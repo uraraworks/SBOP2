@@ -1,0 +1,184 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// ì˙ñ{åÍ resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+#ifdef _WIN32
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+#pragma code_page(932)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDP_MAP_01              PNG                     "res\\map01.png"
+IDP_SYSTEM              PNG                     "res\\system.png"
+IDP_LOGO                PNG                     "res\\URARA-worksÉçÉS.png"
+IDP_TITLE_BACK          PNG                     "res\\title_back.png"
+IDP_TITLE               PNG                     "res\\title.png"
+IDP_BODY_HUM            PNG                     "res\\ëÃ\\hum.png"
+IDP_BODY_BST            PNG                     "res\\ëÃ\\bst.png"
+IDP_BODY_BST_EAR        PNG                     "res\\ëÃ\\bst_ear.png"
+IDP_BODY_DRK            PNG                     "res\\ëÃ\\drk.png"
+IDP_BODY_DRK_EAR        PNG                     "res\\ëÃ\\drk_ear.png"
+IDP_BODY_ELF            PNG                     "res\\ëÃ\\elf.png"
+IDP_BODY_ELF_EAR        PNG                     "res\\ëÃ\\elf_ear.png"
+IDP_HAIR_D01            PNG                     "res\\îØ\\hair_d01.png"
+IDP_HAIR_D02            PNG                     "res\\îØ\\hair_d02.png"
+IDP_HAIR_D03            PNG                     "res\\îØ\\hair_d03.png"
+IDP_HAIR_D04            PNG                     "res\\îØ\\hair_d04.png"
+IDP_HAIR_D05            PNG                     "res\\îØ\\hair_d05.png"
+IDP_HAIR_D06            PNG                     "res\\îØ\\hair_d06.png"
+IDP_HAIR_D07            PNG                     "res\\îØ\\hair_d07.png"
+IDP_HAIR_D08            PNG                     "res\\îØ\\hair_d08.png"
+IDP_HAIR_D09            PNG                     "res\\îØ\\hair_d09.png"
+IDP_HAIR_D10            PNG                     "res\\îØ\\hair_d10.png"
+IDP_HAIR_D11            PNG                     "res\\îØ\\hair_d11.png"
+IDP_HAIR_D12            PNG                     "res\\îØ\\hair_d12.png"
+IDP_HAIR_U01            PNG                     "res\\îØ\\hair_u01.png"
+IDP_HAIR_U02            PNG                     "res\\îØ\\hair_u02.png"
+IDP_HAIR_U03            PNG                     "res\\îØ\\hair_u03.png"
+IDP_HAIR_U04            PNG                     "res\\îØ\\hair_u04.png"
+IDP_HAIR_U05            PNG                     "res\\îØ\\hair_u05.png"
+IDP_HAIR_U12            PNG                     "res\\îØ\\hair_u12.png"
+IDP_HAIR_U06            PNG                     "res\\îØ\\hair_u06.png"
+IDP_HAIR_U07            PNG                     "res\\îØ\\hair_u07.png"
+IDP_HAIR_U08            PNG                     "res\\îØ\\hair_u08.png"
+IDP_HAIR_U09            PNG                     "res\\îØ\\hair_u09.png"
+IDP_HAIR_U10            PNG                     "res\\îØ\\hair_u10.png"
+IDP_HAIR_U11            PNG                     "res\\îØ\\hair_u11.png"
+IDP_CLOTH_01            PNG                     "res\\ïû\\cloth01.png"
+IDP_CLOTH_SP01          PNG                     "res\\ïû\\sp01.png"
+IDP_EYE_01              PNG                     "res\\ñ⁄\\eye01.png"
+IDP_EYE_02              PNG                     "res\\ñ⁄\\eye02.png"
+IDP_EYE_03              PNG                     "res\\ñ⁄\\eye03.png"
+IDP_EYE_04              PNG                     "res\\ñ⁄\\eye04.png"
+IDP_EYE_05              PNG                     "res\\ñ⁄\\eye05.png"
+IDP_EYE_06              PNG                     "res\\ñ⁄\\eye06.png"
+IDP_CHARSELECT_BACK     PNG                     "res\\char_back.png"
+IDP_HAIR_D13            PNG                     "res\\îØ\\hair_d13.png"
+IDP_HAIR_U13            PNG                     "res\\îØ\\hair_u13.png"
+IDP_SHADOW              PNG                     "res\\shadow.png"
+IDP_MAPSHADOW_01        PNG                     "res\\map_shadow01.png"
+IDP_ACCE_01             PNG                     "res\\acce01.png"
+IDP_ITEM_01             PNG                     "res\\item.png"
+IDP_MARK                PNG                     "res\\mark.png"
+IDP_WEAPON_01           PNG                     "res\\ïêäÌ\\weapon01.png"
+IDP_WEAPON_02           PNG                     "res\\ïêäÌ\\weapon02.png"
+IDP_ACCE_02             PNG                     "res\\acce02.png"
+IDP_CLOTH_02            PNG                     "res\\ïû\\cloth02.png"
+IDP_NPC_01              PNG                     "res\\NPC\\npc01.png"
+IDP_WEAPON_BOW_01       PNG                     "res\\ïêäÌ\\weapon_bow01.png"
+IDP_WEAPON_ARROW_01     PNG                     "res\\ïêäÌ\\weapon_arrow01.png"
+IDP_WEAPON_GLOVE_01     PNG                     "res\\ïêäÌ\\weapon_glove01.png"
+IDP_WEAPON_ETC_01       PNG                     "res\\ïêäÌ\\weapon_etc01.png"
+IDP_BALLOON_01          PNG                     "res\\balloon_01.png"
+IDP_NPC_02              PNG                     "res\\NPC\\npc02.png"
+IDP_TITLE_CLOUD         PNG                     "res\\title_cloud.png"
+IDP_2X2_BODY_HUM        PNG                     "res\\2x2\\2x2_hum.png"
+IDP_2X2_HUM_HAIR_U01    PNG                     "res\\2x2\\2x2_hum_hair_u01.png"
+IDP_2X2_EYE_01          PNG                     "res\\2x2\\2x2_eye01.png"
+IDP_2X2_CLOTH_01        PNG                     "res\\2x2\\2x2_cloth01.png"
+IDP_2X2_HAIR_01         PNG                     "res\\2x2\\2x2_hair01.png"
+IDP_2X2_HAIR_02         PNG                     "res\\2x2\\2x2_hair02.png"
+IDP_2X2_HAIR_03         PNG                     "res\\2x2\\2x2_hair03.png"
+IDP_2X2_SP_CLOTH_01     PNG                     "res\\2x2\\2x2_sp_cloth01.png"
+IDP_2X2_SP_CLOTH_02     PNG                     "res\\2x2\\2x2_sp_cloth02.png"
+IDP_2X2_SP_HAIR_01      PNG                     "res\\2x2\\2x2_sp_hair01.png"
+IDP_2X2_SP_HAIR_02      PNG                     "res\\2x2\\2x2_sp_hair02.png"
+IDP_2X2_ARMS_01         PNG                     "res\\2x2\\2x2_arms01.png"
+IDP_2X2_ARMS_02         PNG                     "res\\2x2\\2x2_arms02.png"
+IDP_2X2_ARMS_03         PNG                     "res\\2x2\\2x2_arms03.png"
+IDP_2X2_SHIELD_01       PNG                     "res\\2x2\\2x2_shield01.png"
+IDP_2X2_EYE_02          PNG                     "res\\2x2\\2x2_eye02.png"
+IDP_2X2_ARMS_SP_01      PNG                     "res\\2x2\\2x2_arms_sp01.png"
+IDP_2X2_BOW_01          PNG                     "res\\2x2\\2x2_bow01.png"
+IDP_2X2_NPC_001         PNG                     "res\\2x2\\2x2_npc001.png"
+IDP_NUM_S               PNG                     "res\\num_s.png"
+IDP_NUM_M               PNG                     "res\\num_m.png"
+IDP_2X2_HAIR_04         PNG                     "res\\2x2\\2x2_hair04.png"
+IDP_2X2_EYE_03          PNG                     "res\\2x2\\2x2_eye03.png"
+IDP_2X2_NPC_002         PNG                     "res\\2x2\\2x2_npc002.png"
+IDP_2X2_CLOTH_00        PNG                     "res\\2x2\\2x2_cloth00.png"
+IDP_2X2_CLOTH_02        PNG                     "res\\2x2\\2x2_cloth02.png"
+IDP_2X2_EYE_04          PNG                     "res\\2x2\\2x2_eye04.png"
+IDP_EFC_32_01           PNG                     "res\\efc_32_01.png"
+IDP_EFC_64_01           PNG                     "res\\efc_64_01.png"
+IDP_2X2_EYE_05          PNG                     "res\\2x2\\2x2_eye05.png"
+IDP_2X2_CHAR_SHADOW_01  PNG                     "res\\2x2\\2x2_char_shadow_01.png"
+IDP_2X2_NPC_003         PNG                     "res\\2x2\\2x2_npc003.png"
+IDP_2X2_NPC_001_SHADOW  PNG                     "res\\2x2\\2x2_npc001_shadow.png"
+IDP_2X2_NPC_002_SHADOW  PNG                     "res\\2x2\\2x2_npc002_shadow.png"
+IDP_2X2_NPC_003_SHADOW  PNG                     "res\\2x2\\2x2_npc003_shadow.png"
+IDP_2X2_NPC_004         PNG                     "res\\2x2\\2x2_npc004.png"
+IDP_2X2_NPC_004_SHADOW  PNG                     "res\\2x2\\2x2_npc004_shadow.png"
+IDP_2X2_NPC_005         PNG                     "res\\2x2\\2x2_npc005.png"
+IDP_2X2_NPC_005_SHADOW  PNG                     "res\\2x2\\2x2_npc005_shadow.png"
+IDP_NUM_L               PNG                     "res\\num_l.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_DLLVER              "4"
+END
+
+#endif    // ì˙ñ{åÍ resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

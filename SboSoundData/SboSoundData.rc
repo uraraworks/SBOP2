@@ -1,0 +1,133 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 日本語 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+#ifdef _WIN32
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+#pragma code_page(932)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+IDR_WAVE_PI73           WAVE                    "res\\WAVE\\pi73.wav"
+IDR_WAVE_ASI_2          WAVE                    "res\\WAVE\\asi_2.wav"
+IDR_WAVE_PUSH51_C       WAVE                    "res\\WAVE\\push51_c.wav"
+IDR_WAVE_SELECT         WAVE                    "res\\WAVE\\select.wav"
+IDR_WAVE_CHARI14_A      WAVE                    "res\\WAVE\\chari14_a.wav"
+IDR_WAVE_SWING24_C      WAVE                    "res\\WAVE\\swing24_c.wav"
+IDR_WAVE_SWING25_C      WAVE                    "res\\WAVE\\swing25_c.wav"
+IDR_WAVE_HIT0           WAVE                    "res\\WAVE\\hit0.wav"
+IDR_WAVE_HIT1           WAVE                    "res\\WAVE\\hit1.wav"
+IDR_WAVE_MONEY          WAVE                    "res\\WAVE\\お金.wav"
+IDR_WAVE_ITEM_SMALL     WAVE                    "res\\WAVE\\小アイテム.wav"
+IDR_WAVE_ITEM_MIDIUM    WAVE                    "res\\WAVE\\中アイテム.wav"
+IDR_WAVE_ITEM_LARGE     WAVE                    "res\\WAVE\\大アイテム.wav"
+IDR_WAVE_MATERIAL       WAVE                    "res\\WAVE\\素材.wav"
+IDR_WAVE_WEAPON         WAVE                    "res\\WAVE\\武器.wav"
+IDR_WAVE_CLOTH          WAVE                    "res\\WAVE\\服・ローブ.wav"
+IDR_WAVE_CRASH20_D      WAVE                    "res\\WAVE\\crash20_d.wav"
+IDR_WAVE_KUSA           WAVE                    "res\\WAVE\\kusa.wav"
+IDR_WAVE_KAI            WAVE                    "res\\WAVE\\kai.wav"
+IDR_WAVE_CHAT           WAVE                    "res\\WAVE\\chat.wav"
+IDR_WAVE_W_CHAT         WAVE                    "res\\WAVE\\w_chat.wav"
+IDR_WAVE_CLAP02         WAVE                    "res\\WAVE\\clap02_loop.wav"
+IDR_WAVE_CLAP03         WAVE                    "res\\WAVE\\clap03_loop.wav"
+IDR_WAVE_BALLOON1       WAVE                    "res\\WAVE\\balloon1.wav"
+IDR_WAVE_BIKKURI        WAVE                    "res\\WAVE\\bikkuri.wav"
+IDR_WAVE_WHISTLES       WAVE                    "res\\WAVE\\whistleS.wav"
+IDR_WAVE_WHISTLEL       WAVE                    "res\\WAVE\\whistleL.wav"
+IDR_WAVE_GIMON          WAVE                    "res\\WAVE\\gimon.wav"
+IDR_WAVE_NIKU           WAVE                    "res\\WAVE\\niku.wav"
+IDR_WAVE_KIZUKU         WAVE                    "res\\WAVE\\kizuku.wav"
+IDR_PINPONPANPON        WAVE                    "res\\WAVE\\ピンポンパンポーン.wav"
+IDR_WAVE_SWOON          WAVE                    "res\\WAVE\\気絶.wav"
+IDR_WAVE_URARA_WORKS    WAVE                    "res\\WAVE\\（加工済）ウララワークス(20050923).wav"
+IDR_WAVE_PUYON_ATACK    WAVE                    "res\\WAVE\\プヨン攻撃.wav"
+IDR_WAVE_LIQUID         WAVE                    "res\\WAVE\\液体.wav"
+IDR_WAVE_BOW_ATACK      WAVE                    "res\\WAVE\\弓攻撃.wav"
+IDR_WAVE_MEAL           WAVE                    "res\\WAVE\\食事.wav"
+IDR_WAVE_DEFENSE        WAVE                    "res\\WAVE\\防御.wav"
+IDR_WAVE_SHIELD         WAVE                    "res\\WAVE\\盾構え.wav"
+IDR_WAVE_PUYON_MOVE     WAVE                    "res\\WAVE\\プヨン移動.wav"
+IDR_WAVE_PUYON_DEAD     WAVE                    "res\\WAVE\\プヨン死亡.wav"
+IDR_WAVE_EXIST          WAVE                    "res\\WAVE\\消滅.wav"
+IDR_WAVE_DROP_BIN       WAVE                    "res\\WAVE\\ドロップ：ビン.wav"
+IDR_WAVE_OPEN_BAG       WAVE                    "res\\WAVE\\バッグ開く.wav"
+IDR_WAVE_CRITICAL2      WAVE                    "res\\WAVE\\打撃クリティカル.wav"
+IDR_WAVE_HIT2           WAVE                    "res\\WAVE\\斬撃ヒット１.wav"
+IDR_WAVE_OPEN_WINDOW    WAVE                    "res\\WAVE\\窓開く.wav"
+IDR_WAVE_CRITICAL3      WAVE                    "res\\WAVE\\矢クリティカル.wav"
+IDR_WAVE_CRITICAL1      WAVE                    "res\\WAVE\\斬撃クリティカル.wav"
+IDR_WAVE_LVUP           WAVE                    "res\\WAVE\\レベルアップ.wav"
+IDR_WAVE_MISS           WAVE                    "res\\WAVE\\ミス.wav"
+IDR_WAVE_HIT4           WAVE                    "res\\WAVE\\矢ヒット.wav"
+IDR_WAVE_TRASH          WAVE                    "res\\WAVE\\ゴミ箱開く・捨てる.wav"
+IDR_WAVE_CHARGE         WAVE                    "res\\WAVE\\溜め.wav"
+IDR_WAVE_HIT3           WAVE                    "res\\WAVE\\斬撃ヒット２.wav"
+IDR_WAVE_CHARGE2        WAVE                    "res\\WAVE\\溜め２.wav"
+IDR_WAVE_DR_BASS01      WAVE                    "res\\WAVE\\dr-bass01.wav"
+IDR_WAVE_DR_BASS02      WAVE                    "res\\WAVE\\dr-bass02.wav"
+IDR_WAVE_DR_BASS05      WAVE                    "res\\WAVE\\dr-bass05.wav"
+IDR_WAVE_DR_CLAP01      WAVE                    "res\\WAVE\\dr-clap01.wav"
+IDR_WAVE_DR_SNE02       WAVE                    "res\\WAVE\\dr-sne02.wav"
+IDR_WAVE_KIE_ATACK      WAVE                    "res\\WAVE\\キー攻撃.wav"
+IDR_WAVE_KIE_DEAD       WAVE                    "res\\WAVE\\キー死亡.wav"
+IDR_WAVE_FLY            WAVE                    "res\\WAVE\\羽ばたき.wav"
+#endif    // 日本語 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
