@@ -44,6 +44,8 @@ void CDlgAdminMapPartsEdit::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_BLOCK_LEFT, m_bBlockLeft);
 	DDX_Check(pDX, IDC_BLOCK_RIGHT, m_bBlockRight);
 	DDX_Check(pDX, IDC_BLOCK_UP, m_bBlockUp);
+	DDX_CBIndex(pDX, IDC_GRPNO, m_nGrpNo);
+	DDX_Control(pDX, IDC_GRPNO, m_cbGrpNo);
 	//}}AFX_DATA_MAP
 }
 
@@ -62,6 +64,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapPartsEdit, CDlgAdminBase)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_PLAY, OnPlay)
 	ON_BN_CLICKED(IDC_STOP, OnStop)
+	ON_CBN_SELCHANGE(IDC_GRPNO, OnSelchangeGrpNo)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_WNDCLOSE, OnWndClose)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
@@ -90,6 +93,7 @@ CDlgAdminMapPartsEdit::CDlgAdminMapPartsEdit(CWnd* pParent /*=NULL*/)
 	m_bBlockLeft = FALSE;
 	m_bBlockRight = FALSE;
 	m_bBlockUp = FALSE;
+	m_nGrpNo = 0;
 	//}}AFX_DATA_INIT
 
 	m_nSelectType			= 0;
@@ -144,6 +148,7 @@ int CDlgAdminMapPartsEdit::DoModal(CMgrData *pMgrData)
 
 BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 {
+	int i, nCount;
 	CString strTmp;
 	CSize sizeTmp;
 	CRect rc;
@@ -175,6 +180,13 @@ BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 	GetDlgItem (IDC_MOVE_DOWN)->	EnableWindow (FALSE);
 	GetDlgItem (IDC_MOVE_LEFT)->	EnableWindow (FALSE);
 	GetDlgItem (IDC_MOVE_RIGHT)->	EnableWindow (FALSE);
+
+	nCount = m_pMgrData->GetMgrGrpData ()->GetMapPartsCount () / 1024;
+	for (i = 0; i < nCount; i ++) {
+		strTmp.Format ("画像 %d 枚目", i + 1);
+		m_cbGrpNo.AddString (strTmp);
+	}
+	m_cbGrpNo.SetCurSel (0);
 
 	SetData ();
 
@@ -557,6 +569,19 @@ void CDlgAdminMapPartsEdit::OnStop()
 	m_dwTimeLastAnime	= 0;
 }
 
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapPartsEdit::OnSelchangeGrpNo						 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2008/10/11														 */
+/* ========================================================================= */
+
+void CDlgAdminMapPartsEdit::OnSelchangeGrpNo()
+{
+	UpdateData ();
+
+	m_pWndMapPartsGrp->SetNo (m_nGrpNo);
+}
 
 
 /* ========================================================================= */

@@ -10,8 +10,7 @@
 #include "resource.h"
 #include "InfoMapShadow.h"
 #include "WndMapShadowAnimeList.h"
-#include "WndSelectMapShadowGrp.h"
-#include "WndMapShadowGrp.h"
+#include "WndMapPartsGrp.h"
 #include "Img32.h"
 #include "MgrGrpData.h"
 #include "MgrData.h"
@@ -36,6 +35,8 @@ void CDlgAdminMapShadowEdit::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_NOW, m_strNow);
 	DDX_Text(pDX, IDC_LEVEL, m_nLevel);
 	DDX_Text(pDX, IDC_VIEWTIME, m_nViewTime);
+	DDX_CBIndex(pDX, IDC_GRPNO, m_nGrpNo);
+	DDX_Control(pDX, IDC_GRPNO, m_cbGrpNo);
 	//}}AFX_DATA_MAP
 }
 
@@ -54,6 +55,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapShadowEdit, CDlgAdminBase)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_PLAY, OnPlay)
 	ON_BN_CLICKED(IDC_STOP, OnStop)
+	ON_CBN_SELCHANGE(IDC_GRPNO, OnSelchangeGrpNo)
 	ON_WM_LBUTTONDOWN()
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_WNDCLOSE, OnWndClose)
@@ -75,6 +77,7 @@ CDlgAdminMapShadowEdit::CDlgAdminMapShadowEdit(CWnd* pParent /*=NULL*/)
 	m_strNow = _T("");
 	m_nLevel = 0;
 	m_nViewTime = 0;
+	m_nGrpNo = 0;
 	//}}AFX_DATA_INIT
 
 	m_nSelectType			= 0;
@@ -89,7 +92,7 @@ CDlgAdminMapShadowEdit::CDlgAdminMapShadowEdit(CWnd* pParent /*=NULL*/)
 
 	m_pInfoMapShadow			= new CInfoMapShadow;
 	m_pWndMapShadowAnimeList	= new CWndMapShadowAnimeList;
-	m_pWndMapShadowGrp			= new CWndMapShadowGrp;
+	m_pWndMapShadowGrp			= new CWndMapPartsGrp;
 }
 
 
@@ -128,13 +131,14 @@ int CDlgAdminMapShadowEdit::DoModal(CMgrData *pMgrData)
 
 BOOL CDlgAdminMapShadowEdit::OnInitDialog()
 {
+	int i, nCount;
 	CString strTmp;
 	CSize sizeTmp;
 	CRect rc;
 
 	CDlgAdminBase::OnInitDialog();
 
-	m_pWndMapShadowGrp->Create (this, m_pMgrData, IDC_PARTS);
+	m_pWndMapShadowGrp->Create (this, m_pMgrData, IDC_PARTS, 1);
 	m_pWndMapShadowAnimeList->Create (this, m_pMgrData, IDC_LIST, m_pInfoMapShadow);
 
 	GetWindowRect (rc);
@@ -152,7 +156,18 @@ BOOL CDlgAdminMapShadowEdit::OnInitDialog()
 	CheckRadioButton (IDC_MOVE_UP, IDC_MOVE_NONE, IDC_MOVE_NONE);
 	CheckRadioButton (IDC_GRP_PARTS, IDC_GRP_SHASOW, IDC_GRP_PARTS);
 
+	nCount = m_pMgrData->GetMgrGrpData ()->GetMapShadowCount () / 1024;
+	for (i = 0; i < nCount; i ++) {
+		strTmp.Format ("画像 %d 枚目", i + 1);
+		m_cbGrpNo.AddString (strTmp);
+	}
+	m_cbGrpNo.SetCurSel (0);
+	OnSelchangeGrpNo ();
+
 	SetData ();
+
+	sizeTmp = m_pMgrData->GetDlgMapPartsEdit ();
+	SetWindowPos (NULL, 0, 0, sizeTmp.cx, sizeTmp.cy, SWP_NOZORDER | SWP_NOMOVE);
 
 	return TRUE;
 }
@@ -482,6 +497,19 @@ void CDlgAdminMapShadowEdit::OnStop()
 }
 
 
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapShadowEdit::OnSelchangeGrpNo						 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2008/10/11														 */
+/* ========================================================================= */
+
+void CDlgAdminMapShadowEdit::OnSelchangeGrpNo()
+{
+	UpdateData ();
+
+	m_pWndMapShadowGrp->SetNo (m_nGrpNo);
+}
+
 
 /* ========================================================================= */
 /* 関数名	:CDlgAdminMapShadowEdit::OnOK									 */
@@ -491,6 +519,14 @@ void CDlgAdminMapShadowEdit::OnStop()
 
 void CDlgAdminMapShadowEdit::OnOK()
 {
+	CRect rcTmp;
+	SIZE sizeTmp;
+
+	GetWindowRect (rcTmp);
+	sizeTmp.cx = rcTmp.Width ();
+	sizeTmp.cy = rcTmp.Height ();
+	m_pMgrData->SetDlgMapPartsEdit (sizeTmp);
+
 	GetData ();
 	CDlgAdminBase::OnOK();
 }

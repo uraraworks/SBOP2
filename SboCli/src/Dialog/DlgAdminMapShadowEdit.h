@@ -12,7 +12,7 @@
 
 class CMgrData;
 class CWndMapShadowAnimeList;
-class CWndMapShadowGrp;
+class CWndMapPartsGrp;
 class CInfoMapShadow;
 
 /* ========================================================================= */
@@ -45,7 +45,7 @@ public:
 	CMgrGrpData				*m_pMgrGrpData;				/* グラフィックデータ管理 */
 	CWndMapShadowAnimeList	*m_pWndMapShadowAnimeList;	/* マップ影アニメーション一覧ウィンドウ */
 	CInfoMapShadow			*m_pInfoMapShadow;			/* マップ影情報 */
-	CWndMapShadowGrp		*m_pWndMapShadowGrp;		/* マップ影画像一覧 */
+	CWndMapPartsGrp			*m_pWndMapShadowGrp;		/* マップ影画像一覧 */
 
 
 
@@ -55,6 +55,8 @@ public:
 	CSliderCtrl	m_Slider;
 	CString	m_strCount;
 	CString	m_strNow;
+	CComboBox	m_cbGrpNo;
+	int		m_nGrpNo;
 	int		m_nLevel;
 	int		m_nViewTime;
 	//}}AFX_DATA
@@ -82,6 +84,7 @@ protected:
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnPlay();
 	afx_msg void OnStop();
+	afx_msg void OnSelchangeGrpNo();
 	//}}AFX_MSG
 	afx_msg LRESULT OnWndClose(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnAdminMsg(WPARAM wParam, LPARAM lParam);

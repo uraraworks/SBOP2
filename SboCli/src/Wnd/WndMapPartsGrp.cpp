@@ -49,10 +49,12 @@ END_MESSAGE_MAP()
 
 CWndMapPartsGrp::CWndMapPartsGrp()
 {
-	m_nPos				= 0;
-	m_pWndParent		= NULL;
-	m_pMgrData			= NULL;
-	m_pMgrGrpData		= NULL;
+	m_nPos			= 0;
+	m_pWndParent	= NULL;
+	m_pMgrData		= NULL;
+	m_pMgrGrpData	= NULL;
+	m_nMode			= 0;
+	m_nGrpNo		= 0;
 
 	m_pImgParts		= new CImg32;
 
@@ -80,13 +82,14 @@ CWndMapPartsGrp::~CWndMapPartsGrp()
 /* 日付		:2007/05/15														 */
 /* ========================================================================= */
 
-BOOL CWndMapPartsGrp::Create(CWnd *pParent, CMgrData *pMgrData, int nResourceID)
+BOOL CWndMapPartsGrp::Create(CWnd *pParent, CMgrData *pMgrData, int nResourceID, int nMode/*0*/)
 {
 	BOOL bRet;
 	CWnd *pWnd;
 	CRect rc;
 
 	bRet = FALSE;
+	m_nMode = nMode;
 
 	pWnd = pParent->GetDlgItem (nResourceID);
 	if (pWnd == NULL) {
@@ -143,7 +146,22 @@ void CWndMapPartsGrp::Destroy(void)
 void CWndMapPartsGrp::SetMode(
 	int nMode)		/* 0:マップ画像 1:影画像 */
 {
+	m_nMode = nMode;
 	MakeImage (nMode);
+	InvalidateRect (NULL);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWndMapPartsGrp::SetNo											 */
+/* 内容		:画像番号の変更													 */
+/* 日付		:2008/10/11														 */
+/* ========================================================================= */
+
+void CWndMapPartsGrp::SetNo(int nGrpNo)
+{
+	m_nGrpNo = nGrpNo;
+	MakeImage (m_nMode);
 	InvalidateRect (NULL);
 }
 
@@ -169,7 +187,7 @@ int CWndMapPartsGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	stScrollInfo.nPage = 1;
 	SetScrollInfo (SB_VERT, &stScrollInfo);
 
-	MakeImage (0);
+	MakeImage (m_nMode);
 
 	return 0;
 }
@@ -273,6 +291,7 @@ void CWndMapPartsGrp::OnLButtonDown(UINT nFlags, CPoint point)
 	x = point.x / 16 + GetScrollPos (SB_HORZ);
 	y = point.y / 16 + GetScrollPos (SB_VERT);
 	nNo = (y * 32) + x;
+	nNo += (m_nGrpNo * 1024);
 
 	m_pWndParent->PostMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, nNo);
 }
@@ -291,6 +310,7 @@ void CWndMapPartsGrp::OnRButtonDown(UINT nFlags, CPoint point)
 	x = point.x / 16 + GetScrollPos (SB_HORZ);
 	y = point.y / 16 + GetScrollPos (SB_VERT);
 	nNo = (y * 32) + x;
+	nNo += (m_nGrpNo * 1024);
 
 	m_pWndParent->PostMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, nNo);
 }
@@ -419,7 +439,6 @@ void CWndMapPartsGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CWndMapPartsGrp::MakeImage(int nMode)
 {
-	int i, nCount;
 	CImg32 *pImg;
 
 	if (m_pMgrData == NULL) {
@@ -427,21 +446,19 @@ void CWndMapPartsGrp::MakeImage(int nMode)
 	}
 
 	if (nMode == 1) {
-		nCount = m_pMgrGrpData->GetMapShadowCount () / 1024;
-		pImg = m_pMgrGrpData->GetDibMapShadowTmp (0);
+		pImg = m_pMgrGrpData->GetDibMapShadowTmp (m_nGrpNo);
 	} else {
-		nCount = m_pMgrGrpData->GetMapPartsCount () / 1024;
-		pImg = m_pMgrGrpData->GetDibMapPartsTmp (0);
+		pImg = m_pMgrGrpData->GetDibMapPartsTmp (m_nGrpNo);
+	}
+	if (pImg == NULL) {
+		return;
 	}
 
 	m_pImgParts->Destroy ();
-	m_pImgParts->Create (pImg->Width (), pImg->Height () * nCount);
+	m_pImgParts->Create (pImg->Width (), pImg->Height ());
 	m_pImgParts->FillRect (0, 0, m_pImgParts->Width (), m_pImgParts->Height (), RGB (128, 128, 128));
 
-	for (i = 0; i < nCount; i ++) {
-		pImg = m_pMgrGrpData->GetDibMapPartsTmp (i);
-		m_pImgParts->BltFrom256 (0, i * pImg->Height (), pImg->Width (), pImg->Height (), pImg, 0, 0);
-	}
+	m_pImgParts->BltFrom256 (0, 0, pImg->Width (), pImg->Height (), pImg, 0, 0);
 }
 
 

@@ -22,10 +22,11 @@ public:
 			CWndMapPartsGrp();						/* コンストラクタ */
 	virtual ~CWndMapPartsGrp();						/* デストラクタ */
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID);	/* 作成 */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID, int nMode=0);	/* 作成 */
 	void	Destroy	(void);									/* 破棄 */
 
 	void	SetMode	(int nMode);							/* 画像モードの変更 */
+	void	SetNo	(int nGrpNo);							/* 画像番号の変更 */
 
 
 protected:
@@ -33,7 +34,9 @@ protected:
 
 
 protected:
-	int			m_nPos;							/* 縦スクロール位置 */
+	int			m_nPos,							/* 縦スクロール位置 */
+				m_nMode,						/* 画像モード */
+				m_nGrpNo;						/* 画像番号 */
 	CWnd		*m_pWndParent;					/* 親ウィンドウ */
 	CImg32		*m_pImgParts;					/* バックバッファ */
 	CPoint		m_ptCursor;						/* カーソルのあるパーツ位置 */
