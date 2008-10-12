@@ -75,7 +75,7 @@ CDlgAdminMapEventGRPIDTMP::~CDlgAdminMapEventGRPIDTMP()
 
 void CDlgAdminMapEventGRPIDTMP::Set(CInfoMapEventBase *pSrc)
 {
-	int i, nNo, nCount;
+	int i, nNo, nCount, nSelect;
 	PCInfoMapEventGRPIDTMP pSrcTmp = (PCInfoMapEventGRPIDTMP)pSrc;
 
 	m_dwIDSub = pSrcTmp->m_dwIDSub;
@@ -89,7 +89,8 @@ void CDlgAdminMapEventGRPIDTMP::Set(CInfoMapEventBase *pSrc)
 			break;
 		}
 	}
-	CheckRadioButton (IDC_RADIO_OFF, IDC_RADIO_ON, pSrcTmp->m_nSetType);
+	nSelect = (pSrcTmp->m_nSetType == GRPIDTMPTYPE_ON) ? IDC_RADIO_ON : IDC_RADIO_OFF;
+	CheckRadioButton (IDC_RADIO_OFF, IDC_RADIO_ON, nSelect);
 	m_ctlIDMain.SetCurSel (nNo);
 
 	UpdateData (FALSE);
