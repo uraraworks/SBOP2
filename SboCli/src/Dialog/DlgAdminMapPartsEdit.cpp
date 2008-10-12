@@ -186,7 +186,10 @@ BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 		strTmp.Format ("‰æ‘œ %d –‡–Ú", i + 1);
 		m_cbGrpNo.AddString (strTmp);
 	}
-	m_cbGrpNo.SetCurSel (0);
+	m_nGrpNo = m_pMgrData->GetLastSelectGrpNo ();
+	m_nGrpNo = min (m_nGrpNo, nCount - 1);
+	m_cbGrpNo.SetCurSel (m_nGrpNo);
+	OnSelchangeGrpNo ();
 
 	SetData ();
 
@@ -595,10 +598,13 @@ void CDlgAdminMapPartsEdit::OnOK()
 	CRect rcTmp;
 	SIZE sizeTmp;
 
+	UpdateData ();
+
 	GetWindowRect (rcTmp);
 	sizeTmp.cx = rcTmp.Width ();
 	sizeTmp.cy = rcTmp.Height ();
 	m_pMgrData->SetDlgMapPartsEdit (sizeTmp);
+	m_pMgrData->SetLastSelectGrpNo (m_nGrpNo);
 
 	GetData ();
 	CDlgAdminBase::OnOK();

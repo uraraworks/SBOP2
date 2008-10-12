@@ -97,8 +97,9 @@ CMgrData::CMgrData()
 	ZeroMemory (&m_stInputGuid, sizeof (m_stInputGuid));
 	m_sizeDlgMapPartsEdit.cx = 0;
 	m_sizeDlgMapPartsEdit.cy = 0;
-	m_sizeWndMap.cx = 400;
-	m_sizeWndMap.cy = 400;
+	m_sizeWndMap.cx			 = 400;
+	m_sizeWndMap.cy			 = 400;
+	m_nLastSelectGrpNo		 = 0;
 }
 
 

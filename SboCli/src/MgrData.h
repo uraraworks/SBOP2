@@ -138,6 +138,8 @@ public:
 	void			SetDlgMapPartsEdit	(SIZE sizeDlgMapPartsEdit)	{ m_sizeDlgMapPartsEdit = sizeDlgMapPartsEdit; }	/* マップパーツ編集ダイアログサイズを設定 */
 	SIZE			GetWndMap			(void)						{ return m_sizeWndMap;	}							/* マップウィンドウサイズを取得 */
 	void			SetWndMap			(SIZE sizeWndMap)			{ m_sizeWndMap = sizeWndMap; }						/* マップウィンドウサイズを設定 */
+	int				GetLastSelectGrpNo	(void)						{ return m_nLastSelectGrpNo;	}					/* 最後に選んだ画像番号を取得 */
+	void			SetLastSelectGrpNo	(int nLastSelectGrpNo)		{ m_nLastSelectGrpNo = nLastSelectGrpNo; }			/* 最後に選んだ画像番号を設定 */
 
 	CMainFrame		*GetMainFrame		(void)	{ return m_pMainFrame;		}		/* メインフレームを取得 */
 	CMgrSound		*GetMgrSound		(void)	{ return m_pMgrSound;		}		/* サウンド管理を取得 */
@@ -190,6 +192,7 @@ private:
 	GUID				m_stInputGuid;				/* 入力パッドのGUID */
 	SIZE				m_sizeDlgMapPartsEdit,		/* マップパーツ編集ダイアログサイズ */
 						m_sizeWndMap;				/* マップウィンドウサイズ */
+	int					m_nLastSelectGrpNo;			/* 最後に選んだ画像番号 */
 
 
 	CmyString			m_strServerAddr,			/* サーバーアドレス */
