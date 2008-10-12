@@ -21,6 +21,7 @@ enum {
 	MAPEVENTTYPE_MAPMOVE,								/* マップ間移動 */
 	MAPEVENTTYPE_TRASHBOX,								/* ゴミ箱 */
 	MAPEVENTTYPE_INITSTATUS,							/* ステータス初期化 */
+	MAPEVENTTYPE_GRPIDTMP,								/* 一時画像設定 */
 	MAPEVENTTYPE_MAX
 };
 

@@ -83,6 +83,9 @@ PCInfoBase CLibInfoMapEvent::GetNew(int nType)
 	case MAPEVENTTYPE_INITSTATUS:		/* ステータス初期化 */
 		pInfo = new CInfoMapEventINITSTATUS;
 		break;
+	case MAPEVENTTYPE_GRPIDTMP:			/* 一時画像設定 */
+		pInfo = new CInfoMapEventGRPIDTMP;
+		break;
 	default:
 		pInfo = new CInfoMapEventBase;
 		break;

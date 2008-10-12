@@ -36,6 +36,8 @@ CPacketCHAR_GRP::CPacketCHAR_GRP()
 	m_wGrpIDArmsSub				= 0;	/* 画像ID(持ち物:サブ) */
 	m_wGrpIDArmsLeftMain		= 0;	/* 画像ID(盾:メイン) */
 	m_wGrpIDArmsLeftSub			= 0;	/* 画像ID(盾:サブ) */
+	m_wGrpIDTmpMain				= 0;	/* 画像ID(一時服:メイン) */
+	m_wGrpIDTmpSub				= 0;	/* 画像ID(一時服:サブ) */
 }
 
 
@@ -80,7 +82,9 @@ void CPacketCHAR_GRP::Make(
 			 sizeof (pInfo->m_wGrpIDArmsMain)			+
 			 sizeof (pInfo->m_wGrpIDArmsSub)			+
 			 sizeof (pInfo->m_wGrpIDArmsLeftMain)		+
-			 sizeof (pInfo->m_wGrpIDArmsLeftSub);
+			 sizeof (pInfo->m_wGrpIDArmsLeftSub)		+
+			 sizeof (pInfo->m_wGrpIDTmpMain)			+
+			 sizeof (pInfo->m_wGrpIDTmpSub);
 
 	pData = new BYTE[dwSize];
 	ZeroMemory (pData, dwSize);
@@ -106,6 +110,8 @@ void CPacketCHAR_GRP::Make(
 	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsSub,				sizeof (pInfo->m_wGrpIDArmsSub),			pDataTmp);	/* 画像ID(持ち物:サブ) */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsLeftMain,		sizeof (pInfo->m_wGrpIDArmsLeftMain),		pDataTmp);	/* 画像ID(盾:メイン) */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsLeftSub,			sizeof (pInfo->m_wGrpIDArmsLeftSub),		pDataTmp);	/* 画像ID(盾:サブ) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDTmpMain,				sizeof (pInfo->m_wGrpIDTmpMain),			pDataTmp);	/* 画像ID(一時服:メイン) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDTmpSub,				sizeof (pInfo->m_wGrpIDTmpSub),				pDataTmp);	/* 画像ID(一時服:サブ) */
 
 	RenewPacket (pData, dwSize);
 }
@@ -140,6 +146,8 @@ PBYTE CPacketCHAR_GRP::Set(PBYTE pPacket)
 	CopyMemoryRenew (&m_wGrpIDArmsSub,				pDataTmp, sizeof (m_wGrpIDArmsSub),				pDataTmp);	/* 画像ID(持ち物:サブ) */
 	CopyMemoryRenew (&m_wGrpIDArmsLeftMain,			pDataTmp, sizeof (m_wGrpIDArmsLeftMain),		pDataTmp);	/* 画像ID(盾:メイン) */
 	CopyMemoryRenew (&m_wGrpIDArmsLeftSub,			pDataTmp, sizeof (m_wGrpIDArmsLeftSub),			pDataTmp);	/* 画像ID(盾:サブ) */
+	CopyMemoryRenew (&m_wGrpIDTmpMain,				pDataTmp, sizeof (m_wGrpIDTmpMain),				pDataTmp);	/* 画像ID(一時服:メイン) */
+	CopyMemoryRenew (&m_wGrpIDTmpSub,				pDataTmp, sizeof (m_wGrpIDTmpSub),				pDataTmp);	/* 画像ID(一時服:サブ) */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -174,6 +182,8 @@ void CPacketCHAR_GRP::SetParam(CInfoCharBase *pInfo)
 	pInfo->m_wGrpIDArmsSub			= m_wGrpIDArmsSub;			/* 画像ID(持ち物:サブ) */
 	pInfo->m_wGrpIDArmsLeftMain		= m_wGrpIDArmsLeftMain;		/* 画像ID(盾:メイン) */
 	pInfo->m_wGrpIDArmsLeftSub		= m_wGrpIDArmsLeftSub;		/* 画像ID(盾:サブ) */
+	pInfo->m_wGrpIDTmpMain			= m_wGrpIDTmpMain;			/* 画像ID(一時服:メイン) */
+	pInfo->m_wGrpIDTmpSub			= m_wGrpIDTmpSub;			/* 画像ID(一時服:サブ) */
 }
 
 /* Copyright(C)URARA-works 2007 */

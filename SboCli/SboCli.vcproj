@@ -852,6 +852,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp"
 							>
 						</File>
@@ -2926,6 +2930,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminMapEventGRPIDTMP.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminMapEventINITSTATUS.cpp"
 					>
 				</File>
@@ -3585,6 +3593,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.h"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.h"
 							>
 						</File>
@@ -4096,6 +4108,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminMapEventBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminMapEventGRPIDTMP.h"
 					>
 				</File>
 				<File

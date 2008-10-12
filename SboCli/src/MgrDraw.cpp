@@ -231,6 +231,7 @@ void CMgrDraw::DrawChar(
 	for (i = 0; i < nCount; i ++) {
 		switch (pInfoMotion->m_anDrawList[i]) {
 		case 0:
+			/* 2x2サイズ以外？ */
 			if (wGrpIDMainBase != GRPIDMAIN_2X2_CHAR) {
 				nTmp = 0;
 				if (wGrpIDMainBase == GRPIDMAIN_2X2_NPC) {
@@ -265,6 +266,7 @@ void CMgrDraw::DrawChar(
 					y + pInfoMotion->m_ptDrawPosPile0.y,
 					cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
 
+			/* 2x2サイズ */
 			} else {
 				m_pMgrGrpData->GetGrpPos (wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
 				nTmp = 0;
@@ -272,30 +274,29 @@ void CMgrDraw::DrawChar(
 					nTmp += 32 * 4;
 				}
 				pSrc = m_pMgrGrpData->GetDib (wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, 0);
+				/* 体 */
 				pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp);
-				if (pInfoChar->m_wGrpIDSP == 0) {
-					pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_CLOTH, 0, pInfoChar->m_wGrpIDCloth);
-					pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
-					pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_HAIR, 0, pInfoChar->m_wGrpIDHairType);
-					pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
-					if (nDirection != 0) {
-						pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_EYE, 0, nEyeID);
-						pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x - 32 * 4, ptTmp.y, TRUE);
-					}
+				if ((pInfoChar->m_wGrpIDSP == 0) && (pInfoChar->m_wGrpIDTmpMain == 0)) {
+					wGrpIDMain = GRPIDMAIN_2X2_CLOTH;
+					wGrpIDSub  = pInfoChar->m_wGrpIDCloth;
 				} else {
-					if (nDirection != 0) {
-						pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_SPCLOTH, 0, pInfoChar->m_wGrpIDSP);
-						pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
-						pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_HAIR, 0, pInfoChar->m_wGrpIDHairType);
-						pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
-						pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_EYE, 0, nEyeID);
-						pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x - 32 * 4, ptTmp.y, TRUE);
-					} else {
-						pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_SPCLOTH, 0, pInfoChar->m_wGrpIDSP);
-						pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
-						pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_HAIR, 0, pInfoChar->m_wGrpIDHairType);
-						pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
+					wGrpIDMain = GRPIDMAIN_2X2_SPCLOTH;
+					wGrpIDSub  = pInfoChar->m_wGrpIDSP;
+					if (pInfoChar->m_wGrpIDTmpMain != 0) {
+						wGrpIDMain = pInfoChar->m_wGrpIDTmpMain;
+						wGrpIDSub  = pInfoChar->m_wGrpIDTmpSub;
 					}
+				}
+				pSrc = m_pMgrGrpData->GetDib (wGrpIDMain, 0, wGrpIDSub);
+				/* 服 */
+				pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
+				pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_HAIR, 0, pInfoChar->m_wGrpIDHairType);
+				/* 髪 */
+				pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
+				if (nDirection != 0) {
+					/* 目 */
+					pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_EYE, 0, nEyeID);
+					pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x - 32 * 4, ptTmp.y, TRUE);
 				}
 				hDCBmp = pDibTmp->Lock ();
 				StretchBlt (hDCBmp, 0, cyChar * 2, cxChar * 2, cyChar * 2, hDCBmp, 0, 0, cxChar, cyChar, SRCCOPY);

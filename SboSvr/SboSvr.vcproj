@@ -675,6 +675,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp"
 							>
 						</File>
@@ -1832,6 +1836,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventBase.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.h"
 							>
 						</File>
 						<File

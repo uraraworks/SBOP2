@@ -44,7 +44,9 @@ public:
 			m_wGrpIDArmsMain,			/* 画像ID(持ち物:メイン) */
 			m_wGrpIDArmsSub,			/* 画像ID(持ち物:サブ) */
 			m_wGrpIDArmsLeftMain,		/* 画像ID(盾:メイン) */
-			m_wGrpIDArmsLeftSub;		/* 画像ID(盾:サブ) */
+			m_wGrpIDArmsLeftSub,		/* 画像ID(盾:サブ) */
+			m_wGrpIDTmpMain,			/* 画像ID(一時服:メイン) */
+			m_wGrpIDTmpSub;				/* 画像ID(一時服:サブ) */
 } CPacketCHAR_GRP, *PCPacketCHAR_GRP;
 
 /* Copyright(C)URARA-works 2007 */

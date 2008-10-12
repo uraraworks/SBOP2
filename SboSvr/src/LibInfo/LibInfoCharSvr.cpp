@@ -2390,6 +2390,23 @@ BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_bChgStatus = TRUE;
 		}
 		break;
+
+	case MAPEVENTTYPE_GRPIDTMP:		/* 一時画像設定 */
+		{
+			PCInfoMapEventGRPIDTMP pInfoMapEvent = (PCInfoMapEventGRPIDTMP)pInfoMapEventBase;
+
+			/* 設定？ */
+			if (pInfoMapEvent->m_nSetType == GRPIDTMPTYPE_ON) {
+				pInfoChar->m_wGrpIDTmpMain	= (WORD)pInfoMapEvent->m_dwIDMain;	/* 画像ID(一時服:メイン) */
+				pInfoChar->m_wGrpIDTmpSub	= (WORD)pInfoMapEvent->m_dwIDSub;	/* 画像ID(一時服:サブ) */
+			/* 解除 */
+			} else {
+				pInfoChar->m_wGrpIDTmpMain	= 0;		/* 画像ID(一時服:メイン) */
+				pInfoChar->m_wGrpIDTmpSub	= 0;		/* 画像ID(一時服:サブ) */
+			}
+			pInfoChar->m_bChgGrp = TRUE;
+		}
+		break;
 	}
 
 Exit:

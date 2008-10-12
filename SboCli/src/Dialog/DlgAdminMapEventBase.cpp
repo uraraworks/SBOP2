@@ -14,6 +14,7 @@
 #include "DlgAdminMapEventMOVE.h"
 #include "DlgAdminMapEventMAPMOVE.h"
 #include "DlgAdminMapEventINITSTATUS.h"
+#include "DlgAdminMapEventGRPIDTMP.h"
 #include "DlgAdminMapEventBase.h"
 
 #ifdef _DEBUG
@@ -164,6 +165,8 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	m_ctlType.SetItemData (3, MAPEVENTTYPE_TRASHBOX);
 	m_ctlType.InsertString (4, "ステータス初期化");
 	m_ctlType.SetItemData (4, MAPEVENTTYPE_INITSTATUS);
+	m_ctlType.InsertString (5, "一時画像設定");
+	m_ctlType.SetItemData (5, MAPEVENTTYPE_GRPIDTMP);
 
 	nNo = 0;
 	if (m_pInfo) {
@@ -253,6 +256,9 @@ void CDlgAdminMapEventBase::OnSelchangeType()
 		break;
 	case MAPEVENTTYPE_INITSTATUS:	/* ステータス初期化 */
 		m_pDlgType = new CDlgAdminMapEventINITSTATUS(this);
+		break;
+	case MAPEVENTTYPE_GRPIDTMP:		/* 一時画像設定 */
+		m_pDlgType = new CDlgAdminMapEventGRPIDTMP(this);
 		break;
 	default:
 		m_pDlgType = new CDlgAdminMapEventNONE(this);

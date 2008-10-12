@@ -185,6 +185,8 @@ public:
 				m_wGrpIDHairType,			/* 画像ID(髪) */
 				m_wGrpIDHairColor,			/* 画像ID(髪色) */
 				m_wGrpIDSP,					/* 画像ID(特殊服) */
+				m_wGrpIDTmpMain,			/* 画像ID(一時服:メイン) */
+				m_wGrpIDTmpSub,				/* 画像ID(一時服:サブ) */
 				m_wGrpIDAcce,				/* 画像ID(アクセサリ) */
 				m_wGrpIDArmsMain,			/* 画像ID(持ち物:メイン) */
 				m_wGrpIDArmsSub,			/* 画像ID(持ち物:サブ) */

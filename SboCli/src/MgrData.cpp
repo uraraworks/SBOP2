@@ -618,6 +618,7 @@ LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 	case MAPEVENTTYPE_MAPMOVE:		pszRet = "マップ間移動";	break;	/* マップ間移動 */
 	case MAPEVENTTYPE_TRASHBOX:		pszRet = "ゴミ箱";			break;	/* ゴミ箱 */
 	case MAPEVENTTYPE_INITSTATUS:	pszRet = "ステータス初期化";break;	/* ステータス初期化 */
+	case MAPEVENTTYPE_GRPIDTMP:		pszRet = "一時画像設定";	break;	/* 一時画像設定 */
 	default:						pszRet = "未設定";			break;
 	}
 

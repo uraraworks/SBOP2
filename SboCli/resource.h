@@ -52,6 +52,7 @@
 #define IDD_CHAR_MODIFY_STATUS1         171
 #define IDD_SYSTEM_SET_INITCHARSTATUS   171
 #define IDD_MAP_EVENT_INITSTATUS        172
+#define IDD_MAP_EVENT_GRPIDTMP          173
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -267,6 +268,10 @@
 #define IDC_DARK                        1125
 #define IDC_EFFECTID                    1126
 #define IDC_GRPNO                       1127
+#define IDC_RADIO_OFF                   1128
+#define IDC_RADIO_ON                    1129
+#define IDC_IDMAIN                      1130
+#define IDC_IDSUB                       1131
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -309,7 +314,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        166
 #define _APS_NEXT_COMMAND_VALUE         32805
-#define _APS_NEXT_CONTROL_VALUE         1128
+#define _APS_NEXT_CONTROL_VALUE         1132
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
