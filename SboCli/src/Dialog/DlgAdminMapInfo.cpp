@@ -167,6 +167,8 @@ BOOL CDlgAdminMapInfo::OnInitDialog()
 	m_cmbWeatherType.InsertString (0, "–³‚µ");
 	m_cmbWeatherType.InsertString (1, "‰_");
 	m_cmbWeatherType.SetItemData  (1, WEATHERTYPE_CLOUD);
+	m_cmbWeatherType.InsertString (2, "–¶");
+	m_cmbWeatherType.SetItemData  (2, WEATHERTYPE_MISTY);
 
 	Renew ();
 

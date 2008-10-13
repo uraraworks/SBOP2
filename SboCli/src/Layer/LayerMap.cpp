@@ -18,6 +18,8 @@
 #include "MgrGrpData.h"
 #include "MgrDraw.h"
 #include "MgrLayer.h"
+#include "LayerCloud.h"
+#include "LayerMisty.h"
 #include "LayerMap.h"
 
 
@@ -49,6 +51,9 @@ CLayerMap::CLayerMap()
 	m_pDibLevelTmp		= NULL;
 	m_pLibInfoItem		= NULL;
 	m_pLibInfoMapParts	= NULL;
+
+	m_pLayerCould		= NULL;
+	m_pLayerMisty		= NULL;
 }
 
 
@@ -62,6 +67,8 @@ CLayerMap::~CLayerMap()
 {
 	SAFE_DELETE (m_pDibLevel);
 	SAFE_DELETE (m_pDibLevelTmp);
+	SAFE_DELETE (m_pLayerCould);
+	SAFE_DELETE (m_pLayerMisty);
 }
 
 
@@ -74,12 +81,10 @@ CLayerMap::~CLayerMap()
 void CLayerMap::Create(
 	CMgrData	*pMgrData)		/* [in] ƒf[ƒ^ŠÇ— */
 {
-	CLayerCloud::Create (pMgrData);
+	CLayerBase::Create (pMgrData);
 
 	m_pLibInfoItem		= m_pMgrData->GetLibInfoItem ();
 	m_pLibInfoMapParts	= m_pMgrData->GetLibInfoMapParts ();
-
-	m_pLayerMap = this;
 
 	m_pDibLevel = new CImg32;
 	m_pDibLevel->CreateWithoutGdi (SCRSIZEX + 64, SCRSIZEY + 64);
@@ -89,6 +94,13 @@ void CLayerMap::Create(
 	m_pDibLevelTmp->CreateWithoutGdi (SCRSIZEX + 64, SCRSIZEY + 64);
 
 	m_pDibLevelTmp->CircleGradation (0, 0, 64, 48, RGB (50, 0, 0));
+
+	m_pLayerCould = new CLayerCloud;
+	m_pLayerMisty = new CLayerMisty;
+	m_pLayerCould->Create (pMgrData);
+	m_pLayerMisty->Create (pMgrData);
+
+	m_pLayerCould->m_pLayerMap = this;
 }
 
 
@@ -101,16 +113,17 @@ void CLayerMap::Create(
 void CLayerMap::Draw(PCImg32 pDst)
 {
 	PCInfoMapBase pMap;
-DWORD dwTmp;
+	PCLayerBase pLayer;
+
 	pMap = m_pMgrData->GetMap ();
 	if (pMap == NULL) {
 		return;
 	}
-dwTmp=timeGetTime();
+
 	if (pMap->m_byLevel != 0) {
 		RenewLevel ();
 	}
-dwTmp = timeGetTime()-dwTmp;
+
 #if 0
 	int y;
 
@@ -128,13 +141,17 @@ dwTmp = timeGetTime()-dwTmp;
 	DrawPartsPile	(pDst);
 	DrawShadow		(pDst);
 #endif
-	if (pMap->m_dwWeatherType == WEATHERTYPE_CLOUD) {
-		CLayerCloud::Draw	(pDst);
+
+	pLayer = NULL;
+	switch (pMap->m_dwWeatherType) {
+	case WEATHERTYPE_CLOUD:		pLayer = m_pLayerCould;		break;
+	case WEATHERTYPE_MISTY:		pLayer = m_pLayerMisty;		break;
+	}
+	if (pLayer) {
+		pLayer->Draw (pDst);
 	}
 	if (pMap->m_byLevel != 0) {
-dwTmp=timeGetTime();
 		pDst->SetLevel (m_pDibLevel);
-dwTmp = timeGetTime()-dwTmp;
 	}
 	DrawCharText		(pDst);
 	DrawGauge			(pDst);
@@ -151,10 +168,32 @@ dwTmp = timeGetTime()-dwTmp;
 BOOL CLayerMap::TimerProc(void)
 {
 	BOOL bRet;
+	PCInfoMapBase pMap;
+	PCLayerBase pLayer;
 
-	bRet  = CLayerCloud::TimerProc ();
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return FALSE;
+	}
+
+	bRet  = CLayerBase::TimerProc ();
 	bRet |= TimerProcScroll ();
 	bRet |= TimerProcSystemIcon ();
+
+	switch (pMap->m_dwWeatherType) {
+	case WEATHERTYPE_CLOUD:
+		bRet |= m_pLayerCould->TimerProc ();
+		break;
+	}
+
+	pLayer = NULL;
+	switch (pMap->m_dwWeatherType) {
+	case WEATHERTYPE_CLOUD:		pLayer = m_pLayerCould;		break;
+	case WEATHERTYPE_MISTY:		pLayer = m_pLayerMisty;		break;
+	}
+	if (pLayer) {
+		bRet |= pLayer->TimerProc ();
+	}
 
 	return bRet;
 }

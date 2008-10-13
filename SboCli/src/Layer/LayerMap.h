@@ -13,12 +13,14 @@
 class CInfoCharCli;
 class CLibInfoItem;
 class CLibInfoMapParts;
+class CLayerCloud;
+class CLayerMisty;
 
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
 
-typedef class CLayerMap : public CLayerCloud
+typedef class CLayerMap : public CLayerBase
 {
 public:
 			CLayerMap();											/* コンストラクタ */
@@ -74,6 +76,8 @@ public:
 				*m_pDibLevelTmp;
 	CLibInfoItem		*m_pLibInfoItem;		/* アイテム情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;	/* マップパーツ情報 */
+	CLayerCloud			*m_pLayerCould;			/* 雲レイヤー */
+	CLayerMisty			*m_pLayerMisty;			/* 霧レイヤー */
 } CLayerMap, *PCLayerMap;
 
 /* Copyright(C)URARA-works 2006 */

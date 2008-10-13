@@ -20,7 +20,9 @@ class CInfoMapEventBase;
 /* “VŒó */
 enum {
 	WEATHERTYPE_NONE = 0,
-	WEATHERTYPE_CLOUD,								/* ‰_ */
+	WEATHERTYPE_CLOUD,			/* ‰_ */
+	WEATHERTYPE_MISTY,			/* –¶ */
+	WEATHERTYPE_MAX
 };
 
 

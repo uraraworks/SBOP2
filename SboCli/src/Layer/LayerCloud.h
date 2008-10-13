@@ -29,11 +29,11 @@ public:
 	BOOL	TimerProc	(void);							/* 時間処理 */
 
 
-protected:
+public:
 	CLayerMap		*m_pLayerMap;						/* マップレイヤー */
 
 
-private:
+protected:
 	int				m_nCount,							/* 移動カウンタ */
 					m_nPosXBack,						/* 基準点(横) */
 					m_nPosYBack,						/* 基準点(縦) */
