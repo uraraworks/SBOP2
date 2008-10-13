@@ -167,7 +167,7 @@ BOOL CLayerCloud::TimerProc(void)
 	m_dwLastProc = dwTime;
 	m_nCount ++;
 
-//	bRet = TRUE;
+	bRet = TRUE;
 Exit:
 	return bRet;
 }
