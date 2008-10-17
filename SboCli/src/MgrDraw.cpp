@@ -560,7 +560,7 @@ void CMgrDraw::DrawMapParts(
 	}
 	if (wGrpIDPile > 0) {
 		pImg = m_pMgrGrpData->GetDibMapParts (wGrpIDPile / 1024);
-		pDibTmp->BltFrom256 (0, 0, nSize, nSize, pImg, ((wGrpIDPile % 1024) % 32) * nSize, ((wGrpIDPile % 1024) / 32) * nSize, TRUE);
+		pDibTmp->BltFrom256 (0, 0, nSize+1, nSize, pImg, ((wGrpIDPile % 1024) % 32) * nSize, ((wGrpIDPile % 1024) / 32) * nSize, TRUE);
 	}
 
 	hDCBmp = pDibTmp->Lock ();

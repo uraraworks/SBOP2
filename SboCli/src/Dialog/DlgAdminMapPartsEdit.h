@@ -66,6 +66,7 @@ public:
 	BOOL	m_bTypePileBack;
 	BOOL	m_bTypePile;
 	BOOL	m_bFishing;
+	BOOL	m_bTypeDrawLast;
 	BOOL	m_bBlockDown;
 	BOOL	m_bBlockLeft;
 	BOOL	m_bBlockRight;

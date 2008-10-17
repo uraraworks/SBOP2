@@ -135,6 +135,8 @@
 #define IDC_LIST                        1044
 #define IDC_OBJECT                      1044
 #define IDC_GRP_PARTS                   1045
+#define IDC_TYPE_PILE4                  1045
+#define IDC_TYPE_DRAWLAST               1045
 #define IDC_GRP_SHASOW                  1046
 #define IDC_MAPSHADOW                   1046
 #define IDC_ATTR                        1047

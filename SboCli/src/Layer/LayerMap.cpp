@@ -112,6 +112,7 @@ void CLayerMap::Create(
 
 void CLayerMap::Draw(PCImg32 pDst)
 {
+	int y;
 	PCInfoMapBase pMap;
 	PCLayerBase pLayer;
 
@@ -124,23 +125,14 @@ void CLayerMap::Draw(PCImg32 pDst)
 		RenewLevel ();
 	}
 
-#if 0
-	int y;
-
 	DrawPartsBase (pDst);
+	DrawItem (pDst);
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
-		DrawItem		(pDst, y);
 		DrawChar		(pDst, y);
 		DrawPartsPile	(pDst, y);
-		DrawShadow		(pDst, y);
 	}
-#else
-	DrawPartsBase	(pDst);
-	DrawItem		(pDst);
-	DrawChar		(pDst);
 	DrawPartsPile	(pDst);
 	DrawShadow		(pDst);
-#endif
 
 	pLayer = NULL;
 	switch (pMap->m_dwWeatherType) {
@@ -1105,6 +1097,23 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 			} else {
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
 			}
+			pInfoMapPartsBack	= pInfoMapParts;
+			dwPartsIDBack		= dwPartsID;
+			if (pInfoMapParts == NULL) {
+				continue;
+			}
+			if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
+				continue;
+			}
+			if (nDrawY != -99) {
+				if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) {
+					continue;
+				}
+			} else {
+				if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) == 0) {
+					continue;
+				}
+			}
 			m_pMgrDraw->DrawMapParts (
 					pDst,
 					32 + x * 32 + nMoveX,
@@ -1114,8 +1123,6 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 					FALSE,
 					TRUE,
 					FALSE);
-			pInfoMapPartsBack	= pInfoMapParts;
-			dwPartsIDBack		= dwPartsID;
 			if (byViewGrid) {
 				if (byViewGrid == 1) {
 					pDst->Rectangle (32 + x * 32 + nMoveX, 32 + y * 32 + nMoveY, 32, 32, -1);

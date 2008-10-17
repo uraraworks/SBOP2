@@ -18,6 +18,7 @@
 #define BIT_PARTSHIT_PILE		(0x00000002)		/* 重なる */
 #define BIT_PARTSHIT_PILEBACK	(0x00000004)		/* 下地も重ねる */
 #define BIT_PARTSHIT_FISHING	(0x00000008)		/* 釣り場 */
+#define BIT_PARTSHIT_DRAWLAST	(0x00000010)		/* キャラの後に描画 */
 
 #define BIT_PARTSBLOCK_UP		(0x01)				/* 上にぶつかる */
 #define BIT_PARTSBLOCK_DOWN		(0x02)				/* 下にぶつかる */

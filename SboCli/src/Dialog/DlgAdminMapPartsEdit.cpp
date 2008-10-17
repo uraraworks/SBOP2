@@ -40,6 +40,7 @@ void CDlgAdminMapPartsEdit::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_TYPE_PILEBACK, m_bTypePileBack);
 	DDX_Check(pDX, IDC_TYPE_PILE, m_bTypePile);
 	DDX_Check(pDX, IDC_FISHING, m_bFishing);
+	DDX_Check(pDX, IDC_TYPE_DRAWLAST, m_bTypeDrawLast);
 	DDX_Check(pDX, IDC_BLOCK_DOWN, m_bBlockDown);
 	DDX_Check(pDX, IDC_BLOCK_LEFT, m_bBlockLeft);
 	DDX_Check(pDX, IDC_BLOCK_RIGHT, m_bBlockRight);
@@ -89,6 +90,7 @@ CDlgAdminMapPartsEdit::CDlgAdminMapPartsEdit(CWnd* pParent /*=NULL*/)
 	m_bTypePileBack = FALSE;
 	m_bTypePile = FALSE;
 	m_bFishing = FALSE;
+	m_bTypeDrawLast = FALSE;
 	m_bBlockDown = FALSE;
 	m_bBlockLeft = FALSE;
 	m_bBlockRight = FALSE;
@@ -682,6 +684,7 @@ void CDlgAdminMapPartsEdit::SetPartsType(DWORD dwType)
 	m_bTypePile		= FALSE;
 	m_bTypePileBack	= FALSE;
 	m_bFishing		= FALSE;
+	m_bTypeDrawLast	= FALSE;
 
 	if (dwType & BIT_PARTSHIT_BLOCK) {			/* Ç‘Ç¬Ç©ÇÈ */
 		m_bTypeBlock = TRUE;
@@ -694,6 +697,9 @@ void CDlgAdminMapPartsEdit::SetPartsType(DWORD dwType)
 	}
 	if (dwType & BIT_PARTSHIT_FISHING) {		/* íﬁÇËèÍ */
 		m_bFishing = TRUE;
+	}
+	if (dwType & BIT_PARTSHIT_DRAWLAST) {		/* ÉLÉÉÉâÇÃå„Ç…ï`âÊ */
+		m_bTypeDrawLast = TRUE;
 	}
 
 	UpdateData (FALSE);
@@ -725,6 +731,9 @@ DWORD CDlgAdminMapPartsEdit::GetPartsType(void)
 	}
 	if (m_bFishing) {			/* íﬁÇËèÍ */
 		dwRet |= BIT_PARTSHIT_FISHING;
+	}
+	if (m_bTypeDrawLast) {		/* ÉLÉÉÉâÇÃå„Ç…ï`âÊ */
+		dwRet |= BIT_PARTSHIT_DRAWLAST;
 	}
 
 	return dwRet;
