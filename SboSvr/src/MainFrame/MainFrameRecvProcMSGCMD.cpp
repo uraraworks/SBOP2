@@ -38,6 +38,7 @@ void CMainFrame::RecvProcMSGCMD(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_MSGCMD_DICE:			RecvProcMSGCMD_DICE			(pData, dwSessionID);	break;	/* サイコロ */
 	case SBOCOMMANDID_SUB_MSGCMD_RND:			RecvProcMSGCMD_RND			(pData, dwSessionID);	break;	/* ランダム */
 	case SBOCOMMANDID_SUB_MSGCMD_EFFECT:		RecvProcMSGCMD_EFFECT		(pData, dwSessionID);	break;	/* エフェクト */
+	case SBOCOMMANDID_SUB_MSGCMD_WHERE:			RecvProcMSGCMD_WHERE		(pData, dwSessionID);	break;	/* 最も集まっている場所 */
 	}
 }
 
@@ -455,6 +456,44 @@ void CMainFrame::RecvProcMSGCMD_EFFECT(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 	pInfoChar->m_nReserveChgEfect = (int)Packet.m_dwPara;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcMSGCMD_WHERE								 */
+/* 内容		:受信処理(最も集まっている場所)									 */
+/* 日付		:2008/10/18														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcMSGCMD_WHERE(PBYTE pData, DWORD dwSessionID)
+{
+	int nCount;
+	DWORD dwTmp;
+	PCInfoCharSvr pInfoChar;
+	CPacketMSGCMD_PARA1 Packet;
+	CPacketMAP_SYSTEMMSG PacketMAP_SYSTEMMSG;
+	CmyString strTmp, strTmp2;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+
+	strTmp.Format ("SYSTEM:現在最も人が集まっている場所は");
+	PacketMAP_SYSTEMMSG.Make (strTmp, RGB (255, 255, 255), TRUE, SYSTEMMSGTYPE_NOLOG);
+	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
+	dwTmp  = m_pLibInfoChar->GetPlaceName (strTmp2);
+	nCount = m_pLibInfoChar->GetCountOnline (dwTmp);
+
+	if (strTmp2.IsEmpty ()) {
+		strTmp.Format ("SYSTEM:オンライン数 %d でマップ番号[%d]のようです", nCount, dwTmp);
+	} else {
+		strTmp.Format ("SYSTEM:オンライン数 %d で[%s]のようです", nCount, (LPCSTR)strTmp2);
+	}
+	PacketMAP_SYSTEMMSG.Make (strTmp, RGB (255, 255, 255), FALSE, SYSTEMMSGTYPE_NOLOG);
+	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 }
 
 /* Copyright(C)URARA-works 2007 */

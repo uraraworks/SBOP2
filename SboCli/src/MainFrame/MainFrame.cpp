@@ -39,9 +39,32 @@
 /* 定数定義																	 */
 /* ========================================================================= */
 
-#define CLNAME "SboCli"									/* 登録クラス名 */
-#define TIMERID_TOOLCHECK	100							/* ツールチェックタイマー */
-#define TIMER_TOOLCHECK		1000						/* ツールチェックタイマー周期 */
+#define CLNAME "SboCli"								/* 登録クラス名 */
+#define TIMERID_TOOLCHECK	100						/* ツールチェックタイマー */
+#define TIMER_TOOLCHECK		1000					/* ツールチェックタイマー周期 */
+
+/* メッセージコマンド種別 */
+enum {
+	MSGCMDTYPE_NONE = 0,
+	MSGCMDTYPE_CHGFACE,								/* 表情変更 */
+	MSGCMDTYPE_CHGHAIR,								/* 髪変更 */
+	MSGCMDTYPE_CHGCLOTH,							/* 服装変更 */
+	MSGCMDTYPE_CHGACCE,								/* アクセサリ変更 */
+	MSGCMDTYPE_BGMVOLUME,							/* BGM音量設定 */
+	MSGCMDTYPE_CHGCOLOR,							/* 色変更 */
+	MSGCMDTYPE_SEVOLUME,							/* 効果音量設定 */
+	MSGCMDTYPE_CHGARMS,								/* 持ち物変更 */
+	MSGCMDTYPE_CHGSHIELD,							/* 盾変更 */
+	MSGCMDTYPE_SETITEM,								/* 配置アイテム変更 */
+	MSGCMDTYPE_MAKEITEM,							/* アイテム作成 */
+	MSGCMDTYPE_BALLOON,								/* 噴出し */
+	MSGCMDTYPE_DICE,								/* サイコロ */
+	MSGCMDTYPE_RND,									/* ランダム */
+	MSGCMDTYPE_NOW,									/* 現在時刻 */
+	MSGCMDTYPE_EFFECT,								/* エフェクト */
+	MSGCMDTYPE_WHERE,								/* 最も集まっている場所 */
+	MSGCMDTYPE_MAX
+};
 
 
 /* ========================================================================= */
@@ -542,6 +565,14 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			if (pdwDst) {
 				*pdwDst = atoi (&pszTmp[1]);
 			}
+		}
+		break;
+	case MSGCMDTYPE_WHERE:			/* 最も集まっている場所 */
+		{
+			CPacketMSGCMD_PARA1 Packet;
+
+			Packet.Make (SBOCOMMANDID_SUB_MSGCMD_WHERE, pPlayerChar->m_dwCharID, 0);
+			m_pSock->Send (&Packet);
 		}
 		break;
 	default:
@@ -1423,6 +1454,12 @@ int CMainFrame::GetMsgCmdType(LPCSTR pszText)
 	} else if (strcmp (&pszTmp[1], "now") == 0) {
 		if (nCount == 1) {
 			nRet = MSGCMDTYPE_NOW;
+		}
+
+	/* 最も集まっている場所 */
+	} else if (strcmp (&pszTmp[1], "where") == 0) {
+		if (nCount == 1) {
+			nRet = MSGCMDTYPE_WHERE;
 		}
 	}
 

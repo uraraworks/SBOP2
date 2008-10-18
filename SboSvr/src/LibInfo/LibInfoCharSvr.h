@@ -34,7 +34,7 @@ public:
 	BOOL	Proc			(void);								/* 処理 */
 
 	int		GetCountLogIn	(void);													/* ログイン中キャラ数を取得 */
-	int		GetCountOnline	(void);													/* オンライン中のPC数を取得 */
+	int		GetCountOnline	(DWORD dwMapID = 0);									/* オンライン中のPC数を取得 */
 	void	LogIn			(DWORD dwCharID, DWORD dwSessionID, DWORD dwAccountID);	/* ログイン */
 	void	LogOut			(DWORD dwCharID);										/* ログアウト */
 	void	Revice			(void);													/* データの補正 */
@@ -45,7 +45,7 @@ public:
 	BOOL	UnEquip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* 装備解除 */
 	BOOL	UseItem			(CInfoCharSvr *pChar, DWORD dwItemID);					/* アイテム使用 */
 	void	RenewGrpID		(DWORD dwCharID);										/* 装備画像IDを更新 */
-	void	GetPlaceName	(CmyString &strDst);									/* 最も人が集まっているマップ名を取得 */
+	DWORD	GetPlaceName	(CmyString &strDst);									/* 最も人が集まっているマップ名を取得 */
 	void	MoveMapIn		(CInfoCharSvr *pInfoChar);								/* マップ内移動 */
 	void	MoveMapOut		(CInfoCharSvr *pInfoChar);								/* マップ外移動 */
 	void	SetInitStatus	(CInfoCharSvr *pInfoChar, BOOL bInitPos=FALSE);			/* ステータス初期値設定 */

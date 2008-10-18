@@ -128,6 +128,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	BOOL bResult;
 	int i, nTmp, nResult, nOnlineCount;
 	time_t timeTmp;
+	DWORD dwTmp;
 	PBYTE pTmp;
 	PCInfoCharSvr pInfoChar;
 	PCInfoAccount pInfoAccount;
@@ -151,7 +152,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	CPacketEFFECT_EFFECTINFO PacketEFFECT_EFFECTINFO;
 	CPacketEFFECT_BALLOONINFO PacketEFFECT_BALLOONINFO;
 	CLibInfoCharSvr LibInfoCharTmp;
-	CmyString strTmp;
+	CmyString strTmp, strTmp2;
 
 	pTmp	= NULL;
 	nResult	= PLAYRES_NONE;
@@ -214,8 +215,6 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	} else if (pInfoChar->m_strCharName == "VeLTiNA") {
 		pInfoChar->m_abyMark.Add (3);
 		nResult = PLAYRES_ADMINLEVEL_ALL;
-	} else if (pInfoChar->m_strCharName == "ユーリル") {
-		nResult = PLAYRES_ADMINLEVEL_ALL;
 	}
 	pInfoChar->m_abyMark.Add (1);
 
@@ -258,14 +257,32 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 
 	UpdateServerInfo ();
 
-	strTmp.Format ("SYSTEM:スクラップブックオンラインの世界へようこそ！");
+	strTmp.Format ("SYSTEM:スクラップブックオンラインの世界へようこそ♪");
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:最新のクライアントバージョンは[%s]です", m_pMgrData->GetClientVersion ());
-	PacketMAP_SYSTEMMSG.Make (strTmp);
+	strTmp.Format ("SYSTEM:現在のオンライン数: %d", nOnlineCount);
+	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:現在のオンライン数は %d です", nOnlineCount);
-	PacketMAP_SYSTEMMSG.Make (strTmp);
+	strTmp.Format ("SYSTEM:最新クライアントバージョン: %s", m_pMgrData->GetClientVersion ());
+	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
+	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
+
+	if (nOnlineCount % 10 == 0) {
+		strTmp.Format ("SYSTEM:オンライン数が %d になりました", nOnlineCount);
+		PacketMAP_SYSTEMMSG.Make (strTmp);
+		m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
+	}
+
+	strTmp.Format ("SYSTEM:現在最も人が集まっている場所は");
+	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
+	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
+	dwTmp = m_pLibInfoChar->GetPlaceName (strTmp2);
+	if (strTmp2.IsEmpty ()) {
+		strTmp.Format ("SYSTEM:マップ番号[%d]のようです", dwTmp);
+	} else {
+		strTmp.Format ("SYSTEM:[%s]のようです", (LPCSTR)strTmp2);
+	}
+	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 
 Exit:

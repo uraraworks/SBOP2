@@ -140,7 +140,7 @@ int CLibInfoCharSvr::GetCountLogIn(void)
 /* “ú•t		:2007/01/27														 */
 /* ========================================================================= */
 
-int CLibInfoCharSvr::GetCountOnline(void)
+int CLibInfoCharSvr::GetCountOnline(DWORD dwMapID/*0*/)
 {
 	int i, nCount, nRet;
 	PCInfoCharSvr pInfoChar;
@@ -156,6 +156,11 @@ int CLibInfoCharSvr::GetCountOnline(void)
 		pInfoChar = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
 		if (pInfoChar->IsNPC ()) {
 			continue;
+		}
+		if (dwMapID != 0) {
+			if (pInfoChar->m_dwMapID != dwMapID) {
+				continue;
+			}
 		}
 		nRet ++;
 	}
@@ -906,20 +911,18 @@ void CLibInfoCharSvr::RenewGrpID(DWORD dwCharID)
 /* “ú•t		:2008/05/23														 */
 /* ========================================================================= */
 
-void CLibInfoCharSvr::GetPlaceName(CmyString &strDst)
+DWORD CLibInfoCharSvr::GetPlaceName(CmyString &strDst)
 {
 	int i, nCount, nNo;
-	DWORD dwMapID;
 	PCInfoCharSvr pInfoChar;
 	PCInfoMapBase pInfoMap;
 	ARRAYINT anMapLoginCount;
 
 	strDst.Empty ();
-	dwMapID = 0;
 
 	nCount = m_pLibInfoMap->GetCount ();
 	if (nCount == 0) {
-		return;
+		return 0;
 	}
 	for (i = 0; i < nCount; i ++) {
 		anMapLoginCount.Add (0);
@@ -947,6 +950,8 @@ void CLibInfoCharSvr::GetPlaceName(CmyString &strDst)
 	}
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (nNo);
 	strDst = pInfoMap->m_strMapName;
+
+	return pInfoMap->m_dwMapID;
 }
 
 

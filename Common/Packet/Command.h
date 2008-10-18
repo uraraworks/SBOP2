@@ -186,6 +186,7 @@ enum {
 	SBOCOMMANDID_SUB_MSGCMD_DICE,				/* サイコロ */
 	SBOCOMMANDID_SUB_MSGCMD_RND,				/* ランダム */
 	SBOCOMMANDID_SUB_MSGCMD_EFFECT,				/* エフェクト */
+	SBOCOMMANDID_SUB_MSGCMD_WHERE,				/* 最も集まっている場所 */
 };
 
 /* コマンドID(アイテム系) */

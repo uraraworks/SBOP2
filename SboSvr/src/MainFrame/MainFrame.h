@@ -171,6 +171,7 @@ private:
 	void	RecvProcMSGCMD_DICE					(PBYTE pData, DWORD dwSessionID);					/* サイコロ */
 	void	RecvProcMSGCMD_RND					(PBYTE pData, DWORD dwSessionID);					/* ランダム */
 	void	RecvProcMSGCMD_EFFECT				(PBYTE pData, DWORD dwSessionID);					/* エフェクト */
+	void	RecvProcMSGCMD_WHERE				(PBYTE pData, DWORD dwSessionID);					/* 最も集まっている場所 */
 
 	/* 受信処理(MainFrameRecvProcEFFECT.cpp) */
 	void	RecvProcEFFECT						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* エフェクト系 */

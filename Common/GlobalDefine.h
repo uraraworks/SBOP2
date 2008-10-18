@@ -70,27 +70,6 @@ enum {
 	ADMINLEVEL_ALL									/* 全権限 */
 };
 
-/* メッセージコマンド種別 */
-enum {
-	MSGCMDTYPE_NONE = 0,
-	MSGCMDTYPE_CHGFACE,								/* 表情変更 */
-	MSGCMDTYPE_CHGHAIR,								/* 髪変更 */
-	MSGCMDTYPE_CHGCLOTH,							/* 服装変更 */
-	MSGCMDTYPE_CHGACCE,								/* アクセサリ変更 */
-	MSGCMDTYPE_BGMVOLUME,							/* BGM音量設定 */
-	MSGCMDTYPE_CHGCOLOR,							/* 色変更 */
-	MSGCMDTYPE_SEVOLUME,							/* 効果音量設定 */
-	MSGCMDTYPE_CHGARMS,								/* 持ち物変更 */
-	MSGCMDTYPE_CHGSHIELD,							/* 盾変更 */
-	MSGCMDTYPE_SETITEM,								/* 配置アイテム変更 */
-	MSGCMDTYPE_MAKEITEM,							/* アイテム作成 */
-	MSGCMDTYPE_BALLOON,								/* 噴出し */
-	MSGCMDTYPE_DICE,								/* サイコロ */
-	MSGCMDTYPE_RND,									/* ランダム */
-	MSGCMDTYPE_NOW,									/* 現在時刻 */
-	MSGCMDTYPE_EFFECT,								/* エフェクト */
-};
-
 /* マーク名 */
 enum {
 	MARKID_NONE = 0,
