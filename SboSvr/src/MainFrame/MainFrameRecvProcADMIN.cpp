@@ -24,6 +24,7 @@
 #include "InfoAccount.h"
 #include "InfoCharSvr.h"
 #include "LibInfoCharSvr.h"
+#include "TextOutput.h"
 #include "MgrData.h"
 #include "MainFrame.h"
 
@@ -36,7 +37,17 @@
 
 void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
-//Todo:権限チェック
+	PCInfoAccount pInfoAccount;
+
+	pInfoAccount = m_pLibInfoAccount->GetPtrSessionID (dwSessionID);
+	if (pInfoAccount == NULL) {
+		return;
+	}
+	if (pInfoAccount->m_nAdminLevel == ADMINLEVEL_NONE) {
+		m_pLog->Write ("■ 権限無しからの要求 dwSessionID:[%d] byCmdSub:[%d]", dwSessionID, byCmdSub);
+		PostMessage (m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		return;
+	}
 
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_ADMIN_CHARINFO:				RecvProcADMIN_CHARINFO				(pData, dwSessionID);	break;	/* キャラ情報通知 */

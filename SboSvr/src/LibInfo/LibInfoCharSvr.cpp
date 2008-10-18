@@ -1163,9 +1163,9 @@ PCInfoCharBase CLibInfoCharSvr::GetPtrSessionID(DWORD dwSessionID)
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfoLogin->GetAt (i);
 		if (pInfoTmp->m_dwSessionID == dwSessionID) {
 			pRet = pInfoTmp;
 			break;
