@@ -775,9 +775,11 @@ BOOL CLayerMap::TimerProcScroll(void)
 		goto Exit;
 	}
 
+	nTmp = nTmp / nMoveWait;
+	nTmp = max (nTmp, 1);
 	m_dwLastTimeScroll = timeGetTime ();
-	m_nMoveX += (anPosChangeX[m_byDirection] * (nTmp / nMoveWait));
-	m_nMoveY += (anPosChangeY[m_byDirection] * (nTmp / nMoveWait));
+	m_nMoveX += (anPosChangeX[m_byDirection] * nTmp);
+	m_nMoveY += (anPosChangeY[m_byDirection] * nTmp);
 
 	if (m_nMoveX >= SCROLLSIZE) {
 		m_nMoveX = 0;

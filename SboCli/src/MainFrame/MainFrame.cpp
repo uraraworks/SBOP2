@@ -82,6 +82,7 @@ CMainFrame::CMainFrame()
 	m_nDrawCount		= 30;
 	m_nFPS				= 0;
 	m_dwLastTimeCheck	= 0;
+	m_dwDrawTime		= 0;
 
 	m_pStateProc	= NULL;
 	m_pMgrData		= new CMgrData;
@@ -139,7 +140,7 @@ CMainFrame::~CMainFrame()
 int CMainFrame::MainLoop(HINSTANCE hInstance)
 {
 	char szBuf[256];
-	BYTE byFps, byNowFrame, byFrameBack;
+	BYTE byFps, byNowFrame, byFrameBack, byFrameTmp;
 	DWORD dwStyle, dwTimeTmp, dwTimeFps, dwTimeStart;
 	BOOL bResult, bDraw;
 	RECT rcTmp;
@@ -207,30 +208,35 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 			DispatchMessage (&msg);
 
 		} else {
-			bResult		= TimerProc ();
 			dwTimeTmp	= timeGetTime ();
+			bResult		= TimerProc ();
 			bDraw		|= bResult;
-
 			/* 時間的に描画するだろうフレーム番号を求める */
 			byNowFrame = (BYTE)((dwTimeTmp - dwTimeStart) / m_nFPS);
 			if ((byFps <= m_nDrawCount) && (byFrameBack != byNowFrame)) {
 				if (byFps && (byNowFrame - byFrameBack != 1)) {
 					bDraw = FALSE;
 				}
-
+				byFrameTmp = (BYTE)(m_dwDrawTime / m_nFPS);
+				if (byFrameTmp >= byNowFrame) {
+					bDraw = FALSE;
+				}
 				KeyProc ();
 				if (bDraw) {
 					InvalidateRect (m_hWnd, NULL, FALSE);
-					bDraw = FALSE;
+					OnPaint (m_hWnd);
 					byFps ++;
 				}
+				bDraw = FALSE;
 				byFrameBack = byNowFrame;
 			}
 
 			if (dwTimeTmp > dwTimeStart + 1000) {
 				/* FPSの更新 */
 				dwTimeStart = dwTimeFps = timeGetTime ();
+				m_dwDrawTime = 0;
 				byFps = 0;
+				bDraw = FALSE;
 			}
 		}
 	}
@@ -844,6 +850,7 @@ void CMainFrame::OnPaint(HWND hWnd)
 	m_pMgrDraw->Draw (hDC);
 
 	dwTmp = timeGetTime () - dwTmp;
+	m_dwDrawTime += dwTmp;
 
 	EndPaint (hWnd, &ps);
 }
@@ -1166,7 +1173,6 @@ BOOL CMainFrame::TimerProc(void)
 	PCInfoCharCli pPlayerChar;
 
 	bRet = FALSE;
-
 	bDraw = FALSE;
 	bDraw |= m_pMgrDraw->			TimerProc ();
 	bDraw |= m_pMgrLayer->			TimerProc ();
@@ -1194,9 +1200,6 @@ BOOL CMainFrame::TimerProc(void)
 	}
 
 	MsgWaitForMultipleObjects (0, NULL, FALSE, 1, QS_ALLINPUT);
-	if (bDraw == FALSE) {
-		int a=0;
-	}
 
 	bRet = bDraw;
 	return bRet;

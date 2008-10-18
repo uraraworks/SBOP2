@@ -173,7 +173,8 @@ private:
 	int					m_nGameState,			/* ゲーム状態 */
 						m_nDrawCount,			/* 秒間表示回数 */
 						m_nFPS;					/* 1フレームの時間 */
-	DWORD				m_dwLastTimeCheck;		/* 前回のチェック時間 */
+	DWORD				m_dwLastTimeCheck,		/* 前回のチェック時間 */
+						m_dwDrawTime;			/* 描画に使った時間 */
 	HRESULT				m_hCom;
 	SYSTEMTIME			m_stSystemTime;			/* 前回のチェック時刻 */
 
