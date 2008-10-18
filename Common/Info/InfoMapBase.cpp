@@ -459,10 +459,10 @@ BOOL CInfoMapBase::IsMapEvent(int x, int y)
 	if (m_pbyMapEvent == NULL) {
 		goto Exit;
 	}
-	if (x >= m_sizeMap.cx - 1) {
+	if (x >= m_sizeMap.cx) {
 		goto Exit;
 	}
-	if (y >= m_sizeMap.cy - 1) {
+	if (y >= m_sizeMap.cy) {
 		goto Exit;
 	}
 	if ((x < 0) || (y < 0)) {
