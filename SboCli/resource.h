@@ -264,6 +264,9 @@
 #define IDC_ATTR_DARK                   1117
 #define IDC_VIEWPOS_X                   1117
 #define IDC_PMAGIC                      1118
+#define IDC_LIGHTLEVEL                  1119
+#define IDC_MAXHP3                      1120
+#define IDC_LIGHTTIME                   1120
 #define IDC_TOPMOST                     1121
 #define IDC_BGMID                       1122
 #define IDC_WEATHERTYPE                 1123

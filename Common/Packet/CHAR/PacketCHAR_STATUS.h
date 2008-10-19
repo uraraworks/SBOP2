@@ -58,10 +58,12 @@ public:
 			m_dwHP,						/* HP */
 			m_dwMaxHP,					/* 最大HP */
 			m_dwSP,						/* SP */
-			m_dwMaxSP;					/* 最大SP */
+			m_dwMaxSP,					/* 最大SP */
+			m_dwLightTime;				/* 灯り継続時間 */
 	int		m_nDropItemAverage,			/* アイテムドロップ率 */
 			m_nMoveAverage,				/* 移動確率 */
-			m_nMoveAverageBattle;		/* 戦闘時移動確率 */
+			m_nMoveAverageBattle,		/* 戦闘時移動確率 */
+			m_nLightLevel;				/* 灯りレベル */
 } CPacketCHAR_STATUS, *PCPacketCHAR_STATUS;
 
 /* Copyright(C)URARA-works 2008 */

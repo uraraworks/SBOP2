@@ -148,7 +148,8 @@ public:
 				m_dwFrontCharID,					/* 付いているキャラID */
 				m_dwParentCharID,					/* 親のキャラID */
 				m_dwTargetCharID,					/* ターゲットキャラID */
-				m_adwMotionID[CHARMOTIONID_MAX];	/* モーションID */
+				m_adwMotionID[CHARMOTIONID_MAX],	/* モーションID */
+				m_dwLightTime;						/* 灯り有効時間 */
 	WORD		m_wAtackGauge,						/* アタックゲージ */
 				m_wDefenseGauge;					/* ガードゲージ */
 	POINT		m_ptCharBack,						/* 前回のキャラ座標 */
@@ -157,7 +158,8 @@ public:
 	int			m_nAnime,							/* アニメーション番号 */
 				m_nDirectionBack,					/* 前回の向き */
 				m_nProcState,						/* 行動状態 */
-				m_nMoveDirection;					/* 移動方向 */
+				m_nMoveDirection,					/* 移動方向 */
+				m_nLightLevel;						/* 灯りレベル */
 	BOOL		m_bNPC,								/* NPC */
 				m_bChargeAtack;						/* 溜め攻撃 */
 	ARRAYBYTE	m_abyMark;							/* 名前の前に表示するマーク番号 */

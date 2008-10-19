@@ -986,6 +986,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 	Packet.SetParam (pInfoChar);
+	if (Packet.m_dwLightTime != 0) {
+		pInfoChar->m_dwLightTime = timeGetTime () + Packet.m_dwLightTime;
+	}
 
 	pInfoChar->m_bChgStatus = TRUE;
 }

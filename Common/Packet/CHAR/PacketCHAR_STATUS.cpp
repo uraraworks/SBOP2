@@ -51,9 +51,11 @@ CPacketCHAR_STATUS::CPacketCHAR_STATUS()
 	m_dwMaxHP				= 0;	/* 最大HP */
 	m_dwSP					= 0;	/* SP */
 	m_dwMaxSP				= 0;	/* 最大SP */
+	m_dwLightTime			= 0;	/* 灯り継続時間 */
 	m_nDropItemAverage		= 0;	/* アイテムドロップ率 */
 	m_nMoveAverage			= 0;	/* 移動確率 */
 	m_nMoveAverageBattle	= 0;	/* 戦闘時移動確率 */
+	m_nLightLevel			= 0;	/* 灯りレベル */
 }
 
 
@@ -111,9 +113,11 @@ void CPacketCHAR_STATUS::Make(
 			 sizeof (pInfo->m_dwMaxHP)			+
 			 sizeof (pInfo->m_dwSP)				+
 			 sizeof (pInfo->m_dwMaxSP)			+
+			 sizeof (pInfo->m_dwLightTime)		+	/* 灯り継続時間 */
 			 sizeof (pInfo->m_nDropItemAverage)	+
 			 sizeof (pInfo->m_nMoveAverage)		+
-			 sizeof (pInfo->m_nMoveAverageBattle);
+			 sizeof (pInfo->m_nMoveAverageBattle) +
+			 sizeof (pInfo->m_nLightLevel);			/* 灯りレベル */
 
 	pData = new BYTE[dwSize];
 	ZeroMemory (pData, dwSize);
@@ -152,9 +156,11 @@ void CPacketCHAR_STATUS::Make(
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMaxHP,				sizeof (m_dwMaxHP),				pDataTmp);	/* 最大HP */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwSP,					sizeof (m_dwSP),				pDataTmp);	/* SP */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMaxSP,				sizeof (m_dwMaxSP),				pDataTmp);	/* 最大SP */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwLightTime,			sizeof (m_dwLightTime),			pDataTmp);	/* 灯り継続時間 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_nDropItemAverage,		sizeof (m_nDropItemAverage),	pDataTmp);	/* アイテムドロップ率 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverage,			sizeof (m_nMoveAverage),		pDataTmp);	/* 移動確率 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverageBattle,	sizeof (m_nMoveAverageBattle),	pDataTmp);	/* 戦闘時移動確率 */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_nLightLevel,			sizeof (m_nLightLevel),			pDataTmp);	/* 灯りレベル */
 
 	RenewPacket (pData, dwSize);
 }
@@ -202,9 +208,11 @@ PBYTE CPacketCHAR_STATUS::Set(PBYTE pPacket)
 	CopyMemoryRenew (&m_dwMaxHP,				pDataTmp, sizeof (m_dwMaxHP),				pDataTmp);	/* 最大HP */
 	CopyMemoryRenew (&m_dwSP,					pDataTmp, sizeof (m_dwSP),					pDataTmp);	/* SP */
 	CopyMemoryRenew (&m_dwMaxSP,				pDataTmp, sizeof (m_dwMaxSP),				pDataTmp);	/* 最大SP */
+	CopyMemoryRenew (&m_dwLightTime,			pDataTmp, sizeof (m_dwLightTime),			pDataTmp);	/* 灯り継続時間 */
 	CopyMemoryRenew (&m_nDropItemAverage,		pDataTmp, sizeof (m_nDropItemAverage),		pDataTmp);	/* アイテムドロップ率 */
 	CopyMemoryRenew (&m_nMoveAverage,			pDataTmp, sizeof (m_nMoveAverage),			pDataTmp);	/* 移動確率 */
 	CopyMemoryRenew (&m_nMoveAverageBattle,		pDataTmp, sizeof (m_nMoveAverageBattle),	pDataTmp);	/* 戦闘時移動確率 */
+	CopyMemoryRenew (&m_nLightLevel,			pDataTmp, sizeof (m_nLightLevel),			pDataTmp);	/* 灯りレベル */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -254,6 +262,7 @@ void CPacketCHAR_STATUS::SetParam(CInfoCharBase *pInfo)
 	pInfo->m_nDropItemAverage	= m_nDropItemAverage;	/* アイテムドロップ率 */
 	pInfo->m_nMoveAverage		= m_nMoveAverage;		/* 移動確率 */
 	pInfo->m_nMoveAverageBattle	= m_nMoveAverageBattle;	/* 戦闘時移動確率 */
+	pInfo->m_nLightLevel		= m_nLightLevel;		/* 灯りレベル */
 }
 
 /* Copyright(C)URARA-works 2008 */

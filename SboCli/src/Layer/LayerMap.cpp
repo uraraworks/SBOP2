@@ -711,16 +711,17 @@ void CLayerMap::RenewLevel(void)
 	if (pMap == NULL) {
 		return;
 	}
-
-	if (pMap->m_byLevel != 100) {
-		m_pDibLevel->FillRect (0, 0, m_pDibLevel->Width (), m_pDibLevel->Height (), RGB (100 - pMap->m_byLevel, 0, 0));
+	if (pMap->m_byLevel == 0) {
 		return;
 	}
 
-	m_pDibLevel->FillRect (0, 0, m_pDibLevel->Width (), m_pDibLevel->Height (), RGB (0, 0, 0));
+	m_pDibLevel->FillRect (0, 0, m_pDibLevel->Width (), m_pDibLevel->Height (), RGB (100 - pMap->m_byLevel, 0, 0));
 	nCount = m_pLibInfoChar->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
+		if (pChar->m_nLightLevel == 0) {
+			continue;
+		}
 
 		pInfoMotion = pChar->GetMotionInfo ();
 		wGrpIDMainBase	= pInfoMotion->m_wGrpIDMainBase;

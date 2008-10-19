@@ -325,6 +325,14 @@ BOOL CInfoCharSvr::TimerProc(DWORD dwTime)
 
 	Proc (dwTime);
 
+	if (m_dwLightTime != 0) {
+		if (dwTime > m_dwLightTime) {
+			m_nLightLevel = 0;
+			m_dwLightTime = 0;
+			m_bChgStatus  = TRUE;
+		}
+	}
+
 	return bRet;
 }
 

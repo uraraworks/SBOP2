@@ -117,6 +117,7 @@ CInfoCharBase::CInfoCharBase()
 	m_nMoveState			= CHARMOVESTATE_STAND;
 	m_nProcState			= CHARPROCSTATEID_NORMAL;
 	m_nMoveDirection		= -1;
+	m_nLightLevel			= 0;				/* 灯りレベル */
 	m_nMoveType				= CHARMOVETYPE_PC;
 	m_nDirection			= 1;
 	m_nGrpSize				= 16;
@@ -182,6 +183,7 @@ CInfoCharBase::CInfoCharBase()
 	m_dwFrontCharID			= 0;
 	m_dwParentCharID		= 0;
 	m_dwTargetCharID		= 0;
+	m_dwLightTime			= 0;					/* 灯り有効時間 */
 
 	m_dwEquipItemIDCloth		= 0;
 	m_dwEquipItemIDAcce1		= 0;
@@ -1833,6 +1835,9 @@ void CInfoCharBase::SetSpeak(LPCSTR pszSpeak)
 void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 {
 	int i, nCount;
+
+	m_dwLightTime				= m_dwLightTime;				/* 灯り有効時間 */
+	m_nLightLevel				= m_nLightLevel;				/* 灯りレベル */
 
 	m_dwAccountID				= pSrc->m_dwAccountID;
 	m_dwTailCharID				= pSrc->m_dwTailCharID;

@@ -44,9 +44,11 @@ public:
 	DWORD	m_dwMaxHP;
 	DWORD	m_dwSP;
 	DWORD	m_dwMaxSP;
+	DWORD	m_dwLightTime;
 	int	m_nDropItemAverage;
 	int	m_nMoveAverage;
 	int	m_nMoveAverageBattle;
+	int	m_nLightLevel;
 	DWORD	m_dwStamina;
 	DWORD	m_dwPower;
 	DWORD	m_dwStrength;
