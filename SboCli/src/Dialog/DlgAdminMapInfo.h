@@ -37,7 +37,7 @@ public:
 	enum { IDD = IDD_MAP_INFO };
 	CString	m_strMapSize;
 	int		m_nValue;
-	BOOL	m_bDark;
+	int		m_nDarkLevel;
 	CString	m_strMapID;
 	CString	m_strMapName;
 	CComboBox	m_cmbBGMID;

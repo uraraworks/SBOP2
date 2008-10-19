@@ -117,6 +117,7 @@
 #define IDC_VIEWPOS_X3                  1030
 #define IDC_TYPE_BLOCK                  1031
 #define IDC_VIEWPOS_Y3                  1031
+#define IDC_DARKLEVEL                   1031
 #define IDC_TYPE_PILE                   1032
 #define IDC_LEVEL3                      1032
 #define IDC_TYPE_PILEBACK               1033
@@ -135,7 +136,6 @@
 #define IDC_LIST                        1044
 #define IDC_OBJECT                      1044
 #define IDC_GRP_PARTS                   1045
-#define IDC_TYPE_PILE4                  1045
 #define IDC_TYPE_DRAWLAST               1045
 #define IDC_GRP_SHASOW                  1046
 #define IDC_MAPSHADOW                   1046

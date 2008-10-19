@@ -34,7 +34,7 @@ void CDlgAdminMapInfo::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_VALUE, m_nValue);
 	DDX_Text(pDX, IDC_MAPID, m_strMapID);
 	DDX_Text(pDX, IDC_MAPNAME, m_strMapName);
-	DDX_Check(pDX, IDC_DARK, m_bDark);
+	DDX_Text(pDX, IDC_DARKLEVEL, m_nDarkLevel);
 	DDX_Control(pDX, IDC_BGMID, m_cmbBGMID);
 	DDX_Control(pDX, IDC_WEATHERTYPE, m_cmbWeatherType);
 	//}}AFX_DATA_MAP
@@ -63,7 +63,7 @@ CDlgAdminMapInfo::CDlgAdminMapInfo(CWnd* pParent /*=NULL*/)
 	m_nValue = 0;
 	m_strMapID = _T("");
 	m_strMapName = _T("");
-	m_bDark = FALSE;
+	m_nDarkLevel = 0;
 	//}}AFX_DATA_INIT
 
 	m_pInfoMap = NULL;
@@ -118,7 +118,7 @@ void CDlgAdminMapInfo::Renew(void)
 
 	SelectCmb (&m_cmbBGMID,			m_pInfoMap->m_dwBGMID);
 	SelectCmb (&m_cmbWeatherType,	m_pInfoMap->m_dwWeatherType);
-	m_bDark = (m_pInfoMap->m_byLevel == 0) ? FALSE : TRUE;			/* 明るさレベル */
+	m_nDarkLevel = m_pInfoMap->m_byLevel;							/* 暗度 */
 
 	UpdateData (FALSE);
 }
@@ -283,7 +283,7 @@ void CDlgAdminMapInfo::OnChangemapname()
 	m_pInfoMap->m_dwBGMID = m_cmbBGMID.GetItemData (nSelect);				/* BGMID */
 	nSelect = m_cmbWeatherType.GetCurSel ();
 	m_pInfoMap->m_dwWeatherType = m_cmbWeatherType.GetItemData (nSelect);	/* 天気種別 */
-	m_pInfoMap->m_byLevel = (m_bDark) ? 100 : 0;							/* 明るさレベル */
+	m_pInfoMap->m_byLevel = (BYTE)m_nDarkLevel;								/* 暗度 */
 
 	Packet.Make (m_pInfoMap->m_dwMapID, m_pInfoMap->m_dwBGMID, m_pInfoMap->m_dwWeatherType, m_pInfoMap->m_byLevel, (LPCSTR)m_strMapName);
 	m_pSock->Send (&Packet);

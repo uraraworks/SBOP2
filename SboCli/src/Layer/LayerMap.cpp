@@ -705,12 +705,19 @@ void CLayerMap::RenewLevel(void)
 	PCInfoCharCli pChar;
 	POINT ptTmp;
 	PCInfoMotion pInfoMotion;
+	PCInfoMapBase pMap;
 
-DWORD dwTmp=timeGetTime();
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return;
+	}
+
+	if (pMap->m_byLevel != 100) {
+		m_pDibLevel->FillRect (0, 0, m_pDibLevel->Width (), m_pDibLevel->Height (), RGB (100 - pMap->m_byLevel, 0, 0));
+		return;
+	}
+
 	m_pDibLevel->FillRect (0, 0, m_pDibLevel->Width (), m_pDibLevel->Height (), RGB (0, 0, 0));
-dwTmp = timeGetTime()-dwTmp;
-
-dwTmp=timeGetTime();
 	nCount = m_pLibInfoChar->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
@@ -744,7 +751,6 @@ dwTmp=timeGetTime();
 		m_pDibLevel->BltPlus (x - nTmp, y - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
 //		m_pDibLevel->Circle (x - nTmp, y - nTmp, r, RGB (100, 0, 0));
 	}
-dwTmp = timeGetTime()-dwTmp;
 }
 
 
