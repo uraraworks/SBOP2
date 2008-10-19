@@ -96,6 +96,7 @@ protected:
 
 	/* アイテム使用処理 */
 	int UseItemProcHP				(CInfoCharSvr *pInfoChar, DWORD dwItemID);	/* HP増減 */
+	int UseItemProcLIGHT			(CInfoCharSvr *pInfoChar, DWORD dwItemID);	/* 灯り */
 
 
 public:

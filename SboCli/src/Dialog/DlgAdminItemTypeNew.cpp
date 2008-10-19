@@ -17,6 +17,7 @@
 #include "LibSboSoundLoader.h"
 #include "DlgAdminItemTypeNewARMS.h"
 #include "DlgAdminItemTypeNewHP.h"
+#include "DlgAdminItemTypeNewLIGHT.h"
 #include "DlgAdminItemTypeNew.h"
 
 #ifdef _DEBUG
@@ -400,6 +401,19 @@ void CDlgAdminItemTypeNew::OnTypeinfo()
 	case ITEMTYPEID_HP:			/* HPëùå∏ */
 		{
 			CDlgAdminItemTypeNewHP Dlg(this);
+
+			Dlg.Init (m_pMgrData);
+			Dlg.Set (m_pInfoItemType);
+			nResult = Dlg.DoModal ();
+			if (nResult != IDOK) {
+				break;
+			}
+			Dlg.Get (m_pInfoItemType);
+		}
+		break;
+	case ITEMTYPEID_LIGHT:		/* ìîÇË */
+		{
+			CDlgAdminItemTypeNewLIGHT Dlg(this);
 
 			Dlg.Init (m_pMgrData);
 			Dlg.Set (m_pInfoItemType);

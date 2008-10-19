@@ -958,6 +958,7 @@ BOOL CLibInfoItem::IsUseItem(DWORD dwItemID)
 
 	switch (pInfoItemType->m_dwItemTypeID) {
 	case ITEMTYPEID_HP:		/* HP‘Œ¸ */
+	case ITEMTYPEID_LIGHT:	/* “”‚è*/
 		break;
 	default:
 		goto Exit;

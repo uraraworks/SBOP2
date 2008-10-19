@@ -240,15 +240,11 @@ int CLibInfoItemType::GetGrpIDMainCount(DWORD dwTypeID)
 {
 	int nRet;
 
-	nRet = 0;
+	nRet = 1;
 
 	switch (dwTypeID) {
-	case ITEMTYPEID_NONE:		nRet = ITEMGRPIDMAIN_NONE_MAX;		break;	/* 効果無し */
 	case ITEMTYPEID_CLOTH:		nRet = ITEMGRPIDMAIN_CLOTH_MAX;		break;	/* 服 */
-	case ITEMTYPEID_ACCE:		nRet = ITEMGRPIDMAIN_ACCE_MAX;		break;	/* アクセサリ */
 	case ITEMTYPEID_ARMS:		nRet = ITEMGRPIDMAIN_ARMS_MAX;		break;	/* 持ち物 */
-	case ITEMTYPEID_SHIELD:		nRet = ITEMGRPIDMAIN_SHIELD_MAX;	break;	/* 盾 */
-	case ITEMTYPEID_HP:			nRet = ITEMGRPIDMAIN_HP_MAX;		break;	/* HP増減 */
 	}
 
 	return nRet;
@@ -274,6 +270,7 @@ LPCSTR CLibInfoItemType::GetTypeName(DWORD dwItemTypeID)
 	case ITEMTYPEID_ARMS:		pszRet = "持ち物";			break;	/* 持ち物 */
 	case ITEMTYPEID_SHIELD:		pszRet = "盾";				break;	/* 盾 */
 	case ITEMTYPEID_HP:			pszRet = "HP増減";			break;	/* HP増減 */
+	case ITEMTYPEID_LIGHT:		pszRet = "灯り";			break;	/* 灯り */
 	}
 
 	return pszRet;
@@ -292,23 +289,13 @@ LPCSTR CLibInfoItemType::GetGrpIDMainName(
 {
 	LPCSTR pszRet;
 
-	pszRet = "";
+	pszRet = "種別の基本画像";
 
 	switch (dwTypeID) {
-	case ITEMTYPEID_NONE:	/* 効果無し */
-		switch (wGrpIDMain) {
-		case ITEMGRPIDMAIN_NONE_NONE:	pszRet = "種別の基本画像";	break;	/* 未設定 */
-		}
-		break;
 	case ITEMTYPEID_CLOTH:	/* 服 */
 		switch (wGrpIDMain) {
 		case ITEMGRPIDMAIN_CLOTH_NONE:	pszRet = "種別の基本画像";	break;	/* 未設定 */
 		case ITEMGRPIDMAIN_CLOTH_SP:	pszRet = "特殊服";			break;	/* 特殊服 */
-		}
-		break;
-	case ITEMTYPEID_ACCE:	/* アクセサリ */
-		switch (wGrpIDMain) {
-		case ITEMGRPIDMAIN_ACCE_NONE:	pszRet = "種別の基本画像";	break;	/* 未設定 */
 		}
 		break;
 	case ITEMTYPEID_ARMS:	/* 持ち物 */
@@ -321,16 +308,6 @@ LPCSTR CLibInfoItemType::GetGrpIDMainName(
 		case ITEMGRPIDMAIN_2X2_SHIELD:		pszRet = "盾(2x2)";			break;	/* 盾(2x2) */
 		case ITEMGRPIDMAIN_2X2_ARMSSP:		pszRet = "特殊持ち物(2x2)";	break;	/* 特殊持ち物(2x2) */
 		case ITEMGRPIDMAIN_2X2_BOW:			pszRet = "弓(2x2)";			break;	/* 弓(2x2) */
-		}
-		break;
-	case ITEMTYPEID_SHIELD:	/* 盾 */
-		switch (wGrpIDMain) {
-		case ITEMGRPIDMAIN_SHIELD_NONE:		pszRet = "種別の基本画像";	break;	/* 未設定 */
-		}
-		break;
-	case ITEMTYPEID_HP:		/* HP増減 */
-		switch (wGrpIDMain) {
-		case ITEMGRPIDMAIN_HP_NONE:			pszRet = "種別の基本画像";	break;	/* 未設定 */
 		}
 		break;
 	}

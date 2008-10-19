@@ -837,6 +837,9 @@ BOOL CLibInfoCharSvr::UseItem(CInfoCharSvr *pChar, DWORD dwItemID)
 	case ITEMTYPEID_HP:		/* HP増減 */
 		nResult = UseItemProcHP (pChar, dwItemID);
 		break;
+	case ITEMTYPEID_LIGHT:	/* 灯り */
+		nResult = UseItemProcLIGHT (pChar, dwItemID);
+		break;
 	}
 	switch (nResult) {
 	case 0:		/* 使わなかった */
@@ -2956,6 +2959,56 @@ int CLibInfoCharSvr::UseItemProcHP(CInfoCharSvr *pInfoChar, DWORD dwItemID)
 			Damage (pInfoChar, pCharTarget, abs (nPoint), (int)pInfoItemType->m_dwUseEffectID, FALSE);
 		}
 	}
+
+	nRet = -1;
+	/* 無くなるか判定 */
+	if (pInfoItemType->m_byDelAverage != 0) {
+		if (genrand () % 100 >= 100 - pInfoItemType->m_byDelAverage) {
+			nRet = 1;
+		}
+	}
+	/* 効果音の再生 */
+	if (pInfoItemType->m_dwUseSoundID != 0) {
+		PacketPLAYSOUND.Make (pInfoItemType->m_dwUseSoundID);
+		m_pMainFrame->SendToClient (pInfoChar->m_dwSessionID, &PacketPLAYSOUND);
+	}
+
+Exit:
+	return nRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::UseItemProcLIGHT								 */
+/* 内容		:アイテム使用処理(灯り)											 */
+/* 日付		:2008/10/19														 */
+/* ========================================================================= */
+
+int CLibInfoCharSvr::UseItemProcLIGHT(CInfoCharSvr *pInfoChar, DWORD dwItemID)
+{
+	int nRet;
+	PCInfoItem pInfoItem;
+	PCInfoItemTypeBase pInfoItemType;
+	CPacketADMIN_PLAYSOUND PacketPLAYSOUND;
+	CmyString strMsg;
+
+	nRet = 0;
+
+	pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (dwItemID);
+	if (pInfoItem == NULL) {
+		goto Exit;
+	}
+	pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (pInfoItem->m_dwItemTypeID);
+	if (pInfoItemType == NULL) {
+		goto Exit;
+	}
+
+	pInfoChar->m_nLightLevel = (int)pInfoItemType->m_dwValue;
+	pInfoChar->m_dwLightTime = timeGetTime () + pInfoItemType->m_dwValue2;
+	pInfoChar->m_bChgStatus = TRUE;
+
+	strMsg.Format ("%s を使いました", (LPCSTR)pInfoItem->m_strName);
+	SendSystemMsg (pInfoChar->m_dwSessionID, (LPCSTR)strMsg, SYSTEMMSGTYPE_NOLOG);
 
 	nRet = -1;
 	/* 無くなるか判定 */

@@ -2918,6 +2918,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminItemTypeNewLIGHT.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminItemWeaponList.cpp"
 					>
 				</File>
@@ -4100,6 +4104,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminItemTypeNewHP.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminItemTypeNewLIGHT.h"
 					>
 				</File>
 				<File

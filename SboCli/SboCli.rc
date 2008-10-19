@@ -1090,6 +1090,19 @@ BEGIN
     EDITTEXT        IDC_IDSUB,53,42,40,14,ES_AUTOHSCROLL
 END
 
+IDD_ITEMTYPE_NEW_LIGHT DIALOGEX 0, 0, 199, 72
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "アイテム種別(灯り)の設定"
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
+BEGIN
+    LTEXT           "灯りレベル：",-1,7,9,35,8
+    EDITTEXT        IDC_VALUE1,56,7,40,14,ES_AUTOHSCROLL
+    LTEXT           "持続時間(ms)：",-1,7,25,45,8
+    EDITTEXT        IDC_VALUE2,56,23,40,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,87,51,50,14
+    PUSHBUTTON      "キャンセル",IDCANCEL,142,51,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1260,6 +1273,14 @@ BEGIN
         RIGHTMARGIN, 154
         TOPMARGIN, 7
         BOTTOMMARGIN, 99
+    END
+
+    IDD_ITEMTYPE_NEW_LIGHT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 192
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 65
     END
 END
 #endif    // APSTUDIO_INVOKED

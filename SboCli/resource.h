@@ -53,6 +53,8 @@
 #define IDD_SYSTEM_SET_INITCHARSTATUS   171
 #define IDD_MAP_EVENT_INITSTATUS        172
 #define IDD_MAP_EVENT_GRPIDTMP          173
+#define IDD_ITEMTYPE_NEW_HP1            174
+#define IDD_ITEMTYPE_NEW_LIGHT          174
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -265,7 +267,6 @@
 #define IDC_VIEWPOS_X                   1117
 #define IDC_PMAGIC                      1118
 #define IDC_LIGHTLEVEL                  1119
-#define IDC_MAXHP3                      1120
 #define IDC_LIGHTTIME                   1120
 #define IDC_TOPMOST                     1121
 #define IDC_BGMID                       1122

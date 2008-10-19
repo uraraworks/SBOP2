@@ -22,13 +22,8 @@ enum {
 	ITEMTYPEID_ARMS,					/* 持ち物 */
 	ITEMTYPEID_SHIELD,					/* 盾 */
 	ITEMTYPEID_HP,						/* HP増減 */
+	ITEMTYPEID_LIGHT,					/* 灯り */
 	ITEMTYPEID_MAX
-};
-
-/* 画像IDメイン(効果無し) */
-enum {
-	ITEMGRPIDMAIN_NONE_NONE = 0,		/* 未設定 */
-	ITEMGRPIDMAIN_NONE_MAX
 };
 
 /* 画像IDメイン(服) */
@@ -36,12 +31,6 @@ enum {
 	ITEMGRPIDMAIN_CLOTH_NONE = 0,		/* 未設定 */
 	ITEMGRPIDMAIN_CLOTH_SP,				/* 特殊服 */
 	ITEMGRPIDMAIN_CLOTH_MAX
-};
-
-/* 画像IDメイン(アクセサリ) */
-enum {
-	ITEMGRPIDMAIN_ACCE_NONE = 0,		/* 未設定 */
-	ITEMGRPIDMAIN_ACCE_MAX
 };
 
 /* 画像IDメイン(持ち物) */
@@ -55,18 +44,6 @@ enum {
 	ITEMGRPIDMAIN_2X2_ARMSSP,			/* 特殊持ち物(2x2) */
 	ITEMGRPIDMAIN_2X2_BOW,				/* 弓(2x2) */
 	ITEMGRPIDMAIN_ARMS_MAX
-};
-
-/* 画像IDメイン(盾) */
-enum {
-	ITEMGRPIDMAIN_SHIELD_NONE = 0,		/* 未設定 */
-	ITEMGRPIDMAIN_SHIELD_MAX
-};
-
-/* 画像IDメイン(HP増減) */
-enum {
-	ITEMGRPIDMAIN_HP_NONE = 0,		/* 未設定 */
-	ITEMGRPIDMAIN_HP_MAX
 };
 
 /* モーション種別 */
@@ -129,6 +106,9 @@ public:
 				m_dwMoveCount;					/* 飛距離 */
 	/* HP増減 */
 	DWORD		m_dwValue2;						/* 効果(最大)最小はm_dwValue */
+	/* 灯り */
+//	DWORD		m_dwValue,						/* 灯りレベル */
+//				m_dwValue2;						/* 持続時間 */
 } CInfoItemTypeBase, *PCInfoItemTypeBase;
 typedef CmyArray<PCInfoItemTypeBase, PCInfoItemTypeBase>	   ARRAYITEMTYPEINFO;
 typedef CmyArray<PCInfoItemTypeBase, PCInfoItemTypeBase>	 *PARRAYITEMTYPEINFO;
