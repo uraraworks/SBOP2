@@ -870,7 +870,7 @@ void CInfoMapBase::Copy(CInfoMapBase *pSrc)
 
 void CInfoMapBase::RenewMapEvent(void)
 {
-	int i, nCount;
+	int i, x, y, nCount, nCountX, nCountY;
 	PCInfoMapEventBase pInfo;
 
 	SAFE_DELETE_ARRAY (m_pbyMapEvent);
@@ -881,7 +881,20 @@ void CInfoMapBase::RenewMapEvent(void)
 		nCount = m_pLibInfoMapEvent->GetCount ();
 		for (i = 0; i < nCount; i ++) {
 			pInfo = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
-			m_pbyMapEvent[pInfo->m_ptPos.y * m_sizeMap.cx + pInfo->m_ptPos.x] = 1;
+
+			/* 範囲で判定？ */
+			if (pInfo->m_nHitType == MAPEVENTHITTYPE_AREA) {
+				nCountX = pInfo->m_ptPos2.x - pInfo->m_ptPos.x + 1;
+				nCountY = pInfo->m_ptPos2.y - pInfo->m_ptPos.y + 1;
+				for (y = 0; y < nCountY; y ++) {
+					for (x = 0; x < nCountX; x ++) {
+						m_pbyMapEvent[(pInfo->m_ptPos.y + y) * m_sizeMap.cx + (pInfo->m_ptPos.x + x)] = 1;
+					}
+				}
+
+			} else {
+				m_pbyMapEvent[pInfo->m_ptPos.y * m_sizeMap.cx + pInfo->m_ptPos.x] = 1;
+			}
 		}
 	}
 }
@@ -935,7 +948,9 @@ Exit:
 /* 日付		:2008/06/28														 */
 /* ========================================================================= */
 
-CInfoMapEventBase *CInfoMapBase::GetEvent(int x, int y)
+CInfoMapEventBase *CInfoMapBase::GetEvent(
+	int x,		/* [in] マップ座標X */
+	int y)		/* [in] マップ座標Y */
 {
 	int i, nCount;
 	PCInfoMapEventBase pRet, pInfo;
@@ -948,8 +963,18 @@ CInfoMapEventBase *CInfoMapBase::GetEvent(int x, int y)
 	nCount = m_pLibInfoMapEvent->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
-		if ((pInfo->m_ptPos.x == x) && (pInfo->m_ptPos.y == y)) {
-			pRet = pInfo;
+		switch (pInfo->m_nHitType) {
+		case MAPEVENTHITTYPE_AREA:			/* 範囲で判定 */
+			if ((x >= pInfo->m_ptPos.x) && (x <= pInfo->m_ptPos2.x)) {
+				if ((y >= pInfo->m_ptPos.y) && (y <= pInfo->m_ptPos2.y)) {
+					pRet = pInfo;
+				}
+			}
+			break;
+		default:
+			if ((pInfo->m_ptPos.x == x) && (pInfo->m_ptPos.y == y)) {
+				pRet = pInfo;
+			}
 			break;
 		}
 	}

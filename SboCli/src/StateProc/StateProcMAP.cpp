@@ -1908,7 +1908,7 @@ BOOL CStateProcMAP::MoveProc(
 	int yy,				/* [in] 増減(タテ) */
 	int nDirection)		/* [in] 向き */
 {
-	int nResult, nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
+	int i, nCount, nResult, nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
 		anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	BOOL bRet, bResult;
 	DWORD dwCharID;
@@ -2108,8 +2108,10 @@ ExitSend:
 
 	if ((xBack != x) || (yBack != y)) {
 		m_dwLastTimeGauge = timeGetTime ();
-		if ((m_pPlayerChar->m_nMapX % 2 == 0) && (m_pPlayerChar->m_nMapY % 2 == 0)) {
-			bResult = pMap->IsMapEvent (m_pPlayerChar->m_nMapX / 2, m_pPlayerChar->m_nMapY / 2);
+		m_pPlayerChar->RenewBlockMapArea (x, y, nDirectionView);
+		nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
+		for (i = 0; i < nCount; i ++) {
+			bResult = bResult = pMap->IsMapEvent (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y);
 			if (bResult) {
 				/* マップイベントチェック予約 */
 				m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;

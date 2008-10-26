@@ -53,7 +53,6 @@
 #define IDD_SYSTEM_SET_INITCHARSTATUS   171
 #define IDD_MAP_EVENT_INITSTATUS        172
 #define IDD_MAP_EVENT_GRPIDTMP          173
-#define IDD_ITEMTYPE_NEW_HP1            174
 #define IDD_ITEMTYPE_NEW_LIGHT          174
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
@@ -83,6 +82,8 @@
 #define IDC_STANDMOTION                 1012
 #define IDC_MOVETYPE2                   1012
 #define IDC_SEX                         1012
+#define IDC_TYPE2                       1012
+#define IDC_HITTYPE                     1012
 #define IDC_ID                          1013
 #define IDC_DEL2                        1013
 #define IDC_PLAY                        1013
@@ -154,6 +155,7 @@
 #define IDC_POSX                        1058
 #define IDC_POSY                        1059
 #define IDC_POSX2                       1060
+#define IDC_POSY2                       1061
 #define IDC_GRPID                       1062
 #define IDC_PUTON                       1063
 #define IDC_BLOCK                       1064

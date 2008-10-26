@@ -2324,7 +2324,22 @@ BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
-	pInfoMapEventBase = pInfoMap->GetEvent (pInfoChar->m_nMapX / 2, pInfoChar->m_nMapY / 2);
+	pInfoChar->RenewBlockMapArea (pInfoChar->m_nMapX, pInfoChar->m_nMapY, pInfoChar->m_nDirection);
+	pInfoMapEventBase = NULL;
+	nCount = pInfoChar->m_aposBockMapArea.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoMapEventBase = pInfoMap->GetEvent (pInfoChar->m_aposBockMapArea[i].x, pInfoChar->m_aposBockMapArea[i].y);
+		if (pInfoMapEventBase) {
+			if (pInfoMapEventBase->m_nHitType == MAPEVENTHITTYPE_MAPPOS) {
+				/* マップ座標で判定の時に半端な位置にいる？ */
+				if ((pInfoChar->m_nMapX % 2) || (pInfoChar->m_nMapY % 2)) {
+					pInfoMapEventBase = NULL;
+					continue;
+				}
+			}
+			break;
+		}
+	}
 	if (pInfoMapEventBase == NULL) {
 		goto Exit;
 	}

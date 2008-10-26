@@ -25,6 +25,14 @@ enum {
 	MAPEVENTTYPE_MAX
 };
 
+/* 当たり判定種別 */
+enum {
+	MAPEVENTHITTYPE_MAPPOS = 0,							/* マップ座標で判定 */
+	MAPEVENTHITTYPE_CHARPOS,							/* キャラ座標で判定 */
+	MAPEVENTHITTYPE_AREA,								/* 範囲で判定 */
+	MAPEVENTHITTYPE_MAX
+};
+
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -55,8 +63,10 @@ public:
 	int			m_nElementCountBase;			/* 基底クラスの要素数 */
 
 	DWORD		m_dwMapEventID;					/* マップイベントID */
-	int			m_nType;						/* イベント種別 */
-	POINT		m_ptPos;						/* 座標 */
+	int			m_nType,						/* イベント種別 */
+				m_nHitType;						/* 当たり判定種別 */
+	POINT		m_ptPos,						/* 座標1 */
+				m_ptPos2;						/* 座標2 */
 } CInfoMapEventBase, *PCInfoMapEventBase;
 typedef CmyArray<PCInfoMapEventBase, PCInfoMapEventBase>	  ARRAYMAPEVENTBASEINFO;
 typedef CmyArray<PCInfoMapEventBase, PCInfoMapEventBase>	*PARRAYMAPEVENTBASEINFO;

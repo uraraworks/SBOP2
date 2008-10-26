@@ -32,14 +32,18 @@ void CDlgAdminMapEventBase::DoDataExchange(CDataExchange* pDX)
 	CDlgAdminBase::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDlgAdminMapEventBase)
 	DDX_Control(pDX, IDC_TYPE, m_ctlType);
+	DDX_Control(pDX, IDC_HITTYPE, m_ctlHitType);
 	DDX_Text(pDX, IDC_POSX, m_nPosX);
 	DDX_Text(pDX, IDC_POSY, m_nPosY);
+	DDX_Text(pDX, IDC_POSX2, m_nPosX2);
+	DDX_Text(pDX, IDC_POSY2, m_nPosY2);
 	//}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminMapEventBase, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminMapEventBase)
 	ON_CBN_SELCHANGE(IDC_TYPE, OnSelchangeType)
+	ON_CBN_SELCHANGE(IDC_HITTYPE, OnSelchangeHitType)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -57,9 +61,12 @@ CDlgAdminMapEventBase::CDlgAdminMapEventBase(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDlgAdminMapEventBase)
 	m_nPosX = 0;
 	m_nPosY = 0;
+	m_nPosX2 = 0;
+	m_nPosY2 = 0;
 	//}}AFX_DATA_INIT
 
 	m_nEventType	= -1;
+	m_nHitType		= -1;
 	m_bModeModify	= FALSE;
 	m_ppWndNotify	= NULL;
 	m_pDlgType		= NULL;
@@ -127,8 +134,10 @@ void CDlgAdminMapEventBase::SetModify(CInfoMapEventBase *pSrc)
 	m_pInfo = (PCInfoMapEventBase)LibInfo.GetNew (pSrc->m_nType);
 	m_pInfo->Copy (pSrc);
 
-	m_nPosX = m_pInfo->m_ptPos.x;
-	m_nPosY = m_pInfo->m_ptPos.y;
+	m_nPosX  = m_pInfo->m_ptPos.x;
+	m_nPosY  = m_pInfo->m_ptPos.y;
+	m_nPosX2 = m_pInfo->m_ptPos2.x;
+	m_nPosY2 = m_pInfo->m_ptPos2.y;
 
 	m_bModeModify = TRUE;
 }
@@ -168,6 +177,13 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	m_ctlType.InsertString (5, "一時画像設定");
 	m_ctlType.SetItemData (5, MAPEVENTTYPE_GRPIDTMP);
 
+	m_ctlHitType.InsertString (0, "マップ座標で判定");
+	m_ctlHitType.SetItemData (0, MAPEVENTHITTYPE_MAPPOS);
+	m_ctlHitType.InsertString (1, "キャラ座標で判定");
+	m_ctlHitType.SetItemData (1, MAPEVENTHITTYPE_CHARPOS);
+	m_ctlHitType.InsertString (2, "範囲で判定");
+	m_ctlHitType.SetItemData (2, MAPEVENTHITTYPE_AREA);
+
 	nNo = 0;
 	if (m_pInfo) {
 		for (i = 0; i < MAPEVENTTYPE_MAX; i ++) {
@@ -180,7 +196,20 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	}
 	m_ctlType.SetCurSel (nNo);
 
+	nNo = 0;
+	if (m_pInfo) {
+		for (i = 0; i < MAPEVENTHITTYPE_MAX; i ++) {
+			if (m_pInfo->m_nHitType == m_ctlHitType.GetItemData (i)) {
+				nNo = i;
+				m_nHitType = m_pInfo->m_nHitType;
+				break;
+			}
+		}
+	}
+	m_ctlHitType.SetCurSel (nNo);
+
 	OnSelchangeType ();
+	OnSelchangeHitType ();
 	if (m_pDlgType && m_pInfo) {
 		m_pDlgType->Set (m_pInfo);
 	}
@@ -286,6 +315,26 @@ void CDlgAdminMapEventBase::OnSelchangeType()
 
 
 /* ========================================================================= */
+/* 関数名	:CDlgAdminMapEventBase::OnSelchangeHitType						 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2008/10/26														 */
+/* ========================================================================= */
+
+void CDlgAdminMapEventBase::OnSelchangeHitType()
+{
+	int nNo;
+
+	if (m_pInfo == NULL) {
+		return;
+	}
+
+	nNo = m_ctlHitType.GetCurSel ();
+	m_nHitType = m_ctlHitType.GetItemData (nNo);
+	m_pInfo->m_nHitType = m_nHitType;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CDlgAdminMapEventBase::OnOK									 */
 /* 内容		:ボタンハンドラ(OK)												 */
 /* 日付		:2007/08/16														 */
@@ -296,8 +345,10 @@ void CDlgAdminMapEventBase::OnOK()
 	UpdateData ();
 
 	if (m_pInfo) {
-		m_pInfo->m_ptPos.x = m_nPosX;
-		m_pInfo->m_ptPos.y = m_nPosY;
+		m_pInfo->m_ptPos.x  = m_nPosX;
+		m_pInfo->m_ptPos.y  = m_nPosY;
+		m_pInfo->m_ptPos2.x = m_nPosX2;
+		m_pInfo->m_ptPos2.y = m_nPosY2;
 		if (m_pDlgType) {
 			m_pDlgType->Get (m_pInfo);
 		}

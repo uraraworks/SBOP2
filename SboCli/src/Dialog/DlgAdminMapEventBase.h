@@ -29,7 +29,8 @@ public:
 
 
 protected:
-	int			m_nEventType;				/* イベント種別 */
+	int			m_nEventType,				/* イベント種別 */
+				m_nHitType;					/* 当たり判定種別 */
 	BOOL		m_bModeModify;				/* 編集モード判定 */
 	CWnd		**m_ppWndNotify;			/* 通知先ウィンドウ */
 	CDlgAdminMapEventNONE	*m_pDlgType;	/* 編集中のイベント種別ダイアログ */
@@ -42,8 +43,11 @@ public:
 	//{{AFX_DATA(CDlgAdminMapEventBase)
 	enum { IDD = IDD_MAP_EVENT_BASE };
 	CComboBox	m_ctlType;
+	CComboBox	m_ctlHitType;
 	int		m_nPosX;
 	int		m_nPosY;
+	int		m_nPosX2;
+	int		m_nPosY2;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminMapEventBase)
@@ -56,6 +60,7 @@ protected:
 	//{{AFX_MSG(CDlgAdminMapEventBase)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeType();
+	afx_msg void OnSelchangeHitType();
 	afx_msg LRESULT OnAdminMsg(WPARAM wParam, LPARAM lParam);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
