@@ -329,6 +329,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\map03.png"
+				>
+			</File>
+			<File
 				RelativePath="res\map_shadow01.png"
 				>
 			</File>
