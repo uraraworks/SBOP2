@@ -847,7 +847,9 @@ void CMainFrame::OnPaint(HWND hWnd)
 	dwTmp	= timeGetTime ();
 	hDC		= BeginPaint (hWnd, &ps);
 
-	m_pMgrDraw->Draw (hDC);
+	if (IsWindowVisible (m_hWnd)) {
+		m_pMgrDraw->Draw (hDC);
+	}
 
 	dwTmp = timeGetTime () - dwTmp;
 	m_dwDrawTime += dwTmp;
