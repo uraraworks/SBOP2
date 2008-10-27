@@ -2697,7 +2697,9 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 	}
 
 	switch (dwPara) {
-//	case 0:	/* キャラクター(C) */
+	case 0:	/* キャラクター(C) */
+		m_pMgrWindow->MakeWindowCHAR_STATUS ();
+		break;
 //	case 1:	/* スキル(S) */
 	case 2:	/* バッグ(B) */
 		m_pMgrWindow->MakeWindowITEMMENU ();

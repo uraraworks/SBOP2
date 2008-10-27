@@ -40,6 +40,8 @@ public:
 	virtual void	SetInput	(BOOL bInput) { m_bInput = bInput; }	/* キー入力を行うか設定 */
 			void	Redraw		(void);									/* 再描画 */
 			void	SetPos		(int nPos);								/* 位置の設定 */
+			void	AddChild	(CWindowBase *pChild);					/* 子ウィンドウを追加 */
+			void	DeleteChild	(CWindowBase *pChild);					/* 子ウィンドウを削除 */
 
 
 protected:
@@ -64,7 +66,7 @@ protected:
 	void DrawInputFrame1	(int x, int y, int cx, int cy, int nType);	/* 入力欄用フレームを描画1 */
 
 
-protected:
+public:
 	HWND			m_hWndMain;						/* メインウィンドウハンドル */
 	DWORD			m_dwLastTimerProc,				/* 前回の時間処理時間 */
 					m_dwLastTimeCursor,				/* 前回のカーソル処理時間 */
@@ -86,13 +88,13 @@ protected:
 					m_hFont12,						/* 描画に使うフォント(12ドット) */
 					m_hFont14;						/* 描画に使うフォント(14ドット) */
 
-	CWindowBase		*m_pParent,						/* 親ウィンドウ */
-					*m_pChild;						/* 子ウィンドウ */
+	CWindowBase		*m_pParent;						/* 親ウィンドウ */
 	CImg32			*m_pDib,						/* ビットマップ */
 					*m_pDibSystem;					/* システム画像 */
 	CMgrData		*m_pMgrData;					/* データ管理 */
 	CMgrSound		*m_pMgrSound;					/* サウンド管理 */
 	CMgrGrpData		*m_pMgrGrpData;					/* グラフィックデータ管理 */
+	CmyArray<CWindowBase *, CWindowBase *>	m_apChild;	/* 子ウィンドウ */
 } CWindowBase, *PCWindowBase;
 typedef CmyArray<PCWindowBase, PCWindowBase>	  ARRAYWINDOWBASE;
 typedef CmyArray<PCWindowBase, PCWindowBase>	*PARRAYWINDOWBASE;

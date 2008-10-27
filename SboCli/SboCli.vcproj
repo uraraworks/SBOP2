@@ -1870,6 +1870,18 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS2.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS3.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Window\WindowCHARNAME.cpp"
 					>
 					<FileConfiguration
@@ -3884,6 +3896,18 @@
 				</File>
 				<File
 					RelativePath="src\Window\WindowBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS2.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS3.h"
 					>
 				</File>
 				<File

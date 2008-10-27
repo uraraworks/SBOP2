@@ -201,6 +201,7 @@ public:
 				m_wGrpIDInitHairType,		/* 初期画像ID(髪) */
 				m_wGrpIDInitHairColor,		/* 初期画像ID(髪色) */
 				m_wGrpIDInitSP,				/* 初期画像ID(特殊服) */
+				m_wLevel,					/* レベル */
 				m_wStamina,					/* スタミナ */
 				m_wPower,					/* 腕力 */
 				m_wStrength,				/* 体力 */
@@ -232,6 +233,7 @@ public:
 				m_dwEquipItemIDHead,		/* 装備アイテムID:頭 */
 				m_dwMoveWait,				/* 移動待ち時間 */
 				m_dwMoveWaitBattle,			/* 戦闘時移動待ち時間 */
+				m_dwExp,					/* 経験値 */
 				m_dwHP,						/* HP */
 				m_dwMaxHP,					/* 最大HP */
 				m_dwSP,						/* SP */

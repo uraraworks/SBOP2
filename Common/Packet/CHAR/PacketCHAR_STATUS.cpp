@@ -24,6 +24,7 @@ CPacketCHAR_STATUS::CPacketCHAR_STATUS()
 
 	m_wAtackGauge			= 0;	/* アタックゲージ */
 	m_wDefenseGauge			= 0;	/* ディフェンスゲージ */
+	m_wLevel				= 0;	/* レベル */
 	m_wStamina				= 0;	/* スタミナ */
 	m_wPower				= 0;	/* 腕力 */
 	m_wStrength				= 0;	/* 体力 */
@@ -47,6 +48,7 @@ CPacketCHAR_STATUS::CPacketCHAR_STATUS()
 	m_dwCharID				= 0;	/* キャラID */
 	m_dwMoveWait			= 0;	/* 移動待ち時間 */
 	m_dwMoveWaitBattle		= 0;	/* 戦闘時移動待ち時間 */
+	m_dwExp					= 0;	/* 経験値 */
 	m_dwHP					= 0;	/* HP */
 	m_dwMaxHP				= 0;	/* 最大HP */
 	m_dwSP					= 0;	/* SP */
@@ -87,6 +89,7 @@ void CPacketCHAR_STATUS::Make(
 			 sizeof (pInfo->m_dwCharID)			+
 			 sizeof (m_wAtackGauge)				+	/* アタックゲージ */
 			 sizeof (m_wDefenseGauge)			+	/* ディフェンスゲージ */
+			 sizeof (m_wLevel)					+	/* レベル */
 			 sizeof (m_wStamina)				+	/* スタミナ */
 			 sizeof (m_wPower)					+	/* 腕力 */
 			 sizeof (m_wStrength)				+	/* 体力 */
@@ -109,6 +112,7 @@ void CPacketCHAR_STATUS::Make(
 			 sizeof (m_wAttrDark)				+	/* 属性[闇] */
 			 sizeof (pInfo->m_dwMoveWait)		+
 			 sizeof (pInfo->m_dwMoveWaitBattle)	+
+			 sizeof (pInfo->m_dwExp)			+	/* 経験値 */
 			 sizeof (pInfo->m_dwHP)				+
 			 sizeof (pInfo->m_dwMaxHP)			+
 			 sizeof (pInfo->m_dwSP)				+
@@ -130,6 +134,7 @@ void CPacketCHAR_STATUS::Make(
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwCharID,				sizeof (m_dwCharID),			pDataTmp);	/* キャラID */
 //	CopyMemoryRenew (pDataTmp, &pInfo->m_wAtackGauge,			sizeof (m_wAtackGauge),			pDataTmp);	/* アタックゲージ */
 //	CopyMemoryRenew (pDataTmp, &pInfo->m_wDefenseGauge,			sizeof (m_wDefenseGauge),		pDataTmp);	/* ディフェンスゲージ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wLevel,				sizeof (m_wLevel),				pDataTmp);	/* レベル */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_wStamina,				sizeof (m_wStamina),			pDataTmp);	/* スタミナ */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_wPower,				sizeof (m_wPower),				pDataTmp);	/* 腕力 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_wStrength,				sizeof (m_wStrength),			pDataTmp);	/* 体力 */
@@ -152,6 +157,7 @@ void CPacketCHAR_STATUS::Make(
 	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrDark,				sizeof (m_wAttrDark),			pDataTmp);	/* 属性[闇] */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMoveWait,			sizeof (m_dwMoveWait),			pDataTmp);	/* 移動待ち時間 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMoveWaitBattle,		sizeof (m_dwMoveWaitBattle),	pDataTmp);	/* 戦闘時移動待ち時間 */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwExp,					sizeof (m_dwExp),				pDataTmp);	/* 経験値 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwHP,					sizeof (m_dwHP),				pDataTmp);	/* HP */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMaxHP,				sizeof (m_dwMaxHP),				pDataTmp);	/* 最大HP */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwSP,					sizeof (m_dwSP),				pDataTmp);	/* SP */
@@ -182,6 +188,7 @@ PBYTE CPacketCHAR_STATUS::Set(PBYTE pPacket)
 	CopyMemoryRenew (&m_dwCharID,				pDataTmp, sizeof (m_dwCharID),				pDataTmp);	/* キャラID */
 //	CopyMemoryRenew (&m_wAtackGauge,			pDataTmp, sizeof (m_wAtackGauge),			pDataTmp);	/* アタックゲージ */
 //	CopyMemoryRenew (&m_wDefenseGauge,			pDataTmp, sizeof (m_wDefenseGauge),			pDataTmp);	/* ディフェンスゲージ */
+	CopyMemoryRenew (&m_wLevel,					pDataTmp, sizeof (m_wLevel),				pDataTmp);	/* レベル */
 	CopyMemoryRenew (&m_wStamina,				pDataTmp, sizeof (m_wStamina),				pDataTmp);	/* スタミナ */
 	CopyMemoryRenew (&m_wPower,					pDataTmp, sizeof (m_wPower),				pDataTmp);	/* 腕力 */
 	CopyMemoryRenew (&m_wStrength,				pDataTmp, sizeof (m_wStrength),				pDataTmp);	/* 体力 */
@@ -204,6 +211,7 @@ PBYTE CPacketCHAR_STATUS::Set(PBYTE pPacket)
 	CopyMemoryRenew (&m_wAttrDark,				pDataTmp, sizeof (m_wAttrDark),				pDataTmp);	/* 属性[闇] */
 	CopyMemoryRenew (&m_dwMoveWait,				pDataTmp, sizeof (m_dwMoveWait),			pDataTmp);	/* 移動待ち時間 */
 	CopyMemoryRenew (&m_dwMoveWaitBattle,		pDataTmp, sizeof (m_dwMoveWaitBattle),		pDataTmp);	/* 戦闘時移動待ち時間 */
+	CopyMemoryRenew (&m_dwExp,					pDataTmp, sizeof (m_dwExp),					pDataTmp);	/* 経験値 */
 	CopyMemoryRenew (&m_dwHP,					pDataTmp, sizeof (m_dwHP),					pDataTmp);	/* HP */
 	CopyMemoryRenew (&m_dwMaxHP,				pDataTmp, sizeof (m_dwMaxHP),				pDataTmp);	/* 最大HP */
 	CopyMemoryRenew (&m_dwSP,					pDataTmp, sizeof (m_dwSP),					pDataTmp);	/* SP */
@@ -233,6 +241,7 @@ void CPacketCHAR_STATUS::SetParam(CInfoCharBase *pInfo)
 
 //	pInfo->m_wAtackGauge		= m_wAtackGauge;		/* アタックゲージ */
 //	pInfo->m_wDefenseGauge		= m_wDefenseGauge;		/* ディフェンスゲージ */
+	pInfo->m_wLevel				= m_wLevel;				/* レベル */
 	pInfo->m_wStamina			= m_wStamina;			/* スタミナ */
 	pInfo->m_wPower				= m_wPower;				/* 腕力 */
 	pInfo->m_wStrength			= m_wStrength;			/* 体力 */
@@ -255,6 +264,7 @@ void CPacketCHAR_STATUS::SetParam(CInfoCharBase *pInfo)
 	pInfo->m_wAttrDark			= m_wAttrDark;			/* 属性[闇] */
 	pInfo->m_dwMoveWait			= m_dwMoveWait;			/* 移動待ち時間 */
 	pInfo->m_dwMoveWaitBattle	= m_dwMoveWaitBattle;	/* 戦闘時移動待ち時間 */
+	pInfo->m_dwExp				= m_dwExp;				/* 経験値 */
 	pInfo->m_dwHP				= m_dwHP;				/* HP */
 	pInfo->m_dwMaxHP			= m_dwMaxHP;			/* 最大HP */
 	pInfo->m_dwSP				= m_dwSP;				/* SP */

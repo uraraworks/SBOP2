@@ -53,6 +53,9 @@ enum {
 	WINDOWTYPE_OPTION_ACTIONSET,			/* オプション-動作設定メニュー */
 	WINDOWTYPE_OPTION_ACTIONSET_SLEEPTIMER,	/* オプション-動作設定-おひるねタイマーの設定 */
 	WINDOWTYPE_COMMANDMENU,					/* コマンドメニュー */
+	WINDOWTYPE_CHAR_STATUS,					/* キャラ-ステータス */
+	WINDOWTYPE_CHAR_STATUS2,				/* キャラ-ステータス2 */
+	WINDOWTYPE_CHAR_STATUS3,				/* キャラ-ステータス3 */
 };
 
 
@@ -109,6 +112,7 @@ public:
 	void MakeWindowOPTION_ACTIONSET	(void);						/* オプション-動作設定 */
 	void MakeWindowOPTION_ACTIONSET_SLEEPTIMER	(void);			/* オプション-動作設定-おひるねタイマーの設定 */
 	void MakeWindowCOMMANDMENU		(void);						/* コマンドメニュー */
+	void MakeWindowCHAR_STATUS		(void);						/* キャラ-ステータス */
 
 
 private:

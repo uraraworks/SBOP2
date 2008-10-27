@@ -32,6 +32,7 @@ public:
 			m_byCmdSub;					/* コマンドIDサブ */
 	WORD	m_wAtackGauge,				/* アタックゲージ */
 			m_wDefenseGauge,			/* ディフェンスゲージ */
+			m_wLevel,					/* レベル */
 			m_wStamina,					/* スタミナ */
 			m_wPower,					/* 腕力 */
 			m_wStrength,				/* 体力 */
@@ -55,6 +56,7 @@ public:
 	DWORD	m_dwCharID,					/* キャラID */
 			m_dwMoveWait,				/* 移動待ち時間 */
 			m_dwMoveWaitBattle,			/* 戦闘時移動待ち時間 */
+			m_dwExp,					/* 経験値 */
 			m_dwHP,						/* HP */
 			m_dwMaxHP,					/* 最大HP */
 			m_dwSP,						/* SP */

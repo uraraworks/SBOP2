@@ -40,6 +40,9 @@
 #include "WindowOPTION_ACTIONSET.h"
 #include "WindowOPTION_ACTIONSET_SLEEPTIMER.h"
 #include "WindowCOMMANDMENU.h"
+#include "WindowCHAR_STATUS.h"
+#include "WindowCHAR_STATUS2.h"
+#include "WindowCHAR_STATUS3.h"
 #include "MgrWindow.h"
 
 
@@ -225,13 +228,19 @@ void CMgrWindow::DeleteAll(void)
 
 void CMgrWindow::Delete(int nID)
 {
-	int i, nCount;
-	PCWindowBase pWindow;
+	int i, j, nCount, nCount2;
+	PCWindowBase pWindow, pChild;
 
 	nCount = m_paWindow->GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pWindow = m_paWindow->GetAt (i);
 		if (pWindow->GetID () == nID) {
+			nCount2 = pWindow->m_apChild.GetSize ();
+			for (j = 0; j < nCount2; j ++) {
+				pChild = pWindow->m_apChild[j];
+				pChild->m_bDelete = TRUE;
+			}
+
 			SAFE_DELETE (pWindow);
 			m_paWindow->RemoveAt (i);
 			SetActive ();
@@ -869,6 +878,35 @@ void CMgrWindow::MakeWindowCOMMANDMENU(void)
 
 	pWindowNew = new CWindowCOMMANDMENU;
 	pWindowNew->Create (m_pMgrData);
+	m_paWindow->Add (pWindowNew);
+	SetActive ();
+
+	m_bDraw = TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrWindow::MakeWindowCHAR_STATUS								 */
+/* 内容		:キャラ-ステータス												 */
+/* 日付		:2008/10/27														 */
+/* ========================================================================= */
+
+void CMgrWindow::MakeWindowCHAR_STATUS(void)
+{
+	PCWindowCHAR_STATUS pWindowNew;
+	PCWindowCHAR_STATUS2 pWindowNew2;
+	PCWindowCHAR_STATUS3 pWindowNew3;
+
+	pWindowNew2 = new CWindowCHAR_STATUS2;
+	pWindowNew2->Create (m_pMgrData);
+	m_paWindow->Add (pWindowNew2);
+	pWindowNew3 = new CWindowCHAR_STATUS3;
+	pWindowNew3->Create (m_pMgrData);
+	m_paWindow->Add (pWindowNew3);
+	pWindowNew = new CWindowCHAR_STATUS;
+	pWindowNew->Create (m_pMgrData);
+	pWindowNew->AddChild (pWindowNew2);
+	pWindowNew->AddChild (pWindowNew3);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
 

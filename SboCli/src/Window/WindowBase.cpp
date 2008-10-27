@@ -29,7 +29,6 @@ CWindowBase::CWindowBase()
 	m_dwTimeDrawStart	= 0;
 	m_dwLastTimeKey		= 0;
 	m_pParent			= NULL;
-	m_pChild			= NULL;
 	m_pDib				= new CImg32;
 	m_pMgrData			= NULL;
 	m_pMgrSound			= NULL;
@@ -71,6 +70,18 @@ CWindowBase::CWindowBase()
 
 CWindowBase::~CWindowBase()
 {
+	int i, nCount;
+	PCWindowBase pChild;
+
+	nCount = m_apChild.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pChild = m_apChild[i];
+		pChild->m_bDelete = TRUE;
+	}
+	if (m_pParent) {
+		m_pParent->DeleteChild (this);
+	}
+
 	if (m_hFont) {
 		DeleteObject (m_hFont);
 		m_hFont = NULL;
@@ -284,6 +295,38 @@ void CWindowBase::Redraw(void)
 void CWindowBase::SetPos(int nPos)
 {
 	m_nPos = nPos;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::AddChild											 */
+/* 内容		:子ウィンドウを追加												 */
+/* 日付		:2008/10/27														 */
+/* ========================================================================= */
+
+void CWindowBase::AddChild(CWindowBase *pChild)
+{
+	m_apChild.Add (pChild);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::DeleteChild										 */
+/* 内容		:子ウィンドウを削除												 */
+/* 日付		:2008/10/27														 */
+/* ========================================================================= */
+
+void CWindowBase::DeleteChild(CWindowBase *pChild)
+{
+	int i, nCount;
+	PCWindowBase pChildTmp;
+
+	nCount = m_apChild.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pChildTmp = m_apChild[i];
+		m_apChild.RemoveAt (i);
+		break;
+	}
 }
 
 
