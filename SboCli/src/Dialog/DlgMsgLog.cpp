@@ -348,7 +348,7 @@ void CDlgMsgLog::OnBnClickedHideMainframe()
 
 LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	char szTmp[256], szTmp2[256];
+	char szTmp[256];
 	PCDlgMsgLog pThis;
 	LRESULT hResult;
 	CMainFrame *pMainFrame;
@@ -386,11 +386,11 @@ LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam,
 				break;
 			}
 			pThis->UpdateData ();
-			if (strlen (szTmp) > 0) {
+			if (pThis->m_strChat.GetLength () > 0) {
 				pMainFrame = pThis->m_pMgrData->GetMainFrame ();
-				ZeroMemory (szTmp2, sizeof (szTmp2));
-				_tcsnccat (szTmp2, pThis->m_strChat, 100);
-				TrimViewString (strTmp, szTmp2);
+				ZeroMemory (szTmp, sizeof (szTmp));
+				_tcsnccat (szTmp, pThis->m_strChat, 100);
+				TrimViewString (strTmp, szTmp);
 				pThis->m_strChat = strTmp;
 				::PostMessage (pThis->m_pMgrData->GetMainWindow (), WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
 
