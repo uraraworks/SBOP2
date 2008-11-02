@@ -96,6 +96,7 @@ CMainFrame::CMainFrame()
 	m_pMgrSound				= NULL;
 	m_pLibInfoChar			= NULL;
 	m_pLibInfoMap			= NULL;
+	m_pLibInfoMapObject		= NULL;
 	m_pLibInfoMapParts		= NULL;
 	m_pLibInfoMapShadow		= NULL;
 	m_pLibInfoItemType		= NULL;
@@ -721,6 +722,7 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	m_pMgrSound				= m_pMgrData->GetMgrSound ();
 	m_pLibInfoChar			= m_pMgrData->GetLibInfoChar ();
 	m_pLibInfoMap			= m_pMgrData->GetLibInfoMap ();
+	m_pLibInfoMapObject		= m_pMgrData->GetLibInfoMapObject ();
 	m_pLibInfoMapParts		= m_pMgrData->GetLibInfoMapParts ();
 	m_pLibInfoMapShadow		= m_pMgrData->GetLibInfoMapShadow ();
 	m_pLibInfoItemType		= m_pMgrData->GetLibInfoItemType ();

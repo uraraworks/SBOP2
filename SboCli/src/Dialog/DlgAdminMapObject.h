@@ -10,7 +10,7 @@
 
 #include "DlgAdminBase.h"
 
-class CInfoMapBase;
+class CLibInfoMapObject;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -23,6 +23,7 @@ public:
 	virtual ~CDlgAdminMapObject();								/* デストラクタ */
 
 	void	Init		(CMgrData *pMgrData);							/* 初期化 */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
 	void	Renew		(void);											/* 一覧を更新 */
 
 
@@ -31,7 +32,7 @@ protected:
 
 protected:
 	CWnd				*m_pWndNotify;				/* 通知先ウィンドウ */
-	CInfoMapBase		*m_pInfoMap;				/* 編集中のマップ情報 */
+	CLibInfoMapObject	*m_pLibInfoMapObject;		/* マップオブジェクト情報ライブラリ */
 
 
 

@@ -82,7 +82,6 @@
 #define IDC_STANDMOTION                 1012
 #define IDC_MOVETYPE2                   1012
 #define IDC_SEX                         1012
-#define IDC_TYPE2                       1012
 #define IDC_HITTYPE                     1012
 #define IDC_ID                          1013
 #define IDC_DEL2                        1013
@@ -280,6 +279,15 @@
 #define IDC_RADIO_ON                    1129
 #define IDC_IDMAIN                      1130
 #define IDC_IDSUB                       1131
+#define IDC_LEVEL_STA                   1132
+#define IDC_LEVEL_STA2                  1133
+#define IDC_VIEWTIME_STA                1134
+#define IDC_VIEWTIME_STA2               1135
+#define IDC_COUNT_STA                   1136
+#define IDC_NOW_STA                     1137
+#define IDC_PARTS_STA                   1138
+#define IDC_CX                          1139
+#define IDC_CY                          1140
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -322,7 +330,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        166
 #define _APS_NEXT_COMMAND_VALUE         32805
-#define _APS_NEXT_CONTROL_VALUE         1132
+#define _APS_NEXT_CONTROL_VALUE         1141
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

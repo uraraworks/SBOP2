@@ -741,6 +741,10 @@
 						</FileConfiguration>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObject.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.cpp"
 						>
 						<FileConfiguration
@@ -1176,6 +1180,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapEvent.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObject.cpp"
 						>
 					</File>
 					<File
@@ -3214,6 +3222,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Wnd\StaticMapObjectGrp.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Wnd\StaticMapParts.cpp"
 					>
 					<FileConfiguration
@@ -3570,6 +3582,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObject.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.h"
 						>
 					</File>
@@ -3703,6 +3719,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapEvent.h"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObject.h"
 						>
 					</File>
 					<File
@@ -4232,6 +4252,10 @@
 				</File>
 				<File
 					RelativePath="src\Wnd\StaticGrp.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Wnd\StaticMapObjectGrp.h"
 					>
 				</File>
 				<File

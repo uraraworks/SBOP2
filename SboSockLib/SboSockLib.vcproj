@@ -743,6 +743,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPOBJECT.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPSIZE.cpp"
 							>
 							<FileConfiguration
@@ -2067,6 +2071,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\MAP\PacketMAP_MAPOBJECT.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\MAP\PacketMAP_MAPPARTS.cpp"
 							>
 							<FileConfiguration
@@ -2936,6 +2944,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\MAP\PacketMAP_MAPOBJECT.h"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\MAP\PacketMAP_MAPPARTS.h"
 							>
 						</File>
@@ -3141,6 +3153,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_MAP_EVENT.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPOBJECT.h"
 							>
 						</File>
 						<File

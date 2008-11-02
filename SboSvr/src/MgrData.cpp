@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "LibInfoAccount.h"
 #include "LibInfoMapBase.h"
+#include "LibInfoMapObject.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoItemType.h"
@@ -46,6 +47,7 @@ CMgrData::CMgrData()
 	m_pLibInfoAccount		= new CLibInfoAccount;
 	m_pLibInfoChar			= new CLibInfoCharSvr;
 	m_pLibInfoMap			= new CLibInfoMapBase;
+	m_pLibInfoMapObject		= new CLibInfoMapObject;
 	m_pLibInfoMapParts		= new CLibInfoMapParts;
 	m_pLibInfoMapShadow		= new CLibInfoMapShadow;
 	m_pLibInfoItemType		= new CLibInfoItemType;
@@ -72,6 +74,7 @@ CMgrData::~CMgrData()
 	SAFE_DELETE (m_pLibInfoAccount);
 	SAFE_DELETE (m_pLibInfoChar);
 	SAFE_DELETE (m_pLibInfoMap);
+	SAFE_DELETE (m_pLibInfoMapObject);
 	SAFE_DELETE (m_pLibInfoMapParts);
 	SAFE_DELETE (m_pLibInfoMapShadow);
 	SAFE_DELETE (m_pLibInfoItemType);
@@ -107,6 +110,7 @@ void CMgrData::Create(
 
 	m_pLibInfoAccount->		Create ();
 	m_pLibInfoChar->		Create (this);
+	m_pLibInfoMapObject->	Create ();
 	m_pLibInfoMapParts->	Create ();
 	m_pLibInfoMapShadow->	Create ();
 	m_pLibInfoMap->			Create (m_pLibInfoMapParts);
@@ -143,6 +147,7 @@ void CMgrData::Destroy(void)
 	m_pLibInfoAccount->		Destroy ();
 	m_pLibInfoChar->		Destroy ();
 	m_pLibInfoMap->			Destroy ();
+	m_pLibInfoMapObject->	Destroy ();
 	m_pLibInfoMapParts->	Destroy ();
 	m_pLibInfoMapShadow->	Destroy ();
 	m_pLibInfoItemType->	Destroy ();
@@ -167,6 +172,7 @@ void CMgrData::Save(void)
 	CSaveLoadInfoAccount SaveLoadInfoAccount;
 	CSaveLoadInfoChar SaveLoadInfoChar;
 	CSaveLoadInfoMap SaveLoadInfoMap;
+	CSaveLoadInfoMapObject SaveLoadInfoMapObject;
 	CSaveLoadInfoMapParts SaveLoadInfoMapParts;
 	CSaveLoadInfoMapShadow SaveLoadInfoMapShadow;
 	CSaveLoadInfoEffect SaveLoadInfoEffect;
@@ -181,6 +187,7 @@ void CMgrData::Save(void)
 	SaveLoadInfoAccount.	Save ((PCLibInfoBase)m_pLibInfoAccount);
 	SaveLoadInfoChar.		Save ((PCLibInfoBase)m_pLibInfoChar);
 	SaveLoadInfoMap.		Save ((PCLibInfoBase)m_pLibInfoMap);
+	SaveLoadInfoMapObject.	Save ((PCLibInfoBase)m_pLibInfoMapObject);
 	SaveLoadInfoMapParts.	Save ((PCLibInfoBase)m_pLibInfoMapParts);
 	SaveLoadInfoMapShadow.	Save ((PCLibInfoBase)m_pLibInfoMapShadow);
 	SaveLoadInfoEffect.		Save ((PCLibInfoBase)m_pLibInfoEffect);
@@ -205,6 +212,7 @@ void CMgrData::Load(void)
 	CSaveLoadInfoAccount SaveLoadInfoAccount;
 	CSaveLoadInfoChar SaveLoadInfoChar;
 	CSaveLoadInfoMap SaveLoadInfoMap;
+	CSaveLoadInfoMapObject SaveLoadInfoMapObject;
 	CSaveLoadInfoMapParts SaveLoadInfoMapParts;
 	CSaveLoadInfoMapShadow SaveLoadInfoMapShadow;
 	CSaveLoadInfoEffect SaveLoadInfoEffect;
@@ -219,6 +227,7 @@ void CMgrData::Load(void)
 	m_pLibInfoAccount->		DeleteAll ();
 	m_pLibInfoChar->		DeleteAll ();
 	m_pLibInfoMap->			DeleteAll ();
+	m_pLibInfoMapObject->	DeleteAll ();
 	m_pLibInfoMapParts->	DeleteAll ();
 	m_pLibInfoMapShadow->	DeleteAll ();
 	m_pLibInfoItemType->	DeleteAll ();
@@ -231,6 +240,7 @@ void CMgrData::Load(void)
 	SaveLoadInfoAccount.	Load ((PCLibInfoBase)m_pLibInfoAccount);
 	SaveLoadInfoChar.		Load ((PCLibInfoBase)m_pLibInfoChar);
 	SaveLoadInfoMap.		Load ((PCLibInfoBase)m_pLibInfoMap);
+	SaveLoadInfoMapObject.	Load ((PCLibInfoBase)m_pLibInfoMapObject);
 	SaveLoadInfoMapParts.	Load ((PCLibInfoBase)m_pLibInfoMapParts);
 	SaveLoadInfoMapShadow.	Load ((PCLibInfoBase)m_pLibInfoMapShadow);
 	SaveLoadInfoEffect.		Load ((PCLibInfoBase)m_pLibInfoEffect);

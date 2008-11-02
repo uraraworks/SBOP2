@@ -568,6 +568,10 @@
 						</FileConfiguration>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObject.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.cpp"
 						>
 						<FileConfiguration
@@ -1021,6 +1025,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObject.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapParts.cpp"
 						>
 						<FileConfiguration
@@ -1386,6 +1394,10 @@
 							PreprocessorDefinitions=""
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\src\SaveLoad\SaveLoadInfoMapObject.cpp"
+					>
 				</File>
 				<File
 					RelativePath="src\SaveLoad\SaveLoadInfoMapParts.cpp"
@@ -1800,6 +1812,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObject.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.h"
 						>
 					</File>
@@ -1932,6 +1948,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObject.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapParts.h"
 						>
 					</File>
@@ -2038,6 +2058,10 @@
 				</File>
 				<File
 					RelativePath="src\SaveLoad\SaveLoadInfoMap.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\SaveLoad\SaveLoadInfoMapObject.h"
 					>
 				</File>
 				<File

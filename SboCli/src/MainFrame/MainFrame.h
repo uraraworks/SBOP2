@@ -18,6 +18,7 @@ class CMgrKeyInput;
 class CMgrSound;
 class CLibInfoCharCli;
 class CLibInfoMapBase;
+class CLibInfoMapObject;
 class CLibInfoMapParts;
 class CLibInfoMapShadow;
 class CLibInfoItemType;
@@ -124,6 +125,7 @@ private:
 	void	RecvProcMAP_ONLINE					(PBYTE pData);					/* オンライン数通知 */
 	void	RecvProcMAP_SYSTEMMSG				(PBYTE pData);					/* システムメッセージ通知 */
 	void	RecvProcMAP_FORMATMSG				(PBYTE pData);					/* フォーマットメッセージ通知 */
+	void	RecvProcMAP_MAPOBJECT				(PBYTE pData);					/* マップオブジェクト情報通知 */
 	void	RecvProcMAP_MAPPARTS				(PBYTE pData);					/* マップパーツ情報通知 */
 	void	RecvProcMAP_SETPARTS				(PBYTE pData);					/* マップパーツ配置 */
 	void	RecvProcMAP_RENEWMAPSIZE			(PBYTE pData);					/* マップサイズ更新 */
@@ -188,6 +190,7 @@ private:
 	CMgrSound			*m_pMgrSound;			/* サウンド管理 */
 	CLibInfoCharCli		*m_pLibInfoChar;		/* キャラ情報ライブラリ */
 	CLibInfoMapBase		*m_pLibInfoMap;			/* マップ情報ライブラリ */
+	CLibInfoMapObject	*m_pLibInfoMapObject;	/* マップオブジェクト情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;	/* マップパーツ情報ライブラリ */
 	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* マップ影情報ライブラリ */
 	CLibInfoItemType	*m_pLibInfoItemType;	/* アイテム種別情報ライブラリ */

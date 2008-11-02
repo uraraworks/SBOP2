@@ -11,6 +11,7 @@
 #include "Command.h"
 #include "Packet.h"
 #include "LibInfoMapBase.h"
+#include "LibInfoMapObject.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoAccount.h"
@@ -51,6 +52,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_ADMIN_CHARINFO:				RecvProcADMIN_CHARINFO				(pData, dwSessionID);	break;	/* キャラ情報通知 */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPOBJECT:		RecvProcADMIN_MAP_RENEWMAPOBJECT	(pData, dwSessionID);	break;	/* マップオブジェクト更新 */
 	case SBOCOMMANDID_SUB_ADMIN_RENEWMAPPARTS:			RecvProcADMIN_RENEWMAPPARTS			(pData, dwSessionID);	break;	/* マップパーツ更新 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_SETPARTS:			RecvProcADMIN_MAP_SETPARTS			(pData, dwSessionID);	break;	/* マップパーツ配置 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPSIZE:		RecvProcADMIN_MAP_RENEWMAPSIZE		(pData, dwSessionID);	break;	/* マップサイズ更新 */
@@ -170,6 +172,39 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 		pInfoChar->m_bChgMap = TRUE;
 		pInfoChar->m_bChgPosRenew = FALSE;
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT					 */
+/* 内容		:受信処理(マップオブジェクト更新)								 */
+/* 日付		:2008/11/01														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT(PBYTE pData, DWORD dwSessionID)
+{
+	DWORD dwObjectID;
+	PCInfoMapObject pInfo;
+	CPacketADMIN_MAP_RENEWMAPOBJECT Packet;
+	CPacketMAP_MAPOBJECT PacketMAP_MAPOBJECT;
+
+	Packet.Set (pData);
+
+	pInfo = NULL;
+	if (Packet.m_pInfoMapObject->m_dwObjectID != 0) {
+		pInfo = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr (Packet.m_pInfoMapObject->m_dwObjectID);
+	}
+	if (pInfo == NULL) {
+		pInfo = (PCInfoMapObject)m_pLibInfoMapObject->GetNew ();
+		m_pLibInfoMapObject->Add (pInfo);
+	}
+	dwObjectID = pInfo->m_dwObjectID;
+	pInfo->Copy (Packet.m_pInfoMapObject);
+	pInfo->m_dwObjectID = dwObjectID;
+
+	/* 更新されたマップオブジェクト情報を全クライアントへ通知 */
+	PacketMAP_MAPOBJECT.Make (pInfo);
+	m_pSock->SendTo (0, &PacketMAP_MAPOBJECT);
 }
 
 

@@ -16,6 +16,7 @@ class CUpdateServerInfo;
 class CLibInfoAccount;
 class CLibInfoCharSvr;
 class CLibInfoMapBase;
+class CLibInfoMapObject;
 class CLibInfoMapParts;
 class CLibInfoMapShadow;
 class CLibInfoItemType;
@@ -118,6 +119,7 @@ private:
 	/* 受信処理(MainFrameRecvProcADMIN.cpp) */
 	void	RecvProcADMIN						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* 管理者系 */
 	void	RecvProcADMIN_CHARINFO				(PBYTE pData, DWORD dwSessionID);					/* キャラ情報通知 */
+	void	RecvProcADMIN_MAP_RENEWMAPOBJECT	(PBYTE pData, DWORD dwSessionID);					/* マップオブジェクト更新 */
 	void	RecvProcADMIN_RENEWMAPPARTS			(PBYTE pData, DWORD dwSessionID);					/* マップパーツ更新 */
 	void	RecvProcADMIN_MAP_SETPARTS			(PBYTE pData, DWORD dwSessionID);					/* マップパーツ配置 */
 	void	RecvProcADMIN_MAP_RENEWMAPSIZE		(PBYTE pData, DWORD dwSessionID);					/* マップサイズ更新 */
@@ -198,6 +200,7 @@ private:
 	CLibInfoAccount		*m_pLibInfoAccount;				/* アカウント情報ライブラリ */
 	CLibInfoCharSvr		*m_pLibInfoChar;				/* キャラ情報ライブラリ */
 	CLibInfoMapBase		*m_pLibInfoMap;					/* マップ情報ライブラリ */
+	CLibInfoMapObject	*m_pLibInfoMapObject;			/* マップオブジェクト情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;			/* マップパーツ情報ライブラリ */
 	CLibInfoMapShadow	*m_pLibInfoMapShadow;			/* マップ影情報ライブラリ */
 	CLibInfoItemType	*m_pLibInfoItemType;			/* アイテム種別情報ライブラリ */

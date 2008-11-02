@@ -86,6 +86,7 @@ enum {
 	ADMINMSG_NOTIFYTYPE_RBUTTONDOWN,					/* 右クリック通知 */
 	ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK,					/* 右ダブルクリック通知 */
 	ADMINMSG_RENEWMAPINFO,								/* マップ情報更新 */
+	ADMINMSG_RENEWMAPOBJECT,							/* マップオブジェクト情報更新 */
 	ADMINMSG_RENEWMAPPARTS,								/* マップパーツ情報更新 */
 	ADMINMSG_RENEWMAPSHADOW,							/* マップ影情報更新 */
 	ADMINMSG_ADMINLEVEL,								/* 管理者レベル通知 */

@@ -23,6 +23,7 @@ class CInfoMapBase;
 class CInfoAccount;
 class CLibInfoCharCli;
 class CLibInfoMapBase;
+class CLibInfoMapObject;
 class CLibInfoMapParts;
 class CLibInfoMapShadow;
 class CLibInfoItem;
@@ -151,6 +152,7 @@ public:
 
 	CLibInfoCharCli		*GetLibInfoChar			(void)	{ return m_pLibInfoChar;		}	/* キャラ情報ライブラリを取得 */
 	CLibInfoMapBase		*GetLibInfoMap			(void)	{ return m_pLibInfoMap;			}	/* マップ情報ライブラリを取得 */
+	CLibInfoMapObject	*GetLibInfoMapObject	(void)	{ return m_pLibInfoMapObject;	}	/* マップオブジェクト情報ライブラリを取得 */
 	CLibInfoMapParts	*GetLibInfoMapParts		(void)	{ return m_pLibInfoMapParts;	}	/* マップパーツ情報ライブラリを取得 */
 	CLibInfoMapShadow	*GetLibInfoMapShadow	(void)	{ return m_pLibInfoMapShadow;	}	/* マップ影情報ライブラリを取得 */
 	CLibInfoItem		*GetLibInfoItem			(void)	{ return m_pLibInfoItem;		}	/* アイテム情報ライブラリを取得 */
@@ -218,6 +220,7 @@ private:
 
 	CLibInfoCharCli		*m_pLibInfoChar;			/* キャラ情報ライブラリ */
 	CLibInfoMapBase		*m_pLibInfoMap;				/* マップ情報ライブラリ */
+	CLibInfoMapObject	*m_pLibInfoMapObject;		/* マップオブジェクト情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;		/* マップパーツ情報ライブラリ */
 	CLibInfoMapShadow	*m_pLibInfoMapShadow;		/* マップ影情報ライブラリ */
 	CLibInfoItem		*m_pLibInfoItem;			/* アイテム情報ライブラリ */

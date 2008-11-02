@@ -11,6 +11,7 @@
 #include "Command.h"
 #include "Packet.h"
 #include "LibInfoMapBase.h"
+#include "LibInfoMapObject.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoMapEvent.h"
@@ -40,6 +41,7 @@ void CMainFrame::RecvProcMAP(BYTE byCmdSub, PBYTE pData)
 	case SBOCOMMANDID_SUB_MAP_ONLINE:			RecvProcMAP_ONLINE			(pData);	break;	/* オンライン数通知 */
 	case SBOCOMMANDID_SUB_MAP_SYSTEMMSG:		RecvProcMAP_SYSTEMMSG		(pData);	break;	/* システムメッセージ通知 */
 	case SBOCOMMANDID_SUB_MAP_FORMATMSG:		RecvProcMAP_FORMATMSG		(pData);	break;	/* フォーマットメッセージ通知 */
+	case SBOCOMMANDID_SUB_MAP_MAPOBJECT:		RecvProcMAP_MAPOBJECT		(pData);	break;	/* マップオブジェクト情報通知 */
 	case SBOCOMMANDID_SUB_MAP_MAPPARTS:			RecvProcMAP_MAPPARTS		(pData);	break;	/* マップパーツ情報通知 */
 	case SBOCOMMANDID_SUB_MAP_SETPARTS:			RecvProcMAP_SETPARTS		(pData);	break;	/* マップパーツ配置 */
 	case SBOCOMMANDID_SUB_MAP_RENEWMAPSIZE:		RecvProcMAP_RENEWMAPSIZE	(pData);	break;	/* マップサイズ更新 */
@@ -248,6 +250,24 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 	}
 
 	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcMAP_MAPOBJECT								 */
+/* 内容		:受信処理(マップオブジェクト情報通知)							 */
+/* 日付		:2008/11/01														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcMAP_MAPOBJECT(PBYTE pData)
+{
+	CPacketMAP_MAPOBJECT Packet;
+
+	Packet.Set (pData);
+
+	m_pLibInfoMapObject->Merge (Packet.m_pLibInfoMapObject);
+
+	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPOBJECT, 0);
 }
 
 

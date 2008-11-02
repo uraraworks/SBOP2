@@ -57,6 +57,7 @@
 #include "MAP/PacketMAP_ONLINE.h"						/* 			オンライン数通知 */
 #include "MAP/PacketMAP_SYSTEMMSG.h"					/* 			システムメッセージ通知 */
 #include "MAP/PacketMAP_FORMATMSG.h"					/* 			フォーマットメッセージ通知 */
+#include "MAP/PacketMAP_MAPOBJECT.h"					/* 			マップオブジェクト情報通知 */
 #include "MAP/PacketMAP_MAPPARTS.h"						/* 			マップパーツ情報通知 */
 #include "MAP/PacketMAP_SETPARTS.h"						/* 			マップパーツ配置 */
 #include "MAP/PacketMAP_RENEWMAPSIZE.h"					/* 			マップサイズ更新 */
@@ -68,6 +69,7 @@
 #include "MAP/PacketMAP_MAPEVENT.h"						/* 			マップイベント情報通知 */
 #include "MAP/PacketMAP_PARA1.h"						/* 			汎用[パラメータ1個] */
 #include "ADMIN/PacketADMIN_CHARINFO.h"					/* 管理者系:キャラ情報通知 */
+#include "ADMIN/PacketADMIN_MAP_RENEWMAPOBJECT.h"		/* 			マップオブジェクト更新 */
 #include "ADMIN/PacketADMIN_RENEWMAPPARTS.h"			/* 			マップパーツ更新 */
 #include "ADMIN/PacketADMIN_MAP_SETPARTS.h"				/* 			マップパーツ配置 */
 #include "ADMIN/PacketADMIN_MAP_RENEWMAPSIZE.h"			/* 			マップサイズ更新 */

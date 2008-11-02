@@ -8,11 +8,14 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include "PacketADMIN_MAP_RENEWMAPOBJECT.h"
 #include "UraraSockTCPSBO.h"
-#include "InfoMapBase.h"
+#include "LibInfoMapObject.h"
 #include "Command.h"
 #include "LayoutHelper.h"
 #include "MgrData.h"
+#include "MgrGrpData.h"
+#include "DlgAdminMapObjectEdit.h"
 #include "DlgAdminMapObject.h"
 
 #ifdef _DEBUG
@@ -56,7 +59,7 @@ CDlgAdminMapObject::CDlgAdminMapObject(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 
 	m_pWndNotify		= NULL;
-	m_pInfoMap			= NULL;
+	m_pLibInfoMapObject	= NULL;
 }
 
 
@@ -81,11 +84,28 @@ void CDlgAdminMapObject::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	m_pInfoMap = m_pMgrData->GetMap ();
+	m_pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject ();
+	m_pMgrData->GetMgrGrpData ()->ReadMapPartsTmp ();
 
 	/* ウィンドウ作成 */
 	Create (CDlgAdminMapObject::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapObject::OnAdminMsg									 */
+/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
+/* 日付		:2008/11/01														 */
+/* ========================================================================= */
+
+void CDlgAdminMapObject::OnAdminMsg(int nType, DWORD dwPara)
+{
+	switch (nType) {
+	case ADMINMSG_RENEWMAPOBJECT:	/* マップオブジェクト情報更新 */
+		Renew ();
+		break;
+	}
 }
 
 
@@ -97,28 +117,20 @@ void CDlgAdminMapObject::Init(CMgrData *pMgrData)
 
 void CDlgAdminMapObject::Renew(void)
 {
-#if 0
 	int i, nCount;
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObject pInfo;
 	CString strTmp;
 
 	m_List.DeleteAllItems ();
 
-	nCount = m_pLibInfoMapEvent->GetCount ();
+	nCount = m_pLibInfoMapObject->GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
-		strTmp.Format ("%d", pInfo->m_dwMapEventID);	/* ID */
+		pInfo = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr (i);
+		strTmp.Format ("%d", pInfo->m_dwObjectID);				/* ID */
 		m_List.InsertItem (i, strTmp);
-		m_List.SetItemData (i, pInfo->m_dwMapEventID);
-		strTmp.Format ("%d", pInfo->m_ptPos.x);			/* X座標 */
-		m_List.SetItemText (i, 1, strTmp);
-		strTmp.Format ("%d", pInfo->m_ptPos.y);			/* Y座標 */
-		m_List.SetItemText (i, 2, strTmp);
-
-		strTmp = m_pMgrData->GetMapEventName (pInfo->m_nType);
-		m_List.SetItemText (i, 3, strTmp);				/* 種別 */
+		m_List.SetItemData (i, pInfo->m_dwObjectID);
+		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strName);	/* オブジェクト名 */
 	}
-#endif
 }
 
 
@@ -152,28 +164,17 @@ BOOL CDlgAdminMapObject::OnInitDialog()
 
 void CDlgAdminMapObject::OnAdd()
 {
-#if 0
 	int nResult;
-	PCInfoMapEventBase pInfo;
-	CPacketADMIN_MAP_EVENT Packet;
-	CDlgAdminMapObjectBase Dlg(this);
+	CPacketADMIN_MAP_RENEWMAPOBJECT Packet;
+	CDlgAdminMapObjectEdit Dlg(this);
 
-	pInfo = NULL;
-
-	Dlg.Init (m_pMgrData, &m_pWndNotify);
+	Dlg.Init (m_pMgrData);
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
-		goto Exit;
+		return;
 	}
-
-	Dlg.Get (pInfo);
-
-	Packet.Make (m_pInfoMap->m_dwMapID, pInfo);
+	Packet.Make (Dlg.m_pInfoMapObject);
 	m_pSock->Send (&Packet);
-
-Exit:
-	SAFE_DELETE (pInfo);
-#endif
 }
 
 
@@ -185,42 +186,28 @@ Exit:
 
 void CDlgAdminMapObject::OnModify()
 {
-#if 0
 	int nResult;
-	DWORD dwMapEventID;
-	CDlgAdminMapObjectBase Dlg(this);
-	PCInfoMapEventBase pInfo, pInfoTmp;
-	CPacketADMIN_MAP_EVENT Packet;
+	DWORD dwObjectID;
+	PCInfoMapObject pInfo;
+	CPacketADMIN_MAP_RENEWMAPOBJECT Packet;
+	CDlgAdminMapObjectEdit Dlg(this);
 
 	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
 	if (nResult < 0) {
-		goto Exit;
+		return;
 	}
-	dwMapEventID	= m_List.GetItemData (nResult);
-	pInfo			= (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (dwMapEventID);
-	if (pInfo == NULL) {
-		goto Exit;
-	}
+	dwObjectID = m_List.GetItemData (nResult);
+	pInfo = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr (dwObjectID);
 
-	Dlg.Init (m_pMgrData, &m_pWndNotify);
-	Dlg.SetModify (pInfo);
+	Dlg.Init (m_pMgrData);
+	Dlg.SetData (pInfo);
 
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
-		goto Exit;
+		return;
 	}
-
-	pInfoTmp = NULL;
-	Dlg.Get (pInfoTmp);
-	pInfo = m_pLibInfoMapEvent->Renew (dwMapEventID, pInfoTmp);
-	SAFE_DELETE (pInfoTmp);
-
-	Packet.Make (m_pInfoMap->m_dwMapID, pInfo);
+	Packet.Make (Dlg.m_pInfoMapObject);
 	m_pSock->Send (&Packet);
-
-Exit:
-	return;
-#endif
 }
 
 

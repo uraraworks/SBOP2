@@ -48,6 +48,7 @@ CMainFrame::CMainFrame()
 	m_pLibInfoAccount		= NULL;
 	m_pLibInfoChar			= NULL;
 	m_pLibInfoMap			= NULL;
+	m_pLibInfoMapObject		= NULL;
 	m_pLibInfoMapParts		= NULL;
 	m_pLibInfoMapShadow		= NULL;
 	m_pLibInfoItemType		= NULL;
@@ -391,6 +392,7 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	m_pLog					= m_pMgrData->GetLog ();
 	m_pLibInfoAccount		= m_pMgrData->GetLibInfoAccount ();
 	m_pLibInfoMap			= m_pMgrData->GetLibInfoMap ();
+	m_pLibInfoMapObject		= m_pMgrData->GetLibInfoMapObject ();
 	m_pLibInfoMapParts		= m_pMgrData->GetLibInfoMapParts ();
 	m_pLibInfoMapShadow		= m_pMgrData->GetLibInfoMapShadow ();
 	m_pLibInfoChar			= m_pMgrData->GetLibInfoChar ();

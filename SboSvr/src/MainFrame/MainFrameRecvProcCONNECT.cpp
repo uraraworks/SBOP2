@@ -143,6 +143,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	CPacketCHAR_MOTIONTYPE PacketCHAR_MOTIONTYPE;
 	CPacketMAP_ONLINE PacketMAP_ONLINE;
 	CPacketMAP_SYSTEMMSG PacketMAP_SYSTEMMSG;
+	CPacketMAP_MAPOBJECT PacketMAP_MAPOBJECT;
 	CPacketMAP_MAPPARTS PacketMAP_MAPPARTS;
 	CPacketMAP_MAPSHADOW PacketMAP_MAPSHADOW;
 	CPacketMAP_RES_MAPINFO PacketRES_MAPINFO;
@@ -224,6 +225,8 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	m_pSock->SendTo (dwSessionID, &PacketITEM_ITEMINFO);
 	PacketITEM_ITEMWEAPONINFO.Make (m_pLibInfoItemWeapon);
 	m_pSock->SendTo (dwSessionID, &PacketITEM_ITEMWEAPONINFO);
+	PacketMAP_MAPOBJECT.Make (m_pLibInfoMapObject);
+	m_pSock->SendTo (dwSessionID, &PacketMAP_MAPOBJECT);
 	PacketMAP_MAPPARTS.Make (m_pLibInfoMapParts);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_MAPPARTS);
 	PacketMAP_MAPSHADOW.Make (m_pLibInfoMapShadow);
