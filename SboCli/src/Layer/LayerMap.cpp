@@ -128,6 +128,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 	DrawPartsBase (pDst);
 	DrawItem (pDst);
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
+		DrawMapObject	(pDst, y);
 		DrawChar		(pDst, y);
 		DrawPartsPile	(pDst, y);
 	}
@@ -1251,6 +1252,116 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 					32 + y * 32 + nMoveY,
 					wShadowID,
 					FALSE,
+					TRUE,
+					FALSE);
+		}
+		if (nDrawY != -99) {
+			break;
+		}
+	}
+	m_pMgrDraw->UnLockDibTmp ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::DrawMapObject										 */
+/* 内容		:描画(マップオブジェクト)										 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
+{
+	DWORD dwObjectID;
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
+	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
+		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
+		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
+	PCInfoMapBase pMap;
+
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return;
+	}
+
+	cx		= pMap->m_sizeMap.cx;
+	cy		= pMap->m_sizeMap.cy;
+	nMoveX	= m_nMoveX;
+	nMoveY	= m_nMoveY;
+	nPosX	= m_nViewX;
+	nPosY	= m_nViewY;
+
+	if (nMoveX > 0 || nMoveY > 0) {
+		/* 移動中の座標を補正 */
+		nMoveX *= aMoveX[m_byDirection];
+		nMoveY *= aMoveY[m_byDirection];
+		switch (m_byDirection) {
+		case 0:
+		case 1:
+			if (m_nViewX % 2) {
+				nMoveX += aScrollX[m_byDirection];
+			}
+			if (m_nViewY % 2 == 0) {
+				nMoveY += aScrollY[m_byDirection];
+			} else {
+				nPosY += aPosY[m_byDirection];
+			}
+			break;
+		case 2:
+		case 3:
+			if (m_nViewX % 2 == 0) {
+				nMoveX += aScrollX[m_byDirection];
+			} else {
+				nPosX += aPosX[m_byDirection];
+			}
+			if (m_nViewY % 2) {
+				nMoveY += aScrollY[m_byDirection];
+			}
+			break;
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+			if (m_nViewX % 2 == 0) {
+				nMoveX += aScrollX[m_byDirection];
+			} else {
+				nPosX += aPosX[m_byDirection];
+			}
+			if (m_nViewY % 2 == 0) {
+				nMoveY += aScrollY[m_byDirection];
+			} else {
+				nPosY += aPosY[m_byDirection];
+			}
+			break;
+		}
+	} else {
+		if (m_nViewX % 2) {
+			nMoveX -= 16;
+		}
+		if (m_nViewY % 2) {
+			nMoveY -= 16;
+		}
+	}
+	nPosX /= 2;
+	nPosY /= 2;
+
+	m_pMgrDraw->LockDibTmp ();
+	y = -1;
+	if (nDrawY != -99) {
+		y = nDrawY;
+	}
+	for (; y < DRAW_PARTS_Y + 2; y ++) {
+		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
+			xx = nPosX + x;
+			yy = nPosY + y;
+			dwObjectID = pMap->GetMapObject (xx, yy);
+			if (dwObjectID == 0) {
+				continue;
+			}
+			m_pMgrDraw->DrawMapObject (
+					pDst,
+					32 + x * 32 + nMoveX,
+					32 + y * 32 + nMoveY,
+					dwObjectID,
 					TRUE,
 					FALSE);
 		}

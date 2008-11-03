@@ -1,23 +1,23 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ファイル名	:LibInfoMapEvent.cpp										 */
-/* 内容			:マップイベント情報ライブラリクラス 実装ファイル			 */
+/* ファイル名	:LibInfoMapObjectData.cpp									 */
+/* 内容			:マップオブジェクト配置データライブラリクラス 実装ファイル	 */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/22													 */
+/* 作成開始日	:2008/11/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
-#include "InfoMapEvent.h"
-#include "LibInfoMapEvent.h"
+#include "InfoMapObjectData.h"
+#include "LibInfoMapObjectData.h"
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::CLibInfoMapEvent								 */
+/* 関数名	:CLibInfoMapObjectData::CLibInfoMapObjectData					 */
 /* 内容		:コンストラクタ													 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-CLibInfoMapEvent::CLibInfoMapEvent()
+CLibInfoMapObjectData::CLibInfoMapObjectData()
 {
 	m_dwNewIDTmp	= 0;
 	m_paInfo		= NULL;
@@ -25,36 +25,36 @@ CLibInfoMapEvent::CLibInfoMapEvent()
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::~CLibInfoMapEvent							 */
+/* 関数名	:CLibInfoMapObjectData::~CLibInfoMapObjectData					 */
 /* 内容		:デストラクタ													 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-CLibInfoMapEvent::~CLibInfoMapEvent()
+CLibInfoMapObjectData::~CLibInfoMapObjectData()
 {
 	Destroy ();
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::Create										 */
+/* 関数名	:CLibInfoMapObjectData::Create									 */
 /* 内容		:作成															 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-void CLibInfoMapEvent::Create(void)
+void CLibInfoMapObjectData::Create(void)
 {
-	m_paInfo = new ARRAYMAPEVENTBASEINFO;
+	m_paInfo = new ARRAYMAPOBJECTDATAINFO;
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::Destroy										 */
+/* 関数名	:CLibInfoMapObjectData::Destroy									 */
 /* 内容		:破棄															 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-void CLibInfoMapEvent::Destroy(void)
+void CLibInfoMapObjectData::Destroy(void)
 {
 	DeleteAll ();
 	SAFE_DELETE (m_paInfo);
@@ -62,47 +62,28 @@ void CLibInfoMapEvent::Destroy(void)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetNew										 */
+/* 関数名	:CLibInfoMapObjectData::GetNew									 */
 /* 内容		:新規データを取得												 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-PCInfoBase CLibInfoMapEvent::GetNew(int nType)
+PCInfoBase CLibInfoMapObjectData::GetNew(void)
 {
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObjectData pInfo;
 
-	pInfo = NULL;
-
-	switch (nType) {
-	case MAPEVENTTYPE_MOVE:				/* マップ内移動 */
-		pInfo = new CInfoMapEventMOVE;
-		break;
-	case MAPEVENTTYPE_MAPMOVE:			/* マップ間移動 */
-		pInfo = new CInfoMapEventMAPMOVE;
-		break;
-	case MAPEVENTTYPE_INITSTATUS:		/* ステータス初期化 */
-		pInfo = new CInfoMapEventINITSTATUS;
-		break;
-	case MAPEVENTTYPE_GRPIDTMP:			/* 一時画像設定 */
-		pInfo = new CInfoMapEventGRPIDTMP;
-		break;
-	default:
-		pInfo = new CInfoMapEventBase;
-		break;
-	}
-	pInfo->m_nType = nType;
+	pInfo = new CInfoMapObjectData;
 
 	return pInfo;
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetCount										 */
+/* 関数名	:CLibInfoMapObjectData::GetCount								 */
 /* 内容		:データ数を取得													 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-int CLibInfoMapEvent::GetCount(void)
+int CLibInfoMapObjectData::GetCount(void)
 {
 	int nRet;
 
@@ -119,33 +100,33 @@ Exit:
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::Add											 */
+/* 関数名	:CLibInfoMapObjectData::Add										 */
 /* 内容		:追加															 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-void CLibInfoMapEvent::Add(PCInfoBase pInfo)
+void CLibInfoMapObjectData::Add(PCInfoBase pInfo)
 {
-	PCInfoMapEventBase pInfoMapEvent;
+	PCInfoMapObjectData pInfoMapObjectData;
 
-	pInfoMapEvent = (PCInfoMapEventBase)pInfo;
-	if (pInfoMapEvent->m_dwMapEventID == 0) {
-		pInfoMapEvent->m_dwMapEventID = GetNewID ();
+	pInfoMapObjectData = (PCInfoMapObjectData)pInfo;
+	if (pInfoMapObjectData->m_dwDataID == 0) {
+		pInfoMapObjectData->m_dwDataID = GetNewID ();
 	}
-	m_paInfo->Add (pInfoMapEvent);
+	m_paInfo->Add (pInfoMapObjectData);
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::Delete										 */
+/* 関数名	:CLibInfoMapObjectData::Delete									 */
 /* 内容		:削除															 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-void CLibInfoMapEvent::Delete(
+void CLibInfoMapObjectData::Delete(
 	int nNo)		/* [in] 配列番号 */
 {
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObjectData pInfo;
 
 	pInfo = m_paInfo->GetAt (nNo);
 	SAFE_DELETE (pInfo);
@@ -154,20 +135,20 @@ void CLibInfoMapEvent::Delete(
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::Delete										 */
+/* 関数名	:CLibInfoMapObjectData::Delete									 */
 /* 内容		:削除															 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-void CLibInfoMapEvent::Delete(DWORD dwMapEventID)
+void CLibInfoMapObjectData::Delete(DWORD dwDataID)
 {
 	int i, nCount;
-	PCInfoMapEventBase pInfoTmp;
+	PCInfoMapObjectData pInfoTmp;
 
 	nCount = m_paInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoTmp = m_paInfo->GetAt (i);
-		if (pInfoTmp->m_dwMapEventID != dwMapEventID) {
+		if (pInfoTmp->m_dwDataID != dwDataID) {
 			continue;
 		}
 		Delete (i);
@@ -177,12 +158,12 @@ void CLibInfoMapEvent::Delete(DWORD dwMapEventID)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::DeleteAll									 */
+/* 関数名	:CLibInfoMapObjectData::DeleteAll								 */
 /* 内容		:全て削除														 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-void CLibInfoMapEvent::DeleteAll(void)
+void CLibInfoMapObjectData::DeleteAll(void)
 {
 	int i, nCount;
 
@@ -198,55 +179,55 @@ void CLibInfoMapEvent::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::Merge										 */
+/* 関数名	:CLibInfoMapObjectData::Merge									 */
 /* 内容		:取り込み														 */
 /* 日付		:2008/06/25														 */
 /* ========================================================================= */
 
-void CLibInfoMapEvent::Merge(CLibInfoMapEvent *pSrc)
+void CLibInfoMapObjectData::Merge(CLibInfoMapObjectData *pSrc)
 {
 	int i, nCount;
-	PCInfoMapEventBase pInfoTmp, pInfoSrc, pInfoDst;
+	PCInfoMapObjectData pInfoTmp, pInfoSrc, pInfoDst;
 
 	nCount = pSrc->GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoSrc = (PCInfoMapEventBase)pSrc->GetPtr (i);
-		pInfoTmp = (PCInfoMapEventBase)GetPtr (pInfoSrc->m_dwMapEventID);
+		pInfoSrc = (PCInfoMapObjectData)pSrc->GetPtr (i);
+		pInfoTmp = (PCInfoMapObjectData)GetPtr (pInfoSrc->m_dwDataID);
 		if (pInfoTmp == NULL) {
-			pInfoTmp = (PCInfoMapEventBase)GetNew (pInfoSrc->m_nType);
+			pInfoTmp = (PCInfoMapObjectData)GetNew ();
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
 		} else {
-			pInfoDst = (PCInfoMapEventBase)GetNew (pInfoSrc->m_nType);
+			pInfoDst = (PCInfoMapObjectData)GetNew ();
 			pInfoDst->Copy (pInfoSrc);
-			Renew (pInfoSrc->m_dwMapEventID, pInfoDst);
+			Renew (pInfoSrc->m_dwDataID, pInfoDst);
 		}
 	}
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::Renew										 */
+/* 関数名	:CLibInfoMapObjectData::Renew									 */
 /* 内容		:更新															 */
 /* 日付		:2008/06/25														 */
 /* ========================================================================= */
 
-CInfoMapEventBase *CLibInfoMapEvent::Renew(DWORD dwMapEventID, CInfoMapEventBase *pSrc)
+CInfoMapObjectData *CLibInfoMapObjectData::Renew(DWORD dwDataID, CInfoMapObjectData *pSrc)
 {
 	int i, nCount;
-	PCInfoMapEventBase pRet, pInfo, pInfoTmp;
+	PCInfoMapObjectData pRet, pInfo, pInfoTmp;
 
 	pRet = NULL;
 
 	nCount = m_paInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoTmp = m_paInfo->GetAt (i);
-		if (pInfoTmp->m_dwMapEventID != dwMapEventID) {
+		if (pInfoTmp->m_dwDataID != dwDataID) {
 			continue;
 		}
-		pInfo = (PCInfoMapEventBase)GetNew (pSrc->m_nType);
+		pInfo = (PCInfoMapObjectData)GetNew ();
 		pInfo->Copy (pSrc);
-		pInfo->m_dwMapEventID = pInfoTmp->m_dwMapEventID;
+		pInfo->m_dwDataID = pInfoTmp->m_dwDataID;
 
 		SAFE_DELETE (pInfoTmp);
 		m_paInfo->SetAt (i, pInfo);
@@ -259,34 +240,34 @@ CInfoMapEventBase *CLibInfoMapEvent::Renew(DWORD dwMapEventID, CInfoMapEventBase
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetPtr										 */
-/* 内容		:マップイベント情報を取得										 */
-/* 日付		:2008/06/22														 */
+/* 関数名	:CLibInfoMapObjectData::GetPtr									 */
+/* 内容		:配置データを取得												 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-PCInfoBase CLibInfoMapEvent::GetPtr(int nNo)
+PCInfoBase CLibInfoMapObjectData::GetPtr(int nNo)
 {
 	return m_paInfo->GetAt (nNo);
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetPtr										 */
-/* 内容		:マップイベント情報を取得										 */
-/* 日付		:2008/06/25														 */
+/* 関数名	:CLibInfoMapObjectData::GetPtr									 */
+/* 内容		:配置データを取得												 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-PCInfoBase CLibInfoMapEvent::GetPtr(DWORD dwMapEventID)
+PCInfoBase CLibInfoMapObjectData::GetPtr(DWORD dwDataID)
 {
 	int i, nCount;
-	PCInfoMapEventBase pRet, pInfoTmp;
+	PCInfoMapObjectData pRet, pInfoTmp;
 
 	pRet = NULL;
 
 	nCount = m_paInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoTmp = m_paInfo->GetAt (i);
-		if (pInfoTmp->m_dwMapEventID == dwMapEventID) {
+		if (pInfoTmp->m_dwDataID == dwDataID) {
 			pRet = pInfoTmp;
 			break;
 		}
@@ -297,16 +278,16 @@ PCInfoBase CLibInfoMapEvent::GetPtr(DWORD dwMapEventID)
 
 
 /* ========================================================================= */
-/* 関数名	:CInfoMapEventMOVE::GetDataSize									 */
+/* 関数名	:CInfoMapObjectDataMOVE::GetDataSize							 */
 /* 内容		:データサイズを取得												 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-DWORD CLibInfoMapEvent::GetDataSize(void)
+DWORD CLibInfoMapObjectData::GetDataSize(void)
 {
 	int i, j, nCount, nCount2;
 	DWORD dwRet;
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObjectData pInfo;
 
 	dwRet = 0;
 
@@ -328,17 +309,17 @@ DWORD CLibInfoMapEvent::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetWriteData									 */
+/* 関数名	:CLibInfoMapObjectData::GetWriteData							 */
 /* 内容		:指定要素の保存用データを取得									 */
-/* 日付		:2008/06/22														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-PBYTE CLibInfoMapEvent::GetWriteData(PDWORD pdwSize)
+PBYTE CLibInfoMapObjectData::GetWriteData(PDWORD pdwSize)
 {
 	int i, j, nCount, nCount2;
 	PBYTE pRet, pRetTmp, pTmp;
 	DWORD dwSize, dwTmp;
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObjectData pInfo;
 
 	pRet		= NULL;
 	dwSize		= GetDataSize ();
@@ -374,17 +355,17 @@ Exit:
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::ReadElementData								 */
+/* 関数名	:CLibInfoMapObjectData::ReadElementData							 */
 /* 内容		:指定要素データを読み込み										 */
-/* 日付		:2005/07/05														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-DWORD CLibInfoMapEvent::ReadElementData(PBYTE pSrc)
+DWORD CLibInfoMapObjectData::ReadElementData(PBYTE pSrc)
 {
-	int i, j, nNo, nCount, nCount2, nType;
+	int i, j, nNo, nCount, nCount2;
 	PBYTE pDst, pSrcTmp;
 	DWORD dwSize, dwSizeTmp;
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObjectData pInfo;
 	CmyString strTmp;
 
 	pDst	= NULL;
@@ -397,20 +378,15 @@ DWORD CLibInfoMapEvent::ReadElementData(PBYTE pSrc)
 	for (i = 0; i < nCount; i ++) {
 		CopyMemoryRenew (&nCount2, pSrcTmp, sizeof (nCount2), pSrcTmp);			/* 要素数 */
 
+		pInfo = (PCInfoMapObjectData)GetNew ();
 		for (j = 0; j < nCount2; j ++) {
 			StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* 要素名 */
 			CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* データサイズ */
-			if (j == 0) {
-				/* 最初はイベント種別 */
-				CopyMemoryRenew (&nType, pSrcTmp, sizeof (nType), pSrcTmp);		/* イベント種別 */
-				pInfo = (PCInfoMapEventBase)GetNew (nType);
-			} else {
-				nNo = pInfo->GetElementNo ((LPCSTR)strTmp);
-				if (nNo >= 0) {
-					dwSizeTmp = pInfo->ReadElementData (pSrcTmp, nNo);
-				}
-				pSrcTmp += dwSizeTmp;
+			nNo = pInfo->GetElementNo ((LPCSTR)strTmp);
+			if (nNo >= 0) {
+				dwSizeTmp = pInfo->ReadElementData (pSrcTmp, nNo);
 			}
+			pSrcTmp += dwSizeTmp;
 		}
 		Add (pInfo);
 	}
@@ -420,16 +396,16 @@ DWORD CLibInfoMapEvent::ReadElementData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetSendDataSize								 */
+/* 関数名	:CLibInfoMapObjectData::GetSendDataSize							 */
 /* 内容		:送信データサイズを取得											 */
-/* 日付		:2007/05/05														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-DWORD CLibInfoMapEvent::GetSendDataSize(void)
+DWORD CLibInfoMapObjectData::GetSendDataSize(void)
 {
 	int i, nCount;
 	DWORD dwRet, dwSize;
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObjectData pInfo;
 
 	dwRet = dwSize = 0;
 
@@ -438,7 +414,7 @@ DWORD CLibInfoMapEvent::GetSendDataSize(void)
 
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = (PCInfoMapEventBase)GetPtr (i);
+		pInfo = (PCInfoMapObjectData)GetPtr (i);
 
 		dwSize += pInfo->GetSendDataSize ();
 	}
@@ -449,17 +425,17 @@ DWORD CLibInfoMapEvent::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetSendData									 */
+/* 関数名	:CLibInfoMapObjectData::GetSendData								 */
 /* 内容		:送信データを取得												 */
-/* 日付		:2007/05/05														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-PBYTE CLibInfoMapEvent::GetSendData(void)
+PBYTE CLibInfoMapObjectData::GetSendData(void)
 {
 	int i, nCount;
 	PBYTE pRet, pData, pDataTmp;
 	DWORD dwCount, dwSize, dwSizeTmp, dwOffset;
-	PCInfoMapEventBase pInfo;
+	PCInfoMapObjectData pInfo;
 
 	pRet = NULL;
 
@@ -472,10 +448,10 @@ PBYTE CLibInfoMapEvent::GetSendData(void)
 	CopyMemory (pData, &dwCount, sizeof (dwCount));
 	dwOffset += sizeof (dwCount);
 
-	/* イベント情報を書き込み */
+	/* 配置データを書き込み */
 	nCount = (int)dwCount;
 	for (i = 0; i < nCount; i ++) {
-		pInfo = (PCInfoMapEventBase)GetPtr (i);
+		pInfo = (PCInfoMapObjectData)GetPtr (i);
 
 		dwSizeTmp	= pInfo->GetSendDataSize ();
 		pDataTmp	= pInfo->GetSendData ();
@@ -491,18 +467,18 @@ PBYTE CLibInfoMapEvent::GetSendData(void)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::SetSendData									 */
+/* 関数名	:CLibInfoMapObjectData::SetSendData								 */
 /* 内容		:送信データから取り込み											 */
-/* 日付		:2007/05/05														 */
+/* 日付		:2008/11/03														 */
 /* 戻り値	:処理した後のアドレス											 */
 /* ========================================================================= */
 
-PBYTE CLibInfoMapEvent::SetSendData(PBYTE pSrc)
+PBYTE CLibInfoMapObjectData::SetSendData(PBYTE pSrc)
 {
 	int i, nCount;
 	DWORD dwCount;
 	PBYTE pRet, pDataTmp, pDataTmpBack;
-	CInfoMapEventBase InfoTmp, *pInfo;
+	CInfoMapObjectData InfoTmp, *pInfo;
 
 	pRet		= pSrc;
 	pDataTmp	= pSrc;
@@ -517,7 +493,7 @@ PBYTE CLibInfoMapEvent::SetSendData(PBYTE pSrc)
 	for (i = 0; i < nCount; i ++) {
 		pDataTmpBack = pDataTmp;
 		InfoTmp.SetSendData (pDataTmp);
-		pInfo = (PCInfoMapEventBase)GetNew (InfoTmp.m_nType);
+		pInfo = (PCInfoMapObjectData)GetNew ();
 		pDataTmp = pDataTmpBack;
 		pDataTmp = pInfo->SetSendData (pDataTmp);
 		Add (pInfo);
@@ -529,16 +505,16 @@ PBYTE CLibInfoMapEvent::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoMapEvent::GetNewID										 */
+/* 関数名	:CLibInfoMapObjectData::GetNewID								 */
 /* 内容		:新しいIDを取得													 */
-/* 日付		:2007/05/05														 */
+/* 日付		:2008/11/03														 */
 /* ========================================================================= */
 
-DWORD CLibInfoMapEvent::GetNewID(void)
+DWORD CLibInfoMapObjectData::GetNewID(void)
 {
 	DWORD dwRet;
 	int i, nCount;
-	PCInfoMapEventBase pInfoTmp;
+	PCInfoMapObjectData pInfoTmp;
 
 	dwRet = m_dwNewIDTmp + 1;
 	if (dwRet == 0) {
@@ -548,7 +524,7 @@ DWORD CLibInfoMapEvent::GetNewID(void)
 	nCount = m_paInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoTmp = m_paInfo->GetAt (i);
-		if (pInfoTmp->m_dwMapEventID == dwRet) {
+		if (pInfoTmp->m_dwDataID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;

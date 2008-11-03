@@ -126,6 +126,8 @@ private:
 	void	RecvProcMAP_SYSTEMMSG				(PBYTE pData);					/* システムメッセージ通知 */
 	void	RecvProcMAP_FORMATMSG				(PBYTE pData);					/* フォーマットメッセージ通知 */
 	void	RecvProcMAP_MAPOBJECT				(PBYTE pData);					/* マップオブジェクト情報通知 */
+	void	RecvProcMAP_MAPOBJECTDATA			(PBYTE pData);					/* マップオブジェクト配置データ通知 */
+	void	RecvProcMAP_DELETEMAPOBJECTDATA		(PBYTE pData);					/* マップオブジェクト配置データ削除 */
 	void	RecvProcMAP_MAPPARTS				(PBYTE pData);					/* マップパーツ情報通知 */
 	void	RecvProcMAP_SETPARTS				(PBYTE pData);					/* マップパーツ配置 */
 	void	RecvProcMAP_RENEWMAPSIZE			(PBYTE pData);					/* マップサイズ更新 */

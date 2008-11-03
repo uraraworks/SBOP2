@@ -120,6 +120,8 @@ private:
 	void	RecvProcADMIN						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* 管理者系 */
 	void	RecvProcADMIN_CHARINFO				(PBYTE pData, DWORD dwSessionID);					/* キャラ情報通知 */
 	void	RecvProcADMIN_MAP_RENEWMAPOBJECT	(PBYTE pData, DWORD dwSessionID);					/* マップオブジェクト更新 */
+	void	RecvProcADMIN_MAP_RENEWOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* マップオブジェクト配置データ更新 */
+	void	RecvProcADMIN_MAP_DELETEOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* マップオブジェクト配置データ削除 */
 	void	RecvProcADMIN_RENEWMAPPARTS			(PBYTE pData, DWORD dwSessionID);					/* マップパーツ更新 */
 	void	RecvProcADMIN_MAP_SETPARTS			(PBYTE pData, DWORD dwSessionID);					/* マップパーツ配置 */
 	void	RecvProcADMIN_MAP_RENEWMAPSIZE		(PBYTE pData, DWORD dwSessionID);					/* マップサイズ更新 */

@@ -54,6 +54,8 @@
 #define IDD_MAP_EVENT_INITSTATUS        172
 #define IDD_MAP_EVENT_GRPIDTMP          173
 #define IDD_ITEMTYPE_NEW_LIGHT          174
+#define IDD_MAP_OBJECTDATA              175
+#define IDD_MAP_OBJECTDATA_EDIT         176
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -323,13 +325,15 @@
 #define ID_32802                        32802
 #define IDM_SYSTEM_SET_CHARSTATUS_INIT  32803
 #define IDM_SYSTEM_SET_INITCHARSTATUS   32804
+#define ID_32805                        32805
+#define IDM_MAP_OBJECTDATA              32806
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        166
-#define _APS_NEXT_COMMAND_VALUE         32805
+#define _APS_NEXT_COMMAND_VALUE         32807
 #define _APS_NEXT_CONTROL_VALUE         1141
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

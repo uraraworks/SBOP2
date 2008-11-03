@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapEvent.h"
+#include "LibInfoMapObjectData.h"
 #include "InfoMapEvent.h"
 #include "InfoMapBase.h"
 
@@ -18,15 +19,16 @@
 
 /* ヘッダ情報 */
 static LPCSTR s_aszName[] = {
-	"sizeMap",			/* マップサイズ */
-	"dwMapID",			/* マップID */
-	"m_dwBGMID",		/* BGMID */
-	"m_dwWeatherType",	/* 天気種別 */
-	"m_byLevel",		/* 暗さレベル */
-	"pwMap",			/* マップ */
-	"pwMapShadow",		/* マップ影 */
-	"strMapName",		/* マップ名 */
-	"pLibInfoMapEvent",	/* マップイベント情報 */
+	"sizeMap",					/* マップサイズ */
+	"dwMapID",					/* マップID */
+	"m_dwBGMID",				/* BGMID */
+	"m_dwWeatherType",			/* 天気種別 */
+	"m_byLevel",				/* 暗さレベル */
+	"pwMap",					/* マップ */
+	"pwMapShadow",				/* マップ影 */
+	"strMapName",				/* マップ名 */
+	"pLibInfoMapEvent",			/* マップイベント情報 */
+	"pLibInfoMapObjectData",	/* マップオブジェクト配置データ */
 	NULL
 };
 
@@ -48,8 +50,9 @@ CInfoMapBase::CInfoMapBase()
 	m_pwMapShadow	= NULL;
 	m_byLevel		= 0;
 
-	m_pLibInfoMapParts = NULL;
-	m_pLibInfoMapEvent = NULL;
+	m_pLibInfoMapParts		= NULL;
+	m_pLibInfoMapEvent		= NULL;
+	m_pLibInfoMapObjectData	= NULL;
 
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
 }
@@ -67,6 +70,7 @@ CInfoMapBase::~CInfoMapBase()
 	SAFE_DELETE_ARRAY (m_pwMap);
 	SAFE_DELETE_ARRAY (m_pwMapShadow);
 	SAFE_DELETE (m_pLibInfoMapEvent);
+	SAFE_DELETE (m_pLibInfoMapObjectData);
 }
 
 
@@ -81,6 +85,8 @@ void CInfoMapBase::Create(CLibInfoMapParts *pLibInfoMapParts)
 	m_pLibInfoMapParts = pLibInfoMapParts;
 	m_pLibInfoMapEvent = new CLibInfoMapEvent;
 	m_pLibInfoMapEvent->Create ();
+	m_pLibInfoMapObjectData = new CLibInfoMapObjectData;
+	m_pLibInfoMapObjectData->Create ();
 }
 
 
@@ -102,6 +108,7 @@ void CInfoMapBase::Init(
 	SAFE_DELETE_ARRAY (m_pwMapShadow);
 	if (bDeleteMapEvent) {
 		SAFE_DELETE (m_pLibInfoMapEvent);
+		SAFE_DELETE (m_pLibInfoMapObjectData);
 	}
 	m_sizeMap.cx = cx;
 	m_sizeMap.cy = cy;
@@ -115,6 +122,8 @@ void CInfoMapBase::Init(
 	if (bDeleteMapEvent) {
 		m_pLibInfoMapEvent	= new CLibInfoMapEvent;
 		m_pLibInfoMapEvent->Create ();
+		m_pLibInfoMapObjectData = new CLibInfoMapObjectData;
+		m_pLibInfoMapObjectData->Create ();
 	}
 
 	for (y = 0; y < cy; y ++) {
@@ -139,6 +148,7 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 	PWORD pwMapBack, pwMapShadow;
 	SIZE sizeBack;
 	PCInfoMapEventBase pInfoMapEvent;
+	PCInfoMapObjectData pInfoMapObjectData;
 
 	if ((nDirection < 0) || (nDirection >= 4)) {
 		return;
@@ -207,6 +217,11 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 	for (i = 0; i < nCount; i ++) {
 		pInfoMapEvent = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
 		pInfoMapEvent->RenewSize (nDirection, nSize);
+	}
+	nCount = m_pLibInfoMapObjectData->GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoMapObjectData = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (i);
+		pInfoMapObjectData->RenewSize (nDirection, nSize);
 	}
 
 	RenewMapEvent ();
@@ -282,6 +297,9 @@ DWORD CInfoMapBase::GetDataSize(void)
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetDataSize ();
 	}
+	if (m_pLibInfoMapObjectData) {
+		dwRet += m_pLibInfoMapObjectData->GetDataSize ();
+	}
 
 	return dwRet;
 }
@@ -311,6 +329,11 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 	case 8:
 		if (m_pLibInfoMapEvent) {
 			dwRet = m_pLibInfoMapEvent->GetDataSize ();
+		}
+		break;
+	case 9:
+		if (m_pLibInfoMapObjectData) {
+			dwRet = m_pLibInfoMapObjectData->GetDataSize ();
 		}
 		break;
 	}
@@ -369,6 +392,14 @@ PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
 			goto Exit;
 		}
 		break;
+	case 9:
+		if (m_pLibInfoMapObjectData) {
+			pSrc = m_pLibInfoMapObjectData->GetWriteData (pdwSize);
+			CopyMemory (pRet, pSrc, dwSize);
+			SAFE_DELETE_ARRAY (pSrc);
+			goto Exit;
+		}
+		break;
 	}
 
 	if (pSrc) {
@@ -421,6 +452,11 @@ DWORD CInfoMapBase::ReadElementData(
 	case 8:
 		if (m_pLibInfoMapEvent) {
 			dwSize = m_pLibInfoMapEvent->ReadElementData (pSrc);
+		}
+		break;
+	case 9:
+		if (m_pLibInfoMapObjectData) {
+			dwSize = m_pLibInfoMapObjectData->ReadElementData (pSrc);
 		}
 		break;
 	}
@@ -700,6 +736,39 @@ void CInfoMapBase::DeleteShadow(DWORD dwShadowID)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoMapBase::GetMapObject										 */
+/* 内容		:指定座標のマップオブジェクトIDを取得							 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+DWORD CInfoMapBase::GetMapObject(int x, int y)
+{
+	int i, nCount;
+	DWORD dwRet;
+	PCInfoMapObjectData pInfo;
+
+	dwRet = 0;
+
+	if ((x < 0) || (y < 0) || (x >= m_sizeMap.cx) || (y >= m_sizeMap.cy)) {
+		goto Exit;
+	}
+
+	nCount = m_pLibInfoMapObjectData->GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfo = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (i);
+		if (!((pInfo->m_ptPos.x == x) && (pInfo->m_ptPos.y == y))) {
+			continue;
+		}
+		dwRet = pInfo->m_dwObjectID;
+		break;
+	}
+
+Exit:
+	return dwRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoMapBase::IsFlg											 */
 /* 内容		:指定属性か判定													 */
 /* 日付		:2008/01/04														 */
@@ -755,6 +824,9 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetSendDataSize ();
 	}
+	if (m_pLibInfoMapObjectData) {
+		dwRet += m_pLibInfoMapObjectData->GetSendDataSize ();
+	}
 
 	return dwRet;
 }
@@ -795,6 +867,12 @@ PBYTE CInfoMapBase::GetSendData(void)
 		CopyMemoryRenew (pDataTmp, pDataLibInfoTmp, dwSizeLibInfo, pDataTmp);	/* マップイベント情報 */
 		SAFE_DELETE_ARRAY (pDataLibInfoTmp);
 	}
+	if (m_pLibInfoMapObjectData) {
+		pDataLibInfoTmp	= m_pLibInfoMapObjectData->GetSendData ();
+		dwSizeLibInfo	= m_pLibInfoMapObjectData->GetSendDataSize ();
+		CopyMemoryRenew (pDataTmp, pDataLibInfoTmp, dwSizeLibInfo, pDataTmp);	/* マップオブジェクト配置データ */
+		SAFE_DELETE_ARRAY (pDataLibInfoTmp);
+	}
 
 	pRet = pData;
 	return pRet;
@@ -829,6 +907,9 @@ PBYTE CInfoMapBase::SetSendData(PBYTE pSrc)
 	if (m_pLibInfoMapEvent) {
 		pDataTmp = m_pLibInfoMapEvent->SetSendData (pDataTmp);
 	}
+	if (m_pLibInfoMapObjectData) {
+		pDataTmp = m_pLibInfoMapObjectData->SetSendData (pDataTmp);
+	}
 
 	pRet = pDataTmp;
 	return pRet;
@@ -858,6 +939,9 @@ void CInfoMapBase::Copy(CInfoMapBase *pSrc)
 	}
 	pTmp = pSrc->m_pLibInfoMapEvent->GetSendData ();
 	m_pLibInfoMapEvent->SetSendData (pTmp);
+	SAFE_DELETE_ARRAY (pTmp);
+	pTmp = pSrc->m_pLibInfoMapObjectData->GetSendData ();
+	m_pLibInfoMapObjectData->SetSendData (pTmp);
 	SAFE_DELETE_ARRAY (pTmp);
 }
 
@@ -976,6 +1060,79 @@ CInfoMapEventBase *CInfoMapBase::GetEvent(
 				pRet = pInfo;
 			}
 			break;
+		}
+	}
+
+Exit:
+	return pRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoMapBase::GetMapObjectDataCount							 */
+/* 内容		:マップオブジェクト配置データ数を取得							 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+int CInfoMapBase::GetMapObjectDataCount(void)
+{
+	int nRet;
+
+	nRet = 0;
+	if (m_pLibInfoMapObjectData == NULL) {
+		goto Exit;
+	}
+
+	nRet = m_pLibInfoMapObjectData->GetCount ();
+Exit:
+	return nRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoMapBase::GetObjectData									 */
+/* 内容		:マップオブジェクト配置データを取得								 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+CInfoMapObjectData *CInfoMapBase::GetObjectData(int nNo)
+{
+	PCInfoMapObjectData pRet;
+
+	pRet = NULL;
+	if (m_pLibInfoMapObjectData == NULL) {
+		goto Exit;
+	}
+
+	pRet = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (nNo);
+Exit:
+	return pRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoMapBase::GetEvent											 */
+/* 内容		:マップオブジェクト配置データを取得								 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+CInfoMapObjectData *CInfoMapBase::GetObjectData(
+	int x,		/* [in] マップ座標X */
+	int y)		/* [in] マップ座標Y */
+{
+	int i, nCount;
+	PCInfoMapObjectData pRet, pInfo;
+
+	pRet = NULL;
+	if (m_pLibInfoMapObjectData == NULL) {
+		goto Exit;
+	}
+
+	nCount = m_pLibInfoMapObjectData->GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfo = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (i);
+		if ((pInfo->m_ptPos.x == x) && (pInfo->m_ptPos.y == y)) {
+			pRet = pInfo;
 		}
 	}
 

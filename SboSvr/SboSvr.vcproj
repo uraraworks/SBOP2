@@ -572,6 +572,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObjectData.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.cpp"
 						>
 						<FileConfiguration
@@ -1026,6 +1030,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapObject.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObjectData.cpp"
 						>
 					</File>
 					<File
@@ -1816,6 +1824,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObjectData.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.h"
 						>
 					</File>
@@ -1949,6 +1961,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapObject.h"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObjectData.h"
 						>
 					</File>
 					<File

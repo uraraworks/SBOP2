@@ -74,6 +74,7 @@ BEGIN
         MENUITEM "マップ影の編集(&S)",                 IDM_MAP_SHADOW
         MENUITEM "マップの追加(&A)",                  IDM_MAP_ADD
         MENUITEM "マップオブジェクトの編集(&O)",            IDM_MAP_OBJECT
+        MENUITEM "マップオブジェクトの配置(&D)",            IDM_MAP_OBJECTDATA
         MENUITEM "マップウィンドウ(&M)",                IDM_MAP_WINDOW
     END
     POPUP "キャラ(&C)"
@@ -1109,6 +1110,35 @@ BEGIN
     PUSHBUTTON      "キャンセル",IDCANCEL,142,51,50,14
 END
 
+IDD_MAP_OBJECTDATA DIALOGEX 0, 0, 223, 214
+STYLE DS_SETFONT | WS_CHILD
+EXSTYLE WS_EX_STATICEDGE
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "新規作成",IDC_ADD,7,5,40,14
+    PUSHBUTTON      "編集",IDC_MODIFY,49,5,40,14
+    PUSHBUTTON      "コピー",IDC_COPY,162,5,30,14
+    PUSHBUTTON      "削除",IDC_DELETE,195,5,20,14
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,7,23,208,177
+END
+
+IDD_MAP_OBJECTDATA_EDIT DIALOGEX 0, 0, 207, 74
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+EXSTYLE WS_EX_STATICEDGE
+CAPTION "マップオブジェクト配置データの追加"
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
+BEGIN
+    LTEXT           "配置データ：",-1,7,9,37,8
+    COMBOBOX        IDC_TYPE,46,7,83,86,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "配置場所：",-1,7,31,32,8
+    LTEXT           "X：",-1,40,31,8,8
+    EDITTEXT        IDC_POSX,49,27,14,14,ES_AUTOHSCROLL
+    LTEXT           "Y：",-1,67,31,8,8
+    EDITTEXT        IDC_POSY,76,27,14,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,93,53,50,14
+    PUSHBUTTON      "キャンセル",IDCANCEL,150,53,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1287,6 +1317,14 @@ BEGIN
         RIGHTMARGIN, 192
         TOPMARGIN, 7
         BOTTOMMARGIN, 65
+    END
+
+    IDD_MAP_OBJECTDATA_EDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 200
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
     END
 END
 #endif    // APSTUDIO_INVOKED

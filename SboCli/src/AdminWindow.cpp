@@ -25,6 +25,7 @@
 #include "DlgAdminMapParts.h"
 #include "DlgAdminMapShadow.h"
 #include "DlgAdminMapObject.h"
+#include "DlgAdminMapObjectData.h"
 #include "DlgAdminItemTypeList.h"
 #include "DlgAdminItemList.h"
 #include "DlgAdminItemWeaponList.h"
@@ -59,6 +60,7 @@ BEGIN_MESSAGE_MAP(CAdminWindow, CWnd)
 	ON_COMMAND(IDM_MAP_SHADOW, OnMapShadow)
 	ON_COMMAND(IDM_MAP_ADD, OnMapAdd)
 	ON_COMMAND(IDM_MAP_OBJECT, OnMapObject)
+	ON_COMMAND(IDM_MAP_OBJECTDATA, OnMapObjectData)
 	ON_COMMAND(IDM_MAP_WINDOW, OnMapWindow)
 	ON_COMMAND(IDM_CHAR_MODIFY, OnCharModify)
 	ON_COMMAND(IDM_CHAR_MODIFY_STATUS, OnCharModifyStatus)
@@ -262,9 +264,11 @@ void CAdminWindow::ChgScreen(int nScrID)
 		m_pDlgBase = new CDlgAdminMapShadow(this);
 		break;
 	case SCRIDADMIN_MAP_OBJECT:					/* マップオブジェクトの編集 */
-//		nTypeL = ADMINNOTIFYTYPE_MAPEDIT;
-//		nTypeR = ADMINNOTIFYTYPE_MAPEDIT;
 		m_pDlgBase = new CDlgAdminMapObject(this);
+		break;
+	case SCRIDADMIN_MAP_OBJECTDATA:				/* マップオブジェクトの配置 */
+		nTypeL = ADMINNOTIFYTYPE_POS;
+		m_pDlgBase = new CDlgAdminMapObjectData(this);
 		break;
 	case SCRIDADMIN_ITEMTYPE_LIST:				/* アイテム種別一覧 */
 		m_pDlgBase = new CDlgAdminItemTypeList(this);
@@ -528,6 +532,18 @@ void CAdminWindow::OnMapAdd()
 void CAdminWindow::OnMapObject()
 {
 	ChgScreen (SCRIDADMIN_MAP_OBJECT);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CAdminWindow::OnMapObjectData									 */
+/* 内容		:メニューハンドラ(マップオブジェクトの配置)						 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+void CAdminWindow::OnMapObjectData()
+{
+	ChgScreen (SCRIDADMIN_MAP_OBJECTDATA);
 }
 
 

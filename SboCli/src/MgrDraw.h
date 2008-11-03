@@ -41,6 +41,7 @@ public:
 	void	DrawMapParts	(CImg32 *pDst, int x, int y, DWORD dwPartsID, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BYTE byLevel = 0);			/* マップパーツを描画 */
 	void	DrawMapParts	(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapParts, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE, BYTE byLevel = 0);		/* マップパーツを描画 */
 	void	DrawMapShadow	(CImg32 *pDst, int x, int y, DWORD dwShadowID, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);	/* マップ影を描画 */
+	void	DrawMapObject	(CImg32 *pDst, int x, int y, DWORD dwObjectID, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);			/* マップオブジェクトを描画 */
 	void	DrawItem		(CImg32 *pDst, int x, int y, DWORD dwItemID);							/* アイテムを描画 */
 	void	DrawItem		(CImg32 *pDst, int x, int y, CInfoItem *pInfoItem, BOOL bLock = TRUE);	/* アイテムを描画 */
 	void	DrawBalloon		(CImg32 *pDst, int x, int y, DWORD dwBalloonID);						/* 噴出しを描画 */

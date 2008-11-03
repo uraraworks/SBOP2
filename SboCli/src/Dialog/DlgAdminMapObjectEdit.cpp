@@ -75,6 +75,10 @@ CDlgAdminMapObjectEdit::CDlgAdminMapObjectEdit(CWnd* pParent /*=NULL*/)
 
 	m_pWndMapPartsGrp = new CWndMapPartsGrp;
 	m_pInfoMapObject  = new CInfoMapObject;
+
+	m_pInfoMapObject->AddAnime ();
+	m_pInfoMapObject->m_sizeGrp.cx = m_pInfoMapObject->m_sizeGrp.cy = 1;
+	m_pInfoMapObject->RenewGrpSize ();
 }
 
 

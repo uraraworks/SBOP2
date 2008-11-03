@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
+#include "LibInfoMapObject.h"
 #include "LibInfoItem.h"
 #include "LibInfoMotionType.h"
 #include "InfoMotion.h"
@@ -639,6 +640,72 @@ void CMgrDraw::DrawMapShadow(
 	} else {
 		pDst->BltAlpha (x, y, nSizeDst, nSizeDst, pDibTmp, 0, nSizeDst, 75, TRUE);
 	}
+
+Exit:
+	ReleaseDibTmp ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrDraw::DrawMapObject										 */
+/* 内容		:マップオブジェクトを描画										 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+void CMgrDraw::DrawMapObject(
+	CImg32 *pDst,				/* [in] 描画先 */
+	int x,						/* [in] 描画位置(X) */
+	int y,						/* [in] 描画位置(Y) */
+	DWORD dwObjectID,			/* [in] オブジェクトID */
+	BOOL bUseColorKey,/*TRUE*/	/* [in] TRUE:重ね合わせする */
+	BOOL bLock)/*TRUE*/			/* [in] テンポラリをロックする */
+{
+	int xx, yy;
+	SIZE sizeSrc, sizeDst;
+	WORD wGrpID;
+	PCImg32 pImg, pDibTmp;
+	PCInfoMapObject pInfo;
+	HDC hDCBmp;
+	PSTMAPOBJECTANIMEINFO pAnimeInfo;
+	PCLibInfoMapObject pLibInfoMapObject;
+
+	pDibTmp = GetDibTmp ();
+
+	pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject ();
+	pInfo = (PCInfoMapObject)pLibInfoMapObject->GetPtr (dwObjectID);
+	if (pInfo == NULL) {
+		goto Exit;
+	}
+	pAnimeInfo = pInfo->GetAnimePtr (0);
+	if (pAnimeInfo == NULL) {
+		goto Exit;
+	}
+
+	sizeSrc = pInfo->m_sizeGrp;
+	sizeSrc.cx *= 16;
+	sizeSrc.cy *= 16;
+	sizeDst = sizeSrc;
+	sizeDst.cx *= 2;
+	sizeDst.cy *= 2;
+
+	for (yy = 0; yy < pInfo->m_sizeGrp.cy; yy ++) {
+		for (xx = 0; xx < pInfo->m_sizeGrp.cx; xx ++) {
+			wGrpID = pAnimeInfo->pwGrpID[yy * pInfo->m_sizeGrp.cx + xx];
+			pImg = m_pMgrGrpData->GetDibMapParts (wGrpID / 1024);
+			if (pImg == NULL) {
+				continue;
+			}
+			pDibTmp->BltFrom256 (xx * 16, yy * 16, 16, 16, pImg, ((wGrpID % 1024) % 32) * 16, ((wGrpID % 1024) / 32) * 16);
+		}
+	}
+
+	hDCBmp = pDibTmp->Lock ();
+	StretchBlt (hDCBmp, 0, sizeDst.cy, sizeDst.cx, sizeDst.cy, hDCBmp, 0, 0, sizeSrc.cx, sizeSrc.cy, SRCCOPY);
+	if (bLock) {
+		pDibTmp->Unlock ();
+	}
+
+	pDst->Blt (x, y - (sizeDst.cy - 32), sizeDst.cx, sizeDst.cy, pDibTmp, 0, sizeDst.cy, bUseColorKey);
 
 Exit:
 	ReleaseDibTmp ();

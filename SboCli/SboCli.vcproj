@@ -745,6 +745,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObjectData.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.cpp"
 						>
 						<FileConfiguration
@@ -1184,6 +1188,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapObject.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObjectData.cpp"
 						>
 					</File>
 					<File
@@ -3004,6 +3012,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminMapObjectData.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminMapObjectDataEdit.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminMapObjectEdit.cpp"
 					>
 				</File>
@@ -3586,6 +3602,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoMapObjectData.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoMapParts.h"
 						>
 					</File>
@@ -3723,6 +3743,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMapObject.h"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoMapObjectData.h"
 						>
 					</File>
 					<File
@@ -4196,6 +4220,14 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminMapObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminMapObjectData.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminMapObjectDataEdit.h"
 					>
 				</File>
 				<File

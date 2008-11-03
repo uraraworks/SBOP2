@@ -12,6 +12,7 @@
 #include "Packet.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoMapObject.h"
+#include "LibInfoMapObjectData.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoAccount.h"
@@ -53,6 +54,8 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_ADMIN_CHARINFO:				RecvProcADMIN_CHARINFO				(pData, dwSessionID);	break;	/* キャラ情報通知 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPOBJECT:		RecvProcADMIN_MAP_RENEWMAPOBJECT	(pData, dwSessionID);	break;	/* マップオブジェクト更新 */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWOBJECTDATA:	RecvProcADMIN_MAP_RENEWOBJECTDATA	(pData, dwSessionID);	break;	/* マップオブジェクト配置データ更新 */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEOBJECTDATA:	RecvProcADMIN_MAP_DELETEOBJECTDATA	(pData, dwSessionID);	break;	/* マップオブジェクト配置データ削除 */
 	case SBOCOMMANDID_SUB_ADMIN_RENEWMAPPARTS:			RecvProcADMIN_RENEWMAPPARTS			(pData, dwSessionID);	break;	/* マップパーツ更新 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_SETPARTS:			RecvProcADMIN_MAP_SETPARTS			(pData, dwSessionID);	break;	/* マップパーツ配置 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPSIZE:		RecvProcADMIN_MAP_RENEWMAPSIZE		(pData, dwSessionID);	break;	/* マップサイズ更新 */
@@ -205,6 +208,80 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT(PBYTE pData, DWORD dwSessionID
 	/* 更新されたマップオブジェクト情報を全クライアントへ通知 */
 	PacketMAP_MAPOBJECT.Make (pInfo);
 	m_pSock->SendTo (0, &PacketMAP_MAPOBJECT);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA					 */
+/* 内容		:受信処理(マップオブジェクト配置データ更新)						 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoMapBase pInfoMap;
+	PCInfoMapObjectData pObjectData;
+	PCLibInfoMapObjectData pLibInfo;
+	CPacketADMIN_MAP_RENEWOBJECTDATA Packet;
+	CPacketMAP_MAPOBJECTDATA PacketMAP_MAPOBJECTDATA;
+
+	Packet.Set (pData);
+
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (Packet.m_dwMapID);
+	if (pInfoMap == NULL) {
+		return;
+	}
+	pLibInfo = pInfoMap->m_pLibInfoMapObjectData;
+	if (pLibInfo == NULL) {
+		return;
+	}
+
+	/* 追加？ */
+	if (Packet.m_pInfo->m_dwDataID == 0) {
+		pObjectData = (PCInfoMapObjectData)pLibInfo->GetNew ();
+		pObjectData->Copy (Packet.m_pInfo);
+		pLibInfo->Add (pObjectData);
+
+	/* 更新 */
+	} else {
+		pObjectData = pLibInfo->Renew (Packet.m_pInfo->m_dwDataID, Packet.m_pInfo);
+		if (pObjectData == NULL) {
+			return;
+		}
+	}
+
+	PacketMAP_MAPOBJECTDATA.Make (Packet.m_dwMapID, pObjectData);
+	SendToMapChar (Packet.m_dwMapID, &PacketMAP_MAPOBJECTDATA);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_MAP_DELETEOBJECTDATA					 */
+/* 内容		:受信処理(マップオブジェクト配置データ削除)						 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_MAP_DELETEOBJECTDATA(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoMapBase pInfoMap;
+	PCLibInfoMapObjectData pLibInfo;
+	CPacketADMIN_PARA2 Packet;
+	CPacketMAP_PARA1 PacketMAP_PARA1;
+
+	Packet.Set (pData);
+
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (Packet.m_dwPara1);
+	if (pInfoMap == NULL) {
+		return;
+	}
+	pLibInfo = pInfoMap->m_pLibInfoMapObjectData;
+	if (pLibInfo == NULL) {
+		return;
+	}
+	pLibInfo->Delete (Packet.m_dwPara2);
+
+	PacketMAP_PARA1.Make (SBOCOMMANDID_SUB_MAP_DELETEMAPOBJECTDATA, Packet.m_dwPara1, Packet.m_dwPara2);
+	SendToMapChar (Packet.m_dwPara1, &PacketMAP_PARA1);
 }
 
 

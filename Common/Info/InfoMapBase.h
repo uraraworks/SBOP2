@@ -13,6 +13,8 @@
 class CLibInfoMapParts;
 class CLibInfoMapEvent;
 class CInfoMapEventBase;
+class CLibInfoMapObjectData;
+class CInfoMapObjectData;
 
 /* ========================================================================= */
 /* 定数定義																	 */
@@ -61,6 +63,7 @@ public:
 	WORD	GetShadow		(int x, int y);						/* 指定座標の影番号を取得 */
 	void	SetShadow		(int x, int y, DWORD dwShadowID);	/* 指定座標の影番号を設定 */
 	void	DeleteShadow	(DWORD dwShadowID);					/* 指定影を削除 */
+	DWORD	GetMapObject	(int x, int y);						/* 指定座標のマップオブジェクトIDを取得 */
 	BOOL	IsFlg			(int x, int y, DWORD dwFlg);		/* 指定属性か判定 */
 
 	DWORD	GetSendDataSize	(void);								/* 送信データサイズを取得 */
@@ -74,7 +77,10 @@ public:
 	int					GetEventCount	(void);						/* マップイベント数を取得 */
 	CInfoMapEventBase	*GetEvent		(int nNo);					/* マップイベントを取得 */
 	CInfoMapEventBase	*GetEvent		(int x, int y);				/* マップイベントを取得 */
-	void				AddEvent		(CInfoMapEventBase *pSrc);	/* マップイベントを追加 */
+	/* マップオブジェクト配置データ関連 */
+	int					GetMapObjectDataCount	(void);				/* マップオブジェクト配置データ数を取得 */
+	CInfoMapObjectData	*GetObjectData			(int nNo);			/* マップオブジェクト配置データを取得 */
+	CInfoMapObjectData	*GetObjectData			(int x, int y);		/* マップオブジェクト配置データを取得 */
 
 
 public:
@@ -88,8 +94,9 @@ public:
 	BYTE		m_byLevel;				/* 暗さレベル */
 	CmyString	m_strMapName;			/* マップ名 */
 
-	CLibInfoMapParts	*m_pLibInfoMapParts;	/* マップパーツ情報 */
-	CLibInfoMapEvent	*m_pLibInfoMapEvent;	/* マップイベント情報 */
+	CLibInfoMapParts		*m_pLibInfoMapParts;		/* マップパーツ情報 */
+	CLibInfoMapEvent		*m_pLibInfoMapEvent;		/* マップイベント情報 */
+	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* マップオブジェクト配置データ */
 } CInfoMapBase, *PCInfoMapBase;
 typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	  ARRAYINFOMAPBASE;
 typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	*PARRAYINFOMAPBASE;

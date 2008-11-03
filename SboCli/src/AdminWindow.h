@@ -27,6 +27,7 @@ enum {
 	SCRIDADMIN_MAP_PARTS,					/* パーツの編集 */
 	SCRIDADMIN_MAP_SHADOW,					/* 影の編集 */
 	SCRIDADMIN_MAP_OBJECT,					/* マップオブジェクトの編集 */
+	SCRIDADMIN_MAP_OBJECTDATA,				/* マップオブジェクトの配置 */
 	SCRIDADMIN_CHAR_MODIFY,					/* 選択キャラ情報編集[基本情報] */
 	SCRIDADMIN_CHAR_MODIFY_STATUS,			/* 選択キャラ情報編集[ステータス] */
 	SCRIDADMIN_CHAR_MODIFY_GRP,				/* 選択キャラ情報編集[画像の設定] */
@@ -103,6 +104,7 @@ protected:
 	afx_msg void OnMapShadow();
 	afx_msg void OnMapAdd();
 	afx_msg void OnMapObject();
+	afx_msg void OnMapObjectData();
 	afx_msg void OnMapWindow();
 	afx_msg void OnCharModify();
 	afx_msg void OnCharModifyStatus();

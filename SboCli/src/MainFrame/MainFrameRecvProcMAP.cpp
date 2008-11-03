@@ -12,6 +12,7 @@
 #include "Packet.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoMapObject.h"
+#include "LibInfoMapObjectData.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoMapEvent.h"
@@ -37,22 +38,24 @@
 void CMainFrame::RecvProcMAP(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_MAP_RES_MAPINFO:		RecvProcMAP_RES_MAPINFO		(pData);	break;	/* マップ情報応答 */
-	case SBOCOMMANDID_SUB_MAP_ONLINE:			RecvProcMAP_ONLINE			(pData);	break;	/* オンライン数通知 */
-	case SBOCOMMANDID_SUB_MAP_SYSTEMMSG:		RecvProcMAP_SYSTEMMSG		(pData);	break;	/* システムメッセージ通知 */
-	case SBOCOMMANDID_SUB_MAP_FORMATMSG:		RecvProcMAP_FORMATMSG		(pData);	break;	/* フォーマットメッセージ通知 */
-	case SBOCOMMANDID_SUB_MAP_MAPOBJECT:		RecvProcMAP_MAPOBJECT		(pData);	break;	/* マップオブジェクト情報通知 */
-	case SBOCOMMANDID_SUB_MAP_MAPPARTS:			RecvProcMAP_MAPPARTS		(pData);	break;	/* マップパーツ情報通知 */
-	case SBOCOMMANDID_SUB_MAP_SETPARTS:			RecvProcMAP_SETPARTS		(pData);	break;	/* マップパーツ配置 */
-	case SBOCOMMANDID_SUB_MAP_RENEWMAPSIZE:		RecvProcMAP_RENEWMAPSIZE	(pData);	break;	/* マップサイズ更新 */
-	case SBOCOMMANDID_SUB_MAP_DELETEPARTS:		RecvProcMAP_DELETEPARTS		(pData);	break;	/* マップパーツ削除 */
-	case SBOCOMMANDID_SUB_MAP_MAPSHADOW:		RecvProcMAP_MAPSHADOW		(pData);	break;	/* マップ影情報通知 */
-	case SBOCOMMANDID_SUB_MAP_SETMAPSHADOW:		RecvProcMAP_SETMAPSHADOW	(pData);	break;	/* マップ影配置 */
-	case SBOCOMMANDID_SUB_MAP_DELETEMAPSHADOW:	RecvProcMAP_DELETEMAPSHADOW	(pData);	break;	/* マップ影削除 */
-	case SBOCOMMANDID_SUB_MAP_MAPNAME:			RecvProcMAP_MAPNAME			(pData);	break;	/* マップ名通知 */
-	case SBOCOMMANDID_SUB_MAP_MAPEVENT:			RecvProcMAP_MAPEVENT		(pData);	break;	/* マップイベント情報通知 */
-	case SBOCOMMANDID_SUB_MAP_DELETEEVENT:		RecvProcMAP_DELETEEVENT		(pData);	break;	/* マップイベント情報削除 */
-	case SBOCOMMANDID_SUB_MAP_FADEINOUT:		RecvProcMAP_FADEINOUT		(pData);	break;	/* フェードイン/アウト通知 */
+	case SBOCOMMANDID_SUB_MAP_RES_MAPINFO:			RecvProcMAP_RES_MAPINFO			(pData);	break;	/* マップ情報応答 */
+	case SBOCOMMANDID_SUB_MAP_ONLINE:				RecvProcMAP_ONLINE				(pData);	break;	/* オンライン数通知 */
+	case SBOCOMMANDID_SUB_MAP_SYSTEMMSG:			RecvProcMAP_SYSTEMMSG			(pData);	break;	/* システムメッセージ通知 */
+	case SBOCOMMANDID_SUB_MAP_FORMATMSG:			RecvProcMAP_FORMATMSG			(pData);	break;	/* フォーマットメッセージ通知 */
+	case SBOCOMMANDID_SUB_MAP_MAPOBJECT:			RecvProcMAP_MAPOBJECT			(pData);	break;	/* マップオブジェクト情報通知 */
+	case SBOCOMMANDID_SUB_MAP_MAPOBJECTDATA:		RecvProcMAP_MAPOBJECTDATA		(pData);	break;	/* マップオブジェクト配置データ通知 */
+	case SBOCOMMANDID_SUB_MAP_DELETEMAPOBJECTDATA:	RecvProcMAP_DELETEMAPOBJECTDATA	(pData);	break;	/* マップオブジェクト配置データ削除 */
+	case SBOCOMMANDID_SUB_MAP_MAPPARTS:				RecvProcMAP_MAPPARTS			(pData);	break;	/* マップパーツ情報通知 */
+	case SBOCOMMANDID_SUB_MAP_SETPARTS:				RecvProcMAP_SETPARTS			(pData);	break;	/* マップパーツ配置 */
+	case SBOCOMMANDID_SUB_MAP_RENEWMAPSIZE:			RecvProcMAP_RENEWMAPSIZE		(pData);	break;	/* マップサイズ更新 */
+	case SBOCOMMANDID_SUB_MAP_DELETEPARTS:			RecvProcMAP_DELETEPARTS			(pData);	break;	/* マップパーツ削除 */
+	case SBOCOMMANDID_SUB_MAP_MAPSHADOW:			RecvProcMAP_MAPSHADOW			(pData);	break;	/* マップ影情報通知 */
+	case SBOCOMMANDID_SUB_MAP_SETMAPSHADOW:			RecvProcMAP_SETMAPSHADOW		(pData);	break;	/* マップ影配置 */
+	case SBOCOMMANDID_SUB_MAP_DELETEMAPSHADOW:		RecvProcMAP_DELETEMAPSHADOW		(pData);	break;	/* マップ影削除 */
+	case SBOCOMMANDID_SUB_MAP_MAPNAME:				RecvProcMAP_MAPNAME				(pData);	break;	/* マップ名通知 */
+	case SBOCOMMANDID_SUB_MAP_MAPEVENT:				RecvProcMAP_MAPEVENT			(pData);	break;	/* マップイベント情報通知 */
+	case SBOCOMMANDID_SUB_MAP_DELETEEVENT:			RecvProcMAP_DELETEEVENT			(pData);	break;	/* マップイベント情報削除 */
+	case SBOCOMMANDID_SUB_MAP_FADEINOUT:			RecvProcMAP_FADEINOUT			(pData);	break;	/* フェードイン/アウト通知 */
 	}
 }
 
@@ -268,6 +271,54 @@ void CMainFrame::RecvProcMAP_MAPOBJECT(PBYTE pData)
 	m_pLibInfoMapObject->Merge (Packet.m_pLibInfoMapObject);
 
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPOBJECT, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcMAP_MAPOBJECTDATA							 */
+/* 内容		:受信処理(マップオブジェクト配置データ通知)						 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcMAP_MAPOBJECTDATA(PBYTE pData)
+{
+	PCInfoMapBase pInfoMap;
+	CPacketMAP_MAPOBJECTDATA Packet;
+
+	Packet.Set (pData);
+
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (Packet.m_dwMapID);
+	if (pInfoMap == NULL) {
+		return;
+	}
+
+	pInfoMap->m_pLibInfoMapObjectData->Merge (Packet.m_pLibInfo);
+
+	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA					 */
+/* 内容		:受信処理(マップオブジェクト配置データ削除)						 */
+/* 日付		:2008/11/03														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA(PBYTE pData)
+{
+	PCInfoMapBase pInfoMap;
+	CPacketMAP_PARA1 Packet;
+
+	Packet.Set (pData);
+
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (Packet.m_dwCharID);
+	if (pInfoMap == NULL) {
+		return;
+	}
+
+	pInfoMap->m_pLibInfoMapObjectData->Delete (Packet.m_dwPara);
+
+	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
