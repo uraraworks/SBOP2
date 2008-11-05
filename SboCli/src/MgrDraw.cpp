@@ -47,7 +47,7 @@ CMgrDraw::CMgrDraw()
 	m_pDibBack = new CImg32;
 	m_pDibBack->Create (SCRSIZEX + 64, SCRSIZEY + 64);
 	m_pDibTmp = new CImg32;
-	m_pDibTmp->Create (SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibTmp->Create ((SCRSIZEX + 64) * 2, (SCRSIZEY + 64) * 2);
 	m_pDibTmp->SetColorKey (RGB (255, 0, 255));
 }
 

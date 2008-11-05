@@ -696,6 +696,17 @@ void CImg32::Blt(
 		return;
 	}
 
+	if (dx < 0) {
+		sx += (0 - dx);
+		cx -= (0 - dx);
+		dx = 0;
+	}
+	if (dy < 0) {
+		sy += (0 - dy);
+		cy -= (0 - dy);
+		dy = 0;
+	}
+
 	/* 座標をクリッピング */
 	ClipPos (dx, dy, cx, cy, pSrc, sx, sy);
 
