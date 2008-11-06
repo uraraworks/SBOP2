@@ -9,6 +9,8 @@
 #include "stdafx.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapBase.h"
+#include "LibInfoMapObject.h"
+#include "LibInfoMapObjectData.h"
 #include "LibInfoItem.h"
 #include "InfoMapBase.h"
 #include "LibInfoCharCli.h"
@@ -1272,16 +1274,22 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 {
 	DWORD dwObjectID;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
+	int i, nCount, x, y, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
 		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
 	PCInfoMapBase pMap;
+	PCLibInfoMapObjectData pLibInfoMapObjectData;
+	PCLibInfoMapObject pLibInfoMapObject;
+	PCInfoMapObjectData pInfoData;
+	PCInfoMapObject pInfo;
 
 	pMap = m_pMgrData->GetMap ();
 	if (pMap == NULL) {
 		return;
 	}
+	pLibInfoMapObjectData = pMap->m_pLibInfoMapObjectData;
+	pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject ();
 
 	cx		= pMap->m_sizeMap.cx;
 	cy		= pMap->m_sizeMap.cy;
@@ -1349,25 +1357,47 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 	if (nDrawY != -99) {
 		y = nDrawY;
 	}
-	for (; y < DRAW_PARTS_Y + 2; y ++) {
-		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
-			xx = nPosX + x;
-			yy = nPosY + y;
-			dwObjectID = pMap->GetMapObject (xx, yy);
-			if (dwObjectID == 0) {
-				continue;
-			}
-			m_pMgrDraw->DrawMapObject (
-					pDst,
-					32 + x * 32 + nMoveX,
-					32 + y * 32 + nMoveY,
-					dwObjectID,
-					TRUE,
-					FALSE);
+
+	nCount = pLibInfoMapObjectData->GetCount ();
+	yy = nPosY + y;
+	dwObjectID = 0;
+	for (i = 0; i < nCount; i ++) {
+		pInfoData = (PCInfoMapObjectData)pLibInfoMapObjectData->GetPtr (i);
+		pInfo = (PCInfoMapObject)pLibInfoMapObject->GetPtr (pInfoData->m_dwObjectID);
+		if (pInfo == NULL) {
+			continue;
 		}
 		if (nDrawY != -99) {
-			break;
+			if (yy != pInfoData->m_ptPos.y) {
+				if (y == DRAW_PARTS_Y + 1) {
+					if (!((pInfoData->m_ptPos.y >= yy) && (pInfoData->m_ptPos.y - pInfo->m_sizeGrp.cy - 1 < yy))) {
+						continue;
+					}
+				} else {
+					continue;
+				}
+			}
 		}
+		x = pInfoData->m_ptPos.x - nPosX;
+		if (pInfoData->m_ptPos.x > nPosX + DRAW_PARTS_X + 2) {
+			continue;
+		}
+		if (pInfoData->m_ptPos.x + pInfo->m_sizeGrp.cx < nPosX) {
+			continue;
+		}
+		x = pInfoData->m_ptPos.x - nPosX;
+		y = pInfoData->m_ptPos.y - nPosY;
+		dwObjectID = pInfoData->m_dwObjectID;
+		break;
+	}
+	if (dwObjectID != 0) {
+		m_pMgrDraw->DrawMapObject (
+				pDst,
+				32 + x * 32 + nMoveX,
+				32 + y * 32 + nMoveY,
+				dwObjectID,
+				TRUE,
+				FALSE);
 	}
 	m_pMgrDraw->UnLockDibTmp ();
 }
