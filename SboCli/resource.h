@@ -240,6 +240,8 @@
 #define IDC_SPIN_Y0                     1103
 #define IDC_MAXPUTCOUNT                 1104
 #define IDC_HP                          1104
+#define IDC_SPIN_Y4                     1104
+#define IDC_SPIN_HIDEY                  1104
 #define IDC_PUTAREA_X                   1105
 #define IDC_MAXHP                       1105
 #define IDC_PUTAREA_Y                   1106
@@ -290,6 +292,7 @@
 #define IDC_PARTS_STA                   1138
 #define IDC_CX                          1139
 #define IDC_CY                          1140
+#define IDC_HIDEY                       1141
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773

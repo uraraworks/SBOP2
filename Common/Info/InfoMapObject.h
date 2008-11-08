@@ -66,6 +66,7 @@ public:
 	/* 保存するデータ */
 	DWORD				m_dwObjectID,						/* オブジェクトID */
 						m_dwAttr;							/* オブジェクトの属性 */
+	int					m_nHideY;							/* 隠れる上からのマス数 */
 	SIZE				m_sizeGrp;							/* 画像サイズ */
 	CmyString			m_strName;							/* オブジェクト名 */
 

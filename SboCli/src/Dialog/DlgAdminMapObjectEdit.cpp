@@ -37,9 +37,11 @@ void CDlgAdminMapObjectEdit::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_NAME, m_strName);
 	DDX_Text(pDX, IDC_CX, m_nCx);
 	DDX_Text(pDX, IDC_CY, m_nCy);
+	DDX_Text(pDX, IDC_HIDEY, m_nHideY);
 	DDX_Text(pDX, IDC_COUNT, m_nCount);
 	DDX_Control(pDX, IDC_SPIN_X0, m_ctlSpinX);
 	DDX_Control(pDX, IDC_SPIN_Y0, m_ctlSpinY);
+	DDX_Control(pDX, IDC_SPIN_HIDEY, m_ctlSpinHideY);
 	DDX_Text(pDX, IDC_NOW, m_nNow);
 }
 
@@ -66,6 +68,7 @@ CDlgAdminMapObjectEdit::CDlgAdminMapObjectEdit(CWnd* pParent /*=NULL*/)
 	, m_strName(_T(""))
 	, m_nCx(0)
 	, m_nCy(0)
+	, m_nHideY(0)
 	, m_nCount(0)
 	, m_nNow(0)
 {
@@ -134,6 +137,7 @@ BOOL CDlgAdminMapObjectEdit::OnInitDialog()
 
 	m_ctlSpinX.SetRange (1, 15);
 	m_ctlSpinY.SetRange (1, 13);
+	m_ctlSpinHideY.SetRange (0, 99);
 
 	m_pWndMapPartsGrp->Create (this, m_pMgrData, IDC_PARTS);
 	m_ctlObject.Create (this, m_pMgrData);
@@ -295,6 +299,7 @@ void CDlgAdminMapObjectEdit::Set(void)
 	m_strName	= m_pInfoMapObject->m_strName;
 	m_nCx		= m_pInfoMapObject->m_sizeGrp.cx;
 	m_nCy		= m_pInfoMapObject->m_sizeGrp.cy;
+	m_nHideY	= m_pInfoMapObject->m_nHideY;
 	m_nCount	= m_pInfoMapObject->GetAnimeCount ();
 
 	if (m_hWnd) {
@@ -319,6 +324,7 @@ void CDlgAdminMapObjectEdit::Get(void)
 	m_pInfoMapObject->m_strName		= m_strName;
 	m_pInfoMapObject->m_sizeGrp.cx	= m_nCx;
 	m_pInfoMapObject->m_sizeGrp.cy	= m_nCy;
+	m_pInfoMapObject->m_nHideY		= min (m_nHideY, m_nCy);
 }
 
 

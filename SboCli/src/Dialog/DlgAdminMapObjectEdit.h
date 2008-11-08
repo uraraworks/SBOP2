@@ -70,12 +70,14 @@ public:
 	CString m_strName;
 	int m_nCx;
 	int m_nCy;
+	int m_nHideY;
 	afx_msg void OnEnChangeCx();
 	afx_msg void OnEnChangeCy();
 	afx_msg void OnBnClickedAdd();
 	int m_nCount;
 	CSpinButtonCtrl m_ctlSpinX;
 	CSpinButtonCtrl m_ctlSpinY;
+	CSpinButtonCtrl m_ctlSpinHideY;
 	int m_nNow;
 };
 

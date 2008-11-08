@@ -1274,7 +1274,7 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 {
 	DWORD dwObjectID;
-	int i, nCount, x, y, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
+	int i, nCount, x, y, yy, yTmp, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
 		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
@@ -1367,8 +1367,12 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 		if (pInfo == NULL) {
 			continue;
 		}
+		yTmp = pInfoData->m_ptPos.y;
+		if (pInfo->m_nHideY != 0) {
+			yTmp -= (pInfo->m_sizeGrp.cy - pInfo->m_nHideY);
+		}
 		if (nDrawY != -99) {
-			if (yy != pInfoData->m_ptPos.y) {
+			if (yy != yTmp) {
 				if (y == DRAW_PARTS_Y + 1) {
 					if (!((pInfoData->m_ptPos.y >= yy) && (pInfoData->m_ptPos.y - pInfo->m_sizeGrp.cy - 1 < yy))) {
 						continue;
