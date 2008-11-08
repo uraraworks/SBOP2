@@ -117,7 +117,7 @@ void CMgrDraw::Draw(HDC hDC)
 
 	hDCTmp = m_pDibBack->Lock ();
 	BitBlt (hDC, 0, 0, SCRSIZEX, SCRSIZEY, hDCTmp, 32, 32, SRCCOPY);
-	m_pDibBack->Unlock ();
+//	m_pDibBack->Unlock ();
 }
 
 
@@ -1127,7 +1127,7 @@ void CMgrDraw::LockDibTmp(void)
 
 void CMgrDraw::UnLockDibTmp(void)
 {
-	m_pDibTmp->Unlock ();
+//	m_pDibTmp->Unlock ();
 	ReleaseDibTmp ();
 }
 
