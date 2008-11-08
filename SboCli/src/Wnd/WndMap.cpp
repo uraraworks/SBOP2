@@ -31,6 +31,13 @@ enum {
 	TOOLBAR_RANGE,			/* 範囲選択 */
 };
 
+/* ステータスバー設定用情報 */
+static UINT indicators[] =
+{
+	ID_SEPARATOR,           // ステータス ライン インジケータ
+};
+
+
 /* ========================================================================= */
 /* クラス設定																 */
 /* ========================================================================= */
@@ -184,6 +191,13 @@ int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndToolBar.GetToolBarCtrl ().SetImageList (&m_ImgListToolBar);
 
 	RenewToolbar ();
+
+	/* ステータスバーの設定 */
+	if (!m_StatusBar.Create (this) ||
+		!m_StatusBar.SetIndicators (indicators, sizeof (indicators) / sizeof (UINT))) {
+		return -1;
+	}
+	RepositionBars (AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
 
 	/* スクロールバーの設定 */
 	ModifyStyle (0, WS_VSCROLL | WS_HSCROLL);
@@ -340,7 +354,9 @@ void CWndMap::OnPaint()
 	pDCTmp->DrawEdge (rcTmp, EDGE_BUMP, BF_MONO | BF_RECT);
 
 	dc.BitBlt (0, size.cy, cx, cy, pDCTmp, 0, 0, SRCCOPY);
-	m_pImgBack->Unlock ();
+//	m_pImgBack->Unlock ();
+
+	RenewStatusText ();
 }
 
 
@@ -361,6 +377,8 @@ void CWndMap::OnSize(UINT nType, int cx, int cy)
 
 	/* スクロールバーの最大値を更新 */
 	RenewScrollRange (cx, cy - size.cy);
+
+	RepositionBars (AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
 }
 
 
@@ -375,9 +393,12 @@ void CWndMap::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	int nMin, nMax;
 	BOOL bChange;
 	UINT nPosNow;
+	SCROLLINFO stScrollInfo;
 
 	nPosNow = GetScrollPos (SB_HORZ);
 	bChange = TRUE;
+
+	GetScrollInfo (SB_HORZ, &stScrollInfo);
 
 	switch (nSBCode) {
 	case SB_LEFT:			/* 左端へスクロール */
@@ -389,12 +410,16 @@ void CWndMap::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		nPos = nMax;
 		break;
 	case SB_LINELEFT:		/* 左へスクロール */
-	case SB_PAGELEFT:		/* 1ページ左へスクロール */
 		nPos = nPosNow - 1;
 		break;
+	case SB_PAGELEFT:		/* 1ページ左へスクロール */
+		nPos = nPosNow - stScrollInfo.nPage;
+		break;
 	case SB_LINERIGHT:		/* 右へスクロール */
-	case SB_PAGERIGHT:		/* 1ページ右へスクロール */
 		nPos = nPosNow + 1;
+		break;
+	case SB_PAGERIGHT:		/* 1ページ右へスクロール */
+		nPos = nPosNow + stScrollInfo.nPage;
 		break;
 	case SB_THUMBPOSITION:	/* 絶対位置へスクロール */
 	case SB_THUMBTRACK:		/* ドラッグされた */
@@ -423,9 +448,12 @@ void CWndMap::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	int nMin, nMax;
 	BOOL bChange;
 	UINT nPosNow;
+	SCROLLINFO stScrollInfo;
 
 	nPosNow = GetScrollPos (SB_VERT);
 	bChange = TRUE;
+
+	GetScrollInfo (SB_VERT, &stScrollInfo);
 
 	switch (nSBCode) {
 	case SB_TOP:			/* 1番上までスクロール */
@@ -437,12 +465,16 @@ void CWndMap::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		nPos = nMax;
 		break;
 	case SB_LINEUP:			/* 1行上へスクロール */
-	case SB_PAGEUP:			/* 1ページ上へスクロール */
 		nPos = nPosNow - 1;
 		break;
+	case SB_PAGEUP:			/* 1ページ上へスクロール */
+		nPos = nPosNow - stScrollInfo.nPage;
+		break;
 	case SB_LINEDOWN:		/* 1行下へスクロール */
-	case SB_PAGEDOWN:		/* 1ページ下へスクロール */
 		nPos = nPosNow + 1;
+		break;
+	case SB_PAGEDOWN:		/* 1ページ下へスクロール */
+		nPos = nPosNow + stScrollInfo.nPage;
 		break;
 	case SB_THUMBPOSITION:	/* 絶対位置へスクロール */
 	case SB_THUMBTRACK:		/* ドラッグされた */
@@ -842,8 +874,13 @@ void CWndMap::PostNcDestroy()
 
 void CWndMap::RenewScrollRange(int cx, int cy)
 {
+	CRect rc;
+	SCROLLINFO stScrollInfo;
+
+	m_StatusBar.GetWindowRect (rc);
+
 	m_pImgBack->Destroy ();
-	m_pImgBack->Create (cx, cy);
+	m_pImgBack->Create (cx, cy - rc.Height ());
 
 	if (m_pInfoMap == NULL) {
 		return;
@@ -852,6 +889,13 @@ void CWndMap::RenewScrollRange(int cx, int cy)
 	/* スクロールバーの最大値を更新 */
 	SetScrollRange (SB_HORZ, 0, m_pInfoMap->m_sizeMap.cx);
 	SetScrollRange (SB_VERT, 0, m_pInfoMap->m_sizeMap.cy);
+
+	GetScrollInfo (SB_HORZ, &stScrollInfo);
+	stScrollInfo.nPage = (m_pImgBack->Width () / 16) - 1;
+	SetScrollInfo (SB_HORZ, &stScrollInfo);
+	GetScrollInfo (SB_VERT, &stScrollInfo);
+	stScrollInfo.nPage = (m_pImgBack->Height () / 16) - 1;
+	SetScrollInfo (SB_VERT, &stScrollInfo);
 }
 
 
@@ -887,6 +931,74 @@ void CWndMap::RenewToolbar(void)
 	Button.idCommand	= TOOLBAR_RANGE;
 	Button.fsStyle		= TBSTYLE_CHECK;
 	pToolBarCtrl->AddButtons (1, &Button);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWndMap::RenewStatusText										 */
+/* 内容		:ステータスバーのテキストを更新									 */
+/* 日付		:2008/11/08														 */
+/* ========================================================================= */
+
+void CWndMap::RenewStatusText(void)
+{
+	int x, y;
+	BOOL bResult;
+	CPoint point;
+	CRect rcRangeTmp;
+	CSize size;
+	CString strTmp, strPane;
+
+	GetCursorPos (&point);
+	ScreenToClient (&point);
+	size = m_wndToolBar.CalcFixedLayout (FALSE, TRUE);
+	point.y -= size.cy;
+
+	x  = GetScrollPos (SB_HORZ);
+	y  = GetScrollPos (SB_VERT);
+	x += (point.x / 16);
+	y += (point.y / 16);
+
+	strPane.Format ("座標(%3d,%3d)", x, y);
+
+	/* 範囲選択中？ */
+	bResult = GetCheck (TOOLBAR_RANGE);
+	if (bResult) {
+		rcRangeTmp = m_rcRange;
+		if (rcRangeTmp.left > rcRangeTmp.right) {
+			rcRangeTmp.left  = m_rcRange.right;
+			rcRangeTmp.right = m_rcRange.left;
+		}
+		if (rcRangeTmp.top > rcRangeTmp.bottom) {
+			rcRangeTmp.top		= m_rcRange.bottom;
+			rcRangeTmp.bottom	= m_rcRange.top;
+		}
+		if (rcRangeTmp.left != -1) {
+			strTmp.Format (" 選択(%3d,%3d) 範囲(%3d,%3d)",
+					rcRangeTmp.left, rcRangeTmp.top, rcRangeTmp.Width () + 1, rcRangeTmp.Height () + 1);
+			strPane += strTmp;
+		}
+	}
+	/* 張り付け中？ */
+	bResult = GetCheck (TOOLBAR_PASTE);
+	if (bResult) {
+		rcRangeTmp = m_rcCopy;
+		if (rcRangeTmp.left > rcRangeTmp.right) {
+			rcRangeTmp.left  = m_rcCopy.right;
+			rcRangeTmp.right = m_rcCopy.left;
+		}
+		if (rcRangeTmp.top > rcRangeTmp.bottom) {
+			rcRangeTmp.top		= m_rcCopy.bottom;
+			rcRangeTmp.bottom	= m_rcCopy.top;
+		}
+		if (rcRangeTmp.left != -1) {
+			strTmp.Format (" 選択(%3d,%3d) 範囲(%3d,%3d)",
+					rcRangeTmp.left, rcRangeTmp.top, rcRangeTmp.Width (), rcRangeTmp.Height ());
+			strPane += strTmp;
+		}
+	}
+
+	m_StatusBar.SetPaneText (0, strPane);
 }
 
 

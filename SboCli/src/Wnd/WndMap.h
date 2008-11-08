@@ -34,6 +34,7 @@ public:
 protected:
 	void	RenewScrollRange	(int cx, int cy);			/* スクロールバーの範囲を更新 */
 	void	RenewToolbar		(void);						/* ツールバーを更新 */
+	void	RenewStatusText		(void);						/* ステータスバーのテキストを更新 */
 	BOOL	GetCheck			(int nNo);					/* ツールバーのボタン状態を取得 */
 	void	SetCheck			(int nNo, BOOL bCheck);		/* ツールバーのボタン状態を設定 */
 
@@ -47,6 +48,7 @@ protected:
 	CImg32		*m_pImgBack,					/* バックバッファ */
 				*m_pImgBase;					/* 表示画像 */
 	CWndToolbar	m_wndToolBar;					/* ツールバー */
+	CStatusBar	m_StatusBar;					/* ステータスバー */
 	CImageList	m_ImgListToolBar;				/* ツールバー用イメージリスト */
 	CRect		m_rcRange,						/* 選択範囲 */
 				m_rcCopy;						/* コピーする範囲 */
