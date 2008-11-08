@@ -1016,6 +1016,7 @@ void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 
 void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 {
+	BOOL bDraw;
 	BYTE byViewGrid;
 	DWORD dwPartsID, dwPartsIDBack;
 	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
@@ -1109,33 +1110,37 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 			} else {
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
 			}
+			bDraw = TRUE;
 			pInfoMapPartsBack	= pInfoMapParts;
 			dwPartsIDBack		= dwPartsID;
 			if (pInfoMapParts == NULL) {
+				bDraw = FALSE;
 				continue;
 			}
 			if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
-				continue;
+				bDraw = FALSE;
 			}
 			if (nDrawY != -99) {
 				if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) {
-					continue;
+					bDraw = FALSE;
 				}
 			} else {
 				if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) == 0) {
-					continue;
+					bDraw = FALSE;
 				}
 			}
-			m_pMgrDraw->DrawMapParts (
-					pDst,
-					32 + x * 32 + nMoveX,
-					32 + y * 32 + nMoveY,
-					pInfoMapParts,
-					3,
-					FALSE,
-					TRUE,
-					FALSE);
-			if (byViewGrid) {
+			if (bDraw) {
+				m_pMgrDraw->DrawMapParts (
+						pDst,
+						32 + x * 32 + nMoveX,
+						32 + y * 32 + nMoveY,
+						pInfoMapParts,
+						3,
+						FALSE,
+						TRUE,
+						FALSE);
+			}
+			if (byViewGrid && nDrawY == -99) {
 				if (byViewGrid == 1) {
 					pDst->Rectangle (32 + x * 32 + nMoveX, 32 + y * 32 + nMoveY, 32, 32, -1);
 				} else {
