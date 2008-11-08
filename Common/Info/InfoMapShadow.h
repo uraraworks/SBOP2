@@ -52,6 +52,7 @@ public:
 						m_byAnimeType,						/* アニメーション種別 */
 						m_byAnimeCount,						/* アニメーションコマ数 */
 						m_byLevel;							/* 透明度 */
+	BOOL				m_bLight;							/* 透明度を明度として使う */
 	WORD				m_wGrpID;							/* グラフィックID */
 	DWORD				m_dwShadowID;						/* 影ID */
 	POINT				m_ptViewPos;						/* 編集画面での表示位置 */

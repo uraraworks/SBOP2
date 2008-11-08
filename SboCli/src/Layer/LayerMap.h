@@ -13,6 +13,7 @@
 class CInfoCharCli;
 class CLibInfoItem;
 class CLibInfoMapParts;
+class CLibInfoMapShadow;
 class CLayerCloud;
 class CLayerMisty;
 
@@ -77,6 +78,7 @@ public:
 				*m_pDibLevelTmp;
 	CLibInfoItem		*m_pLibInfoItem;		/* アイテム情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;	/* マップパーツ情報 */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* マップ影情報 */
 	CLayerCloud			*m_pLayerCould;			/* 雲レイヤー */
 	CLayerMisty			*m_pLayerMisty;			/* 霧レイヤー */
 } CLayerMap, *PCLayerMap;

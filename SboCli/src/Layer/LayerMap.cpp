@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "LibInfoMapParts.h"
+#include "LibInfoMapShadow.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoMapObject.h"
 #include "LibInfoMapObjectData.h"
@@ -53,6 +54,7 @@ CLayerMap::CLayerMap()
 	m_pDibLevelTmp		= NULL;
 	m_pLibInfoItem		= NULL;
 	m_pLibInfoMapParts	= NULL;
+	m_pLibInfoMapShadow	= NULL;
 
 	m_pLayerCould		= NULL;
 	m_pLayerMisty		= NULL;
@@ -87,6 +89,7 @@ void CLayerMap::Create(
 
 	m_pLibInfoItem		= m_pMgrData->GetLibInfoItem ();
 	m_pLibInfoMapParts	= m_pMgrData->GetLibInfoMapParts ();
+	m_pLibInfoMapShadow	= m_pMgrData->GetLibInfoMapShadow ();
 
 	m_pDibLevel = new CImg32;
 	m_pDibLevel->CreateWithoutGdi (SCRSIZEX + 64, SCRSIZEY + 64);
@@ -1168,11 +1171,12 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 {
 	WORD wShadowID;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy, r, nTmp;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
 		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
 	PCInfoMapBase pMap;
+	PCInfoMapShadow pInfoMapShadow;
 
 	pMap = m_pMgrData->GetMap ();
 	if (pMap == NULL) {
@@ -1253,14 +1257,25 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 			if (wShadowID == 0) {
 				continue;
 			}
-			m_pMgrDraw->DrawMapShadow (
-					pDst,
-					32 + x * 32 + nMoveX,
-					32 + y * 32 + nMoveY,
-					wShadowID,
-					FALSE,
-					TRUE,
-					FALSE);
+			xx = 32 + x * 32 + nMoveX;
+			yy = 32 + y * 32 + nMoveY;
+			pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr ((DWORD)wShadowID);
+			if (pInfoMapShadow->m_bLight) {
+				if (pMap->m_byLevel != 0) {
+					r = 32 * 2;
+					nTmp = (r - 32 / 2);
+					m_pDibLevel->BltPlus (xx - nTmp, yy - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
+				}
+			} else {
+				m_pMgrDraw->DrawMapShadow (
+						pDst,
+						xx,
+						yy,
+						wShadowID,
+						FALSE,
+						TRUE,
+						FALSE);
+			}
 		}
 		if (nDrawY != -99) {
 			break;

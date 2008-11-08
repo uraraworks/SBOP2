@@ -59,6 +59,7 @@ public:
 	int		m_nGrpNo;
 	int		m_nLevel;
 	int		m_nViewTime;
+	BOOL	m_bLight;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminMapShadowEdit)

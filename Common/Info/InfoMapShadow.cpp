@@ -19,6 +19,7 @@ static LPCSTR s_aszName[] = {
 	"byAnimeType",		/* アニメーション種別 */
 	"byAnimeCount",		/* アニメーションコマ数 */
 	"byLevel",			/* 透明度 */
+	"m_bLight",			/* 透明度を明度として使う */
 	"wGrpID",			/* グラフィックID */
 	"dwShadowID",		/* 影ID */
 	"ptViewPos",		/* 編集画面での表示位置 */
@@ -38,6 +39,7 @@ CInfoMapShadow::CInfoMapShadow()
 	m_byAnimeType		= 0;
 	m_byAnimeCount		= 0;
 	m_byLevel			= 0;
+	m_bLight			= FALSE;
 	m_wGrpID			= 0;
 	m_dwShadowID		= 0;
 	ZeroMemory (&m_ptViewPos, sizeof (m_ptViewPos));
@@ -147,6 +149,7 @@ DWORD CInfoMapShadow::GetDataSize(void)
 			sizeof (m_byAnimeType)		+
 			sizeof (m_byAnimeCount)		+
 			sizeof (m_byLevel)			+
+			sizeof (m_bLight)			+
 			sizeof (m_wGrpID)			+
 			sizeof (m_dwShadowID)		+
 			sizeof (m_ptViewPos);
@@ -187,9 +190,10 @@ DWORD CInfoMapShadow::GetDataSizeNo(int nNo)
 	case 1:		dwRet = sizeof (m_byAnimeType);			break;
 	case 2:		dwRet = sizeof (m_byAnimeCount);		break;
 	case 3:		dwRet = sizeof (m_byLevel);				break;
-	case 4:		dwRet = sizeof (m_wGrpID);				break;
-	case 5:		dwRet = sizeof (m_dwShadowID);			break;
-	case 6:		dwRet = sizeof (m_ptViewPos);			break;
+	case 4:		dwRet = sizeof (m_bLight);				break;		/* 透明度を明度として使う */
+	case 5:		dwRet = sizeof (m_wGrpID);				break;
+	case 6:		dwRet = sizeof (m_dwShadowID);			break;
+	case 7:		dwRet = sizeof (m_ptViewPos);			break;
 	default:
 		nCount = m_paAnimeInfo->GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -243,9 +247,10 @@ PBYTE CInfoMapShadow::GetWriteData(int nNo, PDWORD pdwSize)
 	case 1:	pSrc = &m_byAnimeType;			break;
 	case 2:	pSrc = &m_byAnimeCount;			break;
 	case 3:	pSrc = &m_byLevel;				break;
-	case 4:	pSrc = (PBYTE)&m_wGrpID;		break;
-	case 5:	pSrc = (PBYTE)&m_dwShadowID;	break;
-	case 6:	pSrc = (PBYTE)&m_ptViewPos;		break;
+	case 4:	pSrc = (PBYTE)&m_bLight;		break;		/* 透明度を明度として使う */
+	case 5:	pSrc = (PBYTE)&m_wGrpID;		break;
+	case 6:	pSrc = (PBYTE)&m_dwShadowID;	break;
+	case 7:	pSrc = (PBYTE)&m_ptViewPos;		break;
 	default:
 		{
 			PBYTE pTmp;
@@ -304,9 +309,10 @@ DWORD CInfoMapShadow::ReadElementData(
 		}
 		break;
 	case 3:	pDst = &m_byLevel;				dwSize = sizeof (m_byLevel);		break;
-	case 4:	pDst = (PBYTE)&m_wGrpID;		dwSize = sizeof (m_wGrpID);			break;
-	case 5:	pDst = (PBYTE)&m_dwShadowID;	dwSize = sizeof (m_dwShadowID);		break;
-	case 6:	pDst = (PBYTE)&m_ptViewPos;		dwSize = sizeof (m_ptViewPos);		break;
+	case 4:	pDst = (PBYTE)&m_bLight;		dwSize = sizeof (m_bLight);			break;
+	case 5:	pDst = (PBYTE)&m_wGrpID;		dwSize = sizeof (m_wGrpID);			break;
+	case 6:	pDst = (PBYTE)&m_dwShadowID;	dwSize = sizeof (m_dwShadowID);		break;
+	case 7:	pDst = (PBYTE)&m_ptViewPos;		dwSize = sizeof (m_ptViewPos);		break;
 	default:
 		pSrcTmp	= pSrc;
 		for (i = 0; i < m_byAnimeCount; i ++) {
@@ -359,6 +365,7 @@ DWORD CInfoMapShadow::GetSendDataSize(void)
 			sizeof (m_byAnimeType)		+
 			sizeof (m_byAnimeCount)		+
 			sizeof (m_byLevel)			+
+			sizeof (m_bLight)			+		/* 透明度を明度として使う */
 			sizeof (m_wGrpID)			+
 			sizeof (m_ptViewPos);
 
@@ -401,6 +408,7 @@ PBYTE CInfoMapShadow::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_byAnimeType,	sizeof (m_byAnimeType),		pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_byAnimeCount,	sizeof (m_byAnimeCount),	pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_byLevel,		sizeof (m_byLevel),			pDataTmp);
+	CopyMemoryRenew (pDataTmp, &m_bLight,		sizeof (m_bLight),			pDataTmp);		/* 透明度を明度として使う */
 	CopyMemoryRenew (pDataTmp, &m_wGrpID,		sizeof (m_wGrpID),			pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_ptViewPos,	sizeof (m_ptViewPos),		pDataTmp);
 
@@ -437,6 +445,7 @@ PBYTE CInfoMapShadow::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_byAnimeType,	pDataTmp, sizeof (m_byAnimeType),	pDataTmp);
 	CopyMemoryRenew (&m_byAnimeCount,	pDataTmp, sizeof (m_byAnimeCount),	pDataTmp);
 	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);
+	CopyMemoryRenew (&m_bLight,			pDataTmp, sizeof (m_bLight),		pDataTmp);		/* 透明度を明度として使う */
 	CopyMemoryRenew (&m_wGrpID,			pDataTmp, sizeof (m_wGrpID),		pDataTmp);
 	CopyMemoryRenew (&m_ptViewPos,		pDataTmp, sizeof (m_ptViewPos),		pDataTmp);
 

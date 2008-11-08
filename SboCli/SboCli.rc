@@ -296,6 +296,7 @@ FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
 BEGIN
     LTEXT           "プレビュー：",-1,2,2,35,8,NOT WS_GROUP
     CONTROL         "",IDC_PREVIEW,"Static",SS_OWNERDRAW,2,12,13,14
+    CONTROL         "透明度を明度として使う（画像は無効）",IDC_LIGHT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,2,125,10
     LTEXT           "表示時間：",-1,2,40,32,8
     EDITTEXT        IDC_VIEWTIME,36,36,25,14,ES_AUTOHSCROLL
     LTEXT           "(10ms)",-1,63,40,21,8

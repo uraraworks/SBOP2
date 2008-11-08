@@ -37,6 +37,7 @@ void CDlgAdminMapShadowEdit::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_VIEWTIME, m_nViewTime);
 	DDX_CBIndex(pDX, IDC_GRPNO, m_nGrpNo);
 	DDX_Control(pDX, IDC_GRPNO, m_cbGrpNo);
+	DDX_Check(pDX, IDC_LIGHT, m_bLight);
 	//}}AFX_DATA_MAP
 }
 
@@ -78,6 +79,7 @@ CDlgAdminMapShadowEdit::CDlgAdminMapShadowEdit(CWnd* pParent /*=NULL*/)
 	m_nLevel = 0;
 	m_nViewTime = 0;
 	m_nGrpNo = 0;
+	m_bLight = FALSE;
 	//}}AFX_DATA_INIT
 
 	m_nSelectType			= 0;
@@ -545,6 +547,7 @@ void CDlgAdminMapShadowEdit::SetData(void)
 {
 	PCInfoAnime pAnime;
 
+	m_bLight = m_pInfoMapShadow->m_bLight;
 	m_strCount.Format ("%d", m_pInfoMapShadow->m_byAnimeCount);
 	m_Slider.SetRange (0, m_pInfoMapShadow->m_byAnimeCount - 1, TRUE);
 	if (m_pInfoMapShadow->m_byAnimeCount > 0) {
@@ -576,7 +579,8 @@ void CDlgAdminMapShadowEdit::GetData(void)
 {
 	OnChangeViewtime ();
 
-	m_pInfoMapShadow->m_byLevel = m_nLevel;
+	m_pInfoMapShadow->m_byLevel	= m_nLevel;
+	m_pInfoMapShadow->m_bLight	= m_bLight;
 }
 
 
