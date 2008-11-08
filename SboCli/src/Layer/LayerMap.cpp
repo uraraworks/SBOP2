@@ -1380,7 +1380,6 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 
 	nCount = pLibInfoMapObjectData->GetCount ();
 	yy = nPosY + y;
-	dwObjectID = 0;
 	for (i = 0; i < nCount; i ++) {
 		pInfoData = (PCInfoMapObjectData)pLibInfoMapObjectData->GetPtr (i);
 		pInfo = (PCInfoMapObject)pLibInfoMapObject->GetPtr (pInfoData->m_dwObjectID);
@@ -1412,9 +1411,6 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 		x = pInfoData->m_ptPos.x - nPosX;
 		y = pInfoData->m_ptPos.y - nPosY;
 		dwObjectID = pInfoData->m_dwObjectID;
-		break;
-	}
-	if (dwObjectID != 0) {
 		m_pMgrDraw->DrawMapObject (
 				pDst,
 				32 + x * 32 + nMoveX,
