@@ -96,17 +96,17 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 	strTmp = "ƒŒƒxƒ‹";
 	TextOut2 (hDC, 16, 16 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%d", pInfoChar->m_wLevel);
-	TextOut2 (hDC, 16 + 12 * 7, 12 + 12 * y, (LPCSTR)strTmp, clText);
+	TextOut2 (hDC, 16 + 12 * 7, 16 + 12 * y, (LPCSTR)strTmp, clText);
 	y ++;
 	strTmp = "HP";
 	TextOut2 (hDC, 16, 16 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%d", pInfoChar->m_dwHP);
-	TextOut2 (hDC, 16 + 12 * 7, 12 + 12 * y, (LPCSTR)strTmp, clText);
+	TextOut2 (hDC, 16 + 12 * 7, 16 + 12 * y, (LPCSTR)strTmp, clText);
 	y ++;
 	strTmp = "SP";
 	TextOut2 (hDC, 16, 16 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%d", pInfoChar->m_dwSP);
-	TextOut2 (hDC, 16 + 12 * 7, 12 + 12 * y, (LPCSTR)strTmp, clText);
+	TextOut2 (hDC, 16 + 12 * 7, 16 + 12 * y, (LPCSTR)strTmp, clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
