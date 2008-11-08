@@ -643,7 +643,7 @@ void CDlgAdminMapParts::MakePartsImage(void)
 
 	m_ctlScroll.GetScrollInfo (&stScrollInfo);
 	stScrollInfo.nPage	= (rc.Height () / 16) - 1;
-	stScrollInfo.nMax	= 100;
+	stScrollInfo.nMax	= 1000;
 	m_ctlScroll.SetScrollInfo (&stScrollInfo);
 }
 
