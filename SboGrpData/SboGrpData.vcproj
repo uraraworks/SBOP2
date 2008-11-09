@@ -736,6 +736,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\res\2x2\2x2_npc006.png"
+					>
+				</File>
+				<File
+					RelativePath=".\res\2x2\2x2_npc006_shadow.png"
+					>
+				</File>
+				<File
 					RelativePath=".\res\2x2\2x2_shield01.png"
 					>
 				</File>
