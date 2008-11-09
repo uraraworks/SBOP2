@@ -30,6 +30,7 @@ static LPCSTR s_aszName[] = {
 
 CInfoMotionType::CInfoMotionType()
 {
+	m_wGrpIDSub		 = 0;
 	m_dwMotionTypeID = 0;
 
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
