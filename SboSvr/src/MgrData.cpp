@@ -264,6 +264,8 @@ void CMgrData::Load(void)
 	m_pLibInfoChar->		Revice ();
 	m_pLibInfoItemType->	Revice ();
 	m_pLibInfoMap->			RenewMapEvent ();
+	m_pLibInfoMap->			SetMapObject (m_pLibInfoMapObject);
+	m_pLibInfoMap->			RenewHitTmp ();
 	m_pLibInfoMotion->		Revice ();
 }
 

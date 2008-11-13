@@ -43,6 +43,7 @@ void CDlgAdminMapObjectEdit::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SPIN_Y0, m_ctlSpinY);
 	DDX_Control(pDX, IDC_SPIN_HIDEY, m_ctlSpinHideY);
 	DDX_Text(pDX, IDC_NOW, m_nNow);
+	DDX_Check(pDX, IDC_HIT, m_bHit);
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminMapObjectEdit, CDlgAdminBase)
@@ -71,6 +72,7 @@ CDlgAdminMapObjectEdit::CDlgAdminMapObjectEdit(CWnd* pParent /*=NULL*/)
 	, m_nHideY(0)
 	, m_nCount(0)
 	, m_nNow(0)
+	, m_bHit(FALSE)
 {
 	//{{AFX_DATA_INIT(CDlgAdminMapObjectEdit)
 	m_nGrpNo = 0;
@@ -301,6 +303,7 @@ void CDlgAdminMapObjectEdit::Set(void)
 	m_nCy		= m_pInfoMapObject->m_sizeGrp.cy;
 	m_nHideY	= m_pInfoMapObject->m_nHideY;
 	m_nCount	= m_pInfoMapObject->GetAnimeCount ();
+	m_bHit		= m_pInfoMapObject->m_bHit;
 
 	if (m_hWnd) {
 		m_Slider.SetRange (0, m_nCount - 1, TRUE);
@@ -325,6 +328,7 @@ void CDlgAdminMapObjectEdit::Get(void)
 	m_pInfoMapObject->m_sizeGrp.cx	= m_nCx;
 	m_pInfoMapObject->m_sizeGrp.cy	= m_nCy;
 	m_pInfoMapObject->m_nHideY		= min (m_nHideY, m_nCy);
+	m_pInfoMapObject->m_bHit		= m_bHit;
 }
 
 

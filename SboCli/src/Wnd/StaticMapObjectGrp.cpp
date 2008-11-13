@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(CStaticMapObjectGrp, CStatic)
 	ON_WM_CREATE()
 	ON_WM_PAINT()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -194,6 +195,29 @@ void CStaticMapObjectGrp::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
+/* 関数名	:CStaticMapObjectGrp::OnRButtonDown								 */
+/* 内容		:メッセージハンドラ(WM_RBUTTONDOWN)								 */
+/* 日付		:2008/11/12														 */
+/* ========================================================================= */
+
+void CStaticMapObjectGrp::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	int x, y;
+	BYTE byHit;
+
+	x = point.x / 16;
+	y = point.y / 16;
+
+	byHit = m_pInfoMapObject->m_pHit[m_pInfoMapObject->m_sizeGrp.cx * y + x];
+	byHit = (byHit != 0) ? 0 : 1;
+	m_pInfoMapObject->m_pHit[m_pInfoMapObject->m_sizeGrp.cx * y + x] = byHit;
+
+	RenewGrp ();
+	InvalidateRect (NULL);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CStaticMapObjectGrp::RenewGrp									 */
 /* 内容		:画像更新														 */
 /* 日付		:2008/11/02														 */
@@ -201,6 +225,7 @@ void CStaticMapObjectGrp::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CStaticMapObjectGrp::RenewGrp(void)
 {
+	BYTE byHit;
 	int cx, cy, x, y;
 	WORD wGrpID;
 	PCImg32 pImg;
@@ -224,6 +249,11 @@ void CStaticMapObjectGrp::RenewGrp(void)
 				pImg = m_pMgrGrpData->GetDibMapParts (wGrpID / 1024);
 				if (pImg) {
 					m_pImgBack->BltFrom256 (x * 16, y * 16, 16, 16, pImg, ((wGrpID % 1024) % 32) * 16, ((wGrpID % 1024) / 32) * 16);
+				}
+
+				byHit = m_pInfoMapObject->m_pHit[m_pInfoMapObject->m_sizeGrp.cx * y + x];
+				if (byHit != 0) {
+					m_pImgBack->ChgLevel (x * 16, y * 16, 16, 16, 50);
 				}
 			}
 		}

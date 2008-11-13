@@ -79,6 +79,7 @@ public:
 	CSpinButtonCtrl m_ctlSpinY;
 	CSpinButtonCtrl m_ctlSpinHideY;
 	int m_nNow;
+	BOOL m_bHit;
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -14,6 +14,7 @@ class CLibInfoMapParts;
 class CLibInfoMapEvent;
 class CInfoMapEventBase;
 class CLibInfoMapObjectData;
+class CLibInfoMapObject;
 class CInfoMapObjectData;
 
 /* ========================================================================= */
@@ -71,6 +72,7 @@ public:
 	PBYTE	SetSendData		(PBYTE pSrc);						/* 送信データを設定 */
 
 	void	Copy		(CInfoMapBase *pSrc);					/* コピー */
+	void	RenewHitTmp	(void);									/* マップパーツ以外での当たり判定を更新 */
 
 	/* マップイベント関連 */
 	void				RenewMapEvent	(void);						/* マップイベント更新 */
@@ -88,7 +90,8 @@ public:
 	DWORD		m_dwMapID,				/* マップID */
 				m_dwBGMID,				/* BGMID */
 				m_dwWeatherType;		/* 天気種別 */
-	PBYTE		m_pbyMapEvent;			/* 各座標のマップイベント */
+	PBYTE		m_pbyMapEvent,			/* 各座標のマップイベント */
+				m_pbyHitTmp;			/* マップパーツ以外での当たり判定 */
 	PWORD		m_pwMap,				/* マップ */
 				m_pwMapShadow;			/* マップ影 */
 	BYTE		m_byLevel;				/* 暗さレベル */
@@ -97,6 +100,7 @@ public:
 	CLibInfoMapParts		*m_pLibInfoMapParts;		/* マップパーツ情報 */
 	CLibInfoMapEvent		*m_pLibInfoMapEvent;		/* マップイベント情報 */
 	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* マップオブジェクト配置データ */
+	CLibInfoMapObject		*m_pLibInfoMapObject;		/* マップオブジェクト情報 */
 } CInfoMapBase, *PCInfoMapBase;
 typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	  ARRAYINFOMAPBASE;
 typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	*PARRAYINFOMAPBASE;

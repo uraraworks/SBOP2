@@ -98,6 +98,8 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 		pLayerMap->SetCenterPos (pInfoChar->m_nMapX, pInfoChar->m_nMapY);
 	}
 	RenewItemArea ();
+	m_pLibInfoMap->SetMapObject (m_pLibInfoMapObject);
+	m_pLibInfoMap->RenewHitTmp ();
 
 	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWMAPINFO, 0);
 }
@@ -269,6 +271,7 @@ void CMainFrame::RecvProcMAP_MAPOBJECT(PBYTE pData)
 	Packet.Set (pData);
 
 	m_pLibInfoMapObject->Merge (Packet.m_pLibInfoMapObject);
+	m_pLibInfoMap->RenewHitTmp ();
 
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPOBJECT, 0);
 }
@@ -293,6 +296,7 @@ void CMainFrame::RecvProcMAP_MAPOBJECTDATA(PBYTE pData)
 	}
 
 	pInfoMap->m_pLibInfoMapObjectData->Merge (Packet.m_pLibInfo);
+	m_pLibInfoMap->RenewHitTmp ();
 
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
 }
@@ -317,6 +321,7 @@ void CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA(PBYTE pData)
 	}
 
 	pInfoMap->m_pLibInfoMapObjectData->Delete (Packet.m_dwPara);
+	pInfoMap->RenewHitTmp ();
 
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
 }

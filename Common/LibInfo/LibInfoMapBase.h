@@ -12,6 +12,7 @@
 #include "LibInfoBase.h"
 
 class CLibInfoMapParts;
+class CLibInfoMapObject;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -29,6 +30,8 @@ public:
 	PCInfoBase GetNew	(void);									/* 新規データを取得 */
 
 	void	RenewMapEvent	(void);								/* マップイベント更新 */
+	void	RenewHitTmp		(void);								/* マップパーツ以外での当たり判定を更新 */
+	void	SetMapObject	(CLibInfoMapObject *pLibInfo);		/* マップオブジェクト情報を設定 */
 	int		GetCount		(void);								/* データ数を取得 */
 	void	Add				(PCInfoBase pInfo);					/* 追加 */
 	void	Delete			(int nNo);							/* 削除 */

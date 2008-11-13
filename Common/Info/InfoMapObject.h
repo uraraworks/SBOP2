@@ -68,7 +68,9 @@ public:
 						m_dwAttr;							/* オブジェクトの属性 */
 	int					m_nHideY;							/* 隠れる上からのマス数 */
 	SIZE				m_sizeGrp;							/* 画像サイズ */
+	BOOL				m_bHit;								/* 当たり判定 */
 	CmyString			m_strName;							/* オブジェクト名 */
+	BYTE				*m_pHit;							/* 当たり判定データ */
 
 	ARRAYMAPOBJECTANIMEINFO	m_aInfoAnime;					/* オブジェクトアニメ情報 */
 } CInfoMapObject, *PCInfoMapObject;

@@ -205,6 +205,8 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT(PBYTE pData, DWORD dwSessionID
 	pInfo->Copy (Packet.m_pInfoMapObject);
 	pInfo->m_dwObjectID = dwObjectID;
 
+	m_pLibInfoMap->RenewHitTmp ();
+
 	/* 更新されたマップオブジェクト情報を全クライアントへ通知 */
 	PacketMAP_MAPOBJECT.Make (pInfo);
 	m_pSock->SendTo (0, &PacketMAP_MAPOBJECT);
@@ -250,6 +252,8 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA(PBYTE pData, DWORD dwSessionI
 		}
 	}
 
+	m_pLibInfoMap->RenewHitTmp ();
+
 	PacketMAP_MAPOBJECTDATA.Make (Packet.m_dwMapID, pObjectData);
 	SendToMapChar (Packet.m_dwMapID, &PacketMAP_MAPOBJECTDATA);
 }
@@ -279,6 +283,8 @@ void CMainFrame::RecvProcADMIN_MAP_DELETEOBJECTDATA(PBYTE pData, DWORD dwSession
 		return;
 	}
 	pLibInfo->Delete (Packet.m_dwPara2);
+
+	m_pLibInfoMap->RenewHitTmp ();
 
 	PacketMAP_PARA1.Make (SBOCOMMANDID_SUB_MAP_DELETEMAPOBJECTDATA, Packet.m_dwPara1, Packet.m_dwPara2);
 	SendToMapChar (Packet.m_dwPara1, &PacketMAP_PARA1);
@@ -627,6 +633,7 @@ void CMainFrame::RecvProcADMIN_MAP_ADD(PBYTE pData, DWORD dwSessionID)
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetNew ();
 	pInfoMap->Init (DRAW_PARTS_X, DRAW_PARTS_Y, 1);
 	m_pLibInfoMap->Add (pInfoMap);
+	m_pLibInfoMap->SetMapObject (m_pLibInfoMapObject);
 
 	strTmp.Format ("SYSTEM:マップID[%d]が追加されました", pInfoMap->m_dwMapID);
 	PacketMAP_SYSTEMMSG.Make (strTmp);

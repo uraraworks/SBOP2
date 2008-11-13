@@ -19,7 +19,9 @@ static LPCSTR s_aszName[] = {
 	"m_dwAttr",			/* オブジェクトの属性 */
 	"m_nHideY",			/* 隠れる上からのマス数 */
 	"m_sizeGrp",		/* 画像サイズ */
+	"m_bHit",			/* 当たり判定 */
 	"m_strName",		/* オブジェクト名 */
+	"m_pHit",			/* 当たり判定データ */
 	"nAnimeCount",		/* オブジェクトアニメ数 */
 	"anime_byWait",		/* 待ち時間(×１０ミリ秒) */
 	"anime_byLevel",	/* 透明度 */
@@ -39,6 +41,8 @@ CInfoMapObject::CInfoMapObject()
 	m_dwObjectID	= 0;		/* オブジェクトID */
 	m_dwAttr		= 0;		/* オブジェクトの属性 */
 	m_nHideY		= 0;		/* 隠れる上からのマス数 */
+	m_bHit			= FALSE;	/* 当たり判定 */
+	m_pHit			= NULL;		/* 当たり判定データ */
 	ZeroMemory (&m_sizeGrp, sizeof (m_sizeGrp));		/* 画像サイズ */
 
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
@@ -54,6 +58,7 @@ CInfoMapObject::CInfoMapObject()
 CInfoMapObject::~CInfoMapObject()
 {
 	DeleteAllAnime ();
+	SAFE_DELETE_ARRAY (m_pHit);
 }
 
 
@@ -132,11 +137,13 @@ DWORD CInfoMapObject::GetDataSizeNo(int nNo)
 	case 1:		dwRet = sizeof (m_dwAttr);				break;		/* オブジェクトの属性 */
 	case 2:		dwRet = sizeof (m_nHideY);				break;		/* 隠れる上からのマス数 */
 	case 3:		dwRet = sizeof (m_sizeGrp);				break;		/* 画像サイズ */
-	case 4:		dwRet = m_strName.GetLength () + 1;		break;		/* オブジェクト名 */
-	case 5:		dwRet = sizeof (nTmp);					break;		/* オブジェクトアニメ数 */
-	case 6:		dwRet = sizeof (BYTE) * nTmp;			break;		/* 待ち時間(×１０ミリ秒) */
-	case 7:		dwRet = sizeof (BYTE) * nTmp;			break;		/* 透明度 */
-	case 8:		/* 画像ID */
+	case 4:		dwRet = sizeof (m_bHit);				break;		/* 当たり判定 */
+	case 5:		dwRet = m_strName.GetLength () + 1;		break;		/* オブジェクト名 */
+	case 6:		dwRet = m_sizeGrp.cx * m_sizeGrp.cy;	break;		/* 当たり判定データ */
+	case 7:		dwRet = sizeof (nTmp);					break;		/* オブジェクトアニメ数 */
+	case 8:		dwRet = sizeof (BYTE) * nTmp;			break;		/* 待ち時間(×１０ミリ秒) */
+	case 9:		dwRet = sizeof (BYTE) * nTmp;			break;		/* 透明度 */
+	case 10:	/* 画像ID */
 		dwRet = sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy * nTmp;
 		break;
 	}
@@ -186,25 +193,33 @@ PBYTE CInfoMapObject::GetWriteData(int nNo, PDWORD pdwSize)
 	case 1:		pSrc = (PBYTE)&m_dwAttr;				break;		/* オブジェクトの属性 */
 	case 2:		pSrc = (PBYTE)&m_nHideY;				break;		/* 隠れる上からのマス数 */
 	case 3:		pSrc = (PBYTE)&m_sizeGrp;				break;		/* 画像サイズ */
-	case 4:		pSrc = (PBYTE)(LPCSTR)m_strName;		break;		/* オブジェクト名 */
-	case 5:		/* オブジェクトアニメ数 */
+	case 4:		pSrc = (PBYTE)&m_bHit;					break;		/* 当たり判定 */
+	case 5:		pSrc = (PBYTE)(LPCSTR)m_strName;		break;		/* オブジェクト名 */
+	case 6:		/* 当たり判定データ */
+		if (m_pHit) {
+			CopyMemory (pRet, m_pHit, dwSize);
+		} else {
+			ZeroMemory (pRet, dwSize);
+		}
+		break;
+	case 7:		/* オブジェクトアニメ数 */
 		pSrc = (PBYTE)&nCount;
 		break;
-	case 6:		/* 待ち時間(×１０ミリ秒) */
+	case 8:		/* 待ち時間(×１０ミリ秒) */
 		pTmp = pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
 			CopyMemoryRenew (pTmp, &pInfo->byWait, sizeof (pInfo->byWait), pTmp);
 		}
 		break;
-	case 7:		/* 透明度 */
+	case 9:		/* 透明度 */
 		pTmp = pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
 			CopyMemoryRenew (pTmp, &pInfo->byLevel, sizeof (pInfo->byLevel), pTmp);
 		}
 		break;
-	case 8:		/* 画像ID */
+	case 10:	/* 画像ID */
 		pTmp = pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
@@ -246,18 +261,25 @@ DWORD CInfoMapObject::ReadElementData(
 	case 1:		pDst = (PBYTE)&m_dwAttr;		dwSize = sizeof (m_dwAttr);			break;		/* オブジェクトの属性 */
 	case 2:		pDst = (PBYTE)&m_nHideY;		dwSize = sizeof (m_nHideY);			break;		/* 隠れる上からのマス数 */
 	case 3:		pDst = (PBYTE)&m_sizeGrp;		dwSize = sizeof (m_sizeGrp);		break;		/* 画像サイズ */
-	case 4:		/* オブジェクト名 */
+	case 4:		pDst = (PBYTE)&m_bHit;			dwSize = sizeof (m_bHit);			break;		/* 当たり判定 */
+	case 5:		/* オブジェクト名 */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
-	case 5:		/* オブジェクトアニメ数 */
+	case 6:		/* 当たり判定データ */
+		SAFE_DELETE_ARRAY (m_pHit);
+		dwSize = m_sizeGrp.cx * m_sizeGrp.cy;
+		m_pHit = new BYTE[dwSize];
+		CopyMemory (m_pHit, pSrc, dwSize);
+		break;
+	case 7:		/* オブジェクトアニメ数 */
 		dwSize = sizeof (int);
 		CopyMemory ((PBYTE)&nCount, pSrc, dwSize);
 		for (i = 0; i < nCount; i ++) {
 			AddAnime ();
 		}
 		break;
-	case 6:		/* 待ち時間(×１０ミリ秒) */
+	case 8:		/* 待ち時間(×１０ミリ秒) */
 		pSrcTmp = pSrc;
 		nCount  = m_aInfoAnime.GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -266,7 +288,7 @@ DWORD CInfoMapObject::ReadElementData(
 			dwSize += sizeof (pInfo->byWait);
 		}
 		break;
-	case 7:		/* 透明度 */
+	case 9:		/* 透明度 */
 		pSrcTmp = pSrc;
 		nCount  = m_aInfoAnime.GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -275,7 +297,7 @@ DWORD CInfoMapObject::ReadElementData(
 			dwSize += sizeof (pInfo->byLevel);
 		}
 		break;
-	case 8:		/* 画像ID */
+	case 10:	/* 画像ID */
 		pSrcTmp = pSrc;
 		nCount  = m_aInfoAnime.GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -348,8 +370,17 @@ PBYTE CInfoMapObject::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwAttr,		sizeof (m_dwAttr),		pDataTmp);		/* オブジェクトの属性 */
 	CopyMemoryRenew (pDataTmp, &m_nHideY,		sizeof (m_nHideY),		pDataTmp);		/* 隠れる上からのマス数 */
 	CopyMemoryRenew (pDataTmp, &m_sizeGrp,		sizeof (m_sizeGrp),		pDataTmp);		/* 画像サイズ */
+	CopyMemoryRenew (pDataTmp, &m_bHit,			sizeof (m_bHit),		pDataTmp);		/* 当たり判定 */
 	CopyMemoryRenew (pDataTmp, &nCount,			sizeof (nCount),		pDataTmp);		/* オブジェクトアニメ数 */
 	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);									/* オブジェクト名 */
+
+	/* 当たり判定データ */
+	dwSizeTmp = m_sizeGrp.cx * m_sizeGrp.cy;
+	if (m_pHit) {
+		CopyMemoryRenew (pDataTmp, m_pHit, dwSizeTmp, pDataTmp);
+	} else {
+		pDataTmp += dwSizeTmp;
+	}
 
 	dwSizeTmp = sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy;
 	for (i = 0; i < nCount; i ++) {
@@ -383,8 +414,15 @@ PBYTE CInfoMapObject::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_dwAttr,		pDataTmp, sizeof (m_dwAttr),		pDataTmp);		/* オブジェクトの属性 */
 	CopyMemoryRenew (&m_nHideY,		pDataTmp, sizeof (m_nHideY),		pDataTmp);		/* 隠れる上からのマス数 */
 	CopyMemoryRenew (&m_sizeGrp,	pDataTmp, sizeof (m_sizeGrp),		pDataTmp);		/* 画像サイズ */
+	CopyMemoryRenew (&m_bHit,		pDataTmp, sizeof (m_bHit),			pDataTmp);		/* 当たり判定 */
 	CopyMemoryRenew (&nCount,		pDataTmp, sizeof (nCount),			pDataTmp);		/* オブジェクトアニメ数 */
 	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);									/* オブジェクト名 */
+
+	/* 当たり判定データ */
+	SAFE_DELETE_ARRAY (m_pHit);
+	dwSizeTmp = m_sizeGrp.cx * m_sizeGrp.cy;
+	m_pHit = new BYTE[dwSizeTmp];
+	CopyMemoryRenew (m_pHit, pDataTmp, dwSizeTmp, pDataTmp);
 
 	for (i = 0; i < nCount; i ++) {
 		AddAnime ();
@@ -477,6 +515,7 @@ void CInfoMapObject::DeleteAllAnime(void)
 void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
 {
 	int i, nCount, x, y, xx, yy;
+	PBYTE pTmp;
 	PWORD pwTmp;
 	PSTMAPOBJECTANIMEINFO pInfo;
 
@@ -490,6 +529,25 @@ void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
 		cy = m_sizeGrp.cy;
 	}
 
+	xx = m_sizeGrp.cx;
+	yy = m_sizeGrp.cy;
+	xx = min (xx, cx);
+	yy = min (yy, cy);
+
+	/* 当たり判定データ */
+	pTmp = new BYTE[cx * cy];
+	ZeroMemory (pTmp, cx * cy);
+	if (m_pHit) {
+		for (y = 0; y < yy; y ++) {
+			for (x = 0; x < xx; x ++) {
+				pTmp[cx * y + x] = m_pHit[m_sizeGrp.cx * y + x];
+			}
+		}
+	}
+	SAFE_DELETE_ARRAY (m_pHit);
+	m_pHit = pTmp;
+
+	/* アニメ毎の設定 */
 	nCount = m_aInfoAnime.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetAnimePtr (i);
@@ -497,10 +555,6 @@ void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
 		pwTmp = new WORD[cx * cy];
 		ZeroMemory ((PBYTE)pwTmp, sizeof (WORD) * cx * cy);
 
-		xx = m_sizeGrp.cx;
-		yy = m_sizeGrp.cy;
-		xx = min (xx, cx);
-		yy = min (yy, cy);
 		for (y = 0; y < yy; y ++) {
 			for (x = 0; x < xx; x ++) {
 				pwTmp[cx * y + x] = pInfo->pwGrpID[m_sizeGrp.cx * y + x];

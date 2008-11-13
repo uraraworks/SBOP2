@@ -100,6 +100,44 @@ void CLibInfoMapBase::RenewMapEvent(void)
 
 
 /* ========================================================================= */
+/* 関数名	:CLibInfoMapBase::RenewHitTmp									 */
+/* 内容		:マップパーツ以外での当たり判定を更新							 */
+/* 日付		:2008/11/13														 */
+/* ========================================================================= */
+
+void CLibInfoMapBase::RenewHitTmp(void)
+{
+	int i, nCount;
+	PCInfoMapBase pInfoMapBase;
+
+	nCount = GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoMapBase = (PCInfoMapBase)GetPtr (i);
+		pInfoMapBase->RenewHitTmp ();
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoMapBase::SetMapObject									 */
+/* 内容		:マップオブジェクト情報を設定									 */
+/* 日付		:2008/11/13														 */
+/* ========================================================================= */
+
+void CLibInfoMapBase::SetMapObject(CLibInfoMapObject *pLibInfo)
+{
+	int i, nCount;
+	PCInfoMapBase pInfoMapBase;
+
+	nCount = GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoMapBase = (PCInfoMapBase)GetPtr (i);
+		pInfoMapBase->m_pLibInfoMapObject = pLibInfo;
+	}
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CLibInfoMapBase::GetCount										 */
 /* 内容		:データ数を取得													 */
 /* 日付		:2006/10/15														 */

@@ -46,6 +46,7 @@ public:
 	void	DrawItem		(CImg32 *pDst, int x, int y, CInfoItem *pInfoItem, BOOL bLock = TRUE);	/* アイテムを描画 */
 	void	DrawBalloon		(CImg32 *pDst, int x, int y, DWORD dwBalloonID);						/* 噴出しを描画 */
 	void	DrawTextEffect	(CImg32 *pDst, int x, int y, CInfoTextEffect *pInfoTextEffect);			/* 文字エフェクトを描画 */
+	void	DrawMapHitMark	(CImg32 *pDst, int x, int y, int nNo);									/* マップ当たり判定マークを描画 */
 
 	BOOL	TimerProc		(void);								/* 時間処理 */
 	BOOL	IsFade			(void);								/* フェードイン/アウト中か判定 */

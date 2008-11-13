@@ -292,8 +292,9 @@
 #define IDC_CX                          1139
 #define IDC_CY                          1140
 #define IDC_HIDEY                       1141
-#define IDC_CHECK1                      1141
 #define IDC_LIGHT                       1141
+#define IDC_CHECK1                      1142
+#define IDC_HIT                         1142
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -338,7 +339,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        166
 #define _APS_NEXT_COMMAND_VALUE         32807
-#define _APS_NEXT_CONTROL_VALUE         1142
+#define _APS_NEXT_CONTROL_VALUE         1143
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
