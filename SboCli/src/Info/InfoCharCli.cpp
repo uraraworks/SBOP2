@@ -29,6 +29,7 @@ CInfoCharCli::CInfoCharCli()
 {
 	m_bRedraw				= FALSE;
 	m_bChgWait				= FALSE;
+	m_bSkipMove				= TRUE;
 	m_bWaitCheckMapEvent	= FALSE;
 	m_bMotionDirection		= TRUE;
 	m_bMotionInterrupt		= FALSE;
@@ -1421,6 +1422,12 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 	dwWait		= GetMoveWait ();
 	if (m_dwMoveWaitOnce != 0) {
 		dwWait = m_dwMoveWaitOnce;
+	}
+	if (m_bSkipMove) {
+		if (m_apMovePosQue.GetSize () > 0) {
+			/* ƒLƒ…[‚ÉÏ‚Ü‚ê‚Ä‚¢‚éê‡‚Í‘Ò‚¿ŽžŠÔ–³‚µ */
+			dwWait = 1;
+		}
 	}
 	nStandState	= CHARMOVESTATE_STAND;
 

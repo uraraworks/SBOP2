@@ -112,6 +112,7 @@ protected:
 public:
 	BOOL	m_bRedraw,						/* 再描画させる */
 			m_bChgWait,						/* 状態変更待ち */
+			m_bSkipMove,					/* 移動が間に合わない場合は待ち時間を無視する */
 			m_bWaitCheckMapEvent,			/* マップイベントチェック待ち */
 			m_bMotionDirection,				/* 向きに応じてモーションを切り替える */
 			m_bMotionInterrupt,				/* モーション割り込み再生 */

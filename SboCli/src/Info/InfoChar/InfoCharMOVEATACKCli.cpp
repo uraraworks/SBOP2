@@ -19,7 +19,8 @@
 
 CInfoCharMOVEATACKCli::CInfoCharMOVEATACKCli()
 {
-	m_bMotionDirection = FALSE;
+	m_bSkipMove			= FALSE;
+	m_bMotionDirection	= FALSE;
 
 	m_adwMotionID[CHARMOTIONID_STAND]		= CHARMOTIONLISTID_STAND_SIMPLE;	/* モーションID(立ち) */
 	m_adwMotionID[CHARMOTIONID_WALK]		= CHARMOTIONLISTID_STAND_SIMPLE;	/* モーションID(歩き) */
