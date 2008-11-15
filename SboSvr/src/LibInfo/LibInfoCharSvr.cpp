@@ -195,6 +195,8 @@ void CLibInfoCharSvr::LogIn(
 	pChar->m_dwAccountID = dwAccountID;
 	pChar->SetMoveState (CHARMOVESTATE_STAND);
 	pChar->m_strSpeak.Empty ();
+	pChar->m_ptCharBack.x = pChar->m_nMapX;
+	pChar->m_ptCharBack.y = pChar->m_nMapY;
 	m_paInfoLogin->Add (pChar);
 }
 
