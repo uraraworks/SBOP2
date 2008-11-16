@@ -564,12 +564,8 @@ PCInfoBase CLibInfoItem::GetPtr(
 			}
 		} else {
 			if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y == pptPos->y))) {
-				if (!((pInfoTmp->m_ptPos.x + 1 == pptPos->x) && (pInfoTmp->m_ptPos.y == pptPos->y))) {
-					if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y + 1 == pptPos->y))) {
-						if (!((pInfoTmp->m_ptPos.x + 1 == pptPos->x) && (pInfoTmp->m_ptPos.y + 1 == pptPos->y))) {
-							continue;
-						}
-					}
+				if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y + 1 == pptPos->y))) {
+					continue;
 				}
 			}
 		}
