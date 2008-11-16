@@ -1137,6 +1137,10 @@
 						/>
 					</FileConfiguration>
 				</File>
+				<File
+					RelativePath=".\src\LibInfo\LibInfoCharSvrMapEvent.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Info No. 2"
