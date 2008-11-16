@@ -2430,6 +2430,10 @@ BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 				pInfoChar->m_wGrpIDTmpSub	= 0;		/* 画像ID(一時服:サブ) */
 			}
 			pInfoChar->m_bChgGrp = TRUE;
+
+			/* 付いて行くのと付いて来ているのを解除させる為2回呼ぶ */
+			Tail (pInfoChar, NULL, FALSE);
+			Tail (pInfoChar, NULL, FALSE);
 		}
 		break;
 	}
