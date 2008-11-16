@@ -2352,6 +2352,7 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 		}
 		PacketCHAR_REQ_EQUIP.Make (m_pPlayerChar->m_dwCharID, dwItemID, -1);
 		pPacket = &PacketCHAR_REQ_EQUIP;
+		m_dwLastTimeGauge = timeGetTime ();
 		break;
 	case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	/* ‘•”õ‚ðŠO‚· */
 		if (bEnableMove == FALSE) {
