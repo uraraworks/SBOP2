@@ -214,6 +214,11 @@ void CMgrDraw::DrawChar(
 
 	case GRPIDMAIN_2X2_NPC:
 		m_pMgrGrpData->GetGrpPos (wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
+		nTmp = 0;
+		if (pInfoChar->m_nSex == SEX_FEMALE) {
+			nTmp += 32 * 4;
+		}
+		ptTmp.y += nTmp;
 		pSrc = m_pMgrGrpData->GetDib2x2NPCShadow (wGrpIdNPC);
 		pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y);
 		hDCBmp = pDibTmp->Lock ();
