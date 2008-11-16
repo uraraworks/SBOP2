@@ -2055,14 +2055,13 @@ BOOL CStateProcMAP::MoveProc(
 		m_pSock->Send (&PacketREQ_PUSH);
 		m_pPlayerChar->m_dwMoveWaitOnce = BATTLEMOVEWAIT;
 		pLayerMap->m_dwMoveWaitOnce = BATTLEMOVEWAIT;
+	}
 
-	} else {
-		/* ‚Ô‚Â‚©‚éH */
-		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
-		if (bResult) {
-			bRet = TRUE;
-			goto Exit;
-		}
+	/* ‚Ô‚Â‚©‚éH */
+	bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
+	if (bResult) {
+		bRet = TRUE;
+		goto Exit;
 	}
 
 	nState = CHARMOVESTATE_MOVE;
