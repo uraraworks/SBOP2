@@ -268,6 +268,7 @@ void CLibInfoItem::DeleteAll(void)
 /* ========================================================================= */
 /* 関数名	:CLibInfoItem::Sort												 */
 /* 内容		:表示位置に合わせてソート										 */
+/* 			:表示用のテーブルのみソートする									 */
 /* 日付		:2008/06/03														 */
 /* ========================================================================= */
 
@@ -277,15 +278,16 @@ void CLibInfoItem::Sort(void)
 	PCInfoItem pInfoItem, pInfoItemTmp;
 	ARRAYITEMINFO aTmp;
 	ARRAYINT anNo;
+	ARRAYDWORD adwNo;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = GetAreaCount ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoItem = m_paInfo->GetAt (i);
+		pInfoItem = (PCInfoItem)GetPtrArea (i);
 		nCountTmp = anNo.GetSize ();
 		nNo = 0;
 		if (nCountTmp > 0) {
 			for (j = 0; j < nCountTmp; j ++) {
-				pInfoItemTmp = m_paInfo->GetAt (anNo[j]);
+				pInfoItemTmp = (PCInfoItem)GetPtrArea (anNo[j]);
 				if (pInfoItem->m_ptPos.y < pInfoItemTmp->m_ptPos.y) {
 					break;
 				}
@@ -314,10 +316,9 @@ void CLibInfoItem::Sort(void)
 			nNo = j;
 		}
 		anNo.InsertAt (nNo, i);
-		aTmp.InsertAt (nNo, pInfoItem);
+		adwNo.InsertAt (nNo, pInfoItem->m_dwItemID);
 	}
-
-	m_paInfo->Copy (&aTmp);
+	m_adwAreaID.Copy (&adwNo);
 }
 
 

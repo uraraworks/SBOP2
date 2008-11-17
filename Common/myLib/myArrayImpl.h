@@ -79,7 +79,7 @@ TYPE CmyArray<TYPE, ARG_TYPE>::GetAt(
 {
 	TYPE Ret;
 
-	ZeroMemory (&Ret, sizeof (TYPE));
+//	ZeroMemory (&Ret, sizeof (TYPE));
 
 	if (nIndex >= m_nCount) {
 		goto Exit;
