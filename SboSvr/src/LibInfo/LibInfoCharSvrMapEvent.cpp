@@ -174,7 +174,7 @@ BOOL CLibInfoCharSvr::MapEventProcINITSTATUS(CInfoCharSvr *pInfoChar, CInfoMapEv
 	PCInfoMapEventINITSTATUS pInfoMapEvent;
 	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
 
-	bRet = FALSE;
+	bRet = TRUE;
 	pInfoMapEvent = (PCInfoMapEventINITSTATUS)pInfoMapEventBase;
 
 	if (pInfoMapEvent->m_dwEffectID != 0) {
@@ -202,7 +202,7 @@ BOOL CLibInfoCharSvr::MapEventProcGRPIDTMP(CInfoCharSvr *pInfoChar, CInfoMapEven
 	BOOL bRet;
 	PCInfoMapEventGRPIDTMP pInfoMapEvent;
 
-	bRet = FALSE;
+	bRet = TRUE;
 	pInfoMapEvent = (PCInfoMapEventGRPIDTMP)pInfoMapEventBase;
 
 	/* ê›íËÅH */
