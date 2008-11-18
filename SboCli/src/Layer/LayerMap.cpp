@@ -117,8 +117,7 @@ void CLayerMap::Create(
 
 void CLayerMap::Draw(PCImg32 pDst)
 {
-	int y, nDrawMode;
-	BOOL bDrawName;
+	int y;
 	PCInfoMapBase pMap;
 	PCLayerBase pLayer;
 
@@ -129,12 +128,6 @@ void CLayerMap::Draw(PCImg32 pDst)
 
 	if (pMap->m_byLevel != 0) {
 		RenewLevel ();
-	}
-
-	bDrawName = TRUE;
-	nDrawMode = m_pMgrData->GetDrawMode ();
-	if (nDrawMode == 0) {
-		bDrawName = FALSE;
 	}
 
 	DrawPartsBase (pDst);
@@ -158,9 +151,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 	if (pMap->m_byLevel != 0) {
 		pDst->SetLevel (m_pDibLevel);
 	}
-	if (bDrawName) {
-		DrawItem (pDst, 1);
-	}
+	DrawItem (pDst, 1);
 	DrawCharText		(pDst);
 	DrawGauge			(pDst);
 	DrawSystemIcon		(pDst);
@@ -1455,6 +1446,11 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 	}
 	if (m_pMgrData->GetOptionViewItem () == FALSE) {
 		return;
+	}
+	if (nType != 0) {
+		if (m_pMgrData->GetOptionViewItemName () == FALSE) {
+			return;
+		}
 	}
 
 	xx = yy = 0;

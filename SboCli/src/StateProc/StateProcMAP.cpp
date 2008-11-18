@@ -2516,7 +2516,17 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 4:		/* ヘルプアイコンを表示する */
+	case 4:		/* アイテム名を表示する */
+		if (m_pMgrData->GetOptionViewItemName ()) {
+			m_pMgrData->SetOptionViewItemName (FALSE);
+			AddSystemMsg (FALSE, "アイテム名を表示しません", RGB (255, 255, 255));
+		} else {
+			m_pMgrData->SetOptionViewItemName (TRUE);
+			AddSystemMsg (FALSE, "アイテム名を表示します", RGB (255, 255, 255));
+		}
+		m_pMgrData->SaveIniData ();
+		break;
+	case 5:		/* ヘルプアイコンを表示する */
 		if (m_pMgrData->GetOptionViewHelpIcon () != 0) {
 			m_pMgrData->SetOptionViewHelpIcon (0);
 			AddSystemMsg (FALSE, "ヘルプアイコンを表示しません", RGB (255, 255, 255));
@@ -2526,7 +2536,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 5:		/* 戦闘メッセージをログに残す */
+	case 6:		/* 戦闘メッセージをログに残す */
 		if (m_pMgrData->GetOptionBattleMsgLog () == TRUE) {
 			m_pMgrData->SetOptionBattleMsgLog (FALSE);
 			AddSystemMsg (FALSE, "戦闘メッセージをログに残しません", RGB (255, 255, 255));
@@ -2536,7 +2546,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 6:		/* 60フレームで表示する */
+	case 7:		/* 60フレームで表示する */
 		if (m_pMgrData->GetOption60Frame () == TRUE) {
 			m_pMgrData->SetOption60Frame (FALSE);
 			AddSystemMsg (FALSE, "秒間30フレームで表示します", RGB (255, 255, 255));

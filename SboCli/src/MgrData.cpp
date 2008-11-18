@@ -67,6 +67,7 @@ CMgrData::CMgrData()
 	m_bOptionTaskbar		= FALSE;
 	m_bOptionViewChat		= TRUE;
 	m_bOptionViewItem		= TRUE;
+	m_bOptionViewItemName	= TRUE;
 	m_bOptionViewHelpIcon	= TRUE;
 	m_bOptionBattleMsgLog	= FALSE;
 	m_bOption60Frame		= FALSE;
@@ -267,6 +268,9 @@ void CMgrData::SaveIniData(void)
 	/* アイテムを表示する */
 	strTmp.Format ("%d", m_bOptionViewItem);
 	WritePrivateProfileString ("Setting", "OptionViewItem", strTmp, szFileName);
+	/* アイテム名を表示する */
+	strTmp.Format ("%d", m_bOptionViewItemName);
+	WritePrivateProfileString ("Setting", "OptionViewItemName", strTmp, szFileName);
 	/* ヘルプアイコンを表示する */
 	strTmp.Format ("%d", m_bOptionViewHelpIcon);
 	WritePrivateProfileString ("Setting", "OptionViewHelpIcon", strTmp, szFileName);
@@ -766,6 +770,8 @@ void CMgrData::ReadIniData(void)
 	m_bOptionViewChat = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewChat", 1, szFileName);
 	/* アイテムを表示する */
 	m_bOptionViewItem = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewItem", 1, szFileName);
+	/* アイテム名を表示する */
+	m_bOptionViewItemName = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewItemName", 1, szFileName);
 	/* ヘルプアイコンを表示する */
 	m_bOptionViewHelpIcon = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewHelpIcon", 1, szFileName);
 	/* 戦闘メッセージをログに残す */
