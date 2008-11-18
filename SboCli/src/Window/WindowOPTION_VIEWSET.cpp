@@ -23,13 +23,13 @@
 
 CWindowOPTION_VIEWSET::CWindowOPTION_VIEWSET()
 {
-	m_nPosMax		= 5;
+	m_nPosMax		= 6;
 	m_bInput		= TRUE;
 	m_nID			= WINDOWTYPE_OPTION_VIEWSET;
 	m_ptViewPos.x	= 8 * 13;
 	m_ptViewPos.y	= 16 * 8;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 16 + 8;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 6;
+	m_sizeWindow.cy	= 16 * 2 + 16 * (m_nPosMax + 1);
 }
 
 
@@ -98,9 +98,10 @@ void CWindowOPTION_VIEWSET::Draw(PCImg32 pDst)
 	TextOut2 (hDC, 32 + 24, 16 + 16 * 0, "発言時にタスクバーチカチカ",	clText);
 	TextOut2 (hDC, 32 + 24, 16 + 16 * 1, "名前を表示する",				clText);
 	TextOut2 (hDC, 32 + 24, 16 + 16 * 2, "発言を表示する",				clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 3, "ヘルプアイコンを表示する",	clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 4, "戦闘メッセージをログに残す",	clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 5, "60フレームで表示する",		clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 3, "アイテムを表示する",			clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 4, "ヘルプアイコンを表示する",	clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 5, "戦闘メッセージをログに残す",	clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 6, "60フレームで表示する",		clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -319,12 +320,15 @@ BOOL CWindowOPTION_VIEWSET::GetCheck(int nNo)
 		bRet = m_pMgrData->GetOptionViewChat ();
 		break;
 	case 3:
-		bRet = m_pMgrData->GetOptionViewHelpIcon ();
+		bRet = m_pMgrData->GetOptionViewItem ();
 		break;
 	case 4:
-		bRet = m_pMgrData->GetOptionBattleMsgLog ();
+		bRet = m_pMgrData->GetOptionViewHelpIcon ();
 		break;
 	case 5:
+		bRet = m_pMgrData->GetOptionBattleMsgLog ();
+		break;
+	case 6:
 		bRet = m_pMgrData->GetOption60Frame ();
 		break;
 	}

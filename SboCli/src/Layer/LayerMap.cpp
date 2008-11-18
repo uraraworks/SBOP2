@@ -1453,6 +1453,9 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 	if (pPlayerChar == NULL) {
 		return;
 	}
+	if (m_pMgrData->GetOptionViewItem () == FALSE) {
+		return;
+	}
 
 	xx = yy = 0;
 	/* スクロール中？ */

@@ -91,8 +91,10 @@ public:
 	BYTE			GetViewGrid				(void)					{ return m_byViewGrid;						}	/* グリッド表示を取得 */
 	void			SetOptionTaskbar		(BOOL bOn)				{ m_bOptionTaskbar = bOn;					}	/* 発言時にタスクバーチカチカを設定 */
 	BOOL			GetOptionTaskbar		(void)					{ return m_bOptionTaskbar;					}	/* 発言時にタスクバーチカチカを取得 */
-	void			SetOptionViewChat		(BOOL bOn)				{ m_bOptionViewChat = bOn;					}	/* 発言を表示しないを設定 */
-	BOOL			GetOptionViewChat		(void)					{ return m_bOptionViewChat;					}	/* 発言を表示しないを取得 */
+	void			SetOptionViewChat		(BOOL bOn)				{ m_bOptionViewChat = bOn;					}	/* 発言を表示するを設定 */
+	BOOL			GetOptionViewChat		(void)					{ return m_bOptionViewChat;					}	/* 発言を表示するを取得 */
+	void			SetOptionViewItem		(BOOL bOn)				{ m_bOptionViewItem = bOn;					}	/* アイテムを表示するを設定 */
+	BOOL			GetOptionViewItem		(void)					{ return m_bOptionViewItem;					}	/* アイテムを表示するを取得 */
 	void			SetOptionViewHelpIcon	(BOOL bOn)				{ m_bOptionViewHelpIcon = bOn;				}	/* ヘルプアイコンを表示しないを設定 */
 	BOOL			GetOptionViewHelpIcon	(void)					{ return m_bOptionViewHelpIcon;				}	/* ヘルプアイコンを表示しないを取得 */
 	void			SetOptionBattleMsgLog	(BOOL bOn)				{ m_bOptionBattleMsgLog = bOn;				}	/* 戦闘メッセージをログに残すを設定 */
@@ -187,6 +189,7 @@ private:
 						m_bSavePassword,			/* パスワードを保存する？ */
 						m_bOptionTaskbar,			/* 発言時にタスクバーをチカチカ */
 						m_bOptionViewChat,			/* 発言を表示する */
+						m_bOptionViewItem,			/* アイテムを表示する */
 						m_bOptionViewHelpIcon,		/* ヘルプアイコンを表示する */
 						m_bOptionBattleMsgLog,		/* 戦闘メッセージをログに残す */
 						m_bOption60Frame;			/* 60フレームで表示する */

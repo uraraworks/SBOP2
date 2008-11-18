@@ -64,6 +64,7 @@ void CMgrKeyInput::Create(void)
 		'P',			/* P */
 		'M',			/* M */
 		'N',			/* N */
+		'V',			/* V */
 		VK_OEM_3,		/* @ */
 		VK_RETURN,		/* Enter */
 		VK_ESCAPE,		/* Escape */

@@ -111,6 +111,7 @@ void CStateProcBase::KeyProc(
 	case 'R':			bResult = OnR		(bDown);	break;
 	case 'B':			bResult = OnB		(bDown);	break;
 	case 'N':			bResult = OnN		(bDown);	break;
+	case 'V':			bResult = OnV		(bDown);	break;
 	case VK_OEM_3:		bResult = OnAt		(bDown);	break;
 	case VK_UP:			bResult = OnUp		(bDown);	break;
 	case VK_DOWN:		bResult = OnDown	(bDown);	break;
@@ -370,6 +371,18 @@ BOOL CStateProcBase::OnI(BOOL bDown)
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnN(BOOL bDown)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcBase::OnV											 */
+/* 内容		:キーハンドラ(V)												 */
+/* 日付		:2008/11/18														 */
+/* ========================================================================= */
+
+BOOL CStateProcBase::OnV(BOOL bDown)
 {
 	return FALSE;
 }

@@ -1533,6 +1533,44 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnV												 */
+/* 内容		:キーハンドラ(V)												 */
+/* 日付		:2008/11/18														 */
+/* ========================================================================= */
+
+BOOL CStateProcMAP::OnV(BOOL bDown)
+{
+	BOOL bRet;
+
+	bRet = FALSE;
+
+	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
+	if (m_pPlayerChar == NULL) {
+		goto Exit;
+	}
+	if (IsKeyInputEnable () == FALSE) {
+		goto Exit;
+	}
+	if (bDown) {
+		goto Exit;
+	}
+	m_dwLastKeyInput = timeGetTime ();
+
+	if (m_pMgrData->GetOptionViewItem ()) {
+		m_pMgrData->SetOptionViewItem (FALSE);
+		AddSystemMsg (FALSE, "アイテムを非表示にしました　解除は[ V ]キー", RGB (255, 255, 255));
+	} else {
+		m_pMgrData->SetOptionViewItem (TRUE);
+		AddSystemMsg (FALSE, "アイテムを表示します", RGB (255, 255, 255));
+	}
+	m_pMgrData->SaveIniData ();
+
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CStateProcMAP::OnAt											 */
 /* 内容		:キーハンドラ(@)												 */
 /* 日付		:2007/12/31														 */
@@ -2448,7 +2486,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 1:		/* 名前を表示しない */
+	case 1:		/* 名前を表示する */
 		if (m_pMgrData->GetDrawMode () != 0) {
 			m_pMgrData->SetDrawMode (0);
 			AddSystemMsg (FALSE, "名前を表示しません", RGB (255, 255, 255));
@@ -2458,7 +2496,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 2:		/* 発言を表示しない */
+	case 2:		/* 発言を表示する */
 		if (m_pMgrData->GetOptionViewChat () != 0) {
 			m_pMgrData->SetOptionViewChat (0);
 			AddSystemMsg (FALSE, "発言を表示しません", RGB (255, 255, 255));
@@ -2468,7 +2506,17 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 3:		/* ヘルプアイコンを表示しない */
+	case 3:		/* アイテムを表示する */
+		if (m_pMgrData->GetOptionViewItem ()) {
+			m_pMgrData->SetOptionViewItem (FALSE);
+			AddSystemMsg (FALSE, "アイテムを表示しません", RGB (255, 255, 255));
+		} else {
+			m_pMgrData->SetOptionViewItem (TRUE);
+			AddSystemMsg (FALSE, "アイテムを表示します", RGB (255, 255, 255));
+		}
+		m_pMgrData->SaveIniData ();
+		break;
+	case 4:		/* ヘルプアイコンを表示する */
 		if (m_pMgrData->GetOptionViewHelpIcon () != 0) {
 			m_pMgrData->SetOptionViewHelpIcon (0);
 			AddSystemMsg (FALSE, "ヘルプアイコンを表示しません", RGB (255, 255, 255));
@@ -2478,7 +2526,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 4:		/* 戦闘メッセージをログに残す */
+	case 5:		/* 戦闘メッセージをログに残す */
 		if (m_pMgrData->GetOptionBattleMsgLog () == TRUE) {
 			m_pMgrData->SetOptionBattleMsgLog (FALSE);
 			AddSystemMsg (FALSE, "戦闘メッセージをログに残しません", RGB (255, 255, 255));
@@ -2488,7 +2536,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 5:		/* 60フレームで表示する */
+	case 6:		/* 60フレームで表示する */
 		if (m_pMgrData->GetOption60Frame () == TRUE) {
 			m_pMgrData->SetOption60Frame (FALSE);
 			AddSystemMsg (FALSE, "秒間30フレームで表示します", RGB (255, 255, 255));

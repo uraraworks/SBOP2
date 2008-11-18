@@ -55,6 +55,7 @@ protected:
 	virtual BOOL OnR		(BOOL bDown);							/* キーハンドラ(R) */
 	virtual BOOL OnI		(BOOL bDown);							/* キーハンドラ(I) */
 	virtual BOOL OnN		(BOOL bDown);							/* キーハンドラ(N) */
+	virtual BOOL OnV		(BOOL bDown);							/* キーハンドラ(V) */
 	virtual BOOL OnAt		(BOOL bDown);							/* キーハンドラ(@) */
 	virtual BOOL OnEnter	(BOOL bDown);							/* キーハンドラ(Enter) */
 	virtual BOOL OnEscape	(BOOL bDown);							/* キーハンドラ(Escape) */
