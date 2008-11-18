@@ -117,7 +117,8 @@ void CLayerMap::Create(
 
 void CLayerMap::Draw(PCImg32 pDst)
 {
-	int y;
+	int y, nDrawMode;
+	BOOL bDrawName;
 	PCInfoMapBase pMap;
 	PCLayerBase pLayer;
 
@@ -130,8 +131,14 @@ void CLayerMap::Draw(PCImg32 pDst)
 		RenewLevel ();
 	}
 
+	bDrawName = TRUE;
+	nDrawMode = m_pMgrData->GetDrawMode ();
+	if (nDrawMode == 0) {
+		bDrawName = FALSE;
+	}
+
 	DrawPartsBase (pDst);
-	DrawItem (pDst);
+	DrawItem (pDst, 0);
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
 		DrawMapObject	(pDst, y);
 		DrawChar		(pDst, y);
@@ -150,6 +157,9 @@ void CLayerMap::Draw(PCImg32 pDst)
 	}
 	if (pMap->m_byLevel != 0) {
 		pDst->SetLevel (m_pDibLevel);
+	}
+	if (bDrawName) {
+		DrawItem (pDst, 1);
 	}
 	DrawCharText		(pDst);
 	DrawGauge			(pDst);
@@ -1429,13 +1439,15 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 /* “ú•t		:2007/05/05														 */
 /* ========================================================================= */
 
-void CLayerMap::DrawItem(PCImg32 pDst, int nDrawY/*-99*/)
+void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 {
 	int i, nCount, x, y, xx, yy,
 		aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, aPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	PCInfoItem pInfoItem;
 	PCInfoCharCli pPlayerChar;
+	HDC hDC;
+	HFONT hFontOld;
 
 	pPlayerChar = m_pMgrData->GetPlayerChar ();
 	if (pPlayerChar == NULL) {
@@ -1464,14 +1476,26 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nDrawY/*-99*/)
 			}
 		}
 
-		x = pInfoItem->m_ptPos.x - m_nViewX;
-		y = pInfoItem->m_ptPos.y - m_nViewY;
-		m_pMgrDraw->DrawItem (
-				pDst,
-				32 + x * SCROLLSIZE + xx,
-				32 + y * SCROLLSIZE + yy,
-				pInfoItem,
-				FALSE);
+		x = 32 + (pInfoItem->m_ptPos.x - m_nViewX) * SCROLLSIZE + xx;
+		y = 32 + (pInfoItem->m_ptPos.y - m_nViewY) * SCROLLSIZE + yy;
+		if (nType == 0) {
+			m_pMgrDraw->DrawItem (
+					pDst,
+					x,
+					y,
+					pInfoItem,
+					FALSE);
+		} else {
+			hDC = pDst->Lock ();
+			hFontOld = (HFONT)SelectObject (hDC, m_hFont);
+			SetBkMode (hDC, TRANSPARENT);
+			x += 16;
+			x -= (pInfoItem->m_strName.GetLength () * 6 / 2);
+			y += 32;
+			TextOut2 (hDC, x, y, (LPCSTR)pInfoItem->m_strName, RGB (255, 255, 255));
+			SelectObject (hDC, hFontOld);
+			pDst->Unlock ();
+		}
 	}
 	m_pMgrDraw->UnLockDibTmp ();
 }

@@ -51,7 +51,7 @@ private:
 	void	DrawPartsPile		(CImg32 *pDst, int nDrawY = -99);				/* 描画(重ね合わせ) */
 	void	DrawShadow			(CImg32 *pDst, int nDrawY = -99);				/* 描画(マップ影) */
 	void	DrawMapObject		(CImg32 *pDst, int nDrawY = -99);				/* 描画(マップオブジェクト) */
-	void	DrawItem			(CImg32 *pDst, int nDrawY = -99);				/* 描画(アイテム) */
+	void	DrawItem			(CImg32 *pDst, int nType, int nDrawY = -99);	/* 描画(アイテム) */
 	void	GetDrawPos			(CInfoCharCli *pChar, int &nDstX, int &nDstY);	/* 描画位置を取得 */
 	void	DrawChar			(CImg32 *pDst, int nDrawY = -99);				/* 描画(キャラ) */
 	void	DrawCharText		(CImg32 *pDst, int nDrawY = -99);				/* 描画(キャラ関連のテキスト) */
