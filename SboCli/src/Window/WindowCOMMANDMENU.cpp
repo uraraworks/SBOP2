@@ -110,7 +110,7 @@ Exit:
 		x = 3 + m_nPos * 32;
 		y = 3;
 		y -= ((m_nPosSub * 32) + 3);
-		DrawFrame2 (m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + 67 + y - 20, m_strCommand.GetLength () * 6, 16, 0, pDst);
+		DrawFrame2 (m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + 67 + y - 20, m_strCommand.GetLength () * 6, 16, 0, pDst, 4);
 		TextOut2 (hDC, m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + 67 + y - 20, (LPCSTR)m_strCommand, RGB (10, 10, 10), FALSE);
 
 		SelectObject (hDC, hFontOld);

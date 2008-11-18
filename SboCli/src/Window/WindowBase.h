@@ -60,7 +60,7 @@ protected:
 	void TextOut4			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color);						/* 黒縁取りで文字描画 */
 	void DrawFrame			(int nType = 0);							/* フレームを描画 */
 	void DrawFrame			(int x, int y, int cx, int cy, int nType);	/* フレームを描画 */
-	void DrawFrame2			(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL);	/* フレームを描画 */
+	void DrawFrame2			(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	/* フレームを描画 */
 	void DrawFrame3			(int x, int y, int cx, int cy, int nType);	/* フレームを描画 */
 	void DrawCursor			(int x, int y);								/* カーソルを描画 */
 	void DrawInputFrame1	(int x, int y, int cx, int cy, int nType);	/* 入力欄用フレームを描画1 */

@@ -611,7 +611,7 @@ void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType)
 /* ì˙ït		:2005/05/29														 */
 /* ========================================================================= */
 
-void CWindowBase::DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pDst/*NULL*/)
+void CWindowBase::DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pDst/*NULL*/, int nBottom/*0*/)
 {
 	int i, xx, yy, aTypeX[] = {0, 24, 0}, aTypeY[] = {144, 144, 168};
 	COLORREF clTmp, clType[] = {RGB (255, 235, 200), RGB (255, 255, 255), RGB (255, 235, 200)};
@@ -631,24 +631,24 @@ void CWindowBase::DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pD
 	}
 
 	/* îwåiìhÇËÇ¬Ç‘Çµ */
-	pDst->FillRect (x, y, cx, cy, clTmp);
+	pDst->FillRect (x, y, cx, cy - nBottom, clTmp);
 
 	/* élã˜ */
-	pDst->BltFrom256 (x - 8,	y - 8,	8, 8, m_pDibSystem, xx,		 yy,		TRUE);
-	pDst->BltFrom256 (x + cx,	y - 8,	8, 8, m_pDibSystem, xx + 16, yy,		TRUE);
-	pDst->BltFrom256 (x - 8,	y + cy,	8, 8, m_pDibSystem, xx,		 yy + 16,	TRUE);
-	pDst->BltFrom256 (x + cx,	y + cy,	8, 8, m_pDibSystem, xx + 16, yy + 16,	TRUE);
+	pDst->BltFrom256 (x - 8,	y - 8,	8, 8, m_pDibSystem, xx,		 yy, TRUE);
+	pDst->BltFrom256 (x + cx,	y - 8,	8, 8, m_pDibSystem, xx + 16, yy, TRUE);
+	pDst->BltFrom256 (x - 8,	y + cy - nBottom, 8, 8, m_pDibSystem, xx,		yy + 16, TRUE);
+	pDst->BltFrom256 (x + cx,	y + cy - nBottom, 8, 8, m_pDibSystem, xx + 16,  yy + 16, TRUE);
 
 	/* â°ê¸ */
 	for (i = 0; i < cx / 8; i ++) {
-		pDst->BltFrom256 (x + i * 8, y - 8,		8, 8, m_pDibSystem, xx + 8, yy,			TRUE);
-		pDst->BltFrom256 (x + i * 8, y + cy,	8, 8, m_pDibSystem, xx + 8, yy + 16,	TRUE);
+		pDst->BltFrom256 (x + i * 8, y - 8, 8, 8, m_pDibSystem, xx + 8, yy, TRUE);
+		pDst->BltFrom256 (x + i * 8, y + cy - nBottom, 8, 8, m_pDibSystem, xx + 8, yy + 16,	TRUE);
 	}
 
 	/* ècê¸ */
 	for (i = 0; i < cy / 8; i ++) {
-		pDst->BltFrom256 (x - 8,	y + i * 8, 8, 8, m_pDibSystem, xx,		yy + 8, TRUE);
-		pDst->BltFrom256 (x + cx,	y + i * 8, 8, 8, m_pDibSystem, xx + 16,	yy + 8, TRUE);
+		pDst->BltFrom256 (x - 8, y + i * 8, 8, 8, m_pDibSystem, xx, yy + 8, TRUE);
+		pDst->BltFrom256 (x + cx, y + i * 8 - nBottom, 8, 8, m_pDibSystem, xx + 16,	yy + 8, TRUE);
 	}
 }
 

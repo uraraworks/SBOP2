@@ -185,7 +185,7 @@ Exit:
 			x = 33 * ((m_nPos - EQUIPTYPE_MAX) % 5) + 11;
 			y = 33 * ((m_nPos - EQUIPTYPE_MAX) / 5) + 96;
 		}
-		DrawFrame2 (m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + y - 24, m_strName.GetLength () * 6, 16, 0, pDst);
+		DrawFrame2 (m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + y - 24, m_strName.GetLength () * 6, 16, 0, pDst, 4);
 		TextOut2 (hDC, m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + y - 24, (LPCSTR)m_strName, RGB (10, 10, 10), FALSE);
 
 		SelectObject (hDC, hFontOld);
