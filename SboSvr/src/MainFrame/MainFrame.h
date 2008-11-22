@@ -96,6 +96,7 @@ private:
 	void	RecvProcCHAR_REQ_CHARINFO2			(PBYTE pData, DWORD dwSessionID);					/* キャラ情報要求(複数) */
 	void	RecvProcCHAR_REQ_PUTGET				(PBYTE pData, DWORD dwSessionID);					/* アイテムを拾う置く要求 */
 	void	RecvProcCHAR_REQ_USEITEM			(PBYTE pData, DWORD dwSessionID);					/* アイテムを使う要求 */
+	void	RecvProcCHAR_REQ_DRAGITEM			(PBYTE pData, DWORD dwSessionID);					/* アイテム位置変更要求 */
 	void	RecvProcCHAR_REQ_PUSH				(PBYTE pData, DWORD dwSessionID);					/* 押す要求 */
 	void	RecvProcCHAR_REQ_TAIL				(PBYTE pData, DWORD dwSessionID);					/* 付いて行く要求 */
 	void	RecvProcCHAR_REQ_MODIFY_PARAM		(PBYTE pData, DWORD dwSessionID);					/* パラメータ変更要求 */

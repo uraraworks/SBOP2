@@ -21,6 +21,7 @@
 #include "PacketCHAR_REQ_MODIFY_PARAM.h"
 #include "PacketCHAR_REQ_EQUIP.h"
 #include "PacketCHAR_REQ_USEITEM.h"
+#include "PacketCHAR_REQ_DRAGITEM.h"
 #include "PacketCHAR_PARA1.h"
 #include "PacketCONNECT_KEEPALIVE.h"
 #include "PacketADMIN_MAP_SETPARTS.h"
@@ -2303,7 +2304,9 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU(DWORD dwPara)
 {
 	BOOL bRet;
 	int nPos;
+	DWORD dwDragItemID;
 	PCWindowITEMMENU pWnd;
+	CPacketCHAR_REQ_DRAGITEM Packet;
 
 	bRet = TRUE;
 	pWnd = (PCWindowITEMMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_ITEMMENU);
@@ -2311,8 +2314,19 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU(DWORD dwPara)
 		goto Exit;
 	}
 
-	nPos = pWnd->GetPos ();
-	m_pMgrWindow->MakeWindowITEMMENU_SELECT (nPos, dwPara);
+	dwDragItemID = pWnd->GetDragItemID ();
+	if (dwDragItemID != 0) {
+		Packet.Make (m_pPlayerChar->m_dwCharID, dwDragItemID, pWnd->GetDragPos ());
+		m_pSock->Send (&Packet);
+		pWnd->DragOff ();
+
+	} else {
+		if (dwPara == 0) {
+			goto Exit;
+		}
+		nPos = pWnd->GetPos ();
+		m_pMgrWindow->MakeWindowITEMMENU_SELECT (nPos, dwPara);
+	}
 
 	bRet = FALSE;
 Exit:

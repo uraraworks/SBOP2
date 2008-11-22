@@ -39,6 +39,7 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO2:		RecvProcCHAR_REQ_CHARINFO2		(pData, dwSessionID);	break;	/* キャラ情報要求(複数) */
 	case SBOCOMMANDID_SUB_CHAR_REQ_PUTGET:			RecvProcCHAR_REQ_PUTGET			(pData, dwSessionID);	break;	/* アイテムを拾う置く要求 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_USEITEM:			RecvProcCHAR_REQ_USEITEM		(pData, dwSessionID);	break;	/* アイテムを使う要求 */
+	case SBOCOMMANDID_SUB_CHAR_REQ_DRAGITEM:		RecvProcCHAR_REQ_DRAGITEM		(pData, dwSessionID);	break;	/* アイテム位置変更要求 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_PUSH:			RecvProcCHAR_REQ_PUSH			(pData, dwSessionID);	break;	/* 押す要求 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_TAIL:			RecvProcCHAR_REQ_TAIL			(pData, dwSessionID);	break;	/* 付いて行く要求 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_MODIFY_PARAM:	RecvProcCHAR_REQ_MODIFY_PARAM	(pData, dwSessionID);	break;	/* パラメータ変更要求 */
@@ -426,6 +427,27 @@ void CMainFrame::RecvProcCHAR_REQ_USEITEM(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 	m_pLibInfoChar->UseItem (pInfoChar, Packet.m_dwItemID);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_REQ_DRAGITEM							 */
+/* 内容		:受信処理(アイテム位置変更要求)									 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_REQ_DRAGITEM(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoCharSvr pInfoChar;
+	CPacketCHAR_REQ_DRAGITEM Packet;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+	m_pLibInfoChar->DragItem (pInfoChar, Packet.m_dwItemID, Packet.m_ptNewPos);
 }
 
 

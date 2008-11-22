@@ -1271,6 +1271,10 @@
 							</FileConfiguration>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\CHAR\PacketCHAR_REQ_DRAGITEM.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\CHAR\PacketCHAR_REQ_EQUIP.cpp"
 							>
 							<FileConfiguration
@@ -2757,6 +2761,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Packet\CHAR\PacketCHAR_REQ_CHAT.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\CHAR\PacketCHAR_REQ_DRAGITEM.h"
 							>
 						</File>
 						<File

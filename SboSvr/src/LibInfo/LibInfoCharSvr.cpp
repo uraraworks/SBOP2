@@ -863,6 +863,55 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::DragItem										 */
+/* 内容		:アイテム位置変更												 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CLibInfoCharSvr::DragItem(CInfoCharSvr *pChar, DWORD dwItemID, POINT ptNewPos)
+{
+	int i, nCount;
+	PCInfoItem pInfoItem, pInfoItemTmp, pInfoItemSrc;
+	CPacketITEM_RES_ITEMINFO PacketITEM_RES_ITEMINFO;
+
+	if (pChar == NULL) {
+		return;
+	}
+	pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (dwItemID);
+	if (pInfoItem == NULL) {
+		return;
+	}
+
+	pInfoItemSrc = NULL;
+	nCount = pChar->m_adwItemID.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoItemTmp = (PCInfoItem)m_pLibInfoItem->GetPtr (pChar->m_adwItemID[i]);
+		if (pInfoItemTmp == NULL) {
+			continue;
+		}
+		if (!((pInfoItemTmp->m_ptBackPack.x == ptNewPos.x) && (pInfoItemTmp->m_ptBackPack.y == ptNewPos.y))) {
+			continue;
+		}
+		/* 入れ替えるアイテムを発見 */
+		pInfoItemSrc = pInfoItemTmp;
+		break;
+	}
+	if (pInfoItemSrc) {
+		pInfoItemSrc->m_ptBackPack.x = pInfoItem->m_ptBackPack.x;
+		pInfoItemSrc->m_ptBackPack.y = pInfoItem->m_ptBackPack.y;
+	}
+	pInfoItem->m_ptBackPack.x = ptNewPos.x;
+	pInfoItem->m_ptBackPack.y = ptNewPos.y;
+	PacketITEM_RES_ITEMINFO.Make (pInfoItem);
+	m_pSock->SendTo (pChar->m_dwSessionID, &PacketITEM_RES_ITEMINFO);
+	if (pInfoItemSrc) {
+		PacketITEM_RES_ITEMINFO.Make (pInfoItemSrc);
+		m_pSock->SendTo (pChar->m_dwSessionID, &PacketITEM_RES_ITEMINFO);
+	}
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CLibInfoCharSvr::RenewGrpID									 */
 /* 内容		:装備画像IDを更新												 */
 /* 日付		:2007/12/22														 */

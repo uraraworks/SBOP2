@@ -26,6 +26,7 @@
 
 CWindowITEMMENU::CWindowITEMMENU()
 {
+	m_ptDrag.x = m_ptDrag.y = -1;
 	m_nPos			= EQUIPTYPE_MAX + 12;
 	m_nPosMax		= EQUIPTYPE_MAX + 24;
 	m_bInput		= TRUE;
@@ -36,6 +37,7 @@ CWindowITEMMENU::CWindowITEMMENU()
 	m_sizeWindow.cy	= 301;
 
 	m_dwSelectItemID = 0;
+	m_dwDragItemID	 = 0;
 
 	m_pPlayerChar	= NULL;
 	m_pLibInfoItem	= NULL;
@@ -80,10 +82,10 @@ void CWindowITEMMENU::Create(CMgrData *pMgrData)
 
 void CWindowITEMMENU::Draw(PCImg32 pDst)
 {
-	int i, nCount, nLevel, x, y;
+	int i, nCount, nLevel, x, y, nCursor;
 	HDC hDC;
 	HFONT hFontOld;
-	PCInfoItem pInfoItem;
+	PCInfoItem pInfoItem, pIntoItemDrag;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
@@ -99,6 +101,8 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	DrawEquip (2, m_pPlayerChar->m_dwEquipItemIDArmsRight);	/* 持ち物 */
 	DrawEquip (3, m_pPlayerChar->m_dwEquipItemIDArmsLeft);	/* 盾 */
 
+	pIntoItemDrag = NULL;
+
 	/* アイテムを描画 */
 	nCount = m_pPlayerChar->m_adwItemID.GetSize ();
 	for (i = 0; i < nCount; i ++) {
@@ -108,6 +112,9 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		}
 		x = pInfoItem->m_ptBackPack.x;
 		y = pInfoItem->m_ptBackPack.y;
+		if ((m_ptDrag.x == x) && (m_ptDrag.y == y)) {
+			pIntoItemDrag = pInfoItem;
+		}
 		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 33), 95 + (y * 33), pInfoItem);
 		if (m_strName.IsEmpty () == FALSE) {
 			continue;
@@ -118,9 +125,17 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		}
 	}
 
+	/* ドラッグ中？ */
+	if (pIntoItemDrag) {
+		x = (m_nPos - EQUIPTYPE_MAX) % 5;
+		y = (m_nPos - EQUIPTYPE_MAX) / 5;
+		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 33), 95 + (y * 33), pIntoItemDrag);
+	}
+
 	GetDrawPos (m_nPos, x, y);
 
-	m_pMgrDraw->DrawCursor (m_pDib, x - 8, y, 2);
+	nCursor = (m_ptDrag.x == -1) ? 2 : 3;
+	m_pMgrDraw->DrawCursor (m_pDib, x - 8, y, nCursor);
 	m_dwTimeDrawStart = timeGetTime ();
 
 Exit:
@@ -145,6 +160,20 @@ Exit:
 		SelectObject (hDC, hFontOld);
 		pDst->Unlock ();
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowITEMMENU::DragOff										 */
+/* 内容		:ドラッグ解除													 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CWindowITEMMENU::DragOff(void)
+{
+	m_ptDrag.x = m_ptDrag.y = -1;
+	m_dwDragItemID = 0;
+	Redraw ();
 }
 
 
@@ -176,6 +205,10 @@ BOOL CWindowITEMMENU::OnUp(void)
 		} else {
 			m_nPos -= 5;
 		}
+	}
+	if (m_nPos < EQUIPTYPE_MAX) {
+		/* ドラッグ解除 */
+		DragOff ();
 	}
 
 	m_nCursorAnime = 0;
@@ -314,14 +347,25 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 	int i, nCount;
 	POINT ptPos;
 	BOOL bRet;
-	DWORD dwItemID;
+	DWORD dwItemID, dwItemIDDrag;
 	PCInfoItem pInfoItem;
 
-	bRet		= FALSE;
-	dwItemID	= 0;
+	bRet		 = FALSE;
+	dwItemID	 = 0;
+	dwItemIDDrag = 0;
+
+	ptPos.x = (m_nPos - EQUIPTYPE_MAX) % 5;
+	ptPos.y = (m_nPos - EQUIPTYPE_MAX) / 5;
 
 	if (bDown) {
+		if (m_ptDrag.x == -1) {
+			m_ptDrag = ptPos;
+			Redraw ();
+		}
 		goto Exit;
+	}
+	if ((m_ptDrag.x == ptPos.x) && (m_ptDrag.y == ptPos.y)) {
+		DragOff ();
 	}
 
 	if (m_nPos < EQUIPTYPE_MAX) {
@@ -334,9 +378,6 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 		case EQUIPTYPE_ARMSLEFT:	dwItemID = m_pPlayerChar->m_dwEquipItemIDArmsLeft;	break;	/* 左手 */
 		}
 	} else {
-		ptPos.x = (m_nPos - EQUIPTYPE_MAX) % 5;
-		ptPos.y = (m_nPos - EQUIPTYPE_MAX) / 5;
-
 		nCount = m_pPlayerChar->m_adwItemID.GetSize ();
 		for (i = 0; i < nCount; i ++) {
 			pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (m_pPlayerChar->m_adwItemID[i]);
@@ -347,16 +388,33 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 			if ((pInfoItem->m_ptBackPack.x == ptPos.x) &&
 				(pInfoItem->m_ptBackPack.y == ptPos.y)) {
 				dwItemID = pInfoItem->m_dwItemID;
-				break;
+			}
+			if (m_ptDrag.x != -1) {
+				/* ドラッグ開始位置のアイテム？ */
+				if ((pInfoItem->m_ptBackPack.x == m_ptDrag.x) &&
+					(pInfoItem->m_ptBackPack.y == m_ptDrag.y)) {
+					dwItemIDDrag = pInfoItem->m_dwItemID;
+				}
+			}
+		}
+		if (m_ptDrag.x != -1) {
+			/* ドラッグされた？ */
+			if (!((m_ptDrag.x == ptPos.x) && (m_ptDrag.y == ptPos.y))) {
+				m_ptDrop = ptPos;
 			}
 		}
 	}
 
-	if (dwItemID == 0) {
-		goto Exit;
+	if (dwItemIDDrag == 0) {
+		m_ptDrag.x = m_ptDrag.y = -1;
+		Redraw ();
+		if (dwItemID == 0) {
+			goto Exit;
+		}
 	}
 
 	m_dwSelectItemID = dwItemID;
+	m_dwDragItemID	 = dwItemIDDrag;
 	m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, dwItemID);
 

@@ -16,6 +16,7 @@
 #include "LayerMap.h"
 #include "MgrLayer.h"
 #include "MgrData.h"
+#include "MgrWindow.h"
 #include "MainFrame.h"
 
 
@@ -64,6 +65,7 @@ void CMainFrame::RecvProcITEM_RES_ITEMINFO(PBYTE pData)
 	}
 	m_pLibInfoItem->Sort ();
 	RenewItemArea ();
+	m_pMgrWindow->Update ();
 
 	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMINFO, pInfoItem->m_dwItemID);
 }

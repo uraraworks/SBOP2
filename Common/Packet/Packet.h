@@ -37,6 +37,7 @@
 #include "CHAR/PacketCHAR_REQ_PUTGET.h"					/* 			アイテムを拾う置く要求 */
 #include "CHAR/PacketCHAR_RES_PUTGET.h"					/* 			アイテムを拾う置く応答 */
 #include "CHAR/PacketCHAR_REQ_USEITEM.h"				/* 			アイテムを使う要求 */
+#include "CHAR/PacketCHAR_REQ_DRAGITEM.h"				/* 			アイテム位置変更要求 */
 #include "CHAR/PacketCHAR_SET_EFFECT.h"					/* 			エフェクト指定 */
 #include "CHAR/PacketCHAR_ITEMINFO.h"					/* 			アイテム情報通知 */
 #include "CHAR/PacketCHAR_REQ_PUSH.h"					/* 			押す要求 */
