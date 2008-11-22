@@ -31,6 +31,7 @@ CWindowBase::CWindowBase()
 	m_pParent			= NULL;
 	m_pDib				= new CImg32;
 	m_pMgrData			= NULL;
+	m_pMgrDraw			= NULL;
 	m_pMgrSound			= NULL;
 	m_pMgrGrpData		= NULL;
 	m_pDibSystem		= NULL;
@@ -107,6 +108,7 @@ CWindowBase::~CWindowBase()
 void CWindowBase::Create(CMgrData *pMgrData)
 {
 	m_pMgrData		= pMgrData;
+	m_pMgrDraw		= m_pMgrData->		GetMgrDraw();
 	m_pMgrSound		= m_pMgrData->		GetMgrSound ();
 	m_pMgrGrpData	= m_pMgrData->		GetMgrGrpData ();
 	m_hWndMain		= m_pMgrData->		GetMainWindow ();

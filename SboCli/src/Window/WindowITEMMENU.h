@@ -40,6 +40,8 @@ protected:
 	BOOL	OnB			(BOOL bDown);						/* キーハンドラ(B) */
 	BOOL	OnX			(BOOL bDown);						/* キーハンドラ(X) */
 	BOOL	OnZ			(BOOL bDown);						/* キーハンドラ(Z) */
+	void	DrawEquip	(int nType, DWORD dwEquipItemID);	/* 装備アイテムを描画 */
+	void	GetDrawPos	(int nPos, int &nDstX, int &nDstY);	/* アイテム描画位置を取得 */
 
 
 protected:

@@ -11,6 +11,7 @@
 class CImg32;
 class CWindowBase;
 class CMgrData;
+class CMgrDraw;
 class CMgrSound;
 class CMgrGrpData;
 
@@ -92,6 +93,7 @@ public:
 	CImg32			*m_pDib,						/* ビットマップ */
 					*m_pDibSystem;					/* システム画像 */
 	CMgrData		*m_pMgrData;					/* データ管理 */
+	CMgrDraw		*m_pMgrDraw;					/* 描画管理 */
 	CMgrSound		*m_pMgrSound;					/* サウンド管理 */
 	CMgrGrpData		*m_pMgrGrpData;					/* グラフィックデータ管理 */
 	CmyArray<CWindowBase *, CWindowBase *>	m_apChild;	/* 子ウィンドウ */

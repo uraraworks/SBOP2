@@ -910,6 +910,30 @@ void CMgrDraw::DrawMapHitMark(
 
 
 /* ========================================================================= */
+/* 関数名	:CMgrDraw::DrawCursor											 */
+/* 内容		:指カーソルを描画												 */
+/* 日付		:2008/11/19														 */
+/* ========================================================================= */
+
+void CMgrDraw::DrawCursor(
+	CImg32 *pDst,		/* [in] 描画先 */
+	int x,				/* [in] 描画位置(X) */
+	int y,				/* [in] 描画位置(Y) */
+	int nType)			/* [in] 種別 */
+{
+	POINT apt[] = { 48, 0, 72, 0, 48, 24, 72, 24 };
+	CImg32 *pDibSystem;
+
+	if (nType > 3) {
+		return;
+	}
+
+	pDibSystem = m_pMgrGrpData->GetDibSystem ();
+	pDst->BltFrom256 (x, y, 24, 24, pDibSystem, apt[nType].x, apt[nType].y, TRUE);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CMgrDraw::TimerProc											 */
 /* 内容		:時間処理														 */
 /* 日付		:2006/09/24														 */
