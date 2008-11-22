@@ -66,6 +66,7 @@ protected:
 	BOOL	OnCtrl						(BOOL bDown);									/* キーハンドラ(Ctrl) */
 	BOOL	OnSpace						(BOOL bDown);									/* キーハンドラ(Space) */
 	void	OnMgrDrawSTART_FADEIN		(DWORD dwPara);									/* フェードイン開始 */
+	void	OnMgrDrawEND_FADEIN			(DWORD dwPara);									/* フェードイン完了 */
 	BOOL	MoveProc					(int x, int y, int xx, int yy, int nDirection);	/* 移動処理 */
 	BOOL	OnWindowMsgCHAT				(DWORD dwPara);									/* チャット入力 */
 	BOOL	OnWindowMsgSYSTEMMENU		(DWORD dwPara);									/* システムメニュー */

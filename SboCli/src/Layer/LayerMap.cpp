@@ -46,18 +46,26 @@ CLayerMap::CLayerMap()
 	m_nMoveY			= 0;
 	m_nSystemIconMode	= 0;
 	m_nSyatemIconOffset	= 0;
+	m_nLevelMapName		= 0;
 	m_dwLastTimeScroll	= 0;
 	m_dwLastTimeSystemIconMode	= 0;
+	m_dwLastTimeMapName	= 0;
 	m_dwMoveWaitOnce	= 0;
 
 	m_pDibLevel			= NULL;
 	m_pDibLevelTmp		= NULL;
+	m_pDibMapName		= NULL;
 	m_pLibInfoItem		= NULL;
 	m_pLibInfoMapParts	= NULL;
 	m_pLibInfoMapShadow	= NULL;
 
 	m_pLayerCould		= NULL;
 	m_pLayerMisty		= NULL;
+
+	m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
+			TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
+			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ Ｐ明朝");
 }
 
 
@@ -71,8 +79,14 @@ CLayerMap::~CLayerMap()
 {
 	SAFE_DELETE (m_pDibLevel);
 	SAFE_DELETE (m_pDibLevelTmp);
+	SAFE_DELETE (m_pDibMapName);
 	SAFE_DELETE (m_pLayerCould);
 	SAFE_DELETE (m_pLayerMisty);
+
+	if (m_hFont32) {
+		DeleteObject (m_hFont32);
+		m_hFont32 = NULL;
+	}
 }
 
 
@@ -155,6 +169,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 	DrawCharText		(pDst);
 	DrawGauge			(pDst);
 	DrawSystemIcon		(pDst);
+	DrawMapName			(pDst);
 }
 
 
@@ -178,6 +193,7 @@ BOOL CLayerMap::TimerProc(void)
 	bRet  = CLayerBase::TimerProc ();
 	bRet |= TimerProcScroll ();
 	bRet |= TimerProcSystemIcon ();
+	bRet |= TimerProcMapName ();
 
 	switch (pMap->m_dwWeatherType) {
 	case WEATHERTYPE_CLOUD:
@@ -763,6 +779,46 @@ void CLayerMap::RenewLevel(void)
 
 
 /* ========================================================================= */
+/* 関数名	:CLayerMap::RenewMapName										 */
+/* 内容		:マップ名表示用画像を更新										 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CLayerMap::RenewMapName(LPCSTR pszMapName)
+{
+	int nLen;
+	HFONT hFontOld;
+	HDC hDCTmp;
+
+	m_nLevelMapName		= 0;
+	m_dwLastTimeMapName	= 0;
+	SAFE_DELETE (m_pDibMapName);
+
+	nLen = 0;
+	if (pszMapName) {
+		nLen = strlen (pszMapName);
+	}
+	if (nLen <= 0) {
+		return;
+	}
+
+	m_pDibMapName = new CImg32;
+	m_pDibMapName->Create (nLen * 16 + 2, 34);
+
+	hDCTmp = m_pDibMapName->Lock ();
+	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont32);
+	SetBkMode (hDCTmp, TRANSPARENT);
+
+	TextOut2 (hDCTmp, 1, 2, pszMapName, RGB (255, 255, 255));
+
+	SelectObject (hDCTmp, hFontOld);
+	m_pDibMapName->Unlock ();
+
+	m_dwLastTimeMapName = timeGetTime ();
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CLayerMap::TimerProcScroll										 */
 /* 内容		:時間処理(スクロール)											 */
 /* 日付		:2007/09/16														 */
@@ -860,6 +916,46 @@ BOOL CLayerMap::TimerProcSystemIcon(void)
 	if (m_nSyatemIconOffset != 0) {
 		bRet = TRUE;
 	}
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::TimerProcMapName									 */
+/* 内容		:時間処理(マップ名表示)											 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+BOOL CLayerMap::TimerProcMapName(void)
+{
+	BOOL bRet;
+	DWORD dwTimeTmp;
+
+	bRet = FALSE;
+
+	if (m_dwLastTimeMapName == 0) {
+		goto Exit;
+	}
+	dwTimeTmp = (timeGetTime () - m_dwLastTimeMapName) / 20;
+	if (dwTimeTmp == 0) {
+		goto Exit;
+	}
+	if (dwTimeTmp < 100) {
+		m_nLevelMapName = dwTimeTmp;
+	} else if (dwTimeTmp < 200) {
+	} else {
+		m_nLevelMapName = 100 - (dwTimeTmp - 200);
+	}
+	m_nLevelMapName = min (m_nLevelMapName, 100);
+	m_nLevelMapName = max (m_nLevelMapName, 0);
+
+	/* 終了？ */
+	if (m_nLevelMapName == 0) {
+		RenewMapName (NULL);
+	}
+
+	bRet = TRUE;
 Exit:
 	return bRet;
 }
@@ -1735,6 +1831,32 @@ void CLayerMap::DrawGauge(PCImg32 pDst)
 			pDst->BltFrom256 (x + 3, y + 3,	nTmp, 10, m_pDibSystem, 448, 147, TRUE);
 		}
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::DrawMapName											 */
+/* 内容		:描画(マップ名)													 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CLayerMap::DrawMapName(PCImg32 pDst)
+{
+	int x, y, cx, cy;
+
+	if (m_pDibMapName == NULL) {
+		return;
+	}
+
+	cx = m_pDibMapName->Width ();
+	cy = m_pDibMapName->Height ();
+
+	x = pDst->Width () / 2;
+	x -= (cx / 2);
+	y = pDst->Height () / 2;
+	y -= (cy / 2);
+
+	pDst->BltAlpha (x, y, cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
 }
 
 /* Copyright(C)URARA-works 2006 */

@@ -1934,6 +1934,27 @@ void CStateProcMAP::OnMgrDrawSTART_FADEIN(DWORD dwPara)
 
 
 /* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnMgrDrawEND_FADEIN								 */
+/* 内容		:フェードイン完了												 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CStateProcMAP::OnMgrDrawEND_FADEIN(DWORD dwPara)
+{
+	PCLayerMap pLayerMap;
+
+	pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
+	if (pLayerMap == NULL) {
+		return;
+	}
+	if (m_pMap == NULL) {
+		return;
+	}
+	pLayerMap->RenewMapName ((LPCSTR)m_pMap->m_strMapName);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CStateProcMAP::MoveProc										 */
 /* 内容		:移動処理														 */
 /* 日付		:2006/11/01														 */

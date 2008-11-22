@@ -41,11 +41,13 @@ public:
 	void	SetSystemIconMode	(int nMode);								/* システムアイコンモードを設定 */
 	void	GetViewMapPos		(int &nDstX, int &nDstY);					/* 視点をマップ座標で取得 */
 	void	RenewLevel			(void);										/* 明度レベル画像を更新 */
+	void	RenewMapName		(LPCSTR pszMapName);						/* マップ名表示用画像を更新 */
 
 
 private:
 	BOOL	TimerProcScroll		(void);											/* 時間処理(スクロール) */
 	BOOL	TimerProcSystemIcon	(void);											/* 時間処理(システムアイコン) */
+	BOOL	TimerProcMapName	(void);											/* 時間処理(マップ名表示) */
 	void	DrawPartsBase		(CImg32 *pDst, int nDrawY = -99);				/* 描画(土台) */
 	void	GetDrawMapPos		(POINT *ptPos, int &nDstX, int &nDstY);			/* マップ座標の描画位置を所得 */
 	void	DrawPartsPile		(CImg32 *pDst, int nDrawY = -99);				/* 描画(重ね合わせ) */
@@ -57,9 +59,11 @@ private:
 	void	DrawCharText		(CImg32 *pDst, int nDrawY = -99);				/* 描画(キャラ関連のテキスト) */
 	void	DrawSystemIcon		(CImg32 *pDst);									/* 描画(システムアイコン) */
 	void	DrawGauge			(CImg32 *pDst);									/* 描画(ゲージ類) */
+	void	DrawMapName			(CImg32 *pDst);									/* 描画(マップ名) */
 
 
 public:
+	HFONT		m_hFont32;					/* 描画に使うフォント(32ドット) */
 	BOOL		m_bScroll;					/* スクロールする判定 */
 	BYTE		m_byDirection;				/* スクロール向き */
 	int			m_nViewIcon,				/* 視点アイコン */
@@ -69,13 +73,16 @@ public:
 				m_nMoveX,					/* スクロール中(横) */
 				m_nMoveY,					/* スクロール中(縦) */
 				m_nSystemIconMode,			/* システムアイコン表示モード */
-				m_nSyatemIconOffset;		/* システムアイコン表示オフセット */
+				m_nSyatemIconOffset,		/* システムアイコン表示オフセット */
+				m_nLevelMapName;			/* マップ名表示用透過レベル */
 	DWORD		m_dwLastTimeScroll,			/* 前回のスクロール処理時間 */
 				m_dwLastTimeSystemIconMode,	/* 前回のシステムアイコン表示モード処理時間 */
+				m_dwLastTimeMapName,		/* 前回のマップ名表示処理時間 */
 				m_dwMoveWaitOnce;			/* 一度だけの移動待ち時間 */
 
 	CImg32		*m_pDibLevel,					/* 明度レベル画像 */
-				*m_pDibLevelTmp;
+				*m_pDibLevelTmp,				/* 灯り描画用テンポラリ */
+				*m_pDibMapName;					/* マップ名表示用画像 */
 	CLibInfoItem		*m_pLibInfoItem;		/* アイテム情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;	/* マップパーツ情報 */
 	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* マップ影情報 */
