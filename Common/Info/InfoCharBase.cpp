@@ -48,6 +48,7 @@ static LPCSTR s_aszName[] = {
 	"m_clSpeak",				/* 発言の描画色 */
 	"m_strCharName",			/* キャラ名 */
 	"m_strSpeak",				/* 発言内容 */
+	"m_strTalk",				/* 会話データ */
 	"m_adwItemID",				/* 所持アイテム */
 	"m_bBlock",					/* ぶつかる判定 */
 	"m_bPush",					/* 押せる判定 */
@@ -347,6 +348,7 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += sizeof (m_clSpeak);
 	dwRet += (m_strCharName.GetLength () + 1);
 	dwRet += (m_strSpeak.GetLength () + 1);
+	dwRet += (m_strTalk.GetLength () + 1);
 	dwRet += ((m_adwItemID.GetSize () + 1) * sizeof (DWORD));
 	/* NPC発生 */
 	dwRet += sizeof (m_dwPutCycle);				/* 発生周期 */
@@ -405,56 +407,57 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 30:	dwRet = sizeof (m_clSpeak);					break;
 	case 31:	dwRet = (m_strCharName.	GetLength () + 1);	break;
 	case 32:	dwRet = (m_strSpeak.	GetLength () + 1);	break;
-	case 33:	dwRet = ((m_adwItemID.GetSize () + 1) * sizeof (DWORD));	break;
-	case 34:	dwRet = sizeof (m_bBlock);					break;
-	case 35:	dwRet = sizeof (m_bPush);					break;
-	case 36:	dwRet = sizeof (m_dwEquipItemIDCloth);		break;
-	case 37:	dwRet = sizeof (m_dwEquipItemIDAcce1);		break;
-	case 38:	dwRet = sizeof (m_dwEquipItemIDAcce2);		break;
-	case 39:	dwRet = sizeof (m_dwEquipItemIDArmsRight);	break;
-	case 40:	dwRet = sizeof (m_dwEquipItemIDArmsLeft);	break;
-	case 41:	dwRet = sizeof (m_dwEquipItemIDHead);		break;
-	case 42:	dwRet = sizeof (m_wGrpIDInitNPC);			break;
-	case 43:	dwRet = sizeof (m_wGrpIDInitCloth);			break;
-	case 44:	dwRet = sizeof (m_wGrpIDInitEye);			break;
-	case 45:	dwRet = sizeof (m_wGrpIDInitEyeColor);		break;
-	case 46:	dwRet = sizeof (m_wGrpIDInitHairType);		break;
-	case 47:	dwRet = sizeof (m_wGrpIDInitHairColor);		break;
-	case 48:	dwRet = sizeof (m_wGrpIDInitSP);			break;
-	case 49:	dwRet = sizeof (m_wLevel);					break;	/* レベル */
-	case 50:	dwRet = sizeof (m_wStamina);				break;	/* スタミナ */
-	case 51:	dwRet = sizeof (m_wPower);					break;	/* 腕力 */
-	case 52:	dwRet = sizeof (m_wStrength);				break;	/* 体力 */
-	case 53:	dwRet = sizeof (m_wMagic);					break;	/* 魔力 */
-	case 54:	dwRet = sizeof (m_wSkillful);				break;	/* 器用 */
-	case 55:	dwRet = sizeof (m_wAbillityAT);				break;	/* 攻撃技能 */
-	case 56:	dwRet = sizeof (m_wAbillityDF);				break;	/* 防御技能 */
-	case 57:	dwRet = sizeof (m_wPAtack);					break;	/* 攻撃力 */
-	case 58:	dwRet = sizeof (m_wPDefense);				break;	/* 防御力 */
-	case 59:	dwRet = sizeof (m_wPMagic);					break;	/* 魔法力 */
-	case 60:	dwRet = sizeof (m_wPMagicDefense);			break;	/* 魔法防御力 */
-	case 61:	dwRet = sizeof (m_wPHitAverage);			break;	/* 命中率 */
-	case 62:	dwRet = sizeof (m_wPAvoidAverage);			break;	/* 回避率 */
-	case 63:	dwRet = sizeof (m_wPCriticalAverage);		break;	/* クリティカル率 */
-	case 64:	dwRet = sizeof (m_wAttrFire);				break;	/* 属性[火] */
-	case 65:	dwRet = sizeof (m_wAttrWind);				break;	/* 属性[風] */
-	case 66:	dwRet = sizeof (m_wAttrWater);				break;	/* 属性[水] */
-	case 67:	dwRet = sizeof (m_wAttrEarth);				break;	/* 属性[土] */
-	case 68:	dwRet = sizeof (m_wAttrLight);				break;	/* 属性[光] */
-	case 69:	dwRet = sizeof (m_wAttrDark);				break;	/* 属性[闇] */
-	case 70:	dwRet = sizeof (m_dwMoveWait);				break;	/* 移動待ち時間 */
-	case 71:	dwRet = sizeof (m_dwMoveWaitBattle);		break;	/* 戦闘時移動待ち時間 */
-	case 72:	dwRet = sizeof (m_dwExp);					break;	/* 経験値 */
-	case 73:	dwRet = sizeof (m_dwHP);					break;
-	case 74:	dwRet = sizeof (m_dwMaxHP);					break;
-	case 75:	dwRet = sizeof (m_dwSP);					break;
-	case 76:	dwRet = sizeof (m_dwMaxSP);					break;
+	case 33:	dwRet = (m_strTalk.		GetLength () + 1);	break;
+	case 34:	dwRet = ((m_adwItemID.GetSize () + 1) * sizeof (DWORD));	break;
+	case 35:	dwRet = sizeof (m_bBlock);					break;
+	case 36:	dwRet = sizeof (m_bPush);					break;
+	case 37:	dwRet = sizeof (m_dwEquipItemIDCloth);		break;
+	case 38:	dwRet = sizeof (m_dwEquipItemIDAcce1);		break;
+	case 39:	dwRet = sizeof (m_dwEquipItemIDAcce2);		break;
+	case 40:	dwRet = sizeof (m_dwEquipItemIDArmsRight);	break;
+	case 41:	dwRet = sizeof (m_dwEquipItemIDArmsLeft);	break;
+	case 42:	dwRet = sizeof (m_dwEquipItemIDHead);		break;
+	case 43:	dwRet = sizeof (m_wGrpIDInitNPC);			break;
+	case 44:	dwRet = sizeof (m_wGrpIDInitCloth);			break;
+	case 45:	dwRet = sizeof (m_wGrpIDInitEye);			break;
+	case 46:	dwRet = sizeof (m_wGrpIDInitEyeColor);		break;
+	case 47:	dwRet = sizeof (m_wGrpIDInitHairType);		break;
+	case 48:	dwRet = sizeof (m_wGrpIDInitHairColor);		break;
+	case 49:	dwRet = sizeof (m_wGrpIDInitSP);			break;
+	case 50:	dwRet = sizeof (m_wLevel);					break;	/* レベル */
+	case 51:	dwRet = sizeof (m_wStamina);				break;	/* スタミナ */
+	case 52:	dwRet = sizeof (m_wPower);					break;	/* 腕力 */
+	case 53:	dwRet = sizeof (m_wStrength);				break;	/* 体力 */
+	case 54:	dwRet = sizeof (m_wMagic);					break;	/* 魔力 */
+	case 55:	dwRet = sizeof (m_wSkillful);				break;	/* 器用 */
+	case 56:	dwRet = sizeof (m_wAbillityAT);				break;	/* 攻撃技能 */
+	case 57:	dwRet = sizeof (m_wAbillityDF);				break;	/* 防御技能 */
+	case 58:	dwRet = sizeof (m_wPAtack);					break;	/* 攻撃力 */
+	case 59:	dwRet = sizeof (m_wPDefense);				break;	/* 防御力 */
+	case 60:	dwRet = sizeof (m_wPMagic);					break;	/* 魔法力 */
+	case 61:	dwRet = sizeof (m_wPMagicDefense);			break;	/* 魔法防御力 */
+	case 62:	dwRet = sizeof (m_wPHitAverage);			break;	/* 命中率 */
+	case 63:	dwRet = sizeof (m_wPAvoidAverage);			break;	/* 回避率 */
+	case 64:	dwRet = sizeof (m_wPCriticalAverage);		break;	/* クリティカル率 */
+	case 65:	dwRet = sizeof (m_wAttrFire);				break;	/* 属性[火] */
+	case 66:	dwRet = sizeof (m_wAttrWind);				break;	/* 属性[風] */
+	case 67:	dwRet = sizeof (m_wAttrWater);				break;	/* 属性[水] */
+	case 68:	dwRet = sizeof (m_wAttrEarth);				break;	/* 属性[土] */
+	case 69:	dwRet = sizeof (m_wAttrLight);				break;	/* 属性[光] */
+	case 70:	dwRet = sizeof (m_wAttrDark);				break;	/* 属性[闇] */
+	case 71:	dwRet = sizeof (m_dwMoveWait);				break;	/* 移動待ち時間 */
+	case 72:	dwRet = sizeof (m_dwMoveWaitBattle);		break;	/* 戦闘時移動待ち時間 */
+	case 73:	dwRet = sizeof (m_dwExp);					break;	/* 経験値 */
+	case 74:	dwRet = sizeof (m_dwHP);					break;
+	case 75:	dwRet = sizeof (m_dwMaxHP);					break;
+	case 76:	dwRet = sizeof (m_dwSP);					break;
+	case 77:	dwRet = sizeof (m_dwMaxSP);					break;
 	/* NPC発生 */
-	case 77:	dwRet = sizeof (m_dwPutCycle);				break;	/* 発生周期 */
-	case 78:	dwRet = sizeof (m_nPutMoveType);			break;	/* 発生させる移動種別 */
-	case 79:	dwRet = sizeof (m_nMaxPutCount);			break;	/* 同時発生数 */
-	case 80:	dwRet = sizeof (m_nPutAverage);				break;	/* 発生確率 */
-	case 81:	dwRet = sizeof (m_ptPutArea);				break;	/* 発生範囲(半径) */
+	case 78:	dwRet = sizeof (m_dwPutCycle);				break;	/* 発生周期 */
+	case 79:	dwRet = sizeof (m_nPutMoveType);			break;	/* 発生させる移動種別 */
+	case 80:	dwRet = sizeof (m_nMaxPutCount);			break;	/* 同時発生数 */
+	case 81:	dwRet = sizeof (m_nPutAverage);				break;	/* 発生確率 */
+	case 82:	dwRet = sizeof (m_ptPutArea);				break;	/* 発生範囲(半径) */
 	}
 
 	return dwRet;
@@ -529,7 +532,8 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 30:	pSrc = (PBYTE)&m_clSpeak;				break;
 	case 31:	pSrc = (PBYTE)(LPCSTR)m_strCharName;	break;
 	case 32:	pSrc = (PBYTE)(LPCSTR)m_strSpeak;		break;
-	case 33:
+	case 33:	pSrc = (PBYTE)(LPCSTR)m_strTalk;		break;
+	case 34:
 		pTmp	= pRet;
 		nCount	= m_adwItemID.GetSize ();
 
@@ -540,55 +544,55 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 		dwTmp = 0;
 		CopyMemoryRenew (pTmp, &dwTmp, sizeof (DWORD), pTmp);
 		break;
-	case 34:	pSrc = (PBYTE)&m_bBlock;					break;
-	case 35:	pSrc = (PBYTE)&m_bPush;						break;
-	case 36:	pSrc = (PBYTE)&m_dwEquipItemIDCloth;		break;
-	case 37:	pSrc = (PBYTE)&m_dwEquipItemIDAcce1;		break;
-	case 38:	pSrc = (PBYTE)&m_dwEquipItemIDAcce2;		break;
-	case 39:	pSrc = (PBYTE)&m_dwEquipItemIDArmsRight;	break;
-	case 40:	pSrc = (PBYTE)&m_dwEquipItemIDArmsLeft;		break;
-	case 41:	pSrc = (PBYTE)&m_dwEquipItemIDHead;			break;
-	case 42:	pSrc = (PBYTE)&m_wGrpIDInitNPC;				break;
-	case 43:	pSrc = (PBYTE)&m_wGrpIDInitCloth;			break;
-	case 44:	pSrc = (PBYTE)&m_wGrpIDInitEye;				break;
-	case 45:	pSrc = (PBYTE)&m_wGrpIDInitEyeColor;		break;
-	case 46:	pSrc = (PBYTE)&m_wGrpIDInitHairType;		break;
-	case 47:	pSrc = (PBYTE)&m_wGrpIDInitHairColor;		break;
-	case 48:	pSrc = (PBYTE)&m_wGrpIDInitSP;				break;
-	case 49:	pSrc = (PBYTE)&m_wLevel;					break;	/* レベル */
-	case 50:	pSrc = (PBYTE)&m_wStamina;					break;	/* スタミナ */
-	case 51:	pSrc = (PBYTE)&m_wPower;					break;	/* 腕力 */
-	case 52:	pSrc = (PBYTE)&m_wStrength;					break;	/* 体力 */
-	case 53:	pSrc = (PBYTE)&m_wMagic;					break;	/* 魔力 */
-	case 54:	pSrc = (PBYTE)&m_wSkillful;					break;	/* 器用 */
-	case 55:	pSrc = (PBYTE)&m_wAbillityAT;				break;	/* 攻撃技能 */
-	case 56:	pSrc = (PBYTE)&m_wAbillityDF;				break;	/* 防御技能 */
-	case 57:	pSrc = (PBYTE)&m_wPAtack;					break;	/* 攻撃力 */
-	case 58:	pSrc = (PBYTE)&m_wPDefense;					break;	/* 防御力 */
-	case 59:	pSrc = (PBYTE)&m_wPMagic;					break;	/* 魔法力 */
-	case 60:	pSrc = (PBYTE)&m_wPMagicDefense;			break;	/* 魔法防御力 */
-	case 61:	pSrc = (PBYTE)&m_wPHitAverage;				break;	/* 命中率 */
-	case 62:	pSrc = (PBYTE)&m_wPAvoidAverage;			break;	/* 回避率 */
-	case 63:	pSrc = (PBYTE)&m_wPCriticalAverage;			break;	/* クリティカル率 */
-	case 64:	pSrc = (PBYTE)&m_wAttrFire;					break;	/* 属性[火] */
-	case 65:	pSrc = (PBYTE)&m_wAttrWind;					break;	/* 属性[風] */
-	case 66:	pSrc = (PBYTE)&m_wAttrWater;				break;	/* 属性[水] */
-	case 67:	pSrc = (PBYTE)&m_wAttrEarth;				break;	/* 属性[土] */
-	case 68:	pSrc = (PBYTE)&m_wAttrLight;				break;	/* 属性[光] */
-	case 69:	pSrc = (PBYTE)&m_wAttrDark;					break;	/* 属性[闇] */
-	case 70:	pSrc = (PBYTE)&m_dwMoveWait;				break;	/* 移動待ち時間 */
-	case 71:	pSrc = (PBYTE)&m_dwMoveWaitBattle;			break;	/* 先頭時移動待ち時間 */
-	case 72:	pSrc = (PBYTE)&m_dwExp;						break;	/* 経験値 */
-	case 73:	pSrc = (PBYTE)&m_dwHP;						break;
-	case 74:	pSrc = (PBYTE)&m_dwMaxHP;					break;
-	case 75:	pSrc = (PBYTE)&m_dwSP;						break;
-	case 76:	pSrc = (PBYTE)&m_dwMaxSP;					break;
+	case 35:	pSrc = (PBYTE)&m_bBlock;					break;
+	case 36:	pSrc = (PBYTE)&m_bPush;						break;
+	case 37:	pSrc = (PBYTE)&m_dwEquipItemIDCloth;		break;
+	case 38:	pSrc = (PBYTE)&m_dwEquipItemIDAcce1;		break;
+	case 39:	pSrc = (PBYTE)&m_dwEquipItemIDAcce2;		break;
+	case 40:	pSrc = (PBYTE)&m_dwEquipItemIDArmsRight;	break;
+	case 41:	pSrc = (PBYTE)&m_dwEquipItemIDArmsLeft;		break;
+	case 42:	pSrc = (PBYTE)&m_dwEquipItemIDHead;			break;
+	case 43:	pSrc = (PBYTE)&m_wGrpIDInitNPC;				break;
+	case 44:	pSrc = (PBYTE)&m_wGrpIDInitCloth;			break;
+	case 45:	pSrc = (PBYTE)&m_wGrpIDInitEye;				break;
+	case 46:	pSrc = (PBYTE)&m_wGrpIDInitEyeColor;		break;
+	case 47:	pSrc = (PBYTE)&m_wGrpIDInitHairType;		break;
+	case 48:	pSrc = (PBYTE)&m_wGrpIDInitHairColor;		break;
+	case 49:	pSrc = (PBYTE)&m_wGrpIDInitSP;				break;
+	case 50:	pSrc = (PBYTE)&m_wLevel;					break;	/* レベル */
+	case 51:	pSrc = (PBYTE)&m_wStamina;					break;	/* スタミナ */
+	case 52:	pSrc = (PBYTE)&m_wPower;					break;	/* 腕力 */
+	case 53:	pSrc = (PBYTE)&m_wStrength;					break;	/* 体力 */
+	case 54:	pSrc = (PBYTE)&m_wMagic;					break;	/* 魔力 */
+	case 55:	pSrc = (PBYTE)&m_wSkillful;					break;	/* 器用 */
+	case 56:	pSrc = (PBYTE)&m_wAbillityAT;				break;	/* 攻撃技能 */
+	case 57:	pSrc = (PBYTE)&m_wAbillityDF;				break;	/* 防御技能 */
+	case 58:	pSrc = (PBYTE)&m_wPAtack;					break;	/* 攻撃力 */
+	case 59:	pSrc = (PBYTE)&m_wPDefense;					break;	/* 防御力 */
+	case 60:	pSrc = (PBYTE)&m_wPMagic;					break;	/* 魔法力 */
+	case 61:	pSrc = (PBYTE)&m_wPMagicDefense;			break;	/* 魔法防御力 */
+	case 62:	pSrc = (PBYTE)&m_wPHitAverage;				break;	/* 命中率 */
+	case 63:	pSrc = (PBYTE)&m_wPAvoidAverage;			break;	/* 回避率 */
+	case 64:	pSrc = (PBYTE)&m_wPCriticalAverage;			break;	/* クリティカル率 */
+	case 65:	pSrc = (PBYTE)&m_wAttrFire;					break;	/* 属性[火] */
+	case 66:	pSrc = (PBYTE)&m_wAttrWind;					break;	/* 属性[風] */
+	case 67:	pSrc = (PBYTE)&m_wAttrWater;				break;	/* 属性[水] */
+	case 68:	pSrc = (PBYTE)&m_wAttrEarth;				break;	/* 属性[土] */
+	case 69:	pSrc = (PBYTE)&m_wAttrLight;				break;	/* 属性[光] */
+	case 70:	pSrc = (PBYTE)&m_wAttrDark;					break;	/* 属性[闇] */
+	case 71:	pSrc = (PBYTE)&m_dwMoveWait;				break;	/* 移動待ち時間 */
+	case 72:	pSrc = (PBYTE)&m_dwMoveWaitBattle;			break;	/* 先頭時移動待ち時間 */
+	case 73:	pSrc = (PBYTE)&m_dwExp;						break;	/* 経験値 */
+	case 74:	pSrc = (PBYTE)&m_dwHP;						break;
+	case 75:	pSrc = (PBYTE)&m_dwMaxHP;					break;
+	case 76:	pSrc = (PBYTE)&m_dwSP;						break;
+	case 77:	pSrc = (PBYTE)&m_dwMaxSP;					break;
 	/* NPC発生 */
-	case 77:	pSrc = (PBYTE)&m_dwPutCycle;				break;	/* 発生周期 */
-	case 78:	pSrc = (PBYTE)&m_nPutMoveType;				break;	/* 発生させる移動種別 */
-	case 79:	pSrc = (PBYTE)&m_nMaxPutCount;				break;	/* 同時発生数 */
-	case 80:	pSrc = (PBYTE)&m_nPutAverage;				break;	/* 発生確率 */
-	case 81:	pSrc = (PBYTE)&m_ptPutArea;					break;	/* 発生範囲(半径) */
+	case 78:	pSrc = (PBYTE)&m_dwPutCycle;				break;	/* 発生周期 */
+	case 79:	pSrc = (PBYTE)&m_nPutMoveType;				break;	/* 発生させる移動種別 */
+	case 80:	pSrc = (PBYTE)&m_nMaxPutCount;				break;	/* 同時発生数 */
+	case 81:	pSrc = (PBYTE)&m_nPutAverage;				break;	/* 発生確率 */
+	case 82:	pSrc = (PBYTE)&m_ptPutArea;					break;	/* 発生範囲(半径) */
 	}
 
 	if (pSrc) {
@@ -657,6 +661,10 @@ DWORD CInfoCharBase::ReadElementData(
 		dwSize = m_strSpeak.GetLength () + 1;
 		break;
 	case 33:
+		m_strTalk = (LPCSTR)pSrc;
+		dwSize = m_strTalk.GetLength () + 1;
+		break;
+	case 34:
 		pTmp	= pSrc;
 		dwTmp	= 0;
 
@@ -669,55 +677,55 @@ DWORD CInfoCharBase::ReadElementData(
 		}
 		dwSize = (m_adwItemID.GetSize () + 1) * sizeof (DWORD);
 		break;
-	case 34:	pDst = (PBYTE)&m_bBlock;					dwSize = sizeof (m_bBlock);					break;
-	case 35:	pDst = (PBYTE)&m_bPush;						dwSize = sizeof (m_bPush);					break;
-	case 36:	pDst = (PBYTE)&m_dwEquipItemIDCloth;		dwSize = sizeof (m_dwEquipItemIDCloth);		break;
-	case 37:	pDst = (PBYTE)&m_dwEquipItemIDAcce1;		dwSize = sizeof (m_dwEquipItemIDAcce1);		break;
-	case 38:	pDst = (PBYTE)&m_dwEquipItemIDAcce2;		dwSize = sizeof (m_dwEquipItemIDAcce2);		break;
-	case 39:	pDst = (PBYTE)&m_dwEquipItemIDArmsRight;	dwSize = sizeof (m_dwEquipItemIDArmsRight);	break;
-	case 40:	pDst = (PBYTE)&m_dwEquipItemIDArmsLeft;		dwSize = sizeof (m_dwEquipItemIDArmsLeft);	break;
-	case 41:	pDst = (PBYTE)&m_dwEquipItemIDHead;			dwSize = sizeof (m_dwEquipItemIDHead);		break;
-	case 42:	pDst = (PBYTE)&m_wGrpIDInitNPC;				dwSize = sizeof (m_wGrpIDInitNPC);			break;
-	case 43:	pDst = (PBYTE)&m_wGrpIDInitCloth;			dwSize = sizeof (m_wGrpIDInitCloth);		break;
-	case 44:	pDst = (PBYTE)&m_wGrpIDInitEye;				dwSize = sizeof (m_wGrpIDInitEye);			break;
-	case 45:	pDst = (PBYTE)&m_wGrpIDInitEyeColor;		dwSize = sizeof (m_wGrpIDInitEyeColor);		break;
-	case 46:	pDst = (PBYTE)&m_wGrpIDInitHairType;		dwSize = sizeof (m_wGrpIDInitHairType);		break;
-	case 47:	pDst = (PBYTE)&m_wGrpIDInitHairColor;		dwSize = sizeof (m_wGrpIDInitHairColor);	break;
-	case 48:	pDst = (PBYTE)&m_wGrpIDInitSP;				dwSize = sizeof (m_wGrpIDInitSP);			break;
-	case 49:	pDst = (PBYTE)&m_wLevel;					dwSize = sizeof (m_wLevel);					break;	/* レベル */
-	case 50:	pDst = (PBYTE)&m_wStamina;					dwSize = sizeof (m_wStamina);				break;	/* スタミナ */
-	case 51:	pDst = (PBYTE)&m_wPower;					dwSize = sizeof (m_wPower);					break;	/* 腕力 */
-	case 52:	pDst = (PBYTE)&m_wStrength;					dwSize = sizeof (m_wStrength);				break;	/* 体力 */
-	case 53:	pDst = (PBYTE)&m_wMagic;					dwSize = sizeof (m_wMagic);					break;	/* 魔力 */
-	case 54:	pDst = (PBYTE)&m_wSkillful;					dwSize = sizeof (m_wSkillful);				break;	/* 器用 */
-	case 55:	pDst = (PBYTE)&m_wAbillityAT;				dwSize = sizeof (m_wAbillityAT);			break;	/* 攻撃技能 */
-	case 56:	pDst = (PBYTE)&m_wAbillityDF;				dwSize = sizeof (m_wAbillityDF);			break;	/* 防御技能 */
-	case 57:	pDst = (PBYTE)&m_wPAtack;					dwSize = sizeof (m_wPAtack);				break;	/* 攻撃力 */
-	case 58:	pDst = (PBYTE)&m_wPDefense;					dwSize = sizeof (m_wPDefense);				break;	/* 防御力 */
-	case 59:	pDst = (PBYTE)&m_wPMagic;					dwSize = sizeof (m_wPMagic);				break;	/* 魔法力 */
-	case 60:	pDst = (PBYTE)&m_wPMagicDefense;			dwSize = sizeof (m_wPMagicDefense);			break;	/* 魔法防御力 */
-	case 61:	pDst = (PBYTE)&m_wPHitAverage;				dwSize = sizeof (m_wPHitAverage);			break;	/* 命中率 */
-	case 62:	pDst = (PBYTE)&m_wPAvoidAverage;			dwSize = sizeof (m_wPAvoidAverage);			break;	/* 回避率 */
-	case 63:	pDst = (PBYTE)&m_wPCriticalAverage;			dwSize = sizeof (m_wPCriticalAverage);		break;	/* クリティカル率 */
-	case 64:	pDst = (PBYTE)&m_wAttrFire;					dwSize = sizeof (m_wAttrFire);				break;	/* 属性[火] */
-	case 65:	pDst = (PBYTE)&m_wAttrWind;					dwSize = sizeof (m_wAttrWind);				break;	/* 属性[風] */
-	case 66:	pDst = (PBYTE)&m_wAttrWater;				dwSize = sizeof (m_wAttrWater);				break;	/* 属性[水] */
-	case 67:	pDst = (PBYTE)&m_wAttrEarth;				dwSize = sizeof (m_wAttrEarth);				break;	/* 属性[土] */
-	case 68:	pDst = (PBYTE)&m_wAttrLight;				dwSize = sizeof (m_wAttrLight);				break;	/* 属性[光] */
-	case 69:	pDst = (PBYTE)&m_wAttrDark;					dwSize = sizeof (m_wAttrDark);				break;	/* 属性[闇] */
-	case 70:	pDst = (PBYTE)&m_dwMoveWait;				dwSize = sizeof (m_dwMoveWait);				break;	/* 移動待ち時間 */
-	case 71:	pDst = (PBYTE)&m_dwMoveWaitBattle;			dwSize = sizeof (m_dwMoveWaitBattle);		break;	/* 戦闘時移動待ち時間 */
-	case 72:	pDst = (PBYTE)&m_dwExp;						dwSize = sizeof (m_dwExp);					break;	/* 経験値 */
-	case 73:	pDst = (PBYTE)&m_dwHP;						dwSize = sizeof (m_dwHP);					break;
-	case 74:	pDst = (PBYTE)&m_dwMaxHP;					dwSize = sizeof (m_dwMaxHP);				break;
-	case 75:	pDst = (PBYTE)&m_dwSP;						dwSize = sizeof (m_dwSP);					break;
-	case 76:	pDst = (PBYTE)&m_dwMaxSP;					dwSize = sizeof (m_dwMaxSP);				break;
+	case 35:	pDst = (PBYTE)&m_bBlock;					dwSize = sizeof (m_bBlock);					break;
+	case 36:	pDst = (PBYTE)&m_bPush;						dwSize = sizeof (m_bPush);					break;
+	case 37:	pDst = (PBYTE)&m_dwEquipItemIDCloth;		dwSize = sizeof (m_dwEquipItemIDCloth);		break;
+	case 38:	pDst = (PBYTE)&m_dwEquipItemIDAcce1;		dwSize = sizeof (m_dwEquipItemIDAcce1);		break;
+	case 39:	pDst = (PBYTE)&m_dwEquipItemIDAcce2;		dwSize = sizeof (m_dwEquipItemIDAcce2);		break;
+	case 40:	pDst = (PBYTE)&m_dwEquipItemIDArmsRight;	dwSize = sizeof (m_dwEquipItemIDArmsRight);	break;
+	case 41:	pDst = (PBYTE)&m_dwEquipItemIDArmsLeft;		dwSize = sizeof (m_dwEquipItemIDArmsLeft);	break;
+	case 42:	pDst = (PBYTE)&m_dwEquipItemIDHead;			dwSize = sizeof (m_dwEquipItemIDHead);		break;
+	case 43:	pDst = (PBYTE)&m_wGrpIDInitNPC;				dwSize = sizeof (m_wGrpIDInitNPC);			break;
+	case 44:	pDst = (PBYTE)&m_wGrpIDInitCloth;			dwSize = sizeof (m_wGrpIDInitCloth);		break;
+	case 45:	pDst = (PBYTE)&m_wGrpIDInitEye;				dwSize = sizeof (m_wGrpIDInitEye);			break;
+	case 46:	pDst = (PBYTE)&m_wGrpIDInitEyeColor;		dwSize = sizeof (m_wGrpIDInitEyeColor);		break;
+	case 47:	pDst = (PBYTE)&m_wGrpIDInitHairType;		dwSize = sizeof (m_wGrpIDInitHairType);		break;
+	case 48:	pDst = (PBYTE)&m_wGrpIDInitHairColor;		dwSize = sizeof (m_wGrpIDInitHairColor);	break;
+	case 49:	pDst = (PBYTE)&m_wGrpIDInitSP;				dwSize = sizeof (m_wGrpIDInitSP);			break;
+	case 50:	pDst = (PBYTE)&m_wLevel;					dwSize = sizeof (m_wLevel);					break;	/* レベル */
+	case 51:	pDst = (PBYTE)&m_wStamina;					dwSize = sizeof (m_wStamina);				break;	/* スタミナ */
+	case 52:	pDst = (PBYTE)&m_wPower;					dwSize = sizeof (m_wPower);					break;	/* 腕力 */
+	case 53:	pDst = (PBYTE)&m_wStrength;					dwSize = sizeof (m_wStrength);				break;	/* 体力 */
+	case 54:	pDst = (PBYTE)&m_wMagic;					dwSize = sizeof (m_wMagic);					break;	/* 魔力 */
+	case 55:	pDst = (PBYTE)&m_wSkillful;					dwSize = sizeof (m_wSkillful);				break;	/* 器用 */
+	case 56:	pDst = (PBYTE)&m_wAbillityAT;				dwSize = sizeof (m_wAbillityAT);			break;	/* 攻撃技能 */
+	case 57:	pDst = (PBYTE)&m_wAbillityDF;				dwSize = sizeof (m_wAbillityDF);			break;	/* 防御技能 */
+	case 58:	pDst = (PBYTE)&m_wPAtack;					dwSize = sizeof (m_wPAtack);				break;	/* 攻撃力 */
+	case 59:	pDst = (PBYTE)&m_wPDefense;					dwSize = sizeof (m_wPDefense);				break;	/* 防御力 */
+	case 60:	pDst = (PBYTE)&m_wPMagic;					dwSize = sizeof (m_wPMagic);				break;	/* 魔法力 */
+	case 61:	pDst = (PBYTE)&m_wPMagicDefense;			dwSize = sizeof (m_wPMagicDefense);			break;	/* 魔法防御力 */
+	case 62:	pDst = (PBYTE)&m_wPHitAverage;				dwSize = sizeof (m_wPHitAverage);			break;	/* 命中率 */
+	case 63:	pDst = (PBYTE)&m_wPAvoidAverage;			dwSize = sizeof (m_wPAvoidAverage);			break;	/* 回避率 */
+	case 64:	pDst = (PBYTE)&m_wPCriticalAverage;			dwSize = sizeof (m_wPCriticalAverage);		break;	/* クリティカル率 */
+	case 65:	pDst = (PBYTE)&m_wAttrFire;					dwSize = sizeof (m_wAttrFire);				break;	/* 属性[火] */
+	case 66:	pDst = (PBYTE)&m_wAttrWind;					dwSize = sizeof (m_wAttrWind);				break;	/* 属性[風] */
+	case 67:	pDst = (PBYTE)&m_wAttrWater;				dwSize = sizeof (m_wAttrWater);				break;	/* 属性[水] */
+	case 68:	pDst = (PBYTE)&m_wAttrEarth;				dwSize = sizeof (m_wAttrEarth);				break;	/* 属性[土] */
+	case 69:	pDst = (PBYTE)&m_wAttrLight;				dwSize = sizeof (m_wAttrLight);				break;	/* 属性[光] */
+	case 70:	pDst = (PBYTE)&m_wAttrDark;					dwSize = sizeof (m_wAttrDark);				break;	/* 属性[闇] */
+	case 71:	pDst = (PBYTE)&m_dwMoveWait;				dwSize = sizeof (m_dwMoveWait);				break;	/* 移動待ち時間 */
+	case 72:	pDst = (PBYTE)&m_dwMoveWaitBattle;			dwSize = sizeof (m_dwMoveWaitBattle);		break;	/* 戦闘時移動待ち時間 */
+	case 73:	pDst = (PBYTE)&m_dwExp;						dwSize = sizeof (m_dwExp);					break;	/* 経験値 */
+	case 74:	pDst = (PBYTE)&m_dwHP;						dwSize = sizeof (m_dwHP);					break;
+	case 75:	pDst = (PBYTE)&m_dwMaxHP;					dwSize = sizeof (m_dwMaxHP);				break;
+	case 76:	pDst = (PBYTE)&m_dwSP;						dwSize = sizeof (m_dwSP);					break;
+	case 77:	pDst = (PBYTE)&m_dwMaxSP;					dwSize = sizeof (m_dwMaxSP);				break;
 	/* NPC発生 */
-	case 77:	pDst = (PBYTE)&m_dwPutCycle;				dwSize = sizeof (m_dwPutCycle);				break;	/* 発生周期 */
-	case 78:	pDst = (PBYTE)&m_nPutMoveType;				dwSize = sizeof (m_nPutMoveType);			break;	/* 発生させる移動種別 */
-	case 79:	pDst = (PBYTE)&m_nMaxPutCount;				dwSize = sizeof (m_nMaxPutCount);			break;	/* 同時発生数 */
-	case 80:	pDst = (PBYTE)&m_nPutAverage;				dwSize = sizeof (m_nPutAverage);			break;	/* 発生確率 */
-	case 81:	pDst = (PBYTE)&m_ptPutArea;					dwSize = sizeof (m_ptPutArea);				break;	/* 発生範囲(半径) */
+	case 78:	pDst = (PBYTE)&m_dwPutCycle;				dwSize = sizeof (m_dwPutCycle);				break;	/* 発生周期 */
+	case 79:	pDst = (PBYTE)&m_nPutMoveType;				dwSize = sizeof (m_nPutMoveType);			break;	/* 発生させる移動種別 */
+	case 80:	pDst = (PBYTE)&m_nMaxPutCount;				dwSize = sizeof (m_nMaxPutCount);			break;	/* 同時発生数 */
+	case 81:	pDst = (PBYTE)&m_nPutAverage;				dwSize = sizeof (m_nPutAverage);			break;	/* 発生確率 */
+	case 82:	pDst = (PBYTE)&m_ptPutArea;					dwSize = sizeof (m_ptPutArea);				break;	/* 発生範囲(半径) */
 	}
 
 	if (pDst) {
@@ -823,6 +831,7 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof (m_clSpeak);
 	dwRet += (m_strCharName.GetLength () + 1);
 	dwRet += (m_strSpeak.	GetLength () + 1);
+	dwRet += (m_strTalk.	GetLength () + 1);
 	dwRet += (m_abyMark.	GetSize () + 1);
 	dwRet += ((m_adwItemID.	GetSize () + 1) * sizeof (DWORD));
 	/* NPC発生 */
@@ -937,6 +946,7 @@ PBYTE CInfoCharBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_clSpeak,					sizeof (m_clSpeak),					pDataTmp);	/* 発言の描画色 */
 	strcpyRenew ((LPSTR)pDataTmp, m_strCharName, pDataTmp);													/* キャラ名 */
 	strcpyRenew ((LPSTR)pDataTmp, m_strSpeak, pDataTmp);													/* 発言内容 */
+	strcpyRenew ((LPSTR)pDataTmp, m_strTalk,  pDataTmp);													/* 会話データ */
 
 	nCount = m_abyMark.GetSize ();
 	for (i = 0; i < nCount; i ++) {
@@ -1066,6 +1076,7 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_clSpeak,				pDataTmp, sizeof (m_clSpeak),					pDataTmp);	/* 発言の描画色 */
 	StoreRenew (m_strCharName,	(LPCSTR)pDataTmp, pDataTmp);												/* キャラ名 */
 	StoreRenew (m_strSpeak,		(LPCSTR)pDataTmp, pDataTmp);												/* 発言内容 */
+	StoreRenew (m_strTalk,		(LPCSTR)pDataTmp, pDataTmp);												/* 会話データ */
 
 	SetName (m_strCharName);
 	SetSpeak (m_strSpeak);
@@ -1939,6 +1950,7 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_dwMaxSP					= pSrc->m_dwMaxSP;
 	m_clName					= pSrc->m_clName;
 	m_clSpeak					= pSrc->m_clSpeak;
+	m_strTalk					= pSrc->m_strTalk;				/* 会話データ */
 
 	m_abyMark.RemoveAll ();
 	nCount = pSrc->m_abyMark.GetSize ();

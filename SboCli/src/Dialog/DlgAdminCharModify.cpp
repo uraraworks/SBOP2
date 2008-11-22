@@ -16,6 +16,7 @@
 #include "InfoCharCli.h"
 #include "MgrData.h"
 #include "DlgAdminCharModifyTypePUTNPC.h"
+#include "DlgAdminTalkSet.h"
 #include "DlgAdminCharModify.h"
 
 #ifdef _DEBUG
@@ -48,6 +49,7 @@ void CDlgAdminCharModify::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDlgAdminCharModify, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminCharModify)
 	ON_BN_CLICKED(IDC_SEND, OnSend)
+	ON_BN_CLICKED(IDC_TALK, OnTalk)
 	ON_BN_CLICKED(IDC_SET_MOVETYPE, OnSetMoveType)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -257,6 +259,30 @@ BOOL CDlgAdminCharModify::OnInitDialog()
 void CDlgAdminCharModify::OnSend()
 {
 	Send (FALSE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharModify::OnTalk									 */
+/* 内容		:ボタンハンドラ(会話データの編集)								 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CDlgAdminCharModify::OnTalk()
+{
+	int nResult;
+	CDlgAdminTalkSet Dlg;
+
+	if (m_pInfoChar == NULL) {
+		return;
+	}
+
+	Dlg.m_strTalk = m_pInfoChar->m_strTalk;
+	nResult = Dlg.DoModal ();
+	if (nResult != IDOK) {
+		return;
+	}
+	m_pInfoChar->m_strTalk = Dlg.m_strTalk;
 }
 
 

@@ -56,6 +56,8 @@
 #define IDD_ITEMTYPE_NEW_LIGHT          174
 #define IDD_MAP_OBJECTDATA              175
 #define IDD_MAP_OBJECTDATA_EDIT         176
+#define IDD_DIALOG1                     177
+#define IDD_TALK_SET                    177
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -198,6 +200,7 @@
 #define IDC_GRP                         1086
 #define IDC_BUTTON2                     1086
 #define IDC_DRAW_DOWN                   1086
+#define IDC_TALK                        1086
 #define IDC_FISHING                     1087
 #define IDC_LISTID                      1088
 #define IDC_PROCID                      1089
@@ -208,6 +211,7 @@
 #define IDC_DELAVERAGE                  1091
 #define IDC_STAMINA                     1091
 #define IDC_VALUE1                      1091
+#define IDC_EDIT                        1091
 #define IDC_PASSWORD                    1092
 #define IDC_RENEW_CLIENTVERSION         1092
 #define IDC_EDIT2                       1092
@@ -293,7 +297,6 @@
 #define IDC_CY                          1140
 #define IDC_HIDEY                       1141
 #define IDC_LIGHT                       1141
-#define IDC_CHECK1                      1142
 #define IDC_HIT                         1142
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
@@ -337,7 +340,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        166
+#define _APS_NEXT_RESOURCE_VALUE        178
 #define _APS_NEXT_COMMAND_VALUE         32807
 #define _APS_NEXT_CONTROL_VALUE         1143
 #define _APS_NEXT_SYMED_VALUE           101

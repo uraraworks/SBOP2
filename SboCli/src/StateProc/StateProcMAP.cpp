@@ -2901,6 +2901,10 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 		m_pSock->Send (&PacketREQ_PUSH);
 		break;
 	default:
+		if (pInfoChar->m_strTalk.GetLength () > 0) {
+			m_pMgrWindow->MakeWindowTEXTMSG ((LPCSTR)pInfoChar->m_strTalk);
+			break;
+		}
 		goto Exit;
 	}
 

@@ -61,6 +61,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSend();
 	afx_msg void OnSetMoveType();
+	afx_msg void OnTalk();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 } CDlgAdminCharModify, *PCDlgAdminCharModify;

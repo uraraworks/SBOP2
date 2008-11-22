@@ -2373,6 +2373,10 @@
 						/>
 					</FileConfiguration>
 				</File>
+				<File
+					RelativePath=".\src\Window\WindowTEXTMSG.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="MainFrame"
@@ -3161,6 +3165,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminSystemSetInitCharStatus.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkSet.cpp"
 					>
 				</File>
 				<File
@@ -4070,6 +4078,10 @@
 					RelativePath="src\Window\WindowSYSTEMMENU.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Window\WindowTEXTMSG.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="MainFrame No. 1"
@@ -4264,6 +4276,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminSystemSetInitCharStatus.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkSet.h"
 					>
 				</File>
 				<File

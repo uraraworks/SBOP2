@@ -241,7 +241,8 @@ public:
 	COLORREF	m_clName,					/* 名前の描画色 */
 				m_clSpeak;					/* 発言の描画色 */
 	CmyString	m_strCharName,				/* キャラ名 */
-				m_strSpeak;					/* 発言内容 */
+				m_strSpeak,					/* 発言内容 */
+				m_strTalk;					/* 会話データ */
 	ARRAYDWORD	m_adwItemID;				/* 所持アイテム */
 
 	/* 移動種別による個別情報 */

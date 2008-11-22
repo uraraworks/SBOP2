@@ -56,6 +56,7 @@ enum {
 	WINDOWTYPE_CHAR_STATUS,					/* キャラ-ステータス */
 	WINDOWTYPE_CHAR_STATUS2,				/* キャラ-ステータス2 */
 	WINDOWTYPE_CHAR_STATUS3,				/* キャラ-ステータス3 */
+	WINDOWTYPE_TEXTMSG,						/* テキストメッセージ */
 };
 
 
@@ -113,6 +114,7 @@ public:
 	void MakeWindowOPTION_ACTIONSET_SLEEPTIMER	(void);			/* オプション-動作設定-おひるねタイマーの設定 */
 	void MakeWindowCOMMANDMENU		(void);						/* コマンドメニュー */
 	void MakeWindowCHAR_STATUS		(void);						/* キャラ-ステータス */
+	void MakeWindowTEXTMSG			(LPCSTR pszMsg);			/* テキストメッセージ */
 
 
 private:

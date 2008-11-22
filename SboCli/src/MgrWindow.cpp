@@ -43,6 +43,7 @@
 #include "WindowCHAR_STATUS.h"
 #include "WindowCHAR_STATUS2.h"
 #include "WindowCHAR_STATUS3.h"
+#include "WindowTEXTMSG.h"
 #include "MgrWindow.h"
 
 
@@ -907,6 +908,26 @@ void CMgrWindow::MakeWindowCHAR_STATUS(void)
 	pWindowNew->Create (m_pMgrData);
 	pWindowNew->AddChild (pWindowNew2);
 	pWindowNew->AddChild (pWindowNew3);
+	m_paWindow->Add (pWindowNew);
+	SetActive ();
+
+	m_bDraw = TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrWindow::MakeWindowTEXTMSG									 */
+/* 内容		:テキストメッセージ												 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszMsg)
+{
+	PCWindowTEXTMSG pWindowNew;
+
+	pWindowNew = new CWindowTEXTMSG;
+	pWindowNew->Create (m_pMgrData);
+	pWindowNew->SetMsg (pszMsg);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
 
