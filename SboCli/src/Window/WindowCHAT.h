@@ -32,7 +32,8 @@ public:
 
 private:
 	void	MakeWindow	(void);										/* ウィンドウ作成 */
-	static LRESULT CALLBACK ChatWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* チャット入力欄プロシージャ */
+	static LRESULT CALLBACK ChatWndProcEntry(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* チャット入力欄プロシージャ */
+	LRESULT ChatWndProc	(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* チャット入力欄プロシージャ */
 
 
 public:

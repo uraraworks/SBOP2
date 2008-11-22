@@ -176,7 +176,7 @@ void CWindowCHAT::MakeWindow(void)
 	m_OrgWndProcChat = (WNDPROC)GetWindowLong (m_hWndChat, GWL_WNDPROC);
 	SendMessage			(m_hWndChat, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
 	SetWindowLong		(m_hWndChat, GWL_USERDATA, (LONG)this);
-	SetWindowLong		(m_hWndChat, GWL_WNDPROC, (LONG)ChatWndProc);
+	SetWindowLong		(m_hWndChat, GWL_WNDPROC, (LONG)ChatWndProcEntry);
 
 	/* IMEをオンにする */
 	hImc = ImmGetContext (m_hWndChat);
@@ -188,89 +188,112 @@ void CWindowCHAT::MakeWindow(void)
 
 
 /* ========================================================================= */
+/* 関数名	:CWindowCHAT::ChatWndProcEntry									 */
+/* 内容		:チャット入力欄プロシージャ										 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+LRESULT CALLBACK CWindowCHAT::ChatWndProcEntry(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT hResult;
+	PCWindowCHAT pThis;
+
+	pThis	= (PCWindowCHAT)GetWindowLong (hWnd, GWL_USERDATA);
+	hResult	= -1;
+
+	if (pThis) {
+		hResult = pThis->ChatWndProc (hWnd, message, wParam, lParam);
+	}
+	return hResult;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CWindowCHAT::ChatWndProc										 */
 /* 内容		:チャット入力欄プロシージャ										 */
 /* 日付		:2007/02/03														 */
 /* ========================================================================= */
 
-LRESULT CALLBACK CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	int nCount;
-	char szTmp[256], szTmp2[256];
-	PCWindowCHAT pThis;
-	LRESULT hResult;
-
-	pThis	= (PCWindowCHAT)GetWindowLong (hWnd, GWL_USERDATA);
-	hResult	= -1;
+	LRESULT hResult = -1;
 
 	switch (message) {
 	case WM_CHAR:
-		if (wParam == VK_RETURN) {
+		switch (wParam) {
+		case VK_RETURN:
+		case VK_ESCAPE:
 			hResult = 0;
-
-		} else if (wParam == VK_ESCAPE) {
-			hResult = 0;
+			break;
 		}
 		break;
 
 	case WM_KEYDOWN:
-		nCount = pThis->m_aArrayType.GetSize ();
+		{
+			int nCount;
+			nCount = m_aArrayType.GetSize ();
 
-		switch (wParam) {
-		case VK_RETURN:
-			pThis->m_bPushEnter = TRUE;
-			hResult = 0;
-			break;
-		case VK_ESCAPE:
-			pThis->m_bPushEsc = TRUE;
-			hResult = 0;
-			break;
-		case VK_UP:
-			pThis->m_nType --;
-			if (pThis->m_nType < 0) {
-				pThis->m_nType = nCount - 1;
-			}
-			pThis->m_dwTimeDrawStart = 0;
-			hResult = 0;
-			break;
+			switch (wParam) {
+			case VK_RETURN:
+				m_bPushEnter = TRUE;
+				hResult = 0;
+				break;
+			case VK_ESCAPE:
+				m_bPushEsc = TRUE;
+				hResult = 0;
+				break;
+			case VK_UP:
+				m_nType --;
+				if (m_nType < 0) {
+					m_nType = nCount - 1;
+				}
+				m_dwTimeDrawStart = 0;
+				hResult = 0;
+				break;
 
-		case VK_DOWN:
-			pThis->m_nType ++;
-			if (pThis->m_nType >= nCount) {
-				pThis->m_nType = 0;
+			case VK_DOWN:
+				m_nType ++;
+				if (m_nType >= nCount) {
+					m_nType = 0;
+				}
+				m_dwTimeDrawStart = 0;
+				hResult = 0;
+				break;
 			}
-			pThis->m_dwTimeDrawStart = 0;
-			hResult = 0;
-			break;
 		}
 		break;
 
 	case WM_KEYUP:
 		switch (wParam) {
 		case VK_RETURN:
-			if (pThis->m_bPushEnter == FALSE) {
-				break;
+			{
+				char szTmp[256], szTmp2[256];
+
+				if (m_bPushEnter == FALSE) {
+					break;
+				}
+				GetWindowText (hWnd, szTmp, sizeof (szTmp) - 1);
+				if (strlen (szTmp) > 0) {
+					ZeroMemory (szTmp2, sizeof (szTmp2));
+					_tcsnccat (szTmp2, szTmp, 100);
+					TrimViewString (m_strChat, szTmp2);
+					m_pMgrData->SetChatModeBack (m_nType);
+					PostMessage (m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
+
+				} else {
+					m_bDelete = TRUE;
+				}
+				m_bPushEnter = FALSE;
+				hResult = 0;
 			}
-			GetWindowText (hWnd, szTmp, sizeof (szTmp) - 1);
-			if (strlen (szTmp) > 0) {
-				ZeroMemory (szTmp2, sizeof (szTmp2));
-				_tcsnccat (szTmp2, szTmp, 100);
-				TrimViewString (pThis->m_strChat, szTmp2);
-				pThis->m_pMgrData->SetChatModeBack (pThis->m_nType);
-				PostMessage (pThis->m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
-			} else {
-				pThis->m_bDelete = TRUE;
-			}
-			pThis->m_bPushEnter = FALSE;
-			hResult = 0;
 			break;
 		case VK_ESCAPE:
-			if (pThis->m_bPushEsc == FALSE) {
+			if (m_bPushEsc == FALSE) {
 				break;
 			}
-			pThis->m_bPushEsc = FALSE;
-			pThis->m_bDelete  = TRUE;
-			pThis->m_pMgrData->SetChatModeBack (pThis->m_nType);
+			m_bPushEsc = FALSE;
+			m_bDelete  = TRUE;
+			m_pMgrData->SetChatModeBack (m_nType);
 			hResult = 0;
 			break;
 		}
@@ -278,7 +301,7 @@ LRESULT CALLBACK CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam
 	}
 
 	if (hResult != 0) {
-		hResult = CallWindowProc (pThis->m_OrgWndProcChat, hWnd, message, wParam, lParam);
+		hResult = CallWindowProc (m_OrgWndProcChat, hWnd, message, wParam, lParam);
 	}
 	return hResult;
 }
