@@ -136,16 +136,56 @@ void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color)
 /* ì˙ït		:2006/09/24														 */
 /* ========================================================================= */
 
-void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color)
+void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame)
 {
 	int nLen;
 
 	nLen = strlen (pStr);
-	SetTextColor (hDC, RGB(10, 10, 10));
+	SetTextColor (hDC, colorFrame);
 	TextOut (hDC, x - 1, y, pStr, nLen);
 	TextOut (hDC, x + 1, y, pStr, nLen);
 	TextOut (hDC, x, y - 1, pStr, nLen);
 	TextOut (hDC, x, y + 1, pStr, nLen);
+	SetTextColor (hDC, color);
+	TextOut (hDC, x, y, pStr, nLen);
+}
+
+
+/* ========================================================================= */
+/* ä÷êîñº	:TextOut3														 */
+/* ì‡óe		:âèéÊÇËï∂éöï`âÊ													 */
+/* ì˙ït		:2008/11/22														 */
+/* ========================================================================= */
+
+void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame)
+{
+	int nLen;
+
+	nLen = strlen (pStr);
+	SetTextColor (hDC, colorFrame);
+	TextOut (hDC, x - 2, y, pStr, nLen);
+	TextOut (hDC, x - 1, y, pStr, nLen);
+	TextOut (hDC, x - 1, y - 2, pStr, nLen);
+	TextOut (hDC, x - 2, y - 1, pStr, nLen);
+	TextOut (hDC, x - 1, y - 1, pStr, nLen);
+	TextOut (hDC, x - 2, y + 1, pStr, nLen);
+	TextOut (hDC, x - 1, y + 1, pStr, nLen);
+	TextOut (hDC, x - 1, y + 2, pStr, nLen);
+
+	TextOut (hDC, x + 2, y, pStr, nLen);
+	TextOut (hDC, x + 1, y, pStr, nLen);
+	TextOut (hDC, x + 1, y - 2, pStr, nLen);
+	TextOut (hDC, x + 2, y - 1, pStr, nLen);
+	TextOut (hDC, x + 1, y - 1, pStr, nLen);
+	TextOut (hDC, x + 2, y + 1, pStr, nLen);
+	TextOut (hDC, x + 1, y + 1, pStr, nLen);
+	TextOut (hDC, x + 1, y + 2, pStr, nLen);
+
+	TextOut (hDC, x, y - 2, pStr, nLen);
+	TextOut (hDC, x, y - 1, pStr, nLen);
+	TextOut (hDC, x, y + 2, pStr, nLen);
+	TextOut (hDC, x, y + 1, pStr, nLen);
+
 	SetTextColor (hDC, color);
 	TextOut (hDC, x, y, pStr, nLen);
 }

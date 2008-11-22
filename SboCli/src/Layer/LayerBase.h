@@ -36,7 +36,8 @@ public:
 
 protected:
 	void	TextOut1	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color);		/* •¶š•`‰æ */
-	void	TextOut2	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color);		/* ‰æ‚è•¶š•`‰æ */
+	void	TextOut2	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* ‰æ‚è•¶š•`‰æ */
+	void	TextOut3	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* ‰æ‚è•¶š•`‰æ */
 
 
 protected:

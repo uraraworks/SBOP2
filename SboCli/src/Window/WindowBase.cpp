@@ -58,6 +58,10 @@ CWindowBase::CWindowBase()
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ÇlÇr ÇoÉSÉVÉbÉN");
+	m_hFont16Normal = CreateFont (16, 0, 0, 0, FW_NORMAL,
+			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ÇlÇr ÉSÉVÉbÉN");
 
 	m_pDib->SetColorKey (RGB (255, 0, 255));
 }
@@ -94,6 +98,10 @@ CWindowBase::~CWindowBase()
 	if (m_hFont14) {
 		DeleteObject (m_hFont14);
 		m_hFont14 = NULL;
+	}
+	if (m_hFont16Normal) {
+		DeleteObject (m_hFont16Normal);
+		m_hFont16Normal = NULL;
 	}
 	SAFE_DELETE (m_pDib);
 }
@@ -458,14 +466,14 @@ BOOL CWindowBase::OnSpace(BOOL bDown)
 /* ì˙ït		:2005/05/06														 */
 /* ========================================================================= */
 
-void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw)
+void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
 {
 	int nLen;
 
 	nLen = strlen (pStr);
 	/* âèéÊÇËÇ∑ÇÈÅH */
 	if (bDraw) {
-		SetTextColor (hDC, RGB(10, 10, 10));
+		SetTextColor (hDC, ColorFrame);
 		TextOut (hDC, x - 1, y, pStr, nLen);
 		TextOut (hDC, x + 1, y, pStr, nLen);
 		TextOut (hDC, x, y - 1, pStr, nLen);

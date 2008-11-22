@@ -809,7 +809,7 @@ void CLayerMap::RenewMapName(LPCSTR pszMapName)
 	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont32);
 	SetBkMode (hDCTmp, TRANSPARENT);
 
-	TextOut2 (hDCTmp, 1, 2, pszMapName, RGB (255, 255, 255));
+	TextOut3 (hDCTmp, 1, 2, pszMapName, RGB (255, 255, 255));//, RGB (124, 232, 123));
 
 	SelectObject (hDCTmp, hFontOld);
 	m_pDibMapName->Unlock ();

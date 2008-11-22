@@ -56,9 +56,9 @@ protected:
 	virtual BOOL OnI		(BOOL bDown);								/* キーハンドラ(I) */
 	virtual BOOL OnEscape	(BOOL bDown);								/* キーハンドラ(Escape) */
 	virtual BOOL OnSpace	(BOOL bDown);								/* キーハンドラ(Space) */
-	void TextOut2			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw = FALSE);	/* 黒縁取りで文字描画 */
+	void TextOut2			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	/* 黒縁取りで文字描画 */
 	void TextOut3			(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, COLORREF Color);		/* 黒縁取りで文字描画(右詰) */
-	void TextOut4			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color);						/* 黒縁取りで文字描画 */
+	void TextOut4			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color);	/* 黒縁取りで文字描画 */
 	void DrawFrame			(int nType = 0);							/* フレームを描画 */
 	void DrawFrame			(int x, int y, int cx, int cy, int nType);	/* フレームを描画 */
 	void DrawFrame2			(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	/* フレームを描画 */
@@ -87,7 +87,8 @@ public:
 	DWORD			m_dwTimeDrawStart;				/* 描画した時間 */
 	HFONT			m_hFont,						/* 描画に使うフォント */
 					m_hFont12,						/* 描画に使うフォント(12ドット) */
-					m_hFont14;						/* 描画に使うフォント(14ドット) */
+					m_hFont14,						/* 描画に使うフォント(14ドット) */
+					m_hFont16Normal;				/* 描画に使うフォント(16ドット) */
 
 	CWindowBase		*m_pParent;						/* 親ウィンドウ */
 	CImg32			*m_pDib,						/* ビットマップ */
