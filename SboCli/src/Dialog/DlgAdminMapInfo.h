@@ -55,6 +55,7 @@ protected:
 	afx_msg void OnAdd();
 	afx_msg void OnDel();
 	afx_msg void OnChangemapname();
+	afx_msg void OnCopy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 } CDlgAdminMapInfo, *PCDlgAdminMapInfo;

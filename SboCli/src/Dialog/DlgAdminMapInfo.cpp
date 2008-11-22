@@ -13,6 +13,8 @@
 #include "MgrSound.h"
 #include "PacketADMIN_MAP_RENEWMAPSIZE.h"
 #include "PacketADMIN_MAP_SETMAPNAME.h"
+#include "PacketADMIN_PARA2.h"
+#include "Command.h"
 #include "MgrData.h"
 #include "DlgAdminMapInfo.h"
 
@@ -45,6 +47,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapInfo, CDlgAdminBase)
 	ON_BN_CLICKED(IDC_ADD, OnAdd)
 	ON_BN_CLICKED(IDC_DEL, OnDel)
 	ON_BN_CLICKED(IDC_CHANGEMAPNAME, OnChangemapname)
+	ON_BN_CLICKED(IDC_COPY, OnCopy)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -286,6 +289,27 @@ void CDlgAdminMapInfo::OnChangemapname()
 	m_pInfoMap->m_byLevel = (BYTE)m_nDarkLevel;								/* 暗度 */
 
 	Packet.Make (m_pInfoMap->m_dwMapID, m_pInfoMap->m_dwBGMID, m_pInfoMap->m_dwWeatherType, m_pInfoMap->m_byLevel, (LPCSTR)m_strMapName);
+	m_pSock->Send (&Packet);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapInfo::OnCopy										 */
+/* 内容		:ボタンハンドラ(コピー)											 */
+/* 日付		:2008/11/22														 */
+/* ========================================================================= */
+
+void CDlgAdminMapInfo::OnCopy()
+{
+	int nResult;
+	CPacketADMIN_PARA2 Packet;
+
+	nResult = MessageBox ("新しいマップとしてコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+	if (nResult != IDYES) {
+		return;
+	}
+
+	Packet.Make (SBOCOMMANDID_SUB_ADMIN_MAP_ADD, m_pInfoMap->m_dwMapID, 0);
 	m_pSock->Send (&Packet);
 }
 

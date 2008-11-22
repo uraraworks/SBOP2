@@ -623,17 +623,33 @@ void CMainFrame::RecvProcADMIN_MAP_DELETEEVENT(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcADMIN_MAP_ADD(PBYTE pData, DWORD dwSessionID)
 {
-	PCInfoMapBase pInfoMap;
+	DWORD dwMapID;
+	PCInfoMapBase pInfoMap, pInfoMapTmp;
 	CPacketADMIN_PARA2 Packet;
 	CPacketMAP_SYSTEMMSG PacketMAP_SYSTEMMSG;
 	CmyString strTmp;
 
 	Packet.Set (pData);
 
+	pInfoMapTmp = NULL;
+	/* 既存マップからのコピー？ */
+	if (Packet.m_dwPara1 != 0) {
+		pInfoMapTmp = (PCInfoMapBase)m_pLibInfoMap->GetPtr (Packet.m_dwPara1);
+		if (pInfoMapTmp == NULL) {
+			return;
+		}
+	}
+
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetNew ();
 	pInfoMap->Init (DRAW_PARTS_X, DRAW_PARTS_Y, 1);
 	m_pLibInfoMap->Add (pInfoMap);
 	m_pLibInfoMap->SetMapObject (m_pLibInfoMapObject);
+
+	if (pInfoMapTmp) {
+		dwMapID = pInfoMap->m_dwMapID;
+		pInfoMap->Copy (pInfoMapTmp);
+		pInfoMap->m_dwMapID = dwMapID;
+	}
 
 	strTmp.Format ("SYSTEM:マップID[%d]が追加されました", pInfoMap->m_dwMapID);
 	PacketMAP_SYSTEMMSG.Make (strTmp);
