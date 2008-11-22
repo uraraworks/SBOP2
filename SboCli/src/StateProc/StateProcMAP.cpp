@@ -1557,12 +1557,12 @@ BOOL CStateProcMAP::OnV(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
-	if (m_pMgrData->GetOptionViewItem ()) {
-		m_pMgrData->SetOptionViewItem (FALSE);
-		AddSystemMsg (FALSE, "アイテムを非表示にしました　解除は[ V ]キー", RGB (255, 255, 255));
+	if (m_pMgrData->GetOptionViewItemName ()) {
+		m_pMgrData->SetOptionViewItemName (FALSE);
+		AddSystemMsg (FALSE, "アイテム名を非表示にしました　解除は[ V ]キー", RGB (255, 255, 255));
 	} else {
-		m_pMgrData->SetOptionViewItem (TRUE);
-		AddSystemMsg (FALSE, "アイテムを表示します", RGB (255, 255, 255));
+		m_pMgrData->SetOptionViewItemName (TRUE);
+		AddSystemMsg (FALSE, "アイテム名を表示します", RGB (255, 255, 255));
 	}
 	m_pMgrData->SaveIniData ();
 
