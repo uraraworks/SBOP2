@@ -65,7 +65,7 @@ CLayerMap::CLayerMap()
 	m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
 			TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚o–¾’©");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
 }
 
 
@@ -1853,10 +1853,11 @@ void CLayerMap::DrawMapName(PCImg32 pDst)
 
 	x = pDst->Width () / 2;
 	x -= (cx / 2);
-	y = pDst->Height () / 2;
+	y = pDst->Height () / 2 - 72;
 	y -= (cy / 2);
 
-	pDst->BltAlpha (x, y, cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
+	pDst->BltAlphaFrom256 (x, y, 50, 58, m_pDibSystem, 544, 320, 100 - m_nLevelMapName, TRUE);
+	pDst->BltAlpha (x + 32, y + 16, cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
 }
 
 /* Copyright(C)URARA-works 2006 */
