@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MgrData.h"
+#include "LayoutHelper.h"
 #include "DlgAdminTalkSet.h"
 
 #ifdef _DEBUG
@@ -58,6 +59,26 @@ CDlgAdminTalkSet::CDlgAdminTalkSet(CWnd* pParent /*=NULL*/)
 
 CDlgAdminTalkSet::~CDlgAdminTalkSet()
 {
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkSet::OnInitDialog									 */
+/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
+/* 日付		:2008/11/23														 */
+/* ========================================================================= */
+
+BOOL CDlgAdminTalkSet::OnInitDialog()
+{
+	CDlgAdminBase::OnInitDialog();
+
+	GetDlgItem (IDCANCEL)->SetFocus ();
+
+	RegisterControl (IDC_TALK,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl (IDOK,		LH_CTRL_X | LH_CTRL_Y);
+	RegisterControl (IDCANCEL,	LH_CTRL_X | LH_CTRL_Y);
+
+	return FALSE;
 }
 
 

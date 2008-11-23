@@ -36,6 +36,7 @@ public:
 
 protected:
 	//{{AFX_MSG(CDlgAdminTalkSet)
+	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 } CDlgAdminTalkSet, *PCDlgAdminTalkSet;

@@ -300,7 +300,7 @@ void CDlgAdminCharModify::OnSend()
 void CDlgAdminCharModify::OnTalk()
 {
 	int nResult;
-	CDlgAdminTalkSet Dlg;
+	CDlgAdminTalkSet Dlg(this);
 
 	if (m_pInfoChar == NULL) {
 		return;

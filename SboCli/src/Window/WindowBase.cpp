@@ -615,7 +615,7 @@ void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType)
 void CWindowBase::DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pDst/*NULL*/, int nBottom/*0*/)
 {
 	int i, xx, yy, aTypeX[] = {0, 24, 0}, aTypeY[] = {144, 144, 168};
-	COLORREF clTmp, clType[] = {RGB (255, 235, 200), RGB (255, 255, 255), RGB (255, 235, 200)};
+	COLORREF clTmp, clType[] = {RGB (255, 255, 255), RGB (255, 255, 255), RGB (255, 235, 200)};
 
 	xx		= aTypeX[nType];
 	yy		= aTypeY[nType];
