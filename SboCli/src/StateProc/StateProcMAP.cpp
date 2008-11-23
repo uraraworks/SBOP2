@@ -1923,6 +1923,7 @@ void CStateProcMAP::OnMgrDrawSTART_FADEIN(DWORD dwPara)
 
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 	if (pLayerMap) {
+		pLayerMap->RenewMapName (NULL);
 		pLayerMap->SetCenterPos (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY);
 		rcTmp.left	 = pLayerMap->m_nViewX - 2;
 		rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * 2) + 2;
