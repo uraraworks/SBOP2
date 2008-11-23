@@ -515,22 +515,13 @@ void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, C
 /* “ú•t		:2007/04/03														 */
 /* ========================================================================= */
 
-void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color)
+void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFrame, COLORREF Color)
 {
 	int nLen;
 
 	nLen = strlen (pStr);
-	SetTextColor (hDC, Color);
-#if 0
-	TextOut (hDC, x - 1, y, pStr, nLen);
-	TextOut (hDC, x - 1, y - 1, pStr, nLen);
-	TextOut (hDC, x + 1, y, pStr, nLen);
-	TextOut (hDC, x + 1, y + 1, pStr, nLen);
-	TextOut (hDC, x, y - 1, pStr, nLen);
-	TextOut (hDC, x + 1, y - 1, pStr, nLen);
-	TextOut (hDC, x, y + 1, pStr, nLen);
-	TextOut (hDC, x - 1, y + 1, pStr, nLen);
-#else
+	SetTextColor (hDC, ColorFrame);
+
 	TextOut (hDC, x - 2, y, pStr, nLen);
 	TextOut (hDC, x - 1, y, pStr, nLen);
 	TextOut (hDC, x - 1, y - 2, pStr, nLen);
@@ -553,8 +544,8 @@ void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color)
 	TextOut (hDC, x, y - 1, pStr, nLen);
 	TextOut (hDC, x, y + 2, pStr, nLen);
 	TextOut (hDC, x, y + 1, pStr, nLen);
-#endif
-	SetTextColor (hDC, RGB (255, 255, 255));
+
+	SetTextColor (hDC, Color);
 	TextOut (hDC, x, y, pStr, nLen);
 }
 

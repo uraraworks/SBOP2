@@ -103,11 +103,11 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 	DrawFrame ();
 
 	hDC			= m_pDib->Lock ();
-	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
+	hFontOld	= (HFONT)SelectObject (hDC, m_hFont16Normal);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 16, 16, "アカウント:",	RGB (1, 1, 1));
-	TextOut2 (hDC, 16, 42, "パスワード:",	RGB (1, 1, 1));
+	TextOut4 (hDC, 16, 16, "アカウント:",	RGB (150, 80, 30));
+	TextOut4 (hDC, 16, 42, "パスワード:",	RGB (150, 80, 30));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

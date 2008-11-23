@@ -110,7 +110,7 @@ void CWindowLOGINMENU::Draw(PCImg32 pDst)
 	int nLevel;
 	HDC hDC;
 	HFONT hFontOld;
-	COLORREF clText;
+	COLORREF clText, clBack;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
@@ -120,17 +120,18 @@ void CWindowLOGINMENU::Draw(PCImg32 pDst)
 
 	clText		= RGB (1, 1, 1);
 	hDC			= m_pDib->Lock ();
-	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
+	hFontOld	= (HFONT)SelectObject (hDC, m_hFont16Normal);
 	SetBkMode (hDC, TRANSPARENT);
 
-	clText = (m_abEnable[0] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 0, "キャラ選択", clText);
-	clText = (m_abEnable[1] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "新規作成", clText);
-	clText = (m_abEnable[2] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 2, "キャラ削除", clText);
-	clText = (m_abEnable[3] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 3, "戻る", clText);
+	clBack = RGB (150, 80, 30);
+	clText = (m_abEnable[0] == TRUE) ? RGB (255, 255, 255) : RGB (128, 128, 128);
+	TextOut4 (hDC, 32, 16 + 16 * 0, "キャラ選択", clBack, clText);
+	clText = (m_abEnable[1] == TRUE) ? RGB (255, 255, 255) : RGB (128, 128, 128);
+	TextOut4 (hDC, 32, 16 + 16 * 1, "新規作成", clBack, clText);
+	clText = (m_abEnable[2] == TRUE) ? RGB (255, 255, 255) : RGB (128, 128, 128);
+	TextOut4 (hDC, 32, 16 + 16 * 2, "キャラ削除", clBack, clText);
+	clText = (m_abEnable[3] == TRUE) ? RGB (255, 255, 255) : RGB (128, 128, 128);
+	TextOut4 (hDC, 32, 16 + 16 * 3, "戻る", clBack, clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
