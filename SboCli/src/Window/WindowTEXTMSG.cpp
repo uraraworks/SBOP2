@@ -61,6 +61,7 @@ void CWindowTEXTMSG::Create(CMgrData *pMgrData)
 
 	m_bActive = TRUE;
 	m_pDib->Create (m_sizeWindow.cx, m_sizeWindow.cy);
+	m_pDib->SetColorKey (0);
 
 	m_pDibText = new CImg32;
 	m_pDibText->Create (m_sizeWindow.cx - 16 * 2, m_sizeWindow.cy - 16 * 2);
