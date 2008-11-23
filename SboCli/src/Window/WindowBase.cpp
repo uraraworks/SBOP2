@@ -58,6 +58,10 @@ CWindowBase::CWindowBase()
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ÇlÇr ÇoÉSÉVÉbÉN");
+	m_hFont16 = CreateFont (16, 0, 0, 0, FW_ULTRABOLD,
+			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ÇlÇr ÉSÉVÉbÉN");
 	m_hFont16Normal = CreateFont (16, 0, 0, 0, FW_NORMAL,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
@@ -98,6 +102,10 @@ CWindowBase::~CWindowBase()
 	if (m_hFont14) {
 		DeleteObject (m_hFont14);
 		m_hFont14 = NULL;
+	}
+	if (m_hFont16) {
+		DeleteObject (m_hFont16);
+		m_hFont16 = NULL;
 	}
 	if (m_hFont16Normal) {
 		DeleteObject (m_hFont16Normal);
