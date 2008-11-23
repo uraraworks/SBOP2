@@ -727,7 +727,8 @@ void CMgrDraw::DrawItem(
 	CImg32 *pDst,		/* [in] 描画先 */
 	int x,				/* [in] 描画位置(X) */
 	int y,				/* [in] 描画位置(Y) */
-	DWORD dwItemID)		/* [in] アイテムID */
+	DWORD dwItemID,		/* [in] アイテムID */
+	BYTE byLevel)/*0*/	/* [in] 透明度 */
 {
 	PCInfoItem pInfoItem;
 
@@ -736,7 +737,7 @@ void CMgrDraw::DrawItem(
 		return;
 	}
 
-	DrawItem (pDst, x, y, pInfoItem);
+	DrawItem (pDst, x, y, pInfoItem, byLevel);
 }
 
 
@@ -751,6 +752,7 @@ void CMgrDraw::DrawItem(
 	int x,						/* [in] 描画位置(X) */
 	int y,						/* [in] 描画位置(Y) */
 	CInfoItem *pInfoItem,		/* [in] アイテム情報 */
+	BYTE byLevel,/*0*/			/* [in] 透明度 */
 	BOOL bLock)/*TRUE*/			/* [in] テンポラリをロックする */
 {
 	PCImg32 pImg, pDibTmp;
@@ -773,7 +775,11 @@ void CMgrDraw::DrawItem(
 		pDibTmp->Unlock ();
 	}
 
-	pDst->Blt (x, y, 32, 32, pDibTmp, 0, 32, TRUE);
+	if (byLevel == 0) {
+		pDst->Blt (x, y, 32, 32, pDibTmp, 0, 32, TRUE);
+	} else {
+		pDst->BltAlpha (x, y, 32, 32, pDibTmp, 0, 32, byLevel, TRUE);
+	}
 
 Exit:
 	ReleaseDibTmp ();

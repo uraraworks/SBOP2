@@ -1579,6 +1579,7 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 					x,
 					y,
 					pInfoItem,
+					0,
 					FALSE);
 		} else {
 			hDC = pDst->Lock ();

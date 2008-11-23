@@ -129,7 +129,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	if (pIntoItemDrag) {
 		x = (m_nPos - EQUIPTYPE_MAX) % 5;
 		y = (m_nPos - EQUIPTYPE_MAX) / 5;
-		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 33), 95 + (y * 33), pIntoItemDrag);
+		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 33), 95 + (y * 33), pIntoItemDrag, 50);
 	}
 
 	GetDrawPos (m_nPos, x, y);
