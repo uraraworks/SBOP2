@@ -20,7 +20,7 @@ typedef class CDlgAdminCharModify : public CDlgAdminBase
 {
 public:
 			CDlgAdminCharModify(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminCharModify();						/* デストラクタ */
+	virtual ~CDlgAdminCharModify();							/* デストラクタ */
 
 	void	Init		(CMgrData *pMgrData);						/* 初期化 */
 	void	Renew		(void);										/* 更新 */
@@ -28,7 +28,8 @@ public:
 
 
 protected:
-	void	Send		(BOOL bChgScreenPos);						/* 送信処理 */
+	void		Send		(BOOL bChgScreenPos);					/* 送信処理 */
+	COLORREF	GetColor	(int nNo);								/* 番号から色を取得 */
 
 
 protected:
@@ -42,6 +43,7 @@ public:
 	CComboBox	m_ctlMoveType;
 	CComboBox	m_ctlMotionType;
 	CComboBox	m_ctlSex;
+	CComboBox	m_ctlColor;
 	CString	m_strCharName;
 	CString	m_strCharID;
 	BOOL	m_bBlock;

@@ -25,6 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#define COLORCOUNT	(14)		/* 色種類 */
+
 /* ========================================================================= */
 /* クラスの設定																 */
 /* ========================================================================= */
@@ -36,6 +38,7 @@ void CDlgAdminCharModify::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_MOVETYPE, m_ctlMoveType);
 	DDX_Control(pDX, IDC_MOTIONTYPE, m_ctlMotionType);
 	DDX_Control(pDX, IDC_SEX, m_ctlSex);
+	DDX_Control(pDX, IDC_COLOR, m_ctlColor);
 	DDX_Text(pDX, IDC_CHARNAME, m_strCharName);
 	DDX_Text(pDX, IDC_STATIC_CHARID, m_strCharID);
 	DDX_Check(pDX, IDC_BLOCK, m_bBlock);
@@ -128,6 +131,7 @@ void CDlgAdminCharModify::Renew(void)
 	m_ctlMoveType.SetCurSel (0);
 	m_ctlMotionType.SetCurSel (0);
 	m_ctlSex.SetCurSel (0);
+	m_ctlColor.SetCurSel (0);
 
 	if (m_pInfoChar == NULL) {
 		goto Exit;
@@ -179,6 +183,31 @@ void CDlgAdminCharModify::Renew(void)
 		nNo = 1;
 	}
 	m_ctlSex.SetCurSel (nNo);
+
+	m_ctlColor.ResetContent ();
+	m_ctlColor.AddString ("赤");
+	m_ctlColor.AddString ("黄");
+	m_ctlColor.AddString ("緑");
+	m_ctlColor.AddString ("青緑");
+	m_ctlColor.AddString ("青");
+	m_ctlColor.AddString ("紫");
+	m_ctlColor.AddString ("白");
+	m_ctlColor.AddString ("(濃)赤");
+	m_ctlColor.AddString ("(濃)橙");
+	m_ctlColor.AddString ("(濃)青");
+	m_ctlColor.AddString ("(濃)紫");
+	m_ctlColor.AddString ("(濃)黄緑");
+	m_ctlColor.AddString ("(濃)緑");
+	m_ctlColor.AddString ("(濃)水");
+	for (i = 0; i < COLORCOUNT; i ++) {
+		if (m_pInfoChar->m_clName == GetColor (i)) {
+			break;
+		}
+	}
+	if (i >= COLORCOUNT) {
+		i = 6;
+	}
+	m_ctlColor.SetCurSel (i);
 
 Exit:
 	UpdateData (FALSE);
@@ -346,9 +375,46 @@ void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 	InfoCharTmp.m_nMapY				= m_nPosY;
 	InfoCharTmp.m_dwMotionTypeID	= m_ctlMotionType.GetItemData (m_ctlMotionType.GetCurSel ());
 	InfoCharTmp.m_nSex				= m_ctlSex.GetItemData (m_ctlSex.GetCurSel ());
+	InfoCharTmp.m_clName			= GetColor (m_ctlColor.GetCurSel ());
+	InfoCharTmp.m_clSpeak			= InfoCharTmp.m_clName;
 
 	Packet.Make (&InfoCharTmp, bChgScreenPos);
 	m_pSock->Send (&Packet);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharModify::GetColor									 */
+/* 内容		:番号から色を取得												 */
+/* 日付		:2008/11/23														 */
+/* ========================================================================= */
+
+COLORREF CDlgAdminCharModify::GetColor(int nNo)
+{
+	COLORREF clRet, acl[] = {
+		RGB (255, 200, 200),	/* 赤 */
+		RGB (255, 255, 200),	/* 黄 */
+		RGB (200, 255, 200),	/* 緑 */
+		RGB (200, 255, 255),	/* 青緑 */
+		RGB (200, 200, 255),	/* 青 */
+		RGB (255, 200, 255),	/* 紫 */
+		RGB (255, 255, 255),	/* 白 */
+		RGB (255, 150, 150),	/* 赤（ピンク） */
+		RGB (255, 200, 100),	/* 橙 */
+		RGB (150, 150, 255),	/* 青 */
+		RGB (200, 100, 255),	/* 紫 */
+		RGB (200, 255, 150),	/* 黄緑 */
+		RGB (150, 255, 150),	/* 緑 */
+		RGB (100, 200, 255),	/* 水 */
+	};
+
+	if (nNo >= COLORCOUNT) {
+		clRet = RGB (255, 255, 255);
+	} else {
+		clRet = acl[nNo];
+	}
+
+	return clRet;
 }
 
 /* Copyright(C)URARA-works 2007 */

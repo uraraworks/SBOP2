@@ -56,7 +56,6 @@
 #define IDD_ITEMTYPE_NEW_LIGHT          174
 #define IDD_MAP_OBJECTDATA              175
 #define IDD_MAP_OBJECTDATA_EDIT         176
-#define IDD_DIALOG1                     177
 #define IDD_TALK_SET                    177
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
@@ -211,7 +210,6 @@
 #define IDC_DELAVERAGE                  1091
 #define IDC_STAMINA                     1091
 #define IDC_VALUE1                      1091
-#define IDC_EDIT                        1091
 #define IDC_PASSWORD                    1092
 #define IDC_RENEW_CLIENTVERSION         1092
 #define IDC_EDIT2                       1092
@@ -224,6 +222,8 @@
 #define IDC_MAGIC                       1094
 #define IDC_SPIN_X1                     1095
 #define IDC_SKILLFUL                    1095
+#define IDC_MOTIONTYPE2                 1095
+#define IDC_COLOR                       1095
 #define IDC_SPIN_Y1                     1096
 #define IDC_ABILLITYAT                  1096
 #define IDC_SPIN_X2                     1097
