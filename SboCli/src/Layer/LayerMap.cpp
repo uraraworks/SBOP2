@@ -1638,7 +1638,7 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
 		if (nDrawY != -99) {
 			if ((m_nViewY + (nDrawY * 2) != pChar->m_nMapY) &&
-				(m_nViewY + (nDrawY * 2) + 1 != pChar->m_nMapY)) {
+				(m_nViewY + (nDrawY * 2) != pChar->m_nMapY + 1)) {
 				continue;
 			}
 		}
