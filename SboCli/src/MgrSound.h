@@ -45,7 +45,7 @@ public:
 	void	Destroy		(void);							/* ”jŠü */
 
 	void	PlaySound		(DWORD dwSoundID);			/* Œø‰Ê‰¹‚ÌÄ¶ */
-	void	PlayBGM			(int nNo);					/* BGM‚ÌÄ¶ */
+	void	PlayBGM			(int nNo, BOOL bPlay=FALSE);/* BGM‚ÌÄ¶ */
 	void	StopBGM			(void);						/* BGM‚Ì’â~ */
 	void	SetBGMVolume	(int nVolume);				/* BGM‰¹—Êİ’è */
 	void	SetSEVolume		(int nVolume);				/* Œø‰Ê‰¹—Êİ’è */
@@ -56,6 +56,7 @@ protected:
 
 
 protected:
+	DWORD					m_dwSoundID;				/* Ä¶’†‚ÌBGMID */
 	int						m_SEVolume;					/* Œø‰Ê‰¹—Ê */
 	float					m_fBGMVolume;				/* BGM‰¹—Ê */
 	HMODULE					m_hDllSoundData;			/* ‰¹ŠÖ˜ADLL‚Ìƒnƒ“ƒhƒ‹ */

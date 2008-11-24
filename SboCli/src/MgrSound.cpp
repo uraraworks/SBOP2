@@ -23,6 +23,7 @@
 
 CMgrSound::CMgrSound()
 {
+	m_dwSoundID				= 0;
 	m_SEVolume				= -7;
 	m_fBGMVolume			= 0.50f;
 	m_hDllSoundData			= NULL;
@@ -139,10 +140,18 @@ void CMgrSound::PlaySound(DWORD dwSoundID)
 /* “ú•t		:2006/05/09														 */
 /* ========================================================================= */
 
-void CMgrSound::PlayBGM(int nNo)
+void CMgrSound::PlayBGM(
+	int nNo,		/* [in] BGMID */
+	BOOL bPlay)		/* [in] Šù‚É“¯‚¶ID‚ÌBGM‚ªÄ¶’†‚ÌŽž‚Í‚»‚Ì‚Ü‚Ü‚É‚µ‚Ä‚¨‚­ */
 {
 	char szTmp[MAX_PATH];
 	OutputStream *pOutputStream;
+
+	if (bPlay) {
+		if (m_dwSoundID == (DWORD)nNo) {
+			return;
+		}
+	}
 
 	GetModuleFilePath (szTmp, sizeof (szTmp));
 	strcat (szTmp, "BGM\\");
@@ -172,6 +181,7 @@ void CMgrSound::PlayBGM(int nNo)
 		strcat (szTmp, "tabla_image.ogg");
 		break;
 	}
+	m_dwSoundID = (DWORD)nNo;
 
 	if (m_pOutputStreamPtr) {
 		m_pOutputStreamPtr->stop ();
@@ -196,6 +206,8 @@ void CMgrSound::PlayBGM(int nNo)
 
 void CMgrSound::StopBGM(void)
 {
+	m_dwSoundID = 0;
+
 	if (m_pOutputStreamPtr == NULL) {
 		return;
 	}

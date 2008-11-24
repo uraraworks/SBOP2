@@ -91,7 +91,7 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 		pInfoMap->RenewMapEvent ();
 		m_pLibInfoChar->DeleteOutScreen (pInfoChar, TRUE);
 		PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, 0);
-		m_pMgrSound->PlayBGM (pInfoMap->m_dwBGMID);
+		m_pMgrSound->PlayBGM (pInfoMap->m_dwBGMID, TRUE);
 	}
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 	if (pLayerMap) {
@@ -500,7 +500,7 @@ void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
 		m_pMgrData->AddSystemMsg (TRUE, strTmp, RGB (0, 200, 255));
 		m_pMgrSound->PlaySound (SOUNDID_W_CHAT);
 	}
-	m_pMgrSound->PlayBGM (pInfoMap->m_dwBGMID);
+	m_pMgrSound->PlayBGM (pInfoMap->m_dwBGMID, TRUE);
 
 	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
