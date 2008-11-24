@@ -22,12 +22,15 @@
 /* 関数名	:CLibInfoCharSvr::CheckMapEvent									 */
 /* 内容		:マップイベントチェック											 */
 /* 日付		:2008/06/28														 */
+/* 戻り値	:TRUE:応答を返す	チェックのみの場合は TRUE:マップイベントあり */
 /* ========================================================================= */
 
-BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
+BOOL CLibInfoCharSvr::CheckMapEvent(
+	CInfoCharSvr *pInfoChar,	/* [in] 対象キャラ */
+	BOOL bCheck/*FALSE*/)		/* [in] TRUE:チェックのみ */
 {
 	BOOL bRet;
-	int i, nCount, x, y;
+	int i, x, y, nCount;
 	PCInfoMapBase pInfoMap;
 	PCInfoMapEventBase pInfoMapEventBase;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
@@ -35,6 +38,7 @@ BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
 
 	bRet = TRUE;
+	pInfoMapEventBase = NULL;
 
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
@@ -82,8 +86,13 @@ BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 	/* 向き指定あり？ */
 	if (pInfoMapEventBase->m_nHitDirection >= 0) {
 		if (pInfoChar->m_nDirection != pInfoMapEventBase->m_nHitDirection) {
+			pInfoMapEventBase = NULL;
 			goto Exit;
 		}
+	}
+	/* チェックのみ？ */
+	if (bCheck) {
+		goto Exit;
 	}
 
 	switch (pInfoMapEventBase->m_nType) {
@@ -94,6 +103,12 @@ BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 	}
 
 Exit:
+	/* チェックのみ？ */
+	if (bCheck) {
+		if (pInfoMapEventBase == NULL) {
+			bRet = FALSE;
+		}
+	}
 	return bRet;
 }
 

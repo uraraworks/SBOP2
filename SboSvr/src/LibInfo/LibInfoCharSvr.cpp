@@ -456,6 +456,14 @@ DWORD CLibInfoCharSvr::Tail(
 	if (pCharTarget->m_dwMapID != pChar->m_dwMapID) {
 		goto Exit;
 	}
+	/* マップイベントの上にいる？ */
+	bResult = CheckMapEvent ((PCInfoCharSvr)pCharTarget, TRUE);
+	if (bResult) {
+		Packet.Make (pChar->m_dwCharID, pCharTarget->m_dwCharID, RES_TAIL_RESULT_NG_PLACE, 0);
+		m_pMainFrame->SendToClient (pChar->m_dwSessionID, &Packet);
+		goto Exit;
+	}
+
 	pChar->GetFrontPos (ptFrontPos, -1, TRUE);
 	pChar->GetCharSize (size);
 	/* 目の前にいない？ */

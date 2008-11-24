@@ -543,6 +543,9 @@ void CMainFrame::RecvProcCHAR_RES_TAIL(PBYTE pData)
 		case RES_TAIL_RESULT_NG_SWOON:		/* ‚Â‚¢‚Ä‚¢‚¯‚È‚¢ */
 			strTmp.Format ("‹Câ’†‚È‚Ì‚Å‚Â‚¢‚Ä‚¢‚­‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñ");
 			break;
+		case RES_TAIL_RESULT_NG_PLACE:		/* ‚Â‚¢‚Ä‚¢‚¯‚È‚¢êŠ */
+			strTmp.Format ("%s‚ª‚¢‚éêŠ‚Å‚Í‚Â‚¢‚Ä‚¢‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ", (LPCSTR)pInfoCharTarget->m_strCharName);
+			break;
 		}
 		if (strTmp.IsEmpty () == FALSE) {
 			m_pMgrData->AddSystemMsg (FALSE, strTmp, RGB (255, 255, 255));

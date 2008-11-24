@@ -22,6 +22,7 @@ enum {
 	RES_TAIL_RESULT_NG_TAIL,					/* Šù‚É‚Â‚¢‚Ä‚¢‚Á‚Ä‚¢‚é */
 	RES_TAIL_RESULT_NG_STATE,					/* ‚Â‚¢‚Ä‚¢‚¯‚È‚¢ó‘Ô */
 	RES_TAIL_RESULT_NG_SWOON,					/* ‹Câ’†‚È‚Ì‚Å‚Â‚¢‚Ä‚¢‚¯‚È‚¢ */
+	RES_TAIL_RESULT_NG_PLACE,					/* ‚Â‚¢‚Ä‚¢‚¯‚È‚¢êŠ */
 };
 
 

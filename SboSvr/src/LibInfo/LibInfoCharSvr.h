@@ -99,7 +99,7 @@ protected:
 	int UseItemProcLIGHT			(CInfoCharSvr *pInfoChar, DWORD dwItemID);	/* 灯り */
 
 	/* マップイベント処理(LibInfoCharSvrMapEvent.cpp) */
-	BOOL CheckMapEvent			(CInfoCharSvr *pInfoChar);			/* マップイベントチェック */
+	BOOL CheckMapEvent			(CInfoCharSvr *pInfoChar, BOOL bCheck=FALSE);						/* マップイベントチェック */
 	BOOL MapEventProcMOVE		(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* マップ内移動 */
 	BOOL MapEventProcMAPMOVE	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* マップ間移動 */
 	BOOL MapEventProcINITSTATUS	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ステータス初期化 */
