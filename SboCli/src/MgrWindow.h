@@ -114,7 +114,7 @@ public:
 	void MakeWindowOPTION_ACTIONSET_SLEEPTIMER	(void);			/* オプション-動作設定-おひるねタイマーの設定 */
 	void MakeWindowCOMMANDMENU		(void);						/* コマンドメニュー */
 	void MakeWindowCHAR_STATUS		(void);						/* キャラ-ステータス */
-	void MakeWindowTEXTMSG			(LPCSTR pszMsg);			/* テキストメッセージ */
+	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg);	/* テキストメッセージ */
 
 
 private:

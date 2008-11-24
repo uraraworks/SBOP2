@@ -921,12 +921,14 @@ void CMgrWindow::MakeWindowCHAR_STATUS(void)
 /* “ú•t		:2008/11/22														 */
 /* ========================================================================= */
 
-void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszMsg)
+void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg)
 {
 	PCWindowTEXTMSG pWindowNew;
 
 	pWindowNew = new CWindowTEXTMSG;
 	pWindowNew->Create (m_pMgrData);
+	pWindowNew->SetTitle (pszTitle);
+	pWindowNew->SetName (pszName);
 	pWindowNew->SetMsg (pszMsg);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();

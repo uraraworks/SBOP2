@@ -22,16 +22,19 @@
 
 CWindowTEXTMSG::CWindowTEXTMSG()
 {
+	m_nSpaceHeight	= 16 * 3;
+
 	m_nID			= WINDOWTYPE_TEXTMSG;
 	m_ptViewPos.x	= 16;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 26;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 5;
+	m_sizeWindow.cy	= 16 * 2 + 16 * 5 + m_nSpaceHeight;
 	m_ptViewPos.y	= SCRSIZEY - 16 - m_sizeWindow.cy;
 
 	m_bInputWait	= FALSE;
 	m_nType			= 0;
 	m_nProcPos		= 0;
 	m_dwLastProc	= 0;
+	m_pDibTitle		= NULL;
 	m_pDibText		= NULL;
 	m_ptDraw.x = m_ptDraw.y = 0;
 }
@@ -45,6 +48,7 @@ CWindowTEXTMSG::CWindowTEXTMSG()
 
 CWindowTEXTMSG::~CWindowTEXTMSG()
 {
+	SAFE_DELETE (m_pDibTitle);
 	SAFE_DELETE (m_pDibText);
 }
 
@@ -63,8 +67,10 @@ void CWindowTEXTMSG::Create(CMgrData *pMgrData)
 	m_pDib->Create (m_sizeWindow.cx, m_sizeWindow.cy);
 	m_pDib->SetColorKey (0);
 
+	m_pDibTitle = new CImg32;
+	m_pDibTitle->Create (16 * 6, 16 * 2);
 	m_pDibText = new CImg32;
-	m_pDibText->Create (m_sizeWindow.cx - 16 * 2, m_sizeWindow.cy - 16 * 2);
+	m_pDibText->Create (m_sizeWindow.cx - 16 * 2 + 2, m_sizeWindow.cy - 16 * 2 - m_nSpaceHeight + 2);
 }
 
 
@@ -76,13 +82,31 @@ void CWindowTEXTMSG::Create(CMgrData *pMgrData)
 
 void CWindowTEXTMSG::Draw(PCImg32 pDst)
 {
+	int nTmp, x, y, cx, cy;
+
 	if (m_dwTimeDrawStart) {
 		goto Exit;
 	}
 
-	DrawFrame (m_nType);
+	DrawFrame (0, m_nSpaceHeight, m_sizeWindow.cx, m_sizeWindow.cy - m_nSpaceHeight, m_nType);
 
-	m_pDib->Blt (16, 16, m_pDibText->Width (), m_pDibText->Height (), m_pDibText, 0, 0, TRUE);
+	nTmp = 0;
+	if (m_strTitle.IsEmpty () == FALSE) {
+		nTmp ++;
+	}
+	if (m_strName.IsEmpty () == FALSE) {
+		nTmp ++;
+	}
+	if (nTmp > 0) {
+		cx = m_pDibTitle->Width ()  + 16 * 2;
+		cy = 16 * (2 + nTmp);
+		x = m_sizeWindow.cx / 2 - cx / 2;
+		y = (2 - nTmp) * 16;
+		DrawFrame (x, y, cx, cy, m_nType);
+		m_pDib->Blt (x + 16, y + 16, m_pDibTitle->Width (), m_pDibTitle->Height (), m_pDibTitle, 0, 0, TRUE);
+	}
+
+	m_pDib->Blt (16, 16 + m_nSpaceHeight, m_pDibText->Width (), m_pDibText->Height (), m_pDibText, 0, 0, TRUE);
 
 	m_dwTimeDrawStart = timeGetTime ();
 Exit:
@@ -102,10 +126,6 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 	DWORD dwTimeTmp;
 	LPCSTR pszTmp;
 	char szTmp[3];
-	int cx, cy;
-	HDC hDC;
-	HFONT hFontOld;
-	COLORREF clText;
 
 	bRet = FALSE;
 
@@ -118,8 +138,6 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 	}
 	m_dwLastProc = timeGetTime ();
 
-	cx = m_pDibText->Width ();
-	cy = m_pDibText->Height ();
 	ZeroMemory (szTmp, sizeof (szTmp));
 	pszTmp = (LPCSTR)m_strMsg;
 
@@ -128,6 +146,11 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 		m_bInputWait = TRUE;
 		goto Exit;
 	}
+	if (pszTmp[m_nProcPos] == 0x0D) {
+		if (pszTmp[m_nProcPos + 1] == 0x0A) {
+			szTmp[1] = pszTmp[m_nProcPos + 1];
+		}
+	}
 
 	bResult = IsDBCSLeadByte ((BYTE)pszTmp[m_nProcPos]);
 	if (bResult) {
@@ -135,35 +158,7 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 		m_nProcPos ++;
 	}
 
-	clText		= RGB (1, 1, 1);
-	hDC			= m_pDibText->Lock ();
-	hFontOld	= (HFONT)SelectObject (hDC, m_hFont16Normal);
-	SetBkMode (hDC, TRANSPARENT);
-
-	clText = RGB (1, 1, 1);
-//	clText = RGB (255, 255, 255);
-	TextOut2 (hDC, m_ptDraw.x, m_ptDraw.y, szTmp, clText);
-
-	if (pszTmp[m_nProcPos] == 0x0D) {
-		if (pszTmp[m_nProcPos + 1] == 0x0A) {
-			m_ptDraw.x = cx;
-			m_nProcPos ++;
-		}
-	}
-
-	m_ptDraw.x += (strlen (szTmp) * 8);
-	if (m_ptDraw.x + 8 >= cx) {
-		m_ptDraw.x = 0;
-		m_ptDraw.y += 16;
-		if (m_ptDraw.y >= cy) {
-			m_ptDraw.y -= 16;
-			m_pDibText->Blt (0, 0, cx, cy, m_pDibText, 0, 16);
-			m_pDibText->FillRect (0, cy - 16, cx, 16, RGB (0, 0, 0));
-		}
-	}
-
-	SelectObject (hDC, hFontOld);
-	m_pDibText->Unlock ();
+	DrawChar (szTmp);
 
 	m_nProcPos ++;
 	Redraw ();
@@ -171,6 +166,34 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 	bRet = TRUE;
 Exit:
 	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowTEXTMSG::SetTitle										 */
+/* 内容		:肩書きを設定													 */
+/* 日付		:2008/11/24														 */
+/* ========================================================================= */
+
+void CWindowTEXTMSG::SetTitle(LPCSTR pszTitle)
+{
+	m_strTitle = pszTitle;
+	RenewTitle ();
+	Redraw ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowTEXTMSG::SetName										 */
+/* 内容		:名前を設定														 */
+/* 日付		:2008/11/24														 */
+/* ========================================================================= */
+
+void CWindowTEXTMSG::SetName(LPCSTR pszName)
+{
+	m_strName = pszName;
+	RenewTitle ();
+	Redraw ();
 }
 
 
@@ -226,6 +249,92 @@ BOOL CWindowTEXTMSG::OnZ(BOOL bDown)
 	}
 
 	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowTEXTMSG::DrawChar										 */
+/* 内容		:１文字表示														 */
+/* 日付		:2008/11/24														 */
+/* ========================================================================= */
+
+void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
+{
+	int cx, cy;
+	HDC hDC;
+	HFONT hFontOld;
+	COLORREF clText;
+
+	if (pszText == NULL) {
+		return;
+	}
+
+	cx = m_pDibText->Width ();
+	cy = m_pDibText->Height () - 16;
+
+	clText		= RGB (1, 1, 1);
+	hDC			= m_pDibText->Lock ();
+	hFontOld	= (HFONT)SelectObject (hDC, m_hFont16Normal);
+	SetBkMode (hDC, TRANSPARENT);
+
+	clText = RGB (1, 1, 1);
+	TextOut2 (hDC, m_ptDraw.x, m_ptDraw.y, pszText, clText);
+
+	if (pszText[0] == 0x0D) {
+		if (pszText[1] == 0x0A) {
+			m_ptDraw.x = cx;
+			m_nProcPos ++;
+		}
+	}
+
+	m_ptDraw.x += (strlen (pszText) * 8);
+	if (m_ptDraw.x + 8 >= cx) {
+		m_ptDraw.x = 0;
+		m_ptDraw.y += 16;
+		if (m_ptDraw.y >= cy) {
+			m_ptDraw.y -= 16;
+			m_pDibText->Blt (0, 0, cx, cy, m_pDibText, 0, 16);
+			m_pDibText->FillRect (0, cy, cx, 16, RGB (0, 0, 0));
+		}
+	}
+
+	SelectObject (hDC, hFontOld);
+	m_pDibText->Unlock ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowTEXTMSG::RenewTitle										 */
+/* 内容		:肩書と名前画像を更新											 */
+/* 日付		:2008/11/24														 */
+/* ========================================================================= */
+
+void CWindowTEXTMSG::RenewTitle(void)
+{
+	int y;
+	HDC hDC;
+	COLORREF clText, clFrame;
+	HFONT hFontOld;
+
+	m_pDibTitle->FillRect (0, 0, m_pDibTitle->Width (), m_pDibTitle->Height (), RGB (0, 0, 0));
+
+	hDC			= m_pDibTitle->Lock ();
+	hFontOld	= (HFONT)SelectObject (hDC, m_hFont16);
+	SetBkMode (hDC, TRANSPARENT);
+
+	y = 1;
+	clText  = RGB (255, 255, 255);
+	clFrame = RGB (1, 1, 1);
+	if (m_strTitle.GetLength () > 0) {
+		TextOut2 (hDC, 1, 1, (LPCSTR)m_strTitle, clText, TRUE, clFrame);
+		y += 16;
+	}
+	if (m_strName.GetLength () > 0) {
+		TextOut2 (hDC, 1, y, (LPCSTR)m_strName, clText, TRUE, clFrame);
+	}
+
+	SelectObject (hDC, hFontOld);
+	m_pDibTitle->Unlock ();
 }
 
 /* Copyright(C)URARA-works 2008 */
