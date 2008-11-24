@@ -45,6 +45,8 @@ public:
 	DWORD m_dwMapID;
 	int m_nPosX;
 	int m_nPosY;
+	int m_nDirection;
+	CComboBox m_ctlDirection;
 } CDlgAdminMapEventMAPMOVE, *PCDlgAdminMapEventMAPMOVE;
 
 //{{AFX_INSERT_LOCATION}}

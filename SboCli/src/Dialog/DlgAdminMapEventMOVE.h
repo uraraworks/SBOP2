@@ -9,6 +9,7 @@
 #pragma once
 
 #include "DlgAdminMapEventNONE.h"
+#include "afxwin.h"
 
 /* ========================================================================= */
 /* ÉNÉâÉXêÈåæ																 */
@@ -44,6 +45,8 @@ protected:
 public:
 	int m_nPosX;
 	int m_nPosY;
+	CComboBox m_ctlDirection;
+	int m_nDirection;
 } CDlgAdminMapEventMOVE, *PCDlgAdminMapEventMOVE;
 
 //{{AFX_INSERT_LOCATION}}

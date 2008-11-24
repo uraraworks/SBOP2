@@ -222,7 +222,6 @@
 #define IDC_MAGIC                       1094
 #define IDC_SPIN_X1                     1095
 #define IDC_SKILLFUL                    1095
-#define IDC_MOTIONTYPE2                 1095
 #define IDC_COLOR                       1095
 #define IDC_SPIN_Y1                     1096
 #define IDC_ABILLITYAT                  1096
@@ -298,6 +297,7 @@
 #define IDC_HIDEY                       1141
 #define IDC_LIGHT                       1141
 #define IDC_HIT                         1142
+#define IDC_DIRECTION                   1143
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -342,7 +342,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        178
 #define _APS_NEXT_COMMAND_VALUE         32807
-#define _APS_NEXT_CONTROL_VALUE         1143
+#define _APS_NEXT_CONTROL_VALUE         1144
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

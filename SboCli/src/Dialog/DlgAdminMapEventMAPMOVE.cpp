@@ -30,6 +30,8 @@ void CDlgAdminMapEventMAPMOVE::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_MAPID, m_dwMapID);
 	DDX_Text(pDX, IDC_POSX, m_nPosX);
 	DDX_Text(pDX, IDC_POSY, m_nPosY);
+	DDX_Control(pDX, IDC_DIRECTION, m_ctlDirection);
+	DDX_CBIndex(pDX, IDC_DIRECTION, m_nDirection);
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminMapEventMAPMOVE, CDlgAdminMapEventNONE)
@@ -49,6 +51,7 @@ CDlgAdminMapEventMAPMOVE::CDlgAdminMapEventMAPMOVE(CWnd* pParent /*=NULL*/)
 	, m_dwMapID(0)
 	, m_nPosX(0)
 	, m_nPosY(0)
+	, m_nDirection(-1)
 {
 	//{{AFX_DATA_INIT(CDlgAdminMapEventMAPMOVE)
 	//}}AFX_DATA_INIT
@@ -78,9 +81,13 @@ void CDlgAdminMapEventMAPMOVE::Set(CInfoMapEventBase *pSrc)
 {
 	PCInfoMapEventMAPMOVE pSrcTmp = (PCInfoMapEventMAPMOVE)pSrc;
 
-	m_dwMapID	= pSrcTmp->m_dwMapID;
-	m_nPosX		= pSrcTmp->m_ptDst.x;
-	m_nPosY		= pSrcTmp->m_ptDst.y;
+	m_dwMapID		= pSrcTmp->m_dwMapID;
+	m_nPosX			= pSrcTmp->m_ptDst.x;
+	m_nPosY			= pSrcTmp->m_ptDst.y;
+	m_nDirection	= pSrcTmp->m_nDirection;
+	if (m_nDirection < 0) {
+		m_nDirection = 4;
+	}
 
 	UpdateData (FALSE);
 }
@@ -98,9 +105,10 @@ void CDlgAdminMapEventMAPMOVE::Get(CInfoMapEventBase *pDst)
 
 	UpdateData ();
 
-	pDstTmp->m_dwMapID = m_dwMapID;
-	pDstTmp->m_ptDst.x = m_nPosX;
-	pDstTmp->m_ptDst.y = m_nPosY;
+	pDstTmp->m_dwMapID		= m_dwMapID;
+	pDstTmp->m_ptDst.x		= m_nPosX;
+	pDstTmp->m_ptDst.y		= m_nPosY;
+	pDstTmp->m_nDirection	= m_nDirection;
 }
 
 
@@ -113,6 +121,17 @@ void CDlgAdminMapEventMAPMOVE::Get(CInfoMapEventBase *pDst)
 BOOL CDlgAdminMapEventMAPMOVE::OnInitDialog()
 {
 	CDlgAdminMapEventNONE::OnInitDialog();
+
+	m_ctlDirection.InsertString (0, "è„");
+	m_ctlDirection.InsertString (1, "â∫");
+	m_ctlDirection.InsertString (2, "ç∂");
+	m_ctlDirection.InsertString (3, "âE");
+	m_ctlDirection.InsertString (4, "éwíËñ≥Çµ");
+
+	if (m_nDirection < 0) {
+		m_nDirection = 4;
+	}
+	m_ctlDirection.SetCurSel (m_nDirection);
 
 	return TRUE;
 }

@@ -33,6 +33,7 @@ void CDlgAdminMapEventBase::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CDlgAdminMapEventBase)
 	DDX_Control(pDX, IDC_TYPE, m_ctlType);
 	DDX_Control(pDX, IDC_HITTYPE, m_ctlHitType);
+	DDX_Control(pDX, IDC_DIRECTION, m_ctlDirection);
 	DDX_Text(pDX, IDC_POSX, m_nPosX);
 	DDX_Text(pDX, IDC_POSY, m_nPosY);
 	DDX_Text(pDX, IDC_POSX2, m_nPosX2);
@@ -44,6 +45,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapEventBase, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminMapEventBase)
 	ON_CBN_SELCHANGE(IDC_TYPE, OnSelchangeType)
 	ON_CBN_SELCHANGE(IDC_HITTYPE, OnSelchangeHitType)
+	ON_CBN_SELCHANGE(IDC_DIRECTION, OnSelchangeDirection)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -67,6 +69,7 @@ CDlgAdminMapEventBase::CDlgAdminMapEventBase(CWnd* pParent /*=NULL*/)
 
 	m_nEventType	= -1;
 	m_nHitType		= -1;
+	m_nHitDirection	= -1;
 	m_bModeModify	= FALSE;
 	m_ppWndNotify	= NULL;
 	m_pDlgType		= NULL;
@@ -184,6 +187,12 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	m_ctlHitType.InsertString (2, "範囲で判定");
 	m_ctlHitType.SetItemData (2, MAPEVENTHITTYPE_AREA);
 
+	m_ctlDirection.InsertString (0, "上");
+	m_ctlDirection.InsertString (1, "下");
+	m_ctlDirection.InsertString (2, "左");
+	m_ctlDirection.InsertString (3, "右");
+	m_ctlDirection.InsertString (4, "指定無し");
+
 	nNo = 0;
 	if (m_pInfo) {
 		for (i = 0; i < MAPEVENTTYPE_MAX; i ++) {
@@ -208,8 +217,18 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	}
 	m_ctlHitType.SetCurSel (nNo);
 
+	nNo = 4;
+	if (m_pInfo) {
+		nNo = m_pInfo->m_nHitDirection;
+		if (nNo < 0) {
+			nNo = 4;
+		}
+	}
+	m_ctlDirection.SetCurSel (nNo);
+
 	OnSelchangeType ();
 	OnSelchangeHitType ();
+	OnSelchangeDirection ();
 	if (m_pDlgType && m_pInfo) {
 		m_pDlgType->Set (m_pInfo);
 	}
@@ -331,6 +350,29 @@ void CDlgAdminMapEventBase::OnSelchangeHitType()
 	nNo = m_ctlHitType.GetCurSel ();
 	m_nHitType = m_ctlHitType.GetItemData (nNo);
 	m_pInfo->m_nHitType = m_nHitType;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapEventBase::OnSelchangeDirection					 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2008/11/24														 */
+/* ========================================================================= */
+
+void CDlgAdminMapEventBase::OnSelchangeDirection()
+{
+	int nNo;
+
+	if (m_pInfo == NULL) {
+		return;
+	}
+
+	nNo = m_ctlDirection.GetCurSel ();
+	m_nHitDirection = m_ctlDirection.GetCurSel ();
+	m_pInfo->m_nHitDirection = m_nHitDirection;
+	if (m_nHitDirection > 3) {
+		m_pInfo->m_nHitDirection = -1;
+	}
 }
 
 

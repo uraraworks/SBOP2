@@ -37,6 +37,7 @@ public:
 
 public:
 	POINT		m_ptDst;			/* ˆÚ“®æ */
+	int			m_nDirection;		/* ˆÚ“®Œã‚ÌŒü‚« */
 } CInfoMapEventMOVE, *PCInfoMapEventMOVE;
 typedef CmyArray<PCInfoMapEventMOVE, PCInfoMapEventMOVE>	  ARRAYMAPEVENTMAPINFO;
 typedef CmyArray<PCInfoMapEventMOVE, PCInfoMapEventMOVE>	*PARRAYMAPEVENTMAPINFO;

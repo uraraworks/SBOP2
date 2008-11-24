@@ -37,6 +37,7 @@ public:
 public:
 	DWORD		m_dwMapID;			/* ˆÚ“®æƒ}ƒbƒvID */
 	POINT		m_ptDst;			/* ˆÚ“®æ */
+	int			m_nDirection;		/* ˆÚ“®Œã‚ÌŒü‚« */
 } CInfoMapEventMAPMOVE, *PCInfoMapEventMAPMOVE;
 
 /* Copyright(C)URARA-works 2008 */

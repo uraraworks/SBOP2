@@ -17,6 +17,7 @@
 static LPCSTR s_aszName[] = {
 	"m_nType",			/* イベント種別 */
 	"m_nHitType",		/* 当たり判定種別 */
+	"m_nHitDirection",	/* 判定向き */
 	"m_dwMapEventID",	/* マップイベントID */
 	"m_ptPos",			/* 座標1 */
 	"m_ptPos2",			/* 座標2 */
@@ -35,6 +36,7 @@ CInfoMapEventBase::CInfoMapEventBase()
 	m_dwMapEventID	= 0;
 	m_nType			= MAPEVENTTYPE_NONE;
 	m_nHitType		= MAPEVENTHITTYPE_MAPPOS;
+	m_nHitDirection	= -1;
 	ZeroMemory (&m_ptPos,  sizeof (m_ptPos));
 	ZeroMemory (&m_ptPos2, sizeof (m_ptPos2));
 
@@ -111,6 +113,7 @@ DWORD CInfoMapEventBase::GetDataSize(void)
 	dwRet = 0;
 	dwRet += sizeof (m_nType);			/* イベント種別 */
 	dwRet += sizeof (m_nHitType);		/* 当たり判定種別 */
+	dwRet += sizeof (m_nHitDirection);	/* 判定向き */
 	dwRet += sizeof (m_dwMapEventID);	/* マップイベントID */
 	dwRet += sizeof (m_ptPos);			/* 座標1 */
 	dwRet += sizeof (m_ptPos2);			/* 座標2 */
@@ -134,9 +137,10 @@ DWORD CInfoMapEventBase::GetDataSizeNo(int nNo)
 	switch (nNo) {
 	case 0:	dwRet = sizeof (m_nType);			break;	/* イベント種別 */
 	case 1:	dwRet = sizeof (m_nHitType);		break;	/* 当たり判定種別 */
-	case 2:	dwRet = sizeof (m_dwMapEventID);	break;	/* マップイベントID */
-	case 3:	dwRet = sizeof (m_ptPos);			break;	/* 座標1 */
-	case 4:	dwRet = sizeof (m_ptPos2);			break;	/* 座標2 */
+	case 2:	dwRet = sizeof (m_nHitDirection);	break;	/* 判定向き */
+	case 3:	dwRet = sizeof (m_dwMapEventID);	break;	/* マップイベントID */
+	case 4:	dwRet = sizeof (m_ptPos);			break;	/* 座標1 */
+	case 5:	dwRet = sizeof (m_ptPos2);			break;	/* 座標2 */
 	}
 
 	return dwRet;
@@ -179,9 +183,10 @@ PBYTE CInfoMapEventBase::GetWriteData(int nNo, PDWORD pdwSize)
 	switch (nNo) {
 	case 0:	pSrc = (PBYTE)&m_nType;			break;	/* イベント種別 */
 	case 1:	pSrc = (PBYTE)&m_nHitType;		break;	/* 当たり判定種別 */
-	case 2:	pSrc = (PBYTE)&m_dwMapEventID;	break;	/* マップイベントID */
-	case 3:	pSrc = (PBYTE)&m_ptPos;			break;	/* 座標1 */
-	case 4:	pSrc = (PBYTE)&m_ptPos2;		break;	/* 座標2 */
+	case 2:	pSrc = (PBYTE)&m_nHitDirection;	break;	/* 判定向き */
+	case 3:	pSrc = (PBYTE)&m_dwMapEventID;	break;	/* マップイベントID */
+	case 4:	pSrc = (PBYTE)&m_ptPos;			break;	/* 座標1 */
+	case 5:	pSrc = (PBYTE)&m_ptPos2;		break;	/* 座標2 */
 	}
 
 	if (pSrc) {
@@ -212,9 +217,10 @@ DWORD CInfoMapEventBase::ReadElementData(
 	switch (nNo) {
 	case 0: pDst = (PBYTE)&m_nType;			dwSize = sizeof (m_nType);			break;	/* イベント種別 */
 	case 1: pDst = (PBYTE)&m_nHitType;		dwSize = sizeof (m_nHitType);		break;	/* 当たり判定種別 */
-	case 2: pDst = (PBYTE)&m_dwMapEventID;	dwSize = sizeof (m_dwMapEventID);	break;	/* マップイベントID */
-	case 3:	pDst = (PBYTE)&m_ptPos;			dwSize = sizeof (m_ptPos);			break;	/* 座標1 */
-	case 4:	pDst = (PBYTE)&m_ptPos2;		dwSize = sizeof (m_ptPos2);			break;	/* 座標2 */
+	case 2: pDst = (PBYTE)&m_nHitDirection;	dwSize = sizeof (m_nHitDirection);	break;	/* 判定向き */
+	case 3: pDst = (PBYTE)&m_dwMapEventID;	dwSize = sizeof (m_dwMapEventID);	break;	/* マップイベントID */
+	case 4:	pDst = (PBYTE)&m_ptPos;			dwSize = sizeof (m_ptPos);			break;	/* 座標1 */
+	case 5:	pDst = (PBYTE)&m_ptPos2;		dwSize = sizeof (m_ptPos2);			break;	/* 座標2 */
 	}
 
 	if (pDst) {
@@ -237,6 +243,7 @@ DWORD CInfoMapEventBase::GetSendDataSize(void)
 
 	dwRet = sizeof (m_nType)		+	/* イベント種別 */
 			sizeof (m_nHitType)		+	/* 当たり判定種別 */
+			sizeof (m_nHitDirection)+	/* 判定向き */
 			sizeof (m_dwMapEventID)	+	/* マップイベントID */
 			sizeof (m_ptPos)		+	/* 座標1 */
 			sizeof (m_ptPos2);			/* 座標2 */
@@ -263,6 +270,7 @@ PBYTE CInfoMapEventBase::GetSendData(void)
 
 	CopyMemoryRenew (pDataTmp, &m_nType,		sizeof (m_nType), 			pDataTmp);	/* イベント種別 */
 	CopyMemoryRenew (pDataTmp, &m_nHitType,		sizeof (m_nHitType), 		pDataTmp);	/* 当たり判定種別 */
+	CopyMemoryRenew (pDataTmp, &m_nHitDirection,sizeof (m_nHitDirection), 	pDataTmp);	/* 判定向き */
 	CopyMemoryRenew (pDataTmp, &m_dwMapEventID,	sizeof (m_dwMapEventID), 	pDataTmp);	/* マップイベントID */
 	CopyMemoryRenew (pDataTmp, &m_ptPos,		sizeof (m_ptPos),			pDataTmp);	/* 座標1 */
 	CopyMemoryRenew (pDataTmp, &m_ptPos2,		sizeof (m_ptPos2),			pDataTmp);	/* 座標2 */
@@ -286,6 +294,7 @@ PBYTE CInfoMapEventBase::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 	CopyMemoryRenew (&m_nType,			pDataTmp, sizeof (m_nType), 		pDataTmp);	/* イベント種別 */
 	CopyMemoryRenew (&m_nHitType,		pDataTmp, sizeof (m_nHitType), 		pDataTmp);	/* 当たり判定種別 */
+	CopyMemoryRenew (&m_nHitDirection,	pDataTmp, sizeof (m_nHitDirection), pDataTmp);	/* 判定向き */
 	CopyMemoryRenew (&m_dwMapEventID,	pDataTmp, sizeof (m_dwMapEventID), 	pDataTmp);	/* マップイベントID */
 	CopyMemoryRenew (&m_ptPos,			pDataTmp, sizeof (m_ptPos),			pDataTmp);	/* 座標1 */
 	CopyMemoryRenew (&m_ptPos2,			pDataTmp, sizeof (m_ptPos2),		pDataTmp);	/* 座標2 */
@@ -308,6 +317,7 @@ void CInfoMapEventBase::Copy(CInfoMapEventBase *pSrc)
 	}
 	m_nType			= pSrc->m_nType;		/* イベント種別 */
 	m_nHitType		= pSrc->m_nHitType;		/* 当たり判定種別 */
+	m_nHitDirection	= pSrc->m_nHitDirection;/* 判定向き */
 	m_dwMapEventID	= pSrc->m_dwMapEventID;	/* マップイベントID */
 	m_ptPos			= pSrc->m_ptPos;		/* 座標1 */
 	m_ptPos2		= pSrc->m_ptPos2;		/* 座標2 */

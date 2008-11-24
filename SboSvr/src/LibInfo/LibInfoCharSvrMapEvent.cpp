@@ -27,7 +27,7 @@
 BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 {
 	BOOL bRet;
-	int i, nCount;
+	int i, nCount, x, y;
 	PCInfoMapBase pInfoMap;
 	PCInfoMapEventBase pInfoMapEventBase;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
@@ -45,21 +45,45 @@ BOOL CLibInfoCharSvr::CheckMapEvent(CInfoCharSvr *pInfoChar)
 	pInfoMapEventBase = NULL;
 	nCount = pInfoChar->m_aposBockMapArea.GetSize ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoMapEventBase = pInfoMap->GetEvent (pInfoChar->m_aposBockMapArea[i].x, pInfoChar->m_aposBockMapArea[i].y);
+		x = pInfoChar->m_aposBockMapArea[i].x;
+		y = pInfoChar->m_aposBockMapArea[i].y;
+		pInfoMapEventBase = pInfoMap->GetEvent (x, y);
 		if (pInfoMapEventBase == NULL) {
 			continue;
 		}
-		if (pInfoMapEventBase->m_nHitType == MAPEVENTHITTYPE_MAPPOS) {
+		switch (pInfoMapEventBase->m_nHitType) {
+		case MAPEVENTHITTYPE_MAPPOS:
 			/* マップ座標で判定の時に半端な位置にいる？ */
 			if ((pInfoChar->m_nMapX % 2) || (pInfoChar->m_nMapY % 2)) {
 				pInfoMapEventBase = NULL;
 				continue;
 			}
+			break;
+		case MAPEVENTHITTYPE_AREA:
+			if ((x == pInfoMapEventBase->m_ptPos.x) || (y == pInfoMapEventBase->m_ptPos2.x)) {
+				if (pInfoChar->m_nMapX % 2) {
+					pInfoMapEventBase = NULL;
+					continue;
+				}
+			}
+			if ((y == pInfoMapEventBase->m_ptPos.y) || (y == pInfoMapEventBase->m_ptPos2.y)) {
+				if (pInfoChar->m_nMapY % 2) {
+					pInfoMapEventBase = NULL;
+					continue;
+				}
+			}
+			break;
 		}
 		break;
 	}
 	if (pInfoMapEventBase == NULL) {
 		goto Exit;
+	}
+	/* 向き指定あり？ */
+	if (pInfoMapEventBase->m_nHitDirection >= 0) {
+		if (pInfoChar->m_nDirection != pInfoMapEventBase->m_nHitDirection) {
+			goto Exit;
+		}
 	}
 
 	switch (pInfoMapEventBase->m_nType) {
@@ -83,7 +107,7 @@ Exit:
 BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
 {
 	BOOL bRet;
-	int i, nCount;
+	int i, nCount, nDirection;
 	PCInfoMapEventMOVE pInfoMapEvent;
 	PCInfoCharSvr pInfoCharTmp;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
@@ -92,6 +116,8 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 
 	bRet = FALSE;
 	pInfoMapEvent = (PCInfoMapEventMOVE)pInfoMapEventBase;
+
+	nDirection = pInfoMapEvent->m_nDirection;
 
 	GetTailCharID (pInfoChar, apInfoChar);
 	apInfoChar.InsertAt (0, pInfoChar);
@@ -104,6 +130,9 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_STATE);
 
 		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2, TRUE);
+		if (nDirection >= 0) {
+			pInfoCharTmp->SetDirection (nDirection);
+		}
 		pInfoCharTmp->AddProcInfo (CHARPROCID_MAPMOVEIN, 2000, 0);
 		pInfoCharTmp->AddProcInfo (CHARPROCID_INVINCIBLE, 5000, 0);
 		pInfoCharTmp->m_bStatusInvincible = TRUE;
@@ -126,7 +155,7 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
 {
 	BOOL bRet;
-	int i, nCount;
+	int i, nCount, nDirection;
 	PCInfoCharSvr pInfoCharTmp;
 	PCInfoMapEventMAPMOVE pInfoMapEvent;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
@@ -135,6 +164,8 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 
 	bRet = FALSE;
 	pInfoMapEvent = (PCInfoMapEventMAPMOVE)pInfoMapEventBase;
+
+	nDirection = pInfoMapEvent->m_nDirection;
 
 	GetTailCharID (pInfoChar, apInfoChar);
 	apInfoChar.InsertAt (0, pInfoChar);
@@ -149,6 +180,9 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 
 		pInfoCharTmp->m_dwMapID = pInfoMapEvent->m_dwMapID;
 		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2, TRUE);
+		if (nDirection >= 0) {
+			pInfoCharTmp->SetDirection (nDirection);
+		}
 		pInfoCharTmp->AddProcInfo (CHARPROCID_MAPMOVEOUT, 2000, 0);
 		pInfoCharTmp->AddProcInfo (CHARPROCID_INVINCIBLE, 5000, 0);
 		pInfoCharTmp->m_bStatusInvincible = TRUE;
