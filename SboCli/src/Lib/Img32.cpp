@@ -289,6 +289,53 @@ void CImg32::FillRect(
 
 
 /* ========================================================================= */
+/* 関数名：	CImg32::XorRect													 */
+/* 内容：	矩形XOR															 */
+/* 日付：	2008/11/25														 */
+/* ========================================================================= */
+void CImg32::XorRect(
+	int x,		/* [in] 始点(X) */
+	int y,		/* [in] 始点(Y) */
+	int cx,		/* [in] 幅 */
+	int cy)		/* [in] 高さ */
+{
+	int i, j;
+	PDWORD dst;
+	DWORD dwLineDst;
+	PBYTE pBitsDst;
+
+	if (m_pBits == NULL) {
+		return;
+	}
+
+	x = min (x, Width ());
+	x = max (x, 0);
+	y = min (y, Height ());
+	y = max (y, 0);
+	if (x + cx > Width ()) {
+		cx = Width () - x;
+	}
+	if (y + cy > Height ()) {
+		cy = Height () - y;
+	}
+
+	pBitsDst	= m_pBits;
+	dwLineDst	= BYTES_PER_LINE(Width ());
+
+	x *= BYTES_PER_PIXEL;
+	y = Height () - 1 - y;
+
+	for (j = 0; j < cy; j ++) {
+		dst = (PDWORD)(pBitsDst + dwLineDst * (y - j) + x);
+		for (i = 0; i < cx; i ++) {
+			*dst ^= (DWORD)-1;
+			dst ++;
+		}
+	}
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CImg32::Rectangle												 */
 /* 内容		:矩形															 */
 /* 日付		:2008/04/14														 */

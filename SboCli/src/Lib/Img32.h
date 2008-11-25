@@ -25,6 +25,7 @@ public:
 
 	void	Clear				(void);													/* クリア */
 	void	FillRect			(int x, int y, int cx, int cy, COLORREF clFill);		/* 矩形塗りつぶし */
+	void	XorRect				(int x, int y, int cx, int cy);							/* 矩形XOR */
 	void	Rectangle			(int x, int y, int cx, int cy, COLORREF clDraw);		/* 矩形 */
 	void	Circle				(int x, int y, int r, COLORREF clDraw);					/* 円 */
 	void	CircleGradation		(int x, int y, int r, int rr, COLORREF clDraw);			/* 円(グラデーション) */

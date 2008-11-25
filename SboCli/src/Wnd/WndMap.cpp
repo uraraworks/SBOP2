@@ -29,6 +29,7 @@ enum {
 	TOOLBAR_PASTE,			/* 貼り付け */
 	TOOLBAR_PAINT,			/* 塗りつぶし */
 	TOOLBAR_RANGE,			/* 範囲選択 */
+	TOOLBAR_GRID,			/* グリッド表示 */
 };
 
 /* ステータスバー設定用情報 */
@@ -49,6 +50,7 @@ BEGIN_MESSAGE_MAP(CWndMap, CWnd)
 	ON_UPDATE_COMMAND_UI(TOOLBAR_PASTE, OnUpdateCommandUI)
 	ON_UPDATE_COMMAND_UI(TOOLBAR_PAINT, OnUpdateCommandUI)
 	ON_UPDATE_COMMAND_UI(TOOLBAR_RANGE, OnUpdateCommandUI)
+	ON_UPDATE_COMMAND_UI(TOOLBAR_GRID, OnUpdateCommandUI)
 	ON_WM_PAINT()
 	ON_WM_SIZE()
 	ON_WM_HSCROLL()
@@ -67,6 +69,7 @@ BEGIN_MESSAGE_MAP(CWndMap, CWnd)
 	ON_COMMAND(TOOLBAR_PASTE, OnPaste)
 	ON_COMMAND(TOOLBAR_PAINT, OnToolPaint)
 	ON_COMMAND(TOOLBAR_RANGE, OnRange)
+	ON_COMMAND(TOOLBAR_GRID, OnGrid)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -80,6 +83,7 @@ END_MESSAGE_MAP()
 CWndMap::CWndMap()
 {
 	m_bRClickFirst	= FALSE;
+	m_bViewGrid		= FALSE;
 	m_nSelect		= -1;
 	m_nNotify		= 0;
 	m_pdwParts		= NULL;
@@ -192,13 +196,6 @@ int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	RenewToolbar ();
 
-	/* ステータスバーの設定 */
-	if (!m_StatusBar.Create (this) ||
-		!m_StatusBar.SetIndicators (indicators, sizeof (indicators) / sizeof (UINT))) {
-		return -1;
-	}
-	RepositionBars (AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
-
 	/* スクロールバーの設定 */
 	ModifyStyle (0, WS_VSCROLL | WS_HSCROLL);
 	nCount = m_pMgrGrpData->GetMapPartsCount ();
@@ -214,12 +211,15 @@ int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	stScrollInfo.nPage = 1;
 	SetScrollInfo (SB_VERT, &stScrollInfo);
 
-//	m_wndToolBar.GetToolBarCtrl ().EnableButton (TOOLBAR_COPY,  FALSE);
-//	m_wndToolBar.GetToolBarCtrl ().EnableButton (TOOLBAR_PASTE, FALSE);
-//	m_wndToolBar.GetToolBarCtrl ().EnableButton (TOOLBAR_RANGE, TRUE);
-
 	sizeTmp = m_pMgrData->GetWndMap ();
 	SetWindowPos (NULL, 0, 0, sizeTmp.cx, sizeTmp.cy, SWP_NOZORDER | SWP_NOMOVE);
+
+	/* ステータスバーの設定 */
+	if (!m_StatusBar.Create (this) ||
+		!m_StatusBar.SetIndicators (indicators, sizeof (indicators) / sizeof (UINT))) {
+		return -1;
+	}
+	RepositionBars (AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
 
 	return 0;
 }
@@ -299,6 +299,10 @@ void CWndMap::OnPaint()
 		for (xx = 0; xx < cx / 16 + 1; xx ++) {
 			dwPartsID = m_pInfoMap->GetParts (xx + x, yy + y);
 			m_pMgrDraw->DrawMapParts (m_pImgBack, xx * 16, yy * 16, dwPartsID, 2, TRUE);
+			if (m_bViewGrid) {
+				m_pImgBack->XorRect (xx * 16 + 15, yy * 16, 1, 16);
+				m_pImgBack->XorRect (xx * 16, yy * 16 + 15, 16, 1);
+			}
 		}
 	}
 
@@ -931,6 +935,11 @@ void CWndMap::RenewToolbar(void)
 	Button.idCommand	= TOOLBAR_RANGE;
 	Button.fsStyle		= TBSTYLE_CHECK;
 	pToolBarCtrl->AddButtons (1, &Button);
+
+	Button.iBitmap		= 4;
+	Button.idCommand	= TOOLBAR_GRID;
+	Button.fsStyle		= TBSTYLE_CHECK;
+	pToolBarCtrl->AddButtons (1, &Button);
 }
 
 
@@ -1136,6 +1145,21 @@ void CWndMap::OnToolPaint()
 void CWndMap::OnRange()
 {
 	SetCheck (TOOLBAR_PASTE, FALSE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWndMap::OnGrid												 */
+/* 内容		:ボタンハンドラ(グリッド表示)									 */
+/* 日付		:2008/11/25														 */
+/* ========================================================================= */
+
+void CWndMap::OnGrid()
+{
+	m_bViewGrid = (m_bViewGrid) ? FALSE : TRUE;
+	SetCheck (TOOLBAR_GRID, m_bViewGrid);
+
+	InvalidateRect (NULL);
 }
 
 /* Copyright(C)URARA-works 2008 */
