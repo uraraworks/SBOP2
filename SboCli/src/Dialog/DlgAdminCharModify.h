@@ -33,7 +33,8 @@ protected:
 
 
 protected:
-	CInfoCharCli	*m_pInfoChar;					/* 編集中のキャラ情報 */
+	DWORD			m_dwCharID;					/* 最後に選択したキャラID */
+	CInfoCharCli	*m_pInfoChar;				/* 編集中のキャラ情報 */
 
 
 

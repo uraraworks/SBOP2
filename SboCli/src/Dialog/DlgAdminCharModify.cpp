@@ -77,7 +77,8 @@ CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent /*=NULL*/)
 	m_nPosY = 0;
 	//}}AFX_DATA_INIT
 
-	m_pInfoChar = NULL;
+	m_dwCharID	= 0;
+	m_pInfoChar	= NULL;
 	Create (CDlgAdminCharModify::IDD, pParent);
 }
 
@@ -226,8 +227,15 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 
 	switch (nType) {
 	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* 左クリック通知 */
+		if (dwPara == (DWORD)-1) {
+			dwPara = m_dwCharID;
+		}
 		pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
 		m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (dwPara);
+		if (m_pInfoChar == NULL) {
+			dwPara = 0;
+		}
+		m_dwCharID = dwPara;
 		Renew ();
 		break;
 	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* 右クリック通知 */

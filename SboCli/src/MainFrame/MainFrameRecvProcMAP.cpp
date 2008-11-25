@@ -90,7 +90,7 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 		m_pMgrData->SetMap (pInfoMap);
 		pInfoMap->RenewMapEvent ();
 		m_pLibInfoChar->DeleteOutScreen (pInfoChar, TRUE);
-		PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, 0);
+		PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, (DWORD)-1);
 		m_pMgrSound->PlayBGM (pInfoMap->m_dwBGMID, TRUE);
 	}
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
