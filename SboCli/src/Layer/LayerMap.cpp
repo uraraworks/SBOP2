@@ -1220,7 +1220,17 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 			if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
 				bDraw = FALSE;
 			}
-
+			if (nDrawY != -99) {
+				if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) {
+					bDraw = FALSE;
+				}
+			} else {
+				if (nMoveY <= 0) {
+					if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) == 0) {
+						bDraw = FALSE;
+					}
+				}
+			}
 			if (bDraw) {
 				m_pMgrDraw->DrawMapParts (
 						pDst,
