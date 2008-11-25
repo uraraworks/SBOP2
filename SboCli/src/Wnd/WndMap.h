@@ -40,7 +40,8 @@ protected:
 
 
 protected:
-	BOOL		m_bRClickFirst;					/* 右クリックされた */
+	BOOL		m_bRClickFirst,					/* 右クリックされた */
+				m_bViewGrid;					/* グリッド表示 */
 	int			m_nSelect,						/* 選択されたパーツ番号 */
 				m_nNotify;						/* 通知データ */
 	DWORD		*m_pdwParts;					/* コピー中のマップ */
@@ -91,6 +92,7 @@ protected:
 	afx_msg void OnPaste();
 	afx_msg void OnToolPaint();
 	afx_msg void OnRange();
+	afx_msg void OnGrid();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 } CWndMap, *PCWndMap;
