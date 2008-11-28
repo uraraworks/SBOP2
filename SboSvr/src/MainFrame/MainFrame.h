@@ -120,6 +120,7 @@ private:
 	/* 受信処理(MainFrameRecvProcADMIN.cpp) */
 	void	RecvProcADMIN						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* 管理者系 */
 	void	RecvProcADMIN_CHARINFO				(PBYTE pData, DWORD dwSessionID);					/* キャラ情報通知 */
+	void	RecvProcADMIN_DELETECHARINFO		(PBYTE pData, DWORD dwSessionID);					/* キャラ情報削除 */
 	void	RecvProcADMIN_MAP_RENEWMAPOBJECT	(PBYTE pData, DWORD dwSessionID);					/* マップオブジェクト更新 */
 	void	RecvProcADMIN_MAP_RENEWOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* マップオブジェクト配置データ更新 */
 	void	RecvProcADMIN_MAP_DELETEOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* マップオブジェクト配置データ削除 */

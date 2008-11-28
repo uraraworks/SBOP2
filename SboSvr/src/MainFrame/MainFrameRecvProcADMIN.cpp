@@ -53,6 +53,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_ADMIN_CHARINFO:				RecvProcADMIN_CHARINFO				(pData, dwSessionID);	break;	/* キャラ情報通知 */
+	case SBOCOMMANDID_SUB_ADMIN_DELETECHARINFO:			RecvProcADMIN_DELETECHARINFO		(pData, dwSessionID);	break;	/* キャラ情報削除 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPOBJECT:		RecvProcADMIN_MAP_RENEWMAPOBJECT	(pData, dwSessionID);	break;	/* マップオブジェクト更新 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWOBJECTDATA:	RecvProcADMIN_MAP_RENEWOBJECTDATA	(pData, dwSessionID);	break;	/* マップオブジェクト配置データ更新 */
 	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEOBJECTDATA:	RecvProcADMIN_MAP_DELETEOBJECTDATA	(pData, dwSessionID);	break;	/* マップオブジェクト配置データ削除 */
@@ -175,6 +176,30 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 		pInfoChar->m_bChgMap = TRUE;
 		pInfoChar->m_bChgPosRenew = FALSE;
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_DELETECHARINFO						 */
+/* 内容		:受信処理(キャラ情報削除)										 */
+/* 日付		:2008/11/28														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_DELETECHARINFO(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoCharSvr pInfoChar;
+	CPacketADMIN_PARA2 Packet;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
+	if (pInfoChar == NULL) {
+		return;
+	}
+	if (pInfoChar->IsNPC () == FALSE) {
+		return;
+	}
+	pInfoChar->SetMoveState (CHARMOVESTATE_DELETE);
 }
 
 

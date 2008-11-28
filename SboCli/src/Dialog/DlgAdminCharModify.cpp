@@ -8,8 +8,10 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include "command.h"
 #include "UraraSockTCPSBO.h"
 #include "PacketADMIN_CHARINFO.h"
+#include "PacketADMIN_PARA2.h"
 #include "LibInfoMotionType.h"
 #include "LayoutHelper.h"
 #include "LibInfoCharCli.h"
@@ -52,6 +54,7 @@ void CDlgAdminCharModify::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDlgAdminCharModify, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminCharModify)
 	ON_BN_CLICKED(IDC_SEND, OnSend)
+	ON_BN_CLICKED(IDC_DELETE, OnDelete)
 	ON_BN_CLICKED(IDC_TALK, OnTalk)
 	ON_BN_CLICKED(IDC_SET_MOVETYPE, OnSetMoveType)
 	//}}AFX_MSG_MAP
@@ -296,6 +299,36 @@ BOOL CDlgAdminCharModify::OnInitDialog()
 void CDlgAdminCharModify::OnSend()
 {
 	Send (FALSE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharModify::OnDelete									 */
+/* 内容		:ボタンハンドラ(削除)											 */
+/* 日付		:2008/11/28														 */
+/* ========================================================================= */
+
+void CDlgAdminCharModify::OnDelete()
+{
+	int nResult;
+	CString strTmp;
+	CPacketADMIN_PARA2 Packet;
+
+	if (m_pInfoChar == NULL) {
+		return;
+	}
+	if (m_pInfoChar->IsNPC () == FALSE) {
+		return;
+	}
+
+	strTmp.Format ("[%s]を削除しますか？", (LPCSTR)m_pInfoChar->m_strCharName);
+	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
+	if (nResult != IDYES) {
+		return;
+	}
+
+	Packet.Make (SBOCOMMANDID_SUB_ADMIN_DELETECHARINFO, m_pInfoChar->m_dwCharID);
+	m_pSock->Send (&Packet);
 }
 
 

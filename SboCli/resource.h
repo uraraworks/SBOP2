@@ -70,6 +70,7 @@
 #define IDC_SEND                        1005
 #define IDC_STATIC_CHARID               1006
 #define IDC_ACCOUNTID                   1006
+#define IDC_SEND2                       1007
 #define IDC_LOG                         1010
 #define IDC_COMBO1                      1011
 #define IDC_TYPE                        1011

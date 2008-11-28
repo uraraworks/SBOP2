@@ -63,6 +63,7 @@ protected:
 	//{{AFX_MSG(CDlgAdminCharModify)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSend();
+	afx_msg void OnDelete();
 	afx_msg void OnSetMoveType();
 	afx_msg void OnTalk();
 	//}}AFX_MSG
