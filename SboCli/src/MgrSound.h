@@ -28,6 +28,9 @@ enum {
 	BGMID_SUISHA,					/* suisha.ogg */
 	BGMID_FAIRYTALE,				/* fairytale.ogg */
 	BGMID_TABLA_IMAGE,				/* tabla_image.ogg */
+	BGMID_FLOWED_PIANO,				/* flowed piano.ogg */
+	BGMID_HUYUNOMATI_FULL,			/* huyunomati_full.ogg */
+	BGMID_OYAKODON_NAMI,			/* oyakodon_nami.ogg */
 };
 
 

@@ -180,6 +180,15 @@ void CMgrSound::PlayBGM(
 	case BGMID_TABLA_IMAGE:
 		strcat (szTmp, "tabla_image.ogg");
 		break;
+	case BGMID_FLOWED_PIANO:
+		strcat (szTmp, "flowed piano.ogg");
+		break;
+	case BGMID_HUYUNOMATI_FULL:
+		strcat (szTmp, "huyunomati_full.ogg");
+		break;
+	case BGMID_OYAKODON_NAMI:
+		strcat (szTmp, "oyakodon_nami.ogg");
+		break;
 	}
 	m_dwSoundID = (DWORD)nNo;
 
