@@ -803,7 +803,7 @@ void CLayerMap::RenewMapName(LPCSTR pszMapName)
 	}
 
 	m_pDibMapName = new CImg32;
-	m_pDibMapName->Create (nLen * 16 + 8, 34);
+	m_pDibMapName->Create (nLen * 16 + 8, 36);
 
 	hDCTmp = m_pDibMapName->Lock ();
 	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont32);
