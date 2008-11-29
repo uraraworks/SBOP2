@@ -107,6 +107,9 @@ void CDlgAdminMapEvent::Renew(void)
 	PCInfoMapEventBase pInfo;
 	CString strTmp;
 
+	m_pInfoMap = m_pMgrData->GetMap ();
+	m_pLibInfoMapEvent = m_pInfoMap->m_pLibInfoMapEvent;
+
 	m_List.DeleteAllItems ();
 
 	nCount = m_pLibInfoMapEvent->GetCount ();

@@ -110,6 +110,7 @@ void CDlgAdminMapInfo::Init(CMgrData *pMgrData)
 
 void CDlgAdminMapInfo::Renew(void)
 {
+	m_pInfoMap = m_pMgrData->GetMap ();
 	if (m_pInfoMap == NULL) {
 		return;
 	}

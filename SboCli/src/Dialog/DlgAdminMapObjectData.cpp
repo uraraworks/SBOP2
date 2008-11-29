@@ -136,6 +136,10 @@ void CDlgAdminMapObjectData::Renew(void)
 	PCInfoMapObject pInfoMapObject;
 	CString strTmp;
 
+	m_pInfoMap = m_pMgrData->GetMap ();
+	m_pLibInfoMapObject		= m_pMgrData->GetLibInfoMapObject ();
+	m_pLibInfoMapObjectData = m_pInfoMap->m_pLibInfoMapObjectData;
+
 	m_List.DeleteAllItems ();
 
 	nCountTmp = 0;

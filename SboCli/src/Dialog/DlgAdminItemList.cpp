@@ -202,6 +202,9 @@ void CDlgAdminItemList::OnAdminMsg(int nType, DWORD dwPara)
 	int nResult;
 
 	switch (nType) {
+	case ADMINMSG_RENEWMAPINFO:	/* マップ情報更新 */
+		SetTimer (TIMERID_RENEW, TIMER_RENEW, NULL);
+		break;
 	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* 左クリック通知 */
 		switch (m_pMgrData->GetAdminNotifyTypeL ()) {
 		case ADMINNOTIFYTYPE_ITEMID:			/* アイテムID */

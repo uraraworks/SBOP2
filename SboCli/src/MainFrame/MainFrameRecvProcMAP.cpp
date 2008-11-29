@@ -102,6 +102,7 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 	m_pLibInfoMap->RenewHitTmp ();
 
 	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWMAPINFO, 0);
+	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
