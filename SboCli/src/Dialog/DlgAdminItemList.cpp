@@ -199,7 +199,8 @@ void CDlgAdminItemList::Renew(void)
 
 void CDlgAdminItemList::OnAdminMsg(int nType, DWORD dwPara)
 {
-	int nResult;
+	int i, nCount, nResult;
+	UINT unState;
 
 	switch (nType) {
 	case ADMINMSG_RENEWMAPINFO:	/* マップ情報更新 */
@@ -212,8 +213,16 @@ void CDlgAdminItemList::OnAdminMsg(int nType, DWORD dwPara)
 			if (nResult < 0) {
 				break;
 			}
-			/* クリックされたアイテムを選択 */
-			m_List.SetItemState (nResult, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+			/* クリックされたアイテムだけを選択 */
+			nCount = m_List.GetItemCount ();
+			for (i = 0; i < nCount; i ++) {
+				unState = 0;
+				if (i == nResult) {
+					unState = LVIS_SELECTED | LVIS_FOCUSED;
+				}
+				m_List.SetItemState (i, unState, LVIS_SELECTED | LVIS_FOCUSED);
+			}
+			m_List.EnsureVisible (nResult, FALSE);
 			break;
 
 		case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
