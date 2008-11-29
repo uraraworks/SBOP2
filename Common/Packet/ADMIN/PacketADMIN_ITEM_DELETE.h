@@ -17,15 +17,16 @@
 typedef class CPacketADMIN_ITEM_DELETE : public CPacketBase
 {
 public:
-			CPacketADMIN_ITEM_DELETE();						/* コンストラクタ */
-	virtual ~CPacketADMIN_ITEM_DELETE();					/* デストラクタ */
+			CPacketADMIN_ITEM_DELETE();				/* コンストラクタ */
+	virtual ~CPacketADMIN_ITEM_DELETE();			/* デストラクタ */
 
-	void	Make	(DWORD dwItemID);								/* パケットを作成 */
-	PBYTE	Set		(PBYTE pPacket);								/* パケットを設定 */
+	void	Make	(DWORD dwItemID);						/* パケットを作成 */
+	void	Make	(PARRAYDWORD padwItemID);				/* パケットを作成 */
+	PBYTE	Set		(PBYTE pPacket);						/* パケットを設定 */
 
 
 public:
-	DWORD	m_dwItemID;			/* アイテムID */
+	ARRAYDWORD	m_adwItemID;	/* アイテムID */
 } CPacketADMIN_ITEM_DELETE, *PCPacketADMIN_ITEM_DELETE;
 
 /* Copyright(C)URARA-works 2007 */

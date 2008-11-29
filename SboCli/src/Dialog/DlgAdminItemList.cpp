@@ -29,6 +29,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#define TIMERID_RENEW	(100)		/* 一覧更新タイマー */
+#define TIMER_RENEW		(100)		/* 一覧更新タイマー周期 */
+
 /* ========================================================================= */
 /* クラスの設定																 */
 /* ========================================================================= */
@@ -39,6 +42,8 @@ void CDlgAdminItemList::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CDlgAdminItemList)
 	DDX_Control(pDX, IDC_LIST, m_List);
 	//}}AFX_DATA_MAP
+	DDX_Check(pDX, IDC_DROP, m_bDrop);
+	DDX_Check(pDX, IDC_MAP, m_bMap);
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminItemList, CDlgAdminBase)
@@ -49,6 +54,9 @@ BEGIN_MESSAGE_MAP(CDlgAdminItemList, CDlgAdminBase)
 	ON_BN_CLICKED(IDC_DELETE, OnDelete)
 	ON_BN_CLICKED(IDC_RENEW, OnRenew)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_DROP, &CDlgAdminItemList::OnBnClickedDrop)
+	ON_BN_CLICKED(IDC_MAP, &CDlgAdminItemList::OnBnClickedMap)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -60,6 +68,8 @@ END_MESSAGE_MAP()
 
 CDlgAdminItemList::CDlgAdminItemList(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminItemList::IDD, pParent)
+	, m_bDrop(TRUE)
+	, m_bMap(TRUE)
 {
 	//{{AFX_DATA_INIT(CDlgAdminItemList)
 	//}}AFX_DATA_INIT
@@ -108,12 +118,16 @@ void CDlgAdminItemList::Init(CMgrData *pMgrData)
 
 void CDlgAdminItemList::Renew(void)
 {
-	int i, nCount, nSelect;
+	DWORD dwMapID;
+	int i, nCount, nSelect, nIndex;
 	PCInfoItem pInfoItem;
 	PCInfoCharCli pInfoChar;
 	PCLibInfoCharCli pLibInfoChar;
 	CString strTmp;
 
+	m_pLibInfoItem->Enter ();
+
+	dwMapID = m_pMgrData->GetMapID ();
 	pLibInfoChar = m_pMgrData->GetLibInfoChar ();
 
 	nSelect = m_List.GetNextItem (-1, LVNI_SELECTED);
@@ -123,18 +137,30 @@ void CDlgAdminItemList::Renew(void)
 	nCount = m_pLibInfoItem->GetCount ();
 	m_List.SetItemCount (nCount);
 
+	nIndex = 0;
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (i);
 		if (pInfoItem == NULL) {
 			continue;
 		}
+		if (m_bDrop) {
+			if (pInfoItem->m_dwMapID == 0) {
+				continue;
+			}
+		}
+		if (m_bMap) {
+			if (pInfoItem->m_dwMapID != dwMapID) {
+				continue;
+			}
+		}
+
 		strTmp.Format ("%d", pInfoItem->m_dwItemID);
-		m_List.InsertItem (i, strTmp);
-		m_List.SetItemData (i, pInfoItem->m_dwItemID);		/* ID */
-		m_List.SetItemText (i, 1, pInfoItem->m_strName);	/* アイテム名 */
+		m_List.InsertItem (nIndex, strTmp);
+		m_List.SetItemData (nIndex, pInfoItem->m_dwItemID);		/* ID */
+		m_List.SetItemText (nIndex, 1, pInfoItem->m_strName);	/* アイテム名 */
 
 		strTmp = m_pLibInfoItemType->GetTypeNameTypeID (pInfoItem->m_dwItemTypeID);
-		m_List.SetItemText (i, 2, strTmp);					/* 種別 */
+		m_List.SetItemText (nIndex, 2, strTmp);					/* 種別 */
 
 		strTmp.Empty ();
 		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
@@ -145,13 +171,14 @@ void CDlgAdminItemList::Renew(void)
 				strTmp.Format ("[%u]", pInfoItem->m_dwCharID);
 			}
 		}
-		m_List.SetItemText (i, 3, strTmp);					/* 所持キャラ */
+		m_List.SetItemText (nIndex, 3, strTmp);					/* 所持キャラ */
 
 		strTmp.Empty ();
 		if (pInfoItem->m_dwMapID) {
 			strTmp.Format ("MAPID:%u (%d, %d)", pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
 		}
-		m_List.SetItemText (i, 4, strTmp);					/* 配置座標 */
+		m_List.SetItemText (nIndex, 4, strTmp);					/* 配置座標 */
+		nIndex ++;
 	}
 
 	if (nSelect >= 0) {
@@ -159,6 +186,8 @@ void CDlgAdminItemList::Renew(void)
 		m_List.EnsureVisible (nSelect, FALSE);
 	}
 	m_List.SetRedraw ();
+
+	m_pLibInfoItem->Leave ();
 }
 
 
@@ -234,6 +263,25 @@ BOOL CDlgAdminItemList::OnInitDialog()
 
 
 /* ========================================================================= */
+/* 関数名	:CDlgAdminItemList::OnTimer										 */
+/* 内容		:メッセージハンドラ(WM_TIMER)									 */
+/* 日付		:2008/11/29														 */
+/* ========================================================================= */
+
+void CDlgAdminItemList::OnTimer(UINT_PTR nIDEvent)
+{
+	switch (nIDEvent) {
+	case TIMERID_RENEW:
+		KillTimer (TIMERID_RENEW);
+		Renew ();
+		break;
+	}
+
+	CDlgAdminBase::OnTimer(nIDEvent);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CDlgAdminItemList::OnMainFrame									 */
 /* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
 /* 日付		:2007/08/16														 */
@@ -243,7 +291,7 @@ void CDlgAdminItemList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
 	case MAINFRAMEMSG_RENEWITEMINFO:		/* アイテム情報更新 */
-		Renew ();
+		SetTimer (TIMERID_RENEW, TIMER_RENEW, NULL);
 		break;
 	}
 }
@@ -376,29 +424,43 @@ void CDlgAdminItemList::OnCopy()
 
 void CDlgAdminItemList::OnDelete()
 {
-	int nResult;
+	int nCount, nResult;
 	DWORD dwItemID;
 	PCInfoItem pInfoItem;
 	CString strTmp;
 	CPacketADMIN_ITEM_DELETE Packet;
+	ARRAYDWORD adwItemID;
 
-	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
-	if (nResult < 0) {
+	nResult = -1;
+	nCount  = 0;
+	while (1) {
+		nResult = m_List.GetNextItem (nResult, LVNI_SELECTED);
+		if (nResult < 0) {
+			break;
+		}
+		dwItemID	= m_List.GetItemData (nResult);
+		pInfoItem	= (PCInfoItem)m_pLibInfoItem->GetPtr (dwItemID);
+		if (pInfoItem == NULL) {
+			continue;
+		}
+		adwItemID.Add (dwItemID);
+		nCount ++;
+	}
+	if (nCount <= 0) {
 		return;
 	}
-	dwItemID	= m_List.GetItemData (nResult);
-	pInfoItem	= (PCInfoItem)m_pLibInfoItem->GetPtr (dwItemID);
-	if (pInfoItem == NULL) {
-		return;
+	if (nCount == 1) {
+		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (adwItemID[0]);
+		strTmp.Format ("[%s]を削除しますか？", (LPCSTR)pInfoItem->m_strName);
+	} else {
+		strTmp.Format ("選択されているアイテムを削除しますか？");
 	}
-
-	strTmp.Format ("[%s]を削除しますか？", (LPCSTR)pInfoItem->m_strName);
 	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (dwItemID);
+	Packet.Make (&adwItemID);
 	m_pSock->Send (&Packet);
 }
 
@@ -416,6 +478,32 @@ void CDlgAdminItemList::OnRenew()
 	/* 全アイテム情報を要求 */
 	Packet.Make (0);
 	m_pSock->Send (&Packet);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminItemList::OnBnClickedDrop								 */
+/* 内容		:チェックボタンハンドラ(落ちているものだけ表示)					 */
+/* 日付		:2008/11/29														 */
+/* ========================================================================= */
+
+void CDlgAdminItemList::OnBnClickedDrop()
+{
+	UpdateData ();
+	Renew ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminItemList::OnBnClickedDrop								 */
+/* 内容		:チェックボタンハンドラ(現在のマップのみ)						 */
+/* 日付		:2008/11/29														 */
+/* ========================================================================= */
+
+void CDlgAdminItemList::OnBnClickedMap()
+{
+	UpdateData ();
+	Renew ();
 }
 
 

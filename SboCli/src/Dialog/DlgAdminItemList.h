@@ -44,6 +44,8 @@ public:
 	//{{AFX_DATA(CDlgAdminItemList)
 	enum { IDD = IDD_ITEM_LIST };
 	CListCtrl	m_List;
+	BOOL m_bDrop;
+	BOOL m_bMap;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminItemList)
@@ -54,11 +56,14 @@ public:
 protected:
 	//{{AFX_MSG(CDlgAdminItemList)
 	virtual BOOL OnInitDialog();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnAdd();
 	afx_msg void OnModify();
 	afx_msg void OnCopy();
 	afx_msg void OnDelete();
 	afx_msg void OnRenew();
+	afx_msg void OnBnClickedDrop();
+	afx_msg void OnBnClickedMap();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 } CDlgAdminItemList, *PCDlgAdminItemList;

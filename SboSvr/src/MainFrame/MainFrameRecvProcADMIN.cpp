@@ -835,6 +835,8 @@ void CMainFrame::RecvProcADMIN_ITEM_COPY(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcADMIN_ITEM_DELETE(PBYTE pData, DWORD dwSessionID)
 {
+	int i, nCount;
+	DWORD dwItemID;
 	PCInfoItem pInfoItem;
 	PCInfoCharSvr pInfoChar;
 	CPacketADMIN_ITEM_DELETE Packet;
@@ -843,29 +845,34 @@ void CMainFrame::RecvProcADMIN_ITEM_DELETE(PBYTE pData, DWORD dwSessionID)
 
 	Packet.Set (pData);
 
-	pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (Packet.m_dwItemID);
-	if (pInfoItem == NULL) {
-		return;
-	}
-	if (pInfoItem->m_dwCharID) {
-		pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (pInfoItem->m_dwCharID);
-		if (pInfoChar) {
-			/* キャラの所持アイテムから削除する */
-			pInfoChar->DeleteItem (pInfoItem->m_dwItemID);
-			m_pLibInfoItem->DeleteItem (pInfoItem->m_dwItemID, pInfoChar);
+	nCount = Packet.m_adwItemID.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		dwItemID = Packet.m_adwItemID[i];
 
-			PacketCHAR_ITEMINFO.Make (pInfoChar->m_dwCharID, &pInfoChar->m_adwItemID);
-			m_pSock->SendTo (pInfoChar->m_dwSessionID, &PacketCHAR_ITEMINFO);
+		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (dwItemID);
+		if (pInfoItem == NULL) {
+			continue;
 		}
-	}
+		if (pInfoItem->m_dwCharID) {
+			pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (pInfoItem->m_dwCharID);
+			if (pInfoChar) {
+				/* キャラの所持アイテムから削除する */
+				pInfoChar->DeleteItem (pInfoItem->m_dwItemID);
+				m_pLibInfoItem->DeleteItem (pInfoItem->m_dwItemID, pInfoChar);
 
-	PacketITEM_DELETEITEMINFO.Make (Packet.m_dwItemID);
-	if (pInfoItem->m_dwMapID) {
-		SendToMapChar (pInfoItem->m_dwMapID, &PacketITEM_DELETEITEMINFO);
-	}
-	SendToAdminChar (&PacketITEM_DELETEITEMINFO);
+				PacketCHAR_ITEMINFO.Make (pInfoChar->m_dwCharID, &pInfoChar->m_adwItemID);
+				m_pSock->SendTo (pInfoChar->m_dwSessionID, &PacketCHAR_ITEMINFO);
+			}
+		}
 
-	m_pLibInfoItem->Delete (Packet.m_dwItemID);
+		PacketITEM_DELETEITEMINFO.Make (dwItemID);
+		if (pInfoItem->m_dwMapID) {
+			SendToMapChar (pInfoItem->m_dwMapID, &PacketITEM_DELETEITEMINFO);
+		}
+		SendToAdminChar (&PacketITEM_DELETEITEMINFO);
+
+		m_pLibInfoItem->Delete (dwItemID);
+	}
 }
 
 

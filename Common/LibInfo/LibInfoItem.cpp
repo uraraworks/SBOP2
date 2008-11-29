@@ -226,6 +226,8 @@ void CLibInfoItem::Delete(
 	int i, nCount, nNo;
 	PCInfoItem pInfoTmp;
 
+	Enter ();
+
 	nNo = -1;
 
 	nCount = m_paInfo->GetSize ();
@@ -241,6 +243,8 @@ void CLibInfoItem::Delete(
 	if (nNo >= 0) {
 		Delete (nNo);
 	}
+
+	Leave ();
 }
 
 

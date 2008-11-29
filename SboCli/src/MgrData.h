@@ -116,6 +116,7 @@ public:
 	DWORD			GetAccountID		(void);										/* 使用中のアカウントIDを取得 */
 	void			SetCharID			(DWORD dwCharID);							/* 使用中のキャラIDを設定 */
 	DWORD			GetCharID			(void);										/* 使用中のキャラIDを取得 */
+	DWORD			GetMapID			(void);										/* 現在のマップIDを取得 */
 	LPCSTR			GetFamilyTypeName	(WORD wFamilyTypeID);						/* 種族名を取得 */
 	LPCSTR			GetHairTypeName		(WORD wHairTypeID);							/* 髪型名を取得 */
 	LPCSTR			GetHairColorName	(WORD wHairColorID);						/* 髪色名を取得 */

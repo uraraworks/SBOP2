@@ -362,6 +362,27 @@ DWORD CMgrData::GetCharID(void)
 
 
 /* ========================================================================= */
+/* 関数名	:CMgrData::GetMapID												 */
+/* 内容		:現在のマップIDを取得											 */
+/* 日付		:2008/11/29														 */
+/* ========================================================================= */
+
+DWORD CMgrData::GetMapID(void)
+{
+	DWORD dwRet;
+
+	dwRet = 0;
+	if (m_pPlayerChar == NULL) {
+		goto Exit;
+	}
+
+	dwRet = m_pPlayerChar->m_dwMapID;
+Exit:
+	return dwRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CMgrData::GetFamilyTypeName									 */
 /* 内容		:種族名を取得													 */
 /* 日付		:2007/04/07														 */

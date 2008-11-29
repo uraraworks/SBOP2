@@ -19,7 +19,6 @@
 
 CPacketADMIN_ITEM_DELETE::CPacketADMIN_ITEM_DELETE()
 {
-	m_dwItemID = 0;
 }
 
 
@@ -43,12 +42,31 @@ CPacketADMIN_ITEM_DELETE::~CPacketADMIN_ITEM_DELETE()
 void CPacketADMIN_ITEM_DELETE::Make(
 	DWORD dwItemID)		/* [in] アイテムID */
 {
+	ARRAYDWORD adwItemID;
+
+	adwItemID.Add (dwItemID);
+	Make (&adwItemID);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CPacketADMIN_ITEM_DELETE::Make									 */
+/* 内容		:パケットを作成													 */
+/* 日付		:2008/11/29														 */
+/* ========================================================================= */
+
+void CPacketADMIN_ITEM_DELETE::Make(
+	PARRAYDWORD padwItemID)		/* [in] アイテムID */
+{
+	int i, nCount;
 	PBYTE pData, pDataTmp;
-	DWORD dwSize;
+	DWORD dwItemID, dwSize;
 	PPACKETBASE pPacketBase;
 
+	nCount = padwItemID->GetSize ();
+
 	dwSize = sizeof (PACKETBASE) +
-			 sizeof (dwItemID);
+			 ((nCount + 1) * sizeof (DWORD));
 
 	pData = new BYTE[dwSize];
 	ZeroMemory (pData, dwSize);
@@ -58,6 +76,12 @@ void CPacketADMIN_ITEM_DELETE::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_ITEM_DELETE;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
+	for (i = 0; i < nCount; i ++) {
+		dwItemID = padwItemID->GetAt (i);
+		CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* アイテムID */
+	}
+	/* 終端用 */
+	dwItemID = 0;
 	CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* アイテムID */
 
 	RenewPacket (pData, dwSize);
@@ -72,12 +96,21 @@ void CPacketADMIN_ITEM_DELETE::Make(
 
 PBYTE CPacketADMIN_ITEM_DELETE::Set(PBYTE pPacket)
 {
+	DWORD dwItemID;
 	PBYTE pRet, pDataTmp;
+
+	m_adwItemID.RemoveAll ();
 
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwItemID, pDataTmp, sizeof (m_dwItemID), pDataTmp);	/* アイテムID */
+	while (1) {
+		CopyMemoryRenew (&dwItemID, pDataTmp, sizeof (dwItemID), pDataTmp);	/* アイテムID */
+		if (dwItemID == 0) {
+			break;
+		}
+		m_adwItemID.Add (dwItemID);
+	}
 
 	pRet = pDataTmp;
 	return pRet;

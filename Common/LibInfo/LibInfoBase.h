@@ -9,12 +9,13 @@
 #pragma once
 
 #include "InfoBase.h"
+#include "mySection.h"
 
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
 
-typedef class CLibInfoBase
+typedef class CLibInfoBase : public CmySection
 {
 public:
 			CLibInfoBase();							/* コンストラクタ */
