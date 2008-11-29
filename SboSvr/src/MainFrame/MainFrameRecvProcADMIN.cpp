@@ -475,9 +475,18 @@ void CMainFrame::RecvProcADMIN_MAP_SETMAPNAME(PBYTE pData, DWORD dwSessionID)
 	pInfoMap->m_strMapName		= Packet.m_strMapName;
 	pInfoMap->m_dwBGMID			= Packet.m_dwBGMID;			/* BGMID */
 	pInfoMap->m_dwWeatherType	= Packet.m_dwWeatherType;	/* 天気種別 */
+	pInfoMap->m_bEnableBattle	= Packet.m_bEnableBattle;	/* 戦闘許可 */
+	pInfoMap->m_bRecovery		= Packet.m_bRecovery;		/* 気絶後回復する */
 	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* 明るさレベル */
 
-	PacketMAP_MAPNAME.Make (pInfoMap->m_dwMapID, pInfoMap->m_dwBGMID, pInfoMap->m_dwWeatherType, pInfoMap->m_byLevel, pInfoMap->m_strMapName);
+	PacketMAP_MAPNAME.Make (
+			pInfoMap->m_dwMapID,
+			pInfoMap->m_dwBGMID,
+			pInfoMap->m_dwWeatherType,
+			pInfoMap->m_bEnableBattle,
+			pInfoMap->m_bRecovery,
+			pInfoMap->m_byLevel,
+			pInfoMap->m_strMapName);
 	SendToMapChar (pInfoMap->m_dwMapID, &PacketMAP_MAPNAME);
 	UpdateServerInfo (FALSE);
 }

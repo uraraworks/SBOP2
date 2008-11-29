@@ -1078,6 +1078,11 @@ void CLibInfoCharSvr::MoveMapOut(CInfoCharSvr *pInfoChar)
 	if (pInfoMap == NULL) {
 		return;
 	}
+	if (pInfoMap->IsEnableBattle () == FALSE) {
+		if (pInfoChar->IsStateBattle ()) {
+			pInfoChar->SetMoveState (CHARMOVESTATE_STAND);
+		}
+	}
 
 	PacketRES_CHARINFO.Make (pInfoChar);
 	m_pSock->SendTo (pInfoChar->m_dwSessionID, &PacketRES_CHARINFO);

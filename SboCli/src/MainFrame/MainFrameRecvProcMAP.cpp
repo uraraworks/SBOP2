@@ -494,6 +494,8 @@ void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
 	pInfoMap->m_strMapName		= Packet.m_strMapName;
 	pInfoMap->m_dwBGMID			= Packet.m_dwBGMID;			/* BGMID */
 	pInfoMap->m_dwWeatherType	= Packet.m_dwWeatherType;	/* 天気種別 */
+	pInfoMap->m_bEnableBattle	= Packet.m_bEnableBattle;	/* 戦闘許可 */
+	pInfoMap->m_bRecovery		= Packet.m_bRecovery;		/* 気絶後回復する */
 	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* 明るさレベル */
 
 	if (pInfoMap->m_strMapName != strMapNameBack) {

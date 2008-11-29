@@ -21,6 +21,8 @@ CPacketADMIN_MAP_SETMAPNAME::CPacketADMIN_MAP_SETMAPNAME()
 	m_dwMapID		= 0;			/* マップID */
 	m_dwBGMID		= 0;			/* BGMID */
 	m_dwWeatherType	= 0;			/* 天気種別 */
+	m_bEnableBattle	= TRUE;			/* 戦闘許可 */
+	m_bRecovery		= TRUE;			/* 気絶後回復する */
 	m_byLevel		= 0;			/* 明るさレベル */
 }
 
@@ -46,6 +48,8 @@ void CPacketADMIN_MAP_SETMAPNAME::Make(
 	DWORD dwMapID,			/* [in] マップID */
 	DWORD dwBGMID,			/* [in] BGMID */
 	DWORD dwWeatherType,	/* [in] 天気種別 */
+	BOOL bEnableBattle,		/* [in] 戦闘許可 */
+	BOOL bRecovery,			/* [in] 気絶後回復する */
 	BYTE byLevel,			/* [in] 明るさレベル */
 	LPCSTR pszMapName)		/* [in] マップ名 */
 {
@@ -57,6 +61,8 @@ void CPacketADMIN_MAP_SETMAPNAME::Make(
 			 sizeof (dwMapID)		+
 			 sizeof (dwBGMID)		+
 			 sizeof (dwWeatherType)	+
+			 sizeof (bEnableBattle)	+
+			 sizeof (bRecovery)		+
 			 sizeof (byLevel)		+
 			 (strlen (pszMapName) + 1);
 
@@ -71,6 +77,8 @@ void CPacketADMIN_MAP_SETMAPNAME::Make(
 	CopyMemoryRenew (pDataTmp, &dwMapID,		sizeof (dwMapID),		pDataTmp);	/* マップID */
 	CopyMemoryRenew (pDataTmp, &dwBGMID,		sizeof (dwBGMID),		pDataTmp);	/* BGMID */
 	CopyMemoryRenew (pDataTmp, &dwWeatherType,	sizeof (dwWeatherType),	pDataTmp);	/* 天気種別 */
+	CopyMemoryRenew (pDataTmp, &bEnableBattle,	sizeof (bEnableBattle),	pDataTmp);	/* 戦闘許可 */
+	CopyMemoryRenew (pDataTmp, &bRecovery,		sizeof (bRecovery),		pDataTmp);	/* 気絶後回復する */
 	CopyMemoryRenew (pDataTmp, &byLevel,		sizeof (byLevel),		pDataTmp);	/* 明るさレベル */
 	strcpyRenew ((LPSTR)pDataTmp, pszMapName, pDataTmp);				/* マップ名 */
 
@@ -94,6 +102,8 @@ PBYTE CPacketADMIN_MAP_SETMAPNAME::Set(PBYTE pPacket)
 	CopyMemoryRenew (&m_dwMapID,		pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* マップID */
 	CopyMemoryRenew (&m_dwBGMID,		pDataTmp, sizeof (m_dwBGMID),		pDataTmp);	/* BGMID */
 	CopyMemoryRenew (&m_dwWeatherType,	pDataTmp, sizeof (m_dwWeatherType),	pDataTmp);	/* 天気種別 */
+	CopyMemoryRenew (&m_bEnableBattle,	pDataTmp, sizeof (m_bEnableBattle),	pDataTmp);	/* 戦闘許可 */
+	CopyMemoryRenew (&m_bRecovery,		pDataTmp, sizeof (m_bRecovery),		pDataTmp);	/* 気絶後回復する */
 	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);	/* 明るさレベル */
 	StoreRenew (m_strMapName, (LPCSTR)pDataTmp, pDataTmp);								/* マップ名 */
 

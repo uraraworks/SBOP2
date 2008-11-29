@@ -303,7 +303,14 @@ void CDlgAdminMapInfo::OnChangemapname()
 	m_pInfoMap->m_bEnableBattle	= m_bEnableBattle;							/* í“¬‹–‰Â */
 	m_pInfoMap->m_bRecovery		= m_bRecovery;								/* ‹CâŒã‰ñ•œ‚·‚é */
 
-	Packet.Make (m_pInfoMap->m_dwMapID, m_pInfoMap->m_dwBGMID, m_pInfoMap->m_dwWeatherType, m_pInfoMap->m_byLevel, (LPCSTR)m_strMapName);
+	Packet.Make (
+			m_pInfoMap->m_dwMapID,
+			m_pInfoMap->m_dwBGMID,
+			m_pInfoMap->m_dwWeatherType,
+			m_pInfoMap->m_bEnableBattle,
+			m_pInfoMap->m_bRecovery,
+			m_pInfoMap->m_byLevel,
+			(LPCSTR)m_strMapName);
 	m_pSock->Send (&Packet);
 }
 

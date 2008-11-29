@@ -862,6 +862,8 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 	dwRet += sizeof (m_dwMapID);
 	dwRet += sizeof (m_dwBGMID);				/* BGMID */
 	dwRet += sizeof (m_dwWeatherType);			/* 天気種別 */
+	dwRet += sizeof (m_bEnableBattle);			/* 戦闘許可 */
+	dwRet += sizeof (m_bRecovery);				/* 気絶後回復する */
 	dwRet += sizeof (m_byLevel);				/* 暗さレベル */
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
@@ -898,6 +900,8 @@ PBYTE CInfoMapBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwMapID,			sizeof (m_dwMapID),			pDataTmp);	/* マップID */
 	CopyMemoryRenew (pDataTmp, &m_dwBGMID,			sizeof (m_dwBGMID),			pDataTmp);	/* BGMID */
 	CopyMemoryRenew (pDataTmp, &m_dwWeatherType,	sizeof (m_dwWeatherType),	pDataTmp);	/* 天気種別 */
+	CopyMemoryRenew (pDataTmp, &m_bEnableBattle,	sizeof (m_bEnableBattle),	pDataTmp);	/* 戦闘許可 */
+	CopyMemoryRenew (pDataTmp, &m_bRecovery,		sizeof (m_bRecovery),		pDataTmp);	/* 気絶後回復する */
 	CopyMemoryRenew (pDataTmp, &m_byLevel,			sizeof (m_byLevel),			pDataTmp);	/* 暗さレベル */
 	strcpyRenew ((LPSTR)pDataTmp, m_strMapName, pDataTmp);					/* マップ名 */
 	if (m_pwMap) {
@@ -942,6 +946,8 @@ PBYTE CInfoMapBase::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_dwMapID,		pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* マップID */
 	CopyMemoryRenew (&m_dwBGMID,		pDataTmp, sizeof (m_dwBGMID),		pDataTmp);	/* BGMID */
 	CopyMemoryRenew (&m_dwWeatherType,	pDataTmp, sizeof (m_dwWeatherType),	pDataTmp);	/* 天気種別 */
+	CopyMemoryRenew (&m_bEnableBattle,	pDataTmp, sizeof (m_bEnableBattle),	pDataTmp);	/* 戦闘許可 */
+	CopyMemoryRenew (&m_bRecovery,		pDataTmp, sizeof (m_bRecovery),		pDataTmp);	/* 気絶後回復する */
 	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);	/* 暗さレベル */
 	StoreRenew (m_strMapName, (LPCSTR)pDataTmp, pDataTmp);					/* マップ名 */
 	Init (m_sizeMap.cx, m_sizeMap.cy, 0);
