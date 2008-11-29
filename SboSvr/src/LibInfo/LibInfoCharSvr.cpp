@@ -2631,11 +2631,12 @@ BOOL CLibInfoCharSvr::IsHitAtack(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTar
 
 void CLibInfoCharSvr::Damage(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget, DWORD dwPoint, int nEffectID, BOOL bCritical)
 {
-	BOOL bDefense;
+	BOOL bDefense, bResult;
 	int nReserveChgEfect, anDirection[] = {1, 0, 3, 2, 6, 7, 4, 5};
 	DWORD dwStartTime, dwPointTmp;
 	COLORREF clMsg;
-	CInfoCharSvr *pCharTmp;
+	PCInfoCharSvr pCharTmp;
+	PCInfoMapBase pInfoMap;
 	CPacketMAP_FORMATMSG PacketMsg;
 	CPacketCHAR_STATUS PacketCHAR_STATUS;
 	CPacketCHAR_STATE PacketCHAR_STATE;
@@ -2649,6 +2650,8 @@ void CLibInfoCharSvr::Damage(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget,
 		/* 親がいる場合は親の情報を使用する */
 		pCharTmp = (PCInfoCharSvr)GetPtrLogIn (pInfoChar->m_dwParentCharID);
 	}
+
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pCharTarget->m_dwMapID);
 
 	bDefense = (pCharTarget->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) ? TRUE : FALSE;
 	if (bDefense) {
@@ -2703,14 +2706,20 @@ void CLibInfoCharSvr::Damage(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget,
 		pCharTarget->SetMoveState (CHARMOVESTATE_SWOON);
 //Todo:暫定
 		dwStartTime = 5000;
+		bResult		= TRUE;
 		if (pCharTarget->IsLogoutDelete ()) {
 			/* 死亡エフェクト再生 */
 			pCharTarget->SetMotion (CHARMOTIONLISTID_DEAD_UP);
 			dwStartTime = 2500;
 		} else {
 			pCharTarget->m_nReserveChgEfect = 2;
+			if (pInfoMap->m_bRecovery == FALSE) {
+				bResult = FALSE;
+			}
 		}
-		pCharTarget->AddProcInfo (CHARPROCID_SWOON, dwStartTime, 0);
+		if (bResult) {
+			pCharTarget->AddProcInfo (CHARPROCID_SWOON, dwStartTime, 0);
+		}
 
 		SendFormatMsg (pCharTarget->m_dwSessionID, FORMATMSGID_SWOON3, pCharTmp->m_dwCharID);
 		SendFormatMsg (pCharTmp->m_dwSessionID, FORMATMSGID_SWOON2, pCharTarget->m_dwCharID);

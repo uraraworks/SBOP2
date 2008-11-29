@@ -66,6 +66,7 @@ public:
 	void	DeleteShadow	(DWORD dwShadowID);					/* 指定影を削除 */
 	DWORD	GetMapObject	(int x, int y);						/* 指定座標のマップオブジェクトIDを取得 */
 	BOOL	IsFlg			(int x, int y, DWORD dwFlg);		/* 指定属性か判定 */
+	BOOL	IsEnableBattle	(void);								/* 戦闘許可か判定 */
 
 	DWORD	GetSendDataSize	(void);								/* 送信データサイズを取得 */
 	PBYTE	GetSendData		(void);								/* 送信データを取得 */
@@ -90,6 +91,8 @@ public:
 	DWORD		m_dwMapID,				/* マップID */
 				m_dwBGMID,				/* BGMID */
 				m_dwWeatherType;		/* 天気種別 */
+	BOOL		m_bEnableBattle,		/* 戦闘許可 */
+				m_bRecovery;			/* 気絶後回復する */
 	PBYTE		m_pbyMapEvent,			/* 各座標のマップイベント */
 				m_pbyHitTmp;			/* マップパーツ以外での当たり判定 */
 	PWORD		m_pwMap,				/* マップ */

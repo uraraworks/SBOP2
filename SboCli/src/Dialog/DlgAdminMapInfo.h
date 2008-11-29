@@ -42,6 +42,8 @@ public:
 	CString	m_strMapName;
 	CComboBox	m_cmbBGMID;
 	CComboBox	m_cmbWeatherType;
+	BOOL m_bEnableBattle;
+	BOOL m_bRecovery;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminMapInfo)

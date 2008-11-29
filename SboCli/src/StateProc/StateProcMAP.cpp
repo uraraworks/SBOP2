@@ -1722,6 +1722,11 @@ BOOL CStateProcMAP::OnTab(BOOL bDown)
 
 	switch (m_pPlayerChar->m_nMoveState) {
 	case CHARMOVESTATE_STAND:			/* —§‚¿ */
+		bResult = m_pMap->IsEnableBattle ();
+		if (bResult == FALSE) {
+			AddSystemMsg (FALSE, "‚±‚Ìƒ}ƒbƒv‚Å‚Íí“¬‚Å‚«‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			goto Exit;
+		}
 		m_pPlayerChar->SetMoveState (CHARMOVESTATE_BATTLE);
 		m_dwLastTimeGauge = timeGetTime ();
 		break;

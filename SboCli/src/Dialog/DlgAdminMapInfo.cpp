@@ -39,6 +39,8 @@ void CDlgAdminMapInfo::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_DARKLEVEL, m_nDarkLevel);
 	DDX_Control(pDX, IDC_BGMID, m_cmbBGMID);
 	DDX_Control(pDX, IDC_WEATHERTYPE, m_cmbWeatherType);
+	DDX_Check(pDX, IDC_ENABLEBATTLE, m_bEnableBattle);
+	DDX_Check(pDX, IDC_RECOVERY, m_bRecovery);
 	//}}AFX_DATA_MAP
 }
 
@@ -60,6 +62,8 @@ END_MESSAGE_MAP()
 
 CDlgAdminMapInfo::CDlgAdminMapInfo(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminMapInfo::IDD, pParent)
+	, m_bEnableBattle(TRUE)
+	, m_bRecovery(TRUE)
 {
 	//{{AFX_DATA_INIT(CDlgAdminMapInfo)
 	m_strMapSize = _T("");
@@ -122,7 +126,9 @@ void CDlgAdminMapInfo::Renew(void)
 
 	SelectCmb (&m_cmbBGMID,			m_pInfoMap->m_dwBGMID);
 	SelectCmb (&m_cmbWeatherType,	m_pInfoMap->m_dwWeatherType);
-	m_nDarkLevel = m_pInfoMap->m_byLevel;							/* 暗度 */
+	m_nDarkLevel	= m_pInfoMap->m_byLevel;		/* 暗度 */
+	m_bEnableBattle	= m_pInfoMap->m_bEnableBattle;	/* 戦闘許可 */
+	m_bRecovery		= m_pInfoMap->m_bRecovery;		/* 気絶後回復する */
 
 	UpdateData (FALSE);
 }
@@ -293,7 +299,9 @@ void CDlgAdminMapInfo::OnChangemapname()
 	m_pInfoMap->m_dwBGMID = m_cmbBGMID.GetItemData (nSelect);				/* BGMID */
 	nSelect = m_cmbWeatherType.GetCurSel ();
 	m_pInfoMap->m_dwWeatherType = m_cmbWeatherType.GetItemData (nSelect);	/* 天気種別 */
-	m_pInfoMap->m_byLevel = (BYTE)m_nDarkLevel;								/* 暗度 */
+	m_pInfoMap->m_byLevel		= (BYTE)m_nDarkLevel;						/* 暗度 */
+	m_pInfoMap->m_bEnableBattle	= m_bEnableBattle;							/* 戦闘許可 */
+	m_pInfoMap->m_bRecovery		= m_bRecovery;								/* 気絶後回復する */
 
 	Packet.Make (m_pInfoMap->m_dwMapID, m_pInfoMap->m_dwBGMID, m_pInfoMap->m_dwWeatherType, m_pInfoMap->m_byLevel, (LPCSTR)m_strMapName);
 	m_pSock->Send (&Packet);

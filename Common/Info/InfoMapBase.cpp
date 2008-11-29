@@ -24,6 +24,8 @@ static LPCSTR s_aszName[] = {
 	"dwMapID",					/* マップID */
 	"m_dwBGMID",				/* BGMID */
 	"m_dwWeatherType",			/* 天気種別 */
+	"m_bEnableBattle",			/* 戦闘許可 */
+	"m_bRecovery",				/* 気絶後回復する */
 	"m_byLevel",				/* 暗さレベル */
 	"pwMap",					/* マップ */
 	"pwMapShadow",				/* マップ影 */
@@ -46,6 +48,8 @@ CInfoMapBase::CInfoMapBase()
 	m_dwMapID		= 0;
 	m_dwBGMID		= 0;
 	m_dwWeatherType	= 0;
+	m_bEnableBattle	= TRUE;		/* 戦闘許可 */
+	m_bRecovery		= TRUE;		/* 気絶後回復する */
 	m_pbyMapEvent	= NULL;
 	m_pbyHitTmp		= NULL;
 	m_pwMap			= NULL;
@@ -299,6 +303,8 @@ DWORD CInfoMapBase::GetDataSize(void)
 	dwRet += sizeof (m_dwMapID);
 	dwRet += sizeof (m_dwBGMID);				/* BGMID */
 	dwRet += sizeof (m_dwWeatherType);			/* 天気種別 */
+	dwRet += sizeof (m_bEnableBattle);			/* 戦闘許可 */
+	dwRet += sizeof (m_bRecovery);				/* 気絶後回復する */
 	dwRet += sizeof (m_byLevel);				/* 暗さレベル */
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
@@ -331,16 +337,18 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 	case 1:	dwRet = sizeof (m_dwMapID);								break;
 	case 2:	dwRet = sizeof (m_dwBGMID);								break;	/* BGMID */
 	case 3:	dwRet = sizeof (m_dwWeatherType);						break;	/* 天気種別 */
-	case 4:	dwRet = sizeof (m_byLevel);								break;	/* 暗さレベル */
-	case 5:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
-	case 6:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
-	case 7:	dwRet = m_strMapName.GetLength () + 1;					break;
-	case 8:
+	case 4:	dwRet = sizeof (m_bEnableBattle);						break;	/* 戦闘許可 */
+	case 5:	dwRet = sizeof (m_bRecovery);							break;	/* 気絶後回復する */
+	case 6:	dwRet = sizeof (m_byLevel);								break;	/* 暗さレベル */
+	case 7:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
+	case 8:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
+	case 9:	dwRet = m_strMapName.GetLength () + 1;					break;
+	case 10:
 		if (m_pLibInfoMapEvent) {
 			dwRet = m_pLibInfoMapEvent->GetDataSize ();
 		}
 		break;
-	case 9:
+	case 11:
 		if (m_pLibInfoMapObjectData) {
 			dwRet = m_pLibInfoMapObjectData->GetDataSize ();
 		}
@@ -389,11 +397,13 @@ PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 1:	pSrc = (PBYTE)&m_dwMapID;			break;
 	case 2:	pSrc = (PBYTE)&m_dwBGMID;			break;		/* BGMID */
 	case 3:	pSrc = (PBYTE)&m_dwWeatherType;		break;		/* 天気種別 */
-	case 4:	pSrc = (PBYTE)&m_byLevel;			break;		/* 暗さレベル */
-	case 5:	pSrc = (PBYTE)m_pwMap;				break;
-	case 6:	pSrc = (PBYTE)m_pwMapShadow;		break;
-	case 7:	pSrc = (PBYTE)(LPCSTR)m_strMapName;	break;
-	case 8:
+	case 4:	pSrc = (PBYTE)&m_bEnableBattle;		break;		/* 戦闘許可 */
+	case 5:	pSrc = (PBYTE)&m_bRecovery;			break;		/* 気絶後回復する */
+	case 6:	pSrc = (PBYTE)&m_byLevel;			break;		/* 暗さレベル */
+	case 7:	pSrc = (PBYTE)m_pwMap;				break;
+	case 8:	pSrc = (PBYTE)m_pwMapShadow;		break;
+	case 9:	pSrc = (PBYTE)(LPCSTR)m_strMapName;	break;
+	case 10:
 		if (m_pLibInfoMapEvent) {
 			pSrc = m_pLibInfoMapEvent->GetWriteData (pdwSize);
 			CopyMemory (pRet, pSrc, dwSize);
@@ -401,7 +411,7 @@ PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
 			goto Exit;
 		}
 		break;
-	case 9:
+	case 11:
 		if (m_pLibInfoMapObjectData) {
 			pSrc = m_pLibInfoMapObjectData->GetWriteData (pdwSize);
 			CopyMemory (pRet, pSrc, dwSize);
@@ -441,28 +451,30 @@ DWORD CInfoMapBase::ReadElementData(
 	case 1:	pDst = (PBYTE)&m_dwMapID;		dwSize = sizeof (m_dwMapID);		break;
 	case 2:	pDst = (PBYTE)&m_dwBGMID;		dwSize = sizeof (m_dwBGMID);		break;		/* BGMID */
 	case 3:	pDst = (PBYTE)&m_dwWeatherType;	dwSize = sizeof (m_dwWeatherType);	break;		/* 天気種別 */
-	case 4:	pDst = (PBYTE)&m_byLevel;		dwSize = sizeof (m_byLevel);		break;		/* 暗さレベル */
-	case 5:
+	case 4:	pDst = (PBYTE)&m_bEnableBattle;	dwSize = sizeof (m_bEnableBattle);	break;		/* 戦闘許可 */
+	case 5:	pDst = (PBYTE)&m_bRecovery;		dwSize = sizeof (m_bRecovery);		break;		/* 気絶後回復する */
+	case 6:	pDst = (PBYTE)&m_byLevel;		dwSize = sizeof (m_byLevel);		break;		/* 暗さレベル */
+	case 7:
 		Init (m_sizeMap.cx, m_sizeMap.cy, 0, FALSE);
 		pDst	= (PBYTE)m_pwMap;
 		dwSize	= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
 		break;
-	case 6:
+	case 8:
 		SAFE_DELETE_ARRAY (m_pwMapShadow);
 		m_pwMapShadow	= new WORD[m_sizeMap.cx * m_sizeMap.cy];
 		pDst			= (PBYTE)m_pwMapShadow;
 		dwSize			= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
 		break;
-	case 7:
+	case 9:
 		m_strMapName = (LPCSTR)pSrc;
 		dwSize = m_strMapName.GetLength () + 1;
 		break;
-	case 8:
+	case 10:
 		if (m_pLibInfoMapEvent) {
 			dwSize = m_pLibInfoMapEvent->ReadElementData (pSrc);
 		}
 		break;
-	case 9:
+	case 11:
 		if (m_pLibInfoMapObjectData) {
 			dwSize = m_pLibInfoMapObjectData->ReadElementData (pSrc);
 		}
@@ -816,6 +828,26 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoMapBase::IsEnableBattle									 */
+/* 内容		:戦闘許可か判定													 */
+/* 日付		:2008/11/29														 */
+/* ========================================================================= */
+
+BOOL CInfoMapBase::IsEnableBattle(void)
+{
+	BOOL bRet;
+
+	bRet = TRUE;
+
+	if (m_bEnableBattle == FALSE) {
+		bRet = FALSE;
+	}
+
+	return bRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoMapBase::GetSendDataSize									 */
 /* 内容		:送信データサイズを取得											 */
 /* 日付		:2007/01/04														 */
@@ -943,6 +975,8 @@ void CInfoMapBase::Copy(CInfoMapBase *pSrc)
 	m_dwMapID		= pSrc->m_dwMapID;			/* マップID */
 	m_dwBGMID		= pSrc->m_dwBGMID;			/* BGMID */
 	m_dwWeatherType	= pSrc->m_dwWeatherType;	/* 天気種別 */
+	m_bEnableBattle	= pSrc->m_bEnableBattle;	/* 戦闘許可 */
+	m_bRecovery		= pSrc->m_bRecovery;		/* 気絶後回復する */
 	m_byLevel		= pSrc->m_byLevel;			/* 暗さレベル */
 	m_strMapName	= pSrc->m_strMapName;
 	Init (pSrc->m_sizeMap.cx, pSrc->m_sizeMap.cy, 0);
