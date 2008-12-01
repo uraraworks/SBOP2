@@ -157,6 +157,7 @@ private:
 	void	RecvProcADMIN_RENEWADMINLEVEL		(PBYTE pData);					/* 管理者レベル更新 */
 	void	RecvProcADMIN_PLAYSOUND				(PBYTE pData);					/* 効果音の再生 */
 	void	RecvProcADMIN_CHAR_RES_ACCOUNT		(PBYTE pData);					/* アカウント情報応答 */
+	void	RecvProcADMIN_CHAR_RES_ONLINE		(PBYTE pData);					/* オンライン中キャラ一覧応答 */
 
 	/* 受信処理(MainFrameRecvProcEFFECT.cpp) */
 	void	RecvProcEFFECT						(BYTE byCmdSub, PBYTE pData);	/* エフェクト系 */

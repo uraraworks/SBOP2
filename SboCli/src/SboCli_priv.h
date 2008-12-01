@@ -92,6 +92,7 @@ enum {
 	ADMINMSG_ADMINLEVEL,								/* 管理者レベル通知 */
 	ADMINMSG_SELECT_ANIME,								/* アニメーションコマ選択 */
 	ADMINMSG_ACCOUNTINFO,								/* アカウント情報取得 */
+	ADMINMSG_CHAR_ONLINE,								/* オンライン中キャラ一覧更新 */
 };
 
 /* 管理者ウィンドウへの通知種別 */

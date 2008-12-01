@@ -98,6 +98,8 @@ CMgrData::CMgrData()
 	m_pLibInfoEfcBalloon	= NULL;
 	m_pLibInfoSystem		= NULL;
 
+	m_pLibInfoCharOnline	= NULL;
+
 	ZeroMemory (&m_stInputGuid, sizeof (m_stInputGuid));
 	m_sizeDlgMapPartsEdit.cx = 0;
 	m_sizeDlgMapPartsEdit.cy = 0;
@@ -136,6 +138,8 @@ CMgrData::~CMgrData()
 	SAFE_DELETE (m_pLibInfoMotionType);
 	SAFE_DELETE (m_pLibInfoEfcBalloon);
 	SAFE_DELETE (m_pLibInfoSystem);
+
+	SAFE_DELETE (m_pLibInfoCharOnline);
 }
 
 
@@ -172,6 +176,8 @@ void CMgrData::Create(
 	m_pLibInfoEfcBalloon	= new CLibInfoEfcBalloon;
 	m_pLibInfoSystem		= new CLibInfoSystem;
 
+	m_pLibInfoCharOnline	= new CLibInfoCharCli;
+
 	ReadIniData ();
 
 	m_pMgrSound->			Create ();
@@ -192,6 +198,8 @@ void CMgrData::Create(
 	m_pLibInfoMotionType->	Create ();
 	m_pLibInfoEfcBalloon->	Create ();
 	m_pLibInfoSystem->		Create ();
+
+	m_pLibInfoCharOnline->	Create (this);
 
 	m_pLibInfoItem->SetTypeInfo (m_pLibInfoItemType);
 	m_pLibInfoItem->SetWeaponInfo (m_pLibInfoItemWeapon);

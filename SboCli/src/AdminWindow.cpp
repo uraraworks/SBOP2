@@ -16,6 +16,7 @@
 #include "DlgAdminCharModifyStatus.h"
 #include "DlgAdminCharModifyGrp.h"
 #include "DlgAdminCharModifyItem.h"
+#include "DlgAdminCharList.h"
 #include "DlgAdminCharAdmin.h"
 #include "DlgAdminCharAddNPC.h"
 #include "DlgAdminCharMotionTypeList.h"
@@ -66,6 +67,7 @@ BEGIN_MESSAGE_MAP(CAdminWindow, CWnd)
 	ON_COMMAND(IDM_CHAR_MODIFY_STATUS, OnCharModifyStatus)
 	ON_COMMAND(IDM_CHAR_MODIFY_GRP, OnCharModifyGrp)
 	ON_COMMAND(IDM_CHAR_MODIFY_ITEM, OnCharModifyItem)
+	ON_COMMAND(IDM_CHAR_LIST, OnCharList)
 	ON_COMMAND(IDM_CHAR_ADMIN, OnCharAdmin)
 	ON_COMMAND(IDM_CHAR_ADDNPC, OnCharAddNPC)
 	ON_COMMAND(IDM_CHAR_MOTION, OnCharMotion)
@@ -229,6 +231,9 @@ void CAdminWindow::ChgScreen(int nScrID)
 	case SCRIDADMIN_CHAR_MODIFY_ITEM:			/* 選択キャラ情報編集[所持アイテムの設定] */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharModifyItem(this);
+		break;
+	case SCRIDADMIN_CHAR_LIST:					/* 一覧 */
+		m_pDlgBase = new CDlgAdminCharList(this);
 		break;
 	case SCRIDADMIN_CHAR_ADMIN:					/* 管理者権限の設定 */
 		nTypeL = ADMINNOTIFYTYPE_ACCOUNTID;
@@ -610,6 +615,18 @@ void CAdminWindow::OnCharModifyGrp()
 void CAdminWindow::OnCharModifyItem()
 {
 	ChgScreen (SCRIDADMIN_CHAR_MODIFY_ITEM);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CAdminWindow::OnCharList										 */
+/* 内容		:メニューハンドラ(一覧)											 */
+/* 日付		:2008/12/01														 */
+/* ========================================================================= */
+
+void CAdminWindow::OnCharList()
+{
+	ChgScreen (SCRIDADMIN_CHAR_LIST);
 }
 
 

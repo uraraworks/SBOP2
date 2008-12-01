@@ -87,6 +87,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTIONTYPE:	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(pData, dwSessionID);	break;	/* キャラモーション情報種別の更新 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWSTATUS:		RecvProcADMIN_CHAR_RENEWSTATUS		(pData, dwSessionID);	break;	/* ステータス情報更新 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_STATUS:		RecvProcADMIN_CHAR_REQ_STATUS		(pData, dwSessionID);	break;	/* ステータス情報要求 */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ONLINE:		RecvProcADMIN_CHAR_REQ_ONLINE		(pData, dwSessionID);	break;	/* オンライン中キャラ一覧要求 */
 	case SBOCOMMANDID_SUB_ADMIN_EFC_RENEWBALLOON:		RecvProcADMIN_EFC_RENEWBALLOON		(pData, dwSessionID);	break;	/* 噴出し情報の更新 */
 	case SBOCOMMANDID_SUB_ADMIN_EFC_RENEWEFFECT:		RecvProcADMIN_EFC_RENEWEFFECT		(pData, dwSessionID);	break;	/* エフェクト情報の更新 */
 	case SBOCOMMANDID_SUB_ADMIN_REQ_PLAYSOUND:			RecvProcADMIN_REQ_PLAYSOUND			(pData, dwSessionID);	break;	/* 効果音の再生要求 */
@@ -1191,6 +1192,39 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_STATUS(PBYTE pData, DWORD dwSessionID)
 	}
 	PacketCHAR_STATUS.Make (pInfoChar);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_STATUS);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_CHAR_REQ_ONLINE						 */
+/* 内容		:受信処理(オンライン中キャラ一覧要求)							 */
+/* 日付		:2008/12/01														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_CHAR_REQ_ONLINE(PBYTE pData, DWORD dwSessionID)
+{
+	int i, nCount;
+	PCInfoCharSvr pInfoCharTmp, pInfoChar;
+	CPacketADMIN_PARA2 Packet;
+	CPacketADMIN_CHAR_RES_ONLINE PacketADMIN_CHAR_RES_ONLINE;
+	CLibInfoCharSvr LibInfoCharTmp;
+
+	Packet.Set (pData);
+
+	LibInfoCharTmp.Create (m_pMgrData);
+	nCount = m_pLibInfoChar->GetCountLogIn ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (i);
+		if (pInfoChar->IsNPC ()) {
+			continue;
+		}
+		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetNew (pInfoChar->m_nMoveType);
+		pInfoCharTmp->Copy (pInfoChar);
+		LibInfoCharTmp.Add (pInfoCharTmp);
+	}
+
+	PacketADMIN_CHAR_RES_ONLINE.Make (&LibInfoCharTmp);
+	m_pSock->SendTo (dwSessionID, &PacketADMIN_CHAR_RES_ONLINE);
 }
 
 

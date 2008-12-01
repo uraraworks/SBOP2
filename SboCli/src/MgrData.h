@@ -169,6 +169,8 @@ public:
 	CLibInfoEfcBalloon	*GetLibInfoEfcBalloon	(void)	{ return m_pLibInfoEfcBalloon;	}	/* 噴出し情報ライブラリを取得 */
 	CLibInfoSystem		*GetLibInfoSystem		(void)	{ return m_pLibInfoSystem;		}	/* システム情報ライブラリを取得 */
 
+	CLibInfoCharCli		*GetLibInfoCharOnline	(void)	{ return m_pLibInfoCharOnline;	}	/* ログイン中キャラ情報ライブラリを取得 */
+
 
 private:
 	void	ReadIniData	(void);						/* iniファイルから設定を読み込み */
@@ -238,6 +240,8 @@ private:
 	CLibInfoMotionType	*m_pLibInfoMotionType;		/* モーション種別情報ライブラリ */
 	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;		/* 噴出し情報ライブラリ */
 	CLibInfoSystem		*m_pLibInfoSystem;			/* システム情報ライブラリ */
+
+	CLibInfoCharCli		*m_pLibInfoCharOnline;		/* ログイン中キャラ情報ライブラリ */
 
 	CmyArray<PSTSYSTEMMSG, PSTSYSTEMMSG>	m_aSystemMsg;	/* システムメッセージ */
 } CMgrData, *PCMgrData;

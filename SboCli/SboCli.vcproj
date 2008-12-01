@@ -2658,6 +2658,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminCharList.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Dialog\DlgAdminCharModify.cpp"
 					>
 					<FileConfiguration
@@ -4108,6 +4112,10 @@
 				</File>
 				<File
 					RelativePath="src\Dialog\DlgAdminCharAdmin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminCharList.h"
 					>
 				</File>
 				<File

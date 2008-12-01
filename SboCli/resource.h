@@ -57,6 +57,8 @@
 #define IDD_MAP_OBJECTDATA              175
 #define IDD_MAP_OBJECTDATA_EDIT         176
 #define IDD_TALK_SET                    177
+#define IDD_MAP_EVENT1                  178
+#define IDD_CHAR_LIST                   178
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -302,7 +304,6 @@
 #define IDC_DROP                        1145
 #define IDC_MAP                         1146
 #define IDC_ENABLEBATTLE                1147
-#define IDC_CHECK2                      1148
 #define IDC_RECOVERY                    1148
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772

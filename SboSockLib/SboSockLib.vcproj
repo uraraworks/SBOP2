@@ -485,6 +485,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ONLINE.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.cpp"
 							>
 							<FileConfiguration
@@ -3113,6 +3117,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ACCOUNT.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ONLINE.h"
 							>
 						</File>
 						<File

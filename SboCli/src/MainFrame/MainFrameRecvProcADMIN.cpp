@@ -10,6 +10,7 @@
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "Packet.h"
+#include "LibInfoCharCli.h"
 #include "InfoAccount.h"
 #include "MgrData.h"
 #include "MgrWindow.h"
@@ -30,6 +31,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData)
 	case SBOCOMMANDID_SUB_ADMIN_RENEWADMINLEVEL:	RecvProcADMIN_RENEWADMINLEVEL	(pData);	break;	/* 管理者レベル更新 */
 	case SBOCOMMANDID_SUB_ADMIN_PLAYSOUND:			RecvProcADMIN_PLAYSOUND			(pData);	break;	/* 効果音の再生 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ACCOUNT:	RecvProcADMIN_CHAR_RES_ACCOUNT	(pData);	break;	/* アカウント情報応答 */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ONLINE:	RecvProcADMIN_CHAR_RES_ONLINE	(pData);	break;	/* オンライン中キャラ一覧応答 */
 	}
 }
 
@@ -108,6 +110,30 @@ void CMainFrame::RecvProcADMIN_CHAR_RES_ACCOUNT(PBYTE pData)
 
 	dwDataID = m_pMgrData->Add (dwDataSize, pTmpData);
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_ACCOUNTINFO, dwDataID);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE						 */
+/* 内容		:受信処理(オンライン中キャラ一覧応答)							 */
+/* 日付		:2008/12/01														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE(PBYTE pData)
+{
+	PBYTE pTmp;
+	PCLibInfoCharCli pLibInfoCharOnline;
+	CPacketADMIN_CHAR_RES_ONLINE Packet;
+
+	Packet.Set (pData);
+	pTmp = Packet.m_pLibInfo->GetSendData ();
+
+	pLibInfoCharOnline = m_pMgrData->GetLibInfoCharOnline ();
+	pLibInfoCharOnline->SetSendData (pTmp);
+
+	SAFE_DELETE_ARRAY (pTmp);
+
+	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_CHAR_ONLINE, 0);
 }
 
 /* Copyright(C)URARA-works 2006 */

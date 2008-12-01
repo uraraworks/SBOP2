@@ -101,6 +101,7 @@
 #include "ADMIN/PacketADMIN_CHAR_ADDMOTIONTYPE.h"		/* 			キャラモーション種別情報の追加 */
 #include "ADMIN/PacketADMIN_CHAR_RENEWMOTIONTYPE.h"		/* 			キャラモーション種別情報の更新 */
 #include "ADMIN/PacketADMIN_CHAR_RENEWSTATUS.h"			/* 			ステータス情報更新 */
+#include "ADMIN/PacketADMIN_CHAR_RES_ONLINE.h"			/* 			オンライン中キャラ一覧応答 */
 #include "ADMIN/PacketADMIN_EFC_RENEWBALLOON.h"			/* 			噴出し情報の更新 */
 #include "ADMIN/PacketADMIN_EFC_RENEWEFFECT.h"			/* 			エフェクト情報の更新 */
 #include "ADMIN/PacketADMIN_REQ_PLAYSOUND.h"			/* 			効果音の再生要求 */

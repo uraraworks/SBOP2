@@ -154,6 +154,7 @@ private:
 	void	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(PBYTE pData, DWORD dwSessionID);					/* キャラモーション種別情報の更新 */
 	void	RecvProcADMIN_CHAR_RENEWSTATUS		(PBYTE pData, DWORD dwSessionID);					/* ステータス情報更新 */
 	void	RecvProcADMIN_CHAR_REQ_STATUS		(PBYTE pData, DWORD dwSessionID);					/* ステータス情報要求 */
+	void	RecvProcADMIN_CHAR_REQ_ONLINE		(PBYTE pData, DWORD dwSessionID);					/* オンライン中キャラ一覧要求 */
 	void	RecvProcADMIN_EFC_RENEWBALLOON		(PBYTE pData, DWORD dwSessionID);					/* 噴出し情報の更新 */
 	void	RecvProcADMIN_EFC_RENEWEFFECT		(PBYTE pData, DWORD dwSessionID);					/* エフェクト情報の更新 */
 	void	RecvProcADMIN_REQ_PLAYSOUND			(PBYTE pData, DWORD dwSessionID);					/* 効果音の再生要求 */

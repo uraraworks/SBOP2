@@ -1169,6 +1169,15 @@ BEGIN
     PUSHBUTTON      "キャンセル",IDCANCEL,138,90,50,14
 END
 
+IDD_CHAR_LIST DIALOGEX 0, 0, 223, 214
+STYLE DS_SETFONT | WS_CHILD
+EXSTYLE WS_EX_STATICEDGE
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
+BEGIN
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,7,23,208,177
+    PUSHBUTTON      "更新",IDC_RENEW,7,4,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
