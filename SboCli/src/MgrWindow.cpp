@@ -44,6 +44,7 @@
 #include "WindowCHAR_STATUS2.h"
 #include "WindowCHAR_STATUS3.h"
 #include "WindowTEXTMSG.h"
+#include "WindowSWOON.h"
 #include "MgrWindow.h"
 
 
@@ -930,6 +931,25 @@ void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMs
 	pWindowNew->SetTitle (pszTitle);
 	pWindowNew->SetName (pszName);
 	pWindowNew->SetMsg (pszMsg);
+	m_paWindow->Add (pWindowNew);
+	SetActive ();
+
+	m_bDraw = TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrWindow::MakeWindowSWOON									 */
+/* 内容		:気絶メニュー													 */
+/* 日付		:2008/12/02														 */
+/* ========================================================================= */
+
+void CMgrWindow::MakeWindowSWOON(void)
+{
+	PCWindowSWOON pWindowNew;
+
+	pWindowNew = new CWindowSWOON;
+	pWindowNew->Create (m_pMgrData);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
 

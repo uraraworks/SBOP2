@@ -312,6 +312,7 @@ void CStateProcMAP::OnWindowMsg(int nType, DWORD dwPara)
 	case WINDOWTYPE_OPTION_ACTIONSET:				bClose = OnWindowMsgOPTION_ACTIONSET			(dwPara);	break;	/* オプション-動作設定 */
 	case WINDOWTYPE_OPTION_ACTIONSET_SLEEPTIMER:	bClose = OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER	(dwPara);	break;	/* オプション-動作設定-おひるねタイマーの設定 */
 	case WINDOWTYPE_COMMANDMENU:					bClose = OnWindowMsgCOMMANDMENU					(dwPara);	break;	/* コマンドメニュー */
+	case WINDOWTYPE_SWOON:							bClose = OnWindowMsgSWOON						(dwPara);	break;	/* 気絶メニュー */
 	}
 	if (bClose) {
 		m_pMgrWindow->Delete (nType);
@@ -1476,6 +1477,9 @@ BOOL CStateProcMAP::OnB(BOOL bDown)
 	if (m_pPlayerChar == NULL) {
 		goto Exit;
 	}
+	if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_SWOON) {
+		goto Exit;
+	}
 	if (IsKeyInputEnable () == FALSE) {
 		goto Exit;
 	}
@@ -1891,12 +1895,23 @@ BOOL CStateProcMAP::OnSpace(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
-	pWnd = (PCWindowCOMMANDMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_COMMANDMENU);
-	if (pWnd) {
-		goto Exit;
+	switch (m_pPlayerChar->m_nMoveState) {
+	case CHARMOVESTATE_SWOON:	/* 気絶中 */
+		pWnd = (PCWindowCOMMANDMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_SWOON);
+		if (pWnd) {
+			goto Exit;
+		}
+		m_pMgrWindow->MakeWindowSWOON ();
+		break;
+	default:
+		pWnd = (PCWindowCOMMANDMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_COMMANDMENU);
+		if (pWnd) {
+			goto Exit;
+		}
+		m_pMgrWindow->MakeWindowCOMMANDMENU ();
+		m_pMgrSound->PlaySound (SOUNDID_OPEN_WINDOW);
+		break;
 	}
-	m_pMgrWindow->MakeWindowCOMMANDMENU ();
-	m_pMgrSound->PlaySound (SOUNDID_OPEN_WINDOW);
 
 	bRet = TRUE;
 Exit:
@@ -2811,6 +2826,29 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 
 Exit:
 	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnWindowMsgSWOON								 */
+/* 内容		:気絶メニュー													 */
+/* 日付		:2008/12/02														 */
+/* ========================================================================= */
+
+BOOL CStateProcMAP::OnWindowMsgSWOON(DWORD dwPara)
+{
+	CPacketCHAR_PARA1 PacketCHAR_PARA1;
+
+	switch (dwPara) {
+	case 0:		/* この場で助けを待つ */
+		break;
+	case 1:		/* 記録した場所で復活する */
+		PacketCHAR_PARA1.Make (SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY, m_pPlayerChar->m_dwCharID, 0);
+		m_pSock->Send (&PacketCHAR_PARA1);
+		break;
+	}
+
+	return TRUE;
 }
 
 

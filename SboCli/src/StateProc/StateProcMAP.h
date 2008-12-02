@@ -82,6 +82,7 @@ protected:
 	BOOL	OnWindowMsgOPTION_ACTIONSET	(DWORD dwPara);									/* オプション-動作設定 */
 	BOOL	OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER	(DWORD dwPara);						/* オプション-動作設定-おひるねタイマーの設定 */
 	BOOL	OnWindowMsgCOMMANDMENU		(DWORD dwPara);									/* コマンドメニュー */
+	BOOL	OnWindowMsgSWOON			(DWORD dwPara);									/* 気絶メニュー */
 	void	OnMainFrameRENEWITEMINFO	(DWORD dwItemID);								/* メッセージハンドラ(WM_MAINFRAME)[アイテム情報更新] */
 	BOOL	OnXChar						(DWORD dwCharID);								/* キャラにXキーを押した時の処理 */
 	void	AddSystemMsg				(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);		/* システムメッセージを追加 */

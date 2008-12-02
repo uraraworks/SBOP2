@@ -99,6 +99,7 @@ enum {
 	SBOCOMMANDID_SUB_CHAR_STATUS,				/* ステータス情報通知 */
 	SBOCOMMANDID_SUB_CHAR_TEXTEFFECT,			/* 文字エフェクト通知 */
 	SBOCOMMANDID_SUB_CHAR_STATE_CHARGE,			/* 溜め状態通知 */
+	SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY,			/* 気絶後復活要求 */
 };
 
 /* コマンドID(マップ系) */

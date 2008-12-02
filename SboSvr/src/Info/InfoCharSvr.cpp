@@ -43,6 +43,7 @@ CInfoCharSvr::CInfoCharSvr()
 	m_bRenewTargetPos		= FALSE;
 	m_bProcMoveMapIn		= FALSE;
 	m_bProcMoveMapOut		= FALSE;
+	m_bProcMoveMarkPos		= FALSE;
 	m_bProcSwoon			= FALSE;
 	m_bProcInvincible		= FALSE;
 	m_bStateFadeInOut		= FALSE;
@@ -535,6 +536,12 @@ BOOL CInfoCharSvr::ProcSWOON(DWORD dwPara)
 {
 	m_bProcSwoon = TRUE;
 	m_nReserveChgEfect = -1;
+
+	/* ãLò^à íuÇ÷ñﬂÇÈÅH */
+	if (dwPara != 0) {
+		m_bProcMoveMarkPos = TRUE;
+	}
+
 	return TRUE;
 }
 

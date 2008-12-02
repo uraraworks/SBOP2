@@ -2352,6 +2352,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Window\WindowSWOON.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Window\WindowSYSTEMMENU.cpp"
 					>
 					<FileConfiguration
@@ -4076,6 +4080,10 @@
 				</File>
 				<File
 					RelativePath="src\Window\WindowSTYLESELECT.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowSWOON.h"
 					>
 				</File>
 				<File

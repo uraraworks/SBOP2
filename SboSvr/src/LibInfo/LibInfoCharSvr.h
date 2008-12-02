@@ -83,6 +83,7 @@ protected:
 	void ProcChgMap					(CInfoCharSvr *pInfoChar);			/* マップ移動処理 */
 	void ProcChgPosRenew			(CInfoCharSvr *pInfoChar);			/* 座標変更処理 */
 	BOOL ProcLocalStateBATTLEATACK	(CInfoCharSvr *pInfoChar);			/* 状態に応じた処理(戦闘攻撃中) */
+	void CharProcMoveMarkPos		(CInfoCharSvr *pInfoChar);			/* 記録位置へ移動 */
 	void CharProcSWOON				(CInfoCharSvr *pInfoChar);			/* キャラ処理(気絶) */
 	void CharProcAtack				(CInfoCharSvr *pInfoChar);			/* 攻撃 */
 	void PutNpc						(CInfoCharSvr *pInfoChar);			/* NPC発生 */

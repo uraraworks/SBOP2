@@ -17,6 +17,7 @@
 #include "LibInfoItem.h"
 #include "LibInfoItemWeapon.h"
 #include "LibInfoSystem.h"
+#include "InfoSystem.h"
 #include "InfoMapEvent.h"
 #include "InfoCharATACKANIMESvr.h"
 #include "InfoCharMOVEATACKSvr.h"
@@ -2148,6 +2149,11 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 		MoveMapOut (pInfoChar);
 		pInfoChar->m_bProcMoveMapOut = FALSE;
 
+	/* 記録位置へ移動 */
+	} else if (pInfoChar->m_bProcMoveMarkPos) {
+		CharProcMoveMarkPos (pInfoChar);
+		pInfoChar->m_bProcMoveMarkPos = FALSE;
+
 	/* 気絶 */
 	} else if (pInfoChar->m_bProcSwoon) {
 		CharProcSWOON (pInfoChar);
@@ -2362,6 +2368,29 @@ BOOL CLibInfoCharSvr::ProcLocalStateBATTLEATACK(CInfoCharSvr *pInfoChar)
 Exit:
 	pInfoChar->SetMoveState (CHARMOVESTATE_BATTLE);
 	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::CharProcMoveMarkPos							 */
+/* 内容		:キャラ処理(記録位置へ移動)										 */
+/* 日付		:2008/12/02														 */
+/* ========================================================================= */
+
+void CLibInfoCharSvr::CharProcMoveMarkPos(CInfoCharSvr *pInfoChar)
+{
+//Todo:記録位置が未実装なので初期位置へ戻る
+	PCInfoSystem pInfoSystem;
+	PSTSYSTEM_INITCHARSTATUS pInitCharStatus;
+
+	pInfoSystem		= (PCInfoSystem)m_pMgrData->GetLibInfoSystem ()->GetPtr ();
+	pInitCharStatus	= pInfoSystem->m_pInitCharStatus;
+
+	/* 初期位置に転送 */
+	pInfoChar->m_dwMapID = pInitCharStatus->dwInitPosMapID;		/* マップID */
+	pInfoChar->SetPos (pInitCharStatus->ptInitPos.x, pInitCharStatus->ptInitPos.y, TRUE);
+	pInfoChar->SetDirection (1);
+	pInfoChar->AddProcInfo (CHARPROCID_MAPMOVEOUT, 2000, 0);
 }
 
 

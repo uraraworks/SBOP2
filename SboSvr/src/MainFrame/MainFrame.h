@@ -104,6 +104,7 @@ private:
 	void	RecvProcCHAR_PROC_FISHING			(PBYTE pData, DWORD dwSessionID);					/* 釣り要求 */
 	void	RecvProcCHAR_REQ_CHECKMAPEVENT		(PBYTE pData, DWORD dwSessionID);					/* マップイベントチェック要求 */
 	void	RecvProcCHAR_STATE_CHARGE			(PBYTE pData, DWORD dwSessionID);					/* 溜め状態通知 */
+	void	RecvProcCHAR_REQ_RECOVERY			(PBYTE pData, DWORD dwSessionID);					/* 気絶後復活要求 */
 
 	/* 受信処理(MainFrameRecvProcMAP.cpp) */
 	void	RecvProcMAP							(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* マップ系 */

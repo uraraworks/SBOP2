@@ -47,6 +47,7 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_CHAR_PROC_FISHING:		RecvProcCHAR_PROC_FISHING		(pData, dwSessionID);	break;	/* 釣り要求 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT:	RecvProcCHAR_REQ_CHECKMAPEVENT	(pData, dwSessionID);	break;	/* マップイベントチェック要求 */
 	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE:		RecvProcCHAR_STATE_CHARGE		(pData, dwSessionID);	break;	/* 溜め状態通知 */
+	case SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY:		RecvProcCHAR_REQ_RECOVERY		(pData, dwSessionID);	break;	/* 気絶後復活要求 */
 	}
 }
 
@@ -712,6 +713,35 @@ void CMainFrame::RecvProcCHAR_STATE_CHARGE(PBYTE pData, DWORD dwSessionID)
 	/* 周りのキャラにも通知 */
 	Packet.Make (SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, Packet.m_dwCharID, Packet.m_dwPara);
 	SendToScreenChar (pInfoChar, &Packet);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_REQ_RECOVERY							 */
+/* 内容		:受信処理(気絶後復活要求)										 */
+/* 日付		:2008/12/02														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoCharSvr pInfoChar;
+	CPacketCHAR_PARA1 Packet;
+	CPacketMAP_PARA1 PacketMAP_PARA1;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+	if (pInfoChar->m_nMoveState != CHARMOVESTATE_SWOON) {
+		return;
+	}
+	pInfoChar->AddProcInfo (CHARPROCID_SWOON, 2000, 1);
+
+	pInfoChar->m_bStateFadeInOut = TRUE;
+	PacketMAP_PARA1.Make (SBOCOMMANDID_SUB_MAP_FADEINOUT, pInfoChar->m_dwMapID, 1);
+	SendToClient (pInfoChar->m_dwSessionID, &PacketMAP_PARA1);
 }
 
 /* Copyright(C)URARA-works 2006 */

@@ -108,6 +108,7 @@ public:
 			m_bRenewTargetPos,			/* ターゲット座標更新 */
 			m_bProcMoveMapIn,			/* マップ内移動 */
 			m_bProcMoveMapOut,			/* マップ外移動 */
+			m_bProcMoveMarkPos,			/* 記録位置へ移動 */
 			m_bProcSwoon,				/* 気絶 */
 			m_bProcInvincible,			/* 無敵 */
 			m_bStateFadeInOut,			/* フェードイン・アウト中 */

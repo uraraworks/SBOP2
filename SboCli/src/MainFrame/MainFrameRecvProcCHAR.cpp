@@ -11,6 +11,7 @@
 #include "Command.h"
 #include "Packet.h"
 #include "InfoAccount.h"
+#include "InfoMapBase.h"
 #include "LibInfoMotion.h"
 #include "LibInfoMotionType.h"
 #include "LibInfoCharCli.h"
@@ -21,6 +22,7 @@
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrSound.h"
+#include "MgrWindow.h"
 #include "MainFrame.h"
 
 
@@ -285,6 +287,7 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 {
 	BOOL bChgBGM;
 	int nState;
+	PCInfoMapBase pInfoMap;
 	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	CPacketCHAR_STATE Packet;
 
@@ -310,8 +313,15 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 
 	if (pInfoChar == pInfoCharPlayer) {
 		bChgBGM = FALSE;
-		if (pInfoChar->m_nMoveState == CHARMOVESTATE_SWOON) {
-			bChgBGM = TRUE;
+		pInfoMap = m_pMgrData->GetMap ();
+		if (pInfoMap && (pInfoMap->m_bRecovery == FALSE)) {
+			/* ‹Câ‚µ‚½H */
+			if (pInfoChar->m_nMoveState == CHARMOVESTATE_SWOON) {
+				bChgBGM = TRUE;
+				m_pMgrWindow->MakeWindowSWOON ();
+			} else {
+				m_pMgrWindow->Delete (WINDOWTYPE_SWOON);
+			}
 		}
 		ChgMoveState (bChgBGM);
 	}
