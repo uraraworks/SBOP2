@@ -120,6 +120,11 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 			return;
 		}
 	}
+	if (pInfoChar->m_dwHP == 0) {
+		/* HP0‚Å•à‚±‚¤‚Æ‚µ‚½Žž‚Í‹Câ‚³‚¹‚é */
+		pInfoChar->SetMoveState (CHARMOVESTATE_SWOON);
+		return;
+	}
 
 	/* ˆÚ“®‚µ‚½H */
 	if (!((pInfoChar->m_nMapX == Packet.m_pos.x) && (pInfoChar->m_nMapY == Packet.m_pos.y))) {
