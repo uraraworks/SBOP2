@@ -71,6 +71,7 @@ protected:
 
 
 protected:
+	HANDLE		m_hInitEventWindow;				/* ウィンドウ作成完了イベント */
 	HWND		m_hWnd,							/* ウィンドウハンドル */
 				m_hWndParent;					/* 親ウィンドウハンドル */
 	int			m_nScrID;						/* 画面ID */

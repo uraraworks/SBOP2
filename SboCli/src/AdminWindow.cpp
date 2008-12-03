@@ -97,13 +97,14 @@ END_MESSAGE_MAP()
 
 CAdminWindow::CAdminWindow()
 {
-	m_hWnd			= NULL;
-	m_hWndParent	= NULL;
-	m_nScrID		= SCRIDADMIN_TOP;
-	m_pDlgBase		= NULL;
-	m_pMgrData		= NULL;
-	m_pWndParent	= NULL;
-	m_pWndMap		= NULL;
+	m_hInitEventWindow	= NULL;
+	m_hWnd				= NULL;
+	m_hWndParent		= NULL;
+	m_nScrID			= SCRIDADMIN_TOP;
+	m_pDlgBase			= NULL;
+	m_pMgrData			= NULL;
+	m_pWndParent		= NULL;
+	m_pWndMap			= NULL;
 }
 
 
@@ -132,7 +133,17 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 	m_pMgrData		= pMgrData;
 	m_hWndParent	= hWndParent;
 
+	/* イベントを作成 */
+	m_hInitEventWindow = CreateEvent (NULL, FALSE, FALSE, NULL);
+	if (m_hInitEventWindow == NULL) {
+		return FALSE;
+	}
+
 	bRet = CmyThread::Create ();
+
+	/* 初期化完了待ち */
+	WaitForSingleObject (m_hInitEventWindow, INFINITE);
+
 	return bRet;
 }
 
@@ -152,6 +163,11 @@ void CAdminWindow::Destroy(void)
 		WaitForSingleObject (m_hThread, INFINITE);
 	}
 	CmyThread::Destroy ();
+
+	if (m_hInitEventWindow) {
+		CloseHandle (m_hInitEventWindow);
+		m_hInitEventWindow = NULL;
+	}
 
 	/* 変数を初期化 */
 	m_pWndParent	= NULL;
@@ -351,6 +367,8 @@ int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CWnd::OnCreate (lpCreateStruct) == -1) {
 		return -1;
 	}
+
+	SetEvent (m_hInitEventWindow);
 
 	m_hWnd = GetSafeHwnd ();
 	/* メニューの設定 */
