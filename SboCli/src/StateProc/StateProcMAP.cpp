@@ -1441,6 +1441,10 @@ BOOL CStateProcMAP::OnR(BOOL bDown)
 
 	switch (m_pPlayerChar->m_nMoveState) {
 	case CHARMOVESTATE_STAND:		/* óßÇø */
+		if (m_pPlayerChar->m_dwFrontCharID != 0) {
+			/* Ç¬Ç¢ÇƒÇ¢Ç≠íÜÇÕç¿ÇÍÇ»Ç¢ */
+			goto Exit;
+		}
 		m_pPlayerChar->ChgMoveState (CHARMOVESTATE_SIT);
 		break;
 	case CHARMOVESTATE_SIT:			/* ç¿ÇËíÜ */
