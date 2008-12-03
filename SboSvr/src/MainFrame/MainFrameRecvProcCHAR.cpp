@@ -727,6 +727,7 @@ void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 	PCInfoCharSvr pInfoChar;
 	CPacketCHAR_PARA1 Packet;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
+	CPacketCHAR_STATE PacketCHAR_STATE;
 
 	Packet.Set (pData);
 
@@ -738,6 +739,10 @@ void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 	pInfoChar->AddProcInfo (CHARPROCID_SWOON, 2000, 1);
+
+	/* Žü‚è‚ÌƒLƒƒƒ‰‚É’Ê’m */
+	PacketCHAR_STATE.Make (pInfoChar->m_dwCharID, CHARMOVESTATE_DELETE);
+	SendToScreenChar (pInfoChar, &PacketCHAR_STATE);
 
 	pInfoChar->m_bStateFadeInOut = TRUE;
 	PacketMAP_PARA1.Make (SBOCOMMANDID_SUB_MAP_FADEINOUT, pInfoChar->m_dwMapID, 1);
