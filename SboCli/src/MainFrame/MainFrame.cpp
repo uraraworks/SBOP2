@@ -171,7 +171,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	AdjustWindowRect (&rcTmp, dwStyle, FALSE);
 
 	/* ウィンドウ作成 */
-	wsprintf (szBuf, "%s %s", WNDTITLE, VERTEXT);
+	wsprintf (szBuf, "%s Ver%s", WNDTITLE, VERTEXT);
 	m_hWnd = CreateWindow (
 				CLNAME,
 				szBuf,

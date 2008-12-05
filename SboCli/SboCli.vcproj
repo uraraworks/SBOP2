@@ -72,6 +72,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1041"
+				AdditionalIncludeDirectories="..\Common"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -170,6 +171,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1041"
+				AdditionalIncludeDirectories="..\Common"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"

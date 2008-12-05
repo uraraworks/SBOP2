@@ -1365,7 +1365,7 @@ void CMainFrame::RecvProcADMIN_RENEW_CLIENTVERSION(PBYTE pData, DWORD dwSessionI
 	Packet.Set (pData);
 	m_pMgrData->SetClientVersion ((LPCSTR)Packet.m_strClientVersion);
 
-	strTmp.Format ("SYSTEM:クライアントファイルが[%s]に更新されました", (LPCSTR)Packet.m_strClientVersion);
+	strTmp.Format ("SYSTEM:クライアントファイルが[Ver%s]に更新されました", (LPCSTR)Packet.m_strClientVersion);
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 	strTmp.Format ("SYSTEM:クライアントを終了してランチャーにて更新してください");

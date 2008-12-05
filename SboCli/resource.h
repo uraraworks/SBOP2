@@ -57,7 +57,6 @@
 #define IDD_MAP_OBJECTDATA              175
 #define IDD_MAP_OBJECTDATA_EDIT         176
 #define IDD_TALK_SET                    177
-#define IDD_MAP_EVENT1                  178
 #define IDD_CHAR_LIST                   178
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
