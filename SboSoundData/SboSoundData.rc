@@ -116,6 +116,7 @@ IDR_WAVE_DR_SNE02       WAVE                    "res\\WAVE\\dr-sne02.wav"
 IDR_WAVE_KIE_ATACK      WAVE                    "res\\WAVE\\キー攻撃.wav"
 IDR_WAVE_KIE_DEAD       WAVE                    "res\\WAVE\\キー死亡.wav"
 IDR_WAVE_FLY            WAVE                    "res\\WAVE\\羽ばたき.wav"
+IDR_WAVE_STEP03         WAVE                    "res\\WAVE\\step03.wav"
 #endif    // 日本語 resources
 /////////////////////////////////////////////////////////////////////////////
 

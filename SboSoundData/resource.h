@@ -71,12 +71,14 @@
 #define IDR_WAVE_KIE_DEAD               166
 #define IDR_WAVE6                       167
 #define IDR_WAVE_FLY                    167
+#define IDR_WAVE3                       168
+#define IDR_WAVE_STEP03                 168
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        168
+#define _APS_NEXT_RESOURCE_VALUE        169
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           101

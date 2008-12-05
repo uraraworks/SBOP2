@@ -94,6 +94,7 @@ static SOUNDDATAINFO g_aSoundDataTbl[] = {
 	SOUNDID_KIE_ATACK,			IDR_WAVE_KIE_ATACK,		"キー攻撃",
 	SOUNDID_KIE_DEAD,			IDR_WAVE_KIE_DEAD,		"キー死亡",
 	SOUNDID_FLY,				IDR_WAVE_FLY,			"羽ばたき",
+	SOUNDID_STEP03,				IDR_WAVE_STEP03,		"階段移動",
 	0, 0, ""
 };
 

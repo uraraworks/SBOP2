@@ -392,6 +392,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\res\WAVE\step03.wav"
+					>
+				</File>
+				<File
 					RelativePath="res\WAVE\swing24_c.wav"
 					>
 				</File>

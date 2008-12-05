@@ -85,6 +85,7 @@ enum {
 	SOUNDID_KIE_ATACK			= 62,				/* キー攻撃 */
 	SOUNDID_KIE_DEAD			= 63,				/* キー死亡 */
 	SOUNDID_FLY					= 64,				/* 羽ばたき */
+	SOUNDID_STEP03				= 65,				/* 階段移動 */
 	SOUNDID_MAX
 };
 
