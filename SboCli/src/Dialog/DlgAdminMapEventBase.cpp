@@ -10,7 +10,9 @@
 #include "resource.h"
 #include "InfoMapEventBase.h"
 #include "LibInfoMapEvent.h"
+#include "LibSboSoundLoader.h"
 #include "MgrData.h"
+#include "MgrSound.h"
 #include "DlgAdminMapEventMOVE.h"
 #include "DlgAdminMapEventMAPMOVE.h"
 #include "DlgAdminMapEventINITSTATUS.h"
@@ -34,6 +36,7 @@ void CDlgAdminMapEventBase::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_TYPE, m_ctlType);
 	DDX_Control(pDX, IDC_HITTYPE, m_ctlHitType);
 	DDX_Control(pDX, IDC_DIRECTION, m_ctlDirection);
+	DDX_Control(pDX, IDC_SOUNDID, m_ctlSoundID);
 	DDX_Text(pDX, IDC_POSX, m_nPosX);
 	DDX_Text(pDX, IDC_POSY, m_nPosY);
 	DDX_Text(pDX, IDC_POSX2, m_nPosX2);
@@ -46,8 +49,10 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapEventBase, CDlgAdminBase)
 	ON_CBN_SELCHANGE(IDC_TYPE, OnSelchangeType)
 	ON_CBN_SELCHANGE(IDC_HITTYPE, OnSelchangeHitType)
 	ON_CBN_SELCHANGE(IDC_DIRECTION, OnSelchangeDirection)
+	ON_CBN_SELCHANGE(IDC_SOUNDID, OnSelchangeSoundID)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_PLAY, &CDlgAdminMapEventBase::OnBnClickedPlay)
 END_MESSAGE_MAP()
 
 
@@ -70,6 +75,7 @@ CDlgAdminMapEventBase::CDlgAdminMapEventBase(CWnd* pParent /*=NULL*/)
 	m_nEventType	= -1;
 	m_nHitType		= -1;
 	m_nHitDirection	= -1;
+	m_dwSoundID		= 0;
 	m_bModeModify	= FALSE;
 	m_ppWndNotify	= NULL;
 	m_pDlgType		= NULL;
@@ -154,8 +160,10 @@ void CDlgAdminMapEventBase::SetModify(CInfoMapEventBase *pSrc)
 
 BOOL CDlgAdminMapEventBase::OnInitDialog()
 {
-	int i, nNo;
-//	LPCSTR pszTmp;
+	int i, nCount, nNo;
+	LPCSTR pszTmp;
+	DWORD dwSoundID;
+	CLibSboSoundLoader LibSboSoundLoader;
 
 	CDlgAdminBase::OnInitDialog();
 
@@ -193,6 +201,22 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	m_ctlDirection.InsertString (3, "右");
 	m_ctlDirection.InsertString (4, "指定無し");
 
+	m_ctlSoundID.InsertString (0, "無し");
+
+	nNo = 0;
+	nCount = LibSboSoundLoader.GetSoundCount ();
+	for (i = 0; i < nCount; i ++) {
+		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
+		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
+		m_ctlSoundID.InsertString (i + 1, pszTmp);
+		m_ctlSoundID.SetItemData (i + 1, dwSoundID);
+		if (m_pInfo->m_dwSoundID == dwSoundID) {
+			m_dwSoundID = dwSoundID;
+			nNo = i + 1;
+		}
+	}
+	m_ctlSoundID.SetCurSel (nNo);
+
 	nNo = 0;
 	if (m_pInfo) {
 		for (i = 0; i < MAPEVENTTYPE_MAX; i ++) {
@@ -229,9 +253,12 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	OnSelchangeType ();
 	OnSelchangeHitType ();
 	OnSelchangeDirection ();
+	OnSelchangeSoundID ();
 	if (m_pDlgType && m_pInfo) {
 		m_pDlgType->Set (m_pInfo);
 	}
+
+	SelectSound (m_dwSoundID);
 
 	return TRUE;
 }
@@ -377,6 +404,55 @@ void CDlgAdminMapEventBase::OnSelchangeDirection()
 
 
 /* ========================================================================= */
+/* 関数名	:CDlgAdminMapEventBase::OnSelchangeSoundID						 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2008/12/05														 */
+/* ========================================================================= */
+
+void CDlgAdminMapEventBase::OnSelchangeSoundID()
+{
+	int nNo;
+
+	if (m_pInfo == NULL) {
+		return;
+	}
+
+	nNo = m_ctlSoundID.GetCurSel ();
+	m_dwSoundID = m_ctlSoundID.GetItemData(m_ctlSoundID.GetCurSel ());
+	m_pInfo->m_dwSoundID = m_dwSoundID;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapEventBase::OnBnClickedPlay							 */
+/* 内容		:ボタンハンドラ(再生)											 */
+/* 日付		:2008/12/05														 */
+/* ========================================================================= */
+
+void CDlgAdminMapEventBase::OnBnClickedPlay()
+{
+	int nNo;
+	DWORD dwSoundID;
+	PCMgrSound pMgrSound;
+
+	nNo = m_ctlSoundID.GetCurSel ();
+	if (nNo < 0) {
+		goto Exit;
+	}
+
+	pMgrSound = m_pMgrData->GetMgrSound ();
+	dwSoundID = m_ctlSoundID.GetItemData (nNo);
+	if (dwSoundID == 0) {
+		goto Exit;
+	}
+	pMgrSound->PlaySound (dwSoundID);
+
+Exit:
+	m_ctlSoundID.SetFocus ();
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CDlgAdminMapEventBase::OnOK									 */
 /* 内容		:ボタンハンドラ(OK)												 */
 /* 日付		:2007/08/16														 */
@@ -397,6 +473,28 @@ void CDlgAdminMapEventBase::OnOK()
 	}
 
 	CDlgAdminBase::EndDialog (IDOK);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapEventBase::SelectSound								 */
+/* 内容		:実行時の効果音IDを選択											 */
+/* 日付		:2007/10/06														 */
+/* ========================================================================= */
+
+void CDlgAdminMapEventBase::SelectSound(DWORD dwSoundID)
+{
+	int i, nCount;
+	DWORD dwResult;
+
+	nCount = m_ctlSoundID.GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		dwResult = m_ctlSoundID.GetItemData (i);
+		if (dwResult == dwSoundID) {
+			m_ctlSoundID.SetCurSel (i);
+			break;
+		}
+	}
 }
 
 /* Copyright(C)URARA-works 2008 */

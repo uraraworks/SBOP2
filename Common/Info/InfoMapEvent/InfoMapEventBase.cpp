@@ -21,6 +21,7 @@ static LPCSTR s_aszName[] = {
 	"m_dwMapEventID",	/* マップイベントID */
 	"m_ptPos",			/* 座標1 */
 	"m_ptPos2",			/* 座標2 */
+	"m_dwSoundID",		/* 実行時の効果音ID */
 	NULL
 };
 
@@ -37,6 +38,7 @@ CInfoMapEventBase::CInfoMapEventBase()
 	m_nType			= MAPEVENTTYPE_NONE;
 	m_nHitType		= MAPEVENTHITTYPE_MAPPOS;
 	m_nHitDirection	= -1;
+	m_dwSoundID		= 0;
 	ZeroMemory (&m_ptPos,  sizeof (m_ptPos));
 	ZeroMemory (&m_ptPos2, sizeof (m_ptPos2));
 
@@ -117,6 +119,7 @@ DWORD CInfoMapEventBase::GetDataSize(void)
 	dwRet += sizeof (m_dwMapEventID);	/* マップイベントID */
 	dwRet += sizeof (m_ptPos);			/* 座標1 */
 	dwRet += sizeof (m_ptPos2);			/* 座標2 */
+	dwRet += sizeof (m_dwSoundID);		/* 実行時の効果音ID */
 
 	return dwRet;
 }
@@ -141,6 +144,7 @@ DWORD CInfoMapEventBase::GetDataSizeNo(int nNo)
 	case 3:	dwRet = sizeof (m_dwMapEventID);	break;	/* マップイベントID */
 	case 4:	dwRet = sizeof (m_ptPos);			break;	/* 座標1 */
 	case 5:	dwRet = sizeof (m_ptPos2);			break;	/* 座標2 */
+	case 6:	dwRet = sizeof (m_dwSoundID);		break;	/* 実行時の効果音ID */
 	}
 
 	return dwRet;
@@ -187,6 +191,7 @@ PBYTE CInfoMapEventBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 3:	pSrc = (PBYTE)&m_dwMapEventID;	break;	/* マップイベントID */
 	case 4:	pSrc = (PBYTE)&m_ptPos;			break;	/* 座標1 */
 	case 5:	pSrc = (PBYTE)&m_ptPos2;		break;	/* 座標2 */
+	case 6:	pSrc = (PBYTE)&m_dwSoundID;		break;	/* 実行時の効果音ID */
 	}
 
 	if (pSrc) {
@@ -221,6 +226,7 @@ DWORD CInfoMapEventBase::ReadElementData(
 	case 3: pDst = (PBYTE)&m_dwMapEventID;	dwSize = sizeof (m_dwMapEventID);	break;	/* マップイベントID */
 	case 4:	pDst = (PBYTE)&m_ptPos;			dwSize = sizeof (m_ptPos);			break;	/* 座標1 */
 	case 5:	pDst = (PBYTE)&m_ptPos2;		dwSize = sizeof (m_ptPos2);			break;	/* 座標2 */
+	case 6:	pDst = (PBYTE)&m_dwSoundID;		dwSize = sizeof (m_dwSoundID);		break;	/* 実行時の効果音ID */
 	}
 
 	if (pDst) {
@@ -246,7 +252,8 @@ DWORD CInfoMapEventBase::GetSendDataSize(void)
 			sizeof (m_nHitDirection)+	/* 判定向き */
 			sizeof (m_dwMapEventID)	+	/* マップイベントID */
 			sizeof (m_ptPos)		+	/* 座標1 */
-			sizeof (m_ptPos2);			/* 座標2 */
+			sizeof (m_ptPos2)		+	/* 座標2 */
+			sizeof (m_dwSoundID);		/* 実行時の効果音ID */
 
 	return dwRet;
 }
@@ -274,6 +281,7 @@ PBYTE CInfoMapEventBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwMapEventID,	sizeof (m_dwMapEventID), 	pDataTmp);	/* マップイベントID */
 	CopyMemoryRenew (pDataTmp, &m_ptPos,		sizeof (m_ptPos),			pDataTmp);	/* 座標1 */
 	CopyMemoryRenew (pDataTmp, &m_ptPos2,		sizeof (m_ptPos2),			pDataTmp);	/* 座標2 */
+	CopyMemoryRenew (pDataTmp, &m_dwSoundID,	sizeof (m_dwSoundID),		pDataTmp);	/* 実行時の効果音ID */
 
 	return pData;
 }
@@ -298,6 +306,7 @@ PBYTE CInfoMapEventBase::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_dwMapEventID,	pDataTmp, sizeof (m_dwMapEventID), 	pDataTmp);	/* マップイベントID */
 	CopyMemoryRenew (&m_ptPos,			pDataTmp, sizeof (m_ptPos),			pDataTmp);	/* 座標1 */
 	CopyMemoryRenew (&m_ptPos2,			pDataTmp, sizeof (m_ptPos2),		pDataTmp);	/* 座標2 */
+	CopyMemoryRenew (&m_dwSoundID,		pDataTmp, sizeof (m_dwSoundID),		pDataTmp);	/* 実行時の効果音ID */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -321,6 +330,7 @@ void CInfoMapEventBase::Copy(CInfoMapEventBase *pSrc)
 	m_dwMapEventID	= pSrc->m_dwMapEventID;	/* マップイベントID */
 	m_ptPos			= pSrc->m_ptPos;		/* 座標1 */
 	m_ptPos2		= pSrc->m_ptPos2;		/* 座標2 */
+	m_dwSoundID		= pSrc->m_dwSoundID;	/* 実行時の効果音ID */
 }
 
 /* Copyright(C)URARA-works 2007 */

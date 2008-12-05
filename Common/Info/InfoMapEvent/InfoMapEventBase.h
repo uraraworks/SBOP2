@@ -62,7 +62,8 @@ public:
 public:
 	int			m_nElementCountBase;			/* 基底クラスの要素数 */
 
-	DWORD		m_dwMapEventID;					/* マップイベントID */
+	DWORD		m_dwMapEventID,					/* マップイベントID */
+				m_dwSoundID;					/* 実行時の効果音ID */
 	int			m_nType,						/* イベント種別 */
 				m_nHitType,						/* 当たり判定種別 */
 				m_nHitDirection;				/* 判定向き */

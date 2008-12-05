@@ -95,6 +95,13 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 		goto Exit;
 	}
 
+	if (pInfoMapEventBase->m_dwSoundID != 0) {
+		CPacketADMIN_PLAYSOUND PacketPLAYSOUND;
+
+		PacketPLAYSOUND.Make (pInfoMapEventBase->m_dwSoundID);
+		m_pMainFrame->SendToClient (pInfoChar->m_dwSessionID, &PacketPLAYSOUND);
+	}
+
 	switch (pInfoMapEventBase->m_nType) {
 	case MAPEVENTTYPE_MOVE:			bRet = MapEventProcMOVE			(pInfoChar, pInfoMapEventBase);	break;	/* マップ内移動 */
 	case MAPEVENTTYPE_MAPMOVE:		bRet = MapEventProcMAPMOVE		(pInfoChar, pInfoMapEventBase);	break;	/* マップ間移動 */
