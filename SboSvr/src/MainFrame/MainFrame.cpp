@@ -15,8 +15,9 @@
 #include "Command.h"
 #include "Packet.h"
 #include "LibInfoAccount.h"
-#include "TextOutput.h"
+#include "LibInfoMapBase.h"
 #include "LibInfoCharSvr.h"
+#include "TextOutput.h"
 #include "InfoCharSvr.h"
 #include "MgrData.h"
 #include "UpdateServerInfo.h"
@@ -59,6 +60,7 @@ CMainFrame::CMainFrame()
 	m_pLibInfoMotionType	= NULL;
 	m_pLibInfoEfcBalloon	= NULL;
 	m_pLibInfoSystem		= NULL;
+	m_pLibInfoSkill			= NULL;
 	m_pLog					= NULL;
 
 	m_pSock				= new CUraraSockTCPSBO;
@@ -404,6 +406,7 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	m_pLibInfoMotionType	= m_pMgrData->GetLibInfoMotionType ();
 	m_pLibInfoEfcBalloon	= m_pMgrData->GetLibInfoEfcBalloon ();
 	m_pLibInfoSystem		= m_pMgrData->GetLibInfoSystem ();
+	m_pLibInfoSkill			= m_pMgrData->GetLibInfoSkill ();
 
 	UpdateServerInfo (FALSE);
 	m_pUpdateServerInfo->Create (
@@ -493,7 +496,7 @@ void CMainFrame::OnPaint(HWND hWnd)
 	MyTextOut (hDC, 0, 0, 		"サーバー稼動時間");
 	MyTextOut (hDC, 0, 12 * 1, 	"接続数");
 	MyTextOut (hDC, 0, 12 * 2, 	"処理キャラ数");
-//	MyTextOut (hDC, 0, 12 * 3, 	"処理マップ数");
+	MyTextOut (hDC, 0, 12 * 3, 	"処理マップ数");
 
 	SetTextColor (hDC, RGB(255, 255, 255));
 
@@ -509,8 +512,8 @@ void CMainFrame::OnPaint(HWND hWnd)
 	wsprintf (szTmp, "%d", m_pLibInfoChar->GetCount ());
 	MyTextOut (hDC, 120, 12 * 2, szTmp);
 
-//	wsprintf (szTmp, "%d", g_aMapInfo.GetSize ());
-//	MyTextOut (hDC, 120, 12 * 3, szTmp);
+	wsprintf (szTmp, "%d", m_pLibInfoMap->GetCount ());
+	MyTextOut (hDC, 120, 12 * 3, szTmp);
 
 	SelectObject (hDC, hFontOld);
 

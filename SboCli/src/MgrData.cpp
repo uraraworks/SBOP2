@@ -22,6 +22,7 @@
 #include "LibInfoMotionType.h"
 #include "LibInfoEfcBalloon.h"
 #include "LibInfoSystem.h"
+#include "LibInfoSkill.h"
 #include "CryptUtil.h"
 #include "LibInfoCharCli.h"
 #include "InfoCharCli.h"
@@ -97,6 +98,7 @@ CMgrData::CMgrData()
 	m_pLibInfoMotionType	= NULL;
 	m_pLibInfoEfcBalloon	= NULL;
 	m_pLibInfoSystem		= NULL;
+	m_pLibInfoSkill			= NULL;
 
 	m_pLibInfoCharOnline	= NULL;
 
@@ -138,6 +140,7 @@ CMgrData::~CMgrData()
 	SAFE_DELETE (m_pLibInfoMotionType);
 	SAFE_DELETE (m_pLibInfoEfcBalloon);
 	SAFE_DELETE (m_pLibInfoSystem);
+	SAFE_DELETE (m_pLibInfoSkill);
 
 	SAFE_DELETE (m_pLibInfoCharOnline);
 }
@@ -175,6 +178,7 @@ void CMgrData::Create(
 	m_pLibInfoMotionType	= new CLibInfoMotionType;
 	m_pLibInfoEfcBalloon	= new CLibInfoEfcBalloon;
 	m_pLibInfoSystem		= new CLibInfoSystem;
+	m_pLibInfoSkill			= new CLibInfoSkill;
 
 	m_pLibInfoCharOnline	= new CLibInfoCharCli;
 
@@ -198,6 +202,7 @@ void CMgrData::Create(
 	m_pLibInfoMotionType->	Create ();
 	m_pLibInfoEfcBalloon->	Create ();
 	m_pLibInfoSystem->		Create ();
+	m_pLibInfoSkill->		Create ();
 
 	m_pLibInfoCharOnline->	Create (this);
 
@@ -235,6 +240,7 @@ void CMgrData::Destroy(void)
 	if (m_pLibInfoMotionType)	{	m_pLibInfoMotionType->	Destroy ();	}
 	if (m_pLibInfoEfcBalloon)	{	m_pLibInfoEfcBalloon->	Destroy ();	}
 	if (m_pLibInfoSystem)		{	m_pLibInfoSystem->		Destroy ();	}
+	if (m_pLibInfoSkill)		{	m_pLibInfoSkill->		Destroy ();	}
 
 	DeleteAllSystemMsg ();
 }

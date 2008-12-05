@@ -22,5 +22,6 @@
 #include "SaveLoadInfoMotionType.h"		/* モーション種別情報 */
 #include "SaveLoadInfoEfcBalloon.h"		/* 噴出し情報 */
 #include "SaveLoadInfoSystem.h"			/* システム情報 */
+#include "SaveLoadInfoSkill.h"			/* スキル情報 */
 
 /* Copyright(C)URARA-works 2007 */

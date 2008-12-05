@@ -51,7 +51,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\myLib\myZLib;..\SboSoundData"
+				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\myLib\myZLib;..\SboSoundData"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -149,7 +149,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\myLib\myZLib;..\SboSoundData"
+				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\myLib\myZLib;..\SboSoundData"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -876,6 +876,14 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="InfoSkill"
+						>
+						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.cpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="Lib No. 2"
@@ -1262,6 +1270,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMotionType.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoSkill.cpp"
 						>
 					</File>
 					<File
@@ -3681,6 +3693,14 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="InfoSkill"
+						>
+						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="Lib No. 3"
@@ -3779,6 +3799,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoMotionType.h"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoSkill.h"
 						>
 					</File>
 					<File

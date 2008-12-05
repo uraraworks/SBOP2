@@ -34,6 +34,7 @@ class CLibInfoMotion;
 class CLibInfoMotionType;
 class CLibInfoEfcBalloon;
 class CLibInfoSystem;
+class CLibInfoSkill;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -168,6 +169,7 @@ public:
 	CLibInfoMotionType	*GetLibInfoMotionType	(void)	{ return m_pLibInfoMotionType;	}	/* モーション種別情報ライブラリを取得 */
 	CLibInfoEfcBalloon	*GetLibInfoEfcBalloon	(void)	{ return m_pLibInfoEfcBalloon;	}	/* 噴出し情報ライブラリを取得 */
 	CLibInfoSystem		*GetLibInfoSystem		(void)	{ return m_pLibInfoSystem;		}	/* システム情報ライブラリを取得 */
+	CLibInfoSkill		*GetLibInfoSkill		(void)	{ return m_pLibInfoSkill;		}	/* スキル情報ライブラリを取得 */
 
 	CLibInfoCharCli		*GetLibInfoCharOnline	(void)	{ return m_pLibInfoCharOnline;	}	/* ログイン中キャラ情報ライブラリを取得 */
 
@@ -240,6 +242,7 @@ private:
 	CLibInfoMotionType	*m_pLibInfoMotionType;		/* モーション種別情報ライブラリ */
 	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;		/* 噴出し情報ライブラリ */
 	CLibInfoSystem		*m_pLibInfoSystem;			/* システム情報ライブラリ */
+	CLibInfoSkill		*m_pLibInfoSkill;			/* スキル情報ライブラリ */
 
 	CLibInfoCharCli		*m_pLibInfoCharOnline;		/* ログイン中キャラ情報ライブラリ */
 

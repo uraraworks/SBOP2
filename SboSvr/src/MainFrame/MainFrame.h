@@ -27,6 +27,7 @@ class CLibInfoMotion;
 class CLibInfoMotionType;
 class CLibInfoEfcBalloon;
 class CLibInfoSystem;
+class CLibInfoSkill;
 class CInfoCharBase;
 
 /* ========================================================================= */
@@ -217,6 +218,7 @@ private:
 	CLibInfoMotionType	*m_pLibInfoMotionType;			/* モーション種別情報ライブラリ */
 	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;			/* 噴出し情報ライブラリ */
 	CLibInfoSystem		*m_pLibInfoSystem;				/* システム情報ライブラリ */
+	CLibInfoSkill		*m_pLibInfoSkill;				/* スキル情報ライブラリ */
 };
 
 /* Copyright(C)URARA-works 2006 */

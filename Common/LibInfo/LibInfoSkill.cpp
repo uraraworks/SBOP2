@@ -1,0 +1,384 @@
+/* Copyright(C)URARA-works 2008 */
+/* ========================================================================= */
+/* ファイル名	:LibInfoSkill.cpp											 */
+/* 内容			:スキル情報ライブラリクラス 実装ファイル					 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2008/12/04													 */
+/* ========================================================================= */
+
+#include "stdafx.h"
+#include "LibInfoSkill.h"
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::CLibInfoSkill									 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+CLibInfoSkill::CLibInfoSkill()
+{
+	m_paInfo = NULL;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::~CLibInfoSkill									 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+CLibInfoSkill::~CLibInfoSkill()
+{
+	Destroy ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::Create											 */
+/* 内容		:作成															 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+void CLibInfoSkill::Create(void)
+{
+	m_paInfo = new ARRAYSKILLBASEINFO;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::Destroy											 */
+/* 内容		:破棄															 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+void CLibInfoSkill::Destroy(void)
+{
+	DeleteAll ();
+	SAFE_DELETE (m_paInfo);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetNew											 */
+/* 内容		:新規データを取得												 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+PCInfoBase CLibInfoSkill::GetNew(int nType)
+{
+	PCInfoSkillBase pInfo;
+
+	pInfo = NULL;
+
+	switch (nType) {
+	case SKILLTYPE_FISHING:				/* 釣り */
+	default:
+		pInfo = new CInfoSkillBase;
+		break;
+	}
+	pInfo->m_nType = nType;
+
+	return pInfo;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetCount										 */
+/* 内容		:データ数を取得													 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+int CLibInfoSkill::GetCount(void)
+{
+	int nRet;
+
+	nRet = 0;
+
+	if (m_paInfo == NULL) {
+		goto Exit;
+	}
+
+	nRet = m_paInfo->GetSize ();
+Exit:
+	return nRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::Add												 */
+/* 内容		:追加															 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+void CLibInfoSkill::Add(PCInfoBase pInfo)
+{
+	PCInfoSkillBase pInfoSkillBase;
+
+	pInfoSkillBase = (PCInfoSkillBase)pInfo;
+	if (pInfoSkillBase->m_dwSkillID == 0) {
+		pInfoSkillBase->m_dwSkillID = GetNewID ();
+	}
+
+	m_paInfo->Add (pInfoSkillBase);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::Delete											 */
+/* 内容		:削除															 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+void CLibInfoSkill::Delete(
+	int nNo)		/* [in] 配列番号 */
+{
+	PCInfoSkillBase pInfo;
+
+	pInfo = m_paInfo->GetAt (nNo);
+	SAFE_DELETE (pInfo);
+	m_paInfo->RemoveAt (nNo);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::Delete											 */
+/* 内容		:削除															 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+void CLibInfoSkill::Delete(
+	DWORD dwSkillID)		/* [in] スキルID */
+{
+	int i, nCount, nNo;
+	PCInfoSkillBase pInfoTmp;
+
+	nNo = -1;
+
+	nCount = m_paInfo->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoTmp = m_paInfo->GetAt (i);
+		if (pInfoTmp->m_dwSkillID != dwSkillID) {
+			continue;
+		}
+		nNo = i;
+		break;
+	}
+
+	if (nNo >= 0) {
+		Delete (nNo);
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::DeleteAll										 */
+/* 内容		:全て削除														 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+void CLibInfoSkill::DeleteAll(void)
+{
+	int i, nCount;
+
+	if (m_paInfo == NULL) {
+		return;
+	}
+
+	nCount = m_paInfo->GetSize ();
+	for (i = nCount - 1; i >= 0; i --) {
+		Delete (i);
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::Merge											 */
+/* 内容		:取り込み														 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+void CLibInfoSkill::Merge(CLibInfoSkill *pSrc)
+{
+	int i, nCount;
+	PCInfoSkillBase pInfoTmp, pInfoSrc;
+
+	nCount = pSrc->GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoSrc = (PCInfoSkillBase)pSrc->GetPtr (i);
+		pInfoTmp = (PCInfoSkillBase)GetPtr (pInfoSrc->m_dwSkillID);
+		if (pInfoTmp == NULL) {
+			pInfoTmp = (PCInfoSkillBase)GetNew (pInfoSrc->m_nType);
+			pInfoTmp->Copy (pInfoSrc);
+			Add (pInfoTmp);
+		}
+		pInfoTmp->Copy (pInfoSrc);
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetPtr											 */
+/* 内容		:情報を取得														 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+PCInfoBase CLibInfoSkill::GetPtr(int nNo)
+{
+	return m_paInfo->GetAt (nNo);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetPtr											 */
+/* 内容		:情報を取得														 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+PCInfoBase CLibInfoSkill::GetPtr(
+	DWORD dwSkillID)		/* [in] スキルID */
+{
+	int i, nCount;
+	PCInfoSkillBase pRet, pInfoTmp;
+
+	pRet = NULL;
+
+	nCount = m_paInfo->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoTmp = m_paInfo->GetAt (i);
+		if (pInfoTmp->m_dwSkillID != dwSkillID) {
+			continue;
+		}
+		pRet = pInfoTmp;
+		break;
+	}
+
+	return pRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetSendDataSize									 */
+/* 内容		:送信データサイズを取得											 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+DWORD CLibInfoSkill::GetSendDataSize(void)
+{
+	int i, nCount;
+	DWORD dwSize;
+	PCInfoSkillBase pInfoSkillBase;
+
+	dwSize = 0;
+
+	nCount = GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoSkillBase = (PCInfoSkillBase)GetPtr (i);
+		dwSize += pInfoSkillBase->GetSendDataSize ();
+	}
+	/* 終端用 */
+	dwSize += sizeof (DWORD);
+
+	return dwSize;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetSendData										 */
+/* 内容		:送信データを取得												 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+PBYTE CLibInfoSkill::GetSendData(void)
+{
+	int i, nCount;
+	PBYTE pData, pDataPos, pDataTmp;
+	DWORD dwSize, dwSizeTmp;
+	PCInfoSkillBase pInfoSkillBase;
+
+	dwSize	= GetSendDataSize ();
+	pData	= new BYTE[dwSize];
+	ZeroMemory (pData, dwSize);
+
+	pDataPos = pData;
+
+	nCount = GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoSkillBase = (PCInfoSkillBase)GetPtr (i);
+
+		dwSizeTmp	= pInfoSkillBase->GetSendDataSize ();
+		pDataTmp	= pInfoSkillBase->GetSendData ();
+		CopyMemoryRenew (pDataPos, pDataTmp, dwSizeTmp, pDataPos);
+		SAFE_DELETE_ARRAY (pDataTmp);
+	}
+
+	return pData;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::SetSendData										 */
+/* 内容		:送信データから取り込み											 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+PBYTE CLibInfoSkill::SetSendData(PBYTE pSrc)
+{
+	PBYTE pDataTmp, pDataTmpBack;
+	DWORD dwTmp;
+	CInfoSkillBase InfoTmp, *pInfoSkillBase, *pInfoSkillBaseTmp;
+
+	pDataTmp = pSrc;
+
+	while (1) {
+		CopyMemory (&dwTmp, pDataTmp, sizeof (DWORD));
+		if (dwTmp == 0) {
+			pDataTmp += sizeof (DWORD);
+			break;
+		}
+		pDataTmpBack = pDataTmp;
+		InfoTmp.SetSendData (pDataTmp);
+		pInfoSkillBaseTmp = (PCInfoSkillBase)GetNew (InfoTmp.m_nType);
+		pDataTmp = pInfoSkillBaseTmp->SetSendData (pDataTmpBack);
+
+		pInfoSkillBase = (PCInfoSkillBase)GetPtr (pInfoSkillBaseTmp->m_dwSkillID);
+		if (pInfoSkillBase) {
+			pInfoSkillBase->Copy (pInfoSkillBaseTmp);
+			SAFE_DELETE (pInfoSkillBaseTmp);
+		} else {
+			Add (pInfoSkillBaseTmp);
+		}
+	}
+
+	return pDataTmp;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetNewID										 */
+/* 内容		:新しいIDを取得													 */
+/* 日付		:2008/12/04														 */
+/* ========================================================================= */
+
+DWORD CLibInfoSkill::GetNewID(void)
+{
+	DWORD dwRet;
+	int i, nCount;
+	PCInfoSkillBase pInfoTmp;
+
+	dwRet = 1;
+
+	nCount = m_paInfo->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoTmp = m_paInfo->GetAt (i);
+		if (pInfoTmp->m_dwSkillID == dwRet) {
+			dwRet ++;
+			i = -1;
+			continue;
+		}
+	}
+
+	return dwRet;
+}
+
+/* Copyright(C)URARA-works 2008 */
