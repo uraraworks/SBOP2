@@ -474,7 +474,6 @@ DWORD CInfoMapBase::ReadElementData(
 		dwSize	= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
 		break;
 	case 8:
-		Init (m_sizeMap.cx, m_sizeMap.cy, 0, FALSE);
 		pDst	= (PBYTE)m_pwMapPile;
 		dwSize	= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
 		break;

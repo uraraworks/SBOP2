@@ -448,6 +448,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 
 void CStateProcMAP::OnRButtonDown(int x, int y)
 {
+	BOOL bPile;
 	int nMapX, nMapY, xx, yy;
 	WORD wTmp;
 	DWORD dwNotifyData;
@@ -465,7 +466,12 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 	case ADMINNOTIFYTYPE_MAPEDIT:			/* マップ編集(通知は無し) */
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
-		wTmp = m_pMap->GetParts (x, y);
+		bPile = m_pMgrData->GetEditMapPile ();
+		if (bPile) {
+			wTmp = m_pMap->GetPartsPile (x, y);
+		} else {
+			wTmp = m_pMap->GetParts (x, y);
+		}
 		m_pMgrData->SetSelectMapPartsID (wTmp);
 		break;
 
