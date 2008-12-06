@@ -564,7 +564,7 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 				for (xx = 0; xx < m_rcCopy.Width (); xx ++) {
 					dwPartsID = m_pdwParts[xx + yy * m_rcCopy.Width ()];
 					m_pInfoMap->SetParts (x + xx, y + yy, dwPartsID);
-					Packet.Make (m_pInfoMap->m_dwMapID, x + xx, y + yy, dwPartsID);
+					Packet.Make (m_pInfoMap->m_dwMapID, x + xx, y + yy, dwPartsID, FALSE);
 					m_pSock->Send (&Packet);
 				}
 			}
@@ -572,7 +572,7 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 
 	} else {
 		m_pInfoMap->SetParts (x, y, m_pMgrData->GetSelectMapPartsID ());
-		Packet.Make (m_pInfoMap->m_dwMapID, x, y, m_pMgrData->GetSelectMapPartsID ());
+		Packet.Make (m_pInfoMap->m_dwMapID, x, y, m_pMgrData->GetSelectMapPartsID (), FALSE);
 		m_pSock->Send (&Packet);
 	}
 
@@ -1127,7 +1127,7 @@ void CWndMap::OnToolPaint()
 		for (yy = 0; yy <= m_rcRange.Height (); yy ++) {
 			for (xx = 0; xx <= m_rcRange.Width (); xx ++) {
 				m_pInfoMap->SetParts (x + xx, y + yy, dwPartsID);
-				Packet.Make (m_pInfoMap->m_dwMapID, x + xx, y + yy, dwPartsID);
+				Packet.Make (m_pInfoMap->m_dwMapID, x + xx, y + yy, dwPartsID, FALSE);
 				m_pSock->Send (&Packet);
 			}
 		}

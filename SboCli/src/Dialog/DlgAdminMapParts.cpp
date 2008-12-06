@@ -43,6 +43,7 @@ void CDlgAdminMapParts::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_ATTR, m_strAttr);
 	DDX_Text(pDX, IDC_ATTR2, m_strAttr2);
 	//}}AFX_DATA_MAP
+	DDX_Check(pDX, IDC_PILE, m_bPile);
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminMapParts, CDlgAdminBase)
@@ -56,6 +57,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapParts, CDlgAdminBase)
 	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_WNDCLOSE, OnWndClose)
+	ON_BN_CLICKED(IDC_PILE, &CDlgAdminMapParts::OnBnClickedPile)
 END_MESSAGE_MAP()
 
 
@@ -67,6 +69,7 @@ END_MESSAGE_MAP()
 
 CDlgAdminMapParts::CDlgAdminMapParts(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminMapParts::IDD, pParent)
+	, m_bPile(FALSE)
 {
 	//{{AFX_DATA_INIT(CDlgAdminMapParts)
 	m_nTypeSelect = 0;
@@ -187,6 +190,8 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 
 	MakePartsImage ();
 	pWnd->SetFocus ();
+
+	m_pMgrData->SetEditMapPile (m_bPile);
 
 	return FALSE;
 }
@@ -566,6 +571,19 @@ void CDlgAdminMapParts::OnSelchangeType()
 		RenewMessage ("");
 		break;
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapParts::OnBnClickedPile								 */
+/* 内容		:ボタンハンドラ(重ね用マップ)									 */
+/* 日付		:2008/12/06														 */
+/* ========================================================================= */
+
+void CDlgAdminMapParts::OnBnClickedPile()
+{
+	UpdateData();
+	m_pMgrData->SetEditMapPile (m_bPile);
 }
 
 

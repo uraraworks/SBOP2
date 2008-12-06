@@ -28,6 +28,7 @@ static LPCSTR s_aszName[] = {
 	"m_bRecovery",				/* 気絶後回復する */
 	"m_byLevel",				/* 暗さレベル */
 	"pwMap",					/* マップ */
+	"pwMapPile",				/* マップ重ね合わせ */
 	"pwMapShadow",				/* マップ影 */
 	"strMapName",				/* マップ名 */
 	"pLibInfoMapEvent",			/* マップイベント情報 */
@@ -53,6 +54,7 @@ CInfoMapBase::CInfoMapBase()
 	m_pbyMapEvent	= NULL;
 	m_pbyHitTmp		= NULL;
 	m_pwMap			= NULL;
+	m_pwMapPile		= NULL;
 	m_pwMapShadow	= NULL;
 	m_byLevel		= 0;
 
@@ -76,6 +78,7 @@ CInfoMapBase::~CInfoMapBase()
 	SAFE_DELETE_ARRAY (m_pbyMapEvent);
 	SAFE_DELETE_ARRAY (m_pbyHitTmp);
 	SAFE_DELETE_ARRAY (m_pwMap);
+	SAFE_DELETE_ARRAY (m_pwMapPile);
 	SAFE_DELETE_ARRAY (m_pwMapShadow);
 	SAFE_DELETE (m_pLibInfoMapEvent);
 	SAFE_DELETE (m_pLibInfoMapObjectData);
@@ -113,6 +116,7 @@ void CInfoMapBase::Init(
 	int x, y;
 
 	SAFE_DELETE_ARRAY (m_pwMap);
+	SAFE_DELETE_ARRAY (m_pwMapPile);
 	SAFE_DELETE_ARRAY (m_pwMapShadow);
 	SAFE_DELETE_ARRAY (m_pbyHitTmp);
 	if (bDeleteMapEvent) {
@@ -127,6 +131,7 @@ void CInfoMapBase::Init(
 	}
 
 	m_pwMap				= new WORD[cx * cy];
+	m_pwMapPile			= new WORD[cx * cy];
 	m_pwMapShadow		= new WORD[cx * cy];
 	m_pbyHitTmp			= new BYTE[cx * cy];
 	if (bDeleteMapEvent) {
@@ -139,6 +144,7 @@ void CInfoMapBase::Init(
 	for (y = 0; y < cy; y ++) {
 		for (x = 0; x < cx; x ++) {
 			m_pwMap[cx * y + x]			= wParts;
+			m_pwMapPile[cx * y + x]		= 0;
 			m_pwMapShadow[cx * y + x]	= 0;
 		}
 	}
@@ -157,7 +163,7 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 {
 	int i, nCount, x, y, nSrcStartX, nSrcEndX, nDstStartX, nDstEndX, nSrcStartY, nSrcEndY, nDstStartY, nDstEndY,
 		anPosX[] = {0, 0, 1, 0}, anPosY[] = {1, 0, 0, 0};
-	PWORD pwMapBack, pwMapShadow;
+	PWORD pwMapBack, pwMapPileBack, pwMapShadow;
 	SIZE sizeBack;
 	PCInfoMapEventBase pInfoMapEvent;
 	PCInfoMapObjectData pInfoMapObjectData;
@@ -168,8 +174,10 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 
 	sizeBack		= m_sizeMap;
 	pwMapBack		= m_pwMap;
+	pwMapPileBack	= m_pwMapPile;
 	pwMapShadow		= m_pwMapShadow;
 	m_pwMap			= NULL;
+	m_pwMapPile		= NULL;
 	m_pwMapShadow	= NULL;
 
 	nSrcStartX	= 0;
@@ -218,11 +226,14 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 		for (x = 0; x < nSrcEndX; x ++) {
 			m_pwMap[(m_sizeMap.cx * (nDstStartY + y)) + x + nDstStartX] =
 					pwMapBack[(sizeBack.cx * (nSrcStartY + y)) + x + nSrcStartX];
+			m_pwMapPile[(m_sizeMap.cx * (nDstStartY + y)) + x + nDstStartX] =
+					pwMapPileBack[(sizeBack.cx * (nSrcStartY + y)) + x + nSrcStartX];
 			m_pwMapShadow[(m_sizeMap.cx * (nDstStartY + y)) + x + nDstStartX] =
 					pwMapShadow[(sizeBack.cx * (nSrcStartY + y)) + x + nSrcStartX];
 		}
 	}
 	SAFE_DELETE_ARRAY (pwMapBack);
+	SAFE_DELETE_ARRAY (pwMapPileBack);
 	SAFE_DELETE_ARRAY (pwMapShadow);
 
 	nCount = m_pLibInfoMapEvent->GetCount ();
@@ -308,6 +319,7 @@ DWORD CInfoMapBase::GetDataSize(void)
 	dwRet += sizeof (m_byLevel);				/* 暗さレベル */
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
+	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += (m_strMapName.GetLength () + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetDataSize ();
@@ -342,13 +354,14 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 	case 6:	dwRet = sizeof (m_byLevel);								break;	/* 暗さレベル */
 	case 7:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
 	case 8:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
-	case 9:	dwRet = m_strMapName.GetLength () + 1;					break;
-	case 10:
+	case 9:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
+	case 10:dwRet = m_strMapName.GetLength () + 1;					break;
+	case 11:
 		if (m_pLibInfoMapEvent) {
 			dwRet = m_pLibInfoMapEvent->GetDataSize ();
 		}
 		break;
-	case 11:
+	case 12:
 		if (m_pLibInfoMapObjectData) {
 			dwRet = m_pLibInfoMapObjectData->GetDataSize ();
 		}
@@ -401,9 +414,10 @@ PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 5:	pSrc = (PBYTE)&m_bRecovery;			break;		/* 気絶後回復する */
 	case 6:	pSrc = (PBYTE)&m_byLevel;			break;		/* 暗さレベル */
 	case 7:	pSrc = (PBYTE)m_pwMap;				break;
-	case 8:	pSrc = (PBYTE)m_pwMapShadow;		break;
-	case 9:	pSrc = (PBYTE)(LPCSTR)m_strMapName;	break;
-	case 10:
+	case 8:	pSrc = (PBYTE)m_pwMapPile;			break;
+	case 9:	pSrc = (PBYTE)m_pwMapShadow;		break;
+	case 10:pSrc = (PBYTE)(LPCSTR)m_strMapName;	break;
+	case 11:
 		if (m_pLibInfoMapEvent) {
 			pSrc = m_pLibInfoMapEvent->GetWriteData (pdwSize);
 			CopyMemory (pRet, pSrc, dwSize);
@@ -411,7 +425,7 @@ PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
 			goto Exit;
 		}
 		break;
-	case 11:
+	case 12:
 		if (m_pLibInfoMapObjectData) {
 			pSrc = m_pLibInfoMapObjectData->GetWriteData (pdwSize);
 			CopyMemory (pRet, pSrc, dwSize);
@@ -460,21 +474,26 @@ DWORD CInfoMapBase::ReadElementData(
 		dwSize	= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
 		break;
 	case 8:
+		Init (m_sizeMap.cx, m_sizeMap.cy, 0, FALSE);
+		pDst	= (PBYTE)m_pwMapPile;
+		dwSize	= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
+		break;
+	case 9:
 		SAFE_DELETE_ARRAY (m_pwMapShadow);
 		m_pwMapShadow	= new WORD[m_sizeMap.cx * m_sizeMap.cy];
 		pDst			= (PBYTE)m_pwMapShadow;
 		dwSize			= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
 		break;
-	case 9:
+	case 10:
 		m_strMapName = (LPCSTR)pSrc;
 		dwSize = m_strMapName.GetLength () + 1;
 		break;
-	case 10:
+	case 11:
 		if (m_pLibInfoMapEvent) {
 			dwSize = m_pLibInfoMapEvent->ReadElementData (pSrc);
 		}
 		break;
-	case 11:
+	case 12:
 		if (m_pLibInfoMapObjectData) {
 			dwSize = m_pLibInfoMapObjectData->ReadElementData (pSrc);
 		}
@@ -597,6 +616,44 @@ void CInfoMapBase::SetParts(int x, int y, DWORD dwPartsID)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoMapBase::GetPartsPile										 */
+/* 内容		:指定座標の重ね合わせパーツ番号を取得							 */
+/* 日付		:2008/12/06														 */
+/* ========================================================================= */
+
+WORD CInfoMapBase::GetPartsPile(int x, int y)
+{
+	WORD wRet;
+
+	wRet = 0;
+
+	if ((x < 0) || (y < 0) || (x >= m_sizeMap.cx) || (y >= m_sizeMap.cy)) {
+		goto Exit;
+	}
+
+	wRet = m_pwMapPile[m_sizeMap.cx * y + x];
+Exit:
+	return wRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoMapBase::SetPartsPile										 */
+/* 内容		:指定座標の重ね合わせパーツ番号を設定							 */
+/* 日付		:2008/12/06														 */
+/* ========================================================================= */
+
+void CInfoMapBase::SetPartsPile(int x, int y, DWORD dwPartsID)
+{
+	if ((x < 0) || (y < 0) || (x >= m_sizeMap.cx) || (y >= m_sizeMap.cy)) {
+		return;
+	}
+
+	m_pwMapPile[m_sizeMap.cx * y + x] = (WORD)dwPartsID;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoMapBase::IsMove											 */
 /* 内容		:進入可能か判定													 */
 /* 戻り値	:TRUE:通れる FALSE:ぶつかる										 */
@@ -694,6 +751,10 @@ void CInfoMapBase::DeleteParts(DWORD dwPartsID)
 			wPartsID = m_pwMap[m_sizeMap.cx * y + x];
 			if (wPartsID == dwPartsID) {
 				m_pwMap[m_sizeMap.cx * y + x] = 0;
+			}
+			wPartsID = m_pwMapPile[m_sizeMap.cx * y + x];
+			if (wPartsID == dwPartsID) {
+				m_pwMapPile[m_sizeMap.cx * y + x] = 0;
 			}
 		}
 	}
@@ -867,6 +928,7 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 	dwRet += sizeof (m_byLevel);				/* 暗さレベル */
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
+	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += (m_strMapName.GetLength () + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetSendDataSize ();
@@ -905,7 +967,10 @@ PBYTE CInfoMapBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_byLevel,			sizeof (m_byLevel),			pDataTmp);	/* 暗さレベル */
 	strcpyRenew ((LPSTR)pDataTmp, m_strMapName, pDataTmp);					/* マップ名 */
 	if (m_pwMap) {
-		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMap, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* マップ */
+		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMap, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);		/* マップ */
+	}
+	if (m_pwMapPile) {
+		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMapPile, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* マップ重ね合わせ */
 	}
 	if (m_pwMapShadow) {
 		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMapShadow, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* マップ影 */
@@ -953,6 +1018,7 @@ PBYTE CInfoMapBase::SetSendData(PBYTE pSrc)
 	Init (m_sizeMap.cx, m_sizeMap.cy, 0);
 	if ((m_sizeMap.cx != 0) || (m_sizeMap.cy != 0)) {
 		CopyMemoryRenew ((PBYTE)m_pwMap,		pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* マップ */
+		CopyMemoryRenew ((PBYTE)m_pwMapPile,	pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* マップ重ね合わせ */
 		CopyMemoryRenew ((PBYTE)m_pwMapShadow,	pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* マップ影 */
 	}
 	if (m_pLibInfoMapEvent) {
@@ -988,6 +1054,7 @@ void CInfoMapBase::Copy(CInfoMapBase *pSrc)
 	Init (pSrc->m_sizeMap.cx, pSrc->m_sizeMap.cy, 0);
 	if ((m_sizeMap.cx != 0) || (m_sizeMap.cy != 0)) {
 		CopyMemory ((PBYTE)m_pwMap,			pSrc->m_pwMap,		(m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
+		CopyMemory ((PBYTE)m_pwMapPile,		pSrc->m_pwMapPile,	(m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 		CopyMemory ((PBYTE)m_pwMapShadow,	pSrc->m_pwMapShadow, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	}
 	pTmp = pSrc->m_pLibInfoMapEvent->GetSendData ();

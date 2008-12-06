@@ -364,7 +364,11 @@ void CMainFrame::RecvProcMAP_SETPARTS(PBYTE pData)
 	if (pInfoMap == NULL) {
 		return;
 	}
-	pInfoMap->SetParts (Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
+	if (Packet.m_bPile) {
+		pInfoMap->SetPartsPile (Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
+	} else {
+		pInfoMap->SetParts (Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
+	}
 }
 
 

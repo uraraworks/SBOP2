@@ -362,9 +362,13 @@ void CMainFrame::RecvProcADMIN_MAP_SETPARTS(PBYTE pData, DWORD dwSessionID)
 	if (pInfoMap == NULL) {
 		return;
 	}
-	pInfoMap->SetParts (Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
+	if (Packet.m_bPile) {
+		pInfoMap->SetPartsPile (Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
+	} else {
+		pInfoMap->SetParts (Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
+	}
 
-	PacketMAP_SETPARTS.Make (Packet.m_dwMapID, Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
+	PacketMAP_SETPARTS.Make (Packet.m_dwMapID, Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID, Packet.m_bPile);
 	SendToMapChar (Packet.m_dwMapID, &PacketMAP_SETPARTS);
 }
 

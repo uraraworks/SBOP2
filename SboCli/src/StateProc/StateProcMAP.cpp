@@ -373,13 +373,19 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 
 	case ADMINNOTIFYTYPE_MAPEDIT:			/* マップ編集(通知は無し) */
 		{
+			BOOL bPile;
 			CPacketADMIN_MAP_SETPARTS Packet;
 
 			x = (xx / 32) + nMapX;
 			y = (yy / 32) + nMapY;
-			m_pMap->SetParts (x, y, m_pMgrData->GetSelectMapPartsID ());
 
-			Packet.Make (m_pMap->m_dwMapID, x, y, m_pMgrData->GetSelectMapPartsID ());
+			bPile = m_pMgrData->GetEditMapPile ();
+			if (bPile) {
+				m_pMap->SetPartsPile (x, y, m_pMgrData->GetSelectMapPartsID ());
+			} else {
+				m_pMap->SetParts (x, y, m_pMgrData->GetSelectMapPartsID ());
+			}
+			Packet.Make (m_pMap->m_dwMapID, x, y, m_pMgrData->GetSelectMapPartsID (), bPile);
 			m_pSock->Send (&Packet);
 		}
 		break;
@@ -547,6 +553,7 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 	switch (m_pMgrData->GetAdminNotifyTypeL ()) {
 	case ADMINNOTIFYTYPE_MAPEDIT:	/* マップ編集(通知は無し) */
 		{
+			BOOL bPile;
 			WORD wMapParts;
 			DWORD dwMapPartsID;
 			CPacketADMIN_MAP_SETPARTS Packet;
@@ -561,9 +568,14 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 			if (wMapParts == dwMapPartsID) {
 				break;
 			}
-			m_pMap->SetParts (x, y, dwMapPartsID);
+			bPile = m_pMgrData->GetEditMapPile ();
+			if (bPile) {
+				m_pMap->SetPartsPile (x, y, dwMapPartsID);
+			} else {
+				m_pMap->SetParts (x, y, dwMapPartsID);
+			}
 
-			Packet.Make (m_pMap->m_dwMapID, x, y, m_pMgrData->GetSelectMapPartsID ());
+			Packet.Make (m_pMap->m_dwMapID, x, y, m_pMgrData->GetSelectMapPartsID (), bPile);
 			m_pSock->Send (&Packet);
 		}
 		break;

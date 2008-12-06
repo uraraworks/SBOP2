@@ -20,11 +20,12 @@ public:
 			CPacketADMIN_MAP_SETPARTS();					/* コンストラクタ */
 	virtual ~CPacketADMIN_MAP_SETPARTS();					/* デストラクタ */
 
-	void	Make	(DWORD dwMapID, int x, int y, DWORD dwPartsID);	/* パケットを作成 */
+	void	Make	(DWORD dwMapID, int x, int y, DWORD dwPartsID, BOOL bPile);	/* パケットを作成 */
 	PBYTE	Set		(PBYTE pPacket);								/* パケットを設定 */
 
 
 public:
+	BOOL	m_bPile;				/* TRUE:重ね合わせ用マップ */
 	POINT	m_ptPos;				/* 座標 */
 	DWORD	m_dwMapID,				/* マップID */
 			m_dwPartsID;			/* パーツID */

@@ -49,6 +49,7 @@ private:
 	BOOL	TimerProcSystemIcon	(void);											/* 時間処理(システムアイコン) */
 	BOOL	TimerProcMapName	(void);											/* 時間処理(マップ名表示) */
 	void	DrawPartsBase		(CImg32 *pDst, int nDrawY = -99);				/* 描画(土台) */
+	void	DrawMapPile			(CImg32 *pDst, int nDrawY = -99);				/* 描画(マップ重ね合わせ) */
 	void	GetDrawMapPos		(POINT *ptPos, int &nDstX, int &nDstY);			/* マップ座標の描画位置を所得 */
 	void	DrawPartsPile		(CImg32 *pDst, int nDrawY = -99);				/* 描画(重ね合わせ) */
 	void	DrawShadow			(CImg32 *pDst, int nDrawY = -99);				/* 描画(マップ影) */

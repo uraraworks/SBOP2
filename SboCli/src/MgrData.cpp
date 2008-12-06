@@ -63,6 +63,7 @@ CMgrData::CMgrData()
 	m_nSEVolume				= 2;
 	m_nBGMVolume			= 2;
 	m_nSleepTimer			= 0;
+	m_bEditMapPile			= FALSE;
 	m_bMoveNoBlock			= FALSE;
 	m_bSavePassword			= FALSE;
 	m_bOptionTaskbar		= FALSE;

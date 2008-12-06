@@ -19,6 +19,7 @@
 
 CPacketMAP_SETPARTS::CPacketMAP_SETPARTS()
 {
+	m_bPile		= FALSE;
 	m_ptPos.x	= 0;
 	m_ptPos.y	= 0;
 	m_dwMapID	= 0;
@@ -47,7 +48,8 @@ void CPacketMAP_SETPARTS::Make(
 	DWORD dwMapID,			/* [in] マップID */
 	int x,					/* [in] X座標 */
 	int y,					/* [in] Y座標 */
-	DWORD dwPartsID)		/* [in] パーツID */
+	DWORD dwPartsID,		/* [in] パーツID */
+	BOOL bPile)				/* [in] 重ね合わせ用 */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,7 +62,8 @@ void CPacketMAP_SETPARTS::Make(
 	dwSize = sizeof (PACKETBASE)	+
 			 sizeof (ptPos)			+
 			 sizeof (dwMapID)		+
-			 sizeof (dwPartsID);
+			 sizeof (dwPartsID)		+
+			 sizeof (bPile);
 
 	pData = new BYTE[dwSize];
 	ZeroMemory (pData, dwSize);
@@ -73,6 +76,7 @@ void CPacketMAP_SETPARTS::Make(
 	CopyMemoryRenew (pDataTmp, &dwMapID,	sizeof (dwMapID),	pDataTmp);	/* マップID */
 	CopyMemoryRenew (pDataTmp, &ptPos,		sizeof (ptPos),		pDataTmp);	/* 座標 */
 	CopyMemoryRenew (pDataTmp, &dwPartsID,	sizeof (dwPartsID),	pDataTmp);	/* パーツID */
+	CopyMemoryRenew (pDataTmp, &bPile,		sizeof (bPile),		pDataTmp);	/* 重ね合わせ用 */
 
 	RenewPacket (pData, dwSize);
 }
@@ -94,6 +98,7 @@ PBYTE CPacketMAP_SETPARTS::Set(PBYTE pPacket)
 	CopyMemoryRenew (&m_dwMapID,	pDataTmp, sizeof (m_dwMapID),	pDataTmp);	/* マップID */
 	CopyMemoryRenew (&m_ptPos,		pDataTmp, sizeof (m_ptPos),		pDataTmp);	/* 座標 */
 	CopyMemoryRenew (&m_dwPartsID,	pDataTmp, sizeof (m_dwPartsID),	pDataTmp);	/* パーツID */
+	CopyMemoryRenew (&m_bPile,		pDataTmp, sizeof (m_bPile),		pDataTmp);	/* 重ね合わせ用 */
 
 	pRet = pDataTmp;
 	return pRet;

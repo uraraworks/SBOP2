@@ -82,6 +82,9 @@ protected:
 	//}}AFX_MSG
 	afx_msg LRESULT OnWndClose(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
+public:
+	BOOL m_bPile;
+	afx_msg void OnBnClickedPile();
 };
 
 //{{AFX_INSERT_LOCATION}}

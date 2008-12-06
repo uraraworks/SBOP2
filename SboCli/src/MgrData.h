@@ -80,6 +80,8 @@ public:
 	void			SetLastPassword		(LPCSTR pszPassword)	{ m_strLastPassword = pszPassword;	}	/* 最終パスワードを設定 */
 	LPCSTR			GetLastPassword		(void)					{ return m_strLastPassword;			}	/* 最終パスワードを取得 */
 
+	void			SetEditMapPile			(BOOL bEditMapPile)		{ m_bEditMapPile = bEditMapPile;			}	/* 重ね合わせ用としてマップ編集を設定 */
+	BOOL			GetEditMapPile			(void)					{ return m_bEditMapPile;					}	/* 重ね合わせ用としてマップ編集を取得 */
 	void			SetMoveNoBlock			(BOOL bMoveNoBlock)		{ m_bMoveNoBlock = bMoveNoBlock;			}	/* 当たり判定無効を設定 */
 	BOOL			GetMoveNoBlock			(void)					{ return m_bMoveNoBlock;					}	/* 当たり判定無効を取得 */
 	void			SetSavePassword			(BOOL bSavePassword)	{ m_bSavePassword = bSavePassword;			}	/* パスワードを保存するを設定 */
@@ -192,7 +194,8 @@ private:
 						m_nSEVolume,				/* 効果音量 */
 						m_nBGMVolume,				/* BGM音量 */
 						m_nSleepTimer;				/* おひるねタイマー */
-	BOOL				m_bMoveNoBlock,				/* 当たり判定無効 */
+	BOOL				m_bEditMapPile,				/* 重ね合わせ用としてマップ編集 */
+						m_bMoveNoBlock,				/* 当たり判定無効 */
 						m_bSavePassword,			/* パスワードを保存する？ */
 						m_bOptionTaskbar,			/* 発言時にタスクバーをチカチカ */
 						m_bOptionViewChat,			/* 発言を表示する */

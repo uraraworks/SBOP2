@@ -58,6 +58,8 @@ public:
 	int		GetMapEventType	(int x, int y);						/* 指定座標のマップイベント種別を取得 */
 	WORD	GetParts		(int x, int y);						/* 指定座標のパーツ番号を取得 */
 	void	SetParts		(int x, int y, DWORD dwPartsID);	/* 指定座標のパーツ番号を設定 */
+	WORD	GetPartsPile	(int x, int y);						/* 指定座標の重ね合わせパーツ番号を取得 */
+	void	SetPartsPile	(int x, int y, DWORD dwPartsID);	/* 指定座標の重ね合わせパーツ番号を設定 */
 	BOOL	IsMove			(int x, int y, int nDirection);		/* 進入可能か判定 */
 	BOOL	IsMoveOut		(int x, int y, int nDirection);		/* 脱出可能か判定 */
 	void	DeleteParts		(DWORD dwPartsID);					/* 指定パーツを削除 */
@@ -96,6 +98,7 @@ public:
 	PBYTE		m_pbyMapEvent,			/* 各座標のマップイベント */
 				m_pbyHitTmp;			/* マップパーツ以外での当たり判定 */
 	PWORD		m_pwMap,				/* マップ */
+				m_pwMapPile,			/* マップ重ね合わせ */
 				m_pwMapShadow;			/* マップ影 */
 	BYTE		m_byLevel;				/* 暗さレベル */
 	CmyString	m_strMapName;			/* マップ名 */

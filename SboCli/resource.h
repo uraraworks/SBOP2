@@ -304,6 +304,7 @@
 #define IDC_MAP                         1146
 #define IDC_ENABLEBATTLE                1147
 #define IDC_RECOVERY                    1148
+#define IDC_CHECK1                      1148
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -348,7 +349,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        178
 #define _APS_NEXT_COMMAND_VALUE         32807
-#define _APS_NEXT_CONTROL_VALUE         1148
+#define _APS_NEXT_CONTROL_VALUE         1149
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
