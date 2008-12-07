@@ -970,6 +970,8 @@ Exit:
 
 void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 {
+	BOOL bPile;
+	BYTE byLevel;
 	DWORD dwPartsID, dwPartsIDBack;
 	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
@@ -986,6 +988,11 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 		if (nDrawY % 2) {
 			return;
 		}
+	}
+	byLevel = 0;
+	bPile = m_pMgrData->GetEditMapPile ();
+	if (bPile) {
+		byLevel = 50;
 	}
 
 	cx		= pMap->m_sizeMap.cx;
@@ -1066,6 +1073,16 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 			} else {
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
 			}
+			if (bPile) {
+				if (pInfoMapParts) {
+					if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
+						pDst->FillRect (
+							32 + x * 32 + nMoveX,
+							32 + y * 32 + nMoveY,
+							32, 32, RGB (0, 0, 0));
+					}
+				}
+			}
 			m_pMgrDraw->DrawMapParts (
 					pDst,
 					32 + x * 32 + nMoveX,
@@ -1074,7 +1091,8 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 					2,
 					FALSE,
 					TRUE,
-					FALSE);
+					FALSE,
+					byLevel);
 			pInfoMapPartsBack	= pInfoMapParts;
 			dwPartsIDBack		= dwPartsID;
 		}
@@ -1244,8 +1262,8 @@ void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 
 void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 {
-	BOOL bDraw;
-	BYTE byViewGrid;
+	BOOL bDraw, bPile;
+	BYTE byViewGrid, byLevel;
 	DWORD dwPartsID, dwPartsIDBack;
 	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
@@ -1257,6 +1275,11 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 	pMap = m_pMgrData->GetMap ();
 	if (pMap == NULL) {
 		return;
+	}
+	byLevel = 0;
+	bPile = m_pMgrData->GetEditMapPile ();
+	if (bPile) {
+		byLevel = 50;
 	}
 
 	cx		= pMap->m_sizeMap.cx;
@@ -1369,6 +1392,14 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 						FALSE,
 						TRUE,
 						FALSE);
+				if (bPile) {
+					if (nDrawY != -99) {
+						pDst->ChgLevel (
+							32 + x * 32 + nMoveX,
+							32 + y * 32 + nMoveY,
+							32, 32, 50);
+					}
+				}
 			}
 			if (byViewGrid && nDrawY == -99) {
 				if (byViewGrid == 1) {
