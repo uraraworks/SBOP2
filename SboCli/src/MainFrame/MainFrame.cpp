@@ -107,6 +107,7 @@ CMainFrame::CMainFrame()
 	m_pLibInfoEfcBalloon	= NULL;
 	m_pLibInfoEffect		= NULL;
 	m_pLibInfoSystem		= NULL;
+	m_pLibInfoSkill			= NULL;
 
 	m_hCom = CoInitializeEx (0, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 	ZeroMemory (&m_stSystemTime, sizeof (m_stSystemTime));
@@ -733,6 +734,7 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	m_pLibInfoEfcBalloon	= m_pMgrData->GetLibInfoEfcBalloon ();
 	m_pLibInfoEffect		= m_pMgrData->GetLibInfoEffect ();
 	m_pLibInfoSystem		= m_pMgrData->GetLibInfoSystem ();
+	m_pLibInfoSkill			= m_pMgrData->GetLibInfoSkill ();
 
 	/* グラフィックデータDLLの読み込み */
 	bResult = m_pMgrGrpData->Load ();
@@ -1159,6 +1161,7 @@ void CMainFrame::OnRecv(PBYTE pData)
 	case SBOCOMMANDID_MAIN_ADMIN:	RecvProcADMIN	(Packet.m_byCmdSub, pData);		break;		/* 管理者系 */
 	case SBOCOMMANDID_MAIN_EFFECT:	RecvProcEFFECT	(Packet.m_byCmdSub, pData);		break;		/* エフェクト系 */
 	case SBOCOMMANDID_MAIN_SYSTEM:	RecvProcSYSTEM	(Packet.m_byCmdSub, pData);		break;		/* システム系 */
+	case SBOCOMMANDID_MAIN_SKILL:	RecvProcSKILL	(Packet.m_byCmdSub, pData);		break;		/* スキル系 */
 	}
 
 	m_pSock->DeleteRecvData (pData);

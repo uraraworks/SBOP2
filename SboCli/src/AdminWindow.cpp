@@ -21,6 +21,7 @@
 #include "DlgAdminCharAddNPC.h"
 #include "DlgAdminCharMotionTypeList.h"
 #include "DlgAdminCharAccountInfo.h"
+#include "DlgAdminCharSkillList.h"
 #include "DlgAdminMapInfo.h"
 #include "DlgAdminMapEvent.h"
 #include "DlgAdminMapParts.h"
@@ -72,6 +73,7 @@ BEGIN_MESSAGE_MAP(CAdminWindow, CWnd)
 	ON_COMMAND(IDM_CHAR_ADDNPC, OnCharAddNPC)
 	ON_COMMAND(IDM_CHAR_MOTION, OnCharMotion)
 	ON_COMMAND(IDM_CHAR_ACCOUNTINFO, OnCharAccountInfo)
+	ON_COMMAND(IDM_CHAR_SKILL, OnCharSkill)
 	ON_COMMAND(IDM_ITEMTYPE_LIST, OnItemTypeList)
 	ON_COMMAND(IDM_ITEM_LIST, OnItemList)
 	ON_COMMAND(IDM_ITEM_WEAPONLIST, OnItemWeaponList)
@@ -265,6 +267,9 @@ void CAdminWindow::ChgScreen(int nScrID)
 	case SCRIDADMIN_CHAR_ACCOUNTINFO:			/* アカウント情報の編集 */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharAccountInfo(this);
+		break;
+	case SCRIDADMIN_CHAR_SKILL:					/* スキルの編集 */
+		m_pDlgBase = new CDlgAdminCharSkillList(this);
 		break;
 	case SCRIDADMIN_MAP_INFO:					/* マップ情報の編集 */
 		m_pDlgBase = new CDlgAdminMapInfo(this);
@@ -693,6 +698,18 @@ void CAdminWindow::OnCharMotion()
 void CAdminWindow::OnCharAccountInfo()
 {
 	ChgScreen (SCRIDADMIN_CHAR_ACCOUNTINFO);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CAdminWindow::OnCharSkill										 */
+/* 内容		:メニューハンドラ(スキルの編集)									 */
+/* 日付		:2008/12/07														 */
+/* ========================================================================= */
+
+void CAdminWindow::OnCharSkill()
+{
+	ChgScreen (SCRIDADMIN_CHAR_SKILL);
 }
 
 

@@ -58,6 +58,10 @@
 #define IDD_MAP_OBJECTDATA_EDIT         176
 #define IDD_TALK_SET                    177
 #define IDD_CHAR_LIST                   178
+#define IDD_CHAR_SKILL_LIST             179
+#define IDD_CHAR_SKILL_BASE             180
+#define IDD_MAP_EVENT_NONE1             181
+#define IDD_CHAR_SKILL_NONE             181
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -304,7 +308,6 @@
 #define IDC_MAP                         1146
 #define IDC_ENABLEBATTLE                1147
 #define IDC_RECOVERY                    1148
-#define IDC_CHECK1                      1148
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -342,13 +345,17 @@
 #define IDM_SYSTEM_SET_INITCHARSTATUS   32804
 #define ID_32805                        32805
 #define IDM_MAP_OBJECTDATA              32806
+#define ID_32807                        32807
+#define ID_SKILL                        32808
+#define ID_CHAR_SKILL                   32809
+#define IDM_CHAR_SKILL                  32810
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        178
-#define _APS_NEXT_COMMAND_VALUE         32807
+#define _APS_NEXT_COMMAND_VALUE         32811
 #define _APS_NEXT_CONTROL_VALUE         1149
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

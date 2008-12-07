@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\LibInfo"
+				AdditionalIncludeDirectories=".\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Packet\SKILL;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\Info\InfoSkill;..\Common\LibInfo"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -119,7 +119,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\LibInfo"
+				AdditionalIncludeDirectories=".\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Packet\SKILL;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\Info\InfoSkill;..\Common\LibInfo"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
@@ -2639,6 +2639,18 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="SKILL"
+						>
+						<File
+							RelativePath="..\Common\Packet\SKILL\PacketSKILL_PARA2.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\SKILL\PacketSKILL_SKILLINFO.cpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 		</Filter>
@@ -3257,6 +3269,18 @@
 						>
 						<File
 							RelativePath="..\Common\Packet\SYSTEM\PacketSYSTEM_INFO.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="SKILL"
+						>
+						<File
+							RelativePath="..\Common\Packet\SKILL\PacketSKILL_PARA2.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\SKILL\PacketSKILL_SKILLINFO.h"
 							>
 						</File>
 					</Filter>

@@ -76,6 +76,7 @@ enum {
 	MAINFRAMEMSG_RENEWSTATUS,							/* ステータス情報更新 */
 	MAINFRAMEMSG_RENEWSYSTEMINFO,						/* システム情報更新 */
 	MAINFRAMEMSG_RENEWVIEWSET,							/* 表示設定更新 */
+	MAINFRAMEMSG_RENEWSKILLINFO,						/* スキル情報更新 */
 	MAINFRAMEMSG_DAMAGE,								/* ダメージを受けた */
 };
 

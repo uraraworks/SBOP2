@@ -141,5 +141,7 @@
 #include "EFFECT/PacketEFFECT_DELETEBALLOONINFO.h"		/* 				噴出し情報削除 */
 #include "BATTLE/PacketBATTLE_REQ_ATACK.h"				/* 戦闘系:	攻撃要求 */
 #include "SYSTEM/PacketSYSTEM_INFO.h"					/* システム系:	システム情報通知 */
+#include "SKILL/PacketSKILL_PARA2.h"					/* スキル系:	汎用[パラメータ2個] */
+#include "SKILL/PacketSKILL_SKILLINFO.h"				/* 				スキル情報通知 */
 
 /* Copyright(C)URARA-works 2006 */

@@ -29,6 +29,7 @@ class CLibInfoMotion;
 class CLibInfoMotionType;
 class CLibInfoEfcBalloon;
 class CLibInfoSystem;
+class CLibInfoSkill;
 class CStateProcBase;
 
 /* ========================================================================= */
@@ -170,6 +171,10 @@ private:
 	void	RecvProcSYSTEM						(BYTE byCmdSub, PBYTE pData);	/* システム系 */
 	void	RecvProcSYSTEM_INFO					(PBYTE pData);					/* システム情報通知 */
 
+	/* 受信処理(MainFrameRecvProcSKILL.cpp) */
+	void	RecvProcSKILL						(BYTE byCmdSub, PBYTE pData);	/* スキル系 */
+	void	RecvProcSKILL_SKILLINFO				(PBYTE pData);					/* スキル情報通知 */
+
 
 private:
 	HWND				m_hWnd;					/* ウィンドウハンドル */
@@ -204,6 +209,7 @@ private:
 	CLibInfoMotionType	*m_pLibInfoMotionType;	/* モーション種別情報ライブラリ */
 	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;	/* 噴出し情報ライブラリ */
 	CLibInfoSystem		*m_pLibInfoSystem;		/* システム情報ライブラリ */
+	CLibInfoSkill		*m_pLibInfoSkill;		/* スキル情報ライブラリ */
 	CStateProcBase		*m_pStateProc;			/* 状態処理 */
 };
 

@@ -26,6 +26,7 @@ enum {
 	SBOCOMMANDID_MAIN_EFFECT,					/* エフェクト系 */
 	SBOCOMMANDID_MAIN_BATTLE,					/* 戦闘系 */
 	SBOCOMMANDID_MAIN_SYSTEM,					/* システム系 */
+	SBOCOMMANDID_MAIN_SKILL,					/* スキル系 */
 
 	SBOCOMMANDID_MAIN_MAX
 };
@@ -242,6 +243,14 @@ enum {
 enum {
 	SBOCOMMANDID_SUB_SYSTEM_NONE = 0,
 	SBOCOMMANDID_SUB_SYSTEM_INFO,				/* システム情報通知 */
+};
+
+/* コマンドID(スキル系) */
+enum {
+	SBOCOMMANDID_SUB_SKILL_NONE = 0,
+	SBOCOMMANDID_SUB_SKILL_REQ_SKILLINFO,		/* スキル情報要求 */
+	SBOCOMMANDID_SUB_SKILL_SKILLINFO,			/* スキル情報通知 */
+	SBOCOMMANDID_SUB_SKILL_DELETESKILLINFO,		/* スキル情報削除 */
 };
 
 /* Copyright(C)URARA-works 2006 */

@@ -152,6 +152,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	CPacketITEM_ITEMWEAPONINFO PacketITEM_ITEMWEAPONINFO;
 	CPacketEFFECT_EFFECTINFO PacketEFFECT_EFFECTINFO;
 	CPacketEFFECT_BALLOONINFO PacketEFFECT_BALLOONINFO;
+	CPacketSKILL_SKILLINFO PacketSKILL_SKILLINFO;
 	CLibInfoCharSvr LibInfoCharTmp;
 	CmyString strTmp, strTmp2;
 
@@ -237,6 +238,8 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	m_pSock->SendTo (dwSessionID, &PacketEFFECT_EFFECTINFO);
 	PacketEFFECT_BALLOONINFO.Make (0, m_pLibInfoEfcBalloon);
 	m_pSock->SendTo (dwSessionID, &PacketEFFECT_BALLOONINFO);
+	PacketSKILL_SKILLINFO.Make (m_pLibInfoSkill);
+	m_pSock->SendTo (dwSessionID, &PacketSKILL_SKILLINFO);
 
 	/* ü‚è‚ÌƒLƒƒƒ‰î•ñ‚ğ‘—M */
 	PacketCHAR_MOTION.Make (0, 0, m_pLibInfoMotion);
