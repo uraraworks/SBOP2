@@ -105,6 +105,7 @@ protected:
 	BOOL MapEventProcMAPMOVE	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* マップ間移動 */
 	BOOL MapEventProcINITSTATUS	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ステータス初期化 */
 	BOOL MapEventProcGRPIDTMP	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* 一時画像設定 */
+	BOOL MapEventProcLIGHT		(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* 灯り */
 
 
 public:

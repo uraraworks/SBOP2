@@ -60,8 +60,8 @@
 #define IDD_CHAR_LIST                   178
 #define IDD_CHAR_SKILL_LIST             179
 #define IDD_CHAR_SKILL_BASE             180
-#define IDD_MAP_EVENT_NONE1             181
 #define IDD_CHAR_SKILL_NONE             181
+#define IDD_MAP_EVENT_LIGHT             182
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -308,6 +308,7 @@
 #define IDC_MAP                         1146
 #define IDC_ENABLEBATTLE                1147
 #define IDC_RECOVERY                    1148
+#define IDC_TIME                        1149
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -356,7 +357,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        178
 #define _APS_NEXT_COMMAND_VALUE         32811
-#define _APS_NEXT_CONTROL_VALUE         1149
+#define _APS_NEXT_CONTROL_VALUE         1150
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

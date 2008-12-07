@@ -1217,6 +1217,16 @@ FONT 9, "ÇlÇr ÇoÉSÉVÉbÉN", 0, 0, 0x1
 BEGIN
 END
 
+IDD_MAP_EVENT_LIGHT DIALOGEX 0, 0, 161, 106
+STYLE DS_SETFONT | DS_CONTROL | WS_CHILD
+FONT 9, "ÇlÇr ÇoÉSÉVÉbÉN", 0, 0, 0x1
+BEGIN
+    CONTROL         "è¡Ç∑",IDC_RADIO_OFF,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,7,7,30,10
+    CONTROL         "ì_ÇØÇÈ",IDC_RADIO_ON,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,40,7,35,10
+    LTEXT           "éùë±éûä‘Åims)(ÇOÇ≈ñ≥êßå¿ÅjÅF",IDC_STATIC,7,22,83,8,NOT WS_GROUP
+    EDITTEXT        IDC_TIME,91,20,40,14,ES_AUTOHSCROLL
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1422,6 +1432,14 @@ BEGIN
     END
 
     IDD_CHAR_SKILL_NONE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 154
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+
+    IDD_MAP_EVENT_LIGHT, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 154

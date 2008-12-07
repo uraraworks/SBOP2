@@ -107,6 +107,7 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	case MAPEVENTTYPE_MAPMOVE:		bRet = MapEventProcMAPMOVE		(pInfoChar, pInfoMapEventBase);	break;	/* マップ間移動 */
 	case MAPEVENTTYPE_INITSTATUS:	bRet = MapEventProcINITSTATUS	(pInfoChar, pInfoMapEventBase);	break;	/* ステータス初期化 */
 	case MAPEVENTTYPE_GRPIDTMP:		bRet = MapEventProcGRPIDTMP		(pInfoChar, pInfoMapEventBase);	break;	/* 一時画像設定 */
+	case MAPEVENTTYPE_LIGHT:		bRet = MapEventProcLIGHT		(pInfoChar, pInfoMapEventBase);	break;	/* 灯り */
 	}
 
 Exit:
@@ -275,6 +276,35 @@ BOOL CLibInfoCharSvr::MapEventProcGRPIDTMP(CInfoCharSvr *pInfoChar, CInfoMapEven
 	/* 付いて行くのと付いて来ているのを解除させる為2回呼ぶ */
 	Tail (pInfoChar, NULL, FALSE);
 	Tail (pInfoChar, NULL, FALSE);
+
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::MapEventProcLIGHT								 */
+/* 内容		:マップイベント処理(灯り)										 */
+/* 日付		:2008/12/07														 */
+/* ========================================================================= */
+
+BOOL CLibInfoCharSvr::MapEventProcLIGHT(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
+{
+	BOOL bRet;
+	PCInfoMapEventLIGHT pInfoMapEvent;
+
+	bRet = TRUE;
+	pInfoMapEvent = (PCInfoMapEventLIGHT)pInfoMapEventBase;
+
+	pInfoChar->m_nLightLevel = 0;
+	pInfoChar->m_dwLightTime = 0;
+	/* 設定？ */
+	if (pInfoMapEvent->m_bLightOn) {
+		pInfoChar->m_nLightLevel = 1;
+		if (pInfoMapEvent->m_dwTime != 0) {
+			pInfoChar->m_dwLightTime = timeGetTime () + pInfoMapEvent->m_dwTime;
+		}
+	}
+	pInfoChar->m_bChgStatus = TRUE;
 
 	return bRet;
 }

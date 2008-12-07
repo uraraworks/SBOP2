@@ -86,6 +86,9 @@ PCInfoBase CLibInfoMapEvent::GetNew(int nType)
 	case MAPEVENTTYPE_GRPIDTMP:			/* ˆê‰æ‘œİ’è */
 		pInfo = new CInfoMapEventGRPIDTMP;
 		break;
+	case MAPEVENTTYPE_LIGHT:			/* “”‚è */
+		pInfo = new CInfoMapEventLIGHT;
+		break;
 	default:
 		pInfo = new CInfoMapEventBase;
 		break;

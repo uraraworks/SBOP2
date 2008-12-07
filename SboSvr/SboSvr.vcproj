@@ -693,6 +693,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp"
 							>
 						</File>
@@ -1894,6 +1898,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.h"
 							>
 						</File>
 						<File

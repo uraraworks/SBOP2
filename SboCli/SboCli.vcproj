@@ -870,6 +870,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp"
 							>
 						</File>
@@ -3016,6 +3020,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminMapEventLIGHT.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminMapEventMAPMOVE.cpp"
 					>
 				</File>
@@ -3703,6 +3711,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.h"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.h"
 							>
 						</File>
@@ -4282,6 +4294,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminMapEventINITSTATUS.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminMapEventLIGHT.h"
 					>
 				</File>
 				<File

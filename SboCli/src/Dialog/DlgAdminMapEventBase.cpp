@@ -17,6 +17,7 @@
 #include "DlgAdminMapEventMAPMOVE.h"
 #include "DlgAdminMapEventINITSTATUS.h"
 #include "DlgAdminMapEventGRPIDTMP.h"
+#include "DlgAdminMapEventLIGHT.h"
 #include "DlgAdminMapEventBase.h"
 
 #ifdef _DEBUG
@@ -187,6 +188,8 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	m_ctlType.SetItemData (4, MAPEVENTTYPE_INITSTATUS);
 	m_ctlType.InsertString (5, "一時画像設定");
 	m_ctlType.SetItemData (5, MAPEVENTTYPE_GRPIDTMP);
+	m_ctlType.InsertString (6, "灯り");
+	m_ctlType.SetItemData (6, MAPEVENTTYPE_LIGHT);
 
 	m_ctlHitType.InsertString (0, "マップ座標で判定");
 	m_ctlHitType.SetItemData (0, MAPEVENTHITTYPE_MAPPOS);
@@ -210,7 +213,7 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
 		m_ctlSoundID.InsertString (i + 1, pszTmp);
 		m_ctlSoundID.SetItemData (i + 1, dwSoundID);
-		if (m_pInfo->m_dwSoundID == dwSoundID) {
+		if (m_pInfo && (m_pInfo->m_dwSoundID == dwSoundID)) {
 			m_dwSoundID = dwSoundID;
 			nNo = i + 1;
 		}
@@ -334,6 +337,9 @@ void CDlgAdminMapEventBase::OnSelchangeType()
 		break;
 	case MAPEVENTTYPE_GRPIDTMP:		/* 一時画像設定 */
 		m_pDlgType = new CDlgAdminMapEventGRPIDTMP(this);
+		break;
+	case MAPEVENTTYPE_LIGHT:		/* 灯り */
+		m_pDlgType = new CDlgAdminMapEventLIGHT(this);
 		break;
 	default:
 		m_pDlgType = new CDlgAdminMapEventNONE(this);

@@ -207,6 +207,7 @@ void CDlgAdminMapEvent::OnAdd()
 
 Exit:
 	SAFE_DELETE (pInfo);
+	m_pWndNotify = NULL;
 }
 
 
@@ -251,7 +252,7 @@ void CDlgAdminMapEvent::OnModify()
 	m_pSock->Send (&Packet);
 
 Exit:
-	return;
+	m_pWndNotify = NULL;
 }
 
 

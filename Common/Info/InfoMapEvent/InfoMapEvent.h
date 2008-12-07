@@ -12,5 +12,6 @@
 #include "InfoMapEventMAPMOVE.h"
 #include "InfoMapEventINITSTATUS.h"
 #include "InfoMapEventGRPIDTMP.h"
+#include "InfoMapEventLIGHT.h"
 
 /* Copyright(C)URARA-works 2008 */

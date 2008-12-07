@@ -22,6 +22,7 @@ enum {
 	MAPEVENTTYPE_TRASHBOX,								/* ゴミ箱 */
 	MAPEVENTTYPE_INITSTATUS,							/* ステータス初期化 */
 	MAPEVENTTYPE_GRPIDTMP,								/* 一時画像設定 */
+	MAPEVENTTYPE_LIGHT,									/* 灯り */
 	MAPEVENTTYPE_MAX
 };
 
