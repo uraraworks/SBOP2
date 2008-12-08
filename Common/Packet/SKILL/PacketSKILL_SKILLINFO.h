@@ -22,6 +22,7 @@ public:
 	virtual ~CPacketSKILL_SKILLINFO();				/* デストラクタ */
 
 	void	Make	(PCLibInfoSkill pInfo);					/* パケットを作成 */
+	void	Make	(PCInfoSkillBase pInfo);				/* パケットを作成 */
 	PBYTE	Set		(PBYTE pPacket);						/* パケットを設定 */
 
 

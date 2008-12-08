@@ -83,6 +83,7 @@
 #include "ADMIN/PacketADMIN_MAP_SETMAPSHADOW.h"			/* 			マップ影配置 */
 #include "ADMIN/PacketADMIN_MAP_DELETEMAPSHADOW.h"		/* 			マップ影削除 */
 #include "ADMIN/PacketADMIN_MAP_EVENT.h"				/*			マップイベント情報更新 */
+#include "ADMIN/PacketADMIN_SKILL_RENEWSKILL.h"			/*			スキル情報更新 */
 #include "ADMIN/PacketADMIN_REQ_ADMINLEVEL.h"			/* 			管理者権限レベル要求 */
 #include "ADMIN/PacketADMIN_RES_ADMINLEVEL.h"			/* 			管理者権限レベル応答 */
 #include "ADMIN/PacketADMIN_RENEWADMINLEVEL.h"			/* 			管理者権限レベル更新 */

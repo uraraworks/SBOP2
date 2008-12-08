@@ -96,6 +96,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_ADMIN_RENEW_CLIENTVERSION:	RecvProcADMIN_RENEW_CLIENTVERSION	(pData, dwSessionID);	break;	/* クライアントバージョン更新 */
 	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_REQ_INFO:		RecvProcADMIN_SYSTEM_REQ_INFO		(pData, dwSessionID);	break;	/* システム情報要求 */
 	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO:		RecvProcADMIN_SYSTEM_RENEWINFO		(pData, dwSessionID);	break;	/* システム情報の更新 */
+	case SBOCOMMANDID_SUB_ADMIN_SKILL_RENEWSKILL:		RecvProcADMIN_SKILL_RENEWSKILL		(pData, dwSessionID);	break;	/* スキル情報更新 */
 	}
 }
 
@@ -1415,6 +1416,39 @@ void CMainFrame::RecvProcADMIN_SYSTEM_RENEWINFO(PBYTE pData, DWORD dwSessionID)
 
 	PacketSYSTEM_INFO.Make (pInfoSystem);
 	m_pSock->SendTo (0, &PacketSYSTEM_INFO);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL						 */
+/* 内容		:受信処理(スキル情報更新)										 */
+/* 日付		:2008/12/08														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoSkillBase pInfo;
+	CPacketADMIN_SKILL_RENEWSKILL Packet;
+	CPacketSKILL_SKILLINFO PacketSKILL_SKILLINFO;
+
+	Packet.Set (pData);
+
+	/* 追加？ */
+	if (Packet.m_pInfo->m_dwSkillID == 0) {
+		pInfo = (PCInfoSkillBase)m_pLibInfoSkill->GetNew (Packet.m_pInfo->m_nType);
+		pInfo->Copy (Packet.m_pInfo);
+		m_pLibInfoSkill->Add (pInfo);
+
+	/* 更新 */
+	} else {
+		pInfo = m_pLibInfoSkill->Renew (Packet.m_pInfo);
+		if (pInfo == NULL) {
+			return;
+		}
+	}
+
+	PacketSKILL_SKILLINFO.Make (pInfo);
+	m_pSock->SendTo (0, &PacketSKILL_SKILLINFO);
 }
 
 /* Copyright(C)URARA-works 2007 */

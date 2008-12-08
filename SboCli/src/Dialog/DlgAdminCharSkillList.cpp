@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "UraraSockTCPSBO.h"
+#include "PacketADMIN_SKILL_RENEWSKILL.h"
 #include "LibInfoSkill.h"
 #include "MgrData.h"
 #include "DlgAdminCharSkillBase.h"
@@ -159,15 +160,25 @@ BOOL CDlgAdminCharSkillList::OnInitDialog()
 void CDlgAdminCharSkillList::OnAdd()
 {
 	int nResult;
+	PCInfoSkillBase pInfo;
+	CPacketADMIN_SKILL_RENEWSKILL Packet;
 	CDlgAdminCharSkillBase Dlg(this);
 
-	Dlg.Init (m_pMgrData, NULL);
+	pInfo = NULL;
+
+	Dlg.Init (m_pMgrData);
 	nResult = Dlg.DoModal ();
+	if (nResult != IDOK) {
+		goto Exit;
+	}
 
-//	CPacketADMIN_CHAR_ADDSkill Packet;
+	Dlg.Get (pInfo);
 
-//	Packet.Make ();
-//	m_pSock->Send (&Packet);
+	Packet.Make (pInfo);
+	m_pSock->Send (&Packet);
+
+Exit:
+	SAFE_DELETE (pInfo);
 }
 
 
@@ -179,38 +190,40 @@ void CDlgAdminCharSkillList::OnAdd()
 
 void CDlgAdminCharSkillList::OnModify()
 {
-#if 0
-	int nNo, nResult;
+	int nResult;
 	DWORD dwSkillID;
-	PCInfoSkill pInfo;
-	CDlgAdminCharMotionList Dlg(this);
-	CPacketADMIN_CHAR_RENEWSkill Packet;
+	CDlgAdminCharSkillBase Dlg(this);
+	PCInfoSkillBase pInfo, pInfoTmp;
+	CPacketADMIN_SKILL_RENEWSKILL Packet;
 
-	nNo = m_List.GetNextItem (-1, LVNI_SELECTED);
-	if (nNo < 0) {
-		return;
+	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
+	if (nResult < 0) {
+		goto Exit;
 	}
-	dwSkillID = m_List.GetItemData (nNo);
-	pInfo = (PCInfoSkill)m_pLibInfoSkill->GetPtr (dwSkillID);
+	dwSkillID	= m_List.GetItemData (nResult);
+	pInfo		= (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (dwSkillID);
 	if (pInfo == NULL) {
-		return;
+		goto Exit;
 	}
 
-	Dlg.Init (m_pMgrData, dwSkillID);
-	Dlg.m_strMotionName	= pInfo->m_strName;
-	Dlg.m_nGrpIDSub		= pInfo->m_wGrpIDSub;
+	Dlg.Init (m_pMgrData);
+	Dlg.SetModify (pInfo);
 
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
-		return;
+		goto Exit;
 	}
-	pInfo->m_strName	= Dlg.m_strMotionName;
-	pInfo->m_wGrpIDSub	= Dlg.m_nGrpIDSub;
-	Renew ();
 
-	Packet.Make (dwSkillID, m_pLibInfoSkill);
+	pInfoTmp = NULL;
+	Dlg.Get (pInfoTmp);
+	pInfo = m_pLibInfoSkill->Renew (pInfoTmp);
+	SAFE_DELETE (pInfoTmp);
+
+	Packet.Make (pInfo);
 	m_pSock->Send (&Packet);
-#endif
+
+Exit:
+	return;
 }
 
 

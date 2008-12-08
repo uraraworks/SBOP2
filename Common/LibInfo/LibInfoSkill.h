@@ -24,6 +24,7 @@ public:
 	void Create			(void);									/* 作成 */
 	void Destroy		(void);									/* 破棄 */
 
+	PCInfoBase GetNew	(void);									/* 新規データを取得 */
 	PCInfoBase GetNew	(int nType);							/* 新規データを取得 */
 
 	int		GetCount	(void);									/* データ数を取得 */
@@ -33,8 +34,9 @@ public:
 	void	DeleteAll	(void);									/* 全て削除 */
 	void	Merge		(CLibInfoSkill *pSrc);					/* 取り込み */
 
-	PCInfoBase	GetPtr (int nNo);								/* 情報を取得 */
-	PCInfoBase	GetPtr (DWORD dwSkillID);						/* 情報を取得 */
+	CInfoSkillBase	*Renew	(CInfoSkillBase *pSrc);				/* 更新 */
+	PCInfoBase		GetPtr	(int nNo);							/* 情報を取得 */
+	PCInfoBase		GetPtr	(DWORD dwSkillID);					/* 情報を取得 */
 
 	DWORD	GetSendDataSize		(void);							/* 送信データサイズを取得 */
 	PBYTE	GetSendData			(void);							/* 送信データを取得 */

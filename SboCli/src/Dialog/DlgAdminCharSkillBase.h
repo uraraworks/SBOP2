@@ -23,7 +23,7 @@ public:
 			CDlgAdminCharSkillBase(CWnd* pParent = NULL);	/* コンストラクタ */
 	virtual ~CDlgAdminCharSkillBase();						/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify);	/* 初期化 */
+	void	Init		(CMgrData *pMgrData);						/* 初期化 */
 	void	Get			(CInfoSkillBase *&pDst);					/* 編集内容を取得 */
 	void	SetModify	(CInfoSkillBase *pSrc);						/* 編集モードとして設定 */
 
@@ -34,9 +34,8 @@ protected:
 protected:
 	int			m_nType;					/* スキル種別 */
 	BOOL		m_bModeModify;				/* 編集モード判定 */
-	CWnd		**m_ppWndNotify;			/* 通知先ウィンドウ */
 	CDlgAdminCharSkillNONE	*m_pDlgType;	/* 編集中のイベント種別ダイアログ */
-	CInfoSkillBase		*m_pInfo;			/* 編集中のスキル情報 */
+	CInfoSkillBase			*m_pInfo;		/* 編集中のスキル情報 */
 
 
 
@@ -45,6 +44,8 @@ public:
 	//{{AFX_DATA(CDlgAdminCharSkillBase)
 	enum { IDD = IDD_CHAR_SKILL_BASE };
 	CComboBox	m_ctlType;
+	CString m_strName;
+	DWORD m_dwSP;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillBase)

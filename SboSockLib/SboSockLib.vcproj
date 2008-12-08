@@ -973,6 +973,10 @@
 							</FileConfiguration>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_SKILL_RENEWSKILL.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_SYSTEM_RENEWINFO.cpp"
 							>
 						</File>
@@ -3257,6 +3261,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_SERVER_SAVEINFO.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_SKILL_RENEWSKILL.h"
 							>
 						</File>
 						<File

@@ -30,6 +30,8 @@ void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CDlgAdminCharSkillBase)
 	DDX_Control(pDX, IDC_TYPE, m_ctlType);
 	//}}AFX_DATA_MAP
+	DDX_Text(pDX, IDC_NAME, m_strName);
+	DDX_Text(pDX, IDC_SP, m_dwSP);
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminCharSkillBase, CDlgAdminBase)
@@ -48,13 +50,14 @@ END_MESSAGE_MAP()
 
 CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminCharSkillBase::IDD, pParent)
+	, m_strName(_T(""))
+	, m_dwSP(0)
 {
 	//{{AFX_DATA_INIT(CDlgAdminCharSkillBase)
 	//}}AFX_DATA_INIT
 
 	m_nType	= -1;
 	m_bModeModify	= FALSE;
-	m_ppWndNotify	= NULL;
 	m_pDlgType		= NULL;
 	m_pInfo			= NULL;
 }
@@ -78,11 +81,9 @@ CDlgAdminCharSkillBase::~CDlgAdminCharSkillBase()
 /* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
-void CDlgAdminCharSkillBase::Init(CMgrData *pMgrData, CWnd **pWndNotify)
+void CDlgAdminCharSkillBase::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
-
-	m_ppWndNotify = pWndNotify;
 }
 
 
@@ -120,6 +121,10 @@ void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 	m_pInfo = (PCInfoSkillBase)LibInfo.GetNew (pSrc->m_nType);
 	m_pInfo->Copy (pSrc);
 
+	m_strName	= m_pInfo->m_strName;
+	m_dwSP		= m_pInfo->m_dwSP;
+	m_nType		= m_pInfo->m_nType;
+
 	m_bModeModify = TRUE;
 }
 
@@ -136,10 +141,6 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 
 	CDlgAdminBase::OnInitDialog();
 
-	if (m_ppWndNotify) {
-		*m_ppWndNotify = this;
-	}
-
 	if (m_bModeModify) {
 		SetWindowText ("スキルの編集");
 	}
@@ -155,7 +156,6 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 		for (i = 0; i < SKILLTYPE_MAX; i ++) {
 			if (m_pInfo->m_nType == m_ctlType.GetItemData (i)) {
 				nNo = i;
-				m_nType = m_pInfo->m_nType;
 				break;
 			}
 		}
@@ -249,8 +249,8 @@ void CDlgAdminCharSkillBase::OnSelchangeType()
 	if (m_nType != nType) {
 		pInfoTmp = (PCInfoSkillBase)LibInfo.GetNew (nType);
 		if (m_pInfo) {
-//			pInfoTmp->m_dwMapEventID	= m_pInfo->m_dwMapEventID;
-//			pInfoTmp->m_ptPos			= m_pInfo->m_ptPos;
+			pInfoTmp->m_dwSkillID	= m_pInfo->m_dwSkillID;
+			pInfoTmp->m_dwSP		= m_pInfo->m_dwSP;
 		}
 		pInfoTmp->m_nType = nType;
 
@@ -270,6 +270,8 @@ void CDlgAdminCharSkillBase::OnOK()
 	UpdateData ();
 
 	if (m_pInfo) {
+		m_pInfo->m_strName	= m_strName;
+		m_pInfo->m_dwSP		= m_dwSP;
 		if (m_pDlgType) {
 			m_pDlgType->Get (m_pInfo);
 		}

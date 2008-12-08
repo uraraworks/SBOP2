@@ -70,6 +70,28 @@ void CPacketSKILL_SKILLINFO::Make(
 
 
 /* ========================================================================= */
+/* 関数名	:CPacketSKILL_SKILLINFO::Make									 */
+/* 内容		:パケットを作成													 */
+/* 日付		:2008/12/08														 */
+/* ========================================================================= */
+
+void CPacketSKILL_SKILLINFO::Make(
+	CInfoSkillBase *pInfo)		/* [in] スキル情報 */
+{
+	PCInfoSkillBase pInfoTmp;
+	CLibInfoSkill LibInfoSkill;
+
+	LibInfoSkill.Create ();
+
+	pInfoTmp = (PCInfoSkillBase)LibInfoSkill.GetNew (pInfo->m_nType);
+	pInfoTmp->Copy (pInfo);
+	LibInfoSkill.Add (pInfoTmp);
+
+	Make (&LibInfoSkill);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CPacketSKILL_SKILLINFO::Set									 */
 /* 内容		:パケットを設定													 */
 /* 日付		:2008/12/06														 */

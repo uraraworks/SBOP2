@@ -62,6 +62,18 @@ void CLibInfoSkill::Destroy(void)
 /* ========================================================================= */
 /* 関数名	:CLibInfoSkill::GetNew											 */
 /* 内容		:新規データを取得												 */
+/* 日付		:2008/12/07														 */
+/* ========================================================================= */
+
+PCInfoBase CLibInfoSkill::GetNew(void)
+{
+	return (PCInfoBase)GetNew (SKILLTYPE_NONE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::GetNew											 */
+/* 内容		:新規データを取得												 */
 /* 日付		:2008/12/04														 */
 /* ========================================================================= */
 
@@ -214,6 +226,39 @@ void CLibInfoSkill::Merge(CLibInfoSkill *pSrc)
 		}
 		pInfoTmp->Copy (pInfoSrc);
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::Renew											 */
+/* 内容		:更新															 */
+/* 日付		:2008/12/08														 */
+/* ========================================================================= */
+
+CInfoSkillBase *CLibInfoSkill::Renew(CInfoSkillBase *pSrc)
+{
+	int i, nCount;
+	PCInfoSkillBase pRet, pInfo, pInfoTmp;
+
+	pRet = NULL;
+
+	nCount = m_paInfo->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoTmp = m_paInfo->GetAt (i);
+		if (pInfoTmp->m_dwSkillID != pSrc->m_dwSkillID) {
+			continue;
+		}
+		pInfo = (PCInfoSkillBase)GetNew (pSrc->m_nType);
+		pInfo->Copy (pSrc);
+		pInfo->m_dwSkillID = pInfoTmp->m_dwSkillID;
+
+		SAFE_DELETE (pInfoTmp);
+		m_paInfo->SetAt (i, pInfo);
+		pRet = pInfo;
+		break;
+	}
+
+	return pRet;
 }
 
 

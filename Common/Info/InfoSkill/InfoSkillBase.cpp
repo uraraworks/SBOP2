@@ -154,7 +154,7 @@ PBYTE CInfoSkillBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 0:	pSrc = (PBYTE)&m_dwSkillID;			break;	/* スキルID */
 	case 1:	pSrc = (PBYTE)&m_dwSP;				break;	/* 消費SP */
 	case 2:	pSrc = (PBYTE)&m_nType;				break;	/* スキル種別 */
-	case 3:	pSrc = (PBYTE)(LPCSTR)&m_strName;	break;	/* スキル名 */
+	case 3:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* スキル名 */
 	}
 
 	if (pSrc) {
