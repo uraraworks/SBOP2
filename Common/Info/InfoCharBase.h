@@ -244,7 +244,8 @@ public:
 	CmyString	m_strCharName,				/* キャラ名 */
 				m_strSpeak,					/* 発言内容 */
 				m_strTalk;					/* 会話データ */
-	ARRAYDWORD	m_adwItemID;				/* 所持アイテム */
+	ARRAYDWORD	m_adwItemID,				/* 所持アイテム */
+				m_adwSkillID;				/* 所持スキル */
 
 	/* 移動種別による個別情報 */
 

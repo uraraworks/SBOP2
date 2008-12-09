@@ -29,6 +29,7 @@ void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 	CDlgAdminBase::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDlgAdminCharSkillBase)
 	DDX_Control(pDX, IDC_TYPE, m_ctlType);
+	DDX_Control(pDX, IDC_USE, m_ctlUse);
 	//}}AFX_DATA_MAP
 	DDX_Text(pDX, IDC_NAME, m_strName);
 	DDX_Text(pDX, IDC_SP, m_dwSP);
@@ -37,6 +38,7 @@ void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDlgAdminCharSkillBase, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminCharSkillBase)
 	ON_CBN_SELCHANGE(IDC_TYPE, OnSelchangeType)
+	ON_CBN_SELCHANGE(IDC_USE, OnSelchangeUse)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -57,6 +59,7 @@ CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 
 	m_nType	= -1;
+	m_nUse	= -1;
 	m_bModeModify	= FALSE;
 	m_pDlgType		= NULL;
 	m_pInfo			= NULL;
@@ -124,6 +127,7 @@ void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 	m_strName	= m_pInfo->m_strName;
 	m_dwSP		= m_pInfo->m_dwSP;
 	m_nType		= m_pInfo->m_nType;
+	m_nUse		= m_pInfo->m_nUse;
 
 	m_bModeModify = TRUE;
 }
@@ -151,7 +155,6 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 	m_ctlType.SetItemData (1, SKILLTYPE_FISHING);
 
 	nNo = 0;
-
 	if (m_pInfo) {
 		for (i = 0; i < SKILLTYPE_MAX; i ++) {
 			if (m_pInfo->m_nType == m_ctlType.GetItemData (i)) {
@@ -160,10 +163,28 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 			}
 		}
 	}
-
 	m_ctlType.SetCurSel (nNo);
 
+	m_ctlUse.InsertString (0, "制限無し");
+	m_ctlUse.SetItemData (0, SKILLUSE_ANY);
+	m_ctlUse.InsertString (1, "通常時");
+	m_ctlUse.SetItemData (1, SKILLUSE_NORMAL);
+	m_ctlUse.InsertString (2, "戦闘モード時");
+	m_ctlUse.SetItemData (2, SKILLUSE_BATTLE);
+
+	nNo = 0;
+	if (m_pInfo) {
+		for (i = 0; i < SKILLUSE_MAX; i ++) {
+			if (m_pInfo->m_nUse == m_ctlUse.GetItemData (i)) {
+				nNo = i;
+				break;
+			}
+		}
+	}
+	m_ctlUse.SetCurSel (nNo);
+
 	OnSelchangeType ();
+	OnSelchangeUse ();
 	if (m_pDlgType && m_pInfo) {
 		m_pDlgType->Set (m_pInfo);
 	}
@@ -259,6 +280,25 @@ void CDlgAdminCharSkillBase::OnSelchangeType()
 	}
 }
 
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharSkillBase::OnSelchangeUse							 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2008/12/09														 */
+/* ========================================================================= */
+
+void CDlgAdminCharSkillBase::OnSelchangeUse()
+{
+	int nNo;
+
+	nNo = m_ctlUse.GetCurSel ();
+	if (nNo < 0) {
+		return;
+	}
+	m_nUse = m_ctlUse.GetItemData (nNo);
+}
+
+
 /* ========================================================================= */
 /* 関数名	:CDlgAdminCharSkillBase::OnOK									 */
 /* 内容		:ボタンハンドラ(OK)												 */
@@ -272,6 +312,7 @@ void CDlgAdminCharSkillBase::OnOK()
 	if (m_pInfo) {
 		m_pInfo->m_strName	= m_strName;
 		m_pInfo->m_dwSP		= m_dwSP;
+		m_pInfo->m_nUse		= m_nUse;
 		if (m_pDlgType) {
 			m_pDlgType->Get (m_pInfo);
 		}

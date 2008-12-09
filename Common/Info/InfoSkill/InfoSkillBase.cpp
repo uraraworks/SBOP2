@@ -18,6 +18,7 @@ static LPCSTR s_aszName[] = {
 	"m_dwSkillID",		/* スキルID */
 	"m_dwSP",			/* 消費SP */
 	"m_nType",			/* スキル種別 */
+	"m_nUse",			/* 使用制限 */
 	"m_strName",		/* スキル名 */
 	NULL
 };
@@ -34,6 +35,7 @@ CInfoSkillBase::CInfoSkillBase()
 	m_dwSkillID		= 0;
 	m_dwSP			= 0;
 	m_nType			= SKILLTYPE_NONE;
+	m_nUse			= SKILLUSE_ANY;
 
 	for (m_nElementCountBase = 0; s_aszName[m_nElementCountBase] != NULL; m_nElementCountBase ++) {}
 	m_nElementCount = m_nElementCountBase;
@@ -88,6 +90,7 @@ DWORD CInfoSkillBase::GetDataSize(void)
 	dwRet += sizeof (m_dwSkillID);			/* スキルID */
 	dwRet += sizeof (m_dwSP);				/* 消費SP */
 	dwRet += sizeof (m_nType);				/* スキル種別 */
+	dwRet += sizeof (m_nUse);				/* 使用制限 */
 	dwRet += (m_strName.GetLength () + 1);	/* スキル名 */
 
 	return dwRet;
@@ -110,7 +113,8 @@ DWORD CInfoSkillBase::GetDataSizeNo(int nNo)
 	case 0:	dwRet = sizeof (m_dwSkillID);			break;	/* スキルID */
 	case 1:	dwRet = sizeof (m_dwSP);				break;	/* 消費SP */
 	case 2:	dwRet = sizeof (m_nType);				break;	/* スキル種別 */
-	case 3:	dwRet = (m_strName.GetLength () + 1);	break;	/* スキル名 */
+	case 3:	dwRet = sizeof (m_nUse);				break;	/* 使用制限 */
+	case 4:	dwRet = (m_strName.GetLength () + 1);	break;	/* スキル名 */
 	}
 
 	return dwRet;
@@ -154,7 +158,8 @@ PBYTE CInfoSkillBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 0:	pSrc = (PBYTE)&m_dwSkillID;			break;	/* スキルID */
 	case 1:	pSrc = (PBYTE)&m_dwSP;				break;	/* 消費SP */
 	case 2:	pSrc = (PBYTE)&m_nType;				break;	/* スキル種別 */
-	case 3:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* スキル名 */
+	case 3:	pSrc = (PBYTE)&m_nUse;				break;	/* 使用制限 */
+	case 4:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* スキル名 */
 	}
 
 	if (pSrc) {
@@ -186,7 +191,8 @@ DWORD CInfoSkillBase::ReadElementData(
 	case 0: pDst = (PBYTE)&m_dwSkillID;	dwSize = sizeof (m_dwSkillID);	break;	/* スキルID */
 	case 1: pDst = (PBYTE)&m_dwSP;		dwSize = sizeof (m_dwSP);		break;	/* 消費SP */
 	case 2: pDst = (PBYTE)&m_nType;		dwSize = sizeof (m_nType);		break;	/* スキル種別 */
-	case 3:		/* スキル名 */
+	case 3: pDst = (PBYTE)&m_nUse;		dwSize = sizeof (m_nUse);		break;	/* 使用制限 */
+	case 4:		/* スキル名 */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
@@ -214,6 +220,7 @@ DWORD CInfoSkillBase::GetSendDataSize(void)
 	dwRet += sizeof (m_dwSkillID);			/* スキルID */
 	dwRet += sizeof (m_dwSP);				/* 消費SP */
 	dwRet += sizeof (m_nType);				/* スキル種別 */
+	dwRet += sizeof (m_nUse);				/* 使用制限 */
 	dwRet += (m_strName.GetLength () + 1);	/* スキル名 */
 
 	return dwRet;
@@ -239,6 +246,7 @@ PBYTE CInfoSkillBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwSkillID,	sizeof (m_dwSkillID), 	pDataTmp);	/* スキルID */
 	CopyMemoryRenew (pDataTmp, &m_dwSP,			sizeof (m_dwSP), 		pDataTmp);	/* 消費SP */
 	CopyMemoryRenew (pDataTmp, &m_nType,		sizeof (m_nType),	 	pDataTmp);	/* スキル種別 */
+	CopyMemoryRenew (pDataTmp, &m_nUse,			sizeof (m_nUse),	 	pDataTmp);	/* 使用制限 */
 	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);								/* スキル名 */
 
 	return pData;
@@ -261,6 +269,7 @@ PBYTE CInfoSkillBase::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_dwSkillID,	pDataTmp, sizeof (m_dwSkillID), pDataTmp);	/* スキルID */
 	CopyMemoryRenew (&m_dwSP,		pDataTmp, sizeof (m_dwSP), 		pDataTmp);	/* 消費SP */
 	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),	 	pDataTmp);	/* スキル種別 */
+	CopyMemoryRenew (&m_nUse,		pDataTmp, sizeof (m_nUse),	 	pDataTmp);	/* 使用制限 */
 	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);							/* スキル名 */
 
 	pRet = pDataTmp;
@@ -282,6 +291,7 @@ void CInfoSkillBase::Copy(CInfoSkillBase *pSrc)
 	m_dwSkillID	= pSrc->m_dwSkillID;	/* スキルID */
 	m_dwSP		= pSrc->m_dwSP;			/* 消費SP */
 	m_nType		= pSrc->m_nType;		/* スキル種別 */
+	m_nUse		= pSrc->m_nUse;			/* 使用制限 */
 	m_strName	= pSrc->m_strName;		/* スキル名 */
 }
 

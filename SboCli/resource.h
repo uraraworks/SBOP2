@@ -95,6 +95,8 @@
 #define IDC_ID                          1013
 #define IDC_DEL2                        1013
 #define IDC_PLAY                        1013
+#define IDC_TYPE2                       1013
+#define IDC_USE                         1013
 #define IDC_MSG                         1014
 #define IDC_STOP                        1014
 #define IDC_USE_PLAY                    1014

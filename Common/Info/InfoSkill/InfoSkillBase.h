@@ -21,6 +21,13 @@ enum {
 	SKILLTYPE_MAX
 };
 
+/* 使用制限 */
+enum {
+	SKILLUSE_ANY = 0,			/* 制限無し */
+	SKILLUSE_NORMAL,			/* 通常時 */
+	SKILLUSE_BATTLE,			/* 戦闘モード時 */
+	SKILLUSE_MAX
+};
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -51,7 +58,8 @@ public:
 
 	DWORD		m_dwSkillID,					/* スキルID */
 				m_dwSP;							/* 消費SP */
-	int			m_nType;						/* スキル種別 */
+	int			m_nType,						/* スキル種別 */
+				m_nUse;							/* 使用制限 */
 	CmyString	m_strName;						/* スキル名 */
 } CInfoSkillBase, *PCInfoSkillBase;
 typedef CmyArray<PCInfoSkillBase, PCInfoSkillBase>	  ARRAYSKILLBASEINFO;

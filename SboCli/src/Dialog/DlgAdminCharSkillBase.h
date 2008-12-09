@@ -32,7 +32,8 @@ protected:
 
 
 protected:
-	int			m_nType;					/* スキル種別 */
+	int			m_nType,					/* スキル種別 */
+				m_nUse;						/* 使用制限 */
 	BOOL		m_bModeModify;				/* 編集モード判定 */
 	CDlgAdminCharSkillNONE	*m_pDlgType;	/* 編集中のイベント種別ダイアログ */
 	CInfoSkillBase			*m_pInfo;		/* 編集中のスキル情報 */
@@ -44,6 +45,7 @@ public:
 	//{{AFX_DATA(CDlgAdminCharSkillBase)
 	enum { IDD = IDD_CHAR_SKILL_BASE };
 	CComboBox	m_ctlType;
+	CComboBox	m_ctlUse;
 	CString m_strName;
 	DWORD m_dwSP;
 	//}}AFX_DATA
@@ -58,6 +60,7 @@ protected:
 	//{{AFX_MSG(CDlgAdminCharSkillBase)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeType();
+	afx_msg void OnSelchangeUse();
 	afx_msg LRESULT OnAdminMsg(WPARAM wParam, LPARAM lParam);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
