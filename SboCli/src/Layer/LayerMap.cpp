@@ -154,6 +154,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 		DrawMapPile		(pDst, y);
 	}
 	DrawPartsPile	(pDst);
+	DrawMapPile		(pDst, -98);
 	DrawShadow		(pDst);
 
 	pLayer = NULL;
@@ -1192,7 +1193,7 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 	m_pMgrDraw->LockDibTmp ();
 	y = -1;
 	nCount = DRAW_PARTS_Y + 2;
-	if (nDrawY != -99) {
+	if (nDrawY >= -1) {
 		y = nDrawY;
 		nCount = nDrawY + 2;
 	}
@@ -1209,8 +1210,12 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 			} else {
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
 			}
-			if (nDrawY != -99) {
+			if (nDrawY >= -1) {
 				if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
+					continue;
+				}
+			} else if (nDrawY == -98) {
+				if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) == 0) {
 					continue;
 				}
 			} else {
@@ -1230,7 +1235,7 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 			pInfoMapPartsBack	= pInfoMapParts;
 			dwPartsIDBack		= dwPartsID;
 		}
-		if (nDrawY != -99) {
+		if (nDrawY >= -1) {
 			break;
 		}
 	}
