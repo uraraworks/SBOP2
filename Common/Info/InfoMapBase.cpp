@@ -683,6 +683,14 @@ BOOL CInfoMapBase::IsMove(int x, int y, int nDirection)
 	if (bResult == FALSE) {
 		goto Exit;
 	}
+	dwPartsID		= GetPartsPile (x, y);
+	pInfoMapParts	= (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+	if (pInfoMapParts) {
+		bResult = pInfoMapParts->IsBlock (nDirection);
+		if (bResult == FALSE) {
+			goto Exit;
+		}
+	}
 	if (m_pbyHitTmp) {
 		if (m_pbyHitTmp[m_sizeMap.cx * y + x] != 0) {
 			goto Exit;
@@ -726,6 +734,14 @@ BOOL CInfoMapBase::IsMoveOut(int x, int y, int nDirection)
 	bResult = pInfoMapParts->IsBlock (anDirection[nDirection]);
 	if (bResult == FALSE) {
 		goto Exit;
+	}
+	dwPartsID		= GetPartsPile (x, y);
+	pInfoMapParts	= (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+	if (pInfoMapParts) {
+		bResult = pInfoMapParts->IsBlock (anDirection[nDirection]);
+		if (bResult == FALSE) {
+			goto Exit;
+		}
 	}
 
 	bRet = TRUE;

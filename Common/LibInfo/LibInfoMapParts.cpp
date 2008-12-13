@@ -277,6 +277,9 @@ PCInfoBase CLibInfoMapParts::GetPtr(
 	PCInfoMapParts pRet, pInfoTmp;
 
 	pRet = NULL;
+	if (dwPartsID == 0) {
+		return pRet;
+	}
 
 	nCount = m_paInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
