@@ -151,6 +151,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 		DrawMapObject	(pDst, y);
 		DrawChar		(pDst, y);
 		DrawPartsPile	(pDst, y);
+		DrawMapPile		(pDst, y);
 	}
 	DrawPartsPile	(pDst);
 	DrawShadow		(pDst);
@@ -1113,7 +1114,7 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 {
 	DWORD dwPartsID, dwPartsIDBack;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy, nCount;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
 		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
@@ -1123,11 +1124,6 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 	pMap = m_pMgrData->GetMap ();
 	if (pMap == NULL) {
 		return;
-	}
-	if (nDrawY != -99) {
-		if (nDrawY % 2) {
-			return;
-		}
 	}
 
 	cx		= pMap->m_sizeMap.cx;
@@ -1195,10 +1191,12 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 	pInfoMapPartsBack = NULL;
 	m_pMgrDraw->LockDibTmp ();
 	y = -1;
+	nCount = DRAW_PARTS_Y + 2;
 	if (nDrawY != -99) {
-		y = nDrawY / 2;
+		y = nDrawY;
+		nCount = nDrawY + 2;
 	}
-	for (; y < DRAW_PARTS_Y + 2; y ++) {
+	for (; y < nCount; y ++) {
 		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
 			xx = nPosX + x;
 			yy = nPosY + y;
@@ -1210,6 +1208,15 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 				pInfoMapParts = pInfoMapPartsBack;
 			} else {
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+			}
+			if (nDrawY != -99) {
+				if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
+					continue;
+				}
+			} else {
+				if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) != 0) {
+					continue;
+				}
 			}
 			m_pMgrDraw->DrawMapParts (
 					pDst,
@@ -1265,7 +1272,7 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 	BOOL bDraw, bPile;
 	BYTE byViewGrid, byLevel;
 	DWORD dwPartsID, dwPartsIDBack;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy, nCount;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
 		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
@@ -1348,10 +1355,12 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 	pInfoMapPartsBack = NULL;
 	m_pMgrDraw->LockDibTmp ();
 	y = -1;
+	nCount = DRAW_PARTS_Y + 2;
 	if (nDrawY != -99) {
 		y = nDrawY;
+		nCount = nDrawY + 1;
 	}
-	for (; y < DRAW_PARTS_Y + 2; y ++) {
+	for (; y < nCount; y ++) {
 		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
 			xx = nPosX + x;
 			yy = nPosY + y;
