@@ -12,6 +12,7 @@
 #include "UraraSockTCPSBO.h"
 #include "PacketADMIN_CHARINFO.h"
 #include "PacketADMIN_PARA2.h"
+#include "PacketCHAR_REQ_CHARINFO.h"
 #include "LibInfoMotionType.h"
 #include "LayoutHelper.h"
 #include "LibInfoCharCli.h"
@@ -226,24 +227,36 @@ Exit:
 
 void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 {
+	DWORD dwCharID;
+	PCInfoCharCli pInfoCharTmp;
 	PCLibInfoCharCli pLibInfoChar;
 
 	switch (nType) {
 	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* 左クリック通知 */
+		dwCharID = dwPara;
 		if (dwPara == (DWORD)-1) {
-			dwPara = m_dwCharID;
+			dwCharID = m_dwCharID;
 		}
 		pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
-		m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (dwPara);
-		if (m_pInfoChar == NULL) {
-			dwPara = 0;
+		pInfoCharTmp	= (PCInfoCharCli)pLibInfoChar->GetPtr (dwCharID);
+		if (pInfoCharTmp == NULL) {
+			if (dwPara == (DWORD)-1) {
+				CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
+
+				PacketCHAR_REQ_CHARINFO.Make (m_dwCharID);
+				m_pSock->Send (&PacketCHAR_REQ_CHARINFO);
+				break;
+			}
+			dwCharID = 0;
 		}
-		m_dwCharID = dwPara;
+		m_pInfoChar = pInfoCharTmp;
+		m_dwCharID = dwCharID;
 		Renew ();
 		break;
 	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* 右クリック通知 */
-		m_nPosX = HIWORD (dwPara);
-		m_nPosY = LOWORD (dwPara);
+		m_dwMapID	= m_pMgrData->GetMapID ();
+		m_nPosX		= HIWORD (dwPara);
+		m_nPosY		= LOWORD (dwPara);
 		UpdateData (FALSE);
 		break;
 	case ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK:	/* 右ダブルクリック通知 */
@@ -397,8 +410,11 @@ void CDlgAdminCharModify::OnSetMoveType()
 void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 {
 	CInfoCharCli InfoCharTmp;
+	PCLibInfoCharCli pLibInfoChar;
 	CPacketADMIN_CHARINFO Packet;
 
+	pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
+	m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (m_dwCharID);
 	if (m_pInfoChar == NULL) {
 		return;
 	}
