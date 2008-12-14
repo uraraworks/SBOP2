@@ -16,6 +16,7 @@ class CLibInfoMapParts;
 class CLibInfoMapShadow;
 class CLayerCloud;
 class CLayerMisty;
+class CLayerSnow;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -89,6 +90,7 @@ public:
 	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* マップ影情報 */
 	CLayerCloud			*m_pLayerCould;			/* 雲レイヤー */
 	CLayerMisty			*m_pLayerMisty;			/* 霧レイヤー */
+	CLayerSnow			*m_pLayerSnow;			/* 雪レイヤー */
 } CLayerMap, *PCLayerMap;
 
 /* Copyright(C)URARA-works 2006 */

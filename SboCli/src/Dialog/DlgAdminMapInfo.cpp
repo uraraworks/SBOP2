@@ -185,6 +185,8 @@ BOOL CDlgAdminMapInfo::OnInitDialog()
 	m_cmbWeatherType.SetItemData  (1, WEATHERTYPE_CLOUD);
 	m_cmbWeatherType.InsertString (2, "ñ∂");
 	m_cmbWeatherType.SetItemData  (2, WEATHERTYPE_MISTY);
+	m_cmbWeatherType.InsertString (3, "ê·");
+	m_cmbWeatherType.SetItemData  (3, WEATHERTYPE_SNOW);
 
 	Renew ();
 

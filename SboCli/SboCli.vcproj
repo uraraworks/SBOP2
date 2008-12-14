@@ -1550,6 +1550,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Layer\LayerSnow.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Layer\LayerSystemMsg.cpp"
 					>
 					<FileConfiguration
@@ -3902,6 +3906,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Layer\LayerMisty.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Layer\LayerSnow.h"
 					>
 				</File>
 				<File

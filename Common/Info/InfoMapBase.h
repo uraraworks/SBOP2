@@ -25,6 +25,7 @@ enum {
 	WEATHERTYPE_NONE = 0,
 	WEATHERTYPE_CLOUD,			/* â_ */
 	WEATHERTYPE_MISTY,			/* ñ∂ */
+	WEATHERTYPE_SNOW,			/* ê· */
 	WEATHERTYPE_MAX
 };
 

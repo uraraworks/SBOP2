@@ -23,6 +23,7 @@
 #include "MgrLayer.h"
 #include "LayerCloud.h"
 #include "LayerMisty.h"
+#include "LayerSnow.h"
 #include "LayerMap.h"
 
 
@@ -61,6 +62,7 @@ CLayerMap::CLayerMap()
 
 	m_pLayerCould		= NULL;
 	m_pLayerMisty		= NULL;
+	m_pLayerSnow		= NULL;
 
 	m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
 			TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
@@ -82,6 +84,7 @@ CLayerMap::~CLayerMap()
 	SAFE_DELETE (m_pDibMapName);
 	SAFE_DELETE (m_pLayerCould);
 	SAFE_DELETE (m_pLayerMisty);
+	SAFE_DELETE (m_pLayerSnow);
 
 	if (m_hFont32) {
 		DeleteObject (m_hFont32);
@@ -116,8 +119,10 @@ void CLayerMap::Create(
 
 	m_pLayerCould = new CLayerCloud;
 	m_pLayerMisty = new CLayerMisty;
+	m_pLayerSnow  = new CLayerSnow;
 	m_pLayerCould->Create (pMgrData);
 	m_pLayerMisty->Create (pMgrData);
+	m_pLayerSnow-> Create (pMgrData);
 
 	m_pLayerCould->m_pLayerMap = this;
 }
@@ -161,6 +166,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 	switch (pMap->m_dwWeatherType) {
 	case WEATHERTYPE_CLOUD:		pLayer = m_pLayerCould;		break;
 	case WEATHERTYPE_MISTY:		pLayer = m_pLayerMisty;		break;
+	case WEATHERTYPE_SNOW:		pLayer = m_pLayerSnow;		break;
 	}
 	if (pLayer) {
 		pLayer->Draw (pDst);
@@ -208,6 +214,7 @@ BOOL CLayerMap::TimerProc(void)
 	switch (pMap->m_dwWeatherType) {
 	case WEATHERTYPE_CLOUD:		pLayer = m_pLayerCould;		break;
 	case WEATHERTYPE_MISTY:		pLayer = m_pLayerMisty;		break;
+	case WEATHERTYPE_SNOW:		pLayer = m_pLayerSnow;		break;
 	}
 	if (pLayer) {
 		bRet |= pLayer->TimerProc ();
