@@ -1228,6 +1228,10 @@ void CMainFrame::KeyProc(void)
 	if (m_bWindowActive == FALSE) {
 		return;
 	}
+	if (GetForegroundWindow () != m_hWnd) {
+		m_bWindowActive = FALSE;
+		return;
+	}
 
 	/* ウィンドウで必要であればウィンドウ、そうでなければ状態処理のキー処理を行う */
 	m_pMgrKeyInput->Renew (byCode, bDown);
