@@ -713,6 +713,18 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="InfoTalkEvent"
+						>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEvent.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="Lib"
@@ -1918,6 +1930,18 @@
 						>
 						<File
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="InfoTalkEvent"
+						>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEvent.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.h"
 							>
 						</File>
 					</Filter>
