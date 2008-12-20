@@ -38,6 +38,7 @@ protected:
 
 
 protected:
+	int		m_nLength;							/* •¶š—ñ’· */
 	LPSTR	m_pszString;						/* •¶š—ñƒf[ƒ^ */
 } CmyString, *PCmyString;
 

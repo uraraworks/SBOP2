@@ -18,6 +18,7 @@
 
 CmyString::CmyString()
 {
+	m_nLength	= 0;
 	m_pszString = NULL;
 	Empty ();
 }
@@ -78,7 +79,7 @@ BOOL CmyString::IsEmpty(void)
 	if (m_pszString == NULL) {
 		goto Exit;
 	}
-	if (strlen (m_pszString) <= 0) {
+	if (m_nLength <= 0) {
 		goto Exit;
 	}
 
@@ -96,17 +97,7 @@ Exit:
 
 int CmyString::GetLength(void)
 {
-	int nRet;
-
-	nRet = 0;
-
-	if (m_pszString == NULL) {
-		goto Exit;
-	}
-
-	nRet = strlen (m_pszString);
-Exit:
-	return nRet;
+	return m_nLength;
 }
 
 
@@ -302,7 +293,8 @@ void CmyString::Renew(LPCSTR pszSrc)
 		return;
 	}
 
-	m_pszString = new char[strlen (pszSrc) + 1];
+	m_nLength = strlen (pszSrc);
+	m_pszString = new char[m_nLength + 1];
 	strcpy (m_pszString, pszSrc);
 }
 
