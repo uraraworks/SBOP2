@@ -238,8 +238,13 @@ int CLayerMap::IsScrollPos(
 	int nDirection)		/* [in] Œü‚« */
 {
 	int yy, nRet, nMaxX, nMaxY;
+	PCInfoMapBase pMap;
 
 	nRet = -1;
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return nRet;
+	}
 
 	yy = y;
 	x = (x % 2) ? x / 2 + 1 : x / 2;
@@ -254,7 +259,7 @@ int CLayerMap::IsScrollPos(
 		}
 		break;
 	case 1:
-		if ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2) {
+		if ((nMaxY + DRAW_PARTS_Y < pMap->m_sizeMap.cy) && ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2)) {
 			nRet = nDirection;
 		}
 		break;
@@ -264,36 +269,36 @@ int CLayerMap::IsScrollPos(
 		}
 		break;
 	case 3:
-		if ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2) {
+		if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
 			nRet = nDirection;
 		}
 		break;
 	case 4:
 		if ((m_nViewY > 0) && (y - nMaxY <= DRAW_PARTS_Y / 2)) {
 			nRet = 0;
-			if ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2) {
+			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
 				nRet = nDirection;
 			}
 		} else {
-			if ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2) {
+			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
 				nRet = 3;
 			}
 		}
 		break;
 	case 5:
-		if ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2) {
+		if ((nMaxY + DRAW_PARTS_Y < pMap->m_sizeMap.cy) && ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2)) {
 			nRet = 1;
-			if ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2) {
+			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
 				nRet = nDirection;
 			}
 		} else {
-			if ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2) {
+			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
 				nRet = 3;
 			}
 		}
 		break;
 	case 6:
-		if ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2) {
+		if ((nMaxY + DRAW_PARTS_Y < pMap->m_sizeMap.cy) && ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2)) {
 			nRet = 1;
 			if ((m_nViewX > 0) && (x - nMaxX <= DRAW_PARTS_X / 2)) {
 				nRet = nDirection;
