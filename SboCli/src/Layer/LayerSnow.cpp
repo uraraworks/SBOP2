@@ -12,6 +12,7 @@
 #include "MgrGrpData.h"
 #include "Img32.h"
 #include "InfoMapBase.h"
+#include "LayerMap.h"
 #include "LayerSnow.h"
 
 
@@ -25,7 +26,8 @@ CLayerSnow::CLayerSnow()
 {
 	m_nID = WEATHERTYPE_SNOW;
 
-	m_dwLastProc = 0;
+	m_dwLastProc	= 0;
+	m_pLayerMap		= NULL;
 }
 
 
@@ -50,7 +52,12 @@ CLayerSnow::~CLayerSnow()
 void CLayerSnow::Create(
 	CMgrData	*pMgrData)		/* [in] データ管理 */
 {
+	PCMgrLayer pMgrLayer;
+
 	CLayerBase::Create (pMgrData);
+
+	pMgrLayer	= pMgrData->GetMgrLayer ();
+	m_pLayerMap = (PCLayerMap)pMgrLayer->Get (LAYERTYPE_MAP);
 
 	RenewSnowInfo (200);
 }
@@ -64,14 +71,40 @@ void CLayerSnow::Create(
 
 void CLayerSnow::Draw(PCImg32 pDst)
 {
-	int i, nCount;
 	PSTLAYERSNOW_SNOWINFO pInfo;
+	int i, x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, nCount;
+	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
+		aPosX[] = {0, 0, 1, -1, -1, -1, 1, 1}, aPosY[] = {1, -1, 0, 0, 1, -1, -1, 1};
+
+	nMoveX	= 0;
+	nMoveY	= 0;
+	nPosX	= 0;
+	nPosY	= 0;
+
+	if (m_pLayerMap) {
+		nMoveX	= m_pLayerMap->m_nMoveX;
+		nMoveY	= m_pLayerMap->m_nMoveY;
+		nPosX	= m_pLayerMap->m_nViewX;
+		nPosY	= m_pLayerMap->m_nViewY;
+
+		if (nMoveX || nMoveY) {
+			/* 移動中の座標を補正 */
+			nMoveX	*= aMoveX[m_pLayerMap->m_byDirection];
+			nMoveY	*= aMoveY[m_pLayerMap->m_byDirection];
+			nPosX	+= aPosX[m_pLayerMap->m_byDirection];
+			nPosY	+= aPosY[m_pLayerMap->m_byDirection];
+		}
+	}
+	x = nPosX % (DRAW_PARTS_X * 2);
+	y = nPosY % (DRAW_PARTS_Y * 2);
 
 	nCount = m_aSnowInfo.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
 
-		pDst->Circle (pInfo->x, pInfo->y, pInfo->nSize, RGB (255, 255, 255));
+		xx = (pInfo->x + (SCRSIZEX - x * 16)) % SCRSIZEX;
+		yy = (pInfo->y + (SCRSIZEY - y * 16)) % SCRSIZEY;
+		pDst->Circle (32 + xx + nMoveX, 32 + yy + nMoveY, pInfo->nSize, RGB (255, 255, 255));
 	}
 }
 
@@ -92,7 +125,7 @@ BOOL CLayerSnow::TimerProc(void)
 	bRet	= FALSE;
 	dwTime	= timeGetTime ();
 
-	if (dwTime - m_dwLastProc < 50) {
+	if (dwTime - m_dwLastProc < 25) {
 		goto Exit;
 	}
 
@@ -111,7 +144,7 @@ BOOL CLayerSnow::TimerProc(void)
 		pInfo->dwLastProc = dwTime;
 		pInfo->y ++;
 		if (pInfo->y >= pInfo->nEndY) {
-			pInfo->y = -5;
+			pInfo->y = pInfo->nStartY;
 		}
 		bRet = TRUE;
 	}
@@ -139,10 +172,11 @@ void CLayerSnow::RenewSnowInfo(int nCount)
 
 		nTmp = (genrand () % 3);
 		pInfo->nSize		= 3 - nTmp;
-		pInfo->nEndY		= (SCRSIZEY - (genrand () % (SCRSIZEY / 3 * (nTmp + 1)))) + 32;
+		pInfo->nStartY		= genrand () % SCRSIZEY;
+		pInfo->nEndY		= pInfo->nStartY + (SCRSIZEY - (genrand () % (SCRSIZEY / 3 * (nTmp + 1)))) + 32;
 		pInfo->x			= (genrand () % SCRSIZEX) + 32;
-		pInfo->y			= -5;
-		pInfo->dwStartWait	= (genrand () % 30000);
+		pInfo->y			= pInfo->nStartY;
+		pInfo->dwStartWait	= 0;
 		pInfo->dwWait		= 50 + nTmp * 25;
 		pInfo->dwLastProc	= timeGetTime ();
 

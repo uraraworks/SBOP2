@@ -12,6 +12,7 @@
 
 class CImg32;
 class CMgrData;
+class CLayerMap;
 
 /* ========================================================================= */
 /* 構造体宣言																 */
@@ -19,6 +20,7 @@ class CMgrData;
 /* 雪情報 */
 typedef struct _STLAYERSNOW_SNOWINFO {
 	int		nSize,			/* サイズ */
+			nStartY,		/* 開始地点 */
 			nEndY,			/* 着地点 */
 			x,				/* 横座標 */
 			y;				/* 縦座標 */
@@ -46,6 +48,10 @@ public:
 protected:
 	void	RenewSnowInfo		(int nCount);			/* 雪情報を更新 */
 	void	DeleteSnowInfoAll	(void);					/* 雪情報を全て削除 */
+
+
+public:
+	CLayerMap		*m_pLayerMap;						/* マップレイヤー */
 
 
 protected:

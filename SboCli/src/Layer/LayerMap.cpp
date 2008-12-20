@@ -125,6 +125,7 @@ void CLayerMap::Create(
 	m_pLayerSnow-> Create (pMgrData);
 
 	m_pLayerCould->m_pLayerMap = this;
+	m_pLayerSnow-> m_pLayerMap = this;
 }
 
 
