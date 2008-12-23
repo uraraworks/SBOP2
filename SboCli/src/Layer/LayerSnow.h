@@ -19,7 +19,9 @@ class CLayerMap;
 /* ========================================================================= */
 /* 雪情報 */
 typedef struct _STLAYERSNOW_SNOWINFO {
-	int		nSize,			/* サイズ */
+	int		nState,			/* 状態 */
+			nLevel,			/* 透明度 */
+			nSize,			/* サイズ */
 			nStartY,		/* 開始地点 */
 			nEndY,			/* 着地点 */
 			x,				/* 横座標 */
@@ -57,6 +59,7 @@ public:
 protected:
 	DWORD			m_dwLastProc;		/* 前回の処理時間 */
 	ARRAYSNOWINFO	m_aSnowInfo;		/* 雪情報 */
+	CImg32			*m_pImgTmp;			/* 画像テンポラリ */
 } CLayerSnow, *PCLayerSnow;
 
 /* Copyright(C)URARA-works 2008 */

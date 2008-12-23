@@ -28,6 +28,7 @@ CLayerSnow::CLayerSnow()
 
 	m_dwLastProc	= 0;
 	m_pLayerMap		= NULL;
+	m_pImgTmp		= new CImg32;
 }
 
 
@@ -40,6 +41,7 @@ CLayerSnow::CLayerSnow()
 CLayerSnow::~CLayerSnow()
 {
 	DeleteSnowInfoAll ();
+	SAFE_DELETE (m_pImgTmp);
 }
 
 
@@ -58,6 +60,8 @@ void CLayerSnow::Create(
 
 	pMgrLayer	= pMgrData->GetMgrLayer ();
 	m_pLayerMap = (PCLayerMap)pMgrLayer->Get (LAYERTYPE_MAP);
+
+	m_pImgTmp->CreateWithoutGdi (100, 100);
 
 	RenewSnowInfo (200);
 }
@@ -102,9 +106,11 @@ void CLayerSnow::Draw(PCImg32 pDst)
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
 
-		xx = (pInfo->x + (SCRSIZEX - x * 16)) % SCRSIZEX;
-		yy = (pInfo->y + (SCRSIZEY - y * 16)) % SCRSIZEY;
-		pDst->Circle (32 + xx + nMoveX, 32 + yy + nMoveY, pInfo->nSize, RGB (255, 255, 255));
+		xx = (pInfo->x + (SCRSIZEX - x * 16)) % (SCRSIZEX + 32);
+		yy = (pInfo->y + (SCRSIZEY - y * 16)) % (SCRSIZEY + 32);
+		m_pImgTmp->FillRect (0, 0, pInfo->nSize * 2, pInfo->nSize * 2, RGB (0, 0, 0));
+		m_pImgTmp->Circle (0, 0, pInfo->nSize, RGB (255, 255, 255));
+		pDst->BltAlpha (16 + xx + nMoveX, 16 + yy + nMoveY, pInfo->nSize * 2, pInfo->nSize * 2, m_pImgTmp, 0, 0, pInfo->nLevel, TRUE);
 	}
 }
 
@@ -132,19 +138,36 @@ BOOL CLayerSnow::TimerProc(void)
 	nCount = m_aSnowInfo.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
-		if (pInfo->dwStartWait != 0) {
-			if (dwTime - pInfo->dwLastProc < pInfo->dwStartWait) {
-				continue;
-			}
-			pInfo->dwStartWait = 0;
-		}
 		if (dwTime - pInfo->dwLastProc < pInfo->dwWait) {
 			continue;
 		}
-		pInfo->dwLastProc = dwTime;
-		pInfo->y ++;
-		if (pInfo->y >= pInfo->nEndY) {
+
+		switch (pInfo->nState) {
+		case 0:
+			if (dwTime - pInfo->dwLastProc < pInfo->dwStartWait) {
+				continue;
+			}
+			pInfo->dwLastProc = dwTime;
+			pInfo->nState = 1;
+			pInfo->nLevel = 0;
 			pInfo->y = pInfo->nStartY;
+			break;
+		case 1:
+			pInfo->dwLastProc = dwTime;
+			pInfo->y ++;
+			if (pInfo->y >= pInfo->nEndY) {
+				pInfo->nState = 2;
+			}
+			break;
+		case 2:
+			if (dwTime - pInfo->dwLastProc > 1000) {
+				pInfo->nState = 0;
+				break;
+			}
+			pInfo->nLevel = (dwTime - pInfo->dwLastProc) / 10;
+			pInfo->nLevel = min (pInfo->nLevel, 100);
+			pInfo->nLevel = max (pInfo->nLevel, 1);
+			break;
 		}
 		bRet = TRUE;
 	}
@@ -171,13 +194,15 @@ void CLayerSnow::RenewSnowInfo(int nCount)
 		pInfo = new STLAYERSNOW_SNOWINFO;
 
 		nTmp = (genrand () % 3);
+		pInfo->nState		= 0;
+		pInfo->nLevel		= 100;
 		pInfo->nSize		= 3 - nTmp;
 		pInfo->nStartY		= genrand () % SCRSIZEY;
 		pInfo->nEndY		= pInfo->nStartY + (SCRSIZEY - (genrand () % (SCRSIZEY / 3 * (nTmp + 1)))) + 32;
 		pInfo->x			= (genrand () % SCRSIZEX) + 32;
 		pInfo->y			= pInfo->nStartY;
-		pInfo->dwStartWait	= 0;
-		pInfo->dwWait		= 50 + nTmp * 25;
+		pInfo->dwStartWait	= genrand () % 3000;
+		pInfo->dwWait		= 50 + nTmp * 50;
 		pInfo->dwLastProc	= timeGetTime ();
 
 		m_aSnowInfo.Add (pInfo);
