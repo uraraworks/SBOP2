@@ -863,7 +863,7 @@ BOOL CLayerMap::TimerProcScroll(void)
 
 	nTmp = nTmp / nMoveWait;
 	nTmp = max (nTmp, 1);
-	m_dwLastTimeScroll = timeGetTime ();
+	m_dwLastTimeScroll += (nTmp * nMoveWait);
 	m_nMoveX += (anPosChangeX[m_byDirection] * nTmp);
 	m_nMoveY += (anPosChangeY[m_byDirection] * nTmp);
 

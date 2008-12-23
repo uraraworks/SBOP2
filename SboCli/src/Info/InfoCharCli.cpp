@@ -1502,7 +1502,7 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 	}
 
 	if ((dwTmp > 0) && (!((m_ptMove.x == 0) && (m_ptMove.y == 0)))) {
-		m_dwLastTimeMove = dwTime;
+		m_dwLastTimeMove += (dwTmp * dwWait);
 	}
 	if ((m_ptMove.x == 0) && (m_ptMove.y == 0)) {
 		if (m_pMgrData->GetCharID () != m_dwCharID) {
