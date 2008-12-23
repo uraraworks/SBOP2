@@ -50,7 +50,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib"
+				AdditionalIncludeDirectories=".\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -148,7 +148,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib"
+				AdditionalIncludeDirectories=".\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

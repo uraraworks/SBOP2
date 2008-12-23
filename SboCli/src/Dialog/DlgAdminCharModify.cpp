@@ -360,6 +360,7 @@ void CDlgAdminCharModify::OnTalk()
 		return;
 	}
 
+	Dlg.Init (m_pMgrData);
 	Dlg.m_strTalk = m_pInfoChar->m_strTalk;
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {

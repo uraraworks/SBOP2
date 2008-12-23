@@ -40,6 +40,7 @@ public:
 	PCInfoTalkEventBase	GetNew			(int nType);									/* 新しい会話イベントを取得 */
 	void	SetPtr						(int nPage, int nNo, CInfoTalkEventBase *pInfo);/* 会話イベントを差し替え */
 	void	GetEventArray				(int nPage, ARRAYTALKEVENTBASEINFO &aDst);		/* 指定ページ番号のイベント一覧を取得 */
+	int		GetPageCount				(void);								/* 会話イベントページ数を取得 */
 	void	AddTalkEvent				(CInfoTalkEventBase *pInfo);		/* 会話イベントを追加 */
 	void	DeleteTalkEvent				(int nNo);							/* 会話イベントを削除 */
 	void	DeleteTalkEvent				(int nPage, int nNo);				/* 会話イベントを削除 */

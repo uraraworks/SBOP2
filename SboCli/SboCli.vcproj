@@ -51,7 +51,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData"
+				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -150,7 +150,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData"
+				AdditionalIncludeDirectories=".\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -3230,6 +3230,34 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventMENU.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventMSG.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventNONE.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventPAGE.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventSet.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventTab.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminTalkSet.cpp"
 					>
 				</File>
@@ -4394,6 +4422,34 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminSystemSetInitCharStatus.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventMENU.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventMSG.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventNONE.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventPAGE.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventSet.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventTab.h"
 					>
 				</File>
 				<File

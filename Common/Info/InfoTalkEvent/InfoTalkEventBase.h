@@ -17,6 +17,7 @@
 /* 会話イベント種別 */
 enum {
 	TALKEVENTTYPE_NONE = 0,
+	TALKEVENTTYPE_PAGE,			/* ページ切り替え */
 	TALKEVENTTYPE_MSG,			/* メッセージ表示 */
 	TALKEVENTTYPE_MENU,			/* 項目選択 */
 	TALKEVENTTYPE_MAX

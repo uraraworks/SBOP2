@@ -10,6 +10,7 @@
 #include "resource.h"
 #include "MgrData.h"
 #include "LayoutHelper.h"
+#include "DlgAdminTalkEventSet.h"
 #include "DlgAdminTalkSet.h"
 
 #ifdef _DEBUG
@@ -33,6 +34,7 @@ void CDlgAdminTalkSet::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDlgAdminTalkSet, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminTalkSet)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_TALKEVENT, &CDlgAdminTalkSet::OnBnClickedTalkevent)
 END_MESSAGE_MAP()
 
 
@@ -105,6 +107,21 @@ void CDlgAdminTalkSet::OnOK()
 	UpdateData ();
 
 	CDialog::OnOK ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkSet::OnBnClickedTalkevent							 */
+/* 内容		:ボタンハンドラ(会話イベントの設定)								 */
+/* 日付		:2008/12/23														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkSet::OnBnClickedTalkevent()
+{
+	CDlgAdminTalkEventSet Dlg(this);
+
+	Dlg.Init (m_pMgrData);
+	Dlg.DoModal ();
 }
 
 /* Copyright(C)URARA-works 2008 */

@@ -62,12 +62,20 @@
 #define IDD_CHAR_SKILL_BASE             180
 #define IDD_CHAR_SKILL_NONE             181
 #define IDD_MAP_EVENT_LIGHT             182
+#define IDD_TALKEVENT_SET               183
+#define IDD_TALKEVENT_TAB               184
+#define IDD_TALKEVENT_BASE              185
+#define IDD_TALKEVENT_NONE              186
+#define IDD_TALKEVENT_PAGE              187
+#define IDD_TALKEVENT_MSG               188
+#define IDD_TALKEVENT_MENU              189
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
 #define IDC_MODIFY                      1001
 #define IDC_CHARCOUNT                   1002
 #define IDC_DELETE                      1002
+#define IDC_ADD3                        1002
 #define IDM_ITEM_LIST                   1003
 #define IDC_COPY                        1003
 #define IDC_CHARNAME                    1004
@@ -84,6 +92,7 @@
 #define IDC_MOVETYPE                    1011
 #define IDC_TYPE_CHAR                   1011
 #define IDC_WALKMOTION                  1011
+#define IDC_COMBO                       1011
 #define IDC_FRAME                       1012
 #define IDC_DEL                         1012
 #define IDC_MAPPARTS                    1012
@@ -95,7 +104,6 @@
 #define IDC_ID                          1013
 #define IDC_DEL2                        1013
 #define IDC_PLAY                        1013
-#define IDC_TYPE2                       1013
 #define IDC_USE                         1013
 #define IDC_MSG                         1014
 #define IDC_STOP                        1014
@@ -203,6 +211,7 @@
 #define IDC_PLAYSOUND                   1085
 #define IDC_DRAW_UP                     1085
 #define IDC_SET_MOVETYPE                1085
+#define IDC_TALKEVENT                   1085
 #define IDC_BLOW                        1086
 #define IDC_GRP                         1086
 #define IDC_BUTTON2                     1086
@@ -311,6 +320,7 @@
 #define IDC_ENABLEBATTLE                1147
 #define IDC_RECOVERY                    1148
 #define IDC_TIME                        1149
+#define IDC_TAB                         1150
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -357,9 +367,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        178
+#define _APS_NEXT_RESOURCE_VALUE        186
 #define _APS_NEXT_COMMAND_VALUE         32811
-#define _APS_NEXT_CONTROL_VALUE         1150
+#define _APS_NEXT_CONTROL_VALUE         1153
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

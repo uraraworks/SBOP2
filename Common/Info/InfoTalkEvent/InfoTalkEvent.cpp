@@ -448,6 +448,29 @@ void CInfoTalkEvent::GetEventArray(int nPage, ARRAYTALKEVENTBASEINFO &aDst)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoTalkEvent::GetPageCount									 */
+/* 内容		:会話イベントページ数を取得										 */
+/* 日付		:2008/12/23														 */
+/* ========================================================================= */
+
+int CInfoTalkEvent::GetPageCount(void)
+{
+	int nRet, i, nCount;
+	PCInfoTalkEventBase pInfo;
+
+	nRet = 0;
+
+	nCount = m_apTalkEvent.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfo = m_apTalkEvent[i];
+		nRet = max (nRet, pInfo->m_nPage + 1);
+	}
+
+	return nRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoTalkEvent::AddTalkEvent									 */
 /* 内容		:会話イベントを追加												 */
 /* 日付		:2008/12/17														 */

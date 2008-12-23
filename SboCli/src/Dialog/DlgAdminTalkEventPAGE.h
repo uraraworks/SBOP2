@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ファイル名	:DlgAdminTalkSet.h											 */
-/* 内容			:会話データ設定ダイアログクラス 定義ファイル				 */
+/* ファイル名	:DlgAdminTalkEventPAGE.h									 */
+/* 内容			:会話イベント設定(ページ切り替え)ダイアログクラス 定義ファイル */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/11/22													 */
+/* 作成開始日	:2008/12/23													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,34 +14,39 @@
 /* クラス宣言																 */
 /* ========================================================================= */
 
-typedef class CDlgAdminTalkSet : public CDlgAdminBase
+typedef class CDlgAdminTalkEventPAGE : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkSet(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminTalkSet();						/* デストラクタ */
+			CDlgAdminTalkEventPAGE(CWnd* pParent = NULL);		/* コンストラクタ */
+	virtual ~CDlgAdminTalkEventPAGE();							/* デストラクタ */
+
+	void	Init		(CMgrData *pMgrData);							/* 初期化 */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+
+
+protected:
+
+
+protected:
+
 
 
 public:
-	void OnOK();
-	//{{AFX_DATA(CDlgAdminTalkSet)
-	enum { IDD = IDD_TALK_SET };
-	CString	m_strTalk;
+	//{{AFX_DATA(CDlgAdminTalkEventPAGE)
+	enum { IDD = IDD_TALKEVENT_PAGE };
 	//}}AFX_DATA
 
-	//{{AFX_VIRTUAL(CDlgAdminTalkSet)
+	//{{AFX_VIRTUAL(CDlgAdminTalkEventPAGE)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 
 protected:
-	//{{AFX_MSG(CDlgAdminTalkSet)
+	//{{AFX_MSG(CDlgAdminTalkEventPAGE)
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnBnClickedTalkevent();
-} CDlgAdminTalkSet, *PCDlgAdminTalkSet;
+} CDlgAdminTalkEventPAGE, *PCDlgAdminTalkEventPAGE;
 
 //{{AFX_INSERT_LOCATION}}
 
