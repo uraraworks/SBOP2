@@ -106,11 +106,11 @@ void CLayerSnow::Draw(PCImg32 pDst)
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
 
-		xx = (pInfo->x + (SCRSIZEX - x * 16)) % (SCRSIZEX + 32);
-		yy = (pInfo->y + (SCRSIZEY - y * 16)) % (SCRSIZEY + 32);
+		xx = (pInfo->x + (SCRSIZEX - x * 16)) % SCRSIZEX;
+		yy = (pInfo->y + (SCRSIZEY - y * 16)) % SCRSIZEY;
 		m_pImgTmp->FillRect (0, 0, pInfo->nSize * 2, pInfo->nSize * 2, RGB (0, 0, 0));
 		m_pImgTmp->Circle (0, 0, pInfo->nSize, RGB (255, 255, 255));
-		pDst->BltAlpha (16 + xx + nMoveX, 16 + yy + nMoveY, pInfo->nSize * 2, pInfo->nSize * 2, m_pImgTmp, 0, 0, pInfo->nLevel, TRUE);
+		pDst->BltAlpha (32 + xx + nMoveX, 32 + yy + nMoveY, pInfo->nSize * 2, pInfo->nSize * 2, m_pImgTmp, 0, 0, pInfo->nLevel, TRUE);
 	}
 }
 
