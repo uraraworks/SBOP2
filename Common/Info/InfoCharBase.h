@@ -161,7 +161,8 @@ public:
 				m_nProcState,						/* 行動状態 */
 				m_nMoveDirection,					/* 移動方向 */
 				m_nLightLevel;						/* 灯りレベル */
-	BOOL		m_bNPC,								/* NPC */
+	BOOL		m_bDelete,							/* 削除フラグ */
+				m_bNPC,								/* NPC */
 				m_bChargeAtack;						/* 溜め攻撃 */
 	ARRAYBYTE	m_abyMark;							/* 名前の前に表示するマーク番号 */
 	CmyArray<POINT, POINT> m_aposBockMapArea;		/* 当たり判定対象のマップ座標 */

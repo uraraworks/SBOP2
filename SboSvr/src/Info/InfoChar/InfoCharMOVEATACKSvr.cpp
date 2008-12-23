@@ -19,7 +19,8 @@
 
 CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
 {
-	m_nMoveCount = 0;
+	m_bDelete		= TRUE;
+	m_nMoveCount	= 0;
 }
 
 
@@ -52,18 +53,6 @@ void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 	CInfoCharSvr::SetMoveState (nMoveState);
 
 	m_dwLastTimeMove = timeGetTime ();
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharMOVEATACKSvr::IsLogoutDelete							 */
-/* 内容		:ログアウト時に削除するか判定									 */
-/* 日付		:2007/09/17														 */
-/* ========================================================================= */
-
-BOOL CInfoCharMOVEATACKSvr::IsLogoutDelete(void)
-{
-	return TRUE;
 }
 
 

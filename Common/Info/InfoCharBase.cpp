@@ -112,6 +112,7 @@ static LPCSTR s_aszName[] = {
 
 CInfoCharBase::CInfoCharBase()
 {
+	m_bDelete				= FALSE;
 	m_bBlock				= FALSE;
 	m_bPush					= FALSE;
 	m_nAnime				= 0;
@@ -2318,7 +2319,7 @@ Exit:
 
 BOOL CInfoCharBase::IsLogoutDelete(void)
 {
-	return FALSE;
+	return m_bDelete;
 }
 
 /* Copyright(C)URARA-works 2006 */

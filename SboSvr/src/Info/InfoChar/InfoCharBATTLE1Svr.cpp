@@ -19,7 +19,8 @@
 
 CInfoCharBATTLE1Svr::CInfoCharBATTLE1Svr()
 {
-	m_dwLastTiemAtack = 0;
+	m_bDelete			= TRUE;
+	m_dwLastTiemAtack	= 0;
 }
 
 
@@ -54,18 +55,6 @@ void CInfoCharBATTLE1Svr::SetMoveState(int nMoveState)
 		m_dwTargetCharID = 0;
 		break;
 	}
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharBATTLE1Svr::IsLogoutDelete							 */
-/* 内容		:ログアウト時に削除するか判定									 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
-BOOL CInfoCharBATTLE1Svr::IsLogoutDelete(void)
-{
-	return TRUE;
 }
 
 

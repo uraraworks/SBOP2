@@ -201,6 +201,7 @@ void CMainFrame::RecvProcADMIN_DELETECHARINFO(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar->IsNPC () == FALSE) {
 		return;
 	}
+	pInfoChar->m_bDelete = TRUE;
 	pInfoChar->SetMoveState (CHARMOVESTATE_DELETE);
 }
 

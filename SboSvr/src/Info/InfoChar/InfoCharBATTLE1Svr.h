@@ -21,7 +21,6 @@ public:
 	virtual ~CInfoCharBATTLE1Svr();						/* デストラクタ */
 
 	void SetMoveState	(int nMoveState);						/* 移動状態を変更 */
-	BOOL IsLogoutDelete	(void);									/* ログアウト時に削除するか判定 */
 	BOOL TimerProc		(DWORD dwTime);							/* 時間処理 */
 	void ProcAtack		(void);									/* 処理(攻撃した時) */
 	BOOL ProcHit		(CInfoCharSvr *pInfoChar);				/* 処理(攻撃を受けた時) */
