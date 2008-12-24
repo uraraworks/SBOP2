@@ -192,6 +192,11 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	}
 	if (bResult == FALSE) {
 		m_pLog->Write ("埋まり救出 MAP:%d(%d,%d)", pInfoChar->m_dwMapID, pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+
+		if (pInfoChar->m_dwMaxHP == 0) {
+			m_pLibInfoChar->SetInitStatus (pInfoChar, TRUE);
+		}
+
 		/* 初期位置に転送 */
 		pInfoChar->m_dwMapID	= pInitCharStatus->dwInitPosMapID;		/* マップID */
 		pInfoChar->m_nMapX		= pInitCharStatus->ptInitPos.x;			/* X座標 */
