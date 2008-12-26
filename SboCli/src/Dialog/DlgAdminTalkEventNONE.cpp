@@ -48,6 +48,8 @@ CDlgAdminTalkEventNONE::CDlgAdminTalkEventNONE(CWnd* pParent /*=NULL*/)
 {
 	//{{AFX_DATA_INIT(CDlgAdminTalkEventNONE)
 	//}}AFX_DATA_INIT
+
+	m_nResourceID = CDlgAdminTalkEventNONE::IDD;
 }
 
 
@@ -73,7 +75,7 @@ void CDlgAdminTalkEventNONE::Init(CMgrData *pMgrData)
 	CDlgAdminBase::Init (pMgrData);
 
 	/* ウィンドウ作成 */
-	Create (CDlgAdminTalkEventNONE::IDD, m_pWndParent);
+	Create (m_nResourceID, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
@@ -85,6 +87,28 @@ void CDlgAdminTalkEventNONE::Init(CMgrData *pMgrData)
 /* ========================================================================= */
 
 void CDlgAdminTalkEventNONE::OnAdminMsg(int nType, DWORD dwPara)
+{
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventNONE::Set									 */
+/* 内容		:設定から画面に反映												 */
+/* 日付		:2008/12/25														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventNONE::Set(CInfoTalkEventBase *pSrc)
+{
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventNONE::Get									 */
+/* 内容		:画面から設定に反映												 */
+/* 日付		:2008/12/25														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventNONE::Get(CInfoTalkEventBase *pDst)
 {
 }
 

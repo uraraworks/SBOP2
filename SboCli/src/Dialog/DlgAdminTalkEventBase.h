@@ -11,7 +11,8 @@
 #include "DlgAdminBase.h"
 #include "afxwin.h"
 
-class CDlgAdminBase;
+class CDlgAdminTalkEventNONE;
+class CInfoTalkEventBase;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -23,19 +24,22 @@ public:
 			CDlgAdminTalkEventBase(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventBase();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
+	void	Init		(CMgrData *pMgrData, CInfoTalkEventBase *pInfo = NULL);	/* 初期化 */
 	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Get			(CInfoTalkEventBase *&pDst);					/* 取得 */
 
 
 protected:
 
 
 protected:
-	CDlgAdminBase	*m_pDlgType;	/* 編集中のイベント種別ダイアログ */
+	CDlgAdminTalkEventNONE	*m_pDlgType;	/* 編集中のイベント種別ダイアログ */
+	CInfoTalkEventBase		*m_pInfo;		/* 編集中のイベント情報 */
 
 
 
 public:
+	void OnOK();
 	//{{AFX_DATA(CDlgAdminTalkEventBase)
 	enum { IDD = IDD_TALKEVENT_BASE };
 	//}}AFX_DATA

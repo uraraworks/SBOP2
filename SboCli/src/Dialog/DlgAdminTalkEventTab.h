@@ -11,6 +11,8 @@
 #include "DlgAdminBase.h"
 #include "afxcmn.h"
 
+class CInfoTalkEvent;
+
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
@@ -21,14 +23,18 @@ public:
 			CDlgAdminTalkEventTab(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventTab();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
+	void	Init		(CMgrData *pMgrData, CInfoTalkEvent *pInfo);	/* 初期化 */
 	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	void	SetPage		(int nPage);									/* 表示するページを設定 */
 
 
 protected:
+	void	Renew(void);					/* 更新 */
 
 
 protected:
+	int				m_nPage;		/* 表示中のページ番号 */
+	CInfoTalkEvent	*m_pInfo;		/* 編集中の会話イベント */
 
 
 
@@ -52,6 +58,8 @@ protected:
 public:
 	CListCtrl m_List;
 	afx_msg void OnBnClickedAdd();
+	afx_msg void OnBnClickedModify();
+	afx_msg void OnBnClickedDel();
 } CDlgAdminTalkEventTab, *PCDlgAdminTalkEventTab;
 
 //{{AFX_INSERT_LOCATION}}

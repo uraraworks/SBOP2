@@ -10,6 +10,8 @@
 
 #include "DlgAdminBase.h"
 
+class CInfoTalkEventBase;
+
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
@@ -20,11 +22,14 @@ public:
 			CDlgAdminTalkEventNONE(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventNONE();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	virtual void	Init		(CMgrData *pMgrData);					/* 初期化 */
+	virtual void	OnAdminMsg	(int nType, DWORD dwPara);				/* メッセージハンドラ(WM_ADMINMSG) */
+	virtual void	Set			(CInfoTalkEventBase *pSrc);				/* 設定から画面に反映 */
+	virtual void	Get			(CInfoTalkEventBase *pDst);				/* 画面から設定に反映 */
 
 
 protected:
+	int		m_nResourceID;		/* ダイアログリソースID */
 
 
 protected:

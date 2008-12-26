@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "DlgAdminBase.h"
+#include "DlgAdminTalkEventNONE.h"
 
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
 
-typedef class CDlgAdminTalkEventMENU : public CDlgAdminBase
+typedef class CDlgAdminTalkEventMENU : public CDlgAdminTalkEventNONE
 {
 public:
 			CDlgAdminTalkEventMENU(CWnd* pParent = NULL);		/* コンストラクタ */

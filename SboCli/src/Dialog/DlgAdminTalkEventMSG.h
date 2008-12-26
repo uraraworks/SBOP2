@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "DlgAdminBase.h"
+#include "DlgAdminTalkEventNONE.h"
 
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
 
-typedef class CDlgAdminTalkEventMSG : public CDlgAdminBase
+typedef class CDlgAdminTalkEventMSG : public CDlgAdminTalkEventNONE
 {
 public:
 			CDlgAdminTalkEventMSG(CWnd* pParent = NULL);		/* コンストラクタ */
@@ -22,6 +22,8 @@ public:
 
 	void	Init		(CMgrData *pMgrData);							/* 初期化 */
 	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Set			(CInfoTalkEventBase *pSrc);						/* 設定から画面に反映 */
+	void	Get			(CInfoTalkEventBase *pDst);						/* 画面から設定に反映 */
 
 
 protected:
@@ -46,6 +48,8 @@ protected:
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	CString m_strMsg;
 } CDlgAdminTalkEventMSG, *PCDlgAdminTalkEventMSG;
 
 //{{AFX_INSERT_LOCATION}}

@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include "InfoTalkEvent.h"
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "LayoutHelper.h"
@@ -37,6 +38,8 @@ BEGIN_MESSAGE_MAP(CDlgAdminTalkEventTab, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminTalkEventTab)
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_ADD, &CDlgAdminTalkEventTab::OnBnClickedAdd)
+	ON_BN_CLICKED(IDC_MODIFY, &CDlgAdminTalkEventTab::OnBnClickedModify)
+	ON_BN_CLICKED(IDC_DEL, &CDlgAdminTalkEventTab::OnBnClickedDel)
 END_MESSAGE_MAP()
 
 
@@ -51,6 +54,9 @@ CDlgAdminTalkEventTab::CDlgAdminTalkEventTab(CWnd* pParent /*=NULL*/)
 {
 	//{{AFX_DATA_INIT(CDlgAdminTalkEventTab)
 	//}}AFX_DATA_INIT
+
+	m_nPage	= 0;
+	m_pInfo	= NULL;
 }
 
 
@@ -71,9 +77,11 @@ CDlgAdminTalkEventTab::~CDlgAdminTalkEventTab()
 /* 日付		:2008/12/23														 */
 /* ========================================================================= */
 
-void CDlgAdminTalkEventTab::Init(CMgrData *pMgrData)
+void CDlgAdminTalkEventTab::Init(CMgrData *pMgrData, CInfoTalkEvent *pInfo)
 {
 	CDlgAdminBase::Init (pMgrData);
+
+	m_pInfo = pInfo;
 
 	/* ウィンドウ作成 */
 	Create (CDlgAdminTalkEventTab::IDD, m_pWndParent);
@@ -89,6 +97,19 @@ void CDlgAdminTalkEventTab::Init(CMgrData *pMgrData)
 
 void CDlgAdminTalkEventTab::OnAdminMsg(int nType, DWORD dwPara)
 {
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventTab::SetPage									 */
+/* 内容		:表示するページを設定											 */
+/* 日付		:2008/12/24														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventTab::SetPage(int nPage)
+{
+	m_nPage = nPage;
+	Renew ();
 }
 
 
@@ -112,6 +133,8 @@ BOOL CDlgAdminTalkEventTab::OnInitDialog()
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "イベント種別", 0, 100);
 
+	Renew ();
+
 	return TRUE;
 }
 
@@ -125,13 +148,99 @@ BOOL CDlgAdminTalkEventTab::OnInitDialog()
 void CDlgAdminTalkEventTab::OnBnClickedAdd()
 {
 	int nResult;
-
+	PCInfoTalkEventBase pInfo;
 	CDlgAdminTalkEventBase Dlg(this);
 
 	Dlg.Init (m_pMgrData);
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
 		return;
+	}
+	pInfo = NULL;
+	Dlg.Get (pInfo);
+	pInfo->m_nPage = m_nPage;
+	m_pInfo->AddTalkEvent (pInfo);
+
+	Renew ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventTab::OnBnClickedModify						 */
+/* 内容		:ボタンハンドラ(編集)											 */
+/* 日付		:2008/12/26														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventTab::OnBnClickedModify()
+{
+	int nSelect, nResult;
+	PCInfoTalkEventBase pInfo;
+	CDlgAdminTalkEventBase Dlg(this);
+
+	nSelect = m_List.GetNextItem (-1, LVNI_SELECTED);
+	if (nSelect < 0) {
+		return;
+	}
+	pInfo = (PCInfoTalkEventBase)m_List.GetItemData (nSelect);
+
+	Dlg.Init (m_pMgrData, pInfo);
+	nResult = Dlg.DoModal ();
+	if (nResult != IDOK) {
+		return;
+	}
+	pInfo = NULL;
+	Dlg.Get (pInfo);
+	m_pInfo->SetPtr (m_nPage, nSelect, pInfo);
+	m_List.SetItemData (nSelect, (DWORD)pInfo);
+
+	Renew ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventTab::OnBnClickedDel							 */
+/* 内容		:ボタンハンドラ(削除)											 */
+/* 日付		:2008/12/26														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventTab::OnBnClickedDel()
+{
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventTab::Renew									 */
+/* 内容		:更新															 */
+/* 日付		:2008/12/24														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventTab::Renew(void)
+{
+	int i, nCount;
+	PCInfoTalkEventBase pInfo;
+	ARRAYTALKEVENTBASEINFO apInfo;
+	CString strTmp;
+
+	m_List.DeleteAllItems ();
+	m_pInfo->GetEventArray (m_nPage, apInfo);
+
+	nCount = apInfo.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfo = apInfo[i];
+		strTmp = "未選択";
+		switch (pInfo->m_nEventType) {
+		case TALKEVENTTYPE_PAGE:		/* ページ切り替え */
+			strTmp = "ページ切り替え";
+			break;
+		case TALKEVENTTYPE_MSG:			/* メッセージ表示 */
+			strTmp = "メッセージ表示";
+			break;
+		case TALKEVENTTYPE_MENU:		/* 項目選択 */
+			strTmp = "項目選択";
+			break;
+		}
+		m_List.InsertItem (i, strTmp);
+		m_List.SetItemData (i, (DWORD)pInfo);
 	}
 }
 

@@ -26,12 +26,12 @@ static char THIS_FILE[] = __FILE__;
 
 void CDlgAdminTalkEventPAGE::DoDataExchange(CDataExchange* pDX)
 {
-	CDlgAdminBase::DoDataExchange(pDX);
+	CDlgAdminTalkEventNONE::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDlgAdminTalkEventPAGE)
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(CDlgAdminTalkEventPAGE, CDlgAdminBase)
+BEGIN_MESSAGE_MAP(CDlgAdminTalkEventPAGE, CDlgAdminTalkEventNONE)
 	//{{AFX_MSG_MAP(CDlgAdminTalkEventPAGE)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -44,10 +44,12 @@ END_MESSAGE_MAP()
 /* ========================================================================= */
 
 CDlgAdminTalkEventPAGE::CDlgAdminTalkEventPAGE(CWnd* pParent /*=NULL*/)
-	: CDlgAdminBase(CDlgAdminTalkEventPAGE::IDD, pParent)
+	: CDlgAdminTalkEventNONE(pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminTalkEventPAGE)
 	//}}AFX_DATA_INIT
+
+	m_nResourceID = CDlgAdminTalkEventPAGE::IDD;
 }
 
 
@@ -70,11 +72,7 @@ CDlgAdminTalkEventPAGE::~CDlgAdminTalkEventPAGE()
 
 void CDlgAdminTalkEventPAGE::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
-
-	/* ウィンドウ作成 */
-	Create (CDlgAdminTalkEventPAGE::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	CDlgAdminTalkEventNONE::Init (pMgrData);
 }
 
 
@@ -97,7 +95,7 @@ void CDlgAdminTalkEventPAGE::OnAdminMsg(int nType, DWORD dwPara)
 
 BOOL CDlgAdminTalkEventPAGE::OnInitDialog()
 {
-	CDlgAdminBase::OnInitDialog();
+	CDlgAdminTalkEventNONE::OnInitDialog();
 
 	return TRUE;
 }

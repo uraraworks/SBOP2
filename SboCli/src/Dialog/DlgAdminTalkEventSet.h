@@ -24,12 +24,14 @@ public:
 			CDlgAdminTalkEventSet(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventSet();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
+	void	Init		(CMgrData *pMgrData, CInfoTalkEvent *pInfo = NULL);	/* 初期化 */
 	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Get			(CInfoTalkEvent *&pDst);						/* 取得 */
 
 
 protected:
-	void	AddPage(void);			/* ページの追加 */
+	void	Renew	(void);			/* 更新 */
+	void	AddPage	(void);			/* ページの追加 */
 
 
 protected:
@@ -56,6 +58,8 @@ protected:
 public:
 	CTabCtrl m_Tab;
 	afx_msg void OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedAdd();
+	afx_msg void OnBnClickedDel();
 } CDlgAdminTalkEventSet, *PCDlgAdminTalkEventSet;
 
 //{{AFX_INSERT_LOCATION}}

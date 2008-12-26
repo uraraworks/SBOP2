@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include "InfoTalkEventBase.h"
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "LayoutHelper.h"
@@ -26,12 +27,13 @@ static char THIS_FILE[] = __FILE__;
 
 void CDlgAdminTalkEventMSG::DoDataExchange(CDataExchange* pDX)
 {
-	CDlgAdminBase::DoDataExchange(pDX);
+	CDlgAdminTalkEventNONE::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDlgAdminTalkEventMSG)
 	//}}AFX_DATA_MAP
+	DDX_Text(pDX, IDC_MSG, m_strMsg);
 }
 
-BEGIN_MESSAGE_MAP(CDlgAdminTalkEventMSG, CDlgAdminBase)
+BEGIN_MESSAGE_MAP(CDlgAdminTalkEventMSG, CDlgAdminTalkEventNONE)
 	//{{AFX_MSG_MAP(CDlgAdminTalkEventMSG)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -44,10 +46,13 @@ END_MESSAGE_MAP()
 /* ========================================================================= */
 
 CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG(CWnd* pParent /*=NULL*/)
-	: CDlgAdminBase(CDlgAdminTalkEventMSG::IDD, pParent)
+	: CDlgAdminTalkEventNONE(pParent)
+	, m_strMsg(_T(""))
 {
 	//{{AFX_DATA_INIT(CDlgAdminTalkEventMSG)
 	//}}AFX_DATA_INIT
+
+	m_nResourceID = CDlgAdminTalkEventMSG::IDD;
 }
 
 
@@ -70,11 +75,7 @@ CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG()
 
 void CDlgAdminTalkEventMSG::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
-
-	/* ウィンドウ作成 */
-	Create (CDlgAdminTalkEventMSG::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	CDlgAdminTalkEventNONE::Init (pMgrData);
 }
 
 
@@ -90,6 +91,34 @@ void CDlgAdminTalkEventMSG::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventMSG::Set										 */
+/* 内容		:設定から画面に反映												 */
+/* 日付		:2008/12/26														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventMSG::Set(CInfoTalkEventBase *pSrc)
+{
+	m_strMsg = pSrc->m_strText;
+
+	UpdateData (FALSE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventMSG::Get										 */
+/* 内容		:画面から設定に反映												 */
+/* 日付		:2008/12/26														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventMSG::Get(CInfoTalkEventBase *pDst)
+{
+	UpdateData ();
+
+	pDst->m_strText = m_strMsg;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CDlgAdminTalkEventMSG::OnInitDialog							 */
 /* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
 /* 日付		:2008/12/23														 */
@@ -97,7 +126,7 @@ void CDlgAdminTalkEventMSG::OnAdminMsg(int nType, DWORD dwPara)
 
 BOOL CDlgAdminTalkEventMSG::OnInitDialog()
 {
-	CDlgAdminBase::OnInitDialog();
+	CDlgAdminTalkEventNONE::OnInitDialog();
 
 	RegisterControl (IDC_MSG, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 

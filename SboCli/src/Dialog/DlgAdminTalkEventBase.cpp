@@ -12,7 +12,7 @@
 #include "Command.h"
 #include "LayoutHelper.h"
 #include "MgrData.h"
-#include "InfoTalkEventBase.h"
+#include "InfoTalkEvent.h"
 #include "DlgAdminTalkEventNONE.h"
 #include "DlgAdminTalkEventPAGE.h"
 #include "DlgAdminTalkEventMSG.h"
@@ -56,7 +56,8 @@ CDlgAdminTalkEventBase::CDlgAdminTalkEventBase(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDlgAdminTalkEventBase)
 	//}}AFX_DATA_INIT
 
-	m_pDlgType = NULL;
+	m_pDlgType	= NULL;
+	m_pInfo		= NULL;
 }
 
 
@@ -68,6 +69,7 @@ CDlgAdminTalkEventBase::CDlgAdminTalkEventBase(CWnd* pParent /*=NULL*/)
 
 CDlgAdminTalkEventBase::~CDlgAdminTalkEventBase()
 {
+	SAFE_DELETE (m_pInfo);
 }
 
 
@@ -77,9 +79,35 @@ CDlgAdminTalkEventBase::~CDlgAdminTalkEventBase()
 /* 日付		:2008/12/23														 */
 /* ========================================================================= */
 
-void CDlgAdminTalkEventBase::Init(CMgrData *pMgrData)
+void CDlgAdminTalkEventBase::Init(CMgrData *pMgrData, CInfoTalkEventBase *pInfo/*NULL*/)
 {
+	int nType;
+	CInfoTalkEvent InfoTalkEvent;
+
 	CDlgAdminBase::Init (pMgrData);
+
+	nType	= (pInfo) ? pInfo->m_nEventType : TALKEVENTTYPE_NONE;
+	m_pInfo	= InfoTalkEvent.GetNew (nType);
+	if (pInfo) {
+		m_pInfo->Copy (pInfo);
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventBase::Get									 */
+/* 内容		:取得															 */
+/* 日付		:2008/12/26														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventBase::Get(CInfoTalkEventBase *&pDst)
+{
+	CInfoTalkEvent InfoTalkEvent;
+
+	SAFE_DELETE (pDst);
+
+	pDst = InfoTalkEvent.GetNew (m_pInfo->m_nEventType);
+	pDst->Copy (m_pInfo);
 }
 
 
@@ -102,6 +130,8 @@ void CDlgAdminTalkEventBase::OnAdminMsg(int nType, DWORD dwPara)
 
 BOOL CDlgAdminTalkEventBase::OnInitDialog()
 {
+	int i, nCount, nNo;
+
 	CDlgAdminBase::OnInitDialog();
 
 	m_Type.InsertString (0, "未設定");
@@ -113,7 +143,15 @@ BOOL CDlgAdminTalkEventBase::OnInitDialog()
 	m_Type.InsertString (3, "項目選択");
 	m_Type.SetItemData (3, TALKEVENTTYPE_MENU);
 
-	m_Type.SetCurSel (0);
+	nNo = 0;
+	nCount = m_Type.GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		if (m_pInfo->m_nEventType == m_Type.GetItemData (i)) {
+			nNo = i;
+			break;
+		}
+	}
+	m_Type.SetCurSel (nNo);
 
 	OnCbnSelchangeType ();
 
@@ -131,11 +169,11 @@ void CDlgAdminTalkEventBase::OnCbnSelchangeType()
 {
 	int nNo, nType;
 	CRect rc;
-//	PCInfoMapEventBase pInfoTmp;
-//	CLibInfoMapEvent LibInfo;
+	PCInfoTalkEventBase pInfoTmp;
+	CInfoTalkEvent InfoTalkEvent;
 
-	nNo = m_Type.GetCurSel ();
-	nType = m_Type.GetItemData (nNo);
+	nNo		= m_Type.GetCurSel ();
+	nType	= m_Type.GetItemData (nNo);
 
 	if (m_pDlgType) {
 		m_pDlgType->DestroyWindow ();
@@ -155,25 +193,20 @@ void CDlgAdminTalkEventBase::OnCbnSelchangeType()
 		m_pDlgType = new CDlgAdminTalkEventNONE(this);
 		break;
 	}
-	if (m_pDlgType) {
-		m_pDlgType->Init (m_pMgrData);
-		GetDlgItem (IDC_FRAME)->GetWindowRect (rc);
-		ScreenToClient (rc);
-		m_pDlgType->MoveWindow (rc.left, rc.top, rc.Width (), rc.Height ());
-	}
-#if 0
-	if (m_nEventType != nEventType) {
-		pInfoTmp = (PCInfoMapEventBase)LibInfo.GetNew (nEventType);
-		if (m_pInfo) {
-			pInfoTmp->m_dwMapEventID	= m_pInfo->m_dwMapEventID;
-			pInfoTmp->m_ptPos			= m_pInfo->m_ptPos;
-		}
-		pInfoTmp->m_nType = nEventType;
-
+	/* 種別が変わった？ */
+	if (m_pInfo->m_nEventType != nType) {
+		pInfoTmp = InfoTalkEvent.GetNew (nType);
+		pInfoTmp->m_nEventType = nType;
 		SAFE_DELETE (m_pInfo);
 		m_pInfo = pInfoTmp;
 	}
-#endif
+
+	GetDlgItem (IDC_FRAME)->GetWindowRect (rc);
+	ScreenToClient (rc);
+
+	m_pDlgType->Init (m_pMgrData);
+	m_pDlgType->MoveWindow (rc.left, rc.top, rc.Width (), rc.Height ());
+	m_pDlgType->Set (m_pInfo);
 }
 
 
@@ -187,6 +220,24 @@ void CDlgAdminTalkEventBase::PostNcDestroy()
 {
 	/* モードレスダイアログ時はこの関数を消す */
 	CDialog::PostNcDestroy ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventBase::OnOK									 */
+/* 内容		:ボタンハンドラ(OK)												 */
+/* 日付		:2008/12/25														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventBase::OnOK()
+{
+	UpdateData ();
+
+	if (m_pDlgType) {
+		m_pDlgType->Get (m_pInfo);
+	}
+
+	CDlgAdminBase::OnOK ();
 }
 
 /* Copyright(C)URARA-works 2008 */
