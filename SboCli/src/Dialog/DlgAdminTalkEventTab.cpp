@@ -151,7 +151,7 @@ void CDlgAdminTalkEventTab::OnBnClickedAdd()
 	PCInfoTalkEventBase pInfo;
 	CDlgAdminTalkEventBase Dlg(this);
 
-	Dlg.Init (m_pMgrData);
+	Dlg.Init (m_pMgrData, m_pInfo->GetPageCount ());
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
 		return;
@@ -183,7 +183,7 @@ void CDlgAdminTalkEventTab::OnBnClickedModify()
 	}
 	pInfo = (PCInfoTalkEventBase)m_List.GetItemData (nSelect);
 
-	Dlg.Init (m_pMgrData, pInfo);
+	Dlg.Init (m_pMgrData, m_pInfo->GetPageCount (), pInfo);
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
 		return;

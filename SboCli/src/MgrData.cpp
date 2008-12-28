@@ -10,6 +10,7 @@
 #include <comdef.h>
 #include "InfoAccount.h"
 #include "InfoMapEventBase.h"
+#include "InfoTalkEvent.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoMapObject.h"
 #include "LibInfoMapParts.h"
@@ -81,6 +82,7 @@ CMgrData::CMgrData()
 	m_pMap					= NULL;
 
 	m_pInfoAccount			= NULL;
+	m_pInfoTalkEvent		= NULL;
 	m_pMgrSound				= NULL;
 	m_pMgrDraw				= NULL;
 	m_pMgrLayer				= NULL;
@@ -123,6 +125,7 @@ CMgrData::~CMgrData()
 	Destroy ();
 
 	SAFE_DELETE (m_pInfoAccount);
+	SAFE_DELETE (m_pInfoTalkEvent);
 	SAFE_DELETE (m_pMgrSound);
 	SAFE_DELETE (m_pMgrDraw);
 	SAFE_DELETE (m_pMgrLayer);
@@ -161,6 +164,7 @@ void CMgrData::Create(
 	m_pMgrGrpData	= pMgrGrpData;
 
 	m_pInfoAccount			= new CInfoAccount;
+	m_pInfoTalkEvent		= new CInfoTalkEvent;
 	m_pMgrSound				= new CMgrSound;
 	m_pMgrDraw				= new CMgrDraw;
 	m_pMgrLayer				= new CMgrLayer;
@@ -180,7 +184,6 @@ void CMgrData::Create(
 	m_pLibInfoEfcBalloon	= new CLibInfoEfcBalloon;
 	m_pLibInfoSystem		= new CLibInfoSystem;
 	m_pLibInfoSkill			= new CLibInfoSkill;
-
 	m_pLibInfoCharOnline	= new CLibInfoCharCli;
 
 	ReadIniData ();
@@ -774,6 +777,30 @@ void CMgrData::SetBGMVolume(int nBGMVolume)
 {
 	m_nBGMVolume = nBGMVolume;
 	SaveIniData ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrData::SetInfoTalkEvent										 */
+/* 内容		:会話イベント情報の設定											 */
+/* 日付		:2008/12/28														 */
+/* ========================================================================= */
+
+void CMgrData::SetInfoTalkEvent(CInfoTalkEvent *pSrc)
+{
+	m_pInfoTalkEvent->Copy (pSrc);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrData::GetInfoTalkEvent										 */
+/* 内容		:会話イベント情報の取得											 */
+/* 日付		:2008/12/28														 */
+/* ========================================================================= */
+
+CInfoTalkEvent *CMgrData::GetInfoTalkEvent(void)
+{
+	return m_pInfoTalkEvent;
 }
 
 

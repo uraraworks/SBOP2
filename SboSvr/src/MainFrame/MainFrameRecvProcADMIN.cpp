@@ -23,6 +23,7 @@
 #include "LibInfoEfcBalloon.h"
 #include "LibInfoMapEvent.h"
 #include "LibInfoSystem.h"
+#include "LibInfoTalkEvent.h"
 #include "InfoAccount.h"
 #include "InfoCharSvr.h"
 #include "LibInfoCharSvr.h"
@@ -93,6 +94,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_ADMIN_REQ_PLAYSOUND:			RecvProcADMIN_REQ_PLAYSOUND			(pData, dwSessionID);	break;	/* 効果音の再生要求 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ACCOUNT:		RecvProcADMIN_CHAR_REQ_ACCOUNT		(pData, dwSessionID);	break;	/* アカウント情報要求 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEW_ACCOUNT:		RecvProcADMIN_CHAR_RENEW_ACCOUNT	(pData, dwSessionID);	break;	/* アカウント情報更新 */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEW_TALKEVENT:	RecvProcADMIN_CHAR_RENEW_TALKEVENT	(pData, dwSessionID);	break;	/* 会話イベント情報更新 */
 	case SBOCOMMANDID_SUB_ADMIN_RENEW_CLIENTVERSION:	RecvProcADMIN_RENEW_CLIENTVERSION	(pData, dwSessionID);	break;	/* クライアントバージョン更新 */
 	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_REQ_INFO:		RecvProcADMIN_SYSTEM_REQ_INFO		(pData, dwSessionID);	break;	/* システム情報要求 */
 	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO:		RecvProcADMIN_SYSTEM_RENEWINFO		(pData, dwSessionID);	break;	/* システム情報の更新 */
@@ -1353,6 +1355,34 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 			(LPCSTR)pInfoAccount->m_strPassword);
 	PacketMsg.Make (strTmp, RGB (255, 255, 255));
 	m_pSock->SendTo (dwSessionID, &PacketMsg);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_CHAR_RENEW_TALKEVENT					 */
+/* 内容		:受信処理(会話イベント情報更新)									 */
+/* 日付		:2008/12/27														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_CHAR_RENEW_TALKEVENT(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoTalkEvent pInfo;
+	CPacketADMIN_CHAR_RENEW_TALKEVENT Packet;
+
+	Packet.Set (pData);
+
+	if (Packet.m_pInfo->GetPageCount () <= 0) {
+		return;
+	}
+
+	pInfo = (PCInfoTalkEvent)m_pLibInfoTalkEvent->GetPtr (Packet.m_pInfo->m_dwTalkEventID);
+	if (pInfo) {
+		m_pLibInfoTalkEvent->Renew (Packet.m_pInfo);
+	} else {
+		pInfo = (PCInfoTalkEvent)m_pLibInfoTalkEvent->GetNew ();
+		pInfo->Copy (Packet.m_pInfo);
+		m_pLibInfoTalkEvent->Add (pInfo);
+	}
 }
 
 

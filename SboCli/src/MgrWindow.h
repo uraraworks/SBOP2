@@ -14,6 +14,7 @@ class CImg32;
 class CMgrData;
 class CMgrGrpData;
 class CMgrKeyInput;
+class CInfoTalkEvent;
 
 /* ========================================================================= */
 /* 定数の定義																 */
@@ -115,7 +116,8 @@ public:
 	void MakeWindowOPTION_ACTIONSET_SLEEPTIMER	(void);			/* オプション-動作設定-おひるねタイマーの設定 */
 	void MakeWindowCOMMANDMENU		(void);						/* コマンドメニュー */
 	void MakeWindowCHAR_STATUS		(void);						/* キャラ-ステータス */
-	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg);	/* テキストメッセージ */
+	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg);			/* テキストメッセージ */
+	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo);	/* テキストメッセージ */
 	void MakeWindowSWOON			(void);						/* 気絶メニュー */
 
 

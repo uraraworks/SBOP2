@@ -12,6 +12,7 @@
 
 class CImg32;
 class CMgrData;
+class CInfoTalkEvent;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -30,6 +31,7 @@ public:
 	void	SetTitle	(LPCSTR pszTitle);					/* 肩書きを設定 */
 	void	SetName		(LPCSTR pszName);					/* 名前を設定 */
 	void	SetMsg		(LPCSTR pszMsg);					/* メッセージ設定 */
+	void	SetTalkEvent(CInfoTalkEvent *pInfo);			/* 会話イベント設定 */
 
 
 protected:
@@ -55,6 +57,8 @@ protected:
 				m_nType,					/* ウィンドウ種別 */
 				m_nProcPos,					/* 処理中の文字位置 */
 				m_nProcPosTmp,				/* 処理中の文字位置 */
+				m_nProcEventPage,			/* 処理中イベントページ */
+				m_nProcEventNo,				/* 処理中イベント番号 */
 				m_nSpaceHeight;				/* ウィンドウ上の余白の高さ */
 	DWORD		m_dwLastProc;				/* 前回の処理時間 */
 	CmyString	m_strTitle,					/* 肩書き */
@@ -64,6 +68,7 @@ protected:
 	CmyStringArray	m_astrMenu;				/* メニュー項目 */
 	CImg32		*m_pDibTitle,				/* 肩書きと名前部分 */
 				*m_pDibText;				/* 文字描画テンポラリ */
+	CInfoTalkEvent	*m_pInfoTalkEvent;		/* 処理中の会話イベント */
 } CWindowTEXTMSG, *PCWindowTEXTMSG;
 
 /* Copyright(C)URARA-works 2008 */

@@ -77,6 +77,7 @@ enum {
 	MAINFRAMEMSG_RENEWSYSTEMINFO,						/* システム情報更新 */
 	MAINFRAMEMSG_RENEWVIEWSET,							/* 表示設定更新 */
 	MAINFRAMEMSG_RENEWSKILLINFO,						/* スキル情報更新 */
+	MAINFRAMEMSG_RENEWTALKEVENT,						/* 会話イベント情報更新 */
 	MAINFRAMEMSG_DAMAGE,								/* ダメージを受けた */
 };
 
@@ -90,6 +91,7 @@ enum {
 	ADMINMSG_RENEWMAPOBJECT,							/* マップオブジェクト情報更新 */
 	ADMINMSG_RENEWMAPPARTS,								/* マップパーツ情報更新 */
 	ADMINMSG_RENEWMAPSHADOW,							/* マップ影情報更新 */
+	ADMINMSG_RENEWTALKEVENT,							/* 会話イベント情報更新 */
 	ADMINMSG_ADMINLEVEL,								/* 管理者レベル通知 */
 	ADMINMSG_SELECT_ANIME,								/* アニメーションコマ選択 */
 	ADMINMSG_ACCOUNTINFO,								/* アカウント情報取得 */

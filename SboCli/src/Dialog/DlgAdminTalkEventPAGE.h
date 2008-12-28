@@ -20,7 +20,6 @@ public:
 			CDlgAdminTalkEventPAGE(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventPAGE();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
 	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
 
 

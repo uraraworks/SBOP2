@@ -20,10 +20,8 @@ public:
 			CDlgAdminTalkEventMSG(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventMSG();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	Set			(CInfoTalkEventBase *pSrc);						/* 設定から画面に反映 */
-	void	Get			(CInfoTalkEventBase *pDst);						/* 画面から設定に反映 */
+	void	Set	(CInfoTalkEventBase *pSrc);								/* 設定から画面に反映 */
+	void	Get	(CInfoTalkEventBase *pDst);								/* 画面から設定に反映 */
 
 
 protected:

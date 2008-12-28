@@ -901,6 +901,10 @@
 							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp"
 							>
 						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp"
+							>
+						</File>
 					</Filter>
 				</Filter>
 				<Filter
@@ -3238,6 +3242,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventMENUSet.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminTalkEventMSG.cpp"
 					>
 				</File>
@@ -3784,6 +3792,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.h"
 							>
 						</File>
 					</Filter>
@@ -4430,6 +4442,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminTalkEventMENU.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventMENUSet.h"
 					>
 				</File>
 				<File

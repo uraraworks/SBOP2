@@ -61,6 +61,7 @@ CMainFrame::CMainFrame()
 	m_pLibInfoEfcBalloon	= NULL;
 	m_pLibInfoSystem		= NULL;
 	m_pLibInfoSkill			= NULL;
+	m_pLibInfoTalkEvent		= NULL;
 	m_pLog					= NULL;
 
 	m_pSock				= new CUraraSockTCPSBO;
@@ -407,6 +408,7 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	m_pLibInfoEfcBalloon	= m_pMgrData->GetLibInfoEfcBalloon ();
 	m_pLibInfoSystem		= m_pMgrData->GetLibInfoSystem ();
 	m_pLibInfoSkill			= m_pMgrData->GetLibInfoSkill ();
+	m_pLibInfoTalkEvent		= m_pMgrData->GetLibInfoTalkEvent ();
 
 	UpdateServerInfo (FALSE);
 	m_pUpdateServerInfo->Create (

@@ -939,6 +939,28 @@ void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMs
 
 
 /* ========================================================================= */
+/* 関数名	:CMgrWindow::MakeWindowTEXTMSG									 */
+/* 内容		:テキストメッセージ												 */
+/* 日付		:2008/12/28														 */
+/* ========================================================================= */
+
+void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo)
+{
+	PCWindowTEXTMSG pWindowNew;
+
+	pWindowNew = new CWindowTEXTMSG;
+	pWindowNew->Create (m_pMgrData);
+	pWindowNew->SetTitle (pszTitle);
+	pWindowNew->SetName (pszName);
+	pWindowNew->SetTalkEvent (pInfo);
+	m_paWindow->Add (pWindowNew);
+	SetActive ();
+
+	m_bDraw = TRUE;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CMgrWindow::MakeWindowSWOON									 */
 /* 内容		:気絶メニュー													 */
 /* 日付		:2008/12/02														 */

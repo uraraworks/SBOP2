@@ -84,6 +84,7 @@ protected:
 	BOOL	OnWindowMsgCOMMANDMENU		(DWORD dwPara);									/* コマンドメニュー */
 	BOOL	OnWindowMsgSWOON			(DWORD dwPara);									/* 気絶メニュー */
 	void	OnMainFrameRENEWITEMINFO	(DWORD dwItemID);								/* メッセージハンドラ(WM_MAINFRAME)[アイテム情報更新] */
+	void	OnMainFrameRENEWTALKEVENT	(DWORD dwParam);								/* メッセージハンドラ(WM_MAINFRAME)[会話イベント情報更新] */
 	BOOL	OnXChar						(DWORD dwCharID);								/* キャラにXキーを押した時の処理 */
 	void	AddSystemMsg				(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);		/* システムメッセージを追加 */
 	void	DefenseOff					(void);											/* 防御解除 */

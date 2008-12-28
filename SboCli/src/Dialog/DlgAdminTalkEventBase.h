@@ -24,7 +24,7 @@ public:
 			CDlgAdminTalkEventBase(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventBase();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData, CInfoTalkEventBase *pInfo = NULL);	/* 初期化 */
+	void	Init		(CMgrData *pMgrData, int nPage, CInfoTalkEventBase *pInfo = NULL);	/* 初期化 */
 	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
 	void	Get			(CInfoTalkEventBase *&pDst);					/* 取得 */
 
@@ -33,6 +33,7 @@ protected:
 
 
 protected:
+	int						m_nPageCount;	/* ページ数 */
 	CDlgAdminTalkEventNONE	*m_pDlgType;	/* 編集中のイベント種別ダイアログ */
 	CInfoTalkEventBase		*m_pInfo;		/* 編集中のイベント情報 */
 

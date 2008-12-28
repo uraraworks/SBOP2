@@ -10,6 +10,7 @@
 #include "resource.h"
 #include "MgrData.h"
 #include "LayoutHelper.h"
+#include "InfoTalkEvent.h"
 #include "DlgAdminTalkEventSet.h"
 #include "DlgAdminTalkSet.h"
 
@@ -50,6 +51,9 @@ CDlgAdminTalkSet::CDlgAdminTalkSet(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDlgAdminTalkSet)
 	m_strTalk = _T("");
 	//}}AFX_DATA_INIT
+
+	m_pInfo = NULL;
+	m_pInfo = new CInfoTalkEvent;
 }
 
 
@@ -61,6 +65,7 @@ CDlgAdminTalkSet::CDlgAdminTalkSet(CWnd* pParent /*=NULL*/)
 
 CDlgAdminTalkSet::~CDlgAdminTalkSet()
 {
+	SAFE_DELETE (m_pInfo);
 }
 
 
@@ -118,10 +123,15 @@ void CDlgAdminTalkSet::OnOK()
 
 void CDlgAdminTalkSet::OnBnClickedTalkevent()
 {
+	int nResult;
 	CDlgAdminTalkEventSet Dlg(this);
 
-	Dlg.Init (m_pMgrData);
-	Dlg.DoModal ();
+	Dlg.Init (m_pMgrData, m_pInfo);
+	nResult = Dlg.DoModal ();
+	if (nResult != IDOK) {
+		return;
+	}
+	Dlg.Get (m_pInfo);
 }
 
 /* Copyright(C)URARA-works 2008 */

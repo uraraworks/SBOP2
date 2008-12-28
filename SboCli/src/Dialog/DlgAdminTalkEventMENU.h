@@ -9,6 +9,7 @@
 #pragma once
 
 #include "DlgAdminTalkEventNONE.h"
+#include "afxcmn.h"
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -20,8 +21,8 @@ public:
 			CDlgAdminTalkEventMENU(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventMENU();							/* デストラクタ */
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Set	(CInfoTalkEventBase *pSrc);								/* 設定から画面に反映 */
+	void	Get	(CInfoTalkEventBase *pDst);								/* 画面から設定に反映 */
 
 
 protected:
@@ -46,6 +47,10 @@ protected:
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedAdd();
+	afx_msg void OnBnClickedModify();
+	CListCtrl m_List;
 } CDlgAdminTalkEventMENU, *PCDlgAdminTalkEventMENU;
 
 //{{AFX_INSERT_LOCATION}}

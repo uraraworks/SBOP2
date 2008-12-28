@@ -28,6 +28,7 @@ class CLibInfoMotionType;
 class CLibInfoEfcBalloon;
 class CLibInfoSystem;
 class CLibInfoSkill;
+class CLibInfoTalkEvent;
 class CInfoCharBase;
 
 /* ========================================================================= */
@@ -106,6 +107,7 @@ private:
 	void	RecvProcCHAR_REQ_CHECKMAPEVENT		(PBYTE pData, DWORD dwSessionID);					/* マップイベントチェック要求 */
 	void	RecvProcCHAR_STATE_CHARGE			(PBYTE pData, DWORD dwSessionID);					/* 溜め状態通知 */
 	void	RecvProcCHAR_REQ_RECOVERY			(PBYTE pData, DWORD dwSessionID);					/* 気絶後復活要求 */
+	void	RecvProcCHAR_REQ_TALKEVENT			(PBYTE pData, DWORD dwSessionID);					/* 会話イベント情報要求 */
 
 	/* 受信処理(MainFrameRecvProcMAP.cpp) */
 	void	RecvProcMAP							(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* マップ系 */
@@ -162,6 +164,7 @@ private:
 	void	RecvProcADMIN_REQ_PLAYSOUND			(PBYTE pData, DWORD dwSessionID);					/* 効果音の再生要求 */
 	void	RecvProcADMIN_CHAR_REQ_ACCOUNT		(PBYTE pData, DWORD dwSessionID);					/* アカウント情報要求 */
 	void	RecvProcADMIN_CHAR_RENEW_ACCOUNT	(PBYTE pData, DWORD dwSessionID);					/* アカウント情報更新 */
+	void	RecvProcADMIN_CHAR_RENEW_TALKEVENT	(PBYTE pData, DWORD dwSessionID);					/* 会話イベント情報更新 */
 	void	RecvProcADMIN_RENEW_CLIENTVERSION	(PBYTE pData, DWORD dwSessionID);					/* クライアントバージョン更新 */
 	void	RecvProcADMIN_SYSTEM_REQ_INFO		(PBYTE pData, DWORD dwSessionID);					/* システム情報要求 */
 	void	RecvProcADMIN_SYSTEM_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* システム情報の更新 */
@@ -220,6 +223,7 @@ private:
 	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;			/* 噴出し情報ライブラリ */
 	CLibInfoSystem		*m_pLibInfoSystem;				/* システム情報ライブラリ */
 	CLibInfoSkill		*m_pLibInfoSkill;				/* スキル情報ライブラリ */
+	CLibInfoTalkEvent	*m_pLibInfoTalkEvent;			/* 会話イベント情報ライブラリ */
 };
 
 /* Copyright(C)URARA-works 2006 */

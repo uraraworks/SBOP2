@@ -11,6 +11,7 @@
 #include "DlgAdminBase.h"
 
 class CInfoCharCli;
+class CInfoTalkEvent;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -35,6 +36,7 @@ protected:
 protected:
 	DWORD			m_dwCharID;					/* 最後に選択したキャラID */
 	CInfoCharCli	*m_pInfoChar;				/* 編集中のキャラ情報 */
+	CInfoTalkEvent	*m_pInfoTalkEvent;			/* 編集中の会話イベント */
 
 
 

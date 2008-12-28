@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "Img32.h"
+#include "InfoTalkEvent.h"
 #include "MgrWindow.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
@@ -18,6 +19,7 @@
 enum {
 	STATE_TEXT = 0,			/* メッセージ表示 */
 	STATE_MENU,				/* 項目選択 */
+	STATE_EVENTPROC,		/* 会話イベント処理 */
 };
 
 /* ========================================================================= */
@@ -36,15 +38,19 @@ CWindowTEXTMSG::CWindowTEXTMSG()
 	m_sizeWindow.cy	= 16 * 2 + 16 * 5 + m_nSpaceHeight;
 	m_ptViewPos.y	= SCRSIZEY - 16 - m_sizeWindow.cy;
 
-	m_bInputWait	= FALSE;
-	m_nState		= STATE_TEXT;
-	m_nType			= 0;
-	m_nProcPos		= 0;
-	m_nProcPosTmp	= 0;
-	m_dwLastProc	= 0;
-	m_pDibTitle		= NULL;
-	m_pDibText		= NULL;
+	m_bInputWait		= FALSE;
+	m_nState			= STATE_TEXT;
+	m_nType				= 0;
+	m_nProcPos			= 0;
+	m_nProcPosTmp		= 0;
+	m_nProcEventPage	= 0;
+	m_nProcEventNo		= 0;
+	m_dwLastProc		= 0;
+	m_pDibTitle			= NULL;
+	m_pDibText			= NULL;
 	m_ptDraw.x = m_ptDraw.y = 0;
+
+	m_pInfoTalkEvent = NULL;
 }
 
 
@@ -58,6 +64,7 @@ CWindowTEXTMSG::~CWindowTEXTMSG()
 {
 	SAFE_DELETE (m_pDibTitle);
 	SAFE_DELETE (m_pDibText);
+	SAFE_DELETE (m_pInfoTalkEvent);
 }
 
 
@@ -244,6 +251,26 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 		break;
 	case STATE_MENU:		/* 項目選択 */
 		break;
+	case STATE_EVENTPROC:	/* 会話イベント処理 */
+		{
+			PCInfoTalkEventBase pInfoTalkEvent;
+
+			pInfoTalkEvent = m_pInfoTalkEvent->GetPtr (m_nProcEventPage, m_nProcEventNo);
+			if (pInfoTalkEvent == NULL) {
+				break;
+			}
+			switch (pInfoTalkEvent->m_nEventType) {
+			case TALKEVENTTYPE_PAGE:			/* ページ切り替え */
+				break;
+			case TALKEVENTTYPE_MSG:				/* メッセージ表示 */
+				SetMsg ((LPCSTR)pInfoTalkEvent->m_strText);
+				m_nState = STATE_TEXT;
+				break;
+			case TALKEVENTTYPE_MENU:			/* 項目選択 */
+				break;
+			}
+		}
+		break;
 	}
 
 	Redraw ();
@@ -296,6 +323,24 @@ void CWindowTEXTMSG::SetMsg(LPCSTR pszMsg)
 	m_strMsg		= pszMsg;
 
 	m_pDibText->FillRect (0, 0, m_pDibText->Width (), m_pDibText->Height (), RGB (0, 0, 0));
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowTEXTMSG::SetTalkEvent									 */
+/* 内容		:会話イベント設定												 */
+/* 日付		:2008/12/28														 */
+/* ========================================================================= */
+
+void CWindowTEXTMSG::SetTalkEvent(CInfoTalkEvent *pInfo)
+{
+	SAFE_DELETE (m_pInfoTalkEvent);
+	m_pInfoTalkEvent = new CInfoTalkEvent;
+	m_pInfoTalkEvent->Copy (pInfo);
+
+	m_nProcEventPage	= 0;
+	m_nProcEventNo		= 0;
+	m_nState			= STATE_EVENTPROC;
 }
 
 

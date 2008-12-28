@@ -57,35 +57,12 @@ CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG				 */
+/* 関数名	:CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG					 */
 /* 内容		:デストラクタ													 */
 /* 日付		:2008/12/23														 */
 /* ========================================================================= */
 
 CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG()
-{
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
-void CDlgAdminTalkEventMSG::Init(CMgrData *pMgrData)
-{
-	CDlgAdminTalkEventNONE::Init (pMgrData);
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::OnAdminMsg								 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
-void CDlgAdminTalkEventMSG::OnAdminMsg(int nType, DWORD dwPara)
 {
 }
 

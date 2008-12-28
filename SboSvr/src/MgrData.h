@@ -26,6 +26,7 @@ class CLibInfoMotionType;
 class CLibInfoEfcBalloon;
 class CLibInfoSystem;
 class CLibInfoSkill;
+class CLibInfoTalkEvent;
 class CInfoFileList;
 
 /* ========================================================================= */
@@ -77,6 +78,7 @@ public:
 	CLibInfoEfcBalloon	*GetLibInfoEfcBalloon	(void)	{ return m_pLibInfoEfcBalloon;	}	/* 噴出し情報ライブラリを取得 */
 	CLibInfoSystem		*GetLibInfoSystem		(void)	{ return m_pLibInfoSystem;		}	/* システム情報ライブラリを取得 */
 	CLibInfoSkill		*GetLibInfoSkill		(void)	{ return m_pLibInfoSkill;		}	/* スキル情報ライブラリを取得 */
+	CLibInfoTalkEvent	*GetLibInfoTalkEvent	(void)	{ return m_pLibInfoTalkEvent;	}	/* 会話イベント情報ライブラリを取得 */
 	CInfoFileList		*GetInfoFileList		(void)	{ return m_pInfoFileList;		}	/* ファイルリスト情報を取得 */
 
 
@@ -114,6 +116,7 @@ private:
 	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;	/* 噴出し情報ライブラリ */
 	CLibInfoSystem		*m_pLibInfoSystem;		/* システム情報ライブラリ */
 	CLibInfoSkill		*m_pLibInfoSkill;		/* スキル情報ライブラリ */
+	CLibInfoTalkEvent	*m_pLibInfoTalkEvent;	/* 会話イベント情報ライブラリ */
 	CInfoFileList		*m_pInfoFileList;		/* ファイルリスト情報 */
 } CMgrData, *PCMgrData;
 

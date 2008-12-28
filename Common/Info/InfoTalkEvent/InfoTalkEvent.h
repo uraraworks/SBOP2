@@ -38,6 +38,7 @@ public:
 	virtual void	Copy				(CInfoTalkEvent *pSrc);				/* コピー */
 
 	PCInfoTalkEventBase	GetNew			(int nType);									/* 新しい会話イベントを取得 */
+	PCInfoTalkEventBase	GetPtr			(int nPage, int nNo);							/* 会話イベントを取得 */
 	void	SetPtr						(int nPage, int nNo, CInfoTalkEventBase *pInfo);/* 会話イベントを差し替え */
 	void	GetEventArray				(int nPage, ARRAYTALKEVENTBASEINFO &aDst);		/* 指定ページ番号のイベント一覧を取得 */
 	int		GetPageCount				(void);								/* 会話イベントページ数を取得 */

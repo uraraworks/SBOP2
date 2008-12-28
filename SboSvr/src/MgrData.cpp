@@ -21,6 +21,7 @@
 #include "LibInfoEfcBalloon.h"
 #include "LibInfoSystem.h"
 #include "LibInfoSkill.h"
+#include "LibInfoTalkEvent.h"
 #include "InfoFileList.h"
 #include "TextOutput.h"
 #include "TextInput.h"
@@ -60,6 +61,7 @@ CMgrData::CMgrData()
 	m_pLibInfoEfcBalloon	= new CLibInfoEfcBalloon;
 	m_pLibInfoSystem		= new CLibInfoSystem;
 	m_pLibInfoSkill			= new CLibInfoSkill;
+	m_pLibInfoTalkEvent		= new CLibInfoTalkEvent;
 	m_pInfoFileList			= new CInfoFileList;
 }
 
@@ -88,6 +90,7 @@ CMgrData::~CMgrData()
 	SAFE_DELETE (m_pLibInfoEfcBalloon);
 	SAFE_DELETE (m_pLibInfoSystem);
 	SAFE_DELETE (m_pLibInfoSkill);
+	SAFE_DELETE (m_pLibInfoTalkEvent);
 	SAFE_DELETE (m_pInfoFileList);
 }
 
@@ -126,6 +129,7 @@ void CMgrData::Create(
 	m_pLibInfoEfcBalloon->	Create ();
 	m_pLibInfoSystem->		Create ();
 	m_pLibInfoSkill->		Create ();
+	m_pLibInfoTalkEvent->	Create ();
 
 	m_pLibInfoItem->SetTypeInfo (m_pLibInfoItemType);
 	m_pLibInfoItem->SetWeaponInfo (m_pLibInfoItemWeapon);
@@ -163,6 +167,7 @@ void CMgrData::Destroy(void)
 	m_pLibInfoEfcBalloon->	Destroy ();
 	m_pLibInfoSystem->		Destroy ();
 	m_pLibInfoSkill->		Destroy ();
+	m_pLibInfoTalkEvent->	Destroy ();
 }
 
 
@@ -189,6 +194,7 @@ void CMgrData::Save(void)
 	CSaveLoadInfoEfcBalloon SaveLoadInfoEfcBalloon;
 	CSaveLoadInfoSystem SaveLoadInfoSystem;
 	CSaveLoadInfoSkill SaveLoadInfoSkill;
+	CSaveLoadInfoTalkEvent SaveLoadInfoTalkEvent;
 
 	SaveLoadInfoAccount.	Save ((PCLibInfoBase)m_pLibInfoAccount);
 	SaveLoadInfoChar.		Save ((PCLibInfoBase)m_pLibInfoChar);
@@ -205,6 +211,7 @@ void CMgrData::Save(void)
 	SaveLoadInfoEfcBalloon.	Save ((PCLibInfoBase)m_pLibInfoEfcBalloon);
 	SaveLoadInfoSystem.		Save ((PCLibInfoBase)m_pLibInfoSystem);
 	SaveLoadInfoSkill.		Save ((PCLibInfoBase)m_pLibInfoSkill);
+	SaveLoadInfoTalkEvent.	Save ((PCLibInfoBase)m_pLibInfoTalkEvent);
 }
 
 
@@ -231,6 +238,7 @@ void CMgrData::Load(void)
 	CSaveLoadInfoEfcBalloon SaveLoadInfoEfcBalloon;
 	CSaveLoadInfoSystem SaveLoadInfoSystem;
 	CSaveLoadInfoSkill SaveLoadInfoSkill;
+	CSaveLoadInfoTalkEvent SaveLoadInfoTalkEvent;
 
 	m_pLibInfoAccount->		DeleteAll ();
 	m_pLibInfoChar->		DeleteAll ();
@@ -245,6 +253,7 @@ void CMgrData::Load(void)
 	m_pLibInfoMotionType->	DeleteAll ();
 	m_pLibInfoEfcBalloon->	DeleteAll ();
 	m_pLibInfoSkill->		DeleteAll ();
+	m_pLibInfoTalkEvent->		DeleteAll ();
 
 	SaveLoadInfoAccount.	Load ((PCLibInfoBase)m_pLibInfoAccount);
 	SaveLoadInfoChar.		Load ((PCLibInfoBase)m_pLibInfoChar);
@@ -261,7 +270,7 @@ void CMgrData::Load(void)
 	SaveLoadInfoEfcBalloon.	Load ((PCLibInfoBase)m_pLibInfoEfcBalloon);
 	SaveLoadInfoSystem.		Load ((PCLibInfoBase)m_pLibInfoSystem);
 	SaveLoadInfoSkill.		Load ((PCLibInfoBase)m_pLibInfoSkill);
-
+	SaveLoadInfoTalkEvent.	Load ((PCLibInfoBase)m_pLibInfoTalkEvent);
 	if (m_pLibInfoMap->GetCount () <= 0) {
 		PCInfoMapBase pMapTmp;
 

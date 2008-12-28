@@ -11,6 +11,7 @@
 #include "LibInfoItem.h"
 #include "ParamUtil.h"
 #include "InfoMapBase.h"
+#include "InfoTalkEvent.h"
 #include "PacketMAP_REQ_MAPINFO.h"
 #include "PacketCHAR_MOVEPOS.h"
 #include "PacketCHAR_STATE.h"
@@ -709,6 +710,10 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 	case MAINFRAMEMSG_RENEWITEMINFO:	/* アイテム情報更新 */
 		OnMainFrameRENEWITEMINFO (dwParam);
+		break;
+
+	case MAINFRAMEMSG_RENEWTALKEVENT:	/* 会話イベント情報更新 */
+		OnMainFrameRENEWTALKEVENT (dwParam);
 		break;
 
 	case MAINFRAMEMSG_DAMAGE:			/* ダメージを受けた */
@@ -2925,6 +2930,35 @@ void CStateProcMAP::OnMainFrameRENEWITEMINFO(DWORD dwItemID)
 
 
 /* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnMainFrameRENEWTALKEVENT						 */
+/* 内容		:メッセージハンドラ(WM_MAINFRAME)[会話イベント情報更新]			 */
+/* 日付		:2008/12/28														 */
+/* ========================================================================= */
+
+void CStateProcMAP::OnMainFrameRENEWTALKEVENT(DWORD dwParam)
+{
+	LPCSTR pszName;
+	PCInfoTalkEvent pInfo;
+	PCInfoCharBase pInfoChar;
+
+	if (dwParam != 0) {
+		return;
+	}
+	pInfo = m_pMgrData->GetInfoTalkEvent ();
+	if (pInfo->GetPageCount () <= 0) {
+		return;
+	}
+	pszName	  = NULL;
+	pInfoChar = (PCInfoCharBase)m_pLibInfoChar->GetPtr (pInfo->m_dwTalkEventID);
+	if (pInfoChar) {
+		pszName = (LPCSTR)pInfoChar->m_strCharName;
+	}
+
+	m_pMgrWindow->MakeWindowTEXTMSG (NULL, pszName, pInfo);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CStateProcMAP::OnXChar											 */
 /* 内容		:キャラにXキーを押した時の処理									 */
 /* 戻り値	:TRUE:処理した													 */
@@ -2933,10 +2967,12 @@ void CStateProcMAP::OnMainFrameRENEWITEMINFO(DWORD dwItemID)
 
 BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 {
+	int nLen;
 	BOOL bRet, bResult;
 	PCInfoCharBase pInfoChar;
 	CPacketCHAR_REQ_MODIFY_PARAM Packet;
 	CPacketCHAR_REQ_PUSH PacketREQ_PUSH;
+	CmyString strTmp;
 
 	bRet = FALSE;
 
@@ -2967,8 +3003,20 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 		m_pSock->Send (&PacketREQ_PUSH);
 		break;
 	default:
-		if (pInfoChar->m_strTalk.GetLength () > 0) {
-			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar->m_strTalk);
+		TrimViewString (strTmp, (LPCSTR)pInfoChar->m_strTalk);
+		nLen = strTmp.GetLength ();
+		if (nLen == 1) {
+			if (strcmp ((LPCSTR)strTmp, "@") == 0) {
+				CPacketCHAR_PARA1 Packet;
+
+				Packet.Make (SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT, dwCharID, 0);
+				m_pSock->Send (&Packet);
+				m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+				break;
+			}
+		}
+		if (nLen > 0) {
+			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
 			break;
 		}
 		goto Exit;

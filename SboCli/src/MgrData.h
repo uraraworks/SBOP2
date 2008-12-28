@@ -21,6 +21,7 @@ class CMgrKeyInput;
 class CInfoCharCli;
 class CInfoMapBase;
 class CInfoAccount;
+class CInfoTalkEvent;
 class CLibInfoCharCli;
 class CLibInfoMapBase;
 class CLibInfoMapObject;
@@ -149,6 +150,8 @@ public:
 	void			SetWndMap			(SIZE sizeWndMap)			{ m_sizeWndMap = sizeWndMap; }						/* マップウィンドウサイズを設定 */
 	int				GetLastSelectGrpNo	(void)						{ return m_nLastSelectGrpNo;	}					/* 最後に選んだ画像番号を取得 */
 	void			SetLastSelectGrpNo	(int nLastSelectGrpNo)		{ m_nLastSelectGrpNo = nLastSelectGrpNo; }			/* 最後に選んだ画像番号を設定 */
+	void			SetInfoTalkEvent	(CInfoTalkEvent *pSrc);						/* 会話イベント情報の設定 */
+	CInfoTalkEvent	*GetInfoTalkEvent	(void);										/* 会話イベント情報の取得 */
 
 	CMainFrame		*GetMainFrame		(void)	{ return m_pMainFrame;		}		/* メインフレームを取得 */
 	CMgrSound		*GetMgrSound		(void)	{ return m_pMgrSound;		}		/* サウンド管理を取得 */
@@ -222,6 +225,7 @@ private:
 	CInfoCharCli		*m_pPlayerChar;				/* 操作中のキャラ情報 */
 	CInfoMapBase		*m_pMap;					/* 表示中のマップ情報 */
 	CInfoAccount		*m_pInfoAccount;			/* 使用中のアカウント情報 */
+	CInfoTalkEvent		*m_pInfoTalkEvent;			/* 会話イベント情報 */
 
 	CMainFrame			*m_pMainFrame;				/* メインフレーム */
 	CUraraSockTCPSBO	*m_pSock;					/* 通信マネージャ */
@@ -246,7 +250,6 @@ private:
 	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;		/* 噴出し情報ライブラリ */
 	CLibInfoSystem		*m_pLibInfoSystem;			/* システム情報ライブラリ */
 	CLibInfoSkill		*m_pLibInfoSkill;			/* スキル情報ライブラリ */
-
 	CLibInfoCharCli		*m_pLibInfoCharOnline;		/* ログイン中キャラ情報ライブラリ */
 
 	CmyArray<PSTSYSTEMMSG, PSTSYSTEMMSG>	m_aSystemMsg;	/* システムメッセージ */

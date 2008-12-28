@@ -65,18 +65,6 @@ CDlgAdminTalkEventPAGE::~CDlgAdminTalkEventPAGE()
 
 
 /* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventPAGE::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
-void CDlgAdminTalkEventPAGE::Init(CMgrData *pMgrData)
-{
-	CDlgAdminTalkEventNONE::Init (pMgrData);
-}
-
-
-/* ========================================================================= */
 /* 関数名	:CDlgAdminTalkEventPAGE::OnAdminMsg								 */
 /* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
 /* 日付		:2008/12/23														 */

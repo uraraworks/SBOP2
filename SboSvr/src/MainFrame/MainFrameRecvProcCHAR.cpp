@@ -18,6 +18,7 @@
 #include "InfoMapParts.h"
 #include "InfoMapEventBase.h"
 #include "LibInfoCharSvr.h"
+#include "LibInfoTalkEvent.h"
 #include "InfoCharSvr.h"
 #include "MgrData.h"
 #include "MainFrame.h"
@@ -48,6 +49,7 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT:	RecvProcCHAR_REQ_CHECKMAPEVENT	(pData, dwSessionID);	break;	/* マップイベントチェック要求 */
 	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE:		RecvProcCHAR_STATE_CHARGE		(pData, dwSessionID);	break;	/* 溜め状態通知 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY:		RecvProcCHAR_REQ_RECOVERY		(pData, dwSessionID);	break;	/* 気絶後復活要求 */
+	case SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT:		RecvProcCHAR_REQ_TALKEVENT		(pData, dwSessionID);	break;	/* 会話イベント情報要求 */
 	}
 }
 
@@ -752,6 +754,35 @@ void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 	pInfoChar->m_bStateFadeInOut = TRUE;
 	PacketMAP_PARA1.Make (SBOCOMMANDID_SUB_MAP_FADEINOUT, pInfoChar->m_dwMapID, 1);
 	SendToClient (pInfoChar->m_dwSessionID, &PacketMAP_PARA1);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_REQ_TALKEVENT							 */
+/* 内容		:受信処理(会話イベント情報要求)									 */
+/* 日付		:2008/12/27														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_REQ_TALKEVENT(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoCharSvr pInfoChar;
+	CInfoTalkEvent InfoTalkEventTmp, *pInfoTalkEvent;
+	CPacketCHAR_PARA1 Packet;
+	CPacketCHAR_RES_TALKEVENT PacketCHAR_RES_TALKEVENT;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+	pInfoTalkEvent = (PCInfoTalkEvent)m_pLibInfoTalkEvent->GetPtr (Packet.m_dwCharID);
+	if (pInfoTalkEvent == NULL) {
+		pInfoTalkEvent = &InfoTalkEventTmp;
+		pInfoTalkEvent->m_dwTalkEventID = Packet.m_dwCharID;
+	}
+	PacketCHAR_RES_TALKEVENT.Make (pInfoTalkEvent, Packet.m_dwPara);
+	m_pSock->SendTo (dwSessionID, &PacketCHAR_RES_TALKEVENT);
 }
 
 /* Copyright(C)URARA-works 2006 */

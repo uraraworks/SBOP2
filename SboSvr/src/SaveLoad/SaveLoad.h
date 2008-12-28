@@ -23,5 +23,6 @@
 #include "SaveLoadInfoEfcBalloon.h"		/* 噴出し情報 */
 #include "SaveLoadInfoSystem.h"			/* システム情報 */
 #include "SaveLoadInfoSkill.h"			/* スキル情報 */
+#include "SaveLoadInfoTalkEvent.h"		/* 会話イベント情報 */
 
 /* Copyright(C)URARA-works 2007 */

@@ -56,6 +56,7 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData)
 	case SBOCOMMANDID_SUB_CHAR_STATUS:				RecvProcCHAR_STATUS				(pData);	break;	/* ステータス情報通知 */
 	case SBOCOMMANDID_SUB_CHAR_TEXTEFFECT:			RecvProcCHAR_TEXTEFFECT			(pData);	break;	/* 文字エフェクト通知 */
 	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE:		RecvProcCHAR_STATE_CHARGE		(pData);	break;	/* 溜め状態通知 */
+	case SBOCOMMANDID_SUB_CHAR_RES_TALKEVENT:		RecvProcCHAR_RES_TALKEVENT		(pData);	break;	/* 会話イベント情報応答 */
 	}
 }
 
@@ -829,6 +830,33 @@ void CMainFrame::RecvProcCHAR_STATE_CHARGE(PBYTE pData)
 	if (pInfoChar == pInfoCharPlayer) {
 		ChgMoveState (FALSE);
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_RES_TALKEVENT							 */
+/* 内容		:受信処理(会話イベント情報応答)									 */
+/* 日付		:2008/12/28														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_RES_TALKEVENT(PBYTE pData)
+{
+	PCInfoCharCli pInfoCharPlayer;
+	CPacketCHAR_RES_TALKEVENT Packet;
+
+	Packet.Set (pData);
+
+	if (Packet.m_dwParam == 0) {
+		pInfoCharPlayer = m_pMgrData->GetPlayerChar ();
+		if (pInfoCharPlayer) {
+			pInfoCharPlayer->m_bWaitCheckMapEvent = FALSE;
+		}
+	}
+
+	m_pMgrData->SetInfoTalkEvent (Packet.m_pInfo);
+
+	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWTALKEVENT, Packet.m_dwParam);
+	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWTALKEVENT, Packet.m_dwParam);
 }
 
 /* Copyright(C)URARA-works 2006 */

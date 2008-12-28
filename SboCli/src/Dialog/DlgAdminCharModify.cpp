@@ -9,8 +9,11 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "command.h"
+#include "InfoTalkEvent.h"
 #include "UraraSockTCPSBO.h"
 #include "PacketADMIN_CHARINFO.h"
+#include "PacketADMIN_CHAR_RENEW_TALKEVENT.h"
+#include "PacketCHAR_PARA1.h"
 #include "PacketADMIN_PARA2.h"
 #include "PacketCHAR_REQ_CHARINFO.h"
 #include "LibInfoMotionType.h"
@@ -81,8 +84,9 @@ CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent /*=NULL*/)
 	m_nPosY = 0;
 	//}}AFX_DATA_INIT
 
-	m_dwCharID	= 0;
-	m_pInfoChar	= NULL;
+	m_dwCharID			= 0;
+	m_pInfoChar			= NULL;
+	m_pInfoTalkEvent	= NULL;
 	Create (CDlgAdminCharModify::IDD, pParent);
 }
 
@@ -95,6 +99,7 @@ CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent /*=NULL*/)
 
 CDlgAdminCharModify::~CDlgAdminCharModify()
 {
+	SAFE_DELETE (m_pInfoTalkEvent);
 }
 
 
@@ -230,6 +235,7 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 	DWORD dwCharID;
 	PCInfoCharCli pInfoCharTmp;
 	PCLibInfoCharCli pLibInfoChar;
+	CPacketCHAR_PARA1 Packet;
 
 	switch (nType) {
 	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* 左クリック通知 */
@@ -252,6 +258,10 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 		m_pInfoChar = pInfoCharTmp;
 		m_dwCharID = dwCharID;
 		Renew ();
+		if (m_dwCharID != 0) {
+			Packet.Make (SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT, m_dwCharID, m_dwCharID);
+			m_pSock->Send (&Packet);
+		}
 		break;
 	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* 右クリック通知 */
 		m_dwMapID	= m_pMgrData->GetMapID ();
@@ -264,6 +274,15 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 		m_nPosY = LOWORD (dwPara);
 		UpdateData (FALSE);
 		Send (TRUE);
+		break;
+	case ADMINMSG_RENEWTALKEVENT:			/* 会話イベント情報更新 */
+		if (m_pInfoChar == NULL) {
+			break;
+		}
+		if (dwPara != m_pInfoChar->m_dwCharID) {
+			break;
+		}
+		m_pInfoTalkEvent->Copy (m_pMgrData->GetInfoTalkEvent ());
 		break;
 	}
 }
@@ -298,6 +317,8 @@ BOOL CDlgAdminCharModify::OnInitDialog()
 	m_ctlMoveType.AddString ("戦闘1");
 	m_ctlMoveType.SetItemData (8, CHARMOVETYPE_BATTLE1);
 	m_ctlMoveType.SetCurSel (0);
+
+	m_pInfoTalkEvent = new CInfoTalkEvent;
 
 	return TRUE;
 }
@@ -361,12 +382,14 @@ void CDlgAdminCharModify::OnTalk()
 	}
 
 	Dlg.Init (m_pMgrData);
+	Dlg.m_pInfo->Copy (m_pInfoTalkEvent);
 	Dlg.m_strTalk = m_pInfoChar->m_strTalk;
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
 		return;
 	}
 	m_pInfoChar->m_strTalk = Dlg.m_strTalk;
+	m_pInfoTalkEvent->Copy (Dlg.m_pInfo);
 }
 
 
@@ -413,6 +436,7 @@ void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 	CInfoCharCli InfoCharTmp;
 	PCLibInfoCharCli pLibInfoChar;
 	CPacketADMIN_CHARINFO Packet;
+	CPacketADMIN_CHAR_RENEW_TALKEVENT PacketADMIN_CHAR_RENEW_TALKEVENT;
 
 	pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
 	m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (m_dwCharID);
@@ -438,6 +462,10 @@ void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 
 	Packet.Make (&InfoCharTmp, bChgScreenPos);
 	m_pSock->Send (&Packet);
+
+	m_pInfoTalkEvent->m_dwTalkEventID = m_dwCharID;
+	PacketADMIN_CHAR_RENEW_TALKEVENT.Make (m_pInfoTalkEvent, m_dwCharID);
+	m_pSock->Send (&PacketADMIN_CHAR_RENEW_TALKEVENT);
 }
 
 

@@ -79,13 +79,14 @@ CDlgAdminTalkEventBase::~CDlgAdminTalkEventBase()
 /* “ú•t		:2008/12/23														 */
 /* ========================================================================= */
 
-void CDlgAdminTalkEventBase::Init(CMgrData *pMgrData, CInfoTalkEventBase *pInfo/*NULL*/)
+void CDlgAdminTalkEventBase::Init(CMgrData *pMgrData, int nPage, CInfoTalkEventBase *pInfo/*NULL*/)
 {
 	int nType;
 	CInfoTalkEvent InfoTalkEvent;
 
 	CDlgAdminBase::Init (pMgrData);
 
+	m_nPageCount = nPage;
 	nType	= (pInfo) ? pInfo->m_nEventType : TALKEVENTTYPE_NONE;
 	m_pInfo	= InfoTalkEvent.GetNew (nType);
 	if (pInfo) {
@@ -204,7 +205,7 @@ void CDlgAdminTalkEventBase::OnCbnSelchangeType()
 	GetDlgItem (IDC_FRAME)->GetWindowRect (rc);
 	ScreenToClient (rc);
 
-	m_pDlgType->Init (m_pMgrData);
+	m_pDlgType->Init (m_pMgrData, m_nPageCount);
 	m_pDlgType->MoveWindow (rc.left, rc.top, rc.Width (), rc.Height ());
 	m_pDlgType->Set (m_pInfo);
 }

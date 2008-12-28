@@ -724,6 +724,10 @@
 							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp"
 							>
 						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp"
+							>
+						</File>
 					</Filter>
 				</Filter>
 				<Filter
@@ -1140,6 +1144,10 @@
 						RelativePath="..\Common\LibInfo\LibInfoSystem.cpp"
 						>
 					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoTalkEvent.cpp"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter
@@ -1517,6 +1525,10 @@
 				</File>
 				<File
 					RelativePath=".\src\SaveLoad\SaveLoadInfoSystem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\SaveLoad\SaveLoadInfoTalkEvent.cpp"
 					>
 				</File>
 			</Filter>
@@ -1944,6 +1956,10 @@
 							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.h"
 							>
 						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.h"
+							>
+						</File>
 					</Filter>
 				</Filter>
 				<Filter
@@ -2051,6 +2067,10 @@
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoSystem.h"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoTalkEvent.h"
 						>
 					</File>
 				</Filter>
@@ -2168,6 +2188,10 @@
 				</File>
 				<File
 					RelativePath=".\src\SaveLoad\SaveLoadInfoSystem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\SaveLoad\SaveLoadInfoTalkEvent.h"
 					>
 				</File>
 			</Filter>

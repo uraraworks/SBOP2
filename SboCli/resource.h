@@ -69,13 +69,13 @@
 #define IDD_TALKEVENT_PAGE              187
 #define IDD_TALKEVENT_MSG               188
 #define IDD_TALKEVENT_MENU              189
+#define IDD_TALKEVENT_MENU_SET          190
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
 #define IDC_MODIFY                      1001
 #define IDC_CHARCOUNT                   1002
 #define IDC_DELETE                      1002
-#define IDC_ADD3                        1002
 #define IDM_ITEM_LIST                   1003
 #define IDC_COPY                        1003
 #define IDC_CHARNAME                    1004
@@ -367,7 +367,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        186
+#define _APS_NEXT_RESOURCE_VALUE        191
 #define _APS_NEXT_COMMAND_VALUE         32811
 #define _APS_NEXT_CONTROL_VALUE         1153
 #define _APS_NEXT_SYMED_VALUE           101

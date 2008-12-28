@@ -50,6 +50,7 @@ CDlgAdminTalkEventNONE::CDlgAdminTalkEventNONE(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 
 	m_nResourceID = CDlgAdminTalkEventNONE::IDD;
+	m_nPageCount  = 0;
 }
 
 
@@ -70,9 +71,11 @@ CDlgAdminTalkEventNONE::~CDlgAdminTalkEventNONE()
 /* 日付		:2008/12/23														 */
 /* ========================================================================= */
 
-void CDlgAdminTalkEventNONE::Init(CMgrData *pMgrData)
+void CDlgAdminTalkEventNONE::Init(CMgrData *pMgrData, int nPage)
 {
 	CDlgAdminBase::Init (pMgrData);
+
+	m_nPageCount = nPage;
 
 	/* ウィンドウ作成 */
 	Create (m_nResourceID, m_pWndParent);

@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #include "stdafx.h"
+#include "InfoTalkEventMENU.h"
 #include "InfoTalkEvent.h"
 
 /* ========================================================================= */
@@ -107,6 +108,7 @@ DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
 	switch (nNo) {
 	case 0:	dwRet = sizeof (m_dwTalkEventID);	break;	/* 会話イベントID */
 	case 1:		/* 会話イベント */
+		dwRet += sizeof (int);				/* データ数 */
 		nCount = m_apTalkEvent.GetSize ();
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_apTalkEvent[i];
@@ -236,6 +238,7 @@ DWORD CInfoTalkEvent::ReadElementData(
 			}
 			AddTalkEvent (pInfo);
 		}
+		dwSize = (pSrcTmp - pSrc);
 		break;
 	}
 
@@ -384,9 +387,46 @@ PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
 
 	switch (nType) {
 	case TALKEVENTTYPE_MSG:				/* メッセージ表示 */
+		pRet = new CInfoTalkEventBase;
+		break;
 	case TALKEVENTTYPE_MENU:			/* 項目選択 */
+		pRet = new CInfoTalkEventMENU;
+		break;
 	default:
 		pRet = new CInfoTalkEventBase;
+		break;
+	}
+	pRet->m_nEventType = nType;
+
+	return pRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoTalkEvent::GetPtr											 */
+/* 内容		:会話イベントを取得												 */
+/* 日付		:2008/12/28														 */
+/* ========================================================================= */
+
+PCInfoTalkEventBase CInfoTalkEvent::GetPtr(int nPage, int nNo)
+{
+	int i, nCount, nNoCount;
+	PCInfoTalkEventBase pInfo, pRet;
+
+	pRet	 = NULL;
+	nNoCount = 0;
+	nCount   = m_apTalkEvent.GetSize ();
+
+	for (i = 0; i < nCount; i ++) {
+		pInfo = m_apTalkEvent[i];
+		if (pInfo->m_nPage != nPage) {
+			continue;
+		}
+		if (nNo != nNoCount) {
+			nNoCount ++;
+			continue;
+		}
+		pRet = pInfo;
 		break;
 	}
 
