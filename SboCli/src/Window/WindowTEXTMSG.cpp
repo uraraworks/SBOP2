@@ -13,6 +13,7 @@
 #include "InfoTalkEventPAGE.h"
 #include "InfoTalkEventMENU.h"
 #include "InfoCharCli.h"
+#include "MgrKeyInput.h"
 #include "MgrWindow.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
@@ -42,6 +43,7 @@ CWindowTEXTMSG::CWindowTEXTMSG()
 	m_sizeWindow.cy	= 16 * 2 + 16 * 5 + m_nSpaceHeight;
 	m_ptViewPos.y	= SCRSIZEY - 16 - m_sizeWindow.cy;
 
+	m_bSkip				= FALSE;
 	m_bInputWait		= FALSE;
 	m_nState			= STATE_TEXT;
 	m_nType				= 0;
@@ -200,12 +202,13 @@ Exit:
 
 BOOL CWindowTEXTMSG::TimerProc(void)
 {
-	BOOL bRet;
+	BOOL bRet, bResult;
 	int *pnProcPos;
 	DWORD dwTimeTmp;
 	LPCSTR pszTmp;
 	char szTmp[3];
 	PCInfoCharCli pPlayerChar;
+	PCMgrKeyInput pMgrKeyInput;
 
 	bRet = FALSE;
 	pPlayerChar = m_pMgrData->GetPlayerChar ();
@@ -213,9 +216,14 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 	if (m_pDibText == NULL) {
 		goto Exit;
 	}
-	dwTimeTmp = timeGetTime () - m_dwLastProc;
-	if (dwTimeTmp < 100) {
-		goto Exit;
+	pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
+
+	dwTimeTmp	= timeGetTime () - m_dwLastProc;
+	bResult		= pMgrKeyInput->IsInput ('X');
+	if (bResult == FALSE) {
+		if (dwTimeTmp < 100) {
+			goto Exit;
+		}
 	}
 	m_dwLastProc = timeGetTime ();
 
@@ -364,7 +372,12 @@ void CWindowTEXTMSG::SetTitle(LPCSTR pszTitle)
 
 void CWindowTEXTMSG::SetName(LPCSTR pszName)
 {
+	int nLen;
+
 	m_strName = pszName;
+	nLen = max (m_strName.GetLength (), 6);
+	m_pDibTitle->Destroy ();
+	m_pDibTitle->Create (9 * nLen, 16 * 2);
 	RenewTitle ();
 	Redraw ();
 }
@@ -518,7 +531,12 @@ BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 	if (bDown == FALSE) {
 		switch (m_nState) {
 		case STATE_TEXT:		/* メッセージ表示 */
+			if (m_bSkip) {
+				m_bSkip = FALSE;
+				break;
+			}
 			if (m_bInputWait) {
+				m_bInputWait = FALSE;
 				m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 				if (m_pInfoTalkEvent) {
 					m_nProcEventNo ++;
@@ -540,6 +558,10 @@ BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 				m_nState = STATE_EVENTPROC;
 			}
 			break;
+		}
+	} else {
+		if (m_bInputWait == FALSE) {
+			m_bSkip = TRUE;
 		}
 	}
 

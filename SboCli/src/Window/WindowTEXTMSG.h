@@ -51,7 +51,8 @@ protected:
 
 
 protected:
-	BOOL		m_bInputWait;				/* 入力待ち */
+	BOOL		m_bInputWait,				/* 入力待ち */
+				m_bSkip;					/* 表示スキップ */
 	POINT		m_ptDraw;					/* 描画位置 */
 	int			m_nState,					/* 表示状態 */
 				m_nType,					/* ウィンドウ種別 */

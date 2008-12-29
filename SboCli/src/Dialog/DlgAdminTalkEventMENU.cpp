@@ -189,7 +189,7 @@ void CDlgAdminTalkEventMENU::OnBnClickedModify()
 
 	Dlg.Init (m_pMgrData, m_nPageCount);
 	Dlg.m_strName	= m_List.GetItemText (nSelect, 0);
-	Dlg.m_nPage		= atoi (m_List.GetItemText (nSelect, 1));
+	Dlg.m_nPage		= atoi (m_List.GetItemText (nSelect, 1)) - 1;
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
 		return;
