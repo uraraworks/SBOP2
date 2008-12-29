@@ -101,7 +101,6 @@
 #define IDC_MOVETYPE2                   1012
 #define IDC_SEX                         1012
 #define IDC_HITTYPE                     1012
-#define IDC_COMBO2                      1012
 #define IDC_JUMP_CMB                    1012
 #define IDC_ID                          1013
 #define IDC_DEL2                        1013
@@ -162,7 +161,9 @@
 #define IDC_TYPE_DRAWLAST               1045
 #define IDC_GRP_SHASOW                  1046
 #define IDC_MAPSHADOW                   1046
+#define IDC_TYPE_COUNTER                1046
 #define IDC_ATTR                        1047
+#define IDC_TYPE_PUTITEM                1047
 #define IDC_ATTR2                       1048
 #define IDC_STATIC_ACCOUNTID            1048
 #define IDC_STATIC_CHARNAME             1049

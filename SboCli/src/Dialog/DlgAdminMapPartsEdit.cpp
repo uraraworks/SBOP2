@@ -41,6 +41,7 @@ void CDlgAdminMapPartsEdit::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_TYPE_PILE, m_bTypePile);
 	DDX_Check(pDX, IDC_FISHING, m_bFishing);
 	DDX_Check(pDX, IDC_TYPE_DRAWLAST, m_bTypeDrawLast);
+	DDX_Check(pDX, IDC_TYPE_COUNTER, m_bTypeCounter);
 	DDX_Check(pDX, IDC_BLOCK_DOWN, m_bBlockDown);
 	DDX_Check(pDX, IDC_BLOCK_LEFT, m_bBlockLeft);
 	DDX_Check(pDX, IDC_BLOCK_RIGHT, m_bBlockRight);
@@ -91,6 +92,7 @@ CDlgAdminMapPartsEdit::CDlgAdminMapPartsEdit(CWnd* pParent /*=NULL*/)
 	m_bTypePile = FALSE;
 	m_bFishing = FALSE;
 	m_bTypeDrawLast = FALSE;
+	m_bTypeCounter = FALSE;
 	m_bBlockDown = FALSE;
 	m_bBlockLeft = FALSE;
 	m_bBlockRight = FALSE;
@@ -685,6 +687,7 @@ void CDlgAdminMapPartsEdit::SetPartsType(DWORD dwType)
 	m_bTypePileBack	= FALSE;
 	m_bFishing		= FALSE;
 	m_bTypeDrawLast	= FALSE;
+	m_bTypeCounter	= FALSE;
 
 	if (dwType & BIT_PARTSHIT_BLOCK) {			/* ぶつかる */
 		m_bTypeBlock = TRUE;
@@ -698,8 +701,11 @@ void CDlgAdminMapPartsEdit::SetPartsType(DWORD dwType)
 	if (dwType & BIT_PARTSHIT_FISHING) {		/* 釣り場 */
 		m_bFishing = TRUE;
 	}
-	if (dwType & BIT_PARTSHIT_DRAWLAST) {		/* キャラの後に描画 */
+	if (dwType & BIT_PARTSHIT_DRAWLAST) {		/* 常に重なる */
 		m_bTypeDrawLast = TRUE;
+	}
+	if (dwType & BIT_PARTSHIT_COUNTER) {		/* カウンター */
+		m_bTypeCounter = TRUE;
 	}
 
 	UpdateData (FALSE);
@@ -732,8 +738,11 @@ DWORD CDlgAdminMapPartsEdit::GetPartsType(void)
 	if (m_bFishing) {			/* 釣り場 */
 		dwRet |= BIT_PARTSHIT_FISHING;
 	}
-	if (m_bTypeDrawLast) {		/* キャラの後に描画 */
+	if (m_bTypeDrawLast) {		/* 常に重なる */
 		dwRet |= BIT_PARTSHIT_DRAWLAST;
+	}
+	if (m_bTypeCounter) {		/* カウンター */
+		dwRet |= BIT_PARTSHIT_COUNTER;
 	}
 
 	return dwRet;

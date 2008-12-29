@@ -19,6 +19,7 @@
 #define BIT_PARTSHIT_PILEBACK	(0x00000004)		/* 下地も重ねる */
 #define BIT_PARTSHIT_FISHING	(0x00000008)		/* 釣り場 */
 #define BIT_PARTSHIT_DRAWLAST	(0x00000010)		/* 常に重なる */
+#define BIT_PARTSHIT_COUNTER	(0x00000020)		/* カウンター */
 
 #define BIT_PARTSBLOCK_UP		(0x01)				/* 上にぶつかる */
 #define BIT_PARTSBLOCK_DOWN		(0x02)				/* 下にぶつかる */

@@ -88,6 +88,7 @@ protected:
 	BOOL	OnXChar						(DWORD dwCharID);								/* キャラにXキーを押した時の処理 */
 	void	AddSystemMsg				(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);		/* システムメッセージを追加 */
 	void	DefenseOff					(void);											/* 防御解除 */
+	DWORD	GetTalkCharID				(DWORD dwCharID, int nDirection);				/* 会話できるキャラIDを取得 */
 
 
 protected:

@@ -48,6 +48,7 @@ public:
 
 	virtual	DWORD	GetFrontCharID		(DWORD dwCharID, int nDirection = -1);	/* 一歩前のキャラIDを取得 */
 	virtual	DWORD	GetFrontCharIDPush	(DWORD dwCharID, int nDirection = -1);	/* 一歩前の押せるキャラIDを取得 */
+	virtual	DWORD	GetHitCharID		(DWORD dwCharIDBase, int x, int y);		/* 指定座標に当たるキャラIDを取得 */
 	virtual	void	SetPtr				(DWORD dwCharID, PCInfoCharBase pChar);	/* キャラ情報を更新 */
 			PCInfoBase	GetPtr			(int nNo);								/* キャラ情報を取得 */
 			PCInfoBase	GetPtr			(DWORD dwCharID);						/* キャラ情報を取得 */

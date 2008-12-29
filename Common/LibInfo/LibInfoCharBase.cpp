@@ -665,6 +665,51 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CLibInfoCharBase::GetHitCharID									 */
+/* 内容		:指定座標に当たるキャラIDを取得									 */
+/* 日付		:2008/12/29														 */
+/* ========================================================================= */
+
+DWORD CLibInfoCharBase::GetHitCharID(DWORD dwCharIDBase, int x, int y)
+{
+	int i, nCount;
+	DWORD dwRet;
+	PCInfoCharBase pInfoCharBase, pInfoCharTmp;
+	SIZE size;
+
+	dwRet = 0;
+
+	pInfoCharBase = (PCInfoCharBase)GetPtr (dwCharIDBase);
+	if (pInfoCharBase == NULL) {
+		goto Exit;
+	}
+	pInfoCharBase->GetCharSize (size);
+
+	nCount = m_paInfo->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoCharTmp = m_paInfo->GetAt (i);
+		if (pInfoCharBase == pInfoCharTmp) {
+			continue;
+		}
+		if (pInfoCharTmp->m_nMoveType == CHARMOVETYPE_PUTNPC) {
+			continue;
+		}
+		if (pInfoCharBase->m_dwMapID != pInfoCharTmp->m_dwMapID) {
+			continue;
+		}
+		if (pInfoCharTmp->IsHitCharPos (x, y, &size) == FALSE) {
+			continue;
+		}
+		dwRet = pInfoCharTmp->m_dwCharID;
+		break;
+	}
+
+Exit:
+	return dwRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CLibInfoCharBase::SetPtr										 */
 /* 内容		:キャラ情報を更新												 */
 /* 日付		:2007/09/02														 */

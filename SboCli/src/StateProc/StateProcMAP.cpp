@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoItem.h"
+#include "LibInfoMapParts.h"
 #include "ParamUtil.h"
 #include "InfoMapBase.h"
 #include "InfoTalkEvent.h"
@@ -1284,10 +1285,9 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
-	dwFrontCharID = m_pLibInfoChar->GetFrontCharID (m_pPlayerChar->m_dwCharID);
-
 	switch (m_pPlayerChar->m_nMoveState) {
 	case CHARMOVESTATE_STAND:			/* 立ち */
+		dwFrontCharID = GetTalkCharID (m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
 		bResult = OnXChar (dwFrontCharID);
 		if (bResult) {
 			break;
@@ -3068,6 +3068,67 @@ void CStateProcMAP::DefenseOff(void)
 	Packet.Make (m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLE);
 	m_pSock->Send (&Packet);
 	m_pPlayerChar->SetChgWait (TRUE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::GetTalkCharID									 */
+/* 内容		:会話できるキャラIDを取得										 */
+/* 日付		:2008/12/29														 */
+/* ========================================================================= */
+
+DWORD CStateProcMAP::GetTalkCharID(DWORD dwCharID, int nDirection)
+{
+	BOOL bContinue;
+	DWORD dwRet;
+	WORD wPartsID;
+	int nPosX[] = {0, 0, -1, 1}, nPosY[] = {-1, 1, 0, 0};
+	PCInfoCharCli pInfoChar;
+	PCLibInfoMapParts pLibInfoMapParts;
+	PCInfoMapParts pInfoMapParts;
+	POINT ptFrontPos, ptFrontMapPos;
+
+	dwRet = m_pLibInfoChar->GetFrontCharID (dwCharID);
+	if (dwRet != 0) {
+		return dwRet;
+	}
+	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (dwCharID);
+	if (pInfoChar == NULL) {
+		return dwRet;
+	}
+	pInfoChar->GetFrontMapPos (ptFrontMapPos);
+	pInfoChar->GetFrontPos (ptFrontPos);
+	pInfoChar->ChgDirection (nDirection);
+
+	pLibInfoMapParts = m_pMgrData->GetLibInfoMapParts ();
+
+	while (1) {
+		bContinue = FALSE;
+		wPartsID = m_pMap->GetPartsPile (ptFrontMapPos.x, ptFrontMapPos.y);
+		if (wPartsID != 0) {
+			pInfoMapParts = (PCInfoMapParts)pLibInfoMapParts->GetPtr ((DWORD)wPartsID);
+			if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_COUNTER) {
+				bContinue = TRUE;
+			}
+		}
+		wPartsID = m_pMap->GetParts (ptFrontMapPos.x, ptFrontMapPos.y);
+		if (wPartsID != 0) {
+			pInfoMapParts = (PCInfoMapParts)pLibInfoMapParts->GetPtr ((DWORD)wPartsID);
+			if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_COUNTER) {
+				bContinue = TRUE;
+			}
+		}
+		if (bContinue == FALSE) {
+			break;
+		}
+		ptFrontMapPos.x = nPosX[nDirection];
+		ptFrontMapPos.y = nPosY[nDirection];
+		ptFrontPos.x += (nPosX[nDirection] * 2);
+		ptFrontPos.y += (nPosY[nDirection] * 2);
+	}
+	dwRet = m_pLibInfoChar->GetHitCharID (dwCharID, ptFrontPos.x, ptFrontPos.y);
+
+	return dwRet;
 }
 
 /* Copyright(C)URARA-works 2006 */
