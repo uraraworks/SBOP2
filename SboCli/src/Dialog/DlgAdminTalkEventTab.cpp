@@ -40,6 +40,8 @@ BEGIN_MESSAGE_MAP(CDlgAdminTalkEventTab, CDlgAdminBase)
 	ON_BN_CLICKED(IDC_ADD, &CDlgAdminTalkEventTab::OnBnClickedAdd)
 	ON_BN_CLICKED(IDC_MODIFY, &CDlgAdminTalkEventTab::OnBnClickedModify)
 	ON_BN_CLICKED(IDC_DEL, &CDlgAdminTalkEventTab::OnBnClickedDel)
+	ON_BN_CLICKED(IDC_UP, &CDlgAdminTalkEventTab::OnBnClickedUp)
+	ON_BN_CLICKED(IDC_DOWN, &CDlgAdminTalkEventTab::OnBnClickedDown)
 END_MESSAGE_MAP()
 
 
@@ -205,6 +207,47 @@ void CDlgAdminTalkEventTab::OnBnClickedModify()
 
 void CDlgAdminTalkEventTab::OnBnClickedDel()
 {
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventTab::OnBnClickedUp							 */
+/* 内容		:ボタンハンドラ(↑)											 */
+/* 日付		:2008/12/29														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventTab::OnBnClickedUp()
+{
+	int nSelect;
+
+	nSelect = m_List.GetNextItem (-1, LVNI_SELECTED);
+	if (nSelect < 1) {
+		return;
+	}
+	m_pInfo->UpTalkEvent (m_nPage, nSelect);
+	Renew ();
+	m_List.SetItemState (nSelect - 1, LVNI_SELECTED, LVNI_SELECTED);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminTalkEventTab::OnBnClickedDown							 */
+/* 内容		:ボタンハンドラ(↓)											 */
+/* 日付		:2008/12/29														 */
+/* ========================================================================= */
+
+void CDlgAdminTalkEventTab::OnBnClickedDown()
+{
+	int nSelect, nCount;
+
+	nCount  = m_List.GetItemCount ();
+	nSelect = m_List.GetNextItem (-1, LVNI_SELECTED);
+	if (nSelect >= nCount - 1) {
+		return;
+	}
+	m_pInfo->DownTalkEvent (m_nPage, nSelect);
+	Renew ();
+	m_List.SetItemState (nSelect + 1, LVNI_SELECTED, LVNI_SELECTED);
 }
 
 

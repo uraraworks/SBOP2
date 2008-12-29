@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:InfoTalkEventMENU.cpp										 */
-/* 内容			:会話イベント情報基底クラス 実装ファイル					 */
+/* 内容			:会話イベント情報(項目選択)クラス 実装ファイル				 */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/18													 */
+/* 作成開始日	:2008/12/28													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,12 +25,12 @@ static LPCSTR s_aszName[] = {
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::CInfoTalkEventMENU							 */
 /* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 CInfoTalkEventMENU::CInfoTalkEventMENU()
 {
-	m_nEventType		= TALKEVENTTYPE_MENU;
+	m_nEventType = TALKEVENTTYPE_MENU;
 
 	m_nElementCountBase = m_nElementCount;
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
@@ -40,7 +40,7 @@ CInfoTalkEventMENU::CInfoTalkEventMENU()
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::~CInfoTalkEventMENU						 */
 /* 内容		:デストラクタ													 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 CInfoTalkEventMENU::~CInfoTalkEventMENU()
@@ -90,7 +90,7 @@ Exit:
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::GetDataSize								 */
 /* 内容		:データサイズを取得												 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::GetDataSize(void)
@@ -116,7 +116,7 @@ DWORD CInfoTalkEventMENU::GetDataSize(void)
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::GetDataSizeNo								 */
 /* 内容		:指定要素のデータサイズを取得									 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::GetDataSizeNo(int nNo)
@@ -169,7 +169,7 @@ LPCSTR CInfoTalkEventMENU::GetName(int nNo)
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::GetWriteData								 */
 /* 内容		:指定要素の保存用データを取得									 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventMENU::GetWriteData(int nNo, PDWORD pdwSize)
@@ -226,7 +226,7 @@ Exit:
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::ReadElementData							 */
 /* 内容		:指定要素データを読み込み										 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::ReadElementData(
@@ -286,7 +286,7 @@ DWORD CInfoTalkEventMENU::ReadElementData(
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::GetSendDataSize							 */
 /* 内容		:送信データサイズを取得											 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::GetSendDataSize(void)
@@ -305,7 +305,7 @@ DWORD CInfoTalkEventMENU::GetSendDataSize(void)
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::GetSendData								 */
 /* 内容		:送信データを取得												 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventMENU::GetSendData(void)
@@ -342,7 +342,7 @@ PBYTE CInfoTalkEventMENU::GetSendData(void)
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::SetSendData								 */
 /* 内容		:送信データから取り込み											 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventMENU::SetSendData(PBYTE pSrc)
@@ -373,7 +373,7 @@ PBYTE CInfoTalkEventMENU::SetSendData(PBYTE pSrc)
 /* ========================================================================= */
 /* 関数名	:CInfoTalkEventMENU::Copy										 */
 /* 内容		:コピー															 */
-/* 日付		:2008/12/18														 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 void CInfoTalkEventMENU::Copy(CInfoTalkEventBase *pSrc)

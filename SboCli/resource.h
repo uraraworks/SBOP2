@@ -101,6 +101,8 @@
 #define IDC_MOVETYPE2                   1012
 #define IDC_SEX                         1012
 #define IDC_HITTYPE                     1012
+#define IDC_COMBO2                      1012
+#define IDC_JUMP_CMB                    1012
 #define IDC_ID                          1013
 #define IDC_DEL2                        1013
 #define IDC_PLAY                        1013
@@ -321,6 +323,8 @@
 #define IDC_RECOVERY                    1148
 #define IDC_TIME                        1149
 #define IDC_TAB                         1150
+#define IDC_ITEM_CMB                    1153
+#define IDC_ITEM_STA                    1154
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -369,7 +373,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        191
 #define _APS_NEXT_COMMAND_VALUE         32811
-#define _APS_NEXT_CONTROL_VALUE         1153
+#define _APS_NEXT_CONTROL_VALUE         1155
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

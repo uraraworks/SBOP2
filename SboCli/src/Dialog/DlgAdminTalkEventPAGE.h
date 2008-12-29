@@ -20,7 +20,8 @@ public:
 			CDlgAdminTalkEventPAGE(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminTalkEventPAGE();							/* デストラクタ */
 
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Set	(CInfoTalkEventBase *pSrc);								/* 設定から画面に反映 */
+	void	Get	(CInfoTalkEventBase *pDst);								/* 画面から設定に反映 */
 
 
 protected:
@@ -33,6 +34,9 @@ protected:
 public:
 	//{{AFX_DATA(CDlgAdminTalkEventPAGE)
 	enum { IDD = IDD_TALKEVENT_PAGE };
+	CComboBox m_Combo;
+	CComboBox m_cmbJump;
+	CComboBox m_cmbItem;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminTalkEventPAGE)
@@ -45,6 +49,8 @@ protected:
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnCbnSelchangeCombo();
 } CDlgAdminTalkEventPAGE, *PCDlgAdminTalkEventPAGE;
 
 //{{AFX_INSERT_LOCATION}}

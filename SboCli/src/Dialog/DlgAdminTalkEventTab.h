@@ -60,6 +60,8 @@ public:
 	afx_msg void OnBnClickedAdd();
 	afx_msg void OnBnClickedModify();
 	afx_msg void OnBnClickedDel();
+	afx_msg void OnBnClickedUp();
+	afx_msg void OnBnClickedDown();
 } CDlgAdminTalkEventTab, *PCDlgAdminTalkEventTab;
 
 //{{AFX_INSERT_LOCATION}}

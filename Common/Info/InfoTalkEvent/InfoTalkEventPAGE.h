@@ -1,38 +1,39 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ファイル名	:InfoTalkEventBase.h										 */
-/* 内容			:会話イベント情報基底クラス 定義ファイル					 */
+/* ファイル名	:InfoTalkEventPAGE.h										 */
+/* 内容			:会話イベント情報(ページ切り替え)クラス 定義ファイル		 */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/16													 */
+/* 作成開始日	:2008/12/29													 */
 /* ========================================================================= */
 
 #pragma once
 
-#include "InfoBase.h"
+#include "InfoTalkEventBase.h"
 
 /* ========================================================================= */
 /* 定数定義																	 */
 /* ========================================================================= */
 
-/* 会話イベント種別 */
+/* ページ切り替え条件 */
 enum {
-	TALKEVENTTYPE_NONE = 0,
-	TALKEVENTTYPE_PAGE,			/* ページ切り替え */
-	TALKEVENTTYPE_MSG,			/* メッセージ表示 */
-	TALKEVENTTYPE_MENU,			/* 項目選択 */
-	TALKEVENTTYPE_MAX
+	CHGPAGECONDITION_NONE = 0,
+	CHGPAGECONDITION_ITEM,		/* アイテムあり */
+	CHGPAGECONDITION_NOITEM,	/* アイテムなし */
+	CHGPAGECONDITION_MAX
 };
+
 
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
 
-typedef class CInfoTalkEventBase : public CInfoBase
+typedef class CInfoTalkEventPAGE : public CInfoTalkEventBase
 {
 public:
-			CInfoTalkEventBase();									/* コンストラクタ */
-	virtual ~CInfoTalkEventBase();									/* デストラクタ */
+			CInfoTalkEventPAGE();									/* コンストラクタ */
+	virtual ~CInfoTalkEventPAGE();									/* デストラクタ */
 
+	virtual int		GetElementCount		(void);								/* 要素数を取得 */
 	virtual int		GetElementNo		(LPCSTR pszName);					/* 要素番号を取得 */
 	virtual DWORD	GetDataSize			(void);								/* データサイズを取得 */
 	virtual DWORD	GetDataSizeNo		(int nNo);							/* 指定要素のデータサイズを取得 */
@@ -48,13 +49,8 @@ public:
 
 
 public:
-	int			m_nElementCountBase,			/* 基底クラスの要素数 */
-				m_nEventType,					/* 会話イベント種別 */
-				m_nPage;						/* 所属ページ番号 */
-	DWORD		m_dwData;						/* バイナリデータ */
-	CmyString	m_strText;						/* 文字列データ */
-} CInfoTalkEventBase, *PCInfoTalkEventBase;
-typedef CmyArray<PCInfoTalkEventBase, PCInfoTalkEventBase>	  ARRAYTALKEVENTBASEINFO;
-typedef CmyArray<PCInfoTalkEventBase, PCInfoTalkEventBase>	*PARRAYTALKEVENTBASEINFO;
+	int		m_nPageChgCondition,			/* ページ切り替え条件 */
+			m_nPageJump;					/* ページ切り替え先 */
+} CInfoTalkEventPAGE, *PCInfoTalkEventPAGE;
 
 /* Copyright(C)URARA-works 2008 */

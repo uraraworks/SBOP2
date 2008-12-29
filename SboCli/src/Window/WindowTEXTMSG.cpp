@@ -8,7 +8,11 @@
 
 #include "stdafx.h"
 #include "Img32.h"
+#include "LibInfoItem.h"
 #include "InfoTalkEvent.h"
+#include "InfoTalkEventPAGE.h"
+#include "InfoTalkEventMENU.h"
+#include "InfoCharCli.h"
 #include "MgrWindow.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
@@ -201,8 +205,10 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 	DWORD dwTimeTmp;
 	LPCSTR pszTmp;
 	char szTmp[3];
+	PCInfoCharCli pPlayerChar;
 
 	bRet = FALSE;
+	pPlayerChar = m_pMgrData->GetPlayerChar ();
 
 	if (m_pDibText == NULL) {
 		goto Exit;
@@ -253,20 +259,75 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 		break;
 	case STATE_EVENTPROC:	/* 会話イベント処理 */
 		{
-			PCInfoTalkEventBase pInfoTalkEvent;
-
-			pInfoTalkEvent = m_pInfoTalkEvent->GetPtr (m_nProcEventPage, m_nProcEventNo);
+			PCLibInfoItem pLibInfoItem = m_pMgrData->GetLibInfoItem ();
+			PCInfoTalkEventBase pInfoTalkEvent = m_pInfoTalkEvent->GetPtr (m_nProcEventPage, m_nProcEventNo);
 			if (pInfoTalkEvent == NULL) {
+				m_bDelete = TRUE;
 				break;
 			}
 			switch (pInfoTalkEvent->m_nEventType) {
 			case TALKEVENTTYPE_PAGE:			/* ページ切り替え */
+				{
+					int i, nCount;
+					BOOL bJump;
+					PCInfoTalkEventPAGE pInfoTmp = (PCInfoTalkEventPAGE)pInfoTalkEvent;
+					PARRAYDWORD padwItemID;
+
+					bJump = FALSE;
+					switch (pInfoTmp->m_nPageChgCondition) {
+					case CHGPAGECONDITION_ITEM:			/* アイテムあり */
+					case CHGPAGECONDITION_NOITEM:		/* アイテムなし */
+						padwItemID = pPlayerChar->GetItem ();
+						nCount = padwItemID->GetSize ();
+						for (i = 0; i < nCount; i ++) {
+							if (pInfoTmp->m_dwData == pLibInfoItem->GetItemTypeID (padwItemID->GetAt (i))) {
+								break;
+							}
+						}
+						switch (pInfoTmp->m_nPageChgCondition) {
+						case CHGPAGECONDITION_ITEM:			/* アイテムあり */
+							if (i < nCount) {
+								bJump = TRUE;
+							}
+							break;
+						case CHGPAGECONDITION_NOITEM:		/* アイテムなし */
+							if (i >= nCount) {
+								bJump = TRUE;
+							}
+							break;
+						}
+						break;
+					default:
+						bJump = TRUE;
+						break;
+					}
+					m_nProcEventNo ++;
+					if (bJump) {
+						m_nProcEventPage = pInfoTmp->m_nPageJump;
+						m_nProcEventNo	 = 0;
+					}
+				}
 				break;
 			case TALKEVENTTYPE_MSG:				/* メッセージ表示 */
 				SetMsg ((LPCSTR)pInfoTalkEvent->m_strText);
 				m_nState = STATE_TEXT;
 				break;
 			case TALKEVENTTYPE_MENU:			/* 項目選択 */
+				{
+					int i, nCount;
+					PSTTALKEVENTMENUINFO pMenuInfo;	
+					PCInfoTalkEventMENU pInfoTmp = (PCInfoTalkEventMENU)pInfoTalkEvent;
+
+					m_astrMenu.RemoveAll ();
+					nCount = pInfoTmp->GetMenuInfoCount ();
+					for (i = 0; i < nCount; i ++) {
+						pMenuInfo = pInfoTmp->GetPtr (i);
+						m_astrMenu.Add (pMenuInfo->strName);
+					}
+					m_nState	= STATE_MENU;
+					m_nPos		= 0;
+					m_nPosMax	= nCount - 1;
+				}
 				break;
 			}
 		}
@@ -459,12 +520,25 @@ BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 		case STATE_TEXT:		/* メッセージ表示 */
 			if (m_bInputWait) {
 				m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
+				if (m_pInfoTalkEvent) {
+					m_nProcEventNo ++;
+					m_nState = STATE_EVENTPROC;
+					break;
+				}
 				m_bDelete = TRUE;
 			}
 			break;
 		case STATE_MENU:		/* 項目選択 */
 			m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 			m_nState = STATE_TEXT;
+			if (m_pInfoTalkEvent) {
+				PSTTALKEVENTMENUINFO pMenuInfo;	
+				PCInfoTalkEventMENU pInfoTmp = (PCInfoTalkEventMENU)m_pInfoTalkEvent->GetPtr (m_nProcEventPage, m_nProcEventNo);
+				pMenuInfo = pInfoTmp->GetPtr (m_nPos);
+				m_nProcEventPage = pMenuInfo->nPage;
+				m_nProcEventNo = 0;
+				m_nState = STATE_EVENTPROC;
+			}
 			break;
 		}
 	}

@@ -17,7 +17,6 @@
 static LPCSTR s_aszName[] = {
 	"m_nEventType",					/* 会話イベント種別 */
 	"m_nPage",						/* 所属ページ番号 */
-	"m_nPageChgCondition",			/* ページ切り替え条件 */
 	"m_dwData",						/* バイナリデータ */
 	"m_strText",					/* 文字列データ */
 	NULL
@@ -34,7 +33,6 @@ CInfoTalkEventBase::CInfoTalkEventBase()
 {
 	m_nEventType		= TALKEVENTTYPE_NONE;
 	m_nPage				= 0;
-	m_nPageChgCondition	= CHGPAGECONDITION_NONE;
 	m_dwData			= 0;
 
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
@@ -88,7 +86,6 @@ DWORD CInfoTalkEventBase::GetDataSize(void)
 	dwRet = 0;
 	dwRet += sizeof (m_nEventType);					/* 会話イベント種別 */
 	dwRet += sizeof (m_nPage);						/* 所属ページ番号 */
-	dwRet += sizeof (m_nPageChgCondition);			/* ページ切り替え条件 */
 	dwRet += sizeof (m_dwData);						/* バイナリデータ */
 	dwRet += (m_strText.GetLength () + 1);			/* 文字列データ */
 
@@ -111,9 +108,8 @@ DWORD CInfoTalkEventBase::GetDataSizeNo(int nNo)
 	switch (nNo) {
 	case 0:	dwRet = sizeof (m_nEventType);			break;	/* 会話イベント種別 */
 	case 1:	dwRet = sizeof (m_nPage);				break;	/* 所属ページ番号 */
-	case 2:	dwRet = sizeof (m_nPageChgCondition);	break;	/* ページ切り替え条件 */
-	case 3:	dwRet = sizeof (m_dwData);				break;	/* バイナリデータ */
-	case 4:	dwRet = m_strText.GetLength () + 1;		break;	/* 文字列データ */
+	case 2:	dwRet = sizeof (m_dwData);				break;	/* バイナリデータ */
+	case 3:	dwRet = m_strText.GetLength () + 1;		break;	/* 文字列データ */
 	}
 
 	return dwRet;
@@ -156,9 +152,8 @@ PBYTE CInfoTalkEventBase::GetWriteData(int nNo, PDWORD pdwSize)
 	switch (nNo) {
 	case 0:	pSrc = (PBYTE)&m_nEventType;			break;		/* 会話イベント種別 */
 	case 1:	pSrc = (PBYTE)&m_nPage;					break;		/* 所属ページ番号 */
-	case 2:	pSrc = (PBYTE)&m_nPageChgCondition;		break;		/* ページ切り替え条件 */
-	case 3:	pSrc = (PBYTE)&m_dwData;				break;		/* バイナリデータ */
-	case 4:	pSrc = (PBYTE)(LPCSTR)m_strText;		break;		/* 文字列データ */
+	case 2:	pSrc = (PBYTE)&m_dwData;				break;		/* バイナリデータ */
+	case 3:	pSrc = (PBYTE)(LPCSTR)m_strText;		break;		/* 文字列データ */
 	}
 
 	if (pSrc) {
@@ -189,9 +184,8 @@ DWORD CInfoTalkEventBase::ReadElementData(
 	switch (nNo) {
 	case 0: pDst = (PBYTE)&m_nEventType;		dwSize = sizeof (m_nEventType);			break;		/* 会話イベント種別 */
 	case 1: pDst = (PBYTE)&m_nPage;				dwSize = sizeof (m_nPage);				break;		/* 所属ページ番号 */
-	case 2: pDst = (PBYTE)&m_nPageChgCondition;	dwSize = sizeof (m_nPageChgCondition);	break;		/* ページ切り替え条件 */
-	case 3: pDst = (PBYTE)&m_dwData;			dwSize = sizeof (m_dwData);				break;		/* バイナリデータ */
-	case 4:				/* 文字列データ */
+	case 2: pDst = (PBYTE)&m_dwData;			dwSize = sizeof (m_dwData);				break;		/* バイナリデータ */
+	case 3:				/* 文字列データ */
 		m_strText = (LPCSTR)pSrc;
 		dwSize = m_strText.GetLength () + 1;
 		break;
@@ -218,7 +212,6 @@ DWORD CInfoTalkEventBase::GetSendDataSize(void)
 	dwRet = 0;
 	dwRet += sizeof (m_nEventType);					/* 会話イベント種別 */
 	dwRet += sizeof (m_nPage);						/* 所属ページ番号 */
-	dwRet += sizeof (m_nPageChgCondition);			/* ページ切り替え条件 */
 	dwRet += sizeof (m_dwData);						/* バイナリデータ */
 	dwRet += (m_strText.GetLength () + 1);			/* 文字列データ */
 
@@ -244,7 +237,6 @@ PBYTE CInfoTalkEventBase::GetSendData(void)
 
 	CopyMemoryRenew (pDataTmp, &m_nEventType,			sizeof (m_nEventType),			pDataTmp);		/* 会話イベント種別 */
 	CopyMemoryRenew (pDataTmp, &m_nPage,				sizeof (m_nPage),				pDataTmp);		/* 所属ページ番号 */
-	CopyMemoryRenew (pDataTmp, &m_nPageChgCondition,	sizeof (m_nPageChgCondition),	pDataTmp);		/* ページ切り替え条件 */
 	CopyMemoryRenew (pDataTmp, &m_dwData,				sizeof (m_dwData),				pDataTmp);		/* バイナリデータ */
 	strcpyRenew ((LPSTR)pDataTmp, m_strText, pDataTmp);					/* 文字列データ */
 
@@ -267,7 +259,6 @@ PBYTE CInfoTalkEventBase::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 	CopyMemoryRenew (&m_nEventType,			pDataTmp, sizeof (m_nEventType),		pDataTmp);		/* 会話イベント種別 */
 	CopyMemoryRenew (&m_nPage,				pDataTmp, sizeof (m_nPage),				pDataTmp);		/* 所属ページ番号 */
-	CopyMemoryRenew (&m_nPageChgCondition,	pDataTmp, sizeof (m_nPageChgCondition),	pDataTmp);		/* ページ切り替え条件 */
 	CopyMemoryRenew (&m_dwData,				pDataTmp, sizeof (m_dwData),			pDataTmp);		/* バイナリデータ */
 	StoreRenew (m_strText, (LPCSTR)pDataTmp, pDataTmp);					/* 文字列データ */
 
@@ -290,7 +281,6 @@ void CInfoTalkEventBase::Copy(CInfoTalkEventBase *pSrc)
 
 	m_nEventType		= pSrc->m_nEventType;			/* 会話イベント種別 */
 	m_nPage				= pSrc->m_nPage;				/* 所属ページ番号 */
-	m_nPageChgCondition	= pSrc->m_nPageChgCondition;	/* ページ切り替え条件 */
 	m_dwData			= pSrc->m_dwData;				/* バイナリデータ */
 	m_strText			= pSrc->m_strText;				/* 文字列データ */
 }

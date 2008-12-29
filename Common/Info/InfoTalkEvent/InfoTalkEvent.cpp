@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #include "stdafx.h"
+#include "InfoTalkEventPAGE.h"
 #include "InfoTalkEventMENU.h"
 #include "InfoTalkEvent.h"
 
@@ -386,6 +387,9 @@ PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
 	pRet = NULL;
 
 	switch (nType) {
+	case TALKEVENTTYPE_PAGE:			/* ページ切り替え */
+		pRet = new CInfoTalkEventPAGE;
+		break;
 	case TALKEVENTTYPE_MSG:				/* メッセージ表示 */
 		pRet = new CInfoTalkEventBase;
 		break;
@@ -488,6 +492,22 @@ void CInfoTalkEvent::GetEventArray(int nPage, ARRAYTALKEVENTBASEINFO &aDst)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoTalkEvent::GetTalkEventCount								 */
+/* 内容		:会話イベントページ数を取得										 */
+/* 日付		:2008/12/29														 */
+/* ========================================================================= */
+
+int CInfoTalkEvent::GetTalkEventCount(int nPage)
+{
+	ARRAYTALKEVENTBASEINFO aInfoTmp;
+
+	GetEventArray (nPage, aInfoTmp);
+
+	return aInfoTmp.GetSize ();
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoTalkEvent::GetPageCount									 */
 /* 内容		:会話イベントページ数を取得										 */
 /* 日付		:2008/12/23														 */
@@ -523,6 +543,81 @@ void CInfoTalkEvent::AddTalkEvent(CInfoTalkEventBase *pInfo)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoTalkEvent::UpTalkEvent									 */
+/* 内容		:指定イベントを1つ上に移動										 */
+/* 日付		:2008/12/29														 */
+/* ========================================================================= */
+
+void CInfoTalkEvent::UpTalkEvent(int nPage, int nNo)
+{
+	int i, nNoFront, nCount, nNoCount;
+	PCInfoTalkEventBase pInfo;
+
+	if (nNo <= 0) {
+		return;
+	}
+
+	nNoFront = 0;
+	nNoCount = 0;
+	nCount   = m_apTalkEvent.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfo = m_apTalkEvent[i];
+		if (pInfo->m_nPage != nPage) {
+			continue;
+		}
+		if (nNo != nNoCount) {
+			if (nNoCount == nNo - 1) {
+				nNoFront = i;
+			}
+			nNoCount ++;
+			continue;
+		}
+		m_apTalkEvent[i] = m_apTalkEvent[nNoFront];
+		m_apTalkEvent[nNoFront] = pInfo;
+		break;
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoTalkEvent::DownTalkEvent									 */
+/* 内容		:指定イベントを1つ下に移動										 */
+/* 日付		:2008/12/29														 */
+/* ========================================================================= */
+
+void CInfoTalkEvent::DownTalkEvent(int nPage, int nNo)
+{
+	int i, nNoBack, nCount, nNoCount;
+	PCInfoTalkEventBase pInfo;
+
+	nCount = GetTalkEventCount (nPage);
+	if (nNo >= nCount - 1) {
+		return;
+	}
+
+	nNoBack = 0;
+	nNoCount = nCount - 1;
+	nCount   = m_apTalkEvent.GetSize ();
+	for (i = nCount - 1; i >= 0; i --) {
+		pInfo = m_apTalkEvent[i];
+		if (pInfo->m_nPage != nPage) {
+			continue;
+		}
+		if (nNo != nNoCount) {
+			if (nNoCount == nNo + 1) {
+				nNoBack = i;
+			}
+			nNoCount --;
+			continue;
+		}
+		m_apTalkEvent[i] = m_apTalkEvent[nNoBack];
+		m_apTalkEvent[nNoBack] = pInfo;
+		break;
+	}
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoTalkEvent::DeleteTalkEvent								 */
 /* 内容		:会話イベントを削除												 */
 /* 日付		:2008/12/17														 */
@@ -550,23 +645,6 @@ void CInfoTalkEvent::DeleteTalkEvent(int nNo)
 
 void CInfoTalkEvent::DeleteTalkEvent(int nPage, int nNo)
 {
-	int i, nCount, nNoCount;
-	PCInfoTalkEventBase pInfo;
-
-	nNoCount = 0;
-	nCount   = m_apTalkEvent.GetSize ();
-	for (i = 0; i < nCount; i ++) {
-		pInfo = m_apTalkEvent[i];
-		if (pInfo->m_nPage != nPage) {
-			continue;
-		}
-		if (nNo != nNoCount) {
-			nNoCount ++;
-			continue;
-		}
-		DeleteTalkEvent (i);
-		break;
-	}
 }
 
 

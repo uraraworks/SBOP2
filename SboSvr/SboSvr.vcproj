@@ -728,6 +728,10 @@
 							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp"
 							>
 						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.cpp"
+							>
+						</File>
 					</Filter>
 				</Filter>
 				<Filter
@@ -1958,6 +1962,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.h"
 							>
 						</File>
 					</Filter>
