@@ -57,6 +57,7 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData)
 	case SBOCOMMANDID_SUB_CHAR_TEXTEFFECT:			RecvProcCHAR_TEXTEFFECT			(pData);	break;	/* 文字エフェクト通知 */
 	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE:		RecvProcCHAR_STATE_CHARGE		(pData);	break;	/* 溜め状態通知 */
 	case SBOCOMMANDID_SUB_CHAR_RES_TALKEVENT:		RecvProcCHAR_RES_TALKEVENT		(pData);	break;	/* 会話イベント情報応答 */
+	case SBOCOMMANDID_SUB_CHAR_SKILLINFO:			RecvProcCHAR_SKILLINFO			(pData);	break;	/* スキル情報通知 */
 	}
 }
 
@@ -857,6 +858,34 @@ void CMainFrame::RecvProcCHAR_RES_TALKEVENT(PBYTE pData)
 
 	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWTALKEVENT, Packet.m_dwParam);
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWTALKEVENT, Packet.m_dwParam);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_SKILLINFO								 */
+/* 内容		:受信処理(スキル情報通知)										 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_SKILLINFO(PBYTE pData)
+{
+	PCInfoCharCli pInfoChar, pInfoCharPlayer;
+	CPacketCHAR_SKILLINFO Packet;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwCharID);
+	/* 知らないキャラ？ */
+	if (pInfoChar == NULL) {
+		return;
+	}
+
+	pInfoChar->SetSkill (&Packet.m_adwSkillID);
+
+	pInfoCharPlayer = m_pMgrData->GetPlayerChar ();
+	if (pInfoChar == pInfoCharPlayer) {
+		PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
+	}
 }
 
 /* Copyright(C)URARA-works 2006 */

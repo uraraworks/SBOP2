@@ -161,6 +161,7 @@ IDP_2X2_CLOTH_03        PNG                     "res\\2x2\\2x2_cloth03.png"
 IDP_MAP_03              PNG                     "res\\map03.png"
 IDP_2X2_NPC_006         PNG                     "res\\2x2\\2x2_npc006.png"
 IDP_2X2_NPC_006_SHADOW  PNG                     "res\\2x2\\2x2_npc006_shadow.png"
+IDP_ICON                PNG                     "res\\icon.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //

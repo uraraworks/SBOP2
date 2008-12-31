@@ -59,6 +59,7 @@ enum {
 	WINDOWTYPE_CHAR_STATUS3,				/* キャラ-ステータス3 */
 	WINDOWTYPE_TEXTMSG,						/* テキストメッセージ */
 	WINDOWTYPE_SWOON,						/* 気絶メニュー */
+	WINDOWTYPE_SKILLMENU,					/* スキルメニュー */
 };
 
 
@@ -119,6 +120,7 @@ public:
 	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg);			/* テキストメッセージ */
 	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo);	/* テキストメッセージ */
 	void MakeWindowSWOON			(void);						/* 気絶メニュー */
+	void MakeWindowSKILLMENU		(int nType = 0);			/* スキルメニュー */
 
 
 private:

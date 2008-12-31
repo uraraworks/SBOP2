@@ -12,6 +12,7 @@
 #include "UraraSockTCPSBO.h"
 #include "Packet.h"
 #include "Command.h"
+#include "InfoMapParts.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoItemType.h"
 #include "LibInfoItem.h"
@@ -864,6 +865,49 @@ BOOL CLibInfoCharSvr::UseItem(CInfoCharSvr *pChar, DWORD dwItemID)
 		m_pMainFrame->SendToClient (pChar->m_dwSessionID, &PacketCHAR_ITEMINFO);
 		break;
 	}
+
+	bRet = TRUE;
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::UseSkill										 */
+/* 内容		:スキル使用														 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+BOOL CLibInfoCharSvr::UseSkill(CInfoCharSvr *pChar, DWORD dwItemID)
+{
+	BOOL bRet, bResult;
+	DWORD dwMotionType;
+	POINT ptPos;
+	PCInfoMapBase pInfoMap;
+
+	bRet = FALSE;
+	if (pChar == NULL) {
+		goto Exit;
+	}
+//	bResult = pChar->HaveItem (dwItemID);
+//	if (bResult == FALSE) {
+//		goto Exit;
+//	}
+//Todo:とりあえず釣りのみ
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pChar->m_dwMapID);
+	if (pInfoMap == NULL) {
+		goto Exit;
+	}
+	pChar->GetFrontMapPos (ptPos);
+	bResult = pInfoMap->IsFlg (ptPos.x, ptPos.y, BIT_PARTSHIT_FISHING);
+	if (bResult == FALSE) {
+		goto Exit;
+	}
+	dwMotionType = m_pLibInfoItem->GetMotionIDAtack (pChar->m_dwEquipItemIDArmsRight);
+	if ((dwMotionType & INFOITEMARMS_MOTION_FISHING) == 0) {
+		goto Exit;
+	}
+	pChar->SetMotion (CHARMOTIONLISTID_FISHING_UP);
 
 	bRet = TRUE;
 Exit:

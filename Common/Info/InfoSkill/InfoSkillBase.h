@@ -14,11 +14,19 @@
 /* 定数定義																	 */
 /* ========================================================================= */
 
-/* スキル種別 */
+/* スキル種別(メイン) */
 enum {
-	SKILLTYPE_NONE = 0,
-	SKILLTYPE_FISHING,			/* 釣り */
-	SKILLTYPE_MAX
+	SKILLTYPEMAIN_NONE = 0,			/* 能力 */
+	SKILLTYPEMAIN_BATTLE,			/* 戦闘 */
+	SKILLTYPEMAIN_LIFE,				/* 生活 */
+	SKILLTYPEMAIN_MAX
+};
+
+/* スキル種別(サブ:生活) */
+enum {
+	SKILLTYPESUB_LIFE_NONE = 0,
+	SKILLTYPESUB_LIFE_FISHING,		/* 釣り */
+	SKILLTYPESUB_LIFE_MAX
 };
 
 /* 使用制限 */
@@ -58,7 +66,8 @@ public:
 
 	DWORD		m_dwSkillID,					/* スキルID */
 				m_dwSP;							/* 消費SP */
-	int			m_nType,						/* スキル種別 */
+	int			m_nTypeMain,					/* スキル種別(メイン) */
+				m_nTypeSub,						/* スキル種別(サブ) */
 				m_nUse;							/* 使用制限 */
 	CmyString	m_strName;						/* スキル名 */
 } CInfoSkillBase, *PCInfoSkillBase;

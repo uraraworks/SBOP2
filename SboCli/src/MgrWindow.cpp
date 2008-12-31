@@ -45,6 +45,7 @@
 #include "WindowCHAR_STATUS3.h"
 #include "WindowTEXTMSG.h"
 #include "WindowSWOON.h"
+#include "WindowSKILLMENU.h"
 #include "MgrWindow.h"
 
 
@@ -971,6 +972,26 @@ void CMgrWindow::MakeWindowSWOON(void)
 	PCWindowSWOON pWindowNew;
 
 	pWindowNew = new CWindowSWOON;
+	pWindowNew->Create (m_pMgrData);
+	m_paWindow->Add (pWindowNew);
+	SetActive ();
+
+	m_bDraw = TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrWindow::MakeWindowSKILLMENU								 */
+/* 内容		:スキルメニュー													 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CMgrWindow::MakeWindowSKILLMENU(int nType/*0*/)
+{
+	PCWindowSKILLMENU pWindowNew;
+
+	pWindowNew = new CWindowSKILLMENU;
+	pWindowNew->SetType (nType);
 	pWindowNew->Create (m_pMgrData);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();

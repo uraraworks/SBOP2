@@ -1515,6 +1515,10 @@
 							</FileConfiguration>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\CHAR\PacketCHAR_SKILLINFO.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\CHAR\PacketCHAR_STATE.cpp"
 							>
 							<FileConfiguration
@@ -2841,6 +2845,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Packet\CHAR\PacketCHAR_SET_EFFECT.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\CHAR\PacketCHAR_SKILLINFO.h"
 							>
 						</File>
 						<File

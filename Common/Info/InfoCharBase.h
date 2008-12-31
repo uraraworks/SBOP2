@@ -119,6 +119,8 @@ public:
 	BOOL		HaveItem		(DWORD dwItemID);								/* 指定アイテムを持っているか判定 */
 	void		GetTargetPos	(POINT *ptTarget, POINT &ptDst, int nCount);	/* 指定座標を取得 */
 	void		SetTarget		(CInfoCharBase *pCharTarget);					/* ターゲットキャラを設定 */
+	void		SetSkill		(ARRAYDWORD *padwSkillID);						/* スキル情報を設定 */
+	ARRAYDWORD	*GetSkill		(void)	{ return &m_adwSkillID; }				/* スキル情報を取得 */
 
 	virtual BOOL IsMove				(void);							/* 移動中か判定 */
 	virtual int  SetPos				(int x, int y, BOOL bBack = FALSE);	/* 座標を指定 */

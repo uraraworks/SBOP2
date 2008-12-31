@@ -14,6 +14,7 @@
 #include "LibInfoItem.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoMapParts.h"
+#include "LibInfoSkill.h"
 #include "InfoAccount.h"
 #include "InfoMapParts.h"
 #include "InfoMapEventBase.h"
@@ -50,6 +51,8 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE:		RecvProcCHAR_STATE_CHARGE		(pData, dwSessionID);	break;	/* 溜め状態通知 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY:		RecvProcCHAR_REQ_RECOVERY		(pData, dwSessionID);	break;	/* 気絶後復活要求 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT:		RecvProcCHAR_REQ_TALKEVENT		(pData, dwSessionID);	break;	/* 会話イベント情報要求 */
+	case SBOCOMMANDID_SUB_CHAR_REQ_ADDSKILL:		RecvProcCHAR_REQ_ADDSKILL		(pData, dwSessionID);	break;	/* スキル追加要求 */
+	case SBOCOMMANDID_SUB_CHAR_REQ_USESKILL:		RecvProcCHAR_REQ_USESKILL		(pData, dwSessionID);	break;	/* スキルを使う要求 */
 	}
 }
 
@@ -662,7 +665,10 @@ void CMainFrame::RecvProcCHAR_PROC_FISHING(PBYTE pData, DWORD dwSessionID)
 	bRet = TRUE;
 Exit:
 	if (pInfoChar && (bRet == FALSE)) {
-		pInfoChar->SetMoveState (CHARMOVESTATE_BATTLE);
+		bResult = pInfoChar->IsEnableBattle ();
+		if (bResult) {
+			pInfoChar->SetMoveState (CHARMOVESTATE_BATTLE);
+		}
 	}
 	pInfoChar->SetProcState (nProcState);
 }
@@ -783,6 +789,74 @@ void CMainFrame::RecvProcCHAR_REQ_TALKEVENT(PBYTE pData, DWORD dwSessionID)
 	}
 	PacketCHAR_RES_TALKEVENT.Make (pInfoTalkEvent, Packet.m_dwPara);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_RES_TALKEVENT);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_REQ_ADDSKILL							 */
+/* 内容		:受信処理(スキル追加要求)										 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
+{
+	int i, nCount;
+	PARRAYDWORD paSkill;
+	PCInfoCharSvr pInfoChar;
+	PCInfoSkillBase pInfoSkill;
+	CPacketCHAR_PARA1 Packet;
+	CPacketCHAR_SKILLINFO PacketCHAR_SKILLINFO;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+	pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (Packet.m_dwPara);
+	if (pInfoSkill == NULL) {
+		return;
+	}
+
+	paSkill = pInfoChar->GetSkill ();
+	nCount = paSkill->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		if (paSkill->GetAt (i) == Packet.m_dwPara) {
+			break;
+		}
+	}
+	/* すでに持っている？ */
+	if (i < nCount) {
+		return;
+	}
+
+//Todo:
+	/* 条件の判定など入れる */
+
+	paSkill->Add (Packet.m_dwPara);
+	PacketCHAR_SKILLINFO.Make (Packet.m_dwCharID, paSkill);
+	m_pSock->SendTo (dwSessionID, &PacketCHAR_SKILLINFO);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_REQ_USESKILL							 */
+/* 内容		:受信処理(スキルを使う要求)										 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_REQ_USESKILL(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoCharSvr pInfoChar;
+	CPacketCHAR_PARA1 Packet;
+
+	Packet.Set (pData);
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+	m_pLibInfoChar->UseSkill (pInfoChar, Packet.m_dwPara);
 }
 
 /* Copyright(C)URARA-works 2006 */

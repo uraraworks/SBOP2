@@ -1616,7 +1616,9 @@ BOOL CInfoCharCli::TimerProcAtack(DWORD dwTime)
 			goto Exit;
 		}
 	}
-	ChgMoveState (CHARMOVESTATE_BATTLE);
+	if (IsStateBattle ()) {
+		ChgMoveState (CHARMOVESTATE_BATTLE);
+	}
 	bRet = TRUE;
 Exit:
 	return bRet;

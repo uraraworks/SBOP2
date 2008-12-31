@@ -50,6 +50,7 @@ protected:
 	virtual BOOL OnDown		(void);										/* キーハンドラ(↓) */
 	virtual BOOL OnLeft		(void);										/* キーハンドラ(←) */
 	virtual BOOL OnRight	(void);										/* キーハンドラ(→) */
+	virtual BOOL OnS		(BOOL bDown);								/* キーハンドラ(S) */
 	virtual BOOL OnB		(BOOL bDown);								/* キーハンドラ(B) */
 	virtual BOOL OnX		(BOOL bDown);								/* キーハンドラ(X) */
 	virtual BOOL OnZ		(BOOL bDown);								/* キーハンドラ(Z) */

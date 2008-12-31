@@ -89,7 +89,7 @@ PBYTE CPacketADMIN_SKILL_RENEWSKILL::Set(PBYTE pPacket)
 	InfoTmp.SetSendData (pDataTmp);
 
 	SAFE_DELETE (m_pInfo);
-	m_pInfo		= (PCInfoSkillBase)LibInfo.GetNew (InfoTmp.m_nType);
+	m_pInfo		= (PCInfoSkillBase)LibInfo.GetNew (InfoTmp.m_nTypeMain, InfoTmp.m_nTypeSub);
 	pDataTmp	= m_pInfo->SetSendData (pDataTmpBack);
 
 	pRet = pDataTmp;

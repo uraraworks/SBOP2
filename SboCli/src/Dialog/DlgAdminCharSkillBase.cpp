@@ -28,7 +28,8 @@ void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 {
 	CDlgAdminBase::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDlgAdminCharSkillBase)
-	DDX_Control(pDX, IDC_TYPE, m_ctlType);
+	DDX_Control(pDX, IDC_TYPEMAIN, m_ctlTypeMain);
+	DDX_Control(pDX, IDC_TYPESUB, m_ctlTypeSub);
 	DDX_Control(pDX, IDC_USE, m_ctlUse);
 	//}}AFX_DATA_MAP
 	DDX_Text(pDX, IDC_NAME, m_strName);
@@ -37,7 +38,8 @@ void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CDlgAdminCharSkillBase, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminCharSkillBase)
-	ON_CBN_SELCHANGE(IDC_TYPE, OnSelchangeType)
+	ON_CBN_SELCHANGE(IDC_TYPEMAIN, OnSelchangeTypeMain)
+	ON_CBN_SELCHANGE(IDC_TYPESUB, OnSelchangeTypeSub)
 	ON_CBN_SELCHANGE(IDC_USE, OnSelchangeUse)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
 	//}}AFX_MSG_MAP
@@ -58,8 +60,9 @@ CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDlgAdminCharSkillBase)
 	//}}AFX_DATA_INIT
 
-	m_nType	= -1;
-	m_nUse	= -1;
+	m_nTypeMain		= -1;
+	m_nTypeSub		= -1;
+	m_nUse			= -1;
 	m_bModeModify	= FALSE;
 	m_pDlgType		= NULL;
 	m_pInfo			= NULL;
@@ -105,7 +108,7 @@ void CDlgAdminCharSkillBase::Get(CInfoSkillBase *&pDst)
 	}
 
 	SAFE_DELETE (pDst);
-	pDst = (PCInfoSkillBase)LibInfo.GetNew (m_pInfo->m_nType);
+	pDst = (PCInfoSkillBase)LibInfo.GetNew (m_pInfo->m_nTypeMain, m_pInfo->m_nTypeSub);
 	pDst->Copy (m_pInfo);
 }
 
@@ -121,12 +124,13 @@ void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 	CLibInfoSkill LibInfo;
 
 	SAFE_DELETE (m_pInfo);
-	m_pInfo = (PCInfoSkillBase)LibInfo.GetNew (pSrc->m_nType);
+	m_pInfo = (PCInfoSkillBase)LibInfo.GetNew (pSrc->m_nTypeMain, pSrc->m_nTypeSub);
 	m_pInfo->Copy (pSrc);
 
 	m_strName	= m_pInfo->m_strName;
 	m_dwSP		= m_pInfo->m_dwSP;
-	m_nType		= m_pInfo->m_nType;
+	m_nTypeMain	= m_pInfo->m_nTypeMain;
+	m_nTypeSub	= m_pInfo->m_nTypeSub;
 	m_nUse		= m_pInfo->m_nUse;
 
 	m_bModeModify = TRUE;
@@ -141,7 +145,7 @@ void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 
 BOOL CDlgAdminCharSkillBase::OnInitDialog()
 {
-	int i, nNo;
+	int i, nCount, nNo, nTmp;
 
 	CDlgAdminBase::OnInitDialog();
 
@@ -149,21 +153,38 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 		SetWindowText ("スキルの編集");
 	}
 
-	m_ctlType.InsertString (0, "未設定");
-	m_ctlType.SetItemData (0, SKILLTYPE_NONE);
-	m_ctlType.InsertString (1, "釣り");
-	m_ctlType.SetItemData (1, SKILLTYPE_FISHING);
+	m_ctlTypeMain.InsertString (0, "能力");
+	m_ctlTypeMain.SetItemData (0, 0);
+	m_ctlTypeMain.InsertString (1, "戦闘");
+	m_ctlTypeMain.SetItemData (1, SKILLTYPEMAIN_BATTLE);
+	m_ctlTypeMain.InsertString (2, "生活");
+	m_ctlTypeMain.SetItemData (2, SKILLTYPEMAIN_LIFE);
 
 	nNo = 0;
 	if (m_pInfo) {
-		for (i = 0; i < SKILLTYPE_MAX; i ++) {
-			if (m_pInfo->m_nType == m_ctlType.GetItemData (i)) {
+		for (i = 0; i < SKILLTYPEMAIN_MAX; i ++) {
+			if (m_pInfo->m_nTypeMain == m_ctlTypeMain.GetItemData (i)) {
 				nNo = i;
 				break;
 			}
 		}
 	}
-	m_ctlType.SetCurSel (nNo);
+	nTmp = m_pInfo->m_nTypeSub;
+	m_ctlTypeMain.SetCurSel (nNo);
+	OnSelchangeTypeMain ();
+
+	m_pInfo->m_nTypeSub = nTmp;
+	nNo = 0;
+	if (m_pInfo) {
+		nCount = m_ctlTypeSub.GetCount ();
+		for (i = 0; i < nCount; i ++) {
+			if (m_pInfo->m_nTypeSub == m_ctlTypeSub.GetItemData (i)) {
+				nNo = i;
+				break;
+			}
+		}
+	}
+	m_ctlTypeSub.SetCurSel (nNo);
 
 	m_ctlUse.InsertString (0, "制限無し");
 	m_ctlUse.SetItemData (0, SKILLUSE_ANY);
@@ -183,7 +204,7 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 	}
 	m_ctlUse.SetCurSel (nNo);
 
-	OnSelchangeType ();
+	OnSelchangeTypeSub ();
 	OnSelchangeUse ();
 	if (m_pDlgType && m_pInfo) {
 		m_pDlgType->Set (m_pInfo);
@@ -232,26 +253,59 @@ void CDlgAdminCharSkillBase::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnSelchangeType						 */
+/* 関数名	:CDlgAdminCharSkillBase::OnSelchangeTypeMain					 */
 /* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
 /* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
-void CDlgAdminCharSkillBase::OnSelchangeType()
+void CDlgAdminCharSkillBase::OnSelchangeTypeMain()
 {
-	int nNo, nType;
+	int nTypeMain;
+
+	m_ctlTypeSub.ResetContent ();
+
+	m_ctlTypeSub.InsertString (0, "未設定");
+	m_ctlTypeSub.SetItemData (0, 0);
+
+	nTypeMain = m_ctlTypeMain.GetItemData (m_ctlTypeMain.GetCurSel ());
+	switch (nTypeMain) {
+	case SKILLTYPEMAIN_NONE:			/* 能力 */
+		break;
+	case SKILLTYPEMAIN_BATTLE:			/* 戦闘 */
+		break;
+	case SKILLTYPEMAIN_LIFE:			/* 生活 */
+		m_ctlTypeSub.InsertString (1, "釣り");
+		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_LIFE_FISHING);
+		break;
+	}
+	m_ctlTypeSub.SetCurSel (0);
+	OnSelchangeTypeSub ();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharSkillBase::OnSelchangeTypeSub						 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2008/12/07														 */
+/* ========================================================================= */
+
+void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
+{
+	int nTypeMain, nTypeSub;
 	CRect rc;
 	PCInfoSkillBase pInfoTmp;
 	CLibInfoSkill LibInfo;
 
-	nNo = m_ctlType.GetCurSel ();
-	nType = m_ctlType.GetItemData (nNo);
+	nTypeMain = m_ctlTypeMain.GetItemData (m_ctlTypeMain.GetCurSel ());
+	nTypeSub  = m_ctlTypeSub. GetItemData (m_ctlTypeSub. GetCurSel ());
 
 	if (m_pDlgType) {
 		m_pDlgType->DestroyWindow ();
 		m_pDlgType = NULL;
 	}
 
+	m_pDlgType = new CDlgAdminCharSkillNONE(this);
+#if 0
 	switch (nType) {
 	case SKILLTYPE_FISHING:			/* 釣り */
 		m_pDlgType = new CDlgAdminCharSkillNONE(this);
@@ -260,6 +314,7 @@ void CDlgAdminCharSkillBase::OnSelchangeType()
 		m_pDlgType = new CDlgAdminCharSkillNONE(this);
 		break;
 	}
+#endif
 	if (m_pDlgType) {
 		m_pDlgType->Init (m_pMgrData);
 		GetDlgItem (IDC_FRAME)->GetWindowRect (rc);
@@ -267,17 +322,17 @@ void CDlgAdminCharSkillBase::OnSelchangeType()
 		m_pDlgType->MoveWindow (rc.left, rc.top, rc.Width (), rc.Height ());
 	}
 
-	if (m_nType != nType) {
-		pInfoTmp = (PCInfoSkillBase)LibInfo.GetNew (nType);
+	if ((m_nTypeMain != nTypeMain) || (m_nTypeSub != nTypeSub)) {
+		pInfoTmp = (PCInfoSkillBase)LibInfo.GetNew (nTypeMain, nTypeSub);
 		if (m_pInfo) {
-			pInfoTmp->m_dwSkillID	= m_pInfo->m_dwSkillID;
-			pInfoTmp->m_dwSP		= m_pInfo->m_dwSP;
+			pInfoTmp->Copy (m_pInfo);
 		}
-		pInfoTmp->m_nType = nType;
 
 		SAFE_DELETE (m_pInfo);
 		m_pInfo = pInfoTmp;
 	}
+	m_nTypeMain = nTypeMain;
+	m_nTypeSub  = nTypeSub;
 }
 
 

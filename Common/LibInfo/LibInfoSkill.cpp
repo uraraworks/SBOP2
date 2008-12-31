@@ -67,7 +67,7 @@ void CLibInfoSkill::Destroy(void)
 
 PCInfoBase CLibInfoSkill::GetNew(void)
 {
-	return (PCInfoBase)GetNew (SKILLTYPE_NONE);
+	return (PCInfoBase)GetNew (0, 0);
 }
 
 
@@ -77,19 +77,15 @@ PCInfoBase CLibInfoSkill::GetNew(void)
 /* “ú•t		:2008/12/04														 */
 /* ========================================================================= */
 
-PCInfoBase CLibInfoSkill::GetNew(int nType)
+PCInfoBase CLibInfoSkill::GetNew(int nTypeMain, int nTypeSub)
 {
 	PCInfoSkillBase pInfo;
 
 	pInfo = NULL;
 
-	switch (nType) {
-	case SKILLTYPE_FISHING:				/* ’Þ‚è */
-	default:
-		pInfo = new CInfoSkillBase;
-		break;
-	}
-	pInfo->m_nType = nType;
+	pInfo = new CInfoSkillBase;
+	pInfo->m_nTypeMain = nTypeMain;
+	pInfo->m_nTypeSub  = nTypeSub;
 
 	return pInfo;
 }
@@ -220,7 +216,7 @@ void CLibInfoSkill::Merge(CLibInfoSkill *pSrc)
 		pInfoSrc = (PCInfoSkillBase)pSrc->GetPtr (i);
 		pInfoTmp = (PCInfoSkillBase)GetPtr (pInfoSrc->m_dwSkillID);
 		if (pInfoTmp == NULL) {
-			pInfoTmp = (PCInfoSkillBase)GetNew (pInfoSrc->m_nType);
+			pInfoTmp = (PCInfoSkillBase)GetNew (pInfoSrc->m_nTypeMain, pInfoSrc->m_nTypeSub);
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
 		}
@@ -248,7 +244,7 @@ CInfoSkillBase *CLibInfoSkill::Renew(CInfoSkillBase *pSrc)
 		if (pInfoTmp->m_dwSkillID != pSrc->m_dwSkillID) {
 			continue;
 		}
-		pInfo = (PCInfoSkillBase)GetNew (pSrc->m_nType);
+		pInfo = (PCInfoSkillBase)GetNew (pSrc->m_nTypeMain, pSrc->m_nTypeSub);
 		pInfo->Copy (pSrc);
 		pInfo->m_dwSkillID = pInfoTmp->m_dwSkillID;
 
@@ -383,7 +379,7 @@ PBYTE CLibInfoSkill::SetSendData(PBYTE pSrc)
 		}
 		pDataTmpBack = pDataTmp;
 		InfoTmp.SetSendData (pDataTmp);
-		pInfoSkillBaseTmp = (PCInfoSkillBase)GetNew (InfoTmp.m_nType);
+		pInfoSkillBaseTmp = (PCInfoSkillBase)GetNew (InfoTmp.m_nTypeMain, InfoTmp.m_nTypeSub);
 		pDataTmp = pInfoSkillBaseTmp->SetSendData (pDataTmpBack);
 
 		pInfoSkillBase = (PCInfoSkillBase)GetPtr (pInfoSkillBaseTmp->m_dwSkillID);

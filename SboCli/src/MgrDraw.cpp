@@ -940,6 +940,75 @@ void CMgrDraw::DrawCursor(
 
 
 /* ========================================================================= */
+/* 関数名	:CMgrDraw::DrawSkillMenu										 */
+/* 内容		:スキルメニューを描画											 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CMgrDraw::DrawSkillMenu(
+	CImg32 *pDst,		/* [in] 描画先 */
+	int x,				/* [in] 描画位置(X) */
+	int y)				/* [in] 描画位置(Y) */
+{
+	CImg32 *pDibSystem = m_pMgrGrpData->GetDibSystem ();
+
+	pDst->BltFrom256 (x, y, 192, 192, pDibSystem, 368, 432, TRUE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrDraw::DrawSkillType										 */
+/* 内容		:スキル種別タブを描画											 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CMgrDraw::DrawSkillType(
+	CImg32 *pDst,		/* [in] 描画先 */
+	int x,				/* [in] 描画位置(X) */
+	int y,				/* [in] 描画位置(Y) */
+	int nType,			/* [in] 種別 */
+	BOOL bActive)		/* [in] TRUE:選択 FALSE:非選択 */
+{
+	int yy;
+	CImg32 *pDibSystem = m_pMgrGrpData->GetDibSystem ();
+
+	yy		= (bActive) ? 320 : 376;
+	nType	= min (nType, 2);
+
+	pDst->BltFrom256 (x, y, 52, 56, pDibSystem, 368 + (nType * 52), yy, TRUE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrDraw::DrawIcon												 */
+/* 内容		:アイコンを描画													 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CMgrDraw::DrawIcon(
+	CImg32 *pDst,		/* [in] 描画先 */
+	int x,				/* [in] 描画位置(X) */
+	int y,				/* [in] 描画位置(Y) */
+	int nIndex)			/* [in] アイコン番号 */
+{
+	int cx, cy;
+	PCImg32 pImg, pDibTmp;
+	HDC hDCBmp;
+
+	cx = cy = 16;
+	pDibTmp	= GetDibTmp ();
+	pImg	= m_pMgrGrpData->GetDibIcon ();
+	pDibTmp->BltFrom256 (0, 0, 16, 16, pImg, nIndex % 20 * cx, nIndex / 20 * cy);
+
+	hDCBmp = pDibTmp->Lock ();
+	StretchBlt (hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
+	pDibTmp->Unlock ();
+
+	pDst->Blt (x, y, cx * 2, cy * 2, pDibTmp, 0, cy * 2, TRUE);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CMgrDraw::TimerProc											 */
 /* 内容		:時間処理														 */
 /* 日付		:2006/09/24														 */

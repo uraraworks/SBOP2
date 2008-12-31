@@ -70,6 +70,8 @@
 #define IDD_TALKEVENT_MSG               188
 #define IDD_TALKEVENT_MENU              189
 #define IDD_TALKEVENT_MENU_SET          190
+#define IDD_TALKEVENT_PAGE1             191
+#define IDD_TALKEVENT_ADDSKILL          191
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -109,6 +111,7 @@
 #define IDC_MSG                         1014
 #define IDC_STOP                        1014
 #define IDC_USE_PLAY                    1014
+#define IDC_TYPESUB                     1014
 #define IDC_BASE                        1015
 #define IDC_SCROLLBAR1                  1015
 #define IDC_SCROLL                      1015
@@ -163,7 +166,6 @@
 #define IDC_MAPSHADOW                   1046
 #define IDC_TYPE_COUNTER                1046
 #define IDC_ATTR                        1047
-#define IDC_TYPE_PUTITEM                1047
 #define IDC_ATTR2                       1048
 #define IDC_STATIC_ACCOUNTID            1048
 #define IDC_STATIC_CHARNAME             1049
@@ -326,6 +328,8 @@
 #define IDC_TAB                         1150
 #define IDC_ITEM_CMB                    1153
 #define IDC_ITEM_STA                    1154
+#define IDC_TYPEMAIN                    1155
+#define IDC_SKILL                       1156
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -374,7 +378,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        191
 #define _APS_NEXT_COMMAND_VALUE         32811
-#define _APS_NEXT_CONTROL_VALUE         1155
+#define _APS_NEXT_CONTROL_VALUE         1157
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

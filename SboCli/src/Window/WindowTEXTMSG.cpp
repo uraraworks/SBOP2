@@ -7,6 +7,9 @@
 /* ========================================================================= */
 
 #include "stdafx.h"
+#include "Command.h"
+#include "PacketCHAR_PARA1.h"
+#include "UraraSockTCPSBO.h"
 #include "Img32.h"
 #include "LibInfoItem.h"
 #include "InfoTalkEvent.h"
@@ -84,6 +87,7 @@ void CWindowTEXTMSG::Create(CMgrData *pMgrData)
 {
 	CWindowBase::Create (pMgrData);
 
+	m_pSock = m_pMgrData->GetUraraSockTCP ();
 	m_bActive = TRUE;
 	m_pDib->Create (m_sizeWindow.cx, m_sizeWindow.cy);
 	m_pDib->SetColorKey (0);
@@ -335,6 +339,15 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 					m_nState	= STATE_MENU;
 					m_nPos		= 0;
 					m_nPosMax	= nCount - 1;
+				}
+				break;
+			case TALKEVENTTYPE_ADDSKILL:		/* ƒXƒLƒ‹’Ç‰Á */
+				{
+					CPacketCHAR_PARA1 PacketPara1;
+
+					PacketPara1.Make (SBOCOMMANDID_SUB_CHAR_REQ_ADDSKILL, pPlayerChar->m_dwCharID, pInfoTalkEvent->m_dwData);
+					m_pSock->Send (&PacketPara1);
+					m_nProcEventNo ++;
 				}
 				break;
 			}

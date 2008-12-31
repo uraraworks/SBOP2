@@ -35,6 +35,7 @@ CMgrGrpData::CMgrGrpData()
 	m_nMapPartsCount		= 0;
 	m_nMapShadowCount		= 0;
 	m_pImgSystem			= NULL;
+	m_pImgIcon				= NULL;
 	m_pImgShadow			= NULL;
 	m_pImgItem				= NULL;
 	m_pImgNumS				= NULL;
@@ -94,6 +95,7 @@ CMgrGrpData::~CMgrGrpData()
 	}
 
 	SAFE_DELETE (m_pImgSystem);
+	SAFE_DELETE (m_pImgIcon);
 	SAFE_DELETE (m_pImgShadow);
 	SAFE_DELETE (m_pImgItem);
 	SAFE_DELETE (m_pImgNumS);
@@ -178,6 +180,8 @@ BOOL CMgrGrpData::Load(void)
 
 	/* システム */
 	Read256 ("IDP_SYSTEM", &m_pImgSystem, 1);
+	/* アイコン */
+	Read256 ("IDP_ICON", &m_pImgIcon, 1);
 	/* 影画像 */
 	Read256 ("IDP_SHADOW", &m_pImgShadow, 1);
 	/* アイテム画像 */
@@ -665,6 +669,18 @@ void CMgrGrpData::Write(LPCSTR pszFileName, CImg32 *pSrc)
 PCImg32 CMgrGrpData::GetDibSystem(void)
 {
 	return m_pImgSystem;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrGrpData::GetDibIcon										 */
+/* 内容		:アイコン画像イメージを取得										 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+PCImg32 CMgrGrpData::GetDibIcon(void)
+{
+	return m_pImgIcon;
 }
 
 

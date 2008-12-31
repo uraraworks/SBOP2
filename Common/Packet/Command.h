@@ -103,6 +103,9 @@ enum {
 	SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY,			/* 気絶後復活要求 */
 	SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT,		/* 会話イベント情報要求 */
 	SBOCOMMANDID_SUB_CHAR_RES_TALKEVENT,		/* 会話イベント情報応答 */
+	SBOCOMMANDID_SUB_CHAR_REQ_ADDSKILL,			/* スキル追加要求 */
+	SBOCOMMANDID_SUB_CHAR_SKILLINFO,			/* スキル情報通知 */
+	SBOCOMMANDID_SUB_CHAR_REQ_USESKILL,			/* スキルを使う要求 */
 };
 
 /* コマンドID(マップ系) */

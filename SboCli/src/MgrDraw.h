@@ -48,6 +48,9 @@ public:
 	void	DrawTextEffect	(CImg32 *pDst, int x, int y, CInfoTextEffect *pInfoTextEffect);			/* 文字エフェクトを描画 */
 	void	DrawMapHitMark	(CImg32 *pDst, int x, int y, int nNo);									/* マップ当たり判定マークを描画 */
 	void	DrawCursor		(CImg32 *pDst, int x, int y, int nType);								/* 指カーソルを描画 */
+	void	DrawSkillMenu	(CImg32 *pDst, int x, int y);											/* スキルメニューを描画 */
+	void	DrawSkillType	(CImg32 *pDst, int x, int y, int nType, BOOL bActive);					/* スキル種別タブを描画 */
+	void	DrawIcon		(CImg32 *pDst, int x, int y, int nIndex);								/* アイコンを描画 */
 
 	BOOL	TimerProc		(void);								/* 時間処理 */
 	BOOL	IsFade			(void);								/* フェードイン/アウト中か判定 */

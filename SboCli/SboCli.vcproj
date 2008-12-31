@@ -2350,6 +2350,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Window\WindowSKILLMENU.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Window\WindowSTATUS.cpp"
 					>
 					<FileConfiguration
@@ -3235,6 +3239,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminSystemSetInitCharStatus.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventADDSKILL.cpp"
 					>
 				</File>
 				<File
@@ -4209,6 +4217,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Window\WindowSKILLMENU.h"
+					>
+				</File>
+				<File
 					RelativePath="src\Window\WindowSTATUS.h"
 					>
 				</File>
@@ -4442,6 +4454,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminSystemSetInitCharStatus.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminTalkEventADDSKILL.h"
 					>
 				</File>
 				<File

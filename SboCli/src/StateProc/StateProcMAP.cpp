@@ -57,6 +57,7 @@
 #include "WindowOPTION_ACTIONSET.h"
 #include "WindowOPTION_ACTIONSET_SLEEPTIMER.h"
 #include "WindowCOMMANDMENU.h"
+#include "WindowSKILLMENU.h"
 #include "DlgMsgLog.h"
 #include "MainFrame.h"
 #include "AdminWindow.h"
@@ -315,6 +316,7 @@ void CStateProcMAP::OnWindowMsg(int nType, DWORD dwPara)
 	case WINDOWTYPE_OPTION_ACTIONSET_SLEEPTIMER:	bClose = OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER	(dwPara);	break;	/* オプション-動作設定-おひるねタイマーの設定 */
 	case WINDOWTYPE_COMMANDMENU:					bClose = OnWindowMsgCOMMANDMENU					(dwPara);	break;	/* コマンドメニュー */
 	case WINDOWTYPE_SWOON:							bClose = OnWindowMsgSWOON						(dwPara);	break;	/* 気絶メニュー */
+	case WINDOWTYPE_SKILLMENU:						bClose = OnWindowMsgSKILLMENU					(dwPara);	break;	/* スキルメニュー */
 	}
 	if (bClose) {
 		m_pMgrWindow->Delete (nType);
@@ -1411,6 +1413,7 @@ Exit:
 BOOL CStateProcMAP::OnS(BOOL bDown)
 {
 	BOOL bRet;
+	PCWindowSKILLMENU pWnd;
 
 	bRet = FALSE;
 
@@ -1426,6 +1429,12 @@ BOOL CStateProcMAP::OnS(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
+	pWnd = (PCWindowSKILLMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_SKILLMENU);
+	if (pWnd) {
+		goto Exit;
+	}
+
+	m_pMgrWindow->MakeWindowSKILLMENU (2);
 	bRet = TRUE;
 Exit:
 	return bRet;
@@ -1597,6 +1606,80 @@ BOOL CStateProcMAP::OnV(BOOL bDown)
 	}
 	m_pMgrData->SaveIniData ();
 
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnF												 */
+/* 内容		:キーハンドラ(F)												 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+BOOL CStateProcMAP::OnF(BOOL bDown)
+{
+	BOOL bRet;
+	PCWindowSKILLMENU pWnd;
+
+	bRet = FALSE;
+
+	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
+	if (m_pPlayerChar == NULL) {
+		goto Exit;
+	}
+	if (IsKeyInputEnable () == FALSE) {
+		goto Exit;
+	}
+	if (bDown) {
+		goto Exit;
+	}
+	m_dwLastKeyInput = timeGetTime ();
+
+	pWnd = (PCWindowSKILLMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_SKILLMENU);
+	if (pWnd) {
+		goto Exit;
+	}
+
+	m_pMgrWindow->MakeWindowSKILLMENU (0);
+	bRet = TRUE;
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnL												 */
+/* 内容		:キーハンドラ(L)												 */
+/* 日付		:2006/12/31														 */
+/* ========================================================================= */
+
+BOOL CStateProcMAP::OnL(BOOL bDown)
+{
+	BOOL bRet;
+	PCWindowSKILLMENU pWnd;
+
+	bRet = FALSE;
+
+	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
+	if (m_pPlayerChar == NULL) {
+		goto Exit;
+	}
+	if (IsKeyInputEnable () == FALSE) {
+		goto Exit;
+	}
+	if (bDown) {
+		goto Exit;
+	}
+	m_dwLastKeyInput = timeGetTime ();
+
+	pWnd = (PCWindowSKILLMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_SKILLMENU);
+	if (pWnd) {
+		goto Exit;
+	}
+
+	m_pMgrWindow->MakeWindowSKILLMENU (1);
+	bRet = TRUE;
 Exit:
 	return bRet;
 }
@@ -2828,6 +2911,7 @@ Exit:
 
 BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 {
+	int nTmp;
 	BOOL bRet;
 	PCWindowCOMMANDMENU pWnd;
 
@@ -2841,7 +2925,15 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 	case 0:	/* キャラクター(C) */
 		m_pMgrWindow->MakeWindowCHAR_STATUS ();
 		break;
-//	case 1:	/* スキル(S) */
+	case 1:	/* スキル(S) */
+		nTmp = 0;
+		switch (pWnd->GetPosSub ()) {
+		case 0: nTmp = 2; break;
+		case 1: nTmp = 0; break;
+		case 2: nTmp = 1; break;
+		}
+		m_pMgrWindow->MakeWindowSKILLMENU (nTmp);
+		break;
 	case 2:	/* バッグ(B) */
 		m_pMgrWindow->MakeWindowITEMMENU ();
 		break;
@@ -2876,6 +2968,36 @@ BOOL CStateProcMAP::OnWindowMsgSWOON(DWORD dwPara)
 	}
 
 	return TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnWindowMsgSKILLMENU							 */
+/* 内容		:スキルメニュー													 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+BOOL CStateProcMAP::OnWindowMsgSKILLMENU(DWORD dwPara)
+{
+	BOOL bRet;
+	PCWindowSKILLMENU pWnd;
+	CPacketCHAR_PARA1 PacketCHAR_PARA1;
+
+	bRet = TRUE;
+	pWnd = (PCWindowSKILLMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_SKILLMENU);
+	if (pWnd == NULL) {
+		goto Exit;
+	}
+
+	if (dwPara == 0) {
+		goto Exit;
+	}
+
+	PacketCHAR_PARA1.Make (SBOCOMMANDID_SUB_CHAR_REQ_USESKILL, m_pPlayerChar->m_dwCharID, dwPara);
+	m_pSock->Send (&PacketCHAR_PARA1);
+
+Exit:
+	return bRet;
 }
 
 

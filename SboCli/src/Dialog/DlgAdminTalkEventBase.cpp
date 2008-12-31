@@ -17,6 +17,7 @@
 #include "DlgAdminTalkEventPAGE.h"
 #include "DlgAdminTalkEventMSG.h"
 #include "DlgAdminTalkEventMENU.h"
+#include "DlgAdminTalkEventADDSKILL.h"
 #include "DlgAdminTalkEventBase.h"
 
 #ifdef _DEBUG
@@ -143,6 +144,8 @@ BOOL CDlgAdminTalkEventBase::OnInitDialog()
 	m_Type.SetItemData (2, TALKEVENTTYPE_MSG);
 	m_Type.InsertString (3, "項目選択");
 	m_Type.SetItemData (3, TALKEVENTTYPE_MENU);
+	m_Type.InsertString (4, "スキル追加");
+	m_Type.SetItemData (4, TALKEVENTTYPE_ADDSKILL);
 
 	nNo = 0;
 	nCount = m_Type.GetCount ();
@@ -189,6 +192,9 @@ void CDlgAdminTalkEventBase::OnCbnSelchangeType()
 		break;
 	case TALKEVENTTYPE_MENU:			/* 項目選択 */
 		m_pDlgType = new CDlgAdminTalkEventMENU(this);
+		break;
+	case TALKEVENTTYPE_ADDSKILL:		/* スキル追加 */
+		m_pDlgType = new CDlgAdminTalkEventADDSKILL(this);
 		break;
 	default:
 		m_pDlgType = new CDlgAdminTalkEventNONE(this);

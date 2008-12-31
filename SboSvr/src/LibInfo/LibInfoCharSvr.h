@@ -44,6 +44,7 @@ public:
 	BOOL	Equip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* 装備 */
 	BOOL	UnEquip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* 装備解除 */
 	BOOL	UseItem			(CInfoCharSvr *pChar, DWORD dwItemID);					/* アイテム使用 */
+	BOOL	UseSkill		(CInfoCharSvr *pChar, DWORD dwSkillID);					/* スキル使用 */
 	void	DragItem		(CInfoCharSvr *pChar, DWORD dwItemID, POINT ptNewPos);	/* アイテム位置変更 */
 	void	RenewGrpID		(DWORD dwCharID);										/* 装備画像IDを更新 */
 	DWORD	GetPlaceName	(CmyString &strDst);									/* 最も人が集まっているマップ名を取得 */

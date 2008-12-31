@@ -120,6 +120,7 @@ private:
 	void	RecvProcCHAR_TEXTEFFECT				(PBYTE pData);					/* 文字エフェクト通知 */
 	void	RecvProcCHAR_STATE_CHARGE			(PBYTE pData);					/* 溜め状態通知 */
 	void	RecvProcCHAR_RES_TALKEVENT			(PBYTE pData);					/* 会話イベント情報応答 */
+	void	RecvProcCHAR_SKILLINFO				(PBYTE pData);					/* スキル情報通知 */
 
 	/* 受信処理(MainFrameRecvProcMAP.cpp) */
 	void	RecvProcMAP							(BYTE byCmdSub, PBYTE pData);	/* マップ系 */

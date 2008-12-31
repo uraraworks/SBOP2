@@ -54,6 +54,7 @@
 #include "CHAR/PacketCHAR_STATUS.h"						/* 			ステータス情報通知 */
 #include "CHAR/PacketCHAR_TEXTEFFECT.h"					/* 			文字エフェクト通知 */
 #include "CHAR/PacketCHAR_RES_TALKEVENT.h"				/* 			会話イベント情報応答 */
+#include "CHAR/PacketCHAR_SKILLINFO.h"					/* 			スキル情報通知 */
 #include "MAP/PacketMAP_REQ_MAPINFO.h"					/* マップ系:マップ情報要求 */
 #include "MAP/PacketMAP_RES_MAPINFO.h"					/* 			マップ情報応答 */
 #include "MAP/PacketMAP_ONLINE.h"						/* 			オンライン数通知 */

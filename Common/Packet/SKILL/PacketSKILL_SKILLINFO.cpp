@@ -83,7 +83,7 @@ void CPacketSKILL_SKILLINFO::Make(
 
 	LibInfoSkill.Create ();
 
-	pInfoTmp = (PCInfoSkillBase)LibInfoSkill.GetNew (pInfo->m_nType);
+	pInfoTmp = (PCInfoSkillBase)LibInfoSkill.GetNew (pInfo->m_nTypeMain, pInfo->m_nTypeSub);
 	pInfoTmp->Copy (pInfo);
 	LibInfoSkill.Add (pInfoTmp);
 

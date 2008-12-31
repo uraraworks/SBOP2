@@ -459,12 +459,19 @@ void CInfoCharSvr::Proc(DWORD dwTime)
 
 BOOL CInfoCharSvr::ProcFISHING(DWORD dwPara)
 {
+	int nState;
+
+	nState = CHARMOVESTATE_STAND;
+	if (IsStateBattle ()) {
+		nState = CHARMOVESTATE_BATTLE;
+	}
+
 	/* ’Þ‚ê‚È‚©‚Á‚½ */
 	if ((genrand () % 100) < 60) {
 //Todo:
 		SetEfcBalloon (8);
 		SetProcState (CHARPROCSTATEID_NORMAL);
-		SetMoveState (CHARMOVESTATE_BATTLE);
+		SetMoveState (nState);
 	} else {
 		SetMotion (CHARMOTIONLISTID_FISHING_HIT_UP);
 		AddProcInfo (CHARPROCID_FISHING_HIT, 5000, 0);
@@ -482,6 +489,13 @@ BOOL CInfoCharSvr::ProcFISHING(DWORD dwPara)
 
 BOOL CInfoCharSvr::ProcFISHING_HIT(DWORD dwPara)
 {
+	int nState;
+
+	nState = CHARMOVESTATE_STAND;
+	if (IsStateBattle ()) {
+		nState = CHARMOVESTATE_BATTLE;
+	}
+
 	/* ’Þ‚ê‚È‚©‚Á‚½ */
 	if ((genrand () % 100) < 60) {
 //Todo:
@@ -492,7 +506,7 @@ BOOL CInfoCharSvr::ProcFISHING_HIT(DWORD dwPara)
 		m_bChgFishingHit = TRUE;
 	}
 	SetMotion (-1);
-	SetMoveState (CHARMOVESTATE_BATTLE);
+	SetMoveState (nState);
 	SetProcState (CHARPROCSTATEID_NORMAL);
 	DeleteProcInfo (CHARPROCID_FISHING);
 

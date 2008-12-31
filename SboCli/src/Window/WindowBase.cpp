@@ -226,7 +226,10 @@ void CWindowBase::KeyProc(
 	dwTimeTmp = timeGetTime () - m_dwLastTimeKey;
 
 	bResult = FALSE;
-	if (byCode == 'B') {
+	if (byCode == 'S') {
+		bResult = OnS (bDown);
+
+	} else if (byCode == 'B') {
 		bResult = OnB (bDown);
 
 	} else if (byCode == 'X') {
@@ -391,6 +394,18 @@ BOOL CWindowBase::OnLeft(void)
 /* ========================================================================= */
 
 BOOL CWindowBase::OnRight(void)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::OnS												 */
+/* 内容		:キーハンドラ(S)												 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+BOOL CWindowBase::OnS(BOOL bDown)
 {
 	return FALSE;
 }

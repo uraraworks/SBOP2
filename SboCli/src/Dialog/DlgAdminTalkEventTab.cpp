@@ -281,6 +281,9 @@ void CDlgAdminTalkEventTab::Renew(void)
 		case TALKEVENTTYPE_MENU:		/* 項目選択 */
 			strTmp = "項目選択";
 			break;
+		case TALKEVENTTYPE_ADDSKILL:	/* スキル追加 */
+			strTmp = "スキル追加";
+			break;
 		}
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, (DWORD)pInfo);

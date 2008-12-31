@@ -25,6 +25,7 @@ public:
 
 	void	Create		(CMgrData *pMgrData);					/* 作成 */
 	void	Draw		(CImg32 *pDst);							/* 描画 */
+	int		GetPosSub	(void)	{ return m_nPosSub; }			/* サブメニューの位置を取得 */
 
 
 protected:

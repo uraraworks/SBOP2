@@ -25,7 +25,7 @@ public:
 	void Destroy		(void);									/* 破棄 */
 
 	PCInfoBase GetNew	(void);									/* 新規データを取得 */
-	PCInfoBase GetNew	(int nType);							/* 新規データを取得 */
+	PCInfoBase GetNew	(int nTypeMain, int nTypeSub);			/* 新規データを取得 */
 
 	int		GetCount	(void);									/* データ数を取得 */
 	void	Add			(PCInfoBase pInfo);						/* 追加 */

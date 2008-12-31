@@ -317,6 +317,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\icon.png"
+				>
+			</File>
+			<File
 				RelativePath="res\item.png"
 				>
 			</File>

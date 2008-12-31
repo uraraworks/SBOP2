@@ -13,6 +13,7 @@
 class CImg32;
 class CMgrData;
 class CInfoTalkEvent;
+class CUraraSockTCPSBO;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -69,7 +70,8 @@ protected:
 	CmyStringArray	m_astrMenu;				/* メニュー項目 */
 	CImg32		*m_pDibTitle,				/* 肩書きと名前部分 */
 				*m_pDibText;				/* 文字描画テンポラリ */
-	CInfoTalkEvent	*m_pInfoTalkEvent;		/* 処理中の会話イベント */
+	CInfoTalkEvent		*m_pInfoTalkEvent;	/* 処理中の会話イベント */
+	CUraraSockTCPSBO	*m_pSock;			/* 通信マネージャ */
 } CWindowTEXTMSG, *PCWindowTEXTMSG;
 
 /* Copyright(C)URARA-works 2008 */

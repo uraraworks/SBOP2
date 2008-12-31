@@ -108,6 +108,8 @@ private:
 	void	RecvProcCHAR_STATE_CHARGE			(PBYTE pData, DWORD dwSessionID);					/* 溜め状態通知 */
 	void	RecvProcCHAR_REQ_RECOVERY			(PBYTE pData, DWORD dwSessionID);					/* 気絶後復活要求 */
 	void	RecvProcCHAR_REQ_TALKEVENT			(PBYTE pData, DWORD dwSessionID);					/* 会話イベント情報要求 */
+	void	RecvProcCHAR_REQ_ADDSKILL			(PBYTE pData, DWORD dwSessionID);					/* スキル追加要求 */
+	void	RecvProcCHAR_REQ_USESKILL			(PBYTE pData, DWORD dwSessionID);					/* スキルを使う要求 */
 
 	/* 受信処理(MainFrameRecvProcMAP.cpp) */
 	void	RecvProcMAP							(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* マップ系 */

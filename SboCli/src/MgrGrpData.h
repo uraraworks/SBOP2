@@ -32,6 +32,7 @@ public:
 	BOOL	CheckVersion		(LPCSTR pszVersion);				/* バージョンチェック */
 	void	Write				(LPCSTR pszFileName, CImg32 *pSrc);	/* PNGデータの保存 */
 	CImg32	*GetDibSystem		(void);								/* システム画像イメージを取得 */
+	CImg32	*GetDibIcon			(void);								/* アイコン画像イメージを取得 */
 	CImg32	*GetDibShadow		(void);								/* 影画像イメージを取得 */
 	CImg32	*GetDibMapParts		(int nNo);							/* マップ画像イメージを取得 */
 	CImg32	*GetDibMapShadow	(int nNo);							/* マップ影画像イメージを取得 */
@@ -108,6 +109,7 @@ private:
 	int			m_nMapPartsCount,		/* マップパーツ画像数 */
 				m_nMapShadowCount;		/* マップ影画像数 */
 	CImg32		*m_pImgSystem,			/* システム */
+				*m_pImgIcon,			/* アイコン */
 				*m_pImgShadow,			/* 影画像 */
 				*m_pImgItem,			/* アイテム画像 */
 				*m_pImgNumS,			/* 数字(S) */

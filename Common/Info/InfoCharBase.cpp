@@ -1772,6 +1772,18 @@ void CInfoCharBase::SetTarget(CInfoCharBase *pCharTarget)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::SetSkill										 */
+/* 内容		:スキル情報を設定												 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+void CInfoCharBase::SetSkill(ARRAYDWORD *padwSkillID)
+{
+	m_adwSkillID.Copy (padwSkillID);
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::SetPos											 */
 /* 内容		:座標を指定														 */
 /* 日付		:2008/04/29														 */

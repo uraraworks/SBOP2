@@ -1466,7 +1466,7 @@ void CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL(PBYTE pData, DWORD dwSessionID)
 
 	/* ’Ç‰ÁH */
 	if (Packet.m_pInfo->m_dwSkillID == 0) {
-		pInfo = (PCInfoSkillBase)m_pLibInfoSkill->GetNew (Packet.m_pInfo->m_nType);
+		pInfo = (PCInfoSkillBase)m_pLibInfoSkill->GetNew (Packet.m_pInfo->m_nTypeMain, Packet.m_pInfo->m_nTypeSub);
 		pInfo->Copy (Packet.m_pInfo);
 		m_pLibInfoSkill->Add (pInfo);
 
