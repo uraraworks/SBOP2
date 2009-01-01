@@ -1784,6 +1784,34 @@ void CInfoCharBase::SetSkill(ARRAYDWORD *padwSkillID)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::HaveSkill										 */
+/* 内容		:指定スキルを持っているか判定									 */
+/* 日付		:2009/01/01														 */
+/* ========================================================================= */
+
+BOOL CInfoCharBase::HaveSkill(DWORD dwSkillID)
+{
+	BOOL bRet;
+	int i, nCount;
+
+	bRet = FALSE;
+	nCount = m_adwSkillID.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		if (m_adwSkillID[i] == dwSkillID) {
+			break;
+		}
+	}
+	if (i >= nCount) {
+		goto Exit;
+	}
+
+	bRet = TRUE;
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::SetPos											 */
 /* 内容		:座標を指定														 */
 /* 日付		:2008/04/29														 */

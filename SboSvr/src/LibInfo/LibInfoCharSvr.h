@@ -1,7 +1,7 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:LibInfoCharSvr.h											 */
-/* 内容			:キャラ情報ライブラリサーバークラス 定義ファイル			 */
+/* 内容			:キャラ情報ライブラリクラス 定義ファイル					 */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
 /* 作成開始日	:2007/01/21													 */
 /* ========================================================================= */
@@ -13,7 +13,9 @@
 class CMainFrame;
 class CMgrData;
 class CInfoCharSvr;
+class CInfoSkillBase;
 class CLibInfoMapBase;
+class CLibInfoSkill;
 class CLibInfoItemType;
 class CLibInfoItem;
 class CLibInfoItemWeapon;
@@ -44,7 +46,6 @@ public:
 	BOOL	Equip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* 装備 */
 	BOOL	UnEquip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* 装備解除 */
 	BOOL	UseItem			(CInfoCharSvr *pChar, DWORD dwItemID);					/* アイテム使用 */
-	BOOL	UseSkill		(CInfoCharSvr *pChar, DWORD dwSkillID);					/* スキル使用 */
 	void	DragItem		(CInfoCharSvr *pChar, DWORD dwItemID, POINT ptNewPos);	/* アイテム位置変更 */
 	void	RenewGrpID		(DWORD dwCharID);										/* 装備画像IDを更新 */
 	DWORD	GetPlaceName	(CmyString &strDst);									/* 最も人が集まっているマップ名を取得 */
@@ -108,12 +109,19 @@ protected:
 	BOOL MapEventProcGRPIDTMP	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* 一時画像設定 */
 	BOOL MapEventProcLIGHT		(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* 灯り */
 
+	/* スキル関連処理(LibInfoCharSvrSkill.cpp) */
+public:
+	BOOL UseSkill			(CInfoCharSvr *pInfoChar, DWORD dwSkillID);					/* スキル使用 */
+protected:
+	BOOL UseSkillFISHING	(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkill);		/* スキル使用(釣り) */
+
 
 public:
 	CMainFrame			*m_pMainFrame;			/* メインフレーム */
 	CMgrData			*m_pMgrData;			/* データマネージャ */
 	CUraraSockTCPSBO	*m_pSock;				/* 通信マネージャ */
 	CLibInfoMapBase		*m_pLibInfoMap;			/* マップ情報 */
+	CLibInfoSkill		*m_pLibInfoSkill;		/* スキル情報 */
 	CLibInfoItemType	*m_pLibInfoItemType;	/* アイテム種別情報 */
 	CLibInfoItem		*m_pLibInfoItem;		/* アイテム情報 */
 	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;	/* 武器情報 */

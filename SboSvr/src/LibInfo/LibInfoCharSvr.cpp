@@ -1,7 +1,7 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:LibInfoCharSvr.cpp											 */
-/* 内容			:キャラ情報ライブラリクライアントクラス 実装ファイル		 */
+/* 内容			:キャラ情報ライブラリクラス 実装ファイル					 */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
 /* 作成開始日	:2007/01/21													 */
 /* ========================================================================= */
@@ -41,6 +41,7 @@ CLibInfoCharSvr::CLibInfoCharSvr()
 	m_pMainFrame		= NULL;
 	m_pMgrData			= NULL;
 	m_pLibInfoMap		= NULL;
+	m_pLibInfoSkill		= NULL;
 	m_pLibInfoItemType	= NULL;
 	m_pLibInfoItem		= NULL;
 	m_pSock				= NULL;
@@ -73,6 +74,7 @@ void CLibInfoCharSvr::Create(CMgrData *pMgrData)
 	m_pMgrData				= pMgrData;
 	m_pMainFrame			= m_pMgrData->GetMainFrame ();
 	m_pLibInfoMap			= m_pMgrData->GetLibInfoMap ();
+	m_pLibInfoSkill			= m_pMgrData->GetLibInfoSkill ();
 	m_pLibInfoItemType		= m_pMgrData->GetLibInfoItemType ();
 	m_pLibInfoItem			= m_pMgrData->GetLibInfoItem ();
 	m_pLibInfoItemWeapon	= m_pMgrData->GetLibInfoItemWeapon ();
@@ -865,49 +867,6 @@ BOOL CLibInfoCharSvr::UseItem(CInfoCharSvr *pChar, DWORD dwItemID)
 		m_pMainFrame->SendToClient (pChar->m_dwSessionID, &PacketCHAR_ITEMINFO);
 		break;
 	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharSvr::UseSkill										 */
-/* 内容		:スキル使用														 */
-/* 日付		:2008/12/31														 */
-/* ========================================================================= */
-
-BOOL CLibInfoCharSvr::UseSkill(CInfoCharSvr *pChar, DWORD dwItemID)
-{
-	BOOL bRet, bResult;
-	DWORD dwMotionType;
-	POINT ptPos;
-	PCInfoMapBase pInfoMap;
-
-	bRet = FALSE;
-	if (pChar == NULL) {
-		goto Exit;
-	}
-//	bResult = pChar->HaveItem (dwItemID);
-//	if (bResult == FALSE) {
-//		goto Exit;
-//	}
-//Todo:とりあえず釣りのみ
-	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pChar->m_dwMapID);
-	if (pInfoMap == NULL) {
-		goto Exit;
-	}
-	pChar->GetFrontMapPos (ptPos);
-	bResult = pInfoMap->IsFlg (ptPos.x, ptPos.y, BIT_PARTSHIT_FISHING);
-	if (bResult == FALSE) {
-		goto Exit;
-	}
-	dwMotionType = m_pLibInfoItem->GetMotionIDAtack (pChar->m_dwEquipItemIDArmsRight);
-	if ((dwMotionType & INFOITEMARMS_MOTION_FISHING) == 0) {
-		goto Exit;
-	}
-	pChar->SetMotion (CHARMOTIONLISTID_FISHING_UP);
 
 	bRet = TRUE;
 Exit:
