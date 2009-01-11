@@ -327,7 +327,7 @@ void CSaveLoadInfoBase::ReadHeader(void)
 		pData = pDataBack + pInfoElement->dwOffset;
 
 		for (j = 0; j < dwDataCount; j ++) {
-			pInfo	= m_pLibInfoBase->GetPtr (j);
+			pInfo	= m_pLibInfoBase->RenewInfo (j);
 			nNo		= pInfo->GetElementNo (pInfoElement->szName);
 			dwSize	= pInfo->ReadElementData (pData, nNo);
 			pData	+= dwSize;

@@ -11,6 +11,7 @@
 #include "InfoSkillBase.h"
 #include "LibInfoSkill.h"
 #include "DlgAdminCharSkillNONE.h"
+#include "DlgAdminCharSkillMOVEATACK.h"
 #include "MgrData.h"
 #include "DlgAdminCharSkillBase.h"
 
@@ -60,6 +61,7 @@ CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDlgAdminCharSkillBase)
 	//}}AFX_DATA_INIT
 
+	m_bInit			= TRUE;
 	m_nTypeMain		= -1;
 	m_nTypeSub		= -1;
 	m_nUse			= -1;
@@ -149,6 +151,10 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 
 	CDlgAdminBase::OnInitDialog();
 
+	RegisterControl (IDC_FRAME, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl (IDOK,		LH_CTRL_X | LH_CTRL_Y);
+	RegisterControl (IDCANCEL,	LH_CTRL_X | LH_CTRL_Y);
+
 	if (m_bModeModify) {
 		SetWindowText ("スキルの編集");
 	}
@@ -160,7 +166,7 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 	m_ctlTypeMain.InsertString (2, "生活");
 	m_ctlTypeMain.SetItemData (2, SKILLTYPEMAIN_LIFE);
 
-	nNo = 0;
+	nNo = nTmp = 0;
 	if (m_pInfo) {
 		for (i = 0; i < SKILLTYPEMAIN_MAX; i ++) {
 			if (m_pInfo->m_nTypeMain == m_ctlTypeMain.GetItemData (i)) {
@@ -168,14 +174,14 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 				break;
 			}
 		}
+		nTmp = m_pInfo->m_nTypeSub;
 	}
-	nTmp = m_pInfo->m_nTypeSub;
 	m_ctlTypeMain.SetCurSel (nNo);
 	OnSelchangeTypeMain ();
 
-	m_pInfo->m_nTypeSub = nTmp;
 	nNo = 0;
 	if (m_pInfo) {
+		m_pInfo->m_nTypeSub = nTmp;
 		nCount = m_ctlTypeSub.GetCount ();
 		for (i = 0; i < nCount; i ++) {
 			if (m_pInfo->m_nTypeSub == m_ctlTypeSub.GetItemData (i)) {
@@ -209,6 +215,7 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 	if (m_pDlgType && m_pInfo) {
 		m_pDlgType->Set (m_pInfo);
 	}
+	m_bInit = FALSE;
 
 	return TRUE;
 }
@@ -272,6 +279,8 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeMain()
 	case SKILLTYPEMAIN_NONE:			/* 能力 */
 		break;
 	case SKILLTYPEMAIN_BATTLE:			/* 戦闘 */
+		m_ctlTypeSub.InsertString (1, "移動して攻撃");
+		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_BATTLE_MOVEATACK);
 		break;
 	case SKILLTYPEMAIN_LIFE:			/* 生活 */
 		m_ctlTypeSub.InsertString (1, "釣り");
@@ -300,36 +309,46 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
 	nTypeSub  = m_ctlTypeSub. GetItemData (m_ctlTypeSub. GetCurSel ());
 
 	if (m_pDlgType) {
+		UnregisterControl (m_pDlgType->m_hWnd);
 		m_pDlgType->DestroyWindow ();
 		m_pDlgType = NULL;
 	}
 
-	m_pDlgType = new CDlgAdminCharSkillNONE(this);
-#if 0
-	switch (nType) {
-	case SKILLTYPE_FISHING:			/* 釣り */
-		m_pDlgType = new CDlgAdminCharSkillNONE(this);
+	switch (nTypeMain) {
+	case SKILLTYPEMAIN_NONE:				/* 能力 */
 		break;
-	default:
-		m_pDlgType = new CDlgAdminCharSkillNONE(this);
+	case SKILLTYPEMAIN_BATTLE:				/* 戦闘 */
+		switch (nTypeSub) {
+		case SKILLTYPESUB_BATTLE_MOVEATACK:		/* 移動して攻撃 */
+			m_pDlgType = new CDlgAdminCharSkillMOVEATACK(this);
+			break;
+		}
+		break;
+	case SKILLTYPEMAIN_LIFE:				/* 生活 */
 		break;
 	}
-#endif
+	if (m_pDlgType == NULL) {
+		m_pDlgType = new CDlgAdminCharSkillNONE(this);
+	}
+
 	if (m_pDlgType) {
 		m_pDlgType->Init (m_pMgrData);
 		GetDlgItem (IDC_FRAME)->GetWindowRect (rc);
 		ScreenToClient (rc);
 		m_pDlgType->MoveWindow (rc.left, rc.top, rc.Width (), rc.Height ());
+		RegisterControl (m_pDlgType->m_hWnd, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 	}
 
-	if ((m_nTypeMain != nTypeMain) || (m_nTypeSub != nTypeSub)) {
-		pInfoTmp = (PCInfoSkillBase)LibInfo.GetNew (nTypeMain, nTypeSub);
-		if (m_pInfo) {
-			pInfoTmp->Copy (m_pInfo);
-		}
+	if (m_bInit == FALSE) {
+		if ((m_nTypeMain != nTypeMain) || (m_nTypeSub != nTypeSub)) {
+			pInfoTmp = (PCInfoSkillBase)LibInfo.GetNew (nTypeMain, nTypeSub);
+			if (m_pInfo) {
+				pInfoTmp->m_dwSkillID = m_pInfo->m_dwSkillID;
+			}
 
-		SAFE_DELETE (m_pInfo);
-		m_pInfo = pInfoTmp;
+			SAFE_DELETE (m_pInfo);
+			m_pInfo = pInfoTmp;
+		}
 	}
 	m_nTypeMain = nTypeMain;
 	m_nTypeSub  = nTypeSub;

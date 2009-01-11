@@ -889,6 +889,10 @@
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.cpp"
 							>
 						</File>
+						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="InfoTalkEvent"
@@ -2850,6 +2854,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminCharSkillMOVEATACK.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminCharSkillNONE.cpp"
 					>
 				</File>
@@ -3794,6 +3802,10 @@
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.h"
 							>
 						</File>
+						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.h"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="InfoTalkEvent"
@@ -4314,6 +4326,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminCharSkillList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminCharSkillMOVEATACK.h"
 					>
 				</File>
 				<File

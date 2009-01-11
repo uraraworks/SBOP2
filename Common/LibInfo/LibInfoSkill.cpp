@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #include "stdafx.h"
+#include "InfoSkillMOVEATACK.h"
 #include "LibInfoSkill.h"
 
 
@@ -83,7 +84,23 @@ PCInfoBase CLibInfoSkill::GetNew(int nTypeMain, int nTypeSub)
 
 	pInfo = NULL;
 
-	pInfo = new CInfoSkillBase;
+	switch (nTypeMain) {
+	case SKILLTYPEMAIN_NONE:			/* 能力 */
+		break;
+	case SKILLTYPEMAIN_BATTLE:			/* 戦闘 */
+		switch (nTypeSub) {
+		case SKILLTYPESUB_BATTLE_MOVEATACK:		/* 移動して攻撃 */
+			pInfo = new CInfoSkillMOVEATACK;
+			break;
+		}
+		break;
+	case SKILLTYPEMAIN_LIFE:			/* 生活 */
+		break;
+	}
+
+	if (pInfo == NULL) {
+		pInfo = new CInfoSkillBase;
+	}
 	pInfo->m_nTypeMain = nTypeMain;
 	pInfo->m_nTypeSub  = nTypeSub;
 
@@ -295,6 +312,27 @@ PCInfoBase CLibInfoSkill::GetPtr(
 	}
 
 	return pRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoSkill::RenewInfo										 */
+/* 内容		:内容に応じて更新												 */
+/* 日付		:2009/01/11														 */
+/* ========================================================================= */
+
+PCInfoBase CLibInfoSkill::RenewInfo(int nNo)
+{
+	PCInfoSkillBase pInfoSkillBase, pInfoTmp;
+
+	pInfoSkillBase = (PCInfoSkillBase)GetPtr (nNo);
+
+	pInfoTmp = (PCInfoSkillBase)GetNew (pInfoSkillBase->m_nTypeMain, pInfoSkillBase->m_nTypeSub);
+	pInfoTmp->Copy (pInfoSkillBase);
+	m_paInfo->SetAt (nNo, pInfoTmp);
+	SAFE_DELETE (pInfoSkillBase);
+
+	return pInfoTmp;
 }
 
 

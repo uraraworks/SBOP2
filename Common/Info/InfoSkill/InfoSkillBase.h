@@ -22,6 +22,13 @@ enum {
 	SKILLTYPEMAIN_MAX
 };
 
+/* スキル種別(サブ:戦闘) */
+enum {
+	SKILLTYPESUB_BATTLE_NONE = 0,
+	SKILLTYPESUB_BATTLE_MOVEATACK,	/* 移動して攻撃 */
+	SKILLTYPESUB_BATTLE_MAX
+};
+
 /* スキル種別(サブ:生活) */
 enum {
 	SKILLTYPESUB_LIFE_NONE = 0,
@@ -36,6 +43,13 @@ enum {
 	SKILLUSE_BATTLE,			/* 戦闘モード時 */
 	SKILLUSE_MAX
 };
+
+/* クラス種別 */
+enum {
+	INFOSKILLTYPE_BASE = 0,		/* 基底 */
+	INFOSKILLTYPE_MOVEATACK,	/* 移動して攻撃 */
+};
+
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -54,6 +68,10 @@ public:
 	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* 指定要素の保存用データを取得 */
 	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* 指定要素データを読み込み */
 
+	virtual DWORD	GetDerivationSize		(void);							/* 派生データサイズを取得 */
+	virtual PBYTE	GetDerivationWriteData	(PDWORD pdwSize);				/* 派生データの保存用データを取得 */
+	virtual DWORD	ReadDerivationData		(PBYTE pSrc);					/* 派生データを読み込み */
+
 	virtual DWORD	GetSendDataSize		(void);								/* 送信データサイズを取得 */
 	virtual PBYTE	GetSendData			(void);								/* 送信データを取得 */
 	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* 送信データから取り込み */
@@ -62,7 +80,8 @@ public:
 
 
 public:
-	int			m_nElementCountBase;			/* 基底クラスの要素数 */
+	int			m_nElementCountBase,			/* 基底クラスの要素数 */
+				m_nClassType;					/* クラス種別 */
 
 	DWORD		m_dwSkillID,					/* スキルID */
 				m_dwSP;							/* 消費SP */

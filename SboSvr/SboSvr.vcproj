@@ -712,6 +712,10 @@
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.cpp"
 							>
 						</File>
+						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="InfoTalkEvent"
@@ -1950,6 +1954,10 @@
 						>
 						<File
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.h"
 							>
 						</File>
 					</Filter>

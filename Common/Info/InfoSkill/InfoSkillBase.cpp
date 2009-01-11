@@ -21,6 +21,7 @@ static LPCSTR s_aszName[] = {
 	"m_nTypeSub",		/* スキル種別(サブ) */
 	"m_nUse",			/* 使用制限 */
 	"m_strName",		/* スキル名 */
+	"derivation",		/* 派生データ */
 	NULL
 };
 
@@ -33,6 +34,7 @@ static LPCSTR s_aszName[] = {
 
 CInfoSkillBase::CInfoSkillBase()
 {
+	m_nClassType	= INFOSKILLTYPE_BASE;
 	m_dwSkillID		= 0;
 	m_dwSP			= 0;
 	m_nTypeMain		= 0;
@@ -95,6 +97,7 @@ DWORD CInfoSkillBase::GetDataSize(void)
 	dwRet += sizeof (m_nTypeSub);			/* スキル種別(サブ) */
 	dwRet += sizeof (m_nUse);				/* 使用制限 */
 	dwRet += (m_strName.GetLength () + 1);	/* スキル名 */
+	dwRet += GetDerivationSize ();			/* 派生データ */
 
 	return dwRet;
 }
@@ -119,6 +122,7 @@ DWORD CInfoSkillBase::GetDataSizeNo(int nNo)
 	case 3:	dwRet = sizeof (m_nTypeSub);			break;	/* スキル種別(サブ) */
 	case 4:	dwRet = sizeof (m_nUse);				break;	/* 使用制限 */
 	case 5:	dwRet = (m_strName.GetLength () + 1);	break;	/* スキル名 */
+	case 6:	dwRet = GetDerivationSize ();			break;	/* 派生データ */
 	}
 
 	return dwRet;
@@ -165,6 +169,11 @@ PBYTE CInfoSkillBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 3:	pSrc = (PBYTE)&m_nTypeSub;			break;	/* スキル種別(サブ) */
 	case 4:	pSrc = (PBYTE)&m_nUse;				break;	/* 使用制限 */
 	case 5:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* スキル名 */
+	case 6:		/* 派生データ */
+		pSrc = GetDerivationWriteData (&dwSize);
+		CopyMemory (pRet, pSrc, dwSize);
+		SAFE_DELETE_ARRAY (pSrc);
+		break;
 	}
 
 	if (pSrc) {
@@ -202,6 +211,9 @@ DWORD CInfoSkillBase::ReadElementData(
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
+	case 6:		/* 派生データ */
+		dwSize = ReadDerivationData (pSrc);
+		break;
 	}
 
 	if (pDst) {
@@ -209,6 +221,48 @@ DWORD CInfoSkillBase::ReadElementData(
 	}
 
 	return dwSize;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoSkillBase::GetDerivationSize								 */
+/* 内容		:派生データサイズを取得											 */
+/* 日付		:2009/01/10														 */
+/* ========================================================================= */
+
+DWORD CInfoSkillBase::GetDerivationSize(void)
+{
+	return 1;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoSkillBase::GetDerivationWriteData							 */
+/* 内容		:派生データの保存用データを取得									 */
+/* 日付		:2009/01/10														 */
+/* ========================================================================= */
+
+PBYTE CInfoSkillBase::GetDerivationWriteData(PDWORD pdwSize)
+{
+	PBYTE pRet;
+	DWORD dwSize;
+
+	dwSize	= GetDerivationSize ();
+	pRet	= ZeroNew (dwSize);
+
+	return pRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoSkillBase::ReadDerivationData								 */
+/* 内容		:派生データを読み込み											 */
+/* 日付		:2009/01/10														 */
+/* ========================================================================= */
+
+DWORD CInfoSkillBase::ReadDerivationData(PBYTE pSrc)
+{
+	return GetDerivationSize ();
 }
 
 

@@ -158,10 +158,17 @@ enum {
 /* 構造体定義																 */
 /* ========================================================================= */
 
+/* システムメッセージ構造体 */
 typedef struct _STSYSTEMMSG {
 	BOOL		bAddLog;			/* ログへ追加する？ */
 	CmyString	strMsg;				/* メッセージ */
 	COLORREF	clMsg;				/* 描画色 */
 } STSYSTEMMSG, *PSTSYSTEMMSG;
+
+/* 数値と文字列ポインタ構造体 */
+typedef struct _STINTLPCSTR {
+	int			nValue;				/* 数値 */
+	LPCSTR		pszText;			/* 文字列ポインタ */
+} STINTLPCSTR, *PSTINTLPCSTR;
 
 /* Copyright(C)URARA-works 2006 */

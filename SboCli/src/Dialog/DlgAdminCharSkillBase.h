@@ -32,6 +32,7 @@ protected:
 
 
 protected:
+	BOOL		m_bInit;					/* 初期化中 */
 	int			m_nTypeMain,				/* スキル種別(メイン) */
 				m_nTypeSub,					/* スキル種別(サブ) */
 				m_nUse;						/* 使用制限 */

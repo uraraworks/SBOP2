@@ -26,6 +26,7 @@ public:
 
 	PCInfoBase GetNew	(void);									/* 新規データを取得 */
 	PCInfoBase GetNew	(int nTypeMain, int nTypeSub);			/* 新規データを取得 */
+	PCInfoBase RenewInfo(int nNo);								/* 内容に応じて更新 */
 
 	int		GetCount	(void);									/* データ数を取得 */
 	void	Add			(PCInfoBase pInfo);						/* 追加 */
@@ -34,9 +35,9 @@ public:
 	void	DeleteAll	(void);									/* 全て削除 */
 	void	Merge		(CLibInfoSkill *pSrc);					/* 取り込み */
 
-	CInfoSkillBase	*Renew	(CInfoSkillBase *pSrc);				/* 更新 */
-	PCInfoBase		GetPtr	(int nNo);							/* 情報を取得 */
-	PCInfoBase		GetPtr	(DWORD dwSkillID);					/* 情報を取得 */
+	CInfoSkillBase	*Renew		(CInfoSkillBase *pSrc);			/* 更新 */
+	PCInfoBase		GetPtr		(int nNo);						/* 情報を取得 */
+	PCInfoBase		GetPtr		(DWORD dwSkillID);				/* 情報を取得 */
 
 	DWORD	GetSendDataSize		(void);							/* 送信データサイズを取得 */
 	PBYTE	GetSendData			(void);							/* 送信データを取得 */

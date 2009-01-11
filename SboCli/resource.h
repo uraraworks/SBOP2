@@ -70,8 +70,8 @@
 #define IDD_TALKEVENT_MSG               188
 #define IDD_TALKEVENT_MENU              189
 #define IDD_TALKEVENT_MENU_SET          190
-#define IDD_TALKEVENT_PAGE1             191
 #define IDD_TALKEVENT_ADDSKILL          191
+#define IDD_CHAR_SKILL_MOVEATACK        192
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -240,6 +240,7 @@
 #define IDC_VALUE2                      1092
 #define IDC_HIDE_MAINFRAME              1093
 #define IDC_STRENGTH                    1093
+#define IDC_DISTANCE                    1093
 #define IDC_MOTIONTYPE                  1094
 #define IDC_MAGIC                       1094
 #define IDC_SPIN_X1                     1095
@@ -326,6 +327,8 @@
 #define IDC_RECOVERY                    1148
 #define IDC_TIME                        1149
 #define IDC_TAB                         1150
+#define IDC_TIME2                       1150
+#define IDC_WAITTIME                    1150
 #define IDC_ITEM_CMB                    1153
 #define IDC_ITEM_STA                    1154
 #define IDC_TYPEMAIN                    1155
@@ -378,7 +381,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        191
 #define _APS_NEXT_COMMAND_VALUE         32811
-#define _APS_NEXT_CONTROL_VALUE         1157
+#define _APS_NEXT_CONTROL_VALUE         1158
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
