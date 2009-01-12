@@ -166,6 +166,7 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 	BOOL bAddLog;
 	PCInfoCharCli pInfoChar, pInfoChar2, pInfoCharPlayer;
 	PCInfoItem pInfoItem;
+	PCInfoSkillBase pInfoSkill;
 	CPacketMAP_FORMATMSG Packet;
 	CmyString strMsg;
 
@@ -244,6 +245,28 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 			return;
 		}
 		strMsg.Format ("%s‚Í %s ‚ğ—‚Æ‚µ‚½", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoItem->m_strName);
+		break;
+	case FORMATMSGID_ADDSKILL:				/* %s‚Í %s ‚ğK“¾‚µ‚Ü‚µ‚½ */
+		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
+		if (pInfoChar == NULL) {
+			return;
+		}
+		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (Packet.m_dwPara2);
+		if (pInfoSkill == NULL) {
+			return;
+		}
+		strMsg.Format ("%s‚Í %s ‚ğK“¾‚µ‚Ü‚µ‚½", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
+		break;
+	case FORMATMSGID_USESKILL:				/* %s‚Í %s ‚ğg‚Á‚½ */
+		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
+		if (pInfoChar == NULL) {
+			return;
+		}
+		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (Packet.m_dwPara2);
+		if (pInfoSkill == NULL) {
+			break;
+		}
+		strMsg.Format ("%s‚Í %s ‚ğg‚Á‚½", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
 		break;
 	default:
 		return;

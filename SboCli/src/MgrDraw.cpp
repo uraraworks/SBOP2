@@ -173,6 +173,10 @@ void CMgrDraw::DrawChar(
 	cx = cy = m_pMgrGrpData->GetGrpSize (wGrpIDMainBase);
 	cxChar = cyChar = cx;
 
+	if (pInfoChar->m_wGrpIDNPC == (WORD)-1) {
+		goto ExitEffect;
+	}
+
 //Todo;
 	nEyeID = 0;
 	if (pInfoChar->IsDamage ()) {
@@ -405,6 +409,7 @@ void CMgrDraw::DrawChar(
 		}
 	}
 
+ExitEffect:
 	/* エフェクト */
 	pSrc = pInfoChar->GetEfcImg ();
 	if (pSrc) {

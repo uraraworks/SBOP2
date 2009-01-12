@@ -54,15 +54,17 @@ public:
 			void SetEfcBalloon	(DWORD dwEfcBalloonID);			/* 噴出しを設定 */
 			void SetMotion		(DWORD dwMotionID);				/* モーションを設定 */
 
-	virtual BOOL IsEnableBattle	(void);							/* 戦闘状態に遷移できるか判定 */
-	virtual BOOL IsEnableMove	(void);							/* 移動できる状態か判定 */
-	virtual void CopyAll		(CInfoCharSvr *pSrc);			/* 派生先の情報も全てコピー */
-	virtual void Copy			(CInfoCharBase *pSrc);			/* コピー */
-	virtual void ProcAtack		(void);							/* 処理(攻撃した時) */
-	virtual BOOL ProcHit		(CInfoCharSvr *pInfoChar);		/* 処理(攻撃を受けた時) */
-	virtual BOOL TimerProc		(DWORD dwTime);					/* 時間処理 */
-	virtual BOOL TimerProcMOVE	(DWORD dwTime);					/* 時間処理(移動) */
-	virtual BOOL IsAtackTarget	(void);							/* 攻撃対象となるか判定 */
+	virtual BOOL  IsEnableBattle	(void);						/* 戦闘状態に遷移できるか判定 */
+	virtual BOOL  IsEnableMove		(void);						/* 移動できる状態か判定 */
+	virtual void  CopyAll			(CInfoCharSvr *pSrc);		/* 派生先の情報も全てコピー */
+	virtual void  Copy				(CInfoCharBase *pSrc);		/* コピー */
+	virtual void  ProcAtack			(void);						/* 処理(攻撃した時) */
+	virtual BOOL  ProcHit			(CInfoCharSvr *pInfoChar);	/* 処理(攻撃を受けた時) */
+	virtual BOOL  TimerProc			(DWORD dwTime);				/* 時間処理 */
+	virtual BOOL  TimerProcMOVE		(DWORD dwTime);				/* 時間処理(移動) */
+	virtual BOOL  IsAtackTarget		(void);						/* 攻撃対象となるか判定 */
+	virtual DWORD GetHitEffectID	(void);						/* ヒット時に相手に表示するエフェクトIDを取得 */
+	virtual DWORD GetDamage			(void);						/* ダメージ値を取得 */
 
 			void Proc				(DWORD dwTime);				/* 行動処理 */
 	virtual BOOL ProcFISHING		(DWORD dwPara);				/* 行動処理(釣り) */

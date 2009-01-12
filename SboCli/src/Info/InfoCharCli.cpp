@@ -379,6 +379,10 @@ void CInfoCharCli::MakeCharGrp(void)
 	m_pDibChar->FillRect (0, 0, m_nGrpSize * 16, m_nGrpSize, RGB (255, 0, 255));
 	m_pDibChar->SetColorKey (RGB (255, 0, 255));
 
+	if (m_wFamilyID == 0) {
+		return;
+	}
+
 	pImgAcce	= NULL;
 	pMgrGrpData = m_pMgrData->GetMgrGrpData ();
 	pImgBody	= pMgrGrpData->GetDibBody	(m_wFamilyID);

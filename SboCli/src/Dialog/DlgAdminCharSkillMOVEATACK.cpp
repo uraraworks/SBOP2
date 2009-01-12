@@ -33,10 +33,12 @@ void CDlgAdminCharSkillMOVEATACK::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_DOWN, m_ctlDown);
 	DDX_Control(pDX, IDC_LEFT, m_ctlLeft);
 	DDX_Control(pDX, IDC_RIGHT, m_ctlRight);
+	DDX_Control(pDX, IDC_HITEFFECT, m_ctlHitEffect);
 	DDX_Control(pDX, IDC_TYPE, m_ctlPutType);
 	DDX_Text(pDX, IDC_TIME, m_dwAliveTime);
 	DDX_Text(pDX, IDC_WAITTIME, m_dwWaitTime);
-	DDX_Text(pDX, IDC_VALUE, m_dwValue);
+	DDX_Text(pDX, IDC_VALUE1, m_dwValue1);
+	DDX_Text(pDX, IDC_VALUE2, m_dwValue2);
 	DDX_Text(pDX, IDC_DISTANCE, m_dwDistance);
 	DDX_Check(pDX, IDC_HIT, m_bHitQuit);
 	//}}AFX_DATA_MAP
@@ -61,7 +63,8 @@ CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK(CWnd* pParent /*=NULL*/
 	//{{AFX_DATA_INIT(CDlgAdminCharSkillMOVEATACK)
 	m_dwAliveTime = 0;
 	m_dwWaitTime = 0;
-	m_dwValue = 0;
+	m_dwValue1 = 0;
+	m_dwValue2 = 0;
 	m_dwDistance = 0;
 	m_bHitQuit = FALSE;
 	//}}AFX_DATA_INIT
@@ -119,7 +122,8 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 
 	m_dwAliveTime	= pSrcTmp->m_dwAliveTime;	/* 耐久時間 */
 	m_dwWaitTime	= pSrcTmp->m_dwWaitTime;	/* 移動速度 */
-	m_dwValue		= pSrcTmp->m_dwValue;		/* 効果 */
+	m_dwValue1		= pSrcTmp->m_dwValue1;		/* 効果1 */
+	m_dwValue2		= pSrcTmp->m_dwValue2;		/* 効果2 */
 	m_dwDistance	= pSrcTmp->m_dwDistance;	/* 射程距離 */
 	m_bHitQuit		= pSrcTmp->m_bHitQuit;		/* ヒットすると消滅 */
 
@@ -137,6 +141,19 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 		}
 		pCombo->SetCurSel (nNo);
 	}
+
+	/* ヒット時の表示エフェクト */
+	pCombo = &m_ctlHitEffect;
+	nNo = 0;
+	nCount = pCombo->GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		dwTmp = pCombo->GetItemData (i);
+		if (pSrcTmp->m_dwHitEffectID == dwTmp) {
+			nNo = i;
+			break;
+		}
+	}
+	pCombo->SetCurSel (nNo);
 
 	UpdateData (FALSE);
 }
@@ -160,7 +177,8 @@ void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 	pDstTmp->m_dwTartgetType	= m_ctlTarget.GetItemData (nNo);	/* 攻撃対象 */
 	pDstTmp->m_dwAliveTime		= m_dwAliveTime;	/* 耐久時間 */
 	pDstTmp->m_dwWaitTime		= m_dwWaitTime;		/* 移動速度 */
-	pDstTmp->m_dwValue			= m_dwValue;		/* 効果 */
+	pDstTmp->m_dwValue1			= m_dwValue1;		/* 効果1 */
+	pDstTmp->m_dwValue2			= m_dwValue2;		/* 効果2 */
 	pDstTmp->m_dwDistance		= m_dwDistance;		/* 射程距離 */
 	pDstTmp->m_bHitQuit			= m_bHitQuit;		/* ヒットすると消滅 */
 
@@ -170,6 +188,10 @@ void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 		nNo = pCombo->GetCurSel ();
 		pDstTmp->m_adwEffectID[i] = pCombo->GetItemData (nNo);
 	}
+	/* ヒット時の表示エフェクト */
+	pCombo = &m_ctlHitEffect;
+	nNo = pCombo->GetCurSel ();
+	pDstTmp->m_dwHitEffectID = pCombo->GetItemData (nNo);
 }
 
 
@@ -186,19 +208,19 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	PCLibInfoEffect pLibInfoEffect;
 	STINTLPCSTR *pIntLpcstr,
 		astTarget[] = {
-			SKILLMOVEATACKTARGETTYPE_NONE,	"未設定",
-			SKILLMOVEATACKTARGETTYPE_PC,	"プレイヤー",
-			SKILLMOVEATACKTARGETTYPE_NPC,	"NPC",
-			SKILLMOVEATACKTARGETTYPE_ALL,	"全て",
+			ATACKTARGETTYPE_NONE,			"未設定",
+			ATACKTARGETTYPE_PC,				"プレイヤー",
+			ATACKTARGETTYPE_NPC,			"NPC",
+			ATACKTARGETTYPE_ALL,			"全て",
 			-1, NULL
 		},
 		astPutType[] = {
 			SKILLMOVEATACKPUTTYPE_NONE,		"未設定",
 			SKILLMOVEATACKPUTTYPE_FRONT,	"前方",
-			SKILLMOVEATACKPUTTYPE_CROSS,	"上下左右",
+//			SKILLMOVEATACKPUTTYPE_CROSS,	"上下左右",
 			-1, NULL
 		};
-	CComboBox *pCombo, *apCtlEffectID[] = { &m_ctlUp, &m_ctlDown, &m_ctlLeft, &m_ctlRight };
+	CComboBox *pCombo, *apCtlEffectID[] = { &m_ctlUp, &m_ctlDown, &m_ctlLeft, &m_ctlRight, &m_ctlHitEffect };
 
 	CDlgAdminCharSkillNONE::OnInitDialog();
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
@@ -215,20 +237,20 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	m_ctlTarget.SetCurSel (0);
 
 	/* エフェクトID */
-	for (j = 0; j < 4; j ++) {
+	for (j = 0; j < 5; j ++) {
 		pCombo = apCtlEffectID[j];
 		pCombo->InsertString (0, "無し");
 	}
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
-		for (j = 0; j < 4; j ++) {
+		for (j = 0; j < 5; j ++) {
 			pCombo = apCtlEffectID[j];
 			pCombo->InsertString (i + 1, (LPCSTR)pInfoEffect->m_strName);
 			pCombo->SetItemData (i + 1, pInfoEffect->m_dwEffectID);
 		}
 	}
-	for (j = 0; j < 4; j ++) {
+	for (j = 0; j < 5; j ++) {
 		pCombo = apCtlEffectID[j];
 		pCombo->SetCurSel (0);
 	}

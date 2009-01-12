@@ -19,8 +19,14 @@
 
 CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
 {
-	m_bDelete		= TRUE;
-	m_nMoveCount	= 0;
+	m_bHitQuit			= TRUE;
+	m_bDelete			= TRUE;
+	m_dwLastAtackTime	= 0;
+	m_dwQuitTime		= 0;
+	m_dwHitEffectID		= 0;
+	m_dwValue1			= 0;
+	m_dwValue2			= 0;
+	m_nMoveCount		= 0;
 }
 
 
@@ -43,8 +49,14 @@ CInfoCharMOVEATACKSvr::~CInfoCharMOVEATACKSvr()
 
 void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 {
+	DWORD dwTime;
+
 	if (m_nMoveState == nMoveState) {
 		return;
+	}
+	dwTime = timeGetTime ();;
+	if (nMoveState == CHARMOVESTATE_BATTLEATACK) {
+		m_dwLastAtackTime = dwTime;
 	}
 	/* 戦闘中 */
 	if (nMoveState == CHARMOVESTATE_BATTLE) {
@@ -52,7 +64,7 @@ void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 	}
 	CInfoCharSvr::SetMoveState (nMoveState);
 
-	m_dwLastTimeMove = timeGetTime ();
+	m_dwLastTimeMove = dwTime;
 }
 
 
@@ -64,15 +76,24 @@ void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 
 BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 {
-	int i, nCount;
-	BOOL bRet, bResult;
+	int i, nCount, nState;
+	BOOL bRet, bResult, bDelete;
 	POINT ptFront;
 	DWORD dwTmp;
 
 	bRet = CInfoCharBase::TimerProc (dwTime);
+	bDelete = FALSE;
 
 	bResult = IsEnableAtack ();
 	if (bResult == FALSE) {
+		bDelete = TRUE;
+	}
+	if (m_dwQuitTime != 0) {
+		if (dwTime >= m_dwQuitTime) {
+			bDelete = TRUE;
+		}
+	}
+	if (bDelete) {
 		SetMoveState (CHARMOVESTATE_DELETE);
 		goto Exit;
 	}
@@ -111,7 +132,14 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 
 	/* ぶつかる？ */
 	if (bResult == FALSE) {
-		SetMoveState (CHARMOVESTATE_DELETE);
+		nState = CHARMOVESTATE_DELETE;
+		if (m_dwQuitTime != 0) {
+			if (dwTime - m_dwLastAtackTime < 1000) {
+				goto Exit;
+			}
+			nState = CHARMOVESTATE_BATTLEATACK;
+		}
+		SetMoveState (nState);
 
 	} else {
 		/* 2回目以降？ */
@@ -136,8 +164,41 @@ Exit:
 
 void CInfoCharMOVEATACKSvr::ProcAtack(void)
 {
-	/* 攻撃できたので終了 */
-	SetMoveState (CHARMOVESTATE_DELETE);
+	if (m_bHitQuit) {
+		/* 攻撃できたので終了 */
+		SetMoveState (CHARMOVESTATE_DELETE);
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharMOVEATACKSvr::GetHitEffectID							 */
+/* 内容		:ヒット時に相手に表示するエフェクトIDを取得						 */
+/* 日付		:2009/01/12														 */
+/* ========================================================================= */
+
+DWORD CInfoCharMOVEATACKSvr::GetHitEffectID(void)
+{
+	return m_dwHitEffectID;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharMOVEATACKSvr::GetDamage								 */
+/* 内容		:ダメージ値を取得												 */
+/* 日付		:2009/01/12														 */
+/* ========================================================================= */
+
+DWORD CInfoCharMOVEATACKSvr::GetDamage(void)
+{
+	DWORD dwRet;
+
+	if (m_dwValue2 - m_dwValue1 == 0) {
+		return 0;
+	}
+	dwRet = m_dwValue1 + (genrand () % (m_dwValue2 - m_dwValue1));
+
+	return dwRet;
 }
 
 /* Copyright(C)URARA-works 2007 */

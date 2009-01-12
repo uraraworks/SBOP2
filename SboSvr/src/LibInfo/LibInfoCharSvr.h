@@ -113,7 +113,8 @@ protected:
 public:
 	BOOL UseSkill			(CInfoCharSvr *pInfoChar, DWORD dwSkillID);					/* スキル使用 */
 protected:
-	BOOL UseSkillFISHING	(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkill);		/* スキル使用(釣り) */
+	BOOL UseSkillBATTLE_MOVEATACK	(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* スキル使用(戦闘:移動して攻撃) */
+	BOOL UseSkillFISHING			(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* スキル使用(釣り) */
 
 
 public:

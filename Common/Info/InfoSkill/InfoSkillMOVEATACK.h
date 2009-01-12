@@ -14,15 +14,6 @@
 /* 定数定義																	 */
 /* ========================================================================= */
 
-/* 攻撃対象 */
-enum {
-	SKILLMOVEATACKTARGETTYPE_NONE = 0,		/* 未設定 */
-	SKILLMOVEATACKTARGETTYPE_PC,			/* プレイヤー */
-	SKILLMOVEATACKTARGETTYPE_NPC,			/* NPC */
-	SKILLMOVEATACKTARGETTYPE_ALL,			/* 全て */
-	SKILLMOVEATACKTARGETTYPE_MAX
-};
-
 /* 発射種別 */
 enum {
 	SKILLMOVEATACKPUTTYPE_NONE = 0,			/* 未設定 */
@@ -63,11 +54,13 @@ public:
 public:
 	int		m_nElementCountDerivation;	/* 要素数 */
 	DWORD	m_dwTartgetType,		/* 攻撃対象 */
+			m_dwHitEffectID,		/* ヒット時の表示エフェクト */
 			m_adwEffectID[4],		/* 向きによる表示エフェクト */
 			m_dwPutType,			/* 発射種別 */
 			m_dwAliveTime,			/* 耐久時間 */
 			m_dwWaitTime,			/* 移動速度 */
-			m_dwValue,				/* 効果 */
+			m_dwValue1,				/* 効果1 */
+			m_dwValue2,				/* 効果2 */
 			m_dwDistance;			/* 射程距離 */
 	BOOL	m_bHitQuit;				/* ヒットすると消滅 */
 } CInfoSkillMOVEATACK, *PCInfoSkillMOVEATACK;

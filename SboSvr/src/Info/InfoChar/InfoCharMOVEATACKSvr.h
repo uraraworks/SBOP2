@@ -20,12 +20,20 @@ public:
 			CInfoCharMOVEATACKSvr();					/* コンストラクタ */
 	virtual ~CInfoCharMOVEATACKSvr();					/* デストラクタ */
 
-	void SetMoveState	(int nMoveState);						/* 移動状態を変更 */
-	BOOL TimerProc		(DWORD dwTime);							/* 時間処理 */
-	void ProcAtack		(void);									/* 処理(攻撃した時) */
+	void  SetMoveState	(int nMoveState);						/* 移動状態を変更 */
+	BOOL  TimerProc		(DWORD dwTime);							/* 時間処理 */
+	void  ProcAtack		(void);									/* 処理(攻撃した時) */
+	DWORD GetHitEffectID(void);									/* ヒット時に相手に表示するエフェクトIDを取得 */
+	DWORD GetDamage		(void);									/* ダメージ値を取得 */
 
 
 public:
+	BOOL	m_bHitQuit;						/* ヒットすると消滅 */
+	DWORD	m_dwLastAtackTime,				/* 最後に攻撃した時間 */
+			m_dwQuitTime,					/* 終了時間 */
+			m_dwHitEffectID,				/* ヒット時に相手に表示するエフェクトID */
+			m_dwValue1,						/* 効果1 */
+			m_dwValue2;						/* 効果2 */
 	int		m_nMoveCount;					/* 移動した歩数 */
 } CInfoCharMOVEATACKSvr, *PCInfoCharMOVEATACKSvr;
 

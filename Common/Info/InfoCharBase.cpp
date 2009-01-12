@@ -115,6 +115,8 @@ CInfoCharBase::CInfoCharBase()
 	m_bDelete				= FALSE;
 	m_bBlock				= FALSE;
 	m_bPush					= FALSE;
+	m_bParentInfo			= TRUE;
+	m_nAtackTarget			= 0;				/* çUåÇëŒè€ */
 	m_nAnime				= 0;
 	m_nDirectionBack		= 0;
 	m_nMapX					= 1;

@@ -532,7 +532,7 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 	int nTmp, nReserveChgEfect;
 	BOOL bRet, bResult, bChargeAtack, bCritical;
 	DWORD dwCharID, dwPoint;
-	PCInfoCharSvr pCharTarget, pCharTmp;
+	PCInfoCharSvr pCharTarget, pCharTmp, pCharParent;
 	CPacketCHAR_TEXTEFFECT PacketCHAR_TEXTEFFECT;
 
 	bRet = FALSE;
@@ -555,9 +555,26 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 	if (pCharTarget == NULL) {
 		goto Exit;
 	}
-	if (IsNPC (pChar) && IsNPC (pCharTarget)) {
-		goto Exit;
+	switch (pChar->m_nAtackTarget) {
+	case ATACKTARGETTYPE_NONE:			/* 未設定 */
+		if (IsNPC (pChar) && IsNPC (pCharTarget)) {
+			goto Exit;
+		}
+		break;
+	case ATACKTARGETTYPE_PC:			/* プレイヤー */
+		if (IsNPC (pCharTarget)) {
+			goto Exit;
+		}
+		break;
+	case ATACKTARGETTYPE_NPC:			/* NPC */
+		if (IsNPC (pCharTarget) == FALSE) {
+			goto Exit;
+		}
+		break;
+	case ATACKTARGETTYPE_ALL:			/* 全て */
+		break;
 	}
+
 	bResult = pChar->IsEnableAtack ();
 	if (bResult == FALSE) {
 		goto Exit;
@@ -566,10 +583,13 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 	if (bResult == FALSE) {
 		goto Exit;
 	}
-	pCharTmp = pChar;
+	pCharParent = pCharTmp = pChar;
 	if (pChar->m_dwParentCharID) {
-		/* 親がいる場合は親の情報を使用する */
-		pCharTmp = (PCInfoCharSvr)GetPtrLogIn (pChar->m_dwParentCharID);
+		pCharParent = (PCInfoCharSvr)GetPtrLogIn (pChar->m_dwParentCharID);
+		if (pChar->m_bParentInfo) {
+			/* 親がいる場合は親の情報を使用する */
+			pCharTmp = pCharParent;
+		}
 	}
 
 	bChargeAtack = pChar->m_bChargeAtack;
@@ -585,7 +605,7 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 		goto Exit;
 	}
 
-	bResult = pCharTarget->ProcHit (pCharTmp);
+	bResult = pCharTarget->ProcHit (pCharParent);
 	if (bResult == FALSE) {
 		bRet = TRUE;
 		goto Exit;
@@ -1995,14 +2015,6 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 	if (pInfoChar->IsLogin () == FALSE) {
 		goto Exit;
 
-	/* エフェクト変更予約あり？ */
-	} else if (pInfoChar->m_nReserveChgEfect != 0) {
-		CPacketCHAR_SET_EFFECT Packet;
-
-		Packet.Make (pInfoChar->m_dwCharID, pInfoChar->m_nReserveChgEfect);
-		m_pMainFrame->SendToScreenChar (pInfoChar, &Packet);
-		pInfoChar->m_nReserveChgEfect = 0;
-
 	/* アイテムドロップ？ */
 	} else if (pInfoChar->m_bDropItem) {
 		DropItem (pInfoChar);
@@ -2031,6 +2043,14 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 		Packet.Make (SBOCOMMANDID_SUB_CHAR_PROCSTATE, pInfoChar->m_dwCharID, pInfoChar->m_nProcState);
 		m_pMainFrame->SendToClient (pInfoChar->m_dwSessionID, &Packet);
 		pInfoChar->m_bChgProcState = FALSE;
+
+	/* エフェクト変更予約あり？ */
+	} else if (pInfoChar->m_nReserveChgEfect != 0) {
+		CPacketCHAR_SET_EFFECT Packet;
+
+		Packet.Make (pInfoChar->m_dwCharID, pInfoChar->m_nReserveChgEfect);
+		m_pMainFrame->SendToScreenChar (pInfoChar, &Packet);
+		pInfoChar->m_nReserveChgEfect = 0;
 
 	/* 発言内容が変わった？ */
 	} else if (pInfoChar->m_bChgSpeak) {
@@ -2779,7 +2799,10 @@ DWORD CLibInfoCharSvr::GetAtackDamage(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCh
 	DWORD dwRet;
 	PCInfoItemTypeBase pInfoItemType;
 
-	dwRet = 0;
+	dwRet = pInfoChar->GetDamage ();
+	if (dwRet != 0) {
+		return dwRet;
+	}
 	pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDArmsRight);
 
 //Todo:
@@ -2832,6 +2855,10 @@ DWORD CLibInfoCharSvr::GetAtackEffectID(CInfoCharSvr *pInfoChar, BOOL bCritical)
 	PCInfoItemWeapon pInfoItemWeapon;
 	PARRAYDWORD padwEffectID;
 
+	dwRet = pInfoChar->GetHitEffectID ();
+	if (dwRet != 0) {
+		return dwRet;
+	}
 //Todo:初期値
 	dwRet = 1;
 

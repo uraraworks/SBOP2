@@ -85,7 +85,6 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	int i, nCount, nLevel, x, y;
 	HDC hDC;
 	HFONT hFontOld;
-	PARRAYDWORD paSkillID;
 	PCInfoSkillBase pInfoSkill;
 
 	if (m_dwTimeDrawStart) {
@@ -100,14 +99,9 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	m_pMgrDraw->DrawSkillMenu (m_pDib, 0, MENUPOSY);
 
 	/* スキルを描画 */
-	paSkillID = m_pPlayerChar->GetSkill ();
-	nCount = paSkillID->GetSize ();
+	nCount = m_adwSkillID.GetSize ();
 	for (i = 0; i < nCount; i ++) {
-//Todo:とりあえず生活スキルだけ
-		if (m_nType != 1) {
-			continue;
-		}
-		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (paSkillID->GetAt (i));
+		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (m_adwSkillID[i]);
 		if (pInfoSkill == NULL) {
 			continue;
 		}
@@ -145,6 +139,40 @@ Exit:
 
 		SelectObject (hDC, hFontOld);
 		pDst->Unlock ();
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowSKILLMENU::SetType										 */
+/* 内容		:スキル種別を設定												 */
+/* 日付		:2009/01/11														 */
+/* ========================================================================= */
+
+void CWindowSKILLMENU::SetType(int nType)
+{
+	int i, nCount;
+	DWORD dwSkillID;
+	PARRAYDWORD paSkillID;
+	PCInfoSkillBase pInfoSkill;
+	int anSkillType[] = {SKILLTYPEMAIN_BATTLE, SKILLTYPEMAIN_LIFE, SKILLTYPEMAIN_NONE};
+
+	m_nType = nType;
+	m_adwSkillID.RemoveAll ();
+
+	/* スキルを描画 */
+	paSkillID = m_pPlayerChar->GetSkill ();
+	nCount = paSkillID->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		dwSkillID = paSkillID->GetAt (i);
+		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (dwSkillID);
+		if (pInfoSkill == NULL) {
+			continue;
+		}
+		if (anSkillType[m_nType] != pInfoSkill->m_nTypeMain) {
+			continue;
+		}
+		m_adwSkillID.Add (dwSkillID);
 	}
 }
 
@@ -219,7 +247,7 @@ BOOL CWindowSKILLMENU::OnLeft(void)
 		if (m_nType == 0) {
 			goto Exit;
 		}
-		m_nType --;
+		SetType (m_nType -1);
 		m_nPos += 5;
 	}
 	m_nPos --;
@@ -249,7 +277,7 @@ BOOL CWindowSKILLMENU::OnRight(void)
 		if (m_nType >= 2) {
 			goto Exit;
 		}
-		m_nType ++;
+		SetType (m_nType + 1);
 		m_nPos -= 5;
 	}
 	m_nPos ++;
@@ -287,8 +315,6 @@ BOOL CWindowSKILLMENU::OnX(BOOL bDown)
 	POINT ptPos;
 	BOOL bRet;
 	DWORD dwSkillID;
-	PARRAYDWORD paSkillID;
-//	PCInfoSkillBase pInfoSkill;
 
 	bRet		 = FALSE;
 	dwSkillID	 = 0;
@@ -300,14 +326,8 @@ BOOL CWindowSKILLMENU::OnX(BOOL bDown)
 		goto Exit;
 	}
 
-//Todo:選択中のID取得
-	if (m_nType == 1) {
-		if (m_nPos == 0) {
-			paSkillID = m_pPlayerChar->GetSkill ();
-			if (paSkillID->GetSize () >= 0) {
-				dwSkillID = paSkillID->GetAt (0);
-			}
-		}
+	if (m_nPos < m_adwSkillID.GetSize ()) {
+		dwSkillID = m_adwSkillID[m_nPos];
 	}
 	if (dwSkillID == 0) {
 		goto Exit;

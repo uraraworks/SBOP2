@@ -137,6 +137,15 @@ enum {
 	CHARTARGET_ENEMY,		/* 敵 */
 };
 
+/* 攻撃対象 */
+enum {
+	ATACKTARGETTYPE_NONE = 0,		/* 未設定 */
+	ATACKTARGETTYPE_PC,				/* プレイヤー */
+	ATACKTARGETTYPE_NPC,			/* NPC */
+	ATACKTARGETTYPE_ALL,			/* 全て */
+	ATACKTARGETTYPE_MAX
+};
+
 /* 使用範囲 */
 enum {
 	CHARAREA_SELF = 0,		/* 自分 */

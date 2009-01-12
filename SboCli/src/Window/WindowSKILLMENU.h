@@ -27,11 +27,10 @@ public:
 
 	void	Create		(CMgrData *pMgrData);					/* 作成 */
 	void	Draw		(CImg32 *pDst);							/* 描画 */
-	void	DragOff		(void);									/* ドラッグ解除 */
 
 	DWORD	GetSelectID	(void)	{ return m_dwSelectID;	}		/* 選択されているスキルIDを取得 */
 	int		GetPos		(void)	{ return m_nPos;		}		/* カーソル位置を取得 */
-	void	SetType		(int nType) { m_nType = nType; }		/* スキル種別を設定 */
+	void	SetType		(int nType);							/* スキル種別を設定 */
 
 
 protected:
@@ -51,6 +50,7 @@ protected:
 	CmyString		m_strName;				/* 選択中のスキル名 */
 	CInfoCharCli	*m_pPlayerChar;			/* 操作中のキャラ情報 */
 	CLibInfoSkill	*m_pLibInfoSkill;		/* スキル情報ライブラリ */
+	ARRAYDWORD		m_adwSkillID;			/* 現在の種別のスキル一覧 */
 } CWindowSKILLMENU, *PCWindowSKILLMENU;
 
 /* Copyright(C)URARA-works 2008 */

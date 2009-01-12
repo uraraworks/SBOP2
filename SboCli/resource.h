@@ -136,6 +136,7 @@
 #define IDC_VIEWPOS_X1                  1027
 #define IDC_MAPID                       1028
 #define IDC_VIEWPOS_X2                  1028
+#define IDC_HITEFFECT                   1028
 #define IDC_MAPNAME                     1029
 #define IDC_VIEWPOS_Y2                  1029
 #define IDC_CHANGEMAPNAME               1030
@@ -327,7 +328,6 @@
 #define IDC_RECOVERY                    1148
 #define IDC_TIME                        1149
 #define IDC_TAB                         1150
-#define IDC_TIME2                       1150
 #define IDC_WAITTIME                    1150
 #define IDC_ITEM_CMB                    1153
 #define IDC_ITEM_STA                    1154

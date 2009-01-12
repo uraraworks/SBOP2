@@ -32,6 +32,8 @@ enum {
 	FORMATMSGID_NOUSE,				/* %s‚ÍŒø‰Ê‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½ */
 	FORMATMSGID_NOUNEQUIP_ITEMFULL,	/* Ž‚¿•¨‚ª‚¢‚Á‚Ï‚¢‚Å‘•”õ‚ðŠO‚¹‚Ü‚¹‚ñ */
 	FORMATMSGID_DROPITEM,			/* %s‚Í%s‚ð—Ž‚Æ‚µ‚½ */
+	FORMATMSGID_ADDSKILL,			/* %s‚Í %s ‚ðK“¾‚µ‚Ü‚µ‚½ */
+	FORMATMSGID_USESKILL,			/* %s‚Í %s ‚ðŽg‚Á‚½ */
 };
 
 /* ========================================================================= */

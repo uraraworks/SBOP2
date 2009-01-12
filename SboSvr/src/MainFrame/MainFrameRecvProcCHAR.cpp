@@ -806,6 +806,7 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 	PCInfoSkillBase pInfoSkill;
 	CPacketCHAR_PARA1 Packet;
 	CPacketCHAR_SKILLINFO PacketCHAR_SKILLINFO;
+	CPacketMAP_FORMATMSG PacketMsg;
 
 	Packet.Set (pData);
 
@@ -836,6 +837,9 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 	paSkill->Add (Packet.m_dwPara);
 	PacketCHAR_SKILLINFO.Make (Packet.m_dwCharID, paSkill);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_SKILLINFO);
+
+	PacketMsg.Make (FORMATMSGID_ADDSKILL, Packet.m_dwCharID, Packet.m_dwPara, RGB (255, 255, 255), FALSE, FORMATMSGTYPE_NOLOG);
+	m_pSock->SendTo (dwSessionID, &PacketMsg);
 }
 
 

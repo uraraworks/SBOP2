@@ -991,8 +991,8 @@ void CMgrWindow::MakeWindowSKILLMENU(int nType/*0*/)
 	PCWindowSKILLMENU pWindowNew;
 
 	pWindowNew = new CWindowSKILLMENU;
-	pWindowNew->SetType (nType);
 	pWindowNew->Create (m_pMgrData);
+	pWindowNew->SetType (nType);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
 

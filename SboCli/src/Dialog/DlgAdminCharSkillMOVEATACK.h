@@ -39,10 +39,12 @@ public:
 	CComboBox	m_ctlDown;
 	CComboBox	m_ctlLeft;
 	CComboBox	m_ctlRight;
+	CComboBox	m_ctlHitEffect;
 	CComboBox	m_ctlPutType;
 	DWORD	m_dwAliveTime;
 	DWORD	m_dwWaitTime;
-	DWORD	m_dwValue;
+	DWORD	m_dwValue1;
+	DWORD	m_dwValue2;
 	DWORD	m_dwDistance;
 	BOOL	m_bHitQuit;
 	//}}AFX_DATA
