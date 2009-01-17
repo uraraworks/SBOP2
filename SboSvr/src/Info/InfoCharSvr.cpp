@@ -54,6 +54,8 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwEfcBalloonID		= 0;
 	m_dwMotionID			= 0;
 	m_dwMoveCount			= 0;
+
+	m_pLibInfoCharSvr		= NULL;
 }
 
 
@@ -149,6 +151,18 @@ void CInfoCharSvr::SetProcState(int nProcState)
 void CInfoCharSvr::SetMap(CInfoMapBase *pInfoMap)
 {
 	m_pInfoMap = pInfoMap;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharSvr::SetLibInfoChar									 */
+/* 内容		:キャラ情報ライブラリを設定										 */
+/* 日付		:2009/01/17														 */
+/* ========================================================================= */
+
+void CInfoCharSvr::SetLibInfoChar(CLibInfoCharSvr *pLibInfoChar)
+{
+	m_pLibInfoCharSvr = pLibInfoChar;
 }
 
 

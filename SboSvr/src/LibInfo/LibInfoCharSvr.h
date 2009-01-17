@@ -52,6 +52,7 @@ public:
 	void	MoveMapIn		(CInfoCharSvr *pInfoChar);								/* マップ内移動 */
 	void	MoveMapOut		(CInfoCharSvr *pInfoChar);								/* マップ外移動 */
 	void	SetInitStatus	(CInfoCharSvr *pInfoChar, BOOL bInitPos=FALSE);			/* ステータス初期値設定 */
+	void	GetDistance		(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CInfoCharSvr *pInfoCharDst);/* キャラ座標で距離を取得 */
 
 	PCInfoCharBase	AddNPC			(CInfoCharBase *pInfoChar);						/* NPCの追加 */
 	PCInfoBase		GetNew			(int nType);									/* 新規データを取得 */

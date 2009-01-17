@@ -1169,6 +1169,55 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 
 
 /* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::GetDistance									 */
+/* 内容		:キャラ座標で距離を取得											 */
+/* 日付		:2009/01/17														 */
+/* ========================================================================= */
+
+void CLibInfoCharSvr::GetDistance(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CInfoCharSvr *pInfoCharDst)
+{
+	POINT ptTmp;
+	SIZE sizeTmp;
+	RECT rcSrc, rcDst;
+
+	sizeDst.cx = sizeDst.cy = -1;
+	if (pInfoCharSrc->m_dwMapID != pInfoCharDst->m_dwMapID) {
+		return;
+	}
+	/* 比較元の座標矩形を取得 */
+	pInfoCharSrc->GetCharSize (sizeTmp);
+	ptTmp.x = pInfoCharSrc->m_nMapX;
+	ptTmp.y = pInfoCharSrc->m_nMapY - (sizeTmp.cy - 1);
+	SetRect (&rcSrc,
+			ptTmp.x, ptTmp.y,
+			ptTmp.x + (sizeTmp.cx - 1), ptTmp.y + (sizeTmp.cy - 1));
+	/* 比較先の座標矩形を取得 */
+	pInfoCharDst->GetCharSize (sizeTmp);
+	ptTmp.x = pInfoCharDst->m_nMapX;
+	ptTmp.y = pInfoCharDst->m_nMapY - (sizeTmp.cy - 1);
+	SetRect (&rcDst,
+			ptTmp.x, ptTmp.y,
+			ptTmp.x + (sizeTmp.cx - 1), ptTmp.y + (sizeTmp.cy - 1));
+
+	sizeDst.cx = rcSrc.left - rcDst.right;
+	if (pInfoCharSrc->m_nMapX < pInfoCharDst->m_nMapX) {
+		sizeDst.cx = rcDst.left - rcSrc.right;
+
+	} else if (pInfoCharSrc->m_nMapX == pInfoCharDst->m_nMapX) {
+		sizeDst.cx = 0;
+	}
+
+	sizeDst.cy = rcSrc.top - rcDst.bottom;
+	if (pInfoCharSrc->m_nMapY < pInfoCharDst->m_nMapY) {
+		sizeDst.cy = rcDst.top - rcSrc.bottom;
+
+	} else if (pInfoCharSrc->m_nMapY == pInfoCharDst->m_nMapY) {
+		sizeDst.cy = 0;
+	}
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CLibInfoCharSvr::AddNPC										 */
 /* 内容		:NPCの追加														 */
 /* 日付		:2007/09/01														 */
@@ -1769,13 +1818,13 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 {
 	int i, nCount;
 	DWORD dwRet;
-	PCInfoCharBase pInfoCharSrc, pInfoCharTmp;
+	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
 	POINT ptFront;
-	SIZE size;
+	SIZE size, sizeDistance;
 
 	dwRet = 0;
 
-	pInfoCharSrc = (PCInfoCharBase)GetPtr (dwCharID);
+	pInfoCharSrc = (PCInfoCharSvr)GetPtr (dwCharID);
 	if (pInfoCharSrc == NULL) {
 		goto Exit;
 	}
@@ -1787,13 +1836,14 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfoLogin->GetAt (i);
+		pInfoCharTmp = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
 		if (pInfoCharSrc == pInfoCharTmp) {
 			continue;
 		}
 		if (pInfoCharTmp->IsAtackTarget () == FALSE) {
 			continue;
 		}
+#if 0
 		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 		}
@@ -1810,6 +1860,22 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
 			continue;
 		}
+#else
+		GetDistance (sizeDistance, pInfoCharSrc, pInfoCharTmp);
+		if (sizeDistance.cx < 0) {
+			continue;
+		}
+		if (nXType == 1) {
+			if (nDirection < 2) {
+				if (sizeDistance.cx > 0) {
+					continue;
+				}
+			}
+		}
+		if (sizeDistance.cx + sizeDistance.cy >= 2) {
+			continue;
+		}
+#endif
 		dwRet = pInfoCharTmp->m_dwCharID;
 		break;
 	}
@@ -2383,6 +2449,7 @@ BOOL CLibInfoCharSvr::ProcLocalStateBATTLEATACK(CInfoCharSvr *pInfoChar)
 
 			pInfoCharTmp = (PCInfoCharMOVEATACKSvr)AddNPC (&InfoCharTmp);
 			pInfoCharTmp->SetMap (pInfoMap);
+			pInfoCharTmp->SetLibInfoChar (this);
 		}
 		break;
 	}
@@ -2528,6 +2595,7 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 
 	pInfoCharAdd = (PCInfoCharSvr)AddNPC (pInfoCharTmp);
 	pInfoCharAdd->SetMap (pInfoMap);
+	pInfoCharAdd->SetLibInfoChar (this);
 
 	pInfoChar->IncPutCount ();
 	pInfoChar->m_bChgPutNpc = FALSE;

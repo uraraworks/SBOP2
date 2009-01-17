@@ -11,6 +11,7 @@
 #include "InfoCharBase.h"
 
 class CInfoMapBase;
+class CLibInfoCharSvr;
 
 /* ========================================================================= */
 /* 定数定義																	 */
@@ -51,6 +52,7 @@ public:
 	virtual void SetMoveState	(int nMoveState);				/* 移動状態を変更 */
 	virtual void SetProcState	(int nProcState);				/* 行動状態を変更 */
 			void SetMap			(CInfoMapBase *pInfoMap);		/* マップ情報を設定 */
+			void SetLibInfoChar	(CLibInfoCharSvr *pLibInfoChar);/* キャラ情報ライブラリを設定 */
 			void SetEfcBalloon	(DWORD dwEfcBalloonID);			/* 噴出しを設定 */
 			void SetMotion		(DWORD dwMotionID);				/* モーションを設定 */
 
@@ -122,6 +124,7 @@ public:
 			m_dwMoveCount;				/* 移動歩数 */
 
 	CInfoMapBase	*m_pInfoMap;		/* マップ情報 */
+	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* キャラ情報ライブラリ */
 	CmyArray<PCHARPROCINFO, PCHARPROCINFO>	m_apProcInfo;	/* 行動情報 */
 } CInfoCharSvr, *PCInfoCharSvr;
 

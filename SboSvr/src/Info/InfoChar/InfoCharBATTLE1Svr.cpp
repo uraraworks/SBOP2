@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "InfoMapBase.h"
 #include "InfoCharBATTLE1Svr.h"
+#include "LibInfoCharSvr.h"
 
 
 /* ========================================================================= */
@@ -21,6 +22,7 @@ CInfoCharBATTLE1Svr::CInfoCharBATTLE1Svr()
 {
 	m_bDelete			= TRUE;
 	m_dwLastTiemAtack	= 0;
+	m_pInfoCharTarget	= NULL;
 }
 
 
@@ -130,6 +132,7 @@ BOOL CInfoCharBATTLE1Svr::ProcHit(CInfoCharSvr *pInfoChar)
 		}
 		m_nDirection = anDirection[pInfoChar->m_nDirection];
 		SetTarget (pInfoChar);
+		m_pInfoCharTarget = pInfoChar;
 		m_bChgPos = TRUE;
 	}
 
@@ -271,6 +274,7 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 	BOOL bResult;
 	DWORD dwTmp, dwMoveWait;
 	POINT ptPos;
+	SIZE sizeDistance;
 
 	if (m_dwTargetCharID == 0) {
 		SetMoveState (CHARMOVESTATE_STAND);
@@ -317,18 +321,13 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 	}
 
 	GetTargetPos (&m_ptTargetPos, ptPos, 1);
-	xx = abs (m_ptTargetPos.x - m_nMapX);
-	yy = abs (m_ptTargetPos.y - m_nMapY);
-	if ((xx <= 2) && (yy <= 2)) {
-		nDirection = GetDirection (m_ptTargetPos.x, m_ptTargetPos.y);
-		if (nDirection >= 4) {
-			if ((xx <= 1) && (yy <= 1)) {
-				ptPos.x = -1;
-			}
-		} else {
-			ptPos.x = -1;
-		}
+	m_pLibInfoCharSvr->GetDistance (sizeDistance, this, m_pInfoCharTarget);
+	xx = sizeDistance.cx;
+	yy = sizeDistance.cy;
+	if (xx + yy == 1) {
+		ptPos.x = -1;
 	}
+
 	if (ptPos.x < 0) {
 		nDirection = GetDirection (m_ptTargetPos.x, m_ptTargetPos.y);
 		/* 4•ûŒü‚É•ÏŠ· */
