@@ -171,6 +171,7 @@ private:
 	void	RecvProcADMIN_SYSTEM_REQ_INFO		(PBYTE pData, DWORD dwSessionID);					/* システム情報要求 */
 	void	RecvProcADMIN_SYSTEM_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* システム情報の更新 */
 	void	RecvProcADMIN_SKILL_RENEWSKILL		(PBYTE pData, DWORD dwSessionID);					/* スキル情報更新 */
+	void	RecvProcADMIN_ACCOUNT_REQ_ADD		(PBYTE pData, DWORD dwSessionID);					/* アカウントの追加要求 */
 
 	/* 受信処理(MainFrameRecvProcMSGCMD.cpp) */
 	void	RecvProcMSGCMD						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* メッセージコマンド系 */

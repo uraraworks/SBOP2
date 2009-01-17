@@ -395,6 +395,10 @@
 						Name="ADMIN"
 						>
 						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDMOTIONTYPE.cpp"
 							>
 						</File>
@@ -3119,6 +3123,10 @@
 					<Filter
 						Name="ADMIN No. 1"
 						>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.h"
+							>
+						</File>
 						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDMOTIONTYPE.h"
 							>

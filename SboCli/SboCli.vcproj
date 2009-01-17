@@ -2646,6 +2646,10 @@
 				Name="Dialog"
 				>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminAccountAdd.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Dialog\DlgAdminBase.cpp"
 					>
 					<FileConfiguration
@@ -4264,6 +4268,10 @@
 			<Filter
 				Name="Dialog No. 1"
 				>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminAccountAdd.h"
+					>
+				</File>
 				<File
 					RelativePath="src\Dialog\DlgAdminBase.h"
 					>

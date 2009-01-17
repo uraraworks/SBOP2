@@ -190,6 +190,7 @@ enum {
 	SBOCOMMANDID_SUB_ADMIN_RENEW_CLIENTVERSION,		/* クライアントバージョン更新 */
 	SBOCOMMANDID_SUB_ADMIN_SYSTEM_REQ_INFO,			/* システム情報要求 */
 	SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO,		/* システム情報の更新 */
+	SBOCOMMANDID_SUB_ADMIN_ACCOUNT_REQ_ADD,			/* アカウントの追加要求 */
 };
 
 /* コマンドID(メッセージコマンド系) */

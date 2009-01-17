@@ -35,6 +35,7 @@
 #include "DlgAdminEfcEffectList.h"
 #include "DlgAdminServerInfo.h"
 #include "DlgAdminSystemSetInitCharStatus.h"
+#include "DlgAdminAccountAdd.h"
 #include "MgrData.h"
 #include "WndMap.h"
 #include "AdminWindow.h"
@@ -85,6 +86,7 @@ BEGIN_MESSAGE_MAP(CAdminWindow, CWnd)
 	ON_COMMAND(IDM_DEBUG_GRID, OnDebugGrid)
 	ON_COMMAND(IDM_DEBUG_GRID_HALF, OnDebugGridHalf)
 	ON_COMMAND(IDM_SYSTEM_SET_INITCHARSTATUS, OnSystemSetInitCharStatus)
+	ON_COMMAND(IDM_ACCOUNT_ADD, OnAccountAdd)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
 	ON_MESSAGE(WM_MAINFRAME, OnMainFrame)
 	//}}AFX_MSG_MAP
@@ -317,6 +319,9 @@ void CAdminWindow::ChgScreen(int nScrID)
 		break;
 	case SCRIDADMIN_SYSTEM_SET_INITCHARSTATUS:	/* キャラステータス初期値の設定 */
 		m_pDlgBase = new CDlgAdminSystemSetInitCharStatus(this);
+		break;
+	case SCRIDADMIN_ACCOUNT_ADD:				/* アカウントの追加 */
+		m_pDlgBase = new CDlgAdminAccountAdd(this);
 		break;
 	}
 	m_pMgrData->SetAdminNotifyTypeL (nTypeL);
@@ -861,6 +866,18 @@ void CAdminWindow::OnDebugGridHalf()
 void CAdminWindow::OnSystemSetInitCharStatus()
 {
 	ChgScreen (SCRIDADMIN_SYSTEM_SET_INITCHARSTATUS);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CAdminWindow::OnAccountAdd										 */
+/* 内容		:メニューハンドラ(アカウントの追加)								 */
+/* 日付		:2009/01/17														 */
+/* ========================================================================= */
+
+void CAdminWindow::OnAccountAdd()
+{
+	ChgScreen (SCRIDADMIN_ACCOUNT_ADD);
 }
 
 

@@ -72,6 +72,8 @@
 #define IDD_TALKEVENT_MENU_SET          190
 #define IDD_TALKEVENT_ADDSKILL          191
 #define IDD_CHAR_SKILL_MOVEATACK        192
+#define IDD_CHAR_ACCOUNTINFO1           193
+#define IDD_ACCOUNT_ADD                 193
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -374,13 +376,16 @@
 #define ID_SKILL                        32808
 #define ID_CHAR_SKILL                   32809
 #define IDM_CHAR_SKILL                  32810
+#define ID_32811                        32811
+#define ID_32812                        32812
+#define IDM_ACCOUNT_ADD                 32813
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        191
-#define _APS_NEXT_COMMAND_VALUE         32811
+#define _APS_NEXT_COMMAND_VALUE         32814
 #define _APS_NEXT_CONTROL_VALUE         1158
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

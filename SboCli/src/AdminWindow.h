@@ -45,6 +45,7 @@ enum {
 	SCRIDADMIN_EFC_EFFECT_LIST,				/* エフェクト一覧 */
 	SCRIDADMIN_SERVER_INFO,					/* サーバー情報 */
 	SCRIDADMIN_SYSTEM_SET_INITCHARSTATUS,	/* キャラステータス初期値の設定 */
+	SCRIDADMIN_ACCOUNT_ADD,					/* アカウントの追加 */
 };
 
 
@@ -130,6 +131,7 @@ protected:
 	afx_msg void OnDebugGrid();
 	afx_msg void OnDebugGridHalf();
 	afx_msg void OnSystemSetInitCharStatus();
+	afx_msg void OnAccountAdd();
 	afx_msg LRESULT OnAdminMsg(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnMainFrame(WPARAM wParam, LPARAM lParam);
 	//}}AFX_MSG

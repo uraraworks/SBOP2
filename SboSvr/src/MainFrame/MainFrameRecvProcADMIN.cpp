@@ -99,6 +99,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_REQ_INFO:		RecvProcADMIN_SYSTEM_REQ_INFO		(pData, dwSessionID);	break;	/* システム情報要求 */
 	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO:		RecvProcADMIN_SYSTEM_RENEWINFO		(pData, dwSessionID);	break;	/* システム情報の更新 */
 	case SBOCOMMANDID_SUB_ADMIN_SKILL_RENEWSKILL:		RecvProcADMIN_SKILL_RENEWSKILL		(pData, dwSessionID);	break;	/* スキル情報更新 */
+	case SBOCOMMANDID_SUB_ADMIN_ACCOUNT_REQ_ADD:		RecvProcADMIN_ACCOUNT_REQ_ADD		(pData, dwSessionID);	break;	/* アカウントの追加要求 */
 	}
 }
 
@@ -1480,6 +1481,37 @@ void CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL(PBYTE pData, DWORD dwSessionID)
 
 	PacketSKILL_SKILLINFO.Make (pInfo);
 	m_pSock->SendTo (0, &PacketSKILL_SKILLINFO);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD						 */
+/* 内容		:受信処理(アカウントの追加要求)									 */
+/* 日付		:2009/01/17														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
+{
+	PCInfoAccount pInfoAccount;
+	CPacketADMIN_ACCOUNT_REQ_ADD Packet;
+	CPacketMAP_SYSTEMMSG PacketMAP_SYSTEMMSG;
+	CmyString strTmp;
+
+	Packet.Set (pData);
+
+	pInfoAccount = m_pLibInfoAccount->GetPtr ((LPCSTR)Packet.m_strAccount);
+	if (pInfoAccount) {
+		strTmp = "そのアカウント名は登録済みです";
+	} else {
+		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew ();
+		TrimViewString (pInfoAccount->m_strAccount,  Packet.m_strAccount);
+		TrimViewString (pInfoAccount->m_strPassword, Packet.m_strPassword);
+		m_pLibInfoAccount->Add (pInfoAccount);
+		strTmp = "アカウントを登録しました";
+	}
+
+	PacketMAP_SYSTEMMSG.Make ((LPCSTR)strTmp, RGB (255, 255,255), TRUE, SYSTEMMSGTYPE_NOLOG);
+	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 }
 
 /* Copyright(C)URARA-works 2007 */

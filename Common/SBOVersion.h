@@ -12,8 +12,8 @@
 /* 定数定義																	 */
 /* ========================================================================= */
 
-#define VERTEXT					"0.034"								/* バージョン */
-#define VERSIONVAL				(0x00003400)						/* バージョン番号 */
+#define VERTEXT					"0.034.1"							/* バージョン */
+#define VERSIONVAL				(0x00003401)						/* バージョン番号 */
 #define DLLVER					"1"									/* DLLバージョン */
 #define GRPDATADLLVER			"4"									/* グラフィックデータDLLバージョン */
 
@@ -61,7 +61,7 @@
 				VALUE "FileDescription", "スクラップブックオンライン\0"									\
 				VALUE "FileVersion", VERTEXT "\0"														\
 				VALUE "InternalName", " \0"																\
-				VALUE "LegalCopyright", "Copyright (C)2003-2008 URARA-WORKS. All rights reserved.\0"	\
+				VALUE "LegalCopyright", "Copyright (C)2003-2009 URARA-WORKS. All rights reserved.\0"	\
 				VALUE "LegalTrademarks", "スクラップブックオンライン\0"									\
 				VALUE "OriginalFilename", OriginalFilename "\0"											\
 				VALUE "PrivateBuild", " \0"																\
