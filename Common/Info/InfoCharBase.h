@@ -122,6 +122,8 @@ public:
 	void		SetSkill		(ARRAYDWORD *padwSkillID);						/* スキル情報を設定 */
 	ARRAYDWORD	*GetSkill		(void)	{ return &m_adwSkillID; }				/* スキル情報を取得 */
 	BOOL		HaveSkill		(DWORD dwSkillID);								/* 指定スキルを持っているか判定 */
+	BOOL		AddSkill		(DWORD dwSkillID);								/* スキルを追加 */
+	BOOL		DeleteSkill		(DWORD dwSkillID);								/* スキルを削除 */
 
 	virtual BOOL IsMove				(void);							/* 移動中か判定 */
 	virtual int  SetPos				(int x, int y, BOOL bBack = FALSE);	/* 座標を指定 */

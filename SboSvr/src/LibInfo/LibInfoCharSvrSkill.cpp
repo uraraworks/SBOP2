@@ -125,13 +125,14 @@ Exit:
 
 BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase)
 {
-	int nDirection;
+	int i, nCount, nDirectionTmp, nDirection;
 	BOOL bRet, bResult;
 	POINT ptFront;
 	PCInfoMapBase pInfoMap;
 	PCInfoSkillMOVEATACK pInfoSkill = (PCInfoSkillMOVEATACK)pInfoSkillBase;
 	CInfoCharMOVEATACKSvr InfoCharTmp, *pInfoCharTmp;
 	CPacketMAP_FORMATMSG PacketMsg;
+	ARRAYINT anDirection;
 
 	bRet = FALSE;
 
@@ -139,37 +140,54 @@ BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSki
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
-	/* 進めるかチェック */
-	bResult = IsMove (pInfoChar, pInfoChar->m_nDirection);
-	if (bResult == FALSE) {
-		goto Exit;
+
+	switch (pInfoSkill->m_dwPutType) {
+	case SKILLMOVEATACKPUTTYPE_FRONT:		/* 前方 */
+		nDirection = pInfoChar->GetDrawDirection ();
+		anDirection.Add (nDirection);
+		break;
+	case SKILLMOVEATACKPUTTYPE_CROSS:		/* 上下左右 */
+		anDirection.Add (0);
+		anDirection.Add (1);
+		anDirection.Add (2);
+		anDirection.Add (3);
+		break;
 	}
 
-	nDirection = pInfoChar->GetDrawDirection ();
-	pInfoChar->GetFrontPos (ptFront, pInfoChar->m_nDirection, TRUE);
-	InfoCharTmp.m_dwParentCharID	= pInfoChar->m_dwCharID;
-	InfoCharTmp.m_dwMapID			= pInfoChar->m_dwMapID;
-	InfoCharTmp.m_nDirection		= nDirection;
-	InfoCharTmp.m_bChargeAtack		= pInfoChar->m_bChargeAtack;
-	InfoCharTmp.m_nMapX				= ptFront.x;
-	InfoCharTmp.m_nMapY				= ptFront.y;
-	InfoCharTmp.m_dwHP				= 1;
-	InfoCharTmp.m_nMoveType			= CHARMOVETYPE_MOVEATACK;
-	InfoCharTmp.m_wGrpIDNPC			= (WORD)-1;
+	nCount = anDirection.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		nDirectionTmp = anDirection[i];
+		/* 進めるかチェック */
+		bResult = IsMove (pInfoChar, nDirectionTmp);
+		if (bResult == FALSE) {
+			continue;
+		}
 
-	pInfoCharTmp = (PCInfoCharMOVEATACKSvr)AddNPC (&InfoCharTmp);
-	pInfoCharTmp->SetMap (pInfoMap);
-	pInfoCharTmp->m_bParentInfo		= FALSE;
-	pInfoCharTmp->m_bHitQuit		= pInfoSkill->m_bHitQuit;
-	pInfoCharTmp->m_nAtackTarget	= pInfoSkill->m_dwTartgetType;
-	pInfoCharTmp->m_nReserveChgEfect = pInfoSkill->m_adwEffectID[nDirection];
-	pInfoCharTmp->m_dwMoveWait		= pInfoSkill->m_dwWaitTime;
-	pInfoCharTmp->m_dwMoveCount		= pInfoSkill->m_dwDistance;
-	pInfoCharTmp->m_dwHitEffectID	= pInfoSkill->m_dwHitEffectID;
-	pInfoCharTmp->m_dwValue1		= pInfoSkill->m_dwValue1;
-	pInfoCharTmp->m_dwValue2		= pInfoSkill->m_dwValue2;
-	pInfoCharTmp->m_dwQuitTime		= timeGetTime () + pInfoSkill->m_dwAliveTime;
+		nDirection = pInfoChar->GetDrawDirection ();
+		pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
+		InfoCharTmp.m_dwParentCharID	= pInfoChar->m_dwCharID;
+		InfoCharTmp.m_dwMapID			= pInfoChar->m_dwMapID;
+		InfoCharTmp.m_nDirection		= nDirectionTmp;
+		InfoCharTmp.m_bChargeAtack		= pInfoChar->m_bChargeAtack;
+		InfoCharTmp.m_nMapX				= ptFront.x;
+		InfoCharTmp.m_nMapY				= ptFront.y;
+		InfoCharTmp.m_dwHP				= 1;
+		InfoCharTmp.m_nMoveType			= CHARMOVETYPE_MOVEATACK;
+		InfoCharTmp.m_wGrpIDNPC			= (WORD)-1;
 
+		pInfoCharTmp = (PCInfoCharMOVEATACKSvr)AddNPC (&InfoCharTmp);
+		pInfoCharTmp->SetMap (pInfoMap);
+		pInfoCharTmp->m_bParentInfo		= FALSE;
+		pInfoCharTmp->m_bHitQuit		= pInfoSkill->m_bHitQuit;
+		pInfoCharTmp->m_nAtackTarget	= pInfoSkill->m_dwTartgetType;
+		pInfoCharTmp->m_nReserveChgEfect = pInfoSkill->m_adwEffectID[nDirectionTmp];
+		pInfoCharTmp->m_dwMoveWait		= pInfoSkill->m_dwWaitTime;
+		pInfoCharTmp->m_dwMoveCount		= pInfoSkill->m_dwDistance;
+		pInfoCharTmp->m_dwHitEffectID	= pInfoSkill->m_dwHitEffectID;
+		pInfoCharTmp->m_dwValue1		= pInfoSkill->m_dwValue1;
+		pInfoCharTmp->m_dwValue2		= pInfoSkill->m_dwValue2;
+		pInfoCharTmp->m_dwQuitTime		= timeGetTime () + pInfoSkill->m_dwAliveTime;
+	}
 	PacketMsg.Make (
 			FORMATMSGID_USESKILL,
 			pInfoChar->m_dwCharID,

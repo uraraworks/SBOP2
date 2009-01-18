@@ -1814,6 +1814,60 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::AddSkill										 */
+/* 内容		:スキルを追加													 */
+/* 日付		:2009/01/17														 */
+/* ========================================================================= */
+
+BOOL CInfoCharBase::AddSkill(DWORD dwSkillID)
+{
+	BOOL bRet;
+	int i, nCount;
+
+	bRet = FALSE;
+
+	nCount = m_adwSkillID.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		if (m_adwSkillID[i] == dwSkillID) {
+			break;
+		}
+	}
+	if (i >= nCount) {
+		m_adwSkillID.Add (dwSkillID);
+		bRet = TRUE;
+	}
+
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharBase::DeleteSkill										 */
+/* 内容		:スキルを削除													 */
+/* 日付		:2009/01/17														 */
+/* ========================================================================= */
+
+BOOL CInfoCharBase::DeleteSkill(DWORD dwSkillID)
+{
+	BOOL bRet;
+	int i, nCount;
+
+	bRet = FALSE;
+
+	nCount = m_adwSkillID.GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		if (m_adwSkillID[i] == dwSkillID) {
+			m_adwSkillID.RemoveAt (i);
+			bRet = TRUE;
+			break;
+		}
+	}
+
+	return bRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::SetPos											 */
 /* 内容		:座標を指定														 */
 /* 日付		:2008/04/29														 */

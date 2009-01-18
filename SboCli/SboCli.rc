@@ -83,6 +83,7 @@ BEGIN
         MENUITEM "選択キャラの編集[ステータス](&S)",         IDM_CHAR_MODIFY_STATUS
         MENUITEM "選択キャラの編集[画像の設定](&G)",         IDM_CHAR_MODIFY_GRP
         MENUITEM "選択キャラの編集[所持アイテム](&I)",        IDM_CHAR_MODIFY_ITEM
+        MENUITEM "選択キャラの編集[所持スキル](&O)",         IDM_CHAR_MODIFY_SKILL
         MENUITEM "一覧(&L)",                      IDM_CHAR_LIST
         MENUITEM "管理者権限の設定(&A)",                IDM_CHAR_ADMIN
         MENUITEM "NPCの追加(&N)",                  IDM_CHAR_ADDNPC
@@ -1372,6 +1373,22 @@ BEGIN
     LTEXT           "パスワード：",-1,1,25,35,8
     EDITTEXT        IDC_PASSWORD,44,22,90,14,ES_AUTOHSCROLL
     PUSHBUTTON      "送信",IDC_SEND,168,5,50,14
+END
+
+IDD_CHAR_MODIFY_SKILL DIALOGEX 0, 0, 223, 214
+STYLE DS_SETFONT | WS_CHILD
+EXSTYLE WS_EX_STATICEDGE
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
+BEGIN
+    LTEXT           "キャラID：",IDC_STATIC,2,7,29,8
+    LTEXT           "",IDC_STATIC_CHARID,37,7,54,8
+    LTEXT           "キャラ名：",IDC_STATIC,2,16,30,8
+    LTEXT           "",IDC_STATIC_CHARNAME,37,16,54,8
+    LTEXT           "所持スキル：",IDC_STATIC,2,25,38,8
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,3,36,163,101
+    COMBOBOX        IDC_COMBO,3,140,103,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "追加",IDC_ADD,3,155,50,14
+    PUSHBUTTON      "削除",IDC_DELETE,56,155,50,14
 END
 
 

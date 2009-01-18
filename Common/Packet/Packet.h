@@ -100,6 +100,7 @@
 #include "ADMIN/PacketADMIN_ITEMWEAPON_RENEW.h"			/* 			武器情報更新 */
 #include "ADMIN/PacketADMIN_CHAR_ADDNPC.h"				/* 			NPCの追加 */
 #include "ADMIN/PacketADMIN_CHAR_MODIFYITEM.h"			/* 			所持アイテムの変更 */
+#include "ADMIN/PacketADMIN_CHAR_MODIFYSKILL.h"			/* 			所持スキルの変更 */
 #include "ADMIN/PacketADMIN_CHAR_RENEWMOTION.h"			/* 			キャラモーション情報の更新 */
 #include "ADMIN/PacketADMIN_CHAR_ADDMOTIONTYPE.h"		/* 			キャラモーション種別情報の追加 */
 #include "ADMIN/PacketADMIN_CHAR_RENEWMOTIONTYPE.h"		/* 			キャラモーション種別情報の更新 */

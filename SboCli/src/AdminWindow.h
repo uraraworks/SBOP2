@@ -32,6 +32,7 @@ enum {
 	SCRIDADMIN_CHAR_MODIFY_STATUS,			/* 選択キャラ情報編集[ステータス] */
 	SCRIDADMIN_CHAR_MODIFY_GRP,				/* 選択キャラ情報編集[画像の設定] */
 	SCRIDADMIN_CHAR_MODIFY_ITEM,			/* 選択キャラ情報編集[所持アイテムの設定] */
+	SCRIDADMIN_CHAR_MODIFY_SKILL,			/* 選択キャラ情報編集[所持スキルの設定] */
 	SCRIDADMIN_CHAR_LIST,					/* 一覧 */
 	SCRIDADMIN_CHAR_ADMIN,					/* 管理者権限の設定 */
 	SCRIDADMIN_CHAR_ADDNPC,					/* NPCの追加 */
@@ -114,6 +115,7 @@ protected:
 	afx_msg void OnCharModifyStatus();
 	afx_msg void OnCharModifyGrp();
 	afx_msg void OnCharModifyItem();
+	afx_msg void OnCharModifySkill();
 	afx_msg void OnCharList();
 	afx_msg void OnCharAdmin();
 	afx_msg void OnCharAddNPC();

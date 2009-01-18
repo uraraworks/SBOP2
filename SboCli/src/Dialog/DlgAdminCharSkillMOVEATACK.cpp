@@ -155,6 +155,19 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 	}
 	pCombo->SetCurSel (nNo);
 
+	/* 発射種別 */
+	pCombo = &m_ctlPutType;
+	nNo = 0;
+	nCount = pCombo->GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		dwTmp = pCombo->GetItemData (i);
+		if (pSrcTmp->m_dwPutType == dwTmp) {
+			nNo = i;
+			break;
+		}
+	}
+	pCombo->SetCurSel (nNo);
+
 	UpdateData (FALSE);
 }
 
@@ -189,9 +202,11 @@ void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 		pDstTmp->m_adwEffectID[i] = pCombo->GetItemData (nNo);
 	}
 	/* ヒット時の表示エフェクト */
-	pCombo = &m_ctlHitEffect;
-	nNo = pCombo->GetCurSel ();
+	nNo = m_ctlHitEffect.GetCurSel ();
 	pDstTmp->m_dwHitEffectID = pCombo->GetItemData (nNo);
+	/* 発射種別 */
+	nNo = m_ctlPutType.GetCurSel ();
+	pDstTmp->m_dwPutType = pCombo->GetItemData (nNo);
 }
 
 
@@ -217,7 +232,7 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 		astPutType[] = {
 			SKILLMOVEATACKPUTTYPE_NONE,		"未設定",
 			SKILLMOVEATACKPUTTYPE_FRONT,	"前方",
-//			SKILLMOVEATACKPUTTYPE_CROSS,	"上下左右",
+			SKILLMOVEATACKPUTTYPE_CROSS,	"上下左右",
 			-1, NULL
 		};
 	CComboBox *pCombo, *apCtlEffectID[] = { &m_ctlUp, &m_ctlDown, &m_ctlLeft, &m_ctlRight, &m_ctlHitEffect };

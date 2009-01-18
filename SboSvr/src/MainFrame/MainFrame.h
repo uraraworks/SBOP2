@@ -155,6 +155,7 @@ private:
 	void	RecvProcADMIN_ITEMWEAPON_RENEW		(PBYTE pData, DWORD dwSessionID);					/* 武器情報更新 */
 	void	RecvProcADMIN_CHAR_ADDNPC			(PBYTE pData, DWORD dwSessionID);					/* NPCの追加 */
 	void	RecvProcADMIN_CHAR_MODIFYITEM		(PBYTE pData, DWORD dwSessionID);					/* 所持アイテムの変更 */
+	void	RecvProcADMIN_CHAR_MODIFYSKILL		(PBYTE pData, DWORD dwSessionID);					/* 所持スキルの変更 */
 	void	RecvProcADMIN_CHAR_RENEWMOTION		(PBYTE pData, DWORD dwSessionID);					/* キャラモーション情報の更新 */
 	void	RecvProcADMIN_CHAR_ADDMOTIONTYPE	(PBYTE pData, DWORD dwSessionID);					/* キャラモーション種別情報の追加 */
 	void	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(PBYTE pData, DWORD dwSessionID);					/* キャラモーション種別情報の更新 */

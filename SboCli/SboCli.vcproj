@@ -2790,6 +2790,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminCharModifySkill.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminCharModifyStatus.cpp"
 					>
 				</File>
@@ -4302,6 +4306,10 @@
 				</File>
 				<File
 					RelativePath="src\Dialog\DlgAdminCharModifyItem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminCharModifySkill.h"
 					>
 				</File>
 				<File

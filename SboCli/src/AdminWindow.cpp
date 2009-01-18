@@ -16,6 +16,7 @@
 #include "DlgAdminCharModifyStatus.h"
 #include "DlgAdminCharModifyGrp.h"
 #include "DlgAdminCharModifyItem.h"
+#include "DlgAdminCharModifySkill.h"
 #include "DlgAdminCharList.h"
 #include "DlgAdminCharAdmin.h"
 #include "DlgAdminCharAddNPC.h"
@@ -69,6 +70,7 @@ BEGIN_MESSAGE_MAP(CAdminWindow, CWnd)
 	ON_COMMAND(IDM_CHAR_MODIFY_STATUS, OnCharModifyStatus)
 	ON_COMMAND(IDM_CHAR_MODIFY_GRP, OnCharModifyGrp)
 	ON_COMMAND(IDM_CHAR_MODIFY_ITEM, OnCharModifyItem)
+	ON_COMMAND(IDM_CHAR_MODIFY_SKILL, OnCharModifySkill)
 	ON_COMMAND(IDM_CHAR_LIST, OnCharList)
 	ON_COMMAND(IDM_CHAR_ADMIN, OnCharAdmin)
 	ON_COMMAND(IDM_CHAR_ADDNPC, OnCharAddNPC)
@@ -251,6 +253,10 @@ void CAdminWindow::ChgScreen(int nScrID)
 	case SCRIDADMIN_CHAR_MODIFY_ITEM:			/* 選択キャラ情報編集[所持アイテムの設定] */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharModifyItem(this);
+		break;
+	case SCRIDADMIN_CHAR_MODIFY_SKILL:			/* 選択キャラ情報編集[所持スキルの設定] */
+		nTypeL = ADMINNOTIFYTYPE_CHARID;
+		m_pDlgBase = new CDlgAdminCharModifySkill(this);
 		break;
 	case SCRIDADMIN_CHAR_LIST:					/* 一覧 */
 		m_pDlgBase = new CDlgAdminCharList(this);
@@ -643,6 +649,18 @@ void CAdminWindow::OnCharModifyGrp()
 void CAdminWindow::OnCharModifyItem()
 {
 	ChgScreen (SCRIDADMIN_CHAR_MODIFY_ITEM);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CAdminWindow::OnCharModifySkill								 */
+/* 内容		:メニューハンドラ(選択キャラの編集[所持スキルの設定])			 */
+/* 日付		:2009/01/18														 */
+/* ========================================================================= */
+
+void CAdminWindow::OnCharModifySkill()
+{
+	ChgScreen (SCRIDADMIN_CHAR_MODIFY_SKILL);
 }
 
 

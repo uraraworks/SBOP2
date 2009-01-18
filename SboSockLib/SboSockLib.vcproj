@@ -447,6 +447,10 @@
 							</FileConfiguration>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYSKILL.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_ACCOUNT.cpp"
 							>
 						</File>
@@ -3137,6 +3141,10 @@
 						</File>
 						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYITEM.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYSKILL.h"
 							>
 						</File>
 						<File

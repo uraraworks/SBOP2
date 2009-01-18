@@ -1840,27 +1840,16 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 		if (pInfoCharSrc == pInfoCharTmp) {
 			continue;
 		}
+		if (pInfoCharTmp->m_dwCharID == pInfoCharSrc->m_dwParentCharID) {
+			continue;
+		}
+		if (pInfoCharTmp->m_dwParentCharID == pInfoCharSrc->m_dwParentCharID) {
+			continue;
+		}
 		if (pInfoCharTmp->IsAtackTarget () == FALSE) {
 			continue;
 		}
-#if 0
-		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
-			continue;
-		}
-		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
-			continue;
-		}
-		if (nXType == 1) {
-			if (nDirection < 2) {
-				if (pInfoCharTmp->m_nMapX != ptFront.x) {
-					continue;
-				}
-			}
-		}
-		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
-			continue;
-		}
-#else
+
 		GetDistance (sizeDistance, pInfoCharSrc, pInfoCharTmp);
 		if (sizeDistance.cx < 0) {
 			continue;
@@ -1875,7 +1864,7 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 		if (sizeDistance.cx + sizeDistance.cy >= 2) {
 			continue;
 		}
-#endif
+
 		dwRet = pInfoCharTmp->m_dwCharID;
 		break;
 	}

@@ -83,6 +83,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_ADMIN_ITEMWEAPON_RENEW:		RecvProcADMIN_ITEMWEAPON_RENEW		(pData, dwSessionID);	break;	/* 武器情報更新 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_ADDNPC:			RecvProcADMIN_CHAR_ADDNPC			(pData, dwSessionID);	break;	/* NPCの追加 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_MODIFYITEM:		RecvProcADMIN_CHAR_MODIFYITEM		(pData, dwSessionID);	break;	/* 所持アイテムの変更 */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_MODIFYSKILL:		RecvProcADMIN_CHAR_MODIFYSKILL		(pData, dwSessionID);	break;	/* 所持スキルの変更 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTION:		RecvProcADMIN_CHAR_RENEWMOTION		(pData, dwSessionID);	break;	/* キャラモーション情報の更新 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_ADDMOTIONTYPE:		RecvProcADMIN_CHAR_ADDMOTIONTYPE	(pData, dwSessionID);	break;	/* キャラモーション情報種別の追加 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTIONTYPE:	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(pData, dwSessionID);	break;	/* キャラモーション情報種別の更新 */
@@ -1084,6 +1085,52 @@ void CMainFrame::RecvProcADMIN_CHAR_MODIFYITEM(PBYTE pData, DWORD dwSessionID)
 
 	PacketITEM_RES_ITEMINFO.Make (pInfoItem);
 	SendToMapChar (pInfoChar->m_dwMapID, &PacketITEM_RES_ITEMINFO);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_CHAR_MODIFYSKILL						 */
+/* 内容		:受信処理(所持スキルの変更)										 */
+/* 日付		:2009/01/18														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_CHAR_MODIFYSKILL(PBYTE pData, DWORD dwSessionID)
+{
+	BOOL bResult;
+	PCInfoSkillBase pInfoSkill;
+	PCInfoCharSvr pInfoChar;
+	CPacketADMIN_CHAR_MODIFYSKILL Packet;
+	CPacketCHAR_SKILLINFO PacketCHAR_SKILLINFO;
+
+	Packet.Set (pData);
+
+	pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (Packet.m_dwSkillID);
+	if (pInfoSkill == NULL) {
+		return;
+	}
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+
+	switch (Packet.m_nType) {
+	case CHARMODIFYSKILLTYPE_ADD:		/* 追加 */
+		bResult = pInfoChar->AddSkill (Packet.m_dwSkillID);
+		if (bResult == FALSE) {
+			return;
+		}
+		break;
+
+	case CHARMODIFYSKILLTYPE_DELETE:	/* 削除 */
+		bResult = pInfoChar->DeleteSkill (Packet.m_dwSkillID);
+		if (bResult == FALSE) {
+			return;
+		}
+		break;
+	}
+	PacketCHAR_SKILLINFO.Make (pInfoChar->m_dwCharID, &pInfoChar->m_adwSkillID);
+	m_pSock->SendTo (pInfoChar->m_dwSessionID, &PacketCHAR_SKILLINFO);
+	m_pSock->SendTo (dwSessionID, &PacketCHAR_SKILLINFO);
 }
 
 
