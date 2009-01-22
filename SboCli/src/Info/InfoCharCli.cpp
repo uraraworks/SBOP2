@@ -372,6 +372,11 @@ void CInfoCharCli::MakeCharGrp(void)
 	PCMgrGrpData pMgrGrpData;
 	PCImg32 pImgBody, pImgEar, pImgCloth, pImgHairD, pImgHairU, pImgEye, pImgAcce;
 
+	/* “Áêˆ— */
+	if (m_wGrpIDNPC == (WORD)-1) {
+		SetEffectID (m_wGrpIDCloth);
+	}
+
 	/* •à‚«—p‚Ì‰æ‘œ‚ğ—pˆÓ */
 	SAFE_DELETE (m_pDibChar);
 	m_pDibChar = new CImg32;

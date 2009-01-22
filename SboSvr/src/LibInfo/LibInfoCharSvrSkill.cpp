@@ -174,13 +174,13 @@ BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSki
 		InfoCharTmp.m_dwHP				= 1;
 		InfoCharTmp.m_nMoveType			= CHARMOVETYPE_MOVEATACK;
 		InfoCharTmp.m_wGrpIDNPC			= (WORD)-1;
+		InfoCharTmp.m_wGrpIDCloth		= (WORD)pInfoSkill->m_adwEffectID[nDirectionTmp];
 
 		pInfoCharTmp = (PCInfoCharMOVEATACKSvr)AddNPC (&InfoCharTmp);
 		pInfoCharTmp->SetMap (pInfoMap);
 		pInfoCharTmp->m_bParentInfo		= FALSE;
 		pInfoCharTmp->m_bHitQuit		= pInfoSkill->m_bHitQuit;
 		pInfoCharTmp->m_nAtackTarget	= pInfoSkill->m_dwTartgetType;
-		pInfoCharTmp->m_nReserveChgEfect = pInfoSkill->m_adwEffectID[nDirectionTmp];
 		pInfoCharTmp->m_dwMoveWait		= pInfoSkill->m_dwWaitTime;
 		pInfoCharTmp->m_dwMoveCount		= pInfoSkill->m_dwDistance;
 		pInfoCharTmp->m_dwHitEffectID	= pInfoSkill->m_dwHitEffectID;
