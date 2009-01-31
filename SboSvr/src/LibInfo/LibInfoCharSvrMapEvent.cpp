@@ -142,7 +142,7 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 
 	nDirection = pInfoMapEvent->m_nDirection;
 
-	GetTailCharID (pInfoChar, apInfoChar);
+	GetTailCharInfo (pInfoChar, apInfoChar);
 	apInfoChar.InsertAt (0, pInfoChar);
 	nCount = apInfoChar.GetSize ();
 	for (i = 0; i < nCount; i ++) {
@@ -190,7 +190,7 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 
 	nDirection = pInfoMapEvent->m_nDirection;
 
-	GetTailCharID (pInfoChar, apInfoChar);
+	GetTailCharInfo (pInfoChar, apInfoChar);
 	apInfoChar.InsertAt (0, pInfoChar);
 
 	nCount = apInfoChar.GetSize ();

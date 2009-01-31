@@ -1593,6 +1593,29 @@ DWORD CInfoCharBase::GetMoveWait(void)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::GetPosRect										 */
+/* 内容		:座標矩形を取得													 */
+/* 日付		:2009/01/28														 */
+/* ========================================================================= */
+
+void CInfoCharBase::GetPosRect(RECT &rcDst)
+{
+	int x, y;
+	SIZE sizeTmp;
+
+	GetCharSize (sizeTmp);
+	x = m_nMapX;
+	y = m_nMapY - (sizeTmp.cy - 1);
+
+	SetRect (&rcDst,
+		x,
+		y - (sizeTmp.cy - 1),
+		x + (sizeTmp.cx - 1),
+		y + (sizeTmp.cy - 1));
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::SetItem											 */
 /* 内容		:アイテム情報を設定												 */
 /* 日付		:2007/08/05														 */

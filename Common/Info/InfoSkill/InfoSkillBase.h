@@ -22,6 +22,12 @@ enum {
 	SKILLTYPEMAIN_MAX
 };
 
+/* スキル種別(サブ:能力) */
+enum {
+	SKILLTYPESUB_NONE_NONE = 0,
+	SKILLTYPESUB_NONE_HEAL,			/* 回復 */
+};
+
 /* スキル種別(サブ:戦闘) */
 enum {
 	SKILLTYPESUB_BATTLE_NONE = 0,
@@ -48,6 +54,7 @@ enum {
 enum {
 	INFOSKILLTYPE_BASE = 0,		/* 基底 */
 	INFOSKILLTYPE_MOVEATACK,	/* 移動して攻撃 */
+	INFOSKILLTYPE_HEAL,			/* 回復 */
 };
 
 

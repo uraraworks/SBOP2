@@ -890,6 +890,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp"
 							>
 						</File>
@@ -2858,6 +2862,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminCharSkillHEAL.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminCharSkillList.cpp"
 					>
 				</File>
@@ -3811,6 +3819,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillHEAL.h"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.h"
 							>
 						</File>
@@ -4338,6 +4350,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminCharSkillBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminCharSkillHEAL.h"
 					>
 				</File>
 				<File

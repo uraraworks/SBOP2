@@ -74,6 +74,7 @@
 #define IDD_CHAR_SKILL_MOVEATACK        192
 #define IDD_ACCOUNT_ADD                 193
 #define IDD_CHAR_MODIFY_SKILL           194
+#define IDD_CHAR_SKILL_HEAL             195
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -295,6 +296,7 @@
 #define IDC_ATTR_LIGHT                  1116
 #define IDC_AREA                        1116
 #define IDC_LOOPSOUND                   1116
+#define IDC_TARGET2                     1116
 #define IDC_EDIT19                      1117
 #define IDC_ATTR_DARK                   1117
 #define IDC_VIEWPOS_X                   1117

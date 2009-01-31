@@ -21,6 +21,9 @@ class CLibInfoItem;
 class CLibInfoItemWeapon;
 class CUraraSockTCPSBO;
 
+typedef CmyArray<CInfoCharSvr *, CInfoCharSvr *>	  ARRAYINFOCHARSVR;
+typedef CmyArray<CInfoCharSvr *, CInfoCharSvr *>	*PARRAYINFOCHARSVR;
+
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
@@ -62,10 +65,11 @@ public:
 	PCInfoCharBase	GetPtrLogIn		(DWORD dwCharID);								/* ログイン中キャラ情報を取得 */
 	PCInfoCharBase	GetPtrParent	(CInfoCharSvr *pChar);							/* 親キャラ情報を取得 */
 
-	int		GetNoLogIn				(DWORD dwCharID);								/* ログイン中キャラの配列番号を取得 */
-	void	GetScreenCharID			(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);	/* 指定キャラの画面内にいるキャラIDを取得 */
-	void	GetScreenCharIDLineOut	(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);	/* 指定キャラの画面端にいるキャラIDを取得 */
-	void	GetTailCharID			(CInfoCharSvr *pInfoChar, CmyArray<CInfoCharSvr *, CInfoCharSvr *> &aDst);	/* ついてきているキャラIDを取得 */
+	int		GetNoLogIn				(DWORD dwCharID);										/* ログイン中キャラの配列番号を取得 */
+	void	GetScreenCharID			(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);			/* 指定キャラの画面内にいるキャラIDを取得 */
+	void	GetScreenCharIDLineOut	(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);			/* 指定キャラの画面端にいるキャラIDを取得 */
+	void	GetAreaCharInfo			(DWORD dwMapID, RECT *prcSrc, ARRAYINFOCHARSVR &aDst);	/* 指定範囲にぶつかるキャラ情報を取得 */
+	void	GetTailCharInfo			(CInfoCharSvr *pInfoChar, ARRAYINFOCHARSVR &aDst);		/* ついてきているキャラIDを取得 */
 	BOOL	IsMove					(PCInfoCharBase pInfoChar, int &nDirection, BOOL bEvent=FALSE);	/* 指定方向に進めるかチェック */
 	BOOL	IsNPC					(CInfoCharSvr *pInfoChar);						/* NPCか判定 */
 	DWORD	GetFrontCharID			(DWORD dwCharID, int nDirection = -1);			/* 一歩前のキャラIDを取得 */
@@ -114,6 +118,7 @@ protected:
 public:
 	BOOL UseSkill			(CInfoCharSvr *pInfoChar, DWORD dwSkillID);					/* スキル使用 */
 protected:
+	BOOL UseSkillNONE_HEAL			(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* スキル使用(能力:回復) */
 	BOOL UseSkillBATTLE_MOVEATACK	(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* スキル使用(戦闘:移動して攻撃) */
 	BOOL UseSkillFISHING			(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* スキル使用(釣り) */
 

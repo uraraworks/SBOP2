@@ -203,10 +203,10 @@ void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 	}
 	/* ヒット時の表示エフェクト */
 	nNo = m_ctlHitEffect.GetCurSel ();
-	pDstTmp->m_dwHitEffectID = pCombo->GetItemData (nNo);
+	pDstTmp->m_dwHitEffectID = m_ctlHitEffect.GetItemData (nNo);
 	/* 発射種別 */
 	nNo = m_ctlPutType.GetCurSel ();
-	pDstTmp->m_dwPutType = pCombo->GetItemData (nNo);
+	pDstTmp->m_dwPutType = m_ctlPutType.GetItemData (nNo);
 }
 
 

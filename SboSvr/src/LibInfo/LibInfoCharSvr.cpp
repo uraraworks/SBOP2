@@ -1176,8 +1176,6 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 
 void CLibInfoCharSvr::GetDistance(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CInfoCharSvr *pInfoCharDst)
 {
-	POINT ptTmp;
-	SIZE sizeTmp;
 	RECT rcSrc, rcDst;
 
 	sizeDst.cx = sizeDst.cy = -1;
@@ -1185,19 +1183,9 @@ void CLibInfoCharSvr::GetDistance(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CIn
 		return;
 	}
 	/* 比較元の座標矩形を取得 */
-	pInfoCharSrc->GetCharSize (sizeTmp);
-	ptTmp.x = pInfoCharSrc->m_nMapX;
-	ptTmp.y = pInfoCharSrc->m_nMapY - (sizeTmp.cy - 1);
-	SetRect (&rcSrc,
-			ptTmp.x, ptTmp.y,
-			ptTmp.x + (sizeTmp.cx - 1), ptTmp.y + (sizeTmp.cy - 1));
+	pInfoCharSrc->GetPosRect (rcSrc);
 	/* 比較先の座標矩形を取得 */
-	pInfoCharDst->GetCharSize (sizeTmp);
-	ptTmp.x = pInfoCharDst->m_nMapX;
-	ptTmp.y = pInfoCharDst->m_nMapY - (sizeTmp.cy - 1);
-	SetRect (&rcDst,
-			ptTmp.x, ptTmp.y,
-			ptTmp.x + (sizeTmp.cx - 1), ptTmp.y + (sizeTmp.cy - 1));
+	pInfoCharDst->GetPosRect (rcDst);
 
 	sizeDst.cx = rcSrc.left - rcDst.right;
 	if (pInfoCharSrc->m_nMapX < pInfoCharDst->m_nMapX) {
@@ -1510,14 +1498,51 @@ void CLibInfoCharSvr::GetScreenCharIDLineOut(
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoCharSvr::GetTailCharID									 */
-/* 内容		:ついてきているキャラIDを取得									 */
+/* 関数名	:CLibInfoCharSvr::GetAreaCharInfo								 */
+/* 内容		:指定範囲にぶつかるキャラ情報を取得								 */
+/* 日付		:2009/01/28														 */
+/* ========================================================================= */
+
+void CLibInfoCharSvr::GetAreaCharInfo(
+	DWORD dwMapID,				/* [in] 対象マップID */
+	RECT *prcSrc,				/* [in] 対象範囲 */
+	ARRAYINFOCHARSVR &aDst)		/* [in] 出力先 */
+{
+	int i, nCount;
+	RECT rcTmp;
+	PCInfoCharSvr pInfoCharTmp;
+
+	aDst.RemoveAll ();
+
+	nCount = GetCountLogIn ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoCharTmp = (PCInfoCharSvr)GetPtrLogIn (i);
+		/* 別マップ？ */
+		if (pInfoCharTmp->m_dwMapID != dwMapID) {
+			continue;
+		}
+		pInfoCharTmp->GetPosRect (rcTmp);
+		/* ぶつからない？ */
+		if (!((prcSrc->left <= rcTmp.right) &&
+			(prcSrc->right >= rcTmp.left) &&
+			(prcSrc->top <= rcTmp.bottom) &&
+			(prcSrc->bottom >= rcTmp.top))) {
+			continue;
+		}
+		aDst.Add (pInfoCharTmp);
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::GetTailCharInfo								 */
+/* 内容		:ついてきているキャラ情報を取得									 */
 /* 日付		:2008/06/29														 */
 /* ========================================================================= */
 
-void CLibInfoCharSvr::GetTailCharID(
-	CInfoCharSvr *pInfoChar,							/* [in] 基準となるキャラ情報 */
-	CmyArray<CInfoCharSvr *, CInfoCharSvr *> &aDst)		/* [in] 出力先 */
+void CLibInfoCharSvr::GetTailCharInfo(
+	CInfoCharSvr *pInfoChar,	/* [in] 基準となるキャラ情報 */
+	ARRAYINFOCHARSVR &aDst)		/* [in] 出力先 */
 {
 	PCInfoCharSvr pInfoCharTmp;
 
@@ -1889,13 +1914,13 @@ void CLibInfoCharSvr::SetPos(
 {
 	int i, nCount, nResult;
 	PCInfoCharSvr pInfoCharTmp, pInfoCharFront;
-	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
+	ARRAYINFOCHARSVR apInfoChar;
 
 	pInfoChar->SetPos (x, y);
 
 	if (bTail) {
 		/* ついてきているキャラ一覧を取得 */
-		GetTailCharID (pInfoChar, apInfoChar);
+		GetTailCharInfo (pInfoChar, apInfoChar);
 
 		nCount = apInfoChar.GetSize ();
 		for (i = nCount - 1; i >= 0; i --) {

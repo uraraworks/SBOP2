@@ -713,6 +713,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp"
 							>
 						</File>
@@ -1954,6 +1958,10 @@
 						>
 						<File
 							RelativePath="..\Common\Info\InfoSkill\InfoSkillBase.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Info\InfoSkill\InfoSkillHEAL.h"
 							>
 						</File>
 						<File

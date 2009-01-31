@@ -12,6 +12,7 @@
 #include "LibInfoSkill.h"
 #include "DlgAdminCharSkillNONE.h"
 #include "DlgAdminCharSkillMOVEATACK.h"
+#include "DlgAdminCharSkillHEAL.h"
 #include "MgrData.h"
 #include "DlgAdminCharSkillBase.h"
 
@@ -277,6 +278,8 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeMain()
 	nTypeMain = m_ctlTypeMain.GetItemData (m_ctlTypeMain.GetCurSel ());
 	switch (nTypeMain) {
 	case SKILLTYPEMAIN_NONE:			/* î\óÕ */
+		m_ctlTypeSub.InsertString (1, "âÒïú");
+		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_NONE_HEAL);
 		break;
 	case SKILLTYPEMAIN_BATTLE:			/* êÌì¨ */
 		m_ctlTypeSub.InsertString (1, "à⁄ìÆÇµÇƒçUåÇ");
@@ -316,6 +319,11 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
 
 	switch (nTypeMain) {
 	case SKILLTYPEMAIN_NONE:				/* î\óÕ */
+		switch (nTypeSub) {
+		case SKILLTYPESUB_NONE_HEAL:			/* âÒïú */
+			m_pDlgType = new CDlgAdminCharSkillHEAL(this);
+			break;
+		}
 		break;
 	case SKILLTYPEMAIN_BATTLE:				/* êÌì¨ */
 		switch (nTypeSub) {
