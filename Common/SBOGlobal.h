@@ -20,5 +20,7 @@ extern void		StoreRenew			(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos);			/* 
 extern void		GetModuleFilePath	(LPSTR pszDst, DWORD dwSize);								/* モジュールパスを取得 */
 extern BOOL		AllCreateDirectory	(LPCSTR, LPSECURITY_ATTRIBUTES pSAtt = NULL, BOOL bResult = TRUE);	/* 指定されたパスのフォルダを作成 */
 extern void		TrimViewString		(CmyString &strDst, LPCSTR pszSrc);							/* 表示できない文字を削除 */
+extern BOOL		IsInRect			(RECT *pSrc, RECT *pTarget);								/* 指定矩形が完全に内側にあるか判定 */
+extern BOOL		IsHitRect			(RECT *pSrc1, RECT *pSrc2);									/* 矩形同士の当たり判定 */
 
 /* Copyright(C)URARA-works 2006 */

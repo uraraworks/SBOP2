@@ -29,8 +29,10 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	CInfoCharSvr *pInfoChar,	/* [in] 対象キャラ */
 	BOOL bCheck/*FALSE*/)		/* [in] TRUE:チェックのみ */
 {
-	BOOL bRet;
-	int i, x, y, nCount;
+	BOOL bRet, bResult, bBreak;
+	int x, y;
+	RECT rcChar, rcMap, rcMapEvent;
+	POINT *pptPos1, *pptPos2;
 	PCInfoMapBase pInfoMap;
 	PCInfoMapEventBase pInfoMapEventBase;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
@@ -44,41 +46,45 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
-	pInfoChar->RenewBlockMapArea (pInfoChar->m_nMapX, pInfoChar->m_nMapY, pInfoChar->m_nDirection);
-
 	pInfoMapEventBase = NULL;
-	nCount = pInfoChar->m_aposBockMapArea.GetSize ();
-	for (i = 0; i < nCount; i ++) {
-		x = pInfoChar->m_aposBockMapArea[i].x;
-		y = pInfoChar->m_aposBockMapArea[i].y;
-		pInfoMapEventBase = pInfoMap->GetEvent (x, y);
-		if (pInfoMapEventBase == NULL) {
-			continue;
-		}
-		switch (pInfoMapEventBase->m_nHitType) {
-		case MAPEVENTHITTYPE_MAPPOS:
-			/* マップ座標で判定の時に半端な位置にいる？ */
-			if ((pInfoChar->m_nMapX % 2) || (pInfoChar->m_nMapY % 2)) {
+	/* 座標を矩形で取得 */
+	pInfoChar->GetPosRect (rcChar);
+	pInfoChar->GetMapPosRect (rcMap);
+
+	bBreak = FALSE;
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			pInfoMapEventBase = pInfoMap->GetEvent (x, y);
+			if (pInfoMapEventBase == NULL) {
+				continue;
+			}
+			bResult = TRUE;
+			pptPos1 = &pInfoMapEventBase->m_ptPos;
+			pptPos2 = &pInfoMapEventBase->m_ptPos2;
+			switch (pInfoMapEventBase->m_nHitType) {
+			case MAPEVENTHITTYPE_MAPPOS:		/* マップ座標で判定 */
+				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
+				bResult = IsInRect (&rcChar, &rcMapEvent);
+				break;
+			case MAPEVENTHITTYPE_CHARPOS:		/* キャラ座標で判定 */
+				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
+				bResult = IsHitRect (&rcChar, &rcMapEvent);
+				break;
+			case MAPEVENTHITTYPE_AREA:			/* 範囲で判定 */
+				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos2->x * 2 + 1, pptPos2->y * 2 + 1);
+				bResult = IsInRect (&rcChar, &rcMapEvent);
+				break;
+			}
+			if (bResult == FALSE) {
 				pInfoMapEventBase = NULL;
 				continue;
 			}
-			break;
-		case MAPEVENTHITTYPE_AREA:
-			if ((x == pInfoMapEventBase->m_ptPos.x) || (y == pInfoMapEventBase->m_ptPos2.x)) {
-				if (pInfoChar->m_nMapX % 2) {
-					pInfoMapEventBase = NULL;
-					continue;
-				}
-			}
-			if ((y == pInfoMapEventBase->m_ptPos.y) || (y == pInfoMapEventBase->m_ptPos2.y)) {
-				if (pInfoChar->m_nMapY % 2) {
-					pInfoMapEventBase = NULL;
-					continue;
-				}
-			}
+			bBreak = TRUE;
 			break;
 		}
-		break;
+		if (bBreak) {
+			break;
+		}
 	}
 	if (pInfoMapEventBase == NULL) {
 		goto Exit;

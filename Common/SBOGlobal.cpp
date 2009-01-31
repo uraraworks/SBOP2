@@ -238,4 +238,46 @@ void TrimViewString(CmyString &strDst, LPCSTR pszSrc)
 	}
 }
 
+
+/* ========================================================================= */
+/* 関数名	:IsInRect														 */
+/* 内容		:指定矩形が完全に内側にあるか判定								 */
+/* 日付		:2009/01/31														 */
+/* ========================================================================= */
+
+BOOL IsInRect(RECT *pSrc, RECT *pTarget)
+{
+	BOOL bRet;
+
+	bRet = FALSE;
+
+	if ((pSrc->left >= pTarget->left) && (pSrc->right <= pTarget->right) &&
+		(pSrc->top >= pTarget->top) && (pSrc->bottom <= pTarget->bottom)) {
+		bRet = TRUE;
+	}
+
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:IsHitRect														 */
+/* 内容		:矩形同士の当たり判定											 */
+/* 日付		:2009/01/31														 */
+/* ========================================================================= */
+
+BOOL IsHitRect(RECT *pSrc1, RECT *pSrc2)
+{
+	BOOL bRet;
+
+	bRet = FALSE;
+
+	if ((pSrc1->left <= pSrc2->right) && (pSrc2->left <= pSrc1->right) &&
+		(pSrc1->top <= pSrc2->bottom) && (pSrc2->top <= pSrc1->bottom)) {
+		bRet = TRUE;
+	}
+
+	return bRet;
+}
+
 /* Copyright(C)URARA-works 2006 */

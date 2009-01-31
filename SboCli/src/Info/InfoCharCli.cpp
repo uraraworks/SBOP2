@@ -401,7 +401,7 @@ void CInfoCharCli::MakeCharGrp(void)
 	m_ptViewCharPos.x = m_ptViewCharPos.y = 0;
 	if (m_dwMotionTypeID != 1) {
 		m_ptViewCharPos.x = 16;
-		m_ptViewCharPos.y = 32;
+		m_ptViewCharPos.y = 48;
 	}
 
 	nAcceX = nAcceY = 0;

@@ -56,6 +56,7 @@ public:
 	virtual void TimerProc	(DWORD dwTime);						/* 時間処理 */
 
 	BOOL	IsMapEvent		(int x, int y);						/* 指定座標にマップイベントがあるか判定 */
+	BOOL	IsHitMapEvent	(RECT *pPos);						/* 指定座標でマップイベントにぶつかるか判定 */
 	int		GetMapEventType	(int x, int y);						/* 指定座標のマップイベント種別を取得 */
 	WORD	GetParts		(int x, int y);						/* 指定座標のパーツ番号を取得 */
 	void	SetParts		(int x, int y, DWORD dwPartsID);	/* 指定座標のパーツ番号を設定 */

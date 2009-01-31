@@ -154,23 +154,6 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 	pInfoChar->m_bChgInfo		= TRUE;
 	pInfoChar->m_bChgScreenPos	= Packet.m_bChgScreenPos;
 
-	/* 座標が変わった？ */
-	if (!((Packet.m_pInfoChar->m_dwMapID == dwMapIDBack) &&
-		(Packet.m_pInfoChar->m_nMapX == ptPosBack.x) &&
-		(Packet.m_pInfoChar->m_nMapY == ptPosBack.y))) {
-		PacketCHAR_MOVEPOS.Make (
-				Packet.m_pInfoChar->m_dwMapID,
-				Packet.m_pInfoChar->m_dwCharID,
-				Packet.m_pInfoChar->m_nDirection,
-				Packet.m_pInfoChar->m_nMapX,
-				Packet.m_pInfoChar->m_nMapY,
-				FALSE);
-		/* 移動前の座標の周りにいるキャラへ通知 */
-		SendToScreenChar (pInfoChar, &PacketCHAR_MOVEPOS);
-
-		pInfoChar->m_bChgScreenPos = TRUE;
-	}
-
 	pInfoChar->Copy (Packet.m_pInfoChar);
 	pInfoChar->m_bChgSpeak = FALSE;
 

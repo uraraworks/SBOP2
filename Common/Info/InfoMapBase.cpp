@@ -553,6 +553,37 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoMapBase::IsHitMapEvent									 */
+/* 内容		:指定座標でマップイベントにぶつかるか判定						 */
+/* 日付		:2009/01/31														 */
+/* 戻り値	:TRUE:マップイベントあり										 */
+/* ========================================================================= */
+
+BOOL CInfoMapBase::IsHitMapEvent(RECT *pPos)
+{
+	BOOL bRet, bResult;
+	int x, y;
+
+	bRet = FALSE;
+	if (m_pbyMapEvent == NULL) {
+		goto Exit;
+	}
+	for (y = pPos->top; y <= pPos->bottom; y ++) {
+		for (x = pPos->left; x <= pPos->right; x ++) {
+			bResult = IsMapEvent (x, y);
+			if (bResult) {
+				bRet = TRUE;
+				break;
+			}
+		}
+	}
+
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoMapBase::GetMapEventType									 */
 /* 内容		:指定座標のマップイベント種別を取得								 */
 /* 日付		:2008/07/21														 */

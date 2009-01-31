@@ -357,8 +357,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 			x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
 			y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
 			dwNotifyData = 0;
-			y --;
-			size.cx = size.cy = 2;
+			size.cx = size.cy = 1;
 
 			nCount = m_pLibInfoChar->GetCount ();
 			for (i = 0; i < nCount; i ++) {
@@ -2099,7 +2098,7 @@ BOOL CStateProcMAP::MoveProc(
 	int yy,				/* [in] 増減(タテ) */
 	int nDirection)		/* [in] 向き */
 {
-	int i, nCount, nResult, nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
+	int nResult, nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
 		anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	BOOL bRet, bResult;
 	DWORD dwCharID;
@@ -2297,17 +2296,15 @@ ExitSend:
 	m_pSock->Send (&Packet);
 
 	if ((xBack != x) || (yBack != y)) {
-		m_dwLastTimeGauge = timeGetTime ();
-		m_pPlayerChar->RenewBlockMapArea (x, y, nDirectionView);
-		nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
-		for (i = 0; i < nCount; i ++) {
-			bResult = bResult = pMap->IsMapEvent (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y);
-			if (bResult) {
-				/* マップイベントチェック予約 */
-				m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
-				m_bSendCheckMapEvent = FALSE;
-			}
+		/* マップ座標を矩形で取得 */
+		m_pPlayerChar->GetMapPosRect (rcTmp);
+		bResult = pMap->IsHitMapEvent (&rcTmp);
+		if (bResult) {
+			/* マップイベントチェック予約 */
+			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+			m_bSendCheckMapEvent = FALSE;
 		}
+		m_dwLastTimeGauge = timeGetTime ();
 	}
 
 	bRet = TRUE;

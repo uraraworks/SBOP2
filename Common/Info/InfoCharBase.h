@@ -105,6 +105,7 @@ public:
 	void	GetFrontPos			(POINT &ptDst, int nDirection = -1, BOOL bMove=FALSE);	/* 一歩前のキャラ座標を取得 */
 	void	GetFrontPos			(CmyArray<POINT, POINT> &aptPos, int nDirection = -1);	/* 一歩前のキャラ座標を取得 */
 	void	GetFrontMapPos		(POINT &ptDst, int nDirection = -1);					/* 一歩前のマップ座標を取得 */
+	void	GetFrontMapPosRect	(RECT &rcDst, int nDirection = -1);	/* 一歩前のマップ座標矩形を取得 */
 	int		GetDirection		(int x, int y);						/* 指定座標の向きを取得 */
 	int		GetAtackType		(void);								/* 攻撃種別を取得 */
 	void	SetAtackMotion		(int nMotionID);					/* 攻撃モーションの設定 */
@@ -112,6 +113,7 @@ public:
 	int		GetBackDirection	(void);								/* 反対方向を取得 */
 	DWORD	GetMoveWait			(void);								/* 状態に応じた移動速度を取得 */
 	void	GetPosRect			(RECT &rcDst);						/* 座標矩形を取得 */
+	void	GetMapPosRect		(RECT &rcDst);						/* マップ座標矩形を取得 */
 
 	void		SetItem			(ARRAYDWORD *padwItemID);						/* アイテム情報を設定 */
 	ARRAYDWORD	*GetItem		(void)	{ return &m_adwItemID; }				/* アイテム情報を取得 */

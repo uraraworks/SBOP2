@@ -1825,8 +1825,7 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
 		if (nDrawY != -99) {
-			if ((m_nViewY + (nDrawY * 2) != pChar->m_nMapY) &&
-				(m_nViewY + (nDrawY * 2) != pChar->m_nMapY + 1)) {
+			if (m_nViewY / 2 + nDrawY != pChar->m_nMapY / 2) {
 				continue;
 			}
 		}
@@ -1901,11 +1900,11 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 			nWidth	= pChar->m_pDibName->Width ();
 			nHeight	= pChar->m_pDibName->Height ();
 			xx = x + pChar->m_nGrpSize - (nWidth / 2);
-//			xx = (xx < 32) ? 32 : xx;
-//			xx = (xx + nWidth >= nMaxX) ? nMaxX - nWidth : xx;
-			yy = y + (pChar->m_nGrpSize * 2);
-//			yy = (yy < 32) ? 32 : yy;
-//			yy = (yy + nHeight >= nMaxY) ? nMaxY - nHeight : yy;
+			xx = (xx < 32) ? 32 : xx;
+			xx = (xx + nWidth >= nMaxX) ? nMaxX - nWidth : xx;
+			yy = y + nHeight;
+			yy = (yy < 32) ? 32 : yy;
+			yy = (yy + nHeight >= nMaxY) ? nMaxY - nHeight : yy;
 			pDst->Blt (xx, yy, nWidth, nHeight, pChar->m_pDibName, 0, 0, TRUE);
 		}
 
@@ -1915,12 +1914,12 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 			nHeight	= pChar->m_pDibSpeak->Height ();
 
 			xx = x + pChar->m_nGrpSize - (nWidth / 2) + 3;
-//			xx = (xx < 32) ? 32: xx;
-//			xx = (xx + nWidth >= nMaxX) ? nMaxX - nWidth: xx;
+			xx = (xx < 32) ? 32: xx;
+			xx = (xx + nWidth >= nMaxX) ? nMaxX - nWidth: xx;
 			yy = y - nHeight;
-//			yy = (yy < 32) ? 32 : yy;
-//			yy = (yy + nHeight >= nMaxY) ? nMaxY - nHeight : yy;
 			yy -= ptViewCharPos.y;
+			yy = (yy < 32) ? 32 : yy;
+			yy = (yy + nHeight >= nMaxY) ? nMaxY - nHeight : yy;
 			pDst->Blt (xx, yy, nWidth, nHeight, pChar->m_pDibSpeak, 0, 0, TRUE);
 		}
 	}

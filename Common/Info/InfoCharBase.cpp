@@ -1452,6 +1452,52 @@ void CInfoCharBase::GetFrontMapPos(
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::GetFrontMapPosRect								 */
+/* 内容		:一歩前のマップ座標矩形を取得									 */
+/* 日付		:2009/01/31														 */
+/* ========================================================================= */
+
+void CInfoCharBase::GetFrontMapPosRect(
+	RECT &rcDst,				/* [ou] 取得先 */
+	int nDirection	/*-1*/)		/* [in] 向き */
+{
+	int nFrontPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, nFrontPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+
+	if (nDirection == -1) {
+		nDirection = m_nDirection;
+	}
+
+	GetPosRect (rcDst);
+	switch (nDirection) {
+	case 0:
+	case 1:
+		rcDst.top		+= nFrontPosY[nDirection];
+		rcDst.bottom	+= nFrontPosY[nDirection];
+		break;
+	case 2:
+	case 3:
+		rcDst.left		+= nFrontPosX[nDirection];
+		rcDst.right		+= nFrontPosX[nDirection];
+		break;
+	default:
+		rcDst.top		+= nFrontPosY[nDirection];
+		rcDst.bottom	+= nFrontPosY[nDirection];
+		rcDst.left		+= nFrontPosX[nDirection];
+		rcDst.right		+= nFrontPosX[nDirection];
+		break;
+	}
+
+	rcDst.right		/= 2;
+	rcDst.bottom	/= 2;
+	if ((rcDst.left < 0) || (rcDst.top < 0)) {
+		return;
+	}
+	rcDst.left		/= 2;
+	rcDst.top		/= 2;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::GetDirection									 */
 /* 内容		:指定座標の向きを取得											 */
 /* 日付		:2007/09/16														 */
@@ -1612,6 +1658,22 @@ void CInfoCharBase::GetPosRect(RECT &rcDst)
 		y - (sizeTmp.cy - 1),
 		x + (sizeTmp.cx - 1),
 		y + (sizeTmp.cy - 1));
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharBase::GetMapPosRect									 */
+/* 内容		:マップ座標矩形を取得											 */
+/* 日付		:2009/01/31														 */
+/* ========================================================================= */
+
+void CInfoCharBase::GetMapPosRect(RECT &rcDst)
+{
+	GetPosRect (rcDst);
+	rcDst.left		/= 2;
+	rcDst.right		/= 2;
+	rcDst.top		/= 2;
+	rcDst.bottom	/= 2;
 }
 
 
@@ -2307,7 +2369,7 @@ BOOL CInfoCharBase::IsHitCharPos(
 		SetRect (&rcTarget, x, y, x + psize->cx - 1, y + psize->cy - 1);
 		if (!((rcSrc.left <= rcTarget.right) && (rcTarget.left <= rcSrc.right) &&
 			(rcSrc.top <= rcTarget.bottom) && (rcTarget.top <= rcSrc.bottom))) {
-				goto Exit;
+			goto Exit;
 		}
 	}
 
