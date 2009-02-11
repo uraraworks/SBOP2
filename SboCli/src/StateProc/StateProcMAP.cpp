@@ -2914,7 +2914,6 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 	int nTmp;
 	BOOL bRet;
 	PCWindowCOMMANDMENU pWnd;
-	PCWindowPLACEINFORMATION pWndPLACEINFORMATION;
 
 	bRet = TRUE;
 	pWnd = (PCWindowCOMMANDMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_COMMANDMENU);
@@ -2942,13 +2941,8 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 	case 4:	/* ƒVƒXƒeƒ€(ESC) */
 		m_pMgrWindow->MakeWindowSYSTEMMENU ();
 		break;
-	default:
-		pWndPLACEINFORMATION = (PCWindowPLACEINFORMATION)m_pMgrWindow->GetWindow (WINDOWTYPE_PLACEINFORMATION);
-		if (pWndPLACEINFORMATION) {
-			pWndPLACEINFORMATION->m_bDelete = TRUE;
-		}
-		break;
 	}
+	m_pMgrWindow->Delete (WINDOWTYPE_PLACEINFORMATION);
 
 Exit:
 	return bRet;
