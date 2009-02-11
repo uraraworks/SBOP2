@@ -286,6 +286,7 @@ BOOL CWindowCOMMANDMENU::OnZ(BOOL bDown)
 
 	m_bDelete = TRUE;
 	m_pMgrSound->PlaySound (SOUNDID_CANCEL);
+	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, -1);
 
 	bRet = TRUE;
 Exit:

@@ -58,6 +58,7 @@
 #include "WindowOPTION_ACTIONSET_SLEEPTIMER.h"
 #include "WindowCOMMANDMENU.h"
 #include "WindowSKILLMENU.h"
+#include "WindowPLACEINFORMATION.h"
 #include "DlgMsgLog.h"
 #include "MainFrame.h"
 #include "AdminWindow.h"
@@ -646,6 +647,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		}
 		break;
 
+	case MAINFRAMEMSG_RENEWSTATUS:		/* ステータス情報更新 */
 	case MAINFRAMEMSG_RENEWCHARINFO:	/* キャラ情報更新 */
 		m_pMgrWindow->Update ();
 		break;
@@ -2018,6 +2020,7 @@ BOOL CStateProcMAP::OnSpace(BOOL bDown)
 			goto Exit;
 		}
 		m_pMgrWindow->MakeWindowCOMMANDMENU ();
+		m_pMgrWindow->MakeWindowPLACEINFORMATION ();
 		m_pMgrSound->PlaySound (SOUNDID_OPEN_WINDOW);
 		break;
 	}
@@ -2911,6 +2914,7 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 	int nTmp;
 	BOOL bRet;
 	PCWindowCOMMANDMENU pWnd;
+	PCWindowPLACEINFORMATION pWndPLACEINFORMATION;
 
 	bRet = TRUE;
 	pWnd = (PCWindowCOMMANDMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_COMMANDMENU);
@@ -2937,6 +2941,12 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 //	case 3:	/* 招待(I) */
 	case 4:	/* システム(ESC) */
 		m_pMgrWindow->MakeWindowSYSTEMMENU ();
+		break;
+	default:
+		pWndPLACEINFORMATION = (PCWindowPLACEINFORMATION)m_pMgrWindow->GetWindow (WINDOWTYPE_PLACEINFORMATION);
+		if (pWndPLACEINFORMATION) {
+			pWndPLACEINFORMATION->m_bDelete = TRUE;
+		}
 		break;
 	}
 

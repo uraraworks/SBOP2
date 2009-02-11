@@ -2248,6 +2248,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Window\WindowPLACEINFORMATION.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Window\WindowSETBGMVOLUME.cpp"
 					>
 					<FileConfiguration
@@ -4226,6 +4230,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Window\WindowOPTION_VOLUMESET.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowPLACEINFORMATION.h"
 					>
 				</File>
 				<File

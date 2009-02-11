@@ -46,6 +46,7 @@
 #include "WindowTEXTMSG.h"
 #include "WindowSWOON.h"
 #include "WindowSKILLMENU.h"
+#include "WindowPLACEINFORMATION.h"
 #include "MgrWindow.h"
 
 
@@ -995,6 +996,24 @@ void CMgrWindow::MakeWindowSKILLMENU(int nType/*0*/)
 	pWindowNew->SetType (nType);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
+
+	m_bDraw = TRUE;
+}
+
+
+/* ========================================================================= */
+/* ŠÖ”–¼	:CMgrWindow::MakeWindowPLACEINFORMATION							 */
+/* “à—e		:êŠî•ñ														 */
+/* “ú•t		:2009/02/11														 */
+/* ========================================================================= */
+
+void CMgrWindow::MakeWindowPLACEINFORMATION(void)
+{
+	PCWindowPLACEINFORMATION pWindowNew;
+
+	pWindowNew = new CWindowPLACEINFORMATION;
+	pWindowNew->Create (m_pMgrData);
+	m_paWindow->Add (pWindowNew);
 
 	m_bDraw = TRUE;
 }

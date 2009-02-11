@@ -60,6 +60,7 @@ enum {
 	WINDOWTYPE_TEXTMSG,						/* テキストメッセージ */
 	WINDOWTYPE_SWOON,						/* 気絶メニュー */
 	WINDOWTYPE_SKILLMENU,					/* スキルメニュー */
+	WINDOWTYPE_PLACEINFORMATION,			/* 場所情報 */
 };
 
 
@@ -121,6 +122,7 @@ public:
 	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo);	/* テキストメッセージ */
 	void MakeWindowSWOON			(void);						/* 気絶メニュー */
 	void MakeWindowSKILLMENU		(int nType = 0);			/* スキルメニュー */
+	void MakeWindowPLACEINFORMATION	(void);						/* 場所情報 */
 
 
 private:
