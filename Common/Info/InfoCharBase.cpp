@@ -1490,6 +1490,7 @@ void CInfoCharBase::GetFrontMapPosRect(
 	rcDst.right		/= 2;
 	rcDst.bottom	/= 2;
 	if ((rcDst.left < 0) || (rcDst.top < 0)) {
+		SetRect (&rcDst, -1, -1, -1, -1);
 		return;
 	}
 	rcDst.left		/= 2;

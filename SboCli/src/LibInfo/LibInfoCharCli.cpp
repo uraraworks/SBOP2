@@ -472,6 +472,9 @@ BOOL CLibInfoCharCli::IsMove(
 		}
 	}
 	bResult = !bResult;
+	if (rcMap.top < 0) {
+		bResult = FALSE;
+	}
 	if (bResult == FALSE) {
 		goto Exit;
 	}
