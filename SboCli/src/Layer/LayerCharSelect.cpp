@@ -109,7 +109,7 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 		/* ƒLƒƒƒ‰‚Ì•`‰æ */
 		m_pMgrDraw->DrawChar (
 				pDst,
-				x - ptViewCharPos.x, y - ptViewCharPos.y,
+				x - ptViewCharPos.x, y - ptViewCharPos.y + 16,
 				pChar);
 		if (ptViewCharPos.y != 0) {
 			y -= 16;
