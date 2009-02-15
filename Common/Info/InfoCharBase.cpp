@@ -786,6 +786,7 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof (m_dwParentCharID);
 	dwRet += sizeof (m_dwMapID);
 	dwRet += sizeof (m_dwMotionTypeID);
+	dwRet += sizeof (m_ptViewCharPos);			/* 表示用の座標補正値 */
 	dwRet += sizeof (m_bBlock);
 	dwRet += sizeof (m_bPush);
 	dwRet += sizeof (m_nAnime);
@@ -901,6 +902,7 @@ PBYTE CInfoCharBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwFrontCharID,			sizeof (m_dwFrontCharID),			pDataTmp);	/* 付いているキャラID */
 	CopyMemoryRenew (pDataTmp, &m_dwParentCharID,			sizeof (m_dwParentCharID),			pDataTmp);	/* 親のキャラID */
 	CopyMemoryRenew (pDataTmp, &m_bBlock,					sizeof (m_bBlock),					pDataTmp);	/* ぶつかる判定 */
+	CopyMemoryRenew (pDataTmp, &m_ptViewCharPos,			sizeof (m_ptViewCharPos),			pDataTmp);	/* 表示用の座標補正値 */
 	CopyMemoryRenew (pDataTmp, &m_bPush,					sizeof (m_bPush),					pDataTmp);	/* 押せる判定 */
 	CopyMemoryRenew (pDataTmp, &m_dwMapID,					sizeof (m_dwMapID),					pDataTmp);	/* マップID */
 	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeID,			sizeof (m_dwMotionTypeID),			pDataTmp);	/* モーション種別ID */
@@ -1039,6 +1041,7 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_dwFrontCharID,			pDataTmp, sizeof (m_dwFrontCharID),				pDataTmp);	/* 付いているキャラID */
 	CopyMemoryRenew (&m_dwParentCharID,			pDataTmp, sizeof (m_dwParentCharID),			pDataTmp);	/* 親のキャラID */
 	CopyMemoryRenew (&m_bBlock,					pDataTmp, sizeof (m_bBlock),					pDataTmp);	/* ぶつかる判定 */
+	CopyMemoryRenew (&m_ptViewCharPos,			pDataTmp, sizeof (m_ptViewCharPos),				pDataTmp);	/* 表示用の座標補正値 */
 	CopyMemoryRenew (&m_bPush,					pDataTmp, sizeof (m_bPush),						pDataTmp);	/* 押せる判定 */
 	CopyMemoryRenew (&m_dwMapID,				pDataTmp, sizeof (m_dwMapID),					pDataTmp);	/* マップID */
 	CopyMemoryRenew (&m_dwMotionTypeID,			pDataTmp, sizeof (m_dwMotionTypeID),			pDataTmp);	/* モーション種別ID */
@@ -2113,6 +2116,7 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_dwFrontCharID				= pSrc->m_dwFrontCharID;
 	m_dwParentCharID			= pSrc->m_dwParentCharID;
 	m_bBlock					= pSrc->m_bBlock;
+	m_ptViewCharPos				= pSrc->m_ptViewCharPos;		/* 表示用の座標補正値 */
 	m_bPush						= pSrc->m_bPush;
 	m_nAnime					= pSrc->m_nAnime;
 	m_nMapX						= pSrc->m_nMapX;

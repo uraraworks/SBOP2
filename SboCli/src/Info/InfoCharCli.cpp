@@ -398,7 +398,7 @@ void CInfoCharCli::MakeCharGrp(void)
 	pImgEye		= pMgrGrpData->GetDibEye	(m_wGrpIDEyeColor - 1);
 
 //Todo:Žb’è
-	m_ptViewCharPos.x = m_ptViewCharPos.y = 0;
+//	m_ptViewCharPos.x = m_ptViewCharPos.y = 0;
 	if (m_dwMotionTypeID != 1) {
 		m_ptViewCharPos.x = 16;
 		m_ptViewCharPos.y = 48;

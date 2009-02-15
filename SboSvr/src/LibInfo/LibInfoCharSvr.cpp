@@ -2458,6 +2458,7 @@ BOOL CLibInfoCharSvr::ProcLocalStateBATTLEATACK(CInfoCharSvr *pInfoChar)
 			InfoCharTmp.m_dwHP				= 1;
 			InfoCharTmp.m_nMoveType			= CHARMOVETYPE_MOVEATACK;
 			InfoCharTmp.m_wGrpIDNPC			= 50011;
+			InfoCharTmp.m_ptViewCharPos.y	= 16;
 			InfoCharTmp.m_dwMoveWait		= pInfoItemType->m_dwMoveWait;
 			InfoCharTmp.m_dwMoveCount		= pInfoItemType->m_dwMoveCount;
 
