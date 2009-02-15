@@ -88,6 +88,7 @@ public:
 	DWORD			m_dwTimeDrawStart;				/* 描画した時間 */
 	HFONT			m_hFont,						/* 描画に使うフォント */
 					m_hFont12,						/* 描画に使うフォント(12ドット) */
+					m_hFont12Bold,					/* 描画に使うフォント(12ドット) */
 					m_hFont14,						/* 描画に使うフォント(14ドット) */
 					m_hFont16,						/* 描画に使うフォント(16ドット) */
 					m_hFont16Normal;				/* 描画に使うフォント(16ドット) */

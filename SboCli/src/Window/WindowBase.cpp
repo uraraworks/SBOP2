@@ -54,6 +54,10 @@ CWindowBase::CWindowBase()
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
+	m_hFont12Bold = CreateFont (12, 0, 0, 0, FW_ULTRABOLD,
+			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
 	m_hFont14 = CreateFont (14, 0, 0, 0, FW_ULTRABOLD,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
@@ -98,6 +102,10 @@ CWindowBase::~CWindowBase()
 	if (m_hFont12) {
 		DeleteObject (m_hFont12);
 		m_hFont12 = NULL;
+	}
+	if (m_hFont12Bold) {
+		DeleteObject (m_hFont12Bold);
+		m_hFont12Bold = NULL;
 	}
 	if (m_hFont14) {
 		DeleteObject (m_hFont14);

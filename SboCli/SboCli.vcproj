@@ -1948,6 +1948,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS4.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Window\WindowCHARNAME.cpp"
 					>
 					<FileConfiguration
@@ -4146,6 +4150,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Window\WindowCHAR_STATUS3.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Window\WindowCHAR_STATUS4.h"
 					>
 				</File>
 				<File

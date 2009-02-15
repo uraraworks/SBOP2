@@ -43,6 +43,7 @@
 #include "WindowCHAR_STATUS.h"
 #include "WindowCHAR_STATUS2.h"
 #include "WindowCHAR_STATUS3.h"
+#include "WindowCHAR_STATUS4.h"
 #include "WindowTEXTMSG.h"
 #include "WindowSWOON.h"
 #include "WindowSKILLMENU.h"
@@ -913,6 +914,24 @@ void CMgrWindow::MakeWindowCHAR_STATUS(void)
 	pWindowNew->AddChild (pWindowNew3);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
+
+	m_bDraw = TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMgrWindow::MakeWindowCHAR_STATUS4								 */
+/* 内容		:キャラ-ステータス4												 */
+/* 日付		:2009/02/15														 */
+/* ========================================================================= */
+
+void CMgrWindow::MakeWindowCHAR_STATUS4(void)
+{
+	PCWindowCHAR_STATUS4 pWindowNew;
+
+	pWindowNew = new CWindowCHAR_STATUS4;
+	pWindowNew->Create (m_pMgrData);
+	m_paWindow->Add (pWindowNew);
 
 	m_bDraw = TRUE;
 }

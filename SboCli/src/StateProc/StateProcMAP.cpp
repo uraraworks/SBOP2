@@ -59,6 +59,7 @@
 #include "WindowCOMMANDMENU.h"
 #include "WindowSKILLMENU.h"
 #include "WindowPLACEINFORMATION.h"
+#include "WindowCHAR_STATUS4.h"
 #include "DlgMsgLog.h"
 #include "MainFrame.h"
 #include "AdminWindow.h"
@@ -2021,6 +2022,7 @@ BOOL CStateProcMAP::OnSpace(BOOL bDown)
 		}
 		m_pMgrWindow->MakeWindowCOMMANDMENU ();
 		m_pMgrWindow->MakeWindowPLACEINFORMATION ();
+		m_pMgrWindow->MakeWindowCHAR_STATUS4 ();
 		m_pMgrSound->PlaySound (SOUNDID_OPEN_WINDOW);
 		break;
 	}
@@ -2943,6 +2945,7 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 		break;
 	}
 	m_pMgrWindow->Delete (WINDOWTYPE_PLACEINFORMATION);
+	m_pMgrWindow->Delete (WINDOWTYPE_CHAR_STATUS4);
 
 Exit:
 	return bRet;
