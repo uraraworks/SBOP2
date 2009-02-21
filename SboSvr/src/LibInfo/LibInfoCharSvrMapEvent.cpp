@@ -158,7 +158,7 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 		PacketCHAR_STATE.Make (pInfoCharTmp->m_dwCharID, CHARMOVESTATE_DELETE);
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_STATE);
 
-		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2, TRUE);
+		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2 + 1, TRUE);
 		if (nDirection >= 0) {
 			pInfoCharTmp->SetDirection (nDirection);
 		}
@@ -208,7 +208,7 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_STATE);
 
 		pInfoCharTmp->m_dwMapID = pInfoMapEvent->m_dwMapID;
-		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2, TRUE);
+		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2 + 1, TRUE);
 		if (nDirection >= 0) {
 			pInfoCharTmp->SetDirection (nDirection);
 		}
