@@ -28,10 +28,10 @@ CWindowCOMMANDMENU::CWindowCOMMANDMENU()
 	m_nPosMax		= 4;
 	m_bInput		= TRUE;
 	m_nID			= WINDOWTYPE_COMMANDMENU;
-	m_sizeWindow.cx	= 166;
-	m_sizeWindow.cy	= 50 + 67;
-	m_ptViewPos.x	= (SCRSIZEX / 2) - (m_sizeWindow.cx / 2);
-	m_ptViewPos.y	= SCRSIZEY - 54 - 67;
+	m_sizeWindow.cx	= 186 + 24;
+	m_sizeWindow.cy	= 125;
+	m_ptViewPos.x	= SCRSIZEX - m_sizeWindow.cx;
+	m_ptViewPos.y	= SCRSIZEY - m_sizeWindow.cy;
 
 	m_nPosSub = 0;
 }
@@ -75,24 +75,22 @@ void CWindowCOMMANDMENU::Create(CMgrData *pMgrData)
 void CWindowCOMMANDMENU::Draw(PCImg32 pDst)
 {
 	int nLevel, x, y;
-	HDC hDC;
-	HFONT hFontOld;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
 	}
 
 	m_pDib->FillRect (0, 0, m_sizeWindow.cx, m_sizeWindow.cy, 0);
-	m_pDib->BltFrom256 (0, 67, 166, 50, m_pDibSystem, 492, 263, TRUE);
+	m_pDib->BltFrom256 (m_sizeWindow.cx - 186, m_sizeWindow.cy - 43, 186, 43, m_pDibSystem, 272, 786, TRUE);
 
-	x = 492 + m_nPos * 38;
-	y = 194;
-	m_pDib->BltFrom256 (m_nPos * 32, 0, 38, 69, m_pDibSystem, x, y, TRUE);
+	x = 273 + m_nPos * 37;
+	y = 704;
+	m_pDib->BltFrom256 (m_nPos * 37 + 25, 0, 36, 82, m_pDibSystem, x, y, TRUE);
 
-	x = 3 + m_nPos * 32;
-	y = 3 + 67;
-	y -= ((m_nPosSub * 32) + 3);
-	m_pDib->BltFrom256 (x - 8, y, 24, 24, m_pDibSystem, 72, 0, TRUE);
+	x = 24 + 3 + (m_nPos * 38);
+	y = m_sizeWindow.cy - 24;
+	y -= ((m_nPosSub * 41) + 3);
+	m_pMgrDraw->DrawCursor(m_pDib, x - 16, y - 8, 1);
 	m_dwTimeDrawStart = timeGetTime ();
 
 Exit:
@@ -101,21 +99,6 @@ Exit:
 		nLevel = 60;
 	}
 	pDst->BltLevel (m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, nLevel, TRUE);
-
-	if (m_strCommand.IsEmpty () == FALSE) {
-		hDC			= pDst->Lock ();
-		hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
-		SetBkMode (hDC, TRANSPARENT);
-
-		x = 3 + m_nPos * 32;
-		y = 3;
-		y -= ((m_nPosSub * 32) + 3);
-		DrawFrame2 (m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + 67 + y - 20, m_strCommand.GetLength () * 6, 16, 0, pDst, 4);
-		TextOut2 (hDC, m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + 67 + y - 20, (LPCSTR)m_strCommand, RGB (10, 10, 10), FALSE);
-
-		SelectObject (hDC, hFontOld);
-		pDst->Unlock ();
-	}
 }
 
 
