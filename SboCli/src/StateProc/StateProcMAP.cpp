@@ -2928,12 +2928,7 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 		m_pMgrWindow->MakeWindowCHAR_STATUS ();
 		break;
 	case 1:	/* スキル(S) */
-		nTmp = 0;
-		switch (pWnd->GetPosSub ()) {
-		case 0: nTmp = 2; break;
-		case 1: nTmp = 0; break;
-		case 2: nTmp = 1; break;
-		}
+		nTmp = pWnd->GetPosSub ();
 		m_pMgrWindow->MakeWindowSKILLMENU (nTmp);
 		break;
 	case 2:	/* バッグ(B) */
