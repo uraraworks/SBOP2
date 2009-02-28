@@ -1574,8 +1574,9 @@ BOOL CLibInfoCharSvr::IsMove(
 	int &nDirection,				/* [in] 移動する向き */
 	BOOL bEvent)/*FALSE*/			/* [in] TRUE:マップイベントにぶつかる */
 {
-	int i, nCount, nDirectionTmp;
+	int x, y, nDirectionTmp;
 	BOOL bRet, bResult;
+	RECT rcMap;
 	POINT ptFront, ptBack;
 	PCInfoMapBase pInfoMap;
 	PCInfoMapEventBase pInfoMapEventBase;
@@ -1674,10 +1675,11 @@ BOOL CLibInfoCharSvr::IsMove(
 
 	/* 脱出可能かチェック */
 	bResult = FALSE;
-	pInfoChar->RenewBlockMapArea (pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, TRUE);
-	nCount = pInfoChar->m_aposBockMapArea.GetSize ();
-	for (i = 0; i < nCount; i ++) {
-		bResult |= !pInfoMap->IsMoveOut (pInfoChar->m_aposBockMapArea[i].x, pInfoChar->m_aposBockMapArea[i].y, nDirection);
+	pInfoChar->GetFrontMapPosRect (rcMap, nDirection);
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			bResult |= !pInfoMap->IsMoveOut (x, y, nDirection);
+		}
 	}
 	bResult = !bResult;
 	if (bResult == FALSE) {
@@ -1686,16 +1688,16 @@ BOOL CLibInfoCharSvr::IsMove(
 
 	/* 進めるかチェック */
 	bResult = FALSE;
-	pInfoChar->GetFrontPos (ptFront, nDirection, TRUE);
-	pInfoChar->RenewBlockMapArea (ptFront.x, ptFront.y, nDirection);
-	nCount = pInfoChar->m_aposBockMapArea.GetSize ();
-	for (i = 0; i < nCount; i ++) {
-		bResult |= !pInfoMap->IsMove (pInfoChar->m_aposBockMapArea[i].x, pInfoChar->m_aposBockMapArea[i].y, nDirection);
-		if (bEvent) {
-			pInfoMapEventBase = pInfoMap->GetEvent (pInfoChar->m_aposBockMapArea[i].x, pInfoChar->m_aposBockMapArea[i].y);
-			if (pInfoMapEventBase) {
-				bResult = TRUE;
-				break;
+	pInfoChar->GetFrontMapPosRect (rcMap, nDirection);
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			bResult |= !pInfoMap->IsMove (x, y, nDirection);
+			if (bEvent) {
+				pInfoMapEventBase = pInfoMap->GetEvent (x, y);
+				if (pInfoMapEventBase) {
+					bResult = TRUE;
+					break;
+				}
 			}
 		}
 	}
