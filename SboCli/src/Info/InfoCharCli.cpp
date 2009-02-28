@@ -957,7 +957,9 @@ Exit:
 
 void CInfoCharCli::InitMotionInfo(DWORD dwMotionID)
 {
-	m_nAnime			= 0;
+	if (dwMotionID != -1) {
+		m_nAnime = 0;
+	}
 	m_bMotionInterrupt	= FALSE;
 	m_dwLastTimeAnime	= timeGetTime ();
 
