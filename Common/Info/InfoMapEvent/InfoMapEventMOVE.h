@@ -20,7 +20,7 @@ public:
 			CInfoMapEventMOVE();							/* コンストラクタ */
 	virtual ~CInfoMapEventMOVE();							/* デストラクタ */
 
-	void	RenewSize			(int nDirection, int nSize);		/* サイズ更新 */
+	void	RenewSize			(int nDirection, int nSize, SIZE *pSize);	/* サイズ更新 */
 	int		GetElementNo		(LPCSTR pszName);					/* 要素番号を取得 */
 	DWORD	GetDataSize			(void);								/* データサイズを取得 */
 	DWORD	GetDataSizeNo		(int nNo);							/* 指定要素のデータサイズを取得 */

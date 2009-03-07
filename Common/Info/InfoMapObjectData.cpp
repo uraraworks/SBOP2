@@ -55,7 +55,7 @@ CInfoMapObjectData::~CInfoMapObjectData()
 /* “ú•t		:2008/11/03														 */
 /* ========================================================================= */
 
-void CInfoMapObjectData::RenewSize(int nDirection, int nSize)
+void CInfoMapObjectData::RenewSize(int nDirection, int nSize, SIZE *pSize)
 {
 	switch (nDirection) {
 	case 0:
@@ -65,6 +65,12 @@ void CInfoMapObjectData::RenewSize(int nDirection, int nSize)
 		m_ptPos. x += nSize;
 		break;
 	}
+
+	/* À•W‚Ì’²® */
+	m_ptPos.x = max (0, m_ptPos.x);
+	m_ptPos.x = min (m_ptPos.x, pSize->cx - 1);
+	m_ptPos.y = max (0, m_ptPos.y);
+	m_ptPos.y = min (m_ptPos.y, pSize->cy - 1);
 }
 
 

@@ -239,12 +239,12 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 	nCount = m_pLibInfoMapEvent->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoMapEvent = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
-		pInfoMapEvent->RenewSize (nDirection, nSize);
+		pInfoMapEvent->RenewSize (nDirection, nSize, &m_sizeMap);
 	}
 	nCount = m_pLibInfoMapObjectData->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoMapObjectData = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (i);
-		pInfoMapObjectData->RenewSize (nDirection, nSize);
+		pInfoMapObjectData->RenewSize (nDirection, nSize, &m_sizeMap);
 	}
 
 	RenewMapEvent ();

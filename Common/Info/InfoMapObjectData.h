@@ -20,7 +20,7 @@ public:
 			CInfoMapObjectData();									/* コンストラクタ */
 	virtual ~CInfoMapObjectData();									/* デストラクタ */
 
-	virtual void	RenewSize			(int nDirection, int nSize);		/* サイズ更新 */
+	virtual void	RenewSize			(int nDirection, int nSize, SIZE *pSize);	/* サイズ更新 */
 	virtual int		GetElementNo		(LPCSTR pszName);					/* 要素番号を取得 */
 	virtual DWORD	GetDataSize			(void);								/* データサイズを取得 */
 	virtual DWORD	GetDataSizeNo		(int nNo);							/* 指定要素のデータサイズを取得 */

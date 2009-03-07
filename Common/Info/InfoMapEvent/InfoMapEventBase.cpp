@@ -64,7 +64,7 @@ CInfoMapEventBase::~CInfoMapEventBase()
 /* “ú•t		:2008/09/14														 */
 /* ========================================================================= */
 
-void CInfoMapEventBase::RenewSize(int nDirection, int nSize)
+void CInfoMapEventBase::RenewSize(int nDirection, int nSize, SIZE *pSize)
 {
 	switch (nDirection) {
 	case 0:
@@ -76,6 +76,16 @@ void CInfoMapEventBase::RenewSize(int nDirection, int nSize)
 		m_ptPos2.x += nSize;
 		break;
 	}
+
+	/* À•W‚Ì’²® */
+	m_ptPos.x = max (0, m_ptPos.x);
+	m_ptPos.x = min (m_ptPos.x, pSize->cx - 1);
+	m_ptPos.y = max (0, m_ptPos.y);
+	m_ptPos.y = min (m_ptPos.y, pSize->cy - 1);
+	m_ptPos2.x = max (0, m_ptPos2.x);
+	m_ptPos2.x = min (m_ptPos2.x, pSize->cx - 1);
+	m_ptPos2.y = max (0, m_ptPos2.y);
+	m_ptPos2.y = min (m_ptPos2.y, pSize->cy - 1);
 }
 
 
