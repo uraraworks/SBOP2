@@ -62,17 +62,23 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 			pptPos1 = &pInfoMapEventBase->m_ptPos;
 			pptPos2 = &pInfoMapEventBase->m_ptPos2;
 			switch (pInfoMapEventBase->m_nHitType) {
-			case MAPEVENTHITTYPE_MAPPOS:		/* マップ座標で判定 */
+			case MAPEVENTHITTYPE_MAPPOS:		/* マップ座標縦横いずれか */
 				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
 				bResult = IsInRect (&rcChar, &rcMapEvent);
 				break;
-			case MAPEVENTHITTYPE_CHARPOS:		/* キャラ座標で判定 */
+			case MAPEVENTHITTYPE_CHARPOS:		/* キャラ座標 */
 				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
 				bResult = IsHitRect (&rcChar, &rcMapEvent);
 				break;
-			case MAPEVENTHITTYPE_AREA:			/* 範囲で判定 */
+			case MAPEVENTHITTYPE_AREA:			/* 範囲 */
 				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos2->x * 2 + 1, pptPos2->y * 2 + 1);
 				bResult = IsInRect (&rcChar, &rcMapEvent);
+				break;
+			case MAPEVENTHITTYPE_MAPPOS2:		/* マップ座標完全一致 */
+				bResult = FALSE;
+				if ((rcChar.left == pptPos1->x * 2) & (rcChar.top == pptPos1->y * 2 + 1)) {
+					bResult = TRUE;
+				}
 				break;
 			}
 			if (bResult == FALSE) {

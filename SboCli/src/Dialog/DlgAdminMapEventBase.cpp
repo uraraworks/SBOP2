@@ -191,12 +191,14 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	m_ctlType.InsertString (6, "灯り");
 	m_ctlType.SetItemData (6, MAPEVENTTYPE_LIGHT);
 
-	m_ctlHitType.InsertString (0, "マップ座標で判定");
+	m_ctlHitType.InsertString (0, "マップ座標縦横いずれか");
 	m_ctlHitType.SetItemData (0, MAPEVENTHITTYPE_MAPPOS);
-	m_ctlHitType.InsertString (1, "キャラ座標で判定");
+	m_ctlHitType.InsertString (1, "キャラ座標");
 	m_ctlHitType.SetItemData (1, MAPEVENTHITTYPE_CHARPOS);
-	m_ctlHitType.InsertString (2, "範囲で判定");
+	m_ctlHitType.InsertString (2, "範囲");
 	m_ctlHitType.SetItemData (2, MAPEVENTHITTYPE_AREA);
+	m_ctlHitType.InsertString (3, "マップ座標完全一致");
+	m_ctlHitType.SetItemData (3, MAPEVENTHITTYPE_MAPPOS2);
 
 	m_ctlDirection.InsertString (0, "上");
 	m_ctlDirection.InsertString (1, "下");

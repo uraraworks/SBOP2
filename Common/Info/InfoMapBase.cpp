@@ -1183,12 +1183,12 @@ void CInfoMapBase::RenewMapEvent(void)
 				nCountY = pInfo->m_ptPos2.y - pInfo->m_ptPos.y + 1;
 				for (y = 0; y < nCountY; y ++) {
 					for (x = 0; x < nCountX; x ++) {
-						m_pbyMapEvent[(pInfo->m_ptPos.y + y) * m_sizeMap.cx + (pInfo->m_ptPos.x + x)] = 1;
+						m_pbyMapEvent[(pInfo->m_ptPos.y + y) * m_sizeMap.cx + (pInfo->m_ptPos.x + x)] = pInfo->m_nType;
 					}
 				}
 
 			} else {
-				m_pbyMapEvent[pInfo->m_ptPos.y * m_sizeMap.cx + pInfo->m_ptPos.x] = 1;
+				m_pbyMapEvent[pInfo->m_ptPos.y * m_sizeMap.cx + pInfo->m_ptPos.x] = pInfo->m_nType;
 			}
 		}
 	}

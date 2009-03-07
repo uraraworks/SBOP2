@@ -28,9 +28,10 @@ enum {
 
 /* 当たり判定種別 */
 enum {
-	MAPEVENTHITTYPE_MAPPOS = 0,							/* マップ座標で判定 */
-	MAPEVENTHITTYPE_CHARPOS,							/* キャラ座標で判定 */
-	MAPEVENTHITTYPE_AREA,								/* 範囲で判定 */
+	MAPEVENTHITTYPE_MAPPOS = 0,							/* マップ座標縦横いずれか */
+	MAPEVENTHITTYPE_CHARPOS,							/* キャラ座標 */
+	MAPEVENTHITTYPE_AREA,								/* 範囲 */
+	MAPEVENTHITTYPE_MAPPOS2,							/* マップ座標完全一致 */
 	MAPEVENTHITTYPE_MAX
 };
 
