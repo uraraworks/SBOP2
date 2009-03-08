@@ -1761,6 +1761,7 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 
 		x = 32 + (pInfoItem->m_ptPos.x - m_nViewX) * SCROLLSIZE + xx;
 		y = 32 + (pInfoItem->m_ptPos.y - m_nViewY) * SCROLLSIZE + yy;
+		y -= 16;
 		if (nType == 0) {
 			m_pMgrDraw->DrawItem (
 					pDst,

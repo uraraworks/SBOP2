@@ -1325,19 +1325,47 @@ void CInfoCharBase::GetFrontPos(
 	int nDirection	/*-1*/,			/* [in] å¸Ç´ */
 	BOOL bMove		/*FALSE*/)		/* [in] TRUE:à⁄ìÆêÊópÇÃÉLÉÉÉâç¿ïW */
 {
-	int nFrontPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, nFrontPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
-	SIZE sizeChar;
+	RECT rcTmp;
 
 	if (nDirection == -1) {
 		nDirection = m_nDirection;
 	}
 
-	sizeChar.cx = sizeChar.cy = 1;
-	if (bMove == FALSE) {
-		GetCharSize (sizeChar);
+	GetPosRect (rcTmp);
+	switch (nDirection) {
+	case 0:
+		ptDst.x = rcTmp.left;
+		ptDst.y = rcTmp.top - 1;
+		break;
+	case 1:
+		ptDst.x = rcTmp.left;
+		ptDst.y = rcTmp.bottom + 1;
+		break;
+	case 2:
+		ptDst.x = rcTmp.left - 1;
+		ptDst.y = rcTmp.bottom;
+		break;
+	case 3:
+		ptDst.x = rcTmp.right + 1;
+		ptDst.y = rcTmp.bottom;
+		break;
+	case 4:
+		ptDst.x = rcTmp.right + 1;
+		ptDst.y = rcTmp.top - 1;
+		break;
+	case 5:
+		ptDst.x = rcTmp.right + 1;
+		ptDst.y = rcTmp.bottom + 1;
+		break;
+	case 6:
+		ptDst.x = rcTmp.left - 1;
+		ptDst.y = rcTmp.bottom + 1;
+		break;
+	case 7:
+		ptDst.x = rcTmp.left - 1;
+		ptDst.y = rcTmp.top - 1;
+		break;
 	}
-	ptDst.x = m_nMapX + (nFrontPosX[nDirection] * sizeChar.cx);
-	ptDst.y = m_nMapY + (nFrontPosY[nDirection] * sizeChar.cy);
 }
 
 
@@ -1440,8 +1468,8 @@ void CInfoCharBase::GetFrontMapPos(
 	if (nFrontPosX[nDirection] == 1) {
 		x += sizeChar.cx;
 	}
-	if (nFrontPosY[nDirection] == 1) {
-		y += sizeChar.cy;
+	if (nFrontPosY[nDirection] == -1) {
+		y -= sizeChar.cy;
 	}
 	if (x % 2) {
 		x -= (nFrontPosX[nDirection] * sizeChar.cx);
