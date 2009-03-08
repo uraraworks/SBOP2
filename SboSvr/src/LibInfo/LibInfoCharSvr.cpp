@@ -1174,7 +1174,7 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 /* 日付		:2009/01/17														 */
 /* ========================================================================= */
 
-void CLibInfoCharSvr::GetDistance(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CInfoCharSvr *pInfoCharDst)
+void CLibInfoCharSvr::GetDistance(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CInfoCharSvr *pInfoCharDst, BOOL bFrontPos/*FALSE*/)
 {
 	RECT rcSrc, rcDst;
 
@@ -1183,7 +1183,7 @@ void CLibInfoCharSvr::GetDistance(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CIn
 		return;
 	}
 	/* 比較元の座標矩形を取得 */
-	pInfoCharSrc->GetPosRect (rcSrc);
+	pInfoCharSrc->GetPosRect (rcSrc, bFrontPos);
 	/* 比較先の座標矩形を取得 */
 	pInfoCharDst->GetPosRect (rcDst);
 
@@ -1870,14 +1870,16 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 		if (pInfoCharTmp->m_dwCharID == pInfoCharSrc->m_dwParentCharID) {
 			continue;
 		}
-		if (pInfoCharTmp->m_dwParentCharID == pInfoCharSrc->m_dwParentCharID) {
-			continue;
+		if (pInfoCharTmp->m_dwParentCharID != 0) {
+			if (pInfoCharTmp->m_dwParentCharID == pInfoCharSrc->m_dwParentCharID) {
+				continue;
+			}
 		}
 		if (pInfoCharTmp->IsAtackTarget () == FALSE) {
 			continue;
 		}
 
-		GetDistance (sizeDistance, pInfoCharSrc, pInfoCharTmp);
+		GetDistance (sizeDistance, pInfoCharSrc, pInfoCharTmp, TRUE);
 		if (sizeDistance.cx < 0) {
 			continue;
 		}

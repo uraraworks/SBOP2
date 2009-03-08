@@ -1676,14 +1676,18 @@ DWORD CInfoCharBase::GetMoveWait(void)
 /* “ú•t		:2009/01/28														 */
 /* ========================================================================= */
 
-void CInfoCharBase::GetPosRect(RECT &rcDst)
+void CInfoCharBase::GetPosRect(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 {
-	int x, y;
+	int x, y, anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	SIZE sizeTmp;
 
 	GetCharSize (sizeTmp);
 	x = m_nMapX;
 	y = m_nMapY - (sizeTmp.cy - 1);
+	if (bFrontPos) {
+		x += anPosX[m_nDirection];
+		y += anPosY[m_nDirection];
+	}
 
 	SetRect (&rcDst,
 		x,
