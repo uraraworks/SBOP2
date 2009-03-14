@@ -597,16 +597,31 @@ void CWindowBase::DrawFrame(int nType)
 /* 関数名	:CWindowBase::DrawFrame											 */
 /* 内容		:フレームを描画													 */
 /* 日付		:2007/04/01														 */
+/* メモ		:１ブロックが16x16ドットの枠を描画								 */
 /* ========================================================================= */
 
 void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType)
 {
-	int i, nTmp, xx, yy, aTypeX[] = {0, 0, 48, 96, 0}, aTypeY[] = {0, 48, 48, 48, 96};
-	COLORREF clTmp, clType[] = {RGB (255, 235, 200), RGB (255, 235, 200), RGB (255, 235, 200), RGB (255, 235, 200), RGB (255, 211, 76)};
+	typedef struct _FRAMEINFO {
+		POINT		pt;		/* 左上の開始位置 */
+		COLORREF	cl;		/* 背景色 */
+	} FRAMEINFO, *PFRAMEINFO;
+	int i, nTmp, xx, yy;
+	COLORREF clTmp;
+	FRAMEINFO astFrameinfo[] = {
+		 0,	  0, RGB (255, 235, 200),
+		 0,	 48, RGB (255, 235, 200),
+		48,	 48, RGB (255, 235, 200),
+		96,	 48, RGB (255, 235, 200),
+		 0,	 96, RGB (255, 211, 76),
+		 0,	816, RGB (255, 235, 200),
+		48,	816, RGB (255, 235, 200),
+		96,	816, RGB (196, 140, 81)
+	};
 
-	xx		= aTypeX[nType];
-	yy		= aTypeY[nType];
-	clTmp	= clType[nType];
+	xx		= astFrameinfo[nType].pt.x;
+	yy		= astFrameinfo[nType].pt.y;
+	clTmp	= astFrameinfo[nType].cl;
 	nTmp	= (nType == 4) ? 3 : 0;
 
 	/* 背景塗りつぶし */
@@ -757,6 +772,18 @@ void CWindowBase::DrawInputFrame1(int x, int y, int cx, int cy, int nType)
 		m_pDib->BltFrom256 (x + i, y - 6, 1, 24, m_pDibSystem, 63, yy, TRUE);
 	}
 	m_pDib->BltFrom256 (x + i, y - 6, 5, 24, m_pDibSystem, 107, yy, TRUE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::DrawIconFrame										 */
+/* 内容		:アイコン用フレームを描画										 */
+/* 日付		:2008/03/14														 */
+/* ========================================================================= */
+
+void CWindowBase::DrawIconFrame(int x, int y)
+{
+	m_pDib->BltFrom256 (x, y, 34, 45, m_pDibSystem, 0, 883, TRUE);
 }
 
 /* Copyright(C)URARA-works 2006 */

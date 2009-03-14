@@ -32,9 +32,9 @@ CWindowITEMMENU::CWindowITEMMENU()
 	m_bInput		= TRUE;
 	m_nID			= WINDOWTYPE_ITEMMENU;
 	m_ptViewPos.x	= 24;
-	m_ptViewPos.y	= 64;
-	m_sizeWindow.cx	= 186;
-	m_sizeWindow.cy	= 301;
+	m_ptViewPos.y	= 32;
+	m_sizeWindow.cx	= 13 * 16;
+	m_sizeWindow.cy	= 25 * 16;
 
 	m_dwSelectItemID = 0;
 	m_dwDragItemID	 = 0;
@@ -92,14 +92,41 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	}
 
 	m_strName.Empty ();
-	m_pDib->BltFrom256 (186 / 2 - 62, 0, 124, 84, m_pDibSystem, 368, 200, TRUE);
-	m_pDib->BltFrom256 (0, 84, 186, 217, m_pDibSystem, 0, 200, TRUE);
+	DrawFrame (5);
+	DrawFrame (9, 7, 32 + 4, 24, 7);
+	DrawFrame (2, 24, 120, 104, 6);
+	DrawFrame (146, 24, 48, 104, 6);
+	DrawFrame (9, 134, 104, 24, 7);
+	DrawFrame (2, 149, 204, 248, 6);
+
+	for (y = 0; y < 2; y ++) {
+		for (x = 0; x < 3; x ++) {
+			DrawIconFrame (9 + 36 * x, 31 + 47 * y);
+		}
+	}
+	for (y = 0; y < 2; y ++) {
+		DrawIconFrame (153, 31 + 47 * y);
+	}
+	for (y = 0; y < 5; y ++) {
+		for (x = 0; x < 5; x ++) {
+			DrawIconFrame (9 + 36 * x, 158 + 47 * y);
+		}
+	}
 
 	/* 装備アイテムを描画 */
 	DrawEquip (0, m_pPlayerChar->m_dwEquipItemIDCloth);		/* 服 */
 	DrawEquip (1, m_pPlayerChar->m_dwEquipItemIDAcce1);		/* アクセサリ1 */
 	DrawEquip (2, m_pPlayerChar->m_dwEquipItemIDArmsRight);	/* 持ち物 */
 	DrawEquip (3, m_pPlayerChar->m_dwEquipItemIDArmsLeft);	/* 盾 */
+
+	hDC			= m_pDib->Lock ();
+	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
+	SetBkMode (hDC, TRANSPARENT);
+	TextOut2 (hDC, 9 + 5, 7 + 4, "装備", RGB (255, 255, 255));
+	TextOut2 (hDC, 9 + 5, 134 + 3, "バッグ(B)", RGB (255, 255, 255));
+
+	SelectObject (hDC, hFontOld);
+	m_pDib->Unlock ();
 
 	pIntoItemDrag = NULL;
 
@@ -115,7 +142,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		if ((m_ptDrag.x == x) && (m_ptDrag.y == y)) {
 			pIntoItemDrag = pInfoItem;
 		}
-		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 33), 95 + (y * 33), pInfoItem);
+		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 36), 159 + (y * 47), pInfoItem);
 		if (m_strName.IsEmpty () == FALSE) {
 			continue;
 		}
@@ -129,7 +156,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	if (pIntoItemDrag) {
 		x = (m_nPos - EQUIPTYPE_MAX) % 5;
 		y = (m_nPos - EQUIPTYPE_MAX) / 5;
-		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 33), 95 + (y * 33), pIntoItemDrag, 50);
+		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 36), 159 + (y * 47), pIntoItemDrag, 50);
 	}
 
 	GetDrawPos (m_nPos, x, y);
@@ -476,8 +503,8 @@ void CWindowITEMMENU::DrawEquip(
 	if (pInfoItem == NULL) {
 		return;
 	}
-	x = 41 + 36 * anDrawInfo[nType * 3 + 0];
-	y = 10 + 36 * anDrawInfo[nType * 3 + 1];
+	x = 10 + 36 * anDrawInfo[nType * 3 + 0];
+	y = 32 + 47 * anDrawInfo[nType * 3 + 1];
 	m_pMgrDraw->DrawItem (m_pDib, x, y, pInfoItem);
 	if (m_nPos == anDrawInfo[nType * 3 + 2]) {
 		/* 装備中のアイテムなのでアイテム名を更新 */
@@ -498,11 +525,11 @@ void CWindowITEMMENU::GetDrawPos(
 	int &nDstY)		/* [out] Y座標 */
 {
 	if (nPos < EQUIPTYPE_MAX) {
-		nDstX = 36 * (nPos % 3) + 41 + 1;
-		nDstY = 36 * (nPos / 3) + 10 + 1;
+		nDstX = 36 * (nPos % 3) + 10 + 1;
+		nDstY = 47 * (nPos / 3) + 32 + 1;
 	} else {
-		nDstX = 33 * ((nPos - EQUIPTYPE_MAX) % 5) + 11;
-		nDstY = 33 * ((nPos - EQUIPTYPE_MAX) / 5) + 96;
+		nDstX = 36 * ((nPos - EQUIPTYPE_MAX) % 5) + 1 + 1;
+		nDstY = 47 * ((nPos - EQUIPTYPE_MAX) / 5) + 159 + 1;
 	}
 }
 

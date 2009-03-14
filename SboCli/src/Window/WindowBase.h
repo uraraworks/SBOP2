@@ -66,6 +66,7 @@ protected:
 	void DrawFrame3			(int x, int y, int cx, int cy, int nType);	/* フレームを描画 */
 	void DrawCursor			(int x, int y);								/* カーソルを描画 */
 	void DrawInputFrame1	(int x, int y, int cx, int cy, int nType);	/* 入力欄用フレームを描画1 */
+	void DrawIconFrame		(int x, int y);								/* アイコン用フレームを描画 */
 
 
 public:
