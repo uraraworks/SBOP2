@@ -46,6 +46,7 @@ public:
 
 protected:
 	DWORD	GetNewID	(void);									/* 新しいIDを取得 */
+	void	RenewIDPtr	(void);									/* ID検索用マップを更新 */
 
 
 protected:

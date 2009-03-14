@@ -27,6 +27,9 @@
 #include <time.h>
 #include <tchar.h>
 #include <shlwapi.h>
+#include <map>
+using namespace std;
+
 #include "GlobalDefine.h"
 #include "myArray.h"
 #include "myString.h"

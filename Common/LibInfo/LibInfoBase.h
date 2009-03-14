@@ -34,7 +34,8 @@ public:
 
 
 public:
-	int		m_nProcNo;				/* 処理中のインデックス */
+	int			m_nProcNo;				/* 処理中のインデックス */
+	MapIDPtr	m_mapIDPtr;				/* ID検索用マップ */
 } CLibInfoBase, *PCLibInfoBase;
 
 /* Copyright(C)URARA-works 2007 */

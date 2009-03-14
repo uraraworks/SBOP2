@@ -135,6 +135,7 @@ void CLibInfoMapParts::Add(PCInfoBase pInfo)
 	}
 
 	m_paInfo->Add (pMapPartsInfo);
+	RenewIDPtr ();
 }
 
 
@@ -182,6 +183,7 @@ void CLibInfoMapParts::Delete(
 	if (nNo >= 0) {
 		Delete (nNo);
 	}
+	RenewIDPtr ();
 }
 
 
@@ -204,6 +206,7 @@ void CLibInfoMapParts::DeleteAll(void)
 		Delete (i);
 	}
 	m_dwNewIDTmp = 0;
+	RenewIDPtr ();
 }
 
 
@@ -273,22 +276,17 @@ PCInfoBase CLibInfoMapParts::GetPtr(int nNo)
 PCInfoBase CLibInfoMapParts::GetPtr(
 	DWORD dwPartsID)		/* [in] マップパーツID */
 {
-	int i, nCount;
-	PCInfoMapParts pRet, pInfoTmp;
+	PCInfoBase pRet;
 
 	pRet = NULL;
 	if (dwPartsID == 0) {
 		return pRet;
 	}
 
-	nCount = m_paInfo->GetSize ();
-	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
-		if (pInfoTmp->m_dwPartsID != dwPartsID) {
-			continue;
-		}
-		pRet = pInfoTmp;
-		break;
+	MapIDPtr::iterator ite;
+	ite = m_mapIDPtr.find (dwPartsID);
+	if (ite != m_mapIDPtr.end()) {
+		pRet = (PCInfoBase)ite->second;
 	}
 
 	return pRet;
@@ -414,6 +412,7 @@ PBYTE CLibInfoMapParts::SetSendData(PBYTE pSrc)
 			Add (pInfoMapPartsTmp);
 		}
 	}
+	RenewIDPtr ();
 
 	return pDataTmp;
 }
@@ -448,6 +447,28 @@ DWORD CLibInfoMapParts::GetNewID(void)
 	m_dwNewIDTmp = dwRet;
 
 	return dwRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoMapParts::RenewIDPtr									 */
+/* 内容		:ID検索用マップを更新											 */
+/* 日付		:2009/03/14														 */
+/* ========================================================================= */
+
+void CLibInfoMapParts::RenewIDPtr(void)
+{
+	int i, nCount;
+	PCInfoMapParts pInfoMapParts;
+
+	m_mapIDPtr.clear();
+
+	nCount = GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoMapParts = (PCInfoMapParts)GetPtr (i);
+
+		m_mapIDPtr.insert (pair<DWORD, PVOID>(pInfoMapParts->m_dwPartsID, (PVOID)pInfoMapParts));
+	}
 }
 
 /* Copyright(C)URARA-works 2007 */

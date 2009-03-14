@@ -16,6 +16,7 @@
 #define SAFE_DELETE_ARRAY(p)	{ if(p) { delete[] (p);		(p)=NULL; } }
 #define SAFE_DESTROYWND(p)		{ if(p) { DestroyWindow(p);	(p)=NULL; } }
 
+typedef map<DWORD, PVOID>	MapIDPtr;
 
 /* ========================================================================= */
 /* íËêîíËã`																	 */

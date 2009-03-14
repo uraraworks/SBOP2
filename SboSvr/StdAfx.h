@@ -15,6 +15,9 @@
 #include <mmsystem.h>
 #include <shlwapi.h>
 #include <tchar.h>
+#include <map>
+using namespace std;
+
 #include "GlobalDefine.h"
 #include "myArray.h"
 #include "myString.h"

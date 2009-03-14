@@ -20,6 +20,9 @@
 
 #include <afxtempl.h>
 #include <shlwapi.h>
+#include <map>
+using namespace std;
+
 #include "GlobalDefine.h"
 #include "SBOGlobal.h"
 #include "myString.h"

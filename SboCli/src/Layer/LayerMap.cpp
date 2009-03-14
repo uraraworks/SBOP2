@@ -988,10 +988,8 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 	BOOL bPile;
 	BYTE byLevel;
 	DWORD dwPartsID, dwPartsIDBack;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
-	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
-		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
-		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY;
+	POINT ptMove, ptPos;
 	PCInfoMapBase pMap;
 	PCInfoMapParts pInfoMapParts, pInfoMapPartsBack;
 
@@ -1010,66 +1008,11 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 		byLevel = 50;
 	}
 
-	cx		= pMap->m_sizeMap.cx;
-	cy		= pMap->m_sizeMap.cy;
-	nMoveX	= m_nMoveX;
-	nMoveY	= m_nMoveY;
-	nPosX	= m_nViewX;
-	nPosY	= m_nViewY;
-
-	if (nMoveX > 0 || nMoveY > 0) {
-		/* 移動中の座標を補正 */
-		nMoveX *= aMoveX[m_byDirection];
-		nMoveY *= aMoveY[m_byDirection];
-		switch (m_byDirection) {
-		case 0:
-		case 1:
-			if (m_nViewX % 2) {
-				nMoveX += aScrollX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		case 2:
-		case 3:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2) {
-				nMoveY += aScrollY[m_byDirection];
-			}
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		}
-	} else {
-		if (m_nViewX % 2) {
-			nMoveX -= 16;
-		}
-		if (m_nViewY % 2) {
-			nMoveY -= 16;
-		}
-	}
-	nPosX /= 2;
-	nPosY /= 2;
+	GetDrawMovePos (ptMove, ptPos);
+	nMoveX	= ptMove.x;
+	nMoveY	= ptMove.y;
+	nPosX	= ptPos.x;
+	nPosY	= ptPos.y;
 
 	dwPartsIDBack = -1;
 	pInfoMapPartsBack = NULL;
@@ -1088,14 +1031,12 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 			} else {
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
 			}
-			if (bPile) {
-				if (pInfoMapParts) {
-					if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
-						pDst->FillRect (
-							32 + x * 32 + nMoveX,
-							32 + y * 32 + nMoveY,
-							32, 32, RGB (0, 0, 0));
-					}
+			if (bPile && pInfoMapParts) {
+				if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
+					pDst->FillRect (
+						32 + x * 32 + nMoveX,
+						32 + y * 32 + nMoveY,
+						32, 32, RGB (0, 0, 0));
 				}
 			}
 			m_pMgrDraw->DrawMapParts (
@@ -1128,10 +1069,8 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 {
 	DWORD dwPartsID, dwPartsIDBack;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy, nCount;
-	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
-		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
-		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, nCount;
+	POINT ptMove, ptPos;
 	PCInfoMapBase pMap;
 	PCInfoMapParts pInfoMapParts, pInfoMapPartsBack;
 
@@ -1140,66 +1079,11 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 		return;
 	}
 
-	cx		= pMap->m_sizeMap.cx;
-	cy		= pMap->m_sizeMap.cy;
-	nMoveX	= m_nMoveX;
-	nMoveY	= m_nMoveY;
-	nPosX	= m_nViewX;
-	nPosY	= m_nViewY;
-
-	if (nMoveX > 0 || nMoveY > 0) {
-		/* 移動中の座標を補正 */
-		nMoveX *= aMoveX[m_byDirection];
-		nMoveY *= aMoveY[m_byDirection];
-		switch (m_byDirection) {
-		case 0:
-		case 1:
-			if (m_nViewX % 2) {
-				nMoveX += aScrollX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		case 2:
-		case 3:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2) {
-				nMoveY += aScrollY[m_byDirection];
-			}
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		}
-	} else {
-		if (m_nViewX % 2) {
-			nMoveX -= 16;
-		}
-		if (m_nViewY % 2) {
-			nMoveY -= 16;
-		}
-	}
-	nPosX /= 2;
-	nPosY /= 2;
+	GetDrawMovePos (ptMove, ptPos);
+	nMoveX	= ptMove.x;
+	nMoveY	= ptMove.y;
+	nPosX	= ptPos.x;
+	nPosY	= ptPos.y;
 
 	dwPartsIDBack = -1;
 	pInfoMapPartsBack = NULL;
@@ -1280,42 +1164,31 @@ void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 
 
 /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawPartsPile										 */
-/* 内容		:描画(重ね合わせ)												 */
-/* 日付		:2007/05/26														 */
+/* 関数名	:CLayerMap::GetDrawMovePos										 */
+/* 内容		:スクロール中の描画位置を所得									 */
+/* 日付		:2009/03/14														 */
 /* ========================================================================= */
 
-void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
+void CLayerMap::GetDrawMovePos(POINT &ptMove, POINT &ptPos)
 {
-	BOOL bDraw, bPile;
-	BYTE byViewGrid, byLevel;
-	DWORD dwPartsID, dwPartsIDBack;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy, nCount;
-	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
+	int nMoveX, nMoveY, nPosX, nPosY, aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
 		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
-	PCInfoMapBase pMap;
-	PCInfoMapParts pInfoMapParts, pInfoMapPartsBack;
 
-	pMap = m_pMgrData->GetMap ();
-	if (pMap == NULL) {
-		return;
-	}
-	byLevel = 0;
-	bPile = m_pMgrData->GetEditMapPile ();
-	if (bPile) {
-		byLevel = 50;
-	}
-
-	cx		= pMap->m_sizeMap.cx;
-	cy		= pMap->m_sizeMap.cy;
 	nMoveX	= m_nMoveX;
 	nMoveY	= m_nMoveY;
 	nPosX	= m_nViewX;
 	nPosY	= m_nViewY;
-	byViewGrid = m_pMgrData->GetViewGrid ();
 
-	if (nMoveX > 0 || nMoveY > 0) {
+	if ((nMoveX == 0) && (nMoveY == 0)) {
+		if (m_nViewX % 2) {
+			nMoveX -= 16;
+		}
+		if (m_nViewY % 2) {
+			nMoveY -= 16;
+		}
+
+	} else {
 		/* 移動中の座標を補正 */
 		nMoveX *= aMoveX[m_byDirection];
 		nMoveY *= aMoveY[m_byDirection];
@@ -1358,16 +1231,49 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 			}
 			break;
 		}
-	} else {
-		if (m_nViewX % 2) {
-			nMoveX -= 16;
-		}
-		if (m_nViewY % 2) {
-			nMoveY -= 16;
-		}
 	}
 	nPosX /= 2;
 	nPosY /= 2;
+
+	ptMove.x = nMoveX;
+	ptMove.y = nMoveY;
+	ptPos.x = nPosX;
+	ptPos.y = nPosY;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::DrawPartsPile										 */
+/* 内容		:描画(重ね合わせ)												 */
+/* 日付		:2007/05/26														 */
+/* ========================================================================= */
+
+void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
+{
+	BOOL bDraw, bPile;
+	BYTE byViewGrid, byLevel;
+	DWORD dwPartsID, dwPartsIDBack;
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, nCount;
+	POINT ptMove, ptPos;
+	PCInfoMapBase pMap;
+	PCInfoMapParts pInfoMapParts, pInfoMapPartsBack;
+
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return;
+	}
+	byLevel = 0;
+	bPile = m_pMgrData->GetEditMapPile ();
+	if (bPile) {
+		byLevel = 50;
+	}
+
+	GetDrawMovePos (ptMove, ptPos);
+	nMoveX	= ptMove.x;
+	nMoveY	= ptMove.y;
+	nPosX	= ptPos.x;
+	nPosY	= ptPos.y;
+	byViewGrid = m_pMgrData->GetViewGrid ();
 
 	dwPartsIDBack = -1;
 	pInfoMapPartsBack = NULL;
@@ -1456,10 +1362,8 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 {
 	WORD wShadowID;
-	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, cx, cy, r, nTmp;
-	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
-		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
-		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, r, nTmp;
+	POINT ptMove, ptPos;
 	PCInfoMapBase pMap;
 	PCInfoMapShadow pInfoMapShadow;
 
@@ -1468,66 +1372,11 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 		return;
 	}
 
-	cx		= pMap->m_sizeMap.cx;
-	cy		= pMap->m_sizeMap.cy;
-	nMoveX	= m_nMoveX;
-	nMoveY	= m_nMoveY;
-	nPosX	= m_nViewX;
-	nPosY	= m_nViewY;
-
-	if (nMoveX > 0 || nMoveY > 0) {
-		/* 移動中の座標を補正 */
-		nMoveX *= aMoveX[m_byDirection];
-		nMoveY *= aMoveY[m_byDirection];
-		switch (m_byDirection) {
-		case 0:
-		case 1:
-			if (m_nViewX % 2) {
-				nMoveX += aScrollX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		case 2:
-		case 3:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2) {
-				nMoveY += aScrollY[m_byDirection];
-			}
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		}
-	} else {
-		if (m_nViewX % 2) {
-			nMoveX -= 16;
-		}
-		if (m_nViewY % 2) {
-			nMoveY -= 16;
-		}
-	}
-	nPosX /= 2;
-	nPosY /= 2;
+	GetDrawMovePos (ptMove, ptPos);
+	nMoveX	= ptMove.x;
+	nMoveY	= ptMove.y;
+	nPosX	= ptPos.x;
+	nPosY	= ptPos.y;
 
 	m_pMgrDraw->LockDibTmp ();
 	y = -1;
@@ -1545,6 +1394,9 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 			xx = 32 + x * 32 + nMoveX;
 			yy = 32 + y * 32 + nMoveY;
 			pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr ((DWORD)wShadowID);
+			if (pInfoMapShadow == NULL) {
+				continue;
+			}
 			if (pInfoMapShadow->m_bLight) {
 				if (pMap->m_byLevel != 0) {
 					r = 32 * 2;
@@ -1579,10 +1431,8 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 {
 	DWORD dwObjectID;
-	int i, nCount, x, y, yy, yTmp, nMoveX, nMoveY, nPosX, nPosY, cx, cy;
-	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
-		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
-		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
+	int i, nCount, x, y, yy, yTmp, nMoveX, nMoveY, nPosX, nPosY;
+	POINT ptMove, ptPos;
 	PCInfoMapBase pMap;
 	PCLibInfoMapObjectData pLibInfoMapObjectData;
 	PCLibInfoMapObject pLibInfoMapObject;
@@ -1596,66 +1446,11 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 	pLibInfoMapObjectData = pMap->m_pLibInfoMapObjectData;
 	pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject ();
 
-	cx		= pMap->m_sizeMap.cx;
-	cy		= pMap->m_sizeMap.cy;
-	nMoveX	= m_nMoveX;
-	nMoveY	= m_nMoveY;
-	nPosX	= m_nViewX;
-	nPosY	= m_nViewY;
-
-	if (nMoveX > 0 || nMoveY > 0) {
-		/* 移動中の座標を補正 */
-		nMoveX *= aMoveX[m_byDirection];
-		nMoveY *= aMoveY[m_byDirection];
-		switch (m_byDirection) {
-		case 0:
-		case 1:
-			if (m_nViewX % 2) {
-				nMoveX += aScrollX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		case 2:
-		case 3:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2) {
-				nMoveY += aScrollY[m_byDirection];
-			}
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		}
-	} else {
-		if (m_nViewX % 2) {
-			nMoveX -= 16;
-		}
-		if (m_nViewY % 2) {
-			nMoveY -= 16;
-		}
-	}
-	nPosX /= 2;
-	nPosY /= 2;
+	GetDrawMovePos (ptMove, ptPos);
+	nMoveX	= ptMove.x;
+	nMoveY	= ptMove.y;
+	nPosX	= ptPos.x;
+	nPosY	= ptPos.y;
 
 	m_pMgrDraw->LockDibTmp ();
 	y = -1;

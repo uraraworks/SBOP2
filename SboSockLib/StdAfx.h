@@ -15,6 +15,9 @@
 #include <process.h>
 #include <shlwapi.h>
 #include <tchar.h>
+#include <map>
+using namespace std;
+
 #include "myString.h"
 #include "myArray.h"
 #include "GlobalDefine.h"
