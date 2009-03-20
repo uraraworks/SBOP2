@@ -134,7 +134,29 @@ void CLibInfoMapShadow::Add(PCInfoBase pInfo)
 	}
 
 	m_paInfo->Add (pMapShadowInfo);
-	RenewIDPtr ();
+	m_mapIDPtr.insert (pair<DWORD, PVOID>(pMapShadowInfo->m_dwShadowID, (PVOID)pMapShadowInfo));
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoMapShadow::RenewIDPtr									 */
+/* 内容		:ID検索用マップを更新											 */
+/* 日付		:2009/03/14														 */
+/* ========================================================================= */
+
+void CLibInfoMapShadow::RenewIDPtr(void)
+{
+	int i, nCount;
+	PCInfoMapShadow pInfo;
+
+	m_mapIDPtr.clear();
+
+	nCount = GetCount ();
+	for (i = 0; i < nCount; i ++) {
+		pInfo = (PCInfoMapShadow)GetPtr (i);
+
+		m_mapIDPtr.insert (pair<DWORD, PVOID>(pInfo->m_dwShadowID, (PVOID)pInfo));
+	}
 }
 
 
@@ -440,28 +462,6 @@ DWORD CLibInfoMapShadow::GetNewID(void)
 	}
 
 	return dwRet;
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMapShadow::RenewIDPtr									 */
-/* 内容		:ID検索用マップを更新											 */
-/* 日付		:2009/03/14														 */
-/* ========================================================================= */
-
-void CLibInfoMapShadow::RenewIDPtr(void)
-{
-	int i, nCount;
-	PCInfoMapShadow pInfo;
-
-	m_mapIDPtr.clear();
-
-	nCount = GetCount ();
-	for (i = 0; i < nCount; i ++) {
-		pInfo = (PCInfoMapShadow)GetPtr (i);
-
-		m_mapIDPtr.insert (pair<DWORD, PVOID>(pInfo->m_dwShadowID, (PVOID)pInfo));
-	}
 }
 
 /* Copyright(C)URARA-works 2007 */

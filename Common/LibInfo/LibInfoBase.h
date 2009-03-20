@@ -30,6 +30,7 @@ public:
 	virtual PCInfoBase	RenewInfo	(int nNo);				/* 内容に応じて更新 */
 	virtual void		GetSaveNo	(ARRAYINT &anDst);		/* 保存する情報のインデックスを取得 */
 	virtual void		Add			(PCInfoBase pInfo);		/* 追加 */
+	virtual void		RenewIDPtr	(void);					/* ID検索用マップを更新 */
 	virtual PCInfoBase	GetPtr		(int nNo);				/* 情報を取得 */
 
 

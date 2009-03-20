@@ -29,6 +29,7 @@ public:
 
 	int		GetCount	(void);									/* データ数を取得 */
 	void	Add			(PCInfoBase pInfo);						/* 追加 */
+	void	RenewIDPtr	(void);									/* ID検索用マップを更新 */
 	void	Delete		(int nNo);								/* 削除 */
 	void	Delete		(DWORD dwShadowID);						/* 削除 */
 	void	DeleteAll	(void);									/* 全て削除 */
@@ -46,7 +47,6 @@ public:
 
 protected:
 	DWORD	GetNewID	(void);									/* 新しいIDを取得 */
-	void	RenewIDPtr	(void);									/* ID検索用マップを更新 */
 
 
 protected:

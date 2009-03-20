@@ -339,6 +339,7 @@ void CSaveLoadInfoBase::ReadHeader(void)
 			break;
 		}
 	}
+	m_pLibInfoBase->RenewIDPtr ();
 
 	SAFE_DELETE (pInfoTmp);
 }

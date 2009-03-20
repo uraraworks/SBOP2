@@ -135,7 +135,7 @@ void CLibInfoMapParts::Add(PCInfoBase pInfo)
 	}
 
 	m_paInfo->Add (pMapPartsInfo);
-	RenewIDPtr ();
+	m_mapIDPtr.insert (pair<DWORD, PVOID>(pMapPartsInfo->m_dwPartsID, (PVOID)pMapPartsInfo));
 }
 
 
