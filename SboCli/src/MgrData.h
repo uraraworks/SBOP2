@@ -87,6 +87,8 @@ public:
 	BOOL			GetMoveNoBlock			(void)					{ return m_bMoveNoBlock;					}	/* 当たり判定無効を取得 */
 	void			SetSavePassword			(BOOL bSavePassword)	{ m_bSavePassword = bSavePassword;			}	/* パスワードを保存するを設定 */
 	BOOL			GetSavePassword			(void)					{ return m_bSavePassword;					}	/* パスワードを保存するを取得 */
+	void			SetDisableLogin			(BOOL bDisableLogin)	{ m_bDisableLogin = bDisableLogin;			}	/* ログイン拒否を設定 */
+	BOOL			GetDisableLogin			(void)					{ return m_bDisableLogin;					}	/* ログイン拒否を取得 */
 	void			SetSelectMapPartsID		(DWORD dwMapPartsID)	{ m_dwSelectMapPartsID = dwMapPartsID;		}	/* 選択中のマップパーツIDを設定 */
 	DWORD			GetSelectMapPartsID		(void)					{ return m_dwSelectMapPartsID;				}	/* 選択中のマップパーツIDを取得 */
 	void			SetSelectMapShadowID	(DWORD dwMapShadowID)	{ m_dwSelectMapShadowID = dwMapShadowID;	}	/* 選択中のマップ影IDを設定 */
@@ -200,6 +202,7 @@ private:
 	BOOL				m_bEditMapPile,				/* 重ね合わせ用としてマップ編集 */
 						m_bMoveNoBlock,				/* 当たり判定無効 */
 						m_bSavePassword,			/* パスワードを保存する？ */
+						m_bDisableLogin,			/* ログイン拒否 */
 						m_bOptionTaskbar,			/* 発言時にタスクバーをチカチカ */
 						m_bOptionViewChat,			/* 発言を表示する */
 						m_bOptionViewItem,			/* アイテムを表示する */

@@ -71,6 +71,12 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 	case LOGINRES_NG_MAC:		/* ì¬Ï‚Ý */
 		DisConnectProc (DISCONNECTID_MAC);
 		break;
+
+	case LOGINRES_NG_DISABLE:	/* ƒƒOƒCƒ“‹‘”Û */
+		m_pMgrData->SetDisableLogin(TRUE);
+		m_pMgrData->SaveIniData();
+		PostMessage (m_hWnd, WM_CLOSE, 0, 0);
+		break;
 	}
 }
 

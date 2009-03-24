@@ -600,7 +600,7 @@ void CWindowBase::DrawFrame(int nType)
 /* ÉÅÉÇ		:ÇPÉuÉçÉbÉNÇ™16x16ÉhÉbÉgÇÃògÇï`âÊ								 */
 /* ========================================================================= */
 
-void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType)
+void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRightErace/*FALSE*/)
 {
 	typedef struct _FRAMEINFO {
 		POINT		pt;		/* ç∂è„ÇÃäJénà íu */
@@ -625,29 +625,32 @@ void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType)
 	nTmp	= (nType == 4) ? 3 : 0;
 
 	/* îwåiìhÇËÇ¬Ç‘Çµ */
-	m_pDib->FillRect (x + 16, y + 16, cx - 32, cy - 32, clTmp);
-
-	/* élã˜ */
-	m_pDib->BltFrom256 (x,				y,				16, 16 + nTmp,	m_pDibSystem, xx, yy, TRUE);
-	m_pDib->BltFrom256 (x + cx - 16,	y,				16, 16 + nTmp,	m_pDibSystem, xx + 32, yy, TRUE);
-	m_pDib->BltFrom256 (x,				y + cy - 16,	16, 16,			m_pDibSystem, xx, yy + 32, TRUE);
-	m_pDib->BltFrom256 (x + cx - 16,	y + cy - 16,	16, 16,			m_pDibSystem, xx + 32, yy + 32, TRUE);
+	m_pDib->FillRect (x + 0, y + 8, cx -  0, cy - 16, clTmp);
+	m_pDib->FillRect (x + 8, y + 0, cx - 16, cy -  0, clTmp);
 
 	/* â°ê¸ */
-	for (i = 1; i < cx / 8 - 2; i ++) {
-		m_pDib->BltFrom256 (x + (i + 1) * 8, y,				8, 16, m_pDibSystem, xx + 16, yy, TRUE);
-		m_pDib->BltFrom256 (x + (i + 1) * 8, y + cy - 16,	8, 16, m_pDibSystem, xx + 16, yy + 32, TRUE);
+	for (i = 0; i < cx / 8 - 2; i ++) {
+		m_pDib->BltFrom256 (x + (i + 1) * 8, y,				8, 8, m_pDibSystem, xx + 16, yy, TRUE);
+		m_pDib->BltFrom256 (x + (i + 1) * 8, y + cy - 8,	8, 8, m_pDibSystem, xx + 16, yy + 40, TRUE);
 	}
 
 	/* ècê¸ */
-	for (i = 1; i < cy / 8 - 2; i ++) {
+	for (i = 0; i < cy / 8 - 2; i ++) {
 		if ((i == 1) && (nTmp != 0)) {
-			m_pDib->BltFrom256 (x,				y + (i + 1) * 8 + nTmp, 16, 8 - nTmp, m_pDibSystem, xx,			yy + 16 + nTmp, TRUE);
-			m_pDib->BltFrom256 (x + cx - 16,	y + (i + 1) * 8 + nTmp, 16, 8 - nTmp, m_pDibSystem, xx + 32,	yy + 16 + nTmp, TRUE);
+			m_pDib->BltFrom256 (x,			y + (i + 1) * 8 + nTmp, 8, 8 - nTmp, m_pDibSystem, xx,			yy + 16 + nTmp, TRUE);
+			m_pDib->BltFrom256 (x + cx - 8,	y + (i + 1) * 8 + nTmp, 8, 8 - nTmp, m_pDibSystem, xx + 40,	yy + 16 + nTmp, TRUE);
 		} else {
-			m_pDib->BltFrom256 (x,				y + (i + 1) * 8, 16, 8, m_pDibSystem, xx,		yy + 16 + nTmp, TRUE);
-			m_pDib->BltFrom256 (x + cx - 16,	y + (i + 1) * 8, 16, 8, m_pDibSystem, xx + 32,	yy + 16 + nTmp, TRUE);
+			m_pDib->BltFrom256 (x,			y + (i + 1) * 8, 8, 8, m_pDibSystem, xx,		yy + 16 + nTmp, TRUE);
+			m_pDib->BltFrom256 (x + cx - 8,	y + (i + 1) * 8, 8, 8, m_pDibSystem, xx + 40,	yy + 16 + nTmp, TRUE);
 		}
+	}
+
+	/* élã˜ */
+	m_pDib->BltFrom256 (x, y,			8, 8 + nTmp,	m_pDibSystem, xx, yy, TRUE);
+	m_pDib->BltFrom256 (x, y + cy - 8,	8, 8,			m_pDibSystem, xx, yy + 40, TRUE);
+	if (bRightErace == FALSE) {
+		m_pDib->BltFrom256 (x + cx - 8,	y,			8, 8 + nTmp,	m_pDibSystem, xx + 40, yy, TRUE);
+		m_pDib->BltFrom256 (x + cx - 8,	y + cy - 8,	8, 8,			m_pDibSystem, xx + 40, yy + 40, TRUE);
 	}
 }
 

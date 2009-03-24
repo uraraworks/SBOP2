@@ -1347,6 +1347,8 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 	PCInfoAccount pInfoAccount;
 	CPacketADMIN_CHAR_REQ_ACCOUNT Packet;
 	CPacketADMIN_CHAR_RES_ACCOUNT PacketADMIN_CHAR_RES_ACCOUNT;
+	IN_ADDR AddrTmp;
+	CmyString strTmp;
 
 	Packet.Set (pData);
 
@@ -1354,7 +1356,9 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 	if (pInfoAccount == NULL) {
 		return;
 	}
-	PacketADMIN_CHAR_RES_ACCOUNT.Make (pInfoAccount);
+
+	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(dwSessionID);
+	PacketADMIN_CHAR_RES_ACCOUNT.Make (pInfoAccount, AddrTmp.S_un.S_addr, (LPCSTR)pInfoAccount->m_strLastMacAddr);
 	m_pSock->SendTo (dwSessionID, &PacketADMIN_CHAR_RES_ACCOUNT);
 }
 
@@ -1373,6 +1377,23 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 	CmyString strTmp;
 
 	Packet.Set (pData);
+
+	if (Packet.m_bDisable) {
+		pInfoAccount = m_pLibInfoAccount->GetPtr (Packet.m_dwAccountID);
+		if (pInfoAccount == NULL) {
+			pInfoAccount = m_pLibInfoAccount->GetPtrMacAddr (Packet.m_strMacAddress);
+		}
+		if (pInfoAccount) {
+			pInfoAccount->m_bDisable = Packet.m_bDisable;
+			strTmp.Format ("アカウント[%s]をログイン拒否しました",
+					(LPCSTR)pInfoAccount->m_strAccount,
+					(LPCSTR)pInfoAccount->m_strPassword);
+			PacketMsg.Make (strTmp, RGB (255, 255, 255));
+			m_pSock->SendTo (dwSessionID, &PacketMsg);
+		}
+		return;
+	}
+
 	pInfoAccount = m_pLibInfoAccount->GetPtr (Packet.m_dwAccountID);
 	if (pInfoAccount == NULL) {
 		return;

@@ -53,12 +53,14 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	CPacketCONNECT_REQ_LOGIN Packet;
 	CPacketCONNECT_RES_LOGIN PacketRes;
 	CPacketCHAR_MOTION PacketCHAR_MOTION;
-	CmyString strTmp;
+	CmyString strTmp, strLog;
+	IN_ADDR AddrTmp;
 
 	Packet.Set (pData);
 
 	nResult			= LOGINRES_NG_PASSWORD;
 	pInfoAccount	= m_pLibInfoAccount->GetPtr (Packet.m_strAccount);
+	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(dwSessionID);
 
 	strTmp.Format (
 		"%02X-%02X-%02X-%02X-%02X-%02X",
@@ -95,8 +97,16 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	}
 
 	if (nResult == LOGINRES_OK) {
+		/* 拒否？ */
+		if (pInfoAccount->m_bDisable) {
+			nResult = LOGINRES_NG_DISABLE;
+			m_pLog->Write ("ログイン拒否 dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
+					dwSessionID,
+					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
+					(LPCSTR)strTmp,
+					(LPCSTR)pInfoAccount->m_strAccount);
 		/* 使用中？ */
-		if (pInfoAccount->m_dwSessionID != 0) {
+		} else if (pInfoAccount->m_dwSessionID != 0) {
 			nResult = LOGINRES_NG_LOGIN;
 		} else {
 			time_t timeTmp;
@@ -105,8 +115,14 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			pInfoAccount->m_dwSessionID = dwSessionID;
 			time (&timeTmp);
 			pInfoAccount->m_dwTimeLastLogin = (DWORD)timeTmp;
+			pInfoAccount->m_strLastMacAddr	= strTmp;
 
-			m_pLog->Write ("ログイン dwSessionID:%u [%s]", dwSessionID, (LPCSTR)pInfoAccount->m_strAccount);
+			m_pLog->Write ("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s][%s]",
+					dwSessionID,
+					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
+					(LPCSTR)strTmp,
+					(LPCSTR)pInfoAccount->m_strAccount,
+					(LPCSTR)pInfoAccount->m_strPassword);
 		}
 		PacketCHAR_MOTION.Make (0, 0, m_pLibInfoMotion);
 		m_pSock->SendTo (dwSessionID, &PacketCHAR_MOTION);

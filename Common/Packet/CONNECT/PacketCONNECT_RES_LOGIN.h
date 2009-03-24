@@ -20,6 +20,7 @@ enum {
 	LOGINRES_NG_PASSWORD,					/* パスワード不一致 */
 	LOGINRES_NG_LOGIN,						/* ログイン済み */
 	LOGINRES_NG_MAC,						/* 作成済み */
+	LOGINRES_NG_DISABLE,					/* ログイン拒否 */
 };
 
 

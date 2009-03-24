@@ -33,8 +33,8 @@ CWindowITEMMENU::CWindowITEMMENU()
 	m_nID			= WINDOWTYPE_ITEMMENU;
 	m_ptViewPos.x	= 24;
 	m_ptViewPos.y	= 32;
-	m_sizeWindow.cx	= 13 * 16;
-	m_sizeWindow.cy	= 25 * 16;
+	m_sizeWindow.cx	= 8 * 27;
+	m_sizeWindow.cy	= 8 * 50;
 
 	m_dwSelectItemID = 0;
 	m_dwDragItemID	 = 0;
@@ -93,15 +93,15 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 
 	m_strName.Empty ();
 	DrawFrame (5);
-	DrawFrame (9, 7, 32 + 4, 24, 7);
-	DrawFrame (2, 24, 120, 104, 6);
+	DrawFrame (11, 7, 32 + 4, 24, 7);
+	DrawFrame (4, 24, 120, 104, 6);
 	DrawFrame (146, 24, 48, 104, 6);
-	DrawFrame (9, 134, 104, 24, 7);
-	DrawFrame (2, 149, 204, 248, 6);
+	DrawFrame (11, 134, 104, 24, 7);
+	DrawFrame (4, 149, 208, 248, 6);
 
 	for (y = 0; y < 2; y ++) {
 		for (x = 0; x < 3; x ++) {
-			DrawIconFrame (9 + 36 * x, 31 + 47 * y);
+			DrawIconFrame (12 + 36 * x, 31 + 47 * y);
 		}
 	}
 	for (y = 0; y < 2; y ++) {
@@ -109,7 +109,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	}
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
-			DrawIconFrame (9 + 36 * x, 158 + 47 * y);
+			DrawIconFrame (12 + 36 * x, 158 + 47 * y);
 		}
 	}
 
@@ -122,8 +122,8 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	hDC			= m_pDib->Lock ();
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
-	TextOut2 (hDC, 9 + 5, 7 + 4, "装備", RGB (255, 255, 255));
-	TextOut2 (hDC, 9 + 5, 134 + 3, "バッグ(B)", RGB (255, 255, 255));
+	TextOut2 (hDC, 12 + 5, 7 + 4, "装備", RGB (255, 255, 255));
+	TextOut2 (hDC, 12 + 5, 134 + 3, "バッグ(B)", RGB (255, 255, 255));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -142,7 +142,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		if ((m_ptDrag.x == x) && (m_ptDrag.y == y)) {
 			pIntoItemDrag = pInfoItem;
 		}
-		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 36), 159 + (y * 47), pInfoItem);
+		m_pMgrDraw->DrawItem (m_pDib, 12 + (x * 36), 159 + (y * 47), pInfoItem);
 		if (m_strName.IsEmpty () == FALSE) {
 			continue;
 		}
@@ -156,7 +156,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	if (pIntoItemDrag) {
 		x = (m_nPos - EQUIPTYPE_MAX) % 5;
 		y = (m_nPos - EQUIPTYPE_MAX) / 5;
-		m_pMgrDraw->DrawItem (m_pDib, 10 + (x * 36), 159 + (y * 47), pIntoItemDrag, 50);
+		m_pMgrDraw->DrawItem (m_pDib, 12 + (x * 36), 159 + (y * 47), pIntoItemDrag, 50);
 	}
 
 	GetDrawPos (m_nPos, x, y);
@@ -503,7 +503,7 @@ void CWindowITEMMENU::DrawEquip(
 	if (pInfoItem == NULL) {
 		return;
 	}
-	x = 10 + 36 * anDrawInfo[nType * 3 + 0];
+	x = 12 + 36 * anDrawInfo[nType * 3 + 0];
 	y = 32 + 47 * anDrawInfo[nType * 3 + 1];
 	m_pMgrDraw->DrawItem (m_pDib, x, y, pInfoItem);
 	if (m_nPos == anDrawInfo[nType * 3 + 2]) {
@@ -525,7 +525,7 @@ void CWindowITEMMENU::GetDrawPos(
 	int &nDstY)		/* [out] Y座標 */
 {
 	if (nPos < EQUIPTYPE_MAX) {
-		nDstX = 36 * (nPos % 3) + 10 + 1;
+		nDstX = 36 * (nPos % 3) + 12 + 1;
 		nDstY = 47 * (nPos / 3) + 32 + 1;
 	} else {
 		nDstX = 36 * ((nPos - EQUIPTYPE_MAX) % 5) + 1 + 1;

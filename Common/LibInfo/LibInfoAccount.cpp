@@ -368,6 +368,34 @@ PCInfoAccount CLibInfoAccount::GetPtrSessionID(
 
 
 /* ========================================================================= */
+/* 関数名	:CLibInfoAccount::GetPtrMacAddr									 */
+/* 内容		:アカウント情報を取得											 */
+/* 日付		:2006/11/05														 */
+/* ========================================================================= */
+
+PCInfoAccount CLibInfoAccount::GetPtrMacAddr(
+	LPCSTR pszMacAddr)		/* [in] 作成時のMACアドレス */
+{
+	int i, nCount;
+	PCInfoAccount pRet, pInfoTmp;
+
+	pRet = NULL;
+
+	nCount = m_paInfo->GetSize ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoTmp = m_paInfo->GetAt (i);
+		if (pInfoTmp->m_strMacAddr != pszMacAddr) {
+			continue;
+		}
+		pRet = pInfoTmp;
+		break;
+	}
+
+	return pRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CLibInfoAccount::GetNewID										 */
 /* 内容		:新しいアカウントIDを取得										 */
 /* 日付		:2006/11/05														 */

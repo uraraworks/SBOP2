@@ -22,14 +22,16 @@ public:
 			CPacketADMIN_CHAR_RENEW_ACCOUNT();			/* コンストラクタ */
 	virtual ~CPacketADMIN_CHAR_RENEW_ACCOUNT();			/* デストラクタ */
 
-	void	Make	(CInfoAccount *pInfoAccount);				/* パケットを作成 */
+	void	Make	(CInfoAccount *pInfoAccount, BOOL bDisable=FALSE, LPCSTR pszMacAddress=NULL);/* パケットを作成 */
 	PBYTE	Set		(PBYTE pPacket);							/* パケットを設定 */
 
 
 public:
+	BOOL		m_bDisable;					/* ログイン拒否 */
 	DWORD		m_dwAccountID;				/* アカウントID */
 	CmyString	m_strAccount,				/* アカウント */
-				m_strPassword;				/* パスワード */
+				m_strPassword,				/* パスワード */
+				m_strMacAddress;			/* 拒否MACアドレス */
 } CPacketADMIN_CHAR_RENEW_ACCOUNT, *PCPacketADMIN_CHAR_RENEW_ACCOUNT;
 
 /* Copyright(C)URARA-works 2008 */

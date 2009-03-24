@@ -106,6 +106,8 @@ void CMainFrame::RecvProcADMIN_CHAR_RES_ACCOUNT(PBYTE pData)
 	InfoTmp.m_dwAccountID	= Packet.m_dwAccountID;
 	InfoTmp.m_strAccount	= Packet.m_strAccount;
 	InfoTmp.m_strPassword	= Packet.m_strPassword;
+	InfoTmp.m_dwIP			= Packet.m_dwIP;
+	InfoTmp.m_strLastMacAddr= Packet.m_strMacAddress;
 	pTmpData = InfoTmp.GetTmpData (dwDataSize);
 
 	dwDataID = m_pMgrData->Add (dwDataSize, pTmpData);

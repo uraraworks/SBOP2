@@ -29,8 +29,8 @@ CWindowCHAR_STATUS::CWindowCHAR_STATUS()
 	m_nID			= WINDOWTYPE_CHAR_STATUS;
 	m_ptViewPos.x	= 8 * 2;
 	m_ptViewPos.y	= 16 * 3;
-	m_sizeWindow.cx	= 16 * 2 + 12 * 10;
-	m_sizeWindow.cy	= 16 * 2 + 12 * 3;
+	m_sizeWindow.cx	= 16 * 2 +  8 * 22;
+	m_sizeWindow.cy	= 16 * 2 + 16 * 25;
 }
 
 
@@ -69,7 +69,7 @@ void CWindowCHAR_STATUS::Create(CMgrData *pMgrData)
 
 void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 {
-	int nLevel, y;
+	int nLevel, x, y;
 	HDC hDC;
 	HFONT hFontOld;
 	COLORREF clText;
@@ -81,15 +81,73 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 	}
 
 	pInfoChar = m_pMgrData->GetPlayerChar ();
-	DrawFrame ();
 
 	clText		= RGB (1, 1, 1);
 	hDC			= m_pDib->Lock ();
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
 
-	clText = RGB (1, 1, 1);
+	DrawFrame (5);
+	DrawFrame (12, 7, 80, 24, 7);
+	TextOut2 (hDC, 12 + 5, 7 + 4, "キャラ情報(J)", RGB (255, 255, 255));
+	y = 8 * 3;
+	DrawFrame (4, y, 200, 64, 6);
+	y += 6;
+	x = 12;
+	DrawFrame (x, y, 184, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "名前", RGB (255, 255, 255));
+	y += 18;
+	DrawFrame (x, y, 120, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "職業", RGB (255, 255, 255));
+	x = 12 + 8 * 16;
+	DrawFrame (x, y, 56, 16, 6);
+	DrawFrame (x, y, 32, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "LV", RGB (255, 255, 255));
+	y += 18;
+	x = 12;
+	DrawFrame (x, y, 184, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "所属", RGB (255, 255, 255));
 
+	y = 8 * 11 + 7;
+	x = 12;
+	DrawFrame (x, y, 48, 24, 7);
+	TextOut2 (hDC, x + 5, y + 4, "基本値", RGB (255, 255, 255));
+	y += 16;
+	DrawFrame (4, y, 200, 64, 6);
+	y += 6;
+	x = 12;
+	DrawFrame (x, y, 8 * 11, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "HP", RGB (255, 255, 255));
+	x = 12 + 8 * 12;
+	DrawFrame (x, y, 8 * 11, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5 + 3, y + 2, "MP", RGB (255, 255, 255));
+	y += 18;
+	x = 12;
+	DrawFrame (x, y, 8 * 11, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "力", RGB (255, 255, 255));
+	x = 12 + 8 * 12;
+	DrawFrame (x, y, 8 * 11, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "魔力", RGB (255, 255, 255));
+	y += 18;
+	x = 12;
+	DrawFrame (x, y, 8 * 11, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "体力", RGB (255, 255, 255));
+	x = 12 + 8 * 12;
+	DrawFrame (x, y, 8 * 11, 16, 6);
+	DrawFrame (x, y, 40, 16, 7, TRUE);
+	TextOut2 (hDC, x + 5, y + 2, "器用", RGB (255, 255, 255));
+
+
+
+#if 0
 	y = 0;
 	TextOut2 (hDC, 16, 12 + 12 * y, (LPCSTR)pInfoChar->m_strCharName, clText);
 	y ++;
@@ -107,6 +165,7 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 	TextOut2 (hDC, 16, 16 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%d", pInfoChar->m_dwSP);
 	TextOut2 (hDC, 16 + 12 * 7, 16 + 12 * y, (LPCSTR)strTmp, clText);
+#endif
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

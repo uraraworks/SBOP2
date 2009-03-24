@@ -37,6 +37,8 @@ public:
 	CString	m_strAccountID;
 	CString	m_strAccount;
 	CString	m_strPassword;
+	CString	m_strIP;
+	CString	m_strMac;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminCharAccountInfo)
@@ -48,6 +50,7 @@ protected:
 	//{{AFX_MSG(CDlgAdminCharAccountInfo)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSend();
+	afx_msg void OnDisable();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 } CDlgAdminCharAccountInfo, *PCDlgAdminCharAccountInfo;

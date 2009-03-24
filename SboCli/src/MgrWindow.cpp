@@ -901,17 +901,18 @@ void CMgrWindow::MakeWindowCHAR_STATUS(void)
 	PCWindowCHAR_STATUS pWindowNew;
 	PCWindowCHAR_STATUS2 pWindowNew2;
 	PCWindowCHAR_STATUS3 pWindowNew3;
-
+/*
 	pWindowNew2 = new CWindowCHAR_STATUS2;
 	pWindowNew2->Create (m_pMgrData);
 	m_paWindow->Add (pWindowNew2);
 	pWindowNew3 = new CWindowCHAR_STATUS3;
 	pWindowNew3->Create (m_pMgrData);
 	m_paWindow->Add (pWindowNew3);
+*/
 	pWindowNew = new CWindowCHAR_STATUS;
 	pWindowNew->Create (m_pMgrData);
-	pWindowNew->AddChild (pWindowNew2);
-	pWindowNew->AddChild (pWindowNew3);
+//	pWindowNew->AddChild (pWindowNew2);
+//	pWindowNew->AddChild (pWindowNew3);
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
 

@@ -61,7 +61,7 @@ protected:
 	void TextOut3			(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, COLORREF Color);		/* 黒縁取りで文字描画(右詰) */
 	void TextOut4			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFrame, COLORREF Color = RGB (255, 255, 255));	/* 黒縁取りで文字描画 */
 	void DrawFrame			(int nType = 0);							/* フレームを描画 */
-	void DrawFrame			(int x, int y, int cx, int cy, int nType);	/* フレームを描画 */
+	void DrawFrame			(int x, int y, int cx, int cy, int nType, BOOL bRightErace=FALSE);	/* フレームを描画 */
 	void DrawFrame2			(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	/* フレームを描画 */
 	void DrawFrame3			(int x, int y, int cx, int cy, int nType);	/* フレームを描画 */
 	void DrawCursor			(int x, int y);								/* カーソルを描画 */

@@ -754,6 +754,11 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	wsprintf (szTmp, "%sLog", szName);
 	CreateDirectory (szTmp, NULL);
 
+	bResult = m_pMgrData->GetDisableLogin();
+	if (bResult) {
+		goto Exit;
+	}
+
 	ChgGameState (GAMESTATE_LOGO);
 	ShowWindow (hWnd, SW_SHOW);
 

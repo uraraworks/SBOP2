@@ -39,6 +39,7 @@ public:
 	PCInfoAccount	GetPtr			(DWORD dwAccountID);			/* アカウント情報を取得 */
 	PCInfoAccount	GetPtr			(LPCSTR pszAccount);			/* アカウント情報を取得 */
 	PCInfoAccount	GetPtrSessionID	(DWORD dwSessionID);			/* アカウント情報を取得 */
+	PCInfoAccount	GetPtrMacAddr	(LPCSTR pszMacAddr);			/* アカウント情報を取得 */
 
 
 protected:

@@ -15,6 +15,7 @@
 
 /* ヘッダ情報 */
 static LPCSTR s_aszName[] = {
+	"m_bDisable",			/* ログイン拒否 */
 	"dwAccountID",			/* アカウントID */
 	"dwCharID",				/* キャラID */
 	"dwTimeLastLogin",		/* 前回のログイン日時 */
@@ -37,7 +38,9 @@ static LPCSTR s_aszName[] = {
 
 CInfoAccount::CInfoAccount()
 {
+	m_bDisable			= FALSE;
 	m_dwLastKeepalive	= 0;
+	m_dwIP				= 0;
 	m_dwAccountID		= 0;
 	m_dwCharID			= 0;
 	m_dwTimeLastLogin	= 0;
@@ -96,6 +99,7 @@ DWORD CInfoAccount::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
+	dwRet += sizeof (m_bDisable);
 	dwRet += sizeof (m_dwAccountID);
 	dwRet += sizeof (m_dwCharID);
 	dwRet += sizeof (m_dwTimeLastLogin);
@@ -124,16 +128,17 @@ DWORD CInfoAccount::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:	dwRet = sizeof (m_dwAccountID);								break;
-	case 1:	dwRet = sizeof (m_dwCharID);								break;
-	case 2:	dwRet = sizeof (m_dwTimeLastLogin);							break;
-	case 3:	dwRet = sizeof (m_dwTimeMakeAccount);						break;
-	case 4:	dwRet = sizeof (m_dwLoginCount);							break;
-	case 5:	dwRet = ((m_adwCharID.GetSize () + 1) * sizeof (DWORD));	break;
-	case 6:	dwRet = sizeof (m_nAdminLevel);								break;
-	case 7:	dwRet = (m_strAccount.GetLength () + 1);					break;
-	case 8:	dwRet = (m_strPassword.GetLength () + 1);					break;
-	case 9:	dwRet = (m_strMacAddr.GetLength () + 1);					break;		/* アカウント登録MACアドレス */
+	case 0:	dwRet = sizeof (m_bDisable);								break;
+	case 1:	dwRet = sizeof (m_dwAccountID);								break;
+	case 2:	dwRet = sizeof (m_dwCharID);								break;
+	case 3:	dwRet = sizeof (m_dwTimeLastLogin);							break;
+	case 4:	dwRet = sizeof (m_dwTimeMakeAccount);						break;
+	case 5:	dwRet = sizeof (m_dwLoginCount);							break;
+	case 6:	dwRet = ((m_adwCharID.GetSize () + 1) * sizeof (DWORD));	break;
+	case 7:	dwRet = sizeof (m_nAdminLevel);								break;
+	case 8:	dwRet = (m_strAccount.GetLength () + 1);					break;
+	case 9:	dwRet = (m_strPassword.GetLength () + 1);					break;
+	case 10:dwRet = (m_strMacAddr.GetLength () + 1);					break;		/* アカウント登録MACアドレス */
 	}
 
 	return dwRet;
@@ -174,12 +179,13 @@ PBYTE CInfoAccount::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_dwAccountID;		break;
-	case 1:	pSrc = (PBYTE)&m_dwCharID;			break;
-	case 2:	pSrc = (PBYTE)&m_dwTimeLastLogin;	break;
-	case 3:	pSrc = (PBYTE)&m_dwTimeMakeAccount;	break;
-	case 4:	pSrc = (PBYTE)&m_dwLoginCount;		break;
-	case 5:
+	case 0:	pSrc = (PBYTE)&m_bDisable;			break;
+	case 1:	pSrc = (PBYTE)&m_dwAccountID;		break;
+	case 2:	pSrc = (PBYTE)&m_dwCharID;			break;
+	case 3:	pSrc = (PBYTE)&m_dwTimeLastLogin;	break;
+	case 4:	pSrc = (PBYTE)&m_dwTimeMakeAccount;	break;
+	case 5:	pSrc = (PBYTE)&m_dwLoginCount;		break;
+	case 6:
 		{
 			int i, nCount;
 			DWORD dwTmp;
@@ -194,10 +200,10 @@ PBYTE CInfoAccount::GetWriteData(int nNo, PDWORD pdwSize)
 			}
 		}
 		break;
-	case 6:	pSrc = (PBYTE)&m_nAdminLevel;			break;
-	case 7:	pSrc = (PBYTE)(LPCSTR)m_strAccount;		break;
-	case 8:	pSrc = (PBYTE)(LPCSTR)m_strPassword;	break;
-	case 9:	pSrc = (PBYTE)(LPCSTR)m_strMacAddr;		break;
+	case 7:	pSrc = (PBYTE)&m_nAdminLevel;			break;
+	case 8:	pSrc = (PBYTE)(LPCSTR)m_strAccount;		break;
+	case 9:	pSrc = (PBYTE)(LPCSTR)m_strPassword;	break;
+	case 10:pSrc = (PBYTE)(LPCSTR)m_strMacAddr;		break;
 	}
 
 	if (pSrc) {
@@ -226,12 +232,13 @@ DWORD CInfoAccount::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:	pDst = (PBYTE)&m_dwAccountID;		dwSize = sizeof (m_dwAccountID);		break;
-	case 1:	pDst = (PBYTE)&m_dwCharID;			dwSize = sizeof (m_dwCharID);			break;
-	case 2:	pDst = (PBYTE)&m_dwTimeLastLogin;	dwSize = sizeof (m_dwTimeLastLogin);	break;
-	case 3:	pDst = (PBYTE)&m_dwTimeMakeAccount;	dwSize = sizeof (m_dwTimeMakeAccount);	break;
-	case 4:	pDst = (PBYTE)&m_dwLoginCount;		dwSize = sizeof (m_dwLoginCount);		break;
-	case 5:
+	case 0:	pDst = (PBYTE)&m_bDisable;			dwSize = sizeof (m_bDisable);			break;
+	case 1:	pDst = (PBYTE)&m_dwAccountID;		dwSize = sizeof (m_dwAccountID);		break;
+	case 2:	pDst = (PBYTE)&m_dwCharID;			dwSize = sizeof (m_dwCharID);			break;
+	case 3:	pDst = (PBYTE)&m_dwTimeLastLogin;	dwSize = sizeof (m_dwTimeLastLogin);	break;
+	case 4:	pDst = (PBYTE)&m_dwTimeMakeAccount;	dwSize = sizeof (m_dwTimeMakeAccount);	break;
+	case 5:	pDst = (PBYTE)&m_dwLoginCount;		dwSize = sizeof (m_dwLoginCount);		break;
+	case 6:
 		{
 			DWORD dwTmp;
 			PBYTE pDataTmp;
@@ -248,16 +255,16 @@ DWORD CInfoAccount::ReadElementData(
 			}
 		}
 		break;
-	case 6:	pDst = (PBYTE)&m_nAdminLevel;		dwSize = sizeof (m_nAdminLevel);		break;
-	case 7:
+	case 7:	pDst = (PBYTE)&m_nAdminLevel;		dwSize = sizeof (m_nAdminLevel);		break;
+	case 8:
 		m_strAccount = (LPCSTR)pSrc;
 		dwSize = m_strAccount.GetLength () + 1;
 		break;
-	case 8:
+	case 9:
 		m_strPassword = (LPCSTR)pSrc;
 		dwSize = m_strPassword.GetLength () + 1;
 		break;
-	case 9:
+	case 10:
 		m_strMacAddr = (LPCSTR)pSrc;
 		dwSize = m_strMacAddr.GetLength () + 1;
 		break;
@@ -282,6 +289,7 @@ DWORD CInfoAccount::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
+	dwRet += sizeof (m_bDisable);
 	dwRet += sizeof (m_dwAccountID);
 	dwRet += sizeof (m_dwCharID);
 	dwRet += sizeof (m_dwTimeLastLogin);
@@ -413,14 +421,18 @@ PBYTE CInfoAccount::GetTmpData(DWORD &dwDataSize)
 
 	/* サイズを計算 */
 	dwDataSize += sizeof (m_dwAccountID);
+	dwDataSize += sizeof (m_dwIP);
 	dwDataSize += (m_strAccount.GetLength () + 1);
 	dwDataSize += (m_strPassword.GetLength () + 1);
+	dwDataSize += (m_strLastMacAddr.GetLength () + 1);
 
 	pRet = ZeroNew (dwDataSize);
 	pDataTmp = pRet;
 	CopyMemoryRenew (pDataTmp, &m_dwAccountID, sizeof (m_dwAccountID), pDataTmp);	/* アカウントID */
+	CopyMemoryRenew (pDataTmp, &m_dwIP, sizeof (m_dwIP), pDataTmp);					/* IPアドレス */
 	strcpyRenew ((LPSTR)pDataTmp, m_strAccount,  pDataTmp);							/* アカウント */
 	strcpyRenew ((LPSTR)pDataTmp, m_strPassword, pDataTmp);							/* パスワード */
+	strcpyRenew ((LPSTR)pDataTmp, m_strLastMacAddr, pDataTmp);						/* ログイン時のMACアドレス */
 
 	return pRet;
 }
@@ -438,8 +450,10 @@ void CInfoAccount::SetTmpData(PBYTE pSrc)
 
 	pDataTmp = pSrc;
 	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* アカウントID */
+	CopyMemoryRenew (&m_dwIP, pDataTmp, sizeof (m_dwIP), pDataTmp);					/* IPアドレス */
 	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);						/* アカウント */
 	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);						/* パスワード */
+	StoreRenew (m_strLastMacAddr,	(LPCSTR)pDataTmp, pDataTmp);					/* ログイン時のMACアドレス */
 }
 
 /* Copyright(C)URARA-works 2006 */

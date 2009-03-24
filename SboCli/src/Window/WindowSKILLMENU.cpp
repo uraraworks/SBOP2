@@ -34,7 +34,7 @@ CWindowSKILLMENU::CWindowSKILLMENU()
 	m_ptViewPos.x	= 24;
 	m_ptViewPos.y	= 112;
 	m_sizeWindow.cx	= 208;
-	m_sizeWindow.cy	= 276;
+	m_sizeWindow.cy	= 280;
 
 	m_nType			= 0;
 	m_dwSelectID	= 0;
@@ -99,17 +99,17 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
 	for (i = 0; i < 4; i ++) {
-		DrawFrame (9 + 48 * i, 7, 40 + 6, 24, 7);
-		TextOut2 (hDC, 9 + 5 + 48 * i, 7 + 4, aszTitle[i], RGB (255, 255, 255));
+		DrawFrame (12 + 48 * i, 7, 40 + 6, 24, 7);
+		TextOut2 (hDC, 12 + 5 + 48 * i, 7 + 4, aszTitle[i], RGB (255, 255, 255));
 	}
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
 
-	DrawFrame (2, 23, 204, 248, 6);
+	DrawFrame (4, 23, 200, 248, 6);
 
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
-			DrawIconFrame (9 + 36 * x, 32 + 47 * y);
+			DrawIconFrame (12 + 36 * x, 32 + 47 * y);
 		}
 	}
 
@@ -393,7 +393,7 @@ void CWindowSKILLMENU::GetDrawPos(
 	int &nDstX,		/* [out] XÀ•W */
 	int &nDstY)		/* [out] YÀ•W */
 {
-	nDstX = 10 + 36 * (nPos % 5);
+	nDstX = 13 + 36 * (nPos % 5);
 	nDstY = 33 + 47 * (nPos / 5);
 }
 

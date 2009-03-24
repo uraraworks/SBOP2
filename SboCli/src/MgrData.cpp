@@ -66,6 +66,7 @@ CMgrData::CMgrData()
 	m_nSleepTimer			= 0;
 	m_bEditMapPile			= FALSE;
 	m_bMoveNoBlock			= FALSE;
+	m_bDisableLogin			= FALSE;
 	m_bSavePassword			= FALSE;
 	m_bOptionTaskbar		= FALSE;
 	m_bOptionViewChat		= TRUE;
@@ -277,6 +278,9 @@ void CMgrData::SaveIniData(void)
 	/* パスワードを保存する？ */
 	strTmp.Format ("%d", m_bSavePassword);
 	WritePrivateProfileString ("Setting", "SavePassword", strTmp, szFileName);
+	/* ログイン拒否 */
+	strTmp.Format ("%d", m_bDisableLogin);
+	WritePrivateProfileString ("Setting", "DisableLogin", strTmp, szFileName);
 	/* 発言時にタスクバーチカチカ */
 	strTmp.Format ("%d", m_bOptionTaskbar);
 	WritePrivateProfileString ("Setting", "OptionTaskbar", strTmp, szFileName);
@@ -828,6 +832,8 @@ void CMgrData::ReadIniData(void)
 	m_wServerPort = GetPrivateProfileInt ("Setting", "ServerPort", 2006, szFileName);
 	/* パスワードを保存する？ */
 	m_bSavePassword = (BOOL)GetPrivateProfileInt ("Setting", "SavePassword", 0, szFileName);
+	/* ログイン拒否 */
+	m_bDisableLogin = (BOOL)GetPrivateProfileInt ("Setting", "DisableLogin", 0, szFileName);
 	/* 発言時にタスクバーチカチカ */
 	m_bOptionTaskbar = (BOOL)GetPrivateProfileInt ("Setting", "OptionTaskbar", 0, szFileName);
 	/* 発言を表示する */

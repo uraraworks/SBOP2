@@ -89,6 +89,9 @@
 #define IDC_STATIC_CHARID               1006
 #define IDC_ACCOUNTID                   1006
 #define IDC_SEND2                       1007
+#define IDC_IP                          1007
+#define IDC_SEND3                       1008
+#define IDC_DISABLE                     1008
 #define IDC_LOG                         1010
 #define IDC_COMBO1                      1011
 #define IDC_TYPE                        1011
@@ -245,6 +248,7 @@
 #define IDC_HIDE_MAINFRAME              1093
 #define IDC_STRENGTH                    1093
 #define IDC_DISTANCE                    1093
+#define IDC_MAC                         1093
 #define IDC_MOTIONTYPE                  1094
 #define IDC_MAGIC                       1094
 #define IDC_SPIN_X1                     1095
@@ -296,7 +300,6 @@
 #define IDC_ATTR_LIGHT                  1116
 #define IDC_AREA                        1116
 #define IDC_LOOPSOUND                   1116
-#define IDC_TARGET2                     1116
 #define IDC_EDIT19                      1117
 #define IDC_ATTR_DARK                   1117
 #define IDC_VIEWPOS_X                   1117

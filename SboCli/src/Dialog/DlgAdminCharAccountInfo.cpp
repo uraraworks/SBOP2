@@ -35,12 +35,15 @@ void CDlgAdminCharAccountInfo::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_ACCOUNTID, m_strAccountID);
 	DDX_Text(pDX, IDC_ACCOUNT, m_strAccount);
 	DDX_Text(pDX, IDC_PASSWORD, m_strPassword);
+	DDX_Text(pDX, IDC_IP, m_strIP);
+	DDX_Text(pDX, IDC_MAC, m_strMac);
 	//}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminCharAccountInfo, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminCharAccountInfo)
 	ON_BN_CLICKED(IDC_SEND, OnSend)
+	ON_BN_CLICKED(IDC_DISABLE, OnDisable)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -127,6 +130,8 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 				m_strAccount.	Empty ();
 				m_strPassword.	Empty ();
 				m_strAccountID.	Empty ();
+				m_strIP.		Empty ();
+				m_strMac.		Empty ();
 				if (pInfoChar) {
 					m_dwAccountID = pInfoChar->m_dwAccountID;
 					m_strCharName = pInfoChar->m_strCharName;
@@ -143,12 +148,17 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 		{
 			PBYTE pData;
 			CInfoAccount InfoAccount;
+			IN_ADDR AddrTmp;
 
 			pData = m_pMgrData->GetPtr (dwPara);
 			InfoAccount.SetTmpData (pData);
 			m_dwAccountID	= InfoAccount.m_dwAccountID;
 			m_strAccount	= InfoAccount.m_strAccount;
 			m_strPassword	= InfoAccount.m_strPassword;
+			AddrTmp.S_un.S_addr = InfoAccount.m_dwIP;
+			m_strIP.Format("[%d.%d.%d.%d]",
+					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4);
+			m_strMac		= InfoAccount.m_strLastMacAddr;
 			m_strAccountID.Format ("%d", m_dwAccountID);
 			m_pMgrData->Delete (dwPara);
 			UpdateData (FALSE);
@@ -198,6 +208,33 @@ void CDlgAdminCharAccountInfo::OnSend()
 	InfoAccount.m_strAccount	= m_strAccount;
 	InfoAccount.m_strPassword	= m_strPassword;
 	Packet.Make (&InfoAccount);
+	m_pSock->Send (&Packet);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharAccountInfo::OnDisable							 */
+/* 内容		:ボタンハンドラ(ログイン拒否)									 */
+/* 日付		:2009/03/22														 */
+/* ========================================================================= */
+
+void CDlgAdminCharAccountInfo::OnDisable()
+{
+	int nResult;
+	CPacketADMIN_CHAR_RENEW_ACCOUNT Packet;
+	CInfoAccount InfoAccount;
+
+	nResult = MessageBox ("ログイン拒否しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+	if (nResult != IDYES) {
+		return;
+	}
+
+	UpdateData ();
+
+	InfoAccount.m_dwAccountID	= m_dwAccountID;
+	InfoAccount.m_strAccount	= m_strAccount;
+	InfoAccount.m_strPassword	= m_strPassword;
+	Packet.Make (&InfoAccount, TRUE, m_strMac);
 	m_pSock->Send (&Packet);
 }
 

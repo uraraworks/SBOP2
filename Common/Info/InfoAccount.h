@@ -40,7 +40,9 @@ public:
 
 public:
 	/* 保存しない情報 */
-	DWORD		m_dwLastKeepalive;			/* 最後に受信した生存確認通知の時間 */
+	DWORD		m_dwLastKeepalive,			/* 最後に受信した生存確認通知の時間 */
+				m_dwIP;						/* IPアドレス */
+	CmyString	m_strLastMacAddr;			/* ログイン時のMACアドレス */
 
 	/* 送受信する情報 */
 	DWORD		m_dwAccountID,				/* アカウントID */
@@ -51,6 +53,7 @@ public:
 	ARRAYDWORD	m_adwCharID;				/* キャラIDテーブル */
 
 	/* 送受信せずにサーバー側だけで扱う情報 */
+	BOOL		m_bDisable;					/* ログイン拒否 */
 	int			m_nAdminLevel;				/* 管理者レベル */
 	DWORD		m_dwSessionID;				/* 使用者のセッションID */
 	CmyString	m_strAccount,				/* アカウント */
