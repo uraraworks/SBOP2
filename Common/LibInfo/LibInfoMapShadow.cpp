@@ -247,9 +247,11 @@ void CLibInfoMapShadow::Merge(CLibInfoMapShadow *pSrc)
 		pInfoTmp = (PCInfoMapShadow)GetPtr (pInfoSrc->m_dwShadowID);
 		if (pInfoTmp == NULL) {
 			pInfoTmp = (PCInfoMapShadow)GetNew ();
+			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
+		} else {
+			pInfoTmp->Copy (pInfoSrc);
 		}
-		pInfoTmp->Copy (pInfoSrc);
 	}
 }
 

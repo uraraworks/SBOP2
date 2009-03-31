@@ -229,8 +229,9 @@ void CLibInfoMapParts::Merge(CLibInfoMapParts *pSrc)
 			pInfoTmp = (PCInfoMapParts)GetNew ();
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
+		} else {
+			pInfoTmp->Copy (pInfoSrc);
 		}
-		pInfoTmp->Copy (pInfoSrc);
 	}
 }
 
