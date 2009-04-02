@@ -55,6 +55,7 @@ protected:
 	virtual BOOL OnX		(BOOL bDown);								/* キーハンドラ(X) */
 	virtual BOOL OnZ		(BOOL bDown);								/* キーハンドラ(Z) */
 	virtual BOOL OnI		(BOOL bDown);								/* キーハンドラ(I) */
+	virtual BOOL OnJ		(BOOL bDown);								/* キーハンドラ(J) */
 	virtual BOOL OnEscape	(BOOL bDown);								/* キーハンドラ(Escape) */
 	virtual BOOL OnSpace	(BOOL bDown);								/* キーハンドラ(Space) */
 	void TextOut2			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	/* 黒縁取りで文字描画 */

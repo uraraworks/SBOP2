@@ -59,6 +59,7 @@ void CMgrKeyInput::Create(void)
 		'F',			/* F */
 		'G',			/* G */
 		'H',			/* H */
+		'J',			/* J */
 		'L',			/* L */
 		'C',			/* C */
 		'P',			/* P */

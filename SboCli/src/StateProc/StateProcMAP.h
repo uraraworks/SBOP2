@@ -59,6 +59,7 @@ protected:
 	BOOL	OnN							(BOOL bDown);									/* キーハンドラ(N) */
 	BOOL	OnV							(BOOL bDown);									/* キーハンドラ(V) */
 	BOOL	OnF							(BOOL bDown);									/* キーハンドラ(F) */
+	BOOL	OnJ							(BOOL bDown);									/* キーハンドラ(J) */
 	BOOL	OnL							(BOOL bDown);									/* キーハンドラ(L) */
 	BOOL	OnAt						(BOOL bDown);									/* キーハンドラ(@) */
 	BOOL	OnEnter						(BOOL bDown);									/* キーハンドラ(Enter) */

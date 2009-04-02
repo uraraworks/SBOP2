@@ -30,6 +30,7 @@ public:
 private:
 	BOOL	OnX			(BOOL bDown);						/* キーハンドラ(X) */
 	BOOL	OnZ			(BOOL bDown);						/* キーハンドラ(Z) */
+	BOOL	OnJ			(BOOL bDown);						/* キーハンドラ(J) */
 } CWindowCHAR_STATUS, *PCWindowCHAR_STATUS;
 
 /* Copyright(C)URARA-works 2008 */

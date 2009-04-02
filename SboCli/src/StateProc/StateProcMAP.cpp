@@ -59,6 +59,7 @@
 #include "WindowCOMMANDMENU.h"
 #include "WindowSKILLMENU.h"
 #include "WindowPLACEINFORMATION.h"
+#include "WindowCHAR_STATUS.h"
 #include "WindowCHAR_STATUS4.h"
 #include "DlgMsgLog.h"
 #include "MainFrame.h"
@@ -1644,6 +1645,43 @@ BOOL CStateProcMAP::OnF(BOOL bDown)
 	}
 
 	m_pMgrWindow->MakeWindowSKILLMENU (0);
+	bRet = TRUE;
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::OnJ												 */
+/* 内容		:キーハンドラ(J)												 */
+/* 日付		:2009/04/02														 */
+/* ========================================================================= */
+
+BOOL CStateProcMAP::OnJ(BOOL bDown)
+{
+	BOOL bRet;
+	PCWindowCHAR_STATUS pWnd;
+
+	bRet = FALSE;
+
+	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
+	if (m_pPlayerChar == NULL) {
+		goto Exit;
+	}
+	if (IsKeyInputEnable () == FALSE) {
+		goto Exit;
+	}
+	if (bDown) {
+		goto Exit;
+	}
+	m_dwLastKeyInput = timeGetTime ();
+
+	pWnd = (PCWindowCHAR_STATUS)m_pMgrWindow->GetWindow (WINDOWTYPE_CHAR_STATUS);
+	if (pWnd) {
+		goto Exit;
+	}
+
+	m_pMgrWindow->MakeWindowCHAR_STATUS ();
 	bRet = TRUE;
 Exit:
 	return bRet;

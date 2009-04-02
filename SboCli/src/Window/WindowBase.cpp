@@ -249,6 +249,9 @@ void CWindowBase::KeyProc(
 	} else if (byCode == 'I') {
 		bResult = OnI (bDown);
 
+	} else if (byCode == 'J') {
+		bResult = OnJ (bDown);
+
 	} else if (byCode == VK_ESCAPE) {
 		bResult = OnEscape (bDown);
 
@@ -462,6 +465,18 @@ BOOL CWindowBase::OnZ(BOOL bDown)
 /* ========================================================================= */
 
 BOOL CWindowBase::OnI(BOOL bDown)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::OnJ												 */
+/* 内容		:キーハンドラ(J)												 */
+/* 日付		:2009/04/02														 */
+/* ========================================================================= */
+
+BOOL CWindowBase::OnJ(BOOL bDown)
 {
 	return FALSE;
 }
