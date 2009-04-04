@@ -1169,43 +1169,6 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 
 
 /* ========================================================================= */
-/* 関数名	:CLibInfoCharSvr::GetDistance									 */
-/* 内容		:キャラ座標で距離を取得											 */
-/* 日付		:2009/01/17														 */
-/* ========================================================================= */
-
-void CLibInfoCharSvr::GetDistance(SIZE &sizeDst, CInfoCharSvr *pInfoCharSrc, CInfoCharSvr *pInfoCharDst, BOOL bFrontPos/*FALSE*/)
-{
-	RECT rcSrc, rcDst;
-
-	sizeDst.cx = sizeDst.cy = -1;
-	if (pInfoCharSrc->m_dwMapID != pInfoCharDst->m_dwMapID) {
-		return;
-	}
-	/* 比較元の座標矩形を取得 */
-	pInfoCharSrc->GetPosRect (rcSrc, bFrontPos);
-	/* 比較先の座標矩形を取得 */
-	pInfoCharDst->GetPosRect (rcDst);
-
-	sizeDst.cx = rcSrc.left - rcDst.right;
-	if (pInfoCharSrc->m_nMapX < pInfoCharDst->m_nMapX) {
-		sizeDst.cx = rcDst.left - rcSrc.right;
-
-	} else if (pInfoCharSrc->m_nMapX == pInfoCharDst->m_nMapX) {
-		sizeDst.cx = 0;
-	}
-
-	sizeDst.cy = rcSrc.top - rcDst.bottom;
-	if (pInfoCharSrc->m_nMapY < pInfoCharDst->m_nMapY) {
-		sizeDst.cy = rcDst.top - rcSrc.bottom;
-
-	} else if (pInfoCharSrc->m_nMapY == pInfoCharDst->m_nMapY) {
-		sizeDst.cy = 0;
-	}
-}
-
-
-/* ========================================================================= */
 /* 関数名	:CLibInfoCharSvr::AddNPC										 */
 /* 内容		:NPCの追加														 */
 /* 日付		:2007/09/01														 */

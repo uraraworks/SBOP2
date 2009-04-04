@@ -12,8 +12,8 @@
 /* 定数定義																	 */
 /* ========================================================================= */
 
-#define VERTEXT					"0.038.5"							/* バージョン */
-#define VERSIONVAL				(0x00003804)						/* バージョン番号 */
+#define VERTEXT					"0.038.6"							/* バージョン */
+#define VERSIONVAL				(0x00003806)						/* バージョン番号 */
 #define DLLVER					"1"									/* DLLバージョン */
 #define GRPDATADLLVER			"4"									/* グラフィックデータDLLバージョン */
 

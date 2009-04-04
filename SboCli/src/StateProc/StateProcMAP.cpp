@@ -2152,6 +2152,7 @@ BOOL CStateProcMAP::MoveProc(
 	CPacketCHAR_MOVEPOS Packet;
 	CPacketCHAR_REQ_PUSH PacketREQ_PUSH;
 	CPacketCHAR_STATE PacketSTATE;
+	ARRAYINT anDirection;
 
 	bRet = FALSE;
 	m_bChgScrollMode = FALSE;
@@ -2290,11 +2291,56 @@ BOOL CStateProcMAP::MoveProc(
 		pLayerMap->m_dwMoveWaitOnce = BATTLEMOVEWAIT;
 	}
 
-	/* ‚Ô‚Â‚©‚éH */
-	bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
-	if (bResult) {
-		bRet = TRUE;
-		goto Exit;
+	nTmp = nDirection;
+	switch (nDirection) {
+	case 4:
+		anDirection.Add (0);
+		anDirection.Add (3);
+		break;
+	case 5:
+		anDirection.Add (1);
+		anDirection.Add (3);
+		break;
+	case 6:
+		anDirection.Add (1);
+		anDirection.Add (2);
+		break;
+	case 7:
+		anDirection.Add (0);
+		anDirection.Add (2);
+		break;
+	default:
+		anDirection.Add (nDirection);
+		break;
+	}
+	if (anDirection.GetSize () == 1) {
+		/* ‚Ô‚Â‚©‚éH */
+		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
+		if (bResult) {
+			bRet = TRUE;
+			goto Exit;
+		}
+	} else {
+		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
+		if (bResult) {
+			bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, anDirection[0]);
+			if (bResult == FALSE) {
+				nDirection = anDirection[0];
+			} else {
+				bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, anDirection[1]);
+				if (bResult == FALSE) {
+					nDirection = anDirection[1];
+				} else {
+					bRet = TRUE;
+					goto Exit;
+				}
+			}
+		}
+	}
+	if (nTmp != nDirection) {
+		xx = anPosChangeX[nDirection];
+		yy = anPosChangeY[nDirection];
+		m_pPlayerChar->ChgDirection (nDirection);
 	}
 
 	nState = CHARMOVESTATE_MOVE;

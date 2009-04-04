@@ -397,13 +397,15 @@ void CLibInfoCharBase::SortY(void)
 BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection)
 {
 	BOOL bRet, bResult;
-	int i, nCount;
+	int i, nCount, nDirectionBack;
 	PCInfoCharBase pInfoCharTmp;
 	POINT ptFront;
-	SIZE size;
+	SIZE size, sizeTmp;
 
 	bRet = FALSE;
 
+	nDirectionBack = pChar->m_nDirection;
+	pChar->m_nDirection = nDirection;
 	pChar->GetFrontPos (ptFront, nDirection, TRUE);
 	pChar->GetCharSize (size);
 
@@ -420,7 +422,8 @@ BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection)
 		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 		}
-		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
+		GetDistance (sizeTmp, pChar, pInfoCharTmp, TRUE);
+		if ((sizeTmp.cx < 0) || (sizeTmp.cx + sizeTmp.cy >= 1)) {
 			continue;
 		}
 		if (pInfoCharTmp->m_bBlock == FALSE) {
@@ -429,6 +432,7 @@ BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection)
 		bRet = TRUE;
 		break;
 	}
+	pChar->m_nDirection = nDirectionBack;
 
 	return bRet;
 }
@@ -525,6 +529,45 @@ int CLibInfoCharBase::GetTurnDirection(int nDirection)
 	int anTurnDirection[] = {1, 0, 3, 2, 6, 7, 4, 5};
 
 	return anTurnDirection[nDirection];
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharBase::GetDistance									 */
+/* 内容		:キャラ座標で距離を取得											 */
+/* 日付		:2009/01/17														 */
+/* ========================================================================= */
+
+void CLibInfoCharBase::GetDistance(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, PCInfoCharBase pInfoCharDst, BOOL bFrontPos/*FALSE*/)
+{
+	RECT rcSrc, rcDst;
+
+	sizeDst.cx = sizeDst.cy = -1;
+	if (pInfoCharSrc->m_dwMapID != pInfoCharDst->m_dwMapID) {
+		return;
+	}
+	/* 比較元の座標矩形を取得 */
+	pInfoCharSrc->GetPosRect (rcSrc, bFrontPos);
+	/* 比較先の座標矩形を取得 */
+	pInfoCharDst->GetPosRect (rcDst);
+
+	sizeDst.cx = rcSrc.left - rcDst.right;
+	if (pInfoCharSrc->m_nMapX < pInfoCharDst->m_nMapX) {
+		sizeDst.cx = rcDst.left - rcSrc.right;
+
+	} else if (pInfoCharSrc->m_nMapX == pInfoCharDst->m_nMapX) {
+		sizeDst.cx = 0;
+	}
+	sizeDst.cx = max (sizeDst.cx, 0);
+
+	sizeDst.cy = rcSrc.top - rcDst.bottom;
+	if (pInfoCharSrc->m_nMapY < pInfoCharDst->m_nMapY) {
+		sizeDst.cy = rcDst.top - rcSrc.bottom;
+
+	} else if (pInfoCharSrc->m_nMapY == pInfoCharDst->m_nMapY) {
+		sizeDst.cy = 0;
+	}
+	sizeDst.cy = max (sizeDst.cy, 0);
 }
 
 

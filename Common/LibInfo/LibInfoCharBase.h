@@ -43,6 +43,7 @@ public:
 	BOOL	IsUseName			(LPCSTR pszName);						/* 名前が使用されているかチェック */
 	BOOL	NameCheck			(LPCSTR pszName);						/* 名前に使用できない名前があるかチェック */
 	int		GetTurnDirection	(int nDirection);						/* 逆向きを取得 */
+	void	GetDistance			(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, PCInfoCharBase pInfoCharDst, BOOL bFrontPos = FALSE);/* キャラ座標で距離を取得 */
 
 	BOOL	IsScreenInside	(PCInfoCharBase pCharBase, PCInfoCharBase pCharTarget);	/* 画面内にいるかチェック */
 
