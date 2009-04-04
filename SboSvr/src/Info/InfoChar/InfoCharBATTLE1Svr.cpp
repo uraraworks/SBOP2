@@ -168,10 +168,11 @@ BOOL CInfoCharBATTLE1Svr::ProcSWOON(DWORD dwPara)
 
 BOOL CInfoCharBATTLE1Svr::TimerProcSTAND(DWORD dwTime)
 {
-	int i, nCount, nDirection;
+	int x, y, nDirection;
 	DWORD dwTmp;
 	BOOL bRet, bResult;
 	POINT ptFront;
+	RECT rcMap;
 
 	bRet = FALSE;
 
@@ -197,28 +198,32 @@ BOOL CInfoCharBATTLE1Svr::TimerProcSTAND(DWORD dwTime)
 	nDirection = genrand () % 4;
 	/* 脱出可能かチェック */
 	bResult = FALSE;
-	RenewBlockMapArea (m_nMapX, m_nMapY, nDirection, TRUE);
-
-	/* 進めるかチェック */
-	nCount = m_aposBockMapArea.GetSize ();
-	for (i = 0; i < nCount; i ++) {
-		bResult |= !m_pInfoMap->IsMoveOut (m_aposBockMapArea[i].x, m_aposBockMapArea[i].y, nDirection);
+	GetFrontMapPosRect (rcMap, nDirection);
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			bResult |= !m_pInfoMap->IsMoveOut (x, y, nDirection);
+		}
 	}
 	bResult = !bResult;
 	if (bResult) {
+		/* 進めるかチェック */
 		bResult = FALSE;
-		GetFrontPos (ptFront, nDirection, TRUE);
-		RenewBlockMapArea (ptFront.x, ptFront.y, nDirection);
-		nCount = m_aposBockMapArea.GetSize ();
-		for (i = 0; i < nCount; i ++) {
-			bResult |= !m_pInfoMap->IsMove (m_aposBockMapArea[i].x, m_aposBockMapArea[i].y, nDirection);
+		GetFrontMapPosRect (rcMap, nDirection);
+		for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+			for (x = rcMap.left; x <= rcMap.right; x ++) {
+				bResult |= !m_pInfoMap->IsMove (x, y, nDirection);
+			}
 		}
 		bResult = !bResult;
+		if (rcMap.top < 0) {
+			bResult = FALSE;
+		}
 	}
 
 	/* 進める？ */
 	if (bResult) {
 		m_nDirection = nDirection;
+		GetFrontPos (ptFront, m_nDirection, TRUE);
 		SetPos (ptFront.x, ptFront.y);
 
 		m_bChgPos = TRUE;

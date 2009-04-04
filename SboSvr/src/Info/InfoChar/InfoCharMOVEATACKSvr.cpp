@@ -76,10 +76,11 @@ void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 
 BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 {
-	int i, nCount, nState;
+	int x, y, nState;
 	BOOL bRet, bResult, bDelete;
 	POINT ptFront;
 	DWORD dwTmp;
+	RECT rcMap;
 
 	bRet = CInfoCharBase::TimerProc (dwTime);
 	bDelete = FALSE;
@@ -106,23 +107,26 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 	m_dwLastTimeMove = dwTime;
 	/* 脱出可能かチェック */
 	bResult = FALSE;
-	RenewBlockMapArea (m_nMapX, m_nMapY, m_nDirection, TRUE);
-
-	nCount = m_aposBockMapArea.GetSize ();
-	for (i = 0; i < nCount; i ++) {
-		bResult |= !m_pInfoMap->IsMoveOut (m_aposBockMapArea[i].x, m_aposBockMapArea[i].y, m_nDirection);
+	GetFrontMapPosRect (rcMap, m_nDirection);
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			bResult |= !m_pInfoMap->IsMoveOut (x, y, m_nDirection);
+		}
 	}
 	bResult = !bResult;
 	if (bResult) {
 		/* 進めるかチェック */
 		bResult = FALSE;
-		GetFrontPos (ptFront, m_nDirection, TRUE);
-		RenewBlockMapArea (ptFront.x, ptFront.y, m_nDirection);
-		nCount = m_aposBockMapArea.GetSize ();
-		for (i = 0; i < nCount; i ++) {
-			bResult |= !m_pInfoMap->IsMove (m_aposBockMapArea[i].x, m_aposBockMapArea[i].y, m_nDirection);
+		GetFrontMapPosRect (rcMap, m_nDirection);
+		for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+			for (x = rcMap.left; x <= rcMap.right; x ++) {
+				bResult |= !m_pInfoMap->IsMove (x, y, m_nDirection);
+			}
 		}
 		bResult = !bResult;
+		if (rcMap.top < 0) {
+			bResult = FALSE;
+		}
 	}
 
 	m_nMoveCount ++;
@@ -144,6 +148,7 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 	} else {
 		/* 2回目以降？ */
 		if (m_nMoveCount > 1) {
+			GetFrontPos (ptFront, m_nDirection, TRUE);
 			m_nMapX = ptFront.x;
 			m_nMapY = ptFront.y;
 		}

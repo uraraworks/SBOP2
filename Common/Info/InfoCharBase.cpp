@@ -1332,6 +1332,10 @@ void CInfoCharBase::GetFrontPos(
 	}
 
 	GetPosRect (rcTmp);
+	if (bMove) {
+		rcTmp.right = rcTmp.left;
+		rcTmp.bottom = rcTmp.top;
+	}
 	switch (nDirection) {
 	case 0:
 		ptDst.x = rcTmp.left;
