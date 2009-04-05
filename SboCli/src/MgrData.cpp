@@ -55,6 +55,8 @@ CMgrData::CMgrData()
 	m_dwSelectMapShadowID	= 0;
 	m_dwSetItemID			= 1;
 	m_nOnlineCount			= 0;
+	m_nCharCount			= 0;
+	m_nPing					= 0;
 	m_nAdminLevel			= ADMINLEVEL_NONE;
 	m_nDrawMode				= 1;
 	m_nChatModeBack			= 0;

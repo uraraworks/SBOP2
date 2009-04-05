@@ -16,6 +16,7 @@ class CLibInfoCharCli;
 class CLibInfoMapBase;
 class CLibInfoItem;
 class CDlgMsgLog;
+class CDlgDbg;
 class CAdminWindow;
 
 /* ========================================================================= */
@@ -114,6 +115,7 @@ protected:
 	CLibInfoMapBase	*m_pLibInfoMap;						/* マップ情報ライブラリ */
 	CLibInfoItem	*m_pLibInfoItem;					/* アイテム情報ライブラリ */
 	CDlgMsgLog		*m_pDlgMsgLog;						/* メッセージログウィンドウ */
+	CDlgDbg			*m_pDlgDbg;							/* デバッグウィンドウ */
 } CStateProcMAP, *PCStateProcMAP;
 
 /* Copyright(C)URARA-works 2006 */

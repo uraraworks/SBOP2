@@ -62,6 +62,7 @@
 #include "WindowCHAR_STATUS.h"
 #include "WindowCHAR_STATUS4.h"
 #include "DlgMsgLog.h"
+#include "DlgDbg.h"
 #include "MainFrame.h"
 #include "AdminWindow.h"
 #include "MgrData.h"
@@ -97,6 +98,7 @@ CStateProcMAP::CStateProcMAP()
 	m_pLibInfoMap		= NULL;
 	m_pLibInfoItem		= NULL;
 	m_pDlgMsgLog		= NULL;
+	m_pDlgDbg			= NULL;
 }
 
 
@@ -133,6 +135,8 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 
 	m_pDlgMsgLog = new CDlgMsgLog;
 	m_pDlgMsgLog->Create (pMgrData->GetMainWindow (), m_pMgrData);
+	m_pDlgDbg = new CDlgDbg;
+	m_pDlgDbg->Create (pMgrData->GetMainWindow (), m_pMgrData);
 }
 
 
@@ -227,9 +231,9 @@ BOOL CStateProcMAP::TimerProc(void)
 		CPacketCONNECT_KEEPALIVE Packet;
 
 		/* 生存確認通知を送信 */
-		Packet.Make ();
-		m_pSock->Send (&Packet);
 		m_dwLastTimeKeepAlive = timeGetTime ();
+		Packet.Make (m_dwLastTimeKeepAlive);
+		m_pSock->Send (&Packet);
 	}
 
 	if (m_pPlayerChar) {
@@ -672,11 +676,12 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		break;
 
 	case MAINFRAMEMSG_RENEWCHARCOUNT:	/* キャラ数更新 */
-		m_pDlgMsgLog->SetCharCount (dwParam);
+		m_pMgrData->SetCharCount (dwParam);
+		m_pDlgDbg->Renew();
 		break;
 
 	case MAINFRAMEMSG_RENEWONLINECOUNT:	/* オンライン数更新 */
-		m_pDlgMsgLog->SetOnlineCount (m_pMgrData->GetOnlineCount ());
+		m_pDlgDbg->Renew();
 		break;
 
 	case MAINFRAMEMSG_RENEWSYSTEMMSG:	/* システムメッセージ更新 */
@@ -2404,6 +2409,7 @@ Exit:
 		rcTmp.top	 = pLayerMap->m_nViewY - 2;
 		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * 2) + 2;
 		m_pLibInfoItem->SetArea (m_pPlayerChar->m_dwMapID, &rcTmp);
+		m_pDlgDbg->Renew();
 	}
 
 	return bRet;

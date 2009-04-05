@@ -28,8 +28,6 @@ public:
 	BOOL Create (HWND hWndParent, CMgrData *pMgrData);			/* 作成 */
 	void Add	(LPCSTR pszLog, COLORREF cl);					/* 追加 */
 
-	void SetOnlineCount	(int nCount);							/* オンライン数更新 */
-	void SetCharCount	(int nCount);							/* キャラ数更新 */
 
 
 protected:
@@ -52,8 +50,6 @@ public:
 	void OnCancel () {}
 	//{{AFX_DATA(CDlgMsgLog)
 	enum { IDD = IDD_MSGLOG };
-	CString	m_strOnline;
-	CString	m_strCharCount;
 	CLogViewCtrl m_wndLogViewCtrl;
 	//}}AFX_DATA
 

@@ -3314,6 +3314,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgDbg.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\Dialog\DlgMsgLog.cpp"
 					>
 					<FileConfiguration
@@ -4558,6 +4562,10 @@
 				</File>
 				<File
 					RelativePath=".\src\Dialog\DlgAdminTalkSet.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgDbg.h"
 					>
 				</File>
 				<File

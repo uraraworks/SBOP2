@@ -18,6 +18,7 @@
 
 CPacketCONNECT_KEEPALIVE::CPacketCONNECT_KEEPALIVE()
 {
+	m_dwData = 0;
 }
 
 
@@ -38,20 +39,24 @@ CPacketCONNECT_KEEPALIVE::~CPacketCONNECT_KEEPALIVE()
 /* 日付		:2008/06/21														 */
 /* ========================================================================= */
 
-void CPacketCONNECT_KEEPALIVE::Make(void)
+void CPacketCONNECT_KEEPALIVE::Make(DWORD dwData)
 {
-	PBYTE pData;
+	PBYTE pData, pDataTmp;
 	DWORD dwSize;
 	PPACKETBASE pPacketBase;
 
 	dwSize = sizeof (PACKETBASE);
+	dwSize += sizeof (dwData);
 
-	pData = new BYTE[dwSize];
-	ZeroMemory (pData, dwSize);
+	pData = ZeroNew (dwSize);
 	pPacketBase = (PPACKETBASE)pData;
+	pDataTmp = pData;
 
 	pPacketBase->byCmdMain	= SBOCOMMANDID_MAIN_CONNECT;
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CONNECT_KEEPALIVE;
+
+	pDataTmp = (PBYTE)(pPacketBase + 1);
+	CopyMemoryRenew (pDataTmp, &dwData, sizeof (dwData), pDataTmp);	/* 返信用データ */
 
 	RenewPacket (pData, dwSize);
 }
@@ -69,6 +74,8 @@ PBYTE CPacketCONNECT_KEEPALIVE::Set(PBYTE pPacket)
 
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
+
+	CopyMemoryRenew (&m_dwData, pDataTmp, sizeof (m_dwData), pDataTmp);	/* 返信用データ */
 
 	pRet = pDataTmp;
 	return pRet;

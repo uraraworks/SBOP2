@@ -139,8 +139,6 @@ FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
 BEGIN
     CONTROL         "",IDC_LOG,"LogViewCtrl",WS_VSCROLL | WS_TABSTOP,0,0,242,90
     EDITTEXT        IDC_CHAT,1,92,240,14,ES_AUTOHSCROLL
-    LTEXT           "オンライン：",IDC_ONLINE,2,107,50,8
-    LTEXT           "キャラ数：",IDC_CHARCOUNT,63,107,50,8
     CONTROL         "最前面",IDC_TOPMOST,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,127,106,34,10
     CONTROL         "メインウィンドウ非表示",IDC_HIDE_MAINFRAME,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,166,106,74,10
 END
@@ -1414,6 +1412,18 @@ BEGIN
     EDITTEXT        IDC_DISTANCE,145,50,40,14,ES_AUTOHSCROLL | ES_NUMBER
 END
 
+IDD_DBGDLG DIALOGEX 0, 0, 122, 54
+STYLE DS_SETFONT | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION
+CAPTION "デバッグウィンドウ"
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
+BEGIN
+    LTEXT           "Ping:",IDC_PING,0,19,80,8
+    LTEXT           "座標：",IDC_POS,0,29,80,8
+    LTEXT           "送受信：",IDC_THROWGHPUT,0,39,121,8
+    LTEXT           "オンライン：",IDC_ONLINE,0,0,80,8
+    LTEXT           "キャラ数：",IDC_CHAR,0,10,80,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1720,6 +1730,12 @@ BEGIN
         RIGHTMARGIN, 192
         TOPMARGIN, 2
         BOTTOMMARGIN, 66
+    END
+
+    IDD_DBGDLG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 93
+        BOTTOMMARGIN, 52
     END
 END
 #endif    // APSTUDIO_INVOKED

@@ -75,12 +75,14 @@
 #define IDD_ACCOUNT_ADD                 193
 #define IDD_CHAR_MODIFY_SKILL           194
 #define IDD_CHAR_SKILL_HEAL             195
+#define IDD_DBGDLG                      196
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
 #define IDC_MODIFY                      1001
 #define IDC_CHARCOUNT                   1002
 #define IDC_DELETE                      1002
+#define IDC_CHAR                        1002
 #define IDM_ITEM_LIST                   1003
 #define IDC_COPY                        1003
 #define IDC_CHARNAME                    1004
@@ -90,7 +92,6 @@
 #define IDC_ACCOUNTID                   1006
 #define IDC_SEND2                       1007
 #define IDC_IP                          1007
-#define IDC_SEND3                       1008
 #define IDC_DISABLE                     1008
 #define IDC_LOG                         1010
 #define IDC_COMBO1                      1011
@@ -340,6 +341,10 @@
 #define IDC_ITEM_STA                    1154
 #define IDC_TYPEMAIN                    1155
 #define IDC_SKILL                       1156
+#define IDC_PING                        1158
+#define IDC_POS                         1159
+#define IDC_POS2                        1160
+#define IDC_THROWGHPUT                  1160
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -393,7 +398,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        191
 #define _APS_NEXT_COMMAND_VALUE         32816
-#define _APS_NEXT_CONTROL_VALUE         1158
+#define _APS_NEXT_CONTROL_VALUE         1159
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -90,6 +90,7 @@ private:
 	void	RecvProcCONNECT						(BYTE byCmdSub, PBYTE pData);	/* 接続系 */
 	void	RecvProcCONNECT_RES_LOGIN			(PBYTE pData);					/* ログイン応答 */
 	void	RecvProcCONNECT_RES_PLAY			(PBYTE pData);					/* ゲーム開始応答 */
+	void	RecvProcCONNECT_KEEPALIVE			(PBYTE pData);					/* 生存確認応答 */
 
 	/* 受信処理(MainFrameRecvProcACCOUNT.cpp) */
 	void	RecvProcACCOUNT						(BYTE byCmdSub, PBYTE pData);	/* アカウント系 */

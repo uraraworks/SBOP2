@@ -20,8 +20,12 @@ public:
 			CPacketCONNECT_KEEPALIVE();					/* コンストラクタ */
 	virtual ~CPacketCONNECT_KEEPALIVE();				/* デストラクタ */
 
-	void	Make	(void);										/* パケットを作成 */
+	void	Make	(DWORD dwData);								/* パケットを作成 */
 	PBYTE	Set		(PBYTE pPacket);							/* パケットを設定 */
+
+
+public:
+	DWORD	m_dwData;				/* 返信用データ */
 } CPacketCONNECT_KEEPALIVE, *PCPacketCONNECT_KEEPALIVE;
 
 /* Copyright(C)URARA-works 2008 */

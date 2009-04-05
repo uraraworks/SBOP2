@@ -327,7 +327,9 @@ void CMainFrame::RecvProcCONNECT_KEEPALIVE(PBYTE pData, DWORD dwSessionID)
 {
 	time_t timeTmp;
 	PCInfoAccount pInfoAccount;
+	CPacketCONNECT_KEEPALIVE Packet;
 
+	Packet.Set (pData);
 	pInfoAccount = m_pLibInfoAccount->GetPtrSessionID (dwSessionID);
 	if (pInfoAccount == NULL) {
 		goto Exit;
@@ -335,6 +337,9 @@ void CMainFrame::RecvProcCONNECT_KEEPALIVE(PBYTE pData, DWORD dwSessionID)
 
 	time (&timeTmp);
 	pInfoAccount->m_dwLastKeepalive = (DWORD)timeTmp;
+
+	Packet.Make(Packet.m_dwData);
+	m_pSock->SendTo (dwSessionID, &Packet);
 Exit:
 	return;
 }

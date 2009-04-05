@@ -27,8 +27,9 @@
 void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_CONNECT_RES_LOGIN:	RecvProcCONNECT_RES_LOGIN (pData);	break;	/* ログイン応答 */
-	case SBOCOMMANDID_SUB_CONNECT_RES_PLAY:		RecvProcCONNECT_RES_PLAY (pData);	break;	/* ゲーム開始応答 */
+	case SBOCOMMANDID_SUB_CONNECT_RES_LOGIN:	RecvProcCONNECT_RES_LOGIN	(pData);	break;	/* ログイン応答 */
+	case SBOCOMMANDID_SUB_CONNECT_RES_PLAY:		RecvProcCONNECT_RES_PLAY	(pData);	break;	/* ゲーム開始応答 */
+	case SBOCOMMANDID_SUB_CONNECT_KEEPALIVE:	RecvProcCONNECT_KEEPALIVE	(pData);	break;	/* 生存確認応答 */
 	}
 }
 
@@ -100,6 +101,21 @@ void CMainFrame::RecvProcCONNECT_RES_PLAY(PBYTE pData)
 	}
 
 	ChgGameState (GAMESTATE_MAP);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCONNECT_KEEPALIVE							 */
+/* 内容		:受信処理(生存確認応答)											 */
+/* 日付		:2009/04/05														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCONNECT_KEEPALIVE(PBYTE pData)
+{
+	CPacketCONNECT_KEEPALIVE Packet;
+
+	Packet.Set (pData);
+	m_pMgrData->SetPing (timeGetTime () - Packet.m_dwData);
 }
 
 /* Copyright(C)URARA-works 2006 */

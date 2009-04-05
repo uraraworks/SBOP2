@@ -30,8 +30,6 @@ void CDlgMsgLog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDlgMsgLog)
-	DDX_Text(pDX, IDC_ONLINE, m_strOnline);
-	DDX_Text(pDX, IDC_CHARCOUNT, m_strCharCount);
 	DDX_Control(pDX, IDC_LOG, m_wndLogViewCtrl);
 	//}}AFX_DATA_MAP
 	DDX_Check(pDX, IDC_TOPMOST, m_bTopMost);
@@ -62,8 +60,6 @@ CDlgMsgLog::CDlgMsgLog(CWnd* pParent /*=NULL*/)
 	, m_strChat(_T(""))
 {
 	//{{AFX_DATA_INIT(CDlgMsgLog)
-	m_strOnline = _T("オンライン：");
-	m_strCharCount = _T("キャラ数：");
 	//}}AFX_DATA_INIT
 
 	m_pMgrData			= NULL;
@@ -138,34 +134,6 @@ void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 	m_pLog->Write ("%s", strTmp);
 
 	m_wndLogViewCtrl.AddLine (pszLog, cl, RGB (40, 40, 40));
-}
-
-
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::SetOnlineCount										 */
-/* 内容：	オンライン数更新												 */
-/* 日付：	2007/02/10														 */
-/* ========================================================================= */
-
-void CDlgMsgLog::SetOnlineCount(int nCount)
-{
-	UpdateData ();
-	m_strOnline.Format ("オンライン：%d", nCount);
-	UpdateData (FALSE);
-}
-
-
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::SetCharCount										 */
-/* 内容：	キャラ数更新													 */
-/* 日付：	2007/02/10														 */
-/* ========================================================================= */
-
-void CDlgMsgLog::SetCharCount(int nCount)
-{
-	UpdateData ();
-	m_strCharCount.Format ("キャラ数：%d", nCount);
-	UpdateData (FALSE);
 }
 
 

@@ -752,10 +752,11 @@ void CMainFrame::TimerProcKeepalive(void)
 		/* 1分以上生存確認通知を受けていないので切断する */
 		PostMessage (m_hWnd, WM_DISCONNECT, 0, pInfoChar->m_dwSessionID);
 		dwTmp = dwTimeTmp - pInfoAccount->m_dwTimeLastLogin;
-		m_pLog->Write ("生存確認タイムアウト dwSessionID:%u [ACC:%s][CHAR:%s]",
+		m_pLog->Write ("生存確認タイムアウト dwSessionID:%u [ACC:%s][CHAR:%s][時間:%ds]",
 				pInfoChar->m_dwSessionID,
 				(LPCSTR)pInfoAccount->m_strAccount,
-				(LPCSTR)pInfoChar->m_strCharName);
+				(LPCSTR)pInfoChar->m_strCharName,
+				dwTmp);
 		pInfoAccount->m_dwLastKeepalive = dwTimeTmp;
 	}
 }

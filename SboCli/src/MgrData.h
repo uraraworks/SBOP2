@@ -138,6 +138,10 @@ public:
 
 	void			SetOnlineCount		(int nCount)	{ m_nOnlineCount = nCount;	}	/* オンライン数を設定 */
 	int				GetOnlineCount		(void)			{ return m_nOnlineCount;	}	/* オンライン数を取得 */
+	void			SetCharCount		(int nCount)	{ m_nCharCount = nCount;	}	/* キャラ数を設定 */
+	int				GetCharCount		(void)			{ return m_nCharCount;		}	/* キャラ数を取得 */
+	void			SetPing				(int nPing)		{ m_nPing = nPing;			}	/* サーバーとのパケット往復時間を設定 */
+	int				GetPing				(void)			{ return m_nPing;			}	/* サーバーとのパケット往復時間を取得 */
 	int				GetSEVolume			(void)			{ return m_nSEVolume;		}	/* 効果音量を取得 */
 	void			SetSEVolume			(int nSEVolume);								/* 効果音量を設定 */
 	int				GetBGMVolume		(void)			{ return m_nBGMVolume;		}	/* BGM音量を取得 */
@@ -190,6 +194,8 @@ private:
 	HWND				m_hWndMain,					/* メインウィンドウハンドル */
 						m_hWndAdmin;				/* 管理者ウィンドウのウィンドウハンドル */
 	int					m_nOnlineCount,				/* オンライン数 */
+						m_nCharCount,				/* 処理キャラ数 */
+						m_nPing,					/* サーバーとのパケット往復時間 */
 						m_nAdminLevel,				/* 管理者権限レベル */
 						m_nDrawMode,				/* 描画モード */
 						m_nChatModeBack,			/* 前回のチャット種別 */
