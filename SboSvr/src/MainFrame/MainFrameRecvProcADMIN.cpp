@@ -1357,7 +1357,7 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(dwSessionID);
+	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(pInfoAccount->m_dwSessionID);
 	PacketADMIN_CHAR_RES_ACCOUNT.Make (pInfoAccount, AddrTmp.S_un.S_addr, (LPCSTR)pInfoAccount->m_strLastMacAddr);
 	m_pSock->SendTo (dwSessionID, &PacketADMIN_CHAR_RES_ACCOUNT);
 }
