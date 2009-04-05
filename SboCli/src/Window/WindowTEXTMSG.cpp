@@ -140,7 +140,7 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 			nTmp ++;
 		}
 		if (nTmp > 0) {
-			cx = m_pDibTitle->Width ()  + 16 * 2;
+			cx = m_pDibTitle->Width () + 8 * 2;
 			cy = 16 * (2 + nTmp);
 			x = sizeWindow.cx / 2 - cx / 2;
 			y = (2 - nTmp) * 16;
@@ -390,7 +390,7 @@ void CWindowTEXTMSG::SetName(LPCSTR pszName)
 	m_strName = pszName;
 	nLen = max (m_strName.GetLength (), 6);
 	m_pDibTitle->Destroy ();
-	m_pDibTitle->Create (9 * nLen, 16 * 2);
+	m_pDibTitle->Create (8 * nLen + 8, 16 * 2);
 	RenewTitle ();
 	Redraw ();
 }
