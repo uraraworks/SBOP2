@@ -95,6 +95,7 @@ BOOL CDlgDbg::Create(HWND hWndParent, CMgrData *pMgrData)
 	CDialog::Create (IDD, pWnd);
 
 	ShowWindow (SW_SHOW);
+	pWnd->SetFocus ();
 
 	return TRUE;
 }
