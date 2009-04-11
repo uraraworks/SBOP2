@@ -55,6 +55,7 @@ CMgrData::CMgrData()
 	m_dwSelectMapPartsID	= 0;
 	m_dwSelectMapShadowID	= 0;
 	m_dwSetItemID			= 1;
+	m_dwDrawTime			= 0;
 	m_nOnlineCount			= 0;
 	m_nCharCount			= 0;
 	m_nPing					= 0;

@@ -69,6 +69,8 @@ public:
 	DWORD			GetSetItemID		(void)				{ return m_dwSetItemID;			}	/* 配置するアイテムIDを取得 */
 	void			SetChatModeBack		(int nChatMode)		{ m_nChatModeBack = nChatMode;	}	/* 前回のチャット種別を設定 */
 	int				GetChatModeBack		(void)				{ return m_nChatModeBack;		}	/* 前回のチャット種別を取得 */
+	void			SetDrawTime			(DWORD dwDrawTime)	{ m_dwDrawTime = dwDrawTime;	}	/* 描画時間を設定 */
+	DWORD			GetDrawTime			(void)				{ return m_dwDrawTime;		}	/* 描画時間を取得 */
 
 	void			SetAdminNotifyTypeL		(int nType)		{ m_nAdminNotifyTypeL = nType;	}	/* 管理者ウィンドウへの通知種別(左クリック)を設定 */
 	int				GetAdminNotifyTypeL		(void)			{ return m_nAdminNotifyTypeL;	}	/* 管理者ウィンドウへの通知種別(左クリック)を取得 */
@@ -231,7 +233,8 @@ private:
 	WORD				m_wServerPort;				/* サーバーポート番号 */
 	DWORD				m_dwSelectMapPartsID,		/* 選択中のマップパーツID(マップ編集用) */
 						m_dwSelectMapShadowID,		/* 選択中のマップ影ID(マップ編集用) */
-						m_dwSetItemID;				/* 配置するアイテムID */
+						m_dwSetItemID,				/* 配置するアイテムID */
+						m_dwDrawTime;				/* 描画時間 */
 
 	CInfoCharCli		*m_pPlayerChar;				/* 操作中のキャラ情報 */
 	CInfoMapBase		*m_pMap;					/* 表示中のマップ情報 */

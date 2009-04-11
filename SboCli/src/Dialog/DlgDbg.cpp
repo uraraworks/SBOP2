@@ -163,7 +163,7 @@ void CDlgDbg::OnTimer(UINT nIDEvent)
 
 	m_strOnline.Format("オンライン：%d", m_pMgrData->GetOnlineCount ());
 	m_strCharCount.Format("キャラ数：%d", m_pMgrData->GetCharCount ());
-	m_strPing.Format("Ping：%dms", m_pMgrData->GetPing ());
+	m_strPing.Format("Ping：%dms 描画時間:%4dms", m_pMgrData->GetPing (), m_pMgrData->GetDrawTime ());
 	m_strPos = "座標：";
 	pChar = m_pMgrData->GetPlayerChar ();
 	if (pChar) {

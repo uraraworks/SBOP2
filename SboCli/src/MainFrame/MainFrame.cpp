@@ -866,6 +866,7 @@ void CMainFrame::OnPaint(HWND hWnd)
 	}
 
 	dwTmp = timeGetTime () - dwTmp;
+	m_pMgrData->SetDrawTime (dwTmp);
 	m_dwDrawTime += dwTmp;
 
 	EndPaint (hWnd, &ps);

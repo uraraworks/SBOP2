@@ -1418,7 +1418,7 @@ STYLE DS_SETFONT | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION
 CAPTION "デバッグウィンドウ"
 FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
 BEGIN
-    LTEXT           "Ping:",IDC_PING,0,19,80,8
+    LTEXT           "Ping:",IDC_PING,0,19,121,8
     LTEXT           "座標：",IDC_POS,0,29,80,8
     LTEXT           "送受信：",IDC_THROWGHPUT,0,39,121,8
     LTEXT           "オンライン：",IDC_ONLINE,0,0,80,8
@@ -1757,7 +1757,7 @@ BEGIN
 
     IDD_DBGDLG, DIALOG
     BEGIN
-        RIGHTMARGIN, 93
+        RIGHTMARGIN, 121
         BOTTOMMARGIN, 52
     END
 
