@@ -156,7 +156,7 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 			m_strAccount	= InfoAccount.m_strAccount;
 			m_strPassword	= InfoAccount.m_strPassword;
 			AddrTmp.S_un.S_addr = InfoAccount.m_dwIP;
-			m_strIP.Format("[%d.%d.%d.%d]",
+			m_strIP.Format("%d.%d.%d.%d",
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4);
 			m_strMac		= InfoAccount.m_strLastMacAddr;
 			m_strAccountID.Format ("%d", m_dwAccountID);

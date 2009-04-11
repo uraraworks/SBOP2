@@ -255,6 +255,7 @@
 #define IDC_MAC                         1093
 #define IDC_MOTIONTYPE                  1094
 #define IDC_MAGIC                       1094
+#define IDC_ACCOUNT2                    1094
 #define IDC_SPIN_X1                     1095
 #define IDC_SKILLFUL                    1095
 #define IDC_COLOR                       1095
