@@ -10,6 +10,7 @@
 
 #include "SaveLoadInfoAccount.h"		/* アカウント情報 */
 #include "SaveLoadInfoChar.h"			/* キャラ情報 */
+#include "SaveLoadInfoDisable.h"		/* 拒否情報 */
 #include "SaveLoadInfoMap.h"			/* マップ情報 */
 #include "SaveLoadInfoMapObject.h"		/* マップオブジェクト情報 */
 #include "SaveLoadInfoMapParts.h"		/* マップパーツ情報 */

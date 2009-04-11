@@ -95,6 +95,7 @@ CMainFrame::CMainFrame()
 	m_pMgrKeyInput			= NULL;
 	m_pMgrSound				= NULL;
 	m_pLibInfoChar			= NULL;
+	m_pLibInfoDisable		= NULL;
 	m_pLibInfoMap			= NULL;
 	m_pLibInfoMapObject		= NULL;
 	m_pLibInfoMapParts		= NULL;
@@ -722,6 +723,7 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	m_pMgrKeyInput			= m_pMgrData->GetMgrKeyInput ();
 	m_pMgrSound				= m_pMgrData->GetMgrSound ();
 	m_pLibInfoChar			= m_pMgrData->GetLibInfoChar ();
+	m_pLibInfoDisable		= m_pMgrData->GetLibInfoDisable ();
 	m_pLibInfoMap			= m_pMgrData->GetLibInfoMap ();
 	m_pLibInfoMapObject		= m_pMgrData->GetLibInfoMapObject ();
 	m_pLibInfoMapParts		= m_pMgrData->GetLibInfoMapParts ();

@@ -17,6 +17,7 @@ class CMgrWindow;
 class CMgrKeyInput;
 class CMgrSound;
 class CLibInfoCharCli;
+class CLibInfoDisable;
 class CLibInfoMapBase;
 class CLibInfoMapObject;
 class CLibInfoMapParts;
@@ -162,6 +163,7 @@ private:
 	void	RecvProcADMIN_PLAYSOUND				(PBYTE pData);					/* 効果音の再生 */
 	void	RecvProcADMIN_CHAR_RES_ACCOUNT		(PBYTE pData);					/* アカウント情報応答 */
 	void	RecvProcADMIN_CHAR_RES_ONLINE		(PBYTE pData);					/* オンライン中キャラ一覧応答 */
+	void	RecvProcADMIN_DISABLE_RES_INFO		(PBYTE pData);					/* 拒否情報応答 */
 
 	/* 受信処理(MainFrameRecvProcEFFECT.cpp) */
 	void	RecvProcEFFECT						(BYTE byCmdSub, PBYTE pData);	/* エフェクト系 */
@@ -200,6 +202,7 @@ private:
 	CMgrKeyInput		*m_pMgrKeyInput;		/* キー入力マネージャ */
 	CMgrSound			*m_pMgrSound;			/* サウンド管理 */
 	CLibInfoCharCli		*m_pLibInfoChar;		/* キャラ情報ライブラリ */
+	CLibInfoDisable		*m_pLibInfoDisable;		/* 拒否情報ライブラリ */
 	CLibInfoMapBase		*m_pLibInfoMap;			/* マップ情報ライブラリ */
 	CLibInfoMapObject	*m_pLibInfoMapObject;	/* マップオブジェクト情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;	/* マップパーツ情報ライブラリ */

@@ -15,6 +15,7 @@
 #include "LibInfoMapObjectData.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
+#include "LibInfoDisable.h"
 #include "LibInfoAccount.h"
 #include "LibInfoItem.h"
 #include "LibInfoItemWeapon.h"
@@ -101,6 +102,9 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO:		RecvProcADMIN_SYSTEM_RENEWINFO		(pData, dwSessionID);	break;	/* システム情報の更新 */
 	case SBOCOMMANDID_SUB_ADMIN_SKILL_RENEWSKILL:		RecvProcADMIN_SKILL_RENEWSKILL		(pData, dwSessionID);	break;	/* スキル情報更新 */
 	case SBOCOMMANDID_SUB_ADMIN_ACCOUNT_REQ_ADD:		RecvProcADMIN_ACCOUNT_REQ_ADD		(pData, dwSessionID);	break;	/* アカウントの追加要求 */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_INFO:		RecvProcADMIN_DISABLE_REQ_INFO		(pData, dwSessionID);	break;	/* 拒否情報要求 */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_DELETE:		RecvProcADMIN_DISABLE_REQ_DELETE	(pData, dwSessionID);	break;	/* 拒否情報の削除要求 */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_RENEWINFO:		RecvProcADMIN_DISABLE_RENEWINFO		(pData, dwSessionID);	break;	/* 拒否情報の更新 */
 	}
 }
 
@@ -1563,6 +1567,61 @@ void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
 
 	PacketMAP_SYSTEMMSG.Make ((LPCSTR)strTmp, RGB (255, 255,255), TRUE, SYSTEMMSGTYPE_NOLOG);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_DISABLE_REQ_INFO						 */
+/* 内容		:受信処理(拒否情報要求)											 */
+/* 日付		:2009/04/11														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_DISABLE_REQ_INFO(PBYTE pData, DWORD dwSessionID)
+{
+	CPacketADMIN_PARA2 Packet;
+	CPacketADMIN_DISABLE_RES_INFO PacketADMIN_DISABLE_RES_INFO;
+
+	Packet.Set (pData);
+	PacketADMIN_DISABLE_RES_INFO.Make (m_pLibInfoDisable);
+	m_pSock->SendTo (dwSessionID, &PacketADMIN_DISABLE_RES_INFO);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_DISABLE_REQ_DELETE					 */
+/* 内容		:受信処理(拒否情報の削除要求)									 */
+/* 日付		:2009/04/11														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_DISABLE_REQ_DELETE(PBYTE pData, DWORD dwSessionID)
+{
+	CPacketADMIN_PARA2 Packet;
+	CPacketADMIN_DISABLE_RES_INFO PacketADMIN_DISABLE_RES_INFO;
+
+	Packet.Set (pData);
+	m_pLibInfoDisable->Delete (Packet.m_dwPara1);
+
+	PacketADMIN_DISABLE_RES_INFO.Make (m_pLibInfoDisable);
+	SendToAdminChar (&PacketADMIN_DISABLE_RES_INFO);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_DISABLE_RENEWINFO					 */
+/* 内容		:受信処理(拒否情報の更新)										 */
+/* 日付		:2009/04/11														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_DISABLE_RENEWINFO(PBYTE pData, DWORD dwSessionID)
+{
+	CPacketADMIN_DISABLE_RENEWINFO Packet;
+	CPacketADMIN_DISABLE_RES_INFO PacketADMIN_DISABLE_RES_INFO;
+
+	Packet.Set (pData);
+	m_pLibInfoDisable->Merge (Packet.m_pLibInfoDisable);
+
+	PacketADMIN_DISABLE_RES_INFO.Make (m_pLibInfoDisable);
+	SendToAdminChar (&PacketADMIN_DISABLE_RES_INFO);
 }
 
 /* Copyright(C)URARA-works 2007 */

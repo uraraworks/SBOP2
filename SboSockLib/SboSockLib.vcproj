@@ -523,6 +523,14 @@
 							</FileConfiguration>
 						</File>
 						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RENEWINFO.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RES_INFO.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWBALLOON.cpp"
 							>
 							<FileConfiguration
@@ -3181,6 +3189,14 @@
 						</File>
 						<File
 							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RENEWINFO.h"
+							>
+						</File>
+						<File
+							RelativePath="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RES_INFO.h"
 							>
 						</File>
 						<File

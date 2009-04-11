@@ -23,6 +23,7 @@
 #include "DlgAdminCharMotionTypeList.h"
 #include "DlgAdminCharAccountInfo.h"
 #include "DlgAdminCharSkillList.h"
+#include "DlgAdminCharDisable.h"
 #include "DlgAdminMapInfo.h"
 #include "DlgAdminMapEvent.h"
 #include "DlgAdminMapParts.h"
@@ -77,6 +78,7 @@ BEGIN_MESSAGE_MAP(CAdminWindow, CWnd)
 	ON_COMMAND(IDM_CHAR_MOTION, OnCharMotion)
 	ON_COMMAND(IDM_CHAR_ACCOUNTINFO, OnCharAccountInfo)
 	ON_COMMAND(IDM_CHAR_SKILL, OnCharSkill)
+	ON_COMMAND(IDM_CHAR_DISABLE, OnCharDisable)
 	ON_COMMAND(IDM_ITEMTYPE_LIST, OnItemTypeList)
 	ON_COMMAND(IDM_ITEM_LIST, OnItemList)
 	ON_COMMAND(IDM_ITEM_WEAPONLIST, OnItemWeaponList)
@@ -278,6 +280,9 @@ void CAdminWindow::ChgScreen(int nScrID)
 		break;
 	case SCRIDADMIN_CHAR_SKILL:					/* スキルの編集 */
 		m_pDlgBase = new CDlgAdminCharSkillList(this);
+		break;
+	case SCRIDADMIN_CHAR_DISABLE:				/* 拒否 */
+		m_pDlgBase = new CDlgAdminCharDisable(this);
 		break;
 	case SCRIDADMIN_MAP_INFO:					/* マップ情報の編集 */
 		m_pDlgBase = new CDlgAdminMapInfo(this);
@@ -733,6 +738,18 @@ void CAdminWindow::OnCharAccountInfo()
 void CAdminWindow::OnCharSkill()
 {
 	ChgScreen (SCRIDADMIN_CHAR_SKILL);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CAdminWindow::OnCharDisable									 */
+/* 内容		:メニューハンドラ(拒否)											 */
+/* 日付		:2009/04/06														 */
+/* ========================================================================= */
+
+void CAdminWindow::OnCharDisable()
+{
+	ChgScreen (SCRIDADMIN_CHAR_DISABLE);
 }
 
 

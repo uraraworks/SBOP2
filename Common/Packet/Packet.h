@@ -118,6 +118,8 @@
 #include "ADMIN/PacketADMIN_PARA2.h"					/* 			汎用[パラメータ2個] */
 #include "ADMIN/PacketADMIN_SYSTEM_RENEWINFO.h"			/* 			システム情報の更新 */
 #include "ADMIN/PacketADMIN_ACCOUNT_REQ_ADD.h"			/* 			アカウントの追加要求 */
+#include "ADMIN/PacketADMIN_DISABLE_RENEWINFO.h"		/* 			拒否情報の更新 */
+#include "ADMIN/PacketADMIN_DISABLE_RES_INFO.h"			/* 			拒否情報応答 */
 #include "MSGCMD/PacketMSGCMD_CHGFACE.h"				/* メッセージコマンド系:表情変更 */
 #include "MSGCMD/PacketMSGCMD_CHGCLOTH.h"				/*						服装変更 */
 #include "MSGCMD/PacketMSGCMD_CHGACCE.h"				/*						アクセサリ変更 */

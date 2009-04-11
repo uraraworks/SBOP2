@@ -90,6 +90,7 @@ BEGIN
         MENUITEM "モーションの編集(&M)",                IDM_CHAR_MOTION
         MENUITEM "アカウント情報の編集(&C)",              IDM_CHAR_ACCOUNTINFO
         MENUITEM "スキルの編集(&K)",                  IDM_CHAR_SKILL
+        MENUITEM "拒否(&D)",                      IDM_CHAR_DISABLE
     END
     POPUP "アイテム(&I)"
     BEGIN
@@ -1424,6 +1425,28 @@ BEGIN
     LTEXT           "キャラ数：",IDC_CHAR,0,10,80,8
 END
 
+IDD_CHAR_DISABLE DIALOGEX 0, 0, 223, 214
+STYLE DS_SETFONT | WS_CHILD
+EXSTYLE WS_EX_STATICEDGE
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
+BEGIN
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | WS_BORDER | WS_TABSTOP,7,24,208,176
+    PUSHBUTTON      "更新",IDC_RENEW,7,4,50,14
+    PUSHBUTTON      "追加",IDC_ADD,110,4,50,14
+    PUSHBUTTON      "削除",IDC_DELETE,163,4,50,14
+END
+
+IDD_CHAR_DISABLE_NEW DIALOGEX 0, 0, 197, 57
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "拒否MACアドレスの追加"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "拒否するMACアドレス：",IDC_STATIC,7,7,72,8
+    EDITTEXT        IDC_MACADDRESS,7,17,100,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,86,36,50,14
+    PUSHBUTTON      "キャンセル",IDCANCEL,140,36,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1736,6 +1759,14 @@ BEGIN
     BEGIN
         RIGHTMARGIN, 93
         BOTTOMMARGIN, 52
+    END
+
+    IDD_CHAR_DISABLE_NEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 190
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 50
     END
 END
 #endif    // APSTUDIO_INVOKED

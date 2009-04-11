@@ -13,6 +13,7 @@ class CUraraSockTCPSBO;
 class CTextOutput;
 class CLibInfoAccount;
 class CLibInfoCharSvr;
+class CLibInfoDisable;
 class CLibInfoMapBase;
 class CLibInfoMapObject;
 class CLibInfoMapParts;
@@ -65,6 +66,7 @@ public:
 	CTextOutput			*GetLog					(void)	{ return m_pLog;				}	/* ログクラスを取得 */
 	CLibInfoAccount		*GetLibInfoAccount		(void)	{ return m_pLibInfoAccount;		}	/* アカウント情報ライブラリを取得 */
 	CLibInfoCharSvr		*GetLibInfoChar			(void)	{ return m_pLibInfoChar;		}	/* キャラ情報ライブラリを取得 */
+	CLibInfoDisable		*GetLibInfoDisable		(void)	{ return m_pLibInfoDisable;		}	/* 拒否情報ライブラリを取得 */
 	CLibInfoMapBase		*GetLibInfoMap			(void)	{ return m_pLibInfoMap;			}	/* マップ情報ライブラリを取得 */
 	CLibInfoMapObject	*GetLibInfoMapObject	(void)	{ return m_pLibInfoMapObject;	}	/* マップオブジェクト情報ライブラリを取得 */
 	CLibInfoMapParts	*GetLibInfoMapParts		(void)	{ return m_pLibInfoMapParts;	}	/* マップパーツ情報ライブラリを取得 */
@@ -103,6 +105,7 @@ private:
 
 	CLibInfoAccount		*m_pLibInfoAccount;		/* アカウント情報ライブラリ */
 	CLibInfoCharSvr		*m_pLibInfoChar;		/* キャラ情報ライブラリ */
+	CLibInfoDisable		*m_pLibInfoDisable;		/* 拒否情報ライブラリ */
 	CLibInfoMapBase		*m_pLibInfoMap;			/* マップ情報ライブラリ */
 	CLibInfoMapObject	*m_pLibInfoMapObject;	/* マップオブジェクト情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;	/* マップパーツ情報ライブラリ */

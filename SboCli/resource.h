@@ -76,6 +76,8 @@
 #define IDD_CHAR_MODIFY_SKILL           194
 #define IDD_CHAR_SKILL_HEAL             195
 #define IDD_DBGDLG                      196
+#define IDD_CHAR_DISABLE                197
+#define IDD_CHAR_DISABLE_NEW            198
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -240,6 +242,7 @@
 #define IDC_DELAVERAGE                  1091
 #define IDC_STAMINA                     1091
 #define IDC_VALUE1                      1091
+#define IDC_MACADDRESS                  1091
 #define IDC_PASSWORD                    1092
 #define IDC_RENEW_CLIENTVERSION         1092
 #define IDC_EDIT2                       1092
@@ -343,7 +346,6 @@
 #define IDC_SKILL                       1156
 #define IDC_PING                        1158
 #define IDC_POS                         1159
-#define IDC_POS2                        1160
 #define IDC_THROWGHPUT                  1160
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
@@ -391,13 +393,15 @@
 #define IDM_ACCOUNT_ADD                 32813
 #define ID_32814                        32814
 #define IDM_CHAR_MODIFY_SKILL           32815
+#define ID_32816                        32816
+#define IDM_CHAR_DISABLE                32817
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        191
-#define _APS_NEXT_COMMAND_VALUE         32816
+#define _APS_NEXT_RESOURCE_VALUE        199
+#define _APS_NEXT_COMMAND_VALUE         32818
 #define _APS_NEXT_CONTROL_VALUE         1159
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

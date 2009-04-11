@@ -81,7 +81,6 @@ void CWindowSKILLMENU::Create(CMgrData *pMgrData)
 
 void CWindowSKILLMENU::Draw(PCImg32 pDst)
 {
-	BOOL bActive;
 	LPCSTR aszTitle[] = {"äÓñ{(K)", "êÌì¨(F)", "ê∂äà(L)", "î\óÕ"};
 	int i, nCount, nLevel, x, y;
 	HDC hDC;

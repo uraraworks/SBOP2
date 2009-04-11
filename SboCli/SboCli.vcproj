@@ -625,6 +625,10 @@
 						</FileConfiguration>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoDisable.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoEfcBalloon.cpp"
 						>
 						<FileConfiguration
@@ -1109,6 +1113,10 @@
 								PreprocessorDefinitions=""
 							/>
 						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoDisable.cpp"
+						>
 					</File>
 					<File
 						RelativePath="..\Common\LibInfo\LibInfoEfcBalloon.cpp"
@@ -2732,6 +2740,14 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminCharDisable.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminCharDisableNew.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminCharList.cpp"
 					>
 				</File>
@@ -3724,6 +3740,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoDisable.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoEfcBalloon.h"
 						>
 					</File>
@@ -3905,6 +3925,10 @@
 					</File>
 					<File
 						RelativePath="..\common\LibInfo\LibInfoCharBase.h"
+						>
+					</File>
+					<File
+						RelativePath="..\Common\LibInfo\LibInfoDisable.h"
 						>
 					</File>
 					<File
@@ -4322,6 +4346,14 @@
 				</File>
 				<File
 					RelativePath="src\Dialog\DlgAdminCharAdmin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminCharDisable.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminCharDisableNew.h"
 					>
 				</File>
 				<File

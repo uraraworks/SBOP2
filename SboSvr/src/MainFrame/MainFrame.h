@@ -15,6 +15,7 @@ class CTextOutput;
 class CUpdateServerInfo;
 class CLibInfoAccount;
 class CLibInfoCharSvr;
+class CLibInfoDisable;
 class CLibInfoMapBase;
 class CLibInfoMapObject;
 class CLibInfoMapParts;
@@ -173,6 +174,9 @@ private:
 	void	RecvProcADMIN_SYSTEM_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* システム情報の更新 */
 	void	RecvProcADMIN_SKILL_RENEWSKILL		(PBYTE pData, DWORD dwSessionID);					/* スキル情報更新 */
 	void	RecvProcADMIN_ACCOUNT_REQ_ADD		(PBYTE pData, DWORD dwSessionID);					/* アカウントの追加要求 */
+	void	RecvProcADMIN_DISABLE_REQ_INFO		(PBYTE pData, DWORD dwSessionID);					/* 拒否情報要求 */
+	void	RecvProcADMIN_DISABLE_REQ_DELETE	(PBYTE pData, DWORD dwSessionID);					/* 拒否情報の削除要求 */
+	void	RecvProcADMIN_DISABLE_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* 拒否情報の更新 */
 
 	/* 受信処理(MainFrameRecvProcMSGCMD.cpp) */
 	void	RecvProcMSGCMD						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* メッセージコマンド系 */
@@ -214,6 +218,7 @@ private:
 
 	CLibInfoAccount		*m_pLibInfoAccount;				/* アカウント情報ライブラリ */
 	CLibInfoCharSvr		*m_pLibInfoChar;				/* キャラ情報ライブラリ */
+	CLibInfoDisable		*m_pLibInfoDisable;				/* 拒否情報ライブラリ */
 	CLibInfoMapBase		*m_pLibInfoMap;					/* マップ情報ライブラリ */
 	CLibInfoMapObject	*m_pLibInfoMapObject;			/* マップオブジェクト情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;			/* マップパーツ情報ライブラリ */

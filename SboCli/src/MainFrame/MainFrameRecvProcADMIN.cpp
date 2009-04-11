@@ -11,6 +11,7 @@
 #include "Command.h"
 #include "Packet.h"
 #include "LibInfoCharCli.h"
+#include "LibInfoDisable.h"
 #include "InfoAccount.h"
 #include "MgrData.h"
 #include "MgrWindow.h"
@@ -32,6 +33,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData)
 	case SBOCOMMANDID_SUB_ADMIN_PLAYSOUND:			RecvProcADMIN_PLAYSOUND			(pData);	break;	/* 効果音の再生 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ACCOUNT:	RecvProcADMIN_CHAR_RES_ACCOUNT	(pData);	break;	/* アカウント情報応答 */
 	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ONLINE:	RecvProcADMIN_CHAR_RES_ONLINE	(pData);	break;	/* オンライン中キャラ一覧応答 */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_RES_INFO:	RecvProcADMIN_DISABLE_RES_INFO	(pData);	break;	/* 拒否情報応答 */
 	}
 }
 
@@ -136,6 +138,23 @@ void CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE(PBYTE pData)
 	SAFE_DELETE_ARRAY (pTmp);
 
 	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_CHAR_ONLINE, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcADMIN_DISABLE_RES_INFO						 */
+/* 内容		:受信処理(拒否情報応答)											 */
+/* 日付		:2009/04/11														 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcADMIN_DISABLE_RES_INFO(PBYTE pData)
+{
+	CPacketADMIN_DISABLE_RES_INFO Packet;
+
+	Packet.Set (pData);
+	m_pLibInfoDisable->CopyAll (Packet.m_pLibInfoDisable);
+
+	PostMessage (m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWDISABLE, 0);
 }
 
 /* Copyright(C)URARA-works 2006 */

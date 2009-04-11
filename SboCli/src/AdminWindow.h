@@ -39,6 +39,7 @@ enum {
 	SCRIDADMIN_CHAR_MOTION,					/* モーションの編集 */
 	SCRIDADMIN_CHAR_ACCOUNTINFO,			/* アカウント情報の編集 */
 	SCRIDADMIN_CHAR_SKILL,					/* スキルの編集 */
+	SCRIDADMIN_CHAR_DISABLE,				/* 拒否 */
 	SCRIDADMIN_ITEMTYPE_LIST,				/* アイテム種別一覧 */
 	SCRIDADMIN_ITEM_LIST,					/* アイテム一覧 */
 	SCRIDADMIN_ITEM_WEAPONLIST,				/* 武器情報一覧 */
@@ -122,6 +123,7 @@ protected:
 	afx_msg void OnCharMotion();
 	afx_msg void OnCharAccountInfo();
 	afx_msg void OnCharSkill();
+	afx_msg void OnCharDisable();
 	afx_msg void OnItemTypeList();
 	afx_msg void OnItemList();
 	afx_msg void OnItemWeaponList();

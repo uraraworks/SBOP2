@@ -92,6 +92,7 @@ enum {
 	ADMINMSG_RENEWMAPPARTS,								/* マップパーツ情報更新 */
 	ADMINMSG_RENEWMAPSHADOW,							/* マップ影情報更新 */
 	ADMINMSG_RENEWTALKEVENT,							/* 会話イベント情報更新 */
+	ADMINMSG_RENEWDISABLE,								/* 拒否情報更新 */
 	ADMINMSG_ADMINLEVEL,								/* 管理者レベル通知 */
 	ADMINMSG_SELECT_ANIME,								/* アニメーションコマ選択 */
 	ADMINMSG_ACCOUNTINFO,								/* アカウント情報取得 */

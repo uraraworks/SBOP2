@@ -17,6 +17,7 @@
 #include "LibInfoAccount.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoCharSvr.h"
+#include "LibInfoDisable.h"
 #include "TextOutput.h"
 #include "InfoCharSvr.h"
 #include "MgrData.h"
@@ -48,6 +49,7 @@ CMainFrame::CMainFrame()
 	m_hWnd					= NULL;
 	m_pLibInfoAccount		= NULL;
 	m_pLibInfoChar			= NULL;
+	m_pLibInfoDisable		= NULL;
 	m_pLibInfoMap			= NULL;
 	m_pLibInfoMapObject		= NULL;
 	m_pLibInfoMapParts		= NULL;
@@ -399,6 +401,7 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	m_pLibInfoMapParts		= m_pMgrData->GetLibInfoMapParts ();
 	m_pLibInfoMapShadow		= m_pMgrData->GetLibInfoMapShadow ();
 	m_pLibInfoChar			= m_pMgrData->GetLibInfoChar ();
+	m_pLibInfoDisable		= m_pMgrData->GetLibInfoDisable ();
 	m_pLibInfoItemType		= m_pMgrData->GetLibInfoItemType ();
 	m_pLibInfoItem			= m_pMgrData->GetLibInfoItem ();
 	m_pLibInfoItemWeapon	= m_pMgrData->GetLibInfoItemWeapon ();
@@ -547,14 +550,6 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 					strTmp.Format ("SYSTEM:サーバーが%d時頃をお知らせします", (BYTE)sysTime.wHour);
 					Packet.Make (strTmp);
 					m_pSock->SendTo (0, &Packet);
-#if 0
-					if (g_dwOnline > g_dwOnlineBack[sysTime.wHour]) {
-						g_dwOnlineBack[sysTime.wHour] = g_dwOnline;
-						if (g_dwOnline > g_dwOnlineBackMax[sysTime.wHour]) {
-							g_dwOnlineBackMax[sysTime.wHour] = g_dwOnline;
-						}
-					}
-#endif
 				}
 			}
 			InvalidateRect (hWnd, NULL, TRUE);
@@ -636,8 +631,6 @@ void CMainFrame::OnDecClient(DWORD dwSessionID)
 	if (pChar == NULL) {
 		if (pInfoAccount) {
 			m_pLog->Write ("ログアウト dwSessionID:%u [%s]", dwSessionID, (LPCSTR)pInfoAccount->m_strAccount);
-		} else {
-			m_pLog->Write ("ログアウト dwSessionID:%u", dwSessionID);
 		}
 		return;
 	}
@@ -706,7 +699,8 @@ void CMainFrame::OnDisconnect(DWORD dwSessionID)
 
 void CMainFrame::TimerProc(void)
 {
-	m_pLibInfoChar->Proc ();
+	m_pLibInfoChar->	Proc ();
+	m_pLibInfoDisable->	Proc ();
 	TimerProcKeepalive ();
 
 	MsgWaitForMultipleObjects (0, NULL, FALSE, 1, QS_ALLINPUT);

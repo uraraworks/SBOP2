@@ -23,6 +23,7 @@ class CInfoMapBase;
 class CInfoAccount;
 class CInfoTalkEvent;
 class CLibInfoCharCli;
+class CLibInfoDisable;
 class CLibInfoMapBase;
 class CLibInfoMapObject;
 class CLibInfoMapParts;
@@ -168,6 +169,7 @@ public:
 	CMgrKeyInput	*GetMgrKeyInput		(void)	{ return m_pMgrKeyInput;	}		/* キー入力管理を取得 */
 
 	CLibInfoCharCli		*GetLibInfoChar			(void)	{ return m_pLibInfoChar;		}	/* キャラ情報ライブラリを取得 */
+	CLibInfoDisable		*GetLibInfoDisable		(void)	{ return m_pLibInfoDisable;		}	/* 拒否情報ライブラリを取得 */
 	CLibInfoMapBase		*GetLibInfoMap			(void)	{ return m_pLibInfoMap;			}	/* マップ情報ライブラリを取得 */
 	CLibInfoMapObject	*GetLibInfoMapObject	(void)	{ return m_pLibInfoMapObject;	}	/* マップオブジェクト情報ライブラリを取得 */
 	CLibInfoMapParts	*GetLibInfoMapParts		(void)	{ return m_pLibInfoMapParts;	}	/* マップパーツ情報ライブラリを取得 */
@@ -246,6 +248,7 @@ private:
 	CMgrKeyInput		*m_pMgrKeyInput;			/* キー入力管理 */
 
 	CLibInfoCharCli		*m_pLibInfoChar;			/* キャラ情報ライブラリ */
+	CLibInfoDisable		*m_pLibInfoDisable;			/* 拒否情報ライブラリ */
 	CLibInfoMapBase		*m_pLibInfoMap;				/* マップ情報ライブラリ */
 	CLibInfoMapObject	*m_pLibInfoMapObject;		/* マップオブジェクト情報ライブラリ */
 	CLibInfoMapParts	*m_pLibInfoMapParts;		/* マップパーツ情報ライブラリ */

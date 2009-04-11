@@ -11,14 +11,13 @@
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "Packet.h"
-#include "LibInfoAccount.h"
-#include "InfoAccount.h"
-#include "InfoMapBase.h"
-#include "LibInfoSystem.h"
-#include "TextOutput.h"
-#include "LibInfoMapBase.h"
 #include "InfoCharSvr.h"
+#include "LibInfoAccount.h"
+#include "LibInfoDisable.h"
+#include "LibInfoSystem.h"
+#include "LibInfoMapBase.h"
 #include "LibInfoCharSvr.h"
+#include "TextOutput.h"
 #include "MgrData.h"
 #include "MainFrame.h"
 
@@ -48,7 +47,7 @@ void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 {
 	int nResult;
-	BOOL bResult;
+	BOOL bResult, bDisable;
 	PCInfoAccount pInfoAccount;
 	CPacketCONNECT_REQ_LOGIN Packet;
 	CPacketCONNECT_RES_LOGIN PacketRes;
@@ -66,6 +65,13 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 		"%02X-%02X-%02X-%02X-%02X-%02X",
 		Packet.m_byMacAddr[0], Packet.m_byMacAddr[1], Packet.m_byMacAddr[2],
 		Packet.m_byMacAddr[3], Packet.m_byMacAddr[4], Packet.m_byMacAddr[5]);
+	/* 拒否されているか判定 */
+	bDisable = m_pLibInfoDisable->IsDisable ((LPCSTR)strTmp);
+	if (strTmp == "00-00-00-00-00-00") {
+		bDisable = TRUE;
+	}
+	/* IPアドレスで拒否しているか判定 */
+	bDisable |= m_pLibInfoDisable->IsDisableIP (AddrTmp.S_un.S_addr);
 
 	/* 登録済み？ */
 	if (pInfoAccount) {
@@ -98,13 +104,15 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 
 	if (nResult == LOGINRES_OK) {
 		/* 拒否？ */
-		if (pInfoAccount->m_bDisable) {
+		if (bDisable || pInfoAccount->m_bDisable) {
 			nResult = LOGINRES_NG_DISABLE;
 			m_pLog->Write ("ログイン拒否 dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
 					(LPCSTR)strTmp,
 					(LPCSTR)pInfoAccount->m_strAccount);
+			/* IPアドレスで拒否しておく */
+			m_pLibInfoDisable->AddIP (AddrTmp.S_un.S_addr);
 		/* 使用中？ */
 		} else if (pInfoAccount->m_dwSessionID != 0) {
 			nResult = LOGINRES_NG_LOGIN;

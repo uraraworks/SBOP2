@@ -452,6 +452,10 @@
 						</FileConfiguration>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoDisable.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoEfcBalloon.cpp"
 						>
 						<FileConfiguration
@@ -953,6 +957,10 @@
 						</FileConfiguration>
 					</File>
 					<File
+						RelativePath="..\Common\LibInfo\LibInfoDisable.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\LibInfo\LibInfoEfcBalloon.cpp"
 						>
 						<FileConfiguration
@@ -1346,6 +1354,10 @@
 							PreprocessorDefinitions=""
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\src\SaveLoad\SaveLoadInfoDisable.cpp"
+					>
 				</File>
 				<File
 					RelativePath="src\SaveLoad\SaveLoadInfoEfcBalloon.cpp"
@@ -1858,6 +1870,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\Info\InfoDisable.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\Info\InfoEfcBalloon.h"
 						>
 					</File>
@@ -2038,6 +2054,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\Common\LibInfo\LibInfoDisable.h"
+						>
+					</File>
+					<File
 						RelativePath="..\Common\LibInfo\LibInfoEfcBalloon.h"
 						>
 					</File>
@@ -2164,6 +2184,10 @@
 				</File>
 				<File
 					RelativePath="src\SaveLoad\SaveLoadInfoChar.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\SaveLoad\SaveLoadInfoDisable.h"
 					>
 				</File>
 				<File

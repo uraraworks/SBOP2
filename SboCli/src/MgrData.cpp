@@ -15,6 +15,7 @@
 #include "LibInfoMapObject.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
+#include "LibInfoDisable.h"
 #include "LibInfoItem.h"
 #include "LibInfoItemType.h"
 #include "LibInfoItemWeapon.h"
@@ -92,6 +93,7 @@ CMgrData::CMgrData()
 	m_pMgrWindow			= NULL;
 	m_pMgrKeyInput			= NULL;
 	m_pLibInfoChar			= NULL;
+	m_pLibInfoDisable		= NULL;
 	m_pLibInfoMap			= NULL;
 	m_pLibInfoMapObject		= NULL;
 	m_pLibInfoMapParts		= NULL;
@@ -135,6 +137,7 @@ CMgrData::~CMgrData()
 	SAFE_DELETE (m_pMgrWindow);
 	SAFE_DELETE (m_pMgrKeyInput);
 	SAFE_DELETE (m_pLibInfoChar);
+	SAFE_DELETE (m_pLibInfoDisable);
 	SAFE_DELETE (m_pLibInfoMap);
 	SAFE_DELETE (m_pLibInfoMapObject);
 	SAFE_DELETE (m_pLibInfoMapParts);
@@ -174,6 +177,7 @@ void CMgrData::Create(
 	m_pMgrWindow			= new CMgrWindow;
 	m_pMgrKeyInput			= new CMgrKeyInput;
 	m_pLibInfoChar			= new CLibInfoCharCli;
+	m_pLibInfoDisable		= new CLibInfoDisable;
 	m_pLibInfoMap			= new CLibInfoMapBase;
 	m_pLibInfoMapObject		= new CLibInfoMapObject;
 	m_pLibInfoMapParts		= new CLibInfoMapParts;
@@ -197,6 +201,7 @@ void CMgrData::Create(
 	m_pMgrWindow->			Create (this);
 	m_pMgrKeyInput->		Create ();
 	m_pLibInfoChar->		Create (this);
+	m_pLibInfoDisable->		Create ();
 	m_pLibInfoMapObject->	Create ();
 	m_pLibInfoMapParts->	Create ();
 	m_pLibInfoMapShadow->	Create ();
@@ -235,6 +240,7 @@ void CMgrData::Destroy(void)
 	if (m_pMgrWindow)			{	m_pMgrWindow->			Destroy ();	}
 	if (m_pMgrKeyInput)			{	m_pMgrKeyInput->		Destroy ();	}
 	if (m_pLibInfoChar)			{	m_pLibInfoChar->		Destroy ();	}
+	if (m_pLibInfoDisable)		{	m_pLibInfoDisable->		Destroy ();	}
 	if (m_pLibInfoMap)			{	m_pLibInfoMap->			Destroy ();	}
 	if (m_pLibInfoMapObject)	{	m_pLibInfoMapObject->	Destroy ();	}
 	if (m_pLibInfoMapParts)		{	m_pLibInfoMapParts->	Destroy ();	}
