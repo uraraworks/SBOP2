@@ -42,6 +42,8 @@
 #define CLNAME "SboCli"								/* 登録クラス名 */
 #define TIMERID_TOOLCHECK	100						/* ツールチェックタイマー */
 #define TIMER_TOOLCHECK		1000					/* ツールチェックタイマー周期 */
+#define TIMERID_ACTIVECHECK	101						/* アクティブウィンドウチェックタイマー */
+#define TIMER_ACTIVECHECK	1000					/* アクティブウィンドウチェックタイマー周期 */
 
 /* メッセージコマンド種別 */
 enum {
@@ -691,6 +693,7 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	}
 
 	SetTimer (hWnd, TIMERID_TOOLCHECK, TIMER_TOOLCHECK, NULL);
+	SetTimer (hWnd, TIMERID_ACTIVECHECK, TIMER_ACTIVECHECK, NULL);
 	PostMessage (hWnd, WM_INITEND, 0, 0);
 
 	return TRUE;
@@ -908,6 +911,18 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 				break;
 			}
 			PostMessage (hWnd, WM_CLOSE, 0, 0);
+		}
+		break;
+
+	case TIMERID_ACTIVECHECK:	/* アクティブウィンドウチェックタイマー */
+		{
+			HWND hWnd;
+
+			m_bWindowActive = FALSE;
+			hWnd = GetFocus ();
+			if (m_hWnd == hWnd) {
+				m_bWindowActive = TRUE;
+			}
 		}
 		break;
 	}
