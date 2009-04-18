@@ -71,6 +71,10 @@ void CWindowITEMMENU::Create(CMgrData *pMgrData)
 
 	m_pPlayerChar	= m_pMgrData->GetPlayerChar ();
 	m_pLibInfoItem	= m_pMgrData->GetLibInfoItem ();
+	m_nPos			= m_pMgrData->GetWindowPosITEMMENUPos ();
+	if (m_nPos == -1) {
+		m_nPos = EQUIPTYPE_MAX + 12;
+	}
 }
 
 
@@ -444,6 +448,7 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 	m_dwDragItemID	 = dwItemIDDrag;
 	m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, dwItemID);
+	m_pMgrData->SetWindowPosITEMMENUPos (m_nPos);
 
 	bRet = TRUE;
 Exit:
@@ -468,6 +473,7 @@ BOOL CWindowITEMMENU::OnZ(BOOL bDown)
 
 	m_bDelete = TRUE;
 	m_pMgrSound->PlaySound (SOUNDID_CANCEL);
+	m_pMgrData->SetWindowPosITEMMENUPos (m_nPos);
 
 	bRet = TRUE;
 Exit:

@@ -123,7 +123,7 @@ public:
 	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg);			/* テキストメッセージ */
 	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo);	/* テキストメッセージ */
 	void MakeWindowSWOON			(void);						/* 気絶メニュー */
-	void MakeWindowSKILLMENU		(int nType = 0);			/* スキルメニュー */
+	void MakeWindowSKILLMENU		(int nType = -1);			/* スキルメニュー */
 	void MakeWindowPLACEINFORMATION	(void);						/* 場所情報 */
 
 

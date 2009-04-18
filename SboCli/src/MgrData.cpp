@@ -1,6 +1,6 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ファイル名	:MgrData.h													 */
+/* ファイル名	:MgrData.cpp												 */
 /* 内容			:データマネージャクラス 実装ファイル						 */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
 /* 作成開始日	:2006/09/24													 */
@@ -80,6 +80,10 @@ CMgrData::CMgrData()
 	m_bOptionBattleMsgLog	= FALSE;
 	m_bOption60Frame		= FALSE;
 	m_byViewGrid			= 0;
+
+	m_nWindowPosITEMMENUPos		= -1;
+	m_nWindowPosSKILLMENUPos	= 0;
+	m_nWindowPosSKILLMENUType	= 0;
 
 	m_pMainFrame			= NULL;
 	m_pMgrGrpData			= NULL;

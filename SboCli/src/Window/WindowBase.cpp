@@ -234,23 +234,32 @@ void CWindowBase::KeyProc(
 	dwTimeTmp = timeGetTime () - m_dwLastTimeKey;
 
 	bResult = FALSE;
-	if (byCode == 'S') {
-		bResult = OnS (bDown);
-
-	} else if (byCode == 'B') {
+	if (byCode == 'B') {
 		bResult = OnB (bDown);
 
-	} else if (byCode == 'X') {
-		bResult = OnX (bDown);
-
-	} else if (byCode == 'Z') {
-		bResult = OnZ (bDown);
+	} else if (byCode == 'F') {
+		bResult = OnF (bDown);
 
 	} else if (byCode == 'I') {
 		bResult = OnI (bDown);
 
 	} else if (byCode == 'J') {
 		bResult = OnJ (bDown);
+
+	} else if (byCode == 'K') {
+		bResult = OnK (bDown);
+
+	} else if (byCode == 'L') {
+		bResult = OnL (bDown);
+
+	} else if (byCode == 'S') {
+		bResult = OnS (bDown);
+
+	} else if (byCode == 'X') {
+		bResult = OnX (bDown);
+
+	} else if (byCode == 'Z') {
+		bResult = OnZ (bDown);
 
 	} else if (byCode == VK_ESCAPE) {
 		bResult = OnEscape (bDown);
@@ -411,18 +420,6 @@ BOOL CWindowBase::OnRight(void)
 
 
 /* ========================================================================= */
-/* 関数名	:CWindowBase::OnS												 */
-/* 内容		:キーハンドラ(S)												 */
-/* 日付		:2008/12/31														 */
-/* ========================================================================= */
-
-BOOL CWindowBase::OnS(BOOL bDown)
-{
-	return FALSE;
-}
-
-
-/* ========================================================================= */
 /* 関数名	:CWindowBase::OnB												 */
 /* 内容		:キーハンドラ(B)												 */
 /* 日付		:2008/08/02														 */
@@ -435,24 +432,12 @@ BOOL CWindowBase::OnB(BOOL bDown)
 
 
 /* ========================================================================= */
-/* 関数名	:CWindowBase::OnX												 */
-/* 内容		:キーハンドラ(X)												 */
-/* 日付		:2005/06/21														 */
+/* 関数名	:CWindowBase::OnF												 */
+/* 内容		:キーハンドラ(F)												 */
+/* 日付		:2009/04/18														 */
 /* ========================================================================= */
 
-BOOL CWindowBase::OnX(BOOL bDown)
-{
-	return FALSE;
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CWindowBase::OnZ												 */
-/* 内容		:キーハンドラ(Z)												 */
-/* 日付		:2005/06/22														 */
-/* ========================================================================= */
-
-BOOL CWindowBase::OnZ(BOOL bDown)
+BOOL CWindowBase::OnF(BOOL bDown)
 {
 	return FALSE;
 }
@@ -477,6 +462,66 @@ BOOL CWindowBase::OnI(BOOL bDown)
 /* ========================================================================= */
 
 BOOL CWindowBase::OnJ(BOOL bDown)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::OnK												 */
+/* 内容		:キーハンドラ(K)												 */
+/* 日付		:2009/04/18														 */
+/* ========================================================================= */
+
+BOOL CWindowBase::OnK(BOOL bDown)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::OnL												 */
+/* 内容		:キーハンドラ(L)												 */
+/* 日付		:2009/04/18														 */
+/* ========================================================================= */
+
+BOOL CWindowBase::OnL(BOOL bDown)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::OnS												 */
+/* 内容		:キーハンドラ(S)												 */
+/* 日付		:2008/12/31														 */
+/* ========================================================================= */
+
+BOOL CWindowBase::OnS(BOOL bDown)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::OnX												 */
+/* 内容		:キーハンドラ(X)												 */
+/* 日付		:2005/06/21														 */
+/* ========================================================================= */
+
+BOOL CWindowBase::OnX(BOOL bDown)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWindowBase::OnZ												 */
+/* 内容		:キーハンドラ(Z)												 */
+/* 日付		:2005/06/22														 */
+/* ========================================================================= */
+
+BOOL CWindowBase::OnZ(BOOL bDown)
 {
 	return FALSE;
 }

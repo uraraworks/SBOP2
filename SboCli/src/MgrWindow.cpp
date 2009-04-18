@@ -996,13 +996,15 @@ void CMgrWindow::MakeWindowSWOON(void)
 /* “ú•t		:2008/12/31														 */
 /* ========================================================================= */
 
-void CMgrWindow::MakeWindowSKILLMENU(int nType/*0*/)
+void CMgrWindow::MakeWindowSKILLMENU(int nType/*-1*/)
 {
 	PCWindowSKILLMENU pWindowNew;
 
 	pWindowNew = new CWindowSKILLMENU;
 	pWindowNew->Create (m_pMgrData);
-	pWindowNew->SetType (nType);
+	if (nType != -1) {
+		pWindowNew->SetType (nType);
+	}
 	m_paWindow->Add (pWindowNew);
 	SetActive ();
 

@@ -50,12 +50,15 @@ protected:
 	virtual BOOL OnDown		(void);										/* キーハンドラ(↓) */
 	virtual BOOL OnLeft		(void);										/* キーハンドラ(←) */
 	virtual BOOL OnRight	(void);										/* キーハンドラ(→) */
-	virtual BOOL OnS		(BOOL bDown);								/* キーハンドラ(S) */
 	virtual BOOL OnB		(BOOL bDown);								/* キーハンドラ(B) */
-	virtual BOOL OnX		(BOOL bDown);								/* キーハンドラ(X) */
-	virtual BOOL OnZ		(BOOL bDown);								/* キーハンドラ(Z) */
+	virtual BOOL OnF		(BOOL bDown);								/* キーハンドラ(F) */
 	virtual BOOL OnI		(BOOL bDown);								/* キーハンドラ(I) */
 	virtual BOOL OnJ		(BOOL bDown);								/* キーハンドラ(J) */
+	virtual BOOL OnK		(BOOL bDown);								/* キーハンドラ(K) */
+	virtual BOOL OnL		(BOOL bDown);								/* キーハンドラ(L) */
+	virtual BOOL OnS		(BOOL bDown);								/* キーハンドラ(S) */
+	virtual BOOL OnX		(BOOL bDown);								/* キーハンドラ(X) */
+	virtual BOOL OnZ		(BOOL bDown);								/* キーハンドラ(Z) */
 	virtual BOOL OnEscape	(BOOL bDown);								/* キーハンドラ(Escape) */
 	virtual BOOL OnSpace	(BOOL bDown);								/* キーハンドラ(Space) */
 	void TextOut2			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	/* 黒縁取りで文字描画 */

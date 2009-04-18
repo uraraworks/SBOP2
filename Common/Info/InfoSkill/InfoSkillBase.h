@@ -19,6 +19,7 @@ enum {
 	SKILLTYPEMAIN_NONE = 0,			/* î\óÕ */
 	SKILLTYPEMAIN_BATTLE,			/* êÌì¨ */
 	SKILLTYPEMAIN_LIFE,				/* ê∂äà */
+	SKILLTYPEMAIN_BASIC,			/* äÓñ{ */
 	SKILLTYPEMAIN_MAX
 };
 

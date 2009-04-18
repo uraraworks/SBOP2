@@ -1442,7 +1442,7 @@ BOOL CStateProcMAP::OnS(BOOL bDown)
 		goto Exit;
 	}
 
-	m_pMgrWindow->MakeWindowSKILLMENU (2);
+	m_pMgrWindow->MakeWindowSKILLMENU ();
 	bRet = TRUE;
 Exit:
 	return bRet;

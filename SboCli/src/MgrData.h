@@ -70,7 +70,7 @@ public:
 	void			SetChatModeBack		(int nChatMode)		{ m_nChatModeBack = nChatMode;	}	/* 前回のチャット種別を設定 */
 	int				GetChatModeBack		(void)				{ return m_nChatModeBack;		}	/* 前回のチャット種別を取得 */
 	void			SetDrawTime			(DWORD dwDrawTime)	{ m_dwDrawTime = dwDrawTime;	}	/* 描画時間を設定 */
-	DWORD			GetDrawTime			(void)				{ return m_dwDrawTime;		}	/* 描画時間を取得 */
+	DWORD			GetDrawTime			(void)				{ return m_dwDrawTime;			}	/* 描画時間を取得 */
 
 	void			SetAdminNotifyTypeL		(int nType)		{ m_nAdminNotifyTypeL = nType;	}	/* 管理者ウィンドウへの通知種別(左クリック)を設定 */
 	int				GetAdminNotifyTypeL		(void)			{ return m_nAdminNotifyTypeL;	}	/* 管理者ウィンドウへの通知種別(左クリック)を取得 */
@@ -112,6 +112,13 @@ public:
 	BOOL			GetOptionBattleMsgLog	(void)					{ return m_bOptionBattleMsgLog;				}	/* 戦闘メッセージをログに残すを取得 */
 	void			SetOption60Frame		(BOOL bOn)				{ m_bOption60Frame = bOn;					}	/* 60フレームで表示するを設定 */
 	BOOL			GetOption60Frame		(void)					{ return m_bOption60Frame;					}	/* 60フレームで表示するを取得 */
+
+	int				GetWindowPosITEMMENUPos		(void)		{ return m_nWindowPosITEMMENUPos;		}	/* アイテムメニュー(位置)を取得 */
+	void			SetWindowPosITEMMENUPos		(int nPos)	{ m_nWindowPosITEMMENUPos = nPos;		}	/* アイテムメニュー(位置)を設定 */
+	int				GetWindowPosSKILLMENUPos	(void)		{ return m_nWindowPosSKILLMENUPos;		}	/* スキルメニュー(位置)を取得 */
+	void			SetWindowPosSKILLMENUPos	(int nPos)	{ m_nWindowPosSKILLMENUPos = nPos;		}	/* スキルメニュー(位置)を設定 */
+	int				GetWindowPosSKILLMENUType	(void)		{ return m_nWindowPosSKILLMENUType;		}	/* スキルメニュー(種別)を取得 */
+	void			SetWindowPosSKILLMENUType	(int nType)	{ m_nWindowPosSKILLMENUType = nType;	}	/* スキルメニュー(種別)を設定 */
 
 	LPCSTR			GetServerAddr		(void)	{ return m_strServerAddr;	}		/* サーバーアドレスを取得 */
 	WORD			GetServerPort		(void)	{ return m_wServerPort;		}		/* サーバーポート番号を取得 */
@@ -225,6 +232,10 @@ private:
 	SIZE				m_sizeDlgMapPartsEdit,		/* マップパーツ編集ダイアログサイズ */
 						m_sizeWndMap;				/* マップウィンドウサイズ */
 	int					m_nLastSelectGrpNo;			/* 最後に選んだ画像番号 */
+
+	int					m_nWindowPosITEMMENUPos,	/* アイテムメニュー(位置) */
+						m_nWindowPosSKILLMENUPos,	/* スキルメニュー(位置) */
+						m_nWindowPosSKILLMENUType;	/* スキルメニュー(種別) */
 
 
 	CmyString			m_strServerAddr,			/* サーバーアドレス */
