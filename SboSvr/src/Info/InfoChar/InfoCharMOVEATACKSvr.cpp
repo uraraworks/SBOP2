@@ -20,6 +20,7 @@
 CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
 {
 	m_bHitQuit			= TRUE;
+	m_bDistanceDelete		= FALSE;
 	m_bDelete			= TRUE;
 	m_dwLastAtackTime	= 0;
 	m_dwQuitTime		= 0;
@@ -131,13 +132,14 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 
 	m_nMoveCount ++;
 	if (m_nMoveCount >= (int)m_dwMoveCount) {
+		m_nMoveCount = m_dwMoveCount;
 		bResult = FALSE;
 	}
 
 	/* Ç‘Ç¬Ç©ÇÈÅH */
 	if (bResult == FALSE) {
 		nState = CHARMOVESTATE_DELETE;
-		if (m_dwQuitTime != 0) {
+		if ((m_bDistanceDelete == FALSE) && (m_dwQuitTime != 0)) {
 			if (dwTime - m_dwLastAtackTime < 1000) {
 				goto Exit;
 			}
@@ -146,13 +148,16 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 		SetMoveState (nState);
 
 	} else {
+		m_bChgPos = TRUE;
 		/* 2âÒñ⁄à»ç~ÅH */
 		if (m_nMoveCount > 1) {
 			GetFrontPos (ptFront, m_nDirection, TRUE);
+			if ((m_nMapX == ptFront.x) && (m_nMapY == ptFront.y)) {
+				m_bChgPos = FALSE;
+			}
 			m_nMapX = ptFront.x;
 			m_nMapY = ptFront.y;
 		}
-		m_bChgPos = TRUE;
 		SetMoveState (CHARMOVESTATE_BATTLEATACK);
 	}
 

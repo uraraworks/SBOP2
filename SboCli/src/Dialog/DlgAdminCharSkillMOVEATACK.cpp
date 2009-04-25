@@ -41,6 +41,7 @@ void CDlgAdminCharSkillMOVEATACK::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_VALUE2, m_dwValue2);
 	DDX_Text(pDX, IDC_DISTANCE, m_dwDistance);
 	DDX_Check(pDX, IDC_HIT, m_bHitQuit);
+	DDX_Check(pDX, IDC_DISTANCEDELETE, m_bDistanceDelete);
 	//}}AFX_DATA_MAP
 }
 
@@ -67,6 +68,7 @@ CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK(CWnd* pParent /*=NULL*/
 	m_dwValue2 = 0;
 	m_dwDistance = 0;
 	m_bHitQuit = FALSE;
+	m_bDistanceDelete = FALSE;
 	//}}AFX_DATA_INIT
 
 	m_nResourceID = CDlgAdminCharSkillMOVEATACK::IDD;
@@ -120,12 +122,13 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 	}
 	m_ctlTarget.SetCurSel (nNo);
 
-	m_dwAliveTime	= pSrcTmp->m_dwAliveTime;	/* 耐久時間 */
-	m_dwWaitTime	= pSrcTmp->m_dwWaitTime;	/* 移動速度 */
-	m_dwValue1		= pSrcTmp->m_dwValue1;		/* 効果1 */
-	m_dwValue2		= pSrcTmp->m_dwValue2;		/* 効果2 */
-	m_dwDistance	= pSrcTmp->m_dwDistance;	/* 射程距離 */
-	m_bHitQuit		= pSrcTmp->m_bHitQuit;		/* ヒットすると消滅 */
+	m_dwAliveTime		= pSrcTmp->m_dwAliveTime;		/* 耐久時間 */
+	m_dwWaitTime		= pSrcTmp->m_dwWaitTime;		/* 移動速度 */
+	m_dwValue1			= pSrcTmp->m_dwValue1;			/* 効果1 */
+	m_dwValue2			= pSrcTmp->m_dwValue2;			/* 効果2 */
+	m_dwDistance		= pSrcTmp->m_dwDistance;		/* 射程距離 */
+	m_bHitQuit			= pSrcTmp->m_bHitQuit;			/* ヒットすると消滅 */
+	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete;	/* 射程距離まで行くと消える */
 
 	/* 向きによる表示エフェクト */
 	for (j = 0; j < 4; j ++) {
@@ -188,12 +191,13 @@ void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 
 	nNo = m_ctlTarget.GetCurSel ();
 	pDstTmp->m_dwTartgetType	= m_ctlTarget.GetItemData (nNo);	/* 攻撃対象 */
-	pDstTmp->m_dwAliveTime		= m_dwAliveTime;	/* 耐久時間 */
-	pDstTmp->m_dwWaitTime		= m_dwWaitTime;		/* 移動速度 */
-	pDstTmp->m_dwValue1			= m_dwValue1;		/* 効果1 */
-	pDstTmp->m_dwValue2			= m_dwValue2;		/* 効果2 */
-	pDstTmp->m_dwDistance		= m_dwDistance;		/* 射程距離 */
-	pDstTmp->m_bHitQuit			= m_bHitQuit;		/* ヒットすると消滅 */
+	pDstTmp->m_dwAliveTime		= m_dwAliveTime;		/* 耐久時間 */
+	pDstTmp->m_dwWaitTime		= m_dwWaitTime;			/* 移動速度 */
+	pDstTmp->m_dwValue1			= m_dwValue1;			/* 効果1 */
+	pDstTmp->m_dwValue2			= m_dwValue2;			/* 効果2 */
+	pDstTmp->m_dwDistance		= m_dwDistance;			/* 射程距離 */
+	pDstTmp->m_bHitQuit			= m_bHitQuit;			/* ヒットすると消滅 */
+	pDstTmp->m_bDistanceDelete	= m_bDistanceDelete;	/* 射程距離まで行くと消える */
 
 	/* 向きによる表示エフェクト */
 	for (i = 0; i < 4; i ++) {

@@ -47,6 +47,7 @@ public:
 	DWORD	m_dwValue2;
 	DWORD	m_dwDistance;
 	BOOL	m_bHitQuit;
+	BOOL	m_bDistanceDelete;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillMOVEATACK)

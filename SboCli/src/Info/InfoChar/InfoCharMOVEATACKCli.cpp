@@ -47,7 +47,7 @@ CInfoCharMOVEATACKCli::~CInfoCharMOVEATACKCli()
 
 void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
 {
-	BOOL bResult;
+	BOOL bResult, bInitMove;
 
 	if (nMoveState < 0) {
 		return;
@@ -69,6 +69,7 @@ void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
 			return;
 		}
 	}
+	bInitMove = FALSE;
 	switch (nMoveState) {
 	case CHARMOVESTATE_STAND:				/* —§‚¿ */
 	case CHARMOVESTATE_MOVE:				/* ˆÚ“®’† */
@@ -79,6 +80,9 @@ void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
 		break;
 	case CHARMOVESTATE_BATTLEMOVE:			/* í“¬ˆÚ“®’† */
 	case CHARMOVESTATE_BATTLEATACK:			/* í“¬UŒ‚’† */
+		if (nMoveState == CHARMOVESTATE_BATTLEATACK) {
+			bInitMove = TRUE;
+		}
 		nMoveState = CHARMOVESTATE_MOVE;
 		break;
 	default:
@@ -93,6 +97,9 @@ void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
 
 	CInfoCharCli::ChgMoveState (nMoveState);
 	m_nAnime = m_nDirection;
+	if (bInitMove) {
+		m_ptMove.x = m_ptMove.y = 0;
+	}
 }
 
 

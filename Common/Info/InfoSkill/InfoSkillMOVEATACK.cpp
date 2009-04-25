@@ -15,16 +15,17 @@
 
 /* ヘッダ情報 */
 static LPCSTR s_aszName[] = {
-	"m_dwTartgetType",	/* 攻撃対象 */
-	"m_dwHitEffectID",	/* ヒット時の表示エフェクト */
-	"m_dwEffectID",		/* 向きによる表示エフェクト */
-	"m_dwPutType",		/* 発射種別 */
-	"m_dwAliveTime",	/* 耐久時間 */
-	"m_dwWaitTime",		/* 移動速度 */
-	"m_dwValue1",		/* 効果1 */
-	"m_dwValue2",		/* 効果2 */
-	"m_dwDistance",		/* 射程距離 */
-	"m_bHitQuit",		/* ヒットすると消滅 */
+	"m_dwTartgetType",		/* 攻撃対象 */
+	"m_dwHitEffectID",		/* ヒット時の表示エフェクト */
+	"m_dwEffectID",			/* 向きによる表示エフェクト */
+	"m_dwPutType",			/* 発射種別 */
+	"m_dwAliveTime",		/* 耐久時間 */
+	"m_dwWaitTime",			/* 移動速度 */
+	"m_dwValue1",			/* 効果1 */
+	"m_dwValue2",			/* 効果2 */
+	"m_dwDistance",			/* 射程距離 */
+	"m_bHitQuit",			/* ヒットすると消滅 */
+	"m_bDistanceDelete",	/* 射程距離まで行くと消える */
 	NULL
 };
 
@@ -47,6 +48,7 @@ CInfoSkillMOVEATACK::CInfoSkillMOVEATACK()
 	m_dwValue2			= 0;
 	m_dwDistance		= 0;
 	m_bHitQuit			= FALSE;
+	m_bDistanceDelete	= FALSE;
 
 	ZeroMemory (m_adwEffectID, sizeof (m_adwEffectID));
 
@@ -108,6 +110,7 @@ DWORD CInfoSkillMOVEATACK::GetDataSizeTmp(void)
 	dwRet += sizeof (m_dwValue2);			/* 効果2 */
 	dwRet += sizeof (m_dwDistance);			/* 射程距離 */
 	dwRet += sizeof (m_bHitQuit);			/* ヒットすると消滅 */
+	dwRet += sizeof (m_bDistanceDelete);	/* 射程距離まで行くと消える */
 
 	return dwRet;
 }
@@ -125,16 +128,17 @@ DWORD CInfoSkillMOVEATACK::GetDataSizeNoTmp(int nNo)
 
 	dwRet = 0;
 	switch (nNo) {
-	case 0:	dwRet = sizeof (m_dwTartgetType);	break;		/* 攻撃対象 */
-	case 1:	dwRet = sizeof (m_dwHitEffectID);	break;		/* ヒット時の表示エフェクト */
-	case 2:	dwRet = sizeof (m_adwEffectID);		break;		/* 向きによる表示エフェクト */
-	case 3:	dwRet = sizeof (m_dwPutType);		break;		/* 発射種別 */
-	case 4:	dwRet = sizeof (m_dwAliveTime);		break;		/* 耐久時間 */
-	case 5:	dwRet = sizeof (m_dwWaitTime);		break;		/* 移動速度 */
-	case 6:	dwRet = sizeof (m_dwValue1);		break;		/* 効果1 */
-	case 7:	dwRet = sizeof (m_dwValue2);		break;		/* 効果2 */
-	case 8:	dwRet = sizeof (m_dwDistance);		break;		/* 射程距離 */
-	case 9:	dwRet = sizeof (m_bHitQuit);		break;		/* ヒットすると消滅 */
+	case 0:		dwRet = sizeof (m_dwTartgetType);	break;		/* 攻撃対象 */
+	case 1:		dwRet = sizeof (m_dwHitEffectID);	break;		/* ヒット時の表示エフェクト */
+	case 2:		dwRet = sizeof (m_adwEffectID);		break;		/* 向きによる表示エフェクト */
+	case 3:		dwRet = sizeof (m_dwPutType);		break;		/* 発射種別 */
+	case 4:		dwRet = sizeof (m_dwAliveTime);		break;		/* 耐久時間 */
+	case 5:		dwRet = sizeof (m_dwWaitTime);		break;		/* 移動速度 */
+	case 6:		dwRet = sizeof (m_dwValue1);		break;		/* 効果1 */
+	case 7:		dwRet = sizeof (m_dwValue2);		break;		/* 効果2 */
+	case 8:		dwRet = sizeof (m_dwDistance);		break;		/* 射程距離 */
+	case 9:		dwRet = sizeof (m_bHitQuit);		break;		/* ヒットすると消滅 */
+	case 10:	dwRet = sizeof (m_bDistanceDelete);	break;		/* 射程距離まで行くと消える */
 	}
 
 	return dwRet;
@@ -175,16 +179,17 @@ PBYTE CInfoSkillMOVEATACK::GetWriteDataTmp(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_dwTartgetType;		break;		/* 攻撃対象 */
-	case 1:	pSrc = (PBYTE)&m_dwHitEffectID;		break;		/* ヒット時の表示エフェクト */
-	case 2:	pSrc = (PBYTE)&m_adwEffectID;		break;		/* 向きによる表示エフェクト */
-	case 3:	pSrc = (PBYTE)&m_dwPutType;			break;		/* 発射種別 */
-	case 4:	pSrc = (PBYTE)&m_dwAliveTime;		break;		/* 耐久時間 */
-	case 5:	pSrc = (PBYTE)&m_dwWaitTime;		break;		/* 移動速度 */
-	case 6:	pSrc = (PBYTE)&m_dwValue1;			break;		/* 効果1 */
-	case 7:	pSrc = (PBYTE)&m_dwValue2;			break;		/* 効果2 */
-	case 8:	pSrc = (PBYTE)&m_dwDistance;		break;		/* 射程距離 */
-	case 9:	pSrc = (PBYTE)&m_bHitQuit;			break;		/* ヒットすると消滅 */
+	case 0:		pSrc = (PBYTE)&m_dwTartgetType;		break;		/* 攻撃対象 */
+	case 1:		pSrc = (PBYTE)&m_dwHitEffectID;		break;		/* ヒット時の表示エフェクト */
+	case 2:		pSrc = (PBYTE)&m_adwEffectID;		break;		/* 向きによる表示エフェクト */
+	case 3:		pSrc = (PBYTE)&m_dwPutType;			break;		/* 発射種別 */
+	case 4:		pSrc = (PBYTE)&m_dwAliveTime;		break;		/* 耐久時間 */
+	case 5:		pSrc = (PBYTE)&m_dwWaitTime;		break;		/* 移動速度 */
+	case 6:		pSrc = (PBYTE)&m_dwValue1;			break;		/* 効果1 */
+	case 7:		pSrc = (PBYTE)&m_dwValue2;			break;		/* 効果2 */
+	case 8:		pSrc = (PBYTE)&m_dwDistance;		break;		/* 射程距離 */
+	case 9:		pSrc = (PBYTE)&m_bHitQuit;			break;		/* ヒットすると消滅 */
+	case 10:	pSrc = (PBYTE)&m_bDistanceDelete;	break;		/* 射程距離まで行くと消える */
 	}
 
 	if (pSrc) {
@@ -213,16 +218,17 @@ DWORD CInfoSkillMOVEATACK::ReadElementDataTmp(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:	pDst = (PBYTE)&m_dwTartgetType;	dwSize = sizeof (m_dwTartgetType);	break;		/* 攻撃対象 */
-	case 1:	pDst = (PBYTE)&m_dwHitEffectID;	dwSize = sizeof (m_dwHitEffectID);	break;		/* ヒット時の表示エフェクト */
-	case 2:	pDst = (PBYTE)&m_adwEffectID;	dwSize = sizeof (m_adwEffectID);	break;		/* 向きによる表示エフェクト */
-	case 3:	pDst = (PBYTE)&m_dwPutType;		dwSize = sizeof (m_dwPutType);		break;		/* 発射種別 */
-	case 4:	pDst = (PBYTE)&m_dwAliveTime;	dwSize = sizeof (m_dwAliveTime);	break;		/* 耐久時間 */
-	case 5:	pDst = (PBYTE)&m_dwWaitTime;	dwSize = sizeof (m_dwWaitTime);		break;		/* 移動速度 */
-	case 6:	pDst = (PBYTE)&m_dwValue1;		dwSize = sizeof (m_dwValue1);		break;		/* 効果1 */
-	case 7:	pDst = (PBYTE)&m_dwValue2;		dwSize = sizeof (m_dwValue2);		break;		/* 効果2 */
-	case 8:	pDst = (PBYTE)&m_dwDistance;	dwSize = sizeof (m_dwDistance);		break;		/* 射程距離 */
-	case 9:	pDst = (PBYTE)&m_bHitQuit;		dwSize = sizeof (m_bHitQuit);		break;		/* ヒットすると消滅 */
+	case 0:		pDst = (PBYTE)&m_dwTartgetType;		dwSize = sizeof (m_dwTartgetType);		break;		/* 攻撃対象 */
+	case 1:		pDst = (PBYTE)&m_dwHitEffectID;		dwSize = sizeof (m_dwHitEffectID);		break;		/* ヒット時の表示エフェクト */
+	case 2:		pDst = (PBYTE)&m_adwEffectID;		dwSize = sizeof (m_adwEffectID);		break;		/* 向きによる表示エフェクト */
+	case 3:		pDst = (PBYTE)&m_dwPutType;			dwSize = sizeof (m_dwPutType);			break;		/* 発射種別 */
+	case 4:		pDst = (PBYTE)&m_dwAliveTime;		dwSize = sizeof (m_dwAliveTime);		break;		/* 耐久時間 */
+	case 5:		pDst = (PBYTE)&m_dwWaitTime;		dwSize = sizeof (m_dwWaitTime);			break;		/* 移動速度 */
+	case 6:		pDst = (PBYTE)&m_dwValue1;			dwSize = sizeof (m_dwValue1);			break;		/* 効果1 */
+	case 7:		pDst = (PBYTE)&m_dwValue2;			dwSize = sizeof (m_dwValue2);			break;		/* 効果2 */
+	case 8:		pDst = (PBYTE)&m_dwDistance;		dwSize = sizeof (m_dwDistance);			break;		/* 射程距離 */
+	case 9:		pDst = (PBYTE)&m_bHitQuit;			dwSize = sizeof (m_bHitQuit);			break;		/* ヒットすると消滅 */
+	case 10:	pDst = (PBYTE)&m_bDistanceDelete;	dwSize = sizeof (m_bDistanceDelete);	break;		/* 射程距離まで行くと消える */
 	}
 
 	if (pDst) {
@@ -338,6 +344,7 @@ DWORD CInfoSkillMOVEATACK::GetSendDataSize(void)
 	dwRet += sizeof (m_dwValue2);			/* 効果2 */
 	dwRet += sizeof (m_dwDistance);			/* 射程距離 */
 	dwRet += sizeof (m_bHitQuit);			/* ヒットすると消滅 */
+	dwRet += sizeof (m_bDistanceDelete);	/* 射程距離まで行くと消える */
 
 	return dwRet;
 }
@@ -373,6 +380,7 @@ PBYTE CInfoSkillMOVEATACK::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwValue2,			sizeof (m_dwValue2),		pDataTmp);	/* 効果2 */
 	CopyMemoryRenew (pDataTmp, &m_dwDistance,		sizeof (m_dwDistance),		pDataTmp);	/* 射程距離 */
 	CopyMemoryRenew (pDataTmp, &m_bHitQuit,			sizeof (m_bHitQuit),		pDataTmp);	/* ヒットすると消滅 */
+	CopyMemoryRenew (pDataTmp, &m_bDistanceDelete,	sizeof (m_bDistanceDelete),	pDataTmp);	/* 射程距離まで行くと消える */
 
 	return pData;
 }
@@ -391,16 +399,17 @@ PBYTE CInfoSkillMOVEATACK::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = CInfoSkillBase::SetSendData (pSrc);
-	CopyMemoryRenew (&m_dwTartgetType,	pDataTmp, sizeof (m_dwTartgetType),	pDataTmp);	/* 攻撃対象 */
-	CopyMemoryRenew (&m_dwHitEffectID,	pDataTmp, sizeof (m_dwHitEffectID),	pDataTmp);	/* ヒット時の表示エフェクト */
-	CopyMemoryRenew (&m_adwEffectID,	pDataTmp, sizeof (m_adwEffectID),	pDataTmp);	/* 向きによる表示エフェクト */
-	CopyMemoryRenew (&m_dwPutType,		pDataTmp, sizeof (m_dwPutType),		pDataTmp);	/* 発射種別 */
-	CopyMemoryRenew (&m_dwAliveTime,	pDataTmp, sizeof (m_dwAliveTime),	pDataTmp);	/* 耐久時間 */
-	CopyMemoryRenew (&m_dwWaitTime,		pDataTmp, sizeof (m_dwWaitTime),	pDataTmp);	/* 移動速度 */
-	CopyMemoryRenew (&m_dwValue1,		pDataTmp, sizeof (m_dwValue1),		pDataTmp);	/* 効果1 */
-	CopyMemoryRenew (&m_dwValue2,		pDataTmp, sizeof (m_dwValue2),		pDataTmp);	/* 効果2 */
-	CopyMemoryRenew (&m_dwDistance,		pDataTmp, sizeof (m_dwDistance),	pDataTmp);	/* 射程距離 */
-	CopyMemoryRenew (&m_bHitQuit,		pDataTmp, sizeof (m_bHitQuit),		pDataTmp);	/* ヒットすると消滅 */
+	CopyMemoryRenew (&m_dwTartgetType,		pDataTmp, sizeof (m_dwTartgetType),		pDataTmp);	/* 攻撃対象 */
+	CopyMemoryRenew (&m_dwHitEffectID,		pDataTmp, sizeof (m_dwHitEffectID),		pDataTmp);	/* ヒット時の表示エフェクト */
+	CopyMemoryRenew (&m_adwEffectID,		pDataTmp, sizeof (m_adwEffectID),		pDataTmp);	/* 向きによる表示エフェクト */
+	CopyMemoryRenew (&m_dwPutType,			pDataTmp, sizeof (m_dwPutType),			pDataTmp);	/* 発射種別 */
+	CopyMemoryRenew (&m_dwAliveTime,		pDataTmp, sizeof (m_dwAliveTime),		pDataTmp);	/* 耐久時間 */
+	CopyMemoryRenew (&m_dwWaitTime,			pDataTmp, sizeof (m_dwWaitTime),		pDataTmp);	/* 移動速度 */
+	CopyMemoryRenew (&m_dwValue1,			pDataTmp, sizeof (m_dwValue1),			pDataTmp);	/* 効果1 */
+	CopyMemoryRenew (&m_dwValue2,			pDataTmp, sizeof (m_dwValue2),			pDataTmp);	/* 効果2 */
+	CopyMemoryRenew (&m_dwDistance,			pDataTmp, sizeof (m_dwDistance),		pDataTmp);	/* 射程距離 */
+	CopyMemoryRenew (&m_bHitQuit,			pDataTmp, sizeof (m_bHitQuit),			pDataTmp);	/* ヒットすると消滅 */
+	CopyMemoryRenew (&m_bDistanceDelete,	pDataTmp, sizeof (m_bDistanceDelete),	pDataTmp);	/* 射程距離まで行くと消える */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -427,15 +436,16 @@ void CInfoSkillMOVEATACK::Copy(CInfoSkillBase *pSrc)
 		return;
 	}
 
-	m_dwHitEffectID	= pSrcTmp->m_dwHitEffectID;		/* ヒット時の表示エフェクト */
-	m_dwTartgetType	= pSrcTmp->m_dwTartgetType;		/* 攻撃対象 */
-	m_dwPutType		= pSrcTmp->m_dwPutType;			/* 発射種別 */
-	m_dwAliveTime	= pSrcTmp->m_dwAliveTime;		/* 耐久時間 */
-	m_dwWaitTime	= pSrcTmp->m_dwWaitTime;		/* 移動速度 */
-	m_dwValue1		= pSrcTmp->m_dwValue1;			/* 効果1 */
-	m_dwValue2		= pSrcTmp->m_dwValue2;			/* 効果2 */
-	m_dwDistance	= pSrcTmp->m_dwDistance;		/* 射程距離 */
-	m_bHitQuit		= pSrcTmp->m_bHitQuit;			/* ヒットすると消滅 */
+	m_dwHitEffectID		= pSrcTmp->m_dwHitEffectID;		/* ヒット時の表示エフェクト */
+	m_dwTartgetType		= pSrcTmp->m_dwTartgetType;		/* 攻撃対象 */
+	m_dwPutType			= pSrcTmp->m_dwPutType;			/* 発射種別 */
+	m_dwAliveTime		= pSrcTmp->m_dwAliveTime;		/* 耐久時間 */
+	m_dwWaitTime		= pSrcTmp->m_dwWaitTime;		/* 移動速度 */
+	m_dwValue1			= pSrcTmp->m_dwValue1;			/* 効果1 */
+	m_dwValue2			= pSrcTmp->m_dwValue2;			/* 効果2 */
+	m_dwDistance		= pSrcTmp->m_dwDistance;		/* 射程距離 */
+	m_bHitQuit			= pSrcTmp->m_bHitQuit;			/* ヒットすると消滅 */
+	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete;	/* 射程距離まで行くと消える */
 
 	/* 向きによる表示エフェクト */
 	CopyMemory (m_adwEffectID, pSrcTmp->m_adwEffectID, sizeof (m_adwEffectID));

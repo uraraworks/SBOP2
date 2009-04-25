@@ -265,6 +265,7 @@ BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSki
 		pInfoCharTmp->SetMap (pInfoMap);
 		pInfoCharTmp->m_bParentInfo		= FALSE;
 		pInfoCharTmp->m_bHitQuit		= pInfoSkill->m_bHitQuit;
+		pInfoCharTmp->m_bDistanceDelete	= pInfoSkill->m_bDistanceDelete;
 		pInfoCharTmp->m_nAtackTarget	= pInfoSkill->m_dwTartgetType;
 		pInfoCharTmp->m_dwMoveWait		= pInfoSkill->m_dwWaitTime;
 		pInfoCharTmp->m_dwMoveCount		= pInfoSkill->m_dwDistance;

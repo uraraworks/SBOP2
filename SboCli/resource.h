@@ -255,7 +255,6 @@
 #define IDC_MAC                         1093
 #define IDC_MOTIONTYPE                  1094
 #define IDC_MAGIC                       1094
-#define IDC_ACCOUNT2                    1094
 #define IDC_SPIN_X1                     1095
 #define IDC_SKILLFUL                    1095
 #define IDC_COLOR                       1095
@@ -347,6 +346,8 @@
 #define IDC_SKILL                       1156
 #define IDC_PING                        1158
 #define IDC_POS                         1159
+#define IDC_TIMEDELETE                  1159
+#define IDC_DISTANCEDELETE              1159
 #define IDC_THROWGHPUT                  1160
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
@@ -403,7 +404,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        199
 #define _APS_NEXT_COMMAND_VALUE         32818
-#define _APS_NEXT_CONTROL_VALUE         1159
+#define _APS_NEXT_CONTROL_VALUE         1160
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -28,7 +28,8 @@ public:
 
 
 public:
-	BOOL	m_bHitQuit;						/* ヒットすると消滅 */
+	BOOL	m_bHitQuit,						/* ヒットすると消滅 */
+			m_bDistanceDelete;				/* 射程距離まで行くと消える */
 	DWORD	m_dwLastAtackTime,				/* 最後に攻撃した時間 */
 			m_dwQuitTime,					/* 終了時間 */
 			m_dwHitEffectID,				/* ヒット時に相手に表示するエフェクトID */
