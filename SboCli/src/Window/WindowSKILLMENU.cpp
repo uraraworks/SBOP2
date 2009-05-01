@@ -127,7 +127,7 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 		}
 		GetDrawPos (i, x, y);
 //Todo:‚Æ‚è‚ ‚¦‚¸’Þ‚èƒAƒCƒRƒ“‚¾‚¯
-		m_pMgrDraw->DrawIcon (m_pDib, x, y, 2);
+		m_pMgrDraw->DrawIcon (m_pDib, x, y, pInfoSkill->m_dwIconID);
 		if (i == m_nPos) {
 			m_strName = (LPCSTR)pInfoSkill->m_strName;
 		}

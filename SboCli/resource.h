@@ -243,6 +243,7 @@
 #define IDC_STAMINA                     1091
 #define IDC_VALUE1                      1091
 #define IDC_MACADDRESS                  1091
+#define IDC_ICONID                      1091
 #define IDC_PASSWORD                    1092
 #define IDC_RENEW_CLIENTVERSION         1092
 #define IDC_EDIT2                       1092
@@ -346,7 +347,6 @@
 #define IDC_SKILL                       1156
 #define IDC_PING                        1158
 #define IDC_POS                         1159
-#define IDC_TIMEDELETE                  1159
 #define IDC_DISTANCEDELETE              1159
 #define IDC_THROWGHPUT                  1160
 #define IDM_CHAR_MODIFY                 32771

@@ -51,6 +51,7 @@ public:
 	CComboBox	m_ctlUse;
 	CString m_strName;
 	DWORD m_dwSP;
+	DWORD m_dwIconID;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillBase)

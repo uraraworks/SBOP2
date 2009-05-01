@@ -92,7 +92,8 @@ public:
 				m_nClassType;					/* クラス種別 */
 
 	DWORD		m_dwSkillID,					/* スキルID */
-				m_dwSP;							/* 消費SP */
+				m_dwSP,							/* 消費SP */
+				m_dwIconID;						/* アイコン画像ID */
 	int			m_nTypeMain,					/* スキル種別(メイン) */
 				m_nTypeSub,						/* スキル種別(サブ) */
 				m_nUse;							/* 使用制限 */

@@ -36,6 +36,7 @@ void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 	//}}AFX_DATA_MAP
 	DDX_Text(pDX, IDC_NAME, m_strName);
 	DDX_Text(pDX, IDC_SP, m_dwSP);
+	DDX_Text(pDX, IDC_ICONID, m_dwIconID);
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminCharSkillBase, CDlgAdminBase)
@@ -58,6 +59,7 @@ CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminCharSkillBase::IDD, pParent)
 	, m_strName(_T(""))
 	, m_dwSP(0)
+	, m_dwIconID(0)
 {
 	//{{AFX_DATA_INIT(CDlgAdminCharSkillBase)
 	//}}AFX_DATA_INIT
@@ -132,6 +134,7 @@ void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 
 	m_strName	= m_pInfo->m_strName;
 	m_dwSP		= m_pInfo->m_dwSP;
+	m_dwIconID	= m_pInfo->m_dwIconID;
 	m_nTypeMain	= m_pInfo->m_nTypeMain;
 	m_nTypeSub	= m_pInfo->m_nTypeSub;
 	m_nUse		= m_pInfo->m_nUse;
@@ -394,6 +397,7 @@ void CDlgAdminCharSkillBase::OnOK()
 	if (m_pInfo) {
 		m_pInfo->m_strName	= m_strName;
 		m_pInfo->m_dwSP		= m_dwSP;
+		m_pInfo->m_dwIconID	= m_dwIconID;
 		m_pInfo->m_nUse		= m_nUse;
 		if (m_pDlgType) {
 			m_pDlgType->Get (m_pInfo);
