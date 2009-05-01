@@ -2657,6 +2657,7 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 		}
 		PacketCHAR_REQ_EQUIP.Make (m_pPlayerChar->m_dwCharID, dwItemID, pWndITEMMENU_SELECT->GetType ());
 		pPacket = &PacketCHAR_REQ_EQUIP;
+		m_dwLastTimeGauge = timeGetTime ();
 		break;
 	case ITEMMENU_SELECT_COMMAND_USE:			/* Žg‚¤ */
 		PacketCHAR_REQ_USEITEM.Make (m_pPlayerChar->m_dwCharID, dwItemID);
