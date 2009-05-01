@@ -2160,19 +2160,21 @@ BOOL CStateProcMAP::MoveProc(
 	ARRAYINT anDirection;
 
 	bRet = FALSE;
+	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
+	if (m_pPlayerChar == NULL) {
+		goto Exit;
+	}
+
 	m_bChgScrollMode = FALSE;
 
 	xBack = m_pPlayerChar->m_nMapX;
 	yBack = m_pPlayerChar->m_nMapY;
 	nDirectionView = nDirection;
+	nDirectionBack = m_pPlayerChar->m_nDirection;
 
 	pLayerMap		= (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 	pMgrKeyInput	= m_pMgrData->GetMgrKeyInput ();
 
-	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
-	if (m_pPlayerChar == NULL) {
-		goto Exit;
-	}
 	pMap = m_pMgrData->GetMap ();
 	if (pMap == NULL) {
 		goto Exit;
@@ -2215,7 +2217,6 @@ BOOL CStateProcMAP::MoveProc(
 		goto Exit;
 	}
 
-	nDirectionBack = m_pPlayerChar->m_nDirection;
 	if ((nDirectionBack < 4) && (nDirection >= 4)) {
 		bResult = TRUE;
 		switch (nDirectionBack) {
@@ -2385,9 +2386,11 @@ BOOL CStateProcMAP::MoveProc(
 	y += yy;
 ExitSend:
 	m_pPlayerChar->m_bRedraw = TRUE;
-	/* サーバへ移動通知 */
-	Packet.Make (m_pPlayerChar->m_dwMapID, m_pPlayerChar->m_dwCharID, nDirectionView, x, y, FALSE);
-	m_pSock->Send (&Packet);
+	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirectionView))) {
+		/* サーバへ移動通知 */
+		Packet.Make (m_pPlayerChar->m_dwMapID, m_pPlayerChar->m_dwCharID, nDirectionView, x, y, FALSE);
+		m_pSock->Send (&Packet);
+	}
 
 	if ((xBack != x) || (yBack != y)) {
 		/* マップ座標を矩形で取得 */
