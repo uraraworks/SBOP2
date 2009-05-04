@@ -203,16 +203,26 @@ void CStaticGrp::RenewGrp(DWORD dwGrpIDMain, DWORD dwGrpIDSub)
 	if (dwGrpIDSub == 0) {
 		goto Exit;
 	}
-	dwGrpIDSub --;
 
 	switch (dwGrpIDMain) {
 	case GRPIDMAIN_CHAR:		/* キャラ画像 */
 	case GRPIDMAIN_2X2_CHAR:	/* キャラ(32x32)画像 */
+		dwGrpIDSub --;
 		dwParam = FAMILYTYPE_HUMAN;
 		x = (dwGrpIDSub % nCountX) * nSize;
 		y = (dwGrpIDSub / nCountX) * nSize;
 		break;
+	case GRPIDMAIN_ICON32:		/* アイコン(２倍表示) */
+		dwParam = m_dwGrpIDParam;
+		if (dwGrpIDSub == 0) {
+			break;
+		}
+		x = (dwGrpIDSub % nCountX) * nSize;
+		y = (dwGrpIDSub / nCountX) * nSize;
+		nSize = 32;
+		break;
 	default:
+		dwGrpIDSub --;
 		dwParam = m_dwGrpIDParam;
 		if (dwGrpIDSub == 0) {
 			break;
@@ -227,7 +237,11 @@ void CStaticGrp::RenewGrp(DWORD dwGrpIDMain, DWORD dwGrpIDSub)
 Exit:
 	m_pImgBack->Create (nSize, nSize);
 	if (pImgTmp) {
-		m_pImgBack->BltFrom256 (0, 0, nSize, nSize, pImgTmp, x, y);
+		if (dwGrpIDMain == GRPIDMAIN_ICON32) {
+			m_pMgrData->GetMgrDraw ()->DrawIcon (m_pImgBack, 0, 0, dwGrpIDSub);
+		} else {
+			m_pImgBack->BltFrom256 (0, 0, nSize, nSize, pImgTmp, x, y);
+		}
 	}
 	SetWindowPos (NULL, 0, 0, nSize, nSize, SWP_NOZORDER | SWP_NOMOVE);
 	InvalidateRect (NULL);

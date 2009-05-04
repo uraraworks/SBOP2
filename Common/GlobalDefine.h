@@ -129,6 +129,7 @@ enum {
 	GRPIDMAIN_2X2_BOW,		/* 弓(2x2) */
 	GRPIDMAIN_2X2_NPC,		/* NPC(2x2) */
 	GRPIDMAIN_EFFECT64,		/* エフェクト(64) */
+	GRPIDMAIN_ICON32,		/* アイコン(２倍表示) */
 	GRPIDMAIN_MAX
 };
 

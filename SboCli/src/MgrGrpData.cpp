@@ -1581,6 +1581,9 @@ PCImg32 CMgrGrpData::GetDib(DWORD dwGrpIDMain, DWORD dwGrpIDSub, DWORD dwParam)
 	case GRPIDMAIN_EFFECT64:		/* エフェクト(64) */
 		pRet = GetDibEfc64 (0);
 		break;
+	case GRPIDMAIN_ICON32:			/* アイコン(２倍表示) */
+		pRet = GetDibIcon ();
+		break;
 	}
 
 	return pRet;
@@ -1953,6 +1956,7 @@ int CMgrGrpData::GetGrpSize(DWORD dwGrpIDMain)
 	case GRPIDMAIN_NPC:				/* キャラ(NPC) */
 	case GRPIDMAIN_EFCBALLOON:		/* 噴出し */
 	case GRPIDMAIN_2X2_SHIELD:		/* 盾(2x2) */
+	case GRPIDMAIN_ICON32:			/* アイコン(２倍表示) */
 		nRet = 16;
 		break;
 	case GRPIDMAIN_WEAPON:			/* 武器 */
@@ -2008,6 +2012,7 @@ int CMgrGrpData::GetGrpCountX(DWORD dwGrpIDMain)
 	case GRPIDMAIN_WEAPON_BOW:		/* 弓 */
 	case GRPIDMAIN_WEAPON_GLOVE:	/* 武器(打撃) */
 	case GRPIDMAIN_WEAPON_ETC:		/* 武器(その他) */
+	case GRPIDMAIN_ICON32:			/* アイコン(２倍表示) */
 		nRet = 20;
 		break;
 	case GRPIDMAIN_EFFECT32:		/* エフェクト(32) */
@@ -2092,6 +2097,9 @@ int CMgrGrpData::GetGrpCountY(DWORD dwGrpIDMain)
 		break;
 	case GRPIDMAIN_EFFECT64:		/* エフェクト(64) */
 		nRet = 8;
+		break;
+	case GRPIDMAIN_ICON32:			/* アイコン(２倍表示) */
+		nRet = 20;
 		break;
 	}
 

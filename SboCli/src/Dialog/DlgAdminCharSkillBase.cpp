@@ -8,12 +8,13 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include "MgrData.h"
 #include "InfoSkillBase.h"
 #include "LibInfoSkill.h"
 #include "DlgAdminCharSkillNONE.h"
 #include "DlgAdminCharSkillMOVEATACK.h"
 #include "DlgAdminCharSkillHEAL.h"
-#include "MgrData.h"
+#include "WndSelectGrp.h"
 #include "DlgAdminCharSkillBase.h"
 
 #ifdef _DEBUG
@@ -33,18 +34,20 @@ void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_TYPEMAIN, m_ctlTypeMain);
 	DDX_Control(pDX, IDC_TYPESUB, m_ctlTypeSub);
 	DDX_Control(pDX, IDC_USE, m_ctlUse);
+	DDX_Control(pDX, IDC_ICONGRP, m_ctlIconGrp);
 	//}}AFX_DATA_MAP
 	DDX_Text(pDX, IDC_NAME, m_strName);
 	DDX_Text(pDX, IDC_SP, m_dwSP);
-	DDX_Text(pDX, IDC_ICONID, m_dwIconID);
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminCharSkillBase, CDlgAdminBase)
 	//{{AFX_MSG_MAP(CDlgAdminCharSkillBase)
+	ON_WM_LBUTTONDOWN()
 	ON_CBN_SELCHANGE(IDC_TYPEMAIN, OnSelchangeTypeMain)
 	ON_CBN_SELCHANGE(IDC_TYPESUB, OnSelchangeTypeSub)
 	ON_CBN_SELCHANGE(IDC_USE, OnSelchangeUse)
 	ON_MESSAGE(WM_ADMINMSG, OnAdminMsg)
+	ON_MESSAGE(WM_WNDCLOSE, OnWndClose)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -59,7 +62,6 @@ CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminCharSkillBase::IDD, pParent)
 	, m_strName(_T(""))
 	, m_dwSP(0)
-	, m_dwIconID(0)
 {
 	//{{AFX_DATA_INIT(CDlgAdminCharSkillBase)
 	//}}AFX_DATA_INIT
@@ -71,6 +73,7 @@ CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	m_bModeModify	= FALSE;
 	m_pDlgType		= NULL;
 	m_pInfo			= NULL;
+	m_pWndSelectGrp	= NULL;
 }
 
 
@@ -134,7 +137,6 @@ void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 
 	m_strName	= m_pInfo->m_strName;
 	m_dwSP		= m_pInfo->m_dwSP;
-	m_dwIconID	= m_pInfo->m_dwIconID;
 	m_nTypeMain	= m_pInfo->m_nTypeMain;
 	m_nTypeSub	= m_pInfo->m_nTypeSub;
 	m_nUse		= m_pInfo->m_nUse;
@@ -163,6 +165,9 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 		SetWindowText ("スキルの編集");
 	}
 
+	m_ctlIconGrp.Create (this, m_pMgrData);
+	m_ctlIconGrp.Init (GRPIDMAIN_ICON32);
+
 	m_ctlTypeMain.InsertString (0, "能力");
 	m_ctlTypeMain.SetItemData (0, 0);
 	m_ctlTypeMain.InsertString (1, "戦闘");
@@ -179,6 +184,7 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 			}
 		}
 		nTmp = m_pInfo->m_nTypeSub;
+		m_ctlIconGrp.Set (m_pInfo->m_dwIconID);
 	}
 	m_ctlTypeMain.SetCurSel (nNo);
 	OnSelchangeTypeMain ();
@@ -397,14 +403,71 @@ void CDlgAdminCharSkillBase::OnOK()
 	if (m_pInfo) {
 		m_pInfo->m_strName	= m_strName;
 		m_pInfo->m_dwSP		= m_dwSP;
-		m_pInfo->m_dwIconID	= m_dwIconID;
 		m_pInfo->m_nUse		= m_nUse;
 		if (m_pDlgType) {
 			m_pDlgType->Get (m_pInfo);
 		}
+		m_pInfo->m_dwIconID = m_ctlIconGrp.GetIDSub ();
 	}
 
 	CDlgAdminBase::EndDialog (IDOK);
+}
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharSkillBase::OnLButtonDown							 */
+/* 内容		:メッセージハンドラ(WM_LBUTTONDOWN)								 */
+/* 日付		:2009/05/04														 */
+/* ========================================================================= */
+
+void CDlgAdminCharSkillBase::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	BOOL bResult;
+	CRect rc;
+	CPoint ptTmp;
+
+	if (m_pWndSelectGrp) {
+		goto Exit;
+	}
+
+	ptTmp = point;
+	ClientToScreen (&ptTmp);
+
+	GetDlgItem (IDC_ICONGRP)->GetWindowRect (rc);
+	bResult = rc.PtInRect (ptTmp);
+	if (bResult == FALSE) {
+		goto Exit;
+	}
+	m_pWndSelectGrp = new CWndSelectGrp;
+	m_pWndSelectGrp->Create (this, m_pMgrData, 0);
+	m_pWndSelectGrp->SetType (GRPIDMAIN_ICON32, m_ctlIconGrp.GetIDSub ());
+	m_pWndSelectGrp->ShowWindow (SW_SHOW);
+
+Exit:
+	CDlgAdminBase::OnLButtonDown (nFlags, point);
+}
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharSkillBase::OnWndClose								 */
+/* 内容		:メッセージハンドラ(WM_WNDCLOSE)								 */
+/* 日付		:2009/05/04														 */
+/* ========================================================================= */
+
+LRESULT CDlgAdminCharSkillBase::OnWndClose(WPARAM wParam, LPARAM lParam)
+{
+	int nHi  = HIWORD (lParam);
+	int nLow = LOWORD (lParam);
+
+	switch (wParam) {
+	case WINDOWID_SELECTMAPPARTSGRP:	/* 画像選択 */
+		m_pWndSelectGrp = NULL;
+		if (nLow == 0xFFFF) {
+			break;
+		}
+		m_ctlIconGrp.Set (nLow - 1);
+		break;
+	}
+
+	return -1;
 }
 
 /* Copyright(C)URARA-works 2008 */

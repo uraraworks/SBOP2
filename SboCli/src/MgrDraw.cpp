@@ -1010,6 +1010,7 @@ void CMgrDraw::DrawIcon(
 	pDibTmp->Unlock ();
 
 	pDst->Blt (x, y, cx * 2, cy * 2, pDibTmp, 0, cy * 2, TRUE);
+	ReleaseDibTmp ();
 }
 
 

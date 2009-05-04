@@ -9,9 +9,11 @@
 #pragma once
 
 #include "DlgAdminBase.h"
+#include "StaticGrp.h"
 
 class CInfoSkillBase;
 class CDlgAdminCharSkillNONE;
+class CWndSelectGrp;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -32,13 +34,14 @@ protected:
 
 
 protected:
-	BOOL		m_bInit;					/* 初期化中 */
-	int			m_nTypeMain,				/* スキル種別(メイン) */
-				m_nTypeSub,					/* スキル種別(サブ) */
-				m_nUse;						/* 使用制限 */
-	BOOL		m_bModeModify;				/* 編集モード判定 */
-	CDlgAdminCharSkillNONE	*m_pDlgType;	/* 編集中のイベント種別ダイアログ */
-	CInfoSkillBase			*m_pInfo;		/* 編集中のスキル情報 */
+	BOOL		m_bInit;						/* 初期化中 */
+	int			m_nTypeMain,					/* スキル種別(メイン) */
+				m_nTypeSub,						/* スキル種別(サブ) */
+				m_nUse;							/* 使用制限 */
+	BOOL		m_bModeModify;					/* 編集モード判定 */
+	CDlgAdminCharSkillNONE	*m_pDlgType;		/* 編集中のイベント種別ダイアログ */
+	CInfoSkillBase			*m_pInfo;			/* 編集中のスキル情報 */
+	CWndSelectGrp			*m_pWndSelectGrp;	/* 画像選択ウィンドウ */
 
 
 
@@ -50,8 +53,8 @@ public:
 	CComboBox	m_ctlTypeSub;
 	CComboBox	m_ctlUse;
 	CString m_strName;
+	CStaticGrp	m_ctlIconGrp;
 	DWORD m_dwSP;
-	DWORD m_dwIconID;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillBase)
@@ -66,8 +69,10 @@ protected:
 	afx_msg void OnSelchangeTypeMain();
 	afx_msg void OnSelchangeTypeSub();
 	afx_msg void OnSelchangeUse();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg LRESULT OnAdminMsg(WPARAM wParam, LPARAM lParam);
 	//}}AFX_MSG
+	LRESULT OnWndClose(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 } CDlgAdminCharSkillBase, *PCDlgAdminCharSkillBase;
 
