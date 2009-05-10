@@ -1702,6 +1702,33 @@ void CInfoCharBase::GetPosRect(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::GetPosRectOnce									 */
+/* 内容		:1歩分の座標矩形を取得											 */
+/* 日付		:2009/05/10														 */
+/* ========================================================================= */
+
+void CInfoCharBase::GetPosRectOnce(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
+{
+	GetPosRect (rcDst, bFrontPos);
+
+	switch (GetDrawDirection ()) {
+	case 0:
+		rcDst.bottom = rcDst.top;
+		break;
+	case 1:
+		rcDst.top = rcDst.bottom;
+		break;
+	case 2:
+		rcDst.right = rcDst.left;
+		break;
+	case 3:
+		rcDst.left = rcDst.right;
+		break;
+	}
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::GetMapPosRect									 */
 /* 内容		:マップ座標矩形を取得											 */
 /* 日付		:2009/01/31														 */

@@ -113,6 +113,7 @@ public:
 	int		GetBackDirection	(void);								/* 反対方向を取得 */
 	DWORD	GetMoveWait			(void);								/* 状態に応じた移動速度を取得 */
 	void	GetPosRect			(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 座標矩形を取得 */
+	void	GetPosRectOnce		(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 1歩分の座標矩形を取得 */
 	void	GetMapPosRect		(RECT &rcDst);						/* マップ座標矩形を取得 */
 
 	void		SetItem			(ARRAYDWORD *padwItemID);						/* アイテム情報を設定 */

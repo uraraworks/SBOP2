@@ -1808,8 +1808,8 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 {
 	int i, nCount;
 	DWORD dwRet;
+	RECT rcFrontRect, rcTmp;
 	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
-	SIZE size, sizeDistance;
 
 	dwRet = 0;
 
@@ -1817,10 +1817,10 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 	if (pInfoCharSrc == NULL) {
 		goto Exit;
 	}
-	pInfoCharSrc->GetCharSize (size);
 	if (nDirection == -1) {
 		nDirection = pInfoCharSrc->m_nDirection;
 	}
+	pInfoCharSrc->GetPosRectOnce (rcFrontRect, TRUE);
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
@@ -1840,18 +1840,9 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 			continue;
 		}
 
-		GetDistance (sizeDistance, pInfoCharSrc, pInfoCharTmp);
-		if (sizeDistance.cx + sizeDistance.cy <= 0) {
-			continue;
-		}
-		if (nXType == 1) {
-			if (nDirection < 2) {
-				if (sizeDistance.cx > 0) {
-					continue;
-				}
-			}
-		}
-		if (sizeDistance.cx + sizeDistance.cy >= 2) {
+		pInfoCharTmp->GetPosRect (rcTmp);
+		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
+			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
 			continue;
 		}
 
