@@ -121,7 +121,9 @@ void CDlgDbg::Renew(void)
 
 BOOL CDlgDbg::OnInitDialog()
 {
+	char szFileName[MAX_PATH];
 	CRect rc;
+	POINT pt;
 
 	CDialog::OnInitDialog ();
 
@@ -132,6 +134,17 @@ BOOL CDlgDbg::OnInitDialog()
 
 	Initialize (m_hWnd);
 	SetTimer(100, 1000, NULL);
+
+	ZeroMemory (szFileName, sizeof (szFileName));
+	GetModuleFileName (NULL, szFileName, MAX_PATH);
+	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+
+	m_pMgrData->SetDebugWindow (m_hWnd);
+	pt.x = GetPrivateProfileInt ("Pos", "DebugX", -1, szFileName);
+	pt.y = GetPrivateProfileInt ("Pos", "DebugY", -1, szFileName);
+	if (!((pt.x == -1) && (pt.y == -1))) {
+		SetWindowPos (NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+	}
 
 	return TRUE;
 }

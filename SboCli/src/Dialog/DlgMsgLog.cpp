@@ -295,15 +295,19 @@ void CDlgMsgLog::OnBnClickedTopMost()
 void CDlgMsgLog::OnBnClickedHideMainframe()
 {
 	int nCmdShow;
-	HWND hWndAdmin;
+	HWND hWnd;
 
 	UpdateData ();
 	nCmdShow = (m_bHideMainFrame) ? SW_HIDE : SW_SHOW;
 
 	::ShowWindow (m_pMgrData->GetMainWindow (), nCmdShow);
-	hWndAdmin = m_pMgrData->GetAdminWindow ();
-	if (hWndAdmin) {
-		::ShowWindow (hWndAdmin, nCmdShow);
+	hWnd = m_pMgrData->GetAdminWindow ();
+	if (hWnd) {
+		::ShowWindow (hWnd, nCmdShow);
+	}
+	hWnd = m_pMgrData->GetDebugWindow ();
+	if (hWnd) {
+		::ShowWindow (hWnd, nCmdShow);
 	}
 }
 

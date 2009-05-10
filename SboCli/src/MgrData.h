@@ -61,6 +61,8 @@ public:
 
 	void			SetAdminWindow		(HWND hWndAdmin)	{ m_hWndAdmin = hWndAdmin;		}	/* 管理者ウィンドウを設定 */
 	HWND			GetAdminWindow		(void)				{ return m_hWndAdmin;			}	/* 管理者ウィンドウを取得 */
+	void			SetDebugWindow		(HWND hWndDebug)	{ m_hWndDebug = hWndDebug;		}	/* デバッグウィンドウを設定 */
+	HWND			GetDebugWindow		(void)				{ return m_hWndDebug;			}	/* デバッグウィンドウを取得 */
 	void			SetAdminLevel		(int nAdminLevel)	{ m_nAdminLevel = nAdminLevel;	}	/* 管理者権限レベルを設定 */
 	int				GetAdminLevel		(void)				{ return m_nAdminLevel;			}	/* 管理者権限レベルを取得 */
 	void			SetDrawMode			(int nDrawMode)		{ m_nDrawMode = nDrawMode;		}	/* 描画モードを設定 */
@@ -203,7 +205,8 @@ private:
 private:
 	HINSTANCE			m_hInstance;				/* インスタンスハンドル */
 	HWND				m_hWndMain,					/* メインウィンドウハンドル */
-						m_hWndAdmin;				/* 管理者ウィンドウのウィンドウハンドル */
+						m_hWndAdmin,				/* 管理者ウィンドウのウィンドウハンドル */
+						m_hWndDebug;				/* デバッグウィンドウのウィンドウハンドル */
 	int					m_nOnlineCount,				/* オンライン数 */
 						m_nCharCount,				/* 処理キャラ数 */
 						m_nPing,					/* サーバーとのパケット往復時間 */

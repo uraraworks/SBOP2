@@ -825,6 +825,16 @@ void CMainFrame::OnClose(HWND hWnd)
 				strTmp.Format ("%d", rc.top);
 				WritePrivateProfileString ("Pos", "AdminY", strTmp, szFileName);
 			}
+
+			hWndTmp = m_pMgrData->GetDebugWindow ();
+			if (hWndTmp) {
+				/* デバッグウィンドウ */
+				GetWindowRect (hWndTmp, &rc);
+				strTmp.Format ("%d", rc.left);
+				WritePrivateProfileString ("Pos", "DebugX", strTmp, szFileName);
+				strTmp.Format ("%d", rc.top);
+				WritePrivateProfileString ("Pos", "DebugY", strTmp, szFileName);
+			}
 		}
 	}
 	m_pMgrData->SaveIniData ();

@@ -49,6 +49,7 @@ CMgrData::CMgrData()
 {
 	m_hWndMain				= NULL;
 	m_hWndAdmin				= NULL;
+	m_hWndDebug				= NULL;
 	m_pSock					= NULL;
 	m_hInstance				= NULL;
 	m_wServerPort			= 0;
