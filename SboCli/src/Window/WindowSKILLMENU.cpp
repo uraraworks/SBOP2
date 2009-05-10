@@ -86,7 +86,7 @@ void CWindowSKILLMENU::Create(CMgrData *pMgrData)
 void CWindowSKILLMENU::Draw(PCImg32 pDst)
 {
 	LPCSTR aszTitle[] = {"基本(K)", "戦闘(F)", "生活(L)", "能力"};
-	int i, nCount, nLevel, x, y;
+	int i, nCount, nLevel, x, y, nTmp;
 	HDC hDC;
 	HFONT hFontOld;
 	PCInfoSkillBase pInfoSkill;
@@ -118,6 +118,7 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 		}
 	}
 
+	nTmp = 0;
 	/* スキルを描画 */
 	nCount = m_adwSkillID.GetSize ();
 	for (i = 0; i < nCount; i ++) {
@@ -125,13 +126,12 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 		if (pInfoSkill == NULL) {
 			continue;
 		}
-		GetDrawPos (i, x, y);
-//Todo:とりあえず釣りアイコンだけ
+		GetDrawPos (nTmp, x, y);
 		m_pMgrDraw->DrawIcon (m_pDib, x, y, pInfoSkill->m_dwIconID);
-		if (i == m_nPos) {
+		if (nTmp == m_nPos) {
 			m_strName = (LPCSTR)pInfoSkill->m_strName;
 		}
-		break;
+		nTmp ++;
 	}
 
 	switch (m_nMode) {

@@ -287,12 +287,12 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeMain()
 	nTypeMain = m_ctlTypeMain.GetItemData (m_ctlTypeMain.GetCurSel ());
 	switch (nTypeMain) {
 	case SKILLTYPEMAIN_NONE:			/* ”\—Í */
-		m_ctlTypeSub.InsertString (1, "‰ñ•œ");
-		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_NONE_HEAL);
 		break;
 	case SKILLTYPEMAIN_BATTLE:			/* í“¬ */
 		m_ctlTypeSub.InsertString (1, "ˆÚ“®‚µ‚ÄUŒ‚");
 		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_BATTLE_MOVEATACK);
+		m_ctlTypeSub.InsertString (2, "‰ñ•œ");
+		m_ctlTypeSub.SetItemData (2, SKILLTYPESUB_BATTLE_HEAL);
 		break;
 	case SKILLTYPEMAIN_LIFE:			/* ¶Šˆ */
 		m_ctlTypeSub.InsertString (1, "’Ş‚è");
@@ -328,16 +328,14 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
 
 	switch (nTypeMain) {
 	case SKILLTYPEMAIN_NONE:				/* ”\—Í */
-		switch (nTypeSub) {
-		case SKILLTYPESUB_NONE_HEAL:			/* ‰ñ•œ */
-			m_pDlgType = new CDlgAdminCharSkillHEAL(this);
-			break;
-		}
 		break;
 	case SKILLTYPEMAIN_BATTLE:				/* í“¬ */
 		switch (nTypeSub) {
 		case SKILLTYPESUB_BATTLE_MOVEATACK:		/* ˆÚ“®‚µ‚ÄUŒ‚ */
 			m_pDlgType = new CDlgAdminCharSkillMOVEATACK(this);
+			break;
+		case SKILLTYPESUB_BATTLE_HEAL:			/* ‰ñ•œ */
+			m_pDlgType = new CDlgAdminCharSkillHEAL(this);
 			break;
 		}
 		break;

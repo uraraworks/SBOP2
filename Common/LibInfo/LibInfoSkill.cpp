@@ -87,16 +87,14 @@ PCInfoBase CLibInfoSkill::GetNew(int nTypeMain, int nTypeSub)
 
 	switch (nTypeMain) {
 	case SKILLTYPEMAIN_NONE:			/* î\óÕ */
-		switch (nTypeSub) {
-		case SKILLTYPESUB_NONE_HEAL:			/* âÒïú */
-			pInfo = new CInfoSkillHEAL;
-			break;
-		}
 		break;
 	case SKILLTYPEMAIN_BATTLE:			/* êÌì¨ */
 		switch (nTypeSub) {
 		case SKILLTYPESUB_BATTLE_MOVEATACK:		/* à⁄ìÆÇµÇƒçUåÇ */
 			pInfo = new CInfoSkillMOVEATACK;
+			break;
+		case SKILLTYPESUB_BATTLE_HEAL:			/* âÒïú */
+			pInfo = new CInfoSkillHEAL;
 			break;
 		}
 		break;

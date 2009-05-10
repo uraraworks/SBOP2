@@ -26,13 +26,13 @@ enum {
 /* スキル種別(サブ:能力) */
 enum {
 	SKILLTYPESUB_NONE_NONE = 0,
-	SKILLTYPESUB_NONE_HEAL,			/* 回復 */
 };
 
 /* スキル種別(サブ:戦闘) */
 enum {
 	SKILLTYPESUB_BATTLE_NONE = 0,
 	SKILLTYPESUB_BATTLE_MOVEATACK,	/* 移動して攻撃 */
+	SKILLTYPESUB_BATTLE_HEAL,		/* 回復 */
 	SKILLTYPESUB_BATTLE_MAX
 };
 

@@ -54,13 +54,11 @@ BOOL CLibInfoCharSvr::UseSkill(CInfoCharSvr *pInfoChar, DWORD dwSkillID)
 
 	switch (pInfoSkill->m_nTypeMain) {
 	case SKILLTYPEMAIN_NONE:		/* ”\—Í */
-		switch (pInfoSkill->m_nTypeSub) {
-		case SKILLTYPESUB_NONE_HEAL:	/* ‰ñ•œ */		bRet = UseSkillNONE_HEAL (pInfoChar, pInfoSkill);	break;
-		}
 		break;
 	case SKILLTYPEMAIN_BATTLE:		/* í“¬ */
 		switch (pInfoSkill->m_nTypeSub) {
 		case SKILLTYPESUB_BATTLE_MOVEATACK:	/* ˆÚ“®‚µ‚ÄUŒ‚ */	bRet = UseSkillBATTLE_MOVEATACK (pInfoChar, pInfoSkill);	break;
+		case SKILLTYPESUB_BATTLE_HEAL:		/* ‰ñ•œ */			bRet = UseSkillNONE_HEAL (pInfoChar, pInfoSkill);			break;
 		}
 		break;
 	case SKILLTYPEMAIN_LIFE:		/* ¶Šˆ */
