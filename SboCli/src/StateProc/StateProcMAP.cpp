@@ -1420,32 +1420,7 @@ Exit:
 
 BOOL CStateProcMAP::OnS(BOOL bDown)
 {
-	BOOL bRet;
-	PCWindowSKILLMENU pWnd;
-
-	bRet = FALSE;
-
-	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
-	if (m_pPlayerChar == NULL) {
-		goto Exit;
-	}
-	if (IsKeyInputEnable () == FALSE) {
-		goto Exit;
-	}
-	if (bDown) {
-		goto Exit;
-	}
-	m_dwLastKeyInput = timeGetTime ();
-
-	pWnd = (PCWindowSKILLMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_SKILLMENU);
-	if (pWnd) {
-		goto Exit;
-	}
-
-	m_pMgrWindow->MakeWindowSKILLMENU ();
-	bRet = TRUE;
-Exit:
-	return bRet;
+	return FALSE;
 }
 
 

@@ -40,7 +40,6 @@ protected:
 	BOOL	OnLeft		(void);								/* キーハンドラ(←) */
 	BOOL	OnRight		(void);								/* キーハンドラ(→) */
 	BOOL	OnF			(BOOL bDown);						/* キーハンドラ(F) */
-	BOOL	OnK			(BOOL bDown);						/* キーハンドラ(K) */
 	BOOL	OnL			(BOOL bDown);						/* キーハンドラ(L) */
 	BOOL	OnS			(BOOL bDown);						/* キーハンドラ(S) */
 	BOOL	OnX			(BOOL bDown);						/* キーハンドラ(X) */

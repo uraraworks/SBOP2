@@ -85,7 +85,7 @@ void CWindowSKILLMENU::Create(CMgrData *pMgrData)
 
 void CWindowSKILLMENU::Draw(PCImg32 pDst)
 {
-	LPCSTR aszTitle[] = {"基本(K)", "戦闘(F)", "生活(L)", "能力"};
+	LPCSTR aszTitle[] = {"戦闘(F)", "生活(L)", "能力"};
 	int i, nCount, nLevel, x, y, nTmp;
 	HDC hDC;
 	HFONT hFontOld;
@@ -101,7 +101,7 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	hDC			= m_pDib->Lock ();
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
-	for (i = 0; i < 4; i ++) {
+	for (i = 0; i < 3; i ++) {
 		int nType = (m_nType == i) ? 7 : 5;
 		DrawFrame (7 + 49 * i, 7, 48, 24, nType);
 		TextOut2 (hDC, 7 + 5 + 49 * i, 7 + 4, aszTitle[i],
@@ -134,15 +134,6 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 		nTmp ++;
 	}
 
-	switch (m_nMode) {
-	case 0:
-//		m_pMgrDraw->DrawCursor (m_pDib, 49 * m_nType, 4, 0);
-		break;
-	case 1:
-		GetDrawPos (m_nPos, x, y);
-		m_pMgrDraw->DrawCursor (m_pDib, x - 8, y, 2);
-		break;
-	}
 	m_dwTimeDrawStart = timeGetTime ();
 
 Exit:
@@ -151,6 +142,15 @@ Exit:
 		nLevel = 60;
 	}
 	pDst->BltLevel (m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, nLevel, TRUE);
+	switch (m_nMode) {
+	case 0:
+		m_pMgrDraw->DrawCursor (pDst, m_ptViewPos.x + 32 + 49 * m_nType - 16, m_ptViewPos.y + 32 + 4, 0);
+		break;
+	case 1:
+		GetDrawPos (m_nPos, x, y);
+		m_pMgrDraw->DrawCursor (pDst, m_ptViewPos.x + 32 + x - 8, m_ptViewPos.y + 32 + y, 2);
+		break;
+	}
 
 	/* スキル名を表示 */
 	if ((m_nMode == 1) && (m_strName.IsEmpty () == FALSE)) {
@@ -182,7 +182,7 @@ void CWindowSKILLMENU::SetType(int nType)
 	DWORD dwSkillID;
 	PARRAYDWORD paSkillID;
 	PCInfoSkillBase pInfoSkill;
-	int anSkillType[] = {SKILLTYPEMAIN_BASIC, SKILLTYPEMAIN_BATTLE, SKILLTYPEMAIN_LIFE, SKILLTYPEMAIN_NONE};
+	int anSkillType[] = {SKILLTYPEMAIN_BATTLE, SKILLTYPEMAIN_LIFE, SKILLTYPEMAIN_NONE};
 
 	m_nType = nType;
 	m_adwSkillID.RemoveAll ();
@@ -253,6 +253,7 @@ BOOL CWindowSKILLMENU::OnDown(void)
 	switch (m_nMode) {
 	case 0:
 		m_nMode = 1;
+		m_nPos = 0;
 		break;
 	case 1:
 		if (m_nPos >= m_nPosMax - 4) {
@@ -326,14 +327,14 @@ BOOL CWindowSKILLMENU::OnRight(void)
 
 	switch (m_nMode) {
 	case 0:
-		if (m_nType >= 3) {
+		if (m_nType >= 2) {
 			goto Exit;
 		}
 		SetType (m_nType + 1);
 		break;
 	case 1:
 		if (m_nPos % 5 == 4) {
-			if (m_nType >= 3) {
+			if (m_nType >= 2) {
 				goto Exit;
 			}
 			SetType (m_nType + 1);
@@ -364,24 +365,6 @@ BOOL CWindowSKILLMENU::OnF(BOOL bDown)
 		return FALSE;
 	}
 
-	SetType (1);
-	m_pMgrSound->PlaySound (SOUNDID_CURSORMOVE);
-	return TRUE;
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CWindowSKILLMENU::OnK											 */
-/* 内容		:キーハンドラ(K)												 */
-/* 日付		:2009/04/18														 */
-/* ========================================================================= */
-
-BOOL CWindowSKILLMENU::OnK(BOOL bDown)
-{
-	if (bDown) {
-		return FALSE;
-	}
-
 	SetType (0);
 	m_pMgrSound->PlaySound (SOUNDID_CURSORMOVE);
 	return TRUE;
@@ -400,7 +383,7 @@ BOOL CWindowSKILLMENU::OnL(BOOL bDown)
 		return FALSE;
 	}
 
-	SetType (2);
+	SetType (1);
 	m_pMgrSound->PlaySound (SOUNDID_CURSORMOVE);
 	return TRUE;
 }
