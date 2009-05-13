@@ -46,6 +46,7 @@ public:
 	void	Move			(DWORD dwCharID, int nDirection, BOOL bTurn = FALSE);	/* 1歩進める */
 	DWORD	Tail			(PCInfoCharBase pChar, PCInfoCharBase pCharTarget, BOOL bTail);	/* 付いて行く設定・解除 */
 	BOOL	Atack			(CInfoCharSvr *pChar);									/* 攻撃 */
+	BOOL	AtackImple		(CInfoCharSvr *pChar, DWORD dwCharID);					/* 攻撃実処理 */
 	BOOL	Equip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* 装備 */
 	BOOL	UnEquip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* 装備解除 */
 	BOOL	UseItem			(CInfoCharSvr *pChar, DWORD dwItemID);					/* アイテム使用 */
@@ -73,7 +74,7 @@ public:
 	BOOL	IsNPC					(CInfoCharSvr *pInfoChar);						/* NPCか判定 */
 	DWORD	GetFrontCharID			(DWORD dwCharID, int nDirection = -1);			/* 一歩前のキャラIDを取得 */
 	DWORD	GetFrontCharIDPush		(DWORD dwCharID, int nDirection = -1);			/* 一歩前の押せるキャラIDを取得 */
-	DWORD	GetFrontCharIDTarget	(DWORD dwCharID, int nDirection = -1, int nXType=0);/* 一歩前の攻撃対象キャラIDを取得 */
+	DWORD	GetFrontCharIDTarget	(DWORD dwCharID, int nDirection = -1, int nXType=0, PARRAYDWORD padwCharID=NULL);/* 一歩前の攻撃対象キャラIDを取得 */
 	void	SetPos					(CInfoCharSvr *pInfoChar, DWORD dwMapID, int x, int y, BOOL bTail);	/* キャラの座標を設定 */
 	void	RenewItemGrp			(DWORD dwTypeID);								/* 装備中のアイテム画像を更新 */
 	void	ProcAtack				(CInfoCharSvr *pInfoChar);						/* 攻撃処理 */

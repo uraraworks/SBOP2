@@ -529,14 +529,13 @@ Exit:
 
 BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 {
-	int nTmp, nReserveChgEfect;
-	BOOL bRet, bResult, bChargeAtack, bCritical;
-	DWORD dwCharID, dwPoint;
-	PCInfoCharSvr pCharTarget, pCharTmp, pCharParent;
-	CPacketCHAR_TEXTEFFECT PacketCHAR_TEXTEFFECT;
+	int i, nCount;
+	BOOL bRet, bHitQuit;
+	DWORD dwCharID;
+	ARRAYDWORD adwCharID;
+	PCInfoCharMOVEATACKSvr pInfoCharTmp;
 
 	bRet = FALSE;
-	pCharTmp = NULL;
 
 	if (pChar == NULL) {
 		return FALSE;
@@ -546,11 +545,54 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 		/* 斜め方向には攻撃判定しない */
 		goto Exit;
 	}
-	dwCharID = GetFrontCharIDTarget (pChar->m_dwCharID, -1, 1);
-	/* 一歩前にいない？ */
-	if (dwCharID == 0) {
-		goto Exit;
+	bHitQuit = TRUE;
+	switch (pChar->m_nMoveType) {
+	case CHARMOVETYPE_MOVEATACK:		/* 移動して攻撃 */
+		pInfoCharTmp = (PCInfoCharMOVEATACKSvr)pChar;
+		bHitQuit = pInfoCharTmp->m_bHitQuit;
+		break;
 	}
+
+	if (bHitQuit) {
+		dwCharID = GetFrontCharIDTarget (pChar->m_dwCharID, -1, 1);
+		/* 一歩前にいない？ */
+		if (dwCharID == 0) {
+			goto Exit;
+		}
+		bRet = AtackImple (pChar, dwCharID);
+
+	} else {
+		GetFrontCharIDTarget (pChar->m_dwCharID, -1, 1, &adwCharID);
+		nCount = adwCharID.GetSize ();
+		for (i = 0; i < nCount; i ++) {
+			bRet |= AtackImple (pChar, adwCharID[i]);
+		}
+	}
+
+Exit:
+	pChar->SetMoveState (CHARMOVESTATE_BATTLE);
+
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::Atack											 */
+/* 内容		:攻撃実処理														 */
+/* 日付		:2009/05/13														 */
+/* ========================================================================= */
+
+BOOL CLibInfoCharSvr::AtackImple(PCInfoCharSvr pChar, DWORD dwCharID)
+{
+	int nTmp, nReserveChgEfect;
+	BOOL bRet, bResult, bChargeAtack, bCritical;
+	DWORD dwPoint;
+	PCInfoCharSvr pCharTarget, pCharTmp, pCharParent;
+	CPacketCHAR_TEXTEFFECT PacketCHAR_TEXTEFFECT;
+
+	bRet = FALSE;
+	pCharTmp = NULL;
+
 	pCharTarget = (PCInfoCharSvr)GetPtrLogIn (dwCharID);
 	if (pCharTarget == NULL) {
 		goto Exit;
@@ -638,8 +680,6 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 
 	bRet = TRUE;
 Exit:
-	pChar->SetMoveState (CHARMOVESTATE_BATTLE);
-
 	return bRet;
 }
 
@@ -1802,9 +1842,10 @@ Exit:
 /* ========================================================================= */
 
 DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
-	DWORD dwCharID,			/* [in] 攻撃するキャラID */
-	int nDirection,			/* [in] 向き */
-	int nXType/*0*/)		/* [in] 1:縦向きの時に、半キャラずれた状態は判定しない */
+	DWORD dwCharID,					/* [in] 攻撃するキャラID */
+	int nDirection/*-1*/,			/* [in] 向き */
+	int nXType/*0*/,				/* [in] 1:縦向きの時に、半キャラずれた状態は判定しない */
+	PARRAYDWORD padwCharID)/*NULL*/	/* [out] 対象キャラIDを全て取得 */
 {
 	int i, nCount;
 	DWORD dwRet;
@@ -1847,7 +1888,10 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 		}
 
 		dwRet = pInfoCharTmp->m_dwCharID;
-		break;
+		if (padwCharID == NULL) {
+			break;
+		}
+		padwCharID->Add (dwRet);
 	}
 
 Exit:
@@ -2808,6 +2852,9 @@ void CLibInfoCharSvr::Damage(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget,
 			pCharTarget->SetMotion (CHARMOTIONLISTID_DEAD_UP);
 			dwStartTime = 2500;
 		} else {
+			/* 付いて行くのと付いて来ているのを解除させる為2回呼ぶ */
+			Tail (pCharTarget, NULL, FALSE);
+			Tail (pCharTarget, NULL, FALSE);
 			pCharTarget->m_nReserveChgEfect = 2;
 			if (pInfoMap->m_bRecovery == FALSE) {
 				bResult = FALSE;
