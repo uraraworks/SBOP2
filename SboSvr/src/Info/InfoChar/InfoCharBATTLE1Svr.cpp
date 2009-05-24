@@ -54,6 +54,7 @@ void CInfoCharBATTLE1Svr::SetMoveState(int nMoveState)
 		break;
 	default:
 		m_dwLastTimeMove = timeGetTime ();
+		m_dwLastTiemAtack = 0;
 		m_dwTargetCharID = 0;
 		break;
 	}
@@ -170,7 +171,7 @@ BOOL CInfoCharBATTLE1Svr::TimerProcSTAND(DWORD dwTime)
 {
 	int x, y, nDirection;
 	DWORD dwTmp;
-	BOOL bRet, bResult;
+	BOOL bRet, bResult, bMove;
 	POINT ptFront;
 	RECT rcMap;
 
@@ -219,9 +220,14 @@ BOOL CInfoCharBATTLE1Svr::TimerProcSTAND(DWORD dwTime)
 			bResult = FALSE;
 		}
 	}
+	bMove = bResult;
+	bResult = m_pLibInfoCharSvr->IsBlockChar (this, nDirection, FALSE);
+	if (bResult) {
+		bMove = FALSE;
+	}
 
 	/* êiÇﬂÇÈÅH */
-	if (bResult) {
+	if (bMove) {
 		m_nDirection = nDirection;
 		GetFrontPos (ptFront, m_nDirection, TRUE);
 		SetPos (ptFront.x, ptFront.y);
@@ -315,7 +321,6 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 			SetMoveState (CHARMOVESTATE_STAND);
 			goto Exit;
 		}
-		m_dwLastTimeMove = dwTime;
 		nMoveAverage = m_nMoveAverageBattle;
 		if (nMoveAverage == 0) {
 			nMoveAverage = m_nMoveAverage;
@@ -333,7 +338,7 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 		ptPos.x = -1;
 	}
 
-	if (ptPos.x < 0) {
+	if (xx + yy == 1) {
 		nDirection = GetDirection (m_ptTargetPos.x, m_ptTargetPos.y);
 		/* 4ï˚å¸Ç…ïœä∑ */
 		nDirection = GetDrawDirection (nDirection);

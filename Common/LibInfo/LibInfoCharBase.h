@@ -39,7 +39,7 @@ public:
 	void	Delete				(DWORD dwCharID);						/* 削除 */
 	void	DeleteAll			(void);									/* 全て削除 */
 	void	SortY				(void);									/* Y座標順にソート */
-	BOOL	IsBlockChar			(PCInfoCharBase pChar, int nDirection);	/* 一歩前でぶつかるかチェック */
+	BOOL	IsBlockChar			(PCInfoCharBase pChar, int nDirection, BOOL bNoBlockFlg=TRUE);	/* 一歩前でぶつかるかチェック */
 	BOOL	IsUseName			(LPCSTR pszName);						/* 名前が使用されているかチェック */
 	BOOL	NameCheck			(LPCSTR pszName);						/* 名前に使用できない名前があるかチェック */
 	int		GetTurnDirection	(int nDirection);						/* 逆向きを取得 */

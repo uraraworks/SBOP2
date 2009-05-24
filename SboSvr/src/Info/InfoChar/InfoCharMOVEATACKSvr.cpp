@@ -20,7 +20,7 @@
 CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
 {
 	m_bHitQuit			= TRUE;
-	m_bDistanceDelete		= FALSE;
+	m_bDistanceDelete	= FALSE;
 	m_bDelete			= TRUE;
 	m_dwLastAtackTime	= 0;
 	m_dwQuitTime		= 0;

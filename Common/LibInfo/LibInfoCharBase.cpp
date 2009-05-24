@@ -394,7 +394,7 @@ void CLibInfoCharBase::SortY(void)
 /* “ú•t		:2007/09/01														 */
 /* ========================================================================= */
 
-BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection)
+BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection, BOOL bNoBlockFlg/*TRUE*/)
 {
 	BOOL bRet, bResult;
 	int i, nCount, nDirectionBack;
@@ -426,7 +426,7 @@ BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection)
 		if ((sizeTmp.cx < 0) || (sizeTmp.cx + sizeTmp.cy >= 1)) {
 			continue;
 		}
-		if (pInfoCharTmp->m_bBlock == FALSE) {
+		if (bNoBlockFlg && (pInfoCharTmp->m_bBlock == FALSE)) {
 			continue;
 		}
 		bRet = TRUE;
