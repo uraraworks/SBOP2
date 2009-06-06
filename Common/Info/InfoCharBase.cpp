@@ -2538,6 +2538,33 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::IsEnableHeal									 */
+/* 内容		:回復できる状態か判定											 */
+/* 日付		:2009/05/24														 */
+/* 戻り値	:TRUE:回復可													 */
+/* ========================================================================= */
+
+BOOL CInfoCharBase::IsEnableHeal(void)
+{
+	BOOL bRet;
+
+	bRet = FALSE;
+
+	if (m_dwHP == 0) {
+		goto Exit;
+	}
+	switch (m_nMoveState) {
+	case CHARMOVESTATE_SWOON:				/* 気絶 */
+		goto Exit;
+	}
+
+	bRet = TRUE;
+Exit:
+	return bRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::IsAtackTarget									 */
 /* 内容		:攻撃対象となるか判定											 */
 /* 日付		:2008/07/12														 */

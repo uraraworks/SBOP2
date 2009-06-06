@@ -145,6 +145,7 @@ public:
 	virtual BOOL IsEnableMove		(void);							/* 移動できる状態か判定 */
 	virtual BOOL IsEnableAtack		(void);							/* 攻撃できる状態か判定 */
 	virtual BOOL IsAtackTarget		(void);							/* 攻撃対象となるか判定 */
+	virtual BOOL IsEnableHeal		(void);							/* 回復できる状態か判定 */
 	virtual BOOL IsLogoutDelete		(void);							/* ログアウト時に削除するか判定 */
 
 
