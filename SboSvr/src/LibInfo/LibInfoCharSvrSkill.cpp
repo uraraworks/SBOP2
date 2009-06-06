@@ -89,7 +89,7 @@ Exit:
 BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase)
 {
 	int i, nCount, nTmp, nPoint, nDirection;
-	BOOL bRet;
+	BOOL bRet, bResult;
 	PCInfoMapBase pInfoMap;
 	PCInfoCharSvr pInfoCharTmp;
 	PCInfoSkillHEAL pInfoSkill = (PCInfoSkillHEAL)pInfoSkillBase;
@@ -154,6 +154,10 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = apInfoCharTarget[i];
 		if (pInfoChar->IsNPC () != pInfoCharTmp->IsNPC()) {
+			continue;
+		}
+		bResult = pInfoCharTmp->IsEnableHeal ();
+		if (bResult == FALSE) {
 			continue;
 		}
 
