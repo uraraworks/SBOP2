@@ -316,6 +316,8 @@ BOOL CDlgAdminCharModify::OnInitDialog()
 	m_ctlMoveType.SetItemData (7, CHARMOVETYPE_PUTNPC);
 	m_ctlMoveType.AddString ("êÌì¨1");
 	m_ctlMoveType.SetItemData (8, CHARMOVETYPE_BATTLE1);
+	m_ctlMoveType.AddString ("êÌì¨2");
+	m_ctlMoveType.SetItemData (9, CHARMOVETYPE_BATTLE2);
 	m_ctlMoveType.SetCurSel (0);
 
 	m_pInfoTalkEvent = new CInfoTalkEvent;

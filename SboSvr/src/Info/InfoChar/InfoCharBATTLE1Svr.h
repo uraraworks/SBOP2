@@ -20,17 +20,19 @@ public:
 			CInfoCharBATTLE1Svr();						/* コンストラクタ */
 	virtual ~CInfoCharBATTLE1Svr();						/* デストラクタ */
 
-	void SetMoveState	(int nMoveState);						/* 移動状態を変更 */
-	BOOL TimerProc		(DWORD dwTime);							/* 時間処理 */
-	void ProcAtack		(void);									/* 処理(攻撃した時) */
-	BOOL ProcHit		(CInfoCharSvr *pInfoChar);				/* 処理(攻撃を受けた時) */
-	BOOL ProcSWOON		(DWORD dwPara);							/* 行動処理(気絶) */
+	virtual void SetTarget		(CInfoCharBase *pCharTarget);	/* ターゲットキャラを設定 */
+	virtual void SetMoveState	(int nMoveState);				/* 移動状態を変更 */
+	virtual BOOL TimerProc		(DWORD dwTime);					/* 時間処理 */
+	virtual void ProcAtack		(void);							/* 処理(攻撃した時) */
+	virtual BOOL ProcHit		(CInfoCharSvr *pInfoChar);		/* 処理(攻撃を受けた時) */
+	virtual BOOL ProcSWOON		(DWORD dwPara);					/* 行動処理(気絶) */
 
 
 protected:
-	BOOL TimerProcSTAND	(DWORD dwTime);							/* 時間処理(立ち) */
-	BOOL TimerProcMOVE	(DWORD dwTime);							/* 時間処理(移動中) */
-	BOOL TimerProcBATTLE(DWORD dwTime);							/* 時間処理(戦闘中) */
+	virtual BOOL TimerProcSTAND	(DWORD dwTime);				/* 時間処理(立ち) */
+	virtual BOOL TimerProcMOVE	(DWORD dwTime);				/* 時間処理(移動中) */
+	virtual BOOL TimerProcBATTLE(DWORD dwTime);				/* 時間処理(戦闘中) */
+	virtual BOOL IsMoveDirection(int nDirection);			/* 指定方向に進めるかチェック */
 
 
 public:

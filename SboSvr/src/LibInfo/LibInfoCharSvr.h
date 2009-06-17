@@ -75,6 +75,7 @@ public:
 	DWORD	GetFrontCharID			(DWORD dwCharID, int nDirection = -1);			/* 一歩前のキャラIDを取得 */
 	DWORD	GetFrontCharIDPush		(DWORD dwCharID, int nDirection = -1);			/* 一歩前の押せるキャラIDを取得 */
 	DWORD	GetFrontCharIDTarget	(DWORD dwCharID, int nDirection = -1, int nXType=0, PARRAYDWORD padwCharID=NULL);/* 一歩前の攻撃対象キャラIDを取得 */
+	DWORD	GetNearCharID			(DWORD dwCharID, SIZE &sizedistance);			/* 近くにいる敵キャラIDを取得 */
 	void	SetPos					(CInfoCharSvr *pInfoChar, DWORD dwMapID, int x, int y, BOOL bTail);	/* キャラの座標を設定 */
 	void	RenewItemGrp			(DWORD dwTypeID);								/* 装備中のアイテム画像を更新 */
 	void	ProcAtack				(CInfoCharSvr *pInfoChar);						/* 攻撃処理 */
@@ -94,6 +95,7 @@ protected:
 	void CharProcSWOON				(CInfoCharSvr *pInfoChar);			/* キャラ処理(気絶) */
 	void CharProcAtack				(CInfoCharSvr *pInfoChar);			/* 攻撃 */
 	void PutNpc						(CInfoCharSvr *pInfoChar);			/* NPC発生 */
+	void TargetChar					(CInfoCharSvr *pInfoChar);			/* 近くのキャラにターゲット変更 */
 	void DropItem					(CInfoCharSvr *pInfoChar);			/* アイテムドロップ */
 
 	void	GetTargetCharID			(CInfoCharSvr *pInfoChar, int nTarget, int nArea, ARRAYDWORD &adstCharID);	/* 対象キャラIDを取得 */

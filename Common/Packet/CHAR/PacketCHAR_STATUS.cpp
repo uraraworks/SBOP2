@@ -58,6 +58,7 @@ CPacketCHAR_STATUS::CPacketCHAR_STATUS()
 	m_nMoveAverage			= 0;	/* 移動確率 */
 	m_nMoveAverageBattle	= 0;	/* 戦闘時移動確率 */
 	m_nLightLevel			= 0;	/* 灯りレベル */
+	ZeroMemory (&m_sizeSearchDistance, sizeof (m_sizeSearchDistance));	/* 策敵範囲 */
 }
 
 
@@ -121,7 +122,8 @@ void CPacketCHAR_STATUS::Make(
 			 sizeof (pInfo->m_nDropItemAverage)	+
 			 sizeof (pInfo->m_nMoveAverage)		+
 			 sizeof (pInfo->m_nMoveAverageBattle) +
-			 sizeof (pInfo->m_nLightLevel);			/* 灯りレベル */
+			 sizeof (pInfo->m_nLightLevel)		+	/* 灯りレベル */
+			 sizeof (m_sizeSearchDistance);			/* 策敵範囲 */
 
 	pData = new BYTE[dwSize];
 	ZeroMemory (pData, dwSize);
@@ -167,6 +169,7 @@ void CPacketCHAR_STATUS::Make(
 	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverage,			sizeof (m_nMoveAverage),		pDataTmp);	/* 移動確率 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverageBattle,	sizeof (m_nMoveAverageBattle),	pDataTmp);	/* 戦闘時移動確率 */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_nLightLevel,			sizeof (m_nLightLevel),			pDataTmp);	/* 灯りレベル */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_sizeSearchDistance,	sizeof (m_sizeSearchDistance),	pDataTmp);	/* 策敵範囲 */
 
 	RenewPacket (pData, dwSize);
 }
@@ -221,6 +224,7 @@ PBYTE CPacketCHAR_STATUS::Set(PBYTE pPacket)
 	CopyMemoryRenew (&m_nMoveAverage,			pDataTmp, sizeof (m_nMoveAverage),			pDataTmp);	/* 移動確率 */
 	CopyMemoryRenew (&m_nMoveAverageBattle,		pDataTmp, sizeof (m_nMoveAverageBattle),	pDataTmp);	/* 戦闘時移動確率 */
 	CopyMemoryRenew (&m_nLightLevel,			pDataTmp, sizeof (m_nLightLevel),			pDataTmp);	/* 灯りレベル */
+	CopyMemoryRenew (&m_sizeSearchDistance,		pDataTmp, sizeof (m_sizeSearchDistance),	pDataTmp);	/* 策敵範囲 */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -273,6 +277,7 @@ void CPacketCHAR_STATUS::SetParam(CInfoCharBase *pInfo)
 	pInfo->m_nMoveAverage		= m_nMoveAverage;		/* 移動確率 */
 	pInfo->m_nMoveAverageBattle	= m_nMoveAverageBattle;	/* 戦闘時移動確率 */
 	pInfo->m_nLightLevel		= m_nLightLevel;		/* 灯りレベル */
+	pInfo->m_sizeSearchDistance	= m_sizeSearchDistance;	/* 策敵範囲 */
 }
 
 /* Copyright(C)URARA-works 2008 */

@@ -94,6 +94,7 @@ static LPCSTR s_aszName[] = {
 	"m_dwMaxHP",				/* Å‘åHP */
 	"m_dwSP",					/* SP */
 	"m_dwMaxSP",				/* Å‘åSP */
+	"m_sizeSearchDistance",		/* ô“G”ÍˆÍ */
 	/* NPC”­¶ */
 	"m_dwPutCycle",				/* ”­¶üŠú */
 	"m_nPutMoveType",			/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
@@ -207,6 +208,7 @@ CInfoCharBase::CInfoCharBase()
 	m_dwSP		= 0;
 	m_dwMaxSP	= 0;
 
+	ZeroMemory (&m_sizeSearchDistance, sizeof (m_sizeSearchDistance));
 	ZeroMemory (m_adwMotionID, sizeof (m_adwMotionID));
 	m_adwMotionID[CHARMOTIONID_STAND]		= CHARMOTIONLISTID_STAND_UP;		/* ƒ‚[ƒVƒ‡ƒ“ID(—§‚¿) */
 	m_adwMotionID[CHARMOTIONID_WALK]		= CHARMOTIONLISTID_WALK_UP;			/* ƒ‚[ƒVƒ‡ƒ“ID(•à‚«) */
@@ -355,6 +357,7 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += (m_strTalk.GetLength () + 1);
 	dwRet += ((m_adwItemID.GetSize () + 1) * sizeof (DWORD));
 	dwRet += ((m_adwSkillID.GetSize () + 1) * sizeof (DWORD));
+	dwRet += sizeof (m_sizeSearchDistance);		/* ô“G”ÍˆÍ */
 	/* NPC”­¶ */
 	dwRet += sizeof (m_dwPutCycle);				/* ”­¶üŠú */
 	dwRet += sizeof (m_nPutMoveType);			/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
@@ -458,12 +461,13 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 76:	dwRet = sizeof (m_dwMaxHP);					break;
 	case 77:	dwRet = sizeof (m_dwSP);					break;
 	case 78:	dwRet = sizeof (m_dwMaxSP);					break;
+	case 79:	dwRet = sizeof (m_sizeSearchDistance);		break;	/* ô“G”ÍˆÍ */
 	/* NPC”­¶ */
-	case 79:	dwRet = sizeof (m_dwPutCycle);				break;	/* ”­¶üŠú */
-	case 80:	dwRet = sizeof (m_nPutMoveType);			break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	case 81:	dwRet = sizeof (m_nMaxPutCount);			break;	/* “¯”­¶” */
-	case 82:	dwRet = sizeof (m_nPutAverage);				break;	/* ”­¶Šm—¦ */
-	case 83:	dwRet = sizeof (m_ptPutArea);				break;	/* ”­¶”ÍˆÍ(”¼Œa) */
+	case 80:	dwRet = sizeof (m_dwPutCycle);				break;	/* ”­¶üŠú */
+	case 81:	dwRet = sizeof (m_nPutMoveType);			break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
+	case 82:	dwRet = sizeof (m_nMaxPutCount);			break;	/* “¯”­¶” */
+	case 83:	dwRet = sizeof (m_nPutAverage);				break;	/* ”­¶Šm—¦ */
+	case 84:	dwRet = sizeof (m_ptPutArea);				break;	/* ”­¶”ÍˆÍ(”¼Œa) */
 	}
 
 	return dwRet;
@@ -604,12 +608,13 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 76:	pSrc = (PBYTE)&m_dwMaxHP;					break;
 	case 77:	pSrc = (PBYTE)&m_dwSP;						break;
 	case 78:	pSrc = (PBYTE)&m_dwMaxSP;					break;
+	case 79:	pSrc = (PBYTE)&m_sizeSearchDistance;		break;	/* ô“G”ÍˆÍ */
 	/* NPC”­¶ */
-	case 79:	pSrc = (PBYTE)&m_dwPutCycle;				break;	/* ”­¶üŠú */
-	case 80:	pSrc = (PBYTE)&m_nPutMoveType;				break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	case 81:	pSrc = (PBYTE)&m_nMaxPutCount;				break;	/* “¯”­¶” */
-	case 82:	pSrc = (PBYTE)&m_nPutAverage;				break;	/* ”­¶Šm—¦ */
-	case 83:	pSrc = (PBYTE)&m_ptPutArea;					break;	/* ”­¶”ÍˆÍ(”¼Œa) */
+	case 80:	pSrc = (PBYTE)&m_dwPutCycle;				break;	/* ”­¶üŠú */
+	case 81:	pSrc = (PBYTE)&m_nPutMoveType;				break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
+	case 82:	pSrc = (PBYTE)&m_nMaxPutCount;				break;	/* “¯”­¶” */
+	case 83:	pSrc = (PBYTE)&m_nPutAverage;				break;	/* ”­¶Šm—¦ */
+	case 84:	pSrc = (PBYTE)&m_ptPutArea;					break;	/* ”­¶”ÍˆÍ(”¼Œa) */
 	}
 
 	if (pSrc) {
@@ -750,12 +755,13 @@ DWORD CInfoCharBase::ReadElementData(
 	case 76:	pDst = (PBYTE)&m_dwMaxHP;					dwSize = sizeof (m_dwMaxHP);				break;
 	case 77:	pDst = (PBYTE)&m_dwSP;						dwSize = sizeof (m_dwSP);					break;
 	case 78:	pDst = (PBYTE)&m_dwMaxSP;					dwSize = sizeof (m_dwMaxSP);				break;
+	case 79:	pDst = (PBYTE)&m_sizeSearchDistance;		dwSize = sizeof (m_sizeSearchDistance);		break;	/* ô“G”ÍˆÍ */
 	/* NPC”­¶ */
-	case 79:	pDst = (PBYTE)&m_dwPutCycle;				dwSize = sizeof (m_dwPutCycle);				break;	/* ”­¶üŠú */
-	case 80:	pDst = (PBYTE)&m_nPutMoveType;				dwSize = sizeof (m_nPutMoveType);			break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	case 81:	pDst = (PBYTE)&m_nMaxPutCount;				dwSize = sizeof (m_nMaxPutCount);			break;	/* “¯”­¶” */
-	case 82:	pDst = (PBYTE)&m_nPutAverage;				dwSize = sizeof (m_nPutAverage);			break;	/* ”­¶Šm—¦ */
-	case 83:	pDst = (PBYTE)&m_ptPutArea;					dwSize = sizeof (m_ptPutArea);				break;	/* ”­¶”ÍˆÍ(”¼Œa) */
+	case 80:	pDst = (PBYTE)&m_dwPutCycle;				dwSize = sizeof (m_dwPutCycle);				break;	/* ”­¶üŠú */
+	case 81:	pDst = (PBYTE)&m_nPutMoveType;				dwSize = sizeof (m_nPutMoveType);			break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
+	case 82:	pDst = (PBYTE)&m_nMaxPutCount;				dwSize = sizeof (m_nMaxPutCount);			break;	/* “¯”­¶” */
+	case 83:	pDst = (PBYTE)&m_nPutAverage;				dwSize = sizeof (m_nPutAverage);			break;	/* ”­¶Šm—¦ */
+	case 84:	pDst = (PBYTE)&m_ptPutArea;					dwSize = sizeof (m_ptPutArea);				break;	/* ”­¶”ÍˆÍ(”¼Œa) */
 	}
 
 	if (pDst) {
@@ -866,6 +872,7 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += (m_abyMark.	GetSize () + 1);
 	dwRet += ((m_adwItemID.	GetSize () + 1) * sizeof (DWORD));
 	dwRet += ((m_adwSkillID.GetSize () + 1) * sizeof (DWORD));
+	dwRet += sizeof (m_sizeSearchDistance);		/* ô“G”ÍˆÍ */
 	/* NPC”­¶ */
 	dwRet += sizeof (m_dwPutCycle);				/* ”­¶üŠú */
 	dwRet += sizeof (m_nPutMoveType);			/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
@@ -1002,6 +1009,7 @@ PBYTE CInfoCharBase::GetSendData(void)
 	}
 	dwTmp = 0;
 	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
+	CopyMemoryRenew (pDataTmp, &m_sizeSearchDistance, sizeof (m_sizeSearchDistance), pDataTmp);		/* ô“G”ÍˆÍ */
 
 	/* NPC”­¶ */
 	CopyMemoryRenew (pDataTmp, &m_dwPutCycle,	sizeof (m_dwPutCycle),		pDataTmp);		/* ”­¶üŠú */
@@ -1144,6 +1152,8 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 		}
 		m_adwSkillID.Add (dwTmp);
 	}
+
+	CopyMemoryRenew (&m_sizeSearchDistance, pDataTmp, sizeof (m_sizeSearchDistance), pDataTmp);		/* ô“G”ÍˆÍ */
 
 	/* NPC”­¶ */
 	CopyMemoryRenew (&m_dwPutCycle,		pDataTmp, sizeof (m_dwPutCycle),	pDataTmp);		/* ”­¶üŠú */
@@ -2278,6 +2288,7 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	SetName (pSrc->m_strCharName);
 	SetSpeak (pSrc->m_strSpeak);
 
+	m_sizeSearchDistance = pSrc->m_sizeSearchDistance;	/* ô“G”ÍˆÍ */
 	m_dwPutCycle		= pSrc->m_dwPutCycle;		/* ”­¶üŠú */
 	m_nPutMoveType		= pSrc->m_nPutMoveType;		/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
 	m_nMaxPutCount		= pSrc->m_nMaxPutCount;		/* “¯”­¶” */

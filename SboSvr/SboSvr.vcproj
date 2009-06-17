@@ -1259,6 +1259,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\Info\InfoChar\InfoCharBATTLE2Svr.cpp"
+						>
+					</File>
+					<File
 						RelativePath="src\Info\InfoChar\InfoCharMOVEATACKSvr.cpp"
 						>
 						<FileConfiguration
@@ -2155,6 +2159,10 @@
 					</File>
 					<File
 						RelativePath=".\src\Info\InfoChar\InfoCharBATTLE1Svr.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Info\InfoChar\InfoCharBATTLE2Svr.h"
 						>
 					</File>
 					<File

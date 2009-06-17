@@ -350,6 +350,9 @@
 #define IDC_DISTANCEDELETE              1159
 #define IDC_THROWGHPUT                  1160
 #define IDC_ICONGRP                     1160
+#define IDC_SEARCH_X                    1161
+#define IDC_EDIT4                       1162
+#define IDC_SEARCH_Y                    1162
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -405,7 +408,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        199
 #define _APS_NEXT_COMMAND_VALUE         32818
-#define _APS_NEXT_CONTROL_VALUE         1161
+#define _APS_NEXT_CONTROL_VALUE         1162
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

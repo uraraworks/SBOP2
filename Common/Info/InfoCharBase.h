@@ -48,6 +48,7 @@ enum {
 	CHARMOVETYPE_STYLECOPY_GET,						/* 容姿コピー(反映) */
 	CHARMOVETYPE_PUTNPC,							/* NPC発生 */
 	CHARMOVETYPE_BATTLE1,							/* 戦闘1 */
+	CHARMOVETYPE_BATTLE2,							/* 戦闘2 */
 	CHARMOVETYPE_MAX
 };
 
@@ -122,7 +123,7 @@ public:
 	void		DeleteItem		(DWORD dwItemID);								/* 所持アイテムを削除 */
 	BOOL		HaveItem		(DWORD dwItemID);								/* 指定アイテムを持っているか判定 */
 	void		GetTargetPos	(POINT *ptTarget, POINT &ptDst, int nCount);	/* 指定座標を取得 */
-	void		SetTarget		(CInfoCharBase *pCharTarget);					/* ターゲットキャラを設定 */
+	virtual void SetTarget		(CInfoCharBase *pCharTarget);					/* ターゲットキャラを設定 */
 	void		SetSkill		(ARRAYDWORD *padwSkillID);						/* スキル情報を設定 */
 	ARRAYDWORD	*GetSkill		(void)	{ return &m_adwSkillID; }				/* スキル情報を取得 */
 	BOOL		HaveSkill		(DWORD dwSkillID);								/* 指定スキルを持っているか判定 */
@@ -259,6 +260,7 @@ public:
 				m_strTalk;					/* 会話データ */
 	ARRAYDWORD	m_adwItemID,				/* 所持アイテム */
 				m_adwSkillID;				/* 所持スキル */
+	SIZE		m_sizeSearchDistance;		/* 策敵範囲 */
 
 	/* 移動種別による個別情報 */
 

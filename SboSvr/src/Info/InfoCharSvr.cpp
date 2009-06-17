@@ -37,6 +37,7 @@ CInfoCharSvr::CInfoCharSvr()
 	m_bChgFishingHit		= FALSE;
 	m_bChgMoveCount			= FALSE;
 	m_bChgPutNpc			= FALSE;
+	m_bChgTargetChar		= FALSE;
 	m_bWaitCheckMapEvent	= FALSE;
 	m_bDropItem				= FALSE;
 	m_bAtack				= FALSE;

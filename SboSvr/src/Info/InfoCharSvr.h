@@ -106,6 +106,7 @@ public:
 			m_bChgFishingHit,			/* 釣れた */
 			m_bChgMoveCount,			/* 指定歩数の移動 */
 			m_bChgPutNpc,				/* NPC発生 */
+			m_bChgTargetChar,			/* 近くのキャラにターゲット変更 */
 			m_bWaitCheckMapEvent,		/* マップイベントチェック待ち */
 			m_bDropItem,				/* アイテムドロップ */
 			m_bAtack,					/* 攻撃 */

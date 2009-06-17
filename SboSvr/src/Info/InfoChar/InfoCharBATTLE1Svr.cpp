@@ -38,6 +38,19 @@ CInfoCharBATTLE1Svr::~CInfoCharBATTLE1Svr()
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBATTLE1Svr::SetTarget									 */
+/* 内容		:ターゲットキャラを設定											 */
+/* 日付		:2008/08/09														 */
+/* ========================================================================= */
+
+void CInfoCharBATTLE1Svr::SetTarget(CInfoCharBase *pCharTarget)
+{
+	CInfoCharSvr::SetTarget(pCharTarget);
+	m_pInfoCharTarget = (CInfoCharSvr *)pCharTarget;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBATTLE1Svr::SetMoveState								 */
 /* 内容		:移動状態を変更													 */
 /* 日付		:2008/07/12														 */
@@ -133,7 +146,6 @@ BOOL CInfoCharBATTLE1Svr::ProcHit(CInfoCharSvr *pInfoChar)
 		}
 		m_nDirection = anDirection[pInfoChar->m_nDirection];
 		SetTarget (pInfoChar);
-		m_pInfoCharTarget = pInfoChar;
 		m_bChgPos = TRUE;
 	}
 
@@ -169,11 +181,10 @@ BOOL CInfoCharBATTLE1Svr::ProcSWOON(DWORD dwPara)
 
 BOOL CInfoCharBATTLE1Svr::TimerProcSTAND(DWORD dwTime)
 {
-	int x, y, nDirection;
+	int nDirection;
 	DWORD dwTmp;
-	BOOL bRet, bResult, bMove;
+	BOOL bRet, bResult;
 	POINT ptFront;
-	RECT rcMap;
 
 	bRet = FALSE;
 
@@ -197,37 +208,10 @@ BOOL CInfoCharBATTLE1Svr::TimerProcSTAND(DWORD dwTime)
 	}
 
 	nDirection = genrand () % 4;
-	/* 脱出可能かチェック */
-	bResult = FALSE;
-	GetFrontMapPosRect (rcMap, nDirection);
-	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
-		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			bResult |= !m_pInfoMap->IsMoveOut (x, y, nDirection);
-		}
-	}
-	bResult = !bResult;
-	if (bResult) {
-		/* 進めるかチェック */
-		bResult = FALSE;
-		GetFrontMapPosRect (rcMap, nDirection);
-		for (y = rcMap.top; y <= rcMap.bottom; y ++) {
-			for (x = rcMap.left; x <= rcMap.right; x ++) {
-				bResult |= !m_pInfoMap->IsMove (x, y, nDirection);
-			}
-		}
-		bResult = !bResult;
-		if (rcMap.top < 0) {
-			bResult = FALSE;
-		}
-	}
-	bMove = bResult;
-	bResult = m_pLibInfoCharSvr->IsBlockChar (this, nDirection, FALSE);
-	if (bResult) {
-		bMove = FALSE;
-	}
+	bResult = IsMoveDirection (nDirection);
 
 	/* 進める？ */
-	if (bMove) {
+	if (bResult) {
 		m_nDirection = nDirection;
 		GetFrontPos (ptFront, m_nDirection, TRUE);
 		SetPos (ptFront.x, ptFront.y);
@@ -373,6 +357,65 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 
 Exit:
 	return TRUE;
+}
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharBATTLE1Svr::IsMoveDirection							 */
+/* 内容		:指定方向に進めるかチェック										 */
+/* 日付		:2009/06/14														 */
+/* 戻り値	:TRUE:進める													 */
+/* ========================================================================= */
+
+BOOL CInfoCharBATTLE1Svr::IsMoveDirection(int nDirection)
+{
+	int x, y;
+	BOOL bResult, bRet;
+	RECT rcMap;
+
+	bRet = FALSE;
+
+	bResult = IsEnableMove ();
+	if (bResult == FALSE) {
+		goto Exit;
+	}
+
+	/* 脱出可能かチェック */
+	bResult = FALSE;
+	GetFrontMapPosRect (rcMap, nDirection);
+	if (rcMap.top < 0) {
+		/* 範囲外に出る */
+		goto Exit;
+	}
+
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			/* 通れない場合がTRUEになるよう反転しておく */
+			bResult |= !m_pInfoMap->IsMoveOut (x, y, nDirection);
+		}
+	}
+	if (bResult) {
+		goto Exit;
+	}
+
+	/* 進めるかチェック */
+	bResult = FALSE;
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			/* 通れない場合がTRUEになるよう反転しておく */
+			bResult |= !m_pInfoMap->IsMove (x, y, nDirection);
+		}
+	}
+	if (bResult) {
+		goto Exit;
+	}
+
+	bResult = m_pLibInfoCharSvr->IsBlockChar (this, nDirection, FALSE);
+	if (bResult) {
+		goto Exit;
+	}
+	bRet = TRUE;
+Exit:
+	return bRet;
 }
 
 /* Copyright(C)URARA-works 2008 */

@@ -46,6 +46,8 @@ public:
 	DWORD	m_dwMaxSP;
 	DWORD	m_dwLightTime;
 	int	m_nDropItemAverage;
+	int	m_nSearchX;
+	int	m_nSearchY;
 	int	m_nMoveAverage;
 	int	m_nMoveAverageBattle;
 	int	m_nLightLevel;

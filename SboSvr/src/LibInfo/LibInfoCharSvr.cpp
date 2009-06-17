@@ -23,6 +23,7 @@
 #include "InfoCharATACKANIMESvr.h"
 #include "InfoCharMOVEATACKSvr.h"
 #include "InfoCharBATTLE1Svr.h"
+#include "InfoCharBATTLE2Svr.h"
 #include "InfoCharPUTNPC.h"
 #include "InfoTextEffect.h"
 #include "MainFrame.h"
@@ -1248,6 +1249,7 @@ PCInfoBase CLibInfoCharSvr::GetNew(int nType)
 	case CHARMOVETYPE_ATACKANIME:	pNew = (PCInfoBase)new CInfoCharATACKANIMESvr;	break;	/* 攻撃受けるとアニメーション */
 	case CHARMOVETYPE_MOVEATACK:	pNew = (PCInfoBase)new CInfoCharMOVEATACKSvr;	break;	/* 移動して攻撃 */
 	case CHARMOVETYPE_BATTLE1:		pNew = (PCInfoBase)new CInfoCharBATTLE1Svr;		break;	/* 戦闘1 */
+	case CHARMOVETYPE_BATTLE2:		pNew = (PCInfoBase)new CInfoCharBATTLE2Svr;		break;	/* 戦闘2 */
 	case CHARMOVETYPE_PUTNPC:		pNew = (PCInfoBase)new CInfoCharPUTNPC;			break;	/* NPC発生 */
 	default:						pNew = (PCInfoBase)new CInfoCharSvr;			break;
 	}
@@ -1900,6 +1902,69 @@ Exit:
 
 
 /* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::GetNearCharID									 */
+/* 内容		:近くにいる敵キャラIDを取得										 */
+/* 日付		:2009/07/17														 */
+/* ========================================================================= */
+
+DWORD CLibInfoCharSvr::GetNearCharID(
+	DWORD dwCharID,			/* [in] キャラID */
+	SIZE &sizedistance)		/* [in] 対象距離 */
+{
+	int i, nCount;
+	DWORD dwRet;
+	RECT rcSrcRect, rcTmp;
+	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
+
+	dwRet = 0;
+
+	pInfoCharSrc = (PCInfoCharSvr)GetPtr (dwCharID);
+	if (pInfoCharSrc == NULL) {
+		goto Exit;
+	}
+	pInfoCharSrc->GetPosRect (rcSrcRect);
+	rcSrcRect.left	 -= sizedistance.cx;
+	rcSrcRect.right  += sizedistance.cx;
+	rcSrcRect.top    -= sizedistance.cy;
+	rcSrcRect.bottom += sizedistance.cy;
+
+	nCount = GetCountLogIn ();
+	for (i = 0; i < nCount; i ++) {
+		pInfoCharTmp = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
+		if (pInfoCharSrc == pInfoCharTmp) {
+			continue;
+		}
+		if (pInfoCharTmp->m_dwCharID == pInfoCharSrc->m_dwParentCharID) {
+			continue;
+		}
+		if (pInfoCharTmp->m_dwParentCharID != 0) {
+			if (pInfoCharTmp->m_dwParentCharID == pInfoCharSrc->m_dwParentCharID) {
+				continue;
+			}
+		}
+		if (pInfoCharTmp->IsAtackTarget () == FALSE) {
+			continue;
+		}
+		if (IsNPC (pInfoCharSrc) && IsNPC (pInfoCharTmp)) {
+			continue;
+		}
+
+		pInfoCharTmp->GetPosRect (rcTmp);
+		if (!((rcSrcRect.left <= rcTmp.right) && (rcTmp.left <= rcSrcRect.right) &&
+			(rcSrcRect.top <= rcTmp.bottom) && (rcTmp.top <= rcSrcRect.bottom))) {
+			continue;
+		}
+
+		dwRet = pInfoCharTmp->m_dwCharID;
+		break;
+	}
+
+Exit:
+	return dwRet;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CLibInfoCharSvr::SetPos										 */
 /* 内容		:キャラの座標を設定												 */
 /* 日付		:2008/06/29														 */
@@ -2230,6 +2295,10 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 	/* NPC発生 */
 	} else if (pInfoChar->m_bChgPutNpc) {
 		PutNpc (pInfoChar);
+
+	/* 近くのキャラにターゲット変更 */
+	} else if (pInfoChar->m_bChgTargetChar) {
+		TargetChar (pInfoChar);	
 
 	/* マップイベントチェック待ち */
 	} else if (pInfoChar->m_bWaitCheckMapEvent) {
@@ -2616,6 +2685,29 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 	pInfoChar->m_bChgPutNpc = FALSE;
 Exit:
 	SAFE_DELETE (pInfoCharTmp);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLibInfoCharSvr::TargetChar									 */
+/* 内容		:近くのキャラにターゲット変更									 */
+/* 日付		:2009/07/17														 */
+/* ========================================================================= */
+
+void CLibInfoCharSvr::TargetChar(CInfoCharSvr *pInfoChar)
+{
+	DWORD dwTargetCharID;
+	PCInfoCharSvr pCharTarget;
+
+	dwTargetCharID = GetNearCharID (pInfoChar->m_dwCharID, pInfoChar->m_sizeSearchDistance);
+	if (dwTargetCharID == 0) {
+		return;
+	}
+	pCharTarget = (PCInfoCharSvr)GetPtrLogIn (dwTargetCharID);
+	if (pCharTarget) {
+		pInfoChar->SetTarget (pCharTarget);
+	}
+	pInfoChar->m_bChgTargetChar = FALSE;
 }
 
 

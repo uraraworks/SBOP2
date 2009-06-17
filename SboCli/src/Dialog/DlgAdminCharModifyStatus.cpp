@@ -43,6 +43,8 @@ void CDlgAdminCharModifyStatus::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_LIGHTLEVEL, m_nLightLevel);
 	DDX_Text(pDX, IDC_LIGHTTIME, m_dwLightTime);
 	DDX_Text(pDX, IDC_DROPITEMAVERAGE, m_nDropItemAverage);
+	DDX_Text(pDX, IDC_SEARCH_X, m_nSearchX);
+	DDX_Text(pDX, IDC_SEARCH_Y, m_nSearchY);
 	DDX_Text(pDX, IDC_MOVEAVERAGE, m_nMoveAverage);
 	DDX_Text(pDX, IDC_MOVEAVERAGEBATTLE, m_nMoveAverageBattle);
 	DDX_Text(pDX, IDC_STAMINA, m_dwStamina);
@@ -96,6 +98,8 @@ CDlgAdminCharModifyStatus::CDlgAdminCharModifyStatus(CWnd* pParent /*=NULL*/)
 	m_nLightLevel = 0;
 	m_dwLightTime = 0;
 	m_nDropItemAverage = 0;
+	m_nSearchX = 0;
+	m_nSearchY = 0;
 	m_nMoveAverage = 0;
 	m_nMoveAverageBattle = 0;
 	m_dwStamina = 0;
@@ -170,6 +174,8 @@ void CDlgAdminCharModifyStatus::Renew(void)
 	m_nLightLevel			= 0;
 	m_dwLightTime			= 0;
 	m_nDropItemAverage		= 0;
+	m_nSearchX				= 0;
+	m_nSearchY				= 0;
 	m_nMoveAverage			= 0;
 	m_nMoveAverageBattle	= 0;
 	m_dwStamina				= 0;
@@ -207,6 +213,8 @@ void CDlgAdminCharModifyStatus::Renew(void)
 	m_dwMaxSP				= m_pInfoChar->m_dwMaxSP;
 	m_nLightLevel			= m_pInfoChar->m_nLightLevel;		/* “”‚èƒŒƒxƒ‹ */
 	m_nDropItemAverage		= m_pInfoChar->m_nDropItemAverage;
+	m_nSearchX				= m_pInfoChar->m_sizeSearchDistance.cx;	/* ô“G”ÍˆÍ(X) */
+	m_nSearchY				= m_pInfoChar->m_sizeSearchDistance.cy;	/* ô“G”ÍˆÍ(Y) */
 	m_nMoveAverage			= m_pInfoChar->m_nMoveAverage;
 	m_nMoveAverageBattle	= m_pInfoChar->m_nMoveAverageBattle;
 	m_dwStamina				= m_pInfoChar->m_wStamina;
@@ -322,6 +330,8 @@ void CDlgAdminCharModifyStatus::OnSend()
 	InfoCharTmp.m_nLightLevel			= m_nLightLevel;
 	InfoCharTmp.m_dwLightTime			= m_dwLightTime;
 	InfoCharTmp.m_nDropItemAverage		= m_nDropItemAverage;
+	InfoCharTmp.m_sizeSearchDistance.cx	= m_nSearchX;					/* ô“G”ÍˆÍ(X) */
+	InfoCharTmp.m_sizeSearchDistance.cy	= m_nSearchY;					/* ô“G”ÍˆÍ(Y) */
 	InfoCharTmp.m_nMoveAverage			= m_nMoveAverage;
 	InfoCharTmp.m_nMoveAverageBattle	= m_nMoveAverageBattle;
 	InfoCharTmp.m_wStamina				= (WORD)m_dwStamina;

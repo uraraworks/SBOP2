@@ -66,6 +66,7 @@ public:
 			m_nMoveAverage,				/* ˆÚ“®Šm—¦ */
 			m_nMoveAverageBattle,		/* í“¬ˆÚ“®Šm—¦ */
 			m_nLightLevel;				/* “”‚èƒŒƒxƒ‹ */
+	SIZE	m_sizeSearchDistance;		/* ô“G”ÍˆÍ */
 } CPacketCHAR_STATUS, *PCPacketCHAR_STATUS;
 
 /* Copyright(C)URARA-works 2008 */
