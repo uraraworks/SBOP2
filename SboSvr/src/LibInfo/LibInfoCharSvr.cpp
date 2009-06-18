@@ -1911,9 +1911,9 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 	DWORD dwCharID,			/* [in] ƒLƒƒƒ‰ID */
 	SIZE &sizedistance)		/* [in] ‘ÎÛ‹——£ */
 {
-	int i, nCount;
+	int i, nCount, nMinDistance, nTmp;
 	DWORD dwRet;
-	RECT rcSrcRect, rcTmp;
+	RECT rcSrc, rcSearch, rcTmp;
 	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
 
 	dwRet = 0;
@@ -1922,16 +1922,21 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 	if (pInfoCharSrc == NULL) {
 		goto Exit;
 	}
-	pInfoCharSrc->GetPosRect (rcSrcRect);
-	rcSrcRect.left	 -= sizedistance.cx;
-	rcSrcRect.right  += sizedistance.cx;
-	rcSrcRect.top    -= sizedistance.cy;
-	rcSrcRect.bottom += sizedistance.cy;
+	pInfoCharSrc->GetPosRect (rcSrc);
+	rcSearch = rcSrc;
+	rcSearch.left	-= sizedistance.cx;
+	rcSearch.right  += sizedistance.cx;
+	rcSearch.top    -= sizedistance.cy;
+	rcSearch.bottom += sizedistance.cy;
+	nMinDistance = -1;
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
 		if (pInfoCharSrc == pInfoCharTmp) {
+			continue;
+		}
+		if (pInfoCharTmp->m_dwMapID != pInfoCharSrc->m_dwMapID) {
 			continue;
 		}
 		if (pInfoCharTmp->m_dwCharID == pInfoCharSrc->m_dwParentCharID) {
@@ -1950,13 +1955,22 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 		}
 
 		pInfoCharTmp->GetPosRect (rcTmp);
-		if (!((rcSrcRect.left <= rcTmp.right) && (rcTmp.left <= rcSrcRect.right) &&
-			(rcSrcRect.top <= rcTmp.bottom) && (rcTmp.top <= rcSrcRect.bottom))) {
+		if (!((rcSearch.left <= rcTmp.right) && (rcTmp.left <= rcSearch.right) &&
+			(rcSearch.top <= rcTmp.bottom) && (rcTmp.top <= rcSearch.bottom))) {
 			continue;
+		}
+		nTmp = abs (rcSrc.left - rcTmp.left) + abs (rcSrc.top - rcTmp.top);
+		if (nMinDistance < 0) {
+			nMinDistance = nTmp;
+
+		} else {
+			if (nMinDistance <= nTmp) {
+				continue;
+			}
+			nMinDistance = nTmp;
 		}
 
 		dwRet = pInfoCharTmp->m_dwCharID;
-		break;
 	}
 
 Exit:
