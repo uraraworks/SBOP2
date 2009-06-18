@@ -310,6 +310,7 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 			nMoveAverage = m_nMoveAverage;
 		}
 		if (genrand () % 100 < 100 - nMoveAverage) {
+			m_dwLastTimeMove = dwTime;
 			goto Exit;
 		}
 	}
@@ -320,6 +321,13 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 	yy = sizeDistance.cy;
 	if (xx + yy == 1) {
 		ptPos.x = -1;
+	}
+	if (m_sizeSearchDistance.cx > 0) {
+		if ((m_sizeSearchDistance.cx < xx) || (m_sizeSearchDistance.cy < yy)) {
+			/* õ“G”ÍˆÍŠO‚È‚Ì‚Å‚ ‚«‚ç‚ß‚é */
+			SetMoveState (CHARMOVESTATE_STAND);
+			goto Exit;
+		}
 	}
 
 	if (xx + yy == 1) {
