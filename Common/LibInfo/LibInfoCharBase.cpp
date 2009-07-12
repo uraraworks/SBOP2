@@ -394,12 +394,17 @@ void CLibInfoCharBase::SortY(void)
 /* 日付		:2007/09/01														 */
 /* ========================================================================= */
 
-BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection, BOOL bNoBlockFlg/*TRUE*/)
+BOOL CLibInfoCharBase::IsBlockChar(
+	PCInfoCharBase pChar,			/* [in] 判定元のキャラ情報 */
+	int nDirection,					/* [in] 判定方向 */
+	BOOL bNoBlockFlg/*TRUE*/,		/* [in] TRUE:キャラのぶつかり判定を使用する */
+	BOOL bHitCheck/*FALSE*/)		/* [in] TRUE:重なっている場合は判定しない */
 {
 	BOOL bRet, bResult;
 	int i, nCount, nDirectionBack;
 	PCInfoCharBase pInfoCharTmp;
 	POINT ptFront;
+	RECT rcSrc, rcTmp;
 	SIZE size, sizeTmp;
 
 	bRet = FALSE;
@@ -408,6 +413,7 @@ BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection, BOOL bN
 	pChar->m_nDirection = nDirection;
 	pChar->GetFrontPos (ptFront, nDirection, TRUE);
 	pChar->GetCharSize (size);
+	pChar->GetPosRect (rcSrc);
 
 	nCount = m_paInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
@@ -428,6 +434,14 @@ BOOL CLibInfoCharBase::IsBlockChar(PCInfoCharBase pChar, int nDirection, BOOL bN
 		}
 		if (bNoBlockFlg && (pInfoCharTmp->m_bBlock == FALSE)) {
 			continue;
+		}
+		if (bHitCheck) {
+			pInfoCharTmp->GetPosRect (rcTmp);
+			if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
+				(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
+				/* 重なる場合は対象外 */
+				continue;
+			}
 		}
 		bRet = TRUE;
 		break;

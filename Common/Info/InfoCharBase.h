@@ -166,7 +166,8 @@ public:
 				m_wDefenseGauge;					/* ガードゲージ */
 	POINT		m_ptCharBack,						/* 前回のキャラ座標 */
 				m_ptViewCharPos,					/* 表示用の座標補正値 */
-				m_ptTargetPos;						/* ターゲット座標 */
+				m_ptTargetPos,						/* ターゲット座標 */
+				m_ptStartPos;						/* 開始座標 */
 	int			m_nAnime,							/* アニメーション番号 */
 				m_nDirectionBack,					/* 前回の向き */
 				m_nProcState,						/* 行動状態 */

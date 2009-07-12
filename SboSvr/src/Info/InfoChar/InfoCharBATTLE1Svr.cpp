@@ -20,9 +20,10 @@
 
 CInfoCharBATTLE1Svr::CInfoCharBATTLE1Svr()
 {
-	m_bDelete			= TRUE;
-	m_dwLastTiemAtack	= 0;
-	m_pInfoCharTarget	= NULL;
+	m_bDelete				= TRUE;
+	m_dwLastTiemAtack		= 0;
+	m_dwLastTimeBattleMove	= 0;
+	m_pInfoCharTarget		= NULL;
 }
 
 
@@ -299,10 +300,10 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 
 	/* 前回は移動？ */
 	if (m_dwLastTiemAtack == 0) {
-		dwTmp = timeGetTime () - m_dwLastTimeMove;
-		if ((m_dwLastTimeMove != 0) && (dwTmp > 5000)) {
+		dwTmp = timeGetTime () - m_dwLastTimeBattleMove;
+		if ((m_dwLastTimeBattleMove != 0) && (dwTmp > 5000)) {
 			/* 5秒以上移動していなかったらあきらめる */
-			SetMoveState (CHARMOVESTATE_STAND);
+			SetMoveState (CHARMOVESTATE_DELETE);
 			goto Exit;
 		}
 		nMoveAverage = m_nMoveAverageBattle;
@@ -341,26 +342,34 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 		dwTmp = timeGetTime () - m_dwLastTiemAtack;
 		if (m_dwLastTiemAtack != 0) {
 			if (dwTmp > 5000) {
-				SetMoveState (CHARMOVESTATE_STAND);
+				SetMoveState (CHARMOVESTATE_DELETE);
 				goto Exit;
 			}
 		}
 		if (dwTmp >= 1000) {
 			m_bAtack = TRUE;
 		}
-		m_dwLastTimeMove = dwTime;
+		m_dwLastTimeMove = m_dwLastTimeBattleMove = dwTime;
 
 	} else {
 		nDirection = GetDirection (ptPos.x, ptPos.y);
+		bResult = IsMoveDirection (nDirection);
 		if ((xx <= 1) && (yy <= 1)) {
 			/* 4方向に変換 */
 			nDirection = GetDrawDirection (nDirection);
+			if (bResult == FALSE) {
+				SetMoveState (CHARMOVESTATE_STAND);
+				goto Exit;
+			}
 		}
 
 		/* 進める？ */
-		m_bChgMoveCount = TRUE;
-		m_nDirection = nDirection;
-		m_dwLastTiemAtack = 0;
+		if (bResult) {
+			m_dwLastTimeBattleMove = dwTime;
+			m_bChgMoveCount = TRUE;
+			m_nDirection = nDirection;
+			m_dwLastTiemAtack = 0;
+		}
 	}
 
 Exit:
@@ -417,7 +426,7 @@ BOOL CInfoCharBATTLE1Svr::IsMoveDirection(int nDirection)
 		goto Exit;
 	}
 
-	bResult = m_pLibInfoCharSvr->IsBlockChar (this, nDirection, FALSE);
+	bResult = m_pLibInfoCharSvr->IsBlockChar (this, nDirection, FALSE, TRUE);
 	if (bResult) {
 		goto Exit;
 	}

@@ -12,6 +12,7 @@
 #include "UraraSockTCPSBO.h"
 #include "Packet.h"
 #include "Command.h"
+#include "RouteSearch.h"
 #include "InfoMapParts.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoItemType.h"
@@ -1915,6 +1916,7 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 	DWORD dwRet;
 	RECT rcSrc, rcSearch, rcTmp;
 	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
+	PCInfoMapBase pInfoMap;
 
 	dwRet = 0;
 
@@ -1929,6 +1931,8 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 	rcSearch.top    -= sizedistance.cy;
 	rcSearch.bottom += sizedistance.cy;
 	nMinDistance = -1;
+
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pInfoCharSrc->m_dwMapID);
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
@@ -1960,16 +1964,23 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 			continue;
 		}
 		nTmp = abs (rcSrc.left - rcTmp.left) + abs (rcSrc.top - rcTmp.top);
-		if (nMinDistance < 0) {
-			nMinDistance = nTmp;
-
-		} else {
-			if (nMinDistance <= nTmp) {
-				continue;
-			}
-			nMinDistance = nTmp;
+		if ((nMinDistance >= 0) && (nMinDistance <= nTmp)) {
+			continue;
 		}
-
+		CRouteSearch RouteSearch;
+		RouteSearch.SetMapInfo (pInfoMap);
+		RouteSearch.SetSearchArea (rcSearch);
+		RouteSearch.SetStartPos (pInfoCharSrc->m_nMapX, pInfoCharSrc->m_nMapY);
+		RouteSearch.SetEndPos (pInfoCharTmp->m_nMapX, pInfoCharTmp->m_nMapY);
+		PARRAYSEARCHRESULT pSearchResult = RouteSearch.Search ();
+		if (pSearchResult == NULL) {
+			continue;
+		}
+		int nResult = pSearchResult->GetSize () * 2;
+		if ((nResult <= 0) || (nResult >= nTmp)) {
+			continue;
+		}
+		nMinDistance = nTmp;
 		dwRet = pInfoCharTmp->m_dwCharID;
 	}
 
@@ -2685,6 +2696,8 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 	pInfoCharTmp->m_nMapX			= ptPos.x;
 	pInfoCharTmp->m_nMapY			= ptPos.y;
 	pInfoCharTmp->m_nDirection		= 1;
+	pInfoCharTmp->m_ptStartPos.x	= ptPos.x;
+	pInfoCharTmp->m_ptStartPos.y	= ptPos.y;
 
 	bResult = IsMove (pInfoCharTmp, pInfoCharTmp->m_nDirection);
 	if (bResult == FALSE) {

@@ -8,9 +8,19 @@
 
 #pragma once
 
+class CInfoMapBase;
+
 /* ========================================================================= */
 /* 構造体宣言																 */
 /* ========================================================================= */
+
+/* 検索結果 */
+typedef struct _SEARCHRESULT {
+	POINT	pt;					/* 座標 */
+	BYTE	byDirection;		/* 向き */
+} SEARCHRESULT, *PSEARCHRESULT;
+typedef CmyArray<SEARCHRESULT, SEARCHRESULT>	  ARRAYSEARCHRESULT;
+typedef CmyArray<SEARCHRESULT, SEARCHRESULT>	*PARRAYSEARCHRESULT;
 
 /* 検索情報 */
 typedef struct _SEARCHINFO {
@@ -21,20 +31,6 @@ typedef struct _SEARCHINFO {
 } SEARCHINFO, *PSEARCHINFO;
 typedef CmyArray<SEARCHINFO, SEARCHINFO>		ARRAYSEARCHINFO;
 
-/* 検索処理情報 */
-typedef struct _SEARCHPROCINFO {
-	int		nState,				/* 検索状態 */
-			nDirection,			/* 向き */
-			nTurn;				/* ターン */
-	POINT	ptNow,				/* 現在位置 */
-			ptStart,			/* 開始位置 */
-			ptEnd;				/* 最終位置 */
-	SIZE	sizeMap;			/* 検索用マップサイズ */
-	PBYTE	pSearchMap;			/* 検索中マップ */
-	PWORD	pMap;				/* 検索範囲マップ */
-	ARRAYSEARCHINFO	aInfo;		/* 検索情報 */
-} SEARCHPROCINFO, *PSEARCHPROCINFO;
-
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -43,29 +39,34 @@ typedef struct _SEARCHPROCINFO {
 class CRouteSearch
 {
 public:
-			CRouteSearch();						/* コンストラクタ */
-	virtual ~CRouteSearch();					/* デストラクタ */
+			CRouteSearch();								/* コンストラクタ */
+	virtual ~CRouteSearch();							/* デストラクタ */
 
-	void	SetStartPos		(int x, int y);								/* 開始位置を設定 */
-	void	SetEndPos		(int x, int y);								/* 最終位置を設定 */
-	void	SetSize			(int cx, int cy);							/* 範囲サイズを設定 */
-	void	SetBlock		(int x, int y, BOOL bSet);					/* 障害物を設定 */
-	void	Search			(void);										/* 検索 */
-	BOOL	GetPos			(int &nDstDirection, POINT &ptDstPos);		/* 次の座標を取得 */
+	void	SetMapInfo		(CInfoMapBase *pInfoMap);			/* 検索対象マップ情報 */
+	void	SetSearchArea	(const RECT &rcSearch);				/* 検索範囲を設定 */
+	void	SetStartPos		(int x, int y);						/* 開始位置を設定 */
+	void	SetEndPos		(int x, int y);						/* 最終位置を設定 */
+	PARRAYSEARCHRESULT	Search	(void);								/* 検索 */
 
 
 private:
 	void	InitProcInfo	(void);								/* 検索処理情報を初期化 */
-	void	ChgState		(int nState);						/* 状態遷移 */
-	void	Proc			(void);								/* 検索処理 */
-	BOOL	ProcSEARCH		(void);								/* 検索処理(検索中) */
+	void	ProcSEARCH		(void);								/* 検索処理(検索中) */
 	BOOL	ProcSEARCHMOVE	(void);								/* 検索処理(検索移動中) */
 	void	InfoCleanup		(int x, int y);						/* 検索情報最適化 */
-//	void	ProcMOVE		(void);								/* 検索処理(移動中) */
 
 
 private:
-	SEARCHPROCINFO	m_ProcInfo;			/* 検索処理情報 */
+	int		m_nState;					/* 検索状態 */
+	POINT	m_ptNow,					/* 現在位置 */
+			m_ptStart,					/* 開始位置 */
+			m_ptEnd;					/* 最終位置 */
+	PWORD	m_pMap;						/* 検索中マップテンポラリ */
+	SIZE	m_sizeMap;					/* 検索範囲サイズ */
+	RECT	m_rcSearch;					/* 検索範囲 */
+	CInfoMapBase		*m_pInfoMap;	/* 検索対象マップ情報 */
+	ARRAYSEARCHINFO		m_aInfo;		/* 検索情報 */
+	ARRAYSEARCHRESULT	m_aResult;		/* 検索結果 */
 };
 
 /* Copyright(C)URARA-works 2009 */

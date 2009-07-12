@@ -90,44 +90,6 @@ BOOL CInfoCharBATTLE2Svr::TimerProcSTAND(DWORD dwTime)
 	bRet = TRUE;
 Exit:
 	return bRet;
-
-
-#if 0
-	DWORD dwTmp;
-	BOOL bRet, bResult;
-
-	bRet = FALSE;
-
-	dwTmp = dwTime - m_dwLastTimeMove;
-	/* 1É^Å[ÉìÇÕ100msÇ…ÇµÇƒÇ®Ç≠ */
-	if (dwTmp < 100) {
-		goto Exit;
-	}
-
-	m_dwLastTimeMove = dwTime;
-//	if (genrand () % 100 < 100 - m_nMoveAverage) {
-//		goto Exit;
-//	}
-
-	if (m_pInfoMap == NULL) {
-		goto Exit;
-	}
-	bResult = IsEnableMove ();
-	if (bResult == FALSE) {
-		goto Exit;
-	}
-
-	if (m_dwTargetCharID == 0) {
-		m_bChgTargetChar = TRUE;
-	} else {
-		m_nReserveChgMoveState = CHARMOVESTATE_BATTLE;
-		m_bChgPos = TRUE;
-	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
-#endif
 }
 
 /* Copyright(C)URARA-works 2009 */

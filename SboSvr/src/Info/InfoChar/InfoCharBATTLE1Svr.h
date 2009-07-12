@@ -37,6 +37,7 @@ protected:
 
 public:
 	DWORD			m_dwLastTiemAtack;		/* 最後に攻撃した時間 */
+	DWORD			m_dwLastTimeBattleMove;	/* 戦闘モード中に移動した時間 */
 	CInfoCharSvr	*m_pInfoCharTarget;		/* ターゲット中のキャラ情報 */
 } CInfoCharBATTLE1Svr, *PCInfoCharBATTLE1Svr;
 

@@ -339,6 +339,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\Common\RouteSearch.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\Common\SBOGlobal.cpp"
 					>
 					<FileConfiguration
@@ -1844,6 +1848,10 @@
 				</File>
 				<File
 					RelativePath="..\common\GlobalDefine.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Common\RouteSearch.h"
 					>
 				</File>
 				<File

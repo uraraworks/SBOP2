@@ -221,6 +221,7 @@ CInfoCharBase::CInfoCharBase()
 	m_clSpeak	= RGB (255, 255, 255);
 	m_ptCharBack.x = m_ptCharBack.y = 0;
 	m_ptViewCharPos.x = m_ptViewCharPos.y = 0;
+	ZeroMemory (&m_ptStartPos, sizeof (m_ptStartPos));
 
 	/* NPC発生 */
 	m_dwPutCycle		= 0;				/* 発生周期 */
@@ -2190,6 +2191,7 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_dwParentCharID			= pSrc->m_dwParentCharID;
 	m_bBlock					= pSrc->m_bBlock;
 	m_ptViewCharPos				= pSrc->m_ptViewCharPos;		/* 表示用の座標補正値 */
+	m_ptStartPos				= pSrc->m_ptStartPos;			/* 開始座標 */
 	m_bPush						= pSrc->m_bPush;
 	m_nAnime					= pSrc->m_nAnime;
 	m_nMapX						= pSrc->m_nMapX;
