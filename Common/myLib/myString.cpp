@@ -35,6 +35,11 @@ CmyString::CmyString(CmyString &strSrc)
 	m_pszString = NULL;
 	Renew ((LPCSTR)strSrc);
 }
+CmyString::CmyString(LPCTSTR szSrc)
+{
+	m_pszString = NULL;
+	Renew (szSrc);
+}
 
 
 /* ========================================================================= */

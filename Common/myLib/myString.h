@@ -15,9 +15,10 @@
 typedef class CmyString
 {
 public:
-			CmyString();							/* コンストラクタ */
-			CmyString(CmyString &strSrc);
-	virtual ~CmyString();							/* デストラクタ */
+	CmyString();							/* コンストラクタ */
+	CmyString(CmyString &strSrc);
+	CmyString(LPCSTR szSrc);
+	~CmyString();							/* デストラクタ */
 
 	void	Empty			(void);							/* 文字列を空にする */
 	BOOL	IsEmpty			(void);							/* 文字列が空か判定 */
@@ -38,8 +39,8 @@ protected:
 
 
 protected:
-	int		m_nLength;							/* 文字列長 */
 	LPSTR	m_pszString;						/* 文字列データ */
+	int		m_nLength;							/* 文字列長 */
 } CmyString, *PCmyString;
 
 /* Copyright(C)URARA-works 2006 */
