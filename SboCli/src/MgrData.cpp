@@ -847,7 +847,7 @@ void CMgrData::ReadIniData(void)
 	/* パスワードを保存する？ */
 	m_bSavePassword = (BOOL)GetPrivateProfileInt ("Setting", "SavePassword", 0, szFileName);
 	/* ログイン拒否 */
-	m_bDisableLogin = (BOOL)GetPrivateProfileInt ("Setting", "DisableLogin", 0, szFileName);
+//	m_bDisableLogin = (BOOL)GetPrivateProfileInt ("Setting", "DisableLogin", 0, szFileName);
 	/* 発言時にタスクバーチカチカ */
 	m_bOptionTaskbar = (BOOL)GetPrivateProfileInt ("Setting", "OptionTaskbar", 0, szFileName);
 	/* 発言を表示する */
@@ -866,7 +866,7 @@ void CMgrData::ReadIniData(void)
 	GetPrivateProfileString ("Account", "Account", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strLastAccount = szTmp;
 	/* 最終パスワード */
-GetPrivateProfileString ("Account", "Password", "", szTmp, sizeof (szTmp) - 1, szFileName);
+	GetPrivateProfileString ("Account", "Password", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	CryptUtil.UnCryptStr (szTmp, szTmp2, 10);
 	m_strLastPassword = szTmp2;
 	/* 効果音量 */

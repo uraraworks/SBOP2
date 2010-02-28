@@ -39,6 +39,7 @@ void CMainFrame::RecvProcVERSION(BYTE byCmdSub, PBYTE pData)
 
 void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 {
+	int nCount = 0;
 	BYTE abyTmp[10];
 	PCWindowLOGIN pWindow;
 	CPacketVERSION_RES_VERSIONCHECK Packet;
@@ -53,8 +54,14 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 		if (pWindow == NULL) {
 			break;
 		}
-		ZeroMemory (abyTmp, sizeof (abyTmp));
-		MacAddr.Get (abyTmp);
+		nCount = MacAddr.GetCount();
+		for (int i = 0; i < nCount; i++) {
+			ZeroMemory (abyTmp, sizeof (abyTmp));
+			BOOL bResult = MacAddr.Get (abyTmp, i);
+			if (bResult) {
+				break;
+			}
+		}
 		PacketLOGIN.Make (pWindow->GetAccount (), pWindow->GetPassword (), abyTmp);
 		m_pSock->Send (&PacketLOGIN);
 		break;
