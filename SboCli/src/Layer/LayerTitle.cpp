@@ -102,7 +102,7 @@ void CLayerTitle::Draw(PCImg32 pDst)
 		hDCTmp = pDst->Lock ();
 		hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont);
 		SetBkMode (hDCTmp, TRANSPARENT);
-		strTmp = "Copyright (C)2003-2009 URARA-WORKS. All rights reserved.";
+		strTmp = "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.";
 		TextOut1 (hDCTmp, (480 - (strTmp.GetLength () * 6)) / 2 + 32, SCRSIZEY - 12 + 32, strTmp, RGB (255, 255, 255));
 		SelectObject (hDCTmp, hFontOld);
 		pDst->Unlock ();
