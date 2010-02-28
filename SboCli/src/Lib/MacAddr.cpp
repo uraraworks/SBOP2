@@ -68,9 +68,17 @@ BOOL CMacAddr::Get(
 		goto Exit;
 	}
 
+	BYTE abyNullMacAddress[6];
+	ZeroMemory(abyNullMacAddress, sizeof(abyNullMacAddress));
 	for (nCount = 0; ; nCount ++) {
 		if (nCount == nNo) {
 			pIPAddress = &pAdapterInfo->IpAddressList;
+			CopyMemory (pDst, pAdapterInfo->Address, 6);
+			if (memcmp(abyNullMacAddress, pDst, 6)) {
+				bRet = TRUE;
+				break;
+			}
+#if 0
 			if (!((pIPAddress->Context == 0) ||
 				 (strcmp (pIPAddress->IpAddress.String, "0.0.0.0") == 0) ||
 				 (strcmp (pIPAddress->IpAddress.String, "127.0.0.1") == 0))) {
@@ -81,6 +89,7 @@ BOOL CMacAddr::Get(
 			} else {
 				nCount --;
 			}
+#endif
 		}
 
 		pAdapterInfo = pAdapterInfo->Next;

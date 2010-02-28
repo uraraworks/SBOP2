@@ -68,7 +68,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	/* ‹‘”Û‚³‚ê‚Ä‚¢‚é‚©”»’è */
 	bDisable = m_pLibInfoDisable->IsDisable ((LPCSTR)strTmp);
 	if (strTmp == "00-00-00-00-00-00") {
-		bDisable = TRUE;
+//		bDisable = TRUE;
 	}
 	/* IPƒAƒhƒŒƒX‚Å‹‘”Û‚µ‚Ä‚¢‚é‚©”»’è */
 	bDisable |= m_pLibInfoDisable->IsDisableIP (AddrTmp.S_un.S_addr);
@@ -82,12 +82,12 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 
 	/* –¢“o˜^ */
 	} else {
-		bResult = m_pLibInfoAccount->IsUseMacAddr ((LPCSTR)strTmp);
-		if (bResult) {
-			PacketRes.Make (LOGINRES_NG_MAC, 0);
-			m_pSock->SendTo (dwSessionID, &PacketRes);
-			return;
-		}
+//		bResult = m_pLibInfoAccount->IsUseMacAddr ((LPCSTR)strTmp);
+//		if (bResult) {
+//			PacketRes.Make (LOGINRES_NG_MAC, 0);
+//			m_pSock->SendTo (dwSessionID, &PacketRes);
+//			return;
+//		}
 		nResult = LOGINRES_OK;
 		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew ();
 		TrimViewString (pInfoAccount->m_strAccount,  Packet.m_strAccount);
