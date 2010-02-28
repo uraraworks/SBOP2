@@ -12,6 +12,7 @@
 
 class CMgrData;
 class CUraraSockTCPSBO;
+class CInfoItemTypeBase;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -27,6 +28,8 @@ public:
 	virtual void	Renew			(void);									/* 更新 */
 	virtual void	OnAdminMsg		(int nType, DWORD dwPara);				/* メッセージハンドラ(WM_ADMINMSG) */
 	virtual void	OnMainFrame		(DWORD dwCommand, DWORD dwParam);		/* メッセージハンドラ(WM_MAINFRAME) */
+	virtual void	Set				(CInfoItemTypeBase *pSrc)  {}			/* 編集内容を設定 */
+	virtual void	Get				(CInfoItemTypeBase *&pDst) {}			/* 編集内容を取得 */
 
 
 protected:

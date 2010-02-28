@@ -3064,6 +3064,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\src\Dialog\DlgAdminItemTypeNewARMSBow.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Dialog\DlgAdminItemTypeNewHP.cpp"
 					>
 				</File>
@@ -4454,6 +4458,10 @@
 				</File>
 				<File
 					RelativePath="src\Dialog\DlgAdminItemTypeNewARMS.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Dialog\DlgAdminItemTypeNewARMSBow.h"
 					>
 				</File>
 				<File

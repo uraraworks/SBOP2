@@ -12,6 +12,7 @@
 #include "LibInfoItemWeapon.h"
 #include "InfoMotion.h"
 #include "MgrData.h"
+#include "DlgAdminItemTypeNewARMSBow.h"
 #include "DlgAdminItemTypeNewARMS.h"
 
 #ifdef _DEBUG
@@ -30,14 +31,11 @@ void CDlgAdminItemTypeNewARMS::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CDlgAdminItemTypeNewARMS)
 	DDX_Control(pDX, IDC_WEAPONTYPE, m_ctlWeaponType);
 	DDX_Text(pDX, IDC_VALUE, m_dwValue);
-	DDX_Text(pDX, IDC_MOVEWAIT, m_dwMoveWait);
-	DDX_Text(pDX, IDC_MOVECOUNT, m_dwMoveCount);
 	//}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(CDlgAdminItemTypeNewARMS, CDlgAdminBase)
-	//{{AFX_MSG_MAP(CDlgAdminItemTypeNewARMS)
-	//}}AFX_MSG_MAP
+	ON_CBN_SELCHANGE(IDC_WEAPONTYPE, &CDlgAdminItemTypeNewARMS::OnCbnSelchangeWeapontype)
 END_MESSAGE_MAP()
 
 
@@ -48,15 +46,12 @@ END_MESSAGE_MAP()
 /* ========================================================================= */
 
 CDlgAdminItemTypeNewARMS::CDlgAdminItemTypeNewARMS(CWnd* pParent /*=NULL*/)
-	: CDlgAdminBase(CDlgAdminItemTypeNewARMS::IDD, pParent)
+: CDlgAdminBase(CDlgAdminItemTypeNewARMS::IDD, pParent)
+, m_pSrc(NULL)
+, m_dwValue(0)
+, m_dwWeaponInfoID(0)
+, m_pDlgWeaponType(NULL)
 {
-	//{{AFX_DATA_INIT(CDlgAdminItemTypeNewARMS)
-	m_dwValue = 0;
-	m_dwMoveWait = 0;
-	m_dwMoveCount = 0;
-	//}}AFX_DATA_INIT
-
-	m_dwWeaponInfoID = 0;		/* 武器情報ID */
 }
 
 
@@ -79,10 +74,9 @@ CDlgAdminItemTypeNewARMS::~CDlgAdminItemTypeNewARMS()
 
 void CDlgAdminItemTypeNewARMS::Set(CInfoItemTypeBase *pSrc)
 {
+	m_pSrc = pSrc;
 	m_dwWeaponInfoID	= pSrc->m_dwWeaponInfoID;		/* 武器情報ID */
 	m_dwValue			= pSrc->m_dwValue;				/* 攻撃力 */
-	m_dwMoveWait		= pSrc->m_dwMoveWait;			/* 速度 */
-	m_dwMoveCount		= pSrc->m_dwMoveCount;			/* 飛距離 */
 }
 
 
@@ -96,8 +90,6 @@ void CDlgAdminItemTypeNewARMS::Get(CInfoItemTypeBase *&pDst)
 {
 	pDst->m_dwWeaponInfoID	= m_dwWeaponInfoID;		/* 武器情報ID */
 	pDst->m_dwValue			= m_dwValue;			/* 攻撃力 */
-	pDst->m_dwMoveWait		= m_dwMoveWait;			/* 速度 */
-	pDst->m_dwMoveCount		= m_dwMoveCount;		/* 飛距離 */
 }
 
 
@@ -126,6 +118,7 @@ BOOL CDlgAdminItemTypeNewARMS::OnInitDialog()
 	}
 
 	SetWeaponType (m_dwWeaponInfoID);
+	OnCbnSelchangeWeapontype();
 
 	return TRUE;
 }
@@ -153,6 +146,9 @@ void CDlgAdminItemTypeNewARMS::OnOK()
 {
 	UpdateData ();
 
+	if (m_pDlgWeaponType) {
+		m_pDlgWeaponType->Get(m_pSrc);
+	}
 	m_dwWeaponInfoID = GetWeaponType ();
 
 	CDlgAdminBase::EndDialog (IDOK);
@@ -206,6 +202,43 @@ DWORD CDlgAdminItemTypeNewARMS::GetWeaponType(void)
 	dwRet = m_ctlWeaponType.GetItemData (nSelect);
 Exit:
 	return dwRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminItemTypeNewARMS::OnCbnSelchangeWeapontype				 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2010/01/05														 */
+/* ========================================================================= */
+
+void CDlgAdminItemTypeNewARMS::OnCbnSelchangeWeapontype()
+{
+	if (m_pDlgWeaponType) {
+		m_pDlgWeaponType->DestroyWindow();
+		m_pDlgWeaponType = NULL;
+	}
+
+	DWORD dwWeaponInfoID = GetWeaponType();
+	PCLibInfoItemWeapon pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon ();
+	PCInfoItemWeapon pInfoItemWeapon = (PCInfoItemWeapon)pLibInfoItemWeapon->GetPtr(dwWeaponInfoID);
+	if (pInfoItemWeapon == NULL) {
+		return;
+	}
+
+	if (pInfoItemWeapon->m_dwMotionType & INFOITEMARMS_MOTION_BOW) {
+		m_pDlgWeaponType = new CDlgAdminItemTypeNewARMSBow(this);
+		m_pDlgWeaponType->Create(CDlgAdminItemTypeNewARMSBow::IDD, this);
+		m_pDlgWeaponType->Set(m_pSrc);
+	}
+
+	if (m_pDlgWeaponType == NULL) {
+		return;
+	}
+	CRect rcTmp;
+	GetDlgItem(IDC_DLGSUB)->GetWindowRect(rcTmp);
+	ScreenToClient(rcTmp);
+	m_pDlgWeaponType->ShowWindow(SW_SHOW);
+	m_pDlgWeaponType->MoveWindow(&rcTmp);
 }
 
 /* Copyright(C)URARA-works 2007 */

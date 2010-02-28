@@ -78,6 +78,7 @@
 #define IDD_DBGDLG                      196
 #define IDD_CHAR_DISABLE                197
 #define IDD_CHAR_DISABLE_NEW            198
+#define IDD_ITEMTYPE_NEW_ARMS_BOW       199
 #define IDC_WEBBROWSER                  1000
 #define IDC_ADD                         1000
 #define IDC_ONLINE                      1001
@@ -353,6 +354,7 @@
 #define IDC_SEARCH_X                    1161
 #define IDC_EDIT4                       1162
 #define IDC_SEARCH_Y                    1162
+#define IDC_DLGSUB                      1162
 #define IDM_CHAR_MODIFY                 32771
 #define IDM_CHAR_LIST                   32772
 #define IDM_MAP_PARTS                   32773
@@ -408,7 +410,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        199
 #define _APS_NEXT_COMMAND_VALUE         32818
-#define _APS_NEXT_CONTROL_VALUE         1162
+#define _APS_NEXT_CONTROL_VALUE         1163
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

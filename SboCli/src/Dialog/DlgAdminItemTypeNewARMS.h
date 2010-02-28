@@ -11,6 +11,7 @@
 #include "DlgAdminBase.h"
 
 class CInfoItemTypeBase;
+class CDlgAdminBase;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -22,17 +23,19 @@ public:
 			CDlgAdminItemTypeNewARMS(CWnd* pParent = NULL);		/* コンストラクタ */
 	virtual ~CDlgAdminItemTypeNewARMS();						/* デストラクタ */
 
-	void	Set		(CInfoItemTypeBase *pSrc);							/* 編集内容を設定 */
-	void	Get		(CInfoItemTypeBase *&pDst);							/* 編集内容を取得 */
+	void	Set(CInfoItemTypeBase *pSrc);							/* 編集内容を設定 */
+	void	Get(CInfoItemTypeBase *&pDst);							/* 編集内容を取得 */
 
 
 protected:
-	void	SetWeaponType	(DWORD dwWeaponInfoID);		/* 武器種別を設定 */
-	DWORD	GetWeaponType	(void);						/* 武器種別を取得 */
+	void	SetWeaponType(DWORD dwWeaponInfoID);		/* 武器種別を設定 */
+	DWORD	GetWeaponType(void);						/* 武器種別を取得 */
 
 
 protected:
-	DWORD	m_dwWeaponInfoID;				/* 武器情報ID */
+	CInfoItemTypeBase	*m_pSrc;				/* アイテム情報 */
+	DWORD				m_dwWeaponInfoID;		/* 武器情報ID */
+	CDlgAdminBase		*m_pDlgWeaponType;		/* 武器毎の設定画面 */
 
 
 
@@ -42,8 +45,6 @@ public:
 	enum { IDD = IDD_ITEMTYPE_NEW_ARMS };
 	CComboBox	m_ctlWeaponType;
 	DWORD m_dwValue;
-	DWORD m_dwMoveWait;
-	DWORD m_dwMoveCount;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminItemTypeNewARMS)
@@ -57,6 +58,8 @@ protected:
 	virtual BOOL OnInitDialog();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnCbnSelchangeWeapontype();
 } CDlgAdminItemTypeNewARMS, *PCDlgAdminItemTypeNewARMS;
 
 //{{AFX_INSERT_LOCATION}}

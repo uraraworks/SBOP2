@@ -61,7 +61,7 @@
 				VALUE "FileDescription", "スクラップブックオンライン\0"									\
 				VALUE "FileVersion", VERTEXT "\0"														\
 				VALUE "InternalName", " \0"																\
-				VALUE "LegalCopyright", "Copyright (C)2003-2009 URARA-WORKS. All rights reserved.\0"	\
+				VALUE "LegalCopyright", "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.\0"	\
 				VALUE "LegalTrademarks", "スクラップブックオンライン\0"									\
 				VALUE "OriginalFilename", OriginalFilename "\0"											\
 				VALUE "PrivateBuild", " \0"																\

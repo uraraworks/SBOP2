@@ -1,14 +1,14 @@
 call "%VS90COMNTOOLS%vsvars32.bat"
 
-VCBuild myLib\myLib.vcproj "Release|Win32"
-VCBuild SboSockLib\SboSockLib.vcproj "Release|Win32"
-VCBuild SboCli\SboCli.vcproj "Release|Win32"
-VCBuild SboSvr\SboSvr.vcproj "Release|Win32"
-VCBuild SboGrpData\SboGrpData.vcproj "Release|Win32"
-VCBuild SboSoundData\SboSoundData.vcproj "Release|Win32"
-VCBuild SboLaunch\SboLaunch.vcproj "Release|Win32"
-VCBuild SboCopy\SboCopy.vcproj "Release|Win32"
-VCBuild Tool\MakeFileList\MakeFileList.vcproj "Release|Win32"
+devenv myLib\myLib.vcproj /build Release
+devenv SboSockLib\SboSockLib.vcproj /build Release
+devenv SboCli\SboCli.vcproj /build Release
+devenv SboSvr\SboSvr.vcproj /build Release
+devenv SboGrpData\SboGrpData.vcproj /build Release
+devenv SboSoundData\SboSoundData.vcproj /build Release
+devenv SboLaunch\SboLaunch.vcproj /build Release
+devenv SboCopy\SboCopy.vcproj /build Release
+devenv Tool\MakeFileList\MakeFileList.vcproj /build Release
 call "Release\MakeFileList.exe"
 
 pause
