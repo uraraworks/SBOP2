@@ -124,7 +124,7 @@ BOOL CDlgAdminBase::OnInitDialog()
 {
 	CDialog::OnInitDialog ();
 
-	Initialize (m_hWnd);
+	CLayoutHelper::Initialize (m_hWnd);
 
 	return TRUE;
 }

@@ -199,7 +199,7 @@ BOOL CDlgMsgLog::OnInitDialog()
 	m_wndLogViewCtrl.SetSetting (&stLOGVIEWCTRLSETTING);
 	m_wndLogViewCtrl.SetTextLimit (LVC_TEXT_LIMIT_LINE, 3000);
 
-	Initialize (m_hWnd);
+	CLayoutHelper::Initialize (m_hWnd);
 	RegisterControl (m_wndLogViewCtrl.m_hWnd,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 	RegisterControl (IDC_ONLINE,				LH_CTRL_Y);
 	RegisterControl (IDC_CHARCOUNT,				LH_CTRL_Y);
