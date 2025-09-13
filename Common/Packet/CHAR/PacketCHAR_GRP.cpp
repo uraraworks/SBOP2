@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_GRP.cpp											 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:‰æ‘œ’Ê’m) ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/10/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_GRP.cpp											 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ç”»åƒé€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,39 +12,39 @@
 #include "PacketCHAR_GRP.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_GRP::CPacketCHAR_GRP								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CPacketCHAR_GRP::CPacketCHAR_GRP								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 CPacketCHAR_GRP::CPacketCHAR_GRP()
 {
-	m_dwCharID					= 0;	/* ƒLƒƒƒ‰ID */
-	m_dwEquipItemIDCloth		= 0;	/* ‘•”õƒAƒCƒeƒ€ID(•ž) */
-	m_dwEquipItemIDAcce1		= 0;	/* ‘•”õƒAƒCƒeƒ€ID(ƒAƒNƒZƒTƒŠ) */
-	m_dwEquipItemIDArmsRight	= 0;	/* ‘•”õƒAƒCƒeƒ€ID(Ž‚¿•¨) */
-	m_dwEquipItemIDArmsLeft		= 0;	/* ‘•”õƒAƒCƒeƒ€ID:¶Žè */
-	m_wGrpIDNPC					= 0;	/* ‰æ‘œID(NPC) */
-	m_wGrpIDCloth				= 0;	/* ‰æ‘œID(•ž) */
-	m_wGrpIDEye					= 0;	/* ‰æ‘œID(–Ú) */
-	m_wGrpIDEyeColor			= 0;	/* ‰æ‘œID(–ÚF) */
-	m_wGrpIDHairType			= 0;	/* ‰æ‘œID(”¯) */
-	m_wGrpIDHairColor			= 0;	/* ‰æ‘œID(”¯F) */
-	m_wGrpIDSP					= 0;	/* ‰æ‘œID(“ÁŽê•ž) */
-	m_wGrpIDAcce				= 0;	/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-	m_wGrpIDArmsMain			= 0;	/* ‰æ‘œID(Ž‚¿•¨:ƒƒCƒ“) */
-	m_wGrpIDArmsSub				= 0;	/* ‰æ‘œID(Ž‚¿•¨:ƒTƒu) */
-	m_wGrpIDArmsLeftMain		= 0;	/* ‰æ‘œID(‚:ƒƒCƒ“) */
-	m_wGrpIDArmsLeftSub			= 0;	/* ‰æ‘œID(‚:ƒTƒu) */
-	m_wGrpIDTmpMain				= 0;	/* ‰æ‘œID(ˆêŽž•ž:ƒƒCƒ“) */
-	m_wGrpIDTmpSub				= 0;	/* ‰æ‘œID(ˆêŽž•ž:ƒTƒu) */
+	m_dwCharID					= 0;	/* ã‚­ãƒ£ãƒ©ID */
+	m_dwEquipItemIDCloth		= 0;	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æœ) */
+	m_dwEquipItemIDAcce1		= 0;	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	m_dwEquipItemIDArmsRight	= 0;	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æŒã¡ç‰©) */
+	m_dwEquipItemIDArmsLeft		= 0;	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å·¦æ‰‹ */
+	m_wGrpIDNPC					= 0;	/* ç”»åƒID(NPC) */
+	m_wGrpIDCloth				= 0;	/* ç”»åƒID(æœ) */
+	m_wGrpIDEye					= 0;	/* ç”»åƒID(ç›®) */
+	m_wGrpIDEyeColor			= 0;	/* ç”»åƒID(ç›®è‰²) */
+	m_wGrpIDHairType			= 0;	/* ç”»åƒID(é«ª) */
+	m_wGrpIDHairColor			= 0;	/* ç”»åƒID(é«ªè‰²) */
+	m_wGrpIDSP					= 0;	/* ç”»åƒID(ç‰¹æ®Šæœ) */
+	m_wGrpIDAcce				= 0;	/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	m_wGrpIDArmsMain			= 0;	/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+	m_wGrpIDArmsSub				= 0;	/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+	m_wGrpIDArmsLeftMain		= 0;	/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+	m_wGrpIDArmsLeftSub			= 0;	/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+	m_wGrpIDTmpMain				= 0;	/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	m_wGrpIDTmpSub				= 0;	/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_GRP::~CPacketCHAR_GRP								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CPacketCHAR_GRP::~CPacketCHAR_GRP								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 CPacketCHAR_GRP::~CPacketCHAR_GRP()
@@ -53,13 +53,13 @@ CPacketCHAR_GRP::~CPacketCHAR_GRP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_GRP::Make											 */
-/* “à—e		:ƒpƒPƒbƒg‚ðì¬													 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CPacketCHAR_GRP::Make											 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 void CPacketCHAR_GRP::Make(
-	CInfoCharBase *pInfo)		/* [in] ƒLƒƒƒ‰î•ñ */
+	CInfoCharBase *pInfo)		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -94,33 +94,33 @@ void CPacketCHAR_GRP::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_GRP;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwCharID,					sizeof (pInfo->m_dwCharID),					pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwEquipItemIDCloth,		sizeof (pInfo->m_dwEquipItemIDCloth),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID(•ž) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwEquipItemIDAcce1,		sizeof (pInfo->m_dwEquipItemIDAcce1),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID(ƒAƒNƒZƒTƒŠ) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwEquipItemIDArmsRight,	sizeof (pInfo->m_dwEquipItemIDArmsRight),	pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID(Ž‚¿•¨) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDNPC,					sizeof (pInfo->m_wGrpIDNPC),				pDataTmp);	/* ‰æ‘œID(NPC) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDCloth,				sizeof (pInfo->m_wGrpIDCloth),				pDataTmp);	/* ‰æ‘œID(•ž) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDEye,					sizeof (pInfo->m_wGrpIDEye),				pDataTmp);	/* ‰æ‘œID(–Ú) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDEyeColor,			sizeof (pInfo->m_wGrpIDEyeColor),			pDataTmp);	/* ‰æ‘œID(–ÚF) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDHairType,			sizeof (pInfo->m_wGrpIDHairType),			pDataTmp);	/* ‰æ‘œID(”¯) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDHairColor,			sizeof (pInfo->m_wGrpIDHairColor),			pDataTmp);	/* ‰æ‘œID(”¯F) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDSP,					sizeof (pInfo->m_wGrpIDSP),					pDataTmp);	/* ‰æ‘œID(“ÁŽê•ž) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDAcce,				sizeof (pInfo->m_wGrpIDAcce),				pDataTmp);	/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsMain,			sizeof (pInfo->m_wGrpIDArmsMain),			pDataTmp);	/* ‰æ‘œID(Ž‚¿•¨:ƒƒCƒ“) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsSub,				sizeof (pInfo->m_wGrpIDArmsSub),			pDataTmp);	/* ‰æ‘œID(Ž‚¿•¨:ƒTƒu) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsLeftMain,		sizeof (pInfo->m_wGrpIDArmsLeftMain),		pDataTmp);	/* ‰æ‘œID(‚:ƒƒCƒ“) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsLeftSub,			sizeof (pInfo->m_wGrpIDArmsLeftSub),		pDataTmp);	/* ‰æ‘œID(‚:ƒTƒu) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDTmpMain,				sizeof (pInfo->m_wGrpIDTmpMain),			pDataTmp);	/* ‰æ‘œID(ˆêŽž•ž:ƒƒCƒ“) */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDTmpSub,				sizeof (pInfo->m_wGrpIDTmpSub),				pDataTmp);	/* ‰æ‘œID(ˆêŽž•ž:ƒTƒu) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwCharID,					sizeof (pInfo->m_dwCharID),					pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwEquipItemIDCloth,		sizeof (pInfo->m_dwEquipItemIDCloth),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æœ) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwEquipItemIDAcce1,		sizeof (pInfo->m_dwEquipItemIDAcce1),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwEquipItemIDArmsRight,	sizeof (pInfo->m_dwEquipItemIDArmsRight),	pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æŒã¡ç‰©) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDNPC,					sizeof (pInfo->m_wGrpIDNPC),				pDataTmp);	/* ç”»åƒID(NPC) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDCloth,				sizeof (pInfo->m_wGrpIDCloth),				pDataTmp);	/* ç”»åƒID(æœ) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDEye,					sizeof (pInfo->m_wGrpIDEye),				pDataTmp);	/* ç”»åƒID(ç›®) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDEyeColor,			sizeof (pInfo->m_wGrpIDEyeColor),			pDataTmp);	/* ç”»åƒID(ç›®è‰²) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDHairType,			sizeof (pInfo->m_wGrpIDHairType),			pDataTmp);	/* ç”»åƒID(é«ª) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDHairColor,			sizeof (pInfo->m_wGrpIDHairColor),			pDataTmp);	/* ç”»åƒID(é«ªè‰²) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDSP,					sizeof (pInfo->m_wGrpIDSP),					pDataTmp);	/* ç”»åƒID(ç‰¹æ®Šæœ) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDAcce,				sizeof (pInfo->m_wGrpIDAcce),				pDataTmp);	/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsMain,			sizeof (pInfo->m_wGrpIDArmsMain),			pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsSub,				sizeof (pInfo->m_wGrpIDArmsSub),			pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsLeftMain,		sizeof (pInfo->m_wGrpIDArmsLeftMain),		pDataTmp);	/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDArmsLeftSub,			sizeof (pInfo->m_wGrpIDArmsLeftSub),		pDataTmp);	/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDTmpMain,				sizeof (pInfo->m_wGrpIDTmpMain),			pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wGrpIDTmpSub,				sizeof (pInfo->m_wGrpIDTmpSub),				pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_GRP::Set											 */
-/* “à—e		:ƒpƒPƒbƒg‚ðÝ’è													 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CPacketCHAR_GRP::Set											 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_GRP::Set(PBYTE pPacket)
@@ -130,24 +130,24 @@ PBYTE CPacketCHAR_GRP::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,					pDataTmp, sizeof (m_dwCharID),					pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwEquipItemIDCloth,			pDataTmp, sizeof (m_dwEquipItemIDCloth),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID(•ž) */
-	CopyMemoryRenew (&m_dwEquipItemIDAcce1,			pDataTmp, sizeof (m_dwEquipItemIDAcce1),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID(ƒAƒNƒZƒTƒŠ) */
-	CopyMemoryRenew (&m_dwEquipItemIDArmsRight,		pDataTmp, sizeof (m_dwEquipItemIDArmsRight),	pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID(Ž‚¿•¨) */
-	CopyMemoryRenew (&m_wGrpIDNPC,					pDataTmp, sizeof (m_wGrpIDNPC),					pDataTmp);	/* ‰æ‘œID(NPC) */
-	CopyMemoryRenew (&m_wGrpIDCloth,				pDataTmp, sizeof (m_wGrpIDCloth),				pDataTmp);	/* ‰æ‘œID(•ž) */
-	CopyMemoryRenew (&m_wGrpIDEye,					pDataTmp, sizeof (m_wGrpIDEye),					pDataTmp);	/* ‰æ‘œID(–Ú) */
-	CopyMemoryRenew (&m_wGrpIDEyeColor,				pDataTmp, sizeof (m_wGrpIDEyeColor),			pDataTmp);	/* ‰æ‘œID(–ÚF) */
-	CopyMemoryRenew (&m_wGrpIDHairType,				pDataTmp, sizeof (m_wGrpIDHairType),			pDataTmp);	/* ‰æ‘œID(”¯) */
-	CopyMemoryRenew (&m_wGrpIDHairColor,			pDataTmp, sizeof (m_wGrpIDHairColor),			pDataTmp);	/* ‰æ‘œID(”¯F) */
-	CopyMemoryRenew (&m_wGrpIDSP,					pDataTmp, sizeof (m_wGrpIDSP),					pDataTmp);	/* ‰æ‘œID(“ÁŽê•ž) */
-	CopyMemoryRenew (&m_wGrpIDAcce,					pDataTmp, sizeof (m_wGrpIDAcce),				pDataTmp);	/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-	CopyMemoryRenew (&m_wGrpIDArmsMain,				pDataTmp, sizeof (m_wGrpIDArmsMain),			pDataTmp);	/* ‰æ‘œID(Ž‚¿•¨:ƒƒCƒ“) */
-	CopyMemoryRenew (&m_wGrpIDArmsSub,				pDataTmp, sizeof (m_wGrpIDArmsSub),				pDataTmp);	/* ‰æ‘œID(Ž‚¿•¨:ƒTƒu) */
-	CopyMemoryRenew (&m_wGrpIDArmsLeftMain,			pDataTmp, sizeof (m_wGrpIDArmsLeftMain),		pDataTmp);	/* ‰æ‘œID(‚:ƒƒCƒ“) */
-	CopyMemoryRenew (&m_wGrpIDArmsLeftSub,			pDataTmp, sizeof (m_wGrpIDArmsLeftSub),			pDataTmp);	/* ‰æ‘œID(‚:ƒTƒu) */
-	CopyMemoryRenew (&m_wGrpIDTmpMain,				pDataTmp, sizeof (m_wGrpIDTmpMain),				pDataTmp);	/* ‰æ‘œID(ˆêŽž•ž:ƒƒCƒ“) */
-	CopyMemoryRenew (&m_wGrpIDTmpSub,				pDataTmp, sizeof (m_wGrpIDTmpSub),				pDataTmp);	/* ‰æ‘œID(ˆêŽž•ž:ƒTƒu) */
+	CopyMemoryRenew (&m_dwCharID,					pDataTmp, sizeof (m_dwCharID),					pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwEquipItemIDCloth,			pDataTmp, sizeof (m_dwEquipItemIDCloth),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æœ) */
+	CopyMemoryRenew (&m_dwEquipItemIDAcce1,			pDataTmp, sizeof (m_dwEquipItemIDAcce1),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	CopyMemoryRenew (&m_dwEquipItemIDArmsRight,		pDataTmp, sizeof (m_dwEquipItemIDArmsRight),	pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æŒã¡ç‰©) */
+	CopyMemoryRenew (&m_wGrpIDNPC,					pDataTmp, sizeof (m_wGrpIDNPC),					pDataTmp);	/* ç”»åƒID(NPC) */
+	CopyMemoryRenew (&m_wGrpIDCloth,				pDataTmp, sizeof (m_wGrpIDCloth),				pDataTmp);	/* ç”»åƒID(æœ) */
+	CopyMemoryRenew (&m_wGrpIDEye,					pDataTmp, sizeof (m_wGrpIDEye),					pDataTmp);	/* ç”»åƒID(ç›®) */
+	CopyMemoryRenew (&m_wGrpIDEyeColor,				pDataTmp, sizeof (m_wGrpIDEyeColor),			pDataTmp);	/* ç”»åƒID(ç›®è‰²) */
+	CopyMemoryRenew (&m_wGrpIDHairType,				pDataTmp, sizeof (m_wGrpIDHairType),			pDataTmp);	/* ç”»åƒID(é«ª) */
+	CopyMemoryRenew (&m_wGrpIDHairColor,			pDataTmp, sizeof (m_wGrpIDHairColor),			pDataTmp);	/* ç”»åƒID(é«ªè‰²) */
+	CopyMemoryRenew (&m_wGrpIDSP,					pDataTmp, sizeof (m_wGrpIDSP),					pDataTmp);	/* ç”»åƒID(ç‰¹æ®Šæœ) */
+	CopyMemoryRenew (&m_wGrpIDAcce,					pDataTmp, sizeof (m_wGrpIDAcce),				pDataTmp);	/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	CopyMemoryRenew (&m_wGrpIDArmsMain,				pDataTmp, sizeof (m_wGrpIDArmsMain),			pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (&m_wGrpIDArmsSub,				pDataTmp, sizeof (m_wGrpIDArmsSub),				pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+	CopyMemoryRenew (&m_wGrpIDArmsLeftMain,			pDataTmp, sizeof (m_wGrpIDArmsLeftMain),		pDataTmp);	/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (&m_wGrpIDArmsLeftSub,			pDataTmp, sizeof (m_wGrpIDArmsLeftSub),			pDataTmp);	/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+	CopyMemoryRenew (&m_wGrpIDTmpMain,				pDataTmp, sizeof (m_wGrpIDTmpMain),				pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (&m_wGrpIDTmpSub,				pDataTmp, sizeof (m_wGrpIDTmpSub),				pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -155,9 +155,9 @@ PBYTE CPacketCHAR_GRP::Set(PBYTE pPacket)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_GRP::SetParam										 */
-/* “à—e		:Žw’èƒLƒƒƒ‰î•ñ‚Öƒpƒ‰ƒ[ƒ^‚ð”½‰f								 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CPacketCHAR_GRP::SetParam										 */
+/* å†…å®¹		:æŒ‡å®šã‚­ãƒ£ãƒ©æƒ…å ±ã¸ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’åæ˜ 								 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 void CPacketCHAR_GRP::SetParam(CInfoCharBase *pInfo)
@@ -166,24 +166,24 @@ void CPacketCHAR_GRP::SetParam(CInfoCharBase *pInfo)
 		return;
 	}
 
-	pInfo->m_dwEquipItemIDCloth		= m_dwEquipItemIDCloth;		/* ‘•”õƒAƒCƒeƒ€ID(•ž) */
-	pInfo->m_dwEquipItemIDAcce1		= m_dwEquipItemIDAcce1;		/* ‘•”õƒAƒCƒeƒ€ID(ƒAƒNƒZƒTƒŠ) */
-	pInfo->m_dwEquipItemIDArmsRight	= m_dwEquipItemIDArmsRight;	/* ‘•”õƒAƒCƒeƒ€ID(Ž‚¿•¨) */
-	pInfo->m_dwEquipItemIDArmsLeft	= m_dwEquipItemIDArmsLeft;	/* ‘•”õƒAƒCƒeƒ€ID:¶Žè */
-	pInfo->m_wGrpIDNPC				= m_wGrpIDNPC;				/* ‰æ‘œID(NPC) */
-	pInfo->m_wGrpIDCloth			= m_wGrpIDCloth;			/* ‰æ‘œID(•ž) */
-	pInfo->m_wGrpIDEye				= m_wGrpIDEye;				/* ‰æ‘œID(–Ú) */
-	pInfo->m_wGrpIDEyeColor			= m_wGrpIDEyeColor;			/* ‰æ‘œID(–ÚF) */
-	pInfo->m_wGrpIDHairType			= m_wGrpIDHairType;			/* ‰æ‘œID(”¯) */
-	pInfo->m_wGrpIDHairColor		= m_wGrpIDHairColor;		/* ‰æ‘œID(”¯F) */
-	pInfo->m_wGrpIDSP				= m_wGrpIDSP;				/* ‰æ‘œID(“ÁŽê•ž) */
-	pInfo->m_wGrpIDAcce				= m_wGrpIDAcce;				/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-	pInfo->m_wGrpIDArmsMain			= m_wGrpIDArmsMain;			/* ‰æ‘œID(Ž‚¿•¨:ƒƒCƒ“) */
-	pInfo->m_wGrpIDArmsSub			= m_wGrpIDArmsSub;			/* ‰æ‘œID(Ž‚¿•¨:ƒTƒu) */
-	pInfo->m_wGrpIDArmsLeftMain		= m_wGrpIDArmsLeftMain;		/* ‰æ‘œID(‚:ƒƒCƒ“) */
-	pInfo->m_wGrpIDArmsLeftSub		= m_wGrpIDArmsLeftSub;		/* ‰æ‘œID(‚:ƒTƒu) */
-	pInfo->m_wGrpIDTmpMain			= m_wGrpIDTmpMain;			/* ‰æ‘œID(ˆêŽž•ž:ƒƒCƒ“) */
-	pInfo->m_wGrpIDTmpSub			= m_wGrpIDTmpSub;			/* ‰æ‘œID(ˆêŽž•ž:ƒTƒu) */
+	pInfo->m_dwEquipItemIDCloth		= m_dwEquipItemIDCloth;		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æœ) */
+	pInfo->m_dwEquipItemIDAcce1		= m_dwEquipItemIDAcce1;		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	pInfo->m_dwEquipItemIDArmsRight	= m_dwEquipItemIDArmsRight;	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æŒã¡ç‰©) */
+	pInfo->m_dwEquipItemIDArmsLeft	= m_dwEquipItemIDArmsLeft;	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å·¦æ‰‹ */
+	pInfo->m_wGrpIDNPC				= m_wGrpIDNPC;				/* ç”»åƒID(NPC) */
+	pInfo->m_wGrpIDCloth			= m_wGrpIDCloth;			/* ç”»åƒID(æœ) */
+	pInfo->m_wGrpIDEye				= m_wGrpIDEye;				/* ç”»åƒID(ç›®) */
+	pInfo->m_wGrpIDEyeColor			= m_wGrpIDEyeColor;			/* ç”»åƒID(ç›®è‰²) */
+	pInfo->m_wGrpIDHairType			= m_wGrpIDHairType;			/* ç”»åƒID(é«ª) */
+	pInfo->m_wGrpIDHairColor		= m_wGrpIDHairColor;		/* ç”»åƒID(é«ªè‰²) */
+	pInfo->m_wGrpIDSP				= m_wGrpIDSP;				/* ç”»åƒID(ç‰¹æ®Šæœ) */
+	pInfo->m_wGrpIDAcce				= m_wGrpIDAcce;				/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	pInfo->m_wGrpIDArmsMain			= m_wGrpIDArmsMain;			/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+	pInfo->m_wGrpIDArmsSub			= m_wGrpIDArmsSub;			/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+	pInfo->m_wGrpIDArmsLeftMain		= m_wGrpIDArmsLeftMain;		/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+	pInfo->m_wGrpIDArmsLeftSub		= m_wGrpIDArmsLeftSub;		/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+	pInfo->m_wGrpIDTmpMain			= m_wGrpIDTmpMain;			/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	pInfo->m_wGrpIDTmpSub			= m_wGrpIDTmpSub;			/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 }
 
 /* Copyright(C)URARA-works 2007 */

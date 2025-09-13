@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowLOGINMENU.h											 */
-/* “à—e			:ƒƒOƒCƒ“ƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowLOGINMENU.h											 */
+/* å†…å®¹			:ãƒ­ã‚°ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,28 +15,28 @@ class CMgrData;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowLOGINMENU : public CWindowBase
 {
 public:
-			CWindowLOGINMENU();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowLOGINMENU();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowLOGINMENU();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowLOGINMENU();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Update		(void);										/* XV */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	BOOL	TimerProc	(void);										/* ŽžŠÔˆ— */
-	void	SetEnable	(int nNo, BOOL bEnable);					/* ƒƒjƒ…[€–Ú‚Ì“ü—Íó‘ÔÝ’è */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Update		(void);										/* æ›´æ–° */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	BOOL	TimerProc	(void);										/* æ™‚é–“å‡¦ç† */
+	void	SetEnable	(int nNo, BOOL bEnable);					/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã®å…¥åŠ›çŠ¶æ…‹è¨­å®š */
 
 
 private:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
 
 
 private:

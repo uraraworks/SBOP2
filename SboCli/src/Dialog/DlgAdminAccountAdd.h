@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminAccountAdd.h										 */
-/* “à—e			:ƒAƒJƒEƒ“ƒg’Ç‰Áƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminAccountAdd.h										 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆè¿½åŠ ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,16 +11,16 @@
 #include "DlgAdminBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminAccountAdd : public CDlgAdminBase
 {
 public:
-			CDlgAdminAccountAdd(CWnd* pParent = NULL);			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminAccountAdd();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminAccountAdd(CWnd* pParent = NULL);			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminAccountAdd();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init	(CMgrData *pMgrData);								/* ‰Šú‰» */
+	void	Init	(CMgrData *pMgrData);								/* åˆæœŸåŒ– */
 
 
 
@@ -33,7 +33,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminAccountAdd)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

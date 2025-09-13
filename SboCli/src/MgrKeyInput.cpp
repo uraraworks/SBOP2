@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrKeyInput.cpp											 */
-/* “à—e			:ƒL[“ü—ÍŠÇ—ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrKeyInput.cpp											 */
+/* å†…å®¹			:ã‚­ãƒ¼å…¥åŠ›ç®¡ç†ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::CMgrKeyInput										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMgrKeyInput::CMgrKeyInput										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CMgrKeyInput::CMgrKeyInput()
@@ -28,9 +28,9 @@ CMgrKeyInput::CMgrKeyInput()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::~CMgrKeyInput									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMgrKeyInput::~CMgrKeyInput									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CMgrKeyInput::~CMgrKeyInput()
@@ -41,9 +41,9 @@ CMgrKeyInput::~CMgrKeyInput()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMgrKeyInput::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CMgrKeyInput::Create(void)
@@ -71,10 +71,10 @@ void CMgrKeyInput::Create(void)
 		VK_RETURN,		/* Enter */
 		VK_ESCAPE,		/* Escape */
 		VK_TAB,			/* Tab */
-		VK_UP,			/* ª */
-		VK_DOWN,		/* « */
-		VK_LEFT,		/* © */
-		VK_RIGHT,		/* ¨ */
+		VK_UP,			/* â†‘ */
+		VK_DOWN,		/* â†“ */
+		VK_LEFT,		/* â† */
+		VK_RIGHT,		/* â†’ */
 		VK_SHIFT,		/* Shift */
 		VK_CONTROL,		/* Ctrl */
 		VK_SPACE,		/* Space */
@@ -94,9 +94,9 @@ void CMgrKeyInput::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::Destroy											 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMgrKeyInput::Destroy											 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CMgrKeyInput::Destroy(void)
@@ -105,9 +105,9 @@ void CMgrKeyInput::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::Renew											 */
-/* “à—e		:ó‘ÔXV														 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMgrKeyInput::Renew											 */
+/* å†…å®¹		:çŠ¶æ…‹æ›´æ–°														 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
@@ -122,7 +122,7 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 	byCode	= 0;
 	bDown	= FALSE;
 
-	/* “ü—Íó‘Ô‚ÌŒŸo */
+	/* å…¥åŠ›çŠ¶æ…‹ã®æ¤œå‡º */
 	dwKeyInput = m_pDInputUtil->GetKeyState ();
 	for (i = 0; ; i ++) {
 		byCodeTmp = m_abyCode[i];
@@ -132,19 +132,19 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 		bBreak = TRUE;
 		m_abyKeyState[byCodeTmp] = (BYTE)GetKeyState (byCodeTmp);
 		switch (byCodeTmp) {
-		case VK_UP:			/* ª */
+		case VK_UP:			/* â†‘ */
 			m_abyKeyState[byCodeTmp] |= (dwKeyInput & BUTTON_UP) ? 0x80 : 0;
 			bBreak = FALSE;
 			break;
-		case VK_DOWN:		/* « */
+		case VK_DOWN:		/* â†“ */
 			m_abyKeyState[byCodeTmp] |= (dwKeyInput & BUTTON_DOWN) ? 0x80 : 0;
 			bBreak = FALSE;
 			break;
-		case VK_LEFT:		/* © */
+		case VK_LEFT:		/* â† */
 			m_abyKeyState[byCodeTmp] |= (dwKeyInput & BUTTON_LEFT) ? 0x80 : 0;
 			bBreak = FALSE;
 			break;
-		case VK_RIGHT:		/* ¨ */
+		case VK_RIGHT:		/* â†’ */
 			m_abyKeyState[byCodeTmp] |= (dwKeyInput & BUTTON_RIGHT) ? 0x80 : 0;
 			bBreak = FALSE;
 			break;
@@ -176,9 +176,9 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::Reset											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMgrKeyInput::Reset											 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CMgrKeyInput::Reset(void)
@@ -189,9 +189,9 @@ void CMgrKeyInput::Reset(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::IsInput											 */
-/* “à—e		:‰Ÿ‰º”»’è														 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMgrKeyInput::IsInput											 */
+/* å†…å®¹		:æŠ¼ä¸‹åˆ¤å®š														 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CMgrKeyInput::IsInput(BYTE byCode)
@@ -211,9 +211,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::SetDevice										 */
-/* “à—e		:Žg—pƒfƒoƒCƒX‚ðÝ’è												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrKeyInput::SetDevice										 */
+/* å†…å®¹		:ä½¿ç”¨ãƒ‡ãƒã‚¤ã‚¹ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CMgrKeyInput::SetDevice(int nNo, HWND hWnd)
@@ -223,9 +223,9 @@ void CMgrKeyInput::SetDevice(int nNo, HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::SetDevice										 */
-/* “à—e		:Žg—pƒfƒoƒCƒX‚ðÝ’è												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CMgrKeyInput::SetDevice										 */
+/* å†…å®¹		:ä½¿ç”¨ãƒ‡ãƒã‚¤ã‚¹ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CMgrKeyInput::SetDevice(GUID &stSrc, HWND hWnd)
@@ -235,9 +235,9 @@ void CMgrKeyInput::SetDevice(GUID &stSrc, HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::Enum												 */
-/* “à—e		:ƒWƒ‡ƒCƒpƒbƒh‚ð—ñ‹“												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrKeyInput::Enum												 */
+/* å†…å®¹		:ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã‚’åˆ—æŒ™												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CMgrKeyInput::Enum(void)
@@ -247,9 +247,9 @@ void CMgrKeyInput::Enum(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::GetDeviceCount									 */
-/* “à—e		:ƒfƒoƒCƒX”‚ðŽæ“¾												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrKeyInput::GetDeviceCount									 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹æ•°ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 int CMgrKeyInput::GetDeviceCount(void)
@@ -259,9 +259,9 @@ int CMgrKeyInput::GetDeviceCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::GetDeviceName									 */
-/* “à—e		:ƒfƒoƒCƒX–¼‚ðŽæ“¾												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrKeyInput::GetDeviceName									 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹åã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CMgrKeyInput::GetDeviceName(int nNo, CmyString &strDst)
@@ -271,14 +271,14 @@ BOOL CMgrKeyInput::GetDeviceName(int nNo, CmyString &strDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrKeyInput::GetGUID											 */
-/* “à—e		:Žw’èƒfƒoƒCƒX‚ÌGUID‚ðŽæ“¾										 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CMgrKeyInput::GetGUID											 */
+/* å†…å®¹		:æŒ‡å®šãƒ‡ãƒã‚¤ã‚¹ã®GUIDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CMgrKeyInput::GetGUID(
-	int nNo,			/* [in] ”z—ñ”Ô† */
-	GUID &stDst)		/* [out] Žæ“¾æ */
+	int nNo,			/* [in] é…åˆ—ç•ªå· */
+	GUID &stDst)		/* [out] å–å¾—å…ˆ */
 {
 	return m_pDInputUtil->GetGUID (nNo, stDst);
 }

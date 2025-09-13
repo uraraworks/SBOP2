@@ -7,7 +7,7 @@
 
 /*
 #ifdef _MSC_VER
-	#ifdef _DEBUG	//ƒƒ‚ƒŠƒŠ[ƒNƒeƒXƒg
+	#ifdef _DEBUG	//ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯ãƒ†ã‚¹ãƒˆ
 		#include <crtdbg.h>
 		#define malloc(a) _malloc_dbg(a,_NORMAL_BLOCK,__FILE__,__LINE__)
 		inline void*  operator new(size_t size, LPCSTR strFileName, INT iLine)
@@ -32,7 +32,7 @@ namespace Afl{
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflCall
-// ƒNƒ‰ƒXŠÖ”ŒÄ‚Ño‚µ•â•ƒNƒ‰ƒX
+// ã‚¯ãƒ©ã‚¹é–¢æ•°å‘¼ã³å‡ºã—è£œåŠ©ã‚¯ãƒ©ã‚¹
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflClassProc::AflClassProc()
 {
@@ -63,12 +63,12 @@ THANDLE AflThread::createThread(LPVOID pAddress,LPVOID pvData,LPDWORD pdwId)
 {
 	THANDLE hThread;
 	#ifdef _WIN32
-		#ifdef _MT //Cƒ‰ƒ“ƒ^ƒCƒ€ƒXƒŒƒbƒh
-			hThread = (THANDLE)_beginthreadex(NULL,0,(unsigned(__stdcall*)(LPVOID))pAddress,pvData,0,(LPUINT)pdwId);	//ƒXƒŒƒbƒh‚Ì”­¶
-		#else		//WIN32APIƒXƒŒƒbƒh
-			hThread = ::CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)pAddress,pvData,0,pdwId);				//ƒXƒŒƒbƒh‚Ì”­¶
+		#ifdef _MT //Cãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¹ãƒ¬ãƒƒãƒ‰
+			hThread = (THANDLE)_beginthreadex(NULL,0,(unsigned(__stdcall*)(LPVOID))pAddress,pvData,0,(LPUINT)pdwId);	//ã‚¹ãƒ¬ãƒƒãƒ‰ã®ç™ºç”Ÿ
+		#else		//WIN32APIã‚¹ãƒ¬ãƒƒãƒ‰
+			hThread = ::CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)pAddress,pvData,0,pdwId);				//ã‚¹ãƒ¬ãƒƒãƒ‰ã®ç™ºç”Ÿ
 		#endif
-	#else			//POSIXƒXƒŒƒbƒh
+	#else			//POSIXã‚¹ãƒ¬ãƒƒãƒ‰
 		pthread_create(&hThread,NULL,(LPVOID(*)(LPVOID))pAddress,pvData);
 	#endif
 	return hThread;
@@ -78,9 +78,9 @@ bool AflThread::closeThread(THANDLE hThread)
 {
 	if(hThread)
 	{
-	#ifdef _WIN32	//WIN32ƒnƒ“ƒhƒ‹—p
+	#ifdef _WIN32	//WIN32ãƒãƒ³ãƒ‰ãƒ«ç”¨
 		::CloseHandle(hThread);
-	#else			//POSIXƒnƒ“ƒhƒ‹—p
+	#else			//POSIXãƒãƒ³ãƒ‰ãƒ«ç”¨
 		pthread_detach(hThread);
 	#endif
 		return true;
@@ -126,18 +126,18 @@ bool AflThread::isActiveThread()
 //------------------------------------------------------------
 bool AflThread::startThread(AflClassProc* paflClassCallBack,LPVOID pvData)
 {
-	//ƒXƒŒƒbƒh‚É“n‚·’l‚Ìİ’è
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã«æ¸¡ã™å€¤ã®è¨­å®š
 	LPVOID adwThreadData[] = {this,pvData};
 	LPVOID pdwThreadData = new LPVOID[sizeof(adwThreadData)/sizeof(LPVOID)];
 	memcpy(pdwThreadData,adwThreadData,sizeof(adwThreadData));
 	
-	closeThread();	//Šù‚É‘¶İ‚·‚éƒXƒŒƒbƒh‚ğ’â~
+	closeThread();	//æ—¢ã«å­˜åœ¨ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’åœæ­¢
 	m_paflClassCallBack = paflClassCallBack;
 
 	m_bEnable = true;
-	//ƒXƒŒƒbƒh‚Ìì¬
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã®ä½œæˆ
 	m_hThread = createThread((LPVOID)threadProcServer,pdwThreadData,&m_dwThreadID);
-    //ƒXƒŒƒbƒhì¬Œã‚ÌƒEƒGƒCƒg
+    //ã‚¹ãƒ¬ãƒƒãƒ‰ä½œæˆå¾Œã®ã‚¦ã‚¨ã‚¤ãƒˆ
     while(!m_bEnable)
 		Sleep(0);
 	return m_hThread != 0;
@@ -145,18 +145,18 @@ bool AflThread::startThread(AflClassProc* paflClassCallBack,LPVOID pvData)
 //------------------------------------------------------------
 bool AflThread::startThread(AflThreadProc* paflThreadProc,LPVOID pvData)
 {
-	//ƒXƒŒƒbƒh‚É“n‚·’l‚Ìİ’è
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã«æ¸¡ã™å€¤ã®è¨­å®š
 	LPVOID adwThreadData[] = {this,pvData};
 	LPVOID pdwThreadData = new LPVOID[sizeof(adwThreadData)/sizeof(LPVOID)];
 	memcpy(pdwThreadData,adwThreadData,sizeof(adwThreadData));
 	
-	closeThread();	//Šù‚É‘¶İ‚·‚éƒXƒŒƒbƒh‚ğ’â~
+	closeThread();	//æ—¢ã«å­˜åœ¨ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’åœæ­¢
 	m_paflThreadProc = paflThreadProc;
 
 	m_bEnable = true;
-	//ƒXƒŒƒbƒh‚Ìì¬
+	//ã‚¹ãƒ¬ãƒƒãƒ‰ã®ä½œæˆ
 	m_hThread = createThread((LPVOID)threadProcServer,pdwThreadData,&m_dwThreadID);
-    //ƒXƒŒƒbƒhì¬Œã‚ÌƒEƒGƒCƒg
+    //ã‚¹ãƒ¬ãƒƒãƒ‰ä½œæˆå¾Œã®ã‚¦ã‚¨ã‚¤ãƒˆ
     while(!m_bEnable)
 		Sleep(0);
 	return m_hThread != 0;
@@ -164,12 +164,12 @@ bool AflThread::startThread(AflThreadProc* paflThreadProc,LPVOID pvData)
 //------------------------------------------------------------
 DWORD AflThread::threadProcServer(LPVOID pVoid)
 {
-	//ƒXƒŒƒbƒh‰Šú‰»—pƒf[ƒ^‚Ìİ’è
+	//ã‚¹ãƒ¬ãƒƒãƒ‰åˆæœŸåŒ–ç”¨ãƒ‡ãƒ¼ã‚¿ã®è¨­å®š
 	LPVOID* ppThreadData = (LPVOID*)pVoid;
 	LPAFLTHREAD pAflThread = (LPAFLTHREAD)ppThreadData[0];
 	LPVOID pvData = ppThreadData[1];
 	delete[] ppThreadData;
-	//‰¼‘zŠÖ”‚ÌŒÄ‚Ño‚µ
+	//ä»®æƒ³é–¢æ•°ã®å‘¼ã³å‡ºã—
 	pAflThread->m_dwExitCode = pAflThread->threadProcRouter(pvData);
 	pAflThread->m_bEnable = false;
 	return pAflThread->m_dwExitCode;
@@ -177,16 +177,16 @@ DWORD AflThread::threadProcServer(LPVOID pVoid)
 DWORD AflThread::threadProcRouter(LPVOID pvData)
 {
 	if(m_paflClassCallBack)
-		return m_paflClassCallBack->call(pvData);	//ƒ†[ƒUƒNƒ‰ƒX‚Ìƒƒ“ƒoŠÖ”‚Ö
+		return m_paflClassCallBack->call(pvData);	//ãƒ¦ãƒ¼ã‚¶ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒ³ãƒé–¢æ•°ã¸
 	else if(m_paflThreadProc)
-		return m_paflThreadProc->onThreadProc(pvData);	//ƒ†[ƒUƒNƒ‰ƒX‚Ìƒƒ“ƒoŠÖ”‚Ö
+		return m_paflThreadProc->onThreadProc(pvData);	//ãƒ¦ãƒ¼ã‚¶ã‚¯ãƒ©ã‚¹ã®ãƒ¡ãƒ³ãƒé–¢æ•°ã¸
 	return 0;
 }
 
 
 //------------------------------------------------------------
 // AflStringHistory
-// —š—ğ•t‚«•¶š—ñ
+// å±¥æ­´ä»˜ãæ–‡å­—åˆ—
 //------------------------------------------------------------
 AflStringHistory::AflStringHistory()
 {
@@ -296,7 +296,7 @@ LPCSTR AflStringHistory::GetLastString(int iIndex)
 }
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFile
-// ƒtƒ@ƒCƒ‹§Œä—p
+// ãƒ•ã‚¡ã‚¤ãƒ«åˆ¶å¾¡ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflFile::AflFile()
 {
@@ -362,7 +362,7 @@ LPSTR AflFile::gets(LPSTR pString,INT iSize)
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflStd
-// ”Ä—p
+// æ±ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 int AflStd::GetChr(const char* pData,char Data,int nLength)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_TEXTEFFECT.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:•¶šƒGƒtƒFƒNƒg’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_TEXTEFFECT.h									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆé€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/13													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,26 +11,26 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_TEXTEFFECT : public CPacketBase
 {
 public:
-			CPacketCHAR_TEXTEFFECT();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_TEXTEFFECT();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_TEXTEFFECT();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_TEXTEFFECT();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, DWORD dwData, int nColor = 0, int nSize = 0);		/* ƒpƒPƒbƒg‚ğì¬ */
-	void	Make	(DWORD dwCharID, LPCSTR pszData, int nColor = 0, int nSize = 0);	/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(DWORD dwCharID, DWORD dwData, int nColor = 0, int nSize = 0);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	void	Make	(DWORD dwCharID, LPCSTR pszData, int nColor = 0, int nSize = 0);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int			m_nColor,				/* F */
-				m_nSize;				/* ƒTƒCƒY */
-	DWORD		m_dwCharID,				/* ƒLƒƒƒ‰ID */
-				m_dwData;				/* ”’lƒf[ƒ^ */
-	CmyString	m_strData;				/* •¶š—ñƒf[ƒ^ */
+	int			m_nColor,				/* è‰² */
+				m_nSize;				/* ã‚µã‚¤ã‚º */
+	DWORD		m_dwCharID,				/* ã‚­ãƒ£ãƒ©ID */
+				m_dwData;				/* æ•°å€¤ãƒ‡ãƒ¼ã‚¿ */
+	CmyString	m_strData;				/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 } CPacketCHAR_TEXTEFFECT, *PCPacketCHAR_TEXTEFFECT;
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StaticMapObjectGrp.h										 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg•\¦ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StaticMapObjectGrp.h										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¡¨ç¤ºã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/02													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,35 +14,35 @@ class CImg32;
 class CInfoMapObject;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStaticMapObjectGrp : public CStatic
 {
 public:
-			CStaticMapObjectGrp();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStaticMapObjectGrp();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStaticMapObjectGrp();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStaticMapObjectGrp();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
-	void	Init	(CInfoMapObject *pInfoMapObject);		/* ‰Šú‰» */
-	void	Set		(int nAnimeNo);							/* XV */
-	void	IncPosX	(void);									/* ‘I‘ğˆÊ’u‚ğ‰E‚ÉˆÚ“® */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
+	void	Init	(CInfoMapObject *pInfoMapObject);		/* åˆæœŸåŒ– */
+	void	Set		(int nAnimeNo);							/* æ›´æ–° */
+	void	IncPosX	(void);									/* é¸æŠä½ç½®ã‚’å³ã«ç§»å‹• */
 
 
 protected:
-	void	RenewGrp(void);									/* ‰æ‘œXV */
+	void	RenewGrp(void);									/* ç”»åƒæ›´æ–° */
 
 
 public:
-	int				m_nAnimeNo;					/* •\¦‚·‚éƒAƒjƒ”Ô† */
-	POINT			m_ptSelect;					/* ‘I‘ğˆÊ’u */
-	CWnd			*m_pWndParent;				/* eƒEƒBƒ“ƒhƒE */
-	CImg32			*m_pImgBack;				/* ƒoƒbƒNƒoƒbƒtƒ@ */
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CInfoMapObject	*m_pInfoMapObject;			/* •\¦‚·‚éƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
+	int				m_nAnimeNo;					/* è¡¨ç¤ºã™ã‚‹ã‚¢ãƒ‹ãƒ¡ç•ªå· */
+	POINT			m_ptSelect;					/* é¸æŠä½ç½® */
+	CWnd			*m_pWndParent;				/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32			*m_pImgBack;				/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CInfoMapObject	*m_pInfoMapObject;			/* è¡¨ç¤ºã™ã‚‹ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
 
 
 

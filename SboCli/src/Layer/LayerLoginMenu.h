@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerLoginMenu.h											 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(ƒƒOƒCƒ“ƒƒjƒ…[) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/15													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerLoginMenu.h											 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ãƒ­ã‚°ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/15													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,22 +14,22 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerLoginMenu : public CLayerCloud
 {
 public:
-			CLayerLoginMenu();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerLoginMenu();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerLoginMenu();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerLoginMenu();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);				/* ì¬ */
-	void	Draw		(CImg32 *pDst);						/* •`‰æ */
+	void	Create		(CMgrData *pMgrData);				/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);						/* æç”» */
 
 
 private:
-	DWORD		m_dwLastTimeProc;				/* ÅIˆ—ŠÔ */
-	CImg32		*m_pDibBack;					/* ”wŒi‰æ‘œ */
+	DWORD		m_dwLastTimeProc;				/* æœ€çµ‚å‡¦ç†æ™‚é–“ */
+	CImg32		*m_pDibBack;					/* èƒŒæ™¯ç”»åƒ */
 } CLayerLoginMenu, *PCLayerLoginMenu;
 
 /* Copyright(C)URARA-works 2007 */

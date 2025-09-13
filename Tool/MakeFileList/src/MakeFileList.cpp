@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MakeFileList.cpp											 */
-/* “à—e			:ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MakeFileList.cpp											 */
+/* å†…å®¹			:ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,14 +23,14 @@ BEGIN_MESSAGE_MAP(CMakeFileListApp, CWinApp)
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/* —Bˆê‚Ì CMakeFileListApp ƒIƒuƒWƒFƒNƒg */
+/* å”¯ä¸€ã® CMakeFileListApp ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ */
 CMakeFileListApp theApp;
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMakeFileListApp::CMakeFileListApp								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/26														 */
+/* é–¢æ•°å	:CMakeFileListApp::CMakeFileListApp								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/26														 */
 /* ========================================================================= */
 
 CMakeFileListApp::CMakeFileListApp()
@@ -39,9 +39,9 @@ CMakeFileListApp::CMakeFileListApp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMakeFileListApp::InitInstance									 */
-/* “à—e		:‰Šú‰»ˆ—														 */
-/* “ú•t		:2008/08/26														 */
+/* é–¢æ•°å	:CMakeFileListApp::InitInstance									 */
+/* å†…å®¹		:åˆæœŸåŒ–å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/08/26														 */
 /* ========================================================================= */
 
 BOOL CMakeFileListApp::InitInstance()

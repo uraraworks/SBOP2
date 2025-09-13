@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	DlgMsgLog.cpp												 */
-/* “à—eF		ƒƒbƒZ[ƒWƒƒOƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2005/09/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	DlgMsgLog.cpp												 */
+/* å†…å®¹ï¼š		ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ­ã‚°ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/09/25													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgMsgLog::DoDataExchange(CDataExchange* pDX)
@@ -48,9 +48,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDlgMsgLog::CDlgMsgLog											 */
-/* “à—eF	ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/09/25														 */
+/* é–¢æ•°åï¼š	CDlgMsgLog::CDlgMsgLog											 */
+/* å†…å®¹ï¼š	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2005/09/25														 */
 /* ========================================================================= */
 
 CDlgMsgLog::CDlgMsgLog(CWnd* pParent /*=NULL*/)
@@ -71,9 +71,9 @@ CDlgMsgLog::CDlgMsgLog(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDlgMsgLog::~CDlgMsgLog											 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/09/25														 */
+/* é–¢æ•°åï¼š	CDlgMsgLog::~CDlgMsgLog											 */
+/* å†…å®¹ï¼š	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2005/09/25														 */
 /* ========================================================================= */
 
 CDlgMsgLog::~CDlgMsgLog()
@@ -83,9 +83,9 @@ CDlgMsgLog::~CDlgMsgLog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDlgMsgLog::Create												 */
-/* “à—eF	ì¬															 */
-/* “ú•tF	2005/09/25														 */
+/* é–¢æ•°åï¼š	CDlgMsgLog::Create												 */
+/* å†…å®¹ï¼š	ä½œæˆ															 */
+/* æ—¥ä»˜ï¼š	2005/09/25														 */
 /* ========================================================================= */
 
 BOOL CDlgMsgLog::Create(HWND hWndParent, CMgrData *pMgrData)
@@ -100,7 +100,7 @@ BOOL CDlgMsgLog::Create(HWND hWndParent, CMgrData *pMgrData)
 	ShowWindow (SW_SHOW);
 	pWnd->SetFocus ();
 
-	/* ƒƒOƒtƒ@ƒCƒ‹‚Ìì¬ */
+	/* ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ */
 	MakeLogFile ();
 
 	return TRUE;
@@ -108,9 +108,9 @@ BOOL CDlgMsgLog::Create(HWND hWndParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDlgMsgLog::Add													 */
-/* “à—eF	’Ç‰Á															 */
-/* “ú•tF	2005/09/25														 */
+/* é–¢æ•°åï¼š	CDlgMsgLog::Add													 */
+/* å†…å®¹ï¼š	è¿½åŠ 															 */
+/* æ—¥ä»˜ï¼š	2005/09/25														 */
 /* ========================================================================= */
 
 void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
@@ -125,11 +125,11 @@ void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 	time = CTime::GetCurrentTime ();
 	timeTmp = CTime::CTime (time.GetYear (), time.GetMonth (), time.GetDay (), 0, 0, 0);
 	if (m_timeMakeLog != timeTmp) {
-		/* “ú•t‚ª•Ï‚í‚Á‚½‚Ì‚ÅƒƒOƒtƒ@ƒCƒ‹‚ðÄì¬ */
+		/* æ—¥ä»˜ãŒå¤‰ã‚ã£ãŸã®ã§ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å†ä½œæˆ */
 		MakeLogFile ();
 	}
 
-	/* ƒƒOƒtƒ@ƒCƒ‹‚É‘‚«ž‚Ý */
+	/* ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã¿ */
 	strTmp.Format ("[%02d:%02d:%02d] %s", time.GetHour (), time.GetMinute (), time.GetSecond (), pszLog);
 	m_pLog->Write ("%s", strTmp);
 
@@ -138,9 +138,9 @@ void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDlgMsgLog::MakeLogFile											 */
-/* “à—eF	Œ»ÝŽž‚ÅƒƒOƒtƒ@ƒCƒ‹‚ðì¬									 */
-/* “ú•tF	2005/10/01														 */
+/* é–¢æ•°åï¼š	CDlgMsgLog::MakeLogFile											 */
+/* å†…å®¹ï¼š	ç¾åœ¨æ™‚åˆ»ã§ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ									 */
+/* æ—¥ä»˜ï¼š	2005/10/01														 */
 /* ========================================================================= */
 
 void CDlgMsgLog::MakeLogFile(void)
@@ -159,21 +159,21 @@ void CDlgMsgLog::MakeLogFile(void)
 	*pszTmp	= 0;
 	PathAddBackslash (szName);
 
-	strTmp.Format ("%sLog\\SBOƒƒO(%d”N%02dŒŽ%02d“ú).txt",
+	strTmp.Format ("%sLog\\SBOãƒ­ã‚°(%då¹´%02dæœˆ%02dæ—¥).txt",
 		szName,
 		time.GetYear (),
 		time.GetMonth (),
 		time.GetDay ());
-	/* ƒƒOƒtƒ@ƒCƒ‹‚Ìì¬ */
+	/* ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ */
 	m_pLog->Destroy ();
 	m_pLog->Create (strTmp, FALSE, TRUE);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDlgMsgLog::OnInitDialog										 */
-/* “à—eF	ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•tF	2005/09/26														 */
+/* é–¢æ•°åï¼š	CDlgMsgLog::OnInitDialog										 */
+/* å†…å®¹ï¼š	ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜ï¼š	2005/09/26														 */
 /* ========================================================================= */
 
 BOOL CDlgMsgLog::OnInitDialog()
@@ -186,10 +186,10 @@ BOOL CDlgMsgLog::OnInitDialog()
 	::GetWindowRect (m_pMgrData->GetMainWindow (), rc);
 	SetWindowPos (NULL, rc.right, rc.top, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 
-	/* ƒƒO•\Ž¦ƒRƒ“ƒgƒ[ƒ‹‚ÌÝ’è */
+	/* ãƒ­ã‚°è¡¨ç¤ºã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®è¨­å®š */
 	m_wndLogViewCtrl.GetSetting (&stLOGVIEWCTRLSETTING);
-	strcpy (stLOGVIEWCTRLSETTING.szFontText,	"‚l‚r ‚oƒSƒVƒbƒN");
-	strcpy (stLOGVIEWCTRLSETTING.szFontHeader,	"‚l‚r ƒSƒVƒbƒN");
+	strcpy (stLOGVIEWCTRLSETTING.szFontText,	"ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
+	strcpy (stLOGVIEWCTRLSETTING.szFontHeader,	"ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯");
 	stLOGVIEWCTRLSETTING.crBack				= RGB (40, 40, 40);
 	stLOGVIEWCTRLSETTING.crSelectBack		= RGB (40, 40, 255);
 	stLOGVIEWCTRLSETTING.crSelectText		= RGB (255, 255, 255);
@@ -218,9 +218,9 @@ BOOL CDlgMsgLog::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDlgMsgLog::OnSize												 */
-/* “à—eF	ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)										 */
-/* “ú•tF	2005/09/25														 */
+/* é–¢æ•°åï¼š	CDlgMsgLog::OnSize												 */
+/* å†…å®¹ï¼š	ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)										 */
+/* æ—¥ä»˜ï¼š	2005/09/25														 */
 /* ========================================================================= */
 
 void CDlgMsgLog::OnSize(UINT nType, int cx, int cy)
@@ -232,9 +232,9 @@ void CDlgMsgLog::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgMsgLog::PostNcDestroy										 */
-/* “à—e		:Œãˆ—															 */
-/* “ú•t		:2007/04/12														 */
+/* é–¢æ•°å	:CDlgMsgLog::PostNcDestroy										 */
+/* å†…å®¹		:å¾Œå‡¦ç†															 */
+/* æ—¥ä»˜		:2007/04/12														 */
 /* ========================================================================= */
 
 void CDlgMsgLog::PostNcDestroy()
@@ -242,7 +242,7 @@ void CDlgMsgLog::PostNcDestroy()
 	HIMC hImc;
 
 	if (m_hWndChat) {
-		/* IME‚ðƒIƒt‚É‚·‚é */
+		/* IMEã‚’ã‚ªãƒ•ã«ã™ã‚‹ */
 		hImc = ImmGetContext (m_hWndChat);
 		ImmSetOpenStatus (hImc, FALSE);
 		ImmReleaseContext (m_hWndChat, hImc);
@@ -255,9 +255,9 @@ void CDlgMsgLog::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgMsgLog::OnLink												 */
-/* “à—e		:ƒƒOƒRƒ“ƒgƒ[ƒ‹‚©‚ç‚ÌƒŠƒ“ƒN’Ê’m								 */
-/* “ú•t		:2007/04/12														 */
+/* é–¢æ•°å	:CDlgMsgLog::OnLink												 */
+/* å†…å®¹		:ãƒ­ã‚°ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‹ã‚‰ã®ãƒªãƒ³ã‚¯é€šçŸ¥								 */
+/* æ—¥ä»˜		:2007/04/12														 */
 /* ========================================================================= */
 
 void CDlgMsgLog::OnLink(NMHDR* pNMHDR, LRESULT* pResult)
@@ -269,9 +269,9 @@ void CDlgMsgLog::OnLink(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgMsgLog::OnBnClickedTopMost									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Å‘O–Ê)											 */
-/* “ú•t		:2008/08/30														 */
+/* é–¢æ•°å	:CDlgMsgLog::OnBnClickedTopMost									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æœ€å‰é¢)											 */
+/* æ—¥ä»˜		:2008/08/30														 */
 /* ========================================================================= */
 
 void CDlgMsgLog::OnBnClickedTopMost()
@@ -287,9 +287,9 @@ void CDlgMsgLog::OnBnClickedTopMost()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgMsgLog::OnBnClickedHideMainframe							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒƒCƒ“ƒEƒBƒ“ƒhƒE”ñ•\Ž¦)							 */
-/* “ú•t		:2008/06/08														 */
+/* é–¢æ•°å	:CDlgMsgLog::OnBnClickedHideMainframe							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦éžè¡¨ç¤º)							 */
+/* æ—¥ä»˜		:2008/06/08														 */
 /* ========================================================================= */
 
 void CDlgMsgLog::OnBnClickedHideMainframe()
@@ -313,9 +313,9 @@ void CDlgMsgLog::OnBnClickedHideMainframe()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgMsgLog::ChatWndProc										 */
-/* “à—e		:ƒ`ƒƒƒbƒg“ü—Í—“ƒvƒƒV[ƒWƒƒ										 */
-/* “ú•t		:2008/06/08														 */
+/* é–¢æ•°å	:CDlgMsgLog::ChatWndProc										 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£										 */
+/* æ—¥ä»˜		:2008/06/08														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

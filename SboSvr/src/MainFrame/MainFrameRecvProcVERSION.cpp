@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcVERSION.cpp								 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒo[ƒWƒ‡ƒ“ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcVERSION.cpp								 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,26 +17,26 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION									 */
-/* “à—e		:ŽóMˆ—(ƒo[ƒWƒ‡ƒ“Œn)											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»)											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_VERSION_REQ_VERSIONCHECK:		RecvProcVERSION_REQ_VERSIONCHECK	(pData, dwSessionID);	break;	/* ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN—v‹ */
-	case SBOCOMMANDID_SUB_VERSION_REQ_FILELISTCHECK:	RecvProcVERSION_REQ_FILELISTCHECK	(pData, dwSessionID);	break;	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN—v‹ */
-	case SBOCOMMANDID_SUB_VERSION_REQ_FILELIST:			RecvProcVERSION_REQ_FILELIST		(pData, dwSessionID);	break;	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg—v‹ */
-	case SBOCOMMANDID_SUB_VERSION_REQ_FILE:				RecvProcVERSION_REQ_FILE			(pData, dwSessionID);	break;	/* ƒtƒ@ƒCƒ‹—v‹ */
+	case SBOCOMMANDID_SUB_VERSION_REQ_VERSIONCHECK:		RecvProcVERSION_REQ_VERSIONCHECK	(pData, dwSessionID);	break;	/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯è¦æ±‚ */
+	case SBOCOMMANDID_SUB_VERSION_REQ_FILELISTCHECK:	RecvProcVERSION_REQ_FILELISTCHECK	(pData, dwSessionID);	break;	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚ */
+	case SBOCOMMANDID_SUB_VERSION_REQ_FILELIST:			RecvProcVERSION_REQ_FILELIST		(pData, dwSessionID);	break;	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆè¦æ±‚ */
+	case SBOCOMMANDID_SUB_VERSION_REQ_FILE:				RecvProcVERSION_REQ_FILE			(pData, dwSessionID);	break;	/* ãƒ•ã‚¡ã‚¤ãƒ«è¦æ±‚ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_REQ_VERSIONCHECK					 */
-/* “à—e		:ŽóMˆ—(ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN—v‹)								 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_REQ_VERSIONCHECK					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯è¦æ±‚)								 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION_REQ_VERSIONCHECK(PBYTE pData, DWORD dwSessionID)
@@ -58,9 +58,9 @@ void CMainFrame::RecvProcVERSION_REQ_VERSIONCHECK(PBYTE pData, DWORD dwSessionID
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK					 */
-/* “à—e		:ŽóMˆ—(ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN—v‹)							 */
-/* “ú•t		:2007/08/29														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚)							 */
+/* æ—¥ä»˜		:2007/08/29														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionID)
@@ -74,7 +74,7 @@ void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionI
 
 	Packet.Set (pData);
 
-	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ÌƒnƒbƒVƒ…‚ðŽæ“¾ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ãƒãƒƒã‚·ãƒ¥ã‚’å–å¾— */
 	GetModuleFilePath (szTmp, sizeof (szTmp));
 	strTmp.Format ("%sSBOHashList.txt", szTmp);
 	GetMD5File.Init ();
@@ -94,9 +94,9 @@ void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionI
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_REQ_FILELIST						 */
-/* “à—e		:ŽóMˆ—(ƒtƒ@ƒCƒ‹ƒŠƒXƒg—v‹)									 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_REQ_FILELIST						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆè¦æ±‚)									 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION_REQ_FILELIST(PBYTE pData, DWORD dwSessionID)
@@ -109,9 +109,9 @@ void CMainFrame::RecvProcVERSION_REQ_FILELIST(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_REQ_FILE							 */
-/* “à—e		:ŽóMˆ—(ƒtƒ@ƒCƒ‹—v‹)											 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_REQ_FILE							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«è¦æ±‚)											 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)

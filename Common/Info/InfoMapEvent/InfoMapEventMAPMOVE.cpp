@@ -1,31 +1,31 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapEventMAPMOVE.cpp									 */
-/* “à—e			:ƒCƒxƒ“ƒgî•ñ(ƒ}ƒbƒvŠÔˆÚ“®)ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapEventMAPMOVE.cpp									 */
+/* å†…å®¹			:ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±(ãƒãƒƒãƒ—é–“ç§»å‹•)ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/27													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMapEventMAPMOVE.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwMapID",		/* ˆÚ“®æƒ}ƒbƒvID */
-	"ptDst",			/* ˆÚ“®æ */
-	"m_nDirection",		/* ˆÚ“®Œã‚ÌŒü‚« */
+	"m_dwMapID",		/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+	"ptDst",			/* ç§»å‹•å…ˆ */
+	"m_nDirection",		/* ç§»å‹•å¾Œã®å‘ã */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::CInfoMapEventMAPMOVE						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::CInfoMapEventMAPMOVE						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 CInfoMapEventMAPMOVE::CInfoMapEventMAPMOVE()
@@ -40,9 +40,9 @@ CInfoMapEventMAPMOVE::CInfoMapEventMAPMOVE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::~CInfoMapEventMAPMOVE					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::~CInfoMapEventMAPMOVE					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 CInfoMapEventMAPMOVE::~CInfoMapEventMAPMOVE()
@@ -51,9 +51,9 @@ CInfoMapEventMAPMOVE::~CInfoMapEventMAPMOVE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::GetElementNo								 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::GetElementNo								 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 int CInfoMapEventMAPMOVE::GetElementNo(LPCSTR pszName)
@@ -81,9 +81,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::GetDataSize								 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::GetDataSize								 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventMAPMOVE::GetDataSize(void)
@@ -91,18 +91,18 @@ DWORD CInfoMapEventMAPMOVE::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = CInfoMapEventBase::GetDataSize ();
-	dwRet += sizeof (m_dwMapID);		/* ˆÚ“®æƒ}ƒbƒvID */
-	dwRet += sizeof (m_ptDst);			/* ˆÚ“®æ */
-	dwRet += sizeof (m_nDirection);		/* ˆÚ“®Œã‚ÌŒü‚« */
+	dwRet += sizeof (m_dwMapID);		/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+	dwRet += sizeof (m_ptDst);			/* ç§»å‹•å…ˆ */
+	dwRet += sizeof (m_nDirection);		/* ç§»å‹•å¾Œã®å‘ã */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::GetDataSizeNo							 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::GetDataSizeNo							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventMAPMOVE::GetDataSizeNo(int nNo)
@@ -113,9 +113,9 @@ DWORD CInfoMapEventMAPMOVE::GetDataSizeNo(int nNo)
 		dwRet = CInfoMapEventBase::GetDataSizeNo (nNo);
 	} else {
 		switch (nNo - m_nElementCountBase) {
-		case 0:	dwRet = sizeof (m_dwMapID);		break;		/* ˆÚ“®æƒ}ƒbƒvID */
-		case 1:	dwRet = sizeof (m_ptDst);		break;		/* ˆÚ“®æ */
-		case 2:	dwRet = sizeof (m_nDirection);	break;		/* ˆÚ“®Œã‚ÌŒü‚« */
+		case 0:	dwRet = sizeof (m_dwMapID);		break;		/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+		case 1:	dwRet = sizeof (m_ptDst);		break;		/* ç§»å‹•å…ˆ */
+		case 2:	dwRet = sizeof (m_nDirection);	break;		/* ç§»å‹•å¾Œã®å‘ã */
 		}
 	}
 
@@ -124,9 +124,9 @@ DWORD CInfoMapEventMAPMOVE::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::GetName									 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::GetName									 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMapEventMAPMOVE::GetName(int nNo)
@@ -140,9 +140,9 @@ LPCSTR CInfoMapEventMAPMOVE::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::GetWriteData								 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::GetWriteData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventMAPMOVE::GetWriteData(int nNo, PDWORD pdwSize)
@@ -164,9 +164,9 @@ PBYTE CInfoMapEventMAPMOVE::GetWriteData(int nNo, PDWORD pdwSize)
 		pRet = new BYTE[dwSize];
 
 		switch (nNo - m_nElementCountBase) {
-		case 0:	pSrc = (PBYTE)&m_dwMapID;		break;		/* ˆÚ“®æƒ}ƒbƒvID */
-		case 1:	pSrc = (PBYTE)&m_ptDst;			break;		/* ˆÚ“®æ */
-		case 2:	pSrc = (PBYTE)&m_nDirection;	break;		/* ˆÚ“®Œã‚ÌŒü‚« */
+		case 0:	pSrc = (PBYTE)&m_dwMapID;		break;		/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+		case 1:	pSrc = (PBYTE)&m_ptDst;			break;		/* ç§»å‹•å…ˆ */
+		case 2:	pSrc = (PBYTE)&m_nDirection;	break;		/* ç§»å‹•å¾Œã®å‘ã */
 		}
 
 		if (pSrc) {
@@ -180,14 +180,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::ReadElementData							 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::ReadElementData							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventMAPMOVE::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -199,9 +199,9 @@ DWORD CInfoMapEventMAPMOVE::ReadElementData(
 		dwSize = CInfoMapEventBase::ReadElementData (pSrc, nNo);
 	} else {
 		switch (nNo - m_nElementCountBase) {
-		case 0: pDst = (PBYTE)&m_dwMapID;		dwSize = sizeof (m_dwMapID);	break;		/* ˆÚ“®æƒ}ƒbƒvID */
-		case 1: pDst = (PBYTE)&m_ptDst;			dwSize = sizeof (m_ptDst);		break;		/* ˆÚ“®æ */
-		case 2: pDst = (PBYTE)&m_nDirection;	dwSize = sizeof (m_nDirection);	break;		/* ˆÚ“®Œã‚ÌŒü‚« */
+		case 0: pDst = (PBYTE)&m_dwMapID;		dwSize = sizeof (m_dwMapID);	break;		/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+		case 1: pDst = (PBYTE)&m_ptDst;			dwSize = sizeof (m_ptDst);		break;		/* ç§»å‹•å…ˆ */
+		case 2: pDst = (PBYTE)&m_nDirection;	dwSize = sizeof (m_nDirection);	break;		/* ç§»å‹•å¾Œã®å‘ã */
 		}
 
 		if (pDst) {
@@ -214,9 +214,9 @@ DWORD CInfoMapEventMAPMOVE::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventMAPMOVE::GetSendDataSize(void)
@@ -233,9 +233,9 @@ DWORD CInfoMapEventMAPMOVE::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventMAPMOVE::GetSendData(void)
@@ -253,9 +253,9 @@ PBYTE CInfoMapEventMAPMOVE::GetSendData(void)
 
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 
-	CopyMemoryRenew (pDataTmp, &m_dwMapID,		sizeof (m_dwMapID),		pDataTmp);	/* ˆÚ“®æƒ}ƒbƒvID */
-	CopyMemoryRenew (pDataTmp, &m_ptDst,		sizeof (m_ptDst),		pDataTmp);	/* ˆÚ“®æ */
-	CopyMemoryRenew (pDataTmp, &m_nDirection,	sizeof (m_nDirection),	pDataTmp);	/* ˆÚ“®Œã‚ÌŒü‚« */
+	CopyMemoryRenew (pDataTmp, &m_dwMapID,		sizeof (m_dwMapID),		pDataTmp);	/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+	CopyMemoryRenew (pDataTmp, &m_ptDst,		sizeof (m_ptDst),		pDataTmp);	/* ç§»å‹•å…ˆ */
+	CopyMemoryRenew (pDataTmp, &m_nDirection,	sizeof (m_nDirection),	pDataTmp);	/* ç§»å‹•å¾Œã®å‘ã */
 
 	SAFE_DELETE_ARRAY (pDataBase);
 
@@ -264,9 +264,9 @@ PBYTE CInfoMapEventMAPMOVE::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventMAPMOVE::SetSendData(PBYTE pSrc)
@@ -278,9 +278,9 @@ PBYTE CInfoMapEventMAPMOVE::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 	pDataTmp = CInfoMapEventBase::SetSendData (pSrc);
 
-	CopyMemoryRenew (&m_dwMapID,	pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* ˆÚ“®æƒ}ƒbƒvID */
-	CopyMemoryRenew (&m_ptDst,		pDataTmp, sizeof (m_ptDst),			pDataTmp);	/* ˆÚ“®æ */
-	CopyMemoryRenew (&m_nDirection,	pDataTmp, sizeof (m_nDirection),	pDataTmp);	/* ˆÚ“®Œã‚ÌŒü‚« */
+	CopyMemoryRenew (&m_dwMapID,	pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+	CopyMemoryRenew (&m_ptDst,		pDataTmp, sizeof (m_ptDst),			pDataTmp);	/* ç§»å‹•å…ˆ */
+	CopyMemoryRenew (&m_nDirection,	pDataTmp, sizeof (m_nDirection),	pDataTmp);	/* ç§»å‹•å¾Œã®å‘ã */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -288,10 +288,10 @@ PBYTE CInfoMapEventMAPMOVE::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventMAPMOVE::Copy										 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/06/25														 */
-/* ”õl		:í•Ê‚ªˆá‚¤ê‡‚Í‚¨‚©‚µ‚È‚±‚Æ‚É‚È‚é‚Ì‚Å’ˆÓ						 */
+/* é–¢æ•°å	:CInfoMapEventMAPMOVE::Copy										 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/06/25														 */
+/* å‚™è€ƒ		:ç¨®åˆ¥ãŒé•ã†å ´åˆã¯ãŠã‹ã—ãªã“ã¨ã«ãªã‚‹ã®ã§æ³¨æ„						 */
 /* ========================================================================= */
 
 void CInfoMapEventMAPMOVE::Copy(CInfoMapEventBase *pSrc)

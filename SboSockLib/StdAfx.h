@@ -1,14 +1,14 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:stdafx.h													 */
-/* “à—e			:ƒvƒŠƒRƒ“ƒpƒCƒ‹ƒwƒbƒ_ ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/01/20													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:stdafx.h													 */
+/* å†…å®¹			:ãƒ—ãƒªã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ãƒ˜ãƒƒãƒ€ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/20													 */
 /* ========================================================================= */
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN		// Windows ƒwƒbƒ_[‚©‚ç–w‚ÇŽg—p‚³‚ê‚È‚¢ƒXƒ^ƒbƒt‚ðœŠO‚µ‚Ü‚·
+#define WIN32_LEAN_AND_MEAN		// Windows ãƒ˜ãƒƒãƒ€ãƒ¼ã‹ã‚‰æ®†ã©ä½¿ç”¨ã•ã‚Œãªã„ã‚¹ã‚¿ãƒƒãƒ•ã‚’é™¤å¤–ã—ã¾ã™
 
 #include <winsock2.h>
 #include <windowsx.h>

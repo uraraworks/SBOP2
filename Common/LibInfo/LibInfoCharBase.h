@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoCharBase.h											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoCharBase.h											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,65 +12,65 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoCharBase : public CLibInfoBase
 {
 public:
-			CLibInfoCharBase();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoCharBase();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoCharBase();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoCharBase();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Create		(void);							/* ì¬ */
-	virtual void	Destroy		(void);							/* ”jŠü */
-	virtual BOOL	Proc		(void);							/* ˆ— */
-	virtual void	RenewSize	(DWORD dwMapID, int nDirection, int nSize);	/* ƒ}ƒbƒvƒTƒCƒYXV */
+	virtual void	Create		(void);							/* ä½œæˆ */
+	virtual void	Destroy		(void);							/* ç ´æ£„ */
+	virtual BOOL	Proc		(void);							/* å‡¦ç† */
+	virtual void	RenewSize	(DWORD dwMapID, int nDirection, int nSize);	/* ãƒãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–° */
 
-			PCInfoBase	GetNew	(void);									/* V‹Kƒf[ƒ^‚ğæ“¾ */
-	virtual PCInfoBase	GetNew	(int nType);							/* V‹Kƒf[ƒ^‚ğæ“¾ */
+			PCInfoBase	GetNew	(void);									/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PCInfoBase	GetNew	(int nType);							/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	void	GetSaveNo			(ARRAYINT &anDst);						/* •Û‘¶‚·‚éî•ñ‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾ */
-	int		GetCount			(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	int		GetCountScreen		(PCInfoCharBase pCharBase);				/* ƒf[ƒ^”‚ğæ“¾(‰æ–Ê“à‚ÌƒLƒƒƒ‰) */
-	void	Add					(PCInfoBase pInfo);						/* ’Ç‰Á */
-	DWORD	Add					(PCInfoCharBase pChar);					/* ’Ç‰Á */
-	void	CopyAdd				(PCInfoCharBase pChar);					/* ƒRƒs[‚µ‚Ä’Ç‰Á */
-	void	Delete				(int nNo);								/* íœ */
-	void	Delete				(DWORD dwCharID);						/* íœ */
-	void	DeleteAll			(void);									/* ‘S‚Äíœ */
-	void	SortY				(void);									/* YÀ•W‡‚Éƒ\[ƒg */
-	BOOL	IsBlockChar			(PCInfoCharBase pChar, int nDirection, BOOL bNoBlockFlg=TRUE, BOOL bHitCheck=FALSE);	/* ˆê•à‘O‚Å‚Ô‚Â‚©‚é‚©ƒ`ƒFƒbƒN */
-	BOOL	IsUseName			(LPCSTR pszName);						/* –¼‘O‚ªg—p‚³‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN */
-	BOOL	NameCheck			(LPCSTR pszName);						/* –¼‘O‚Ég—p‚Å‚«‚È‚¢–¼‘O‚ª‚ ‚é‚©ƒ`ƒFƒbƒN */
-	int		GetTurnDirection	(int nDirection);						/* ‹tŒü‚«‚ğæ“¾ */
-	void	GetDistance			(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, PCInfoCharBase pInfoCharDst, BOOL bFrontPos = FALSE);/* ƒLƒƒƒ‰À•W‚Å‹——£‚ğæ“¾ */
+	void	GetSaveNo			(ARRAYINT &anDst);						/* ä¿å­˜ã™ã‚‹æƒ…å ±ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾— */
+	int		GetCount			(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	int		GetCountScreen		(PCInfoCharBase pCharBase);				/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—(ç”»é¢å†…ã®ã‚­ãƒ£ãƒ©) */
+	void	Add					(PCInfoBase pInfo);						/* è¿½åŠ  */
+	DWORD	Add					(PCInfoCharBase pChar);					/* è¿½åŠ  */
+	void	CopyAdd				(PCInfoCharBase pChar);					/* ã‚³ãƒ”ãƒ¼ã—ã¦è¿½åŠ  */
+	void	Delete				(int nNo);								/* å‰Šé™¤ */
+	void	Delete				(DWORD dwCharID);						/* å‰Šé™¤ */
+	void	DeleteAll			(void);									/* å…¨ã¦å‰Šé™¤ */
+	void	SortY				(void);									/* Yåº§æ¨™é †ã«ã‚½ãƒ¼ãƒˆ */
+	BOOL	IsBlockChar			(PCInfoCharBase pChar, int nDirection, BOOL bNoBlockFlg=TRUE, BOOL bHitCheck=FALSE);	/* ä¸€æ­©å‰ã§ã¶ã¤ã‹ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
+	BOOL	IsUseName			(LPCSTR pszName);						/* åå‰ãŒä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
+	BOOL	NameCheck			(LPCSTR pszName);						/* åå‰ã«ä½¿ç”¨ã§ããªã„åå‰ãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
+	int		GetTurnDirection	(int nDirection);						/* é€†å‘ãã‚’å–å¾— */
+	void	GetDistance			(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, PCInfoCharBase pInfoCharDst, BOOL bFrontPos = FALSE);/* ã‚­ãƒ£ãƒ©åº§æ¨™ã§è·é›¢ã‚’å–å¾— */
 
-	BOOL	IsScreenInside	(PCInfoCharBase pCharBase, PCInfoCharBase pCharTarget);	/* ‰æ–Ê“à‚É‚¢‚é‚©ƒ`ƒFƒbƒN */
+	BOOL	IsScreenInside	(PCInfoCharBase pCharBase, PCInfoCharBase pCharTarget);	/* ç”»é¢å†…ã«ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
 
-	virtual	DWORD	GetFrontCharID		(DWORD dwCharID, int nDirection = -1);	/* ˆê•à‘O‚ÌƒLƒƒƒ‰ID‚ğæ“¾ */
-	virtual	DWORD	GetFrontCharIDPush	(DWORD dwCharID, int nDirection = -1);	/* ˆê•à‘O‚Ì‰Ÿ‚¹‚éƒLƒƒƒ‰ID‚ğæ“¾ */
-	virtual	DWORD	GetHitCharID		(DWORD dwCharIDBase, int x, int y);		/* w’èÀ•W‚É“–‚½‚éƒLƒƒƒ‰ID‚ğæ“¾ */
-	virtual	void	SetPtr				(DWORD dwCharID, PCInfoCharBase pChar);	/* ƒLƒƒƒ‰î•ñ‚ğXV */
-			PCInfoBase	GetPtr			(int nNo);								/* ƒLƒƒƒ‰î•ñ‚ğæ“¾ */
-			PCInfoBase	GetPtr			(DWORD dwCharID);						/* ƒLƒƒƒ‰î•ñ‚ğæ“¾ */
-			PCInfoBase	GetPtrAccountID	(DWORD dwAccountID);					/* ƒLƒƒƒ‰î•ñ‚ğæ“¾ */
-			PCInfoBase	GetPtrFront		(PCInfoCharBase pChar, int nDirection);	/* ˆê•à‘O‚ÌƒLƒƒƒ‰î•ñ‚ğæ“¾ */
+	virtual	DWORD	GetFrontCharID		(DWORD dwCharID, int nDirection = -1);	/* ä¸€æ­©å‰ã®ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	virtual	DWORD	GetFrontCharIDPush	(DWORD dwCharID, int nDirection = -1);	/* ä¸€æ­©å‰ã®æŠ¼ã›ã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	virtual	DWORD	GetHitCharID		(DWORD dwCharIDBase, int x, int y);		/* æŒ‡å®šåº§æ¨™ã«å½“ãŸã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	virtual	void	SetPtr				(DWORD dwCharID, PCInfoCharBase pChar);	/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’æ›´æ–° */
+			PCInfoBase	GetPtr			(int nNo);								/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+			PCInfoBase	GetPtr			(DWORD dwCharID);						/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+			PCInfoBase	GetPtrAccountID	(DWORD dwAccountID);					/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+			PCInfoBase	GetPtrFront		(PCInfoCharBase pChar, int nDirection);	/* ä¸€æ­©å‰ã®ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);							/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);							/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);					/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	DWORD	GetSendDataSize		(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);					/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	DWORD	GetDataSizeScreen	(PCInfoCharBase pCharBase);		/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾(‰æ–Ê“à‚ÌƒLƒƒƒ‰) */
-	PBYTE	GetDataScreen		(PCInfoCharBase pCharBase);		/* ƒf[ƒ^‚ğæ“¾(‰æ–Ê“à‚ÌƒLƒƒƒ‰) */
-
-
-protected:
-	DWORD	GetNewID		(void);								/* V‚µ‚¢ƒLƒƒƒ‰ID‚ğæ“¾ */
+	DWORD	GetDataSizeScreen	(PCInfoCharBase pCharBase);		/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—(ç”»é¢å†…ã®ã‚­ãƒ£ãƒ©) */
+	PBYTE	GetDataScreen		(PCInfoCharBase pCharBase);		/* ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—(ç”»é¢å†…ã®ã‚­ãƒ£ãƒ©) */
 
 
 protected:
-	DWORD	m_dwNewIDTmp;						/* V‹KIDì¬—p */
-	PARRAYINFOCHARBASE	m_paInfo;				/* ƒLƒƒƒ‰î•ñ */
+	DWORD	GetNewID		(void);								/* æ–°ã—ã„ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+
+
+protected:
+	DWORD	m_dwNewIDTmp;						/* æ–°è¦IDä½œæˆç”¨ */
+	PARRAYINFOCHARBASE	m_paInfo;				/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CLibInfoCharBase, *PCLibInfoCharBase;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_MAP_RENEWMAPOBJECT.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgXV) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/11/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_MAP_RENEWMAPOBJECT.h							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoMapObject;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_MAP_RENEWMAPOBJECT : public CPacketBase
 {
 public:
-			CPacketADMIN_MAP_RENEWMAPOBJECT();		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_MAP_RENEWMAPOBJECT();		/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_MAP_RENEWMAPOBJECT();		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_MAP_RENEWMAPOBJECT();		/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoMapObject *pInfo);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoMapObject *pInfo);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CInfoMapObject	*m_pInfoMapObject;		/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
+	CInfoMapObject	*m_pInfoMapObject;		/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
 } CPacketADMIN_MAP_RENEWMAPOBJECT, *PCPacketADMIN_MAP_RENEWMAPOBJECT;
 
 /* Copyright(C)URARA-works 2008 */

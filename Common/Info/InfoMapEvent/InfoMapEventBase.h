@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapEventBase.h											 */
-/* “à—e			:ƒCƒxƒ“ƒgî•ñŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapEventBase.h											 */
+/* å†…å®¹			:ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,66 +11,66 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒCƒxƒ“ƒgŽí•Ê */
+/* ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
 enum {
 	MAPEVENTTYPE_NONE = 0,
-	MAPEVENTTYPE_MOVE,									/* ƒ}ƒbƒv“àˆÚ“® */
-	MAPEVENTTYPE_MAPMOVE,								/* ƒ}ƒbƒvŠÔˆÚ“® */
-	MAPEVENTTYPE_TRASHBOX,								/* ƒSƒ~”  */
-	MAPEVENTTYPE_INITSTATUS,							/* ƒXƒe[ƒ^ƒX‰Šú‰» */
-	MAPEVENTTYPE_GRPIDTMP,								/* ˆêŽž‰æ‘œÝ’è */
-	MAPEVENTTYPE_LIGHT,									/* “”‚è */
+	MAPEVENTTYPE_MOVE,									/* ãƒžãƒƒãƒ—å†…ç§»å‹• */
+	MAPEVENTTYPE_MAPMOVE,								/* ãƒžãƒƒãƒ—é–“ç§»å‹• */
+	MAPEVENTTYPE_TRASHBOX,								/* ã‚´ãƒŸç®± */
+	MAPEVENTTYPE_INITSTATUS,							/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ– */
+	MAPEVENTTYPE_GRPIDTMP,								/* ä¸€æ™‚ç”»åƒè¨­å®š */
+	MAPEVENTTYPE_LIGHT,									/* ç¯ã‚Š */
 	MAPEVENTTYPE_MAX
 };
 
-/* “–‚½‚è”»’èŽí•Ê */
+/* å½“ãŸã‚Šåˆ¤å®šç¨®åˆ¥ */
 enum {
-	MAPEVENTHITTYPE_MAPPOS = 0,							/* ƒ}ƒbƒvÀ•Wc‰¡‚¢‚¸‚ê‚© */
-	MAPEVENTHITTYPE_CHARPOS,							/* ƒLƒƒƒ‰À•W */
-	MAPEVENTHITTYPE_AREA,								/* ”ÍˆÍ */
-	MAPEVENTHITTYPE_MAPPOS2,							/* ƒ}ƒbƒvÀ•WŠ®‘Sˆê’v */
+	MAPEVENTHITTYPE_MAPPOS = 0,							/* ãƒžãƒƒãƒ—åº§æ¨™ç¸¦æ¨ªã„ãšã‚Œã‹ */
+	MAPEVENTHITTYPE_CHARPOS,							/* ã‚­ãƒ£ãƒ©åº§æ¨™ */
+	MAPEVENTHITTYPE_AREA,								/* ç¯„å›² */
+	MAPEVENTHITTYPE_MAPPOS2,							/* ãƒžãƒƒãƒ—åº§æ¨™å®Œå…¨ä¸€è‡´ */
 	MAPEVENTHITTYPE_MAX
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoMapEventBase : public CInfoBase
 {
 public:
-			CInfoMapEventBase();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoMapEventBase();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoMapEventBase();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoMapEventBase();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	RenewSize			(int nDirection, int nSize, SIZE *pSize);	/* ƒTƒCƒYXV */
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	virtual void	RenewSize			(int nDirection, int nSize, SIZE *pSize);	/* ã‚µã‚¤ã‚ºæ›´æ–° */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoMapEventBase *pSrc);			/* ƒRƒs[ */
+	virtual void	Copy				(CInfoMapEventBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	int			m_nElementCountBase;			/* Šî’êƒNƒ‰ƒX‚Ì—v‘f” */
+	int			m_nElementCountBase;			/* åŸºåº•ã‚¯ãƒ©ã‚¹ã®è¦ç´ æ•° */
 
-	DWORD		m_dwMapEventID,					/* ƒ}ƒbƒvƒCƒxƒ“ƒgID */
-				m_dwSoundID;					/* ŽÀsŽž‚ÌŒø‰Ê‰¹ID */
-	int			m_nType,						/* ƒCƒxƒ“ƒgŽí•Ê */
-				m_nHitType,						/* “–‚½‚è”»’èŽí•Ê */
-				m_nHitDirection;				/* ”»’èŒü‚« */
-	POINT		m_ptPos,						/* À•W1 */
-				m_ptPos2;						/* À•W2 */
+	DWORD		m_dwMapEventID,					/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆID */
+				m_dwSoundID;					/* å®Ÿè¡Œæ™‚ã®åŠ¹æžœéŸ³ID */
+	int			m_nType,						/* ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+				m_nHitType,						/* å½“ãŸã‚Šåˆ¤å®šç¨®åˆ¥ */
+				m_nHitDirection;				/* åˆ¤å®šå‘ã */
+	POINT		m_ptPos,						/* åº§æ¨™1 */
+				m_ptPos2;						/* åº§æ¨™2 */
 } CInfoMapEventBase, *PCInfoMapEventBase;
 typedef CmyArray<PCInfoMapEventBase, PCInfoMapEventBase>	  ARRAYMAPEVENTBASEINFO;
 typedef CmyArray<PCInfoMapEventBase, PCInfoMapEventBase>	*PARRAYMAPEVENTBASEINFO;

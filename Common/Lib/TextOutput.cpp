@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	TextOutput.cpp												 */
-/* “à—eF		ƒeƒLƒXƒgo—ÍƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/04/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	TextOutput.cpp												 */
+/* å†…å®¹ï¼š		ãƒ†ã‚­ã‚¹ãƒˆå‡ºåŠ›ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/04/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CTextOutput::CTextOutput										 */
-/* “à—eF	ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/04/01														 */
+/* é–¢æ•°åï¼š	CTextOutput::CTextOutput										 */
+/* å†…å®¹ï¼š	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2005/04/01														 */
 /* ========================================================================= */
 
 CTextOutput::CTextOutput()
@@ -23,15 +23,15 @@ CTextOutput::CTextOutput()
 	m_bHeader		= FALSE;
 	m_bReturn		= TRUE;
 
-	/* ƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“ƒIƒuƒWƒFƒNƒg‚ğ‰Šú‰» */
+	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆæœŸåŒ– */
 	InitializeCriticalSection (&m_csWrite);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CTextOutput::~CTextOutput										 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/04/01														 */
+/* é–¢æ•°åï¼š	CTextOutput::~CTextOutput										 */
+/* å†…å®¹ï¼š	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2005/04/01														 */
 /* ========================================================================= */
 
 CTextOutput::~CTextOutput()
@@ -43,15 +43,15 @@ CTextOutput::~CTextOutput()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CTextOutput::Create												 */
-/* “à—eF	‰Šú‰»															 */
-/* “ú•tF	2005/04/01														 */
+/* é–¢æ•°åï¼š	CTextOutput::Create												 */
+/* å†…å®¹ï¼š	åˆæœŸåŒ–															 */
+/* æ—¥ä»˜ï¼š	2005/04/01														 */
 /* ========================================================================= */
 
 BOOL CTextOutput::Create(
-	LPCSTR pszFileName,		/* [in] o—Í‚·‚éƒtƒ@ƒCƒ‹–¼ */
-	BOOL bHeader,			/* [in] ƒwƒbƒ_‚ğ‘‚«‚ŞH */
-	BOOL bReturn)			/* [in] ‰üsƒR[ƒh‚ğ‘‚«‚ŞH */
+	LPCSTR pszFileName,		/* [in] å‡ºåŠ›ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å */
+	BOOL bHeader,			/* [in] ãƒ˜ãƒƒãƒ€ã‚’æ›¸ãè¾¼ã‚€ï¼Ÿ */
+	BOOL bReturn)			/* [in] æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’æ›¸ãè¾¼ã‚€ï¼Ÿ */
 {
 	BOOL bRet;
 
@@ -74,9 +74,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CTextOutput::Destroy											 */
-/* “à—eF	”jŠü															 */
-/* “ú•tF	2005/04/01														 */
+/* é–¢æ•°åï¼š	CTextOutput::Destroy											 */
+/* å†…å®¹ï¼š	ç ´æ£„															 */
+/* æ—¥ä»˜ï¼š	2005/04/01														 */
 /* ========================================================================= */
 
 void CTextOutput::Destroy(void)
@@ -89,19 +89,19 @@ void CTextOutput::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CTextOutput::Write												 */
-/* “à—eF	‘‚«‚İ														 */
-/* “ú•tF	2005/04/01														 */
+/* é–¢æ•°åï¼š	CTextOutput::Write												 */
+/* å†…å®¹ï¼š	æ›¸ãè¾¼ã¿														 */
+/* æ—¥ä»˜ï¼š	2005/04/01														 */
 /* ========================================================================= */
 
 void CTextOutput::Write(
-	LPCSTR format, ...)		/* [in] o—Í‚·‚éƒtƒH[ƒ}ƒbƒg•t‚«•¶š—ñ */
+	LPCSTR format, ...)		/* [in] å‡ºåŠ›ã™ã‚‹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆä»˜ãæ–‡å­—åˆ— */
 {
 	int nLen;
 	char szTmp[256];
 	va_list ap;
 
-	/* ˆø”‚Ìæ‚èo‚µ */
+	/* å¼•æ•°ã®å–ã‚Šå‡ºã— */
 	va_start (ap, format);
 
 	nLen = _vsnprintf (szTmp, sizeof (szTmp), format, ap);
@@ -117,27 +117,27 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CTextOutput::WriteProc											 */
-/* “à—eF	‘‚«‚İˆ—													 */
-/* “ú•tF	2005/04/01														 */
+/* é–¢æ•°åï¼š	CTextOutput::WriteProc											 */
+/* å†…å®¹ï¼š	æ›¸ãè¾¼ã¿å‡¦ç†													 */
+/* æ—¥ä»˜ï¼š	2005/04/01														 */
 /* ========================================================================= */
 
 void CTextOutput::WriteProc(
-	LPCSTR pszText)		/* [in] o—Í‚·‚éNULLI’[•¶š—ñ */
+	LPCSTR pszText)		/* [in] å‡ºåŠ›ã™ã‚‹NULLçµ‚ç«¯æ–‡å­—åˆ— */
 {
 	HANDLE hFile;
 	DWORD dwBytes;
 	char szTmp[128];
 	SYSTEMTIME stSysTime;
 
-	/* ”r‘¼ŠJn */
+	/* æ’ä»–é–‹å§‹ */
 	EnterCriticalSection (&m_csWrite);
 
 	if ((m_pszFileName == NULL) || (pszText == NULL)) {
 		goto Exit;
 	}
 
-	/* ƒtƒ@ƒCƒ‹‚ğŠJ‚­ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã */
 	hFile = CreateFile (
 			m_pszFileName,
 			GENERIC_WRITE | GENERIC_READ,
@@ -149,10 +149,10 @@ void CTextOutput::WriteProc(
 	if (hFile == INVALID_HANDLE_VALUE) {
 		goto Exit;
 	}
-	/* ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^‚ğI’[‚ÉˆÚ“® */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ã‚’çµ‚ç«¯ã«ç§»å‹• */
 	SetFilePointer (hFile, 0, 0, FILE_END);
 
-	/* ƒwƒbƒ_‚ğ‘‚«‚ŞH */
+	/* ãƒ˜ãƒƒãƒ€ã‚’æ›¸ãè¾¼ã‚€ï¼Ÿ */
 	if (m_bHeader) {
 		GetLocalTime (&stSysTime);
 		wsprintf (szTmp, "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
@@ -162,10 +162,10 @@ void CTextOutput::WriteProc(
 		WriteFile (hFile, szTmp, strlen (szTmp), &dwBytes, NULL);
 	}
 
-	/* –{•¶‚ğ‘‚«‚Ş */
+	/* æœ¬æ–‡ã‚’æ›¸ãè¾¼ã‚€ */
 	WriteFile (hFile, pszText, strlen (pszText), &dwBytes, NULL);
 
-	/* ‰üsƒR[ƒh‚ğ‘‚«‚ŞH */
+	/* æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’æ›¸ãè¾¼ã‚€ï¼Ÿ */
 	if (m_bReturn) {
 		strcpy (szTmp, "\r\n");
 		WriteFile (hFile, szTmp, strlen (szTmp), &dwBytes, NULL);
@@ -174,7 +174,7 @@ void CTextOutput::WriteProc(
 	CloseHandle (hFile);
 
 Exit:
-	/* ”r‘¼I—¹ */
+	/* æ’ä»–çµ‚äº† */
 	LeaveCriticalSection (&m_csWrite);
 }
 

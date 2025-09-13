@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_ONLINE.h											 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒIƒ“ƒ‰ƒCƒ“”’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/02/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_ONLINE.h											 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/02/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_ONLINE : public CPacketBase
 {
 public:
-			CPacketMAP_ONLINE();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_ONLINE();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_ONLINE();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_ONLINE();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(int nCount);								/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(int nCount);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int m_nCount;							/* ƒIƒ“ƒ‰ƒCƒ“” */
+	int m_nCount;							/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•° */
 } CPacketMAP_ONLINE, *PCPacketMAP_ONLINE;
 
 /* Copyright(C)URARA-works 2007 */

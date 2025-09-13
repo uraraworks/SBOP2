@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTextEffect.h											 */
-/* “à—e			:•¶ŽšƒGƒtƒFƒNƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTextEffect.h											 */
+/* å†…å®¹			:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/13													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,52 +11,52 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* •\Ž¦Ží•Ê */
+/* è¡¨ç¤ºç¨®åˆ¥ */
 enum {
-	TEXTEFFECTTYPE_NORMAL = 0,				/* ’Êí•\Ž¦ */
-	TEXTEFFECTTYPE_WAVE,					/* 1•¶Žš‚¸‚ÂƒEƒF[ƒu•\Ž¦ */
+	TEXTEFFECTTYPE_NORMAL = 0,				/* é€šå¸¸è¡¨ç¤º */
+	TEXTEFFECTTYPE_WAVE,					/* 1æ–‡å­—ãšã¤ã‚¦ã‚§ãƒ¼ãƒ–è¡¨ç¤º */
 };
-/* •¶ŽšƒTƒCƒY(”’l—p) */
+/* æ–‡å­—ã‚µã‚¤ã‚º(æ•°å€¤ç”¨) */
 enum {
-	TEXTEFFECTNUMSIZE_SMALL = 0,			/* ¬ */
-	TEXTEFFECTNUMSIZE_MEDIUM,				/* •À */
-	TEXTEFFECTNUMSIZE_LARGE,				/* ‘å */
+	TEXTEFFECTNUMSIZE_SMALL = 0,			/* å° */
+	TEXTEFFECTNUMSIZE_MEDIUM,				/* ä¸¦ */
+	TEXTEFFECTNUMSIZE_LARGE,				/* å¤§ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoTextEffect : public CInfoBase
 {
 public:
-			CInfoTextEffect();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoTextEffect();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoTextEffect();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoTextEffect();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	TimerProc	(DWORD dwTime);										/* ŽžŠÔˆ— */
-	void	Set			(DWORD dwData, int nType, int nColor, int nSize);	/* Ý’è(”’lƒf[ƒ^) */
-	void	Set			(LPCSTR pszData, int nType, int nColor, int nSize);	/* Ý’è(•¶Žšƒf[ƒ^) */
+	BOOL	TimerProc	(DWORD dwTime);										/* æ™‚é–“å‡¦ç† */
+	void	Set			(DWORD dwData, int nType, int nColor, int nSize);	/* è¨­å®š(æ•°å€¤ãƒ‡ãƒ¼ã‚¿) */
+	void	Set			(LPCSTR pszData, int nType, int nColor, int nSize);	/* è¨­å®š(æ–‡å­—ãƒ‡ãƒ¼ã‚¿) */
 
-	int		GetGrpCount	(void);										/* ‰æ‘œ”‚ðŽæ“¾ */
-	int		GetGrpNo	(int nNo);									/* Žw’è”Ô†‚Ì”’l‚ðŽæ“¾ */
-	BOOL	GetDrawPos	(int nNo, POINT &ptDst, BYTE &byLevel);		/* Žw’è”Ô†‚Ì•\Ž¦ˆÊ’u•â³’l‚ðŽæ“¾ */
-	DWORD	GetData		(void)	{ return m_dwData; }				/* ”’lƒf[ƒ^‚ðŽæ“¾ */
+	int		GetGrpCount	(void);										/* ç”»åƒæ•°ã‚’å–å¾— */
+	int		GetGrpNo	(int nNo);									/* æŒ‡å®šç•ªå·ã®æ•°å€¤ã‚’å–å¾— */
+	BOOL	GetDrawPos	(int nNo, POINT &ptDst, BYTE &byLevel);		/* æŒ‡å®šç•ªå·ã®è¡¨ç¤ºä½ç½®è£œæ­£å€¤ã‚’å–å¾— */
+	DWORD	GetData		(void)	{ return m_dwData; }				/* æ•°å€¤ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
 
 public:
-	int				m_nType,				/* •\Ž¦Ží•Ê */
-					m_nColor,				/* F */
-					m_nSize;				/* ƒTƒCƒY */
-	BOOL			m_bAnimeEnd;			/* ƒAƒjƒ[ƒVƒ‡ƒ“I—¹H */
-	BYTE			m_byAnimeNo;			/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”Ô† */
-	BYTE			m_byAnimeCount;			/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	DWORD			m_dwLastAnime,			/* ÅŒã‚ÉƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚½ŽžŠÔ */
-					m_dwData;				/* ƒf[ƒ^ */
-	CmyString		m_strData;				/* ƒf[ƒ^ */
+	int				m_nType,				/* è¡¨ç¤ºç¨®åˆ¥ */
+					m_nColor,				/* è‰² */
+					m_nSize;				/* ã‚µã‚¤ã‚º */
+	BOOL			m_bAnimeEnd;			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ï¼Ÿ */
+	BYTE			m_byAnimeNo;			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžç•ªå· */
+	BYTE			m_byAnimeCount;			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•° */
+	DWORD			m_dwLastAnime,			/* æœ€å¾Œã«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã—ãŸæ™‚é–“ */
+					m_dwData;				/* ãƒ‡ãƒ¼ã‚¿ */
+	CmyString		m_strData;				/* ãƒ‡ãƒ¼ã‚¿ */
 } CInfoTextEffect, *PCInfoTextEffect;
 typedef CmyArray<PCInfoTextEffect, PCInfoTextEffect>	  ARRAYTEXTEFFECT;
 typedef CmyArray<PCInfoTextEffect, PCInfoTextEffect>	*PARRAYTEXTEFFECT;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrame.h												 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€ ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrame.h												 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -33,206 +33,206 @@ class CLibInfoTalkEvent;
 class CInfoCharBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CMainFrame
 {
 public:
-			CMainFrame();											/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMainFrame();											/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMainFrame();											/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMainFrame();											/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		MainLoop	(HINSTANCE hInstance);								/* ƒƒCƒ“ƒ‹[ƒv */
+	int		MainLoop	(HINSTANCE hInstance);								/* ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ— */
 
-	/* ‘—Mˆ— */
-	void	SendToScreenChar	(CInfoCharBase *pInfoChar, CPacketBase *pPacket);	/* Žw’èƒLƒƒƒ‰‚Æ“¯‚¶‰æ–Ê‚ÌƒLƒƒƒ‰‚Ö‘—M */
-	void	SendToMapChar		(DWORD dwMapID, CPacketBase *pPacket);				/* Žw’èƒ}ƒbƒv‚É‚¢‚éƒLƒƒƒ‰‚Ö‘—M */
-	void	SendToAdminChar		(CPacketBase *pPacket);								/* ŠÇ—ŽÒŒ ŒÀ‚ðŽ‚Á‚Ä‚¢‚éƒLƒƒƒ‰‚Ö‘—M */
-	void	SendToClient		(DWORD dwSessionID, CPacketBase *pPacket);			/* ƒZƒbƒVƒ‡ƒ“ID‚ª—LŒø‚Èê‡‚Ì‚Ý‘—M */
-
-
-private:
-	static	LRESULT CALLBACK WndProcEntry	(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	/* ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ(ƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒg) */
-			LRESULT WndProc					(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	/* ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
-	BOOL	OnCreate			(HWND hWnd, LPCREATESTRUCT lpCreateStruct);			/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE) */
-	void	OnClose				(HWND hWnd);										/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CLOSE) */
-	void	OnDestroy			(HWND hWnd);										/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_DESTROY) */
-	void	OnPaint				(HWND hWnd);										/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT) */
-	void	OnTimer				(HWND hWnd, UINT id);								/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER) */
-	void	OnCommand			(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify);	/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_COMMAND) */
-	void	OnAddClient			(DWORD dwSessionID);								/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_ADDCLIENT) */
-	void	OnDecClient			(DWORD dwSessionID);								/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_DECCLIENT) */
-	void	OnRecv				(PBYTE pData, DWORD dwSessionID);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_RECV) */
-	void	OnDisconnect		(DWORD dwSessionID);								/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_DISCONNECT) */
-	void	TimerProc			(void);												/* ŽžŠÔˆ— */
-	void	TimerProcKeepalive	(void);												/* ŽžŠÔˆ—(¶‘¶Šm”Fƒ`ƒFƒbƒN) */
-	void	MyTextOut			(HDC hDC, int x, int y, LPCSTR pStr);				/* •¶Žš—ñ•`‰æ */
-	void	UpdateServerInfo	(BOOL bSend = TRUE, BOOL bUpload = FALSE);			/* ƒT[ƒo[î•ñ‚ðXV */
-
-	void	OnCommandACCOUNT_DELETEALL	(void);									/* ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‘SƒAƒJƒEƒ“ƒg‚ðíœ) */
-	void	OnCommandUPDATE_RENEW		(void);									/* ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒAƒbƒvƒf[ƒgƒtƒ@ƒCƒ‹XV) */
-
-	/* ŽóMˆ—(MainFrameRecvProcVERSION.cpp) */
-	void	RecvProcVERSION						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ƒo[ƒWƒ‡ƒ“Œn */
-	void	RecvProcVERSION_REQ_VERSIONCHECK	(PBYTE pData, DWORD dwSessionID);					/* ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN—v‹ */
-	void	RecvProcVERSION_REQ_FILELISTCHECK	(PBYTE pData, DWORD dwSessionID);					/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN—v‹ */
-	void	RecvProcVERSION_REQ_FILELIST		(PBYTE pData, DWORD dwSessionID);					/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg—v‹ */
-	void	RecvProcVERSION_REQ_FILE			(PBYTE pData, DWORD dwSessionID);					/* ƒtƒ@ƒCƒ‹—v‹ */
-
-	/* ŽóMˆ—(MainFrameRecvProcCONNECT.cpp) */
-	void	RecvProcCONNECT						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* Ú‘±Œn */
-	void	RecvProcCONNECT_REQ_LOGIN			(PBYTE pData, DWORD dwSessionID);					/* ƒƒOƒCƒ“—v‹ */
-	void	RecvProcCONNECT_REQ_PLAY			(PBYTE pData, DWORD dwSessionID);					/* ƒQ[ƒ€ŠJŽn—v‹ */
-	void	RecvProcCONNECT_KEEPALIVE			(PBYTE pData, DWORD dwSessionID);					/* ¶‘¶Šm”F’Ê’m */
-
-	/* ŽóMˆ—(MainFrameRecvProcACCOUNT.cpp) */
-	void	RecvProcACCOUNT						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ƒAƒJƒEƒ“ƒgŒn */
-	void	RecvProcACCOUNT_REQ_ACCOUNTINFO		(PBYTE pData, DWORD dwSessionID);					/* ƒAƒJƒEƒ“ƒgî•ñ—v‹ */
-	void	RecvProcACCOUNT_REQ_MAKECHAR		(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰ì¬—v‹ */
-
-	/* ŽóMˆ—(MainFrameRecvProcCHAR.cpp) */
-	void	RecvProcCHAR						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ƒLƒƒƒ‰Œn */
-	void	RecvProcCHAR_REQ_CHARINFO			(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰î•ñ—v‹ */
-	void	RecvProcCHAR_MOVEPOS				(PBYTE pData, DWORD dwSessionID);					/* ˆÚ“®’Ê’m */
-	void	RecvProcCHAR_STATE					(PBYTE pData, DWORD dwSessionID);					/* ó‘Ô’Ê’m */
-	void	RecvProcCHAR_REQ_CHAT				(PBYTE pData, DWORD dwSessionID);					/* ƒ`ƒƒƒbƒg—v‹ */
-	void	RecvProcCHAR_REQ_CHARINFO2			(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰î•ñ—v‹(•¡”) */
-	void	RecvProcCHAR_REQ_PUTGET				(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€‚ðE‚¤’u‚­—v‹ */
-	void	RecvProcCHAR_REQ_USEITEM			(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€‚ðŽg‚¤—v‹ */
-	void	RecvProcCHAR_REQ_DRAGITEM			(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€ˆÊ’u•ÏX—v‹ */
-	void	RecvProcCHAR_REQ_PUSH				(PBYTE pData, DWORD dwSessionID);					/* ‰Ÿ‚·—v‹ */
-	void	RecvProcCHAR_REQ_TAIL				(PBYTE pData, DWORD dwSessionID);					/* •t‚¢‚Äs‚­—v‹ */
-	void	RecvProcCHAR_REQ_MODIFY_PARAM		(PBYTE pData, DWORD dwSessionID);					/* ƒpƒ‰ƒ[ƒ^•ÏX—v‹ */
-	void	RecvProcCHAR_REQ_EQUIP				(PBYTE pData, DWORD dwSessionID);					/* ‘•”õ—v‹ */
-	void	RecvProcCHAR_PROC_FISHING			(PBYTE pData, DWORD dwSessionID);					/* ’Þ‚è—v‹ */
-	void	RecvProcCHAR_REQ_CHECKMAPEVENT		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN—v‹ */
-	void	RecvProcCHAR_STATE_CHARGE			(PBYTE pData, DWORD dwSessionID);					/* —­‚ßó‘Ô’Ê’m */
-	void	RecvProcCHAR_REQ_RECOVERY			(PBYTE pData, DWORD dwSessionID);					/* ‹CâŒã•œŠˆ—v‹ */
-	void	RecvProcCHAR_REQ_TALKEVENT			(PBYTE pData, DWORD dwSessionID);					/* ‰ï˜bƒCƒxƒ“ƒgî•ñ—v‹ */
-	void	RecvProcCHAR_REQ_ADDSKILL			(PBYTE pData, DWORD dwSessionID);					/* ƒXƒLƒ‹’Ç‰Á—v‹ */
-	void	RecvProcCHAR_REQ_USESKILL			(PBYTE pData, DWORD dwSessionID);					/* ƒXƒLƒ‹‚ðŽg‚¤—v‹ */
-
-	/* ŽóMˆ—(MainFrameRecvProcMAP.cpp) */
-	void	RecvProcMAP							(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ƒ}ƒbƒvŒn */
-	void	RecvProcMAP_REQ_MAPINFO				(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvî•ñ—v‹ */
-
-	/* ŽóMˆ—(MainFrameRecvProcITEM.cpp) */
-	void	RecvProcITEM						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ƒAƒCƒeƒ€Œn */
-	void	RecvProcITEM_REQ_ITEMINFO			(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€î•ñ—v‹ */
-	void	RecvProcITEM_RENEWITEMINFO			(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€î•ñXV */
-	void	RecvProcITEM_REQ_ITEMTYPEINFO		(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€Ží•Êî•ñ—v‹ */
-	void	RecvProcITEM_RENEWITEMTYPEINFO		(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€Ží•Êî•ñXV */
-	void	RecvProcITEM_REQ_ITEMWEAPONINFO		(PBYTE pData, DWORD dwSessionID);					/* •Šíî•ñ—v‹ */
-
-	/* ŽóMˆ—(MainFrameRecvProcADMIN.cpp) */
-	void	RecvProcADMIN						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ŠÇ—ŽÒŒn */
-	void	RecvProcADMIN_CHARINFO				(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰î•ñ’Ê’m */
-	void	RecvProcADMIN_DELETECHARINFO		(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰î•ñíœ */
-	void	RecvProcADMIN_MAP_RENEWMAPOBJECT	(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgXV */
-	void	RecvProcADMIN_MAP_RENEWOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^XV */
-	void	RecvProcADMIN_MAP_DELETEOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^íœ */
-	void	RecvProcADMIN_RENEWMAPPARTS			(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒp[ƒcXV */
-	void	RecvProcADMIN_MAP_SETPARTS			(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒp[ƒc”z’u */
-	void	RecvProcADMIN_MAP_RENEWMAPSIZE		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒTƒCƒYXV */
-	void	RecvProcADMIN_MAP_DELETEPARTS		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒp[ƒcíœ */
-	void	RecvProcADMIN_MAP_COPYPARTS			(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒp[ƒcƒRƒs[ */
-	void	RecvProcADMIN_MAP_SETMAPNAME		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒv–¼•ÏX */
-	void	RecvProcADMIN_RENEWMAPSHADOW		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒv‰eXV */
-	void	RecvProcADMIN_MAP_SETMAPSHADOW		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒv‰e”z’u */
-	void	RecvProcADMIN_MAP_DELETEMAPSHADOW	(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒv‰eíœ */
-	void	RecvProcADMIN_MAP_RENEWEVENT		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñXV */
-	void	RecvProcADMIN_MAP_DELETEEVENT		(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñíœ */
-	void	RecvProcADMIN_MAP_ADD				(PBYTE pData, DWORD dwSessionID);					/* ƒ}ƒbƒv’Ç‰Á */
-	void	RecvProcADMIN_REQ_ADMINILEVEL		(PBYTE pData, DWORD dwSessionID);					/* ŠÇ—ŽÒŒ ŒÀƒŒƒxƒ‹—v‹ */
-	void	RecvProcADMIN_RENEWADMINILEVEL		(PBYTE pData, DWORD dwSessionID);					/* ŠÇ—ŽÒŒ ŒÀƒŒƒxƒ‹XV */
-	void	RecvProcADMIN_SERVER_SAVEINFO		(PBYTE pData, DWORD dwSessionID);					/* ƒT[ƒo[î•ñ•Û‘¶ */
-	void	RecvProcADMIN_ITEM_ADD				(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€î•ñ’Ç‰Á */
-	void	RecvProcADMIN_ITEM_COPY				(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€î•ñƒRƒs[ */
-	void	RecvProcADMIN_ITEM_DELETE			(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€î•ñíœ */
-	void	RecvProcADMIN_ITEMTYPE_ADD			(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€Ží•Êî•ñ’Ç‰Á */
-	void	RecvProcADMIN_ITEMTYPE_COPY			(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€Ží•Êî•ñƒRƒs[ */
-	void	RecvProcADMIN_ITEMTYPE_DELETE		(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€Ží•Êî•ñíœ */
-	void	RecvProcADMIN_ITEMWEAPON_ADD		(PBYTE pData, DWORD dwSessionID);					/* •Šíî•ñ’Ç‰Á */
-	void	RecvProcADMIN_ITEMWEAPON_RENEW		(PBYTE pData, DWORD dwSessionID);					/* •Šíî•ñXV */
-	void	RecvProcADMIN_CHAR_ADDNPC			(PBYTE pData, DWORD dwSessionID);					/* NPC‚Ì’Ç‰Á */
-	void	RecvProcADMIN_CHAR_MODIFYITEM		(PBYTE pData, DWORD dwSessionID);					/* ŠŽƒAƒCƒeƒ€‚Ì•ÏX */
-	void	RecvProcADMIN_CHAR_MODIFYSKILL		(PBYTE pData, DWORD dwSessionID);					/* ŠŽƒXƒLƒ‹‚Ì•ÏX */
-	void	RecvProcADMIN_CHAR_RENEWMOTION		(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“î•ñ‚ÌXV */
-	void	RecvProcADMIN_CHAR_ADDMOTIONTYPE	(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ‚Ì’Ç‰Á */
-	void	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(PBYTE pData, DWORD dwSessionID);					/* ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ‚ÌXV */
-	void	RecvProcADMIN_CHAR_RENEWSTATUS		(PBYTE pData, DWORD dwSessionID);					/* ƒXƒe[ƒ^ƒXî•ñXV */
-	void	RecvProcADMIN_CHAR_REQ_STATUS		(PBYTE pData, DWORD dwSessionID);					/* ƒXƒe[ƒ^ƒXî•ñ—v‹ */
-	void	RecvProcADMIN_CHAR_REQ_ONLINE		(PBYTE pData, DWORD dwSessionID);					/* ƒIƒ“ƒ‰ƒCƒ“’†ƒLƒƒƒ‰ˆê———v‹ */
-	void	RecvProcADMIN_EFC_RENEWBALLOON		(PBYTE pData, DWORD dwSessionID);					/* •¬o‚µî•ñ‚ÌXV */
-	void	RecvProcADMIN_EFC_RENEWEFFECT		(PBYTE pData, DWORD dwSessionID);					/* ƒGƒtƒFƒNƒgî•ñ‚ÌXV */
-	void	RecvProcADMIN_REQ_PLAYSOUND			(PBYTE pData, DWORD dwSessionID);					/* Œø‰Ê‰¹‚ÌÄ¶—v‹ */
-	void	RecvProcADMIN_CHAR_REQ_ACCOUNT		(PBYTE pData, DWORD dwSessionID);					/* ƒAƒJƒEƒ“ƒgî•ñ—v‹ */
-	void	RecvProcADMIN_CHAR_RENEW_ACCOUNT	(PBYTE pData, DWORD dwSessionID);					/* ƒAƒJƒEƒ“ƒgî•ñXV */
-	void	RecvProcADMIN_CHAR_RENEW_TALKEVENT	(PBYTE pData, DWORD dwSessionID);					/* ‰ï˜bƒCƒxƒ“ƒgî•ñXV */
-	void	RecvProcADMIN_RENEW_CLIENTVERSION	(PBYTE pData, DWORD dwSessionID);					/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“XV */
-	void	RecvProcADMIN_SYSTEM_REQ_INFO		(PBYTE pData, DWORD dwSessionID);					/* ƒVƒXƒeƒ€î•ñ—v‹ */
-	void	RecvProcADMIN_SYSTEM_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* ƒVƒXƒeƒ€î•ñ‚ÌXV */
-	void	RecvProcADMIN_SKILL_RENEWSKILL		(PBYTE pData, DWORD dwSessionID);					/* ƒXƒLƒ‹î•ñXV */
-	void	RecvProcADMIN_ACCOUNT_REQ_ADD		(PBYTE pData, DWORD dwSessionID);					/* ƒAƒJƒEƒ“ƒg‚Ì’Ç‰Á—v‹ */
-	void	RecvProcADMIN_DISABLE_REQ_INFO		(PBYTE pData, DWORD dwSessionID);					/* ‹‘”Ûî•ñ—v‹ */
-	void	RecvProcADMIN_DISABLE_REQ_DELETE	(PBYTE pData, DWORD dwSessionID);					/* ‹‘”Ûî•ñ‚Ìíœ—v‹ */
-	void	RecvProcADMIN_DISABLE_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* ‹‘”Ûî•ñ‚ÌXV */
-
-	/* ŽóMˆ—(MainFrameRecvProcMSGCMD.cpp) */
-	void	RecvProcMSGCMD						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒn */
-	void	RecvProcMSGCMD_CHGFACE				(PBYTE pData, DWORD dwSessionID);					/* •\î•ÏX */
-	void	RecvProcMSGCMD_CHGHAIR				(PBYTE pData, DWORD dwSessionID);					/* ”¯•ÏX */
-	void	RecvProcMSGCMD_CHGCLOTH				(PBYTE pData, DWORD dwSessionID);					/* •ž‘••ÏX */
-	void	RecvProcMSGCMD_CHGACCE				(PBYTE pData, DWORD dwSessionID);					/* ƒAƒNƒZƒTƒŠ•ÏX */
-	void	RecvProcMSGCMD_CHGCOLOR				(PBYTE pData, DWORD dwSessionID);					/* F•ÏX */
-	void	RecvProcMSGCMD_CHGARMS				(PBYTE pData, DWORD dwSessionID);					/* Ž‚¿•¨•ÏX */
-	void	RecvProcMSGCMD_CHGSHIELD			(PBYTE pData, DWORD dwSessionID);					/* ‚•ÏX */
-	void	RecvProcMSGCMD_MAKEITEM				(PBYTE pData, DWORD dwSessionID);					/* ƒAƒCƒeƒ€ì¬ */
-	void	RecvProcMSGCMD_BALLOON				(PBYTE pData, DWORD dwSessionID);					/* •¬o‚µ */
-	void	RecvProcMSGCMD_DICE					(PBYTE pData, DWORD dwSessionID);					/* ƒTƒCƒRƒ */
-	void	RecvProcMSGCMD_RND					(PBYTE pData, DWORD dwSessionID);					/* ƒ‰ƒ“ƒ_ƒ€ */
-	void	RecvProcMSGCMD_EFFECT				(PBYTE pData, DWORD dwSessionID);					/* ƒGƒtƒFƒNƒg */
-	void	RecvProcMSGCMD_WHERE				(PBYTE pData, DWORD dwSessionID);					/* Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
-
-	/* ŽóMˆ—(MainFrameRecvProcEFFECT.cpp) */
-	void	RecvProcEFFECT						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ƒGƒtƒFƒNƒgŒn */
-	void	RecvProcEFFECT_REQ_BALLOONINFO		(PBYTE pData, DWORD dwSessionID);					/* •¬o‚µî•ñ—v‹ */
-	void	RecvProcEFFECT_DELETEBALLOONINFO	(PBYTE pData, DWORD dwSessionID);					/* •¬o‚µî•ñíœ */
-
-	/* ŽóMˆ—(MainFrameRecvProcBATTLE.cpp) */
-	void	RecvProcBATTLE						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* í“¬Œn */
-	void	RecvProcBATTLE_REQ_ATACK			(PBYTE pData, DWORD dwSessionID);					/* UŒ‚—v‹ */
+	/* é€ä¿¡å‡¦ç† */
+	void	SendToScreenChar	(CInfoCharBase *pInfoChar, CPacketBase *pPacket);	/* æŒ‡å®šã‚­ãƒ£ãƒ©ã¨åŒã˜ç”»é¢ã®ã‚­ãƒ£ãƒ©ã¸é€ä¿¡ */
+	void	SendToMapChar		(DWORD dwMapID, CPacketBase *pPacket);				/* æŒ‡å®šãƒžãƒƒãƒ—ã«ã„ã‚‹ã‚­ãƒ£ãƒ©ã¸é€ä¿¡ */
+	void	SendToAdminChar		(CPacketBase *pPacket);								/* ç®¡ç†è€…æ¨©é™ã‚’æŒã£ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ã¸é€ä¿¡ */
+	void	SendToClient		(DWORD dwSessionID, CPacketBase *pPacket);			/* ã‚»ãƒƒã‚·ãƒ§ãƒ³IDãŒæœ‰åŠ¹ãªå ´åˆã®ã¿é€ä¿¡ */
 
 
 private:
-	BYTE				m_byLastSendClock;				/* ÅŒã‚É‚¨’m‚ç‚¹‚µ‚½Žž */
-	DWORD				m_dwServerStartTime,			/* ƒT[ƒo[‹N“®ŽžŠÔ */
-						m_dwLastKeepaliveCheck;			/* ÅŒã‚É¶‘¶Šm”Fƒ`ƒFƒbƒN‚µ‚½ŽžŠÔ */
-	HWND				m_hWnd;							/* ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-	HFONT				m_hFont;						/* ƒT[ƒo[ó‘Ô‚Ì•`‰æ‚ÉŽg‚¤ƒtƒHƒ“ƒg */
+	static	LRESULT CALLBACK WndProcEntry	(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	/* ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£(ã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ãƒˆ) */
+			LRESULT WndProc					(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	/* ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+	BOOL	OnCreate			(HWND hWnd, LPCREATESTRUCT lpCreateStruct);			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE) */
+	void	OnClose				(HWND hWnd);										/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CLOSE) */
+	void	OnDestroy			(HWND hWnd);										/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_DESTROY) */
+	void	OnPaint				(HWND hWnd);										/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT) */
+	void	OnTimer				(HWND hWnd, UINT id);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER) */
+	void	OnCommand			(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_COMMAND) */
+	void	OnAddClient			(DWORD dwSessionID);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_ADDCLIENT) */
+	void	OnDecClient			(DWORD dwSessionID);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_DECCLIENT) */
+	void	OnRecv				(PBYTE pData, DWORD dwSessionID);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_RECV) */
+	void	OnDisconnect		(DWORD dwSessionID);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_DISCONNECT) */
+	void	TimerProc			(void);												/* æ™‚é–“å‡¦ç† */
+	void	TimerProcKeepalive	(void);												/* æ™‚é–“å‡¦ç†(ç”Ÿå­˜ç¢ºèªãƒã‚§ãƒƒã‚¯) */
+	void	MyTextOut			(HDC hDC, int x, int y, LPCSTR pStr);				/* æ–‡å­—åˆ—æç”» */
+	void	UpdateServerInfo	(BOOL bSend = TRUE, BOOL bUpload = FALSE);			/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ã‚’æ›´æ–° */
 
-	CMgrData			*m_pMgrData;					/* ƒf[ƒ^ŠÇ— */
-	CUraraSockTCPSBO	*m_pSock;						/* ’ÊMƒ}ƒl[ƒWƒƒ */
-	CTextOutput			*m_pLog;						/* ƒƒOƒtƒ@ƒCƒ‹ */
-	CUpdateServerInfo	*m_pUpdateServerInfo;			/* ƒT[ƒo[î•ñƒAƒbƒvƒ[ƒh */
+	void	OnCommandACCOUNT_DELETEALL	(void);									/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(å…¨ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤) */
+	void	OnCommandUPDATE_RENEW		(void);									/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°) */
 
-	CLibInfoAccount		*m_pLibInfoAccount;				/* ƒAƒJƒEƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoCharSvr		*m_pLibInfoChar;				/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoDisable		*m_pLibInfoDisable;				/* ‹‘”Ûî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapBase		*m_pLibInfoMap;					/* ƒ}ƒbƒvî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapObject	*m_pLibInfoMapObject;			/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapParts	*m_pLibInfoMapParts;			/* ƒ}ƒbƒvƒp[ƒcî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;			/* ƒ}ƒbƒv‰eî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItemType	*m_pLibInfoItemType;			/* ƒAƒCƒeƒ€Ží•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItem		*m_pLibInfoItem;				/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;			/* •Šíî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoEffect		*m_pLibInfoEffect;				/* ƒGƒtƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMotion		*m_pLibInfoMotion;				/* ƒ‚[ƒVƒ‡ƒ“î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMotionType	*m_pLibInfoMotionType;			/* ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;			/* •¬o‚µî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoSystem		*m_pLibInfoSystem;				/* ƒVƒXƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoSkill		*m_pLibInfoSkill;				/* ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoTalkEvent	*m_pLibInfoTalkEvent;			/* ‰ï˜bƒCƒxƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcVERSION.cpp) */
+	void	RecvProcVERSION						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³» */
+	void	RecvProcVERSION_REQ_VERSIONCHECK	(PBYTE pData, DWORD dwSessionID);					/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯è¦æ±‚ */
+	void	RecvProcVERSION_REQ_FILELISTCHECK	(PBYTE pData, DWORD dwSessionID);					/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚ */
+	void	RecvProcVERSION_REQ_FILELIST		(PBYTE pData, DWORD dwSessionID);					/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆè¦æ±‚ */
+	void	RecvProcVERSION_REQ_FILE			(PBYTE pData, DWORD dwSessionID);					/* ãƒ•ã‚¡ã‚¤ãƒ«è¦æ±‚ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcCONNECT.cpp) */
+	void	RecvProcCONNECT						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* æŽ¥ç¶šç³» */
+	void	RecvProcCONNECT_REQ_LOGIN			(PBYTE pData, DWORD dwSessionID);					/* ãƒ­ã‚°ã‚¤ãƒ³è¦æ±‚ */
+	void	RecvProcCONNECT_REQ_PLAY			(PBYTE pData, DWORD dwSessionID);					/* ã‚²ãƒ¼ãƒ é–‹å§‹è¦æ±‚ */
+	void	RecvProcCONNECT_KEEPALIVE			(PBYTE pData, DWORD dwSessionID);					/* ç”Ÿå­˜ç¢ºèªé€šçŸ¥ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcACCOUNT.cpp) */
+	void	RecvProcACCOUNT						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³» */
+	void	RecvProcACCOUNT_REQ_ACCOUNTINFO		(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±è¦æ±‚ */
+	void	RecvProcACCOUNT_REQ_MAKECHAR		(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©ä½œæˆè¦æ±‚ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcCHAR.cpp) */
+	void	RecvProcCHAR						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ã‚­ãƒ£ãƒ©ç³» */
+	void	RecvProcCHAR_REQ_CHARINFO			(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©æƒ…å ±è¦æ±‚ */
+	void	RecvProcCHAR_MOVEPOS				(PBYTE pData, DWORD dwSessionID);					/* ç§»å‹•é€šçŸ¥ */
+	void	RecvProcCHAR_STATE					(PBYTE pData, DWORD dwSessionID);					/* çŠ¶æ…‹é€šçŸ¥ */
+	void	RecvProcCHAR_REQ_CHAT				(PBYTE pData, DWORD dwSessionID);					/* ãƒãƒ£ãƒƒãƒˆè¦æ±‚ */
+	void	RecvProcCHAR_REQ_CHARINFO2			(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©æƒ…å ±è¦æ±‚(è¤‡æ•°) */
+	void	RecvProcCHAR_REQ_PUTGET				(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†ç½®ãè¦æ±‚ */
+	void	RecvProcCHAR_REQ_USEITEM			(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ã†è¦æ±‚ */
+	void	RecvProcCHAR_REQ_DRAGITEM			(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ä½ç½®å¤‰æ›´è¦æ±‚ */
+	void	RecvProcCHAR_REQ_PUSH				(PBYTE pData, DWORD dwSessionID);					/* æŠ¼ã™è¦æ±‚ */
+	void	RecvProcCHAR_REQ_TAIL				(PBYTE pData, DWORD dwSessionID);					/* ä»˜ã„ã¦è¡Œãè¦æ±‚ */
+	void	RecvProcCHAR_REQ_MODIFY_PARAM		(PBYTE pData, DWORD dwSessionID);					/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ›´è¦æ±‚ */
+	void	RecvProcCHAR_REQ_EQUIP				(PBYTE pData, DWORD dwSessionID);					/* è£…å‚™è¦æ±‚ */
+	void	RecvProcCHAR_PROC_FISHING			(PBYTE pData, DWORD dwSessionID);					/* é‡£ã‚Šè¦æ±‚ */
+	void	RecvProcCHAR_REQ_CHECKMAPEVENT		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚ */
+	void	RecvProcCHAR_STATE_CHARGE			(PBYTE pData, DWORD dwSessionID);					/* æºœã‚çŠ¶æ…‹é€šçŸ¥ */
+	void	RecvProcCHAR_REQ_RECOVERY			(PBYTE pData, DWORD dwSessionID);					/* æ°—çµ¶å¾Œå¾©æ´»è¦æ±‚ */
+	void	RecvProcCHAR_REQ_TALKEVENT			(PBYTE pData, DWORD dwSessionID);					/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±è¦æ±‚ */
+	void	RecvProcCHAR_REQ_ADDSKILL			(PBYTE pData, DWORD dwSessionID);					/* ã‚¹ã‚­ãƒ«è¿½åŠ è¦æ±‚ */
+	void	RecvProcCHAR_REQ_USESKILL			(PBYTE pData, DWORD dwSessionID);					/* ã‚¹ã‚­ãƒ«ã‚’ä½¿ã†è¦æ±‚ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcMAP.cpp) */
+	void	RecvProcMAP							(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ãƒžãƒƒãƒ—ç³» */
+	void	RecvProcMAP_REQ_MAPINFO				(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—æƒ…å ±è¦æ±‚ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcITEM.cpp) */
+	void	RecvProcITEM						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ã‚¢ã‚¤ãƒ†ãƒ ç³» */
+	void	RecvProcITEM_REQ_ITEMINFO			(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±è¦æ±‚ */
+	void	RecvProcITEM_RENEWITEMINFO			(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–° */
+	void	RecvProcITEM_REQ_ITEMTYPEINFO		(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¦æ±‚ */
+	void	RecvProcITEM_RENEWITEMTYPEINFO		(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ›´æ–° */
+	void	RecvProcITEM_REQ_ITEMWEAPONINFO		(PBYTE pData, DWORD dwSessionID);					/* æ­¦å™¨æƒ…å ±è¦æ±‚ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcADMIN.cpp) */
+	void	RecvProcADMIN						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ç®¡ç†è€…ç³» */
+	void	RecvProcADMIN_CHARINFO				(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©æƒ…å ±é€šçŸ¥ */
+	void	RecvProcADMIN_DELETECHARINFO		(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©æƒ…å ±å‰Šé™¤ */
+	void	RecvProcADMIN_MAP_RENEWMAPOBJECT	(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–° */
+	void	RecvProcADMIN_MAP_RENEWOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿æ›´æ–° */
+	void	RecvProcADMIN_MAP_DELETEOBJECTDATA	(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿å‰Šé™¤ */
+	void	RecvProcADMIN_RENEWMAPPARTS			(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æ›´æ–° */
+	void	RecvProcADMIN_MAP_SETPARTS			(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„é…ç½® */
+	void	RecvProcADMIN_MAP_RENEWMAPSIZE		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–° */
+	void	RecvProcADMIN_MAP_DELETEPARTS		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„å‰Šé™¤ */
+	void	RecvProcADMIN_MAP_COPYPARTS			(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚³ãƒ”ãƒ¼ */
+	void	RecvProcADMIN_MAP_SETMAPNAME		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—åå¤‰æ›´ */
+	void	RecvProcADMIN_RENEWMAPSHADOW		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—å½±æ›´æ–° */
+	void	RecvProcADMIN_MAP_SETMAPSHADOW		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—å½±é…ç½® */
+	void	RecvProcADMIN_MAP_DELETEMAPSHADOW	(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—å½±å‰Šé™¤ */
+	void	RecvProcADMIN_MAP_RENEWEVENT		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	void	RecvProcADMIN_MAP_DELETEEVENT		(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±å‰Šé™¤ */
+	void	RecvProcADMIN_MAP_ADD				(PBYTE pData, DWORD dwSessionID);					/* ãƒžãƒƒãƒ—è¿½åŠ  */
+	void	RecvProcADMIN_REQ_ADMINILEVEL		(PBYTE pData, DWORD dwSessionID);					/* ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«è¦æ±‚ */
+	void	RecvProcADMIN_RENEWADMINILEVEL		(PBYTE pData, DWORD dwSessionID);					/* ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«æ›´æ–° */
+	void	RecvProcADMIN_SERVER_SAVEINFO		(PBYTE pData, DWORD dwSessionID);					/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä¿å­˜ */
+	void	RecvProcADMIN_ITEM_ADD				(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±è¿½åŠ  */
+	void	RecvProcADMIN_ITEM_COPY				(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚³ãƒ”ãƒ¼ */
+	void	RecvProcADMIN_ITEM_DELETE			(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å‰Šé™¤ */
+	void	RecvProcADMIN_ITEMTYPE_ADD			(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¿½åŠ  */
+	void	RecvProcADMIN_ITEMTYPE_COPY			(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ã‚³ãƒ”ãƒ¼ */
+	void	RecvProcADMIN_ITEMTYPE_DELETE		(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±å‰Šé™¤ */
+	void	RecvProcADMIN_ITEMWEAPON_ADD		(PBYTE pData, DWORD dwSessionID);					/* æ­¦å™¨æƒ…å ±è¿½åŠ  */
+	void	RecvProcADMIN_ITEMWEAPON_RENEW		(PBYTE pData, DWORD dwSessionID);					/* æ­¦å™¨æƒ…å ±æ›´æ–° */
+	void	RecvProcADMIN_CHAR_ADDNPC			(PBYTE pData, DWORD dwSessionID);					/* NPCã®è¿½åŠ  */
+	void	RecvProcADMIN_CHAR_MODIFYITEM		(PBYTE pData, DWORD dwSessionID);					/* æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã®å¤‰æ›´ */
+	void	RecvProcADMIN_CHAR_MODIFYSKILL		(PBYTE pData, DWORD dwSessionID);					/* æ‰€æŒã‚¹ã‚­ãƒ«ã®å¤‰æ›´ */
+	void	RecvProcADMIN_CHAR_RENEWMOTION		(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®æ›´æ–° */
+	void	RecvProcADMIN_CHAR_ADDMOTIONTYPE	(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ã®è¿½åŠ  */
+	void	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(PBYTE pData, DWORD dwSessionID);					/* ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ã®æ›´æ–° */
+	void	RecvProcADMIN_CHAR_RENEWSTATUS		(PBYTE pData, DWORD dwSessionID);					/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±æ›´æ–° */
+	void	RecvProcADMIN_CHAR_REQ_STATUS		(PBYTE pData, DWORD dwSessionID);					/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±è¦æ±‚ */
+	void	RecvProcADMIN_CHAR_REQ_ONLINE		(PBYTE pData, DWORD dwSessionID);					/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©ä¸€è¦§è¦æ±‚ */
+	void	RecvProcADMIN_EFC_RENEWBALLOON		(PBYTE pData, DWORD dwSessionID);					/* å™´å‡ºã—æƒ…å ±ã®æ›´æ–° */
+	void	RecvProcADMIN_EFC_RENEWEFFECT		(PBYTE pData, DWORD dwSessionID);					/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ã®æ›´æ–° */
+	void	RecvProcADMIN_REQ_PLAYSOUND			(PBYTE pData, DWORD dwSessionID);					/* åŠ¹æžœéŸ³ã®å†ç”Ÿè¦æ±‚ */
+	void	RecvProcADMIN_CHAR_REQ_ACCOUNT		(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±è¦æ±‚ */
+	void	RecvProcADMIN_CHAR_RENEW_ACCOUNT	(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	void	RecvProcADMIN_CHAR_RENEW_TALKEVENT	(PBYTE pData, DWORD dwSessionID);					/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	void	RecvProcADMIN_RENEW_CLIENTVERSION	(PBYTE pData, DWORD dwSessionID);					/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³æ›´æ–° */
+	void	RecvProcADMIN_SYSTEM_REQ_INFO		(PBYTE pData, DWORD dwSessionID);					/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±è¦æ±‚ */
+	void	RecvProcADMIN_SYSTEM_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã®æ›´æ–° */
+	void	RecvProcADMIN_SKILL_RENEWSKILL		(PBYTE pData, DWORD dwSessionID);					/* ã‚¹ã‚­ãƒ«æƒ…å ±æ›´æ–° */
+	void	RecvProcADMIN_ACCOUNT_REQ_ADD		(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ è¦æ±‚ */
+	void	RecvProcADMIN_DISABLE_REQ_INFO		(PBYTE pData, DWORD dwSessionID);					/* æ‹’å¦æƒ…å ±è¦æ±‚ */
+	void	RecvProcADMIN_DISABLE_REQ_DELETE	(PBYTE pData, DWORD dwSessionID);					/* æ‹’å¦æƒ…å ±ã®å‰Šé™¤è¦æ±‚ */
+	void	RecvProcADMIN_DISABLE_RENEWINFO		(PBYTE pData, DWORD dwSessionID);					/* æ‹’å¦æƒ…å ±ã®æ›´æ–° */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcMSGCMD.cpp) */
+	void	RecvProcMSGCMD						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒžãƒ³ãƒ‰ç³» */
+	void	RecvProcMSGCMD_CHGFACE				(PBYTE pData, DWORD dwSessionID);					/* è¡¨æƒ…å¤‰æ›´ */
+	void	RecvProcMSGCMD_CHGHAIR				(PBYTE pData, DWORD dwSessionID);					/* é«ªå¤‰æ›´ */
+	void	RecvProcMSGCMD_CHGCLOTH				(PBYTE pData, DWORD dwSessionID);					/* æœè£…å¤‰æ›´ */
+	void	RecvProcMSGCMD_CHGACCE				(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¯ã‚»ã‚µãƒªå¤‰æ›´ */
+	void	RecvProcMSGCMD_CHGCOLOR				(PBYTE pData, DWORD dwSessionID);					/* è‰²å¤‰æ›´ */
+	void	RecvProcMSGCMD_CHGARMS				(PBYTE pData, DWORD dwSessionID);					/* æŒã¡ç‰©å¤‰æ›´ */
+	void	RecvProcMSGCMD_CHGSHIELD			(PBYTE pData, DWORD dwSessionID);					/* ç›¾å¤‰æ›´ */
+	void	RecvProcMSGCMD_MAKEITEM				(PBYTE pData, DWORD dwSessionID);					/* ã‚¢ã‚¤ãƒ†ãƒ ä½œæˆ */
+	void	RecvProcMSGCMD_BALLOON				(PBYTE pData, DWORD dwSessionID);					/* å™´å‡ºã— */
+	void	RecvProcMSGCMD_DICE					(PBYTE pData, DWORD dwSessionID);					/* ã‚µã‚¤ã‚³ãƒ­ */
+	void	RecvProcMSGCMD_RND					(PBYTE pData, DWORD dwSessionID);					/* ãƒ©ãƒ³ãƒ€ãƒ  */
+	void	RecvProcMSGCMD_EFFECT				(PBYTE pData, DWORD dwSessionID);					/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	void	RecvProcMSGCMD_WHERE				(PBYTE pData, DWORD dwSessionID);					/* æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcEFFECT.cpp) */
+	void	RecvProcEFFECT						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³» */
+	void	RecvProcEFFECT_REQ_BALLOONINFO		(PBYTE pData, DWORD dwSessionID);					/* å™´å‡ºã—æƒ…å ±è¦æ±‚ */
+	void	RecvProcEFFECT_DELETEBALLOONINFO	(PBYTE pData, DWORD dwSessionID);					/* å™´å‡ºã—æƒ…å ±å‰Šé™¤ */
+
+	/* å—ä¿¡å‡¦ç†(MainFrameRecvProcBATTLE.cpp) */
+	void	RecvProcBATTLE						(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	/* æˆ¦é—˜ç³» */
+	void	RecvProcBATTLE_REQ_ATACK			(PBYTE pData, DWORD dwSessionID);					/* æ”»æ’ƒè¦æ±‚ */
+
+
+private:
+	BYTE				m_byLastSendClock;				/* æœ€å¾Œã«ãŠçŸ¥ã‚‰ã›ã—ãŸæ™‚åˆ» */
+	DWORD				m_dwServerStartTime,			/* ã‚µãƒ¼ãƒãƒ¼èµ·å‹•æ™‚é–“ */
+						m_dwLastKeepaliveCheck;			/* æœ€å¾Œã«ç”Ÿå­˜ç¢ºèªãƒã‚§ãƒƒã‚¯ã—ãŸæ™‚é–“ */
+	HWND				m_hWnd;							/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ« */
+	HFONT				m_hFont;						/* ã‚µãƒ¼ãƒãƒ¼çŠ¶æ…‹ã®æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ */
+
+	CMgrData			*m_pMgrData;					/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CUraraSockTCPSBO	*m_pSock;						/* é€šä¿¡ãƒžãƒãƒ¼ã‚¸ãƒ£ */
+	CTextOutput			*m_pLog;						/* ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ« */
+	CUpdateServerInfo	*m_pUpdateServerInfo;			/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ */
+
+	CLibInfoAccount		*m_pLibInfoAccount;				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoCharSvr		*m_pLibInfoChar;				/* ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoDisable		*m_pLibInfoDisable;				/* æ‹’å¦æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapBase		*m_pLibInfoMap;					/* ãƒžãƒƒãƒ—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapObject	*m_pLibInfoMapObject;			/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapParts	*m_pLibInfoMapParts;			/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;			/* ãƒžãƒƒãƒ—å½±æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoItemType	*m_pLibInfoItemType;			/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoItem		*m_pLibInfoItem;				/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;			/* æ­¦å™¨æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoEffect		*m_pLibInfoEffect;				/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMotion		*m_pLibInfoMotion;				/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMotionType	*m_pLibInfoMotionType;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;			/* å™´å‡ºã—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoSystem		*m_pLibInfoSystem;				/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoSkill		*m_pLibInfoSkill;				/* ã‚¹ã‚­ãƒ«æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoTalkEvent	*m_pLibInfoTalkEvent;			/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 };
 
 /* Copyright(C)URARA-works 2006 */

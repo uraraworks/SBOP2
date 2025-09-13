@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboLaunchDlg.h												 */
-/* “à—e			:ƒƒCƒ“ƒ_ƒCƒAƒƒO ’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/01/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboLaunchDlg.h												 */
+/* å†…å®¹			:ãƒ¡ã‚¤ãƒ³ãƒ€ã‚¤ã‚¢ãƒ­ã‚° å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,67 +12,67 @@ class CUraraSockTCPSBO;
 class CInfoFileList;
 
 /* ========================================================================= */
-/* \‘¢‘ÌéŒ¾																 */
+/* æ§‹é€ ä½“å®£è¨€																 */
 /* ========================================================================= */
 
-/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN\‘¢‘Ì */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯æ§‹é€ ä½“ */
 typedef struct _CHECKFILELIST {
-	int			nNo;			/* ƒ`ƒFƒbƒN’†‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg”Ô† */
-	ARRAYINT	anGetFlieNo;	/* Žæ“¾‚·‚éƒtƒ@ƒCƒ‹ƒŠƒXƒg”Ô† */
+	int			nNo;			/* ãƒã‚§ãƒƒã‚¯ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆç•ªå· */
+	ARRAYINT	anGetFlieNo;	/* å–å¾—ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆç•ªå· */
 } CHECKFILELIST, *PCHECKFILELIST;
 
-/* ƒtƒ@ƒCƒ‹Žæ“¾î•ñ\‘¢‘Ì */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—æƒ…å ±æ§‹é€ ä½“ */
 typedef struct _GETFILEINFO {
-	int			nNo;			/* Žæ“¾’†‚Ìƒtƒ@ƒCƒ‹ƒŠƒXƒg”Ô† */
-	DWORD		dwRecvSize;		/* Žæ“¾Ï‚ÝƒTƒCƒY */
-	PBYTE		pRecvDataTmp;	/* Žæ“¾’†ƒf[ƒ^ */
+	int			nNo;			/* å–å¾—ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆç•ªå· */
+	DWORD		dwRecvSize;		/* å–å¾—æ¸ˆã¿ã‚µã‚¤ã‚º */
+	PBYTE		pRecvDataTmp;	/* å–å¾—ä¸­ãƒ‡ãƒ¼ã‚¿ */
 } GETFILEINFO, *PGETFILEINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CSboLaunchDlg : public CDialog
 {
 public:
-			CSboLaunchDlg(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSboLaunchDlg();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSboLaunchDlg(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSboLaunchDlg();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
 protected:
-	void	AddMsg					(LPCSTR pszMsg);	/* ƒƒbƒZ[ƒW’Ç‰Á */
-	void	ReadIniData				(void);				/* iniƒtƒ@ƒCƒ‹‚©‚çÝ’è‚ð“Ç‚Ýž‚Ý */
-	void	ChgState				(int nState);		/* ó‘Ô‘JˆÚ */
-	void	ChgStateNONE			(void);				/* ó‘Ô‘JˆÚ(’âŽ~’†) */
-	void	ChgStateCONNECT			(void);				/* ó‘Ô‘JˆÚ(ƒT[ƒo[‚ÖÚ‘±) */
-	void	ChgStateCONNECTMISS		(void);				/* ó‘Ô‘JˆÚ(ƒT[ƒo[‚ÖÚ‘±Ž¸”s) */
-	void	ChgStateDISCONNECT		(void);				/* ó‘Ô‘JˆÚ(ƒT[ƒo[‚ÆØ’f) */
-	void	ChgStateGETFILELIST		(void);				/* ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹ƒŠƒXƒgŽæ“¾) */
-	void	ChgStateCHECKFILELIST	(void);				/* ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN) */
-	void	ChgStateGETFILE			(void);				/* ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹Žæ“¾) */
-	void	ChgStateMAKEFILELIST	(void);				/* ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹ƒŠƒXƒgo—Í) */
-	void	ChgStateRUNUPDATE		(void);				/* ó‘Ô‘JˆÚ(ƒAƒbƒvƒf[ƒ^‹N“®) */
-	void	ChgStateQUIT			(void);				/* ó‘Ô‘JˆÚ(I—¹) */
-	void	ProcCHECKFILELIST		(void);				/* ˆ—(ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN) */
-	void	ProcGETFILE				(void);				/* ˆ—(ƒtƒ@ƒCƒ‹Žæ“¾) */
-	void	OnRecv					(PBYTE pRecvData);	/* ƒf[ƒ^ŽóM */
-	void	RecvProcVERSION					(BYTE byCmdSub, PBYTE pData);	/* ŽóMˆ—(ƒo[ƒWƒ‡ƒ“Œn) */
-	void	RecvProcVERSION_RES_FILELIST	(PBYTE pData);					/* ŽóMˆ—(ƒtƒ@ƒCƒ‹ƒŠƒXƒg‰ž“š) */
-	void	RecvProcVERSION_RES_FILE		(PBYTE pData);					/* ŽóMˆ—(ƒtƒ@ƒCƒ‹‰ž“š) */
-	void	DeleteAllFiles			(LPCSTR pszPath);						/* Žw’èƒpƒXˆÈ‰º‚Ìƒtƒ@ƒCƒ‹‚ð‘S‚Äíœ */
-	void	DeleteAllFilesTmp		(HANDLE hFind, LPCSTR pszPath1, LPCSTR pszPath2, CmyStringArray &astrFolderPath);	/* Žw’èƒpƒXˆÈ‰º‚Ìƒtƒ@ƒCƒ‹‚ð‘S‚Äíœ(ˆ—) */
+	void	AddMsg					(LPCSTR pszMsg);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¿½åŠ  */
+	void	ReadIniData				(void);				/* iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è¨­å®šã‚’èª­ã¿è¾¼ã¿ */
+	void	ChgState				(int nState);		/* çŠ¶æ…‹é·ç§» */
+	void	ChgStateNONE			(void);				/* çŠ¶æ…‹é·ç§»(åœæ­¢ä¸­) */
+	void	ChgStateCONNECT			(void);				/* çŠ¶æ…‹é·ç§»(ã‚µãƒ¼ãƒãƒ¼ã¸æŽ¥ç¶š) */
+	void	ChgStateCONNECTMISS		(void);				/* çŠ¶æ…‹é·ç§»(ã‚µãƒ¼ãƒãƒ¼ã¸æŽ¥ç¶šå¤±æ•—) */
+	void	ChgStateDISCONNECT		(void);				/* çŠ¶æ…‹é·ç§»(ã‚µãƒ¼ãƒãƒ¼ã¨åˆ‡æ–­) */
+	void	ChgStateGETFILELIST		(void);				/* çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå–å¾—) */
+	void	ChgStateCHECKFILELIST	(void);				/* çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯) */
+	void	ChgStateGETFILE			(void);				/* çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—) */
+	void	ChgStateMAKEFILELIST	(void);				/* çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå‡ºåŠ›) */
+	void	ChgStateRUNUPDATE		(void);				/* çŠ¶æ…‹é·ç§»(ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿èµ·å‹•) */
+	void	ChgStateQUIT			(void);				/* çŠ¶æ…‹é·ç§»(çµ‚äº†) */
+	void	ProcCHECKFILELIST		(void);				/* å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯) */
+	void	ProcGETFILE				(void);				/* å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—) */
+	void	OnRecv					(PBYTE pRecvData);	/* ãƒ‡ãƒ¼ã‚¿å—ä¿¡ */
+	void	RecvProcVERSION					(BYTE byCmdSub, PBYTE pData);	/* å—ä¿¡å‡¦ç†(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³») */
+	void	RecvProcVERSION_RES_FILELIST	(PBYTE pData);					/* å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå¿œç­”) */
+	void	RecvProcVERSION_RES_FILE		(PBYTE pData);					/* å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«å¿œç­”) */
+	void	DeleteAllFiles			(LPCSTR pszPath);						/* æŒ‡å®šãƒ‘ã‚¹ä»¥ä¸‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦å‰Šé™¤ */
+	void	DeleteAllFilesTmp		(HANDLE hFind, LPCSTR pszPath1, LPCSTR pszPath2, CmyStringArray &astrFolderPath);	/* æŒ‡å®šãƒ‘ã‚¹ä»¥ä¸‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦å‰Šé™¤(å‡¦ç†) */
 
 
 protected:
-	BOOL				m_bConnect;				/* ƒT[ƒo[‚ÆÚ‘±‚µ‚½ */
-	int					m_nState;				/* ó‘Ô */
-	CUraraSockTCPSBO	*m_pSock;				/* ’ÊMƒ‰ƒCƒuƒ‰ƒŠ */
-	CString				m_strServerAddr;		/* ƒT[ƒo[ƒAƒhƒŒƒX */
-	WORD				m_wServerPort;			/* ƒT[ƒo[Ú‘±ƒ|[ƒg */
-	CInfoFileList		*m_pInfoFileList;		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ */
-	CHECKFILELIST		*m_pstCheckFlieList;	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN\‘¢‘Ì */
-	GETFILEINFO			*m_pstGetFileInfo;		/* ƒtƒ@ƒCƒ‹Žæ“¾î•ñ\‘¢‘Ì */
+	BOOL				m_bConnect;				/* ã‚µãƒ¼ãƒãƒ¼ã¨æŽ¥ç¶šã—ãŸ */
+	int					m_nState;				/* çŠ¶æ…‹ */
+	CUraraSockTCPSBO	*m_pSock;				/* é€šä¿¡ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CString				m_strServerAddr;		/* ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	WORD				m_wServerPort;			/* ã‚µãƒ¼ãƒãƒ¼æŽ¥ç¶šãƒãƒ¼ãƒˆ */
+	CInfoFileList		*m_pInfoFileList;		/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ± */
+	CHECKFILELIST		*m_pstCheckFlieList;	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯æ§‹é€ ä½“ */
+	GETFILEINFO			*m_pstGetFileInfo;		/* ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—æƒ…å ±æ§‹é€ ä½“ */
 
 
 
@@ -87,7 +87,7 @@ public:
 
 	//{{AFX_VIRTUAL(CSboLaunchDlg)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV ‚ÌƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV ã®ã‚µãƒãƒ¼ãƒˆ
 	virtual LRESULT DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	//}}AFX_VIRTUAL
 

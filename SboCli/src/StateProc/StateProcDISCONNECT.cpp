@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcDISCONNECT.cpp									 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(Ø’f) ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcDISCONNECT.cpp									 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(åˆ‡æ–­) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,9 +15,9 @@
 #include "StateProcDISCONNECT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcDISCONNECT::CStateProcDISCONNECT						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CStateProcDISCONNECT::CStateProcDISCONNECT						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 CStateProcDISCONNECT::CStateProcDISCONNECT()
@@ -26,9 +26,9 @@ CStateProcDISCONNECT::CStateProcDISCONNECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcDISCONNECT::~CStateProcDISCONNECT					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CStateProcDISCONNECT::~CStateProcDISCONNECT					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 CStateProcDISCONNECT::~CStateProcDISCONNECT()
@@ -37,14 +37,14 @@ CStateProcDISCONNECT::~CStateProcDISCONNECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcDISCONNECT::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CStateProcDISCONNECT::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CStateProcDISCONNECT::Init(void)
 {
-	m_pMgrWindow->MakeWindowMSG ("ƒT[ƒo[‚Æ‚ÌÚ‘±‚ªØ‚ê‚Ü‚µ‚½");
+	m_pMgrWindow->MakeWindowMSG ("ã‚µãƒ¼ãƒãƒ¼ã¨ã®æŽ¥ç¶šãŒåˆ‡ã‚Œã¾ã—ãŸ");
 }
 
 /* Copyright(C)URARA-works 2006 */

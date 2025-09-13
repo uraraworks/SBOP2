@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTalkEventMENU.h										 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñ(€–Ú‘I‘ğ)ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTalkEventMENU.h										 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±(é …ç›®é¸æŠ)ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,52 +11,52 @@
 #include "InfoTalkEventBase.h"
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
-/* €–Úî•ñ */
+/* é …ç›®æƒ…å ± */
 typedef struct _STTALKEVENTMENUINFO {
-	int			nPage;		/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
-	CmyString	strName;	/* €–Ú–¼ */
+	int			nPage;		/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
+	CmyString	strName;	/* é …ç›®å */
 } STTALKEVENTMENUINFO, *PSTTALKEVENTMENUINFO;
 typedef CmyArray<PSTTALKEVENTMENUINFO, PSTTALKEVENTMENUINFO>	  ARRAYTALKEVENTMENUINFO;
 typedef CmyArray<PSTTALKEVENTMENUINFO, PSTTALKEVENTMENUINFO>	*PARRAYTALKEVENTMENUINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoTalkEventMENU : public CInfoTalkEventBase
 {
 public:
-			CInfoTalkEventMENU();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoTalkEventMENU();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoTalkEventMENU();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoTalkEventMENU();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementCount		(void);								/* —v‘f”‚ğæ“¾ */
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual int		GetElementCount		(void);								/* è¦ç´ æ•°ã‚’å–å¾— */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoTalkEventBase *pSrc);			/* ƒRƒs[ */
+	virtual void	Copy				(CInfoTalkEventBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
-	void DeleteMenuInfo		(int nNo);						/* €–Úî•ñ‚ğíœ */
-	void DeleteAllMenuInfo	(void);							/* €–Úî•ñ‚ğ‘S‚Äíœ */
-	void AddMenuInfo		(int nPage, LPCSTR pszName);	/* €–Úî•ñ‚ğ’Ç‰Á */
-	int  GetMenuInfoCount	(void);							/* €–Ú”‚ğæ“¾ */
+	void DeleteMenuInfo		(int nNo);						/* é …ç›®æƒ…å ±ã‚’å‰Šé™¤ */
+	void DeleteAllMenuInfo	(void);							/* é …ç›®æƒ…å ±ã‚’å…¨ã¦å‰Šé™¤ */
+	void AddMenuInfo		(int nPage, LPCSTR pszName);	/* é …ç›®æƒ…å ±ã‚’è¿½åŠ  */
+	int  GetMenuInfoCount	(void);							/* é …ç›®æ•°ã‚’å–å¾— */
 
-	PSTTALKEVENTMENUINFO	GetPtr	(int nNo);				/* €–Úî•ñ‚ğæ“¾ */
+	PSTTALKEVENTMENUINFO	GetPtr	(int nNo);				/* é …ç›®æƒ…å ±ã‚’å–å¾— */
 
 
 public:
-	ARRAYTALKEVENTMENUINFO	m_aMenuInfo;		/* €–Úî•ñ */
+	ARRAYTALKEVENTMENUINFO	m_aMenuInfo;		/* é …ç›®æƒ…å ± */
 } CInfoTalkEventMENU, *PCInfoTalkEventMENU;
 
 /* Copyright(C)URARA-works 2008 */

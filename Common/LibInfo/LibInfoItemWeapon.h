@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoItemWeapon.h										 */
-/* “à—e			:ƒAƒCƒeƒ€•Šíî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoItemWeapon.h										 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,41 +12,41 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoItemWeapon : public CLibInfoBase
 {
 public:
-			CLibInfoItemWeapon();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoItemWeapon();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoItemWeapon();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoItemWeapon();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);									/* ì¬ */
-	void Destroy		(void);									/* ”jŠü */
+	void Create			(void);									/* ä½œæˆ */
+	void Destroy		(void);									/* ç ´æ£„ */
 
-	PCInfoBase GetNew	(void);									/* V‹Kƒf[ƒ^‚ğæ“¾ */
-	int		GetCount	(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);						/* ’Ç‰Á */
-	void	Delete		(int nNo);								/* íœ */
-	void	Delete		(DWORD dwWeaponInfoID);					/* íœ */
-	void	DeleteAll	(void);									/* ‘S‚Äíœ */
+	PCInfoBase GetNew	(void);									/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	int		GetCount	(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);						/* è¿½åŠ  */
+	void	Delete		(int nNo);								/* å‰Šé™¤ */
+	void	Delete		(DWORD dwWeaponInfoID);					/* å‰Šé™¤ */
+	void	DeleteAll	(void);									/* å…¨ã¦å‰Šé™¤ */
 
-	PCInfoBase	GetPtr (int nNo);								/* •Šíî•ñ‚ğæ“¾ */
-	PCInfoBase	GetPtr (DWORD dwWeaponInfoID);					/* •Šíî•ñ‚ğæ“¾ */
+	PCInfoBase	GetPtr (int nNo);								/* æ­¦å™¨æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase	GetPtr (DWORD dwWeaponInfoID);					/* æ­¦å™¨æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);							/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);							/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);					/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
-	PBYTE	GetNewSendData		(PBYTE pSrc, PCInfoItemWeapon &pDst);	/* ‘—Mƒf[ƒ^‚©‚çV‹Kƒf[ƒ^‚ğæ“¾ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ƒAƒCƒeƒ€ID‚ğæ“¾ */
+	DWORD	GetSendDataSize		(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);					/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
+	PBYTE	GetNewSendData		(PBYTE pSrc, PCInfoItemWeapon &pDst);	/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
 
 protected:
-	DWORD	m_dwNewIDTmp;						/* V‹KIDì¬—p */
-	PARRAYWEAPONINFO	m_paInfo;				/* •Šíî•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„ã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾— */
+
+
+protected:
+	DWORD	m_dwNewIDTmp;						/* æ–°è¦IDä½œæˆç”¨ */
+	PARRAYWEAPONINFO	m_paInfo;				/* æ­¦å™¨æƒ…å ± */
 } CLibInfoItemWeapon, *PCLibInfoItemWeapon;
 
 /* Copyright(C)URARA-works 2008 */

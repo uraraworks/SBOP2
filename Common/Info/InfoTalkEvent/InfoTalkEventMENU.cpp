@@ -1,31 +1,31 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTalkEventMENU.cpp										 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñ(€–Ú‘I‘ğ)ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTalkEventMENU.cpp										 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±(é …ç›®é¸æŠ)ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/28													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoTalkEventMENU.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"nCount",			/* €–Ú” */
-	"nPage",			/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
-	"strName",			/* €–Ú–¼ */
+	"nCount",			/* é …ç›®æ•° */
+	"nPage",			/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
+	"strName",			/* é …ç›®å */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::CInfoTalkEventMENU							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::CInfoTalkEventMENU							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 CInfoTalkEventMENU::CInfoTalkEventMENU()
@@ -38,9 +38,9 @@ CInfoTalkEventMENU::CInfoTalkEventMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::~CInfoTalkEventMENU						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::~CInfoTalkEventMENU						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 CInfoTalkEventMENU::~CInfoTalkEventMENU()
@@ -49,9 +49,9 @@ CInfoTalkEventMENU::~CInfoTalkEventMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetElementCount							 */
-/* “à—e		:—v‘f”‚ğæ“¾													 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetElementCount							 */
+/* å†…å®¹		:è¦ç´ æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 int CInfoTalkEventMENU::GetElementCount(void)
@@ -61,9 +61,9 @@ int CInfoTalkEventMENU::GetElementCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetElementNo								 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2005/07/05														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetElementNo								 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/07/05														 */
 /* ========================================================================= */
 
 int CInfoTalkEventMENU::GetElementNo(LPCSTR pszName)
@@ -88,9 +88,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetDataSize								 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetDataSize								 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::GetDataSize(void)
@@ -102,11 +102,11 @@ DWORD CInfoTalkEventMENU::GetDataSize(void)
 	nCount = m_aMenuInfo.GetSize ();
 
 	dwRet = CInfoTalkEventBase::GetDataSize();
-	dwRet += sizeof (int);				/* €–Ú” */
+	dwRet += sizeof (int);				/* é …ç›®æ•° */
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aMenuInfo[i];
-		dwRet += sizeof (int);						/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
-		dwRet += (pInfo->strName.GetLength () + 1);	/* €–Ú–¼ */
+		dwRet += sizeof (int);						/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
+		dwRet += (pInfo->strName.GetLength () + 1);	/* é …ç›®å */
 	}
 
 	return dwRet;
@@ -114,9 +114,9 @@ DWORD CInfoTalkEventMENU::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetDataSizeNo								 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetDataSizeNo								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::GetDataSizeNo(int nNo)
@@ -133,13 +133,13 @@ DWORD CInfoTalkEventMENU::GetDataSizeNo(int nNo)
 	nCount = m_aMenuInfo.GetSize ();
 
 	switch (nNo - m_nElementCountBase) {
-	case 0:			/* €–Ú” */
+	case 0:			/* é …ç›®æ•° */
 		dwRet = sizeof (int);
 		break;
-	case 1:			/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
+	case 1:			/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
 		dwRet = sizeof (int) * nCount;
 		break;
-	case 2:			/* €–Ú–¼ */
+	case 2:			/* é …ç›®å */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_aMenuInfo[i];
 			dwRet += (pInfo->strName.GetLength () + 1);
@@ -152,9 +152,9 @@ DWORD CInfoTalkEventMENU::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetName									 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2005/07/05														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetName									 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/07/05														 */
 /* ========================================================================= */
 
 LPCSTR CInfoTalkEventMENU::GetName(int nNo)
@@ -167,9 +167,9 @@ LPCSTR CInfoTalkEventMENU::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetWriteData								 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetWriteData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventMENU::GetWriteData(int nNo, PDWORD pdwSize)
@@ -197,16 +197,16 @@ PBYTE CInfoTalkEventMENU::GetWriteData(int nNo, PDWORD pdwSize)
 
 	nNo -= m_nElementCountBase;
 	switch (nNo) {
-	case 0:			/* €–Ú” */
+	case 0:			/* é …ç›®æ•° */
 		pSrc = (PBYTE)&nCount;
 		break;
-	case 1:			/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
+	case 1:			/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_aMenuInfo[i];
 			CopyMemoryRenew (pDataTmp, &pInfo->nPage, sizeof (pInfo->nPage), pDataTmp);
 		}
 		break;
-	case 2:			/* €–Ú–¼ */
+	case 2:			/* é …ç›®å */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_aMenuInfo[i];
 			strcpyRenew ((LPSTR)pDataTmp, pInfo->strName, pDataTmp);
@@ -224,14 +224,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::ReadElementData							 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::ReadElementData							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	int i, nCount;
 	DWORD dwSize;
@@ -250,7 +250,7 @@ DWORD CInfoTalkEventMENU::ReadElementData(
 
 	nNo -= m_nElementCountBase;
 	switch (nNo) {
-	case 0:			/* €–Ú” */
+	case 0:			/* é …ç›®æ•° */
 		DeleteAllMenuInfo ();
 		nCount = 0;
 		CopyMemoryRenew (&nCount, pDataTmp, sizeof (nCount), pDataTmp);
@@ -259,14 +259,14 @@ DWORD CInfoTalkEventMENU::ReadElementData(
 		}
 		dwSize = (pDataTmp - pSrc);
 		break;
-	case 1:			/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
+	case 1:			/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_aMenuInfo[i];
 			CopyMemoryRenew (&pInfo->nPage, pDataTmp, sizeof (pInfo->nPage), pDataTmp);
 		}
 		dwSize = (pDataTmp - pSrc);
 		break;
-	case 2:			/* €–Ú–¼ */
+	case 2:			/* é …ç›®å */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_aMenuInfo[i];
 			StoreRenew (pInfo->strName, (LPCSTR)pDataTmp, pDataTmp);
@@ -284,9 +284,9 @@ DWORD CInfoTalkEventMENU::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventMENU::GetSendDataSize(void)
@@ -294,18 +294,18 @@ DWORD CInfoTalkEventMENU::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = CInfoTalkEventBase::GetSendDataSize ();
-	dwRet += GetDataSizeNo (m_nElementCountBase + 0);	/* €–Ú” */
-	dwRet += GetDataSizeNo (m_nElementCountBase + 1);	/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
-	dwRet += GetDataSizeNo (m_nElementCountBase + 2);	/* €–Ú–¼ */
+	dwRet += GetDataSizeNo (m_nElementCountBase + 0);	/* é …ç›®æ•° */
+	dwRet += GetDataSizeNo (m_nElementCountBase + 1);	/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
+	dwRet += GetDataSizeNo (m_nElementCountBase + 2);	/* é …ç›®å */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventMENU::GetSendData(void)
@@ -325,13 +325,13 @@ PBYTE CInfoTalkEventMENU::GetSendData(void)
 	SAFE_DELETE_ARRAY (pDataBase);
 
 	nCount = m_aMenuInfo.GetSize ();
-	CopyMemoryRenew (pDataTmp, &nCount, sizeof (nCount), pDataTmp);		/* €–Ú” */
+	CopyMemoryRenew (pDataTmp, &nCount, sizeof (nCount), pDataTmp);		/* é …ç›®æ•° */
 
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aMenuInfo[i];
-		/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
+		/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
 		CopyMemoryRenew (pDataTmp, &pInfo->nPage, sizeof (pInfo->nPage), pDataTmp);
-		/* €–Ú–¼ */
+		/* é …ç›®å */
 		strcpyRenew ((LPSTR)pDataTmp, pInfo->strName, pDataTmp);
 	}
 
@@ -340,9 +340,9 @@ PBYTE CInfoTalkEventMENU::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventMENU::SetSendData(PBYTE pSrc)
@@ -355,13 +355,13 @@ PBYTE CInfoTalkEventMENU::SetSendData(PBYTE pSrc)
 	DeleteAllMenuInfo ();
 
 	pDataTmp = CInfoTalkEventBase::SetSendData (pSrc);
-	CopyMemoryRenew (&nCount, pDataTmp, sizeof (nCount), pDataTmp);		/* €–Ú” */
+	CopyMemoryRenew (&nCount, pDataTmp, sizeof (nCount), pDataTmp);		/* é …ç›®æ•° */
 	for (i = 0; i < nCount; i ++) {
 		AddMenuInfo (0, NULL);
 		pInfo = m_aMenuInfo[i];
-		/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
+		/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
 		CopyMemoryRenew (&pInfo->nPage, pDataTmp, sizeof (pInfo->nPage), pDataTmp);
-		/* €–Ú–¼ */
+		/* é …ç›®å */
 		StoreRenew (pInfo->strName, (LPCSTR)pDataTmp, pDataTmp);
 	}
 
@@ -371,9 +371,9 @@ PBYTE CInfoTalkEventMENU::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::Copy										 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::Copy										 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CInfoTalkEventMENU::Copy(CInfoTalkEventBase *pSrc)
@@ -399,9 +399,9 @@ void CInfoTalkEventMENU::Copy(CInfoTalkEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::DeleteMenuInfo								 */
-/* “à—e		:€–Úî•ñ‚ğíœ													 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::DeleteMenuInfo								 */
+/* å†…å®¹		:é …ç›®æƒ…å ±ã‚’å‰Šé™¤													 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CInfoTalkEventMENU::DeleteMenuInfo(int nNo)
@@ -419,9 +419,9 @@ void CInfoTalkEventMENU::DeleteMenuInfo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::DeleteAllMenuInfo							 */
-/* “à—e		:€–Úî•ñ‚ğ‘S‚Äíœ												 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::DeleteAllMenuInfo							 */
+/* å†…å®¹		:é …ç›®æƒ…å ±ã‚’å…¨ã¦å‰Šé™¤												 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CInfoTalkEventMENU::DeleteAllMenuInfo(void)
@@ -436,9 +436,9 @@ void CInfoTalkEventMENU::DeleteAllMenuInfo(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::AddMenuInfo								 */
-/* “à—e		:€–Úî•ñ‚ğ’Ç‰Á													 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::AddMenuInfo								 */
+/* å†…å®¹		:é …ç›®æƒ…å ±ã‚’è¿½åŠ 													 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CInfoTalkEventMENU::AddMenuInfo(int nPage, LPCSTR pszName)
@@ -446,16 +446,16 @@ void CInfoTalkEventMENU::AddMenuInfo(int nPage, LPCSTR pszName)
 	PSTTALKEVENTMENUINFO pInfo;
 
 	pInfo = new STTALKEVENTMENUINFO;
-	pInfo->nPage	= nPage;		/* ƒWƒƒƒ“ƒvæƒy[ƒW”Ô† */
-	pInfo->strName	= pszName;		/* €–Ú–¼ */
+	pInfo->nPage	= nPage;		/* ã‚¸ãƒ£ãƒ³ãƒ—å…ˆãƒšãƒ¼ã‚¸ç•ªå· */
+	pInfo->strName	= pszName;		/* é …ç›®å */
 	m_aMenuInfo.Add (pInfo);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetMenuInfoCount							 */
-/* “à—e		:€–Ú”‚ğæ“¾													 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetMenuInfoCount							 */
+/* å†…å®¹		:é …ç›®æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 int CInfoTalkEventMENU::GetMenuInfoCount(void)
@@ -465,9 +465,9 @@ int CInfoTalkEventMENU::GetMenuInfoCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventMENU::GetPtr										 */
-/* “à—e		:€–Úî•ñ‚ğæ“¾													 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEventMENU::GetPtr										 */
+/* å†…å®¹		:é …ç›®æƒ…å ±ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 PSTTALKEVENTMENUINFO CInfoTalkEventMENU::GetPtr(int nNo)

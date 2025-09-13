@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoSkill.cpp											 */
-/* “à—e			:ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoSkill.cpp											 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -13,9 +13,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::CLibInfoSkill									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::CLibInfoSkill									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 CLibInfoSkill::CLibInfoSkill()
@@ -25,9 +25,9 @@ CLibInfoSkill::CLibInfoSkill()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::~CLibInfoSkill									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::~CLibInfoSkill									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 CLibInfoSkill::~CLibInfoSkill()
@@ -37,9 +37,9 @@ CLibInfoSkill::~CLibInfoSkill()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 void CLibInfoSkill::Create(void)
@@ -49,9 +49,9 @@ void CLibInfoSkill::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::Destroy											 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::Destroy											 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 void CLibInfoSkill::Destroy(void)
@@ -62,9 +62,9 @@ void CLibInfoSkill::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetNew											 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetNew											 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoSkill::GetNew(void)
@@ -74,9 +74,9 @@ PCInfoBase CLibInfoSkill::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetNew											 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetNew											 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoSkill::GetNew(int nTypeMain, int nTypeSub)
@@ -86,19 +86,19 @@ PCInfoBase CLibInfoSkill::GetNew(int nTypeMain, int nTypeSub)
 	pInfo = NULL;
 
 	switch (nTypeMain) {
-	case SKILLTYPEMAIN_NONE:			/* ”\—Í */
+	case SKILLTYPEMAIN_NONE:			/* èƒ½åŠ› */
 		break;
-	case SKILLTYPEMAIN_BATTLE:			/* í“¬ */
+	case SKILLTYPEMAIN_BATTLE:			/* æˆ¦é—˜ */
 		switch (nTypeSub) {
-		case SKILLTYPESUB_BATTLE_MOVEATACK:		/* ˆÚ“®‚µ‚ÄUŒ‚ */
+		case SKILLTYPESUB_BATTLE_MOVEATACK:		/* ç§»å‹•ã—ã¦æ”»æ’ƒ */
 			pInfo = new CInfoSkillMOVEATACK;
 			break;
-		case SKILLTYPESUB_BATTLE_HEAL:			/* ‰ñ•œ */
+		case SKILLTYPESUB_BATTLE_HEAL:			/* å›å¾© */
 			pInfo = new CInfoSkillHEAL;
 			break;
 		}
 		break;
-	case SKILLTYPEMAIN_LIFE:			/* ¶Šˆ */
+	case SKILLTYPEMAIN_LIFE:			/* ç”Ÿæ´» */
 		break;
 	}
 
@@ -113,9 +113,9 @@ PCInfoBase CLibInfoSkill::GetNew(int nTypeMain, int nTypeSub)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetCount										 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetCount										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 int CLibInfoSkill::GetCount(void)
@@ -135,9 +135,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::Add												 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::Add												 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 void CLibInfoSkill::Add(PCInfoBase pInfo)
@@ -154,13 +154,13 @@ void CLibInfoSkill::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::Delete											 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::Delete											 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 void CLibInfoSkill::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoSkillBase pInfo;
 
@@ -171,13 +171,13 @@ void CLibInfoSkill::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::Delete											 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::Delete											 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 void CLibInfoSkill::Delete(
-	DWORD dwSkillID)		/* [in] ƒXƒLƒ‹ID */
+	DWORD dwSkillID)		/* [in] ã‚¹ã‚­ãƒ«ID */
 {
 	int i, nCount, nNo;
 	PCInfoSkillBase pInfoTmp;
@@ -201,9 +201,9 @@ void CLibInfoSkill::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::DeleteAll										 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::DeleteAll										 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 void CLibInfoSkill::DeleteAll(void)
@@ -222,9 +222,9 @@ void CLibInfoSkill::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::Merge											 */
-/* “à—e		:æ‚è‚İ														 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::Merge											 */
+/* å†…å®¹		:å–ã‚Šè¾¼ã¿														 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 void CLibInfoSkill::Merge(CLibInfoSkill *pSrc)
@@ -247,9 +247,9 @@ void CLibInfoSkill::Merge(CLibInfoSkill *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::Renew											 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/12/08														 */
+/* é–¢æ•°å	:CLibInfoSkill::Renew											 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/12/08														 */
 /* ========================================================================= */
 
 CInfoSkillBase *CLibInfoSkill::Renew(CInfoSkillBase *pSrc)
@@ -280,9 +280,9 @@ CInfoSkillBase *CLibInfoSkill::Renew(CInfoSkillBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetPtr											 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetPtr											 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoSkill::GetPtr(int nNo)
@@ -292,13 +292,13 @@ PCInfoBase CLibInfoSkill::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetPtr											 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetPtr											 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoSkill::GetPtr(
-	DWORD dwSkillID)		/* [in] ƒXƒLƒ‹ID */
+	DWORD dwSkillID)		/* [in] ã‚¹ã‚­ãƒ«ID */
 {
 	int i, nCount;
 	PCInfoSkillBase pRet, pInfoTmp;
@@ -320,9 +320,9 @@ PCInfoBase CLibInfoSkill::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::RenewInfo										 */
-/* “à—e		:“à—e‚É‰‚¶‚ÄXV												 */
-/* “ú•t		:2009/01/11														 */
+/* é–¢æ•°å	:CLibInfoSkill::RenewInfo										 */
+/* å†…å®¹		:å†…å®¹ã«å¿œã˜ã¦æ›´æ–°												 */
+/* æ—¥ä»˜		:2009/01/11														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoSkill::RenewInfo(int nNo)
@@ -341,9 +341,9 @@ PCInfoBase CLibInfoSkill::RenewInfo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 DWORD CLibInfoSkill::GetSendDataSize(void)
@@ -359,7 +359,7 @@ DWORD CLibInfoSkill::GetSendDataSize(void)
 		pInfoSkillBase = (PCInfoSkillBase)GetPtr (i);
 		dwSize += pInfoSkillBase->GetSendDataSize ();
 	}
-	/* I’[—p */
+	/* çµ‚ç«¯ç”¨ */
 	dwSize += sizeof (DWORD);
 
 	return dwSize;
@@ -367,9 +367,9 @@ DWORD CLibInfoSkill::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoSkill::GetSendData(void)
@@ -400,9 +400,9 @@ PBYTE CLibInfoSkill::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoSkill::SetSendData(PBYTE pSrc)
@@ -438,9 +438,9 @@ PBYTE CLibInfoSkill::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoSkill::GetNewID										 */
-/* “à—e		:V‚µ‚¢ID‚ğæ“¾													 */
-/* “ú•t		:2008/12/04														 */
+/* é–¢æ•°å	:CLibInfoSkill::GetNewID										 */
+/* å†…å®¹		:æ–°ã—ã„IDã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/04														 */
 /* ========================================================================= */
 
 DWORD CLibInfoSkill::GetNewID(void)

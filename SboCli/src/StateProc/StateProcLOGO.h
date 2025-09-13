@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	StateProcLOGO.h												 */
-/* “à—eF		ó‘Ôˆ—ƒNƒ‰ƒX(ƒƒS) ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2005/05/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	StateProcLOGO.h												 */
+/* å†…å®¹ï¼š		çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒ­ã‚´) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/05/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,29 +11,29 @@
 #include "StateProcBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStateProcLOGO : public CStateProcBase
 {
 public:
-			CStateProcLOGO();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStateProcLOGO();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStateProcLOGO();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStateProcLOGO();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Init			(void);							/* ‰Šú‰» */
-	BOOL TimerProc		(void);							/* ŽžŠÔˆ— */
-	void OnLButtonDown	(int x, int y);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN) */
-
-
-protected:
-	BOOL OnX					(BOOL bDown);			/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL OnZ					(BOOL bDown);			/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	void OnMgrDrawEND_FADEIN	(DWORD dwPara);			/* ƒtƒF[ƒhƒCƒ“Š®—¹ */
-	void OnMgrDrawEND_FADEOUT	(DWORD dwPara);			/* ƒtƒF[ƒhƒAƒEƒgŠ®—¹ */
+	void Init			(void);							/* åˆæœŸåŒ– */
+	BOOL TimerProc		(void);							/* æ™‚é–“å‡¦ç† */
+	void OnLButtonDown	(int x, int y);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN) */
 
 
 protected:
-	DWORD	m_dwTimeWait;					/* ‘Ò‚¿ŽžŠÔ—p */
+	BOOL OnX					(BOOL bDown);			/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL OnZ					(BOOL bDown);			/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	void OnMgrDrawEND_FADEIN	(DWORD dwPara);			/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³å®Œäº† */
+	void OnMgrDrawEND_FADEOUT	(DWORD dwPara);			/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆå®Œäº† */
+
+
+protected:
+	DWORD	m_dwTimeWait;					/* å¾…ã¡æ™‚é–“ç”¨ */
 } CStateProcLOGO, *PCStateProcLOGO;
 
 /* Copyright(C)URARA-works 2005 */

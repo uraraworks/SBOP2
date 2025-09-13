@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_DISABLE_RES_INFO.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:‹‘”Ûî•ñ‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/04/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_DISABLE_RES_INFO.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:æ‹’å¦æƒ…å ±å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/11													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CLibInfoDisable;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_DISABLE_RES_INFO : public CPacketBase
 {
 public:
-			CPacketADMIN_DISABLE_RES_INFO();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_DISABLE_RES_INFO();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_DISABLE_RES_INFO();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_DISABLE_RES_INFO();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CLibInfoDisable *pLibInfoDisable);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CLibInfoDisable *pLibInfoDisable);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CLibInfoDisable		*m_pLibInfoDisable;				/* ‹‘”Ûî•ñ */
+	CLibInfoDisable		*m_pLibInfoDisable;				/* æ‹’å¦æƒ…å ± */
 } CPacketADMIN_DISABLE_RES_INFO, *PCPacketADMIN_DISABLE_RES_INFO;
 
 /* Copyright(C)URARA-works 2009 */

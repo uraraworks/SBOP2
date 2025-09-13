@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoMapObject.h											 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoMapObject.h											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,41 +12,41 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoMapObject : public CLibInfoBase
 {
 public:
-			CLibInfoMapObject();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoMapObject();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoMapObject();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoMapObject();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);									/* ì¬ */
-	void Destroy		(void);									/* ”jŠü */
+	void Create			(void);									/* ä½œæˆ */
+	void Destroy		(void);									/* ç ´æ£„ */
 
-	PCInfoBase GetNew	(void);									/* V‹Kƒf[ƒ^‚ğæ“¾ */
+	PCInfoBase GetNew	(void);									/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	int		GetCount	(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);						/* ’Ç‰Á */
-	void	Delete		(int nNo);								/* íœ */
-	void	Delete		(DWORD dwObjectID);						/* íœ */
-	void	DeleteAll	(void);									/* ‘S‚Äíœ */
-	void	Merge		(CLibInfoMapObject *pSrc);				/* æ‚è‚İ */
+	int		GetCount	(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);						/* è¿½åŠ  */
+	void	Delete		(int nNo);								/* å‰Šé™¤ */
+	void	Delete		(DWORD dwObjectID);						/* å‰Šé™¤ */
+	void	DeleteAll	(void);									/* å…¨ã¦å‰Šé™¤ */
+	void	Merge		(CLibInfoMapObject *pSrc);				/* å–ã‚Šè¾¼ã¿ */
 
-	PCInfoBase	GetPtr (int nNo);								/* î•ñ‚ğæ“¾ */
-	PCInfoBase	GetPtr (DWORD dwObjectID);						/* î•ñ‚ğæ“¾ */
+	PCInfoBase	GetPtr (int nNo);								/* æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase	GetPtr (DWORD dwObjectID);						/* æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);							/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);							/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);					/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ID‚ğæ“¾ */
+	DWORD	GetSendDataSize		(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);					/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 protected:
-	PARRAYMAPOBJECT	m_paInfo;				/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„IDã‚’å–å¾— */
+
+
+protected:
+	PARRAYMAPOBJECT	m_paInfo;				/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
 } CLibInfoMapObject, *PCLibInfoMapObject;
 
 /* Copyright(C)URARA-works 2008 */

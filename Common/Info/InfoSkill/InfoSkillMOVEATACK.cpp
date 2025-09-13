@@ -1,39 +1,39 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSkillMOVEATACK.cpp										 */
-/* “à—e			:ƒXƒLƒ‹î•ñ(ˆÚ“®‚µ‚ÄUŒ‚)ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/08													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:InfoSkillMOVEATACK.cpp										 */
+/* â€œÃ â€”e			:Æ’XÆ’LÆ’â€¹ÂÃ®â€¢Ã±(Ë†Ãšâ€œÂ®â€šÂµâ€šÃ„ÂUÅ’â€š)Æ’NÆ’â€°Æ’X Å½Ã€â€˜â€¢Æ’tÆ’@Æ’CÆ’â€¹				 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2009/01/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoSkillMOVEATACK.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* â€™Ã¨Ââ€â€™Ã¨â€¹`																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* Æ’wÆ’bÆ’_ÂÃ®â€¢Ã± */
 static LPCSTR s_aszName[] = {
-	"m_dwTartgetType",		/* UŒ‚‘ÎÛ */
-	"m_dwHitEffectID",		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	"m_dwEffectID",			/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	"m_dwPutType",			/* ”­Ëí•Ê */
-	"m_dwAliveTime",		/* ‘Ï‹vŠÔ */
-	"m_dwWaitTime",			/* ˆÚ“®‘¬“x */
-	"m_dwValue1",			/* Œø‰Ê1 */
-	"m_dwValue2",			/* Œø‰Ê2 */
-	"m_dwDistance",			/* Ë’ö‹——£ */
-	"m_bHitQuit",			/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	"m_bDistanceDelete",	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	"m_dwTartgetType",		/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	"m_dwHitEffectID",		/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	"m_dwEffectID",			/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	"m_dwPutType",			/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	"m_dwAliveTime",		/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	"m_dwWaitTime",			/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	"m_dwValue1",			/* Å’Ã¸â€°ÃŠ1 */
+	"m_dwValue2",			/* Å’Ã¸â€°ÃŠ2 */
+	"m_dwDistance",			/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	"m_bHitQuit",			/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	"m_bDistanceDelete",	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::CInfoSkillMOVEATACK						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::CInfoSkillMOVEATACK						 */
+/* â€œÃ â€”e		:Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 CInfoSkillMOVEATACK::CInfoSkillMOVEATACK()
@@ -57,9 +57,9 @@ CInfoSkillMOVEATACK::CInfoSkillMOVEATACK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::~CInfoSkillMOVEATACK						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::~CInfoSkillMOVEATACK						 */
+/* â€œÃ â€”e		:Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 CInfoSkillMOVEATACK::~CInfoSkillMOVEATACK()
@@ -68,9 +68,9 @@ CInfoSkillMOVEATACK::~CInfoSkillMOVEATACK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetElementNoTmp							 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetElementNoTmp							 */
+/* â€œÃ â€”e		:â€”vâ€˜fâ€Ã”Ââ€ â€šÃ°Å½Ã¦â€œÂ¾													 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 int CInfoSkillMOVEATACK::GetElementNoTmp(LPCSTR pszName)
@@ -90,9 +90,9 @@ int CInfoSkillMOVEATACK::GetElementNoTmp(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetDataSizeTmp							 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetDataSizeTmp							 */
+/* â€œÃ â€”e		:Æ’fÂ[Æ’^Æ’TÆ’CÆ’Yâ€šÃ°Å½Ã¦â€œÂ¾												 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillMOVEATACK::GetDataSizeTmp(void)
@@ -100,26 +100,26 @@ DWORD CInfoSkillMOVEATACK::GetDataSizeTmp(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_dwTartgetType);		/* UŒ‚‘ÎÛ */
-	dwRet += sizeof (m_dwHitEffectID);		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	dwRet += sizeof (m_adwEffectID);		/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	dwRet += sizeof (m_dwPutType);			/* ”­Ëí•Ê */
-	dwRet += sizeof (m_dwAliveTime);		/* ‘Ï‹vŠÔ */
-	dwRet += sizeof (m_dwWaitTime);			/* ˆÚ“®‘¬“x */
-	dwRet += sizeof (m_dwValue1);			/* Œø‰Ê1 */
-	dwRet += sizeof (m_dwValue2);			/* Œø‰Ê2 */
-	dwRet += sizeof (m_dwDistance);			/* Ë’ö‹——£ */
-	dwRet += sizeof (m_bHitQuit);			/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	dwRet += sizeof (m_bDistanceDelete);	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	dwRet += sizeof (m_dwTartgetType);		/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	dwRet += sizeof (m_dwHitEffectID);		/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	dwRet += sizeof (m_adwEffectID);		/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	dwRet += sizeof (m_dwPutType);			/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	dwRet += sizeof (m_dwAliveTime);		/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	dwRet += sizeof (m_dwWaitTime);			/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	dwRet += sizeof (m_dwValue1);			/* Å’Ã¸â€°ÃŠ1 */
+	dwRet += sizeof (m_dwValue2);			/* Å’Ã¸â€°ÃŠ2 */
+	dwRet += sizeof (m_dwDistance);			/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	dwRet += sizeof (m_bHitQuit);			/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	dwRet += sizeof (m_bDistanceDelete);	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetDataSizeNoTmp							 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetDataSizeNoTmp							 */
+/* â€œÃ â€”e		:Å½wâ€™Ã¨â€”vâ€˜fâ€šÃŒÆ’fÂ[Æ’^Æ’TÆ’CÆ’Yâ€šÃ°Å½Ã¦â€œÂ¾									 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillMOVEATACK::GetDataSizeNoTmp(int nNo)
@@ -128,17 +128,17 @@ DWORD CInfoSkillMOVEATACK::GetDataSizeNoTmp(int nNo)
 
 	dwRet = 0;
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_dwTartgetType);	break;		/* UŒ‚‘ÎÛ */
-	case 1:		dwRet = sizeof (m_dwHitEffectID);	break;		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	case 2:		dwRet = sizeof (m_adwEffectID);		break;		/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	case 3:		dwRet = sizeof (m_dwPutType);		break;		/* ”­Ëí•Ê */
-	case 4:		dwRet = sizeof (m_dwAliveTime);		break;		/* ‘Ï‹vŠÔ */
-	case 5:		dwRet = sizeof (m_dwWaitTime);		break;		/* ˆÚ“®‘¬“x */
-	case 6:		dwRet = sizeof (m_dwValue1);		break;		/* Œø‰Ê1 */
-	case 7:		dwRet = sizeof (m_dwValue2);		break;		/* Œø‰Ê2 */
-	case 8:		dwRet = sizeof (m_dwDistance);		break;		/* Ë’ö‹——£ */
-	case 9:		dwRet = sizeof (m_bHitQuit);		break;		/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	case 10:	dwRet = sizeof (m_bDistanceDelete);	break;		/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	case 0:		dwRet = sizeof (m_dwTartgetType);	break;		/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	case 1:		dwRet = sizeof (m_dwHitEffectID);	break;		/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	case 2:		dwRet = sizeof (m_adwEffectID);		break;		/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	case 3:		dwRet = sizeof (m_dwPutType);		break;		/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	case 4:		dwRet = sizeof (m_dwAliveTime);		break;		/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	case 5:		dwRet = sizeof (m_dwWaitTime);		break;		/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	case 6:		dwRet = sizeof (m_dwValue1);		break;		/* Å’Ã¸â€°ÃŠ1 */
+	case 7:		dwRet = sizeof (m_dwValue2);		break;		/* Å’Ã¸â€°ÃŠ2 */
+	case 8:		dwRet = sizeof (m_dwDistance);		break;		/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	case 9:		dwRet = sizeof (m_bHitQuit);		break;		/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	case 10:	dwRet = sizeof (m_bDistanceDelete);	break;		/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 	}
 
 	return dwRet;
@@ -146,9 +146,9 @@ DWORD CInfoSkillMOVEATACK::GetDataSizeNoTmp(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetNameTmp								 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetNameTmp								 */
+/* â€œÃ â€”e		:â€”vâ€˜fâ€“Â¼â€šÃ°Å½Ã¦â€œÂ¾													 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 LPCSTR CInfoSkillMOVEATACK::GetNameTmp(int nNo)
@@ -158,9 +158,9 @@ LPCSTR CInfoSkillMOVEATACK::GetNameTmp(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetWriteDataTmp							 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetWriteDataTmp							 */
+/* â€œÃ â€”e		:Å½wâ€™Ã¨â€”vâ€˜fâ€šÃŒâ€¢Ã›â€˜Â¶â€”pÆ’fÂ[Æ’^â€šÃ°Å½Ã¦â€œÂ¾									 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillMOVEATACK::GetWriteDataTmp(int nNo, PDWORD pdwSize)
@@ -179,17 +179,17 @@ PBYTE CInfoSkillMOVEATACK::GetWriteDataTmp(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_dwTartgetType;		break;		/* UŒ‚‘ÎÛ */
-	case 1:		pSrc = (PBYTE)&m_dwHitEffectID;		break;		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	case 2:		pSrc = (PBYTE)&m_adwEffectID;		break;		/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	case 3:		pSrc = (PBYTE)&m_dwPutType;			break;		/* ”­Ëí•Ê */
-	case 4:		pSrc = (PBYTE)&m_dwAliveTime;		break;		/* ‘Ï‹vŠÔ */
-	case 5:		pSrc = (PBYTE)&m_dwWaitTime;		break;		/* ˆÚ“®‘¬“x */
-	case 6:		pSrc = (PBYTE)&m_dwValue1;			break;		/* Œø‰Ê1 */
-	case 7:		pSrc = (PBYTE)&m_dwValue2;			break;		/* Œø‰Ê2 */
-	case 8:		pSrc = (PBYTE)&m_dwDistance;		break;		/* Ë’ö‹——£ */
-	case 9:		pSrc = (PBYTE)&m_bHitQuit;			break;		/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	case 10:	pSrc = (PBYTE)&m_bDistanceDelete;	break;		/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	case 0:		pSrc = (PBYTE)&m_dwTartgetType;		break;		/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	case 1:		pSrc = (PBYTE)&m_dwHitEffectID;		break;		/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	case 2:		pSrc = (PBYTE)&m_adwEffectID;		break;		/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	case 3:		pSrc = (PBYTE)&m_dwPutType;			break;		/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	case 4:		pSrc = (PBYTE)&m_dwAliveTime;		break;		/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	case 5:		pSrc = (PBYTE)&m_dwWaitTime;		break;		/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	case 6:		pSrc = (PBYTE)&m_dwValue1;			break;		/* Å’Ã¸â€°ÃŠ1 */
+	case 7:		pSrc = (PBYTE)&m_dwValue2;			break;		/* Å’Ã¸â€°ÃŠ2 */
+	case 8:		pSrc = (PBYTE)&m_dwDistance;		break;		/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	case 9:		pSrc = (PBYTE)&m_bHitQuit;			break;		/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	case 10:	pSrc = (PBYTE)&m_bDistanceDelete;	break;		/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 	}
 
 	if (pSrc) {
@@ -202,14 +202,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::ReadElementDataTmp						 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::ReadElementDataTmp						 */
+/* â€œÃ â€”e		:Å½wâ€™Ã¨â€”vâ€˜fÆ’fÂ[Æ’^â€šÃ°â€œÃ‡â€šÃÂÅ¾â€šÃ										 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillMOVEATACK::ReadElementDataTmp(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] Æ’fÂ[Æ’^â€šÃŒâ€œÃ‡â€šÃÂÅ¾â€šÃÅ’Â³ */
+	int nNo)		/* [in] â€”vâ€˜fâ€Ã”Ââ€  */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -218,17 +218,17 @@ DWORD CInfoSkillMOVEATACK::ReadElementDataTmp(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_dwTartgetType;		dwSize = sizeof (m_dwTartgetType);		break;		/* UŒ‚‘ÎÛ */
-	case 1:		pDst = (PBYTE)&m_dwHitEffectID;		dwSize = sizeof (m_dwHitEffectID);		break;		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	case 2:		pDst = (PBYTE)&m_adwEffectID;		dwSize = sizeof (m_adwEffectID);		break;		/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	case 3:		pDst = (PBYTE)&m_dwPutType;			dwSize = sizeof (m_dwPutType);			break;		/* ”­Ëí•Ê */
-	case 4:		pDst = (PBYTE)&m_dwAliveTime;		dwSize = sizeof (m_dwAliveTime);		break;		/* ‘Ï‹vŠÔ */
-	case 5:		pDst = (PBYTE)&m_dwWaitTime;		dwSize = sizeof (m_dwWaitTime);			break;		/* ˆÚ“®‘¬“x */
-	case 6:		pDst = (PBYTE)&m_dwValue1;			dwSize = sizeof (m_dwValue1);			break;		/* Œø‰Ê1 */
-	case 7:		pDst = (PBYTE)&m_dwValue2;			dwSize = sizeof (m_dwValue2);			break;		/* Œø‰Ê2 */
-	case 8:		pDst = (PBYTE)&m_dwDistance;		dwSize = sizeof (m_dwDistance);			break;		/* Ë’ö‹——£ */
-	case 9:		pDst = (PBYTE)&m_bHitQuit;			dwSize = sizeof (m_bHitQuit);			break;		/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	case 10:	pDst = (PBYTE)&m_bDistanceDelete;	dwSize = sizeof (m_bDistanceDelete);	break;		/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	case 0:		pDst = (PBYTE)&m_dwTartgetType;		dwSize = sizeof (m_dwTartgetType);		break;		/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	case 1:		pDst = (PBYTE)&m_dwHitEffectID;		dwSize = sizeof (m_dwHitEffectID);		break;		/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	case 2:		pDst = (PBYTE)&m_adwEffectID;		dwSize = sizeof (m_adwEffectID);		break;		/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	case 3:		pDst = (PBYTE)&m_dwPutType;			dwSize = sizeof (m_dwPutType);			break;		/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	case 4:		pDst = (PBYTE)&m_dwAliveTime;		dwSize = sizeof (m_dwAliveTime);		break;		/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	case 5:		pDst = (PBYTE)&m_dwWaitTime;		dwSize = sizeof (m_dwWaitTime);			break;		/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	case 6:		pDst = (PBYTE)&m_dwValue1;			dwSize = sizeof (m_dwValue1);			break;		/* Å’Ã¸â€°ÃŠ1 */
+	case 7:		pDst = (PBYTE)&m_dwValue2;			dwSize = sizeof (m_dwValue2);			break;		/* Å’Ã¸â€°ÃŠ2 */
+	case 8:		pDst = (PBYTE)&m_dwDistance;		dwSize = sizeof (m_dwDistance);			break;		/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	case 9:		pDst = (PBYTE)&m_bHitQuit;			dwSize = sizeof (m_bHitQuit);			break;		/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	case 10:	pDst = (PBYTE)&m_bDistanceDelete;	dwSize = sizeof (m_bDistanceDelete);	break;		/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 	}
 
 	if (pDst) {
@@ -240,9 +240,9 @@ DWORD CInfoSkillMOVEATACK::ReadElementDataTmp(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetDerivationSize							 */
-/* “à—e		:”h¶ƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2009/01/10														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetDerivationSize							 */
+/* â€œÃ â€”e		:â€hÂÂ¶Æ’fÂ[Æ’^Æ’TÆ’CÆ’Yâ€šÃ°Å½Ã¦â€œÂ¾											 */
+/* â€œÃºâ€¢t		:2009/01/10														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillMOVEATACK::GetDerivationSize(void)
@@ -250,12 +250,12 @@ DWORD CInfoSkillMOVEATACK::GetDerivationSize(void)
 	int i, nCount;
 	DWORD dwRet;
 
-	dwRet = sizeof (int);		/* —v‘f” */
+	dwRet = sizeof (int);		/* â€”vâ€˜fÂâ€ */
 	nCount = m_nElementCountDerivation;
 	for (i = 0; i < nCount; i ++) {
-		dwRet += (strlen (GetNameTmp (i)) + 1);		/* —v‘f–¼ */
-		dwRet += sizeof (DWORD);					/* ƒf[ƒ^ƒTƒCƒY */
-		dwRet += GetDataSizeNoTmp (i);				/* ƒf[ƒ^ */
+		dwRet += (strlen (GetNameTmp (i)) + 1);		/* â€”vâ€˜fâ€“Â¼ */
+		dwRet += sizeof (DWORD);					/* Æ’fÂ[Æ’^Æ’TÆ’CÆ’Y */
+		dwRet += GetDataSizeNoTmp (i);				/* Æ’fÂ[Æ’^ */
 	}
 
 	return dwRet;
@@ -263,9 +263,9 @@ DWORD CInfoSkillMOVEATACK::GetDerivationSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetDerivationWriteData					 */
-/* “à—e		:”h¶ƒf[ƒ^‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2009/01/10														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetDerivationWriteData					 */
+/* â€œÃ â€”e		:â€hÂÂ¶Æ’fÂ[Æ’^â€šÃŒâ€¢Ã›â€˜Â¶â€”pÆ’fÂ[Æ’^â€šÃ°Å½Ã¦â€œÂ¾									 */
+/* â€œÃºâ€¢t		:2009/01/10														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillMOVEATACK::GetDerivationWriteData(PDWORD pdwSize)
@@ -279,13 +279,13 @@ PBYTE CInfoSkillMOVEATACK::GetDerivationWriteData(PDWORD pdwSize)
 	pRetTmp	= pRet;
 
 	nCount = m_nElementCountDerivation;
-	CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);	/* —v‘f” */
+	CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);	/* â€”vâ€˜fÂâ€ */
 	for (i = 0; i < nCount; i ++) {
-		strcpyRenew ((LPSTR)pRetTmp, GetNameTmp (i), pRetTmp); 		/* —v‘f–¼ */
+		strcpyRenew ((LPSTR)pRetTmp, GetNameTmp (i), pRetTmp); 		/* â€”vâ€˜fâ€“Â¼ */
 		dwTmp = GetDataSizeNoTmp (i);
-		CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+		CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* Æ’fÂ[Æ’^Æ’TÆ’CÆ’Y */
 		pTmp = GetWriteDataTmp (i, &dwTmp);
-		CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* ƒf[ƒ^ */
+		CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* Æ’fÂ[Æ’^ */
 		SAFE_DELETE_ARRAY (pTmp);
 	}
 
@@ -294,9 +294,9 @@ PBYTE CInfoSkillMOVEATACK::GetDerivationWriteData(PDWORD pdwSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::ReadDerivationData						 */
-/* “à—e		:”h¶ƒf[ƒ^‚ğ“Ç‚İ‚İ											 */
-/* “ú•t		:2009/01/10														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::ReadDerivationData						 */
+/* â€œÃ â€”e		:â€hÂÂ¶Æ’fÂ[Æ’^â€šÃ°â€œÃ‡â€šÃÂÅ¾â€šÃ											 */
+/* â€œÃºâ€¢t		:2009/01/10														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillMOVEATACK::ReadDerivationData(PBYTE pSrc)
@@ -308,10 +308,10 @@ DWORD CInfoSkillMOVEATACK::ReadDerivationData(PBYTE pSrc)
 
 	pSrcTmp = pSrc;
 
-	CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);	/* —v‘f” */
+	CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);	/* â€”vâ€˜fÂâ€ */
 	for (i = 0; i < nCount; i ++) {
-		StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* —v‘f–¼ */
-		CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+		StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* â€”vâ€˜fâ€“Â¼ */
+		CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* Æ’fÂ[Æ’^Æ’TÆ’CÆ’Y */
 		nNoTmp = GetElementNoTmp ((LPCSTR)strTmp);
 		if (nNoTmp >= 0) {
 			dwSizeTmp = ReadElementDataTmp (pSrcTmp, nNoTmp);
@@ -324,9 +324,9 @@ DWORD CInfoSkillMOVEATACK::ReadDerivationData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetSendDataSize							 */
+/* â€œÃ â€”e		:â€˜â€”ÂMÆ’fÂ[Æ’^Æ’TÆ’CÆ’Yâ€šÃ°Å½Ã¦â€œÂ¾											 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillMOVEATACK::GetSendDataSize(void)
@@ -334,26 +334,26 @@ DWORD CInfoSkillMOVEATACK::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = CInfoSkillBase::GetSendDataSize ();
-	dwRet += sizeof (m_dwTartgetType);		/* UŒ‚‘ÎÛ */
-	dwRet += sizeof (m_dwHitEffectID);		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	dwRet += sizeof (m_adwEffectID);		/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	dwRet += sizeof (m_dwPutType);			/* ”­Ëí•Ê */
-	dwRet += sizeof (m_dwAliveTime);		/* ‘Ï‹vŠÔ */
-	dwRet += sizeof (m_dwWaitTime);			/* ˆÚ“®‘¬“x */
-	dwRet += sizeof (m_dwValue1);			/* Œø‰Ê1 */
-	dwRet += sizeof (m_dwValue2);			/* Œø‰Ê2 */
-	dwRet += sizeof (m_dwDistance);			/* Ë’ö‹——£ */
-	dwRet += sizeof (m_bHitQuit);			/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	dwRet += sizeof (m_bDistanceDelete);	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	dwRet += sizeof (m_dwTartgetType);		/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	dwRet += sizeof (m_dwHitEffectID);		/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	dwRet += sizeof (m_adwEffectID);		/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	dwRet += sizeof (m_dwPutType);			/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	dwRet += sizeof (m_dwAliveTime);		/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	dwRet += sizeof (m_dwWaitTime);			/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	dwRet += sizeof (m_dwValue1);			/* Å’Ã¸â€°ÃŠ1 */
+	dwRet += sizeof (m_dwValue2);			/* Å’Ã¸â€°ÃŠ2 */
+	dwRet += sizeof (m_dwDistance);			/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	dwRet += sizeof (m_bHitQuit);			/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	dwRet += sizeof (m_bDistanceDelete);	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::GetSendData								 */
+/* â€œÃ â€”e		:â€˜â€”ÂMÆ’fÂ[Æ’^â€šÃ°Å½Ã¦â€œÂ¾												 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillMOVEATACK::GetSendData(void)
@@ -370,26 +370,26 @@ PBYTE CInfoSkillMOVEATACK::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 	SAFE_DELETE_ARRAY (pDataBase);
 
-	CopyMemoryRenew (pDataTmp, &m_dwTartgetType,	sizeof (m_dwTartgetType),	pDataTmp);	/* UŒ‚‘ÎÛ */
-	CopyMemoryRenew (pDataTmp, &m_dwHitEffectID,	sizeof (m_dwHitEffectID),	pDataTmp);	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	CopyMemoryRenew (pDataTmp, &m_adwEffectID,		sizeof (m_adwEffectID),		pDataTmp);	/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	CopyMemoryRenew (pDataTmp, &m_dwPutType,		sizeof (m_dwPutType),		pDataTmp);	/* ”­Ëí•Ê */
-	CopyMemoryRenew (pDataTmp, &m_dwAliveTime,		sizeof (m_dwAliveTime),		pDataTmp);	/* ‘Ï‹vŠÔ */
-	CopyMemoryRenew (pDataTmp, &m_dwWaitTime,		sizeof (m_dwWaitTime),		pDataTmp);	/* ˆÚ“®‘¬“x */
-	CopyMemoryRenew (pDataTmp, &m_dwValue1,			sizeof (m_dwValue1),		pDataTmp);	/* Œø‰Ê1 */
-	CopyMemoryRenew (pDataTmp, &m_dwValue2,			sizeof (m_dwValue2),		pDataTmp);	/* Œø‰Ê2 */
-	CopyMemoryRenew (pDataTmp, &m_dwDistance,		sizeof (m_dwDistance),		pDataTmp);	/* Ë’ö‹——£ */
-	CopyMemoryRenew (pDataTmp, &m_bHitQuit,			sizeof (m_bHitQuit),		pDataTmp);	/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	CopyMemoryRenew (pDataTmp, &m_bDistanceDelete,	sizeof (m_bDistanceDelete),	pDataTmp);	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	CopyMemoryRenew (pDataTmp, &m_dwTartgetType,	sizeof (m_dwTartgetType),	pDataTmp);	/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	CopyMemoryRenew (pDataTmp, &m_dwHitEffectID,	sizeof (m_dwHitEffectID),	pDataTmp);	/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	CopyMemoryRenew (pDataTmp, &m_adwEffectID,		sizeof (m_adwEffectID),		pDataTmp);	/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	CopyMemoryRenew (pDataTmp, &m_dwPutType,		sizeof (m_dwPutType),		pDataTmp);	/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	CopyMemoryRenew (pDataTmp, &m_dwAliveTime,		sizeof (m_dwAliveTime),		pDataTmp);	/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	CopyMemoryRenew (pDataTmp, &m_dwWaitTime,		sizeof (m_dwWaitTime),		pDataTmp);	/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	CopyMemoryRenew (pDataTmp, &m_dwValue1,			sizeof (m_dwValue1),		pDataTmp);	/* Å’Ã¸â€°ÃŠ1 */
+	CopyMemoryRenew (pDataTmp, &m_dwValue2,			sizeof (m_dwValue2),		pDataTmp);	/* Å’Ã¸â€°ÃŠ2 */
+	CopyMemoryRenew (pDataTmp, &m_dwDistance,		sizeof (m_dwDistance),		pDataTmp);	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	CopyMemoryRenew (pDataTmp, &m_bHitQuit,			sizeof (m_bHitQuit),		pDataTmp);	/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	CopyMemoryRenew (pDataTmp, &m_bDistanceDelete,	sizeof (m_bDistanceDelete),	pDataTmp);	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 
 	return pData;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::SetSendData								 */
+/* â€œÃ â€”e		:â€˜â€”ÂMÆ’fÂ[Æ’^â€šÂ©â€šÃ§Å½Ã¦â€šÃ¨ÂÅ¾â€šÃ											 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillMOVEATACK::SetSendData(PBYTE pSrc)
@@ -399,17 +399,17 @@ PBYTE CInfoSkillMOVEATACK::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = CInfoSkillBase::SetSendData (pSrc);
-	CopyMemoryRenew (&m_dwTartgetType,		pDataTmp, sizeof (m_dwTartgetType),		pDataTmp);	/* UŒ‚‘ÎÛ */
-	CopyMemoryRenew (&m_dwHitEffectID,		pDataTmp, sizeof (m_dwHitEffectID),		pDataTmp);	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	CopyMemoryRenew (&m_adwEffectID,		pDataTmp, sizeof (m_adwEffectID),		pDataTmp);	/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-	CopyMemoryRenew (&m_dwPutType,			pDataTmp, sizeof (m_dwPutType),			pDataTmp);	/* ”­Ëí•Ê */
-	CopyMemoryRenew (&m_dwAliveTime,		pDataTmp, sizeof (m_dwAliveTime),		pDataTmp);	/* ‘Ï‹vŠÔ */
-	CopyMemoryRenew (&m_dwWaitTime,			pDataTmp, sizeof (m_dwWaitTime),		pDataTmp);	/* ˆÚ“®‘¬“x */
-	CopyMemoryRenew (&m_dwValue1,			pDataTmp, sizeof (m_dwValue1),			pDataTmp);	/* Œø‰Ê1 */
-	CopyMemoryRenew (&m_dwValue2,			pDataTmp, sizeof (m_dwValue2),			pDataTmp);	/* Œø‰Ê2 */
-	CopyMemoryRenew (&m_dwDistance,			pDataTmp, sizeof (m_dwDistance),		pDataTmp);	/* Ë’ö‹——£ */
-	CopyMemoryRenew (&m_bHitQuit,			pDataTmp, sizeof (m_bHitQuit),			pDataTmp);	/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	CopyMemoryRenew (&m_bDistanceDelete,	pDataTmp, sizeof (m_bDistanceDelete),	pDataTmp);	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	CopyMemoryRenew (&m_dwTartgetType,		pDataTmp, sizeof (m_dwTartgetType),		pDataTmp);	/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	CopyMemoryRenew (&m_dwHitEffectID,		pDataTmp, sizeof (m_dwHitEffectID),		pDataTmp);	/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	CopyMemoryRenew (&m_adwEffectID,		pDataTmp, sizeof (m_adwEffectID),		pDataTmp);	/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	CopyMemoryRenew (&m_dwPutType,			pDataTmp, sizeof (m_dwPutType),			pDataTmp);	/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	CopyMemoryRenew (&m_dwAliveTime,		pDataTmp, sizeof (m_dwAliveTime),		pDataTmp);	/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	CopyMemoryRenew (&m_dwWaitTime,			pDataTmp, sizeof (m_dwWaitTime),		pDataTmp);	/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	CopyMemoryRenew (&m_dwValue1,			pDataTmp, sizeof (m_dwValue1),			pDataTmp);	/* Å’Ã¸â€°ÃŠ1 */
+	CopyMemoryRenew (&m_dwValue2,			pDataTmp, sizeof (m_dwValue2),			pDataTmp);	/* Å’Ã¸â€°ÃŠ2 */
+	CopyMemoryRenew (&m_dwDistance,			pDataTmp, sizeof (m_dwDistance),		pDataTmp);	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	CopyMemoryRenew (&m_bHitQuit,			pDataTmp, sizeof (m_bHitQuit),			pDataTmp);	/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	CopyMemoryRenew (&m_bDistanceDelete,	pDataTmp, sizeof (m_bDistanceDelete),	pDataTmp);	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -417,9 +417,9 @@ PBYTE CInfoSkillMOVEATACK::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillMOVEATACK::Copy										 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2009/01/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CInfoSkillMOVEATACK::Copy										 */
+/* â€œÃ â€”e		:Æ’RÆ’sÂ[															 */
+/* â€œÃºâ€¢t		:2009/01/08														 */
 /* ========================================================================= */
 
 void CInfoSkillMOVEATACK::Copy(CInfoSkillBase *pSrc)
@@ -436,18 +436,18 @@ void CInfoSkillMOVEATACK::Copy(CInfoSkillBase *pSrc)
 		return;
 	}
 
-	m_dwHitEffectID		= pSrcTmp->m_dwHitEffectID;		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	m_dwTartgetType		= pSrcTmp->m_dwTartgetType;		/* UŒ‚‘ÎÛ */
-	m_dwPutType			= pSrcTmp->m_dwPutType;			/* ”­Ëí•Ê */
-	m_dwAliveTime		= pSrcTmp->m_dwAliveTime;		/* ‘Ï‹vŠÔ */
-	m_dwWaitTime		= pSrcTmp->m_dwWaitTime;		/* ˆÚ“®‘¬“x */
-	m_dwValue1			= pSrcTmp->m_dwValue1;			/* Œø‰Ê1 */
-	m_dwValue2			= pSrcTmp->m_dwValue2;			/* Œø‰Ê2 */
-	m_dwDistance		= pSrcTmp->m_dwDistance;		/* Ë’ö‹——£ */
-	m_bHitQuit			= pSrcTmp->m_bHitQuit;			/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete;	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	m_dwHitEffectID		= pSrcTmp->m_dwHitEffectID;		/* Æ’qÆ’bÆ’gÅ½Å¾â€šÃŒâ€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
+	m_dwTartgetType		= pSrcTmp->m_dwTartgetType;		/* ÂUÅ’â€šâ€˜ÃÂÃ› */
+	m_dwPutType			= pSrcTmp->m_dwPutType;			/* â€Â­Å½Ã‹Å½Ã­â€¢ÃŠ */
+	m_dwAliveTime		= pSrcTmp->m_dwAliveTime;		/* â€˜Ãâ€¹vÅ½Å¾Å Ã” */
+	m_dwWaitTime		= pSrcTmp->m_dwWaitTime;		/* Ë†Ãšâ€œÂ®â€˜Â¬â€œx */
+	m_dwValue1			= pSrcTmp->m_dwValue1;			/* Å’Ã¸â€°ÃŠ1 */
+	m_dwValue2			= pSrcTmp->m_dwValue2;			/* Å’Ã¸â€°ÃŠ2 */
+	m_dwDistance		= pSrcTmp->m_dwDistance;		/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£ */
+	m_bHitQuit			= pSrcTmp->m_bHitQuit;			/* Æ’qÆ’bÆ’gâ€šÂ·â€šÃ©â€šÃ†ÂÃâ€“Ã… */
+	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete;	/* Å½Ã‹â€™Ã¶â€¹â€”â€”Â£â€šÃœâ€šÃ…Âsâ€šÂ­â€šÃ†ÂÃâ€šÂ¦â€šÃ© */
 
-	/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
+	/* Å’Ã¼â€šÂ«â€šÃ‰â€šÃ¦â€šÃ©â€¢\Å½Â¦Æ’GÆ’tÆ’FÆ’NÆ’g */
 	CopyMemory (m_adwEffectID, pSrcTmp->m_adwEffectID, sizeof (m_adwEffectID));
 }
 

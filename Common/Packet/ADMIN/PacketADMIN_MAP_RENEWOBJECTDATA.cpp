@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketADMIN_MAP_RENEWOBJECTDATA.cpp						 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ä«óùé“ån:É}ÉbÉvÉIÉuÉWÉFÉNÉgîzíuÉfÅ[É^í ím) é¿ëïÉtÉ@ÉCÉã */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2008/11/03													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketADMIN_MAP_RENEWOBJECTDATA.cpp						 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(ÁÆ°ÁêÜËÄÖÁ≥ª:„Éû„ÉÉ„Éó„Ç™„Éñ„Ç∏„Çß„ÇØ„ÉàÈÖçÁΩÆ„Éá„Éº„ÇøÈÄöÁü•) ÂÆüË£Ö„Éï„Ç°„Ç§„É´ */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2008/11/03													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_MAP_RENEWOBJECTDATA.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_RENEWOBJECTDATA::CPacketADMIN_MAP_RENEWOBJECTDATA */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/11/03														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_RENEWOBJECTDATA::CPacketADMIN_MAP_RENEWOBJECTDATA */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/11/03														 */
 /* ========================================================================= */
 
 CPacketADMIN_MAP_RENEWOBJECTDATA::CPacketADMIN_MAP_RENEWOBJECTDATA()
@@ -25,9 +25,9 @@ CPacketADMIN_MAP_RENEWOBJECTDATA::CPacketADMIN_MAP_RENEWOBJECTDATA()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_RENEWOBJECTDATA::~CPacketADMIN_MAP_RENEWOBJECTDATA */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/11/03														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_RENEWOBJECTDATA::~CPacketADMIN_MAP_RENEWOBJECTDATA */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/11/03														 */
 /* ========================================================================= */
 
 CPacketADMIN_MAP_RENEWOBJECTDATA::~CPacketADMIN_MAP_RENEWOBJECTDATA()
@@ -37,14 +37,14 @@ CPacketADMIN_MAP_RENEWOBJECTDATA::~CPacketADMIN_MAP_RENEWOBJECTDATA()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_RENEWOBJECTDATA::Make							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2008/11/03														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_RENEWOBJECTDATA::Make							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2008/11/03														 */
 /* ========================================================================= */
 
 void CPacketADMIN_MAP_RENEWOBJECTDATA::Make(
-	DWORD dwMapID,					/* [in] É}ÉbÉvID */
-	CInfoMapObjectData *pInfo)		/* [in] îzíuÉfÅ[É^ */
+	DWORD dwMapID,					/* [in] „Éû„ÉÉ„ÉóID */
+	CInfoMapObjectData *pInfo)		/* [in] ÈÖçÁΩÆ„Éá„Éº„Çø */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -65,8 +65,8 @@ void CPacketADMIN_MAP_RENEWOBJECTDATA::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_MAP_RENEWOBJECTDATA;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMapID,		sizeof (dwMapID),	pDataTmp);	/* É}ÉbÉvID */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,		pDataTmp);	/* îzíuÉfÅ[É^ */
+	CopyMemoryRenew (pDataTmp, &dwMapID,		sizeof (dwMapID),	pDataTmp);	/* „Éû„ÉÉ„ÉóID */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,		pDataTmp);	/* ÈÖçÁΩÆ„Éá„Éº„Çø */
 
 	RenewPacket (pData, dwSize);
 
@@ -75,9 +75,9 @@ void CPacketADMIN_MAP_RENEWOBJECTDATA::Make(
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_RENEWOBJECTDATA::Set							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2008/11/03														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_RENEWOBJECTDATA::Set							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2008/11/03														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_MAP_RENEWOBJECTDATA::Set(PBYTE pPacket)
@@ -89,7 +89,7 @@ PBYTE CPacketADMIN_MAP_RENEWOBJECTDATA::Set(PBYTE pPacket)
 	pRet		 = pPacket;
 	pDataTmp	 = CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* É}ÉbÉvID */
+	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* „Éû„ÉÉ„ÉóID */
 	pDataTmpBack = pDataTmp;
 	InfoTmp.SetSendData (pDataTmp);
 

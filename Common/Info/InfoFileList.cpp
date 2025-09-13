@@ -1,18 +1,18 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoFileList.cpp											 */
-/* “à—e			:ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/03/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoFileList.cpp											 */
+/* å†…å®¹			:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/03/02													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
 #include "InfoFileList.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::CInfoFileList									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/03/02														 */
+/* é–¢æ•°å	:CInfoFileList::CInfoFileList									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/03/02														 */
 /* ========================================================================= */
 
 CInfoFileList::CInfoFileList()
@@ -21,9 +21,9 @@ CInfoFileList::CInfoFileList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::~CInfoFileList									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/03/02														 */
+/* é–¢æ•°å	:CInfoFileList::~CInfoFileList									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/03/02														 */
 /* ========================================================================= */
 
 CInfoFileList::~CInfoFileList()
@@ -33,9 +33,9 @@ CInfoFileList::~CInfoFileList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::Add												 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2008/03/02														 */
+/* é–¢æ•°å	:CInfoFileList::Add												 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2008/03/02														 */
 /* ========================================================================= */
 
 void CInfoFileList::Add(LPCSTR pszHash, LPCSTR pszFileName, DWORD dwFileSize)
@@ -51,9 +51,9 @@ void CInfoFileList::Add(LPCSTR pszHash, LPCSTR pszFileName, DWORD dwFileSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::GetCount										 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2008/03/02														 */
+/* é–¢æ•°å	:CInfoFileList::GetCount										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/03/02														 */
 /* ========================================================================= */
 
 int CInfoFileList::GetCount(void)
@@ -63,9 +63,9 @@ int CInfoFileList::GetCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::GetPtr											 */
-/* “à—e		:ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ‚ğæ“¾										 */
-/* “ú•t		:2008/03/02														 */
+/* é–¢æ•°å	:CInfoFileList::GetPtr											 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ±ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/03/02														 */
 /* ========================================================================= */
 
 PFILELISTINFO CInfoFileList::GetPtr(int nNo)
@@ -84,9 +84,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::DeleteAll										 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2008/03/02														 */
+/* é–¢æ•°å	:CInfoFileList::DeleteAll										 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2008/03/02														 */
 /* ========================================================================= */
 
 void CInfoFileList::DeleteAll(void)
@@ -104,9 +104,9 @@ void CInfoFileList::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::GetNew											 */
-/* “à—e		:V‹Kƒf[ƒ^æ“¾													 */
-/* “ú•t		:2008/03/02														 */
+/* é–¢æ•°å	:CInfoFileList::GetNew											 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿å–å¾—													 */
+/* æ—¥ä»˜		:2008/03/02														 */
 /* ========================================================================= */
 
 PFILELISTINFO CInfoFileList::GetNew(void)
@@ -121,9 +121,9 @@ PFILELISTINFO CInfoFileList::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CInfoFileList::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CInfoFileList::Copy(CInfoFileList *pSrc)
@@ -142,9 +142,9 @@ void CInfoFileList::Copy(CInfoFileList *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CInfoFileList::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 DWORD CInfoFileList::GetSendDataSize(void)
@@ -158,9 +158,9 @@ DWORD CInfoFileList::GetSendDataSize(void)
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetPtr (i);
-		dwRet += sizeof (pInfo->dwFileSize);				/* ƒtƒ@ƒCƒ‹ƒTƒCƒY */
-		dwRet += (pInfo->strMD5.GetLength () + 1);			/* MD5ƒnƒbƒVƒ… */
-		dwRet += (pInfo->strFileName.GetLength () + 1);		/* ƒtƒ@ƒCƒ‹–¼ */
+		dwRet += sizeof (pInfo->dwFileSize);				/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º */
+		dwRet += (pInfo->strMD5.GetLength () + 1);			/* MD5ãƒãƒƒã‚·ãƒ¥ */
+		dwRet += (pInfo->strFileName.GetLength () + 1);		/* ãƒ•ã‚¡ã‚¤ãƒ«å */
 	}
 	dwRet += sizeof (DWORD);
 
@@ -169,9 +169,9 @@ DWORD CInfoFileList::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CInfoFileList::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoFileList::GetSendData(void)
@@ -190,12 +190,12 @@ PBYTE CInfoFileList::GetSendData(void)
 	nCount   = GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetPtr (i);
-		CopyMemoryRenew (pDataTmp, &pInfo->dwFileSize, sizeof (pInfo->dwFileSize), pDataTmp);	/* ƒtƒ@ƒCƒ‹ƒTƒCƒY */
-		strcpyRenew ((LPSTR)pDataTmp, pInfo->strMD5,		pDataTmp);	/* MD5ƒnƒbƒVƒ… */
-		strcpyRenew ((LPSTR)pDataTmp, pInfo->strFileName,	pDataTmp);	/* ƒtƒ@ƒCƒ‹–¼ */
+		CopyMemoryRenew (pDataTmp, &pInfo->dwFileSize, sizeof (pInfo->dwFileSize), pDataTmp);	/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º */
+		strcpyRenew ((LPSTR)pDataTmp, pInfo->strMD5,		pDataTmp);	/* MD5ãƒãƒƒã‚·ãƒ¥ */
+		strcpyRenew ((LPSTR)pDataTmp, pInfo->strFileName,	pDataTmp);	/* ãƒ•ã‚¡ã‚¤ãƒ«å */
 	}
 	dwTmp = 0;
-	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);		/* I’[ */
+	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);		/* çµ‚ç«¯ */
 
 	pRet = pData;
 	return pRet;
@@ -203,9 +203,9 @@ PBYTE CInfoFileList::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFileList::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CInfoFileList::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoFileList::SetSendData(PBYTE pSrc)
@@ -219,12 +219,12 @@ PBYTE CInfoFileList::SetSendData(PBYTE pSrc)
 
 	pDataTmp = pSrc;
 	while (1) {
-		CopyMemoryRenew (&dwSize, pDataTmp, sizeof (dwSize), pDataTmp);		/* ƒtƒ@ƒCƒ‹ƒTƒCƒY */
+		CopyMemoryRenew (&dwSize, pDataTmp, sizeof (dwSize), pDataTmp);		/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º */
 		if (dwSize == 0) {
 			break;
 		}
-		StoreRenew (strHash,	 (LPCSTR)pDataTmp, pDataTmp);	/* MD5ƒnƒbƒVƒ… */
-		StoreRenew (strFileName, (LPCSTR)pDataTmp, pDataTmp);	/* ƒtƒ@ƒCƒ‹–¼ */
+		StoreRenew (strHash,	 (LPCSTR)pDataTmp, pDataTmp);	/* MD5ãƒãƒƒã‚·ãƒ¥ */
+		StoreRenew (strFileName, (LPCSTR)pDataTmp, pDataTmp);	/* ãƒ•ã‚¡ã‚¤ãƒ«å */
 		Add (strHash, strFileName, dwSize);
 	}
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_STATE.h											 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ó‘Ô’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/01/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_STATE.h											 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:çŠ¶æ…‹é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_STATE : public CPacketBase
 {
 public:
-			CPacketCHAR_STATE();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_STATE();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_STATE();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_STATE();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, int nState);					/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(DWORD dwCharID, int nState);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID;						/* ƒLƒƒƒ‰ID */
-	int		m_nState;						/* ó‘Ô */
+	DWORD	m_dwCharID;						/* ã‚­ãƒ£ãƒ©ID */
+	int		m_nState;						/* çŠ¶æ…‹ */
 } CPacketCHAR_STATE, *PCPacketCHAR_STATE;
 
 /* Copyright(C)URARA-works 2007 */

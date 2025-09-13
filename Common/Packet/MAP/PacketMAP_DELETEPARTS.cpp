@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketMAP_DELETEPARTS.cpp									 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(É}ÉbÉvån:É}ÉbÉvÉpÅ[ÉcçÌèú) é¿ëïÉtÉ@ÉCÉã			 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/05/04													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketMAP_DELETEPARTS.cpp									 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Éû„ÉÉ„ÉóÁ≥ª:„Éû„ÉÉ„Éó„Éë„Éº„ÉÑÂâäÈô§) ÂÆüË£Ö„Éï„Ç°„Ç§„É´			 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/05/04													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEPARTS::CPacketMAP_DELETEPARTS					 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/05/04														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEPARTS::CPacketMAP_DELETEPARTS					 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/05/04														 */
 /* ========================================================================= */
 
 CPacketMAP_DELETEPARTS::CPacketMAP_DELETEPARTS()
@@ -24,9 +24,9 @@ CPacketMAP_DELETEPARTS::CPacketMAP_DELETEPARTS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEPARTS::~CPacketMAP_DELETEPARTS				 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/05/04														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEPARTS::~CPacketMAP_DELETEPARTS				 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/05/04														 */
 /* ========================================================================= */
 
 CPacketMAP_DELETEPARTS::~CPacketMAP_DELETEPARTS()
@@ -35,13 +35,13 @@ CPacketMAP_DELETEPARTS::~CPacketMAP_DELETEPARTS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEPARTS::Make									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/05/04														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEPARTS::Make									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/05/04														 */
 /* ========================================================================= */
 
 void CPacketMAP_DELETEPARTS::Make(
-	DWORD dwPartsID)		/* [in] ÉpÅ[ÉcID */
+	DWORD dwPartsID)		/* [in] „Éë„Éº„ÉÑID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -58,16 +58,16 @@ void CPacketMAP_DELETEPARTS::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_DELETEPARTS;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwPartsID, sizeof (dwPartsID), pDataTmp);	/* ÉpÅ[ÉcID */
+	CopyMemoryRenew (pDataTmp, &dwPartsID, sizeof (dwPartsID), pDataTmp);	/* „Éë„Éº„ÉÑID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEPARTS::Set									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/05/04														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEPARTS::Set									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/05/04														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_DELETEPARTS::Set(PBYTE pPacket)
@@ -77,7 +77,7 @@ PBYTE CPacketMAP_DELETEPARTS::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwPartsID,	pDataTmp, sizeof (m_dwPartsID), pDataTmp);	/* ÉpÅ[ÉcID */
+	CopyMemoryRenew (&m_dwPartsID,	pDataTmp, sizeof (m_dwPartsID), pDataTmp);	/* „Éë„Éº„ÉÑID */
 
 	pRet = pDataTmp;
 	return pRet;

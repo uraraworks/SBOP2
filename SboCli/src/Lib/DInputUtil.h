@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* �t�@�C����	:DInputUtil.h												 */
-/* ���e			:DirectInput���[�e�B���e�B�N���X ��`�t�@�C��				 */
-/* �쐬			:�N����N���t�����(URARA-works)							 */
-/* �쐬�J�n��	:2007/09/30													 */
+/* ファイル名	:DInputUtil.h												 */
+/* 内容			:DirectInputユーティリティクラス 定義ファイル				 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2007/09/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,7 +11,7 @@
 #include <dinput.h>
 
 /* ========================================================================= */
-/* �萔�̒�`																 */
+/* 定数の定義																 */
 /* ========================================================================= */
 
 #define BUTTON_NULL		0x00000000
@@ -24,10 +24,10 @@
 
 
 /* ========================================================================= */
-/* �\���̂̒�`																 */
+/* 構造体の定義																 */
 /* ========================================================================= */
 
-/* �f�o�C�X��� */
+/* デバイス情報 */
 typedef struct _DINPUTDEVICEINFO {
 	GUID		guidInstance;
 	CmyString	strName;
@@ -35,40 +35,40 @@ typedef struct _DINPUTDEVICEINFO {
 
 
 /* ========================================================================= */
-/* �N���X�錾																 */
+/* クラス宣言																 */
 /* ========================================================================= */
 
 typedef class CDInputUtil
 {
 public:
-			CDInputUtil();									/* �R���X�g���N�^ */
-	virtual ~CDInputUtil();								/* �f�X�g���N�^ */
+			CDInputUtil();									/* コンストラクタ */
+	virtual ~CDInputUtil();								/* デストラクタ */
 
-	BOOL Create		(void);											/* �쐬 */
-	void Destroy	(void);											/* �j�� */
+	BOOL Create		(void);											/* 作成 */
+	void Destroy	(void);											/* 破棄 */
 
-	BOOL	IsUseDevice		(void);									/* �f�o�C�X���g�p���Ă��邩���� */
-	DWORD	GetKeyState		(void);									/* ���͏�Ԃ��擾 */
-	void	SetDevice		(int nNo, HWND hWnd);					/* �g�p�f�o�C�X��ݒ� */
-	void	SetDevice		(GUID &stSrc, HWND hWnd);				/* �g�p�f�o�C�X��ݒ� */
-	BOOL	Enum			(void);									/* �f�o�C�X��� */
-	int		GetDeviceCount	(void);									/* �f�o�C�X�����擾 */
-	BOOL	GetDeviceName	(int nNo, CmyString &strDst);			/* �f�o�C�X�����擾 */
-	BOOL	GetGUID			(int nNo, GUID &stDst);					/* �w��f�o�C�X��GUID���擾 */
-
-
-protected:
-	static BOOL CALLBACK EnumProc(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);	/* �񋓃R�[���o�b�N�֐� */
-
-	void	DeleteDeviceInfo	(int nNo);							/* �f�o�C�X�����폜 */
-	void	DeleteAllDeviceInfo	(void);								/* �f�o�C�X����S�č폜 */
-	void	AddDeviceInfo		(PDINPUTDEVICEINFO pDeviceInfo);	/* �f�o�C�X����ǉ� */
+	BOOL	IsUseDevice		(void);									/* デバイスを使用しているか判定 */
+	DWORD	GetKeyState		(void);									/* 入力状態を取得 */
+	void	SetDevice		(int nNo, HWND hWnd);					/* 使用デバイスを設定 */
+	void	SetDevice		(GUID &stSrc, HWND hWnd);				/* 使用デバイスを設定 */
+	BOOL	Enum			(void);									/* デバイスを列挙 */
+	int		GetDeviceCount	(void);									/* デバイス数を取得 */
+	BOOL	GetDeviceName	(int nNo, CmyString &strDst);			/* デバイス名を取得 */
+	BOOL	GetGUID			(int nNo, GUID &stDst);					/* 指定デバイスのGUIDを取得 */
 
 
 protected:
-	LPDIRECTINPUT8			m_pDInput;			/* DirectInput�C���^�[�t�F�C�X */
-	LPDIRECTINPUTDEVICE8	m_pDevice;			/* �g�p�f�o�C�X */
-	CmyArray <PDINPUTDEVICEINFO, PDINPUTDEVICEINFO>	m_aDeviceInfo;	/* �f�o�C�X��� */
+	static BOOL CALLBACK EnumProc(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);	/* 列挙コールバック関数 */
+
+	void	DeleteDeviceInfo	(int nNo);							/* デバイス情報を削除 */
+	void	DeleteAllDeviceInfo	(void);								/* デバイス情報を全て削除 */
+	void	AddDeviceInfo		(PDINPUTDEVICEINFO pDeviceInfo);	/* デバイス情報を追加 */
+
+
+protected:
+	LPDIRECTINPUT8			m_pDInput;			/* DirectInputインターフェイス */
+	LPDIRECTINPUTDEVICE8	m_pDevice;			/* 使用デバイス */
+	CmyArray <PDINPUTDEVICEINFO, PDINPUTDEVICEINFO>	m_aDeviceInfo;	/* デバイス情報 */
 } CDInputUtil, *PCDInputUtil;
 
 /* Copyright(C)URARA-works 2007 */

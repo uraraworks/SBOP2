@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharDisable.cpp									 */
-/* “à—e			:ƒLƒƒƒ‰ˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharDisable.cpp									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisable::DoDataExchange(CDataExchange* pDX)
@@ -46,9 +46,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::CDlgAdminCharDisable						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::CDlgAdminCharDisable						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 CDlgAdminCharDisable::CDlgAdminCharDisable(CWnd* pParent /*=NULL*/)
@@ -63,9 +63,9 @@ CDlgAdminCharDisable::CDlgAdminCharDisable(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::~CDlgAdminCharDisable					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::~CDlgAdminCharDisable					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 CDlgAdminCharDisable::~CDlgAdminCharDisable()
@@ -75,9 +75,9 @@ CDlgAdminCharDisable::~CDlgAdminCharDisable()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisable::Init(CMgrData *pMgrData)
@@ -86,16 +86,16 @@ void CDlgAdminCharDisable::Init(CMgrData *pMgrData)
 
 	m_pLibInfoDisable->Create ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharDisable::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::Renew									 */
-/* “à—e		:ˆê——‚ğXV														 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::Renew									 */
+/* å†…å®¹		:ä¸€è¦§ã‚’æ›´æ–°														 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisable::Renew(void)
@@ -112,22 +112,22 @@ void CDlgAdminCharDisable::Renew(void)
 	nCount = m_pLibInfoDisable->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoDisable)m_pLibInfoDisable->GetPtr (i);
-		m_List.InsertItem (i, (LPCSTR)pInfo->m_strMacAddress);	/* ‹‘”Û‚·‚éMACƒAƒhƒŒƒX */
+		m_List.InsertItem (i, (LPCSTR)pInfo->m_strMacAddress);	/* æ‹’å¦ã™ã‚‹MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 		m_List.SetItemData (i, pInfo->m_dwDisableID);
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisable::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_RENEWDISABLE:	/* ‹‘”Ûî•ñXV */
+	case ADMINMSG_RENEWDISABLE:	/* æ‹’å¦æƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -135,9 +135,9 @@ void CDlgAdminCharDisable::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharDisable::OnInitDialog()
@@ -145,7 +145,7 @@ BOOL CDlgAdminCharDisable::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, "‹‘”Û‚·‚éMACƒAƒhƒŒƒX",	LVCFMT_LEFT, 200);
+	m_List.InsertColumn (1, "æ‹’å¦ã™ã‚‹MACã‚¢ãƒ‰ãƒ¬ã‚¹",	LVCFMT_LEFT, 200);
 
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
@@ -155,9 +155,9 @@ BOOL CDlgAdminCharDisable::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::OnBnClickedRenew							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(XV)											 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::OnBnClickedRenew							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ›´æ–°)											 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisable::OnBnClickedRenew()
@@ -170,9 +170,9 @@ void CDlgAdminCharDisable::OnBnClickedRenew()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::OnBnClickedAdd							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::OnBnClickedAdd							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisable::OnBnClickedAdd()
@@ -197,9 +197,9 @@ void CDlgAdminCharDisable::OnBnClickedAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisable::OnBnClickedDelete						 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CDlgAdminCharDisable::OnBnClickedDelete						 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisable::OnBnClickedDelete()
@@ -214,7 +214,7 @@ void CDlgAdminCharDisable::OnBnClickedDelete()
 	}
 	dwDisableID = m_List.GetItemData (nNo);
 
-	nResult = MessageBox ("‚±‚ÌMACƒAƒhƒŒƒX‚Ì‹‘”Û‚ğ‰ğœ‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("ã“ã®MACã‚¢ãƒ‰ãƒ¬ã‚¹ã®æ‹’å¦ã‚’è§£é™¤ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

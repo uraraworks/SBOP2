@@ -1,39 +1,39 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTextEffect.cpp											 */
-/* “à—e			:•¶šƒGƒtƒFƒNƒgƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTextEffect.cpp											 */
+/* å†…å®¹			:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/13													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoTextEffect.h"
 
-#define ANIMECOUNT	(30)		/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
+#define ANIMECOUNT	(30)		/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒæ•° */
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::CInfoTextEffect								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::CInfoTextEffect								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 CInfoTextEffect::CInfoTextEffect()
 {
-	m_nType			= TEXTEFFECTTYPE_NORMAL;	/* •\¦í•Ê */
-	m_nColor		= 0;						/* F */
-	m_nSize			= TEXTEFFECTNUMSIZE_SMALL;	/* ƒTƒCƒY */
-	m_bAnimeEnd		= FALSE;					/* ƒAƒjƒ[ƒVƒ‡ƒ“I—¹H */
-	m_byAnimeNo		= 0;						/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”Ô† */
-	m_byAnimeCount	= 0;						/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	m_dwLastAnime	= 0;						/* ÅŒã‚ÉƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚½ŠÔ */
-	m_dwData		= -1;						/* ƒf[ƒ^ */
+	m_nType			= TEXTEFFECTTYPE_NORMAL;	/* è¡¨ç¤ºç¨®åˆ¥ */
+	m_nColor		= 0;						/* è‰² */
+	m_nSize			= TEXTEFFECTNUMSIZE_SMALL;	/* ã‚µã‚¤ã‚º */
+	m_bAnimeEnd		= FALSE;					/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ï¼Ÿ */
+	m_byAnimeNo		= 0;						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒç•ªå· */
+	m_byAnimeCount	= 0;						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒæ•° */
+	m_dwLastAnime	= 0;						/* æœ€å¾Œã«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã—ãŸæ™‚é–“ */
+	m_dwData		= -1;						/* ãƒ‡ãƒ¼ã‚¿ */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::~CInfoTextEffect								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::~CInfoTextEffect								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 CInfoTextEffect::~CInfoTextEffect()
@@ -42,10 +42,10 @@ CInfoTextEffect::~CInfoTextEffect()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALSE:ˆ—‚µ‚Ä‚¢‚È‚¢								 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALSE:å‡¦ç†ã—ã¦ã„ãªã„								 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 BOOL CInfoTextEffect::TimerProc(DWORD dwTime)
@@ -73,7 +73,7 @@ BOOL CInfoTextEffect::TimerProc(DWORD dwTime)
 		}
 	}
 
-	/* I—¹H */
+	/* çµ‚äº†ï¼Ÿ */
 	if (m_byAnimeNo >= m_byAnimeCount) {
 		m_bAnimeEnd = TRUE;
 	}
@@ -85,9 +85,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::Set											 */
-/* “à—e		:İ’è(”’lƒf[ƒ^)												 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::Set											 */
+/* å†…å®¹		:è¨­å®š(æ•°å€¤ãƒ‡ãƒ¼ã‚¿)												 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 void CInfoTextEffect::Set(DWORD dwData, int nType, int nColor, int nSize)
@@ -110,9 +110,9 @@ void CInfoTextEffect::Set(DWORD dwData, int nType, int nColor, int nSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::Set											 */
-/* “à—e		:İ’è(•¶šƒf[ƒ^)												 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::Set											 */
+/* å†…å®¹		:è¨­å®š(æ–‡å­—ãƒ‡ãƒ¼ã‚¿)												 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 void CInfoTextEffect::Set(LPCSTR pszData, int nType, int nColor, int nSize)
@@ -130,9 +130,9 @@ void CInfoTextEffect::Set(LPCSTR pszData, int nType, int nColor, int nSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::GetGrpCount									 */
-/* “à—e		:‰æ‘œ”‚ğæ“¾													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::GetGrpCount									 */
+/* å†…å®¹		:ç”»åƒæ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 int CInfoTextEffect::GetGrpCount(void)
@@ -155,9 +155,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::GetGrpNo										 */
-/* “à—e		:w’è”Ô†‚Ì”’l‚ğæ“¾											 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::GetGrpNo										 */
+/* å†…å®¹		:æŒ‡å®šç•ªå·ã®æ•°å€¤ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 int CInfoTextEffect::GetGrpNo(int nNo)
@@ -172,10 +172,10 @@ int CInfoTextEffect::GetGrpNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTextEffect::GetDrawPos									 */
-/* “à—e		:w’è”Ô†‚Ì•\¦ˆÊ’u•â³’l‚ğæ“¾									 */
-/* –ß‚è’l	:TRUE:•`‰æ‚·‚é FALSE:•`‰æ‚µ‚È‚¢									 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoTextEffect::GetDrawPos									 */
+/* å†…å®¹		:æŒ‡å®šç•ªå·ã®è¡¨ç¤ºä½ç½®è£œæ­£å€¤ã‚’å–å¾—									 */
+/* æˆ»ã‚Šå€¤	:TRUE:æç”»ã™ã‚‹ FALSE:æç”»ã—ãªã„									 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 BOOL CInfoTextEffect::GetDrawPos(int nNo, POINT &ptDst, BYTE &byLevel)

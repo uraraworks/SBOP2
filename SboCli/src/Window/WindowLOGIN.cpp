@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowLOGIN.cpp											 */
-/* “à—e			:ƒƒOƒCƒ“î•ñƒEƒBƒ“ƒhƒEƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowLOGIN.cpp											 */
+/* å†…å®¹			:ãƒ­ã‚°ã‚¤ãƒ³æƒ…å ±ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,9 +15,9 @@
 #include "WindowLOGIN.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::CWindowLOGIN										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowLOGIN::CWindowLOGIN										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 CWindowLOGIN::CWindowLOGIN()
@@ -39,9 +39,9 @@ CWindowLOGIN::CWindowLOGIN()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::~CWindowLOGIN									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowLOGIN::~CWindowLOGIN									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 CWindowLOGIN::~CWindowLOGIN()
@@ -70,9 +70,9 @@ CWindowLOGIN::~CWindowLOGIN()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/11/03														 */
+/* é–¢æ•°å	:CWindowLOGIN::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/11/03														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::Create(CMgrData *pMgrData)
@@ -86,9 +86,9 @@ void CWindowLOGIN::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::Draw												 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowLOGIN::Draw												 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::Draw(PCImg32 pDst)
@@ -106,13 +106,13 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 16, 16, "ƒAƒJƒEƒ“ƒg:", RGB (1, 1, 1));
-	TextOut2 (hDC, 16, 42, "ƒpƒXƒ[ƒh:", RGB (1, 1, 1));
+	TextOut2 (hDC, 16, 16, "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ:", RGB (1, 1, 1));
+	TextOut2 (hDC, 16, 42, "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰:", RGB (1, 1, 1));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
 
-	/* ˜g */
+	/* æ  */
 	DrawInputFrame1 (16 * 8, 16, 8 * 12, 14, 0);
 	DrawInputFrame1 (16 * 8, 42, 8 * 12, 14, 0);
 
@@ -124,9 +124,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::Enable											 */
-/* “à—e		:“ü—Í‹–‰ÂE‹Ö~													 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CWindowLOGIN::Enable											 */
+/* å†…å®¹		:å…¥åŠ›è¨±å¯ãƒ»ç¦æ­¢													 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::Enable(BOOL bEnable)
@@ -139,9 +139,9 @@ void CWindowLOGIN::Enable(BOOL bEnable)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::SetShow											 */
-/* “à—e		:•\¦‚·‚é‚©İ’è													 */
-/* “ú•t		:2005/06/26														 */
+/* é–¢æ•°å	:CWindowLOGIN::SetShow											 */
+/* å†…å®¹		:è¡¨ç¤ºã™ã‚‹ã‹è¨­å®š													 */
+/* æ—¥ä»˜		:2005/06/26														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::SetShow(BOOL bShow)
@@ -159,9 +159,9 @@ void CWindowLOGIN::SetShow(BOOL bShow)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::Save												 */
-/* “à—e		:ƒAƒJƒEƒ“ƒg‚ÆƒpƒXƒ[ƒh‚ğ•Û‘¶									 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CWindowLOGIN::Save												 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜									 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::Save(void)
@@ -181,9 +181,9 @@ void CWindowLOGIN::Save(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::SetCheck											 */
-/* “à—e		:ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚éƒ`ƒFƒbƒN‚Ìİ’è								 */
-/* “ú•t		:2007/07/03														 */
+/* é–¢æ•°å	:CWindowLOGIN::SetCheck											 */
+/* å†…å®¹		:ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãƒã‚§ãƒƒã‚¯ã®è¨­å®š								 */
+/* æ—¥ä»˜		:2007/07/03														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::SetCheck(BOOL bCheck)
@@ -203,9 +203,9 @@ void CWindowLOGIN::SetCheck(BOOL bCheck)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::GetCheck											 */
-/* “à—e		:ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚éƒ`ƒFƒbƒN‚Ìæ“¾								 */
-/* “ú•t		:2007/07/03														 */
+/* é–¢æ•°å	:CWindowLOGIN::GetCheck											 */
+/* å†…å®¹		:ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãƒã‚§ãƒƒã‚¯ã®å–å¾—								 */
+/* æ—¥ä»˜		:2007/07/03														 */
 /* ========================================================================= */
 
 BOOL CWindowLOGIN::GetCheck(void)
@@ -229,9 +229,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::MakeWindow										 */
-/* “à—e		:ƒEƒBƒ“ƒhƒEì¬													 */
-/* “ú•t		:2005/05/14														 */
+/* é–¢æ•°å	:CWindowLOGIN::MakeWindow										 */
+/* å†…å®¹		:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ													 */
+/* æ—¥ä»˜		:2005/05/14														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::MakeWindow(void)
@@ -250,7 +250,7 @@ void CWindowLOGIN::MakeWindow(void)
 	strAccount  = m_pMgrData->GetLastAccount ();
 	strPassword = m_pMgrData->GetLastPassword ();
 
-	/* ƒAƒJƒEƒ“ƒg“ü—Í—“ */
+	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå…¥åŠ›æ¬„ */
 	m_hWndAccount = CreateWindow ("EDIT", "", WS_CHILD |  ES_LOWERCASE,
 			m_ptViewPos.x + 16 * 8, m_ptViewPos.y + 16, 8 * 12, 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcAccount = (WNDPROC)GetWindowLong (m_hWndAccount, GWL_WNDPROC);
@@ -260,7 +260,7 @@ void CWindowLOGIN::MakeWindow(void)
 	SetWindowLong		(m_hWndAccount, GWL_WNDPROC, (LONG)AccountWndProc);
 	SetWindowText (m_hWndAccount, strAccount);
 
-	/* ƒpƒXƒ[ƒh“ü—Í—“ */
+	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å…¥åŠ›æ¬„ */
 	m_hWndPassword = CreateWindow ("EDIT", "", WS_CHILD | ES_PASSWORD | ES_AUTOHSCROLL,
 			m_ptViewPos.x + 16 * 8, m_ptViewPos.y + 42, 8 * 12, 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcPassword = (WNDPROC)GetWindowLong (m_hWndPassword, GWL_WNDPROC);
@@ -269,8 +269,8 @@ void CWindowLOGIN::MakeWindow(void)
 	SetWindowLong		(m_hWndPassword, GWL_USERDATA, (LONG)this);
 	SetWindowLong		(m_hWndPassword, GWL_WNDPROC, (LONG)PasswordWndProc);
 
-	/* ƒpƒXƒ[ƒh‚ğ‹L˜^‚·‚éƒ`ƒFƒbƒN */
-	m_hWndSavePassword = CreateWindow ("BUTTON", "ƒpƒXƒ[ƒh‚ğ‹L˜^‚·‚é", WS_CHILD | BS_AUTOCHECKBOX,
+	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨˜éŒ²ã™ã‚‹ãƒã‚§ãƒƒã‚¯ */
+	m_hWndSavePassword = CreateWindow ("BUTTON", "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨˜éŒ²ã™ã‚‹", WS_CHILD | BS_AUTOCHECKBOX,
 			m_ptViewPos.x + 16, m_ptViewPos.y + 16 * 4 + 6, 6 * 23, 14, hWndMain, (HMENU)IDC_SAVEPASSWORD, hInstance, NULL);
 	m_OrgWndProcSavePassword = (WNDPROC)GetWindowLong (m_hWndSavePassword, GWL_WNDPROC);
 	SendMessage		(m_hWndSavePassword, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
@@ -284,8 +284,8 @@ void CWindowLOGIN::MakeWindow(void)
 		SetWindowText (m_hWndPassword, strPassword);
 	}
 
-	/* Ú‘±ƒ{ƒ^ƒ“ */
-	m_hWndConnect = CreateWindow ("BUTTON", "Ú‘±", WS_CHILD | BS_PUSHBUTTON,
+	/* æ¥ç¶šãƒœã‚¿ãƒ³ */
+	m_hWndConnect = CreateWindow ("BUTTON", "æ¥ç¶š", WS_CHILD | BS_PUSHBUTTON,
 			m_ptViewPos.x + 16 * 11 - 2, m_ptViewPos.y + 16 * 4 + 2, 54, 18, hWndMain, (HMENU)IDC_CONNECT, hInstance, NULL);
 	m_OrgWndProcConnect = (WNDPROC)GetWindowLong (m_hWndConnect, GWL_WNDPROC);
 	SendMessage		(m_hWndConnect, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
@@ -310,9 +310,9 @@ void CWindowLOGIN::MakeWindow(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::AccountWndProc									 */
-/* “à—e		:ƒAƒJƒEƒ“ƒg–¼“ü—Í—“ƒƒbƒZ[ƒWˆ—								 */
-/* “ú•t		:2005/05/14														 */
+/* é–¢æ•°å	:CWindowLOGIN::AccountWndProc									 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåå…¥åŠ›æ¬„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†								 */
+/* æ—¥ä»˜		:2005/05/14														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CWindowLOGIN::AccountWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -348,9 +348,9 @@ LRESULT CALLBACK CWindowLOGIN::AccountWndProc(HWND hWnd, UINT message, WPARAM wP
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::PasswordWndProc									 */
-/* “à—e		:ƒpƒXƒ[ƒh–¼“ü—Í—“ƒƒbƒZ[ƒWˆ—								 */
-/* “ú•t		:2005/05/14														 */
+/* é–¢æ•°å	:CWindowLOGIN::PasswordWndProc									 */
+/* å†…å®¹		:ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰åå…¥åŠ›æ¬„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†								 */
+/* æ—¥ä»˜		:2005/05/14														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CWindowLOGIN::PasswordWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -386,9 +386,9 @@ LRESULT CALLBACK CWindowLOGIN::PasswordWndProc(HWND hWnd, UINT message, WPARAM w
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::SavePasswordWndProc								 */
-/* “à—e		:ƒpƒXƒ[ƒh‚ğ‹L˜^‚·‚éƒ`ƒFƒbƒNƒƒbƒZ[ƒWˆ—						 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CWindowLOGIN::SavePasswordWndProc								 */
+/* å†…å®¹		:ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨˜éŒ²ã™ã‚‹ãƒã‚§ãƒƒã‚¯ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†						 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CWindowLOGIN::SavePasswordWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -445,9 +445,9 @@ LRESULT CALLBACK CWindowLOGIN::SavePasswordWndProc(HWND hWnd, UINT message, WPAR
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::ConnectWndProc									 */
-/* “à—e		:Ú‘±ƒ{ƒ^ƒ“—pƒƒbƒZ[ƒWˆ—										 */
-/* “ú•t		:2005/05/14														 */
+/* é–¢æ•°å	:CWindowLOGIN::ConnectWndProc									 */
+/* å†…å®¹		:æ¥ç¶šãƒœã‚¿ãƒ³ç”¨ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†										 */
+/* æ—¥ä»˜		:2005/05/14														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CWindowLOGIN::ConnectWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -489,9 +489,9 @@ LRESULT CALLBACK CWindowLOGIN::ConnectWndProc(HWND hWnd, UINT message, WPARAM wP
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGIN::OnConnect										 */
-/* “à—e		:Ú‘±ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰												 */
-/* “ú•t		:2005/05/14														 */
+/* é–¢æ•°å	:CWindowLOGIN::OnConnect										 */
+/* å†…å®¹		:æ¥ç¶šãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©												 */
+/* æ—¥ä»˜		:2005/05/14														 */
 /* ========================================================================= */
 
 void CWindowLOGIN::OnConnect(void)

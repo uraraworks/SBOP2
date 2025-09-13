@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_RENEW_CLIENTVERSION.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“XV) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_RENEW_CLIENTVERSION.h							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³æ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/07													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoAccount;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_RENEW_CLIENTVERSION : public CPacketBase
 {
 public:
-			CPacketADMIN_RENEW_CLIENTVERSION();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_RENEW_CLIENTVERSION();		/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_RENEW_CLIENTVERSION();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_RENEW_CLIENTVERSION();		/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(LPCSTR pszClientVersion);					/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(LPCSTR pszClientVersion);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CmyString	m_strClientVersion;		/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“ */
+	CmyString	m_strClientVersion;		/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
 } CPacketADMIN_RENEW_CLIENTVERSION, *PCPacketADMIN_RENEW_CLIENTVERSION;
 
 /* Copyright(C)URARA-works 2008 */

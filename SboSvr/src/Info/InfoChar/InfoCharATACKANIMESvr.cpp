@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharATACKANIMESvr.cpp									 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(UŒ‚Žó‚¯‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“)ƒT[ƒo[ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharATACKANIMESvr.cpp									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(æ”»æ’ƒå—ã‘ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/17													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharATACKANIMESvr::CInfoCharATACKANIMESvr					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharATACKANIMESvr::CInfoCharATACKANIMESvr					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 CInfoCharATACKANIMESvr::CInfoCharATACKANIMESvr()
@@ -22,9 +22,9 @@ CInfoCharATACKANIMESvr::CInfoCharATACKANIMESvr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharATACKANIMESvr::~CInfoCharATACKANIMESvr				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharATACKANIMESvr::~CInfoCharATACKANIMESvr				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 CInfoCharATACKANIMESvr::~CInfoCharATACKANIMESvr()
@@ -33,15 +33,15 @@ CInfoCharATACKANIMESvr::~CInfoCharATACKANIMESvr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharATACKANIMESvr::ProcHit								 */
-/* “à—e		:ˆ—(UŒ‚‚ðŽó‚¯‚½Žž)											 */
-/* “ú•t		:2007/09/17														 */
-/* –ß‚è’l	:TRUE:ˆÈ~‚Ìˆ—‚ð‘±s‚·‚é										 */
+/* é–¢æ•°å	:CInfoCharATACKANIMESvr::ProcHit								 */
+/* å†…å®¹		:å‡¦ç†(æ”»æ’ƒã‚’å—ã‘ãŸæ™‚)											 */
+/* æ—¥ä»˜		:2007/09/17														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ä»¥é™ã®å‡¦ç†ã‚’ç¶šè¡Œã™ã‚‹										 */
 /* ========================================================================= */
 
 BOOL CInfoCharATACKANIMESvr::ProcHit(CInfoCharSvr *pInfoChar)
 {
-//Todo:Žb’è
+//Todo:æš«å®š
 	if (m_wGrpIDNPC != 10) {
 //		m_nReserveChgEfect = 1;
 //		goto Exit;
@@ -55,9 +55,9 @@ BOOL CInfoCharATACKANIMESvr::ProcHit(CInfoCharSvr *pInfoChar)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharSvr::TimerProc										 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharSvr::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 BOOL CInfoCharATACKANIMESvr::TimerProc(DWORD dwTime)

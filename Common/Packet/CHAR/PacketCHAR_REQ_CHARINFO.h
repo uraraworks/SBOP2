@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_REQ_CHARINFO.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒLƒƒƒ‰î•ñ—v‹) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_REQ_CHARINFO.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚­ãƒ£ãƒ©æƒ…å ±è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_REQ_CHARINFO : public CPacketBase
 {
 public:
-			CPacketCHAR_REQ_CHARINFO();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_REQ_CHARINFO();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_REQ_CHARINFO();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_REQ_CHARINFO();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID);							/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD m_dwCharID;						/* ƒLƒƒƒ‰ID */
+	DWORD m_dwCharID;						/* ã‚­ãƒ£ãƒ©ID */
 } CPacketCHAR_REQ_CHARINFO, *PCPacketCHAR_REQ_CHARINFO;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMSGCMD_PARA1.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒn:”Ä—p[ƒpƒ‰ƒ[ƒ^1ŒÂ]) ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMSGCMD_PARA1.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒžãƒ³ãƒ‰ç³»:æ±Žç”¨[ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1å€‹]) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMSGCMD_PARA1 : public CPacketBase
 {
 public:
-			CPacketMSGCMD_PARA1();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMSGCMD_PARA1();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMSGCMD_PARA1();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMSGCMD_PARA1();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(BYTE byCmdSub, DWORD dwCharID, DWORD dwPara);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(BYTE byCmdSub, DWORD dwCharID, DWORD dwPara);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID,				/* ƒLƒƒƒ‰ID */
-			m_dwPara;				/* ƒpƒ‰ƒ[ƒ^ */
+	DWORD	m_dwCharID,				/* ã‚­ãƒ£ãƒ©ID */
+			m_dwPara;				/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 } CPacketMSGCMD_PARA1, *PCPacketMSGCMD_PARA1;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoSystem.h										 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İƒNƒ‰ƒX(ƒVƒXƒeƒ€î•ñ) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoSystem.h										 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "SaveLoadInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CSaveLoadInfoSystem : public CSaveLoadInfoBase
 {
 public:
-			CSaveLoadInfoSystem();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSaveLoadInfoSystem();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSaveLoadInfoSystem();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSaveLoadInfoSystem();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 } CSaveLoadInfoSystem, *PCSaveLoadInfoSystem;
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventBase.h										 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventBase.h										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,33 +14,33 @@ class CDlgAdminMapEventNONE;
 class CInfoMapEventBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminMapEventBase : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapEventBase(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapEventBase();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapEventBase(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapEventBase();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify);	/* ‰Šú‰» */
-	void	Get			(CInfoMapEventBase *&pDst);					/* •ÒW“à—e‚ğæ“¾ */
-	void	SetModify	(CInfoMapEventBase *pSrc);					/* •ÒWƒ‚[ƒh‚Æ‚µ‚Äİ’è */
-
-
-protected:
-	void SelectSound(DWORD dwSoundID);		/* Às‚ÌŒø‰Ê‰¹ID‚ğ‘I‘ğ */
+	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify);	/* åˆæœŸåŒ– */
+	void	Get			(CInfoMapEventBase *&pDst);					/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
+	void	SetModify	(CInfoMapEventBase *pSrc);					/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰ã¨ã—ã¦è¨­å®š */
 
 
 protected:
-	int			m_nEventType,				/* ƒCƒxƒ“ƒgí•Ê */
-				m_nHitType,					/* “–‚½‚è”»’èí•Ê */
-				m_nHitDirection;			/* ”»’èŒü‚« */
-	DWORD		m_dwSoundID;				/* Às‚ÌŒø‰Ê‰¹ID */
-	BOOL		m_bModeModify;				/* •ÒWƒ‚[ƒh”»’è */
-	CWnd		**m_ppWndNotify;			/* ’Ê’mæƒEƒBƒ“ƒhƒE */
-	CDlgAdminMapEventNONE	*m_pDlgType;	/* •ÒW’†‚ÌƒCƒxƒ“ƒgí•Êƒ_ƒCƒAƒƒO */
-	CInfoMapEventBase		*m_pInfo;		/* •ÒW’†‚ÌƒCƒxƒ“ƒgî•ñ */
+	void SelectSound(DWORD dwSoundID);		/* å®Ÿè¡Œæ™‚ã®åŠ¹æœéŸ³IDã‚’é¸æŠ */
+
+
+protected:
+	int			m_nEventType,				/* ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+				m_nHitType,					/* å½“ãŸã‚Šåˆ¤å®šç¨®åˆ¥ */
+				m_nHitDirection;			/* åˆ¤å®šå‘ã */
+	DWORD		m_dwSoundID;				/* å®Ÿè¡Œæ™‚ã®åŠ¹æœéŸ³ID */
+	BOOL		m_bModeModify;				/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰åˆ¤å®š */
+	CWnd		**m_ppWndNotify;			/* é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CDlgAdminMapEventNONE	*m_pDlgType;	/* ç·¨é›†ä¸­ã®ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ãƒ€ã‚¤ã‚¢ãƒ­ã‚° */
+	CInfoMapEventBase		*m_pInfo;		/* ç·¨é›†ä¸­ã®ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 
 
 
@@ -60,7 +60,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapEventBase)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

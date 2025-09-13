@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowITEMMENU.cpp											 */
-/* “à—e			:ƒAƒCƒeƒ€ƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowITEMMENU.cpp											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/30													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,9 +19,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::CWindowITEMMENU								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::CWindowITEMMENU								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 CWindowITEMMENU::CWindowITEMMENU()
@@ -45,9 +45,9 @@ CWindowITEMMENU::CWindowITEMMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::~CWindowITEMMENU								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::~CWindowITEMMENU								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 CWindowITEMMENU::~CWindowITEMMENU()
@@ -56,9 +56,9 @@ CWindowITEMMENU::~CWindowITEMMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU::Create(CMgrData *pMgrData)
@@ -79,9 +79,9 @@ void CWindowITEMMENU::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::Draw											 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::Draw											 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU::Draw(PCImg32 pDst)
@@ -117,24 +117,24 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		}
 	}
 
-	/* ‘•”õƒAƒCƒeƒ€‚ð•`‰æ */
-	DrawEquip (0, m_pPlayerChar->m_dwEquipItemIDCloth);		/* •ž */
-	DrawEquip (1, m_pPlayerChar->m_dwEquipItemIDAcce1);		/* ƒAƒNƒZƒTƒŠ1 */
-	DrawEquip (2, m_pPlayerChar->m_dwEquipItemIDArmsRight);	/* Ž‚¿•¨ */
-	DrawEquip (3, m_pPlayerChar->m_dwEquipItemIDArmsLeft);	/* ‚ */
+	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”» */
+	DrawEquip (0, m_pPlayerChar->m_dwEquipItemIDCloth);		/* æœ */
+	DrawEquip (1, m_pPlayerChar->m_dwEquipItemIDAcce1);		/* ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+	DrawEquip (2, m_pPlayerChar->m_dwEquipItemIDArmsRight);	/* æŒã¡ç‰© */
+	DrawEquip (3, m_pPlayerChar->m_dwEquipItemIDArmsLeft);	/* ç›¾ */
 
 	hDC			= m_pDib->Lock ();
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
-	TextOut2 (hDC, 12 + 5, 7 + 4, "‘•”õ", RGB (255, 255, 255));
-	TextOut2 (hDC, 12 + 5, 134 + 3, "ƒoƒbƒO(B)", RGB (255, 255, 255));
+	TextOut2 (hDC, 12 + 5, 7 + 4, "è£…å‚™", RGB (255, 255, 255));
+	TextOut2 (hDC, 12 + 5, 134 + 3, "ãƒãƒƒã‚°(B)", RGB (255, 255, 255));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
 
 	pIntoItemDrag = NULL;
 
-	/* ƒAƒCƒeƒ€‚ð•`‰æ */
+	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”» */
 	nCount = m_pPlayerChar->m_adwItemID.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (m_pPlayerChar->m_adwItemID[i]);
@@ -156,7 +156,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		}
 	}
 
-	/* ƒhƒ‰ƒbƒO’†H */
+	/* ãƒ‰ãƒ©ãƒƒã‚°ä¸­ï¼Ÿ */
 	if (pIntoItemDrag) {
 		x = (m_nPos - EQUIPTYPE_MAX) % 5;
 		y = (m_nPos - EQUIPTYPE_MAX) / 5;
@@ -176,7 +176,7 @@ Exit:
 	}
 	pDst->BltLevel (m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, nLevel, TRUE);
 
-	/* ƒAƒCƒeƒ€–¼‚ð•\Ž¦ */
+	/* ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤º */
 	if (m_strName.IsEmpty () == FALSE) {
 		hDC			= pDst->Lock ();
 		hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
@@ -195,9 +195,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::DragOff										 */
-/* “à—e		:ƒhƒ‰ƒbƒO‰ðœ													 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowITEMMENU::DragOff										 */
+/* å†…å®¹		:ãƒ‰ãƒ©ãƒƒã‚°è§£é™¤													 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU::DragOff(void)
@@ -209,9 +209,9 @@ void CWindowITEMMENU::DragOff(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::OnUp											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::OnUp											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU::OnUp(void)
@@ -238,7 +238,7 @@ BOOL CWindowITEMMENU::OnUp(void)
 		}
 	}
 	if (m_nPos < EQUIPTYPE_MAX) {
-		/* ƒhƒ‰ƒbƒO‰ðœ */
+		/* ãƒ‰ãƒ©ãƒƒã‚°è§£é™¤ */
 		DragOff ();
 	}
 
@@ -253,9 +253,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::OnDown										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::OnDown										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU::OnDown(void)
@@ -292,9 +292,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::OnLeft										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::OnLeft										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU::OnLeft(void)
@@ -324,9 +324,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::OnRight										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::OnRight										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU::OnRight(void)
@@ -356,9 +356,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::OnB											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(B)												 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CWindowITEMMENU::OnB											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B)												 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU::OnB(BOOL bDown)
@@ -368,9 +368,9 @@ BOOL CWindowITEMMENU::OnB(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU::OnX(BOOL bDown)
@@ -401,12 +401,12 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 
 	if (m_nPos < EQUIPTYPE_MAX) {
 		switch (m_nPos) {
-		case EQUIPTYPE_ACCE1:		dwItemID = m_pPlayerChar->m_dwEquipItemIDAcce1;		break;	/* ƒAƒNƒZƒTƒŠ1 */
-		case EQUIPTYPE_HEAD:		dwItemID = m_pPlayerChar->m_dwEquipItemIDHead;		break;	/* “ª */
-		case EQUIPTYPE_ACCE2:		dwItemID = m_pPlayerChar->m_dwEquipItemIDAcce2;		break;	/* ƒAƒNƒZƒTƒŠ2 */
-		case EQUIPTYPE_ARMSRIGHT:	dwItemID = m_pPlayerChar->m_dwEquipItemIDArmsRight;	break;	/* ‰EŽè */
-		case EQUIPTYPE_CLOTH:		dwItemID = m_pPlayerChar->m_dwEquipItemIDCloth;		break;	/* •ž */
-		case EQUIPTYPE_ARMSLEFT:	dwItemID = m_pPlayerChar->m_dwEquipItemIDArmsLeft;	break;	/* ¶Žè */
+		case EQUIPTYPE_ACCE1:		dwItemID = m_pPlayerChar->m_dwEquipItemIDAcce1;		break;	/* ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+		case EQUIPTYPE_HEAD:		dwItemID = m_pPlayerChar->m_dwEquipItemIDHead;		break;	/* é ­ */
+		case EQUIPTYPE_ACCE2:		dwItemID = m_pPlayerChar->m_dwEquipItemIDAcce2;		break;	/* ã‚¢ã‚¯ã‚»ã‚µãƒª2 */
+		case EQUIPTYPE_ARMSRIGHT:	dwItemID = m_pPlayerChar->m_dwEquipItemIDArmsRight;	break;	/* å³æ‰‹ */
+		case EQUIPTYPE_CLOTH:		dwItemID = m_pPlayerChar->m_dwEquipItemIDCloth;		break;	/* æœ */
+		case EQUIPTYPE_ARMSLEFT:	dwItemID = m_pPlayerChar->m_dwEquipItemIDArmsLeft;	break;	/* å·¦æ‰‹ */
 		}
 	} else {
 		nCount = m_pPlayerChar->m_adwItemID.GetSize ();
@@ -415,13 +415,13 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 			if (pInfoItem == NULL) {
 				continue;
 			}
-			/* ‘I‘ð‚µ‚Ä‚¢‚éêŠ‚ÉƒAƒCƒeƒ€‚ª‚ ‚Á‚½H */
+			/* é¸æŠžã—ã¦ã„ã‚‹å ´æ‰€ã«ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ã£ãŸï¼Ÿ */
 			if ((pInfoItem->m_ptBackPack.x == ptPos.x) &&
 				(pInfoItem->m_ptBackPack.y == ptPos.y)) {
 				dwItemID = pInfoItem->m_dwItemID;
 			}
 			if (m_ptDrag.x != -1) {
-				/* ƒhƒ‰ƒbƒOŠJŽnˆÊ’u‚ÌƒAƒCƒeƒ€H */
+				/* ãƒ‰ãƒ©ãƒƒã‚°é–‹å§‹ä½ç½®ã®ã‚¢ã‚¤ãƒ†ãƒ ï¼Ÿ */
 				if ((pInfoItem->m_ptBackPack.x == m_ptDrag.x) &&
 					(pInfoItem->m_ptBackPack.y == m_ptDrag.y)) {
 					dwItemIDDrag = pInfoItem->m_dwItemID;
@@ -429,7 +429,7 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 			}
 		}
 		if (m_ptDrag.x != -1) {
-			/* ƒhƒ‰ƒbƒO‚³‚ê‚½H */
+			/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸï¼Ÿ */
 			if (!((m_ptDrag.x == ptPos.x) && (m_ptDrag.y == ptPos.y))) {
 				m_ptDrop = ptPos;
 			}
@@ -457,9 +457,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CWindowITEMMENU::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU::OnZ(BOOL bDown)
@@ -482,23 +482,23 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::DrawEquip										 */
-/* “à—e		:‘•”õƒAƒCƒeƒ€‚ð•`‰æ												 */
-/* “ú•t		:2008/11/19														 */
+/* é–¢æ•°å	:CWindowITEMMENU::DrawEquip										 */
+/* å†…å®¹		:è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”»												 */
+/* æ—¥ä»˜		:2008/11/19														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU::DrawEquip(
-	int nType,					/* [in] Ží•Ê */
-	DWORD dwEquipItemID)		/* [in] ‘•”õƒAƒCƒeƒ€ID */
+	int nType,					/* [in] ç¨®åˆ¥ */
+	DWORD dwEquipItemID)		/* [in] è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID */
 {
 	int x, y, anDrawInfo[] = {
-			1, 1, EQUIPTYPE_CLOTH,		/* •ž */
-			0, 0, EQUIPTYPE_ACCE1,		/* ƒAƒNƒZƒTƒŠ1 */
-			0, 1, EQUIPTYPE_ARMSRIGHT,	/* ‰EŽè */
-			2, 1, EQUIPTYPE_ARMSLEFT,	/* ¶Žè */
-//			EQUIPTYPE_HEAD,			/* “ª */
-//			EQUIPTYPE_ACCE2,		/* ƒAƒNƒZƒTƒŠ2 */
-//			EQUIPTYPE_CLOTH,		/* •ž */
+			1, 1, EQUIPTYPE_CLOTH,		/* æœ */
+			0, 0, EQUIPTYPE_ACCE1,		/* ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+			0, 1, EQUIPTYPE_ARMSRIGHT,	/* å³æ‰‹ */
+			2, 1, EQUIPTYPE_ARMSLEFT,	/* å·¦æ‰‹ */
+//			EQUIPTYPE_HEAD,			/* é ­ */
+//			EQUIPTYPE_ACCE2,		/* ã‚¢ã‚¯ã‚»ã‚µãƒª2 */
+//			EQUIPTYPE_CLOTH,		/* æœ */
 			0, 0, 0};
 	PCInfoItem pInfoItem;
 
@@ -513,22 +513,22 @@ void CWindowITEMMENU::DrawEquip(
 	y = 32 + 47 * anDrawInfo[nType * 3 + 1];
 	m_pMgrDraw->DrawItem (m_pDib, x, y, pInfoItem);
 	if (m_nPos == anDrawInfo[nType * 3 + 2]) {
-		/* ‘•”õ’†‚ÌƒAƒCƒeƒ€‚È‚Ì‚ÅƒAƒCƒeƒ€–¼‚ðXV */
+		/* è£…å‚™ä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ ãªã®ã§ã‚¢ã‚¤ãƒ†ãƒ åã‚’æ›´æ–° */
 		m_strName = pInfoItem->m_strName;
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU::GetDrawPos									 */
-/* “à—e		:ƒAƒCƒeƒ€•`‰æˆÊ’u‚ðŽæ“¾											 */
-/* “ú•t		:2008/11/19														 */
+/* é–¢æ•°å	:CWindowITEMMENU::GetDrawPos									 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ æç”»ä½ç½®ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/11/19														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU::GetDrawPos(
-	int nPos,		/* [in] ƒAƒCƒeƒ€ˆÊ’u */
-	int &nDstX,		/* [out] XÀ•W */
-	int &nDstY)		/* [out] YÀ•W */
+	int nPos,		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ä½ç½® */
+	int &nDstX,		/* [out] Xåº§æ¨™ */
+	int &nDstY)		/* [out] Yåº§æ¨™ */
 {
 	if (nPos < EQUIPTYPE_MAX) {
 		nDstX = 36 * (nPos % 3) + 12 + 1;

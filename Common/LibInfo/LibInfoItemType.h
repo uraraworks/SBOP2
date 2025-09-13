@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoItemType.h											 */
-/* “à—e			:ƒAƒCƒeƒ€í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoItemType.h											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,50 +12,50 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoItemType : public CLibInfoBase
 {
 public:
-			CLibInfoItemType();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoItemType();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoItemType();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoItemType();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);									/* ì¬ */
-	void Destroy		(void);									/* ”jŠü */
+	void Create			(void);									/* ä½œæˆ */
+	void Destroy		(void);									/* ç ´æ£„ */
 
-			PCInfoBase GetNew	(void);							/* V‹Kƒf[ƒ^‚ğæ“¾ */
-	virtual	PCInfoBase GetNew	(DWORD dwItemTypeID);			/* V‹Kƒf[ƒ^‚ğæ“¾ */
+			PCInfoBase GetNew	(void);							/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual	PCInfoBase GetNew	(DWORD dwItemTypeID);			/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	void	Revice		(void);									/* ƒf[ƒ^‚Ì•â³ */
-	int		GetCount	(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);						/* ’Ç‰Á */
-	void	Delete		(int nNo);								/* íœ */
-	void	Delete		(DWORD dwTypeID);						/* íœ */
-	void	DeleteAll	(void);									/* ‘S‚Äíœ */
+	void	Revice		(void);									/* ãƒ‡ãƒ¼ã‚¿ã®è£œæ­£ */
+	int		GetCount	(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);						/* è¿½åŠ  */
+	void	Delete		(int nNo);								/* å‰Šé™¤ */
+	void	Delete		(DWORD dwTypeID);						/* å‰Šé™¤ */
+	void	DeleteAll	(void);									/* å…¨ã¦å‰Šé™¤ */
 
-	int		GetGrpIDMainCount	(DWORD dwTypeID);						/* ƒAƒCƒeƒ€í•Ê‚Ì‰æ‘œIDƒƒCƒ“”‚ğæ“¾ */
-	LPCSTR	GetTypeName			(DWORD dwItemTypeID);					/* ƒAƒCƒeƒ€í•Ê–¼‚ğæ“¾ */
-	LPCSTR	GetTypeNameTypeID	(DWORD dwTypeID);						/* ƒAƒCƒeƒ€í•Ê–¼‚ğæ“¾ */
-	LPCSTR	GetGrpIDMainName	(DWORD dwTypeID, WORD wGrpIDMain);		/* ‰æ‘œIDƒƒCƒ“í•Ê–¼‚ğæ“¾ */
-	DWORD	GetGrpIDMain		(DWORD dwTypeID, WORD wGrpIDMain);		/* ‰æ‘œIDƒƒCƒ“‚ğæ“¾ */
+	int		GetGrpIDMainCount	(DWORD dwTypeID);						/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ã®ç”»åƒIDãƒ¡ã‚¤ãƒ³æ•°ã‚’å–å¾— */
+	LPCSTR	GetTypeName			(DWORD dwItemTypeID);					/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥åã‚’å–å¾— */
+	LPCSTR	GetTypeNameTypeID	(DWORD dwTypeID);						/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥åã‚’å–å¾— */
+	LPCSTR	GetGrpIDMainName	(DWORD dwTypeID, WORD wGrpIDMain);		/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ç¨®åˆ¥åã‚’å–å¾— */
+	DWORD	GetGrpIDMain		(DWORD dwTypeID, WORD wGrpIDMain);		/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ã‚’å–å¾— */
 
-	PCInfoBase	GetPtr (int nNo);										/* ƒAƒCƒeƒ€î•ñ‚ğæ“¾ */
-	PCInfoBase	GetPtr (DWORD dwTypeID);								/* ƒAƒCƒeƒ€î•ñ‚ğæ“¾ */
+	PCInfoBase	GetPtr (int nNo);										/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase	GetPtr (DWORD dwTypeID);								/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);									/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);									/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);							/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
-	PBYTE	GetNewSendData		(PBYTE pSrc, PCInfoItemTypeBase &pDst);	/* ‘—Mƒf[ƒ^‚©‚çV‹Kƒf[ƒ^‚ğæ“¾ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ƒAƒCƒeƒ€ID‚ğæ“¾ */
+	DWORD	GetSendDataSize		(void);									/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);									/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
+	PBYTE	GetNewSendData		(PBYTE pSrc, PCInfoItemTypeBase &pDst);	/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
 
 protected:
-	DWORD	m_dwNewIDTmp;						/* V‹KIDì¬—p */
-	PARRAYITEMTYPEINFO	m_paInfo;				/* ƒAƒCƒeƒ€í•Êî•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„ã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾— */
+
+
+protected:
+	DWORD	m_dwNewIDTmp;						/* æ–°è¦IDä½œæˆç”¨ */
+	PARRAYITEMTYPEINFO	m_paInfo;				/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
 } CLibInfoItemType, *PCLibInfoItemType;
 
 /* Copyright(C)URARA-works 2007 */

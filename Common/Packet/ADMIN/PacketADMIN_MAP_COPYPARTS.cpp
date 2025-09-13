@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketADMIN_MAP_COPYPARTS.cpp								 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ä«óùé“ån:É}ÉbÉvÉpÅ[ÉcÉRÉsÅ[) é¿ëïÉtÉ@ÉCÉã			 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/06/14													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketADMIN_MAP_COPYPARTS.cpp								 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(ÁÆ°ÁêÜËÄÖÁ≥ª:„Éû„ÉÉ„Éó„Éë„Éº„ÉÑ„Ç≥„Éî„Éº) ÂÆüË£Ö„Éï„Ç°„Ç§„É´			 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/06/14													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_MAP_COPYPARTS.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_COPYPARTS::CPacketADMIN_MAP_COPYPARTS			 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/14														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_COPYPARTS::CPacketADMIN_MAP_COPYPARTS			 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/14														 */
 /* ========================================================================= */
 
 CPacketADMIN_MAP_COPYPARTS::CPacketADMIN_MAP_COPYPARTS()
@@ -26,9 +26,9 @@ CPacketADMIN_MAP_COPYPARTS::CPacketADMIN_MAP_COPYPARTS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_COPYPARTS::~CPacketADMIN_MAP_COPYPARTS		 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/14														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_COPYPARTS::~CPacketADMIN_MAP_COPYPARTS		 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/14														 */
 /* ========================================================================= */
 
 CPacketADMIN_MAP_COPYPARTS::~CPacketADMIN_MAP_COPYPARTS()
@@ -37,14 +37,14 @@ CPacketADMIN_MAP_COPYPARTS::~CPacketADMIN_MAP_COPYPARTS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_COPYPARTS::Make								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/06/14														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_COPYPARTS::Make								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/06/14														 */
 /* ========================================================================= */
 
 void CPacketADMIN_MAP_COPYPARTS::Make(
-	DWORD dwSrcPartsID,		/* [in] ÉRÉsÅ[å≥ÉpÅ[ÉcID */
-	POINT ptViewPos)		/* [in] ï\é¶à íu */
+	DWORD dwSrcPartsID,		/* [in] „Ç≥„Éî„ÉºÂÖÉ„Éë„Éº„ÉÑID */
+	POINT ptViewPos)		/* [in] Ë°®Á§∫‰ΩçÁΩÆ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -62,17 +62,17 @@ void CPacketADMIN_MAP_COPYPARTS::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_MAP_COPYPARTS;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwSrcPartsID,	sizeof (dwSrcPartsID),	pDataTmp);	/* ÉRÉsÅ[å≥ÉpÅ[ÉcID */
-	CopyMemoryRenew (pDataTmp, &ptViewPos,		sizeof (ptViewPos),		pDataTmp);	/* ï\é¶à íu */
+	CopyMemoryRenew (pDataTmp, &dwSrcPartsID,	sizeof (dwSrcPartsID),	pDataTmp);	/* „Ç≥„Éî„ÉºÂÖÉ„Éë„Éº„ÉÑID */
+	CopyMemoryRenew (pDataTmp, &ptViewPos,		sizeof (ptViewPos),		pDataTmp);	/* Ë°®Á§∫‰ΩçÁΩÆ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_MAP_COPYPARTS::Set								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/06/14														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_MAP_COPYPARTS::Set								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/06/14														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_MAP_COPYPARTS::Set(PBYTE pPacket)
@@ -82,8 +82,8 @@ PBYTE CPacketADMIN_MAP_COPYPARTS::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwSrcPartsID,	pDataTmp, sizeof (m_dwSrcPartsID),	pDataTmp);	/* ÉpÅ[ÉcID */
-	CopyMemoryRenew (&m_ptViewPos,		pDataTmp, sizeof (m_ptViewPos),		pDataTmp);	/* ç¿ïW */
+	CopyMemoryRenew (&m_dwSrcPartsID,	pDataTmp, sizeof (m_dwSrcPartsID),	pDataTmp);	/* „Éë„Éº„ÉÑID */
+	CopyMemoryRenew (&m_ptViewPos,		pDataTmp, sizeof (m_ptViewPos),		pDataTmp);	/* Â∫ßÊ®ô */
 
 	pRet = pDataTmp;
 	return pRet;

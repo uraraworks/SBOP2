@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharMotion.cpp										 */
-/* “à—e			:ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/10/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharMotion.cpp										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/28													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::DoDataExchange(CDataExchange* pDX)
@@ -100,9 +100,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::CDlgAdminCharMotion						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/28														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::CDlgAdminCharMotion						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/28														 */
 /* ========================================================================= */
 
 CDlgAdminCharMotion::CDlgAdminCharMotion(CWnd* pParent /*=NULL*/)
@@ -139,9 +139,9 @@ CDlgAdminCharMotion::CDlgAdminCharMotion(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::~CDlgAdminCharMotion						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/28														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::~CDlgAdminCharMotion						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/28														 */
 /* ========================================================================= */
 
 CDlgAdminCharMotion::~CDlgAdminCharMotion()
@@ -151,9 +151,9 @@ CDlgAdminCharMotion::~CDlgAdminCharMotion()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/08/23														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/08/23														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::Init(CMgrData *pMgrData, DWORD dwMotionTypeID, DWORD dwMotionListID, int nGrpIDSub)
@@ -170,9 +170,9 @@ void CDlgAdminCharMotion::Init(CMgrData *pMgrData, DWORD dwMotionTypeID, DWORD d
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::GetList									 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::GetList									 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::GetList(CLibInfoMotion *pDst)
@@ -186,9 +186,9 @@ void CDlgAdminCharMotion::GetList(CLibInfoMotion *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::SetList									 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::SetList									 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::SetList(CLibInfoMotion *pSrc)
@@ -202,9 +202,9 @@ void CDlgAdminCharMotion::SetList(CLibInfoMotion *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/10/28														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/10/28														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharMotion::OnInitDialog()
@@ -224,77 +224,77 @@ BOOL CDlgAdminCharMotion::OnInitDialog()
 
 	m_ctlGrpChar.Set (1);
 
-	m_cmbTypeChar.InsertString (0, "•W€(16x16)");
+	m_cmbTypeChar.InsertString (0, "æ¨™æº–(16x16)");
 	m_cmbTypeChar.SetItemData (0, GRPIDMAIN_CHAR);
 	m_cmbTypeChar.InsertString (1, "NPC(16x16)");
 	m_cmbTypeChar.SetItemData (1, GRPIDMAIN_NPC);
-	m_cmbTypeChar.InsertString (2, "•W€(32x32)");
+	m_cmbTypeChar.InsertString (2, "æ¨™æº–(32x32)");
 	m_cmbTypeChar.SetItemData (2, GRPIDMAIN_2X2_CHAR);
 	m_cmbTypeChar.InsertString (3, "NPC(32x32)");
 	m_cmbTypeChar.SetItemData (3, GRPIDMAIN_2X2_NPC);
-	m_cmbTypePile1.InsertString (0, "–³‚µ");
+	m_cmbTypePile1.InsertString (0, "ç„¡ã—");
 	m_cmbTypePile1.SetItemData (0, 0);
-	m_cmbTypePile1.InsertString (1, "•Ší");
+	m_cmbTypePile1.InsertString (1, "æ­¦å™¨");
 	m_cmbTypePile1.SetItemData (1, GRPIDMAIN_WEAPON);
-	m_cmbTypePile1.InsertString (2, "‹|");
+	m_cmbTypePile1.InsertString (2, "å¼“");
 	m_cmbTypePile1.SetItemData (2, GRPIDMAIN_WEAPON_BOW);
-	m_cmbTypePile1.InsertString (3, "ƒGƒtƒFƒNƒg(32)");
+	m_cmbTypePile1.InsertString (3, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32)");
 	m_cmbTypePile1.SetItemData (3, GRPIDMAIN_EFFECT32);
-	m_cmbTypePile1.InsertString (4, "ƒGƒtƒFƒNƒg(64)");
+	m_cmbTypePile1.InsertString (4, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64)");
 	m_cmbTypePile1.SetItemData (4, GRPIDMAIN_EFFECT64);
-	m_cmbTypePile1.InsertString (5, "‘ÅŒ‚");
+	m_cmbTypePile1.InsertString (5, "æ‰“æ’ƒ");
 	m_cmbTypePile1.SetItemData (5, GRPIDMAIN_WEAPON_GLOVE);
-	m_cmbTypePile1.InsertString (6, "‚»‚Ì‘¼");
+	m_cmbTypePile1.InsertString (6, "ãã®ä»–");
 	m_cmbTypePile1.SetItemData (6, GRPIDMAIN_WEAPON_ETC);
-	m_cmbTypePile1.InsertString (7, "‚¿•¨(2x2)");
+	m_cmbTypePile1.InsertString (7, "æŒã¡ç‰©(2x2)");
 	m_cmbTypePile1.SetItemData (7, GRPIDMAIN_2X2_ARMS);
-	m_cmbTypePile1.InsertString (8, "“Áê‚¿•¨(2x2)");
+	m_cmbTypePile1.InsertString (8, "ç‰¹æ®ŠæŒã¡ç‰©(2x2)");
 	m_cmbTypePile1.SetItemData (8, GRPIDMAIN_2X2_ARMSSP);
-	m_cmbTypePile1.InsertString (9, "‹|(2x2)");
+	m_cmbTypePile1.InsertString (9, "å¼“(2x2)");
 	m_cmbTypePile1.SetItemData (9, GRPIDMAIN_2X2_BOW);
-	m_cmbTypePile2.InsertString (0, "–³‚µ");
+	m_cmbTypePile2.InsertString (0, "ç„¡ã—");
 	m_cmbTypePile2.SetItemData (0, 0);
-	m_cmbTypePile2.InsertString (1, "•Ší");
+	m_cmbTypePile2.InsertString (1, "æ­¦å™¨");
 	m_cmbTypePile2.SetItemData (1, GRPIDMAIN_WEAPON);
-	m_cmbTypePile2.InsertString (2, "‹|");
+	m_cmbTypePile2.InsertString (2, "å¼“");
 	m_cmbTypePile2.SetItemData (2, GRPIDMAIN_WEAPON_BOW);
-	m_cmbTypePile2.InsertString (3, "ƒGƒtƒFƒNƒg(32)");
+	m_cmbTypePile2.InsertString (3, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32)");
 	m_cmbTypePile2.SetItemData (3, GRPIDMAIN_EFFECT32);
-	m_cmbTypePile2.InsertString (4, "ƒGƒtƒFƒNƒg(64)");
+	m_cmbTypePile2.InsertString (4, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64)");
 	m_cmbTypePile2.SetItemData (4, GRPIDMAIN_EFFECT64);
-	m_cmbTypePile2.InsertString (5, "‘ÅŒ‚");
+	m_cmbTypePile2.InsertString (5, "æ‰“æ’ƒ");
 	m_cmbTypePile2.SetItemData (5, GRPIDMAIN_WEAPON_GLOVE);
-	m_cmbTypePile2.InsertString (6, "‚»‚Ì‘¼");
+	m_cmbTypePile2.InsertString (6, "ãã®ä»–");
 	m_cmbTypePile2.SetItemData (6, GRPIDMAIN_WEAPON_ETC);
-	m_cmbTypePile2.InsertString (7, "‚¿•¨(2x2)");
+	m_cmbTypePile2.InsertString (7, "æŒã¡ç‰©(2x2)");
 	m_cmbTypePile2.SetItemData (7, GRPIDMAIN_2X2_ARMS);
-	m_cmbTypePile2.InsertString (8, "‚(2x2)");
+	m_cmbTypePile2.InsertString (8, "ç›¾(2x2)");
 	m_cmbTypePile2.SetItemData (8, GRPIDMAIN_2X2_SHIELD);
-	m_cmbTypePile2.InsertString (9, "“Áê‚¿•¨(2x2)");
+	m_cmbTypePile2.InsertString (9, "ç‰¹æ®ŠæŒã¡ç‰©(2x2)");
 	m_cmbTypePile2.SetItemData (9, GRPIDMAIN_2X2_ARMSSP);
-	m_cmbTypePile2.InsertString (10, "‹|(2x2)");
+	m_cmbTypePile2.InsertString (10, "å¼“(2x2)");
 	m_cmbTypePile2.SetItemData (10, GRPIDMAIN_2X2_BOW);
-	m_cmbTypePile3.InsertString (0, "–³‚µ");
+	m_cmbTypePile3.InsertString (0, "ç„¡ã—");
 	m_cmbTypePile3.SetItemData (0, 0);
-	m_cmbTypePile3.InsertString (1, "•Ší");
+	m_cmbTypePile3.InsertString (1, "æ­¦å™¨");
 	m_cmbTypePile3.SetItemData (1, GRPIDMAIN_WEAPON);
-	m_cmbTypePile3.InsertString (2, "‹|");
+	m_cmbTypePile3.InsertString (2, "å¼“");
 	m_cmbTypePile3.SetItemData (2, GRPIDMAIN_WEAPON_BOW);
-	m_cmbTypePile3.InsertString (3, "ƒGƒtƒFƒNƒg(32)");
+	m_cmbTypePile3.InsertString (3, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32)");
 	m_cmbTypePile3.SetItemData (3, GRPIDMAIN_EFFECT32);
-	m_cmbTypePile3.InsertString (4, "ƒGƒtƒFƒNƒg(64)");
+	m_cmbTypePile3.InsertString (4, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64)");
 	m_cmbTypePile3.SetItemData (4, GRPIDMAIN_EFFECT64);
-	m_cmbTypePile3.InsertString (5, "‘ÅŒ‚");
+	m_cmbTypePile3.InsertString (5, "æ‰“æ’ƒ");
 	m_cmbTypePile3.SetItemData (5, GRPIDMAIN_WEAPON_GLOVE);
-	m_cmbTypePile3.InsertString (6, "‚»‚Ì‘¼");
+	m_cmbTypePile3.InsertString (6, "ãã®ä»–");
 	m_cmbTypePile3.SetItemData (6, GRPIDMAIN_WEAPON_ETC);
-	m_cmbTypePile3.InsertString (7, "‚¿•¨(2x2)");
+	m_cmbTypePile3.InsertString (7, "æŒã¡ç‰©(2x2)");
 	m_cmbTypePile3.SetItemData (7, GRPIDMAIN_2X2_ARMS);
-	m_cmbTypePile3.InsertString (8, "‚(2x2)");
+	m_cmbTypePile3.InsertString (8, "ç›¾(2x2)");
 	m_cmbTypePile3.SetItemData (8, GRPIDMAIN_2X2_SHIELD);
-	m_cmbTypePile3.InsertString (9, "“Áê‚¿•¨(2x2)");
+	m_cmbTypePile3.InsertString (9, "ç‰¹æ®ŠæŒã¡ç‰©(2x2)");
 	m_cmbTypePile3.SetItemData (9, GRPIDMAIN_2X2_ARMSSP);
-	m_cmbTypePile3.InsertString (10, "‹|(2x2)");
+	m_cmbTypePile3.InsertString (10, "å¼“(2x2)");
 	m_cmbTypePile3.SetItemData (10, GRPIDMAIN_2X2_BOW);
 	m_ctlSpinX0.SetRange (-64, 64);
 	m_ctlSpinY0.SetRange (-64, 64);
@@ -305,7 +305,7 @@ BOOL CDlgAdminCharMotion::OnInitDialog()
 	m_ctlSpinX3.SetRange (-64, 64);
 	m_ctlSpinY3.SetRange (-64, 64);
 
-	m_cmbSoundID.InsertString (0, "–³‚µ");
+	m_cmbSoundID.InsertString (0, "ç„¡ã—");
 	nCount = LibSboSoundLoader.GetSoundCount ();
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
@@ -340,9 +340,9 @@ BOOL CDlgAdminCharMotion::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::PostNcDestroy								 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/10/28														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::PostNcDestroy								 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/10/28														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::PostNcDestroy()
@@ -352,9 +352,9 @@ void CDlgAdminCharMotion::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnLButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnLButtonDown(UINT nFlags, CPoint point)
@@ -400,9 +400,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnWndClose								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WNDCLOSE)								 */
-/* “ú•t		:2007/11/04														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnWndClose								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WNDCLOSE)								 */
+/* æ—¥ä»˜		:2007/11/04														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminCharMotion::OnWndClose(WPARAM wParam, LPARAM lParam)
@@ -413,22 +413,22 @@ LRESULT CDlgAdminCharMotion::OnWndClose(WPARAM wParam, LPARAM lParam)
 	nLow = LOWORD (lParam);
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPPARTSGRP:	/* ‰æ‘œ‘I‘ğ */
+	case WINDOWID_SELECTMAPPARTSGRP:	/* ç”»åƒé¸æŠ */
 		m_pWndSelectGrp = NULL;
 		if (nLow == 0xFFFF) {
 			break;
 		}
 		switch (nHi) {
-		case 0:		/* ƒLƒƒƒ‰‰æ‘œ */
+		case 0:		/* ã‚­ãƒ£ãƒ©ç”»åƒ */
 			m_ctlGrpChar.Set (nLow);
 			break;
-		case 1:		/* d‚Ë‰æ‘œ‚P */
+		case 1:		/* é‡ã­ç”»åƒï¼‘ */
 			m_ctlGrpPile1.Set (nLow);
 			break;
-		case 2:		/* d‚Ë‰æ‘œ‚Q */
+		case 2:		/* é‡ã­ç”»åƒï¼’ */
 			m_ctlGrpPile2.Set (nLow);
 			break;
-		case 3:		/* d‚Ë‰æ‘œ‚R */
+		case 3:		/* é‡ã­ç”»åƒï¼“ */
 			m_ctlGrpPile3.Set (nLow);
 			break;
 		}
@@ -442,9 +442,9 @@ LRESULT CDlgAdminCharMotion::OnWndClose(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnHScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnHScroll									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -456,9 +456,9 @@ void CDlgAdminCharMotion::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScroll
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnTimer									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•t		:2007/11/17														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnTimer									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜		:2007/11/17														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnTimer(UINT nIDEvent)
@@ -499,9 +499,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnAdd										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnAdd										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnAdd()
@@ -524,16 +524,16 @@ void CDlgAdminCharMotion::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnDel										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnDel										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnDel()
 {
 	int nResult;
 
-	nResult = MessageBox ("‚±‚Ìƒpƒ^[ƒ“‚ğíœ‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("ã“ã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -549,9 +549,9 @@ void CDlgAdminCharMotion::OnDel()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnPlay									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Ä¶)											 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnPlay									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å†ç”Ÿ)											 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnPlay()
@@ -564,9 +564,9 @@ void CDlgAdminCharMotion::OnPlay()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnStop									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’â~)											 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnStop									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(åœæ­¢)											 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnStop()
@@ -576,9 +576,9 @@ void CDlgAdminCharMotion::OnStop()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnBnClickedDrawUp							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2008/07/02														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnBnClickedDrawUp							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2008/07/02														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnBnClickedDrawUp()
@@ -600,9 +600,9 @@ void CDlgAdminCharMotion::OnBnClickedDrawUp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnBnClickedDrawDown						 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2008/07/02														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnBnClickedDrawDown						 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2008/07/02														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnBnClickedDrawDown()
@@ -625,9 +625,9 @@ void CDlgAdminCharMotion::OnBnClickedDrawDown()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnOK										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnOK										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnOK()
@@ -639,9 +639,9 @@ void CDlgAdminCharMotion::OnOK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnSelchangeTypeChar						 */
-/* “à—e		:€–Ú‘I‘ğƒnƒ“ƒhƒ‰(ƒLƒƒƒ‰‰æ‘œ)									 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnSelchangeTypeChar						 */
+/* å†…å®¹		:é …ç›®é¸æŠãƒãƒ³ãƒ‰ãƒ©(ã‚­ãƒ£ãƒ©ç”»åƒ)									 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnSelchangeTypeChar()
@@ -660,9 +660,9 @@ void CDlgAdminCharMotion::OnSelchangeTypeChar()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnSelchangeTypePile1						 */
-/* “à—e		:€–Ú‘I‘ğƒnƒ“ƒhƒ‰(d‚Ë‰æ‘œ‚P)									 */
-/* “ú•t		:2007/11/17														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnSelchangeTypePile1						 */
+/* å†…å®¹		:é …ç›®é¸æŠãƒãƒ³ãƒ‰ãƒ©(é‡ã­ç”»åƒï¼‘)									 */
+/* æ—¥ä»˜		:2007/11/17														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnSelchangeTypePile1()
@@ -680,9 +680,9 @@ void CDlgAdminCharMotion::OnSelchangeTypePile1()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnSelchangeTypePile2						 */
-/* “à—e		:€–Ú‘I‘ğƒnƒ“ƒhƒ‰(d‚Ë‰æ‘œ‚Q)									 */
-/* “ú•t		:2007/11/17														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnSelchangeTypePile2						 */
+/* å†…å®¹		:é …ç›®é¸æŠãƒãƒ³ãƒ‰ãƒ©(é‡ã­ç”»åƒï¼’)									 */
+/* æ—¥ä»˜		:2007/11/17														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnSelchangeTypePile2()
@@ -700,9 +700,9 @@ void CDlgAdminCharMotion::OnSelchangeTypePile2()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnSelchangeTypePile3						 */
-/* “à—e		:€–Ú‘I‘ğƒnƒ“ƒhƒ‰(d‚Ë‰æ‘œ‚R)									 */
-/* “ú•t		:2008/06/22														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnSelchangeTypePile3						 */
+/* å†…å®¹		:é …ç›®é¸æŠãƒãƒ³ãƒ‰ãƒ©(é‡ã­ç”»åƒï¼“)									 */
+/* æ—¥ä»˜		:2008/06/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnSelchangeTypePile3()
@@ -721,9 +721,9 @@ void CDlgAdminCharMotion::OnSelchangeTypePile3()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnEnChangeViewpos							 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(EN_CHANGE:•`‰æˆÊ’u)							 */
-/* “ú•t		:2008/06/22														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnEnChangeViewpos							 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(EN_CHANGE:æç”»ä½ç½®)							 */
+/* æ—¥ä»˜		:2008/06/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnEnChangeViewpos()
@@ -736,9 +736,9 @@ void CDlgAdminCharMotion::OnEnChangeViewpos()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::RenewSlider								 */
-/* “à—e		:ƒXƒ‰ƒCƒ_[‚ğXV												 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::RenewSlider								 */
+/* å†…å®¹		:ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æ›´æ–°												 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::RenewSlider(void)
@@ -760,9 +760,9 @@ void CDlgAdminCharMotion::RenewSlider(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::RenewPreview								 */
-/* “à—e		:ƒvƒŒƒrƒ…[‰æ‘œ‚ğXV											 */
-/* “ú•t		:2007/11/17														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::RenewPreview								 */
+/* å†…å®¹		:ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”»åƒã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2007/11/17														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::RenewPreview(void)
@@ -791,8 +791,8 @@ void CDlgAdminCharMotion::RenewPreview(void)
 	y = (nSizeChar == 16) ? 8 : 0;
 
 	switch (pInfo->m_wGrpIDMainBase) {
-	case GRPIDMAIN_CHAR:		/* ƒLƒƒƒ‰ */
-	case GRPIDMAIN_2X2_CHAR:	/* ƒLƒƒƒ‰(32x32) */
+	case GRPIDMAIN_CHAR:		/* ã‚­ãƒ£ãƒ© */
+	case GRPIDMAIN_2X2_CHAR:	/* ã‚­ãƒ£ãƒ©(32x32) */
 		dwParam = FAMILYTYPE_HUMAN;
 		break;
 	default:
@@ -803,13 +803,13 @@ void CDlgAdminCharMotion::RenewPreview(void)
 	nCount = m_ctlDrawList.GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		switch (m_ctlDrawList.GetItemData (i)) {
-		case 0:		/* ‰º’n */
+		case 0:		/* ä¸‹åœ° */
 			pImg = pMgrGrpData->GetDib (pInfo->m_wGrpIDMainBase, 0, dwParam);
 			if (pImg) {
 				Img.BltFrom256 (x + pInfo->m_ptDrawPosPile0.x / 2, y + pInfo->m_ptDrawPosPile0.y / 2, nSizeChar, nSizeChar, pImg, (nNoChar % nCountCharX) * nSizeChar, (nNoChar / nCountCharX) * nSizeChar, TRUE);
 			}
 			break;
-		case 1:		/* d‚Ë‡‚í‚¹1 */
+		case 1:		/* é‡ã­åˆã‚ã›1 */
 			nNo		= pInfo->m_wGrpIDSubPile1;
 			nSize	= pMgrGrpData->GetGrpSize (pInfo->m_wGrpIDMainPile1);
 			nCountX	= pMgrGrpData->GetGrpCountX (pInfo->m_wGrpIDMainPile1);
@@ -825,7 +825,7 @@ void CDlgAdminCharMotion::RenewPreview(void)
 				}
 			}
 			break;
-		case 2:		/* d‚Ë‡‚í‚¹2 */
+		case 2:		/* é‡ã­åˆã‚ã›2 */
 			nNo		= pInfo->m_wGrpIDSubPile2;
 			nSize	= pMgrGrpData->GetGrpSize (pInfo->m_wGrpIDMainPile2);
 			nCountX	= pMgrGrpData->GetGrpCountX (pInfo->m_wGrpIDMainPile2);
@@ -841,7 +841,7 @@ void CDlgAdminCharMotion::RenewPreview(void)
 				}
 			}
 			break;
-		case 3:		/* d‚Ë‡‚í‚¹3 */
+		case 3:		/* é‡ã­åˆã‚ã›3 */
 			nNo		= pInfo->m_wGrpIDSubPile3;
 			nSize	= pMgrGrpData->GetGrpSize (pInfo->m_wGrpIDMainPile3);
 			nCountX	= pMgrGrpData->GetGrpCountX (pInfo->m_wGrpIDMainPile3);
@@ -872,9 +872,9 @@ void CDlgAdminCharMotion::RenewPreview(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::OnSelectAnime								 */
-/* “à—e		:ƒRƒ}‘I‘ğˆ—													 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::OnSelectAnime								 */
+/* å†…å®¹		:ã‚³ãƒé¸æŠå‡¦ç†													 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::OnSelectAnime(void)
@@ -898,9 +898,9 @@ void CDlgAdminCharMotion::OnSelectAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::Enable									 */
-/* “à—e		:“ü—Í‹Ö~İ’è													 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::Enable									 */
+/* å†…å®¹		:å…¥åŠ›ç¦æ­¢è¨­å®š													 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::Enable(BOOL bEnable)
@@ -947,9 +947,9 @@ void CDlgAdminCharMotion::Enable(BOOL bEnable)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::Set										 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚Öİ’è											 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::Set										 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã¸è¨­å®š											 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::Set(int nNo)
@@ -963,34 +963,34 @@ void CDlgAdminCharMotion::Set(int nNo)
 	}
 
 	UpdateData ();
-	pInfo->m_byWait				= (BYTE)m_nViewTime;				/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	pInfo->m_byLevel1			= (BYTE)m_nLevel1;					/* “§–¾“x1 */
-	pInfo->m_byLevel2			= (BYTE)m_nLevel2;					/* “§–¾“x2 */
-	pInfo->m_byLevel3			= (BYTE)m_nLevel3;					/* “§–¾“x3 */
-	pInfo->m_bPile				= m_bPile;							/* d‚Ë‰æ‘œ‚ğæ‚É•`‰æ */
-	pInfo->m_bRedrawHand		= m_bRedrawHand;					/* è‚ğè‘O‚É•`‰æ */
-	pInfo->m_bLoop				= m_bLoop;							/* ƒ‹[ƒvÄ¶ */
-	pInfo->m_ptDrawPosPile0.x	= m_nViewPosX0;						/* •`‰æˆÊ’u(‰º’n)‰¡ */
-	pInfo->m_ptDrawPosPile0.y	= m_nViewPosY0;						/* •`‰æˆÊ’u(‰º’n)c */
-	pInfo->m_ptDrawPosPile1.x	= m_nViewPosX1;						/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹1)‰¡ */
-	pInfo->m_ptDrawPosPile1.y	= m_nViewPosY1;						/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹1)c */
-	pInfo->m_ptDrawPosPile2.x	= m_nViewPosX2;						/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹2)‰¡ */
-	pInfo->m_ptDrawPosPile2.y	= m_nViewPosY2;						/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹2)c */
-	pInfo->m_ptDrawPosPile3.x	= m_nViewPosX3;						/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹3)‰¡ */
-	pInfo->m_ptDrawPosPile3.y	= m_nViewPosY3;						/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹3)c */
-	pInfo->m_wGrpIDMainBase		= (WORD)m_ctlGrpChar. GetIDMain ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(‰º’n) */
-	pInfo->m_wGrpIDMainPile1	= (WORD)m_ctlGrpPile1.GetIDMain ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹1) */
-	pInfo->m_wGrpIDMainPile2	= (WORD)m_ctlGrpPile2.GetIDMain ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹2) */
-	pInfo->m_wGrpIDMainPile3	= (WORD)m_ctlGrpPile3.GetIDMain ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹3) */
-	pInfo->m_wGrpIDSubBase		= (WORD)m_ctlGrpChar. GetIDSub ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(‰º’n) */
-	pInfo->m_wGrpIDSubPile1		= (WORD)m_ctlGrpPile1.GetIDSub ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹1) */
-	pInfo->m_wGrpIDSubPile2		= (WORD)m_ctlGrpPile2.GetIDSub ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹2) */
-	pInfo->m_wGrpIDSubPile3		= (WORD)m_ctlGrpPile3.GetIDSub ();	/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹3) */
+	pInfo->m_byWait				= (BYTE)m_nViewTime;				/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	pInfo->m_byLevel1			= (BYTE)m_nLevel1;					/* é€æ˜åº¦1 */
+	pInfo->m_byLevel2			= (BYTE)m_nLevel2;					/* é€æ˜åº¦2 */
+	pInfo->m_byLevel3			= (BYTE)m_nLevel3;					/* é€æ˜åº¦3 */
+	pInfo->m_bPile				= m_bPile;							/* é‡ã­ç”»åƒã‚’å…ˆã«æç”» */
+	pInfo->m_bRedrawHand		= m_bRedrawHand;					/* æ‰‹ã‚’æ‰‹å‰ã«æç”» */
+	pInfo->m_bLoop				= m_bLoop;							/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	pInfo->m_ptDrawPosPile0.x	= m_nViewPosX0;						/* æç”»ä½ç½®(ä¸‹åœ°)æ¨ª */
+	pInfo->m_ptDrawPosPile0.y	= m_nViewPosY0;						/* æç”»ä½ç½®(ä¸‹åœ°)ç¸¦ */
+	pInfo->m_ptDrawPosPile1.x	= m_nViewPosX1;						/* æç”»ä½ç½®(é‡ã­åˆã‚ã›1)æ¨ª */
+	pInfo->m_ptDrawPosPile1.y	= m_nViewPosY1;						/* æç”»ä½ç½®(é‡ã­åˆã‚ã›1)ç¸¦ */
+	pInfo->m_ptDrawPosPile2.x	= m_nViewPosX2;						/* æç”»ä½ç½®(é‡ã­åˆã‚ã›2)æ¨ª */
+	pInfo->m_ptDrawPosPile2.y	= m_nViewPosY2;						/* æç”»ä½ç½®(é‡ã­åˆã‚ã›2)ç¸¦ */
+	pInfo->m_ptDrawPosPile3.x	= m_nViewPosX3;						/* æç”»ä½ç½®(é‡ã­åˆã‚ã›3)æ¨ª */
+	pInfo->m_ptDrawPosPile3.y	= m_nViewPosY3;						/* æç”»ä½ç½®(é‡ã­åˆã‚ã›3)ç¸¦ */
+	pInfo->m_wGrpIDMainBase		= (WORD)m_ctlGrpChar. GetIDMain ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(ä¸‹åœ°) */
+	pInfo->m_wGrpIDMainPile1	= (WORD)m_ctlGrpPile1.GetIDMain ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›1) */
+	pInfo->m_wGrpIDMainPile2	= (WORD)m_ctlGrpPile2.GetIDMain ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›2) */
+	pInfo->m_wGrpIDMainPile3	= (WORD)m_ctlGrpPile3.GetIDMain ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›3) */
+	pInfo->m_wGrpIDSubBase		= (WORD)m_ctlGrpChar. GetIDSub ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(ä¸‹åœ°) */
+	pInfo->m_wGrpIDSubPile1		= (WORD)m_ctlGrpPile1.GetIDSub ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›1) */
+	pInfo->m_wGrpIDSubPile2		= (WORD)m_ctlGrpPile2.GetIDSub ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›2) */
+	pInfo->m_wGrpIDSubPile3		= (WORD)m_ctlGrpPile3.GetIDSub ();	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›3) */
 
 	nSelect = m_cmbSoundID.GetCurSel ();
-	pInfo->m_dwSoundID	= m_cmbSoundID.GetItemData (nSelect);	/* Œø‰Ê‰¹ID */
+	pInfo->m_dwSoundID	= m_cmbSoundID.GetItemData (nSelect);	/* åŠ¹æœéŸ³ID */
 	nSelect = m_cmbProcID.GetCurSel ();
-	pInfo->m_dwProcID	= m_cmbProcID.GetItemData (nSelect);	/* s“®ID */
+	pInfo->m_dwProcID	= m_cmbProcID.GetItemData (nSelect);	/* è¡Œå‹•ID */
 
 	pInfo->m_anDrawList.RemoveAll ();
 	nCount = m_ctlDrawList.GetCount ();
@@ -1001,9 +1001,9 @@ void CDlgAdminCharMotion::Set(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotion::Get										 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚©‚çæ“¾											 */
-/* “ú•t		:2007/11/14														 */
+/* é–¢æ•°å	:CDlgAdminCharMotion::Get										 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‹ã‚‰å–å¾—											 */
+/* æ—¥ä»˜		:2007/11/14														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotion::Get(int nNo)
@@ -1011,36 +1011,36 @@ void CDlgAdminCharMotion::Get(int nNo)
 	int i, nCount;
 	PCInfoMotion pInfo;
 	ARRAYINT anTmp;
-	LPSTR paszName[] = {"‰º’n", "d‚Ë‰æ‘œ1", "d‚Ë‰æ‘œ2", "d‚Ë‰æ‘œ3"};
+	LPSTR paszName[] = {"ä¸‹åœ°", "é‡ã­ç”»åƒ1", "é‡ã­ç”»åƒ2", "é‡ã­ç”»åƒ3"};
 
 	pInfo = (PCInfoMotion)m_pLibInfoMotion->GetPtr (nNo);
 	if (pInfo == NULL) {
 		return;
 	}
 
-	m_nViewTime		= pInfo->m_byWait;				/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	m_nLevel1		= pInfo->m_byLevel1;			/* “§–¾“x1 */
-	m_nLevel2		= pInfo->m_byLevel2;			/* “§–¾“x2 */
-	m_nLevel3		= pInfo->m_byLevel3;			/* “§–¾“x3 */
-	m_bPile			= pInfo->m_bPile;				/* d‚Ë‰æ‘œ‚ğæ‚É•`‰æ */
-	m_bRedrawHand	= pInfo->m_bRedrawHand;			/* è‚ğè‘O‚É•`‰æ */
-	m_bLoop			= pInfo->m_bLoop;				/* ƒ‹[ƒvÄ¶ */
-	m_nViewPosX0	= pInfo->m_ptDrawPosPile0.x;	/* •`‰æˆÊ’u(‰º’n)‰¡ */
-	m_nViewPosY0	= pInfo->m_ptDrawPosPile0.y;	/* •`‰æˆÊ’u(‰º’n)c */
-	m_nViewPosX1	= pInfo->m_ptDrawPosPile1.x;	/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹1)‰¡ */
-	m_nViewPosY1	= pInfo->m_ptDrawPosPile1.y;	/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹1)c */
-	m_nViewPosX2	= pInfo->m_ptDrawPosPile2.x;	/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹2)‰¡ */
-	m_nViewPosY2	= pInfo->m_ptDrawPosPile2.y;	/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹2)c */
-	m_nViewPosX3	= pInfo->m_ptDrawPosPile3.x;	/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹3)‰¡ */
-	m_nViewPosY3	= pInfo->m_ptDrawPosPile3.y;	/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹3)c */
-	m_ctlGrpChar. Init (pInfo->m_wGrpIDMainBase);	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(‰º’n) */
-	m_ctlGrpPile1.Init (pInfo->m_wGrpIDMainPile1);	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹1) */
-	m_ctlGrpPile2.Init (pInfo->m_wGrpIDMainPile2);	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹2) */
-	m_ctlGrpPile3.Init (pInfo->m_wGrpIDMainPile3);	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹3) */
-	m_ctlGrpChar. Set (pInfo->m_wGrpIDSubBase);		/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(‰º’n) */
-	m_ctlGrpPile1.Set (pInfo->m_wGrpIDSubPile1);	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹1) */
-	m_ctlGrpPile2.Set (pInfo->m_wGrpIDSubPile2);	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹2) */
-	m_ctlGrpPile3.Set (pInfo->m_wGrpIDSubPile3);	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹3) */
+	m_nViewTime		= pInfo->m_byWait;				/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	m_nLevel1		= pInfo->m_byLevel1;			/* é€æ˜åº¦1 */
+	m_nLevel2		= pInfo->m_byLevel2;			/* é€æ˜åº¦2 */
+	m_nLevel3		= pInfo->m_byLevel3;			/* é€æ˜åº¦3 */
+	m_bPile			= pInfo->m_bPile;				/* é‡ã­ç”»åƒã‚’å…ˆã«æç”» */
+	m_bRedrawHand	= pInfo->m_bRedrawHand;			/* æ‰‹ã‚’æ‰‹å‰ã«æç”» */
+	m_bLoop			= pInfo->m_bLoop;				/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	m_nViewPosX0	= pInfo->m_ptDrawPosPile0.x;	/* æç”»ä½ç½®(ä¸‹åœ°)æ¨ª */
+	m_nViewPosY0	= pInfo->m_ptDrawPosPile0.y;	/* æç”»ä½ç½®(ä¸‹åœ°)ç¸¦ */
+	m_nViewPosX1	= pInfo->m_ptDrawPosPile1.x;	/* æç”»ä½ç½®(é‡ã­åˆã‚ã›1)æ¨ª */
+	m_nViewPosY1	= pInfo->m_ptDrawPosPile1.y;	/* æç”»ä½ç½®(é‡ã­åˆã‚ã›1)ç¸¦ */
+	m_nViewPosX2	= pInfo->m_ptDrawPosPile2.x;	/* æç”»ä½ç½®(é‡ã­åˆã‚ã›2)æ¨ª */
+	m_nViewPosY2	= pInfo->m_ptDrawPosPile2.y;	/* æç”»ä½ç½®(é‡ã­åˆã‚ã›2)ç¸¦ */
+	m_nViewPosX3	= pInfo->m_ptDrawPosPile3.x;	/* æç”»ä½ç½®(é‡ã­åˆã‚ã›3)æ¨ª */
+	m_nViewPosY3	= pInfo->m_ptDrawPosPile3.y;	/* æç”»ä½ç½®(é‡ã­åˆã‚ã›3)ç¸¦ */
+	m_ctlGrpChar. Init (pInfo->m_wGrpIDMainBase);	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(ä¸‹åœ°) */
+	m_ctlGrpPile1.Init (pInfo->m_wGrpIDMainPile1);	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›1) */
+	m_ctlGrpPile2.Init (pInfo->m_wGrpIDMainPile2);	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›2) */
+	m_ctlGrpPile3.Init (pInfo->m_wGrpIDMainPile3);	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›3) */
+	m_ctlGrpChar. Set (pInfo->m_wGrpIDSubBase);		/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(ä¸‹åœ°) */
+	m_ctlGrpPile1.Set (pInfo->m_wGrpIDSubPile1);	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›1) */
+	m_ctlGrpPile2.Set (pInfo->m_wGrpIDSubPile2);	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›2) */
+	m_ctlGrpPile3.Set (pInfo->m_wGrpIDSubPile3);	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›3) */
 
 	UpdateData (FALSE);
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_MAP_COPYPARTS.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒ}ƒbƒvƒp[ƒcƒRƒs[) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/06/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_MAP_COPYPARTS.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚³ãƒ”ãƒ¼) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_MAP_COPYPARTS : public CPacketBase
 {
 public:
-			CPacketADMIN_MAP_COPYPARTS();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_MAP_COPYPARTS();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_MAP_COPYPARTS();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_MAP_COPYPARTS();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwSrcPartsID, POINT ptViewPos);			/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwSrcPartsID, POINT ptViewPos);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwSrcPartsID;			/* ƒRƒs[Œ³ƒp[ƒcID */
-	POINT	m_ptViewPos;			/* •\Ž¦ˆÊ’u */
+	DWORD	m_dwSrcPartsID;			/* ã‚³ãƒ”ãƒ¼å…ƒãƒ‘ãƒ¼ãƒ„ID */
+	POINT	m_ptViewPos;			/* è¡¨ç¤ºä½ç½® */
 } CPacketADMIN_MAP_COPYPARTS, *PCPacketADMIN_MAP_COPYPARTS;
 
 /* Copyright(C)URARA-works 2007 */

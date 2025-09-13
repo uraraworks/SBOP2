@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndSelectGrp.h												 */
-/* “à—e			:‰æ‘œ‘I‘ğƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/10/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndSelectGrp.h												 */
+/* å†…å®¹			:ç”»åƒé¸æŠã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,39 +13,39 @@ class CMgrGrpData;
 class CImg32;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWndSelectGrp : public CWnd
 {
 public:
-			CWndSelectGrp();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWndSelectGrp();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWndSelectGrp();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWndSelectGrp();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nNotify);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nNotify);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
 
-	void	SetType	(int nType, int nGrpIDSub = 0);			/* ‰æ‘œƒ^ƒCƒv‚Ìİ’è */
-
-
-protected:
-	void	RenewScrollRange	(int cx, int cy);			/* ƒXƒNƒ[ƒ‹ƒo[‚Ì”ÍˆÍ‚ğXV */
-	void	RenewGrp			(int nType);				/* •\¦‰æ‘œ‚ÌXV */
+	void	SetType	(int nType, int nGrpIDSub = 0);			/* ç”»åƒã‚¿ã‚¤ãƒ—ã®è¨­å®š */
 
 
 protected:
-	int			m_nSelect,						/* ‘I‘ğ‚³‚ê‚½ƒp[ƒc”Ô† */
-				m_nNotify,						/* ’Ê’mƒf[ƒ^ */
-				m_nType,						/* ‰æ‘œƒ^ƒCƒv */
-				m_nGrpSizeX,					/* 1‰æ‘œ‚Ì‰¡ƒTƒCƒY */
-				m_nGrpCountX,					/* ‰æ‘œ‚Pƒtƒ@ƒCƒ‹‚Ì‰¡ŒÂ” */
-				m_nGrpIDSub;					/* ƒOƒ‰ƒtƒBƒbƒNƒTƒuID */
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgBack,					/* ƒoƒbƒNƒoƒbƒtƒ@ */
-				*m_pImgBase;					/* •\¦‰æ‘œ */
+	void	RenewScrollRange	(int cx, int cy);			/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ç¯„å›²ã‚’æ›´æ–° */
+	void	RenewGrp			(int nType);				/* è¡¨ç¤ºç”»åƒã®æ›´æ–° */
 
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+
+protected:
+	int			m_nSelect,						/* é¸æŠã•ã‚ŒãŸãƒ‘ãƒ¼ãƒ„ç•ªå· */
+				m_nNotify,						/* é€šçŸ¥ãƒ‡ãƒ¼ã‚¿ */
+				m_nType,						/* ç”»åƒã‚¿ã‚¤ãƒ— */
+				m_nGrpSizeX,					/* 1ç”»åƒã®æ¨ªã‚µã‚¤ã‚º */
+				m_nGrpCountX,					/* ç”»åƒï¼‘ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¨ªå€‹æ•° */
+				m_nGrpIDSub;					/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚µãƒ–ID */
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgBack,					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+				*m_pImgBase;					/* è¡¨ç¤ºç”»åƒ */
+
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 
 
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:CryptUtil.cpp												 */
-/* “à—e			:ˆÃ†•œ†ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:CryptUtil.cpp												 */
+/* å†…å®¹			:æš—å·å¾©å·ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/02													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CCryptUtil::CCryptUtil											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/02														 */
+/* é–¢æ•°å	:CCryptUtil::CCryptUtil											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/02														 */
 /* ========================================================================= */
 
 CCryptUtil::CCryptUtil()
@@ -25,9 +25,9 @@ CCryptUtil::CCryptUtil()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CCryptUtil::~CCryptUtil										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/02														 */
+/* é–¢æ•°å	:CCryptUtil::~CCryptUtil										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/02														 */
 /* ========================================================================= */
 
 CCryptUtil::~CCryptUtil()
@@ -40,16 +40,16 @@ CCryptUtil::~CCryptUtil()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CCryptUtil::Crypt												 */
-/* “à—e		:ˆÃ†‰»															 */
-/* “ú•t		:2007/07/02														 */
+/* é–¢æ•°å	:CCryptUtil::Crypt												 */
+/* å†…å®¹		:æš—å·åŒ–															 */
+/* æ—¥ä»˜		:2007/07/02														 */
 /* ========================================================================= */
 
 void CCryptUtil::Crypt(
-	PBYTE pSrc,			/* [in]  ˆÃ†‰»‚·‚éƒf[ƒ^ */
-	PBYTE pDst,			/* [out] ˆÃ†‰»‚µ‚½ƒf[ƒ^ */
-	DWORD dwSize,		/* [in]  ƒf[ƒ^ƒTƒCƒY */
-	int nKeyNo)			/* [in]  ‰Šú‰»ˆÊ’u */
+	PBYTE pSrc,			/* [in]  æš—å·åŒ–ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	PBYTE pDst,			/* [out] æš—å·åŒ–ã—ãŸãƒ‡ãƒ¼ã‚¿ */
+	DWORD dwSize,		/* [in]  ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+	int nKeyNo)			/* [in]  åˆæœŸåŒ–ä½ç½® */
 {
 	DWORD i;
 
@@ -60,32 +60,32 @@ void CCryptUtil::Crypt(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CCryptUtil::UnCrypt											 */
-/* “à—e		:•œ†‰»															 */
-/* “ú•t		:2007/07/02														 */
+/* é–¢æ•°å	:CCryptUtil::UnCrypt											 */
+/* å†…å®¹		:å¾©å·åŒ–															 */
+/* æ—¥ä»˜		:2007/07/02														 */
 /* ========================================================================= */
 
 void CCryptUtil::UnCrypt(
-	PBYTE pSrc,			/* [in]  •œ†‰»‚·‚éƒf[ƒ^ */
-	PBYTE pDst,			/* [out] •œ†‰»‚µ‚½ƒf[ƒ^ */
-	DWORD dwSize,		/* [in] ƒf[ƒ^ƒTƒCƒY */
-	int nKeyNo)			/* [in] ‰Šú‰»ˆÊ’u */
+	PBYTE pSrc,			/* [in]  å¾©å·åŒ–ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	PBYTE pDst,			/* [out] å¾©å·åŒ–ã—ãŸãƒ‡ãƒ¼ã‚¿ */
+	DWORD dwSize,		/* [in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+	int nKeyNo)			/* [in] åˆæœŸåŒ–ä½ç½® */
 {
 	Crypt (pSrc, pDst, dwSize, nKeyNo);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CCryptUtil::CryptStr											 */
-/* “à—e		:ˆÃ†‰»(•¶Žš—ñ)													 */
-/* “ú•t		:2007/07/02														 */
-/* ƒƒ‚		:pDst‚Í dwSize * 3 + 1ƒoƒCƒgˆÈã•K—v							 */
+/* é–¢æ•°å	:CCryptUtil::CryptStr											 */
+/* å†…å®¹		:æš—å·åŒ–(æ–‡å­—åˆ—)													 */
+/* æ—¥ä»˜		:2007/07/02														 */
+/* ãƒ¡ãƒ¢		:pDstã¯ dwSize * 3 + 1ãƒã‚¤ãƒˆä»¥ä¸Šå¿…è¦							 */
 /* ========================================================================= */
 
 void CCryptUtil::CryptStr(
-	LPCSTR pszSrc,		/* [in]  ˆÃ†‰»‚·‚éƒf[ƒ^ */
-	LPSTR pszDst,		/* [out] ˆÃ†‰»‚µ‚½ƒf[ƒ^ */
-	int nKeyNo)			/* [in]  ‰Šú‰»ˆÊ’u */
+	LPCSTR pszSrc,		/* [in]  æš—å·åŒ–ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	LPSTR pszDst,		/* [out] æš—å·åŒ–ã—ãŸãƒ‡ãƒ¼ã‚¿ */
+	int nKeyNo)			/* [in]  åˆæœŸåŒ–ä½ç½® */
 {
 	int i, nLen;
 
@@ -99,15 +99,15 @@ void CCryptUtil::CryptStr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CCryptUtil::UnCryptStr											 */
-/* “à—e		:•œ†‰»(•¶Žš—ñ)													 */
-/* “ú•t		:2007/07/02														 */
+/* é–¢æ•°å	:CCryptUtil::UnCryptStr											 */
+/* å†…å®¹		:å¾©å·åŒ–(æ–‡å­—åˆ—)													 */
+/* æ—¥ä»˜		:2007/07/02														 */
 /* ========================================================================= */
 
 void CCryptUtil::UnCryptStr(
-	LPCSTR pszSrc,		/* [in]  •œ†‰»‚·‚éƒf[ƒ^ */
-	LPSTR pszDst,		/* [out] •œ†‰»‚µ‚½ƒf[ƒ^ */
-	int nKeyNo)			/* [in] ‰Šú‰»ˆÊ’u */
+	LPCSTR pszSrc,		/* [in]  å¾©å·åŒ–ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	LPSTR pszDst,		/* [out] å¾©å·åŒ–ã—ãŸãƒ‡ãƒ¼ã‚¿ */
+	int nKeyNo)			/* [in] åˆæœŸåŒ–ä½ç½® */
 {
 	int i, nLen, nPos;
 	char szTmp[3];
@@ -126,9 +126,9 @@ void CCryptUtil::UnCryptStr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CCryptUtil::Init												 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/07/02														 */
+/* é–¢æ•°å	:CCryptUtil::Init												 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/07/02														 */
 /* ========================================================================= */
 
 void CCryptUtil::Init(void)

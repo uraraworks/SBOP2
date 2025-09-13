@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_EFC_RENEWEFFECT.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒGƒtƒFƒNƒgî•ñ‚ÌXV) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_EFC_RENEWEFFECT.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ã®æ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CInfoEffect;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_EFC_RENEWEFFECT : public CPacketBase
 {
 public:
-			CPacketADMIN_EFC_RENEWEFFECT();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_EFC_RENEWEFFECT();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_EFC_RENEWEFFECT();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_EFC_RENEWEFFECT();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwEffectID, CInfoEffect *pSrc);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwEffectID, CInfoEffect *pSrc);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD		m_dwEffectID;		/* ƒGƒtƒFƒNƒgID */
-	CInfoEffect	*m_pInfo;			/* ƒGƒtƒFƒNƒgî•ñ */
+	DWORD		m_dwEffectID;		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	CInfoEffect	*m_pInfo;			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 } CPacketADMIN_EFC_RENEWEFFECT, *PCPacketADMIN_EFC_RENEWEFFECT;
 
 /* Copyright(C)URARA-works 2008 */

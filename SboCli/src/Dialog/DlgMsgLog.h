@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	DlgMsgLog.h													 */
-/* “à—eF		ƒƒbƒZ[ƒWƒƒOƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/09/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	DlgMsgLog.h													 */
+/* å†…å®¹ï¼š		ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ­ã‚°ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/09/25													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,32 +16,32 @@ class CMgrData;
 class CTextOutput;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgMsgLog : public CDialog, CLayoutHelper
 {
 public:
-			CDlgMsgLog(CWnd* pParent = NULL);			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgMsgLog();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgMsgLog(CWnd* pParent = NULL);			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgMsgLog();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL Create (HWND hWndParent, CMgrData *pMgrData);			/* ì¬ */
-	void Add	(LPCSTR pszLog, COLORREF cl);					/* ’Ç‰Á */
+	BOOL Create (HWND hWndParent, CMgrData *pMgrData);			/* ä½œæˆ */
+	void Add	(LPCSTR pszLog, COLORREF cl);					/* è¿½åŠ  */
 
-
-
-protected:
-	void	MakeLogFile	(void);									/* Œ»İ‚ÅƒƒOƒtƒ@ƒCƒ‹‚ğì¬ */
-	static LRESULT CALLBACK ChatWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ƒ`ƒƒƒbƒg“ü—Í—“ƒvƒƒV[ƒWƒƒ */
 
 
 protected:
-	HWND			m_hWndChat;				/* ƒ`ƒƒƒbƒg“ü—Í—“ */
-	WNDPROC			m_OrgWndProcChat;		/* ƒ`ƒƒƒbƒg“ü—Í—“‚ÌŒ³ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
-	BOOL			m_bPushEnter;			/* EnterƒL[‰Ÿ‰ºó‘Ô */
-	CTime			m_timeMakeLog;			/* ƒƒOì¬”NŒ“ú */
-	CMgrData		*m_pMgrData;			/* ƒf[ƒ^ŠÇ— */
-	CTextOutput		*m_pLog;				/* ƒƒOƒtƒ@ƒCƒ‹ */
+	void	MakeLogFile	(void);									/* ç¾åœ¨æ™‚åˆ»ã§ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ */
+	static LRESULT CALLBACK ChatWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+
+
+protected:
+	HWND			m_hWndChat;				/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ */
+	WNDPROC			m_OrgWndProcChat;		/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ã®å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+	BOOL			m_bPushEnter;			/* Enterã‚­ãƒ¼æŠ¼ä¸‹çŠ¶æ…‹ */
+	CTime			m_timeMakeLog;			/* ãƒ­ã‚°ä½œæˆå¹´æœˆæ—¥ */
+	CMgrData		*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CTextOutput		*m_pLog;				/* ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ« */
 
 
 
@@ -55,7 +55,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgMsgLog)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 

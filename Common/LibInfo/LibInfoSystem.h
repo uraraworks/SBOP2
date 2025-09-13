@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoSystem.h											 */
-/* “à—e			:ƒVƒXƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoSystem.h											 */
+/* å†…å®¹			:ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,30 +12,30 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoSystem : public CLibInfoBase
 {
 public:
-			CLibInfoSystem();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoSystem();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoSystem();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoSystem();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);										/* ì¬ */
-	void Destroy		(void);										/* ”jŠü */
+	void Create			(void);										/* ä½œæˆ */
+	void Destroy		(void);										/* ç ´æ£„ */
 
-	virtual PCInfoBase GetNew	(void);								/* V‹Kƒf[ƒ^‚ğæ“¾ */
+	virtual PCInfoBase GetNew	(void);								/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	int		GetCount	(void);										/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);							/* ’Ç‰Á */
-	void	Delete		(int nNo);									/* íœ */
-	void	DeleteAll	(void);										/* ‘S‚Äíœ */
+	int		GetCount	(void);										/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);							/* è¿½åŠ  */
+	void	Delete		(int nNo);									/* å‰Šé™¤ */
+	void	DeleteAll	(void);										/* å…¨ã¦å‰Šé™¤ */
 
-	PCInfoBase	GetPtr	(int nNo = 0);								/* ƒVƒXƒeƒ€î•ñ‚ğæ“¾ */
+	PCInfoBase	GetPtr	(int nNo = 0);								/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã‚’å–å¾— */
 
 
 protected:
-	PCInfoSystem	m_pInfo;				/* ƒVƒXƒeƒ€î•ñ */
+	PCInfoSystem	m_pInfo;				/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
 } CLibInfoSystem, *PCLibInfoSystem;
 
 /* Copyright(C)URARA-works 2008 */

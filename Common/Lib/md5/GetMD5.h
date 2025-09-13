@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:GetMD5.h													 */
-/* “à—e			:MD5ŒvŽZƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹									 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2005/04/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:GetMD5.h													 */
+/* å†…å®¹			:MD5è¨ˆç®—ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«									 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/04/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,23 +13,23 @@ extern "C"{
 }
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CGetMD5
 {
 public:
-			CGetMD5();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CGetMD5();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CGetMD5();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CGetMD5();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Init		(void);									/* ‰Šú‰» */
-	void Update		(PBYTE pSrc, DWORD dwSize);				/* XV */
-	void GetBin		(PBYTE pDst);							/* Žæ“¾(ƒoƒCƒiƒŠ) */
-	void GetStr		(LPSTR pszDst);							/* Žæ“¾(•¶Žš—ñ) */
+	void Init		(void);									/* åˆæœŸåŒ– */
+	void Update		(PBYTE pSrc, DWORD dwSize);				/* æ›´æ–° */
+	void GetBin		(PBYTE pDst);							/* å–å¾—(ãƒã‚¤ãƒŠãƒª) */
+	void GetStr		(LPSTR pszDst);							/* å–å¾—(æ–‡å­—åˆ—) */
 
 
 private:
-	MD5_CTX		m_stContext;								/* ƒoƒbƒtƒ@ */
+	MD5_CTX		m_stContext;								/* ãƒãƒƒãƒ•ã‚¡ */
 };
 
 /* Copyright(C)URARA-works 2005 */

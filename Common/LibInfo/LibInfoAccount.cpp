@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoAccount.cpp											 */
-/* “à—e			:ƒAƒJƒEƒ“ƒgî•ñŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoAccount.cpp											 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::CLibInfoAccount								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::CLibInfoAccount								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CLibInfoAccount::CLibInfoAccount()
@@ -23,9 +23,9 @@ CLibInfoAccount::CLibInfoAccount()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::~CLibInfoAccount								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::~CLibInfoAccount								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CLibInfoAccount::~CLibInfoAccount()
@@ -35,9 +35,9 @@ CLibInfoAccount::~CLibInfoAccount()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CLibInfoAccount::Create(void)
@@ -47,9 +47,9 @@ void CLibInfoAccount::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::Destroy										 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::Destroy										 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CLibInfoAccount::Destroy(void)
@@ -60,9 +60,9 @@ void CLibInfoAccount::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::CheckPassword									 */
-/* “à—e		:ƒpƒXƒ[ƒh‚Ìƒ`ƒFƒbƒN											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::CheckPassword									 */
+/* å†…å®¹		:ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ãƒã‚§ãƒƒã‚¯											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 BOOL CLibInfoAccount::CheckPassword(LPCSTR pszAccount, LPCSTR pszPassword)
@@ -88,10 +88,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::IsUseMacAddr									 */
-/* “à—e		:MACƒAƒhƒŒƒX‚ªg—pÏ‚İ‚©ƒ`ƒFƒbƒN								 */
-/* –ß‚è’l	:TRUE:g—pÏ‚İ													 */
-/* “ú•t		:2008/07/20														 */
+/* é–¢æ•°å	:CLibInfoAccount::IsUseMacAddr									 */
+/* å†…å®¹		:MACã‚¢ãƒ‰ãƒ¬ã‚¹ãŒä½¿ç”¨æ¸ˆã¿ã‹ãƒã‚§ãƒƒã‚¯								 */
+/* æˆ»ã‚Šå€¤	:TRUE:ä½¿ç”¨æ¸ˆã¿													 */
+/* æ—¥ä»˜		:2008/07/20														 */
 /* ========================================================================= */
 
 BOOL CLibInfoAccount::IsUseMacAddr(LPCSTR pszMacAddr)
@@ -124,9 +124,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoAccount::GetNew(void)
@@ -136,9 +136,9 @@ PCInfoBase CLibInfoAccount::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetCount										 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetCount										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 int CLibInfoAccount::GetCount(void)
@@ -158,9 +158,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::Add											 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::Add											 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CLibInfoAccount::Add(PCInfoBase pInfo)
@@ -177,13 +177,13 @@ void CLibInfoAccount::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CLibInfoAccount::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoAccount pInfo;
 
@@ -194,13 +194,13 @@ void CLibInfoAccount::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CLibInfoAccount::Delete(
-	DWORD dwAccountID)		/* [in] ƒAƒJƒEƒ“ƒgID */
+	DWORD dwAccountID)		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
 {
 	int i, nCount, nNo;
 	PCInfoAccount pInfoTmp;
@@ -224,9 +224,9 @@ void CLibInfoAccount::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::DeleteAll										 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::DeleteAll										 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CLibInfoAccount::DeleteAll(void)
@@ -245,9 +245,9 @@ void CLibInfoAccount::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetAccountID									 */
-/* “à—e		:ƒLƒƒƒ‰ID‚©‚çƒAƒJƒEƒ“ƒgID‚ğæ“¾									 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetAccountID									 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©IDã‹ã‚‰ã‚¢ã‚«ã‚¦ãƒ³ãƒˆIDã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
@@ -272,9 +272,9 @@ DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetPtr										 */
-/* “à—e		:ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetPtr										 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoAccount::GetPtr(int nNo)
@@ -284,13 +284,13 @@ PCInfoBase CLibInfoAccount::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetPtr										 */
-/* “à—e		:ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetPtr										 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PCInfoAccount CLibInfoAccount::GetPtr(
-	DWORD dwAccountID)		/* [in] ƒAƒJƒEƒ“ƒgID */
+	DWORD dwAccountID)		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -312,13 +312,13 @@ PCInfoAccount CLibInfoAccount::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetPtr										 */
-/* “à—e		:ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetPtr										 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PCInfoAccount CLibInfoAccount::GetPtr(
-	LPCSTR pszAccount)		/* [in] ƒAƒJƒEƒ“ƒg */
+	LPCSTR pszAccount)		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -340,13 +340,13 @@ PCInfoAccount CLibInfoAccount::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetPtrSessionID								 */
-/* “à—e		:ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾											 */
-/* “ú•t		:2007/02/15														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetPtrSessionID								 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/02/15														 */
 /* ========================================================================= */
 
 PCInfoAccount CLibInfoAccount::GetPtrSessionID(
-	DWORD dwSessionID)		/* [in] ƒZƒbƒVƒ‡ƒ“ID */
+	DWORD dwSessionID)		/* [in] ã‚»ãƒƒã‚·ãƒ§ãƒ³ID */
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -368,13 +368,13 @@ PCInfoAccount CLibInfoAccount::GetPtrSessionID(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetPtrMacAddr									 */
-/* “à—e		:ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetPtrMacAddr									 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PCInfoAccount CLibInfoAccount::GetPtrMacAddr(
-	LPCSTR pszMacAddr)		/* [in] ì¬‚ÌMACƒAƒhƒŒƒX */
+	LPCSTR pszMacAddr)		/* [in] ä½œæˆæ™‚ã®MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -396,9 +396,9 @@ PCInfoAccount CLibInfoAccount::GetPtrMacAddr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoAccount::GetNewID										 */
-/* “à—e		:V‚µ‚¢ƒAƒJƒEƒ“ƒgID‚ğæ“¾										 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CLibInfoAccount::GetNewID										 */
+/* å†…å®¹		:æ–°ã—ã„ã‚¢ã‚«ã‚¦ãƒ³ãƒˆIDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 DWORD CLibInfoAccount::GetNewID(void)

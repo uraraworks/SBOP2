@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoCharSvr.h											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/01/21													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoCharSvr.h											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/21													 */
 /* ========================================================================= */
 
 #pragma once
@@ -25,117 +25,117 @@ typedef CmyArray<CInfoCharSvr *, CInfoCharSvr *>	  ARRAYINFOCHARSVR;
 typedef CmyArray<CInfoCharSvr *, CInfoCharSvr *>	*PARRAYINFOCHARSVR;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoCharSvr : public CLibInfoCharBase
 {
 public:
-			CLibInfoCharSvr();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoCharSvr();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoCharSvr();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoCharSvr();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create			(CMgrData *pMgrData);				/* ì¬ */
-	void	Destroy			(void);								/* ”jŠü */
-	BOOL	Proc			(void);								/* ˆ— */
+	void	Create			(CMgrData *pMgrData);				/* ä½œæˆ */
+	void	Destroy			(void);								/* ç ´æ£„ */
+	BOOL	Proc			(void);								/* å‡¦ç† */
 
-	int		GetCountLogIn	(void);													/* ƒƒOƒCƒ“’†ƒLƒƒƒ‰”‚ğæ“¾ */
-	int		GetCountOnline	(DWORD dwMapID = 0);									/* ƒIƒ“ƒ‰ƒCƒ“’†‚ÌPC”‚ğæ“¾ */
-	void	LogIn			(DWORD dwCharID, DWORD dwSessionID, DWORD dwAccountID);	/* ƒƒOƒCƒ“ */
-	void	LogOut			(DWORD dwCharID);										/* ƒƒOƒAƒEƒg */
-	void	Revice			(void);													/* ƒf[ƒ^‚Ì•â³ */
-	void	Move			(DWORD dwCharID, int nDirection, BOOL bTurn = FALSE);	/* 1•ài‚ß‚é */
-	DWORD	Tail			(PCInfoCharBase pChar, PCInfoCharBase pCharTarget, BOOL bTail);	/* •t‚¢‚Äs‚­İ’èE‰ğœ */
-	BOOL	Atack			(CInfoCharSvr *pChar);									/* UŒ‚ */
-	BOOL	AtackImple		(CInfoCharSvr *pChar, DWORD dwCharID);					/* UŒ‚Àˆ— */
-	BOOL	Equip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* ‘•”õ */
-	BOOL	UnEquip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* ‘•”õ‰ğœ */
-	BOOL	UseItem			(CInfoCharSvr *pChar, DWORD dwItemID);					/* ƒAƒCƒeƒ€g—p */
-	void	DragItem		(CInfoCharSvr *pChar, DWORD dwItemID, POINT ptNewPos);	/* ƒAƒCƒeƒ€ˆÊ’u•ÏX */
-	void	RenewGrpID		(DWORD dwCharID);										/* ‘•”õ‰æ‘œID‚ğXV */
-	DWORD	GetPlaceName	(CmyString &strDst);									/* Å‚àl‚ªW‚Ü‚Á‚Ä‚¢‚éƒ}ƒbƒv–¼‚ğæ“¾ */
-	void	MoveMapIn		(CInfoCharSvr *pInfoChar);								/* ƒ}ƒbƒv“àˆÚ“® */
-	void	MoveMapOut		(CInfoCharSvr *pInfoChar);								/* ƒ}ƒbƒvŠOˆÚ“® */
-	void	SetInitStatus	(CInfoCharSvr *pInfoChar, BOOL bInitPos=FALSE);			/* ƒXƒe[ƒ^ƒX‰Šú’lİ’è */
+	int		GetCountLogIn	(void);													/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©æ•°ã‚’å–å¾— */
+	int		GetCountOnline	(DWORD dwMapID = 0);									/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸­ã®PCæ•°ã‚’å–å¾— */
+	void	LogIn			(DWORD dwCharID, DWORD dwSessionID, DWORD dwAccountID);	/* ãƒ­ã‚°ã‚¤ãƒ³ */
+	void	LogOut			(DWORD dwCharID);										/* ãƒ­ã‚°ã‚¢ã‚¦ãƒˆ */
+	void	Revice			(void);													/* ãƒ‡ãƒ¼ã‚¿ã®è£œæ­£ */
+	void	Move			(DWORD dwCharID, int nDirection, BOOL bTurn = FALSE);	/* 1æ­©é€²ã‚ã‚‹ */
+	DWORD	Tail			(PCInfoCharBase pChar, PCInfoCharBase pCharTarget, BOOL bTail);	/* ä»˜ã„ã¦è¡Œãè¨­å®šãƒ»è§£é™¤ */
+	BOOL	Atack			(CInfoCharSvr *pChar);									/* æ”»æ’ƒ */
+	BOOL	AtackImple		(CInfoCharSvr *pChar, DWORD dwCharID);					/* æ”»æ’ƒå®Ÿå‡¦ç† */
+	BOOL	Equip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* è£…å‚™ */
+	BOOL	UnEquip			(CInfoCharSvr *pChar, DWORD dwItemID);					/* è£…å‚™è§£é™¤ */
+	BOOL	UseItem			(CInfoCharSvr *pChar, DWORD dwItemID);					/* ã‚¢ã‚¤ãƒ†ãƒ ä½¿ç”¨ */
+	void	DragItem		(CInfoCharSvr *pChar, DWORD dwItemID, POINT ptNewPos);	/* ã‚¢ã‚¤ãƒ†ãƒ ä½ç½®å¤‰æ›´ */
+	void	RenewGrpID		(DWORD dwCharID);										/* è£…å‚™ç”»åƒIDã‚’æ›´æ–° */
+	DWORD	GetPlaceName	(CmyString &strDst);									/* æœ€ã‚‚äººãŒé›†ã¾ã£ã¦ã„ã‚‹ãƒãƒƒãƒ—åã‚’å–å¾— */
+	void	MoveMapIn		(CInfoCharSvr *pInfoChar);								/* ãƒãƒƒãƒ—å†…ç§»å‹• */
+	void	MoveMapOut		(CInfoCharSvr *pInfoChar);								/* ãƒãƒƒãƒ—å¤–ç§»å‹• */
+	void	SetInitStatus	(CInfoCharSvr *pInfoChar, BOOL bInitPos=FALSE);			/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤è¨­å®š */
 
-	PCInfoCharBase	AddNPC			(CInfoCharBase *pInfoChar);						/* NPC‚Ì’Ç‰Á */
-	PCInfoBase		GetNew			(int nType);									/* V‹Kƒf[ƒ^‚ğæ“¾ */
-	void			SetPtr			(DWORD dwCharID, PCInfoCharBase pChar);			/* ƒLƒƒƒ‰î•ñ‚ğXV */
-	PCInfoCharBase	GetPtrSessionID	(DWORD dwSessionID);							/* ƒLƒƒƒ‰î•ñ‚ğæ“¾(ƒZƒbƒVƒ‡ƒ“ID‚©‚ç) */
-	PCInfoCharBase	GetPtrLogIn		(int nNo);										/* ƒƒOƒCƒ“’†ƒLƒƒƒ‰î•ñ‚ğæ“¾ */
-	PCInfoCharBase	GetPtrLogIn		(DWORD dwCharID);								/* ƒƒOƒCƒ“’†ƒLƒƒƒ‰î•ñ‚ğæ“¾ */
-	PCInfoCharBase	GetPtrParent	(CInfoCharSvr *pChar);							/* eƒLƒƒƒ‰î•ñ‚ğæ“¾ */
+	PCInfoCharBase	AddNPC			(CInfoCharBase *pInfoChar);						/* NPCã®è¿½åŠ  */
+	PCInfoBase		GetNew			(int nType);									/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	void			SetPtr			(DWORD dwCharID, PCInfoCharBase pChar);			/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’æ›´æ–° */
+	PCInfoCharBase	GetPtrSessionID	(DWORD dwSessionID);							/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾—(ã‚»ãƒƒã‚·ãƒ§ãƒ³IDã‹ã‚‰) */
+	PCInfoCharBase	GetPtrLogIn		(int nNo);										/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+	PCInfoCharBase	GetPtrLogIn		(DWORD dwCharID);								/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+	PCInfoCharBase	GetPtrParent	(CInfoCharSvr *pChar);							/* è¦ªã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
 
-	int		GetNoLogIn				(DWORD dwCharID);										/* ƒƒOƒCƒ“’†ƒLƒƒƒ‰‚Ì”z—ñ”Ô†‚ğæ“¾ */
-	void	GetScreenCharID			(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);			/* w’èƒLƒƒƒ‰‚Ì‰æ–Ê“à‚É‚¢‚éƒLƒƒƒ‰ID‚ğæ“¾ */
-	void	GetScreenCharIDLineOut	(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);			/* w’èƒLƒƒƒ‰‚Ì‰æ–Ê’[‚É‚¢‚éƒLƒƒƒ‰ID‚ğæ“¾ */
-	void	GetAreaCharInfo			(DWORD dwMapID, RECT *prcSrc, ARRAYINFOCHARSVR &aDst);	/* w’è”ÍˆÍ‚É‚Ô‚Â‚©‚éƒLƒƒƒ‰î•ñ‚ğæ“¾ */
-	void	GetTailCharInfo			(CInfoCharSvr *pInfoChar, ARRAYINFOCHARSVR &aDst);		/* ‚Â‚¢‚Ä‚«‚Ä‚¢‚éƒLƒƒƒ‰ID‚ğæ“¾ */
-	BOOL	IsMove					(PCInfoCharBase pInfoChar, int &nDirection, BOOL bEvent=FALSE);	/* w’è•ûŒü‚Éi‚ß‚é‚©ƒ`ƒFƒbƒN */
-	BOOL	IsNPC					(CInfoCharSvr *pInfoChar);						/* NPC‚©”»’è */
-	DWORD	GetFrontCharID			(DWORD dwCharID, int nDirection = -1);			/* ˆê•à‘O‚ÌƒLƒƒƒ‰ID‚ğæ“¾ */
-	DWORD	GetFrontCharIDPush		(DWORD dwCharID, int nDirection = -1);			/* ˆê•à‘O‚Ì‰Ÿ‚¹‚éƒLƒƒƒ‰ID‚ğæ“¾ */
-	DWORD	GetFrontCharIDTarget	(DWORD dwCharID, int nDirection = -1, int nXType=0, PARRAYDWORD padwCharID=NULL);/* ˆê•à‘O‚ÌUŒ‚‘ÎÛƒLƒƒƒ‰ID‚ğæ“¾ */
-	DWORD	GetNearCharID			(DWORD dwCharID, SIZE &sizedistance);			/* ‹ß‚­‚É‚¢‚é“GƒLƒƒƒ‰ID‚ğæ“¾ */
-	void	SetPos					(CInfoCharSvr *pInfoChar, DWORD dwMapID, int x, int y, BOOL bTail);	/* ƒLƒƒƒ‰‚ÌÀ•W‚ğİ’è */
-	void	RenewItemGrp			(DWORD dwTypeID);								/* ‘•”õ’†‚ÌƒAƒCƒeƒ€‰æ‘œ‚ğXV */
-	void	ProcAtack				(CInfoCharSvr *pInfoChar);						/* UŒ‚ˆ— */
+	int		GetNoLogIn				(DWORD dwCharID);										/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©ã®é…åˆ—ç•ªå·ã‚’å–å¾— */
+	void	GetScreenCharID			(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);			/* æŒ‡å®šã‚­ãƒ£ãƒ©ã®ç”»é¢å†…ã«ã„ã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	void	GetScreenCharIDLineOut	(CInfoCharSvr *pInfoChar, ARRAYDWORD &aDst);			/* æŒ‡å®šã‚­ãƒ£ãƒ©ã®ç”»é¢ç«¯ã«ã„ã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	void	GetAreaCharInfo			(DWORD dwMapID, RECT *prcSrc, ARRAYINFOCHARSVR &aDst);	/* æŒ‡å®šç¯„å›²ã«ã¶ã¤ã‹ã‚‹ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+	void	GetTailCharInfo			(CInfoCharSvr *pInfoChar, ARRAYINFOCHARSVR &aDst);		/* ã¤ã„ã¦ãã¦ã„ã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	BOOL	IsMove					(PCInfoCharBase pInfoChar, int &nDirection, BOOL bEvent=FALSE);	/* æŒ‡å®šæ–¹å‘ã«é€²ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
+	BOOL	IsNPC					(CInfoCharSvr *pInfoChar);						/* NPCã‹åˆ¤å®š */
+	DWORD	GetFrontCharID			(DWORD dwCharID, int nDirection = -1);			/* ä¸€æ­©å‰ã®ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	DWORD	GetFrontCharIDPush		(DWORD dwCharID, int nDirection = -1);			/* ä¸€æ­©å‰ã®æŠ¼ã›ã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	DWORD	GetFrontCharIDTarget	(DWORD dwCharID, int nDirection = -1, int nXType=0, PARRAYDWORD padwCharID=NULL);/* ä¸€æ­©å‰ã®æ”»æ’ƒå¯¾è±¡ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	DWORD	GetNearCharID			(DWORD dwCharID, SIZE &sizedistance);			/* è¿‘ãã«ã„ã‚‹æ•µã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	void	SetPos					(CInfoCharSvr *pInfoChar, DWORD dwMapID, int x, int y, BOOL bTail);	/* ã‚­ãƒ£ãƒ©ã®åº§æ¨™ã‚’è¨­å®š */
+	void	RenewItemGrp			(DWORD dwTypeID);								/* è£…å‚™ä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒã‚’æ›´æ–° */
+	void	ProcAtack				(CInfoCharSvr *pInfoChar);						/* æ”»æ’ƒå‡¦ç† */
 
 
 protected:
-	void SendSystemMsg				(DWORD dwSessionID, LPCSTR pszMsg, int nMsgType = 2, COLORREF clMsg = RGB (255, 255, 255), BOOL bSound = FALSE);	/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğ‘—M */
-	void SendFormatMsg				(DWORD dwSessionID, DWORD dwMsgID, DWORD dwPara1 = 0, DWORD dwPara2 = 0, int nMsgType = 2, COLORREF clMsg = RGB (255, 255, 255), BOOL bSound = FALSE);	/* ƒtƒH[ƒ}ƒbƒgƒƒbƒZ[ƒW‚ğ‘—M */
-	BOOL ProcLocal					(int nNo);							/* ˆ— */
-	BOOL ProcLocalFlgCheck			(CInfoCharSvr *pInfoChar);			/* ƒtƒ‰ƒOƒ`ƒFƒbƒNˆ— */
-	BOOL ProcLocalState				(CInfoCharSvr *pInfoChar);			/* ó‘Ô‚É‰‚¶‚½ˆ— */
-	void ProcChgPos					(CInfoCharSvr *pInfoChar);			/* ˆÚ“®ˆ— */
-	void ProcChgMap					(CInfoCharSvr *pInfoChar);			/* ƒ}ƒbƒvˆÚ“®ˆ— */
-	void ProcChgPosRenew			(CInfoCharSvr *pInfoChar);			/* À•W•ÏXˆ— */
-	BOOL ProcLocalStateBATTLEATACK	(CInfoCharSvr *pInfoChar);			/* ó‘Ô‚É‰‚¶‚½ˆ—(í“¬UŒ‚’†) */
-	void CharProcMoveMarkPos		(CInfoCharSvr *pInfoChar);			/* ‹L˜^ˆÊ’u‚ÖˆÚ“® */
-	void CharProcSWOON				(CInfoCharSvr *pInfoChar);			/* ƒLƒƒƒ‰ˆ—(‹Câ) */
-	void CharProcAtack				(CInfoCharSvr *pInfoChar);			/* UŒ‚ */
-	void PutNpc						(CInfoCharSvr *pInfoChar);			/* NPC”­¶ */
-	void TargetChar					(CInfoCharSvr *pInfoChar);			/* ‹ß‚­‚ÌƒLƒƒƒ‰‚Éƒ^[ƒQƒbƒg•ÏX */
-	void DropItem					(CInfoCharSvr *pInfoChar);			/* ƒAƒCƒeƒ€ƒhƒƒbƒv */
+	void SendSystemMsg				(DWORD dwSessionID, LPCSTR pszMsg, int nMsgType = 2, COLORREF clMsg = RGB (255, 255, 255), BOOL bSound = FALSE);	/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ */
+	void SendFormatMsg				(DWORD dwSessionID, DWORD dwMsgID, DWORD dwPara1 = 0, DWORD dwPara2 = 0, int nMsgType = 2, COLORREF clMsg = RGB (255, 255, 255), BOOL bSound = FALSE);	/* ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ */
+	BOOL ProcLocal					(int nNo);							/* å‡¦ç† */
+	BOOL ProcLocalFlgCheck			(CInfoCharSvr *pInfoChar);			/* ãƒ•ãƒ©ã‚°ãƒã‚§ãƒƒã‚¯å‡¦ç† */
+	BOOL ProcLocalState				(CInfoCharSvr *pInfoChar);			/* çŠ¶æ…‹ã«å¿œã˜ãŸå‡¦ç† */
+	void ProcChgPos					(CInfoCharSvr *pInfoChar);			/* ç§»å‹•å‡¦ç† */
+	void ProcChgMap					(CInfoCharSvr *pInfoChar);			/* ãƒãƒƒãƒ—ç§»å‹•å‡¦ç† */
+	void ProcChgPosRenew			(CInfoCharSvr *pInfoChar);			/* åº§æ¨™å¤‰æ›´å‡¦ç† */
+	BOOL ProcLocalStateBATTLEATACK	(CInfoCharSvr *pInfoChar);			/* çŠ¶æ…‹ã«å¿œã˜ãŸå‡¦ç†(æˆ¦é—˜æ”»æ’ƒä¸­) */
+	void CharProcMoveMarkPos		(CInfoCharSvr *pInfoChar);			/* è¨˜éŒ²ä½ç½®ã¸ç§»å‹• */
+	void CharProcSWOON				(CInfoCharSvr *pInfoChar);			/* ã‚­ãƒ£ãƒ©å‡¦ç†(æ°—çµ¶) */
+	void CharProcAtack				(CInfoCharSvr *pInfoChar);			/* æ”»æ’ƒ */
+	void PutNpc						(CInfoCharSvr *pInfoChar);			/* NPCç™ºç”Ÿ */
+	void TargetChar					(CInfoCharSvr *pInfoChar);			/* è¿‘ãã®ã‚­ãƒ£ãƒ©ã«ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå¤‰æ›´ */
+	void DropItem					(CInfoCharSvr *pInfoChar);			/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ— */
 
-	void	GetTargetCharID			(CInfoCharSvr *pInfoChar, int nTarget, int nArea, ARRAYDWORD &adstCharID);	/* ‘ÎÛƒLƒƒƒ‰ID‚ğæ“¾ */
-	BOOL	IsHitAtack				(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget);		/* UŒ‚‚ªƒqƒbƒg‚·‚é‚©”»’è */
-	void	Damage					(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget, DWORD dwPoint, int nEffectID, BOOL bCritical);	/* ƒ_ƒ[ƒWˆ— */
-	DWORD	GetAtackDamage			(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget);		/* UŒ‚ƒ_ƒ[ƒW‚ğæ“¾ */
-	DWORD	GetAtackEffectID		(CInfoCharSvr *pInfoChar, BOOL bCritical);					/* ‘•”õ‚É‰‚¶‚½UŒ‚‚ÌƒGƒtƒFƒNƒgID‚ğæ“¾ */
+	void	GetTargetCharID			(CInfoCharSvr *pInfoChar, int nTarget, int nArea, ARRAYDWORD &adstCharID);	/* å¯¾è±¡ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	BOOL	IsHitAtack				(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget);		/* æ”»æ’ƒãŒãƒ’ãƒƒãƒˆã™ã‚‹ã‹åˆ¤å®š */
+	void	Damage					(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget, DWORD dwPoint, int nEffectID, BOOL bCritical);	/* ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç† */
+	DWORD	GetAtackDamage			(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget);		/* æ”»æ’ƒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾— */
+	DWORD	GetAtackEffectID		(CInfoCharSvr *pInfoChar, BOOL bCritical);					/* è£…å‚™ã«å¿œã˜ãŸæ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDã‚’å–å¾— */
 
-	/* ƒAƒCƒeƒ€g—pˆ— */
-	int UseItemProcHP				(CInfoCharSvr *pInfoChar, DWORD dwItemID);	/* HP‘Œ¸ */
-	int UseItemProcLIGHT			(CInfoCharSvr *pInfoChar, DWORD dwItemID);	/* “”‚è */
+	/* ã‚¢ã‚¤ãƒ†ãƒ ä½¿ç”¨å‡¦ç† */
+	int UseItemProcHP				(CInfoCharSvr *pInfoChar, DWORD dwItemID);	/* HPå¢—æ¸› */
+	int UseItemProcLIGHT			(CInfoCharSvr *pInfoChar, DWORD dwItemID);	/* ç¯ã‚Š */
 
-	/* ƒ}ƒbƒvƒCƒxƒ“ƒgˆ—(LibInfoCharSvrMapEvent.cpp) */
-	BOOL CheckMapEvent			(CInfoCharSvr *pInfoChar, BOOL bCheck=FALSE);						/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN */
-	BOOL MapEventProcMOVE		(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ƒ}ƒbƒv“àˆÚ“® */
-	BOOL MapEventProcMAPMOVE	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ƒ}ƒbƒvŠÔˆÚ“® */
-	BOOL MapEventProcINITSTATUS	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ƒXƒe[ƒ^ƒX‰Šú‰» */
-	BOOL MapEventProcGRPIDTMP	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ˆê‰æ‘œİ’è */
-	BOOL MapEventProcLIGHT		(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* “”‚è */
+	/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†(LibInfoCharSvrMapEvent.cpp) */
+	BOOL CheckMapEvent			(CInfoCharSvr *pInfoChar, BOOL bCheck=FALSE);						/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯ */
+	BOOL MapEventProcMOVE		(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ãƒãƒƒãƒ—å†…ç§»å‹• */
+	BOOL MapEventProcMAPMOVE	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ãƒãƒƒãƒ—é–“ç§»å‹• */
+	BOOL MapEventProcINITSTATUS	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ– */
+	BOOL MapEventProcGRPIDTMP	(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ä¸€æ™‚ç”»åƒè¨­å®š */
+	BOOL MapEventProcLIGHT		(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase);	/* ç¯ã‚Š */
 
-	/* ƒXƒLƒ‹ŠÖ˜Aˆ—(LibInfoCharSvrSkill.cpp) */
+	/* ã‚¹ã‚­ãƒ«é–¢é€£å‡¦ç†(LibInfoCharSvrSkill.cpp) */
 public:
-	BOOL UseSkill			(CInfoCharSvr *pInfoChar, DWORD dwSkillID);					/* ƒXƒLƒ‹g—p */
+	BOOL UseSkill			(CInfoCharSvr *pInfoChar, DWORD dwSkillID);					/* ã‚¹ã‚­ãƒ«ä½¿ç”¨ */
 protected:
-	BOOL UseSkillNONE_HEAL			(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* ƒXƒLƒ‹g—p(”\—Í:‰ñ•œ) */
-	BOOL UseSkillBATTLE_MOVEATACK	(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* ƒXƒLƒ‹g—p(í“¬:ˆÚ“®‚µ‚ÄUŒ‚) */
-	BOOL UseSkillFISHING			(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* ƒXƒLƒ‹g—p(’Ş‚è) */
+	BOOL UseSkillNONE_HEAL			(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* ã‚¹ã‚­ãƒ«ä½¿ç”¨(èƒ½åŠ›:å›å¾©) */
+	BOOL UseSkillBATTLE_MOVEATACK	(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* ã‚¹ã‚­ãƒ«ä½¿ç”¨(æˆ¦é—˜:ç§»å‹•ã—ã¦æ”»æ’ƒ) */
+	BOOL UseSkillFISHING			(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase);		/* ã‚¹ã‚­ãƒ«ä½¿ç”¨(é‡£ã‚Š) */
 
 
 public:
-	CMainFrame			*m_pMainFrame;			/* ƒƒCƒ“ƒtƒŒ[ƒ€ */
-	CMgrData			*m_pMgrData;			/* ƒf[ƒ^ƒ}ƒl[ƒWƒƒ */
-	CUraraSockTCPSBO	*m_pSock;				/* ’ÊMƒ}ƒl[ƒWƒƒ */
-	CLibInfoMapBase		*m_pLibInfoMap;			/* ƒ}ƒbƒvî•ñ */
-	CLibInfoSkill		*m_pLibInfoSkill;		/* ƒXƒLƒ‹î•ñ */
-	CLibInfoItemType	*m_pLibInfoItemType;	/* ƒAƒCƒeƒ€í•Êî•ñ */
-	CLibInfoItem		*m_pLibInfoItem;		/* ƒAƒCƒeƒ€î•ñ */
-	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;	/* •Šíî•ñ */
+	CMainFrame			*m_pMainFrame;			/* ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  */
+	CMgrData			*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CUraraSockTCPSBO	*m_pSock;				/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CLibInfoMapBase		*m_pLibInfoMap;			/* ãƒãƒƒãƒ—æƒ…å ± */
+	CLibInfoSkill		*m_pLibInfoSkill;		/* ã‚¹ã‚­ãƒ«æƒ…å ± */
+	CLibInfoItemType	*m_pLibInfoItemType;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
+	CLibInfoItem		*m_pLibInfoItem;		/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ± */
+	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;	/* æ­¦å™¨æƒ…å ± */
 
-	PARRAYINFOCHARBASE	m_paInfoLogin;			/* ƒƒOƒCƒ“’†‚ÌƒLƒƒƒ‰î•ñ */
+	PARRAYINFOCHARBASE	m_paInfoLogin;			/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CLibInfoCharSvr, *PCLibInfoCharSvr;
 
 /* Copyright(C)URARA-works 2007 */

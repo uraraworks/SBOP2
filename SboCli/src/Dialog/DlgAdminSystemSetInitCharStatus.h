@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminSystemSetInitCharStatus.h							 */
-/* “à—e			:ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l‚Ìİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminSystemSetInitCharStatus.h							 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,19 +11,19 @@
 #include "DlgAdminBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminSystemSetInitCharStatus : public CDlgAdminBase
 {
 public:
-			CDlgAdminSystemSetInitCharStatus(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminSystemSetInitCharStatus();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminSystemSetInitCharStatus(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminSystemSetInitCharStatus();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);							/* ‰Šú‰» */
-	void	Renew		(void);											/* XV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
+	void	Init		(CMgrData *pMgrData);							/* åˆæœŸåŒ– */
+	void	Renew		(void);											/* æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
 
 
 protected:
@@ -62,7 +62,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminSystemSetInitCharStatus)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼		:LayoutHelper.cpp										 */
-/* “à—e		:	ƒEƒBƒ“ƒhƒEƒTƒCƒY•ÏX‚Ì”z’u•â•ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬		:	”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“ú		:2005/06/17												 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å		:LayoutHelper.cpp										 */
+/* å†…å®¹		:	ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºå¤‰æ›´æ™‚ã®é…ç½®è£œåŠ©ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ		:	å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥		:2005/06/17												 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -14,9 +14,9 @@ typedef	std::map<UINT, DWORD>::iterator			GroupIterator;
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::CLayoutHelper									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::CLayoutHelper									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 CLayoutHelper::CLayoutHelper()
@@ -26,9 +26,9 @@ CLayoutHelper::CLayoutHelper()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::~CLayoutHelper									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::~CLayoutHelper									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 CLayoutHelper::~CLayoutHelper()
@@ -39,9 +39,9 @@ CLayoutHelper::~CLayoutHelper()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::Initialize										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::Initialize										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 void CLayoutHelper::Initialize(HWND hBase)
@@ -60,9 +60,9 @@ void CLayoutHelper::Initialize(HWND hBase)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::RegisterControl									 */
-/* “à—e		:ƒRƒ“ƒgƒ[ƒ‹‚Ì“o˜^												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::RegisterControl									 */
+/* å†…å®¹		:ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç™»éŒ²												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::RegisterControl(HWND hWnd, DWORD dwFlags, UINT uGroup)
@@ -93,9 +93,9 @@ BOOL CLayoutHelper::RegisterControl(HWND hWnd, DWORD dwFlags, UINT uGroup)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::RegisterControl									 */
-/* “à—e		:ƒRƒ“ƒgƒ[ƒ‹‚Ì“o˜^												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::RegisterControl									 */
+/* å†…å®¹		:ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç™»éŒ²												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::RegisterControl(UINT uID, DWORD dwFlags, UINT uGroup)
@@ -110,9 +110,9 @@ BOOL CLayoutHelper::RegisterControl(UINT uID, DWORD dwFlags, UINT uGroup)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::UnregisterControl								 */
-/* “à—e		:ƒRƒ“ƒgƒ[ƒ‹‚Ì‰ğœ												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::UnregisterControl								 */
+/* å†…å®¹		:ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®è§£é™¤												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::UnregisterControl(HWND hWnd)
@@ -129,9 +129,9 @@ BOOL CLayoutHelper::UnregisterControl(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::UnregisterControl								 */
-/* “à—e		:ƒRƒ“ƒgƒ[ƒ‹‚Ì‰ğœ												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::UnregisterControl								 */
+/* å†…å®¹		:ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®è§£é™¤												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::UnregisterControl(UINT uID)
@@ -146,9 +146,9 @@ BOOL CLayoutHelper::UnregisterControl(UINT uID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::DoLayout										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::DoLayout										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 void CLayoutHelper::DoLayout(int cx, int cy)
@@ -197,14 +197,14 @@ void CLayoutHelper::DoLayout(int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::AddGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚Ì’Ç‰Á													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::AddGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®è¿½åŠ 													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::AddGroup(UINT uGroup, DWORD dwFlags)
 {
-	// ƒOƒ‹[ƒv‚ğ’Ç‰Á
+	// ã‚°ãƒ«ãƒ¼ãƒ—ã‚’è¿½åŠ 
 	m_mapGroup[uGroup] = dwFlags;
 
 	return TRUE;
@@ -212,20 +212,20 @@ BOOL CLayoutHelper::AddGroup(UINT uGroup, DWORD dwFlags)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::DeleteGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚Ìíœ													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::DeleteGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®å‰Šé™¤													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::DeleteGroup(UINT uGroup)
 {
-	/* ƒOƒ‹[ƒv‚ğíœ */
+	/* ã‚°ãƒ«ãƒ¼ãƒ—ã‚’å‰Šé™¤ */
 	GroupIterator	itGroup = m_mapGroup.find(uGroup);
 	if (itGroup == m_mapGroup.end()) {
 		return FALSE;
 	}
 	m_mapGroup.erase(itGroup);
-	/* ƒRƒ“ƒgƒ[ƒ‹‚©‚çƒOƒ‹[ƒv‚ğíœ */
+	/* ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‹ã‚‰ã‚°ãƒ«ãƒ¼ãƒ—ã‚’å‰Šé™¤ */
 	for (LayoutIterator it = m_vLayout.begin(); it != m_vLayout.end(); ++it) {
 		if (it->uGroup == uGroup) {
 			it->uGroup = -1;
@@ -237,9 +237,9 @@ BOOL CLayoutHelper::DeleteGroup(UINT uGroup)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::SetGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚Ìİ’è													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::SetGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®è¨­å®š													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::SetGroup(HWND hWnd, UINT uGroup)
@@ -260,9 +260,9 @@ BOOL CLayoutHelper::SetGroup(HWND hWnd, UINT uGroup)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::SetGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚Ìİ’è													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::SetGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®è¨­å®š													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::SetGroup(UINT uID, UINT uGroup)
@@ -277,9 +277,9 @@ BOOL CLayoutHelper::SetGroup(UINT uID, UINT uGroup)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::RemoveGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚Ì‰ğœ													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::RemoveGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®è§£é™¤													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::RemoveGroup(HWND hWnd)
@@ -296,9 +296,9 @@ BOOL CLayoutHelper::RemoveGroup(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::RemoveGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚Ì‰ğœ													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::RemoveGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®è§£é™¤													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::RemoveGroup(UINT uID)
@@ -313,9 +313,9 @@ BOOL CLayoutHelper::RemoveGroup(UINT uID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::GetGroupRect									 */
-/* “à—e		:ƒOƒ‹[ƒv‚Ì‹éŒ`‚ğæ“¾											 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::GetGroupRect									 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®çŸ©å½¢ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CLayoutHelper::GetGroupRect(UINT uGroup, RECT* pRect)
@@ -346,9 +346,9 @@ BOOL CLayoutHelper::GetGroupRect(UINT uGroup, RECT* pRect)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::MoveGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚ÌˆÚ“®													 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::MoveGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®ç§»å‹•													 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 void CLayoutHelper::MoveGroup(UINT uGroup, int x, int y, int cx, int cy, DWORD dwFlags)
@@ -391,9 +391,9 @@ void CLayoutHelper::MoveGroup(UINT uGroup, int x, int y, int cx, int cy, DWORD d
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayoutHelper::OffsetGroup										 */
-/* “à—e		:ƒOƒ‹[ƒv‚ÌƒTƒCƒY•ÏX											 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CLayoutHelper::OffsetGroup										 */
+/* å†…å®¹		:ã‚°ãƒ«ãƒ¼ãƒ—ã®ã‚µã‚¤ã‚ºå¤‰æ›´											 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 void CLayoutHelper::OffsetGroup(UINT uGroup, int left, int top, int right, int bottom)

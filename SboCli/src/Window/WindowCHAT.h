@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	WindowCHAT.h												 */
-/* “à—eF		ƒ`ƒƒƒbƒgƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2007/02/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	WindowCHAT.h												 */
+/* å†…å®¹ï¼š		ãƒãƒ£ãƒƒãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2007/02/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,40 +15,40 @@ class CMgrData;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowCHAT : public CWindowBase
 {
 public:
-			CWindowCHAT();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowCHAT();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowCHAT();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowCHAT();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	void	SetActive	(BOOL bActive);								/* ƒAƒNƒeƒBƒu‚©İ’è */
-	int		GetType		(void);										/* ƒ`ƒƒƒbƒgí•Ê‚ğæ“¾ */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	void	SetActive	(BOOL bActive);								/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹è¨­å®š */
+	int		GetType		(void);										/* ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ã‚’å–å¾— */
 
 
 private:
-	void	MakeWindow	(void);										/* ƒEƒBƒ“ƒhƒEì¬ */
-	static LRESULT CALLBACK ChatWndProcEntry(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ƒ`ƒƒƒbƒg“ü—Í—“ƒvƒƒV[ƒWƒƒ */
-	LRESULT ChatWndProc	(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ƒ`ƒƒƒbƒg“ü—Í—“ƒvƒƒV[ƒWƒƒ */
+	void	MakeWindow	(void);										/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
+	static LRESULT CALLBACK ChatWndProcEntry(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+	LRESULT ChatWndProc	(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
 
 
 public:
-	CmyString	m_strChat;					/* “ü—Í‚³‚ê‚½•¶š—ñ */
+	CmyString	m_strChat;					/* å…¥åŠ›ã•ã‚ŒãŸæ–‡å­—åˆ— */
 
 
 private:
-	int		m_nType;						/* ƒ`ƒƒƒbƒgí•Ê */
-	BOOL	m_bPushEnter,					/* EnterƒL[‰Ÿ‰ºó‘Ô */
-			m_bPushEsc;						/* ESCƒL[‰Ÿ‰ºó‘Ô */
-	HWND	m_hWndChat;						/* ƒ`ƒƒƒbƒg“ü—Í—“ */
+	int		m_nType;						/* ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ */
+	BOOL	m_bPushEnter,					/* Enterã‚­ãƒ¼æŠ¼ä¸‹çŠ¶æ…‹ */
+			m_bPushEsc;						/* ESCã‚­ãƒ¼æŠ¼ä¸‹çŠ¶æ…‹ */
+	HWND	m_hWndChat;						/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ */
 
-	CmyArray<int, int> m_aArrayType;		/* ƒ`ƒƒƒbƒgí•Ê */
+	CmyArray<int, int> m_aArrayType;		/* ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ */
 
-	WNDPROC	m_OrgWndProcChat;				/* ƒ`ƒƒƒbƒg“ü—Í—“‚ÌŒ³ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
+	WNDPROC	m_OrgWndProcChat;				/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ã®å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
 } CWindowCHAT, *PCWindowCHAT;
 
 /* Copyright(C)URARA-works 2007 */

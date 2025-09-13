@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:ListCtrlEffectInfo.h										 */
-/* “à—e			:ƒGƒtƒFƒNƒgˆê——ƒŠƒXƒgƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:ListCtrlEffectInfo.h										 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§ãƒªã‚¹ãƒˆã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,27 +12,27 @@ class CMgrData;
 class CLibInfoEffect;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CListCtrlEffectInfo : public CListCtrl
 {
 public:
-			CListCtrlEffectInfo();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CListCtrlEffectInfo();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CListCtrlEffectInfo();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CListCtrlEffectInfo();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
-	BOOL	Create		(CWnd *pParent, CMgrData *pMgrData);	/* ì¬ */
-	void	Renew		(void);									/* ˆê——‚ğXV */
-
-
-protected:
+	BOOL	Create		(CWnd *pParent, CMgrData *pMgrData);	/* ä½œæˆ */
+	void	Renew		(void);									/* ä¸€è¦§ã‚’æ›´æ–° */
 
 
 protected:
-	CWnd			*m_pWndParent;			/* eƒEƒBƒ“ƒhƒE */
-	CMgrData		*m_pMgrData;			/* ƒf[ƒ^ŠÇ— */
-	CLibInfoEffect	*m_pLibInfoEffect;		/* ƒGƒtƒFƒNƒgî•ñ */
+
+
+protected:
+	CWnd			*m_pWndParent;			/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CMgrData		*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CLibInfoEffect	*m_pLibInfoEffect;		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 
 
 

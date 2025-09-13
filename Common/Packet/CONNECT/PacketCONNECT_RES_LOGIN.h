@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_RES_LOGIN.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:ƒƒOƒCƒ“‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_RES_LOGIN.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(æŽ¥ç¶šç³»:ãƒ­ã‚°ã‚¤ãƒ³å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,36 +11,36 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 enum {
 	LOGINRES_NONE = 0,
-	LOGINRES_OK,							/* –â‘è–³‚µ */
-	LOGINRES_NG_PASSWORD,					/* ƒpƒXƒ[ƒh•sˆê’v */
-	LOGINRES_NG_LOGIN,						/* ƒƒOƒCƒ“Ï‚Ý */
-	LOGINRES_NG_MAC,						/* ì¬Ï‚Ý */
-	LOGINRES_NG_DISABLE,					/* ƒƒOƒCƒ“‹‘”Û */
+	LOGINRES_OK,							/* å•é¡Œç„¡ã— */
+	LOGINRES_NG_PASSWORD,					/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¸ä¸€è‡´ */
+	LOGINRES_NG_LOGIN,						/* ãƒ­ã‚°ã‚¤ãƒ³æ¸ˆã¿ */
+	LOGINRES_NG_MAC,						/* ä½œæˆæ¸ˆã¿ */
+	LOGINRES_NG_DISABLE,					/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCONNECT_RES_LOGIN : public CPacketBase
 {
 public:
-			CPacketCONNECT_RES_LOGIN();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCONNECT_RES_LOGIN();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCONNECT_RES_LOGIN();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCONNECT_RES_LOGIN();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(int nResult, DWORD dwAccountID);			/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(int nResult, DWORD dwAccountID);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int		m_nResult;					/* Œ‹‰Ê */
-	DWORD	m_dwAccountID;				/* ƒAƒJƒEƒ“ƒgID */
+	int		m_nResult;					/* çµæžœ */
+	DWORD	m_dwAccountID;				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
 } CPacketCONNECT_RES_LOGIN, *PCPacketCONNECT_RES_LOGIN;
 
 /* Copyright(C)URARA-works 2006 */

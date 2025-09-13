@@ -1,40 +1,40 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoItem.cpp												 */
-/* “à—e			:ƒAƒCƒeƒ€î•ñƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/05/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoItem.cpp												 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoItem.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_bPutOn",			/* ã‚É’u‚¯‚é‚©”»’è */
-	"m_dwItemID",		/* ƒAƒCƒeƒ€ID */
-	"m_dwItemTypeID",	/* ƒAƒCƒeƒ€Ží•ÊID */
-	"m_dwGrpID",		/* ‰æ‘œID */
-	"m_dwIconGrpID",	/* ƒoƒbƒNƒpƒbƒN“à‚Ì‰æ‘œID */
-	"m_dwMapID",		/* —Ž‚¿‚Ä‚¢‚éƒ}ƒbƒvID */
-	"m_dwCharID",		/* Š—LŽÒƒLƒƒƒ‰ID */
-	"m_nPosZ",			/* —Ž‚¿‚Ä‚¢‚é‚‚³(0‚ª’n–Ê) */
-	"m_ptPos",			/* —Ž‚¿‚Ä‚¢‚éÀ•W */
-	"m_ptBackPack",		/* ƒoƒbƒNƒpƒbƒN“à‚ÌˆÊ’u */
-	"m_strName",		/* ƒAƒCƒeƒ€–¼ */
-	"m_dwDropSoundID",	/* —Ž‚¿‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
+	"m_bPutOn",			/* ä¸Šã«ç½®ã‘ã‚‹ã‹åˆ¤å®š */
+	"m_dwItemID",		/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	"m_dwItemTypeID",	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	"m_dwGrpID",		/* ç”»åƒID */
+	"m_dwIconGrpID",	/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ç”»åƒID */
+	"m_dwMapID",		/* è½ã¡ã¦ã„ã‚‹ãƒžãƒƒãƒ—ID */
+	"m_dwCharID",		/* æ‰€æœ‰è€…ã‚­ãƒ£ãƒ©ID */
+	"m_nPosZ",			/* è½ã¡ã¦ã„ã‚‹é«˜ã•(0ãŒåœ°é¢) */
+	"m_ptPos",			/* è½ã¡ã¦ã„ã‚‹åº§æ¨™ */
+	"m_ptBackPack",		/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ä½ç½® */
+	"m_strName",		/* ã‚¢ã‚¤ãƒ†ãƒ å */
+	"m_dwDropSoundID",	/* è½ã¡ãŸã¨ãã®åŠ¹æžœéŸ³ID */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::CInfoItem											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CInfoItem::CInfoItem											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 CInfoItem::CInfoItem()
@@ -56,9 +56,9 @@ CInfoItem::CInfoItem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::~CInfoItem											 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CInfoItem::~CInfoItem											 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 CInfoItem::~CInfoItem()
@@ -67,9 +67,9 @@ CInfoItem::~CInfoItem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ðŽæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoItem::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 int CInfoItem::GetElementNo(LPCSTR pszName)
@@ -90,9 +90,9 @@ int CInfoItem::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::GetDataSize											 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾												 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CInfoItem::GetDataSize											 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 DWORD CInfoItem::GetDataSize(void)
@@ -100,27 +100,27 @@ DWORD CInfoItem::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_bPutOn);				/* ã‚É’u‚¯‚é‚©”»’è */
-	dwRet += sizeof (m_dwItemID);			/* ƒAƒCƒeƒ€ID */
-	dwRet += sizeof (m_dwItemTypeID);		/* ƒAƒCƒeƒ€Ží•ÊID */
-	dwRet += sizeof (m_dwGrpID);			/* ‰æ‘œID */
-	dwRet += sizeof (m_dwIconGrpID);		/* ƒoƒbƒNƒpƒbƒN“à‚Ì‰æ‘œID */
-	dwRet += sizeof (m_dwMapID);			/* —Ž‚¿‚Ä‚¢‚éƒ}ƒbƒvID */
-	dwRet += sizeof (m_dwCharID);			/* Š—LŽÒƒLƒƒƒ‰ID */
-	dwRet += sizeof (m_dwDropSoundID);		/* —Ž‚¿‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
-	dwRet += sizeof (m_nPosZ);				/* —Ž‚¿‚Ä‚¢‚é‚‚³(0‚ª’n–Ê) */
-	dwRet += sizeof (m_ptPos);				/* —Ž‚¿‚Ä‚¢‚éÀ•W */
-	dwRet += sizeof (m_ptBackPack);			/* ƒoƒbƒNƒpƒbƒN“à‚ÌˆÊ’u */
-	dwRet += (m_strName.GetLength () + 1);	/* ƒAƒCƒeƒ€–¼ */
+	dwRet += sizeof (m_bPutOn);				/* ä¸Šã«ç½®ã‘ã‚‹ã‹åˆ¤å®š */
+	dwRet += sizeof (m_dwItemID);			/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	dwRet += sizeof (m_dwItemTypeID);		/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	dwRet += sizeof (m_dwGrpID);			/* ç”»åƒID */
+	dwRet += sizeof (m_dwIconGrpID);		/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ç”»åƒID */
+	dwRet += sizeof (m_dwMapID);			/* è½ã¡ã¦ã„ã‚‹ãƒžãƒƒãƒ—ID */
+	dwRet += sizeof (m_dwCharID);			/* æ‰€æœ‰è€…ã‚­ãƒ£ãƒ©ID */
+	dwRet += sizeof (m_dwDropSoundID);		/* è½ã¡ãŸã¨ãã®åŠ¹æžœéŸ³ID */
+	dwRet += sizeof (m_nPosZ);				/* è½ã¡ã¦ã„ã‚‹é«˜ã•(0ãŒåœ°é¢) */
+	dwRet += sizeof (m_ptPos);				/* è½ã¡ã¦ã„ã‚‹åº§æ¨™ */
+	dwRet += sizeof (m_ptBackPack);			/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ä½ç½® */
+	dwRet += (m_strName.GetLength () + 1);	/* ã‚¢ã‚¤ãƒ†ãƒ å */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::GetDataSizeNo										 */
-/* “à—e		:Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CInfoItem::GetDataSizeNo										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 DWORD CInfoItem::GetDataSizeNo(int nNo)
@@ -130,18 +130,18 @@ DWORD CInfoItem::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_bPutOn);				break;	/* ã‚É’u‚¯‚é‚©”»’è */
-	case 1:		dwRet = sizeof (m_dwItemID);			break;	/* ƒAƒCƒeƒ€ID */
-	case 2:		dwRet = sizeof (m_dwItemTypeID);		break;	/* ƒAƒCƒeƒ€Ží•ÊID */
-	case 3:		dwRet = sizeof (m_dwGrpID);				break;	/* ‰æ‘œID */
-	case 4:		dwRet = sizeof (m_dwIconGrpID);			break;	/* ƒoƒbƒNƒpƒbƒN“à‚Ì‰æ‘œID */
-	case 5:		dwRet = sizeof (m_dwMapID);				break;	/* —Ž‚¿‚Ä‚¢‚éƒ}ƒbƒvID */
-	case 6:		dwRet = sizeof (m_dwCharID);			break;	/* Š—LŽÒƒLƒƒƒ‰ID */
-	case 7:		dwRet = sizeof (m_nPosZ);				break;	/* —Ž‚¿‚Ä‚¢‚é‚‚³(0‚ª’n–Ê) */
-	case 8:		dwRet = sizeof (m_ptPos);				break;	/* —Ž‚¿‚Ä‚¢‚éÀ•W */
-	case 9:		dwRet = sizeof (m_ptBackPack);			break;	/* ƒoƒbƒNƒpƒbƒN“à‚ÌˆÊ’u */
-	case 10:	dwRet = (m_strName.GetLength () + 1);	break;	/* ƒAƒCƒeƒ€–¼ */
-	case 11:	dwRet = sizeof (m_dwDropSoundID);		break;	/* —Ž‚¿‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
+	case 0:		dwRet = sizeof (m_bPutOn);				break;	/* ä¸Šã«ç½®ã‘ã‚‹ã‹åˆ¤å®š */
+	case 1:		dwRet = sizeof (m_dwItemID);			break;	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	case 2:		dwRet = sizeof (m_dwItemTypeID);		break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	case 3:		dwRet = sizeof (m_dwGrpID);				break;	/* ç”»åƒID */
+	case 4:		dwRet = sizeof (m_dwIconGrpID);			break;	/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ç”»åƒID */
+	case 5:		dwRet = sizeof (m_dwMapID);				break;	/* è½ã¡ã¦ã„ã‚‹ãƒžãƒƒãƒ—ID */
+	case 6:		dwRet = sizeof (m_dwCharID);			break;	/* æ‰€æœ‰è€…ã‚­ãƒ£ãƒ©ID */
+	case 7:		dwRet = sizeof (m_nPosZ);				break;	/* è½ã¡ã¦ã„ã‚‹é«˜ã•(0ãŒåœ°é¢) */
+	case 8:		dwRet = sizeof (m_ptPos);				break;	/* è½ã¡ã¦ã„ã‚‹åº§æ¨™ */
+	case 9:		dwRet = sizeof (m_ptBackPack);			break;	/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ä½ç½® */
+	case 10:	dwRet = (m_strName.GetLength () + 1);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ å */
+	case 11:	dwRet = sizeof (m_dwDropSoundID);		break;	/* è½ã¡ãŸã¨ãã®åŠ¹æžœéŸ³ID */
 	}
 
 	return dwRet;
@@ -149,9 +149,9 @@ DWORD CInfoItem::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::GetName												 */
-/* “à—e		:—v‘f–¼‚ðŽæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoItem::GetName												 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 LPCSTR CInfoItem::GetName(int nNo)
@@ -161,9 +161,9 @@ LPCSTR CInfoItem::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::GetWriteData										 */
-/* “à—e		:Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾									 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CInfoItem::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 PBYTE CInfoItem::GetWriteData(int nNo, PDWORD pdwSize)
@@ -182,18 +182,18 @@ PBYTE CInfoItem::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_bPutOn;			break;	/* ã‚É’u‚¯‚é‚©”»’è */
-	case 1:		pSrc = (PBYTE)&m_dwItemID;			break;	/* ƒAƒCƒeƒ€ID */
-	case 2:		pSrc = (PBYTE)&m_dwItemTypeID;		break;	/* ƒAƒCƒeƒ€Ží•ÊID */
-	case 3:		pSrc = (PBYTE)&m_dwGrpID;			break;	/* ‰æ‘œID */
-	case 4:		pSrc = (PBYTE)&m_dwIconGrpID;		break;	/* ƒoƒbƒNƒpƒbƒN“à‚Ì‰æ‘œID */
-	case 5:		pSrc = (PBYTE)&m_dwMapID;			break;	/* —Ž‚¿‚Ä‚¢‚éƒ}ƒbƒvID */
-	case 6:		pSrc = (PBYTE)&m_dwCharID;			break;	/* Š—LŽÒƒLƒƒƒ‰ID */
-	case 7:		pSrc = (PBYTE)&m_nPosZ;				break;	/* —Ž‚¿‚Ä‚¢‚é‚‚³(0‚ª’n–Ê) */
-	case 8:		pSrc = (PBYTE)&m_ptPos;				break;	/* —Ž‚¿‚Ä‚¢‚éÀ•W */
-	case 9:		pSrc = (PBYTE)&m_ptBackPack;		break;	/* ƒoƒbƒNƒpƒbƒN“à‚ÌˆÊ’u */
-	case 10:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* ƒAƒCƒeƒ€–¼ */
-	case 11:	pSrc = (PBYTE)&m_dwDropSoundID;		break;	/* —Ž‚¿‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
+	case 0:		pSrc = (PBYTE)&m_bPutOn;			break;	/* ä¸Šã«ç½®ã‘ã‚‹ã‹åˆ¤å®š */
+	case 1:		pSrc = (PBYTE)&m_dwItemID;			break;	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	case 2:		pSrc = (PBYTE)&m_dwItemTypeID;		break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	case 3:		pSrc = (PBYTE)&m_dwGrpID;			break;	/* ç”»åƒID */
+	case 4:		pSrc = (PBYTE)&m_dwIconGrpID;		break;	/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ç”»åƒID */
+	case 5:		pSrc = (PBYTE)&m_dwMapID;			break;	/* è½ã¡ã¦ã„ã‚‹ãƒžãƒƒãƒ—ID */
+	case 6:		pSrc = (PBYTE)&m_dwCharID;			break;	/* æ‰€æœ‰è€…ã‚­ãƒ£ãƒ©ID */
+	case 7:		pSrc = (PBYTE)&m_nPosZ;				break;	/* è½ã¡ã¦ã„ã‚‹é«˜ã•(0ãŒåœ°é¢) */
+	case 8:		pSrc = (PBYTE)&m_ptPos;				break;	/* è½ã¡ã¦ã„ã‚‹åº§æ¨™ */
+	case 9:		pSrc = (PBYTE)&m_ptBackPack;		break;	/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ä½ç½® */
+	case 10:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* ã‚¢ã‚¤ãƒ†ãƒ å */
+	case 11:	pSrc = (PBYTE)&m_dwDropSoundID;		break;	/* è½ã¡ãŸã¨ãã®åŠ¹æžœéŸ³ID */
 	}
 
 	if (pSrc) {
@@ -206,14 +206,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::ReadElementData										 */
-/* “à—e		:Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CInfoItem::ReadElementData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 DWORD CInfoItem::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚Ýž‚ÝŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -222,21 +222,21 @@ DWORD CInfoItem::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_bPutOn;			dwSize = sizeof (m_bPutOn);			break;	/* ã‚É’u‚¯‚é‚©”»’è */
-	case 1:		pDst = (PBYTE)&m_dwItemID;			dwSize = sizeof (m_dwItemID);		break;	/* ƒAƒCƒeƒ€ID */
-	case 2:		pDst = (PBYTE)&m_dwItemTypeID;		dwSize = sizeof (m_dwItemTypeID);	break;	/* ƒAƒCƒeƒ€Ží•ÊID */
-	case 3:		pDst = (PBYTE)&m_dwGrpID;			dwSize = sizeof (m_dwGrpID);		break;	/* ‰æ‘œID */
-	case 4:		pDst = (PBYTE)&m_dwIconGrpID;		dwSize = sizeof (m_dwIconGrpID);	break;	/* ƒoƒbƒNƒpƒbƒN“à‚Ì‰æ‘œID */
-	case 5:		pDst = (PBYTE)&m_dwMapID;			dwSize = sizeof (m_dwMapID);		break;	/* —Ž‚¿‚Ä‚¢‚éƒ}ƒbƒvID */
-	case 6:		pDst = (PBYTE)&m_dwCharID;			dwSize = sizeof (m_dwCharID);		break;	/* Š—LŽÒƒLƒƒƒ‰ID */
-	case 7:		pDst = (PBYTE)&m_nPosZ;				dwSize = sizeof (m_nPosZ);			break;	/* —Ž‚¿‚Ä‚¢‚é‚‚³(0‚ª’n–Ê) */
-	case 8:		pDst = (PBYTE)&m_ptPos;				dwSize = sizeof (m_ptPos);			break;	/* —Ž‚¿‚Ä‚¢‚éÀ•W */
-	case 9:		pDst = (PBYTE)&m_ptBackPack;		dwSize = sizeof (m_ptBackPack);		break;	/* ƒoƒbƒNƒpƒbƒN“à‚ÌˆÊ’u */
-	case 10:	/* ƒAƒCƒeƒ€–¼ */
+	case 0:		pDst = (PBYTE)&m_bPutOn;			dwSize = sizeof (m_bPutOn);			break;	/* ä¸Šã«ç½®ã‘ã‚‹ã‹åˆ¤å®š */
+	case 1:		pDst = (PBYTE)&m_dwItemID;			dwSize = sizeof (m_dwItemID);		break;	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	case 2:		pDst = (PBYTE)&m_dwItemTypeID;		dwSize = sizeof (m_dwItemTypeID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	case 3:		pDst = (PBYTE)&m_dwGrpID;			dwSize = sizeof (m_dwGrpID);		break;	/* ç”»åƒID */
+	case 4:		pDst = (PBYTE)&m_dwIconGrpID;		dwSize = sizeof (m_dwIconGrpID);	break;	/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ç”»åƒID */
+	case 5:		pDst = (PBYTE)&m_dwMapID;			dwSize = sizeof (m_dwMapID);		break;	/* è½ã¡ã¦ã„ã‚‹ãƒžãƒƒãƒ—ID */
+	case 6:		pDst = (PBYTE)&m_dwCharID;			dwSize = sizeof (m_dwCharID);		break;	/* æ‰€æœ‰è€…ã‚­ãƒ£ãƒ©ID */
+	case 7:		pDst = (PBYTE)&m_nPosZ;				dwSize = sizeof (m_nPosZ);			break;	/* è½ã¡ã¦ã„ã‚‹é«˜ã•(0ãŒåœ°é¢) */
+	case 8:		pDst = (PBYTE)&m_ptPos;				dwSize = sizeof (m_ptPos);			break;	/* è½ã¡ã¦ã„ã‚‹åº§æ¨™ */
+	case 9:		pDst = (PBYTE)&m_ptBackPack;		dwSize = sizeof (m_ptBackPack);		break;	/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ä½ç½® */
+	case 10:	/* ã‚¢ã‚¤ãƒ†ãƒ å */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
-	case 11:	pDst = (PBYTE)&m_dwDropSoundID;		dwSize = sizeof (m_dwDropSoundID);	break;	/* —Ž‚¿‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
+	case 11:	pDst = (PBYTE)&m_dwDropSoundID;		dwSize = sizeof (m_dwDropSoundID);	break;	/* è½ã¡ãŸã¨ãã®åŠ¹æžœéŸ³ID */
 	}
 
 	if (pDst) {
@@ -248,9 +248,9 @@ DWORD CInfoItem::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::GetSendDataSize										 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CInfoItem::GetSendDataSize										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 DWORD CInfoItem::GetSendDataSize(void)
@@ -275,9 +275,9 @@ DWORD CInfoItem::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::GetSendData											 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CInfoItem::GetSendData											 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PBYTE CInfoItem::GetSendData(void)
@@ -308,9 +308,9 @@ PBYTE CInfoItem::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::SetSendData											 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CInfoItem::SetSendData											 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PBYTE CInfoItem::SetSendData(PBYTE pSrc)
@@ -339,9 +339,9 @@ PBYTE CInfoItem::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItem::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CInfoItem::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CInfoItem::Copy(CInfoItem *pSrc)

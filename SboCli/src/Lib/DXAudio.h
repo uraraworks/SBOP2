@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2003-2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	DXAudio.h													 */
-/* “à—eF		DirectX Audio‚ğg‚¤‚½‚ß‚ÌƒNƒ‰ƒX								 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2003/03/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	DXAudio.h													 */
+/* å†…å®¹ï¼š		DirectX Audioã‚’ä½¿ã†ãŸã‚ã®ã‚¯ãƒ©ã‚¹								 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2003/03/16													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,36 +11,36 @@
 #include <dmusici.h>
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDXAudio
 {
 public:
-			CDXAudio	();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual	~CDXAudio	();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDXAudio	();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual	~CDXAudio	();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL Create				(void);										/* ‰Šú‰» */
-	void Destroy			(void);										/* I—¹ */
-	void SetResourceHandle	(HMODULE hResource);						/* ƒŠƒ\[ƒXƒnƒ“ƒhƒ‹‚Ìİ’è */
+	BOOL Create				(void);										/* åˆæœŸåŒ– */
+	void Destroy			(void);										/* çµ‚äº† */
+	void SetResourceHandle	(HMODULE hResource);						/* ãƒªã‚½ãƒ¼ã‚¹ãƒãƒ³ãƒ‰ãƒ«ã®è¨­å®š */
 
-	BOOL GetSegFromRes		(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi = FALSE);	/* ƒŠƒ\[ƒX‚©‚ç‚ÌƒZƒOƒƒ“ƒg“Ç‚İ‚İ */
-	void ReleaseSeg			(IDirectMusicSegment8 *pSeg);				/* ƒZƒOƒƒ“ƒg‚ÌŠJ•ú */
-	BOOL PlayPrimary		(IDirectMusicSegment8 *pSeg);				/* ƒvƒ‰ƒCƒ}ƒŠƒZƒOƒƒ“ƒg‚Æ‚µ‚ÄÄ¶ */
-	BOOL PlaySecoundary		(IDirectMusicSegment8 *pSeg);				/* ƒZƒJƒ“ƒ_ƒŠƒZƒOƒƒ“ƒg‚Æ‚µ‚ÄÄ¶ */
-	void SetVolPrimary		(long lVol);								/* ƒvƒ‰ƒCƒ}ƒŠƒZƒOƒƒ“ƒg‚Ì‰¹—Êİ’è */
-	void SetVolSecoundary	(long lVol);								/* ƒZƒJƒ“ƒ_ƒŠƒZƒOƒƒ“ƒg‚Ì‰¹—Êİ’è */
-	void Stop				(IDirectMusicSegment8 *pSeg, DWORD dwFlg);	/* Ä¶’â~ */
-	void SetLoopPoints		(IDirectMusicSegment8 *pSeg, DWORD dwFlg);	/* ƒ‹[ƒv”ÍˆÍ‚Ìİ’è */
-	BOOL IsPlaying			(IDirectMusicSegment8 *pSeg);				/* Ä¶’†”»’è */
+	BOOL GetSegFromRes		(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi = FALSE);	/* ãƒªã‚½ãƒ¼ã‚¹ã‹ã‚‰ã®ã‚»ã‚°ãƒ¡ãƒ³ãƒˆèª­ã¿è¾¼ã¿ */
+	void ReleaseSeg			(IDirectMusicSegment8 *pSeg);				/* ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®é–‹æ”¾ */
+	BOOL PlayPrimary		(IDirectMusicSegment8 *pSeg);				/* ãƒ—ãƒ©ã‚¤ãƒãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã¨ã—ã¦å†ç”Ÿ */
+	BOOL PlaySecoundary		(IDirectMusicSegment8 *pSeg);				/* ã‚»ã‚«ãƒ³ãƒ€ãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã¨ã—ã¦å†ç”Ÿ */
+	void SetVolPrimary		(long lVol);								/* ãƒ—ãƒ©ã‚¤ãƒãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®éŸ³é‡è¨­å®š */
+	void SetVolSecoundary	(long lVol);								/* ã‚»ã‚«ãƒ³ãƒ€ãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®éŸ³é‡è¨­å®š */
+	void Stop				(IDirectMusicSegment8 *pSeg, DWORD dwFlg);	/* å†ç”Ÿåœæ­¢ */
+	void SetLoopPoints		(IDirectMusicSegment8 *pSeg, DWORD dwFlg);	/* ãƒ«ãƒ¼ãƒ—ç¯„å›²ã®è¨­å®š */
+	BOOL IsPlaying			(IDirectMusicSegment8 *pSeg);				/* å†ç”Ÿä¸­åˆ¤å®š */
 
 
 private:
-	IDirectMusicPerformance8	*m_pPerformance;	/* ƒpƒtƒH[ƒ}ƒ“ƒXƒIƒuƒWƒFƒNƒg */
-	IDirectMusicAudioPath8		*m_pDefAudioPath;	/* ƒI[ƒfƒBƒIƒpƒX */
-	IDirectMusicAudioPath8		*m_pDefAudioPath2;	/* ƒI[ƒfƒBƒIƒpƒX2 */
-	IDirectMusicLoader8			*m_pLoader;			/* ƒ[ƒ_[ */
-	HMODULE						m_hResource;		/* ƒŠƒ\[ƒXƒnƒ“ƒhƒ‹ */
+	IDirectMusicPerformance8	*m_pPerformance;	/* ãƒ‘ãƒ•ã‚©ãƒ¼ãƒãƒ³ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ */
+	IDirectMusicAudioPath8		*m_pDefAudioPath;	/* ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‘ã‚¹ */
+	IDirectMusicAudioPath8		*m_pDefAudioPath2;	/* ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‘ã‚¹2 */
+	IDirectMusicLoader8			*m_pLoader;			/* ãƒ­ãƒ¼ãƒ€ãƒ¼ */
+	HMODULE						m_hResource;		/* ãƒªã‚½ãƒ¼ã‚¹ãƒãƒ³ãƒ‰ãƒ« */
 } CDXAudio, *PCDXAudio;
 
 /* Copyright(C)URARA-works 2003 */

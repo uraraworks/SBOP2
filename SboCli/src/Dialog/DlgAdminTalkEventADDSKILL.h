@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkEventADDSKILL.h								 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgİ’è(ƒXƒLƒ‹’Ç‰Á)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkEventADDSKILL.h								 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š(ã‚¹ã‚­ãƒ«è¿½åŠ )ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,17 +11,17 @@
 #include "DlgAdminTalkEventNONE.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminTalkEventADDSKILL : public CDlgAdminTalkEventNONE
 {
 public:
-			CDlgAdminTalkEventADDSKILL(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminTalkEventADDSKILL();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminTalkEventADDSKILL(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminTalkEventADDSKILL();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Set	(CInfoTalkEventBase *pSrc);								/* İ’è‚©‚ç‰æ–Ê‚É”½‰f */
-	void	Get	(CInfoTalkEventBase *pDst);								/* ‰æ–Ê‚©‚çİ’è‚É”½‰f */
+	void	Set	(CInfoTalkEventBase *pSrc);								/* è¨­å®šã‹ã‚‰ç”»é¢ã«åæ˜  */
+	void	Get	(CInfoTalkEventBase *pDst);								/* ç”»é¢ã‹ã‚‰è¨­å®šã«åæ˜  */
 
 
 protected:
@@ -39,7 +39,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminTalkEventADDSKILL)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

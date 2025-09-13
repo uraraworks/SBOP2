@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboLaunch.cpp												 */
-/* “à—e			:SBOƒ‰ƒ“ƒ`ƒƒ[ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/01/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboLaunch.cpp												 */
+/* å†…å®¹			:SBOãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/27													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,14 +22,14 @@ BEGIN_MESSAGE_MAP(CSboLaunchApp, CWinApp)
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/* —Bˆê‚Ì CSboLaunchApp ƒIƒuƒWƒFƒNƒg */
+/* å”¯ä¸€ã® CSboLaunchApp ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ */
 CSboLaunchApp theApp;
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchApp::CSboLaunchApp									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchApp::CSboLaunchApp									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 CSboLaunchApp::CSboLaunchApp()
@@ -38,16 +38,16 @@ CSboLaunchApp::CSboLaunchApp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchApp::InitInstance									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchApp::InitInstance									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 BOOL CSboLaunchApp::InitInstance()
 {
 	WSADATA wsaData;
 
-	/* winSock‚ð‰Šú‰» */
+	/* winSockã‚’åˆæœŸåŒ– */
 	WSAStartup (MAKEWORD (2, 0), &wsaData);
 
 	AfxEnableControlContainer();

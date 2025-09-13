@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketACCOUNT_RES_MAKECHAR.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒAƒJƒEƒ“ƒgŒn:ƒLƒƒƒ‰ì¬‰“š) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/12/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketACCOUNT_RES_MAKECHAR.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³»:ã‚­ãƒ£ãƒ©ä½œæˆå¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/03													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketACCOUNT_RES_MAKECHAR.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketACCOUNT_RES_MAKECHAR::CPacketACCOUNT_RES_MAKECHAR		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/03														 */
+/* é–¢æ•°å	:CPacketACCOUNT_RES_MAKECHAR::CPacketACCOUNT_RES_MAKECHAR		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/03														 */
 /* ========================================================================= */
 
 CPacketACCOUNT_RES_MAKECHAR::CPacketACCOUNT_RES_MAKECHAR()
@@ -24,9 +24,9 @@ CPacketACCOUNT_RES_MAKECHAR::CPacketACCOUNT_RES_MAKECHAR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketACCOUNT_RES_MAKECHAR::~CPacketACCOUNT_RES_MAKECHAR		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/03														 */
+/* é–¢æ•°å	:CPacketACCOUNT_RES_MAKECHAR::~CPacketACCOUNT_RES_MAKECHAR		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/03														 */
 /* ========================================================================= */
 
 CPacketACCOUNT_RES_MAKECHAR::~CPacketACCOUNT_RES_MAKECHAR()
@@ -35,14 +35,14 @@ CPacketACCOUNT_RES_MAKECHAR::~CPacketACCOUNT_RES_MAKECHAR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketACCOUNT_RES_MAKECHAR::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2006/12/03														 */
+/* é–¢æ•°å	:CPacketACCOUNT_RES_MAKECHAR::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2006/12/03														 */
 /* ========================================================================= */
 
 void CPacketACCOUNT_RES_MAKECHAR::Make(
-	int nResult,		/* [in] Œ‹‰Ê */
-	DWORD dwCharID)		/* [in] ƒLƒƒƒ‰ID */
+	int nResult,		/* [in] çµæœ */
+	DWORD dwCharID)		/* [in] ã‚­ãƒ£ãƒ©ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketACCOUNT_RES_MAKECHAR::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ACCOUNT_RES_MAKECHAR;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &nResult,	sizeof (nResult),	pDataTmp);	/* Œ‹‰Ê */
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
+	CopyMemoryRenew (pDataTmp, &nResult,	sizeof (nResult),	pDataTmp);	/* çµæœ */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketACCOUNT_RES_MAKECHAR::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2006/12/03														 */
+/* é–¢æ•°å	:CPacketACCOUNT_RES_MAKECHAR::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2006/12/03														 */
 /* ========================================================================= */
 
 PBYTE CPacketACCOUNT_RES_MAKECHAR::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketACCOUNT_RES_MAKECHAR::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_nResult,	pDataTmp, sizeof (m_nResult),	pDataTmp);	/* Œ‹‰Ê */
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
+	CopyMemoryRenew (&m_nResult,	pDataTmp, sizeof (m_nResult),	pDataTmp);	/* çµæœ */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
 
 	pRet = pDataTmp;
 	return pRet;

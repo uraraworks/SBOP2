@@ -9,23 +9,23 @@ static char THIS_FILE[] = __FILE__;
 
 #define	CLASS_NAME			_T("LogViewCtrl")
 
-#define	HEADER_COLUMN		11		// ƒwƒbƒ_•\¦•ª‚Ì•¶š”
+#define	HEADER_COLUMN		11		// ãƒ˜ãƒƒãƒ€è¡¨ç¤ºåˆ†ã®æ–‡å­—æ•°
 
-// ‘I‘ğ•û–@
-#define	SELECT_TYPE_NONE	0		// –¢‘I‘ğ
-#define	SELECT_TYPE_CHAR	1		// •¶š‘I‘ğ
-#define	SELECT_TYPE_LINE	2		// s‘I‘ğ
+// é¸æŠæ–¹æ³•
+#define	SELECT_TYPE_NONE	0		// æœªé¸æŠ
+#define	SELECT_TYPE_CHAR	1		// æ–‡å­—é¸æŠ
+#define	SELECT_TYPE_LINE	2		// è¡Œé¸æŠ
 
-// ƒg[ƒNƒ“í•Ê
-#define	TOKEN_TYPE_NONE		0		// •s–¾
-#define	TOKEN_TYPE_ALNUM	1		// ”¼Šp‰p”
-#define	TOKEN_TYPE_ZENKAKU	2		// ‘SŠp
-#define	TOKEN_TYPE_PUNCT	3		// ‹æØ‚è
-#define	TOKEN_TYPE_LINK		4		// ƒŠƒ“ƒN
+// ãƒˆãƒ¼ã‚¯ãƒ³ç¨®åˆ¥
+#define	TOKEN_TYPE_NONE		0		// ä¸æ˜
+#define	TOKEN_TYPE_ALNUM	1		// åŠè§’è‹±æ•°
+#define	TOKEN_TYPE_ZENKAKU	2		// å…¨è§’
+#define	TOKEN_TYPE_PUNCT	3		// åŒºåˆ‡ã‚Š
+#define	TOKEN_TYPE_LINK		4		// ãƒªãƒ³ã‚¯
 
-// ƒƒjƒ…[ƒRƒ}ƒ“ƒhID
-#define	ID_MENU_COPY		100		// uƒRƒs[vƒRƒ}ƒ“ƒh
-#define	ID_MENU_ALLSELECT	101		// u‚·‚×‚Ä‘I‘ğvƒRƒ}ƒ“ƒh
+// ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚³ãƒãƒ³ãƒ‰ID
+#define	ID_MENU_COPY		100		// ã€Œã‚³ãƒ”ãƒ¼ã€ã‚³ãƒãƒ³ãƒ‰
+#define	ID_MENU_ALLSELECT	101		// ã€Œã™ã¹ã¦é¸æŠã€ã‚³ãƒãƒ³ãƒ‰
 
 class CCurrentDC : public CDC
 {
@@ -67,8 +67,8 @@ IMPLEMENT_DYNCREATE(CLogViewCtrl, CWnd)
 
 CLogViewCtrl::CLogViewCtrl()
 {
-	// ƒ†[ƒU‚ª•ÏX‰Â”\‚Èİ’è‚Ì‰Šú‰»
-	_tcscpy(m_stSetting.szFontText, _T("‚l‚r ƒSƒVƒbƒN"));
+	// ãƒ¦ãƒ¼ã‚¶ãŒå¤‰æ›´å¯èƒ½ãªè¨­å®šã®åˆæœŸåŒ–
+	_tcscpy(m_stSetting.szFontText, _T("ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯"));
 	_tcscpy(m_stSetting.szFontHeader, m_stSetting.szFontText);
 	m_stSetting.nFontPoint = 100;
 	m_stSetting.crText = GetSysColor(COLOR_WINDOWTEXT);
@@ -81,15 +81,15 @@ CLogViewCtrl::CLogViewCtrl()
 	SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &m_stSetting.nWheelDelta, 0);
 	m_stSetting.nLinkNotifyType = LVC_LINK_NOTIFY_NONE;
 
-	// ƒeƒLƒXƒg•ÛŒÀŠE‚Ì‰Šú‰»
+	// ãƒ†ã‚­ã‚¹ãƒˆä¿æŒé™ç•Œã®åˆæœŸåŒ–
 	m_nLimitMode = LVC_TEXT_LIMIT_INFINITE;
 	m_dwLimitSize = 0;
 	m_dwTextSize = 0;
-	// FX‰Šú‰»
+	// è‰²ã€…åˆæœŸåŒ–
 	m_nSelect = SELECT_TYPE_NONE;
 	m_dwTripleClick = 0;
 
-	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚Ì“o˜^
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®ç™»éŒ²
 	WNDCLASS	wc;
 	ZeroMemory(&wc, sizeof(WNDCLASS));
 	wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
@@ -103,7 +103,7 @@ CLogViewCtrl::~CLogViewCtrl()
 {
 }
 
-// s‚Ì’Ç‰Á
+// è¡Œã®è¿½åŠ 
 BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BOOL bRedraw)
 {
 	LINEINFO	li;
@@ -118,18 +118,18 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 		int	nPrevType = nType;
 		if (*psz != _T('\0')) {
 			if ((nType == TOKEN_TYPE_LINK) && (_istprint(*psz) != 0) && (*psz != _T(' '))) {
-				// ƒŠƒ“ƒN‘±s’†
+				// ãƒªãƒ³ã‚¯ç¶šè¡Œä¸­
 			} else if (_istalnum(*psz) != 0) {
-				// ”¼Šp‰p”
+				// åŠè§’è‹±æ•°
 				nType = TOKEN_TYPE_ALNUM;
 			} else if (_istlead(*psz) != 0) {
-				// ‘SŠp
+				// å…¨è§’
 				nType = TOKEN_TYPE_ZENKAKU;
 			} else if (_istpunct(*psz) != 0) {
-				// ‹æØ‚è
+				// åŒºåˆ‡ã‚Š
 				nType = TOKEN_TYPE_PUNCT;
 			} else {
-				// ƒXƒy[ƒX‚Æ‚©
+				// ã‚¹ãƒšãƒ¼ã‚¹ã¨ã‹
 				nType = TOKEN_TYPE_NONE;
 			}
 		} else {
@@ -140,7 +140,7 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 				if ((_tcsncmp(psz, _T("http://"), 7) == 0) ||
 					(_tcsncmp(psz, _T("https://"), 8) == 0) ||
 					(_tcsncmp(psz, _T("ftp:"), 4) == 0)) {
-					// ƒŠƒ“ƒN
+					// ãƒªãƒ³ã‚¯
 					nType = TOKEN_TYPE_LINK;
 				}
 			}
@@ -162,9 +162,9 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 	m_aTexts.Add(li);
 	m_dwTextSize += _tcslen(pszLine);
 
-	// ƒeƒLƒXƒg‚Ì’²®
+	// ãƒ†ã‚­ã‚¹ãƒˆã®èª¿æ•´
 	LimitText();
-	// ƒXƒNƒ[ƒ‹ƒo[‚Ì’²®
+	// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®èª¿æ•´
 	SCROLLINFO info;
 	info.fMask = SIF_PAGE | SIF_RANGE | SIF_POS;
 	GetScrollInfo(SB_VERT, &info);
@@ -182,10 +182,10 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 	return TRUE;
 }
 
-// Ä•`‰æ
+// å†æç”»
 void CLogViewCtrl::Redraw()
 {
-	// ƒf[ƒ^‚ª‚È‚¢‚È‚ç‹ó—“•\¦
+	// ãƒ‡ãƒ¼ã‚¿ãŒãªã„ãªã‚‰ç©ºæ¬„è¡¨ç¤º
 	if (m_aTexts.GetSize() == 0) {
 		Invalidate(FALSE);
 		return;
@@ -203,7 +203,7 @@ void CLogViewCtrl::Redraw()
 	Invalidate(FALSE);
 }
 
-// ƒNƒŠƒA
+// ã‚¯ãƒªã‚¢
 void CLogViewCtrl::Clear()
 {
 	m_aTexts.RemoveAll();
@@ -222,21 +222,21 @@ void CLogViewCtrl::Clear()
 	Invalidate(FALSE);
 }
 
-// İ’è•ÏX
+// è¨­å®šå¤‰æ›´
 void CLogViewCtrl::SetSetting(const LOGVIEWCTRLSETTING* pSetting)
 {
-	// İ’è•ÏX
+	// è¨­å®šå¤‰æ›´
 	m_stSetting = *pSetting;
 	Redraw();
 }
 
-// İ’èæ“¾
+// è¨­å®šå–å¾—
 void CLogViewCtrl::GetSetting(LOGVIEWCTRLSETTING* pSetting)
 {
 	*pSetting = m_stSetting;
 }
 
-// ƒeƒLƒXƒgŒÀŠE‚Ìİ’è
+// ãƒ†ã‚­ã‚¹ãƒˆé™ç•Œã®è¨­å®š
 void CLogViewCtrl::SetTextLimit(int nLimit, DWORD dwSize)
 {
 	if (nLimit == LVC_TEXT_LIMIT_INFINITE) {
@@ -245,9 +245,9 @@ void CLogViewCtrl::SetTextLimit(int nLimit, DWORD dwSize)
 	} else if ((nLimit == LVC_TEXT_LIMIT_LINE) || (nLimit == LVC_TEXT_LIMIT_SIZE)) {
 		m_nLimitMode = nLimit;
 		m_dwLimitSize = dwSize;
-		// ’²®
+		// èª¿æ•´
 		LimitText();
-		// ƒXƒNƒ[ƒ‹ƒo[‚Ì’²®
+		// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®èª¿æ•´
 		SCROLLINFO info;
 		info.fMask = SIF_PAGE | SIF_RANGE | SIF_POS;
 		GetScrollInfo(SB_VERT, &info);
@@ -256,31 +256,31 @@ void CLogViewCtrl::SetTextLimit(int nLimit, DWORD dwSize)
 		info.nMax = m_aTexts.GetUpperBound();
 		info.nPage = 1;
 		SetScrollInfo(SB_VERT, &info);
-		// Ä•`‰æ
+		// å†æç”»
 		Redraw();
 	}
 }
 
-// •`‰æƒpƒ‰ƒ[ƒ^ÄŒvZ
+// æç”»ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å†è¨ˆç®—
 void CLogViewCtrl::RecalcParam(const SIZE* psizeClient)
 {
 	CCurrentDC	dc(this);
 
-	// 1•¶š‚ÌƒTƒCƒY‚ğæ“¾(“™•ƒtƒHƒ“ƒg‚Å‚ ‚é‚±‚Æ‚ª‘O’ñ)
+	// 1æ–‡å­—ã®ã‚µã‚¤ã‚ºã‚’å–å¾—(ç­‰å¹…ãƒ•ã‚©ãƒ³ãƒˆã§ã‚ã‚‹ã“ã¨ãŒå‰æ)
 	CCurrentGdiObject	cFont(&dc, &m_fontText);
 	TEXTMETRIC	tm;
 	dc.GetOutputTextMetrics(&tm);
 	m_sizeChar.cx = tm.tmAveCharWidth;
 	m_sizeChar.cy = tm.tmHeight;
 
-	{	// ƒwƒbƒ_‚ÌƒTƒCƒY
+	{	// ãƒ˜ãƒƒãƒ€ã®ã‚µã‚¤ã‚º
 		CCurrentGdiObject	cHeader(&dc, &m_fontHeader);
 		dc.GetOutputTextMetrics(&tm);
 		m_sizeHeader.cx = tm.tmAveCharWidth * HEADER_COLUMN;
 		m_sizeHeader.cy = tm.tmHeight;
 	}
 
-	// •\¦‚Å‚«‚és”‚Æ•¶š”‚ÌŒvZ‘Oˆ—
+	// è¡¨ç¤ºã§ãã‚‹è¡Œæ•°ã¨æ–‡å­—æ•°ã®è¨ˆç®—å‰å‡¦ç†
 	if (psizeClient == NULL) {
 		CRect	rc;
 		GetClientRect(&rc);
@@ -288,10 +288,10 @@ void CLogViewCtrl::RecalcParam(const SIZE* psizeClient)
 	} else {
 		m_sizeView = *psizeClient;
 	}
-	m_sizeView.cx -= m_sizeHeader.cx;	// ƒwƒbƒ_•ª‚ğŒ¸‚ç‚µ‚Ä‚¨‚­
+	m_sizeView.cx -= m_sizeHeader.cx;	// ãƒ˜ãƒƒãƒ€åˆ†ã‚’æ¸›ã‚‰ã—ã¦ãŠã
 }
 
-// ƒeƒLƒXƒg‚Ì‚‚³(pixel)ŒvZ
+// ãƒ†ã‚­ã‚¹ãƒˆã®é«˜ã•(pixel)è¨ˆç®—
 int CLogViewCtrl::GetTextHeight(CDC* pDC, int nIndex)
 {
 	if ((nIndex < 0) || (nIndex >= m_aTexts.GetSize())) {
@@ -314,18 +314,18 @@ int CLogViewCtrl::GetTextHeight(CDC* pDC, int nIndex)
 	return cy;
 }
 
-// ƒeƒLƒXƒgŒÀŠE’²®
+// ãƒ†ã‚­ã‚¹ãƒˆé™ç•Œèª¿æ•´
 void CLogViewCtrl::LimitText()
 {
 	int	nDelCount = 0;
 	if (m_nLimitMode == LVC_TEXT_LIMIT_LINE) {
-		// s”ƒI[ƒo[‚µ‚Ä‚¢‚éê‡‚Íæ“ª‚©‚çíœ‚·‚é
+		// è¡Œæ•°ã‚ªãƒ¼ãƒãƒ¼ã—ã¦ã„ã‚‹å ´åˆã¯å…ˆé ­ã‹ã‚‰å‰Šé™¤ã™ã‚‹
 		nDelCount = m_aTexts.GetSize() - m_dwLimitSize;
 		if ((nDelCount > 0) && (nDelCount < m_aTexts.GetSize())) {
 			m_aTexts.RemoveAt(0, nDelCount);
 		}
 	} else if (m_nLimitMode == LVC_TEXT_LIMIT_SIZE) {
-		// ƒTƒCƒYƒI[ƒo[‚µ‚Ä‚¢‚éê‡‚Íæ“ª‚©‚çíœ‚·‚é
+		// ã‚µã‚¤ã‚ºã‚ªãƒ¼ãƒãƒ¼ã—ã¦ã„ã‚‹å ´åˆã¯å…ˆé ­ã‹ã‚‰å‰Šé™¤ã™ã‚‹
 		while ((m_aTexts.GetSize() > 0) && (m_dwTextSize > m_dwLimitSize)) {
 			m_dwTextSize -= m_aTexts[0].strText.GetLength();
 			m_aTexts.RemoveAt(0);
@@ -333,7 +333,7 @@ void CLogViewCtrl::LimitText()
 		}
 	}
 
-	// ‘I‘ğ”ÍˆÍ‚Ì’²®
+	// é¸æŠç¯„å›²ã®èª¿æ•´
 	if (nDelCount > 0) {
 		if (m_nSelect != SELECT_TYPE_NONE) {
 			m_nSelectLineStart -= nDelCount;
@@ -353,11 +353,11 @@ void CLogViewCtrl::LimitText()
 	}
 }
 
-// ƒNƒ‰ƒCƒAƒ“ƒgÀ•W‚©‚ç•¶šˆÊ’u‚ÌŒvZ
+// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆåº§æ¨™ã‹ã‚‰æ–‡å­—ä½ç½®ã®è¨ˆç®—
 BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 {
 	if (m_aTexts.GetSize() == 0) {
-		// ƒf[ƒ^‚ª‚È‚¢
+		// ãƒ‡ãƒ¼ã‚¿ãŒãªã„
 		return FALSE;
 	}
 
@@ -371,7 +371,7 @@ BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 	CCurrentDC	dc(this);
 	CCurrentGdiObject	cFont(&dc, &m_fontText);
 
-	// s‚ğ“Á’è‚·‚é
+	// è¡Œã‚’ç‰¹å®šã™ã‚‹
 	int	nLine = -1;
 	CRect	rc = rcClient;
 	CRect	rcItem;
@@ -394,10 +394,10 @@ BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 		return TRUE;
 	}
 
-	// •¶š‚ğ“Á’è‚·‚é
+	// æ–‡å­—ã‚’ç‰¹å®šã™ã‚‹
 	rcItem.left += m_sizeHeader.cx;
 	if (rcItem.PtInRect(point) == FALSE) {
-		// ƒwƒbƒ_•”•ª‚İ‚½‚¢
+		// ãƒ˜ãƒƒãƒ€éƒ¨åˆ†ã¿ãŸã„
 		*pnChar = -1;
 		return TRUE;
 	}
@@ -430,7 +430,7 @@ BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 	return TRUE;
 }
 
-// ’PŒê‚ÌŒŸõ
+// å˜èªã®æ¤œç´¢
 int CLogViewCtrl::FindToken(int nLine, int nChar)
 {
 	int i;
@@ -448,104 +448,104 @@ int CLogViewCtrl::FindToken(int nLine, int nChar)
 	return -1;
 }
 
-// ‘I‘ğ”ÍˆÍî•ñ‚ÌXV
+// é¸æŠç¯„å›²æƒ…å ±ã®æ›´æ–°
 void CLogViewCtrl::UpdateSelectParam(int nLine, int nChar)
 {
 	if (m_nSelect != SELECT_TYPE_NONE) {
-		// ‘I‘ğ”ÍˆÍ‚Ì•ÏX
+		// é¸æŠç¯„å›²ã®å¤‰æ›´
 		if (nChar < 0) {
-			// s‘I‘ğ
+			// è¡Œé¸æŠ
 			if (m_nSelect == SELECT_TYPE_LINE) {
-				// s‘I‘ğ¨s‘I‘ğ
+				// è¡Œé¸æŠâ†’è¡Œé¸æŠ
 				m_nSelectLineEnd = nLine;
 			} else {
-				// •¶š‘I‘ğ¨s‘I‘ğ
+				// æ–‡å­—é¸æŠâ†’è¡Œé¸æŠ
 				if (m_nSelectLineStart == nLine) {
-					// ŠJn‚Æ“¯‚¶s
+					// é–‹å§‹ã¨åŒã˜è¡Œ
 					m_nSelectLineEnd = nLine;
 				} else {
-					// ŠJn‚Æˆá‚¤s
+					// é–‹å§‹ã¨é•ã†è¡Œ
 					m_nSelectLineEnd = nLine;
 				}
-				// s‘I‘ğƒ‚[ƒh‚Ö
+				// è¡Œé¸æŠãƒ¢ãƒ¼ãƒ‰ã¸
 				m_nSelect = SELECT_TYPE_LINE;
 			}
 		} else {
-			// •¶š‘I‘ğ
+			// æ–‡å­—é¸æŠ
 			if (m_nSelect == SELECT_TYPE_CHAR) {
-				// •¶š‘I‘ğ¨•¶š‘I‘ğ
+				// æ–‡å­—é¸æŠâ†’æ–‡å­—é¸æŠ
 				if (m_nSelectLineStart == nLine) {
-					// ŠJn‚Æ“¯‚¶s
+					// é–‹å§‹ã¨åŒã˜è¡Œ
 					m_nSelectCharEnd = nChar;
 				} else {
-					// ŠJn‚Æˆá‚¤s
+					// é–‹å§‹ã¨é•ã†è¡Œ
 					m_nSelectLineEnd = nLine;
-					// s‘I‘ğƒ‚[ƒh‚Ö
+					// è¡Œé¸æŠãƒ¢ãƒ¼ãƒ‰ã¸
 					m_nSelect = SELECT_TYPE_LINE;
 				}
 			} else {
-				// s‘I‘ğ¨•¶š‘I‘ğ
+				// è¡Œé¸æŠâ†’æ–‡å­—é¸æŠ
 				if (m_nSelectLineStart == nLine) {
-					// ŠJn‚Æ“¯‚¶s
+					// é–‹å§‹ã¨åŒã˜è¡Œ
 					m_nSelectCharEnd = nChar;
-					// •¶š‘I‘ğƒ‚[ƒh‚Ö
+					// æ–‡å­—é¸æŠãƒ¢ãƒ¼ãƒ‰ã¸
 					m_nSelect = SELECT_TYPE_CHAR;
 				} else {
-					// ŠJn‚Æˆá‚¤s
+					// é–‹å§‹ã¨é•ã†è¡Œ
 					m_nSelectLineEnd = nLine;
 				}
 			}
 		}
-		TRACE("‘I‘ğ•ÏX %d:%d,%d:%d,%d\n", m_nSelect, m_nSelectCharStart, m_nSelectCharEnd, m_nSelectLineStart, m_nSelectLineEnd);
+		TRACE("é¸æŠå¤‰æ›´ %d:%d,%d:%d,%d\n", m_nSelect, m_nSelectCharStart, m_nSelectCharEnd, m_nSelectLineStart, m_nSelectLineEnd);
 	} else {
-		// ‘I‘ğŠJn
+		// é¸æŠé–‹å§‹
 		if (nChar < 0) {
-			// s‘I‘ğ
+			// è¡Œé¸æŠ
 			m_nSelect = SELECT_TYPE_LINE;
 			m_nSelectCharStart = 0;
 			m_nSelectCharEnd = 0;
 			m_nSelectLineStart = nLine;
 			m_nSelectLineEnd = nLine;
 		} else {
-			// •¶š‘I‘ğ
+			// æ–‡å­—é¸æŠ
 			m_nSelect = SELECT_TYPE_CHAR;
 			m_nSelectCharStart = nChar;
 			m_nSelectCharEnd = nChar;
 			m_nSelectLineStart = nLine;
 			m_nSelectLineEnd = nLine;
 		}
-		TRACE("‘I‘ğŠJn %d:%d,%d:%d,%d\n", m_nSelect, m_nSelectCharStart, m_nSelectCharEnd, m_nSelectLineStart, m_nSelectLineEnd);
+		TRACE("é¸æŠé–‹å§‹ %d:%d,%d:%d,%d\n", m_nSelect, m_nSelectCharStart, m_nSelectCharEnd, m_nSelectLineStart, m_nSelectLineEnd);
 	}
 }
 
-// ƒEƒBƒ“ƒhƒEì¬‘Oˆ—
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆå‰å‡¦ç†
 BOOL CLogViewCtrl::PreCreateWindow(CREATESTRUCT& cs) 
 {
 	if (CWnd::PreCreateWindow(cs) == FALSE) {
 		return FALSE;
 	}
 
-	cs.style |= WS_VSCROLL;		// cƒXƒNƒ[ƒ‹‚ğ’Ç‰Á
-	cs.style &= ~WS_HSCROLL;	// ‰¡ƒXƒNƒ[ƒ‹‚ğíœ
+	cs.style |= WS_VSCROLL;		// ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’è¿½åŠ 
+	cs.style &= ~WS_HSCROLL;	// æ¨ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’å‰Šé™¤
 	cs.lpszClass = CLASS_NAME;
 
 	return TRUE;
 }
 
-// ƒEƒBƒ“ƒhƒEƒTƒuƒNƒ‰ƒX‰»‘Oˆ—(ƒEƒBƒ“ƒhƒEì¬‚É‚àŒÄ‚Î‚ê‚é)
+// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µãƒ–ã‚¯ãƒ©ã‚¹åŒ–å‰å‡¦ç†(ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆæ™‚ã«ã‚‚å‘¼ã°ã‚Œã‚‹)
 void CLogViewCtrl::PreSubclassWindow()
 {
 	CWnd::PreSubclassWindow();
 
-	// ƒtƒHƒ“ƒg‚ğì‚é
+	// ãƒ•ã‚©ãƒ³ãƒˆã‚’ä½œã‚‹
 	m_fontText.CreatePointFont(m_stSetting.nFontPoint, m_stSetting.szFontText);
 	m_fontHeader.CreatePointFont(m_stSetting.nFontPoint, m_stSetting.szFontHeader);
 
-	// ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[‚ğì‚é
+	// ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ä½œã‚‹
 	if (m_menuPopup.CreatePopupMenu() != FALSE) {
-		m_menuPopup.AppendMenu(MF_ENABLED | MF_STRING, ID_MENU_COPY, _T("ƒRƒs[(&C)"));
+		m_menuPopup.AppendMenu(MF_ENABLED | MF_STRING, ID_MENU_COPY, _T("ã‚³ãƒ”ãƒ¼(&C)"));
 		m_menuPopup.AppendMenu(MF_SEPARATOR);
-		m_menuPopup.AppendMenu(MF_ENABLED | MF_STRING, ID_MENU_ALLSELECT, _T("‚·‚×‚Ä‘I‘ğ(&A)"));
+		m_menuPopup.AppendMenu(MF_ENABLED | MF_STRING, ID_MENU_ALLSELECT, _T("ã™ã¹ã¦é¸æŠ(&A)"));
 	}
 
 	SCROLLINFO info;
@@ -583,13 +583,13 @@ END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
-// CLogViewCtrl ƒƒbƒZ[ƒW ƒnƒ“ƒhƒ‰
+// CLogViewCtrl ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ ãƒãƒ³ãƒ‰ãƒ©
 
 HRESULT CLogViewCtrl::OnNcHitTest(CPoint point) 
 {
 	HRESULT	hHitTest = CWnd::OnNcHitTest(point);
 
-	// êŠ‚É‰‚¶‚Äƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğ•ÏX‚·‚é
+	// å ´æ‰€ã«å¿œã˜ã¦ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚’å¤‰æ›´ã™ã‚‹
 	switch (hHitTest) {
 		case HTCLIENT:
 			ScreenToClient(&point);
@@ -627,25 +627,25 @@ void CLogViewCtrl::OnSize(UINT nType, int cx, int cy)
 	CWnd::OnSize(nType, cx, cy);
 
 	if (m_aTexts.GetSize() > 0) {
-		// •`‰æƒpƒ‰ƒ[ƒ^‚ÌXV
+		// æç”»ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°
 		RecalcParam(&CSize(cx, cy));
 	}
 }
 
 BOOL CLogViewCtrl::OnEraseBkgnd(CDC* pDC) 
 {
-	// ”wŒi‚ÍÁ‹‚µ‚È‚¢
+	// èƒŒæ™¯ã¯æ¶ˆå»ã—ãªã„
 	return FALSE;
 }
 
 void CLogViewCtrl::OnPaint() 
 {
-	CPaintDC dc(this); // •`‰æ—p‚ÌƒfƒoƒCƒX ƒRƒ“ƒeƒLƒXƒg
+	CPaintDC dc(this); // æç”»ç”¨ã®ãƒ‡ãƒã‚¤ã‚¹ ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
 
 	CRect	rcClient;
 	GetClientRect(&rcClient);
 	if (m_aTexts.GetSize() == 0) {
-		// ƒeƒLƒXƒg‚ğ•`‰æ‚µ‚È‚¢‚¯‚Ç”wŒi‚Í•`‰æ‚µ‚Ä‚¨‚­
+		// ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»ã—ãªã„ã‘ã©èƒŒæ™¯ã¯æç”»ã—ã¦ãŠã
 		dc.FillSolidRect(&rcClient, m_stSetting.crBack);
 		return;
 	}
@@ -660,7 +660,7 @@ void CLogViewCtrl::OnPaint()
 	info.fMask = SIF_RANGE | SIF_POS;
 	GetScrollInfo(SB_VERT, &info);
 
-	// ‘I‘ğ”ÍˆÍ‚Ì’²®
+	// é¸æŠç¯„å›²ã®èª¿æ•´
 	int	nSelectLineStart;
 	int	nSelectLineEnd;
 	if ((m_nSelect == SELECT_TYPE_LINE) && (m_nSelectLineStart > m_nSelectLineEnd)) {
@@ -689,16 +689,16 @@ void CLogViewCtrl::OnPaint()
 			dc.SetTextColor(m_aTexts[i].crFore);
 			dc.SetBkColor(m_aTexts[i].crBack);
 			dc.FillSolidRect(0, rcItem.top, m_sizeHeader.cx, rcItem.Height(), m_aTexts[i].crBack);
-			{	// ƒwƒbƒ_•`‰æ
+			{	// ãƒ˜ãƒƒãƒ€æç”»
 				CCurrentGdiObject	cHeader(&dc, &m_fontHeader);
 				CString	strTime;
 				strTime.Format(_T("[%02d:%02d:%02d]"), m_aTexts[i].stDateTime.wHour, m_aTexts[i].stDateTime.wMinute, m_aTexts[i].stDateTime.wSecond);
 				dc.TextOut(0, rcItem.top, strTime);
 			}
-			// ”wŒi“h‚è’×‚µ—pƒŠ[ƒWƒ‡ƒ“
+			// èƒŒæ™¯å¡—ã‚Šæ½°ã—ç”¨ãƒªãƒ¼ã‚¸ãƒ§ãƒ³
 			CRgn	rgnItem;
 			rgnItem.CreateRectRgn(rcItem.left, rcItem.top, rcClient.right, rcItem.bottom);
-			// ƒeƒLƒXƒg•`‰æ
+			// ãƒ†ã‚­ã‚¹ãƒˆæç”»
 			int	nToken = 0;
 			CPoint	ptDraw(rcItem.left, rcItem.top);
 			for (LPCTSTR psz = m_aTexts[i].strText; *psz != _T('\0'); psz = CharNext(psz)) {
@@ -708,15 +708,15 @@ void CLogViewCtrl::OnPaint()
 				}
 				if (((m_nSelect == SELECT_TYPE_CHAR) && (i == nSelectLineStart) && (nIndex >= nSelectCharStart) && (nIndex < nSelectCharEnd)) ||
 					((m_nSelect == SELECT_TYPE_LINE) && (i >= nSelectLineStart) && (i <= nSelectLineEnd))) {
-					// ‘I‘ğ
+					// é¸æŠ
 					dc.SetTextColor(m_stSetting.crSelectText);
 					dc.SetBkColor(m_stSetting.crSelectBack);
 				} else if ((m_stSetting.nLinkNotifyType != LVC_LINK_NOTIFY_NONE) && (m_aTexts[i].aTokens[nToken].nType == TOKEN_TYPE_LINK)) {
-					// ƒŠƒ“ƒN
+					// ãƒªãƒ³ã‚¯
 					dc.SetTextColor(m_stSetting.crLinkText);
 					dc.SetBkColor(m_stSetting.crLinkBack);
 				} else {
-					// ’Êí
+					// é€šå¸¸
 					dc.SetTextColor(m_aTexts[i].crFore);
 					dc.SetBkColor(m_aTexts[i].crBack);
 				}
@@ -732,30 +732,30 @@ void CLogViewCtrl::OnPaint()
 				int		nWidth;
 				dc.GetOutputCharWidth(uChar, uChar, &nWidth);
 				if ((ptDraw.x + nWidth) > rcItem.right) {
-					// ‰üs
+					// æ”¹è¡Œ
 					ptDraw.x = rcItem.left;
 					ptDraw.y += m_sizeChar.cy;
 				}
 				dc.TextOut(ptDraw.x, ptDraw.y, psz, nChar);
-				// ƒŠƒ“ƒN‚Ìê‡‚Ì‰ºü•`‰æ
+				// ãƒªãƒ³ã‚¯ã®å ´åˆã®ä¸‹ç·šæç”»
 				if ((m_stSetting.nLinkNotifyType != LVC_LINK_NOTIFY_NONE) && (m_aTexts[i].aTokens[nToken].nType == TOKEN_TYPE_LINK)) {
 					dc.MoveTo(ptDraw.x, ptDraw.y + m_sizeChar.cy - 1);
 					dc.LineTo(ptDraw.x + nWidth, ptDraw.y + m_sizeChar.cy - 1);
 				}
-				// ”wŒi“h‚è’×‚µƒŠ[ƒWƒ‡ƒ“‚ÌXV
+				// èƒŒæ™¯å¡—ã‚Šæ½°ã—ãƒªãƒ¼ã‚¸ãƒ§ãƒ³ã®æ›´æ–°
 				CRgn	rgnChar;
 				rgnChar.CreateRectRgn(ptDraw.x, ptDraw.y, ptDraw.x + nWidth, ptDraw.y + m_sizeChar.cy);
 				rgnItem.CombineRgn(&rgnItem, &rgnChar, RGN_DIFF);
-				// •`‰æˆÊ’u‚ÌXV
+				// æç”»ä½ç½®ã®æ›´æ–°
 				ptDraw.x += nWidth;
 			}
-			// ”wŒi“h‚è’×‚µ
+			// èƒŒæ™¯å¡—ã‚Šæ½°ã—
 			if ((m_nSelect == SELECT_TYPE_LINE) && ((i >= nSelectLineStart) && (i <= nSelectLineEnd))) {
-				// s‘I‘ğ
+				// è¡Œé¸æŠ
 				CBrush	brBack(m_stSetting.crSelectBack);
 				dc.FillRgn(&rgnItem, &brBack);
 			} else {
-				// s‘I‘ğˆÈŠO
+				// è¡Œé¸æŠä»¥å¤–
 				CBrush	brBack(m_aTexts[i].crBack);
 				dc.FillRgn(&rgnItem, &brBack);
 			}
@@ -845,7 +845,7 @@ void CLogViewCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 				(abs(m_ptTripleClick.y - point.y) <= GetSystemMetrics(SM_CYDOUBLECLK)) &&
 				((nToken = FindToken(m_nSelectLineStart, m_nSelectCharStart)) >= 0) &&
 				(m_aTexts[m_nSelectLineStart].aTokens[nToken].nType == TOKEN_TYPE_LINK)) {
-				// ƒgƒŠƒvƒ‹ƒNƒŠƒbƒN‚³‚ê‚½‚Ì‚Åe‚Ö’Ê’m
+				// ãƒˆãƒªãƒ—ãƒ«ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸã®ã§è¦ªã¸é€šçŸ¥
 				CString	strSelect = m_aTexts[m_nSelectLineStart].strText.Mid(m_nSelectCharStart, m_nSelectCharEnd - m_nSelectCharStart);
 				NMLVCLINK	nmLink;
 				nmLink.hdr.hwndFrom = m_hWnd;
@@ -854,10 +854,10 @@ void CLogViewCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 				nmLink.pszLink = strSelect;
 				GetParent()->SendMessage(WM_NOTIFY, nmLink.hdr.idFrom, reinterpret_cast<LPARAM>(&nmLink));
 			} else {
-				// ‘I‘ğ”ÍˆÍ‚Ì‰ğœ
+				// é¸æŠç¯„å›²ã®è§£é™¤
 				m_nSelect = SELECT_TYPE_NONE;
 				Invalidate(FALSE);
-				TRACE("‘I‘ğ‰ğœ\n");
+				TRACE("é¸æŠè§£é™¤\n");
 			}
 		}
 	}
@@ -866,7 +866,7 @@ void CLogViewCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 void CLogViewCtrl::OnLButtonUp(UINT nFlags, CPoint point) 
 {
 	if (m_aTexts.GetSize() == 0) {
-		// •\¦‚·‚éƒf[ƒ^‚ª‚È‚¢ê‡‚Íˆ—‚µ‚È‚¢
+		// è¡¨ç¤ºã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãŒãªã„å ´åˆã¯å‡¦ç†ã—ãªã„
 		return;
 	}
 
@@ -880,7 +880,7 @@ void CLogViewCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 	if (GetSelectPos(point, &nLine, &nChar) != FALSE) {
 		int	nToken = FindToken(nLine, nChar);
 		if (nToken >= 0) {
-			// ’PŒê‚ªƒ_ƒuƒ‹ƒNƒŠƒbƒN‚³‚ê‚½
+			// å˜èªãŒãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ
 			m_nSelect = SELECT_TYPE_CHAR;
 			m_nSelectLineStart = nLine;
 			m_nSelectCharStart = m_aTexts[nLine].aTokens[nToken].nStart;
@@ -888,9 +888,9 @@ void CLogViewCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 			Invalidate(FALSE);
 
 			if (m_aTexts[nLine].aTokens[nToken].nType == TOKEN_TYPE_LINK) {
-				// ƒŠƒ“ƒN‚ªƒ_ƒuƒ‹ƒNƒŠƒbƒN‚³‚ê‚½
+				// ãƒªãƒ³ã‚¯ãŒãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ
 				if (m_stSetting.nLinkNotifyType == LVC_LINK_NOTIFY_DOUBLE_CLICK) {
-					// e‚Ö’Ê’m
+					// è¦ªã¸é€šçŸ¥
 					NMLVCLINK	nmLink;
 					nmLink.hdr.hwndFrom = m_hWnd;
 					nmLink.hdr.idFrom = GetDlgCtrlID();
@@ -898,7 +898,7 @@ void CLogViewCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 					nmLink.pszLink = m_aTexts[nLine].strText.Mid(m_aTexts[nLine].aTokens[nToken].nStart, m_aTexts[nLine].aTokens[nToken].nLen);
 					GetParent()->SendMessage(WM_NOTIFY, nmLink.hdr.idFrom, reinterpret_cast<LPARAM>(&nmLink));
 				} else {
-					// ƒgƒŠƒvƒ‹ƒNƒŠƒbƒN”»’è‚Ì€”õ
+					// ãƒˆãƒªãƒ—ãƒ«ã‚¯ãƒªãƒƒã‚¯åˆ¤å®šã®æº–å‚™
 					m_dwTripleClick = GetTickCount();
 					m_ptTripleClick = point;
 				}
@@ -924,7 +924,7 @@ int CLogViewCtrl::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message
 void CLogViewCtrl::OnMouseMove(UINT nFlags, CPoint point) 
 {
 	if (m_aTexts.GetSize() == 0) {
-		// •\¦‚·‚éƒf[ƒ^‚ª‚È‚¢ê‡‚Íˆ—‚µ‚È‚¢
+		// è¡¨ç¤ºã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãŒãªã„å ´åˆã¯å‡¦ç†ã—ãªã„
 		return;
 	}
 
@@ -962,7 +962,7 @@ BOOL CLogViewCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	GetScrollInfo(SB_VERT, &info);
 
 	if (zDelta < 0) {
-		// ‰º‚Ö
+		// ä¸‹ã¸
 		info.nPos += m_stSetting.nWheelDelta;
 		info.fMask = SIF_DISABLENOSCROLL | SIF_POS;
 		SetScrollInfo(SB_VERT, &info, TRUE);
@@ -978,7 +978,7 @@ BOOL CLogViewCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 		}
 		Invalidate();
 	} else if (zDelta > 0) {
-		// ã‚Ö
+		// ä¸Šã¸
 		info.nPos -= m_stSetting.nWheelDelta;
 		info.fMask = SIF_DISABLENOSCROLL | SIF_POS;
 		SetScrollInfo(SB_VERT, &info, TRUE);
@@ -1001,7 +1001,7 @@ BOOL CLogViewCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 void CLogViewCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
 	if (m_aTexts.GetSize() == 0) {
-		// •\¦‚·‚éƒf[ƒ^‚ª‚È‚¢ê‡‚Íˆ—‚µ‚È‚¢
+		// è¡¨ç¤ºã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãŒãªã„å ´åˆã¯å‡¦ç†ã—ãªã„
 		return;
 	}
 
@@ -1057,7 +1057,7 @@ void CLogViewCtrl::OnMenuCopy()
 
 	HANDLE	hMem = NULL;
 	if (m_nSelect == SELECT_TYPE_CHAR) {
-		// •¶š‘I‘ğ
+		// æ–‡å­—é¸æŠ
 		int	nSelectCharStart;
 		int	nSelectCharEnd;
 		if (m_nSelectCharStart <= m_nSelectCharEnd) {
@@ -1076,7 +1076,7 @@ void CLogViewCtrl::OnMenuCopy()
 			}
 		}
 	} else if (m_nSelect == SELECT_TYPE_LINE) {
-		// s‘I‘ğ
+		// è¡Œé¸æŠ
 		int	nSelectLineStart;
 		int	nSelectLineEnd;
 		if (m_nSelectLineStart <= m_nSelectLineEnd) {
@@ -1117,14 +1117,14 @@ void CLogViewCtrl::OnMenuCopy()
 	if (m_stSetting.bCancelSelectAfterCopy != FALSE) {
 		m_nSelect = SELECT_TYPE_NONE;
 		Invalidate(FALSE);
-		TRACE("‘I‘ğ‰ğœ\n");
+		TRACE("é¸æŠè§£é™¤\n");
 	}
 }
 
 void CLogViewCtrl::OnMenuAllSelect()
 {
 	if (m_aTexts.GetSize() == 0) {
-		// ƒf[ƒ^‚ª‚È‚¢‚Ì‚Åˆ—‚µ‚È‚¢
+		// ãƒ‡ãƒ¼ã‚¿ãŒãªã„ã®ã§å‡¦ç†ã—ãªã„
 		return;
 	}
 

@@ -1,49 +1,49 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:UpdateServerInfo.h											 */
-/* “à—e			:ƒT[ƒo[î•ñXVƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/05/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:UpdateServerInfo.h											 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±æ›´æ–°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/22													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CUpdateServerInfo
 {
 public:
-			CUpdateServerInfo();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CUpdateServerInfo();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CUpdateServerInfo();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CUpdateServerInfo();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create		(LPCSTR pszAccount, LPCSTR pszPassword, LPCSTR pszServerAddr, LPCSTR pszUploadPath);	/* ì¬ */
-	void	Destroy		(void);								/* ”jŠü */
-	void	Update		(int nCount, LPCSTR pszPlace, BOOL bUpload = FALSE);		/* XV */
-
-
-protected:
-	static UINT __stdcall ThreadEntry(LPVOID lpParam);	/* ƒXƒŒƒbƒhƒƒCƒ“ˆ— */
-	void	ThreadMain		(void);							/* ƒXƒŒƒbƒhƒƒCƒ“ˆ— */
-	void	MakeServerInfo	(void);							/* ƒT[ƒo[î•ñì¬ */
-	void	Upload			(void);							/* ƒAƒbƒvƒ[ƒh */
-	void	GetFileName		(CmyString &strDst);			/* ƒT[ƒo[î•ñƒtƒ@ƒCƒ‹–¼‚ğæ“¾ */
+	BOOL	Create		(LPCSTR pszAccount, LPCSTR pszPassword, LPCSTR pszServerAddr, LPCSTR pszUploadPath);	/* ä½œæˆ */
+	void	Destroy		(void);								/* ç ´æ£„ */
+	void	Update		(int nCount, LPCSTR pszPlace, BOOL bUpload = FALSE);		/* æ›´æ–° */
 
 
 protected:
-	HANDLE		m_hThread,			/* ƒXƒŒƒbƒhƒnƒ“ƒhƒ‹ */
-				m_hInitEvent,		/* ŠJn‘Ò‚¿ƒCƒxƒ“ƒg */
-				m_hExitEvent,		/* I—¹‘Ò‚¿ƒCƒxƒ“ƒg */
-				m_hUpdate;			/* XVƒCƒxƒ“ƒg */
-	CmyString	m_strAccount,		/* FTPƒAƒJƒEƒ“ƒg */
-				m_strPassword,		/* FTPƒpƒXƒ[ƒh */
-				m_strServerAddr,	/* ƒT[ƒo[ƒAƒhƒŒƒX */
-				m_strUploadPath;	/* ƒAƒbƒvƒ[ƒhæ */
-	CmySection	m_csUpdate;			/* î•ñXV—pƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“ */
+	static UINT __stdcall ThreadEntry(LPVOID lpParam);	/* ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ¡ã‚¤ãƒ³å‡¦ç† */
+	void	ThreadMain		(void);							/* ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ¡ã‚¤ãƒ³å‡¦ç† */
+	void	MakeServerInfo	(void);							/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä½œæˆ */
+	void	Upload			(void);							/* ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ */
+	void	GetFileName		(CmyString &strDst);			/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾— */
 
-	int			m_nCount;			/* ƒƒOƒCƒ“l” */
-	CmyString	m_strPlace;			/* Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
+
+protected:
+	HANDLE		m_hThread,			/* ã‚¹ãƒ¬ãƒƒãƒ‰ãƒãƒ³ãƒ‰ãƒ« */
+				m_hInitEvent,		/* é–‹å§‹å¾…ã¡ã‚¤ãƒ™ãƒ³ãƒˆ */
+				m_hExitEvent,		/* çµ‚äº†å¾…ã¡ã‚¤ãƒ™ãƒ³ãƒˆ */
+				m_hUpdate;			/* æ›´æ–°ã‚¤ãƒ™ãƒ³ãƒˆ */
+	CmyString	m_strAccount,		/* FTPã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+				m_strPassword,		/* FTPãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+				m_strServerAddr,	/* ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ */
+				m_strUploadPath;	/* ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å…ˆ */
+	CmySection	m_csUpdate;			/* æƒ…å ±æ›´æ–°ç”¨ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ */
+
+	int			m_nCount;			/* ãƒ­ã‚°ã‚¤ãƒ³äººæ•° */
+	CmyString	m_strPlace;			/* æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
 };
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcCONNECT.cpp								 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒo[ƒWƒ‡ƒ“ŒnóMˆ—) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcCONNECT.cpp								 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,25 +23,25 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT									 */
-/* “à—e		:óMˆ—(Ú‘±Œn)												 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ¥ç¶šç³»)												 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_CONNECT_REQ_LOGIN:	RecvProcCONNECT_REQ_LOGIN	(pData, dwSessionID);	break;	/* ƒƒOƒCƒ“—v‹ */
-	case SBOCOMMANDID_SUB_CONNECT_REQ_PLAY:		RecvProcCONNECT_REQ_PLAY	(pData, dwSessionID);	break;	/* ƒQ[ƒ€ŠJn—v‹ */
-	case SBOCOMMANDID_SUB_CONNECT_KEEPALIVE:	RecvProcCONNECT_KEEPALIVE	(pData, dwSessionID);	break;	/* ¶‘¶Šm”F’Ê’m */
+	case SBOCOMMANDID_SUB_CONNECT_REQ_LOGIN:	RecvProcCONNECT_REQ_LOGIN	(pData, dwSessionID);	break;	/* ãƒ­ã‚°ã‚¤ãƒ³è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CONNECT_REQ_PLAY:		RecvProcCONNECT_REQ_PLAY	(pData, dwSessionID);	break;	/* ã‚²ãƒ¼ãƒ é–‹å§‹è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CONNECT_KEEPALIVE:	RecvProcCONNECT_KEEPALIVE	(pData, dwSessionID);	break;	/* ç”Ÿå­˜ç¢ºèªé€šçŸ¥ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT_REQ_LOGIN							 */
-/* “à—e		:óMˆ—(ƒƒOƒCƒ“—v‹)											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT_REQ_LOGIN							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ­ã‚°ã‚¤ãƒ³è¦æ±‚)											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
@@ -65,22 +65,22 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 		"%02X-%02X-%02X-%02X-%02X-%02X",
 		Packet.m_byMacAddr[0], Packet.m_byMacAddr[1], Packet.m_byMacAddr[2],
 		Packet.m_byMacAddr[3], Packet.m_byMacAddr[4], Packet.m_byMacAddr[5]);
-	/* ‹‘”Û‚³‚ê‚Ä‚¢‚é‚©”»’è */
+	/* æ‹’å¦ã•ã‚Œã¦ã„ã‚‹ã‹åˆ¤å®š */
 	bDisable = m_pLibInfoDisable->IsDisable ((LPCSTR)strTmp);
 	if (strTmp == "00-00-00-00-00-00") {
 //		bDisable = TRUE;
 	}
-	/* IPƒAƒhƒŒƒX‚Å‹‘”Û‚µ‚Ä‚¢‚é‚©”»’è */
+	/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ã§æ‹’å¦ã—ã¦ã„ã‚‹ã‹åˆ¤å®š */
 	bDisable |= m_pLibInfoDisable->IsDisableIP (AddrTmp.S_un.S_addr);
 
-	/* “o˜^Ï‚İH */
+	/* ç™»éŒ²æ¸ˆã¿ï¼Ÿ */
 	if (pInfoAccount) {
 		bResult = m_pLibInfoAccount->CheckPassword (Packet.m_strAccount, Packet.m_strPassword);
 		if (bResult) {
 			nResult = LOGINRES_OK;
 		}
 
-	/* –¢“o˜^ */
+	/* æœªç™»éŒ² */
 	} else {
 //		bResult = m_pLibInfoAccount->IsUseMacAddr ((LPCSTR)strTmp);
 //		if (bResult) {
@@ -94,7 +94,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 		TrimViewString (pInfoAccount->m_strPassword, Packet.m_strPassword);
 		pInfoAccount->m_strMacAddr = strTmp;
 
-		/* ŠÇ—ÒŒ ŒÀƒAƒJƒEƒ“ƒgH */
+		/* ç®¡ç†è€…æ¨©é™ã‚¢ã‚«ã‚¦ãƒ³ãƒˆï¼Ÿ */
 		if (pInfoAccount->m_strAccount == m_pMgrData->GetAdminAccount ()) {
 			pInfoAccount->m_nAdminLevel = ADMINLEVEL_ALL;
 		}
@@ -103,17 +103,17 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	}
 
 	if (nResult == LOGINRES_OK) {
-		/* ‹‘”ÛH */
+		/* æ‹’å¦ï¼Ÿ */
 		if (bDisable || pInfoAccount->m_bDisable) {
 			nResult = LOGINRES_NG_DISABLE;
-			m_pLog->Write ("ƒƒOƒCƒ“‹‘”Û dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
+			m_pLog->Write ("ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
 					(LPCSTR)strTmp,
 					(LPCSTR)pInfoAccount->m_strAccount);
-			/* IPƒAƒhƒŒƒX‚Å‹‘”Û‚µ‚Ä‚¨‚­ */
+			/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ã§æ‹’å¦ã—ã¦ãŠã */
 			m_pLibInfoDisable->AddIP (AddrTmp.S_un.S_addr);
-		/* g—p’†H */
+		/* ä½¿ç”¨ä¸­ï¼Ÿ */
 		} else if (pInfoAccount->m_dwSessionID != 0) {
 			nResult = LOGINRES_NG_LOGIN;
 		} else {
@@ -125,7 +125,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			pInfoAccount->m_dwTimeLastLogin = (DWORD)timeTmp;
 			pInfoAccount->m_strLastMacAddr	= strTmp;
 
-			m_pLog->Write ("ƒƒOƒCƒ“ dwSessionID:%u [%d.%d.%d.%d][%s][%s][%s]",
+			m_pLog->Write ("ãƒ­ã‚°ã‚¤ãƒ³ dwSessionID:%u [%d.%d.%d.%d][%s][%s][%s]",
 					dwSessionID,
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
 					(LPCSTR)strTmp,
@@ -142,9 +142,9 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT_REQ_PLAY							 */
-/* “à—e		:óMˆ—(ƒQ[ƒ€ŠJn—v‹)										 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT_REQ_PLAY							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚²ãƒ¼ãƒ é–‹å§‹è¦æ±‚)										 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
@@ -201,46 +201,46 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
-		m_pLog->Write ("Š‘®ƒ}ƒbƒv•s–¾ dwSessionID:%u [%s] dwMapID:%d", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, pInfoChar->m_dwMapID);
+		m_pLog->Write ("æ‰€å±ãƒãƒƒãƒ—ä¸æ˜ dwSessionID:%u [%s] dwMapID:%d", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, pInfoChar->m_dwMapID);
 	}
 
 	m_pLibInfoChar->LogIn (Packet.m_dwCharID, dwSessionID, pInfoAccount->m_dwAccountID);
 	pInfoAccount->m_dwLastKeepalive = (DWORD)timeTmp;
 	nOnlineCount = m_pLibInfoChar->GetCountOnline ();
 
-	m_pLog->Write ("ƒQ[ƒ€ŠJn dwSessionID:%u [%s](Online:%d)", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, nOnlineCount);
+	m_pLog->Write ("ã‚²ãƒ¼ãƒ é–‹å§‹ dwSessionID:%u [%s](Online:%d)", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, nOnlineCount);
 
 	for (i = 0; i < 4; i ++) {
 		nTmp = i;
 		bResult |= m_pLibInfoChar->IsMove (pInfoChar, nTmp);
 	}
 	if (bResult == FALSE) {
-		m_pLog->Write ("–„‚Ü‚è‹~o MAP:%d(%d,%d)", pInfoChar->m_dwMapID, pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+		m_pLog->Write ("åŸ‹ã¾ã‚Šæ•‘å‡º MAP:%d(%d,%d)", pInfoChar->m_dwMapID, pInfoChar->m_nMapX, pInfoChar->m_nMapY);
 
 		if (pInfoChar->m_dwMaxHP == 0) {
 			m_pLibInfoChar->SetInitStatus (pInfoChar, TRUE);
 		}
 
-		/* ‰ŠúˆÊ’u‚É“]‘— */
-		pInfoChar->m_dwMapID	= pInitCharStatus->dwInitPosMapID;		/* ƒ}ƒbƒvID */
-		pInfoChar->m_nMapX		= pInitCharStatus->ptInitPos.x;			/* XÀ•W */
-		pInfoChar->m_nMapY		= pInitCharStatus->ptInitPos.y;			/* YÀ•W */
+		/* åˆæœŸä½ç½®ã«è»¢é€ */
+		pInfoChar->m_dwMapID	= pInitCharStatus->dwInitPosMapID;		/* ãƒãƒƒãƒ—ID */
+		pInfoChar->m_nMapX		= pInitCharStatus->ptInitPos.x;			/* Xåº§æ¨™ */
+		pInfoChar->m_nMapY		= pInitCharStatus->ptInitPos.y;			/* Yåº§æ¨™ */
 		pInfoChar->m_bProcMoveMapOut = TRUE;
 		pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pInfoChar->m_dwMapID);
 		if (pInfoMap == NULL) {
-			m_pLog->Write ("Š‘®ƒ}ƒbƒv•s–¾ dwSessionID:%u [%s] dwMapID:%d", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, pInfoChar->m_dwMapID);
+			m_pLog->Write ("æ‰€å±ãƒãƒƒãƒ—ä¸æ˜ dwSessionID:%u [%s] dwMapID:%d", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, pInfoChar->m_dwMapID);
 			goto Exit;
 		}
 	}
 
 	nResult = PLAYRES_OK;
-	/* ŠÇ—ÒƒAƒJƒEƒ“ƒgH */
+	/* ç®¡ç†è€…ã‚¢ã‚«ã‚¦ãƒ³ãƒˆï¼Ÿ */
 	if (pInfoAccount->m_nAdminLevel == ADMINLEVEL_ALL) {
 		nResult = PLAYRES_ADMINLEVEL_ALL;
 	}
 //Todo:
 	pInfoChar->m_abyMark.RemoveAll ();
-	if (pInfoChar->m_strCharName == "t‚¤‚ç‚ç") {
+	if (pInfoChar->m_strCharName == "æ˜¥ã†ã‚‰ã‚‰") {
 		pInfoChar->m_abyMark.Add (2);
 		nResult = PLAYRES_ADMINLEVEL_ALL;
 	} else if (pInfoChar->m_strCharName == "VeLTiNA") {
@@ -270,7 +270,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	PacketSKILL_SKILLINFO.Make (m_pLibInfoSkill);
 	m_pSock->SendTo (dwSessionID, &PacketSKILL_SKILLINFO);
 
-	/* ü‚è‚ÌƒLƒƒƒ‰î•ñ‚ğ‘—M */
+	/* å‘¨ã‚Šã®ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’é€ä¿¡ */
 	PacketCHAR_MOTION.Make (0, 0, m_pLibInfoMotion);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_MOTION);
 	PacketCHAR_MOTIONTYPE.Make (0, m_pLibInfoMotionType);
@@ -281,41 +281,41 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	PacketCHAR_CHARINFO.Make (&LibInfoCharTmp);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_CHARINFO);
 
-	/* ƒQ[ƒ€ŠJn‰“š‚ğ’Ê’m */
+	/* ã‚²ãƒ¼ãƒ é–‹å§‹å¿œç­”ã‚’é€šçŸ¥ */
 	PacketRES_PLAY.Make (nResult);
 	m_pSock->SendTo (dwSessionID, &PacketRES_PLAY);
 
-	/* ü‚è‚ÌƒLƒƒƒ‰‚É’Ê’m */
+	/* å‘¨ã‚Šã®ã‚­ãƒ£ãƒ©ã«é€šçŸ¥ */
 	PacketCHAR_RES_CHARINFO.Make (pInfoChar);
 	SendToScreenChar (pInfoChar, &PacketCHAR_RES_CHARINFO);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_RES_CHARINFO);
 
 	UpdateServerInfo ();
 
-	strTmp.Format ("SYSTEM:ƒXƒNƒ‰ƒbƒvƒuƒbƒNƒIƒ“ƒ‰ƒCƒ“‚Ì¢ŠE‚Ö‚æ‚¤‚±‚»ô");
+	strTmp.Format ("SYSTEM:ã‚¹ã‚¯ãƒ©ãƒƒãƒ—ãƒ–ãƒƒã‚¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ã®ä¸–ç•Œã¸ã‚ˆã†ã“ãâ™ª");
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:Œ»İ‚ÌƒIƒ“ƒ‰ƒCƒ“”: %d", nOnlineCount);
+	strTmp.Format ("SYSTEM:ç¾åœ¨ã®ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°: %d", nOnlineCount);
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:ÅVƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“: %s", m_pMgrData->GetClientVersion ());
+	strTmp.Format ("SYSTEM:æœ€æ–°ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³: %s", m_pMgrData->GetClientVersion ());
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 
 	if (nOnlineCount % 10 == 0) {
-		strTmp.Format ("SYSTEM:ƒIƒ“ƒ‰ƒCƒ“”‚ª %d ‚É‚È‚è‚Ü‚µ‚½", nOnlineCount);
+		strTmp.Format ("SYSTEM:ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°ãŒ %d ã«ãªã‚Šã¾ã—ãŸ", nOnlineCount);
 		PacketMAP_SYSTEMMSG.Make (strTmp);
 		m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 	}
 
-	strTmp.Format ("SYSTEM:Œ»İÅ‚àl‚ªW‚Ü‚Á‚Ä‚¢‚éêŠ‚Í");
+	strTmp.Format ("SYSTEM:ç¾åœ¨æœ€ã‚‚äººãŒé›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ã¯");
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 	dwTmp = m_pLibInfoChar->GetPlaceName (strTmp2);
 	if (strTmp2.IsEmpty ()) {
-		strTmp.Format ("SYSTEM:ƒ}ƒbƒv”Ô†[%d]‚Ì‚æ‚¤‚Å‚·", dwTmp);
+		strTmp.Format ("SYSTEM:ãƒãƒƒãƒ—ç•ªå·[%d]ã®ã‚ˆã†ã§ã™", dwTmp);
 	} else {
-		strTmp.Format ("SYSTEM:[%s]‚Ì‚æ‚¤‚Å‚·", (LPCSTR)strTmp2);
+		strTmp.Format ("SYSTEM:[%s]ã®ã‚ˆã†ã§ã™", (LPCSTR)strTmp2);
 	}
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
@@ -326,9 +326,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT_KEEPALIVE							 */
-/* “à—e		:óMˆ—(¶‘¶Šm”F’Ê’m)											 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT_KEEPALIVE							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç”Ÿå­˜ç¢ºèªé€šçŸ¥)											 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT_KEEPALIVE(PBYTE pData, DWORD dwSessionID)

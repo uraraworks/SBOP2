@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DInputUtil.h												 */
-/* “à—e			:DirectInputƒ†[ƒeƒBƒŠƒeƒBƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DInputUtil.h												 */
+/* å†…å®¹			:DirectInputãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/30													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -20,9 +20,9 @@
 #pragma comment(lib, "dinput8.lib")
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::CDInputUtil										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::CDInputUtil										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 CDInputUtil::CDInputUtil()
@@ -33,9 +33,9 @@ CDInputUtil::CDInputUtil()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::~CDInputUtil										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::~CDInputUtil										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 CDInputUtil::~CDInputUtil()
@@ -45,9 +45,9 @@ CDInputUtil::~CDInputUtil()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 BOOL CDInputUtil::Create(void)
@@ -74,9 +74,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::Destroy											 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::Destroy											 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 void CDInputUtil::Destroy(void)
@@ -88,9 +88,9 @@ void CDInputUtil::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::IsUseDevice										 */
-/* “à—e		:ƒfƒoƒCƒX‚ðŽg—p‚µ‚Ä‚¢‚é‚©”»’è									 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDInputUtil::IsUseDevice										 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã‹åˆ¤å®š									 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CDInputUtil::IsUseDevice(void)
@@ -109,9 +109,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::GetKeyState										 */
-/* “à—e		:“ü—Íó‘Ô‚ðŽæ“¾													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDInputUtil::GetKeyState										 */
+/* å†…å®¹		:å…¥åŠ›çŠ¶æ…‹ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 DWORD CDInputUtil::GetKeyState(void)
@@ -125,10 +125,10 @@ DWORD CDInputUtil::GetKeyState(void)
 		goto Exit;
 	}
 
-	/* ƒWƒ‡ƒCƒXƒeƒBƒbƒN‚Éƒ|[ƒ‹‚ð‚©‚¯‚é */
+	/* ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã«ãƒãƒ¼ãƒ«ã‚’ã‹ã‘ã‚‹ */
 	m_pDevice->Poll ();
 
-	// ƒfƒoƒCƒXó‘Ô‚ð“Ç‚ÝŽæ‚é
+	// ãƒ‡ãƒã‚¤ã‚¹çŠ¶æ…‹ã‚’èª­ã¿å–ã‚‹
 	hr = m_pDevice->GetDeviceState (sizeof (DIJOYSTATE), &dijs);
 	if (hr != DI_OK){
 		m_pDevice->Acquire ();
@@ -167,9 +167,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::SetDevice											 */
-/* “à—e		:ƒWƒ‡ƒCƒpƒbƒh‚ð—ñ‹“												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDInputUtil::SetDevice											 */
+/* å†…å®¹		:ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã‚’åˆ—æŒ™												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDInputUtil::SetDevice(int nNo, HWND hWnd)
@@ -188,9 +188,9 @@ void CDInputUtil::SetDevice(int nNo, HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::SetDevice											 */
-/* “à—e		:ƒWƒ‡ƒCƒpƒbƒh‚ð—ñ‹“												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CDInputUtil::SetDevice											 */
+/* å†…å®¹		:ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã‚’åˆ—æŒ™												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
@@ -206,21 +206,21 @@ void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 		return;
 	}
 
-	/* ƒWƒ‡ƒCƒXƒeƒBƒbƒN—p‚Ìƒf[ƒ^EƒtƒH[ƒ}ƒbƒg‚ðÝ’è */
+	/* ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ç”¨ã®ãƒ‡ãƒ¼ã‚¿ãƒ»ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆã‚’è¨­å®š */
 	hr = m_pDevice->SetDataFormat (&c_dfDIJoystick);
 	if (FAILED (hr)) {
 		SAFE_RELEASE (m_pDevice);
 		return;
 	}
 
-	/* ƒ‚[ƒh‚ðÝ’èiƒtƒHƒAƒOƒ‰ƒEƒ“ƒh•”ñ”r‘¼ƒ‚[ƒhj */
+	/* ãƒ¢ãƒ¼ãƒ‰ã‚’è¨­å®šï¼ˆãƒ•ã‚©ã‚¢ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ï¼†éžæŽ’ä»–ãƒ¢ãƒ¼ãƒ‰ï¼‰ */
 	hr = m_pDevice->SetCooperativeLevel (hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	if (FAILED (hr)) {
 		SAFE_RELEASE (m_pDevice);
 		return;
 	}
 
-	/* Ž²‚Ì’l‚Ì”ÍˆÍ‚ðÝ’è */
+	/* è»¸ã®å€¤ã®ç¯„å›²ã‚’è¨­å®š */
 	DIPROPRANGE diprg;
 	ZeroMemory (&diprg, sizeof(diprg));
 	diprg.diph.dwSize		= sizeof(diprg); 
@@ -229,7 +229,7 @@ void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 	diprg.lMin				= -1000;
 	diprg.lMax				= 1000;
 
-	/* XŽ²‚Ì”ÍˆÍ‚ðÝ’è */
+	/* Xè»¸ã®ç¯„å›²ã‚’è¨­å®š */
 	diprg.diph.dwObj	= DIJOFS_X; 
 	hr = m_pDevice->SetProperty (DIPROP_RANGE, &diprg.diph);
 	if (FAILED (hr)) {
@@ -237,7 +237,7 @@ void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 		return;
 	}
 
-	/* YŽ²‚Ì”ÍˆÍ‚ðÝ’è */
+	/* Yè»¸ã®ç¯„å›²ã‚’è¨­å®š */
 	diprg.diph.dwObj	= DIJOFS_Y;
 	hr = m_pDevice->SetProperty (DIPROP_RANGE, &diprg.diph);
 	if (FAILED (hr)) {
@@ -245,14 +245,14 @@ void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 		return;
 	}
 
-	/* ŠeŽ²‚²‚Æ‚ÉA–³Œø‚Ìƒ][ƒ“’l‚ðÝ’è‚·‚éB */
+	/* å„è»¸ã”ã¨ã«ã€ç„¡åŠ¹ã®ã‚¾ãƒ¼ãƒ³å€¤ã‚’è¨­å®šã™ã‚‹ã€‚ */
 	DIPROPDWORD				dipdw;
 	dipdw.diph.dwSize		= sizeof(DIPROPDWORD);
 	dipdw.diph.dwHeaderSize	= sizeof(dipdw.diph);
 	dipdw.diph.dwHow		= DIPH_BYOFFSET;
 	dipdw.dwData			= 2500;
 
-	/* XŽ²‚Ì–³Œøƒ][ƒ“‚ðÝ’è */
+	/* Xè»¸ã®ç„¡åŠ¹ã‚¾ãƒ¼ãƒ³ã‚’è¨­å®š */
 	dipdw.diph.dwObj = DIJOFS_X;
 	hr = m_pDevice->SetProperty (DIPROP_DEADZONE, &dipdw.diph);
 	if (FAILED (hr)) {
@@ -260,7 +260,7 @@ void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 		return;
 	}
 
-	/* YŽ²‚Ì–³Œøƒ][ƒ“‚ðÝ’è */
+	/* Yè»¸ã®ç„¡åŠ¹ã‚¾ãƒ¼ãƒ³ã‚’è¨­å®š */
 	dipdw.diph.dwObj = DIJOFS_Y;
 	hr = m_pDevice->SetProperty (DIPROP_DEADZONE, &dipdw.diph);
 	if (FAILED (hr)) {
@@ -273,9 +273,9 @@ void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::Enum												 */
-/* “à—e		:ƒfƒoƒCƒX‚ð—ñ‹“													 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::Enum												 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹ã‚’åˆ—æŒ™													 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 BOOL CDInputUtil::Enum(void)
@@ -305,9 +305,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::GetDeviceCount									 */
-/* “à—e		:ƒfƒoƒCƒX”‚ðŽæ“¾												 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::GetDeviceCount									 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹æ•°ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 int CDInputUtil::GetDeviceCount(void)
@@ -317,14 +317,14 @@ int CDInputUtil::GetDeviceCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::GetDeviceName										 */
-/* “à—e		:ƒfƒoƒCƒX–¼‚ðŽæ“¾												 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::GetDeviceName										 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹åã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 BOOL CDInputUtil::GetDeviceName(
-	int nNo,				/* [in] ”z—ñ”Ô† */
-	CmyString &strDst)		/* [ou] ƒfƒoƒCƒX–¼ */
+	int nNo,				/* [in] é…åˆ—ç•ªå· */
+	CmyString &strDst)		/* [ou] ãƒ‡ãƒã‚¤ã‚¹å */
 {
 	BOOL bRet;
 	PDINPUTDEVICEINFO pInfo;
@@ -347,14 +347,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::GetGUID											 */
-/* “à—e		:Žw’èƒfƒoƒCƒX‚ÌGUID‚ðŽæ“¾										 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CDInputUtil::GetGUID											 */
+/* å†…å®¹		:æŒ‡å®šãƒ‡ãƒã‚¤ã‚¹ã®GUIDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CDInputUtil::GetGUID(
-	int nNo,			/* [in] ”z—ñ”Ô† */
-	GUID &stDst)		/* [out] Žæ“¾æ */
+	int nNo,			/* [in] é…åˆ—ç•ªå· */
+	GUID &stDst)		/* [out] å–å¾—å…ˆ */
 {
 	BOOL bRet;
 	PDINPUTDEVICEINFO pInfo;
@@ -377,9 +377,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::EnumProc											 */
-/* “à—e		:—ñ‹“ƒR[ƒ‹ƒoƒbƒNŠÖ”											 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::EnumProc											 */
+/* å†…å®¹		:åˆ—æŒ™ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°											 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 BOOL CALLBACK CDInputUtil::EnumProc(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
@@ -389,7 +389,7 @@ BOOL CALLBACK CDInputUtil::EnumProc(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
 
 	pThis = (PCDInputUtil)pvRef;
 
-	/* ƒfƒoƒCƒXî•ñ‚ð’Ç‰Á */
+	/* ãƒ‡ãƒã‚¤ã‚¹æƒ…å ±ã‚’è¿½åŠ  */
 	pInfo = new DINPUTDEVICEINFO;
 	pInfo->guidInstance	= lpddi->guidInstance;
 	pInfo->strName		= lpddi->tszInstanceName;
@@ -400,9 +400,9 @@ BOOL CALLBACK CDInputUtil::EnumProc(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::DeleteDeviceInfo									 */
-/* “à—e		:ƒfƒoƒCƒXî•ñ‚ðíœ												 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::DeleteDeviceInfo									 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹æƒ…å ±ã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 void CDInputUtil::DeleteDeviceInfo(int nNo)
@@ -416,9 +416,9 @@ void CDInputUtil::DeleteDeviceInfo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::DeleteAllDeviceInfo								 */
-/* “à—e		:ƒfƒoƒCƒXî•ñ‚ð‘S‚Äíœ											 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::DeleteAllDeviceInfo								 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹æƒ…å ±ã‚’å…¨ã¦å‰Šé™¤											 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 void CDInputUtil::DeleteAllDeviceInfo(void)
@@ -433,9 +433,9 @@ void CDInputUtil::DeleteAllDeviceInfo(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDInputUtil::AddDeviceInfo										 */
-/* “à—e		:ƒfƒoƒCƒXî•ñ‚ð’Ç‰Á												 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDInputUtil::AddDeviceInfo										 */
+/* å†…å®¹		:ãƒ‡ãƒã‚¤ã‚¹æƒ…å ±ã‚’è¿½åŠ 												 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 void CDInputUtil::AddDeviceInfo(PDINPUTDEVICEINFO pDeviceInfo)

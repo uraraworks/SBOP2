@@ -1,35 +1,35 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoItemWeapon.cpp											 */
-/* “à—e			:ƒAƒCƒeƒ€•Šíî•ñƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoItemWeapon.cpp											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/10													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoItemWeapon.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwWeaponInfoID",			/* •Šíî•ñID */
-	"m_dwMotionType",			/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	"m_dwMotionTypeStand",		/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	"m_dwMotionTypeWalk",		/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	"m_strName",				/* •Šíí•Ê–¼ */
-	"m_adwEffectIDAtack",		/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID */
-	"m_adwEffectIDCritical",	/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID */
+	"m_dwWeaponInfoID",			/* æ­¦å™¨æƒ…å ±ID */
+	"m_dwMotionType",			/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	"m_dwMotionTypeStand",		/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	"m_dwMotionTypeWalk",		/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	"m_strName",				/* æ­¦å™¨ç¨®åˆ¥å */
+	"m_adwEffectIDAtack",		/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	"m_adwEffectIDCritical",	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::CInfoItemWeapon								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::CInfoItemWeapon								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 CInfoItemWeapon::CInfoItemWeapon()
@@ -44,9 +44,9 @@ CInfoItemWeapon::CInfoItemWeapon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::~CInfoItemWeapon								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::~CInfoItemWeapon								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 CInfoItemWeapon::~CInfoItemWeapon()
@@ -55,9 +55,9 @@ CInfoItemWeapon::~CInfoItemWeapon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 int CInfoItemWeapon::GetElementNo(LPCSTR pszName)
@@ -78,9 +78,9 @@ int CInfoItemWeapon::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::GetDataSize									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::GetDataSize									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 DWORD CInfoItemWeapon::GetDataSize(void)
@@ -88,22 +88,22 @@ DWORD CInfoItemWeapon::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_dwWeaponInfoID);									/* •Šíî•ñID */
-	dwRet += sizeof (m_dwMotionType);									/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	dwRet += sizeof (m_dwMotionTypeStand);								/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	dwRet += sizeof (m_dwMotionTypeWalk);								/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	dwRet += (m_strName.GetLength () + 1);								/* •Šíí•Ê–¼ */
-	dwRet += ((m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD));	/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID */
-	dwRet += ((m_adwEffectIDCritical.GetSize () + 1) * sizeof (DWORD));	/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID */
+	dwRet += sizeof (m_dwWeaponInfoID);									/* æ­¦å™¨æƒ…å ±ID */
+	dwRet += sizeof (m_dwMotionType);									/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	dwRet += sizeof (m_dwMotionTypeStand);								/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	dwRet += sizeof (m_dwMotionTypeWalk);								/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	dwRet += (m_strName.GetLength () + 1);								/* æ­¦å™¨ç¨®åˆ¥å */
+	dwRet += ((m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD));	/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	dwRet += ((m_adwEffectIDCritical.GetSize () + 1) * sizeof (DWORD));	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 DWORD CInfoItemWeapon::GetDataSizeNo(int nNo)
@@ -113,13 +113,13 @@ DWORD CInfoItemWeapon::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_dwWeaponInfoID);									break;	/* •Šíî•ñID */
-	case 1:		dwRet = sizeof (m_dwMotionType);									break;	/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	case 2:		dwRet = sizeof (m_dwMotionTypeStand);								break;	/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	case 3:		dwRet = sizeof (m_dwMotionTypeWalk);								break;	/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	case 4:		dwRet = (m_strName.GetLength () + 1);								break;	/* •Šíí•Ê–¼ */
-	case 5:		dwRet = ((m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD));		break;	/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID” */
-	case 6:		dwRet = ((m_adwEffectIDCritical.GetSize () + 1) * sizeof (DWORD));	break;	/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID” */
+	case 0:		dwRet = sizeof (m_dwWeaponInfoID);									break;	/* æ­¦å™¨æƒ…å ±ID */
+	case 1:		dwRet = sizeof (m_dwMotionType);									break;	/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 2:		dwRet = sizeof (m_dwMotionTypeStand);								break;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 3:		dwRet = sizeof (m_dwMotionTypeWalk);								break;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 4:		dwRet = (m_strName.GetLength () + 1);								break;	/* æ­¦å™¨ç¨®åˆ¥å */
+	case 5:		dwRet = ((m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD));		break;	/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDæ•° */
+	case 6:		dwRet = ((m_adwEffectIDCritical.GetSize () + 1) * sizeof (DWORD));	break;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDæ•° */
 
 	}
 
@@ -128,9 +128,9 @@ DWORD CInfoItemWeapon::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::GetName										 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::GetName										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 LPCSTR CInfoItemWeapon::GetName(int nNo)
@@ -140,9 +140,9 @@ LPCSTR CInfoItemWeapon::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::GetWriteData									 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 PBYTE CInfoItemWeapon::GetWriteData(int nNo, PDWORD pdwSize)
@@ -162,12 +162,12 @@ PBYTE CInfoItemWeapon::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_dwWeaponInfoID;			break;	/* •Šíî•ñID */
-	case 1:		pSrc = (PBYTE)&m_dwMotionType;				break;	/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	case 2:		pSrc = (PBYTE)&m_dwMotionTypeStand;			break;	/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	case 3:		pSrc = (PBYTE)&m_dwMotionTypeWalk;			break;	/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	case 4:		pSrc = (PBYTE)(LPCSTR)m_strName;			break;	/* •Šíí•Ê–¼ */
-	case 5:		/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID */
+	case 0:		pSrc = (PBYTE)&m_dwWeaponInfoID;			break;	/* æ­¦å™¨æƒ…å ±ID */
+	case 1:		pSrc = (PBYTE)&m_dwMotionType;				break;	/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 2:		pSrc = (PBYTE)&m_dwMotionTypeStand;			break;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 3:		pSrc = (PBYTE)&m_dwMotionTypeWalk;			break;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 4:		pSrc = (PBYTE)(LPCSTR)m_strName;			break;	/* æ­¦å™¨ç¨®åˆ¥å */
+	case 5:		/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 		pTmp	= pRet;
 		nCount	= m_adwEffectIDAtack.GetSize ();
 
@@ -175,11 +175,11 @@ PBYTE CInfoItemWeapon::GetWriteData(int nNo, PDWORD pdwSize)
 			dwTmp = m_adwEffectIDAtack[i];
 			CopyMemoryRenew (pTmp, &dwTmp, sizeof (DWORD), pTmp);
 		}
-		/* I’[—p */
+		/* çµ‚ç«¯ç”¨ */
 		dwTmp = 0;
 		CopyMemoryRenew (pTmp, &dwTmp, sizeof (DWORD), pTmp);
 		break;
-	case 6:		/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID */
+	case 6:		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 		pTmp	= pRet;
 		nCount	= m_adwEffectIDCritical.GetSize ();
 
@@ -187,7 +187,7 @@ PBYTE CInfoItemWeapon::GetWriteData(int nNo, PDWORD pdwSize)
 			dwTmp = m_adwEffectIDCritical[i];
 			CopyMemoryRenew (pTmp, &dwTmp, sizeof (DWORD), pTmp);
 		}
-		/* I’[—p */
+		/* çµ‚ç«¯ç”¨ */
 		dwTmp = 0;
 		CopyMemoryRenew (pTmp, &dwTmp, sizeof (DWORD), pTmp);
 		break;
@@ -203,14 +203,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::ReadElementData								 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::ReadElementData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 DWORD CInfoItemWeapon::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst, pTmp;
 	DWORD dwSize, dwTmp;
@@ -219,15 +219,15 @@ DWORD CInfoItemWeapon::ReadElementData(
 	dwSize	= GetDataSizeNo (nNo);
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_dwWeaponInfoID;			break;	/* •Šíî•ñID */
-	case 1:		pDst = (PBYTE)&m_dwMotionType;				break;	/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	case 2:		pDst = (PBYTE)&m_dwMotionTypeStand;			break;	/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	case 3:		pDst = (PBYTE)&m_dwMotionTypeWalk;			break;	/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	case 4:		/* •Šíí•Ê–¼ */
+	case 0:		pDst = (PBYTE)&m_dwWeaponInfoID;			break;	/* æ­¦å™¨æƒ…å ±ID */
+	case 1:		pDst = (PBYTE)&m_dwMotionType;				break;	/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 2:		pDst = (PBYTE)&m_dwMotionTypeStand;			break;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 3:		pDst = (PBYTE)&m_dwMotionTypeWalk;			break;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case 4:		/* æ­¦å™¨ç¨®åˆ¥å */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
-	case 5:		/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID */
+	case 5:		/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 		pTmp	= pSrc;
 		dwTmp	= 0;
 
@@ -240,7 +240,7 @@ DWORD CInfoItemWeapon::ReadElementData(
 		}
 		dwSize = (m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD);
 		break;
-	case 6:		/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID */
+	case 6:		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 		pTmp	= pSrc;
 		dwTmp	= 0;
 
@@ -264,9 +264,9 @@ DWORD CInfoItemWeapon::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 DWORD CInfoItemWeapon::GetSendDataSize(void)
@@ -276,9 +276,9 @@ DWORD CInfoItemWeapon::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 PBYTE CInfoItemWeapon::GetSendData(void)
@@ -292,29 +292,29 @@ PBYTE CInfoItemWeapon::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwWeaponInfoID,		sizeof (m_dwWeaponInfoID),		pDataTmp);	/* •Šíî•ñID */
-	CopyMemoryRenew (pDataTmp, &m_dwMotionType,			sizeof (m_dwMotionType),		pDataTmp);	/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeStand,	sizeof (m_dwMotionTypeStand),	pDataTmp);	/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeWalk,		sizeof (m_dwMotionTypeWalk),	pDataTmp);	/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	strcpyRenew ((LPSTR)pDataTmp, (LPCSTR)m_strName, pDataTmp);										/* •Šíí•Ê–¼ */
+	CopyMemoryRenew (pDataTmp, &m_dwWeaponInfoID,		sizeof (m_dwWeaponInfoID),		pDataTmp);	/* æ­¦å™¨æƒ…å ±ID */
+	CopyMemoryRenew (pDataTmp, &m_dwMotionType,			sizeof (m_dwMotionType),		pDataTmp);	/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeStand,	sizeof (m_dwMotionTypeStand),	pDataTmp);	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeWalk,		sizeof (m_dwMotionTypeWalk),	pDataTmp);	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	strcpyRenew ((LPSTR)pDataTmp, (LPCSTR)m_strName, pDataTmp);										/* æ­¦å™¨ç¨®åˆ¥å */
 
-	/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID */
+	/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	nCount = m_adwEffectIDAtack.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwEffectIDAtack[i];
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
 	}
-	/* I’[—p */
+	/* çµ‚ç«¯ç”¨ */
 	dwTmp = 0;
 	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
 
-	/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID */
+	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	nCount = m_adwEffectIDCritical.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwEffectIDCritical[i];
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
 	}
-	/* I’[—p */
+	/* çµ‚ç«¯ç”¨ */
 	dwTmp = 0;
 	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
 
@@ -323,9 +323,9 @@ PBYTE CInfoItemWeapon::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 PBYTE CInfoItemWeapon::SetSendData(PBYTE pSrc)
@@ -340,13 +340,13 @@ PBYTE CInfoItemWeapon::SetSendData(PBYTE pSrc)
 	m_adwEffectIDAtack.RemoveAll ();
 	m_adwEffectIDCritical.RemoveAll ();
 
-	CopyMemoryRenew (&m_dwWeaponInfoID,		pDataTmp, sizeof (m_dwWeaponInfoID),	pDataTmp);	/* •Šíî•ñID */
-	CopyMemoryRenew (&m_dwMotionType,		pDataTmp, sizeof (m_dwMotionType),		pDataTmp);	/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	CopyMemoryRenew (&m_dwMotionTypeStand,	pDataTmp, sizeof (m_dwMotionTypeStand),	pDataTmp);	/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	CopyMemoryRenew (&m_dwMotionTypeWalk,	pDataTmp, sizeof (m_dwMotionTypeWalk),	pDataTmp);	/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);											/* •Šíí•Ê–¼ */
+	CopyMemoryRenew (&m_dwWeaponInfoID,		pDataTmp, sizeof (m_dwWeaponInfoID),	pDataTmp);	/* æ­¦å™¨æƒ…å ±ID */
+	CopyMemoryRenew (&m_dwMotionType,		pDataTmp, sizeof (m_dwMotionType),		pDataTmp);	/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CopyMemoryRenew (&m_dwMotionTypeStand,	pDataTmp, sizeof (m_dwMotionTypeStand),	pDataTmp);	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CopyMemoryRenew (&m_dwMotionTypeWalk,	pDataTmp, sizeof (m_dwMotionTypeWalk),	pDataTmp);	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);											/* æ­¦å™¨ç¨®åˆ¥å */
 
-	/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID */
+	/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	while (1) {
 		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);
 		if (dwTmp == 0) {
@@ -355,7 +355,7 @@ PBYTE CInfoItemWeapon::SetSendData(PBYTE pSrc)
 		m_adwEffectIDAtack.Add (dwTmp);
 	}
 
-	/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID */
+	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	while (1) {
 		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);
 		if (dwTmp == 0) {
@@ -370,9 +370,9 @@ PBYTE CInfoItemWeapon::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoItemWeapon::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CInfoItemWeapon::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 void CInfoItemWeapon::Copy(CInfoItemWeapon *pSrc)
@@ -382,20 +382,20 @@ void CInfoItemWeapon::Copy(CInfoItemWeapon *pSrc)
 	if (pSrc == NULL) {
 		return;
 	}
-	m_dwWeaponInfoID		= pSrc->m_dwWeaponInfoID;		/* •Šíî•ñID */
-	m_dwMotionType			= pSrc->m_dwMotionType;			/* g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-	m_dwMotionTypeStand		= pSrc->m_dwMotionTypeStand;	/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-	m_dwMotionTypeWalk		= pSrc->m_dwMotionTypeWalk;		/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	m_strName				= pSrc->m_strName;				/* •Šíí•Ê–¼ */
+	m_dwWeaponInfoID		= pSrc->m_dwWeaponInfoID;		/* æ­¦å™¨æƒ…å ±ID */
+	m_dwMotionType			= pSrc->m_dwMotionType;			/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	m_dwMotionTypeStand		= pSrc->m_dwMotionTypeStand;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	m_dwMotionTypeWalk		= pSrc->m_dwMotionTypeWalk;		/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	m_strName				= pSrc->m_strName;				/* æ­¦å™¨ç¨®åˆ¥å */
 
-	/* ’ÊíUŒ‚‚ÌƒGƒtƒFƒNƒgID */
+	/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	m_adwEffectIDAtack.RemoveAll ();
 	nCount = pSrc->m_adwEffectIDAtack.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		m_adwEffectIDAtack.Add (pSrc->m_adwEffectIDAtack[i]);
 	}
 
-	/* ƒNƒŠƒeƒBƒJƒ‹‚ÌƒGƒtƒFƒNƒgID */
+	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	m_adwEffectIDCritical.RemoveAll ();
 	nCount = pSrc->m_adwEffectIDCritical.GetSize ();
 	for (i = 0; i < nCount; i ++) {

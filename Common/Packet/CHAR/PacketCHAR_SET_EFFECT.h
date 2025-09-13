@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_SET_EFFECT.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒGƒtƒFƒNƒg‚ðŽw’è) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_SET_EFFECT.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æŒ‡å®š) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_SET_EFFECT : public CPacketBase
 {
 public:
-			CPacketCHAR_SET_EFFECT();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_SET_EFFECT();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_SET_EFFECT();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_SET_EFFECT();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, DWORD dwEffectID);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID, DWORD dwEffectID);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID,						/* ƒLƒƒƒ‰ID */
-			m_dwEffectID;					/* ƒGƒtƒFƒNƒgID */
+	DWORD	m_dwCharID,						/* ã‚­ãƒ£ãƒ©ID */
+			m_dwEffectID;					/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 } CPacketCHAR_SET_EFFECT, *PCPacketCHAR_SET_EFFECT;
 
 /* Copyright(C)URARA-works 2007 */

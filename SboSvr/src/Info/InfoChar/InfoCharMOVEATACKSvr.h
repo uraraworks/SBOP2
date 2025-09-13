@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharMOVEATACKSvr.h										 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(ˆÚ“®‚µ‚ÄUŒ‚)ƒT[ƒo[ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharMOVEATACKSvr.h										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(ç§»å‹•ã—ã¦æ”»æ’ƒ)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,31 +11,31 @@
 #include "InfoCharSvr.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharMOVEATACKSvr : public CInfoCharSvr
 {
 public:
-			CInfoCharMOVEATACKSvr();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharMOVEATACKSvr();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharMOVEATACKSvr();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharMOVEATACKSvr();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void  SetMoveState	(int nMoveState);						/* ˆÚ“®ó‘Ô‚ð•ÏX */
-	BOOL  TimerProc		(DWORD dwTime);							/* ŽžŠÔˆ— */
-	void  ProcAtack		(void);									/* ˆ—(UŒ‚‚µ‚½Žž) */
-	DWORD GetHitEffectID(void);									/* ƒqƒbƒgŽž‚É‘ŠŽè‚É•\Ž¦‚·‚éƒGƒtƒFƒNƒgID‚ðŽæ“¾ */
-	DWORD GetDamage		(void);									/* ƒ_ƒ[ƒW’l‚ðŽæ“¾ */
+	void  SetMoveState	(int nMoveState);						/* ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´ */
+	BOOL  TimerProc		(DWORD dwTime);							/* æ™‚é–“å‡¦ç† */
+	void  ProcAtack		(void);									/* å‡¦ç†(æ”»æ’ƒã—ãŸæ™‚) */
+	DWORD GetHitEffectID(void);									/* ãƒ’ãƒƒãƒˆæ™‚ã«ç›¸æ‰‹ã«è¡¨ç¤ºã™ã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDã‚’å–å¾— */
+	DWORD GetDamage		(void);									/* ãƒ€ãƒ¡ãƒ¼ã‚¸å€¤ã‚’å–å¾— */
 
 
 public:
-	BOOL	m_bHitQuit,						/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-			m_bDistanceDelete;				/* ŽË’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
-	DWORD	m_dwLastAtackTime,				/* ÅŒã‚ÉUŒ‚‚µ‚½ŽžŠÔ */
-			m_dwQuitTime,					/* I—¹ŽžŠÔ */
-			m_dwHitEffectID,				/* ƒqƒbƒgŽž‚É‘ŠŽè‚É•\Ž¦‚·‚éƒGƒtƒFƒNƒgID */
-			m_dwValue1,						/* Œø‰Ê1 */
-			m_dwValue2;						/* Œø‰Ê2 */
-	int		m_nMoveCount;					/* ˆÚ“®‚µ‚½•à” */
+	BOOL	m_bHitQuit,						/* ãƒ’ãƒƒãƒˆã™ã‚‹ã¨æ¶ˆæ»… */
+			m_bDistanceDelete;				/* å°„ç¨‹è·é›¢ã¾ã§è¡Œãã¨æ¶ˆãˆã‚‹ */
+	DWORD	m_dwLastAtackTime,				/* æœ€å¾Œã«æ”»æ’ƒã—ãŸæ™‚é–“ */
+			m_dwQuitTime,					/* çµ‚äº†æ™‚é–“ */
+			m_dwHitEffectID,				/* ãƒ’ãƒƒãƒˆæ™‚ã«ç›¸æ‰‹ã«è¡¨ç¤ºã™ã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+			m_dwValue1,						/* åŠ¹æžœ1 */
+			m_dwValue2;						/* åŠ¹æžœ2 */
+	int		m_nMoveCount;					/* ç§»å‹•ã—ãŸæ­©æ•° */
 } CInfoCharMOVEATACKSvr, *PCInfoCharMOVEATACKSvr;
 
 /* Copyright(C)URARA-works 2007 */

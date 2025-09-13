@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMotionType.h											 */
-/* “à—e			:ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/05/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMotionType.h											 */
+/* å†…å®¹			:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,36 +11,36 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoMotionType : public CInfoBase
 {
 public:
-			CInfoMotionType();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoMotionType();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoMotionType();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoMotionType();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	void	Copy				(CInfoMotionType *pSrc);			/* ƒRƒs[ */
+	void	Copy				(CInfoMotionType *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	DWORD		m_dwMotionTypeID;				/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	WORD		m_wGrpIDSub;					/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	CmyString	m_strName;						/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	DWORD		m_dwMotionTypeID;				/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	WORD		m_wGrpIDSub;					/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	CmyString	m_strName;						/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 } CInfoMotionType, *PCInfoMotionType;
 typedef CmyArray<PCInfoMotionType, PCInfoMotionType>	   ARRAYMOTIONTYPEINFO;
 typedef CmyArray<PCInfoMotionType, PCInfoMotionType>	 *PARRAYMOTIONTYPEINFO;

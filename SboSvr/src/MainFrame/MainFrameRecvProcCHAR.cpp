@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcCHAR.cpp									 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒLƒƒƒ‰ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcCHAR.cpp									 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚­ãƒ£ãƒ©ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -26,41 +26,41 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR										 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰Œn)												 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©ç³»)												 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO:		RecvProcCHAR_REQ_CHARINFO		(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰î•ñ—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:				RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* ˆÚ“®’Ê’m */
-	case SBOCOMMANDID_SUB_CHAR_STATE:				RecvProcCHAR_STATE				(pData, dwSessionID);	break;	/* ó‘Ô’Ê’m */
-	case SBOCOMMANDID_SUB_CHAR_REQ_CHAT:			RecvProcCHAR_REQ_CHAT			(pData, dwSessionID);	break;	/* ƒ`ƒƒƒbƒg—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO2:		RecvProcCHAR_REQ_CHARINFO2		(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰î•ñ—v‹(•¡”) */
-	case SBOCOMMANDID_SUB_CHAR_REQ_PUTGET:			RecvProcCHAR_REQ_PUTGET			(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€‚ðE‚¤’u‚­—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_USEITEM:			RecvProcCHAR_REQ_USEITEM		(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€‚ðŽg‚¤—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_DRAGITEM:		RecvProcCHAR_REQ_DRAGITEM		(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€ˆÊ’u•ÏX—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_PUSH:			RecvProcCHAR_REQ_PUSH			(pData, dwSessionID);	break;	/* ‰Ÿ‚·—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_TAIL:			RecvProcCHAR_REQ_TAIL			(pData, dwSessionID);	break;	/* •t‚¢‚Äs‚­—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_MODIFY_PARAM:	RecvProcCHAR_REQ_MODIFY_PARAM	(pData, dwSessionID);	break;	/* ƒpƒ‰ƒ[ƒ^•ÏX—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_EQUIP:			RecvProcCHAR_REQ_EQUIP			(pData, dwSessionID);	break;	/* ‘•”õ—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_PROC_FISHING:		RecvProcCHAR_PROC_FISHING		(pData, dwSessionID);	break;	/* ’Þ‚è—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT:	RecvProcCHAR_REQ_CHECKMAPEVENT	(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE:		RecvProcCHAR_STATE_CHARGE		(pData, dwSessionID);	break;	/* —­‚ßó‘Ô’Ê’m */
-	case SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY:		RecvProcCHAR_REQ_RECOVERY		(pData, dwSessionID);	break;	/* ‹CâŒã•œŠˆ—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT:		RecvProcCHAR_REQ_TALKEVENT		(pData, dwSessionID);	break;	/* ‰ï˜bƒCƒxƒ“ƒgî•ñ—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_ADDSKILL:		RecvProcCHAR_REQ_ADDSKILL		(pData, dwSessionID);	break;	/* ƒXƒLƒ‹’Ç‰Á—v‹ */
-	case SBOCOMMANDID_SUB_CHAR_REQ_USESKILL:		RecvProcCHAR_REQ_USESKILL		(pData, dwSessionID);	break;	/* ƒXƒLƒ‹‚ðŽg‚¤—v‹ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO:		RecvProcCHAR_REQ_CHARINFO		(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©æƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:				RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* ç§»å‹•é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_CHAR_STATE:				RecvProcCHAR_STATE				(pData, dwSessionID);	break;	/* çŠ¶æ…‹é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_CHAT:			RecvProcCHAR_REQ_CHAT			(pData, dwSessionID);	break;	/* ãƒãƒ£ãƒƒãƒˆè¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO2:		RecvProcCHAR_REQ_CHARINFO2		(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©æƒ…å ±è¦æ±‚(è¤‡æ•°) */
+	case SBOCOMMANDID_SUB_CHAR_REQ_PUTGET:			RecvProcCHAR_REQ_PUTGET			(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†ç½®ãè¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_USEITEM:			RecvProcCHAR_REQ_USEITEM		(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ã†è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_DRAGITEM:		RecvProcCHAR_REQ_DRAGITEM		(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ä½ç½®å¤‰æ›´è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_PUSH:			RecvProcCHAR_REQ_PUSH			(pData, dwSessionID);	break;	/* æŠ¼ã™è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_TAIL:			RecvProcCHAR_REQ_TAIL			(pData, dwSessionID);	break;	/* ä»˜ã„ã¦è¡Œãè¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_MODIFY_PARAM:	RecvProcCHAR_REQ_MODIFY_PARAM	(pData, dwSessionID);	break;	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ›´è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_EQUIP:			RecvProcCHAR_REQ_EQUIP			(pData, dwSessionID);	break;	/* è£…å‚™è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_PROC_FISHING:		RecvProcCHAR_PROC_FISHING		(pData, dwSessionID);	break;	/* é‡£ã‚Šè¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT:	RecvProcCHAR_REQ_CHECKMAPEVENT	(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE:		RecvProcCHAR_STATE_CHARGE		(pData, dwSessionID);	break;	/* æºœã‚çŠ¶æ…‹é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY:		RecvProcCHAR_REQ_RECOVERY		(pData, dwSessionID);	break;	/* æ°—çµ¶å¾Œå¾©æ´»è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT:		RecvProcCHAR_REQ_TALKEVENT		(pData, dwSessionID);	break;	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_ADDSKILL:		RecvProcCHAR_REQ_ADDSKILL		(pData, dwSessionID);	break;	/* ã‚¹ã‚­ãƒ«è¿½åŠ è¦æ±‚ */
+	case SBOCOMMANDID_SUB_CHAR_REQ_USESKILL:		RecvProcCHAR_REQ_USESKILL		(pData, dwSessionID);	break;	/* ã‚¹ã‚­ãƒ«ã‚’ä½¿ã†è¦æ±‚ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_CHARINFO							 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰î•ñ—v‹)										 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_CHARINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©æƒ…å ±è¦æ±‚)										 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_CHARINFO(PBYTE pData, DWORD dwSessionID)
@@ -82,9 +82,9 @@ void CMainFrame::RecvProcCHAR_REQ_CHARINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_MOVEPOS								 */
-/* “à—e		:ŽóMˆ—(ˆÚ“®’Ê’m)												 */
-/* “ú•t		:2007/01/14														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_MOVEPOS								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç§»å‹•é€šçŸ¥)												 */
+/* æ—¥ä»˜		:2007/01/14														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
@@ -115,25 +115,25 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 			if (((pInfoChar->m_nMapX == Packet.m_pos.x) && (pInfoChar->m_nMapY == Packet.m_pos.y))) {
 				pInfoChar->SetDirection (Packet.m_nDirection);
 				pInfoChar->m_bChgPos = TRUE;
-				/* –hŒä’†‚ÌŒü‚«•ÏX‚Íˆ—‚·‚é */
+				/* é˜²å¾¡ä¸­ã®å‘ãå¤‰æ›´ã¯å‡¦ç†ã™ã‚‹ */
 				return;
 			}
 		}
 		bResult = pInfoChar->IsStateBattle ();
 		if (bResult == FALSE) {
-			/* ˆÚ“®‚Å‚«‚È‚¢ó‘Ô‚È‚Ì‚Å–³Ž‹ */
+			/* ç§»å‹•ã§ããªã„çŠ¶æ…‹ãªã®ã§ç„¡è¦– */
 			return;
 		}
 	}
 	if (pInfoChar->m_dwHP == 0) {
-		/* HP0‚Å•à‚±‚¤‚Æ‚µ‚½Žž‚Í‹Câ‚³‚¹‚é */
+		/* HP0ã§æ­©ã“ã†ã¨ã—ãŸæ™‚ã¯æ°—çµ¶ã•ã›ã‚‹ */
 		pInfoChar->SetMoveState (CHARMOVESTATE_SWOON);
 		return;
 	}
 
-	/* ˆÚ“®‚µ‚½H */
+	/* ç§»å‹•ã—ãŸï¼Ÿ */
 	if (!((pInfoChar->m_nMapX == Packet.m_pos.x) && (pInfoChar->m_nMapY == Packet.m_pos.y))) {
-		/* •t‚¢‚Ä—ˆ‚Ä‚¢‚éƒLƒƒƒ‰ˆê——‚ðì¬ */
+		/* ä»˜ã„ã¦æ¥ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ä¸€è¦§ã‚’ä½œæˆ */
 		pInfoCharTmp = pInfoChar;
 		while (1) {
 			if (pInfoCharTmp->m_dwTailCharID == 0) {
@@ -146,7 +146,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 			apInfoChar.Add (pInfoCharTmp);
 		}
 
-		/* ‘O‚ÌƒLƒƒƒ‰‚ÌÀ•W‚Öi‚Þ‚æ‚¤‚ÉÝ’è‚µ‚Ä‚¢‚­ */
+		/* å‰ã®ã‚­ãƒ£ãƒ©ã®åº§æ¨™ã¸é€²ã‚€ã‚ˆã†ã«è¨­å®šã—ã¦ã„ã */
 		nCount = apInfoChar.GetSize ();
 		for (i = nCount - 1; i >= 0; i --) {
 			pInfoCharTmp	= apInfoChar[i];
@@ -171,9 +171,9 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_STATE									 */
-/* “à—e		:ŽóMˆ—(ó‘Ô’Ê’m)												 */
-/* “ú•t		:2007/04/20														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_STATE									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(çŠ¶æ…‹é€šçŸ¥)												 */
+/* æ—¥ä»˜		:2007/04/20														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_STATE(PBYTE pData, DWORD dwSessionID)
@@ -197,15 +197,15 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData, DWORD dwSessionID)
 	nState = Packet.m_nState;
 
 	switch (nState) {
-	case CHARMOVESTATE_MOVE:			/* ˆÚ“®’† */
+	case CHARMOVESTATE_MOVE:			/* ç§»å‹•ä¸­ */
 		bResult = pInfoChar->IsEnableMove ();
 		if (bResult == FALSE) {
 			nState = pInfoChar->m_nMoveState;
 		}
 		break;
-	case CHARMOVESTATE_BATTLE:			/* í“¬’† */
-	case CHARMOVESTATE_BATTLEATACK:		/* í“¬UŒ‚’† */
-	case CHARMOVESTATE_BATTLE_DEFENSE:	/* –hŒä’† */
+	case CHARMOVESTATE_BATTLE:			/* æˆ¦é—˜ä¸­ */
+	case CHARMOVESTATE_BATTLEATACK:		/* æˆ¦é—˜æ”»æ’ƒä¸­ */
+	case CHARMOVESTATE_BATTLE_DEFENSE:	/* é˜²å¾¡ä¸­ */
 		bResult = pInfoChar->IsEnableBattle ();
 		if (bResult == FALSE) {
 			nState = pInfoChar->m_nMoveState;
@@ -218,9 +218,9 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_CHAT								 */
-/* “à—e		:ŽóMˆ—(ˆÚ“®’Ê’m)												 */
-/* “ú•t		:2007/01/14														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_CHAT								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç§»å‹•é€šçŸ¥)												 */
+/* æ—¥ä»˜		:2007/01/14														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_CHAT(PBYTE pData, DWORD dwSessionID)
@@ -245,12 +245,12 @@ void CMainFrame::RecvProcCHAR_REQ_CHAT(PBYTE pData, DWORD dwSessionID)
 	TrimViewString (strChar, Packet.m_strChat);
 
 	switch (Packet.m_nType) {
-	case CHATTYPE_NORMAL:				/* ’Êí */
+	case CHATTYPE_NORMAL:				/* é€šå¸¸ */
 		pInfoChar->SetSpeak (strChar);
 		break;
-//	case CHATTYPE_PARTY:				/* ƒp[ƒeƒBƒ`ƒƒƒbƒg */
-//	case CHATTYPE_MAP:					/* ƒ}ƒbƒv“à•ú‘— */
-	case CHATTYPE_ADMIN:				/* ˆêÄ•ú‘— */
+//	case CHATTYPE_PARTY:				/* ãƒ‘ãƒ¼ãƒ†ã‚£ãƒãƒ£ãƒƒãƒˆ */
+//	case CHATTYPE_MAP:					/* ãƒžãƒƒãƒ—å†…æ”¾é€ */
+	case CHATTYPE_ADMIN:				/* ä¸€æ–‰æ”¾é€ */
 		strTmp.Format ("%s:%s", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)strChar);
 		PacketMAP_SYSTEMMSG.Make (strTmp);
 		m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
@@ -260,9 +260,9 @@ void CMainFrame::RecvProcCHAR_REQ_CHAT(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_CHARINFO2							 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰î•ñ—v‹(•¡”))									 */
-/* “ú•t		:2007/02/13														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_CHARINFO2							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©æƒ…å ±è¦æ±‚(è¤‡æ•°))									 */
+/* æ—¥ä»˜		:2007/02/13														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_CHARINFO2(PBYTE pData, DWORD dwSessionID)
@@ -292,9 +292,9 @@ void CMainFrame::RecvProcCHAR_REQ_CHARINFO2(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_PUTGET							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€‚ðE‚¤’u‚­—v‹)								 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_PUTGET							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†ç½®ãè¦æ±‚)								 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
@@ -329,7 +329,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar->GetFrontPos (ptPos);
 
-	/* ƒAƒCƒeƒ€‚ðE‚¤H */
+	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†ï¼Ÿ */
 	if (Packet.m_dwItemID == 0) {
 		pInfoChar->GetFrontPos (aptPos);
 		nCount = aptPos.GetSize ();
@@ -343,7 +343,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 		if (i < nCount) {
 			bResult = pInfoChar->IsItemAdd ();
 			if (bResult) {
-				/* ƒAƒCƒeƒ€‚ð’Ç‰Á */
+				/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿½åŠ  */
 				m_pLibInfoItem->AddItem (pInfoChar->m_dwCharID, pInfoItem->m_dwItemID, &pInfoChar->m_adwItemID);
 
 				PacketITEM_RES_ITEMINFO.Make (pInfoItem);
@@ -358,7 +358,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 				PacketITEM_RES_ITEMINFO.Make (pInfoItem);
 				SendToMapChar (pInfoChar->m_dwMapID, &PacketITEM_RES_ITEMINFO);
 			} else {
-				/* Ž‚Ä‚È‚¢ */
+				/* æŒã¦ãªã„ */
 			}
 		}
 
@@ -370,13 +370,13 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (pInfoChar->m_dwMapID, &ptPos);
 		if (pInfoItem) {
 			if (pInfoItem->m_bPutOn == FALSE) {
-				/* ‚·‚Å‚É’u‚©‚ê‚Ä‚¢‚éêŠ‚É‚Í’u‚¯‚È‚¢ */
+				/* ã™ã§ã«ç½®ã‹ã‚Œã¦ã„ã‚‹å ´æ‰€ã«ã¯ç½®ã‘ãªã„ */
 				return;
 			}
 		}
 		bResult = pInfoMap->IsMove (ptPos.x / 2, ptPos.y / 2, pInfoChar->m_nDirection);
 		if (bResult == FALSE) {
-			/* ˆÚ“®‚Å‚«‚È‚¢‚Æ‚±‚ë‚É‚Í’u‚¯‚È‚¢ */
+			/* ç§»å‹•ã§ããªã„ã¨ã“ã‚ã«ã¯ç½®ã‘ãªã„ */
 			return;
 		}
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (Packet.m_dwItemID);
@@ -394,7 +394,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 
 		nResult = RESULTID_CHAR_RES_PUTGET_PUT;
 
-		/* ƒSƒ~” ˆ— */
+		/* ã‚´ãƒŸç®±å‡¦ç† */
 		pInfoChar->GetFrontMapPos (ptMapPos);
 		nMapEventType = pInfoMap->GetMapEventType (ptMapPos.x, ptMapPos.y);
 		if (nMapEventType == MAPEVENTTYPE_TRASHBOX) {
@@ -421,9 +421,9 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_USEITEM							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€‚ðŽg‚¤—v‹)									 */
-/* “ú•t		:2008/07/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_USEITEM							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ã†è¦æ±‚)									 */
+/* æ—¥ä»˜		:2008/07/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_USEITEM(PBYTE pData, DWORD dwSessionID)
@@ -442,9 +442,9 @@ void CMainFrame::RecvProcCHAR_REQ_USEITEM(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_DRAGITEM							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€ˆÊ’u•ÏX—v‹)									 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_DRAGITEM							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ä½ç½®å¤‰æ›´è¦æ±‚)									 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_DRAGITEM(PBYTE pData, DWORD dwSessionID)
@@ -463,9 +463,9 @@ void CMainFrame::RecvProcCHAR_REQ_DRAGITEM(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_PUSH								 */
-/* “à—e		:ŽóMˆ—(‰Ÿ‚·—v‹)												 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_PUSH								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æŠ¼ã™è¦æ±‚)												 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
@@ -489,9 +489,9 @@ void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_TAIL								 */
-/* “à—e		:ŽóMˆ—(•t‚¢‚Äs‚­—v‹)										 */
-/* “ú•t		:2007/09/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_TAIL								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ä»˜ã„ã¦è¡Œãè¦æ±‚)										 */
+/* æ—¥ä»˜		:2007/09/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_TAIL(PBYTE pData, DWORD dwSessionID)
@@ -520,9 +520,9 @@ void CMainFrame::RecvProcCHAR_REQ_TAIL(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_TAIL								 */
-/* “à—e		:ŽóMˆ—(ƒpƒ‰ƒ[ƒ^•ÏX—v‹)									 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_TAIL								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ›´è¦æ±‚)									 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
@@ -540,7 +540,7 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 	}
 
 	switch (Packet.m_nType) {
-	case PARAMID_CHAR_REQ_MODIFY_ANIME:			/* ƒAƒjƒ[ƒVƒ‡ƒ“”Ô†‚Ì•ÏX */
+	case PARAMID_CHAR_REQ_MODIFY_ANIME:			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·ã®å¤‰æ›´ */
 		pInfoChar->m_nAnime ++;
 		if (pInfoChar->m_nAnime >= 10) {
 			pInfoChar->m_nAnime = 0;
@@ -549,38 +549,38 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 		SendToScreenChar (pInfoChar, &PacketMODIFY_PARAM);
 		break;
 
-	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_PUT:	/* —eŽp‚ÌƒRƒs[(Žæ‚èž‚Ý) */
+	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_PUT:	/* å®¹å§¿ã®ã‚³ãƒ”ãƒ¼(å–ã‚Šè¾¼ã¿) */
 		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn ((DWORD)Packet.m_nParam);
 		if (pInfoCharTmp == NULL) {
 			break;
 		}
-		pInfoChar->m_wFamilyID			= pInfoCharTmp->m_wFamilyID;		/* Ží‘°ID */
-		pInfoChar->m_wGrpIDNPC			= pInfoCharTmp->m_wGrpIDNPC;		/* ‰æ‘œID(NPC) */
-		pInfoChar->m_wGrpIDCloth		= pInfoCharTmp->m_wGrpIDCloth;		/* ‰æ‘œID(•ž) */
-		pInfoChar->m_wGrpIDEye			= pInfoCharTmp->m_wGrpIDEye;		/* ‰æ‘œID(–Ú) */
-		pInfoChar->m_wGrpIDEyeColor		= pInfoCharTmp->m_wGrpIDEyeColor;	/* ‰æ‘œID(–ÚF) */
-		pInfoChar->m_wGrpIDHairType		= pInfoCharTmp->m_wGrpIDHairType;	/* ‰æ‘œID(”¯) */
-		pInfoChar->m_wGrpIDHairColor	= pInfoCharTmp->m_wGrpIDHairColor;	/* ‰æ‘œID(”¯F) */
-		pInfoChar->m_wGrpIDSP			= pInfoCharTmp->m_wGrpIDSP;			/* ‰æ‘œID(“ÁŽê•ž) */
-		pInfoChar->m_wGrpIDAcce			= pInfoCharTmp->m_wGrpIDAcce;		/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-		pInfoChar->m_wGrpIDArmsMain		= pInfoCharTmp->m_wGrpIDArmsMain;	/* ‰æ‘œID(Ž‚¿•¨:ƒƒCƒ“) */
-		pInfoChar->m_wGrpIDArmsSub		= pInfoCharTmp->m_wGrpIDArmsSub;	/* ‰æ‘œID(Ž‚¿•¨:ƒTƒu) */
-		pInfoChar->m_clName				= pInfoCharTmp->m_clName;			/* –¼‘O‚ÌF */
-		pInfoChar->m_nSex				= pInfoCharTmp->m_nSex;				/* «•Ê */
-		pInfoChar->m_dwMotionTypeID		= pInfoCharTmp->m_dwMotionTypeID;	/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
+		pInfoChar->m_wFamilyID			= pInfoCharTmp->m_wFamilyID;		/* ç¨®æ—ID */
+		pInfoChar->m_wGrpIDNPC			= pInfoCharTmp->m_wGrpIDNPC;		/* ç”»åƒID(NPC) */
+		pInfoChar->m_wGrpIDCloth		= pInfoCharTmp->m_wGrpIDCloth;		/* ç”»åƒID(æœ) */
+		pInfoChar->m_wGrpIDEye			= pInfoCharTmp->m_wGrpIDEye;		/* ç”»åƒID(ç›®) */
+		pInfoChar->m_wGrpIDEyeColor		= pInfoCharTmp->m_wGrpIDEyeColor;	/* ç”»åƒID(ç›®è‰²) */
+		pInfoChar->m_wGrpIDHairType		= pInfoCharTmp->m_wGrpIDHairType;	/* ç”»åƒID(é«ª) */
+		pInfoChar->m_wGrpIDHairColor	= pInfoCharTmp->m_wGrpIDHairColor;	/* ç”»åƒID(é«ªè‰²) */
+		pInfoChar->m_wGrpIDSP			= pInfoCharTmp->m_wGrpIDSP;			/* ç”»åƒID(ç‰¹æ®Šæœ) */
+		pInfoChar->m_wGrpIDAcce			= pInfoCharTmp->m_wGrpIDAcce;		/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+		pInfoChar->m_wGrpIDArmsMain		= pInfoCharTmp->m_wGrpIDArmsMain;	/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+		pInfoChar->m_wGrpIDArmsSub		= pInfoCharTmp->m_wGrpIDArmsSub;	/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+		pInfoChar->m_clName				= pInfoCharTmp->m_clName;			/* åå‰ã®è‰² */
+		pInfoChar->m_nSex				= pInfoCharTmp->m_nSex;				/* æ€§åˆ¥ */
+		pInfoChar->m_dwMotionTypeID		= pInfoCharTmp->m_dwMotionTypeID;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
 		PacketRES_CHARINFO.Make (pInfoChar);
 		SendToScreenChar (pInfoChar, &PacketRES_CHARINFO);
 		break;
-	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET:	/* —eŽp‚ÌƒRƒs[(”½‰f) */
+	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET:	/* å®¹å§¿ã®ã‚³ãƒ”ãƒ¼(åæ˜ ) */
 		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn ((DWORD)Packet.m_nParam);
 		if (pInfoCharTmp == NULL) {
 			break;
 		}
-		pInfoChar->m_wGrpIDCloth	= pInfoCharTmp->m_wGrpIDCloth;		/* ‰æ‘œID(•ž) */
-		pInfoChar->m_wGrpIDHairType	= pInfoCharTmp->m_wGrpIDHairType;	/* ‰æ‘œID(”¯) */
-		pInfoChar->m_wGrpIDSP		= pInfoCharTmp->m_wGrpIDSP;			/* ‰æ‘œID(“ÁŽê•ž) */
-		pInfoChar->m_nSex			= pInfoCharTmp->m_nSex;				/* «•Ê */
-		pInfoChar->m_dwMotionTypeID	= pInfoCharTmp->m_dwMotionTypeID;	/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
+		pInfoChar->m_wGrpIDCloth	= pInfoCharTmp->m_wGrpIDCloth;		/* ç”»åƒID(æœ) */
+		pInfoChar->m_wGrpIDHairType	= pInfoCharTmp->m_wGrpIDHairType;	/* ç”»åƒID(é«ª) */
+		pInfoChar->m_wGrpIDSP		= pInfoCharTmp->m_wGrpIDSP;			/* ç”»åƒID(ç‰¹æ®Šæœ) */
+		pInfoChar->m_nSex			= pInfoCharTmp->m_nSex;				/* æ€§åˆ¥ */
+		pInfoChar->m_dwMotionTypeID	= pInfoCharTmp->m_dwMotionTypeID;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
 		PacketRES_CHARINFO.Make (pInfoChar);
 		SendToScreenChar (pInfoChar, &PacketRES_CHARINFO);
 	}
@@ -588,9 +588,9 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_EQUIP								 */
-/* “à—e		:ŽóMˆ—(‘•”õ—v‹)												 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_EQUIP								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(è£…å‚™è¦æ±‚)												 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_EQUIP(PBYTE pData, DWORD dwSessionID)
@@ -611,11 +611,11 @@ void CMainFrame::RecvProcCHAR_REQ_EQUIP(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	/* ‘•”õ‚·‚éH */
+	/* è£…å‚™ã™ã‚‹ï¼Ÿ */
 	if (Packet.m_nUnsetType == -1) {
 		m_pLibInfoChar->Equip (pInfoChar, Packet.m_dwItemID);
 
-	/* ‘•”õ‰ðœ */
+	/* è£…å‚™è§£é™¤ */
 	} else {
 		m_pLibInfoChar->UnEquip (pInfoChar, Packet.m_dwItemID);
 	}
@@ -623,9 +623,9 @@ void CMainFrame::RecvProcCHAR_REQ_EQUIP(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_PROC_FISHING							 */
-/* “à—e		:ŽóMˆ—(’Þ‚è—v‹)												 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_PROC_FISHING							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(é‡£ã‚Šè¦æ±‚)												 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_PROC_FISHING(PBYTE pData, DWORD dwSessionID)
@@ -675,9 +675,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_CHECKMAPEVENT						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN—v‹)							 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_CHECKMAPEVENT						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚)							 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_CHECKMAPEVENT(PBYTE pData, DWORD dwSessionID)
@@ -705,9 +705,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_STATE_CHARGE							 */
-/* “à—e		:ŽóMˆ—(—­‚ßó‘Ô’Ê’m)											 */
-/* “ú•t		:2008/08/13														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_STATE_CHARGE							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æºœã‚çŠ¶æ…‹é€šçŸ¥)											 */
+/* æ—¥ä»˜		:2008/08/13														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_STATE_CHARGE(PBYTE pData, DWORD dwSessionID)
@@ -723,16 +723,16 @@ void CMainFrame::RecvProcCHAR_STATE_CHARGE(PBYTE pData, DWORD dwSessionID)
 	}
 
 	pInfoChar->m_bChargeAtack = (Packet.m_dwPara == 0) ? FALSE : TRUE;
-	/* Žü‚è‚ÌƒLƒƒƒ‰‚É‚à’Ê’m */
+	/* å‘¨ã‚Šã®ã‚­ãƒ£ãƒ©ã«ã‚‚é€šçŸ¥ */
 	Packet.Make (SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, Packet.m_dwCharID, Packet.m_dwPara);
 	SendToScreenChar (pInfoChar, &Packet);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_RECOVERY							 */
-/* “à—e		:ŽóMˆ—(‹CâŒã•œŠˆ—v‹)										 */
-/* “ú•t		:2008/12/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_RECOVERY							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ°—çµ¶å¾Œå¾©æ´»è¦æ±‚)										 */
+/* æ—¥ä»˜		:2008/12/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
@@ -753,7 +753,7 @@ void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 	}
 	pInfoChar->AddProcInfo (CHARPROCID_SWOON, 2000, 1);
 
-	/* Žü‚è‚ÌƒLƒƒƒ‰‚É’Ê’m */
+	/* å‘¨ã‚Šã®ã‚­ãƒ£ãƒ©ã«é€šçŸ¥ */
 	PacketCHAR_STATE.Make (pInfoChar->m_dwCharID, CHARMOVESTATE_DELETE);
 	SendToScreenChar (pInfoChar, &PacketCHAR_STATE);
 
@@ -764,9 +764,9 @@ void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_TALKEVENT							 */
-/* “à—e		:ŽóMˆ—(‰ï˜bƒCƒxƒ“ƒgî•ñ—v‹)									 */
-/* “ú•t		:2008/12/27														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_TALKEVENT							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±è¦æ±‚)									 */
+/* æ—¥ä»˜		:2008/12/27														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_TALKEVENT(PBYTE pData, DWORD dwSessionID)
@@ -793,9 +793,9 @@ void CMainFrame::RecvProcCHAR_REQ_TALKEVENT(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_ADDSKILL							 */
-/* “à—e		:ŽóMˆ—(ƒXƒLƒ‹’Ç‰Á—v‹)										 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_ADDSKILL							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¹ã‚­ãƒ«è¿½åŠ è¦æ±‚)										 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
@@ -826,13 +826,13 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 			break;
 		}
 	}
-	/* ‚·‚Å‚ÉŽ‚Á‚Ä‚¢‚éH */
+	/* ã™ã§ã«æŒã£ã¦ã„ã‚‹ï¼Ÿ */
 	if (i < nCount) {
 		return;
 	}
 
 //Todo:
-	/* ðŒ‚Ì”»’è‚È‚Ç“ü‚ê‚é */
+	/* æ¡ä»¶ã®åˆ¤å®šãªã©å…¥ã‚Œã‚‹ */
 
 	paSkill->Add (Packet.m_dwPara);
 	PacketCHAR_SKILLINFO.Make (Packet.m_dwCharID, paSkill);
@@ -844,9 +844,9 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCHAR_REQ_USESKILL							 */
-/* “à—e		:ŽóMˆ—(ƒXƒLƒ‹‚ðŽg‚¤—v‹)										 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCHAR_REQ_USESKILL							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¹ã‚­ãƒ«ã‚’ä½¿ã†è¦æ±‚)										 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCHAR_REQ_USESKILL(PBYTE pData, DWORD dwSessionID)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoEffect.h										 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İƒNƒ‰ƒX(ƒGƒtƒFƒNƒgî•ñ) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoEffect.h										 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,18 +11,18 @@
 #include "SaveLoadInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CSaveLoadInfoEffect : public CSaveLoadInfoBase
 {
 public:
-			CSaveLoadInfoEffect();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSaveLoadInfoEffect();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSaveLoadInfoEffect();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSaveLoadInfoEffect();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
 protected:
-	void	SetHeaderInfo	(PCInfoBase pInfo);		/* ƒwƒbƒ_î•ñ‚ğİ’è */
+	void	SetHeaderInfo	(PCInfoBase pInfo);		/* ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’è¨­å®š */
 } CSaveLoadInfoEffect, *PCSaveLoadInfoEffect;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ================================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcMSGCMD.cpp										 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)									 */
-/* ì¬ŠJŽn“ú	:2007/05/02															 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcMSGCMD.cpp										 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒžãƒ³ãƒ‰ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)									 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/02															 */
 /* ================================================================================= */
 
 #include "stdafx.h"
@@ -18,35 +18,35 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD										 */
-/* “à—e		:ŽóMˆ—(ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒn)									 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒžãƒ³ãƒ‰ç³»)									 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_MSGCMD_CHGFACE:		RecvProcMSGCMD_CHGFACE		(pData, dwSessionID);	break;	/* •\î•ÏX */
-//	case SBOCOMMANDID_SUB_MSGCMD_CHGHAIR:		RecvProcMSGCMD_CHGHAIR		(pData, dwSessionID);	break;	/* ”¯•ÏX */
-//	case SBOCOMMANDID_SUB_MSGCMD_CHGCLOTH:		RecvProcMSGCMD_CHGCLOTH		(pData, dwSessionID);	break;	/* •ž‘••ÏX */
-//	case SBOCOMMANDID_SUB_MSGCMD_CHGACCE:		RecvProcMSGCMD_CHGACCE		(pData, dwSessionID);	break;	/* ƒAƒNƒZƒTƒŠ•ÏX */
-	case SBOCOMMANDID_SUB_MSGCMD_CHGCOLOR:		RecvProcMSGCMD_CHGCOLOR		(pData, dwSessionID);	break;	/* F•ÏX */
-//	case SBOCOMMANDID_SUB_MSGCMD_CHGARMS:		RecvProcMSGCMD_CHGARMS		(pData, dwSessionID);	break;	/* Ž‚¿•¨•ÏX */
-//	case SBOCOMMANDID_SUB_MSGCMD_CHGSHIELD:		RecvProcMSGCMD_CHGSHIELD	(pData, dwSessionID);	break;	/* ‚•ÏX */
-	case SBOCOMMANDID_SUB_MSGCMD_MAKEITEM:		RecvProcMSGCMD_MAKEITEM		(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€ì¬ */
-	case SBOCOMMANDID_SUB_MSGCMD_BALLOON:		RecvProcMSGCMD_BALLOON		(pData, dwSessionID);	break;	/* •¬o‚µ */
-	case SBOCOMMANDID_SUB_MSGCMD_DICE:			RecvProcMSGCMD_DICE			(pData, dwSessionID);	break;	/* ƒTƒCƒRƒ */
-	case SBOCOMMANDID_SUB_MSGCMD_RND:			RecvProcMSGCMD_RND			(pData, dwSessionID);	break;	/* ƒ‰ƒ“ƒ_ƒ€ */
-	case SBOCOMMANDID_SUB_MSGCMD_EFFECT:		RecvProcMSGCMD_EFFECT		(pData, dwSessionID);	break;	/* ƒGƒtƒFƒNƒg */
-	case SBOCOMMANDID_SUB_MSGCMD_WHERE:			RecvProcMSGCMD_WHERE		(pData, dwSessionID);	break;	/* Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
+	case SBOCOMMANDID_SUB_MSGCMD_CHGFACE:		RecvProcMSGCMD_CHGFACE		(pData, dwSessionID);	break;	/* è¡¨æƒ…å¤‰æ›´ */
+//	case SBOCOMMANDID_SUB_MSGCMD_CHGHAIR:		RecvProcMSGCMD_CHGHAIR		(pData, dwSessionID);	break;	/* é«ªå¤‰æ›´ */
+//	case SBOCOMMANDID_SUB_MSGCMD_CHGCLOTH:		RecvProcMSGCMD_CHGCLOTH		(pData, dwSessionID);	break;	/* æœè£…å¤‰æ›´ */
+//	case SBOCOMMANDID_SUB_MSGCMD_CHGACCE:		RecvProcMSGCMD_CHGACCE		(pData, dwSessionID);	break;	/* ã‚¢ã‚¯ã‚»ã‚µãƒªå¤‰æ›´ */
+	case SBOCOMMANDID_SUB_MSGCMD_CHGCOLOR:		RecvProcMSGCMD_CHGCOLOR		(pData, dwSessionID);	break;	/* è‰²å¤‰æ›´ */
+//	case SBOCOMMANDID_SUB_MSGCMD_CHGARMS:		RecvProcMSGCMD_CHGARMS		(pData, dwSessionID);	break;	/* æŒã¡ç‰©å¤‰æ›´ */
+//	case SBOCOMMANDID_SUB_MSGCMD_CHGSHIELD:		RecvProcMSGCMD_CHGSHIELD	(pData, dwSessionID);	break;	/* ç›¾å¤‰æ›´ */
+	case SBOCOMMANDID_SUB_MSGCMD_MAKEITEM:		RecvProcMSGCMD_MAKEITEM		(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ä½œæˆ */
+	case SBOCOMMANDID_SUB_MSGCMD_BALLOON:		RecvProcMSGCMD_BALLOON		(pData, dwSessionID);	break;	/* å™´å‡ºã— */
+	case SBOCOMMANDID_SUB_MSGCMD_DICE:			RecvProcMSGCMD_DICE			(pData, dwSessionID);	break;	/* ã‚µã‚¤ã‚³ãƒ­ */
+	case SBOCOMMANDID_SUB_MSGCMD_RND:			RecvProcMSGCMD_RND			(pData, dwSessionID);	break;	/* ãƒ©ãƒ³ãƒ€ãƒ  */
+	case SBOCOMMANDID_SUB_MSGCMD_EFFECT:		RecvProcMSGCMD_EFFECT		(pData, dwSessionID);	break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	case SBOCOMMANDID_SUB_MSGCMD_WHERE:			RecvProcMSGCMD_WHERE		(pData, dwSessionID);	break;	/* æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_CHGFACE								 */
-/* “à—e		:ŽóMˆ—(•\î•ÏX)												 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_CHGFACE								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(è¡¨æƒ…å¤‰æ›´)												 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_CHGFACE(PBYTE pData, DWORD dwSessionID)
@@ -78,9 +78,9 @@ void CMainFrame::RecvProcMSGCMD_CHGFACE(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_CHGHAIR								 */
-/* “à—e		:ŽóMˆ—(Ž†•ÏX)												 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_CHGHAIR								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç´™å¤‰æ›´)												 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_CHGHAIR(PBYTE pData, DWORD dwSessionID)
@@ -109,9 +109,9 @@ void CMainFrame::RecvProcMSGCMD_CHGHAIR(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_CHGCLOTH							 */
-/* “à—e		:ŽóMˆ—(•ž‘••ÏX)												 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_CHGCLOTH							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æœè£…å¤‰æ›´)												 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_CHGCLOTH(PBYTE pData, DWORD dwSessionID)
@@ -143,9 +143,9 @@ void CMainFrame::RecvProcMSGCMD_CHGCLOTH(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_CHGACCE								 */
-/* “à—e		:ŽóMˆ—(ƒAƒNƒZƒTƒŠ•ÏX)										 */
-/* “ú•t		:2007/05/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_CHGACCE								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¯ã‚»ã‚µãƒªå¤‰æ›´)										 */
+/* æ—¥ä»˜		:2007/05/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_CHGACCE(PBYTE pData, DWORD dwSessionID)
@@ -177,9 +177,9 @@ void CMainFrame::RecvProcMSGCMD_CHGACCE(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_CHGCOLOR							 */
-/* “à—e		:ŽóMˆ—(F•ÏX)												 */
-/* “ú•t		:2007/05/09														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_CHGCOLOR							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(è‰²å¤‰æ›´)												 */
+/* æ—¥ä»˜		:2007/05/09														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_CHGCOLOR(PBYTE pData, DWORD dwSessionID)
@@ -206,13 +206,13 @@ void CMainFrame::RecvProcMSGCMD_CHGCOLOR(PBYTE pData, DWORD dwSessionID)
 	}
 	cl = RGB (255, 255, 255);
 	switch (Packet.m_nType) {
-	case 0:	cl = RGB (255, 255, 255);	break;	/* ”’ */
-	case 1:	cl = RGB (255, 200, 200);	break;	/* Ô */
-	case 2:	cl = RGB (255, 255, 200);	break;	/* ‰© */
-	case 3:	cl = RGB (200, 255, 200);	break;	/* —Î */
-	case 4:	cl = RGB (200, 255, 255);	break;	/* Â—Î */
-	case 5:	cl = RGB (200, 200, 255);	break;	/* Â */
-	case 6:	cl = RGB (255, 200, 255);	break;	/* Ž‡ */
+	case 0:	cl = RGB (255, 255, 255);	break;	/* ç™½ */
+	case 1:	cl = RGB (255, 200, 200);	break;	/* èµ¤ */
+	case 2:	cl = RGB (255, 255, 200);	break;	/* é»„ */
+	case 3:	cl = RGB (200, 255, 200);	break;	/* ç·‘ */
+	case 4:	cl = RGB (200, 255, 255);	break;	/* é’ç·‘ */
+	case 5:	cl = RGB (200, 200, 255);	break;	/* é’ */
+	case 6:	cl = RGB (255, 200, 255);	break;	/* ç´« */
 	}
 	pInfoChar->m_clName		= cl;
 	pInfoChar->m_clSpeak	= cl;
@@ -223,9 +223,9 @@ void CMainFrame::RecvProcMSGCMD_CHGCOLOR(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_CHGARMS								 */
-/* “à—e		:ŽóMˆ—(Ž‚¿•¨•ÏX)											 */
-/* “ú•t		:2007/07/21														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_CHGARMS								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æŒã¡ç‰©å¤‰æ›´)											 */
+/* æ—¥ä»˜		:2007/07/21														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_CHGARMS(PBYTE pData, DWORD dwSessionID)
@@ -267,9 +267,9 @@ void CMainFrame::RecvProcMSGCMD_CHGARMS(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_CHGSHIELD							 */
-/* “à—e		:ŽóMˆ—(‚•ÏX)												 */
-/* “ú•t		:2008/07/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_CHGSHIELD							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç›¾å¤‰æ›´)												 */
+/* æ—¥ä»˜		:2008/07/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_CHGSHIELD(PBYTE pData, DWORD dwSessionID)
@@ -299,9 +299,9 @@ void CMainFrame::RecvProcMSGCMD_CHGSHIELD(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_MAKEITEM							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€ì¬)											 */
-/* “ú•t		:2007/10/20														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_MAKEITEM							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ä½œæˆ)											 */
+/* æ—¥ä»˜		:2007/10/20														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_MAKEITEM(PBYTE pData, DWORD dwSessionID)
@@ -321,7 +321,7 @@ void CMainFrame::RecvProcMSGCMD_MAKEITEM(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		return;
 	}
-//Todo:Œ ŒÀƒ`ƒFƒbƒN
+//Todo:æ¨©é™ãƒã‚§ãƒƒã‚¯
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
 		return;
@@ -346,9 +346,9 @@ void CMainFrame::RecvProcMSGCMD_MAKEITEM(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_BALLOON								 */
-/* “à—e		:ŽóMˆ—(•¬o‚µ)												 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_BALLOON								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(å™´å‡ºã—)												 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_BALLOON(PBYTE pData, DWORD dwSessionID)
@@ -376,9 +376,9 @@ void CMainFrame::RecvProcMSGCMD_BALLOON(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_DICE								 */
-/* “à—e		:ŽóMˆ—(ƒTƒCƒRƒ)												 */
-/* “ú•t		:2008/06/16														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_DICE								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚µã‚¤ã‚³ãƒ­)												 */
+/* æ—¥ä»˜		:2008/06/16														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_DICE(PBYTE pData, DWORD dwSessionID)
@@ -395,16 +395,16 @@ void CMainFrame::RecvProcMSGCMD_DICE(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	strTmp.Format ("%s‚ÌƒTƒCƒRƒI[%d]‚ªo‚Ü‚µ‚½", (LPCSTR)pInfoChar->m_strCharName, (genrand () % 6) + 1);
+	strTmp.Format ("%sã®ã‚µã‚¤ã‚³ãƒ­ï¼[%d]ãŒå‡ºã¾ã—ãŸ", (LPCSTR)pInfoChar->m_strCharName, (genrand () % 6) + 1);
 	PacketSYSTEMMSG.Make (strTmp, RGB (255, 255, 255), FALSE);
 	SendToScreenChar (pInfoChar, &PacketSYSTEMMSG);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_RND									 */
-/* “à—e		:ŽóMˆ—(ƒ‰ƒ“ƒ_ƒ€)												 */
-/* “ú•t		:2008/06/19														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_RND									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ©ãƒ³ãƒ€ãƒ )												 */
+/* æ—¥ä»˜		:2008/06/19														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_RND(PBYTE pData, DWORD dwSessionID)
@@ -429,7 +429,7 @@ void CMainFrame::RecvProcMSGCMD_RND(PBYTE pData, DWORD dwSessionID)
 	} else {
 		nTmp = 1000;
 	}
-	strTmp.Format ("%s‚Ì 1`%dII[%d]‚ªo‚Ü‚µ‚½",
+	strTmp.Format ("%sã® 1ï½ž%dï¼ï¼[%d]ãŒå‡ºã¾ã—ãŸ",
 			(LPCSTR)pInfoChar->m_strCharName,
 			nTmp,
 			(genrand () % nTmp) + 1);
@@ -439,9 +439,9 @@ void CMainFrame::RecvProcMSGCMD_RND(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_EFFECT								 */
-/* “à—e		:ŽóMˆ—(ƒGƒtƒFƒNƒg)											 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_EFFECT								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ)											 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_EFFECT(PBYTE pData, DWORD dwSessionID)
@@ -460,9 +460,9 @@ void CMainFrame::RecvProcMSGCMD_EFFECT(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMSGCMD_WHERE								 */
-/* “à—e		:ŽóMˆ—(Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ)									 */
-/* “ú•t		:2008/10/18														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMSGCMD_WHERE								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€)									 */
+/* æ—¥ä»˜		:2008/10/18														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMSGCMD_WHERE(PBYTE pData, DWORD dwSessionID)
@@ -481,16 +481,16 @@ void CMainFrame::RecvProcMSGCMD_WHERE(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	strTmp.Format ("SYSTEM:Œ»ÝÅ‚àl‚ªW‚Ü‚Á‚Ä‚¢‚éêŠ‚Í");
+	strTmp.Format ("SYSTEM:ç¾åœ¨æœ€ã‚‚äººãŒé›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ã¯");
 	PacketMAP_SYSTEMMSG.Make (strTmp, RGB (255, 255, 255), TRUE, SYSTEMMSGTYPE_NOLOG);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 	dwTmp  = m_pLibInfoChar->GetPlaceName (strTmp2);
 	nCount = m_pLibInfoChar->GetCountOnline (dwTmp);
 
 	if (strTmp2.IsEmpty ()) {
-		strTmp.Format ("SYSTEM:ƒIƒ“ƒ‰ƒCƒ“” %d ‚Åƒ}ƒbƒv”Ô†[%d]‚Ì‚æ‚¤‚Å‚·", nCount, dwTmp);
+		strTmp.Format ("SYSTEM:ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•° %d ã§ãƒžãƒƒãƒ—ç•ªå·[%d]ã®ã‚ˆã†ã§ã™", nCount, dwTmp);
 	} else {
-		strTmp.Format ("SYSTEM:ƒIƒ“ƒ‰ƒCƒ“” %d ‚Å[%s]‚Ì‚æ‚¤‚Å‚·", nCount, (LPCSTR)strTmp2);
+		strTmp.Format ("SYSTEM:ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•° %d ã§[%s]ã®ã‚ˆã†ã§ã™", nCount, (LPCSTR)strTmp2);
 	}
 	PacketMAP_SYSTEMMSG.Make (strTmp, RGB (255, 255, 255), FALSE, SYSTEMMSGTYPE_NOLOG);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapEventMAPMOVE.h										 */
-/* “à—e			:ƒCƒxƒ“ƒgî•ñ(ƒ}ƒbƒvŠÔˆÚ“®)ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapEventMAPMOVE.h										 */
+/* å†…å®¹			:ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±(ãƒãƒƒãƒ—é–“ç§»å‹•)ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,33 +11,33 @@
 #include "InfoMapEventBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoMapEventMAPMOVE : public CInfoMapEventBase
 {
 public:
-			CInfoMapEventMAPMOVE();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoMapEventMAPMOVE();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoMapEventMAPMOVE();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoMapEventMAPMOVE();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	void	Copy				(CInfoMapEventBase *pSrc);			/* ƒRƒs[ */
+	void	Copy				(CInfoMapEventBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	DWORD		m_dwMapID;			/* ˆÚ“®æƒ}ƒbƒvID */
-	POINT		m_ptDst;			/* ˆÚ“®æ */
-	int			m_nDirection;		/* ˆÚ“®Œã‚ÌŒü‚« */
+	DWORD		m_dwMapID;			/* ç§»å‹•å…ˆãƒãƒƒãƒ—ID */
+	POINT		m_ptDst;			/* ç§»å‹•å…ˆ */
+	int			m_nDirection;		/* ç§»å‹•å¾Œã®å‘ã */
 } CInfoMapEventMAPMOVE, *PCInfoMapEventMAPMOVE;
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,26 +1,26 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SBOGlobal.cpp												 */
-/* “à—e			:ƒvƒƒWƒFƒNƒgˆË‘¶‚Å‚Í‚È‚¢‹¤’Êˆ— ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SBOGlobal.cpp												 */
+/* å†…å®¹			:ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆä¾å­˜ã§ã¯ãªã„å…±é€šå‡¦ç† å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/06													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
 
 /* ========================================================================= */
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒvéŒ¾														 */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€														 */
 /* ========================================================================= */
 
-PBYTE	ZeroNew			(DWORD dwSize);												/* Žw’èƒTƒCƒY‚Ìƒƒ‚ƒŠ‚ðŠm•Û‚µ‚Ä0ƒNƒŠƒA */
-void	CopyMemoryRenew	(PVOID pDst, CONST PVOID pSrc, DWORD dwSize, PBYTE &pPos);	/* ƒƒ‚ƒŠƒRƒs[‚µ‚Äƒ|ƒCƒ“ƒ^‚ði‚ß‚é */
-void	strcpyRenew		(LPSTR pszDst, LPCSTR pszSrc, PBYTE &pPos);					/* •¶Žš—ñƒRƒs[‚µ‚Äƒ|ƒCƒ“ƒ^‚ði‚ß‚é */
-void	StoreRenew		(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos);			/* •¶Žš—ñƒRƒs[‚µ‚Äƒ|ƒCƒ“ƒ^‚ði‚ß‚é */
+PBYTE	ZeroNew			(DWORD dwSize);												/* æŒ‡å®šã‚µã‚¤ã‚ºã®ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã—ã¦0ã‚¯ãƒªã‚¢ */
+void	CopyMemoryRenew	(PVOID pDst, CONST PVOID pSrc, DWORD dwSize, PBYTE &pPos);	/* ãƒ¡ãƒ¢ãƒªã‚³ãƒ”ãƒ¼ã—ã¦ãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹ */
+void	strcpyRenew		(LPSTR pszDst, LPCSTR pszSrc, PBYTE &pPos);					/* æ–‡å­—åˆ—ã‚³ãƒ”ãƒ¼ã—ã¦ãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹ */
+void	StoreRenew		(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos);			/* æ–‡å­—åˆ—ã‚³ãƒ”ãƒ¼ã—ã¦ãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹ */
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:ZeroNew														 */
-/* “à—e		:Žw’èƒTƒCƒY‚Ìƒƒ‚ƒŠ‚ðŠm•Û‚µ‚Ä0ƒNƒŠƒA							 */
-/* “ú•t		:2006/11/06														 */
+/* é–¢æ•°å	:ZeroNew														 */
+/* å†…å®¹		:æŒ‡å®šã‚µã‚¤ã‚ºã®ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã—ã¦0ã‚¯ãƒªã‚¢							 */
+/* æ—¥ä»˜		:2006/11/06														 */
 /* ========================================================================= */
 
 PBYTE ZeroNew(DWORD dwSize)
@@ -35,9 +35,9 @@ PBYTE ZeroNew(DWORD dwSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CopyMemoryRenew												 */
-/* “à—e		:ƒƒ‚ƒŠƒRƒs[‚µ‚Äƒ|ƒCƒ“ƒ^‚ði‚ß‚é								 */
-/* “ú•t		:2006/06/08														 */
+/* é–¢æ•°å	:CopyMemoryRenew												 */
+/* å†…å®¹		:ãƒ¡ãƒ¢ãƒªã‚³ãƒ”ãƒ¼ã—ã¦ãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹								 */
+/* æ—¥ä»˜		:2006/06/08														 */
 /* ========================================================================= */
 
 void CopyMemoryRenew(PVOID pDst, CONST PVOID pSrc, DWORD dwSize, PBYTE &pPos)
@@ -48,9 +48,9 @@ void CopyMemoryRenew(PVOID pDst, CONST PVOID pSrc, DWORD dwSize, PBYTE &pPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:strcpyRenew													 */
-/* “à—e		:•¶Žš—ñƒRƒs[‚µ‚Äƒ|ƒCƒ“ƒ^‚ði‚ß‚é								 */
-/* “ú•t		:2006/06/08														 */
+/* é–¢æ•°å	:strcpyRenew													 */
+/* å†…å®¹		:æ–‡å­—åˆ—ã‚³ãƒ”ãƒ¼ã—ã¦ãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹								 */
+/* æ—¥ä»˜		:2006/06/08														 */
 /* ========================================================================= */
 
 void strcpyRenew(LPSTR pszDst, LPCSTR pszSrc, PBYTE &pPos)
@@ -65,9 +65,9 @@ void strcpyRenew(LPSTR pszDst, LPCSTR pszSrc, PBYTE &pPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:StoreRenew														 */
-/* “à—e		:•¶Žš—ñƒRƒs[‚µ‚Äƒ|ƒCƒ“ƒ^‚ði‚ß‚é								 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:StoreRenew														 */
+/* å†…å®¹		:æ–‡å­—åˆ—ã‚³ãƒ”ãƒ¼ã—ã¦ãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹								 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void StoreRenew(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos)
@@ -82,33 +82,33 @@ void StoreRenew(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:GetModuleFilePath												 */
-/* “à—e		:ƒ‚ƒWƒ…[ƒ‹ƒpƒX‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:GetModuleFilePath												 */
+/* å†…å®¹		:ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ‘ã‚¹ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 void GetModuleFilePath(
-	LPSTR pszDst,		/* [ou] ƒpƒXŠi”[æƒoƒbƒtƒ@ */
-	DWORD dwSize)		/* [in] ƒpƒXŠi”[æƒoƒbƒtƒ@ƒTƒCƒY */
+	LPSTR pszDst,		/* [ou] ãƒ‘ã‚¹æ ¼ç´å…ˆãƒãƒƒãƒ•ã‚¡ */
+	DWORD dwSize)		/* [in] ãƒ‘ã‚¹æ ¼ç´å…ˆãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º */
 {
 	ZeroMemory (pszDst, dwSize);
-	GetModuleFileName (NULL, pszDst, dwSize);	/* ƒ‚ƒWƒ…[ƒ‹–¼‚ðŽæ“¾ */
-	PathRemoveFileSpec (pszDst);				/* ƒtƒ@ƒCƒ‹–¼•”•ª‚ðÁ‚· */
-	PathAddBackslash (pszDst);					/* u\v‚ð’Ç‰Á */
+	GetModuleFileName (NULL, pszDst, dwSize);	/* ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åã‚’å–å¾— */
+	PathRemoveFileSpec (pszDst);				/* ãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã‚’æ¶ˆã™ */
+	PathAddBackslash (pszDst);					/* ã€Œ\ã€ã‚’è¿½åŠ  */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:AllCreateDirectory												 */
-/* “à—e		:Žw’è‚³‚ê‚½ƒpƒX‚ÌƒtƒHƒ‹ƒ_‚ðì¬									 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:AllCreateDirectory												 */
+/* å†…å®¹		:æŒ‡å®šã•ã‚ŒãŸãƒ‘ã‚¹ã®ãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆ									 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 BOOL AllCreateDirectory(
-	LPCTSTR					lpszDir,			/* [in] ƒfƒBƒŒƒNƒgƒŠ–¼					*/
-	LPSECURITY_ATTRIBUTES	pSAtt,				/* [in] (Šî–{FNULL)ƒZƒLƒ…ƒŠƒeƒBŽ¯•ÊŽq	*/
-	BOOL					bResult				/* [in] (Šî–{FTRUE)“¯–¼ƒpƒX‚ª‘¶Ý‚·‚éŽž*/
-												/*		TRUE FALSE ‚Ç‚¿‚ç‚ð•Ô‚·‚©		*/
+	LPCTSTR					lpszDir,			/* [in] ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå					*/
+	LPSECURITY_ATTRIBUTES	pSAtt,				/* [in] (åŸºæœ¬ï¼šNULL)ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£è­˜åˆ¥å­	*/
+	BOOL					bResult				/* [in] (åŸºæœ¬ï¼šTRUE)åŒåãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹æ™‚*/
+												/*		TRUE FALSE ã©ã¡ã‚‰ã‚’è¿”ã™ã‹		*/
 	)
 {
 	UINT	nStrLen;
@@ -118,7 +118,7 @@ BOOL AllCreateDirectory(
 
 
 	/*****************************************
-		‰Šúƒ`ƒFƒbƒN
+		åˆæœŸãƒã‚§ãƒƒã‚¯
 	*****************************************/
 
 	if (lpszDir == NULL) {
@@ -131,7 +131,7 @@ BOOL AllCreateDirectory(
 
 
 	/*****************************************
-		‚Æ‚è‚ ‚¦‚¸ì¬
+		ã¨ã‚Šã‚ãˆãšä½œæˆ
 	*****************************************/
 
 	if (CreateDirectory (lpszDir, pSAtt)) {
@@ -144,13 +144,13 @@ BOOL AllCreateDirectory(
 
 
 	/*****************************************
-		 ì¬ŠJŽnˆÊ’u‚ðŒŸo
+		 ä½œæˆé–‹å§‹ä½ç½®ã‚’æ¤œå‡º
 	*****************************************/
 
 	_tcscpy (szTempDir, lpszDir);
 	szTempDir[MAX_PATH -1] = _T('\0');
 
-	/* ƒlƒbƒgƒ[ƒNƒtƒHƒ‹ƒ_‚ðŽw’è‚³‚ê‚Ä‚¢‚éH */
+	/* ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ•ã‚©ãƒ«ãƒ€ã‚’æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ï¼Ÿ */
 	if (memcmp (szTempDir, _T("\\\\"), 2) == 0) {
 		posRoot = &szTempDir[1];
 		posRoot = _tcschr (posRoot + 1, _T('\\'));
@@ -162,7 +162,7 @@ BOOL AllCreateDirectory(
 			return FALSE;
 		}
 
-	/* ƒ[ƒJƒ‹ƒtƒHƒ‹ƒ_‚ðŽw’è‚³‚ê‚Ä‚¢‚é */
+	/* ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ã‚©ãƒ«ãƒ€ã‚’æŒ‡å®šã•ã‚Œã¦ã„ã‚‹ */
 	} else {
 		posRoot = _tcschr (szTempDir, _T('\\'));
 		if (posRoot == NULL) {
@@ -172,14 +172,14 @@ BOOL AllCreateDirectory(
 
 
 	/********************************************
-		ƒfƒBƒŒƒNƒgƒŠ‚ðæ“ª‚©‚ç‡‚Éì¬‚µ‚Ä‚¢‚­
+		ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å…ˆé ­ã‹ã‚‰é †ã«ä½œæˆã—ã¦ã„ã
 	********************************************/
 
 	while (posRoot) {
 		posRoot = _tcschr (posRoot + 1, _T('\\'));
 		if (posRoot) {
 			ch = *posRoot;
-			/* •¶Žš—ñ‚ðˆê’UØ‚éi‚ ‚Æ‚ÅŒ³‚É–ß‚·jB	*/
+			/* æ–‡å­—åˆ—ã‚’ä¸€æ—¦åˆ‡ã‚‹ï¼ˆã‚ã¨ã§å…ƒã«æˆ»ã™ï¼‰ã€‚	*/
 			*posRoot = NULL;
 		}
 
@@ -189,7 +189,7 @@ BOOL AllCreateDirectory(
 			}
 		}
 		if (posRoot) {
-			/* ‹æØ‚Á‚½ˆÊ’u‚ðŒ³‚É–ß‚· */
+			/* åŒºåˆ‡ã£ãŸä½ç½®ã‚’å…ƒã«æˆ»ã™ */
 			*posRoot = ch;
 		}
 	}
@@ -199,9 +199,9 @@ BOOL AllCreateDirectory(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:TrimViewString													 */
-/* “à—e		:•\Ž¦‚Å‚«‚È‚¢•¶Žš‚ðíœ											 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:TrimViewString													 */
+/* å†…å®¹		:è¡¨ç¤ºã§ããªã„æ–‡å­—ã‚’å‰Šé™¤											 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void TrimViewString(CmyString &strDst, LPCSTR pszSrc)
@@ -240,9 +240,9 @@ void TrimViewString(CmyString &strDst, LPCSTR pszSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:IsInRect														 */
-/* “à—e		:Žw’è‹éŒ`‚ªŠ®‘S‚É“à‘¤‚É‚ ‚é‚©”»’è								 */
-/* “ú•t		:2009/01/31														 */
+/* é–¢æ•°å	:IsInRect														 */
+/* å†…å®¹		:æŒ‡å®šçŸ©å½¢ãŒå®Œå…¨ã«å†…å´ã«ã‚ã‚‹ã‹åˆ¤å®š								 */
+/* æ—¥ä»˜		:2009/01/31														 */
 /* ========================================================================= */
 
 BOOL IsInRect(RECT *pSrc, RECT *pTarget)
@@ -261,9 +261,9 @@ BOOL IsInRect(RECT *pSrc, RECT *pTarget)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:IsHitRect														 */
-/* “à—e		:‹éŒ`“¯Žm‚Ì“–‚½‚è”»’è											 */
-/* “ú•t		:2009/01/31														 */
+/* é–¢æ•°å	:IsHitRect														 */
+/* å†…å®¹		:çŸ©å½¢åŒå£«ã®å½“ãŸã‚Šåˆ¤å®š											 */
+/* æ—¥ä»˜		:2009/01/31														 */
 /* ========================================================================= */
 
 BOOL IsHitRect(RECT *pSrc1, RECT *pSrc2)

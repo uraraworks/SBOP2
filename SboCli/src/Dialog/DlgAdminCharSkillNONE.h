@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillNONE.h									 */
-/* “à—e			:ƒXƒLƒ‹(–¢İ’è)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharSkillNONE.h									 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«(æœªè¨­å®š)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/07													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CInfoSkillBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharSkillNONE : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharSkillNONE(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharSkillNONE();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharSkillNONE(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharSkillNONE();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Init	(CMgrData *pMgrData);						/* ‰Šú‰» */
-	virtual void	Set		(CInfoSkillBase *pSrc);						/* İ’è */
-	virtual void	Get		(CInfoSkillBase *pDst);						/* æ“¾ */
+	virtual void	Init	(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	virtual void	Set		(CInfoSkillBase *pSrc);						/* è¨­å®š */
+	virtual void	Get		(CInfoSkillBase *pDst);						/* å–å¾— */
 
 
 protected:
-	int		m_nResourceID;			/* ƒ_ƒCƒAƒƒOƒŠƒ\[ƒXID */
+	int		m_nResourceID;			/* ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãƒªã‚½ãƒ¼ã‚¹ID */
 
 
 
@@ -39,7 +39,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillNONE)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_SKILL_RENEWSKILL.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒXƒLƒ‹î•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_SKILL_RENEWSKILL.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¹ã‚­ãƒ«æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoSkillBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_SKILL_RENEWSKILL : public CPacketBase
 {
 public:
-			CPacketADMIN_SKILL_RENEWSKILL();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_SKILL_RENEWSKILL();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_SKILL_RENEWSKILL();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_SKILL_RENEWSKILL();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoSkillBase *pInfo);					/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoSkillBase *pInfo);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CInfoSkillBase	*m_pInfo;				/* ƒXƒLƒ‹î•ñ */
+	CInfoSkillBase	*m_pInfo;				/* ã‚¹ã‚­ãƒ«æƒ…å ± */
 } CPacketADMIN_SKILL_RENEWSKILL, *PCPacketADMIN_SKILL_RENEWSKILL;
 
 /* Copyright(C)URARA-works 2008 */

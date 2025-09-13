@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StaticMapObjectGrp.cpp										 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg•\¦ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StaticMapObjectGrp.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¡¨ç¤ºã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/02													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CStaticMapObjectGrp, CStatic)
@@ -36,9 +36,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::CStaticMapObjectGrp						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::CStaticMapObjectGrp						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 CStaticMapObjectGrp::CStaticMapObjectGrp()
@@ -56,9 +56,9 @@ CStaticMapObjectGrp::CStaticMapObjectGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::~CStaticMapObjectGrp						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::~CStaticMapObjectGrp						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 CStaticMapObjectGrp::~CStaticMapObjectGrp()
@@ -68,9 +68,9 @@ CStaticMapObjectGrp::~CStaticMapObjectGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 BOOL CStaticMapObjectGrp::Create(CWnd *pParent, CMgrData *pMgrData)
@@ -84,9 +84,9 @@ BOOL CStaticMapObjectGrp::Create(CWnd *pParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CStaticMapObjectGrp::Init(CInfoMapObject *pInfoMapObject)
@@ -97,9 +97,9 @@ void CStaticMapObjectGrp::Init(CInfoMapObject *pInfoMapObject)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::Set										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::Set										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CStaticMapObjectGrp::Set(int nAnimeNo)
@@ -110,9 +110,9 @@ void CStaticMapObjectGrp::Set(int nAnimeNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::IncPosX									 */
-/* “à—e		:‘I‘ğˆÊ’u‚ğ‰E‚ÉˆÚ“®												 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::IncPosX									 */
+/* å†…å®¹		:é¸æŠä½ç½®ã‚’å³ã«ç§»å‹•												 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CStaticMapObjectGrp::IncPosX(void)
@@ -130,9 +130,9 @@ void CStaticMapObjectGrp::IncPosX(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::OnCreate									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::OnCreate									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 int CStaticMapObjectGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -148,9 +148,9 @@ int CStaticMapObjectGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::OnPaint									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::OnPaint									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CStaticMapObjectGrp::OnPaint()
@@ -170,7 +170,7 @@ void CStaticMapObjectGrp::OnPaint()
 	m_pImgBack->Unlock ();
 
 	if ((m_pInfoMapObject->m_sizeGrp.cx > 1) || (m_pInfoMapObject->m_sizeGrp.cy > 1)) {
-		/* ‘I‘ğˆÊ’u‹éŒ`‚Ì•`‰æ */
+		/* é¸æŠä½ç½®çŸ©å½¢ã®æç”» */
 		x = m_ptSelect.x * 16;
 		y = m_ptSelect.y * 16;
 		rcTmp.SetRect (x, y, x + 15, y + 15);
@@ -180,9 +180,9 @@ void CStaticMapObjectGrp::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::OnLButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CStaticMapObjectGrp::OnLButtonDown(UINT nFlags, CPoint point)
@@ -195,9 +195,9 @@ void CStaticMapObjectGrp::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::OnRButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2008/11/12														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::OnRButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2008/11/12														 */
 /* ========================================================================= */
 
 void CStaticMapObjectGrp::OnRButtonDown(UINT nFlags, CPoint point)
@@ -218,9 +218,9 @@ void CStaticMapObjectGrp::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapObjectGrp::RenewGrp									 */
-/* “à—e		:‰æ‘œXV														 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CStaticMapObjectGrp::RenewGrp									 */
+/* å†…å®¹		:ç”»åƒæ›´æ–°														 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CStaticMapObjectGrp::RenewGrp(void)

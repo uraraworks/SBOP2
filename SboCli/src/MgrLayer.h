@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrLayer.h													 */
-/* “à—e			:ƒŒƒCƒ„[ƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrLayer.h													 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,40 +15,40 @@ class CMgrData;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CMgrLayer
 {
 public:
-			CMgrLayer();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrLayer();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrLayer();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMgrLayer();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create		(CMgrData *pMgrData);				/* ì¬ */
-	void Destroy	(void);								/* ”jŠü */
+	void Create		(CMgrData *pMgrData);				/* ä½œæˆ */
+	void Destroy	(void);								/* ç ´æ£„ */
 
-	void Draw			(CImg32 *pDst);					/* •`‰æ */
-	BOOL TimerProc		(void);							/* ŠÔˆ— */
-	void Delete			(int nID);						/* w’èƒŒƒCƒ„[‚ğ”jŠü */
-	void DeleteAll		(void);							/* ‘S‚Ä‚ÌƒŒƒCƒ„[‚ğ”jŠü */
-	CLayerBase	*Get	(int nID);						/* w’èID‚ÌƒŒƒCƒ„[‚ğæ“¾ */
+	void Draw			(CImg32 *pDst);					/* æç”» */
+	BOOL TimerProc		(void);							/* æ™‚é–“å‡¦ç† */
+	void Delete			(int nID);						/* æŒ‡å®šãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç ´æ£„ */
+	void DeleteAll		(void);							/* å…¨ã¦ã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç ´æ£„ */
+	CLayerBase	*Get	(int nID);						/* æŒ‡å®šIDã®ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾— */
 
-	/* ƒŒƒCƒ„[ì¬ */
-	void MakeLOGO		(void);							/* ƒƒS */
-	void MakeTITLE		(void);							/* ƒ^ƒCƒgƒ‹ */
-	void MakeINFO		(void);							/* ‚¨’m‚ç‚¹ */
-	void MakeLOGINMENU	(void);							/* ƒƒOƒCƒ“ƒƒjƒ…[ */
-	void MakeCHARSELECT	(DWORD dwAccountID);			/* ƒLƒƒƒ‰‘I‘ğ */
-	void MakeMAP		(void);							/* ƒ}ƒbƒv */
-	void MakeCLOUD		(void);							/* ‰_ */
-	void MakeSYSTEMMSG	(void);							/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW */
+	/* ãƒ¬ã‚¤ãƒ¤ãƒ¼ä½œæˆ */
+	void MakeLOGO		(void);							/* ãƒ­ã‚´ */
+	void MakeTITLE		(void);							/* ã‚¿ã‚¤ãƒˆãƒ« */
+	void MakeINFO		(void);							/* ãŠçŸ¥ã‚‰ã› */
+	void MakeLOGINMENU	(void);							/* ãƒ­ã‚°ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeCHARSELECT	(DWORD dwAccountID);			/* ã‚­ãƒ£ãƒ©é¸æŠ */
+	void MakeMAP		(void);							/* ãƒãƒƒãƒ— */
+	void MakeCLOUD		(void);							/* é›² */
+	void MakeSYSTEMMSG	(void);							/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
 
 
 private:
-	CMgrData			*m_pMgrData;			/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData			*m_pMgrGrpData;			/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+	CMgrData			*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData			*m_pMgrGrpData;			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 
-	PARRAYLAYERBASE		m_paLayer;				/* ƒŒƒCƒ„[•`‰æ */
+	PARRAYLAYERBASE		m_paLayer;				/* ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”» */
 } CMgrLayer, *PCMgrLayer;
 
 /* Copyright(C)URARA-works 2006 */

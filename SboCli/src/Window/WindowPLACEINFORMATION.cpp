@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowPLACEINFORMATION.cpp									 */
-/* “à—e			:êŠî•ñƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/02/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowPLACEINFORMATION.cpp									 */
+/* å†…å®¹			:å ´æ‰€æƒ…å ±ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/02/11													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 #include "WindowPLACEINFORMATION.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowPLACEINFORMATION::CWindowPLACEINFORMATION				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/02/11														 */
+/* é–¢æ•°å	:CWindowPLACEINFORMATION::CWindowPLACEINFORMATION				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/02/11														 */
 /* ========================================================================= */
 
 CWindowPLACEINFORMATION::CWindowPLACEINFORMATION()
@@ -32,9 +32,9 @@ CWindowPLACEINFORMATION::CWindowPLACEINFORMATION()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowPLACEINFORMATION::~CWindowPLACEINFORMATION				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/02/11														 */
+/* é–¢æ•°å	:CWindowPLACEINFORMATION::~CWindowPLACEINFORMATION				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/02/11														 */
 /* ========================================================================= */
 
 CWindowPLACEINFORMATION::~CWindowPLACEINFORMATION()
@@ -43,9 +43,9 @@ CWindowPLACEINFORMATION::~CWindowPLACEINFORMATION()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowPLACEINFORMATION::Create								 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2009/02/11														 */
+/* é–¢æ•°å	:CWindowPLACEINFORMATION::Create								 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2009/02/11														 */
 /* ========================================================================= */
 
 void CWindowPLACEINFORMATION::Create(CMgrData *pMgrData)
@@ -58,9 +58,9 @@ void CWindowPLACEINFORMATION::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowPLACEINFORMATION::Draw									 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2009/02/11														 */
+/* é–¢æ•°å	:CWindowPLACEINFORMATION::Draw									 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2009/02/11														 */
 /* ========================================================================= */
 
 void CWindowPLACEINFORMATION::Draw(PCImg32 pDst)

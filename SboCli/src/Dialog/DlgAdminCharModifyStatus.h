@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyStatus.h									 */
-/* “à—e			:‘I‘ğƒLƒƒƒ‰î•ñ•ÒW[ƒXƒe[ƒ^ƒX]ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyStatus.h									 */
+/* å†…å®¹			:é¸æŠã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹]ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,23 +13,23 @@
 class CInfoCharCli;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharModifyStatus : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharModifyStatus(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharModifyStatus();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharModifyStatus(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharModifyStatus();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);							/* ‰Šú‰» */
-	void	Renew		(void);											/* XV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
+	void	Init		(CMgrData *pMgrData);							/* åˆæœŸåŒ– */
+	void	Renew		(void);											/* æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
 
 
 protected:
-	CInfoCharCli	*m_pInfoChar;					/* •ÒW’†‚ÌƒLƒƒƒ‰î•ñ */
+	CInfoCharCli	*m_pInfoChar;					/* ç·¨é›†ä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
 
 
 
@@ -75,7 +75,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharModifyStatus)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

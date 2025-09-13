@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminSelectItem.h										 */
-/* “à—e			:ƒAƒCƒeƒ€‘I‘ğƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminSelectItem.h										 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ é¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,20 +15,20 @@ class CLibInfoItem;
 class CInfoItem;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminSelectItem : public CDlgAdminBase
 {
 public:
-			CDlgAdminSelectItem(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminSelectItem();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminSelectItem(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminSelectItem();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	DWORD	GetSelectItemID	(void);			/* ‘I‘ğ‚³‚ê‚½ƒAƒCƒeƒ€ID‚ğæ“¾ */
+	DWORD	GetSelectItemID	(void);			/* é¸æŠã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾— */
 
 
 protected:
-	DWORD	m_dwSelectItemID;				/* ‘I‘ğ‚³‚ê‚½ƒAƒCƒeƒ€ID */
+	DWORD	m_dwSelectItemID;				/* é¸æŠã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ID */
 
 
 
@@ -41,7 +41,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminSelectItem)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

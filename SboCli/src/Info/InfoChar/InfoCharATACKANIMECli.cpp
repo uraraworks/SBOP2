@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharATACKANIMECli.cpp									 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(UŒ‚Žó‚¯‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharATACKANIMECli.cpp									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(æ”»æ’ƒå—ã‘ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/10													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharATACKANIMECli::CInfoCharATACKANIMECli					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/10														 */
+/* é–¢æ•°å	:CInfoCharATACKANIMECli::CInfoCharATACKANIMECli					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/10														 */
 /* ========================================================================= */
 
 CInfoCharATACKANIMECli::CInfoCharATACKANIMECli()
@@ -22,16 +22,16 @@ CInfoCharATACKANIMECli::CInfoCharATACKANIMECli()
 	m_bMotionDirection = FALSE;
 	m_nAnime = 0;
 
-	m_adwMotionID[CHARMOTIONID_STAND]	= CHARMOTIONLISTID_STAND;			/* ƒ‚[ƒVƒ‡ƒ“ID(—§‚¿) */
-	m_adwMotionID[CHARMOTIONID_WALK]	= CHARMOTIONLISTID_STAND_SIMPLE;	/* ƒ‚[ƒVƒ‡ƒ“ID(•à‚«) */
-	m_adwMotionID[CHARMOTIONID_ANIME]	= CHARMOTIONLISTID_DESTROY;			/* ƒ‚[ƒVƒ‡ƒ“ID(ƒAƒjƒ[ƒVƒ‡ƒ“) */
+	m_adwMotionID[CHARMOTIONID_STAND]	= CHARMOTIONLISTID_STAND;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(ç«‹ã¡) */
+	m_adwMotionID[CHARMOTIONID_WALK]	= CHARMOTIONLISTID_STAND_SIMPLE;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(æ­©ã) */
+	m_adwMotionID[CHARMOTIONID_ANIME]	= CHARMOTIONLISTID_DESTROY;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³) */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharATACKANIMECli::~CInfoCharATACKANIMECli				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/10														 */
+/* é–¢æ•°å	:CInfoCharATACKANIMECli::~CInfoCharATACKANIMECli				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/10														 */
 /* ========================================================================= */
 
 CInfoCharATACKANIMECli::~CInfoCharATACKANIMECli()
@@ -40,9 +40,9 @@ CInfoCharATACKANIMECli::~CInfoCharATACKANIMECli()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharATACKANIMECli::ChgMoveState							 */
-/* “à—e		:ˆÚ“®ó‘Ô•ÏX													 */
-/* “ú•t		:2007/09/10														 */
+/* é–¢æ•°å	:CInfoCharATACKANIMECli::ChgMoveState							 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹å¤‰æ›´													 */
+/* æ—¥ä»˜		:2007/09/10														 */
 /* ========================================================================= */
 
 void CInfoCharATACKANIMECli::ChgMoveState(int nMoveState)
@@ -54,14 +54,14 @@ void CInfoCharATACKANIMECli::ChgMoveState(int nMoveState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharATACKANIMECli::RenewAnime								 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV											 */
-/* “ú•t		:2007/09/11														 */
+/* é–¢æ•°å	:CInfoCharATACKANIMECli::RenewAnime								 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°											 */
+/* æ—¥ä»˜		:2007/09/11														 */
 /* ========================================================================= */
 
 BOOL CInfoCharATACKANIMECli::RenewAnime(
-	DWORD dwTime,		/* [in] ŽžŠÔ */
-	int nAdd/*=1*/)		/* [in] ŽŸ‚Ìƒpƒ^[ƒ“‚Ö‚Ì‘‰Á•ª */
+	DWORD dwTime,		/* [in] æ™‚é–“ */
+	int nAdd/*=1*/)		/* [in] æ¬¡ã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã¸ã®å¢—åŠ åˆ† */
 {
 	BOOL bRet;
 	int nCount;
@@ -81,14 +81,14 @@ BOOL CInfoCharATACKANIMECli::RenewAnime(
 	if (m_nAnime >= nCount - 1) {
 		dwTmp = dwTime - m_dwLastTimeAnime;
 		if (dwTmp > 5000) {
-//Todo:‚Æ‚è‚ ‚¦‚¸
+//Todo:ã¨ã‚Šã‚ãˆãš
 			ChgMoveState (CHARMOVESTATE_STAND);
 		}
 		goto Exit;
 	}
 
 	if (bRet && m_nAnime == 1) {
-//Todo:‚Æ‚è‚ ‚¦‚¸
+//Todo:ã¨ã‚Šã‚ãˆãš
 		switch (m_wGrpIDNPC) {
 		case 8:		m_pMgrSound->PlaySound (SOUNDID_CRASH20_D);	break;
 		case 9:		m_pMgrSound->PlaySound (SOUNDID_KUSA);		break;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPPARTS.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒp[ƒcî•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPPARTS.cpp										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/30													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -13,9 +13,9 @@
 #include "PacketMAP_MAPPARTS.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPPARTS::CPacketMAP_MAPPARTS						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CPacketMAP_MAPPARTS::CPacketMAP_MAPPARTS						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPPARTS::CPacketMAP_MAPPARTS()
@@ -25,9 +25,9 @@ CPacketMAP_MAPPARTS::CPacketMAP_MAPPARTS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPPARTS::~CPacketMAP_MAPPARTS						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CPacketMAP_MAPPARTS::~CPacketMAP_MAPPARTS						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPPARTS::~CPacketMAP_MAPPARTS()
@@ -37,13 +37,13 @@ CPacketMAP_MAPPARTS::~CPacketMAP_MAPPARTS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPPARTS::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CPacketMAP_MAPPARTS::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPPARTS::Make(
-	CLibInfoMapParts *pLibInfo)		/* [in] ƒ}ƒbƒvƒp[ƒcî•ñ */
+	CLibInfoMapParts *pLibInfo)		/* [in] ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -63,7 +63,7 @@ void CPacketMAP_MAPPARTS::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_MAPPARTS;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒ}ƒbƒvƒp[ƒcî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -72,13 +72,13 @@ void CPacketMAP_MAPPARTS::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPPARTS::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CPacketMAP_MAPPARTS::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPPARTS::Make(
-	CInfoMapParts *pInfo)		/* [in] ƒ}ƒbƒvƒp[ƒcî•ñ */
+	CInfoMapParts *pInfo)		/* [in] ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 {
 	PCInfoMapParts pInfoTmp;
 	CLibInfoMapParts LibInfoMapParts;
@@ -94,9 +94,9 @@ void CPacketMAP_MAPPARTS::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPPARTS::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CPacketMAP_MAPPARTS::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_MAPPARTS::Set(PBYTE pPacket)

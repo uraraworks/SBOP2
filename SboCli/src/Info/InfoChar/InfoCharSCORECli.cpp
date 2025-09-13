@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharSCORECli.cpp										 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(“¾“_)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharSCORECli.cpp										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(å¾—ç‚¹)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/09													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,23 +11,23 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharSCORECli::CInfoCharSCORECli							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CInfoCharSCORECli::CInfoCharSCORECli							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 CInfoCharSCORECli::CInfoCharSCORECli()
 {
 	m_bMotionDirection = FALSE;
-	m_adwMotionID[CHARMOTIONID_STAND]	= CHARMOTIONLISTID_SIMPLE;	/* ƒ‚[ƒVƒ‡ƒ“ID(—§‚¿) */
-	m_adwMotionID[CHARMOTIONID_WALK]	= CHARMOTIONLISTID_SIMPLE;	/* ƒ‚[ƒVƒ‡ƒ“ID(•à‚«) */
+	m_adwMotionID[CHARMOTIONID_STAND]	= CHARMOTIONLISTID_SIMPLE;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(ç«‹ã¡) */
+	m_adwMotionID[CHARMOTIONID_WALK]	= CHARMOTIONLISTID_SIMPLE;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(æ­©ã) */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharSCORECli::~CInfoCharSCORECli							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CInfoCharSCORECli::~CInfoCharSCORECli							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 CInfoCharSCORECli::~CInfoCharSCORECli()
@@ -36,9 +36,9 @@ CInfoCharSCORECli::~CInfoCharSCORECli()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharSCORECli::ChgMoveState								 */
-/* “à—e		:ˆÚ“®ó‘Ô•ÏX													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CInfoCharSCORECli::ChgMoveState								 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹å¤‰æ›´													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 void CInfoCharSCORECli::ChgMoveState(int nMoveState)

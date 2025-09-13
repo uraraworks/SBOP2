@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowSKILLMENU.h											 */
-/* “à—e			:ƒXƒLƒ‹ƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowSKILLMENU.h											 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,45 +16,45 @@ class CInfoCharCli;
 class CLibInfoSkill;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowSKILLMENU : public CWindowBase
 {
 public:
-			CWindowSKILLMENU();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowSKILLMENU();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowSKILLMENU();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowSKILLMENU();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);					/* ì¬ */
-	void	Draw		(CImg32 *pDst);							/* •`‰æ */
+	void	Create		(CMgrData *pMgrData);					/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);							/* æç”» */
 
-	DWORD	GetSelectID	(void)	{ return m_dwSelectID;	}		/* ‘I‘ð‚³‚ê‚Ä‚¢‚éƒXƒLƒ‹ID‚ðŽæ“¾ */
-	int		GetPos		(void)	{ return m_nPos;		}		/* ƒJ[ƒ\ƒ‹ˆÊ’u‚ðŽæ“¾ */
-	void	SetPos		(int nPos)	{ m_nPos = nPos;	}		/* ƒJ[ƒ\ƒ‹ˆÊ’u‚ðÝ’è */
-	void	SetType		(int nType);							/* ƒXƒLƒ‹Ží•Ê‚ðÝ’è */
-
-
-protected:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnF			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(F) */
-	BOOL	OnL			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(L) */
-	BOOL	OnS			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(S) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	void	GetDrawPos	(int nPos, int &nDstX, int &nDstY);	/* •`‰æˆÊ’u‚ðŽæ“¾ */
+	DWORD	GetSelectID	(void)	{ return m_dwSelectID;	}		/* é¸æŠžã•ã‚Œã¦ã„ã‚‹ã‚¹ã‚­ãƒ«IDã‚’å–å¾— */
+	int		GetPos		(void)	{ return m_nPos;		}		/* ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’å–å¾— */
+	void	SetPos		(int nPos)	{ m_nPos = nPos;	}		/* ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’è¨­å®š */
+	void	SetType		(int nType);							/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥ã‚’è¨­å®š */
 
 
 protected:
-	int				m_nType,				/* ƒXƒLƒ‹Ží•Ê */
-					m_nMode;				/* ‘I‘ðƒ‚[ƒh */
-	DWORD			m_dwSelectID;			/* ‘I‘ð‚³‚ê‚½ƒXƒLƒ‹ID */
-	CmyString		m_strName;				/* ‘I‘ð’†‚ÌƒXƒLƒ‹–¼ */
-	CInfoCharCli	*m_pPlayerChar;			/* ‘€ì’†‚ÌƒLƒƒƒ‰î•ñ */
-	CLibInfoSkill	*m_pLibInfoSkill;		/* ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	ARRAYDWORD		m_adwSkillID;			/* Œ»Ý‚ÌŽí•Ê‚ÌƒXƒLƒ‹ˆê—— */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnF			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(F) */
+	BOOL	OnL			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(L) */
+	BOOL	OnS			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(S) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	void	GetDrawPos	(int nPos, int &nDstX, int &nDstY);	/* æç”»ä½ç½®ã‚’å–å¾— */
+
+
+protected:
+	int				m_nType,				/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥ */
+					m_nMode;				/* é¸æŠžãƒ¢ãƒ¼ãƒ‰ */
+	DWORD			m_dwSelectID;			/* é¸æŠžã•ã‚ŒãŸã‚¹ã‚­ãƒ«ID */
+	CmyString		m_strName;				/* é¸æŠžä¸­ã®ã‚¹ã‚­ãƒ«å */
+	CInfoCharCli	*m_pPlayerChar;			/* æ“ä½œä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
+	CLibInfoSkill	*m_pLibInfoSkill;		/* ã‚¹ã‚­ãƒ«æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	ARRAYDWORD		m_adwSkillID;			/* ç¾åœ¨ã®ç¨®åˆ¥ã®ã‚¹ã‚­ãƒ«ä¸€è¦§ */
 } CWindowSKILLMENU, *PCWindowSKILLMENU;
 
 /* Copyright(C)URARA-works 2008 */

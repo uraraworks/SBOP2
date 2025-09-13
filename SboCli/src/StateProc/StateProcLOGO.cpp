@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcLOGO.cpp											 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(ƒƒS) ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2005/05/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcLOGO.cpp											 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒ­ã‚´) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/05/29													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::CStateProcLOGO									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGO::CStateProcLOGO									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 CStateProcLOGO::CStateProcLOGO()
@@ -28,9 +28,9 @@ CStateProcLOGO::CStateProcLOGO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::~CStateProcLOGO								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGO::~CStateProcLOGO								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 CStateProcLOGO::~CStateProcLOGO()
@@ -39,9 +39,9 @@ CStateProcLOGO::~CStateProcLOGO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::Init											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGO::Init											 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 void CStateProcLOGO::Init(void)
@@ -53,9 +53,9 @@ void CStateProcLOGO::Init(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::TimerProc										 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGO::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGO::TimerProc(void)
@@ -81,9 +81,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::OnLButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGO::OnLButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 void CStateProcLOGO::OnLButtonDown(int x, int y)
@@ -93,9 +93,9 @@ void CStateProcLOGO::OnLButtonDown(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/03/21														 */
+/* é–¢æ•°å	:CStateProcLOGO::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/03/21														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGO::OnX(BOOL bDown)
@@ -107,9 +107,9 @@ BOOL CStateProcLOGO::OnX(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/03/21														 */
+/* é–¢æ•°å	:CStateProcLOGO::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/03/21														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGO::OnZ(BOOL bDown)
@@ -121,9 +121,9 @@ BOOL CStateProcLOGO::OnZ(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::OnMgrDrawEND_FADEIN							 */
-/* “à—e		:ƒtƒF[ƒhƒCƒ“Š®—¹												 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGO::OnMgrDrawEND_FADEIN							 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³å®Œäº†												 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 void CStateProcLOGO::OnMgrDrawEND_FADEIN(DWORD dwPara)
@@ -134,9 +134,9 @@ void CStateProcLOGO::OnMgrDrawEND_FADEIN(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGO::OnMgrDrawEND_FADEOUT							 */
-/* “à—e		:ƒtƒF[ƒhƒAƒEƒgŠ®—¹												 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGO::OnMgrDrawEND_FADEOUT							 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆå®Œäº†												 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 void CStateProcLOGO::OnMgrDrawEND_FADEOUT(DWORD dwPara)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharDisable.h										 */
-/* “à—e			:‹‘”Ûˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharDisable.h										 */
+/* å†…å®¹			:æ‹’å¦ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,26 +13,26 @@
 class CLibInfoDisable;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharDisable : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharDisable(CWnd* pParent = NULL);			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharDisable();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharDisable(CWnd* pParent = NULL);			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharDisable();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);						/* ‰Šú‰» */
-	void	Renew		(void);										/* ˆê——‚ğXV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-
-
-protected:
+	void	Init		(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	void	Renew		(void);										/* ä¸€è¦§ã‚’æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* ’Ê’mæƒEƒBƒ“ƒhƒE */
-	CLibInfoDisable		*m_pLibInfoDisable;			/* •ÒW’†‚Ì‹‘”Ûî•ñ */
+
+
+protected:
+	CWnd				*m_pWndNotify;				/* é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CLibInfoDisable		*m_pLibInfoDisable;			/* ç·¨é›†ä¸­ã®æ‹’å¦æƒ…å ± */
 
 
 
@@ -44,7 +44,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharDisable)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

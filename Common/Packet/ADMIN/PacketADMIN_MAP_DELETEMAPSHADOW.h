@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_MAP_DELETEMAPSHADOW.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒ}ƒbƒvƒ}ƒbƒv‰eíœ) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_MAP_DELETEMAPSHADOW.h							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ãƒžãƒƒãƒ—ãƒžãƒƒãƒ—å½±å‰Šé™¤) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/07													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_MAP_DELETEMAPSHADOW : public CPacketBase
 {
 public:
-			CPacketADMIN_MAP_DELETEMAPSHADOW();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_MAP_DELETEMAPSHADOW();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_MAP_DELETEMAPSHADOW();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_MAP_DELETEMAPSHADOW();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwShadowID);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwShadowID);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwShadowID;			/* ƒ}ƒbƒv‰eID */
+	DWORD	m_dwShadowID;			/* ãƒžãƒƒãƒ—å½±ID */
 } CPacketADMIN_MAP_DELETEMAPSHADOW, *PCPacketADMIN_MAP_DELETEMAPSHADOW;
 
 /* Copyright(C)URARA-works 2007 */

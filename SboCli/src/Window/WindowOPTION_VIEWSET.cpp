@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowOPTION_VIEWSET.cpp									 */
-/* “à—e			:ƒIƒvƒVƒ‡ƒ“-•\Ž¦Ý’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowOPTION_VIEWSET.cpp									 */
+/* å†…å®¹			:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/27													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::CWindowOPTION_VIEWSET					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::CWindowOPTION_VIEWSET					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 CWindowOPTION_VIEWSET::CWindowOPTION_VIEWSET()
@@ -34,9 +34,9 @@ CWindowOPTION_VIEWSET::CWindowOPTION_VIEWSET()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::~CWindowOPTION_VIEWSET					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::~CWindowOPTION_VIEWSET					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 CWindowOPTION_VIEWSET::~CWindowOPTION_VIEWSET()
@@ -45,9 +45,9 @@ CWindowOPTION_VIEWSET::~CWindowOPTION_VIEWSET()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 void CWindowOPTION_VIEWSET::Create(CMgrData *pMgrData)
@@ -72,9 +72,9 @@ void CWindowOPTION_VIEWSET::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::Draw									 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::Draw									 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 void CWindowOPTION_VIEWSET::Draw(PCImg32 pDst)
@@ -95,14 +95,14 @@ void CWindowOPTION_VIEWSET::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 0, "”­Œ¾Žž‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ",	clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 1, "–¼‘O‚ð•\Ž¦‚·‚é",				clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 2, "”­Œ¾‚ð•\Ž¦‚·‚é",				clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 3, "ƒAƒCƒeƒ€‚ð•\Ž¦‚·‚é",			clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 4, "ƒAƒCƒeƒ€–¼‚ð•\Ž¦‚·‚é",		clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 5, "ƒwƒ‹ƒvƒAƒCƒRƒ“‚ð•\Ž¦‚·‚é",	clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 6, "í“¬ƒƒbƒZ[ƒW‚ðƒƒO‚ÉŽc‚·",	clText);
-	TextOut2 (hDC, 32 + 24, 16 + 16 * 7, "60ƒtƒŒ[ƒ€‚Å•\Ž¦‚·‚é",		clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 0, "ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«",	clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 1, "åå‰ã‚’è¡¨ç¤ºã™ã‚‹",				clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 2, "ç™ºè¨€ã‚’è¡¨ç¤ºã™ã‚‹",				clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 3, "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹",			clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 4, "ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã™ã‚‹",		clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 5, "ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹",	clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 6, "æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã™",	clText);
+	TextOut2 (hDC, 32 + 24, 16 + 16 * 7, "60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã™ã‚‹",		clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -125,9 +125,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::TimerProc								 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::TimerProc								 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::TimerProc(void)
@@ -159,9 +159,9 @@ BOOL CWindowOPTION_VIEWSET::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::OnUp									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::OnUp									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::OnUp(void)
@@ -185,9 +185,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::OnDown									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::OnDown									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::OnDown(void)
@@ -211,9 +211,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::OnLeft									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::OnLeft									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::OnLeft(void)
@@ -228,9 +228,9 @@ BOOL CWindowOPTION_VIEWSET::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::OnRight									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::OnRight									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::OnRight(void)
@@ -245,9 +245,9 @@ BOOL CWindowOPTION_VIEWSET::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::OnX										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::OnX										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::OnX(BOOL bDown)
@@ -276,9 +276,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::OnZ										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::OnZ										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::OnZ(BOOL bDown)
@@ -300,9 +300,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VIEWSET::GetCheck								 */
-/* “à—e		:ƒ`ƒFƒbƒNó‘Ô‚ðŽæ“¾												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VIEWSET::GetCheck								 */
+/* å†…å®¹		:ãƒã‚§ãƒƒã‚¯çŠ¶æ…‹ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VIEWSET::GetCheck(int nNo)

@@ -1,18 +1,18 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DataSlot.cpp												 */
-/* “à—e			:ƒf[ƒ^ƒXƒƒbƒgƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DataSlot.cpp												 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒ­ãƒƒãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "DataSlot.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::CDataSlot											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::CDataSlot											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 CDataSlot::CDataSlot()
@@ -22,9 +22,9 @@ CDataSlot::CDataSlot()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::~CDataSlot											 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::~CDataSlot											 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 CDataSlot::~CDataSlot()
@@ -34,9 +34,9 @@ CDataSlot::~CDataSlot()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::Destroy												 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::Destroy												 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CDataSlot::Destroy(void)
@@ -45,9 +45,9 @@ void CDataSlot::Destroy(void)
 
 	m_CritData.Enter ();
 
-	/* Šm•Û‚³‚ê‚Ä‚¢‚éƒf[ƒ^‚ð‘S‚ÄÁ‹Ž */
+	/* ç¢ºä¿ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’å…¨ã¦æ¶ˆåŽ» */
 
-	/* ƒf[ƒ^ƒXƒƒbƒg */
+	/* ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒ­ãƒƒãƒˆ */
 	nCount = m_DataSlot.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		PDATASLOTINFO pInfo;
@@ -62,14 +62,14 @@ void CDataSlot::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::Add													 */
-/* “à—e		:ƒf[ƒ^’Ç‰Á														 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::Add													 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿è¿½åŠ 														 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 DWORD CDataSlot::Add(
-	DWORD dwSize,		/* [in] ƒf[ƒ^ƒTƒCƒY */
-	LPBYTE pSrc)		/* [in] ’Ç‰Á‚·‚éƒf[ƒ^ */
+	DWORD dwSize,		/* [in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+	LPBYTE pSrc)		/* [in] è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
 {
 	int nNo;
 	DWORD dwRet;
@@ -82,9 +82,9 @@ DWORD CDataSlot::Add(
 	CopyMemory (pData, pSrc, dwSize);
 
 	dwRet = (DWORD)pData;
-	Info.dwID	= m_dwNewID;		/* ƒf[ƒ^ID */
-	Info.dwSize	= dwSize;			/* ƒf[ƒ^ƒTƒCƒY */
-	Info.pData	= pData;			/* ƒf[ƒ^ƒoƒbƒtƒ@ */
+	Info.dwID	= m_dwNewID;		/* ãƒ‡ãƒ¼ã‚¿ID */
+	Info.dwSize	= dwSize;			/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+	Info.pData	= pData;			/* ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡ */
 	m_DataSlot.Add (Info);
 
 	while (1) {
@@ -105,14 +105,14 @@ DWORD CDataSlot::Add(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::AddDelete											 */
-/* “à—e		:ƒf[ƒ^’Ç‰Á‚µ‚Äƒoƒbƒtƒ@‚ðíœ									 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::AddDelete											 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿è¿½åŠ ã—ã¦ãƒãƒƒãƒ•ã‚¡ã‚’å‰Šé™¤									 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 DWORD CDataSlot::AddDelete(
-	DWORD dwSize,		/* [in] ƒf[ƒ^ƒTƒCƒY */
-	LPBYTE *pSrc)		/* [in] ’Ç‰Á‚·‚éƒf[ƒ^ */
+	DWORD dwSize,		/* [in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+	LPBYTE *pSrc)		/* [in] è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
 {
 	DWORD dwRet;
 
@@ -124,13 +124,13 @@ DWORD CDataSlot::AddDelete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::GetSize												 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒYŽæ“¾												 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::GetSize												 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºå–å¾—												 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 DWORD CDataSlot::GetSize(
-	DWORD dwID)		/* [in] ƒf[ƒ^ID */
+	DWORD dwID)		/* [in] ãƒ‡ãƒ¼ã‚¿ID */
 {
 	int nID;
 	DWORD dwRet;
@@ -140,7 +140,7 @@ DWORD CDataSlot::GetSize(
 	m_CritData.Enter ();
 
 	nID = GetID (dwID);
-	/* ƒf[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½H */
+	/* ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸï¼Ÿ */
 	if (nID < 0) {
 		goto Exit;
 	}
@@ -156,15 +156,15 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::Copy												 */
-/* “à—e		:ƒf[ƒ^Žæ“¾														 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::Copy												 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿å–å¾—														 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 BOOL CDataSlot::Copy(
-	DWORD dwID,			/* [in] ƒf[ƒ^ID */
-	LPBYTE pDst,		/* [out] Ši”[æ‚Ìƒ|ƒCƒ“ƒ^ */
-	BOOL bDelete)		/* [in] Žæ“¾Œãíœ‚·‚é‚©‚Ç‚¤‚© */
+	DWORD dwID,			/* [in] ãƒ‡ãƒ¼ã‚¿ID */
+	LPBYTE pDst,		/* [out] æ ¼ç´å…ˆã®ãƒã‚¤ãƒ³ã‚¿ */
+	BOOL bDelete)		/* [in] å–å¾—å¾Œå‰Šé™¤ã™ã‚‹ã‹ã©ã†ã‹ */
 {
 	int nID;
 	BOOL bRet;
@@ -175,7 +175,7 @@ BOOL CDataSlot::Copy(
 	m_CritData.Enter ();
 
 	nID = GetID (dwID);
-	/* ƒf[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½H */
+	/* ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸï¼Ÿ */
 	if (nID < 0) {
 		goto Exit;
 	}
@@ -183,7 +183,7 @@ BOOL CDataSlot::Copy(
 	pInfo = &m_DataSlot[nID];
 	CopyMemory (pDst, pInfo->pData, pInfo->dwSize);
 
-	/* íœŽw’èH */
+	/* å‰Šé™¤æŒ‡å®šï¼Ÿ */
 	if (bDelete) {
 		SAFE_DELETE_ARRAY (pInfo->pData);
 		m_DataSlot.RemoveAt (nID);
@@ -199,13 +199,13 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::GetPtr												 */
-/* “à—e		:ƒf[ƒ^ƒAƒhƒŒƒXŽæ“¾												 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::GetPtr												 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚¢ãƒ‰ãƒ¬ã‚¹å–å¾—												 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 LPBYTE CDataSlot::GetPtr(
-	DWORD dwID)					/* [in] ƒf[ƒ^ID */
+	DWORD dwID)					/* [in] ãƒ‡ãƒ¼ã‚¿ID */
 {
 	int nID;
 	LPBYTE pRet;
@@ -220,7 +220,7 @@ LPBYTE CDataSlot::GetPtr(
 	}
 
 	nID = GetID (dwID);
-	/* ƒf[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½H */
+	/* ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸï¼Ÿ */
 	if (nID < 0) {
 		goto Exit;
 	}
@@ -236,13 +236,13 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::Delete												 */
-/* “à—e		:ƒf[ƒ^íœ														 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::Delete												 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿å‰Šé™¤														 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CDataSlot::Delete(
-	DWORD dwID)		/* [in] ƒf[ƒ^ID */
+	DWORD dwID)		/* [in] ãƒ‡ãƒ¼ã‚¿ID */
 {
 	int nID;
 	PDATASLOTINFO pInfo;
@@ -250,7 +250,7 @@ void CDataSlot::Delete(
 	m_CritData.Enter ();
 
 	nID = GetID (dwID);
-	/* ƒf[ƒ^‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½H */
+	/* ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸï¼Ÿ */
 	if (nID < 0) {
 		goto Exit;
 	}
@@ -265,9 +265,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::Lock												 */
-/* “à—e		:ƒf[ƒ^‚ÌƒƒbƒN													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::Lock												 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒƒã‚¯													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CDataSlot::Lock(void)
@@ -277,9 +277,9 @@ void CDataSlot::Lock(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::Lock												 */
-/* “à—e		:ƒf[ƒ^‚ÌƒƒbƒN‰ðœ												 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDataSlot::Lock												 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒƒã‚¯è§£é™¤												 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CDataSlot::UnLock(void)
@@ -289,14 +289,14 @@ void CDataSlot::UnLock(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDataSlot::Lock												 */
-/* “à—e		:ƒe[ƒuƒ‹IDŽæ“¾													 */
-/* “ú•t		:2008/06/07														 */
-/* –ß‚è’l	:ƒe[ƒuƒ‹ID(-1:Œ©‚Â‚©‚ç‚È‚©‚Á‚½)								 */
+/* é–¢æ•°å	:CDataSlot::Lock												 */
+/* å†…å®¹		:ãƒ†ãƒ¼ãƒ–ãƒ«IDå–å¾—													 */
+/* æ—¥ä»˜		:2008/06/07														 */
+/* æˆ»ã‚Šå€¤	:ãƒ†ãƒ¼ãƒ–ãƒ«ID(-1:è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ)								 */
 /* ========================================================================= */
 
 int CDataSlot::GetID(
-	DWORD dwID)		/* [in] ƒf[ƒ^ID */
+	DWORD dwID)		/* [in] ãƒ‡ãƒ¼ã‚¿ID */
 {
 	int i, nCount, nRet;
 	PDATASLOTINFO pInfo;

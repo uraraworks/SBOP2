@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyStatus.cpp								 */
-/* “à—e			:‘I‘ğƒLƒƒƒ‰î•ñ•ÒW[ƒXƒe[ƒ^ƒX]ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyStatus.cpp								 */
+/* å†…å®¹			:é¸æŠã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹]ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyStatus::DoDataExchange(CDataExchange* pDX)
@@ -78,9 +78,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::CDlgAdminCharModifyStatus			 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::CDlgAdminCharModifyStatus			 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyStatus::CDlgAdminCharModifyStatus(CWnd* pParent /*=NULL*/)
@@ -129,9 +129,9 @@ CDlgAdminCharModifyStatus::CDlgAdminCharModifyStatus(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::~CDlgAdminCharModifyStatus			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::~CDlgAdminCharModifyStatus			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyStatus::~CDlgAdminCharModifyStatus()
@@ -140,25 +140,25 @@ CDlgAdminCharModifyStatus::~CDlgAdminCharModifyStatus()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::Init								 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::Init								 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyStatus::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharModifyStatus::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::Renew								 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::Renew								 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyStatus::Renew(void)
@@ -211,10 +211,10 @@ void CDlgAdminCharModifyStatus::Renew(void)
 	m_dwMaxHP				= m_pInfoChar->m_dwMaxHP;
 	m_dwSP					= m_pInfoChar->m_dwSP;
 	m_dwMaxSP				= m_pInfoChar->m_dwMaxSP;
-	m_nLightLevel			= m_pInfoChar->m_nLightLevel;		/* “”‚èƒŒƒxƒ‹ */
+	m_nLightLevel			= m_pInfoChar->m_nLightLevel;		/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
 	m_nDropItemAverage		= m_pInfoChar->m_nDropItemAverage;
-	m_nSearchX				= m_pInfoChar->m_sizeSearchDistance.cx;	/* ô“G”ÍˆÍ(X) */
-	m_nSearchY				= m_pInfoChar->m_sizeSearchDistance.cy;	/* ô“G”ÍˆÍ(Y) */
+	m_nSearchX				= m_pInfoChar->m_sizeSearchDistance.cx;	/* ç­–æ•µç¯„å›²(X) */
+	m_nSearchY				= m_pInfoChar->m_sizeSearchDistance.cy;	/* ç­–æ•µç¯„å›²(Y) */
 	m_nMoveAverage			= m_pInfoChar->m_nMoveAverage;
 	m_nMoveAverageBattle	= m_pInfoChar->m_nMoveAverageBattle;
 	m_dwStamina				= m_pInfoChar->m_wStamina;
@@ -244,9 +244,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::OnAdminMsg							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::OnAdminMsg							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyStatus::OnAdminMsg(int nType, DWORD dwPara)
@@ -268,15 +268,15 @@ void CDlgAdminCharModifyStatus::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::OnMainFrame							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2008/07/22														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::OnMainFrame							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2008/07/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyStatus::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWSTATUS:		/* ƒXƒe[ƒ^ƒXî•ñXV */
+	case MAINFRAMEMSG_RENEWSTATUS:		/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±æ›´æ–° */
 		if (m_pInfoChar == NULL) {
 			break;
 		}
@@ -290,9 +290,9 @@ void CDlgAdminCharModifyStatus::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::OnInitDialog						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::OnInitDialog						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharModifyStatus::OnInitDialog()
@@ -304,9 +304,9 @@ BOOL CDlgAdminCharModifyStatus::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyStatus::OnSend								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyStatus::OnSend								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyStatus::OnSend()
@@ -330,8 +330,8 @@ void CDlgAdminCharModifyStatus::OnSend()
 	InfoCharTmp.m_nLightLevel			= m_nLightLevel;
 	InfoCharTmp.m_dwLightTime			= m_dwLightTime;
 	InfoCharTmp.m_nDropItemAverage		= m_nDropItemAverage;
-	InfoCharTmp.m_sizeSearchDistance.cx	= m_nSearchX;					/* ô“G”ÍˆÍ(X) */
-	InfoCharTmp.m_sizeSearchDistance.cy	= m_nSearchY;					/* ô“G”ÍˆÍ(Y) */
+	InfoCharTmp.m_sizeSearchDistance.cx	= m_nSearchX;					/* ç­–æ•µç¯„å›²(X) */
+	InfoCharTmp.m_sizeSearchDistance.cy	= m_nSearchY;					/* ç­–æ•µç¯„å›²(Y) */
 	InfoCharTmp.m_nMoveAverage			= m_nMoveAverage;
 	InfoCharTmp.m_nMoveAverageBattle	= m_nMoveAverageBattle;
 	InfoCharTmp.m_wStamina				= (WORD)m_dwStamina;

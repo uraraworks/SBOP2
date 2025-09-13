@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoMapObject.h									 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İƒNƒ‰ƒX(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ) ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoMapObject.h									 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "SaveLoadInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CSaveLoadInfoMapObject : public CSaveLoadInfoBase
 {
 public:
-			CSaveLoadInfoMapObject();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSaveLoadInfoMapObject();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSaveLoadInfoMapObject();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSaveLoadInfoMapObject();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 } CSaveLoadInfoMapObject, *PCSaveLoadInfoMapObject;
 
 /* Copyright(C)URARA-works 2008 */

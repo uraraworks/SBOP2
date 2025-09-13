@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemWeaponNew.cpp									 */
-/* “à—e			:ƒAƒCƒeƒ€•Šíî•ñİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemWeaponNew.cpp									 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ±è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::DoDataExchange(CDataExchange* pDX)
@@ -54,9 +54,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::CDlgAdminItemWeaponNew					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::CDlgAdminItemWeaponNew					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CDlgAdminItemWeaponNew::CDlgAdminItemWeaponNew(CWnd* pParent /*=NULL*/)
@@ -78,9 +78,9 @@ CDlgAdminItemWeaponNew::CDlgAdminItemWeaponNew(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::~CDlgAdminItemWeaponNew				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::~CDlgAdminItemWeaponNew				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CDlgAdminItemWeaponNew::~CDlgAdminItemWeaponNew()
@@ -89,9 +89,9 @@ CDlgAdminItemWeaponNew::~CDlgAdminItemWeaponNew()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::Set									 */
-/* “à—e		:•ÒW“à—e‚ğİ’è													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::Set									 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::Set(CInfoItemWeapon *pSrc)
@@ -107,9 +107,9 @@ void CDlgAdminItemWeaponNew::Set(CInfoItemWeapon *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::Get									 */
-/* “à—e		:•ÒW“à—e‚ğæ“¾													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::Get									 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::Get(CInfoItemWeapon *&pDst)
@@ -125,9 +125,9 @@ void CDlgAdminItemWeaponNew::Get(CInfoItemWeapon *&pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminItemWeaponNew::OnInitDialog()
@@ -135,18 +135,18 @@ BOOL CDlgAdminItemWeaponNew::OnInitDialog()
 	LPCSTR pszTmp;
 	int i, nMotionID,
 		anStandMotionID[] = {
-			CHARMOTIONLISTID_BATTLESTAND_UP,		/* í“¬—§‚¿(ã) */
-			CHARMOTIONLISTID_BOWBATTLESTAND_UP,		/* ‚·‚è‘«(ã) */
-			CHARMOTIONLISTID_GLOVEBATTLESTAND_UP,	/* ‹|—p‚·‚è‘«(ã) */
-			CHARMOTIONLISTID_FISHINGBATTLESTAND_UP,	/* ‘ÅŒ‚—p‚·‚è‘«(ã) */
+			CHARMOTIONLISTID_BATTLESTAND_UP,		/* æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+			CHARMOTIONLISTID_BOWBATTLESTAND_UP,		/* ã™ã‚Šè¶³(ä¸Š) */
+			CHARMOTIONLISTID_GLOVEBATTLESTAND_UP,	/* å¼“ç”¨ã™ã‚Šè¶³(ä¸Š) */
+			CHARMOTIONLISTID_FISHINGBATTLESTAND_UP,	/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸Š) */
 			-1
 		},
 		anWalkMotionID[] = {
-			CHARMOTIONLISTID_STAND_UP,				/* —§‚¿(ã) */
-			CHARMOTIONLISTID_BATTLEWALK_UP,			/* ‚·‚è‘«(ã) */
-			CHARMOTIONLISTID_BOWWALK_UP,			/* ‹|—p‚·‚è‘«(ã) */
-			CHARMOTIONLISTID_GLOVEWALK_UP,			/* ‘ÅŒ‚—p‚·‚è‘«(ã) */
-			CHARMOTIONLISTID_FISHINGWALK_UP,		/* ’Ş‚è—p‚·‚è‘«(ã) */
+			CHARMOTIONLISTID_STAND_UP,				/* ç«‹ã¡(ä¸Š) */
+			CHARMOTIONLISTID_BATTLEWALK_UP,			/* ã™ã‚Šè¶³(ä¸Š) */
+			CHARMOTIONLISTID_BOWWALK_UP,			/* å¼“ç”¨ã™ã‚Šè¶³(ä¸Š) */
+			CHARMOTIONLISTID_GLOVEWALK_UP,			/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸Š) */
+			CHARMOTIONLISTID_FISHINGWALK_UP,		/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(ä¸Š) */
 			-1
 		};
 	CMgrData MgrData;
@@ -185,9 +185,9 @@ BOOL CDlgAdminItemWeaponNew::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::PostNcDestroy()
@@ -197,9 +197,9 @@ void CDlgAdminItemWeaponNew::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::OnBnClickedAddNormal					 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á(’Êí))									 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::OnBnClickedAddNormal					 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ (é€šå¸¸æ™‚))									 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::OnBnClickedAddNormal()
@@ -223,9 +223,9 @@ void CDlgAdminItemWeaponNew::OnBnClickedAddNormal()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::OnBnClickedDelNormal					 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ(’Êí))									 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::OnBnClickedDelNormal					 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤(é€šå¸¸æ™‚))									 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::OnBnClickedDelNormal()
@@ -242,9 +242,9 @@ void CDlgAdminItemWeaponNew::OnBnClickedDelNormal()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::OnBnClickedAddCritical					 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á(ƒNƒŠƒeƒBƒJƒ‹))							 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::OnBnClickedAddCritical					 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ (ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚))							 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::OnBnClickedAddCritical()
@@ -268,9 +268,9 @@ void CDlgAdminItemWeaponNew::OnBnClickedAddCritical()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::OnBnClickedDelCritical					 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ(ƒNƒŠƒeƒBƒJƒ‹))							 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::OnBnClickedDelCritical					 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤(ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚))							 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::OnBnClickedDelCritical()
@@ -287,9 +287,9 @@ void CDlgAdminItemWeaponNew::OnBnClickedDelCritical()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::OnOK()
@@ -305,9 +305,9 @@ void CDlgAdminItemWeaponNew::OnOK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::SetMotionType							 */
-/* “à—e		:g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“‚ğİ’è									 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::SetMotionType							 */
+/* å†…å®¹		:ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®š									 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::SetMotionType(DWORD dwMotionType)
@@ -328,9 +328,9 @@ void CDlgAdminItemWeaponNew::SetMotionType(DWORD dwMotionType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::GetMotionType							 */
-/* “à—e		:g—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“‚ğæ“¾									 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::GetMotionType							 */
+/* å†…å®¹		:ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminItemWeaponNew::GetMotionType(void)
@@ -351,9 +351,9 @@ DWORD CDlgAdminItemWeaponNew::GetMotionType(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::SetMotionTypeStand						 */
-/* “à—e		:í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“‚ğİ’è								 */
-/* “ú•t		:2007/12/09														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::SetMotionTypeStand						 */
+/* å†…å®¹		:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®š								 */
+/* æ—¥ä»˜		:2007/12/09														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::SetMotionTypeStand(DWORD dwMotionID)
@@ -377,9 +377,9 @@ void CDlgAdminItemWeaponNew::SetMotionTypeStand(DWORD dwMotionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::GetMotionTypeStand						 */
-/* “à—e		:í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“‚ğæ“¾								 */
-/* “ú•t		:2007/12/09														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::GetMotionTypeStand						 */
+/* å†…å®¹		:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2007/12/09														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminItemWeaponNew::GetMotionTypeStand(void)
@@ -401,9 +401,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::SetMotionTypeWalk						 */
-/* “à—e		:í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“‚ğİ’è							 */
-/* “ú•t		:2007/12/09														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::SetMotionTypeWalk						 */
+/* å†…å®¹		:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®š							 */
+/* æ—¥ä»˜		:2007/12/09														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::SetMotionTypeWalk(DWORD dwMotionID)
@@ -427,9 +427,9 @@ void CDlgAdminItemWeaponNew::SetMotionTypeWalk(DWORD dwMotionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::GetMotionTypeWalk						 */
-/* “à—e		:í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“‚ğæ“¾							 */
-/* “ú•t		:2007/12/09														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::GetMotionTypeWalk						 */
+/* å†…å®¹		:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2007/12/09														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminItemWeaponNew::GetMotionTypeWalk(void)
@@ -451,9 +451,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemWeaponNew::RenewList								 */
-/* “à—e		:ƒŠƒXƒg‚ğXV													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminItemWeaponNew::RenewList								 */
+/* å†…å®¹		:ãƒªã‚¹ãƒˆã‚’æ›´æ–°													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponNew::RenewList(CListBox *pList, ARRAYDWORD *pSrc)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketSYSTEM_INFO.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒVƒXƒeƒ€Œn:ƒVƒXƒeƒ€î•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/09/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketSYSTEM_INFO.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚·ã‚¹ãƒ†ãƒ ç³»:ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/29													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoSystem;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketSYSTEM_INFO : public CPacketBase
 {
 public:
-			CPacketSYSTEM_INFO();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketSYSTEM_INFO();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketSYSTEM_INFO();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketSYSTEM_INFO();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoSystem *pInfoSystem);					/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoSystem *pInfoSystem);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CInfoSystem		*m_pInfoSystem;				/* ƒVƒXƒeƒ€î•ñ */
+	CInfoSystem		*m_pInfoSystem;				/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
 } CPacketSYSTEM_INFO, *PCPacketSYSTEM_INFO;
 
 /* Copyright(C)URARA-works 2008 */

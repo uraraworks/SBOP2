@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoMapEvent.h											 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoMapEvent.h											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,47 +12,47 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoMapEvent : public CLibInfoBase
 {
 public:
-			CLibInfoMapEvent();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoMapEvent();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoMapEvent();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoMapEvent();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);									/* ì¬ */
-	void Destroy		(void);									/* ”jŠü */
+	void Create			(void);									/* ä½œæˆ */
+	void Destroy		(void);									/* ç ´æ£„ */
 
-	PCInfoBase GetNew	(int nType);							/* V‹Kƒf[ƒ^‚ğæ“¾ */
+	PCInfoBase GetNew	(int nType);							/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	int		GetCount		(void);								/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add				(PCInfoBase pInfo);					/* ’Ç‰Á */
-	void	Delete			(int nNo);							/* íœ */
-	void	Delete			(DWORD dwMapEventID);				/* íœ */
-	void	DeleteAll		(void);								/* ‘S‚Äíœ */
-	void	Merge			(CLibInfoMapEvent *pSrc);			/* æ‚è‚İ */
+	int		GetCount		(void);								/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add				(PCInfoBase pInfo);					/* è¿½åŠ  */
+	void	Delete			(int nNo);							/* å‰Šé™¤ */
+	void	Delete			(DWORD dwMapEventID);				/* å‰Šé™¤ */
+	void	DeleteAll		(void);								/* å…¨ã¦å‰Šé™¤ */
+	void	Merge			(CLibInfoMapEvent *pSrc);			/* å–ã‚Šè¾¼ã¿ */
 
-	CInfoMapEventBase	*Renew	(DWORD dwMapEventID, CInfoMapEventBase *pSrc);	/* XV */
-	PCInfoBase			GetPtr	(int nNo);										/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ‚ğæ“¾ */
-	PCInfoBase			GetPtr	(DWORD dwMapEventID);							/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ‚ğæ“¾ */
+	CInfoMapEventBase	*Renew	(DWORD dwMapEventID, CInfoMapEventBase *pSrc);	/* æ›´æ–° */
+	PCInfoBase			GetPtr	(int nNo);										/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
+	PCInfoBase			GetPtr	(DWORD dwMapEventID);							/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
 
-	virtual DWORD	GetDataSize		(void);						/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetWriteData	(PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementData	(PBYTE pSrc);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual DWORD	GetDataSize		(void);						/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetWriteData	(PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData	(PBYTE pSrc);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize	(void);						/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData		(void);						/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData		(PBYTE pSrc);				/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ID‚ğæ“¾ */
+	virtual DWORD	GetSendDataSize	(void);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData		(void);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData		(PBYTE pSrc);				/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 protected:
-	DWORD	m_dwNewIDTmp;						/* V‹KIDì¬—p */
-	PARRAYMAPEVENTBASEINFO	m_paInfo;			/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„IDã‚’å–å¾— */
+
+
+protected:
+	DWORD	m_dwNewIDTmp;						/* æ–°è¦IDä½œæˆç”¨ */
+	PARRAYMAPEVENTBASEINFO	m_paInfo;			/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 } CLibInfoMapEvent, *PCLibInfoMapEvent;
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrDraw.h													 */
-/* “à—e			:•`‰æƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrDraw.h													 */
+/* å†…å®¹			:æç”»ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -22,68 +22,68 @@ class CLibInfoItem;
 class CInfoTextEffect;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CMgrDraw
 {
 public:
-			CMgrDraw();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrDraw();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrDraw();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMgrDraw();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create			(CMgrData *pMgrData);				/* ì¬ */
-	void	Destroy			(void);								/* ”jŠü */
+	void	Create			(CMgrData *pMgrData);				/* ä½œæˆ */
+	void	Destroy			(void);								/* ç ´æ£„ */
 
-	void	Draw			(HDC hDC);							/* •`‰æ */
-	void	DrawChar		(CImg32 *pDst, int x, int y, CInfoCharCli *pInfoChar, BOOL bLock = TRUE);	/* ƒLƒƒƒ‰‚ğ•`‰æ */
-	void	DrawChar		(CImg32 *pDst, int x, int y, BYTE byDirection, BYTE byAnimeNo, BYTE byLevel, CInfoCharCli *pInfoChar);	/* ƒLƒƒƒ‰‚ğ•`‰æ */
+	void	Draw			(HDC hDC);							/* æç”» */
+	void	DrawChar		(CImg32 *pDst, int x, int y, CInfoCharCli *pInfoChar, BOOL bLock = TRUE);	/* ã‚­ãƒ£ãƒ©ã‚’æç”» */
+	void	DrawChar		(CImg32 *pDst, int x, int y, BYTE byDirection, BYTE byAnimeNo, BYTE byLevel, CInfoCharCli *pInfoChar);	/* ã‚­ãƒ£ãƒ©ã‚’æç”» */
 
-	void	DrawMapParts	(CImg32 *pDst, int x, int y, DWORD dwPartsID, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BYTE byLevel = 0);			/* ƒ}ƒbƒvƒp[ƒc‚ğ•`‰æ */
-	void	DrawMapParts	(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapParts, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE, BYTE byLevel = 0);		/* ƒ}ƒbƒvƒp[ƒc‚ğ•`‰æ */
-	void	DrawMapShadow	(CImg32 *pDst, int x, int y, DWORD dwShadowID, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);	/* ƒ}ƒbƒv‰e‚ğ•`‰æ */
-	void	DrawMapObject	(CImg32 *pDst, int x, int y, DWORD dwObjectID, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);			/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg‚ğ•`‰æ */
-	void	DrawItem		(CImg32 *pDst, int x, int y, DWORD dwItemID, BYTE byLevel = 0);			/* ƒAƒCƒeƒ€‚ğ•`‰æ */
-	void	DrawItem		(CImg32 *pDst, int x, int y, CInfoItem *pInfoItem, BYTE byLevel = 0, BOOL bLock = TRUE);	/* ƒAƒCƒeƒ€‚ğ•`‰æ */
-	void	DrawBalloon		(CImg32 *pDst, int x, int y, DWORD dwBalloonID);						/* •¬o‚µ‚ğ•`‰æ */
-	void	DrawTextEffect	(CImg32 *pDst, int x, int y, CInfoTextEffect *pInfoTextEffect);			/* •¶šƒGƒtƒFƒNƒg‚ğ•`‰æ */
-	void	DrawMapHitMark	(CImg32 *pDst, int x, int y, int nNo);									/* ƒ}ƒbƒv“–‚½‚è”»’èƒ}[ƒN‚ğ•`‰æ */
-	void	DrawCursor		(CImg32 *pDst, int x, int y, int nType);								/* wƒJ[ƒ\ƒ‹‚ğ•`‰æ */
-	void	DrawSkillMenu	(CImg32 *pDst, int x, int y);											/* ƒXƒLƒ‹ƒƒjƒ…[‚ğ•`‰æ */
-	void	DrawSkillType	(CImg32 *pDst, int x, int y, int nType, BOOL bActive);					/* ƒXƒLƒ‹í•Êƒ^ƒu‚ğ•`‰æ */
-	void	DrawIcon		(CImg32 *pDst, int x, int y, int nIndex);								/* ƒAƒCƒRƒ“‚ğ•`‰æ */
+	void	DrawMapParts	(CImg32 *pDst, int x, int y, DWORD dwPartsID, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BYTE byLevel = 0);			/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚’æç”» */
+	void	DrawMapParts	(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapParts, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE, BYTE byLevel = 0);		/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚’æç”» */
+	void	DrawMapShadow	(CImg32 *pDst, int x, int y, DWORD dwShadowID, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);	/* ãƒãƒƒãƒ—å½±ã‚’æç”» */
+	void	DrawMapObject	(CImg32 *pDst, int x, int y, DWORD dwObjectID, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);			/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æç”» */
+	void	DrawItem		(CImg32 *pDst, int x, int y, DWORD dwItemID, BYTE byLevel = 0);			/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”» */
+	void	DrawItem		(CImg32 *pDst, int x, int y, CInfoItem *pInfoItem, BYTE byLevel = 0, BOOL bLock = TRUE);	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”» */
+	void	DrawBalloon		(CImg32 *pDst, int x, int y, DWORD dwBalloonID);						/* å™´å‡ºã—ã‚’æç”» */
+	void	DrawTextEffect	(CImg32 *pDst, int x, int y, CInfoTextEffect *pInfoTextEffect);			/* æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æç”» */
+	void	DrawMapHitMark	(CImg32 *pDst, int x, int y, int nNo);									/* ãƒãƒƒãƒ—å½“ãŸã‚Šåˆ¤å®šãƒãƒ¼ã‚¯ã‚’æç”» */
+	void	DrawCursor		(CImg32 *pDst, int x, int y, int nType);								/* æŒ‡ã‚«ãƒ¼ã‚½ãƒ«ã‚’æç”» */
+	void	DrawSkillMenu	(CImg32 *pDst, int x, int y);											/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’æç”» */
+	void	DrawSkillType	(CImg32 *pDst, int x, int y, int nType, BOOL bActive);					/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥ã‚¿ãƒ–ã‚’æç”» */
+	void	DrawIcon		(CImg32 *pDst, int x, int y, int nIndex);								/* ã‚¢ã‚¤ã‚³ãƒ³ã‚’æç”» */
 
-	BOOL	TimerProc		(void);								/* ŠÔˆ— */
-	BOOL	IsFade			(void);								/* ƒtƒF[ƒhƒCƒ“/ƒAƒEƒg’†‚©”»’è */
-	void	SetLevel		(BYTE byLevel);						/* –¾“xİ’è */
-	void	SetFadeState	(BYTE byFadeState);					/* ƒtƒF[ƒhó‘Ôİ’è */
-	void	Clear			(void);								/* ”wŒiƒNƒŠƒA */
-	void	SaveScreenShot	(void);								/* ƒXƒNƒŠ[ƒ“ƒVƒ‡ƒbƒg‚Ì•Û‘¶ */
-	void	LockDibTmp		(void);								/* •`‰æƒeƒ“ƒ|ƒ‰ƒŠ‚ğƒƒbƒN */
-	void	UnLockDibTmp	(void);								/* •`‰æƒeƒ“ƒ|ƒ‰ƒŠ‚ÌƒƒbƒN‚ğ‰ğœ */
-
-
-private:
-	BOOL	Fade			(void);						/* ƒtƒF[ƒhˆ— */
-	CImg32	*GetDibTmp		(void);						/* •`‰æƒeƒ“ƒ|ƒ‰ƒŠæ“¾ */
-	void	ReleaseDibTmp	(void);						/* •`‰æƒeƒ“ƒ|ƒ‰ƒŠ‰ğ•ú */
+	BOOL	TimerProc		(void);								/* æ™‚é–“å‡¦ç† */
+	BOOL	IsFade			(void);								/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³/ã‚¢ã‚¦ãƒˆä¸­ã‹åˆ¤å®š */
+	void	SetLevel		(BYTE byLevel);						/* æ˜åº¦è¨­å®š */
+	void	SetFadeState	(BYTE byFadeState);					/* ãƒ•ã‚§ãƒ¼ãƒ‰çŠ¶æ…‹è¨­å®š */
+	void	Clear			(void);								/* èƒŒæ™¯ã‚¯ãƒªã‚¢ */
+	void	SaveScreenShot	(void);								/* ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚·ãƒ§ãƒƒãƒˆã®ä¿å­˜ */
+	void	LockDibTmp		(void);								/* æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªã‚’ãƒ­ãƒƒã‚¯ */
+	void	UnLockDibTmp	(void);								/* æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªã®ãƒ­ãƒƒã‚¯ã‚’è§£é™¤ */
 
 
 private:
-	BYTE				m_byLevel;						/* –¾“x */
-	BYTE				m_byFadeState;					/* ƒtƒF[ƒhó‘Ô */
-	DWORD				m_dwLastFade;					/* ‘O‰ñ‚ÌƒtƒF[ƒhˆ— */
+	BOOL	Fade			(void);						/* ãƒ•ã‚§ãƒ¼ãƒ‰å‡¦ç† */
+	CImg32	*GetDibTmp		(void);						/* æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªå–å¾— */
+	void	ReleaseDibTmp	(void);						/* æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªè§£æ”¾ */
 
-	CmySection			m_CritDataLock;					/* ƒf[ƒ^ƒƒbƒN—p‚ÌƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“ */
-	CImg32				*m_pDibBack,					/* ƒoƒbƒNƒoƒbƒtƒ@ */
-						*m_pDibTmp;						/* •`‰æ—pƒeƒ“ƒ|ƒ‰ƒŠ */
-	CMgrData			*m_pMgrData;					/* ƒf[ƒ^ƒ}ƒl[ƒWƒƒ */
-	CMgrGrpData			*m_pMgrGrpData;					/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ƒ}ƒl[ƒWƒƒ */
-	CMgrLayer			*m_pMgrLayer;					/* ƒŒƒCƒ„[ƒ}ƒl[ƒWƒƒ */
-	CMgrWindow			*m_pMgrWindow;					/* ƒEƒBƒ“ƒhƒEƒ}ƒl[ƒWƒƒ */
-	CLibInfoMapParts	*m_pLibInfoMapParts;			/* ƒ}ƒbƒvƒp[ƒcî•ñ */
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;			/* ƒ}ƒbƒv‰eî•ñ */
-	CLibInfoItem		*m_pLibInfoItem;				/* ƒAƒCƒeƒ€î•ñ */
-	CLibInfoMotionType	*m_pLibInfoMotionType;			/* ƒ‚[ƒVƒ‡ƒ“í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
+
+private:
+	BYTE				m_byLevel;						/* æ˜åº¦ */
+	BYTE				m_byFadeState;					/* ãƒ•ã‚§ãƒ¼ãƒ‰çŠ¶æ…‹ */
+	DWORD				m_dwLastFade;					/* å‰å›ã®ãƒ•ã‚§ãƒ¼ãƒ‰å‡¦ç† */
+
+	CmySection			m_CritDataLock;					/* ãƒ‡ãƒ¼ã‚¿ãƒ­ãƒƒã‚¯ç”¨ã®ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ */
+	CImg32				*m_pDibBack,					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+						*m_pDibTmp;						/* æç”»ç”¨ãƒ†ãƒ³ãƒãƒ©ãƒª */
+	CMgrData			*m_pMgrData;					/* ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CMgrGrpData			*m_pMgrGrpData;					/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CMgrLayer			*m_pMgrLayer;					/* ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CMgrWindow			*m_pMgrWindow;					/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CLibInfoMapParts	*m_pLibInfoMapParts;			/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;			/* ãƒãƒƒãƒ—å½±æƒ…å ± */
+	CLibInfoItem		*m_pLibInfoItem;				/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ± */
+	CLibInfoMotionType	*m_pLibInfoMotionType;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 } CMgrDraw, *PCMgrDraw;
 
 /* Copyright(C)URARA-works 2006 */

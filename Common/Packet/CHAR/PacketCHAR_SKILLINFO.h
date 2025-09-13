@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_SKILLINFO.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒXƒLƒ‹î•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_SKILLINFO.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚¹ã‚­ãƒ«æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_SKILLINFO : public CPacketBase
 {
 public:
-			CPacketCHAR_SKILLINFO();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_SKILLINFO();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_SKILLINFO();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_SKILLINFO();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, PARRAYDWORD paSrc);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID, PARRAYDWORD paSrc);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD		m_dwCharID;					/* ƒLƒƒƒ‰ID */
-	ARRAYDWORD	m_adwSkillID;				/* ƒXƒLƒ‹ID */
+	DWORD		m_dwCharID;					/* ã‚­ãƒ£ãƒ©ID */
+	ARRAYDWORD	m_adwSkillID;				/* ã‚¹ã‚­ãƒ«ID */
 } CPacketCHAR_SKILLINFO, *PCPacketCHAR_SKILLINFO;
 
 /* Copyright(C)URARA-works 2008 */

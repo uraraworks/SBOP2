@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* �t�@�C����	:LibInfoMotionType.h										 */
-/* ���e			:���[�V������ʏ�񃉃C�u�������N���X ��`�t�@�C��		 */
-/* �쐬			:�N����N���t�����(URARA-works)							 */
-/* �쐬�J�n��	:2008/05/26													 */
+/* ファイル名	:LibInfoMotionType.h										 */
+/* 内容			:モーション種別情報ライブラリ基底クラス 定義ファイル		 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2008/05/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,40 +12,40 @@
 #include "InfoMotionType.h"
 
 /* ========================================================================= */
-/* �N���X�錾																 */
+/* クラス宣言																 */
 /* ========================================================================= */
 
 typedef class CLibInfoMotionType : public CLibInfoBase
 {
 public:
-			CLibInfoMotionType();									/* �R���X�g���N�^ */
-	virtual ~CLibInfoMotionType();									/* �f�X�g���N�^ */
+			CLibInfoMotionType();									/* コンストラクタ */
+	virtual ~CLibInfoMotionType();									/* デストラクタ */
 
-	void Create			(void);												/* �쐬 */
-	void Destroy		(void);												/* �j�� */
+	void Create			(void);												/* 作成 */
+	void Destroy		(void);												/* 破棄 */
 
-	virtual PCInfoBase GetNew	(void);										/* �V�K�f�[�^���擾 */
-	virtual PCInfoBase GetPtr	(int nNo);									/* �����擾 */
-	virtual PCInfoBase GetPtr	(DWORD dwMotionTypeID);						/* �����擾 */
+	virtual PCInfoBase GetNew	(void);										/* 新規データを取得 */
+	virtual PCInfoBase GetPtr	(int nNo);									/* 情報を取得 */
+	virtual PCInfoBase GetPtr	(DWORD dwMotionTypeID);						/* 情報を取得 */
 
-	int		GetCount	(void);												/* �f�[�^�����擾 */
-	void	Add			(PCInfoBase pInfo);									/* �ǉ� */
-	void	Delete		(int nNo);											/* �폜 */
-	void	Delete		(DWORD dwMotionTypeID);								/* �폜 */
-	void	DeleteAll	(void);												/* �S�č폜 */
+	int		GetCount	(void);												/* データ数を取得 */
+	void	Add			(PCInfoBase pInfo);									/* 追加 */
+	void	Delete		(int nNo);											/* 削除 */
+	void	Delete		(DWORD dwMotionTypeID);								/* 削除 */
+	void	DeleteAll	(void);												/* 全て削除 */
 
-	DWORD	GetSendDataSize		(DWORD dwMotionTypeID);						/* ���M�f�[�^�T�C�Y���擾 */
-	PBYTE	GetSendData			(DWORD dwMotionTypeID);						/* ���M�f�[�^���擾 */
-	PBYTE	SetSendData			(PBYTE pSrc);								/* ���M�f�[�^�����荞�� */
-
-
-protected:
-	DWORD	GetNewID	(void);										/* �V�����A�J�E���gID���擾 */
+	DWORD	GetSendDataSize		(DWORD dwMotionTypeID);						/* 送信データサイズを取得 */
+	PBYTE	GetSendData			(DWORD dwMotionTypeID);						/* 送信データを取得 */
+	PBYTE	SetSendData			(PBYTE pSrc);								/* 送信データから取り込み */
 
 
 protected:
-	DWORD	m_dwNewIDTmp;						/* �V�KID�쐬�p */
-	PARRAYMOTIONTYPEINFO	m_paInfo;			/* ���[�V������ʏ�� */
+	DWORD	GetNewID	(void);										/* 新しいアカウントIDを取得 */
+
+
+protected:
+	DWORD	m_dwNewIDTmp;						/* 新規ID作成用 */
+	PARRAYMOTIONTYPEINFO	m_paInfo;			/* モーション種別情報 */
 } CLibInfoMotionType, *PCLibInfoMotionType;
 
 /* Copyright(C)URARA-works 2008 */

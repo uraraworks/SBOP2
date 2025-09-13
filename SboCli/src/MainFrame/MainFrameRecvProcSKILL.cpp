@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcSKILL.cpp									 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒXƒLƒ‹ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcSKILL.cpp									 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚¹ã‚­ãƒ«ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,23 +16,23 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcSKILL										 */
-/* “à—e		:ŽóMˆ—(ƒXƒLƒ‹Œn)												 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcSKILL										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¹ã‚­ãƒ«ç³»)												 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcSKILL(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_SKILL_SKILLINFO:	RecvProcSKILL_SKILLINFO	(pData);	break;	/* ƒXƒLƒ‹î•ñ’Ê’m */
+	case SBOCOMMANDID_SUB_SKILL_SKILLINFO:	RecvProcSKILL_SKILLINFO	(pData);	break;	/* ã‚¹ã‚­ãƒ«æƒ…å ±é€šçŸ¥ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcSKILL_SKILLINFO							 */
-/* “à—e		:ŽóMˆ—(ƒXƒLƒ‹î•ñ’Ê’m)										 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcSKILL_SKILLINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¹ã‚­ãƒ«æƒ…å ±é€šçŸ¥)										 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcSKILL_SKILLINFO(PBYTE pData)

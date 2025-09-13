@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	LayerLogo.h													 */
-/* “à—eF		ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(ƒƒS) ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/05/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	LayerLogo.h													 */
+/* å†…å®¹ï¼š		ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ãƒ­ã‚´) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/05/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,21 +14,21 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerLogo : public CLayerBase
 {
 public:
-			CLayerLogo();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerLogo();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerLogo();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerLogo();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);				/* ì¬ */
-	void	Draw		(CImg32 *pDst);						/* •`‰æ */
+	void	Create		(CMgrData *pMgrData);				/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);						/* æç”» */
 
 
 private:
-	CImg32			*m_pDibLogo;						/* ƒƒS‰æ‘œ */
+	CImg32			*m_pDibLogo;						/* ãƒ­ã‚´ç”»åƒ */
 } CLayerLogo, *PCLayerLogo;
 
 /* Copyright(C)URARA-works 2005 */

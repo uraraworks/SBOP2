@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	SboSoundData.h												 */
-/* “à—eF		‰¹ŠÖ˜ADLL ’è‹`ƒtƒ@ƒCƒ‹										 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2007/05/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	SboSoundData.h												 */
+/* å†…å®¹ï¼š		éŸ³é–¢é€£DLL å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«										 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2007/05/03													 */
 /* ========================================================================= */
 
 #ifdef SOUNDDATA_EXPORTS
@@ -14,92 +14,92 @@
 
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
-/* Œø‰Ê‰¹ */
+/* åŠ¹æžœéŸ³ */
 enum {
 	SOUNDID_NONE				= 0,
-	SOUNDID_OK_PI73				= 1,				/* Œˆ’è‰¹(pi73.wav) */
-	SOUNDID_FOOT_ASI_2			= 2,				/* ‘«‰¹(asi_2.wav) */
-	SOUNDID_CURSORMOVE			= 3,				/* ƒJ[ƒ\ƒ‹ˆÚ“® */
-	SOUNDID_CANCEL				= 4,				/* ƒLƒƒƒ“ƒZƒ‹ */
-	SOUNDID_CHARI14_A			= 5,				/* í“¬ŠJŽn */
-	SOUNDID_SWING24_C			= 6,				/* •ŠíU‚è */
-	SOUNDID_SWING25_C			= 7,				/* •Ší“Ë‚« */
-	SOUNDID_HIT0				= 8,				/* ƒqƒbƒg0 */
-	SOUNDID_HIT1				= 9,				/* ƒqƒbƒg1 */
-	SOUNDID_DROP_MONEY			= 10,				/* ƒhƒƒbƒv:‚¨‹à */
-	SOUNDID_DROP_ITEM_SMALL		= 11,				/* ƒhƒƒbƒv:¬ƒAƒCƒeƒ€ */
-	SOUNDID_DROP_ITEM_MIDIUM	= 12,				/* ƒhƒƒbƒv:’†ƒAƒCƒeƒ€ */
-	SOUNDID_DROP_ITEM_LARGE		= 13,				/* ƒhƒƒbƒv:‘åƒAƒCƒeƒ€ */
-	SOUNDID_DROP_MATERIAL		= 14,				/* ƒhƒƒbƒv:‘fÞ */
-	SOUNDID_DROP_WEAPON			= 15,				/* ƒhƒƒbƒv:•Ší */
-	SOUNDID_DROP_CLOTH			= 16,				/* ƒhƒƒbƒv:•žEƒ[ƒu */
-	SOUNDID_CRASH20_D			= 17,				/* ’M‚ª‰ó‚ê‚é‰¹ */
-	SOUNDID_KUSA				= 18,				/* ‘‚ðŠ ‚é‰¹ */
-	SOUNDID_KAI					= 19,				/* ŠL‚ª‰ó‚ê‚é‰¹ */
-	SOUNDID_CHAT				= 20,				/* ƒ`ƒƒƒbƒg */
-	SOUNDID_W_CHAT				= 21,				/* ƒAƒiƒEƒ“ƒX */
-	SOUNDID_CLAP02				= 22,				/* ”Žè2 */
-	SOUNDID_CLAP03				= 23,				/* ”Žè3 */
-	SOUNDID_CLAP0203			= 23,				/* ”Žè2‚©”Žè3 */
-	SOUNDID_BALLOON1			= 24,				/* •¬o‚µ */
-	SOUNDID_BIKKURI				= 25,				/* ‚Ñ‚Á‚­‚è */
-	SOUNDID_WHISTLES			= 26,				/* ƒzƒCƒbƒXƒ‹‚r */
-	SOUNDID_WHISTLEL			= 27,				/* ƒzƒCƒbƒXƒ‹‚k */
-	SOUNDID_GIMON				= 28,				/* ‹^–â */
-	SOUNDID_NIKU				= 29,				/* “÷ */
-	SOUNDID_KIZUKU				= 30,				/* ‹C•t‚­ */
-	SOUNDID_PINPONPANPON		= 31,				/* •ú‘—‘O‚Ì‚¨’m‚ç‚¹‰¹ */
-	SOUNDID_SWOON				= 32,				/* ‹Câ */
-	SOUNDID_URARA_WORKS			= 33,				/* ƒEƒ‰ƒ‰ƒ[ƒNƒX */
-	SOUNDID_PUYON_ATACK			= 34,				/* ƒvƒˆƒ“UŒ‚ */
-	SOUNDID_LIQUID				= 35,				/* ‰t‘Ì */
-	SOUNDID_BOW_ATACK			= 36,				/* ‹|UŒ‚ */
-	SOUNDID_MEAL				= 37,				/* HŽ– */
-	SOUNDID_DEFENSE				= 38,				/* –hŒä */
-	SOUNDID_SHIELD				= 39,				/* ‚\‚¦ */
-	SOUNDID_PUYON_MOVE			= 40,				/* ƒvƒˆƒ“ˆÚ“® */
-	SOUNDID_PUYON_DEAD			= 41,				/* ƒvƒˆƒ“Ž€–S */
-	SOUNDID_EXIST				= 42,				/* Á–Å */
-	SOUNDID_TRASH				= 43,				/* ƒSƒ~” ŠJ‚­EŽÌ‚Ä‚é */
-	SOUNDID_DROP_BIN			= 44,				/* ƒhƒƒbƒvFƒrƒ“ */
-	SOUNDID_OPEN_BAG			= 45,				/* ƒoƒbƒOŠJ‚­ */
-	SOUNDID_MISS				= 46,				/* ƒ~ƒX */
-	SOUNDID_LVUP				= 47,				/* ƒŒƒxƒ‹ƒAƒbƒv */
-	SOUNDID_CRITICAL1			= 48,				/* ŽaŒ‚ƒNƒŠƒeƒBƒJƒ‹ */
-	SOUNDID_HIT2				= 49,				/* ŽaŒ‚ƒqƒbƒg‚P */
-	SOUNDID_HIT3				= 50,				/* ŽaŒ‚ƒqƒbƒg‚Q */
-	SOUNDID_OPEN_WINDOW			= 51,				/* ‘‹ŠJ‚­ */
-	SOUNDID_CRITICAL2			= 52,				/* ‘ÅŒ‚ƒNƒŠƒeƒBƒJƒ‹ */
-	SOUNDID_CRITICAL3			= 53,				/* –îƒNƒŠƒeƒBƒJƒ‹ */
-	SOUNDID_HIT4				= 54,				/* –îƒqƒbƒg */
-	SOUNDID_CHARGE				= 55,				/* —­‚ß */
-	SOUNDID_CHARGE2				= 56,				/* —­‚ß‚Q */
-	SOUNDID_DR_BASS01			= 57,				/* ƒx[ƒX‚P */
-	SOUNDID_DR_BASS02			= 58,				/* ƒx[ƒX‚Q */
-	SOUNDID_DR_BASS05			= 59,				/* ƒx[ƒX‚T */
-	SOUNDID_DR_CLAP01			= 60,				/* ƒNƒ‰ƒbƒv‚P */
-	SOUNDID_DR_SNE02			= 61,				/* ƒXƒlƒA‚Q */
-	SOUNDID_KIE_ATACK			= 62,				/* ƒL[UŒ‚ */
-	SOUNDID_KIE_DEAD			= 63,				/* ƒL[Ž€–S */
-	SOUNDID_FLY					= 64,				/* ‰H‚Î‚½‚« */
-	SOUNDID_STEP03				= 65,				/* ŠK’iˆÚ“® */
+	SOUNDID_OK_PI73				= 1,				/* æ±ºå®šéŸ³(pi73.wav) */
+	SOUNDID_FOOT_ASI_2			= 2,				/* è¶³éŸ³(asi_2.wav) */
+	SOUNDID_CURSORMOVE			= 3,				/* ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹• */
+	SOUNDID_CANCEL				= 4,				/* ã‚­ãƒ£ãƒ³ã‚»ãƒ« */
+	SOUNDID_CHARI14_A			= 5,				/* æˆ¦é—˜é–‹å§‹ */
+	SOUNDID_SWING24_C			= 6,				/* æ­¦å™¨æŒ¯ã‚Š */
+	SOUNDID_SWING25_C			= 7,				/* æ­¦å™¨çªã */
+	SOUNDID_HIT0				= 8,				/* ãƒ’ãƒƒãƒˆ0 */
+	SOUNDID_HIT1				= 9,				/* ãƒ’ãƒƒãƒˆ1 */
+	SOUNDID_DROP_MONEY			= 10,				/* ãƒ‰ãƒ­ãƒƒãƒ—:ãŠé‡‘ */
+	SOUNDID_DROP_ITEM_SMALL		= 11,				/* ãƒ‰ãƒ­ãƒƒãƒ—:å°ã‚¢ã‚¤ãƒ†ãƒ  */
+	SOUNDID_DROP_ITEM_MIDIUM	= 12,				/* ãƒ‰ãƒ­ãƒƒãƒ—:ä¸­ã‚¢ã‚¤ãƒ†ãƒ  */
+	SOUNDID_DROP_ITEM_LARGE		= 13,				/* ãƒ‰ãƒ­ãƒƒãƒ—:å¤§ã‚¢ã‚¤ãƒ†ãƒ  */
+	SOUNDID_DROP_MATERIAL		= 14,				/* ãƒ‰ãƒ­ãƒƒãƒ—:ç´ æ */
+	SOUNDID_DROP_WEAPON			= 15,				/* ãƒ‰ãƒ­ãƒƒãƒ—:æ­¦å™¨ */
+	SOUNDID_DROP_CLOTH			= 16,				/* ãƒ‰ãƒ­ãƒƒãƒ—:æœãƒ»ãƒ­ãƒ¼ãƒ– */
+	SOUNDID_CRASH20_D			= 17,				/* æ¨½ãŒå£Šã‚Œã‚‹éŸ³ */
+	SOUNDID_KUSA				= 18,				/* è‰ã‚’åˆˆã‚‹éŸ³ */
+	SOUNDID_KAI					= 19,				/* è²ãŒå£Šã‚Œã‚‹éŸ³ */
+	SOUNDID_CHAT				= 20,				/* ãƒãƒ£ãƒƒãƒˆ */
+	SOUNDID_W_CHAT				= 21,				/* ã‚¢ãƒŠã‚¦ãƒ³ã‚¹ */
+	SOUNDID_CLAP02				= 22,				/* æ‹æ‰‹2 */
+	SOUNDID_CLAP03				= 23,				/* æ‹æ‰‹3 */
+	SOUNDID_CLAP0203			= 23,				/* æ‹æ‰‹2ã‹æ‹æ‰‹3 */
+	SOUNDID_BALLOON1			= 24,				/* å™´å‡ºã— */
+	SOUNDID_BIKKURI				= 25,				/* ã³ã£ãã‚Š */
+	SOUNDID_WHISTLES			= 26,				/* ãƒ›ã‚¤ãƒƒã‚¹ãƒ«ï¼³ */
+	SOUNDID_WHISTLEL			= 27,				/* ãƒ›ã‚¤ãƒƒã‚¹ãƒ«ï¼¬ */
+	SOUNDID_GIMON				= 28,				/* ç–‘å• */
+	SOUNDID_NIKU				= 29,				/* è‚‰ */
+	SOUNDID_KIZUKU				= 30,				/* æ°—ä»˜ã */
+	SOUNDID_PINPONPANPON		= 31,				/* æ”¾é€å‰ã®ãŠçŸ¥ã‚‰ã›éŸ³ */
+	SOUNDID_SWOON				= 32,				/* æ°—çµ¶ */
+	SOUNDID_URARA_WORKS			= 33,				/* ã‚¦ãƒ©ãƒ©ãƒ¯ãƒ¼ã‚¯ã‚¹ */
+	SOUNDID_PUYON_ATACK			= 34,				/* ãƒ—ãƒ¨ãƒ³æ”»æ’ƒ */
+	SOUNDID_LIQUID				= 35,				/* æ¶²ä½“ */
+	SOUNDID_BOW_ATACK			= 36,				/* å¼“æ”»æ’ƒ */
+	SOUNDID_MEAL				= 37,				/* é£Ÿäº‹ */
+	SOUNDID_DEFENSE				= 38,				/* é˜²å¾¡ */
+	SOUNDID_SHIELD				= 39,				/* ç›¾æ§‹ãˆ */
+	SOUNDID_PUYON_MOVE			= 40,				/* ãƒ—ãƒ¨ãƒ³ç§»å‹• */
+	SOUNDID_PUYON_DEAD			= 41,				/* ãƒ—ãƒ¨ãƒ³æ­»äº¡ */
+	SOUNDID_EXIST				= 42,				/* æ¶ˆæ»… */
+	SOUNDID_TRASH				= 43,				/* ã‚´ãƒŸç®±é–‹ããƒ»æ¨ã¦ã‚‹ */
+	SOUNDID_DROP_BIN			= 44,				/* ãƒ‰ãƒ­ãƒƒãƒ—ï¼šãƒ“ãƒ³ */
+	SOUNDID_OPEN_BAG			= 45,				/* ãƒãƒƒã‚°é–‹ã */
+	SOUNDID_MISS				= 46,				/* ãƒŸã‚¹ */
+	SOUNDID_LVUP				= 47,				/* ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ— */
+	SOUNDID_CRITICAL1			= 48,				/* æ–¬æ’ƒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ« */
+	SOUNDID_HIT2				= 49,				/* æ–¬æ’ƒãƒ’ãƒƒãƒˆï¼‘ */
+	SOUNDID_HIT3				= 50,				/* æ–¬æ’ƒãƒ’ãƒƒãƒˆï¼’ */
+	SOUNDID_OPEN_WINDOW			= 51,				/* çª“é–‹ã */
+	SOUNDID_CRITICAL2			= 52,				/* æ‰“æ’ƒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ« */
+	SOUNDID_CRITICAL3			= 53,				/* çŸ¢ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ« */
+	SOUNDID_HIT4				= 54,				/* çŸ¢ãƒ’ãƒƒãƒˆ */
+	SOUNDID_CHARGE				= 55,				/* æºœã‚ */
+	SOUNDID_CHARGE2				= 56,				/* æºœã‚ï¼’ */
+	SOUNDID_DR_BASS01			= 57,				/* ãƒ™ãƒ¼ã‚¹ï¼‘ */
+	SOUNDID_DR_BASS02			= 58,				/* ãƒ™ãƒ¼ã‚¹ï¼’ */
+	SOUNDID_DR_BASS05			= 59,				/* ãƒ™ãƒ¼ã‚¹ï¼• */
+	SOUNDID_DR_CLAP01			= 60,				/* ã‚¯ãƒ©ãƒƒãƒ—ï¼‘ */
+	SOUNDID_DR_SNE02			= 61,				/* ã‚¹ãƒã‚¢ï¼’ */
+	SOUNDID_KIE_ATACK			= 62,				/* ã‚­ãƒ¼æ”»æ’ƒ */
+	SOUNDID_KIE_DEAD			= 63,				/* ã‚­ãƒ¼æ­»äº¡ */
+	SOUNDID_FLY					= 64,				/* ç¾½ã°ãŸã */
+	SOUNDID_STEP03				= 65,				/* éšŽæ®µç§»å‹• */
 	SOUNDID_MAX
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”‚Ì’è‹`																 */
+/* é–¢æ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 extern "C"{
-SOUNDDATA_API int		GetSoundCount		(void);				/* Œø‰Ê‰¹”‚ðŽæ“¾ */
-SOUNDDATA_API int		GetSoundResourceID	(int nNo);			/* Œø‰Ê‰¹‚ÌƒŠƒ\[ƒXID‚ðŽæ“¾ */
-SOUNDDATA_API DWORD		GetSoundID			(int nNo);			/* Œø‰Ê‰¹ID‚ðŽæ“¾ */
-SOUNDDATA_API int		GetSoundNo			(DWORD dwSoundID);	/* Œø‰Ê‰¹‚ÌƒCƒ“ƒfƒbƒNƒX‚ðŽæ“¾ */
-SOUNDDATA_API LPCSTR	GetSoundName		(DWORD dwSoundID);	/* Œø‰Ê‰¹–¼‚ðŽæ“¾ */
+SOUNDDATA_API int		GetSoundCount		(void);				/* åŠ¹æžœéŸ³æ•°ã‚’å–å¾— */
+SOUNDDATA_API int		GetSoundResourceID	(int nNo);			/* åŠ¹æžœéŸ³ã®ãƒªã‚½ãƒ¼ã‚¹IDã‚’å–å¾— */
+SOUNDDATA_API DWORD		GetSoundID			(int nNo);			/* åŠ¹æžœéŸ³IDã‚’å–å¾— */
+SOUNDDATA_API int		GetSoundNo			(DWORD dwSoundID);	/* åŠ¹æžœéŸ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾— */
+SOUNDDATA_API LPCSTR	GetSoundName		(DWORD dwSoundID);	/* åŠ¹æžœéŸ³åã‚’å–å¾— */
 }
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_SYSTEM_RENEWINFO.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒVƒXƒeƒ€î•ñ‚ÌXV) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/10/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_SYSTEM_RENEWINFO.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã®æ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoSystem;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_SYSTEM_RENEWINFO : public CPacketBase
 {
 public:
-			CPacketADMIN_SYSTEM_RENEWINFO();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_SYSTEM_RENEWINFO();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_SYSTEM_RENEWINFO();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_SYSTEM_RENEWINFO();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoSystem *pInfoSystem);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoSystem *pInfoSystem);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CInfoSystem		*m_pInfoSystem;				/* ƒVƒXƒeƒ€î•ñ */
+	CInfoSystem		*m_pInfoSystem;				/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
 } CPacketADMIN_SYSTEM_RENEWINFO, *PCPacketADMIN_SYSTEM_RENEWINFO;
 
 /* Copyright(C)URARA-works 2008 */

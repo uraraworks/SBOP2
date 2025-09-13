@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemTypeNewHP.cpp									 */
-/* “à—e			:ƒAƒCƒeƒ€í•Ê(HP‘Œ¸)İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/15													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemTypeNewHP.cpp									 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥(HPå¢—æ¸›)è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/15													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewHP::DoDataExchange(CDataExchange* pDX)
@@ -41,9 +41,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::CDlgAdminItemTypeNewHP					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::CDlgAdminItemTypeNewHP					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeNewHP::CDlgAdminItemTypeNewHP(CWnd* pParent /*=NULL*/)
@@ -54,15 +54,15 @@ CDlgAdminItemTypeNewHP::CDlgAdminItemTypeNewHP(CWnd* pParent /*=NULL*/)
 	m_nValue2 = 0;
 	//}}AFX_DATA_INIT
 
-	m_byTarget = 0;		/* g—p‘ÎÛ */
-	m_byArea = 0;		/* g—p”ÍˆÍ */
+	m_byTarget = 0;		/* ä½¿ç”¨å¯¾è±¡ */
+	m_byArea = 0;		/* ä½¿ç”¨ç¯„å›² */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::~CDlgAdminItemTypeNewHP				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::~CDlgAdminItemTypeNewHP				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeNewHP::~CDlgAdminItemTypeNewHP()
@@ -71,52 +71,52 @@ CDlgAdminItemTypeNewHP::~CDlgAdminItemTypeNewHP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::Set									 */
-/* “à—e		:•ÒW“à—e‚ğİ’è													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::Set									 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewHP::Set(CInfoItemTypeBase *pSrc)
 {
-	m_byTarget	= pSrc->m_byTarget;			/* g—p‘ÎÛ */
-	m_byArea	= pSrc->m_byArea;			/* g—p”ÍˆÍ */
-	m_nValue1	= (int)pSrc->m_dwValue;	/* Å¬ */
-	m_nValue2	= (int)pSrc->m_dwValue2;	/* Å‘å */
+	m_byTarget	= pSrc->m_byTarget;			/* ä½¿ç”¨å¯¾è±¡ */
+	m_byArea	= pSrc->m_byArea;			/* ä½¿ç”¨ç¯„å›² */
+	m_nValue1	= (int)pSrc->m_dwValue;	/* æœ€å° */
+	m_nValue2	= (int)pSrc->m_dwValue2;	/* æœ€å¤§ */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::Get									 */
-/* “à—e		:•ÒW“à—e‚ğæ“¾													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::Get									 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewHP::Get(CInfoItemTypeBase *&pDst)
 {
-	pDst->m_byTarget	= m_byTarget;			/* g—p‘ÎÛ */
-	pDst->m_byArea		= m_byArea;				/* g—p”ÍˆÍ */
-	pDst->m_dwValue		= m_nValue1;			/* Å¬ */
-	pDst->m_dwValue2	= m_nValue2;			/* Å‘å */
+	pDst->m_byTarget	= m_byTarget;			/* ä½¿ç”¨å¯¾è±¡ */
+	pDst->m_byArea		= m_byArea;				/* ä½¿ç”¨ç¯„å›² */
+	pDst->m_dwValue		= m_nValue1;			/* æœ€å° */
+	pDst->m_dwValue2	= m_nValue2;			/* æœ€å¤§ */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminItemTypeNewHP::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog();
 
-	m_ctlTarget.InsertString (0, "–¡•û");
-	m_ctlTarget.InsertString (1, "“G");
+	m_ctlTarget.InsertString (0, "å‘³æ–¹");
+	m_ctlTarget.InsertString (1, "æ•µ");
 
-	m_ctlArea.InsertString (0, "©•ª");
-	m_ctlArea.InsertString (1, "1•à‘O");
-	m_ctlArea.InsertString (2, "üˆÍ");
-	m_ctlArea.InsertString (3, "‰æ–Ê“à");
+	m_ctlArea.InsertString (0, "è‡ªåˆ†");
+	m_ctlArea.InsertString (1, "1æ­©å‰");
+	m_ctlArea.InsertString (2, "å‘¨å›²");
+	m_ctlArea.InsertString (3, "ç”»é¢å†…");
 
 	SetTarget (m_byTarget);
 	SetArea (m_byArea);
@@ -126,9 +126,9 @@ BOOL CDlgAdminItemTypeNewHP::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewHP::PostNcDestroy()
@@ -138,9 +138,9 @@ void CDlgAdminItemTypeNewHP::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewHP::OnOK()
@@ -155,9 +155,9 @@ void CDlgAdminItemTypeNewHP::OnOK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::SetTarget								 */
-/* “à—e		:g—p‘ÎÛ‚ğİ’è													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::SetTarget								 */
+/* å†…å®¹		:ä½¿ç”¨å¯¾è±¡ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewHP::SetTarget(BYTE byTarget)
@@ -167,9 +167,9 @@ void CDlgAdminItemTypeNewHP::SetTarget(BYTE byTarget)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::GetTarget								 */
-/* “à—e		:g—p‘ÎÛ‚ğæ“¾													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::GetTarget								 */
+/* å†…å®¹		:ä½¿ç”¨å¯¾è±¡ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 BYTE CDlgAdminItemTypeNewHP::GetTarget(void)
@@ -188,9 +188,9 @@ BYTE CDlgAdminItemTypeNewHP::GetTarget(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::SetArea								 */
-/* “à—e		:g—p”ÍˆÍ‚ğİ’è													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::SetArea								 */
+/* å†…å®¹		:ä½¿ç”¨ç¯„å›²ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewHP::SetArea(BYTE byTarget)
@@ -200,9 +200,9 @@ void CDlgAdminItemTypeNewHP::SetArea(BYTE byTarget)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewHP::GetArea								 */
-/* “à—e		:g—p”ÍˆÍ‚ğæ“¾													 */
-/* “ú•t		:2008/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewHP::GetArea								 */
+/* å†…å®¹		:ä½¿ç”¨ç¯„å›²ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/15														 */
 /* ========================================================================= */
 
 BYTE CDlgAdminItemTypeNewHP::GetArea(void)

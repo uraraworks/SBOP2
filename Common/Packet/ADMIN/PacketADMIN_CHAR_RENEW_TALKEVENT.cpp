@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_RENEW_TALKEVENT.cpp						 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(‰ï˜bƒCƒxƒ“ƒgŒn:‰ï˜bƒCƒxƒ“ƒgî•ñXV) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_RENEW_TALKEVENT.cpp						 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç³»:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/27													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_CHAR_RENEW_TALKEVENT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEW_TALKEVENT::CPacketADMIN_CHAR_RENEW_TALKEVENT */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/27														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEW_TALKEVENT::CPacketADMIN_CHAR_RENEW_TALKEVENT */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/27														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RENEW_TALKEVENT::CPacketADMIN_CHAR_RENEW_TALKEVENT()
@@ -25,9 +25,9 @@ CPacketADMIN_CHAR_RENEW_TALKEVENT::CPacketADMIN_CHAR_RENEW_TALKEVENT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEW_TALKEVENT::~CPacketADMIN_CHAR_RENEW_TALKEVENT */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/27														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEW_TALKEVENT::~CPacketADMIN_CHAR_RENEW_TALKEVENT */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/27														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RENEW_TALKEVENT::~CPacketADMIN_CHAR_RENEW_TALKEVENT()
@@ -37,14 +37,14 @@ CPacketADMIN_CHAR_RENEW_TALKEVENT::~CPacketADMIN_CHAR_RENEW_TALKEVENT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEW_TALKEVENT::Make						 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/12/27														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEW_TALKEVENT::Make						 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/12/27														 */
 /* ========================================================================= */
 
 void CPacketADMIN_CHAR_RENEW_TALKEVENT::Make(
-	CInfoTalkEvent *pInfo,		/* [in] ‰ï˜bƒCƒxƒ“ƒgî•ñ */
-	DWORD dwParam)				/* [in] ƒpƒ‰ƒ[ƒ^ */
+	CInfoTalkEvent *pInfo,		/* [in] ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
+	DWORD dwParam)				/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -65,8 +65,8 @@ void CPacketADMIN_CHAR_RENEW_TALKEVENT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_CHAR_RENEW_TALKEVENT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwParam,		sizeof (dwParam),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,		pDataTmp);	/* ‰ï˜bƒCƒxƒ“ƒgî•ñ */
+	CopyMemoryRenew (pDataTmp, &dwParam,		sizeof (dwParam),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,		pDataTmp);	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -75,9 +75,9 @@ void CPacketADMIN_CHAR_RENEW_TALKEVENT::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEW_TALKEVENT::Set							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/12/27														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEW_TALKEVENT::Set							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/12/27														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_RENEW_TALKEVENT::Set(PBYTE pPacket)
@@ -87,7 +87,7 @@ PBYTE CPacketADMIN_CHAR_RENEW_TALKEVENT::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwParam, pDataTmp, sizeof (m_dwParam), pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
+	CopyMemoryRenew (&m_dwParam, pDataTmp, sizeof (m_dwParam), pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 
 	SAFE_DELETE (m_pInfo);
 	m_pInfo		= new CInfoTalkEvent;

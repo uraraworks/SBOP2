@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_RES_CHARINFO.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒLƒƒƒ‰î•ñ‰“š) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_RES_CHARINFO.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚­ãƒ£ãƒ©æƒ…å ±å¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketCHAR_RES_CHARINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_CHARINFO::CPacketCHAR_RES_CHARINFO				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_CHARINFO::CPacketCHAR_RES_CHARINFO				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 CPacketCHAR_RES_CHARINFO::CPacketCHAR_RES_CHARINFO()
@@ -25,9 +25,9 @@ CPacketCHAR_RES_CHARINFO::CPacketCHAR_RES_CHARINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_CHARINFO::~CPacketCHAR_RES_CHARINFO			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_CHARINFO::~CPacketCHAR_RES_CHARINFO			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 CPacketCHAR_RES_CHARINFO::~CPacketCHAR_RES_CHARINFO()
@@ -37,14 +37,14 @@ CPacketCHAR_RES_CHARINFO::~CPacketCHAR_RES_CHARINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_CHARINFO::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_CHARINFO::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CPacketCHAR_RES_CHARINFO::Make(
-	CInfoCharBase *pInfo,		/* [in] ƒLƒƒƒ‰î•ñ */
-	BOOL bChgScreenPos)			/* [in] ‰æ–ÊˆÊ’u•ÏX */
+	CInfoCharBase *pInfo,		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
+	BOOL bChgScreenPos)			/* [in] ç”»é¢ä½ç½®å¤‰æ›´ */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -65,8 +65,8 @@ void CPacketCHAR_RES_CHARINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_RES_CHARINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &bChgScreenPos,	sizeof (bChgScreenPos),	pDataTmp);	/* ‰æ–ÊˆÊ’u•ÏX */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,			pDataTmp);	/* ƒLƒƒƒ‰î•ñ */
+	CopyMemoryRenew (pDataTmp, &bChgScreenPos,	sizeof (bChgScreenPos),	pDataTmp);	/* ç”»é¢ä½ç½®å¤‰æ›´ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,			pDataTmp);	/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -75,9 +75,9 @@ void CPacketCHAR_RES_CHARINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_CHARINFO::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_CHARINFO::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_RES_CHARINFO::Set(PBYTE pPacket)
@@ -87,7 +87,7 @@ PBYTE CPacketCHAR_RES_CHARINFO::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_bChgScreenPos, pDataTmp, sizeof (m_bChgScreenPos), pDataTmp);	/* ‰æ–ÊˆÊ’u•ÏX */
+	CopyMemoryRenew (&m_bChgScreenPos, pDataTmp, sizeof (m_bChgScreenPos), pDataTmp);	/* ç”»é¢ä½ç½®å¤‰æ›´ */
 
 	SAFE_DELETE (m_pInfo);
 	m_pInfo		= new CInfoCharBase;

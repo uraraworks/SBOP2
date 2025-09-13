@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrData.h													 */
-/* “à—e			:ƒf[ƒ^ƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/04													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:MgrData.h													 */
+/* â€œÃ â€”e			:Æ’fÂ[Æ’^Æ’}Æ’lÂ[Æ’WÆ’Æ’Æ’NÆ’â€°Æ’X â€™Ã¨â€¹`Æ’tÆ’@Æ’CÆ’â€¹						 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2006/11/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -31,96 +31,96 @@ class CLibInfoTalkEvent;
 class CInfoFileList;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* Æ’NÆ’â€°Æ’XÂÃ©Å’Â¾																 */
 /* ========================================================================= */
 
 typedef class CMgrData
 {
 public:
-			CMgrData();													/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrData();												/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrData();													/* Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^ */
+	virtual ~CMgrData();												/* Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^ */
 
-	void	Create				(CMainFrame *pMainFrame, CUraraSockTCPSBO *pSock);	/* ì¬ */
-	void	Destroy				(void);												/* ”jŠü */
+	void	Create				(CMainFrame *pMainFrame, CUraraSockTCPSBO *pSock);	/* ÂÃ¬ÂÂ¬ */
+	void	Destroy				(void);												/* â€jÅ Ã¼ */
 
-	void	Save				(void);											/* ƒf[ƒ^‚Ì•Û‘¶ */
-	void	Load				(void);											/* ƒf[ƒ^‚Ì“Ç‚İ‚İ */
-	void	ReadHashList		(void);											/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğ“Ç‚İ‚İ */
-	WORD	GetPort				(void)	{ return m_wPort;				}		/* ‘Ò‚¿‚¤‚¯ƒ|[ƒg”Ô†‚ğæ“¾ */
-	void	AddOnline			(void)	{ m_byOnline ++;				}		/* ƒIƒ“ƒ‰ƒCƒ“”‚ğ’Ç‰Á */
-	void	DecOnline			(void)	{ m_byOnline --;				}		/* ƒIƒ“ƒ‰ƒCƒ“”‚ğŒ¸Z */
-	BYTE	GetOnline			(void)	{ return m_byOnline;			}		/* ƒIƒ“ƒ‰ƒCƒ“”‚ğæ“¾ */
-	LPCSTR	GetAdminAccount		(void)	{ return m_strAdminAccount;		}		/* ŠÇ—ÒŒ ŒÀƒAƒJƒEƒ“ƒg‚ğæ“¾ */
-	LPCSTR	GetClientVersion	(void)	{ return m_strClientVersion;	}		/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“‚ğæ“¾ */
-	void	SetClientVersion	(LPCSTR pszVersion);							/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“‚ğİ’è */
-	BYTE	GetLastSendClock	(void)	{ return m_byLastSendClock; 	}		/* ÅŒã‚É‘—M‚µ‚½‚ğæ“¾ */
-	void	SetLastSendClock	(BYTE byLastSendClock)	{ m_byLastSendClock = byLastSendClock; };	/* ÅŒã‚É‘—M‚µ‚½‚ğİ’è */
-	LPCSTR	GetFtpAccount		(void)	{ return m_strFtpAccount;		}		/* FTPƒAƒJƒEƒ“ƒg‚ğæ“¾ */
-	LPCSTR	GetFtpPassword		(void)	{ return m_strFtpPassword;		}		/* FTPƒpƒXƒ[ƒh‚ğæ“¾ */
-	LPCSTR	GetFtpServerAddr	(void)	{ return m_strFtpServerAddr;	}		/* ƒT[ƒo[ƒAƒhƒŒƒX‚ğæ“¾ */
-	LPCSTR	GetFtpUploadPath	(void)	{ return m_strFtpUploadPath;	}		/* ƒAƒbƒvƒ[ƒhæ‚ğæ“¾ */
+	void	Save				(void);											/* Æ’fÂ[Æ’^â€šÃŒâ€¢Ã›â€˜Â¶ */
+	void	Load				(void);											/* Æ’fÂ[Æ’^â€šÃŒâ€œÃ‡â€šÃÂÅ¾â€šÃ */
+	void	ReadHashList		(void);											/* Æ’tÆ’@Æ’CÆ’â€¹Æ’Å Æ’XÆ’gâ€šÃ°â€œÃ‡â€šÃÂÅ¾â€šÃ */
+	WORD	GetPort				(void)	{ return m_wPort;				}		/* â€˜Ã’â€šÂ¿â€šÂ¤â€šÂ¯Æ’|Â[Æ’gâ€Ã”Ââ€ â€šÃ°Å½Ã¦â€œÂ¾ */
+	void	AddOnline			(void)	{ m_byOnline ++;				}		/* Æ’IÆ’â€œÆ’â€°Æ’CÆ’â€œÂâ€â€šÃ°â€™Ã‡â€°Ã */
+	void	DecOnline			(void)	{ m_byOnline --;				}		/* Æ’IÆ’â€œÆ’â€°Æ’CÆ’â€œÂâ€â€šÃ°Å’Â¸Å½Z */
+	BYTE	GetOnline			(void)	{ return m_byOnline;			}		/* Æ’IÆ’â€œÆ’â€°Æ’CÆ’â€œÂâ€â€šÃ°Å½Ã¦â€œÂ¾ */
+	LPCSTR	GetAdminAccount		(void)	{ return m_strAdminAccount;		}		/* Å Ã‡â€”ÂÅ½Ã’Å’Â Å’Ã€Æ’AÆ’JÆ’EÆ’â€œÆ’gâ€šÃ°Å½Ã¦â€œÂ¾ */
+	LPCSTR	GetClientVersion	(void)	{ return m_strClientVersion;	}		/* Æ’NÆ’â€°Æ’CÆ’AÆ’â€œÆ’gÆ’oÂ[Æ’WÆ’â€¡Æ’â€œâ€šÃ°Å½Ã¦â€œÂ¾ */
+	void	SetClientVersion	(LPCSTR pszVersion);							/* Æ’NÆ’â€°Æ’CÆ’AÆ’â€œÆ’gÆ’oÂ[Æ’WÆ’â€¡Æ’â€œâ€šÃ°ÂÃâ€™Ã¨ */
+	BYTE	GetLastSendClock	(void)	{ return m_byLastSendClock; 	}		/* ÂÃ…Å’Ã£â€šÃ‰â€˜â€”ÂMâ€šÂµâ€šÂ½Å½Å¾ÂÂâ€šÃ°Å½Ã¦â€œÂ¾ */
+	void	SetLastSendClock	(BYTE byLastSendClock)	{ m_byLastSendClock = byLastSendClock; };	/* ÂÃ…Å’Ã£â€šÃ‰â€˜â€”ÂMâ€šÂµâ€šÂ½Å½Å¾ÂÂâ€šÃ°ÂÃâ€™Ã¨ */
+	LPCSTR	GetFtpAccount		(void)	{ return m_strFtpAccount;		}		/* FTPÆ’AÆ’JÆ’EÆ’â€œÆ’gâ€šÃ°Å½Ã¦â€œÂ¾ */
+	LPCSTR	GetFtpPassword		(void)	{ return m_strFtpPassword;		}		/* FTPÆ’pÆ’XÆ’ÂÂ[Æ’hâ€šÃ°Å½Ã¦â€œÂ¾ */
+	LPCSTR	GetFtpServerAddr	(void)	{ return m_strFtpServerAddr;	}		/* Æ’TÂ[Æ’oÂ[Æ’AÆ’hÆ’Å’Æ’Xâ€šÃ°Å½Ã¦â€œÂ¾ */
+	LPCSTR	GetFtpUploadPath	(void)	{ return m_strFtpUploadPath;	}		/* Æ’AÆ’bÆ’vÆ’ÂÂ[Æ’hÂÃ¦â€šÃ°Å½Ã¦â€œÂ¾ */
 
-	CMainFrame			*GetMainFrame			(void)	{ return m_pMainFrame;		}	/* ƒƒCƒ“ƒtƒŒ[ƒ€‚ğæ“¾ */
-	CUraraSockTCPSBO	*GetSock				(void)	{ return m_pSock;			}	/* ’ÊMƒ}ƒl[ƒWƒƒ‚ğæ“¾ */
+	CMainFrame			*GetMainFrame			(void)	{ return m_pMainFrame;		}	/* Æ’ÂÆ’CÆ’â€œÆ’tÆ’Å’Â[Æ’â‚¬â€šÃ°Å½Ã¦â€œÂ¾ */
+	CUraraSockTCPSBO	*GetSock				(void)	{ return m_pSock;			}	/* â€™ÃŠÂMÆ’}Æ’lÂ[Æ’WÆ’Æ’â€šÃ°Å½Ã¦â€œÂ¾ */
 
-	CTextOutput			*GetLog					(void)	{ return m_pLog;				}	/* ƒƒOƒNƒ‰ƒX‚ğæ“¾ */
-	CLibInfoAccount		*GetLibInfoAccount		(void)	{ return m_pLibInfoAccount;		}	/* ƒAƒJƒEƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoCharSvr		*GetLibInfoChar			(void)	{ return m_pLibInfoChar;		}	/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoDisable		*GetLibInfoDisable		(void)	{ return m_pLibInfoDisable;		}	/* ‹‘”Ûî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapBase		*GetLibInfoMap			(void)	{ return m_pLibInfoMap;			}	/* ƒ}ƒbƒvî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapObject	*GetLibInfoMapObject	(void)	{ return m_pLibInfoMapObject;	}	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapParts	*GetLibInfoMapParts		(void)	{ return m_pLibInfoMapParts;	}	/* ƒ}ƒbƒvƒp[ƒcî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapShadow	*GetLibInfoMapShadow	(void)	{ return m_pLibInfoMapShadow;	}	/* ƒ}ƒbƒv‰eî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoItemType	*GetLibInfoItemType		(void)	{ return m_pLibInfoItemType;	}	/* ƒAƒCƒeƒ€í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoItem		*GetLibInfoItem			(void)	{ return m_pLibInfoItem;		}	/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoItemWeapon	*GetLibInfoItemWeapon	(void)	{ return m_pLibInfoItemWeapon;	}	/* •Šíî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoEffect		*GetLibInfoEffect		(void)	{ return m_pLibInfoEffect;		}	/* ƒGƒtƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMotion		*GetLibInfoMotion		(void)	{ return m_pLibInfoMotion;		}	/* ƒ‚[ƒVƒ‡ƒ“î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMotionType	*GetLibInfoMotionType	(void)	{ return m_pLibInfoMotionType;	}	/* ƒ‚[ƒVƒ‡ƒ“í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoEfcBalloon	*GetLibInfoEfcBalloon	(void)	{ return m_pLibInfoEfcBalloon;	}	/* •¬o‚µî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoSystem		*GetLibInfoSystem		(void)	{ return m_pLibInfoSystem;		}	/* ƒVƒXƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoSkill		*GetLibInfoSkill		(void)	{ return m_pLibInfoSkill;		}	/* ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoTalkEvent	*GetLibInfoTalkEvent	(void)	{ return m_pLibInfoTalkEvent;	}	/* ‰ï˜bƒCƒxƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CInfoFileList		*GetInfoFileList		(void)	{ return m_pInfoFileList;		}	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ‚ğæ“¾ */
-
-
-private:
-	void	ReadIniData		(void);				/* iniƒtƒ@ƒCƒ‹‚©‚çİ’è‚ğ“Ç‚İ‚İ */
+	CTextOutput			*GetLog					(void)	{ return m_pLog;				}	/* Æ’ÂÆ’OÆ’NÆ’â€°Æ’Xâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoAccount		*GetLibInfoAccount		(void)	{ return m_pLibInfoAccount;		}	/* Æ’AÆ’JÆ’EÆ’â€œÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoCharSvr		*GetLibInfoChar			(void)	{ return m_pLibInfoChar;		}	/* Æ’LÆ’Æ’Æ’â€°ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoDisable		*GetLibInfoDisable		(void)	{ return m_pLibInfoDisable;		}	/* â€¹â€˜â€Ã›ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoMapBase		*GetLibInfoMap			(void)	{ return m_pLibInfoMap;			}	/* Æ’}Æ’bÆ’vÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoMapObject	*GetLibInfoMapObject	(void)	{ return m_pLibInfoMapObject;	}	/* Æ’}Æ’bÆ’vÆ’IÆ’uÆ’WÆ’FÆ’NÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoMapParts	*GetLibInfoMapParts		(void)	{ return m_pLibInfoMapParts;	}	/* Æ’}Æ’bÆ’vÆ’pÂ[Æ’cÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoMapShadow	*GetLibInfoMapShadow	(void)	{ return m_pLibInfoMapShadow;	}	/* Æ’}Æ’bÆ’vâ€°eÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoItemType	*GetLibInfoItemType		(void)	{ return m_pLibInfoItemType;	}	/* Æ’AÆ’CÆ’eÆ’â‚¬Å½Ã­â€¢ÃŠÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoItem		*GetLibInfoItem			(void)	{ return m_pLibInfoItem;		}	/* Æ’AÆ’CÆ’eÆ’â‚¬ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoItemWeapon	*GetLibInfoItemWeapon	(void)	{ return m_pLibInfoItemWeapon;	}	/* â€¢ÂÅ Ã­ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoEffect		*GetLibInfoEffect		(void)	{ return m_pLibInfoEffect;		}	/* Æ’GÆ’tÆ’FÆ’NÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoMotion		*GetLibInfoMotion		(void)	{ return m_pLibInfoMotion;		}	/* Æ’â€šÂ[Æ’VÆ’â€¡Æ’â€œÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoMotionType	*GetLibInfoMotionType	(void)	{ return m_pLibInfoMotionType;	}	/* Æ’â€šÂ[Æ’VÆ’â€¡Æ’â€œÅ½Ã­â€¢ÃŠÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoEfcBalloon	*GetLibInfoEfcBalloon	(void)	{ return m_pLibInfoEfcBalloon;	}	/* â€¢Â¬Âoâ€šÂµÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoSystem		*GetLibInfoSystem		(void)	{ return m_pLibInfoSystem;		}	/* Æ’VÆ’XÆ’eÆ’â‚¬ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoSkill		*GetLibInfoSkill		(void)	{ return m_pLibInfoSkill;		}	/* Æ’XÆ’LÆ’â€¹ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CLibInfoTalkEvent	*GetLibInfoTalkEvent	(void)	{ return m_pLibInfoTalkEvent;	}	/* â€°Ã¯ËœbÆ’CÆ’xÆ’â€œÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å â€šÃ°Å½Ã¦â€œÂ¾ */
+	CInfoFileList		*GetInfoFileList		(void)	{ return m_pInfoFileList;		}	/* Æ’tÆ’@Æ’CÆ’â€¹Æ’Å Æ’XÆ’gÂÃ®â€¢Ã±â€šÃ°Å½Ã¦â€œÂ¾ */
 
 
 private:
-	WORD				m_wPort;				/* ‘Ò‚¿‚¤‚¯ƒ|[ƒg */
-	BYTE				m_byOnline,				/* ƒIƒ“ƒ‰ƒCƒ“” */
-						m_byLastSendClock;		/* ÅŒã‚É‘—M‚µ‚½ */
-	CmyString			m_strAdminAccount,		/* ŠÇ—ÒŒ ŒÀƒAƒJƒEƒ“ƒg–¼ */
-						m_strClientVersion,		/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“ */
-						m_strFtpAccount,		/* FTPƒAƒJƒEƒ“ƒg */
-						m_strFtpPassword,		/* FTPƒpƒXƒ[ƒh */
-						m_strFtpServerAddr,		/* ƒT[ƒo[ƒAƒhƒŒƒX */
-						m_strFtpUploadPath;		/* ƒAƒbƒvƒ[ƒhæ */
+	void	ReadIniData		(void);				/* iniÆ’tÆ’@Æ’CÆ’â€¹â€šÂ©â€šÃ§ÂÃâ€™Ã¨â€šÃ°â€œÃ‡â€šÃÂÅ¾â€šÃ */
 
-	CMainFrame			*m_pMainFrame;			/* ƒƒCƒ“ƒtƒŒ[ƒ€ */
-	CUraraSockTCPSBO	*m_pSock;				/* ’ÊMƒ}ƒl[ƒWƒƒ */
-	CTextOutput			*m_pLog;				/* ƒƒOƒtƒ@ƒCƒ‹ */
 
-	CLibInfoAccount		*m_pLibInfoAccount;		/* ƒAƒJƒEƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoCharSvr		*m_pLibInfoChar;		/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoDisable		*m_pLibInfoDisable;		/* ‹‘”Ûî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapBase		*m_pLibInfoMap;			/* ƒ}ƒbƒvî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapObject	*m_pLibInfoMapObject;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapParts	*m_pLibInfoMapParts;	/* ƒ}ƒbƒvƒp[ƒcî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* ƒ}ƒbƒv‰eî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItemType	*m_pLibInfoItemType;	/* ƒAƒCƒeƒ€í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItem		*m_pLibInfoItem;		/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;	/* •Šíî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoEffect		*m_pLibInfoEffect;		/* ƒGƒtƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMotion		*m_pLibInfoMotion;		/* ƒ‚[ƒVƒ‡ƒ“î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMotionType	*m_pLibInfoMotionType;	/* ƒ‚[ƒVƒ‡ƒ“í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;	/* •¬o‚µî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoSystem		*m_pLibInfoSystem;		/* ƒVƒXƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoSkill		*m_pLibInfoSkill;		/* ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoTalkEvent	*m_pLibInfoTalkEvent;	/* ‰ï˜bƒCƒxƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CInfoFileList		*m_pInfoFileList;		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ */
+private:
+	WORD				m_wPort;				/* â€˜Ã’â€šÂ¿â€šÂ¤â€šÂ¯Æ’|Â[Æ’g */
+	BYTE				m_byOnline,				/* Æ’IÆ’â€œÆ’â€°Æ’CÆ’â€œÂâ€ */
+						m_byLastSendClock;		/* ÂÃ…Å’Ã£â€šÃ‰â€˜â€”ÂMâ€šÂµâ€šÂ½Å½Å¾ÂÂ */
+	CmyString			m_strAdminAccount,		/* Å Ã‡â€”ÂÅ½Ã’Å’Â Å’Ã€Æ’AÆ’JÆ’EÆ’â€œÆ’gâ€“Â¼ */
+						m_strClientVersion,		/* Æ’NÆ’â€°Æ’CÆ’AÆ’â€œÆ’gÆ’oÂ[Æ’WÆ’â€¡Æ’â€œ */
+						m_strFtpAccount,		/* FTPÆ’AÆ’JÆ’EÆ’â€œÆ’g */
+						m_strFtpPassword,		/* FTPÆ’pÆ’XÆ’ÂÂ[Æ’h */
+						m_strFtpServerAddr,		/* Æ’TÂ[Æ’oÂ[Æ’AÆ’hÆ’Å’Æ’X */
+						m_strFtpUploadPath;		/* Æ’AÆ’bÆ’vÆ’ÂÂ[Æ’hÂÃ¦ */
+
+	CMainFrame			*m_pMainFrame;			/* Æ’ÂÆ’CÆ’â€œÆ’tÆ’Å’Â[Æ’â‚¬ */
+	CUraraSockTCPSBO	*m_pSock;				/* â€™ÃŠÂMÆ’}Æ’lÂ[Æ’WÆ’Æ’ */
+	CTextOutput			*m_pLog;				/* Æ’ÂÆ’OÆ’tÆ’@Æ’CÆ’â€¹ */
+
+	CLibInfoAccount		*m_pLibInfoAccount;		/* Æ’AÆ’JÆ’EÆ’â€œÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoCharSvr		*m_pLibInfoChar;		/* Æ’LÆ’Æ’Æ’â€°ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoDisable		*m_pLibInfoDisable;		/* â€¹â€˜â€Ã›ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoMapBase		*m_pLibInfoMap;			/* Æ’}Æ’bÆ’vÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoMapObject	*m_pLibInfoMapObject;	/* Æ’}Æ’bÆ’vÆ’IÆ’uÆ’WÆ’FÆ’NÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoMapParts	*m_pLibInfoMapParts;	/* Æ’}Æ’bÆ’vÆ’pÂ[Æ’cÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* Æ’}Æ’bÆ’vâ€°eÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoItemType	*m_pLibInfoItemType;	/* Æ’AÆ’CÆ’eÆ’â‚¬Å½Ã­â€¢ÃŠÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoItem		*m_pLibInfoItem;		/* Æ’AÆ’CÆ’eÆ’â‚¬ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;	/* â€¢ÂÅ Ã­ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoEffect		*m_pLibInfoEffect;		/* Æ’GÆ’tÆ’FÆ’NÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoMotion		*m_pLibInfoMotion;		/* Æ’â€šÂ[Æ’VÆ’â€¡Æ’â€œÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoMotionType	*m_pLibInfoMotionType;	/* Æ’â€šÂ[Æ’VÆ’â€¡Æ’â€œÅ½Ã­â€¢ÃŠÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;	/* â€¢Â¬Âoâ€šÂµÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoSystem		*m_pLibInfoSystem;		/* Æ’VÆ’XÆ’eÆ’â‚¬ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoSkill		*m_pLibInfoSkill;		/* Æ’XÆ’LÆ’â€¹ÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CLibInfoTalkEvent	*m_pLibInfoTalkEvent;	/* â€°Ã¯ËœbÆ’CÆ’xÆ’â€œÆ’gÂÃ®â€¢Ã±Æ’â€°Æ’CÆ’uÆ’â€°Æ’Å  */
+	CInfoFileList		*m_pInfoFileList;		/* Æ’tÆ’@Æ’CÆ’â€¹Æ’Å Æ’XÆ’gÂÃ®â€¢Ã± */
 } CMgrData, *PCMgrData;
 
 /* Copyright(C)URARA-works 2006 */

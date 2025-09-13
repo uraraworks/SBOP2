@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoBase.h												 */
-/* “à—e			:î•ñƒ‰ƒCƒuƒ‰ƒŠ Šî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoBase.h												 */
+/* å†…å®¹			:æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,31 +12,31 @@
 #include "mySection.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoBase : public CmySection
 {
 public:
-			CLibInfoBase();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoBase();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoBase();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoBase();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void Create			(void);						/* ì¬ */
-	virtual void Destroy		(void);						/* ”jŠü */
-	virtual BOOL Proc			(void);						/* ˆ— */
+	virtual void Create			(void);						/* ä½œæˆ */
+	virtual void Destroy		(void);						/* ç ´æ£„ */
+	virtual BOOL Proc			(void);						/* å‡¦ç† */
 
-	virtual int			GetCount	(void);					/* ƒf[ƒ^”‚ğæ“¾ */
-	virtual PCInfoBase	GetNew		(void);					/* V‹Kƒf[ƒ^‚ğæ“¾ */
-	virtual PCInfoBase	RenewInfo	(int nNo);				/* “à—e‚É‰‚¶‚ÄXV */
-	virtual void		GetSaveNo	(ARRAYINT &anDst);		/* •Û‘¶‚·‚éî•ñ‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾ */
-	virtual void		Add			(PCInfoBase pInfo);		/* ’Ç‰Á */
-	virtual void		RenewIDPtr	(void);					/* IDŒŸõ—pƒ}ƒbƒv‚ğXV */
-	virtual PCInfoBase	GetPtr		(int nNo);				/* î•ñ‚ğæ“¾ */
+	virtual int			GetCount	(void);					/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	virtual PCInfoBase	GetNew		(void);					/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PCInfoBase	RenewInfo	(int nNo);				/* å†…å®¹ã«å¿œã˜ã¦æ›´æ–° */
+	virtual void		GetSaveNo	(ARRAYINT &anDst);		/* ä¿å­˜ã™ã‚‹æƒ…å ±ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾— */
+	virtual void		Add			(PCInfoBase pInfo);		/* è¿½åŠ  */
+	virtual void		RenewIDPtr	(void);					/* IDæ¤œç´¢ç”¨ãƒãƒƒãƒ—ã‚’æ›´æ–° */
+	virtual PCInfoBase	GetPtr		(int nNo);				/* æƒ…å ±ã‚’å–å¾— */
 
 
 public:
-	int			m_nProcNo;				/* ˆ—’†‚ÌƒCƒ“ƒfƒbƒNƒX */
-	MapIDPtr	m_mapIDPtr;				/* IDŒŸõ—pƒ}ƒbƒv */
+	int			m_nProcNo;				/* å‡¦ç†ä¸­ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ */
+	MapIDPtr	m_mapIDPtr;				/* IDæ¤œç´¢ç”¨ãƒãƒƒãƒ— */
 } CLibInfoBase, *PCLibInfoBase;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_ONLINE.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒIƒ“ƒ‰ƒCƒ“”’Ê’m) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/02/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_ONLINE.cpp										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/02/10													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketMAP_ONLINE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_ONLINE::CPacketMAP_ONLINE							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_ONLINE::CPacketMAP_ONLINE							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 CPacketMAP_ONLINE::CPacketMAP_ONLINE()
@@ -23,9 +23,9 @@ CPacketMAP_ONLINE::CPacketMAP_ONLINE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_ONLINE::~CPacketMAP_ONLINE							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_ONLINE::~CPacketMAP_ONLINE							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 CPacketMAP_ONLINE::~CPacketMAP_ONLINE()
@@ -34,13 +34,13 @@ CPacketMAP_ONLINE::~CPacketMAP_ONLINE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_ONLINE::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_ONLINE::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 void CPacketMAP_ONLINE::Make(
-	int nCount)		/* [in] ƒIƒ“ƒ‰ƒCƒ“” */
+	int nCount)		/* [in] ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•° */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketMAP_ONLINE::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_ONLINE;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &nCount, sizeof (nCount), pDataTmp);	/* ƒIƒ“ƒ‰ƒCƒ“” */
+	CopyMemoryRenew (pDataTmp, &nCount, sizeof (nCount), pDataTmp);	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•° */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_ONLINE::Set											 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_ONLINE::Set											 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_ONLINE::Set(PBYTE pPacket)
@@ -76,7 +76,7 @@ PBYTE CPacketMAP_ONLINE::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_nCount, pDataTmp, sizeof (m_nCount), pDataTmp);	/* ƒIƒ“ƒ‰ƒCƒ“” */
+	CopyMemoryRenew (&m_nCount, pDataTmp, sizeof (m_nCount), pDataTmp);	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•° */
 
 	pRet = pDataTmp;
 	return pRet;

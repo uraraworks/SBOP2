@@ -1,32 +1,32 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTalkEventBase.cpp										 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñŠî’êƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTalkEventBase.cpp										 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/18													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoTalkEventBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_nEventType",					/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	"m_nPage",						/* Š‘®ƒy[ƒW”Ô† */
-	"m_dwData",						/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	"m_strText",					/* •¶Žš—ñƒf[ƒ^ */
+	"m_nEventType",					/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	"m_nPage",						/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	"m_dwData",						/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	"m_strText",					/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::CInfoTalkEventBase							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::CInfoTalkEventBase							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 CInfoTalkEventBase::CInfoTalkEventBase()
@@ -40,9 +40,9 @@ CInfoTalkEventBase::CInfoTalkEventBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::~CInfoTalkEventBase						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::~CInfoTalkEventBase						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 CInfoTalkEventBase::~CInfoTalkEventBase()
@@ -51,9 +51,9 @@ CInfoTalkEventBase::~CInfoTalkEventBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::GetElementNo								 */
-/* “à—e		:—v‘f”Ô†‚ðŽæ“¾													 */
-/* “ú•t		:2005/07/05														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::GetElementNo								 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/07/05														 */
 /* ========================================================================= */
 
 int CInfoTalkEventBase::GetElementNo(LPCSTR pszName)
@@ -74,9 +74,9 @@ int CInfoTalkEventBase::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::GetDataSize								 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾												 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::GetDataSize								 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventBase::GetDataSize(void)
@@ -84,19 +84,19 @@ DWORD CInfoTalkEventBase::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_nEventType);					/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	dwRet += sizeof (m_nPage);						/* Š‘®ƒy[ƒW”Ô† */
-	dwRet += sizeof (m_dwData);						/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	dwRet += (m_strText.GetLength () + 1);			/* •¶Žš—ñƒf[ƒ^ */
+	dwRet += sizeof (m_nEventType);					/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	dwRet += sizeof (m_nPage);						/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	dwRet += sizeof (m_dwData);						/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	dwRet += (m_strText.GetLength () + 1);			/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::GetDataSizeNo								 */
-/* “à—e		:Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::GetDataSizeNo								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventBase::GetDataSizeNo(int nNo)
@@ -106,10 +106,10 @@ DWORD CInfoTalkEventBase::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:	dwRet = sizeof (m_nEventType);			break;	/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	case 1:	dwRet = sizeof (m_nPage);				break;	/* Š‘®ƒy[ƒW”Ô† */
-	case 2:	dwRet = sizeof (m_dwData);				break;	/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	case 3:	dwRet = m_strText.GetLength () + 1;		break;	/* •¶Žš—ñƒf[ƒ^ */
+	case 0:	dwRet = sizeof (m_nEventType);			break;	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	case 1:	dwRet = sizeof (m_nPage);				break;	/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	case 2:	dwRet = sizeof (m_dwData);				break;	/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	case 3:	dwRet = m_strText.GetLength () + 1;		break;	/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 	}
 
 	return dwRet;
@@ -117,9 +117,9 @@ DWORD CInfoTalkEventBase::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::GetName									 */
-/* “à—e		:—v‘f–¼‚ðŽæ“¾													 */
-/* “ú•t		:2005/07/05														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::GetName									 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/07/05														 */
 /* ========================================================================= */
 
 LPCSTR CInfoTalkEventBase::GetName(int nNo)
@@ -129,9 +129,9 @@ LPCSTR CInfoTalkEventBase::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::GetWriteData								 */
-/* “à—e		:Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾									 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::GetWriteData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventBase::GetWriteData(int nNo, PDWORD pdwSize)
@@ -150,10 +150,10 @@ PBYTE CInfoTalkEventBase::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_nEventType;			break;		/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	case 1:	pSrc = (PBYTE)&m_nPage;					break;		/* Š‘®ƒy[ƒW”Ô† */
-	case 2:	pSrc = (PBYTE)&m_dwData;				break;		/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	case 3:	pSrc = (PBYTE)(LPCSTR)m_strText;		break;		/* •¶Žš—ñƒf[ƒ^ */
+	case 0:	pSrc = (PBYTE)&m_nEventType;			break;		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	case 1:	pSrc = (PBYTE)&m_nPage;					break;		/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	case 2:	pSrc = (PBYTE)&m_dwData;				break;		/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	case 3:	pSrc = (PBYTE)(LPCSTR)m_strText;		break;		/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 	}
 
 	if (pSrc) {
@@ -166,14 +166,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::ReadElementData							 */
-/* “à—e		:Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::ReadElementData							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventBase::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚Ýž‚ÝŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -182,10 +182,10 @@ DWORD CInfoTalkEventBase::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0: pDst = (PBYTE)&m_nEventType;		dwSize = sizeof (m_nEventType);			break;		/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	case 1: pDst = (PBYTE)&m_nPage;				dwSize = sizeof (m_nPage);				break;		/* Š‘®ƒy[ƒW”Ô† */
-	case 2: pDst = (PBYTE)&m_dwData;			dwSize = sizeof (m_dwData);				break;		/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	case 3:				/* •¶Žš—ñƒf[ƒ^ */
+	case 0: pDst = (PBYTE)&m_nEventType;		dwSize = sizeof (m_nEventType);			break;		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	case 1: pDst = (PBYTE)&m_nPage;				dwSize = sizeof (m_nPage);				break;		/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	case 2: pDst = (PBYTE)&m_dwData;			dwSize = sizeof (m_dwData);				break;		/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	case 3:				/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 		m_strText = (LPCSTR)pSrc;
 		dwSize = m_strText.GetLength () + 1;
 		break;
@@ -200,9 +200,9 @@ DWORD CInfoTalkEventBase::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventBase::GetSendDataSize(void)
@@ -210,19 +210,19 @@ DWORD CInfoTalkEventBase::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_nEventType);					/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	dwRet += sizeof (m_nPage);						/* Š‘®ƒy[ƒW”Ô† */
-	dwRet += sizeof (m_dwData);						/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	dwRet += (m_strText.GetLength () + 1);			/* •¶Žš—ñƒf[ƒ^ */
+	dwRet += sizeof (m_nEventType);					/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	dwRet += sizeof (m_nPage);						/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	dwRet += sizeof (m_dwData);						/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	dwRet += (m_strText.GetLength () + 1);			/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventBase::GetSendData(void)
@@ -235,19 +235,19 @@ PBYTE CInfoTalkEventBase::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_nEventType,			sizeof (m_nEventType),			pDataTmp);		/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	CopyMemoryRenew (pDataTmp, &m_nPage,				sizeof (m_nPage),				pDataTmp);		/* Š‘®ƒy[ƒW”Ô† */
-	CopyMemoryRenew (pDataTmp, &m_dwData,				sizeof (m_dwData),				pDataTmp);		/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	strcpyRenew ((LPSTR)pDataTmp, m_strText, pDataTmp);					/* •¶Žš—ñƒf[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &m_nEventType,			sizeof (m_nEventType),			pDataTmp);		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &m_nPage,				sizeof (m_nPage),				pDataTmp);		/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	CopyMemoryRenew (pDataTmp, &m_dwData,				sizeof (m_dwData),				pDataTmp);		/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strText, pDataTmp);					/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 
 	return pData;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventBase::SetSendData(PBYTE pSrc)
@@ -257,10 +257,10 @@ PBYTE CInfoTalkEventBase::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_nEventType,			pDataTmp, sizeof (m_nEventType),		pDataTmp);		/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	CopyMemoryRenew (&m_nPage,				pDataTmp, sizeof (m_nPage),				pDataTmp);		/* Š‘®ƒy[ƒW”Ô† */
-	CopyMemoryRenew (&m_dwData,				pDataTmp, sizeof (m_dwData),			pDataTmp);		/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	StoreRenew (m_strText, (LPCSTR)pDataTmp, pDataTmp);					/* •¶Žš—ñƒf[ƒ^ */
+	CopyMemoryRenew (&m_nEventType,			pDataTmp, sizeof (m_nEventType),		pDataTmp);		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	CopyMemoryRenew (&m_nPage,				pDataTmp, sizeof (m_nPage),				pDataTmp);		/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	CopyMemoryRenew (&m_dwData,				pDataTmp, sizeof (m_dwData),			pDataTmp);		/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	StoreRenew (m_strText, (LPCSTR)pDataTmp, pDataTmp);					/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -268,9 +268,9 @@ PBYTE CInfoTalkEventBase::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEventBase::Copy										 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/12/18														 */
+/* é–¢æ•°å	:CInfoTalkEventBase::Copy										 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/12/18														 */
 /* ========================================================================= */
 
 void CInfoTalkEventBase::Copy(CInfoTalkEventBase *pSrc)
@@ -279,10 +279,10 @@ void CInfoTalkEventBase::Copy(CInfoTalkEventBase *pSrc)
 		return;
 	}
 
-	m_nEventType		= pSrc->m_nEventType;			/* ‰ï˜bƒCƒxƒ“ƒgŽí•Ê */
-	m_nPage				= pSrc->m_nPage;				/* Š‘®ƒy[ƒW”Ô† */
-	m_dwData			= pSrc->m_dwData;				/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	m_strText			= pSrc->m_strText;				/* •¶Žš—ñƒf[ƒ^ */
+	m_nEventType		= pSrc->m_nEventType;			/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+	m_nPage				= pSrc->m_nPage;				/* æ‰€å±žãƒšãƒ¼ã‚¸ç•ªå· */
+	m_dwData			= pSrc->m_dwData;				/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	m_strText			= pSrc->m_strText;				/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 }
 
 /* Copyright(C)URARA-works 2008 */

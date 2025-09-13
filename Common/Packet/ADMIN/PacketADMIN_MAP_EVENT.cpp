@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_MAP_EVENT.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_MAP_EVENT.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/25													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_MAP_EVENT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_MAP_EVENT::CPacketADMIN_MAP_EVENT					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketADMIN_MAP_EVENT::CPacketADMIN_MAP_EVENT					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 CPacketADMIN_MAP_EVENT::CPacketADMIN_MAP_EVENT()
@@ -25,9 +25,9 @@ CPacketADMIN_MAP_EVENT::CPacketADMIN_MAP_EVENT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_MAP_EVENT::~CPacketADMIN_MAP_EVENT				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketADMIN_MAP_EVENT::~CPacketADMIN_MAP_EVENT				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 CPacketADMIN_MAP_EVENT::~CPacketADMIN_MAP_EVENT()
@@ -37,14 +37,14 @@ CPacketADMIN_MAP_EVENT::~CPacketADMIN_MAP_EVENT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_MAP_EVENT::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketADMIN_MAP_EVENT::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 void CPacketADMIN_MAP_EVENT::Make(
-	DWORD dwMapID,					/* [in] ƒ}ƒbƒvID */
-	CInfoMapEventBase *pInfo)		/* [in] ƒCƒxƒ“ƒgî•ñ */
+	DWORD dwMapID,					/* [in] ãƒãƒƒãƒ—ID */
+	CInfoMapEventBase *pInfo)		/* [in] ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -65,8 +65,8 @@ void CPacketADMIN_MAP_EVENT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_MAP_RENEWEVENT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMapID,		sizeof (dwMapID),	pDataTmp);	/* ƒ}ƒbƒvID */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,		pDataTmp);	/* ƒCƒxƒ“ƒgî•ñ */
+	CopyMemoryRenew (pDataTmp, &dwMapID,		sizeof (dwMapID),	pDataTmp);	/* ãƒãƒƒãƒ—ID */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,		pDataTmp);	/* ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -75,9 +75,9 @@ void CPacketADMIN_MAP_EVENT::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_MAP_EVENT::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketADMIN_MAP_EVENT::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_MAP_EVENT::Set(PBYTE pPacket)
@@ -89,7 +89,7 @@ PBYTE CPacketADMIN_MAP_EVENT::Set(PBYTE pPacket)
 	pRet		 = pPacket;
 	pDataTmp	 = CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ãƒãƒƒãƒ—ID */
 	pDataTmpBack = pDataTmp;
 	InfoTmp.SetSendData (pDataTmp);
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_PARA2.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:”Ä—p[ƒpƒ‰ƒ[ƒ^2ŒÂ]) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_PARA2.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:æ±Žç”¨[ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2å€‹]) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/25													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_PARA2 : public CPacketBase
 {
 public:
-			CPacketADMIN_PARA2();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_PARA2();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_PARA2();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_PARA2();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(BYTE byCmdSub, DWORD dwPara1=0, DWORD dwPara=0);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(BYTE byCmdSub, DWORD dwPara1=0, DWORD dwPara=0);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwPara1,						/* ƒpƒ‰ƒ[ƒ^1 */
-			m_dwPara2;						/* ƒpƒ‰ƒ[ƒ^2 */
+	DWORD	m_dwPara1,						/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+			m_dwPara2;						/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
 } CPacketADMIN_PARA2, *PCPacketADMIN_PARA2;
 
 /* Copyright(C)URARA-works 2008 */

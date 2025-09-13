@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrData.h													 */
-/* “à—e			:ƒf[ƒ^ƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrData.h													 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -39,249 +39,249 @@ class CLibInfoSystem;
 class CLibInfoSkill;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CMgrData : public CDataSlot
 {
 public:
-			CMgrData();											/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrData();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrData();											/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMgrData();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void			Create				(CMainFrame *m_pMainFrame, CMgrGrpData *pMgrGrpData);	/* ì¬ */
-	void			Destroy				(void);													/* ”jŠü */
-	void			SaveIniData			(void);													/* İ’èî•ñ‚ğ•Û‘¶ */
+	void			Create				(CMainFrame *m_pMainFrame, CMgrGrpData *pMgrGrpData);	/* ä½œæˆ */
+	void			Destroy				(void);													/* ç ´æ£„ */
+	void			SaveIniData			(void);													/* è¨­å®šæƒ…å ±ã‚’ä¿å­˜ */
 
-	void			SetWindowInfo		(HINSTANCE hInstance, HWND hWndMain);		/* ƒEƒBƒ“ƒhƒEî•ñ‚ğİ’è */
-	HINSTANCE		GetInstance			(void)	{ return m_hInstance;		}		/* ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹‚ğæ“¾ */
-	HWND			GetMainWindow		(void)	{ return m_hWndMain;		}		/* ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹‚ğæ“¾ */
+	void			SetWindowInfo		(HINSTANCE hInstance, HWND hWndMain);		/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æƒ…å ±ã‚’è¨­å®š */
+	HINSTANCE		GetInstance			(void)	{ return m_hInstance;		}		/* ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾— */
+	HWND			GetMainWindow		(void)	{ return m_hWndMain;		}		/* ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾— */
 
-	void				SetUraraSockTCP		(CUraraSockTCPSBO *pSock)	{ m_pSock = pSock;	}	/* ’ÊMƒ}ƒl[ƒWƒƒ‚ğİ’è */
-	CUraraSockTCPSBO	*GetUraraSockTCP	(void)						{ return m_pSock;	}	/* ’ÊMƒ}ƒl[ƒWƒƒ‚ğæ“¾ */
+	void				SetUraraSockTCP		(CUraraSockTCPSBO *pSock)	{ m_pSock = pSock;	}	/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’è¨­å®š */
+	CUraraSockTCPSBO	*GetUraraSockTCP	(void)						{ return m_pSock;	}	/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ã‚’å–å¾— */
 
-	void			SetAdminWindow		(HWND hWndAdmin)	{ m_hWndAdmin = hWndAdmin;		}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚ğİ’è */
-	HWND			GetAdminWindow		(void)				{ return m_hWndAdmin;			}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚ğæ“¾ */
-	void			SetDebugWindow		(HWND hWndDebug)	{ m_hWndDebug = hWndDebug;		}	/* ƒfƒoƒbƒOƒEƒBƒ“ƒhƒE‚ğİ’è */
-	HWND			GetDebugWindow		(void)				{ return m_hWndDebug;			}	/* ƒfƒoƒbƒOƒEƒBƒ“ƒhƒE‚ğæ“¾ */
-	void			SetAdminLevel		(int nAdminLevel)	{ m_nAdminLevel = nAdminLevel;	}	/* ŠÇ—ÒŒ ŒÀƒŒƒxƒ‹‚ğİ’è */
-	int				GetAdminLevel		(void)				{ return m_nAdminLevel;			}	/* ŠÇ—ÒŒ ŒÀƒŒƒxƒ‹‚ğæ“¾ */
-	void			SetDrawMode			(int nDrawMode)		{ m_nDrawMode = nDrawMode;		}	/* •`‰æƒ‚[ƒh‚ğİ’è */
-	int				GetDrawMode			(void)				{ return m_nDrawMode;			}	/* •`‰æƒ‚[ƒh‚ğæ“¾ */
-	void			SetSetItemID		(DWORD dwItemID)	{ m_dwSetItemID = dwItemID;		}	/* ”z’u‚·‚éƒAƒCƒeƒ€ID‚ğİ’è */
-	DWORD			GetSetItemID		(void)				{ return m_dwSetItemID;			}	/* ”z’u‚·‚éƒAƒCƒeƒ€ID‚ğæ“¾ */
-	void			SetChatModeBack		(int nChatMode)		{ m_nChatModeBack = nChatMode;	}	/* ‘O‰ñ‚Ìƒ`ƒƒƒbƒgí•Ê‚ğİ’è */
-	int				GetChatModeBack		(void)				{ return m_nChatModeBack;		}	/* ‘O‰ñ‚Ìƒ`ƒƒƒbƒgí•Ê‚ğæ“¾ */
-	void			SetDrawTime			(DWORD dwDrawTime)	{ m_dwDrawTime = dwDrawTime;	}	/* •`‰æŠÔ‚ğİ’è */
-	DWORD			GetDrawTime			(void)				{ return m_dwDrawTime;			}	/* •`‰æŠÔ‚ğæ“¾ */
+	void			SetAdminWindow		(HWND hWndAdmin)	{ m_hWndAdmin = hWndAdmin;		}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¨­å®š */
+	HWND			GetAdminWindow		(void)				{ return m_hWndAdmin;			}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å–å¾— */
+	void			SetDebugWindow		(HWND hWndDebug)	{ m_hWndDebug = hWndDebug;		}	/* ãƒ‡ãƒãƒƒã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¨­å®š */
+	HWND			GetDebugWindow		(void)				{ return m_hWndDebug;			}	/* ãƒ‡ãƒãƒƒã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å–å¾— */
+	void			SetAdminLevel		(int nAdminLevel)	{ m_nAdminLevel = nAdminLevel;	}	/* ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«ã‚’è¨­å®š */
+	int				GetAdminLevel		(void)				{ return m_nAdminLevel;			}	/* ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«ã‚’å–å¾— */
+	void			SetDrawMode			(int nDrawMode)		{ m_nDrawMode = nDrawMode;		}	/* æç”»ãƒ¢ãƒ¼ãƒ‰ã‚’è¨­å®š */
+	int				GetDrawMode			(void)				{ return m_nDrawMode;			}	/* æç”»ãƒ¢ãƒ¼ãƒ‰ã‚’å–å¾— */
+	void			SetSetItemID		(DWORD dwItemID)	{ m_dwSetItemID = dwItemID;		}	/* é…ç½®ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ IDã‚’è¨­å®š */
+	DWORD			GetSetItemID		(void)				{ return m_dwSetItemID;			}	/* é…ç½®ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾— */
+	void			SetChatModeBack		(int nChatMode)		{ m_nChatModeBack = nChatMode;	}	/* å‰å›ã®ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ã‚’è¨­å®š */
+	int				GetChatModeBack		(void)				{ return m_nChatModeBack;		}	/* å‰å›ã®ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ã‚’å–å¾— */
+	void			SetDrawTime			(DWORD dwDrawTime)	{ m_dwDrawTime = dwDrawTime;	}	/* æç”»æ™‚é–“ã‚’è¨­å®š */
+	DWORD			GetDrawTime			(void)				{ return m_dwDrawTime;			}	/* æç”»æ™‚é–“ã‚’å–å¾— */
 
-	void			SetAdminNotifyTypeL		(int nType)		{ m_nAdminNotifyTypeL = nType;	}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(¶ƒNƒŠƒbƒN)‚ğİ’è */
-	int				GetAdminNotifyTypeL		(void)			{ return m_nAdminNotifyTypeL;	}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(¶ƒNƒŠƒbƒN)‚ğæ“¾ */
-	void			SetAdminNotifyTypeR		(int nType)		{ m_nAdminNotifyTypeR = nType;	}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(‰EƒNƒŠƒbƒN)‚ğİ’è */
-	int				GetAdminNotifyTypeR		(void)			{ return m_nAdminNotifyTypeR;	}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(‰EƒNƒŠƒbƒN)‚ğæ“¾ */
-	void			SetAdminNotifyTypeRR	(int nType)		{ m_nAdminNotifyTypeRR = nType;	}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(‰Eƒ_ƒuƒ‹ƒNƒŠƒbƒN)‚ğİ’è */
-	int				GetAdminNotifyTypeRR	(void)			{ return m_nAdminNotifyTypeRR;	}	/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(‰Eƒ_ƒuƒ‹ƒNƒŠƒbƒN)‚ğæ“¾ */
+	void			SetAdminNotifyTypeL		(int nType)		{ m_nAdminNotifyTypeL = nType;	}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å·¦ã‚¯ãƒªãƒƒã‚¯)ã‚’è¨­å®š */
+	int				GetAdminNotifyTypeL		(void)			{ return m_nAdminNotifyTypeL;	}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å·¦ã‚¯ãƒªãƒƒã‚¯)ã‚’å–å¾— */
+	void			SetAdminNotifyTypeR		(int nType)		{ m_nAdminNotifyTypeR = nType;	}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å³ã‚¯ãƒªãƒƒã‚¯)ã‚’è¨­å®š */
+	int				GetAdminNotifyTypeR		(void)			{ return m_nAdminNotifyTypeR;	}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å³ã‚¯ãƒªãƒƒã‚¯)ã‚’å–å¾— */
+	void			SetAdminNotifyTypeRR	(int nType)		{ m_nAdminNotifyTypeRR = nType;	}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å³ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯)ã‚’è¨­å®š */
+	int				GetAdminNotifyTypeRR	(void)			{ return m_nAdminNotifyTypeRR;	}	/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å³ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯)ã‚’å–å¾— */
 
-	void			SetLastAccount		(LPCSTR pszAccount)		{ m_strLastAccount = pszAccount;	}	/* ÅIƒAƒJƒEƒ“ƒg–¼‚ğİ’è */
-	LPCSTR			GetLastAccount		(void)					{ return m_strLastAccount;			}	/* ÅIƒAƒJƒEƒ“ƒg–¼‚ğæ“¾ */
-	void			SetLastPassword		(LPCSTR pszPassword)	{ m_strLastPassword = pszPassword;	}	/* ÅIƒpƒXƒ[ƒh‚ğİ’è */
-	LPCSTR			GetLastPassword		(void)					{ return m_strLastPassword;			}	/* ÅIƒpƒXƒ[ƒh‚ğæ“¾ */
+	void			SetLastAccount		(LPCSTR pszAccount)		{ m_strLastAccount = pszAccount;	}	/* æœ€çµ‚ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåã‚’è¨­å®š */
+	LPCSTR			GetLastAccount		(void)					{ return m_strLastAccount;			}	/* æœ€çµ‚ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåã‚’å–å¾— */
+	void			SetLastPassword		(LPCSTR pszPassword)	{ m_strLastPassword = pszPassword;	}	/* æœ€çµ‚ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨­å®š */
+	LPCSTR			GetLastPassword		(void)					{ return m_strLastPassword;			}	/* æœ€çµ‚ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å–å¾— */
 
-	void			SetEditMapPile			(BOOL bEditMapPile)		{ m_bEditMapPile = bEditMapPile;			}	/* d‚Ë‡‚í‚¹—p‚Æ‚µ‚Äƒ}ƒbƒv•ÒW‚ğİ’è */
-	BOOL			GetEditMapPile			(void)					{ return m_bEditMapPile;					}	/* d‚Ë‡‚í‚¹—p‚Æ‚µ‚Äƒ}ƒbƒv•ÒW‚ğæ“¾ */
-	void			SetMoveNoBlock			(BOOL bMoveNoBlock)		{ m_bMoveNoBlock = bMoveNoBlock;			}	/* “–‚½‚è”»’è–³Œø‚ğİ’è */
-	BOOL			GetMoveNoBlock			(void)					{ return m_bMoveNoBlock;					}	/* “–‚½‚è”»’è–³Œø‚ğæ“¾ */
-	void			SetSavePassword			(BOOL bSavePassword)	{ m_bSavePassword = bSavePassword;			}	/* ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚é‚ğİ’è */
-	BOOL			GetSavePassword			(void)					{ return m_bSavePassword;					}	/* ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚é‚ğæ“¾ */
-	void			SetDisableLogin			(BOOL bDisableLogin)	{ m_bDisableLogin = bDisableLogin;			}	/* ƒƒOƒCƒ“‹‘”Û‚ğİ’è */
-	BOOL			GetDisableLogin			(void)					{ return m_bDisableLogin;					}	/* ƒƒOƒCƒ“‹‘”Û‚ğæ“¾ */
-	void			SetSelectMapPartsID		(DWORD dwMapPartsID)	{ m_dwSelectMapPartsID = dwMapPartsID;		}	/* ‘I‘ğ’†‚Ìƒ}ƒbƒvƒp[ƒcID‚ğİ’è */
-	DWORD			GetSelectMapPartsID		(void)					{ return m_dwSelectMapPartsID;				}	/* ‘I‘ğ’†‚Ìƒ}ƒbƒvƒp[ƒcID‚ğæ“¾ */
-	void			SetSelectMapShadowID	(DWORD dwMapShadowID)	{ m_dwSelectMapShadowID = dwMapShadowID;	}	/* ‘I‘ğ’†‚Ìƒ}ƒbƒv‰eID‚ğİ’è */
-	DWORD			GetSelectMapShadowID	(void)					{ return m_dwSelectMapShadowID;				}	/* ‘I‘ğ’†‚Ìƒ}ƒbƒv‰eID‚ğæ“¾ */
-	void			SetViewGrid				(BYTE byViewGrid)		{ m_byViewGrid = byViewGrid;				}	/* ƒOƒŠƒbƒh•\¦‚ğİ’è */
-	BYTE			GetViewGrid				(void)					{ return m_byViewGrid;						}	/* ƒOƒŠƒbƒh•\¦‚ğæ“¾ */
-	void			SetOptionTaskbar		(BOOL bOn)				{ m_bOptionTaskbar = bOn;					}	/* ”­Œ¾‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ‚ğİ’è */
-	BOOL			GetOptionTaskbar		(void)					{ return m_bOptionTaskbar;					}	/* ”­Œ¾‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ‚ğæ“¾ */
-	void			SetOptionViewChat		(BOOL bOn)				{ m_bOptionViewChat = bOn;					}	/* ”­Œ¾‚ğ•\¦‚·‚é‚ğİ’è */
-	BOOL			GetOptionViewChat		(void)					{ return m_bOptionViewChat;					}	/* ”­Œ¾‚ğ•\¦‚·‚é‚ğæ“¾ */
-	void			SetOptionViewItem		(BOOL bOn)				{ m_bOptionViewItem = bOn;					}	/* ƒAƒCƒeƒ€‚ğ•\¦‚·‚é‚ğİ’è */
-	BOOL			GetOptionViewItem		(void)					{ return m_bOptionViewItem;					}	/* ƒAƒCƒeƒ€‚ğ•\¦‚·‚é‚ğæ“¾ */
-	void			SetOptionViewItemName	(BOOL bOn)				{ m_bOptionViewItemName = bOn;				}	/* ƒAƒCƒeƒ€–¼‚ğ•\¦‚·‚é‚ğİ’è */
-	BOOL			GetOptionViewItemName	(void)					{ return m_bOptionViewItemName;				}	/* ƒAƒCƒeƒ€–¼‚ğ•\¦‚·‚é‚ğæ“¾ */
-	void			SetOptionViewHelpIcon	(BOOL bOn)				{ m_bOptionViewHelpIcon = bOn;				}	/* ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚µ‚È‚¢‚ğİ’è */
-	BOOL			GetOptionViewHelpIcon	(void)					{ return m_bOptionViewHelpIcon;				}	/* ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚µ‚È‚¢‚ğæ“¾ */
-	void			SetOptionBattleMsgLog	(BOOL bOn)				{ m_bOptionBattleMsgLog = bOn;				}	/* í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚·‚ğİ’è */
-	BOOL			GetOptionBattleMsgLog	(void)					{ return m_bOptionBattleMsgLog;				}	/* í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚·‚ğæ“¾ */
-	void			SetOption60Frame		(BOOL bOn)				{ m_bOption60Frame = bOn;					}	/* 60ƒtƒŒ[ƒ€‚Å•\¦‚·‚é‚ğİ’è */
-	BOOL			GetOption60Frame		(void)					{ return m_bOption60Frame;					}	/* 60ƒtƒŒ[ƒ€‚Å•\¦‚·‚é‚ğæ“¾ */
+	void			SetEditMapPile			(BOOL bEditMapPile)		{ m_bEditMapPile = bEditMapPile;			}	/* é‡ã­åˆã‚ã›ç”¨ã¨ã—ã¦ãƒãƒƒãƒ—ç·¨é›†ã‚’è¨­å®š */
+	BOOL			GetEditMapPile			(void)					{ return m_bEditMapPile;					}	/* é‡ã­åˆã‚ã›ç”¨ã¨ã—ã¦ãƒãƒƒãƒ—ç·¨é›†ã‚’å–å¾— */
+	void			SetMoveNoBlock			(BOOL bMoveNoBlock)		{ m_bMoveNoBlock = bMoveNoBlock;			}	/* å½“ãŸã‚Šåˆ¤å®šç„¡åŠ¹ã‚’è¨­å®š */
+	BOOL			GetMoveNoBlock			(void)					{ return m_bMoveNoBlock;					}	/* å½“ãŸã‚Šåˆ¤å®šç„¡åŠ¹ã‚’å–å¾— */
+	void			SetSavePassword			(BOOL bSavePassword)	{ m_bSavePassword = bSavePassword;			}	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ã‚’è¨­å®š */
+	BOOL			GetSavePassword			(void)					{ return m_bSavePassword;					}	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ã‚’å–å¾— */
+	void			SetDisableLogin			(BOOL bDisableLogin)	{ m_bDisableLogin = bDisableLogin;			}	/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ã‚’è¨­å®š */
+	BOOL			GetDisableLogin			(void)					{ return m_bDisableLogin;					}	/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ã‚’å–å¾— */
+	void			SetSelectMapPartsID		(DWORD dwMapPartsID)	{ m_dwSelectMapPartsID = dwMapPartsID;		}	/* é¸æŠä¸­ã®ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„IDã‚’è¨­å®š */
+	DWORD			GetSelectMapPartsID		(void)					{ return m_dwSelectMapPartsID;				}	/* é¸æŠä¸­ã®ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„IDã‚’å–å¾— */
+	void			SetSelectMapShadowID	(DWORD dwMapShadowID)	{ m_dwSelectMapShadowID = dwMapShadowID;	}	/* é¸æŠä¸­ã®ãƒãƒƒãƒ—å½±IDã‚’è¨­å®š */
+	DWORD			GetSelectMapShadowID	(void)					{ return m_dwSelectMapShadowID;				}	/* é¸æŠä¸­ã®ãƒãƒƒãƒ—å½±IDã‚’å–å¾— */
+	void			SetViewGrid				(BYTE byViewGrid)		{ m_byViewGrid = byViewGrid;				}	/* ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤ºã‚’è¨­å®š */
+	BYTE			GetViewGrid				(void)					{ return m_byViewGrid;						}	/* ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤ºã‚’å–å¾— */
+	void			SetOptionTaskbar		(BOOL bOn)				{ m_bOptionTaskbar = bOn;					}	/* ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«ã‚’è¨­å®š */
+	BOOL			GetOptionTaskbar		(void)					{ return m_bOptionTaskbar;					}	/* ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«ã‚’å–å¾— */
+	void			SetOptionViewChat		(BOOL bOn)				{ m_bOptionViewChat = bOn;					}	/* ç™ºè¨€ã‚’è¡¨ç¤ºã™ã‚‹ã‚’è¨­å®š */
+	BOOL			GetOptionViewChat		(void)					{ return m_bOptionViewChat;					}	/* ç™ºè¨€ã‚’è¡¨ç¤ºã™ã‚‹ã‚’å–å¾— */
+	void			SetOptionViewItem		(BOOL bOn)				{ m_bOptionViewItem = bOn;					}	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹ã‚’è¨­å®š */
+	BOOL			GetOptionViewItem		(void)					{ return m_bOptionViewItem;					}	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹ã‚’å–å¾— */
+	void			SetOptionViewItemName	(BOOL bOn)				{ m_bOptionViewItemName = bOn;				}	/* ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã™ã‚‹ã‚’è¨­å®š */
+	BOOL			GetOptionViewItemName	(void)					{ return m_bOptionViewItemName;				}	/* ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã™ã‚‹ã‚’å–å¾— */
+	void			SetOptionViewHelpIcon	(BOOL bOn)				{ m_bOptionViewHelpIcon = bOn;				}	/* ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã—ãªã„ã‚’è¨­å®š */
+	BOOL			GetOptionViewHelpIcon	(void)					{ return m_bOptionViewHelpIcon;				}	/* ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã—ãªã„ã‚’å–å¾— */
+	void			SetOptionBattleMsgLog	(BOOL bOn)				{ m_bOptionBattleMsgLog = bOn;				}	/* æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã™ã‚’è¨­å®š */
+	BOOL			GetOptionBattleMsgLog	(void)					{ return m_bOptionBattleMsgLog;				}	/* æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã™ã‚’å–å¾— */
+	void			SetOption60Frame		(BOOL bOn)				{ m_bOption60Frame = bOn;					}	/* 60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã™ã‚‹ã‚’è¨­å®š */
+	BOOL			GetOption60Frame		(void)					{ return m_bOption60Frame;					}	/* 60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã™ã‚‹ã‚’å–å¾— */
 
-	int				GetWindowPosITEMMENUPos		(void)		{ return m_nWindowPosITEMMENUPos;		}	/* ƒAƒCƒeƒ€ƒƒjƒ…[(ˆÊ’u)‚ğæ“¾ */
-	void			SetWindowPosITEMMENUPos		(int nPos)	{ m_nWindowPosITEMMENUPos = nPos;		}	/* ƒAƒCƒeƒ€ƒƒjƒ…[(ˆÊ’u)‚ğİ’è */
-	int				GetWindowPosSKILLMENUPos	(void)		{ return m_nWindowPosSKILLMENUPos;		}	/* ƒXƒLƒ‹ƒƒjƒ…[(ˆÊ’u)‚ğæ“¾ */
-	void			SetWindowPosSKILLMENUPos	(int nPos)	{ m_nWindowPosSKILLMENUPos = nPos;		}	/* ƒXƒLƒ‹ƒƒjƒ…[(ˆÊ’u)‚ğİ’è */
-	int				GetWindowPosSKILLMENUType	(void)		{ return m_nWindowPosSKILLMENUType;		}	/* ƒXƒLƒ‹ƒƒjƒ…[(í•Ê)‚ğæ“¾ */
-	void			SetWindowPosSKILLMENUType	(int nType)	{ m_nWindowPosSKILLMENUType = nType;	}	/* ƒXƒLƒ‹ƒƒjƒ…[(í•Ê)‚ğİ’è */
+	int				GetWindowPosITEMMENUPos		(void)		{ return m_nWindowPosITEMMENUPos;		}	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ä½ç½®)ã‚’å–å¾— */
+	void			SetWindowPosITEMMENUPos		(int nPos)	{ m_nWindowPosITEMMENUPos = nPos;		}	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ä½ç½®)ã‚’è¨­å®š */
+	int				GetWindowPosSKILLMENUPos	(void)		{ return m_nWindowPosSKILLMENUPos;		}	/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ä½ç½®)ã‚’å–å¾— */
+	void			SetWindowPosSKILLMENUPos	(int nPos)	{ m_nWindowPosSKILLMENUPos = nPos;		}	/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ä½ç½®)ã‚’è¨­å®š */
+	int				GetWindowPosSKILLMENUType	(void)		{ return m_nWindowPosSKILLMENUType;		}	/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ç¨®åˆ¥)ã‚’å–å¾— */
+	void			SetWindowPosSKILLMENUType	(int nType)	{ m_nWindowPosSKILLMENUType = nType;	}	/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ç¨®åˆ¥)ã‚’è¨­å®š */
 
-	LPCSTR			GetServerAddr		(void)	{ return m_strServerAddr;	}		/* ƒT[ƒo[ƒAƒhƒŒƒX‚ğæ“¾ */
-	WORD			GetServerPort		(void)	{ return m_wServerPort;		}		/* ƒT[ƒo[ƒ|[ƒg”Ô†‚ğæ“¾ */
+	LPCSTR			GetServerAddr		(void)	{ return m_strServerAddr;	}		/* ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
+	WORD			GetServerPort		(void)	{ return m_wServerPort;		}		/* ã‚µãƒ¼ãƒãƒ¼ãƒãƒ¼ãƒˆç•ªå·ã‚’å–å¾— */
 
-	CInfoCharCli	*GetPlayerChar		(void)	{ return m_pPlayerChar;		}						/* ‘€ì’†‚ÌƒLƒƒƒ‰î•ñ‚ğæ“¾ */
-	void			SetPlayerChar		(CInfoCharCli *pInfoChar)	{ m_pPlayerChar = pInfoChar; }	/* ‘€ì’†‚ÌƒLƒƒƒ‰î•ñ‚ğİ’è */
-	CInfoMapBase	*GetMap				(void)	{ return m_pMap;			}		/* •\¦’†‚Ìƒ}ƒbƒvî•ñ‚ğæ“¾ */
-	CInfoAccount	*GetAccount			(void)	{ return m_pInfoAccount;	}		/* g—p’†‚ÌƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾ */
-	void			SetMap				(CInfoMapBase *pMap)	{ m_pMap = pMap; }	/* •\¦’†‚Ìƒ}ƒbƒvî•ñ‚ğİ’è */
-	void			SetAccount			(CInfoAccount *pInfoAccount);				/* g—p’†‚ÌƒAƒJƒEƒ“ƒgî•ñ‚ğİ’è */
-	DWORD			GetAccountID		(void);										/* g—p’†‚ÌƒAƒJƒEƒ“ƒgID‚ğæ“¾ */
-	void			SetCharID			(DWORD dwCharID);							/* g—p’†‚ÌƒLƒƒƒ‰ID‚ğİ’è */
-	DWORD			GetCharID			(void);										/* g—p’†‚ÌƒLƒƒƒ‰ID‚ğæ“¾ */
-	DWORD			GetMapID			(void);										/* Œ»İ‚Ìƒ}ƒbƒvID‚ğæ“¾ */
-	LPCSTR			GetFamilyTypeName	(WORD wFamilyTypeID);						/* í‘°–¼‚ğæ“¾ */
-	LPCSTR			GetHairTypeName		(WORD wHairTypeID);							/* ”¯Œ^–¼‚ğæ“¾ */
-	LPCSTR			GetHairColorName	(WORD wHairColorID);						/* ”¯F–¼‚ğæ“¾ */
-	LPCSTR			GetEyeColorName		(WORD wEyeColorID);							/* –ÚF–¼‚ğæ“¾ */
-	LPCSTR			GetMotionName		(DWORD dwMotionID);							/* ƒ‚[ƒVƒ‡ƒ“–¼‚ğæ“¾ */
-	LPCSTR			GetMotionProcName	(DWORD dwProcID);							/* s“®–¼‚ğæ“¾ */
-	LPCSTR			GetMapEventName		(int nMapEventType);						/* ƒ}ƒbƒvƒCƒxƒ“ƒgí•Ê–¼‚ğæ“¾ */
+	CInfoCharCli	*GetPlayerChar		(void)	{ return m_pPlayerChar;		}						/* æ“ä½œä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+	void			SetPlayerChar		(CInfoCharCli *pInfoChar)	{ m_pPlayerChar = pInfoChar; }	/* æ“ä½œä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’è¨­å®š */
+	CInfoMapBase	*GetMap				(void)	{ return m_pMap;			}		/* è¡¨ç¤ºä¸­ã®ãƒãƒƒãƒ—æƒ…å ±ã‚’å–å¾— */
+	CInfoAccount	*GetAccount			(void)	{ return m_pInfoAccount;	}		/* ä½¿ç”¨ä¸­ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
+	void			SetMap				(CInfoMapBase *pMap)	{ m_pMap = pMap; }	/* è¡¨ç¤ºä¸­ã®ãƒãƒƒãƒ—æƒ…å ±ã‚’è¨­å®š */
+	void			SetAccount			(CInfoAccount *pInfoAccount);				/* ä½¿ç”¨ä¸­ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’è¨­å®š */
+	DWORD			GetAccountID		(void);										/* ä½¿ç”¨ä¸­ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆIDã‚’å–å¾— */
+	void			SetCharID			(DWORD dwCharID);							/* ä½¿ç”¨ä¸­ã®ã‚­ãƒ£ãƒ©IDã‚’è¨­å®š */
+	DWORD			GetCharID			(void);										/* ä½¿ç”¨ä¸­ã®ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
+	DWORD			GetMapID			(void);										/* ç¾åœ¨ã®ãƒãƒƒãƒ—IDã‚’å–å¾— */
+	LPCSTR			GetFamilyTypeName	(WORD wFamilyTypeID);						/* ç¨®æ—åã‚’å–å¾— */
+	LPCSTR			GetHairTypeName		(WORD wHairTypeID);							/* é«ªå‹åã‚’å–å¾— */
+	LPCSTR			GetHairColorName	(WORD wHairColorID);						/* é«ªè‰²åã‚’å–å¾— */
+	LPCSTR			GetEyeColorName		(WORD wEyeColorID);							/* ç›®è‰²åã‚’å–å¾— */
+	LPCSTR			GetMotionName		(DWORD dwMotionID);							/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³åã‚’å–å¾— */
+	LPCSTR			GetMotionProcName	(DWORD dwProcID);							/* è¡Œå‹•åã‚’å–å¾— */
+	LPCSTR			GetMapEventName		(int nMapEventType);						/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥åã‚’å–å¾— */
 
-	int				GetSystemMsgCount	(void);											/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW”‚ğæ“¾ */
-	PSTSYSTEMMSG	GetSystemMsg		(int nNo);										/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğ’Ç‰Á */
-	void			AddSystemMsg		(BOOL bAddLog, LPCSTR pszMsg, COLORREF clMsg);	/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğæ“¾ */
-	void			DeleteAllSystemMsg	(void);											/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğ‘S‚Äíœ */
+	int				GetSystemMsgCount	(void);											/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ•°ã‚’å–å¾— */
+	PSTSYSTEMMSG	GetSystemMsg		(int nNo);										/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ  */
+	void			AddSystemMsg		(BOOL bAddLog, LPCSTR pszMsg, COLORREF clMsg);	/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å–å¾— */
+	void			DeleteAllSystemMsg	(void);											/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å…¨ã¦å‰Šé™¤ */
 
-	void			SetOnlineCount		(int nCount)	{ m_nOnlineCount = nCount;	}	/* ƒIƒ“ƒ‰ƒCƒ“”‚ğİ’è */
-	int				GetOnlineCount		(void)			{ return m_nOnlineCount;	}	/* ƒIƒ“ƒ‰ƒCƒ“”‚ğæ“¾ */
-	void			SetCharCount		(int nCount)	{ m_nCharCount = nCount;	}	/* ƒLƒƒƒ‰”‚ğİ’è */
-	int				GetCharCount		(void)			{ return m_nCharCount;		}	/* ƒLƒƒƒ‰”‚ğæ“¾ */
-	void			SetPing				(int nPing)		{ m_nPing = nPing;			}	/* ƒT[ƒo[‚Æ‚ÌƒpƒPƒbƒg‰•œŠÔ‚ğİ’è */
-	int				GetPing				(void)			{ return m_nPing;			}	/* ƒT[ƒo[‚Æ‚ÌƒpƒPƒbƒg‰•œŠÔ‚ğæ“¾ */
-	int				GetSEVolume			(void)			{ return m_nSEVolume;		}	/* Œø‰Ê‰¹—Ê‚ğæ“¾ */
-	void			SetSEVolume			(int nSEVolume);								/* Œø‰Ê‰¹—Ê‚ğİ’è */
-	int				GetBGMVolume		(void)			{ return m_nBGMVolume;		}	/* BGM‰¹—Ê‚ğæ“¾ */
-	void			SetBGMVolume		(int nBGMVolume);								/* BGM‰¹—Ê‚ğİ’è */
-	GUID			GetInputGuid		(void)			{ return m_stInputGuid;		}	/* “ü—Íƒpƒbƒh‚ÌGUID‚ğæ“¾ */
-	void			SetInputGuid		(GUID stGuid)	{ m_stInputGuid = stGuid;	}	/* “ü—Íƒpƒbƒh‚ÌGUID‚ğİ’è */
-	int				GetSleepTimer		(void)			{ return m_nSleepTimer;		}	/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[‚ğæ“¾ */
-	void			SetSleepTimer		(int nSleepTimer) { m_nSleepTimer = nSleepTimer; }/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[‚ğİ’è */
-	SIZE			GetDlgMapPartsEdit	(void)			{ return m_sizeDlgMapPartsEdit;	}								/* ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒTƒCƒY‚ğæ“¾ */
-	void			SetDlgMapPartsEdit	(SIZE sizeDlgMapPartsEdit)	{ m_sizeDlgMapPartsEdit = sizeDlgMapPartsEdit; }	/* ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒTƒCƒY‚ğİ’è */
-	SIZE			GetWndMap			(void)						{ return m_sizeWndMap;	}							/* ƒ}ƒbƒvƒEƒBƒ“ƒhƒEƒTƒCƒY‚ğæ“¾ */
-	void			SetWndMap			(SIZE sizeWndMap)			{ m_sizeWndMap = sizeWndMap; }						/* ƒ}ƒbƒvƒEƒBƒ“ƒhƒEƒTƒCƒY‚ğİ’è */
-	int				GetLastSelectGrpNo	(void)						{ return m_nLastSelectGrpNo;	}					/* ÅŒã‚É‘I‚ñ‚¾‰æ‘œ”Ô†‚ğæ“¾ */
-	void			SetLastSelectGrpNo	(int nLastSelectGrpNo)		{ m_nLastSelectGrpNo = nLastSelectGrpNo; }			/* ÅŒã‚É‘I‚ñ‚¾‰æ‘œ”Ô†‚ğİ’è */
-	void			SetInfoTalkEvent	(CInfoTalkEvent *pSrc);						/* ‰ï˜bƒCƒxƒ“ƒgî•ñ‚Ìİ’è */
-	CInfoTalkEvent	*GetInfoTalkEvent	(void);										/* ‰ï˜bƒCƒxƒ“ƒgî•ñ‚Ìæ“¾ */
+	void			SetOnlineCount		(int nCount)	{ m_nOnlineCount = nCount;	}	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°ã‚’è¨­å®š */
+	int				GetOnlineCount		(void)			{ return m_nOnlineCount;	}	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°ã‚’å–å¾— */
+	void			SetCharCount		(int nCount)	{ m_nCharCount = nCount;	}	/* ã‚­ãƒ£ãƒ©æ•°ã‚’è¨­å®š */
+	int				GetCharCount		(void)			{ return m_nCharCount;		}	/* ã‚­ãƒ£ãƒ©æ•°ã‚’å–å¾— */
+	void			SetPing				(int nPing)		{ m_nPing = nPing;			}	/* ã‚µãƒ¼ãƒãƒ¼ã¨ã®ãƒ‘ã‚±ãƒƒãƒˆå¾€å¾©æ™‚é–“ã‚’è¨­å®š */
+	int				GetPing				(void)			{ return m_nPing;			}	/* ã‚µãƒ¼ãƒãƒ¼ã¨ã®ãƒ‘ã‚±ãƒƒãƒˆå¾€å¾©æ™‚é–“ã‚’å–å¾— */
+	int				GetSEVolume			(void)			{ return m_nSEVolume;		}	/* åŠ¹æœéŸ³é‡ã‚’å–å¾— */
+	void			SetSEVolume			(int nSEVolume);								/* åŠ¹æœéŸ³é‡ã‚’è¨­å®š */
+	int				GetBGMVolume		(void)			{ return m_nBGMVolume;		}	/* BGMéŸ³é‡ã‚’å–å¾— */
+	void			SetBGMVolume		(int nBGMVolume);								/* BGMéŸ³é‡ã‚’è¨­å®š */
+	GUID			GetInputGuid		(void)			{ return m_stInputGuid;		}	/* å…¥åŠ›ãƒ‘ãƒƒãƒ‰ã®GUIDã‚’å–å¾— */
+	void			SetInputGuid		(GUID stGuid)	{ m_stInputGuid = stGuid;	}	/* å…¥åŠ›ãƒ‘ãƒƒãƒ‰ã®GUIDã‚’è¨­å®š */
+	int				GetSleepTimer		(void)			{ return m_nSleepTimer;		}	/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ã‚’å–å¾— */
+	void			SetSleepTimer		(int nSleepTimer) { m_nSleepTimer = nSleepTimer; }/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ã‚’è¨­å®š */
+	SIZE			GetDlgMapPartsEdit	(void)			{ return m_sizeDlgMapPartsEdit;	}								/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	void			SetDlgMapPartsEdit	(SIZE sizeDlgMapPartsEdit)	{ m_sizeDlgMapPartsEdit = sizeDlgMapPartsEdit; }	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚µã‚¤ã‚ºã‚’è¨­å®š */
+	SIZE			GetWndMap			(void)						{ return m_sizeWndMap;	}							/* ãƒãƒƒãƒ—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	void			SetWndMap			(SIZE sizeWndMap)			{ m_sizeWndMap = sizeWndMap; }						/* ãƒãƒƒãƒ—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’è¨­å®š */
+	int				GetLastSelectGrpNo	(void)						{ return m_nLastSelectGrpNo;	}					/* æœ€å¾Œã«é¸ã‚“ã ç”»åƒç•ªå·ã‚’å–å¾— */
+	void			SetLastSelectGrpNo	(int nLastSelectGrpNo)		{ m_nLastSelectGrpNo = nLastSelectGrpNo; }			/* æœ€å¾Œã«é¸ã‚“ã ç”»åƒç•ªå·ã‚’è¨­å®š */
+	void			SetInfoTalkEvent	(CInfoTalkEvent *pSrc);						/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã®è¨­å®š */
+	CInfoTalkEvent	*GetInfoTalkEvent	(void);										/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã®å–å¾— */
 
-	CMainFrame		*GetMainFrame		(void)	{ return m_pMainFrame;		}		/* ƒƒCƒ“ƒtƒŒ[ƒ€‚ğæ“¾ */
-	CMgrSound		*GetMgrSound		(void)	{ return m_pMgrSound;		}		/* ƒTƒEƒ“ƒhŠÇ—‚ğæ“¾ */
-	CMgrGrpData 	*GetMgrGrpData		(void)	{ return m_pMgrGrpData;		}		/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ—‚ğæ“¾ */
-	CMgrDraw		*GetMgrDraw			(void)	{ return m_pMgrDraw;		}		/* •`‰æŠÇ—‚ğæ“¾ */
-	CMgrLayer		*GetMgrLayer		(void)	{ return m_pMgrLayer;		}		/* ƒŒƒCƒ„[ŠÇ—‚ğæ“¾ */
-	CMgrWindow		*GetMgrWindow		(void)	{ return m_pMgrWindow;		}		/* ƒEƒBƒ“ƒhƒEŠÇ—‚ğæ“¾ */
-	CMgrKeyInput	*GetMgrKeyInput		(void)	{ return m_pMgrKeyInput;	}		/* ƒL[“ü—ÍŠÇ—‚ğæ“¾ */
+	CMainFrame		*GetMainFrame		(void)	{ return m_pMainFrame;		}		/* ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å–å¾— */
+	CMgrSound		*GetMgrSound		(void)	{ return m_pMgrSound;		}		/* ã‚µã‚¦ãƒ³ãƒ‰ç®¡ç†ã‚’å–å¾— */
+	CMgrGrpData 	*GetMgrGrpData		(void)	{ return m_pMgrGrpData;		}		/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç†ã‚’å–å¾— */
+	CMgrDraw		*GetMgrDraw			(void)	{ return m_pMgrDraw;		}		/* æç”»ç®¡ç†ã‚’å–å¾— */
+	CMgrLayer		*GetMgrLayer		(void)	{ return m_pMgrLayer;		}		/* ãƒ¬ã‚¤ãƒ¤ãƒ¼ç®¡ç†ã‚’å–å¾— */
+	CMgrWindow		*GetMgrWindow		(void)	{ return m_pMgrWindow;		}		/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç®¡ç†ã‚’å–å¾— */
+	CMgrKeyInput	*GetMgrKeyInput		(void)	{ return m_pMgrKeyInput;	}		/* ã‚­ãƒ¼å…¥åŠ›ç®¡ç†ã‚’å–å¾— */
 
-	CLibInfoCharCli		*GetLibInfoChar			(void)	{ return m_pLibInfoChar;		}	/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoDisable		*GetLibInfoDisable		(void)	{ return m_pLibInfoDisable;		}	/* ‹‘”Ûî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapBase		*GetLibInfoMap			(void)	{ return m_pLibInfoMap;			}	/* ƒ}ƒbƒvî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapObject	*GetLibInfoMapObject	(void)	{ return m_pLibInfoMapObject;	}	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapParts	*GetLibInfoMapParts		(void)	{ return m_pLibInfoMapParts;	}	/* ƒ}ƒbƒvƒp[ƒcî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMapShadow	*GetLibInfoMapShadow	(void)	{ return m_pLibInfoMapShadow;	}	/* ƒ}ƒbƒv‰eî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoItem		*GetLibInfoItem			(void)	{ return m_pLibInfoItem;		}	/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoItemType	*GetLibInfoItemType		(void)	{ return m_pLibInfoItemType;	}	/* ƒAƒCƒeƒ€í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoItemWeapon	*GetLibInfoItemWeapon	(void)	{ return m_pLibInfoItemWeapon;	}	/* •Šíî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoEffect		*GetLibInfoEffect		(void)	{ return m_pLibInfoEffect;		}	/* ƒGƒtƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMotion		*GetLibInfoMotion		(void)	{ return m_pLibInfoMotion;		}	/* ƒ‚[ƒVƒ‡ƒ“î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoMotionType	*GetLibInfoMotionType	(void)	{ return m_pLibInfoMotionType;	}	/* ƒ‚[ƒVƒ‡ƒ“í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoEfcBalloon	*GetLibInfoEfcBalloon	(void)	{ return m_pLibInfoEfcBalloon;	}	/* •¬o‚µî•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoSystem		*GetLibInfoSystem		(void)	{ return m_pLibInfoSystem;		}	/* ƒVƒXƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-	CLibInfoSkill		*GetLibInfoSkill		(void)	{ return m_pLibInfoSkill;		}	/* ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
+	CLibInfoCharCli		*GetLibInfoChar			(void)	{ return m_pLibInfoChar;		}	/* ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoDisable		*GetLibInfoDisable		(void)	{ return m_pLibInfoDisable;		}	/* æ‹’å¦æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoMapBase		*GetLibInfoMap			(void)	{ return m_pLibInfoMap;			}	/* ãƒãƒƒãƒ—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoMapObject	*GetLibInfoMapObject	(void)	{ return m_pLibInfoMapObject;	}	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoMapParts	*GetLibInfoMapParts		(void)	{ return m_pLibInfoMapParts;	}	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoMapShadow	*GetLibInfoMapShadow	(void)	{ return m_pLibInfoMapShadow;	}	/* ãƒãƒƒãƒ—å½±æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoItem		*GetLibInfoItem			(void)	{ return m_pLibInfoItem;		}	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoItemType	*GetLibInfoItemType		(void)	{ return m_pLibInfoItemType;	}	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoItemWeapon	*GetLibInfoItemWeapon	(void)	{ return m_pLibInfoItemWeapon;	}	/* æ­¦å™¨æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoEffect		*GetLibInfoEffect		(void)	{ return m_pLibInfoEffect;		}	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoMotion		*GetLibInfoMotion		(void)	{ return m_pLibInfoMotion;		}	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoMotionType	*GetLibInfoMotionType	(void)	{ return m_pLibInfoMotionType;	}	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoEfcBalloon	*GetLibInfoEfcBalloon	(void)	{ return m_pLibInfoEfcBalloon;	}	/* å™´å‡ºã—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoSystem		*GetLibInfoSystem		(void)	{ return m_pLibInfoSystem;		}	/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
+	CLibInfoSkill		*GetLibInfoSkill		(void)	{ return m_pLibInfoSkill;		}	/* ã‚¹ã‚­ãƒ«æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
 
-	CLibInfoCharCli		*GetLibInfoCharOnline	(void)	{ return m_pLibInfoCharOnline;	}	/* ƒƒOƒCƒ“’†ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ğæ“¾ */
-
-
-private:
-	void	ReadIniData	(void);						/* iniƒtƒ@ƒCƒ‹‚©‚çİ’è‚ğ“Ç‚İ‚İ */
+	CLibInfoCharCli		*GetLibInfoCharOnline	(void)	{ return m_pLibInfoCharOnline;	}	/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’å–å¾— */
 
 
 private:
-	HINSTANCE			m_hInstance;				/* ƒCƒ“ƒXƒ^ƒ“ƒXƒnƒ“ƒhƒ‹ */
-	HWND				m_hWndMain,					/* ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-						m_hWndAdmin,				/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚ÌƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-						m_hWndDebug;				/* ƒfƒoƒbƒOƒEƒBƒ“ƒhƒE‚ÌƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-	int					m_nOnlineCount,				/* ƒIƒ“ƒ‰ƒCƒ“” */
-						m_nCharCount,				/* ˆ—ƒLƒƒƒ‰” */
-						m_nPing,					/* ƒT[ƒo[‚Æ‚ÌƒpƒPƒbƒg‰•œŠÔ */
-						m_nAdminLevel,				/* ŠÇ—ÒŒ ŒÀƒŒƒxƒ‹ */
-						m_nDrawMode,				/* •`‰æƒ‚[ƒh */
-						m_nChatModeBack,			/* ‘O‰ñ‚Ìƒ`ƒƒƒbƒgí•Ê */
-						m_nAdminNotifyTypeL,		/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(¶ƒNƒŠƒbƒN) */
-						m_nAdminNotifyTypeR,		/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(‰EƒNƒŠƒbƒN) */
-						m_nAdminNotifyTypeRR,		/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mí•Ê(‰Eƒ_ƒuƒ‹ƒNƒŠƒbƒN) */
-						m_nSEVolume,				/* Œø‰Ê‰¹—Ê */
-						m_nBGMVolume,				/* BGM‰¹—Ê */
-						m_nSleepTimer;				/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[ */
-	BOOL				m_bEditMapPile,				/* d‚Ë‡‚í‚¹—p‚Æ‚µ‚Äƒ}ƒbƒv•ÒW */
-						m_bMoveNoBlock,				/* “–‚½‚è”»’è–³Œø */
-						m_bSavePassword,			/* ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚éH */
-						m_bDisableLogin,			/* ƒƒOƒCƒ“‹‘”Û */
-						m_bOptionTaskbar,			/* ”­Œ¾‚Éƒ^ƒXƒNƒo[‚ğƒ`ƒJƒ`ƒJ */
-						m_bOptionViewChat,			/* ”­Œ¾‚ğ•\¦‚·‚é */
-						m_bOptionViewItem,			/* ƒAƒCƒeƒ€‚ğ•\¦‚·‚é */
-						m_bOptionViewItemName,		/* ƒAƒCƒeƒ€–¼‚ğ•\¦‚·‚é */
-						m_bOptionViewHelpIcon,		/* ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚·‚é */
-						m_bOptionBattleMsgLog,		/* í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚· */
-						m_bOption60Frame;			/* 60ƒtƒŒ[ƒ€‚Å•\¦‚·‚é */
-	BYTE				m_byViewGrid;				/* ƒOƒŠƒbƒh•\¦ */
-	GUID				m_stInputGuid;				/* “ü—Íƒpƒbƒh‚ÌGUID */
-	SIZE				m_sizeDlgMapPartsEdit,		/* ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒTƒCƒY */
-						m_sizeWndMap;				/* ƒ}ƒbƒvƒEƒBƒ“ƒhƒEƒTƒCƒY */
-	int					m_nLastSelectGrpNo;			/* ÅŒã‚É‘I‚ñ‚¾‰æ‘œ”Ô† */
-
-	int					m_nWindowPosITEMMENUPos,	/* ƒAƒCƒeƒ€ƒƒjƒ…[(ˆÊ’u) */
-						m_nWindowPosSKILLMENUPos,	/* ƒXƒLƒ‹ƒƒjƒ…[(ˆÊ’u) */
-						m_nWindowPosSKILLMENUType;	/* ƒXƒLƒ‹ƒƒjƒ…[(í•Ê) */
+	void	ReadIniData	(void);						/* iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è¨­å®šã‚’èª­ã¿è¾¼ã¿ */
 
 
-	CmyString			m_strServerAddr,			/* ƒT[ƒo[ƒAƒhƒŒƒX */
-						m_strLastAccount,			/* ÅŒã‚Ég‚í‚ê‚½ƒAƒJƒEƒ“ƒg–¼ */
-						m_strLastPassword;			/* ÅŒã‚Ég‚í‚ê‚½ƒpƒXƒ[ƒh */
-	WORD				m_wServerPort;				/* ƒT[ƒo[ƒ|[ƒg”Ô† */
-	DWORD				m_dwSelectMapPartsID,		/* ‘I‘ğ’†‚Ìƒ}ƒbƒvƒp[ƒcID(ƒ}ƒbƒv•ÒW—p) */
-						m_dwSelectMapShadowID,		/* ‘I‘ğ’†‚Ìƒ}ƒbƒv‰eID(ƒ}ƒbƒv•ÒW—p) */
-						m_dwSetItemID,				/* ”z’u‚·‚éƒAƒCƒeƒ€ID */
-						m_dwDrawTime;				/* •`‰æŠÔ */
+private:
+	HINSTANCE			m_hInstance;				/* ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãƒãƒ³ãƒ‰ãƒ« */
+	HWND				m_hWndMain,					/* ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ« */
+						m_hWndAdmin,				/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ« */
+						m_hWndDebug;				/* ãƒ‡ãƒãƒƒã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ« */
+	int					m_nOnlineCount,				/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•° */
+						m_nCharCount,				/* å‡¦ç†ã‚­ãƒ£ãƒ©æ•° */
+						m_nPing,					/* ã‚µãƒ¼ãƒãƒ¼ã¨ã®ãƒ‘ã‚±ãƒƒãƒˆå¾€å¾©æ™‚é–“ */
+						m_nAdminLevel,				/* ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ« */
+						m_nDrawMode,				/* æç”»ãƒ¢ãƒ¼ãƒ‰ */
+						m_nChatModeBack,			/* å‰å›ã®ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ */
+						m_nAdminNotifyTypeL,		/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å·¦ã‚¯ãƒªãƒƒã‚¯) */
+						m_nAdminNotifyTypeR,		/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å³ã‚¯ãƒªãƒƒã‚¯) */
+						m_nAdminNotifyTypeRR,		/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥(å³ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯) */
+						m_nSEVolume,				/* åŠ¹æœéŸ³é‡ */
+						m_nBGMVolume,				/* BGMéŸ³é‡ */
+						m_nSleepTimer;				/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ */
+	BOOL				m_bEditMapPile,				/* é‡ã­åˆã‚ã›ç”¨ã¨ã—ã¦ãƒãƒƒãƒ—ç·¨é›† */
+						m_bMoveNoBlock,				/* å½“ãŸã‚Šåˆ¤å®šç„¡åŠ¹ */
+						m_bSavePassword,			/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ï¼Ÿ */
+						m_bDisableLogin,			/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
+						m_bOptionTaskbar,			/* ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ã‚’ãƒã‚«ãƒã‚« */
+						m_bOptionViewChat,			/* ç™ºè¨€ã‚’è¡¨ç¤ºã™ã‚‹ */
+						m_bOptionViewItem,			/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹ */
+						m_bOptionViewItemName,		/* ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã™ã‚‹ */
+						m_bOptionViewHelpIcon,		/* ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹ */
+						m_bOptionBattleMsgLog,		/* æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã™ */
+						m_bOption60Frame;			/* 60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã™ã‚‹ */
+	BYTE				m_byViewGrid;				/* ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º */
+	GUID				m_stInputGuid;				/* å…¥åŠ›ãƒ‘ãƒƒãƒ‰ã®GUID */
+	SIZE				m_sizeDlgMapPartsEdit,		/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚µã‚¤ã‚º */
+						m_sizeWndMap;				/* ãƒãƒƒãƒ—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º */
+	int					m_nLastSelectGrpNo;			/* æœ€å¾Œã«é¸ã‚“ã ç”»åƒç•ªå· */
 
-	CInfoCharCli		*m_pPlayerChar;				/* ‘€ì’†‚ÌƒLƒƒƒ‰î•ñ */
-	CInfoMapBase		*m_pMap;					/* •\¦’†‚Ìƒ}ƒbƒvî•ñ */
-	CInfoAccount		*m_pInfoAccount;			/* g—p’†‚ÌƒAƒJƒEƒ“ƒgî•ñ */
-	CInfoTalkEvent		*m_pInfoTalkEvent;			/* ‰ï˜bƒCƒxƒ“ƒgî•ñ */
+	int					m_nWindowPosITEMMENUPos,	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ä½ç½®) */
+						m_nWindowPosSKILLMENUPos,	/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ä½ç½®) */
+						m_nWindowPosSKILLMENUType;	/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ç¨®åˆ¥) */
 
-	CMainFrame			*m_pMainFrame;				/* ƒƒCƒ“ƒtƒŒ[ƒ€ */
-	CUraraSockTCPSBO	*m_pSock;					/* ’ÊMƒ}ƒl[ƒWƒƒ */
-	CMgrSound			*m_pMgrSound;				/* ƒTƒEƒ“ƒhŠÇ— */
-	CMgrGrpData			*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CMgrDraw			*m_pMgrDraw;				/* •`‰æŠÇ— */
-	CMgrLayer			*m_pMgrLayer;				/* ƒŒƒCƒ„[ŠÇ— */
-	CMgrWindow			*m_pMgrWindow;				/* ƒEƒBƒ“ƒhƒEŠÇ— */
-	CMgrKeyInput		*m_pMgrKeyInput;			/* ƒL[“ü—ÍŠÇ— */
 
-	CLibInfoCharCli		*m_pLibInfoChar;			/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoDisable		*m_pLibInfoDisable;			/* ‹‘”Ûî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapBase		*m_pLibInfoMap;				/* ƒ}ƒbƒvî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapObject	*m_pLibInfoMapObject;		/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapParts	*m_pLibInfoMapParts;		/* ƒ}ƒbƒvƒp[ƒcî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;		/* ƒ}ƒbƒv‰eî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItem		*m_pLibInfoItem;			/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItemType	*m_pLibInfoItemType;		/* ƒAƒCƒeƒ€í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;		/* •Šíî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoEffect		*m_pLibInfoEffect;			/* ƒGƒtƒFƒNƒgî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMotion		*m_pLibInfoMotion;			/* ƒ‚[ƒVƒ‡ƒ“î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMotionType	*m_pLibInfoMotionType;		/* ƒ‚[ƒVƒ‡ƒ“í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;		/* •¬o‚µî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoSystem		*m_pLibInfoSystem;			/* ƒVƒXƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoSkill		*m_pLibInfoSkill;			/* ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoCharCli		*m_pLibInfoCharOnline;		/* ƒƒOƒCƒ“’†ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ */
+	CmyString			m_strServerAddr,			/* ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ */
+						m_strLastAccount,			/* æœ€å¾Œã«ä½¿ã‚ã‚ŒãŸã‚¢ã‚«ã‚¦ãƒ³ãƒˆå */
+						m_strLastPassword;			/* æœ€å¾Œã«ä½¿ã‚ã‚ŒãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	WORD				m_wServerPort;				/* ã‚µãƒ¼ãƒãƒ¼ãƒãƒ¼ãƒˆç•ªå· */
+	DWORD				m_dwSelectMapPartsID,		/* é¸æŠä¸­ã®ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ID(ãƒãƒƒãƒ—ç·¨é›†ç”¨) */
+						m_dwSelectMapShadowID,		/* é¸æŠä¸­ã®ãƒãƒƒãƒ—å½±ID(ãƒãƒƒãƒ—ç·¨é›†ç”¨) */
+						m_dwSetItemID,				/* é…ç½®ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ID */
+						m_dwDrawTime;				/* æç”»æ™‚é–“ */
 
-	CmyArray<PSTSYSTEMMSG, PSTSYSTEMMSG>	m_aSystemMsg;	/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW */
+	CInfoCharCli		*m_pPlayerChar;				/* æ“ä½œä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
+	CInfoMapBase		*m_pMap;					/* è¡¨ç¤ºä¸­ã®ãƒãƒƒãƒ—æƒ…å ± */
+	CInfoAccount		*m_pInfoAccount;			/* ä½¿ç”¨ä¸­ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
+	CInfoTalkEvent		*m_pInfoTalkEvent;			/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
+
+	CMainFrame			*m_pMainFrame;				/* ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  */
+	CUraraSockTCPSBO	*m_pSock;					/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CMgrSound			*m_pMgrSound;				/* ã‚µã‚¦ãƒ³ãƒ‰ç®¡ç† */
+	CMgrGrpData			*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrDraw			*m_pMgrDraw;				/* æç”»ç®¡ç† */
+	CMgrLayer			*m_pMgrLayer;				/* ãƒ¬ã‚¤ãƒ¤ãƒ¼ç®¡ç† */
+	CMgrWindow			*m_pMgrWindow;				/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç®¡ç† */
+	CMgrKeyInput		*m_pMgrKeyInput;			/* ã‚­ãƒ¼å…¥åŠ›ç®¡ç† */
+
+	CLibInfoCharCli		*m_pLibInfoChar;			/* ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoDisable		*m_pLibInfoDisable;			/* æ‹’å¦æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapBase		*m_pLibInfoMap;				/* ãƒãƒƒãƒ—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapObject	*m_pLibInfoMapObject;		/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapParts	*m_pLibInfoMapParts;		/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;		/* ãƒãƒƒãƒ—å½±æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoItem		*m_pLibInfoItem;			/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoItemType	*m_pLibInfoItemType;		/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;		/* æ­¦å™¨æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoEffect		*m_pLibInfoEffect;			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMotion		*m_pLibInfoMotion;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMotionType	*m_pLibInfoMotionType;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoEfcBalloon	*m_pLibInfoEfcBalloon;		/* å™´å‡ºã—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoSystem		*m_pLibInfoSystem;			/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoSkill		*m_pLibInfoSkill;			/* ã‚¹ã‚­ãƒ«æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoCharCli		*m_pLibInfoCharOnline;		/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+
+	CmyArray<PSTSYSTEMMSG, PSTSYSTEMMSG>	m_aSystemMsg;	/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
 } CMgrData, *PCMgrData;
 
 /* Copyright(C)URARA-works 2006 */

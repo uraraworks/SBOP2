@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndMapShadowGrp.h											 */
-/* “à—e			:ƒ}ƒbƒv‰e‰æ‘œˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndMapShadowGrp.h											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ç”»åƒä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,31 +13,31 @@ class CMgrGrpData;
 class CImg32;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWndMapShadowGrp : public CWnd
 {
 public:
-			CWndMapShadowGrp();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWndMapShadowGrp();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWndMapShadowGrp();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWndMapShadowGrp();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
-
-
-protected:
-	void	MakeImage	(void);			/* ‰æ‘œ‚ğì¬ */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
 
 
 protected:
-	int			m_nPos;							/* cƒXƒNƒ[ƒ‹ˆÊ’u */
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgShadow;					/* ƒoƒbƒNƒoƒbƒtƒ@ */
-	CPoint		m_ptCursor;						/* ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒp[ƒcˆÊ’u */
+	void	MakeImage	(void);			/* ç”»åƒã‚’ä½œæˆ */
 
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+
+protected:
+	int			m_nPos;							/* ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½® */
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgShadow;					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+	CPoint		m_ptCursor;						/* ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚ã‚‹ãƒ‘ãƒ¼ãƒ„ä½ç½® */
+
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 
 
 

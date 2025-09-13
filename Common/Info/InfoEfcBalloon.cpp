@@ -1,36 +1,36 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoEfcBalloon.cpp											 */
-/* “à—e			:•¬o‚µî•ñƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoEfcBalloon.cpp											 */
+/* å†…å®¹			:å™´å‡ºã—æƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoEfcBalloon.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_byWait",				/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	"m_bLoop",				/* ƒ‹[ƒvÄ¶ */
-	"m_dwEfcBalloonID",		/* •¬o‚µID */
-	"m_dwListID",			/* •¬o‚µí•ÊID */
-	"m_dwAnimeID",			/* ƒRƒ}”Ô† */
-	"m_dwSoundID",			/* Œø‰Ê‰¹ID */
-	"m_dwGrpID",			/* ‰æ‘œID*/
-	"m_strName",			/* •¬o‚µ–¼ */
+	"m_byWait",				/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	"m_bLoop",				/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	"m_dwEfcBalloonID",		/* å™´å‡ºã—ID */
+	"m_dwListID",			/* å™´å‡ºã—ç¨®åˆ¥ID */
+	"m_dwAnimeID",			/* ã‚³ãƒç•ªå· */
+	"m_dwSoundID",			/* åŠ¹æœéŸ³ID */
+	"m_dwGrpID",			/* ç”»åƒID*/
+	"m_strName",			/* å™´å‡ºã—å */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::CInfoEfcBalloon								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::CInfoEfcBalloon								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CInfoEfcBalloon::CInfoEfcBalloon()
@@ -48,9 +48,9 @@ CInfoEfcBalloon::CInfoEfcBalloon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::~CInfoEfcBalloon								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::~CInfoEfcBalloon								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CInfoEfcBalloon::~CInfoEfcBalloon()
@@ -59,9 +59,9 @@ CInfoEfcBalloon::~CInfoEfcBalloon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2005/05/01														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/05/01														 */
 /* ========================================================================= */
 
 int CInfoEfcBalloon::GetElementNo(LPCSTR pszName)
@@ -82,32 +82,32 @@ int CInfoEfcBalloon::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::GetDataSize									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::GetDataSize									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 DWORD CInfoEfcBalloon::GetDataSize(void)
 {
 	DWORD dwRet;
 
-	dwRet = sizeof (m_byWait)				+	/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-			sizeof (m_bLoop)				+	/* ƒ‹[ƒvÄ¶ */
-			sizeof (m_dwEfcBalloonID)		+	/* •¬o‚µID */
-			sizeof (m_dwListID)				+	/* •¬o‚µí•ÊID */
-			sizeof (m_dwAnimeID)			+	/* ƒRƒ}”Ô† */
-			sizeof (m_dwSoundID)			+	/* Œø‰Ê‰¹ID */
-			(m_strName.GetLength () + 1)	+	/* ‰æ‘œID */
-			sizeof (m_dwGrpID); 			 	/* •¬o‚µ–¼ */
+	dwRet = sizeof (m_byWait)				+	/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+			sizeof (m_bLoop)				+	/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+			sizeof (m_dwEfcBalloonID)		+	/* å™´å‡ºã—ID */
+			sizeof (m_dwListID)				+	/* å™´å‡ºã—ç¨®åˆ¥ID */
+			sizeof (m_dwAnimeID)			+	/* ã‚³ãƒç•ªå· */
+			sizeof (m_dwSoundID)			+	/* åŠ¹æœéŸ³ID */
+			(m_strName.GetLength () + 1)	+	/* ç”»åƒID */
+			sizeof (m_dwGrpID); 			 	/* å™´å‡ºã—å */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 DWORD CInfoEfcBalloon::GetDataSizeNo(int nNo)
@@ -117,14 +117,14 @@ DWORD CInfoEfcBalloon::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_byWait);				break;	/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	case 1:		dwRet = sizeof (m_bLoop);				break;	/* ƒ‹[ƒvÄ¶ */
-	case 2:		dwRet = sizeof (m_dwEfcBalloonID);		break;	/* •¬o‚µID */
-	case 3:		dwRet = sizeof (m_dwListID);			break;	/* •¬o‚µí•ÊID */
-	case 4:		dwRet = sizeof (m_dwAnimeID);			break;	/* ƒRƒ}”Ô† */
-	case 5:		dwRet = sizeof (m_dwSoundID);			break;	/* Œø‰Ê‰¹ID */
-	case 6:		dwRet = sizeof (m_dwGrpID);				break;	/* ‰æ‘œID */
-	case 7:		dwRet = (m_strName.GetLength () + 1);	break;	/* •¬o‚µ–¼ */
+	case 0:		dwRet = sizeof (m_byWait);				break;	/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	case 1:		dwRet = sizeof (m_bLoop);				break;	/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	case 2:		dwRet = sizeof (m_dwEfcBalloonID);		break;	/* å™´å‡ºã—ID */
+	case 3:		dwRet = sizeof (m_dwListID);			break;	/* å™´å‡ºã—ç¨®åˆ¥ID */
+	case 4:		dwRet = sizeof (m_dwAnimeID);			break;	/* ã‚³ãƒç•ªå· */
+	case 5:		dwRet = sizeof (m_dwSoundID);			break;	/* åŠ¹æœéŸ³ID */
+	case 6:		dwRet = sizeof (m_dwGrpID);				break;	/* ç”»åƒID */
+	case 7:		dwRet = (m_strName.GetLength () + 1);	break;	/* å™´å‡ºã—å */
 	}
 
 	return dwRet;
@@ -132,9 +132,9 @@ DWORD CInfoEfcBalloon::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::GetName										 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::GetName										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 LPCSTR CInfoEfcBalloon::GetName(int nNo)
@@ -144,9 +144,9 @@ LPCSTR CInfoEfcBalloon::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::GetWriteData									 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 PBYTE CInfoEfcBalloon::GetWriteData(int nNo, PDWORD pdwSize)
@@ -165,14 +165,14 @@ PBYTE CInfoEfcBalloon::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = &m_byWait;					break;		/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	case 1:		pSrc = (PBYTE)&m_bLoop;				break;		/* ƒ‹[ƒvÄ¶ */
-	case 2:		pSrc = (PBYTE)&m_dwEfcBalloonID;	break;		/* •¬o‚µID */
-	case 3:		pSrc = (PBYTE)&m_dwListID;			break;		/* •¬o‚µí•ÊID */
-	case 4:		pSrc = (PBYTE)&m_dwAnimeID;			break;		/* ƒRƒ}”Ô† */
-	case 5:		pSrc = (PBYTE)&m_dwSoundID;			break;		/* Œø‰Ê‰¹ID */
-	case 6:		pSrc = (PBYTE)&m_dwGrpID;			break;		/* ‰æ‘œID */
-	case 7:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;		/* •¬o‚µ–¼ */
+	case 0:		pSrc = &m_byWait;					break;		/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	case 1:		pSrc = (PBYTE)&m_bLoop;				break;		/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	case 2:		pSrc = (PBYTE)&m_dwEfcBalloonID;	break;		/* å™´å‡ºã—ID */
+	case 3:		pSrc = (PBYTE)&m_dwListID;			break;		/* å™´å‡ºã—ç¨®åˆ¥ID */
+	case 4:		pSrc = (PBYTE)&m_dwAnimeID;			break;		/* ã‚³ãƒç•ªå· */
+	case 5:		pSrc = (PBYTE)&m_dwSoundID;			break;		/* åŠ¹æœéŸ³ID */
+	case 6:		pSrc = (PBYTE)&m_dwGrpID;			break;		/* ç”»åƒID */
+	case 7:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;		/* å™´å‡ºã—å */
 	}
 
 	if (pSrc) {
@@ -185,14 +185,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::ReadElementData								 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::ReadElementData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 DWORD CInfoEfcBalloon::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -201,14 +201,14 @@ DWORD CInfoEfcBalloon::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = &m_byWait;					dwSize = sizeof (m_byWait);			break;	/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	case 1:		pDst = (PBYTE)&m_bLoop;				dwSize = sizeof (m_bLoop);			break;	/* ƒ‹[ƒvÄ¶ */
-	case 2:		pDst = (PBYTE)&m_dwEfcBalloonID;	dwSize = sizeof (m_dwEfcBalloonID);	break;	/* •¬o‚µID */
-	case 3:		pDst = (PBYTE)&m_dwListID;			dwSize = sizeof (m_dwListID);		break;	/* •¬o‚µí•ÊID */
-	case 4:		pDst = (PBYTE)&m_dwAnimeID;			dwSize = sizeof (m_dwAnimeID);		break;	/* ƒRƒ}”Ô† */
-	case 5:		pDst = (PBYTE)&m_dwSoundID;			dwSize = sizeof (m_dwSoundID);		break;	/* Œø‰Ê‰¹ID */
-	case 6:		pDst = (PBYTE)&m_dwGrpID;			dwSize = sizeof (m_dwGrpID);		break;	/* ‰æ‘œID */
-	case 7: 																				  	/* •¬o‚µ–¼ */
+	case 0:		pDst = &m_byWait;					dwSize = sizeof (m_byWait);			break;	/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	case 1:		pDst = (PBYTE)&m_bLoop;				dwSize = sizeof (m_bLoop);			break;	/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	case 2:		pDst = (PBYTE)&m_dwEfcBalloonID;	dwSize = sizeof (m_dwEfcBalloonID);	break;	/* å™´å‡ºã—ID */
+	case 3:		pDst = (PBYTE)&m_dwListID;			dwSize = sizeof (m_dwListID);		break;	/* å™´å‡ºã—ç¨®åˆ¥ID */
+	case 4:		pDst = (PBYTE)&m_dwAnimeID;			dwSize = sizeof (m_dwAnimeID);		break;	/* ã‚³ãƒç•ªå· */
+	case 5:		pDst = (PBYTE)&m_dwSoundID;			dwSize = sizeof (m_dwSoundID);		break;	/* åŠ¹æœéŸ³ID */
+	case 6:		pDst = (PBYTE)&m_dwGrpID;			dwSize = sizeof (m_dwGrpID);		break;	/* ç”»åƒID */
+	case 7: 																				  	/* å™´å‡ºã—å */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
@@ -223,9 +223,9 @@ DWORD CInfoEfcBalloon::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 DWORD CInfoEfcBalloon::GetSendDataSize(void)
@@ -235,9 +235,9 @@ DWORD CInfoEfcBalloon::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 PBYTE CInfoEfcBalloon::GetSendData(void)
@@ -250,23 +250,23 @@ PBYTE CInfoEfcBalloon::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwListID,			sizeof (m_dwListID),		pDataTmp);	/* •¬o‚µí•ÊID */
-	CopyMemoryRenew (pDataTmp, &m_byWait,			sizeof (m_byWait),			pDataTmp);	/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	CopyMemoryRenew (pDataTmp, &m_bLoop,			sizeof (m_bLoop),			pDataTmp);	/* ƒ‹[ƒvÄ¶ */
-	CopyMemoryRenew (pDataTmp, &m_dwEfcBalloonID,	sizeof (m_dwEfcBalloonID),	pDataTmp);	/* •¬o‚µID */
-	CopyMemoryRenew (pDataTmp, &m_dwAnimeID,		sizeof (m_dwAnimeID),		pDataTmp);	/* ƒRƒ}”Ô† */
-	CopyMemoryRenew (pDataTmp, &m_dwSoundID,		sizeof (m_dwSoundID),		pDataTmp);	/* Œø‰Ê‰¹ID */
-	CopyMemoryRenew (pDataTmp, &m_dwGrpID,			sizeof (m_dwGrpID),			pDataTmp);	/* ‰æ‘œID */
-	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp); 								  	/* •¬o‚µ–¼ */
+	CopyMemoryRenew (pDataTmp, &m_dwListID,			sizeof (m_dwListID),		pDataTmp);	/* å™´å‡ºã—ç¨®åˆ¥ID */
+	CopyMemoryRenew (pDataTmp, &m_byWait,			sizeof (m_byWait),			pDataTmp);	/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	CopyMemoryRenew (pDataTmp, &m_bLoop,			sizeof (m_bLoop),			pDataTmp);	/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	CopyMemoryRenew (pDataTmp, &m_dwEfcBalloonID,	sizeof (m_dwEfcBalloonID),	pDataTmp);	/* å™´å‡ºã—ID */
+	CopyMemoryRenew (pDataTmp, &m_dwAnimeID,		sizeof (m_dwAnimeID),		pDataTmp);	/* ã‚³ãƒç•ªå· */
+	CopyMemoryRenew (pDataTmp, &m_dwSoundID,		sizeof (m_dwSoundID),		pDataTmp);	/* åŠ¹æœéŸ³ID */
+	CopyMemoryRenew (pDataTmp, &m_dwGrpID,			sizeof (m_dwGrpID),			pDataTmp);	/* ç”»åƒID */
+	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp); 								  	/* å™´å‡ºã—å */
 
 	return pData;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 PBYTE CInfoEfcBalloon::SetSendData(PBYTE pSrc)
@@ -275,35 +275,35 @@ PBYTE CInfoEfcBalloon::SetSendData(PBYTE pSrc)
 
 	pDataTmp = pSrc;
 
-	CopyMemoryRenew (&m_dwListID,		pDataTmp, sizeof (m_dwListID),			pDataTmp);	/* •¬o‚µí•ÊID */
-	CopyMemoryRenew (&m_byWait,			pDataTmp, sizeof (m_byWait),			pDataTmp);	/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	CopyMemoryRenew (&m_bLoop,			pDataTmp, sizeof (m_bLoop),				pDataTmp);	/* ƒ‹[ƒvÄ¶ */
-	CopyMemoryRenew (&m_dwEfcBalloonID,	pDataTmp, sizeof (m_dwEfcBalloonID),	pDataTmp);	/* •¬o‚µID */
-	CopyMemoryRenew (&m_dwAnimeID,		pDataTmp, sizeof (m_dwAnimeID),			pDataTmp);	/* ƒRƒ}”Ô† */
-	CopyMemoryRenew (&m_dwSoundID,		pDataTmp, sizeof (m_dwSoundID),			pDataTmp);	/* Œø‰Ê‰¹ID */
-	CopyMemoryRenew (&m_dwGrpID,		pDataTmp, sizeof (m_dwGrpID),			pDataTmp);	/* ‰æ‘œID */
-	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp); 								  	/* •¬o‚µ–¼ */
+	CopyMemoryRenew (&m_dwListID,		pDataTmp, sizeof (m_dwListID),			pDataTmp);	/* å™´å‡ºã—ç¨®åˆ¥ID */
+	CopyMemoryRenew (&m_byWait,			pDataTmp, sizeof (m_byWait),			pDataTmp);	/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	CopyMemoryRenew (&m_bLoop,			pDataTmp, sizeof (m_bLoop),				pDataTmp);	/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	CopyMemoryRenew (&m_dwEfcBalloonID,	pDataTmp, sizeof (m_dwEfcBalloonID),	pDataTmp);	/* å™´å‡ºã—ID */
+	CopyMemoryRenew (&m_dwAnimeID,		pDataTmp, sizeof (m_dwAnimeID),			pDataTmp);	/* ã‚³ãƒç•ªå· */
+	CopyMemoryRenew (&m_dwSoundID,		pDataTmp, sizeof (m_dwSoundID),			pDataTmp);	/* åŠ¹æœéŸ³ID */
+	CopyMemoryRenew (&m_dwGrpID,		pDataTmp, sizeof (m_dwGrpID),			pDataTmp);	/* ç”»åƒID */
+	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp); 								  	/* å™´å‡ºã—å */
 
 	return pDataTmp;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEfcBalloon::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CInfoEfcBalloon::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CInfoEfcBalloon::Copy(CInfoEfcBalloon *pSrc)
 {
-	m_byWait			= pSrc->m_byWait;			/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	m_bLoop				= pSrc->m_bLoop;			/* ƒ‹[ƒvÄ¶ */
-	m_dwEfcBalloonID	= pSrc->m_dwEfcBalloonID;	/* •¬o‚µID */
-	m_dwListID			= pSrc->m_dwListID;			/* •¬o‚µí•ÊID */
-	m_dwAnimeID			= pSrc->m_dwAnimeID;		/* ƒRƒ}”Ô† */
-	m_dwSoundID			= pSrc->m_dwSoundID;		/* Œø‰Ê‰¹ID */
-	m_dwGrpID			= pSrc->m_dwGrpID;			/* ‰æ‘œID */
-	m_strName			= pSrc->m_strName;			/* •¬o‚µ–¼ */
+	m_byWait			= pSrc->m_byWait;			/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	m_bLoop				= pSrc->m_bLoop;			/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	m_dwEfcBalloonID	= pSrc->m_dwEfcBalloonID;	/* å™´å‡ºã—ID */
+	m_dwListID			= pSrc->m_dwListID;			/* å™´å‡ºã—ç¨®åˆ¥ID */
+	m_dwAnimeID			= pSrc->m_dwAnimeID;		/* ã‚³ãƒç•ªå· */
+	m_dwSoundID			= pSrc->m_dwSoundID;		/* åŠ¹æœéŸ³ID */
+	m_dwGrpID			= pSrc->m_dwGrpID;			/* ç”»åƒID */
+	m_strName			= pSrc->m_strName;			/* å™´å‡ºã—å */
 }
 
 /* Copyright(C)URARA-works 2007 */

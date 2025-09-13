@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventINITSTATUS.h								 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg(ƒXƒe[ƒ^ƒX‰Šú‰»)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/10/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventINITSTATUS.h								 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ(ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ–)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "DlgAdminMapEventNONE.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminMapEventINITSTATUS : public CDlgAdminMapEventNONE
 {
 public:
-			CDlgAdminMapEventINITSTATUS(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapEventINITSTATUS();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapEventINITSTATUS(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapEventINITSTATUS();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Set		(CInfoMapEventBase *pSrc);							/* İ’è */
-	void	Get		(CInfoMapEventBase *pDst);							/* æ“¾ */
+	void	Set		(CInfoMapEventBase *pSrc);							/* è¨­å®š */
+	void	Get		(CInfoMapEventBase *pDst);							/* å–å¾— */
 
 
 protected:
-	DWORD	m_dwEffectID;			/* ƒGƒtƒFƒNƒgID */
+	DWORD	m_dwEffectID;			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 
 
 
@@ -36,7 +36,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapEventINITSTATUS)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

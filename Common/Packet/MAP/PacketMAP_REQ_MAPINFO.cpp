@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_REQ_MAPINFO.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvî•ñ—v‹) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/01/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_REQ_MAPINFO.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—æƒ…å ±è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/04													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketMAP_REQ_MAPINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_REQ_MAPINFO::CPacketMAP_REQ_MAPINFO					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CPacketMAP_REQ_MAPINFO::CPacketMAP_REQ_MAPINFO					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 CPacketMAP_REQ_MAPINFO::CPacketMAP_REQ_MAPINFO()
@@ -23,9 +23,9 @@ CPacketMAP_REQ_MAPINFO::CPacketMAP_REQ_MAPINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_REQ_MAPINFO::~CPacketMAP_REQ_MAPINFO				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CPacketMAP_REQ_MAPINFO::~CPacketMAP_REQ_MAPINFO				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 CPacketMAP_REQ_MAPINFO::~CPacketMAP_REQ_MAPINFO()
@@ -34,13 +34,13 @@ CPacketMAP_REQ_MAPINFO::~CPacketMAP_REQ_MAPINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_REQ_MAPINFO::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CPacketMAP_REQ_MAPINFO::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 void CPacketMAP_REQ_MAPINFO::Make(
-	DWORD dwMapID)		/* [in] ƒ}ƒbƒvID */
+	DWORD dwMapID)		/* [in] ãƒãƒƒãƒ—ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketMAP_REQ_MAPINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_REQ_MAPINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMapID, sizeof (dwMapID), pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (pDataTmp, &dwMapID, sizeof (dwMapID), pDataTmp);	/* ãƒãƒƒãƒ—ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_REQ_MAPINFO::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CPacketMAP_REQ_MAPINFO::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_REQ_MAPINFO::Set(PBYTE pPacket)
@@ -76,7 +76,7 @@ PBYTE CPacketMAP_REQ_MAPINFO::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ãƒãƒƒãƒ—ID */
 
 	pRet = pDataTmp;
 	return pRet;

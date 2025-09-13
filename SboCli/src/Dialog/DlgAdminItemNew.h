@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemNew.h											 */
-/* “à—e			:ƒAƒCƒeƒ€V‹K’Ç‰Áƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/15													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemNew.h											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ–°è¦è¿½åŠ ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/15													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,33 +16,33 @@ class CMgrGrpData;
 class CWndSelectItemGrp;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminItemNew : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemNew(CWnd* pParent = NULL);			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminItemNew();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminItemNew(CWnd* pParent = NULL);			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminItemNew();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify, BOOL bPosSet = TRUE);	/* ‰Šú‰» */
-	void	Get			(CInfoItem *pDst);							/* •ÒW“à—e‚ğæ“¾ */
-	void	SetModify	(CInfoItem *pInfoItem);						/* •ÒWƒ‚[ƒh‚Æ‚µ‚Äİ’è */
-
-
-protected:
-	void	SelectSound	(DWORD dwSoundID);					/* —‚Æ‚µ‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID‚ğ‘I‘ğ */
+	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify, BOOL bPosSet = TRUE);	/* åˆæœŸåŒ– */
+	void	Get			(CInfoItem *pDst);							/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
+	void	SetModify	(CInfoItem *pInfoItem);						/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰ã¨ã—ã¦è¨­å®š */
 
 
 protected:
-	DWORD				m_dwSelectItemTypeID,	/* í•Ê */
-						m_dwSelectSoundID;		/* —‚Æ‚µ‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
-	BOOL				m_bModeModify,			/* •ÒWƒ‚[ƒh”»’è */
-						m_bPosSet;				/* İ’uˆÊ’u‚ğİ’è‚Å‚«‚é‚©”»’è */
-	CWnd				**m_ppWndNotify;		/* ’Ê’mæƒEƒBƒ“ƒhƒE */
-	CMgrGrpData			*m_pMgrGrpData;			/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CWndSelectItemGrp	*m_pWndSelectItemGrp;	/* ƒAƒCƒeƒ€‰æ‘œ‘I‘ğƒEƒBƒ“ƒhƒE */
-	CLibInfoItemType	*m_pLibInfoItemType;	/* ƒAƒCƒeƒ€í•Êî•ñƒ‰ƒCƒuƒ‰ƒŠ */
+	void	SelectSound	(DWORD dwSoundID);					/* è½ã¨ã—ãŸã¨ãã®åŠ¹æœéŸ³IDã‚’é¸æŠ */
+
+
+protected:
+	DWORD				m_dwSelectItemTypeID,	/* ç¨®åˆ¥ */
+						m_dwSelectSoundID;		/* è½ã¨ã—ãŸã¨ãã®åŠ¹æœéŸ³ID */
+	BOOL				m_bModeModify,			/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰åˆ¤å®š */
+						m_bPosSet;				/* è¨­ç½®ä½ç½®ã‚’è¨­å®šã§ãã‚‹ã‹åˆ¤å®š */
+	CWnd				**m_ppWndNotify;		/* é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CMgrGrpData			*m_pMgrGrpData;			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CWndSelectItemGrp	*m_pWndSelectItemGrp;	/* ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒé¸æŠã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CLibInfoItemType	*m_pLibInfoItemType;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 
 
 
@@ -62,7 +62,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminItemNew)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

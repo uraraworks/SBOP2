@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	WindowTEXTMSG.h												 */
-/* “à—eF		ƒeƒLƒXƒgƒƒbƒZ[ƒW•\Ž¦ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2008/11/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	WindowTEXTMSG.h												 */
+/* å†…å®¹ï¼š		ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤ºã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2008/11/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,62 +16,62 @@ class CInfoTalkEvent;
 class CUraraSockTCPSBO;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowTEXTMSG : public CWindowBase
 {
 public:
-			CWindowTEXTMSG();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowTEXTMSG();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowTEXTMSG();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowTEXTMSG();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);				/* ì¬ */
+	void	Create		(CMgrData *pMgrData);				/* ä½œæˆ */
 
-	void	Draw		(CImg32 *pDst);						/* •`‰æ */
-	BOOL	TimerProc	(void);								/* ŽžŠÔˆ— */
-	void	SetTitle	(LPCSTR pszTitle);					/* Œ¨‘‚«‚ðÝ’è */
-	void	SetName		(LPCSTR pszName);					/* –¼‘O‚ðÝ’è */
-	void	SetMsg		(LPCSTR pszMsg);					/* ƒƒbƒZ[ƒWÝ’è */
-	void	SetTalkEvent(CInfoTalkEvent *pInfo);			/* ‰ï˜bƒCƒxƒ“ƒgÝ’è */
-
-
-protected:
-	BOOL OnUp			(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL OnDown			(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL OnLeft			(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	void DrawChar		(LPCSTR pszText);					/* ‚P•¶Žš•\Ž¦ */
-	void RenewTitle		(void);								/* Œ¨‘‚Æ–¼‘O‰æ‘œ‚ðXV */
-	void InitText		(void);								/* ƒƒbƒZ[ƒW‰æ‘œ‚ð‰Šú‰» */
-	void MsgProc		(void);								/* ƒƒbƒZ[ƒW‰ðÍˆ— */
-	void GetLineText	(LPCSTR pszSrc, CmyString &strDst);	/* 1sŽæ“¾ */
-	void TrimSpace		(CmyString &strSrc);				/* ‘OŒã‚Ì‹ó”’‚ðœ‹Ž */
-	void GetBlock		(LPCSTR pszSrc, CmyString &strDst);	/* ‘å‚©‚Á‚±1ƒuƒƒbƒN•ªŽæ“¾ */
+	void	Draw		(CImg32 *pDst);						/* æç”» */
+	BOOL	TimerProc	(void);								/* æ™‚é–“å‡¦ç† */
+	void	SetTitle	(LPCSTR pszTitle);					/* è‚©æ›¸ãã‚’è¨­å®š */
+	void	SetName		(LPCSTR pszName);					/* åå‰ã‚’è¨­å®š */
+	void	SetMsg		(LPCSTR pszMsg);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¨­å®š */
+	void	SetTalkEvent(CInfoTalkEvent *pInfo);			/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š */
 
 
 protected:
-	BOOL		m_bInputWait,				/* “ü—Í‘Ò‚¿ */
-				m_bSkip;					/* •\Ž¦ƒXƒLƒbƒv */
-	POINT		m_ptDraw;					/* •`‰æˆÊ’u */
-	int			m_nState,					/* •\Ž¦ó‘Ô */
-				m_nType,					/* ƒEƒBƒ“ƒhƒEŽí•Ê */
-				m_nProcPos,					/* ˆ—’†‚Ì•¶ŽšˆÊ’u */
-				m_nProcPosTmp,				/* ˆ—’†‚Ì•¶ŽšˆÊ’u */
-				m_nProcEventPage,			/* ˆ—’†ƒCƒxƒ“ƒgƒy[ƒW */
-				m_nProcEventNo,				/* ˆ—’†ƒCƒxƒ“ƒg”Ô† */
-				m_nSpaceHeight;				/* ƒEƒBƒ“ƒhƒEã‚Ì—]”’‚Ì‚‚³ */
-	DWORD		m_dwLastProc;				/* ‘O‰ñ‚Ìˆ—ŽžŠÔ */
-	CmyString	m_strTitle,					/* Œ¨‘‚« */
-				m_strName,					/* –¼‘O */
-				m_strMsg,					/* ƒƒbƒZ[ƒW */
-				m_strMsgTmp;				/* ƒƒbƒZ[ƒW */
-	CmyStringArray	m_astrMenu;				/* ƒƒjƒ…[€–Ú */
-	CImg32		*m_pDibTitle,				/* Œ¨‘‚«‚Æ–¼‘O•”•ª */
-				*m_pDibText;				/* •¶Žš•`‰æƒeƒ“ƒ|ƒ‰ƒŠ */
-	CInfoTalkEvent		*m_pInfoTalkEvent;	/* ˆ—’†‚Ì‰ï˜bƒCƒxƒ“ƒg */
-	CUraraSockTCPSBO	*m_pSock;			/* ’ÊMƒ}ƒl[ƒWƒƒ */
+	BOOL OnUp			(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL OnDown			(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL OnLeft			(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	void DrawChar		(LPCSTR pszText);					/* ï¼‘æ–‡å­—è¡¨ç¤º */
+	void RenewTitle		(void);								/* è‚©æ›¸ã¨åå‰ç”»åƒã‚’æ›´æ–° */
+	void InitText		(void);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”»åƒã‚’åˆæœŸåŒ– */
+	void MsgProc		(void);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è§£æžå‡¦ç† */
+	void GetLineText	(LPCSTR pszSrc, CmyString &strDst);	/* 1è¡Œå–å¾— */
+	void TrimSpace		(CmyString &strSrc);				/* å‰å¾Œã®ç©ºç™½ã‚’é™¤åŽ» */
+	void GetBlock		(LPCSTR pszSrc, CmyString &strDst);	/* å¤§ã‹ã£ã“1ãƒ–ãƒ­ãƒƒã‚¯åˆ†å–å¾— */
+
+
+protected:
+	BOOL		m_bInputWait,				/* å…¥åŠ›å¾…ã¡ */
+				m_bSkip;					/* è¡¨ç¤ºã‚¹ã‚­ãƒƒãƒ— */
+	POINT		m_ptDraw;					/* æç”»ä½ç½® */
+	int			m_nState,					/* è¡¨ç¤ºçŠ¶æ…‹ */
+				m_nType,					/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç¨®åˆ¥ */
+				m_nProcPos,					/* å‡¦ç†ä¸­ã®æ–‡å­—ä½ç½® */
+				m_nProcPosTmp,				/* å‡¦ç†ä¸­ã®æ–‡å­—ä½ç½® */
+				m_nProcEventPage,			/* å‡¦ç†ä¸­ã‚¤ãƒ™ãƒ³ãƒˆãƒšãƒ¼ã‚¸ */
+				m_nProcEventNo,				/* å‡¦ç†ä¸­ã‚¤ãƒ™ãƒ³ãƒˆç•ªå· */
+				m_nSpaceHeight;				/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸Šã®ä½™ç™½ã®é«˜ã• */
+	DWORD		m_dwLastProc;				/* å‰å›žã®å‡¦ç†æ™‚é–“ */
+	CmyString	m_strTitle,					/* è‚©æ›¸ã */
+				m_strName,					/* åå‰ */
+				m_strMsg,					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+				m_strMsgTmp;				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	CmyStringArray	m_astrMenu;				/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›® */
+	CImg32		*m_pDibTitle,				/* è‚©æ›¸ãã¨åå‰éƒ¨åˆ† */
+				*m_pDibText;				/* æ–‡å­—æç”»ãƒ†ãƒ³ãƒãƒ©ãƒª */
+	CInfoTalkEvent		*m_pInfoTalkEvent;	/* å‡¦ç†ä¸­ã®ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
+	CUraraSockTCPSBO	*m_pSock;			/* é€šä¿¡ãƒžãƒãƒ¼ã‚¸ãƒ£ */
 } CWindowTEXTMSG, *PCWindowTEXTMSG;
 
 /* Copyright(C)URARA-works 2008 */

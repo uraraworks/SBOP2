@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_MODIFYSKILL.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ŠŽƒXƒLƒ‹‚Ì•ÏX) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/01/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_MODIFYSKILL.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:æ‰€æŒã‚¹ã‚­ãƒ«ã®å¤‰æ›´) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/18													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,34 +13,34 @@
 class CInfoCharBase;
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
 enum {
 	CHARMODIFYSKILLTYPE_NONE = 0,
-	CHARMODIFYSKILLTYPE_ADD,						/* ’Ç‰Á */
-	CHARMODIFYSKILLTYPE_DELETE,						/* íœ */
+	CHARMODIFYSKILLTYPE_ADD,						/* è¿½åŠ  */
+	CHARMODIFYSKILLTYPE_DELETE,						/* å‰Šé™¤ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_CHAR_MODIFYSKILL : public CPacketBase
 {
 public:
-			CPacketADMIN_CHAR_MODIFYSKILL();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_CHAR_MODIFYSKILL();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_CHAR_MODIFYSKILL();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_CHAR_MODIFYSKILL();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, DWORD dwSkillID, int nType);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID, DWORD dwSkillID, int nType);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD		m_dwCharID,					/* ƒLƒƒƒ‰ID */
-				m_dwSkillID;				/* ƒXƒLƒ‹ID */
-	int			m_nType;					/* Ží•Ê */
+	DWORD		m_dwCharID,					/* ã‚­ãƒ£ãƒ©ID */
+				m_dwSkillID;				/* ã‚¹ã‚­ãƒ«ID */
+	int			m_nType;					/* ç¨®åˆ¥ */
 } CPacketADMIN_CHAR_MODIFYSKILL, *PCPacketADMIN_CHAR_MODIFYSKILL;
 
 /* Copyright(C)URARA-works 2009 */

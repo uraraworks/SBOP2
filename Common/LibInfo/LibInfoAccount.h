@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoAccount.h											 */
-/* “à—e			:ƒAƒJƒEƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoAccount.h											 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,42 +12,42 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoAccount : public CLibInfoBase
 {
 public:
-			CLibInfoAccount();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoAccount();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoAccount();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoAccount();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);										/* ì¬ */
-	void Destroy		(void);										/* ”jŠü */
-	BOOL CheckPassword	(LPCSTR pszAccount, LPCSTR pszPassword);	/* ƒpƒXƒ[ƒh‚Ìƒ`ƒFƒbƒN */
-	BOOL IsUseMacAddr	(LPCSTR pszMacAddr);						/* MACƒAƒhƒŒƒX‚ªg—pÏ‚İ‚©ƒ`ƒFƒbƒN */
+	void Create			(void);										/* ä½œæˆ */
+	void Destroy		(void);										/* ç ´æ£„ */
+	BOOL CheckPassword	(LPCSTR pszAccount, LPCSTR pszPassword);	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ãƒã‚§ãƒƒã‚¯ */
+	BOOL IsUseMacAddr	(LPCSTR pszMacAddr);						/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ãŒä½¿ç”¨æ¸ˆã¿ã‹ãƒã‚§ãƒƒã‚¯ */
 
-	virtual PCInfoBase GetNew	(void);								/* V‹Kƒf[ƒ^‚ğæ“¾ */
+	virtual PCInfoBase GetNew	(void);								/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	int		GetCount		(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add				(PCInfoBase pInfo);						/* ’Ç‰Á */
-	void	Delete			(int nNo);								/* íœ */
-	void	Delete			(DWORD dwAccountID);					/* íœ */
-	void	DeleteAll		(void);									/* ‘S‚Äíœ */
-	DWORD	GetAccountID	(DWORD dwCharID);						/* ƒLƒƒƒ‰ID‚©‚çƒAƒJƒEƒ“ƒgID‚ğæ“¾ */
+	int		GetCount		(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add				(PCInfoBase pInfo);						/* è¿½åŠ  */
+	void	Delete			(int nNo);								/* å‰Šé™¤ */
+	void	Delete			(DWORD dwAccountID);					/* å‰Šé™¤ */
+	void	DeleteAll		(void);									/* å…¨ã¦å‰Šé™¤ */
+	DWORD	GetAccountID	(DWORD dwCharID);						/* ã‚­ãƒ£ãƒ©IDã‹ã‚‰ã‚¢ã‚«ã‚¦ãƒ³ãƒˆIDã‚’å–å¾— */
 
-	PCInfoBase		GetPtr			(int nNo);						/* ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾ */
-	PCInfoAccount	GetPtr			(DWORD dwAccountID);			/* ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾ */
-	PCInfoAccount	GetPtr			(LPCSTR pszAccount);			/* ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾ */
-	PCInfoAccount	GetPtrSessionID	(DWORD dwSessionID);			/* ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾ */
-	PCInfoAccount	GetPtrMacAddr	(LPCSTR pszMacAddr);			/* ƒAƒJƒEƒ“ƒgî•ñ‚ğæ“¾ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ƒAƒJƒEƒ“ƒgID‚ğæ“¾ */
+	PCInfoBase		GetPtr			(int nNo);						/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
+	PCInfoAccount	GetPtr			(DWORD dwAccountID);			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
+	PCInfoAccount	GetPtr			(LPCSTR pszAccount);			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
+	PCInfoAccount	GetPtrSessionID	(DWORD dwSessionID);			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
+	PCInfoAccount	GetPtrMacAddr	(LPCSTR pszMacAddr);			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’å–å¾— */
 
 
 protected:
-	PARRAYINFOACCOUNT	m_paInfo;				/* ƒAƒJƒEƒ“ƒgî•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„ã‚¢ã‚«ã‚¦ãƒ³ãƒˆIDã‚’å–å¾— */
+
+
+protected:
+	PARRAYINFOACCOUNT	m_paInfo;				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
 } CLibInfoAccount, *PCLibInfoAccount;
 
 /* Copyright(C)URARA-works 2006 */

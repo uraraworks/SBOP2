@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillHEAL.cpp									 */
-/* “à—e			:ƒXƒLƒ‹(ˆÚ“®‚µ‚ÄUŒ‚)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/01/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharSkillHEAL.cpp									 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«(ç§»å‹•ã—ã¦æ”»æ’ƒ)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/22													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -21,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillHEAL::DoDataExchange(CDataExchange* pDX)
@@ -45,9 +45,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillHEAL::CDlgAdminCharSkillHEAL					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillHEAL::CDlgAdminCharSkillHEAL					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillHEAL::CDlgAdminCharSkillHEAL(CWnd* pParent /*=NULL*/)
@@ -64,9 +64,9 @@ CDlgAdminCharSkillHEAL::CDlgAdminCharSkillHEAL(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillHEAL::~CDlgAdminCharSkillHEAL				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillHEAL::~CDlgAdminCharSkillHEAL				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillHEAL::~CDlgAdminCharSkillHEAL()
@@ -75,9 +75,9 @@ CDlgAdminCharSkillHEAL::~CDlgAdminCharSkillHEAL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillHEAL::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillHEAL::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillHEAL::Init(CMgrData *pMgrData)
@@ -87,9 +87,9 @@ void CDlgAdminCharSkillHEAL::Init(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillHEAL::Set									 */
-/* “à—e		:Ý’è															 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillHEAL::Set									 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillHEAL::Set(CInfoSkillBase *pSrc)
@@ -99,11 +99,11 @@ void CDlgAdminCharSkillHEAL::Set(CInfoSkillBase *pSrc)
 	CComboBox *pCombo;
 	PCInfoSkillHEAL pSrcTmp = (PCInfoSkillHEAL)pSrc;
 
-	m_dwValue1		= pSrcTmp->m_dwValue1;		/* Œø‰Ê1 */
-	m_dwValue2		= pSrcTmp->m_dwValue2;		/* Œø‰Ê2 */
-	m_dwDistance	= pSrcTmp->m_dwDistance;	/* ŽË’ö‹——£ */
+	m_dwValue1		= pSrcTmp->m_dwValue1;		/* åŠ¹æžœ1 */
+	m_dwValue2		= pSrcTmp->m_dwValue2;		/* åŠ¹æžœ2 */
+	m_dwDistance	= pSrcTmp->m_dwDistance;	/* å°„ç¨‹è·é›¢ */
 
-	/* ƒqƒbƒgŽž‚Ì•\Ž¦ƒGƒtƒFƒNƒg */
+	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 	pCombo = &m_ctlHitEffect;
 	nNo = 0;
 	nCount = pCombo->GetCount ();
@@ -116,7 +116,7 @@ void CDlgAdminCharSkillHEAL::Set(CInfoSkillBase *pSrc)
 	}
 	pCombo->SetCurSel (nNo);
 
-	/* ‰ñ•œŽí•Ê */
+	/* å›žå¾©ç¨®åˆ¥ */
 	pCombo = &m_ctlHealType;
 	nNo = 0;
 	nCount = pCombo->GetCount ();
@@ -129,7 +129,7 @@ void CDlgAdminCharSkillHEAL::Set(CInfoSkillBase *pSrc)
 	}
 	pCombo->SetCurSel (nNo);
 
-	/* ”ÍˆÍ */
+	/* ç¯„å›² */
 	pCombo = &m_ctlArea;
 	nNo = 0;
 	nCount = pCombo->GetCount ();
@@ -147,9 +147,9 @@ void CDlgAdminCharSkillHEAL::Set(CInfoSkillBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillHEAL::Get									 */
-/* “à—e		:Žæ“¾															 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillHEAL::Get									 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillHEAL::Get(CInfoSkillBase *pDst)
@@ -159,26 +159,26 @@ void CDlgAdminCharSkillHEAL::Get(CInfoSkillBase *pDst)
 
 	UpdateData ();
 
-	pDstTmp->m_dwValue1			= m_dwValue1;		/* Œø‰Ê1 */
-	pDstTmp->m_dwValue2			= m_dwValue2;		/* Œø‰Ê2 */
-	pDstTmp->m_dwDistance		= m_dwDistance;		/* ŽË’ö‹——£ */
+	pDstTmp->m_dwValue1			= m_dwValue1;		/* åŠ¹æžœ1 */
+	pDstTmp->m_dwValue2			= m_dwValue2;		/* åŠ¹æžœ2 */
+	pDstTmp->m_dwDistance		= m_dwDistance;		/* å°„ç¨‹è·é›¢ */
 
-	/* ƒqƒbƒgŽž‚Ì•\Ž¦ƒGƒtƒFƒNƒg */
+	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 	nNo = m_ctlHitEffect.GetCurSel ();
 	pDstTmp->m_dwHitEffectID = m_ctlHitEffect.GetItemData (nNo);
-	/* ‰ñ•œŽí•Ê */
+	/* å›žå¾©ç¨®åˆ¥ */
 	nNo = m_ctlHealType.GetCurSel ();
 	pDstTmp->m_dwHealType = m_ctlHealType.GetItemData (nNo);
-	/* ”ÍˆÍ */
+	/* ç¯„å›² */
 	nNo = m_ctlArea.GetCurSel ();
 	pDstTmp->m_dwArea = m_ctlArea.GetItemData (nNo);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillHEAL::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillHEAL::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
@@ -188,13 +188,13 @@ BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
 	PCLibInfoEffect pLibInfoEffect;
 	STINTLPCSTR *pIntLpcstr,
 		astArea[] = {
-			SKILLHEAL_AREA_NONE,		"Ž©•ªˆÊ’u",
-			SKILLHEAL_AREA_FRONT,		"‘O•û",
-			SKILLHEAL_AREA_AREA,		"ŽüˆÍ",
+			SKILLHEAL_AREA_NONE,		"è‡ªåˆ†ä½ç½®",
+			SKILLHEAL_AREA_FRONT,		"å‰æ–¹",
+			SKILLHEAL_AREA_AREA,		"å‘¨å›²",
 			-1, NULL
 		},
 		astHealType[] = {
-			SKILLHEAL_HEALTYPE_NONE,	"–¢Ý’è",
+			SKILLHEAL_HEALTYPE_NONE,	"æœªè¨­å®š",
 			SKILLHEAL_HEALTYPE_HP,		"HP",
 			SKILLHEAL_HEALTYPE_SP,		"SP",
 			-1, NULL
@@ -203,8 +203,8 @@ BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
 	CDlgAdminCharSkillNONE::OnInitDialog();
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
 
-	/* ƒGƒtƒFƒNƒgID */
-	m_ctlHitEffect.InsertString (0, "–³‚µ");
+	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	m_ctlHitEffect.InsertString (0, "ç„¡ã—");
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
@@ -213,7 +213,7 @@ BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
 	}
 	m_ctlHitEffect.SetCurSel (0);
 
-	/* ‰ñ•œŽí•Ê */
+	/* å›žå¾©ç¨®åˆ¥ */
 	for (i = 0; ; i ++) {
 		pIntLpcstr = &astHealType[i];
 		if (pIntLpcstr->nValue == -1) {
@@ -224,7 +224,7 @@ BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
 	}
 	m_ctlHealType.SetCurSel (0);
 
-	/* ”ÍˆÍ */
+	/* ç¯„å›² */
 	for (i = 0; ; i ++) {
 		pIntLpcstr = &astArea[i];
 		if (pIntLpcstr->nValue == -1) {

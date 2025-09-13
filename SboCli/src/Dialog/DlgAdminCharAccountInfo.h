@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharAccountInfo.h									 */
-/* “à—e			:ƒAƒJƒEƒ“ƒgî•ñƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharAccountInfo.h									 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "DlgAdminBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharAccountInfo : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharAccountInfo(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharAccountInfo();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharAccountInfo(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharAccountInfo();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);							/* ‰Šú‰» */
-	void	Renew		(void);											/* XV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
+	void	Init		(CMgrData *pMgrData);							/* åˆæœŸåŒ– */
+	void	Renew		(void);											/* æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
 
 
 protected:
-	DWORD	m_dwAccountID;			/* •ÒW’†‚ÌƒAƒJƒEƒ“ƒgID */
+	DWORD	m_dwAccountID;			/* ç·¨é›†ä¸­ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
 
 
 
@@ -43,7 +43,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharAccountInfo)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_REQ_DRAGITEM.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒAƒCƒeƒ€ˆÊ’u•ÏX—v‹) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/11/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_REQ_DRAGITEM.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚¢ã‚¤ãƒ†ãƒ ä½ç½®å¤‰æ›´è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,23 +11,23 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_REQ_DRAGITEM : public CPacketBase
 {
 public:
-			CPacketCHAR_REQ_DRAGITEM();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_REQ_DRAGITEM();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_REQ_DRAGITEM();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_REQ_DRAGITEM();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, DWORD dwItemID, POINT ptNewPos);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID, DWORD dwItemID, POINT ptNewPos);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID,					/* ƒLƒƒƒ‰ID */
-			m_dwItemID;					/* ƒAƒCƒeƒ€ID */
-	POINT	m_ptNewPos;					/* V‚µ‚¢ˆÊ’u */
+	DWORD	m_dwCharID,					/* ã‚­ãƒ£ãƒ©ID */
+			m_dwItemID;					/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	POINT	m_ptNewPos;					/* æ–°ã—ã„ä½ç½® */
 } CPacketCHAR_REQ_DRAGITEM, *PCPacketCHAR_REQ_DRAGITEM;
 
 /* Copyright(C)URARA-works 2008 */

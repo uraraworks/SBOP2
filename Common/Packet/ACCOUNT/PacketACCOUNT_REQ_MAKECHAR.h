@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketACCOUNT_REQ_MAKECHAR.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒAƒJƒEƒ“ƒgŒn:ƒLƒƒƒ‰ì¬—v‹) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketACCOUNT_REQ_MAKECHAR.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³»:ã‚­ãƒ£ãƒ©ä½œæˆè¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CInfoCharBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketACCOUNT_REQ_MAKECHAR : public CPacketBase
 {
 public:
-			CPacketACCOUNT_REQ_MAKECHAR();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketACCOUNT_REQ_MAKECHAR();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketACCOUNT_REQ_MAKECHAR();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketACCOUNT_REQ_MAKECHAR();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwAccountID, CInfoCharBase *pInfoCharBase);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwAccountID, CInfoCharBase *pInfoCharBase);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD			m_dwAccountID;				/* ƒAƒJƒEƒ“ƒgID */
-	CInfoCharBase	*m_pInfoCharBase;			/* ƒLƒƒƒ‰î•ñ */
+	DWORD			m_dwAccountID;				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CInfoCharBase	*m_pInfoCharBase;			/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CPacketACCOUNT_REQ_MAKECHAR, *PCPacketACCOUNT_REQ_MAKECHAR;
 
 /* Copyright(C)URARA-works 2006 */

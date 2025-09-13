@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_MODIFY_PARAM.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒpƒ‰ƒ[ƒ^•ÏX’Ê’m) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_MODIFY_PARAM.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ›´é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/09													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_MODIFY_PARAM.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_MODIFY_PARAM::CPacketCHAR_MODIFY_PARAM				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CPacketCHAR_MODIFY_PARAM::CPacketCHAR_MODIFY_PARAM				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 CPacketCHAR_MODIFY_PARAM::CPacketCHAR_MODIFY_PARAM()
@@ -25,9 +25,9 @@ CPacketCHAR_MODIFY_PARAM::CPacketCHAR_MODIFY_PARAM()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_MODIFY_PARAM::~CPacketCHAR_MODIFY_PARAM			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CPacketCHAR_MODIFY_PARAM::~CPacketCHAR_MODIFY_PARAM			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 CPacketCHAR_MODIFY_PARAM::~CPacketCHAR_MODIFY_PARAM()
@@ -36,15 +36,15 @@ CPacketCHAR_MODIFY_PARAM::~CPacketCHAR_MODIFY_PARAM()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_MODIFY_PARAM::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CPacketCHAR_MODIFY_PARAM::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 void CPacketCHAR_MODIFY_PARAM::Make(
-	DWORD dwCharID,		/* [in] ƒLƒƒƒ‰ID */
-	int nType,			/* [in] í•Ê */
-	int nParam)			/* [in] ƒpƒ‰ƒ[ƒ^ */
+	DWORD dwCharID,		/* [in] ã‚­ãƒ£ãƒ©ID */
+	int nType,			/* [in] ç¨®åˆ¥ */
+	int nParam)			/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -63,18 +63,18 @@ void CPacketCHAR_MODIFY_PARAM::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_MODIFY_PARAM;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* í•Ê */
-	CopyMemoryRenew (pDataTmp, &nParam,		sizeof (nParam),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* ç¨®åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &nParam,		sizeof (nParam),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_MODIFY_PARAM::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CPacketCHAR_MODIFY_PARAM::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_MODIFY_PARAM::Set(PBYTE pPacket)
@@ -84,9 +84,9 @@ PBYTE CPacketCHAR_MODIFY_PARAM::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* í•Ê */
-	CopyMemoryRenew (&m_nParam,		pDataTmp, sizeof (m_nParam),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* ç¨®åˆ¥ */
+	CopyMemoryRenew (&m_nParam,		pDataTmp, sizeof (m_nParam),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 
 	pRet = pDataTmp;
 	return pRet;

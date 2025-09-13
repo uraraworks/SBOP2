@@ -1,36 +1,36 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSkillBase.cpp											 */
-/* “à—e			:ƒXƒLƒ‹î•ñŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoSkillBase.cpp											 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«æƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoSkillBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwSkillID",		/* ƒXƒLƒ‹ID */
-	"m_dwSP",			/* Á”ïSP */
-	"m_dwIconID",		/* ƒAƒCƒRƒ“‰æ‘œID */
-	"m_nTypeMain",		/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	"m_nTypeSub",		/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	"m_nUse",			/* g—p§ŒÀ */
-	"m_strName",		/* ƒXƒLƒ‹–¼ */
-	"derivation",		/* ”h¶ƒf[ƒ^ */
+	"m_dwSkillID",		/* ã‚¹ã‚­ãƒ«ID */
+	"m_dwSP",			/* æ¶ˆè²»SP */
+	"m_dwIconID",		/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	"m_nTypeMain",		/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	"m_nTypeSub",		/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	"m_nUse",			/* ä½¿ç”¨åˆ¶é™ */
+	"m_strName",		/* ã‚¹ã‚­ãƒ«å */
+	"derivation",		/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::CInfoSkillBase									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::CInfoSkillBase									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 CInfoSkillBase::CInfoSkillBase()
@@ -49,9 +49,9 @@ CInfoSkillBase::CInfoSkillBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::~CInfoSkillBase								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::~CInfoSkillBase								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 CInfoSkillBase::~CInfoSkillBase()
@@ -60,9 +60,9 @@ CInfoSkillBase::~CInfoSkillBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 int CInfoSkillBase::GetElementNo(LPCSTR pszName)
@@ -83,9 +83,9 @@ int CInfoSkillBase::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetDataSize									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetDataSize									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillBase::GetDataSize(void)
@@ -93,23 +93,23 @@ DWORD CInfoSkillBase::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_dwSkillID);			/* ƒXƒLƒ‹ID */
-	dwRet += sizeof (m_dwSP);				/* Á”ïSP */
-	dwRet += sizeof (m_dwIconID);			/* ƒAƒCƒRƒ“‰æ‘œID */
-	dwRet += sizeof (m_nTypeMain);			/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	dwRet += sizeof (m_nTypeSub);			/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	dwRet += sizeof (m_nUse);				/* g—p§ŒÀ */
-	dwRet += (m_strName.GetLength () + 1);	/* ƒXƒLƒ‹–¼ */
-	dwRet += GetDerivationSize ();			/* ”h¶ƒf[ƒ^ */
+	dwRet += sizeof (m_dwSkillID);			/* ã‚¹ã‚­ãƒ«ID */
+	dwRet += sizeof (m_dwSP);				/* æ¶ˆè²»SP */
+	dwRet += sizeof (m_dwIconID);			/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	dwRet += sizeof (m_nTypeMain);			/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	dwRet += sizeof (m_nTypeSub);			/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	dwRet += sizeof (m_nUse);				/* ä½¿ç”¨åˆ¶é™ */
+	dwRet += (m_strName.GetLength () + 1);	/* ã‚¹ã‚­ãƒ«å */
+	dwRet += GetDerivationSize ();			/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillBase::GetDataSizeNo(int nNo)
@@ -119,14 +119,14 @@ DWORD CInfoSkillBase::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:	dwRet = sizeof (m_dwSkillID);			break;	/* ƒXƒLƒ‹ID */
-	case 1:	dwRet = sizeof (m_dwSP);				break;	/* Á”ïSP */
-	case 2:	dwRet = sizeof (m_dwIconID);			break;	/* ƒAƒCƒRƒ“‰æ‘œID */
-	case 3:	dwRet = sizeof (m_nTypeMain);			break;	/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	case 4:	dwRet = sizeof (m_nTypeSub);			break;	/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	case 5:	dwRet = sizeof (m_nUse);				break;	/* g—p§ŒÀ */
-	case 6:	dwRet = (m_strName.GetLength () + 1);	break;	/* ƒXƒLƒ‹–¼ */
-	case 7:	dwRet = GetDerivationSize ();			break;	/* ”h¶ƒf[ƒ^ */
+	case 0:	dwRet = sizeof (m_dwSkillID);			break;	/* ã‚¹ã‚­ãƒ«ID */
+	case 1:	dwRet = sizeof (m_dwSP);				break;	/* æ¶ˆè²»SP */
+	case 2:	dwRet = sizeof (m_dwIconID);			break;	/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	case 3:	dwRet = sizeof (m_nTypeMain);			break;	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	case 4:	dwRet = sizeof (m_nTypeSub);			break;	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	case 5:	dwRet = sizeof (m_nUse);				break;	/* ä½¿ç”¨åˆ¶é™ */
+	case 6:	dwRet = (m_strName.GetLength () + 1);	break;	/* ã‚¹ã‚­ãƒ«å */
+	case 7:	dwRet = GetDerivationSize ();			break;	/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ */
 	}
 
 	return dwRet;
@@ -134,9 +134,9 @@ DWORD CInfoSkillBase::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetName										 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetName										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 LPCSTR CInfoSkillBase::GetName(int nNo)
@@ -146,9 +146,9 @@ LPCSTR CInfoSkillBase::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetWriteData									 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillBase::GetWriteData(int nNo, PDWORD pdwSize)
@@ -167,14 +167,14 @@ PBYTE CInfoSkillBase::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_dwSkillID;			break;	/* ƒXƒLƒ‹ID */
-	case 1:	pSrc = (PBYTE)&m_dwSP;				break;	/* Á”ïSP */
-	case 2:	pSrc = (PBYTE)&m_dwIconID;			break;	/* ƒAƒCƒRƒ“‰æ‘œID */
-	case 3:	pSrc = (PBYTE)&m_nTypeMain;			break;	/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	case 4:	pSrc = (PBYTE)&m_nTypeSub;			break;	/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	case 5:	pSrc = (PBYTE)&m_nUse;				break;	/* g—p§ŒÀ */
-	case 6:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* ƒXƒLƒ‹–¼ */
-	case 7:		/* ”h¶ƒf[ƒ^ */
+	case 0:	pSrc = (PBYTE)&m_dwSkillID;			break;	/* ã‚¹ã‚­ãƒ«ID */
+	case 1:	pSrc = (PBYTE)&m_dwSP;				break;	/* æ¶ˆè²»SP */
+	case 2:	pSrc = (PBYTE)&m_dwIconID;			break;	/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	case 3:	pSrc = (PBYTE)&m_nTypeMain;			break;	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	case 4:	pSrc = (PBYTE)&m_nTypeSub;			break;	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	case 5:	pSrc = (PBYTE)&m_nUse;				break;	/* ä½¿ç”¨åˆ¶é™ */
+	case 6:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* ã‚¹ã‚­ãƒ«å */
+	case 7:		/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ */
 		pSrc = GetDerivationWriteData (&dwSize);
 		CopyMemory (pRet, pSrc, dwSize);
 		SAFE_DELETE_ARRAY (pSrc);
@@ -191,14 +191,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::ReadElementData								 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::ReadElementData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillBase::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -207,17 +207,17 @@ DWORD CInfoSkillBase::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0: pDst = (PBYTE)&m_dwSkillID;	dwSize = sizeof (m_dwSkillID);	break;	/* ƒXƒLƒ‹ID */
-	case 1: pDst = (PBYTE)&m_dwSP;		dwSize = sizeof (m_dwSP);		break;	/* Á”ïSP */
-	case 2: pDst = (PBYTE)&m_dwIconID;	dwSize = sizeof (m_dwIconID);	break;	/* ƒAƒCƒRƒ“‰æ‘œID */
-	case 3: pDst = (PBYTE)&m_nTypeMain;	dwSize = sizeof (m_nTypeMain);	break;	/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	case 4: pDst = (PBYTE)&m_nTypeSub;	dwSize = sizeof (m_nTypeSub);	break;	/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	case 5: pDst = (PBYTE)&m_nUse;		dwSize = sizeof (m_nUse);		break;	/* g—p§ŒÀ */
-	case 6:		/* ƒXƒLƒ‹–¼ */
+	case 0: pDst = (PBYTE)&m_dwSkillID;	dwSize = sizeof (m_dwSkillID);	break;	/* ã‚¹ã‚­ãƒ«ID */
+	case 1: pDst = (PBYTE)&m_dwSP;		dwSize = sizeof (m_dwSP);		break;	/* æ¶ˆè²»SP */
+	case 2: pDst = (PBYTE)&m_dwIconID;	dwSize = sizeof (m_dwIconID);	break;	/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	case 3: pDst = (PBYTE)&m_nTypeMain;	dwSize = sizeof (m_nTypeMain);	break;	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	case 4: pDst = (PBYTE)&m_nTypeSub;	dwSize = sizeof (m_nTypeSub);	break;	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	case 5: pDst = (PBYTE)&m_nUse;		dwSize = sizeof (m_nUse);		break;	/* ä½¿ç”¨åˆ¶é™ */
+	case 6:		/* ã‚¹ã‚­ãƒ«å */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
-	case 7:		/* ”h¶ƒf[ƒ^ */
+	case 7:		/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ */
 		dwSize = ReadDerivationData (pSrc);
 		break;
 	}
@@ -231,9 +231,9 @@ DWORD CInfoSkillBase::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetDerivationSize								 */
-/* “à—e		:”h¶ƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2009/01/10														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetDerivationSize								 */
+/* å†…å®¹		:æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/01/10														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillBase::GetDerivationSize(void)
@@ -243,9 +243,9 @@ DWORD CInfoSkillBase::GetDerivationSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetDerivationWriteData							 */
-/* “à—e		:”h¶ƒf[ƒ^‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2009/01/10														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetDerivationWriteData							 */
+/* å†…å®¹		:æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2009/01/10														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillBase::GetDerivationWriteData(PDWORD pdwSize)
@@ -261,9 +261,9 @@ PBYTE CInfoSkillBase::GetDerivationWriteData(PDWORD pdwSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::ReadDerivationData								 */
-/* “à—e		:”h¶ƒf[ƒ^‚ğ“Ç‚İ‚İ											 */
-/* “ú•t		:2009/01/10														 */
+/* é–¢æ•°å	:CInfoSkillBase::ReadDerivationData								 */
+/* å†…å®¹		:æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2009/01/10														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillBase::ReadDerivationData(PBYTE pSrc)
@@ -273,9 +273,9 @@ DWORD CInfoSkillBase::ReadDerivationData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillBase::GetSendDataSize(void)
@@ -283,22 +283,22 @@ DWORD CInfoSkillBase::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_dwSkillID);			/* ƒXƒLƒ‹ID */
-	dwRet += sizeof (m_dwSP);				/* Á”ïSP */
-	dwRet += sizeof (m_dwIconID);			/* ƒAƒCƒRƒ“‰æ‘œID */
-	dwRet += sizeof (m_nTypeMain);			/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	dwRet += sizeof (m_nTypeSub);			/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	dwRet += sizeof (m_nUse);				/* g—p§ŒÀ */
-	dwRet += (m_strName.GetLength () + 1);	/* ƒXƒLƒ‹–¼ */
+	dwRet += sizeof (m_dwSkillID);			/* ã‚¹ã‚­ãƒ«ID */
+	dwRet += sizeof (m_dwSP);				/* æ¶ˆè²»SP */
+	dwRet += sizeof (m_dwIconID);			/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	dwRet += sizeof (m_nTypeMain);			/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	dwRet += sizeof (m_nTypeSub);			/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	dwRet += sizeof (m_nUse);				/* ä½¿ç”¨åˆ¶é™ */
+	dwRet += (m_strName.GetLength () + 1);	/* ã‚¹ã‚­ãƒ«å */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillBase::GetSendData(void)
@@ -311,22 +311,22 @@ PBYTE CInfoSkillBase::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwSkillID,	sizeof (m_dwSkillID), 	pDataTmp);	/* ƒXƒLƒ‹ID */
-	CopyMemoryRenew (pDataTmp, &m_dwSP,			sizeof (m_dwSP), 		pDataTmp);	/* Á”ïSP */
-	CopyMemoryRenew (pDataTmp, &m_dwIconID,		sizeof (m_dwIconID), 	pDataTmp);	/* ƒAƒCƒRƒ“‰æ‘œID */
-	CopyMemoryRenew (pDataTmp, &m_nTypeMain,	sizeof (m_nTypeMain),	pDataTmp);	/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	CopyMemoryRenew (pDataTmp, &m_nTypeSub,		sizeof (m_nTypeSub),	pDataTmp);	/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	CopyMemoryRenew (pDataTmp, &m_nUse,			sizeof (m_nUse),	 	pDataTmp);	/* g—p§ŒÀ */
-	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);								/* ƒXƒLƒ‹–¼ */
+	CopyMemoryRenew (pDataTmp, &m_dwSkillID,	sizeof (m_dwSkillID), 	pDataTmp);	/* ã‚¹ã‚­ãƒ«ID */
+	CopyMemoryRenew (pDataTmp, &m_dwSP,			sizeof (m_dwSP), 		pDataTmp);	/* æ¶ˆè²»SP */
+	CopyMemoryRenew (pDataTmp, &m_dwIconID,		sizeof (m_dwIconID), 	pDataTmp);	/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	CopyMemoryRenew (pDataTmp, &m_nTypeMain,	sizeof (m_nTypeMain),	pDataTmp);	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (pDataTmp, &m_nTypeSub,		sizeof (m_nTypeSub),	pDataTmp);	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	CopyMemoryRenew (pDataTmp, &m_nUse,			sizeof (m_nUse),	 	pDataTmp);	/* ä½¿ç”¨åˆ¶é™ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);								/* ã‚¹ã‚­ãƒ«å */
 
 	return pData;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillBase::SetSendData(PBYTE pSrc)
@@ -336,13 +336,13 @@ PBYTE CInfoSkillBase::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_dwSkillID,	pDataTmp, sizeof (m_dwSkillID), pDataTmp);	/* ƒXƒLƒ‹ID */
-	CopyMemoryRenew (&m_dwSP,		pDataTmp, sizeof (m_dwSP), 		pDataTmp);	/* Á”ïSP */
-	CopyMemoryRenew (&m_dwIconID,	pDataTmp, sizeof (m_dwIconID), 	pDataTmp);	/* ƒAƒCƒRƒ“‰æ‘œID */
-	CopyMemoryRenew (&m_nTypeMain,	pDataTmp, sizeof (m_nTypeMain),	pDataTmp);	/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	CopyMemoryRenew (&m_nTypeSub,	pDataTmp, sizeof (m_nTypeSub),	pDataTmp);	/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	CopyMemoryRenew (&m_nUse,		pDataTmp, sizeof (m_nUse),	 	pDataTmp);	/* g—p§ŒÀ */
-	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);							/* ƒXƒLƒ‹–¼ */
+	CopyMemoryRenew (&m_dwSkillID,	pDataTmp, sizeof (m_dwSkillID), pDataTmp);	/* ã‚¹ã‚­ãƒ«ID */
+	CopyMemoryRenew (&m_dwSP,		pDataTmp, sizeof (m_dwSP), 		pDataTmp);	/* æ¶ˆè²»SP */
+	CopyMemoryRenew (&m_dwIconID,	pDataTmp, sizeof (m_dwIconID), 	pDataTmp);	/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	CopyMemoryRenew (&m_nTypeMain,	pDataTmp, sizeof (m_nTypeMain),	pDataTmp);	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (&m_nTypeSub,	pDataTmp, sizeof (m_nTypeSub),	pDataTmp);	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	CopyMemoryRenew (&m_nUse,		pDataTmp, sizeof (m_nUse),	 	pDataTmp);	/* ä½¿ç”¨åˆ¶é™ */
+	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);							/* ã‚¹ã‚­ãƒ«å */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -350,9 +350,9 @@ PBYTE CInfoSkillBase::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillBase::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/12/03														 */
+/* é–¢æ•°å	:CInfoSkillBase::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/12/03														 */
 /* ========================================================================= */
 
 void CInfoSkillBase::Copy(CInfoSkillBase *pSrc)
@@ -360,13 +360,13 @@ void CInfoSkillBase::Copy(CInfoSkillBase *pSrc)
 	if (pSrc == NULL) {
 		return;
 	}
-	m_dwSkillID	= pSrc->m_dwSkillID;	/* ƒXƒLƒ‹ID */
-	m_dwSP		= pSrc->m_dwSP;			/* Á”ïSP */
-	m_dwIconID	= pSrc->m_dwIconID;		/* ƒAƒCƒRƒ“‰æ‘œID */
-	m_nTypeMain	= pSrc->m_nTypeMain;	/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-	m_nTypeSub	= pSrc->m_nTypeSub;		/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-	m_nUse		= pSrc->m_nUse;			/* g—p§ŒÀ */
-	m_strName	= pSrc->m_strName;		/* ƒXƒLƒ‹–¼ */
+	m_dwSkillID	= pSrc->m_dwSkillID;	/* ã‚¹ã‚­ãƒ«ID */
+	m_dwSP		= pSrc->m_dwSP;			/* æ¶ˆè²»SP */
+	m_dwIconID	= pSrc->m_dwIconID;		/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	m_nTypeMain	= pSrc->m_nTypeMain;	/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+	m_nTypeSub	= pSrc->m_nTypeSub;		/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+	m_nUse		= pSrc->m_nUse;			/* ä½¿ç”¨åˆ¶é™ */
+	m_strName	= pSrc->m_strName;		/* ã‚¹ã‚­ãƒ«å */
 }
 
 /* Copyright(C)URARA-works 2008 */

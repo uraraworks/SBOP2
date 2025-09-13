@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcCONNECT.cpp								 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒo[ƒWƒ‡ƒ“ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcCONNECT.cpp								 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,25 +19,25 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT									 */
-/* “à—e		:ŽóMˆ—(Ú‘±Œn)												 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æŽ¥ç¶šç³»)												 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_CONNECT_RES_LOGIN:	RecvProcCONNECT_RES_LOGIN	(pData);	break;	/* ƒƒOƒCƒ“‰ž“š */
-	case SBOCOMMANDID_SUB_CONNECT_RES_PLAY:		RecvProcCONNECT_RES_PLAY	(pData);	break;	/* ƒQ[ƒ€ŠJŽn‰ž“š */
-	case SBOCOMMANDID_SUB_CONNECT_KEEPALIVE:	RecvProcCONNECT_KEEPALIVE	(pData);	break;	/* ¶‘¶Šm”F‰ž“š */
+	case SBOCOMMANDID_SUB_CONNECT_RES_LOGIN:	RecvProcCONNECT_RES_LOGIN	(pData);	break;	/* ãƒ­ã‚°ã‚¤ãƒ³å¿œç­” */
+	case SBOCOMMANDID_SUB_CONNECT_RES_PLAY:		RecvProcCONNECT_RES_PLAY	(pData);	break;	/* ã‚²ãƒ¼ãƒ é–‹å§‹å¿œç­” */
+	case SBOCOMMANDID_SUB_CONNECT_KEEPALIVE:	RecvProcCONNECT_KEEPALIVE	(pData);	break;	/* ç”Ÿå­˜ç¢ºèªå¿œç­” */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT_RES_LOGIN							 */
-/* “à—e		:ŽóMˆ—(ƒƒOƒCƒ“‰ž“š)											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT_RES_LOGIN							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ­ã‚°ã‚¤ãƒ³å¿œç­”)											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
@@ -49,31 +49,31 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 	Packet.Set (pData);
 
 	switch (Packet.m_nResult) {
-	case LOGINRES_OK:			/* –â‘è–³‚µ */
-		/* “ü—Í“à—e‚Æƒ`ƒFƒbƒNó‘Ô‚ð•Û‘¶ */
+	case LOGINRES_OK:			/* å•é¡Œç„¡ã— */
+		/* å…¥åŠ›å†…å®¹ã¨ãƒã‚§ãƒƒã‚¯çŠ¶æ…‹ã‚’ä¿å­˜ */
 		pWindow = (PCWindowLOGIN)m_pMgrWindow->GetWindow (WINDOWTYPE_LOGIN);
 		pWindow->Save ();
 
-//Todo:‚¨’m‚ç‚¹—v‹
+//Todo:ãŠçŸ¥ã‚‰ã›è¦æ±‚
 		PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGINMENU);
-		/* ƒAƒJƒEƒ“ƒgî•ñ‚ð—v‹ */
+		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’è¦æ±‚ */
 		PacketREQ_ACCOUNTINFO.Make (Packet.m_dwAccountID);
 		m_pSock->Send (&PacketREQ_ACCOUNTINFO);
 		break;
 
-	case LOGINRES_NG_PASSWORD:	/* ƒpƒXƒ[ƒh•sˆê’v */
+	case LOGINRES_NG_PASSWORD:	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¸ä¸€è‡´ */
 		DisConnectProc (DISCONNECTID_PASSWORD);
 		break;
 
-	case LOGINRES_NG_LOGIN:		/* ƒƒOƒCƒ“Ï‚Ý */
+	case LOGINRES_NG_LOGIN:		/* ãƒ­ã‚°ã‚¤ãƒ³æ¸ˆã¿ */
 		DisConnectProc (DISCONNECTID_LOGIN);
 		break;
 
-	case LOGINRES_NG_MAC:		/* ì¬Ï‚Ý */
+	case LOGINRES_NG_MAC:		/* ä½œæˆæ¸ˆã¿ */
 		DisConnectProc (DISCONNECTID_MAC);
 		break;
 
-	case LOGINRES_NG_DISABLE:	/* ƒƒOƒCƒ“‹‘”Û */
+	case LOGINRES_NG_DISABLE:	/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
 		m_pMgrData->SetDisableLogin(TRUE);
 		m_pMgrData->SaveIniData();
 		PostMessage (m_hWnd, WM_CLOSE, 0, 0);
@@ -83,9 +83,9 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT_RES_PLAY							 */
-/* “à—e		:ŽóMˆ—(ƒQ[ƒ€ŠJŽn‰ž“š)										 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT_RES_PLAY							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚²ãƒ¼ãƒ é–‹å§‹å¿œç­”)										 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT_RES_PLAY(PBYTE pData)
@@ -95,7 +95,7 @@ void CMainFrame::RecvProcCONNECT_RES_PLAY(PBYTE pData)
 	Packet.Set (pData);
 
 	switch (Packet.m_nResult) {
-	case PLAYRES_ADMINLEVEL_ALL:	/* ŠÇ—ŽÒ(‘SŒ ŒÀ) */
+	case PLAYRES_ADMINLEVEL_ALL:	/* ç®¡ç†è€…(å…¨æ¨©é™) */
 		m_pMgrData->SetAdminLevel (ADMINLEVEL_ALL);
 		break;
 	}
@@ -105,9 +105,9 @@ void CMainFrame::RecvProcCONNECT_RES_PLAY(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcCONNECT_KEEPALIVE							 */
-/* “à—e		:ŽóMˆ—(¶‘¶Šm”F‰ž“š)											 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcCONNECT_KEEPALIVE							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç”Ÿå­˜ç¢ºèªå¿œç­”)											 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcCONNECT_KEEPALIVE(PBYTE pData)

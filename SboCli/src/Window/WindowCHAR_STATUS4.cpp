@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowCHAR_STATUS4.cpp										 */
-/* “à—e			:êŠî•ñƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/02/15													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowCHAR_STATUS4.cpp										 */
+/* å†…å®¹			:å ´æ‰€æƒ…å ±ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/02/15													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 #include "WindowCHAR_STATUS4.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS4::CWindowCHAR_STATUS4						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/02/15														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS4::CWindowCHAR_STATUS4						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/02/15														 */
 /* ========================================================================= */
 
 CWindowCHAR_STATUS4::CWindowCHAR_STATUS4()
@@ -32,9 +32,9 @@ CWindowCHAR_STATUS4::CWindowCHAR_STATUS4()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS4::~CWindowCHAR_STATUS4						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/02/15														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS4::~CWindowCHAR_STATUS4						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/02/15														 */
 /* ========================================================================= */
 
 CWindowCHAR_STATUS4::~CWindowCHAR_STATUS4()
@@ -43,9 +43,9 @@ CWindowCHAR_STATUS4::~CWindowCHAR_STATUS4()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS4::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2009/02/15														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS4::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2009/02/15														 */
 /* ========================================================================= */
 
 void CWindowCHAR_STATUS4::Create(CMgrData *pMgrData)
@@ -58,9 +58,9 @@ void CWindowCHAR_STATUS4::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS4::Draw										 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2009/02/15														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS4::Draw										 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2009/02/15														 */
 /* ========================================================================= */
 
 void CWindowCHAR_STATUS4::Draw(PCImg32 pDst)

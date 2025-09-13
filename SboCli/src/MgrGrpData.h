@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrGrpData.h												 */
-/* “à—e			:ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:MgrGrpData.h												 */
+/* â€œÃ â€”e			:Æ’OÆ’â€°Æ’tÆ’BÆ’bÆ’NÆ’fÂ[Æ’^Æ’}Æ’lÂ[Æ’WÆ’Æ’Æ’NÆ’â€°Æ’X â€™Ã¨â€¹`Æ’tÆ’@Æ’CÆ’â€¹			 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2006/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,7 +11,7 @@
 class CImg32;
 
 /* ========================================================================= */
-/* ’è”éŒ¾																	 */
+/* â€™Ã¨Ââ€ÂÃ©Å’Â¾																	 */
 /* ========================================================================= */
 
 typedef CmyArray<CImg32 *, CImg32 *>	  ARRAYCIMG;
@@ -19,137 +19,137 @@ typedef CmyArray<CImg32 *, CImg32 *>	*PARRAYCIMG;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* Æ’NÆ’â€°Æ’XÂÃ©Å’Â¾																 */
 /* ========================================================================= */
 
 typedef class CMgrGrpData
 {
 public:
-			CMgrGrpData();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrGrpData();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrGrpData();									/* Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^ */
+	virtual ~CMgrGrpData();									/* Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^ */
 
-	BOOL	Load				(void);								/* “Ç‚İ‚İ */
-	BOOL	CheckVersion		(LPCSTR pszVersion);				/* ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN */
-	void	Write				(LPCSTR pszFileName, CImg32 *pSrc);	/* PNGƒf[ƒ^‚Ì•Û‘¶ */
-	CImg32	*GetDibSystem		(void);								/* ƒVƒXƒeƒ€‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibIcon			(void);								/* ƒAƒCƒRƒ“‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibShadow		(void);								/* ‰e‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibMapParts		(int nNo);							/* ƒ}ƒbƒv‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibMapShadow	(int nNo);							/* ƒ}ƒbƒv‰e‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibItem			(int nNo);							/* ƒAƒCƒeƒ€‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibNumS			(void);								/* ”š(S)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibNumM			(void);								/* ”š(M)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibNumL			(void);								/* ”š(L)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibNPC			(int nNo);							/* NPC‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibBody			(WORD wFamilyID);					/* ‘Ì‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibEar			(WORD wFamilyID);					/* ¨‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibCloth		(int nNo);							/* •‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibEye			(int nNo);							/* –Ú‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibHairD		(WORD wHairColorID);				/* ”¯(‰º)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibHairU		(WORD wHairColorID);				/* ”¯(ã)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibSP			(int nNo);							/* “Áê•‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibAcce			(int nNo);							/* ƒAƒNƒZƒTƒŠ‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibEfc32		(int nNo);							/* ƒGƒtƒFƒNƒg(32)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibEfc64		(int nNo);							/* ƒGƒtƒFƒNƒg(64)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibWeapon		(int nNo);							/* •Ší‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibWeaponBow	(int nNo);							/* •Ší(‹|)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibWeaponArrow	(int nNo);							/* •Ší(–î)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibWeaponGlove	(int nNo);							/* •Ší(‘ÅŒ‚)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibWeaponEtc	(int nNo);							/* •Ší(‚»‚Ì‘¼)‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibEfcBalloon	(int nNo);							/* •¬o‚µ‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2Body		(WORD wFamilyID);					/* 2x2‘Ì‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2Cloth		(WORD wClothID);					/* 2x2•‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2Eye		(int nNo);							/* 2x2–Ú‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2Hair		(WORD wHairColorID);				/* 2x2”¯‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2SPCloth	(WORD wSPClothID);					/* 2x2“Áê•‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2SPHair	(WORD wSPHairID);					/* 2x2“Áê”¯‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2Arms		(WORD wArmsID);						/* 2x2‚¿•¨‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2Shield	(WORD wShieldID);					/* 2x2‚‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2ArmsSP	(WORD wArmsID);						/* 2x2“Áê‚¿•¨‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2Bow		(WORD wBowID);						/* 2x2‹|‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2NPC		(WORD wNPCID);						/* 2x2NPC‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2CharShadow(int nNo);							/* 2x2ƒLƒƒƒ‰‰e‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDib2x2NPCShadow	(int nNo);							/* 2x2NPC‰e‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
+	BOOL	Load				(void);								/* â€œÃ‡â€šÃÂÅ¾â€šÃ */
+	BOOL	CheckVersion		(LPCSTR pszVersion);				/* Æ’oÂ[Æ’WÆ’â€¡Æ’â€œÆ’`Æ’FÆ’bÆ’N */
+	void	Write				(LPCSTR pszFileName, CImg32 *pSrc);	/* PNGÆ’fÂ[Æ’^â€šÃŒâ€¢Ã›â€˜Â¶ */
+	CImg32	*GetDibSystem		(void);								/* Æ’VÆ’XÆ’eÆ’â‚¬â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibIcon			(void);								/* Æ’AÆ’CÆ’RÆ’â€œâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibShadow		(void);								/* â€°eâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibMapParts		(int nNo);							/* Æ’}Æ’bÆ’vâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibMapShadow	(int nNo);							/* Æ’}Æ’bÆ’vâ€°eâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibItem			(int nNo);							/* Æ’AÆ’CÆ’eÆ’â‚¬â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibNumS			(void);								/* Ââ€Å½Å¡(S)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibNumM			(void);								/* Ââ€Å½Å¡(M)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibNumL			(void);								/* Ââ€Å½Å¡(L)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibNPC			(int nNo);							/* NPCâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibBody			(WORD wFamilyID);					/* â€˜ÃŒâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibEar			(WORD wFamilyID);					/* Å½Â¨â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibCloth		(int nNo);							/* â€¢Å¾â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibEye			(int nNo);							/* â€“Ãšâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibHairD		(WORD wHairColorID);				/* â€Â¯(â€°Âº)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibHairU		(WORD wHairColorID);				/* â€Â¯(ÂÃ£)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibSP			(int nNo);							/* â€œÃÅ½Ãªâ€¢Å¾â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibAcce			(int nNo);							/* Æ’AÆ’NÆ’ZÆ’TÆ’Å â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibEfc32		(int nNo);							/* Æ’GÆ’tÆ’FÆ’NÆ’g(32)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibEfc64		(int nNo);							/* Æ’GÆ’tÆ’FÆ’NÆ’g(64)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibWeapon		(int nNo);							/* â€¢ÂÅ Ã­â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibWeaponBow	(int nNo);							/* â€¢ÂÅ Ã­(â€¹|)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibWeaponArrow	(int nNo);							/* â€¢ÂÅ Ã­(â€“Ã®)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibWeaponGlove	(int nNo);							/* â€¢ÂÅ Ã­(â€˜Ã…Å’â€š)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibWeaponEtc	(int nNo);							/* â€¢ÂÅ Ã­(â€šÂ»â€šÃŒâ€˜Â¼)â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibEfcBalloon	(int nNo);							/* â€¢Â¬Âoâ€šÂµâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2Body		(WORD wFamilyID);					/* 2x2â€˜ÃŒâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2Cloth		(WORD wClothID);					/* 2x2â€¢Å¾â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2Eye		(int nNo);							/* 2x2â€“Ãšâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2Hair		(WORD wHairColorID);				/* 2x2â€Â¯â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2SPCloth	(WORD wSPClothID);					/* 2x2â€œÃÅ½Ãªâ€¢Å¾â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2SPHair	(WORD wSPHairID);					/* 2x2â€œÃÅ½Ãªâ€Â¯â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2Arms		(WORD wArmsID);						/* 2x2Å½Ââ€šÂ¿â€¢Â¨â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2Shield	(WORD wShieldID);					/* 2x2Ââ€šâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2ArmsSP	(WORD wArmsID);						/* 2x2â€œÃÅ½ÃªÅ½Ââ€šÂ¿â€¢Â¨â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2Bow		(WORD wBowID);						/* 2x2â€¹|â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2NPC		(WORD wNPCID);						/* 2x2NPCâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2CharShadow(int nNo);							/* 2x2Æ’LÆ’Æ’Æ’â€°â€°eâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDib2x2NPCShadow	(int nNo);							/* 2x2NPCâ€°eâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
 
-	CImg32	*GetDib				(DWORD dwGrpIDMain, DWORD dwGrpIDSub, DWORD dwParam);	/* ‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
+	CImg32	*GetDib				(DWORD dwGrpIDMain, DWORD dwGrpIDSub, DWORD dwParam);	/* â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
 
-	CImg32	*GetDibTmpLogo			(void);							/* URARA-worksƒƒS‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibTmpTitle			(void);							/* ƒ^ƒCƒgƒ‹‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibTmpTitleBack		(void);							/* ƒ^ƒCƒgƒ‹”wŒi‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibTmpTitleCloud	(void);							/* ƒ^ƒCƒgƒ‹‰_‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	CImg32	*GetDibTmpLoginMenuBack	(void);							/* ƒƒOƒCƒ“ƒƒjƒ…[‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
+	CImg32	*GetDibTmpLogo			(void);							/* URARA-worksÆ’ÂÆ’Sâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibTmpTitle			(void);							/* Æ’^Æ’CÆ’gÆ’â€¹â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibTmpTitleBack		(void);							/* Æ’^Æ’CÆ’gÆ’â€¹â€wÅ’iâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibTmpTitleCloud	(void);							/* Æ’^Æ’CÆ’gÆ’â€¹â€°_â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibTmpLoginMenuBack	(void);							/* Æ’ÂÆ’OÆ’CÆ’â€œÆ’ÂÆ’jÆ’â€¦Â[â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
 
-	int		GetMapPartsCount	(void);								/* ƒ}ƒbƒvƒp[ƒc”‚ğæ“¾ */
-	CImg32	*GetDibMapPartsTmp	(int nNo);							/* “™”{ƒ}ƒbƒv‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	void	ReadMapPartsTmp		(void);								/* “™”{ƒ}ƒbƒvƒp[ƒc‰æ‘œ‚ğ“Ç‚İ‚İ */
-	void	DeleteMapPartsTmp	(void);								/* “™”{ƒ}ƒbƒvƒp[ƒc‰æ‘œ‚ğíœ */
-	int		GetMapShadowCount	(void);								/* ƒ}ƒbƒv‰e‰æ‘œ”‚ğæ“¾ */
-	CImg32	*GetDibMapShadowTmp	(int nNo);							/* “™”{ƒ}ƒbƒv‰e‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	void	ReadMapShadowTmp	(void);								/* “™”{ƒ}ƒbƒv‰e‰æ‘œ‚ğ“Ç‚İ‚İ */
-	void	DeleteMapShadowTmp	(void);								/* “™”{ƒ}ƒbƒv‰e‰æ‘œ‚ğíœ */
-	int		GetItemCount		(void);								/* ƒAƒCƒeƒ€‰æ‘œ”‚ğæ“¾ */
-	CImg32	*GetDibItemTmp		(int nNo);							/* “™”{ƒAƒCƒeƒ€‰æ‘œƒCƒ[ƒW‚ğæ“¾ */
-	void	ReadItemTmp			(void);								/* “™”{ƒAƒCƒeƒ€‰æ‘œ‚ğ“Ç‚İ‚İ */
-	void	DeleteItemTmp		(void);								/* “™”{ƒAƒCƒeƒ€‰æ‘œ‚ğíœ */
+	int		GetMapPartsCount	(void);								/* Æ’}Æ’bÆ’vÆ’pÂ[Æ’cÂâ€â€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibMapPartsTmp	(int nNo);							/* â€œâ„¢â€{Æ’}Æ’bÆ’vâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	void	ReadMapPartsTmp		(void);								/* â€œâ„¢â€{Æ’}Æ’bÆ’vÆ’pÂ[Æ’câ€°Ã¦â€˜Å“â€šÃ°â€œÃ‡â€šÃÂÅ¾â€šÃ */
+	void	DeleteMapPartsTmp	(void);								/* â€œâ„¢â€{Æ’}Æ’bÆ’vÆ’pÂ[Æ’câ€°Ã¦â€˜Å“â€šÃ°ÂÃ­ÂÅ“ */
+	int		GetMapShadowCount	(void);								/* Æ’}Æ’bÆ’vâ€°eâ€°Ã¦â€˜Å“Ââ€â€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibMapShadowTmp	(int nNo);							/* â€œâ„¢â€{Æ’}Æ’bÆ’vâ€°eâ€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	void	ReadMapShadowTmp	(void);								/* â€œâ„¢â€{Æ’}Æ’bÆ’vâ€°eâ€°Ã¦â€˜Å“â€šÃ°â€œÃ‡â€šÃÂÅ¾â€šÃ */
+	void	DeleteMapShadowTmp	(void);								/* â€œâ„¢â€{Æ’}Æ’bÆ’vâ€°eâ€°Ã¦â€˜Å“â€šÃ°ÂÃ­ÂÅ“ */
+	int		GetItemCount		(void);								/* Æ’AÆ’CÆ’eÆ’â‚¬â€°Ã¦â€˜Å“Ââ€â€šÃ°Å½Ã¦â€œÂ¾ */
+	CImg32	*GetDibItemTmp		(int nNo);							/* â€œâ„¢â€{Æ’AÆ’CÆ’eÆ’â‚¬â€°Ã¦â€˜Å“Æ’CÆ’ÂÂ[Æ’Wâ€šÃ°Å½Ã¦â€œÂ¾ */
+	void	ReadItemTmp			(void);								/* â€œâ„¢â€{Æ’AÆ’CÆ’eÆ’â‚¬â€°Ã¦â€˜Å“â€šÃ°â€œÃ‡â€šÃÂÅ¾â€šÃ */
+	void	DeleteItemTmp		(void);								/* â€œâ„¢â€{Æ’AÆ’CÆ’eÆ’â‚¬â€°Ã¦â€˜Å“â€šÃ°ÂÃ­ÂÅ“ */
 
-	int		GetGrpSize			(DWORD dwGrpIDMain);				/* ‰æ‘œ‚P‚Â‚ ‚½‚è‚ÌƒTƒCƒY‚ğæ“¾ */
-	int		GetGrpCountX		(DWORD dwGrpIDMain);				/* ‰æ‘œ‚Pƒtƒ@ƒCƒ‹‚Ì‰¡ŒÂ”‚ğæ“¾ */
-	int		GetGrpCountY		(DWORD dwGrpIDMain);				/* ‰æ‘œ‚Pƒtƒ@ƒCƒ‹‚ÌcŒÂ”‚ğæ“¾ */
-	void	GetGrpPos			(DWORD dwGrpIDMain, DWORD dwGrpIDSub, POINT &ptDst, WORD wGrpID = 0);	/* w’è‰æ‘œ‚ÌˆÊ’u‚ğæ“¾ */
-
-
-private:
-	BOOL	Read	(LPSTR pszName, CImg32 **pDib, int nSize);	/* PNGƒf[ƒ^‚Ì“Ç‚İ‚İ */
-	BOOL	Read256	(LPSTR pszName, CImg32 **pDib, int nSize);	/* PNGƒf[ƒ^‚Ì“Ç‚İ‚İ */
+	int		GetGrpSize			(DWORD dwGrpIDMain);				/* â€°Ã¦â€˜Å“â€šPâ€šÃ‚â€šÂ â€šÂ½â€šÃ¨â€šÃŒÆ’TÆ’CÆ’Yâ€šÃ°Å½Ã¦â€œÂ¾ */
+	int		GetGrpCountX		(DWORD dwGrpIDMain);				/* â€°Ã¦â€˜Å“â€šPÆ’tÆ’@Æ’CÆ’â€¹â€šÃŒâ€°Â¡Å’Ã‚Ââ€â€šÃ°Å½Ã¦â€œÂ¾ */
+	int		GetGrpCountY		(DWORD dwGrpIDMain);				/* â€°Ã¦â€˜Å“â€šPÆ’tÆ’@Æ’CÆ’â€¹â€šÃŒÂcÅ’Ã‚Ââ€â€šÃ°Å½Ã¦â€œÂ¾ */
+	void	GetGrpPos			(DWORD dwGrpIDMain, DWORD dwGrpIDSub, POINT &ptDst, WORD wGrpID = 0);	/* Å½wâ€™Ã¨â€°Ã¦â€˜Å“â€šÃŒË†ÃŠâ€™uâ€šÃ°Å½Ã¦â€œÂ¾ */
 
 
 private:
-	HMODULE		m_hDll;					/* DLL‚Ìƒ‚ƒWƒ…[ƒ‹ƒnƒ“ƒhƒ‹ */
+	BOOL	Read	(LPSTR pszName, CImg32 **pDib, int nSize);	/* PNGÆ’fÂ[Æ’^â€šÃŒâ€œÃ‡â€šÃÂÅ¾â€šÃ */
+	BOOL	Read256	(LPSTR pszName, CImg32 **pDib, int nSize);	/* PNGÆ’fÂ[Æ’^â€šÃŒâ€œÃ‡â€šÃÂÅ¾â€šÃ */
 
-	int			m_nMapPartsCount,		/* ƒ}ƒbƒvƒp[ƒc‰æ‘œ” */
-				m_nMapShadowCount;		/* ƒ}ƒbƒv‰e‰æ‘œ” */
-	CImg32		*m_pImgSystem,			/* ƒVƒXƒeƒ€ */
-				*m_pImgIcon,			/* ƒAƒCƒRƒ“ */
-				*m_pImgShadow,			/* ‰e‰æ‘œ */
-				*m_pImgItem,			/* ƒAƒCƒeƒ€‰æ‘œ */
-				*m_pImgNumS,			/* ”š(S) */
-				*m_pImgNumM,			/* ”š(M) */
-				*m_pImgNumL;			/* ”š(L) */
-	PARRAYCIMG	m_paImgMapParts,		/* ƒ}ƒbƒvƒp[ƒc */
-				m_paImgMapShadow,		/* ƒ}ƒbƒv‰e */
+
+private:
+	HMODULE		m_hDll;					/* DLLâ€šÃŒÆ’â€šÆ’WÆ’â€¦Â[Æ’â€¹Æ’nÆ’â€œÆ’hÆ’â€¹ */
+
+	int			m_nMapPartsCount,		/* Æ’}Æ’bÆ’vÆ’pÂ[Æ’câ€°Ã¦â€˜Å“Ââ€ */
+				m_nMapShadowCount;		/* Æ’}Æ’bÆ’vâ€°eâ€°Ã¦â€˜Å“Ââ€ */
+	CImg32		*m_pImgSystem,			/* Æ’VÆ’XÆ’eÆ’â‚¬ */
+				*m_pImgIcon,			/* Æ’AÆ’CÆ’RÆ’â€œ */
+				*m_pImgShadow,			/* â€°eâ€°Ã¦â€˜Å“ */
+				*m_pImgItem,			/* Æ’AÆ’CÆ’eÆ’â‚¬â€°Ã¦â€˜Å“ */
+				*m_pImgNumS,			/* Ââ€Å½Å¡(S) */
+				*m_pImgNumM,			/* Ââ€Å½Å¡(M) */
+				*m_pImgNumL;			/* Ââ€Å½Å¡(L) */
+	PARRAYCIMG	m_paImgMapParts,		/* Æ’}Æ’bÆ’vÆ’pÂ[Æ’c */
+				m_paImgMapShadow,		/* Æ’}Æ’bÆ’vâ€°e */
 				m_paImgNPC,				/* NPC */
-				m_paImgBody,			/* ‘Ì */
-				m_paImgEar,				/* ¨ */
-				m_paImgCloth,			/* • */
-				m_paImgEye,				/* –Ú */
-				m_paImgHairD,			/* ”¯(‰º) */
-				m_paImgHairU,			/* ”¯(ã) */
-				m_paImgSP,				/* “Áê• */
-				m_paImgAcce,			/* ƒAƒNƒZƒTƒŠ */
-				m_paImgMapPartsTmp,		/* “™”{ƒ}ƒbƒvƒp[ƒc */
-				m_paImgMapShadowTmp,	/* “™”{ƒ}ƒbƒv‰e */
-				m_paImgItemTmp,			/* “™”{ƒAƒCƒeƒ€ */
-				m_paImgEfc32,			/* ƒGƒtƒFƒNƒg(32) */
-				m_paImgEfc64,			/* ƒGƒtƒFƒNƒg(64) */
-				m_paImgWeapon,			/* •Ší */
-				m_paImgWeaponBow,		/* •Ší(‹|) */
-				m_paImgWeaponArrow,		/* •Ší(–î) */
-				m_paImgWeaponGlove,		/* •Ší(‘ÅŒ‚) */
-				m_paImgWeaponEtc,		/* •Ší(‚»‚Ì‘¼) */
-				m_paImgEfcBalloon,		/* •¬o‚µ */
-				m_paImg2x2Body,			/* 2x2‘Ì */
-				m_paImg2x2Cloth,		/* 2x2• */
-				m_paImg2x2Eye,			/* 2x2–Ú */
-				m_paImg2x2Hair,			/* 2x2”¯ */
-				m_paImg2x2SPCloth,		/* 2x2“Áê• */
-				m_paImg2x2SPHair,		/* 2x2“Áê”¯ */
-				m_paImg2x2Arms,			/* 2x2‚¿•¨ */
-				m_paImg2x2Shield,		/* 2x2‚ */
-				m_paImg2x2ArmsSP,		/* 2x2“Áê‚¿•¨ */
-				m_paImg2x2Bow,			/* 2x2‹| */
+				m_paImgBody,			/* â€˜ÃŒ */
+				m_paImgEar,				/* Å½Â¨ */
+				m_paImgCloth,			/* â€¢Å¾ */
+				m_paImgEye,				/* â€“Ãš */
+				m_paImgHairD,			/* â€Â¯(â€°Âº) */
+				m_paImgHairU,			/* â€Â¯(ÂÃ£) */
+				m_paImgSP,				/* â€œÃÅ½Ãªâ€¢Å¾ */
+				m_paImgAcce,			/* Æ’AÆ’NÆ’ZÆ’TÆ’Å  */
+				m_paImgMapPartsTmp,		/* â€œâ„¢â€{Æ’}Æ’bÆ’vÆ’pÂ[Æ’c */
+				m_paImgMapShadowTmp,	/* â€œâ„¢â€{Æ’}Æ’bÆ’vâ€°e */
+				m_paImgItemTmp,			/* â€œâ„¢â€{Æ’AÆ’CÆ’eÆ’â‚¬ */
+				m_paImgEfc32,			/* Æ’GÆ’tÆ’FÆ’NÆ’g(32) */
+				m_paImgEfc64,			/* Æ’GÆ’tÆ’FÆ’NÆ’g(64) */
+				m_paImgWeapon,			/* â€¢ÂÅ Ã­ */
+				m_paImgWeaponBow,		/* â€¢ÂÅ Ã­(â€¹|) */
+				m_paImgWeaponArrow,		/* â€¢ÂÅ Ã­(â€“Ã®) */
+				m_paImgWeaponGlove,		/* â€¢ÂÅ Ã­(â€˜Ã…Å’â€š) */
+				m_paImgWeaponEtc,		/* â€¢ÂÅ Ã­(â€šÂ»â€šÃŒâ€˜Â¼) */
+				m_paImgEfcBalloon,		/* â€¢Â¬Âoâ€šÂµ */
+				m_paImg2x2Body,			/* 2x2â€˜ÃŒ */
+				m_paImg2x2Cloth,		/* 2x2â€¢Å¾ */
+				m_paImg2x2Eye,			/* 2x2â€“Ãš */
+				m_paImg2x2Hair,			/* 2x2â€Â¯ */
+				m_paImg2x2SPCloth,		/* 2x2â€œÃÅ½Ãªâ€¢Å¾ */
+				m_paImg2x2SPHair,		/* 2x2â€œÃÅ½Ãªâ€Â¯ */
+				m_paImg2x2Arms,			/* 2x2Å½Ââ€šÂ¿â€¢Â¨ */
+				m_paImg2x2Shield,		/* 2x2Ââ€š */
+				m_paImg2x2ArmsSP,		/* 2x2â€œÃÅ½ÃªÅ½Ââ€šÂ¿â€¢Â¨ */
+				m_paImg2x2Bow,			/* 2x2â€¹| */
 				m_paImg2x2NPC,			/* 2x2NPC */
-				m_paImg2x2CharShadow,	/* 2x2ƒLƒƒƒ‰‰e */
-				m_paImg2x2NPCShadow;	/* 2x2NPC‰e */
+				m_paImg2x2CharShadow,	/* 2x2Æ’LÆ’Æ’Æ’â€°â€°e */
+				m_paImg2x2NPCShadow;	/* 2x2NPCâ€°e */
 } CMgrGrpData, *PCMgrGrpData;
 
 /* Copyright(C)URARA-works 2006 */

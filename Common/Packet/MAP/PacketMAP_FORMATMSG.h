@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_FORMATMSG.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒtƒH[ƒ}ƒbƒgƒƒbƒZ[ƒW’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_FORMATMSG.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,52 +11,52 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒƒbƒZ[ƒWŽí•Ê */
+/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 enum {
-	FORMATMSGTYPE_DEFAULT = 0,		/* ’Êí */
-	FORMATMSGTYPE_NOLOG,			/* ƒƒO‚ÉŽc‚³‚È‚¢ */
-	FORMATMSGTYPE_BATTLE,			/* í“¬ŠÖ˜A */
+	FORMATMSGTYPE_DEFAULT = 0,		/* é€šå¸¸ */
+	FORMATMSGTYPE_NOLOG,			/* ãƒ­ã‚°ã«æ®‹ã•ãªã„ */
+	FORMATMSGTYPE_BATTLE,			/* æˆ¦é—˜é–¢é€£ */
 };
 
-/* ƒƒbƒZ[ƒWID */
+/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ID */
 enum {
 	FORMATMSGID_NONE = 0,
-	FORMATMSGID_DAMAGE1,			/* %s‚©‚ç %d ‚Ìƒ_ƒ[ƒW */
-	FORMATMSGID_DAMAGE2,			/* %s‚É %d ‚Ìƒ_ƒ[ƒW */
-	FORMATMSGID_SWOON1,				/* %s‚Í%s‚ð“|‚µ‚½ */
-	FORMATMSGID_SWOON2,				/* %s‚ð“|‚µ‚½ */
-	FORMATMSGID_SWOON3,				/* %s‚É“|‚³‚ê‚½ */
-	FORMATMSGID_NOUSE,				/* %s‚ÍŒø‰Ê‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½ */
-	FORMATMSGID_NOUNEQUIP_ITEMFULL,	/* Ž‚¿•¨‚ª‚¢‚Á‚Ï‚¢‚Å‘•”õ‚ðŠO‚¹‚Ü‚¹‚ñ */
-	FORMATMSGID_DROPITEM,			/* %s‚Í%s‚ð—Ž‚Æ‚µ‚½ */
-	FORMATMSGID_ADDSKILL,			/* %s‚Í %s ‚ðK“¾‚µ‚Ü‚µ‚½ */
-	FORMATMSGID_USESKILL,			/* %s‚Í %s ‚ðŽg‚Á‚½ */
+	FORMATMSGID_DAMAGE1,			/* %sã‹ã‚‰ %d ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ */
+	FORMATMSGID_DAMAGE2,			/* %sã« %d ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ */
+	FORMATMSGID_SWOON1,				/* %sã¯%sã‚’å€’ã—ãŸ */
+	FORMATMSGID_SWOON2,				/* %sã‚’å€’ã—ãŸ */
+	FORMATMSGID_SWOON3,				/* %sã«å€’ã•ã‚ŒãŸ */
+	FORMATMSGID_NOUSE,				/* %sã¯åŠ¹æžœãŒã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸ */
+	FORMATMSGID_NOUNEQUIP_ITEMFULL,	/* æŒã¡ç‰©ãŒã„ã£ã±ã„ã§è£…å‚™ã‚’å¤–ã›ã¾ã›ã‚“ */
+	FORMATMSGID_DROPITEM,			/* %sã¯%sã‚’è½ã¨ã—ãŸ */
+	FORMATMSGID_ADDSKILL,			/* %sã¯ %s ã‚’ç¿’å¾—ã—ã¾ã—ãŸ */
+	FORMATMSGID_USESKILL,			/* %sã¯ %s ã‚’ä½¿ã£ãŸ */
 };
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_FORMATMSG : public CPacketBase
 {
 public:
-			CPacketMAP_FORMATMSG();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_FORMATMSG();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_FORMATMSG();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_FORMATMSG();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMsgID, DWORD dwPara1 = 0, DWORD dwPara2 = 0, COLORREF clMsg = 0, BOOL bSound = TRUE, int nMsgType = FORMATMSGTYPE_DEFAULT);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);											/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwMsgID, DWORD dwPara1 = 0, DWORD dwPara2 = 0, COLORREF clMsg = 0, BOOL bSound = TRUE, int nMsgType = FORMATMSGTYPE_DEFAULT);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);											/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int			m_nMsgType;			/* ƒƒbƒZ[ƒWŽí•Ê */
-	BOOL		m_bSound;			/* •\Ž¦‚·‚éŽž‚É‰¹‚ð‚È‚ç‚·‚©”»’è */
-	DWORD		m_dwMsgID,			/* ƒƒbƒZ[ƒWID */
-				m_dwPara1,			/* ƒpƒ‰ƒ[ƒ^1 */
-				m_dwPara2;			/* ƒpƒ‰ƒ[ƒ^2 */
-	COLORREF	m_clMsg;			/* •\Ž¦F */
+	int			m_nMsgType;			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
+	BOOL		m_bSound;			/* è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	DWORD		m_dwMsgID,			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ID */
+				m_dwPara1,			/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+				m_dwPara2;			/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
+	COLORREF	m_clMsg;			/* è¡¨ç¤ºè‰² */
 } CPacketMAP_FORMATMSG, *PCPacketMAP_FORMATMSG;
 
 /* Copyright(C)URARA-works 2008 */

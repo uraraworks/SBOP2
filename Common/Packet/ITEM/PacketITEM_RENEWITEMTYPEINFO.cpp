@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketITEM_RENEWITEMTYPEINFO.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒAƒCƒeƒ€Œn:ƒAƒCƒeƒ€í•Êî•ñXV) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/10/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketITEM_RENEWITEMTYPEINFO.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚¢ã‚¤ãƒ†ãƒ ç³»:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/03													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketITEM_RENEWITEMTYPEINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RENEWITEMTYPEINFO::CPacketITEM_RENEWITEMTYPEINFO	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/03														 */
+/* é–¢æ•°å	:CPacketITEM_RENEWITEMTYPEINFO::CPacketITEM_RENEWITEMTYPEINFO	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/03														 */
 /* ========================================================================= */
 
 CPacketITEM_RENEWITEMTYPEINFO::CPacketITEM_RENEWITEMTYPEINFO()
@@ -24,9 +24,9 @@ CPacketITEM_RENEWITEMTYPEINFO::CPacketITEM_RENEWITEMTYPEINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RENEWITEMTYPEINFO::~CPacketITEM_RENEWITEMTYPEINFO	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/03														 */
+/* é–¢æ•°å	:CPacketITEM_RENEWITEMTYPEINFO::~CPacketITEM_RENEWITEMTYPEINFO	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/03														 */
 /* ========================================================================= */
 
 CPacketITEM_RENEWITEMTYPEINFO::~CPacketITEM_RENEWITEMTYPEINFO()
@@ -36,13 +36,13 @@ CPacketITEM_RENEWITEMTYPEINFO::~CPacketITEM_RENEWITEMTYPEINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RENEWITEMTYPEINFO::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/10/03														 */
+/* é–¢æ•°å	:CPacketITEM_RENEWITEMTYPEINFO::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/10/03														 */
 /* ========================================================================= */
 
 void CPacketITEM_RENEWITEMTYPEINFO::Make(
-	CInfoItemTypeBase *pInfo)		/* [in] ƒAƒCƒeƒ€í•Êî•ñ */
+	CInfoItemTypeBase *pInfo)		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketITEM_RENEWITEMTYPEINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ITEM_RENEWITEMTYPEINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒAƒCƒeƒ€í•Êî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketITEM_RENEWITEMTYPEINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RENEWITEMTYPEINFO::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/10/03														 */
+/* é–¢æ•°å	:CPacketITEM_RENEWITEMTYPEINFO::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/10/03														 */
 /* ========================================================================= */
 
 PBYTE CPacketITEM_RENEWITEMTYPEINFO::Set(PBYTE pPacket)

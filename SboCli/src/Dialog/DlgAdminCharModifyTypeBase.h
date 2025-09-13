@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyTypeBase.h								 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ ˆÚ“®í•Ê‚Ìİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyTypeBase.h								 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ± ç§»å‹•ç¨®åˆ¥ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,18 +13,18 @@
 class CInfoCharCli;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharModifyTypeBase : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharModifyTypeBase(CWnd* pParent = NULL);						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharModifyTypeBase(CWnd* pParent = NULL);						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 			CDlgAdminCharModifyTypeBase(int nResourceID, CWnd* pParent = NULL);
-	virtual ~CDlgAdminCharModifyTypeBase();											/* ƒfƒXƒgƒ‰ƒNƒ^ */
+	virtual ~CDlgAdminCharModifyTypeBase();											/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Set	(CInfoCharCli *pSrc);					/* İ’è */
-	virtual void	Get	(CInfoCharCli *pDst);					/* æ“¾ */
+	virtual void	Set	(CInfoCharCli *pSrc);					/* è¨­å®š */
+	virtual void	Get	(CInfoCharCli *pDst);					/* å–å¾— */
 
 
 
@@ -35,7 +35,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharModifyTypeBase)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

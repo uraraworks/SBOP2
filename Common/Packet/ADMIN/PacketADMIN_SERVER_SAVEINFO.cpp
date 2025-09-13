@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_SERVER_SAVEINFO.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒT[ƒo[î•ñ•Û‘¶) ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_SERVER_SAVEINFO.cpp							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä¿å­˜) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketADMIN_SERVER_SAVEINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SERVER_SAVEINFO::CPacketADMIN_SERVER_SAVEINFO		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CPacketADMIN_SERVER_SAVEINFO::CPacketADMIN_SERVER_SAVEINFO		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 CPacketADMIN_SERVER_SAVEINFO::CPacketADMIN_SERVER_SAVEINFO()
@@ -22,9 +22,9 @@ CPacketADMIN_SERVER_SAVEINFO::CPacketADMIN_SERVER_SAVEINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SERVER_SAVEINFO::~CPacketADMIN_SERVER_SAVEINFO	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CPacketADMIN_SERVER_SAVEINFO::~CPacketADMIN_SERVER_SAVEINFO	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 CPacketADMIN_SERVER_SAVEINFO::~CPacketADMIN_SERVER_SAVEINFO()
@@ -33,9 +33,9 @@ CPacketADMIN_SERVER_SAVEINFO::~CPacketADMIN_SERVER_SAVEINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SERVER_SAVEINFO::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ðì¬													 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CPacketADMIN_SERVER_SAVEINFO::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 void CPacketADMIN_SERVER_SAVEINFO::Make(void)

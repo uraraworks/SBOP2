@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_EFC_RENEWBALLOON.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:•¬o‚µî•ñ‚ÌXV) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_EFC_RENEWBALLOON.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:å™´å‡ºã—æƒ…å ±ã®æ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CLibInfoEfcBalloon;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_EFC_RENEWBALLOON : public CPacketBase
 {
 public:
-			CPacketADMIN_EFC_RENEWBALLOON();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_EFC_RENEWBALLOON();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_EFC_RENEWBALLOON();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_EFC_RENEWBALLOON();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwListID, CLibInfoEfcBalloon *pSrc);			/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwListID, CLibInfoEfcBalloon *pSrc);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD				m_dwListID;			/* Ží•ÊID */
-	CLibInfoEfcBalloon	*m_pInfo;			/* •¬o‚µî•ñ */
+	DWORD				m_dwListID;			/* ç¨®åˆ¥ID */
+	CLibInfoEfcBalloon	*m_pInfo;			/* å™´å‡ºã—æƒ…å ± */
 } CPacketADMIN_EFC_RENEWBALLOON, *PCPacketADMIN_EFC_RENEWBALLOON;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:LayerCharSelect.cpp										 */
-/* ì‡óe			:ÉåÉCÉÑÅ[ï`âÊÉNÉâÉX(ÉLÉÉÉâëIë) é¿ëïÉtÉ@ÉCÉã				 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2005/07/04													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:LayerCharSelect.cpp										 */
+/* ÂÜÖÂÆπ			:„É¨„Ç§„É§„ÉºÊèèÁîª„ÇØ„É©„Çπ(„Ç≠„É£„É©ÈÅ∏Êäû) ÂÆüË£Ö„Éï„Ç°„Ç§„É´				 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2005/07/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -18,9 +18,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::CLayerCharSelect								 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2005/07/04														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::CLayerCharSelect								 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2005/07/04														 */
 /* ========================================================================= */
 
 CLayerCharSelect::CLayerCharSelect()
@@ -35,9 +35,9 @@ CLayerCharSelect::CLayerCharSelect()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::~CLayerCharSelect							 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2005/07/04														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::~CLayerCharSelect							 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2005/07/04														 */
 /* ========================================================================= */
 
 CLayerCharSelect::~CLayerCharSelect()
@@ -46,14 +46,14 @@ CLayerCharSelect::~CLayerCharSelect()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::Create										 */
-/* ì‡óe		:çÏê¨															 */
-/* ì˙ït		:2005/07/04														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::Create										 */
+/* ÂÜÖÂÆπ		:‰ΩúÊàê															 */
+/* Êó•‰ªò		:2005/07/04														 */
 /* ========================================================================= */
 
 void CLayerCharSelect::Create(
-	CMgrData	*pMgrData,		/* [in] ÉfÅ[É^ä«óù */
-	DWORD		dwAccountID)	/* [in] ÉAÉJÉEÉìÉgID */
+	CMgrData	*pMgrData,		/* [in] „Éá„Éº„ÇøÁÆ°ÁêÜ */
+	DWORD		dwAccountID)	/* [in] „Ç¢„Ç´„Ç¶„É≥„ÉàID */
 {
 	CLayerBase::Create (pMgrData);
 
@@ -62,9 +62,9 @@ void CLayerCharSelect::Create(
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::Draw											 */
-/* ì‡óe		:ï`âÊ															 */
-/* ì˙ït		:2005/07/04														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::Draw											 */
+/* ÂÜÖÂÆπ		:ÊèèÁîª															 */
+/* Êó•‰ªò		:2005/07/04														 */
 /* ========================================================================= */
 
 void CLayerCharSelect::Draw(PCImg32 pDst)
@@ -103,10 +103,10 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 		if (ptViewCharPos.y != 0) {
 			y += 16;
 		}
-		/* ïKÇ∏â∫å¸Ç´ */
+		/* ÂøÖ„Åö‰∏ãÂêë„Åç */
 		pChar->m_nDirection = 1;
 
-		/* ÉLÉÉÉâÇÃï`âÊ */
+		/* „Ç≠„É£„É©„ÅÆÊèèÁîª */
 		m_pMgrDraw->DrawChar (
 				pDst,
 				x - ptViewCharPos.x, y - ptViewCharPos.y + 16,
@@ -115,7 +115,7 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 			y -= 16;
 		}
 
-		/* ñºëOÇÃï`âÊ */
+		/* ÂêçÂâç„ÅÆÊèèÁîª */
 		hDC			= pDst->Lock ();
 		hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 		SetBkMode (hDC, TRANSPARENT);
@@ -137,9 +137,9 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::TimerProc									 */
-/* ì‡óe		:éûä‘èàóù														 */
-/* ì˙ït		:2005/07/09														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::TimerProc									 */
+/* ÂÜÖÂÆπ		:ÊôÇÈñìÂá¶ÁêÜ														 */
+/* Êó•‰ªò		:2005/07/09														 */
 /* ========================================================================= */
 
 BOOL CLayerCharSelect::TimerProc(void)
@@ -168,9 +168,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::SetSelect									 */
-/* ì‡óe		:ëIëà íuÇê›íË													 */
-/* ì˙ït		:2005/07/09														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::SetSelect									 */
+/* ÂÜÖÂÆπ		:ÈÅ∏Êäû‰ΩçÁΩÆ„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2005/07/09														 */
 /* ========================================================================= */
 
 void CLayerCharSelect::SetSelect(int nNo)
@@ -199,9 +199,9 @@ void CLayerCharSelect::SetSelect(int nNo)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::GetSelectCharID								 */
-/* ì‡óe		:ëIëíÜÇÃÉLÉÉÉâIDÇéÊìæ											 */
-/* ì˙ït		:2007/03/21														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::GetSelectCharID								 */
+/* ÂÜÖÂÆπ		:ÈÅ∏Êäû‰∏≠„ÅÆ„Ç≠„É£„É©ID„ÇíÂèñÂæó											 */
+/* Êó•‰ªò		:2007/03/21														 */
 /* ========================================================================= */
 
 DWORD CLayerCharSelect::GetSelectCharID(void)
@@ -229,9 +229,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLayerCharSelect::DrawFrame									 */
-/* ì‡óe		:ÉtÉåÅ[ÉÄÇï`âÊ													 */
-/* ì˙ït		:2007/04/01														 */
+/* Èñ¢Êï∞Âêç	:CLayerCharSelect::DrawFrame									 */
+/* ÂÜÖÂÆπ		:„Éï„É¨„Éº„É†„ÇíÊèèÁîª													 */
+/* Êó•‰ªò		:2007/04/01														 */
 /* ========================================================================= */
 
 void CLayerCharSelect::DrawFrame(CImg32 *pDst, int x, int y, int cx, int cy, int nType)
@@ -244,22 +244,22 @@ void CLayerCharSelect::DrawFrame(CImg32 *pDst, int x, int y, int cx, int cy, int
 	clTmp	= clType[nType];
 	nTmp	= (nType == 4) ? 3 : 0;
 
-	/* îwåiìhÇËÇ¬Ç‘Çµ */
+	/* ËÉåÊôØÂ°ó„Çä„Å§„Å∂„Åó */
 	pDst->FillRect (x + 16, y + 16, cx - 32, cy - 32, clTmp);
 
-	/* élã˜ */
+	/* ÂõõÈöÖ */
 	pDst->BltFrom256 (x,			y,				16, 16 + nTmp,	m_pDibSystem, xx, yy, TRUE);
 	pDst->BltFrom256 (x + cx - 16,	y,				16, 16 + nTmp,	m_pDibSystem, xx + 32, yy, TRUE);
 	pDst->BltFrom256 (x,			y + cy - 16,	16, 16,			m_pDibSystem, xx, yy + 32, TRUE);
 	pDst->BltFrom256 (x + cx - 16,	y + cy - 16,	16, 16,			m_pDibSystem, xx + 32, yy + 32, TRUE);
 
-	/* â°ê¸ */
+	/* Ê®™Á∑ö */
 	for (i = 1; i < cx / 8 - 2; i ++) {
 		pDst->BltFrom256 (x + (i + 1) * 8, y,			8, 16, m_pDibSystem, xx + 16, yy, TRUE);
 		pDst->BltFrom256 (x + (i + 1) * 8, y + cy - 16,	8, 16, m_pDibSystem, xx + 16, yy + 32, TRUE);
 	}
 
-	/* ècê¸ */
+	/* Á∏¶Á∑ö */
 	for (i = 1; i < cy / 8 - 2; i ++) {
 		if ((i == 1) && (nTmp != 0)) {
 			pDst->BltFrom256 (x,			y + (i + 1) * 8 + nTmp, 16, 8 - nTmp, m_pDibSystem, xx,		yy + 16 + nTmp, TRUE);

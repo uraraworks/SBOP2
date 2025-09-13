@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerMisty.h												 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(–¶) ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/10/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerMisty.h												 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(éœ§) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/13													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,17 +14,17 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerMisty : public CLayerBase
 {
 public:
-			CLayerMisty();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerMisty();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerMisty();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerMisty();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);			/* ì¬ */
-	void	Draw		(CImg32 *pDst);					/* •`‰æ */
+	void	Create		(CMgrData *pMgrData);			/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);					/* æç”» */
 } CLayerMisty, *PCLayerMisty;
 
 /* Copyright(C)URARA-works 2008 */

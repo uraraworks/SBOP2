@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTalkEvent.cpp											 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTalkEvent.cpp											 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/16													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,21 +12,21 @@
 #include "InfoTalkEvent.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwTalkEventID",	/* ‰ï˜bƒCƒxƒ“ƒgID */
-	"m_apTalkEvent",	/* ‰ï˜bƒCƒxƒ“ƒg */
+	"m_dwTalkEventID",	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
+	"m_apTalkEvent",	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::CInfoTalkEvent									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::CInfoTalkEvent									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 CInfoTalkEvent::CInfoTalkEvent()
@@ -38,9 +38,9 @@ CInfoTalkEvent::CInfoTalkEvent()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::~CInfoTalkEvent								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::~CInfoTalkEvent								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 CInfoTalkEvent::~CInfoTalkEvent()
@@ -50,9 +50,9 @@ CInfoTalkEvent::~CInfoTalkEvent()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2005/07/05														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/07/05														 */
 /* ========================================================================= */
 
 int CInfoTalkEvent::GetElementNo(LPCSTR pszName)
@@ -73,9 +73,9 @@ int CInfoTalkEvent::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetDataSize									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetDataSize									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEvent::GetDataSize(void)
@@ -93,9 +93,9 @@ DWORD CInfoTalkEvent::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
@@ -107,18 +107,18 @@ DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:	dwRet = sizeof (m_dwTalkEventID);	break;	/* ‰ï˜bƒCƒxƒ“ƒgID */
-	case 1:		/* ‰ï˜bƒCƒxƒ“ƒg */
-		dwRet += sizeof (int);				/* ƒf[ƒ^” */
+	case 0:	dwRet = sizeof (m_dwTalkEventID);	break;	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
+	case 1:		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
+		dwRet += sizeof (int);				/* ãƒ‡ãƒ¼ã‚¿æ•° */
 		nCount = m_apTalkEvent.GetSize ();
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_apTalkEvent[i];
-			dwRet += sizeof (int);								/* —v‘f” */
+			dwRet += sizeof (int);								/* è¦ç´ æ•° */
 			nCount2 = pInfo->GetElementCount ();
 			for (j = 0; j < nCount2; j ++) {
-				dwRet += (strlen (pInfo->GetName (j)) + 1);		/* —v‘f–¼ */
-				dwRet += sizeof (DWORD);						/* ƒf[ƒ^ƒTƒCƒY */
-				dwRet += pInfo->GetDataSizeNo (j);				/* ƒf[ƒ^ */
+				dwRet += (strlen (pInfo->GetName (j)) + 1);		/* è¦ç´ å */
+				dwRet += sizeof (DWORD);						/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+				dwRet += pInfo->GetDataSizeNo (j);				/* ãƒ‡ãƒ¼ã‚¿ */
 			}
 		}
 		break;
@@ -129,9 +129,9 @@ DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetName										 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2005/07/05														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetName										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/07/05														 */
 /* ========================================================================= */
 
 LPCSTR CInfoTalkEvent::GetName(int nNo)
@@ -141,9 +141,9 @@ LPCSTR CInfoTalkEvent::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetWriteData									 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEvent::GetWriteData(int nNo, PDWORD pdwSize)
@@ -165,21 +165,21 @@ PBYTE CInfoTalkEvent::GetWriteData(int nNo, PDWORD pdwSize)
 	pRetTmp = pRet;
 
 	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_dwTalkEventID;			break;	/* ‰ï˜bƒCƒxƒ“ƒgID */
-	case 1:			/* ‰ï˜bƒCƒxƒ“ƒg */
+	case 0:	pSrc = (PBYTE)&m_dwTalkEventID;			break;	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
+	case 1:			/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
 		nCount = m_apTalkEvent.GetSize ();
-		CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);		/* ƒf[ƒ^” */
+		CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);		/* ãƒ‡ãƒ¼ã‚¿æ•° */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_apTalkEvent[i];
 			nCount2 = pInfo->GetElementCount ();
-			CopyMemoryRenew (pRetTmp, &nCount2, sizeof (nCount2), pRetTmp);	/* —v‘f” */
+			CopyMemoryRenew (pRetTmp, &nCount2, sizeof (nCount2), pRetTmp);	/* è¦ç´ æ•° */
 
 			for (j = 0; j < nCount2; j ++) {
-				strcpyRenew ((LPSTR)pRetTmp, pInfo->GetName (j), pRetTmp); 	/* —v‘f–¼ */
+				strcpyRenew ((LPSTR)pRetTmp, pInfo->GetName (j), pRetTmp); 	/* è¦ç´ å */
 				dwTmp = pInfo->GetDataSizeNo (j);
-				CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+				CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
 				pTmp = pInfo->GetWriteData (j, &dwTmp);
-				CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* ƒf[ƒ^ */
+				CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* ãƒ‡ãƒ¼ã‚¿ */
 				SAFE_DELETE_ARRAY (pTmp);
 			}
 		}
@@ -196,14 +196,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::ReadElementData								 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::ReadElementData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEvent::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	int i, j, nNoTmp, nCount, nCount2, nType;
 	PBYTE pDst, pSrcTmp;
@@ -215,19 +215,19 @@ DWORD CInfoTalkEvent::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0: pDst = (PBYTE)&m_dwTalkEventID; dwSize = sizeof (m_dwTalkEventID); break;	/* ‰ï˜bƒCƒxƒ“ƒgID */
-	case 1:				/* ‰ï˜bƒCƒxƒ“ƒg */
+	case 0: pDst = (PBYTE)&m_dwTalkEventID; dwSize = sizeof (m_dwTalkEventID); break;	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
+	case 1:				/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
 		pSrcTmp = pSrc;
-		CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);				/* ƒf[ƒ^” */
+		CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);				/* ãƒ‡ãƒ¼ã‚¿æ•° */
 		for (i = 0; i < nCount; i ++) {
-			CopyMemoryRenew (&nCount2, pSrcTmp, sizeof (nCount2), pSrcTmp);			/* —v‘f” */
+			CopyMemoryRenew (&nCount2, pSrcTmp, sizeof (nCount2), pSrcTmp);			/* è¦ç´ æ•° */
 
 			for (j = 0; j < nCount2; j ++) {
-				StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* —v‘f–¼ */
-				CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+				StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* è¦ç´ å */
+				CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
 				if (j == 0) {
-					/* Å‰‚ÍƒCƒxƒ“ƒgí•Ê */
-					CopyMemoryRenew (&nType, pSrcTmp, sizeof (nType), pSrcTmp);		/* ƒCƒxƒ“ƒgí•Ê */
+					/* æœ€åˆã¯ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+					CopyMemoryRenew (&nType, pSrcTmp, sizeof (nType), pSrcTmp);		/* ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
 					pInfo = (PCInfoTalkEventBase)GetNew (nType);
 				} else {
 					nNoTmp = pInfo->GetElementNo ((LPCSTR)strTmp);
@@ -252,9 +252,9 @@ DWORD CInfoTalkEvent::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEvent::GetSendDataSize(void)
@@ -263,9 +263,9 @@ DWORD CInfoTalkEvent::GetSendDataSize(void)
 	DWORD dwRet;
 	PCInfoTalkEventBase pInfo;
 
-	dwRet = sizeof (m_dwTalkEventID);	/* ‰ï˜bƒCƒxƒ“ƒgID */
+	dwRet = sizeof (m_dwTalkEventID);	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
 
-	/* ƒf[ƒ^”•ª‚ÌƒTƒCƒY */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°åˆ†ã®ã‚µã‚¤ã‚º */
 	dwRet += sizeof (DWORD);
 
 	nCount = m_apTalkEvent.GetSize ();
@@ -280,9 +280,9 @@ DWORD CInfoTalkEvent::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEvent::GetSendData(void)
@@ -297,20 +297,20 @@ PBYTE CInfoTalkEvent::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwTalkEventID, sizeof (m_dwTalkEventID), pDataTmp);	/* ‰ï˜bƒCƒxƒ“ƒgID */
+	CopyMemoryRenew (pDataTmp, &m_dwTalkEventID, sizeof (m_dwTalkEventID), pDataTmp);	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
 
-	/* ƒf[ƒ^”‚ğ‘‚«‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’æ›¸ãè¾¼ã¿ */
 	dwCount = (DWORD)m_apTalkEvent.GetSize ();
 	CopyMemoryRenew (pDataTmp, &dwCount, sizeof (dwCount), pDataTmp);
 
-	/* ƒCƒxƒ“ƒgî•ñ‚ğ‘‚«‚İ */
+	/* ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã‚’æ›¸ãè¾¼ã¿ */
 	nCount = (int)dwCount;
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
 
 		dwSizeTmp	= pInfo->GetSendDataSize ();
 		pDataTmp2	= pInfo->GetSendData ();
-		CopyMemoryRenew (pDataTmp, pDataTmp2, dwSizeTmp, pDataTmp);	/* ‰ï˜bƒCƒxƒ“ƒg */
+		CopyMemoryRenew (pDataTmp, pDataTmp2, dwSizeTmp, pDataTmp);	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
 
 		SAFE_DELETE_ARRAY (pDataTmp2);
 	}
@@ -320,9 +320,9 @@ PBYTE CInfoTalkEvent::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEvent::SetSendData(PBYTE pSrc)
@@ -335,9 +335,9 @@ PBYTE CInfoTalkEvent::SetSendData(PBYTE pSrc)
 	DeleteAllTalkEvent ();
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_dwTalkEventID, pDataTmp, sizeof (m_dwTalkEventID), pDataTmp);	/* ‰ï˜bƒCƒxƒ“ƒgID */
+	CopyMemoryRenew (&m_dwTalkEventID, pDataTmp, sizeof (m_dwTalkEventID), pDataTmp);	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
 
-	/* ƒf[ƒ^”‚ğ“Ç‚İ‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’èª­ã¿è¾¼ã¿ */
 	CopyMemoryRenew (&dwCount, pDataTmp, sizeof (dwCount), pDataTmp);
 	nCount = (int)dwCount;
 
@@ -353,9 +353,9 @@ PBYTE CInfoTalkEvent::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/12/16														 */
+/* é–¢æ•°å	:CInfoTalkEvent::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/12/16														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::Copy(CInfoTalkEvent *pSrc)
@@ -375,9 +375,9 @@ void CInfoTalkEvent::Copy(CInfoTalkEvent *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetNew											 */
-/* “à—e		:V‚µ‚¢‰ï˜bƒCƒxƒ“ƒg‚ğæ“¾										 */
-/* “ú•t		:2008/12/17														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetNew											 */
+/* å†…å®¹		:æ–°ã—ã„ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/12/17														 */
 /* ========================================================================= */
 
 PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
@@ -387,13 +387,13 @@ PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
 	pRet = NULL;
 
 	switch (nType) {
-	case TALKEVENTTYPE_PAGE:			/* ƒy[ƒWØ‚è‘Ö‚¦ */
+	case TALKEVENTTYPE_PAGE:			/* ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆ */
 		pRet = new CInfoTalkEventPAGE;
 		break;
-	case TALKEVENTTYPE_MSG:				/* ƒƒbƒZ[ƒW•\¦ */
+	case TALKEVENTTYPE_MSG:				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
 		pRet = new CInfoTalkEventBase;
 		break;
-	case TALKEVENTTYPE_MENU:			/* €–Ú‘I‘ğ */
+	case TALKEVENTTYPE_MENU:			/* é …ç›®é¸æŠ */
 		pRet = new CInfoTalkEventMENU;
 		break;
 	default:
@@ -407,9 +407,9 @@ PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetPtr											 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒg‚ğæ“¾												 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetPtr											 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 PCInfoTalkEventBase CInfoTalkEvent::GetPtr(int nPage, int nNo)
@@ -439,9 +439,9 @@ PCInfoTalkEventBase CInfoTalkEvent::GetPtr(int nPage, int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::SetPtr											 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒg‚ğ·‚µ‘Ö‚¦											 */
-/* “ú•t		:2008/12/17														 */
+/* é–¢æ•°å	:CInfoTalkEvent::SetPtr											 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å·®ã—æ›¿ãˆ											 */
+/* æ—¥ä»˜		:2008/12/17														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::SetPtr(int nPage, int nNo, CInfoTalkEventBase *pInfo)
@@ -468,9 +468,9 @@ void CInfoTalkEvent::SetPtr(int nPage, int nNo, CInfoTalkEventBase *pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetEventArray									 */
-/* “à—e		:w’èƒy[ƒW”Ô†‚ÌƒCƒxƒ“ƒgˆê——‚ğæ“¾								 */
-/* “ú•t		:2008/12/17														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetEventArray									 */
+/* å†…å®¹		:æŒ‡å®šãƒšãƒ¼ã‚¸ç•ªå·ã®ã‚¤ãƒ™ãƒ³ãƒˆä¸€è¦§ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/12/17														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::GetEventArray(int nPage, ARRAYTALKEVENTBASEINFO &aDst)
@@ -492,9 +492,9 @@ void CInfoTalkEvent::GetEventArray(int nPage, ARRAYTALKEVENTBASEINFO &aDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetTalkEventCount								 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒgƒy[ƒW”‚ğæ“¾										 */
-/* “ú•t		:2008/12/29														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetTalkEventCount								 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãƒšãƒ¼ã‚¸æ•°ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/12/29														 */
 /* ========================================================================= */
 
 int CInfoTalkEvent::GetTalkEventCount(int nPage)
@@ -508,9 +508,9 @@ int CInfoTalkEvent::GetTalkEventCount(int nPage)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::GetPageCount									 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒgƒy[ƒW”‚ğæ“¾										 */
-/* “ú•t		:2008/12/23														 */
+/* é–¢æ•°å	:CInfoTalkEvent::GetPageCount									 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãƒšãƒ¼ã‚¸æ•°ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/12/23														 */
 /* ========================================================================= */
 
 int CInfoTalkEvent::GetPageCount(void)
@@ -531,9 +531,9 @@ int CInfoTalkEvent::GetPageCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::AddTalkEvent									 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒg‚ğ’Ç‰Á												 */
-/* “ú•t		:2008/12/17														 */
+/* é–¢æ•°å	:CInfoTalkEvent::AddTalkEvent									 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’è¿½åŠ 												 */
+/* æ—¥ä»˜		:2008/12/17														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::AddTalkEvent(CInfoTalkEventBase *pInfo)
@@ -543,9 +543,9 @@ void CInfoTalkEvent::AddTalkEvent(CInfoTalkEventBase *pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::UpTalkEvent									 */
-/* “à—e		:w’èƒCƒxƒ“ƒg‚ğ1‚Âã‚ÉˆÚ“®										 */
-/* “ú•t		:2008/12/29														 */
+/* é–¢æ•°å	:CInfoTalkEvent::UpTalkEvent									 */
+/* å†…å®¹		:æŒ‡å®šã‚¤ãƒ™ãƒ³ãƒˆã‚’1ã¤ä¸Šã«ç§»å‹•										 */
+/* æ—¥ä»˜		:2008/12/29														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::UpTalkEvent(int nPage, int nNo)
@@ -580,9 +580,9 @@ void CInfoTalkEvent::UpTalkEvent(int nPage, int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::DownTalkEvent									 */
-/* “à—e		:w’èƒCƒxƒ“ƒg‚ğ1‚Â‰º‚ÉˆÚ“®										 */
-/* “ú•t		:2008/12/29														 */
+/* é–¢æ•°å	:CInfoTalkEvent::DownTalkEvent									 */
+/* å†…å®¹		:æŒ‡å®šã‚¤ãƒ™ãƒ³ãƒˆã‚’1ã¤ä¸‹ã«ç§»å‹•										 */
+/* æ—¥ä»˜		:2008/12/29														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::DownTalkEvent(int nPage, int nNo)
@@ -618,9 +618,9 @@ void CInfoTalkEvent::DownTalkEvent(int nPage, int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::DeleteTalkEvent								 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒg‚ğíœ												 */
-/* “ú•t		:2008/12/17														 */
+/* é–¢æ•°å	:CInfoTalkEvent::DeleteTalkEvent								 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2008/12/17														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::DeleteTalkEvent(int nNo)
@@ -638,9 +638,9 @@ void CInfoTalkEvent::DeleteTalkEvent(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::DeleteTalkEvent								 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒg‚ğíœ												 */
-/* “ú•t		:2008/12/17														 */
+/* é–¢æ•°å	:CInfoTalkEvent::DeleteTalkEvent								 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2008/12/17														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::DeleteTalkEvent(int nPage, int nNo)
@@ -649,9 +649,9 @@ void CInfoTalkEvent::DeleteTalkEvent(int nPage, int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::DeleteTalkEvent								 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒg‚ğíœ												 */
-/* “ú•t		:2008/12/17														 */
+/* é–¢æ•°å	:CInfoTalkEvent::DeleteTalkEvent								 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2008/12/17														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::DeleteTalkEvent(CInfoTalkEventBase *pInfo)
@@ -661,9 +661,9 @@ void CInfoTalkEvent::DeleteTalkEvent(CInfoTalkEventBase *pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoTalkEvent::DeleteAllTalkEvent								 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒg‚ğ‘S‚Äíœ											 */
-/* “ú•t		:2008/12/20														 */
+/* é–¢æ•°å	:CInfoTalkEvent::DeleteAllTalkEvent								 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å…¨ã¦å‰Šé™¤											 */
+/* æ—¥ä»˜		:2008/12/20														 */
 /* ========================================================================= */
 
 void CInfoTalkEvent::DeleteAllTalkEvent(void)

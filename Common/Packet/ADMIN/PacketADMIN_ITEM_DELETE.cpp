@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ITEM_DELETE.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒAƒCƒeƒ€î•ñíœ) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/19													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ITEM_DELETE.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å‰Šé™¤) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/19													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEM_DELETE::CPacketADMIN_ITEM_DELETE				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEM_DELETE::CPacketADMIN_ITEM_DELETE				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEM_DELETE::CPacketADMIN_ITEM_DELETE()
@@ -23,9 +23,9 @@ CPacketADMIN_ITEM_DELETE::CPacketADMIN_ITEM_DELETE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEM_DELETE::~CPacketADMIN_ITEM_DELETE			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEM_DELETE::~CPacketADMIN_ITEM_DELETE			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEM_DELETE::~CPacketADMIN_ITEM_DELETE()
@@ -34,13 +34,13 @@ CPacketADMIN_ITEM_DELETE::~CPacketADMIN_ITEM_DELETE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEM_DELETE::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEM_DELETE::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 void CPacketADMIN_ITEM_DELETE::Make(
-	DWORD dwItemID)		/* [in] ƒAƒCƒeƒ€ID */
+	DWORD dwItemID)		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ID */
 {
 	ARRAYDWORD adwItemID;
 
@@ -50,13 +50,13 @@ void CPacketADMIN_ITEM_DELETE::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEM_DELETE::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/11/29														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEM_DELETE::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/11/29														 */
 /* ========================================================================= */
 
 void CPacketADMIN_ITEM_DELETE::Make(
-	PARRAYDWORD padwItemID)		/* [in] ƒAƒCƒeƒ€ID */
+	PARRAYDWORD padwItemID)		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ID */
 {
 	int i, nCount;
 	PBYTE pData, pDataTmp;
@@ -78,20 +78,20 @@ void CPacketADMIN_ITEM_DELETE::Make(
 	pDataTmp = (PBYTE)(pPacketBase + 1);
 	for (i = 0; i < nCount; i ++) {
 		dwItemID = padwItemID->GetAt (i);
-		CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* ƒAƒCƒeƒ€ID */
+		CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
 	}
-	/* I’[—p */
+	/* çµ‚ç«¯ç”¨ */
 	dwItemID = 0;
-	CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* ƒAƒCƒeƒ€ID */
+	CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEM_DELETE::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEM_DELETE::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_ITEM_DELETE::Set(PBYTE pPacket)
@@ -105,7 +105,7 @@ PBYTE CPacketADMIN_ITEM_DELETE::Set(PBYTE pPacket)
 	pDataTmp	= CPacketBase::Set (pPacket);
 
 	while (1) {
-		CopyMemoryRenew (&dwItemID, pDataTmp, sizeof (dwItemID), pDataTmp);	/* ƒAƒCƒeƒ€ID */
+		CopyMemoryRenew (&dwItemID, pDataTmp, sizeof (dwItemID), pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
 		if (dwItemID == 0) {
 			break;
 		}

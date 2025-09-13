@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoMapShadow.h											 */
-/* “à—e			:ƒ}ƒbƒv‰eî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoMapShadow.h											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,45 +12,45 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoMapShadow : public CLibInfoBase
 {
 public:
-			CLibInfoMapShadow();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoMapShadow();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoMapShadow();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoMapShadow();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);									/* ì¬ */
-	void Destroy		(void);									/* ”jŠü */
-	BOOL Proc			(void);									/* ˆ— */
+	void Create			(void);									/* ä½œæˆ */
+	void Destroy		(void);									/* ç ´æ£„ */
+	BOOL Proc			(void);									/* å‡¦ç† */
 
-	PCInfoBase GetNew	(void);									/* V‹Kƒf[ƒ^‚ğæ“¾ */
+	PCInfoBase GetNew	(void);									/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	int		GetCount	(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);						/* ’Ç‰Á */
-	void	RenewIDPtr	(void);									/* IDŒŸõ—pƒ}ƒbƒv‚ğXV */
-	void	Delete		(int nNo);								/* íœ */
-	void	Delete		(DWORD dwShadowID);						/* íœ */
-	void	DeleteAll	(void);									/* ‘S‚Äíœ */
-	void	Merge		(CLibInfoMapShadow *pSrc);				/* æ‚è‚İ */
-	void	ResetAnime	(void);									/* ƒAƒjƒ[ƒVƒ‡ƒ“ó‘Ô‚ğ‰Šú‰» */
+	int		GetCount	(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);						/* è¿½åŠ  */
+	void	RenewIDPtr	(void);									/* IDæ¤œç´¢ç”¨ãƒãƒƒãƒ—ã‚’æ›´æ–° */
+	void	Delete		(int nNo);								/* å‰Šé™¤ */
+	void	Delete		(DWORD dwShadowID);						/* å‰Šé™¤ */
+	void	DeleteAll	(void);									/* å…¨ã¦å‰Šé™¤ */
+	void	Merge		(CLibInfoMapShadow *pSrc);				/* å–ã‚Šè¾¼ã¿ */
+	void	ResetAnime	(void);									/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çŠ¶æ…‹ã‚’åˆæœŸåŒ– */
 
-	PCInfoBase	GetPtr (int nNo);								/* î•ñ‚ğæ“¾ */
-	PCInfoBase	GetPtr (DWORD dwShadowID);						/* î•ñ‚ğæ“¾ */
-	PCInfoBase	GetPtr (POINT *pPos);							/* î•ñ‚ğæ“¾ */
+	PCInfoBase	GetPtr (int nNo);								/* æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase	GetPtr (DWORD dwShadowID);						/* æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase	GetPtr (POINT *pPos);							/* æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);							/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);							/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);					/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ID‚ğæ“¾ */
+	DWORD	GetSendDataSize		(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);					/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 protected:
-	PARRAYMAPSHADOW	m_paInfo;				/* ƒ}ƒbƒv‰eî•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„IDã‚’å–å¾— */
+
+
+protected:
+	PARRAYMAPSHADOW	m_paInfo;				/* ãƒãƒƒãƒ—å½±æƒ…å ± */
 } CLibInfoMapShadow, *PCLibInfoMapShadow;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrDraw.cpp												 */
-/* “à—e			:•`‰æƒ}ƒl[ƒWƒƒƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrDraw.cpp												 */
+/* å†…å®¹			:æç”»ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -24,9 +24,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::CMgrDraw												 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::CMgrDraw												 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CMgrDraw::CMgrDraw()
@@ -53,9 +53,9 @@ CMgrDraw::CMgrDraw()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::~CMgrDraw											 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::~CMgrDraw											 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CMgrDraw::~CMgrDraw()
@@ -66,13 +66,13 @@ CMgrDraw::~CMgrDraw()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::Create												 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::Create												 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::Create(
-	CMgrData	*pMgrData)		/* [in] ƒf[ƒ^ŠÇ— */
+	CMgrData	*pMgrData)		/* [in] ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 {
 	m_pMgrData		= pMgrData;
 	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
@@ -87,9 +87,9 @@ void CMgrDraw::Create(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::Destroy												 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::Destroy												 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::Destroy(void)
@@ -98,19 +98,19 @@ void CMgrDraw::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::Draw													 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::Draw													 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::Draw(HDC hDC)
 {
 	HDC hDCTmp;
 
-	m_pMgrLayer->	Draw (m_pDibBack);		/* ƒŒƒCƒ„[ */
-	m_pMgrWindow->	Draw (m_pDibBack);		/* ƒEƒBƒ“ƒhƒE */
+	m_pMgrLayer->	Draw (m_pDibBack);		/* ãƒ¬ã‚¤ãƒ¤ãƒ¼ */
+	m_pMgrWindow->	Draw (m_pDibBack);		/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 
-	/* –¾“xw’è‚ ‚èH */
+	/* æ˜åº¦æŒ‡å®šã‚ã‚Šï¼Ÿ */
 	if (m_byLevel < 100 && m_byLevel > 0) {
 		m_pDibBack->ChgLevel (32, 32, SCRSIZEX, SCRSIZEY, (m_byLevel == 1) ? 0 : m_byLevel);
 	}
@@ -122,17 +122,17 @@ void CMgrDraw::Draw(HDC hDC)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawChar												 */
-/* “à—e		:ƒLƒƒƒ‰‚ğ•`‰æ													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::DrawChar												 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©ã‚’æç”»													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawChar(
-	CImg32 *pDst,					/* [in] •`‰ææ */
-	int x,							/* [in] •`‰æˆÊ’u(X) */
-	int y,							/* [in] •`‰æˆÊ’u(Y) */
-	CInfoCharCli *pInfoChar,		/* [in] ƒLƒƒƒ‰î•ñ */
-	BOOL bLock)/*TRUE*/				/* [in] ƒeƒ“ƒ|ƒ‰ƒŠ‚ğƒƒbƒN‚·‚é */
+	CImg32 *pDst,					/* [in] æç”»å…ˆ */
+	int x,							/* [in] æç”»ä½ç½®(X) */
+	int y,							/* [in] æç”»ä½ç½®(Y) */
+	CInfoCharCli *pInfoChar,		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
+	BOOL bLock)/*TRUE*/				/* [in] ãƒ†ãƒ³ãƒãƒ©ãƒªã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹ */
 {
 	WORD wGrpIDMain, wGrpIDSub, wGrpIDMainBase, wGrpIdNPC, wGrpID;
 	int cx, cy, cxChar, cyChar, nTmp, nDirection, nEyeID, i, nCount, nFadeLevel;
@@ -199,7 +199,7 @@ void CMgrDraw::DrawChar(
 		}
 	}
 
-	/* ƒLƒƒƒ‰‰e‚Ì•`‰æ */
+	/* ã‚­ãƒ£ãƒ©å½±ã®æç”» */
 	switch (wGrpIDMainBase) {
 	case GRPIDMAIN_2X2_CHAR:
 		m_pMgrGrpData->GetGrpPos (wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
@@ -241,7 +241,7 @@ void CMgrDraw::DrawChar(
 	for (i = 0; i < nCount; i ++) {
 		switch (pInfoMotion->m_anDrawList[i]) {
 		case 0:
-			/* 2x2ƒTƒCƒYˆÈŠOH */
+			/* 2x2ã‚µã‚¤ã‚ºä»¥å¤–ï¼Ÿ */
 			if (wGrpIDMainBase != GRPIDMAIN_2X2_CHAR) {
 				nTmp = 0;
 				if (wGrpIDMainBase == GRPIDMAIN_2X2_NPC) {
@@ -276,7 +276,7 @@ void CMgrDraw::DrawChar(
 					y + pInfoMotion->m_ptDrawPosPile0.y,
 					cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
 
-			/* 2x2ƒTƒCƒY */
+			/* 2x2ã‚µã‚¤ã‚º */
 			} else {
 				m_pMgrGrpData->GetGrpPos (wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
 				nTmp = 0;
@@ -284,7 +284,7 @@ void CMgrDraw::DrawChar(
 					nTmp += 32 * 4;
 				}
 				pSrc = m_pMgrGrpData->GetDib (wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, 0);
-				/* ‘Ì */
+				/* ä½“ */
 				pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp);
 				if ((pInfoChar->m_wGrpIDSP == 0) && (pInfoChar->m_wGrpIDTmpMain == 0)) {
 					wGrpIDMain = GRPIDMAIN_2X2_CLOTH;
@@ -298,13 +298,13 @@ void CMgrDraw::DrawChar(
 					}
 				}
 				pSrc = m_pMgrGrpData->GetDib (wGrpIDMain, 0, wGrpIDSub);
-				/* • */
+				/* æœ */
 				pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
 				pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_HAIR, 0, pInfoChar->m_wGrpIDHairType);
-				/* ”¯ */
+				/* é«ª */
 				pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
 				if (nDirection != 0) {
-					/* –Ú */
+					/* ç›® */
 					pSrc = m_pMgrGrpData->GetDib (GRPIDMAIN_2X2_EYE, 0, nEyeID);
 					pDibTmp->BltFrom256 (0, 0, cxChar, cyChar, pSrc, ptTmp.x - 32 * 4, ptTmp.y, TRUE);
 				}
@@ -319,7 +319,7 @@ void CMgrDraw::DrawChar(
 					cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
 			}
 			break;
-		case 1:		/* d‚Ë‰æ‘œ‚P */
+		case 1:		/* é‡ã­ç”»åƒï¼‘ */
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile1;
 			wGrpIDSub  = pInfoMotion->m_wGrpIDSubPile1;
 			if (wGrpIDSub == 0) {
@@ -348,7 +348,7 @@ void CMgrDraw::DrawChar(
 				y + nTmp + pInfoMotion->m_ptDrawPosPile1.y,
 				cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel1, TRUE);
 			break;
-		case 2:		/* d‚Ë‰æ‘œ‚Q */
+		case 2:		/* é‡ã­ç”»åƒï¼’ */
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile2;
 			wGrpIDSub  = pInfoMotion->m_wGrpIDSubPile2;
 			if (wGrpIDSub == 0) {
@@ -377,7 +377,7 @@ void CMgrDraw::DrawChar(
 				y + nTmp + pInfoMotion->m_ptDrawPosPile2.y,
 				cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel2, TRUE);
 			break;
-		case 3:		/* d‚Ë‰æ‘œ‚R */
+		case 3:		/* é‡ã­ç”»åƒï¼“ */
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile3;
 			wGrpIDSub  = pInfoMotion->m_wGrpIDSubPile3;
 			if (wGrpIDSub == 0) {
@@ -410,7 +410,7 @@ void CMgrDraw::DrawChar(
 	}
 
 ExitEffect:
-	/* ƒGƒtƒFƒNƒg */
+	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 	pSrc = pInfoChar->GetEfcImg ();
 	if (pSrc) {
 		pInfoChar->GetEfcGrpPos (ptTmp);
@@ -435,19 +435,19 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawChar												 */
-/* “à—e		:ƒLƒƒƒ‰‚ğ•`‰æ													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::DrawChar												 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©ã‚’æç”»													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawChar(
-	CImg32 *pDst,					/* [in] •`‰ææ */
-	int x,							/* [in] •`‰æˆÊ’u(X) */
-	int y,							/* [in] •`‰æˆÊ’u(Y) */
-	BYTE byDirection,				/* [in] Œü‚« */
-	BYTE byAnimeNo,					/* [in] ƒAƒjƒ[ƒVƒ‡ƒ“”Ô† */
-	BYTE byLevel,					/* [in] “§–¾“x */
-	CInfoCharCli *pInfoChar)		/* [in] ƒLƒƒƒ‰î•ñ */
+	CImg32 *pDst,					/* [in] æç”»å…ˆ */
+	int x,							/* [in] æç”»ä½ç½®(X) */
+	int y,							/* [in] æç”»ä½ç½®(Y) */
+	BYTE byDirection,				/* [in] å‘ã */
+	BYTE byAnimeNo,					/* [in] ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå· */
+	BYTE byLevel,					/* [in] é€æ˜åº¦ */
+	CInfoCharCli *pInfoChar)		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
 {
 	BYTE byAnimeNoTmp;
 	int yy, cx, cy;
@@ -481,20 +481,20 @@ void CMgrDraw::DrawChar(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawMapParts											 */
-/* “à—e		:ƒ}ƒbƒvƒp[ƒc‚ğ•`‰æ												 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::DrawMapParts											 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚’æç”»												 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawMapParts(
-	CImg32 *pDst,				/* [in] •`‰ææ */
-	int x,						/* [in] •`‰æˆÊ’u(X) */
-	int y,						/* [in] •`‰æˆÊ’u(Y) */
-	DWORD dwPartsID,			/* [in] ƒ}ƒbƒvƒp[ƒcID */
-	int nMode,					/* [in] •`‰æƒ‚[ƒh(0:‰º’n‚Ì‚İ 1:d‚Ë‡‚í‚¹‚Ì‚İ 2:‘S‚Ä 3:”wŒi‚²‚Æd‚È‚é‚È‚ç‘S‚Ä) */
-	BOOL bSingleSize,			/* [in] “™”{w’è */
-	BOOL bUseColorKey,/*TRUE*/	/* [in] TRUE:d‚Ë‡‚í‚¹‚·‚é */
-	BYTE byLevel)/*0*/			/* [in] “§‰ßƒŒƒxƒ‹ */
+	CImg32 *pDst,				/* [in] æç”»å…ˆ */
+	int x,						/* [in] æç”»ä½ç½®(X) */
+	int y,						/* [in] æç”»ä½ç½®(Y) */
+	DWORD dwPartsID,			/* [in] ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ID */
+	int nMode,					/* [in] æç”»ãƒ¢ãƒ¼ãƒ‰(0:ä¸‹åœ°ã®ã¿ 1:é‡ã­åˆã‚ã›ã®ã¿ 2:å…¨ã¦ 3:èƒŒæ™¯ã”ã¨é‡ãªã‚‹ãªã‚‰å…¨ã¦) */
+	BOOL bSingleSize,			/* [in] ç­‰å€æŒ‡å®š */
+	BOOL bUseColorKey,/*TRUE*/	/* [in] TRUE:é‡ã­åˆã‚ã›ã™ã‚‹ */
+	BYTE byLevel)/*0*/			/* [in] é€éãƒ¬ãƒ™ãƒ« */
 {
 	PCInfoMapParts pInfoMapParts;
 
@@ -504,21 +504,21 @@ void CMgrDraw::DrawMapParts(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawMapParts											 */
-/* “à—e		:ƒ}ƒbƒvƒp[ƒc‚ğ•`‰æ												 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::DrawMapParts											 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚’æç”»												 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawMapParts(
-	CImg32 *pDst,						/* [in] •`‰ææ */
-	int x,								/* [in] •`‰æˆÊ’u(X) */
-	int y,								/* [in] •`‰æˆÊ’u(Y) */
-	CInfoMapParts *pInfoMapParts,		/* [in] ƒ}ƒbƒvƒp[ƒcî•ñ */
-	int nMode,							/* [in] •`‰æƒ‚[ƒh(0:‰º’n‚Ì‚İ 1:d‚Ë‡‚í‚¹‚Ì‚İ 2:‘S‚Ä 3:”wŒi‚²‚Æd‚È‚é‚È‚ç‘S‚Ä) */
-	BOOL bSingleSize,					/* [in] “™”{w’è */
-	BOOL bUseColorKey,/*TRUE*/			/* [in] TRUE:d‚Ë‡‚í‚¹‚·‚é */
-	BOOL bLock,/*TRUE*/					/* [in] ƒeƒ“ƒ|ƒ‰ƒŠ‚ğƒƒbƒN‚·‚é */
-	BYTE byLevel)/*0*/					/* [in] “§‰ßƒŒƒxƒ‹ */
+	CImg32 *pDst,						/* [in] æç”»å…ˆ */
+	int x,								/* [in] æç”»ä½ç½®(X) */
+	int y,								/* [in] æç”»ä½ç½®(Y) */
+	CInfoMapParts *pInfoMapParts,		/* [in] ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
+	int nMode,							/* [in] æç”»ãƒ¢ãƒ¼ãƒ‰(0:ä¸‹åœ°ã®ã¿ 1:é‡ã­åˆã‚ã›ã®ã¿ 2:å…¨ã¦ 3:èƒŒæ™¯ã”ã¨é‡ãªã‚‹ãªã‚‰å…¨ã¦) */
+	BOOL bSingleSize,					/* [in] ç­‰å€æŒ‡å®š */
+	BOOL bUseColorKey,/*TRUE*/			/* [in] TRUE:é‡ã­åˆã‚ã›ã™ã‚‹ */
+	BOOL bLock,/*TRUE*/					/* [in] ãƒ†ãƒ³ãƒãƒ©ãƒªã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹ */
+	BYTE byLevel)/*0*/					/* [in] é€éãƒ¬ãƒ™ãƒ« */
 {
 	int nSize, nSizeDst;
 	WORD wGrpIDBase, wGrpIDPile;
@@ -549,10 +549,10 @@ void CMgrDraw::DrawMapParts(
 		wGrpIDPile = 0;
 	}
 	if (nMode == 3) {
-		/* ”wŒi‚²‚Æd‚È‚é */
+		/* èƒŒæ™¯ã”ã¨é‡ãªã‚‹ */
 		if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_PILEBACK) {
 			nMode = 2;
-		/* d‚È‚é */
+		/* é‡ãªã‚‹ */
 		} else if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_PILE) {
 			nMode = 1;
 		} else {
@@ -592,19 +592,19 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawMapShadow										 */
-/* “à—e		:ƒ}ƒbƒv‰e‚ğ•`‰æ													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CMgrDraw::DrawMapShadow										 */
+/* å†…å®¹		:ãƒãƒƒãƒ—å½±ã‚’æç”»													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawMapShadow(
-	CImg32 *pDst,				/* [in] •`‰ææ */
-	int x,						/* [in] •`‰æˆÊ’u(X) */
-	int y,						/* [in] •`‰æˆÊ’u(Y) */
-	DWORD dwShadowID,			/* [in] ƒ}ƒbƒv‰eID */
-	BOOL bSingleSize,			/* [in] “™”{w’è */
-	BOOL bUseColorKey,/*TRUE*/	/* [in] TRUE:d‚Ë‡‚í‚¹‚·‚é */
-	BOOL bLock)/*TRUE*/			/* [in] ƒeƒ“ƒ|ƒ‰ƒŠ‚ğƒƒbƒN‚·‚é */
+	CImg32 *pDst,				/* [in] æç”»å…ˆ */
+	int x,						/* [in] æç”»ä½ç½®(X) */
+	int y,						/* [in] æç”»ä½ç½®(Y) */
+	DWORD dwShadowID,			/* [in] ãƒãƒƒãƒ—å½±ID */
+	BOOL bSingleSize,			/* [in] ç­‰å€æŒ‡å®š */
+	BOOL bUseColorKey,/*TRUE*/	/* [in] TRUE:é‡ã­åˆã‚ã›ã™ã‚‹ */
+	BOOL bLock)/*TRUE*/			/* [in] ãƒ†ãƒ³ãƒãƒ©ãƒªã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹ */
 {
 	int nSize, nSizeDst;
 	WORD wGrpIDBase;
@@ -657,18 +657,18 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawMapObject										 */
-/* “à—e		:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg‚ğ•`‰æ										 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CMgrDraw::DrawMapObject										 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æç”»										 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawMapObject(
-	CImg32 *pDst,				/* [in] •`‰ææ */
-	int x,						/* [in] •`‰æˆÊ’u(X) */
-	int y,						/* [in] •`‰æˆÊ’u(Y) */
-	DWORD dwObjectID,			/* [in] ƒIƒuƒWƒFƒNƒgID */
-	BOOL bUseColorKey,/*TRUE*/	/* [in] TRUE:d‚Ë‡‚í‚¹‚·‚é */
-	BOOL bLock)/*TRUE*/			/* [in] ƒeƒ“ƒ|ƒ‰ƒŠ‚ğƒƒbƒN‚·‚é */
+	CImg32 *pDst,				/* [in] æç”»å…ˆ */
+	int x,						/* [in] æç”»ä½ç½®(X) */
+	int y,						/* [in] æç”»ä½ç½®(Y) */
+	DWORD dwObjectID,			/* [in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	BOOL bUseColorKey,/*TRUE*/	/* [in] TRUE:é‡ã­åˆã‚ã›ã™ã‚‹ */
+	BOOL bLock)/*TRUE*/			/* [in] ãƒ†ãƒ³ãƒãƒ©ãƒªã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹ */
 {
 	int xx, yy;
 	SIZE sizeSrc, sizeDst;
@@ -723,17 +723,17 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawItem												 */
-/* “à—e		:ƒAƒCƒeƒ€‚ğ•`‰æ													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMgrDraw::DrawItem												 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”»													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawItem(
-	CImg32 *pDst,		/* [in] •`‰ææ */
-	int x,				/* [in] •`‰æˆÊ’u(X) */
-	int y,				/* [in] •`‰æˆÊ’u(Y) */
-	DWORD dwItemID,		/* [in] ƒAƒCƒeƒ€ID */
-	BYTE byLevel)/*0*/	/* [in] “§–¾“x */
+	CImg32 *pDst,		/* [in] æç”»å…ˆ */
+	int x,				/* [in] æç”»ä½ç½®(X) */
+	int y,				/* [in] æç”»ä½ç½®(Y) */
+	DWORD dwItemID,		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ID */
+	BYTE byLevel)/*0*/	/* [in] é€æ˜åº¦ */
 {
 	PCInfoItem pInfoItem;
 
@@ -747,18 +747,18 @@ void CMgrDraw::DrawItem(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawItem												 */
-/* “à—e		:ƒAƒCƒeƒ€‚ğ•`‰æ													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMgrDraw::DrawItem												 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”»													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawItem(
-	CImg32 *pDst,				/* [in] •`‰ææ */
-	int x,						/* [in] •`‰æˆÊ’u(X) */
-	int y,						/* [in] •`‰æˆÊ’u(Y) */
-	CInfoItem *pInfoItem,		/* [in] ƒAƒCƒeƒ€î•ñ */
-	BYTE byLevel,/*0*/			/* [in] “§–¾“x */
-	BOOL bLock)/*TRUE*/			/* [in] ƒeƒ“ƒ|ƒ‰ƒŠ‚ğƒƒbƒN‚·‚é */
+	CImg32 *pDst,				/* [in] æç”»å…ˆ */
+	int x,						/* [in] æç”»ä½ç½®(X) */
+	int y,						/* [in] æç”»ä½ç½®(Y) */
+	CInfoItem *pInfoItem,		/* [in] ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ± */
+	BYTE byLevel,/*0*/			/* [in] é€æ˜åº¦ */
+	BOOL bLock)/*TRUE*/			/* [in] ãƒ†ãƒ³ãƒãƒ©ãƒªã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹ */
 {
 	PCImg32 pImg, pDibTmp;
 	HDC hDCBmp;
@@ -792,16 +792,16 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawBalloon											 */
-/* “à—e		:•¬o‚µ‚ğ•`‰æ													 */
-/* “ú•t		:2008/07/05														 */
+/* é–¢æ•°å	:CMgrDraw::DrawBalloon											 */
+/* å†…å®¹		:å™´å‡ºã—ã‚’æç”»													 */
+/* æ—¥ä»˜		:2008/07/05														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawBalloon(
-	CImg32 *pDst,			/* [in] •`‰ææ */
-	int x,					/* [in] •`‰æˆÊ’u(X) */
-	int y,					/* [in] •`‰æˆÊ’u(Y) */
-	DWORD dwBalloonID)		/* [in] •¬o‚µID */
+	CImg32 *pDst,			/* [in] æç”»å…ˆ */
+	int x,					/* [in] æç”»ä½ç½®(X) */
+	int y,					/* [in] æç”»ä½ç½®(Y) */
+	DWORD dwBalloonID)		/* [in] å™´å‡ºã—ID */
 {
 	int cx, cy;
 	PCImg32 pImg, pDibTmp;
@@ -834,16 +834,16 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawTextEffect										 */
-/* “à—e		:•¶šƒGƒtƒFƒNƒg‚ğ•`‰æ											 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrDraw::DrawTextEffect										 */
+/* å†…å®¹		:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æç”»											 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawTextEffect(
-	CImg32 *pDst,							/* [in] •`‰ææ */
-	int x,									/* [in] •`‰æˆÊ’u(X) */
-	int y,									/* [in] •`‰æˆÊ’u(Y) */
-	CInfoTextEffect *pInfoTextEffect)		/* [in] •¶šƒGƒtƒFƒNƒgî•ñ */
+	CImg32 *pDst,							/* [in] æç”»å…ˆ */
+	int x,									/* [in] æç”»ä½ç½®(X) */
+	int y,									/* [in] æç”»ä½ç½®(Y) */
+	CInfoTextEffect *pInfoTextEffect)		/* [in] æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 {
 	BOOL bResult;
 	BYTE byLevel;
@@ -902,16 +902,16 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawMapHitMark										 */
-/* “à—e		:ƒ}ƒbƒv“–‚½‚è”»’èƒ}[ƒN‚ğ•`‰æ									 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrDraw::DrawMapHitMark										 */
+/* å†…å®¹		:ãƒãƒƒãƒ—å½“ãŸã‚Šåˆ¤å®šãƒãƒ¼ã‚¯ã‚’æç”»									 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawMapHitMark(
-	CImg32 *pDst,		/* [in] •`‰ææ */
-	int x,				/* [in] •`‰æˆÊ’u(X) */
-	int y,				/* [in] •`‰æˆÊ’u(Y) */
-	int nNo)			/* [in] í•Ê */
+	CImg32 *pDst,		/* [in] æç”»å…ˆ */
+	int x,				/* [in] æç”»ä½ç½®(X) */
+	int y,				/* [in] æç”»ä½ç½®(Y) */
+	int nNo)			/* [in] ç¨®åˆ¥ */
 {
 	CImg32 *pDibSystem;
 
@@ -921,16 +921,16 @@ void CMgrDraw::DrawMapHitMark(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawCursor											 */
-/* “à—e		:wƒJ[ƒ\ƒ‹‚ğ•`‰æ												 */
-/* “ú•t		:2008/11/19														 */
+/* é–¢æ•°å	:CMgrDraw::DrawCursor											 */
+/* å†…å®¹		:æŒ‡ã‚«ãƒ¼ã‚½ãƒ«ã‚’æç”»												 */
+/* æ—¥ä»˜		:2008/11/19														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawCursor(
-	CImg32 *pDst,		/* [in] •`‰ææ */
-	int x,				/* [in] •`‰æˆÊ’u(X) */
-	int y,				/* [in] •`‰æˆÊ’u(Y) */
-	int nType)			/* [in] í•Ê */
+	CImg32 *pDst,		/* [in] æç”»å…ˆ */
+	int x,				/* [in] æç”»ä½ç½®(X) */
+	int y,				/* [in] æç”»ä½ç½®(Y) */
+	int nType)			/* [in] ç¨®åˆ¥ */
 {
 	POINT apt[] = { 48, 0, 72, 0, 48, 24, 72, 24 };
 	CImg32 *pDibSystem;
@@ -945,15 +945,15 @@ void CMgrDraw::DrawCursor(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawSkillMenu										 */
-/* “à—e		:ƒXƒLƒ‹ƒƒjƒ…[‚ğ•`‰æ											 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CMgrDraw::DrawSkillMenu										 */
+/* å†…å®¹		:ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’æç”»											 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawSkillMenu(
-	CImg32 *pDst,		/* [in] •`‰ææ */
-	int x,				/* [in] •`‰æˆÊ’u(X) */
-	int y)				/* [in] •`‰æˆÊ’u(Y) */
+	CImg32 *pDst,		/* [in] æç”»å…ˆ */
+	int x,				/* [in] æç”»ä½ç½®(X) */
+	int y)				/* [in] æç”»ä½ç½®(Y) */
 {
 	CImg32 *pDibSystem = m_pMgrGrpData->GetDibSystem ();
 
@@ -962,17 +962,17 @@ void CMgrDraw::DrawSkillMenu(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawSkillType										 */
-/* “à—e		:ƒXƒLƒ‹í•Êƒ^ƒu‚ğ•`‰æ											 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CMgrDraw::DrawSkillType										 */
+/* å†…å®¹		:ã‚¹ã‚­ãƒ«ç¨®åˆ¥ã‚¿ãƒ–ã‚’æç”»											 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawSkillType(
-	CImg32 *pDst,		/* [in] •`‰ææ */
-	int x,				/* [in] •`‰æˆÊ’u(X) */
-	int y,				/* [in] •`‰æˆÊ’u(Y) */
-	int nType,			/* [in] í•Ê */
-	BOOL bActive)		/* [in] TRUE:‘I‘ğ FALSE:”ñ‘I‘ğ */
+	CImg32 *pDst,		/* [in] æç”»å…ˆ */
+	int x,				/* [in] æç”»ä½ç½®(X) */
+	int y,				/* [in] æç”»ä½ç½®(Y) */
+	int nType,			/* [in] ç¨®åˆ¥ */
+	BOOL bActive)		/* [in] TRUE:é¸æŠ FALSE:éé¸æŠ */
 {
 	int yy;
 	CImg32 *pDibSystem = m_pMgrGrpData->GetDibSystem ();
@@ -985,16 +985,16 @@ void CMgrDraw::DrawSkillType(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::DrawIcon												 */
-/* “à—e		:ƒAƒCƒRƒ“‚ğ•`‰æ													 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CMgrDraw::DrawIcon												 */
+/* å†…å®¹		:ã‚¢ã‚¤ã‚³ãƒ³ã‚’æç”»													 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CMgrDraw::DrawIcon(
-	CImg32 *pDst,		/* [in] •`‰ææ */
-	int x,				/* [in] •`‰æˆÊ’u(X) */
-	int y,				/* [in] •`‰æˆÊ’u(Y) */
-	int nIndex)			/* [in] ƒAƒCƒRƒ“”Ô† */
+	CImg32 *pDst,		/* [in] æç”»å…ˆ */
+	int x,				/* [in] æç”»ä½ç½®(X) */
+	int y,				/* [in] æç”»ä½ç½®(Y) */
+	int nIndex)			/* [in] ã‚¢ã‚¤ã‚³ãƒ³ç•ªå· */
 {
 	int cx, cy;
 	PCImg32 pImg, pDibTmp;
@@ -1015,9 +1015,9 @@ void CMgrDraw::DrawIcon(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::TimerProc											 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::TimerProc											 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CMgrDraw::TimerProc(void)
@@ -1034,9 +1034,9 @@ BOOL CMgrDraw::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::Fade													 */
-/* “à—e		:ƒtƒF[ƒhˆ—													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::Fade													 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰å‡¦ç†													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CMgrDraw::Fade(void)
@@ -1095,9 +1095,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::GetDibTmp											 */
-/* “à—e		:•`‰æƒeƒ“ƒ|ƒ‰ƒŠæ“¾												 */
-/* “ú•t		:2008/07/05														 */
+/* é–¢æ•°å	:CMgrDraw::GetDibTmp											 */
+/* å†…å®¹		:æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªå–å¾—												 */
+/* æ—¥ä»˜		:2008/07/05														 */
 /* ========================================================================= */
 
 CImg32 *CMgrDraw::GetDibTmp(void)
@@ -1108,9 +1108,9 @@ CImg32 *CMgrDraw::GetDibTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::ReleaseDibTmp										 */
-/* “à—e		:•`‰æƒeƒ“ƒ|ƒ‰ƒŠ‰ğ•ú												 */
-/* “ú•t		:2008/07/05														 */
+/* é–¢æ•°å	:CMgrDraw::ReleaseDibTmp										 */
+/* å†…å®¹		:æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªè§£æ”¾												 */
+/* æ—¥ä»˜		:2008/07/05														 */
 /* ========================================================================= */
 
 void CMgrDraw::ReleaseDibTmp(void)
@@ -1120,9 +1120,9 @@ void CMgrDraw::ReleaseDibTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::IsFade												 */
-/* “à—e		:ƒtƒF[ƒhƒCƒ“/ƒAƒEƒg’†‚©”»’è									 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CMgrDraw::IsFade												 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³/ã‚¢ã‚¦ãƒˆä¸­ã‹åˆ¤å®š									 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CMgrDraw::IsFade(void)
@@ -1145,9 +1145,9 @@ BOOL CMgrDraw::IsFade(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::SetLevel												 */
-/* “à—e		:–¾“xİ’è														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::SetLevel												 */
+/* å†…å®¹		:æ˜åº¦è¨­å®š														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::SetLevel(BYTE byLevel)
@@ -1157,9 +1157,9 @@ void CMgrDraw::SetLevel(BYTE byLevel)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::SetFadeState											 */
-/* “à—e		:–¾“xİ’è														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::SetFadeState											 */
+/* å†…å®¹		:æ˜åº¦è¨­å®š														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::SetFadeState(BYTE byFadeState)
@@ -1188,9 +1188,9 @@ void CMgrDraw::SetFadeState(BYTE byFadeState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::Clear												 */
-/* “à—e		:”wŒiƒNƒŠƒA														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::Clear												 */
+/* å†…å®¹		:èƒŒæ™¯ã‚¯ãƒªã‚¢														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::Clear(void)
@@ -1200,9 +1200,9 @@ void CMgrDraw::Clear(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::SaveScreenShot										 */
-/* “à—e		:ƒXƒNƒŠ[ƒ“ƒVƒ‡ƒbƒg‚Ì•Û‘¶										 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrDraw::SaveScreenShot										 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚·ãƒ§ãƒƒãƒˆã®ä¿å­˜										 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrDraw::SaveScreenShot(void)
@@ -1213,7 +1213,7 @@ void CMgrDraw::SaveScreenShot(void)
 	SYSTEMTIME sysTime;
 	CImg32 ImgTmp;
 
-	/* ƒtƒ@ƒCƒ‹–¼‚Ìì¬ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®ä½œæˆ */
 	GetModuleFileName (NULL, szName, MAX_PATH);
 	pszTmp		= strrchr (szName, '\\');
 	pszTmp[1]	= 0;
@@ -1236,9 +1236,9 @@ void CMgrDraw::SaveScreenShot(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::LockDibTmp											 */
-/* “à—e		:•`‰æƒeƒ“ƒ|ƒ‰ƒŠ‚ğƒƒbƒN											 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CMgrDraw::LockDibTmp											 */
+/* å†…å®¹		:æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªã‚’ãƒ­ãƒƒã‚¯											 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 void CMgrDraw::LockDibTmp(void)
@@ -1249,9 +1249,9 @@ void CMgrDraw::LockDibTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrDraw::UnLockDibTmp											 */
-/* “à—e		:•`‰æƒeƒ“ƒ|ƒ‰ƒŠ‚ÌƒƒbƒN‚ğ‰ğœ									 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CMgrDraw::UnLockDibTmp											 */
+/* å†…å®¹		:æç”»ãƒ†ãƒ³ãƒãƒ©ãƒªã®ãƒ­ãƒƒã‚¯ã‚’è§£é™¤									 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 void CMgrDraw::UnLockDibTmp(void)

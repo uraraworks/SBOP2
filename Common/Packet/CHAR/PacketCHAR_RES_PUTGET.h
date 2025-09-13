@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_RES_PUTGET.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒAƒCƒeƒ€‚ðE‚¤’u‚­‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_RES_PUTGET.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†ç½®ãå¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,33 +11,33 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
 enum {
 	RESULTID_CHAR_RES_PUTGET_NONE = 0,
-	RESULTID_CHAR_RES_PUTGET_PUT,				/* ’u‚¢‚½ */
-	RESULTID_CHAR_RES_PUTGET_GET,				/* Žæ“¾‚µ‚½ */
-	RESULTID_CHAR_RES_PUTGET_DELETE,			/* íœ‚µ‚½ */
+	RESULTID_CHAR_RES_PUTGET_PUT,				/* ç½®ã„ãŸ */
+	RESULTID_CHAR_RES_PUTGET_GET,				/* å–å¾—ã—ãŸ */
+	RESULTID_CHAR_RES_PUTGET_DELETE,			/* å‰Šé™¤ã—ãŸ */
 };
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_RES_PUTGET : public CPacketBase
 {
 public:
-			CPacketCHAR_RES_PUTGET();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_RES_PUTGET();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_RES_PUTGET();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_RES_PUTGET();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwItemID, int nResult);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwItemID, int nResult);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwItemID;					/* ƒAƒCƒeƒ€ID */
-	int		m_nResult;					/* Œ‹‰Ê */
+	DWORD	m_dwItemID;					/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	int		m_nResult;					/* çµæžœ */
 } CPacketCHAR_RES_PUTGET, *PCPacketCHAR_RES_PUTGET;
 
 /* Copyright(C)URARA-works 2007 */

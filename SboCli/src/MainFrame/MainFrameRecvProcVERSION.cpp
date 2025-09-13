@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcVERSION.cpp								 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒo[ƒWƒ‡ƒ“ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcVERSION.cpp								 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,24 +17,24 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION									 */
-/* “à—e		:ŽóMˆ—(ƒo[ƒWƒ‡ƒ“Œn)											 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»)											 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_VERSION_RES_VERSIONCHECK:		RecvProcVERSION_RES_VERSIONCHECK	(pData);	break;	/* ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN‰ž“š */
-	case SBOCOMMANDID_SUB_VERSION_RES_FILELISTCHECK:	RecvProcVERSION_RES_FILELISTCHECK	(pData);	break;	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN‰ž“š */
+	case SBOCOMMANDID_SUB_VERSION_RES_VERSIONCHECK:		RecvProcVERSION_RES_VERSIONCHECK	(pData);	break;	/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯å¿œç­” */
+	case SBOCOMMANDID_SUB_VERSION_RES_FILELISTCHECK:	RecvProcVERSION_RES_FILELISTCHECK	(pData);	break;	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯å¿œç­” */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_RES_VERSIONCHECK					 */
-/* “à—e		:ŽóMˆ—(ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN‰ž“š)								 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_RES_VERSIONCHECK					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯å¿œç­”)								 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
@@ -49,7 +49,7 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 	Packet.Set (pData);
 
 	switch (Packet.m_nResult) {
-	case VERSIONCHECKRES_OK:			/* –â‘è–³‚µ */
+	case VERSIONCHECKRES_OK:			/* å•é¡Œç„¡ã— */
 		pWindow = (PCWindowLOGIN)m_pMgrWindow->GetWindow (WINDOWTYPE_LOGIN);
 		if (pWindow == NULL) {
 			break;
@@ -66,7 +66,7 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 		m_pSock->Send (&PacketLOGIN);
 		break;
 
-	case VERSIONCHECKRES_NG_VERSION:	/* ƒo[ƒWƒ‡ƒ“•sˆê’v */
+	case VERSIONCHECKRES_NG_VERSION:	/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ä¸ä¸€è‡´ */
 		m_pSock->Destroy ();
 		DisConnectProc (DISCONNECTID_VERSION);
 		break;
@@ -75,9 +75,9 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_RES_FILELISTCHECK					 */
-/* “à—e		:ŽóMˆ—(ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN‰ž“š)							 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_RES_FILELISTCHECK					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯å¿œç­”)							 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcVERSION_RES_FILELISTCHECK(PBYTE pData)
@@ -87,9 +87,9 @@ void CMainFrame::RecvProcVERSION_RES_FILELISTCHECK(PBYTE pData)
 	Packet.Set (pData);
 
 	switch (Packet.m_nResult) {
-	case FILELISTCHECKRES_OK:			/* –â‘è–³‚µ */
+	case FILELISTCHECKRES_OK:			/* å•é¡Œç„¡ã— */
 		break;
-	case FILELISTCHECKRES_NG:			/* •sˆê’v */
+	case FILELISTCHECKRES_NG:			/* ä¸ä¸€è‡´ */
 		break;
 	}
 }

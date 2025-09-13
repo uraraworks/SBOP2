@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ITEMTYPE_ADD.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒAƒCƒeƒ€í•Êî•ñ’Ç‰Á) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ITEMTYPE_ADD.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¿½åŠ ) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/01													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_ITEMTYPE_ADD.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMTYPE_ADD::CPacketADMIN_ITEMTYPE_ADD			 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/01														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMTYPE_ADD::CPacketADMIN_ITEMTYPE_ADD			 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEMTYPE_ADD::CPacketADMIN_ITEMTYPE_ADD()
@@ -24,9 +24,9 @@ CPacketADMIN_ITEMTYPE_ADD::CPacketADMIN_ITEMTYPE_ADD()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMTYPE_ADD::~CPacketADMIN_ITEMTYPE_ADD			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/01														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMTYPE_ADD::~CPacketADMIN_ITEMTYPE_ADD			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEMTYPE_ADD::~CPacketADMIN_ITEMTYPE_ADD()
@@ -36,13 +36,13 @@ CPacketADMIN_ITEMTYPE_ADD::~CPacketADMIN_ITEMTYPE_ADD()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMTYPE_ADD::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/10/01														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMTYPE_ADD::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/10/01														 */
 /* ========================================================================= */
 
 void CPacketADMIN_ITEMTYPE_ADD::Make(
-	CInfoItemTypeBase *pInfo)		/* [in] ƒAƒCƒeƒ€í•Êî•ñ */
+	CInfoItemTypeBase *pInfo)		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketADMIN_ITEMTYPE_ADD::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_ADD;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒAƒCƒeƒ€í•Êî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketADMIN_ITEMTYPE_ADD::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMTYPE_ADD::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/10/01														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMTYPE_ADD::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/10/01														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_ITEMTYPE_ADD::Set(PBYTE pPacket)

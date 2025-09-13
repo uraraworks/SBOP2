@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcEFFECT.cpp								 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒGƒtƒFƒNƒgŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcEFFECT.cpp								 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,26 +17,26 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT										 */
-/* “à—e		:ŽóMˆ—(ƒGƒtƒFƒNƒgŒn)											 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»)											 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_EFFECT_RES_EFFECTINFO:	RecvProcEFFECT_RES_EFFECTINFO	(pData);	break;	/* ƒGƒtƒFƒNƒgî•ñ‰ž“š */
-	case SBOCOMMANDID_SUB_EFFECT_EFFECTINFO:		RecvProcEFFECT_EFFECTINFO		(pData);	break;	/* ƒGƒtƒFƒNƒgî•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_EFFECT_DELETEEFFECTINFO:	RecvProcEFFECT_DELETEEFFECTINFO	(pData);	break;	/* ƒGƒtƒFƒNƒgî•ñíœ */
-	case SBOCOMMANDID_SUB_EFFECT_BALLOONINFO:		RecvProcEFFECT_BALLOONINFO		(pData);	break;	/* •¬o‚µî•ñ’Ê’m */
+	case SBOCOMMANDID_SUB_EFFECT_RES_EFFECTINFO:	RecvProcEFFECT_RES_EFFECTINFO	(pData);	break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±å¿œç­” */
+	case SBOCOMMANDID_SUB_EFFECT_EFFECTINFO:		RecvProcEFFECT_EFFECTINFO		(pData);	break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_EFFECT_DELETEEFFECTINFO:	RecvProcEFFECT_DELETEEFFECTINFO	(pData);	break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_EFFECT_BALLOONINFO:		RecvProcEFFECT_BALLOONINFO		(pData);	break;	/* å™´å‡ºã—æƒ…å ±é€šçŸ¥ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT_RES_EFFECTINFO						 */
-/* “à—e		:ŽóMˆ—(ƒGƒtƒFƒNƒgî•ñ‰ž“š)									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT_RES_EFFECTINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±å¿œç­”)									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT_RES_EFFECTINFO(PBYTE pData)
@@ -60,9 +60,9 @@ void CMainFrame::RecvProcEFFECT_RES_EFFECTINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT_EFFECTINFO							 */
-/* “à—e		:ŽóMˆ—(ƒGƒtƒFƒNƒgî•ñ’Ê’m)									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT_EFFECTINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±é€šçŸ¥)									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT_EFFECTINFO(PBYTE pData)
@@ -90,9 +90,9 @@ void CMainFrame::RecvProcEFFECT_EFFECTINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT_DELETEEFFECTINFO					 */
-/* “à—e		:ŽóMˆ—(ƒGƒtƒFƒNƒgî•ñíœ)									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT_DELETEEFFECTINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±å‰Šé™¤)									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT_DELETEEFFECTINFO(PBYTE pData)
@@ -107,9 +107,9 @@ void CMainFrame::RecvProcEFFECT_DELETEEFFECTINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT_BALLOONINFO							 */
-/* “à—e		:ŽóMˆ—(•¬o‚µî•ñ’Ê’m)										 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT_BALLOONINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(å™´å‡ºã—æƒ…å ±é€šçŸ¥)										 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT_BALLOONINFO(PBYTE pData)

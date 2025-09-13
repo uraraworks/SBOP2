@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoCharCli.h											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoCharCli.h											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,34 +15,34 @@ class CMgrData;
 class CInfoCharCli;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoCharCli : public CLibInfoCharBase
 {
 public:
-			CLibInfoCharCli();													/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoCharCli();													/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoCharCli();													/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoCharCli();													/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create				(CMgrData *pMgrData);										/* ì¬ */
-	BOOL Proc				(void);														/* ˆ— */
-	BOOL DeleteOutScreen	(CInfoCharCli *pChar, BOOL bDelete = FALSE);				/* ‰æ–ÊŠO‚ÌƒLƒƒƒ‰‚ðíœ */
-	void RenewMotionInfo	(DWORD dwCharID);											/* ƒ‚[ƒVƒ‡ƒ“î•ñ‚ðXV */
-	void RenewMotionInfo	(CInfoCharCli *pChar);										/* ƒ‚[ƒVƒ‡ƒ“î•ñ‚ðXV */
-	void SetMotionInfo		(CInfoCharCli *pChar, DWORD dwMotionID, DWORD dwListID);	/* ƒ‚[ƒVƒ‡ƒ“î•ñ‚ðÝ’è */
-	void RenewGrpID			(DWORD dwCharID);											/* ‘•”õ‰æ‘œID‚ðXV */
-	BOOL IsMove				(PCInfoCharBase pInfoChar, int &nDirection);				/* Žw’è•ûŒü‚Éi‚ß‚é‚©ƒ`ƒFƒbƒN */
+	void Create				(CMgrData *pMgrData);										/* ä½œæˆ */
+	BOOL Proc				(void);														/* å‡¦ç† */
+	BOOL DeleteOutScreen	(CInfoCharCli *pChar, BOOL bDelete = FALSE);				/* ç”»é¢å¤–ã®ã‚­ãƒ£ãƒ©ã‚’å‰Šé™¤ */
+	void RenewMotionInfo	(DWORD dwCharID);											/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’æ›´æ–° */
+	void RenewMotionInfo	(CInfoCharCli *pChar);										/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’æ›´æ–° */
+	void SetMotionInfo		(CInfoCharCli *pChar, DWORD dwMotionID, DWORD dwListID);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’è¨­å®š */
+	void RenewGrpID			(DWORD dwCharID);											/* è£…å‚™ç”»åƒIDã‚’æ›´æ–° */
+	BOOL IsMove				(PCInfoCharBase pInfoChar, int &nDirection);				/* æŒ‡å®šæ–¹å‘ã«é€²ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
 
-	CInfoBase	*GetNew		(int nType);												/* V‹Kƒf[ƒ^‚ðŽæ“¾ */
-	CInfoBase	*GetPtr		(int nNo);													/* ƒLƒƒƒ‰î•ñ‚ðŽæ“¾ */
-	CInfoBase	*GetPtr		(DWORD dwCharID);											/* ƒLƒƒƒ‰î•ñ‚ðŽæ“¾ */
+	CInfoBase	*GetNew		(int nType);												/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	CInfoBase	*GetPtr		(int nNo);													/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
+	CInfoBase	*GetPtr		(DWORD dwCharID);											/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾— */
 
 
 public:
-	int		m_nProcNo;						/* ˆ—’†‚ÌƒLƒƒƒ‰ƒCƒ“ƒfƒbƒNƒX */
+	int		m_nProcNo;						/* å‡¦ç†ä¸­ã®ã‚­ãƒ£ãƒ©ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ */
 
-	CMainFrame	*m_pMainFrame;				/* ƒƒCƒ“ƒtƒŒ[ƒ€ */
-	CMgrData	*m_pMgrData;				/* ƒf[ƒ^ƒ}ƒl[ƒWƒƒ */
+	CMainFrame	*m_pMainFrame;				/* ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  */
+	CMgrData	*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ãƒžãƒãƒ¼ã‚¸ãƒ£ */
 } CLibInfoCharCli, *PCLibInfoCharCli;
 
 /* Copyright(C)URARA-works 2006 */

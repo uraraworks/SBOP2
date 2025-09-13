@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_REQ_PLAYSOUND.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:Œø‰Ê‰¹‚ÌÄ¶—v‹) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_REQ_PLAYSOUND.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:åŠ¹æžœéŸ³ã®å†ç”Ÿè¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/02													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_REQ_PLAYSOUND : public CPacketBase
 {
 public:
-			CPacketADMIN_REQ_PLAYSOUND();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_REQ_PLAYSOUND();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_REQ_PLAYSOUND();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_REQ_PLAYSOUND();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwSoundID);							/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwSoundID);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD m_dwSoundID;					/* Œø‰Ê‰¹ID */
+	DWORD m_dwSoundID;					/* åŠ¹æžœéŸ³ID */
 } CPacketADMIN_REQ_PLAYSOUND, *PCPacketADMIN_REQ_PLAYSOUND;
 
 /* Copyright(C)URARA-works 2008 */

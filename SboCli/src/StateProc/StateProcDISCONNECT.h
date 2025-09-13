@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcDISCONNECT.h										 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(Ø’f) ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcDISCONNECT.h										 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(åˆ‡æ–­) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,16 +11,16 @@
 #include "StateProcBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStateProcDISCONNECT : public CStateProcBase
 {
 public:
-			CStateProcDISCONNECT();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStateProcDISCONNECT();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStateProcDISCONNECT();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStateProcDISCONNECT();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Init	(void);											/* ‰Šú‰» */
+	void Init	(void);											/* åˆæœŸåŒ– */
 
 
 protected:

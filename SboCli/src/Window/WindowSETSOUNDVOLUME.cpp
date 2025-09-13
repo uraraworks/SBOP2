@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:WindowSETSOUNDVOLUME.cpp									 */
-/* ì‡óe			:å¯â âπâπó ÇÃê›íËÉEÉBÉìÉhÉEÉNÉâÉX é¿ëïÉtÉ@ÉCÉã				 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/06/21													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:WindowSETSOUNDVOLUME.cpp									 */
+/* ÂÜÖÂÆπ			:ÂäπÊûúÈü≥Èü≥Èáè„ÅÆË®≠ÂÆö„Ç¶„Ç£„É≥„Éâ„Ç¶„ÇØ„É©„Çπ ÂÆüË£Ö„Éï„Ç°„Ç§„É´				 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/06/21													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::CWindowSETSOUNDVOLUME					 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::CWindowSETSOUNDVOLUME					 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 CWindowSETSOUNDVOLUME::CWindowSETSOUNDVOLUME()
@@ -34,9 +34,9 @@ CWindowSETSOUNDVOLUME::CWindowSETSOUNDVOLUME()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::~CWindowSETSOUNDVOLUME					 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::~CWindowSETSOUNDVOLUME					 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 CWindowSETSOUNDVOLUME::~CWindowSETSOUNDVOLUME()
@@ -45,9 +45,9 @@ CWindowSETSOUNDVOLUME::~CWindowSETSOUNDVOLUME()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::Create									 */
-/* ì‡óe		:çÏê¨															 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::Create									 */
+/* ÂÜÖÂÆπ		:‰ΩúÊàê															 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 void CWindowSETSOUNDVOLUME::Create(CMgrData *pMgrData)
@@ -63,9 +63,9 @@ void CWindowSETSOUNDVOLUME::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::Draw									 */
-/* ì‡óe		:ï`âÊ															 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::Draw									 */
+/* ÂÜÖÂÆπ		:ÊèèÁîª															 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 void CWindowSETSOUNDVOLUME::Draw(PCImg32 pDst)
@@ -87,11 +87,11 @@ void CWindowSETSOUNDVOLUME::Draw(PCImg32 pDst)
 	SetBkMode (hDC, TRANSPARENT);
 
 	clText = RGB (1, 1, 1);
-	TextOut2 (hDC, 32, 16 + 16 * 0, "ñ≥Çµ",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "ÇP",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 2, "ÇQ",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 3, "ÇR",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 4, "ÇS",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, "ÁÑ°„Åó",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, "Ôºë",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 2, "Ôºí",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 3, "Ôºì",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 4, "Ôºî",	clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -109,9 +109,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::OnUp									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å™)												 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::OnUp									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üë)												 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETSOUNDVOLUME::OnUp(void)
@@ -135,9 +135,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::OnDown									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å´)												 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::OnDown									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üì)												 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETSOUNDVOLUME::OnDown(void)
@@ -161,9 +161,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::OnLeft									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å©)												 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::OnLeft									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üê)												 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETSOUNDVOLUME::OnLeft(void)
@@ -178,9 +178,9 @@ BOOL CWindowSETSOUNDVOLUME::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::OnRight									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å®)												 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::OnRight									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üí)												 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETSOUNDVOLUME::OnRight(void)
@@ -195,9 +195,9 @@ BOOL CWindowSETSOUNDVOLUME::OnRight(void)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::OnX										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(X)												 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::OnX										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(X)												 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETSOUNDVOLUME::OnX(BOOL bDown)
@@ -219,9 +219,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSETSOUNDVOLUME::OnZ										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Z)												 */
-/* ì˙ït		:2007/06/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSETSOUNDVOLUME::OnZ										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(Z)												 */
+/* Êó•‰ªò		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETSOUNDVOLUME::OnZ(BOOL bDown)

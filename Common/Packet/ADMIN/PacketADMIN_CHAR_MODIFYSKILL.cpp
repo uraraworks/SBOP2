@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketADMIN_CHAR_MODIFYSKILL.cpp							 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ä«óùé“ån:èäéùÉXÉLÉãÇÃïœçX) é¿ëïÉtÉ@ÉCÉã			 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2009/01/18													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketADMIN_CHAR_MODIFYSKILL.cpp							 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(ÁÆ°ÁêÜËÄÖÁ≥ª:ÊâÄÊåÅ„Çπ„Ç≠„É´„ÅÆÂ§âÊõ¥) ÂÆüË£Ö„Éï„Ç°„Ç§„É´			 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2009/01/18													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_CHAR_MODIFYSKILL.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_CHAR_MODIFYSKILL::CPacketADMIN_CHAR_MODIFYSKILL	 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2009/01/18														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_CHAR_MODIFYSKILL::CPacketADMIN_CHAR_MODIFYSKILL	 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2009/01/18														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_MODIFYSKILL::CPacketADMIN_CHAR_MODIFYSKILL()
@@ -26,9 +26,9 @@ CPacketADMIN_CHAR_MODIFYSKILL::CPacketADMIN_CHAR_MODIFYSKILL()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_CHAR_MODIFYSKILL::~CPacketADMIN_CHAR_MODIFYSKILL	 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2009/01/18														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_CHAR_MODIFYSKILL::~CPacketADMIN_CHAR_MODIFYSKILL	 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2009/01/18														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_MODIFYSKILL::~CPacketADMIN_CHAR_MODIFYSKILL()
@@ -37,15 +37,15 @@ CPacketADMIN_CHAR_MODIFYSKILL::~CPacketADMIN_CHAR_MODIFYSKILL()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_CHAR_MODIFYSKILL::Make							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2009/01/18														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_CHAR_MODIFYSKILL::Make							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2009/01/18														 */
 /* ========================================================================= */
 
 void CPacketADMIN_CHAR_MODIFYSKILL::Make(
-	DWORD dwCharID,			/* [in] ÉLÉÉÉâID */
-	DWORD dwSkillID,		/* [in] ÉXÉLÉãID */
-	int nType)				/* [in] éÌï  */
+	DWORD dwCharID,			/* [in] „Ç≠„É£„É©ID */
+	DWORD dwSkillID,		/* [in] „Çπ„Ç≠„É´ID */
+	int nType)				/* [in] Á®ÆÂà• */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -64,18 +64,18 @@ void CPacketADMIN_CHAR_MODIFYSKILL::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_CHAR_MODIFYSKILL;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (pDataTmp, &dwSkillID,	sizeof (dwSkillID),	pDataTmp);	/* ÉXÉLÉãID */
-	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* éÌï  */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (pDataTmp, &dwSkillID,	sizeof (dwSkillID),	pDataTmp);	/* „Çπ„Ç≠„É´ID */
+	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* Á®ÆÂà• */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_CHAR_MODIFYSKILL::Set								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2009/01/18														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_CHAR_MODIFYSKILL::Set								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2009/01/18														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_MODIFYSKILL::Set(PBYTE pPacket)
@@ -85,9 +85,9 @@ PBYTE CPacketADMIN_CHAR_MODIFYSKILL::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (&m_dwSkillID,	pDataTmp, sizeof (m_dwSkillID),	pDataTmp);	/* ÉXÉLÉãID */
-	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* éÌï  */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (&m_dwSkillID,	pDataTmp, sizeof (m_dwSkillID),	pDataTmp);	/* „Çπ„Ç≠„É´ID */
+	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* Á®ÆÂà• */
 
 	pRet = pDataTmp;
 	return pRet;

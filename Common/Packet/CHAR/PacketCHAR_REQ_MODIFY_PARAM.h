@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_REQ_MODIFY_PARAM.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒpƒ‰ƒ[ƒ^•ÏX—v‹) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_REQ_MODIFY_PARAM.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å¤‰æ›´è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/09													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,35 +11,35 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
 enum {
 	PARAMID_CHAR_REQ_MODIFY_NONE = 0,
-	PARAMID_CHAR_REQ_MODIFY_ANIME,					/* ƒAƒjƒ[ƒVƒ‡ƒ“”Ô†‚Ì•ÏX */
-	PARAMID_CHAR_REQ_MODIFY_STYLECOPY_PUT,			/* —eŽp‚ÌƒRƒs[(Žæ‚èž‚Ý) */
-	PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET,			/* —eŽp‚ÌƒRƒs[(”½‰f) */
+	PARAMID_CHAR_REQ_MODIFY_ANIME,					/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·ã®å¤‰æ›´ */
+	PARAMID_CHAR_REQ_MODIFY_STYLECOPY_PUT,			/* å®¹å§¿ã®ã‚³ãƒ”ãƒ¼(å–ã‚Šè¾¼ã¿) */
+	PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET,			/* å®¹å§¿ã®ã‚³ãƒ”ãƒ¼(åæ˜ ) */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_REQ_MODIFY_PARAM : public CPacketBase
 {
 public:
-			CPacketCHAR_REQ_MODIFY_PARAM();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_REQ_MODIFY_PARAM();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_REQ_MODIFY_PARAM();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_REQ_MODIFY_PARAM();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, int nType, int nParam);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID, int nType, int nParam);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID;					/* ƒLƒƒƒ‰ID */
-	int		m_nType,					/* Ží•Ê */
-			m_nParam;					/* ƒpƒ‰ƒ[ƒ^ */
+	DWORD	m_dwCharID;					/* ã‚­ãƒ£ãƒ©ID */
+	int		m_nType,					/* ç¨®åˆ¥ */
+			m_nParam;					/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 } CPacketCHAR_REQ_MODIFY_PARAM, *PCPacketCHAR_REQ_MODIFY_PARAM;
 
 /* Copyright(C)URARA-works 2007 */

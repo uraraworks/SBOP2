@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketSYSTEM_INFO.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒVƒXƒeƒ€Œn:ƒVƒXƒeƒ€î•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketSYSTEM_INFO.cpp										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚·ã‚¹ãƒ†ãƒ ç³»:ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/29													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketSYSTEM_INFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSYSTEM_INFO::CPacketSYSTEM_INFO							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/29														 */
+/* é–¢æ•°å	:CPacketSYSTEM_INFO::CPacketSYSTEM_INFO							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/29														 */
 /* ========================================================================= */
 
 CPacketSYSTEM_INFO::CPacketSYSTEM_INFO()
@@ -24,9 +24,9 @@ CPacketSYSTEM_INFO::CPacketSYSTEM_INFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSYSTEM_INFO::~CPacketSYSTEM_INFO						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/29														 */
+/* é–¢æ•°å	:CPacketSYSTEM_INFO::~CPacketSYSTEM_INFO						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/29														 */
 /* ========================================================================= */
 
 CPacketSYSTEM_INFO::~CPacketSYSTEM_INFO()
@@ -36,13 +36,13 @@ CPacketSYSTEM_INFO::~CPacketSYSTEM_INFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSYSTEM_INFO::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/09/29														 */
+/* é–¢æ•°å	:CPacketSYSTEM_INFO::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/09/29														 */
 /* ========================================================================= */
 
 void CPacketSYSTEM_INFO::Make(
-	CInfoSystem *pInfoSystem)		/* [in] ƒVƒXƒeƒ€î•ñ */
+	CInfoSystem *pInfoSystem)		/* [in] ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize, dwSizeInfoSystem;
@@ -63,16 +63,16 @@ void CPacketSYSTEM_INFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_SYSTEM_INFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pDataInfoSystem, dwSizeInfoSystem, pDataTmp);	/* ƒVƒXƒeƒ€î•ñ */
+	CopyMemoryRenew (pDataTmp, pDataInfoSystem, dwSizeInfoSystem, pDataTmp);	/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSYSTEM_INFO::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/09/29														 */
+/* é–¢æ•°å	:CPacketSYSTEM_INFO::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/09/29														 */
 /* ========================================================================= */
 
 PBYTE CPacketSYSTEM_INFO::Set(PBYTE pPacket)

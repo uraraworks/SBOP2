@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminBase.h												 */
-/* “à—e			:ŠÇ—ÒƒEƒBƒ“ƒhƒEŠî’êƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/03/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminBase.h												 */
+/* å†…å®¹			:ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦åŸºåº•ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/03/18													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,31 +15,31 @@ class CUraraSockTCPSBO;
 class CInfoItemTypeBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminBase : public CDialog, public CLayoutHelper
 {
 public:
-			CDlgAdminBase(int nResourceID, CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminBase();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminBase(int nResourceID, CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminBase();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Init			(CMgrData *pMgrData);					/* ‰Šú‰» */
-	virtual void	Renew			(void);									/* XV */
-	virtual void	OnAdminMsg		(int nType, DWORD dwPara);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	virtual void	OnMainFrame		(DWORD dwCommand, DWORD dwParam);		/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
-	virtual void	Set				(CInfoItemTypeBase *pSrc)  {}			/* •ÒW“à—e‚ğİ’è */
-	virtual void	Get				(CInfoItemTypeBase *&pDst) {}			/* •ÒW“à—e‚ğæ“¾ */
-
-
-protected:
-	void	SelectCmb		(CComboBox *pCmb, DWORD dwID);	/* €–Ú‚ğ‘I‘ğ */
+	virtual void	Init			(CMgrData *pMgrData);					/* åˆæœŸåŒ– */
+	virtual void	Renew			(void);									/* æ›´æ–° */
+	virtual void	OnAdminMsg		(int nType, DWORD dwPara);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	virtual void	OnMainFrame		(DWORD dwCommand, DWORD dwParam);		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
+	virtual void	Set				(CInfoItemTypeBase *pSrc)  {}			/* ç·¨é›†å†…å®¹ã‚’è¨­å®š */
+	virtual void	Get				(CInfoItemTypeBase *&pDst) {}			/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
 
 
 protected:
-	CMgrData			*m_pMgrData;			/* ƒf[ƒ^ƒ}ƒl[ƒWƒƒ */
-	CUraraSockTCPSBO	*m_pSock;				/* ’ÊMƒ}ƒl[ƒWƒƒ */
-	CWnd				*m_pWndParent;			/* eƒEƒBƒ“ƒhƒE */
+	void	SelectCmb		(CComboBox *pCmb, DWORD dwID);	/* é …ç›®ã‚’é¸æŠ */
+
+
+protected:
+	CMgrData			*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CUraraSockTCPSBO	*m_pSock;				/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CWnd				*m_pWndParent;			/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 
 
 
@@ -49,7 +49,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminBase)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	MgrSound.h													 */
-/* “à—eF		ƒTƒEƒ“ƒhƒf[ƒ^ŠÇ—ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2006/05/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	MgrSound.h													 */
+/* å†…å®¹ï¼š		ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿ç®¡ç†ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2006/05/09													 */
 /* ========================================================================= */
 
 #pragma once
@@ -18,7 +18,7 @@ class CLibMusicLoader;
 class CLibSboSoundLoader;
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 /* BGM */
 enum {
@@ -35,40 +35,40 @@ enum {
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CMgrSound
 {
 public:
-			CMgrSound();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrSound();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrSound();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMgrSound();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create		(void);							/* ì¬ */
-	void	Destroy		(void);							/* ”jŠü */
+	BOOL	Create		(void);							/* ä½œæˆ */
+	void	Destroy		(void);							/* ç ´æ£„ */
 
-	void	PlaySound		(DWORD dwSoundID);			/* Œø‰Ê‰¹‚ÌÄ¶ */
-	void	PlayBGM			(int nNo, BOOL bPlay=FALSE);/* BGM‚ÌÄ¶ */
-	void	StopBGM			(void);						/* BGM‚Ì’â~ */
-	void	SetBGMVolume	(int nVolume);				/* BGM‰¹—Êİ’è */
-	void	SetSEVolume		(int nVolume);				/* Œø‰Ê‰¹—Êİ’è */
-
-
-protected:
-	void	ReadSoundData	(void);						/* Œø‰Ê‰¹‚ğ“Ç‚İ‚İ */
+	void	PlaySound		(DWORD dwSoundID);			/* åŠ¹æœéŸ³ã®å†ç”Ÿ */
+	void	PlayBGM			(int nNo, BOOL bPlay=FALSE);/* BGMã®å†ç”Ÿ */
+	void	StopBGM			(void);						/* BGMã®åœæ­¢ */
+	void	SetBGMVolume	(int nVolume);				/* BGMéŸ³é‡è¨­å®š */
+	void	SetSEVolume		(int nVolume);				/* åŠ¹æœéŸ³é‡è¨­å®š */
 
 
 protected:
-	DWORD					m_dwSoundID;				/* Ä¶’†‚ÌBGMID */
-	int						m_SEVolume;					/* Œø‰Ê‰¹—Ê */
-	float					m_fBGMVolume;				/* BGM‰¹—Ê */
-	HMODULE					m_hDllSoundData;			/* ‰¹ŠÖ˜ADLL‚Ìƒnƒ“ƒhƒ‹ */
-	CDXAudio				*m_pDXAudio;				/* ƒTƒEƒ“ƒhƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibMusicLoader			*m_pLibMusicLoader;			/* MIDIÄ¶ƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibSboSoundLoader		*m_pLibSboSoundLoader;		/* ƒTƒEƒ“ƒhƒf[ƒ^ƒ‰ƒCƒuƒ‰ƒŠ */
-	IDirectMusicSegment8	**m_apDMSSound;				/* Œø‰Ê‰¹ */
-	AudioDevicePtr			*m_pDevicePtr;				/* BGM—pƒfƒoƒCƒX */
-	OutputStream			*m_pOutputStreamPtr;		/* Ä¶‚·‚éƒXƒgƒŠ[ƒ€ */
+	void	ReadSoundData	(void);						/* åŠ¹æœéŸ³ã‚’èª­ã¿è¾¼ã¿ */
+
+
+protected:
+	DWORD					m_dwSoundID;				/* å†ç”Ÿä¸­ã®BGMID */
+	int						m_SEVolume;					/* åŠ¹æœéŸ³é‡ */
+	float					m_fBGMVolume;				/* BGMéŸ³é‡ */
+	HMODULE					m_hDllSoundData;			/* éŸ³é–¢é€£DLLã®ãƒãƒ³ãƒ‰ãƒ« */
+	CDXAudio				*m_pDXAudio;				/* ã‚µã‚¦ãƒ³ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibMusicLoader			*m_pLibMusicLoader;			/* MIDIå†ç”Ÿãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibSboSoundLoader		*m_pLibSboSoundLoader;		/* ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	IDirectMusicSegment8	**m_apDMSSound;				/* åŠ¹æœéŸ³ */
+	AudioDevicePtr			*m_pDevicePtr;				/* BGMç”¨ãƒ‡ãƒã‚¤ã‚¹ */
+	OutputStream			*m_pOutputStreamPtr;		/* å†ç”Ÿã™ã‚‹ã‚¹ãƒˆãƒªãƒ¼ãƒ  */
 } CMgrSound, *PCMgrSound;
 
 /* Copyright(C)URARA-works 2006 */

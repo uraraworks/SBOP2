@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrData.cpp												 */
-/* “à—e			:ƒf[ƒ^ƒ}ƒl[ƒWƒƒƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrData.cpp												 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -40,9 +40,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::CMgrData												 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrData::CMgrData												 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CMgrData::CMgrData()
@@ -126,9 +126,9 @@ CMgrData::CMgrData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::~CMgrData											 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrData::~CMgrData											 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CMgrData::~CMgrData()
@@ -163,14 +163,14 @@ CMgrData::~CMgrData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::Create												 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrData::Create												 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrData::Create(
-	CMainFrame		*pMainFrame,		/* [in] ƒƒCƒ“ƒtƒŒ[ƒ€ */
-	CMgrGrpData		*pMgrGrpData)		/* [in] ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+	CMainFrame		*pMainFrame,		/* [in] ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  */
+	CMgrGrpData		*pMgrGrpData)		/* [in] ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 {
 	m_pMainFrame	= pMainFrame;
 	m_pMgrGrpData	= pMgrGrpData;
@@ -233,9 +233,9 @@ void CMgrData::Create(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::Destroy												 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrData::Destroy												 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrData::Destroy(void)
@@ -266,9 +266,9 @@ void CMgrData::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SaveIniData											 */
-/* “à—e		:İ’èî•ñ‚ğ•Û‘¶													 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CMgrData::SaveIniData											 */
+/* å†…å®¹		:è¨­å®šæƒ…å ±ã‚’ä¿å­˜													 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 void CMgrData::SaveIniData(void)
@@ -283,63 +283,63 @@ void CMgrData::SaveIniData(void)
 	GetModuleFileName (NULL, szFileName, MAX_PATH);
 	strcpy (szFileName + strlen (szFileName) - 3, "ini");
 
-	/* ˆÃ†‰» */
+	/* æš—å·åŒ– */
 	CryptUtil.CryptStr (m_strLastPassword, szTmp, 10);
-	/* ÅIƒAƒJƒEƒ“ƒg–¼ */
+	/* æœ€çµ‚ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå */
 	WritePrivateProfileString ("Account", "Account", m_strLastAccount, szFileName);
-	/* ÅIƒpƒXƒ[ƒh */
+	/* æœ€çµ‚ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 	WritePrivateProfileString ("Account", "Password", szTmp, szFileName);
-	/* ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚éH */
+	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ï¼Ÿ */
 	strTmp.Format ("%d", m_bSavePassword);
 	WritePrivateProfileString ("Setting", "SavePassword", strTmp, szFileName);
-	/* ƒƒOƒCƒ“‹‘”Û */
+	/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
 	strTmp.Format ("%d", m_bDisableLogin);
 	WritePrivateProfileString ("Setting", "DisableLogin", strTmp, szFileName);
-	/* ”­Œ¾‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ */
+	/* ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚« */
 	strTmp.Format ("%d", m_bOptionTaskbar);
 	WritePrivateProfileString ("Setting", "OptionTaskbar", strTmp, szFileName);
-	/* ”­Œ¾‚ğ•\¦‚·‚é */
+	/* ç™ºè¨€ã‚’è¡¨ç¤ºã™ã‚‹ */
 	strTmp.Format ("%d", m_bOptionViewChat);
 	WritePrivateProfileString ("Setting", "OptionViewChat", strTmp, szFileName);
-	/* ƒAƒCƒeƒ€‚ğ•\¦‚·‚é */
+	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹ */
 	strTmp.Format ("%d", m_bOptionViewItem);
 	WritePrivateProfileString ("Setting", "OptionViewItem", strTmp, szFileName);
-	/* ƒAƒCƒeƒ€–¼‚ğ•\¦‚·‚é */
+	/* ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã™ã‚‹ */
 	strTmp.Format ("%d", m_bOptionViewItemName);
 	WritePrivateProfileString ("Setting", "OptionViewItemName", strTmp, szFileName);
-	/* ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚·‚é */
+	/* ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹ */
 	strTmp.Format ("%d", m_bOptionViewHelpIcon);
 	WritePrivateProfileString ("Setting", "OptionViewHelpIcon", strTmp, szFileName);
-	/* í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚· */
+	/* æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã™ */
 	strTmp.Format ("%d", m_bOptionBattleMsgLog);
 	WritePrivateProfileString ("Setting", "OptionBattleMsgLog", strTmp, szFileName);
-	/* 60ƒtƒŒ[ƒ€‚Å•\¦‚·‚é */
+	/* 60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã™ã‚‹ */
 	strTmp.Format ("%d", m_bOption60Frame);
 	WritePrivateProfileString ("Setting", "Option60Frame", strTmp, szFileName);
-	/* Œø‰Ê‰¹—Ê */
+	/* åŠ¹æœéŸ³é‡ */
 	strTmp.Format ("%d", m_nSEVolume);
 	WritePrivateProfileString ("Setting", "SEVolume", strTmp, szFileName);
-	/* BGM‰¹—Ê */
+	/* BGMéŸ³é‡ */
 	strTmp.Format ("%d", m_nBGMVolume);
 	WritePrivateProfileString ("Setting", "BGMVolume", strTmp, szFileName);
-	/* •`‰æƒ‚[ƒh */
+	/* æç”»ãƒ¢ãƒ¼ãƒ‰ */
 	strTmp.Format ("%d", m_nDrawMode);
 	WritePrivateProfileString ("Setting", "DrawMode", strTmp, szFileName);
-	/* “ü—ÍƒWƒ‡ƒCƒpƒbƒh */
+	/* å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ */
 	StringFromGUID2 (m_stInputGuid, szwGuid, sizeof (szwGuid));
 	bstrTmp = szwGuid;
 	strcpy (szTmp, bstrTmp);
 	WritePrivateProfileString ("Setting", "InputDevice", szTmp, szFileName);
-	/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[ */
+	/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ */
 	strTmp.Format ("%d", m_nSleepTimer);
 	WritePrivateProfileString ("Setting", "SleepTimer", strTmp, szFileName);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SetWindowInfo										 */
-/* “à—e		:ƒEƒBƒ“ƒhƒEî•ñ‚ğİ’è											 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrData::SetWindowInfo										 */
+/* å†…å®¹		:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æƒ…å ±ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrData::SetWindowInfo(HINSTANCE hInstance, HWND hWndMain)
@@ -350,9 +350,9 @@ void CMgrData::SetWindowInfo(HINSTANCE hInstance, HWND hWndMain)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SetAccount											 */
-/* “à—e		:g—p’†‚ÌƒAƒJƒEƒ“ƒgî•ñ‚ğİ’è									 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CMgrData::SetAccount											 */
+/* å†…å®¹		:ä½¿ç”¨ä¸­ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’è¨­å®š									 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CMgrData::SetAccount(CInfoAccount *pInfoAccount)
@@ -362,9 +362,9 @@ void CMgrData::SetAccount(CInfoAccount *pInfoAccount)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetAccountID											 */
-/* “à—e		:g—p’†‚ÌƒAƒJƒEƒ“ƒgID‚ğæ“¾										 */
-/* “ú•t		:2006/12/02														 */
+/* é–¢æ•°å	:CMgrData::GetAccountID											 */
+/* å†…å®¹		:ä½¿ç”¨ä¸­ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆIDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2006/12/02														 */
 /* ========================================================================= */
 
 DWORD CMgrData::GetAccountID(void)
@@ -374,9 +374,9 @@ DWORD CMgrData::GetAccountID(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SetCharID											 */
-/* “à—e		:g—p’†‚ÌƒLƒƒƒ‰ID‚ğİ’è											 */
-/* “ú•t		:2007/03/21														 */
+/* é–¢æ•°å	:CMgrData::SetCharID											 */
+/* å†…å®¹		:ä½¿ç”¨ä¸­ã®ã‚­ãƒ£ãƒ©IDã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2007/03/21														 */
 /* ========================================================================= */
 
 void CMgrData::SetCharID(DWORD dwCharID)
@@ -386,9 +386,9 @@ void CMgrData::SetCharID(DWORD dwCharID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetCharID											 */
-/* “à—e		:g—p’†‚ÌƒLƒƒƒ‰ID‚ğæ“¾											 */
-/* “ú•t		:2007/01/02														 */
+/* é–¢æ•°å	:CMgrData::GetCharID											 */
+/* å†…å®¹		:ä½¿ç”¨ä¸­ã®ã‚­ãƒ£ãƒ©IDã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/01/02														 */
 /* ========================================================================= */
 
 DWORD CMgrData::GetCharID(void)
@@ -398,9 +398,9 @@ DWORD CMgrData::GetCharID(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetMapID												 */
-/* “à—e		:Œ»İ‚Ìƒ}ƒbƒvID‚ğæ“¾											 */
-/* “ú•t		:2008/11/29														 */
+/* é–¢æ•°å	:CMgrData::GetMapID												 */
+/* å†…å®¹		:ç¾åœ¨ã®ãƒãƒƒãƒ—IDã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/11/29														 */
 /* ========================================================================= */
 
 DWORD CMgrData::GetMapID(void)
@@ -419,9 +419,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetFamilyTypeName									 */
-/* “à—e		:í‘°–¼‚ğæ“¾													 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CMgrData::GetFamilyTypeName									 */
+/* å†…å®¹		:ç¨®æ—åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 LPCSTR CMgrData::GetFamilyTypeName(WORD wFamilyTypeID)
@@ -431,10 +431,10 @@ LPCSTR CMgrData::GetFamilyTypeName(WORD wFamilyTypeID)
 	pszRet = "";
 
 	switch (wFamilyTypeID) {
-	case FAMILYTYPE_HUMAN:	pszRet = "ƒjƒ“ƒQƒ“";	break;		/* ƒjƒ“ƒQƒ“ */
-	case FAMILYTYPE_ELF:	pszRet = "ƒGƒ‹ƒt";		break;		/* ƒGƒ‹ƒt */
-	case FAMILYTYPE_BST:	pszRet = "ƒWƒ…ƒEƒWƒ“";	break;		/* ƒWƒ…ƒEƒWƒ“ */
-	case FAMILYTYPE_DAEMON:	pszRet = "ƒ}ƒ]ƒN";		break;		/* ƒ}ƒ]ƒN */
+	case FAMILYTYPE_HUMAN:	pszRet = "ãƒ‹ãƒ³ã‚²ãƒ³";	break;		/* ãƒ‹ãƒ³ã‚²ãƒ³ */
+	case FAMILYTYPE_ELF:	pszRet = "ã‚¨ãƒ«ãƒ•";		break;		/* ã‚¨ãƒ«ãƒ• */
+	case FAMILYTYPE_BST:	pszRet = "ã‚¸ãƒ¥ã‚¦ã‚¸ãƒ³";	break;		/* ã‚¸ãƒ¥ã‚¦ã‚¸ãƒ³ */
+	case FAMILYTYPE_DAEMON:	pszRet = "ãƒã‚¾ã‚¯";		break;		/* ãƒã‚¾ã‚¯ */
 	}
 
 	return pszRet;
@@ -442,9 +442,9 @@ LPCSTR CMgrData::GetFamilyTypeName(WORD wFamilyTypeID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetHairTypeName										 */
-/* “à—e		:”¯Œ^–¼‚ğæ“¾													 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CMgrData::GetHairTypeName										 */
+/* å†…å®¹		:é«ªå‹åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 LPCSTR CMgrData::GetHairTypeName(WORD wHairTypeID)
@@ -454,28 +454,28 @@ LPCSTR CMgrData::GetHairTypeName(WORD wHairTypeID)
 	pszRet = "";
 
 	switch (wHairTypeID) {
-	case 1:		pszRet = "ƒgƒŠƒjƒeƒB";		break;
-	case 2:		pszRet = "ƒcƒCƒ“";			break;
-	case 3:		pszRet = "ƒJƒEƒ{[ƒC";		break;
-	case 4:		pszRet = "ƒGƒbƒO";			break;
-	case 5:		pszRet = "ƒiƒCƒg";			break;
-	case 6:		pszRet = "ƒEƒF[ƒu";		break;
-	case 7:		pszRet = "ƒVƒƒƒCƒ“";		break;
-	case 8:		pszRet = "ƒ|ƒPƒbƒg";		break;
-	case 9:		pszRet = "ƒuƒŒƒCƒu";		break;
-	case 10:	pszRet = "ƒN[ƒ‹";			break;
-	case 11:	pszRet = "ƒŒƒtƒg";			break;
-	case 12:	pszRet = "ƒeƒCƒ‹ƒY";		break;
-	case 13:	pszRet = "ƒ|ƒj[";			break;
-	case 14:	pszRet = "ƒGƒbƒW";			break;
-	case 15:	pszRet = "ƒ‰ƒCƒg";			break;
-	case 16:	pszRet = "ƒgƒ‰ƒCƒtƒ‹";		break;
-	case 17:	pszRet = "ƒLƒƒƒbƒXƒ‹";		break;
-	case 18:	pszRet = "ƒs[ƒX";			break;
-	case 19:	pszRet = "ƒŠƒgƒ‹ƒfƒrƒ‹";	break;
-	case 20:	pszRet = "ƒEƒCƒ“ƒh";		break;
-	case 21:	pszRet = "ƒm[ƒuƒ‹";		break;
-	case 22:	pszRet = "ƒtƒFƒAƒŠ[";		break;
+	case 1:		pszRet = "ãƒˆãƒªãƒ‹ãƒ†ã‚£";		break;
+	case 2:		pszRet = "ãƒ„ã‚¤ãƒ³";			break;
+	case 3:		pszRet = "ã‚«ã‚¦ãƒœãƒ¼ã‚¤";		break;
+	case 4:		pszRet = "ã‚¨ãƒƒã‚°";			break;
+	case 5:		pszRet = "ãƒŠã‚¤ãƒˆ";			break;
+	case 6:		pszRet = "ã‚¦ã‚§ãƒ¼ãƒ–";		break;
+	case 7:		pszRet = "ã‚·ãƒ£ã‚¤ãƒ³";		break;
+	case 8:		pszRet = "ãƒã‚±ãƒƒãƒˆ";		break;
+	case 9:		pszRet = "ãƒ–ãƒ¬ã‚¤ãƒ–";		break;
+	case 10:	pszRet = "ã‚¯ãƒ¼ãƒ«";			break;
+	case 11:	pszRet = "ãƒ¬ãƒ•ãƒˆ";			break;
+	case 12:	pszRet = "ãƒ†ã‚¤ãƒ«ã‚º";		break;
+	case 13:	pszRet = "ãƒãƒ‹ãƒ¼";			break;
+	case 14:	pszRet = "ã‚¨ãƒƒã‚¸";			break;
+	case 15:	pszRet = "ãƒ©ã‚¤ãƒˆ";			break;
+	case 16:	pszRet = "ãƒˆãƒ©ã‚¤ãƒ•ãƒ«";		break;
+	case 17:	pszRet = "ã‚­ãƒ£ãƒƒã‚¹ãƒ«";		break;
+	case 18:	pszRet = "ãƒ”ãƒ¼ã‚¹";			break;
+	case 19:	pszRet = "ãƒªãƒˆãƒ«ãƒ‡ãƒ“ãƒ«";	break;
+	case 20:	pszRet = "ã‚¦ã‚¤ãƒ³ãƒ‰";		break;
+	case 21:	pszRet = "ãƒãƒ¼ãƒ–ãƒ«";		break;
+	case 22:	pszRet = "ãƒ•ã‚§ã‚¢ãƒªãƒ¼";		break;
 	}
 
 	return pszRet;
@@ -483,9 +483,9 @@ LPCSTR CMgrData::GetHairTypeName(WORD wHairTypeID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetHairColorName										 */
-/* “à—e		:”¯F–¼‚ğæ“¾													 */
-/* “ú•t		:2007/05/11														 */
+/* é–¢æ•°å	:CMgrData::GetHairColorName										 */
+/* å†…å®¹		:é«ªè‰²åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/05/11														 */
 /* ========================================================================= */
 
 LPCSTR CMgrData::GetHairColorName(WORD wHairColorID)
@@ -495,19 +495,19 @@ LPCSTR CMgrData::GetHairColorName(WORD wHairColorID)
 	pszRet = "";
 
 	switch (wHairColorID) {
-	case 1:		pszRet = "ƒOƒŒƒC";		break;
-	case 2:		pszRet = "ƒuƒ‰ƒEƒ“";	break;
-	case 3:		pszRet = "ƒAƒbƒVƒ…";	break;
-	case 4:		pszRet = "ƒVƒ‹ƒo[";	break;
-	case 5:		pszRet = "ƒNƒŠƒ€ƒ]ƒ“";	break;
-	case 6:		pszRet = "ƒXƒJƒC";		break;
-	case 7:		pszRet = "ƒuƒƒ“ƒh";	break;
-	case 8:		pszRet = "ƒOƒŠ[ƒ“";	break;
-	case 9:		pszRet = "ƒ`ƒFƒŠ[";	break;
-	case 10:	pszRet = "ƒOƒŒ[ƒv";	break;
-	case 11:	pszRet = "ƒIƒŒƒ“ƒW";	break;
-	case 12:	pszRet = "ƒŠ[ƒt";		break;
-	case 13:	pszRet = "ƒAƒNƒA";		break;
+	case 1:		pszRet = "ã‚°ãƒ¬ã‚¤";		break;
+	case 2:		pszRet = "ãƒ–ãƒ©ã‚¦ãƒ³";	break;
+	case 3:		pszRet = "ã‚¢ãƒƒã‚·ãƒ¥";	break;
+	case 4:		pszRet = "ã‚·ãƒ«ãƒãƒ¼";	break;
+	case 5:		pszRet = "ã‚¯ãƒªãƒ ã‚¾ãƒ³";	break;
+	case 6:		pszRet = "ã‚¹ã‚«ã‚¤";		break;
+	case 7:		pszRet = "ãƒ–ãƒ­ãƒ³ãƒ‰";	break;
+	case 8:		pszRet = "ã‚°ãƒªãƒ¼ãƒ³";	break;
+	case 9:		pszRet = "ãƒã‚§ãƒªãƒ¼";	break;
+	case 10:	pszRet = "ã‚°ãƒ¬ãƒ¼ãƒ—";	break;
+	case 11:	pszRet = "ã‚ªãƒ¬ãƒ³ã‚¸";	break;
+	case 12:	pszRet = "ãƒªãƒ¼ãƒ•";		break;
+	case 13:	pszRet = "ã‚¢ã‚¯ã‚¢";		break;
 	}
 
 	return pszRet;
@@ -515,9 +515,9 @@ LPCSTR CMgrData::GetHairColorName(WORD wHairColorID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetEyeColorName										 */
-/* “à—e		:–ÚF–¼‚ğæ“¾													 */
-/* “ú•t		:2007/05/11														 */
+/* é–¢æ•°å	:CMgrData::GetEyeColorName										 */
+/* å†…å®¹		:ç›®è‰²åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/05/11														 */
 /* ========================================================================= */
 
 LPCSTR CMgrData::GetEyeColorName(WORD wEyeColorID)
@@ -527,12 +527,12 @@ LPCSTR CMgrData::GetEyeColorName(WORD wEyeColorID)
 	pszRet = "";
 
 	switch (wEyeColorID) {
-	case 1:		pszRet = "ƒuƒ‰ƒbƒN";	break;
-	case 2:		pszRet = "ƒgƒp[ƒY";	break;
-	case 3:		pszRet = "ƒ‹ƒr[";		break;
-	case 4:		pszRet = "ƒAƒƒWƒXƒg";	break;
-	case 5:		pszRet = "ƒGƒƒ‰ƒ‹ƒh";	break;
-	case 6:		pszRet = "ƒTƒtƒ@ƒCƒA";	break;
+	case 1:		pszRet = "ãƒ–ãƒ©ãƒƒã‚¯";	break;
+	case 2:		pszRet = "ãƒˆãƒ‘ãƒ¼ã‚º";	break;
+	case 3:		pszRet = "ãƒ«ãƒ“ãƒ¼";		break;
+	case 4:		pszRet = "ã‚¢ãƒ¡ã‚¸ã‚¹ãƒˆ";	break;
+	case 5:		pszRet = "ã‚¨ãƒ¡ãƒ©ãƒ«ãƒ‰";	break;
+	case 6:		pszRet = "ã‚µãƒ•ã‚¡ã‚¤ã‚¢";	break;
 	}
 
 	return pszRet;
@@ -540,9 +540,9 @@ LPCSTR CMgrData::GetEyeColorName(WORD wEyeColorID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetMotionName										 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“–¼‚ğæ“¾												 */
-/* “ú•t		:2007/05/11														 */
+/* é–¢æ•°å	:CMgrData::GetMotionName										 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³åã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/11														 */
 /* ========================================================================= */
 
 LPCSTR CMgrData::GetMotionName(DWORD dwMotionID)
@@ -552,99 +552,99 @@ LPCSTR CMgrData::GetMotionName(DWORD dwMotionID)
 	pszRet = "";
 
 	switch (dwMotionID) {
-	case CHARMOTIONLISTID_STAND_UP:					pszRet = "—§‚¿(ã)";				break;	/* —§‚¿(ã) */
-	case CHARMOTIONLISTID_STAND_DOWN:				pszRet = "—§‚¿(‰º)";				break;	/* —§‚¿(‰º) */
-	case CHARMOTIONLISTID_STAND_LEFT:				pszRet = "—§‚¿(¶)";				break;	/* —§‚¿(¶) */
-	case CHARMOTIONLISTID_STAND_RIGHT:				pszRet = "—§‚¿(‰E)";				break;	/* —§‚¿(‰E) */
-	case CHARMOTIONLISTID_WALK_UP:					pszRet = "•à‚«(ã)";				break;	/* •à‚«(ã) */
-	case CHARMOTIONLISTID_WALK_DOWN:				pszRet = "•à‚«(‰º)";				break;	/* •à‚«(‰º) */
-	case CHARMOTIONLISTID_WALK_LEFT:				pszRet = "•à‚«(¶)";				break;	/* •à‚«(¶) */
-	case CHARMOTIONLISTID_WALK_RIGHT:				pszRet = "•à‚«(‰E)";				break;	/* •à‚«(‰E) */
-	case CHARMOTIONLISTID_SIT_UP:					pszRet = "À‚è(ã)";				break;	/* À‚è(ã) */
-	case CHARMOTIONLISTID_SIT_DOWN:					pszRet = "À‚è(‰º)";				break;	/* À‚è(‰º) */
-	case CHARMOTIONLISTID_SIT_LEFT:					pszRet = "À‚è(¶)";				break;	/* À‚è(¶) */
-	case CHARMOTIONLISTID_SIT_RIGHT:				pszRet = "À‚è(‰E)";				break;	/* À‚è(‰E) */
-	case CHARMOTIONLISTID_BATTLESTAND_UP:			pszRet = "í“¬—§‚¿(ã)";			break;	/* í“¬—§‚¿(ã) */
-	case CHARMOTIONLISTID_BATTLESTAND_DOWN:			pszRet = "í“¬—§‚¿(‰º)";			break;	/* í“¬—§‚¿(‰º) */
-	case CHARMOTIONLISTID_BATTLESTAND_LEFT:			pszRet = "í“¬—§‚¿(¶)";			break;	/* í“¬—§‚¿(¶) */
-	case CHARMOTIONLISTID_BATTLESTAND_RIGHT:		pszRet = "í“¬—§‚¿(‰E)";			break;	/* í“¬—§‚¿(‰E) */
-	case CHARMOTIONLISTID_BATTLEWALK_UP:			pszRet = "‚·‚è‘«(ã)";				break;	/* ‚·‚è‘«(ã) */
-	case CHARMOTIONLISTID_BATTLEWALK_DOWN:			pszRet = "‚·‚è‘«(‰º)";				break;	/* ‚·‚è‘«(‰º) */
-	case CHARMOTIONLISTID_BATTLEWALK_LEFT:			pszRet = "‚·‚è‘«(¶)";				break;	/* ‚·‚è‘«(¶) */
-	case CHARMOTIONLISTID_BATTLEWALK_RIGHT:			pszRet = "‚·‚è‘«(‰E)";				break;	/* ‚·‚è‘«(‰E) */
-	case CHARMOTIONLISTID_SWING_UP:					pszRet = "U‚è(ã)";				break;	/* U‚è(ã) */
-	case CHARMOTIONLISTID_SWING_DOWN:				pszRet = "U‚è(‰º)";				break;	/* U‚è(‰º) */
-	case CHARMOTIONLISTID_SWING_LEFT:				pszRet = "U‚è(¶)";				break;	/* U‚è(¶) */
-	case CHARMOTIONLISTID_SWING_RIGHT:				pszRet = "U‚è(‰E)";				break;	/* U‚è(‰E) */
-	case CHARMOTIONLISTID_POKE_UP:					pszRet = "“Ë‚«(ã)";				break;	/* “Ë‚«(ã) */
-	case CHARMOTIONLISTID_POKE_DOWN:				pszRet = "“Ë‚«(‰º)";				break;	/* “Ë‚«(‰º) */
-	case CHARMOTIONLISTID_POKE_LEFT:				pszRet = "“Ë‚«(¶)";				break;	/* “Ë‚«(¶) */
-	case CHARMOTIONLISTID_POKE_RIGHT:				pszRet = "“Ë‚«(‰E)";				break;	/* “Ë‚«(‰E) */
-	case CHARMOTIONLISTID_BOWWALK_UP:				pszRet = "‹|—p‚·‚è‘«(ã)";			break;	/* ‹|—p‚·‚è‘«(ã) */
-	case CHARMOTIONLISTID_BOWWALK_DOWN:				pszRet = "‹|—p‚·‚è‘«(‰º)";			break;	/* ‹|—p‚·‚è‘«(‰º) */
-	case CHARMOTIONLISTID_BOWWALK_LEFT:				pszRet = "‹|—p‚·‚è‘«(¶)";			break;	/* ‹|—p‚·‚è‘«(¶) */
-	case CHARMOTIONLISTID_BOWWALK_RIGHT:			pszRet = "‹|—p‚·‚è‘«(‰E)";			break;	/* ‹|—p‚·‚è‘«(‰E) */
-	case CHARMOTIONLISTID_BOW_UP:					pszRet = "‹|(ã)";					break;	/* ‹|(ã) */
-	case CHARMOTIONLISTID_BOW_DOWN:					pszRet = "‹|(‰º)";					break;	/* ‹|(‰º) */
-	case CHARMOTIONLISTID_BOW_LEFT:					pszRet = "‹|(¶)";					break;	/* ‹|(¶) */
-	case CHARMOTIONLISTID_BOW_RIGHT:				pszRet = "‹|(‰E)";					break;	/* ‹|(‰E) */
-	case CHARMOTIONLISTID_GLOVEWALK_UP:				pszRet = "‘ÅŒ‚—p‚·‚è‘«(ã)";		break;	/* ‘ÅŒ‚—p‚·‚è‘«(ã) */
-	case CHARMOTIONLISTID_GLOVEWALK_DOWN:			pszRet = "‘ÅŒ‚—p‚·‚è‘«(‰º)";		break;	/* ‘ÅŒ‚—p‚·‚è‘«(‰º) */
-	case CHARMOTIONLISTID_GLOVEWALK_LEFT:			pszRet = "‘ÅŒ‚—p‚·‚è‘«(¶)";		break;	/* ‘ÅŒ‚—p‚·‚è‘«(¶) */
-	case CHARMOTIONLISTID_GLOVEWALK_RIGHT:			pszRet = "‘ÅŒ‚—p‚·‚è‘«(‰E)";		break;	/* ‘ÅŒ‚—p‚·‚è‘«(‰E) */
-	case CHARMOTIONLISTID_GLOVE_UP:					pszRet = "‘ÅŒ‚(ã)";				break;	/* ‘ÅŒ‚(ã) */
-	case CHARMOTIONLISTID_GLOVE_DOWN:				pszRet = "‘ÅŒ‚(‰º)";				break;	/* ‘ÅŒ‚(‰º) */
-	case CHARMOTIONLISTID_GLOVE_LEFT:				pszRet = "‘ÅŒ‚(¶)";				break;	/* ‘ÅŒ‚(¶) */
-	case CHARMOTIONLISTID_GLOVE_RIGHT:				pszRet = "‘ÅŒ‚(‰E)";				break;	/* ‘ÅŒ‚(‰E) */
-	case CHARMOTIONLISTID_FISHINGWALK_UP:			pszRet = "’Ş‚è—p‚·‚è‘«(ã)";		break;	/* ’Ş‚è—p‚·‚è‘«(ã) */
-	case CHARMOTIONLISTID_FISHINGWALK_DOWN:			pszRet = "’Ş‚è—p‚·‚è‘«(‰º)";		break;	/* ’Ş‚è—p‚·‚è‘«(‰º) */
-	case CHARMOTIONLISTID_FISHINGWALK_LEFT:			pszRet = "’Ş‚è—p‚·‚è‘«(¶)";		break;	/* ’Ş‚è—p‚·‚è‘«(¶) */
-	case CHARMOTIONLISTID_FISHINGWALK_RIGHT:		pszRet = "’Ş‚è—p‚·‚è‘«(‰E)";		break;	/* ’Ş‚è—p‚·‚è‘«(‰E) */
-	case CHARMOTIONLISTID_FISHING_UP:				pszRet = "’Ş‚è(ã)";				break;	/* ’Ş‚è(ã) */
-	case CHARMOTIONLISTID_FISHING_DOWN:				pszRet = "’Ş‚è(‰º)";				break;	/* ’Ş‚è(‰º) */
-	case CHARMOTIONLISTID_FISHING_LEFT:				pszRet = "’Ş‚è(¶)";				break;	/* ’Ş‚è(¶) */
-	case CHARMOTIONLISTID_FISHING_RIGHT:			pszRet = "’Ş‚è(‰E)";				break;	/* ’Ş‚è(‰E) */
-	case CHARMOTIONLISTID_FISHING_HIT_UP:			pszRet = "’Ş‚èƒqƒbƒg(ã)";			break;	/* ’Ş‚èƒqƒbƒg(ã) */
-	case CHARMOTIONLISTID_FISHING_HIT_DOWN:			pszRet = "’Ş‚èƒqƒbƒg(‰º)";			break;	/* ’Ş‚èƒqƒbƒg(‰º) */
-	case CHARMOTIONLISTID_FISHING_HIT_LEFT:			pszRet = "’Ş‚èƒqƒbƒg(¶)";			break;	/* ’Ş‚èƒqƒbƒg(¶) */
-	case CHARMOTIONLISTID_FISHING_HIT_RIGHT:		pszRet = "’Ş‚èƒqƒbƒg(‰E)";			break;	/* ’Ş‚èƒqƒbƒg(‰E) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_UP:		pszRet = "‹|—pí“¬—§‚¿(ã)";		break;	/* ‹|—pí“¬—§‚¿(ã) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_DOWN:		pszRet = "‹|—pí“¬—§‚¿(‰º)";		break;	/* ‹|—pí“¬—§‚¿(‰º) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_LEFT:		pszRet = "‹|—pí“¬—§‚¿(¶)";		break;	/* ‹|—pí“¬—§‚¿(¶) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_RIGHT:		pszRet = "‹|—pí“¬—§‚¿(‰E)";		break;	/* ‹|—pí“¬—§‚¿(‰E) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_UP:		pszRet = "‘ÅŒ‚—pí“¬—§‚¿(ã)";		break;	/* ‘ÅŒ‚—pí“¬—§‚¿(ã) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_DOWN:	pszRet = "‘ÅŒ‚—pí“¬—§‚¿(‰º)";		break;	/* ‘ÅŒ‚—pí“¬—§‚¿(‰º) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_LEFT:	pszRet = "‘ÅŒ‚—pí“¬—§‚¿(¶)";		break;	/* ‘ÅŒ‚—pí“¬—§‚¿(¶) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_RIGHT:	pszRet = "‘ÅŒ‚—pí“¬—§‚¿(‰E)";		break;	/* ‘ÅŒ‚—pí“¬—§‚¿(‰E) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_UP:	pszRet = "’Ş‚è—pí“¬—§‚¿(ã)";		break;	/* ’Ş‚è—pí“¬—§‚¿(ã) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_DOWN:	pszRet = "’Ş‚è—pí“¬—§‚¿(‰º)";		break;	/* ’Ş‚è—pí“¬—§‚¿(‰º) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_LEFT:	pszRet = "’Ş‚è—pí“¬—§‚¿(¶)";		break;	/* ’Ş‚è—pí“¬—§‚¿(¶) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_RIGHT:	pszRet = "’Ş‚è—pí“¬—§‚¿(‰E)";		break;	/* ’Ş‚è—pí“¬—§‚¿(‰E) */
-	case CHARMOTIONLISTID_STAND:					pszRet = "—§‚¿";					break;	/* —§‚¿ */
-	case CHARMOTIONLISTID_STAND_SIMPLE:				pszRet = "—§‚¿(ã‰º¶‰E1ƒRƒ}‚¸‚Â)";	break;	/* —§‚¿(ã‰º¶‰E1ƒRƒ}‚¸‚Â) */
-	case CHARMOTIONLISTID_WALK:						pszRet = "•à‚«(•ûŒü–³‚µ)";			break;	/* •à‚«(•ûŒü–³‚µ) */
-	case CHARMOTIONLISTID_DESTROY:					pszRet = "”j‰ó";					break;	/* ”j‰ó */
-	case CHARMOTIONLISTID_SIMPLE:					pszRet = "16ƒRƒ}˜A‘±";				break;	/* 16ƒRƒ}˜A‘± */
-	case CHARMOTIONLISTID_DEFENSE_UP:				pszRet = "–hŒä(ã)";				break;	/* –hŒä(ã) */
-	case CHARMOTIONLISTID_DEFENSE_DOWN:				pszRet = "–hŒä(‰º)";				break;	/* –hŒä(‰º) */
-	case CHARMOTIONLISTID_DEFENSE_LEFT:				pszRet = "–hŒä(¶)";				break;	/* –hŒä(¶) */
-	case CHARMOTIONLISTID_DEFENSE_RIGHT:			pszRet = "–hŒä(‰E)";				break;	/* –hŒä(‰E) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_UP:		pszRet = "–hŒä¬Œ÷(ã)";			break;	/* –hŒä¬Œ÷(ã) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_DOWN:		pszRet = "–hŒä¬Œ÷(‰º)";			break;	/* –hŒä¬Œ÷(‰º) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_LEFT:		pszRet = "–hŒä¬Œ÷(¶)";			break;	/* –hŒä¬Œ÷(¶) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_RIGHT:	pszRet = "–hŒä¬Œ÷(‰E)";			break;	/* –hŒä¬Œ÷(‰E) */
-	case CHARMOTIONLISTID_BOWDEFENSE_UP:			pszRet = "‹|—p–hŒä(ã)";			break;	/* ‹|—p–hŒä(ã) */
-	case CHARMOTIONLISTID_BOWDEFENSE_DOWN:			pszRet = "‹|—p–hŒä(‰º)";			break;	/* ‹|—p–hŒä(‰º) */
-	case CHARMOTIONLISTID_BOWDEFENSE_LEFT:			pszRet = "‹|—p–hŒä(¶)";			break;	/* ‹|—p–hŒä(¶) */
-	case CHARMOTIONLISTID_BOWDEFENSE_RIGHT:			pszRet = "‹|—p–hŒä(‰E)";			break;	/* ‹|—p–hŒä(‰E) */
-	case CHARMOTIONLISTID_DAMAGE_UP:				pszRet = "ƒ_ƒ[ƒW(ã)";			break;	/* ƒ_ƒ[ƒW(ã) */
-	case CHARMOTIONLISTID_DAMAGE_DOWN:				pszRet = "ƒ_ƒ[ƒW(‰º)";			break;	/* ƒ_ƒ[ƒW(‰º) */
-	case CHARMOTIONLISTID_DAMAGE_LEFT:				pszRet = "ƒ_ƒ[ƒW(¶)";			break;	/* ƒ_ƒ[ƒW(¶) */
-	case CHARMOTIONLISTID_DAMAGE_RIGHT:				pszRet = "ƒ_ƒ[ƒW(‰E)";			break;	/* ƒ_ƒ[ƒW(‰E) */
-	case CHARMOTIONLISTID_DEAD_UP:					pszRet = "€–S(ã)";				break;	/* €–S(ã) */
-	case CHARMOTIONLISTID_DEAD_DOWN:				pszRet = "€–S(‰º)";				break;	/* €–S(‰º) */
-	case CHARMOTIONLISTID_DEAD_LEFT:				pszRet = "€–S(¶)";				break;	/* €–S(¶) */
-	case CHARMOTIONLISTID_DEAD_RIGHT:				pszRet = "€–S(‰E)";				break;	/* €–S(‰E) */
+	case CHARMOTIONLISTID_STAND_UP:					pszRet = "ç«‹ã¡(ä¸Š)";				break;	/* ç«‹ã¡(ä¸Š) */
+	case CHARMOTIONLISTID_STAND_DOWN:				pszRet = "ç«‹ã¡(ä¸‹)";				break;	/* ç«‹ã¡(ä¸‹) */
+	case CHARMOTIONLISTID_STAND_LEFT:				pszRet = "ç«‹ã¡(å·¦)";				break;	/* ç«‹ã¡(å·¦) */
+	case CHARMOTIONLISTID_STAND_RIGHT:				pszRet = "ç«‹ã¡(å³)";				break;	/* ç«‹ã¡(å³) */
+	case CHARMOTIONLISTID_WALK_UP:					pszRet = "æ­©ã(ä¸Š)";				break;	/* æ­©ã(ä¸Š) */
+	case CHARMOTIONLISTID_WALK_DOWN:				pszRet = "æ­©ã(ä¸‹)";				break;	/* æ­©ã(ä¸‹) */
+	case CHARMOTIONLISTID_WALK_LEFT:				pszRet = "æ­©ã(å·¦)";				break;	/* æ­©ã(å·¦) */
+	case CHARMOTIONLISTID_WALK_RIGHT:				pszRet = "æ­©ã(å³)";				break;	/* æ­©ã(å³) */
+	case CHARMOTIONLISTID_SIT_UP:					pszRet = "åº§ã‚Š(ä¸Š)";				break;	/* åº§ã‚Š(ä¸Š) */
+	case CHARMOTIONLISTID_SIT_DOWN:					pszRet = "åº§ã‚Š(ä¸‹)";				break;	/* åº§ã‚Š(ä¸‹) */
+	case CHARMOTIONLISTID_SIT_LEFT:					pszRet = "åº§ã‚Š(å·¦)";				break;	/* åº§ã‚Š(å·¦) */
+	case CHARMOTIONLISTID_SIT_RIGHT:				pszRet = "åº§ã‚Š(å³)";				break;	/* åº§ã‚Š(å³) */
+	case CHARMOTIONLISTID_BATTLESTAND_UP:			pszRet = "æˆ¦é—˜ç«‹ã¡(ä¸Š)";			break;	/* æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	case CHARMOTIONLISTID_BATTLESTAND_DOWN:			pszRet = "æˆ¦é—˜ç«‹ã¡(ä¸‹)";			break;	/* æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	case CHARMOTIONLISTID_BATTLESTAND_LEFT:			pszRet = "æˆ¦é—˜ç«‹ã¡(å·¦)";			break;	/* æˆ¦é—˜ç«‹ã¡(å·¦) */
+	case CHARMOTIONLISTID_BATTLESTAND_RIGHT:		pszRet = "æˆ¦é—˜ç«‹ã¡(å³)";			break;	/* æˆ¦é—˜ç«‹ã¡(å³) */
+	case CHARMOTIONLISTID_BATTLEWALK_UP:			pszRet = "ã™ã‚Šè¶³(ä¸Š)";				break;	/* ã™ã‚Šè¶³(ä¸Š) */
+	case CHARMOTIONLISTID_BATTLEWALK_DOWN:			pszRet = "ã™ã‚Šè¶³(ä¸‹)";				break;	/* ã™ã‚Šè¶³(ä¸‹) */
+	case CHARMOTIONLISTID_BATTLEWALK_LEFT:			pszRet = "ã™ã‚Šè¶³(å·¦)";				break;	/* ã™ã‚Šè¶³(å·¦) */
+	case CHARMOTIONLISTID_BATTLEWALK_RIGHT:			pszRet = "ã™ã‚Šè¶³(å³)";				break;	/* ã™ã‚Šè¶³(å³) */
+	case CHARMOTIONLISTID_SWING_UP:					pszRet = "æŒ¯ã‚Š(ä¸Š)";				break;	/* æŒ¯ã‚Š(ä¸Š) */
+	case CHARMOTIONLISTID_SWING_DOWN:				pszRet = "æŒ¯ã‚Š(ä¸‹)";				break;	/* æŒ¯ã‚Š(ä¸‹) */
+	case CHARMOTIONLISTID_SWING_LEFT:				pszRet = "æŒ¯ã‚Š(å·¦)";				break;	/* æŒ¯ã‚Š(å·¦) */
+	case CHARMOTIONLISTID_SWING_RIGHT:				pszRet = "æŒ¯ã‚Š(å³)";				break;	/* æŒ¯ã‚Š(å³) */
+	case CHARMOTIONLISTID_POKE_UP:					pszRet = "çªã(ä¸Š)";				break;	/* çªã(ä¸Š) */
+	case CHARMOTIONLISTID_POKE_DOWN:				pszRet = "çªã(ä¸‹)";				break;	/* çªã(ä¸‹) */
+	case CHARMOTIONLISTID_POKE_LEFT:				pszRet = "çªã(å·¦)";				break;	/* çªã(å·¦) */
+	case CHARMOTIONLISTID_POKE_RIGHT:				pszRet = "çªã(å³)";				break;	/* çªã(å³) */
+	case CHARMOTIONLISTID_BOWWALK_UP:				pszRet = "å¼“ç”¨ã™ã‚Šè¶³(ä¸Š)";			break;	/* å¼“ç”¨ã™ã‚Šè¶³(ä¸Š) */
+	case CHARMOTIONLISTID_BOWWALK_DOWN:				pszRet = "å¼“ç”¨ã™ã‚Šè¶³(ä¸‹)";			break;	/* å¼“ç”¨ã™ã‚Šè¶³(ä¸‹) */
+	case CHARMOTIONLISTID_BOWWALK_LEFT:				pszRet = "å¼“ç”¨ã™ã‚Šè¶³(å·¦)";			break;	/* å¼“ç”¨ã™ã‚Šè¶³(å·¦) */
+	case CHARMOTIONLISTID_BOWWALK_RIGHT:			pszRet = "å¼“ç”¨ã™ã‚Šè¶³(å³)";			break;	/* å¼“ç”¨ã™ã‚Šè¶³(å³) */
+	case CHARMOTIONLISTID_BOW_UP:					pszRet = "å¼“(ä¸Š)";					break;	/* å¼“(ä¸Š) */
+	case CHARMOTIONLISTID_BOW_DOWN:					pszRet = "å¼“(ä¸‹)";					break;	/* å¼“(ä¸‹) */
+	case CHARMOTIONLISTID_BOW_LEFT:					pszRet = "å¼“(å·¦)";					break;	/* å¼“(å·¦) */
+	case CHARMOTIONLISTID_BOW_RIGHT:				pszRet = "å¼“(å³)";					break;	/* å¼“(å³) */
+	case CHARMOTIONLISTID_GLOVEWALK_UP:				pszRet = "æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸Š)";		break;	/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸Š) */
+	case CHARMOTIONLISTID_GLOVEWALK_DOWN:			pszRet = "æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸‹)";		break;	/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸‹) */
+	case CHARMOTIONLISTID_GLOVEWALK_LEFT:			pszRet = "æ‰“æ’ƒç”¨ã™ã‚Šè¶³(å·¦)";		break;	/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(å·¦) */
+	case CHARMOTIONLISTID_GLOVEWALK_RIGHT:			pszRet = "æ‰“æ’ƒç”¨ã™ã‚Šè¶³(å³)";		break;	/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(å³) */
+	case CHARMOTIONLISTID_GLOVE_UP:					pszRet = "æ‰“æ’ƒ(ä¸Š)";				break;	/* æ‰“æ’ƒ(ä¸Š) */
+	case CHARMOTIONLISTID_GLOVE_DOWN:				pszRet = "æ‰“æ’ƒ(ä¸‹)";				break;	/* æ‰“æ’ƒ(ä¸‹) */
+	case CHARMOTIONLISTID_GLOVE_LEFT:				pszRet = "æ‰“æ’ƒ(å·¦)";				break;	/* æ‰“æ’ƒ(å·¦) */
+	case CHARMOTIONLISTID_GLOVE_RIGHT:				pszRet = "æ‰“æ’ƒ(å³)";				break;	/* æ‰“æ’ƒ(å³) */
+	case CHARMOTIONLISTID_FISHINGWALK_UP:			pszRet = "é‡£ã‚Šç”¨ã™ã‚Šè¶³(ä¸Š)";		break;	/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(ä¸Š) */
+	case CHARMOTIONLISTID_FISHINGWALK_DOWN:			pszRet = "é‡£ã‚Šç”¨ã™ã‚Šè¶³(ä¸‹)";		break;	/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(ä¸‹) */
+	case CHARMOTIONLISTID_FISHINGWALK_LEFT:			pszRet = "é‡£ã‚Šç”¨ã™ã‚Šè¶³(å·¦)";		break;	/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(å·¦) */
+	case CHARMOTIONLISTID_FISHINGWALK_RIGHT:		pszRet = "é‡£ã‚Šç”¨ã™ã‚Šè¶³(å³)";		break;	/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(å³) */
+	case CHARMOTIONLISTID_FISHING_UP:				pszRet = "é‡£ã‚Š(ä¸Š)";				break;	/* é‡£ã‚Š(ä¸Š) */
+	case CHARMOTIONLISTID_FISHING_DOWN:				pszRet = "é‡£ã‚Š(ä¸‹)";				break;	/* é‡£ã‚Š(ä¸‹) */
+	case CHARMOTIONLISTID_FISHING_LEFT:				pszRet = "é‡£ã‚Š(å·¦)";				break;	/* é‡£ã‚Š(å·¦) */
+	case CHARMOTIONLISTID_FISHING_RIGHT:			pszRet = "é‡£ã‚Š(å³)";				break;	/* é‡£ã‚Š(å³) */
+	case CHARMOTIONLISTID_FISHING_HIT_UP:			pszRet = "é‡£ã‚Šãƒ’ãƒƒãƒˆ(ä¸Š)";			break;	/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(ä¸Š) */
+	case CHARMOTIONLISTID_FISHING_HIT_DOWN:			pszRet = "é‡£ã‚Šãƒ’ãƒƒãƒˆ(ä¸‹)";			break;	/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(ä¸‹) */
+	case CHARMOTIONLISTID_FISHING_HIT_LEFT:			pszRet = "é‡£ã‚Šãƒ’ãƒƒãƒˆ(å·¦)";			break;	/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(å·¦) */
+	case CHARMOTIONLISTID_FISHING_HIT_RIGHT:		pszRet = "é‡£ã‚Šãƒ’ãƒƒãƒˆ(å³)";			break;	/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(å³) */
+	case CHARMOTIONLISTID_BOWBATTLESTAND_UP:		pszRet = "å¼“ç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š)";		break;	/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	case CHARMOTIONLISTID_BOWBATTLESTAND_DOWN:		pszRet = "å¼“ç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹)";		break;	/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	case CHARMOTIONLISTID_BOWBATTLESTAND_LEFT:		pszRet = "å¼“ç”¨æˆ¦é—˜ç«‹ã¡(å·¦)";		break;	/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(å·¦) */
+	case CHARMOTIONLISTID_BOWBATTLESTAND_RIGHT:		pszRet = "å¼“ç”¨æˆ¦é—˜ç«‹ã¡(å³)";		break;	/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(å³) */
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_UP:		pszRet = "æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š)";		break;	/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_DOWN:	pszRet = "æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹)";		break;	/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_LEFT:	pszRet = "æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(å·¦)";		break;	/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(å·¦) */
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_RIGHT:	pszRet = "æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(å³)";		break;	/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(å³) */
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_UP:	pszRet = "é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š)";		break;	/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_DOWN:	pszRet = "é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹)";		break;	/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_LEFT:	pszRet = "é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(å·¦)";		break;	/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(å·¦) */
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_RIGHT:	pszRet = "é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(å³)";		break;	/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(å³) */
+	case CHARMOTIONLISTID_STAND:					pszRet = "ç«‹ã¡";					break;	/* ç«‹ã¡ */
+	case CHARMOTIONLISTID_STAND_SIMPLE:				pszRet = "ç«‹ã¡(ä¸Šä¸‹å·¦å³1ã‚³ãƒãšã¤)";	break;	/* ç«‹ã¡(ä¸Šä¸‹å·¦å³1ã‚³ãƒãšã¤) */
+	case CHARMOTIONLISTID_WALK:						pszRet = "æ­©ã(æ–¹å‘ç„¡ã—)";			break;	/* æ­©ã(æ–¹å‘ç„¡ã—) */
+	case CHARMOTIONLISTID_DESTROY:					pszRet = "ç ´å£Š";					break;	/* ç ´å£Š */
+	case CHARMOTIONLISTID_SIMPLE:					pszRet = "16ã‚³ãƒé€£ç¶š";				break;	/* 16ã‚³ãƒé€£ç¶š */
+	case CHARMOTIONLISTID_DEFENSE_UP:				pszRet = "é˜²å¾¡(ä¸Š)";				break;	/* é˜²å¾¡(ä¸Š) */
+	case CHARMOTIONLISTID_DEFENSE_DOWN:				pszRet = "é˜²å¾¡(ä¸‹)";				break;	/* é˜²å¾¡(ä¸‹) */
+	case CHARMOTIONLISTID_DEFENSE_LEFT:				pszRet = "é˜²å¾¡(å·¦)";				break;	/* é˜²å¾¡(å·¦) */
+	case CHARMOTIONLISTID_DEFENSE_RIGHT:			pszRet = "é˜²å¾¡(å³)";				break;	/* é˜²å¾¡(å³) */
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_UP:		pszRet = "é˜²å¾¡æˆåŠŸ(ä¸Š)";			break;	/* é˜²å¾¡æˆåŠŸ(ä¸Š) */
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_DOWN:		pszRet = "é˜²å¾¡æˆåŠŸ(ä¸‹)";			break;	/* é˜²å¾¡æˆåŠŸ(ä¸‹) */
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_LEFT:		pszRet = "é˜²å¾¡æˆåŠŸ(å·¦)";			break;	/* é˜²å¾¡æˆåŠŸ(å·¦) */
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_RIGHT:	pszRet = "é˜²å¾¡æˆåŠŸ(å³)";			break;	/* é˜²å¾¡æˆåŠŸ(å³) */
+	case CHARMOTIONLISTID_BOWDEFENSE_UP:			pszRet = "å¼“ç”¨é˜²å¾¡(ä¸Š)";			break;	/* å¼“ç”¨é˜²å¾¡(ä¸Š) */
+	case CHARMOTIONLISTID_BOWDEFENSE_DOWN:			pszRet = "å¼“ç”¨é˜²å¾¡(ä¸‹)";			break;	/* å¼“ç”¨é˜²å¾¡(ä¸‹) */
+	case CHARMOTIONLISTID_BOWDEFENSE_LEFT:			pszRet = "å¼“ç”¨é˜²å¾¡(å·¦)";			break;	/* å¼“ç”¨é˜²å¾¡(å·¦) */
+	case CHARMOTIONLISTID_BOWDEFENSE_RIGHT:			pszRet = "å¼“ç”¨é˜²å¾¡(å³)";			break;	/* å¼“ç”¨é˜²å¾¡(å³) */
+	case CHARMOTIONLISTID_DAMAGE_UP:				pszRet = "ãƒ€ãƒ¡ãƒ¼ã‚¸(ä¸Š)";			break;	/* ãƒ€ãƒ¡ãƒ¼ã‚¸(ä¸Š) */
+	case CHARMOTIONLISTID_DAMAGE_DOWN:				pszRet = "ãƒ€ãƒ¡ãƒ¼ã‚¸(ä¸‹)";			break;	/* ãƒ€ãƒ¡ãƒ¼ã‚¸(ä¸‹) */
+	case CHARMOTIONLISTID_DAMAGE_LEFT:				pszRet = "ãƒ€ãƒ¡ãƒ¼ã‚¸(å·¦)";			break;	/* ãƒ€ãƒ¡ãƒ¼ã‚¸(å·¦) */
+	case CHARMOTIONLISTID_DAMAGE_RIGHT:				pszRet = "ãƒ€ãƒ¡ãƒ¼ã‚¸(å³)";			break;	/* ãƒ€ãƒ¡ãƒ¼ã‚¸(å³) */
+	case CHARMOTIONLISTID_DEAD_UP:					pszRet = "æ­»äº¡(ä¸Š)";				break;	/* æ­»äº¡(ä¸Š) */
+	case CHARMOTIONLISTID_DEAD_DOWN:				pszRet = "æ­»äº¡(ä¸‹)";				break;	/* æ­»äº¡(ä¸‹) */
+	case CHARMOTIONLISTID_DEAD_LEFT:				pszRet = "æ­»äº¡(å·¦)";				break;	/* æ­»äº¡(å·¦) */
+	case CHARMOTIONLISTID_DEAD_RIGHT:				pszRet = "æ­»äº¡(å³)";				break;	/* æ­»äº¡(å³) */
 	}
 
 	return pszRet;
@@ -652,9 +652,9 @@ LPCSTR CMgrData::GetMotionName(DWORD dwMotionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetMotionProcName									 */
-/* “à—e		:s“®–¼‚ğæ“¾													 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CMgrData::GetMotionProcName									 */
+/* å†…å®¹		:è¡Œå‹•åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 LPCSTR CMgrData::GetMotionProcName(DWORD dwProcID)
@@ -664,9 +664,9 @@ LPCSTR CMgrData::GetMotionProcName(DWORD dwProcID)
 	pszRet = "";
 
 	switch (dwProcID) {
-	case CHARMOTIONPROCID_ATACK:		pszRet = "UŒ‚";		break;		/* UŒ‚ */
-	case CHARMOTIONPROCID_FISHING:		pszRet = "’Ş‚è";		break;		/* ’Ş‚è */
-	default:							pszRet = "‰½‚à‚µ‚È‚¢";	break;
+	case CHARMOTIONPROCID_ATACK:		pszRet = "æ”»æ’ƒ";		break;		/* æ”»æ’ƒ */
+	case CHARMOTIONPROCID_FISHING:		pszRet = "é‡£ã‚Š";		break;		/* é‡£ã‚Š */
+	default:							pszRet = "ä½•ã‚‚ã—ãªã„";	break;
 	}
 
 	return pszRet;
@@ -674,9 +674,9 @@ LPCSTR CMgrData::GetMotionProcName(DWORD dwProcID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetMapEventName										 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgí•Ê–¼‚ğæ“¾										 */
-/* “ú•t		:2008/07/17														 */
+/* é–¢æ•°å	:CMgrData::GetMapEventName										 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥åã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/07/17														 */
 /* ========================================================================= */
 
 LPCSTR CMgrData::GetMapEventName(int nMapEventType)
@@ -686,13 +686,13 @@ LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 	pszRet = "";
 
 	switch (nMapEventType) {
-	case MAPEVENTTYPE_MOVE:			pszRet = "ƒ}ƒbƒv“àˆÚ“®";	break;	/* ƒ}ƒbƒv“àˆÚ“® */
-	case MAPEVENTTYPE_MAPMOVE:		pszRet = "ƒ}ƒbƒvŠÔˆÚ“®";	break;	/* ƒ}ƒbƒvŠÔˆÚ“® */
-	case MAPEVENTTYPE_TRASHBOX:		pszRet = "ƒSƒ~” ";			break;	/* ƒSƒ~”  */
-	case MAPEVENTTYPE_INITSTATUS:	pszRet = "ƒXƒe[ƒ^ƒX‰Šú‰»";break;	/* ƒXƒe[ƒ^ƒX‰Šú‰» */
-	case MAPEVENTTYPE_GRPIDTMP:		pszRet = "ˆê‰æ‘œİ’è";	break;	/* ˆê‰æ‘œİ’è */
-	case MAPEVENTTYPE_LIGHT:		pszRet = "“”‚è";			break;	/* “”‚è */
-	default:						pszRet = "–¢İ’è";			break;
+	case MAPEVENTTYPE_MOVE:			pszRet = "ãƒãƒƒãƒ—å†…ç§»å‹•";	break;	/* ãƒãƒƒãƒ—å†…ç§»å‹• */
+	case MAPEVENTTYPE_MAPMOVE:		pszRet = "ãƒãƒƒãƒ—é–“ç§»å‹•";	break;	/* ãƒãƒƒãƒ—é–“ç§»å‹• */
+	case MAPEVENTTYPE_TRASHBOX:		pszRet = "ã‚´ãƒŸç®±";			break;	/* ã‚´ãƒŸç®± */
+	case MAPEVENTTYPE_INITSTATUS:	pszRet = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ–";break;	/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ– */
+	case MAPEVENTTYPE_GRPIDTMP:		pszRet = "ä¸€æ™‚ç”»åƒè¨­å®š";	break;	/* ä¸€æ™‚ç”»åƒè¨­å®š */
+	case MAPEVENTTYPE_LIGHT:		pszRet = "ç¯ã‚Š";			break;	/* ç¯ã‚Š */
+	default:						pszRet = "æœªè¨­å®š";			break;
 	}
 
 	return pszRet;
@@ -700,9 +700,9 @@ LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetSystemMsgCount									 */
-/* “à—e		:ƒVƒXƒeƒ€ƒƒbƒZ[ƒW”‚ğæ“¾										 */
-/* “ú•t		:2007/09/06														 */
+/* é–¢æ•°å	:CMgrData::GetSystemMsgCount									 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ•°ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/09/06														 */
 /* ========================================================================= */
 
 int CMgrData::GetSystemMsgCount(void)
@@ -712,9 +712,9 @@ int CMgrData::GetSystemMsgCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetSystemMsg											 */
-/* “à—e		:ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğ’Ç‰Á										 */
-/* “ú•t		:2007/09/06														 */
+/* é–¢æ•°å	:CMgrData::GetSystemMsg											 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ 										 */
+/* æ—¥ä»˜		:2007/09/06														 */
 /* ========================================================================= */
 
 PSTSYSTEMMSG CMgrData::GetSystemMsg(int nNo)
@@ -734,9 +734,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::AddSystemMsg											 */
-/* “à—e		:ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğ’Ç‰Á										 */
-/* “ú•t		:2007/09/06														 */
+/* é–¢æ•°å	:CMgrData::AddSystemMsg											 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ 										 */
+/* æ—¥ä»˜		:2007/09/06														 */
 /* ========================================================================= */
 
 void CMgrData::AddSystemMsg(BOOL bAddLog, LPCSTR pszMsg, COLORREF clMsg)
@@ -753,9 +753,9 @@ void CMgrData::AddSystemMsg(BOOL bAddLog, LPCSTR pszMsg, COLORREF clMsg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::DeleteAllSystemMsg									 */
-/* “à—e		:ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğ‘S‚Äíœ									 */
-/* “ú•t		:2007/09/06														 */
+/* é–¢æ•°å	:CMgrData::DeleteAllSystemMsg									 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å…¨ã¦å‰Šé™¤									 */
+/* æ—¥ä»˜		:2007/09/06														 */
 /* ========================================================================= */
 
 void CMgrData::DeleteAllSystemMsg(void)
@@ -773,9 +773,9 @@ void CMgrData::DeleteAllSystemMsg(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SetSEVolume											 */
-/* “à—e		:Œø‰Ê‰¹—Ê‚ğİ’è													 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CMgrData::SetSEVolume											 */
+/* å†…å®¹		:åŠ¹æœéŸ³é‡ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CMgrData::SetSEVolume(int nSEVolume)
@@ -786,9 +786,9 @@ void CMgrData::SetSEVolume(int nSEVolume)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SetSEVolume											 */
-/* “à—e		:BGM‰¹—Ê‚ğİ’è													 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CMgrData::SetSEVolume											 */
+/* å†…å®¹		:BGMéŸ³é‡ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CMgrData::SetBGMVolume(int nBGMVolume)
@@ -799,9 +799,9 @@ void CMgrData::SetBGMVolume(int nBGMVolume)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SetInfoTalkEvent										 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒgî•ñ‚Ìİ’è											 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CMgrData::SetInfoTalkEvent										 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã®è¨­å®š											 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CMgrData::SetInfoTalkEvent(CInfoTalkEvent *pSrc)
@@ -811,9 +811,9 @@ void CMgrData::SetInfoTalkEvent(CInfoTalkEvent *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::GetInfoTalkEvent										 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒgî•ñ‚Ìæ“¾											 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CMgrData::GetInfoTalkEvent										 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã®å–å¾—											 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 CInfoTalkEvent *CMgrData::GetInfoTalkEvent(void)
@@ -823,9 +823,9 @@ CInfoTalkEvent *CMgrData::GetInfoTalkEvent(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::ReadIniData											 */
-/* “à—e		:iniƒtƒ@ƒCƒ‹‚©‚çİ’è‚ğ“Ç‚İ‚İ									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrData::ReadIniData											 */
+/* å†…å®¹		:iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è¨­å®šã‚’èª­ã¿è¾¼ã¿									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrData::ReadIniData(void)
@@ -839,50 +839,50 @@ void CMgrData::ReadIniData(void)
 	GetModuleFileName (NULL, szFileName, MAX_PATH);
 	strcpy (szFileName + strlen (szFileName) - 3, "ini");
 
-	/* ƒT[ƒo[ƒAƒhƒŒƒX */
+	/* ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	GetPrivateProfileString ("Setting", "ServerAddr", "127.0.0.1", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strServerAddr = szTmp;
-	/* ‘Ò‚¿‚¤‚¯ƒ|[ƒg */
+	/* å¾…ã¡ã†ã‘ãƒãƒ¼ãƒˆ */
 	m_wServerPort = GetPrivateProfileInt ("Setting", "ServerPort", 2006, szFileName);
-	/* ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚éH */
+	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ï¼Ÿ */
 	m_bSavePassword = (BOOL)GetPrivateProfileInt ("Setting", "SavePassword", 0, szFileName);
-	/* ƒƒOƒCƒ“‹‘”Û */
+	/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
 //	m_bDisableLogin = (BOOL)GetPrivateProfileInt ("Setting", "DisableLogin", 0, szFileName);
-	/* ”­Œ¾‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ */
+	/* ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚« */
 	m_bOptionTaskbar = (BOOL)GetPrivateProfileInt ("Setting", "OptionTaskbar", 0, szFileName);
-	/* ”­Œ¾‚ğ•\¦‚·‚é */
+	/* ç™ºè¨€ã‚’è¡¨ç¤ºã™ã‚‹ */
 	m_bOptionViewChat = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewChat", 1, szFileName);
-	/* ƒAƒCƒeƒ€‚ğ•\¦‚·‚é */
+	/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹ */
 	m_bOptionViewItem = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewItem", 1, szFileName);
-	/* ƒAƒCƒeƒ€–¼‚ğ•\¦‚·‚é */
+	/* ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã™ã‚‹ */
 	m_bOptionViewItemName = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewItemName", 1, szFileName);
-	/* ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚·‚é */
+	/* ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹ */
 	m_bOptionViewHelpIcon = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewHelpIcon", 1, szFileName);
-	/* í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚· */
+	/* æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã™ */
 	m_bOptionBattleMsgLog = (BOOL)GetPrivateProfileInt ("Setting", "OptionBattleMsgLog", 0, szFileName);
-	/* 60ƒtƒŒ[ƒ€‚Å•\¦‚·‚é */
+	/* 60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã™ã‚‹ */
 	m_bOption60Frame = (BOOL)GetPrivateProfileInt ("Setting", "Option60Frame", 0, szFileName);
-	/* ÅIƒAƒJƒEƒ“ƒg–¼ */
+	/* æœ€çµ‚ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå */
 	GetPrivateProfileString ("Account", "Account", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strLastAccount = szTmp;
-	/* ÅIƒpƒXƒ[ƒh */
+	/* æœ€çµ‚ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 	GetPrivateProfileString ("Account", "Password", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	CryptUtil.UnCryptStr (szTmp, szTmp2, 10);
 	m_strLastPassword = szTmp2;
-	/* Œø‰Ê‰¹—Ê */
+	/* åŠ¹æœéŸ³é‡ */
 	nTmp = GetPrivateProfileInt ("Setting", "SEVolume", 2, szFileName);
 	m_nSEVolume = min (nTmp, 4);
-	/* BGM‰¹—Ê */
+	/* BGMéŸ³é‡ */
 	nTmp = GetPrivateProfileInt ("Setting", "BGMVolume", 2, szFileName);
 	m_nBGMVolume = min (nTmp, 4);
-	/* •`‰æƒ‚[ƒh */
+	/* æç”»ãƒ¢ãƒ¼ãƒ‰ */
 	nTmp = GetPrivateProfileInt ("Setting", "DrawMode", 1, szFileName);
 	m_nDrawMode = min (nTmp, 4);
-	/* “ü—ÍƒWƒ‡ƒCƒpƒbƒh */
+	/* å…¥åŠ›ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ */
 	GetPrivateProfileString ("Setting", "InputDevice", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	bstrTmp = szTmp;
 	CLSIDFromString (bstrTmp, &m_stInputGuid); 
-	/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[ */
+	/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ */
 	nTmp = GetPrivateProfileInt ("Setting", "SleepTimer", 0, szFileName);
 	m_nSleepTimer = min (nTmp, 5);
 }

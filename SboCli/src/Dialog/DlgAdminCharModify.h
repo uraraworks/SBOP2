@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModify.h										 */
-/* “à—e			:‘I‘ğƒLƒƒƒ‰î•ñ•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/03/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModify.h										 */
+/* å†…å®¹			:é¸æŠã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/03/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,29 +14,29 @@ class CInfoCharCli;
 class CInfoTalkEvent;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharModify : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharModify(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharModify();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharModify(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharModify();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);						/* ‰Šú‰» */
-	void	Renew		(void);										/* XV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-
-
-protected:
-	void		Send		(BOOL bChgScreenPos);					/* ‘—Mˆ— */
-	COLORREF	GetColor	(int nNo);								/* ”Ô†‚©‚çF‚ğæ“¾ */
+	void	Init		(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	void	Renew		(void);										/* æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
 
 
 protected:
-	DWORD			m_dwCharID;					/* ÅŒã‚É‘I‘ğ‚µ‚½ƒLƒƒƒ‰ID */
-	CInfoCharCli	*m_pInfoChar;				/* •ÒW’†‚ÌƒLƒƒƒ‰î•ñ */
-	CInfoTalkEvent	*m_pInfoTalkEvent;			/* •ÒW’†‚Ì‰ï˜bƒCƒxƒ“ƒg */
+	void		Send		(BOOL bChgScreenPos);					/* é€ä¿¡å‡¦ç† */
+	COLORREF	GetColor	(int nNo);								/* ç•ªå·ã‹ã‚‰è‰²ã‚’å–å¾— */
+
+
+protected:
+	DWORD			m_dwCharID;					/* æœ€å¾Œã«é¸æŠã—ãŸã‚­ãƒ£ãƒ©ID */
+	CInfoCharCli	*m_pInfoChar;				/* ç·¨é›†ä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
+	CInfoTalkEvent	*m_pInfoTalkEvent;			/* ç·¨é›†ä¸­ã®ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
 
 
 
@@ -58,7 +58,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharModify)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketCHAR_SET_EFCBALLOON.cpp								 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ÉLÉÉÉâån:ï¨èoÇµÇéwíË) é¿ëïÉtÉ@ÉCÉã				 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/12/31													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketCHAR_SET_EFCBALLOON.cpp								 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Ç≠„É£„É©Á≥ª:Âô¥Âá∫„Åó„ÇíÊåáÂÆö) ÂÆüË£Ö„Éï„Ç°„Ç§„É´				 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/12/31													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_SET_EFCBALLOON.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFCBALLOON::CPacketCHAR_SET_EFCBALLOON			 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/12/31														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFCBALLOON::CPacketCHAR_SET_EFCBALLOON			 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/12/31														 */
 /* ========================================================================= */
 
 CPacketCHAR_SET_EFCBALLOON::CPacketCHAR_SET_EFCBALLOON()
@@ -24,9 +24,9 @@ CPacketCHAR_SET_EFCBALLOON::CPacketCHAR_SET_EFCBALLOON()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFCBALLOON::~CPacketCHAR_SET_EFCBALLOON		 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/12/31														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFCBALLOON::~CPacketCHAR_SET_EFCBALLOON		 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/12/31														 */
 /* ========================================================================= */
 
 CPacketCHAR_SET_EFCBALLOON::~CPacketCHAR_SET_EFCBALLOON()
@@ -35,14 +35,14 @@ CPacketCHAR_SET_EFCBALLOON::~CPacketCHAR_SET_EFCBALLOON()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFCBALLOON::Make								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/12/31														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFCBALLOON::Make								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/12/31														 */
 /* ========================================================================= */
 
 void CPacketCHAR_SET_EFCBALLOON::Make(
-	DWORD dwCharID,			/* [in] ÉLÉÉÉâID */
-	DWORD dwBalloonID)		/* [in] ï¨èoÇµID */
+	DWORD dwCharID,			/* [in] „Ç≠„É£„É©ID */
+	DWORD dwBalloonID)		/* [in] Âô¥Âá∫„ÅóID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketCHAR_SET_EFCBALLOON::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_SET_EFCBALLOON;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),		pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (pDataTmp, &dwBalloonID,	sizeof (dwBalloonID),	pDataTmp);	/* ï¨èoÇµID */
+	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),		pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (pDataTmp, &dwBalloonID,	sizeof (dwBalloonID),	pDataTmp);	/* Âô¥Âá∫„ÅóID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFCBALLOON::Set								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/12/31														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFCBALLOON::Set								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/12/31														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_SET_EFCBALLOON::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketCHAR_SET_EFCBALLOON::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (&m_dwBalloonID,	pDataTmp, sizeof (m_dwBalloonID),	pDataTmp);	/* ï¨èoÇµID */
+	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (&m_dwBalloonID,	pDataTmp, sizeof (m_dwBalloonID),	pDataTmp);	/* Âô¥Âá∫„ÅóID */
 
 	pRet = pDataTmp;
 	return pRet;

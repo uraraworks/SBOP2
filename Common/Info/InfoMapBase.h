@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapBase.h												 */
-/* “à—e			:ƒ}ƒbƒvî•ñŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapBase.h												 */
+/* å†…å®¹			:ãƒãƒƒãƒ—æƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -18,97 +18,97 @@ class CLibInfoMapObject;
 class CInfoMapObjectData;
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
-/* “VŒó */
+/* å¤©å€™ */
 enum {
 	WEATHERTYPE_NONE = 0,
-	WEATHERTYPE_CLOUD,			/* ‰_ */
-	WEATHERTYPE_MISTY,			/* –¶ */
-	WEATHERTYPE_SNOW,			/* á */
+	WEATHERTYPE_CLOUD,			/* é›² */
+	WEATHERTYPE_MISTY,			/* éœ§ */
+	WEATHERTYPE_SNOW,			/* é›ª */
 	WEATHERTYPE_MAX
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoMapBase : public CInfoBase
 {
 public:
-			CInfoMapBase();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoMapBase();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoMapBase();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoMapBase();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(CLibInfoMapParts *pLibInfoMapParts);	/* ì¬ */
+	void Create			(CLibInfoMapParts *pLibInfoMapParts);	/* ä½œæˆ */
 
-	void Init			(int cx, int cy, WORD wParts, BOOL bDeleteMapEvent = TRUE);	/* ‰Šú‰» */
-	void RenewSize		(int nDirection, int nSize);					/* ƒTƒCƒYXV */
-	void FillShadow		(int x, int y, int cx, int cy, WORD wShadowID);	/* ‹éŒ`‚ğ“h‚è‚Â‚Ô‚µ */
+	void Init			(int cx, int cy, WORD wParts, BOOL bDeleteMapEvent = TRUE);	/* åˆæœŸåŒ– */
+	void RenewSize		(int nDirection, int nSize);					/* ã‚µã‚¤ã‚ºæ›´æ–° */
+	void FillShadow		(int x, int y, int cx, int cy, WORD wShadowID);	/* çŸ©å½¢ã‚’å¡—ã‚Šã¤ã¶ã— */
 
-	int		GetElementNo	(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	DWORD	GetDataSize		(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	DWORD	GetDataSizeNo	(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	LPCSTR	GetName			(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	PBYTE	GetWriteData	(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	DWORD	ReadElementData	(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	int		GetElementNo	(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize		(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo	(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName			(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData	(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData	(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual void TimerProc	(DWORD dwTime);						/* ŠÔˆ— */
+	virtual void TimerProc	(DWORD dwTime);						/* æ™‚é–“å‡¦ç† */
 
-	BOOL	IsMapEvent		(int x, int y);						/* w’èÀ•W‚Éƒ}ƒbƒvƒCƒxƒ“ƒg‚ª‚ ‚é‚©”»’è */
-	BOOL	IsHitMapEvent	(RECT *pPos);						/* w’èÀ•W‚Åƒ}ƒbƒvƒCƒxƒ“ƒg‚É‚Ô‚Â‚©‚é‚©”»’è */
-	int		GetMapEventType	(int x, int y);						/* w’èÀ•W‚Ìƒ}ƒbƒvƒCƒxƒ“ƒgí•Ê‚ğæ“¾ */
-	WORD	GetParts		(int x, int y);						/* w’èÀ•W‚Ìƒp[ƒc”Ô†‚ğæ“¾ */
-	void	SetParts		(int x, int y, DWORD dwPartsID);	/* w’èÀ•W‚Ìƒp[ƒc”Ô†‚ğİ’è */
-	WORD	GetPartsPile	(int x, int y);						/* w’èÀ•W‚Ìd‚Ë‡‚í‚¹ƒp[ƒc”Ô†‚ğæ“¾ */
-	void	SetPartsPile	(int x, int y, DWORD dwPartsID);	/* w’èÀ•W‚Ìd‚Ë‡‚í‚¹ƒp[ƒc”Ô†‚ğİ’è */
-	BOOL	IsMove			(int x, int y, int nDirection);		/* i“ü‰Â”\‚©”»’è */
-	BOOL	IsMoveOut		(int x, int y, int nDirection);		/* ’Eo‰Â”\‚©”»’è */
-	void	DeleteParts		(DWORD dwPartsID);					/* w’èƒp[ƒc‚ğíœ */
-	WORD	GetShadow		(int x, int y);						/* w’èÀ•W‚Ì‰e”Ô†‚ğæ“¾ */
-	void	SetShadow		(int x, int y, DWORD dwShadowID);	/* w’èÀ•W‚Ì‰e”Ô†‚ğİ’è */
-	void	DeleteShadow	(DWORD dwShadowID);					/* w’è‰e‚ğíœ */
-	DWORD	GetMapObject	(int x, int y);						/* w’èÀ•W‚Ìƒ}ƒbƒvƒIƒuƒWƒFƒNƒgID‚ğæ“¾ */
-	BOOL	IsFlg			(int x, int y, DWORD dwFlg);		/* w’è‘®«‚©”»’è */
-	BOOL	IsEnableBattle	(void);								/* í“¬‹–‰Â‚©”»’è */
+	BOOL	IsMapEvent		(int x, int y);						/* æŒ‡å®šåº§æ¨™ã«ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãŒã‚ã‚‹ã‹åˆ¤å®š */
+	BOOL	IsHitMapEvent	(RECT *pPos);						/* æŒ‡å®šåº§æ¨™ã§ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã«ã¶ã¤ã‹ã‚‹ã‹åˆ¤å®š */
+	int		GetMapEventType	(int x, int y);						/* æŒ‡å®šåº§æ¨™ã®ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ã‚’å–å¾— */
+	WORD	GetParts		(int x, int y);						/* æŒ‡å®šåº§æ¨™ã®ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’å–å¾— */
+	void	SetParts		(int x, int y, DWORD dwPartsID);	/* æŒ‡å®šåº§æ¨™ã®ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’è¨­å®š */
+	WORD	GetPartsPile	(int x, int y);						/* æŒ‡å®šåº§æ¨™ã®é‡ã­åˆã‚ã›ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’å–å¾— */
+	void	SetPartsPile	(int x, int y, DWORD dwPartsID);	/* æŒ‡å®šåº§æ¨™ã®é‡ã­åˆã‚ã›ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’è¨­å®š */
+	BOOL	IsMove			(int x, int y, int nDirection);		/* é€²å…¥å¯èƒ½ã‹åˆ¤å®š */
+	BOOL	IsMoveOut		(int x, int y, int nDirection);		/* è„±å‡ºå¯èƒ½ã‹åˆ¤å®š */
+	void	DeleteParts		(DWORD dwPartsID);					/* æŒ‡å®šãƒ‘ãƒ¼ãƒ„ã‚’å‰Šé™¤ */
+	WORD	GetShadow		(int x, int y);						/* æŒ‡å®šåº§æ¨™ã®å½±ç•ªå·ã‚’å–å¾— */
+	void	SetShadow		(int x, int y, DWORD dwShadowID);	/* æŒ‡å®šåº§æ¨™ã®å½±ç•ªå·ã‚’è¨­å®š */
+	void	DeleteShadow	(DWORD dwShadowID);					/* æŒ‡å®šå½±ã‚’å‰Šé™¤ */
+	DWORD	GetMapObject	(int x, int y);						/* æŒ‡å®šåº§æ¨™ã®ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆIDã‚’å–å¾— */
+	BOOL	IsFlg			(int x, int y, DWORD dwFlg);		/* æŒ‡å®šå±æ€§ã‹åˆ¤å®š */
+	BOOL	IsEnableBattle	(void);								/* æˆ¦é—˜è¨±å¯ã‹åˆ¤å®š */
 
-	DWORD	GetSendDataSize	(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData		(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData		(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚ğİ’è */
+	DWORD	GetSendDataSize	(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData		(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š */
 
-	void	Copy		(CInfoMapBase *pSrc);					/* ƒRƒs[ */
-	void	RenewHitTmp	(void);									/* ƒ}ƒbƒvƒp[ƒcˆÈŠO‚Å‚Ì“–‚½‚è”»’è‚ğXV */
+	void	Copy		(CInfoMapBase *pSrc);					/* ã‚³ãƒ”ãƒ¼ */
+	void	RenewHitTmp	(void);									/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ä»¥å¤–ã§ã®å½“ãŸã‚Šåˆ¤å®šã‚’æ›´æ–° */
 
-	/* ƒ}ƒbƒvƒCƒxƒ“ƒgŠÖ˜A */
-	void				RenewMapEvent	(void);						/* ƒ}ƒbƒvƒCƒxƒ“ƒgXV */
-	int					GetEventCount	(void);						/* ƒ}ƒbƒvƒCƒxƒ“ƒg”‚ğæ“¾ */
-	CInfoMapEventBase	*GetEvent		(int nNo);					/* ƒ}ƒbƒvƒCƒxƒ“ƒg‚ğæ“¾ */
-	CInfoMapEventBase	*GetEvent		(int x, int y);				/* ƒ}ƒbƒvƒCƒxƒ“ƒg‚ğæ“¾ */
-	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ŠÖ˜A */
-	int					GetMapObjectDataCount	(void);				/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^”‚ğæ“¾ */
-	CInfoMapObjectData	*GetObjectData			(int nNo);			/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^‚ğæ“¾ */
-	CInfoMapObjectData	*GetObjectData			(int x, int y);		/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^‚ğæ“¾ */
+	/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆé–¢é€£ */
+	void				RenewMapEvent	(void);						/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæ›´æ–° */
+	int					GetEventCount	(void);						/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæ•°ã‚’å–å¾— */
+	CInfoMapEventBase	*GetEvent		(int nNo);					/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾— */
+	CInfoMapEventBase	*GetEvent		(int x, int y);				/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾— */
+	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿é–¢é€£ */
+	int					GetMapObjectDataCount	(void);				/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	CInfoMapObjectData	*GetObjectData			(int nNo);			/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	CInfoMapObjectData	*GetObjectData			(int x, int y);		/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
 
 public:
-	SIZE		m_sizeMap;				/* ƒ}ƒbƒvƒTƒCƒY */
-	DWORD		m_dwMapID,				/* ƒ}ƒbƒvID */
+	SIZE		m_sizeMap;				/* ãƒãƒƒãƒ—ã‚µã‚¤ã‚º */
+	DWORD		m_dwMapID,				/* ãƒãƒƒãƒ—ID */
 				m_dwBGMID,				/* BGMID */
-				m_dwWeatherType;		/* “V‹Cí•Ê */
-	BOOL		m_bEnableBattle,		/* í“¬‹–‰Â */
-				m_bRecovery;			/* ‹CâŒã‰ñ•œ‚·‚é */
-	PBYTE		m_pbyMapEvent,			/* ŠeÀ•W‚Ìƒ}ƒbƒvƒCƒxƒ“ƒg */
-				m_pbyHitTmp;			/* ƒ}ƒbƒvƒp[ƒcˆÈŠO‚Å‚Ì“–‚½‚è”»’è */
-	PWORD		m_pwMap,				/* ƒ}ƒbƒv */
-				m_pwMapPile,			/* ƒ}ƒbƒvd‚Ë‡‚í‚¹ */
-				m_pwMapShadow;			/* ƒ}ƒbƒv‰e */
-	BYTE		m_byLevel;				/* ˆÃ‚³ƒŒƒxƒ‹ */
-	CmyString	m_strMapName;			/* ƒ}ƒbƒv–¼ */
+				m_dwWeatherType;		/* å¤©æ°—ç¨®åˆ¥ */
+	BOOL		m_bEnableBattle,		/* æˆ¦é—˜è¨±å¯ */
+				m_bRecovery;			/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	PBYTE		m_pbyMapEvent,			/* å„åº§æ¨™ã®ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ */
+				m_pbyHitTmp;			/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ä»¥å¤–ã§ã®å½“ãŸã‚Šåˆ¤å®š */
+	PWORD		m_pwMap,				/* ãƒãƒƒãƒ— */
+				m_pwMapPile,			/* ãƒãƒƒãƒ—é‡ã­åˆã‚ã› */
+				m_pwMapShadow;			/* ãƒãƒƒãƒ—å½± */
+	BYTE		m_byLevel;				/* æš—ã•ãƒ¬ãƒ™ãƒ« */
+	CmyString	m_strMapName;			/* ãƒãƒƒãƒ—å */
 
-	CLibInfoMapParts		*m_pLibInfoMapParts;		/* ƒ}ƒbƒvƒp[ƒcî•ñ */
-	CLibInfoMapEvent		*m_pLibInfoMapEvent;		/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
-	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ */
-	CLibInfoMapObject		*m_pLibInfoMapObject;		/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
+	CLibInfoMapParts		*m_pLibInfoMapParts;		/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
+	CLibInfoMapEvent		*m_pLibInfoMapEvent;		/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
+	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ */
+	CLibInfoMapObject		*m_pLibInfoMapObject;		/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
 } CInfoMapBase, *PCInfoMapBase;
 typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	  ARRAYINFOMAPBASE;
 typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	*PARRAYINFOMAPBASE;

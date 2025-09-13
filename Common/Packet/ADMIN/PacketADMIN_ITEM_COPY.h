@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ITEM_COPY.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒAƒCƒeƒ€î•ñƒRƒs[) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ITEM_COPY.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚³ãƒ”ãƒ¼) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_ITEM_COPY : public CPacketBase
 {
 public:
-			CPacketADMIN_ITEM_COPY();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_ITEM_COPY();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_ITEM_COPY();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_ITEM_COPY();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwItemID);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwItemID);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwItemID;			/* ƒAƒCƒeƒ€ID */
+	DWORD	m_dwItemID;			/* ã‚¢ã‚¤ãƒ†ãƒ ID */
 } CPacketADMIN_ITEM_COPY, *PCPacketADMIN_ITEM_COPY;
 
 /* Copyright(C)URARA-works 2007 */

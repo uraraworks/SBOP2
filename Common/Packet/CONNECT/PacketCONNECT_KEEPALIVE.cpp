@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_KEEPALIVE.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:¶‘¶Šm”F’Ê’m) À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/21													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_KEEPALIVE.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(æ¥ç¶šç³»:ç”Ÿå­˜ç¢ºèªé€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/21													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCONNECT_KEEPALIVE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_KEEPALIVE::CPacketCONNECT_KEEPALIVE				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CPacketCONNECT_KEEPALIVE::CPacketCONNECT_KEEPALIVE				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 CPacketCONNECT_KEEPALIVE::CPacketCONNECT_KEEPALIVE()
@@ -23,9 +23,9 @@ CPacketCONNECT_KEEPALIVE::CPacketCONNECT_KEEPALIVE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_KEEPALIVE::~CPacketCONNECT_KEEPALIVE			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CPacketCONNECT_KEEPALIVE::~CPacketCONNECT_KEEPALIVE			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 CPacketCONNECT_KEEPALIVE::~CPacketCONNECT_KEEPALIVE()
@@ -34,9 +34,9 @@ CPacketCONNECT_KEEPALIVE::~CPacketCONNECT_KEEPALIVE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_KEEPALIVE::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CPacketCONNECT_KEEPALIVE::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CPacketCONNECT_KEEPALIVE::Make(DWORD dwData)
@@ -56,16 +56,16 @@ void CPacketCONNECT_KEEPALIVE::Make(DWORD dwData)
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CONNECT_KEEPALIVE;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwData, sizeof (dwData), pDataTmp);	/* •ÔM—pƒf[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &dwData, sizeof (dwData), pDataTmp);	/* è¿”ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_KEEPALIVE::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CPacketCONNECT_KEEPALIVE::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 PBYTE CPacketCONNECT_KEEPALIVE::Set(PBYTE pPacket)
@@ -75,7 +75,7 @@ PBYTE CPacketCONNECT_KEEPALIVE::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwData, pDataTmp, sizeof (m_dwData), pDataTmp);	/* •ÔM—pƒf[ƒ^ */
+	CopyMemoryRenew (&m_dwData, pDataTmp, sizeof (m_dwData), pDataTmp);	/* è¿”ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ */
 
 	pRet = pDataTmp;
 	return pRet;

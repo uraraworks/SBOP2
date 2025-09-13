@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcMAP.cpp											 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(ƒ}ƒbƒv‰æ–Ê) À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcMAP.cpp											 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒãƒƒãƒ—ç”»é¢) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -74,9 +74,9 @@
 #include "StateProcMAP.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::CStateProcMAP									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::CStateProcMAP									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CStateProcMAP::CStateProcMAP()
@@ -103,9 +103,9 @@ CStateProcMAP::CStateProcMAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::~CStateProcMAP									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::~CStateProcMAP									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CStateProcMAP::~CStateProcMAP()
@@ -120,9 +120,9 @@ CStateProcMAP::~CStateProcMAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
@@ -141,9 +141,9 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::Init											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::Init											 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcMAP::Init(void)
@@ -186,9 +186,9 @@ void CStateProcMAP::Init(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::GetMsgLogRect									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒƒOƒEƒBƒ“ƒhƒE‚Ì‹éŒ`‚ğæ“¾							 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CStateProcMAP::GetMsgLogRect									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®çŸ©å½¢ã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
@@ -200,9 +200,9 @@ void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CStateProcMAP::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::TimerProc(void)
@@ -230,7 +230,7 @@ BOOL CStateProcMAP::TimerProc(void)
 	if (dwTime > 20 * 1000) {
 		CPacketCONNECT_KEEPALIVE Packet;
 
-		/* ¶‘¶Šm”F’Ê’m‚ğ‘—M */
+		/* ç”Ÿå­˜ç¢ºèªé€šçŸ¥ã‚’é€ä¿¡ */
 		m_dwLastTimeKeepAlive = timeGetTime ();
 		Packet.Make (m_dwLastTimeKeepAlive);
 		m_pSock->Send (&Packet);
@@ -244,7 +244,7 @@ BOOL CStateProcMAP::TimerProc(void)
 		}
 		if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
 			if (bResult == FALSE) {
-				/* –hŒä‰ğœ */
+				/* é˜²å¾¡è§£é™¤ */
 				DefenseOff ();
 			}
 		} else {
@@ -257,7 +257,7 @@ BOOL CStateProcMAP::TimerProc(void)
 			if (bResult == FALSE) {
 				CPacketCHAR_PARA1 PacketPara1;
 
-				/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN */
+				/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯ */
 				PacketPara1.Make (SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT, m_pPlayerChar->m_dwCharID, 0);
 				m_pSock->Send (&PacketPara1);
 				m_bSendCheckMapEvent = TRUE;
@@ -265,11 +265,11 @@ BOOL CStateProcMAP::TimerProc(void)
 		}
 	}
 
-	/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[ˆ— */
+	/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼å‡¦ç† */
 	TimerProcSleepTimer ();
-	/* —­‚ßUŒ‚ˆ— */
+	/* æºœã‚æ”»æ’ƒå‡¦ç† */
 	TimerProcChargeAtack ();
-	/* ƒQ[ƒW‰ñ•œ */
+	/* ã‚²ãƒ¼ã‚¸å›å¾© */
 	TimerProcGauge ();
 
 	return bRet;
@@ -277,17 +277,17 @@ BOOL CStateProcMAP::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::KeyProc											 */
-/* “à—e		:ƒL[ˆ—														 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CStateProcMAP::KeyProc											 */
+/* å†…å®¹		:ã‚­ãƒ¼å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CStateProcMAP::KeyProc(
-	BYTE byCode,		/* [in] ƒCƒxƒ“ƒg */
-	BOOL bDown)			/* [in] ‰Ÿ‰ºó‘Ô */
+	BYTE byCode,		/* [in] ã‚¤ãƒ™ãƒ³ãƒˆ */
+	BOOL bDown)			/* [in] æŠ¼ä¸‹çŠ¶æ…‹ */
 {
 	if ((byCode == 0) && (bDown == FALSE)) {
-		/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[‰ğœ‚Ìˆ×‚ÉŠÔXV */
+		/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼è§£é™¤ã®ç‚ºã«æ™‚é–“æ›´æ–° */
 		m_dwLastKeyInput = timeGetTime ();
 		return;
 	}
@@ -297,9 +297,9 @@ void CStateProcMAP::KeyProc(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG)								 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsg										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG)								 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnWindowMsg(int nType, DWORD dwPara)
@@ -308,22 +308,22 @@ void CStateProcMAP::OnWindowMsg(int nType, DWORD dwPara)
 
 	bClose = FALSE;
 	switch (nType) {
-	case WINDOWTYPE_CHAT:							bClose = OnWindowMsgCHAT						(dwPara);	break;	/* ƒ`ƒƒƒbƒg“ü—Í */
-	case WINDOWTYPE_SYSTEMMENU:						bClose = OnWindowMsgSYSTEMMENU					(dwPara);	break;	/* ƒVƒXƒeƒ€ƒƒjƒ…[ */
-	case WINDOWTYPE_SETCOLOR:						bClose = OnWindowMsgSETCOLOR					(dwPara);	break;	/* –¼‘O‚Æ”­Œ¾F‚Ìİ’è */
-	case WINDOWTYPE_SETDRAWMODE:					bClose = OnWindowMsgSETDRAWMODE					(dwPara);	break;	/* •\¦“à—e‚Ìİ’è */
-	case WINDOWTYPE_ITEMMENU:						bClose = OnWindowMsgITEMMENU					(dwPara);	break;	/* ƒAƒCƒeƒ€ƒƒjƒ…[ */
-	case WINDOWTYPE_ITEMMENU_SELECT:				bClose = OnWindowMsgITEMMENU_SELECT				(dwPara);	break;	/* ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[ */
-	case WINDOWTYPE_OPTION:							bClose = OnWindowMsgOPTION						(dwPara);	break;	/* ƒIƒvƒVƒ‡ƒ“ */
-	case WINDOWTYPE_OPTION_VIEWSET:					bClose = OnWindowMsgOPTION_VIEWSET				(dwPara);	break;	/* ƒIƒvƒVƒ‡ƒ“-•\¦İ’è */
-	case WINDOWTYPE_OPTION_INPUTSET:				bClose = OnWindowMsgOPTION_INPUTSET				(dwPara);	break;	/* ƒIƒvƒVƒ‡ƒ“-“ü—Íİ’è */
-	case WINDOWTYPE_OPTION_TASKBAR:					bClose = OnWindowMsgOPTION_TASKBAR				(dwPara);	break;	/* ƒIƒvƒVƒ‡ƒ“(”­Œ¾‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ) */
-	case WINDOWTYPE_OPTION_INPUTSET_SETDEVICE:		bClose = OnWindowMsgOPTION_INPUTSET_SETDEVICE	(dwPara);	break;	/* ƒIƒvƒVƒ‡ƒ“-“ü—Íİ’è-“ü—ÍƒfƒoƒCƒX‚Ìİ’è */
-	case WINDOWTYPE_OPTION_ACTIONSET:				bClose = OnWindowMsgOPTION_ACTIONSET			(dwPara);	break;	/* ƒIƒvƒVƒ‡ƒ“-“®ìİ’è */
-	case WINDOWTYPE_OPTION_ACTIONSET_SLEEPTIMER:	bClose = OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER	(dwPara);	break;	/* ƒIƒvƒVƒ‡ƒ“-“®ìİ’è-‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[‚Ìİ’è */
-	case WINDOWTYPE_COMMANDMENU:					bClose = OnWindowMsgCOMMANDMENU					(dwPara);	break;	/* ƒRƒ}ƒ“ƒhƒƒjƒ…[ */
-	case WINDOWTYPE_SWOON:							bClose = OnWindowMsgSWOON						(dwPara);	break;	/* ‹Câƒƒjƒ…[ */
-	case WINDOWTYPE_SKILLMENU:						bClose = OnWindowMsgSKILLMENU					(dwPara);	break;	/* ƒXƒLƒ‹ƒƒjƒ…[ */
+	case WINDOWTYPE_CHAT:							bClose = OnWindowMsgCHAT						(dwPara);	break;	/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ› */
+	case WINDOWTYPE_SYSTEMMENU:						bClose = OnWindowMsgSYSTEMMENU					(dwPara);	break;	/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	case WINDOWTYPE_SETCOLOR:						bClose = OnWindowMsgSETCOLOR					(dwPara);	break;	/* åå‰ã¨ç™ºè¨€è‰²ã®è¨­å®š */
+	case WINDOWTYPE_SETDRAWMODE:					bClose = OnWindowMsgSETDRAWMODE					(dwPara);	break;	/* è¡¨ç¤ºå†…å®¹ã®è¨­å®š */
+	case WINDOWTYPE_ITEMMENU:						bClose = OnWindowMsgITEMMENU					(dwPara);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	case WINDOWTYPE_ITEMMENU_SELECT:				bClose = OnWindowMsgITEMMENU_SELECT				(dwPara);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	case WINDOWTYPE_OPTION:							bClose = OnWindowMsgOPTION						(dwPara);	break;	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³ */
+	case WINDOWTYPE_OPTION_VIEWSET:					bClose = OnWindowMsgOPTION_VIEWSET				(dwPara);	break;	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®š */
+	case WINDOWTYPE_OPTION_INPUTSET:				bClose = OnWindowMsgOPTION_INPUTSET				(dwPara);	break;	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š */
+	case WINDOWTYPE_OPTION_TASKBAR:					bClose = OnWindowMsgOPTION_TASKBAR				(dwPara);	break;	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³(ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«) */
+	case WINDOWTYPE_OPTION_INPUTSET_SETDEVICE:		bClose = OnWindowMsgOPTION_INPUTSET_SETDEVICE	(dwPara);	break;	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®š */
+	case WINDOWTYPE_OPTION_ACTIONSET:				bClose = OnWindowMsgOPTION_ACTIONSET			(dwPara);	break;	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š */
+	case WINDOWTYPE_OPTION_ACTIONSET_SLEEPTIMER:	bClose = OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER	(dwPara);	break;	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š-ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ã®è¨­å®š */
+	case WINDOWTYPE_COMMANDMENU:					bClose = OnWindowMsgCOMMANDMENU					(dwPara);	break;	/* ã‚³ãƒãƒ³ãƒ‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	case WINDOWTYPE_SWOON:							bClose = OnWindowMsgSWOON						(dwPara);	break;	/* æ°—çµ¶ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	case WINDOWTYPE_SKILLMENU:						bClose = OnWindowMsgSKILLMENU					(dwPara);	break;	/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
 	}
 	if (bClose) {
 		m_pMgrWindow->Delete (nType);
@@ -332,9 +332,9 @@ void CStateProcMAP::OnWindowMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnLButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:CStateProcMAP::OnLButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnLButtonDown(int x, int y)
@@ -355,8 +355,8 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 
 	nType = m_pMgrData->GetAdminNotifyTypeL ();
 	switch (nType) {
-	case ADMINNOTIFYTYPE_CHARID:			/* ƒLƒƒƒ‰ID */
-	case ADMINNOTIFYTYPE_ACCOUNTID:			/* ƒAƒJƒEƒ“ƒgID */
+	case ADMINNOTIFYTYPE_CHARID:			/* ã‚­ãƒ£ãƒ©ID */
+	case ADMINNOTIFYTYPE_ACCOUNTID:			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
 		{
 			int i, nCount;
 			PCInfoCharCli pInfoChar;
@@ -381,7 +381,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		}
 		break;
 
-	case ADMINNOTIFYTYPE_MAPEDIT:			/* ƒ}ƒbƒv•ÒW(’Ê’m‚Í–³‚µ) */
+	case ADMINNOTIFYTYPE_MAPEDIT:			/* ãƒãƒƒãƒ—ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
 		{
 			BOOL bPile;
 			CPacketADMIN_MAP_SETPARTS Packet;
@@ -400,7 +400,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		}
 		break;
 
-	case ADMINNOTIFYTYPE_MAPSHADOWEDIT:		/* ƒ}ƒbƒv‰e•ÒW(’Ê’m‚Í–³‚µ) */
+	case ADMINNOTIFYTYPE_MAPSHADOWEDIT:		/* ãƒãƒƒãƒ—å½±ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
 		{
 			CPacketADMIN_MAP_SETMAPSHADOW Packet;
 
@@ -413,7 +413,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		}
 		break;
 
-	case ADMINNOTIFYTYPE_ITEMID:			/* ƒAƒCƒeƒ€ID */
+	case ADMINNOTIFYTYPE_ITEMID:			/* ã‚¢ã‚¤ãƒ†ãƒ ID */
 		{
 			POINT ptTmp;
 			PCInfoItem pInfoItem;
@@ -433,14 +433,14 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		}
 		break;
 
-	case ADMINNOTIFYTYPE_POS:				/* ƒ}ƒbƒvÀ•W */
+	case ADMINNOTIFYTYPE_POS:				/* ãƒãƒƒãƒ—åº§æ¨™ */
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		break;
 
-	case ADMINNOTIFYTYPE_CHARPOS:			/* ƒLƒƒƒ‰À•W */
+	case ADMINNOTIFYTYPE_CHARPOS:			/* ã‚­ãƒ£ãƒ©åº§æ¨™ */
 		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
 		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
 		dwNotifyData = MAKELPARAM (y, x);
@@ -451,9 +451,9 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnRButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CStateProcMAP::OnRButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnRButtonDown(int x, int y)
@@ -473,7 +473,7 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
 
 	switch (m_pMgrData->GetAdminNotifyTypeR ()) {
-	case ADMINNOTIFYTYPE_MAPEDIT:			/* ƒ}ƒbƒv•ÒW(’Ê’m‚Í–³‚µ) */
+	case ADMINNOTIFYTYPE_MAPEDIT:			/* ãƒãƒƒãƒ—ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		bPile = m_pMgrData->GetEditMapPile ();
@@ -485,21 +485,21 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 		m_pMgrData->SetSelectMapPartsID (wTmp);
 		break;
 
-	case ADMINNOTIFYTYPE_MAPSHADOWEDIT:		/* ƒ}ƒbƒv‰e•ÒW(’Ê’m‚Í–³‚µ) */
+	case ADMINNOTIFYTYPE_MAPSHADOWEDIT:		/* ãƒãƒƒãƒ—å½±ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		wTmp = m_pMap->GetShadow (x, y);
 		m_pMgrData->SetSelectMapShadowID (wTmp);
 		break;
 
-	case ADMINNOTIFYTYPE_POS:				/* ƒ}ƒbƒvÀ•W */
+	case ADMINNOTIFYTYPE_POS:				/* ãƒãƒƒãƒ—åº§æ¨™ */
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, dwNotifyData);
 		break;
 
-	case ADMINNOTIFYTYPE_CHARPOS:			/* ƒLƒƒƒ‰À•W */
+	case ADMINNOTIFYTYPE_CHARPOS:			/* ã‚­ãƒ£ãƒ©åº§æ¨™ */
 		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
 		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
 		dwNotifyData = MAKELPARAM (y, x);
@@ -510,9 +510,9 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnRButtonDblClk									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDBLCLK)							 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CStateProcMAP::OnRButtonDblClk									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDBLCLK)							 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnRButtonDblClk(int x, int y)
@@ -530,14 +530,14 @@ void CStateProcMAP::OnRButtonDblClk(int x, int y)
 	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
 
 	switch (m_pMgrData->GetAdminNotifyTypeRR ()) {
-	case ADMINNOTIFYTYPE_POS:				/* ƒ}ƒbƒvÀ•W */
+	case ADMINNOTIFYTYPE_POS:				/* ãƒãƒƒãƒ—åº§æ¨™ */
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK, dwNotifyData);
 		break;
 
-	case ADMINNOTIFYTYPE_CHARPOS:			/* ƒLƒƒƒ‰À•W */
+	case ADMINNOTIFYTYPE_CHARPOS:			/* ã‚­ãƒ£ãƒ©åº§æ¨™ */
 		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
 		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
 		dwNotifyData = MAKELPARAM (y, x);
@@ -548,9 +548,9 @@ void CStateProcMAP::OnRButtonDblClk(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnMouseMove										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CStateProcMAP::OnMouseMove										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnMouseMove(int x, int y)
@@ -567,7 +567,7 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
 
 	switch (m_pMgrData->GetAdminNotifyTypeL ()) {
-	case ADMINNOTIFYTYPE_MAPEDIT:	/* ƒ}ƒbƒv•ÒW(’Ê’m‚Í–³‚µ) */
+	case ADMINNOTIFYTYPE_MAPEDIT:	/* ãƒãƒƒãƒ—ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
 		{
 			BOOL bPile;
 			WORD wMapParts;
@@ -596,7 +596,7 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 		}
 		break;
 
-	case ADMINNOTIFYTYPE_MAPSHADOWEDIT:		/* ƒ}ƒbƒv‰e•ÒW(’Ê’m‚Í–³‚µ) */
+	case ADMINNOTIFYTYPE_MAPSHADOWEDIT:		/* ãƒãƒƒãƒ—å½±ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
 		{
 			WORD wMapShadow;
 			DWORD dwMapShadowID;
@@ -623,9 +623,9 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnMainFrame										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/01/07														 */
+/* é–¢æ•°å	:CStateProcMAP::OnMainFrame										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2007/01/07														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
@@ -636,7 +636,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
 
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWMAPINFO:		/* ƒ}ƒbƒvî•ñXV */
+	case MAINFRAMEMSG_RENEWMAPINFO:		/* ãƒãƒƒãƒ—æƒ…å ±æ›´æ–° */
 		{
 			PCLayerMap pLayerMap;
 			CRect rcTmp;
@@ -653,12 +653,12 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		}
 		break;
 
-	case MAINFRAMEMSG_RENEWSTATUS:		/* ƒXƒe[ƒ^ƒXî•ñXV */
-	case MAINFRAMEMSG_RENEWCHARINFO:	/* ƒLƒƒƒ‰î•ñXV */
+	case MAINFRAMEMSG_RENEWSTATUS:		/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±æ›´æ–° */
+	case MAINFRAMEMSG_RENEWCHARINFO:	/* ã‚­ãƒ£ãƒ©æƒ…å ±æ›´æ–° */
 		m_pMgrWindow->Update ();
 		break;
 
-	case MAINFRAMEMSG_RENEWCHARCHAT:	/* ”­Œ¾“à—eXV */
+	case MAINFRAMEMSG_RENEWCHARCHAT:	/* ç™ºè¨€å†…å®¹æ›´æ–° */
 		{
 			PCInfoCharCli pInfoChar;
 			CmyString strTmp;
@@ -670,21 +670,21 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 			if (pInfoChar == m_pPlayerChar) {
 				KeyProc (0, FALSE);
 			}
-			strTmp.Format ("%sF%s", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar->m_strSpeak);
+			strTmp.Format ("%sï¼š%s", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar->m_strSpeak);
 			m_pDlgMsgLog->Add (strTmp, pInfoChar->m_clSpeak);
 		}
 		break;
 
-	case MAINFRAMEMSG_RENEWCHARCOUNT:	/* ƒLƒƒƒ‰”XV */
+	case MAINFRAMEMSG_RENEWCHARCOUNT:	/* ã‚­ãƒ£ãƒ©æ•°æ›´æ–° */
 		m_pMgrData->SetCharCount (dwParam);
 		m_pDlgDbg->Renew();
 		break;
 
-	case MAINFRAMEMSG_RENEWONLINECOUNT:	/* ƒIƒ“ƒ‰ƒCƒ“”XV */
+	case MAINFRAMEMSG_RENEWONLINECOUNT:	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°æ›´æ–° */
 		m_pDlgDbg->Renew();
 		break;
 
-	case MAINFRAMEMSG_RENEWSYSTEMMSG:	/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒWXV */
+	case MAINFRAMEMSG_RENEWSYSTEMMSG:	/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ›´æ–° */
 		{
 			int i, nCount;
 			PCLayerSystemMsg pLayerSystemMsg;
@@ -707,7 +707,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		}
 		break;
 
-	case MAINFRAMEMSG_RENEWADMINLEVEL:	/* ŠÇ—ÒŒ ŒÀ•ÏX */
+	case MAINFRAMEMSG_RENEWADMINLEVEL:	/* ç®¡ç†è€…æ¨©é™å¤‰æ›´ */
 		if (m_pAdminWindow) {
 			m_pMgrData->SetAdminWindow (NULL);
 			SAFE_DELETE (m_pAdminWindow);
@@ -719,15 +719,15 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		}
 		break;
 
-	case MAINFRAMEMSG_RENEWITEMINFO:	/* ƒAƒCƒeƒ€î•ñXV */
+	case MAINFRAMEMSG_RENEWITEMINFO:	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–° */
 		OnMainFrameRENEWITEMINFO (dwParam);
 		break;
 
-	case MAINFRAMEMSG_RENEWTALKEVENT:	/* ‰ï˜bƒCƒxƒ“ƒgî•ñXV */
+	case MAINFRAMEMSG_RENEWTALKEVENT:	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
 		OnMainFrameRENEWTALKEVENT (dwParam);
 		break;
 
-	case MAINFRAMEMSG_DAMAGE:			/* ƒ_ƒ[ƒW‚ğó‚¯‚½ */
+	case MAINFRAMEMSG_DAMAGE:			/* ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸ */
 		{
 			int nTmp;
 
@@ -753,9 +753,9 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnAdminMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CStateProcMAP::OnAdminMsg										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnAdminMsg(int nCode, DWORD dwPara)
@@ -767,9 +767,9 @@ void CStateProcMAP::OnAdminMsg(int nCode, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::TimerProcSleepTimer								 */
-/* “à—e		:ŠÔˆ—(‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[)										 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CStateProcMAP::TimerProcSleepTimer								 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼)										 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 void CStateProcMAP::TimerProcSleepTimer(void)
@@ -796,15 +796,15 @@ void CStateProcMAP::TimerProcSleepTimer(void)
 	}
 
 	switch (m_pPlayerChar->m_nMoveState) {
-	case CHARMOVESTATE_STAND:				/* —§‚¿ */
-	case CHARMOVESTATE_SIT:					/* À‚è’† */
-	case CHARMOVESTATE_SLEEPTIMER:			/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[’† */
+	case CHARMOVESTATE_STAND:				/* ç«‹ã¡ */
+	case CHARMOVESTATE_SIT:					/* åº§ã‚Šä¸­ */
+	case CHARMOVESTATE_SLEEPTIMER:			/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ä¸­ */
 		if (m_pPlayerChar->IsEnableMove () == FALSE) {
 			m_pPlayerChar->SetSleepTimer (FALSE);
 			break;
 		}
 		if (bSleepTime) {
-			/* ‰‰ñH */
+			/* åˆå›ï¼Ÿ */
 			if (m_pPlayerChar->m_bModeSleepTimer == FALSE) {
 				nState = CHARMOVESTATE_SLEEPTIMER;
 			}
@@ -813,7 +813,7 @@ void CStateProcMAP::TimerProcSleepTimer(void)
 		break;
 	}
 
-	/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[’†H */
+	/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ä¸­ï¼Ÿ */
 	if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_SLEEPTIMER) {
 		if (bSleepTime == FALSE) {
 			if (m_pPlayerChar->m_bModeSleepTimer) {
@@ -833,9 +833,9 @@ void CStateProcMAP::TimerProcSleepTimer(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::TimerProcChargeAtack							 */
-/* “à—e		:ŠÔˆ—(—­‚ßUŒ‚)												 */
-/* “ú•t		:2008/08/13														 */
+/* é–¢æ•°å	:CStateProcMAP::TimerProcChargeAtack							 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(æºœã‚æ”»æ’ƒ)												 */
+/* æ—¥ä»˜		:2008/08/13														 */
 /* ========================================================================= */
 
 void CStateProcMAP::TimerProcChargeAtack(void)
@@ -883,7 +883,7 @@ void CStateProcMAP::TimerProcChargeAtack(void)
 		return;
 	}
 
-	/* —­‚ßó‘ÔON‚ğ’Ê’m */
+	/* æºœã‚çŠ¶æ…‹ONã‚’é€šçŸ¥ */
 	Packet.Make (SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 1);
 	m_pSock->Send (&Packet);
 	m_pPlayerChar->m_bChargeAtack = TRUE;
@@ -893,7 +893,7 @@ Exit:
 	if (bCancel) {
 		if (m_pPlayerChar) {
 			m_pPlayerChar->m_bChargeAtack = FALSE;
-			/* —­‚ßó‘ÔOFF‚ğ’Ê’m */
+			/* æºœã‚çŠ¶æ…‹OFFã‚’é€šçŸ¥ */
 			Packet.Make (SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 0);
 			m_pSock->Send (&Packet);
 		}
@@ -904,9 +904,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::TimerProcGauge									 */
-/* “à—e		:ŠÔˆ—(ƒQ[ƒW‰ñ•œ)											 */
-/* “ú•t		:2008/08/23														 */
+/* é–¢æ•°å	:CStateProcMAP::TimerProcGauge									 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(ã‚²ãƒ¼ã‚¸å›å¾©)											 */
+/* æ—¥ä»˜		:2008/08/23														 */
 /* ========================================================================= */
 
 void CStateProcMAP::TimerProcGauge(void)
@@ -935,7 +935,7 @@ void CStateProcMAP::TimerProcGauge(void)
 	dwTime -= 750;
 	fAverage = (float)dwTime * 100.0f / 5000.0f;
 
-	/* ƒAƒ^ƒbƒNƒQ[ƒW‚Ìˆ— */
+	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ã®å‡¦ç† */
 	{
 		nTmp = (int)(MAX_ATACKGAUGE * fAverage * 0.02f);
 		if (nTmp > 0) {
@@ -946,7 +946,7 @@ void CStateProcMAP::TimerProcGauge(void)
 		}
 	}
 
-	/* ƒK[ƒhƒQ[ƒW‚Ìˆ— */
+	/* ã‚¬ãƒ¼ãƒ‰ã‚²ãƒ¼ã‚¸ã®å‡¦ç† */
 	{
 		nTmp = (int)(MAX_DEFENSEGAUGE * fAverage * 0.02f);
 		if (nTmp > 0) {
@@ -962,7 +962,7 @@ void CStateProcMAP::TimerProcGauge(void)
 		m_dwLastTimeGauge = 0;
 
 	} else {
-		/* ƒAƒ^ƒbƒNƒQ[ƒW‚ÆƒK[ƒhƒQ[ƒW‚ÌÅ‘å‚ª“¯‚¶ŠÔ‚Í“¯‚¶ˆ—‚ÅB */
+		/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ã¨ã‚¬ãƒ¼ãƒ‰ã‚²ãƒ¼ã‚¸ã®æœ€å¤§ãŒåŒã˜é–“ã¯åŒã˜å‡¦ç†ã§ã€‚ */
 		if (nTmp > 0) {
 			m_dwLastTimeGauge = timeGetTime () - 750;
 		}
@@ -971,10 +971,10 @@ void CStateProcMAP::TimerProcGauge(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::IsKeyInputEnable								 */
-/* “à—e		:ƒL[“ü—Í‚ğ‹–‰Â‚·‚é‚©”»’è										 */
-/* “ú•t		:2008/06/29														 */
-/* –ß‚è’l	:TRUE:‹–‰Â														 */
+/* é–¢æ•°å	:CStateProcMAP::IsKeyInputEnable								 */
+/* å†…å®¹		:ã‚­ãƒ¼å…¥åŠ›ã‚’è¨±å¯ã™ã‚‹ã‹åˆ¤å®š										 */
+/* æ—¥ä»˜		:2008/06/29														 */
+/* æˆ»ã‚Šå€¤	:TRUE:è¨±å¯														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::IsKeyInputEnable(void)
@@ -1003,9 +1003,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnUp											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnUp											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnUp(BOOL bDown)
@@ -1055,9 +1055,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnDown											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnDown											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnDown(BOOL bDown)
@@ -1107,9 +1107,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnLeft											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnLeft											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnLeft(BOOL bDown)
@@ -1159,9 +1159,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnRight											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnRight											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnRight(BOOL bDown)
@@ -1211,9 +1211,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnX												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnX												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnX(BOOL bDown)
@@ -1242,14 +1242,14 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 		goto Exit;
 	}
 	bResult = m_pPlayerChar->IsChgWait ();
-	/* ó‘Ô•ÏX‘Ò‚¿H */
+	/* çŠ¶æ…‹å¤‰æ›´å¾…ã¡ï¼Ÿ */
 	if (bResult) {
 		goto Exit;
 	}
 	if (bDown) {
 		if ((m_dwStartChargeTime == 0) && (m_pPlayerChar->m_bChargeAtack == FALSE)) {
 			if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE) {
-//Todo:b’è
+//Todo:æš«å®š
 				if (m_pPlayerChar->m_wAtackGauge > 10) {
 					m_pPlayerChar->m_wAtackGauge -= 10;
 					m_dwLastTimeGauge = timeGetTime ();
@@ -1266,7 +1266,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 					m_pPlayerChar->SetChgWait (TRUE);
 					PacketCHAR_STATE.Make (m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLEATACK);
 					m_pSock->Send (&PacketCHAR_STATE);
-					/* —­‚ßŠJn */
+					/* æºœã‚é–‹å§‹ */
 					m_dwStartChargeTime = timeGetTime ();
 				}
 			}
@@ -1275,7 +1275,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	}
 	if (m_dwStartChargeTime) {
 		if (m_pPlayerChar->m_bChargeAtack) {
-			/* —­‚ßUŒ‚ */
+			/* æºœã‚æ”»æ’ƒ */
 			m_pPlayerChar->SetChgWait (TRUE);
 			PacketCHAR_STATE.Make (m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLEATACK);
 			m_pSock->Send (&PacketCHAR_STATE);
@@ -1296,7 +1296,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	m_dwLastKeyInput = timeGetTime ();
 
 	switch (m_pPlayerChar->m_nMoveState) {
-	case CHARMOVESTATE_STAND:			/* —§‚¿ */
+	case CHARMOVESTATE_STAND:			/* ç«‹ã¡ */
 		dwFrontCharID = GetTalkCharID (m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
 		bResult = OnXChar (dwFrontCharID);
 		if (bResult) {
@@ -1307,7 +1307,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 		m_pPlayerChar->RenewBlockMapArea (ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
 		nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
 		for (i = 0; i < nCount; i ++) {
-			/* i“ü‰Â”\‚©ƒ`ƒFƒbƒN */
+			/* é€²å…¥å¯èƒ½ã‹ãƒã‚§ãƒƒã‚¯ */
 			bResult |= !m_pMap->IsMove (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
 		}
 		bResult = !bResult;
@@ -1323,7 +1323,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 			}
 
 			if (i < nCount) {
-				/* ƒAƒCƒeƒ€E‚¤—v‹ */
+				/* ã‚¢ã‚¤ãƒ†ãƒ æ‹¾ã†è¦æ±‚ */
 				PacketCHAR_REQ_PUTGET.Make (m_pPlayerChar->m_dwCharID, 0);
 				m_pSock->Send (&PacketCHAR_REQ_PUTGET);
 				break;
@@ -1346,9 +1346,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnZ												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnZ												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnZ(BOOL bDown)
@@ -1389,7 +1389,7 @@ BOOL CStateProcMAP::OnZ(BOOL bDown)
 		bRet = TRUE;
 
 		m_pPlayerChar->m_bChargeAtack = FALSE;
-		/* —­‚ßó‘ÔOFF‚ğ’Ê’m */
+		/* æºœã‚çŠ¶æ…‹OFFã‚’é€šçŸ¥ */
 		PacketCHAR_PARA1.Make (SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 0);
 		m_pSock->Send (&PacketCHAR_PARA1);
 		m_dwStartChargeTime = 0;
@@ -1402,7 +1402,7 @@ BOOL CStateProcMAP::OnZ(BOOL bDown)
 		PacketCHAR_REQ_TAIL.Make (m_pPlayerChar->m_dwCharID, dwCharID, TRUE);
 		m_pSock->Send (&PacketCHAR_REQ_TAIL);
 	} else {
-		/* –hŒä‰ğœ */
+		/* é˜²å¾¡è§£é™¤ */
 		DefenseOff ();
 	}
 
@@ -1413,9 +1413,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnS												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(S)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnS												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(S)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnS(BOOL bDown)
@@ -1425,9 +1425,9 @@ BOOL CStateProcMAP::OnS(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnR												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(R)												 */
-/* “ú•t		:2007/04/20														 */
+/* é–¢æ•°å	:CStateProcMAP::OnR												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(R)												 */
+/* æ—¥ä»˜		:2007/04/20														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnR(BOOL bDown)
@@ -1449,20 +1449,20 @@ BOOL CStateProcMAP::OnR(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 	bResult = m_pPlayerChar->IsChgWait ();
-	/* ó‘Ô•ÏX‘Ò‚¿H */
+	/* çŠ¶æ…‹å¤‰æ›´å¾…ã¡ï¼Ÿ */
 	if (bResult) {
 		goto Exit;
 	}
 
 	switch (m_pPlayerChar->m_nMoveState) {
-	case CHARMOVESTATE_STAND:		/* —§‚¿ */
+	case CHARMOVESTATE_STAND:		/* ç«‹ã¡ */
 		if (m_pPlayerChar->m_dwFrontCharID != 0) {
-			/* ‚Â‚¢‚Ä‚¢‚­’†‚ÍÀ‚ê‚È‚¢ */
+			/* ã¤ã„ã¦ã„ãä¸­ã¯åº§ã‚Œãªã„ */
 			goto Exit;
 		}
 		m_pPlayerChar->ChgMoveState (CHARMOVESTATE_SIT);
 		break;
-	case CHARMOVESTATE_SIT:			/* À‚è’† */
+	case CHARMOVESTATE_SIT:			/* åº§ã‚Šä¸­ */
 		m_pPlayerChar->ChgMoveState (CHARMOVESTATE_STAND);
 		break;
 	default:
@@ -1480,9 +1480,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnB												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(B)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CStateProcMAP::OnB												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnB(BOOL bDown)
@@ -1519,9 +1519,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnN												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(N)												 */
-/* “ú•t		:2008/07/14														 */
+/* é–¢æ•°å	:CStateProcMAP::OnN												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(N)												 */
+/* æ—¥ä»˜		:2008/07/14														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnN(BOOL bDown)
@@ -1544,10 +1544,10 @@ BOOL CStateProcMAP::OnN(BOOL bDown)
 
 	if (m_pMgrData->GetDrawMode () != 0) {
 		m_pMgrData->SetDrawMode (0);
-		AddSystemMsg (FALSE, "–¼‘O”ñ•\¦‚É•ÏX‚³‚ê‚Ü‚µ‚½@‰ğœ‚Í[ N ]ƒL[", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "åå‰éè¡¨ç¤ºã«å¤‰æ›´ã•ã‚Œã¾ã—ãŸã€€è§£é™¤ã¯[ N ]ã‚­ãƒ¼", RGB (255, 255, 255));
 	} else {
 		m_pMgrData->SetDrawMode (1);
-		AddSystemMsg (FALSE, "–¼‘O‚ğ•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "åå‰ã‚’è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 	}
 	m_pMgrData->SaveIniData ();
 
@@ -1557,9 +1557,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnV												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(V)												 */
-/* “ú•t		:2008/11/18														 */
+/* é–¢æ•°å	:CStateProcMAP::OnV												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(V)												 */
+/* æ—¥ä»˜		:2008/11/18														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnV(BOOL bDown)
@@ -1582,10 +1582,10 @@ BOOL CStateProcMAP::OnV(BOOL bDown)
 
 	if (m_pMgrData->GetOptionViewItemName ()) {
 		m_pMgrData->SetOptionViewItemName (FALSE);
-		AddSystemMsg (FALSE, "ƒAƒCƒeƒ€–¼‚ğ”ñ•\¦‚É‚µ‚Ü‚µ‚½@‰ğœ‚Í[ V ]ƒL[", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "ã‚¢ã‚¤ãƒ†ãƒ åã‚’éè¡¨ç¤ºã«ã—ã¾ã—ãŸã€€è§£é™¤ã¯[ V ]ã‚­ãƒ¼", RGB (255, 255, 255));
 	} else {
 		m_pMgrData->SetOptionViewItemName (TRUE);
-		AddSystemMsg (FALSE, "ƒAƒCƒeƒ€–¼‚ğ•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 	}
 	m_pMgrData->SaveIniData ();
 
@@ -1595,9 +1595,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnF												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(F)												 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CStateProcMAP::OnF												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(F)												 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnF(BOOL bDown)
@@ -1632,9 +1632,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnJ												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(J)												 */
-/* “ú•t		:2009/04/02														 */
+/* é–¢æ•°å	:CStateProcMAP::OnJ												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(J)												 */
+/* æ—¥ä»˜		:2009/04/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnJ(BOOL bDown)
@@ -1669,9 +1669,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnL												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(L)												 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CStateProcMAP::OnL												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(L)												 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnL(BOOL bDown)
@@ -1706,9 +1706,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnAt											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(@)												 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CStateProcMAP::OnAt											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(@)												 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnAt(BOOL bDown)
@@ -1740,9 +1740,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnEnter											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Enter)											 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcMAP::OnEnter											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Enter)											 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnEnter(BOOL bDown)
@@ -1774,9 +1774,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnEscape										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Escape)											 */
-/* “ú•t		:2007/06/19														 */
+/* é–¢æ•°å	:CStateProcMAP::OnEscape										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Escape)											 */
+/* æ—¥ä»˜		:2007/06/19														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnEscape(BOOL bDown)
@@ -1809,9 +1809,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnTab											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Tab)												 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CStateProcMAP::OnTab											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Tab)												 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnTab(BOOL bDown)
@@ -1835,7 +1835,7 @@ BOOL CStateProcMAP::OnTab(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 	bResult = m_pPlayerChar->IsChgWait ();
-	/* ó‘Ô•ÏX‘Ò‚¿H */
+	/* çŠ¶æ…‹å¤‰æ›´å¾…ã¡ï¼Ÿ */
 	if (bResult) {
 		goto Exit;
 	}
@@ -1843,34 +1843,34 @@ BOOL CStateProcMAP::OnTab(BOOL bDown)
 	if (bResult == FALSE) {
 		goto Exit;
 	}
-	/* À‚è’†H */
+	/* åº§ã‚Šä¸­ï¼Ÿ */
 	if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_SIT) {
 		goto Exit;
 	}
 
-	/* ’N‚©‚É•t‚¢‚Äs‚Á‚Ä‚¢‚éH */
+	/* èª°ã‹ã«ä»˜ã„ã¦è¡Œã£ã¦ã„ã‚‹ï¼Ÿ */
 	if (m_pPlayerChar->m_dwFrontCharID) {
-		AddSystemMsg (FALSE, "•t‚¢‚Äs‚Á‚Ä‚¢‚é‚Íƒ‚[ƒh•ÏX‚Å‚«‚Ü‚¹‚ñ", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "ä»˜ã„ã¦è¡Œã£ã¦ã„ã‚‹æ™‚ã¯ãƒ¢ãƒ¼ãƒ‰å¤‰æ›´ã§ãã¾ã›ã‚“", RGB (255, 255, 255));
 		goto Exit;
 	}
 
 	switch (m_pPlayerChar->m_nMoveState) {
-	case CHARMOVESTATE_STAND:			/* —§‚¿ */
+	case CHARMOVESTATE_STAND:			/* ç«‹ã¡ */
 		bResult = m_pMap->IsEnableBattle ();
 		if (bResult == FALSE) {
-			AddSystemMsg (FALSE, "‚±‚Ìƒ}ƒbƒv‚Å‚Íí“¬‚Å‚«‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ã“ã®ãƒãƒƒãƒ—ã§ã¯æˆ¦é—˜ã§ãã¾ã›ã‚“", RGB (255, 255, 255));
 			goto Exit;
 		}
 		m_pPlayerChar->SetMoveState (CHARMOVESTATE_BATTLE);
 		m_dwLastTimeGauge = timeGetTime ();
 		break;
-	case CHARMOVESTATE_BATTLE:			/* í“¬’† */
+	case CHARMOVESTATE_BATTLE:			/* æˆ¦é—˜ä¸­ */
 		m_pPlayerChar->SetMoveState (CHARMOVESTATE_STAND);
 
 		if (m_dwStartChargeTime || m_pPlayerChar->m_bChargeAtack) {
 			m_dwStartChargeTime = 0;
 			m_pPlayerChar->m_bChargeAtack = FALSE;
-			/* —­‚ßó‘ÔOFF‚ğ’Ê’m */
+			/* æºœã‚çŠ¶æ…‹OFFã‚’é€šçŸ¥ */
 			PacketCHAR_PARA1.Make (SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 0);
 			m_pSock->Send (&PacketCHAR_PARA1);
 		}
@@ -1890,9 +1890,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnShift											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Shift)											 */
-/* “ú•t		:2007/07/28														 */
+/* é–¢æ•°å	:CStateProcMAP::OnShift											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Shift)											 */
+/* æ—¥ä»˜		:2007/07/28														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnShift(BOOL bDown)
@@ -1921,7 +1921,7 @@ BOOL CStateProcMAP::OnShift(BOOL bDown)
 			goto Exit;
 		}
 		pLayerMap->SetCenterPos (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY);
-		AddSystemMsg (FALSE, "‰ŠúˆÊ’u‚É‹“_‚ğ–ß‚µ‚Ü‚µ‚½", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "åˆæœŸä½ç½®ã«è¦–ç‚¹ã‚’æˆ»ã—ã¾ã—ãŸ", RGB (255, 255, 255));
 	}
 
 	bRet = TRUE;
@@ -1931,9 +1931,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnCtrl											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Ctrl)												 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CStateProcMAP::OnCtrl											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Ctrl)												 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnCtrl(BOOL bDown)
@@ -1973,12 +1973,12 @@ BOOL CStateProcMAP::OnCtrl(BOOL bDown)
 
 	switch (m_nScrollMode) {
 	case 0:
-		strTmp = "ƒXƒNƒ[ƒ‹‚µ‚Ü‚·";
+		strTmp = "ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ã¾ã™";
 		pLayerMap->SetCenterPos (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY);
 		pLayerMap->SetScrollMode (TRUE, 0);
 		break;
 	case 1:
-		strTmp = "‰æ–ÊŒÅ’è‚µ‚Ü‚·";
+		strTmp = "ç”»é¢å›ºå®šã—ã¾ã™";
 		pLayerMap->SetScrollMode (FALSE, 2);
 		break;
 	}
@@ -2001,9 +2001,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnSpace											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Space)											 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CStateProcMAP::OnSpace											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Space)											 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnSpace(BOOL bDown)
@@ -2026,7 +2026,7 @@ BOOL CStateProcMAP::OnSpace(BOOL bDown)
 	m_dwLastKeyInput = timeGetTime ();
 
 	switch (m_pPlayerChar->m_nMoveState) {
-	case CHARMOVESTATE_SWOON:	/* ‹Câ’† */
+	case CHARMOVESTATE_SWOON:	/* æ°—çµ¶ä¸­ */
 		pWnd = (PCWindowCOMMANDMENU)m_pMgrWindow->GetWindow (WINDOWTYPE_SWOON);
 		if (pWnd) {
 			goto Exit;
@@ -2052,9 +2052,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnMgrDrawSTART_FADEIN							 */
-/* “à—e		:ƒtƒF[ƒhƒCƒ“ŠJn												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CStateProcMAP::OnMgrDrawSTART_FADEIN							 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³é–‹å§‹												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnMgrDrawSTART_FADEIN(DWORD dwPara)
@@ -2087,9 +2087,9 @@ void CStateProcMAP::OnMgrDrawSTART_FADEIN(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnMgrDrawEND_FADEIN								 */
-/* “à—e		:ƒtƒF[ƒhƒCƒ“Š®—¹												 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CStateProcMAP::OnMgrDrawEND_FADEIN								 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³å®Œäº†												 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnMgrDrawEND_FADEIN(DWORD dwPara)
@@ -2108,18 +2108,18 @@ void CStateProcMAP::OnMgrDrawEND_FADEIN(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::MoveProc										 */
-/* “à—e		:ˆÚ“®ˆ—														 */
-/* “ú•t		:2006/11/01														 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALSE:–¢ˆ—										 */
+/* é–¢æ•°å	:CStateProcMAP::MoveProc										 */
+/* å†…å®¹		:ç§»å‹•å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/11/01														 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALSE:æœªå‡¦ç†										 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::MoveProc(
-	int x,				/* [in] Œ»İˆÊ’u(ƒˆƒR) */
-	int y,				/* [in] Œ»İˆÊ’u(ƒ^ƒe) */
-	int xx,				/* [in] ‘Œ¸(ƒˆƒR) */
-	int yy,				/* [in] ‘Œ¸(ƒ^ƒe) */
-	int nDirection)		/* [in] Œü‚« */
+	int x,				/* [in] ç¾åœ¨ä½ç½®(ãƒ¨ã‚³) */
+	int y,				/* [in] ç¾åœ¨ä½ç½®(ã‚¿ãƒ†) */
+	int xx,				/* [in] å¢—æ¸›(ãƒ¨ã‚³) */
+	int yy,				/* [in] å¢—æ¸›(ã‚¿ãƒ†) */
+	int nDirection)		/* [in] å‘ã */
 {
 	int nResult, nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
 		anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
@@ -2154,7 +2154,7 @@ BOOL CStateProcMAP::MoveProc(
 	if (pMap == NULL) {
 		goto Exit;
 	}
-	/* ˆÚ“®‚¹‚¸‚ÉƒXƒNƒ[ƒ‹‚¾‚¯H */
+	/* ç§»å‹•ã›ãšã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã ã‘ï¼Ÿ */
 	bResult = pMgrKeyInput->IsInput (VK_CONTROL);
 	if (bResult) {
 		bResult = pLayerMap->IsScrollArea (x, y, nDirection);
@@ -2169,23 +2169,23 @@ BOOL CStateProcMAP::MoveProc(
 		goto Exit;
 	}
 	bResult = m_pPlayerChar->IsMove ();
-	/* ˆÚ“®’†H */
+	/* ç§»å‹•ä¸­ï¼Ÿ */
 	if (bResult) {
 		goto Exit;
 	}
 	bResult = m_pPlayerChar->IsChgWait ();
-	/* ó‘Ô•ÏX‘Ò‚¿H */
+	/* çŠ¶æ…‹å¤‰æ›´å¾…ã¡ï¼Ÿ */
 	if (bResult) {
 		goto Exit;
 	}
-	/* ’N‚©‚É•t‚¢‚Äs‚Á‚Ä‚¢‚éH */
+	/* èª°ã‹ã«ä»˜ã„ã¦è¡Œã£ã¦ã„ã‚‹ï¼Ÿ */
 	if (m_pPlayerChar->m_dwFrontCharID) {
 		goto Exit;
 	}
 	bResult = m_pPlayerChar->IsEnableMove ();
 	if (bResult == FALSE) {
 		if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-			/* –hŒä’†‚ÍŒü‚«‚Ì•ÏX‚¾‚¯ */
+			/* é˜²å¾¡ä¸­ã¯å‘ãã®å¤‰æ›´ã ã‘ */
 			m_pPlayerChar->ChgDirection (nDirection);
 			goto ExitSend;
 		}
@@ -2217,7 +2217,7 @@ BOOL CStateProcMAP::MoveProc(
 			break;
 		}
 		if (bResult) {
-			/* Î‚ß‚ÉˆÚ“®‚·‚é‚ÍÅŒã‚Ì4•ûŒü‚ğˆÛ‚·‚é */
+			/* æ–œã‚ã«ç§»å‹•ã™ã‚‹æ™‚ã¯æœ€å¾Œã®4æ–¹å‘ã‚’ç¶­æŒã™ã‚‹ */
 			nDirectionView = nDirectionBack;
 		}
 	}
@@ -2229,12 +2229,12 @@ BOOL CStateProcMAP::MoveProc(
 	}
 	m_pPlayerChar->ChgDirection (nDirectionView);
 
-	/* ˆÚ“®‚¹‚¸‚ÉŒü‚«•ÏX‚¾‚¯H */
+	/* ç§»å‹•ã›ãšã«å‘ãå¤‰æ›´ã ã‘ï¼Ÿ */
 	bResult = pMgrKeyInput->IsInput (VK_SHIFT);
 	if (bResult) {
 		goto ExitSend;
 	}
-	/* À‚Á‚Ä‚¢‚éH */
+	/* åº§ã£ã¦ã„ã‚‹ï¼Ÿ */
 	if ((m_pPlayerChar->m_nMoveState == CHARMOVESTATE_SIT) ||
 		(m_pPlayerChar->m_nMoveState == CHARMOVESTATE_SLEEPTIMER)) {
 		x = m_pPlayerChar->m_nMapX;
@@ -2245,7 +2245,7 @@ BOOL CStateProcMAP::MoveProc(
 	nTmp = nDirection;
 	bResult = m_pMgrData->GetMoveNoBlock ();
 	if (bResult == FALSE) {
-		/* “–‚½‚è”»’è–³Œøó‘Ô‚Å‚È‚¢‚È‚çƒ`ƒFƒbƒN */
+		/* å½“ãŸã‚Šåˆ¤å®šç„¡åŠ¹çŠ¶æ…‹ã§ãªã„ãªã‚‰ãƒã‚§ãƒƒã‚¯ */
 		bResult = m_pLibInfoChar->IsMove (m_pPlayerChar, nDirection);
 	}
 	if (bResult) {
@@ -2263,7 +2263,7 @@ BOOL CStateProcMAP::MoveProc(
 			goto Exit;
 		}
 	}
-	/* 1•à‘O‚É‰Ÿ‚¹‚éƒLƒƒƒ‰‚ª‚¢‚éH */
+	/* 1æ­©å‰ã«æŠ¼ã›ã‚‹ã‚­ãƒ£ãƒ©ãŒã„ã‚‹ï¼Ÿ */
 	dwCharID = m_pLibInfoChar->GetFrontCharIDPush (m_pPlayerChar->m_dwCharID, nDirection);
 	if (dwCharID) {
 		PacketREQ_PUSH.Make (dwCharID, nDirection);
@@ -2295,7 +2295,7 @@ BOOL CStateProcMAP::MoveProc(
 		break;
 	}
 	if (anDirection.GetSize () == 1) {
-		/* ‚Ô‚Â‚©‚éH */
+		/* ã¶ã¤ã‹ã‚‹ï¼Ÿ */
 		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
 		if (bResult) {
 			bRet = TRUE;
@@ -2334,7 +2334,7 @@ BOOL CStateProcMAP::MoveProc(
 	m_pPlayerChar->ChgMoveState (nState);
 
 	if (nDirection <= 1) {
-		/* d‚È‚è’²® */
+		/* é‡ãªã‚Šèª¿æ•´ */
 		m_pLibInfoChar->SortY ();
 	}
 
@@ -2342,7 +2342,7 @@ BOOL CStateProcMAP::MoveProc(
 	if (nResult >= 0) {
 		pLayerMap->Scroll (nResult);
 	}
-	/* ‰æ–ÊŠO‚Éo‚éH */
+	/* ç”»é¢å¤–ã«å‡ºã‚‹ï¼Ÿ */
 	bResult = pLayerMap->IsInScreen (x + xx, y + yy);
 	if (bResult == FALSE) {
 		m_nScrollMode = 0;
@@ -2362,17 +2362,17 @@ BOOL CStateProcMAP::MoveProc(
 ExitSend:
 	m_pPlayerChar->m_bRedraw = TRUE;
 	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirectionView))) {
-		/* ƒT[ƒo‚ÖˆÚ“®’Ê’m */
+		/* ã‚µãƒ¼ãƒã¸ç§»å‹•é€šçŸ¥ */
 		Packet.Make (m_pPlayerChar->m_dwMapID, m_pPlayerChar->m_dwCharID, nDirectionView, x, y, FALSE);
 		m_pSock->Send (&Packet);
 	}
 
 	if ((xBack != x) || (yBack != y)) {
-		/* ƒ}ƒbƒvÀ•W‚ğ‹éŒ`‚Åæ“¾ */
+		/* ãƒãƒƒãƒ—åº§æ¨™ã‚’çŸ©å½¢ã§å–å¾— */
 		m_pPlayerChar->GetMapPosRect (rcTmp);
 		bResult = pMap->IsHitMapEvent (&rcTmp);
 		if (bResult) {
-			/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN—\–ñ */
+			/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯äºˆç´„ */
 			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
 			m_bSendCheckMapEvent = FALSE;
 		}
@@ -2395,9 +2395,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgCHAT									 */
-/* “à—e		:ƒ`ƒƒƒbƒg“ü—Í													 */
-/* “ú•t		:2007/06/20														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgCHAT									 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆå…¥åŠ›													 */
+/* æ—¥ä»˜		:2007/06/20														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgCHAT(DWORD dwPara)
@@ -2432,9 +2432,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgSYSTEMMENU							 */
-/* “à—e		:ƒVƒXƒeƒ€ƒƒjƒ…[												 */
-/* “ú•t		:2007/06/20														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgSYSTEMMENU							 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼												 */
+/* æ—¥ä»˜		:2007/06/20														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgSYSTEMMENU(DWORD dwPara)
@@ -2449,10 +2449,10 @@ BOOL CStateProcMAP::OnWindowMsgSYSTEMMENU(DWORD dwPara)
 	}
 
 	switch (dwPara) {
-	case 0:		/* –¼‘O‚Æ”­Œ¾F‚Ìİ’è */
+	case 0:		/* åå‰ã¨ç™ºè¨€è‰²ã®è¨­å®š */
 		m_pMgrWindow->MakeWindowSETCOLOR ();
 		break;
-	case 1:		/* ƒIƒvƒVƒ‡ƒ“ */
+	case 1:		/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³ */
 		m_pMgrWindow->MakeWindowOPTION ();
 		break;
 	default:
@@ -2466,9 +2466,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgSETCOLOR								 */
-/* “à—e		:–¼‘O‚Æ”­Œ¾F‚Ìİ’è												 */
-/* “ú•t		:2007/06/24														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgSETCOLOR								 */
+/* å†…å®¹		:åå‰ã¨ç™ºè¨€è‰²ã®è¨­å®š												 */
+/* æ—¥ä»˜		:2007/06/24														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgSETCOLOR(DWORD dwPara)
@@ -2492,9 +2492,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgSETDRAWMODE							 */
-/* “à—e		:•\¦“à—e‚Ìİ’è													 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgSETDRAWMODE							 */
+/* å†…å®¹		:è¡¨ç¤ºå†…å®¹ã®è¨­å®š													 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgSETDRAWMODE(DWORD dwPara)
@@ -2517,9 +2517,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgITEMMENU								 */
-/* “à—e		:ƒAƒCƒeƒ€ƒƒjƒ…[												 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgITEMMENU								 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼												 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgITEMMENU(DWORD dwPara)
@@ -2557,9 +2557,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgITEMMENU_SELECT						 */
-/* “à—e		:ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[										 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgITEMMENU_SELECT						 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼										 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
@@ -2593,13 +2593,13 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 	bEnableMove = m_pPlayerChar->IsEnableMove ();
 
 	switch (dwPara) {
-	case ITEMMENU_SELECT_COMMAND_PUT:			/* ’n–Ê‚É’u‚­ */
+	case ITEMMENU_SELECT_COMMAND_PUT:			/* åœ°é¢ã«ç½®ã */
 		bResult = FALSE;
 		m_pPlayerChar->GetFrontPos (ptFrontPos);
 		m_pPlayerChar->RenewBlockMapArea (ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
 		nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
 		for (i = 0; i < nCount; i ++) {
-			/* ’Eo‰Â”\‚©ƒ`ƒFƒbƒN */
+			/* è„±å‡ºå¯èƒ½ã‹ãƒã‚§ãƒƒã‚¯ */
 			bResult |= !m_pMap->IsMoveOut (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
 		}
 		bResult = !bResult;
@@ -2608,7 +2608,7 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 			m_pPlayerChar->RenewBlockMapArea (ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
 			nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
 			for (i = 0; i < nCount; i ++) {
-				/* i“ü‰Â”\‚©ƒ`ƒFƒbƒN */
+				/* é€²å…¥å¯èƒ½ã‹ãƒã‚§ãƒƒã‚¯ */
 				bResult |= !m_pMap->IsMove (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
 			}
 			bResult = !bResult;
@@ -2619,25 +2619,25 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 		PacketCHAR_REQ_PUTGET.Make (m_pPlayerChar->m_dwCharID, dwItemID);
 		pPacket = &PacketCHAR_REQ_PUTGET;
 		break;
-	case ITEMMENU_SELECT_COMMAND_EQUIP:			/* ‘•”õ‚·‚é */
+	case ITEMMENU_SELECT_COMMAND_EQUIP:			/* è£…å‚™ã™ã‚‹ */
 		if (bEnableMove == FALSE) {
-			AddSystemMsg (FALSE, "s“®’†‚È‚Ì‚Å‘•”õ•ÏX‚Å‚«‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "è¡Œå‹•ä¸­ãªã®ã§è£…å‚™å¤‰æ›´ã§ãã¾ã›ã‚“", RGB (255, 255, 255));
 			break;
 		}
 		PacketCHAR_REQ_EQUIP.Make (m_pPlayerChar->m_dwCharID, dwItemID, -1);
 		pPacket = &PacketCHAR_REQ_EQUIP;
 		m_dwLastTimeGauge = timeGetTime ();
 		break;
-	case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	/* ‘•”õ‚ğŠO‚· */
+	case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	/* è£…å‚™ã‚’å¤–ã™ */
 		if (bEnableMove == FALSE) {
-			AddSystemMsg (FALSE, "s“®’†‚È‚Ì‚Å‘•”õ•ÏX‚Å‚«‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "è¡Œå‹•ä¸­ãªã®ã§è£…å‚™å¤‰æ›´ã§ãã¾ã›ã‚“", RGB (255, 255, 255));
 			break;
 		}
 		PacketCHAR_REQ_EQUIP.Make (m_pPlayerChar->m_dwCharID, dwItemID, pWndITEMMENU_SELECT->GetType ());
 		pPacket = &PacketCHAR_REQ_EQUIP;
 		m_dwLastTimeGauge = timeGetTime ();
 		break;
-	case ITEMMENU_SELECT_COMMAND_USE:			/* g‚¤ */
+	case ITEMMENU_SELECT_COMMAND_USE:			/* ä½¿ã† */
 		PacketCHAR_REQ_USEITEM.Make (m_pPlayerChar->m_dwCharID, dwItemID);
 		pPacket = &PacketCHAR_REQ_USEITEM;
 		break;
@@ -2656,9 +2656,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgOPTION								 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“														 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgOPTION								 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³														 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgOPTION(DWORD dwPara)
@@ -2673,16 +2673,16 @@ BOOL CStateProcMAP::OnWindowMsgOPTION(DWORD dwPara)
 	}
 
 	switch (dwPara) {
-	case 0:		/* •\¦İ’è */
+	case 0:		/* è¡¨ç¤ºè¨­å®š */
 		m_pMgrWindow->MakeWindowOPTION_VIEWSET ();
 		break;
-	case 1:		/* ‰¹—Êİ’è */
+	case 1:		/* éŸ³é‡è¨­å®š */
 		m_pMgrWindow->MakeWindowOPTION_VOLUMESET ();
 		break;
-	case 2:		/* “ü—Íİ’è */
+	case 2:		/* å…¥åŠ›è¨­å®š */
 		m_pMgrWindow->MakeWindowOPTION_INPUTSET ();
 		break;
-	case 3:		/* “®ìİ’è */
+	case 3:		/* å‹•ä½œè¨­å®š */
 		m_pMgrWindow->MakeWindowOPTION_ACTIONSET ();
 		break;
 	default:
@@ -2696,9 +2696,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgOPTION_VIEWSET						 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-•\¦İ’è											 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgOPTION_VIEWSET						 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®š											 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
@@ -2713,83 +2713,83 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 	}
 
 	switch (dwPara) {
-	case 0:		/* ”­Œ¾‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ */
+	case 0:		/* ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚« */
 		if (m_pMgrData->GetOptionTaskbar ()) {
 			m_pMgrData->SetOptionTaskbar (FALSE);
-			AddSystemMsg (FALSE, "”­Œ¾‚Å‚à•Ï‰»‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ç™ºè¨€æ™‚ã§ã‚‚å¤‰åŒ–ã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetOptionTaskbar (TRUE);
-			AddSystemMsg (FALSE, "”­Œ¾‚Éƒ^ƒXƒNƒo[‚ğ“_–Å‚³‚¹‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ã‚’ç‚¹æ»…ã•ã›ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 1:		/* –¼‘O‚ğ•\¦‚·‚é */
+	case 1:		/* åå‰ã‚’è¡¨ç¤ºã™ã‚‹ */
 		if (m_pMgrData->GetDrawMode () != 0) {
 			m_pMgrData->SetDrawMode (0);
-			AddSystemMsg (FALSE, "–¼‘O‚ğ•\¦‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "åå‰ã‚’è¡¨ç¤ºã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetDrawMode (1);
-			AddSystemMsg (FALSE, "–¼‘O‚ğ•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "åå‰ã‚’è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 2:		/* ”­Œ¾‚ğ•\¦‚·‚é */
+	case 2:		/* ç™ºè¨€ã‚’è¡¨ç¤ºã™ã‚‹ */
 		if (m_pMgrData->GetOptionViewChat () != 0) {
 			m_pMgrData->SetOptionViewChat (0);
-			AddSystemMsg (FALSE, "”­Œ¾‚ğ•\¦‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ç™ºè¨€ã‚’è¡¨ç¤ºã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetOptionViewChat (1);
-			AddSystemMsg (FALSE, "”­Œ¾‚ğ•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ç™ºè¨€ã‚’è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 3:		/* ƒAƒCƒeƒ€‚ğ•\¦‚·‚é */
+	case 3:		/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã™ã‚‹ */
 		if (m_pMgrData->GetOptionViewItem ()) {
 			m_pMgrData->SetOptionViewItem (FALSE);
-			AddSystemMsg (FALSE, "ƒAƒCƒeƒ€‚ğ•\¦‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetOptionViewItem (TRUE);
-			AddSystemMsg (FALSE, "ƒAƒCƒeƒ€‚ğ•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 4:		/* ƒAƒCƒeƒ€–¼‚ğ•\¦‚·‚é */
+	case 4:		/* ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã™ã‚‹ */
 		if (m_pMgrData->GetOptionViewItemName ()) {
 			m_pMgrData->SetOptionViewItemName (FALSE);
-			AddSystemMsg (FALSE, "ƒAƒCƒeƒ€–¼‚ğ•\¦‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetOptionViewItemName (TRUE);
-			AddSystemMsg (FALSE, "ƒAƒCƒeƒ€–¼‚ğ•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ã‚¢ã‚¤ãƒ†ãƒ åã‚’è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 5:		/* ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚·‚é */
+	case 5:		/* ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹ */
 		if (m_pMgrData->GetOptionViewHelpIcon () != 0) {
 			m_pMgrData->SetOptionViewHelpIcon (0);
-			AddSystemMsg (FALSE, "ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetOptionViewHelpIcon (1);
-			AddSystemMsg (FALSE, "ƒwƒ‹ƒvƒAƒCƒRƒ“‚ğ•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ãƒ˜ãƒ«ãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 6:		/* í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚· */
+	case 6:		/* æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã™ */
 		if (m_pMgrData->GetOptionBattleMsgLog () == TRUE) {
 			m_pMgrData->SetOptionBattleMsgLog (FALSE);
-			AddSystemMsg (FALSE, "í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetOptionBattleMsgLog (TRUE);
-			AddSystemMsg (FALSE, "í“¬ƒƒbƒZ[ƒW‚ğƒƒO‚Éc‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "æˆ¦é—˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ãƒ­ã‚°ã«æ®‹ã—ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		break;
-	case 7:		/* 60ƒtƒŒ[ƒ€‚Å•\¦‚·‚é */
+	case 7:		/* 60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã™ã‚‹ */
 		if (m_pMgrData->GetOption60Frame () == TRUE) {
 			m_pMgrData->SetOption60Frame (FALSE);
-			AddSystemMsg (FALSE, "•bŠÔ30ƒtƒŒ[ƒ€‚Å•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ç§’é–“30ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 		} else {
 			m_pMgrData->SetOption60Frame (TRUE);
-			AddSystemMsg (FALSE, "•bŠÔ60ƒtƒŒ[ƒ€‚Å•\¦‚µ‚Ü‚·", RGB (255, 255, 255));
+			AddSystemMsg (FALSE, "ç§’é–“60ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡¨ç¤ºã—ã¾ã™", RGB (255, 255, 255));
 		}
 		m_pMgrData->SaveIniData ();
 		PostMessage (m_pMgrData->GetMainWindow (), WM_MAINFRAME, MAINFRAMEMSG_RENEWVIEWSET, 0);
@@ -2805,9 +2805,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgOPTION_INPUTSET						 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“ü—Íİ’è											 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgOPTION_INPUTSET						 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š											 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET(DWORD dwPara)
@@ -2823,7 +2823,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET(DWORD dwPara)
 	}
 
 	switch (dwPara) {
-	case 0:		/* g—p‚·‚éƒWƒ‡ƒCƒpƒbƒh‚Ìİ’è */
+	case 0:		/* ä½¿ç”¨ã™ã‚‹ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã®è¨­å®š */
 		pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
 		pMgrKeyInput->Enum ();
 		m_pMgrWindow->MakeWindowOPTION_INPUTSET_SETDEVICE ();
@@ -2839,9 +2839,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgOPTION_TASKBAR						 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“(”­Œ¾‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ)							 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgOPTION_TASKBAR						 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³(ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«)							 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgOPTION_TASKBAR(DWORD dwPara)
@@ -2858,12 +2858,12 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_TASKBAR(DWORD dwPara)
 	switch (dwPara) {
 	case 0:		/* ON */
 		m_pMgrData->SetOptionTaskbar (TRUE);
-		AddSystemMsg (FALSE, "”­Œ¾‚Éƒ^ƒXƒNƒo[‚ğ“_–Å‚³‚¹‚Ü‚·", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ã‚’ç‚¹æ»…ã•ã›ã¾ã™", RGB (255, 255, 255));
 		m_pMgrData->SaveIniData ();
 		break;
 	case 1:		/* OFF */
 		m_pMgrData->SetOptionTaskbar (FALSE);
-		AddSystemMsg (FALSE, "”­Œ¾‚Å‚à•Ï‰»‚µ‚Ü‚¹‚ñ", RGB (255, 255, 255));
+		AddSystemMsg (FALSE, "ç™ºè¨€æ™‚ã§ã‚‚å¤‰åŒ–ã—ã¾ã›ã‚“", RGB (255, 255, 255));
 		m_pMgrData->SaveIniData ();
 		break;
 	default:
@@ -2876,9 +2876,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgOPTION_INPUTSET_SETDEVICE			 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“ü—Íİ’è-“ü—ÍƒfƒoƒCƒX‚Ìİ’è							 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgOPTION_INPUTSET_SETDEVICE			 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®š							 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET_SETDEVICE(DWORD dwPara)
@@ -2905,9 +2905,9 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET_SETDEVICE(DWORD dwPara)
 		pMgrKeyInput->GetGUID (nNo, stGuid);
 		pMgrKeyInput->GetDeviceName (nNo, strName);
 
-		strTmp.Format ("[%s]‚ğg—p‚µ‚Ü‚·", (LPCSTR)strName);
+		strTmp.Format ("[%s]ã‚’ä½¿ç”¨ã—ã¾ã™", (LPCSTR)strName);
 	} else {
-		strTmp.Format ("ƒWƒ‡ƒCƒpƒbƒh‚ğg—p‚µ‚Ü‚¹‚ñ");
+		strTmp.Format ("ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ã¾ã›ã‚“");
 	}
 	m_pMgrData->SetInputGuid (stGuid);
 	m_pMgrData->SaveIniData ();
@@ -2919,9 +2919,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgOPTION_ACTIONSET						 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“®ìİ’è											 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgOPTION_ACTIONSET						 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š											 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgOPTION_ACTIONSET(DWORD dwPara)
@@ -2936,7 +2936,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_ACTIONSET(DWORD dwPara)
 	}
 
 	switch (dwPara) {
-	case 0:		/* ‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[‚Ìİ’è */
+	case 0:		/* ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ã®è¨­å®š */
 		m_pMgrWindow->MakeWindowOPTION_ACTIONSET_SLEEPTIMER ();
 		break;
 	default:
@@ -2950,9 +2950,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER			 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“®ìİ’è-‚¨‚Ğ‚é‚Ëƒ^ƒCƒ}[‚Ìİ’è						 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER			 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š-ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒãƒ¼ã®è¨­å®š						 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER(DWORD dwPara)
@@ -2975,9 +2975,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgCOMMANDMENU							 */
-/* “à—e		:ƒRƒ}ƒ“ƒhƒƒjƒ…[												 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgCOMMANDMENU							 */
+/* å†…å®¹		:ã‚³ãƒãƒ³ãƒ‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼												 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
@@ -2993,18 +2993,18 @@ BOOL CStateProcMAP::OnWindowMsgCOMMANDMENU(DWORD dwPara)
 	}
 
 	switch (dwPara) {
-	case 0:	/* ƒLƒƒƒ‰ƒNƒ^[(C) */
+	case 0:	/* ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼(C) */
 		m_pMgrWindow->MakeWindowCHAR_STATUS ();
 		break;
-	case 1:	/* ƒXƒLƒ‹(S) */
+	case 1:	/* ã‚¹ã‚­ãƒ«(S) */
 		nTmp = pWnd->GetPosSub ();
 		m_pMgrWindow->MakeWindowSKILLMENU (nTmp);
 		break;
-	case 2:	/* ƒoƒbƒO(B) */
+	case 2:	/* ãƒãƒƒã‚°(B) */
 		m_pMgrWindow->MakeWindowITEMMENU ();
 		break;
-//	case 3:	/* µ‘Ò(I) */
-	case 4:	/* ƒVƒXƒeƒ€(ESC) */
+//	case 3:	/* æ‹›å¾…(I) */
+	case 4:	/* ã‚·ã‚¹ãƒ†ãƒ (ESC) */
 		m_pMgrWindow->MakeWindowSYSTEMMENU ();
 		break;
 	}
@@ -3017,9 +3017,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgSWOON								 */
-/* “à—e		:‹Câƒƒjƒ…[													 */
-/* “ú•t		:2008/12/02														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgSWOON								 */
+/* å†…å®¹		:æ°—çµ¶ãƒ¡ãƒ‹ãƒ¥ãƒ¼													 */
+/* æ—¥ä»˜		:2008/12/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgSWOON(DWORD dwPara)
@@ -3027,9 +3027,9 @@ BOOL CStateProcMAP::OnWindowMsgSWOON(DWORD dwPara)
 	CPacketCHAR_PARA1 PacketCHAR_PARA1;
 
 	switch (dwPara) {
-	case 0:		/* ‚±‚Ìê‚Å•‚¯‚ğ‘Ò‚Â */
+	case 0:		/* ã“ã®å ´ã§åŠ©ã‘ã‚’å¾…ã¤ */
 		break;
-	case 1:		/* ‹L˜^‚µ‚½êŠ‚Å•œŠˆ‚·‚é */
+	case 1:		/* è¨˜éŒ²ã—ãŸå ´æ‰€ã§å¾©æ´»ã™ã‚‹ */
 		PacketCHAR_PARA1.Make (SBOCOMMANDID_SUB_CHAR_REQ_RECOVERY, m_pPlayerChar->m_dwCharID, 0);
 		m_pSock->Send (&PacketCHAR_PARA1);
 		break;
@@ -3040,9 +3040,9 @@ BOOL CStateProcMAP::OnWindowMsgSWOON(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnWindowMsgSKILLMENU							 */
-/* “à—e		:ƒXƒLƒ‹ƒƒjƒ…[													 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CStateProcMAP::OnWindowMsgSKILLMENU							 */
+/* å†…å®¹		:ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼													 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnWindowMsgSKILLMENU(DWORD dwPara)
@@ -3070,9 +3070,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnMainFrameRENEWITEMINFO						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)[ƒAƒCƒeƒ€î•ñXV]				 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CStateProcMAP::OnMainFrameRENEWITEMINFO						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)[ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–°]				 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnMainFrameRENEWITEMINFO(DWORD dwItemID)
@@ -3114,15 +3114,15 @@ void CStateProcMAP::OnMainFrameRENEWITEMINFO(DWORD dwItemID)
 		return;
 	}
 
-	/* ‹ß‹——£‚É‚¢‚é‚Ì‚ÅŒø‰Ê‰¹Ä¶ */
+	/* è¿‘è·é›¢ã«ã„ã‚‹ã®ã§åŠ¹æœéŸ³å†ç”Ÿ */
 	m_pMgrSound->PlaySound (pInfoItem->m_dwDropSoundID);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnMainFrameRENEWTALKEVENT						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)[‰ï˜bƒCƒxƒ“ƒgî•ñXV]			 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CStateProcMAP::OnMainFrameRENEWTALKEVENT						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)[ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–°]			 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CStateProcMAP::OnMainFrameRENEWTALKEVENT(DWORD dwParam)
@@ -3149,10 +3149,10 @@ void CStateProcMAP::OnMainFrameRENEWTALKEVENT(DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::OnXChar											 */
-/* “à—e		:ƒLƒƒƒ‰‚ÉXƒL[‚ğ‰Ÿ‚µ‚½‚Ìˆ—									 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CStateProcMAP::OnXChar											 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©ã«Xã‚­ãƒ¼ã‚’æŠ¼ã—ãŸæ™‚ã®å‡¦ç†									 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
@@ -3176,19 +3176,19 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 	}
 
 	switch (pInfoChar->m_nMoveType) {
-	case CHARMOVETYPE_SCORE:			/* “¾“_ */
+	case CHARMOVETYPE_SCORE:			/* å¾—ç‚¹ */
 		Packet.Make (dwCharID, PARAMID_CHAR_REQ_MODIFY_ANIME, 0);
 		m_pSock->Send (&Packet);
 		break;
-	case CHARMOVETYPE_STYLECOPY_PUT:	/* —epƒRƒs[(æ‚è‚İ) */
+	case CHARMOVETYPE_STYLECOPY_PUT:	/* å®¹å§¿ã‚³ãƒ”ãƒ¼(å–ã‚Šè¾¼ã¿) */
 		Packet.Make (dwCharID, PARAMID_CHAR_REQ_MODIFY_STYLECOPY_PUT, m_pPlayerChar->m_dwCharID);
 		m_pSock->Send (&Packet);
 		break;
-	case CHARMOVETYPE_STYLECOPY_GET:	/* —epƒRƒs[(”½‰f) */
+	case CHARMOVETYPE_STYLECOPY_GET:	/* å®¹å§¿ã‚³ãƒ”ãƒ¼(åæ˜ ) */
 		Packet.Make (m_pPlayerChar->m_dwCharID, PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET, dwCharID);
 		m_pSock->Send (&Packet);
 		break;
-	case CHARMOVETYPE_BALL:				/* ƒ{[ƒ‹ */
+	case CHARMOVETYPE_BALL:				/* ãƒœãƒ¼ãƒ« */
 		PacketREQ_PUSH.Make (dwCharID, m_pPlayerChar->m_nDirection, 2);
 		m_pSock->Send (&PacketREQ_PUSH);
 		break;
@@ -3219,15 +3219,15 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::AddSystemMsg									 */
-/* “à—e		:ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ğ’Ç‰Á										 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CStateProcMAP::AddSystemMsg									 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ 										 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CStateProcMAP::AddSystemMsg(
-	BOOL bAddLog,		/* [in] TRUE:ƒƒO‚É’Ç‰Á */
-	LPCSTR pszMsg,		/* [in] ƒƒbƒZ[ƒW */
-	COLORREF cl)		/* [in] •\¦F */
+	BOOL bAddLog,		/* [in] TRUE:ãƒ­ã‚°ã«è¿½åŠ  */
+	LPCSTR pszMsg,		/* [in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	COLORREF cl)		/* [in] è¡¨ç¤ºè‰² */
 {
 	m_pMgrData->AddSystemMsg (bAddLog, pszMsg, cl);
 	PostMessage (m_pMgrData->GetMainWindow (), WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
@@ -3235,9 +3235,9 @@ void CStateProcMAP::AddSystemMsg(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::DefenseOff										 */
-/* “à—e		:–hŒä‰ğœ														 */
-/* “ú•t		:2008/07/07														 */
+/* é–¢æ•°å	:CStateProcMAP::DefenseOff										 */
+/* å†…å®¹		:é˜²å¾¡è§£é™¤														 */
+/* æ—¥ä»˜		:2008/07/07														 */
 /* ========================================================================= */
 
 void CStateProcMAP::DefenseOff(void)
@@ -3262,9 +3262,9 @@ void CStateProcMAP::DefenseOff(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcMAP::GetTalkCharID									 */
-/* “à—e		:‰ï˜b‚Å‚«‚éƒLƒƒƒ‰ID‚ğæ“¾										 */
-/* “ú•t		:2008/12/29														 */
+/* é–¢æ•°å	:CStateProcMAP::GetTalkCharID									 */
+/* å†…å®¹		:ä¼šè©±ã§ãã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/12/29														 */
 /* ========================================================================= */
 
 DWORD CStateProcMAP::GetTalkCharID(DWORD dwCharID, int nDirection)

@@ -10,7 +10,7 @@
 /*
 
 #ifdef _MSC_VER
-	#ifdef _DEBUG	//ƒƒ‚ƒŠƒŠ[ƒNƒeƒXƒg
+	#ifdef _DEBUG	//ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯ãƒ†ã‚¹ãƒˆ
 		#include <crtdbg.h>
 		#define malloc(a) _malloc_dbg(a,_NORMAL_BLOCK,__FILE__,__LINE__)
 		inline void*  operator new(size_t size, LPCSTR strFileName, INT iLine)
@@ -38,7 +38,7 @@ namespace Afl{namespace Windows{
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflSemaphore
-// “¯Šú§Œä—p
+// åŒæœŸåˆ¶å¾¡ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflSemaphore::AflSemaphore()
 {
@@ -67,7 +67,7 @@ void AflSemaphore::wait()const
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflEvent
-// “¯Šú§Œä—p
+// åŒæœŸåˆ¶å¾¡ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflEvent::AflEvent()
 {
@@ -95,49 +95,49 @@ void AflEvent::wait()const
 }
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflAdviseTimer
-// üŠúŒÄ‚Ño‚µ—p
+// å‘¨æœŸå‘¼ã³å‡ºã—ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflAdviseTimer::AflAdviseTimer()
 {
-	//DirectShow—p‚ÌIReferenceClock‚ÌGUID
+	//DirectShowç”¨ã®IReferenceClockã®GUID
     static const GUID IID_IReferenceClock = {0x56a86897,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xaf,0x0b,0xa7,0x70};
     static const GUID CLSID_SystemClock = {0xe436ebb1, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70};
-    //COM‚ğ—˜—p‰Â”\‚É
+    //COMã‚’åˆ©ç”¨å¯èƒ½ã«
 	::CoInitialize(NULL);
-    //DirectShow—pIReferenceClock‚ğ—˜—p‰Â”\‚É
+    //DirectShowç”¨IReferenceClockã‚’åˆ©ç”¨å¯èƒ½ã«
 	::CoCreateInstance( CLSID_SystemClock , NULL , CLSCTX_INPROC_SERVER , IID_IReferenceClock , (LPVOID*)&m_pReferenceClock);
-	//üŠúƒJƒEƒ“ƒ^‚Ì‰Šú‰»
+	//å‘¨æœŸã‚«ã‚¦ãƒ³ã‚¿ã®åˆæœŸåŒ–
 	m_dwAdviseToken = 0;
 }
 AflAdviseTimer::~AflAdviseTimer()
 {
 	stopTimer();
-    //IReferenceClock‚Ì‰ğ•ú
+    //IReferenceClockã®è§£æ”¾
 	m_pReferenceClock->Release();
-	//COM—˜—pŠ®—¹
+	//COMåˆ©ç”¨å®Œäº†
     ::CoUninitialize();
 }
 bool AflAdviseTimer::startTimer(DWORD dwTime)
 {
 	stopTimer();
-	//Œ»İ‚ÌƒJƒEƒ“ƒg‚ğŠJnƒJƒEƒ“ƒ^‚Éİ’è
+	//ç¾åœ¨ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’é–‹å§‹ã‚«ã‚¦ãƒ³ã‚¿ã«è¨­å®š
     REFERENCE_TIME rtBase;
     m_pReferenceClock->GetTime(&rtBase);
-    //ƒZƒ}ƒtƒHƒCƒxƒ“ƒg‚Ìİ’è
+    //ã‚»ãƒãƒ•ã‚©ã‚¤ãƒ™ãƒ³ãƒˆã®è¨­å®š
 	return m_pReferenceClock->AdvisePeriodic(rtBase,dwTime,(HEVENT)m_semaphore.getHandle(),&m_dwAdviseToken) == S_OK;
 }
 bool AflAdviseTimer::stopTimer()
 {
 	if(!m_dwAdviseToken)
 		return false;
-	//ƒCƒxƒ“ƒg‚Ì“®ì’â~
+	//ã‚¤ãƒ™ãƒ³ãƒˆã®å‹•ä½œåœæ­¢
 	bool bFlag = m_pReferenceClock->Unadvise(m_dwAdviseToken) == S_OK;
 	m_dwAdviseToken = 0;
 	return bFlag;
 }
 void AflAdviseTimer::waitTimer()
 {
-	//ŠÔ‚ª—ˆ‚é‚Ü‚Å‘Ò‹@
+	//æ™‚é–“ãŒæ¥ã‚‹ã¾ã§å¾…æ©Ÿ
 	m_semaphore.wait();
 }
 bool AflAdviseTimer::release(LONG lCount)
@@ -146,7 +146,7 @@ bool AflAdviseTimer::release(LONG lCount)
 }
 REFERENCE_TIME AflAdviseTimer::getTime()
 {
-    //Œ»İ‚ÌƒJƒEƒ“ƒg‚ğæ“¾
+    //ç¾åœ¨ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å–å¾—
 	REFERENCE_TIME rtBase;
     m_pReferenceClock->GetTime(&rtBase);
     return rtBase;
@@ -154,7 +154,7 @@ REFERENCE_TIME AflAdviseTimer::getTime()
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflMediaTimer
-// üŠúŒÄ‚Ño‚µ—p
+// å‘¨æœŸå‘¼ã³å‡ºã—ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflMediaTimer::AflMediaTimer()
 {
@@ -170,7 +170,7 @@ AflMediaTimer::~AflMediaTimer()
 bool AflMediaTimer::startTimer(DWORD dwTime)
 {
 	stopTimer();
-    //ƒZƒ}ƒtƒHƒCƒxƒ“ƒg‚Ìİ’è
+    //ã‚»ãƒãƒ•ã‚©ã‚¤ãƒ™ãƒ³ãƒˆã®è¨­å®š
 	m_timerID = timeSetEvent(m_timeCaps.wPeriodMin,0,
 		(LPTIMECALLBACK)m_event.getHandle(),0,TIME_PERIODIC | TIME_CALLBACK_EVENT_SET);
 	return m_timerID != 0;
@@ -179,14 +179,14 @@ bool AflMediaTimer::stopTimer()
 {
 	if(!m_timerID)
 		return false;
-	//ƒCƒxƒ“ƒg‚Ì“®ì’â~
+	//ã‚¤ãƒ™ãƒ³ãƒˆã®å‹•ä½œåœæ­¢
 	bool bFlag = timeKillEvent(m_timerID) == S_OK;
 	m_timerID = 0;
 	return bFlag;
 }
 void AflMediaTimer::waitTimer()
 {
-	//ŠÔ‚ª—ˆ‚é‚Ü‚Å‘Ò‹@
+	//æ™‚é–“ãŒæ¥ã‚‹ã¾ã§å¾…æ©Ÿ
 	m_event.wait();
 }
 bool AflMediaTimer::release(LONG lCount)
@@ -197,11 +197,11 @@ bool AflMediaTimer::release(LONG lCount)
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflTimeCounter
-// is‘¬“xˆÛ—pƒJƒEƒ“ƒ^
+// é€²è¡Œé€Ÿåº¦ç¶­æŒç”¨ã‚«ã‚¦ãƒ³ã‚¿
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflTimeCounter::AflTimeCounter()
 {
-	//ƒ^ƒCƒ}[‚Ì•ª‰ğ”\İ’è
+	//ã‚¿ã‚¤ãƒãƒ¼ã®åˆ†è§£èƒ½è¨­å®š
 	TIMECAPS timeCaps;
 	timeGetDevCaps(&timeCaps,sizeof(TIMECAPS));       
 	timeBeginPeriod(timeCaps.wPeriodMin);
@@ -212,7 +212,7 @@ AflTimeCounter::AflTimeCounter()
 }
 AflTimeCounter::~AflTimeCounter()
 {
-	//ƒ^ƒCƒ}[‚Ì•ª‰ğ”\•œ‹A
+	//ã‚¿ã‚¤ãƒãƒ¼ã®åˆ†è§£èƒ½å¾©å¸°
 	TIMECAPS timeCaps;
 	timeGetDevCaps(&timeCaps,sizeof(TIMECAPS));       
 	timeEndPeriod(timeCaps.wPeriodMin);
@@ -233,7 +233,7 @@ DWORD AflTimeCounter::getTime() const
 }
 INT AflTimeCounter::getCount()
 {
-	//ƒEƒGƒCƒg–³Œø‚ÌƒXƒLƒbƒvˆ—
+	//ã‚¦ã‚¨ã‚¤ãƒˆç„¡åŠ¹ã®ã‚¹ã‚­ãƒƒãƒ—å‡¦ç†
 /*	if(!m_bEnable)
 	{
 		m_iNowCount =  getTime() / m_dwSyncTime;
@@ -241,7 +241,7 @@ INT AflTimeCounter::getCount()
 		return 1;
 	}
 */
-	//’Êíˆ—
+	//é€šå¸¸å‡¦ç†
 	INT iOldCount;
 	DWORD dwTime;
 	INT iCount;
@@ -277,7 +277,7 @@ DWORD AflTimeCounter::sleepTime() const
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFileName
-// ƒtƒ@ƒCƒ‹–¼‚ÆƒpƒX§Œä
+// ãƒ•ã‚¡ã‚¤ãƒ«åã¨ãƒ‘ã‚¹åˆ¶å¾¡
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 bool AflFileName::setFileName(LPCSTR pFileName)
 {
@@ -369,18 +369,18 @@ bool AflFileName::changePath()
 
 //------------------------------------------------------------
 // AflRect
-// ‚RŸŒ³À•WŠÇ—
+// ï¼“æ¬¡å…ƒåº§æ¨™ç®¡ç†
 //------------------------------------------------------------
 
 //-----------------------------------------------------
-//	‰Šú‰»
+//	åˆæœŸåŒ–
 //-----------------------------------------------------
 AflRect::AflRect()
 {
 	left=right=top=bottom=high=low=0;
 }
 //-----------------------------------------------------
-//	‰Šú‰»
+//	åˆæœŸåŒ–
 //-----------------------------------------------------
 AflRect::AflRect(int nLeft,int nTop,int nHigh,int nRight,int nBottom,int nLow)
 {
@@ -391,7 +391,7 @@ AflRect::AflRect(int nLeft,int nTop,int nRight,int nBottom)
 	setRect(nLeft,nTop,nRight,nBottom);
 }
 //-----------------------------------------------------
-//	À•Wİ’è
+//	åº§æ¨™è¨­å®š
 //-----------------------------------------------------
 void AflRect::setRect(int nLeft,int nTop,int nHigh,int nRight,int nBottom,int nLow)
 {
@@ -406,7 +406,7 @@ void AflRect::setRect(int nLeft,int nTop,int nRight,int nBottom)
 	high = 0; low = 0;
 }
 //-----------------------------------------------------
-//	À•WˆÚ“®
+//	åº§æ¨™ç§»å‹•
 //-----------------------------------------------------
 void AflRect::offsetRect(int nX,int nY,int nZ)
 {
@@ -415,7 +415,7 @@ void AflRect::offsetRect(int nX,int nY,int nZ)
 	high += nZ; low += nZ;
 }
 //-----------------------------------------------------
-//	‘S‚Ä0‚©‚Ç‚¤‚©‚Ì”»’è
+//	å…¨ã¦0ã‹ã©ã†ã‹ã®åˆ¤å®š
 //-----------------------------------------------------
 bool AflRect::isRectNull() const
 {
@@ -427,7 +427,7 @@ bool AflRect::isRectNull() const
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFont
-// ƒtƒHƒ“ƒgŒn
+// ãƒ•ã‚©ãƒ³ãƒˆç³»
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //-----------------------------------------------------
 AflFont::AflFont()
@@ -436,7 +436,7 @@ AflFont::AflFont()
 	m_iFontBold = FW_SEMIBOLD;
 	m_sizeFont.cy = 16;
 	m_sizeFont.cx = 0;
-	m_strFontName = "‚l‚r ƒSƒVƒbƒN";
+	m_strFontName = "ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯";
 }
 //-----------------------------------------------------
 AflFont::~AflFont()
@@ -481,7 +481,7 @@ bool AflFont::getFontSize(LPSIZE pSize,HFONT hFont,LPCSTR pText,INT iLength,INT 
 {
 	if(iLength < 0)
 		iLength = (INT)lstrlen(pText);
-	//ƒtƒHƒ“ƒgƒTƒCƒY‚Ìæ“¾
+	//ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã®å–å¾—
 	SIZE sizeFont;
 	INT i;
 	HDC hdmDC = CreateCompatibleDC(NULL);
@@ -536,7 +536,7 @@ bool AflFont::getFontSize(LPSIZE pSize,HFONT hFont,LPCWSTR pText,INT iLength,INT
 {
 	if(iLength < 0)
 		iLength = lstrlenW(pText);
-	//ƒtƒHƒ“ƒgƒTƒCƒY‚Ìæ“¾
+	//ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã®å–å¾—
 	SIZE sizeFont;
 	INT i;
 	HDC hdmDC = CreateCompatibleDC(NULL);
@@ -589,7 +589,7 @@ bool AflFont::getFontSize(LPSIZE pSize,HFONT hFont,LPCWSTR pText,INT iLength,INT
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFep
-// FEP§Œä—p
+// FEPåˆ¶å¾¡ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //-----------------------------------------------------
 AflFep::AflFep()
@@ -605,7 +605,7 @@ AflFep::~AflFep()
 //-----------------------------------------------------
 bool AflFep::release()
 {
-	//ƒRƒ“ƒeƒLƒXƒg‚Ì‰ğ•ú
+	//ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®è§£æ”¾
     if(m_pCandidateList)
     {
 		delete m_pCandidateList;
@@ -620,11 +620,11 @@ bool AflFep::setWindow(HWND hWnd)
     release();
 	if(hWnd)
 	{
-		//Šù‘¶‚ÌFEP‚Ì”j‰ó
+		//æ—¢å­˜ã®FEPã®ç ´å£Š
 		HWND hFep = ImmGetDefaultIMEWnd(hWnd);
 		//SendMessage(hFep,WM_CLOSE,0,0);
 
-	    //ƒEƒCƒ“ƒhƒE‚ÉŠÖ˜A‚Ã‚¯‚ç‚ê‚Ä‚¢‚éFEP‚Ìæ“¾
+	    //ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã«é–¢é€£ã¥ã‘ã‚‰ã‚Œã¦ã„ã‚‹FEPã®å–å¾—
 		m_hWnd = hWnd;
 	}
 	return true;
@@ -632,7 +632,7 @@ bool AflFep::setWindow(HWND hWnd)
 //-----------------------------------------------------
 bool AflFep::isOpen() const
 {
-	//FEP‚ÌŠˆ“®ó‘Ô‚ğæ“¾
+	//FEPã®æ´»å‹•çŠ¶æ…‹ã‚’å–å¾—
 	HIMC hImc = ImmGetContext(m_hWnd);
 	bool bRet = ImmGetOpenStatus(hImc)!=false;
 	ImmReleaseContext(m_hWnd,hImc);
@@ -649,7 +649,7 @@ bool AflFep::setOpenStatus(bool bFlag)
 //-----------------------------------------------------
 bool AflFep::getStatus(LPDWORD pdwConversion,LPDWORD pdwSentence) const
 {
-	//FEP‚Ì“ü—Íƒ‚[ƒh
+	//FEPã®å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰
 	 HIMC hImc = ImmGetContext(m_hWnd);
 	bool bRet = ImmGetConversionStatus(hImc,pdwConversion,pdwSentence)!=false;
 	ImmReleaseContext(m_hWnd,hImc);
@@ -658,7 +658,7 @@ bool AflFep::getStatus(LPDWORD pdwConversion,LPDWORD pdwSentence) const
 //-----------------------------------------------------
 bool AflFep::getString(std::string& strBuff) const
 {
-    //FEP“ü—Í•¶š—ñ‚Ìæ“¾
+    //FEPå…¥åŠ›æ–‡å­—åˆ—ã®å–å¾—
     LONG lByte;
 	 HIMC hImc = ImmGetContext(m_hWnd);
     lByte = ImmGetCompositionString(hImc,GCS_COMPSTR,NULL,0);
@@ -676,7 +676,7 @@ bool AflFep::getString(std::string& strBuff) const
 //-----------------------------------------------------
 INT AflFep::getConvertPos() const
 {
-	//•ÏŠ·ˆÊ’u‚Ìæ“¾
+	//å¤‰æ›ä½ç½®ã®å–å¾—
     DWORD dwBuff[2];
 	HIMC hImc = ImmGetContext(m_hWnd);
     if(ImmGetCompositionString(hImc,GCS_COMPCLAUSE,dwBuff,sizeof(DWORD)*2) <= 0)
@@ -690,7 +690,7 @@ INT AflFep::getConvertPos() const
 //-----------------------------------------------------
 INT AflFep::getCursorCount() const
 {
-	//ƒJ[ƒ\ƒ‹ˆÊ’u‚Ìæ“¾
+	//ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã®å–å¾—
 	HIMC hImc = ImmGetContext(m_hWnd);
     INT iRet = ImmGetCompositionString(hImc,GCS_CURSORPOS,NULL,0);
 	ImmReleaseContext(m_hWnd,hImc);
@@ -701,13 +701,13 @@ INT AflFep::getCursorCount() const
 //-----------------------------------------------------
 INT AflFep::getCountCandidate()
 {
-	//‘O‰ñg‚Á‚½•ÏŠ·Œó•â‚Ì‰ğ•ú
+	//å‰å›ä½¿ã£ãŸå¤‰æ›å€™è£œã®è§£æ”¾
     if(m_pCandidateList)
 	{
         delete m_pCandidateList;
 		m_pCandidateList = NULL;
 	}
-    //•ÏŠ·Œó•â‚Ìæ“¾
+    //å¤‰æ›å€™è£œã®å–å¾—
 	HIMC hImc = ImmGetContext(m_hWnd);
 	INT iCandidateSize = ImmGetCandidateList(hImc,0,NULL,0);
 	if(!iCandidateSize)
@@ -723,13 +723,13 @@ INT AflFep::getCountCandidate()
 //-----------------------------------------------------
 INT AflFep::getCandidateIndex() const
 {
-	//Œ»İ‘I‘ğ’†‚Ì•ÏŠ·Œó•â‚Ìæ“¾
+	//ç¾åœ¨é¸æŠä¸­ã®å¤‰æ›å€™è£œã®å–å¾—
     return m_pCandidateList->dwSelection;
 }
 //-----------------------------------------------------
 LPCSTR AflFep::getCandidateString(INT iIndex) const
 {
-	//w’è‚³‚ê‚½ƒCƒ“ƒfƒbƒNƒX‚Ì•ÏŠ·Œó•â‚ğæ“¾
+	//æŒ‡å®šã•ã‚ŒãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å¤‰æ›å€™è£œã‚’å–å¾—
 	if(!m_pCandidateList)
 		return NULL;
     return (LPCSTR)((LPBYTE)m_pCandidateList+m_pCandidateList->dwOffset[iIndex]);
@@ -737,13 +737,13 @@ LPCSTR AflFep::getCandidateString(INT iIndex) const
 //-----------------------------------------------------
 INT AflFep::getCandidateStart() const
 {
-	//•ÏŠ·Œó•âƒCƒ“ƒfƒbƒNƒX‚ÌŠJnˆÊ’u‚Ìæ“¾
+	//å¤‰æ›å€™è£œã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®é–‹å§‹ä½ç½®ã®å–å¾—
     return m_pCandidateList->dwPageStart;
 }
 //-----------------------------------------------------
 INT AflFep::getCandidateEnd() const
 {
-	//•ÏŠ·Œó•âƒCƒ“ƒfƒbƒNƒX‚ÌI—¹ˆÊ’u‚Ìæ“¾
+	//å¤‰æ›å€™è£œã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®çµ‚äº†ä½ç½®ã®å–å¾—
     int iCount = (int)(m_pCandidateList->dwPageStart + m_pCandidateList->dwPageSize);
     if(iCount > (int)m_pCandidateList->dwCount)
         iCount = m_pCandidateList->dwCount;
@@ -753,7 +753,7 @@ INT AflFep::getCandidateEnd() const
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflThreadTimer
-// ŠÔ§Œäƒ‹[ƒvƒXƒŒƒbƒh
+// æ™‚é–“åˆ¶å¾¡ãƒ«ãƒ¼ãƒ—ã‚¹ãƒ¬ãƒƒãƒ‰
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 AflThreadTimer::AflThreadTimer()
@@ -845,24 +845,24 @@ void AflThreadTimer::onProc(LPVOID pvoid)
 	while(m_bEnable)
 	{
 		INT i;
-		//•K—v“®ì‰ñ”
+		//å¿…è¦å‹•ä½œå›æ•°
 		INT iCount = m_aflTimeCounter.getCount();
 		
-		//Àsˆ——pƒ‹[ƒv
+		//å®Ÿè¡Œå‡¦ç†ç”¨ãƒ«ãƒ¼ãƒ—
 		if(m_bEnable && m_paflProcAction) 
 		{
 			for(i=0;m_bEnable && i<iCount;i++)
 				m_paflProcAction->call(pvoid);
 		}
-		//ƒAƒCƒhƒ‹ˆ——p
+		//ã‚¢ã‚¤ãƒ‰ãƒ«å‡¦ç†ç”¨
 		if(m_bEnable && m_paflProcIdle)
 		{
 			m_paflProcIdle->call(pvoid);
 		}
-		//ƒŒƒ“ƒ_ƒŠƒ“ƒO—p
+		//ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ç”¨
 		if(m_bEnable && m_paflProcRender)
 		{
-			//ƒŒƒ“ƒ_ƒŠƒ“ƒO‚Ì•K—v«‚ğŠm”F
+			//ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã®å¿…è¦æ€§ã‚’ç¢ºèª
 			if(m_bEnable && iCount > 0 || !m_aflTimeCounter.isEnable())
 			{
 				m_paflProcRender->call(pvoid);

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_SKILL_RENEWSKILL.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒXƒLƒ‹î•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_SKILL_RENEWSKILL.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¹ã‚­ãƒ«æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_SKILL_RENEWSKILL.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SKILL_RENEWSKILL::CPacketADMIN_SKILL_RENEWSKILL	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/08														 */
+/* é–¢æ•°å	:CPacketADMIN_SKILL_RENEWSKILL::CPacketADMIN_SKILL_RENEWSKILL	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/08														 */
 /* ========================================================================= */
 
 CPacketADMIN_SKILL_RENEWSKILL::CPacketADMIN_SKILL_RENEWSKILL()
@@ -24,9 +24,9 @@ CPacketADMIN_SKILL_RENEWSKILL::CPacketADMIN_SKILL_RENEWSKILL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SKILL_RENEWSKILL::~CPacketADMIN_SKILL_RENEWSKILL	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/08														 */
+/* é–¢æ•°å	:CPacketADMIN_SKILL_RENEWSKILL::~CPacketADMIN_SKILL_RENEWSKILL	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/08														 */
 /* ========================================================================= */
 
 CPacketADMIN_SKILL_RENEWSKILL::~CPacketADMIN_SKILL_RENEWSKILL()
@@ -36,13 +36,13 @@ CPacketADMIN_SKILL_RENEWSKILL::~CPacketADMIN_SKILL_RENEWSKILL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SKILL_RENEWSKILL::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/12/08														 */
+/* é–¢æ•°å	:CPacketADMIN_SKILL_RENEWSKILL::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/12/08														 */
 /* ========================================================================= */
 
 void CPacketADMIN_SKILL_RENEWSKILL::Make(
-	CInfoSkillBase *pInfo)		/* [in] ƒXƒLƒ‹î•ñ */
+	CInfoSkillBase *pInfo)		/* [in] ã‚¹ã‚­ãƒ«æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketADMIN_SKILL_RENEWSKILL::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_SKILL_RENEWSKILL;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒXƒLƒ‹î•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚¹ã‚­ãƒ«æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketADMIN_SKILL_RENEWSKILL::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SKILL_RENEWSKILL::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/12/08														 */
+/* é–¢æ•°å	:CPacketADMIN_SKILL_RENEWSKILL::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/12/08														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_SKILL_RENEWSKILL::Set(PBYTE pPacket)

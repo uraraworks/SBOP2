@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrData.cpp												 */
-/* “à—e			:ƒf[ƒ^ƒ}ƒl[ƒWƒƒƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrData.cpp												 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ãƒãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -33,9 +33,9 @@
 #include "MgrData.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::CMgrData												 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/04/25														 */
+/* é–¢æ•°å	:CMgrData::CMgrData												 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/04/25														 */
 /* ========================================================================= */
 
 CMgrData::CMgrData()
@@ -69,9 +69,9 @@ CMgrData::CMgrData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::~CMgrData											 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/04/25														 */
+/* é–¢æ•°å	:CMgrData::~CMgrData											 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/04/25														 */
 /* ========================================================================= */
 
 CMgrData::~CMgrData()
@@ -99,14 +99,14 @@ CMgrData::~CMgrData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::Create												 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2005/06/09														 */
+/* é–¢æ•°å	:CMgrData::Create												 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2005/06/09														 */
 /* ========================================================================= */
 
 void CMgrData::Create(
-	CMainFrame			*pMainFrame,	/* [in] ƒƒCƒ“ƒtƒŒ[ƒ€ */
-	CUraraSockTCPSBO	*pSock)			/* [in] ’ÊMƒ}ƒl[ƒWƒƒ */
+	CMainFrame			*pMainFrame,	/* [in] ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  */
+	CUraraSockTCPSBO	*pSock)			/* [in] é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ */
 {
 	char szName[MAX_PATH], *pszTmp;
 	CmyString strTmp;
@@ -142,16 +142,16 @@ void CMgrData::Create(
 	pszTmp		= strrchr (szName, '\\');
 	pszTmp[1]	= 0;
 
-	/* ƒƒOƒtƒ@ƒCƒ‹‚Ìì¬ */
+	/* ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ */
 	strTmp.Format ("%sSboSvrLog.txt", szName);
 	m_pLog->Create (strTmp, TRUE, TRUE);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::Destroy												 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2005/06/09														 */
+/* é–¢æ•°å	:CMgrData::Destroy												 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2005/06/09														 */
 /* ========================================================================= */
 
 void CMgrData::Destroy(void)
@@ -177,9 +177,9 @@ void CMgrData::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::Save													 */
-/* “à—e		:ƒf[ƒ^‚Ì•Û‘¶													 */
-/* “ú•t		:2005/05/01														 */
+/* é–¢æ•°å	:CMgrData::Save													 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜													 */
+/* æ—¥ä»˜		:2005/05/01														 */
 /* ========================================================================= */
 
 void CMgrData::Save(void)
@@ -223,9 +223,9 @@ void CMgrData::Save(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::Load													 */
-/* “à—e		:ƒf[ƒ^‚Ì“Ç‚İ‚İ												 */
-/* “ú•t		:2005/05/01														 */
+/* é–¢æ•°å	:CMgrData::Load													 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿												 */
+/* æ—¥ä»˜		:2005/05/01														 */
 /* ========================================================================= */
 
 void CMgrData::Load(void)
@@ -289,7 +289,7 @@ void CMgrData::Load(void)
 		m_pLibInfoMap->Add (pMapTmp);
 	}
 
-	/* “Ç‚İ‚İŒã‚Ìƒf[ƒ^•â³ */
+	/* èª­ã¿è¾¼ã¿å¾Œã®ãƒ‡ãƒ¼ã‚¿è£œæ­£ */
 	m_pLibInfoChar->		Revice ();
 	m_pLibInfoItemType->	Revice ();
 	m_pLibInfoMap->			RenewMapEvent ();
@@ -300,9 +300,9 @@ void CMgrData::Load(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::ReadHashList											 */
-/* “à—e		:ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CMgrData::ReadHashList											 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CMgrData::ReadHashList(void)
@@ -332,9 +332,9 @@ void CMgrData::ReadHashList(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::SetClientVersion										 */
-/* “à—e		:ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“‚ğİ’è									 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CMgrData::SetClientVersion										 */
+/* å†…å®¹		:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’è¨­å®š									 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CMgrData::SetClientVersion(LPCSTR pszVersion)
@@ -353,9 +353,9 @@ void CMgrData::SetClientVersion(LPCSTR pszVersion)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrData::ReadIniData											 */
-/* “à—e		:iniƒtƒ@ƒCƒ‹‚©‚çİ’è‚ğ“Ç‚İ‚İ									 */
-/* “ú•t		:2005/06/09														 */
+/* é–¢æ•°å	:CMgrData::ReadIniData											 */
+/* å†…å®¹		:iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è¨­å®šã‚’èª­ã¿è¾¼ã¿									 */
+/* æ—¥ä»˜		:2005/06/09														 */
 /* ========================================================================= */
 
 void CMgrData::ReadIniData(void)
@@ -368,26 +368,26 @@ void CMgrData::ReadIniData(void)
 	GetModuleFileName (NULL, szFileName, MAX_PATH);
 	strcpy (szFileName + strlen (szFileName) - 3, "ini");
 
-	/* ‘Ò‚¿‚¤‚¯ƒ|[ƒg */
+	/* å¾…ã¡ã†ã‘ãƒãƒ¼ãƒˆ */
 	m_wPort = GetPrivateProfileInt ("Setting", "Port", 2006, szFileName);
-	/* ŠÇ—ÒŒ ŒÀƒAƒJƒEƒ“ƒg */
+	/* ç®¡ç†è€…æ¨©é™ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
 	GetPrivateProfileString ("Setting", "AdminAccount", "Admin", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strAdminAccount = szTmp;
 
-	/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“ */
+	/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
 	GetPrivateProfileString ("Info", "ClientVersion", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strClientVersion = szTmp;
 
-	/* FTPƒAƒJƒEƒ“ƒg */
+	/* FTPã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
 	GetPrivateProfileString ("FTP", "Account", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strFtpAccount = szTmp;
-	/* FTPƒpƒXƒ[ƒh */
+	/* FTPãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 	GetPrivateProfileString ("FTP", "Password", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strFtpPassword = szTmp;
-	/* ƒT[ƒo[ƒAƒhƒŒƒX */
+	/* ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	GetPrivateProfileString ("FTP", "ServerAddr", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strFtpServerAddr = szTmp;
-	/* ƒAƒbƒvƒ[ƒhæ */
+	/* ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å…ˆ */
 	GetPrivateProfileString ("FTP", "UploadPath", "", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strFtpUploadPath = szTmp;
 }

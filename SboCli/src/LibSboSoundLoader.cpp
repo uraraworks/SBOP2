@@ -1,18 +1,18 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibSboSoundLoader.cpp										 */
-/* “à—e			:SBOƒTƒEƒ“ƒhƒf[ƒ^ƒ‰ƒCƒuƒ‰ƒŠ“Ç‚İ‚İƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibSboSoundLoader.cpp										 */
+/* å†…å®¹			:SBOã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿ãƒ©ã‚¤ãƒ–ãƒ©ãƒªèª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "LibSboSoundLoader.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibSboSoundLoader::CLibSboSoundLoader							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:CLibSboSoundLoader::CLibSboSoundLoader							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 CLibSboSoundLoader::CLibSboSoundLoader()
@@ -28,9 +28,9 @@ CLibSboSoundLoader::CLibSboSoundLoader()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CLibSboSoundLoader::~CLibSboSoundLoader							 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/10/18														 */
+/* é–¢æ•°åï¼š	CLibSboSoundLoader::~CLibSboSoundLoader							 */
+/* å†…å®¹ï¼š	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2005/10/18														 */
 /* ========================================================================= */
 
 CLibSboSoundLoader::~CLibSboSoundLoader()
@@ -40,9 +40,9 @@ CLibSboSoundLoader::~CLibSboSoundLoader()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CLibSboSoundLoader::Load										 */
-/* “à—eF	“Ç‚İ‚İ														 */
-/* “ú•tF	2005/10/18														 */
+/* é–¢æ•°åï¼š	CLibSboSoundLoader::Load										 */
+/* å†…å®¹ï¼š	èª­ã¿è¾¼ã¿														 */
+/* æ—¥ä»˜ï¼š	2005/10/18														 */
 /* ========================================================================= */
 
 void CLibSboSoundLoader::Load(void)
@@ -55,7 +55,7 @@ void CLibSboSoundLoader::Load(void)
 		return;
 	}
 
-	/* ŠeŠÖ”‚ÌƒAƒhƒŒƒX‚ğæ“¾ */
+	/* å„é–¢æ•°ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
 	m_pGetSoundCount		= (LIBSBOSOUNDGetSoundCount)		GetProcAddress (m_hLib, "GetSoundCount");
 	m_pGetSoundResourceID	= (LIBSBOSOUNDGetSoundResourceID)	GetProcAddress (m_hLib, "GetSoundResourceID");
 	m_pGetSoundID			= (LIBSBOSOUNDGetSoundID)			GetProcAddress (m_hLib, "GetSoundID");
@@ -73,9 +73,9 @@ void CLibSboSoundLoader::Load(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CLibSboSoundLoader::Free										 */
-/* “à—eF	ŠJ•ú															 */
-/* “ú•tF	2005/10/18														 */
+/* é–¢æ•°åï¼š	CLibSboSoundLoader::Free										 */
+/* å†…å®¹ï¼š	é–‹æ”¾															 */
+/* æ—¥ä»˜ï¼š	2005/10/18														 */
 /* ========================================================================= */
 
 void CLibSboSoundLoader::Free(void)
@@ -92,9 +92,9 @@ void CLibSboSoundLoader::Free(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibSboSoundLoader::GetSoundCount								 */
-/* “à—e		:Œø‰Ê‰¹”‚ğæ“¾													 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:CLibSboSoundLoader::GetSoundCount								 */
+/* å†…å®¹		:åŠ¹æœéŸ³æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 int CLibSboSoundLoader::GetSoundCount(void)
@@ -107,9 +107,9 @@ int CLibSboSoundLoader::GetSoundCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibSboSoundLoader::GetSoundResourceID							 */
-/* “à—e		:Œø‰Ê‰¹‚ÌƒŠƒ\[ƒXID‚ğæ“¾										 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:CLibSboSoundLoader::GetSoundResourceID							 */
+/* å†…å®¹		:åŠ¹æœéŸ³ã®ãƒªã‚½ãƒ¼ã‚¹IDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 int CLibSboSoundLoader::GetSoundResourceID(int nNo)
@@ -122,9 +122,9 @@ int CLibSboSoundLoader::GetSoundResourceID(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibSboSoundLoader::GetSoundID									 */
-/* “à—e		:Œø‰Ê‰¹ID‚ğæ“¾													 */
-/* “ú•t		:2007/09/19														 */
+/* é–¢æ•°å	:CLibSboSoundLoader::GetSoundID									 */
+/* å†…å®¹		:åŠ¹æœéŸ³IDã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/09/19														 */
 /* ========================================================================= */
 
 DWORD CLibSboSoundLoader::GetSoundID(int nNo)
@@ -137,9 +137,9 @@ DWORD CLibSboSoundLoader::GetSoundID(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibSboSoundLoader::GetSoundNo									 */
-/* “à—e		:Œø‰Ê‰¹‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾										 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:CLibSboSoundLoader::GetSoundNo									 */
+/* å†…å®¹		:åŠ¹æœéŸ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 int CLibSboSoundLoader::GetSoundNo(DWORD dwSoundID)
@@ -152,9 +152,9 @@ int CLibSboSoundLoader::GetSoundNo(DWORD dwSoundID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibSboSoundLoader::GetSoundName								 */
-/* “à—e		:Œø‰Ê‰¹–¼‚ğæ“¾													 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:CLibSboSoundLoader::GetSoundName								 */
+/* å†…å®¹		:åŠ¹æœéŸ³åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 LPCSTR CLibSboSoundLoader::GetSoundName(DWORD dwSoundID)

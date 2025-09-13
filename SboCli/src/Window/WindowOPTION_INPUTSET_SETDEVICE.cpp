@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowOPTION_INPUTSET_SETDEVICE.cpp						 */
-/* “à—e			:ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è-“ü—ÍƒfƒoƒCƒX‚ÌÝ’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowOPTION_INPUTSET_SETDEVICE.cpp						 */
+/* å†…å®¹			:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,9 +17,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::CWindowOPTION_INPUTSET_SETDEVICE	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::CWindowOPTION_INPUTSET_SETDEVICE	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CWindowOPTION_INPUTSET_SETDEVICE::CWindowOPTION_INPUTSET_SETDEVICE()
@@ -37,9 +37,9 @@ CWindowOPTION_INPUTSET_SETDEVICE::CWindowOPTION_INPUTSET_SETDEVICE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::~CWindowOPTION_INPUTSET_SETDEVICE */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::~CWindowOPTION_INPUTSET_SETDEVICE */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CWindowOPTION_INPUTSET_SETDEVICE::~CWindowOPTION_INPUTSET_SETDEVICE()
@@ -48,9 +48,9 @@ CWindowOPTION_INPUTSET_SETDEVICE::~CWindowOPTION_INPUTSET_SETDEVICE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::Create						 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::Create						 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CWindowOPTION_INPUTSET_SETDEVICE::Create(CMgrData *pMgrData)
@@ -83,9 +83,9 @@ void CWindowOPTION_INPUTSET_SETDEVICE::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::Draw							 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::Draw							 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CWindowOPTION_INPUTSET_SETDEVICE::Draw(PCImg32 pDst)
@@ -107,7 +107,7 @@ void CWindowOPTION_INPUTSET_SETDEVICE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "Žg—p‚µ‚È‚¢", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, "ä½¿ç”¨ã—ãªã„", clText);
 
 	for (i = 0; i < m_nPosMax; i ++) {
 		m_MgrKeyInput->GetDeviceName (i, strTmp);
@@ -130,9 +130,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::OnUp							 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::OnUp							 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnUp(void)
@@ -156,9 +156,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::OnDown						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::OnDown						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnDown(void)
@@ -182,9 +182,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::OnLeft						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::OnLeft						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnLeft(void)
@@ -199,9 +199,9 @@ BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::OnRight						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::OnRight						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnRight(void)
@@ -216,9 +216,9 @@ BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::OnX							 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::OnX							 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnX(BOOL bDown)
@@ -240,9 +240,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_INPUTSET_SETDEVICE::OnZ							 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CWindowOPTION_INPUTSET_SETDEVICE::OnZ							 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_INPUTSET_SETDEVICE::OnZ(BOOL bDown)

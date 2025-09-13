@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_ADDMOTIONTYPE.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ‚Ì’Ç‰Á) ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_ADDMOTIONTYPE.cpp							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ã®è¿½åŠ ) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/09													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketADMIN_CHAR_ADDMOTIONTYPE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDMOTIONTYPE::CPacketADMIN_CHAR_ADDMOTIONTYPE */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDMOTIONTYPE::CPacketADMIN_CHAR_ADDMOTIONTYPE */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_ADDMOTIONTYPE::CPacketADMIN_CHAR_ADDMOTIONTYPE()
@@ -22,9 +22,9 @@ CPacketADMIN_CHAR_ADDMOTIONTYPE::CPacketADMIN_CHAR_ADDMOTIONTYPE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDMOTIONTYPE::~CPacketADMIN_CHAR_ADDMOTIONTYPE */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDMOTIONTYPE::~CPacketADMIN_CHAR_ADDMOTIONTYPE */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_ADDMOTIONTYPE::~CPacketADMIN_CHAR_ADDMOTIONTYPE()
@@ -33,9 +33,9 @@ CPacketADMIN_CHAR_ADDMOTIONTYPE::~CPacketADMIN_CHAR_ADDMOTIONTYPE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDMOTIONTYPE::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ðì¬													 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDMOTIONTYPE::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 void CPacketADMIN_CHAR_ADDMOTIONTYPE::Make(void)
@@ -60,9 +60,9 @@ void CPacketADMIN_CHAR_ADDMOTIONTYPE::Make(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDMOTIONTYPE::Set							 */
-/* “à—e		:ƒpƒPƒbƒg‚ðÝ’è													 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDMOTIONTYPE::Set							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_ADDMOTIONTYPE::Set(PBYTE pPacket)

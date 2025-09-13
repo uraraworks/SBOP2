@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_PARA1.h											 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:”Ä—p[ƒpƒ‰ƒ[ƒ^1ŒÂ]) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_PARA1.h											 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:æ±ç”¨[ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1å€‹]) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_PARA1 : public CPacketBase
 {
 public:
-			CPacketMAP_PARA1();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_PARA1();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_PARA1();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_PARA1();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(BYTE byCmdSub, DWORD dwCharID, DWORD dwPara);	/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(BYTE byCmdSub, DWORD dwCharID, DWORD dwPara);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID,						/* ƒLƒƒƒ‰ID */
-			m_dwPara;						/* ƒpƒ‰ƒ[ƒ^ */
+	DWORD	m_dwCharID,						/* ã‚­ãƒ£ãƒ©ID */
+			m_dwPara;						/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 } CPacketMAP_PARA1, *PCPacketMAP_PARA1;
 
 /* Copyright(C)URARA-works 2006 */

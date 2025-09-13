@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_CHARINFO.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒLƒƒƒ‰î•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/01/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_CHARINFO.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚­ãƒ£ãƒ©æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/27													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_CHARINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_CHARINFO::CPacketCHAR_CHARINFO						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/01/27														 */
+/* é–¢æ•°å	:CPacketCHAR_CHARINFO::CPacketCHAR_CHARINFO						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/01/27														 */
 /* ========================================================================= */
 
 CPacketCHAR_CHARINFO::CPacketCHAR_CHARINFO()
@@ -23,9 +23,9 @@ CPacketCHAR_CHARINFO::CPacketCHAR_CHARINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_CHARINFO::~CPacketCHAR_CHARINFO					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/01/27														 */
+/* é–¢æ•°å	:CPacketCHAR_CHARINFO::~CPacketCHAR_CHARINFO					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/01/27														 */
 /* ========================================================================= */
 
 CPacketCHAR_CHARINFO::~CPacketCHAR_CHARINFO()
@@ -35,13 +35,13 @@ CPacketCHAR_CHARINFO::~CPacketCHAR_CHARINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_CHARINFO::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/01/27														 */
+/* é–¢æ•°å	:CPacketCHAR_CHARINFO::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/01/27														 */
 /* ========================================================================= */
 
 void CPacketCHAR_CHARINFO::Make(
-	PCLibInfoCharBase pInfo)		/* [in] ƒLƒƒƒ‰î•ñ */
+	PCLibInfoCharBase pInfo)		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -61,7 +61,7 @@ void CPacketCHAR_CHARINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_CHARINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒLƒƒƒ‰î•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -70,9 +70,9 @@ void CPacketCHAR_CHARINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_CHARINFO::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/01/27														 */
+/* é–¢æ•°å	:CPacketCHAR_CHARINFO::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/01/27														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_CHARINFO::Set(PBYTE pPacket)

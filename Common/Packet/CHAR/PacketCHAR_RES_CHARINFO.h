@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_RES_CHARINFO.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒLƒƒƒ‰î•ñ‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_RES_CHARINFO.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚­ãƒ£ãƒ©æƒ…å ±å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CInfoCharBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_RES_CHARINFO : public CPacketBase
 {
 public:
-			CPacketCHAR_RES_CHARINFO();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_RES_CHARINFO();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_RES_CHARINFO();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_RES_CHARINFO();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoCharBase *pInfo, BOOL bChgScreenPos = FALSE);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoCharBase *pInfo, BOOL bChgScreenPos = FALSE);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	BOOL			m_bChgScreenPos;			/* ‰æ–ÊˆÊ’u•ÏX */
-	CInfoCharBase	*m_pInfo;					/* ƒLƒƒƒ‰î•ñ */
+	BOOL			m_bChgScreenPos;			/* ç”»é¢ä½ç½®å¤‰æ›´ */
+	CInfoCharBase	*m_pInfo;					/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CPacketCHAR_RES_CHARINFO, *PCPacketCHAR_RES_CHARINFO;
 
 /* Copyright(C)URARA-works 2006 */

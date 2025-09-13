@@ -1,29 +1,29 @@
 /* Copyright(C)URARA-works 2004 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:mySection.h												 */
-/* “à—e			:ƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2004/09/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:mySection.h												 */
+/* å†…å®¹			:ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2004/09/01													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CmySection
 {
 public:
-			CmySection();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CmySection();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CmySection();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CmySection();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Enter	(void);									/* ƒƒbƒN */
-	void Leave	(void);									/* ƒƒbƒN‰ðœ */
+	void Enter	(void);									/* ãƒ­ãƒƒã‚¯ */
+	void Leave	(void);									/* ãƒ­ãƒƒã‚¯è§£é™¤ */
 
 
 protected:
-	CRITICAL_SECTION	m_Crit;					/* ƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“ */
+	CRITICAL_SECTION	m_Crit;					/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ */
 };
 
 /* Copyright(C)URARA-works 2004 */

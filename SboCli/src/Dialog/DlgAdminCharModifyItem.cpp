@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyItem.cpp									 */
-/* “à—e			:‘I‘ğƒLƒƒƒ‰î•ñ•ÒW[ŠƒAƒCƒeƒ€‚Ìİ’è]ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyItem.cpp									 */
+/* å†…å®¹			:é¸æŠã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã®è¨­å®š]ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/23													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -29,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::DoDataExchange(CDataExchange* pDX)
@@ -53,9 +53,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::CDlgAdminCharModifyItem				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::CDlgAdminCharModifyItem				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyItem::CDlgAdminCharModifyItem(CWnd* pParent /*=NULL*/)
@@ -72,9 +72,9 @@ CDlgAdminCharModifyItem::CDlgAdminCharModifyItem(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::~CDlgAdminCharModifyItem				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::~CDlgAdminCharModifyItem				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyItem::~CDlgAdminCharModifyItem()
@@ -83,9 +83,9 @@ CDlgAdminCharModifyItem::~CDlgAdminCharModifyItem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::Init(CMgrData *pMgrData)
@@ -94,16 +94,16 @@ void CDlgAdminCharModifyItem::Init(CMgrData *pMgrData)
 
 	m_pLibInfoItem = m_pMgrData->GetLibInfoItem ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharModifyItem::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::Renew									 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::Renew									 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::Renew(void)
@@ -133,9 +133,9 @@ void CDlgAdminCharModifyItem::Renew(void)
 		m_List.InsertItem (i, strTmp, 0);			/* ID */
 		m_List.SetItemData (i, pInfoItem->m_dwItemID);
 		strTmp.Format ("%s", (LPCSTR)pInfoItem->m_strName);
-		m_List.SetItemText (i, 1, strTmp);			/* ƒAƒCƒeƒ€–¼ */
+		m_List.SetItemText (i, 1, strTmp);			/* ã‚¢ã‚¤ãƒ†ãƒ å */
 		strTmp = m_pLibInfoItem->GetTypeName (pInfoItem->m_dwItemTypeID);
-		m_List.SetItemText (i, 2, strTmp);			/* í•Ê */
+		m_List.SetItemText (i, 2, strTmp);			/* ç¨®åˆ¥ */
 	}
 
 Exit:
@@ -144,9 +144,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::OnAdminMsg							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::OnAdminMsg							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::OnAdminMsg(int nType, DWORD dwPara)
@@ -165,15 +165,15 @@ void CDlgAdminCharModifyItem::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::OnMainFrame							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::OnMainFrame							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWCHARINFO:		/* ƒLƒƒƒ‰î•ñXV */
+	case MAINFRAMEMSG_RENEWCHARINFO:		/* ã‚­ãƒ£ãƒ©æƒ…å ±æ›´æ–° */
 		if (m_pInfoChar == NULL) {
 			break;
 		}
@@ -182,7 +182,7 @@ void CDlgAdminCharModifyItem::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		}
 		Renew ();
 		break;
-	case MAINFRAMEMSG_RENEWITEMINFO:		/* ƒAƒCƒeƒ€î•ñXV */
+	case MAINFRAMEMSG_RENEWITEMINFO:		/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -190,9 +190,9 @@ void CDlgAdminCharModifyItem::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharModifyItem::OnInitDialog()
@@ -201,17 +201,17 @@ BOOL CDlgAdminCharModifyItem::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID", LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒAƒCƒeƒ€–¼", LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "í•Ê", LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "ã‚¢ã‚¤ãƒ†ãƒ å", LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, "ç¨®åˆ¥", LVCFMT_LEFT, 120);
 
 	return TRUE;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::OnAddnew								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(V‹K’Ç‰Á)										 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::OnAddnew								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ–°è¦è¿½åŠ )										 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::OnAddnew()
@@ -248,9 +248,9 @@ void CDlgAdminCharModifyItem::OnAddnew()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::OnAdd									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::OnAdd()
@@ -285,9 +285,9 @@ void CDlgAdminCharModifyItem::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::OnModify								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::OnModify								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç·¨é›†)											 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::OnModify()
@@ -327,9 +327,9 @@ void CDlgAdminCharModifyItem::OnModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyItem::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyItem::OnDelete								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyItem::OnDelete()

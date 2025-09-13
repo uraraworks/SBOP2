@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:AdminWindow.cpp											 */
-/* “à—e			:ŠÇ—ŽÒƒEƒBƒ“ƒhƒEƒƒCƒ“ƒtƒŒ[ƒ€ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/01/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:AdminWindow.cpp											 */
+/* å†…å®¹			:ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/01/25													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -49,7 +49,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 IMPLEMENT_DYNAMIC(CAdminWindow, CWnd)
@@ -98,9 +98,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::CAdminWindow										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::CAdminWindow										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 CAdminWindow::CAdminWindow()
@@ -117,9 +117,9 @@ CAdminWindow::CAdminWindow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::~CAdminWindow									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::~CAdminWindow									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 CAdminWindow::~CAdminWindow()
@@ -129,9 +129,9 @@ CAdminWindow::~CAdminWindow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
@@ -141,7 +141,7 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 	m_pMgrData		= pMgrData;
 	m_hWndParent	= hWndParent;
 
-	/* ƒCƒxƒ“ƒg‚ðì¬ */
+	/* ã‚¤ãƒ™ãƒ³ãƒˆã‚’ä½œæˆ */
 	m_hInitEventWindow = CreateEvent (NULL, FALSE, FALSE, NULL);
 	if (m_hInitEventWindow == NULL) {
 		return FALSE;
@@ -149,7 +149,7 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 
 	bRet = CmyThread::Create ();
 
-	/* ‰Šú‰»Š®—¹‘Ò‚¿ */
+	/* åˆæœŸåŒ–å®Œäº†å¾…ã¡ */
 	WaitForSingleObject (m_hInitEventWindow, INFINITE);
 
 	return bRet;
@@ -157,9 +157,9 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::Destroy											 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::Destroy											 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 void CAdminWindow::Destroy(void)
@@ -177,16 +177,16 @@ void CAdminWindow::Destroy(void)
 		m_hInitEventWindow = NULL;
 	}
 
-	/* •Ï”‚ð‰Šú‰» */
+	/* å¤‰æ•°ã‚’åˆæœŸåŒ– */
 	m_pWndParent	= NULL;
 	m_hWnd			= NULL;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::Show												 */
-/* “à—e		:•\Ž¦															 */
-/* “ú•t		:2006/03/12														 */
+/* é–¢æ•°å	:CAdminWindow::Show												 */
+/* å†…å®¹		:è¡¨ç¤º															 */
+/* æ—¥ä»˜		:2006/03/12														 */
 /* ========================================================================= */
 
 void CAdminWindow::Show(void)
@@ -200,9 +200,9 @@ void CAdminWindow::Show(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::Hide												 */
-/* “à—e		:”ñ•\Ž¦															 */
-/* “ú•t		:2006/03/12														 */
+/* é–¢æ•°å	:CAdminWindow::Hide												 */
+/* å†…å®¹		:éžè¡¨ç¤º															 */
+/* æ—¥ä»˜		:2006/03/12														 */
 /* ========================================================================= */
 
 void CAdminWindow::Hide(void)
@@ -216,9 +216,9 @@ void CAdminWindow::Hide(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::ChgScreen										 */
-/* “à—e		:‰æ–ÊØ‚è‘Ö‚¦													 */
-/* “ú•t		:2006/01/26														 */
+/* é–¢æ•°å	:CAdminWindow::ChgScreen										 */
+/* å†…å®¹		:ç”»é¢åˆ‡ã‚Šæ›¿ãˆ													 */
+/* æ—¥ä»˜		:2006/01/26														 */
 /* ========================================================================= */
 
 void CAdminWindow::ChgScreen(int nScrID)
@@ -238,100 +238,100 @@ void CAdminWindow::ChgScreen(int nScrID)
 	nTypeRR = ADMINNOTIFYTYPE_NONE;
 
 	switch (nScrID) {
-	case SCRIDADMIN_CHAR_MODIFY:				/* ‘I‘ðƒLƒƒƒ‰î•ñ•ÒW */
+	case SCRIDADMIN_CHAR_MODIFY:				/* é¸æŠžã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›† */
 		nTypeL  = ADMINNOTIFYTYPE_CHARID;
 		nTypeR  = ADMINNOTIFYTYPE_CHARPOS;
 		nTypeRR = ADMINNOTIFYTYPE_CHARPOS;
 		m_pDlgBase = new CDlgAdminCharModify(this);
 		break;
-	case SCRIDADMIN_CHAR_MODIFY_STATUS:			/* ‘I‘ðƒLƒƒƒ‰î•ñ•ÒW[ƒXƒe[ƒ^ƒX] */
+	case SCRIDADMIN_CHAR_MODIFY_STATUS:			/* é¸æŠžã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹] */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharModifyStatus(this);
 		break;
-	case SCRIDADMIN_CHAR_MODIFY_GRP:			/* ‘I‘ðƒLƒƒƒ‰î•ñ•ÒW[‰æ‘œ‚ÌÝ’è] */
+	case SCRIDADMIN_CHAR_MODIFY_GRP:			/* é¸æŠžã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[ç”»åƒã®è¨­å®š] */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharModifyGrp(this);
 		break;
-	case SCRIDADMIN_CHAR_MODIFY_ITEM:			/* ‘I‘ðƒLƒƒƒ‰î•ñ•ÒW[ŠŽƒAƒCƒeƒ€‚ÌÝ’è] */
+	case SCRIDADMIN_CHAR_MODIFY_ITEM:			/* é¸æŠžã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã®è¨­å®š] */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharModifyItem(this);
 		break;
-	case SCRIDADMIN_CHAR_MODIFY_SKILL:			/* ‘I‘ðƒLƒƒƒ‰î•ñ•ÒW[ŠŽƒXƒLƒ‹‚ÌÝ’è] */
+	case SCRIDADMIN_CHAR_MODIFY_SKILL:			/* é¸æŠžã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[æ‰€æŒã‚¹ã‚­ãƒ«ã®è¨­å®š] */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharModifySkill(this);
 		break;
-	case SCRIDADMIN_CHAR_LIST:					/* ˆê—— */
+	case SCRIDADMIN_CHAR_LIST:					/* ä¸€è¦§ */
 		m_pDlgBase = new CDlgAdminCharList(this);
 		break;
-	case SCRIDADMIN_CHAR_ADMIN:					/* ŠÇ—ŽÒŒ ŒÀ‚ÌÝ’è */
+	case SCRIDADMIN_CHAR_ADMIN:					/* ç®¡ç†è€…æ¨©é™ã®è¨­å®š */
 		nTypeL = ADMINNOTIFYTYPE_ACCOUNTID;
 		m_pDlgBase = new CDlgAdminCharAdmin(this);
 		break;
-	case SCRIDADMIN_CHAR_ADDNPC:				/* NPC‚Ì’Ç‰Á */
+	case SCRIDADMIN_CHAR_ADDNPC:				/* NPCã®è¿½åŠ  */
 		nTypeL = ADMINNOTIFYTYPE_POS;
 		m_pDlgBase = new CDlgAdminCharAddNPC(this);
 		break;
-	case SCRIDADMIN_CHAR_MOTION:				/* ƒ‚[ƒVƒ‡ƒ“‚Ì•ÒW */
+	case SCRIDADMIN_CHAR_MOTION:				/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®ç·¨é›† */
 		m_pDlgBase = new CDlgAdminCharMotionTypeList(this);
 		break;
-	case SCRIDADMIN_CHAR_ACCOUNTINFO:			/* ƒAƒJƒEƒ“ƒgî•ñ‚Ì•ÒW */
+	case SCRIDADMIN_CHAR_ACCOUNTINFO:			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã®ç·¨é›† */
 		nTypeL = ADMINNOTIFYTYPE_CHARID;
 		m_pDlgBase = new CDlgAdminCharAccountInfo(this);
 		break;
-	case SCRIDADMIN_CHAR_SKILL:					/* ƒXƒLƒ‹‚Ì•ÒW */
+	case SCRIDADMIN_CHAR_SKILL:					/* ã‚¹ã‚­ãƒ«ã®ç·¨é›† */
 		m_pDlgBase = new CDlgAdminCharSkillList(this);
 		break;
-	case SCRIDADMIN_CHAR_DISABLE:				/* ‹‘”Û */
+	case SCRIDADMIN_CHAR_DISABLE:				/* æ‹’å¦ */
 		m_pDlgBase = new CDlgAdminCharDisable(this);
 		break;
-	case SCRIDADMIN_MAP_INFO:					/* ƒ}ƒbƒvî•ñ‚Ì•ÒW */
+	case SCRIDADMIN_MAP_INFO:					/* ãƒžãƒƒãƒ—æƒ…å ±ã®ç·¨é›† */
 		m_pDlgBase = new CDlgAdminMapInfo(this);
 		break;
-	case SCRIDADMIN_MAP_EVENT:					/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ‚Ì•ÒW */
+	case SCRIDADMIN_MAP_EVENT:					/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã®ç·¨é›† */
 		nTypeL  = ADMINNOTIFYTYPE_POS;
 		nTypeR  = ADMINNOTIFYTYPE_POS;
 		m_pDlgBase = new CDlgAdminMapEvent(this);
 		break;
-	case SCRIDADMIN_MAP_PARTS:					/* ƒp[ƒc‚Ì•ÒW */
+	case SCRIDADMIN_MAP_PARTS:					/* ãƒ‘ãƒ¼ãƒ„ã®ç·¨é›† */
 		nTypeL = ADMINNOTIFYTYPE_MAPEDIT;
 		nTypeR = ADMINNOTIFYTYPE_MAPEDIT;
 		m_pDlgBase = new CDlgAdminMapParts(this);
 		break;
-	case SCRIDADMIN_MAP_SHADOW:					/* ‰e‚Ì•ÒW */
+	case SCRIDADMIN_MAP_SHADOW:					/* å½±ã®ç·¨é›† */
 		nTypeL = ADMINNOTIFYTYPE_MAPSHADOWEDIT;
 		nTypeR = ADMINNOTIFYTYPE_MAPSHADOWEDIT;
 		m_pDlgBase = new CDlgAdminMapShadow(this);
 		break;
-	case SCRIDADMIN_MAP_OBJECT:					/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg‚Ì•ÒW */
+	case SCRIDADMIN_MAP_OBJECT:					/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç·¨é›† */
 		m_pDlgBase = new CDlgAdminMapObject(this);
 		break;
-	case SCRIDADMIN_MAP_OBJECTDATA:				/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg‚Ì”z’u */
+	case SCRIDADMIN_MAP_OBJECTDATA:				/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é…ç½® */
 		nTypeL = ADMINNOTIFYTYPE_POS;
 		m_pDlgBase = new CDlgAdminMapObjectData(this);
 		break;
-	case SCRIDADMIN_ITEMTYPE_LIST:				/* ƒAƒCƒeƒ€Ží•Êˆê—— */
+	case SCRIDADMIN_ITEMTYPE_LIST:				/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ä¸€è¦§ */
 		m_pDlgBase = new CDlgAdminItemTypeList(this);
 		break;
-	case SCRIDADMIN_ITEM_LIST:					/* ƒAƒCƒeƒ€ˆê—— */
+	case SCRIDADMIN_ITEM_LIST:					/* ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ */
 		nTypeL = ADMINNOTIFYTYPE_ITEMID;
 		m_pDlgBase = new CDlgAdminItemList(this);
 		break;
-	case SCRIDADMIN_ITEM_WEAPONLIST:			/* •Šíî•ñˆê—— */
+	case SCRIDADMIN_ITEM_WEAPONLIST:			/* æ­¦å™¨æƒ…å ±ä¸€è¦§ */
 		m_pDlgBase = new CDlgAdminItemWeaponList(this);
 		break;
-	case SCRIDADMIN_EFC_BALLOON_LIST:			/* •¬o‚µˆê—— */
+	case SCRIDADMIN_EFC_BALLOON_LIST:			/* å™´å‡ºã—ä¸€è¦§ */
 		m_pDlgBase = new CDlgAdminEfcBalloonList(this);
 		break;
-	case SCRIDADMIN_EFC_EFFECT_LIST:			/* ƒGƒtƒFƒNƒgˆê—— */
+	case SCRIDADMIN_EFC_EFFECT_LIST:			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§ */
 		m_pDlgBase = new CDlgAdminEfcEffectList(this);
 		break;
-	case SCRIDADMIN_SERVER_INFO:				/* ƒT[ƒo[î•ñ */
+	case SCRIDADMIN_SERVER_INFO:				/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ± */
 		m_pDlgBase = new CDlgAdminServerInfo(this);
 		break;
-	case SCRIDADMIN_SYSTEM_SET_INITCHARSTATUS:	/* ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l‚ÌÝ’è */
+	case SCRIDADMIN_SYSTEM_SET_INITCHARSTATUS:	/* ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ã®è¨­å®š */
 		m_pDlgBase = new CDlgAdminSystemSetInitCharStatus(this);
 		break;
-	case SCRIDADMIN_ACCOUNT_ADD:				/* ƒAƒJƒEƒ“ƒg‚Ì’Ç‰Á */
+	case SCRIDADMIN_ACCOUNT_ADD:				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ  */
 		m_pDlgBase = new CDlgAdminAccountAdd(this);
 		break;
 	}
@@ -348,9 +348,9 @@ void CAdminWindow::ChgScreen(int nScrID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::PreCreateWindow									 */
-/* “à—e		:ƒEƒBƒ“ƒhƒEì¬‘Oˆ—											 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::PreCreateWindow									 */
+/* å†…å®¹		:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆå‰å‡¦ç†											 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 BOOL CAdminWindow::PreCreateWindow(CREATESTRUCT& cs)
@@ -367,7 +367,7 @@ BOOL CAdminWindow::PreCreateWindow(CREATESTRUCT& cs)
 	AfxRegisterClass (&wc);
 	cs.dwExStyle	&= ~WS_EX_CLIENTEDGE;
 	cs.style		= WS_OVERLAPPEDWINDOW & ~WS_SYSMENU;
-	cs.lpszName		= "ŠÇ—ŽÒƒEƒBƒ“ƒhƒE";
+	cs.lpszName		= "ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦";
 	cs.lpszClass	= AfxRegisterWndClass (wc.style, wc.hCursor, wc.hbrBackground, wc.hIcon);
 
 	return TRUE;
@@ -375,9 +375,9 @@ BOOL CAdminWindow::PreCreateWindow(CREATESTRUCT& cs)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCreate											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::OnCreate											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -392,7 +392,7 @@ int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SetEvent (m_hInitEventWindow);
 
 	m_hWnd = GetSafeHwnd ();
-	/* ƒƒjƒ…[‚ÌÝ’è */
+	/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®è¨­å®š */
 	m_Menu.LoadMenu ("IDR_MENU1");
 	SetMenu (&m_Menu);
 
@@ -416,9 +416,9 @@ int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnDestroy										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_DESTROY)									 */
-/* “ú•t		:2006/02/11														 */
+/* é–¢æ•°å	:CAdminWindow::OnDestroy										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_DESTROY)									 */
+/* æ—¥ä»˜		:2006/02/11														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnDestroy()
@@ -429,9 +429,9 @@ void CAdminWindow::OnDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::PostNcDestroy									 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CAdminWindow::PostNcDestroy									 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CAdminWindow::PostNcDestroy()
@@ -441,9 +441,9 @@ void CAdminWindow::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnGetMinMaxInfo									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_GETMINMAXINFO)							 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::OnGetMinMaxInfo									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_GETMINMAXINFO)							 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
@@ -456,9 +456,9 @@ void CAdminWindow::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnSize											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2006/01/25														 */
+/* é–¢æ•°å	:CAdminWindow::OnSize											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2006/01/25														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnSize(UINT nType, int cx, int cy)
@@ -470,9 +470,9 @@ void CAdminWindow::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnAdminMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CAdminWindow::OnAdminMsg										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 LRESULT CAdminWindow::OnAdminMsg(WPARAM wParam, LPARAM lParam)
@@ -485,9 +485,9 @@ LRESULT CAdminWindow::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMainFrame										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CAdminWindow::OnMainFrame										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 LRESULT CAdminWindow::OnMainFrame(WPARAM wParam, LPARAM lParam)
@@ -500,9 +500,9 @@ LRESULT CAdminWindow::OnMainFrame(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapInfo										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒ}ƒbƒvî•ñ‚Ì•ÒW)								 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapInfo										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒžãƒƒãƒ—æƒ…å ±ã®ç·¨é›†)								 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapInfo()
@@ -512,9 +512,9 @@ void CAdminWindow::OnMapInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapEvent										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ‚Ì•ÒW)						 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapEvent										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã®ç·¨é›†)						 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapEvent()
@@ -524,9 +524,9 @@ void CAdminWindow::OnMapEvent()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapParts										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒp[ƒc‚Ì•ÒW)									 */
-/* “ú•t		:2007/04/25														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapParts										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒ‘ãƒ¼ãƒ„ã®ç·¨é›†)									 */
+/* æ—¥ä»˜		:2007/04/25														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapParts()
@@ -536,9 +536,9 @@ void CAdminWindow::OnMapParts()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapShadow										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‰e‚Ì•ÒW)										 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapShadow										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(å½±ã®ç·¨é›†)										 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapShadow()
@@ -548,9 +548,9 @@ void CAdminWindow::OnMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapAdd											 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒ}ƒbƒv‚Ì’Ç‰Á)									 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapAdd											 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒžãƒƒãƒ—ã®è¿½åŠ )									 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapAdd()
@@ -558,7 +558,7 @@ void CAdminWindow::OnMapAdd()
 	int nResult;
 	CPacketADMIN_PARA2 Packet;
 
-	nResult = MessageBox ("ƒ}ƒbƒv‚ð’Ç‰Á‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("ãƒžãƒƒãƒ—ã‚’è¿½åŠ ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -568,9 +568,9 @@ void CAdminWindow::OnMapAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapObject										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg‚Ì•ÒW)						 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapObject										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç·¨é›†)						 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapObject()
@@ -580,9 +580,9 @@ void CAdminWindow::OnMapObject()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapObjectData									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg‚Ì”z’u)						 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapObjectData									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é…ç½®)						 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapObjectData()
@@ -592,9 +592,9 @@ void CAdminWindow::OnMapObjectData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnMapWindow										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒ}ƒbƒvƒEƒBƒ“ƒhƒE)								 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CAdminWindow::OnMapWindow										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒžãƒƒãƒ—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦)								 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnMapWindow()
@@ -610,9 +610,9 @@ void CAdminWindow::OnMapWindow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharModify										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‘I‘ðƒLƒƒƒ‰‚Ì•ÒW)								 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharModify										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(é¸æŠžã‚­ãƒ£ãƒ©ã®ç·¨é›†)								 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharModify()
@@ -622,9 +622,9 @@ void CAdminWindow::OnCharModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharModifyStatus								 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‘I‘ðƒLƒƒƒ‰‚Ì•ÒW[ƒXƒe[ƒ^ƒX])					 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharModifyStatus								 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(é¸æŠžã‚­ãƒ£ãƒ©ã®ç·¨é›†[ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹])					 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharModifyStatus()
@@ -634,9 +634,9 @@ void CAdminWindow::OnCharModifyStatus()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharModifyGrp									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‘I‘ðƒLƒƒƒ‰‚Ì•ÒW[‰æ‘œ‚ÌÝ’è])					 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharModifyGrp									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(é¸æŠžã‚­ãƒ£ãƒ©ã®ç·¨é›†[ç”»åƒã®è¨­å®š])					 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharModifyGrp()
@@ -646,9 +646,9 @@ void CAdminWindow::OnCharModifyGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharModifyItem									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‘I‘ðƒLƒƒƒ‰‚Ì•ÒW[ŠŽƒAƒCƒeƒ€‚ÌÝ’è])			 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharModifyItem									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(é¸æŠžã‚­ãƒ£ãƒ©ã®ç·¨é›†[æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã®è¨­å®š])			 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharModifyItem()
@@ -658,9 +658,9 @@ void CAdminWindow::OnCharModifyItem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharModifySkill								 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‘I‘ðƒLƒƒƒ‰‚Ì•ÒW[ŠŽƒXƒLƒ‹‚ÌÝ’è])			 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharModifySkill								 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(é¸æŠžã‚­ãƒ£ãƒ©ã®ç·¨é›†[æ‰€æŒã‚¹ã‚­ãƒ«ã®è¨­å®š])			 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharModifySkill()
@@ -670,9 +670,9 @@ void CAdminWindow::OnCharModifySkill()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharList										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ˆê——)											 */
-/* “ú•t		:2008/12/01														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharList										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ä¸€è¦§)											 */
+/* æ—¥ä»˜		:2008/12/01														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharList()
@@ -682,9 +682,9 @@ void CAdminWindow::OnCharList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharAdmin										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ŠÇ—ŽÒŒ ŒÀ‚ÌÝ’è)								 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharAdmin										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ç®¡ç†è€…æ¨©é™ã®è¨­å®š)								 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharAdmin()
@@ -694,9 +694,9 @@ void CAdminWindow::OnCharAdmin()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharAddNPC										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(NPC‚Ì’Ç‰Á)									 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharAddNPC										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(NPCã®è¿½åŠ )									 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharAddNPC()
@@ -706,9 +706,9 @@ void CAdminWindow::OnCharAddNPC()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharMotion										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒ‚[ƒVƒ‡ƒ“‚Ì•ÒW)								 */
-/* “ú•t		:2007/10/28														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharMotion										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®ç·¨é›†)								 */
+/* æ—¥ä»˜		:2007/10/28														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharMotion()
@@ -718,9 +718,9 @@ void CAdminWindow::OnCharMotion()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharAccountInfo								 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒAƒJƒEƒ“ƒgî•ñ‚Ì•ÒW)							 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharAccountInfo								 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã®ç·¨é›†)							 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharAccountInfo()
@@ -730,9 +730,9 @@ void CAdminWindow::OnCharAccountInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharSkill										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒXƒLƒ‹‚Ì•ÒW)									 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharSkill										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¹ã‚­ãƒ«ã®ç·¨é›†)									 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharSkill()
@@ -742,9 +742,9 @@ void CAdminWindow::OnCharSkill()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnCharDisable									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‹‘”Û)											 */
-/* “ú•t		:2009/04/06														 */
+/* é–¢æ•°å	:CAdminWindow::OnCharDisable									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(æ‹’å¦)											 */
+/* æ—¥ä»˜		:2009/04/06														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnCharDisable()
@@ -754,9 +754,9 @@ void CAdminWindow::OnCharDisable()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnItemTypeList									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒAƒCƒeƒ€Ží•Êˆê——)								 */
-/* “ú•t		:2007/09/30														 */
+/* é–¢æ•°å	:CAdminWindow::OnItemTypeList									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ä¸€è¦§)								 */
+/* æ—¥ä»˜		:2007/09/30														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnItemTypeList()
@@ -766,9 +766,9 @@ void CAdminWindow::OnItemTypeList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnItemList										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒAƒCƒeƒ€ˆê——)									 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CAdminWindow::OnItemList										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§)									 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnItemList()
@@ -778,9 +778,9 @@ void CAdminWindow::OnItemList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnItemWeaponList									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(•Šíî•ñˆê——)									 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CAdminWindow::OnItemWeaponList									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(æ­¦å™¨æƒ…å ±ä¸€è¦§)									 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnItemWeaponList()
@@ -790,9 +790,9 @@ void CAdminWindow::OnItemWeaponList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnEfcBalloonList									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(•¬o‚µˆê——)									 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CAdminWindow::OnEfcBalloonList									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(å™´å‡ºã—ä¸€è¦§)									 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnEfcBalloonList()
@@ -802,9 +802,9 @@ void CAdminWindow::OnEfcBalloonList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnEfcEffectList									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒGƒtƒFƒNƒgˆê——)								 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CAdminWindow::OnEfcEffectList									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§)								 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnEfcEffectList()
@@ -814,9 +814,9 @@ void CAdminWindow::OnEfcEffectList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnServerInfo										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒT[ƒo[î•ñ)									 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CAdminWindow::OnServerInfo										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚µãƒ¼ãƒãƒ¼æƒ…å ±)									 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnServerInfo()
@@ -826,9 +826,9 @@ void CAdminWindow::OnServerInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnDebugMoveNoBlock								 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ˆÚ“®“–‚½‚è”»’è–³Œø)							 */
-/* “ú•t		:2008/07/20														 */
+/* é–¢æ•°å	:CAdminWindow::OnDebugMoveNoBlock								 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ç§»å‹•å½“ãŸã‚Šåˆ¤å®šç„¡åŠ¹)							 */
+/* æ—¥ä»˜		:2008/07/20														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnDebugMoveNoBlock()
@@ -848,9 +848,9 @@ void CAdminWindow::OnDebugMoveNoBlock()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnDebugGridOff									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒOƒŠƒbƒh•\Ž¦-•\Ž¦‚µ‚È‚¢)						 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CAdminWindow::OnDebugGridOff									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º-è¡¨ç¤ºã—ãªã„)						 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnDebugGridOff()
@@ -863,9 +863,9 @@ void CAdminWindow::OnDebugGridOff()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnDebugGrid										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒOƒŠƒbƒh•\Ž¦-1ƒLƒƒƒ‰ƒTƒCƒY)					 */
-/* “ú•t		:2008/05/02														 */
+/* é–¢æ•°å	:CAdminWindow::OnDebugGrid										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º-1ã‚­ãƒ£ãƒ©ã‚µã‚¤ã‚º)					 */
+/* æ—¥ä»˜		:2008/05/02														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnDebugGrid()
@@ -878,9 +878,9 @@ void CAdminWindow::OnDebugGrid()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnDebugGridHalf									 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒOƒŠƒbƒh•\Ž¦-”¼ƒLƒƒƒ‰ƒTƒCƒY)					 */
-/* “ú•t		:2008/05/02														 */
+/* é–¢æ•°å	:CAdminWindow::OnDebugGridHalf									 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º-åŠã‚­ãƒ£ãƒ©ã‚µã‚¤ã‚º)					 */
+/* æ—¥ä»˜		:2008/05/02														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnDebugGridHalf()
@@ -893,9 +893,9 @@ void CAdminWindow::OnDebugGridHalf()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnSystemSetInitCharStatus						 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l‚ÌÝ’è)					 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CAdminWindow::OnSystemSetInitCharStatus						 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ã®è¨­å®š)					 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnSystemSetInitCharStatus()
@@ -905,9 +905,9 @@ void CAdminWindow::OnSystemSetInitCharStatus()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnAccountAdd										 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒAƒJƒEƒ“ƒg‚Ì’Ç‰Á)								 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CAdminWindow::OnAccountAdd										 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ )								 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 void CAdminWindow::OnAccountAdd()
@@ -917,9 +917,9 @@ void CAdminWindow::OnAccountAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::ThreadMain										 */
-/* “à—e		:ƒƒCƒ“ˆ—														 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CAdminWindow::ThreadMain										 */
+/* å†…å®¹		:ãƒ¡ã‚¤ãƒ³å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CAdminWindow::ThreadMain(void)
@@ -934,7 +934,7 @@ void CAdminWindow::ThreadMain(void)
 	rc.right	= rc.left + 400;
 	rc.bottom	= rc.top + 300;
 
-	/* ƒEƒBƒ“ƒhƒE‚ðì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ä½œæˆ */
 	bResult = CWnd::Create (
 					NULL,
 					NULL,
@@ -958,7 +958,7 @@ void CAdminWindow::ThreadMain(void)
 			DispatchMessage (&msg);
 		} else {
 			if (m_pWndMap && IsWindow (m_pWndMap->GetSafeHwnd ())) {
-				/* ƒc[ƒ‹ƒo[‚ª—LŒø‚É‚È‚é‚æ‚¤‚ÉƒAƒCƒhƒ‹ƒƒbƒZ[ƒW‚ð’Ê’m */
+				/* ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ãŒæœ‰åŠ¹ã«ãªã‚‹ã‚ˆã†ã«ã‚¢ã‚¤ãƒ‰ãƒ«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€šçŸ¥ */
 				m_pWndMap->SendMessageToDescendants (WM_IDLEUPDATECMDUI);
 			}
 			MsgWaitForMultipleObjects (0, NULL, FALSE, 1, QS_ALLINPUT);

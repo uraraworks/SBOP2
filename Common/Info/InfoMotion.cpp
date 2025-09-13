@@ -1,54 +1,54 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMotion.cpp												 */
-/* “à—e			:ƒ‚[ƒVƒ‡ƒ“î•ñƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/10/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMotion.cpp												 */
+/* å†…å®¹			:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/29													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMotion.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwMotionID",			/* ƒ‚[ƒVƒ‡ƒ“ID */
-	"m_dwMotionTypeID",		/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	"m_dwMotionListID",		/* ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
-	"m_byWait",				/* ‘Ò‚¿ŽžŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	"m_byLevel1",			/* “§–¾“x1 */
-	"m_byLevel2",			/* “§–¾“x2 */
-	"m_byLevel3",			/* “§–¾“x3 */
-	"m_bPile",				/* d‚Ë‰æ‘œ‚ðæ‚É•`‰æ */
-	"m_bRedrawHand",		/* Žè‚ðŽè‘O‚É•`‰æ */
-	"m_wGrpIDMainBase",		/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(‰º’n) */
-	"m_wGrpIDMainPile1",	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹1) */
-	"m_wGrpIDMainPile2",	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹2) */
-	"m_wGrpIDMainPile3",	/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹3) */
-	"m_wGrpIDSubBase",		/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(‰º’n) */
-	"m_wGrpIDSubPile1",		/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹1) */
-	"m_wGrpIDSubPile2",		/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹2) */
-	"m_wGrpIDSubPile3",		/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹3) */
-	"m_dwSoundID",			/* Œø‰Ê‰¹ID */
-	"m_bLoop",				/* ƒ‹[ƒvÄ¶ */
-	"m_dwProcID",			/* s“®ID */
-	"m_ptDrawPos0",			/* •`‰æˆÊ’u(‰º’n) */
-	"m_ptDrawPos1",			/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹1) */
-	"m_ptDrawPos2",			/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹2) */
-	"m_ptDrawPos3",			/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹3) */
-	"nDrawListCount",		/* •`‰æ‡ƒŠƒXƒg” */
-	"m_anDrawList",			/* •`‰æ‡ƒŠƒXƒg */
+	"m_dwMotionID",			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID */
+	"m_dwMotionTypeID",		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	"m_dwMotionListID",		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
+	"m_byWait",				/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	"m_byLevel1",			/* é€æ˜Žåº¦1 */
+	"m_byLevel2",			/* é€æ˜Žåº¦2 */
+	"m_byLevel3",			/* é€æ˜Žåº¦3 */
+	"m_bPile",				/* é‡ã­ç”»åƒã‚’å…ˆã«æç”» */
+	"m_bRedrawHand",		/* æ‰‹ã‚’æ‰‹å‰ã«æç”» */
+	"m_wGrpIDMainBase",		/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(ä¸‹åœ°) */
+	"m_wGrpIDMainPile1",	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›1) */
+	"m_wGrpIDMainPile2",	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›2) */
+	"m_wGrpIDMainPile3",	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›3) */
+	"m_wGrpIDSubBase",		/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(ä¸‹åœ°) */
+	"m_wGrpIDSubPile1",		/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›1) */
+	"m_wGrpIDSubPile2",		/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›2) */
+	"m_wGrpIDSubPile3",		/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›3) */
+	"m_dwSoundID",			/* åŠ¹æžœéŸ³ID */
+	"m_bLoop",				/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	"m_dwProcID",			/* è¡Œå‹•ID */
+	"m_ptDrawPos0",			/* æç”»ä½ç½®(ä¸‹åœ°) */
+	"m_ptDrawPos1",			/* æç”»ä½ç½®(é‡ã­åˆã‚ã›1) */
+	"m_ptDrawPos2",			/* æç”»ä½ç½®(é‡ã­åˆã‚ã›2) */
+	"m_ptDrawPos3",			/* æç”»ä½ç½®(é‡ã­åˆã‚ã›3) */
+	"nDrawListCount",		/* æç”»é †ãƒªã‚¹ãƒˆæ•° */
+	"m_anDrawList",			/* æç”»é †ãƒªã‚¹ãƒˆ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::CInfoMotion										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::CInfoMotion										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 CInfoMotion::CInfoMotion()
@@ -83,9 +83,9 @@ CInfoMotion::CInfoMotion()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::~CInfoMotion										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::~CInfoMotion										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 CInfoMotion::~CInfoMotion()
@@ -94,9 +94,9 @@ CInfoMotion::~CInfoMotion()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapParts::GetElementCount									 */
-/* “à—e		:—v‘f”‚ðŽæ“¾													 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMapParts::GetElementCount									 */
+/* å†…å®¹		:è¦ç´ æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 int CInfoMotion::GetElementCount(void)
@@ -106,9 +106,9 @@ int CInfoMotion::GetElementCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ðŽæ“¾													 */
-/* “ú•t		:2005/05/01														 */
+/* é–¢æ•°å	:CInfoMotion::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/05/01														 */
 /* ========================================================================= */
 
 int CInfoMotion::GetElementNo(LPCSTR pszName)
@@ -129,9 +129,9 @@ int CInfoMotion::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾												 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 DWORD CInfoMotion::GetDataSize(void)
@@ -170,9 +170,9 @@ DWORD CInfoMotion::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::GetDataSizeNo										 */
-/* “à—e		:Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::GetDataSizeNo										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 DWORD CInfoMotion::GetDataSizeNo(int nNo)
@@ -215,9 +215,9 @@ DWORD CInfoMotion::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::GetName											 */
-/* “à—e		:—v‘f–¼‚ðŽæ“¾													 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMotion::GetName(int nNo)
@@ -227,9 +227,9 @@ LPCSTR CInfoMotion::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::GetWriteData										 */
-/* “à—e		:Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾									 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 PBYTE CInfoMotion::GetWriteData(int nNo, PDWORD pdwSize)
@@ -297,14 +297,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::ReadElementData									 */
-/* “à—e		:Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 DWORD CInfoMotion::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚Ýž‚ÝŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	int i, nCount, nTmp;
 	PBYTE pDst, pTmp;
@@ -379,9 +379,9 @@ DWORD CInfoMotion::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 DWORD CInfoMotion::GetSendDataSize(void)
@@ -391,9 +391,9 @@ DWORD CInfoMotion::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 PBYTE CInfoMotion::GetSendData(void)
@@ -444,9 +444,9 @@ PBYTE CInfoMotion::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2007/10/29														 */
+/* é–¢æ•°å	:CInfoMotion::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/10/29														 */
 /* ========================================================================= */
 
 PBYTE CInfoMotion::SetSendData(PBYTE pSrc)
@@ -493,9 +493,9 @@ PBYTE CInfoMotion::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotion::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CInfoMotion::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 void CInfoMotion::Copy(CInfoMotion *pSrc)

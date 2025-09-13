@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminBase.h												 */
-/* “à—e			:ŠÇ—ÒƒEƒBƒ“ƒhƒEŠî’êƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/03/18													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:DlgAdminBase.h												 */
+/* â€œÃ â€”e			:Å Ã‡â€”ÂÅ½Ã’Æ’EÆ’BÆ’â€œÆ’hÆ’EÅ Ã®â€™ÃªÆ’_Æ’CÆ’AÆ’ÂÆ’OÆ’NÆ’â€°Æ’X Å½Ã€â€˜â€¢Æ’tÆ’@Æ’CÆ’â€¹			 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2007/03/18													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -18,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* Æ’NÆ’â€°Æ’Xâ€šÃŒÂÃâ€™Ã¨																 */
 /* ========================================================================= */
 
 void CDlgAdminBase::DoDataExchange(CDataExchange* pDX)
@@ -36,9 +36,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::CDlgAdminBase									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::CDlgAdminBase									 */
+/* â€œÃ â€”e		:Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 CDlgAdminBase::CDlgAdminBase(int nResourceID, CWnd* pParent /*=NULL*/)
@@ -53,9 +53,9 @@ CDlgAdminBase::CDlgAdminBase(int nResourceID, CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::~CDlgAdminBase									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::~CDlgAdminBase									 */
+/* â€œÃ â€”e		:Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 CDlgAdminBase::~CDlgAdminBase()
@@ -64,9 +64,9 @@ CDlgAdminBase::~CDlgAdminBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::Init											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::Init											 */
+/* â€œÃ â€”e		:Ââ€°Å Ãºâ€°Â»															 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::Init(CMgrData *pMgrData)
@@ -77,9 +77,9 @@ void CDlgAdminBase::Init(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::Renew											 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::Renew											 */
+/* â€œÃ â€”e		:ÂXÂV															 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::Renew(void)
@@ -88,15 +88,15 @@ void CDlgAdminBase::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnAdminMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::OnAdminMsg										 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_ADMINMSG)								 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_ACCOUNTINFO:		/* ƒAƒJƒEƒ“ƒgî•ñæ“¾ */
+	case ADMINMSG_ACCOUNTINFO:		/* Æ’AÆ’JÆ’EÆ’â€œÆ’gÂÃ®â€¢Ã±Å½Ã¦â€œÂ¾ */
 		m_pMgrData->Delete (dwPara);
 		break;
 	}
@@ -104,9 +104,9 @@ void CDlgAdminBase::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnMainFrame										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/08/16														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::OnMainFrame										 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MAINFRAME)								 */
+/* â€œÃºâ€¢t		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::OnMainFrame(DWORD dwCommand, DWORD dwParam)
@@ -115,9 +115,9 @@ void CDlgAdminBase::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnInitDialog									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::OnInitDialog									 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_INITDIALOG)								 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminBase::OnInitDialog()
@@ -131,9 +131,9 @@ BOOL CDlgAdminBase::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnSize											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::OnSize											 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_SIZE)									 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::OnSize(UINT nType, int cx, int cy)
@@ -145,9 +145,9 @@ void CDlgAdminBase::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::PostNcDestroy									 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/03/18														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::PostNcDestroy									 */
+/* â€œÃ â€”e		:ÂIâ€”Â¹ÂË†â€”Â														 */
+/* â€œÃºâ€¢t		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::PostNcDestroy()
@@ -157,9 +157,9 @@ void CDlgAdminBase::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::SelectCmb										 */
-/* “à—e		:€–Ú‚ğ‘I‘ğ														 */
-/* “ú•t		:2007/11/25														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminBase::SelectCmb										 */
+/* â€œÃ â€”e		:Ââ‚¬â€“Ãšâ€šÃ°â€˜Iâ€˜Ã°														 */
+/* â€œÃºâ€¢t		:2007/11/25														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::SelectCmb(CComboBox *pCmb, DWORD dwID)

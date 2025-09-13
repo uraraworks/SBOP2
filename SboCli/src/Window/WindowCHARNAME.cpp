@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowCHARNAME.cpp											 */
-/* “à—e			:ƒLƒƒƒ‰–¼“ü—ÍƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowCHARNAME.cpp											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©åå…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,9 +15,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHARNAME::CWindowCHARNAME								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CWindowCHARNAME::CWindowCHARNAME								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 CWindowCHARNAME::CWindowCHARNAME()
@@ -34,9 +34,9 @@ CWindowCHARNAME::CWindowCHARNAME()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHARNAME::~CWindowCHARNAME								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CWindowCHARNAME::~CWindowCHARNAME								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 CWindowCHARNAME::~CWindowCHARNAME()
@@ -44,7 +44,7 @@ CWindowCHARNAME::~CWindowCHARNAME()
 	HIMC hImc;
 
 	if (m_hWndCharName) {
-		/* IME‚ðƒIƒt‚É‚·‚é */
+		/* IMEã‚’ã‚ªãƒ•ã«ã™ã‚‹ */
 		hImc = ImmGetContext (m_hWndCharName);
 		ImmSetOpenStatus (hImc, FALSE);
 		ImmReleaseContext (m_hWndCharName, hImc);
@@ -57,9 +57,9 @@ CWindowCHARNAME::~CWindowCHARNAME()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHARNAME::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CWindowCHARNAME::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CWindowCHARNAME::Create(CMgrData *pMgrData)
@@ -74,9 +74,9 @@ void CWindowCHARNAME::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHARNAME::Draw											 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CWindowCHARNAME::Draw											 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CWindowCHARNAME::Draw(PCImg32 pDst)
@@ -95,7 +95,7 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 24, 16, "ƒLƒƒƒ‰ƒNƒ^[–¼", RGB (255, 127, 53));
+	TextOut4 (hDC, 24, 16, "ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼å", RGB (255, 127, 53));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -108,9 +108,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHARNAME::SetActive										 */
-/* “à—e		:ƒAƒNƒeƒBƒu‚©Ý’è												 */
-/* “ú•t		:2006/06/22														 */
+/* é–¢æ•°å	:CWindowCHARNAME::SetActive										 */
+/* å†…å®¹		:ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹è¨­å®š												 */
+/* æ—¥ä»˜		:2006/06/22														 */
 /* ========================================================================= */
 
 void CWindowCHARNAME::SetActive(BOOL bActive)
@@ -130,9 +130,9 @@ void CWindowCHARNAME::SetActive(BOOL bActive)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHARNAME::MakeWindow									 */
-/* “à—e		:ƒEƒBƒ“ƒhƒEì¬													 */
-/* “ú•t		:2006/05/14														 */
+/* é–¢æ•°å	:CWindowCHARNAME::MakeWindow									 */
+/* å†…å®¹		:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ													 */
+/* æ—¥ä»˜		:2006/05/14														 */
 /* ========================================================================= */
 
 void CWindowCHARNAME::MakeWindow(void)
@@ -144,7 +144,7 @@ void CWindowCHARNAME::MakeWindow(void)
 	hInstance	= m_pMgrData->GetInstance ();
 	hWndMain	= m_pMgrData->GetMainWindow ();
 
-	/* ƒLƒƒƒ‰–¼“ü—Í—“ */
+	/* ã‚­ãƒ£ãƒ©åå…¥åŠ›æ¬„ */
 	m_hWndCharName = CreateWindow ("EDIT", "", WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
 			m_ptViewPos.x + 16, m_ptViewPos.y + 48, 8 * MAXLEN_CHARNAME, 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcCharName = (WNDPROC)GetWindowLong (m_hWndCharName, GWL_WNDPROC);
@@ -152,7 +152,7 @@ void CWindowCHARNAME::MakeWindow(void)
 	SetWindowLong		(m_hWndCharName, GWL_USERDATA, (LONG)this);
 	SetWindowLong		(m_hWndCharName, GWL_WNDPROC, (LONG)CharNameWndProc);
 
-	/* IME‚ðƒIƒ“‚É‚·‚é */
+	/* IMEã‚’ã‚ªãƒ³ã«ã™ã‚‹ */
 	hImc = ImmGetContext (m_hWndCharName);
 	ImmSetOpenStatus (hImc, TRUE);
 	ImmReleaseContext (m_hWndCharName, hImc);
@@ -162,9 +162,9 @@ void CWindowCHARNAME::MakeWindow(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHARNAME::CharNameWndProc								 */
-/* “à—e		:ƒLƒƒƒ‰–¼“ü—Í—“ƒƒbƒZ[ƒWˆ—									 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CWindowCHARNAME::CharNameWndProc								 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©åå…¥åŠ›æ¬„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†									 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CWindowCHARNAME::CharNameWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -195,7 +195,7 @@ LRESULT CALLBACK CWindowCHARNAME::CharNameWndProc(HWND hWnd, UINT message, WPARA
 				TrimViewString (pThis->m_strName, szTmp);
 				PostMessage (pThis->m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_CHARNAME, 0);
 			}
-			/* IME‚ðƒIƒt‚É‚·‚é */
+			/* IMEã‚’ã‚ªãƒ•ã«ã™ã‚‹ */
 			hImc = ImmGetContext (pThis->m_hWndCharName);
 			ImmSetOpenStatus (hImc, FALSE);
 			ImmReleaseContext (pThis->m_hWndCharName, hImc);

@@ -1,30 +1,30 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* �t�@�C����	:InfoTalkEventPAGE.cpp										 */
-/* ���e			:��b�C�x���g���(�y�[�W�؂�ւ�)�N���X �����t�@�C��		 */
-/* �쐬			:�N����N���t�����(URARA-works)							 */
-/* �쐬�J�n��	:2008/12/29													 */
+/* ファイル名	:InfoTalkEventPAGE.cpp										 */
+/* 内容			:会話イベント情報(ページ切り替え)クラス 実装ファイル		 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2008/12/29													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoTalkEventPAGE.h"
 
 /* ========================================================================= */
-/* �萔��`																	 */
+/* 定数定義																	 */
 /* ========================================================================= */
 
-/* �w�b�_��� */
+/* ヘッダ情報 */
 static LPCSTR s_aszName[] = {
-	"m_nPageChgCondition",	/* �y�[�W�؂�ւ����� */
-	"m_nPageJump",			/* �y�[�W�؂�ւ��� */
+	"m_nPageChgCondition",	/* ページ切り替え条件 */
+	"m_nPageJump",			/* ページ切り替え先 */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::CInfoTalkEventPAGE							 */
-/* ���e		:�R���X�g���N�^													 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::CInfoTalkEventPAGE							 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 CInfoTalkEventPAGE::CInfoTalkEventPAGE()
@@ -37,9 +37,9 @@ CInfoTalkEventPAGE::CInfoTalkEventPAGE()
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::~CInfoTalkEventPAGE						 */
-/* ���e		:�f�X�g���N�^													 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::~CInfoTalkEventPAGE						 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 CInfoTalkEventPAGE::~CInfoTalkEventPAGE()
@@ -48,9 +48,9 @@ CInfoTalkEventPAGE::~CInfoTalkEventPAGE()
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetElementCount							 */
-/* ���e		:�v�f�����擾													 */
-/* ���t		:2008/12/28														 */
+/* 関数名	:CInfoTalkEventPAGE::GetElementCount							 */
+/* 内容		:要素数を取得													 */
+/* 日付		:2008/12/28														 */
 /* ========================================================================= */
 
 int CInfoTalkEventPAGE::GetElementCount(void)
@@ -60,9 +60,9 @@ int CInfoTalkEventPAGE::GetElementCount(void)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetElementNo								 */
-/* ���e		:�v�f�ԍ����擾													 */
-/* ���t		:2005/07/05														 */
+/* 関数名	:CInfoTalkEventPAGE::GetElementNo								 */
+/* 内容		:要素番号を取得													 */
+/* 日付		:2005/07/05														 */
 /* ========================================================================= */
 
 int CInfoTalkEventPAGE::GetElementNo(LPCSTR pszName)
@@ -87,9 +87,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetDataSize								 */
-/* ���e		:�f�[�^�T�C�Y���擾												 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::GetDataSize								 */
+/* 内容		:データサイズを取得												 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventPAGE::GetDataSize(void)
@@ -97,17 +97,17 @@ DWORD CInfoTalkEventPAGE::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = CInfoTalkEventBase::GetDataSize();
-	dwRet += sizeof (m_nPageChgCondition);		/* �y�[�W�؂�ւ����� */
-	dwRet += sizeof (m_nPageJump);				/* �y�[�W�؂�ւ��� */
+	dwRet += sizeof (m_nPageChgCondition);		/* ページ切り替え条件 */
+	dwRet += sizeof (m_nPageJump);				/* ページ切り替え先 */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetDataSizeNo								 */
-/* ���e		:�w��v�f�̃f�[�^�T�C�Y���擾									 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::GetDataSizeNo								 */
+/* 内容		:指定要素のデータサイズを取得									 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventPAGE::GetDataSizeNo(int nNo)
@@ -120,8 +120,8 @@ DWORD CInfoTalkEventPAGE::GetDataSizeNo(int nNo)
 	}
 
 	switch (nNo - m_nElementCountBase) {
-	case 0:	dwRet = sizeof (m_nPageChgCondition);	break;		/* �y�[�W�؂�ւ����� */
-	case 1:	dwRet = sizeof (m_nPageJump);			break;		/* �y�[�W�؂�ւ��� */
+	case 0:	dwRet = sizeof (m_nPageChgCondition);	break;		/* ページ切り替え条件 */
+	case 1:	dwRet = sizeof (m_nPageJump);			break;		/* ページ切り替え先 */
 	}
 
 	return dwRet;
@@ -129,9 +129,9 @@ DWORD CInfoTalkEventPAGE::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetName									 */
-/* ���e		:�v�f�����擾													 */
-/* ���t		:2005/07/05														 */
+/* 関数名	:CInfoTalkEventPAGE::GetName									 */
+/* 内容		:要素名を取得													 */
+/* 日付		:2005/07/05														 */
 /* ========================================================================= */
 
 LPCSTR CInfoTalkEventPAGE::GetName(int nNo)
@@ -144,9 +144,9 @@ LPCSTR CInfoTalkEventPAGE::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetWriteData								 */
-/* ���e		:�w��v�f�̕ۑ��p�f�[�^���擾									 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::GetWriteData								 */
+/* 内容		:指定要素の保存用データを取得									 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventPAGE::GetWriteData(int nNo, PDWORD pdwSize)
@@ -170,8 +170,8 @@ PBYTE CInfoTalkEventPAGE::GetWriteData(int nNo, PDWORD pdwSize)
 
 	nNo -= m_nElementCountBase;
 	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_nPageChgCondition;		break;		/* �y�[�W�؂�ւ����� */
-	case 1:	pSrc = (PBYTE)&m_nPageJump;				break;		/* �y�[�W�؂�ւ��� */
+	case 0:	pSrc = (PBYTE)&m_nPageChgCondition;		break;		/* ページ切り替え条件 */
+	case 1:	pSrc = (PBYTE)&m_nPageJump;				break;		/* ページ切り替え先 */
 	}
 
 	if (pSrc) {
@@ -184,14 +184,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::ReadElementData							 */
-/* ���e		:�w��v�f�f�[�^��ǂݍ���										 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::ReadElementData							 */
+/* 内容		:指定要素データを読み込み										 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventPAGE::ReadElementData(
-	PBYTE pSrc,		/* [in] �f�[�^�̓ǂݍ��݌� */
-	int nNo)		/* [in] �v�f�ԍ� */
+	PBYTE pSrc,		/* [in] データの読み込み元 */
+	int nNo)		/* [in] 要素番号 */
 {
 	DWORD dwSize;
 	PBYTE pDst;
@@ -205,8 +205,8 @@ DWORD CInfoTalkEventPAGE::ReadElementData(
 
 	nNo -= m_nElementCountBase;
 	switch (nNo) {
-	case 0:	pDst = (PBYTE)&m_nPageChgCondition;	dwSize = sizeof (m_nPageChgCondition);	break;	/* �y�[�W�؂�ւ����� */
-	case 1:	pDst = (PBYTE)&m_nPageJump;			dwSize = sizeof (m_nPageJump);			break;	/* �y�[�W�؂�ւ��� */
+	case 0:	pDst = (PBYTE)&m_nPageChgCondition;	dwSize = sizeof (m_nPageChgCondition);	break;	/* ページ切り替え条件 */
+	case 1:	pDst = (PBYTE)&m_nPageJump;			dwSize = sizeof (m_nPageJump);			break;	/* ページ切り替え先 */
 	}
 
 	if (pDst) {
@@ -218,9 +218,9 @@ DWORD CInfoTalkEventPAGE::ReadElementData(
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetSendDataSize							 */
-/* ���e		:���M�f�[�^�T�C�Y���擾											 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::GetSendDataSize							 */
+/* 内容		:送信データサイズを取得											 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 DWORD CInfoTalkEventPAGE::GetSendDataSize(void)
@@ -228,17 +228,17 @@ DWORD CInfoTalkEventPAGE::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = CInfoTalkEventBase::GetSendDataSize ();
-	dwRet += GetDataSizeNo (m_nElementCountBase + 0);	/* �y�[�W�؂�ւ����� */
-	dwRet += GetDataSizeNo (m_nElementCountBase + 1);	/* �y�[�W�؂�ւ��� */
+	dwRet += GetDataSizeNo (m_nElementCountBase + 0);	/* ページ切り替え条件 */
+	dwRet += GetDataSizeNo (m_nElementCountBase + 1);	/* ページ切り替え先 */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::GetSendData								 */
-/* ���e		:���M�f�[�^���擾												 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::GetSendData								 */
+/* 内容		:送信データを取得												 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventPAGE::GetSendData(void)
@@ -255,17 +255,17 @@ PBYTE CInfoTalkEventPAGE::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 	SAFE_DELETE_ARRAY (pDataBase);
 
-	CopyMemoryRenew (pDataTmp, &m_nPageChgCondition,	sizeof (m_nPageChgCondition),	pDataTmp);	/* �y�[�W�؂�ւ����� */
-	CopyMemoryRenew (pDataTmp, &m_nPageJump,			sizeof (m_nPageJump),			pDataTmp);	/* �y�[�W�؂�ւ��� */
+	CopyMemoryRenew (pDataTmp, &m_nPageChgCondition,	sizeof (m_nPageChgCondition),	pDataTmp);	/* ページ切り替え条件 */
+	CopyMemoryRenew (pDataTmp, &m_nPageJump,			sizeof (m_nPageJump),			pDataTmp);	/* ページ切り替え先 */
 
 	return pData;
 }
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::SetSendData								 */
-/* ���e		:���M�f�[�^�����荞��											 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::SetSendData								 */
+/* 内容		:送信データから取り込み											 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 PBYTE CInfoTalkEventPAGE::SetSendData(PBYTE pSrc)
@@ -275,8 +275,8 @@ PBYTE CInfoTalkEventPAGE::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = CInfoTalkEventBase::SetSendData (pSrc);
-	CopyMemoryRenew (&m_nPageChgCondition,	pDataTmp, sizeof (m_nPageChgCondition),	pDataTmp);	/* �y�[�W�؂�ւ����� */
-	CopyMemoryRenew (&m_nPageJump,			pDataTmp, sizeof (m_nPageJump),			pDataTmp);	/* �y�[�W�؂�ւ��� */
+	CopyMemoryRenew (&m_nPageChgCondition,	pDataTmp, sizeof (m_nPageChgCondition),	pDataTmp);	/* ページ切り替え条件 */
+	CopyMemoryRenew (&m_nPageJump,			pDataTmp, sizeof (m_nPageJump),			pDataTmp);	/* ページ切り替え先 */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -284,9 +284,9 @@ PBYTE CInfoTalkEventPAGE::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoTalkEventPAGE::Copy										 */
-/* ���e		:�R�s�[															 */
-/* ���t		:2008/12/29														 */
+/* 関数名	:CInfoTalkEventPAGE::Copy										 */
+/* 内容		:コピー															 */
+/* 日付		:2008/12/29														 */
 /* ========================================================================= */
 
 void CInfoTalkEventPAGE::Copy(CInfoTalkEventBase *pSrc)
@@ -299,8 +299,8 @@ void CInfoTalkEventPAGE::Copy(CInfoTalkEventBase *pSrc)
 	pSrcTmp = (PCInfoTalkEventPAGE)pSrc;
 
 	CInfoTalkEventBase::Copy (pSrcTmp);
-	m_nPageChgCondition	= pSrcTmp->m_nPageChgCondition;			/* �y�[�W�؂�ւ����� */
-	m_nPageJump			= pSrcTmp->m_nPageJump;					/* �y�[�W�؂�ւ��� */
+	m_nPageChgCondition	= pSrcTmp->m_nPageChgCondition;			/* ページ切り替え条件 */
+	m_nPageJump			= pSrcTmp->m_nPageJump;					/* ページ切り替え先 */
 }
 
 /* Copyright(C)URARA-works 2008 */

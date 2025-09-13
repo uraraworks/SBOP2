@@ -1,30 +1,30 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoDisable.cpp											 */
-/* “à—e			:‹‘”Ûî•ñƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoDisable.cpp											 */
+/* å†…å®¹			:æ‹’å¦æƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoDisable.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwDisableID",		/* ‹‘”Ûî•ñID */
-	"m_strMacAddress",		/* MACƒAƒhƒŒƒX */
+	"m_dwDisableID",		/* æ‹’å¦æƒ…å ±ID */
+	"m_strMacAddress",		/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::CInfoDisable										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::CInfoDisable										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 CInfoDisable::CInfoDisable()
@@ -36,9 +36,9 @@ CInfoDisable::CInfoDisable()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::~CInfoDisable									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::~CInfoDisable									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 CInfoDisable::~CInfoDisable()
@@ -47,9 +47,9 @@ CInfoDisable::~CInfoDisable()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 int CInfoDisable::GetElementNo(LPCSTR pszName)
@@ -70,9 +70,9 @@ int CInfoDisable::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 DWORD CInfoDisable::GetDataSize(void)
@@ -80,17 +80,17 @@ DWORD CInfoDisable::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_dwDisableID);				/* ‹‘”Ûî•ñID */
-	dwRet += (m_strMacAddress.GetLength () + 1);	/* MACƒAƒhƒŒƒX */
+	dwRet += sizeof (m_dwDisableID);				/* æ‹’å¦æƒ…å ±ID */
+	dwRet += (m_strMacAddress.GetLength () + 1);	/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 DWORD CInfoDisable::GetDataSizeNo(int nNo)
@@ -100,8 +100,8 @@ DWORD CInfoDisable::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_dwDisableID);				break;	/* ‹‘”Ûî•ñID */
-	case 1:		dwRet = (m_strMacAddress.GetLength () + 1);	break;	/* MACƒAƒhƒŒƒX */
+	case 0:		dwRet = sizeof (m_dwDisableID);				break;	/* æ‹’å¦æƒ…å ±ID */
+	case 1:		dwRet = (m_strMacAddress.GetLength () + 1);	break;	/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	}
 
 	return dwRet;
@@ -109,9 +109,9 @@ DWORD CInfoDisable::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::GetName											 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 LPCSTR CInfoDisable::GetName(int nNo)
@@ -121,9 +121,9 @@ LPCSTR CInfoDisable::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::GetWriteData										 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoDisable::GetWriteData(int nNo, PDWORD pdwSize)
@@ -142,8 +142,8 @@ PBYTE CInfoDisable::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_dwDisableID;			break;	/* ‹‘”Ûî•ñID */
-	case 1:		pSrc = (PBYTE)(LPCSTR)m_strMacAddress;	break;	/* MACƒAƒhƒŒƒX */
+	case 0:		pSrc = (PBYTE)&m_dwDisableID;			break;	/* æ‹’å¦æƒ…å ±ID */
+	case 1:		pSrc = (PBYTE)(LPCSTR)m_strMacAddress;	break;	/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	}
 
 	if (pSrc) {
@@ -156,14 +156,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::ReadElementData									 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 DWORD CInfoDisable::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -172,8 +172,8 @@ DWORD CInfoDisable::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_dwDisableID;	dwSize = sizeof (m_dwDisableID);	break;	/* ‹‘”Ûî•ñID */
-	case 1:		/* MACƒAƒhƒŒƒX */
+	case 0:		pDst = (PBYTE)&m_dwDisableID;	dwSize = sizeof (m_dwDisableID);	break;	/* æ‹’å¦æƒ…å ±ID */
+	case 1:		/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 		m_strMacAddress = (LPCSTR)pSrc;
 		dwSize = m_strMacAddress.GetLength () + 1;
 		break;
@@ -188,9 +188,9 @@ DWORD CInfoDisable::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 DWORD CInfoDisable::GetSendDataSize(void)
@@ -205,9 +205,9 @@ DWORD CInfoDisable::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoDisable::GetSendData(void)
@@ -228,9 +228,9 @@ PBYTE CInfoDisable::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 PBYTE CInfoDisable::SetSendData(PBYTE pSrc)
@@ -249,9 +249,9 @@ PBYTE CInfoDisable::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoDisable::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CInfoDisable::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 void CInfoDisable::Copy(CInfoDisable *pSrc)

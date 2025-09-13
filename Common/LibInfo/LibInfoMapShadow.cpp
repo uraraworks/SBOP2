@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoMapShadow.cpp										 */
-/* “à—e			:ƒ}ƒbƒv‰eî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoMapShadow.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::CLibInfoMapShadow							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::CLibInfoMapShadow							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 CLibInfoMapShadow::CLibInfoMapShadow()
@@ -23,9 +23,9 @@ CLibInfoMapShadow::CLibInfoMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::~CLibInfoMapShadow							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::~CLibInfoMapShadow							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 CLibInfoMapShadow::~CLibInfoMapShadow()
@@ -35,9 +35,9 @@ CLibInfoMapShadow::~CLibInfoMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::Create(void)
@@ -47,9 +47,9 @@ void CLibInfoMapShadow::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::Destroy										 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::Destroy										 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::Destroy(void)
@@ -60,10 +60,10 @@ void CLibInfoMapShadow::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::Proc										 */
-/* “à—e		:ˆ—															 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALS:ˆ—‚µ‚Ä‚¢‚È‚¢								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::Proc										 */
+/* å†…å®¹		:å‡¦ç†															 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALS:å‡¦ç†ã—ã¦ã„ãªã„								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 BOOL CLibInfoMapShadow::Proc(void)
@@ -85,9 +85,9 @@ BOOL CLibInfoMapShadow::Proc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapShadow::GetNew(void)
@@ -97,9 +97,9 @@ PCInfoBase CLibInfoMapShadow::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetCount									 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetCount									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 int CLibInfoMapShadow::GetCount(void)
@@ -119,9 +119,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::Add											 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::Add											 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::Add(PCInfoBase pInfo)
@@ -139,9 +139,9 @@ void CLibInfoMapShadow::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::RenewIDPtr									 */
-/* “à—e		:IDŒŸõ—pƒ}ƒbƒv‚ğXV											 */
-/* “ú•t		:2009/03/14														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::RenewIDPtr									 */
+/* å†…å®¹		:IDæ¤œç´¢ç”¨ãƒãƒƒãƒ—ã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2009/03/14														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::RenewIDPtr(void)
@@ -161,13 +161,13 @@ void CLibInfoMapShadow::RenewIDPtr(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoMapShadow pInfo;
 
@@ -178,13 +178,13 @@ void CLibInfoMapShadow::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::Delete(
-	DWORD dwShadowID)		/* [in] ƒ}ƒbƒv‰eID */
+	DWORD dwShadowID)		/* [in] ãƒãƒƒãƒ—å½±ID */
 {
 	int i, nCount, nNo;
 	PCInfoMapShadow pInfoTmp;
@@ -209,9 +209,9 @@ void CLibInfoMapShadow::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::DeleteAll									 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::DeleteAll									 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::DeleteAll(void)
@@ -231,9 +231,9 @@ void CLibInfoMapShadow::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::Merge										 */
-/* “à—e		:æ‚è‚İ														 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::Merge										 */
+/* å†…å®¹		:å–ã‚Šè¾¼ã¿														 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::Merge(CLibInfoMapShadow *pSrc)
@@ -257,9 +257,9 @@ void CLibInfoMapShadow::Merge(CLibInfoMapShadow *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::ResetAnime									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ó‘Ô‚ğ‰Šú‰»										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::ResetAnime									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çŠ¶æ…‹ã‚’åˆæœŸåŒ–										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CLibInfoMapShadow::ResetAnime(void)
@@ -277,9 +277,9 @@ void CLibInfoMapShadow::ResetAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetPtr										 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapShadow::GetPtr(int nNo)
@@ -289,13 +289,13 @@ PCInfoBase CLibInfoMapShadow::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetPtr										 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapShadow::GetPtr(
-	DWORD dwShadowID)		/* [in] ƒ}ƒbƒv‰eID */
+	DWORD dwShadowID)		/* [in] ãƒãƒƒãƒ—å½±ID */
 {
 	PCInfoBase pRet;
 
@@ -315,13 +315,13 @@ PCInfoBase CLibInfoMapShadow::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetPtr										 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapShadow::GetPtr(
-	POINT *pPos)		/* [in] •\¦ˆÊ’u */
+	POINT *pPos)		/* [in] è¡¨ç¤ºä½ç½® */
 {
 	int i, nCount;
 	PCInfoMapShadow pRet, pInfoTmp;
@@ -344,9 +344,9 @@ PCInfoBase CLibInfoMapShadow::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapShadow::GetSendDataSize(void)
@@ -362,7 +362,7 @@ DWORD CLibInfoMapShadow::GetSendDataSize(void)
 		pInfoMapShadow = (PCInfoMapShadow)GetPtr (i);
 		dwSize += pInfoMapShadow->GetSendDataSize ();
 	}
-	/* I’[—p */
+	/* çµ‚ç«¯ç”¨ */
 	dwSize += sizeof (DWORD);
 
 	return dwSize;
@@ -370,9 +370,9 @@ DWORD CLibInfoMapShadow::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMapShadow::GetSendData(void)
@@ -403,9 +403,9 @@ PBYTE CLibInfoMapShadow::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMapShadow::SetSendData(PBYTE pSrc)
@@ -440,9 +440,9 @@ PBYTE CLibInfoMapShadow::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapShadow::GetNewID									 */
-/* “à—e		:V‚µ‚¢ID‚ğæ“¾													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CLibInfoMapShadow::GetNewID									 */
+/* å†…å®¹		:æ–°ã—ã„IDã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapShadow::GetNewID(void)

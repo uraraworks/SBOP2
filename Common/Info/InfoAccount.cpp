@@ -1,39 +1,39 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoAccount.cpp											 */
-/* “à—e			:ƒAƒJƒEƒ“ƒgî•ñŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoAccount.cpp											 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoAccount.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_bDisable",			/* ƒƒOƒCƒ“‹‘”Û */
-	"dwAccountID",			/* ƒAƒJƒEƒ“ƒgID */
-	"dwCharID",				/* ƒLƒƒƒ‰ID */
-	"dwTimeLastLogin",		/* ‘O‰ñ‚ÌƒƒOƒCƒ““ú */
-	"dwTimeMakeAccount",	/* ƒAƒJƒEƒ“ƒgì¬“ú */
-	"dwLoginCount",			/* ƒƒOƒCƒ“‰ñ” */
-	"adwCharID",			/* ƒLƒƒƒ‰IDƒe[ƒuƒ‹ */
-	"nAdminLevel",			/* ŠÇ—ÒƒŒƒxƒ‹ */
-	"strAccount",			/* ƒAƒJƒEƒ“ƒg */
-	"strPassword",			/* ƒpƒXƒ[ƒh */
-	"m_strMacAddr",			/* ƒAƒJƒEƒ“ƒg“o˜^MACƒAƒhƒŒƒX */
+	"m_bDisable",			/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
+	"dwAccountID",			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	"dwCharID",				/* ã‚­ãƒ£ãƒ©ID */
+	"dwTimeLastLogin",		/* å‰å›ã®ãƒ­ã‚°ã‚¤ãƒ³æ—¥æ™‚ */
+	"dwTimeMakeAccount",	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆæ—¥æ™‚ */
+	"dwLoginCount",			/* ãƒ­ã‚°ã‚¤ãƒ³å›æ•° */
+	"adwCharID",			/* ã‚­ãƒ£ãƒ©IDãƒ†ãƒ¼ãƒ–ãƒ« */
+	"nAdminLevel",			/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ« */
+	"strAccount",			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	"strPassword",			/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	"m_strMacAddr",			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::CInfoAccount										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/04														 */
+/* é–¢æ•°å	:CInfoAccount::CInfoAccount										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/04														 */
 /* ========================================================================= */
 
 CInfoAccount::CInfoAccount()
@@ -55,9 +55,9 @@ CInfoAccount::CInfoAccount()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::~CInfoAccount									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/04														 */
+/* é–¢æ•°å	:CInfoAccount::~CInfoAccount									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/04														 */
 /* ========================================================================= */
 
 CInfoAccount::~CInfoAccount()
@@ -66,9 +66,9 @@ CInfoAccount::~CInfoAccount()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoAccount::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 int CInfoAccount::GetElementNo(LPCSTR pszName)
@@ -89,9 +89,9 @@ int CInfoAccount::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoAccount::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoAccount::GetDataSize(void)
@@ -116,9 +116,9 @@ DWORD CInfoAccount::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoAccount::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoAccount::GetDataSizeNo(int nNo)
@@ -138,7 +138,7 @@ DWORD CInfoAccount::GetDataSizeNo(int nNo)
 	case 7:	dwRet = sizeof (m_nAdminLevel);								break;
 	case 8:	dwRet = (m_strAccount.GetLength () + 1);					break;
 	case 9:	dwRet = (m_strPassword.GetLength () + 1);					break;
-	case 10:dwRet = (m_strMacAddr.GetLength () + 1);					break;		/* ƒAƒJƒEƒ“ƒg“o˜^MACƒAƒhƒŒƒX */
+	case 10:dwRet = (m_strMacAddr.GetLength () + 1);					break;		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	}
 
 	return dwRet;
@@ -146,9 +146,9 @@ DWORD CInfoAccount::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetName											 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoAccount::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 LPCSTR CInfoAccount::GetName(int nNo)
@@ -158,9 +158,9 @@ LPCSTR CInfoAccount::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetWriteData										 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoAccount::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 PBYTE CInfoAccount::GetWriteData(int nNo, PDWORD pdwSize)
@@ -216,14 +216,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::ReadElementData									 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoAccount::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoAccount::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -279,9 +279,9 @@ DWORD CInfoAccount::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2006/11/06														 */
+/* é–¢æ•°å	:CInfoAccount::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2006/11/06														 */
 /* ========================================================================= */
 
 DWORD CInfoAccount::GetSendDataSize(void)
@@ -303,9 +303,9 @@ DWORD CInfoAccount::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2006/11/06														 */
+/* é–¢æ•°å	:CInfoAccount::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2006/11/06														 */
 /* ========================================================================= */
 
 PBYTE CInfoAccount::GetSendData(void)
@@ -320,15 +320,15 @@ PBYTE CInfoAccount::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	pDataTmp	= pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwAccountID,			sizeof (m_dwAccountID),			pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (pDataTmp, &m_dwCharID,				sizeof (m_dwCharID),			pDataTmp);	/* g—p’†‚ÌƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &m_dwTimeLastLogin,		sizeof (m_dwTimeLastLogin),		pDataTmp);	/* ‘O‰ñ‚ÌƒƒOƒCƒ““ú */
-	CopyMemoryRenew (pDataTmp, &m_dwTimeMakeAccount,	sizeof (m_dwTimeMakeAccount),	pDataTmp);	/* ƒAƒJƒEƒ“ƒgì¬“ú */
-	CopyMemoryRenew (pDataTmp, &m_dwLoginCount,			sizeof (m_dwLoginCount),		pDataTmp);	/* ƒƒOƒCƒ“” */
+	CopyMemoryRenew (pDataTmp, &m_dwAccountID,			sizeof (m_dwAccountID),			pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &m_dwCharID,				sizeof (m_dwCharID),			pDataTmp);	/* ä½¿ç”¨ä¸­ã®ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &m_dwTimeLastLogin,		sizeof (m_dwTimeLastLogin),		pDataTmp);	/* å‰å›ã®ãƒ­ã‚°ã‚¤ãƒ³æ—¥æ™‚ */
+	CopyMemoryRenew (pDataTmp, &m_dwTimeMakeAccount,	sizeof (m_dwTimeMakeAccount),	pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆæ—¥æ™‚ */
+	CopyMemoryRenew (pDataTmp, &m_dwLoginCount,			sizeof (m_dwLoginCount),		pDataTmp);	/* ãƒ­ã‚°ã‚¤ãƒ³æ•° */
 	nCount = m_adwCharID.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwCharID[i];
-		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* ƒLƒƒƒ‰ID */
+		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
 	}
 
 	pRet = pData;
@@ -337,10 +337,10 @@ PBYTE CInfoAccount::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğİ’è												 */
-/* “ú•t		:2006/11/06														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CInfoAccount::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2006/11/06														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CInfoAccount::SetSendData(PBYTE pSrc)
@@ -353,14 +353,14 @@ PBYTE CInfoAccount::SetSendData(PBYTE pSrc)
 	m_adwCharID.RemoveAll ();
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_dwAccountID,		pDataTmp, sizeof (m_dwAccountID), 		pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (&m_dwCharID,			pDataTmp, sizeof (m_dwCharID),			pDataTmp);	/* g—p’†‚ÌƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwTimeLastLogin,	pDataTmp, sizeof (m_dwTimeLastLogin),	pDataTmp);	/* ‘O‰ñ‚ÌƒƒOƒCƒ““ú */
-	CopyMemoryRenew (&m_dwTimeMakeAccount,	pDataTmp, sizeof (m_dwTimeMakeAccount),	pDataTmp);	/* ƒAƒJƒEƒ“ƒgì¬“ú */
-	CopyMemoryRenew (&m_dwLoginCount,		pDataTmp, sizeof (m_dwLoginCount),		pDataTmp);	/* ƒƒOƒCƒ“” */
+	CopyMemoryRenew (&m_dwAccountID,		pDataTmp, sizeof (m_dwAccountID), 		pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (&m_dwCharID,			pDataTmp, sizeof (m_dwCharID),			pDataTmp);	/* ä½¿ç”¨ä¸­ã®ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwTimeLastLogin,	pDataTmp, sizeof (m_dwTimeLastLogin),	pDataTmp);	/* å‰å›ã®ãƒ­ã‚°ã‚¤ãƒ³æ—¥æ™‚ */
+	CopyMemoryRenew (&m_dwTimeMakeAccount,	pDataTmp, sizeof (m_dwTimeMakeAccount),	pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆæ—¥æ™‚ */
+	CopyMemoryRenew (&m_dwLoginCount,		pDataTmp, sizeof (m_dwLoginCount),		pDataTmp);	/* ãƒ­ã‚°ã‚¤ãƒ³æ•° */
 
 	while (1) {
-		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* ƒLƒƒƒ‰ID */
+		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
 		if (dwTmp == 0) {
 			break;
 		}
@@ -373,9 +373,9 @@ PBYTE CInfoAccount::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetCharCount										 */
-/* “à—e		:ƒLƒƒƒ‰”‚ğæ“¾													 */
-/* “ú•t		:2007/03/21														 */
+/* é–¢æ•°å	:CInfoAccount::GetCharCount										 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/03/21														 */
 /* ========================================================================= */
 
 int CInfoAccount::GetCharCount(void)
@@ -385,9 +385,9 @@ int CInfoAccount::GetCharCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CInfoAccount::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CInfoAccount::Copy(CInfoAccount *pSrc)
@@ -407,9 +407,9 @@ void CInfoAccount::Copy(CInfoAccount *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::GetTmpData										 */
-/* “à—e		:ƒf[ƒ^ƒLƒƒƒbƒVƒ…—p‚Éæ“¾										 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CInfoAccount::GetTmpData										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚­ãƒ£ãƒƒã‚·ãƒ¥ç”¨ã«å–å¾—										 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 PBYTE CInfoAccount::GetTmpData(DWORD &dwDataSize)
@@ -419,7 +419,7 @@ PBYTE CInfoAccount::GetTmpData(DWORD &dwDataSize)
 	pRet = NULL;
 	dwDataSize = 0;
 
-	/* ƒTƒCƒY‚ğŒvZ */
+	/* ã‚µã‚¤ã‚ºã‚’è¨ˆç®— */
 	dwDataSize += sizeof (m_dwAccountID);
 	dwDataSize += sizeof (m_dwIP);
 	dwDataSize += (m_strAccount.GetLength () + 1);
@@ -428,20 +428,20 @@ PBYTE CInfoAccount::GetTmpData(DWORD &dwDataSize)
 
 	pRet = ZeroNew (dwDataSize);
 	pDataTmp = pRet;
-	CopyMemoryRenew (pDataTmp, &m_dwAccountID, sizeof (m_dwAccountID), pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (pDataTmp, &m_dwIP, sizeof (m_dwIP), pDataTmp);					/* IPƒAƒhƒŒƒX */
-	strcpyRenew ((LPSTR)pDataTmp, m_strAccount,  pDataTmp);							/* ƒAƒJƒEƒ“ƒg */
-	strcpyRenew ((LPSTR)pDataTmp, m_strPassword, pDataTmp);							/* ƒpƒXƒ[ƒh */
-	strcpyRenew ((LPSTR)pDataTmp, m_strLastMacAddr, pDataTmp);						/* ƒƒOƒCƒ“‚ÌMACƒAƒhƒŒƒX */
+	CopyMemoryRenew (pDataTmp, &m_dwAccountID, sizeof (m_dwAccountID), pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &m_dwIP, sizeof (m_dwIP), pDataTmp);					/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strAccount,  pDataTmp);							/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strPassword, pDataTmp);							/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strLastMacAddr, pDataTmp);						/* ãƒ­ã‚°ã‚¤ãƒ³æ™‚ã®MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 
 	return pRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoAccount::SetTmpData										 */
-/* “à—e		:ƒf[ƒ^ƒLƒƒƒbƒVƒ…‚©‚çİ’è										 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CInfoAccount::SetTmpData										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‹ã‚‰è¨­å®š										 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CInfoAccount::SetTmpData(PBYTE pSrc)
@@ -449,11 +449,11 @@ void CInfoAccount::SetTmpData(PBYTE pSrc)
 	PBYTE pDataTmp;
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (&m_dwIP, pDataTmp, sizeof (m_dwIP), pDataTmp);					/* IPƒAƒhƒŒƒX */
-	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);						/* ƒAƒJƒEƒ“ƒg */
-	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);						/* ƒpƒXƒ[ƒh */
-	StoreRenew (m_strLastMacAddr,	(LPCSTR)pDataTmp, pDataTmp);					/* ƒƒOƒCƒ“‚ÌMACƒAƒhƒŒƒX */
+	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (&m_dwIP, pDataTmp, sizeof (m_dwIP), pDataTmp);					/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);						/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);						/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	StoreRenew (m_strLastMacAddr,	(LPCSTR)pDataTmp, pDataTmp);					/* ãƒ­ã‚°ã‚¤ãƒ³æ™‚ã®MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 }
 
 /* Copyright(C)URARA-works 2006 */

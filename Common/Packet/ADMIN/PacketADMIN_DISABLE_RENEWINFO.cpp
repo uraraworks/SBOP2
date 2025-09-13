@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_DISABLE_RENEWINFO.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:‹‘”Ûî•ñ‚ÌXV) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_DISABLE_RENEWINFO.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:æ‹’å¦æƒ…å ±ã®æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/11													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_DISABLE_RENEWINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_DISABLE_RENEWINFO::CPacketADMIN_DISABLE_RENEWINFO	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CPacketADMIN_DISABLE_RENEWINFO::CPacketADMIN_DISABLE_RENEWINFO	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 CPacketADMIN_DISABLE_RENEWINFO::CPacketADMIN_DISABLE_RENEWINFO()
@@ -24,9 +24,9 @@ CPacketADMIN_DISABLE_RENEWINFO::CPacketADMIN_DISABLE_RENEWINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_DISABLE_RENEWINFO::~CPacketADMIN_DISABLE_RENEWINFO */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CPacketADMIN_DISABLE_RENEWINFO::~CPacketADMIN_DISABLE_RENEWINFO */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 CPacketADMIN_DISABLE_RENEWINFO::~CPacketADMIN_DISABLE_RENEWINFO()
@@ -36,13 +36,13 @@ CPacketADMIN_DISABLE_RENEWINFO::~CPacketADMIN_DISABLE_RENEWINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_DISABLE_RENEWINFO::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CPacketADMIN_DISABLE_RENEWINFO::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CPacketADMIN_DISABLE_RENEWINFO::Make(
-	CLibInfoDisable *pLibInfoDisable)		/* [in] ‹‘”Ûî•ñ */
+	CLibInfoDisable *pLibInfoDisable)		/* [in] æ‹’å¦æƒ…å ± */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize, dwSizeLibInfoDisable;
@@ -63,20 +63,20 @@ void CPacketADMIN_DISABLE_RENEWINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_DISABLE_RENEWINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pDataLibInfoDisable, dwSizeLibInfoDisable, pDataTmp);	/* ‹‘”Ûî•ñ */
+	CopyMemoryRenew (pDataTmp, pDataLibInfoDisable, dwSizeLibInfoDisable, pDataTmp);	/* æ‹’å¦æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_DISABLE_RENEWINFO::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CPacketADMIN_DISABLE_RENEWINFO::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CPacketADMIN_DISABLE_RENEWINFO::Make(
-	CInfoDisable *pInfoDisable)		/* [in] ‹‘”Ûî•ñ */
+	CInfoDisable *pInfoDisable)		/* [in] æ‹’å¦æƒ…å ± */
 {
 	PCInfoDisable pInfoDisableTmp;
 	CLibInfoDisable LibInfo;
@@ -90,9 +90,9 @@ void CPacketADMIN_DISABLE_RENEWINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_DISABLE_RENEWINFO::Set							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CPacketADMIN_DISABLE_RENEWINFO::Set							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_DISABLE_RENEWINFO::Set(PBYTE pPacket)

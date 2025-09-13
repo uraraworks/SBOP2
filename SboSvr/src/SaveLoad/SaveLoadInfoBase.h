@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoBase.h											 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/04/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoBase.h											 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/04/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,57 +13,57 @@
 class CInfoBase;
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 typedef struct _HEADERINFO {
-	char		szName[64];							/* ƒJƒ‰ƒ€–¼ */
-	DWORD		dwOffset;							/* ƒIƒtƒZƒbƒg */
-	DWORD		dwDataSize;							/* ƒf[ƒ^ƒTƒCƒY */
+	char		szName[64];							/* ã‚«ãƒ©ãƒ å */
+	DWORD		dwOffset;							/* ã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+	DWORD		dwDataSize;							/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
 } HEADERINFO, *PHEADERINFO;
 
 typedef CmyArray<PHEADERINFO, PHEADERINFO>	ARRAYHEADERINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CSaveLoadInfoBase
 {
 public:
-			CSaveLoadInfoBase();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSaveLoadInfoBase();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSaveLoadInfoBase();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSaveLoadInfoBase();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	WriteData			(void);					/* ƒf[ƒ^‚Ì‘‚«‚İ */
-	virtual BOOL	ReadData			(void);					/* ƒf[ƒ^‚Ì“Ç‚İ‚İ */
+	virtual void	WriteData			(void);					/* ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãè¾¼ã¿ */
+	virtual BOOL	ReadData			(void);					/* ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ */
 
-	virtual void	Save				(PCLibInfoBase pSrc);	/* ƒtƒ@ƒCƒ‹‚É‘‚«‚İ */
-	virtual void	Load				(PCLibInfoBase pDst);	/* ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ */
-
-
-protected:
-	virtual void	SetHeaderInfo		(PCInfoBase pInfo);		/* ƒwƒbƒ_î•ñ‚ğİ’è */
-	void			MakeWriteData		(void);					/* •Û‘¶ƒf[ƒ^‚Ìì¬ */
-	void			ReadHeader			(void);					/* ƒwƒbƒ_î•ñ‚Ì“Ç‚İ‚İ */
-	void			SetFileName			(LPCSTR pszName);		/* ƒtƒ@ƒCƒ‹–¼‚ğİ’è */
-	void			AddHeaderInfo		(LPCSTR pszName);		/* ƒwƒbƒ_î•ñ‚ğ’Ç‰Á */
-	PHEADERINFO		GetHeaderInfo		(LPCSTR pszName);		/* —v‘f–¼‚©‚çƒwƒbƒ_î•ñ‚ğæ“¾ */
-	void			DelAllHeaderInfo	(void);					/* ƒwƒbƒ_î•ñ‚ğíœ */
-
-	void			CopyMemoryDataDst	(PBYTE &pDst, PBYTE pSrc, DWORD dwSize);			/* ƒRƒs[‚µ‚ÄƒRƒs[æƒ|ƒCƒ“ƒ^‚ği‚ß‚é */
-	void			CopyMemoryDataSrc	(PBYTE pDst, PBYTE &pSrc, DWORD dwSize);			/* ƒRƒs[‚µ‚ÄƒRƒs[Œ³ƒ|ƒCƒ“ƒ^‚ği‚ß‚é */
+	virtual void	Save				(PCLibInfoBase pSrc);	/* ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã¿ */
+	virtual void	Load				(PCLibInfoBase pDst);	/* ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿ */
 
 
 protected:
-	CmyString			m_strFileName;				/* ƒtƒ@ƒCƒ‹–¼ */
-	PBYTE				m_pData;					/* •Û‘¶E“Ç‚İ‚İƒf[ƒ^ */
-	DWORD				m_dwDataSize;				/* ƒf[ƒ^ƒTƒCƒY */
-	DWORD				m_dwHeaderSize;				/* ƒwƒbƒ_ƒTƒCƒY */
-	ARRAYHEADERINFO		*m_pHeaderInfo;				/* ƒwƒbƒ_î•ñ */
+	virtual void	SetHeaderInfo		(PCInfoBase pInfo);		/* ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’è¨­å®š */
+	void			MakeWriteData		(void);					/* ä¿å­˜ãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ */
+	void			ReadHeader			(void);					/* ãƒ˜ãƒƒãƒ€æƒ…å ±ã®èª­ã¿è¾¼ã¿ */
+	void			SetFileName			(LPCSTR pszName);		/* ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¨­å®š */
+	void			AddHeaderInfo		(LPCSTR pszName);		/* ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’è¿½åŠ  */
+	PHEADERINFO		GetHeaderInfo		(LPCSTR pszName);		/* è¦ç´ åã‹ã‚‰ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’å–å¾— */
+	void			DelAllHeaderInfo	(void);					/* ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’å‰Šé™¤ */
 
-	PCLibInfoBase		m_pLibInfoBase;				/* î•ñƒNƒ‰ƒX */
+	void			CopyMemoryDataDst	(PBYTE &pDst, PBYTE pSrc, DWORD dwSize);			/* ã‚³ãƒ”ãƒ¼ã—ã¦ã‚³ãƒ”ãƒ¼å…ˆãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹ */
+	void			CopyMemoryDataSrc	(PBYTE pDst, PBYTE &pSrc, DWORD dwSize);			/* ã‚³ãƒ”ãƒ¼ã—ã¦ã‚³ãƒ”ãƒ¼å…ƒãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹ */
+
+
+protected:
+	CmyString			m_strFileName;				/* ãƒ•ã‚¡ã‚¤ãƒ«å */
+	PBYTE				m_pData;					/* ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ãƒ‡ãƒ¼ã‚¿ */
+	DWORD				m_dwDataSize;				/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+	DWORD				m_dwHeaderSize;				/* ãƒ˜ãƒƒãƒ€ã‚µã‚¤ã‚º */
+	ARRAYHEADERINFO		*m_pHeaderInfo;				/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
+
+	PCLibInfoBase		m_pLibInfoBase;				/* æƒ…å ±ã‚¯ãƒ©ã‚¹ */
 } CSaveLoadInfoBase, *PCSaveLoadInfoBase;
 
 /* Copyright(C)URARA-works 2005 */

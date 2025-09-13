@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketEFFECT_EFFECTINFO.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒGƒtƒFƒNƒgŒn:ƒGƒtƒFƒNƒgî•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketEFFECT_EFFECTINFO.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,21 +12,21 @@
 #include "LibInfo/LibInfoEffect.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketEFFECT_EFFECTINFO : public CPacketBase
 {
 public:
-			CPacketEFFECT_EFFECTINFO();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketEFFECT_EFFECTINFO();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketEFFECT_EFFECTINFO();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketEFFECT_EFFECTINFO();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(PCLibInfoEffect pInfo);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(PCLibInfoEffect pInfo);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	PCLibInfoEffect	m_pLibInfo;				/* ƒGƒtƒFƒNƒgî•ñ */
+	PCLibInfoEffect	m_pLibInfo;				/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 } CPacketEFFECT_EFFECTINFO, *PCPacketEFFECT_EFFECTINFO;
 
 /* Copyright(C)URARA-works 2007 */

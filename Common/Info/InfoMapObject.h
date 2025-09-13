@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapObject.h											 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/11/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapObject.h											 */
+/* å†…å®¹			:ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,68 +11,68 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
-/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgƒAƒjƒî•ñ */
+/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æƒ…å ± */
 typedef struct _STMAPOBJECTANIMEINFO {
-	BYTE	byWait,				/* ‘Ò‚¿ŽžŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-			byLevel;			/* “§–¾“x */
-	PWORD	pwGrpID;			/* ‰æ‘œID */
+	BYTE	byWait,				/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+			byLevel;			/* é€æ˜Žåº¦ */
+	PWORD	pwGrpID;			/* ç”»åƒID */
 } STMAPOBJECTANIMEINFO, *PSTMAPOBJECTANIMEINFO;
 typedef CmyArray<PSTMAPOBJECTANIMEINFO, PSTMAPOBJECTANIMEINFO>	   ARRAYMAPOBJECTANIMEINFO;
 typedef CmyArray<PSTMAPOBJECTANIMEINFO, PSTMAPOBJECTANIMEINFO>	 *PARRAYMAPOBJECTANIMEINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoMapObject : public CInfoBase
 {
 public:
-			CInfoMapObject();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoMapObject();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoMapObject();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoMapObject();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementCount		(void);								/* —v‘f”‚ðŽæ“¾ */
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	int		GetElementCount		(void);								/* è¦ç´ æ•°ã‚’å–å¾— */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	void	Copy				(CInfoMapObject *pSrc);				/* ƒRƒs[ */
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
-	void	GetAnimeSize		(int nNo = -1);						/* ƒIƒuƒWƒFƒNƒgƒAƒjƒî•ñƒTƒCƒY‚ðŽæ“¾ */
+	void	Copy				(CInfoMapObject *pSrc);				/* ã‚³ãƒ”ãƒ¼ */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
+	void	GetAnimeSize		(int nNo = -1);						/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æƒ…å ±ã‚µã‚¤ã‚ºã‚’å–å¾— */
 
-	int		GetAnimeCount		(void);								/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”‚ðŽæ“¾ */
-	void	AddAnime			(void);								/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ð’Ç‰Á */
-	void	DeleteAnime			(int nNo);							/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ðíœ */
-	void	DeleteAllAnime		(void);								/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ð‘S‚Äíœ */
-	void	RenewGrpSize		(int cx = -1, int cy = -1);			/* ‰æ‘œƒTƒCƒY‚ðXV */
-	void	SetGrpID			(int nNo, int x, int y, WORD wGrpID);	/* ‰æ‘œID‚ðÝ’è */
+	int		GetAnimeCount		(void);								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•°ã‚’å–å¾— */
+	void	AddAnime			(void);								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’è¿½åŠ  */
+	void	DeleteAnime			(int nNo);							/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å‰Šé™¤ */
+	void	DeleteAllAnime		(void);								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å…¨ã¦å‰Šé™¤ */
+	void	RenewGrpSize		(int cx = -1, int cy = -1);			/* ç”»åƒã‚µã‚¤ã‚ºã‚’æ›´æ–° */
+	void	SetGrpID			(int nNo, int x, int y, WORD wGrpID);	/* ç”»åƒIDã‚’è¨­å®š */
 
-	PSTMAPOBJECTANIMEINFO	GetAnimePtr	(int nNo);					/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ðŽæ“¾ */
+	PSTMAPOBJECTANIMEINFO	GetAnimePtr	(int nNo);					/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å–å¾— */
 
 
 public:
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	DWORD				m_dwObjectID,						/* ƒIƒuƒWƒFƒNƒgID */
-						m_dwAttr;							/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	int					m_nHideY;							/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	SIZE				m_sizeGrp;							/* ‰æ‘œƒTƒCƒY */
-	BOOL				m_bHit;								/* “–‚½‚è”»’è */
-	CmyString			m_strName;							/* ƒIƒuƒWƒFƒNƒg–¼ */
-	BYTE				*m_pHit;							/* “–‚½‚è”»’èƒf[ƒ^ */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	DWORD				m_dwObjectID,						/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+						m_dwAttr;							/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±žæ€§ */
+	int					m_nHideY;							/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒžã‚¹æ•° */
+	SIZE				m_sizeGrp;							/* ç”»åƒã‚µã‚¤ã‚º */
+	BOOL				m_bHit;								/* å½“ãŸã‚Šåˆ¤å®š */
+	CmyString			m_strName;							/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
+	BYTE				*m_pHit;							/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
 
-	ARRAYMAPOBJECTANIMEINFO	m_aInfoAnime;					/* ƒIƒuƒWƒFƒNƒgƒAƒjƒî•ñ */
+	ARRAYMAPOBJECTANIMEINFO	m_aInfoAnime;					/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æƒ…å ± */
 } CInfoMapObject, *PCInfoMapObject;
 typedef CmyArray<PCInfoMapObject, PCInfoMapObject>	  ARRAYMAPOBJECT;
 typedef CmyArray<PCInfoMapObject, PCInfoMapObject>	*PARRAYMAPOBJECT;

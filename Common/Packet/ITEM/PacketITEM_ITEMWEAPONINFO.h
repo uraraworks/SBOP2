@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketITEM_ITEMWEAPONINFO.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒAƒCƒeƒ€Œn:•Šíî•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketITEM_ITEMWEAPONINFO.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¢ã‚¤ãƒ†ãƒ ç³»:æ­¦å™¨æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,21 +12,21 @@
 #include "LibInfoItemWeapon.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketITEM_ITEMWEAPONINFO : public CPacketBase
 {
 public:
-			CPacketITEM_ITEMWEAPONINFO();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketITEM_ITEMWEAPONINFO();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketITEM_ITEMWEAPONINFO();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketITEM_ITEMWEAPONINFO();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(PCLibInfoItemWeapon pInfo);			/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(PCLibInfoItemWeapon pInfo);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	PCLibInfoItemWeapon	m_pLibInfo;				/* •Šíî•ñ */
+	PCLibInfoItemWeapon	m_pLibInfo;				/* æ­¦å™¨æƒ…å ± */
 } CPacketITEM_ITEMWEAPONINFO, *PCPacketITEM_ITEMWEAPONINFO;
 
 /* Copyright(C)URARA-works 2008 */

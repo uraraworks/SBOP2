@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_RES_TAIL.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:•t‚¢‚Äs‚­‰“š) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_RES_TAIL.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ä»˜ã„ã¦è¡Œãå¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/04													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_RES_TAIL.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_TAIL::CPacketCHAR_RES_TAIL						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/04														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_TAIL::CPacketCHAR_RES_TAIL						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/04														 */
 /* ========================================================================= */
 
 CPacketCHAR_RES_TAIL::CPacketCHAR_RES_TAIL()
@@ -26,9 +26,9 @@ CPacketCHAR_RES_TAIL::CPacketCHAR_RES_TAIL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_TAIL::~CPacketCHAR_RES_TAIL					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/04														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_TAIL::~CPacketCHAR_RES_TAIL					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/04														 */
 /* ========================================================================= */
 
 CPacketCHAR_RES_TAIL::~CPacketCHAR_RES_TAIL()
@@ -37,16 +37,16 @@ CPacketCHAR_RES_TAIL::~CPacketCHAR_RES_TAIL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_TAIL::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/09/04														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_TAIL::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/09/04														 */
 /* ========================================================================= */
 
 void CPacketCHAR_RES_TAIL::Make(
-	DWORD dwCharID,				/* [in] ƒLƒƒƒ‰ID */
-	DWORD dwTargetCharID,		/* [in] •t‚¢‚Äs‚­‘Šè‚ÌƒLƒƒƒ‰ID */
-	int nResult,				/* [in] Œ‹‰Ê */
-	DWORD dwPara/*0*/)			/* [in] ƒpƒ‰ƒ[ƒ^ */
+	DWORD dwCharID,				/* [in] ã‚­ãƒ£ãƒ©ID */
+	DWORD dwTargetCharID,		/* [in] ä»˜ã„ã¦è¡Œãç›¸æ‰‹ã®ã‚­ãƒ£ãƒ©ID */
+	int nResult,				/* [in] çµæœ */
+	DWORD dwPara/*0*/)			/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -66,19 +66,19 @@ void CPacketCHAR_RES_TAIL::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_RES_TAIL;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),			pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &dwTargetCharID,	sizeof (dwTargetCharID),	pDataTmp);	/* •t‚¢‚Äs‚­‘Šè‚ÌƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &nResult,		sizeof (nResult),			pDataTmp);	/* Œ‹‰Ê */
-	CopyMemoryRenew (pDataTmp, &dwPara,			sizeof (dwPara),			pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),			pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &dwTargetCharID,	sizeof (dwTargetCharID),	pDataTmp);	/* ä»˜ã„ã¦è¡Œãç›¸æ‰‹ã®ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &nResult,		sizeof (nResult),			pDataTmp);	/* çµæœ */
+	CopyMemoryRenew (pDataTmp, &dwPara,			sizeof (dwPara),			pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_TAIL::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/09/04														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_TAIL::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/04														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_RES_TAIL::Set(PBYTE pPacket)
@@ -88,10 +88,10 @@ PBYTE CPacketCHAR_RES_TAIL::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),			pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwTargetCharID,	pDataTmp, sizeof (m_dwTargetCharID),	pDataTmp);	/* •t‚¢‚Äs‚­‘Šè‚ÌƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_nResult,		pDataTmp, sizeof (m_nResult),			pDataTmp);	/* Œ‹‰Ê */
-	CopyMemoryRenew (&m_dwPara,			pDataTmp, sizeof (m_dwPara),			pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
+	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),			pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwTargetCharID,	pDataTmp, sizeof (m_dwTargetCharID),	pDataTmp);	/* ä»˜ã„ã¦è¡Œãç›¸æ‰‹ã®ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_nResult,		pDataTmp, sizeof (m_nResult),			pDataTmp);	/* çµæœ */
+	CopyMemoryRenew (&m_dwPara,			pDataTmp, sizeof (m_dwPara),			pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 
 	pRet = pDataTmp;
 	return pRet;

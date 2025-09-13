@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrame.cpp												 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€ À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrame.cpp												 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -26,20 +26,20 @@
 
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-#define CLNAME "SboSvr"								/* “o˜^ƒNƒ‰ƒX–¼ */
-#define TIMERID_REDRAW		(100)					/* Ä•`‰æƒ^ƒCƒ}[ */
-#define TIMER_REDRAW		(1000)					/* Ä•`‰æüŠú */
-#define TIMERID_SAVE		(101)					/* •Û‘¶ƒ^ƒCƒ}[ */
-#define TIMER_SAVE			(1000 * 60 * 30)		/* •Û‘¶üŠú(30•ª) */
+#define CLNAME "SboSvr"								/* ç™»éŒ²ã‚¯ãƒ©ã‚¹å */
+#define TIMERID_REDRAW		(100)					/* å†æç”»ã‚¿ã‚¤ãƒãƒ¼ */
+#define TIMER_REDRAW		(1000)					/* å†æç”»å‘¨æœŸ */
+#define TIMERID_SAVE		(101)					/* ä¿å­˜ã‚¿ã‚¤ãƒãƒ¼ */
+#define TIMER_SAVE			(1000 * 60 * 30)		/* ä¿å­˜å‘¨æœŸ(30åˆ†) */
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::CMainFrame											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/04/24														 */
+/* é–¢æ•°å	:CMainFrame::CMainFrame											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/04/24														 */
 /* ========================================================================= */
 
 CMainFrame::CMainFrame()
@@ -73,14 +73,14 @@ CMainFrame::CMainFrame()
 	m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯");
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::~CMainFrame										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/04/24														 */
+/* é–¢æ•°å	:CMainFrame::~CMainFrame										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/04/24														 */
 /* ========================================================================= */
 
 CMainFrame::~CMainFrame()
@@ -96,9 +96,9 @@ CMainFrame::~CMainFrame()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::MainLoop											 */
-/* “à—e		:ƒƒCƒ“ƒ‹[ƒv													 */
-/* “ú•t		:2006/11/04														 */
+/* é–¢æ•°å	:CMainFrame::MainLoop											 */
+/* å†…å®¹		:ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—													 */
+/* æ—¥ä»˜		:2006/11/04														 */
 /* ========================================================================= */
 
 int CMainFrame::MainLoop(HINSTANCE hInstance)
@@ -119,12 +119,12 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	wc.cbWndExtra		= 0;
 	wc.hbrBackground	= (HBRUSH)GetStockObject (BLACK_BRUSH);
 
-	/* ƒEƒBƒ“ƒhƒE‚ÌƒNƒ‰ƒX‚ğ“o˜^ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ©ã‚¹ã‚’ç™»éŒ² */
 	if (!RegisterClass (&wc)) {
 		return FALSE;
 	}
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	wsprintf (szBuf, "%s Ver%s", WNDTITLE, VERTEXT);
 	m_hWnd = CreateWindow (
 				CLNAME,
@@ -143,7 +143,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	ShowWindow (m_hWnd, SW_SHOW);
 
 	timeGetDevCaps (&tc, sizeof (TIMECAPS));
-	/* ƒ}ƒ‹ƒ`ƒƒfƒBƒAƒ^ƒCƒ}[‚ÌƒT[ƒrƒX¸“x‚ğÅ‘å‚É */
+	/* ãƒãƒ«ãƒãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¤ãƒãƒ¼ã®ã‚µãƒ¼ãƒ“ã‚¹ç²¾åº¦ã‚’æœ€å¤§ã« */
 	timeBeginPeriod (tc.wPeriodMin);
 
 	while (1) {
@@ -162,20 +162,20 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	timeEndPeriod (tc.wPeriodMin);
 	UnregisterClass (CLNAME, hInstance);
 
-	/* I—¹ƒƒbƒZ[ƒW‚É‚æ‚èƒvƒƒOƒ‰ƒ€I—¹ */
+	/* çµ‚äº†ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«ã‚ˆã‚Šãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº† */
 	return (int)msg.wParam;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::SendToScreenChar									 */
-/* “à—e		:w’èƒLƒƒƒ‰‚Æ“¯‚¶‰æ–Ê‚ÌƒLƒƒƒ‰‚Ö‘—M								 */
-/* “ú•t		:2007/01/21														 */
+/* é–¢æ•°å	:CMainFrame::SendToScreenChar									 */
+/* å†…å®¹		:æŒ‡å®šã‚­ãƒ£ãƒ©ã¨åŒã˜ç”»é¢ã®ã‚­ãƒ£ãƒ©ã¸é€ä¿¡								 */
+/* æ—¥ä»˜		:2007/01/21														 */
 /* ========================================================================= */
 
 void CMainFrame::SendToScreenChar(
-	CInfoCharBase *pInfoChar,		/* [in] ‘—MŠî€‚ÌƒLƒƒƒ‰î•ñ */
-	CPacketBase *pPacket)			/* [in] ‘—MƒpƒPƒbƒg */
+	CInfoCharBase *pInfoChar,		/* [in] é€ä¿¡åŸºæº–ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
+	CPacketBase *pPacket)			/* [in] é€ä¿¡ãƒ‘ã‚±ãƒƒãƒˆ */
 {
 	int i, nCount;
 	PCInfoCharSvr pInfoCharTmp;
@@ -189,7 +189,7 @@ void CMainFrame::SendToScreenChar(
 		if (pInfoCharTmp->m_dwMapID != pInfoChar->m_dwMapID) {
 			continue;
 		}
-		/* ‰æ–ÊŠOH */
+		/* ç”»é¢å¤–ï¼Ÿ */
 		if (!(
 			(abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * 2 + 2) &&
 			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * 2 + 2))) {
@@ -203,14 +203,14 @@ void CMainFrame::SendToScreenChar(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::SendToMapChar										 */
-/* “à—e		:w’èƒ}ƒbƒv‚É‚¢‚éƒLƒƒƒ‰‚Ö‘—M									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CMainFrame::SendToMapChar										 */
+/* å†…å®¹		:æŒ‡å®šãƒãƒƒãƒ—ã«ã„ã‚‹ã‚­ãƒ£ãƒ©ã¸é€ä¿¡									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CMainFrame::SendToMapChar(
-	DWORD dwMapID,				/* [in] ƒ}ƒbƒvID(0‚Å‘S‚Ä‚Ìƒ}ƒbƒv) */
-	CPacketBase *pPacket)		/* [in] ‘—MƒpƒPƒbƒg */
+	DWORD dwMapID,				/* [in] ãƒãƒƒãƒ—ID(0ã§å…¨ã¦ã®ãƒãƒƒãƒ—) */
+	CPacketBase *pPacket)		/* [in] é€ä¿¡ãƒ‘ã‚±ãƒƒãƒˆ */
 {
 	int i, nCount;
 	PCInfoCharSvr pInfoCharTmp;
@@ -234,13 +234,13 @@ void CMainFrame::SendToMapChar(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::SendToAdminChar									 */
-/* “à—e		:ŠÇ—ÒŒ ŒÀ‚ğ‚Á‚Ä‚¢‚éƒLƒƒƒ‰‚Ö‘—M								 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CMainFrame::SendToAdminChar									 */
+/* å†…å®¹		:ç®¡ç†è€…æ¨©é™ã‚’æŒã£ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ã¸é€ä¿¡								 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 void CMainFrame::SendToAdminChar(
-	CPacketBase *pPacket)		/* [in] ‘—MƒpƒPƒbƒg */
+	CPacketBase *pPacket)		/* [in] é€ä¿¡ãƒ‘ã‚±ãƒƒãƒˆ */
 {
 	int i, nCount;
 	PCInfoCharSvr pInfoCharTmp;
@@ -266,14 +266,14 @@ void CMainFrame::SendToAdminChar(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::SendToClient										 */
-/* “à—e		:ƒZƒbƒVƒ‡ƒ“ID‚ª—LŒø‚Èê‡‚Ì‚İ‘—M								 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CMainFrame::SendToClient										 */
+/* å†…å®¹		:ã‚»ãƒƒã‚·ãƒ§ãƒ³IDãŒæœ‰åŠ¹ãªå ´åˆã®ã¿é€ä¿¡								 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CMainFrame::SendToClient(
-	DWORD dwSessionID,			/* [in] ƒZƒbƒVƒ‡ƒ“ID */
-	CPacketBase *pPacket)		/* [in] ‘—MƒpƒPƒbƒg */
+	DWORD dwSessionID,			/* [in] ã‚»ãƒƒã‚·ãƒ§ãƒ³ID */
+	CPacketBase *pPacket)		/* [in] é€ä¿¡ãƒ‘ã‚±ãƒƒãƒˆ */
 {
 	if (dwSessionID == 0) {
 		return;
@@ -283,9 +283,9 @@ void CMainFrame::SendToClient(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::WndProcEntry										 */
-/* “à—e		:ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ(ƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒg)					 */
-/* “ú•t		:2005/04/24														 */
+/* é–¢æ•°å	:CMainFrame::WndProcEntry										 */
+/* å†…å®¹		:ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£(ã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ãƒˆ)					 */
+/* æ—¥ä»˜		:2005/04/24														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CMainFrame::WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -296,7 +296,7 @@ LRESULT CALLBACK CMainFrame::WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LP
 		SetWindowLong (hWnd, GWL_USERDATA, (LONG)(((LPCREATESTRUCT)lParam)->lpCreateParams));
 	}
 
-	/* ƒ†[ƒUƒf[ƒ^‚©‚ç this ƒ|ƒCƒ“ƒ^‚ğæ“¾‚µAˆ—‚ğs‚¤ */
+	/* ãƒ¦ãƒ¼ã‚¶ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ this ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã—ã€å‡¦ç†ã‚’è¡Œã† */
 	pThis = (CMainFrame *)GetWindowLong (hWnd, GWL_USERDATA);
 	if (pThis) {
 		return pThis->WndProc (hWnd, msg, wParam, lParam);
@@ -306,9 +306,9 @@ LRESULT CALLBACK CMainFrame::WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LP
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::WndProc											 */
-/* “à—e		:ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ									 */
-/* “ú•t		:2005/04/24														 */
+/* é–¢æ•°å	:CMainFrame::WndProc											 */
+/* å†…å®¹		:ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£									 */
+/* æ—¥ä»˜		:2005/04/24														 */
 /* ========================================================================= */
 
 LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -321,30 +321,30 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	HANDLE_MSG (hWnd, WM_TIMER,		OnTimer);
 	HANDLE_MSG (hWnd, WM_COMMAND,	OnCommand);
 
-	case WM_DISCONNECT:					/* Ø’f */
+	case WM_DISCONNECT:					/* åˆ‡æ–­ */
 		OnDisconnect ((DWORD)lParam);
 		break;
 
 	default:
 		if ((msg >= URARASOCK_MSGBASE) && (msg < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
 			switch (msg - URARASOCK_MSGBASE) {
-			case WM_URARASOCK_HOST:				/* ‘Ò‚¿ó‚¯ŠJn */
+			case WM_URARASOCK_HOST:				/* å¾…ã¡å—ã‘é–‹å§‹ */
 				break;
 
-			case WM_URARASOCK_ADDCLIENT:		/* ƒNƒ‰ƒCƒAƒ“ƒg‚ªÚ‘±‚µ‚½ */
+			case WM_URARASOCK_ADDCLIENT:		/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãŒæ¥ç¶šã—ãŸ */
 				OnAddClient ((DWORD)lParam);
 				break;
 
-			case WM_URARASOCK_DECCLIENT:		/* ƒNƒ‰ƒCƒAƒ“ƒg‚ªØ’f‚µ‚½ */
+			case WM_URARASOCK_DECCLIENT:		/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãŒåˆ‡æ–­ã—ãŸ */
 				OnDecClient ((DWORD)lParam);
 				break;
 
-			case WM_URARASOCK_RECV:				/* óM */
+			case WM_URARASOCK_RECV:				/* å—ä¿¡ */
 				OnRecv ((PBYTE)wParam, (DWORD)lParam);
 				break;
 			}
 		} else {
-			/* C—‚µ‚È‚¢ƒƒbƒZ[ƒW‚ÍOS‚É•Ô‚· */
+			/* ä¿®ç†ã—ãªã„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯OSã«è¿”ã™ */
 			return DefWindowProc (hWnd, msg, wParam, lParam);
 		}
 	}
@@ -353,9 +353,9 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnCreate											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2005/04/24														 */
+/* é–¢æ•°å	:CMainFrame::OnCreate											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2005/04/24														 */
 /* ========================================================================= */
 
 BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
@@ -379,7 +379,7 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 		SetWindowPos (hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER);
 	}
 
-	/* ì‹Æ—pƒtƒHƒ‹ƒ_‚ğì¬ */
+	/* ä½œæ¥­ç”¨ãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆ */
 	GetModuleFileName (NULL, szName, MAX_PATH);
 	pszTmp		= strrchr (szName, '\\');
 	pszTmp[1]	= 0;
@@ -428,9 +428,9 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnClose											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CLOSE)									 */
-/* “ú•t		:2008/08/01														 */
+/* é–¢æ•°å	:CMainFrame::OnClose											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CLOSE)									 */
+/* æ—¥ä»˜		:2008/08/01														 */
 /* ========================================================================= */
 
 void CMainFrame::OnClose(HWND hWnd)
@@ -447,7 +447,7 @@ void CMainFrame::OnClose(HWND hWnd)
 	if ((IsIconic (hWnd) == FALSE) && (IsWindowVisible (hWnd))) {
 		GetWindowRect (hWnd, &rc);
 
-		/* ƒƒCƒ“ƒEƒBƒ“ƒhƒE */
+		/* ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 		strTmp.Format ("%d", rc.left);
 		WritePrivateProfileString ("Pos", "MainLeft", strTmp, szFileName);
 		strTmp.Format ("%d", rc.top);
@@ -464,9 +464,9 @@ void CMainFrame::OnClose(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnDestroy											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_DESTROY)									 */
-/* “ú•t		:2005/04/24														 */
+/* é–¢æ•°å	:CMainFrame::OnDestroy											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_DESTROY)									 */
+/* æ—¥ä»˜		:2005/04/24														 */
 /* ========================================================================= */
 
 void CMainFrame::OnDestroy(HWND hWnd)
@@ -478,9 +478,9 @@ void CMainFrame::OnDestroy(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMainFrame::OnPaint												 */
-/* “à—eF	ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•tF	2007/02/15														 */
+/* é–¢æ•°åï¼š	CMainFrame::OnPaint												 */
+/* å†…å®¹ï¼š	ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜ï¼š	2007/02/15														 */
 /* ========================================================================= */
 
 void CMainFrame::OnPaint(HWND hWnd)
@@ -498,10 +498,10 @@ void CMainFrame::OnPaint(HWND hWnd)
 	hFontOld = (HFONT)SelectObject (hDC, m_hFont);
 
 	SetTextColor (hDC, RGB(0, 255, 0));
-	MyTextOut (hDC, 0, 0, 		"ƒT[ƒo[‰Ò“®ŠÔ");
-	MyTextOut (hDC, 0, 12 * 1, 	"Ú‘±”");
-	MyTextOut (hDC, 0, 12 * 2, 	"ˆ—ƒLƒƒƒ‰”");
-	MyTextOut (hDC, 0, 12 * 3, 	"ˆ—ƒ}ƒbƒv”");
+	MyTextOut (hDC, 0, 0, 		"ã‚µãƒ¼ãƒãƒ¼ç¨¼å‹•æ™‚é–“");
+	MyTextOut (hDC, 0, 12 * 1, 	"æ¥ç¶šæ•°");
+	MyTextOut (hDC, 0, 12 * 2, 	"å‡¦ç†ã‚­ãƒ£ãƒ©æ•°");
+	MyTextOut (hDC, 0, 12 * 3, 	"å‡¦ç†ãƒãƒƒãƒ—æ•°");
 
 	SetTextColor (hDC, RGB(255, 255, 255));
 
@@ -527,15 +527,15 @@ void CMainFrame::OnPaint(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMainFrame::OnTimer												 */
-/* “à—eF	ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•tF	2007/02/15														 */
+/* é–¢æ•°åï¼š	CMainFrame::OnTimer												 */
+/* å†…å®¹ï¼š	ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜ï¼š	2007/02/15														 */
 /* ========================================================================= */
 
 void CMainFrame::OnTimer(HWND hWnd, UINT id)
 {
 	switch (id) {
-	case TIMERID_REDRAW:			/* Ä•`‰æƒ^ƒCƒ}[ */
+	case TIMERID_REDRAW:			/* å†æç”»ã‚¿ã‚¤ãƒãƒ¼ */
 		{
 			SYSTEMTIME sysTime;
 			GetLocalTime (&sysTime);
@@ -547,7 +547,7 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 
 					m_pMgrData->SetLastSendClock ((BYTE)sysTime.wHour);
 
-					strTmp.Format ("SYSTEM:ƒT[ƒo[‚ª%d ‚ğ‚¨’m‚ç‚¹‚µ‚Ü‚·", (BYTE)sysTime.wHour);
+					strTmp.Format ("SYSTEM:ã‚µãƒ¼ãƒãƒ¼ãŒ%dæ™‚é ƒã‚’ãŠçŸ¥ã‚‰ã›ã—ã¾ã™", (BYTE)sysTime.wHour);
 					Packet.Make (strTmp);
 					m_pSock->SendTo (0, &Packet);
 				}
@@ -556,13 +556,13 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 		}
 		break;
 
-	case TIMERID_SAVE:				/* •Û‘¶ƒ^ƒCƒ}[ */
+	case TIMERID_SAVE:				/* ä¿å­˜ã‚¿ã‚¤ãƒãƒ¼ */
 		{
 			CPacketMAP_SYSTEMMSG Packet;
 			CmyString strTmp;
 
 			m_pMgrData->Save ();
-			strTmp.Format ("SYSTEM:ƒT[ƒo[î•ñ‚ğ•Û‘¶‚µ‚Ü‚µ‚½");
+			strTmp.Format ("SYSTEM:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ã‚’ä¿å­˜ã—ã¾ã—ãŸ");
 			Packet.Make (strTmp);
 			m_pSock->SendTo (0, &Packet);
 			UpdateServerInfo (FALSE, TRUE);
@@ -573,18 +573,18 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnCommand											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_COMMAND)									 */
-/* “ú•t		:2007/10/20														 */
+/* é–¢æ•°å	:CMainFrame::OnCommand											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_COMMAND)									 */
+/* æ—¥ä»˜		:2007/10/20														 */
 /* ========================================================================= */
 
 void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
 {
 	switch (id) {
-	case IDM_ACCOUNT_DELETEALL:		/* ‘SƒAƒJƒEƒ“ƒg‚ğíœ */
+	case IDM_ACCOUNT_DELETEALL:		/* å…¨ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤ */
 		OnCommandACCOUNT_DELETEALL ();
 		break;
-	case IDM_UPDATE_RENEW:			/* ƒAƒbƒvƒf[ƒgƒtƒ@ƒCƒ‹XV */
+	case IDM_UPDATE_RENEW:			/* ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–° */
 		OnCommandUPDATE_RENEW ();
 		break;
 	}
@@ -592,22 +592,22 @@ void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnAddClient										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_ADDCLIENT)						 */
-/* “ú•t		:2005/06/08														 */
+/* é–¢æ•°å	:CMainFrame::OnAddClient										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_ADDCLIENT)						 */
+/* æ—¥ä»˜		:2005/06/08														 */
 /* ========================================================================= */
 
 void CMainFrame::OnAddClient(DWORD dwSessionID)
 {
-	/* ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN */
+	/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ */
 //	m_pSendCommand->SendCONNECT_VERCHECK (dwID, VERSIONVAL);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnDecClient										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_DECCLIENT)						 */
-/* “ú•t		:2005/08/14														 */
+/* é–¢æ•°å	:CMainFrame::OnDecClient										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_DECCLIENT)						 */
+/* æ—¥ä»˜		:2005/08/14														 */
 /* ========================================================================= */
 
 void CMainFrame::OnDecClient(DWORD dwSessionID)
@@ -630,13 +630,13 @@ void CMainFrame::OnDecClient(DWORD dwSessionID)
 	pChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrSessionID (dwSessionID);
 	if (pChar == NULL) {
 		if (pInfoAccount) {
-			m_pLog->Write ("ƒƒOƒAƒEƒg dwSessionID:%u [%s]", dwSessionID, (LPCSTR)pInfoAccount->m_strAccount);
+			m_pLog->Write ("ãƒ­ã‚°ã‚¢ã‚¦ãƒˆ dwSessionID:%u [%s]", dwSessionID, (LPCSTR)pInfoAccount->m_strAccount);
 		}
 		return;
 	}
 	if (pInfoAccount && pChar) {
 		dwLoginTime = (DWORD)timeTmp - pInfoAccount->m_dwTimeLastLogin;
-		m_pLog->Write ("ƒƒOƒAƒEƒg dwSessionID:%u [ACC:%s][CHAR:%s][TIME:%02d:%02d:%02d]",
+		m_pLog->Write ("ãƒ­ã‚°ã‚¢ã‚¦ãƒˆ dwSessionID:%u [ACC:%s][CHAR:%s][TIME:%02d:%02d:%02d]",
 				dwSessionID,
 				(LPCSTR)pInfoAccount->m_strAccount,
 				(LPCSTR)pChar->m_strCharName,
@@ -651,9 +651,9 @@ void CMainFrame::OnDecClient(DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnRecv												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_RECV)							 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::OnRecv												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_RECV)							 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::OnRecv(PBYTE pData, DWORD dwSessionID)
@@ -663,16 +663,16 @@ void CMainFrame::OnRecv(PBYTE pData, DWORD dwSessionID)
 	Packet.Set (pData);
 
 	switch (Packet.m_byCmdMain) {
-	case SBOCOMMANDID_MAIN_VERSION:	RecvProcVERSION	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ƒo[ƒWƒ‡ƒ“Œn */
-	case SBOCOMMANDID_MAIN_CONNECT:	RecvProcCONNECT	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* Ú‘±Œn */
-	case SBOCOMMANDID_MAIN_ACCOUNT:	RecvProcACCOUNT	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ƒAƒJƒEƒ“ƒgŒn */
-	case SBOCOMMANDID_MAIN_CHAR:	RecvProcCHAR	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ƒLƒƒƒ‰Œn */
-	case SBOCOMMANDID_MAIN_MAP:		RecvProcMAP		(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ƒ}ƒbƒvŒn */
-	case SBOCOMMANDID_MAIN_ITEM:	RecvProcITEM	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ƒAƒCƒeƒ€Œn */
-	case SBOCOMMANDID_MAIN_ADMIN:	RecvProcADMIN	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ŠÇ—ÒŒn */
-	case SBOCOMMANDID_MAIN_MSGCMD:	RecvProcMSGCMD	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒn */
-	case SBOCOMMANDID_MAIN_EFFECT:	RecvProcEFFECT	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ƒGƒtƒFƒNƒgŒn */
-	case SBOCOMMANDID_MAIN_BATTLE:	RecvProcBATTLE	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* í“¬Œn */
+	case SBOCOMMANDID_MAIN_VERSION:	RecvProcVERSION	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³» */
+	case SBOCOMMANDID_MAIN_CONNECT:	RecvProcCONNECT	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* æ¥ç¶šç³» */
+	case SBOCOMMANDID_MAIN_ACCOUNT:	RecvProcACCOUNT	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³» */
+	case SBOCOMMANDID_MAIN_CHAR:	RecvProcCHAR	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ã‚­ãƒ£ãƒ©ç³» */
+	case SBOCOMMANDID_MAIN_MAP:		RecvProcMAP		(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ãƒãƒƒãƒ—ç³» */
+	case SBOCOMMANDID_MAIN_ITEM:	RecvProcITEM	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ã‚¢ã‚¤ãƒ†ãƒ ç³» */
+	case SBOCOMMANDID_MAIN_ADMIN:	RecvProcADMIN	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ç®¡ç†è€…ç³» */
+	case SBOCOMMANDID_MAIN_MSGCMD:	RecvProcMSGCMD	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒãƒ³ãƒ‰ç³» */
+	case SBOCOMMANDID_MAIN_EFFECT:	RecvProcEFFECT	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³» */
+	case SBOCOMMANDID_MAIN_BATTLE:	RecvProcBATTLE	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* æˆ¦é—˜ç³» */
 	}
 
 	SAFE_DELETE_ARRAY (pData);
@@ -680,9 +680,9 @@ void CMainFrame::OnRecv(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnDisconnect										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_DISCONNECT)								 */
-/* “ú•t		:2008/01/05														 */
+/* é–¢æ•°å	:CMainFrame::OnDisconnect										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_DISCONNECT)								 */
+/* æ—¥ä»˜		:2008/01/05														 */
 /* ========================================================================= */
 
 void CMainFrame::OnDisconnect(DWORD dwSessionID)
@@ -692,9 +692,9 @@ void CMainFrame::OnDisconnect(DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::TimerProc											 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2005/04/24														 */
+/* é–¢æ•°å	:CMainFrame::TimerProc											 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2005/04/24														 */
 /* ========================================================================= */
 
 void CMainFrame::TimerProc(void)
@@ -708,9 +708,9 @@ void CMainFrame::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::TimerProcKeepalive									 */
-/* “à—e		:ŠÔˆ—(¶‘¶Šm”Fƒ`ƒFƒbƒN)										 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMainFrame::TimerProcKeepalive									 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(ç”Ÿå­˜ç¢ºèªãƒã‚§ãƒƒã‚¯)										 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CMainFrame::TimerProcKeepalive(void)
@@ -743,10 +743,10 @@ void CMainFrame::TimerProcKeepalive(void)
 		if (pInfoChar->m_dwSessionID == 0) {
 			continue;
 		}
-		/* 1•ªˆÈã¶‘¶Šm”F’Ê’m‚ğó‚¯‚Ä‚¢‚È‚¢‚Ì‚ÅØ’f‚·‚é */
+		/* 1åˆ†ä»¥ä¸Šç”Ÿå­˜ç¢ºèªé€šçŸ¥ã‚’å—ã‘ã¦ã„ãªã„ã®ã§åˆ‡æ–­ã™ã‚‹ */
 		PostMessage (m_hWnd, WM_DISCONNECT, 0, pInfoChar->m_dwSessionID);
 		dwTmp = dwTimeTmp - pInfoAccount->m_dwTimeLastLogin;
-		m_pLog->Write ("¶‘¶Šm”Fƒ^ƒCƒ€ƒAƒEƒg dwSessionID:%u [ACC:%s][CHAR:%s][ŠÔ:%ds]",
+		m_pLog->Write ("ç”Ÿå­˜ç¢ºèªã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ dwSessionID:%u [ACC:%s][CHAR:%s][æ™‚é–“:%ds]",
 				pInfoChar->m_dwSessionID,
 				(LPCSTR)pInfoAccount->m_strAccount,
 				(LPCSTR)pInfoChar->m_strCharName,
@@ -757,9 +757,9 @@ void CMainFrame::TimerProcKeepalive(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::MyTextOut											 */
-/* “à—e		:•¶š—ñ•\¦														 */
-/* “ú•t		:2003/05/17														 */
+/* é–¢æ•°å	:CMainFrame::MyTextOut											 */
+/* å†…å®¹		:æ–‡å­—åˆ—è¡¨ç¤º														 */
+/* æ—¥ä»˜		:2003/05/17														 */
 /* ========================================================================= */
 
 void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCSTR pStr)
@@ -769,14 +769,14 @@ void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCSTR pStr)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::UpdateServerInfo									 */
-/* “à—e		:ƒT[ƒo[î•ñ‚ğXV												 */
-/* “ú•t		:2008/05/23														 */
+/* é–¢æ•°å	:CMainFrame::UpdateServerInfo									 */
+/* å†…å®¹		:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ã‚’æ›´æ–°												 */
+/* æ—¥ä»˜		:2008/05/23														 */
 /* ========================================================================= */
 
 void CMainFrame::UpdateServerInfo(
-	BOOL bSend/*=TRUE*/,		/* [in] TRUE:ƒIƒ“ƒ‰ƒCƒ“”‚ğ’Ê’m‚·‚é */
-	BOOL bUpload/*=FALSE*/)		/* [in] TRUE:‚·‚®‚ÉƒAƒbƒvƒ[ƒh‚·‚é */
+	BOOL bSend/*=TRUE*/,		/* [in] TRUE:ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°ã‚’é€šçŸ¥ã™ã‚‹ */
+	BOOL bUpload/*=FALSE*/)		/* [in] TRUE:ã™ãã«ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ */
 {
 	int nCount;
 	CmyString strTmp;
@@ -787,7 +787,7 @@ void CMainFrame::UpdateServerInfo(
 	m_pUpdateServerInfo->Update (nCount, strTmp, bUpload);
 
 	if (bSend) {
-		/* ƒIƒ“ƒ‰ƒCƒ“”‚ğ’Ê’m */
+		/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°ã‚’é€šçŸ¥ */
 		Packet.Make (nCount);
 		m_pSock->SendTo (0, &Packet);
 	}
@@ -795,9 +795,9 @@ void CMainFrame::UpdateServerInfo(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnCommandACCOUNT_DELETEALL							 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(‘SƒAƒJƒEƒ“ƒg‚ğíœ)							 */
-/* “ú•t		:2007/10/20														 */
+/* é–¢æ•°å	:CMainFrame::OnCommandACCOUNT_DELETEALL							 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(å…¨ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤)							 */
+/* æ—¥ä»˜		:2007/10/20														 */
 /* ========================================================================= */
 
 void CMainFrame::OnCommandACCOUNT_DELETEALL(void)
@@ -805,7 +805,7 @@ void CMainFrame::OnCommandACCOUNT_DELETEALL(void)
 	int i, j, nCount, nCount2, nResult;
 	PCInfoAccount pInfoAccount;
 
-	nResult = MessageBox (m_hWnd, "‘S‚Ä‚ÌƒAƒJƒEƒ“ƒg‚ÆƒLƒƒƒ‰‚ğíœ‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONWARNING);
+	nResult = MessageBox (m_hWnd, "å…¨ã¦ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¨ã‚­ãƒ£ãƒ©ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONWARNING);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -823,9 +823,9 @@ void CMainFrame::OnCommandACCOUNT_DELETEALL(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnCommandUPDATE_RENEW								 */
-/* “à—e		:ƒƒjƒ…[ƒnƒ“ƒhƒ‰(ƒAƒbƒvƒf[ƒgƒtƒ@ƒCƒ‹XV)						 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CMainFrame::OnCommandUPDATE_RENEW								 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°)						 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CMainFrame::OnCommandUPDATE_RENEW(void)

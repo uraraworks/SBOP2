@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ITEM_DELETE.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒAƒCƒeƒ€î•ñíœ) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/19													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ITEM_DELETE.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å‰Šé™¤) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/19													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_ITEM_DELETE : public CPacketBase
 {
 public:
-			CPacketADMIN_ITEM_DELETE();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_ITEM_DELETE();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_ITEM_DELETE();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_ITEM_DELETE();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwItemID);						/* ƒpƒPƒbƒg‚ðì¬ */
-	void	Make	(PARRAYDWORD padwItemID);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwItemID);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	void	Make	(PARRAYDWORD padwItemID);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	ARRAYDWORD	m_adwItemID;	/* ƒAƒCƒeƒ€ID */
+	ARRAYDWORD	m_adwItemID;	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
 } CPacketADMIN_ITEM_DELETE, *PCPacketADMIN_ITEM_DELETE;
 
 /* Copyright(C)URARA-works 2007 */

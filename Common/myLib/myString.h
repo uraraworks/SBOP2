@@ -1,46 +1,46 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:myString.h													 */
-/* “à—e			:•¶Žš—ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹									 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/05/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:myString.h													 */
+/* å†…å®¹			:æ–‡å­—åˆ—ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«									 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/05/25													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CmyString
 {
 public:
-	CmyString();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
+	CmyString();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 	CmyString(CmyString &strSrc);
 	CmyString(LPCSTR szSrc);
-	~CmyString();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+	~CmyString();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Empty			(void);							/* •¶Žš—ñ‚ð‹ó‚É‚·‚é */
-	BOOL	IsEmpty			(void);							/* •¶Žš—ñ‚ª‹ó‚©”»’è */
-	int		GetLength		(void);							/* •¶Žš—ñ’·‚ðŽæ“¾ */
-	void	Format			(LPCSTR lpFormat, ...);			/* ‘Ž®•¶Žš—ñ‚Å‰Šú‰» */
+	void	Empty			(void);							/* æ–‡å­—åˆ—ã‚’ç©ºã«ã™ã‚‹ */
+	BOOL	IsEmpty			(void);							/* æ–‡å­—åˆ—ãŒç©ºã‹åˆ¤å®š */
+	int		GetLength		(void);							/* æ–‡å­—åˆ—é•·ã‚’å–å¾— */
+	void	Format			(LPCSTR lpFormat, ...);			/* æ›¸å¼æ–‡å­—åˆ—ã§åˆæœŸåŒ– */
 
-	void	operator =		(CmyString &strSrc);			/* •¶Žš—ñ‚ð‰Šú‰» */
-	void	operator =		(LPCSTR pszSrc);				/* •¶Žš—ñ‚ð‰Šú‰» */
-	void	operator +=		(LPCSTR pszSrc);				/* •¶Žš—ñ‚ð’Ç‰Á */
-	BOOL	operator ==		(LPCSTR pszSrc);				/* •¶Žš—ñ‚ð”äŠr */
-	BOOL	operator !=		(LPCSTR pszSrc);				/* •¶Žš—ñ‚ð”äŠr */
-			operator LPCTSTR	();							/* ƒLƒƒƒXƒg */
+	void	operator =		(CmyString &strSrc);			/* æ–‡å­—åˆ—ã‚’åˆæœŸåŒ– */
+	void	operator =		(LPCSTR pszSrc);				/* æ–‡å­—åˆ—ã‚’åˆæœŸåŒ– */
+	void	operator +=		(LPCSTR pszSrc);				/* æ–‡å­—åˆ—ã‚’è¿½åŠ  */
+	BOOL	operator ==		(LPCSTR pszSrc);				/* æ–‡å­—åˆ—ã‚’æ¯”è¼ƒ */
+	BOOL	operator !=		(LPCSTR pszSrc);				/* æ–‡å­—åˆ—ã‚’æ¯”è¼ƒ */
+			operator LPCTSTR	();							/* ã‚­ãƒ£ã‚¹ãƒˆ */
 
-	int		CompareNoCase	(LPCSTR pszSrc);				/* •¶Žš—ñ”äŠr(‘å•¶Žš¬•¶Žš‹æ•Ê–³‚µ) */
-
-protected:
-	void	Renew	(LPCSTR pszSrc);						/* •¶Žš—ñ‚ðXV */
-
+	int		CompareNoCase	(LPCSTR pszSrc);				/* æ–‡å­—åˆ—æ¯”è¼ƒ(å¤§æ–‡å­—å°æ–‡å­—åŒºåˆ¥ç„¡ã—) */
 
 protected:
-	LPSTR	m_pszString;						/* •¶Žš—ñƒf[ƒ^ */
-	int		m_nLength;							/* •¶Žš—ñ’· */
+	void	Renew	(LPCSTR pszSrc);						/* æ–‡å­—åˆ—ã‚’æ›´æ–° */
+
+
+protected:
+	LPSTR	m_pszString;						/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
+	int		m_nLength;							/* æ–‡å­—åˆ—é•· */
 } CmyString, *PCmyString;
 
 /* Copyright(C)URARA-works 2006 */

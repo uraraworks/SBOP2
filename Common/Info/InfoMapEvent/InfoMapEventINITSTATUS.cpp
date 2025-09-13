@@ -1,29 +1,29 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapEventINITSTATUS.cpp									 */
-/* “à—e			:ƒCƒxƒ“ƒgî•ñ(ƒXƒe[ƒ^ƒX‰Šú‰»)ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/10/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapEventINITSTATUS.cpp									 */
+/* å†…å®¹			:ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±(ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ–)ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMapEventINITSTATUS.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwEffectID",		/* ƒGƒtƒFƒNƒgID */
+	"m_dwEffectID",		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::CInfoMapEventINITSTATUS				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::CInfoMapEventINITSTATUS				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 CInfoMapEventINITSTATUS::CInfoMapEventINITSTATUS()
@@ -38,9 +38,9 @@ CInfoMapEventINITSTATUS::CInfoMapEventINITSTATUS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::~CInfoMapEventINITSTATUS				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::~CInfoMapEventINITSTATUS				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 CInfoMapEventINITSTATUS::~CInfoMapEventINITSTATUS()
@@ -49,9 +49,9 @@ CInfoMapEventINITSTATUS::~CInfoMapEventINITSTATUS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::GetElementNo							 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::GetElementNo							 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 int CInfoMapEventINITSTATUS::GetElementNo(LPCSTR pszName)
@@ -79,9 +79,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::GetDataSize							 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::GetDataSize							 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventINITSTATUS::GetDataSize(void)
@@ -96,9 +96,9 @@ DWORD CInfoMapEventINITSTATUS::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::GetDataSizeNo							 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::GetDataSizeNo							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventINITSTATUS::GetDataSizeNo(int nNo)
@@ -118,9 +118,9 @@ DWORD CInfoMapEventINITSTATUS::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::GetName								 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::GetName								 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMapEventINITSTATUS::GetName(int nNo)
@@ -134,9 +134,9 @@ LPCSTR CInfoMapEventINITSTATUS::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::GetWriteData							 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::GetWriteData							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventINITSTATUS::GetWriteData(int nNo, PDWORD pdwSize)
@@ -172,14 +172,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::ReadElementData						 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::ReadElementData						 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventINITSTATUS::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -204,9 +204,9 @@ DWORD CInfoMapEventINITSTATUS::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::GetSendDataSize						 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::GetSendDataSize						 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventINITSTATUS::GetSendDataSize(void)
@@ -221,9 +221,9 @@ DWORD CInfoMapEventINITSTATUS::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::GetSendData							 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::GetSendData							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventINITSTATUS::GetSendData(void)
@@ -241,7 +241,7 @@ PBYTE CInfoMapEventINITSTATUS::GetSendData(void)
 
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 
-	CopyMemoryRenew (pDataTmp, &m_dwEffectID, sizeof (m_dwEffectID), pDataTmp);		/* ƒGƒtƒFƒNƒgID */
+	CopyMemoryRenew (pDataTmp, &m_dwEffectID, sizeof (m_dwEffectID), pDataTmp);		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 
 	SAFE_DELETE_ARRAY (pDataBase);
 
@@ -250,9 +250,9 @@ PBYTE CInfoMapEventINITSTATUS::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::SetSendData							 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::SetSendData							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventINITSTATUS::SetSendData(PBYTE pSrc)
@@ -264,7 +264,7 @@ PBYTE CInfoMapEventINITSTATUS::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 	pDataTmp = CInfoMapEventBase::SetSendData (pSrc);
 
-	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);		/* ƒGƒtƒFƒNƒgID */
+	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -272,10 +272,10 @@ PBYTE CInfoMapEventINITSTATUS::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventINITSTATUS::Copy									 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/10/05														 */
-/* ”õl		:í•Ê‚ªˆá‚¤ê‡‚Í‚¨‚©‚µ‚È‚±‚Æ‚É‚È‚é‚Ì‚Å’ˆÓ						 */
+/* é–¢æ•°å	:CInfoMapEventINITSTATUS::Copy									 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/10/05														 */
+/* å‚™è€ƒ		:ç¨®åˆ¥ãŒé•ã†å ´åˆã¯ãŠã‹ã—ãªã“ã¨ã«ãªã‚‹ã®ã§æ³¨æ„						 */
 /* ========================================================================= */
 
 void CInfoMapEventINITSTATUS::Copy(CInfoMapEventBase *pSrc)

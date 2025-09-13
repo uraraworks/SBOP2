@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcLOGIN.h											 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(ƒƒOƒCƒ“‰æ–Ê) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcLOGIN.h											 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,27 +11,27 @@
 #include "StateProcBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStateProcLOGIN : public CStateProcBase
 {
 public:
-			CStateProcLOGIN();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStateProcLOGIN();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStateProcLOGIN();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStateProcLOGIN();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Init			(void);									/* ‰Šú‰» */
-	BOOL TimerProc		(void);									/* ŽžŠÔˆ— */
-	void OnLButtonDown	(int x, int y);							/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN) */
-
-
-protected:
-	BOOL OnX					(BOOL bDown);					/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	void OnMgrDrawSTART_FADEIN	(DWORD dwPara);					/* ƒtƒF[ƒhƒCƒ“ŠJŽn */
+	void Init			(void);									/* åˆæœŸåŒ– */
+	BOOL TimerProc		(void);									/* æ™‚é–“å‡¦ç† */
+	void OnLButtonDown	(int x, int y);							/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN) */
 
 
 protected:
-	BOOL	m_bFadeIn;					/* ƒtƒF[ƒhƒCƒ“Š®—¹H */
+	BOOL OnX					(BOOL bDown);					/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	void OnMgrDrawSTART_FADEIN	(DWORD dwPara);					/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³é–‹å§‹ */
+
+
+protected:
+	BOOL	m_bFadeIn;					/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³å®Œäº†ï¼Ÿ */
 } CStateProcLOGIN, *PCStateProcLOGIN;
 
 /* Copyright(C)URARA-works 2006 */

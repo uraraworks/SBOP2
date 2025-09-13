@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkEventPAGE.cpp									 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgİ’è(ƒy[ƒWØ‚è‘Ö‚¦)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkEventPAGE.cpp									 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š(ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆ)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/23													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -21,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventPAGE::DoDataExchange(CDataExchange* pDX)
@@ -42,9 +42,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventPAGE::CDlgAdminTalkEventPAGE					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/23														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventPAGE::CDlgAdminTalkEventPAGE					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/23														 */
 /* ========================================================================= */
 
 CDlgAdminTalkEventPAGE::CDlgAdminTalkEventPAGE(CWnd* pParent /*=NULL*/)
@@ -58,9 +58,9 @@ CDlgAdminTalkEventPAGE::CDlgAdminTalkEventPAGE(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventPAGE::~CDlgAdminTalkEventPAGE				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/23														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventPAGE::~CDlgAdminTalkEventPAGE				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/23														 */
 /* ========================================================================= */
 
 CDlgAdminTalkEventPAGE::~CDlgAdminTalkEventPAGE()
@@ -69,9 +69,9 @@ CDlgAdminTalkEventPAGE::~CDlgAdminTalkEventPAGE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventPAGE::Set									 */
-/* “à—e		:İ’è‚©‚ç‰æ–Ê‚É”½‰f												 */
-/* “ú•t		:2008/12/26														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventPAGE::Set									 */
+/* å†…å®¹		:è¨­å®šã‹ã‚‰ç”»é¢ã«åæ˜ 												 */
+/* æ—¥ä»˜		:2008/12/26														 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventPAGE::Set(CInfoTalkEventBase *pSrc)
@@ -96,9 +96,9 @@ void CDlgAdminTalkEventPAGE::Set(CInfoTalkEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventPAGE::Get									 */
-/* “à—e		:‰æ–Ê‚©‚çİ’è‚É”½‰f												 */
-/* “ú•t		:2008/12/26														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventPAGE::Get									 */
+/* å†…å®¹		:ç”»é¢ã‹ã‚‰è¨­å®šã«åæ˜ 												 */
+/* æ—¥ä»˜		:2008/12/26														 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventPAGE::Get(CInfoTalkEventBase *pDst)
@@ -114,9 +114,9 @@ void CDlgAdminTalkEventPAGE::Get(CInfoTalkEventBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventPAGE::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/12/23														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventPAGE::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/12/23														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminTalkEventPAGE::OnInitDialog()
@@ -128,17 +128,17 @@ BOOL CDlgAdminTalkEventPAGE::OnInitDialog()
 
 	CDlgAdminTalkEventNONE::OnInitDialog();
 
-	m_Combo.InsertString (0, "–¢İ’è");
+	m_Combo.InsertString (0, "æœªè¨­å®š");
 	m_Combo.SetItemData (0, CHGPAGECONDITION_NONE);
-	m_Combo.InsertString (1, "ƒAƒCƒeƒ€‚ ‚è");
+	m_Combo.InsertString (1, "ã‚¢ã‚¤ãƒ†ãƒ ã‚ã‚Š");
 	m_Combo.SetItemData (1, CHGPAGECONDITION_ITEM);
-	m_Combo.InsertString (2, "ƒAƒCƒeƒ€‚È‚µ");
+	m_Combo.InsertString (2, "ã‚¢ã‚¤ãƒ†ãƒ ãªã—");
 	m_Combo.SetItemData (2, CHGPAGECONDITION_NOITEM);
 	m_Combo.SetCurSel (0);
 	OnCbnSelchangeCombo ();
 
 	for (i = 0; i < m_nPageCount; i ++) {
-		strTmp.Format ("ƒy[ƒW%d", i + 1);
+		strTmp.Format ("ãƒšãƒ¼ã‚¸%d", i + 1);
 		m_cmbJump.InsertString (i, strTmp);
 	}
 	m_cmbJump.SetCurSel (0);
@@ -157,9 +157,9 @@ BOOL CDlgAdminTalkEventPAGE::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventPAGE::OnCbnSelchangeCombo					 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/12/29														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventPAGE::OnCbnSelchangeCombo					 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/12/29														 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventPAGE::OnCbnSelchangeCombo()
@@ -169,8 +169,8 @@ void CDlgAdminTalkEventPAGE::OnCbnSelchangeCombo()
 	nCmdShow = SW_HIDE;
 	nResult  = m_Combo.GetCurSel ();
 	switch (nResult) {
-	case CHGPAGECONDITION_ITEM:		/* ƒAƒCƒeƒ€‚ ‚è */
-	case CHGPAGECONDITION_NOITEM:	/* ƒAƒCƒeƒ€‚È‚µ */
+	case CHGPAGECONDITION_ITEM:		/* ã‚¢ã‚¤ãƒ†ãƒ ã‚ã‚Š */
+	case CHGPAGECONDITION_NOITEM:	/* ã‚¢ã‚¤ãƒ†ãƒ ãªã— */
 		nCmdShow = SW_SHOW;
 		break;
 	}

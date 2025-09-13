@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillList.cpp									 */
-/* “à—e			:ƒXƒLƒ‹ƒŠƒXƒgƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/07													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:DlgAdminCharSkillList.cpp									 */
+/* â€œÃ â€”e			:Æ’XÆ’LÆ’â€¹Æ’Å Æ’XÆ’gÆ’_Æ’CÆ’AÆ’ÂÆ’OÆ’NÆ’â€°Æ’X Å½Ã€â€˜â€¢Æ’tÆ’@Æ’CÆ’â€¹					 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2008/12/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* Æ’NÆ’â€°Æ’Xâ€šÃŒÂÃâ€™Ã¨																 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::DoDataExchange(CDataExchange* pDX)
@@ -43,9 +43,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::CDlgAdminCharSkillList					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::CDlgAdminCharSkillList					 */
+/* â€œÃ â€”e		:Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillList::CDlgAdminCharSkillList(CWnd* pParent /*=NULL*/)
@@ -59,9 +59,9 @@ CDlgAdminCharSkillList::CDlgAdminCharSkillList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::~CDlgAdminCharSkillList				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::~CDlgAdminCharSkillList				 */
+/* â€œÃ â€”e		:Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillList::~CDlgAdminCharSkillList()
@@ -70,9 +70,9 @@ CDlgAdminCharSkillList::~CDlgAdminCharSkillList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::Init									 */
+/* â€œÃ â€”e		:Ââ€°Å Ãºâ€°Â»															 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::Init(CMgrData *pMgrData)
@@ -81,16 +81,16 @@ void CDlgAdminCharSkillList::Init(CMgrData *pMgrData)
 
 	m_pLibInfoSkill = m_pMgrData->GetLibInfoSkill ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* Æ’EÆ’BÆ’â€œÆ’hÆ’EÂÃ¬ÂÂ¬ */
 	Create (CDlgAdminCharSkillList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::Renew									 */
-/* “à—e		:ƒŠƒXƒgXV														 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::Renew									 */
+/* â€œÃ â€”e		:Æ’Å Æ’XÆ’gÂXÂV														 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::Renew(void)
@@ -114,15 +114,15 @@ void CDlgAdminCharSkillList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnMainFrame							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::OnMainFrame							 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MAINFRAME)								 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWSKILLINFO:		/* ƒXƒLƒ‹î•ñXV */
+	case MAINFRAMEMSG_RENEWSKILLINFO:		/* Æ’XÆ’LÆ’â€¹ÂÃ®â€¢Ã±ÂXÂV */
 		Renew ();
 		break;
 	}
@@ -130,9 +130,9 @@ void CDlgAdminCharSkillList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::OnInitDialog							 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_INITDIALOG)								 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharSkillList::OnInitDialog()
@@ -143,7 +143,7 @@ BOOL CDlgAdminCharSkillList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",		LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒXƒLƒ‹–¼",	LVCFMT_LEFT, 300);
+	m_List.InsertColumn (1, "Æ’XÆ’LÆ’â€¹â€“Â¼",	LVCFMT_LEFT, 300);
 
 	Renew ();
 
@@ -152,9 +152,9 @@ BOOL CDlgAdminCharSkillList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::OnAdd									 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(â€™Ã‡â€°Ã)											 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnAdd()
@@ -183,9 +183,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnModify								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::OnModify								 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(â€¢Ã’ÂW)											 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnModify()
@@ -228,9 +228,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2008/12/07														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharSkillList::OnDelete								 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(ÂÃ­ÂÅ“)											 */
+/* â€œÃºâ€¢t		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnDelete()

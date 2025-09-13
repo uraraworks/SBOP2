@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndMapShadowAnimeList.cpp									 */
-/* “à—e			:ƒ}ƒbƒv‰eƒAƒjƒ[ƒVƒ‡ƒ“ˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndMapShadowAnimeList.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CWndMapShadowAnimeList, CWnd)
@@ -40,9 +40,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::CWndMapShadowAnimeList					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::CWndMapShadowAnimeList					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CWndMapShadowAnimeList::CWndMapShadowAnimeList()
@@ -57,9 +57,9 @@ CWndMapShadowAnimeList::CWndMapShadowAnimeList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::~CWndMapShadowAnimeList				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::~CWndMapShadowAnimeList				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CWndMapShadowAnimeList::~CWndMapShadowAnimeList()
@@ -69,9 +69,9 @@ CWndMapShadowAnimeList::~CWndMapShadowAnimeList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 BOOL CWndMapShadowAnimeList::Create(CWnd *pParent, CMgrData *pMgrData, int nResourceID, CInfoMapShadow *pInfoMapShadow)
@@ -115,9 +115,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::Destroy								 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::Destroy								 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::Destroy(void)
@@ -129,9 +129,9 @@ void CWndMapShadowAnimeList::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::Renew									 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::Renew									 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::Renew(void)
@@ -142,9 +142,9 @@ void CWndMapShadowAnimeList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::OnCreate								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::OnCreate								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 int CWndMapShadowAnimeList::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -172,9 +172,9 @@ int CWndMapShadowAnimeList::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::OnPaint								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::OnPaint								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::OnPaint()
@@ -206,9 +206,9 @@ void CWndMapShadowAnimeList::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::OnSize									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::OnSize									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::OnSize(UINT nType, int cx, int cy)
@@ -225,9 +225,9 @@ void CWndMapShadowAnimeList::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::OnLButtonDown							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::OnLButtonDown							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::OnLButtonDown(UINT nFlags, CPoint point)
@@ -243,9 +243,9 @@ void CWndMapShadowAnimeList::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::OnHScroll								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::OnHScroll								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -256,28 +256,28 @@ void CWndMapShadowAnimeList::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 	nPosNow = GetScrollPos (SB_HORZ);
 
 	switch (nSBCode) {
-	case SB_LEFT:			/* ¶’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LEFT:			/* å·¦ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nMin;
 		break;
-	case SB_RIGHT:			/* ‰E’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_RIGHT:			/* å³ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nMax;
 		break;
-	case SB_LINELEFT:		/* ¶‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGELEFT:		/* 1ƒy[ƒW¶‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINELEFT:		/* å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGELEFT:		/* 1ãƒšãƒ¼ã‚¸å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		if (nPosNow <= 0) {
 			return;
 		}
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINERIGHT:		/* ‰E‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGERIGHT:		/* 1ƒy[ƒW‰E‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINERIGHT:		/* å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGERIGHT:		/* 1ãƒšãƒ¼ã‚¸å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		if (nPosNow >= nMax) {
 			return;
 		}
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		return;
@@ -289,9 +289,9 @@ void CWndMapShadowAnimeList::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::MakeImage								 */
-/* “à—e		:‰æ‘œ‚ğì¬														 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::MakeImage								 */
+/* å†…å®¹		:ç”»åƒã‚’ä½œæˆ														 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::MakeImage(void)
@@ -313,16 +313,16 @@ void CWndMapShadowAnimeList::MakeImage(void)
 	for (i = 0; i < nCount; i ++) {
 		pInfoAnime	= m_pInfoMapShadow->GetAnimePtr (i);
 		pImg		= m_pMgrGrpData->GetDibMapShadowTmp (pInfoAnime->m_wGrpIDBase / 1024);
-//Todo:“§‰ß
+//Todo:é€é
 		m_pImgShadow->BltFrom256 (i * 16, 0, 16, 16, pImg, pInfoAnime->m_wGrpIDBase % 32 * 16, pInfoAnime->m_wGrpIDBase / 32 * 16);
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowAnimeList::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowAnimeList::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowAnimeList::PostNcDestroy()

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndMapShadowGrp.cpp										 */
-/* “à—e			:ƒ}ƒbƒv‰eˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndMapShadowGrp.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CWndMapShadowGrp, CWnd)
@@ -42,9 +42,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::CWndMapShadowGrp								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::CWndMapShadowGrp								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CWndMapShadowGrp::CWndMapShadowGrp()
@@ -61,9 +61,9 @@ CWndMapShadowGrp::CWndMapShadowGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::~CWndMapShadowGrp							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::~CWndMapShadowGrp							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CWndMapShadowGrp::~CWndMapShadowGrp()
@@ -73,9 +73,9 @@ CWndMapShadowGrp::~CWndMapShadowGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 BOOL CWndMapShadowGrp::Create(CWnd *pParent, CMgrData *pMgrData, int nResourceID)
@@ -119,9 +119,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::Destroy										 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/05/17														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::Destroy										 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/05/17														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::Destroy(void)
@@ -133,9 +133,9 @@ void CWndMapShadowGrp::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnCreate										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnCreate										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 int CWndMapShadowGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -160,9 +160,9 @@ int CWndMapShadowGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnPaint										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnPaint										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::OnPaint()
@@ -201,9 +201,9 @@ void CWndMapShadowGrp::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnSize										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnSize										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::OnSize(UINT nType, int cx, int cy)
@@ -224,9 +224,9 @@ void CWndMapShadowGrp::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnMouseMove									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/25														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnMouseMove									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/04/25														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::OnMouseMove(UINT nFlags, CPoint point)
@@ -245,9 +245,9 @@ void CWndMapShadowGrp::OnMouseMove(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnLButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::OnLButtonDown(UINT nFlags, CPoint point)
@@ -263,9 +263,9 @@ void CWndMapShadowGrp::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnRButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnRButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::OnRButtonDown(UINT nFlags, CPoint point)
@@ -281,9 +281,9 @@ void CWndMapShadowGrp::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnMouseWheel									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnMouseWheel									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 BOOL CWndMapShadowGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -304,9 +304,9 @@ BOOL CWndMapShadowGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnHScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnHScroll									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -317,28 +317,28 @@ void CWndMapShadowGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
 	nPosNow = GetScrollPos (SB_HORZ);
 
 	switch (nSBCode) {
-	case SB_LEFT:			/* ¶’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LEFT:			/* å·¦ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nMin;
 		break;
-	case SB_RIGHT:			/* ‰E’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_RIGHT:			/* å³ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nMax;
 		break;
-	case SB_LINELEFT:		/* ¶‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGELEFT:		/* 1ƒy[ƒW¶‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINELEFT:		/* å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGELEFT:		/* 1ãƒšãƒ¼ã‚¸å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		if (nPosNow <= 0) {
 			return;
 		}
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINERIGHT:		/* ‰E‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGERIGHT:		/* 1ƒy[ƒW‰E‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINERIGHT:		/* å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGERIGHT:		/* 1ãƒšãƒ¼ã‚¸å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		if (nPosNow >= nMax) {
 			return;
 		}
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		return;
@@ -350,9 +350,9 @@ void CWndMapShadowGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::OnVScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_VSCROLL)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::OnVScroll									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_VSCROLL)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -363,28 +363,28 @@ void CWndMapShadowGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
 	nPosNow = GetScrollPos (SB_VERT);
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1”Ôã‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_TOP:			/* 1ç•ªä¸Šã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1”Ô‰º‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_BOTTOM:			/* 1ç•ªä¸‹ã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1sã‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEUP:			/* 1ƒy[ƒWã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEUP:			/* 1è¡Œä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEUP:			/* 1ãƒšãƒ¼ã‚¸ä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		if (nPosNow <= 0) {
 			return;
 		}
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINEDOWN:		/* 1s‰º‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEDOWN:		/* 1ƒy[ƒW‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEDOWN:		/* 1è¡Œä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEDOWN:		/* 1ãƒšãƒ¼ã‚¸ä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		if (nPosNow >= nMax) {
 			return;
 		}
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		return;
@@ -396,9 +396,9 @@ void CWndMapShadowGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::MakeImage									 */
-/* “à—e		:‰æ‘œ‚ğì¬														 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::MakeImage									 */
+/* å†…å®¹		:ç”»åƒã‚’ä½œæˆ														 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::MakeImage(void)
@@ -425,9 +425,9 @@ void CWndMapShadowGrp::MakeImage(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMapShadowGrp::PostNcDestroy								 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CWndMapShadowGrp::PostNcDestroy								 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CWndMapShadowGrp::PostNcDestroy()

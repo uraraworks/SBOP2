@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoItemWeapon.h											 */
-/* “à—e			:ƒAƒCƒeƒ€•Šíî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/08/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoItemWeapon.h											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,42 +11,42 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoItemWeapon : public CInfoBase
 {
 public:
-			CInfoItemWeapon();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoItemWeapon();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoItemWeapon();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoItemWeapon();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoItemWeapon *pSrc);			/* ƒRƒs[ */
+	virtual void	Copy				(CInfoItemWeapon *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	DWORD		m_dwWeaponInfoID,				/* •Šíî•ñID */
-				m_dwMotionType,					/* Žg—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-				m_dwMotionTypeStand,			/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-				m_dwMotionTypeWalk;				/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	CmyString	m_strName;						/* •ŠíŽí•Ê–¼ */
-	ARRAYDWORD	m_adwEffectIDAtack,				/* ’ÊíUŒ‚Žž‚ÌƒGƒtƒFƒNƒgID */
-				m_adwEffectIDCritical;			/* ƒNƒŠƒeƒBƒJƒ‹Žž‚ÌƒGƒtƒFƒNƒgID */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	DWORD		m_dwWeaponInfoID,				/* æ­¦å™¨æƒ…å ±ID */
+				m_dwMotionType,					/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+				m_dwMotionTypeStand,			/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+				m_dwMotionTypeWalk;				/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CmyString	m_strName;						/* æ­¦å™¨ç¨®åˆ¥å */
+	ARRAYDWORD	m_adwEffectIDAtack,				/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+				m_adwEffectIDCritical;			/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 
-	/* Ž‚¿•¨ */
+	/* æŒã¡ç‰© */
 } CInfoItemWeapon, *PCInfoItemWeapon;
 typedef CmyArray<PCInfoItemWeapon, PCInfoItemWeapon>	   ARRAYWEAPONINFO;
 typedef CmyArray<PCInfoItemWeapon, PCInfoItemWeapon>	 *PARRAYWEAPONINFO;

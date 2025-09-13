@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:RouteSearch.cpp											 */
-/* “à—e			:Œo˜H’TõƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/06/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:RouteSearch.cpp											 */
+/* å†…å®¹			:çµŒè·¯æŽ¢ç´¢ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/06/13													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,22 +11,22 @@
 #include "RouteSearch.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ŒŸõó‘Ô */
+/* æ¤œç´¢çŠ¶æ…‹ */
 enum {
-	SEARCHSTATE_READY = 0,			/* ‘Ò‹@’† */
-	SEARCHSTATE_SEARCH,				/* ŒŸõ’† */
-	SEARCHSTATE_SEARCHMOVE,			/* ŒŸõˆÚ“®’† */
-	SEARCHSTATE_FINISH				/* Š®—¹ */
+	SEARCHSTATE_READY = 0,			/* å¾…æ©Ÿä¸­ */
+	SEARCHSTATE_SEARCH,				/* æ¤œç´¢ä¸­ */
+	SEARCHSTATE_SEARCHMOVE,			/* æ¤œç´¢ç§»å‹•ä¸­ */
+	SEARCHSTATE_FINISH				/* å®Œäº† */
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CRouteSearch::CRouteSearch										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/06/13														 */
+/* é–¢æ•°å	:CRouteSearch::CRouteSearch										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/06/13														 */
 /* ========================================================================= */
 
 CRouteSearch::CRouteSearch()
@@ -106,9 +106,9 @@ PARRAYSEARCHRESULT CRouteSearch::Search(void)
 }
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CRouteSearch::ProcSEARCH										 */
-/* “à—e		:‚S•ûŒüŒŸõ														 */
-/* “ú•t		:2009/06/21														 */
+/* é–¢æ•°å	:CRouteSearch::ProcSEARCH										 */
+/* å†…å®¹		:ï¼”æ–¹å‘æ¤œç´¢														 */
+/* æ—¥ä»˜		:2009/06/21														 */
 /* ========================================================================= */
 
 void CRouteSearch::ProcSEARCH(void)
@@ -118,29 +118,29 @@ void CRouteSearch::ProcSEARCH(void)
 		anDirection[] = {1, 0, 3, 2}, anPosX[] = {0, 0, -1, 1}, anPosY[] = {-1, 1, 0, 0};
 	SEARCHINFO SearchInfo;
 
-	/* Še•ûŒü‚ðƒ`ƒFƒbƒN */
+	/* å„æ–¹å‘ã‚’ãƒã‚§ãƒƒã‚¯ */
 	for (nDirection = 0; nDirection < 4; nDirection ++) {
 		x = m_ptNow.x + anPosX[nDirection];
 		y = m_ptNow.y + anPosY[nDirection];
-		/* ”ÍˆÍŠOH */
+		/* ç¯„å›²å¤–ï¼Ÿ */
 		if ((x < m_rcSearch.left) || (x > m_rcSearch.right) || (y < m_rcSearch.top) || (y > m_rcSearch.bottom)) {
 			continue;
 		}
-		/* ŠJŽnˆÊ’uH */
+		/* é–‹å§‹ä½ç½®ï¼Ÿ */
 		if ((x == m_ptStart.x) && (y == m_ptStart.y)) {
 			continue;
 		}
-		/* ŒŸõÏ‚ÝH */
+		/* æ¤œç´¢æ¸ˆã¿ï¼Ÿ */
 		if (m_pMap[y * m_sizeMap.cx + x] > 0) {
 			continue;
 		}
-		/* ‚Ô‚Â‚©‚éH */
+		/* ã¶ã¤ã‹ã‚‹ï¼Ÿ */
 		bResult = m_pInfoMap->IsMove (x, y, nDirection);
 		if (bResult == FALSE) {
 			continue;
 		}
 
-		/* ˆÚ“®‚Å‚«‚»‚¤‚È‚Ì‚ÅŒŸõî•ñ‚ð’Ç‰Á */
+		/* ç§»å‹•ã§ããã†ãªã®ã§æ¤œç´¢æƒ…å ±ã‚’è¿½åŠ  */
 		SearchInfo.pt.x			= x;
 		SearchInfo.pt.y			= y;
 		SearchInfo.byDirection	= anDirection[nDirection];
@@ -152,9 +152,9 @@ void CRouteSearch::ProcSEARCH(void)
 }
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CRouteSearch::ProcSEARCHMOVE									 */
-/* “à—e		:ŒŸõˆ—(ŒŸõˆÚ“®’†)											 */
-/* “ú•t		:2009/06/21														 */
+/* é–¢æ•°å	:CRouteSearch::ProcSEARCHMOVE									 */
+/* å†…å®¹		:æ¤œç´¢å‡¦ç†(æ¤œç´¢ç§»å‹•ä¸­)											 */
+/* æ—¥ä»˜		:2009/06/21														 */
 /* ========================================================================= */
 
 BOOL CRouteSearch::ProcSEARCHMOVE(void)
@@ -170,7 +170,7 @@ BOOL CRouteSearch::ProcSEARCHMOVE(void)
 	wScore		= 0xFFFF;
 	nProcCount	= 0;
 
-	/* ƒXƒRƒA‚ªÅ¬‚Ìƒ‹[ƒg‚ðŒŸõ */
+	/* ã‚¹ã‚³ã‚¢ãŒæœ€å°ã®ãƒ«ãƒ¼ãƒˆã‚’æ¤œç´¢ */
 	nCount = m_aInfo.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = &m_aInfo[i];
@@ -182,7 +182,7 @@ BOOL CRouteSearch::ProcSEARCHMOVE(void)
 			nNo = i;
 		}
 	}
-	/* Œ©‚Â‚©‚Á‚½H */
+	/* è¦‹ã¤ã‹ã£ãŸï¼Ÿ */
 	if (nNo >= 0) {
 		pInfo = &m_aInfo[nNo];
 		nProcCount ++;
@@ -190,9 +190,9 @@ BOOL CRouteSearch::ProcSEARCHMOVE(void)
 		m_ptNow.x		= pInfo->pt.x;
 		m_ptNow.y		= pInfo->pt.y;
 
-		/* ÅIˆÊ’uH */
+		/* æœ€çµ‚ä½ç½®ï¼Ÿ */
 		if ((pInfo->pt.x == m_ptEnd.x) && (pInfo->pt.y == m_ptEnd.y)) {
-			/* W‚ß‚½ƒf[ƒ^‚ð®— */
+			/* é›†ã‚ãŸãƒ‡ãƒ¼ã‚¿ã‚’æ•´ç† */
 			InfoCleanup (pInfo->pt.x, pInfo->pt.y);
 			m_nState = SEARCHSTATE_FINISH;
 			goto Exit;
@@ -210,21 +210,21 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWndMap::InfoCleanup											 */
-/* “à—eF	ŒŸõî•ñÅ“K‰»													 */
-/* “ú•tF	2005/10/09														 */
+/* é–¢æ•°åï¼š	CWndMap::InfoCleanup											 */
+/* å†…å®¹ï¼š	æ¤œç´¢æƒ…å ±æœ€é©åŒ–													 */
+/* æ—¥ä»˜ï¼š	2005/10/09														 */
 /* ========================================================================= */
 
 void CRouteSearch::InfoCleanup(
-	int x,		/* [in] ÅIˆÊ’u(‰¡) */
-	int y)		/* [in] ÅIˆÊ’u(c) */
+	int x,		/* [in] æœ€çµ‚ä½ç½®(æ¨ª) */
+	int y)		/* [in] æœ€çµ‚ä½ç½®(ç¸¦) */
 {
 	int i, nNo, nCount,
 		anDirection[] = {1, 0, 3, 2}, anPosX[] = {0, 0, -1, 1}, anPosY[] = {-1, 1, 0, 0};
 	PSEARCHINFO pInfo;
 	ARRAYSEARCHINFO aSearchInfoTmp;
 
-	/* Å’Zƒ‹[ƒg‚Ì‚ÝŽc‚µ‚½”z—ñ‚ðì¬ */
+	/* æœ€çŸ­ãƒ«ãƒ¼ãƒˆã®ã¿æ®‹ã—ãŸé…åˆ—ã‚’ä½œæˆ */
 	nCount = m_aInfo.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		nNo = m_pMap[m_sizeMap.cx * y + x] - 1;
@@ -233,7 +233,7 @@ void CRouteSearch::InfoCleanup(
 		aSearchInfoTmp.Add (*pInfo);
 		x += anPosX[pInfo->byDirection];
 		y += anPosY[pInfo->byDirection];
-		/* ŠJŽnˆÊ’uH */
+		/* é–‹å§‹ä½ç½®ï¼Ÿ */
 		if ((x == m_ptStart.x) && (y == m_ptStart.y)) {
 			break;
 		}
@@ -247,7 +247,7 @@ void CRouteSearch::InfoCleanup(
 		Result.pt.x = pInfo->pt.x;
 		Result.pt.y = pInfo->pt.y;
 		if (i > 0) {
-			/* ŽŸ‚ÌˆÊ’u‚Ö‚ÌŒü‚«‚ðÝ’è */
+			/* æ¬¡ã®ä½ç½®ã¸ã®å‘ãã‚’è¨­å®š */
 			Result.byDirection = anDirection[m_aInfo[i - 1].byDirection];
 
 		} else {

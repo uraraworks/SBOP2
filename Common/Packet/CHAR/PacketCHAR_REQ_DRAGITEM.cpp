@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketCHAR_REQ_DRAGITEM.cpp								 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ÉLÉÉÉâån:ÉAÉCÉeÉÄà íuïœçXóvãÅ) é¿ëïÉtÉ@ÉCÉã		 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2008/11/22													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketCHAR_REQ_DRAGITEM.cpp								 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Ç≠„É£„É©Á≥ª:„Ç¢„Ç§„ÉÜ„É†‰ΩçÁΩÆÂ§âÊõ¥Ë¶ÅÊ±Ç) ÂÆüË£Ö„Éï„Ç°„Ç§„É´		 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2008/11/22													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_REQ_DRAGITEM.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_REQ_DRAGITEM::CPacketCHAR_REQ_DRAGITEM				 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/11/22														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_REQ_DRAGITEM::CPacketCHAR_REQ_DRAGITEM				 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/11/22														 */
 /* ========================================================================= */
 
 CPacketCHAR_REQ_DRAGITEM::CPacketCHAR_REQ_DRAGITEM()
@@ -25,9 +25,9 @@ CPacketCHAR_REQ_DRAGITEM::CPacketCHAR_REQ_DRAGITEM()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_REQ_DRAGITEM::~CPacketCHAR_REQ_DRAGITEM			 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/11/22														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_REQ_DRAGITEM::~CPacketCHAR_REQ_DRAGITEM			 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/11/22														 */
 /* ========================================================================= */
 
 CPacketCHAR_REQ_DRAGITEM::~CPacketCHAR_REQ_DRAGITEM()
@@ -36,15 +36,15 @@ CPacketCHAR_REQ_DRAGITEM::~CPacketCHAR_REQ_DRAGITEM()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_REQ_DRAGITEM::Make									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2008/11/22														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_REQ_DRAGITEM::Make									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2008/11/22														 */
 /* ========================================================================= */
 
 void CPacketCHAR_REQ_DRAGITEM::Make(
-	DWORD dwCharID,		/* [in] ÉLÉÉÉâID */
-	DWORD dwItemID,		/* [in] ÉAÉCÉeÉÄID */
-	POINT ptNewPos)		/* [in] êVÇµÇ¢à íu */
+	DWORD dwCharID,		/* [in] „Ç≠„É£„É©ID */
+	DWORD dwItemID,		/* [in] „Ç¢„Ç§„ÉÜ„É†ID */
+	POINT ptNewPos)		/* [in] Êñ∞„Åó„ÅÑ‰ΩçÁΩÆ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -63,18 +63,18 @@ void CPacketCHAR_REQ_DRAGITEM::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_REQ_DRAGITEM;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID, sizeof (dwCharID), pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* ÉAÉCÉeÉÄID */
-	CopyMemoryRenew (pDataTmp, &ptNewPos, sizeof (ptNewPos), pDataTmp);	/* êVÇµÇ¢à íu */
+	CopyMemoryRenew (pDataTmp, &dwCharID, sizeof (dwCharID), pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* „Ç¢„Ç§„ÉÜ„É†ID */
+	CopyMemoryRenew (pDataTmp, &ptNewPos, sizeof (ptNewPos), pDataTmp);	/* Êñ∞„Åó„ÅÑ‰ΩçÁΩÆ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_REQ_DRAGITEM::Set									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2008/11/22														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_REQ_DRAGITEM::Set									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2008/11/22														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_REQ_DRAGITEM::Set(PBYTE pPacket)
@@ -84,9 +84,9 @@ PBYTE CPacketCHAR_REQ_DRAGITEM::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID, pDataTmp, sizeof (m_dwCharID), pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (&m_dwItemID, pDataTmp, sizeof (m_dwItemID), pDataTmp);	/* ÉAÉCÉeÉÄID */
-	CopyMemoryRenew (&m_ptNewPos, pDataTmp, sizeof (m_ptNewPos), pDataTmp);	/* êVÇµÇ¢à íu */
+	CopyMemoryRenew (&m_dwCharID, pDataTmp, sizeof (m_dwCharID), pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (&m_dwItemID, pDataTmp, sizeof (m_dwItemID), pDataTmp);	/* „Ç¢„Ç§„ÉÜ„É†ID */
+	CopyMemoryRenew (&m_ptNewPos, pDataTmp, sizeof (m_ptNewPos), pDataTmp);	/* Êñ∞„Åó„ÅÑ‰ΩçÁΩÆ */
 
 	pRet = pDataTmp;
 	return pRet;

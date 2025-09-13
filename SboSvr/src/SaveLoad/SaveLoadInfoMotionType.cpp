@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoMotionType.cpp									 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚Ýž‚ÝƒNƒ‰ƒX(ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ) ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/05/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoMotionType.cpp									 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/31													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,22 +11,22 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoMotionType::CSaveLoadInfoMotionType				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/31														 */
+/* é–¢æ•°å	:CSaveLoadInfoMotionType::CSaveLoadInfoMotionType				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/31														 */
 /* ========================================================================= */
 
 CSaveLoadInfoMotionType::CSaveLoadInfoMotionType()
 {
-	/* ƒtƒ@ƒCƒ‹–¼‚ÌÝ’è */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®è¨­å®š */
 	SetFileName ("SBODATA\\SboDataMotionType.dat");
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoMotionType::~CSaveLoadInfoMotionType				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/31														 */
+/* é–¢æ•°å	:CSaveLoadInfoMotionType::~CSaveLoadInfoMotionType				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/31														 */
 /* ========================================================================= */
 
 CSaveLoadInfoMotionType::~CSaveLoadInfoMotionType()

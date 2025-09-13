@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcADMIN.cpp									 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ŠÇ—ŽÒŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcADMIN.cpp									 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ç®¡ç†è€…ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,28 +20,28 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN										 */
-/* “à—e		:ŽóMˆ—(ŠÇ—ŽÒŒn)												 */
-/* “ú•t		:2007/07/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç®¡ç†è€…ç³»)												 */
+/* æ—¥ä»˜		:2007/07/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_ADMIN_RES_ADMINLEVEL:		RecvProcADMIN_RES_ADMINLEVEL	(pData);	break;	/* ŠÇ—ŽÒƒŒƒxƒ‹‰ž“š */
-	case SBOCOMMANDID_SUB_ADMIN_RENEWADMINLEVEL:	RecvProcADMIN_RENEWADMINLEVEL	(pData);	break;	/* ŠÇ—ŽÒƒŒƒxƒ‹XV */
-	case SBOCOMMANDID_SUB_ADMIN_PLAYSOUND:			RecvProcADMIN_PLAYSOUND			(pData);	break;	/* Œø‰Ê‰¹‚ÌÄ¶ */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ACCOUNT:	RecvProcADMIN_CHAR_RES_ACCOUNT	(pData);	break;	/* ƒAƒJƒEƒ“ƒgî•ñ‰ž“š */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ONLINE:	RecvProcADMIN_CHAR_RES_ONLINE	(pData);	break;	/* ƒIƒ“ƒ‰ƒCƒ“’†ƒLƒƒƒ‰ˆê——‰ž“š */
-	case SBOCOMMANDID_SUB_ADMIN_DISABLE_RES_INFO:	RecvProcADMIN_DISABLE_RES_INFO	(pData);	break;	/* ‹‘”Ûî•ñ‰ž“š */
+	case SBOCOMMANDID_SUB_ADMIN_RES_ADMINLEVEL:		RecvProcADMIN_RES_ADMINLEVEL	(pData);	break;	/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ«å¿œç­” */
+	case SBOCOMMANDID_SUB_ADMIN_RENEWADMINLEVEL:	RecvProcADMIN_RENEWADMINLEVEL	(pData);	break;	/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ«æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_PLAYSOUND:			RecvProcADMIN_PLAYSOUND			(pData);	break;	/* åŠ¹æžœéŸ³ã®å†ç”Ÿ */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ACCOUNT:	RecvProcADMIN_CHAR_RES_ACCOUNT	(pData);	break;	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±å¿œç­” */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ONLINE:	RecvProcADMIN_CHAR_RES_ONLINE	(pData);	break;	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©ä¸€è¦§å¿œç­” */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_RES_INFO:	RecvProcADMIN_DISABLE_RES_INFO	(pData);	break;	/* æ‹’å¦æƒ…å ±å¿œç­” */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_RES_ADMINLEVEL						 */
-/* “à—e		:ŽóMˆ—(ŠÇ—ŽÒƒŒƒxƒ‹‰ž“š)										 */
-/* “ú•t		:2007/07/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_RES_ADMINLEVEL						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç®¡ç†è€…ãƒ¬ãƒ™ãƒ«å¿œç­”)										 */
+/* æ—¥ä»˜		:2007/07/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_RES_ADMINLEVEL(PBYTE pData)
@@ -54,9 +54,9 @@ void CMainFrame::RecvProcADMIN_RES_ADMINLEVEL(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_RENEWADMINLEVEL						 */
-/* “à—e		:ŽóMˆ—(ŠÇ—ŽÒƒŒƒxƒ‹XV)										 */
-/* “ú•t		:2007/07/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_RENEWADMINLEVEL						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç®¡ç†è€…ãƒ¬ãƒ™ãƒ«æ›´æ–°)										 */
+/* æ—¥ä»˜		:2007/07/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_RENEWADMINLEVEL(PBYTE pData)
@@ -76,9 +76,9 @@ void CMainFrame::RecvProcADMIN_RENEWADMINLEVEL(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_PLAYSOUND							 */
-/* “à—e		:ŽóMˆ—(Œø‰Ê‰¹‚ÌÄ¶)											 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_PLAYSOUND							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(åŠ¹æžœéŸ³ã®å†ç”Ÿ)											 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_PLAYSOUND(PBYTE pData)
@@ -92,9 +92,9 @@ void CMainFrame::RecvProcADMIN_PLAYSOUND(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_RES_ACCOUNT						 */
-/* “à—e		:ŽóMˆ—(ƒAƒJƒEƒ“ƒgî•ñ‰ž“š)									 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_RES_ACCOUNT						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±å¿œç­”)									 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_RES_ACCOUNT(PBYTE pData)
@@ -118,9 +118,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RES_ACCOUNT(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE						 */
-/* “à—e		:ŽóMˆ—(ƒIƒ“ƒ‰ƒCƒ“’†ƒLƒƒƒ‰ˆê——‰ž“š)							 */
-/* “ú•t		:2008/12/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©ä¸€è¦§å¿œç­”)							 */
+/* æ—¥ä»˜		:2008/12/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE(PBYTE pData)
@@ -142,9 +142,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_DISABLE_RES_INFO						 */
-/* “à—e		:ŽóMˆ—(‹‘”Ûî•ñ‰ž“š)											 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_DISABLE_RES_INFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ‹’å¦æƒ…å ±å¿œç­”)											 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_DISABLE_RES_INFO(PBYTE pData)

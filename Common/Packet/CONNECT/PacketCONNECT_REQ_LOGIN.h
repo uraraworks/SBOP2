@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_REQ_LOGIN.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:ƒƒOƒCƒ“—v‹) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_REQ_LOGIN.h									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(æ¥ç¶šç³»:ãƒ­ã‚°ã‚¤ãƒ³è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,23 +11,23 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCONNECT_REQ_LOGIN : public CPacketBase
 {
 public:
-			CPacketCONNECT_REQ_LOGIN();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCONNECT_REQ_LOGIN();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCONNECT_REQ_LOGIN();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCONNECT_REQ_LOGIN();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(LPCSTR pszAccount, LPCSTR pszPassword, PBYTE pbyMacAddr);	/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(LPCSTR pszAccount, LPCSTR pszPassword, PBYTE pbyMacAddr);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	BYTE		m_byMacAddr[6];					/* MACƒAƒhƒŒƒX */
-	CmyString	m_strAccount,					/* ƒAƒJƒEƒ“ƒg */
-				m_strPassword;					/* ƒpƒXƒ[ƒh */
+	BYTE		m_byMacAddr[6];					/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	CmyString	m_strAccount,					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+				m_strPassword;					/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 } CPacketCONNECT_REQ_LOGIN, *PCPacketCONNECT_REQ_LOGIN;
 
 /* Copyright(C)URARA-works 2006 */

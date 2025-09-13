@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapPartsEdit.cpp									 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapPartsEdit.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/14													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::DoDataExchange(CDataExchange* pDX)
@@ -74,9 +74,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::CDlgAdminMapPartsEdit					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::CDlgAdminMapPartsEdit					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 CDlgAdminMapPartsEdit::CDlgAdminMapPartsEdit(CWnd* pParent /*=NULL*/)
@@ -118,9 +118,9 @@ CDlgAdminMapPartsEdit::CDlgAdminMapPartsEdit(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::~CDlgAdminMapPartsEdit					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::~CDlgAdminMapPartsEdit					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 CDlgAdminMapPartsEdit::~CDlgAdminMapPartsEdit()
@@ -130,9 +130,9 @@ CDlgAdminMapPartsEdit::~CDlgAdminMapPartsEdit()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::DoModal									 */
-/* “à—e		:ƒ‚[ƒ_ƒ‹ƒ_ƒCƒAƒƒO•\¦											 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::DoModal									 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ãƒ€ãƒ«ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤º											 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 int CDlgAdminMapPartsEdit::DoModal(CMgrData *pMgrData)
@@ -145,9 +145,9 @@ int CDlgAdminMapPartsEdit::DoModal(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapPartsEdit::OnInitDialog()
@@ -179,7 +179,7 @@ BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 	CheckRadioButton (IDC_MOVE_UP, IDC_MOVE_NONE, IDC_MOVE_NONE);
 	CheckRadioButton (IDC_GRP_PARTS, IDC_GRP_SHASOW, IDC_GRP_PARTS);
 
-	/* Todo:–¢À‘•‚È‚Ì‚Å‘I‘ğ‚Å‚«‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¨‚­ */
+	/* Todo:æœªå®Ÿè£…ãªã®ã§é¸æŠã§ããªã„ã‚ˆã†ã«ã—ã¦ãŠã */
 	GetDlgItem (IDC_MOVE_UP)->		EnableWindow (FALSE);
 	GetDlgItem (IDC_MOVE_DOWN)->	EnableWindow (FALSE);
 	GetDlgItem (IDC_MOVE_LEFT)->	EnableWindow (FALSE);
@@ -187,7 +187,7 @@ BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 
 	nCount = m_pMgrData->GetMgrGrpData ()->GetMapPartsCount () / 1024;
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("‰æ‘œ %d –‡–Ú", i + 1);
+		strTmp.Format ("ç”»åƒ %d æšç›®", i + 1);
 		m_cbGrpNo.AddString (strTmp);
 	}
 	m_nGrpNo = m_pMgrData->GetLastSelectGrpNo ();
@@ -205,9 +205,9 @@ BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnPaint									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnPaint									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnPaint()
@@ -224,7 +224,7 @@ void CDlgAdminMapPartsEdit::OnPaint()
 	ImgTmp.SetColorKey (RGB (255, 0, 255));
 	ImgPreview.Create (32, 32);
 
-	/* ‰º’n */
+	/* ä¸‹åœ° */
 	no = m_wPartsBase;
 	pImg = m_pMgrGrpData->GetDibMapParts (no / 1024);
 	if (pImg == NULL) {
@@ -238,7 +238,7 @@ void CDlgAdminMapPartsEdit::OnPaint()
 	pDC->StretchBlt (0, 0, 32, 32, pDCTmp, 0, 0, 16, 16, SRCCOPY);
 	ImgTmp.Unlock ();
 
-	/* d‚Ë‡‚í‚¹ */
+	/* é‡ã­åˆã‚ã› */
 	no = m_wPartsPile;
 	pImg = m_pMgrGrpData->GetDibMapParts (no / 1024);
 	if (pImg == NULL) {
@@ -255,7 +255,7 @@ void CDlgAdminMapPartsEdit::OnPaint()
 	pDC->StretchBlt (0, 0, 32, 32, pDCTmp, 0, 0, 16, 16, SRCCOPY);
 	ImgTmp.Unlock ();
 
-	/* ƒvƒŒƒrƒ…[ */
+	/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ */
 	hDC		= ImgPreview.Lock ();
 	pDCTmp	= dc.FromHandle (hDC);
 	pDC		= GetDlgItem (IDC_PREVIEW)->GetDC ();
@@ -265,9 +265,9 @@ void CDlgAdminMapPartsEdit::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnWndClose								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WNDCLOSE)								 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnWndClose								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WNDCLOSE)								 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapPartsEdit::OnWndClose(WPARAM wParam, LPARAM lParam)
@@ -276,7 +276,7 @@ LRESULT CDlgAdminMapPartsEdit::OnWndClose(WPARAM wParam, LPARAM lParam)
 	PCInfoAnime pInfo;
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPPARTSGRP:	/* ƒ}ƒbƒvƒp[ƒc‰æ‘œ‘I‘ğ */
+	case WINDOWID_SELECTMAPPARTSGRP:	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒé¸æŠ */
 		if (lParam >= 0) {
 			if (m_nSelectType == 1) {
 				m_wPartsBase = (WORD)lParam;
@@ -306,23 +306,23 @@ LRESULT CDlgAdminMapPartsEdit::OnWndClose(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/05/18														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/05/18														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapPartsEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_nSelectType = 1;
 		PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPPARTSGRP, lParam);
 		break;
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:		/* ‰EƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:		/* å³ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_nSelectType = 0;
 		PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPPARTSGRP, lParam);
 		break;
-	case ADMINMSG_SELECT_ANIME:					/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‘I‘ğ */
+	case ADMINMSG_SELECT_ANIME:					/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒé¸æŠ */
 		m_nAnimeNo = lParam;
 		m_Slider.SetPos (m_nAnimeNo);
 		OnSelectAnime ();
@@ -334,9 +334,9 @@ LRESULT CDlgAdminMapPartsEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnHScroll								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnHScroll								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -348,9 +348,9 @@ void CDlgAdminMapPartsEdit::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScro
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnGetMinMaxInfo							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_GETMINMAXINFO)							 */
-/* “ú•t		:2007/05/15														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnGetMinMaxInfo							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_GETMINMAXINFO)							 */
+/* æ—¥ä»˜		:2007/05/15														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
@@ -365,9 +365,9 @@ void CDlgAdminMapPartsEdit::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnMouseMove								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/05/16														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnMouseMove								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/05/16														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnMouseMove(UINT nFlags, CPoint point)
@@ -377,9 +377,9 @@ void CDlgAdminMapPartsEdit::OnMouseMove(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnLButtonDown							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONUP)								 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnLButtonDown							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONUP)								 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnLButtonDown(UINT nFlags, CPoint point)
@@ -405,9 +405,9 @@ void CDlgAdminMapPartsEdit::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnMouseWheel							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/05/16														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnMouseWheel							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/05/16														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapPartsEdit::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -417,9 +417,9 @@ BOOL CDlgAdminMapPartsEdit::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnTimer									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•t		:2007/05/28														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnTimer									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜		:2007/05/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnTimer(UINT nIDEvent)
@@ -451,9 +451,9 @@ void CDlgAdminMapPartsEdit::OnTimer(UINT nIDEvent)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnChangeLevel							 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(ENM_CHANGE)									 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnChangeLevel							 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(ENM_CHANGE)									 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnChangeLevel()
@@ -473,9 +473,9 @@ void CDlgAdminMapPartsEdit::OnChangeLevel()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnChangeViewtime						 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(ENM_CHANGE)									 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnChangeViewtime						 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(ENM_CHANGE)									 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnChangeViewtime()
@@ -495,9 +495,9 @@ void CDlgAdminMapPartsEdit::OnChangeViewtime()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnAdd									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnAdd()
@@ -516,9 +516,9 @@ void CDlgAdminMapPartsEdit::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnDel									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnDel									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnDel()
@@ -542,9 +542,9 @@ void CDlgAdminMapPartsEdit::OnDel()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnPlay									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Ä¶)											 */
-/* “ú•t		:2007/05/28														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnPlay									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å†ç”Ÿ)											 */
+/* æ—¥ä»˜		:2007/05/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnPlay()
@@ -560,9 +560,9 @@ void CDlgAdminMapPartsEdit::OnPlay()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnStop									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’â~)											 */
-/* “ú•t		:2007/05/28														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnStop									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(åœæ­¢)											 */
+/* æ—¥ä»˜		:2007/05/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnStop()
@@ -578,9 +578,9 @@ void CDlgAdminMapPartsEdit::OnStop()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnSelchangeGrpNo						 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/10/11														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnSelchangeGrpNo						 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/10/11														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnSelchangeGrpNo()
@@ -592,9 +592,9 @@ void CDlgAdminMapPartsEdit::OnSelchangeGrpNo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnOK()
@@ -616,9 +616,9 @@ void CDlgAdminMapPartsEdit::OnOK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::SetData									 */
-/* “à—e		:ƒf[ƒ^‚ğ‰æ–Ê‚É”½‰f												 */
-/* “ú•t		:2007/05/26														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::SetData									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚’ç”»é¢ã«åæ˜ 												 */
+/* æ—¥ä»˜		:2007/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::SetData(void)
@@ -655,9 +655,9 @@ void CDlgAdminMapPartsEdit::SetData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::GetData									 */
-/* “à—e		:‰æ–Ê‚©‚çƒf[ƒ^‚ğæ“¾											 */
-/* “ú•t		:2007/05/26														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::GetData									 */
+/* å†…å®¹		:ç”»é¢ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::GetData(void)
@@ -675,9 +675,9 @@ void CDlgAdminMapPartsEdit::GetData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::SetPartsType							 */
-/* “à—e		:ƒp[ƒcí•Ê‚É‰‚¶‚Äƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚ğİ’è					 */
-/* “ú•t		:2007/05/15														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::SetPartsType							 */
+/* å†…å®¹		:ãƒ‘ãƒ¼ãƒ„ç¨®åˆ¥ã«å¿œã˜ã¦ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã®çŠ¶æ…‹ã‚’è¨­å®š					 */
+/* æ—¥ä»˜		:2007/05/15														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::SetPartsType(DWORD dwType)
@@ -689,22 +689,22 @@ void CDlgAdminMapPartsEdit::SetPartsType(DWORD dwType)
 	m_bTypeDrawLast	= FALSE;
 	m_bTypeCounter	= FALSE;
 
-	if (dwType & BIT_PARTSHIT_BLOCK) {			/* ‚Ô‚Â‚©‚é */
+	if (dwType & BIT_PARTSHIT_BLOCK) {			/* ã¶ã¤ã‹ã‚‹ */
 		m_bTypeBlock = TRUE;
 	}
-	if (dwType & BIT_PARTSHIT_PILE) {			/* d‚È‚é */
+	if (dwType & BIT_PARTSHIT_PILE) {			/* é‡ãªã‚‹ */
 		m_bTypePile = TRUE;
 	}
-	if (dwType & BIT_PARTSHIT_PILEBACK) {		/* ”wŒi‚²‚Æd‚È‚é */
+	if (dwType & BIT_PARTSHIT_PILEBACK) {		/* èƒŒæ™¯ã”ã¨é‡ãªã‚‹ */
 		m_bTypePileBack = TRUE;
 	}
-	if (dwType & BIT_PARTSHIT_FISHING) {		/* ’Ş‚èê */
+	if (dwType & BIT_PARTSHIT_FISHING) {		/* é‡£ã‚Šå ´ */
 		m_bFishing = TRUE;
 	}
-	if (dwType & BIT_PARTSHIT_DRAWLAST) {		/* í‚Éd‚È‚é */
+	if (dwType & BIT_PARTSHIT_DRAWLAST) {		/* å¸¸ã«é‡ãªã‚‹ */
 		m_bTypeDrawLast = TRUE;
 	}
-	if (dwType & BIT_PARTSHIT_COUNTER) {		/* ƒJƒEƒ“ƒ^[ */
+	if (dwType & BIT_PARTSHIT_COUNTER) {		/* ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ */
 		m_bTypeCounter = TRUE;
 	}
 
@@ -713,9 +713,9 @@ void CDlgAdminMapPartsEdit::SetPartsType(DWORD dwType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::GetPartsType							 */
-/* “à—e		:ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚É‰‚¶‚Äƒp[ƒcí•Ê‚ğæ“¾					 */
-/* “ú•t		:2007/05/15														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::GetPartsType							 */
+/* å†…å®¹		:ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã®çŠ¶æ…‹ã«å¿œã˜ã¦ãƒ‘ãƒ¼ãƒ„ç¨®åˆ¥ã‚’å–å¾—					 */
+/* æ—¥ä»˜		:2007/05/15														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminMapPartsEdit::GetPartsType(void)
@@ -726,22 +726,22 @@ DWORD CDlgAdminMapPartsEdit::GetPartsType(void)
 
 	dwRet = 0;
 
-	if (m_bTypeBlock) {			/* ‚Ô‚Â‚©‚é */
+	if (m_bTypeBlock) {			/* ã¶ã¤ã‹ã‚‹ */
 		dwRet |= BIT_PARTSHIT_BLOCK;
 	}
-	if (m_bTypePile) {			/* d‚È‚é */
+	if (m_bTypePile) {			/* é‡ãªã‚‹ */
 		dwRet |= BIT_PARTSHIT_PILE;
 	}
-	if (m_bTypePileBack) {		/* ”wŒi‚²‚Æd‚È‚é */
+	if (m_bTypePileBack) {		/* èƒŒæ™¯ã”ã¨é‡ãªã‚‹ */
 		dwRet |= BIT_PARTSHIT_PILEBACK;
 	}
-	if (m_bFishing) {			/* ’Ş‚èê */
+	if (m_bFishing) {			/* é‡£ã‚Šå ´ */
 		dwRet |= BIT_PARTSHIT_FISHING;
 	}
-	if (m_bTypeDrawLast) {		/* í‚Éd‚È‚é */
+	if (m_bTypeDrawLast) {		/* å¸¸ã«é‡ãªã‚‹ */
 		dwRet |= BIT_PARTSHIT_DRAWLAST;
 	}
-	if (m_bTypeCounter) {		/* ƒJƒEƒ“ƒ^[ */
+	if (m_bTypeCounter) {		/* ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ */
 		dwRet |= BIT_PARTSHIT_COUNTER;
 	}
 
@@ -750,9 +750,9 @@ DWORD CDlgAdminMapPartsEdit::GetPartsType(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::OnSelectAnime							 */
-/* “à—e		:ƒRƒ}‘I‘ğˆ—													 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::OnSelectAnime							 */
+/* å†…å®¹		:ã‚³ãƒé¸æŠå‡¦ç†													 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::OnSelectAnime(void)
@@ -779,9 +779,9 @@ void CDlgAdminMapPartsEdit::OnSelectAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::RenewButtonState						 */
-/* “à—e		:ƒ{ƒ^ƒ“ó‘Ô‚Ìİ’è												 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::RenewButtonState						 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³çŠ¶æ…‹ã®è¨­å®š												 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::RenewButtonState(void)
@@ -804,9 +804,9 @@ void CDlgAdminMapPartsEdit::RenewButtonState(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapPartsEdit::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminMapPartsEdit::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminMapPartsEdit::PostNcDestroy()

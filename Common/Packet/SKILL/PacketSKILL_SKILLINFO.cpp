@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketSKILL_SKILLINFO.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒXƒLƒ‹Œn:ƒXƒLƒ‹î•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketSKILL_SKILLINFO.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚¹ã‚­ãƒ«ç³»:ã‚¹ã‚­ãƒ«æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/06													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketSKILL_SKILLINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_SKILLINFO::CPacketSKILL_SKILLINFO					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_SKILLINFO::CPacketSKILL_SKILLINFO					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 CPacketSKILL_SKILLINFO::CPacketSKILL_SKILLINFO()
@@ -23,9 +23,9 @@ CPacketSKILL_SKILLINFO::CPacketSKILL_SKILLINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_SKILLINFO::~CPacketSKILL_SKILLINFO				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_SKILLINFO::~CPacketSKILL_SKILLINFO				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 CPacketSKILL_SKILLINFO::~CPacketSKILL_SKILLINFO()
@@ -35,13 +35,13 @@ CPacketSKILL_SKILLINFO::~CPacketSKILL_SKILLINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_SKILLINFO::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_SKILLINFO::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 void CPacketSKILL_SKILLINFO::Make(
-	PCLibInfoSkill pInfo)		/* [in] ƒXƒLƒ‹î•ñ */
+	PCLibInfoSkill pInfo)		/* [in] ã‚¹ã‚­ãƒ«æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -61,7 +61,7 @@ void CPacketSKILL_SKILLINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_SKILL_SKILLINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒXƒLƒ‹î•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚¹ã‚­ãƒ«æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -70,13 +70,13 @@ void CPacketSKILL_SKILLINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_SKILLINFO::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/12/08														 */
+/* é–¢æ•°å	:CPacketSKILL_SKILLINFO::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/12/08														 */
 /* ========================================================================= */
 
 void CPacketSKILL_SKILLINFO::Make(
-	CInfoSkillBase *pInfo)		/* [in] ƒXƒLƒ‹î•ñ */
+	CInfoSkillBase *pInfo)		/* [in] ã‚¹ã‚­ãƒ«æƒ…å ± */
 {
 	PCInfoSkillBase pInfoTmp;
 	CLibInfoSkill LibInfoSkill;
@@ -92,9 +92,9 @@ void CPacketSKILL_SKILLINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_SKILLINFO::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_SKILLINFO::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 PBYTE CPacketSKILL_SKILLINFO::Set(PBYTE pPacket)

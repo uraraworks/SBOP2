@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowOPTION_TASKBAR.cpp									 */
-/* “à—e			:ƒIƒvƒVƒ‡ƒ“(”­Œ¾Žž‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ)ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/21													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowOPTION_TASKBAR.cpp									 */
+/* å†…å®¹			:ã‚ªãƒ—ã‚·ãƒ§ãƒ³(ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«)ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/21													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::CWindowOPTION_TASKBAR					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::CWindowOPTION_TASKBAR					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 CWindowOPTION_TASKBAR::CWindowOPTION_TASKBAR()
@@ -34,9 +34,9 @@ CWindowOPTION_TASKBAR::CWindowOPTION_TASKBAR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::~CWindowOPTION_TASKBAR					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::~CWindowOPTION_TASKBAR					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 CWindowOPTION_TASKBAR::~CWindowOPTION_TASKBAR()
@@ -45,9 +45,9 @@ CWindowOPTION_TASKBAR::~CWindowOPTION_TASKBAR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CWindowOPTION_TASKBAR::Create(CMgrData *pMgrData)
@@ -62,9 +62,9 @@ void CWindowOPTION_TASKBAR::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::Draw									 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::Draw									 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CWindowOPTION_TASKBAR::Draw(PCImg32 pDst)
@@ -104,9 +104,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::OnUp									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::OnUp									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_TASKBAR::OnUp(void)
@@ -130,9 +130,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::OnDown									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::OnDown									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_TASKBAR::OnDown(void)
@@ -156,9 +156,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::OnLeft									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::OnLeft									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_TASKBAR::OnLeft(void)
@@ -173,9 +173,9 @@ BOOL CWindowOPTION_TASKBAR::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::OnRight									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::OnRight									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_TASKBAR::OnRight(void)
@@ -190,9 +190,9 @@ BOOL CWindowOPTION_TASKBAR::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::OnX										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::OnX										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_TASKBAR::OnX(BOOL bDown)
@@ -214,9 +214,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_TASKBAR::OnZ										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CWindowOPTION_TASKBAR::OnZ										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_TASKBAR::OnZ(BOOL bDown)

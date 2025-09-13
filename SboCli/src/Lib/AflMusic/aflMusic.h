@@ -18,11 +18,11 @@ struct IDirectMusicDownloadedInstrument;
 //namespace Afl::DirectX::Music
 namespace Afl{namespace DirectX{namespace Music{
 
-#define MARK_LOOP "L"	//ƒ‹[ƒv—pƒ}[ƒN
+#define MARK_LOOP "L"	//ãƒ«ãƒ¼ãƒ—ç”¨ãƒãƒ¼ã‚¯
 
 //------------------------------------------------------------
 // AflMTimer
-// ƒ}ƒ‹ƒ`ƒƒfƒBƒAƒ^ƒCƒ}[‘ã‘Ö—p
+// ãƒãƒ«ãƒãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¤ãƒãƒ¼ä»£æ›¿ç”¨
 //------------------------------------------------------------
 class AflMTimer
 {
@@ -47,7 +47,7 @@ protected:
 
 //------------------------------------------------------------
 // AflMusicDevice
-// MIDIƒfƒoƒCƒX§Œä—p
+// MIDIãƒ‡ãƒã‚¤ã‚¹åˆ¶å¾¡ç”¨
 //------------------------------------------------------------
 #define MIDI_DIRECTMUSIC     ((UINT)-2)
 class AflMusicDevice
@@ -173,7 +173,7 @@ public:
 		DWORD m_dwNextCount;
 		LPBYTE m_pByte,m_pLastByte; 
 		INT m_nStep,m_nEStep;
-		INT m_nMarker;			//ƒ}[ƒJ[•¶š”
+		INT m_nMarker;			//ãƒãƒ¼ã‚«ãƒ¼æ–‡å­—æ•°
 	};
 public:
 	AflMPlayData();
@@ -247,19 +247,19 @@ public:
 		RESET_GS,RESET_GM,RESET_GM2
 	};
 	//---------------------------
-	// ƒRƒ“ƒXƒg^ƒfƒXƒg
+	// ã‚³ãƒ³ã‚¹ãƒˆï¼ãƒ‡ã‚¹ãƒˆ
 	AflMusic();
 	~AflMusic();
 	
 	//---------------------------
-	// ƒf[ƒ^Œn
+	// ãƒ‡ãƒ¼ã‚¿ç³»
 	bool open(LPCSTR pFileName,LPCSTR pType=NULL);
 	bool open(HMODULE hResource, HRSRC hSrc, LPCSTR pType=NULL);
 	bool close();
 	bool isData();
 	
 	//---------------------------
-	// ‰‰‘tŒn
+	// æ¼”å¥ç³»
 	bool fadeIn(INT nTime,INT nVolume=-70);
 	bool fadeOut(INT nTime);
 	bool playTime(DWORD dwTime);
@@ -272,7 +272,7 @@ public:
 	bool outMidiData(BYTE byData1,BYTE byData2,BYTE byData3);
 
 	//---------------------------
-	// ‰‰‘t§ŒäŒn
+	// æ¼”å¥åˆ¶å¾¡ç³»
 	void setLoop(bool bLoop);
 	void setLoopTop(DWORDLONG dwlLoopSearch);
 	void setLoopTopTime(DWORD dwLoopSearch);
@@ -286,7 +286,7 @@ public:
 	void setRelativeReverb(INT nReverb);
 
 	//---------------------------
-	// ‰‰‘tó‘ÔŒn
+	// æ¼”å¥çŠ¶æ…‹ç³»
 	LPCSTR getTitle()const;
 	SGpPlayInfo* getPlayInfo();
 	WORD getTimeBase()const;
@@ -302,7 +302,7 @@ public:
 	virtual void callbackMarkerEvent(LPCSTR pString);
 
 	//---------------------------
-	// ƒfƒoƒCƒXİ’èŒn
+	// ãƒ‡ãƒã‚¤ã‚¹è¨­å®šç³»
 	bool setDevice(INT nIndex=MIDI_MAPPER);
 	INT getDeviceCount();
 	void getDeviceName(INT nIndex,LPTSTR pString);

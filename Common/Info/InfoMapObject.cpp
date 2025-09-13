@@ -1,58 +1,58 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapObject.cpp											 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒcƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapObject.cpp											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMapObject.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwObjectID",		/* ƒIƒuƒWƒFƒNƒgID */
-	"m_dwAttr",			/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	"m_nHideY",			/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	"m_sizeGrp",		/* ‰æ‘œƒTƒCƒY */
-	"m_bHit",			/* “–‚½‚è”»’è */
-	"m_strName",		/* ƒIƒuƒWƒFƒNƒg–¼ */
-	"m_pHit",			/* “–‚½‚è”»’èƒf[ƒ^ */
-	"nAnimeCount",		/* ƒIƒuƒWƒFƒNƒgƒAƒjƒ” */
-	"anime_byWait",		/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	"anime_byLevel",	/* “§–¾“x */
-	"anime_pwGrpID",	/* ‰æ‘œID */
+	"m_dwObjectID",		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	"m_dwAttr",			/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±æ€§ */
+	"m_nHideY",			/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒã‚¹æ•° */
+	"m_sizeGrp",		/* ç”»åƒã‚µã‚¤ã‚º */
+	"m_bHit",			/* å½“ãŸã‚Šåˆ¤å®š */
+	"m_strName",		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
+	"m_pHit",			/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
+	"nAnimeCount",		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æ•° */
+	"anime_byWait",		/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	"anime_byLevel",	/* é€æ˜åº¦ */
+	"anime_pwGrpID",	/* ç”»åƒID */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::CInfoMapObject									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::CInfoMapObject									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 CInfoMapObject::CInfoMapObject()
 {
-	m_dwObjectID	= 0;		/* ƒIƒuƒWƒFƒNƒgID */
-	m_dwAttr		= 0;		/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	m_nHideY		= 0;		/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	m_bHit			= FALSE;	/* “–‚½‚è”»’è */
-	m_pHit			= NULL;		/* “–‚½‚è”»’èƒf[ƒ^ */
-	ZeroMemory (&m_sizeGrp, sizeof (m_sizeGrp));		/* ‰æ‘œƒTƒCƒY */
+	m_dwObjectID	= 0;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	m_dwAttr		= 0;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±æ€§ */
+	m_nHideY		= 0;		/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒã‚¹æ•° */
+	m_bHit			= FALSE;	/* å½“ãŸã‚Šåˆ¤å®š */
+	m_pHit			= NULL;		/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
+	ZeroMemory (&m_sizeGrp, sizeof (m_sizeGrp));		/* ç”»åƒã‚µã‚¤ã‚º */
 
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::~CInfoMapObject								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::~CInfoMapObject								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 CInfoMapObject::~CInfoMapObject()
@@ -63,9 +63,9 @@ CInfoMapObject::~CInfoMapObject()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetElementCount								 */
-/* “à—e		:—v‘f”‚ğæ“¾													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetElementCount								 */
+/* å†…å®¹		:è¦ç´ æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 int CInfoMapObject::GetElementCount(void)
@@ -75,9 +75,9 @@ int CInfoMapObject::GetElementCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 int CInfoMapObject::GetElementNo(LPCSTR pszName)
@@ -98,9 +98,9 @@ int CInfoMapObject::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetDataSize									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetDataSize									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 DWORD CInfoMapObject::GetDataSize(void)
@@ -118,9 +118,9 @@ DWORD CInfoMapObject::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 DWORD CInfoMapObject::GetDataSizeNo(int nNo)
@@ -133,17 +133,17 @@ DWORD CInfoMapObject::GetDataSizeNo(int nNo)
 	nTmp = m_aInfoAnime.GetSize ();
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_dwObjectID);			break;		/* ƒIƒuƒWƒFƒNƒgID */
-	case 1:		dwRet = sizeof (m_dwAttr);				break;		/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	case 2:		dwRet = sizeof (m_nHideY);				break;		/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	case 3:		dwRet = sizeof (m_sizeGrp);				break;		/* ‰æ‘œƒTƒCƒY */
-	case 4:		dwRet = sizeof (m_bHit);				break;		/* “–‚½‚è”»’è */
-	case 5:		dwRet = m_strName.GetLength () + 1;		break;		/* ƒIƒuƒWƒFƒNƒg–¼ */
-	case 6:		dwRet = m_sizeGrp.cx * m_sizeGrp.cy;	break;		/* “–‚½‚è”»’èƒf[ƒ^ */
-	case 7:		dwRet = sizeof (nTmp);					break;		/* ƒIƒuƒWƒFƒNƒgƒAƒjƒ” */
-	case 8:		dwRet = sizeof (BYTE) * nTmp;			break;		/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	case 9:		dwRet = sizeof (BYTE) * nTmp;			break;		/* “§–¾“x */
-	case 10:	/* ‰æ‘œID */
+	case 0:		dwRet = sizeof (m_dwObjectID);			break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	case 1:		dwRet = sizeof (m_dwAttr);				break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±æ€§ */
+	case 2:		dwRet = sizeof (m_nHideY);				break;		/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒã‚¹æ•° */
+	case 3:		dwRet = sizeof (m_sizeGrp);				break;		/* ç”»åƒã‚µã‚¤ã‚º */
+	case 4:		dwRet = sizeof (m_bHit);				break;		/* å½“ãŸã‚Šåˆ¤å®š */
+	case 5:		dwRet = m_strName.GetLength () + 1;		break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
+	case 6:		dwRet = m_sizeGrp.cx * m_sizeGrp.cy;	break;		/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
+	case 7:		dwRet = sizeof (nTmp);					break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æ•° */
+	case 8:		dwRet = sizeof (BYTE) * nTmp;			break;		/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	case 9:		dwRet = sizeof (BYTE) * nTmp;			break;		/* é€æ˜åº¦ */
+	case 10:	/* ç”»åƒID */
 		dwRet = sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy * nTmp;
 		break;
 	}
@@ -153,9 +153,9 @@ DWORD CInfoMapObject::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetName										 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetName										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMapObject::GetName(int nNo)
@@ -165,9 +165,9 @@ LPCSTR CInfoMapObject::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetWriteData									 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapObject::GetWriteData(int nNo, PDWORD pdwSize)
@@ -189,37 +189,37 @@ PBYTE CInfoMapObject::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_dwObjectID;			break;		/* ƒIƒuƒWƒFƒNƒgID */
-	case 1:		pSrc = (PBYTE)&m_dwAttr;				break;		/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	case 2:		pSrc = (PBYTE)&m_nHideY;				break;		/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	case 3:		pSrc = (PBYTE)&m_sizeGrp;				break;		/* ‰æ‘œƒTƒCƒY */
-	case 4:		pSrc = (PBYTE)&m_bHit;					break;		/* “–‚½‚è”»’è */
-	case 5:		pSrc = (PBYTE)(LPCSTR)m_strName;		break;		/* ƒIƒuƒWƒFƒNƒg–¼ */
-	case 6:		/* “–‚½‚è”»’èƒf[ƒ^ */
+	case 0:		pSrc = (PBYTE)&m_dwObjectID;			break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	case 1:		pSrc = (PBYTE)&m_dwAttr;				break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±æ€§ */
+	case 2:		pSrc = (PBYTE)&m_nHideY;				break;		/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒã‚¹æ•° */
+	case 3:		pSrc = (PBYTE)&m_sizeGrp;				break;		/* ç”»åƒã‚µã‚¤ã‚º */
+	case 4:		pSrc = (PBYTE)&m_bHit;					break;		/* å½“ãŸã‚Šåˆ¤å®š */
+	case 5:		pSrc = (PBYTE)(LPCSTR)m_strName;		break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
+	case 6:		/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
 		if (m_pHit) {
 			CopyMemory (pRet, m_pHit, dwSize);
 		} else {
 			ZeroMemory (pRet, dwSize);
 		}
 		break;
-	case 7:		/* ƒIƒuƒWƒFƒNƒgƒAƒjƒ” */
+	case 7:		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æ•° */
 		pSrc = (PBYTE)&nCount;
 		break;
-	case 8:		/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
+	case 8:		/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
 		pTmp = pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
 			CopyMemoryRenew (pTmp, &pInfo->byWait, sizeof (pInfo->byWait), pTmp);
 		}
 		break;
-	case 9:		/* “§–¾“x */
+	case 9:		/* é€æ˜åº¦ */
 		pTmp = pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
 			CopyMemoryRenew (pTmp, &pInfo->byLevel, sizeof (pInfo->byLevel), pTmp);
 		}
 		break;
-	case 10:	/* ‰æ‘œID */
+	case 10:	/* ç”»åƒID */
 		pTmp = pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
@@ -239,14 +239,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::ReadElementData								 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::ReadElementData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 DWORD CInfoMapObject::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	int i, nCount;
 	PBYTE pDst, pSrcTmp;
@@ -257,29 +257,29 @@ DWORD CInfoMapObject::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_dwObjectID;	dwSize = sizeof (m_dwObjectID);		break;		/* ƒIƒuƒWƒFƒNƒgID */
-	case 1:		pDst = (PBYTE)&m_dwAttr;		dwSize = sizeof (m_dwAttr);			break;		/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	case 2:		pDst = (PBYTE)&m_nHideY;		dwSize = sizeof (m_nHideY);			break;		/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	case 3:		pDst = (PBYTE)&m_sizeGrp;		dwSize = sizeof (m_sizeGrp);		break;		/* ‰æ‘œƒTƒCƒY */
-	case 4:		pDst = (PBYTE)&m_bHit;			dwSize = sizeof (m_bHit);			break;		/* “–‚½‚è”»’è */
-	case 5:		/* ƒIƒuƒWƒFƒNƒg–¼ */
+	case 0:		pDst = (PBYTE)&m_dwObjectID;	dwSize = sizeof (m_dwObjectID);		break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	case 1:		pDst = (PBYTE)&m_dwAttr;		dwSize = sizeof (m_dwAttr);			break;		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±æ€§ */
+	case 2:		pDst = (PBYTE)&m_nHideY;		dwSize = sizeof (m_nHideY);			break;		/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒã‚¹æ•° */
+	case 3:		pDst = (PBYTE)&m_sizeGrp;		dwSize = sizeof (m_sizeGrp);		break;		/* ç”»åƒã‚µã‚¤ã‚º */
+	case 4:		pDst = (PBYTE)&m_bHit;			dwSize = sizeof (m_bHit);			break;		/* å½“ãŸã‚Šåˆ¤å®š */
+	case 5:		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
-	case 6:		/* “–‚½‚è”»’èƒf[ƒ^ */
+	case 6:		/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
 		SAFE_DELETE_ARRAY (m_pHit);
 		dwSize = m_sizeGrp.cx * m_sizeGrp.cy;
 		m_pHit = new BYTE[dwSize];
 		CopyMemory (m_pHit, pSrc, dwSize);
 		break;
-	case 7:		/* ƒIƒuƒWƒFƒNƒgƒAƒjƒ” */
+	case 7:		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æ•° */
 		dwSize = sizeof (int);
 		CopyMemory ((PBYTE)&nCount, pSrc, dwSize);
 		for (i = 0; i < nCount; i ++) {
 			AddAnime ();
 		}
 		break;
-	case 8:		/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
+	case 8:		/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
 		pSrcTmp = pSrc;
 		nCount  = m_aInfoAnime.GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -288,7 +288,7 @@ DWORD CInfoMapObject::ReadElementData(
 			dwSize += sizeof (pInfo->byWait);
 		}
 		break;
-	case 9:		/* “§–¾“x */
+	case 9:		/* é€æ˜åº¦ */
 		pSrcTmp = pSrc;
 		nCount  = m_aInfoAnime.GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -297,7 +297,7 @@ DWORD CInfoMapObject::ReadElementData(
 			dwSize += sizeof (pInfo->byLevel);
 		}
 		break;
-	case 10:	/* ‰æ‘œID */
+	case 10:	/* ç”»åƒID */
 		pSrcTmp = pSrc;
 		nCount  = m_aInfoAnime.GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -318,9 +318,9 @@ DWORD CInfoMapObject::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CInfoMapObject::Copy(CInfoMapObject *pSrc)
@@ -334,22 +334,22 @@ void CInfoMapObject::Copy(CInfoMapObject *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 DWORD CInfoMapObject::GetSendDataSize(void)
 {
-	/* •Û‘¶—pƒf[ƒ^ƒTƒCƒY‚Æ“¯‚¶ */
+	/* ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã¨åŒã˜ */
 	return GetDataSize ();
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapObject::GetSendData(void)
@@ -366,15 +366,15 @@ PBYTE CInfoMapObject::GetSendData(void)
 	pDataTmp = pData;
 	nCount   = m_aInfoAnime.GetSize ();
 
-	CopyMemoryRenew (pDataTmp, &m_dwObjectID,	sizeof (m_dwObjectID),	pDataTmp);		/* ƒIƒuƒWƒFƒNƒgID */
-	CopyMemoryRenew (pDataTmp, &m_dwAttr,		sizeof (m_dwAttr),		pDataTmp);		/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	CopyMemoryRenew (pDataTmp, &m_nHideY,		sizeof (m_nHideY),		pDataTmp);		/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	CopyMemoryRenew (pDataTmp, &m_sizeGrp,		sizeof (m_sizeGrp),		pDataTmp);		/* ‰æ‘œƒTƒCƒY */
-	CopyMemoryRenew (pDataTmp, &m_bHit,			sizeof (m_bHit),		pDataTmp);		/* “–‚½‚è”»’è */
-	CopyMemoryRenew (pDataTmp, &nCount,			sizeof (nCount),		pDataTmp);		/* ƒIƒuƒWƒFƒNƒgƒAƒjƒ” */
-	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);									/* ƒIƒuƒWƒFƒNƒg–¼ */
+	CopyMemoryRenew (pDataTmp, &m_dwObjectID,	sizeof (m_dwObjectID),	pDataTmp);		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &m_dwAttr,		sizeof (m_dwAttr),		pDataTmp);		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±æ€§ */
+	CopyMemoryRenew (pDataTmp, &m_nHideY,		sizeof (m_nHideY),		pDataTmp);		/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒã‚¹æ•° */
+	CopyMemoryRenew (pDataTmp, &m_sizeGrp,		sizeof (m_sizeGrp),		pDataTmp);		/* ç”»åƒã‚µã‚¤ã‚º */
+	CopyMemoryRenew (pDataTmp, &m_bHit,			sizeof (m_bHit),		pDataTmp);		/* å½“ãŸã‚Šåˆ¤å®š */
+	CopyMemoryRenew (pDataTmp, &nCount,			sizeof (nCount),		pDataTmp);		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æ•° */
+	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);									/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
 
-	/* “–‚½‚è”»’èƒf[ƒ^ */
+	/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
 	dwSizeTmp = m_sizeGrp.cx * m_sizeGrp.cy;
 	if (m_pHit) {
 		CopyMemoryRenew (pDataTmp, m_pHit, dwSizeTmp, pDataTmp);
@@ -385,9 +385,9 @@ PBYTE CInfoMapObject::GetSendData(void)
 	dwSizeTmp = sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy;
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetAnimePtr (i);
-		CopyMemoryRenew (pDataTmp, &pInfo->byWait,  sizeof (pInfo->byWait),  pDataTmp);	/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-		CopyMemoryRenew (pDataTmp, &pInfo->byLevel, sizeof (pInfo->byLevel), pDataTmp);	/* “§–¾“x */
-		CopyMemoryRenew (pDataTmp, (PBYTE)pInfo->pwGrpID, dwSizeTmp, pDataTmp);			/* ‰æ‘œID */
+		CopyMemoryRenew (pDataTmp, &pInfo->byWait,  sizeof (pInfo->byWait),  pDataTmp);	/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+		CopyMemoryRenew (pDataTmp, &pInfo->byLevel, sizeof (pInfo->byLevel), pDataTmp);	/* é€æ˜åº¦ */
+		CopyMemoryRenew (pDataTmp, (PBYTE)pInfo->pwGrpID, dwSizeTmp, pDataTmp);			/* ç”»åƒID */
 	}
 
 	return pData;
@@ -395,9 +395,9 @@ PBYTE CInfoMapObject::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapObject::SetSendData(PBYTE pSrc)
@@ -410,15 +410,15 @@ PBYTE CInfoMapObject::SetSendData(PBYTE pSrc)
 	DeleteAllAnime ();
 	pDataTmp = pSrc;
 
-	CopyMemoryRenew (&m_dwObjectID,	pDataTmp, sizeof (m_dwObjectID),	pDataTmp);		/* ƒIƒuƒWƒFƒNƒgID */
-	CopyMemoryRenew (&m_dwAttr,		pDataTmp, sizeof (m_dwAttr),		pDataTmp);		/* ƒIƒuƒWƒFƒNƒg‚Ì‘®« */
-	CopyMemoryRenew (&m_nHideY,		pDataTmp, sizeof (m_nHideY),		pDataTmp);		/* ‰B‚ê‚éã‚©‚ç‚Ìƒ}ƒX” */
-	CopyMemoryRenew (&m_sizeGrp,	pDataTmp, sizeof (m_sizeGrp),		pDataTmp);		/* ‰æ‘œƒTƒCƒY */
-	CopyMemoryRenew (&m_bHit,		pDataTmp, sizeof (m_bHit),			pDataTmp);		/* “–‚½‚è”»’è */
-	CopyMemoryRenew (&nCount,		pDataTmp, sizeof (nCount),			pDataTmp);		/* ƒIƒuƒWƒFƒNƒgƒAƒjƒ” */
-	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);									/* ƒIƒuƒWƒFƒNƒg–¼ */
+	CopyMemoryRenew (&m_dwObjectID,	pDataTmp, sizeof (m_dwObjectID),	pDataTmp);		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	CopyMemoryRenew (&m_dwAttr,		pDataTmp, sizeof (m_dwAttr),		pDataTmp);		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å±æ€§ */
+	CopyMemoryRenew (&m_nHideY,		pDataTmp, sizeof (m_nHideY),		pDataTmp);		/* éš ã‚Œã‚‹ä¸Šã‹ã‚‰ã®ãƒã‚¹æ•° */
+	CopyMemoryRenew (&m_sizeGrp,	pDataTmp, sizeof (m_sizeGrp),		pDataTmp);		/* ç”»åƒã‚µã‚¤ã‚º */
+	CopyMemoryRenew (&m_bHit,		pDataTmp, sizeof (m_bHit),			pDataTmp);		/* å½“ãŸã‚Šåˆ¤å®š */
+	CopyMemoryRenew (&nCount,		pDataTmp, sizeof (nCount),			pDataTmp);		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¢ãƒ‹ãƒ¡æ•° */
+	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);									/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
 
-	/* “–‚½‚è”»’èƒf[ƒ^ */
+	/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
 	SAFE_DELETE_ARRAY (m_pHit);
 	dwSizeTmp = m_sizeGrp.cx * m_sizeGrp.cy;
 	m_pHit = new BYTE[dwSizeTmp];
@@ -430,9 +430,9 @@ PBYTE CInfoMapObject::SetSendData(PBYTE pSrc)
 	dwSizeTmp = sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy;
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetAnimePtr (i);
-		CopyMemoryRenew (&pInfo->byWait,		pDataTmp, sizeof (pInfo->byWait),  pDataTmp);	/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-		CopyMemoryRenew (&pInfo->byLevel,		pDataTmp, sizeof (pInfo->byLevel), pDataTmp);	/* “§–¾“x */
-		CopyMemoryRenew ((PBYTE)pInfo->pwGrpID, pDataTmp, dwSizeTmp, pDataTmp);					/* ‰æ‘œID */
+		CopyMemoryRenew (&pInfo->byWait,		pDataTmp, sizeof (pInfo->byWait),  pDataTmp);	/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+		CopyMemoryRenew (&pInfo->byLevel,		pDataTmp, sizeof (pInfo->byLevel), pDataTmp);	/* é€æ˜åº¦ */
+		CopyMemoryRenew ((PBYTE)pInfo->pwGrpID, pDataTmp, dwSizeTmp, pDataTmp);					/* ç”»åƒID */
 	}
 
 	return pDataTmp;
@@ -440,9 +440,9 @@ PBYTE CInfoMapObject::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetAnimeCount									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”‚ğæ“¾										 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetAnimeCount									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒæ•°ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 int CInfoMapObject::GetAnimeCount(void)
@@ -452,9 +452,9 @@ int CInfoMapObject::GetAnimeCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::AddAnime										 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğ’Ç‰Á										 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::AddAnime										 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’è¿½åŠ 										 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CInfoMapObject::AddAnime(void)
@@ -462,8 +462,8 @@ void CInfoMapObject::AddAnime(void)
 	PSTMAPOBJECTANIMEINFO pInfo;
 
 	pInfo = new STMAPOBJECTANIMEINFO;
-	pInfo->byWait	= 0;		/* ‘Ò‚¿ŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	pInfo->byLevel	= 0;		/* “§–¾“x */
+	pInfo->byWait	= 0;		/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	pInfo->byLevel	= 0;		/* é€æ˜åº¦ */
 	pInfo->pwGrpID = new WORD[m_sizeGrp.cx * m_sizeGrp.cy];
 	ZeroMemory ((PBYTE)pInfo->pwGrpID, sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy);
 
@@ -472,9 +472,9 @@ void CInfoMapObject::AddAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::DeleteAnime									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğíœ										 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::DeleteAnime									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’å‰Šé™¤										 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CInfoMapObject::DeleteAnime(int nNo)
@@ -490,9 +490,9 @@ void CInfoMapObject::DeleteAnime(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::DeleteAllAnime									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğ‘S‚Äíœ									 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::DeleteAllAnime									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’å…¨ã¦å‰Šé™¤									 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CInfoMapObject::DeleteAllAnime(void)
@@ -507,9 +507,9 @@ void CInfoMapObject::DeleteAllAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::RenewGrpSize									 */
-/* “à—e		:‰æ‘œƒTƒCƒY‚ğXV												 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::RenewGrpSize									 */
+/* å†…å®¹		:ç”»åƒã‚µã‚¤ã‚ºã‚’æ›´æ–°												 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
@@ -534,7 +534,7 @@ void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
 	xx = min (xx, cx);
 	yy = min (yy, cy);
 
-	/* “–‚½‚è”»’èƒf[ƒ^ */
+	/* å½“ãŸã‚Šåˆ¤å®šãƒ‡ãƒ¼ã‚¿ */
 	pTmp = new BYTE[cx * cy];
 	ZeroMemory (pTmp, cx * cy);
 	if (m_pHit) {
@@ -547,7 +547,7 @@ void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
 	SAFE_DELETE_ARRAY (m_pHit);
 	m_pHit = pTmp;
 
-	/* ƒAƒjƒ–ˆ‚Ìİ’è */
+	/* ã‚¢ãƒ‹ãƒ¡æ¯ã®è¨­å®š */
 	nCount = m_aInfoAnime.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetAnimePtr (i);
@@ -567,9 +567,9 @@ void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::SetGrpID										 */
-/* “à—e		:‰æ‘œID‚ğİ’è													 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CInfoMapObject::SetGrpID										 */
+/* å†…å®¹		:ç”»åƒIDã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CInfoMapObject::SetGrpID(int nNo, int x, int y, WORD wGrpID)
@@ -592,9 +592,9 @@ void CInfoMapObject::SetGrpID(int nNo, int x, int y, WORD wGrpID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObject::GetAnimePtr									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğæ“¾										 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CInfoMapObject::GetAnimePtr									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 PSTMAPOBJECTANIMEINFO CInfoMapObject::GetAnimePtr(int nNo)

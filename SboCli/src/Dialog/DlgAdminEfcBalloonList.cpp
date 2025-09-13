@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminEfcBalloonList.cpp									 */
-/* “à—e			:•¬o‚µˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminEfcBalloonList.cpp									 */
+/* å†…å®¹			:å™´å‡ºã—ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::DoDataExchange(CDataExchange* pDX)
@@ -45,9 +45,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::CDlgAdminEfcBalloonList				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::CDlgAdminEfcBalloonList				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CDlgAdminEfcBalloonList::CDlgAdminEfcBalloonList(CWnd* pParent /*=NULL*/)
@@ -59,9 +59,9 @@ CDlgAdminEfcBalloonList::CDlgAdminEfcBalloonList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::~CDlgAdminEfcBalloonList				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::~CDlgAdminEfcBalloonList				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CDlgAdminEfcBalloonList::~CDlgAdminEfcBalloonList()
@@ -70,9 +70,9 @@ CDlgAdminEfcBalloonList::~CDlgAdminEfcBalloonList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::Init(CMgrData *pMgrData)
@@ -81,16 +81,16 @@ void CDlgAdminEfcBalloonList::Init(CMgrData *pMgrData)
 
 	m_pLibInfo = m_pMgrData->GetLibInfoEfcBalloon ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminEfcBalloonList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::Renew									 */
-/* “à—e		:ˆê——‚ğXV														 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::Renew									 */
+/* å†…å®¹		:ä¸€è¦§ã‚’æ›´æ–°														 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::Renew(void)
@@ -116,9 +116,9 @@ void CDlgAdminEfcBalloonList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::OnAdminMsg							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::OnAdminMsg							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::OnAdminMsg(int nType, DWORD dwPara)
@@ -127,9 +127,9 @@ void CDlgAdminEfcBalloonList::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminEfcBalloonList::OnInitDialog()
@@ -138,7 +138,7 @@ BOOL CDlgAdminEfcBalloonList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "•¬o‚µ–¼",		LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "å™´å‡ºã—å",		LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -150,15 +150,15 @@ BOOL CDlgAdminEfcBalloonList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::OnMainFrame							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::OnMainFrame							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWBALLOON:		/* •¬o‚µî•ñXV */
+	case MAINFRAMEMSG_RENEWBALLOON:		/* å™´å‡ºã—æƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -166,9 +166,9 @@ void CDlgAdminEfcBalloonList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(V‹K’Ç‰Á)										 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::OnAdd									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ–°è¦è¿½åŠ )										 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::OnAdd()
@@ -191,9 +191,9 @@ void CDlgAdminEfcBalloonList::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::OnModify								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::OnModify								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç·¨é›†)											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::OnModify()
@@ -222,9 +222,9 @@ void CDlgAdminEfcBalloonList::OnModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::OnDelete								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::OnDelete()
@@ -233,9 +233,9 @@ void CDlgAdminEfcBalloonList::OnDelete()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcBalloonList::OnRenew								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(XV)											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CDlgAdminEfcBalloonList::OnRenew								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ›´æ–°)											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcBalloonList::OnRenew()

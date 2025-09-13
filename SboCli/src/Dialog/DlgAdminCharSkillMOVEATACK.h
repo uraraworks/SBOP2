@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillMOVEATACK.h								 */
-/* “à—e			:ƒXƒLƒ‹(ˆÚ“®‚µ‚ÄUŒ‚)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharSkillMOVEATACK.h								 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«(ç§»å‹•ã—ã¦æ”»æ’ƒ)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/07													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,18 +13,18 @@
 class CInfoSkillBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharSkillMOVEATACK : public CDlgAdminCharSkillNONE
 {
 public:
-			CDlgAdminCharSkillMOVEATACK(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharSkillMOVEATACK();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharSkillMOVEATACK(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharSkillMOVEATACK();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Init	(CMgrData *pMgrData);						/* ‰Šú‰» */
-	virtual void	Set		(CInfoSkillBase *pSrc);						/* İ’è */
-	virtual void	Get		(CInfoSkillBase *pDst);						/* æ“¾ */
+	virtual void	Init	(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	virtual void	Set		(CInfoSkillBase *pSrc);						/* è¨­å®š */
+	virtual void	Get		(CInfoSkillBase *pDst);						/* å–å¾— */
 
 
 protected:
@@ -52,7 +52,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillMOVEATACK)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

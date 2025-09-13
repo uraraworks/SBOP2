@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapObjectDataEdit.h								 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapObjectDataEdit.h								 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,25 +14,25 @@ class CLibInfoMapObject;
 class CInfoMapObjectData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminMapObjectDataEdit : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapObjectDataEdit(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapObjectDataEdit();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapObjectDataEdit(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapObjectDataEdit();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify);		/* ‰Šú‰» */
-	void	Get			(CInfoMapObjectData *&pDst);					/* •ÒW“à—e‚ğæ“¾ */
-	void	SetModify	(CInfoMapObjectData *pSrc);						/* •ÒWƒ‚[ƒh‚Æ‚µ‚Äİ’è */
+	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify);		/* åˆæœŸåŒ– */
+	void	Get			(CInfoMapObjectData *&pDst);					/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
+	void	SetModify	(CInfoMapObjectData *pSrc);						/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰ã¨ã—ã¦è¨­å®š */
 
 
 protected:
-	BOOL					m_bModeModify;			/* •ÒWƒ‚[ƒh”»’è */
-	CWnd					**m_ppWndNotify;		/* ’Ê’mæƒEƒBƒ“ƒhƒE */
-	CLibInfoMapObject		*m_pLibInfoMapObject;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
-	CInfoMapObjectData		*m_pInfo;				/* •ÒW’†‚Ì”z’uƒf[ƒ^ */
+	BOOL					m_bModeModify;			/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰åˆ¤å®š */
+	CWnd					**m_ppWndNotify;		/* é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CLibInfoMapObject		*m_pLibInfoMapObject;	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
+	CInfoMapObjectData		*m_pInfo;				/* ç·¨é›†ä¸­ã®é…ç½®ãƒ‡ãƒ¼ã‚¿ */
 
 
 
@@ -47,7 +47,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapObjectDataEdit)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

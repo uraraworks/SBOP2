@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharBATTLE2Svr.h										 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(í“¬2)ƒT[ƒo[ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/07/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharBATTLE2Svr.h										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(æˆ¦é—˜2)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/07/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,18 +11,18 @@
 #include "InfoCharBATTLE1Svr.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharBATTLE2Svr : public CInfoCharBATTLE1Svr
 {
 public:
-			CInfoCharBATTLE2Svr();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharBATTLE2Svr();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharBATTLE2Svr();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharBATTLE2Svr();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
 protected:
-	virtual BOOL TimerProcSTAND	(DWORD dwTime);					/* ŽžŠÔˆ—(—§‚¿) */
+	virtual BOOL TimerProcSTAND	(DWORD dwTime);					/* æ™‚é–“å‡¦ç†(ç«‹ã¡) */
 
 
 public:

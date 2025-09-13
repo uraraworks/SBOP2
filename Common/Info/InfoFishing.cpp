@@ -1,34 +1,34 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoFishing.cpp											 */
-/* “à—e			:’Ş‚èî•ñƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoFishing.cpp											 */
+/* å†…å®¹			:é‡£ã‚Šæƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/02													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoFishing.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwFishingID",	/* ’Ş‚èID */
-	"m_nAverage",		/* ’Ş‚ê‚éŠm—¦ */
-	"m_strName",		/* ’Ş‚èê–¼ */
-	"nArrayCount",		/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^” */
-	"a_dwItemTypeID",	/* ƒAƒCƒeƒ€í•ÊID */
-	"a_nAverage",		/* ’Ş‚è‚«‚éŠm—¦ */
+	"m_dwFishingID",	/* é‡£ã‚ŠID */
+	"m_nAverage",		/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	"m_strName",		/* é‡£ã‚Šå ´å */
+	"nArrayCount",		/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•° */
+	"a_dwItemTypeID",	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	"a_nAverage",		/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::CInfoFishing										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::CInfoFishing										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 CInfoFishing::CInfoFishing()
@@ -41,9 +41,9 @@ CInfoFishing::CInfoFishing()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::~CInfoFishing									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::~CInfoFishing									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 CInfoFishing::~CInfoFishing()
@@ -52,9 +52,9 @@ CInfoFishing::~CInfoFishing()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoFishing::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 int CInfoFishing::GetElementNo(LPCSTR pszName)
@@ -75,9 +75,9 @@ int CInfoFishing::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 DWORD CInfoFishing::GetDataSize(void)
@@ -88,22 +88,22 @@ DWORD CInfoFishing::GetDataSize(void)
 	dwRet = 0;
 	nCount = m_apParam.GetSize ();
 
-	dwRet += sizeof (m_dwFishingID);		/* ’Ş‚èID */
-	dwRet += sizeof (m_nAverage);			/* ’Ş‚ê‚éŠm—¦ */
-	dwRet += (m_strName.GetLength () + 1);	/* ’Ş‚èê–¼ */
-	dwRet += sizeof (int);					/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^” */
-	/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^ */
-	dwRet += (nCount * sizeof (DWORD));		/* ƒAƒCƒeƒ€í•ÊID */
-	dwRet += (nCount * sizeof (int));		/* ’Ş‚è‚«‚éŠm—¦ */
+	dwRet += sizeof (m_dwFishingID);		/* é‡£ã‚ŠID */
+	dwRet += sizeof (m_nAverage);			/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	dwRet += (m_strName.GetLength () + 1);	/* é‡£ã‚Šå ´å */
+	dwRet += sizeof (int);					/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•° */
+	/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
+	dwRet += (nCount * sizeof (DWORD));		/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	dwRet += (nCount * sizeof (int));		/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 DWORD CInfoFishing::GetDataSizeNo(int nNo)
@@ -115,12 +115,12 @@ DWORD CInfoFishing::GetDataSizeNo(int nNo)
 	nCount = m_apParam.GetSize ();
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_dwFishingID);			break;	/* ’Ş‚èID */
-	case 1:		dwRet = sizeof (m_nAverage);			break;	/* ’Ş‚ê‚éŠm—¦ */
-	case 2:		dwRet = (m_strName.GetLength () + 1);	break;	/* ’Ş‚èê–¼ */
-	case 3:		dwRet = nCount * sizeof (int);			break;	/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^” */
-	case 4:		dwRet = nCount * sizeof (DWORD);		break;	/* ƒAƒCƒeƒ€í•ÊID */
-	case 5:		dwRet = nCount * sizeof (int);			break;	/* ’Ş‚è‚«‚éŠm—¦ */
+	case 0:		dwRet = sizeof (m_dwFishingID);			break;	/* é‡£ã‚ŠID */
+	case 1:		dwRet = sizeof (m_nAverage);			break;	/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	case 2:		dwRet = (m_strName.GetLength () + 1);	break;	/* é‡£ã‚Šå ´å */
+	case 3:		dwRet = nCount * sizeof (int);			break;	/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•° */
+	case 4:		dwRet = nCount * sizeof (DWORD);		break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	case 5:		dwRet = nCount * sizeof (int);			break;	/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 	}
 
 	return dwRet;
@@ -128,9 +128,9 @@ DWORD CInfoFishing::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetName											 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 LPCSTR CInfoFishing::GetName(int nNo)
@@ -140,9 +140,9 @@ LPCSTR CInfoFishing::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetWriteData										 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 PBYTE CInfoFishing::GetWriteData(int nNo, PDWORD pdwSize)
@@ -164,18 +164,18 @@ PBYTE CInfoFishing::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_dwFishingID;		break;	/* ’Ş‚èID */
-	case 1:		pSrc = (PBYTE)&m_nAverage;			break;	/* ’Ş‚ê‚éŠm—¦ */
-	case 2:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* ’Ş‚èê–¼ */
-	case 3:		pSrc = (PBYTE)&nCount;				break;	/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^” */
-	case 4:		/* ƒAƒCƒeƒ€í•ÊID */
+	case 0:		pSrc = (PBYTE)&m_dwFishingID;		break;	/* é‡£ã‚ŠID */
+	case 1:		pSrc = (PBYTE)&m_nAverage;			break;	/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	case 2:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* é‡£ã‚Šå ´å */
+	case 3:		pSrc = (PBYTE)&nCount;				break;	/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•° */
+	case 4:		/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
 		pdwTmp = (PDWORD)pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetPtr (i);
 			pdwTmp[i] = pInfo->dwItemTypeID;
 		}
 		break;
-	case 5:		/* ’Ş‚è‚«‚éŠm—¦ */
+	case 5:		/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 		pnTmp = (int *)pRet;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetPtr (i);
@@ -194,14 +194,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::ReadElementData									 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 DWORD CInfoFishing::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	int i, nCount, *pnTmp;
 	PBYTE pDst;
@@ -213,26 +213,26 @@ DWORD CInfoFishing::ReadElementData(
 	nCount	= m_apParam.GetSize ();
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_dwFishingID;		break;	/* ’Ş‚èID */
-	case 1:		pDst = (PBYTE)&m_nAverage;			break;	/* ’Ş‚ê‚éŠm—¦ */
-	case 2:		/* ’Ş‚èê–¼ */
+	case 0:		pDst = (PBYTE)&m_dwFishingID;		break;	/* é‡£ã‚ŠID */
+	case 1:		pDst = (PBYTE)&m_nAverage;			break;	/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	case 2:		/* é‡£ã‚Šå ´å */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
-	case 3:		/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^” */
+	case 3:		/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•° */
 		CopyMemory ((PBYTE)&nCount, pSrc, dwSize);
 		for (i = 0; i < nCount; i ++) {
 			AddParam (0, 0);
 		}
 		break;
-	case 4:		/* ƒAƒCƒeƒ€í•ÊID */
+	case 4:		/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
 		pdwTmp = (PDWORD)pSrc;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetPtr (i);
 			pInfo->dwItemTypeID = pdwTmp[i];
 		}
 		break;
-	case 5:		/* ’Ş‚è‚«‚éŠm—¦ */
+	case 5:		/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 		pnTmp = (int *)pSrc;
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetPtr (i);
@@ -250,9 +250,9 @@ DWORD CInfoFishing::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 DWORD CInfoFishing::GetSendDataSize(void)
@@ -262,9 +262,9 @@ DWORD CInfoFishing::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 PBYTE CInfoFishing::GetSendData(void)
@@ -280,14 +280,14 @@ PBYTE CInfoFishing::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwFishingID,	sizeof (m_dwFishingID),	pDataTmp);	/* ’Ş‚èID */
-	CopyMemoryRenew (pDataTmp, &m_nAverage,		sizeof (m_nAverage),	pDataTmp);	/* ’Ş‚ê‚éŠm—¦ */
-	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);								/* ’Ş‚èê–¼ */
-	CopyMemoryRenew (pDataTmp, &nCount,			sizeof (nCount),		pDataTmp);	/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^” */
+	CopyMemoryRenew (pDataTmp, &m_dwFishingID,	sizeof (m_dwFishingID),	pDataTmp);	/* é‡£ã‚ŠID */
+	CopyMemoryRenew (pDataTmp, &m_nAverage,		sizeof (m_nAverage),	pDataTmp);	/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);								/* é‡£ã‚Šå ´å */
+	CopyMemoryRenew (pDataTmp, &nCount,			sizeof (nCount),		pDataTmp);	/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•° */
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetPtr (i);
-		CopyMemoryRenew (pDataTmp, &pInfo->dwItemTypeID,	sizeof (pInfo->dwItemTypeID),	pDataTmp);	/* ƒAƒCƒeƒ€í•ÊID */
-		CopyMemoryRenew (pDataTmp, &pInfo->nAverage,		sizeof (pInfo->nAverage),		pDataTmp);	/* ’Ş‚è‚«‚éŠm—¦ */
+		CopyMemoryRenew (pDataTmp, &pInfo->dwItemTypeID,	sizeof (pInfo->dwItemTypeID),	pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+		CopyMemoryRenew (pDataTmp, &pInfo->nAverage,		sizeof (pInfo->nAverage),		pDataTmp);	/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 	}
 
 	return pData;
@@ -295,9 +295,9 @@ PBYTE CInfoFishing::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 PBYTE CInfoFishing::SetSendData(PBYTE pSrc)
@@ -309,15 +309,15 @@ PBYTE CInfoFishing::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_dwFishingID,	pDataTmp, sizeof (m_dwFishingID),	pDataTmp);	/* ’Ş‚èID */
-	CopyMemoryRenew (&m_nAverage,		pDataTmp, sizeof (m_nAverage),		pDataTmp);	/* ’Ş‚ê‚éŠm—¦ */
-	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);									/* ’Ş‚èê–¼ */
-	CopyMemoryRenew (&nCount,			pDataTmp, sizeof (nCount),			pDataTmp);	/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^” */
+	CopyMemoryRenew (&m_dwFishingID,	pDataTmp, sizeof (m_dwFishingID),	pDataTmp);	/* é‡£ã‚ŠID */
+	CopyMemoryRenew (&m_nAverage,		pDataTmp, sizeof (m_nAverage),		pDataTmp);	/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);									/* é‡£ã‚Šå ´å */
+	CopyMemoryRenew (&nCount,			pDataTmp, sizeof (nCount),			pDataTmp);	/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•° */
 
 	DeleteAllParam ();
 	for (i = 0; i < nCount; i ++) {
-		CopyMemoryRenew (&dwItemTypeID,	pDataTmp, sizeof (dwItemTypeID),	pDataTmp);	/* ƒAƒCƒeƒ€í•ÊID */
-		CopyMemoryRenew (&nAverage,		pDataTmp, sizeof (nAverage),		pDataTmp);	/* ’Ş‚è‚«‚éŠm—¦ */
+		CopyMemoryRenew (&dwItemTypeID,	pDataTmp, sizeof (dwItemTypeID),	pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+		CopyMemoryRenew (&nAverage,		pDataTmp, sizeof (nAverage),		pDataTmp);	/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 		AddParam (dwItemTypeID, nAverage);
 	}
 
@@ -327,9 +327,9 @@ PBYTE CInfoFishing::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::GetCount											 */
-/* “à—e		:’Ş‚èî•ñƒpƒ‰ƒ[ƒ^”‚ğæ“¾										 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::GetCount											 */
+/* å†…å®¹		:é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•°ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 int CInfoFishing::GetCount(void)
@@ -339,14 +339,14 @@ int CInfoFishing::GetCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::AddParam											 */
-/* “à—e		:’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğ’Ç‰Á										 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::AddParam											 */
+/* å†…å®¹		:é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿½åŠ 										 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CInfoFishing::AddParam(
-	DWORD dwItemTypeID,		/* [in] ƒAƒCƒeƒ€í•ÊID */
-	int nAverage)			/* [in] ’Ş‚è‚«‚éŠm—¦ */
+	DWORD dwItemTypeID,		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	int nAverage)			/* [in] é‡£ã‚Šãã‚‹ç¢ºç‡ */
 {
 	PINFOFISHINGPARAM pInfo;
 
@@ -359,9 +359,9 @@ void CInfoFishing::AddParam(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::DeleteParam										 */
-/* “à—e		:’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğíœ										 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::DeleteParam										 */
+/* å†…å®¹		:é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å‰Šé™¤										 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CInfoFishing::DeleteParam(int nNo)
@@ -378,9 +378,9 @@ void CInfoFishing::DeleteParam(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::DeleteAllParam									 */
-/* “à—e		:’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğ‘S‚Äíœ									 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::DeleteAllParam									 */
+/* å†…å®¹		:é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å…¨ã¦å‰Šé™¤									 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CInfoFishing::DeleteAllParam(void)
@@ -395,9 +395,9 @@ void CInfoFishing::DeleteAllParam(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::DeleteAllParam									 */
-/* “à—e		:’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğ‘S‚Äíœ									 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::DeleteAllParam									 */
+/* å†…å®¹		:é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å…¨ã¦å‰Šé™¤									 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 PINFOFISHINGPARAM CInfoFishing::GetPtr(int nNo)
@@ -416,9 +416,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoFishing::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CInfoFishing::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CInfoFishing::Copy(CInfoFishing *pSrc)

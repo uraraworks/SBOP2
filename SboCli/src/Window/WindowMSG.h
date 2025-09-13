@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	WindowMSG.h													 */
-/* “à—eF		ƒƒbƒZ[ƒW•\¦ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	WindowMSG.h													 */
+/* å†…å®¹ï¼š		ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤ºã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2006/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,26 +15,26 @@ class CMgrData;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowMSG : public CWindowBase
 {
 public:
-			CWindowMSG();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowMSG();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowMSG();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowMSG();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
 
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	BOOL	TimerProc	(void);										/* ŠÔˆ— */
-	void	SetMsg		(LPCSTR pszMsg, DWORD dwTime, int nType=0);				/* ƒƒbƒZ[ƒWİ’è */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	BOOL	TimerProc	(void);										/* æ™‚é–“å‡¦ç† */
+	void	SetMsg		(LPCSTR pszMsg, DWORD dwTime, int nType=0);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¨­å®š */
 
 
 private:
-	int			m_nType;					/* ƒEƒBƒ“ƒhƒEí•Ê */
-	DWORD		m_dwDeleteTime;				/* íœ‚Ü‚Å‚ÌŠÔ */
-	CmyString	m_strMsg;					/* ƒƒbƒZ[ƒW */
+	int			m_nType;					/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç¨®åˆ¥ */
+	DWORD		m_dwDeleteTime;				/* å‰Šé™¤ã¾ã§ã®æ™‚é–“ */
+	CmyString	m_strMsg;					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
 } CWindowMSG, *PCWindowMSG;
 
 /* Copyright(C)URARA-works 2006 */

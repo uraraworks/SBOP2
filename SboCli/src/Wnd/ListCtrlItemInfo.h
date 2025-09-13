@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:ListCtrlItemInfo.h											 */
-/* “à—e			:ƒAƒCƒeƒ€ˆê——ƒŠƒXƒgƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:ListCtrlItemInfo.h											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ãƒªã‚¹ãƒˆã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,27 +12,27 @@ class CMgrData;
 class CLibInfoItem;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CListCtrlItemInfo : public CListCtrl
 {
 public:
-			CListCtrlItemInfo();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CListCtrlItemInfo();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CListCtrlItemInfo();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CListCtrlItemInfo();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
-	BOOL	Create		(CWnd *pParent, CMgrData *pMgrData);	/* ì¬ */
-	void	Renew		(void);									/* ˆê——‚ğXV */
-
-
-protected:
+	BOOL	Create		(CWnd *pParent, CMgrData *pMgrData);	/* ä½œæˆ */
+	void	Renew		(void);									/* ä¸€è¦§ã‚’æ›´æ–° */
 
 
 protected:
-	CWnd			*m_pWndParent;			/* eƒEƒBƒ“ƒhƒE */
-	CMgrData		*m_pMgrData;			/* ƒf[ƒ^ŠÇ— */
-	CLibInfoItem	*m_pLibInfoItem;		/* ƒAƒCƒeƒ€î•ñ */
+
+
+protected:
+	CWnd			*m_pWndParent;			/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CMgrData		*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CLibInfoItem	*m_pLibInfoItem;		/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ± */
 
 
 

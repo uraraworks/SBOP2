@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* �t�@�C����	:InfoCharSvr.h												 */
-/* ���e			:�L�������T�[�o�[�N���X ��`�t�@�C��						 */
-/* �쐬			:�N����N���t�����(URARA-works)							 */
-/* �쐬�J�n��	:2007/01/14													 */
+/* ƒtƒ@ƒCƒ‹–¼	:InfoCharSvr.h												 */
+/* “à—e			:ƒLƒƒƒ‰î•ñƒT[ƒo[ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
+/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
+/* ì¬ŠJŽn“ú	:2007/01/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,119 +14,119 @@ class CInfoMapBase;
 class CLibInfoCharSvr;
 
 /* ========================================================================= */
-/* �萔��`																	 */
+/* ’è”’è‹`																	 */
 /* ========================================================================= */
 
-/* �s��ID */
+/* s“®ID */
 enum {
 	CHARPROCID_NONE = 0,
-	CHARPROCID_FISHING,								/* �ނ� */
-	CHARPROCID_FISHING_HIT,							/* �ނ�(�q�b�g) */
-	CHARPROCID_MAPMOVEIN,							/* �}�b�v���ړ� */
-	CHARPROCID_MAPMOVEOUT,							/* �}�b�v�O�ړ� */
-	CHARPROCID_SWOON,								/* �C�� */
-	CHARPROCID_INVINCIBLE,							/* ���G */
+	CHARPROCID_FISHING,								/* ’Þ‚è */
+	CHARPROCID_FISHING_HIT,							/* ’Þ‚è(ƒqƒbƒg) */
+	CHARPROCID_MAPMOVEIN,							/* ƒ}ƒbƒv“àˆÚ“® */
+	CHARPROCID_MAPMOVEOUT,							/* ƒ}ƒbƒvŠOˆÚ“® */
+	CHARPROCID_SWOON,								/* ‹Câ */
+	CHARPROCID_INVINCIBLE,							/* –³“G */
 	CHARPROCID_MAX
 };
 
-/* �s����� */
+/* s“®î•ñ */
 typedef struct _CHARPROCINFO {
-	DWORD	dwProcID,								/* �s��ID */
-			dwProcSetTime,							/* �����ݒ莞�� */
-			dwProcStartTime,						/* �����J�n���� */
-			dwPara;									/* �p�����[�^ */
+	DWORD	dwProcID,								/* s“®ID */
+			dwProcSetTime,							/* ˆ—Ý’èŽžŠÔ */
+			dwProcStartTime,						/* ˆ—ŠJŽnŽžŠÔ */
+			dwPara;									/* ƒpƒ‰ƒ[ƒ^ */
 } CHARPROCINFO, *PCHARPROCINFO;
 
 
 /* ========================================================================= */
-/* �N���X�錾																 */
+/* ƒNƒ‰ƒXéŒ¾																 */
 /* ========================================================================= */
 
 typedef class CInfoCharSvr : public CInfoCharBase
 {
 public:
-			CInfoCharSvr();								/* �R���X�g���N�^ */
-	virtual ~CInfoCharSvr();							/* �f�X�g���N�^ */
+			CInfoCharSvr();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
+	virtual ~CInfoCharSvr();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
 
-			void SetSpeak		(LPCSTR pszSpeak);				/* �������e���X�V */
-	virtual void SetMoveState	(int nMoveState);				/* �ړ���Ԃ�ύX */
-	virtual void SetProcState	(int nProcState);				/* �s����Ԃ�ύX */
-			void SetMap			(CInfoMapBase *pInfoMap);		/* �}�b�v����ݒ� */
-			void SetLibInfoChar	(CLibInfoCharSvr *pLibInfoChar);/* �L������񃉃C�u������ݒ� */
-			void SetEfcBalloon	(DWORD dwEfcBalloonID);			/* ���o����ݒ� */
-			void SetMotion		(DWORD dwMotionID);				/* ���[�V������ݒ� */
+			void SetSpeak		(LPCSTR pszSpeak);				/* ”­Œ¾“à—e‚ðXV */
+	virtual void SetMoveState	(int nMoveState);				/* ˆÚ“®ó‘Ô‚ð•ÏX */
+	virtual void SetProcState	(int nProcState);				/* s“®ó‘Ô‚ð•ÏX */
+			void SetMap			(CInfoMapBase *pInfoMap);		/* ƒ}ƒbƒvî•ñ‚ðÝ’è */
+			void SetLibInfoChar	(CLibInfoCharSvr *pLibInfoChar);/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ‚ðÝ’è */
+			void SetEfcBalloon	(DWORD dwEfcBalloonID);			/* •¬o‚µ‚ðÝ’è */
+			void SetMotion		(DWORD dwMotionID);				/* ƒ‚[ƒVƒ‡ƒ“‚ðÝ’è */
 
-	virtual BOOL  IsEnableBattle	(void);						/* �퓬��ԂɑJ�ڂł��邩���� */
-	virtual BOOL  IsEnableMove		(void);						/* �ړ��ł����Ԃ����� */
-	virtual void  CopyAll			(CInfoCharSvr *pSrc);		/* �h����̏����S�ăR�s�[ */
-	virtual void  Copy				(CInfoCharBase *pSrc);		/* �R�s�[ */
-	virtual void  ProcAtack			(void);						/* ����(�U��������) */
-	virtual BOOL  ProcHit			(CInfoCharSvr *pInfoChar);	/* ����(�U�����󂯂���) */
-	virtual BOOL  TimerProc			(DWORD dwTime);				/* ���ԏ��� */
-	virtual BOOL  TimerProcMOVE		(DWORD dwTime);				/* ���ԏ���(�ړ�) */
-	virtual BOOL  IsAtackTarget		(void);						/* �U���ΏۂƂȂ邩���� */
-	virtual DWORD GetHitEffectID	(void);						/* �q�b�g���ɑ���ɕ\������G�t�F�N�gID���擾 */
-	virtual DWORD GetDamage			(void);						/* �_���[�W�l���擾 */
+	virtual BOOL  IsEnableBattle	(void);						/* í“¬ó‘Ô‚É‘JˆÚ‚Å‚«‚é‚©”»’è */
+	virtual BOOL  IsEnableMove		(void);						/* ˆÚ“®‚Å‚«‚éó‘Ô‚©”»’è */
+	virtual void  CopyAll			(CInfoCharSvr *pSrc);		/* ”h¶æ‚Ìî•ñ‚à‘S‚ÄƒRƒs[ */
+	virtual void  Copy				(CInfoCharBase *pSrc);		/* ƒRƒs[ */
+	virtual void  ProcAtack			(void);						/* ˆ—(UŒ‚‚µ‚½Žž) */
+	virtual BOOL  ProcHit			(CInfoCharSvr *pInfoChar);	/* ˆ—(UŒ‚‚ðŽó‚¯‚½Žž) */
+	virtual BOOL  TimerProc			(DWORD dwTime);				/* ŽžŠÔˆ— */
+	virtual BOOL  TimerProcMOVE		(DWORD dwTime);				/* ŽžŠÔˆ—(ˆÚ“®) */
+	virtual BOOL  IsAtackTarget		(void);						/* UŒ‚‘ÎÛ‚Æ‚È‚é‚©”»’è */
+	virtual DWORD GetHitEffectID	(void);						/* ƒqƒbƒgŽž‚É‘ŠŽè‚É•\Ž¦‚·‚éƒGƒtƒFƒNƒgID‚ðŽæ“¾ */
+	virtual DWORD GetDamage			(void);						/* ƒ_ƒ[ƒW’l‚ðŽæ“¾ */
 
-			void Proc				(DWORD dwTime);				/* �s������ */
-	virtual BOOL ProcFISHING		(DWORD dwPara);				/* �s������(�ނ�) */
-	virtual BOOL ProcFISHING_HIT	(DWORD dwPara);				/* �s������(�ނ�(�q�b�g)) */
-	virtual BOOL ProcMAPMOVEIN		(DWORD dwPara);				/* �s������(�}�b�v���ړ�) */
-	virtual BOOL ProcMAPMOVEOUT		(DWORD dwPara);				/* �s������(�}�b�v�O�ړ�) */
-	virtual BOOL ProcSWOON			(DWORD dwPara);				/* �s������(�C��) */
-	virtual BOOL ProcINVINCIBLE		(DWORD dwPara);				/* �s������(���G) */
+			void Proc				(DWORD dwTime);				/* s“®ˆ— */
+	virtual BOOL ProcFISHING		(DWORD dwPara);				/* s“®ˆ—(’Þ‚è) */
+	virtual BOOL ProcFISHING_HIT	(DWORD dwPara);				/* s“®ˆ—(’Þ‚è(ƒqƒbƒg)) */
+	virtual BOOL ProcMAPMOVEIN		(DWORD dwPara);				/* s“®ˆ—(ƒ}ƒbƒv“àˆÚ“®) */
+	virtual BOOL ProcMAPMOVEOUT		(DWORD dwPara);				/* s“®ˆ—(ƒ}ƒbƒvŠOˆÚ“®) */
+	virtual BOOL ProcSWOON			(DWORD dwPara);				/* s“®ˆ—(‹Câ) */
+	virtual BOOL ProcINVINCIBLE		(DWORD dwPara);				/* s“®ˆ—(–³“G) */
 
-	void DeleteProcInfo		(int nNo);							/* �s�������폜 */
-	void DeleteProcInfo		(DWORD dwProcID);					/* �s�������폜 */
-	void DeleteAllProcInfo	(void);								/* �s������S�č폜 */
-	void AddProcInfo		(DWORD dwProcID, DWORD dwStartTime, DWORD dwPara);	/* �s������ǉ� */
+	void DeleteProcInfo		(int nNo);							/* s“®î•ñ‚ðíœ */
+	void DeleteProcInfo		(DWORD dwProcID);					/* s“®î•ñ‚ðíœ */
+	void DeleteAllProcInfo	(void);								/* s“®î•ñ‚ð‘S‚Äíœ */
+	void AddProcInfo		(DWORD dwProcID, DWORD dwStartTime, DWORD dwPara);	/* s“®î•ñ‚ð’Ç‰Á */
 
-	/* �ړ���ʂɂ�鏈�� */
-	virtual void IncPutCount	(void);							/* ����NPC���𑝉� */
-	virtual void DecPutCount	(void);							/* ����NPC�������� */
+	/* ˆÚ“®Ží•Ê‚É‚æ‚éˆ— */
+	virtual void IncPutCount	(void);							/* ”­¶NPC”‚ð‘‰Á */
+	virtual void DecPutCount	(void);							/* ”­¶NPC”‚ðŒ¸­ */
 
 
 public:
-	int		m_nReserveChgEfect,			/* �G�t�F�N�g�ύX�\�� */
-			m_nReserveChgMoveState,		/* �ړ���ʕύX�\�� */
-			m_nMoveCount;				/* �ړ����� */
-	BOOL	m_bChgPos,					/* ���W���ύX���ꂽ */
-			m_bChgMap,					/* �}�b�v���ύX���ꂽ */
-			m_bChgUpdatePos,			/* �N���C�A���g���Ŏ��L�����̍��W���X�V���� */
-			m_bChgSpeak,				/* �������e���ύX���ꂽ */
-			m_bChgInfo,					/* �L������񂪕ύX���ꂽ */
-			m_bChgMoveState,			/* �ړ���Ԃ��ύX���ꂽ */
-			m_bChgProcState,			/* �s����Ԃ��ύX���ꂽ */
-			m_bChgScreenPos,			/* ��ʈʒu��ύX���� */
-			m_bChgPosRenew,				/* ���W���ύX���ꂽ */
-			m_bChgGrp,					/* �摜���ύX���ꂽ */
-			m_bChgEfcBalloon,			/* ���o�����ύX���ꂽ */
-			m_bChgMotion,				/* ���[�V�������ύX���ꂽ */
-			m_bChgStatus,				/* �X�e�[�^�X���ύX���ꂽ */
-			m_bChgFishingHit,			/* �ނꂽ */
-			m_bChgMoveCount,			/* �w������̈ړ� */
-			m_bChgPutNpc,				/* NPC���� */
-			m_bChgTargetChar,			/* �߂��̃L�����Ƀ^�[�Q�b�g�ύX */
-			m_bWaitCheckMapEvent,		/* �}�b�v�C�x���g�`�F�b�N�҂� */
-			m_bDropItem,				/* �A�C�e���h���b�v */
-			m_bAtack,					/* �U�� */
-			m_bRenewTargetPos,			/* �^�[�Q�b�g���W�X�V */
-			m_bProcMoveMapIn,			/* �}�b�v���ړ� */
-			m_bProcMoveMapOut,			/* �}�b�v�O�ړ� */
-			m_bProcMoveMarkPos,			/* �L�^�ʒu�ֈړ� */
-			m_bProcSwoon,				/* �C�� */
-			m_bProcInvincible,			/* ���G */
-			m_bStateFadeInOut,			/* �t�F�[�h�C���E�A�E�g�� */
-			m_bStatusInvincible;		/* ���G�� */
-	DWORD	m_dwLastTimeChg,			/* ��ԕύX���� */
-			m_dwChgWait,				/* ��ԕύX�҂����� */
-			m_dwEfcBalloonID,			/* ���o��ID */
-			m_dwMotionID,				/* ���[�V����ID */
-			m_dwMoveCount;				/* �ړ����� */
+	int		m_nReserveChgEfect,			/* ƒGƒtƒFƒNƒg•ÏX—\–ñ */
+			m_nReserveChgMoveState,		/* ˆÚ“®Ží•Ê•ÏX—\–ñ */
+			m_nMoveCount;				/* ˆÚ“®•à” */
+	BOOL	m_bChgPos,					/* À•W‚ª•ÏX‚³‚ê‚½ */
+			m_bChgMap,					/* ƒ}ƒbƒv‚ª•ÏX‚³‚ê‚½ */
+			m_bChgUpdatePos,			/* ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚ÅŽ©ƒLƒƒƒ‰‚ÌÀ•W‚ðXV‚·‚é */
+			m_bChgSpeak,				/* ”­Œ¾“à—e‚ª•ÏX‚³‚ê‚½ */
+			m_bChgInfo,					/* ƒLƒƒƒ‰î•ñ‚ª•ÏX‚³‚ê‚½ */
+			m_bChgMoveState,			/* ˆÚ“®ó‘Ô‚ª•ÏX‚³‚ê‚½ */
+			m_bChgProcState,			/* s“®ó‘Ô‚ª•ÏX‚³‚ê‚½ */
+			m_bChgScreenPos,			/* ‰æ–ÊˆÊ’u‚ð•ÏX‚·‚é */
+			m_bChgPosRenew,				/* À•W‚ª•ÏX‚³‚ê‚½ */
+			m_bChgGrp,					/* ‰æ‘œ‚ª•ÏX‚³‚ê‚½ */
+			m_bChgEfcBalloon,			/* •¬o‚µ‚ª•ÏX‚³‚ê‚½ */
+			m_bChgMotion,				/* ƒ‚[ƒVƒ‡ƒ“‚ª•ÏX‚³‚ê‚½ */
+			m_bChgStatus,				/* ƒXƒe[ƒ^ƒX‚ª•ÏX‚³‚ê‚½ */
+			m_bChgFishingHit,			/* ’Þ‚ê‚½ */
+			m_bChgMoveCount,			/* Žw’è•à”‚ÌˆÚ“® */
+			m_bChgPutNpc,				/* NPC”­¶ */
+			m_bChgTargetChar,			/* ‹ß‚­‚ÌƒLƒƒƒ‰‚Éƒ^[ƒQƒbƒg•ÏX */
+			m_bWaitCheckMapEvent,		/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN‘Ò‚¿ */
+			m_bDropItem,				/* ƒAƒCƒeƒ€ƒhƒƒbƒv */
+			m_bAtack,					/* UŒ‚ */
+			m_bRenewTargetPos,			/* ƒ^[ƒQƒbƒgÀ•WXV */
+			m_bProcMoveMapIn,			/* ƒ}ƒbƒv“àˆÚ“® */
+			m_bProcMoveMapOut,			/* ƒ}ƒbƒvŠOˆÚ“® */
+			m_bProcMoveMarkPos,			/* ‹L˜^ˆÊ’u‚ÖˆÚ“® */
+			m_bProcSwoon,				/* ‹Câ */
+			m_bProcInvincible,			/* –³“G */
+			m_bStateFadeInOut,			/* ƒtƒF[ƒhƒCƒ“EƒAƒEƒg’† */
+			m_bStatusInvincible;		/* –³“G’† */
+	DWORD	m_dwLastTimeChg,			/* ó‘Ô•ÏXŽžŠÔ */
+			m_dwChgWait,				/* ó‘Ô•ÏX‘Ò‚¿ŽžŠÔ */
+			m_dwEfcBalloonID,			/* •¬o‚µID */
+			m_dwMotionID,				/* ƒ‚[ƒVƒ‡ƒ“ID */
+			m_dwMoveCount;				/* ˆÚ“®•à” */
 
-	CInfoMapBase	*m_pInfoMap;		/* �}�b�v��� */
-	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* �L������񃉃C�u���� */
-	CmyArray<PCHARPROCINFO, PCHARPROCINFO>	m_apProcInfo;	/* �s����� */
+	CInfoMapBase	*m_pInfoMap;		/* ƒ}ƒbƒvî•ñ */
+	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ */
+	CmyArray<PCHARPROCINFO, PCHARPROCINFO>	m_apProcInfo;	/* s“®î•ñ */
 } CInfoCharSvr, *PCInfoCharSvr;
 
 /* Copyright(C)URARA-works 2007 */

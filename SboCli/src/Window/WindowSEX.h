@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	WindowSEX.h													 */
-/* “à—eF		«•ÊƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2006/11/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	WindowSEX.h													 */
+/* å†…å®¹ï¼š		æ€§åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2006/11/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,33 +15,33 @@ class CMgrData;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowSEX : public CWindowBase
 {
 public:
-			CWindowSEX();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowSEX();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowSEX();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowSEX();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	BOOL	TimerProc	(void);										/* ŽžŠÔˆ— */
-	void	SetType		(int nSex);									/* «•Ê‚ðÝ’è */
-	int		GetType		(void);										/* «•Ê‚ðŽæ“¾ */
-
-
-private:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Y) */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	BOOL	TimerProc	(void);										/* æ™‚é–“å‡¦ç† */
+	void	SetType		(int nSex);									/* æ€§åˆ¥ã‚’è¨­å®š */
+	int		GetType		(void);										/* æ€§åˆ¥ã‚’å–å¾— */
 
 
 private:
-	int		m_nPos;									/* ‘I‘ðˆÊ’u */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Y) */
+
+
+private:
+	int		m_nPos;									/* é¸æŠžä½ç½® */
 } CWindowSEX, *PCWindowSEX;
 
 /* Copyright(C)URARA-works 2006 */

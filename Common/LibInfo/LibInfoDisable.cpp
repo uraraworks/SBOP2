@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoDisable.cpp											 */
-/* “à—e			:‹‘”Ûî•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoDisable.cpp											 */
+/* å†…å®¹			:æ‹’å¦æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::CLibInfoDisable								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::CLibInfoDisable								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 CLibInfoDisable::CLibInfoDisable()
@@ -26,9 +26,9 @@ CLibInfoDisable::CLibInfoDisable()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::~CLibInfoDisable								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::~CLibInfoDisable								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 CLibInfoDisable::~CLibInfoDisable()
@@ -38,9 +38,9 @@ CLibInfoDisable::~CLibInfoDisable()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::Create(void)
@@ -51,9 +51,9 @@ void CLibInfoDisable::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::Destroy										 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::Destroy										 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::Destroy(void)
@@ -66,10 +66,10 @@ void CLibInfoDisable::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::Proc											 */
-/* “à—e		:ˆ—															 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALS:ˆ—‚µ‚Ä‚¢‚È‚¢								 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::Proc											 */
+/* å†…å®¹		:å‡¦ç†															 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALS:å‡¦ç†ã—ã¦ã„ãªã„								 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 BOOL CLibInfoDisable::Proc(void)
@@ -91,16 +91,16 @@ BOOL CLibInfoDisable::Proc(void)
 
 	dwTime = timeGetTime ();
 	if (dwTime - m_dwLastTimeProc < 1000 * 10) {
-		/* 10•bˆÈ“à‚È‚çˆ—‚µ‚È‚¢ */
+		/* 10ç§’ä»¥å†…ãªã‚‰å‡¦ç†ã—ãªã„ */
 		goto Exit;
 	}
 	m_dwLastTimeProc = dwTime;
 
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfo = m_paInfoIPADdress->GetAt (i);
-		/* 1ŠÔˆÈãŒo‰ß‚µ‚Ä‚¢‚éH */
+		/* 1æ™‚é–“ä»¥ä¸ŠçµŒéã—ã¦ã„ã‚‹ï¼Ÿ */
 		if (dwTime - pInfo->dwLastTime >= 1000 * 60 * 60) {
-			/* ‹‘”Û‰ğœ */
+			/* æ‹’å¦è§£é™¤ */
 			DeleteIP (i);
 		}
 	}
@@ -112,9 +112,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoDisable::GetNew(void)
@@ -128,9 +128,9 @@ PCInfoBase CLibInfoDisable::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetCount										 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetCount										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 int CLibInfoDisable::GetCount(void)
@@ -150,9 +150,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::Add											 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::Add											 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::Add(PCInfoBase pInfo)
@@ -169,13 +169,13 @@ void CLibInfoDisable::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoDisable pInfo;
 
@@ -186,13 +186,13 @@ void CLibInfoDisable::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::Delete(
-	DWORD dwDisableID)		/* [in] ‹‘”Ûî•ñID */
+	DWORD dwDisableID)		/* [in] æ‹’å¦æƒ…å ±ID */
 {
 	int i, nCount, nNo;
 	PCInfoDisable pInfoTmp;
@@ -220,9 +220,9 @@ void CLibInfoDisable::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::DeleteAll										 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::DeleteAll										 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::DeleteAll(void)
@@ -241,9 +241,9 @@ void CLibInfoDisable::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::CopyAll										 */
-/* “à—e		:‘S‚ÄƒRƒs[														 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::CopyAll										 */
+/* å†…å®¹		:å…¨ã¦ã‚³ãƒ”ãƒ¼														 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::CopyAll(CLibInfoDisable *pSrc)
@@ -265,9 +265,9 @@ void CLibInfoDisable::CopyAll(CLibInfoDisable *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::IsDisable										 */
-/* “à—e		:‹‘”Ûî•ñ‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚©”»’è									 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::IsDisable										 */
+/* å†…å®¹		:æ‹’å¦æƒ…å ±ãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹åˆ¤å®š									 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 BOOL CLibInfoDisable::IsDisable(LPCSTR pszMacAddress)
@@ -287,9 +287,9 @@ BOOL CLibInfoDisable::IsDisable(LPCSTR pszMacAddress)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::Merge											 */
-/* “à—e		:æ‚è‚İ														 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::Merge											 */
+/* å†…å®¹		:å–ã‚Šè¾¼ã¿														 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::Merge(CLibInfoDisable *pSrc)
@@ -312,9 +312,9 @@ void CLibInfoDisable::Merge(CLibInfoDisable *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetPtr										 */
-/* “à—e		:‹‘”Ûî•ñ‚ğæ“¾													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetPtr										 */
+/* å†…å®¹		:æ‹’å¦æƒ…å ±ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoDisable::GetPtr(int nNo)
@@ -324,13 +324,13 @@ PCInfoBase CLibInfoDisable::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetPtr										 */
-/* “à—e		:‹‘”Ûî•ñ‚ğæ“¾													 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetPtr										 */
+/* å†…å®¹		:æ‹’å¦æƒ…å ±ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoDisable::GetPtr(
-	DWORD dwDisableID)		/* [in] ‹‘”Ûî•ñID */
+	DWORD dwDisableID)		/* [in] æ‹’å¦æƒ…å ±ID */
 {
 	int i, nCount;
 	PCInfoDisable pRet, pInfoTmp;
@@ -352,13 +352,13 @@ PCInfoBase CLibInfoDisable::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetPtr										 */
-/* “à—e		:‹‘”Ûî•ñ‚ğæ“¾													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetPtr										 */
+/* å†…å®¹		:æ‹’å¦æƒ…å ±ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoDisable::GetPtr(
-	LPCSTR pszMacAddress)		/* [in] MACƒAƒhƒŒƒX */
+	LPCSTR pszMacAddress)		/* [in] MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 {
 	int i, nCount;
 	PCInfoDisable pRet, pInfoTmp;
@@ -380,9 +380,9 @@ PCInfoBase CLibInfoDisable::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 DWORD CLibInfoDisable::GetSendDataSize(void)
@@ -393,7 +393,7 @@ DWORD CLibInfoDisable::GetSendDataSize(void)
 
 	dwRet = dwSize = 0;
 
-	/* ƒf[ƒ^”•ª‚ÌƒTƒCƒY */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°åˆ†ã®ã‚µã‚¤ã‚º */
 	dwSize += sizeof (DWORD);
 
 	nCount = GetCount ();
@@ -409,9 +409,9 @@ DWORD CLibInfoDisable::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoDisable::GetSendData(void)
@@ -427,12 +427,12 @@ PBYTE CLibInfoDisable::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	dwOffset	= 0;
 
-	/* ƒf[ƒ^”‚ğ‘‚«‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’æ›¸ãè¾¼ã¿ */
 	dwCount = (DWORD)GetCount ();
 	CopyMemory (pData, &dwCount, sizeof (dwCount));
 	dwOffset += sizeof (dwCount);
 
-	/* ‹‘”Ûî•ñ‚ğ‘‚«‚İ */
+	/* æ‹’å¦æƒ…å ±ã‚’æ›¸ãè¾¼ã¿ */
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pDisable = (PCInfoDisable)GetPtr (i);
@@ -451,10 +451,10 @@ PBYTE CLibInfoDisable::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2009/04/08														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CLibInfoDisable::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2009/04/08														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CLibInfoDisable::SetSendData(PBYTE pSrc)
@@ -469,7 +469,7 @@ PBYTE CLibInfoDisable::SetSendData(PBYTE pSrc)
 
 	DeleteAll ();
 
-	/* ƒf[ƒ^”‚ğ“Ç‚İ‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’èª­ã¿è¾¼ã¿ */
 	CopyMemory (&dwCount, pDataTmp, sizeof (dwCount));
 	nCount		= (int)dwCount;
 	pDataTmp	+= sizeof (dwCount);
@@ -487,9 +487,9 @@ PBYTE CLibInfoDisable::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::AddIP											 */
-/* “à—e		:IPƒAƒhƒŒƒXŠÖ˜A(’Ç‰Á)											 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::AddIP											 */
+/* å†…å®¹		:IPã‚¢ãƒ‰ãƒ¬ã‚¹é–¢é€£(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::AddIP(ULONG ulIPAddress)
@@ -499,7 +499,7 @@ void CLibInfoDisable::AddIP(ULONG ulIPAddress)
 
 	bResult = IsDisableIP (ulIPAddress);
 	if (bResult) {
-		/* “o˜^Ï‚İ */
+		/* ç™»éŒ²æ¸ˆã¿ */
 		return;
 	}
 
@@ -511,9 +511,9 @@ void CLibInfoDisable::AddIP(ULONG ulIPAddress)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::DeleteIP										 */
-/* “à—e		:IPƒAƒhƒŒƒXŠÖ˜A(íœ)											 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::DeleteIP										 */
+/* å†…å®¹		:IPã‚¢ãƒ‰ãƒ¬ã‚¹é–¢é€£(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::DeleteIP(int nNo)
@@ -527,9 +527,9 @@ void CLibInfoDisable::DeleteIP(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::DeleteAllIP									 */
-/* “à—e		:IPƒAƒhƒŒƒXŠÖ˜A(‘S‚Äíœ)										 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::DeleteAllIP									 */
+/* å†…å®¹		:IPã‚¢ãƒ‰ãƒ¬ã‚¹é–¢é€£(å…¨ã¦å‰Šé™¤)										 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CLibInfoDisable::DeleteAllIP(void)
@@ -547,9 +547,9 @@ void CLibInfoDisable::DeleteAllIP(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::IsDisableIP									 */
-/* “à—e		:IPƒAƒhƒŒƒXŠÖ˜A(‹Ö~‚³‚ê‚Ä‚¢‚éIPƒAƒhƒŒƒX‚©”»’è)					 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CLibInfoDisable::IsDisableIP									 */
+/* å†…å®¹		:IPã‚¢ãƒ‰ãƒ¬ã‚¹é–¢é€£(ç¦æ­¢ã•ã‚Œã¦ã„ã‚‹IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‹åˆ¤å®š)					 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 BOOL CLibInfoDisable::IsDisableIP(ULONG ulIPAddress)
@@ -575,9 +575,9 @@ BOOL CLibInfoDisable::IsDisableIP(ULONG ulIPAddress)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoDisable::GetNewID										 */
-/* “à—e		:V‚µ‚¢‹‘”Ûî•ñID‚ğæ“¾											 */
-/* “ú•t		:2009/04/08														 */
+/* é–¢æ•°å	:CLibInfoDisable::GetNewID										 */
+/* å†…å®¹		:æ–°ã—ã„æ‹’å¦æƒ…å ±IDã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/04/08														 */
 /* ========================================================================= */
 
 DWORD CLibInfoDisable::GetNewID(void)

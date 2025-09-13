@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerTitle.h												 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(ƒ^ƒCƒgƒ‹) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/03/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerTitle.h												 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ã‚¿ã‚¤ãƒˆãƒ«) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/03/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,32 +14,32 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerTitle : public CLayerBase
 {
 public:
-			CLayerTitle();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerTitle();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerTitle();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerTitle();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);				/* ì¬ */
-	void	Draw		(CImg32 *pDst);						/* •`‰æ */
-	BOOL	TimerProc	(void);								/* ŠÔˆ— */
-	void	StartFadeIn	(void);								/* ƒtƒF[ƒhƒCƒ“ŠJn */
-	void	EndFadeIn	(void);								/* ƒtƒF[ƒhƒCƒ“I—¹ */
-	BOOL	IsFadeInEnd	(void);								/* ƒtƒF[ƒhƒCƒ“I—¹H */
+	void	Create		(CMgrData *pMgrData);				/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);						/* æç”» */
+	BOOL	TimerProc	(void);								/* æ™‚é–“å‡¦ç† */
+	void	StartFadeIn	(void);								/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³é–‹å§‹ */
+	void	EndFadeIn	(void);								/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³çµ‚äº† */
+	BOOL	IsFadeInEnd	(void);								/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³çµ‚äº†ï¼Ÿ */
 
 
 private:
-	int			m_nAnime,						/* ƒAƒjƒ[ƒVƒ‡ƒ“”Ô† */
-				m_nFadeLevel,					/* ƒtƒF[ƒhƒŒƒxƒ‹ */
-				m_nCloudPos;					/* ‰_‚ÌˆÊ’u—p */
-	DWORD		m_dwLastTimeProc,				/* ÅIˆ—ŠÔ */
-				m_dwLastTimeFadeIn;				/* ÅIˆ—ŠÔ(ƒtƒF[ƒhƒCƒ“) */
-	CImg32		*m_pDibTitle,					/* ƒ^ƒCƒgƒ‹‰æ‘œ */
-				*m_pDibTitleBack,				/* ƒ^ƒCƒgƒ‹”wŒi‰æ‘œ */
-				*m_pDibTitleCloud;				/* ƒ^ƒCƒgƒ‹‰_‰æ‘œ */
+	int			m_nAnime,						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå· */
+				m_nFadeLevel,					/* ãƒ•ã‚§ãƒ¼ãƒ‰ãƒ¬ãƒ™ãƒ« */
+				m_nCloudPos;					/* é›²ã®ä½ç½®ç”¨ */
+	DWORD		m_dwLastTimeProc,				/* æœ€çµ‚å‡¦ç†æ™‚é–“ */
+				m_dwLastTimeFadeIn;				/* æœ€çµ‚å‡¦ç†æ™‚é–“(ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³) */
+	CImg32		*m_pDibTitle,					/* ã‚¿ã‚¤ãƒˆãƒ«ç”»åƒ */
+				*m_pDibTitleBack,				/* ã‚¿ã‚¤ãƒˆãƒ«èƒŒæ™¯ç”»åƒ */
+				*m_pDibTitleCloud;				/* ã‚¿ã‚¤ãƒˆãƒ«é›²ç”»åƒ */
 } CLayerTitle, *PCLayerTitle;
 
 /* Copyright(C)URARA-works 2007 */

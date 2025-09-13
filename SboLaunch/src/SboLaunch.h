@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboLaunch.h												 */
-/* “à—e			:SBOƒ‰ƒ“ƒ`ƒƒ[ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/01/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboLaunch.h												 */
+/* å†…å®¹			:SBOãƒ©ãƒ³ãƒãƒ£ãƒ¼ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,16 +12,16 @@
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"		// ƒƒCƒ“ ƒVƒ“ƒ{ƒ‹
+#include "resource.h"		// ãƒ¡ã‚¤ãƒ³ ã‚·ãƒ³ãƒœãƒ«
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CSboLaunchApp : public CWinApp
 {
 public:
-	CSboLaunchApp();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
+	CSboLaunchApp();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
 

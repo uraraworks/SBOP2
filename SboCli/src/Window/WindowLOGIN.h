@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowLOGIN.h												 */
-/* “à—e			:ƒƒOƒCƒ“î•ñƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowLOGIN.h												 */
+/* å†…å®¹			:ãƒ­ã‚°ã‚¤ãƒ³æƒ…å ±ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,51 +15,51 @@ class CMgrData;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowLOGIN : public CWindowBase
 {
 public:
-			CWindowLOGIN();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowLOGIN();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowLOGIN();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowLOGIN();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
 
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	void	Enable		(BOOL bEnable);								/* “ü—Í‹–‰ÂE‹Ö~ */
-	void	SetShow		(BOOL bShow);								/* •\¦‚·‚é‚©İ’è */
-	void	Save		(void);										/* ƒAƒJƒEƒ“ƒg‚ÆƒpƒXƒ[ƒh‚ğ•Û‘¶ */
-	void	SetCheck	(BOOL bCheck);								/* ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚éƒ`ƒFƒbƒN‚Ìİ’è */
-	BOOL	GetCheck	(void);										/* ƒpƒXƒ[ƒh‚ğ•Û‘¶‚·‚éƒ`ƒFƒbƒN‚Ìæ“¾ */
-	LPCSTR	GetAccount	(void)	{ return m_strAccount;	}			/* “ü—Í‚³‚ê‚½ƒAƒJƒEƒ“ƒg‚ğæ“¾ */
-	LPCSTR	GetPassword	(void)	{ return m_strPassword;	}			/* “ü—Í‚³‚ê‚½ƒpƒXƒ[ƒh‚ğæ“¾ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	void	Enable		(BOOL bEnable);								/* å…¥åŠ›è¨±å¯ãƒ»ç¦æ­¢ */
+	void	SetShow		(BOOL bShow);								/* è¡¨ç¤ºã™ã‚‹ã‹è¨­å®š */
+	void	Save		(void);										/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ */
+	void	SetCheck	(BOOL bCheck);								/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãƒã‚§ãƒƒã‚¯ã®è¨­å®š */
+	BOOL	GetCheck	(void);										/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ä¿å­˜ã™ã‚‹ãƒã‚§ãƒƒã‚¯ã®å–å¾— */
+	LPCSTR	GetAccount	(void)	{ return m_strAccount;	}			/* å…¥åŠ›ã•ã‚ŒãŸã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å–å¾— */
+	LPCSTR	GetPassword	(void)	{ return m_strPassword;	}			/* å…¥åŠ›ã•ã‚ŒãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å–å¾— */
 
 
 private:
-	void	MakeWindow	(void);										/* ƒEƒBƒ“ƒhƒEì¬ */
-	static LRESULT CALLBACK AccountWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ƒAƒJƒEƒ“ƒg“ü—Í—“ƒvƒƒV[ƒWƒƒ */
-	static LRESULT CALLBACK PasswordWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ƒpƒXƒ[ƒh“ü—Í—“ƒvƒƒV[ƒWƒƒ */
-	static LRESULT CALLBACK SavePasswordWndProc	(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ƒpƒXƒ[ƒh‚ğ‹L˜^‚·‚éƒ`ƒFƒbƒNƒvƒƒV[ƒWƒƒ */
-	static LRESULT CALLBACK ConnectWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* Ú‘±ƒ{ƒ^ƒ“ƒvƒƒV[ƒWƒƒ */
-	void	OnConnect	(void);										/* Ú‘±ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰ */
+	void	MakeWindow	(void);										/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
+	static LRESULT CALLBACK AccountWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+	static LRESULT CALLBACK PasswordWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+	static LRESULT CALLBACK SavePasswordWndProc	(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨˜éŒ²ã™ã‚‹ãƒã‚§ãƒƒã‚¯ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+	static LRESULT CALLBACK ConnectWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* æ¥ç¶šãƒœã‚¿ãƒ³ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+	void	OnConnect	(void);										/* æ¥ç¶šãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ© */
 
 
 public:
-	CmyString	m_strAccount,				/* “ü—Í‚³‚ê‚½ƒAƒJƒEƒ“ƒg */
-				m_strPassword;				/* “ü—Í‚³‚ê‚½ƒpƒXƒ[ƒh */
+	CmyString	m_strAccount,				/* å…¥åŠ›ã•ã‚ŒãŸã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+				m_strPassword;				/* å…¥åŠ›ã•ã‚ŒãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 
 
 private:
-	HWND	m_hWndAccount,					/* ƒAƒJƒEƒ“ƒg“ü—Í—“ */
-			m_hWndPassword,					/* ƒpƒXƒ[ƒh“ü—Í—“ */
-			m_hWndSavePassword,				/* ƒpƒXƒ[ƒh‚ğ‹L˜^‚·‚éƒ`ƒFƒbƒN */
-			m_hWndConnect;					/* Ú‘±ƒ{ƒ^ƒ“ */
+	HWND	m_hWndAccount,					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå…¥åŠ›æ¬„ */
+			m_hWndPassword,					/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å…¥åŠ›æ¬„ */
+			m_hWndSavePassword,				/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨˜éŒ²ã™ã‚‹ãƒã‚§ãƒƒã‚¯ */
+			m_hWndConnect;					/* æ¥ç¶šãƒœã‚¿ãƒ³ */
 
-	WNDPROC	m_OrgWndProcAccount,			/* ƒAƒJƒEƒ“ƒg“ü—Í—“‚ÌŒ³ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
-			m_OrgWndProcPassword,			/* ƒpƒXƒ[ƒh“ü—Í—“‚ÌŒ³ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
-			m_OrgWndProcSavePassword,		/* ƒpƒXƒ[ƒh‚ğ‹L˜^‚·‚éƒ`ƒFƒbƒN‚ÌŒ³ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
-			m_OrgWndProcConnect;			/* Ú‘±ƒ{ƒ^ƒ“‚ÌŒ³ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
+	WNDPROC	m_OrgWndProcAccount,			/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå…¥åŠ›æ¬„ã®å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+			m_OrgWndProcPassword,			/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å…¥åŠ›æ¬„ã®å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+			m_OrgWndProcSavePassword,		/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨˜éŒ²ã™ã‚‹ãƒã‚§ãƒƒã‚¯ã®å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
+			m_OrgWndProcConnect;			/* æ¥ç¶šãƒœã‚¿ãƒ³ã®å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
 } CWindowLOGIN, *PCWindowLOGIN;
 
 /* Copyright(C)URARA-works 2006 */

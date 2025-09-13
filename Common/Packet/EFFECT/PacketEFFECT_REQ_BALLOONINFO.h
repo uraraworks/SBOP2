@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketEFFECT_REQ_BALLOONINFO.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒGƒtƒFƒNƒgŒn:•¬o‚µî•ñ—v‹) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketEFFECT_REQ_BALLOONINFO.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»:å™´å‡ºã—æƒ…å ±è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketEFFECT_REQ_BALLOONINFO : public CPacketBase
 {
 public:
-			CPacketEFFECT_REQ_BALLOONINFO();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketEFFECT_REQ_BALLOONINFO();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketEFFECT_REQ_BALLOONINFO();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketEFFECT_REQ_BALLOONINFO();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwBalloonID);						/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwBalloonID);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD m_dwBalloonID;					/* •¬o‚µID */
+	DWORD m_dwBalloonID;					/* å™´å‡ºã—ID */
 } CPacketEFFECT_REQ_BALLOONINFO, *PCPacketEFFECT_REQ_BALLOONINFO;
 
 /* Copyright(C)URARA-works 2007 */

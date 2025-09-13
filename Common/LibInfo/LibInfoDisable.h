@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoDisable.h											 */
-/* “à—e			:‹‘”Ûî•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoDisable.h											 */
+/* å†…å®¹			:æ‹’å¦æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,64 +11,64 @@
 #include "InfoDisable.h"
 #include "LibInfoBase.h"
 
-/* IPƒAƒhƒŒƒX‹‘”Ûî•ñ */
+/* IPã‚¢ãƒ‰ãƒ¬ã‚¹æ‹’å¦æƒ…å ± */
 typedef struct _STDISABLEIPADDRESS {
-	ULONG	ulIPAddress;		/* IPƒAƒhƒŒƒX */
-	DWORD	dwLastTime;			/* ÅIƒƒOƒCƒ“ŠÔ */
+	ULONG	ulIPAddress;		/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	DWORD	dwLastTime;			/* æœ€çµ‚ãƒ­ã‚°ã‚¤ãƒ³æ™‚é–“ */
 } STDISABLEIPADDRESS, *PSTDISABLEIPADDRESS;
 typedef CmyArray<PSTDISABLEIPADDRESS, PSTDISABLEIPADDRESS>   ARRAYDISABLEIPADDRESS;
 typedef CmyArray<PSTDISABLEIPADDRESS, PSTDISABLEIPADDRESS> *PARRAYDISABLEIPADDRESS;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoDisable : public CLibInfoBase
 {
 public:
-			CLibInfoDisable();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoDisable();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoDisable();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoDisable();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);										/* ì¬ */
-	void Destroy		(void);										/* ”jŠü */
-	BOOL Proc			(void);										/* ˆ— */
+	void Create			(void);										/* ä½œæˆ */
+	void Destroy		(void);										/* ç ´æ£„ */
+	BOOL Proc			(void);										/* å‡¦ç† */
 
-	PCInfoBase GetNew	(void);										/* V‹Kƒf[ƒ^‚ğæ“¾ */
+	PCInfoBase GetNew	(void);										/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	int		GetCount	(void);										/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);							/* ’Ç‰Á */
-	void	Delete		(int nNo);									/* íœ */
-	void	Delete		(DWORD dwDisableID);						/* íœ */
-	void	DeleteAll	(void);										/* ‘S‚Äíœ */
-	void	CopyAll		(CLibInfoDisable *pSrc);					/* ‘S‚ÄƒRƒs[ */
-	void	Merge		(CLibInfoDisable *pSrc);					/* æ‚è‚İ */
-	BOOL	IsDisable	(LPCSTR pszMacAddress);						/* ‹‘”Ûî•ñ‚ª“o˜^‚³‚ê‚Ä‚¢‚é‚©”»’è */
+	int		GetCount	(void);										/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);							/* è¿½åŠ  */
+	void	Delete		(int nNo);									/* å‰Šé™¤ */
+	void	Delete		(DWORD dwDisableID);						/* å‰Šé™¤ */
+	void	DeleteAll	(void);										/* å…¨ã¦å‰Šé™¤ */
+	void	CopyAll		(CLibInfoDisable *pSrc);					/* å…¨ã¦ã‚³ãƒ”ãƒ¼ */
+	void	Merge		(CLibInfoDisable *pSrc);					/* å–ã‚Šè¾¼ã¿ */
+	BOOL	IsDisable	(LPCSTR pszMacAddress);						/* æ‹’å¦æƒ…å ±ãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹åˆ¤å®š */
 
-	PCInfoBase	GetPtr (int nNo);									/* ‹‘”Ûî•ñ‚ğæ“¾ */
-	PCInfoBase	GetPtr (DWORD dwDisableID);							/* ‹‘”Ûî•ñ‚ğæ“¾ */
-	PCInfoBase	GetPtr (LPCSTR pszMacAddress);						/* ‹‘”Ûî•ñ‚ğæ“¾ */
+	PCInfoBase	GetPtr (int nNo);									/* æ‹’å¦æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase	GetPtr (DWORD dwDisableID);							/* æ‹’å¦æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase	GetPtr (LPCSTR pszMacAddress);						/* æ‹’å¦æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	/* IPƒAƒhƒŒƒXŠÖ˜A */
-	void	AddIP		(ULONG ulIPAddress);						/* ’Ç‰Á */
-	void	DeleteIP	(int nNo);									/* íœ */
-	void	DeleteAllIP	(void);										/* ‘S‚Äíœ */
-	BOOL	IsDisableIP	(ULONG ulIPAddress);						/* ‹Ö~‚³‚ê‚Ä‚¢‚éIPƒAƒhƒŒƒX‚©”»’è */
-
-
-protected:
-	DWORD	GetNewID	(void);										/* V‚µ‚¢‹‘”ÛID‚ğæ“¾ */
+	/* IPã‚¢ãƒ‰ãƒ¬ã‚¹é–¢é€£ */
+	void	AddIP		(ULONG ulIPAddress);						/* è¿½åŠ  */
+	void	DeleteIP	(int nNo);									/* å‰Šé™¤ */
+	void	DeleteAllIP	(void);										/* å…¨ã¦å‰Šé™¤ */
+	BOOL	IsDisableIP	(ULONG ulIPAddress);						/* ç¦æ­¢ã•ã‚Œã¦ã„ã‚‹IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‹åˆ¤å®š */
 
 
 protected:
-	DWORD	m_dwNewIDTmp,						/* V‹KIDì¬—p */
-			m_dwLastTimeProc;					/* ÅŒã‚Ìˆ—ŠÔ */
+	DWORD	GetNewID	(void);										/* æ–°ã—ã„æ‹’å¦IDã‚’å–å¾— */
 
-	PARRAYDISABLEINFO		m_paInfo;			/* ‹‘”Ûî•ñ */
-	PARRAYDISABLEIPADDRESS	m_paInfoIPADdress;	/* ‹‘”ÛIPƒAƒhƒŒƒXî•ñ */
+
+protected:
+	DWORD	m_dwNewIDTmp,						/* æ–°è¦IDä½œæˆç”¨ */
+			m_dwLastTimeProc;					/* æœ€å¾Œã®å‡¦ç†æ™‚é–“ */
+
+	PARRAYDISABLEINFO		m_paInfo;			/* æ‹’å¦æƒ…å ± */
+	PARRAYDISABLEIPADDRESS	m_paInfoIPADdress;	/* æ‹’å¦IPã‚¢ãƒ‰ãƒ¬ã‚¹æƒ…å ± */
 } CLibInfoDisable, *PCLibInfoDisable;
 
 /* Copyright(C)URARA-works 2009 */

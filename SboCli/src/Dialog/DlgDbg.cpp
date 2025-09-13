@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgDbg.cpp													 */
-/* “à—e			:ƒfƒoƒbƒOî•ñƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgDbg.cpp													 */
+/* å†…å®¹			:ãƒ‡ãƒãƒƒã‚°æƒ…å ±ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgDbg::DoDataExchange(CDataExchange* pDX)
@@ -46,9 +46,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::CDlgDbg												 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::CDlgDbg												 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 CDlgDbg::CDlgDbg(CWnd* pParent /*=NULL*/)
@@ -68,9 +68,9 @@ CDlgDbg::CDlgDbg(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::~CDlgDbg												 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::~CDlgDbg												 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 CDlgDbg::~CDlgDbg()
@@ -79,9 +79,9 @@ CDlgDbg::~CDlgDbg()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::Create												 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::Create												 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 BOOL CDlgDbg::Create(HWND hWndParent, CMgrData *pMgrData)
@@ -102,9 +102,9 @@ BOOL CDlgDbg::Create(HWND hWndParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::Renew													 */
-/* “à—e		:XV															 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::Renew													 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 void CDlgDbg::Renew(void)
@@ -114,9 +114,9 @@ void CDlgDbg::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::OnInitDialog											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::OnInitDialog											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 BOOL CDlgDbg::OnInitDialog()
@@ -151,9 +151,9 @@ BOOL CDlgDbg::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::OnSize												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::OnSize												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 void CDlgDbg::OnSize(UINT nType, int cx, int cy)
@@ -165,24 +165,24 @@ void CDlgDbg::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::OnTimer												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::OnTimer												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 void CDlgDbg::OnTimer(UINT nIDEvent)
 {
 	PCInfoCharCli pChar;
 
-	m_strOnline.Format("ƒIƒ“ƒ‰ƒCƒ“F%d", m_pMgrData->GetOnlineCount ());
-	m_strCharCount.Format("ƒLƒƒƒ‰”F%d", m_pMgrData->GetCharCount ());
-	m_strPing.Format("PingF%dms •`‰æŠÔ:%4dms", m_pMgrData->GetPing (), m_pMgrData->GetDrawTime ());
-	m_strPos = "À•WF";
+	m_strOnline.Format("ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ï¼š%d", m_pMgrData->GetOnlineCount ());
+	m_strCharCount.Format("ã‚­ãƒ£ãƒ©æ•°ï¼š%d", m_pMgrData->GetCharCount ());
+	m_strPing.Format("Pingï¼š%dms æç”»æ™‚é–“:%4dms", m_pMgrData->GetPing (), m_pMgrData->GetDrawTime ());
+	m_strPos = "åº§æ¨™ï¼š";
 	pChar = m_pMgrData->GetPlayerChar ();
 	if (pChar) {
-		m_strPos.Format("À•WFMAP:%d X:%3d Y:%3d", pChar->m_dwMapID, pChar->m_nMapX, pChar->m_nMapY);
+		m_strPos.Format("åº§æ¨™ï¼šMAP:%d X:%3d Y:%3d", pChar->m_dwMapID, pChar->m_nMapX, pChar->m_nMapY);
 	}
-	m_strThrowghput.Format("‘—MF%5dBps óMF%5dBps", m_pSock->GetThrowghPutSend (0), m_pSock->GetThrowghPutRecv (0));
+	m_strThrowghput.Format("é€ä¿¡ï¼š%5dBps å—ä¿¡ï¼š%5dBps", m_pSock->GetThrowghPutSend (0), m_pSock->GetThrowghPutRecv (0));
 
 	UpdateData(FALSE);
 	SetTimer(100, 1000, NULL);
@@ -190,9 +190,9 @@ void CDlgDbg::OnTimer(UINT nIDEvent)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgDbg::PostNcDestroy											 */
-/* “à—e		:Œãˆ—															 */
-/* “ú•t		:2009/04/05														 */
+/* é–¢æ•°å	:CDlgDbg::PostNcDestroy											 */
+/* å†…å®¹		:å¾Œå‡¦ç†															 */
+/* æ—¥ä»˜		:2009/04/05														 */
 /* ========================================================================= */
 
 void CDlgDbg::PostNcDestroy()

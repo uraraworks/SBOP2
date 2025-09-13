@@ -1,15 +1,15 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	LibMusicLoader.h											 */
-/* “à—eF		AflMusicƒ‰ƒCƒuƒ‰ƒŠ“Ç‚Ýž‚ÝƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2005/10/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	LibMusicLoader.h											 */
+/* å†…å®¹ï¼š		AflMusicãƒ©ã‚¤ãƒ–ãƒ©ãƒªèª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/10/18													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ŠÖ”ƒ|ƒCƒ“ƒ^’è‹`															 */
+/* é–¢æ•°ãƒã‚¤ãƒ³ã‚¿å®šç¾©															 */
 /* ========================================================================= */
 
 typedef bool		(*LIBMUSICOpen1)(LPCSTR, LPCSTR);
@@ -31,40 +31,40 @@ typedef DWORDLONG	(*LIBMUSICGetPlayTime)();
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibMusicLoader
 {
 public:
-			CLibMusicLoader();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual	~CLibMusicLoader();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibMusicLoader();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual	~CLibMusicLoader();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Load (void);						/* “Ç‚Ýž‚Ý */
-	void	Free (void);						/* ŠJ•ú */
+	void	Load (void);						/* èª­ã¿è¾¼ã¿ */
+	void	Free (void);						/* é–‹æ”¾ */
 
-	BOOL		Open				(LPCSTR pFileName, LPCSTR pType = NULL);				/* ƒtƒ@ƒCƒ‹‚©‚çMIDIƒf[ƒ^‚ð“Ç‚Ýž‚Þ */
-	BOOL		Open				(HMODULE hResource, HRSRC hSrc, LPCSTR pType = NULL);	/* ƒŠƒ\[ƒX‚©‚çMIDIƒf[ƒ^‚ð“Ç‚Ýž‚Þ */
-	BOOL		Close				(void);													/* ƒf[ƒ^‚ðƒƒ‚ƒŠ‚©‚çŠJ•ú */
-	BOOL		FadeIn				(INT nTime, INT nVolume = -70);							/* ƒtƒF[ƒhƒCƒ“‚ðs‚¤ */
-	BOOL		FadeOut				(INT nTime);											/* ƒtƒF[ƒhƒAƒEƒg‚ðs‚¤ */
-	BOOL		PlayTime			(DWORD dwTime);											/* Žw’èŽžŠÔ‚©‚ç‚©‚ç‰‰‘tŠJŽn */
-	BOOL		Play				(DWORDLONG dwlCount);									/* Žw’èˆÊ’u‚©‚ç‰‰‘tŠJŽn */
-	BOOL		Play				(void);													/* ‰‰‘tŠJŽn */
-	BOOL		Cont				(void);													/* ‰‰‘tÄŠJ */
-	BOOL		Stop				(void);													/* ‰‰‘t’âŽ~ */
-	BOOL		IsPlay				(void);													/* ‰‰‘t’†‚©”»’è */
-	void		SetLoop				(BOOL bLoop);											/* ƒ‹[ƒv‚³‚¹‚é‚©Žw’è */
-	void		SetRelativeVolume	(INT nVolume);											/* ƒ{ƒŠƒ…[ƒ€‚ÌÝ’è */
-	LPCSTR		GetTitle			(void);													/* ƒ^ƒCƒgƒ‹–¼Žæ“¾ */
-	DWORDLONG	GetAllTime			(void);													/* ‘‰‰‘tŽžŠÔ‚ðŽæ“¾ */
-	DWORDLONG	GetPlayTime			(void);													/* ‰‰‘tŽžŠÔ‚ðŽæ“¾ */
+	BOOL		Open				(LPCSTR pFileName, LPCSTR pType = NULL);				/* ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰MIDIãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ */
+	BOOL		Open				(HMODULE hResource, HRSRC hSrc, LPCSTR pType = NULL);	/* ãƒªã‚½ãƒ¼ã‚¹ã‹ã‚‰MIDIãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ */
+	BOOL		Close				(void);													/* ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ¡ãƒ¢ãƒªã‹ã‚‰é–‹æ”¾ */
+	BOOL		FadeIn				(INT nTime, INT nVolume = -70);							/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã‚’è¡Œã† */
+	BOOL		FadeOut				(INT nTime);											/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã‚’è¡Œã† */
+	BOOL		PlayTime			(DWORD dwTime);											/* æŒ‡å®šæ™‚é–“ã‹ã‚‰ã‹ã‚‰æ¼”å¥é–‹å§‹ */
+	BOOL		Play				(DWORDLONG dwlCount);									/* æŒ‡å®šä½ç½®ã‹ã‚‰æ¼”å¥é–‹å§‹ */
+	BOOL		Play				(void);													/* æ¼”å¥é–‹å§‹ */
+	BOOL		Cont				(void);													/* æ¼”å¥å†é–‹ */
+	BOOL		Stop				(void);													/* æ¼”å¥åœæ­¢ */
+	BOOL		IsPlay				(void);													/* æ¼”å¥ä¸­ã‹åˆ¤å®š */
+	void		SetLoop				(BOOL bLoop);											/* ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹ã‹æŒ‡å®š */
+	void		SetRelativeVolume	(INT nVolume);											/* ãƒœãƒªãƒ¥ãƒ¼ãƒ ã®è¨­å®š */
+	LPCSTR		GetTitle			(void);													/* ã‚¿ã‚¤ãƒˆãƒ«åå–å¾— */
+	DWORDLONG	GetAllTime			(void);													/* ç·æ¼”å¥æ™‚é–“ã‚’å–å¾— */
+	DWORDLONG	GetPlayTime			(void);													/* æ¼”å¥æ™‚é–“ã‚’å–å¾— */
 
 
 protected:
-	HMODULE				m_hLib;		/* DLL‚Ìƒ‚ƒWƒ…[ƒ‹ƒnƒ“ƒhƒ‹ */
+	HMODULE				m_hLib;		/* DLLã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒãƒ³ãƒ‰ãƒ« */
 
-	/* ˆÈ‰ºŠÖ”ƒ|ƒCƒ“ƒ^ */
+	/* ä»¥ä¸‹é–¢æ•°ãƒã‚¤ãƒ³ã‚¿ */
 	LIBMUSICOpen1				m_pOpen1;
 	LIBMUSICOpen2				m_pOpen2;
 	LIBMUSICClose				m_pClose;

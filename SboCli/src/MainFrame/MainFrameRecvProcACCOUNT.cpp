@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcACCOUNT.cpp								 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒAƒJƒEƒ“ƒgŒnóMˆ—) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcACCOUNT.cpp								 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,24 +17,24 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcACCOUNT									 */
-/* “à—e		:óMˆ—(ƒAƒJƒEƒ“ƒgŒn)											 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcACCOUNT									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³»)											 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcACCOUNT(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_ACCOUNT_RES_ACCOUNTINFO:	RecvProcACCOUNT_RES_ACCOUNTINFO (pData);	break;	/* ƒAƒJƒEƒ“ƒgî•ñ‰“š */
-	case SBOCOMMANDID_SUB_ACCOUNT_RES_MAKECHAR:		RecvProcACCOUNT_RES_MAKECHAR (pData);		break;	/* ƒLƒƒƒ‰ì¬‰“š */
+	case SBOCOMMANDID_SUB_ACCOUNT_RES_ACCOUNTINFO:	RecvProcACCOUNT_RES_ACCOUNTINFO (pData);	break;	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±å¿œç­” */
+	case SBOCOMMANDID_SUB_ACCOUNT_RES_MAKECHAR:		RecvProcACCOUNT_RES_MAKECHAR (pData);		break;	/* ã‚­ãƒ£ãƒ©ä½œæˆå¿œç­” */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcACCOUNT_RES_ACCOUNTINFO					 */
-/* “à—e		:óMˆ—(ƒAƒJƒEƒ“ƒgî•ñ‰“š)									 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcACCOUNT_RES_ACCOUNTINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±å¿œç­”)									 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcACCOUNT_RES_ACCOUNTINFO(PBYTE pData)
@@ -49,9 +49,9 @@ void CMainFrame::RecvProcACCOUNT_RES_ACCOUNTINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcACCOUNT_RES_MAKECHAR						 */
-/* “à—e		:óMˆ—(ƒLƒƒƒ‰ì¬‰“š)										 */
-/* “ú•t		:2006/12/29														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcACCOUNT_RES_MAKECHAR						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©ä½œæˆå¿œç­”)										 */
+/* æ—¥ä»˜		:2006/12/29														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcACCOUNT_RES_MAKECHAR(PBYTE pData)
@@ -62,13 +62,13 @@ void CMainFrame::RecvProcACCOUNT_RES_MAKECHAR(PBYTE pData)
 	Packet.Set (pData);
 
 	switch (Packet.m_nResult) {
-	case MAKECHARRES_OK:			/* –â‘è–³‚µ */
+	case MAKECHARRES_OK:			/* å•é¡Œç„¡ã— */
 		pAccountInfo = m_pMgrData->GetAccount ();
 		pAccountInfo->m_adwCharID.Add (Packet.m_dwCharID);
 		PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
 		break;
-	case MAKECHARRES_NG_USE:		/* g—pÏ‚İ */
-	case MAKECHARRES_NG_SPACE:		/* ‹ó”’‚ªg—p‚³‚ê‚Ä‚¢‚é */
+	case MAKECHARRES_NG_USE:		/* ä½¿ç”¨æ¸ˆã¿ */
+	case MAKECHARRES_NG_SPACE:		/* ç©ºç™½ãŒä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ */
 		break;
 	}
 	PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RES_MAKECHAR, Packet.m_nResult);

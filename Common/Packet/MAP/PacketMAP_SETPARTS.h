@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_SETPARTS.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒp[ƒc”z’u) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_SETPARTS.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„é…ç½®) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,24 +11,24 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_SETPARTS : public CPacketBase
 {
 public:
-			CPacketMAP_SETPARTS();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_SETPARTS();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_SETPARTS();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_SETPARTS();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMapID, int x, int y, DWORD dwPartsID, BOOL bPile);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwMapID, int x, int y, DWORD dwPartsID, BOOL bPile);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	BOOL	m_bPile;				/* d‚Ë‡‚í‚¹—p */
-	POINT	m_ptPos;				/* À•W */
-	DWORD	m_dwMapID,				/* ƒ}ƒbƒvID */
-			m_dwPartsID;			/* ƒp[ƒcID */
+	BOOL	m_bPile;				/* é‡ã­åˆã‚ã›ç”¨ */
+	POINT	m_ptPos;				/* åº§æ¨™ */
+	DWORD	m_dwMapID,				/* ãƒžãƒƒãƒ—ID */
+			m_dwPartsID;			/* ãƒ‘ãƒ¼ãƒ„ID */
 } CPacketMAP_SETPARTS, *PCPacketMAP_SETPARTS;
 
 /* Copyright(C)URARA-works 2007 */

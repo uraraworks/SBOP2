@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventGRPIDTMP.cpp								 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg(ˆê‰æ‘œİ’è)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/10/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventGRPIDTMP.cpp								 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ(ä¸€æ™‚ç”»åƒè¨­å®š)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventGRPIDTMP::DoDataExchange(CDataExchange* pDX)
@@ -39,9 +39,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventGRPIDTMP::CDlgAdminMapEventGRPIDTMP			 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/12														 */
+/* é–¢æ•°å	:CDlgAdminMapEventGRPIDTMP::CDlgAdminMapEventGRPIDTMP			 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/12														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventGRPIDTMP::CDlgAdminMapEventGRPIDTMP(CWnd* pParent /*=NULL*/)
@@ -57,9 +57,9 @@ CDlgAdminMapEventGRPIDTMP::CDlgAdminMapEventGRPIDTMP(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventGRPIDTMP::~CDlgAdminMapEventGRPIDTMP			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/12														 */
+/* é–¢æ•°å	:CDlgAdminMapEventGRPIDTMP::~CDlgAdminMapEventGRPIDTMP			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/12														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventGRPIDTMP::~CDlgAdminMapEventGRPIDTMP()
@@ -68,9 +68,9 @@ CDlgAdminMapEventGRPIDTMP::~CDlgAdminMapEventGRPIDTMP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventGRPIDTMP::Set									 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2008/10/12														 */
+/* é–¢æ•°å	:CDlgAdminMapEventGRPIDTMP::Set									 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2008/10/12														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventGRPIDTMP::Set(CInfoMapEventBase *pSrc)
@@ -80,7 +80,7 @@ void CDlgAdminMapEventGRPIDTMP::Set(CInfoMapEventBase *pSrc)
 
 	m_dwIDSub = pSrcTmp->m_dwIDSub;
 
-	/* ‰æ‘œIDƒƒCƒ“ */
+	/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ */
 	nNo = 0;
 	nCount = m_ctlIDMain.GetCount ();
 	for (i = 0; i < nCount; i ++) {
@@ -98,9 +98,9 @@ void CDlgAdminMapEventGRPIDTMP::Set(CInfoMapEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventGRPIDTMP::Get									 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2008/10/12														 */
+/* é–¢æ•°å	:CDlgAdminMapEventGRPIDTMP::Get									 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2008/10/12														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventGRPIDTMP::Get(CInfoMapEventBase *pDst)
@@ -119,19 +119,19 @@ void CDlgAdminMapEventGRPIDTMP::Get(CInfoMapEventBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventGRPIDTMP::OnInitDialog						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/10/12														 */
+/* é–¢æ•°å	:CDlgAdminMapEventGRPIDTMP::OnInitDialog						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/10/12														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapEventGRPIDTMP::OnInitDialog()
 {
 	CDlgAdminMapEventNONE::OnInitDialog();
 
-	/* ‰æ‘œIDƒƒCƒ“ */
-	m_ctlIDMain.InsertString (0, "•(2x2)");
+	/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ */
+	m_ctlIDMain.InsertString (0, "æœ(2x2)");
 	m_ctlIDMain.SetItemData  (0, GRPIDMAIN_2X2_CLOTH);
-	m_ctlIDMain.InsertString (1, "“Áê•(2x2)");
+	m_ctlIDMain.InsertString (1, "ç‰¹æ®Šæœ(2x2)");
 	m_ctlIDMain.SetItemData  (1, GRPIDMAIN_2X2_SPCLOTH);
 
 	m_ctlIDMain.SetCurSel (0);

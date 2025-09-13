@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowSETBGMVOLUME.cpp										 */
-/* “à—e			:BGM‰¹—Ê‚ÌÝ’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/06/21													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowSETBGMVOLUME.cpp										 */
+/* å†…å®¹			:BGMéŸ³é‡ã®è¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/21													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::CWindowSETBGMVOLUME						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::CWindowSETBGMVOLUME						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 CWindowSETBGMVOLUME::CWindowSETBGMVOLUME()
@@ -34,9 +34,9 @@ CWindowSETBGMVOLUME::CWindowSETBGMVOLUME()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::~CWindowSETBGMVOLUME						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::~CWindowSETBGMVOLUME						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 CWindowSETBGMVOLUME::~CWindowSETBGMVOLUME()
@@ -45,9 +45,9 @@ CWindowSETBGMVOLUME::~CWindowSETBGMVOLUME()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 void CWindowSETBGMVOLUME::Create(CMgrData *pMgrData)
@@ -63,9 +63,9 @@ void CWindowSETBGMVOLUME::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::Draw										 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::Draw										 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 void CWindowSETBGMVOLUME::Draw(PCImg32 pDst)
@@ -87,11 +87,11 @@ void CWindowSETBGMVOLUME::Draw(PCImg32 pDst)
 	SetBkMode (hDC, TRANSPARENT);
 
 	clText = RGB (1, 1, 1);
-	TextOut2 (hDC, 32, 16 + 16 * 0, "–³‚µ",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "‚P",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 2, "‚Q",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 3, "‚R",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 4, "‚S",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, "ç„¡ã—",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, "ï¼‘",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 2, "ï¼’",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 3, "ï¼“",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 4, "ï¼”",	clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -109,9 +109,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::OnUp										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::OnUp										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETBGMVOLUME::OnUp(void)
@@ -135,9 +135,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::OnDown									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::OnDown									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETBGMVOLUME::OnDown(void)
@@ -161,9 +161,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::OnLeft									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::OnLeft									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETBGMVOLUME::OnLeft(void)
@@ -178,9 +178,9 @@ BOOL CWindowSETBGMVOLUME::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::OnRight									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::OnRight									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETBGMVOLUME::OnRight(void)
@@ -195,9 +195,9 @@ BOOL CWindowSETBGMVOLUME::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::OnX										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::OnX										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETBGMVOLUME::OnX(BOOL bDown)
@@ -219,9 +219,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETBGMVOLUME::OnZ										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CWindowSETBGMVOLUME::OnZ										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowSETBGMVOLUME::OnZ(BOOL bDown)

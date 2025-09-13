@@ -1,15 +1,15 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:GlobalDefine.h												 */
-/* “à—e			:‹¤’Ê’è‹`ƒtƒ@ƒCƒ‹											 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:GlobalDefine.h												 */
+/* å†…å®¹			:å…±é€šå®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«											 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒ}ƒNƒ’è‹`																 */
+/* ãƒžã‚¯ãƒ­å®šç¾©																 */
 /* ========================================================================= */
 
 #define SAFE_DELETE(p)			{ if(p) { delete (p);		(p)=NULL; } }
@@ -19,153 +19,153 @@
 typedef map<DWORD, PVOID>	MapIDPtr;
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-#define WNDTITLE				"Scrap Book Online Page.2"			/* ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹ */
-#define DRAW_PARTS_X			(15)								/* ƒ}ƒbƒv•\Ž¦”(‰¡) */
-#define DRAW_PARTS_Y			(15)								/* ƒ}ƒbƒv•\Ž¦”(c) */
-#define MOVEWAIT				(11)								/* ˆÚ“®ŽüŠú */
-#define BATTLEMOVEWAIT			(15)								/* ˆÚ“®ŽüŠú(í“¬’†) */
+#define WNDTITLE				"Scrap Book Online Page.2"			/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ« */
+#define DRAW_PARTS_X			(15)								/* ãƒžãƒƒãƒ—è¡¨ç¤ºæ•°(æ¨ª) */
+#define DRAW_PARTS_Y			(15)								/* ãƒžãƒƒãƒ—è¡¨ç¤ºæ•°(ç¸¦) */
+#define MOVEWAIT				(11)								/* ç§»å‹•å‘¨æœŸ */
+#define BATTLEMOVEWAIT			(15)								/* ç§»å‹•å‘¨æœŸ(æˆ¦é—˜ä¸­) */
 
-#define MAXLEN_ACCOUNT			(10)								/* Å‘åƒAƒJƒEƒ“ƒg–¼’· */
-#define MAXLEN_PASSWORD			(10)								/* Å‘åƒpƒXƒ[ƒh’· */
-#define MAXLEN_CHARNAME			(15)								/* Å‘åƒLƒƒƒ‰–¼’· */
-#define URARASOCK_PRECHECK		(0x56BB3E5E)						/* ƒ`ƒFƒbƒN—pƒL[ƒ[ƒh	 */
-#define URARASOCK_MSGBASE		(WM_APP + 200)						/* ’ÊMƒ‰ƒCƒuƒ‰ƒŠ’Ê’mƒƒbƒZ[ƒWŠî€ */
+#define MAXLEN_ACCOUNT			(10)								/* æœ€å¤§ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåé•· */
+#define MAXLEN_PASSWORD			(10)								/* æœ€å¤§ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰é•· */
+#define MAXLEN_CHARNAME			(15)								/* æœ€å¤§ã‚­ãƒ£ãƒ©åé•· */
+#define URARASOCK_PRECHECK		(0x56BB3E5E)						/* ãƒã‚§ãƒƒã‚¯ç”¨ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰	 */
+#define URARASOCK_MSGBASE		(WM_APP + 200)						/* é€šä¿¡ãƒ©ã‚¤ãƒ–ãƒ©ãƒªé€šçŸ¥ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸åŸºæº– */
 
-/* ƒLƒƒƒ‰ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“ */
+/* ã‚­ãƒ£ãƒ©ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³ */
 enum {
 	CHARGRPMAIN_NONE = 0,
 	CHARGRPMAIN_3232,
 };
 
-/* ƒLƒƒƒ‰ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
+/* ã‚­ãƒ£ãƒ©ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
 enum {
 	CHARGRPSUB_NONE = 0,
-	CHARGRPSUB_INIT_MALE,							/* ‰ŠúƒLƒƒƒ‰(’j) */
-	CHARGRPSUB_INIT_FEMALE,							/* ‰ŠúƒLƒƒƒ‰(—) */
+	CHARGRPSUB_INIT_MALE,							/* åˆæœŸã‚­ãƒ£ãƒ©(ç”·) */
+	CHARGRPSUB_INIT_FEMALE,							/* åˆæœŸã‚­ãƒ£ãƒ©(å¥³) */
 };
 
-/* «•Ê‚É‚æ‚éŽí•Ê */
+/* æ€§åˆ¥ã«ã‚ˆã‚‹ç¨®åˆ¥ */
 enum {
-	SEX_ALL = 0,									/* ‘Sˆõ */
-	SEX_MALE,										/* ’j« */
-	SEX_FEMALE,										/* —« */
+	SEX_ALL = 0,									/* å…¨å“¡ */
+	SEX_MALE,										/* ç”·æ€§ */
+	SEX_FEMALE,										/* å¥³æ€§ */
 	SEX_MAX
 };
 
-/* Ží‘° */
+/* ç¨®æ— */
 enum {
 	FAMILYTYPE_NONE = 0,
-	FAMILYTYPE_HUMAN,								/* ƒjƒ“ƒQƒ“ */
-	FAMILYTYPE_ELF,									/* ƒGƒ‹ƒt */
-	FAMILYTYPE_BST,									/* ƒWƒ…ƒEƒWƒ“ */
-	FAMILYTYPE_DAEMON,								/* ƒ}ƒ]ƒN */
+	FAMILYTYPE_HUMAN,								/* ãƒ‹ãƒ³ã‚²ãƒ³ */
+	FAMILYTYPE_ELF,									/* ã‚¨ãƒ«ãƒ• */
+	FAMILYTYPE_BST,									/* ã‚¸ãƒ¥ã‚¦ã‚¸ãƒ³ */
+	FAMILYTYPE_DAEMON,								/* ãƒžã‚¾ã‚¯ */
 	FAMILYTYPE_MAX
 };
 
-/* ŠÇ—ŽÒƒŒƒxƒ‹ */
+/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ« */
 enum {
-	ADMINLEVEL_NONE = 0,							/* ˆê”Ê */
-	ADMINLEVEL_ALL									/* ‘SŒ ŒÀ */
+	ADMINLEVEL_NONE = 0,							/* ä¸€èˆ¬ */
+	ADMINLEVEL_ALL									/* å…¨æ¨©é™ */
 };
 
-/* ƒ}[ƒN–¼ */
+/* ãƒžãƒ¼ã‚¯å */
 enum {
 	MARKID_NONE = 0,
-	MARKID_BEGINNER,								/* ‰SŽÒƒ}[ƒN */
-	MARKID_ADMIN_URARA,								/* ‚¤‚ç‚ç‚ñƒ}[ƒN */
-	MARKID_ADMIN_VELTINA,							/* ‚×‚é‚¿‚Èƒ}[ƒN */
-	MARKID_ADMIN,									/* ŠÇ—ŽÒƒ}[ƒN */
-	MARKID_NAZO,									/* ‚æ‚­‚í‚©‚ç‚È‚¢ƒ}[ƒNi‚¥ */
-	MARKID_PT_MEMBER,								/* ‚o‚sƒƒ“ƒo */
-	MARKID_PT_LEADER,								/* ‚o‚sƒŠ[ƒ_[ */
-	MARKID_PT_RECRUIT,								/* PT•åW’† */
-	MARKID_SHOP,									/* ˜I“XH */
-	MARKID_GUILD_LEADER,							/* ƒMƒ‹ƒhƒŠ[ƒ_[ */
-	MARKID_GUILD_MEMBER,							/* ƒMƒ‹ƒhƒƒ“ƒo */
-	MARKID_WALLET,									/* —p“r–¢’è‚ª‚Ü‚®‚¿ƒTƒCƒt */
+	MARKID_BEGINNER,								/* åˆå¿ƒè€…ãƒžãƒ¼ã‚¯ */
+	MARKID_ADMIN_URARA,								/* ã†ã‚‰ã‚‰ã‚“ãƒžãƒ¼ã‚¯ */
+	MARKID_ADMIN_VELTINA,							/* ã¹ã‚‹ã¡ãªãƒžãƒ¼ã‚¯ */
+	MARKID_ADMIN,									/* ç®¡ç†è€…ãƒžãƒ¼ã‚¯ */
+	MARKID_NAZO,									/* ã‚ˆãã‚ã‹ã‚‰ãªã„ãƒžãƒ¼ã‚¯ï¼ˆã‡ */
+	MARKID_PT_MEMBER,								/* ï¼°ï¼´ãƒ¡ãƒ³ãƒ */
+	MARKID_PT_LEADER,								/* ï¼°ï¼´ãƒªãƒ¼ãƒ€ãƒ¼ */
+	MARKID_PT_RECRUIT,								/* PTå‹Ÿé›†ä¸­ */
+	MARKID_SHOP,									/* éœ²åº—ï¼Ÿ */
+	MARKID_GUILD_LEADER,							/* ã‚®ãƒ«ãƒ‰ãƒªãƒ¼ãƒ€ãƒ¼ */
+	MARKID_GUILD_MEMBER,							/* ã‚®ãƒ«ãƒ‰ãƒ¡ãƒ³ãƒ */
+	MARKID_WALLET,									/* ç”¨é€”æœªå®šãŒã¾ãã¡ã‚µã‚¤ãƒ• */
 };
 
-/* •ŠíŽí•Ê */
+/* æ­¦å™¨ç¨®åˆ¥ */
 enum {
-	WEAPONTYPE_SWING = 0,							/* U‚é */
-	WEAPONTYPE_POKE,								/* “Ë‚­ */
-	WEAPONTYPE_BOW,									/* ‹| */
+	WEAPONTYPE_SWING = 0,							/* æŒ¯ã‚‹ */
+	WEAPONTYPE_POKE,								/* çªã */
+	WEAPONTYPE_BOW,									/* å¼“ */
 };
 
-/* ‘•”õ‚ÌŽí—Þ */
+/* è£…å‚™ã®ç¨®é¡ž */
 enum {
-	EQUIPTYPE_ACCE1 = 0,	/* ƒAƒNƒZƒTƒŠ1 */
-	EQUIPTYPE_HEAD,			/* “ª */
-	EQUIPTYPE_ACCE2,		/* ƒAƒNƒZƒTƒŠ2 */
-	EQUIPTYPE_ARMSRIGHT,	/* ‰EŽè */
-	EQUIPTYPE_CLOTH,		/* •ž */
-	EQUIPTYPE_ARMSLEFT,		/* ¶Žè */
+	EQUIPTYPE_ACCE1 = 0,	/* ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+	EQUIPTYPE_HEAD,			/* é ­ */
+	EQUIPTYPE_ACCE2,		/* ã‚¢ã‚¯ã‚»ã‚µãƒª2 */
+	EQUIPTYPE_ARMSRIGHT,	/* å³æ‰‹ */
+	EQUIPTYPE_CLOTH,		/* æœ */
+	EQUIPTYPE_ARMSLEFT,		/* å·¦æ‰‹ */
 	EQUIPTYPE_MAX
 };
 
-/* ‰æ‘œŽí•ÊID */
+/* ç”»åƒç¨®åˆ¥ID */
 enum {
 	GRPIDMAIN_NONE = 0,
-	GRPIDMAIN_CHAR,			/* ƒLƒƒƒ‰ */
-	GRPIDMAIN_WEAPON,		/* •Ší */
-	GRPIDMAIN_WEAPON_BOW,	/* ‹| */
-	GRPIDMAIN_EFFECT32,		/* ƒGƒtƒFƒNƒg(32) */
-	GRPIDMAIN_WEAPON_GLOVE,	/* •Ší(‘ÅŒ‚) */
-	GRPIDMAIN_WEAPON_ETC,	/* •Ší(‚»‚Ì‘¼) */
-	GRPIDMAIN_NPC,			/* ƒLƒƒƒ‰(NPC) */
-	GRPIDMAIN_EFCBALLOON,	/* •¬o‚µ */
-	GRPIDMAIN_2X2_CHAR,		/* ƒLƒƒƒ‰(2x2) */
-	GRPIDMAIN_2X2_CLOTH,	/* •ž(2x2) */
-	GRPIDMAIN_2X2_EYE,		/* –Ú(2x2) */
-	GRPIDMAIN_2X2_HAIR,		/* ”¯(2x2) */
-	GRPIDMAIN_2X2_SPCLOTH,	/* “ÁŽê•ž(2x2) */
-	GRPIDMAIN_2X2_SPHAIR,	/* “ÁŽê”¯(2x2) */
-	GRPIDMAIN_2X2_ARMS,		/* Ž‚¿•¨(2x2) */
-	GRPIDMAIN_2X2_SHIELD,	/* ‚(2x2) */
-	GRPIDMAIN_2X2_ARMSSP,	/* “ÁŽêŽ‚¿•¨(2x2) */
-	GRPIDMAIN_2X2_BOW,		/* ‹|(2x2) */
+	GRPIDMAIN_CHAR,			/* ã‚­ãƒ£ãƒ© */
+	GRPIDMAIN_WEAPON,		/* æ­¦å™¨ */
+	GRPIDMAIN_WEAPON_BOW,	/* å¼“ */
+	GRPIDMAIN_EFFECT32,		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32) */
+	GRPIDMAIN_WEAPON_GLOVE,	/* æ­¦å™¨(æ‰“æ’ƒ) */
+	GRPIDMAIN_WEAPON_ETC,	/* æ­¦å™¨(ãã®ä»–) */
+	GRPIDMAIN_NPC,			/* ã‚­ãƒ£ãƒ©(NPC) */
+	GRPIDMAIN_EFCBALLOON,	/* å™´å‡ºã— */
+	GRPIDMAIN_2X2_CHAR,		/* ã‚­ãƒ£ãƒ©(2x2) */
+	GRPIDMAIN_2X2_CLOTH,	/* æœ(2x2) */
+	GRPIDMAIN_2X2_EYE,		/* ç›®(2x2) */
+	GRPIDMAIN_2X2_HAIR,		/* é«ª(2x2) */
+	GRPIDMAIN_2X2_SPCLOTH,	/* ç‰¹æ®Šæœ(2x2) */
+	GRPIDMAIN_2X2_SPHAIR,	/* ç‰¹æ®Šé«ª(2x2) */
+	GRPIDMAIN_2X2_ARMS,		/* æŒã¡ç‰©(2x2) */
+	GRPIDMAIN_2X2_SHIELD,	/* ç›¾(2x2) */
+	GRPIDMAIN_2X2_ARMSSP,	/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
+	GRPIDMAIN_2X2_BOW,		/* å¼“(2x2) */
 	GRPIDMAIN_2X2_NPC,		/* NPC(2x2) */
-	GRPIDMAIN_EFFECT64,		/* ƒGƒtƒFƒNƒg(64) */
-	GRPIDMAIN_ICON32,		/* ƒAƒCƒRƒ“(‚Q”{•\Ž¦) */
+	GRPIDMAIN_EFFECT64,		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64) */
+	GRPIDMAIN_ICON32,		/* ã‚¢ã‚¤ã‚³ãƒ³(ï¼’å€è¡¨ç¤º) */
 	GRPIDMAIN_MAX
 };
 
-/* Žg—p‘ÎÛ */
+/* ä½¿ç”¨å¯¾è±¡ */
 enum {
-	CHARTARGET_ALLY = 0,	/* –¡•û */
-	CHARTARGET_ENEMY,		/* “G */
+	CHARTARGET_ALLY = 0,	/* å‘³æ–¹ */
+	CHARTARGET_ENEMY,		/* æ•µ */
 };
 
-/* UŒ‚‘ÎÛ */
+/* æ”»æ’ƒå¯¾è±¡ */
 enum {
-	ATACKTARGETTYPE_NONE = 0,		/* –¢Ý’è */
-	ATACKTARGETTYPE_PC,				/* ƒvƒŒƒCƒ„[ */
+	ATACKTARGETTYPE_NONE = 0,		/* æœªè¨­å®š */
+	ATACKTARGETTYPE_PC,				/* ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ */
 	ATACKTARGETTYPE_NPC,			/* NPC */
-	ATACKTARGETTYPE_ALL,			/* ‘S‚Ä */
+	ATACKTARGETTYPE_ALL,			/* å…¨ã¦ */
 	ATACKTARGETTYPE_MAX
 };
 
-/* Žg—p”ÍˆÍ */
+/* ä½¿ç”¨ç¯„å›² */
 enum {
-	CHARAREA_SELF = 0,		/* Ž©•ª */
-	CHARAREA_FRONT,			/* 1•à‘O */
-	CHARAREA_AROUND,		/* ŽüˆÍ */
-	CHARAREA_SCREEN,		/* ‰æ–Ê“à */
+	CHARAREA_SELF = 0,		/* è‡ªåˆ† */
+	CHARAREA_FRONT,			/* 1æ­©å‰ */
+	CHARAREA_AROUND,		/* å‘¨å›² */
+	CHARAREA_SCREEN,		/* ç”»é¢å†… */
 };
 
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:FreeInfo														 */
-/* “à—e		:î•ñ‚ðŠJ•ú														 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:FreeInfo														 */
+/* å†…å®¹		:æƒ…å ±ã‚’é–‹æ”¾														 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 template<class PARRAY, class PINFO>

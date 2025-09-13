@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharDisableNew.h									 */
-/* “à—e			:‹‘”ÛMACƒAƒhƒŒƒX‚Ì’Ç‰Áƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharDisableNew.h									 */
+/* å†…å®¹			:æ‹’å¦MACã‚¢ãƒ‰ãƒ¬ã‚¹ã®è¿½åŠ ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/11													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "DlgAdminBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharDisableNew : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharDisableNew(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharDisableNew();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharDisableNew(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharDisableNew();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
 
@@ -31,7 +31,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharDisableNew)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_REQ_PUSH.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:‰Ÿ‚·—v‹) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_REQ_PUSH.h										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:æŠ¼ã™è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/02													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,23 +11,23 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_REQ_PUSH : public CPacketBase
 {
 public:
-			CPacketCHAR_REQ_PUSH();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_REQ_PUSH();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_REQ_PUSH();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_REQ_PUSH();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, int nDirection, int nPushCount = 1);	/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(DWORD dwCharID, int nDirection, int nPushCount = 1);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID;				/* ƒLƒƒƒ‰ID */
-	int		m_nDirection,			/* Œü‚« */
-			m_nPushCount;			/* ‰Ÿ‚µ‚Äi‚Ş” */
+	DWORD	m_dwCharID;				/* ã‚­ãƒ£ãƒ©ID */
+	int		m_nDirection,			/* å‘ã */
+			m_nPushCount;			/* æŠ¼ã—ã¦é€²ã‚€æ•° */
 } CPacketCHAR_REQ_PUSH, *PCPacketCHAR_REQ_PUSH;
 
 /* Copyright(C)URARA-works 2007 */

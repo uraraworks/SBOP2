@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapObject.cpp										 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒgˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapObject.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::DoDataExchange(CDataExchange* pDX)
@@ -47,9 +47,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::CDlgAdminMapObject							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::CDlgAdminMapObject							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 CDlgAdminMapObject::CDlgAdminMapObject(CWnd* pParent /*=NULL*/)
@@ -64,9 +64,9 @@ CDlgAdminMapObject::CDlgAdminMapObject(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::~CDlgAdminMapObject						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::~CDlgAdminMapObject						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 CDlgAdminMapObject::~CDlgAdminMapObject()
@@ -75,9 +75,9 @@ CDlgAdminMapObject::~CDlgAdminMapObject()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::Init(CMgrData *pMgrData)
@@ -87,22 +87,22 @@ void CDlgAdminMapObject::Init(CMgrData *pMgrData)
 	m_pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject ();
 	m_pMgrData->GetMgrGrpData ()->ReadMapPartsTmp ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminMapObject::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::OnAdminMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::OnAdminMsg									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_RENEWMAPOBJECT:	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñXV */
+	case ADMINMSG_RENEWMAPOBJECT:	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -110,9 +110,9 @@ void CDlgAdminMapObject::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::Renew										 */
-/* “à—e		:ˆê——‚ğXV														 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::Renew										 */
+/* å†…å®¹		:ä¸€è¦§ã‚’æ›´æ–°														 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::Renew(void)
@@ -129,15 +129,15 @@ void CDlgAdminMapObject::Renew(void)
 		strTmp.Format ("%d", pInfo->m_dwObjectID);				/* ID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwObjectID);
-		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strName);	/* ƒIƒuƒWƒFƒNƒg–¼ */
+		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strName);	/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapObject::OnInitDialog()
@@ -146,7 +146,7 @@ BOOL CDlgAdminMapObject::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (1, "ID",				LVCFMT_LEFT, 50);
-	m_List.InsertColumn (2, "ƒIƒuƒWƒFƒNƒg–¼",	LVCFMT_LEFT, 200);
+	m_List.InsertColumn (2, "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå",	LVCFMT_LEFT, 200);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -157,9 +157,9 @@ BOOL CDlgAdminMapObject::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::OnAdd										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(V‹K’Ç‰Á)										 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::OnAdd										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ–°è¦è¿½åŠ )										 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::OnAdd()
@@ -179,9 +179,9 @@ void CDlgAdminMapObject::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::OnModify									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::OnModify									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç·¨é›†)											 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::OnModify()
@@ -212,9 +212,9 @@ void CDlgAdminMapObject::OnModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::OnCopy										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒRƒs[)											 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::OnCopy										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚³ãƒ”ãƒ¼)											 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::OnCopy()
@@ -235,7 +235,7 @@ void CDlgAdminMapObject::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("‘I‘ğ‚³‚ê‚Ä‚¢‚éƒAƒCƒeƒ€‚ğƒRƒs[‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -247,9 +247,9 @@ void CDlgAdminMapObject::OnCopy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObject::OnDelete									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObject::OnDelete									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObject::OnDelete()
@@ -270,7 +270,7 @@ void CDlgAdminMapObject::OnDelete()
 		return;
 	}
 
-	nResult = MessageBox ("‘I‘ğ‚³‚ê‚Ä‚¢‚éƒCƒxƒ“ƒg‚ğíœ‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

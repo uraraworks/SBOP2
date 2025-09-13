@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_RES_PUTGET.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒAƒCƒeƒ€‚ğE‚¤’u‚­‰“š) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_RES_PUTGET.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‹¾ã†ç½®ãå¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_RES_PUTGET.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_PUTGET::CPacketCHAR_RES_PUTGET					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_PUTGET::CPacketCHAR_RES_PUTGET					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 CPacketCHAR_RES_PUTGET::CPacketCHAR_RES_PUTGET()
@@ -24,9 +24,9 @@ CPacketCHAR_RES_PUTGET::CPacketCHAR_RES_PUTGET()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_PUTGET::~CPacketCHAR_RES_PUTGET				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_PUTGET::~CPacketCHAR_RES_PUTGET				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 CPacketCHAR_RES_PUTGET::~CPacketCHAR_RES_PUTGET()
@@ -35,14 +35,14 @@ CPacketCHAR_RES_PUTGET::~CPacketCHAR_RES_PUTGET()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_PUTGET::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_PUTGET::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 void CPacketCHAR_RES_PUTGET::Make(
-	DWORD dwItemID,		/* [in] ƒAƒCƒeƒ€ID */
-	int nResult)		/* [in] Œ‹‰Ê */
+	DWORD dwItemID,		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ID */
+	int nResult)		/* [in] çµæœ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketCHAR_RES_PUTGET::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_RES_PUTGET;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwItemID,	sizeof (dwItemID), pDataTmp);	/* ƒAƒCƒeƒ€ID */
-	CopyMemoryRenew (pDataTmp, &nResult,	 sizeof (nResult), pDataTmp);	/* Œ‹‰Ê */
+	CopyMemoryRenew (pDataTmp, &dwItemID,	sizeof (dwItemID), pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	CopyMemoryRenew (pDataTmp, &nResult,	 sizeof (nResult), pDataTmp);	/* çµæœ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_RES_PUTGET::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CPacketCHAR_RES_PUTGET::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_RES_PUTGET::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketCHAR_RES_PUTGET::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwItemID,	pDataTmp, sizeof (m_dwItemID),	pDataTmp);	/* ƒAƒCƒeƒ€ID */
-	CopyMemoryRenew (&m_nResult,	pDataTmp, sizeof (m_nResult),	pDataTmp);	/* Œ‹‰Ê */
+	CopyMemoryRenew (&m_dwItemID,	pDataTmp, sizeof (m_dwItemID),	pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	CopyMemoryRenew (&m_nResult,	pDataTmp, sizeof (m_nResult),	pDataTmp);	/* çµæœ */
 
 	pRet = pDataTmp;
 	return pRet;

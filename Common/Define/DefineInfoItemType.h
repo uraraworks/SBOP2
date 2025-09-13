@@ -1,48 +1,48 @@
 #pragma once
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 namespace InfoItemType {
 
-/* ƒAƒCƒeƒ€Ží•Ê */
+/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ */
 enum {
-	TYPEID_NONE = 0,				/* Œø‰Ê–³‚µ */
-	TYPEID_CLOTH,					/* •ž */
-	TYPEID_ACCE,					/* ƒAƒNƒZƒTƒŠ */
-	TYPEID_ARMS,					/* Ž‚¿•¨ */
-	TYPEID_SHIELD,					/* ‚ */
-	TYPEID_HP,						/* HP‘Œ¸ */
-	TYPEID_LIGHT,					/* “”‚è */
+	TYPEID_NONE = 0,				/* åŠ¹æžœç„¡ã— */
+	TYPEID_CLOTH,					/* æœ */
+	TYPEID_ACCE,					/* ã‚¢ã‚¯ã‚»ã‚µãƒª */
+	TYPEID_ARMS,					/* æŒã¡ç‰© */
+	TYPEID_SHIELD,					/* ç›¾ */
+	TYPEID_HP,						/* HPå¢—æ¸› */
+	TYPEID_LIGHT,					/* ç¯ã‚Š */
 	TYPEID_MAX
 };
 
-/* ‰æ‘œIDƒƒCƒ“(•ž) */
+/* ç”»åƒIDãƒ¡ã‚¤ãƒ³(æœ) */
 enum {
-	GRPIDMAIN_CLOTH_NONE = 0,		/* –¢Ý’è */
-	GRPIDMAIN_CLOTH_SP,				/* “ÁŽê•ž */
+	GRPIDMAIN_CLOTH_NONE = 0,		/* æœªè¨­å®š */
+	GRPIDMAIN_CLOTH_SP,				/* ç‰¹æ®Šæœ */
 	GRPIDMAIN_CLOTH_MAX
 };
 
-/* ‰æ‘œIDƒƒCƒ“(Ž‚¿•¨) */
+/* ç”»åƒIDãƒ¡ã‚¤ãƒ³(æŒã¡ç‰©) */
 enum {
-	GRPIDMAIN_ARMS_NONE = 0,		/* –¢Ý’è */
-	GRPIDMAIN_ARMS_BOW,				/* ‹| */
-	GRPIDMAIN_WEAPON_GLOVE,			/* •Ší(‘ÅŒ‚) */
-	GRPIDMAIN_WEAPON_ETC,			/* •Ší(‚»‚Ì‘¼) */
-	GRPIDMAIN_2X2_ARMS,				/* Ž‚¿•¨(2x2) */
-	GRPIDMAIN_2X2_SHIELD,			/* ‚(2x2) */
-	GRPIDMAIN_2X2_ARMSSP,			/* “ÁŽêŽ‚¿•¨(2x2) */
-	GRPIDMAIN_2X2_BOW,				/* ‹|(2x2) */
+	GRPIDMAIN_ARMS_NONE = 0,		/* æœªè¨­å®š */
+	GRPIDMAIN_ARMS_BOW,				/* å¼“ */
+	GRPIDMAIN_WEAPON_GLOVE,			/* æ­¦å™¨(æ‰“æ’ƒ) */
+	GRPIDMAIN_WEAPON_ETC,			/* æ­¦å™¨(ãã®ä»–) */
+	GRPIDMAIN_2X2_ARMS,				/* æŒã¡ç‰©(2x2) */
+	GRPIDMAIN_2X2_SHIELD,			/* ç›¾(2x2) */
+	GRPIDMAIN_2X2_ARMSSP,			/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
+	GRPIDMAIN_2X2_BOW,				/* å¼“(2x2) */
 	GRPIDMAIN_ARMS_MAX
 };
 
-/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê */
+/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ */
 #define ARMS_MOTION_NONE		0x00000000
-#define ARMS_MOTION_SWING		0x00000001		/* U‚è */
-#define ARMS_MOTION_POKE		0x00000002		/* “Ë‚« */
-#define ARMS_MOTION_BOW			0x00000004		/* ‹| */
-#define ARMS_MOTION_BLOW		0x00000008		/* ‘ÅŒ‚ */
-#define ARMS_MOTION_FISHING		0x00000010		/* ’Þ‚è */
+#define ARMS_MOTION_SWING		0x00000001		/* æŒ¯ã‚Š */
+#define ARMS_MOTION_POKE		0x00000002		/* çªã */
+#define ARMS_MOTION_BOW			0x00000004		/* å¼“ */
+#define ARMS_MOTION_BLOW		0x00000008		/* æ‰“æ’ƒ */
+#define ARMS_MOTION_FISHING		0x00000010		/* é‡£ã‚Š */
 
 }

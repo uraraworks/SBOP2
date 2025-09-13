@@ -1,15 +1,15 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibSboSoundLoader.h										 */
-/* “à—e			:SBOƒTƒEƒ“ƒhƒf[ƒ^ƒ‰ƒCƒuƒ‰ƒŠ“Ç‚İ‚İƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibSboSoundLoader.h										 */
+/* å†…å®¹			:SBOã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿ãƒ©ã‚¤ãƒ–ãƒ©ãƒªèª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/03													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ŠÖ”ƒ|ƒCƒ“ƒ^’è‹`															 */
+/* é–¢æ•°ãƒã‚¤ãƒ³ã‚¿å®šç¾©															 */
 /* ========================================================================= */
 
 typedef int		(*LIBSBOSOUNDGetSoundCount)			(void);
@@ -20,29 +20,29 @@ typedef LPCSTR	(*LIBSBOSOUNDGetSoundName)			(DWORD dwSoundID);
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibSboSoundLoader
 {
 public:
-			CLibSboSoundLoader();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual	~CLibSboSoundLoader();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibSboSoundLoader();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual	~CLibSboSoundLoader();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Load (void);									/* “Ç‚İ‚İ */
-	void	Free (void);									/* ŠJ•ú */
+	void	Load (void);									/* èª­ã¿è¾¼ã¿ */
+	void	Free (void);									/* é–‹æ”¾ */
 
-	int		GetSoundCount		(void);						/* Œø‰Ê‰¹”‚ğæ“¾ */
-	int		GetSoundResourceID	(int nNo);					/* Œø‰Ê‰¹‚ÌƒŠƒ\[ƒXID‚ğæ“¾ */
-	DWORD	GetSoundID			(int nNo);					/* Œø‰Ê‰¹ID‚ğæ“¾ */
-	int		GetSoundNo			(DWORD dwSoundID);			/* Œø‰Ê‰¹‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾ */
-	LPCSTR	GetSoundName		(DWORD dwSoundID);			/* Œø‰Ê‰¹–¼‚ğæ“¾ */
+	int		GetSoundCount		(void);						/* åŠ¹æœéŸ³æ•°ã‚’å–å¾— */
+	int		GetSoundResourceID	(int nNo);					/* åŠ¹æœéŸ³ã®ãƒªã‚½ãƒ¼ã‚¹IDã‚’å–å¾— */
+	DWORD	GetSoundID			(int nNo);					/* åŠ¹æœéŸ³IDã‚’å–å¾— */
+	int		GetSoundNo			(DWORD dwSoundID);			/* åŠ¹æœéŸ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾— */
+	LPCSTR	GetSoundName		(DWORD dwSoundID);			/* åŠ¹æœéŸ³åã‚’å–å¾— */
 
 
 protected:
-	HMODULE				m_hLib;		/* DLL‚Ìƒ‚ƒWƒ…[ƒ‹ƒnƒ“ƒhƒ‹ */
+	HMODULE				m_hLib;		/* DLLã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒãƒ³ãƒ‰ãƒ« */
 
-	/* ˆÈ‰ºŠÖ”ƒ|ƒCƒ“ƒ^ */
+	/* ä»¥ä¸‹é–¢æ•°ãƒã‚¤ãƒ³ã‚¿ */
 	LIBSBOSOUNDGetSoundCount		m_pGetSoundCount;
 	LIBSBOSOUNDGetSoundResourceID	m_pGetSoundResourceID;
 	LIBSBOSOUNDGetSoundID			m_pGetSoundID;

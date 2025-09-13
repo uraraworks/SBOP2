@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_STATUS.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒXƒe[ƒ^ƒXî•ñ’Ê’m) ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_STATUS.cpp										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/29													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketCHAR_STATUS.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_STATUS::CPacketCHAR_STATUS							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CPacketCHAR_STATUS::CPacketCHAR_STATUS							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 CPacketCHAR_STATUS::CPacketCHAR_STATUS()
@@ -22,50 +22,50 @@ CPacketCHAR_STATUS::CPacketCHAR_STATUS()
 	m_byCmdMain	= SBOCOMMANDID_MAIN_CHAR;
 	m_byCmdSub	= SBOCOMMANDID_SUB_CHAR_STATUS;
 
-	m_wAtackGauge			= 0;	/* ƒAƒ^ƒbƒNƒQ[ƒW */
-	m_wDefenseGauge			= 0;	/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	m_wLevel				= 0;	/* ƒŒƒxƒ‹ */
-	m_wStamina				= 0;	/* ƒXƒ^ƒ~ƒi */
-	m_wPower				= 0;	/* ˜r—Í */
-	m_wStrength				= 0;	/* ‘Ì—Í */
-	m_wMagic				= 0;	/* –‚—Í */
-	m_wSkillful				= 0;	/* Ší—p */
-	m_wAbillityAT			= 0;	/* UŒ‚‹Z”\ */
-	m_wAbillityDF			= 0;	/* –hŒä‹Z”\ */
-	m_wPAtack				= 0;	/* UŒ‚—Í */
-	m_wPDefense				= 0;	/* –hŒä—Í */
-	m_wPMagic				= 0;	/* –‚–@—Í */
-	m_wPMagicDefense		= 0;	/* –‚–@–hŒä—Í */
-	m_wPHitAverage			= 0;	/* –½’†—¦ */
-	m_wPAvoidAverage		= 0;	/* ‰ñ”ð—¦ */
-	m_wPCriticalAverage		= 0;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	m_wAttrFire				= 0;	/* ‘®«[‰Î] */
-	m_wAttrWind				= 0;	/* ‘®«[•—] */
-	m_wAttrWater			= 0;	/* ‘®«[…] */
-	m_wAttrEarth			= 0;	/* ‘®«[“y] */
-	m_wAttrLight			= 0;	/* ‘®«[Œõ] */
-	m_wAttrDark				= 0;	/* ‘®«[ˆÅ] */
-	m_dwCharID				= 0;	/* ƒLƒƒƒ‰ID */
-	m_dwMoveWait			= 0;	/* ˆÚ“®‘Ò‚¿ŽžŠÔ */
-	m_dwMoveWaitBattle		= 0;	/* í“¬ŽžˆÚ“®‘Ò‚¿ŽžŠÔ */
-	m_dwExp					= 0;	/* ŒoŒ±’l */
+	m_wAtackGauge			= 0;	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+	m_wDefenseGauge			= 0;	/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	m_wLevel				= 0;	/* ãƒ¬ãƒ™ãƒ« */
+	m_wStamina				= 0;	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	m_wPower				= 0;	/* è…•åŠ› */
+	m_wStrength				= 0;	/* ä½“åŠ› */
+	m_wMagic				= 0;	/* é­”åŠ› */
+	m_wSkillful				= 0;	/* å™¨ç”¨ */
+	m_wAbillityAT			= 0;	/* æ”»æ’ƒæŠ€èƒ½ */
+	m_wAbillityDF			= 0;	/* é˜²å¾¡æŠ€èƒ½ */
+	m_wPAtack				= 0;	/* æ”»æ’ƒåŠ› */
+	m_wPDefense				= 0;	/* é˜²å¾¡åŠ› */
+	m_wPMagic				= 0;	/* é­”æ³•åŠ› */
+	m_wPMagicDefense		= 0;	/* é­”æ³•é˜²å¾¡åŠ› */
+	m_wPHitAverage			= 0;	/* å‘½ä¸­çŽ‡ */
+	m_wPAvoidAverage		= 0;	/* å›žé¿çŽ‡ */
+	m_wPCriticalAverage		= 0;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	m_wAttrFire				= 0;	/* å±žæ€§[ç«] */
+	m_wAttrWind				= 0;	/* å±žæ€§[é¢¨] */
+	m_wAttrWater			= 0;	/* å±žæ€§[æ°´] */
+	m_wAttrEarth			= 0;	/* å±žæ€§[åœŸ] */
+	m_wAttrLight			= 0;	/* å±žæ€§[å…‰] */
+	m_wAttrDark				= 0;	/* å±žæ€§[é—‡] */
+	m_dwCharID				= 0;	/* ã‚­ãƒ£ãƒ©ID */
+	m_dwMoveWait			= 0;	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	m_dwMoveWaitBattle		= 0;	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	m_dwExp					= 0;	/* çµŒé¨“å€¤ */
 	m_dwHP					= 0;	/* HP */
-	m_dwMaxHP				= 0;	/* Å‘åHP */
+	m_dwMaxHP				= 0;	/* æœ€å¤§HP */
 	m_dwSP					= 0;	/* SP */
-	m_dwMaxSP				= 0;	/* Å‘åSP */
-	m_dwLightTime			= 0;	/* “”‚èŒp‘±ŽžŠÔ */
-	m_nDropItemAverage		= 0;	/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	m_nMoveAverage			= 0;	/* ˆÚ“®Šm—¦ */
-	m_nMoveAverageBattle	= 0;	/* í“¬ŽžˆÚ“®Šm—¦ */
-	m_nLightLevel			= 0;	/* “”‚èƒŒƒxƒ‹ */
-	ZeroMemory (&m_sizeSearchDistance, sizeof (m_sizeSearchDistance));	/* ô“G”ÍˆÍ */
+	m_dwMaxSP				= 0;	/* æœ€å¤§SP */
+	m_dwLightTime			= 0;	/* ç¯ã‚Šç¶™ç¶šæ™‚é–“ */
+	m_nDropItemAverage		= 0;	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—çŽ‡ */
+	m_nMoveAverage			= 0;	/* ç§»å‹•ç¢ºçŽ‡ */
+	m_nMoveAverageBattle	= 0;	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºçŽ‡ */
+	m_nLightLevel			= 0;	/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	ZeroMemory (&m_sizeSearchDistance, sizeof (m_sizeSearchDistance));	/* ç­–æ•µç¯„å›² */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_STATUS::~CPacketCHAR_STATUS						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CPacketCHAR_STATUS::~CPacketCHAR_STATUS						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 CPacketCHAR_STATUS::~CPacketCHAR_STATUS()
@@ -74,13 +74,13 @@ CPacketCHAR_STATUS::~CPacketCHAR_STATUS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_STATUS::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ðì¬													 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CPacketCHAR_STATUS::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 void CPacketCHAR_STATUS::Make(
-	CInfoCharBase *pInfo)		/* [in] ƒLƒƒƒ‰î•ñ */
+	CInfoCharBase *pInfo)		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -88,42 +88,42 @@ void CPacketCHAR_STATUS::Make(
 
 	dwSize = sizeof (PACKETBASE)				+
 			 sizeof (pInfo->m_dwCharID)			+
-			 sizeof (m_wAtackGauge)				+	/* ƒAƒ^ƒbƒNƒQ[ƒW */
-			 sizeof (m_wDefenseGauge)			+	/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-			 sizeof (m_wLevel)					+	/* ƒŒƒxƒ‹ */
-			 sizeof (m_wStamina)				+	/* ƒXƒ^ƒ~ƒi */
-			 sizeof (m_wPower)					+	/* ˜r—Í */
-			 sizeof (m_wStrength)				+	/* ‘Ì—Í */
-			 sizeof (m_wMagic)					+	/* –‚—Í */
-			 sizeof (m_wSkillful)				+	/* Ší—p */
-			 sizeof (m_wAbillityAT)				+	/* UŒ‚‹Z”\ */
-			 sizeof (m_wAbillityDF)				+	/* –hŒä‹Z”\ */
-			 sizeof (m_wPAtack)					+	/* UŒ‚—Í */
-			 sizeof (m_wPDefense)				+	/* –hŒä—Í */
-			 sizeof (m_wPMagic)					+	/* –‚–@—Í */
-			 sizeof (m_wPMagicDefense)			+	/* –‚–@–hŒä—Í */
-			 sizeof (m_wPHitAverage)			+	/* –½’†—¦ */
-			 sizeof (m_wPAvoidAverage)			+	/* ‰ñ”ð—¦ */
-			 sizeof (m_wPCriticalAverage)		+	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-			 sizeof (m_wAttrFire)				+	/* ‘®«[‰Î] */
-			 sizeof (m_wAttrWind)				+	/* ‘®«[•—] */
-			 sizeof (m_wAttrWater)				+	/* ‘®«[…] */
-			 sizeof (m_wAttrEarth)				+	/* ‘®«[“y] */
-			 sizeof (m_wAttrLight)				+	/* ‘®«[Œõ] */
-			 sizeof (m_wAttrDark)				+	/* ‘®«[ˆÅ] */
+			 sizeof (m_wAtackGauge)				+	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+			 sizeof (m_wDefenseGauge)			+	/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+			 sizeof (m_wLevel)					+	/* ãƒ¬ãƒ™ãƒ« */
+			 sizeof (m_wStamina)				+	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+			 sizeof (m_wPower)					+	/* è…•åŠ› */
+			 sizeof (m_wStrength)				+	/* ä½“åŠ› */
+			 sizeof (m_wMagic)					+	/* é­”åŠ› */
+			 sizeof (m_wSkillful)				+	/* å™¨ç”¨ */
+			 sizeof (m_wAbillityAT)				+	/* æ”»æ’ƒæŠ€èƒ½ */
+			 sizeof (m_wAbillityDF)				+	/* é˜²å¾¡æŠ€èƒ½ */
+			 sizeof (m_wPAtack)					+	/* æ”»æ’ƒåŠ› */
+			 sizeof (m_wPDefense)				+	/* é˜²å¾¡åŠ› */
+			 sizeof (m_wPMagic)					+	/* é­”æ³•åŠ› */
+			 sizeof (m_wPMagicDefense)			+	/* é­”æ³•é˜²å¾¡åŠ› */
+			 sizeof (m_wPHitAverage)			+	/* å‘½ä¸­çŽ‡ */
+			 sizeof (m_wPAvoidAverage)			+	/* å›žé¿çŽ‡ */
+			 sizeof (m_wPCriticalAverage)		+	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+			 sizeof (m_wAttrFire)				+	/* å±žæ€§[ç«] */
+			 sizeof (m_wAttrWind)				+	/* å±žæ€§[é¢¨] */
+			 sizeof (m_wAttrWater)				+	/* å±žæ€§[æ°´] */
+			 sizeof (m_wAttrEarth)				+	/* å±žæ€§[åœŸ] */
+			 sizeof (m_wAttrLight)				+	/* å±žæ€§[å…‰] */
+			 sizeof (m_wAttrDark)				+	/* å±žæ€§[é—‡] */
 			 sizeof (pInfo->m_dwMoveWait)		+
 			 sizeof (pInfo->m_dwMoveWaitBattle)	+
-			 sizeof (pInfo->m_dwExp)			+	/* ŒoŒ±’l */
+			 sizeof (pInfo->m_dwExp)			+	/* çµŒé¨“å€¤ */
 			 sizeof (pInfo->m_dwHP)				+
 			 sizeof (pInfo->m_dwMaxHP)			+
 			 sizeof (pInfo->m_dwSP)				+
 			 sizeof (pInfo->m_dwMaxSP)			+
-			 sizeof (pInfo->m_dwLightTime)		+	/* “”‚èŒp‘±ŽžŠÔ */
+			 sizeof (pInfo->m_dwLightTime)		+	/* ç¯ã‚Šç¶™ç¶šæ™‚é–“ */
 			 sizeof (pInfo->m_nDropItemAverage)	+
 			 sizeof (pInfo->m_nMoveAverage)		+
 			 sizeof (pInfo->m_nMoveAverageBattle) +
-			 sizeof (pInfo->m_nLightLevel)		+	/* “”‚èƒŒƒxƒ‹ */
-			 sizeof (m_sizeSearchDistance);			/* ô“G”ÍˆÍ */
+			 sizeof (pInfo->m_nLightLevel)		+	/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+			 sizeof (m_sizeSearchDistance);			/* ç­–æ•µç¯„å›² */
 
 	pData = new BYTE[dwSize];
 	ZeroMemory (pData, dwSize);
@@ -133,52 +133,52 @@ void CPacketCHAR_STATUS::Make(
 	pPacketBase->byCmdSub	= m_byCmdSub;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwCharID,				sizeof (m_dwCharID),			pDataTmp);	/* ƒLƒƒƒ‰ID */
-//	CopyMemoryRenew (pDataTmp, &pInfo->m_wAtackGauge,			sizeof (m_wAtackGauge),			pDataTmp);	/* ƒAƒ^ƒbƒNƒQ[ƒW */
-//	CopyMemoryRenew (pDataTmp, &pInfo->m_wDefenseGauge,			sizeof (m_wDefenseGauge),		pDataTmp);	/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wLevel,				sizeof (m_wLevel),				pDataTmp);	/* ƒŒƒxƒ‹ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wStamina,				sizeof (m_wStamina),			pDataTmp);	/* ƒXƒ^ƒ~ƒi */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPower,				sizeof (m_wPower),				pDataTmp);	/* ˜r—Í */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wStrength,				sizeof (m_wStrength),			pDataTmp);	/* ‘Ì—Í */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wMagic,				sizeof (m_wMagic),				pDataTmp);	/* –‚—Í */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wSkillful,				sizeof (m_wSkillful),			pDataTmp);	/* Ší—p */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAbillityAT,			sizeof (m_wAbillityAT),			pDataTmp);	/* UŒ‚‹Z”\ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAbillityDF,			sizeof (m_wAbillityDF),			pDataTmp);	/* –hŒä‹Z”\ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPAtack,				sizeof (m_wPAtack),				pDataTmp);	/* UŒ‚—Í */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPDefense,				sizeof (m_wPDefense),			pDataTmp);	/* –hŒä—Í */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPMagic,				sizeof (m_wPMagic),				pDataTmp);	/* –‚–@—Í */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPMagicDefense,		sizeof (m_wPMagicDefense),		pDataTmp);	/* –‚–@–hŒä—Í */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPHitAverage,			sizeof (m_wPHitAverage),		pDataTmp);	/* –½’†—¦ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPAvoidAverage,		sizeof (m_wPAvoidAverage),		pDataTmp);	/* ‰ñ”ð—¦ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wPCriticalAverage,		sizeof (m_wPCriticalAverage),	pDataTmp);	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrFire,				sizeof (m_wAttrFire),			pDataTmp);	/* ‘®«[‰Î] */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrWind,				sizeof (m_wAttrWind),			pDataTmp);	/* ‘®«[•—] */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrWater,			sizeof (m_wAttrWater),			pDataTmp);	/* ‘®«[…] */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrEarth,			sizeof (m_wAttrEarth),			pDataTmp);	/* ‘®«[“y] */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrLight,			sizeof (m_wAttrLight),			pDataTmp);	/* ‘®«[Œõ] */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrDark,				sizeof (m_wAttrDark),			pDataTmp);	/* ‘®«[ˆÅ] */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMoveWait,			sizeof (m_dwMoveWait),			pDataTmp);	/* ˆÚ“®‘Ò‚¿ŽžŠÔ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMoveWaitBattle,		sizeof (m_dwMoveWaitBattle),	pDataTmp);	/* í“¬ŽžˆÚ“®‘Ò‚¿ŽžŠÔ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwExp,					sizeof (m_dwExp),				pDataTmp);	/* ŒoŒ±’l */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwCharID,				sizeof (m_dwCharID),			pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+//	CopyMemoryRenew (pDataTmp, &pInfo->m_wAtackGauge,			sizeof (m_wAtackGauge),			pDataTmp);	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+//	CopyMemoryRenew (pDataTmp, &pInfo->m_wDefenseGauge,			sizeof (m_wDefenseGauge),		pDataTmp);	/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wLevel,				sizeof (m_wLevel),				pDataTmp);	/* ãƒ¬ãƒ™ãƒ« */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wStamina,				sizeof (m_wStamina),			pDataTmp);	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPower,				sizeof (m_wPower),				pDataTmp);	/* è…•åŠ› */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wStrength,				sizeof (m_wStrength),			pDataTmp);	/* ä½“åŠ› */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wMagic,				sizeof (m_wMagic),				pDataTmp);	/* é­”åŠ› */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wSkillful,				sizeof (m_wSkillful),			pDataTmp);	/* å™¨ç”¨ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAbillityAT,			sizeof (m_wAbillityAT),			pDataTmp);	/* æ”»æ’ƒæŠ€èƒ½ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAbillityDF,			sizeof (m_wAbillityDF),			pDataTmp);	/* é˜²å¾¡æŠ€èƒ½ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPAtack,				sizeof (m_wPAtack),				pDataTmp);	/* æ”»æ’ƒåŠ› */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPDefense,				sizeof (m_wPDefense),			pDataTmp);	/* é˜²å¾¡åŠ› */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPMagic,				sizeof (m_wPMagic),				pDataTmp);	/* é­”æ³•åŠ› */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPMagicDefense,		sizeof (m_wPMagicDefense),		pDataTmp);	/* é­”æ³•é˜²å¾¡åŠ› */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPHitAverage,			sizeof (m_wPHitAverage),		pDataTmp);	/* å‘½ä¸­çŽ‡ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPAvoidAverage,		sizeof (m_wPAvoidAverage),		pDataTmp);	/* å›žé¿çŽ‡ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wPCriticalAverage,		sizeof (m_wPCriticalAverage),	pDataTmp);	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrFire,				sizeof (m_wAttrFire),			pDataTmp);	/* å±žæ€§[ç«] */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrWind,				sizeof (m_wAttrWind),			pDataTmp);	/* å±žæ€§[é¢¨] */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrWater,			sizeof (m_wAttrWater),			pDataTmp);	/* å±žæ€§[æ°´] */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrEarth,			sizeof (m_wAttrEarth),			pDataTmp);	/* å±žæ€§[åœŸ] */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrLight,			sizeof (m_wAttrLight),			pDataTmp);	/* å±žæ€§[å…‰] */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_wAttrDark,				sizeof (m_wAttrDark),			pDataTmp);	/* å±žæ€§[é—‡] */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMoveWait,			sizeof (m_dwMoveWait),			pDataTmp);	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMoveWaitBattle,		sizeof (m_dwMoveWaitBattle),	pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwExp,					sizeof (m_dwExp),				pDataTmp);	/* çµŒé¨“å€¤ */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwHP,					sizeof (m_dwHP),				pDataTmp);	/* HP */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMaxHP,				sizeof (m_dwMaxHP),				pDataTmp);	/* Å‘åHP */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMaxHP,				sizeof (m_dwMaxHP),				pDataTmp);	/* æœ€å¤§HP */
 	CopyMemoryRenew (pDataTmp, &pInfo->m_dwSP,					sizeof (m_dwSP),				pDataTmp);	/* SP */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMaxSP,				sizeof (m_dwMaxSP),				pDataTmp);	/* Å‘åSP */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_dwLightTime,			sizeof (m_dwLightTime),			pDataTmp);	/* “”‚èŒp‘±ŽžŠÔ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_nDropItemAverage,		sizeof (m_nDropItemAverage),	pDataTmp);	/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverage,			sizeof (m_nMoveAverage),		pDataTmp);	/* ˆÚ“®Šm—¦ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverageBattle,	sizeof (m_nMoveAverageBattle),	pDataTmp);	/* í“¬ŽžˆÚ“®Šm—¦ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_nLightLevel,			sizeof (m_nLightLevel),			pDataTmp);	/* “”‚èƒŒƒxƒ‹ */
-	CopyMemoryRenew (pDataTmp, &pInfo->m_sizeSearchDistance,	sizeof (m_sizeSearchDistance),	pDataTmp);	/* ô“G”ÍˆÍ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwMaxSP,				sizeof (m_dwMaxSP),				pDataTmp);	/* æœ€å¤§SP */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_dwLightTime,			sizeof (m_dwLightTime),			pDataTmp);	/* ç¯ã‚Šç¶™ç¶šæ™‚é–“ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_nDropItemAverage,		sizeof (m_nDropItemAverage),	pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—çŽ‡ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverage,			sizeof (m_nMoveAverage),		pDataTmp);	/* ç§»å‹•ç¢ºçŽ‡ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_nMoveAverageBattle,	sizeof (m_nMoveAverageBattle),	pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºçŽ‡ */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_nLightLevel,			sizeof (m_nLightLevel),			pDataTmp);	/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	CopyMemoryRenew (pDataTmp, &pInfo->m_sizeSearchDistance,	sizeof (m_sizeSearchDistance),	pDataTmp);	/* ç­–æ•µç¯„å›² */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_STATUS::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ðÝ’è													 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CPacketCHAR_STATUS::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_STATUS::Set(PBYTE pPacket)
@@ -188,43 +188,43 @@ PBYTE CPacketCHAR_STATUS::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,				pDataTmp, sizeof (m_dwCharID),				pDataTmp);	/* ƒLƒƒƒ‰ID */
-//	CopyMemoryRenew (&m_wAtackGauge,			pDataTmp, sizeof (m_wAtackGauge),			pDataTmp);	/* ƒAƒ^ƒbƒNƒQ[ƒW */
-//	CopyMemoryRenew (&m_wDefenseGauge,			pDataTmp, sizeof (m_wDefenseGauge),			pDataTmp);	/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	CopyMemoryRenew (&m_wLevel,					pDataTmp, sizeof (m_wLevel),				pDataTmp);	/* ƒŒƒxƒ‹ */
-	CopyMemoryRenew (&m_wStamina,				pDataTmp, sizeof (m_wStamina),				pDataTmp);	/* ƒXƒ^ƒ~ƒi */
-	CopyMemoryRenew (&m_wPower,					pDataTmp, sizeof (m_wPower),				pDataTmp);	/* ˜r—Í */
-	CopyMemoryRenew (&m_wStrength,				pDataTmp, sizeof (m_wStrength),				pDataTmp);	/* ‘Ì—Í */
-	CopyMemoryRenew (&m_wMagic,					pDataTmp, sizeof (m_wMagic),				pDataTmp);	/* –‚—Í */
-	CopyMemoryRenew (&m_wSkillful,				pDataTmp, sizeof (m_wSkillful),				pDataTmp);	/* Ší—p */
-	CopyMemoryRenew (&m_wAbillityAT,			pDataTmp, sizeof (m_wAbillityAT),			pDataTmp);	/* UŒ‚‹Z”\ */
-	CopyMemoryRenew (&m_wAbillityDF,			pDataTmp, sizeof (m_wAbillityDF),			pDataTmp);	/* –hŒä‹Z”\ */
-	CopyMemoryRenew (&m_wPAtack,				pDataTmp, sizeof (m_wPAtack),				pDataTmp);	/* UŒ‚—Í */
-	CopyMemoryRenew (&m_wPDefense,				pDataTmp, sizeof (m_wPDefense),				pDataTmp);	/* –hŒä—Í */
-	CopyMemoryRenew (&m_wPMagic,				pDataTmp, sizeof (m_wPMagic),				pDataTmp);	/* –‚–@—Í */
-	CopyMemoryRenew (&m_wPMagicDefense,			pDataTmp, sizeof (m_wPMagicDefense),		pDataTmp);	/* –‚–@–hŒä—Í */
-	CopyMemoryRenew (&m_wPHitAverage,			pDataTmp, sizeof (m_wPHitAverage),			pDataTmp);	/* –½’†—¦ */
-	CopyMemoryRenew (&m_wPAvoidAverage,			pDataTmp, sizeof (m_wPAvoidAverage),		pDataTmp);	/* ‰ñ”ð—¦ */
-	CopyMemoryRenew (&m_wPCriticalAverage,		pDataTmp, sizeof (m_wPCriticalAverage),		pDataTmp);	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	CopyMemoryRenew (&m_wAttrFire,				pDataTmp, sizeof (m_wAttrFire),				pDataTmp);	/* ‘®«[‰Î] */
-	CopyMemoryRenew (&m_wAttrWind,				pDataTmp, sizeof (m_wAttrWind),				pDataTmp);	/* ‘®«[•—] */
-	CopyMemoryRenew (&m_wAttrWater,				pDataTmp, sizeof (m_wAttrWater),			pDataTmp);	/* ‘®«[…] */
-	CopyMemoryRenew (&m_wAttrEarth,				pDataTmp, sizeof (m_wAttrEarth),			pDataTmp);	/* ‘®«[“y] */
-	CopyMemoryRenew (&m_wAttrLight,				pDataTmp, sizeof (m_wAttrLight),			pDataTmp);	/* ‘®«[Œõ] */
-	CopyMemoryRenew (&m_wAttrDark,				pDataTmp, sizeof (m_wAttrDark),				pDataTmp);	/* ‘®«[ˆÅ] */
-	CopyMemoryRenew (&m_dwMoveWait,				pDataTmp, sizeof (m_dwMoveWait),			pDataTmp);	/* ˆÚ“®‘Ò‚¿ŽžŠÔ */
-	CopyMemoryRenew (&m_dwMoveWaitBattle,		pDataTmp, sizeof (m_dwMoveWaitBattle),		pDataTmp);	/* í“¬ŽžˆÚ“®‘Ò‚¿ŽžŠÔ */
-	CopyMemoryRenew (&m_dwExp,					pDataTmp, sizeof (m_dwExp),					pDataTmp);	/* ŒoŒ±’l */
+	CopyMemoryRenew (&m_dwCharID,				pDataTmp, sizeof (m_dwCharID),				pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+//	CopyMemoryRenew (&m_wAtackGauge,			pDataTmp, sizeof (m_wAtackGauge),			pDataTmp);	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+//	CopyMemoryRenew (&m_wDefenseGauge,			pDataTmp, sizeof (m_wDefenseGauge),			pDataTmp);	/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	CopyMemoryRenew (&m_wLevel,					pDataTmp, sizeof (m_wLevel),				pDataTmp);	/* ãƒ¬ãƒ™ãƒ« */
+	CopyMemoryRenew (&m_wStamina,				pDataTmp, sizeof (m_wStamina),				pDataTmp);	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	CopyMemoryRenew (&m_wPower,					pDataTmp, sizeof (m_wPower),				pDataTmp);	/* è…•åŠ› */
+	CopyMemoryRenew (&m_wStrength,				pDataTmp, sizeof (m_wStrength),				pDataTmp);	/* ä½“åŠ› */
+	CopyMemoryRenew (&m_wMagic,					pDataTmp, sizeof (m_wMagic),				pDataTmp);	/* é­”åŠ› */
+	CopyMemoryRenew (&m_wSkillful,				pDataTmp, sizeof (m_wSkillful),				pDataTmp);	/* å™¨ç”¨ */
+	CopyMemoryRenew (&m_wAbillityAT,			pDataTmp, sizeof (m_wAbillityAT),			pDataTmp);	/* æ”»æ’ƒæŠ€èƒ½ */
+	CopyMemoryRenew (&m_wAbillityDF,			pDataTmp, sizeof (m_wAbillityDF),			pDataTmp);	/* é˜²å¾¡æŠ€èƒ½ */
+	CopyMemoryRenew (&m_wPAtack,				pDataTmp, sizeof (m_wPAtack),				pDataTmp);	/* æ”»æ’ƒåŠ› */
+	CopyMemoryRenew (&m_wPDefense,				pDataTmp, sizeof (m_wPDefense),				pDataTmp);	/* é˜²å¾¡åŠ› */
+	CopyMemoryRenew (&m_wPMagic,				pDataTmp, sizeof (m_wPMagic),				pDataTmp);	/* é­”æ³•åŠ› */
+	CopyMemoryRenew (&m_wPMagicDefense,			pDataTmp, sizeof (m_wPMagicDefense),		pDataTmp);	/* é­”æ³•é˜²å¾¡åŠ› */
+	CopyMemoryRenew (&m_wPHitAverage,			pDataTmp, sizeof (m_wPHitAverage),			pDataTmp);	/* å‘½ä¸­çŽ‡ */
+	CopyMemoryRenew (&m_wPAvoidAverage,			pDataTmp, sizeof (m_wPAvoidAverage),		pDataTmp);	/* å›žé¿çŽ‡ */
+	CopyMemoryRenew (&m_wPCriticalAverage,		pDataTmp, sizeof (m_wPCriticalAverage),		pDataTmp);	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	CopyMemoryRenew (&m_wAttrFire,				pDataTmp, sizeof (m_wAttrFire),				pDataTmp);	/* å±žæ€§[ç«] */
+	CopyMemoryRenew (&m_wAttrWind,				pDataTmp, sizeof (m_wAttrWind),				pDataTmp);	/* å±žæ€§[é¢¨] */
+	CopyMemoryRenew (&m_wAttrWater,				pDataTmp, sizeof (m_wAttrWater),			pDataTmp);	/* å±žæ€§[æ°´] */
+	CopyMemoryRenew (&m_wAttrEarth,				pDataTmp, sizeof (m_wAttrEarth),			pDataTmp);	/* å±žæ€§[åœŸ] */
+	CopyMemoryRenew (&m_wAttrLight,				pDataTmp, sizeof (m_wAttrLight),			pDataTmp);	/* å±žæ€§[å…‰] */
+	CopyMemoryRenew (&m_wAttrDark,				pDataTmp, sizeof (m_wAttrDark),				pDataTmp);	/* å±žæ€§[é—‡] */
+	CopyMemoryRenew (&m_dwMoveWait,				pDataTmp, sizeof (m_dwMoveWait),			pDataTmp);	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (&m_dwMoveWaitBattle,		pDataTmp, sizeof (m_dwMoveWaitBattle),		pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (&m_dwExp,					pDataTmp, sizeof (m_dwExp),					pDataTmp);	/* çµŒé¨“å€¤ */
 	CopyMemoryRenew (&m_dwHP,					pDataTmp, sizeof (m_dwHP),					pDataTmp);	/* HP */
-	CopyMemoryRenew (&m_dwMaxHP,				pDataTmp, sizeof (m_dwMaxHP),				pDataTmp);	/* Å‘åHP */
+	CopyMemoryRenew (&m_dwMaxHP,				pDataTmp, sizeof (m_dwMaxHP),				pDataTmp);	/* æœ€å¤§HP */
 	CopyMemoryRenew (&m_dwSP,					pDataTmp, sizeof (m_dwSP),					pDataTmp);	/* SP */
-	CopyMemoryRenew (&m_dwMaxSP,				pDataTmp, sizeof (m_dwMaxSP),				pDataTmp);	/* Å‘åSP */
-	CopyMemoryRenew (&m_dwLightTime,			pDataTmp, sizeof (m_dwLightTime),			pDataTmp);	/* “”‚èŒp‘±ŽžŠÔ */
-	CopyMemoryRenew (&m_nDropItemAverage,		pDataTmp, sizeof (m_nDropItemAverage),		pDataTmp);	/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	CopyMemoryRenew (&m_nMoveAverage,			pDataTmp, sizeof (m_nMoveAverage),			pDataTmp);	/* ˆÚ“®Šm—¦ */
-	CopyMemoryRenew (&m_nMoveAverageBattle,		pDataTmp, sizeof (m_nMoveAverageBattle),	pDataTmp);	/* í“¬ŽžˆÚ“®Šm—¦ */
-	CopyMemoryRenew (&m_nLightLevel,			pDataTmp, sizeof (m_nLightLevel),			pDataTmp);	/* “”‚èƒŒƒxƒ‹ */
-	CopyMemoryRenew (&m_sizeSearchDistance,		pDataTmp, sizeof (m_sizeSearchDistance),	pDataTmp);	/* ô“G”ÍˆÍ */
+	CopyMemoryRenew (&m_dwMaxSP,				pDataTmp, sizeof (m_dwMaxSP),				pDataTmp);	/* æœ€å¤§SP */
+	CopyMemoryRenew (&m_dwLightTime,			pDataTmp, sizeof (m_dwLightTime),			pDataTmp);	/* ç¯ã‚Šç¶™ç¶šæ™‚é–“ */
+	CopyMemoryRenew (&m_nDropItemAverage,		pDataTmp, sizeof (m_nDropItemAverage),		pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—çŽ‡ */
+	CopyMemoryRenew (&m_nMoveAverage,			pDataTmp, sizeof (m_nMoveAverage),			pDataTmp);	/* ç§»å‹•ç¢ºçŽ‡ */
+	CopyMemoryRenew (&m_nMoveAverageBattle,		pDataTmp, sizeof (m_nMoveAverageBattle),	pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºçŽ‡ */
+	CopyMemoryRenew (&m_nLightLevel,			pDataTmp, sizeof (m_nLightLevel),			pDataTmp);	/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	CopyMemoryRenew (&m_sizeSearchDistance,		pDataTmp, sizeof (m_sizeSearchDistance),	pDataTmp);	/* ç­–æ•µç¯„å›² */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -232,9 +232,9 @@ PBYTE CPacketCHAR_STATUS::Set(PBYTE pPacket)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_STATUS::SetParam									 */
-/* “à—e		:Žw’èƒLƒƒƒ‰î•ñ‚Öƒpƒ‰ƒ[ƒ^‚ð”½‰f								 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CPacketCHAR_STATUS::SetParam									 */
+/* å†…å®¹		:æŒ‡å®šã‚­ãƒ£ãƒ©æƒ…å ±ã¸ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’åæ˜ 								 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 void CPacketCHAR_STATUS::SetParam(CInfoCharBase *pInfo)
@@ -243,41 +243,41 @@ void CPacketCHAR_STATUS::SetParam(CInfoCharBase *pInfo)
 		return;
 	}
 
-//	pInfo->m_wAtackGauge		= m_wAtackGauge;		/* ƒAƒ^ƒbƒNƒQ[ƒW */
-//	pInfo->m_wDefenseGauge		= m_wDefenseGauge;		/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	pInfo->m_wLevel				= m_wLevel;				/* ƒŒƒxƒ‹ */
-	pInfo->m_wStamina			= m_wStamina;			/* ƒXƒ^ƒ~ƒi */
-	pInfo->m_wPower				= m_wPower;				/* ˜r—Í */
-	pInfo->m_wStrength			= m_wStrength;			/* ‘Ì—Í */
-	pInfo->m_wMagic				= m_wMagic;				/* –‚—Í */
-	pInfo->m_wSkillful			= m_wSkillful;			/* Ší—p */
-	pInfo->m_wAbillityAT		= m_wAbillityAT;		/* UŒ‚‹Z”\ */
-	pInfo->m_wAbillityDF		= m_wAbillityDF;		/* –hŒä‹Z”\ */
-	pInfo->m_wPAtack			= m_wPAtack;			/* UŒ‚—Í */
-	pInfo->m_wPDefense			= m_wPDefense;			/* –hŒä—Í */
-	pInfo->m_wPMagic			= m_wPMagic;			/* –‚–@—Í */
-	pInfo->m_wPMagicDefense		= m_wPMagicDefense;		/* –‚–@–hŒä—Í */
-	pInfo->m_wPHitAverage		= m_wPHitAverage;		/* –½’†—¦ */
-	pInfo->m_wPAvoidAverage		= m_wPAvoidAverage;		/* ‰ñ”ð—¦ */
-	pInfo->m_wPCriticalAverage	= m_wPCriticalAverage;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	pInfo->m_wAttrFire			= m_wAttrFire;			/* ‘®«[‰Î] */
-	pInfo->m_wAttrWind			= m_wAttrWind;			/* ‘®«[•—] */
-	pInfo->m_wAttrWater			= m_wAttrWater;			/* ‘®«[…] */
-	pInfo->m_wAttrEarth			= m_wAttrEarth;			/* ‘®«[“y] */
-	pInfo->m_wAttrLight			= m_wAttrLight;			/* ‘®«[Œõ] */
-	pInfo->m_wAttrDark			= m_wAttrDark;			/* ‘®«[ˆÅ] */
-	pInfo->m_dwMoveWait			= m_dwMoveWait;			/* ˆÚ“®‘Ò‚¿ŽžŠÔ */
-	pInfo->m_dwMoveWaitBattle	= m_dwMoveWaitBattle;	/* í“¬ŽžˆÚ“®‘Ò‚¿ŽžŠÔ */
-	pInfo->m_dwExp				= m_dwExp;				/* ŒoŒ±’l */
+//	pInfo->m_wAtackGauge		= m_wAtackGauge;		/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+//	pInfo->m_wDefenseGauge		= m_wDefenseGauge;		/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	pInfo->m_wLevel				= m_wLevel;				/* ãƒ¬ãƒ™ãƒ« */
+	pInfo->m_wStamina			= m_wStamina;			/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	pInfo->m_wPower				= m_wPower;				/* è…•åŠ› */
+	pInfo->m_wStrength			= m_wStrength;			/* ä½“åŠ› */
+	pInfo->m_wMagic				= m_wMagic;				/* é­”åŠ› */
+	pInfo->m_wSkillful			= m_wSkillful;			/* å™¨ç”¨ */
+	pInfo->m_wAbillityAT		= m_wAbillityAT;		/* æ”»æ’ƒæŠ€èƒ½ */
+	pInfo->m_wAbillityDF		= m_wAbillityDF;		/* é˜²å¾¡æŠ€èƒ½ */
+	pInfo->m_wPAtack			= m_wPAtack;			/* æ”»æ’ƒåŠ› */
+	pInfo->m_wPDefense			= m_wPDefense;			/* é˜²å¾¡åŠ› */
+	pInfo->m_wPMagic			= m_wPMagic;			/* é­”æ³•åŠ› */
+	pInfo->m_wPMagicDefense		= m_wPMagicDefense;		/* é­”æ³•é˜²å¾¡åŠ› */
+	pInfo->m_wPHitAverage		= m_wPHitAverage;		/* å‘½ä¸­çŽ‡ */
+	pInfo->m_wPAvoidAverage		= m_wPAvoidAverage;		/* å›žé¿çŽ‡ */
+	pInfo->m_wPCriticalAverage	= m_wPCriticalAverage;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	pInfo->m_wAttrFire			= m_wAttrFire;			/* å±žæ€§[ç«] */
+	pInfo->m_wAttrWind			= m_wAttrWind;			/* å±žæ€§[é¢¨] */
+	pInfo->m_wAttrWater			= m_wAttrWater;			/* å±žæ€§[æ°´] */
+	pInfo->m_wAttrEarth			= m_wAttrEarth;			/* å±žæ€§[åœŸ] */
+	pInfo->m_wAttrLight			= m_wAttrLight;			/* å±žæ€§[å…‰] */
+	pInfo->m_wAttrDark			= m_wAttrDark;			/* å±žæ€§[é—‡] */
+	pInfo->m_dwMoveWait			= m_dwMoveWait;			/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	pInfo->m_dwMoveWaitBattle	= m_dwMoveWaitBattle;	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	pInfo->m_dwExp				= m_dwExp;				/* çµŒé¨“å€¤ */
 	pInfo->m_dwHP				= m_dwHP;				/* HP */
-	pInfo->m_dwMaxHP			= m_dwMaxHP;			/* Å‘åHP */
+	pInfo->m_dwMaxHP			= m_dwMaxHP;			/* æœ€å¤§HP */
 	pInfo->m_dwSP				= m_dwSP;				/* SP */
-	pInfo->m_dwMaxSP			= m_dwMaxSP;			/* Å‘åSP */
-	pInfo->m_nDropItemAverage	= m_nDropItemAverage;	/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	pInfo->m_nMoveAverage		= m_nMoveAverage;		/* ˆÚ“®Šm—¦ */
-	pInfo->m_nMoveAverageBattle	= m_nMoveAverageBattle;	/* í“¬ŽžˆÚ“®Šm—¦ */
-	pInfo->m_nLightLevel		= m_nLightLevel;		/* “”‚èƒŒƒxƒ‹ */
-	pInfo->m_sizeSearchDistance	= m_sizeSearchDistance;	/* ô“G”ÍˆÍ */
+	pInfo->m_dwMaxSP			= m_dwMaxSP;			/* æœ€å¤§SP */
+	pInfo->m_nDropItemAverage	= m_nDropItemAverage;	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—çŽ‡ */
+	pInfo->m_nMoveAverage		= m_nMoveAverage;		/* ç§»å‹•ç¢ºçŽ‡ */
+	pInfo->m_nMoveAverageBattle	= m_nMoveAverageBattle;	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºçŽ‡ */
+	pInfo->m_nLightLevel		= m_nLightLevel;		/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	pInfo->m_sizeSearchDistance	= m_sizeSearchDistance;	/* ç­–æ•µç¯„å›² */
 }
 
 /* Copyright(C)URARA-works 2008 */

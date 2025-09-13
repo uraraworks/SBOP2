@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapParts.cpp										 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/25													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:DlgAdminMapParts.cpp										 */
+/* â€œÃ â€”e			:Æ’}Æ’bÆ’vÆ’pÂ[Æ’câ€¢Ã’ÂWÆ’_Æ’CÆ’AÆ’ÂÆ’OÆ’NÆ’â€°Æ’X Å½Ã€â€˜â€¢Æ’tÆ’@Æ’CÆ’â€¹				 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2007/04/25													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* Æ’NÆ’â€°Æ’Xâ€šÃŒÂÃâ€™Ã¨																 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::DoDataExchange(CDataExchange* pDX)
@@ -62,9 +62,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::CDlgAdminMapParts							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/25														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::CDlgAdminMapParts							 */
+/* â€œÃ â€”e		:Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2007/04/25														 */
 /* ========================================================================= */
 
 CDlgAdminMapParts::CDlgAdminMapParts(CWnd* pParent /*=NULL*/)
@@ -94,9 +94,9 @@ CDlgAdminMapParts::CDlgAdminMapParts(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::~CDlgAdminMapParts							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/25														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::~CDlgAdminMapParts							 */
+/* â€œÃ â€”e		:Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2007/04/25														 */
 /* ========================================================================= */
 
 CDlgAdminMapParts::~CDlgAdminMapParts()
@@ -109,9 +109,9 @@ CDlgAdminMapParts::~CDlgAdminMapParts()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/04/25														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::Init										 */
+/* â€œÃ â€”e		:Ââ€°Å Ãºâ€°Â»															 */
+/* â€œÃºâ€¢t		:2007/04/25														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::Init(CMgrData *pMgrData)
@@ -124,22 +124,22 @@ void CDlgAdminMapParts::Init(CMgrData *pMgrData)
 
 	m_pMgrGrpData->ReadMapPartsTmp ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* Æ’EÆ’BÆ’â€œÆ’hÆ’EÂÃ¬ÂÂ¬ */
 	Create (CDlgAdminMapParts::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnAdminMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/05/04														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnAdminMsg									 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_ADMINMSG)								 */
+/* â€œÃºâ€¢t		:2007/05/04														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_RENEWMAPPARTS:	/* ƒ}ƒbƒvƒp[ƒcî•ñXV */
+	case ADMINMSG_RENEWMAPPARTS:	/* Æ’}Æ’bÆ’vÆ’pÂ[Æ’cÂÃ®â€¢Ã±ÂXÂV */
 		MakePartsImage ();
 		break;
 	}
@@ -147,9 +147,9 @@ void CDlgAdminMapParts::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/04/25														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnInitDialog								 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_INITDIALOG)								 */
+/* â€œÃºâ€¢t		:2007/04/25														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapParts::OnInitDialog()
@@ -162,12 +162,12 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 
 	m_ctlMapParts.Create (this, m_pMgrData);
 
-	m_cbType.AddString ("ƒ}ƒbƒv•ÒW—p‚É‘I‘ğ");
-	m_cbType.AddString ("ƒp[ƒc‚Ì’Ç‰Á");
-	m_cbType.AddString ("ƒp[ƒc‚Ì•ÒW");
-	m_cbType.AddString ("ƒp[ƒc‚ÌˆÚ“®");
-	m_cbType.AddString ("ƒp[ƒc‚Ìíœ");
-	m_cbType.AddString ("ƒp[ƒc‚ÌƒRƒs[");
+	m_cbType.AddString ("Æ’}Æ’bÆ’vâ€¢Ã’ÂWâ€”pâ€šÃ‰â€˜Iâ€˜Ã°");
+	m_cbType.AddString ("Æ’pÂ[Æ’câ€šÃŒâ€™Ã‡â€°Ã");
+	m_cbType.AddString ("Æ’pÂ[Æ’câ€šÃŒâ€¢Ã’ÂW");
+	m_cbType.AddString ("Æ’pÂ[Æ’câ€šÃŒË†Ãšâ€œÂ®");
+	m_cbType.AddString ("Æ’pÂ[Æ’câ€šÃŒÂÃ­ÂÅ“");
+	m_cbType.AddString ("Æ’pÂ[Æ’câ€šÃŒÆ’RÆ’sÂ[");
 	m_cbType.SetCurSel (0);
 
 	pWnd = GetDlgItem (IDC_MAPPARTS);
@@ -176,7 +176,7 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 	rc.bottom = rc.top + 32 * 7;
 	pWnd->SetWindowPos (NULL, 0, 0, rc.Width (), rc.Height (), SWP_NOZORDER | SWP_NOMOVE);
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚Ìİ’è */
+	/* Æ’XÆ’NÆ’ÂÂ[Æ’â€¹Æ’oÂ[â€šÃŒÂÃâ€™Ã¨ */
 	ScreenToClient (rc);
 	m_ctlScroll.GetWindowRect (rcTmp);
 	m_ctlScroll.SetWindowPos (NULL, rc.right, rc.top, rcTmp.Width (), rc.Height (), SWP_NOZORDER);
@@ -198,9 +198,9 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnSize										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/04/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnSize										 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_SIZE)									 */
+/* â€œÃºâ€¢t		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnSize(UINT nType, int cx, int cy)
@@ -219,9 +219,9 @@ void CDlgAdminMapParts::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnMouseMove									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/25														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnMouseMove									 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MOUSEMOVE)								 */
+/* â€œÃºâ€¢t		:2007/04/25														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnMouseMove(UINT nFlags, CPoint point)
@@ -252,9 +252,9 @@ void CDlgAdminMapParts::OnMouseMove(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/04/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnLButtonDown								 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_LBUTTONDOWN)								 */
+/* â€œÃºâ€¢t		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
@@ -275,20 +275,20 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 	GetDlgItem (IDC_MAPPARTS)->SetFocus ();
 
 	switch (m_nSelectType) {
-	case 0:		/* ƒ}ƒbƒv•ÒW—p‚É‘I‘ğ */
-	case 2:		/* •ÒW */
+	case 0:		/* Æ’}Æ’bÆ’vâ€¢Ã’ÂWâ€”pâ€šÃ‰â€˜Iâ€˜Ã° */
+	case 2:		/* â€¢Ã’ÂW */
 		m_dwSelectPartsID = GetSelectMapPartsID ();
 		m_pMgrData->SetSelectMapPartsID (m_dwSelectPartsID);
 		m_strID.Format ("ID:%u", m_dwSelectPartsID);
 		RenewPartsInfo ();
 		break;
-	case 1:		/* ’Ç‰Á */
+	case 1:		/* â€™Ã‡â€°Ã */
 		{
 			CPacketADMIN_RENEWMAPPARTS Packet;
 
 			m_dwSelectPartsID = GetSelectMapPartsID ();
 			if (m_dwSelectPartsID) {
-				RenewMessage ("‚»‚±‚É‚Í’Ç‰Á‚Å‚«‚Ü‚¹‚ñ");
+				RenewMessage ("â€šÂ»â€šÂ±â€šÃ‰â€šÃâ€™Ã‡â€°Ãâ€šÃ…â€šÂ«â€šÃœâ€šÂ¹â€šÃ±");
 				break;
 			}
 			pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetNew ();
@@ -300,27 +300,27 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case 3:		/* ˆÚ“® */
+	case 3:		/* Ë†Ãšâ€œÂ® */
 		{
 			CPacketADMIN_RENEWMAPPARTS Packet;
 
 			switch (m_nState) {
-			case 0:			/* ˆÚ“®Œ³‚Ì‘I‘ğ */
+			case 0:			/* Ë†Ãšâ€œÂ®Å’Â³â€šÃŒâ€˜Iâ€˜Ã° */
 				m_dwSelectPartsID = GetSelectMapPartsID ();
 				if (m_dwSelectPartsID == 0) {
 					break;
 				}
 				m_ptMoveSrc	= m_ptCursor;
 				m_nState	= 1;
-				RenewMessage ("ˆÚ“®æ‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+				RenewMessage ("Ë†Ãšâ€œÂ®ÂÃ¦â€šÃ°Æ’NÆ’Å Æ’bÆ’Nâ€šÂµâ€šÃ„â€šÂ­â€šÂ¾â€šÂ³â€šÂ¢");
 				break;
-			case 1:			/* ˆÚ“®æ‚Ì‘I‘ğ */
+			case 1:			/* Ë†Ãšâ€œÂ®ÂÃ¦â€šÃŒâ€˜Iâ€˜Ã° */
 				m_ptMoveDst = m_ptCursor;
 
 				dwTmp = GetSelectMapPartsID ();
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (&m_ptMoveDst);
 				if (pInfoMapParts) {
-					/* ˆÚ“®æ‚Éƒp[ƒc‚ª‚ ‚Á‚½ê‡‚Í“ü‚êŠ·‚¦‚é */
+					/* Ë†Ãšâ€œÂ®ÂÃ¦â€šÃ‰Æ’pÂ[Æ’câ€šÂªâ€šÂ â€šÃâ€šÂ½ÂÃªÂâ€¡â€šÃâ€œÃ¼â€šÃªÅ Â·â€šÂ¦â€šÃ© */
 					pInfoMapParts->m_ptViewPos = m_ptMoveSrc;
 					Packet.Make (pInfoMapParts);
 					m_pSock->Send (&Packet);
@@ -337,7 +337,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 		break;
-	case 4:		/* íœ */
+	case 4:		/* ÂÃ­ÂÅ“ */
 		{
 			int nResult;
 			CPacketADMIN_MAP_DELETEPARTS Packet;
@@ -347,7 +347,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 
-			nResult = MessageBox ("‘I‘ğ‚µ‚Ä‚¢‚éƒp[ƒc‚ğíœ‚µ‚Ü‚·‚©H", "Šm”F", MB_ICONQUESTION | MB_YESNO);
+			nResult = MessageBox ("â€˜Iâ€˜Ã°â€šÂµâ€šÃ„â€šÂ¢â€šÃ©Æ’pÂ[Æ’câ€šÃ°ÂÃ­ÂÅ“â€šÂµâ€šÃœâ€šÂ·â€šÂ©ÂH", "Å mâ€F", MB_ICONQUESTION | MB_YESNO);
 			if (nResult != IDYES) {
 				break;
 			}
@@ -355,25 +355,25 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case 5:		/* ƒRƒs[ */
+	case 5:		/* Æ’RÆ’sÂ[ */
 		{
 			CPacketADMIN_MAP_COPYPARTS Packet;
 
 			switch (m_nState) {
-			case 0:			/* ƒRƒs[Œ³‚Ì‘I‘ğ */
+			case 0:			/* Æ’RÆ’sÂ[Å’Â³â€šÃŒâ€˜Iâ€˜Ã° */
 				m_dwSelectPartsID = GetSelectMapPartsID ();
 				if (m_dwSelectPartsID == 0) {
 					break;
 				}
 				m_ptMoveSrc	= m_ptCursor;
 				m_nState	= 1;
-				RenewMessage ("ƒRƒs[æ‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+				RenewMessage ("Æ’RÆ’sÂ[ÂÃ¦â€šÃ°Æ’NÆ’Å Æ’bÆ’Nâ€šÂµâ€šÃ„â€šÂ­â€šÂ¾â€šÂ³â€šÂ¢");
 				break;
-			case 1:			/* ˆÚ“®æ‚Ì‘I‘ğ */
+			case 1:			/* Ë†Ãšâ€œÂ®ÂÃ¦â€šÃŒâ€˜Iâ€˜Ã° */
 				dwTmp = GetSelectMapPartsID ();
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (&m_ptMoveDst);
 				if (pInfoMapParts) {
-					/* ƒRƒs[æ‚Éƒp[ƒc‚ª‚ ‚Á‚½ê‡‚Íˆ—‚µ‚È‚¢ */
+					/* Æ’RÆ’sÂ[ÂÃ¦â€šÃ‰Æ’pÂ[Æ’câ€šÂªâ€šÂ â€šÃâ€šÂ½ÂÃªÂâ€¡â€šÃÂË†â€”Ââ€šÂµâ€šÃˆâ€šÂ¢ */
 					break;
 				}
 				Packet.Make (m_dwSelectPartsID, m_ptCursor);
@@ -390,9 +390,9 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnRButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/09/08														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnRButtonDown								 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_RBUTTONDOWN)								 */
+/* â€œÃºâ€¢t		:2007/09/08														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnRButtonDown(UINT nFlags, CPoint point)
@@ -400,7 +400,7 @@ void CDlgAdminMapParts::OnRButtonDown(UINT nFlags, CPoint point)
 	PCInfoMapParts pInfoMapParts;
 
 	switch (m_nSelectType) {
-	case 2:		/* •ÒW */
+	case 2:		/* â€¢Ã’ÂW */
 		{
 			int nResult;
 			CDlgAdminMapPartsEdit Dlg(this);
@@ -428,9 +428,9 @@ void CDlgAdminMapParts::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnWndClose									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WNDCLOSE)								 */
-/* “ú•t		:2007/04/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnWndClose									 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_WNDCLOSE)								 */
+/* â€œÃºâ€¢t		:2007/04/28														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapParts::OnWndClose(WPARAM wParam, LPARAM lParam)
@@ -438,7 +438,7 @@ LRESULT CDlgAdminMapParts::OnWndClose(WPARAM wParam, LPARAM lParam)
 	PCInfoMapParts pInfoMapParts;
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPPARTSGRP:	/* ƒ}ƒbƒvƒp[ƒc‰æ‘œ‘I‘ğ */
+	case WINDOWID_SELECTMAPPARTSGRP:	/* Æ’}Æ’bÆ’vÆ’pÂ[Æ’câ€°Ã¦â€˜Å“â€˜Iâ€˜Ã° */
 		if (lParam < 0) {
 			break;
 		}
@@ -456,9 +456,9 @@ LRESULT CDlgAdminMapParts::OnWndClose(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnVScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_VSCROLL)									 */
-/* “ú•t		:2007/05/04														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnVScroll									 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_VSCROLL)									 */
+/* â€œÃºâ€¢t		:2007/05/04														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -474,32 +474,32 @@ void CDlgAdminMapParts::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 	m_ctlScroll.GetScrollInfo (&stScrollInfo);
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1”Ôã‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_TOP:			/* 1â€Ã”ÂÃ£â€šÃœâ€šÃ…Æ’XÆ’NÆ’ÂÂ[Æ’â€¹ */
 		pScrollBar->GetScrollRange (&nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1”Ô‰º‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_BOTTOM:			/* 1â€Ã”â€°Âºâ€šÃœâ€šÃ…Æ’XÆ’NÆ’ÂÂ[Æ’â€¹ */
 		pScrollBar->GetScrollRange (&nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1sã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEUP:			/* 1ÂsÂÃ£â€šÃ–Æ’XÆ’NÆ’ÂÂ[Æ’â€¹ */
 		nPos = nPosNow;
 		if (nPosNow == 0) {
 			break;
 		}
 		nPos --;
 		break;
-	case SB_PAGEUP:			/* 1ƒy[ƒWã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGEUP:			/* 1Æ’yÂ[Æ’WÂÃ£â€šÃ–Æ’XÆ’NÆ’ÂÂ[Æ’â€¹ */
 		nPos = nPosNow - stScrollInfo.nPage;
 		break;
-	case SB_LINEDOWN:		/* 1s‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEDOWN:		/* 1Âsâ€°Âºâ€šÃ–Æ’XÆ’NÆ’ÂÂ[Æ’â€¹ */
 		nPos = nPosNow + 1;
 		break;
-	case SB_PAGEDOWN:		/* 1ƒy[ƒW‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGEDOWN:		/* 1Æ’yÂ[Æ’Wâ€°Âºâ€šÃ–Æ’XÆ’NÆ’ÂÂ[Æ’â€¹ */
 		nPos = nPosNow + stScrollInfo.nPage;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* ÂÃ¢â€˜ÃË†ÃŠâ€™uâ€šÃ–Æ’XÆ’NÆ’ÂÂ[Æ’â€¹ */
+	case SB_THUMBTRACK:		/* Æ’hÆ’â€°Æ’bÆ’Oâ€šÂ³â€šÃªâ€šÂ½ */
 		break;
 	default:
 		bChange = FALSE;
@@ -516,9 +516,9 @@ void CDlgAdminMapParts::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnMouseWheel								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/05/04														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnMouseWheel								 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MOUSEWHEEL)								 */
+/* â€œÃºâ€¢t		:2007/05/04														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapParts::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -539,9 +539,9 @@ BOOL CDlgAdminMapParts::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnSelchangeType								 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2007/04/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnSelchangeType								 */
+/* â€œÃ â€”e		:Æ’CÆ’xÆ’â€œÆ’gÆ’nÆ’â€œÆ’hÆ’â€°(CBN_SELCHANGE)								 */
+/* â€œÃºâ€¢t		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnSelchangeType()
@@ -552,20 +552,20 @@ void CDlgAdminMapParts::OnSelchangeType()
 	m_nSelectType	= m_cbType.GetCurSel ();
 
 	switch (m_nSelectType) {
-	case 1:		/* ’Ç‰Á */
-		RenewMessage ("’Ç‰Á‚·‚éêŠ‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 1:		/* â€™Ã‡â€°Ã */
+		RenewMessage ("â€™Ã‡â€°Ãâ€šÂ·â€šÃ©ÂÃªÂÅ â€šÃ°Æ’NÆ’Å Æ’bÆ’Nâ€šÂµâ€šÃ„â€šÂ­â€šÂ¾â€šÂ³â€šÂ¢");
 		break;
-	case 2:		/* •ÒW */
-		RenewMessage ("•ÒW‚·‚éƒp[ƒc‚ğ‰EƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 2:		/* â€¢Ã’ÂW */
+		RenewMessage ("â€¢Ã’ÂWâ€šÂ·â€šÃ©Æ’pÂ[Æ’câ€šÃ°â€°EÆ’NÆ’Å Æ’bÆ’Nâ€šÂµâ€šÃ„â€šÂ­â€šÂ¾â€šÂ³â€šÂ¢");
 		break;
-	case 3:		/* ˆÚ“® */
-		RenewMessage ("ˆÚ“®‚·‚éƒp[ƒc‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 3:		/* Ë†Ãšâ€œÂ® */
+		RenewMessage ("Ë†Ãšâ€œÂ®â€šÂ·â€šÃ©Æ’pÂ[Æ’câ€šÃ°Æ’NÆ’Å Æ’bÆ’Nâ€šÂµâ€šÃ„â€šÂ­â€šÂ¾â€šÂ³â€šÂ¢");
 		break;
-	case 4:		/* íœ */
-		RenewMessage ("íœ‚·‚éƒp[ƒc‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 4:		/* ÂÃ­ÂÅ“ */
+		RenewMessage ("ÂÃ­ÂÅ“â€šÂ·â€šÃ©Æ’pÂ[Æ’câ€šÃ°Æ’NÆ’Å Æ’bÆ’Nâ€šÂµâ€šÃ„â€šÂ­â€šÂ¾â€šÂ³â€šÂ¢");
 		break;
-	case 5:		/* ƒRƒs[ */
-		RenewMessage ("ƒRƒs[Œ³‚Ìƒp[ƒc‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 5:		/* Æ’RÆ’sÂ[ */
+		RenewMessage ("Æ’RÆ’sÂ[Å’Â³â€šÃŒÆ’pÂ[Æ’câ€šÃ°Æ’NÆ’Å Æ’bÆ’Nâ€šÂµâ€šÃ„â€šÂ­â€šÂ¾â€šÂ³â€šÂ¢");
 		break;
 	default:
 		RenewMessage ("");
@@ -575,9 +575,9 @@ void CDlgAdminMapParts::OnSelchangeType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnBnClickedPile								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(d‚Ë—pƒ}ƒbƒv)									 */
-/* “ú•t		:2008/12/06														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::OnBnClickedPile								 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(Âdâ€šÃ‹â€”pÆ’}Æ’bÆ’v)									 */
+/* â€œÃºâ€¢t		:2008/12/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnBnClickedPile()
@@ -588,9 +588,9 @@ void CDlgAdminMapParts::OnBnClickedPile()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::RenewMessage								 */
-/* “à—e		:ƒƒbƒZ[ƒW—“‚ğXV												 */
-/* “ú•t		:2007/04/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::RenewMessage								 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’Wâ€”â€œâ€šÃ°ÂXÂV												 */
+/* â€œÃºâ€¢t		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::RenewMessage(LPCSTR pszMsg)
@@ -601,17 +601,17 @@ void CDlgAdminMapParts::RenewMessage(LPCSTR pszMsg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::RenewPartsInfo								 */
-/* “à—e		:ƒp[ƒcî•ñ‚ğXV												 */
-/* “ú•t		:2007/06/11														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::RenewPartsInfo								 */
+/* â€œÃ â€”e		:Æ’pÂ[Æ’cÂÃ®â€¢Ã±â€šÃ°ÂXÂV												 */
+/* â€œÃºâ€¢t		:2007/06/11														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::RenewPartsInfo(void)
 {
 	PCInfoMapParts pInfoMapParts;
 
-	m_strAttr  = "‘®«:";
-	m_strAttr2 = "i‚ß‚È‚¢•ûŒü:";
+	m_strAttr  = "â€˜Â®ÂÂ«:";
+	m_strAttr2 = "Âiâ€šÃŸâ€šÃˆâ€šÂ¢â€¢Ã»Å’Ã¼:";
 
 	pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (m_dwSelectPartsID);
 	if (pInfoMapParts == NULL) {
@@ -619,26 +619,26 @@ void CDlgAdminMapParts::RenewPartsInfo(void)
 	}
 
 	if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_BLOCK) {
-		m_strAttr += "‚Ô‚Â‚©‚é ";
+		m_strAttr += "â€šÃ”â€šÃ‚â€šÂ©â€šÃ© ";
 	}
 	if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_PILE) {
-		m_strAttr += "d‚È‚é ";
+		m_strAttr += "Âdâ€šÃˆâ€šÃ© ";
 	}
 	if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_PILEBACK) {
-		m_strAttr += "‰º’n‚àd‚Ë‚é ";
+		m_strAttr += "â€°Âºâ€™nâ€šÃ Âdâ€šÃ‹â€šÃ© ";
 	}
 
 	if (pInfoMapParts->m_byBlockDirection & BIT_PARTSBLOCK_UP) {
-		m_strAttr2 += "ª ";
+		m_strAttr2 += "ÂÂª ";
 	}
 	if (pInfoMapParts->m_byBlockDirection & BIT_PARTSBLOCK_DOWN) {
-		m_strAttr2 += "« ";
+		m_strAttr2 += "ÂÂ« ";
 	}
 	if (pInfoMapParts->m_byBlockDirection & BIT_PARTSBLOCK_LEFT) {
-		m_strAttr2 += "© ";
+		m_strAttr2 += "ÂÂ© ";
 	}
 	if (pInfoMapParts->m_byBlockDirection & BIT_PARTSBLOCK_RIGHT) {
-		m_strAttr2 += "¨ ";
+		m_strAttr2 += "ÂÂ¨ ";
 	}
 
 	UpdateData (FALSE);
@@ -646,9 +646,9 @@ void CDlgAdminMapParts::RenewPartsInfo(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::MakePartsImage								 */
-/* “à—e		:ƒp[ƒcˆê——‰æ‘œ‚ğì¬											 */
-/* “ú•t		:2007/04/25														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::MakePartsImage								 */
+/* â€œÃ â€”e		:Æ’pÂ[Æ’cË†Ãªâ€”â€”â€°Ã¦â€˜Å“â€šÃ°ÂÃ¬ÂÂ¬											 */
+/* â€œÃºâ€¢t		:2007/04/25														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::MakePartsImage(void)
@@ -667,9 +667,9 @@ void CDlgAdminMapParts::MakePartsImage(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::GetSelectMapPartsID							 */
-/* “à—e		:‘I‘ğ’†‚Ìƒ}ƒbƒvƒp[ƒcID‚ğæ“¾									 */
-/* “ú•t		:2007/04/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminMapParts::GetSelectMapPartsID							 */
+/* â€œÃ â€”e		:â€˜Iâ€˜Ã°â€™â€ â€šÃŒÆ’}Æ’bÆ’vÆ’pÂ[Æ’cIDâ€šÃ°Å½Ã¦â€œÂ¾									 */
+/* â€œÃºâ€¢t		:2007/04/28														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminMapParts::GetSelectMapPartsID(void)

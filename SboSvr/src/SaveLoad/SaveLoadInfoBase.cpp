@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoBase.cpp										 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/04/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoBase.cpp										 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/04/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::CSaveLoadInfoBase							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/04/26														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::CSaveLoadInfoBase							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/04/26														 */
 /* ========================================================================= */
 
 CSaveLoadInfoBase::CSaveLoadInfoBase()
@@ -28,9 +28,9 @@ CSaveLoadInfoBase::CSaveLoadInfoBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::~CSaveLoadInfoBase							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/04/26														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::~CSaveLoadInfoBase							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/04/26														 */
 /* ========================================================================= */
 
 CSaveLoadInfoBase::~CSaveLoadInfoBase()
@@ -43,9 +43,9 @@ CSaveLoadInfoBase::~CSaveLoadInfoBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::WriteData									 */
-/* “à—e		:ƒf[ƒ^‚Ì‘‚«‚İ												 */
-/* “ú•t		:2005/04/26														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::WriteData									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãè¾¼ã¿												 */
+/* æ—¥ä»˜		:2005/04/26														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::WriteData(void)
@@ -65,9 +65,9 @@ void CSaveLoadInfoBase::WriteData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::ReadData									 */
-/* “à—e		:ƒf[ƒ^‚Ì“Ç‚İ‚İ												 */
-/* “ú•t		:2005/04/26														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::ReadData									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿												 */
+/* æ—¥ä»˜		:2005/04/26														 */
 /* ========================================================================= */
 
 BOOL CSaveLoadInfoBase::ReadData(void)
@@ -82,14 +82,14 @@ BOOL CSaveLoadInfoBase::ReadData(void)
 		goto Exit;
 	}
 
-	/* ƒtƒ@ƒCƒ‹ƒTƒCƒYæ“¾ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºå–å¾— */
 	m_dwDataSize = GetFileSize (hFile, NULL);
 	if ((int)m_dwDataSize == -1) {
 		goto Exit;
 	}
 
 	m_pData = new BYTE[m_dwDataSize];
-	/* ƒtƒ@ƒCƒ‹“à—e‚ğ‘S•”“Ç‚İ‚Ş */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ã‚’å…¨éƒ¨èª­ã¿è¾¼ã‚€ */
 	ReadFile (hFile, m_pData, m_dwDataSize, &dwBytes, NULL);
 
 	bRet = TRUE;
@@ -103,9 +103,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::Save										 */
-/* “à—e		:ƒtƒ@ƒCƒ‹‚É‘‚«‚İ												 */
-/* “ú•t		:2005/04/26														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::Save										 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã¿												 */
+/* æ—¥ä»˜		:2005/04/26														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::Save(PCLibInfoBase pSrc)
@@ -130,9 +130,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::Load										 */
-/* “à—e		:ƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ											 */
-/* “ú•t		:2005/04/26														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::Load										 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2005/04/26														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::Load(PCLibInfoBase pDst)
@@ -161,9 +161,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::SetHeaderInfo								 */
-/* “à—e		:ƒwƒbƒ_î•ñ‚ğİ’è												 */
-/* “ú•t		:2005/05/01														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::SetHeaderInfo								 */
+/* å†…å®¹		:ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2005/05/01														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::SetHeaderInfo(PCInfoBase pInfo)
@@ -182,9 +182,9 @@ void CSaveLoadInfoBase::SetHeaderInfo(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::MakeWriteData								 */
-/* “à—e		:•Û‘¶ƒf[ƒ^‚Ìì¬												 */
-/* “ú•t		:2005/04/26														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::MakeWriteData								 */
+/* å†…å®¹		:ä¿å­˜ãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ												 */
+/* æ—¥ä»˜		:2005/04/26														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::MakeWriteData(void)
@@ -203,7 +203,7 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 	m_pLibInfoBase->GetSaveNo (anSaveNo);
 
 	/***************************
-		Še—v‘f‚ÌƒTƒCƒY‚ğİ’è
+		å„è¦ç´ ã®ã‚µã‚¤ã‚ºã‚’è¨­å®š
 	***************************/
 
 	m_dwDataSize	= 0;
@@ -229,7 +229,7 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 
 
 	/*************************
-		•Û‘¶—pƒf[ƒ^‚ğŠm•Û
+		ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºä¿
 	*************************/
 
 	m_pData = new BYTE[m_dwHeaderSize + m_dwDataSize + 8];
@@ -239,12 +239,12 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 	dwColumnCount	= m_pHeaderInfo->GetSize ();
 	dwDataCount		= anSaveNo.GetSize ();
 
-	/* ƒJƒ‰ƒ€”‚ğ‘‚«‚İ */
+	/* ã‚«ãƒ©ãƒ æ•°ã‚’æ›¸ãè¾¼ã¿ */
 	CopyMemoryDataDst (pData, (PBYTE)&dwColumnCount, sizeof (dwColumnCount));
-	/* ƒf[ƒ^”‚ğ‘‚«‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’æ›¸ãè¾¼ã¿ */
 	CopyMemoryDataDst (pData, (PBYTE)&dwDataCount, sizeof (dwDataCount));
 
-	/* ƒwƒbƒ_•”•ª‚ğ‘‚«‚İ */
+	/* ãƒ˜ãƒƒãƒ€éƒ¨åˆ†ã‚’æ›¸ãè¾¼ã¿ */
 	nCount = (int)dwColumnCount;
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_pHeaderInfo->GetAt (i);
@@ -255,7 +255,7 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 		CopyMemoryDataDst (pData, (PBYTE)&pInfo->dwOffset, sizeof (pInfo->dwOffset));
 	}
 
-	/* ƒf[ƒ^•”•ª‚ğì¬ */
+	/* ãƒ‡ãƒ¼ã‚¿éƒ¨åˆ†ã‚’ä½œæˆ */
 	for (i = 0; i < nCountElement; i ++) {
 		for (j = 0; j < (int)dwDataCount; j ++) {
 			dwSize		= 0;
@@ -269,9 +269,9 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::ReadHeader									 */
-/* “à—e		:ƒwƒbƒ_î•ñ‚Ì“Ç‚İ‚İ											 */
-/* “ú•t		:2005/04/27														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::ReadHeader									 */
+/* å†…å®¹		:ãƒ˜ãƒƒãƒ€æƒ…å ±ã®èª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2005/04/27														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::ReadHeader(void)
@@ -286,11 +286,11 @@ void CSaveLoadInfoBase::ReadHeader(void)
 	pInfoTmp		= new HEADERINFO;
 	pInfoElement	= NULL;
 
-	/* ƒJƒ‰ƒ€”‚ğ“Ç‚İ‚İ */
+	/* ã‚«ãƒ©ãƒ æ•°ã‚’èª­ã¿è¾¼ã¿ */
 	CopyMemoryDataSrc ((PBYTE)&dwCountElement, pData, sizeof (dwCountElement));
-	/* ƒf[ƒ^”‚ğ“Ç‚İ‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’èª­ã¿è¾¼ã¿ */
 	CopyMemoryDataSrc ((PBYTE)&dwDataCount, pData, sizeof (dwDataCount));
-	/* ƒwƒbƒ_î•ñ‚ğ“Ç‚İ‚İ */
+	/* ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’èª­ã¿è¾¼ã¿ */
 	for (i = 0; i < dwCountElement; i ++) {
 		ZeroMemory (pInfoTmp, sizeof (HEADERINFO));
 		strcpy (pInfoTmp->szName, (LPCSTR)pData);
@@ -304,18 +304,18 @@ void CSaveLoadInfoBase::ReadHeader(void)
 		pInfoElement->dwOffset = pInfoTmp->dwOffset;
 	}
 
-	/* ‹ó‚Ìƒf[ƒ^‚ğì¬ */
+	/* ç©ºã®ãƒ‡ãƒ¼ã‚¿ã‚’ä½œæˆ */
 	for (i = 0; i < dwDataCount; i ++) {
 		pInfo = m_pLibInfoBase->GetNew ();
 		m_pLibInfoBase->Add (pInfo);
 	}
 
-	/* ƒf[ƒ^æ“ª•”•ª‚ÌƒAƒhƒŒƒX‚ğ•Û‘¶ */
+	/* ãƒ‡ãƒ¼ã‚¿å…ˆé ­éƒ¨åˆ†ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ä¿å­˜ */
 	pDataBack = m_pData;
 
 
 	/***********************
-		ƒf[ƒ^‚ğ“Ç‚İ‚İ
+		ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿
 	***********************/
 
 	dwCountElement = m_pHeaderInfo->GetSize ();
@@ -346,9 +346,9 @@ void CSaveLoadInfoBase::ReadHeader(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::SetFileName									 */
-/* “à—e		:ƒtƒ@ƒCƒ‹–¼‚ğİ’è												 */
-/* “ú•t		:2005/04/27														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::SetFileName									 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2005/04/27														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::SetFileName(LPCSTR pszName)
@@ -356,7 +356,7 @@ void CSaveLoadInfoBase::SetFileName(LPCSTR pszName)
 	char szName[MAX_PATH];
 	LPSTR pszTmp;
 
-	/* ƒtƒ@ƒCƒ‹–¼‚Ìì¬ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®ä½œæˆ */
 	GetModuleFileName (NULL, szName, MAX_PATH);
 	pszTmp = strrchr (szName, '\\');
 	pszTmp[1] = 0;
@@ -367,9 +367,9 @@ void CSaveLoadInfoBase::SetFileName(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::AddHeaderInfo								 */
-/* “à—e		:ƒwƒbƒ_î•ñ‚ğ’Ç‰Á												 */
-/* “ú•t		:2005/04/29														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::AddHeaderInfo								 */
+/* å†…å®¹		:ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’è¿½åŠ 												 */
+/* æ—¥ä»˜		:2005/04/29														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::AddHeaderInfo(LPCSTR pszName)
@@ -388,9 +388,9 @@ void CSaveLoadInfoBase::AddHeaderInfo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::GetHeaderInfo								 */
-/* “à—e		:—v‘f–¼‚©‚çƒwƒbƒ_î•ñ‚ğæ“¾										 */
-/* “ú•t		:2005/04/30														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::GetHeaderInfo								 */
+/* å†…å®¹		:è¦ç´ åã‹ã‚‰ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2005/04/30														 */
 /* ========================================================================= */
 
 PHEADERINFO CSaveLoadInfoBase::GetHeaderInfo(LPCSTR pszName)
@@ -414,9 +414,9 @@ PHEADERINFO CSaveLoadInfoBase::GetHeaderInfo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::DelAllHeaderInfo							 */
-/* “à—e		:ƒwƒbƒ_î•ñ‚ğíœ												 */
-/* “ú•t		:2005/05/03														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::DelAllHeaderInfo							 */
+/* å†…å®¹		:ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2005/05/03														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::DelAllHeaderInfo(void)
@@ -438,9 +438,9 @@ void CSaveLoadInfoBase::DelAllHeaderInfo(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::CopyMemoryDataDst							 */
-/* “à—e		:ƒRƒs[‚µ‚ÄƒRƒs[æƒ|ƒCƒ“ƒ^‚ği‚ß‚é								 */
-/* “ú•t		:2005/04/30														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::CopyMemoryDataDst							 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼ã—ã¦ã‚³ãƒ”ãƒ¼å…ˆãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹								 */
+/* æ—¥ä»˜		:2005/04/30														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::CopyMemoryDataDst(PBYTE &pDst, PBYTE pSrc, DWORD dwSize)
@@ -451,9 +451,9 @@ void CSaveLoadInfoBase::CopyMemoryDataDst(PBYTE &pDst, PBYTE pSrc, DWORD dwSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoBase::CopyMemoryDataSrc							 */
-/* “à—e		:ƒRƒs[‚µ‚ÄƒRƒs[Œ³ƒ|ƒCƒ“ƒ^‚ği‚ß‚é								 */
-/* “ú•t		:2005/04/30														 */
+/* é–¢æ•°å	:CSaveLoadInfoBase::CopyMemoryDataSrc							 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼ã—ã¦ã‚³ãƒ”ãƒ¼å…ƒãƒã‚¤ãƒ³ã‚¿ã‚’é€²ã‚ã‚‹								 */
+/* æ—¥ä»˜		:2005/04/30														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoBase::CopyMemoryDataSrc(PBYTE pDst, PBYTE &pSrc, DWORD dwSize)

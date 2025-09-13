@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMSGCMD_CHGCOLOR.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒn:F•ÏX) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMSGCMD_CHGCOLOR.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒãƒ³ãƒ‰ç³»:è‰²å¤‰æ›´) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/09													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketMSGCMD_CHGCOLOR.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGCOLOR::CPacketMSGCMD_CHGCOLOR					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/09														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGCOLOR::CPacketMSGCMD_CHGCOLOR					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/09														 */
 /* ========================================================================= */
 
 CPacketMSGCMD_CHGCOLOR::CPacketMSGCMD_CHGCOLOR()
@@ -24,9 +24,9 @@ CPacketMSGCMD_CHGCOLOR::CPacketMSGCMD_CHGCOLOR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGCOLOR::~CPacketMSGCMD_CHGCOLOR				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/09														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGCOLOR::~CPacketMSGCMD_CHGCOLOR				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/09														 */
 /* ========================================================================= */
 
 CPacketMSGCMD_CHGCOLOR::~CPacketMSGCMD_CHGCOLOR()
@@ -35,14 +35,14 @@ CPacketMSGCMD_CHGCOLOR::~CPacketMSGCMD_CHGCOLOR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGCOLOR::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/05/09														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGCOLOR::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/05/09														 */
 /* ========================================================================= */
 
 void CPacketMSGCMD_CHGCOLOR::Make(
-	DWORD dwCharID,		/* [in] ƒLƒƒƒ‰ID */
-	int nType)			/* [in] í•Ê */
+	DWORD dwCharID,		/* [in] ã‚­ãƒ£ãƒ©ID */
+	int nType)			/* [in] ç¨®åˆ¥ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketMSGCMD_CHGCOLOR::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MSGCMD_CHGCOLOR;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* í•Ê */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* ç¨®åˆ¥ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGCOLOR::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/05/09														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGCOLOR::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/05/09														 */
 /* ========================================================================= */
 
 PBYTE CPacketMSGCMD_CHGCOLOR::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketMSGCMD_CHGCOLOR::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* í•Ê */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* ç¨®åˆ¥ */
 
 	pRet = pDataTmp;
 	return pRet;

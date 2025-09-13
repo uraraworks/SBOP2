@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapObjectData.h										 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapObjectData.h										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,34 +11,34 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoMapObjectData : public CInfoBase
 {
 public:
-			CInfoMapObjectData();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoMapObjectData();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoMapObjectData();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoMapObjectData();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	RenewSize			(int nDirection, int nSize, SIZE *pSize);	/* ƒTƒCƒYXV */
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual void	RenewSize			(int nDirection, int nSize, SIZE *pSize);	/* ã‚µã‚¤ã‚ºæ›´æ–° */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoMapObjectData *pSrc);			/* ƒRƒs[ */
+	virtual void	Copy				(CInfoMapObjectData *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	DWORD		m_dwDataID,						/* ”z’uƒf[ƒ^ID */
-				m_dwObjectID;					/* ƒIƒuƒWƒFƒNƒgID */
-	POINT		m_ptPos;						/* À•W */
+	DWORD		m_dwDataID,						/* é…ç½®ãƒ‡ãƒ¼ã‚¿ID */
+				m_dwObjectID;					/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆID */
+	POINT		m_ptPos;						/* åº§æ¨™ */
 } CInfoMapObjectData, *PCInfoMapObjectData;
 typedef CmyArray<PCInfoMapObjectData, PCInfoMapObjectData>	  ARRAYMAPOBJECTDATAINFO;
 typedef CmyArray<PCInfoMapObjectData, PCInfoMapObjectData>	*PARRAYMAPOBJECTDATAINFO;

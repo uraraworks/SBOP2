@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoMapParts.cpp										 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒcî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoMapParts.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/28													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::CLibInfoMapParts								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::CLibInfoMapParts								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 CLibInfoMapParts::CLibInfoMapParts()
@@ -24,9 +24,9 @@ CLibInfoMapParts::CLibInfoMapParts()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::~CLibInfoMapParts							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::~CLibInfoMapParts							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 CLibInfoMapParts::~CLibInfoMapParts()
@@ -36,9 +36,9 @@ CLibInfoMapParts::~CLibInfoMapParts()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::Create(void)
@@ -48,9 +48,9 @@ void CLibInfoMapParts::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::Destroy										 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::Destroy										 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::Destroy(void)
@@ -61,10 +61,10 @@ void CLibInfoMapParts::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::Proc											 */
-/* “à—e		:ˆ—															 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALS:ˆ—‚µ‚Ä‚¢‚È‚¢								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CLibInfoMapParts::Proc											 */
+/* å†…å®¹		:å‡¦ç†															 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALS:å‡¦ç†ã—ã¦ã„ãªã„								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 BOOL CLibInfoMapParts::Proc(void)
@@ -86,9 +86,9 @@ BOOL CLibInfoMapParts::Proc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapParts::GetNew(void)
@@ -98,9 +98,9 @@ PCInfoBase CLibInfoMapParts::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetCount										 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetCount										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 int CLibInfoMapParts::GetCount(void)
@@ -120,9 +120,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::Add											 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::Add											 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::Add(PCInfoBase pInfo)
@@ -140,13 +140,13 @@ void CLibInfoMapParts::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoMapParts pInfo;
 
@@ -157,13 +157,13 @@ void CLibInfoMapParts::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::Delete(
-	DWORD dwPartsID)		/* [in] ƒ}ƒbƒvƒp[ƒcID */
+	DWORD dwPartsID)		/* [in] ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ID */
 {
 	int i, nCount, nNo;
 	PCInfoMapParts pInfoTmp;
@@ -188,9 +188,9 @@ void CLibInfoMapParts::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::DeleteAll									 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::DeleteAll									 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::DeleteAll(void)
@@ -211,9 +211,9 @@ void CLibInfoMapParts::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::Merge										 */
-/* “à—e		:æ‚è‚İ														 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CLibInfoMapParts::Merge										 */
+/* å†…å®¹		:å–ã‚Šè¾¼ã¿														 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::Merge(CLibInfoMapParts *pSrc)
@@ -237,9 +237,9 @@ void CLibInfoMapParts::Merge(CLibInfoMapParts *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::ResetAnime									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ó‘Ô‚ğ‰Šú‰»										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CLibInfoMapParts::ResetAnime									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çŠ¶æ…‹ã‚’åˆæœŸåŒ–										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::ResetAnime(void)
@@ -257,9 +257,9 @@ void CLibInfoMapParts::ResetAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetPtr										 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapParts::GetPtr(int nNo)
@@ -269,13 +269,13 @@ PCInfoBase CLibInfoMapParts::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetPtr										 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapParts::GetPtr(
-	DWORD dwPartsID)		/* [in] ƒ}ƒbƒvƒp[ƒcID */
+	DWORD dwPartsID)		/* [in] ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ID */
 {
 	PCInfoBase pRet;
 
@@ -295,13 +295,13 @@ PCInfoBase CLibInfoMapParts::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetPtr										 */
-/* “à—e		:î•ñ‚ğæ“¾														 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapParts::GetPtr(
-	POINT *pPos)		/* [in] •\¦ˆÊ’u */
+	POINT *pPos)		/* [in] è¡¨ç¤ºä½ç½® */
 {
 	int i, nCount;
 	PCInfoMapParts pRet, pInfoTmp;
@@ -324,9 +324,9 @@ PCInfoBase CLibInfoMapParts::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapParts::GetSendDataSize(void)
@@ -342,7 +342,7 @@ DWORD CLibInfoMapParts::GetSendDataSize(void)
 		pInfoMapParts = (PCInfoMapParts)GetPtr (i);
 		dwSize += pInfoMapParts->GetSendDataSize ();
 	}
-	/* I’[—p */
+	/* çµ‚ç«¯ç”¨ */
 	dwSize += sizeof (DWORD);
 
 	return dwSize;
@@ -350,9 +350,9 @@ DWORD CLibInfoMapParts::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMapParts::GetSendData(void)
@@ -383,9 +383,9 @@ PBYTE CLibInfoMapParts::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CLibInfoMapParts::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMapParts::SetSendData(PBYTE pSrc)
@@ -420,9 +420,9 @@ PBYTE CLibInfoMapParts::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::GetNewID										 */
-/* “à—e		:V‚µ‚¢ID‚ğæ“¾													 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CLibInfoMapParts::GetNewID										 */
+/* å†…å®¹		:æ–°ã—ã„IDã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapParts::GetNewID(void)
@@ -452,9 +452,9 @@ DWORD CLibInfoMapParts::GetNewID(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapParts::RenewIDPtr									 */
-/* “à—e		:IDŒŸõ—pƒ}ƒbƒv‚ğXV											 */
-/* “ú•t		:2009/03/14														 */
+/* é–¢æ•°å	:CLibInfoMapParts::RenewIDPtr									 */
+/* å†…å®¹		:IDæ¤œç´¢ç”¨ãƒãƒƒãƒ—ã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2009/03/14														 */
 /* ========================================================================= */
 
 void CLibInfoMapParts::RenewIDPtr(void)

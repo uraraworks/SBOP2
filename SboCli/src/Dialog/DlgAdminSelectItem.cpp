@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminSelectItem.cpp										 */
-/* “à—e			:ƒAƒCƒeƒ€‘I‘ğƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminSelectItem.cpp										 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ é¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminSelectItem::DoDataExchange(CDataExchange* pDX)
@@ -38,9 +38,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectItem::CDlgAdminSelectItem						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminSelectItem::CDlgAdminSelectItem						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 CDlgAdminSelectItem::CDlgAdminSelectItem(CWnd* pParent /*=NULL*/)
@@ -54,9 +54,9 @@ CDlgAdminSelectItem::CDlgAdminSelectItem(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectItem::~CDlgAdminSelectItem						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminSelectItem::~CDlgAdminSelectItem						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 CDlgAdminSelectItem::~CDlgAdminSelectItem()
@@ -65,9 +65,9 @@ CDlgAdminSelectItem::~CDlgAdminSelectItem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectItem::GetSelectItemID							 */
-/* “à—e		:‘I‘ğ‚³‚ê‚½ƒAƒCƒeƒ€ID‚ğæ“¾										 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminSelectItem::GetSelectItemID							 */
+/* å†…å®¹		:é¸æŠã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminSelectItem::GetSelectItemID()
@@ -77,9 +77,9 @@ DWORD CDlgAdminSelectItem::GetSelectItemID()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectItem::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminSelectItem::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminSelectItem::OnInitDialog()
@@ -97,9 +97,9 @@ BOOL CDlgAdminSelectItem::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectItem::PostNcDestroy								 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminSelectItem::PostNcDestroy								 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 void CDlgAdminSelectItem::PostNcDestroy()
@@ -109,9 +109,9 @@ void CDlgAdminSelectItem::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectItem::OnOK										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CDlgAdminSelectItem::OnOK										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 void CDlgAdminSelectItem::OnOK()

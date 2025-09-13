@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndMapPartsAnimeList.h										 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒcƒAƒjƒ[ƒVƒ‡ƒ“ˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndMapPartsAnimeList.h										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,31 +14,31 @@ class CImg32;
 class CInfoMapParts;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWndMapPartsAnimeList : public CWnd
 {
 public:
-			CWndMapPartsAnimeList();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWndMapPartsAnimeList();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWndMapPartsAnimeList();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWndMapPartsAnimeList();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID, CInfoMapParts *pInfoMapParts);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
-	void	Renew	(void);									/* XV */
-
-
-protected:
-	void	MakeImage		(void);				/* ‰æ‘œ‚ğì¬ */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID, CInfoMapParts *pInfoMapParts);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
+	void	Renew	(void);									/* æ›´æ–° */
 
 
 protected:
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgParts;					/* ƒoƒbƒNƒoƒbƒtƒ@ */
+	void	MakeImage		(void);				/* ç”»åƒã‚’ä½œæˆ */
 
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CInfoMapParts	*m_pInfoMapParts;			/* ƒ}ƒbƒvƒp[ƒcî•ñ */
+
+protected:
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgParts;					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CInfoMapParts	*m_pInfoMapParts;			/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 
 
 

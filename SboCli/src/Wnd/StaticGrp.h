@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StaticGrp.h												 */
-/* “à—e			:‰æ‘œ•\¦ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/11/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StaticGrp.h												 */
+/* å†…å®¹			:ç”»åƒè¡¨ç¤ºã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/11/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,39 +13,39 @@ class CMgrGrpData;
 class CImg32;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStaticGrp : public CStatic
 {
 public:
-			CStaticGrp();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStaticGrp();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStaticGrp();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStaticGrp();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
 
-	void	Init		(CImg32 *pSrc);						/* ‰Šú‰» */
-	void	Init		(DWORD dwGrpIDMain);				/* ‰Šú‰» */
-	void	Set			(DWORD dwGrpIDSub);					/* ‰æ‘œİ’è */
-	void	SetParam	(DWORD dwGrpIDParam);				/* ‰æ‘œƒpƒ‰ƒ[ƒ^İ’è */
-	DWORD	GetIDMain	(void)	{ return m_dwGrpIDMain;	}	/* ‰æ‘œIDƒƒCƒ“‚ğæ“¾ */
-	DWORD	GetIDSub	(void)	{ return m_dwGrpIDSub;	}	/* ‰æ‘œIDƒTƒu‚ğæ“¾ */
-
-
-protected:
-	void	RenewGrp	(DWORD dwGrpIDMain, DWORD dwGrpIDSub);	/* ‰æ‘œXV */
+	void	Init		(CImg32 *pSrc);						/* åˆæœŸåŒ– */
+	void	Init		(DWORD dwGrpIDMain);				/* åˆæœŸåŒ– */
+	void	Set			(DWORD dwGrpIDSub);					/* ç”»åƒè¨­å®š */
+	void	SetParam	(DWORD dwGrpIDParam);				/* ç”»åƒãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨­å®š */
+	DWORD	GetIDMain	(void)	{ return m_dwGrpIDMain;	}	/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ã‚’å–å¾— */
+	DWORD	GetIDSub	(void)	{ return m_dwGrpIDSub;	}	/* ç”»åƒIDã‚µãƒ–ã‚’å–å¾— */
 
 
 protected:
-	DWORD			m_dwGrpIDMain,				/* ‰æ‘œIDƒƒCƒ“ */
-					m_dwGrpIDSub,				/* ‰æ‘œIDƒTƒu */
-					m_dwGrpIDParam;				/* ‰æ‘œƒpƒ‰ƒ[ƒ^ */
-	CWnd			*m_pWndParent;				/* eƒEƒBƒ“ƒhƒE */
-	CImg32			*m_pImgBack;				/* ƒoƒbƒNƒoƒbƒtƒ@ */
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+	void	RenewGrp	(DWORD dwGrpIDMain, DWORD dwGrpIDSub);	/* ç”»åƒæ›´æ–° */
+
+
+protected:
+	DWORD			m_dwGrpIDMain,				/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ */
+					m_dwGrpIDSub,				/* ç”»åƒIDã‚µãƒ– */
+					m_dwGrpIDParam;				/* ç”»åƒãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
+	CWnd			*m_pWndParent;				/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32			*m_pImgBack;				/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 
 
 

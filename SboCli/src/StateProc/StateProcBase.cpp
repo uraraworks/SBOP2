@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcBase.cpp											 */
-/* “à—e			:ó‘Ôˆ—Šî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcBase.cpp											 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,9 +17,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::CStateProcBase									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::CStateProcBase									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CStateProcBase::CStateProcBase()
@@ -38,9 +38,9 @@ CStateProcBase::CStateProcBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::~CStateProcBase								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::~CStateProcBase								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CStateProcBase::~CStateProcBase()
@@ -49,9 +49,9 @@ CStateProcBase::~CStateProcBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcBase::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
@@ -69,9 +69,9 @@ void CStateProcBase::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::Init											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::Init											 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcBase::Init(void)
@@ -80,9 +80,9 @@ void CStateProcBase::Init(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::TimerProc(void)
@@ -92,14 +92,14 @@ BOOL CStateProcBase::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::KeyProc										 */
-/* “à—e		:ƒL[ˆ—														 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::KeyProc										 */
+/* å†…å®¹		:ã‚­ãƒ¼å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcBase::KeyProc(
-	BYTE byCode,		/* [in] ƒCƒxƒ“ƒg */
-	BOOL bDown)			/* [in] ‰Ÿ‰ºó‘Ô */
+	BYTE byCode,		/* [in] ã‚¤ãƒ™ãƒ³ãƒˆ */
+	BOOL bDown)			/* [in] æŠ¼ä¸‹çŠ¶æ…‹ */
 {
 	BOOL bResult;
 
@@ -131,9 +131,9 @@ void CStateProcBase::KeyProc(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnLButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnLButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnLButtonDown(int x, int y)
@@ -142,9 +142,9 @@ void CStateProcBase::OnLButtonDown(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnRButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CStateProcBase::OnRButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnRButtonDown(int x, int y)
@@ -153,9 +153,9 @@ void CStateProcBase::OnRButtonDown(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnRButtonDblClk								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDBLCLK)							 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CStateProcBase::OnRButtonDblClk								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDBLCLK)							 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnRButtonDblClk(int x, int y)
@@ -164,9 +164,9 @@ void CStateProcBase::OnRButtonDblClk(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnMouseMove									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CStateProcBase::OnMouseMove									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnMouseMove(int x, int y)
@@ -175,9 +175,9 @@ void CStateProcBase::OnMouseMove(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnKeyDown										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_KEYDOWN)									 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnKeyDown										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_KEYDOWN)									 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnKeyDown(UINT vk)
@@ -186,9 +186,9 @@ void CStateProcBase::OnKeyDown(UINT vk)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnWindowMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG)								 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CStateProcBase::OnWindowMsg									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG)								 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnWindowMsg(int nType, DWORD dwPara)
@@ -197,9 +197,9 @@ void CStateProcBase::OnWindowMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnMainFrame									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2006/11/03														 */
+/* é–¢æ•°å	:CStateProcBase::OnMainFrame									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2006/11/03														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnMainFrame(DWORD dwCommand, DWORD dwParam)
@@ -208,9 +208,9 @@ void CStateProcBase::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnAdminMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CStateProcBase::OnAdminMsg										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnAdminMsg(int nCode, DWORD dwPara)
@@ -219,26 +219,26 @@ void CStateProcBase::OnAdminMsg(int nCode, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnMgrDraw										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MGRDRAW)									 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnMgrDraw										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MGRDRAW)									 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CStateProcBase::OnMgrDraw(int nCode, DWORD dwPara)
 {
 	switch (nCode) {
-	case MGRDRAWMSG_START_FADEIN:		OnMgrDrawSTART_FADEIN	(dwPara);	break;		/* ƒtƒF[ƒhƒCƒ“ŠJn */
-	case MGRDRAWMSG_START_FADEOUT:		OnMgrDrawSTART_FADEOUT	(dwPara);	break;		/* ƒtƒF[ƒhƒAƒEƒgŠJn */
-	case MGRDRAWMSG_END_FADEIN:			OnMgrDrawEND_FADEIN		(dwPara);	break;		/* ƒtƒF[ƒhƒCƒ“Š®—¹ */
-	case MGRDRAWMSG_END_FADEOUT:		OnMgrDrawEND_FADEOUT	(dwPara);	break;		/* ƒtƒF[ƒhƒAƒEƒgŠ®—¹ */
+	case MGRDRAWMSG_START_FADEIN:		OnMgrDrawSTART_FADEIN	(dwPara);	break;		/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³é–‹å§‹ */
+	case MGRDRAWMSG_START_FADEOUT:		OnMgrDrawSTART_FADEOUT	(dwPara);	break;		/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆé–‹å§‹ */
+	case MGRDRAWMSG_END_FADEIN:			OnMgrDrawEND_FADEIN		(dwPara);	break;		/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³å®Œäº† */
+	case MGRDRAWMSG_END_FADEOUT:		OnMgrDrawEND_FADEOUT	(dwPara);	break;		/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆå®Œäº† */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnUp											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnUp											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnUp(BOOL bDown)
@@ -248,9 +248,9 @@ BOOL CStateProcBase::OnUp(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnDown											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnDown											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnDown(BOOL bDown)
@@ -260,9 +260,9 @@ BOOL CStateProcBase::OnDown(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnLeft											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnLeft											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnLeft(BOOL bDown)
@@ -272,9 +272,9 @@ BOOL CStateProcBase::OnLeft(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnRight										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnRight										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnRight(BOOL bDown)
@@ -284,9 +284,9 @@ BOOL CStateProcBase::OnRight(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnX(BOOL bDown)
@@ -296,9 +296,9 @@ BOOL CStateProcBase::OnX(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnZ(BOOL bDown)
@@ -308,9 +308,9 @@ BOOL CStateProcBase::OnZ(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnS											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(S)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnS											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(S)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnS(BOOL bDown)
@@ -320,9 +320,9 @@ BOOL CStateProcBase::OnS(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnA											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(A)												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnA											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(A)												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnA(BOOL bDown)
@@ -332,9 +332,9 @@ BOOL CStateProcBase::OnA(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnB											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(B)												 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CStateProcBase::OnB											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B)												 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnB(BOOL bDown)
@@ -344,9 +344,9 @@ BOOL CStateProcBase::OnB(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnR											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(R)												 */
-/* “ú•t		:2007/04/20														 */
+/* é–¢æ•°å	:CStateProcBase::OnR											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(R)												 */
+/* æ—¥ä»˜		:2007/04/20														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnR(BOOL bDown)
@@ -356,9 +356,9 @@ BOOL CStateProcBase::OnR(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnI											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(I)												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CStateProcBase::OnI											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(I)												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnI(BOOL bDown)
@@ -368,9 +368,9 @@ BOOL CStateProcBase::OnI(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnN											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(N)												 */
-/* “ú•t		:2008/07/14														 */
+/* é–¢æ•°å	:CStateProcBase::OnN											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(N)												 */
+/* æ—¥ä»˜		:2008/07/14														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnN(BOOL bDown)
@@ -380,9 +380,9 @@ BOOL CStateProcBase::OnN(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnV											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(V)												 */
-/* “ú•t		:2008/11/18														 */
+/* é–¢æ•°å	:CStateProcBase::OnV											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(V)												 */
+/* æ—¥ä»˜		:2008/11/18														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnV(BOOL bDown)
@@ -392,9 +392,9 @@ BOOL CStateProcBase::OnV(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnF											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(F)												 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CStateProcBase::OnF											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(F)												 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnF(BOOL bDown)
@@ -404,9 +404,9 @@ BOOL CStateProcBase::OnF(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnJ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(J)												 */
-/* “ú•t		:2009/04/02														 */
+/* é–¢æ•°å	:CStateProcBase::OnJ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(J)												 */
+/* æ—¥ä»˜		:2009/04/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnJ(BOOL bDown)
@@ -416,9 +416,9 @@ BOOL CStateProcBase::OnJ(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnL											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(L)												 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CStateProcBase::OnL											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(L)												 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnL(BOOL bDown)
@@ -428,9 +428,9 @@ BOOL CStateProcBase::OnL(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnAt											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(@)												 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CStateProcBase::OnAt											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(@)												 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnAt(BOOL bDown)
@@ -440,9 +440,9 @@ BOOL CStateProcBase::OnAt(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnEnter										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Enter)											 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CStateProcBase::OnEnter										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Enter)											 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnEnter(BOOL bDown)
@@ -452,9 +452,9 @@ BOOL CStateProcBase::OnEnter(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnEscape										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Escape)											 */
-/* “ú•t		:2007/06/19														 */
+/* é–¢æ•°å	:CStateProcBase::OnEscape										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Escape)											 */
+/* æ—¥ä»˜		:2007/06/19														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnEscape(BOOL bDown)
@@ -464,9 +464,9 @@ BOOL CStateProcBase::OnEscape(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnTab											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Tab)												 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CStateProcBase::OnTab											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Tab)												 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnTab(BOOL bDown)
@@ -476,9 +476,9 @@ BOOL CStateProcBase::OnTab(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnShift										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Shift)											 */
-/* “ú•t		:2007/07/28														 */
+/* é–¢æ•°å	:CStateProcBase::OnShift										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Shift)											 */
+/* æ—¥ä»˜		:2007/07/28														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnShift(BOOL bDown)
@@ -488,9 +488,9 @@ BOOL CStateProcBase::OnShift(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnCtrl											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Ctrl)												 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CStateProcBase::OnCtrl											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Ctrl)												 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnCtrl(BOOL bDown)
@@ -500,9 +500,9 @@ BOOL CStateProcBase::OnCtrl(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcBase::OnSpace										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Space)											 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CStateProcBase::OnSpace										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Space)											 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcBase::OnSpace(BOOL bDown)

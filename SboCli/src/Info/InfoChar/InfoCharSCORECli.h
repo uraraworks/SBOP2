@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharSCORECli.h											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(“¾“_)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharSCORECli.h											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(å¾—ç‚¹)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/09													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,16 +11,16 @@
 #include "InfoCharCli.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharSCORECli : public CInfoCharCli
 {
 public:
-			CInfoCharSCORECli();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharSCORECli();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharSCORECli();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharSCORECli();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	ChgMoveState	(int nMoveState);					/* ˆÚ“®ó‘Ô•ÏX */
+	void	ChgMoveState	(int nMoveState);					/* ç§»å‹•çŠ¶æ…‹å¤‰æ›´ */
 } CInfoCharSCORECli, *PCInfoCharSCORECli;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,36 +1,36 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapShadow.cpp											 */
-/* “à—e			:ƒ}ƒbƒv‰eƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapShadow.cpp											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMapShadow.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"byViewType",		/* •\¦í•Ê */
-	"byAnimeType",		/* ƒAƒjƒ[ƒVƒ‡ƒ“í•Ê */
-	"byAnimeCount",		/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	"byLevel",			/* “§–¾“x */
-	"m_bLight",			/* “§–¾“x‚ğ–¾“x‚Æ‚µ‚Äg‚¤ */
-	"wGrpID",			/* ƒOƒ‰ƒtƒBƒbƒNID */
-	"dwShadowID",		/* ‰eID */
-	"ptViewPos",		/* •ÒW‰æ–Ê‚Å‚Ì•\¦ˆÊ’u */
+	"byViewType",		/* è¡¨ç¤ºç¨®åˆ¥ */
+	"byAnimeType",		/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ */
+	"byAnimeCount",		/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒæ•° */
+	"byLevel",			/* é€æ˜åº¦ */
+	"m_bLight",			/* é€æ˜åº¦ã‚’æ˜åº¦ã¨ã—ã¦ä½¿ã† */
+	"wGrpID",			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ID */
+	"dwShadowID",		/* å½±ID */
+	"ptViewPos",		/* ç·¨é›†ç”»é¢ã§ã®è¡¨ç¤ºä½ç½® */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::CInfoMapShadow									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::CInfoMapShadow									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 CInfoMapShadow::CInfoMapShadow()
@@ -54,9 +54,9 @@ CInfoMapShadow::CInfoMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::~CInfoMapShadow								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::~CInfoMapShadow								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 CInfoMapShadow::~CInfoMapShadow()
@@ -70,9 +70,9 @@ CInfoMapShadow::~CInfoMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetElementCount								 */
-/* “à—e		:—v‘f”‚ğæ“¾													 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetElementCount								 */
+/* å†…å®¹		:è¦ç´ æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 int CInfoMapShadow::GetElementCount(void)
@@ -91,9 +91,9 @@ int CInfoMapShadow::GetElementCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 int CInfoMapShadow::GetElementNo(LPCSTR pszName)
@@ -135,9 +135,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetDataSize									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetDataSize									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 DWORD CInfoMapShadow::GetDataSize(void)
@@ -172,9 +172,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 DWORD CInfoMapShadow::GetDataSizeNo(int nNo)
@@ -190,7 +190,7 @@ DWORD CInfoMapShadow::GetDataSizeNo(int nNo)
 	case 1:		dwRet = sizeof (m_byAnimeType);			break;
 	case 2:		dwRet = sizeof (m_byAnimeCount);		break;
 	case 3:		dwRet = sizeof (m_byLevel);				break;
-	case 4:		dwRet = sizeof (m_bLight);				break;		/* “§–¾“x‚ğ–¾“x‚Æ‚µ‚Äg‚¤ */
+	case 4:		dwRet = sizeof (m_bLight);				break;		/* é€æ˜åº¦ã‚’æ˜åº¦ã¨ã—ã¦ä½¿ã† */
 	case 5:		dwRet = sizeof (m_wGrpID);				break;
 	case 6:		dwRet = sizeof (m_dwShadowID);			break;
 	case 7:		dwRet = sizeof (m_ptViewPos);			break;
@@ -208,9 +208,9 @@ DWORD CInfoMapShadow::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetName										 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetName										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMapShadow::GetName(int nNo)
@@ -220,9 +220,9 @@ LPCSTR CInfoMapShadow::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetWriteData									 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapShadow::GetWriteData(int nNo, PDWORD pdwSize)
@@ -247,7 +247,7 @@ PBYTE CInfoMapShadow::GetWriteData(int nNo, PDWORD pdwSize)
 	case 1:	pSrc = &m_byAnimeType;			break;
 	case 2:	pSrc = &m_byAnimeCount;			break;
 	case 3:	pSrc = &m_byLevel;				break;
-	case 4:	pSrc = (PBYTE)&m_bLight;		break;		/* “§–¾“x‚ğ–¾“x‚Æ‚µ‚Äg‚¤ */
+	case 4:	pSrc = (PBYTE)&m_bLight;		break;		/* é€æ˜åº¦ã‚’æ˜åº¦ã¨ã—ã¦ä½¿ã† */
 	case 5:	pSrc = (PBYTE)&m_wGrpID;		break;
 	case 6:	pSrc = (PBYTE)&m_dwShadowID;	break;
 	case 7:	pSrc = (PBYTE)&m_ptViewPos;		break;
@@ -280,14 +280,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::ReadElementData								 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::ReadElementData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 DWORD CInfoMapShadow::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	int i;
 	PBYTE pDst, pSrcTmp;
@@ -333,9 +333,9 @@ DWORD CInfoMapShadow::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 void CInfoMapShadow::Copy(CInfoMapShadow *pSrc)
@@ -349,9 +349,9 @@ void CInfoMapShadow::Copy(CInfoMapShadow *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 DWORD CInfoMapShadow::GetSendDataSize(void)
@@ -365,7 +365,7 @@ DWORD CInfoMapShadow::GetSendDataSize(void)
 			sizeof (m_byAnimeType)		+
 			sizeof (m_byAnimeCount)		+
 			sizeof (m_byLevel)			+
-			sizeof (m_bLight)			+		/* “§–¾“x‚ğ–¾“x‚Æ‚µ‚Äg‚¤ */
+			sizeof (m_bLight)			+		/* é€æ˜åº¦ã‚’æ˜åº¦ã¨ã—ã¦ä½¿ã† */
 			sizeof (m_wGrpID)			+
 			sizeof (m_ptViewPos);
 
@@ -385,9 +385,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapShadow::GetSendData(void)
@@ -408,7 +408,7 @@ PBYTE CInfoMapShadow::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_byAnimeType,	sizeof (m_byAnimeType),		pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_byAnimeCount,	sizeof (m_byAnimeCount),	pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_byLevel,		sizeof (m_byLevel),			pDataTmp);
-	CopyMemoryRenew (pDataTmp, &m_bLight,		sizeof (m_bLight),			pDataTmp);		/* “§–¾“x‚ğ–¾“x‚Æ‚µ‚Äg‚¤ */
+	CopyMemoryRenew (pDataTmp, &m_bLight,		sizeof (m_bLight),			pDataTmp);		/* é€æ˜åº¦ã‚’æ˜åº¦ã¨ã—ã¦ä½¿ã† */
 	CopyMemoryRenew (pDataTmp, &m_wGrpID,		sizeof (m_wGrpID),			pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_ptViewPos,	sizeof (m_ptViewPos),		pDataTmp);
 
@@ -426,9 +426,9 @@ PBYTE CInfoMapShadow::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapShadow::SetSendData(PBYTE pSrc)
@@ -445,7 +445,7 @@ PBYTE CInfoMapShadow::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_byAnimeType,	pDataTmp, sizeof (m_byAnimeType),	pDataTmp);
 	CopyMemoryRenew (&m_byAnimeCount,	pDataTmp, sizeof (m_byAnimeCount),	pDataTmp);
 	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);
-	CopyMemoryRenew (&m_bLight,			pDataTmp, sizeof (m_bLight),		pDataTmp);		/* “§–¾“x‚ğ–¾“x‚Æ‚µ‚Äg‚¤ */
+	CopyMemoryRenew (&m_bLight,			pDataTmp, sizeof (m_bLight),		pDataTmp);		/* é€æ˜åº¦ã‚’æ˜åº¦ã¨ã—ã¦ä½¿ã† */
 	CopyMemoryRenew (&m_wGrpID,			pDataTmp, sizeof (m_wGrpID),		pDataTmp);
 	CopyMemoryRenew (&m_ptViewPos,		pDataTmp, sizeof (m_ptViewPos),		pDataTmp);
 
@@ -462,10 +462,10 @@ PBYTE CInfoMapShadow::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALS:ˆ—‚µ‚Ä‚¢‚È‚¢								 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALS:å‡¦ç†ã—ã¦ã„ãªã„								 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 BOOL CInfoMapShadow::TimerProc(DWORD dwTime)
@@ -500,9 +500,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetAnimeCount									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”‚ğæ“¾										 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetAnimeCount									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒæ•°ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 int CInfoMapShadow::GetAnimeCount(void)
@@ -512,9 +512,9 @@ int CInfoMapShadow::GetAnimeCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::AddAnime										 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğ’Ç‰Á										 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::AddAnime										 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’è¿½åŠ 										 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 void CInfoMapShadow::AddAnime(void)
@@ -528,9 +528,9 @@ void CInfoMapShadow::AddAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::DeleteAnime									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğíœ										 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::DeleteAnime									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’å‰Šé™¤										 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 void CInfoMapShadow::DeleteAnime(int nNo)
@@ -545,9 +545,9 @@ void CInfoMapShadow::DeleteAnime(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::DeleteAllAnime									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğ‘S‚Äíœ									 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::DeleteAllAnime									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’å…¨ã¦å‰Šé™¤									 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 void CInfoMapShadow::DeleteAllAnime(void)
@@ -562,9 +562,9 @@ void CInfoMapShadow::DeleteAllAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapShadow::GetAnimePtr									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ğæ“¾										 */
-/* “ú•t		:2007/06/04														 */
+/* é–¢æ•°å	:CInfoMapShadow::GetAnimePtr									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/06/04														 */
 /* ========================================================================= */
 
 PCInfoAnime CInfoMapShadow::GetAnimePtr(int nNo)

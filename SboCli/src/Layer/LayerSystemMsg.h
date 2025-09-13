@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerSystemMsg.h											 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(ƒVƒXƒeƒ€ƒƒbƒZ[ƒW) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerSystemMsg.h											 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,40 +14,40 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* \‘¢‘ÌéŒ¾																 */
+/* æ§‹é€ ä½“å®£è¨€																 */
 /* ========================================================================= */
 
 typedef struct _SYSTEMMSGINFO {
-	int			nPosY;						/* YÀ•W */
-	CImg32		*pImg;						/* ƒCƒ[ƒW */
+	int			nPosY;						/* Yåº§æ¨™ */
+	CImg32		*pImg;						/* ã‚¤ãƒ¡ãƒ¼ã‚¸ */
 } SYSTEMMSGINFO, *PSYSTEMMSGINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerSystemMsg : public CLayerCloud
 {
 public:
-			CLayerSystemMsg();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerSystemMsg();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerSystemMsg();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerSystemMsg();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Draw		(CImg32 *pDst);						/* •`‰æ */
-	BOOL	TimerProc	(void);								/* ŠÔˆ— */
-	void	AddMsg		(LPCSTR pszMsg, COLORREF cl);		/* ƒƒbƒZ[ƒW‚ğ’Ç‰Á */
-
-
-private:
-	void	DeleteMsg		(int nNo);						/* ƒƒbƒZ[ƒW‚ğíœ */
-	void	DeleteAllMsg	(void);							/* ‘S‚Ä‚ÌƒƒbƒZ[ƒW‚ğíœ */
+	void	Draw		(CImg32 *pDst);						/* æç”» */
+	BOOL	TimerProc	(void);								/* æ™‚é–“å‡¦ç† */
+	void	AddMsg		(LPCSTR pszMsg, COLORREF cl);		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ  */
 
 
 private:
-	DWORD		m_dwLastTimeProc;				/* ÅIˆ—ŠÔ */
-	CImg32		*m_pDibBack;					/* ”wŒi‰æ‘œ */
+	void	DeleteMsg		(int nNo);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‰Šé™¤ */
+	void	DeleteAllMsg	(void);							/* å…¨ã¦ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‰Šé™¤ */
 
-	CmyArray<PSYSTEMMSGINFO, PSYSTEMMSGINFO>	m_aSystemMsgInfo;	/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒWî•ñ */
+
+private:
+	DWORD		m_dwLastTimeProc;				/* æœ€çµ‚å‡¦ç†æ™‚é–“ */
+	CImg32		*m_pDibBack;					/* èƒŒæ™¯ç”»åƒ */
+
+	CmyArray<PSYSTEMMSGINFO, PSYSTEMMSGINFO>	m_aSystemMsgInfo;	/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æƒ…å ± */
 } CLayerSystemMsg, *PCLayerSystemMsg;
 
 /* Copyright(C)URARA-works 2007 */

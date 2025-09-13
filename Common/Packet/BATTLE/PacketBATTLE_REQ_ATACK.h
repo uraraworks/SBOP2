@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketBATTLE_REQ_ATACK.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(í“¬Œn:UŒ‚—v‹) ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketBATTLE_REQ_ATACK.h									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(æˆ¦é—˜ç³»:æ”»æ’ƒè¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketBATTLE_REQ_ATACK : public CPacketBase
 {
 public:
-			CPacketBATTLE_REQ_ATACK();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketBATTLE_REQ_ATACK();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketBATTLE_REQ_ATACK();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketBATTLE_REQ_ATACK();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, DWORD dwTargetCharID);		/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(DWORD dwCharID, DWORD dwTargetCharID);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID,						/* ƒLƒƒƒ‰ID */
-			m_dwTargetCharID;				/* UŒ‚æƒLƒƒƒ‰ID */
+	DWORD	m_dwCharID,						/* ã‚­ãƒ£ãƒ©ID */
+			m_dwTargetCharID;				/* æ”»æ’ƒå…ˆã‚­ãƒ£ãƒ©ID */
 } CPacketBATTLE_REQ_ATACK, *PCPacketBATTLE_REQ_ATACK;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,29 +1,29 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoad.h													 */
-/* “à—e			:•Û‘¶“Ç‚İ‚İˆ—’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoad.h													 */
+/* å†…å®¹			:ä¿å­˜èª­ã¿è¾¼ã¿å‡¦ç†å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/30													 */
 /* ========================================================================= */
 
 #pragma once
 
-#include "SaveLoadInfoAccount.h"		/* ƒAƒJƒEƒ“ƒgî•ñ */
-#include "SaveLoadInfoChar.h"			/* ƒLƒƒƒ‰î•ñ */
-#include "SaveLoadInfoDisable.h"		/* ‹‘”Ûî•ñ */
-#include "SaveLoadInfoMap.h"			/* ƒ}ƒbƒvî•ñ */
-#include "SaveLoadInfoMapObject.h"		/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
-#include "SaveLoadInfoMapParts.h"		/* ƒ}ƒbƒvƒp[ƒcî•ñ */
-#include "SaveLoadInfoMapShadow.h"		/* ƒ}ƒbƒv‰eî•ñ */
-#include "SaveLoadInfoEffect.h"			/* ƒGƒtƒFƒNƒgî•ñ */
-#include "SaveLoadInfoItemType.h"		/* ƒAƒCƒeƒ€í•Êî•ñ */
-#include "SaveLoadInfoItem.h"			/* ƒAƒCƒeƒ€î•ñ */
-#include "SaveLoadInfoItemWeapon.h"		/* •Šíî•ñ */
-#include "SaveLoadInfoMotion.h"			/* ƒ‚[ƒVƒ‡ƒ“î•ñ */
-#include "SaveLoadInfoMotionType.h"		/* ƒ‚[ƒVƒ‡ƒ“í•Êî•ñ */
-#include "SaveLoadInfoEfcBalloon.h"		/* •¬o‚µî•ñ */
-#include "SaveLoadInfoSystem.h"			/* ƒVƒXƒeƒ€î•ñ */
-#include "SaveLoadInfoSkill.h"			/* ƒXƒLƒ‹î•ñ */
-#include "SaveLoadInfoTalkEvent.h"		/* ‰ï˜bƒCƒxƒ“ƒgî•ñ */
+#include "SaveLoadInfoAccount.h"		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
+#include "SaveLoadInfoChar.h"			/* ã‚­ãƒ£ãƒ©æƒ…å ± */
+#include "SaveLoadInfoDisable.h"		/* æ‹’å¦æƒ…å ± */
+#include "SaveLoadInfoMap.h"			/* ãƒãƒƒãƒ—æƒ…å ± */
+#include "SaveLoadInfoMapObject.h"		/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
+#include "SaveLoadInfoMapParts.h"		/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
+#include "SaveLoadInfoMapShadow.h"		/* ãƒãƒƒãƒ—å½±æƒ…å ± */
+#include "SaveLoadInfoEffect.h"			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
+#include "SaveLoadInfoItemType.h"		/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
+#include "SaveLoadInfoItem.h"			/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ± */
+#include "SaveLoadInfoItemWeapon.h"		/* æ­¦å™¨æƒ…å ± */
+#include "SaveLoadInfoMotion.h"			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ± */
+#include "SaveLoadInfoMotionType.h"		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ± */
+#include "SaveLoadInfoEfcBalloon.h"		/* å™´å‡ºã—æƒ…å ± */
+#include "SaveLoadInfoSystem.h"			/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
+#include "SaveLoadInfoSkill.h"			/* ã‚¹ã‚­ãƒ«æƒ…å ± */
+#include "SaveLoadInfoTalkEvent.h"		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 
 /* Copyright(C)URARA-works 2007 */

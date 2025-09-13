@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowFAMILYTYPE.cpp										 */
-/* “à—e			:Ží‘°‘I‘ðƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowFAMILYTYPE.cpp										 */
+/* å†…å®¹			:ç¨®æ—é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,9 +15,9 @@
 #include "WindowFAMILYTYPE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::CWindowFAMILYTYPE							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::CWindowFAMILYTYPE							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 CWindowFAMILYTYPE::CWindowFAMILYTYPE()
@@ -34,9 +34,9 @@ CWindowFAMILYTYPE::CWindowFAMILYTYPE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::~CWindowFAMILYTYPE							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::~CWindowFAMILYTYPE							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 CWindowFAMILYTYPE::~CWindowFAMILYTYPE()
@@ -45,9 +45,9 @@ CWindowFAMILYTYPE::~CWindowFAMILYTYPE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 void CWindowFAMILYTYPE::Create(CMgrData *pMgrData)
@@ -62,9 +62,9 @@ void CWindowFAMILYTYPE::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::Draw										 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::Draw										 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
@@ -98,9 +98,9 @@ void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 88,	24,		"V‹KƒLƒƒƒ‰ƒNƒ^[ì¬", clText);
-	TextOut4 (hDC, 136,	48,		"Ží‘°‘I‘ð", clText);
-	TextOut4 (hDC, 256,	288,	"‚P^‚R", clText);
+	TextOut4 (hDC, 88,	24,		"æ–°è¦ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ä½œæˆ", clText);
+	TextOut4 (hDC, 136,	48,		"ç¨®æ—é¸æŠž", clText);
+	TextOut4 (hDC, 256,	288,	"ï¼‘ï¼ï¼“", clText);
 
 	for (i = 0; i < nCount; i ++) {
 		TextOut2 (hDC, nCursorPos[i].x, nCursorPos[i].y - 4, m_pMgrData->GetFamilyTypeName ((WORD)(FAMILYTYPE_HUMAN + i)), clText);
@@ -118,9 +118,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::TimerProc									 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::TimerProc									 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 BOOL CWindowFAMILYTYPE::TimerProc(void)
@@ -144,9 +144,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::GetType										 */
-/* “à—e		:Ží‘°‚ðŽæ“¾														 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::GetType										 */
+/* å†…å®¹		:ç¨®æ—ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 WORD CWindowFAMILYTYPE::GetType(void)
@@ -156,9 +156,9 @@ WORD CWindowFAMILYTYPE::GetType(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::OnUp										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::OnUp										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 BOOL CWindowFAMILYTYPE::OnUp(void)
@@ -181,9 +181,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::OnDown										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::OnDown										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 BOOL CWindowFAMILYTYPE::OnDown(void)
@@ -206,9 +206,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::OnLeft										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::OnLeft										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 BOOL CWindowFAMILYTYPE::OnLeft(void)
@@ -222,9 +222,9 @@ BOOL CWindowFAMILYTYPE::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::OnRight										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::OnRight										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 BOOL CWindowFAMILYTYPE::OnRight(void)
@@ -238,9 +238,9 @@ BOOL CWindowFAMILYTYPE::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 BOOL CWindowFAMILYTYPE::OnX(BOOL bDown)
@@ -262,9 +262,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowFAMILYTYPE::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowFAMILYTYPE::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 BOOL CWindowFAMILYTYPE::OnZ(BOOL bDown)

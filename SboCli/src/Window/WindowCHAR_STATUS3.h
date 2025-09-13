@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowCHAR_STATUS3.h										 */
-/* “à—e			:ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX3ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/10/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowCHAR_STATUS3.h										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹3ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,17 +14,17 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowCHAR_STATUS3 : public CWindowBase
 {
 public:
-			CWindowCHAR_STATUS3();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowCHAR_STATUS3();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowCHAR_STATUS3();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowCHAR_STATUS3();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
 } CWindowCHAR_STATUS3, *PCWindowCHAR_STATUS3;
 
 /* Copyright(C)URARA-works 2008 */

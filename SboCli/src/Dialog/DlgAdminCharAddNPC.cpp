@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharAddNPC.cpp										 */
-/* “à—e			:NPC‚Ì’Ç‰Áƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharAddNPC.cpp										 */
+/* å†…å®¹			:NPCã®è¿½åŠ ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharAddNPC::DoDataExchange(CDataExchange* pDX)
@@ -46,9 +46,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAddNPC::CDlgAdminCharAddNPC						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CDlgAdminCharAddNPC::CDlgAdminCharAddNPC						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 CDlgAdminCharAddNPC::CDlgAdminCharAddNPC(CWnd* pParent /*=NULL*/)
@@ -66,9 +66,9 @@ CDlgAdminCharAddNPC::CDlgAdminCharAddNPC(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAddNPC::~CDlgAdminCharAddNPC						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CDlgAdminCharAddNPC::~CDlgAdminCharAddNPC						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 CDlgAdminCharAddNPC::~CDlgAdminCharAddNPC()
@@ -77,25 +77,25 @@ CDlgAdminCharAddNPC::~CDlgAdminCharAddNPC()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAddNPC::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CDlgAdminCharAddNPC::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAddNPC::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharAddNPC::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAddNPC::Renew										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CDlgAdminCharAddNPC::Renew										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAddNPC::Renew(void)
@@ -110,17 +110,17 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAddNPC::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CDlgAdminCharAddNPC::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAddNPC::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		switch (m_pMgrData->GetAdminNotifyTypeL ()) {
-		case ADMINNOTIFYTYPE_POS:				/* ƒ}ƒbƒvÀ•W */
+		case ADMINNOTIFYTYPE_POS:				/* ãƒžãƒƒãƒ—åº§æ¨™ */
 			UpdateData ();
 			m_nMapID = m_pInfoChar->m_dwMapID;
 			m_nPosX  = HIWORD (dwPara);
@@ -134,9 +134,9 @@ void CDlgAdminCharAddNPC::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAddNPC::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CDlgAdminCharAddNPC::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharAddNPC::OnInitDialog()
@@ -159,9 +159,9 @@ BOOL CDlgAdminCharAddNPC::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAddNPC::OnSend									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CDlgAdminCharAddNPC::OnSend									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAddNPC::OnSend()
@@ -173,16 +173,16 @@ void CDlgAdminCharAddNPC::OnSend()
 	UpdateData ();
 
 	if (m_nMapID == 0) {
-		MessageBox ("ƒ}ƒbƒvID‚ÆÀ•W‚ðŠm”F‚µ‚Ä‚­‚¾‚³‚¢", "Šm”F", MB_ICONINFORMATION | MB_OK);
+		MessageBox ("ãƒžãƒƒãƒ—IDã¨åº§æ¨™ã‚’ç¢ºèªã—ã¦ãã ã•ã„", "ç¢ºèª", MB_ICONINFORMATION | MB_OK);
 		return;
 	}
 
-	nResult = MessageBox ("Žw’èÀ•W‚ÉNPC‚ð’Ç‰Á‚µ‚Ü‚·‚©H", "Šm”F", MB_ICONQUESTION | MB_YESNO);
+	nResult = MessageBox ("æŒ‡å®šåº§æ¨™ã«NPCã‚’è¿½åŠ ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_ICONQUESTION | MB_YESNO);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	/* “ü—Í“à—e‚ðƒLƒƒƒ‰î•ñ‚Ö”½‰f */
+	/* å…¥åŠ›å†…å®¹ã‚’ã‚­ãƒ£ãƒ©æƒ…å ±ã¸åæ˜  */
 	InfoCharTmp.Create (m_pMgrData);
 	InfoCharTmp.m_strCharName	= m_strCharName;
 	InfoCharTmp.m_dwMapID		= m_nMapID;
@@ -194,7 +194,7 @@ void CDlgAdminCharAddNPC::OnSend()
 	Packet.Make (&InfoCharTmp);
 	m_pSock->Send (&Packet);
 
-	/* ‘—M‚µ‚½‚Ì‚Å“ñ“x‰Ÿ‚µ–hŽ~‚ÉÀ•W‚ðƒNƒŠƒA‚µ‚Ä‚¨‚­ */
+	/* é€ä¿¡ã—ãŸã®ã§äºŒåº¦æŠ¼ã—é˜²æ­¢ã«åº§æ¨™ã‚’ã‚¯ãƒªã‚¢ã—ã¦ãŠã */
 	m_nMapID = m_nPosX = m_nPosY = 0;
 	UpdateData (FALSE);
 }

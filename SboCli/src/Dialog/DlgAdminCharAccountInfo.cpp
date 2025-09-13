@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharAccountInfo.cpp								 */
-/* “à—e			:ƒAƒJƒEƒ“ƒgî•ñƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharAccountInfo.cpp								 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharAccountInfo::DoDataExchange(CDataExchange* pDX)
@@ -49,9 +49,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::CDlgAdminCharAccountInfo				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::CDlgAdminCharAccountInfo				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 CDlgAdminCharAccountInfo::CDlgAdminCharAccountInfo(CWnd* pParent /*=NULL*/)
@@ -67,9 +67,9 @@ CDlgAdminCharAccountInfo::CDlgAdminCharAccountInfo(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::~CDlgAdminCharAccountInfo			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::~CDlgAdminCharAccountInfo			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 CDlgAdminCharAccountInfo::~CDlgAdminCharAccountInfo()
@@ -78,25 +78,25 @@ CDlgAdminCharAccountInfo::~CDlgAdminCharAccountInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAccountInfo::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharAccountInfo::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::Renew								 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::Renew								 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAccountInfo::Renew(void)
@@ -105,9 +105,9 @@ void CDlgAdminCharAccountInfo::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::OnAdminMsg							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::OnAdminMsg							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
@@ -117,9 +117,9 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 	pLibInfoChar = m_pMgrData->GetLibInfoChar ();
 
 	switch (nType) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		switch (m_pMgrData->GetAdminNotifyTypeL ()) {
-		case ADMINNOTIFYTYPE_CHARID:		/* ƒLƒƒƒ‰ID */
+		case ADMINNOTIFYTYPE_CHARID:		/* ã‚­ãƒ£ãƒ©ID */
 			{
 				PCInfoCharCli pInfoChar;
 				CPacketADMIN_CHAR_REQ_ACCOUNT Packet;
@@ -144,7 +144,7 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 			break;
 		}
 		break;
-	case ADMINMSG_ACCOUNTINFO:		/* ƒAƒJƒEƒ“ƒgî•ñæ“¾ */
+	case ADMINMSG_ACCOUNTINFO:		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±å–å¾— */
 		{
 			PBYTE pData;
 			CInfoAccount InfoAccount;
@@ -169,9 +169,9 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharAccountInfo::OnInitDialog()
@@ -183,9 +183,9 @@ BOOL CDlgAdminCharAccountInfo::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::OnSend								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2008/06/06														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::OnSend								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2008/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAccountInfo::OnSend()
@@ -197,7 +197,7 @@ void CDlgAdminCharAccountInfo::OnSend()
 	if (m_dwAccountID == 0) {
 		return;
 	}
-	nResult = MessageBox ("ƒAƒJƒEƒ“ƒgî•ñ‚ğ‘—M‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’é€ä¿¡ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -213,9 +213,9 @@ void CDlgAdminCharAccountInfo::OnSend()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAccountInfo::OnDisable							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒƒOƒCƒ“‹‘”Û)									 */
-/* “ú•t		:2009/03/22														 */
+/* é–¢æ•°å	:CDlgAdminCharAccountInfo::OnDisable							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦)									 */
+/* æ—¥ä»˜		:2009/03/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAccountInfo::OnDisable()
@@ -224,7 +224,7 @@ void CDlgAdminCharAccountInfo::OnDisable()
 	CPacketADMIN_CHAR_RENEW_ACCOUNT Packet;
 	CInfoAccount InfoAccount;
 
-	nResult = MessageBox ("ƒƒOƒCƒ“‹‘”Û‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

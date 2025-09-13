@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketSKILL_SKILLINFO.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒXƒLƒ‹Œn:ƒXƒLƒ‹î•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketSKILL_SKILLINFO.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¹ã‚­ãƒ«ç³»:ã‚¹ã‚­ãƒ«æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,22 +12,22 @@
 #include "LibInfoSkill.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketSKILL_SKILLINFO : public CPacketBase
 {
 public:
-			CPacketSKILL_SKILLINFO();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketSKILL_SKILLINFO();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketSKILL_SKILLINFO();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketSKILL_SKILLINFO();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(PCLibInfoSkill pInfo);					/* ƒpƒPƒbƒg‚ðì¬ */
-	void	Make	(PCInfoSkillBase pInfo);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(PCLibInfoSkill pInfo);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	void	Make	(PCInfoSkillBase pInfo);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	PCLibInfoSkill	m_pLibInfo;				/* ƒXƒLƒ‹î•ñ */
+	PCLibInfoSkill	m_pLibInfo;				/* ã‚¹ã‚­ãƒ«æƒ…å ± */
 } CPacketSKILL_SKILLINFO, *PCPacketSKILL_SKILLINFO;
 
 /* Copyright(C)URARA-works 2008 */

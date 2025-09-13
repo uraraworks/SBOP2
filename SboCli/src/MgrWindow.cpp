@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrWindow.cpp												 */
-/* “à—e			:ƒEƒBƒ“ƒhƒEƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrWindow.cpp												 */
+/* å†…å®¹			:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒžãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -52,9 +52,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::CMgrWindow											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CMgrWindow::CMgrWindow											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 CMgrWindow::CMgrWindow()
@@ -68,9 +68,9 @@ CMgrWindow::CMgrWindow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::~CMgrWindow										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CMgrWindow::~CMgrWindow										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 CMgrWindow::~CMgrWindow()
@@ -80,13 +80,13 @@ CMgrWindow::~CMgrWindow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::Create												 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2005/05/21														 */
+/* é–¢æ•°å	:CMgrWindow::Create												 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2005/05/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::Create(
-	CMgrData	*pMgrData)		/* [in] ƒf[ƒ^ŠÇ— */
+	CMgrData	*pMgrData)		/* [in] ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 {
 	m_pMgrData		= pMgrData;
 	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
@@ -95,9 +95,9 @@ void CMgrWindow::Create(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::Destroy											 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2005/05/21														 */
+/* é–¢æ•°å	:CMgrWindow::Destroy											 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2005/05/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::Destroy(void)
@@ -107,9 +107,9 @@ void CMgrWindow::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::Update												 */
-/* “à—e		:‘S‚Ä‚ÌƒEƒBƒ“ƒhƒE‚ðXV											 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CMgrWindow::Update												 */
+/* å†…å®¹		:å…¨ã¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CMgrWindow::Update(void)
@@ -126,9 +126,9 @@ void CMgrWindow::Update(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::Draw												 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CMgrWindow::Draw												 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CMgrWindow::Draw(PCImg32 pDst)
@@ -148,9 +148,9 @@ void CMgrWindow::Draw(PCImg32 pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::TimerProc											 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2005/06/12														 */
+/* é–¢æ•°å	:CMgrWindow::TimerProc											 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2005/06/12														 */
 /* ========================================================================= */
 
 BOOL CMgrWindow::TimerProc(void)
@@ -181,9 +181,9 @@ BOOL CMgrWindow::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::KeyProc											 */
-/* “à—e		:ƒL[ˆ—														 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CMgrWindow::KeyProc											 */
+/* å†…å®¹		:ã‚­ãƒ¼å‡¦ç†														 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CMgrWindow::KeyProc(BYTE byEvent, BOOL bDown)
@@ -203,9 +203,9 @@ void CMgrWindow::KeyProc(BYTE byEvent, BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::DeleteAll											 */
-/* “à—e		:‘S‚Ä‚ÌƒEƒBƒ“ƒhƒE‚ð”jŠü											 */
-/* “ú•t		:2005/05/22														 */
+/* é–¢æ•°å	:CMgrWindow::DeleteAll											 */
+/* å†…å®¹		:å…¨ã¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ç ´æ£„											 */
+/* æ—¥ä»˜		:2005/05/22														 */
 /* ========================================================================= */
 
 void CMgrWindow::DeleteAll(void)
@@ -226,9 +226,9 @@ void CMgrWindow::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::Delete												 */
-/* “à—e		:Žw’èID‚ÌƒEƒBƒ“ƒhƒE‚ðíœ										 */
-/* “ú•t		:2005/06/16														 */
+/* é–¢æ•°å	:CMgrWindow::Delete												 */
+/* å†…å®¹		:æŒ‡å®šIDã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å‰Šé™¤										 */
+/* æ—¥ä»˜		:2005/06/16														 */
 /* ========================================================================= */
 
 void CMgrWindow::Delete(int nID)
@@ -258,9 +258,9 @@ void CMgrWindow::Delete(int nID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::GetWindow											 */
-/* “à—e		:Žw’èID‚ÌƒEƒBƒ“ƒhƒE‚ðŽæ“¾										 */
-/* “ú•t		:2005/06/11														 */
+/* é–¢æ•°å	:CMgrWindow::GetWindow											 */
+/* å†…å®¹		:æŒ‡å®šIDã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2005/06/11														 */
 /* ========================================================================= */
 
 CWindowBase *CMgrWindow::GetWindow(int nID)
@@ -284,9 +284,9 @@ CWindowBase *CMgrWindow::GetWindow(int nID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::IsKeyInput											 */
-/* “à—e		:ƒL[ˆ—‚Ì•K—v‚ª‚ ‚é‚©”»’è										 */
-/* “ú•t		:2005/06/26														 */
+/* é–¢æ•°å	:CMgrWindow::IsKeyInput											 */
+/* å†…å®¹		:ã‚­ãƒ¼å‡¦ç†ã®å¿…è¦ãŒã‚ã‚‹ã‹åˆ¤å®š										 */
+/* æ—¥ä»˜		:2005/06/26														 */
 /* ========================================================================= */
 
 BOOL CMgrWindow::IsKeyInput(void)
@@ -316,9 +316,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowLOGIN									 */
-/* “à—e		:ƒƒOƒCƒ“î•ñ													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowLOGIN									 */
+/* å†…å®¹		:ãƒ­ã‚°ã‚¤ãƒ³æƒ…å ±													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowLOGIN(void)
@@ -334,9 +334,9 @@ void CMgrWindow::MakeWindowLOGIN(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowMSG										 */
-/* “à—e		:ƒƒbƒZ[ƒW•\Ž¦													 */
-/* “ú•t		:2005/06/11														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowMSG										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º													 */
+/* æ—¥ä»˜		:2005/06/11														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowMSG(LPCSTR pszMsg, DWORD dwTime, int nType)
@@ -360,9 +360,9 @@ void CMgrWindow::MakeWindowMSG(LPCSTR pszMsg, DWORD dwTime, int nType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowLOGINMENU								 */
-/* “à—e		:ƒƒjƒ…[														 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowLOGINMENU								 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼														 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowLOGINMENU(void)
@@ -379,9 +379,9 @@ void CMgrWindow::MakeWindowLOGINMENU(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowCHARNAME									 */
-/* “à—e		:ƒLƒƒƒ‰–¼“ü—Í													 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowCHARNAME									 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©åå…¥åŠ›													 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHARNAME(void)
@@ -398,9 +398,9 @@ void CMgrWindow::MakeWindowCHARNAME(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSEX										 */
-/* “à—e		:«•Ê															 */
-/* “ú•t		:2006/11/14														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSEX										 */
+/* å†…å®¹		:æ€§åˆ¥															 */
+/* æ—¥ä»˜		:2006/11/14														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSEX(void)
@@ -417,9 +417,9 @@ void CMgrWindow::MakeWindowSEX(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowACCOUNTINFO								 */
-/* “à—e		:ƒAƒJƒEƒ“ƒgî•ñ													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowACCOUNTINFO								 */
+/* å†…å®¹		:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowACCOUNTINFO(void)
@@ -435,9 +435,9 @@ void CMgrWindow::MakeWindowACCOUNTINFO(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSTATUS									 */
-/* “à—e		:‹­‚³															 */
-/* “ú•t		:2005/06/26														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSTATUS									 */
+/* å†…å®¹		:å¼·ã•															 */
+/* æ—¥ä»˜		:2005/06/26														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSTATUS(BOOL bShow)
@@ -453,9 +453,9 @@ void CMgrWindow::MakeWindowSTATUS(BOOL bShow)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowCHAT										 */
-/* “à—e		:ƒ`ƒƒƒbƒg“ü—Í													 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowCHAT										 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆå…¥åŠ›													 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHAT(void)
@@ -472,9 +472,9 @@ void CMgrWindow::MakeWindowCHAT(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowFAMILYTYPE								 */
-/* “à—e		:Ží‘°‘I‘ð														 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowFAMILYTYPE								 */
+/* å†…å®¹		:ç¨®æ—é¸æŠž														 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowFAMILYTYPE(void)
@@ -491,9 +491,9 @@ void CMgrWindow::MakeWindowFAMILYTYPE(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowHAIRTYPE									 */
-/* “à—e		:”¯Œ^‘I‘ð														 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowHAIRTYPE									 */
+/* å†…å®¹		:é«ªåž‹é¸æŠž														 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowHAIRTYPE(void)
@@ -510,9 +510,9 @@ void CMgrWindow::MakeWindowHAIRTYPE(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowHAIRCOLOR								 */
-/* “à—e		:”¯F‘I‘ð														 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowHAIRCOLOR								 */
+/* å†…å®¹		:é«ªè‰²é¸æŠž														 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowHAIRCOLOR(void)
@@ -529,9 +529,9 @@ void CMgrWindow::MakeWindowHAIRCOLOR(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowEYECOLOR									 */
-/* “à—e		:–ÚF‘I‘ð														 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowEYECOLOR									 */
+/* å†…å®¹		:ç›®è‰²é¸æŠž														 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowEYECOLOR(void)
@@ -548,9 +548,9 @@ void CMgrWindow::MakeWindowEYECOLOR(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSTYLESELECT								 */
-/* “à—e		:—eŽp‘I‘ð														 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSTYLESELECT								 */
+/* å†…å®¹		:å®¹å§¿é¸æŠž														 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSTYLESELECT(void)
@@ -567,9 +567,9 @@ void CMgrWindow::MakeWindowSTYLESELECT(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowNAMEINPUT								 */
-/* “à—e		:–¼‘O“ü—Í														 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowNAMEINPUT								 */
+/* å†…å®¹		:åå‰å…¥åŠ›														 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowNAMEINPUT(void)
@@ -586,9 +586,9 @@ void CMgrWindow::MakeWindowNAMEINPUT(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSYSTEMMENU								 */
-/* “à—e		:ƒVƒXƒeƒ€ƒƒjƒ…[												 */
-/* “ú•t		:2007/06/19														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSYSTEMMENU								 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼												 */
+/* æ—¥ä»˜		:2007/06/19														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSYSTEMMENU(void)
@@ -605,9 +605,9 @@ void CMgrWindow::MakeWindowSYSTEMMENU(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSETCOLOR									 */
-/* “à—e		:–¼‘O‚Æ”­Œ¾F‚ÌÝ’è												 */
-/* “ú•t		:2007/06/20														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSETCOLOR									 */
+/* å†…å®¹		:åå‰ã¨ç™ºè¨€è‰²ã®è¨­å®š												 */
+/* æ—¥ä»˜		:2007/06/20														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETCOLOR(void)
@@ -624,9 +624,9 @@ void CMgrWindow::MakeWindowSETCOLOR(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSETBGMVOLUME								 */
-/* “à—e		:BGM‰¹—Ê‚ÌÝ’è													 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSETBGMVOLUME								 */
+/* å†…å®¹		:BGMéŸ³é‡ã®è¨­å®š													 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETBGMVOLUME(void)
@@ -643,9 +643,9 @@ void CMgrWindow::MakeWindowSETBGMVOLUME(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSETSOUNDVOLUME							 */
-/* “à—e		:Œø‰Ê‰¹‰¹—Ê‚ÌÝ’è												 */
-/* “ú•t		:2007/06/21														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSETSOUNDVOLUME							 */
+/* å†…å®¹		:åŠ¹æžœéŸ³éŸ³é‡ã®è¨­å®š												 */
+/* æ—¥ä»˜		:2007/06/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETSOUNDVOLUME(void)
@@ -662,9 +662,9 @@ void CMgrWindow::MakeWindowSETSOUNDVOLUME(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSETDRAWMODE								 */
-/* “à—e		:•\Ž¦“à—e‚ÌÝ’è													 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSETDRAWMODE								 */
+/* å†…å®¹		:è¡¨ç¤ºå†…å®¹ã®è¨­å®š													 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETDRAWMODE(void)
@@ -681,9 +681,9 @@ void CMgrWindow::MakeWindowSETDRAWMODE(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowITEMMENU									 */
-/* “à—e		:ƒAƒCƒeƒ€ƒƒjƒ…[												 */
-/* “ú•t		:2007/07/30														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowITEMMENU									 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼												 */
+/* æ—¥ä»˜		:2007/07/30														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowITEMMENU(void)
@@ -700,9 +700,9 @@ void CMgrWindow::MakeWindowITEMMENU(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowITEMMENU_SELECT							 */
-/* “à—e		:ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[										 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowITEMMENU_SELECT							 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼										 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowITEMMENU_SELECT(int nPos, DWORD dwItemID)
@@ -720,9 +720,9 @@ void CMgrWindow::MakeWindowITEMMENU_SELECT(int nPos, DWORD dwItemID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION									 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“														 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION									 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³														 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION(void)
@@ -739,9 +739,9 @@ void CMgrWindow::MakeWindowOPTION(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION_VIEWSET							 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-•\Ž¦Ý’è											 */
-/* “ú•t		:2008/06/27														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION_VIEWSET							 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®š											 */
+/* æ—¥ä»˜		:2008/06/27														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_VIEWSET(void)
@@ -758,9 +758,9 @@ void CMgrWindow::MakeWindowOPTION_VIEWSET(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION_VOLUMESET							 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-‰¹—ÊÝ’è											 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION_VOLUMESET							 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-éŸ³é‡è¨­å®š											 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_VOLUMESET(void)
@@ -777,9 +777,9 @@ void CMgrWindow::MakeWindowOPTION_VOLUMESET(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION_INPUTSET							 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è											 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION_INPUTSET							 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š											 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_INPUTSET(void)
@@ -796,9 +796,9 @@ void CMgrWindow::MakeWindowOPTION_INPUTSET(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION_TASKBAR							 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“(”­Œ¾Žž‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ)							 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION_TASKBAR							 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³(ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«)							 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_TASKBAR(void)
@@ -815,9 +815,9 @@ void CMgrWindow::MakeWindowOPTION_TASKBAR(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE				 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è-“ü—ÍƒfƒoƒCƒX‚ÌÝ’è							 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE				 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®š							 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE(void)
@@ -834,9 +834,9 @@ void CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION_ACTIONSET							 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è											 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION_ACTIONSET							 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š											 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_ACTIONSET(void)
@@ -853,9 +853,9 @@ void CMgrWindow::MakeWindowOPTION_ACTIONSET(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER				 */
-/* “à—e		:ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è-‚¨‚Ð‚é‚Ëƒ^ƒCƒ}[‚ÌÝ’è						 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER				 */
+/* å†…å®¹		:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š-ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒžãƒ¼ã®è¨­å®š						 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER(void)
@@ -872,9 +872,9 @@ void CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowCOMMANDMENU								 */
-/* “à—e		:ƒRƒ}ƒ“ƒhƒƒjƒ…[												 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowCOMMANDMENU								 */
+/* å†…å®¹		:ã‚³ãƒžãƒ³ãƒ‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼												 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowCOMMANDMENU(void)
@@ -891,9 +891,9 @@ void CMgrWindow::MakeWindowCOMMANDMENU(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowCHAR_STATUS								 */
-/* “à—e		:ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX												 */
-/* “ú•t		:2008/10/27														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowCHAR_STATUS								 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹												 */
+/* æ—¥ä»˜		:2008/10/27														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHAR_STATUS(void)
@@ -910,9 +910,9 @@ void CMgrWindow::MakeWindowCHAR_STATUS(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowCHAR_STATUS4								 */
-/* “à—e		:ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX4												 */
-/* “ú•t		:2009/02/15														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowCHAR_STATUS4								 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹4												 */
+/* æ—¥ä»˜		:2009/02/15														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHAR_STATUS4(void)
@@ -928,9 +928,9 @@ void CMgrWindow::MakeWindowCHAR_STATUS4(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowTEXTMSG									 */
-/* “à—e		:ƒeƒLƒXƒgƒƒbƒZ[ƒW												 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowTEXTMSG									 */
+/* å†…å®¹		:ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸												 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg)
@@ -950,9 +950,9 @@ void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMs
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowTEXTMSG									 */
-/* “à—e		:ƒeƒLƒXƒgƒƒbƒZ[ƒW												 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowTEXTMSG									 */
+/* å†…å®¹		:ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸												 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo)
@@ -972,9 +972,9 @@ void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEve
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSWOON									 */
-/* “à—e		:‹Câƒƒjƒ…[													 */
-/* “ú•t		:2008/12/02														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSWOON									 */
+/* å†…å®¹		:æ°—çµ¶ãƒ¡ãƒ‹ãƒ¥ãƒ¼													 */
+/* æ—¥ä»˜		:2008/12/02														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSWOON(void)
@@ -991,9 +991,9 @@ void CMgrWindow::MakeWindowSWOON(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowSKILLMENU								 */
-/* “à—e		:ƒXƒLƒ‹ƒƒjƒ…[													 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowSKILLMENU								 */
+/* å†…å®¹		:ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼													 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowSKILLMENU(int nType/*-1*/)
@@ -1013,9 +1013,9 @@ void CMgrWindow::MakeWindowSKILLMENU(int nType/*-1*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::MakeWindowPLACEINFORMATION							 */
-/* “à—e		:êŠî•ñ														 */
-/* “ú•t		:2009/02/11														 */
+/* é–¢æ•°å	:CMgrWindow::MakeWindowPLACEINFORMATION							 */
+/* å†…å®¹		:å ´æ‰€æƒ…å ±														 */
+/* æ—¥ä»˜		:2009/02/11														 */
 /* ========================================================================= */
 
 void CMgrWindow::MakeWindowPLACEINFORMATION(void)
@@ -1031,9 +1031,9 @@ void CMgrWindow::MakeWindowPLACEINFORMATION(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrWindow::SetActive											 */
-/* “à—e		:ƒAƒNƒeƒBƒu‚ÈƒEƒBƒ“ƒhƒE‚ÌÝ’è									 */
-/* “ú•t		:2005/06/16														 */
+/* é–¢æ•°å	:CMgrWindow::SetActive											 */
+/* å†…å®¹		:ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¨­å®š									 */
+/* æ—¥ä»˜		:2005/06/16														 */
 /* ========================================================================= */
 
 void CMgrWindow::SetActive(void)

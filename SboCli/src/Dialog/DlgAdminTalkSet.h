@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkSet.h											 */
-/* “à—e			:‰ï˜bƒf[ƒ^İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkSet.h											 */
+/* å†…å®¹			:ä¼šè©±ãƒ‡ãƒ¼ã‚¿è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,18 +13,18 @@
 class CInfoTalkEvent;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminTalkSet : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkSet(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminTalkSet();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminTalkSet(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminTalkSet();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
 public:
-	CInfoTalkEvent		*m_pInfo;		/* •ÒW’†‚Ì‰ï˜bƒCƒxƒ“ƒg */
+	CInfoTalkEvent		*m_pInfo;		/* ç·¨é›†ä¸­ã®ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
 
 
 public:
@@ -36,7 +36,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminTalkSet)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

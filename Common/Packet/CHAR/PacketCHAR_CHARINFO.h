@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_CHARINFO.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒLƒƒƒ‰î•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/01/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_CHARINFO.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚­ãƒ£ãƒ©æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,21 +12,21 @@
 #include "LibInfoCharBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_CHARINFO : public CPacketBase
 {
 public:
-			CPacketCHAR_CHARINFO();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_CHARINFO();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_CHARINFO();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_CHARINFO();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(PCLibInfoCharBase pInfo);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(PCLibInfoCharBase pInfo);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	PCLibInfoCharBase	m_pLibInfo;				/* ƒLƒƒƒ‰î•ñ */
+	PCLibInfoCharBase	m_pLibInfo;				/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CPacketCHAR_CHARINFO, *PCPacketCHAR_CHARINFO;
 
 /* Copyright(C)URARA-works 2007 */

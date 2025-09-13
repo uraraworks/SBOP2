@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcLOGINMENU.h										 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(ƒƒjƒ…[‰æ–Ê) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcLOGINMENU.h										 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -18,45 +18,45 @@ class CWindowNAMEINPUT;
 class CInfoCharCli;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStateProcLOGINMENU : public CStateProcBase
 {
 public:
-			CStateProcLOGINMENU();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStateProcLOGINMENU();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStateProcLOGINMENU();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStateProcLOGINMENU();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Init			(void);									/* ‰Šú‰» */
-	void OnWindowMsg	(int nType, DWORD dwPara);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG) */
-	void OnMainFrame	(DWORD dwCommand, DWORD dwParam);		/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
-
-
-protected:
-	BOOL	OnLeft							(BOOL bDown);			/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight							(BOOL bDown);			/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX								(BOOL bDown);			/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ								(BOOL bDown);			/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	void	OnMgrDrawEND_FADEOUT			(DWORD dwPara);			/* ƒtƒF[ƒhƒAƒEƒgŠ®—¹ */
-	void	OnWindowMsgLOGINMENU			(DWORD dwPara);			/* ƒƒjƒ…[ƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m */
-	void	OnWindowMsgFAMILYTYPE			(DWORD dwPara);			/* Ží‘°‘I‘ðƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m */
-	void	OnWindowMsgSTYLESELECT			(DWORD dwPara);			/* —eŽp‘I‘ðƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m */
-	void	OnWindowMsgNAMEINPUT			(DWORD dwPara);			/* –¼‘O“ü—ÍƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m */
+	void Init			(void);									/* åˆæœŸåŒ– */
+	void OnWindowMsg	(int nType, DWORD dwPara);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG) */
+	void OnMainFrame	(DWORD dwCommand, DWORD dwParam);		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
 
 
 protected:
-	DWORD	m_dwLastTimeKey;					/* ‘O‰ñ‚ÌƒL[ˆ—ŽžŠÔ */
-	int		m_nCountKeyRepeate,					/* ƒL[ƒŠƒs[ƒg‰ñ” */
-			m_nSelect,							/* ‘I‘ðˆÊ’u */
-			m_nState;							/* ó‘Ô */
+	BOOL	OnLeft							(BOOL bDown);			/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight							(BOOL bDown);			/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX								(BOOL bDown);			/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ								(BOOL bDown);			/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	void	OnMgrDrawEND_FADEOUT			(DWORD dwPara);			/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆå®Œäº† */
+	void	OnWindowMsgLOGINMENU			(DWORD dwPara);			/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥ */
+	void	OnWindowMsgFAMILYTYPE			(DWORD dwPara);			/* ç¨®æ—é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥ */
+	void	OnWindowMsgSTYLESELECT			(DWORD dwPara);			/* å®¹å§¿é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥ */
+	void	OnWindowMsgNAMEINPUT			(DWORD dwPara);			/* åå‰å…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥ */
 
-	CInfoAccount		*m_pInfoAccount;		/* ƒAƒJƒEƒ“ƒgî•ñ */
-	CWindowLOGINMENU	*m_pWindowLOGINMENU;	/* ƒƒOƒCƒ“ƒƒjƒ…[ƒEƒBƒ“ƒhƒE */
-	CWindowSTATUS		*m_pWindowSTATUS;		/* ƒXƒe[ƒ^ƒXƒEƒBƒ“ƒhƒE */
-	CWindowSTYLESELECT	*m_pWindowSTYLESELECT;	/* —eŽp‘I‘ðƒEƒBƒ“ƒhƒE */
-	CWindowNAMEINPUT	*m_pWindowNAMEINPUT;	/* –¼‘O“ü—Í */
 
-	CInfoCharCli		*m_pInfoCharCli;		/* ì¬’†‚ÌƒLƒƒƒ‰î•ñ */
+protected:
+	DWORD	m_dwLastTimeKey;					/* å‰å›žã®ã‚­ãƒ¼å‡¦ç†æ™‚é–“ */
+	int		m_nCountKeyRepeate,					/* ã‚­ãƒ¼ãƒªãƒ”ãƒ¼ãƒˆå›žæ•° */
+			m_nSelect,							/* é¸æŠžä½ç½® */
+			m_nState;							/* çŠ¶æ…‹ */
+
+	CInfoAccount		*m_pInfoAccount;		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
+	CWindowLOGINMENU	*m_pWindowLOGINMENU;	/* ãƒ­ã‚°ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CWindowSTATUS		*m_pWindowSTATUS;		/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CWindowSTYLESELECT	*m_pWindowSTYLESELECT;	/* å®¹å§¿é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CWindowNAMEINPUT	*m_pWindowNAMEINPUT;	/* åå‰å…¥åŠ› */
+
+	CInfoCharCli		*m_pInfoCharCli;		/* ä½œæˆä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CStateProcLOGINMENU, *PCStateProcLOGINMENU;
 
 /* Copyright(C)URARA-works 2006 */

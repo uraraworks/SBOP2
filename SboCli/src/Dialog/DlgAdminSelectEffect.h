@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminSelectEffect.h										 */
-/* “à—e			:ƒGƒtƒFƒNƒg‘I‘ğƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminSelectEffect.h										 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆé¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,20 +15,20 @@ class CLibInfoEffect;
 class CInfoEffect;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminSelectEffect : public CDlgAdminBase
 {
 public:
-			CDlgAdminSelectEffect(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminSelectEffect();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminSelectEffect(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminSelectEffect();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	DWORD	GetSelectID	(void);				/* ‘I‘ğ‚³‚ê‚½ƒGƒtƒFƒNƒgID‚ğæ“¾ */
+	DWORD	GetSelectID	(void);				/* é¸æŠã•ã‚ŒãŸã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDã‚’å–å¾— */
 
 
 protected:
-	DWORD	m_dwSelectID;					/* ‘I‘ğ‚³‚ê‚½ƒGƒtƒFƒNƒgID */
+	DWORD	m_dwSelectID;					/* é¸æŠã•ã‚ŒãŸã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 
 
 
@@ -41,7 +41,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminSelectEffect)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

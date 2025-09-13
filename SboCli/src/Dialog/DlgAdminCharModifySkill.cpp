@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifySkill.cpp								 */
-/* “à—e			:‘I‘ðƒLƒƒƒ‰î•ñ•ÒW[ŠŽƒXƒLƒ‹‚ÌÝ’è]ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/01/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifySkill.cpp								 */
+/* å†…å®¹			:é¸æŠžã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[æ‰€æŒã‚¹ã‚­ãƒ«ã®è¨­å®š]ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/18													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifySkill::DoDataExchange(CDataExchange* pDX)
@@ -47,9 +47,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::CDlgAdminCharModifySkill				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::CDlgAdminCharModifySkill				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifySkill::CDlgAdminCharModifySkill(CWnd* pParent /*=NULL*/)
@@ -66,9 +66,9 @@ CDlgAdminCharModifySkill::CDlgAdminCharModifySkill(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::~CDlgAdminCharModifySkill			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::~CDlgAdminCharModifySkill			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifySkill::~CDlgAdminCharModifySkill()
@@ -77,9 +77,9 @@ CDlgAdminCharModifySkill::~CDlgAdminCharModifySkill()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifySkill::Init(CMgrData *pMgrData)
@@ -88,16 +88,16 @@ void CDlgAdminCharModifySkill::Init(CMgrData *pMgrData)
 
 	m_pLibInfoSkill = m_pMgrData->GetLibInfoSkill ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharModifySkill::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::Renew								 */
-/* “à—e		:XV															 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::Renew								 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifySkill::Renew(void)
@@ -127,7 +127,7 @@ void CDlgAdminCharModifySkill::Renew(void)
 		m_List.InsertItem (i, strTmp, 0);			/* ID */
 		m_List.SetItemData (i, pInfoSkill->m_dwSkillID);
 		strTmp.Format ("%s", (LPCSTR)pInfoSkill->m_strName);
-		m_List.SetItemText (i, 1, strTmp);			/* ƒXƒLƒ‹–¼ */
+		m_List.SetItemText (i, 1, strTmp);			/* ã‚¹ã‚­ãƒ«å */
 	}
 
 Exit:
@@ -136,9 +136,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::OnAdminMsg							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::OnAdminMsg							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifySkill::OnAdminMsg(int nType, DWORD dwPara)
@@ -157,15 +157,15 @@ void CDlgAdminCharModifySkill::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::OnMainFrame							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::OnMainFrame							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifySkill::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWCHARINFO:		/* ƒLƒƒƒ‰î•ñXV */
+	case MAINFRAMEMSG_RENEWCHARINFO:		/* ã‚­ãƒ£ãƒ©æƒ…å ±æ›´æ–° */
 		if (m_pInfoChar == NULL) {
 			break;
 		}
@@ -174,7 +174,7 @@ void CDlgAdminCharModifySkill::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		}
 		Renew ();
 		break;
-	case MAINFRAMEMSG_RENEWSKILLINFO:		/* ƒXƒLƒ‹î•ñXV */
+	case MAINFRAMEMSG_RENEWSKILLINFO:		/* ã‚¹ã‚­ãƒ«æƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -182,9 +182,9 @@ void CDlgAdminCharModifySkill::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharModifySkill::OnInitDialog()
@@ -196,7 +196,7 @@ BOOL CDlgAdminCharModifySkill::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID", LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒXƒLƒ‹–¼", LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "ã‚¹ã‚­ãƒ«å", LVCFMT_LEFT, 120);
 
 	nCount = m_pLibInfoSkill->GetCount ();
 	for (i = 0; i < nCount; i ++) {
@@ -211,9 +211,9 @@ BOOL CDlgAdminCharModifySkill::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::OnAdd								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::OnAdd								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifySkill::OnAdd()
@@ -240,9 +240,9 @@ void CDlgAdminCharModifySkill::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifySkill::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifySkill::OnDelete								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifySkill::OnDelete()

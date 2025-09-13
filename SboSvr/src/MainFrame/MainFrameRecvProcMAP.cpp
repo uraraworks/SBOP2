@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcMAP.cpp									 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒ}ƒbƒvŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/01/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcMAP.cpp									 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ãƒžãƒƒãƒ—ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,23 +17,23 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP										 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvŒn)												 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ç³»)												 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_MAP_REQ_MAPINFO:	RecvProcMAP_REQ_MAPINFO (pData, dwSessionID);	break;	/* ƒ}ƒbƒvî•ñ—v‹ */
+	case SBOCOMMANDID_SUB_MAP_REQ_MAPINFO:	RecvProcMAP_REQ_MAPINFO (pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—æƒ…å ±è¦æ±‚ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_REQ_MAPINFO							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvî•ñ—v‹)										 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_REQ_MAPINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—æƒ…å ±è¦æ±‚)										 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_REQ_MAPINFO(PBYTE pData, DWORD dwSessionID)

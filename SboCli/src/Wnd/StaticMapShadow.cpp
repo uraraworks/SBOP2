@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StaticMapShadow.cpp										 */
-/* “à—e			:ƒ}ƒbƒv‰eˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StaticMapShadow.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CStaticMapShadow, CStatic)
@@ -36,9 +36,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::CStaticMapShadow								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::CStaticMapShadow								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CStaticMapShadow::CStaticMapShadow()
@@ -58,9 +58,9 @@ CStaticMapShadow::CStaticMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::~CStaticMapShadow							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::~CStaticMapShadow							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CStaticMapShadow::~CStaticMapShadow()
@@ -70,9 +70,9 @@ CStaticMapShadow::~CStaticMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 BOOL CStaticMapShadow::Create(CWnd *pParent, CMgrData *pMgrData)
@@ -89,9 +89,9 @@ BOOL CStaticMapShadow::Create(CWnd *pParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::Renew										 */
-/* “à—e		:ƒp[ƒcˆê——‰æ‘œ‚ğì¬‚µ‚ÄÄ•`‰æ									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::Renew										 */
+/* å†…å®¹		:ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒã‚’ä½œæˆã—ã¦å†æç”»									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::Renew(void)
@@ -102,9 +102,9 @@ void CStaticMapShadow::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::SetScrollPos									 */
-/* “à—e		:cƒXƒNƒ[ƒ‹ˆÊ’u‚ğİ’è											 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::SetScrollPos									 */
+/* å†…å®¹		:ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::SetScrollPos(int nPos)
@@ -115,9 +115,9 @@ void CStaticMapShadow::SetScrollPos(int nPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::OnLButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::OnLButtonDown(CPoint point)
@@ -126,9 +126,9 @@ void CStaticMapShadow::OnLButtonDown(CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::OnRButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::OnRButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::OnRButtonDown(CPoint point)
@@ -137,9 +137,9 @@ void CStaticMapShadow::OnRButtonDown(CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::OnMouseWheel									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::OnMouseWheel									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::OnMouseWheel(short zDelta, CPoint pt)
@@ -148,9 +148,9 @@ void CStaticMapShadow::OnMouseWheel(short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::OnMouseMove									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/25														 */
+/* é–¢æ•°å	:CStaticMapShadow::OnMouseMove									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/04/25														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::OnMouseMove(CPoint point)
@@ -169,9 +169,9 @@ void CStaticMapShadow::OnMouseMove(CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::OnCreate										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::OnCreate										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 int CStaticMapShadow::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -185,9 +185,9 @@ int CStaticMapShadow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::OnPaint										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::OnPaint										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::OnPaint()
@@ -224,9 +224,9 @@ void CStaticMapShadow::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::OnSize										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::OnSize										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::OnSize(UINT nType, int cx, int cy)
@@ -238,9 +238,9 @@ void CStaticMapShadow::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapShadow::MakeShadowImage								 */
-/* “à—e		:ƒp[ƒcˆê——‰æ‘œ‚ğì¬											 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CStaticMapShadow::MakeShadowImage								 */
+/* å†…å®¹		:ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒã‚’ä½œæˆ											 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CStaticMapShadow::MakeShadowImage(void)

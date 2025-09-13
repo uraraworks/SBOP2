@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowCOMMANDMENU.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒhƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/08/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowCOMMANDMENU.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/02													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,35 +14,35 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowCOMMANDMENU : public CWindowBase
 {
 public:
-			CWindowCOMMANDMENU();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowCOMMANDMENU();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowCOMMANDMENU();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowCOMMANDMENU();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);					/* ì¬ */
-	void	Draw		(CImg32 *pDst);							/* •`‰æ */
-	int		GetPosSub	(void)	{ return m_nPosSub; }			/* ƒTƒuƒƒjƒ…[‚ÌˆÊ’u‚ðŽæ“¾ */
-
-
-protected:
-	BOOL	OnUp			(void);							/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown			(void);							/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft			(void);							/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight			(void);							/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnB				(BOOL bDown);					/* ƒL[ƒnƒ“ƒhƒ‰(B) */
-	BOOL	OnX				(BOOL bDown);					/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ				(BOOL bDown);					/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	BOOL	OnSpace			(BOOL bDown);					/* ƒL[ƒnƒ“ƒhƒ‰(Space) */
-	void	RenewCommand	(void);							/* ‘I‘ð’†‚ÌƒRƒ}ƒ“ƒh‚ðXV */
+	void	Create		(CMgrData *pMgrData);					/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);							/* æç”» */
+	int		GetPosSub	(void)	{ return m_nPosSub; }			/* ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ä½ç½®ã‚’å–å¾— */
 
 
 protected:
-	int			m_nPosSub;					/* ƒTƒuƒƒjƒ…[‚ÌˆÊ’u */
-	CmyString	m_strCommand;				/* ‘I‘ð’†‚ÌƒRƒ}ƒ“ƒh */
+	BOOL	OnUp			(void);							/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown			(void);							/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft			(void);							/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight			(void);							/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnB				(BOOL bDown);					/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B) */
+	BOOL	OnX				(BOOL bDown);					/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ				(BOOL bDown);					/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	BOOL	OnSpace			(BOOL bDown);					/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Space) */
+	void	RenewCommand	(void);							/* é¸æŠžä¸­ã®ã‚³ãƒžãƒ³ãƒ‰ã‚’æ›´æ–° */
+
+
+protected:
+	int			m_nPosSub;					/* ã‚µãƒ–ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ä½ç½® */
+	CmyString	m_strCommand;				/* é¸æŠžä¸­ã®ã‚³ãƒžãƒ³ãƒ‰ */
 } CWindowCOMMANDMENU, *PCWindowCOMMANDMENU;
 
 /* Copyright(C)URARA-works 2008 */

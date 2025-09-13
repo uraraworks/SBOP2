@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketMAP_SETMAPSHADOW.cpp									 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(É}ÉbÉvån:É}ÉbÉvâeîzíu) é¿ëïÉtÉ@ÉCÉã				 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/06/08													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketMAP_SETMAPSHADOW.cpp									 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Éû„ÉÉ„ÉóÁ≥ª:„Éû„ÉÉ„ÉóÂΩ±ÈÖçÁΩÆ) ÂÆüË£Ö„Éï„Ç°„Ç§„É´				 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/06/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketMAP_SETMAPSHADOW.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_SETMAPSHADOW::CPacketMAP_SETMAPSHADOW				 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_SETMAPSHADOW::CPacketMAP_SETMAPSHADOW				 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 CPacketMAP_SETMAPSHADOW::CPacketMAP_SETMAPSHADOW()
@@ -27,9 +27,9 @@ CPacketMAP_SETMAPSHADOW::CPacketMAP_SETMAPSHADOW()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_SETMAPSHADOW::~CPacketMAP_SETMAPSHADOW				 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_SETMAPSHADOW::~CPacketMAP_SETMAPSHADOW				 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 CPacketMAP_SETMAPSHADOW::~CPacketMAP_SETMAPSHADOW()
@@ -38,16 +38,16 @@ CPacketMAP_SETMAPSHADOW::~CPacketMAP_SETMAPSHADOW()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_SETMAPSHADOW::Make									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_SETMAPSHADOW::Make									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 void CPacketMAP_SETMAPSHADOW::Make(
-	DWORD dwMapID,			/* [in] É}ÉbÉvID */
-	int x,					/* [in] Xç¿ïW */
-	int y,					/* [in] Yç¿ïW */
-	DWORD dwShadowID)		/* [in] É}ÉbÉvâeID */
+	DWORD dwMapID,			/* [in] „Éû„ÉÉ„ÉóID */
+	int x,					/* [in] XÂ∫ßÊ®ô */
+	int y,					/* [in] YÂ∫ßÊ®ô */
+	DWORD dwShadowID)		/* [in] „Éû„ÉÉ„ÉóÂΩ±ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -70,18 +70,18 @@ void CPacketMAP_SETMAPSHADOW::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_SETMAPSHADOW;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMapID,	sizeof (dwMapID),		pDataTmp);	/* É}ÉbÉvID */
-	CopyMemoryRenew (pDataTmp, &ptPos,		sizeof (ptPos),			pDataTmp);	/* ç¿ïW */
-	CopyMemoryRenew (pDataTmp, &dwShadowID,	sizeof (dwShadowID),	pDataTmp);	/* É}ÉbÉvâeID */
+	CopyMemoryRenew (pDataTmp, &dwMapID,	sizeof (dwMapID),		pDataTmp);	/* „Éû„ÉÉ„ÉóID */
+	CopyMemoryRenew (pDataTmp, &ptPos,		sizeof (ptPos),			pDataTmp);	/* Â∫ßÊ®ô */
+	CopyMemoryRenew (pDataTmp, &dwShadowID,	sizeof (dwShadowID),	pDataTmp);	/* „Éû„ÉÉ„ÉóÂΩ±ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_SETMAPSHADOW::Set									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_SETMAPSHADOW::Set									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_SETMAPSHADOW::Set(PBYTE pPacket)
@@ -91,9 +91,9 @@ PBYTE CPacketMAP_SETMAPSHADOW::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMapID,	pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* É}ÉbÉvID */
-	CopyMemoryRenew (&m_ptPos,		pDataTmp, sizeof (m_ptPos),			pDataTmp);	/* ç¿ïW */
-	CopyMemoryRenew (&m_dwShadowID,	pDataTmp, sizeof (m_dwShadowID),	pDataTmp);	/* É}ÉbÉvâeID */
+	CopyMemoryRenew (&m_dwMapID,	pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* „Éû„ÉÉ„ÉóID */
+	CopyMemoryRenew (&m_ptPos,		pDataTmp, sizeof (m_ptPos),			pDataTmp);	/* Â∫ßÊ®ô */
+	CopyMemoryRenew (&m_dwShadowID,	pDataTmp, sizeof (m_dwShadowID),	pDataTmp);	/* „Éû„ÉÉ„ÉóÂΩ±ID */
 
 	pRet = pDataTmp;
 	return pRet;

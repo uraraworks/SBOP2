@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndSelectItemGrp.cpp										 */
-/* “à—e			:ƒAƒCƒeƒ€‰æ‘œ‘I‘ðƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/21													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndSelectItemGrp.cpp										 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒé¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/21													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CWndSelectItemGrp, CWnd)
@@ -40,9 +40,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::CWndSelectItemGrp							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::CWndSelectItemGrp							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 CWndSelectItemGrp::CWndSelectItemGrp()
@@ -57,9 +57,9 @@ CWndSelectItemGrp::CWndSelectItemGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::~CWndSelectItemGrp							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::~CWndSelectItemGrp							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 CWndSelectItemGrp::~CWndSelectItemGrp()
@@ -69,9 +69,9 @@ CWndSelectItemGrp::~CWndSelectItemGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 BOOL CWndSelectItemGrp::Create(CWnd *pParent, CMgrData *pMgrData)
@@ -90,7 +90,7 @@ BOOL CWndSelectItemGrp::Create(CWnd *pParent, CMgrData *pMgrData)
 	bRet = CWnd::CreateEx (
 			WS_EX_TOOLWINDOW,
 			AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW),
-			"ƒAƒCƒeƒ€‰æ‘œ‚Ì‘I‘ð",
+			"ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒã®é¸æŠž",
 			WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME | WS_HSCROLL | WS_VSCROLL,
 			rc,
 			pParent,
@@ -105,9 +105,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::Destroy										 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::Destroy										 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::Destroy(void)
@@ -117,9 +117,9 @@ void CWndSelectItemGrp::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnCreate									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnCreate									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 int CWndSelectItemGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -131,7 +131,7 @@ int CWndSelectItemGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÝ’è */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®è¨­å®š */
 	ModifyStyle (0, WS_VSCROLL | WS_HSCROLL);
 	nCount = m_pMgrGrpData->GetMapPartsCount ();
 	cx = 32;
@@ -151,9 +151,9 @@ int CWndSelectItemGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnClose										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CLOSE)									 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnClose										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CLOSE)									 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::OnClose()
@@ -166,9 +166,9 @@ void CWndSelectItemGrp::OnClose()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnPaint										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnPaint										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::OnPaint()
@@ -205,9 +205,9 @@ void CWndSelectItemGrp::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnSize										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnSize										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::OnSize(UINT nType, int cx, int cy)
@@ -221,7 +221,7 @@ void CWndSelectItemGrp::OnSize(UINT nType, int cx, int cy)
 
 	nCount = m_pMgrGrpData->GetItemCount ();
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÅ‘å’l‚ðXV */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®æœ€å¤§å€¤ã‚’æ›´æ–° */
 	cxTmp = 32 - (cx / 32) - 1;
 	cyTmp = (nCount / 32) - (cy / 32) - 1;
 	cxTmp = min (32 - 1, cxTmp);
@@ -232,9 +232,9 @@ void CWndSelectItemGrp::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnHScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnHScroll									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -247,24 +247,24 @@ void CWndSelectItemGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 	bChange = TRUE;
 
 	switch (nSBCode) {
-	case SB_LEFT:			/* ¶’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LEFT:			/* å·¦ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_HORZ, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_RIGHT:			/* ‰E’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_RIGHT:			/* å³ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_HORZ, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINELEFT:		/* ¶‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGELEFT:		/* 1ƒy[ƒW¶‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINELEFT:		/* å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGELEFT:		/* 1ãƒšãƒ¼ã‚¸å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINERIGHT:		/* ‰E‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGERIGHT:		/* 1ƒy[ƒW‰E‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINERIGHT:		/* å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGERIGHT:		/* 1ãƒšãƒ¼ã‚¸å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		bChange = FALSE;
@@ -280,9 +280,9 @@ void CWndSelectItemGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnVScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_VSCROLL)									 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnVScroll									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_VSCROLL)									 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -295,24 +295,24 @@ void CWndSelectItemGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 	bChange = TRUE;
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1”Ôã‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_TOP:			/* 1ç•ªä¸Šã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_VERT, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1”Ô‰º‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_BOTTOM:			/* 1ç•ªä¸‹ã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_VERT, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1sã‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEUP:			/* 1ƒy[ƒWã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEUP:			/* 1è¡Œä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEUP:			/* 1ãƒšãƒ¼ã‚¸ä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINEDOWN:		/* 1s‰º‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEDOWN:		/* 1ƒy[ƒW‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEDOWN:		/* 1è¡Œä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEDOWN:		/* 1ãƒšãƒ¼ã‚¸ä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		bChange = FALSE;
@@ -328,9 +328,9 @@ void CWndSelectItemGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnSetCursor									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SETCURSOR)								 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnSetCursor									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SETCURSOR)								 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 BOOL CWndSelectItemGrp::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
@@ -350,9 +350,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnLButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::OnLButtonDown(UINT nFlags, CPoint point)
@@ -382,9 +382,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnRButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnRButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::OnRButtonDown(UINT nFlags, CPoint point)
@@ -395,9 +395,9 @@ void CWndSelectItemGrp::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::OnMouseWheel								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::OnMouseWheel								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 BOOL CWndSelectItemGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -416,9 +416,9 @@ BOOL CWndSelectItemGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectItemGrp::PostNcDestroy								 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/08/21														 */
+/* é–¢æ•°å	:CWndSelectItemGrp::PostNcDestroy								 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/08/21														 */
 /* ========================================================================= */
 
 void CWndSelectItemGrp::PostNcDestroy()

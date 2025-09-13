@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoItemWeapon.h									 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İƒNƒ‰ƒX(•Šíî•ñ) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoItemWeapon.h									 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(æ­¦å™¨æƒ…å ±) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "SaveLoadInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CSaveLoadInfoItemWeapon : public CSaveLoadInfoBase
 {
 public:
-			CSaveLoadInfoItemWeapon();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSaveLoadInfoItemWeapon();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSaveLoadInfoItemWeapon();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSaveLoadInfoItemWeapon();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 } CSaveLoadInfoItemWeapon, *PCSaveLoadInfoItemWeapon;
 
 /* Copyright(C)URARA-works 2008 */

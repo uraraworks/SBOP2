@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_PLAYSOUND.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:Œø‰Ê‰¹‚ÌÄ¶) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_PLAYSOUND.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:åŠ¹æœéŸ³ã®å†ç”Ÿ) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/02													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketADMIN_PLAYSOUND.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_PLAYSOUND::CPacketADMIN_PLAYSOUND					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CPacketADMIN_PLAYSOUND::CPacketADMIN_PLAYSOUND					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 CPacketADMIN_PLAYSOUND::CPacketADMIN_PLAYSOUND()
@@ -23,9 +23,9 @@ CPacketADMIN_PLAYSOUND::CPacketADMIN_PLAYSOUND()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_PLAYSOUND::~CPacketADMIN_PLAYSOUND				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CPacketADMIN_PLAYSOUND::~CPacketADMIN_PLAYSOUND				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 CPacketADMIN_PLAYSOUND::~CPacketADMIN_PLAYSOUND()
@@ -34,13 +34,13 @@ CPacketADMIN_PLAYSOUND::~CPacketADMIN_PLAYSOUND()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_PLAYSOUND::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CPacketADMIN_PLAYSOUND::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CPacketADMIN_PLAYSOUND::Make(
-	DWORD dwSoundID)		/* [in] Œø‰Ê‰¹ID */
+	DWORD dwSoundID)		/* [in] åŠ¹æœéŸ³ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketADMIN_PLAYSOUND::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_PLAYSOUND;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwSoundID, sizeof (dwSoundID), pDataTmp);	/* Œø‰Ê‰¹ID */
+	CopyMemoryRenew (pDataTmp, &dwSoundID, sizeof (dwSoundID), pDataTmp);	/* åŠ¹æœéŸ³ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_PLAYSOUND::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CPacketADMIN_PLAYSOUND::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_PLAYSOUND::Set(PBYTE pPacket)
@@ -76,7 +76,7 @@ PBYTE CPacketADMIN_PLAYSOUND::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwSoundID, pDataTmp, sizeof (m_dwSoundID), pDataTmp);	/* Œø‰Ê‰¹ID */
+	CopyMemoryRenew (&m_dwSoundID, pDataTmp, sizeof (m_dwSoundID), pDataTmp);	/* åŠ¹æœéŸ³ID */
 
 	pRet = pDataTmp;
 	return pRet;

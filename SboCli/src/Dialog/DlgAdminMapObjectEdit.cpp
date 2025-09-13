@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapObjectEdit.cpp									 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapObjectEdit.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::DoDataExchange(CDataExchange* pDX)
@@ -59,9 +59,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::CDlgAdminMapObjectEdit					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::CDlgAdminMapObjectEdit					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 CDlgAdminMapObjectEdit::CDlgAdminMapObjectEdit(CWnd* pParent /*=NULL*/)
@@ -88,9 +88,9 @@ CDlgAdminMapObjectEdit::CDlgAdminMapObjectEdit(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::~CDlgAdminMapObjectEdit				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::~CDlgAdminMapObjectEdit				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 CDlgAdminMapObjectEdit::~CDlgAdminMapObjectEdit()
@@ -100,9 +100,9 @@ CDlgAdminMapObjectEdit::~CDlgAdminMapObjectEdit()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::SetData								 */
-/* “à—e		:•ÒW—p‚Éƒf[ƒ^‚ğİ’è											 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::SetData								 */
+/* å†…å®¹		:ç·¨é›†ç”¨ã«ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::SetData(CInfoMapObject *pSrc)
@@ -113,9 +113,9 @@ void CDlgAdminMapObjectEdit::SetData(CInfoMapObject *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::GetData								 */
-/* “à—e		:•ÒW‚µ‚½ƒf[ƒ^‚ğæ“¾											 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::GetData								 */
+/* å†…å®¹		:ç·¨é›†ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::GetData(CInfoMapObject *pDst)
@@ -125,9 +125,9 @@ void CDlgAdminMapObjectEdit::GetData(CInfoMapObject *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapObjectEdit::OnInitDialog()
@@ -152,7 +152,7 @@ BOOL CDlgAdminMapObjectEdit::OnInitDialog()
 
 	nCount = m_pMgrData->GetMgrGrpData ()->GetMapPartsCount () / 1024;
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("‰æ‘œ %d –‡–Ú", i + 1);
+		strTmp.Format ("ç”»åƒ %d æšç›®", i + 1);
 		m_cbGrpNo.AddString (strTmp);
 	}
 	m_nGrpNo = m_pMgrData->GetLastSelectGrpNo ();
@@ -168,9 +168,9 @@ BOOL CDlgAdminMapObjectEdit::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnSelchangeGrpNo						 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/10/30														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnSelchangeGrpNo						 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/10/30														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::OnSelchangeGrpNo()
@@ -182,9 +182,9 @@ void CDlgAdminMapObjectEdit::OnSelchangeGrpNo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnHScroll								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnHScroll								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -196,9 +196,9 @@ void CDlgAdminMapObjectEdit::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::OnOK()
@@ -210,9 +210,9 @@ void CDlgAdminMapObjectEdit::OnOK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapObjectEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
@@ -220,7 +220,7 @@ LRESULT CDlgAdminMapObjectEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 	int nNo;
 
 	switch (wParam) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		nNo = m_Slider.GetPos ();
 		m_pInfoMapObject->SetGrpID (nNo, m_ctlObject.m_ptSelect.x, m_ctlObject.m_ptSelect.y, (WORD)lParam);
 		m_ctlObject.IncPosX ();
@@ -232,9 +232,9 @@ LRESULT CDlgAdminMapObjectEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2008/09/07														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/09/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::PostNcDestroy()
@@ -243,9 +243,9 @@ void CDlgAdminMapObjectEdit::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnEnChangeCx							 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(EN_CHANGE)									 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnEnChangeCx							 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(EN_CHANGE)									 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::OnEnChangeCx()
@@ -260,9 +260,9 @@ void CDlgAdminMapObjectEdit::OnEnChangeCx()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnEnChangeCx							 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(EN_CHANGE)									 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnEnChangeCx							 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(EN_CHANGE)									 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::OnEnChangeCy()
@@ -277,9 +277,9 @@ void CDlgAdminMapObjectEdit::OnEnChangeCy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnBnClickedAdd							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnBnClickedAdd							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::OnBnClickedAdd()
@@ -291,9 +291,9 @@ void CDlgAdminMapObjectEdit::OnBnClickedAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::Set									 */
-/* “à—e		:‰æ–Ê‚É”½‰f														 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::Set									 */
+/* å†…å®¹		:ç”»é¢ã«åæ˜ 														 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::Set(void)
@@ -314,9 +314,9 @@ void CDlgAdminMapObjectEdit::Set(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::Get									 */
-/* “à—e		:‰æ–Ê‚©‚çæ“¾													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::Get									 */
+/* å†…å®¹		:ç”»é¢ã‹ã‚‰å–å¾—													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::Get(void)
@@ -333,9 +333,9 @@ void CDlgAdminMapObjectEdit::Get(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapObjectEdit::OnSelectAnime							 */
-/* “à—e		:ƒRƒ}‘I‘ğˆ—													 */
-/* “ú•t		:2008/11/02														 */
+/* é–¢æ•°å	:CDlgAdminMapObjectEdit::OnSelectAnime							 */
+/* å†…å®¹		:ã‚³ãƒé¸æŠå‡¦ç†													 */
+/* æ—¥ä»˜		:2008/11/02														 */
 /* ========================================================================= */
 
 void CDlgAdminMapObjectEdit::OnSelectAnime(void)

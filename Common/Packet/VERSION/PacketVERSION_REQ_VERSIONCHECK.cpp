@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_REQ_VERSIONCHECK.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN—v‹) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_REQ_VERSIONCHECK.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketVERSION_REQ_VERSIONCHECK.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_VERSIONCHECK::CPacketVERSION_REQ_VERSIONCHECK */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_VERSIONCHECK::CPacketVERSION_REQ_VERSIONCHECK */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CPacketVERSION_REQ_VERSIONCHECK::CPacketVERSION_REQ_VERSIONCHECK()
@@ -23,9 +23,9 @@ CPacketVERSION_REQ_VERSIONCHECK::CPacketVERSION_REQ_VERSIONCHECK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_VERSIONCHECK::~CPacketVERSION_REQ_VERSIONCHECK */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_VERSIONCHECK::~CPacketVERSION_REQ_VERSIONCHECK */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CPacketVERSION_REQ_VERSIONCHECK::~CPacketVERSION_REQ_VERSIONCHECK()
@@ -34,13 +34,13 @@ CPacketVERSION_REQ_VERSIONCHECK::~CPacketVERSION_REQ_VERSIONCHECK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_VERSIONCHECK::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_VERSIONCHECK::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CPacketVERSION_REQ_VERSIONCHECK::Make(
-	DWORD dwVersion)		/* [in] ƒo[ƒWƒ‡ƒ“ƒR[ƒh */
+	DWORD dwVersion)		/* [in] ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚³ãƒ¼ãƒ‰ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketVERSION_REQ_VERSIONCHECK::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_VERSION_REQ_VERSIONCHECK;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwVersion, sizeof (dwVersion), pDataTmp);	/* ƒo[ƒWƒ‡ƒ“ƒR[ƒh */
+	CopyMemoryRenew (pDataTmp, &dwVersion, sizeof (dwVersion), pDataTmp);	/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚³ãƒ¼ãƒ‰ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_VERSIONCHECK::Set							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_VERSIONCHECK::Set							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PBYTE CPacketVERSION_REQ_VERSIONCHECK::Set(PBYTE pPacket)

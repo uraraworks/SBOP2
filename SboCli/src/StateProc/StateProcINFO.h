@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcINFO.h											 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(‚¨’m‚ç‚¹) ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2005/08/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcINFO.h											 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãŠçŸ¥ã‚‰ã›) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/08/16													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,21 +12,21 @@
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStateProcINFO : public CStateProcBase
 {
 public:
-			CStateProcINFO();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStateProcINFO();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStateProcINFO();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStateProcINFO();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Init			(void);							/* ‰Šú‰» */
-	void OnLButtonDown	(int x, int y);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN) */
+	void Init			(void);							/* åˆæœŸåŒ– */
+	void OnLButtonDown	(int x, int y);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN) */
 
 
 protected:
-	BOOL	OnX			(BOOL bDown);					/* ƒL[ƒnƒ“ƒhƒ‰(X) */
+	BOOL	OnX			(BOOL bDown);					/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
 } CStateProcINFO, *PCStateProcINFO;
 
 /* Copyright(C)URARA-works 2005 */

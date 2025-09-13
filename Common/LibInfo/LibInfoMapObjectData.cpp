@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoMapObjectData.cpp									 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoMapObjectData.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::CLibInfoMapObjectData					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::CLibInfoMapObjectData					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 CLibInfoMapObjectData::CLibInfoMapObjectData()
@@ -25,9 +25,9 @@ CLibInfoMapObjectData::CLibInfoMapObjectData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::~CLibInfoMapObjectData					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::~CLibInfoMapObjectData					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 CLibInfoMapObjectData::~CLibInfoMapObjectData()
@@ -37,9 +37,9 @@ CLibInfoMapObjectData::~CLibInfoMapObjectData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CLibInfoMapObjectData::Create(void)
@@ -49,9 +49,9 @@ void CLibInfoMapObjectData::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::Destroy									 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::Destroy									 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CLibInfoMapObjectData::Destroy(void)
@@ -62,9 +62,9 @@ void CLibInfoMapObjectData::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetNew									 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetNew									 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapObjectData::GetNew(void)
@@ -78,9 +78,9 @@ PCInfoBase CLibInfoMapObjectData::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetCount								 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetCount								 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 int CLibInfoMapObjectData::GetCount(void)
@@ -100,9 +100,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::Add										 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::Add										 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CLibInfoMapObjectData::Add(PCInfoBase pInfo)
@@ -118,13 +118,13 @@ void CLibInfoMapObjectData::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::Delete									 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::Delete									 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CLibInfoMapObjectData::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoMapObjectData pInfo;
 
@@ -135,9 +135,9 @@ void CLibInfoMapObjectData::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::Delete									 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::Delete									 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CLibInfoMapObjectData::Delete(DWORD dwDataID)
@@ -158,9 +158,9 @@ void CLibInfoMapObjectData::Delete(DWORD dwDataID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::DeleteAll								 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::DeleteAll								 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CLibInfoMapObjectData::DeleteAll(void)
@@ -179,9 +179,9 @@ void CLibInfoMapObjectData::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::Merge									 */
-/* “à—e		:æ‚è‚İ														 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::Merge									 */
+/* å†…å®¹		:å–ã‚Šè¾¼ã¿														 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 void CLibInfoMapObjectData::Merge(CLibInfoMapObjectData *pSrc)
@@ -207,9 +207,9 @@ void CLibInfoMapObjectData::Merge(CLibInfoMapObjectData *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::Renew									 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::Renew									 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 CInfoMapObjectData *CLibInfoMapObjectData::Renew(DWORD dwDataID, CInfoMapObjectData *pSrc)
@@ -240,9 +240,9 @@ CInfoMapObjectData *CLibInfoMapObjectData::Renew(DWORD dwDataID, CInfoMapObjectD
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetPtr									 */
-/* “à—e		:”z’uƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetPtr									 */
+/* å†…å®¹		:é…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapObjectData::GetPtr(int nNo)
@@ -252,9 +252,9 @@ PCInfoBase CLibInfoMapObjectData::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetPtr									 */
-/* “à—e		:”z’uƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetPtr									 */
+/* å†…å®¹		:é…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMapObjectData::GetPtr(DWORD dwDataID)
@@ -278,9 +278,9 @@ PCInfoBase CLibInfoMapObjectData::GetPtr(DWORD dwDataID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapObjectDataMOVE::GetDataSize							 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CInfoMapObjectDataMOVE::GetDataSize							 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapObjectData::GetDataSize(void)
@@ -291,16 +291,16 @@ DWORD CLibInfoMapObjectData::GetDataSize(void)
 
 	dwRet = 0;
 
-	dwRet += sizeof (int);									/* ƒf[ƒ^” */
+	dwRet += sizeof (int);									/* ãƒ‡ãƒ¼ã‚¿æ•° */
 	nCount = m_paInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_paInfo->GetAt (i);
-		dwRet += sizeof (int);								/* —v‘f” */
+		dwRet += sizeof (int);								/* è¦ç´ æ•° */
 		nCount2 = pInfo->GetElementCount ();
 		for (j = 0; j < nCount2; j ++) {
-			dwRet += (strlen (pInfo->GetName (j)) + 1);		/* —v‘f–¼ */
-			dwRet += sizeof (DWORD);						/* ƒf[ƒ^ƒTƒCƒY */
-			dwRet += pInfo->GetDataSizeNo (j);				/* ƒf[ƒ^ */
+			dwRet += (strlen (pInfo->GetName (j)) + 1);		/* è¦ç´ å */
+			dwRet += sizeof (DWORD);						/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+			dwRet += pInfo->GetDataSizeNo (j);				/* ãƒ‡ãƒ¼ã‚¿ */
 		}
 	}
 
@@ -309,9 +309,9 @@ DWORD CLibInfoMapObjectData::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetWriteData							 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetWriteData							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMapObjectData::GetWriteData(PDWORD pdwSize)
@@ -333,18 +333,18 @@ PBYTE CLibInfoMapObjectData::GetWriteData(PDWORD pdwSize)
 	pRetTmp = pRet;
 
 	nCount = m_paInfo->GetSize ();
-	CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);		/* ƒf[ƒ^” */
+	CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);		/* ãƒ‡ãƒ¼ã‚¿æ•° */
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_paInfo->GetAt (i);
 		nCount2 = pInfo->GetElementCount ();
-		CopyMemoryRenew (pRetTmp, &nCount2, sizeof (nCount2), pRetTmp);	/* —v‘f” */
+		CopyMemoryRenew (pRetTmp, &nCount2, sizeof (nCount2), pRetTmp);	/* è¦ç´ æ•° */
 
 		for (j = 0; j < nCount2; j ++) {
-			strcpyRenew ((LPSTR)pRetTmp, pInfo->GetName (j), pRetTmp); 	/* —v‘f–¼ */
+			strcpyRenew ((LPSTR)pRetTmp, pInfo->GetName (j), pRetTmp); 	/* è¦ç´ å */
 			dwTmp = pInfo->GetDataSizeNo (j);
-			CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+			CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
 			pTmp = pInfo->GetWriteData (j, &dwTmp);
-			CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* ƒf[ƒ^ */
+			CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* ãƒ‡ãƒ¼ã‚¿ */
 			SAFE_DELETE_ARRAY (pTmp);
 		}
 	}
@@ -355,9 +355,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::ReadElementData							 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::ReadElementData							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapObjectData::ReadElementData(PBYTE pSrc)
@@ -374,14 +374,14 @@ DWORD CLibInfoMapObjectData::ReadElementData(PBYTE pSrc)
 	DeleteAll ();
 
 	pSrcTmp = pSrc;
-	CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);				/* ƒf[ƒ^” */
+	CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);				/* ãƒ‡ãƒ¼ã‚¿æ•° */
 	for (i = 0; i < nCount; i ++) {
-		CopyMemoryRenew (&nCount2, pSrcTmp, sizeof (nCount2), pSrcTmp);			/* —v‘f” */
+		CopyMemoryRenew (&nCount2, pSrcTmp, sizeof (nCount2), pSrcTmp);			/* è¦ç´ æ•° */
 
 		pInfo = (PCInfoMapObjectData)GetNew ();
 		for (j = 0; j < nCount2; j ++) {
-			StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* —v‘f–¼ */
-			CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+			StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* è¦ç´ å */
+			CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
 			nNo = pInfo->GetElementNo ((LPCSTR)strTmp);
 			if (nNo >= 0) {
 				dwSizeTmp = pInfo->ReadElementData (pSrcTmp, nNo);
@@ -396,9 +396,9 @@ DWORD CLibInfoMapObjectData::ReadElementData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapObjectData::GetSendDataSize(void)
@@ -409,7 +409,7 @@ DWORD CLibInfoMapObjectData::GetSendDataSize(void)
 
 	dwRet = dwSize = 0;
 
-	/* ƒf[ƒ^”•ª‚ÌƒTƒCƒY */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°åˆ†ã®ã‚µã‚¤ã‚º */
 	dwSize += sizeof (DWORD);
 
 	nCount = GetCount ();
@@ -425,9 +425,9 @@ DWORD CLibInfoMapObjectData::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMapObjectData::GetSendData(void)
@@ -443,12 +443,12 @@ PBYTE CLibInfoMapObjectData::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	dwOffset	= 0;
 
-	/* ƒf[ƒ^”‚ğ‘‚«‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’æ›¸ãè¾¼ã¿ */
 	dwCount = (DWORD)GetCount ();
 	CopyMemory (pData, &dwCount, sizeof (dwCount));
 	dwOffset += sizeof (dwCount);
 
-	/* ”z’uƒf[ƒ^‚ğ‘‚«‚İ */
+	/* é…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã¿ */
 	nCount = (int)dwCount;
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapObjectData)GetPtr (i);
@@ -467,10 +467,10 @@ PBYTE CLibInfoMapObjectData::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/11/03														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/11/03														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMapObjectData::SetSendData(PBYTE pSrc)
@@ -485,7 +485,7 @@ PBYTE CLibInfoMapObjectData::SetSendData(PBYTE pSrc)
 
 	DeleteAll ();
 
-	/* ƒf[ƒ^”‚ğ“Ç‚İ‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’èª­ã¿è¾¼ã¿ */
 	CopyMemory (&dwCount, pDataTmp, sizeof (dwCount));
 	nCount		= (int)dwCount;
 	pDataTmp	+= sizeof (dwCount);
@@ -505,9 +505,9 @@ PBYTE CLibInfoMapObjectData::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMapObjectData::GetNewID								 */
-/* “à—e		:V‚µ‚¢ID‚ğæ“¾													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLibInfoMapObjectData::GetNewID								 */
+/* å†…å®¹		:æ–°ã—ã„IDã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMapObjectData::GetNewID(void)

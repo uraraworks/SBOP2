@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndMap.h													 */
-/* “à—e			:ƒ}ƒbƒvƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndMap.h													 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -18,48 +18,48 @@ class CInfoMapBase;
 class CUraraSockTCPSBO;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWndMap : public CWnd
 {
 public:
-			CWndMap();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWndMap();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWndMap();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWndMap();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nNotify);	/* ì¬ */
-	void	Destroy	(void);												/* ”jŠü */
-
-
-protected:
-	void	RenewScrollRange	(int cx, int cy);			/* ƒXƒNƒ[ƒ‹ƒo[‚Ì”ÍˆÍ‚ğXV */
-	void	RenewToolbar		(void);						/* ƒc[ƒ‹ƒo[‚ğXV */
-	void	RenewStatusText		(void);						/* ƒXƒe[ƒ^ƒXƒo[‚ÌƒeƒLƒXƒg‚ğXV */
-	BOOL	GetCheck			(int nNo);					/* ƒc[ƒ‹ƒo[‚Ìƒ{ƒ^ƒ“ó‘Ô‚ğæ“¾ */
-	void	SetCheck			(int nNo, BOOL bCheck);		/* ƒc[ƒ‹ƒo[‚Ìƒ{ƒ^ƒ“ó‘Ô‚ğİ’è */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nNotify);	/* ä½œæˆ */
+	void	Destroy	(void);												/* ç ´æ£„ */
 
 
 protected:
-	BOOL		m_bRClickFirst,					/* ‰EƒNƒŠƒbƒN‚³‚ê‚½ */
-				m_bViewGrid;					/* ƒOƒŠƒbƒh•\¦ */
-	int			m_nSelect,						/* ‘I‘ğ‚³‚ê‚½ƒp[ƒc”Ô† */
-				m_nNotify;						/* ’Ê’mƒf[ƒ^ */
-	DWORD		*m_pdwParts;					/* ƒRƒs[’†‚Ìƒ}ƒbƒv */
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgBack,					/* ƒoƒbƒNƒoƒbƒtƒ@ */
-				*m_pImgBase;					/* •\¦‰æ‘œ */
-	CWndToolbar	m_wndToolBar;					/* ƒc[ƒ‹ƒo[ */
-	CStatusBar	m_StatusBar;					/* ƒXƒe[ƒ^ƒXƒo[ */
-	CImageList	m_ImgListToolBar;				/* ƒc[ƒ‹ƒo[—pƒCƒ[ƒWƒŠƒXƒg */
-	CRect		m_rcRange,						/* ‘I‘ğ”ÍˆÍ */
-				m_rcCopy;						/* ƒRƒs[‚·‚é”ÍˆÍ */
-	POINT		m_ptBack;						/* ‘O‰ñ‚Ìƒ}ƒEƒXˆÊ’u */
+	void	RenewScrollRange	(int cx, int cy);			/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ç¯„å›²ã‚’æ›´æ–° */
+	void	RenewToolbar		(void);						/* ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã‚’æ›´æ–° */
+	void	RenewStatusText		(void);						/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’æ›´æ–° */
+	BOOL	GetCheck			(int nNo);					/* ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒœã‚¿ãƒ³çŠ¶æ…‹ã‚’å–å¾— */
+	void	SetCheck			(int nNo, BOOL bCheck);		/* ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒœã‚¿ãƒ³çŠ¶æ…‹ã‚’è¨­å®š */
 
-	CMgrData			*m_pMgrData;			/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData			*m_pMgrGrpData;			/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CMgrDraw			*m_pMgrDraw;			/* •`‰æƒ}ƒl[ƒWƒƒ */
-	CInfoMapBase		*m_pInfoMap;			/* ƒ}ƒbƒvî•ñ */
-	CUraraSockTCPSBO	*m_pSock;				/* ’ÊMƒ}ƒl[ƒWƒƒ */
+
+protected:
+	BOOL		m_bRClickFirst,					/* å³ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ */
+				m_bViewGrid;					/* ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º */
+	int			m_nSelect,						/* é¸æŠã•ã‚ŒãŸãƒ‘ãƒ¼ãƒ„ç•ªå· */
+				m_nNotify;						/* é€šçŸ¥ãƒ‡ãƒ¼ã‚¿ */
+	DWORD		*m_pdwParts;					/* ã‚³ãƒ”ãƒ¼ä¸­ã®ãƒãƒƒãƒ— */
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgBack,					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+				*m_pImgBase;					/* è¡¨ç¤ºç”»åƒ */
+	CWndToolbar	m_wndToolBar;					/* ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ */
+	CStatusBar	m_StatusBar;					/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ */
+	CImageList	m_ImgListToolBar;				/* ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ç”¨ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒªã‚¹ãƒˆ */
+	CRect		m_rcRange,						/* é¸æŠç¯„å›² */
+				m_rcCopy;						/* ã‚³ãƒ”ãƒ¼ã™ã‚‹ç¯„å›² */
+	POINT		m_ptBack;						/* å‰å›ã®ãƒã‚¦ã‚¹ä½ç½® */
+
+	CMgrData			*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData			*m_pMgrGrpData;			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrDraw			*m_pMgrDraw;			/* æç”»ãƒãƒãƒ¼ã‚¸ãƒ£ */
+	CInfoMapBase		*m_pInfoMap;			/* ãƒãƒƒãƒ—æƒ…å ± */
+	CUraraSockTCPSBO	*m_pSock;				/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ */
 
 
 

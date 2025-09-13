@@ -1,10 +1,10 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:LibInfoCharSvrSkill.cpp									 */
-/* ì‡óe			:ÉLÉÉÉâèÓïÒÉâÉCÉuÉâÉäÉNÉâÉX é¿ëïÉtÉ@ÉCÉã					 */
-/* 				:ÉXÉLÉãä÷òAèàóù												 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2008/11/16													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:LibInfoCharSvrSkill.cpp									 */
+/* ÂÜÖÂÆπ			:„Ç≠„É£„É©ÊÉÖÂ†±„É©„Ç§„Éñ„É©„É™„ÇØ„É©„Çπ ÂÆüË£Ö„Éï„Ç°„Ç§„É´					 */
+/* 				:„Çπ„Ç≠„É´Èñ¢ÈÄ£Âá¶ÁêÜ												 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2008/11/16													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,10 +23,10 @@
 #include "LibInfoCharSvr.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLibInfoCharSvr::UseSkill										 */
-/* ì‡óe		:ÉXÉLÉãégóp														 */
-/* ì˙ït		:2008/12/31														 */
-/* ñﬂÇËíl	:TRUE:égópÇµÇΩ													 */
+/* Èñ¢Êï∞Âêç	:CLibInfoCharSvr::UseSkill										 */
+/* ÂÜÖÂÆπ		:„Çπ„Ç≠„É´‰ΩøÁî®														 */
+/* Êó•‰ªò		:2008/12/31														 */
+/* Êàª„ÇäÂÄ§	:TRUE:‰ΩøÁî®„Åó„Åü													 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::UseSkill(CInfoCharSvr *pInfoChar, DWORD dwSkillID)
@@ -48,22 +48,22 @@ BOOL CLibInfoCharSvr::UseSkill(CInfoCharSvr *pInfoChar, DWORD dwSkillID)
 		goto Exit;
 	}
 	if (pInfoChar->m_dwSP < pInfoSkill->m_dwSP) {
-		SendSystemMsg (pInfoChar->m_dwSessionID, "SPÇ™ë´ÇËÇ‹ÇπÇÒ", SYSTEMMSGTYPE_NOLOG);
+		SendSystemMsg (pInfoChar->m_dwSessionID, "SP„ÅåË∂≥„Çä„Åæ„Åõ„Çì", SYSTEMMSGTYPE_NOLOG);
 		goto Exit;
 	}
 
 	switch (pInfoSkill->m_nTypeMain) {
-	case SKILLTYPEMAIN_NONE:		/* î\óÕ */
+	case SKILLTYPEMAIN_NONE:		/* ËÉΩÂäõ */
 		break;
-	case SKILLTYPEMAIN_BATTLE:		/* êÌì¨ */
+	case SKILLTYPEMAIN_BATTLE:		/* Êà¶Èóò */
 		switch (pInfoSkill->m_nTypeSub) {
-		case SKILLTYPESUB_BATTLE_MOVEATACK:	/* à⁄ìÆÇµÇƒçUåÇ */	bRet = UseSkillBATTLE_MOVEATACK (pInfoChar, pInfoSkill);	break;
-		case SKILLTYPESUB_BATTLE_HEAL:		/* âÒïú */			bRet = UseSkillNONE_HEAL (pInfoChar, pInfoSkill);			break;
+		case SKILLTYPESUB_BATTLE_MOVEATACK:	/* ÁßªÂãï„Åó„Å¶ÊîªÊíÉ */	bRet = UseSkillBATTLE_MOVEATACK (pInfoChar, pInfoSkill);	break;
+		case SKILLTYPESUB_BATTLE_HEAL:		/* ÂõûÂæ© */			bRet = UseSkillNONE_HEAL (pInfoChar, pInfoSkill);			break;
 		}
 		break;
-	case SKILLTYPEMAIN_LIFE:		/* ê∂äà */
+	case SKILLTYPEMAIN_LIFE:		/* ÁîüÊ¥ª */
 		switch (pInfoSkill->m_nTypeSub) {
-		case SKILLTYPESUB_LIFE_FISHING:	/* íﬁÇË */	bRet = UseSkillFISHING (pInfoChar, pInfoSkill);	break;
+		case SKILLTYPESUB_LIFE_FISHING:	/* Èá£„Çä */	bRet = UseSkillFISHING (pInfoChar, pInfoSkill);	break;
 		}
 		break;
 	}
@@ -80,10 +80,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLibInfoCharSvr::UseSkillNONE_HEAL								 */
-/* ì‡óe		:ÉXÉLÉãégóp(î\óÕ:âÒïú)											 */
-/* ì˙ït		:2009/01/24														 */
-/* ñﬂÇËíl	:TRUE:égópÇµÇΩ													 */
+/* Èñ¢Êï∞Âêç	:CLibInfoCharSvr::UseSkillNONE_HEAL								 */
+/* ÂÜÖÂÆπ		:„Çπ„Ç≠„É´‰ΩøÁî®(ËÉΩÂäõ:ÂõûÂæ©)											 */
+/* Êó•‰ªò		:2009/01/24														 */
+/* Êàª„ÇäÂÄ§	:TRUE:‰ΩøÁî®„Åó„Åü													 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase)
@@ -121,11 +121,11 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 	nTmp = (int)pInfoSkill->m_dwDistance;
 	nDirection = pInfoChar->GetDrawDirection ();
 	pInfoChar->GetPosRect (rcTarget);
-	/* îÕàÕ */
+	/* ÁØÑÂõ≤ */
 	switch (pInfoSkill->m_dwArea) {
-	case SKILLHEAL_AREA_NONE:			/* é©ï™à íu */
+	case SKILLHEAL_AREA_NONE:			/* Ëá™ÂàÜ‰ΩçÁΩÆ */
 		break;
-	case SKILLHEAL_AREA_FRONT:			/* ëOï˚ */
+	case SKILLHEAL_AREA_FRONT:			/* ÂâçÊñπ */
 		switch (nDirection) {
 		case 0:
 			rcTarget.top -= nTmp;
@@ -141,14 +141,14 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 			break;
 		}
 		break;
-	case SKILLHEAL_AREA_AREA:			/* é¸àÕ */
+	case SKILLHEAL_AREA_AREA:			/* Âë®Âõ≤ */
 		rcTarget.top	-= nTmp;
 		rcTarget.bottom	+= nTmp;
 		rcTarget.left	-= nTmp;
 		rcTarget.right	+= nTmp;
 		break;
 	}
-	/* ëŒè€ÉLÉÉÉâèÓïÒÇéÊìæ */
+	/* ÂØæË±°„Ç≠„É£„É©ÊÉÖÂ†±„ÇíÂèñÂæó */
 	GetAreaCharInfo (pInfoChar->m_dwMapID, &rcTarget, apInfoCharTarget);
 	nCount = apInfoCharTarget.GetSize ();
 	for (i = 0; i < nCount; i ++) {
@@ -161,19 +161,19 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 			continue;
 		}
 
-		/* å¯â  */
+		/* ÂäπÊûú */
 		nPoint = genrand () % (pInfoSkill->m_dwValue2 - pInfoSkill->m_dwValue1 + 1);
 		nPoint += pInfoSkill->m_dwValue1;
 
 		switch (pInfoSkill->m_dwHealType) {
 		case SKILLHEAL_HEALTYPE_HP:			/* HP */
 			nPoint = min ((DWORD)nPoint, pInfoCharTmp->m_dwMaxHP - pInfoCharTmp->m_dwHP);
-			strMsg.Format ("%s ÇÃHPÇ™ %d âÒïúÇµÇ‹ÇµÇΩ", (LPCSTR)pInfoCharTmp->m_strCharName, nPoint);
+			strMsg.Format ("%s „ÅÆHP„Åå %d ÂõûÂæ©„Åó„Åæ„Åó„Åü", (LPCSTR)pInfoCharTmp->m_strCharName, nPoint);
 			pInfoCharTmp->m_dwHP += nPoint;
 			break;
 		case SKILLHEAL_HEALTYPE_SP:			/* SP */
 			nPoint = min ((DWORD)nPoint, pInfoCharTmp->m_dwMaxSP - pInfoCharTmp->m_dwSP);
-			strMsg.Format ("%s ÇÃSPÇ™ %d âÒïúÇµÇ‹ÇµÇΩ", (LPCSTR)pInfoCharTmp->m_strCharName, nPoint);
+			strMsg.Format ("%s „ÅÆSP„Åå %d ÂõûÂæ©„Åó„Åæ„Åó„Åü", (LPCSTR)pInfoCharTmp->m_strCharName, nPoint);
 			pInfoCharTmp->m_dwSP += nPoint;
 			break;
 		}
@@ -183,7 +183,7 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 		PacketSYSTEMMSG.Make ((LPCSTR)strMsg, RGB (255, 255, 255), FALSE, SYSTEMMSGTYPE_NOLOG);
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketSYSTEMMSG);
 
-		/* ï∂éöÉGÉtÉFÉNÉgÇí ím */
+		/* ÊñáÂ≠ó„Ç®„Éï„Çß„ÇØ„Éà„ÇíÈÄöÁü• */
 		PacketCHAR_TEXTEFFECT.Make (pInfoCharTmp->m_dwCharID, nPoint, 3);
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_TEXTEFFECT);
 
@@ -191,7 +191,7 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 			PacketCHAR_STATUS.Make (pInfoCharTmp);
 			m_pSock->SendTo (pInfoCharTmp->m_dwSessionID, &PacketCHAR_STATUS);
 		}
-		/* ÉGÉtÉFÉNÉgÇÃê›íË */
+		/* „Ç®„Éï„Çß„ÇØ„Éà„ÅÆË®≠ÂÆö */
 		if (pInfoSkill->m_dwHitEffectID != 0) {
 			pInfoCharTmp->m_nReserveChgEfect = (int)pInfoSkill->m_dwHitEffectID;
 		}
@@ -204,10 +204,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK						 */
-/* ì‡óe		:ÉXÉLÉãégóp(êÌì¨:à⁄ìÆÇµÇƒçUåÇ)									 */
-/* ì˙ït		:2009/01/11														 */
-/* ñﬂÇËíl	:TRUE:égópÇµÇΩ													 */
+/* Èñ¢Êï∞Âêç	:CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK						 */
+/* ÂÜÖÂÆπ		:„Çπ„Ç≠„É´‰ΩøÁî®(Êà¶Èóò:ÁßªÂãï„Åó„Å¶ÊîªÊíÉ)									 */
+/* Êó•‰ªò		:2009/01/11														 */
+/* Êàª„ÇäÂÄ§	:TRUE:‰ΩøÁî®„Åó„Åü													 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase)
@@ -229,11 +229,11 @@ BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSki
 	}
 
 	switch (pInfoSkill->m_dwPutType) {
-	case SKILLMOVEATACKPUTTYPE_FRONT:		/* ëOï˚ */
+	case SKILLMOVEATACKPUTTYPE_FRONT:		/* ÂâçÊñπ */
 		nDirection = pInfoChar->GetDrawDirection ();
 		anDirection.Add (nDirection);
 		break;
-	case SKILLMOVEATACKPUTTYPE_CROSS:		/* è„â∫ç∂âE */
+	case SKILLMOVEATACKPUTTYPE_CROSS:		/* ‰∏ä‰∏ãÂ∑¶Âè≥ */
 		anDirection.Add (0);
 		anDirection.Add (1);
 		anDirection.Add (2);
@@ -244,7 +244,7 @@ BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSki
 	nCount = anDirection.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		nDirectionTmp = anDirection[i];
-		/* êiÇﬂÇÈÇ©É`ÉFÉbÉN */
+		/* ÈÄ≤„ÇÅ„Çã„Åã„ÉÅ„Çß„ÉÉ„ÇØ */
 		bResult = IsMove (pInfoChar, nDirectionTmp);
 		if (bResult == FALSE) {
 			continue;
@@ -292,10 +292,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CLibInfoCharSvr::UseSkillFISHING								 */
-/* ì‡óe		:ÉXÉLÉãégóp(íﬁÇË)												 */
-/* ì˙ït		:2009/01/01														 */
-/* ñﬂÇËíl	:TRUE:égópÇµÇΩ													 */
+/* Èñ¢Êï∞Âêç	:CLibInfoCharSvr::UseSkillFISHING								 */
+/* ÂÜÖÂÆπ		:„Çπ„Ç≠„É´‰ΩøÁî®(Èá£„Çä)												 */
+/* Êó•‰ªò		:2009/01/01														 */
+/* Êàª„ÇäÂÄ§	:TRUE:‰ΩøÁî®„Åó„Åü													 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::UseSkillFISHING(CInfoCharSvr *pInfoChar, CInfoSkillBase *pInfoSkillBase)
@@ -307,24 +307,24 @@ BOOL CLibInfoCharSvr::UseSkillFISHING(CInfoCharSvr *pInfoChar, CInfoSkillBase *p
 
 	bRet = FALSE;
 
-	/* íﬁÇËä÷òAÇÃïêäÌÇ©É`ÉFÉbÉN */
+	/* Èá£„ÇäÈñ¢ÈÄ£„ÅÆÊ≠¶Âô®„Åã„ÉÅ„Çß„ÉÉ„ÇØ */
 	dwMotionType = m_pLibInfoItem->GetMotionIDAtack (pInfoChar->m_dwEquipItemIDArmsRight);
 	if ((dwMotionType & INFOITEMARMS_MOTION_FISHING) == 0) {
 		goto Exit;
 	}
-	/* É}ÉbÉvèÓïÒÇÉ`ÉFÉbÉN */
+	/* „Éû„ÉÉ„ÉóÊÉÖÂ†±„Çí„ÉÅ„Çß„ÉÉ„ÇØ */
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
-	/* 1ï‡ëOÇÃÉpÅ[ÉcëÆê´ÇÉ`ÉFÉbÉN */
+	/* 1Ê≠©Ââç„ÅÆ„Éë„Éº„ÉÑÂ±ûÊÄß„Çí„ÉÅ„Çß„ÉÉ„ÇØ */
 	pInfoChar->GetFrontMapPos (ptPos);
 	bResult = pInfoMap->IsFlg (ptPos.x, ptPos.y, BIT_PARTSHIT_FISHING);
 	if (bResult == FALSE) {
 		goto Exit;
 	}
 
-	/* íﬁÇËÉÇÅ[ÉVÉáÉìÇ…ïœçX */
+	/* Èá£„Çä„É¢„Éº„Ç∑„Éß„É≥„Å´Â§âÊõ¥ */
 	pInfoChar->SetMotion (CHARMOTIONLISTID_FISHING_UP);
 
 	bRet = TRUE;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_RES_TALKEVENT.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:‰ï˜bƒCƒxƒ“ƒgî•ñ‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_RES_TALKEVENT.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CInfoTalkEvent;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_RES_TALKEVENT : public CPacketBase
 {
 public:
-			CPacketCHAR_RES_TALKEVENT();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_RES_TALKEVENT();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_RES_TALKEVENT();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_RES_TALKEVENT();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoTalkEvent *pInfo, DWORD dwParam);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoTalkEvent *pInfo, DWORD dwParam);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD			m_dwParam;				/* ƒpƒ‰ƒ[ƒ^ */
-	CInfoTalkEvent	*m_pInfo;				/* ‰ï˜bƒCƒxƒ“ƒgî•ñ */
+	DWORD			m_dwParam;				/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
+	CInfoTalkEvent	*m_pInfo;				/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 } CPacketCHAR_RES_TALKEVENT, *PCPacketCHAR_RES_TALKEVENT;
 
 /* Copyright(C)URARA-works 2008 */

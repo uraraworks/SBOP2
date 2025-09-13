@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_SYSTEM_RENEWINFO.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒVƒXƒeƒ€î•ñ‚ÌXV) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/10/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_SYSTEM_RENEWINFO.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã®æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/04													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_SYSTEM_RENEWINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SYSTEM_RENEWINFO::CPacketADMIN_SYSTEM_RENEWINFO	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/04														 */
+/* é–¢æ•°å	:CPacketADMIN_SYSTEM_RENEWINFO::CPacketADMIN_SYSTEM_RENEWINFO	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/04														 */
 /* ========================================================================= */
 
 CPacketADMIN_SYSTEM_RENEWINFO::CPacketADMIN_SYSTEM_RENEWINFO()
@@ -24,9 +24,9 @@ CPacketADMIN_SYSTEM_RENEWINFO::CPacketADMIN_SYSTEM_RENEWINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SYSTEM_RENEWINFO::~CPacketADMIN_SYSTEM_RENEWINFO	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/04														 */
+/* é–¢æ•°å	:CPacketADMIN_SYSTEM_RENEWINFO::~CPacketADMIN_SYSTEM_RENEWINFO	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/04														 */
 /* ========================================================================= */
 
 CPacketADMIN_SYSTEM_RENEWINFO::~CPacketADMIN_SYSTEM_RENEWINFO()
@@ -36,13 +36,13 @@ CPacketADMIN_SYSTEM_RENEWINFO::~CPacketADMIN_SYSTEM_RENEWINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SYSTEM_RENEWINFO::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/10/04														 */
+/* é–¢æ•°å	:CPacketADMIN_SYSTEM_RENEWINFO::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/10/04														 */
 /* ========================================================================= */
 
 void CPacketADMIN_SYSTEM_RENEWINFO::Make(
-	CInfoSystem *pInfoSystem)		/* [in] ƒVƒXƒeƒ€î•ñ */
+	CInfoSystem *pInfoSystem)		/* [in] ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize, dwSizeInfoSystem;
@@ -63,16 +63,16 @@ void CPacketADMIN_SYSTEM_RENEWINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pDataInfoSystem, dwSizeInfoSystem, pDataTmp);	/* ƒVƒXƒeƒ€î•ñ */
+	CopyMemoryRenew (pDataTmp, pDataInfoSystem, dwSizeInfoSystem, pDataTmp);	/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_SYSTEM_RENEWINFO::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/10/04														 */
+/* é–¢æ•°å	:CPacketADMIN_SYSTEM_RENEWINFO::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/10/04														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_SYSTEM_RENEWINFO::Set(PBYTE pPacket)

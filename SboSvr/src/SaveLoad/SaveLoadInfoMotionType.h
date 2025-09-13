@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoMotionType.h									 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İƒNƒ‰ƒX(ƒ‚[ƒVƒ‡ƒ“í•Êî•ñ) ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/05/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoMotionType.h									 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "SaveLoadInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CSaveLoadInfoMotionType : public CSaveLoadInfoBase
 {
 public:
-			CSaveLoadInfoMotionType();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSaveLoadInfoMotionType();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSaveLoadInfoMotionType();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSaveLoadInfoMotionType();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 } CSaveLoadInfoMotionType, *PCSaveLoadInfoMotionType;
 
 /* Copyright(C)URARA-works 2008 */

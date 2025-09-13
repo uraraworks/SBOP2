@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowOPTION_INPUTSET_SETDEVICE.h							 */
-/* “à—e			:ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è-“ü—ÍƒfƒoƒCƒX‚ÌÝ’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowOPTION_INPUTSET_SETDEVICE.h							 */
+/* å†…å®¹			:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,30 +15,30 @@ class CMgrData;
 class CMgrKeyInput;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowOPTION_INPUTSET_SETDEVICE : public CWindowBase
 {
 public:
-			CWindowOPTION_INPUTSET_SETDEVICE();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowOPTION_INPUTSET_SETDEVICE();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowOPTION_INPUTSET_SETDEVICE();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowOPTION_INPUTSET_SETDEVICE();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-
-
-protected:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
 
 
 protected:
-	CMgrKeyInput		*m_MgrKeyInput;				/* ƒL[“ü—ÍŠÇ— */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+
+
+protected:
+	CMgrKeyInput		*m_MgrKeyInput;				/* ã‚­ãƒ¼å…¥åŠ›ç®¡ç† */
 } CWindowOPTION_INPUTSET_SETDEVICE, *PCWindowOPTION_INPUTSET_SETDEVICE;
 
 /* Copyright(C)URARA-works 2008 */

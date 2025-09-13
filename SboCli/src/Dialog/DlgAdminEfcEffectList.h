@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminEfcEffectList.h									 */
-/* “à—e			:ƒGƒtƒFƒNƒgˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminEfcEffectList.h									 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,26 +13,26 @@
 class CLibInfoEffect;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminEfcEffectList : public CDlgAdminBase
 {
 public:
-			CDlgAdminEfcEffectList(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminEfcEffectList();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminEfcEffectList(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminEfcEffectList();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);							/* ‰Šú‰» */
-	void	Renew		(void);											/* ˆê——‚ğXV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
-
-
-protected:
+	void	Init		(CMgrData *pMgrData);							/* åˆæœŸåŒ– */
+	void	Renew		(void);											/* ä¸€è¦§ã‚’æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
 
 
 protected:
-	CLibInfoEffect	*m_pLibInfo;		/* ƒGƒtƒFƒNƒgî•ñ */
+
+
+protected:
+	CLibInfoEffect	*m_pLibInfo;		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 
 
 
@@ -44,7 +44,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminEfcEffectList)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

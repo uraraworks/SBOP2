@@ -1,32 +1,32 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	crc.h														 */
-/* “à—eF		CRCŒvŽZƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹									 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2005/03/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	crc.h														 */
+/* å†…å®¹ï¼š		CRCè¨ˆç®—ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«									 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/03/29													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 class CCRC
 {
 public:
-			CCRC();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CCRC();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CCRC();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CCRC();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	DWORD Update	(DWORD dwSrc, PBYTE pBuf, DWORD dwSize);	/* CRC‚ðXV */
-	DWORD GetCRC	(PBYTE pBuf, DWORD dwSize);					/* CRC‚ðŽæ“¾ */
-
-
-private:
-	void MakeTbl(void);									/* ŒvŽZ—pƒe[ƒuƒ‹‚ðì¬ */
+	DWORD Update	(DWORD dwSrc, PBYTE pBuf, DWORD dwSize);	/* CRCã‚’æ›´æ–° */
+	DWORD GetCRC	(PBYTE pBuf, DWORD dwSize);					/* CRCã‚’å–å¾— */
 
 
 private:
-	PDWORD		m_padwCRC;								/* ŒvŽZ—pƒe[ƒuƒ‹ */
+	void MakeTbl(void);									/* è¨ˆç®—ç”¨ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ä½œæˆ */
+
+
+private:
+	PDWORD		m_padwCRC;								/* è¨ˆç®—ç”¨ãƒ†ãƒ¼ãƒ–ãƒ« */
 };
 
 /* Copyright(C)URARA-works 2005 */

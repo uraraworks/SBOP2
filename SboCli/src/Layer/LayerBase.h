@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerBase.h												 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerBase.h												 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,43 +16,43 @@ class CLibInfoCharCli;
 class CLibInfoMapBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerBase
 {
 public:
-			CLayerBase();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerBase();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerBase();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerBase();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void Create		(CMgrData *pMgrData);				/* ì¬ */
-	virtual void Destroy	(void);								/* ”jŠü */
+	virtual void Create		(CMgrData *pMgrData);				/* ä½œæˆ */
+	virtual void Destroy	(void);								/* ç ´æ£„ */
 
-	virtual void Draw		(CImg32 *pDst);						/* •`‰æ */
-	virtual BOOL TimerProc	(void);								/* ŠÔˆ— */
+	virtual void Draw		(CImg32 *pDst);						/* æç”» */
+	virtual BOOL TimerProc	(void);								/* æ™‚é–“å‡¦ç† */
 
-	int		GetID		(void)	{ return m_nID; }				/* ID‚ğæ“¾ */
-
-
-protected:
-	void	TextOut1	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color);		/* •¶š•`‰æ */
-	void	TextOut2	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* ‰æ‚è•¶š•`‰æ */
-	void	TextOut3	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* ‰æ‚è•¶š•`‰æ */
+	int		GetID		(void)	{ return m_nID; }				/* IDã‚’å–å¾— */
 
 
 protected:
-	int				m_nID;								/* ƒŒƒCƒ„[ID */
-	HFONT			m_hFont;							/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg */
-	CImg32			*m_pDib,							/* ƒoƒbƒNƒoƒbƒtƒ@ */
-					*m_pDibBase;						/* ƒoƒbƒNƒoƒbƒtƒ@(Œ³ƒTƒCƒY) */
-	CImg32			*m_pDibSystem;						/* ƒVƒXƒeƒ€‰æ‘œ */
+	void	TextOut1	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color);		/* æ–‡å­—æç”» */
+	void	TextOut2	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* ç¸å–ã‚Šæ–‡å­—æç”» */
+	void	TextOut3	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* ç¸å–ã‚Šæ–‡å­—æç”» */
 
-	CMgrData		*m_pMgrData;						/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;						/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CMgrDraw		*m_pMgrDraw;						/* •`‰æŠÇ— */
 
-	CLibInfoCharCli	*m_pLibInfoChar;					/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapBase	*m_pLibInfoMap;						/* ƒ}ƒbƒvî•ñƒ‰ƒCƒuƒ‰ƒŠ */
+protected:
+	int				m_nID;								/* ãƒ¬ã‚¤ãƒ¤ãƒ¼ID */
+	HFONT			m_hFont;							/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ */
+	CImg32			*m_pDib,							/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+					*m_pDibBase;						/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡(å…ƒã‚µã‚¤ã‚º) */
+	CImg32			*m_pDibSystem;						/* ã‚·ã‚¹ãƒ†ãƒ ç”»åƒ */
+
+	CMgrData		*m_pMgrData;						/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;						/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrDraw		*m_pMgrDraw;						/* æç”»ç®¡ç† */
+
+	CLibInfoCharCli	*m_pLibInfoChar;					/* ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapBase	*m_pLibInfoMap;						/* ãƒãƒƒãƒ—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 } CLayerBase, *PCLayerBase;
 typedef CmyArray<PCLayerBase, PCLayerBase>	  ARRAYLAYERBASE;
 typedef CmyArray<PCLayerBase, PCLayerBase>	*PARRAYLAYERBASE;

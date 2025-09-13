@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// “ú–{Œê resources
+// æ—¥æœ¬èªž resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 #ifdef _WIN32
@@ -54,17 +54,17 @@ END
 
 IDR_MENU MENU 
 BEGIN
-    POPUP "ƒAƒJƒEƒ“ƒg(&A)"
+    POPUP "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ(&A)"
     BEGIN
-        MENUITEM "‘SƒAƒJƒEƒ“ƒg‚ðíœ(&A)",               IDM_ACCOUNT_DELETEALL
+        MENUITEM "å…¨ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤(&A)",               IDM_ACCOUNT_DELETEALL
     END
-    POPUP "ƒAƒbƒvƒf[ƒg(&U)"
+    POPUP "ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ(&U)"
     BEGIN
-        MENUITEM "ƒAƒbƒvƒf[ƒgƒtƒ@ƒCƒ‹XV(&R)",            IDM_UPDATE_RENEW
+        MENUITEM "ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°(&R)",            IDM_UPDATE_RENEW
     END
 END
 
-#endif    // “ú–{Œê resources
+#endif    // æ—¥æœ¬èªž resources
 /////////////////////////////////////////////////////////////////////////////
 
 

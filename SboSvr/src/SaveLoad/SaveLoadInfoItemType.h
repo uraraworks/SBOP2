@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoItemType.h										 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İƒNƒ‰ƒX(ƒAƒCƒeƒ€í•Êî•ñ) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/10/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoItemType.h										 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/02													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,14 +11,14 @@
 #include "SaveLoadInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CSaveLoadInfoItemType : public CSaveLoadInfoBase
 {
 public:
-			CSaveLoadInfoItemType();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CSaveLoadInfoItemType();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CSaveLoadInfoItemType();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CSaveLoadInfoItemType();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 } CSaveLoadInfoItemType, *PCSaveLoadInfoItemType;
 
 /* Copyright(C)URARA-works 2007 */

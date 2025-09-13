@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharPUTNPC.cpp											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(NPC”­¶)ƒT[ƒo[ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharPUTNPC.cpp											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(NPCç™ºç”Ÿ)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharPUTNPC::CInfoCharPUTNPC								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CInfoCharPUTNPC::CInfoCharPUTNPC								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CInfoCharPUTNPC::CInfoCharPUTNPC()
@@ -26,9 +26,9 @@ CInfoCharPUTNPC::CInfoCharPUTNPC()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharPUTNPC::~CInfoCharPUTNPC								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CInfoCharPUTNPC::~CInfoCharPUTNPC								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CInfoCharPUTNPC::~CInfoCharPUTNPC()
@@ -37,9 +37,9 @@ CInfoCharPUTNPC::~CInfoCharPUTNPC()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharPUTNPC::SetMoveState									 */
-/* “à—e		:ˆÚ“®ó‘Ô‚ğ•ÏX													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CInfoCharPUTNPC::SetMoveState									 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CInfoCharPUTNPC::SetMoveState(int nMoveState)
@@ -49,9 +49,9 @@ void CInfoCharPUTNPC::SetMoveState(int nMoveState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharPUTNPC::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CInfoCharPUTNPC::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CInfoCharPUTNPC::TimerProc(DWORD dwTime)
@@ -61,9 +61,9 @@ BOOL CInfoCharPUTNPC::TimerProc(DWORD dwTime)
 	dwTmp = dwTime - m_dwLastTimePut;
 	if (dwTmp >= m_dwPutCycle * 1000) {
 		if (m_nPutCount < m_nMaxPutCount) {
-			/* ”­¶H */
+			/* ç™ºç”Ÿï¼Ÿ */
 			if ((genrand () % 100) > 100 - m_nPutAverage) {
-				/* ”­¶—\–ñ */
+				/* ç™ºç”Ÿäºˆç´„ */
 				m_bChgPutNpc = TRUE;
 			}
 		}
@@ -75,9 +75,9 @@ BOOL CInfoCharPUTNPC::TimerProc(DWORD dwTime)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharPUTNPC::IncPutCount									 */
-/* “à—e		:”­¶NPC”‚ğ‘‰Á												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CInfoCharPUTNPC::IncPutCount									 */
+/* å†…å®¹		:ç™ºç”ŸNPCæ•°ã‚’å¢—åŠ 												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 void CInfoCharPUTNPC::IncPutCount(void)
 {
@@ -86,9 +86,9 @@ void CInfoCharPUTNPC::IncPutCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharPUTNPC::DecPutCount									 */
-/* “à—e		:”­¶NPC”‚ğŒ¸­												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CInfoCharPUTNPC::DecPutCount									 */
+/* å†…å®¹		:ç™ºç”ŸNPCæ•°ã‚’æ¸›å°‘												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 void CInfoCharPUTNPC::DecPutCount(void)
 {

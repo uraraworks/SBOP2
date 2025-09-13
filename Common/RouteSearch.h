@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	RouteSearch.h												 */
-/* “à—eF		Œo˜H’TõƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹									 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2009/06/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	RouteSearch.h												 */
+/* å†…å®¹ï¼š		çµŒè·¯æ¢ç´¢ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«									 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2009/06/13													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,62 +11,62 @@
 class CInfoMapBase;
 
 /* ========================================================================= */
-/* \‘¢‘ÌéŒ¾																 */
+/* æ§‹é€ ä½“å®£è¨€																 */
 /* ========================================================================= */
 
-/* ŒŸõŒ‹‰Ê */
+/* æ¤œç´¢çµæœ */
 typedef struct _SEARCHRESULT {
-	POINT	pt;					/* À•W */
-	BYTE	byDirection;		/* Œü‚« */
+	POINT	pt;					/* åº§æ¨™ */
+	BYTE	byDirection;		/* å‘ã */
 } SEARCHRESULT, *PSEARCHRESULT;
 typedef CmyArray<SEARCHRESULT, SEARCHRESULT>	  ARRAYSEARCHRESULT;
 typedef CmyArray<SEARCHRESULT, SEARCHRESULT>	*PARRAYSEARCHRESULT;
 
-/* ŒŸõî•ñ */
+/* æ¤œç´¢æƒ…å ± */
 typedef struct _SEARCHINFO {
-	POINT	pt;					/* À•W */
-	BYTE	byDirection;		/* Œü‚« */
-	BYTE	byState;			/* ó‘Ô */
-	WORD	wScore;				/* ƒXƒRƒA */
+	POINT	pt;					/* åº§æ¨™ */
+	BYTE	byDirection;		/* å‘ã */
+	BYTE	byState;			/* çŠ¶æ…‹ */
+	WORD	wScore;				/* ã‚¹ã‚³ã‚¢ */
 } SEARCHINFO, *PSEARCHINFO;
 typedef CmyArray<SEARCHINFO, SEARCHINFO>		ARRAYSEARCHINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CRouteSearch
 {
 public:
-			CRouteSearch();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CRouteSearch();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CRouteSearch();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CRouteSearch();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	SetMapInfo		(CInfoMapBase *pInfoMap);			/* ŒŸõ‘ÎÛƒ}ƒbƒvî•ñ */
-	void	SetSearchArea	(const RECT &rcSearch);				/* ŒŸõ”ÍˆÍ‚ğİ’è */
-	void	SetStartPos		(int x, int y);						/* ŠJnˆÊ’u‚ğİ’è */
-	void	SetEndPos		(int x, int y);						/* ÅIˆÊ’u‚ğİ’è */
-	PARRAYSEARCHRESULT	Search	(void);								/* ŒŸõ */
-
-
-private:
-	void	InitProcInfo	(void);								/* ŒŸõˆ—î•ñ‚ğ‰Šú‰» */
-	void	ProcSEARCH		(void);								/* ŒŸõˆ—(ŒŸõ’†) */
-	BOOL	ProcSEARCHMOVE	(void);								/* ŒŸõˆ—(ŒŸõˆÚ“®’†) */
-	void	InfoCleanup		(int x, int y);						/* ŒŸõî•ñÅ“K‰» */
+	void	SetMapInfo		(CInfoMapBase *pInfoMap);			/* æ¤œç´¢å¯¾è±¡ãƒãƒƒãƒ—æƒ…å ± */
+	void	SetSearchArea	(const RECT &rcSearch);				/* æ¤œç´¢ç¯„å›²ã‚’è¨­å®š */
+	void	SetStartPos		(int x, int y);						/* é–‹å§‹ä½ç½®ã‚’è¨­å®š */
+	void	SetEndPos		(int x, int y);						/* æœ€çµ‚ä½ç½®ã‚’è¨­å®š */
+	PARRAYSEARCHRESULT	Search	(void);								/* æ¤œç´¢ */
 
 
 private:
-	int		m_nState;					/* ŒŸõó‘Ô */
-	POINT	m_ptNow,					/* Œ»İˆÊ’u */
-			m_ptStart,					/* ŠJnˆÊ’u */
-			m_ptEnd;					/* ÅIˆÊ’u */
-	PWORD	m_pMap;						/* ŒŸõ’†ƒ}ƒbƒvƒeƒ“ƒ|ƒ‰ƒŠ */
-	SIZE	m_sizeMap;					/* ŒŸõ”ÍˆÍƒTƒCƒY */
-	RECT	m_rcSearch;					/* ŒŸõ”ÍˆÍ */
-	CInfoMapBase		*m_pInfoMap;	/* ŒŸõ‘ÎÛƒ}ƒbƒvî•ñ */
-	ARRAYSEARCHINFO		m_aInfo;		/* ŒŸõî•ñ */
-	ARRAYSEARCHRESULT	m_aResult;		/* ŒŸõŒ‹‰Ê */
+	void	InitProcInfo	(void);								/* æ¤œç´¢å‡¦ç†æƒ…å ±ã‚’åˆæœŸåŒ– */
+	void	ProcSEARCH		(void);								/* æ¤œç´¢å‡¦ç†(æ¤œç´¢ä¸­) */
+	BOOL	ProcSEARCHMOVE	(void);								/* æ¤œç´¢å‡¦ç†(æ¤œç´¢ç§»å‹•ä¸­) */
+	void	InfoCleanup		(int x, int y);						/* æ¤œç´¢æƒ…å ±æœ€é©åŒ– */
+
+
+private:
+	int		m_nState;					/* æ¤œç´¢çŠ¶æ…‹ */
+	POINT	m_ptNow,					/* ç¾åœ¨ä½ç½® */
+			m_ptStart,					/* é–‹å§‹ä½ç½® */
+			m_ptEnd;					/* æœ€çµ‚ä½ç½® */
+	PWORD	m_pMap;						/* æ¤œç´¢ä¸­ãƒãƒƒãƒ—ãƒ†ãƒ³ãƒãƒ©ãƒª */
+	SIZE	m_sizeMap;					/* æ¤œç´¢ç¯„å›²ã‚µã‚¤ã‚º */
+	RECT	m_rcSearch;					/* æ¤œç´¢ç¯„å›² */
+	CInfoMapBase		*m_pInfoMap;	/* æ¤œç´¢å¯¾è±¡ãƒãƒƒãƒ—æƒ…å ± */
+	ARRAYSEARCHINFO		m_aInfo;		/* æ¤œç´¢æƒ…å ± */
+	ARRAYSEARCHRESULT	m_aResult;		/* æ¤œç´¢çµæœ */
 };
 
 /* Copyright(C)URARA-works 2009 */

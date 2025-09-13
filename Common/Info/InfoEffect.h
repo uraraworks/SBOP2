@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoEffect.h												 */
-/* “à—e			:ƒGƒtƒFƒNƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoEffect.h												 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,54 +11,54 @@
 #include "InfoAnime.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoEffect : public CInfoBase
 {
 public:
-			CInfoEffect();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoEffect();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoEffect();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoEffect();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementCount		(void);								/* —v‘f”‚ðŽæ“¾ */
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	int		GetElementCount		(void);								/* è¦ç´ æ•°ã‚’å–å¾— */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	void	Copy				(CInfoEffect *pSrc);				/* ƒRƒs[ */
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	void	Copy				(CInfoEffect *pSrc);				/* ã‚³ãƒ”ãƒ¼ */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	BOOL		TimerProc		(DWORD dwTime);						/* ŽžŠÔˆ— */
-	int			GetAnimeCount	(void);								/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”‚ðŽæ“¾ */
-	void		AddAnime		(void);								/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ð’Ç‰Á */
-	void		DeleteAnime		(int nNo);							/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ðíœ */
-	void		DeleteAllAnime	(void);								/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ð‘S‚Äíœ */
-	PCInfoAnime	GetAnimePtr		(int nNo);							/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ðŽæ“¾ */
-	WORD		GetGrpID		(void);								/* Œ»Ý‚Ì‰æ‘œID‚ðŽæ“¾ */
-	BYTE		GetLevel		(void);								/* Œ»Ý‚Ì“§–¾“x‚ðŽæ“¾ */
-	BOOL		IsAnimeEnd		(void);								/* ƒAƒjƒ[ƒVƒ‡ƒ“I—¹‚©”»’è */
+	BOOL		TimerProc		(DWORD dwTime);						/* æ™‚é–“å‡¦ç† */
+	int			GetAnimeCount	(void);								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•°ã‚’å–å¾— */
+	void		AddAnime		(void);								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’è¿½åŠ  */
+	void		DeleteAnime		(int nNo);							/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å‰Šé™¤ */
+	void		DeleteAllAnime	(void);								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å…¨ã¦å‰Šé™¤ */
+	PCInfoAnime	GetAnimePtr		(int nNo);							/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å–å¾— */
+	WORD		GetGrpID		(void);								/* ç¾åœ¨ã®ç”»åƒIDã‚’å–å¾— */
+	BYTE		GetLevel		(void);								/* ç¾åœ¨ã®é€æ˜Žåº¦ã‚’å–å¾— */
+	BOOL		IsAnimeEnd		(void);								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã‹åˆ¤å®š */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
-	BOOL				m_bAnimeEnd;						/* ƒAƒjƒ[ƒVƒ‡ƒ“I—¹H */
-	BYTE				m_byAnimeNo;						/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”Ô† */
-	DWORD				m_dwLastAnime;						/* ÅŒã‚ÉƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚½ŽžŠÔ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
+	BOOL				m_bAnimeEnd;						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ï¼Ÿ */
+	BYTE				m_byAnimeNo;						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžç•ªå· */
+	DWORD				m_dwLastAnime;						/* æœ€å¾Œã«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã—ãŸæ™‚é–“ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	BOOL				m_bLoop,							/* ƒ‹[ƒv”»’è */
-						m_bLoopSound;						/* ƒ‹[ƒvŽž‚ÉŒø‰Ê‰¹‚ðÄ¶‚·‚é */
-	BYTE				m_byAnimeCount;						/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	DWORD				m_dwEffectID,						/* ƒGƒtƒFƒNƒgID */
-						m_dwSoundID,						/* Œø‰Ê‰¹ID */
-						m_dwGrpIDMain;						/* ‰æ‘œƒƒCƒ“ID */
-	CmyString			m_strName;							/* ƒGƒtƒFƒNƒg–¼ */
-	PARRAYANIMEINFO		m_paAnimeInfo;						/* ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	BOOL				m_bLoop,							/* ãƒ«ãƒ¼ãƒ—åˆ¤å®š */
+						m_bLoopSound;						/* ãƒ«ãƒ¼ãƒ—æ™‚ã«åŠ¹æžœéŸ³ã‚’å†ç”Ÿã™ã‚‹ */
+	BYTE				m_byAnimeCount;						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•° */
+	DWORD				m_dwEffectID,						/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+						m_dwSoundID,						/* åŠ¹æžœéŸ³ID */
+						m_dwGrpIDMain;						/* ç”»åƒãƒ¡ã‚¤ãƒ³ID */
+	CmyString			m_strName;							/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
+	PARRAYANIMEINFO		m_paAnimeInfo;						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ± */
 } CInfoEffect, *PCInfoEffect;
 typedef CmyArray<PCInfoEffect, PCInfoEffect>	  ARRAYEFFECT;
 typedef CmyArray<PCInfoEffect, PCInfoEffect>	*PARRAYEFFECT;

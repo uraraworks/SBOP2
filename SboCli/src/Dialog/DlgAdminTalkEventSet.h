@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkEventSet.h										 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkEventSet.h										 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/23													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,28 +15,28 @@ class CInfoTalkEvent;
 class CDlgAdminTalkEventTab;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminTalkEventSet : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkEventSet(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminTalkEventSet();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminTalkEventSet(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminTalkEventSet();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData, CInfoTalkEvent *pInfo = NULL);	/* ‰Šú‰» */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	Get			(CInfoTalkEvent *&pDst);						/* æ“¾ */
-
-
-protected:
-	void	Renew	(void);			/* XV */
-	void	AddPage	(void);			/* ƒy[ƒW‚Ì’Ç‰Á */
+	void	Init		(CMgrData *pMgrData, CInfoTalkEvent *pInfo = NULL);	/* åˆæœŸåŒ– */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	Get			(CInfoTalkEvent *&pDst);						/* å–å¾— */
 
 
 protected:
-	CInfoTalkEvent			*m_pInfo;		/* •ÒW’†‚Ì‰ï˜bƒCƒxƒ“ƒg */
-	CDlgAdminTalkEventTab	*m_pDlgTab;		/* ƒ^ƒuƒ_ƒCƒAƒƒO */
+	void	Renew	(void);			/* æ›´æ–° */
+	void	AddPage	(void);			/* ãƒšãƒ¼ã‚¸ã®è¿½åŠ  */
+
+
+protected:
+	CInfoTalkEvent			*m_pInfo;		/* ç·¨é›†ä¸­ã®ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
+	CDlgAdminTalkEventTab	*m_pDlgTab;		/* ã‚¿ãƒ–ãƒ€ã‚¤ã‚¢ãƒ­ã‚° */
 
 
 public:
@@ -46,7 +46,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminTalkEventSet)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

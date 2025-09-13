@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharMOVEATACKSvr.cpp									 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(ˆÚ“®‚µ‚ÄUŒ‚)ƒT[ƒo[ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharMOVEATACKSvr.cpp									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(ç§»å‹•ã—ã¦æ”»æ’ƒ)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/17													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
@@ -32,9 +32,9 @@ CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKSvr::~CInfoCharMOVEATACKSvr					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKSvr::~CInfoCharMOVEATACKSvr					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 CInfoCharMOVEATACKSvr::~CInfoCharMOVEATACKSvr()
@@ -43,9 +43,9 @@ CInfoCharMOVEATACKSvr::~CInfoCharMOVEATACKSvr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKSvr::SetMoveState							 */
-/* “à—e		:ˆÚ“®ó‘Ô‚ð•ÏX													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKSvr::SetMoveState							 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
@@ -59,7 +59,7 @@ void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 	if (nMoveState == CHARMOVESTATE_BATTLEATACK) {
 		m_dwLastAtackTime = dwTime;
 	}
-	/* í“¬’† */
+	/* æˆ¦é—˜ä¸­ */
 	if (nMoveState == CHARMOVESTATE_BATTLE) {
 		nMoveState = CHARMOVESTATE_MOVE;
 	}
@@ -70,9 +70,9 @@ void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKSvr::TimerProc								 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKSvr::TimerProc								 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
@@ -104,9 +104,9 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 	if (dwTmp < m_dwMoveWait * 16) {
 		goto Exit;
 	}
-//Todo:ˆÚ“®ˆ—(‚Æ‚è‚ ‚¦‚¸’¼i)
+//Todo:ç§»å‹•å‡¦ç†(ã¨ã‚Šã‚ãˆãšç›´é€²)
 	m_dwLastTimeMove = dwTime;
-	/* ’Eo‰Â”\‚©ƒ`ƒFƒbƒN */
+	/* è„±å‡ºå¯èƒ½ã‹ãƒã‚§ãƒƒã‚¯ */
 	bResult = FALSE;
 	GetFrontMapPosRect (rcMap, m_nDirection);
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
@@ -116,7 +116,7 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 	}
 	bResult = !bResult;
 	if (bResult) {
-		/* i‚ß‚é‚©ƒ`ƒFƒbƒN */
+		/* é€²ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
 		bResult = FALSE;
 		GetFrontMapPosRect (rcMap, m_nDirection);
 		for (y = rcMap.top; y <= rcMap.bottom; y ++) {
@@ -136,7 +136,7 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 		bResult = FALSE;
 	}
 
-	/* ‚Ô‚Â‚©‚éH */
+	/* ã¶ã¤ã‹ã‚‹ï¼Ÿ */
 	if (bResult == FALSE) {
 		nState = CHARMOVESTATE_DELETE;
 		if ((m_bDistanceDelete == FALSE) && (m_dwQuitTime != 0)) {
@@ -149,7 +149,7 @@ BOOL CInfoCharMOVEATACKSvr::TimerProc(DWORD dwTime)
 
 	} else {
 		m_bChgPos = TRUE;
-		/* 2‰ñ–ÚˆÈ~H */
+		/* 2å›žç›®ä»¥é™ï¼Ÿ */
 		if (m_nMoveCount > 1) {
 			GetFrontPos (ptFront, m_nDirection, TRUE);
 			if ((m_nMapX == ptFront.x) && (m_nMapY == ptFront.y)) {
@@ -167,24 +167,24 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKSvr::ProcAtack								 */
-/* “à—e		:ˆ—(UŒ‚‚µ‚½Žž)												 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKSvr::ProcAtack								 */
+/* å†…å®¹		:å‡¦ç†(æ”»æ’ƒã—ãŸæ™‚)												 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 void CInfoCharMOVEATACKSvr::ProcAtack(void)
 {
 	if (m_bHitQuit) {
-		/* UŒ‚‚Å‚«‚½‚Ì‚ÅI—¹ */
+		/* æ”»æ’ƒã§ããŸã®ã§çµ‚äº† */
 		SetMoveState (CHARMOVESTATE_DELETE);
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKSvr::GetHitEffectID							 */
-/* “à—e		:ƒqƒbƒgŽž‚É‘ŠŽè‚É•\Ž¦‚·‚éƒGƒtƒFƒNƒgID‚ðŽæ“¾						 */
-/* “ú•t		:2009/01/12														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKSvr::GetHitEffectID							 */
+/* å†…å®¹		:ãƒ’ãƒƒãƒˆæ™‚ã«ç›¸æ‰‹ã«è¡¨ç¤ºã™ã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDã‚’å–å¾—						 */
+/* æ—¥ä»˜		:2009/01/12														 */
 /* ========================================================================= */
 
 DWORD CInfoCharMOVEATACKSvr::GetHitEffectID(void)
@@ -194,9 +194,9 @@ DWORD CInfoCharMOVEATACKSvr::GetHitEffectID(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKSvr::GetDamage								 */
-/* “à—e		:ƒ_ƒ[ƒW’l‚ðŽæ“¾												 */
-/* “ú•t		:2009/01/12														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKSvr::GetDamage								 */
+/* å†…å®¹		:ãƒ€ãƒ¡ãƒ¼ã‚¸å€¤ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2009/01/12														 */
 /* ========================================================================= */
 
 DWORD CInfoCharMOVEATACKSvr::GetDamage(void)

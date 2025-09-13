@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_RES_FILE.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹—v‹) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/01/20													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_RES_FILE.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/20													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketVERSION_RES_FILE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_RES_FILE::CPacketVERSION_RES_FILE				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/01/20														 */
+/* é–¢æ•°å	:CPacketVERSION_RES_FILE::CPacketVERSION_RES_FILE				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/01/20														 */
 /* ========================================================================= */
 
 CPacketVERSION_RES_FILE::CPacketVERSION_RES_FILE()
@@ -25,9 +25,9 @@ CPacketVERSION_RES_FILE::CPacketVERSION_RES_FILE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_RES_FILE::~CPacketVERSION_RES_FILE				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/01/20														 */
+/* é–¢æ•°å	:CPacketVERSION_RES_FILE::~CPacketVERSION_RES_FILE				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/01/20														 */
 /* ========================================================================= */
 
 CPacketVERSION_RES_FILE::~CPacketVERSION_RES_FILE()
@@ -37,16 +37,16 @@ CPacketVERSION_RES_FILE::~CPacketVERSION_RES_FILE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_RES_FILE::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/01/20														 */
+/* é–¢æ•°å	:CPacketVERSION_RES_FILE::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/01/20														 */
 /* ========================================================================= */
 
 void CPacketVERSION_RES_FILE::Make(
-	DWORD dwOffset,			/* [in] ŠJnƒIƒtƒZƒbƒg */
-	DWORD dwDataSize,		/* [in] ƒTƒCƒY */
-	LPCSTR pszFileName,		/* [in] ƒo[ƒWƒ‡ƒ“ƒR[ƒh */
-	PBYTE pFileData)		/* [in] ƒtƒ@ƒCƒ‹ƒf[ƒ^ */
+	DWORD dwOffset,			/* [in] é–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+	DWORD dwDataSize,		/* [in] ã‚µã‚¤ã‚º */
+	LPCSTR pszFileName,		/* [in] ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚³ãƒ¼ãƒ‰ */
+	PBYTE pFileData)		/* [in] ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -66,19 +66,19 @@ void CPacketVERSION_RES_FILE::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_VERSION_RES_FILE;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwOffset,	sizeof (dwOffset),	pDataTmp);	/* ŠJnƒIƒtƒZƒbƒg */
-	CopyMemoryRenew (pDataTmp, &dwDataSize,	sizeof (dwSize),	pDataTmp);	/* ƒTƒCƒY */
-	strcpyRenew ((LPSTR)pDataTmp, pszFileName, pDataTmp);					/* ‘Š‘ÎƒpƒX•t‚«ƒtƒ@ƒCƒ‹–¼ */
-	CopyMemoryRenew (pDataTmp, pFileData,	dwDataSize,			pDataTmp);	/* ƒtƒ@ƒCƒ‹ƒf[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &dwOffset,	sizeof (dwOffset),	pDataTmp);	/* é–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+	CopyMemoryRenew (pDataTmp, &dwDataSize,	sizeof (dwSize),	pDataTmp);	/* ã‚µã‚¤ã‚º */
+	strcpyRenew ((LPSTR)pDataTmp, pszFileName, pDataTmp);					/* ç›¸å¯¾ãƒ‘ã‚¹ä»˜ããƒ•ã‚¡ã‚¤ãƒ«å */
+	CopyMemoryRenew (pDataTmp, pFileData,	dwDataSize,			pDataTmp);	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_RES_FILE::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/01/20														 */
+/* é–¢æ•°å	:CPacketVERSION_RES_FILE::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/01/20														 */
 /* ========================================================================= */
 
 PBYTE CPacketVERSION_RES_FILE::Set(PBYTE pPacket)
@@ -89,12 +89,12 @@ PBYTE CPacketVERSION_RES_FILE::Set(PBYTE pPacket)
 	pDataTmp	= CPacketBase::Set (pPacket);
 
 	SAFE_DELETE_ARRAY (m_pFileData);
-	CopyMemoryRenew (&m_dwOffset,	pDataTmp, sizeof (m_dwOffset),	pDataTmp);	/* ŠJnƒIƒtƒZƒbƒg */
-	CopyMemoryRenew (&m_dwSize,		pDataTmp, sizeof (m_dwSize),	pDataTmp);	/* ƒTƒCƒY */
-	StoreRenew (m_strFileName,	(LPCSTR)pDataTmp, pDataTmp);					/* ‘Š‘ÎƒpƒX•t‚«ƒtƒ@ƒCƒ‹–¼ */
+	CopyMemoryRenew (&m_dwOffset,	pDataTmp, sizeof (m_dwOffset),	pDataTmp);	/* é–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+	CopyMemoryRenew (&m_dwSize,		pDataTmp, sizeof (m_dwSize),	pDataTmp);	/* ã‚µã‚¤ã‚º */
+	StoreRenew (m_strFileName,	(LPCSTR)pDataTmp, pDataTmp);					/* ç›¸å¯¾ãƒ‘ã‚¹ä»˜ããƒ•ã‚¡ã‚¤ãƒ«å */
 
 	m_pFileData = new BYTE[m_dwSize];
-	CopyMemoryRenew (m_pFileData, pDataTmp, m_dwSize, pDataTmp);				/* ƒtƒ@ƒCƒ‹ƒf[ƒ^ */
+	CopyMemoryRenew (m_pFileData, pDataTmp, m_dwSize, pDataTmp);				/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿ */
 
 	pRet = pDataTmp;
 	return pRet;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharATACKANIMECli.h									 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(UŒ‚Žó‚¯‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharATACKANIMECli.h									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(æ”»æ’ƒå—ã‘ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,20 +11,20 @@
 #include "InfoCharCli.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharATACKANIMECli : public CInfoCharCli
 {
 public:
-			CInfoCharATACKANIMECli();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharATACKANIMECli();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharATACKANIMECli();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharATACKANIMECli();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	ChgMoveState	(int nMoveState);					/* ˆÚ“®ó‘Ô•ÏX */
+	void	ChgMoveState	(int nMoveState);					/* ç§»å‹•çŠ¶æ…‹å¤‰æ›´ */
 
 
 protected:
-	BOOL RenewAnime			(DWORD dwTime, int nAdd = 1);		/* ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV */
+	BOOL RenewAnime			(DWORD dwTime, int nAdd = 1);		/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–° */
 } CInfoCharATACKANIMECli, *PCInfoCharATACKANIMECli;
 
 /* Copyright(C)URARA-works 2007 */

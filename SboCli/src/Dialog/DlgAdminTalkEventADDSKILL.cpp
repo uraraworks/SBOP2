@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkEventADDSKILL.cpp								 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgİ’è(ƒXƒLƒ‹’Ç‰Á)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkEventADDSKILL.cpp								 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š(ã‚¹ã‚­ãƒ«è¿½åŠ )ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/31													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventADDSKILL::DoDataExchange(CDataExchange* pDX)
@@ -38,9 +38,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventADDSKILL::CDlgAdminTalkEventADDSKILL			 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventADDSKILL::CDlgAdminTalkEventADDSKILL			 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 CDlgAdminTalkEventADDSKILL::CDlgAdminTalkEventADDSKILL(CWnd* pParent /*=NULL*/)
@@ -54,9 +54,9 @@ CDlgAdminTalkEventADDSKILL::CDlgAdminTalkEventADDSKILL(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventADDSKILL::~CDlgAdminTalkEventADDSKILL		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventADDSKILL::~CDlgAdminTalkEventADDSKILL		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 CDlgAdminTalkEventADDSKILL::~CDlgAdminTalkEventADDSKILL()
@@ -65,9 +65,9 @@ CDlgAdminTalkEventADDSKILL::~CDlgAdminTalkEventADDSKILL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventADDSKILL::Set								 */
-/* “à—e		:İ’è‚©‚ç‰æ–Ê‚É”½‰f												 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventADDSKILL::Set								 */
+/* å†…å®¹		:è¨­å®šã‹ã‚‰ç”»é¢ã«åæ˜ 												 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventADDSKILL::Set(CInfoTalkEventBase *pSrc)
@@ -87,9 +87,9 @@ void CDlgAdminTalkEventADDSKILL::Set(CInfoTalkEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventADDSKILL::Get								 */
-/* “à—e		:‰æ–Ê‚©‚çİ’è‚É”½‰f												 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventADDSKILL::Get								 */
+/* å†…å®¹		:ç”»é¢ã‹ã‚‰è¨­å®šã«åæ˜ 												 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventADDSKILL::Get(CInfoTalkEventBase *pDst)
@@ -101,9 +101,9 @@ void CDlgAdminTalkEventADDSKILL::Get(CInfoTalkEventBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventADDSKILL::OnInitDialog						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventADDSKILL::OnInitDialog						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminTalkEventADDSKILL::OnInitDialog()

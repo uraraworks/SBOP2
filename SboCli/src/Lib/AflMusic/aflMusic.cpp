@@ -8,7 +8,7 @@
 
 /*
 #ifdef _MSC_VER
-	#ifdef _DEBUG	//ƒƒ‚ƒŠƒŠ[ƒNƒeƒXƒg
+	#ifdef _DEBUG	//ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯ãƒ†ã‚¹ãƒˆ
 		#include <crtdbg.h>
 		#define malloc(a) _malloc_dbg(a,_NORMAL_BLOCK,__FILE__,__LINE__)
 		inline void*  operator new(size_t size, LPCSTR strFileName, INT iLine)
@@ -42,7 +42,7 @@
 namespace Afl{namespace DirectX{namespace Music{
 
 //---------------------------------------------------------
-//     ƒ_ƒuƒ‹ƒ[ƒh•ÏŠ·
+//     ãƒ€ãƒ–ãƒ«ãƒ¯ãƒ¼ãƒ‰å¤‰æ›
 //---------------------------------------------------------
 inline static DWORD protConvDW(DWORD dwData)
 {
@@ -67,7 +67,7 @@ inline static DWORD protgetWaitCount(LPBYTE* ppData)
 }
 
 //---------------------------------------------------------
-//     ƒ[ƒh•ÏŠ·
+//     ãƒ¯ãƒ¼ãƒ‰å¤‰æ›
 //---------------------------------------------------------
 inline static WORD protConvW(WORD wData)
 {
@@ -80,7 +80,7 @@ inline static WORD protConvW(WORD wData)
 
 //------------------------------------------------------------
 // AflMTimer
-// ƒ}ƒ‹ƒ`ƒƒfƒBƒAƒ^ƒCƒ}[‘ã‘Ö—p
+// ãƒãƒ«ãƒãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¤ãƒãƒ¼ä»£æ›¿ç”¨
 //------------------------------------------------------------
 AflMTimer::AflMTimer()
 {
@@ -153,7 +153,7 @@ LPMIDIHDR AflMExclusive::get()
 
 /////////////////////////////////////////////////////////////////////////////
 // AflMusicDevice
-// MIDIƒfƒoƒCƒX§Œä—p
+// MIDIãƒ‡ãƒã‚¤ã‚¹åˆ¶å¾¡ç”¨
 //------------------------------------------------------------
 bool AflMusicDevice::closeDirectMusic()
 {
@@ -191,9 +191,9 @@ bool AflMusicDevice::openDirectMusic()
 		m_hMidi = (HMIDIOUT)-1;
 		return true;
 	}
-	//COM‚ğ—˜—p‰Â”\‚É
+	//COMã‚’åˆ©ç”¨å¯èƒ½ã«
 	::CoInitialize(NULL);
-	//IDirectMusic‚ğ—˜—p‰Â”\‚É
+	//IDirectMusicã‚’åˆ©ç”¨å¯èƒ½ã«
 	m_pDirectMusic = NULL;
 	if(::CoCreateInstance(CLSID_DirectMusic,NULL,CLSCTX_INPROC_SERVER,
 		IID_IDirectMusic,(LPVOID*)&m_pDirectMusic) != S_OK)
@@ -202,19 +202,19 @@ bool AflMusicDevice::openDirectMusic()
 
 	if(m_pDirectMusic)
 	{
-		//DLS—pDirectSound‚Ìİ’è
+		//DLSç”¨DirectSoundã®è¨­å®š
 		m_pDirectMusic->SetDirectSound( NULL,NULL);
 
-		//ƒfƒtƒHƒ‹ƒgƒ|[ƒg‚Ìæ“¾
+		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒãƒ¼ãƒˆã®å–å¾—
 		DMUS_PORTCAPS portCaps;
 		m_pDirectMusic->GetDefaultPort( &portCaps.guidPort );
 		
-		//ƒ|[ƒg‚Ìì¬
+		//ãƒãƒ¼ãƒˆã®ä½œæˆ
 		DMUS_PORTPARAMS portParams;
 		ZeroMemory( &portParams , sizeof( DMUS_PORTPARAMS ) );
 		portParams.dwSize = sizeof( DMUS_PORTPARAMS );
 		m_pDirectMusic->CreatePort( portCaps.guidPort , &portParams , &m_pDirectMusicPort , NULL ); 
-		//ƒoƒbƒtƒ@‚Ìì¬
+		//ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
 		DMUS_BUFFERDESC descBuff;
 		descBuff.dwSize = sizeof( DMUS_BUFFERDESC );
 		descBuff.dwFlags = 0;
@@ -222,7 +222,7 @@ bool AflMusicDevice::openDirectMusic()
 		descBuff.cbBuffer = sizeof(DMUS_EVENTHEADER) + 4;
 		m_pDirectMusic->CreateMusicBuffer( &descBuff , &m_pDirectMusicBufferShort , NULL ); 
 		
-		//ƒ|[ƒgƒNƒƒbƒN‚Ìæ“¾‚Æ“®ì‹–‰Â
+		//ãƒãƒ¼ãƒˆã‚¯ãƒ­ãƒƒã‚¯ã®å–å¾—ã¨å‹•ä½œè¨±å¯
 		if(m_pDirectMusicPort)	
 		{
 			m_pDirectMusicPort->GetLatencyClock( &m_pReferenceClock ); 
@@ -240,19 +240,19 @@ bool AflMusicDevice::setDLS(LPDWORD pData,INT iCount)
 #ifndef _WFL_NONDMUSIC
 	if(openDirectMusic())
 	{
-		//PINT pData  •K—v‚È‰¹FƒŠƒXƒg
-		//INT  iCount ‰¹FƒŠƒXƒg‚Ì”
+		//PINT pData  å¿…è¦ãªéŸ³è‰²ãƒªã‚¹ãƒˆ
+		//INT  iCount éŸ³è‰²ãƒªã‚¹ãƒˆã®æ•°
 
-		//ƒRƒŒƒNƒVƒ‡ƒ“‚©‚ç‰¹F‚Ì“Ç‚İo‚µ
+		//ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‹ã‚‰éŸ³è‰²ã®èª­ã¿å‡ºã—
 		IDirectMusicLoader* pDirectMusicLoader;
 		IDirectMusicCollection* pDirectMusicCollection;
 		
-		//IDirectMusicLoader‚ğ—˜—p‰Â”\‚É
+		//IDirectMusicLoaderã‚’åˆ©ç”¨å¯èƒ½ã«
 		::CoCreateInstance( CLSID_DirectMusicLoader , NULL , CLSCTX_INPROC_SERVER , IID_IDirectMusicLoader , (LPVOID*)&pDirectMusicLoader);
 		
 		if(pDirectMusicLoader)
 		{
-			//ƒfƒtƒHƒ‹ƒg‰¹F‚Ìİ’è
+			//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆéŸ³è‰²ã®è¨­å®š
 			DMUS_OBJECTDESC desc; 
 			ZeroMemory(&desc, sizeof(desc));
 			desc.dwSize        = sizeof(DMUS_OBJECTDESC);
@@ -267,37 +267,37 @@ bool AflMusicDevice::setDLS(LPDWORD pData,INT iCount)
 				INT i;
 				IDirectMusicInstrument* pDirectMusicInstrument;
 				
-				//’Êí‰¹F‚Ì“Ç‚İo‚µ
+				//é€šå¸¸éŸ³è‰²ã®èª­ã¿å‡ºã—
 				for(i=0;i<iCount;i++)
 				{
-					//DLS‚©‚ç‰¹F‚Ì“Ç‚İo‚µ
+					//DLSã‹ã‚‰éŸ³è‰²ã®èª­ã¿å‡ºã—
 					pDirectMusicInstrument = NULL;
 					pDirectMusicCollection->GetInstrument(pData[i], &pDirectMusicInstrument);
-					//‰¹F‚ª‘¶İ‚µ‚È‚©‚Á‚½‚ç
+					//éŸ³è‰²ãŒå­˜åœ¨ã—ãªã‹ã£ãŸã‚‰
 					if(!pDirectMusicInstrument)
 					{
-						//ƒoƒŠƒG[ƒVƒ‡ƒ“‚ğƒ}ƒXƒN‚µ‚ÄA‘ã‘Ö‰¹F‚Ìİ’è
+						//ãƒãƒªã‚¨ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ãƒã‚¹ã‚¯ã—ã¦ã€ä»£æ›¿éŸ³è‰²ã®è¨­å®š
 						pDirectMusicCollection->GetInstrument(pData[i]&0xFF0000FF,
 							&pDirectMusicInstrument);
 						if(!pDirectMusicInstrument)
 							continue;
-						//‘ã‘Ö—p‚É‰¹F”Ô†‚Ì•ÏX
+						//ä»£æ›¿ç”¨ã«éŸ³è‰²ç•ªå·ã®å¤‰æ›´
 						pDirectMusicInstrument->SetPatch(pData[i]);
 					}
-					//ƒ|[ƒg‚É‰¹F‚ğŠÖ˜A‚Ã‚¯
+					//ãƒãƒ¼ãƒˆã«éŸ³è‰²ã‚’é–¢é€£ã¥ã‘
 					m_pDirectMusicPort->DownloadInstrument(pDirectMusicInstrument,
 						&m_pDirectMusicDownloadedInstrument,NULL,0); 
 					pDirectMusicInstrument->Release();
 				}
-				//”O‚Ì‚½‚ßƒfƒtƒHƒ‹ƒg‚Ìƒhƒ‰ƒ€ƒZƒbƒg‚¾‚¯‚Í‹­§İ’è
+				//å¿µã®ãŸã‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ‰ãƒ©ãƒ ã‚»ãƒƒãƒˆã ã‘ã¯å¼·åˆ¶è¨­å®š
 				pDirectMusicCollection->GetInstrument(0x80000000, &pDirectMusicInstrument);
 				m_pDirectMusicPort->DownloadInstrument(pDirectMusicInstrument,
 					&m_pDirectMusicDownloadedInstrument,NULL,0); 
 				
-				//g‚¢I‚í‚Á‚½ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì‰ğ•ú
+				//ä½¿ã„çµ‚ã‚ã£ãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è§£æ”¾
 				//pDirectMusicInstrument->Release();
 				pDirectMusicCollection->Release();
-				//‰¹F—p‚Ìƒƒ‚ƒŠ‚ğÅ“K‰»
+				//éŸ³è‰²ç”¨ã®ãƒ¡ãƒ¢ãƒªã‚’æœ€é©åŒ–
 				m_pDirectMusicPort->Compact();
 			}
 			pDirectMusicLoader->Release();
@@ -310,7 +310,7 @@ bool AflMusicDevice::setDLS(LPDWORD pData,INT iCount)
 }
 
 //-------------------------------
-//MIDI Device ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//MIDI Device ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 AflMusicDevice::AflMusicDevice()
 {
 	m_hMidi = 0;
@@ -325,14 +325,14 @@ AflMusicDevice::AflMusicDevice()
 	m_dwIdelTime = 0;
 }
 //-------------------------------
-//MIDI Device ƒfƒXƒgƒ‰ƒNƒ^
+//MIDI Device ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 AflMusicDevice::~AflMusicDevice()
 {
 	close();
 	closeDirectMusic();
 }
 //-------------------------------
-//MIDI Device ŠJ‚­
+//MIDI Device é–‹ã
 bool AflMusicDevice::open(UINT uDeviceID)
 {
 	if(m_hMidi && m_uDevice == uDeviceID)
@@ -346,7 +346,7 @@ bool AflMusicDevice::open(UINT uDeviceID)
 		return midiOutOpen(&m_hMidi,uDeviceID,NULL,NULL,CALLBACK_NULL) == MMSYSERR_NOERROR;
 }
 //-------------------------------
-//MIDI Device •Â‚¶‚é
+//MIDI Device é–‰ã˜ã‚‹
 bool AflMusicDevice::close()
 {
 	if(!m_hMidi)
@@ -363,7 +363,7 @@ bool AflMusicDevice::close()
 	return true;
 }
 //-------------------------------
-//MIDI Device ƒƒ“ƒOƒƒbƒZ[ƒW‚Ì‘—M
+//MIDI Device ãƒ­ãƒ³ã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡
 bool AflMusicDevice::out(LPMIDIHDR pMidiHdr) const
 {
 	if(!m_hMidi)
@@ -400,7 +400,7 @@ bool AflMusicDevice::out(LPMIDIHDR pMidiHdr) const
 	}
 }
 //-------------------------------
-//MIDI Device ƒVƒ‡[ƒgƒƒbƒZ[ƒW‚Ì‘—M
+//MIDI Device ã‚·ãƒ§ãƒ¼ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡
 bool AflMusicDevice::out(DWORD dwData) const
 {
 	if(!m_hMidi)
@@ -408,18 +408,18 @@ bool AflMusicDevice::out(DWORD dwData) const
 	if(m_hMidi == (HMIDIOUT)-1)
 	{
 #ifndef _WFL_NONDMUSIC
-		//m_pReferenceClock IDirectMusicPort‚©‚çæ“¾‚µ‚½‰„‘Ø•t‚«ƒNƒƒbƒN
-		//m_pDirectMusicBufferShort IDirectMusicBuffer‚Å4ƒoƒCƒgŠm•Û‚µ‚½‚à‚Ì
-		//m_pDirectMusicPort IDirectMusicPort‚Ìo—Íæ
+		//m_pReferenceClock IDirectMusicPortã‹ã‚‰å–å¾—ã—ãŸå»¶æ»ä»˜ãã‚¯ãƒ­ãƒƒã‚¯
+		//m_pDirectMusicBufferShort IDirectMusicBufferã§4ãƒã‚¤ãƒˆç¢ºä¿ã—ãŸã‚‚ã®
+		//m_pDirectMusicPort IDirectMusicPortã®å‡ºåŠ›å…ˆ
 
-		//‰„‘Ø•t‚«ŠÔ‚Ìæ“¾
+		//å»¶æ»ä»˜ãæ™‚é–“ã®å–å¾—
 		REFERENCE_TIME refTime;
 		m_pReferenceClock->GetTime( &refTime );
-		//ƒoƒbƒtƒ@‚ÉƒƒbƒZ[ƒW‚ğİ’è
+		//ãƒãƒƒãƒ•ã‚¡ã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¨­å®š
 		m_pDirectMusicBufferShort->PackStructured( refTime + m_dwIdelTime, 0 , dwData); 
-		//ƒ|[ƒg‚Éƒoƒbƒtƒ@‚Ìƒf[ƒ^‚ğ‘—M
+		//ãƒãƒ¼ãƒˆã«ãƒãƒƒãƒ•ã‚¡ã®ãƒ‡ãƒ¼ã‚¿ã‚’é€ä¿¡
 		m_pDirectMusicPort->PlayBuffer( m_pDirectMusicBufferShort );
-		//ƒoƒbƒtƒ@“à‚Ìƒf[ƒ^‚ğƒtƒ‰ƒbƒVƒ…
+		//ãƒãƒƒãƒ•ã‚¡å†…ã®ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ•ãƒ©ãƒƒã‚·ãƒ¥
 		m_pDirectMusicBufferShort->Flush(); 
 		return true;
 #else
@@ -432,7 +432,7 @@ bool AflMusicDevice::out(DWORD dwData) const
 	}
 }
 //-------------------------------
-//MIDI Device ƒVƒ‡[ƒgƒƒbƒZ[ƒW‚Ì‘—M
+//MIDI Device ã‚·ãƒ§ãƒ¼ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®é€ä¿¡
 bool AflMusicDevice::out(BYTE byData1,BYTE byData2,BYTE byData3) const
 {
 	UGpMidiData OutWork;
@@ -443,7 +443,7 @@ bool AflMusicDevice::out(BYTE byData1,BYTE byData2,BYTE byData3) const
 	return out(OutWork.dwMsg) == MMSYSERR_NOERROR;
 }
 //-------------------------------
-//MIDI Device ƒfƒoƒCƒX–¼‚ğ“¾‚é
+//MIDI Device ãƒ‡ãƒã‚¤ã‚¹åã‚’å¾—ã‚‹
 void AflMusicDevice::getDeviceName(INT nIndex,LPTSTR pString)
 {
 	MIDIOUTCAPS midiCaps;
@@ -467,7 +467,7 @@ void AflMusicDevice::setIdelTime(DWORD dwTime)
 
 /////////////////////////////////////////////////////////////////////////////
 // AflMPlayData::CTrackData
-// .midƒtƒ@ƒCƒ‹“Ç‚İo‚µ—p
+// .midãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿å‡ºã—ç”¨
 AflMPlayData::CTrackData::CTrackData()
 {
 	m_dwWCount = 0;
@@ -538,7 +538,7 @@ LPBYTE AflMPlayData::CTrackData::getAdr()
 
 
 //-----------------------------------------------------
-//	ƒXƒe[ƒ^ƒX“Ç‚İ‚¾‚µ
+//	ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹èª­ã¿ã ã—
 //-----------------------------------------------------
 BYTE AflMPlayData::CTrackData::getStat()
 {
@@ -554,7 +554,7 @@ BYTE AflMPlayData::CTrackData::getStat()
 }
 
 //-----------------------------------------------------
-//	ƒwƒbƒ_[“Ç‚İ‚¾‚µ
+//	ãƒ˜ãƒƒãƒ€ãƒ¼èª­ã¿ã ã—
 //-----------------------------------------------------
 DWORD AflMPlayData::CTrackData::setHeader(STrackHeader* pTHeader)
 {	
@@ -598,10 +598,10 @@ DWORD AflMPlayData::CTrackData::setHeader(STrackHeader* pTHeader)
 
 /////////////////////////////////////////////////////////////////////////////
 // AflMPlayData
-// ‰‰‘tƒf[ƒ^—p
+// æ¼”å¥ãƒ‡ãƒ¼ã‚¿ç”¨
 
 //-----------------------------------------------------
-//	ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //-----------------------------------------------------
 AflMPlayData::AflMPlayData()
 {
@@ -615,7 +615,7 @@ AflMPlayData::AflMPlayData()
 	m_nDLSCount = 0;
 }
 //-----------------------------------------------------
-//	ƒfƒXƒgƒ‰ƒNƒ^
+//	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //-----------------------------------------------------
 AflMPlayData::~AflMPlayData()
 {
@@ -623,7 +623,7 @@ AflMPlayData::~AflMPlayData()
 }
 
 //-----------------------------------------------------
-//	ƒf[ƒ^‚Ì‰ğ•ú
+//	ãƒ‡ãƒ¼ã‚¿ã®è§£æ”¾
 //-----------------------------------------------------
 void AflMPlayData::releaseData()
 {
@@ -648,7 +648,7 @@ void AflMPlayData::releaseData()
 }
 
 //-----------------------------------------------------
-//	ƒf[ƒ^ƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µ
+//	ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—
 //-----------------------------------------------------
 bool AflMPlayData::read(const LPBYTE pData,INT nSize)
 {
@@ -657,9 +657,9 @@ bool AflMPlayData::read(const LPBYTE pData,INT nSize)
 	INT nHSize;
 	INT wTracks;
 
-	releaseData();								//Šù‘¶‚Ìƒf[ƒ^‚Ì‰ğ•ú
+	releaseData();								//æ—¢å­˜ã®ãƒ‡ãƒ¼ã‚¿ã®è§£æ”¾
 
-	pFormat = (const SMidiHeader*)pData;		//ƒtƒH[ƒ}ƒbƒg‚Ìİ’è
+	pFormat = (const SMidiHeader*)pData;		//ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®è¨­å®š
 	nHSize =  protConvDW(pFormat->dwBytes);
 	wTracks = protConvW(pFormat->wTracks);
 	m_wRCount = protConvW(pFormat->wCount);
@@ -673,12 +673,12 @@ bool AflMPlayData::read(const LPBYTE pData,INT nSize)
 	for(i=1;i<wTracks;i++)
 	{
 		dwData = protConvDW(ppTHeader[i-1]->dwBytes)+8;
-		if((INT)dwData > nSize)					//“r’†‚Åƒf[ƒ^‚ÌI’[‚ª—ˆ‚½‚çˆÙíI—¹
+		if((INT)dwData > nSize)					//é€”ä¸­ã§ãƒ‡ãƒ¼ã‚¿ã®çµ‚ç«¯ãŒæ¥ãŸã‚‰ç•°å¸¸çµ‚äº†
 		{
 			delete[] ppTHeader;
 			return false;
 		}
-		//ƒf[ƒ^—Ìˆæ‚Ìİ’è
+		//ãƒ‡ãƒ¼ã‚¿é ˜åŸŸã®è¨­å®š
 		ppTHeader[i] = (STrackHeader*)((LPBYTE)ppTHeader[i-1] + dwData);
 	}
 	
@@ -695,7 +695,7 @@ bool AflMPlayData::read(const LPBYTE pData,INT nSize)
 }
 
 //-----------------------------------------------------
-//	ƒgƒ‰ƒbƒN‚²‚Æ‚Ì“Ç‚İo‚µ
+//	ãƒˆãƒ©ãƒƒã‚¯ã”ã¨ã®èª­ã¿å‡ºã—
 //-----------------------------------------------------
 void AflMPlayData::track(STrackHeader** ppTHeader,INT nTCount)
 {
@@ -708,7 +708,7 @@ void AflMPlayData::track(STrackHeader** ppTHeader,INT nTCount)
 }
 
 //-----------------------------------------------------
-//	ƒgƒ‰ƒbƒNƒf[ƒ^‚Ì•¹‡
+//	ãƒˆãƒ©ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ã®ä½µåˆ
 //-----------------------------------------------------
 void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 {
@@ -725,9 +725,9 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 	{
 		pTData[i].init();
 		pTData[i].next();
-		dwStep += pTData[i].getStep();				//’Êíƒf[ƒ^‚ÌƒTƒCƒY
-		dwExStep += pTData[i].getEStep();			//ƒGƒNƒXƒNƒ‹[ƒVƒu‚ÌƒTƒCƒY
-		nMarkerSize += pTData[i].getMarkerSize();	//ƒ}[ƒJ‚Ì•¶šƒTƒCƒY
+		dwStep += pTData[i].getStep();				//é€šå¸¸ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚º
+		dwExStep += pTData[i].getEStep();			//ã‚¨ã‚¯ã‚¹ã‚¯ãƒ«ãƒ¼ã‚·ãƒ–ã®ã‚µã‚¤ã‚º
+		nMarkerSize += pTData[i].getMarkerSize();	//ãƒãƒ¼ã‚«ã®æ–‡å­—ã‚µã‚¤ã‚º
 	}
 	m_dwAllTime = 0;
 	m_dwTempoCount = 60000000/120;
@@ -744,7 +744,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 	ZeroMemory(byCCH,sizeof(byCCH));
 
 	INT nDLSCount = 2;
-	PINT pDLS = new INT[10000];	//‰¹Fƒoƒbƒtƒ@
+	PINT pDLS = new INT[10000];	//éŸ³è‰²ãƒãƒƒãƒ•ã‚¡
 	ZeroMemory(pDLS,sizeof(INT)*10000);
 	pDLS[1] = 0x80000000;
 
@@ -752,7 +752,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 	{
 		bFlag = false;
 		DWORD dwNextCount = 0xffffffff;
-		//Track‚©‚çŸ‚Éæ‚èo‚·ƒf[ƒ^‚Ü‚Å‚ÌƒJƒEƒ“ƒ^‚ğæ“¾
+		//Trackã‹ã‚‰æ¬¡ã«å–ã‚Šå‡ºã™ãƒ‡ãƒ¼ã‚¿ã¾ã§ã®ã‚«ã‚¦ãƒ³ã‚¿ã‚’å–å¾—
 		for(i=0;i<nTracks;i++)
 		{
 			if(pTData[i].isPlay())
@@ -762,11 +762,11 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 					dwNextCount = pTData[i].getNextCount();
 			}
 		}
-		m_pMCode[dwNowStep].dwWait = dwNextCount;	//ƒJƒEƒ“ƒ^‚ğ“ü‚ê‚é
+		m_pMCode[dwNowStep].dwWait = dwNextCount;	//ã‚«ã‚¦ãƒ³ã‚¿ã‚’å…¥ã‚Œã‚‹
 		if(dwNextCount != 0xffffffff)
 			m_dwlAllCount += dwNextCount;
 		
-		//Trackƒf[ƒ^‚ğ•¹‡
+		//Trackãƒ‡ãƒ¼ã‚¿ã‚’ä½µåˆ
 		for(i=0;i<nTracks;i++)
 		{
 			if(pTData[i].isPlay())
@@ -779,7 +779,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 					{
 						m_pMCode[dwNowStep].Mdf.bbData[1] = pTData[i].getData();
 						
-						if((bbStat&0xf0) == 0xc0)	//‰¹F’Šo—p
+						if((bbStat&0xf0) == 0xc0)	//éŸ³è‰²æŠ½å‡ºç”¨
 						{
 							INT nCH = bbStat&0x0f;
 							INT nDLS = (byCCH[nCH]<<16) + (byCCL[nCH]<<8) + m_pMCode[dwNowStep].Mdf.bbData[1];
@@ -810,7 +810,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 						BYTE bbData = pTData[i].getData();
 						DWORD dwCount = pTData[i].getWait();
 						m_pMCode[dwNowStep].Mdf.bbData[1] = bbData; 
-						if(bbData==0x51)			//ƒeƒ“ƒ|
+						if(bbData==0x51)			//ãƒ†ãƒ³ãƒ
 						{
 							DWORD dwTCount=0;
 							for(INT j=0;j<(INT)dwCount;j++)
@@ -828,7 +828,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 							m_pMCode[dwNowStep].Mdf.bbData[0] = 0;	//SkipData
 							if(i == 0)
 							{
-								if(bbData == 3)						//ƒ^ƒCƒgƒ‹
+								if(bbData == 3)						//ã‚¿ã‚¤ãƒˆãƒ«
 								{
 									if(m_pTitle)
 										delete m_pTitle;
@@ -836,7 +836,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 									strncpy(m_pTitle,(LPCSTR)pTData[i].getString(),dwCount);
 									m_pTitle[dwCount] = 0;
 								}
-								else if(bbData == 6)				//ƒ}[ƒJ
+								else if(bbData == 6)				//ãƒãƒ¼ã‚«
 								{
 									strncpy(m_pMarker+nMarkerPoINT,(LPCSTR)pTData[i].getString(),dwCount);
 									m_pMarker[nMarkerPoINT + dwCount] = 0;
@@ -858,7 +858,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 						m_pMCode[dwNowStep].Mdf.bbData[1] = pTData[i].getData();
 						m_pMCode[dwNowStep].Mdf.bbData[2] = pTData[i].getData();
 						
-						if((bbStat&0xf0) == 0xb0)	//‰¹F’Šo—p
+						if((bbStat&0xf0) == 0xb0)	//éŸ³è‰²æŠ½å‡ºç”¨
 						{
 							if(m_pMCode[dwNowStep].Mdf.bbData[1] == 0)
 								byCCH[bbStat&0x0f] = m_pMCode[dwNowStep].Mdf.bbData[2];
@@ -875,7 +875,7 @@ void AflMPlayData::setTracks(CTrackData* pTData,INT nTracks)
 		}
 	}
 	
-	//‰¹F”z—ñ‚Ìİ’è
+	//éŸ³è‰²é…åˆ—ã®è¨­å®š
 	m_pDLSList = new DWORD[nDLSCount];
 	CopyMemory(m_pDLSList,pDLS,sizeof(INT)*nDLSCount);
 	m_nDLSCount = nDLSCount;
@@ -1032,7 +1032,7 @@ LPDWORD AflMPlayData::getDLS()
 // AflMusic
 
 //---------------------------------------------------------
-//     ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//     ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //---------------------------------------------------------
 AflMusic::AflMusic()
 {
@@ -1049,7 +1049,7 @@ AflMusic::AflMusic()
 	m_dwResetCount = 0;
 }
 //---------------------------------------------------------
-//     ƒfƒXƒgƒ‰ƒNƒ^
+//     ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //---------------------------------------------------------
 AflMusic::~AflMusic()
 {
@@ -1057,7 +1057,7 @@ AflMusic::~AflMusic()
 }
 
 //---------------------------------------------------------
-//     ƒtƒ@ƒCƒ‹“Ç‚İo‚µ
+//     ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿å‡ºã—
 //---------------------------------------------------------
 bool AflMusic::open(LPCSTR pName,LPCSTR pType)
 {
@@ -1096,7 +1096,7 @@ bool AflMusic::open(LPCSTR pName,LPCSTR pType)
 
 bool AflMusic::open(HMODULE hResource, HRSRC hSrc,LPCSTR pType)
 {
-	/* ƒŠƒ\[ƒX‚ğ“Ç‚İ‚İ */
+	/* ãƒªã‚½ãƒ¼ã‚¹ã‚’èª­ã¿è¾¼ã¿ */
 	HGLOBAL hRes = LoadResource (hResource, hSrc);
 
 	stop();
@@ -1122,7 +1122,7 @@ bool AflMusic::open(HMODULE hResource, HRSRC hSrc,LPCSTR pType)
 }
 
 //---------------------------------------------------------
-//     ƒf[ƒ^‚Ì‰ğ•ú
+//     ãƒ‡ãƒ¼ã‚¿ã®è§£æ”¾
 //---------------------------------------------------------
 bool AflMusic::close()
 {
@@ -1169,7 +1169,7 @@ bool AflMusic::sendReset(INT nMode)
 }
 
 //---------------------------------------------------------
-//     ‰‰‘t‘O‚Ì‰Šú‰»
+//     æ¼”å¥å‰ã®åˆæœŸåŒ–
 //---------------------------------------------------------
 void AflMusic::insideInit()
 {
@@ -1190,7 +1190,7 @@ void AflMusic::insideInit()
 	m_nEventFlag = 0;
 }
 //---------------------------------------------------------
-//     ‰‰‘tŠJn
+//     æ¼”å¥é–‹å§‹
 //---------------------------------------------------------
 bool AflMusic::play()
 {
@@ -1209,7 +1209,7 @@ bool AflMusic::play()
 }
 
 //---------------------------------------------------------
-//     “ªo‚µ
+//     é ­å‡ºã—
 //---------------------------------------------------------
 bool AflMusic::play(DWORDLONG dwlCount)
 {
@@ -1253,7 +1253,7 @@ bool AflMusic::playTime(DWORD dwTime)
 	return true;
 }
 //---------------------------------------------------------
-//     ‰‰‘tÄŠJ
+//     æ¼”å¥å†é–‹
 //---------------------------------------------------------
 bool AflMusic::cont()
 {
@@ -1268,7 +1268,7 @@ bool AflMusic::cont()
 }
 
 //---------------------------------------------------------
-//     ‰‰‘t’â~
+//     æ¼”å¥åœæ­¢
 //---------------------------------------------------------
 bool AflMusic::stop()
 {
@@ -1472,7 +1472,7 @@ bool AflMusic::stdMidi(const LPBYTE pData,INT nSize)
 }
 
 //---------------------------------------------------------
-//     ƒtƒF[ƒhƒCƒ“
+//     ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
 //---------------------------------------------------------
 bool AflMusic::fadeIn(INT nTime,INT nVolume)
 {
@@ -1489,7 +1489,7 @@ bool AflMusic::fadeIn(INT nTime,INT nVolume)
 }
 
 //---------------------------------------------------------
-//     ƒtƒF[ƒhƒAƒEƒg
+//     ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
 //---------------------------------------------------------
 bool AflMusic::fadeOut(INT nTime)
 {
@@ -1504,7 +1504,7 @@ bool AflMusic::fadeOut(INT nTime)
 }
 
 //---------------------------------------------------------
-//     ƒfƒoƒCƒX‚Ì‘I‘ğ
+//     ãƒ‡ãƒã‚¤ã‚¹ã®é¸æŠ
 //---------------------------------------------------------
 bool AflMusic::setDevice(INT nIndex)
 {
@@ -1522,7 +1522,7 @@ bool AflMusic::setDevice(INT nIndex)
 }
 
 //---------------------------------------------------------
-//     ƒeƒ“ƒ|‚ğİ’è
+//     ãƒ†ãƒ³ãƒã‚’è¨­å®š
 //---------------------------------------------------------
 void AflMusic::setTemp(INT nRelativeTempo)
 {
@@ -1585,7 +1585,7 @@ void AflMusic::setRelativeReverb(INT nReverb)
 }
 
 //---------------------------------------------------------
-//     MIDIƒfƒoƒCƒX‚Ì‰Šú‰»
+//     MIDIãƒ‡ãƒã‚¤ã‚¹ã®åˆæœŸåŒ–
 //---------------------------------------------------------
 bool AflMusic::insideOpenDevice()
 {
@@ -1595,7 +1595,7 @@ bool AflMusic::insideOpenDevice()
 }
 
 //---------------------------------------------------------
-//     MIDI‰¹Œ¹‚Éİ’è‚ğ“`‚¦‚é
+//     MIDIéŸ³æºã«è¨­å®šã‚’ä¼ãˆã‚‹
 //---------------------------------------------------------
 void AflMusic::insideComeback()
 {
@@ -1603,7 +1603,7 @@ void AflMusic::insideComeback()
 	SGpMidiCode midiData;
 	m_Relative.fVolume = (FLOAT)0;
 
-	//ƒvƒƒOƒ‰ƒ€ƒiƒ“ƒo[•œ‹A
+	//ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒŠãƒ³ãƒãƒ¼å¾©å¸°
 	midiData.Mdf.bbData[2] = 0;
 	midiData.Mdf.bbData[3] = 0;
 	for(i=0;i<16;i++)
@@ -1612,7 +1612,7 @@ void AflMusic::insideComeback()
 		midiData.Mdf.bbData[1] = m_playInfo.Chn[i].bbPC;
 		m_MDevice.out(midiData.Mdf.dwMsg);
 	}
-	//ƒRƒ“ƒgƒ[ƒ‹ƒiƒ“ƒo[•œ‹A
+	//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒŠãƒ³ãƒãƒ¼å¾©å¸°
 	midiData.Mdf.bbData[1] = 0;
 	midiData.Mdf.bbData[3] = 0;
 	for(i=0;i<16;i++)
@@ -1621,7 +1621,7 @@ void AflMusic::insideComeback()
 		midiData.Mdf.bbData[2] = m_playInfo.Chn[i].bbCC;
 		m_MDevice.out(midiData.Mdf.dwMsg);
 	}
-	//ƒpƒ“•œ‹A
+	//ãƒ‘ãƒ³å¾©å¸°
 	midiData.Mdf.bbData[1] = 0x0a;
 	midiData.Mdf.bbData[3] = 0;
 	for(i=0;i<16;i++)
@@ -1630,7 +1630,7 @@ void AflMusic::insideComeback()
 		midiData.Mdf.bbData[2] = m_playInfo.Chn[i].bbPan;
 		m_MDevice.out(midiData.Mdf.dwMsg);
 	}
-	//ƒŠƒo[ƒu•œ‹A
+	//ãƒªãƒãƒ¼ãƒ–å¾©å¸°
 	midiData.Mdf.bbData[1] = 0x5b;
 	midiData.Mdf.bbData[3] = 0;
 	for(i=0;i<16;i++)
@@ -1639,7 +1639,7 @@ void AflMusic::insideComeback()
 		midiData.Mdf.bbData[2] = m_playInfo.Chn[i].bbRev;
 		m_MDevice.out(midiData.Mdf.dwMsg);
 	}
-	//ƒR[ƒ‰ƒX•œ‹A
+	//ã‚³ãƒ¼ãƒ©ã‚¹å¾©å¸°
 	midiData.Mdf.bbData[1] = 0x5d;
 	midiData.Mdf.bbData[3] = 0;
 	for(i=0;i<16;i++)
@@ -1648,12 +1648,12 @@ void AflMusic::insideComeback()
 		midiData.Mdf.bbData[2] = m_playInfo.Chn[i].bbChos;
 		m_MDevice.out(midiData.Mdf.dwMsg);
 	}
-	//ƒ{ƒŠƒ…[ƒ€•œ‹A
+	//ãƒœãƒªãƒ¥ãƒ¼ãƒ å¾©å¸°
 	insideSetVolume();
 }
 
 //---------------------------------------------------------
-//     Reverbİ’è
+//     Reverbè¨­å®š
 //---------------------------------------------------------
 void AflMusic::insideSetReverb(INT nSData)
 {
@@ -1678,7 +1678,7 @@ void AflMusic::insideSetReverb(INT nSData)
 }
 
 //---------------------------------------------------------
-//     Chorusİ’è
+//     Chorusè¨­å®š
 //---------------------------------------------------------
 void AflMusic::insideSetChorus(INT nSData)
 {
@@ -1700,7 +1700,7 @@ void AflMusic::insideSetChorus(INT nSData)
 	}
 }
 //---------------------------------------------------------
-//     PANİ’è
+//     PANè¨­å®š
 //---------------------------------------------------------
 void AflMusic::insideSetPan(INT nSData)
 {
@@ -1722,7 +1722,7 @@ void AflMusic::insideSetPan(INT nSData)
 	}
 }
 //---------------------------------------------------------
-//     ƒ{ƒŠƒ…[ƒ€İ’è
+//     ãƒœãƒªãƒ¥ãƒ¼ãƒ è¨­å®š
 //---------------------------------------------------------
 void AflMusic::insideSetVolume(INT nSVolume)
 {
@@ -1744,7 +1744,7 @@ void AflMusic::insideSetVolume(INT nSVolume)
 	}
 }
 //---------------------------------------------------------
-//     ƒ{ƒŠƒ…[ƒ€İ’è
+//     ãƒœãƒªãƒ¥ãƒ¼ãƒ è¨­å®š
 //---------------------------------------------------------
 void AflMusic::insideSetNoteOff()
 {
@@ -1763,7 +1763,7 @@ void AflMusic::insideSetNoteOff()
 }
 
 //---------------------------------------------------------
-//     ƒ^ƒCƒ}[İ’è
+//     ã‚¿ã‚¤ãƒãƒ¼è¨­å®š
 //---------------------------------------------------------
 bool AflMusic::insideSetTimer()
 {
@@ -1787,7 +1787,7 @@ bool AflMusic::insideSetTimer()
 
 bool AflMusic::isResetWait()
 {
-	//GSƒŠƒZƒbƒg50ms‘Ò‹@
+	//GSãƒªã‚»ãƒƒãƒˆ50mså¾…æ©Ÿ
 	if(m_dwResetCount)
 	{
 		if((INT)timeGetTime() - (INT)m_dwResetCount < 50)
@@ -1800,7 +1800,7 @@ bool AflMusic::isResetWait()
 	return false;
 }
 //---------------------------------------------------------
-//     ƒ^ƒCƒ}[ŒÄ‚Ño‚µ•”•ª
+//     ã‚¿ã‚¤ãƒãƒ¼å‘¼ã³å‡ºã—éƒ¨åˆ†
 //---------------------------------------------------------
 void AflMusic::procTimer()
 {
@@ -1818,7 +1818,7 @@ void AflMusic::procTimer()
 	}
 }
 //---------------------------------------------------------
-//     ƒ}[ƒJ‚ÌƒR[ƒ‹ƒoƒbƒN
+//     ãƒãƒ¼ã‚«ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 //---------------------------------------------------------
 void AflMusic::callbackMarkerEvent(LPCSTR pString)
 {
@@ -1832,11 +1832,11 @@ void AflMusic::callbackMarkerEvent(LPCSTR pString)
 }
 
 //---------------------------------------------------------
-//     ‰‰‘to—Íˆê•àè‘O
+//     æ¼”å¥å‡ºåŠ›ä¸€æ­©æ‰‹å‰
 //---------------------------------------------------------
 void AflMusic::insidePlay()
 {	
-	//ƒtƒF[ƒhƒAƒEƒg
+	//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
 	if(m_bFadeOut)
 	{
 		if(m_nFadeCountWork < m_nFadeCount)
@@ -1856,7 +1856,7 @@ void AflMusic::insidePlay()
 			return;
 		}
 	}
-	// ƒtƒF[ƒhƒCƒ“
+	// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
 	if(m_bFadeIn)
 	{
 		if(m_nFadeCountWork < m_nFadeCount)
@@ -1937,7 +1937,7 @@ void AflMusic::insidePlay()
 }
 
 //---------------------------------------------------------
-//     À‰‰‘tˆ—
+//     å®Ÿæ¼”å¥å‡¦ç†
 //---------------------------------------------------------
 void AflMusic::insideMidiout()
 {
@@ -1950,15 +1950,15 @@ void AflMusic::insideMidiout()
 		bbStat = MData.bbData[0];
 		bbStat2 = MData.bbData[0] &  (BYTE)0xf0;
 		bbStat3 = MData.bbData[0] &  (BYTE)0x0f;
-		if(bbStat == 0xf0)	//ƒGƒNƒXƒNƒ‹[ƒVƒu
+		if(bbStat == 0xf0)	//ã‚¨ã‚¯ã‚¹ã‚¯ãƒ«ãƒ¼ã‚·ãƒ–
 		{
 			m_MDevice.out(m_MidiData.getEData());
 		}
-		else if(bbStat == 0xff)	//ƒeƒ“ƒ|
+		else if(bbStat == 0xff)	//ãƒ†ãƒ³ãƒ
 		{
 			if(MData.bbData[1] == 0x51)
 			{
-				m_dwNowTime += DWORD((getPlayCount()-m_dwlCountTime)*m_dwTempParam/(1000*getTimeBase()));	//Œ»İ‚ÌŠÔ‚Ì•Û‘¶
+				m_dwNowTime += DWORD((getPlayCount()-m_dwlCountTime)*m_dwTempParam/(1000*getTimeBase()));	//ç¾åœ¨ã®æ™‚é–“ã®ä¿å­˜
 				m_dwlCountTime = getPlayCount();
 				m_MidiData.Next();
 				((LPWORD)&m_dwTempParam)[0] = m_MidiData.getDataWord();
@@ -1966,17 +1966,17 @@ void AflMusic::insideMidiout()
 				((LPWORD)&m_dwTempParam)[1] = m_MidiData.getDataWord();
 				insideSetTimer();
 			}
-			else if(MData.bbData[1] == 6)	//ƒ}[ƒN
+			else if(MData.bbData[1] == 6)	//ãƒãƒ¼ã‚¯
 			{	
 				callbackMarkerEvent(m_MidiData.getMarker(*(LPWORD)(MData.bbData + 2)));
 			}
 		}
-		else if(bbStat >= 0x80)				//’Êíƒf[ƒ^
+		else if(bbStat >= 0x80)				//é€šå¸¸ãƒ‡ãƒ¼ã‚¿
 		{
 			m_playInfo.Chn[bbStat3].midiMsg.dwMsg = MData.dwMsg;
-			switch(bbStat2)	//ƒXƒe[ƒ^ƒX‚Ì”»’è
+			switch(bbStat2)	//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®åˆ¤å®š
 			{
-			case 0x90:						//ƒm[ƒgƒIƒ“
+			case 0x90:						//ãƒãƒ¼ãƒˆã‚ªãƒ³
 				if(MData.bbData[2])
 				{
 					MData.bbData[1] += m_Relative.cKey;
@@ -1990,21 +1990,21 @@ void AflMusic::insideMidiout()
 					MData.bbData[2] = (BYTE)nVelo;
 					break;
 				}
-			case 0x80:						//ƒm[ƒgƒIƒt
+			case 0x80:						//ãƒãƒ¼ãƒˆã‚ªãƒ•
 				MData.bbData[1] += m_Relative.cKey;
 				m_playInfo.Chn[bbStat3].bbNote[MData.bbData[1]>>3] &=
 						(BYTE)~(1<<(MData.bbData[1]&7));
 				break;
-			case 0xc0:						//ƒvƒƒOƒ‰ƒ€ƒ`ƒFƒ“ƒW
+			case 0xc0:						//ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒã‚§ãƒ³ã‚¸
 				m_playInfo.Chn[bbStat3].bbPC = MData.bbData[1];
 				break;
 			case 0xb0:
 				switch(MData.bbData[1])
 				{
-				case 0x00:					//ƒRƒ“ƒgƒ[ƒ‹ƒ`ƒFƒ“ƒW
+				case 0x00:					//ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒã‚§ãƒ³ã‚¸
 					m_playInfo.Chn[bbStat3].bbCC = MData.bbData[2];
 					break;
-				case 0x07:					//ƒ{ƒŠƒ…[ƒ€
+				case 0x07:					//ãƒœãƒªãƒ¥ãƒ¼ãƒ 
 					m_playInfo.Chn[bbStat3].bbVolume = MData.bbData[2];
 					nWork = MData.bbData[2] + m_Relative.nVolume + (INT)m_Relative.fVolume;
 					if(nWork < (BYTE)0)
@@ -2014,21 +2014,21 @@ void AflMusic::insideMidiout()
 					m_playInfo.Chn[bbStat3].bbVolume2 = (BYTE)nWork;
 					MData.bbData[2] = (BYTE)nWork;
 					break;
-				case 0x5b:					//ƒŠƒo[ƒu
+				case 0x5b:					//ãƒªãƒãƒ¼ãƒ–
 					nWork = MData.bbData[2] + m_Relative.nReverb;
 					if(nWork < 0)		nWork = 0;
 					else if(nWork > 127)	nWork = 127;
 					MData.bbData[2] = (BYTE)nWork;
 					m_playInfo.Chn[bbStat3].bbRev = MData.bbData[2];
 					break;
-				case 0x5d:					//ƒR[ƒ‰ƒX
+				case 0x5d:					//ã‚³ãƒ¼ãƒ©ã‚¹
 					nWork = MData.bbData[2] + m_Relative.nChorus;
 					if(nWork < 0)		nWork = 0;
 					else if(nWork > 127)	nWork = 127;
 					MData.bbData[2] = (BYTE)nWork;
 					m_playInfo.Chn[bbStat3].bbChos = MData.bbData[2];
 					break;
-				case 0x0a:					//ƒpƒ“
+				case 0x0a:					//ãƒ‘ãƒ³
 					nWork = MData.bbData[2] + m_Relative.nPan;
 					if(nWork < 0)		nWork = 0;
 					else if(nWork > 127)	nWork = 127;

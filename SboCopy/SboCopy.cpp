@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboUpdate.cpp												 */
-/* “à—e			:SBOƒAƒbƒvƒf[ƒgƒ‚ƒWƒ…[ƒ‹ À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/03/09													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboUpdate.cpp												 */
+/* å†…å®¹			:SBOã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ« å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/03/09													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:QuitModule														 */
-/* “à—e		:w’èƒ‚ƒWƒ…[ƒ‹‚ğI—¹‚³‚¹‚é										 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:QuitModule														 */
+/* å†…å®¹		:æŒ‡å®šãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’çµ‚äº†ã•ã›ã‚‹										 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void QuitModule(LPCSTR pszTitle)
@@ -33,9 +33,9 @@ void QuitModule(LPCSTR pszTitle)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:ReadFileList													 */
-/* “à—e		:ƒtƒ@ƒCƒ‹ƒŠƒXƒg“Ç‚İ‚İ											 */
-/* “ú•t		:2008/03/15														 */
+/* é–¢æ•°å	:ReadFileList													 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆèª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/03/15														 */
 /* ========================================================================= */
 
 void ReadFileList(CmyStringArray &astrDst)
@@ -60,9 +60,9 @@ void ReadFileList(CmyStringArray &astrDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CopyFileList													 */
-/* “à—e		:ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ìƒtƒ@ƒCƒ‹‚ğƒRƒs[								 */
-/* “ú•t		:2008/03/15														 */
+/* é–¢æ•°å	:CopyFileList													 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ”ãƒ¼								 */
+/* æ—¥ä»˜		:2008/03/15														 */
 /* ========================================================================= */
 
 void CopyFileList(CmyStringArray &astrSrc)
@@ -91,7 +91,7 @@ void CopyFileList(CmyStringArray &astrSrc)
 
 		bResult = CopyFile (szFileNameSrc, szFileNameDst, FALSE);
 		if (bResult) {
-			/* ƒRƒs[‚É¬Œ÷‚µ‚½‚Ì‚Åƒtƒ@ƒCƒ‹‚ğíœ */
+			/* ã‚³ãƒ”ãƒ¼ã«æˆåŠŸã—ãŸã®ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ */
 			DeleteFile (szFileNameSrc);
 		}
 	}
@@ -99,9 +99,9 @@ void CopyFileList(CmyStringArray &astrSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:ExecuteLauncher												 */
-/* “à—e		:ƒ‰ƒ“ƒ`ƒƒ[‹N“®													 */
-/* “ú•t		:2008/03/15														 */
+/* é–¢æ•°å	:ExecuteLauncher												 */
+/* å†…å®¹		:ãƒ©ãƒ³ãƒãƒ£ãƒ¼èµ·å‹•													 */
+/* æ—¥ä»˜		:2008/03/15														 */
 /* ========================================================================= */
 
 void ExecuteLauncher(void)
@@ -122,7 +122,7 @@ void ExecuteLauncher(void)
 	strcpy (szTmp, strFileName);
 	bResult = CreateProcess (NULL, szTmp, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, szPath,  &stStartupInfo, &stProcInfo);
 	if (bResult == FALSE) {
-		MessageBox (NULL, "SBOƒ‰ƒ“ƒ`ƒƒ[‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½", "ƒGƒ‰[", MB_OK);
+		MessageBox (NULL, "SBOãƒ©ãƒ³ãƒãƒ£ãƒ¼ã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸ", "ã‚¨ãƒ©ãƒ¼", MB_OK);
 		goto Exit;
 	}
 
@@ -137,9 +137,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:WinMain														 */
-/* “à—e		:ƒvƒƒOƒ‰ƒ€ŠJn													 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:WinMain														 */
+/* å†…å®¹		:ãƒ—ãƒ­ã‚°ãƒ©ãƒ é–‹å§‹													 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -149,7 +149,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	GetModuleFilePath (szPath, sizeof (szPath));
 
-	QuitModule ("ƒXƒNƒ‰ƒbƒvƒuƒbƒNƒIƒ“ƒ‰ƒCƒ“ ƒ‰ƒ“ƒ`ƒƒ[");
+	QuitModule ("ã‚¹ã‚¯ãƒ©ãƒƒãƒ—ãƒ–ãƒƒã‚¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ ãƒ©ãƒ³ãƒãƒ£ãƒ¼");
 	ReadFileList (astrFileList);
 	CopyFileList (astrFileList);
 	ExecuteLauncher ();

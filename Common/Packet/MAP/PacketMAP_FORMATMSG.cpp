@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_FORMATMSG.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒtƒH[ƒ}ƒbƒgƒƒbƒZ[ƒW’Ê’m) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_FORMATMSG.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/03													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketMAP_FORMATMSG.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_FORMATMSG::CPacketMAP_FORMATMSG						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/03														 */
+/* é–¢æ•°å	:CPacketMAP_FORMATMSG::CPacketMAP_FORMATMSG						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/03														 */
 /* ========================================================================= */
 
 CPacketMAP_FORMATMSG::CPacketMAP_FORMATMSG()
@@ -28,9 +28,9 @@ CPacketMAP_FORMATMSG::CPacketMAP_FORMATMSG()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_FORMATMSG::~CPacketMAP_FORMATMSG					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/03														 */
+/* é–¢æ•°å	:CPacketMAP_FORMATMSG::~CPacketMAP_FORMATMSG					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/03														 */
 /* ========================================================================= */
 
 CPacketMAP_FORMATMSG::~CPacketMAP_FORMATMSG()
@@ -39,18 +39,18 @@ CPacketMAP_FORMATMSG::~CPacketMAP_FORMATMSG()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_FORMATMSG::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/07/03														 */
+/* é–¢æ•°å	:CPacketMAP_FORMATMSG::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/07/03														 */
 /* ========================================================================= */
 
 void CPacketMAP_FORMATMSG::Make(
-	DWORD dwMsgID,				/* [in] ƒƒbƒZ[ƒWID */
-	DWORD dwPara1,	/*=0*/		/* [in] ƒpƒ‰ƒ[ƒ^1 */
-	DWORD dwPara2,	/*=0*/		/* [in] ƒpƒ‰ƒ[ƒ^2 */
-	COLORREF clMsg,	/*=0*/		/* [in] •\¦F */
-	BOOL bSound,	/*=TRUE*/	/* [in] •\¦‚·‚é‚É‰¹‚ğ‚È‚ç‚·‚©”»’è */
-	int nMsgType)	/*=FORMATMSGTYPE_DEFAULT*/	/* [in] ƒƒbƒZ[ƒWí•Ê */
+	DWORD dwMsgID,				/* [in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ID */
+	DWORD dwPara1,	/*=0*/		/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+	DWORD dwPara2,	/*=0*/		/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
+	COLORREF clMsg,	/*=0*/		/* [in] è¡¨ç¤ºè‰² */
+	BOOL bSound,	/*=TRUE*/	/* [in] è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	int nMsgType)	/*=FORMATMSGTYPE_DEFAULT*/	/* [in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -76,21 +76,21 @@ void CPacketMAP_FORMATMSG::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_FORMATMSG;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMsgID,	sizeof (dwMsgID),	pDataTmp);	/* ƒƒbƒZ[ƒWID */
-	CopyMemoryRenew (pDataTmp, &dwPara1,	sizeof (dwPara1),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^1 */
-	CopyMemoryRenew (pDataTmp, &dwPara2,	sizeof (dwPara2),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^2 */
-	CopyMemoryRenew (pDataTmp, &clMsg,		sizeof (clMsg),		pDataTmp);	/* •\¦F */
-	CopyMemoryRenew (pDataTmp, &bSound,		sizeof (bSound),	pDataTmp);	/* •\¦‚·‚é‚É‰¹‚ğ‚È‚ç‚·‚©”»’è */
-	CopyMemoryRenew (pDataTmp, &nMsgType,	sizeof (nMsgType),	pDataTmp);	/* ƒƒbƒZ[ƒWí•Ê */
+	CopyMemoryRenew (pDataTmp, &dwMsgID,	sizeof (dwMsgID),	pDataTmp);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ID */
+	CopyMemoryRenew (pDataTmp, &dwPara1,	sizeof (dwPara1),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+	CopyMemoryRenew (pDataTmp, &dwPara2,	sizeof (dwPara2),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
+	CopyMemoryRenew (pDataTmp, &clMsg,		sizeof (clMsg),		pDataTmp);	/* è¡¨ç¤ºè‰² */
+	CopyMemoryRenew (pDataTmp, &bSound,		sizeof (bSound),	pDataTmp);	/* è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	CopyMemoryRenew (pDataTmp, &nMsgType,	sizeof (nMsgType),	pDataTmp);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_FORMATMSG::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/07/03														 */
+/* é–¢æ•°å	:CPacketMAP_FORMATMSG::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/07/03														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_FORMATMSG::Set(PBYTE pPacket)
@@ -100,12 +100,12 @@ PBYTE CPacketMAP_FORMATMSG::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMsgID,	pDataTmp, sizeof (m_dwMsgID),	pDataTmp);	/* ƒƒbƒZ[ƒWID */
-	CopyMemoryRenew (&m_dwPara1,	pDataTmp, sizeof (m_dwPara1),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^1 */
-	CopyMemoryRenew (&m_dwPara2,	pDataTmp, sizeof (m_dwPara2),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^2 */
-	CopyMemoryRenew (&m_clMsg,		pDataTmp, sizeof (m_clMsg),		pDataTmp);	/* •\¦F */
-	CopyMemoryRenew (&m_bSound,		pDataTmp, sizeof (m_bSound),	pDataTmp);	/* •\¦‚·‚é‚É‰¹‚ğ‚È‚ç‚·‚©”»’è */
-	CopyMemoryRenew (&m_nMsgType,	pDataTmp, sizeof (m_nMsgType),	pDataTmp);	/* ƒƒbƒZ[ƒWí•Ê */
+	CopyMemoryRenew (&m_dwMsgID,	pDataTmp, sizeof (m_dwMsgID),	pDataTmp);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ID */
+	CopyMemoryRenew (&m_dwPara1,	pDataTmp, sizeof (m_dwPara1),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+	CopyMemoryRenew (&m_dwPara2,	pDataTmp, sizeof (m_dwPara2),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
+	CopyMemoryRenew (&m_clMsg,		pDataTmp, sizeof (m_clMsg),		pDataTmp);	/* è¡¨ç¤ºè‰² */
+	CopyMemoryRenew (&m_bSound,		pDataTmp, sizeof (m_bSound),	pDataTmp);	/* è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	CopyMemoryRenew (&m_nMsgType,	pDataTmp, sizeof (m_nMsgType),	pDataTmp);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 
 	pRet = pDataTmp;
 	return pRet;

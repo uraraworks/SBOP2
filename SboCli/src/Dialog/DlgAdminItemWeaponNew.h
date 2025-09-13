@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemWeaponNew.h									 */
-/* “à—e			:ƒAƒCƒeƒ€•Šíî•ñÝ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemWeaponNew.h									 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ±è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,35 +13,35 @@
 class CInfoItemWeapon;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminItemWeaponNew : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemWeaponNew(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminItemWeaponNew();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminItemWeaponNew(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminItemWeaponNew();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Set		(CInfoItemWeapon *pSrc);							/* •ÒW“à—e‚ðÝ’è */
-	void	Get		(CInfoItemWeapon *&pDst);							/* •ÒW“à—e‚ðŽæ“¾ */
-
-
-protected:
-	void	SetMotionType		(DWORD dwMotionType);					/* Žg—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“‚ðÝ’è */
-	DWORD	GetMotionType		(void);									/* Žg—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“‚ðŽæ“¾ */
-	void	SetMotionTypeStand	(DWORD dwMotionID);						/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“‚ðÝ’è */
-	DWORD	GetMotionTypeStand	(void);									/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“‚ðŽæ“¾ */
-	void	SetMotionTypeWalk	(DWORD dwMotionID);						/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“‚ðÝ’è */
-	DWORD	GetMotionTypeWalk	(void);									/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“‚ðŽæ“¾ */
-	void	RenewList			(CListBox *pList, ARRAYDWORD *pSrc);	/* ƒŠƒXƒg‚ðXV */
+	void	Set		(CInfoItemWeapon *pSrc);							/* ç·¨é›†å†…å®¹ã‚’è¨­å®š */
+	void	Get		(CInfoItemWeapon *&pDst);							/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
 
 
 protected:
-	DWORD		m_dwMotionType,			/* Žg—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ */
-				m_dwMotionTypeStand,	/* í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ */
-				m_dwMotionTypeWalk;		/* í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ */
-	ARRAYDWORD	m_adwEffectIDAtack,		/* ’ÊíUŒ‚Žž‚ÌƒGƒtƒFƒNƒgID */
-				m_adwEffectIDCritical;	/* ƒNƒŠƒeƒBƒJƒ‹Žž‚ÌƒGƒtƒFƒNƒgID */
+	void	SetMotionType		(DWORD dwMotionType);					/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®š */
+	DWORD	GetMotionType		(void);									/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾— */
+	void	SetMotionTypeStand	(DWORD dwMotionID);						/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®š */
+	DWORD	GetMotionTypeStand	(void);									/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾— */
+	void	SetMotionTypeWalk	(DWORD dwMotionID);						/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®š */
+	DWORD	GetMotionTypeWalk	(void);									/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾— */
+	void	RenewList			(CListBox *pList, ARRAYDWORD *pSrc);	/* ãƒªã‚¹ãƒˆã‚’æ›´æ–° */
+
+
+protected:
+	DWORD		m_dwMotionType,			/* ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+				m_dwMotionTypeStand,	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+				m_dwMotionTypeWalk;		/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ */
+	ARRAYDWORD	m_adwEffectIDAtack,		/* é€šå¸¸æ”»æ’ƒæ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+				m_adwEffectIDCritical;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 
 
 
@@ -63,7 +63,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminItemWeaponNew)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

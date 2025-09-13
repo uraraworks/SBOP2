@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPOBJECTDATA.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^’Ê’m) À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPOBJECTDATA.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/03													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketMAP_MAPOBJECTDATA.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECTDATA::CPacketMAP_MAPOBJECTDATA				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECTDATA::CPacketMAP_MAPOBJECTDATA				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPOBJECTDATA::CPacketMAP_MAPOBJECTDATA()
@@ -24,9 +24,9 @@ CPacketMAP_MAPOBJECTDATA::CPacketMAP_MAPOBJECTDATA()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECTDATA::~CPacketMAP_MAPOBJECTDATA			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECTDATA::~CPacketMAP_MAPOBJECTDATA			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPOBJECTDATA::~CPacketMAP_MAPOBJECTDATA()
@@ -36,14 +36,14 @@ CPacketMAP_MAPOBJECTDATA::~CPacketMAP_MAPOBJECTDATA()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECTDATA::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECTDATA::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPOBJECTDATA::Make(
-	DWORD dwMapID,						/* [in] ƒ}ƒbƒvID */
-	CLibInfoMapObjectData *pLibInfo)	/* [in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ */
+	DWORD dwMapID,						/* [in] ãƒãƒƒãƒ—ID */
+	CLibInfoMapObjectData *pLibInfo)	/* [in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -64,8 +64,8 @@ void CPacketMAP_MAPOBJECTDATA::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_MAPOBJECTDATA;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMapID, sizeof (dwMapID), pDataTmp);	/* ƒ}ƒbƒvID */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &dwMapID, sizeof (dwMapID), pDataTmp);	/* ãƒãƒƒãƒ—ID */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ */
 
 	RenewPacket (pData, dwSize);
 
@@ -74,14 +74,14 @@ void CPacketMAP_MAPOBJECTDATA::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECTDATA::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECTDATA::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPOBJECTDATA::Make(
-	DWORD dwMapID,					/* [in] ƒ}ƒbƒvID */
-	CInfoMapObjectData *pInfo)		/* [in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ */
+	DWORD dwMapID,					/* [in] ãƒãƒƒãƒ—ID */
+	CInfoMapObjectData *pInfo)		/* [in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ */
 {
 	PCInfoMapObjectData pInfoTmp;
 	CLibInfoMapObjectData LibInfoMapObjectData;
@@ -97,9 +97,9 @@ void CPacketMAP_MAPOBJECTDATA::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECTDATA::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECTDATA::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_MAPOBJECTDATA::Set(PBYTE pPacket)
@@ -109,7 +109,7 @@ PBYTE CPacketMAP_MAPOBJECTDATA::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ãƒãƒƒãƒ—ID */
 
 	SAFE_DELETE (m_pLibInfo);
 	m_pLibInfo	= new CLibInfoMapObjectData;

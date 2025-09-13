@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemTypeNewARMSBow.h								 */
-/* “à—e			:ƒAƒCƒeƒ€í•Ê(‚¿•¨[‹|—p‚Ìİ’è])İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/08/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemTypeNewARMSBow.h								 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥(æŒã¡ç‰©[å¼“ç”¨ã®è¨­å®š])è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/08/29													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,7 +13,7 @@
 class CInfoItemTypeBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CDlgAdminItemTypeNewARMSBow : public CDlgAdminBase
@@ -21,11 +21,11 @@ class CDlgAdminItemTypeNewARMSBow : public CDlgAdminBase
 	DECLARE_DYNAMIC(CDlgAdminItemTypeNewARMSBow)
 
 public:
-			CDlgAdminItemTypeNewARMSBow(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminItemTypeNewARMSBow();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminItemTypeNewARMSBow(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminItemTypeNewARMSBow();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Set		(CInfoItemTypeBase *pSrc);								/* •ÒW“à—e‚ğİ’è */
-	void	Get		(CInfoItemTypeBase *&pDst);								/* •ÒW“à—e‚ğæ“¾ */
+	void	Set		(CInfoItemTypeBase *pSrc);								/* ç·¨é›†å†…å®¹ã‚’è¨­å®š */
+	void	Get		(CInfoItemTypeBase *&pDst);								/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
 
 
 public:
@@ -34,7 +34,7 @@ public:
 	DWORD m_dwMoveCount;
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 
 	DECLARE_MESSAGE_MAP()
 };

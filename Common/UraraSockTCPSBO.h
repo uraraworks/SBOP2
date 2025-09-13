@@ -1,8 +1,8 @@
 /* Copyright(C)URARA-works 2003-2005 */
 /* ========================================================================= */
 /* UraraSockTCPSBO.h														 */
-/* ”Ä—pTCP’ÊMƒNƒ‰ƒX														 */
-/* 2003/10/28 ì¬ŠJn														 */
+/* æ±ç”¨TCPé€šä¿¡ã‚¯ãƒ©ã‚¹														 */
+/* 2003/10/28 ä½œæˆé–‹å§‹														 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,32 +12,32 @@
 class CPacketBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CUraraSockTCPSBO
 {
 public:
-			CUraraSockTCPSBO(void);									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CUraraSockTCPSBO(void);								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CUraraSockTCPSBO(void);									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CUraraSockTCPSBO(void);								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	DeleteRecvData		(PBYTE pData);										/*óMƒf[ƒ^‚ğíœ */
-	void	Destroy				(void);												/* Œãn–– */
-	BOOL	Host				(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount);		/* Ú‘±‘Ò‚¿ŠJn */
-	BOOL	Connect				(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr);	/* ƒT[ƒo[‚ÖÚ‘± */
-	void	DeleteClient		(DWORD dwID);										/* ƒNƒ‰ƒCƒAƒ“ƒg‚ğØ’f */
-	void	SendCancel			(DWORD dwID = 0);									/* ‘—MƒLƒƒƒ“ƒZƒ‹ */
-	void	Send				(CPacketBase *pPacket);								/* ƒT[ƒo[‚Öƒf[ƒ^‘—M */
-	void	SendTo				(DWORD dwID, CPacketBase *pPacket);					/* ƒNƒ‰ƒCƒAƒ“ƒg‚Öƒf[ƒ^‘—M */
-	DWORD	GetThrowghPutSend	(DWORD dwID);										/* ƒŠƒ“ƒNEƒXƒ‹[ƒvƒbƒg—Ê‚ğæ“¾ */
-	DWORD	GetThrowghPutRecv	(DWORD dwID);										/* ƒŠƒ“ƒNEƒXƒ‹[ƒvƒbƒg—Ê‚ğæ“¾ */
-	DWORD	GetQueCount			(DWORD dwID);										/* ƒLƒ…[”‚ğæ“¾ */
-	DWORD	GetIPAddress		(DWORD dwID);										/* IPƒAƒhƒŒƒX‚ğæ“¾ */
+	void	DeleteRecvData		(PBYTE pData);										/*å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ */
+	void	Destroy				(void);												/* å¾Œå§‹æœ« */
+	BOOL	Host				(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount);		/* æ¥ç¶šå¾…ã¡é–‹å§‹ */
+	BOOL	Connect				(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr);	/* ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶š */
+	void	DeleteClient		(DWORD dwID);										/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚’åˆ‡æ–­ */
+	void	SendCancel			(DWORD dwID = 0);									/* é€ä¿¡ã‚­ãƒ£ãƒ³ã‚»ãƒ« */
+	void	Send				(CPacketBase *pPacket);								/* ã‚µãƒ¼ãƒãƒ¼ã¸ãƒ‡ãƒ¼ã‚¿é€ä¿¡ */
+	void	SendTo				(DWORD dwID, CPacketBase *pPacket);					/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸ãƒ‡ãƒ¼ã‚¿é€ä¿¡ */
+	DWORD	GetThrowghPutSend	(DWORD dwID);										/* ãƒªãƒ³ã‚¯ãƒ»ã‚¹ãƒ«ãƒ¼ãƒ—ãƒƒãƒˆé‡ã‚’å–å¾— */
+	DWORD	GetThrowghPutRecv	(DWORD dwID);										/* ãƒªãƒ³ã‚¯ãƒ»ã‚¹ãƒ«ãƒ¼ãƒ—ãƒƒãƒˆé‡ã‚’å–å¾— */
+	DWORD	GetQueCount			(DWORD dwID);										/* ã‚­ãƒ¥ãƒ¼æ•°ã‚’å–å¾— */
+	DWORD	GetIPAddress		(DWORD dwID);										/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
 
 
 protected:
-	HMODULE			m_hDll;					/* ’ÊMƒ‰ƒCƒuƒ‰ƒŠDLL */
-	CUraraSockTCP	*m_pSock;				/* ’ÊMƒ‰ƒCƒuƒ‰ƒŠ */
+	HMODULE			m_hDll;					/* é€šä¿¡ãƒ©ã‚¤ãƒ–ãƒ©ãƒªDLL */
+	CUraraSockTCP	*m_pSock;				/* é€šä¿¡ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 } CUraraSockTCPSBO, *PCUraraSockTCPSBO;
 
 /* Copyright(C)URARA-works 2003-2005 */

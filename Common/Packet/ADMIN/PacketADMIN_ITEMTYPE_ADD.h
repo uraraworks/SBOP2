@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ITEMTYPE_ADD.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒAƒCƒeƒ€Ží•Êî•ñ’Ç‰Á) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ITEMTYPE_ADD.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¿½åŠ ) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoItemTypeBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_ITEMTYPE_ADD : public CPacketBase
 {
 public:
-			CPacketADMIN_ITEMTYPE_ADD();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_ITEMTYPE_ADD();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_ITEMTYPE_ADD();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_ITEMTYPE_ADD();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoItemTypeBase *pInfo);					/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoItemTypeBase *pInfo);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CInfoItemTypeBase	*m_pInfoItem;			/* ’Ç‰Á‚·‚éƒAƒCƒeƒ€Ží•Êî•ñ */
+	CInfoItemTypeBase	*m_pInfoItem;			/* è¿½åŠ ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
 } CPacketADMIN_ITEMTYPE_ADD, *PCPacketADMIN_ITEMTYPE_ADD;
 
 /* Copyright(C)URARA-works 2007 */

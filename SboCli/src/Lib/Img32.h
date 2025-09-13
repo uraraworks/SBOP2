@@ -1,85 +1,85 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	Img32.h														 */
-/* “à—eF		32bitƒCƒ[ƒWƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/01/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	Img32.h														 */
+/* å†…å®¹ï¼š		32bitã‚¤ãƒ¡ãƒ¼ã‚¸ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/01/24													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CImg32
 {
 public:
-			CImg32(void);										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CImg32();											/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CImg32(void);										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CImg32();											/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create				(int cx, int cy);										/* ƒrƒbƒgƒ}ƒbƒv‚ğì¬ */
-	BOOL	CreateWithoutGdi	(int cx, int cy, LPBYTE pBits = NULL);					/* GDI”ñŒİŠ·‚Åì¬ */
-	BOOL	CreateWithoutGdi256	(int cx, int cy);										/* GDI”ñŒİŠ·‚Åì¬(256F) */
-	void	Destroy				(void);													/* ”jŠü */
+	BOOL	Create				(int cx, int cy);										/* ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’ä½œæˆ */
+	BOOL	CreateWithoutGdi	(int cx, int cy, LPBYTE pBits = NULL);					/* GDIéäº’æ›ã§ä½œæˆ */
+	BOOL	CreateWithoutGdi256	(int cx, int cy);										/* GDIéäº’æ›ã§ä½œæˆ(256è‰²) */
+	void	Destroy				(void);													/* ç ´æ£„ */
 
-	void	Clear				(void);													/* ƒNƒŠƒA */
-	void	FillRect			(int x, int y, int cx, int cy, COLORREF clFill);		/* ‹éŒ`“h‚è‚Â‚Ô‚µ */
-	void	XorRect				(int x, int y, int cx, int cy);							/* ‹éŒ`XOR */
-	void	Rectangle			(int x, int y, int cx, int cy, COLORREF clDraw);		/* ‹éŒ` */
-	void	Circle				(int x, int y, int r, COLORREF clDraw);					/* ‰~ */
-	void	CircleGradation		(int x, int y, int r, int rr, COLORREF clDraw);			/* ‰~(ƒOƒ‰ƒf[ƒVƒ‡ƒ“) */
-	void	ChgLevel			(int x, int y, int cx, int cy, BYTE byLevel);			/* –¾“x‚ğ•ÏX */
-	void	ChgColor			(int x, int y, int cx, int cy, COLORREF clChg);			/* F‘f‚ğ•ÏX */
-	void	SetLevel			(CImg32 *pSrc);											/* w’è‰æ‘œ‚ÌR’l‚ğ–¾“x‚Æ‚µ‚Ä”½‰f */
+	void	Clear				(void);													/* ã‚¯ãƒªã‚¢ */
+	void	FillRect			(int x, int y, int cx, int cy, COLORREF clFill);		/* çŸ©å½¢å¡—ã‚Šã¤ã¶ã— */
+	void	XorRect				(int x, int y, int cx, int cy);							/* çŸ©å½¢XOR */
+	void	Rectangle			(int x, int y, int cx, int cy, COLORREF clDraw);		/* çŸ©å½¢ */
+	void	Circle				(int x, int y, int r, COLORREF clDraw);					/* å†† */
+	void	CircleGradation		(int x, int y, int r, int rr, COLORREF clDraw);			/* å††(ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³) */
+	void	ChgLevel			(int x, int y, int cx, int cy, BYTE byLevel);			/* æ˜åº¦ã‚’å¤‰æ›´ */
+	void	ChgColor			(int x, int y, int cx, int cy, COLORREF clChg);			/* è‰²ç´ ã‚’å¤‰æ›´ */
+	void	SetLevel			(CImg32 *pSrc);											/* æŒ‡å®šç”»åƒã®Rå€¤ã‚’æ˜åº¦ã¨ã—ã¦åæ˜  */
 
-	void	Blt					(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);						/* ‹éŒ`“]‘— */
-	void	BltLevel			(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);		/* –¾“x‚ğ•Ï‚¦‚È‚ª‚ç‹éŒ`“]‘— */
-	void	BltAlpha			(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);		/* ¬‚º‡‚í‚¹‹éŒ`“]‘— */
-	void	BltAlpha2			(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevelAlpha, BOOL bColorKey = FALSE);	/* ƒJƒ‰[ƒL[‚Ì‚İ¬‚º‡‚í‚¹‹éŒ`“]‘— */
-	void	BltPlus				(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, int nMax, BOOL bColorKey = FALSE);			/* ‹éŒ`‰ÁZ“]‘— */
-	void	BltTurnRightAndLeft	(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);						/* ¶‰E”½“]‚µ‚Ä‹éŒ`“]‘— */
-	void	BltTurnUpAndDown(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);							/* ã‰º”½“]‚µ‚Ä‹éŒ`“]‘— */	
+	void	Blt					(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);						/* çŸ©å½¢è»¢é€ */
+	void	BltLevel			(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);		/* æ˜åº¦ã‚’å¤‰ãˆãªãŒã‚‰çŸ©å½¢è»¢é€ */
+	void	BltAlpha			(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);		/* æ··ãœåˆã‚ã›çŸ©å½¢è»¢é€ */
+	void	BltAlpha2			(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevelAlpha, BOOL bColorKey = FALSE);	/* ã‚«ãƒ©ãƒ¼ã‚­ãƒ¼ã®ã¿æ··ãœåˆã‚ã›çŸ©å½¢è»¢é€ */
+	void	BltPlus				(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, int nMax, BOOL bColorKey = FALSE);			/* çŸ©å½¢åŠ ç®—è»¢é€ */
+	void	BltTurnRightAndLeft	(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);						/* å·¦å³åè»¢ã—ã¦çŸ©å½¢è»¢é€ */
+	void	BltTurnUpAndDown(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);							/* ä¸Šä¸‹åè»¢ã—ã¦çŸ©å½¢è»¢é€ */	
 
-	HDC		Lock				(void);									/* ‰æ‘œ‚ğƒƒbƒN */
-	void	Unlock				(void);									/* ƒƒbƒN‰ğœ */
+	HDC		Lock				(void);									/* ç”»åƒã‚’ãƒ­ãƒƒã‚¯ */
+	void	Unlock				(void);									/* ãƒ­ãƒƒã‚¯è§£é™¤ */
 
-	HBITMAP	GetSafeHandle		(void);									/* ƒrƒbƒgƒ}ƒbƒvƒnƒ“ƒhƒ‹‚ğæ“¾ */
-	int		Width				(void);									/* •‚ğæ“¾ */
-	int		Height				(void);									/* ‚‚³‚ğæ“¾ */
-	int		GetImageSize		(void);									/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	LPBYTE	GetBits				(void);									/* ƒrƒbƒgƒf[ƒ^‚ÌƒAƒhƒŒƒX‚ğæ“¾ */
-	void	SetColorKey			(COLORREF clKey);						/* ƒJƒ‰[ƒL[‚ğİ’è */
-	COLORREF GetColorKey		(void);									/* ƒJƒ‰[ƒL[‚ğæ“¾ */
+	HBITMAP	GetSafeHandle		(void);									/* ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾— */
+	int		Width				(void);									/* å¹…ã‚’å–å¾— */
+	int		Height				(void);									/* é«˜ã•ã‚’å–å¾— */
+	int		GetImageSize		(void);									/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPBYTE	GetBits				(void);									/* ãƒ“ãƒƒãƒˆãƒ‡ãƒ¼ã‚¿ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
+	void	SetColorKey			(COLORREF clKey);						/* ã‚«ãƒ©ãƒ¼ã‚­ãƒ¼ã‚’è¨­å®š */
+	COLORREF GetColorKey		(void);									/* ã‚«ãƒ©ãƒ¼ã‚­ãƒ¼ã‚’å–å¾— */
 
-	/* 256F‰æ‘œ—p */
-	BOOL	IsMode256			(void);											/* 256F‰æ‘œ‚©”»’è */
-	void	SetColorKeyNo		(BYTE byColorKeyNo);							/* ƒJƒ‰[ƒL[‚ğİ’è */
-	BYTE	GetColorKeyNo		(void);											/* ƒJƒ‰[ƒL[‚ğæ“¾ */
-	void	SetPallet			(BYTE byNo, BYTE r, BYTE g, BYTE b);			/* ƒpƒŒƒbƒg‚ğİ’è */
-	PBYTE	GetPallet			(BYTE byNo);									/* ƒpƒŒƒbƒg‚ğæ“¾ */
-	void	FillRect256			(int x, int y, int cx, int cy, BYTE byPallet);	/* ‹éŒ`“h‚è‚Â‚Ô‚µ */
+	/* 256è‰²ç”»åƒç”¨ */
+	BOOL	IsMode256			(void);											/* 256è‰²ç”»åƒã‹åˆ¤å®š */
+	void	SetColorKeyNo		(BYTE byColorKeyNo);							/* ã‚«ãƒ©ãƒ¼ã‚­ãƒ¼ã‚’è¨­å®š */
+	BYTE	GetColorKeyNo		(void);											/* ã‚«ãƒ©ãƒ¼ã‚­ãƒ¼ã‚’å–å¾— */
+	void	SetPallet			(BYTE byNo, BYTE r, BYTE g, BYTE b);			/* ãƒ‘ãƒ¬ãƒƒãƒˆã‚’è¨­å®š */
+	PBYTE	GetPallet			(BYTE byNo);									/* ãƒ‘ãƒ¬ãƒƒãƒˆã‚’å–å¾— */
+	void	FillRect256			(int x, int y, int cx, int cy, BYTE byPallet);	/* çŸ©å½¢å¡—ã‚Šã¤ã¶ã— */
 	void	BltFrom256			(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);
-	void	BltAlphaFrom256		(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);		/* ¬‚º‡‚í‚¹‹éŒ`“]‘— */
+	void	BltAlphaFrom256		(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);		/* æ··ãœåˆã‚ã›çŸ©å½¢è»¢é€ */
 
 
 protected:
-	void	InitData			(void);									/* ƒf[ƒ^‚ğ‰Šú‰» */
-	DWORD	ColorrefToDword		(COLORREF cl);							/* F‘f‚ğDWORD’l‚É•ÏŠ· */
-	BYTE	PercentToHex		(BYTE byPercent);						/* ƒp[ƒZƒ“ƒg‚ğ255MAX‚Ì16i”‚É•ÏŠ· */
-	void	ClipPos				(int &dx, int &dy, int &cx, int &cy, CImg32 *pSrc, int &sx, int &sy);	/* À•W‚ğƒNƒŠƒbƒsƒ“ƒO */
+	void	InitData			(void);									/* ãƒ‡ãƒ¼ã‚¿ã‚’åˆæœŸåŒ– */
+	DWORD	ColorrefToDword		(COLORREF cl);							/* è‰²ç´ ã‚’DWORDå€¤ã«å¤‰æ› */
+	BYTE	PercentToHex		(BYTE byPercent);						/* ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆã‚’255MAXã®16é€²æ•°ã«å¤‰æ› */
+	void	ClipPos				(int &dx, int &dy, int &cx, int &cy, CImg32 *pSrc, int &sx, int &sy);	/* åº§æ¨™ã‚’ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚° */
 
 
 protected:
-	HBITMAP			m_hBmp;								/* ƒrƒbƒgƒ}ƒbƒvƒnƒ“ƒhƒ‹ */
-	HBITMAP			m_hBmpBack;							/* ƒrƒbƒgƒ}ƒbƒvƒnƒ“ƒhƒ‹•Û‘¶—p */
-	BITMAPINFO		m_bmpInfo;							/* ƒrƒbƒgƒ}ƒbƒvî•ñ */
-	LPBYTE			m_pBits;							/* ƒrƒbƒgƒf[ƒ^ */
-	HDC				m_hDC;								/* ƒfƒoƒCƒXƒRƒ“ƒeƒLƒXƒgƒnƒ“ƒhƒ‹ */
-	DWORD			m_dwColorKey;						/* ƒJƒ‰[ƒL[ */
+	HBITMAP			m_hBmp;								/* ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒãƒ³ãƒ‰ãƒ« */
+	HBITMAP			m_hBmpBack;							/* ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãƒãƒ³ãƒ‰ãƒ«ä¿å­˜ç”¨ */
+	BITMAPINFO		m_bmpInfo;							/* ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—æƒ…å ± */
+	LPBYTE			m_pBits;							/* ãƒ“ãƒƒãƒˆãƒ‡ãƒ¼ã‚¿ */
+	HDC				m_hDC;								/* ãƒ‡ãƒã‚¤ã‚¹ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ³ãƒ‰ãƒ« */
+	DWORD			m_dwColorKey;						/* ã‚«ãƒ©ãƒ¼ã‚­ãƒ¼ */
 
-	BYTE			m_byColorKey;						/* ƒJƒ‰[ƒL[”Ô† */
-	PBYTE			m_pPallet;							/* ƒpƒŒƒbƒg */
+	BYTE			m_byColorKey;						/* ã‚«ãƒ©ãƒ¼ã‚­ãƒ¼ç•ªå· */
+	PBYTE			m_pPallet;							/* ãƒ‘ãƒ¬ãƒƒãƒˆ */
 } CImg32, *PCImg32;
 
 /* Copyright(C)URARA-works 2005 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerInfo.h												 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(‚¨’m‚ç‚¹) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/08/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerInfo.h												 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ãŠçŸ¥ã‚‰ã›) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/08/16													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,28 +14,28 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerInfo : public CLayerBase
 {
 public:
-			CLayerInfo();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerInfo();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerInfo();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerInfo();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);				/* ì¬ */
-	void	Draw		(CImg32 *pDst);						/* •`‰æ */
-
-
-private:
-	void	DrawFrame	(CImg32 *pDst);						/* ƒtƒŒ[ƒ€‚Ì•`‰æ */
+	void	Create		(CMgrData *pMgrData);				/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);						/* æç”» */
 
 
 private:
-	int		m_nX;					/* •\¦ˆÊ’u(‰¡) */
-	int		m_nY;					/* •\¦ˆÊ’u(c) */
-	int		m_nCx;					/* • */
-	int		m_nCy;					/* ‚‚³ */
+	void	DrawFrame	(CImg32 *pDst);						/* ãƒ•ãƒ¬ãƒ¼ãƒ ã®æç”» */
+
+
+private:
+	int		m_nX;					/* è¡¨ç¤ºä½ç½®(æ¨ª) */
+	int		m_nY;					/* è¡¨ç¤ºä½ç½®(ç¸¦) */
+	int		m_nCx;					/* å¹… */
+	int		m_nCy;					/* é«˜ã• */
 } CLayerInfo, *PCLayerInfo;
 
 /* Copyright(C)URARA-works 2005 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventGRPIDTMP.h									 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg(ˆê‰æ‘œİ’è)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/10/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventGRPIDTMP.h									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ(ä¸€æ™‚ç”»åƒè¨­å®š)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,17 +11,17 @@
 #include "DlgAdminMapEventNONE.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminMapEventGRPIDTMP : public CDlgAdminMapEventNONE
 {
 public:
-			CDlgAdminMapEventGRPIDTMP(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapEventGRPIDTMP();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapEventGRPIDTMP(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapEventGRPIDTMP();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Set		(CInfoMapEventBase *pSrc);							/* İ’è */
-	void	Get		(CInfoMapEventBase *pDst);							/* æ“¾ */
+	void	Set		(CInfoMapEventBase *pSrc);							/* è¨­å®š */
+	void	Get		(CInfoMapEventBase *pDst);							/* å–å¾— */
 
 
 
@@ -32,7 +32,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapEventGRPIDTMP)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

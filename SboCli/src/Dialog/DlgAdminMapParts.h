@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapParts.h											 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapParts.h											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/25													 */
 /* ========================================================================= */
 
 #pragma once
@@ -17,38 +17,38 @@ class CLibInfoMapParts;
 class CUraraSockTCPSBO;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CDlgAdminMapParts : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapParts(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapParts();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapParts(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapParts();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);						/* ‰Šú‰» */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-
-
-protected:
-	void	RenewMessage		(LPCSTR pszMsg);	/* ƒƒbƒZ[ƒW—“‚ğXV */
-	void	RenewPartsInfo		(void);				/* ƒp[ƒcî•ñ‚ğXV */
-	void	MakePartsImage		(void);				/* ƒp[ƒcˆê——‰æ‘œ‚ğì¬ */
-	DWORD	GetSelectMapPartsID	(void);				/* ‘I‘ğ’†‚Ìƒ}ƒbƒvƒp[ƒcID‚ğæ“¾ */
+	void	Init		(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
 
 
 protected:
-	int		m_nSelectType,						/* İ’è€–Ú */
-			m_nState;							/* ó‘Ô */
-	DWORD	m_dwSelectPartsID;					/* ‘I‘ğ’†‚Ìƒ}ƒbƒvƒp[ƒcID */
-	CPoint	m_ptCursor,							/* ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒp[ƒcˆÊ’u */
-			m_ptMoveSrc,						/* ˆÚ“®Œ³‚ÌˆÊ’u */
-			m_ptMoveDst;						/* ˆÚ“®æ‚ÌˆÊ’u */
+	void	RenewMessage		(LPCSTR pszMsg);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ¬„ã‚’æ›´æ–° */
+	void	RenewPartsInfo		(void);				/* ãƒ‘ãƒ¼ãƒ„æƒ…å ±ã‚’æ›´æ–° */
+	void	MakePartsImage		(void);				/* ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒã‚’ä½œæˆ */
+	DWORD	GetSelectMapPartsID	(void);				/* é¸æŠä¸­ã®ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„IDã‚’å–å¾— */
 
-	CMgrGrpData			*m_pMgrGrpData;			/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CImg32				*m_pImgParts;			/* ƒp[ƒcˆê——‰æ‘œ */
-	CLibInfoMapParts	*m_pLibInfoMapParts;	/* •ÒW’†‚Ìƒ}ƒbƒvƒp[ƒcî•ñ */
-	CUraraSockTCPSBO	*m_pSock;				/* ’ÊMƒ}ƒl[ƒWƒƒ */
+
+protected:
+	int		m_nSelectType,						/* è¨­å®šé …ç›® */
+			m_nState;							/* çŠ¶æ…‹ */
+	DWORD	m_dwSelectPartsID;					/* é¸æŠä¸­ã®ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ID */
+	CPoint	m_ptCursor,							/* ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚ã‚‹ãƒ‘ãƒ¼ãƒ„ä½ç½® */
+			m_ptMoveSrc,						/* ç§»å‹•å…ƒã®ä½ç½® */
+			m_ptMoveDst;						/* ç§»å‹•å…ˆã®ä½ç½® */
+
+	CMgrGrpData			*m_pMgrGrpData;			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CImg32				*m_pImgParts;			/* ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒ */
+	CLibInfoMapParts	*m_pLibInfoMapParts;	/* ç·¨é›†ä¸­ã®ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
+	CUraraSockTCPSBO	*m_pSock;				/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ */
 
 
 public:
@@ -66,7 +66,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapParts)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

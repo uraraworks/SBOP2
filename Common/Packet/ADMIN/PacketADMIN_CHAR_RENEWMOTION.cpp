@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_RENEWMOTION.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“î•ñ‚ÌXV) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/11/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_RENEWMOTION.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/11/23													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_CHAR_RENEWMOTION.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEWMOTION::CPacketADMIN_CHAR_RENEWMOTION	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEWMOTION::CPacketADMIN_CHAR_RENEWMOTION	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RENEWMOTION::CPacketADMIN_CHAR_RENEWMOTION()
@@ -26,9 +26,9 @@ CPacketADMIN_CHAR_RENEWMOTION::CPacketADMIN_CHAR_RENEWMOTION()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEWMOTION::~CPacketADMIN_CHAR_RENEWMOTION	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEWMOTION::~CPacketADMIN_CHAR_RENEWMOTION	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RENEWMOTION::~CPacketADMIN_CHAR_RENEWMOTION()
@@ -38,15 +38,15 @@ CPacketADMIN_CHAR_RENEWMOTION::~CPacketADMIN_CHAR_RENEWMOTION()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEWMOTION::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEWMOTION::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 void CPacketADMIN_CHAR_RENEWMOTION::Make(
-	DWORD dwMotionTypeID,		/* [in] ƒ‚[ƒVƒ‡ƒ“í•ÊID */
-	DWORD dwMotionListID,		/* [in] ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
-	CLibInfoMotion *pSrc)		/* [in] ƒ‚[ƒVƒ‡ƒ“î•ñ */
+	DWORD dwMotionTypeID,		/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	DWORD dwMotionListID,		/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
+	CLibInfoMotion *pSrc)		/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -67,9 +67,9 @@ void CPacketADMIN_CHAR_RENEWMOTION::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTION;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMotionTypeID, sizeof (dwMotionTypeID), pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“í•ÊID */
-	CopyMemoryRenew (pDataTmp, &dwMotionListID, sizeof (dwMotionListID), pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,			 pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“î•ñ */
+	CopyMemoryRenew (pDataTmp, &dwMotionTypeID, sizeof (dwMotionTypeID), pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	CopyMemoryRenew (pDataTmp, &dwMotionListID, sizeof (dwMotionListID), pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,			 pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -78,9 +78,9 @@ void CPacketADMIN_CHAR_RENEWMOTION::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEWMOTION::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEWMOTION::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_RENEWMOTION::Set(PBYTE pPacket)
@@ -90,8 +90,8 @@ PBYTE CPacketADMIN_CHAR_RENEWMOTION::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMotionTypeID, pDataTmp, sizeof (m_dwMotionTypeID), pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“í•ÊID */
-	CopyMemoryRenew (&m_dwMotionListID, pDataTmp, sizeof (m_dwMotionListID), pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
+	CopyMemoryRenew (&m_dwMotionTypeID, pDataTmp, sizeof (m_dwMotionTypeID), pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	CopyMemoryRenew (&m_dwMotionListID, pDataTmp, sizeof (m_dwMotionListID), pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
 
 	SAFE_DELETE (m_pInfo);
 	m_pInfo		= new CLibInfoMotion;

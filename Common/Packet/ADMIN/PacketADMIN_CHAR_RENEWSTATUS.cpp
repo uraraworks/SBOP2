@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_RENEWSTATUS.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒXƒe[ƒ^ƒXî•ñXV) ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_RENEWSTATUS.cpp							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_CHAR_RENEWSTATUS.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEWSTATUS::CPacketADMIN_CHAR_RENEWSTATUS	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEWSTATUS::CPacketADMIN_CHAR_RENEWSTATUS	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RENEWSTATUS::CPacketADMIN_CHAR_RENEWSTATUS()
@@ -25,9 +25,9 @@ CPacketADMIN_CHAR_RENEWSTATUS::CPacketADMIN_CHAR_RENEWSTATUS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RENEWSTATUS::~CPacketADMIN_CHAR_RENEWSTATUS	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RENEWSTATUS::~CPacketADMIN_CHAR_RENEWSTATUS	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RENEWSTATUS::~CPacketADMIN_CHAR_RENEWSTATUS()

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcBase.h											 */
-/* “à—e			:ó‘Ôˆ—Šî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:StateProcBase.h											 */
+/* â€œÃ â€”e			:ÂÃ³â€˜Ã”ÂË†â€”ÂÅ Ã®â€™ÃªÆ’NÆ’â€°Æ’X â€™Ã¨â€¹`Æ’tÆ’@Æ’CÆ’â€¹							 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2006/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -17,72 +17,72 @@ class CMgrWindow;
 class CMgrKeyInput;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* Æ’NÆ’â€°Æ’XÂÃ©Å’Â¾																 */
 /* ========================================================================= */
 
 typedef class CStateProcBase
 {
 public:
-			CStateProcBase();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStateProcBase();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStateProcBase();							/* Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^ */
+	virtual ~CStateProcBase();							/* Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^ */
 
-	virtual void Create			(CMgrData *pMgrData, CUraraSockTCPSBO *pSock);	/* ì¬ */
+	virtual void Create			(CMgrData *pMgrData, CUraraSockTCPSBO *pSock);	/* ÂÃ¬ÂÂ¬ */
 
-	virtual void Init				(void);								/* ‰Šú‰» */
-	virtual BOOL TimerProc			(void);								/* ŠÔˆ— */
-	virtual void KeyProc			(BYTE byCode, BOOL bDown);			/* ƒL[ˆ— */
-	virtual void OnLButtonDown		(int x, int y);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN) */
-	virtual void OnRButtonDown		(int x, int y);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN) */
-	virtual void OnRButtonDblClk	(int x, int y);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDBLCLK) */
-	virtual void OnMouseMove		(int x, int y);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE) */
-	virtual void OnKeyDown			(UINT vk);							/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_KEYDOWN) */
-	virtual void OnWindowMsg		(int nType, DWORD dwPara);			/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG) */
-	virtual void OnMainFrame		(DWORD dwCommand, DWORD dwParam);	/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
-	virtual void OnAdminMsg			(int nType, DWORD dwPara);			/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-			void OnMgrDraw			(int nCode, DWORD dwPara);			/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MGRDRAW) */
-
-
-protected:
-	virtual BOOL OnUp		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	virtual BOOL OnDown		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	virtual BOOL OnLeft		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	virtual BOOL OnRight	(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	virtual BOOL OnX		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	virtual BOOL OnZ		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	virtual BOOL OnS		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(S) */
-	virtual BOOL OnA		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(A) */
-	virtual BOOL OnB		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(B) */
-	virtual BOOL OnR		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(R) */
-	virtual BOOL OnI		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(I) */
-	virtual BOOL OnN		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(N) */
-	virtual BOOL OnV		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(V) */
-	virtual BOOL OnF		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(F) */
-	virtual BOOL OnJ		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(J) */
-	virtual BOOL OnL		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(L) */
-	virtual BOOL OnAt		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(@) */
-	virtual BOOL OnEnter	(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(Enter) */
-	virtual BOOL OnEscape	(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(Escape) */
-	virtual BOOL OnTab		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(Tab) */
-	virtual BOOL OnShift	(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(Shift) */
-	virtual BOOL OnCtrl		(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(Ctrl) */
-	virtual BOOL OnSpace	(BOOL bDown);							/* ƒL[ƒnƒ“ƒhƒ‰(Space) */
-	virtual void OnMgrDrawSTART_FADEIN	(DWORD dwPara) {}			/* ƒtƒF[ƒhƒCƒ“ŠJn */
-	virtual void OnMgrDrawSTART_FADEOUT	(DWORD dwPara) {}			/* ƒtƒF[ƒhƒAƒEƒgŠJn */
-	virtual void OnMgrDrawEND_FADEIN	(DWORD dwPara) {}			/* ƒtƒF[ƒhƒCƒ“Š®—¹ */
-	virtual void OnMgrDrawEND_FADEOUT	(DWORD dwPara) {}			/* ƒtƒF[ƒhƒAƒEƒgŠ®—¹ */
+	virtual void Init				(void);								/* Ââ€°Å Ãºâ€°Â» */
+	virtual BOOL TimerProc			(void);								/* Å½Å¾Å Ã”ÂË†â€”Â */
+	virtual void KeyProc			(BYTE byCode, BOOL bDown);			/* Æ’LÂ[ÂË†â€”Â */
+	virtual void OnLButtonDown		(int x, int y);						/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_LBUTTONDOWN) */
+	virtual void OnRButtonDown		(int x, int y);						/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_RBUTTONDOWN) */
+	virtual void OnRButtonDblClk	(int x, int y);						/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_RBUTTONDBLCLK) */
+	virtual void OnMouseMove		(int x, int y);						/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MOUSEMOVE) */
+	virtual void OnKeyDown			(UINT vk);							/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_KEYDOWN) */
+	virtual void OnWindowMsg		(int nType, DWORD dwPara);			/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_WINDOWMSG) */
+	virtual void OnMainFrame		(DWORD dwCommand, DWORD dwParam);	/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MAINFRAME) */
+	virtual void OnAdminMsg			(int nType, DWORD dwPara);			/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_ADMINMSG) */
+			void OnMgrDraw			(int nCode, DWORD dwPara);			/* Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MGRDRAW) */
 
 
 protected:
-	HWND			m_hWndMain,							/* ƒƒCƒ“ƒtƒŒ[ƒ€‚ÌƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-					m_hWndAdmin;						/* ŠÇ—ÒƒEƒBƒ“ƒhƒE‚ÌƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
+	virtual BOOL OnUp		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(ÂÂª) */
+	virtual BOOL OnDown		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(ÂÂ«) */
+	virtual BOOL OnLeft		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(ÂÂ©) */
+	virtual BOOL OnRight	(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(ÂÂ¨) */
+	virtual BOOL OnX		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(X) */
+	virtual BOOL OnZ		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(Z) */
+	virtual BOOL OnS		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(S) */
+	virtual BOOL OnA		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(A) */
+	virtual BOOL OnB		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(B) */
+	virtual BOOL OnR		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(R) */
+	virtual BOOL OnI		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(I) */
+	virtual BOOL OnN		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(N) */
+	virtual BOOL OnV		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(V) */
+	virtual BOOL OnF		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(F) */
+	virtual BOOL OnJ		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(J) */
+	virtual BOOL OnL		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(L) */
+	virtual BOOL OnAt		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(@) */
+	virtual BOOL OnEnter	(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(Enter) */
+	virtual BOOL OnEscape	(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(Escape) */
+	virtual BOOL OnTab		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(Tab) */
+	virtual BOOL OnShift	(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(Shift) */
+	virtual BOOL OnCtrl		(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(Ctrl) */
+	virtual BOOL OnSpace	(BOOL bDown);							/* Æ’LÂ[Æ’nÆ’â€œÆ’hÆ’â€°(Space) */
+	virtual void OnMgrDrawSTART_FADEIN	(DWORD dwPara) {}			/* Æ’tÆ’FÂ[Æ’hÆ’CÆ’â€œÅ JÅ½n */
+	virtual void OnMgrDrawSTART_FADEOUT	(DWORD dwPara) {}			/* Æ’tÆ’FÂ[Æ’hÆ’AÆ’EÆ’gÅ JÅ½n */
+	virtual void OnMgrDrawEND_FADEIN	(DWORD dwPara) {}			/* Æ’tÆ’FÂ[Æ’hÆ’CÆ’â€œÅ Â®â€”Â¹ */
+	virtual void OnMgrDrawEND_FADEOUT	(DWORD dwPara) {}			/* Æ’tÆ’FÂ[Æ’hÆ’AÆ’EÆ’gÅ Â®â€”Â¹ */
 
-	CUraraSockTCPSBO	*m_pSock;						/* ’ÊMƒ}ƒl[ƒWƒƒ */
-	CMgrData			*m_pMgrData;					/* ƒf[ƒ^ŠÇ— */
-	CMgrSound			*m_pMgrSound;					/* ƒTƒEƒ“ƒhŠÇ— */
-	CMgrDraw			*m_pMgrDraw;					/* •`‰æŠÇ— */
-	CMgrLayer			*m_pMgrLayer;					/* ƒŒƒCƒ„[ŠÇ— */
-	CMgrWindow			*m_pMgrWindow;					/* ƒEƒBƒ“ƒhƒEŠÇ— */
-	CMgrKeyInput		*m_pMgrKeyInput;				/* ƒL[“ü—ÍŠÇ— */
+
+protected:
+	HWND			m_hWndMain,							/* Æ’ÂÆ’CÆ’â€œÆ’tÆ’Å’Â[Æ’â‚¬â€šÃŒÆ’EÆ’BÆ’â€œÆ’hÆ’EÆ’nÆ’â€œÆ’hÆ’â€¹ */
+					m_hWndAdmin;						/* Å Ã‡â€”ÂÅ½Ã’Æ’EÆ’BÆ’â€œÆ’hÆ’Eâ€šÃŒÆ’EÆ’BÆ’â€œÆ’hÆ’EÆ’nÆ’â€œÆ’hÆ’â€¹ */
+
+	CUraraSockTCPSBO	*m_pSock;						/* â€™ÃŠÂMÆ’}Æ’lÂ[Æ’WÆ’Æ’ */
+	CMgrData			*m_pMgrData;					/* Æ’fÂ[Æ’^Å Ã‡â€”Â */
+	CMgrSound			*m_pMgrSound;					/* Æ’TÆ’EÆ’â€œÆ’hÅ Ã‡â€”Â */
+	CMgrDraw			*m_pMgrDraw;					/* â€¢`â€°Ã¦Å Ã‡â€”Â */
+	CMgrLayer			*m_pMgrLayer;					/* Æ’Å’Æ’CÆ’â€Â[Å Ã‡â€”Â */
+	CMgrWindow			*m_pMgrWindow;					/* Æ’EÆ’BÆ’â€œÆ’hÆ’EÅ Ã‡â€”Â */
+	CMgrKeyInput		*m_pMgrKeyInput;				/* Æ’LÂ[â€œÃ¼â€”ÃÅ Ã‡â€”Â */
 } CStateProcBase, *PCStateProcBase;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketEFFECT_BALLOONINFO.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒGƒtƒFƒNƒgŒn:•¬o‚µî•ñ‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketEFFECT_BALLOONINFO.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»:å™´å‡ºã—æƒ…å ±å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CLibInfoEfcBalloon;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketEFFECT_BALLOONINFO : public CPacketBase
 {
 public:
-			CPacketEFFECT_BALLOONINFO();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketEFFECT_BALLOONINFO();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketEFFECT_BALLOONINFO();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketEFFECT_BALLOONINFO();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwListID, CLibInfoEfcBalloon *pLibInfo);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwListID, CLibInfoEfcBalloon *pLibInfo);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD				m_dwListID;				/* Ží•ÊID */
-	CLibInfoEfcBalloon	*m_pLibInfo;			/* •¬o‚µî•ñ */
+	DWORD				m_dwListID;				/* ç¨®åˆ¥ID */
+	CLibInfoEfcBalloon	*m_pLibInfo;			/* å™´å‡ºã—æƒ…å ± */
 } CPacketEFFECT_BALLOONINFO, *PCPacketEFFECT_BALLOONINFO;
 
 /* Copyright(C)URARA-works 2007 */

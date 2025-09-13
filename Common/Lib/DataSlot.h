@@ -1,58 +1,58 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DataSlot.h													 */
-/* “à—e			:ƒf[ƒ^ƒXƒƒbƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DataSlot.h													 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒ­ãƒƒãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/07													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* \‘¢‘Ì‚Ì’è‹`																 */
+/* æ§‹é€ ä½“ã®å®šç¾©																 */
 /* ========================================================================= */
 
-/* ƒf[ƒ^ƒXƒƒbƒgî•ñ */
+/* ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒ­ãƒƒãƒˆæƒ…å ± */
 typedef struct _DATASLOTINFO {
-	DWORD		dwID;					/* ƒf[ƒ^ID */
-	DWORD		dwSize;					/* ƒf[ƒ^ƒTƒCƒY */
-	PBYTE		pData;					/* ƒf[ƒ^ƒoƒbƒtƒ@ */
+	DWORD		dwID;					/* ãƒ‡ãƒ¼ã‚¿ID */
+	DWORD		dwSize;					/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+	PBYTE		pData;					/* ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡ */
 } DATASLOTINFO, *PDATASLOTINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDataSlot
 {
 public:
-			CDataSlot();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDataSlot();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDataSlot();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDataSlot();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void Destroy(void);						/* ”jŠü */
+	virtual void Destroy(void);						/* ç ´æ£„ */
 
-	/* ƒ†[ƒUƒf[ƒ^‚ÌƒAƒNƒZƒX */
-	DWORD	Add			(DWORD dwSize, PBYTE pSrc);					/* ƒf[ƒ^’Ç‰Á */
-	DWORD	AddDelete	(DWORD dwSize, PBYTE *pSrc);				/* ƒf[ƒ^’Ç‰Á‚µ‚Äƒoƒbƒtƒ@‚ðíœ */
-	DWORD	GetSize		(DWORD dwID);								/* ƒf[ƒ^ƒTƒCƒYŽæ“¾ */
-	BOOL	Copy		(DWORD dwID, LPBYTE pDst, BOOL bDelete);	/* ƒf[ƒ^Žæ“¾ */
-	PBYTE	GetPtr		(DWORD dwID);								/* ƒf[ƒ^ƒAƒhƒŒƒXŽæ“¾ */
-	void	Delete		(DWORD dwID);								/* ƒf[ƒ^íœ */
-	void	Lock		(void);										/* ƒf[ƒ^‚ÌƒƒbƒN */
-	void	UnLock		(void);										/* ƒf[ƒ^‚ÌƒƒbƒN‰ðœ */
-
-
-protected:
-	int GetID(DWORD dwID);							/* ƒe[ƒuƒ‹IDŽæ“¾ */
+	/* ãƒ¦ãƒ¼ã‚¶ãƒ‡ãƒ¼ã‚¿ã®ã‚¢ã‚¯ã‚»ã‚¹ */
+	DWORD	Add			(DWORD dwSize, PBYTE pSrc);					/* ãƒ‡ãƒ¼ã‚¿è¿½åŠ  */
+	DWORD	AddDelete	(DWORD dwSize, PBYTE *pSrc);				/* ãƒ‡ãƒ¼ã‚¿è¿½åŠ ã—ã¦ãƒãƒƒãƒ•ã‚¡ã‚’å‰Šé™¤ */
+	DWORD	GetSize		(DWORD dwID);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºå–å¾— */
+	BOOL	Copy		(DWORD dwID, LPBYTE pDst, BOOL bDelete);	/* ãƒ‡ãƒ¼ã‚¿å–å¾— */
+	PBYTE	GetPtr		(DWORD dwID);								/* ãƒ‡ãƒ¼ã‚¿ã‚¢ãƒ‰ãƒ¬ã‚¹å–å¾— */
+	void	Delete		(DWORD dwID);								/* ãƒ‡ãƒ¼ã‚¿å‰Šé™¤ */
+	void	Lock		(void);										/* ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒƒã‚¯ */
+	void	UnLock		(void);										/* ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒƒã‚¯è§£é™¤ */
 
 
 protected:
-	CmySection		m_CritData,						/* ƒf[ƒ^ƒAƒNƒZƒXŽž‚ÌƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“ */
-					m_CritDataLock;					/* ƒf[ƒ^ƒƒbƒN—p‚ÌƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“ */
-	DWORD			m_dwNewID;						/* ƒf[ƒ^IDƒeƒ“ƒ|ƒ‰ƒŠ */
+	int GetID(DWORD dwID);							/* ãƒ†ãƒ¼ãƒ–ãƒ«IDå–å¾— */
 
-	CmyArray<DATASLOTINFO, DATASLOTINFO> m_DataSlot;	/* ƒf[ƒ^ƒXƒƒbƒg */
+
+protected:
+	CmySection		m_CritData,						/* ãƒ‡ãƒ¼ã‚¿ã‚¢ã‚¯ã‚»ã‚¹æ™‚ã®ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ */
+					m_CritDataLock;					/* ãƒ‡ãƒ¼ã‚¿ãƒ­ãƒƒã‚¯ç”¨ã®ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³ */
+	DWORD			m_dwNewID;						/* ãƒ‡ãƒ¼ã‚¿IDãƒ†ãƒ³ãƒãƒ©ãƒª */
+
+	CmyArray<DATASLOTINFO, DATASLOTINFO> m_DataSlot;	/* ãƒ‡ãƒ¼ã‚¿ã‚¹ãƒ­ãƒƒãƒˆ */
 } CDataSlot, *PCDataSlot;
 
 /* Copyright(C)URARA-works 2008 */

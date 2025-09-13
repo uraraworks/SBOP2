@@ -1,34 +1,34 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoBase.h													 */
-/* “à—e			:î•ñŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoBase.h													 */
+/* å†…å®¹			:æƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/06/06													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoBase
 {
 public:
-			CInfoBase();											/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoBase();											/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoBase();											/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoBase();											/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementCount		(void);								/* —v‘f”‚ğæ“¾ */
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual int		GetElementCount		(void);								/* è¦ç´ æ•°ã‚’å–å¾— */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
 
 public:
-	int			m_nElementCount;					/* —v‘f” */
+	int			m_nElementCount;					/* è¦ç´ æ•° */
 } CInfoBase, *PCInfoBase;
 typedef CmyArray<PCInfoBase, PCInfoBase>	  ARRAYBASEINFO;
 typedef CmyArray<PCInfoBase, PCInfoBase>	*PARRAYBASEINFO;

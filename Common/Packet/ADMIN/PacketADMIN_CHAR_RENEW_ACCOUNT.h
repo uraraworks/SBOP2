@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_RENEW_ACCOUNT.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒAƒJƒEƒ“ƒgî•ñXV) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_RENEW_ACCOUNT.h							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±æ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/07													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,25 +13,25 @@
 class CInfoAccount;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_CHAR_RENEW_ACCOUNT : public CPacketBase
 {
 public:
-			CPacketADMIN_CHAR_RENEW_ACCOUNT();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_CHAR_RENEW_ACCOUNT();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_CHAR_RENEW_ACCOUNT();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_CHAR_RENEW_ACCOUNT();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoAccount *pInfoAccount, BOOL bDisable=FALSE, LPCSTR pszMacAddress=NULL);/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(CInfoAccount *pInfoAccount, BOOL bDisable=FALSE, LPCSTR pszMacAddress=NULL);/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	BOOL		m_bDisable;					/* ƒƒOƒCƒ“‹‘”Û */
-	DWORD		m_dwAccountID;				/* ƒAƒJƒEƒ“ƒgID */
-	CmyString	m_strAccount,				/* ƒAƒJƒEƒ“ƒg */
-				m_strPassword,				/* ƒpƒXƒ[ƒh */
-				m_strMacAddress;			/* ‹‘”ÛMACƒAƒhƒŒƒX */
+	BOOL		m_bDisable;					/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
+	DWORD		m_dwAccountID;				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CmyString	m_strAccount,				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+				m_strPassword,				/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+				m_strMacAddress;			/* æ‹’å¦MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 } CPacketADMIN_CHAR_RENEW_ACCOUNT, *PCPacketADMIN_CHAR_RENEW_ACCOUNT;
 
 /* Copyright(C)URARA-works 2008 */

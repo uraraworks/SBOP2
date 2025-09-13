@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapInfo.cpp										 */
-/* “à—e			:ƒ}ƒbƒvî•ñ•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapInfo.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—æƒ…å ±ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::DoDataExchange(CDataExchange* pDX)
@@ -55,9 +55,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::CDlgAdminMapInfo								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::CDlgAdminMapInfo								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 CDlgAdminMapInfo::CDlgAdminMapInfo(CWnd* pParent /*=NULL*/)
@@ -78,9 +78,9 @@ CDlgAdminMapInfo::CDlgAdminMapInfo(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::~CDlgAdminMapInfo							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::~CDlgAdminMapInfo							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 CDlgAdminMapInfo::~CDlgAdminMapInfo()
@@ -89,9 +89,9 @@ CDlgAdminMapInfo::~CDlgAdminMapInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::Init											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::Init											 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::Init(CMgrData *pMgrData)
@@ -100,16 +100,16 @@ void CDlgAdminMapInfo::Init(CMgrData *pMgrData)
 
 	m_pInfoMap = m_pMgrData->GetMap ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminMapInfo::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::Renew										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::Renew										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::Renew(void)
@@ -126,24 +126,24 @@ void CDlgAdminMapInfo::Renew(void)
 
 	SelectCmb (&m_cmbBGMID,			m_pInfoMap->m_dwBGMID);
 	SelectCmb (&m_cmbWeatherType,	m_pInfoMap->m_dwWeatherType);
-	m_nDarkLevel	= m_pInfoMap->m_byLevel;		/* ˆÃ“x */
-	m_bEnableBattle	= m_pInfoMap->m_bEnableBattle;	/* í“¬‹–‰Â */
-	m_bRecovery		= m_pInfoMap->m_bRecovery;		/* ‹CâŒã‰ñ•œ‚·‚é */
+	m_nDarkLevel	= m_pInfoMap->m_byLevel;		/* æš—åº¦ */
+	m_bEnableBattle	= m_pInfoMap->m_bEnableBattle;	/* æˆ¦é—˜è¨±å¯ */
+	m_bRecovery		= m_pInfoMap->m_bRecovery;		/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
 
 	UpdateData (FALSE);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::OnAdminMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::OnAdminMsg									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_RENEWMAPINFO:	/* ƒ}ƒbƒvî•ñXV */
+	case ADMINMSG_RENEWMAPINFO:	/* ãƒãƒƒãƒ—æƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -151,9 +151,9 @@ void CDlgAdminMapInfo::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::OnInitDialog									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::OnInitDialog									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapInfo::OnInitDialog()
@@ -162,12 +162,12 @@ BOOL CDlgAdminMapInfo::OnInitDialog()
 
 	CheckRadioButton (IDC_UP, IDC_RIGHT, IDC_UP);
 
-	m_cmbBGMID.InsertString (0, "–³‚µ");
-	m_cmbBGMID.InsertString (1, "‘å’n‚ÌŒÛ“® short ver.");
+	m_cmbBGMID.InsertString (0, "ç„¡ã—");
+	m_cmbBGMID.InsertString (1, "å¤§åœ°ã®é¼“å‹• short ver.");
 	m_cmbBGMID.SetItemData	(1, BGMID_DAICHI_S);
-	m_cmbBGMID.InsertString (2, "”òãÄ");
+	m_cmbBGMID.InsertString (2, "é£›ç¿”");
 	m_cmbBGMID.SetItemData	(2, BGMID_HISYOU);
-	m_cmbBGMID.InsertString (3, "…Ô‚ÌŒ©‚¦‚éîŒi");
+	m_cmbBGMID.InsertString (3, "æ°´è»Šã®è¦‹ãˆã‚‹æƒ…æ™¯");
 	m_cmbBGMID.SetItemData	(3, BGMID_SUISHA);
 	m_cmbBGMID.InsertString (4, "A Little Fairy Tale");
 	m_cmbBGMID.SetItemData	(4, BGMID_FAIRYTALE);
@@ -175,17 +175,17 @@ BOOL CDlgAdminMapInfo::OnInitDialog()
 	m_cmbBGMID.SetItemData	(5, BGMID_TABLA_IMAGE);
 	m_cmbBGMID.InsertString (6, "flowed piano solo");
 	m_cmbBGMID.SetItemData	(6, BGMID_FLOWED_PIANO);
-	m_cmbBGMID.InsertString (7, "“~‚ÌŠX@ƒtƒ‹ƒIƒPver");
+	m_cmbBGMID.InsertString (7, "å†¬ã®è¡—ã€€ãƒ•ãƒ«ã‚ªã‚±ver");
 	m_cmbBGMID.SetItemData	(7, BGMID_HUYUNOMATI_FULL);
-	m_cmbBGMID.InsertString (8, "ƒX[ƒp[‚¨‚â‚±‚Ç‚ñ •À·ver/–k");
+	m_cmbBGMID.InsertString (8, "ã‚¹ãƒ¼ãƒ‘ãƒ¼ãŠã‚„ã“ã©ã‚“ ä¸¦ç››ver/åŒ—");
 	m_cmbBGMID.SetItemData	(8, BGMID_OYAKODON_NAMI);
 
-	m_cmbWeatherType.InsertString (0, "–³‚µ");
-	m_cmbWeatherType.InsertString (1, "‰_");
+	m_cmbWeatherType.InsertString (0, "ç„¡ã—");
+	m_cmbWeatherType.InsertString (1, "é›²");
 	m_cmbWeatherType.SetItemData  (1, WEATHERTYPE_CLOUD);
-	m_cmbWeatherType.InsertString (2, "–¶");
+	m_cmbWeatherType.InsertString (2, "éœ§");
 	m_cmbWeatherType.SetItemData  (2, WEATHERTYPE_MISTY);
-	m_cmbWeatherType.InsertString (3, "á");
+	m_cmbWeatherType.InsertString (3, "é›ª");
 	m_cmbWeatherType.SetItemData  (3, WEATHERTYPE_SNOW);
 
 	Renew ();
@@ -195,9 +195,9 @@ BOOL CDlgAdminMapInfo::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::OnAdd										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘‚â‚·)											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::OnAdd										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å¢—ã‚„ã™)											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::OnAdd()
@@ -238,9 +238,9 @@ void CDlgAdminMapInfo::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::OnDel										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Œ¸‚ç‚·)											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::OnDel										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ¸›ã‚‰ã™)											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::OnDel()
@@ -281,9 +281,9 @@ void CDlgAdminMapInfo::OnDel()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::OnChangemapname								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÏX)											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::OnChangemapname								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å¤‰æ›´)											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::OnChangemapname()
@@ -300,10 +300,10 @@ void CDlgAdminMapInfo::OnChangemapname()
 	nSelect = m_cmbBGMID.GetCurSel ();
 	m_pInfoMap->m_dwBGMID = m_cmbBGMID.GetItemData (nSelect);				/* BGMID */
 	nSelect = m_cmbWeatherType.GetCurSel ();
-	m_pInfoMap->m_dwWeatherType = m_cmbWeatherType.GetItemData (nSelect);	/* “V‹Cí•Ê */
-	m_pInfoMap->m_byLevel		= (BYTE)m_nDarkLevel;						/* ˆÃ“x */
-	m_pInfoMap->m_bEnableBattle	= m_bEnableBattle;							/* í“¬‹–‰Â */
-	m_pInfoMap->m_bRecovery		= m_bRecovery;								/* ‹CâŒã‰ñ•œ‚·‚é */
+	m_pInfoMap->m_dwWeatherType = m_cmbWeatherType.GetItemData (nSelect);	/* å¤©æ°—ç¨®åˆ¥ */
+	m_pInfoMap->m_byLevel		= (BYTE)m_nDarkLevel;						/* æš—åº¦ */
+	m_pInfoMap->m_bEnableBattle	= m_bEnableBattle;							/* æˆ¦é—˜è¨±å¯ */
+	m_pInfoMap->m_bRecovery		= m_bRecovery;								/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
 
 	Packet.Make (
 			m_pInfoMap->m_dwMapID,
@@ -318,9 +318,9 @@ void CDlgAdminMapInfo::OnChangemapname()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapInfo::OnCopy										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒRƒs[)											 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CDlgAdminMapInfo::OnCopy										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚³ãƒ”ãƒ¼)											 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CDlgAdminMapInfo::OnCopy()
@@ -328,7 +328,7 @@ void CDlgAdminMapInfo::OnCopy()
 	int nResult;
 	CPacketADMIN_PARA2 Packet;
 
-	nResult = MessageBox ("V‚µ‚¢ƒ}ƒbƒv‚Æ‚µ‚ÄƒRƒs[‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("æ–°ã—ã„ãƒãƒƒãƒ—ã¨ã—ã¦ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

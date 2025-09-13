@@ -1,22 +1,22 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:stdafx.h													 */
-/* “à—e			:ƒvƒŠƒRƒ“ƒpƒCƒ‹ƒwƒbƒ_ ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:stdafx.h													 */
+/* å†…å®¹			:ãƒ—ãƒªã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ãƒ˜ãƒƒãƒ€ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/26													 */
 /* ========================================================================= */
 
 #pragma once
 
-#define VC_EXTRALEAN		// Windows ƒwƒbƒ_[‚©‚ç–w‚ÇŽg—p‚³‚ê‚È‚¢ƒXƒ^ƒbƒt‚ðœŠO‚µ‚Ü‚·B
+#define VC_EXTRALEAN		// Windows ãƒ˜ãƒƒãƒ€ãƒ¼ã‹ã‚‰æ®†ã©ä½¿ç”¨ã•ã‚Œãªã„ã‚¹ã‚¿ãƒƒãƒ•ã‚’é™¤å¤–ã—ã¾ã™ã€‚
 #define WINVER 0x0602
 #define _WIN32_WINNT 0x0602
 
-#include <afxwin.h>         // MFC ‚ÌƒRƒA‚¨‚æ‚Ñ•W€ƒRƒ“ƒ|[ƒlƒ“ƒg
-#include <afxext.h>         // MFC ‚ÌŠg’£•”•ª
-#include <afxdtctl.h>		// MFC ‚Ì Internet Explorer 4 ƒRƒ‚ƒ“ ƒRƒ“ƒgƒ[ƒ‹ ƒTƒ|[ƒg
+#include <afxwin.h>         // MFC ã®ã‚³ã‚¢ãŠã‚ˆã³æ¨™æº–ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+#include <afxext.h>         // MFC ã®æ‹¡å¼µéƒ¨åˆ†
+#include <afxdtctl.h>		// MFC ã® Internet Explorer 4 ã‚³ãƒ¢ãƒ³ ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ« ã‚µãƒãƒ¼ãƒˆ
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC ‚Ì Windows ƒRƒ‚ƒ“ ƒRƒ“ƒgƒ[ƒ‹ ƒTƒ|[ƒg
+#include <afxcmn.h>			// MFC ã® Windows ã‚³ãƒ¢ãƒ³ ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ« ã‚µãƒãƒ¼ãƒˆ
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include <afxtempl.h>

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:DlgAdminItemWeaponList.cpp									 */
-/* ì‡óe			:ÉAÉCÉeÉÄïêäÌèÓïÒàÍóóÉ_ÉCÉAÉçÉOÉNÉâÉX é¿ëïÉtÉ@ÉCÉã			 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2008/08/10													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:DlgAdminItemWeaponList.cpp									 */
+/* ÂÜÖÂÆπ			:„Ç¢„Ç§„ÉÜ„É†Ê≠¶Âô®ÊÉÖÂ†±‰∏ÄË¶ß„ÉÄ„Ç§„Ç¢„É≠„Ç∞„ÇØ„É©„Çπ ÂÆüË£Ö„Éï„Ç°„Ç§„É´			 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2008/08/10													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ÉNÉâÉXÇÃê›íË																 */
+/* „ÇØ„É©„Çπ„ÅÆË®≠ÂÆö																 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::DoDataExchange(CDataExchange* pDX)
@@ -47,9 +47,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::CDlgAdminItemWeaponList				 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/08/10														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::CDlgAdminItemWeaponList				 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/08/10														 */
 /* ========================================================================= */
 
 CDlgAdminItemWeaponList::CDlgAdminItemWeaponList(CWnd* pParent /*=NULL*/)
@@ -63,9 +63,9 @@ CDlgAdminItemWeaponList::CDlgAdminItemWeaponList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::~CDlgAdminItemWeaponList				 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/08/10														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::~CDlgAdminItemWeaponList				 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/08/10														 */
 /* ========================================================================= */
 
 CDlgAdminItemWeaponList::~CDlgAdminItemWeaponList()
@@ -74,9 +74,9 @@ CDlgAdminItemWeaponList::~CDlgAdminItemWeaponList()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::Init									 */
-/* ì‡óe		:èâä˙âª															 */
-/* ì˙ït		:2008/08/10														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::Init									 */
+/* ÂÜÖÂÆπ		:ÂàùÊúüÂåñ															 */
+/* Êó•‰ªò		:2008/08/10														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::Init(CMgrData *pMgrData)
@@ -85,16 +85,16 @@ void CDlgAdminItemWeaponList::Init(CMgrData *pMgrData)
 
 	m_pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon ();
 
-	/* ÉEÉBÉìÉhÉEçÏê¨ */
+	/* „Ç¶„Ç£„É≥„Éâ„Ç¶‰ΩúÊàê */
 	Create (CDlgAdminItemWeaponList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::Renew									 */
-/* ì‡óe		:àÍóóÇçXêV														 */
-/* ì˙ït		:2008/08/10														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::Renew									 */
+/* ÂÜÖÂÆπ		:‰∏ÄË¶ß„ÇíÊõ¥Êñ∞														 */
+/* Êó•‰ªò		:2008/08/10														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::Renew(void)
@@ -118,7 +118,7 @@ void CDlgAdminItemWeaponList::Renew(void)
 		strTmp.Format ("%d", pInfoItemWeapon->m_dwWeaponInfoID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemWeapon->m_dwWeaponInfoID);	/* ID */
-		m_List.SetItemText (i, 1, pInfoItemWeapon->m_strName);		/* ïêäÌéÌï ñº */
+		m_List.SetItemText (i, 1, pInfoItemWeapon->m_strName);		/* Ê≠¶Âô®Á®ÆÂà•Âêç */
 	}
 
 	if (nSelect >= 0) {
@@ -130,9 +130,9 @@ void CDlgAdminItemWeaponList::Renew(void)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::OnAdminMsg							 */
-/* ì‡óe		:ÉÅÉbÉZÅ[ÉWÉnÉìÉhÉâ(WM_ADMINMSG)								 */
-/* ì˙ït		:2007/08/23														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::OnAdminMsg							 */
+/* ÂÜÖÂÆπ		:„É°„ÉÉ„Çª„Éº„Ç∏„Éè„É≥„Éâ„É©(WM_ADMINMSG)								 */
+/* Êó•‰ªò		:2007/08/23														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnAdminMsg(int nType, DWORD dwPara)
@@ -141,9 +141,9 @@ void CDlgAdminItemWeaponList::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::OnInitDialog							 */
-/* ì‡óe		:ÉÅÉbÉZÅ[ÉWÉnÉìÉhÉâ(WM_INITDIALOG)								 */
-/* ì˙ït		:2008/08/10														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::OnInitDialog							 */
+/* ÂÜÖÂÆπ		:„É°„ÉÉ„Çª„Éº„Ç∏„Éè„É≥„Éâ„É©(WM_INITDIALOG)								 */
+/* Êó•‰ªò		:2008/08/10														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminItemWeaponList::OnInitDialog()
@@ -154,11 +154,11 @@ BOOL CDlgAdminItemWeaponList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ïêäÌéÌï ñº",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "Ê≠¶Âô®Á®ÆÂà•Âêç",	LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_LIST, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	/* ëSïêäÌèÓïÒÇóvãÅ */
+	/* ÂÖ®Ê≠¶Âô®ÊÉÖÂ†±„ÇíË¶ÅÊ±Ç */
 	Packet.Make (0);
 	m_pSock->Send (&Packet);
 
@@ -167,15 +167,15 @@ BOOL CDlgAdminItemWeaponList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::OnMainFrame							 */
-/* ì‡óe		:ÉÅÉbÉZÅ[ÉWÉnÉìÉhÉâ(WM_MAINFRAME)								 */
-/* ì˙ït		:2007/08/16														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::OnMainFrame							 */
+/* ÂÜÖÂÆπ		:„É°„ÉÉ„Çª„Éº„Ç∏„Éè„É≥„Éâ„É©(WM_MAINFRAME)								 */
+/* Êó•‰ªò		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWITEMWEAPONINFO:		/* ïêäÌèÓïÒçXêV */
+	case MAINFRAMEMSG_RENEWITEMWEAPONINFO:		/* Ê≠¶Âô®ÊÉÖÂ†±Êõ¥Êñ∞ */
 		Renew ();
 		break;
 	}
@@ -183,9 +183,9 @@ void CDlgAdminItemWeaponList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::OnAdd									 */
-/* ì‡óe		:É{É^ÉìÉnÉìÉhÉâ(êVãKí«â¡)										 */
-/* ì˙ït		:2007/08/15														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::OnAdd									 */
+/* ÂÜÖÂÆπ		:„Éú„Çø„É≥„Éè„É≥„Éâ„É©(Êñ∞Ë¶èËøΩÂä†)										 */
+/* Êó•‰ªò		:2007/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnAdd()
@@ -215,9 +215,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::OnModify								 */
-/* ì‡óe		:É{É^ÉìÉnÉìÉhÉâ(ï“èW)											 */
-/* ì˙ït		:2007/08/16														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::OnModify								 */
+/* ÂÜÖÂÆπ		:„Éú„Çø„É≥„Éè„É≥„Éâ„É©(Á∑®ÈõÜ)											 */
+/* Êó•‰ªò		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnModify()
@@ -257,9 +257,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::OnCopy								 */
-/* ì‡óe		:É{É^ÉìÉnÉìÉhÉâ(ÉRÉsÅ[)											 */
-/* ì˙ït		:2007/09/22														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::OnCopy								 */
+/* ÂÜÖÂÆπ		:„Éú„Çø„É≥„Éè„É≥„Éâ„É©(„Ç≥„Éî„Éº)											 */
+/* Êó•‰ªò		:2007/09/22														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnCopy()
@@ -280,7 +280,7 @@ void CDlgAdminItemWeaponList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("ëIëÇ≥ÇÍÇƒÇ¢ÇÈÉAÉCÉeÉÄÇÉRÉsÅ[ÇµÇ‹Ç∑Ç©ÅH", "ämîF", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("ÈÅ∏Êäû„Åï„Çå„Å¶„ÅÑ„Çã„Ç¢„Ç§„ÉÜ„É†„Çí„Ç≥„Éî„Éº„Åó„Åæ„Åô„ÅãÔºü", "Á¢∫Ë™ç", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -292,9 +292,9 @@ void CDlgAdminItemWeaponList::OnCopy()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CDlgAdminItemWeaponList::OnDelete								 */
-/* ì‡óe		:É{É^ÉìÉnÉìÉhÉâ(çÌèú)											 */
-/* ì˙ït		:2007/08/19														 */
+/* Èñ¢Êï∞Âêç	:CDlgAdminItemWeaponList::OnDelete								 */
+/* ÂÜÖÂÆπ		:„Éú„Çø„É≥„Éè„É≥„Éâ„É©(ÂâäÈô§)											 */
+/* Êó•‰ªò		:2007/08/19														 */
 /* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnDelete()
@@ -316,8 +316,8 @@ void CDlgAdminItemWeaponList::OnDelete()
 		return;
 	}
 
-	strTmp.Format ("[%s]ÇçÌèúÇµÇ‹Ç∑Ç©ÅH", (LPCSTR)pInfoItem->m_strName);
-	nResult = MessageBox (strTmp, "ämîF", MB_YESNO | MB_ICONQUESTION);
+	strTmp.Format ("[%s]„ÇíÂâäÈô§„Åó„Åæ„Åô„ÅãÔºü", (LPCSTR)pInfoItem->m_strName);
+	nResult = MessageBox (strTmp, "Á¢∫Ë™ç", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

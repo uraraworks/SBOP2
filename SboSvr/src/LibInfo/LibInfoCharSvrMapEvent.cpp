@@ -1,10 +1,10 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoCharSvrMapEvent.cpp									 */
-/* “à—e			:ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* 				:ƒ}ƒbƒvƒCƒxƒ“ƒgŠÖ˜Aˆ—										 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoCharSvrMapEvent.cpp									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* 				:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆé–¢é€£å‡¦ç†										 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/16													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,15 +19,15 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharSvr::CheckMapEvent									 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN											 */
-/* “ú•t		:2008/06/28														 */
-/* –ß‚è’l	:TRUE:‰“š‚ğ•Ô‚·	ƒ`ƒFƒbƒN‚Ì‚İ‚Ìê‡‚Í TRUE:ƒ}ƒbƒvƒCƒxƒ“ƒg‚ ‚è */
+/* é–¢æ•°å	:CLibInfoCharSvr::CheckMapEvent									 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯											 */
+/* æ—¥ä»˜		:2008/06/28														 */
+/* æˆ»ã‚Šå€¤	:TRUE:å¿œç­”ã‚’è¿”ã™	ãƒã‚§ãƒƒã‚¯ã®ã¿ã®å ´åˆã¯ TRUE:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚ã‚Š */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::CheckMapEvent(
-	CInfoCharSvr *pInfoChar,	/* [in] ‘ÎÛƒLƒƒƒ‰ */
-	BOOL bCheck/*FALSE*/)		/* [in] TRUE:ƒ`ƒFƒbƒN‚Ì‚İ */
+	CInfoCharSvr *pInfoChar,	/* [in] å¯¾è±¡ã‚­ãƒ£ãƒ© */
+	BOOL bCheck/*FALSE*/)		/* [in] TRUE:ãƒã‚§ãƒƒã‚¯ã®ã¿ */
 {
 	BOOL bRet, bResult, bBreak;
 	int x, y;
@@ -47,7 +47,7 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 		goto Exit;
 	}
 	pInfoMapEventBase = NULL;
-	/* À•W‚ğ‹éŒ`‚Åæ“¾ */
+	/* åº§æ¨™ã‚’çŸ©å½¢ã§å–å¾— */
 	pInfoChar->GetPosRect (rcChar);
 	pInfoChar->GetMapPosRect (rcMap);
 
@@ -62,19 +62,19 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 			pptPos1 = &pInfoMapEventBase->m_ptPos;
 			pptPos2 = &pInfoMapEventBase->m_ptPos2;
 			switch (pInfoMapEventBase->m_nHitType) {
-			case MAPEVENTHITTYPE_MAPPOS:		/* ƒ}ƒbƒvÀ•Wc‰¡‚¢‚¸‚ê‚© */
+			case MAPEVENTHITTYPE_MAPPOS:		/* ãƒãƒƒãƒ—åº§æ¨™ç¸¦æ¨ªã„ãšã‚Œã‹ */
 				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
 				bResult = IsInRect (&rcChar, &rcMapEvent);
 				break;
-			case MAPEVENTHITTYPE_CHARPOS:		/* ƒLƒƒƒ‰À•W */
+			case MAPEVENTHITTYPE_CHARPOS:		/* ã‚­ãƒ£ãƒ©åº§æ¨™ */
 				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
 				bResult = IsHitRect (&rcChar, &rcMapEvent);
 				break;
-			case MAPEVENTHITTYPE_AREA:			/* ”ÍˆÍ */
+			case MAPEVENTHITTYPE_AREA:			/* ç¯„å›² */
 				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos2->x * 2 + 1, pptPos2->y * 2 + 1);
 				bResult = IsInRect (&rcChar, &rcMapEvent);
 				break;
-			case MAPEVENTHITTYPE_MAPPOS2:		/* ƒ}ƒbƒvÀ•WŠ®‘Sˆê’v */
+			case MAPEVENTHITTYPE_MAPPOS2:		/* ãƒãƒƒãƒ—åº§æ¨™å®Œå…¨ä¸€è‡´ */
 				bResult = FALSE;
 				if ((rcChar.left == pptPos1->x * 2) & (rcChar.top == pptPos1->y * 2 + 1)) {
 					bResult = TRUE;
@@ -95,14 +95,14 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	if (pInfoMapEventBase == NULL) {
 		goto Exit;
 	}
-	/* Œü‚«w’è‚ ‚èH */
+	/* å‘ãæŒ‡å®šã‚ã‚Šï¼Ÿ */
 	if (pInfoMapEventBase->m_nHitDirection >= 0) {
 		if (pInfoChar->m_nDirection != pInfoMapEventBase->m_nHitDirection) {
 			pInfoMapEventBase = NULL;
 			goto Exit;
 		}
 	}
-	/* ƒ`ƒFƒbƒN‚Ì‚İH */
+	/* ãƒã‚§ãƒƒã‚¯ã®ã¿ï¼Ÿ */
 	if (bCheck) {
 		goto Exit;
 	}
@@ -115,15 +115,15 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	}
 
 	switch (pInfoMapEventBase->m_nType) {
-	case MAPEVENTTYPE_MOVE:			bRet = MapEventProcMOVE			(pInfoChar, pInfoMapEventBase);	break;	/* ƒ}ƒbƒv“àˆÚ“® */
-	case MAPEVENTTYPE_MAPMOVE:		bRet = MapEventProcMAPMOVE		(pInfoChar, pInfoMapEventBase);	break;	/* ƒ}ƒbƒvŠÔˆÚ“® */
-	case MAPEVENTTYPE_INITSTATUS:	bRet = MapEventProcINITSTATUS	(pInfoChar, pInfoMapEventBase);	break;	/* ƒXƒe[ƒ^ƒX‰Šú‰» */
-	case MAPEVENTTYPE_GRPIDTMP:		bRet = MapEventProcGRPIDTMP		(pInfoChar, pInfoMapEventBase);	break;	/* ˆê‰æ‘œİ’è */
-	case MAPEVENTTYPE_LIGHT:		bRet = MapEventProcLIGHT		(pInfoChar, pInfoMapEventBase);	break;	/* “”‚è */
+	case MAPEVENTTYPE_MOVE:			bRet = MapEventProcMOVE			(pInfoChar, pInfoMapEventBase);	break;	/* ãƒãƒƒãƒ—å†…ç§»å‹• */
+	case MAPEVENTTYPE_MAPMOVE:		bRet = MapEventProcMAPMOVE		(pInfoChar, pInfoMapEventBase);	break;	/* ãƒãƒƒãƒ—é–“ç§»å‹• */
+	case MAPEVENTTYPE_INITSTATUS:	bRet = MapEventProcINITSTATUS	(pInfoChar, pInfoMapEventBase);	break;	/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ– */
+	case MAPEVENTTYPE_GRPIDTMP:		bRet = MapEventProcGRPIDTMP		(pInfoChar, pInfoMapEventBase);	break;	/* ä¸€æ™‚ç”»åƒè¨­å®š */
+	case MAPEVENTTYPE_LIGHT:		bRet = MapEventProcLIGHT		(pInfoChar, pInfoMapEventBase);	break;	/* ç¯ã‚Š */
 	}
 
 Exit:
-	/* ƒ`ƒFƒbƒN‚Ì‚İH */
+	/* ãƒã‚§ãƒƒã‚¯ã®ã¿ï¼Ÿ */
 	if (bCheck) {
 		if (pInfoMapEventBase == NULL) {
 			bRet = FALSE;
@@ -134,9 +134,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharSvr::MapEventProcMOVE								 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgˆ—(ƒ}ƒbƒv“àˆÚ“®)								 */
-/* “ú•t		:2008/11/16														 */
+/* é–¢æ•°å	:CLibInfoCharSvr::MapEventProcMOVE								 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†(ãƒãƒƒãƒ—å†…ç§»å‹•)								 */
+/* æ—¥ä»˜		:2008/11/16														 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
@@ -160,7 +160,7 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = apInfoChar[i];
 
-		/* ü‚è‚ÌƒLƒƒƒ‰‚É’Ê’m */
+		/* å‘¨ã‚Šã®ã‚­ãƒ£ãƒ©ã«é€šçŸ¥ */
 		PacketCHAR_STATE.Make (pInfoCharTmp->m_dwCharID, CHARMOVESTATE_DELETE);
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_STATE);
 
@@ -182,9 +182,9 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharSvr::MapEventProcMAPMOVE							 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgˆ—(ƒ}ƒbƒvŠÔˆÚ“®)								 */
-/* “ú•t		:2008/11/16														 */
+/* é–¢æ•°å	:CLibInfoCharSvr::MapEventProcMAPMOVE							 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†(ãƒãƒƒãƒ—é–“ç§»å‹•)								 */
+/* æ—¥ä»˜		:2008/11/16														 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
@@ -209,7 +209,7 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = apInfoChar[i];
 
-		/* ü‚è‚ÌƒLƒƒƒ‰‚É’Ê’m */
+		/* å‘¨ã‚Šã®ã‚­ãƒ£ãƒ©ã«é€šçŸ¥ */
 		PacketCHAR_STATE.Make (pInfoCharTmp->m_dwCharID, CHARMOVESTATE_DELETE);
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_STATE);
 
@@ -232,9 +232,9 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharSvr::MapEventProcINITSTATUS						 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgˆ—(ƒXƒe[ƒ^ƒX‰Šú‰»)							 */
-/* “ú•t		:2008/11/16														 */
+/* é–¢æ•°å	:CLibInfoCharSvr::MapEventProcINITSTATUS						 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†(ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ–)							 */
+/* æ—¥ä»˜		:2008/11/16														 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::MapEventProcINITSTATUS(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
@@ -261,9 +261,9 @@ BOOL CLibInfoCharSvr::MapEventProcINITSTATUS(CInfoCharSvr *pInfoChar, CInfoMapEv
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharSvr::MapEventProcGRPIDTMP							 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgˆ—(ˆê‰æ‘œİ’è)								 */
-/* “ú•t		:2008/11/16														 */
+/* é–¢æ•°å	:CLibInfoCharSvr::MapEventProcGRPIDTMP							 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†(ä¸€æ™‚ç”»åƒè¨­å®š)								 */
+/* æ—¥ä»˜		:2008/11/16														 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::MapEventProcGRPIDTMP(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
@@ -274,18 +274,18 @@ BOOL CLibInfoCharSvr::MapEventProcGRPIDTMP(CInfoCharSvr *pInfoChar, CInfoMapEven
 	bRet = TRUE;
 	pInfoMapEvent = (PCInfoMapEventGRPIDTMP)pInfoMapEventBase;
 
-	/* İ’èH */
+	/* è¨­å®šï¼Ÿ */
 	if (pInfoMapEvent->m_nSetType == GRPIDTMPTYPE_ON) {
-		pInfoChar->m_wGrpIDTmpMain	= (WORD)pInfoMapEvent->m_dwIDMain;	/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-		pInfoChar->m_wGrpIDTmpSub	= (WORD)pInfoMapEvent->m_dwIDSub;	/* ‰æ‘œID(ˆê•:ƒTƒu) */
-	/* ‰ğœ */
+		pInfoChar->m_wGrpIDTmpMain	= (WORD)pInfoMapEvent->m_dwIDMain;	/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+		pInfoChar->m_wGrpIDTmpSub	= (WORD)pInfoMapEvent->m_dwIDSub;	/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
+	/* è§£é™¤ */
 	} else {
-		pInfoChar->m_wGrpIDTmpMain	= 0;		/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-		pInfoChar->m_wGrpIDTmpSub	= 0;		/* ‰æ‘œID(ˆê•:ƒTƒu) */
+		pInfoChar->m_wGrpIDTmpMain	= 0;		/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+		pInfoChar->m_wGrpIDTmpSub	= 0;		/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 	}
 	pInfoChar->m_bChgGrp = TRUE;
 
-	/* •t‚¢‚Äs‚­‚Ì‚Æ•t‚¢‚Ä—ˆ‚Ä‚¢‚é‚Ì‚ğ‰ğœ‚³‚¹‚éˆ×2‰ñŒÄ‚Ô */
+	/* ä»˜ã„ã¦è¡Œãã®ã¨ä»˜ã„ã¦æ¥ã¦ã„ã‚‹ã®ã‚’è§£é™¤ã•ã›ã‚‹ç‚º2å›å‘¼ã¶ */
 	Tail (pInfoChar, NULL, FALSE);
 	Tail (pInfoChar, NULL, FALSE);
 
@@ -294,9 +294,9 @@ BOOL CLibInfoCharSvr::MapEventProcGRPIDTMP(CInfoCharSvr *pInfoChar, CInfoMapEven
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharSvr::MapEventProcLIGHT								 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgˆ—(“”‚è)										 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CLibInfoCharSvr::MapEventProcLIGHT								 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†(ç¯ã‚Š)										 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharSvr::MapEventProcLIGHT(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
@@ -309,7 +309,7 @@ BOOL CLibInfoCharSvr::MapEventProcLIGHT(CInfoCharSvr *pInfoChar, CInfoMapEventBa
 
 	pInfoChar->m_nLightLevel = 0;
 	pInfoChar->m_dwLightTime = 0;
-	/* İ’èH */
+	/* è¨­å®šï¼Ÿ */
 	if (pInfoMapEvent->m_bLightOn) {
 		pInfoChar->m_nLightLevel = 1;
 		if (pInfoMapEvent->m_dwTime != 0) {

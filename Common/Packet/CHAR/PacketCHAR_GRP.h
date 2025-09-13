@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_GRP.h											 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:‰æ‘œ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/10/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_GRP.h											 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ç”»åƒé€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,40 +13,40 @@
 class CInfoCharBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_GRP : public CPacketBase
 {
 public:
-			CPacketCHAR_GRP();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_GRP();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_GRP();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_GRP();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make		(CInfoCharBase *pInfo);					/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set			(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
-	void	SetParam	(CInfoCharBase *pInfo);					/* Žw’èƒLƒƒƒ‰î•ñ‚Öƒpƒ‰ƒ[ƒ^‚ð”½‰f */
+	void	Make		(CInfoCharBase *pInfo);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set			(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
+	void	SetParam	(CInfoCharBase *pInfo);					/* æŒ‡å®šã‚­ãƒ£ãƒ©æƒ…å ±ã¸ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’åæ˜  */
 
 
 public:
-	DWORD	m_dwCharID,					/* ƒLƒƒƒ‰ID */
-			m_dwEquipItemIDCloth,		/* ‘•”õƒAƒCƒeƒ€ID(•ž) */
-			m_dwEquipItemIDAcce1,		/* ‘•”õƒAƒCƒeƒ€ID(ƒAƒNƒZƒTƒŠ) */
-			m_dwEquipItemIDArmsRight,	/* ‘•”õƒAƒCƒeƒ€ID(Ž‚¿•¨) */
-			m_dwEquipItemIDArmsLeft;	/* ‘•”õƒAƒCƒeƒ€ID:¶Žè */
-	WORD	m_wGrpIDNPC,				/* ‰æ‘œID(NPC) */
-			m_wGrpIDCloth,				/* ‰æ‘œID(•ž) */
-			m_wGrpIDEye,				/* ‰æ‘œID(–Ú) */
-			m_wGrpIDEyeColor,			/* ‰æ‘œID(–ÚF) */
-			m_wGrpIDHairType,			/* ‰æ‘œID(”¯) */
-			m_wGrpIDHairColor,			/* ‰æ‘œID(”¯F) */
-			m_wGrpIDSP,					/* ‰æ‘œID(“ÁŽê•ž) */
-			m_wGrpIDAcce,				/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-			m_wGrpIDArmsMain,			/* ‰æ‘œID(Ž‚¿•¨:ƒƒCƒ“) */
-			m_wGrpIDArmsSub,			/* ‰æ‘œID(Ž‚¿•¨:ƒTƒu) */
-			m_wGrpIDArmsLeftMain,		/* ‰æ‘œID(‚:ƒƒCƒ“) */
-			m_wGrpIDArmsLeftSub,		/* ‰æ‘œID(‚:ƒTƒu) */
-			m_wGrpIDTmpMain,			/* ‰æ‘œID(ˆêŽž•ž:ƒƒCƒ“) */
-			m_wGrpIDTmpSub;				/* ‰æ‘œID(ˆêŽž•ž:ƒTƒu) */
+	DWORD	m_dwCharID,					/* ã‚­ãƒ£ãƒ©ID */
+			m_dwEquipItemIDCloth,		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æœ) */
+			m_dwEquipItemIDAcce1,		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+			m_dwEquipItemIDArmsRight,	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID(æŒã¡ç‰©) */
+			m_dwEquipItemIDArmsLeft;	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å·¦æ‰‹ */
+	WORD	m_wGrpIDNPC,				/* ç”»åƒID(NPC) */
+			m_wGrpIDCloth,				/* ç”»åƒID(æœ) */
+			m_wGrpIDEye,				/* ç”»åƒID(ç›®) */
+			m_wGrpIDEyeColor,			/* ç”»åƒID(ç›®è‰²) */
+			m_wGrpIDHairType,			/* ç”»åƒID(é«ª) */
+			m_wGrpIDHairColor,			/* ç”»åƒID(é«ªè‰²) */
+			m_wGrpIDSP,					/* ç”»åƒID(ç‰¹æ®Šæœ) */
+			m_wGrpIDAcce,				/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+			m_wGrpIDArmsMain,			/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+			m_wGrpIDArmsSub,			/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+			m_wGrpIDArmsLeftMain,		/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+			m_wGrpIDArmsLeftSub,		/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+			m_wGrpIDTmpMain,			/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+			m_wGrpIDTmpSub;				/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 } CPacketCHAR_GRP, *PCPacketCHAR_GRP;
 
 /* Copyright(C)URARA-works 2007 */

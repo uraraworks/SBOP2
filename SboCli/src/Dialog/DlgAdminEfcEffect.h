@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminEfcEffect.h										 */
-/* “à—e			:ƒGƒtƒFƒNƒgî•ñİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminEfcEffect.h										 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,34 +16,34 @@ class CWndSelectGrp;
 class CInfoEffect;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminEfcEffect : public CDlgAdminBase
 {
 public:
-			CDlgAdminEfcEffect(CWnd* pParent = NULL);			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminEfcEffect();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminEfcEffect(CWnd* pParent = NULL);			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminEfcEffect();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init	(CMgrData *pMgrData, BOOL bModify = FALSE);			/* ‰Šú‰» */
-	void	GetInfo	(CInfoEffect *pDst);								/* æ“¾ */
-	void	SetInfo	(CInfoEffect *pSrc);								/* İ’è */
-
-
-protected:
-	void	RenewSlider		(void);							/* ƒXƒ‰ƒCƒ_[‚ğXV */
-	void	OnSelectAnime	(void);							/* ƒRƒ}‘I‘ğˆ— */
-	void	Enable			(BOOL bEnable);					/* “ü—Í‹Ö~İ’è */
-	void	Set				(int nNo);						/* ƒGƒtƒFƒNƒgî•ñ‚Öİ’è */
-	void	Get				(int nNo);						/* ƒGƒtƒFƒNƒgî•ñ‚©‚çæ“¾ */
+	void	Init	(CMgrData *pMgrData, BOOL bModify = FALSE);			/* åˆæœŸåŒ– */
+	void	GetInfo	(CInfoEffect *pDst);								/* å–å¾— */
+	void	SetInfo	(CInfoEffect *pSrc);								/* è¨­å®š */
 
 
 protected:
-	BOOL			m_bModify;						/* •ÒWƒ‚[ƒh */
-	int				m_nSelect;						/* ‘I‘ğ’†‚Ì”Ô† */
-	DWORD			m_dwLastTimeAnime;				/* ‘O‰ñ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ŠÔ */
-	CWndSelectGrp	*m_pWndSelectGrp;				/* ‰æ‘œ‘I‘ğƒEƒBƒ“ƒhƒE */
-	CInfoEffect		*m_pInfoEffect;					/* •ÒW’†‚ÌƒGƒtƒFƒNƒgî•ñ */
+	void	RenewSlider		(void);							/* ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æ›´æ–° */
+	void	OnSelectAnime	(void);							/* ã‚³ãƒé¸æŠå‡¦ç† */
+	void	Enable			(BOOL bEnable);					/* å…¥åŠ›ç¦æ­¢è¨­å®š */
+	void	Set				(int nNo);						/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ã¸è¨­å®š */
+	void	Get				(int nNo);						/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ã‹ã‚‰å–å¾— */
+
+
+protected:
+	BOOL			m_bModify;						/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰ */
+	int				m_nSelect;						/* é¸æŠä¸­ã®ç•ªå· */
+	DWORD			m_dwLastTimeAnime;				/* å‰å›ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ™‚é–“ */
+	CWndSelectGrp	*m_pWndSelectGrp;				/* ç”»åƒé¸æŠã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CInfoEffect		*m_pInfoEffect;					/* ç·¨é›†ä¸­ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 
 
 
@@ -66,7 +66,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminEfcEffect)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

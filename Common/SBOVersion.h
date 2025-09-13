@@ -1,36 +1,36 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SBOVersion.h												 */
-/* “à—e			:ƒo[ƒWƒ‡ƒ“’è‹`ƒtƒ@ƒCƒ‹										 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SBOVersion.h												 */
+/* å†…å®¹			:ãƒãƒ¼ã‚¸ãƒ§ãƒ³å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«										 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/07													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-#define VERTEXT					"0.043"								/* ƒo[ƒWƒ‡ƒ“ */
-#define VERSIONVAL				(0x00004300)						/* ƒo[ƒWƒ‡ƒ“”Ô† */
-#define DLLVER					"1"									/* DLLƒo[ƒWƒ‡ƒ“ */
-#define GRPDATADLLVER			"4"									/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^DLLƒo[ƒWƒ‡ƒ“ */
+#define VERTEXT					"0.043"								/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
+#define VERSIONVAL				(0x00004300)						/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç•ªå· */
+#define DLLVER					"1"									/* DLLãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
+#define GRPDATADLLVER			"4"									/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿DLLãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
 
-/* ¦’ˆÓ[FILEVERSION]E[PRODUCTVERSION]‚ð•ÏX‚·‚é•K—v‚ª‚ ‚è‚Ü‚· */
+/* â€»æ³¨æ„[FILEVERSION]ãƒ»[PRODUCTVERSION]ã‚’å¤‰æ›´ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ */
 
 /****************************************************************************
-	’è”‚Ì’è‹`
+	å®šæ•°ã®å®šç¾©
 ****************************************************************************/
 
-/* ƒtƒ@ƒCƒ‹ƒtƒ‰ƒO’è” */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ãƒ©ã‚°å®šæ•° */
 #ifdef _DEBUG
 #define FILEFLAGS_VALUE		(0x1L)
 #else
 #define	FILEFLAGS_VALUE		(0x0L)
 #endif
 
-/* ƒtƒ@ƒCƒ‹ƒ^ƒCƒv’è” */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—å®šæ•° */
 #if(defined(_USRDLL) || defined(_WINDLL))
 #define	FILETYPE_VALUE		(0x2L)
 #else
@@ -38,7 +38,7 @@
 #endif
 
 /****************************************************************************
-	ƒo[ƒWƒ‡ƒ“ƒŠƒ\[ƒX’è‹`ƒ}ƒNƒ
+	ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒªã‚½ãƒ¼ã‚¹å®šç¾©ãƒžã‚¯ãƒ­
 ****************************************************************************/
 
 #define	SBO_VERSION(OriginalFilename)																	\
@@ -56,16 +56,16 @@
 		BEGIN																							\
 			BLOCK "041104b0"																			\
 			BEGIN																						\
-				VALUE "Comments", "ƒXƒNƒ‰ƒbƒvƒuƒbƒNƒIƒ“ƒ‰ƒCƒ“\0"										\
+				VALUE "Comments", "ã‚¹ã‚¯ãƒ©ãƒƒãƒ—ãƒ–ãƒƒã‚¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³\0"										\
 				VALUE "CompanyName", "URARA-WORKS\0"													\
-				VALUE "FileDescription", "ƒXƒNƒ‰ƒbƒvƒuƒbƒNƒIƒ“ƒ‰ƒCƒ“\0"									\
+				VALUE "FileDescription", "ã‚¹ã‚¯ãƒ©ãƒƒãƒ—ãƒ–ãƒƒã‚¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³\0"									\
 				VALUE "FileVersion", VERTEXT "\0"														\
 				VALUE "InternalName", " \0"																\
 				VALUE "LegalCopyright", "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.\0"	\
-				VALUE "LegalTrademarks", "ƒXƒNƒ‰ƒbƒvƒuƒbƒNƒIƒ“ƒ‰ƒCƒ“\0"									\
+				VALUE "LegalTrademarks", "ã‚¹ã‚¯ãƒ©ãƒƒãƒ—ãƒ–ãƒƒã‚¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³\0"									\
 				VALUE "OriginalFilename", OriginalFilename "\0"											\
 				VALUE "PrivateBuild", " \0"																\
-				VALUE "ProductName", "ƒXƒNƒ‰ƒbƒvƒuƒbƒNƒIƒ“ƒ‰ƒCƒ“\0"										\
+				VALUE "ProductName", "ã‚¹ã‚¯ãƒ©ãƒƒãƒ—ãƒ–ãƒƒã‚¯ã‚ªãƒ³ãƒ©ã‚¤ãƒ³\0"										\
 				VALUE "ProductVersion", VERTEXT "\0"													\
 				VALUE "SpecialBuild", " \0"																\
 			END																							\

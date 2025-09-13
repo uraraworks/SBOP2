@@ -1,30 +1,30 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapEventLIGHT.cpp										 */
-/* “à—e			:ƒCƒxƒ“ƒgî•ñ(“”‚è)ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapEventLIGHT.cpp										 */
+/* å†…å®¹			:ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±(ç¯ã‚Š)ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMapEventLIGHT.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_bLightOn",		/* “”‚è‚ð‚Â‚¯‚é */
-	"m_dwTime",			/* Ž‘±ŽžŠÔ*/
+	"m_bLightOn",		/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+	"m_dwTime",			/* æŒç¶šæ™‚é–“*/
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::CInfoMapEventLIGHT							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::CInfoMapEventLIGHT							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 CInfoMapEventLIGHT::CInfoMapEventLIGHT()
@@ -38,9 +38,9 @@ CInfoMapEventLIGHT::CInfoMapEventLIGHT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::~CInfoMapEventLIGHT						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::~CInfoMapEventLIGHT						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 CInfoMapEventLIGHT::~CInfoMapEventLIGHT()
@@ -49,9 +49,9 @@ CInfoMapEventLIGHT::~CInfoMapEventLIGHT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::GetElementNo								 */
-/* “à—e		:—v‘f”Ô†‚ðŽæ“¾													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::GetElementNo								 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 int CInfoMapEventLIGHT::GetElementNo(LPCSTR pszName)
@@ -79,9 +79,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::GetDataSize								 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾												 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::GetDataSize								 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventLIGHT::GetDataSize(void)
@@ -89,17 +89,17 @@ DWORD CInfoMapEventLIGHT::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = CInfoMapEventBase::GetDataSize ();
-	dwRet += sizeof (m_bLightOn);	/* “”‚è‚ð‚Â‚¯‚é */
-	dwRet += sizeof (m_dwTime);		/* Ž‘±ŽžŠÔ */
+	dwRet += sizeof (m_bLightOn);	/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+	dwRet += sizeof (m_dwTime);		/* æŒç¶šæ™‚é–“ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::GetDataSizeNo								 */
-/* “à—e		:Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::GetDataSizeNo								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventLIGHT::GetDataSizeNo(int nNo)
@@ -110,8 +110,8 @@ DWORD CInfoMapEventLIGHT::GetDataSizeNo(int nNo)
 		dwRet = CInfoMapEventBase::GetDataSizeNo (nNo);
 	} else {
 		switch (nNo - m_nElementCountBase) {
-		case 0:	dwRet = sizeof (m_bLightOn);	break;	/* “”‚è‚ð‚Â‚¯‚é */
-		case 1:	dwRet = sizeof (m_dwTime);		break;	/* Ž‘±ŽžŠÔ */
+		case 0:	dwRet = sizeof (m_bLightOn);	break;	/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+		case 1:	dwRet = sizeof (m_dwTime);		break;	/* æŒç¶šæ™‚é–“ */
 		}
 	}
 
@@ -120,9 +120,9 @@ DWORD CInfoMapEventLIGHT::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::GetName									 */
-/* “à—e		:—v‘f–¼‚ðŽæ“¾													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::GetName									 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMapEventLIGHT::GetName(int nNo)
@@ -136,9 +136,9 @@ LPCSTR CInfoMapEventLIGHT::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::GetWriteData								 */
-/* “à—e		:Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾									 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::GetWriteData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventLIGHT::GetWriteData(int nNo, PDWORD pdwSize)
@@ -160,8 +160,8 @@ PBYTE CInfoMapEventLIGHT::GetWriteData(int nNo, PDWORD pdwSize)
 		pRet = new BYTE[dwSize];
 
 		switch (nNo - m_nElementCountBase) {
-		case 0:	pSrc = (PBYTE)&m_bLightOn;		break;	/* “”‚è‚ð‚Â‚¯‚é */
-		case 1:	pSrc = (PBYTE)&m_dwTime;		break;	/* Ž‘±ŽžŠÔ */
+		case 0:	pSrc = (PBYTE)&m_bLightOn;		break;	/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+		case 1:	pSrc = (PBYTE)&m_dwTime;		break;	/* æŒç¶šæ™‚é–“ */
 		}
 
 		if (pSrc) {
@@ -175,14 +175,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::ReadElementData							 */
-/* “à—e		:Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::ReadElementData							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventLIGHT::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚Ýž‚ÝŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -194,8 +194,8 @@ DWORD CInfoMapEventLIGHT::ReadElementData(
 		dwSize = CInfoMapEventBase::ReadElementData (pSrc, nNo);
 	} else {
 		switch (nNo - m_nElementCountBase) {
-		case 0:	pDst = (PBYTE)&m_bLightOn;	dwSize = sizeof (m_bLightOn);	break;	/* “”‚è‚ð‚Â‚¯‚é */
-		case 1:	pDst = (PBYTE)&m_dwTime;	dwSize = sizeof (m_dwTime);		break;	/* Ž‘±ŽžŠÔ */
+		case 0:	pDst = (PBYTE)&m_bLightOn;	dwSize = sizeof (m_bLightOn);	break;	/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+		case 1:	pDst = (PBYTE)&m_dwTime;	dwSize = sizeof (m_dwTime);		break;	/* æŒç¶šæ™‚é–“ */
 		}
 
 		if (pDst) {
@@ -208,9 +208,9 @@ DWORD CInfoMapEventLIGHT::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventLIGHT::GetSendDataSize(void)
@@ -226,9 +226,9 @@ DWORD CInfoMapEventLIGHT::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventLIGHT::GetSendData(void)
@@ -246,8 +246,8 @@ PBYTE CInfoMapEventLIGHT::GetSendData(void)
 
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 
-	CopyMemoryRenew (pDataTmp, &m_bLightOn,	sizeof (m_bLightOn), pDataTmp);		/* “”‚è‚ð‚Â‚¯‚é */
-	CopyMemoryRenew (pDataTmp, &m_dwTime,	sizeof (m_dwTime), pDataTmp);		/* Ž‘±ŽžŠÔ */
+	CopyMemoryRenew (pDataTmp, &m_bLightOn,	sizeof (m_bLightOn), pDataTmp);		/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+	CopyMemoryRenew (pDataTmp, &m_dwTime,	sizeof (m_dwTime), pDataTmp);		/* æŒç¶šæ™‚é–“ */
 
 	SAFE_DELETE_ARRAY (pDataBase);
 
@@ -256,9 +256,9 @@ PBYTE CInfoMapEventLIGHT::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventLIGHT::SetSendData(PBYTE pSrc)
@@ -270,8 +270,8 @@ PBYTE CInfoMapEventLIGHT::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 	pDataTmp = CInfoMapEventBase::SetSendData (pSrc);
 
-	CopyMemoryRenew (&m_bLightOn,	pDataTmp, sizeof (m_bLightOn),	pDataTmp);		/* “”‚è‚ð‚Â‚¯‚é */
-	CopyMemoryRenew (&m_dwTime,		pDataTmp, sizeof (m_dwTime),	pDataTmp);		/* Ž‘±ŽžŠÔ */
+	CopyMemoryRenew (&m_bLightOn,	pDataTmp, sizeof (m_bLightOn),	pDataTmp);		/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+	CopyMemoryRenew (&m_dwTime,		pDataTmp, sizeof (m_dwTime),	pDataTmp);		/* æŒç¶šæ™‚é–“ */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -279,10 +279,10 @@ PBYTE CInfoMapEventLIGHT::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapEventLIGHT::Copy										 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/12/07														 */
-/* ”õl		:Ží•Ê‚ªˆá‚¤ê‡‚Í‚¨‚©‚µ‚È‚±‚Æ‚É‚È‚é‚Ì‚Å’ˆÓ						 */
+/* é–¢æ•°å	:CInfoMapEventLIGHT::Copy										 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/12/07														 */
+/* å‚™è€ƒ		:ç¨®åˆ¥ãŒé•ã†å ´åˆã¯ãŠã‹ã—ãªã“ã¨ã«ãªã‚‹ã®ã§æ³¨æ„						 */
 /* ========================================================================= */
 
 void CInfoMapEventLIGHT::Copy(CInfoMapEventBase *pSrc)
@@ -294,8 +294,8 @@ void CInfoMapEventLIGHT::Copy(CInfoMapEventBase *pSrc)
 	}
 	CInfoMapEventBase::Copy (pSrc);
 
-	m_bLightOn	= pSrcTmp->m_bLightOn;	/* “”‚è‚ð‚Â‚¯‚é */
-	m_dwTime	= pSrcTmp->m_dwTime;	/* Ž‘±ŽžŠÔ */
+	m_bLightOn	= pSrcTmp->m_bLightOn;	/* ç¯ã‚Šã‚’ã¤ã‘ã‚‹ */
+	m_dwTime	= pSrcTmp->m_dwTime;	/* æŒç¶šæ™‚é–“ */
 }
 
 /* Copyright(C)URARA-works 2008 */

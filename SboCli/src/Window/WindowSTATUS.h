@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowSTATUS.h												 */
-/* “à—e			:‹­‚³ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2005/06/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowSTATUS.h												 */
+/* å†…å®¹			:å¼·ã•ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/06/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowSTATUS : public CWindowBase
 {
 public:
-			CWindowSTATUS();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowSTATUS();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowSTATUS();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowSTATUS();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	void	SetID		(DWORD dwID);								/* ƒLƒƒƒ‰ID‚ðÝ’è */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	void	SetID		(DWORD dwID);								/* ã‚­ãƒ£ãƒ©IDã‚’è¨­å®š */
 
 
 private:
-	DWORD	m_dwCharID;						/* ƒLƒƒƒ‰ID */
+	DWORD	m_dwCharID;						/* ã‚­ãƒ£ãƒ©ID */
 } CWindowSTATUS, *PCWindowSTATUS;
 
 /* Copyright(C)URARA-works 2005 */

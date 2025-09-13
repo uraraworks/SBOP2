@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	WindowLOGINMENU.cpp											 */
-/* “à—eF		ƒƒOƒCƒ“ƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	WindowLOGINMENU.cpp											 */
+/* å†…å®¹ï¼š		ãƒ­ã‚°ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2006/11/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,9 +17,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::CWindowLOGINMENU								 */
-/* “à—eF	ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::CWindowLOGINMENU								 */
+/* å†…å®¹ï¼š	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 CWindowLOGINMENU::CWindowLOGINMENU()
@@ -40,9 +40,9 @@ CWindowLOGINMENU::CWindowLOGINMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::~CWindowLOGINMENU								 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::~CWindowLOGINMENU								 */
+/* å†…å®¹ï¼š	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 CWindowLOGINMENU::~CWindowLOGINMENU()
@@ -51,9 +51,9 @@ CWindowLOGINMENU::~CWindowLOGINMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGINMENU::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CWindowLOGINMENU::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CWindowLOGINMENU::Create(CMgrData *pMgrData)
@@ -67,9 +67,9 @@ void CWindowLOGINMENU::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowLOGINMENU::Update										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CWindowLOGINMENU::Update										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CWindowLOGINMENU::Update(void)
@@ -100,9 +100,9 @@ SetEnable (2, FALSE);
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::Draw											 */
-/* “à—eF	•`‰æ															 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::Draw											 */
+/* å†…å®¹ï¼š	æç”»															 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 void CWindowLOGINMENU::Draw(PCImg32 pDst)
@@ -125,13 +125,13 @@ void CWindowLOGINMENU::Draw(PCImg32 pDst)
 
 	clBack = RGB (1, 1, 1);
 	clText = (m_abEnable[0] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 0, "ƒLƒƒƒ‰‘I‘ð", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, "ã‚­ãƒ£ãƒ©é¸æŠž", clText);
 	clText = (m_abEnable[1] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "V‹Kì¬", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, "æ–°è¦ä½œæˆ", clText);
 	clText = (m_abEnable[2] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 2, "ƒLƒƒƒ‰íœ", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 2, "ã‚­ãƒ£ãƒ©å‰Šé™¤", clText);
 	clText = (m_abEnable[3] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 3, "–ß‚é", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 3, "æˆ»ã‚‹", clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -149,9 +149,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::TimerProc										 */
-/* “à—eF	ŽžŠÔˆ—														 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::TimerProc										 */
+/* å†…å®¹ï¼š	æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 BOOL CWindowLOGINMENU::TimerProc(void)
@@ -175,9 +175,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::SetEnable										 */
-/* “à—eF	ƒƒjƒ…[€–Ú‚Ì“ü—Íó‘ÔÝ’è										 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::SetEnable										 */
+/* å†…å®¹ï¼š	ãƒ¡ãƒ‹ãƒ¥ãƒ¼é …ç›®ã®å…¥åŠ›çŠ¶æ…‹è¨­å®š										 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 void CWindowLOGINMENU::SetEnable(int nNo, BOOL bEnable)
@@ -187,9 +187,9 @@ void CWindowLOGINMENU::SetEnable(int nNo, BOOL bEnable)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::OnUp											 */
-/* “à—eF	ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::OnUp											 */
+/* å†…å®¹ï¼š	ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 BOOL CWindowLOGINMENU::OnUp(void)
@@ -213,9 +213,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::OnDown										 */
-/* “à—eF	ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::OnDown										 */
+/* å†…å®¹ï¼š	ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 BOOL CWindowLOGINMENU::OnDown(void)
@@ -239,9 +239,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::OnLeft										 */
-/* “à—eF	ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::OnLeft										 */
+/* å†…å®¹ï¼š	ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 BOOL CWindowLOGINMENU::OnLeft(void)
@@ -256,9 +256,9 @@ BOOL CWindowLOGINMENU::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::OnRight										 */
-/* “à—eF	ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::OnRight										 */
+/* å†…å®¹ï¼š	ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 BOOL CWindowLOGINMENU::OnRight(void)
@@ -273,9 +273,9 @@ BOOL CWindowLOGINMENU::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowLOGINMENU::OnX											 */
-/* “à—eF	ƒL[ƒnƒ“ƒhƒ‰(X)													 */
-/* “ú•tF	2006/11/05														 */
+/* é–¢æ•°åï¼š	CWindowLOGINMENU::OnX											 */
+/* å†…å®¹ï¼š	ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)													 */
+/* æ—¥ä»˜ï¼š	2006/11/05														 */
 /* ========================================================================= */
 
 BOOL CWindowLOGINMENU::OnX(BOOL bDown)

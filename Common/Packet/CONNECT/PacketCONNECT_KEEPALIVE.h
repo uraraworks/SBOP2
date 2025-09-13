@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_KEEPALIVE.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:¶‘¶Šm”F’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/21													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_KEEPALIVE.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(æŽ¥ç¶šç³»:ç”Ÿå­˜ç¢ºèªé€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/21													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCONNECT_KEEPALIVE : public CPacketBase
 {
 public:
-			CPacketCONNECT_KEEPALIVE();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCONNECT_KEEPALIVE();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCONNECT_KEEPALIVE();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCONNECT_KEEPALIVE();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwData);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwData);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwData;				/* •ÔM—pƒf[ƒ^ */
+	DWORD	m_dwData;				/* è¿”ä¿¡ç”¨ãƒ‡ãƒ¼ã‚¿ */
 } CPacketCONNECT_KEEPALIVE, *PCPacketCONNECT_KEEPALIVE;
 
 /* Copyright(C)URARA-works 2008 */

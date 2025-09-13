@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowCHAT.cpp												 */
-/* “à—e			:ƒ`ƒƒƒbƒgî•ñƒEƒBƒ“ƒhƒEƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/02/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowCHAT.cpp												 */
+/* å†…å®¹			:ãƒãƒ£ãƒƒãƒˆæƒ…å ±ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/02/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::CWindowCHAT										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CWindowCHAT::CWindowCHAT										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 CWindowCHAT::CWindowCHAT()
@@ -38,9 +38,9 @@ CWindowCHAT::CWindowCHAT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::~CWindowCHAT										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CWindowCHAT::~CWindowCHAT										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 CWindowCHAT::~CWindowCHAT()
@@ -48,7 +48,7 @@ CWindowCHAT::~CWindowCHAT()
 	HIMC hImc;
 
 	if (m_hWndChat) {
-		/* IME‚ğƒIƒt‚É‚·‚é */
+		/* IMEã‚’ã‚ªãƒ•ã«ã™ã‚‹ */
 		hImc = ImmGetContext (m_hWndChat);
 		ImmSetOpenStatus (hImc, FALSE);
 		ImmReleaseContext (m_hWndChat, hImc);
@@ -61,9 +61,9 @@ CWindowCHAT::~CWindowCHAT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CWindowCHAT::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 void CWindowCHAT::Create(CMgrData *pMgrData)
@@ -91,9 +91,9 @@ void CWindowCHAT::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::Draw												 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CWindowCHAT::Draw												 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 void CWindowCHAT::Draw(PCImg32 pDst)
@@ -102,13 +102,13 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	/* ƒ^ƒCƒgƒ‹ */
+	/* ã‚¿ã‚¤ãƒˆãƒ« */
 	m_pDib->BltFrom256 (8, 0, 40, 16, m_pDibSystem, 48, 96);
 
-	/* ˜g */
+	/* æ  */
 	DrawInputFrame1 (8 + 6, 16 + 6, m_sizeWindow.cx - 16 - 6 - 6, 14, 0);
 
-	/* ƒ`ƒƒƒbƒgí•ÊƒAƒCƒRƒ“ */
+	/* ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ã‚¢ã‚¤ã‚³ãƒ³ */
 	m_pDib->BltFrom256 (50, 0, 16, 16, m_pDibSystem, 48 + (m_aArrayType[m_nType] * 16), 112);
 
 	m_dwTimeDrawStart = timeGetTime ();
@@ -119,9 +119,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::SetActive											 */
-/* “à—e		:ƒAƒNƒeƒBƒu‚©İ’è												 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CWindowCHAT::SetActive											 */
+/* å†…å®¹		:ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹è¨­å®š												 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 void CWindowCHAT::SetActive(BOOL bActive)
@@ -141,9 +141,9 @@ void CWindowCHAT::SetActive(BOOL bActive)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::GetType											 */
-/* “à—e		:ƒ`ƒƒƒbƒgí•Ê‚ğæ“¾												 */
-/* “ú•t		:2007/07/29														 */
+/* é–¢æ•°å	:CWindowCHAT::GetType											 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/07/29														 */
 /* ========================================================================= */
 
 int CWindowCHAT::GetType(void)
@@ -157,9 +157,9 @@ int CWindowCHAT::GetType(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::MakeWindow										 */
-/* “à—e		:ƒEƒBƒ“ƒhƒEì¬													 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CWindowCHAT::MakeWindow										 */
+/* å†…å®¹		:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 void CWindowCHAT::MakeWindow(void)
@@ -178,7 +178,7 @@ void CWindowCHAT::MakeWindow(void)
 	SetWindowLong		(m_hWndChat, GWL_USERDATA, (LONG)this);
 	SetWindowLong		(m_hWndChat, GWL_WNDPROC, (LONG)ChatWndProcEntry);
 
-	/* IME‚ğƒIƒ“‚É‚·‚é */
+	/* IMEã‚’ã‚ªãƒ³ã«ã™ã‚‹ */
 	hImc = ImmGetContext (m_hWndChat);
 	ImmSetOpenStatus (hImc, TRUE);
 	ImmReleaseContext (m_hWndChat, hImc);
@@ -188,9 +188,9 @@ void CWindowCHAT::MakeWindow(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::ChatWndProcEntry									 */
-/* “à—e		:ƒ`ƒƒƒbƒg“ü—Í—“ƒvƒƒV[ƒWƒƒ										 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowCHAT::ChatWndProcEntry									 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£										 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CWindowCHAT::ChatWndProcEntry(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -209,9 +209,9 @@ LRESULT CALLBACK CWindowCHAT::ChatWndProcEntry(HWND hWnd, UINT message, WPARAM w
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAT::ChatWndProc										 */
-/* “à—e		:ƒ`ƒƒƒbƒg“ü—Í—“ƒvƒƒV[ƒWƒƒ										 */
-/* “ú•t		:2007/02/03														 */
+/* é–¢æ•°å	:CWindowCHAT::ChatWndProc										 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£										 */
+/* æ—¥ä»˜		:2007/02/03														 */
 /* ========================================================================= */
 
 LRESULT CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

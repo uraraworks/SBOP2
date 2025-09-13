@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndSelectGrp.cpp											 */
-/* “à—e			:‰æ‘œ‘I‘ðƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/10/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndSelectGrp.cpp											 */
+/* å†…å®¹			:ç”»åƒé¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/30													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CWndSelectGrp, CWnd)
@@ -41,9 +41,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::CWndSelectGrp									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::CWndSelectGrp									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 CWndSelectGrp::CWndSelectGrp()
@@ -64,9 +64,9 @@ CWndSelectGrp::CWndSelectGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::~CWndSelectGrp									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::~CWndSelectGrp									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 CWndSelectGrp::~CWndSelectGrp()
@@ -77,9 +77,9 @@ CWndSelectGrp::~CWndSelectGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 BOOL CWndSelectGrp::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify)
@@ -99,7 +99,7 @@ BOOL CWndSelectGrp::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify)
 	bRet = CWnd::CreateEx (
 			WS_EX_TOOLWINDOW,
 			AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW),
-			"‰æ‘œ‚Ì‘I‘ð",
+			"ç”»åƒã®é¸æŠž",
 			WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME | WS_HSCROLL | WS_VSCROLL,
 			rc,
 			pParent,
@@ -114,9 +114,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::Destroy											 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::Destroy											 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::Destroy(void)
@@ -126,9 +126,9 @@ void CWndSelectGrp::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::SetType											 */
-/* “à—e		:‰æ‘œƒ^ƒCƒv‚ÌÝ’è												 */
-/* “ú•t		:2007/11/04														 */
+/* é–¢æ•°å	:CWndSelectGrp::SetType											 */
+/* å†…å®¹		:ç”»åƒã‚¿ã‚¤ãƒ—ã®è¨­å®š												 */
+/* æ—¥ä»˜		:2007/11/04														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::SetType(int nType, int nGrpIDSub)
@@ -140,9 +140,9 @@ void CWndSelectGrp::SetType(int nType, int nGrpIDSub)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnCreate										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnCreate										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 int CWndSelectGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -154,7 +154,7 @@ int CWndSelectGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÝ’è */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®è¨­å®š */
 	ModifyStyle (0, WS_VSCROLL | WS_HSCROLL);
 	nCount = m_pMgrGrpData->GetMapPartsCount ();
 	cx = 32;
@@ -174,9 +174,9 @@ int CWndSelectGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnClose											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CLOSE)									 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnClose											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CLOSE)									 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnClose()
@@ -192,9 +192,9 @@ void CWndSelectGrp::OnClose()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnPaint											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnPaint											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnPaint()
@@ -221,24 +221,24 @@ void CWndSelectGrp::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnSize											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnSize											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÅ‘å’l‚ðXV */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®æœ€å¤§å€¤ã‚’æ›´æ–° */
 	RenewScrollRange (cx, cy);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnHScroll										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnHScroll										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -251,24 +251,24 @@ void CWndSelectGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	bChange = TRUE;
 
 	switch (nSBCode) {
-	case SB_LEFT:			/* ¶’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LEFT:			/* å·¦ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_HORZ, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_RIGHT:			/* ‰E’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_RIGHT:			/* å³ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_HORZ, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINELEFT:		/* ¶‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGELEFT:		/* 1ƒy[ƒW¶‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINELEFT:		/* å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGELEFT:		/* 1ãƒšãƒ¼ã‚¸å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINERIGHT:		/* ‰E‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGERIGHT:		/* 1ƒy[ƒW‰E‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINERIGHT:		/* å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGERIGHT:		/* 1ãƒšãƒ¼ã‚¸å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		bChange = FALSE;
@@ -284,9 +284,9 @@ void CWndSelectGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnVScroll										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_VSCROLL)									 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnVScroll										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_VSCROLL)									 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -299,24 +299,24 @@ void CWndSelectGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	bChange = TRUE;
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1”Ôã‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_TOP:			/* 1ç•ªä¸Šã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_VERT, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1”Ô‰º‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_BOTTOM:			/* 1ç•ªä¸‹ã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_VERT, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1sã‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEUP:			/* 1ƒy[ƒWã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEUP:			/* 1è¡Œä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEUP:			/* 1ãƒšãƒ¼ã‚¸ä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINEDOWN:		/* 1s‰º‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEDOWN:		/* 1ƒy[ƒW‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEDOWN:		/* 1è¡Œä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEDOWN:		/* 1ãƒšãƒ¼ã‚¸ä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		bChange = FALSE;
@@ -332,9 +332,9 @@ void CWndSelectGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnSetCursor										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SETCURSOR)								 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnSetCursor										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SETCURSOR)								 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 BOOL CWndSelectGrp::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
@@ -354,9 +354,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnLButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnLButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnLButtonDown(UINT nFlags, CPoint point)
@@ -382,9 +382,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnRButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnRButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnRButtonDown(UINT nFlags, CPoint point)
@@ -395,9 +395,9 @@ void CWndSelectGrp::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnMouseWheel									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnMouseWheel									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 BOOL CWndSelectGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -416,9 +416,9 @@ BOOL CWndSelectGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::OnGetMinMaxInfo									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MINMAXINFO)								 */
-/* “ú•t		:2007/11/04														 */
+/* é–¢æ•°å	:CWndSelectGrp::OnGetMinMaxInfo									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MINMAXINFO)								 */
+/* æ—¥ä»˜		:2007/11/04														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
@@ -446,9 +446,9 @@ void CWndSelectGrp::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::PostNcDestroy									 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::PostNcDestroy									 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::PostNcDestroy()
@@ -458,9 +458,9 @@ void CWndSelectGrp::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::RenewScrollRange								 */
-/* “à—e		:ƒXƒNƒ[ƒ‹ƒo[‚Ì”ÍˆÍ‚ðXV										 */
-/* “ú•t		:2007/10/30														 */
+/* é–¢æ•°å	:CWndSelectGrp::RenewScrollRange								 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ç¯„å›²ã‚’æ›´æ–°										 */
+/* æ—¥ä»˜		:2007/10/30														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::RenewScrollRange(int cx, int cy)
@@ -474,7 +474,7 @@ void CWndSelectGrp::RenewScrollRange(int cx, int cy)
 	m_pImgBack->Destroy ();
 	m_pImgBack->Create (cx, cy);
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÅ‘å’l‚ðXV */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®æœ€å¤§å€¤ã‚’æ›´æ–° */
 	cxTmp  = m_pImgBase->Width () / m_nGrpSizeX;
 	cxTmp -= (cx / m_nGrpSizeX);
 	cxTmp  = max (cxTmp, 0);
@@ -487,9 +487,9 @@ void CWndSelectGrp::RenewScrollRange(int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndSelectGrp::RenewGrp										 */
-/* “à—e		:•\Ž¦‰æ‘œ‚ÌXV													 */
-/* “ú•t		:2007/11/04														 */
+/* é–¢æ•°å	:CWndSelectGrp::RenewGrp										 */
+/* å†…å®¹		:è¡¨ç¤ºç”»åƒã®æ›´æ–°													 */
+/* æ—¥ä»˜		:2007/11/04														 */
 /* ========================================================================= */
 
 void CWndSelectGrp::RenewGrp(int nType)
@@ -509,8 +509,8 @@ void CWndSelectGrp::RenewGrp(int nType)
 	m_nGrpCountX	= m_pMgrGrpData->GetGrpCountX (nType);
 
 	switch (nType) {
-	case GRPIDMAIN_CHAR:		/* ƒLƒƒƒ‰ */
-	case GRPIDMAIN_2X2_CHAR:	/* ƒLƒƒƒ‰(32x32) */
+	case GRPIDMAIN_CHAR:		/* ã‚­ãƒ£ãƒ© */
+	case GRPIDMAIN_2X2_CHAR:	/* ã‚­ãƒ£ãƒ©(32x32) */
 		dwParam = FAMILYTYPE_HUMAN;
 		break;
 	default:

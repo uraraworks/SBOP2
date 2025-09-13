@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharBATTLE1Svr.h										 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(í“¬1)ƒT[ƒo[ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharBATTLE1Svr.h										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(æˆ¦é—˜1)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,34 +11,34 @@
 #include "InfoCharSvr.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharBATTLE1Svr : public CInfoCharSvr
 {
 public:
-			CInfoCharBATTLE1Svr();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharBATTLE1Svr();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharBATTLE1Svr();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharBATTLE1Svr();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void SetTarget		(CInfoCharBase *pCharTarget);	/* ƒ^[ƒQƒbƒgƒLƒƒƒ‰‚ğİ’è */
-	virtual void SetMoveState	(int nMoveState);				/* ˆÚ“®ó‘Ô‚ğ•ÏX */
-	virtual BOOL TimerProc		(DWORD dwTime);					/* ŠÔˆ— */
-	virtual void ProcAtack		(void);							/* ˆ—(UŒ‚‚µ‚½) */
-	virtual BOOL ProcHit		(CInfoCharSvr *pInfoChar);		/* ˆ—(UŒ‚‚ğó‚¯‚½) */
-	virtual BOOL ProcSWOON		(DWORD dwPara);					/* s“®ˆ—(‹Câ) */
+	virtual void SetTarget		(CInfoCharBase *pCharTarget);	/* ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚­ãƒ£ãƒ©ã‚’è¨­å®š */
+	virtual void SetMoveState	(int nMoveState);				/* ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´ */
+	virtual BOOL TimerProc		(DWORD dwTime);					/* æ™‚é–“å‡¦ç† */
+	virtual void ProcAtack		(void);							/* å‡¦ç†(æ”»æ’ƒã—ãŸæ™‚) */
+	virtual BOOL ProcHit		(CInfoCharSvr *pInfoChar);		/* å‡¦ç†(æ”»æ’ƒã‚’å—ã‘ãŸæ™‚) */
+	virtual BOOL ProcSWOON		(DWORD dwPara);					/* è¡Œå‹•å‡¦ç†(æ°—çµ¶) */
 
 
 protected:
-	virtual BOOL TimerProcSTAND	(DWORD dwTime);				/* ŠÔˆ—(—§‚¿) */
-	virtual BOOL TimerProcMOVE	(DWORD dwTime);				/* ŠÔˆ—(ˆÚ“®’†) */
-	virtual BOOL TimerProcBATTLE(DWORD dwTime);				/* ŠÔˆ—(í“¬’†) */
-	virtual BOOL IsMoveDirection(int nDirection);			/* w’è•ûŒü‚Éi‚ß‚é‚©ƒ`ƒFƒbƒN */
+	virtual BOOL TimerProcSTAND	(DWORD dwTime);				/* æ™‚é–“å‡¦ç†(ç«‹ã¡) */
+	virtual BOOL TimerProcMOVE	(DWORD dwTime);				/* æ™‚é–“å‡¦ç†(ç§»å‹•ä¸­) */
+	virtual BOOL TimerProcBATTLE(DWORD dwTime);				/* æ™‚é–“å‡¦ç†(æˆ¦é—˜ä¸­) */
+	virtual BOOL IsMoveDirection(int nDirection);			/* æŒ‡å®šæ–¹å‘ã«é€²ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
 
 
 public:
-	DWORD			m_dwLastTiemAtack;		/* ÅŒã‚ÉUŒ‚‚µ‚½ŠÔ */
-	DWORD			m_dwLastTimeBattleMove;	/* í“¬ƒ‚[ƒh’†‚ÉˆÚ“®‚µ‚½ŠÔ */
-	CInfoCharSvr	*m_pInfoCharTarget;		/* ƒ^[ƒQƒbƒg’†‚ÌƒLƒƒƒ‰î•ñ */
+	DWORD			m_dwLastTiemAtack;		/* æœ€å¾Œã«æ”»æ’ƒã—ãŸæ™‚é–“ */
+	DWORD			m_dwLastTimeBattleMove;	/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã«ç§»å‹•ã—ãŸæ™‚é–“ */
+	CInfoCharSvr	*m_pInfoCharTarget;		/* ã‚¿ãƒ¼ã‚²ãƒƒãƒˆä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CInfoCharBATTLE1Svr, *PCInfoCharBATTLE1Svr;
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndMapPartsGrp.h											 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒc‰æ‘œˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/15													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndMapPartsGrp.h											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/15													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,36 +13,36 @@ class CMgrGrpData;
 class CImg32;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWndMapPartsGrp : public CWnd
 {
 public:
-			CWndMapPartsGrp();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWndMapPartsGrp();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWndMapPartsGrp();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWndMapPartsGrp();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID, int nMode=0);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID, int nMode=0);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
 
-	void	SetMode	(int nMode);							/* ‰æ‘œƒ‚[ƒh‚Ì•ÏX */
-	void	SetNo	(int nGrpNo);							/* ‰æ‘œ”Ô†‚Ì•ÏX */
-
-
-protected:
-	void	MakeImage		(int nMode);			/* ‰æ‘œ‚ğì¬ */
+	void	SetMode	(int nMode);							/* ç”»åƒãƒ¢ãƒ¼ãƒ‰ã®å¤‰æ›´ */
+	void	SetNo	(int nGrpNo);							/* ç”»åƒç•ªå·ã®å¤‰æ›´ */
 
 
 protected:
-	int			m_nPos,							/* cƒXƒNƒ[ƒ‹ˆÊ’u */
-				m_nMode,						/* ‰æ‘œƒ‚[ƒh */
-				m_nGrpNo;						/* ‰æ‘œ”Ô† */
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgParts;					/* ƒoƒbƒNƒoƒbƒtƒ@ */
-	CPoint		m_ptCursor;						/* ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒp[ƒcˆÊ’u */
+	void	MakeImage		(int nMode);			/* ç”»åƒã‚’ä½œæˆ */
 
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+
+protected:
+	int			m_nPos,							/* ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½® */
+				m_nMode,						/* ç”»åƒãƒ¢ãƒ¼ãƒ‰ */
+				m_nGrpNo;						/* ç”»åƒç•ªå· */
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgParts;					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+	CPoint		m_ptCursor;						/* ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚ã‚‹ãƒ‘ãƒ¼ãƒ„ä½ç½® */
+
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 
 
 

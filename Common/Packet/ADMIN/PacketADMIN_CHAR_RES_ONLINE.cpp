@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_RES_ONLINE.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒLƒƒƒ‰î•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_RES_ONLINE.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚­ãƒ£ãƒ©æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/01													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketADMIN_CHAR_RES_ONLINE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ONLINE::CPacketADMIN_CHAR_RES_ONLINE		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ONLINE::CPacketADMIN_CHAR_RES_ONLINE		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RES_ONLINE::CPacketADMIN_CHAR_RES_ONLINE()
@@ -23,9 +23,9 @@ CPacketADMIN_CHAR_RES_ONLINE::CPacketADMIN_CHAR_RES_ONLINE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ONLINE::~CPacketADMIN_CHAR_RES_ONLINE	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ONLINE::~CPacketADMIN_CHAR_RES_ONLINE	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RES_ONLINE::~CPacketADMIN_CHAR_RES_ONLINE()
@@ -35,13 +35,13 @@ CPacketADMIN_CHAR_RES_ONLINE::~CPacketADMIN_CHAR_RES_ONLINE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ONLINE::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/12/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ONLINE::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/12/01														 */
 /* ========================================================================= */
 
 void CPacketADMIN_CHAR_RES_ONLINE::Make(
-	PCLibInfoCharBase pInfo)		/* [in] ƒLƒƒƒ‰î•ñ */
+	PCLibInfoCharBase pInfo)		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -61,7 +61,7 @@ void CPacketADMIN_CHAR_RES_ONLINE::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ONLINE;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒLƒƒƒ‰î•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -70,9 +70,9 @@ void CPacketADMIN_CHAR_RES_ONLINE::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ONLINE::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/12/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ONLINE::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/12/01														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_RES_ONLINE::Set(PBYTE pPacket)

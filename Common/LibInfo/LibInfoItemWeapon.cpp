@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoItemWeapon.cpp										 */
-/* “à—e			:ƒAƒCƒeƒ€•Šíî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoItemWeapon.cpp										 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/10													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::CLibInfoItemWeapon							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::CLibInfoItemWeapon							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 CLibInfoItemWeapon::CLibInfoItemWeapon()
@@ -24,9 +24,9 @@ CLibInfoItemWeapon::CLibInfoItemWeapon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::~CLibInfoItemWeapon						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::~CLibInfoItemWeapon						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 CLibInfoItemWeapon::~CLibInfoItemWeapon()
@@ -36,9 +36,9 @@ CLibInfoItemWeapon::~CLibInfoItemWeapon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 void CLibInfoItemWeapon::Create(void)
@@ -48,9 +48,9 @@ void CLibInfoItemWeapon::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::Destroy									 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::Destroy									 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 void CLibInfoItemWeapon::Destroy(void)
@@ -61,9 +61,9 @@ void CLibInfoItemWeapon::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItemWeapon::GetNew(void)
@@ -77,9 +77,9 @@ PCInfoBase CLibInfoItemWeapon::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetCount									 */
-/* “à—e		:ƒf[ƒ^”‚ğæ“¾													 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetCount									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 int CLibInfoItemWeapon::GetCount(void)
@@ -99,9 +99,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::Add										 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::Add										 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 void CLibInfoItemWeapon::Add(PCInfoBase pInfo)
@@ -118,13 +118,13 @@ void CLibInfoItemWeapon::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 void CLibInfoItemWeapon::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoItemWeapon pInfo;
 
@@ -135,13 +135,13 @@ void CLibInfoItemWeapon::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 void CLibInfoItemWeapon::Delete(
-	DWORD dwWeaponInfoID)		/* [in] •Šíî•ñID */
+	DWORD dwWeaponInfoID)		/* [in] æ­¦å™¨æƒ…å ±ID */
 {
 	int i, nCount, nNo;
 	PCInfoItemWeapon pInfoTmp;
@@ -165,9 +165,9 @@ void CLibInfoItemWeapon::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::DeleteAll									 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::DeleteAll									 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 void CLibInfoItemWeapon::DeleteAll(void)
@@ -186,9 +186,9 @@ void CLibInfoItemWeapon::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetPtr										 */
-/* “à—e		:ƒAƒCƒeƒ€î•ñ‚ğæ“¾												 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetPtr										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItemWeapon::GetPtr(int nNo)
@@ -198,13 +198,13 @@ PCInfoBase CLibInfoItemWeapon::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetPtr										 */
-/* “à—e		:ƒAƒCƒeƒ€î•ñ‚ğæ“¾												 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetPtr										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItemWeapon::GetPtr(
-	DWORD dwWeaponInfoID)		/* [in] •Šíî•ñID */
+	DWORD dwWeaponInfoID)		/* [in] æ­¦å™¨æƒ…å ±ID */
 {
 	int i, nCount;
 	PCInfoItemWeapon pRet, pInfoTmp;
@@ -226,9 +226,9 @@ PCInfoBase CLibInfoItemWeapon::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItemWeapon::GetSendDataSize(void)
@@ -239,7 +239,7 @@ DWORD CLibInfoItemWeapon::GetSendDataSize(void)
 
 	dwRet = dwSize = 0;
 
-	/* ƒf[ƒ^”•ª‚ÌƒTƒCƒY */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°åˆ†ã®ã‚µã‚¤ã‚º */
 	dwSize += sizeof (DWORD);
 
 	nCount = GetCount ();
@@ -255,9 +255,9 @@ DWORD CLibInfoItemWeapon::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoItemWeapon::GetSendData(void)
@@ -273,12 +273,12 @@ PBYTE CLibInfoItemWeapon::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	dwOffset	= 0;
 
-	/* ƒf[ƒ^”‚ğ‘‚«‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’æ›¸ãè¾¼ã¿ */
 	dwCount = (DWORD)GetCount ();
 	CopyMemory (pData, &dwCount, sizeof (dwCount));
 	dwOffset += sizeof (dwCount);
 
-	/* ƒLƒƒƒ‰î•ñ‚ğ‘‚«‚İ */
+	/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’æ›¸ãè¾¼ã¿ */
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pItem = (PCInfoItemWeapon)GetPtr (i);
@@ -297,10 +297,10 @@ PBYTE CLibInfoItemWeapon::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2008/08/10														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/08/10														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CLibInfoItemWeapon::SetSendData(PBYTE pSrc)
@@ -315,7 +315,7 @@ PBYTE CLibInfoItemWeapon::SetSendData(PBYTE pSrc)
 
 	DeleteAll ();
 
-	/* ƒf[ƒ^”‚ğ“Ç‚İ‚İ */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’èª­ã¿è¾¼ã¿ */
 	CopyMemoryRenew (&dwCount, pDataTmp, sizeof (dwCount), pDataTmp);
 	nCount = (int)dwCount;
 
@@ -332,10 +332,10 @@ PBYTE CLibInfoItemWeapon::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetNewSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çV‹Kƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2008/08/11														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetNewSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/08/11														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CLibInfoItemWeapon::GetNewSendData(PBYTE pSrc, PCInfoItemWeapon &pDst)
@@ -345,7 +345,7 @@ PBYTE CLibInfoItemWeapon::GetNewSendData(PBYTE pSrc, PCInfoItemWeapon &pDst)
 
 	SAFE_DELETE (pDst);
 
-	/* ‚Ü‚¸‚ÍŠî’êƒNƒ‰ƒX‚Öæ‚è‚İ */
+	/* ã¾ãšã¯åŸºåº•ã‚¯ãƒ©ã‚¹ã¸å–ã‚Šè¾¼ã¿ */
 	InfoTmp.SetSendData (pSrc);
 	pDst = (PCInfoItemWeapon)GetNew ();
 	pRet = pDst->SetSendData (pSrc);
@@ -355,9 +355,9 @@ PBYTE CLibInfoItemWeapon::GetNewSendData(PBYTE pSrc, PCInfoItemWeapon &pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItemWeapon::GetNewID									 */
-/* “à—e		:V‚µ‚¢ƒAƒCƒeƒ€í•ÊID‚ğæ“¾										 */
-/* “ú•t		:2008/08/10														 */
+/* é–¢æ•°å	:CLibInfoItemWeapon::GetNewID									 */
+/* å†…å®¹		:æ–°ã—ã„ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥IDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/08/10														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItemWeapon::GetNewID(void)

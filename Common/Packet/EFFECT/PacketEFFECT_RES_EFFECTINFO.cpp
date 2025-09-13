@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketEFFECT_RES_EFFECTINFO.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒGƒtƒFƒNƒgŒn:ƒGƒtƒFƒNƒgî•ñ‰“š) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketEFFECT_RES_EFFECTINFO.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±å¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketEFFECT_RES_EFFECTINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketEFFECT_RES_EFFECTINFO::CPacketEFFECT_RES_EFFECTINFO		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketEFFECT_RES_EFFECTINFO::CPacketEFFECT_RES_EFFECTINFO		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketEFFECT_RES_EFFECTINFO::CPacketEFFECT_RES_EFFECTINFO()
@@ -24,9 +24,9 @@ CPacketEFFECT_RES_EFFECTINFO::CPacketEFFECT_RES_EFFECTINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketEFFECT_RES_EFFECTINFO::~CPacketEFFECT_RES_EFFECTINFO	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketEFFECT_RES_EFFECTINFO::~CPacketEFFECT_RES_EFFECTINFO	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketEFFECT_RES_EFFECTINFO::~CPacketEFFECT_RES_EFFECTINFO()
@@ -36,13 +36,13 @@ CPacketEFFECT_RES_EFFECTINFO::~CPacketEFFECT_RES_EFFECTINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketEFFECT_RES_EFFECTINFO::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketEFFECT_RES_EFFECTINFO::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CPacketEFFECT_RES_EFFECTINFO::Make(
-	CInfoEffect *pInfo)		/* [in] ƒGƒtƒFƒNƒgî•ñ */
+	CInfoEffect *pInfo)		/* [in] ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketEFFECT_RES_EFFECTINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_EFFECT_RES_EFFECTINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒGƒtƒFƒNƒgî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketEFFECT_RES_EFFECTINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketEFFECT_RES_EFFECTINFO::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketEFFECT_RES_EFFECTINFO::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 PBYTE CPacketEFFECT_RES_EFFECTINFO::Set(PBYTE pPacket)

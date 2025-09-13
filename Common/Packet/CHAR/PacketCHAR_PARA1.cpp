@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_PARA1.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:”Ä—p[ƒpƒ‰ƒ[ƒ^1ŒÂ]) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/01/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_PARA1.cpp										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:æ±ç”¨[ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1å€‹]) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/01													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_PARA1.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_PARA1::CPacketCHAR_PARA1							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CPacketCHAR_PARA1::CPacketCHAR_PARA1							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 CPacketCHAR_PARA1::CPacketCHAR_PARA1()
@@ -24,9 +24,9 @@ CPacketCHAR_PARA1::CPacketCHAR_PARA1()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_PARA1::~CPacketCHAR_PARA1							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CPacketCHAR_PARA1::~CPacketCHAR_PARA1							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 CPacketCHAR_PARA1::~CPacketCHAR_PARA1()
@@ -35,15 +35,15 @@ CPacketCHAR_PARA1::~CPacketCHAR_PARA1()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_PARA1::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CPacketCHAR_PARA1::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 void CPacketCHAR_PARA1::Make(
-	BYTE byCmdSub,		/* [in] ƒRƒ}ƒ“ƒhIDƒTƒu */
-	DWORD dwCharID,		/* [in] ƒLƒƒƒ‰ID */
-	DWORD dwPara)		/* [in] ƒpƒ‰ƒ[ƒ^ */
+	BYTE byCmdSub,		/* [in] ã‚³ãƒãƒ³ãƒ‰IDã‚µãƒ– */
+	DWORD dwCharID,		/* [in] ã‚­ãƒ£ãƒ©ID */
+	DWORD dwPara)		/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -61,17 +61,17 @@ void CPacketCHAR_PARA1::Make(
 	pPacketBase->byCmdSub	= byCmdSub;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &dwPara,		sizeof (dwPara),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &dwPara,		sizeof (dwPara),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_PARA1::Set											 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CPacketCHAR_PARA1::Set											 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_PARA1::Set(PBYTE pPacket)
@@ -81,8 +81,8 @@ PBYTE CPacketCHAR_PARA1::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwPara,		pDataTmp, sizeof (m_dwPara),	pDataTmp);	/* ƒpƒ‰ƒ[ƒ^ */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwPara,		pDataTmp, sizeof (m_dwPara),	pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 
 	pRet = pDataTmp;
 	return pRet;

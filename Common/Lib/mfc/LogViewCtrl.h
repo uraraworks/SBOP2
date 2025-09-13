@@ -5,34 +5,34 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-// •\¦İ’è
+// è¡¨ç¤ºè¨­å®š
 struct LOGVIEWCTRLSETTING {
-	TCHAR		szFontText[LF_FACESIZE];	// ƒtƒHƒ“ƒg–¼(–{•¶)
-	TCHAR		szFontHeader[LF_FACESIZE];	// ƒtƒHƒ“ƒg–¼(ƒwƒbƒ_)
-	int			nFontPoint;					// ƒtƒHƒ“ƒgƒTƒCƒY(ƒ|ƒCƒ“ƒg)
-	COLORREF	crText;						// ƒeƒLƒXƒg•¶šF
-	COLORREF	crBack;						// ƒeƒLƒXƒg”wŒiF
-	COLORREF	crSelectText;				// ‘I‘ğ•¶šF
-	COLORREF	crSelectBack;				// ‘I‘ğ”wŒiF
-	COLORREF	crLinkText;					// ƒŠƒ“ƒN•¶šF
-	COLORREF	crLinkBack;					// ƒŠƒ“ƒN”wŒiF
-	BOOL		bCancelSelectAfterCopy;		// ƒRƒs[ˆ—ŒãA‘I‘ğ‰ğœ‚·‚é‚©
-	int			nWheelDelta;				// ƒ}ƒEƒXƒzƒC[ƒ‹‚Å‚ÌˆÚ“®—Ê
-	int			nLinkNotifyType;			// ƒŠƒ“ƒN’Ê’mí•Ê
+	TCHAR		szFontText[LF_FACESIZE];	// ãƒ•ã‚©ãƒ³ãƒˆå(æœ¬æ–‡)
+	TCHAR		szFontHeader[LF_FACESIZE];	// ãƒ•ã‚©ãƒ³ãƒˆå(ãƒ˜ãƒƒãƒ€)
+	int			nFontPoint;					// ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º(ãƒã‚¤ãƒ³ãƒˆ)
+	COLORREF	crText;						// ãƒ†ã‚­ã‚¹ãƒˆæ–‡å­—è‰²
+	COLORREF	crBack;						// ãƒ†ã‚­ã‚¹ãƒˆèƒŒæ™¯è‰²
+	COLORREF	crSelectText;				// é¸æŠæ–‡å­—è‰²
+	COLORREF	crSelectBack;				// é¸æŠèƒŒæ™¯è‰²
+	COLORREF	crLinkText;					// ãƒªãƒ³ã‚¯æ–‡å­—è‰²
+	COLORREF	crLinkBack;					// ãƒªãƒ³ã‚¯èƒŒæ™¯è‰²
+	BOOL		bCancelSelectAfterCopy;		// ã‚³ãƒ”ãƒ¼å‡¦ç†å¾Œã€é¸æŠè§£é™¤ã™ã‚‹ã‹
+	int			nWheelDelta;				// ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ã§ã®ç§»å‹•é‡
+	int			nLinkNotifyType;			// ãƒªãƒ³ã‚¯é€šçŸ¥ç¨®åˆ¥
 };
 
-// sî•ñ
+// è¡Œæƒ…å ±
 struct LINEINFO {
-	SYSTEMTIME	stDateTime;					// “ú
-	CString		strText;					// sƒeƒLƒXƒg
-	COLORREF	crFore;						// ‘OŒiF
-	COLORREF	crBack;						// ”wŒiF
+	SYSTEMTIME	stDateTime;					// æ—¥æ™‚
+	CString		strText;					// è¡Œãƒ†ã‚­ã‚¹ãƒˆ
+	COLORREF	crFore;						// å‰æ™¯è‰²
+	COLORREF	crBack;						// èƒŒæ™¯è‰²
 	struct TOKEN {
-		int		nStart;						// ’PŒêŠJnˆÊ’u
-		int		nLen;						// ’PŒê‚Ì’·‚³(ƒoƒCƒg)
-		int		nType;						// ’PŒê‚Ìí—Ş
+		int		nStart;						// å˜èªé–‹å§‹ä½ç½®
+		int		nLen;						// å˜èªã®é•·ã•(ãƒã‚¤ãƒˆ)
+		int		nType;						// å˜èªã®ç¨®é¡
 	};
-	CArray<TOKEN, TOKEN&>	aTokens;		// ’PŒêî•ñ
+	CArray<TOKEN, TOKEN&>	aTokens;		// å˜èªæƒ…å ±
 
 	void operator=(const LINEINFO& li) {
 		stDateTime = li.stDateTime;
@@ -43,27 +43,27 @@ struct LINEINFO {
 	}
 };
 
-// ’Ê’mî•ñ
+// é€šçŸ¥æƒ…å ±
 struct NMLVCLINK {
 	NMHDR	hdr;
 	LPCTSTR	pszLink;
 };
 
-// ƒeƒLƒXƒg•ÛŒÀŠE
-#define	LVC_TEXT_LIMIT_INFINITE			0	// –³§ŒÀ(ƒƒ‚ƒŠˆË‘¶)
-#define	LVC_TEXT_LIMIT_LINE				1	// s”§ŒÀ
-#define	LVC_TEXT_LIMIT_SIZE				2	// ƒTƒCƒY§ŒÀ
+// ãƒ†ã‚­ã‚¹ãƒˆä¿æŒé™ç•Œ
+#define	LVC_TEXT_LIMIT_INFINITE			0	// ç„¡åˆ¶é™(ãƒ¡ãƒ¢ãƒªä¾å­˜)
+#define	LVC_TEXT_LIMIT_LINE				1	// è¡Œæ•°åˆ¶é™
+#define	LVC_TEXT_LIMIT_SIZE				2	// ã‚µã‚¤ã‚ºåˆ¶é™
 
-// ƒŠƒ“ƒN’Ê’mí•Ê
-#define	LVC_LINK_NOTIFY_NONE			0	// ƒŠƒ“ƒN’Ê’m‚È‚µ
-#define	LVC_LINK_NOTIFY_DOUBLE_CLICK	1	// ƒ_ƒuƒ‹ƒNƒŠƒbƒN‚Å’Ê’m
-#define	LVC_LINK_NOTIFY_TRIPLE_CLICK	2	// ƒgƒŠƒvƒ‹ƒNƒŠƒbƒN‚Å’Ê’m
+// ãƒªãƒ³ã‚¯é€šçŸ¥ç¨®åˆ¥
+#define	LVC_LINK_NOTIFY_NONE			0	// ãƒªãƒ³ã‚¯é€šçŸ¥ãªã—
+#define	LVC_LINK_NOTIFY_DOUBLE_CLICK	1	// ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã§é€šçŸ¥
+#define	LVC_LINK_NOTIFY_TRIPLE_CLICK	2	// ãƒˆãƒªãƒ—ãƒ«ã‚¯ãƒªãƒƒã‚¯ã§é€šçŸ¥
 
-// ’Ê’mƒR[ƒh
-#define	LVCN_LINK						100	// ƒŠƒ“ƒN’Ê’mƒR[ƒh
+// é€šçŸ¥ã‚³ãƒ¼ãƒ‰
+#define	LVCN_LINK						100	// ãƒªãƒ³ã‚¯é€šçŸ¥ã‚³ãƒ¼ãƒ‰
 
 /////////////////////////////////////////////////////////////////////////////
-// CLogViewCtrl ƒEƒBƒ“ƒhƒE
+// CLogViewCtrl ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
 
 class CLogViewCtrl : public CWnd
 {
@@ -73,15 +73,15 @@ public:
 
 	DECLARE_DYNCREATE(CLogViewCtrl)
 
-// ƒI[ƒo[ƒ‰ƒCƒh
-	// ClassWizard ‚Í‰¼‘zŠÖ”‚ÌƒI[ƒo[ƒ‰ƒCƒh‚ğ¶¬‚µ‚Ü‚·B
+// ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰
+	// ClassWizard ã¯ä»®æƒ³é–¢æ•°ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã‚’ç”Ÿæˆã—ã¾ã™ã€‚
 	//{{AFX_VIRTUAL(CLogViewCtrl)
 	protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual void PreSubclassWindow();
 	//}}AFX_VIRTUAL
 
-// ƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+// ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 public:
 
 	BOOL	AddLine(LPCTSTR pszLine, COLORREF crFore = 0xffffffff, COLORREF crBack = 0xffffffff, BOOL bRedraw = TRUE);
@@ -92,25 +92,25 @@ public:
 	void	SetTextLimit(int nLimit, DWORD dwSize);
 
 protected:
-	CArray<LINEINFO, LINEINFO&>	m_aTexts;	// sî•ñ
-	int		m_nLimitMode;					// ƒeƒLƒXƒgŒÀŠE
-	DWORD	m_dwLimitSize;					// ƒeƒLƒXƒgŒÀŠE’l
-	DWORD	m_dwTextSize;					// Œ»İ‚ÌƒeƒLƒXƒg‚ÌƒTƒCƒY
-	CSize	m_sizeChar;						// ”¼Šp1•¶š‚Ì•‚Æ‚‚³
-	CSize	m_sizeView;						// •\¦‚Å‚«‚éƒTƒCƒY
-	CSize	m_sizeHeader;					// ƒwƒbƒ_‚Ì•\¦ƒTƒCƒY
-	CFont	m_fontText;						// ƒtƒHƒ“ƒg
-	CFont	m_fontHeader;					// ƒtƒHƒ“ƒg
-	int		m_nSelect;						// ‘I‘ğó‘Ô(0:‘I‘ğ‚È‚µ/1:•¶š‘I‘ğ/2:s‘I‘ğ)
-	int		m_nSelectCharStart;				// •¶š‘I‘ğŠJnˆÊ’u
-	int		m_nSelectCharEnd;				// •¶š‘I‘ğI—¹ˆÊ’u
-	int		m_nSelectLineStart;				// s‘I‘ğŠJnˆÊ’u
-	int		m_nSelectLineEnd;				// s‘I‘ğI—¹ˆÊ’u
-	CMenu	m_menuPopup;					// ƒRƒ“ƒeƒLƒXƒgƒƒjƒ…[
-	DWORD	m_dwTripleClick;				// ƒgƒŠƒvƒ‹ƒNƒŠƒbƒN”»’è—p
-	CPoint	m_ptTripleClick;				// ƒgƒŠƒvƒ‹ƒNƒŠƒbƒN”»’è—p
+	CArray<LINEINFO, LINEINFO&>	m_aTexts;	// è¡Œæƒ…å ±
+	int		m_nLimitMode;					// ãƒ†ã‚­ã‚¹ãƒˆé™ç•Œ
+	DWORD	m_dwLimitSize;					// ãƒ†ã‚­ã‚¹ãƒˆé™ç•Œå€¤
+	DWORD	m_dwTextSize;					// ç¾åœ¨ã®ãƒ†ã‚­ã‚¹ãƒˆã®ã‚µã‚¤ã‚º
+	CSize	m_sizeChar;						// åŠè§’1æ–‡å­—ã®å¹…ã¨é«˜ã•
+	CSize	m_sizeView;						// è¡¨ç¤ºã§ãã‚‹ã‚µã‚¤ã‚º
+	CSize	m_sizeHeader;					// ãƒ˜ãƒƒãƒ€ã®è¡¨ç¤ºã‚µã‚¤ã‚º
+	CFont	m_fontText;						// ãƒ•ã‚©ãƒ³ãƒˆ
+	CFont	m_fontHeader;					// ãƒ•ã‚©ãƒ³ãƒˆ
+	int		m_nSelect;						// é¸æŠçŠ¶æ…‹(0:é¸æŠãªã—/1:æ–‡å­—é¸æŠ/2:è¡Œé¸æŠ)
+	int		m_nSelectCharStart;				// æ–‡å­—é¸æŠé–‹å§‹ä½ç½®
+	int		m_nSelectCharEnd;				// æ–‡å­—é¸æŠçµ‚äº†ä½ç½®
+	int		m_nSelectLineStart;				// è¡Œé¸æŠé–‹å§‹ä½ç½®
+	int		m_nSelectLineEnd;				// è¡Œé¸æŠçµ‚äº†ä½ç½®
+	CMenu	m_menuPopup;					// ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼
+	DWORD	m_dwTripleClick;				// ãƒˆãƒªãƒ—ãƒ«ã‚¯ãƒªãƒƒã‚¯åˆ¤å®šç”¨
+	CPoint	m_ptTripleClick;				// ãƒˆãƒªãƒ—ãƒ«ã‚¯ãƒªãƒƒã‚¯åˆ¤å®šç”¨
 
-	LOGVIEWCTRLSETTING	m_stSetting;		// İ’è
+	LOGVIEWCTRLSETTING	m_stSetting;		// è¨­å®š
 
 	void	RecalcParam(const SIZE* psizeClient = NULL);
 	int		GetTextHeight(CDC* pDC, int nIndex);
@@ -119,7 +119,7 @@ protected:
 	void	UpdateSelectParam(int nLine, int nChar);
 	int		FindToken(int nLine, int nChar);
 
-	// ¶¬‚³‚ê‚½ƒƒbƒZ[ƒW ƒ}ƒbƒvŠÖ”
+	// ç”Ÿæˆã•ã‚ŒãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ ãƒãƒƒãƒ—é–¢æ•°
 protected:
 	//{{AFX_MSG(CLogViewCtrl)
 	afx_msg HRESULT OnNcHitTest(CPoint point);
@@ -145,6 +145,6 @@ protected:
 /////////////////////////////////////////////////////////////////////////////
 
 //{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ ‚Í‘Os‚Ì’¼‘O‚É’Ç‰Á‚ÌéŒ¾‚ğ‘}“ü‚µ‚Ü‚·B
+// Microsoft Visual C++ ã¯å‰è¡Œã®ç›´å‰ã«è¿½åŠ ã®å®£è¨€ã‚’æŒ¿å…¥ã—ã¾ã™ã€‚
 
 #endif

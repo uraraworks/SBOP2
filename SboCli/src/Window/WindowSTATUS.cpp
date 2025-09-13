@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:WindowSTATUS.cpp											 */
-/* ì‡óe			:ã≠Ç≥ÉEÉBÉìÉhÉEÉNÉâÉX é¿ëïÉtÉ@ÉCÉã							 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2005/06/26													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:WindowSTATUS.cpp											 */
+/* ÂÜÖÂÆπ			:Âº∑„Åï„Ç¶„Ç£„É≥„Éâ„Ç¶„ÇØ„É©„Çπ ÂÆüË£Ö„Éï„Ç°„Ç§„É´							 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2005/06/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -18,9 +18,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTATUS::CWindowSTATUS									 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2005/06/26														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTATUS::CWindowSTATUS									 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2005/06/26														 */
 /* ========================================================================= */
 
 CWindowSTATUS::CWindowSTATUS()
@@ -36,9 +36,9 @@ CWindowSTATUS::CWindowSTATUS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTATUS::~CWindowSTATUS									 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2005/06/26														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTATUS::~CWindowSTATUS									 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2005/06/26														 */
 /* ========================================================================= */
 
 CWindowSTATUS::~CWindowSTATUS()
@@ -47,9 +47,9 @@ CWindowSTATUS::~CWindowSTATUS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTATUS::Create											 */
-/* ì‡óe		:çÏê¨															 */
-/* ì˙ït		:2007/03/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTATUS::Create											 */
+/* ÂÜÖÂÆπ		:‰ΩúÊàê															 */
+/* Êó•‰ªò		:2007/03/21														 */
 /* ========================================================================= */
 
 void CWindowSTATUS::Create(CMgrData *pMgrData)
@@ -62,9 +62,9 @@ void CWindowSTATUS::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTATUS::Draw											 */
-/* ì‡óe		:ï`âÊ															 */
-/* ì˙ït		:2005/06/26														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTATUS::Draw											 */
+/* ÂÜÖÂÆπ		:ÊèèÁîª															 */
+/* Êó•‰ªò		:2005/06/26														 */
 /* ========================================================================= */
 
 void CWindowSTATUS::Draw(PCImg32 pDst)
@@ -100,60 +100,60 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 	}
 #endif
 
-//	TextOut2 (hDC, 32, 0, "ã≠Ç≥", RGB (0, 0, 0));
+//	TextOut2 (hDC, 32, 0, "Âº∑„Åï", RGB (0, 0, 0));
 	SetBkMode (hDC, TRANSPARENT);
-	TextOut2 (hDC, 16 + 8 * 0, 16 * 1, "ÉåÉxÉã", RGB (0, 0, 0));
+	TextOut2 (hDC, 16 + 8 * 0, 16 * 1, "„É¨„Éô„É´", RGB (0, 0, 0));
 #if 0
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 1, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byLevel);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 1, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 2, "óÕ", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 2, "Âäõ", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 2, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byPW);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 2, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 3, "ëfëÅÇ≥", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 3, "Á¥†Êó©„Åï", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 3, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byDEX);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 3, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 4, "ëÃóÕ", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 4, "‰ΩìÂäõ", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 4, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byST);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 4, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 5, "å´Ç≥", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 5, "Ë≥¢„Åï", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 5, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byIT);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 5, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 6, "â^ÇÃÇÊÇ≥", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 6, "ÈÅã„ÅÆ„Çà„Åï", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 6, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byLK);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 6, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 7, "ç≈ëÂHP", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 7, "ÊúÄÂ§ßHP", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 7, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_dwMaxHP);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 7, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 8, "ç≈ëÂMana", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 8, "ÊúÄÂ§ßMana", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 8, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_dwMaxMana);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 8, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 9, "çUåÇóÕ", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 9, "ÊîªÊíÉÂäõ", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 9, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byAT);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 9, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 10, "ñhå‰óÕ", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 10, "Èò≤Âæ°Âäõ", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 10, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byDF);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 10, szTmp, RGB (150, 255, 200));
 
-	TextOut2 (hDC, 32 + 8 * 0, 16 * 11, "ñÇñ@ñhå‰", RGB (255, 255, 255));
+	TextOut2 (hDC, 32 + 8 * 0, 16 * 11, "È≠îÊ≥ïÈò≤Âæ°", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 11, ":", RGB (255, 255, 255));
 	wsprintf (szTmp, "%d", pChar->m_byMagicDF);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 11, szTmp, RGB (150, 255, 200));
@@ -173,9 +173,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTATUS::SetID											 */
-/* ì‡óe		:ÉLÉÉÉâIDÇê›íË													 */
-/* ì˙ït		:2005/07/09														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTATUS::SetID											 */
+/* ÂÜÖÂÆπ		:„Ç≠„É£„É©ID„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2005/07/09														 */
 /* ========================================================================= */
 
 void CWindowSTATUS::SetID(DWORD dwID)

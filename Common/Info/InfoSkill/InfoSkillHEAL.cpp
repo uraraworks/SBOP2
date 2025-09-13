@@ -1,34 +1,34 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSkillHEAL.cpp											 */
-/* “à—e			:ƒXƒLƒ‹î•ñ(‰ñ•œ)ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoSkillHEAL.cpp											 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«æƒ…å ±(å›å¾©)ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/22													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoSkillHEAL.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwArea",			/* ”ÍˆÍ */
-	"m_dwHealType",		/* ‰ñ•œí•Ê */
-	"m_dwHitEffectID",	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	"m_dwValue1",		/* Œø‰Ê1 */
-	"m_dwValue2",		/* Œø‰Ê2 */
-	"m_dwDistance",		/* Ë’ö‹——£ */
+	"m_dwArea",			/* ç¯„å›² */
+	"m_dwHealType",		/* å›å¾©ç¨®åˆ¥ */
+	"m_dwHitEffectID",	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	"m_dwValue1",		/* åŠ¹æœ1 */
+	"m_dwValue2",		/* åŠ¹æœ2 */
+	"m_dwDistance",		/* å°„ç¨‹è·é›¢ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::CInfoSkillHEAL									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::CInfoSkillHEAL									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 CInfoSkillHEAL::CInfoSkillHEAL()
@@ -46,9 +46,9 @@ CInfoSkillHEAL::CInfoSkillHEAL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::~CInfoSkillHEAL								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::~CInfoSkillHEAL								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 CInfoSkillHEAL::~CInfoSkillHEAL()
@@ -57,9 +57,9 @@ CInfoSkillHEAL::~CInfoSkillHEAL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetElementNoTmp								 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetElementNoTmp								 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 int CInfoSkillHEAL::GetElementNoTmp(LPCSTR pszName)
@@ -79,9 +79,9 @@ int CInfoSkillHEAL::GetElementNoTmp(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetDataSizeTmp									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetDataSizeTmp									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillHEAL::GetDataSizeTmp(void)
@@ -89,21 +89,21 @@ DWORD CInfoSkillHEAL::GetDataSizeTmp(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_dwArea);				/* ”ÍˆÍ */
-	dwRet += sizeof (m_dwHealType);			/* ‰ñ•œí•Ê */
-	dwRet += sizeof (m_dwHitEffectID);		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	dwRet += sizeof (m_dwValue1);			/* Œø‰Ê1 */
-	dwRet += sizeof (m_dwValue2);			/* Œø‰Ê2 */
-	dwRet += sizeof (m_dwDistance);			/* Ë’ö‹——£ */
+	dwRet += sizeof (m_dwArea);				/* ç¯„å›² */
+	dwRet += sizeof (m_dwHealType);			/* å›å¾©ç¨®åˆ¥ */
+	dwRet += sizeof (m_dwHitEffectID);		/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	dwRet += sizeof (m_dwValue1);			/* åŠ¹æœ1 */
+	dwRet += sizeof (m_dwValue2);			/* åŠ¹æœ2 */
+	dwRet += sizeof (m_dwDistance);			/* å°„ç¨‹è·é›¢ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetDataSizeNoTmp								 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetDataSizeNoTmp								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillHEAL::GetDataSizeNoTmp(int nNo)
@@ -112,12 +112,12 @@ DWORD CInfoSkillHEAL::GetDataSizeNoTmp(int nNo)
 
 	dwRet = 0;
 	switch (nNo) {
-	case 0:	dwRet = sizeof (m_dwArea);			break;		/* ”ÍˆÍ */
-	case 1:	dwRet = sizeof (m_dwHealType);		break;		/* ‰ñ•œí•Ê */
-	case 2:	dwRet = sizeof (m_dwHitEffectID);	break;		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	case 3:	dwRet = sizeof (m_dwValue1);		break;		/* Œø‰Ê1 */
-	case 4:	dwRet = sizeof (m_dwValue2);		break;		/* Œø‰Ê2 */
-	case 5:	dwRet = sizeof (m_dwDistance);		break;		/* Ë’ö‹——£ */
+	case 0:	dwRet = sizeof (m_dwArea);			break;		/* ç¯„å›² */
+	case 1:	dwRet = sizeof (m_dwHealType);		break;		/* å›å¾©ç¨®åˆ¥ */
+	case 2:	dwRet = sizeof (m_dwHitEffectID);	break;		/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	case 3:	dwRet = sizeof (m_dwValue1);		break;		/* åŠ¹æœ1 */
+	case 4:	dwRet = sizeof (m_dwValue2);		break;		/* åŠ¹æœ2 */
+	case 5:	dwRet = sizeof (m_dwDistance);		break;		/* å°„ç¨‹è·é›¢ */
 	}
 
 	return dwRet;
@@ -125,9 +125,9 @@ DWORD CInfoSkillHEAL::GetDataSizeNoTmp(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetNameTmp										 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetNameTmp										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 LPCSTR CInfoSkillHEAL::GetNameTmp(int nNo)
@@ -137,9 +137,9 @@ LPCSTR CInfoSkillHEAL::GetNameTmp(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetWriteDataTmp								 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetWriteDataTmp								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillHEAL::GetWriteDataTmp(int nNo, PDWORD pdwSize)
@@ -158,12 +158,12 @@ PBYTE CInfoSkillHEAL::GetWriteDataTmp(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_dwArea;			break;		/* ”ÍˆÍ */
-	case 1:	pSrc = (PBYTE)&m_dwHealType;		break;		/* ‰ñ•œí•Ê */
-	case 2:	pSrc = (PBYTE)&m_dwHitEffectID;		break;		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	case 3:	pSrc = (PBYTE)&m_dwValue1;			break;		/* Œø‰Ê1 */
-	case 4:	pSrc = (PBYTE)&m_dwValue2;			break;		/* Œø‰Ê2 */
-	case 5:	pSrc = (PBYTE)&m_dwDistance;		break;		/* Ë’ö‹——£ */
+	case 0:	pSrc = (PBYTE)&m_dwArea;			break;		/* ç¯„å›² */
+	case 1:	pSrc = (PBYTE)&m_dwHealType;		break;		/* å›å¾©ç¨®åˆ¥ */
+	case 2:	pSrc = (PBYTE)&m_dwHitEffectID;		break;		/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	case 3:	pSrc = (PBYTE)&m_dwValue1;			break;		/* åŠ¹æœ1 */
+	case 4:	pSrc = (PBYTE)&m_dwValue2;			break;		/* åŠ¹æœ2 */
+	case 5:	pSrc = (PBYTE)&m_dwDistance;		break;		/* å°„ç¨‹è·é›¢ */
 	}
 
 	if (pSrc) {
@@ -176,14 +176,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::ReadElementDataTmp								 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::ReadElementDataTmp								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillHEAL::ReadElementDataTmp(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -192,12 +192,12 @@ DWORD CInfoSkillHEAL::ReadElementDataTmp(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:	pDst = (PBYTE)&m_dwArea;			dwSize = sizeof (m_dwArea);			break;	/* ”ÍˆÍ */
-	case 1:	pDst = (PBYTE)&m_dwHealType;		dwSize = sizeof (m_dwHealType);		break;	/* ‰ñ•œí•Ê */
-	case 2:	pDst = (PBYTE)&m_dwHitEffectID;		dwSize = sizeof (m_dwHitEffectID);	break;	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	case 3:	pDst = (PBYTE)&m_dwValue1;			dwSize = sizeof (m_dwValue1);		break;	/* Œø‰Ê1 */
-	case 4:	pDst = (PBYTE)&m_dwValue2;			dwSize = sizeof (m_dwValue2);		break;	/* Œø‰Ê2 */
-	case 5:	pDst = (PBYTE)&m_dwDistance;		dwSize = sizeof (m_dwDistance);		break;	/* Ë’ö‹——£ */
+	case 0:	pDst = (PBYTE)&m_dwArea;			dwSize = sizeof (m_dwArea);			break;	/* ç¯„å›² */
+	case 1:	pDst = (PBYTE)&m_dwHealType;		dwSize = sizeof (m_dwHealType);		break;	/* å›å¾©ç¨®åˆ¥ */
+	case 2:	pDst = (PBYTE)&m_dwHitEffectID;		dwSize = sizeof (m_dwHitEffectID);	break;	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	case 3:	pDst = (PBYTE)&m_dwValue1;			dwSize = sizeof (m_dwValue1);		break;	/* åŠ¹æœ1 */
+	case 4:	pDst = (PBYTE)&m_dwValue2;			dwSize = sizeof (m_dwValue2);		break;	/* åŠ¹æœ2 */
+	case 5:	pDst = (PBYTE)&m_dwDistance;		dwSize = sizeof (m_dwDistance);		break;	/* å°„ç¨‹è·é›¢ */
 	}
 
 	if (pDst) {
@@ -209,9 +209,9 @@ DWORD CInfoSkillHEAL::ReadElementDataTmp(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetDerivationSize								 */
-/* “à—e		:”h¶ƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2009/01/10														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetDerivationSize								 */
+/* å†…å®¹		:æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/01/10														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillHEAL::GetDerivationSize(void)
@@ -219,12 +219,12 @@ DWORD CInfoSkillHEAL::GetDerivationSize(void)
 	int i, nCount;
 	DWORD dwRet;
 
-	dwRet = sizeof (int);		/* —v‘f” */
+	dwRet = sizeof (int);		/* è¦ç´ æ•° */
 	nCount = m_nElementCountDerivation;
 	for (i = 0; i < nCount; i ++) {
-		dwRet += (strlen (GetNameTmp (i)) + 1);		/* —v‘f–¼ */
-		dwRet += sizeof (DWORD);					/* ƒf[ƒ^ƒTƒCƒY */
-		dwRet += GetDataSizeNoTmp (i);				/* ƒf[ƒ^ */
+		dwRet += (strlen (GetNameTmp (i)) + 1);		/* è¦ç´ å */
+		dwRet += sizeof (DWORD);					/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
+		dwRet += GetDataSizeNoTmp (i);				/* ãƒ‡ãƒ¼ã‚¿ */
 	}
 
 	return dwRet;
@@ -232,9 +232,9 @@ DWORD CInfoSkillHEAL::GetDerivationSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetDerivationWriteData							 */
-/* “à—e		:”h¶ƒf[ƒ^‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2009/01/10														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetDerivationWriteData							 */
+/* å†…å®¹		:æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2009/01/10														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillHEAL::GetDerivationWriteData(PDWORD pdwSize)
@@ -248,13 +248,13 @@ PBYTE CInfoSkillHEAL::GetDerivationWriteData(PDWORD pdwSize)
 	pRetTmp	= pRet;
 
 	nCount = m_nElementCountDerivation;
-	CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);	/* —v‘f” */
+	CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);	/* è¦ç´ æ•° */
 	for (i = 0; i < nCount; i ++) {
-		strcpyRenew ((LPSTR)pRetTmp, GetNameTmp (i), pRetTmp); 		/* —v‘f–¼ */
+		strcpyRenew ((LPSTR)pRetTmp, GetNameTmp (i), pRetTmp); 		/* è¦ç´ å */
 		dwTmp = GetDataSizeNoTmp (i);
-		CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+		CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
 		pTmp = GetWriteDataTmp (i, &dwTmp);
-		CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* ƒf[ƒ^ */
+		CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* ãƒ‡ãƒ¼ã‚¿ */
 		SAFE_DELETE_ARRAY (pTmp);
 	}
 
@@ -263,9 +263,9 @@ PBYTE CInfoSkillHEAL::GetDerivationWriteData(PDWORD pdwSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::ReadDerivationData								 */
-/* “à—e		:”h¶ƒf[ƒ^‚ğ“Ç‚İ‚İ											 */
-/* “ú•t		:2009/01/10														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::ReadDerivationData								 */
+/* å†…å®¹		:æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2009/01/10														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillHEAL::ReadDerivationData(PBYTE pSrc)
@@ -277,10 +277,10 @@ DWORD CInfoSkillHEAL::ReadDerivationData(PBYTE pSrc)
 
 	pSrcTmp = pSrc;
 
-	CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);	/* —v‘f” */
+	CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);	/* è¦ç´ æ•° */
 	for (i = 0; i < nCount; i ++) {
-		StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* —v‘f–¼ */
-		CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* ƒf[ƒ^ƒTƒCƒY */
+		StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* è¦ç´ å */
+		CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º */
 		nNoTmp = GetElementNoTmp ((LPCSTR)strTmp);
 		if (nNoTmp >= 0) {
 			dwSizeTmp = ReadElementDataTmp (pSrcTmp, nNoTmp);
@@ -293,9 +293,9 @@ DWORD CInfoSkillHEAL::ReadDerivationData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 DWORD CInfoSkillHEAL::GetSendDataSize(void)
@@ -303,21 +303,21 @@ DWORD CInfoSkillHEAL::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = CInfoSkillBase::GetSendDataSize ();
-	dwRet += sizeof (m_dwArea);				/* ”ÍˆÍ */
-	dwRet += sizeof (m_dwHealType);			/* ‰ñ•œí•Ê */
-	dwRet += sizeof (m_dwHitEffectID);		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	dwRet += sizeof (m_dwValue1);			/* Œø‰Ê1 */
-	dwRet += sizeof (m_dwValue2);			/* Œø‰Ê2 */
-	dwRet += sizeof (m_dwDistance);			/* Ë’ö‹——£ */
+	dwRet += sizeof (m_dwArea);				/* ç¯„å›² */
+	dwRet += sizeof (m_dwHealType);			/* å›å¾©ç¨®åˆ¥ */
+	dwRet += sizeof (m_dwHitEffectID);		/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	dwRet += sizeof (m_dwValue1);			/* åŠ¹æœ1 */
+	dwRet += sizeof (m_dwValue2);			/* åŠ¹æœ2 */
+	dwRet += sizeof (m_dwDistance);			/* å°„ç¨‹è·é›¢ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillHEAL::GetSendData(void)
@@ -334,21 +334,21 @@ PBYTE CInfoSkillHEAL::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 	SAFE_DELETE_ARRAY (pDataBase);
 
-	CopyMemoryRenew (pDataTmp, &m_dwArea,			sizeof (m_dwArea),			pDataTmp);	/* ”ÍˆÍ */
-	CopyMemoryRenew (pDataTmp, &m_dwHealType,		sizeof (m_dwHealType),		pDataTmp);	/* ‰ñ•œí•Ê */
-	CopyMemoryRenew (pDataTmp, &m_dwHitEffectID,	sizeof (m_dwHitEffectID),	pDataTmp);	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	CopyMemoryRenew (pDataTmp, &m_dwValue1,			sizeof (m_dwValue1),		pDataTmp);	/* Œø‰Ê1 */
-	CopyMemoryRenew (pDataTmp, &m_dwValue2,			sizeof (m_dwValue2),		pDataTmp);	/* Œø‰Ê2 */
-	CopyMemoryRenew (pDataTmp, &m_dwDistance,		sizeof (m_dwDistance),		pDataTmp);	/* Ë’ö‹——£ */
+	CopyMemoryRenew (pDataTmp, &m_dwArea,			sizeof (m_dwArea),			pDataTmp);	/* ç¯„å›² */
+	CopyMemoryRenew (pDataTmp, &m_dwHealType,		sizeof (m_dwHealType),		pDataTmp);	/* å›å¾©ç¨®åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &m_dwHitEffectID,	sizeof (m_dwHitEffectID),	pDataTmp);	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	CopyMemoryRenew (pDataTmp, &m_dwValue1,			sizeof (m_dwValue1),		pDataTmp);	/* åŠ¹æœ1 */
+	CopyMemoryRenew (pDataTmp, &m_dwValue2,			sizeof (m_dwValue2),		pDataTmp);	/* åŠ¹æœ2 */
+	CopyMemoryRenew (pDataTmp, &m_dwDistance,		sizeof (m_dwDistance),		pDataTmp);	/* å°„ç¨‹è·é›¢ */
 
 	return pData;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çæ‚è‚İ											 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 PBYTE CInfoSkillHEAL::SetSendData(PBYTE pSrc)
@@ -358,12 +358,12 @@ PBYTE CInfoSkillHEAL::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = CInfoSkillBase::SetSendData (pSrc);
-	CopyMemoryRenew (&m_dwArea,			pDataTmp, sizeof (m_dwArea),		pDataTmp);	/* ”ÍˆÍ */
-	CopyMemoryRenew (&m_dwHealType,		pDataTmp, sizeof (m_dwHealType),	pDataTmp);	/* ‰ñ•œí•Ê */
-	CopyMemoryRenew (&m_dwHitEffectID,	pDataTmp, sizeof (m_dwHitEffectID),	pDataTmp);	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	CopyMemoryRenew (&m_dwValue1,		pDataTmp, sizeof (m_dwValue1),		pDataTmp);	/* Œø‰Ê1 */
-	CopyMemoryRenew (&m_dwValue2,		pDataTmp, sizeof (m_dwValue2),		pDataTmp);	/* Œø‰Ê2 */
-	CopyMemoryRenew (&m_dwDistance,		pDataTmp, sizeof (m_dwDistance),	pDataTmp);	/* Ë’ö‹——£ */
+	CopyMemoryRenew (&m_dwArea,			pDataTmp, sizeof (m_dwArea),		pDataTmp);	/* ç¯„å›² */
+	CopyMemoryRenew (&m_dwHealType,		pDataTmp, sizeof (m_dwHealType),	pDataTmp);	/* å›å¾©ç¨®åˆ¥ */
+	CopyMemoryRenew (&m_dwHitEffectID,	pDataTmp, sizeof (m_dwHitEffectID),	pDataTmp);	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	CopyMemoryRenew (&m_dwValue1,		pDataTmp, sizeof (m_dwValue1),		pDataTmp);	/* åŠ¹æœ1 */
+	CopyMemoryRenew (&m_dwValue2,		pDataTmp, sizeof (m_dwValue2),		pDataTmp);	/* åŠ¹æœ2 */
+	CopyMemoryRenew (&m_dwDistance,		pDataTmp, sizeof (m_dwDistance),	pDataTmp);	/* å°„ç¨‹è·é›¢ */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -371,9 +371,9 @@ PBYTE CInfoSkillHEAL::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSkillHEAL::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2009/01/22														 */
+/* é–¢æ•°å	:CInfoSkillHEAL::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2009/01/22														 */
 /* ========================================================================= */
 
 void CInfoSkillHEAL::Copy(CInfoSkillBase *pSrc)
@@ -390,12 +390,12 @@ void CInfoSkillHEAL::Copy(CInfoSkillBase *pSrc)
 		return;
 	}
 
-	m_dwArea		= pSrcTmp->m_dwArea;			/* ”ÍˆÍ */
-	m_dwHealType	= pSrcTmp->m_dwHealType;		/* ‰ñ•œí•Ê */
-	m_dwHitEffectID	= pSrcTmp->m_dwHitEffectID;		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-	m_dwValue1		= pSrcTmp->m_dwValue1;			/* Œø‰Ê1 */
-	m_dwValue2		= pSrcTmp->m_dwValue2;			/* Œø‰Ê2 */
-	m_dwDistance	= pSrcTmp->m_dwDistance;		/* Ë’ö‹——£ */
+	m_dwArea		= pSrcTmp->m_dwArea;			/* ç¯„å›² */
+	m_dwHealType	= pSrcTmp->m_dwHealType;		/* å›å¾©ç¨®åˆ¥ */
+	m_dwHitEffectID	= pSrcTmp->m_dwHitEffectID;		/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	m_dwValue1		= pSrcTmp->m_dwValue1;			/* åŠ¹æœ1 */
+	m_dwValue2		= pSrcTmp->m_dwValue2;			/* åŠ¹æœ2 */
+	m_dwDistance	= pSrcTmp->m_dwDistance;		/* å°„ç¨‹è·é›¢ */
 
 }
 

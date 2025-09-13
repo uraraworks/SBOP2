@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcSYSTEM.cpp								 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒVƒXƒeƒ€ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/10/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcSYSTEM.cpp								 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚·ã‚¹ãƒ†ãƒ ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,23 +16,23 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcSYSTEM										 */
-/* “à—e		:ŽóMˆ—(ƒVƒXƒeƒ€Œn)											 */
-/* “ú•t		:2008/10/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcSYSTEM										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚·ã‚¹ãƒ†ãƒ ç³»)											 */
+/* æ—¥ä»˜		:2008/10/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcSYSTEM(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_SYSTEM_INFO:	RecvProcSYSTEM_INFO	(pData);	break;	/* ƒVƒXƒeƒ€î•ñ’Ê’m */
+	case SBOCOMMANDID_SUB_SYSTEM_INFO:	RecvProcSYSTEM_INFO	(pData);	break;	/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±é€šçŸ¥ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcSYSTEM_INFO								 */
-/* “à—e		:ŽóMˆ—(ƒVƒXƒeƒ€î•ñ’Ê’m)										 */
-/* “ú•t		:2008/10/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcSYSTEM_INFO								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±é€šçŸ¥)										 */
+/* æ—¥ä»˜		:2008/10/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcSYSTEM_INFO(PBYTE pData)

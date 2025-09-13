@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_REQ_PUSH.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:‰Ÿ‚·—v‹) À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_REQ_PUSH.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:æŠ¼ã™è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/02													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_REQ_PUSH.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_REQ_PUSH::CPacketCHAR_REQ_PUSH						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CPacketCHAR_REQ_PUSH::CPacketCHAR_REQ_PUSH						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 CPacketCHAR_REQ_PUSH::CPacketCHAR_REQ_PUSH()
@@ -25,9 +25,9 @@ CPacketCHAR_REQ_PUSH::CPacketCHAR_REQ_PUSH()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_REQ_PUSH::~CPacketCHAR_REQ_PUSH					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CPacketCHAR_REQ_PUSH::~CPacketCHAR_REQ_PUSH					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 CPacketCHAR_REQ_PUSH::~CPacketCHAR_REQ_PUSH()
@@ -36,15 +36,15 @@ CPacketCHAR_REQ_PUSH::~CPacketCHAR_REQ_PUSH()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_REQ_PUSH::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CPacketCHAR_REQ_PUSH::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 void CPacketCHAR_REQ_PUSH::Make(
-	DWORD dwCharID,				/* [in] ƒLƒƒƒ‰ID */
-	int nDirection,				/* [in] Œü‚« */
-	int nPushCount)/*=1*/		/* [in] ‰Ÿ‚µ‚Äi‚Ş” */
+	DWORD dwCharID,				/* [in] ã‚­ãƒ£ãƒ©ID */
+	int nDirection,				/* [in] å‘ã */
+	int nPushCount)/*=1*/		/* [in] æŠ¼ã—ã¦é€²ã‚€æ•° */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -63,18 +63,18 @@ void CPacketCHAR_REQ_PUSH::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_REQ_PUSH;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),		pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &nDirection,	sizeof (nDirection),	pDataTmp);	/* Œü‚« */
-	CopyMemoryRenew (pDataTmp, &nPushCount,	sizeof (nPushCount),	pDataTmp);	/* ‰Ÿ‚µ‚Äi‚Ş” */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),		pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &nDirection,	sizeof (nDirection),	pDataTmp);	/* å‘ã */
+	CopyMemoryRenew (pDataTmp, &nPushCount,	sizeof (nPushCount),	pDataTmp);	/* æŠ¼ã—ã¦é€²ã‚€æ•° */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_REQ_PUSH::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CPacketCHAR_REQ_PUSH::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_REQ_PUSH::Set(PBYTE pPacket)
@@ -84,9 +84,9 @@ PBYTE CPacketCHAR_REQ_PUSH::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_nDirection,	pDataTmp, sizeof (m_nDirection),	pDataTmp);	/* Œü‚« */
-	CopyMemoryRenew (&m_nPushCount,	pDataTmp, sizeof (m_nPushCount),	pDataTmp);	/* ‰Ÿ‚µ‚Äi‚Ş” */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_nDirection,	pDataTmp, sizeof (m_nDirection),	pDataTmp);	/* å‘ã */
+	CopyMemoryRenew (&m_nPushCount,	pDataTmp, sizeof (m_nPushCount),	pDataTmp);	/* æŠ¼ã—ã¦é€²ã‚€æ•° */
 
 	pRet = pDataTmp;
 	return pRet;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	LayoutHelper.h												 */
-/* “à—eF		ƒEƒBƒ“ƒhƒEƒTƒCƒY•ÏX‚Ì”z’u•â•ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/06/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	LayoutHelper.h												 */
+/* å†…å®¹ï¼š		ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºå¤‰æ›´æ™‚ã®é…ç½®è£œåŠ©ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/06/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,77 +14,77 @@
 #include <map>
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
-/* •â³ƒtƒ‰ƒO */
-#define	LH_CTRL_X			0x00000001		// X•ûŒü’²®‚ ‚è
-#define	LH_CTRL_Y			0x00000002		// Y•ûŒü’²®‚ ‚è
-#define	LH_CTRL_WIDTH		0x00000004		// •’²®‚ ‚è
-#define	LH_CTRL_HEIGHT		0x00000008		// ‚‚³’²®‚ ‚è
+/* è£œæ­£ãƒ•ãƒ©ã‚° */
+#define	LH_CTRL_X			0x00000001		// Xæ–¹å‘èª¿æ•´ã‚ã‚Š
+#define	LH_CTRL_Y			0x00000002		// Yæ–¹å‘èª¿æ•´ã‚ã‚Š
+#define	LH_CTRL_WIDTH		0x00000004		// å¹…èª¿æ•´ã‚ã‚Š
+#define	LH_CTRL_HEIGHT		0x00000008		// é«˜ã•èª¿æ•´ã‚ã‚Š
 
-#define	LH_GRP_X			0x00000001		// X•ûŒü’²®‚ ‚è
-#define	LH_GRP_Y			0x00000002		// Y•ûŒü’²®‚ ‚è
-#define	LH_GRP_WIDTH		0x00000004		// •’²®‚ ‚è
-#define	LH_GRP_HEIGHT		0x00000008		// ‚‚³’²®‚ ‚è
+#define	LH_GRP_X			0x00000001		// Xæ–¹å‘èª¿æ•´ã‚ã‚Š
+#define	LH_GRP_Y			0x00000002		// Yæ–¹å‘èª¿æ•´ã‚ã‚Š
+#define	LH_GRP_WIDTH		0x00000004		// å¹…èª¿æ•´ã‚ã‚Š
+#define	LH_GRP_HEIGHT		0x00000008		// é«˜ã•èª¿æ•´ã‚ã‚Š
 
-// ƒOƒ‹[ƒvˆÚ“®ƒtƒ‰ƒO
-#define	LH_GRP_NOXMOVE		0x00000001		// ‰¡•ûŒüˆÚ“®‚È‚µ
-#define	LH_GRP_NOYMOVE		0x00000002		// c•ûŒüˆÚ“®‚È‚µ
-#define	LH_GRP_NOMOVE		(LH_GRP_NOXMOVE | LH_GRP_NOYMOVE)	// ˆÚ“®‚È‚µ
-#define	LH_GRP_NOWSIZE		0x00000004		// •İ’è‚È‚µ
-#define	LH_GRP_NOHSIZE		0x00000008		// ‚‚³İ’è‚È‚µ
-#define	LH_GRP_NOSIZE		(LH_GRP_NOWSIZE | LH_GRP_NOHSIZE)	// ƒTƒCƒYİ’è‚È‚µ
+// ã‚°ãƒ«ãƒ¼ãƒ—ç§»å‹•ãƒ•ãƒ©ã‚°
+#define	LH_GRP_NOXMOVE		0x00000001		// æ¨ªæ–¹å‘ç§»å‹•ãªã—
+#define	LH_GRP_NOYMOVE		0x00000002		// ç¸¦æ–¹å‘ç§»å‹•ãªã—
+#define	LH_GRP_NOMOVE		(LH_GRP_NOXMOVE | LH_GRP_NOYMOVE)	// ç§»å‹•ãªã—
+#define	LH_GRP_NOWSIZE		0x00000004		// å¹…è¨­å®šãªã—
+#define	LH_GRP_NOHSIZE		0x00000008		// é«˜ã•è¨­å®šãªã—
+#define	LH_GRP_NOSIZE		(LH_GRP_NOWSIZE | LH_GRP_NOHSIZE)	// ã‚µã‚¤ã‚ºè¨­å®šãªã—
 
 
 /* ========================================================================= */
-/* \‘¢‘Ì‚Ì’è‹`																 */
+/* æ§‹é€ ä½“ã®å®šç¾©																 */
 /* ========================================================================= */
 
 struct LH_CTRL_LAYOUT {
-	HWND	hWnd;				/* ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-	int		x;					/* ˆÊ’u(X) */
-	int		y;					/* ˆÊ’u(Y) */
-	int		cx;					/* • */
-	int		cy;					/* ‚‚³ */
-	DWORD	dwFlags;			/* •â³ƒtƒ‰ƒO */
-	UINT	uGroup;				// Š‘®‚·‚éƒOƒ‹[ƒvID
+	HWND	hWnd;				/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ« */
+	int		x;					/* ä½ç½®(X) */
+	int		y;					/* ä½ç½®(Y) */
+	int		cx;					/* å¹… */
+	int		cy;					/* é«˜ã• */
+	DWORD	dwFlags;			/* è£œæ­£ãƒ•ãƒ©ã‚° */
+	UINT	uGroup;				// æ‰€å±ã™ã‚‹ã‚°ãƒ«ãƒ¼ãƒ—ID
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CLayoutHelper
 {
 public:
-			CLayoutHelper();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual	~CLayoutHelper();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayoutHelper();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual	~CLayoutHelper();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Initialize			(HWND hBase);									/* ‰Šú‰» */
-	BOOL	RegisterControl		(HWND hWnd, DWORD dwFlags, UINT uGroup = -1);	/* ƒRƒ“ƒgƒ[ƒ‹‚Ì“o˜^ */
-	BOOL	RegisterControl		(UINT uID, DWORD dwFlags, UINT uGroup = -1);	/* ƒRƒ“ƒgƒ[ƒ‹‚Ì“o˜^ */
-	BOOL	UnregisterControl	(HWND hWnd);									/* ƒRƒ“ƒgƒ[ƒ‹‚Ì‰ğœ */
-	BOOL	UnregisterControl	(UINT uID);										/* ƒRƒ“ƒgƒ[ƒ‹‚Ì‰ğœ */
-	void	DoLayout			(int cx, int cy);								/* XV */
+	void	Initialize			(HWND hBase);									/* åˆæœŸåŒ– */
+	BOOL	RegisterControl		(HWND hWnd, DWORD dwFlags, UINT uGroup = -1);	/* ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç™»éŒ² */
+	BOOL	RegisterControl		(UINT uID, DWORD dwFlags, UINT uGroup = -1);	/* ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®ç™»éŒ² */
+	BOOL	UnregisterControl	(HWND hWnd);									/* ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®è§£é™¤ */
+	BOOL	UnregisterControl	(UINT uID);										/* ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã®è§£é™¤ */
+	void	DoLayout			(int cx, int cy);								/* æ›´æ–° */
 
-	BOOL	AddGroup			(UINT uGroup, DWORD dwFlags);					/* ƒOƒ‹[ƒv‚Ì’Ç‰Á */
-	BOOL	DeleteGroup			(UINT uGroup);									/* ƒOƒ‹[ƒv‚Ìíœ */
-	BOOL	SetGroup			(HWND hWnd, UINT uGroup);						/* ƒOƒ‹[ƒv‚Ìİ’è */
-	BOOL	SetGroup			(UINT uID, UINT uGroup);						/* ƒOƒ‹[ƒv‚Ìİ’è */
-	BOOL	RemoveGroup			(HWND hWnd);									/* ƒOƒ‹[ƒv‚Ì‰ğœ */
-	BOOL	RemoveGroup			(UINT uID);										/* ƒOƒ‹[ƒv‚Ì‰ğœ */
-	BOOL	GetGroupRect		(UINT uGroup, RECT* pRect);						/* ƒOƒ‹[ƒv‚Ì‹éŒ`‚ğæ“¾ */
-	void	MoveGroup			(UINT uGroup, int x, int y, int cx, int cy, DWORD dwFlags = 0);	/* ƒOƒ‹[ƒv‚ÌˆÚ“® */
-	void	OffsetGroup			(UINT uGroup, int left, int top, int right, int bottom);		/* ƒOƒ‹[ƒv‚ÌƒTƒCƒY•ÏX */
+	BOOL	AddGroup			(UINT uGroup, DWORD dwFlags);					/* ã‚°ãƒ«ãƒ¼ãƒ—ã®è¿½åŠ  */
+	BOOL	DeleteGroup			(UINT uGroup);									/* ã‚°ãƒ«ãƒ¼ãƒ—ã®å‰Šé™¤ */
+	BOOL	SetGroup			(HWND hWnd, UINT uGroup);						/* ã‚°ãƒ«ãƒ¼ãƒ—ã®è¨­å®š */
+	BOOL	SetGroup			(UINT uID, UINT uGroup);						/* ã‚°ãƒ«ãƒ¼ãƒ—ã®è¨­å®š */
+	BOOL	RemoveGroup			(HWND hWnd);									/* ã‚°ãƒ«ãƒ¼ãƒ—ã®è§£é™¤ */
+	BOOL	RemoveGroup			(UINT uID);										/* ã‚°ãƒ«ãƒ¼ãƒ—ã®è§£é™¤ */
+	BOOL	GetGroupRect		(UINT uGroup, RECT* pRect);						/* ã‚°ãƒ«ãƒ¼ãƒ—ã®çŸ©å½¢ã‚’å–å¾— */
+	void	MoveGroup			(UINT uGroup, int x, int y, int cx, int cy, DWORD dwFlags = 0);	/* ã‚°ãƒ«ãƒ¼ãƒ—ã®ç§»å‹• */
+	void	OffsetGroup			(UINT uGroup, int left, int top, int right, int bottom);		/* ã‚°ãƒ«ãƒ¼ãƒ—ã®ã‚µã‚¤ã‚ºå¤‰æ›´ */
 
 
 private:
-	HWND	m_hBase;							/* Šî’ê‚Æ‚È‚éƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-	SIZE	m_sizeBase;							/* Šî’êƒTƒCƒY */
-	std::vector<LH_CTRL_LAYOUT>	m_vLayout;		/* “o˜^‚³‚ê‚½ƒŒƒCƒAƒEƒgî•ñ */
-	std::map<UINT, DWORD>	m_mapGroup;			/* “o˜^‚³‚ê‚½ƒOƒ‹[ƒvî•ñ */
+	HWND	m_hBase;							/* åŸºåº•ã¨ãªã‚‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ« */
+	SIZE	m_sizeBase;							/* åŸºåº•ã‚µã‚¤ã‚º */
+	std::vector<LH_CTRL_LAYOUT>	m_vLayout;		/* ç™»éŒ²ã•ã‚ŒãŸãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆæƒ…å ± */
+	std::map<UINT, DWORD>	m_mapGroup;			/* ç™»éŒ²ã•ã‚ŒãŸã‚°ãƒ«ãƒ¼ãƒ—æƒ…å ± */
 };
 
 /* Copyright(C)URARA-works 2005 */

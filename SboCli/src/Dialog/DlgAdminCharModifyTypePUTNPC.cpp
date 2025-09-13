@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyTypePUTNPC.cpp							 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ ˆÚ“®í•Ê‚Ìİ’è(NPC”­¶)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyTypePUTNPC.cpp							 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ± ç§»å‹•ç¨®åˆ¥ã®è¨­å®š(NPCç™ºç”Ÿ)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypePUTNPC::DoDataExchange(CDataExchange* pDX)
@@ -42,9 +42,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypePUTNPC::CDlgAdminCharModifyTypePUTNPC	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypePUTNPC::CDlgAdminCharModifyTypePUTNPC	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyTypePUTNPC::CDlgAdminCharModifyTypePUTNPC(CWnd* pParent /*=NULL*/)
@@ -63,9 +63,9 @@ CDlgAdminCharModifyTypePUTNPC::CDlgAdminCharModifyTypePUTNPC(CWnd* pParent /*=NU
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypePUTNPC::~CDlgAdminCharModifyTypePUTNPC	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypePUTNPC::~CDlgAdminCharModifyTypePUTNPC	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyTypePUTNPC::~CDlgAdminCharModifyTypePUTNPC()
@@ -74,9 +74,9 @@ CDlgAdminCharModifyTypePUTNPC::~CDlgAdminCharModifyTypePUTNPC()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypePUTNPC::Set								 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypePUTNPC::Set								 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypePUTNPC::Set(CInfoCharCli *pSrc)
@@ -91,9 +91,9 @@ void CDlgAdminCharModifyTypePUTNPC::Set(CInfoCharCli *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypePUTNPC::Get								 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypePUTNPC::Get								 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypePUTNPC::Get(CInfoCharCli *pDst)
@@ -108,9 +108,9 @@ void CDlgAdminCharModifyTypePUTNPC::Get(CInfoCharCli *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypePUTNPC::OnInitDialog					 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypePUTNPC::OnInitDialog					 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharModifyTypePUTNPC::OnInitDialog()
@@ -119,9 +119,9 @@ BOOL CDlgAdminCharModifyTypePUTNPC::OnInitDialog()
 
 	CDlgAdminCharModifyTypeBase::OnInitDialog ();
 
-	m_ctlMoveType.AddString ("í“¬1");
+	m_ctlMoveType.AddString ("æˆ¦é—˜1");
 	m_ctlMoveType.SetItemData (0, CHARMOVETYPE_BATTLE1);
-	m_ctlMoveType.AddString ("í“¬2");
+	m_ctlMoveType.AddString ("æˆ¦é—˜2");
 	m_ctlMoveType.SetItemData (1, CHARMOVETYPE_BATTLE2);
 
 	nNo = 0;
@@ -139,9 +139,9 @@ BOOL CDlgAdminCharModifyTypePUTNPC::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypePUTNPC::OnOK							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypePUTNPC::OnOK							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypePUTNPC::OnOK()

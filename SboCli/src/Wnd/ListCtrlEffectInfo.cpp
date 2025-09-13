@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:ListCtrlEffectInfo.cpp										 */
-/* “à—e			:ƒGƒtƒFƒNƒgˆê——ƒŠƒXƒgƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:ListCtrlEffectInfo.cpp										 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§ãƒªã‚¹ãƒˆã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CListCtrlEffectInfo, CListCtrl)
@@ -29,9 +29,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlEffectInfo::CListCtrlEffectInfo						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CListCtrlEffectInfo::CListCtrlEffectInfo						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CListCtrlEffectInfo::CListCtrlEffectInfo()
@@ -43,9 +43,9 @@ CListCtrlEffectInfo::CListCtrlEffectInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlEffectInfo::~CListCtrlEffectInfo						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CListCtrlEffectInfo::~CListCtrlEffectInfo						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CListCtrlEffectInfo::~CListCtrlEffectInfo()
@@ -54,9 +54,9 @@ CListCtrlEffectInfo::~CListCtrlEffectInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlEffectInfo::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CListCtrlEffectInfo::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 BOOL CListCtrlEffectInfo::Create(CWnd *pParent, CMgrData *pMgrData)
@@ -67,7 +67,7 @@ BOOL CListCtrlEffectInfo::Create(CWnd *pParent, CMgrData *pMgrData)
 
 	SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	InsertColumn (0, "ID",				LVCFMT_LEFT, 40);
-	InsertColumn (1, "ƒGƒtƒFƒNƒg–¼",	LVCFMT_LEFT, 120);
+	InsertColumn (1, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå",	LVCFMT_LEFT, 120);
 
 	Renew ();
 
@@ -76,9 +76,9 @@ BOOL CListCtrlEffectInfo::Create(CWnd *pParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlEffectInfo::Renew										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CListCtrlEffectInfo::Renew										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CListCtrlEffectInfo::Renew(void)
@@ -99,7 +99,7 @@ void CListCtrlEffectInfo::Renew(void)
 		strTmp.Format ("%d", pInfoEffect->m_dwEffectID);
 		InsertItem (i, strTmp);
 		SetItemData (i, pInfoEffect->m_dwEffectID);				/* ID */
-		SetItemText (i, 1, (LPCSTR)pInfoEffect->m_strName);		/* ƒGƒtƒFƒNƒg–¼ */
+		SetItemText (i, 1, (LPCSTR)pInfoEffect->m_strName);		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
 	}
 }
 

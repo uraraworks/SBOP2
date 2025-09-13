@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketBATTLE_REQ_ATACK.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(í“¬Œn:UŒ‚—v‹) À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketBATTLE_REQ_ATACK.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(æˆ¦é—˜ç³»:æ”»æ’ƒè¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketBATTLE_REQ_ATACK.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketBATTLE_REQ_ATACK::CPacketBATTLE_REQ_ATACK				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketBATTLE_REQ_ATACK::CPacketBATTLE_REQ_ATACK				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketBATTLE_REQ_ATACK::CPacketBATTLE_REQ_ATACK()
@@ -24,9 +24,9 @@ CPacketBATTLE_REQ_ATACK::CPacketBATTLE_REQ_ATACK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketBATTLE_REQ_ATACK::~CPacketBATTLE_REQ_ATACK				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketBATTLE_REQ_ATACK::~CPacketBATTLE_REQ_ATACK				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketBATTLE_REQ_ATACK::~CPacketBATTLE_REQ_ATACK()
@@ -35,14 +35,14 @@ CPacketBATTLE_REQ_ATACK::~CPacketBATTLE_REQ_ATACK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketBATTLE_REQ_ATACK::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketBATTLE_REQ_ATACK::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CPacketBATTLE_REQ_ATACK::Make(
-	DWORD dwCharID,				/* [in] ƒLƒƒƒ‰ID */
-	DWORD dwTargetCharID)		/* [in] UŒ‚æƒLƒƒƒ‰ID */
+	DWORD dwCharID,				/* [in] ã‚­ãƒ£ãƒ©ID */
+	DWORD dwTargetCharID)		/* [in] æ”»æ’ƒå…ˆã‚­ãƒ£ãƒ©ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketBATTLE_REQ_ATACK::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_BATTLE_REQ_ATACK;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),			pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &dwTargetCharID,	sizeof (dwTargetCharID),	pDataTmp);	/* UŒ‚æƒLƒƒƒ‰ID */
+	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),			pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &dwTargetCharID,	sizeof (dwTargetCharID),	pDataTmp);	/* æ”»æ’ƒå…ˆã‚­ãƒ£ãƒ©ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketBATTLE_REQ_ATACK::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CPacketBATTLE_REQ_ATACK::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 PBYTE CPacketBATTLE_REQ_ATACK::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketBATTLE_REQ_ATACK::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),			pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwTargetCharID,	pDataTmp, sizeof (m_dwTargetCharID),	pDataTmp);	/* UŒ‚æƒLƒƒƒ‰ID */
+	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),			pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwTargetCharID,	pDataTmp, sizeof (m_dwTargetCharID),	pDataTmp);	/* æ”»æ’ƒå…ˆã‚­ãƒ£ãƒ©ID */
 
 	pRet = pDataTmp;
 	return pRet;

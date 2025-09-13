@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_TEXTEFFECT.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:•¶šƒGƒtƒFƒNƒg’Ê’m) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_TEXTEFFECT.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆé€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/13													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_TEXTEFFECT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_TEXTEFFECT::CPacketCHAR_TEXTEFFECT					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CPacketCHAR_TEXTEFFECT::CPacketCHAR_TEXTEFFECT					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 CPacketCHAR_TEXTEFFECT::CPacketCHAR_TEXTEFFECT()
@@ -25,9 +25,9 @@ CPacketCHAR_TEXTEFFECT::CPacketCHAR_TEXTEFFECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_TEXTEFFECT::~CPacketCHAR_TEXTEFFECT				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CPacketCHAR_TEXTEFFECT::~CPacketCHAR_TEXTEFFECT				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 CPacketCHAR_TEXTEFFECT::~CPacketCHAR_TEXTEFFECT()
@@ -36,16 +36,16 @@ CPacketCHAR_TEXTEFFECT::~CPacketCHAR_TEXTEFFECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_TEXTEFFECT::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CPacketCHAR_TEXTEFFECT::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 void CPacketCHAR_TEXTEFFECT::Make(
-	DWORD dwCharID,			/* [in] ƒLƒƒƒ‰ID */
-	DWORD dwData,			/* [in] ”’lƒf[ƒ^ */
-	int nColor,/*0*/		/* [in] F */
-	int nSize)/*0*/			/* [in] ƒTƒCƒY */
+	DWORD dwCharID,			/* [in] ã‚­ãƒ£ãƒ©ID */
+	DWORD dwData,			/* [in] æ•°å€¤ãƒ‡ãƒ¼ã‚¿ */
+	int nColor,/*0*/		/* [in] è‰² */
+	int nSize)/*0*/			/* [in] ã‚µã‚¤ã‚º */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -56,7 +56,7 @@ void CPacketCHAR_TEXTEFFECT::Make(
 			 sizeof (dwData)		+
 			 sizeof (nColor)		+
 			 sizeof (nSize)			+
-			 1;	/* •¶š—ñI’[—p */
+			 1;	/* æ–‡å­—åˆ—çµ‚ç«¯ç”¨ */
 
 	pData = new BYTE[dwSize];
 	ZeroMemory (pData, dwSize);
@@ -66,26 +66,26 @@ void CPacketCHAR_TEXTEFFECT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_TEXTEFFECT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &dwData,		sizeof (dwData),	pDataTmp);	/* ”’lƒf[ƒ^ */
-	CopyMemoryRenew (pDataTmp, &nColor,		sizeof (nColor),	pDataTmp);	/* F */
-	CopyMemoryRenew (pDataTmp, &nSize,		sizeof (nSize),		pDataTmp);	/* ƒTƒCƒY */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &dwData,		sizeof (dwData),	pDataTmp);	/* æ•°å€¤ãƒ‡ãƒ¼ã‚¿ */
+	CopyMemoryRenew (pDataTmp, &nColor,		sizeof (nColor),	pDataTmp);	/* è‰² */
+	CopyMemoryRenew (pDataTmp, &nSize,		sizeof (nSize),		pDataTmp);	/* ã‚µã‚¤ã‚º */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_TEXTEFFECT::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CPacketCHAR_TEXTEFFECT::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 void CPacketCHAR_TEXTEFFECT::Make(
-	DWORD dwCharID,			/* [in] ƒLƒƒƒ‰ID */
-	LPCSTR pszData,			/* [in] •¶š—ñƒf[ƒ^ */
-	int nColor,/*0*/		/* [in] F */
-	int nSize)/*0*/			/* [in] ƒTƒCƒY */
+	DWORD dwCharID,			/* [in] ã‚­ãƒ£ãƒ©ID */
+	LPCSTR pszData,			/* [in] æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
+	int nColor,/*0*/		/* [in] è‰² */
+	int nSize)/*0*/			/* [in] ã‚µã‚¤ã‚º */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize, dwTmp;
@@ -94,7 +94,7 @@ void CPacketCHAR_TEXTEFFECT::Make(
 	dwTmp  = -1;
 	dwSize = sizeof (PACKETBASE)	+
 			 sizeof (dwCharID)		+
-			 sizeof (DWORD)			+	/* ”’lƒf[ƒ^—p */
+			 sizeof (DWORD)			+	/* æ•°å€¤ãƒ‡ãƒ¼ã‚¿ç”¨ */
 			 sizeof (nColor)		+
 			 sizeof (nSize)			+
 			 (strlen (pszData) + 1);
@@ -107,20 +107,20 @@ void CPacketCHAR_TEXTEFFECT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_TEXTEFFECT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &dwTmp,		sizeof (dwTmp),		pDataTmp);	/* ”’lƒf[ƒ^ */
-	CopyMemoryRenew (pDataTmp, &nColor,		sizeof (nColor),	pDataTmp);	/* F */
-	CopyMemoryRenew (pDataTmp, &nSize,		sizeof (nSize),		pDataTmp);	/* ƒTƒCƒY */
-	strcpyRenew ((LPSTR)pDataTmp, pszData, pDataTmp);						/* •¶š—ñƒf[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &dwTmp,		sizeof (dwTmp),		pDataTmp);	/* æ•°å€¤ãƒ‡ãƒ¼ã‚¿ */
+	CopyMemoryRenew (pDataTmp, &nColor,		sizeof (nColor),	pDataTmp);	/* è‰² */
+	CopyMemoryRenew (pDataTmp, &nSize,		sizeof (nSize),		pDataTmp);	/* ã‚µã‚¤ã‚º */
+	strcpyRenew ((LPSTR)pDataTmp, pszData, pDataTmp);						/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCHAR_TEXTEFFECT::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CPacketCHAR_TEXTEFFECT::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_TEXTEFFECT::Set(PBYTE pPacket)
@@ -130,11 +130,11 @@ PBYTE CPacketCHAR_TEXTEFFECT::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwData,		pDataTmp, sizeof (m_dwData),	pDataTmp);	/* ”’lƒf[ƒ^ */
-	CopyMemoryRenew (&m_nColor,		pDataTmp, sizeof (m_nColor),	pDataTmp);	/* F */
-	CopyMemoryRenew (&m_nSize,		pDataTmp, sizeof (m_nSize),		pDataTmp);	/* ƒTƒCƒY */
-	StoreRenew (m_strData, (LPCSTR)pDataTmp, pDataTmp);							/* •¶š—ñƒf[ƒ^ */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwData,		pDataTmp, sizeof (m_dwData),	pDataTmp);	/* æ•°å€¤ãƒ‡ãƒ¼ã‚¿ */
+	CopyMemoryRenew (&m_nColor,		pDataTmp, sizeof (m_nColor),	pDataTmp);	/* è‰² */
+	CopyMemoryRenew (&m_nSize,		pDataTmp, sizeof (m_nSize),		pDataTmp);	/* ã‚µã‚¤ã‚º */
+	StoreRenew (m_strData, (LPCSTR)pDataTmp, pDataTmp);							/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 
 	pRet = pDataTmp;
 	return pRet;

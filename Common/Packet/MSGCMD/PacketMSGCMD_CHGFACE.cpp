@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMSGCMD_CHGFACE.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒn:•\î•ÏX) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMSGCMD_CHGFACE.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒãƒ³ãƒ‰ç³»:è¡¨æƒ…å¤‰æ›´) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/02													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketMSGCMD_CHGFACE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGFACE::CPacketMSGCMD_CHGFACE					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGFACE::CPacketMSGCMD_CHGFACE					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 CPacketMSGCMD_CHGFACE::CPacketMSGCMD_CHGFACE()
@@ -24,9 +24,9 @@ CPacketMSGCMD_CHGFACE::CPacketMSGCMD_CHGFACE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGFACE::~CPacketMSGCMD_CHGFACE					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGFACE::~CPacketMSGCMD_CHGFACE					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 CPacketMSGCMD_CHGFACE::~CPacketMSGCMD_CHGFACE()
@@ -35,14 +35,14 @@ CPacketMSGCMD_CHGFACE::~CPacketMSGCMD_CHGFACE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGFACE::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGFACE::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 void CPacketMSGCMD_CHGFACE::Make(
-	DWORD dwCharID,		/* [in] ƒLƒƒƒ‰ID */
-	int nType)			/* [in] í•Ê */
+	DWORD dwCharID,		/* [in] ã‚­ãƒ£ãƒ©ID */
+	int nType)			/* [in] ç¨®åˆ¥ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketMSGCMD_CHGFACE::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MSGCMD_CHGFACE;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* í•Ê */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &nType,		sizeof (nType),		pDataTmp);	/* ç¨®åˆ¥ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMSGCMD_CHGFACE::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CPacketMSGCMD_CHGFACE::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 PBYTE CPacketMSGCMD_CHGFACE::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketMSGCMD_CHGFACE::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* í•Ê */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_nType,		pDataTmp, sizeof (m_nType),		pDataTmp);	/* ç¨®åˆ¥ */
 
 	pRet = pDataTmp;
 	return pRet;

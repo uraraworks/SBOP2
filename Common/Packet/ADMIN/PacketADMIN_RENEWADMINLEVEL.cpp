@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_RENEWADMINLEVEL.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ŠÇ—ÒŒ ŒÀƒŒƒxƒ‹XV) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_RENEWADMINLEVEL.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/05													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketADMIN_RENEWADMINLEVEL.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWADMINLEVEL::CPacketADMIN_RENEWADMINLEVEL		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWADMINLEVEL::CPacketADMIN_RENEWADMINLEVEL		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEWADMINLEVEL::CPacketADMIN_RENEWADMINLEVEL()
@@ -24,9 +24,9 @@ CPacketADMIN_RENEWADMINLEVEL::CPacketADMIN_RENEWADMINLEVEL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWADMINLEVEL::~CPacketADMIN_RENEWADMINLEVEL	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWADMINLEVEL::~CPacketADMIN_RENEWADMINLEVEL	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEWADMINLEVEL::~CPacketADMIN_RENEWADMINLEVEL()
@@ -35,14 +35,14 @@ CPacketADMIN_RENEWADMINLEVEL::~CPacketADMIN_RENEWADMINLEVEL()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWADMINLEVEL::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWADMINLEVEL::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 void CPacketADMIN_RENEWADMINLEVEL::Make(
-	DWORD dwAccountID,		/* [in] ƒAƒJƒEƒ“ƒgID */
-	int nLevel)				/* [in] ŠÇ—ÒƒŒƒxƒ‹ */
+	DWORD dwAccountID,		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	int nLevel)				/* [in] ç®¡ç†è€…ãƒ¬ãƒ™ãƒ« */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketADMIN_RENEWADMINLEVEL::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_RENEWADMINLEVEL;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwAccountID,	sizeof (dwAccountID),	pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (pDataTmp, &nLevel,			sizeof (nLevel),		pDataTmp);	/* ŠÇ—ÒƒŒƒxƒ‹ */
+	CopyMemoryRenew (pDataTmp, &dwAccountID,	sizeof (dwAccountID),	pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &nLevel,			sizeof (nLevel),		pDataTmp);	/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ« */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWADMINLEVEL::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWADMINLEVEL::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_RENEWADMINLEVEL::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketADMIN_RENEWADMINLEVEL::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (&m_nAdminLevel, pDataTmp, sizeof (m_nAdminLevel), pDataTmp);	/* ŠÇ—ÒƒŒƒxƒ‹ */
+	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (&m_nAdminLevel, pDataTmp, sizeof (m_nAdminLevel), pDataTmp);	/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ« */
 
 	pRet = pDataTmp;
 	return pRet;

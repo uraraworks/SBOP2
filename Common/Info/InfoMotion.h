@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMotion.h												 */
-/* “à—e			:ƒ‚[ƒVƒ‡ƒ“î•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/10/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMotion.h												 */
+/* å†…å®¹			:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/29													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,173 +11,173 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
+/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
 enum {
 	CHARMOTIONLISTID_NONE = 0,
-	CHARMOTIONLISTID_STAND_UP,					/* —§‚¿(ã) */
-	CHARMOTIONLISTID_STAND_DOWN,				/* —§‚¿(‰º) */
-	CHARMOTIONLISTID_STAND_LEFT,				/* —§‚¿(¶) */
-	CHARMOTIONLISTID_STAND_RIGHT,				/* —§‚¿(‰E) */
-	CHARMOTIONLISTID_WALK_UP,					/* •à‚«(ã) */
-	CHARMOTIONLISTID_WALK_DOWN,					/* •à‚«(‰º) */
-	CHARMOTIONLISTID_WALK_LEFT,					/* •à‚«(¶) */
-	CHARMOTIONLISTID_WALK_RIGHT,				/* •à‚«(‰E) */
-	CHARMOTIONLISTID_SIT_UP,					/* À‚è(ã) */
-	CHARMOTIONLISTID_SIT_DOWN,					/* À‚è(‰º) */
-	CHARMOTIONLISTID_SIT_LEFT,					/* À‚è(¶) */
-	CHARMOTIONLISTID_SIT_RIGHT,					/* À‚è(‰E) */
-	CHARMOTIONLISTID_BATTLESTAND_UP,			/* í“¬—§‚¿(ã) */
-	CHARMOTIONLISTID_BATTLESTAND_DOWN,			/* í“¬—§‚¿(‰º) */
-	CHARMOTIONLISTID_BATTLESTAND_LEFT,			/* í“¬—§‚¿(¶) */
-	CHARMOTIONLISTID_BATTLESTAND_RIGHT,			/* í“¬—§‚¿(‰E) */
-	CHARMOTIONLISTID_BATTLEWALK_UP,				/* ‚·‚è‘«(ã) */
-	CHARMOTIONLISTID_BATTLEWALK_DOWN,			/* ‚·‚è‘«(‰º) */
-	CHARMOTIONLISTID_BATTLEWALK_LEFT,			/* ‚·‚è‘«(¶) */
-	CHARMOTIONLISTID_BATTLEWALK_RIGHT,			/* ‚·‚è‘«(‰E) */
-	CHARMOTIONLISTID_SWING_UP,					/* U‚è(ã) */
-	CHARMOTIONLISTID_SWING_DOWN,				/* U‚è(‰º) */
-	CHARMOTIONLISTID_SWING_LEFT,				/* U‚è(¶) */
-	CHARMOTIONLISTID_SWING_RIGHT,				/* U‚è(‰E) */
-	CHARMOTIONLISTID_POKE_UP,					/* “Ë‚«(ã) */
-	CHARMOTIONLISTID_POKE_DOWN,					/* “Ë‚«(‰º) */
-	CHARMOTIONLISTID_POKE_LEFT,					/* “Ë‚«(¶) */
-	CHARMOTIONLISTID_POKE_RIGHT,				/* “Ë‚«(‰E) */
-	CHARMOTIONLISTID_BOWWALK_UP,				/* ‹|—p‚·‚è‘«(ã) */
-	CHARMOTIONLISTID_BOWWALK_DOWN,				/* ‹|—p‚·‚è‘«(‰º) */
-	CHARMOTIONLISTID_BOWWALK_LEFT,				/* ‹|—p‚·‚è‘«(¶) */
-	CHARMOTIONLISTID_BOWWALK_RIGHT,				/* ‹|—p‚·‚è‘«(‰E) */
-	CHARMOTIONLISTID_BOW_UP,					/* ‹|(ã) */
-	CHARMOTIONLISTID_BOW_DOWN,					/* ‹|(‰º) */
-	CHARMOTIONLISTID_BOW_LEFT,					/* ‹|(¶) */
-	CHARMOTIONLISTID_BOW_RIGHT,					/* ‹|(‰E) */
-	CHARMOTIONLISTID_GLOVEWALK_UP,				/* ‘ÅŒ‚—p‚·‚è‘«(ã) */
-	CHARMOTIONLISTID_GLOVEWALK_DOWN,			/* ‘ÅŒ‚—p‚·‚è‘«(‰º) */
-	CHARMOTIONLISTID_GLOVEWALK_LEFT,			/* ‘ÅŒ‚—p‚·‚è‘«(¶) */
-	CHARMOTIONLISTID_GLOVEWALK_RIGHT,			/* ‘ÅŒ‚—p‚·‚è‘«(‰E) */
-	CHARMOTIONLISTID_GLOVE_UP,					/* ‘ÅŒ‚(ã) */
-	CHARMOTIONLISTID_GLOVE_DOWN,				/* ‘ÅŒ‚(‰º) */
-	CHARMOTIONLISTID_GLOVE_LEFT,				/* ‘ÅŒ‚(¶) */
-	CHARMOTIONLISTID_GLOVE_RIGHT,				/* ‘ÅŒ‚(‰E) */
-	CHARMOTIONLISTID_FISHINGWALK_UP,			/* ’Þ‚è—p‚·‚è‘«(ã) */
-	CHARMOTIONLISTID_FISHINGWALK_DOWN,			/* ’Þ‚è—p‚·‚è‘«(‰º) */
-	CHARMOTIONLISTID_FISHINGWALK_LEFT,			/* ’Þ‚è—p‚·‚è‘«(¶) */
-	CHARMOTIONLISTID_FISHINGWALK_RIGHT,			/* ’Þ‚è—p‚·‚è‘«(‰E) */
-	CHARMOTIONLISTID_FISHING_UP,				/* ’Þ‚è(ã) */
-	CHARMOTIONLISTID_FISHING_DOWN,				/* ’Þ‚è(‰º) */
-	CHARMOTIONLISTID_FISHING_LEFT,				/* ’Þ‚è(¶) */
-	CHARMOTIONLISTID_FISHING_RIGHT,				/* ’Þ‚è(‰E) */
-	CHARMOTIONLISTID_FISHING_HIT_UP,			/* ’Þ‚èƒqƒbƒg(ã) */
-	CHARMOTIONLISTID_FISHING_HIT_DOWN,			/* ’Þ‚èƒqƒbƒg(‰º) */
-	CHARMOTIONLISTID_FISHING_HIT_LEFT,			/* ’Þ‚èƒqƒbƒg(¶) */
-	CHARMOTIONLISTID_FISHING_HIT_RIGHT,			/* ’Þ‚èƒqƒbƒg(‰E) */
-	CHARMOTIONLISTID_BOWBATTLESTAND_UP,			/* ‹|—pí“¬—§‚¿(ã) */
-	CHARMOTIONLISTID_BOWBATTLESTAND_DOWN,		/* ‹|—pí“¬—§‚¿(‰º) */
-	CHARMOTIONLISTID_BOWBATTLESTAND_LEFT,		/* ‹|—pí“¬—§‚¿(¶) */
-	CHARMOTIONLISTID_BOWBATTLESTAND_RIGHT,		/* ‹|—pí“¬—§‚¿(‰E) */
-	CHARMOTIONLISTID_GLOVEBATTLESTAND_UP,		/* ‘ÅŒ‚—pí“¬—§‚¿(ã) */
-	CHARMOTIONLISTID_GLOVEBATTLESTAND_DOWN,		/* ‘ÅŒ‚—pí“¬—§‚¿(‰º) */
-	CHARMOTIONLISTID_GLOVEBATTLESTAND_LEFT,		/* ‘ÅŒ‚—pí“¬—§‚¿(¶) */
-	CHARMOTIONLISTID_GLOVEBATTLESTAND_RIGHT,	/* ‘ÅŒ‚—pí“¬—§‚¿(‰E) */
-	CHARMOTIONLISTID_FISHINGBATTLESTAND_UP,		/* ’Þ‚è—pí“¬—§‚¿(ã) */
-	CHARMOTIONLISTID_FISHINGBATTLESTAND_DOWN,	/* ’Þ‚è—pí“¬—§‚¿(‰º) */
-	CHARMOTIONLISTID_FISHINGBATTLESTAND_LEFT,	/* ’Þ‚è—pí“¬—§‚¿(¶) */
-	CHARMOTIONLISTID_FISHINGBATTLESTAND_RIGHT,	/* ’Þ‚è—pí“¬—§‚¿(‰E) */
-	CHARMOTIONLISTID_STAND,						/* —§‚¿ */
-	CHARMOTIONLISTID_STAND_SIMPLE,				/* —§‚¿(ã‰º¶‰E1ƒRƒ}‚¸‚Â) */
-	CHARMOTIONLISTID_WALK,						/* •à‚«(•ûŒü–³‚µ) */
-	CHARMOTIONLISTID_DESTROY,					/* ”j‰ó */
-	CHARMOTIONLISTID_SIMPLE,					/* 16ƒRƒ}˜A‘± */
-	CHARMOTIONLISTID_DEFENSE_UP,				/* –hŒä(ã) */
-	CHARMOTIONLISTID_DEFENSE_DOWN,				/* –hŒä(‰º) */
-	CHARMOTIONLISTID_DEFENSE_LEFT,				/* –hŒä(¶) */
-	CHARMOTIONLISTID_DEFENSE_RIGHT,				/* –hŒä(‰E) */
-	CHARMOTIONLISTID_DEFENSE_SUCCESS_UP,		/* –hŒä¬Œ÷(ã) */
-	CHARMOTIONLISTID_DEFENSE_SUCCESS_DOWN,		/* –hŒä¬Œ÷(‰º) */
-	CHARMOTIONLISTID_DEFENSE_SUCCESS_LEFT,		/* –hŒä¬Œ÷(¶) */
-	CHARMOTIONLISTID_DEFENSE_SUCCESS_RIGHT,		/* –hŒä¬Œ÷(‰E) */
-	CHARMOTIONLISTID_BOWDEFENSE_UP,				/* ‹|—p–hŒä(ã) */
-	CHARMOTIONLISTID_BOWDEFENSE_DOWN,			/* ‹|—p–hŒä(‰º) */
-	CHARMOTIONLISTID_BOWDEFENSE_LEFT,			/* ‹|—p–hŒä(¶) */
-	CHARMOTIONLISTID_BOWDEFENSE_RIGHT,			/* ‹|—p–hŒä(‰E) */
-	CHARMOTIONLISTID_DAMAGE_UP,					/* ƒ_ƒ[ƒW(ã) */
-	CHARMOTIONLISTID_DAMAGE_DOWN,				/* ƒ_ƒ[ƒW(‰º) */
-	CHARMOTIONLISTID_DAMAGE_LEFT,				/* ƒ_ƒ[ƒW(¶) */
-	CHARMOTIONLISTID_DAMAGE_RIGHT,				/* ƒ_ƒ[ƒW(‰E) */
-	CHARMOTIONLISTID_DEAD_UP,					/* Ž€–S(ã) */
-	CHARMOTIONLISTID_DEAD_DOWN,					/* Ž€–S(‰º) */
-	CHARMOTIONLISTID_DEAD_LEFT,					/* Ž€–S(¶) */
-	CHARMOTIONLISTID_DEAD_RIGHT,				/* Ž€–S(‰E) */
+	CHARMOTIONLISTID_STAND_UP,					/* ç«‹ã¡(ä¸Š) */
+	CHARMOTIONLISTID_STAND_DOWN,				/* ç«‹ã¡(ä¸‹) */
+	CHARMOTIONLISTID_STAND_LEFT,				/* ç«‹ã¡(å·¦) */
+	CHARMOTIONLISTID_STAND_RIGHT,				/* ç«‹ã¡(å³) */
+	CHARMOTIONLISTID_WALK_UP,					/* æ­©ã(ä¸Š) */
+	CHARMOTIONLISTID_WALK_DOWN,					/* æ­©ã(ä¸‹) */
+	CHARMOTIONLISTID_WALK_LEFT,					/* æ­©ã(å·¦) */
+	CHARMOTIONLISTID_WALK_RIGHT,				/* æ­©ã(å³) */
+	CHARMOTIONLISTID_SIT_UP,					/* åº§ã‚Š(ä¸Š) */
+	CHARMOTIONLISTID_SIT_DOWN,					/* åº§ã‚Š(ä¸‹) */
+	CHARMOTIONLISTID_SIT_LEFT,					/* åº§ã‚Š(å·¦) */
+	CHARMOTIONLISTID_SIT_RIGHT,					/* åº§ã‚Š(å³) */
+	CHARMOTIONLISTID_BATTLESTAND_UP,			/* æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	CHARMOTIONLISTID_BATTLESTAND_DOWN,			/* æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	CHARMOTIONLISTID_BATTLESTAND_LEFT,			/* æˆ¦é—˜ç«‹ã¡(å·¦) */
+	CHARMOTIONLISTID_BATTLESTAND_RIGHT,			/* æˆ¦é—˜ç«‹ã¡(å³) */
+	CHARMOTIONLISTID_BATTLEWALK_UP,				/* ã™ã‚Šè¶³(ä¸Š) */
+	CHARMOTIONLISTID_BATTLEWALK_DOWN,			/* ã™ã‚Šè¶³(ä¸‹) */
+	CHARMOTIONLISTID_BATTLEWALK_LEFT,			/* ã™ã‚Šè¶³(å·¦) */
+	CHARMOTIONLISTID_BATTLEWALK_RIGHT,			/* ã™ã‚Šè¶³(å³) */
+	CHARMOTIONLISTID_SWING_UP,					/* æŒ¯ã‚Š(ä¸Š) */
+	CHARMOTIONLISTID_SWING_DOWN,				/* æŒ¯ã‚Š(ä¸‹) */
+	CHARMOTIONLISTID_SWING_LEFT,				/* æŒ¯ã‚Š(å·¦) */
+	CHARMOTIONLISTID_SWING_RIGHT,				/* æŒ¯ã‚Š(å³) */
+	CHARMOTIONLISTID_POKE_UP,					/* çªã(ä¸Š) */
+	CHARMOTIONLISTID_POKE_DOWN,					/* çªã(ä¸‹) */
+	CHARMOTIONLISTID_POKE_LEFT,					/* çªã(å·¦) */
+	CHARMOTIONLISTID_POKE_RIGHT,				/* çªã(å³) */
+	CHARMOTIONLISTID_BOWWALK_UP,				/* å¼“ç”¨ã™ã‚Šè¶³(ä¸Š) */
+	CHARMOTIONLISTID_BOWWALK_DOWN,				/* å¼“ç”¨ã™ã‚Šè¶³(ä¸‹) */
+	CHARMOTIONLISTID_BOWWALK_LEFT,				/* å¼“ç”¨ã™ã‚Šè¶³(å·¦) */
+	CHARMOTIONLISTID_BOWWALK_RIGHT,				/* å¼“ç”¨ã™ã‚Šè¶³(å³) */
+	CHARMOTIONLISTID_BOW_UP,					/* å¼“(ä¸Š) */
+	CHARMOTIONLISTID_BOW_DOWN,					/* å¼“(ä¸‹) */
+	CHARMOTIONLISTID_BOW_LEFT,					/* å¼“(å·¦) */
+	CHARMOTIONLISTID_BOW_RIGHT,					/* å¼“(å³) */
+	CHARMOTIONLISTID_GLOVEWALK_UP,				/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸Š) */
+	CHARMOTIONLISTID_GLOVEWALK_DOWN,			/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(ä¸‹) */
+	CHARMOTIONLISTID_GLOVEWALK_LEFT,			/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(å·¦) */
+	CHARMOTIONLISTID_GLOVEWALK_RIGHT,			/* æ‰“æ’ƒç”¨ã™ã‚Šè¶³(å³) */
+	CHARMOTIONLISTID_GLOVE_UP,					/* æ‰“æ’ƒ(ä¸Š) */
+	CHARMOTIONLISTID_GLOVE_DOWN,				/* æ‰“æ’ƒ(ä¸‹) */
+	CHARMOTIONLISTID_GLOVE_LEFT,				/* æ‰“æ’ƒ(å·¦) */
+	CHARMOTIONLISTID_GLOVE_RIGHT,				/* æ‰“æ’ƒ(å³) */
+	CHARMOTIONLISTID_FISHINGWALK_UP,			/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(ä¸Š) */
+	CHARMOTIONLISTID_FISHINGWALK_DOWN,			/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(ä¸‹) */
+	CHARMOTIONLISTID_FISHINGWALK_LEFT,			/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(å·¦) */
+	CHARMOTIONLISTID_FISHINGWALK_RIGHT,			/* é‡£ã‚Šç”¨ã™ã‚Šè¶³(å³) */
+	CHARMOTIONLISTID_FISHING_UP,				/* é‡£ã‚Š(ä¸Š) */
+	CHARMOTIONLISTID_FISHING_DOWN,				/* é‡£ã‚Š(ä¸‹) */
+	CHARMOTIONLISTID_FISHING_LEFT,				/* é‡£ã‚Š(å·¦) */
+	CHARMOTIONLISTID_FISHING_RIGHT,				/* é‡£ã‚Š(å³) */
+	CHARMOTIONLISTID_FISHING_HIT_UP,			/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(ä¸Š) */
+	CHARMOTIONLISTID_FISHING_HIT_DOWN,			/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(ä¸‹) */
+	CHARMOTIONLISTID_FISHING_HIT_LEFT,			/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(å·¦) */
+	CHARMOTIONLISTID_FISHING_HIT_RIGHT,			/* é‡£ã‚Šãƒ’ãƒƒãƒˆ(å³) */
+	CHARMOTIONLISTID_BOWBATTLESTAND_UP,			/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	CHARMOTIONLISTID_BOWBATTLESTAND_DOWN,		/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	CHARMOTIONLISTID_BOWBATTLESTAND_LEFT,		/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(å·¦) */
+	CHARMOTIONLISTID_BOWBATTLESTAND_RIGHT,		/* å¼“ç”¨æˆ¦é—˜ç«‹ã¡(å³) */
+	CHARMOTIONLISTID_GLOVEBATTLESTAND_UP,		/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	CHARMOTIONLISTID_GLOVEBATTLESTAND_DOWN,		/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	CHARMOTIONLISTID_GLOVEBATTLESTAND_LEFT,		/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(å·¦) */
+	CHARMOTIONLISTID_GLOVEBATTLESTAND_RIGHT,	/* æ‰“æ’ƒç”¨æˆ¦é—˜ç«‹ã¡(å³) */
+	CHARMOTIONLISTID_FISHINGBATTLESTAND_UP,		/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(ä¸Š) */
+	CHARMOTIONLISTID_FISHINGBATTLESTAND_DOWN,	/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(ä¸‹) */
+	CHARMOTIONLISTID_FISHINGBATTLESTAND_LEFT,	/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(å·¦) */
+	CHARMOTIONLISTID_FISHINGBATTLESTAND_RIGHT,	/* é‡£ã‚Šç”¨æˆ¦é—˜ç«‹ã¡(å³) */
+	CHARMOTIONLISTID_STAND,						/* ç«‹ã¡ */
+	CHARMOTIONLISTID_STAND_SIMPLE,				/* ç«‹ã¡(ä¸Šä¸‹å·¦å³1ã‚³ãƒžãšã¤) */
+	CHARMOTIONLISTID_WALK,						/* æ­©ã(æ–¹å‘ç„¡ã—) */
+	CHARMOTIONLISTID_DESTROY,					/* ç ´å£Š */
+	CHARMOTIONLISTID_SIMPLE,					/* 16ã‚³ãƒžé€£ç¶š */
+	CHARMOTIONLISTID_DEFENSE_UP,				/* é˜²å¾¡(ä¸Š) */
+	CHARMOTIONLISTID_DEFENSE_DOWN,				/* é˜²å¾¡(ä¸‹) */
+	CHARMOTIONLISTID_DEFENSE_LEFT,				/* é˜²å¾¡(å·¦) */
+	CHARMOTIONLISTID_DEFENSE_RIGHT,				/* é˜²å¾¡(å³) */
+	CHARMOTIONLISTID_DEFENSE_SUCCESS_UP,		/* é˜²å¾¡æˆåŠŸ(ä¸Š) */
+	CHARMOTIONLISTID_DEFENSE_SUCCESS_DOWN,		/* é˜²å¾¡æˆåŠŸ(ä¸‹) */
+	CHARMOTIONLISTID_DEFENSE_SUCCESS_LEFT,		/* é˜²å¾¡æˆåŠŸ(å·¦) */
+	CHARMOTIONLISTID_DEFENSE_SUCCESS_RIGHT,		/* é˜²å¾¡æˆåŠŸ(å³) */
+	CHARMOTIONLISTID_BOWDEFENSE_UP,				/* å¼“ç”¨é˜²å¾¡(ä¸Š) */
+	CHARMOTIONLISTID_BOWDEFENSE_DOWN,			/* å¼“ç”¨é˜²å¾¡(ä¸‹) */
+	CHARMOTIONLISTID_BOWDEFENSE_LEFT,			/* å¼“ç”¨é˜²å¾¡(å·¦) */
+	CHARMOTIONLISTID_BOWDEFENSE_RIGHT,			/* å¼“ç”¨é˜²å¾¡(å³) */
+	CHARMOTIONLISTID_DAMAGE_UP,					/* ãƒ€ãƒ¡ãƒ¼ã‚¸(ä¸Š) */
+	CHARMOTIONLISTID_DAMAGE_DOWN,				/* ãƒ€ãƒ¡ãƒ¼ã‚¸(ä¸‹) */
+	CHARMOTIONLISTID_DAMAGE_LEFT,				/* ãƒ€ãƒ¡ãƒ¼ã‚¸(å·¦) */
+	CHARMOTIONLISTID_DAMAGE_RIGHT,				/* ãƒ€ãƒ¡ãƒ¼ã‚¸(å³) */
+	CHARMOTIONLISTID_DEAD_UP,					/* æ­»äº¡(ä¸Š) */
+	CHARMOTIONLISTID_DEAD_DOWN,					/* æ­»äº¡(ä¸‹) */
+	CHARMOTIONLISTID_DEAD_LEFT,					/* æ­»äº¡(å·¦) */
+	CHARMOTIONLISTID_DEAD_RIGHT,				/* æ­»äº¡(å³) */
 	CHARMOTIONLISTID_MAX
 };
 
-/* s“®ID */
+/* è¡Œå‹•ID */
 enum {
-	CHARMOTIONPROCID_NONE = 0,					/* ‰½‚à‚µ‚È‚¢ */
-	CHARMOTIONPROCID_ATACK,						/* UŒ‚ */
-	CHARMOTIONPROCID_FISHING,					/* ’Þ‚è */
+	CHARMOTIONPROCID_NONE = 0,					/* ä½•ã‚‚ã—ãªã„ */
+	CHARMOTIONPROCID_ATACK,						/* æ”»æ’ƒ */
+	CHARMOTIONPROCID_FISHING,					/* é‡£ã‚Š */
 	CHARMOTIONPROCID_MAX
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoMotion : public CInfoBase
 {
 public:
-			CInfoMotion();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoMotion();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoMotion();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoMotion();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementCount		(void);								/* —v‘f”‚ðŽæ“¾ */
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	int		GetElementCount		(void);								/* è¦ç´ æ•°ã‚’å–å¾— */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	void	Copy				(CInfoMotion *pSrc);				/* ƒRƒs[ */
+	void	Copy				(CInfoMotion *pSrc);				/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	int			m_nElementCount;				/* —v‘f” */
+	int			m_nElementCount;				/* è¦ç´ æ•° */
 
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	BYTE		m_byWait,						/* ‘Ò‚¿ŽžŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-				m_byLevel1,						/* “§–¾“x1 */
-				m_byLevel2,						/* “§–¾“x2 */
-				m_byLevel3;						/* “§–¾“x3 */
-	BOOL		m_bPile,						/* d‚Ë‰æ‘œ‚ðæ‚É•`‰æ */
-				m_bRedrawHand,					/* Žè‚ðŽè‘O‚É•`‰æ */
-				m_bLoop;						/* ƒ‹[ƒvÄ¶ */
-	WORD		m_wGrpIDMainBase,				/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(‰º’n) */
-				m_wGrpIDMainPile1,				/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹1) */
-				m_wGrpIDMainPile2,				/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹2) */
-				m_wGrpIDMainPile3,				/* ƒOƒ‰ƒtƒBƒbƒNIDƒƒCƒ“(d‚Ë‡‚í‚¹3) */
-				m_wGrpIDSubBase,				/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(‰º’n) */
-				m_wGrpIDSubPile1,				/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹1) */
-				m_wGrpIDSubPile2,				/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹2) */
-				m_wGrpIDSubPile3;				/* ƒOƒ‰ƒtƒBƒbƒNIDƒTƒu(d‚Ë‡‚í‚¹3) */
-	DWORD		m_dwMotionID,					/* ƒ‚[ƒVƒ‡ƒ“ID */
-				m_dwMotionTypeID,				/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-				m_dwMotionListID,				/* ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
-				m_dwSoundID,					/* Œø‰Ê‰¹ID */
-				m_dwProcID;						/* s“®ID */
-	POINT		m_ptDrawPosPile0,				/* •`‰æˆÊ’u(‰º’n) */
-				m_ptDrawPosPile1,				/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹1) */
-				m_ptDrawPosPile2,				/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹2) */
-				m_ptDrawPosPile3;				/* •`‰æˆÊ’u(d‚Ë‡‚í‚¹3) */
-	ARRAYINT	m_anDrawList;					/* •`‰æ‡ƒŠƒXƒg */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	BYTE		m_byWait,						/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+				m_byLevel1,						/* é€æ˜Žåº¦1 */
+				m_byLevel2,						/* é€æ˜Žåº¦2 */
+				m_byLevel3;						/* é€æ˜Žåº¦3 */
+	BOOL		m_bPile,						/* é‡ã­ç”»åƒã‚’å…ˆã«æç”» */
+				m_bRedrawHand,					/* æ‰‹ã‚’æ‰‹å‰ã«æç”» */
+				m_bLoop;						/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	WORD		m_wGrpIDMainBase,				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(ä¸‹åœ°) */
+				m_wGrpIDMainPile1,				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›1) */
+				m_wGrpIDMainPile2,				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›2) */
+				m_wGrpIDMainPile3,				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDãƒ¡ã‚¤ãƒ³(é‡ã­åˆã‚ã›3) */
+				m_wGrpIDSubBase,				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(ä¸‹åœ°) */
+				m_wGrpIDSubPile1,				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›1) */
+				m_wGrpIDSubPile2,				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›2) */
+				m_wGrpIDSubPile3;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ–(é‡ã­åˆã‚ã›3) */
+	DWORD		m_dwMotionID,					/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID */
+				m_dwMotionTypeID,				/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+				m_dwMotionListID,				/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
+				m_dwSoundID,					/* åŠ¹æžœéŸ³ID */
+				m_dwProcID;						/* è¡Œå‹•ID */
+	POINT		m_ptDrawPosPile0,				/* æç”»ä½ç½®(ä¸‹åœ°) */
+				m_ptDrawPosPile1,				/* æç”»ä½ç½®(é‡ã­åˆã‚ã›1) */
+				m_ptDrawPosPile2,				/* æç”»ä½ç½®(é‡ã­åˆã‚ã›2) */
+				m_ptDrawPosPile3;				/* æç”»ä½ç½®(é‡ã­åˆã‚ã›3) */
+	ARRAYINT	m_anDrawList;					/* æç”»é †ãƒªã‚¹ãƒˆ */
 } CInfoMotion, *PCInfoMotion;
 typedef CmyArray<PCInfoMotion, PCInfoMotion>	   ARRAYMOTIONINFO;
 typedef CmyArray<PCInfoMotion, PCInfoMotion>	 *PARRAYMOTIONINFO;

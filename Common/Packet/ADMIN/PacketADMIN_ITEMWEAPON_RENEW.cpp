@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ITEMWEAPON_RENEW.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒAƒCƒeƒ€Œn:•Šíî•ñXV) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ITEMWEAPON_RENEW.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚¢ã‚¤ãƒ†ãƒ ç³»:æ­¦å™¨æƒ…å ±æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_ITEMWEAPON_RENEW.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMWEAPON_RENEW::CPacketADMIN_ITEMWEAPON_RENEW	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMWEAPON_RENEW::CPacketADMIN_ITEMWEAPON_RENEW	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEMWEAPON_RENEW::CPacketADMIN_ITEMWEAPON_RENEW()
@@ -24,9 +24,9 @@ CPacketADMIN_ITEMWEAPON_RENEW::CPacketADMIN_ITEMWEAPON_RENEW()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMWEAPON_RENEW::~CPacketADMIN_ITEMWEAPON_RENEW	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMWEAPON_RENEW::~CPacketADMIN_ITEMWEAPON_RENEW	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEMWEAPON_RENEW::~CPacketADMIN_ITEMWEAPON_RENEW()
@@ -36,13 +36,13 @@ CPacketADMIN_ITEMWEAPON_RENEW::~CPacketADMIN_ITEMWEAPON_RENEW()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMWEAPON_RENEW::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMWEAPON_RENEW::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CPacketADMIN_ITEMWEAPON_RENEW::Make(
-	CInfoItemWeapon *pInfo)		/* [in] •Šíî•ñ */
+	CInfoItemWeapon *pInfo)		/* [in] æ­¦å™¨æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketADMIN_ITEMWEAPON_RENEW::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_ITEMWEAPON_RENEW;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* •Šíî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* æ­¦å™¨æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketADMIN_ITEMWEAPON_RENEW::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ITEMWEAPON_RENEW::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketADMIN_ITEMWEAPON_RENEW::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_ITEMWEAPON_RENEW::Set(PBYTE pPacket)

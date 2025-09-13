@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowACCOUNTINFO.cpp										 */
-/* “à—e			:ƒAƒJƒEƒ“ƒgî•ñƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/12/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowACCOUNTINFO.cpp										 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/29													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,9 +17,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowACCOUNTINFO::CWindowACCOUNTINFO							 */
-/* “à—eF	ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2006/12/29														 */
+/* é–¢æ•°åï¼š	CWindowACCOUNTINFO::CWindowACCOUNTINFO							 */
+/* å†…å®¹ï¼š	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2006/12/29														 */
 /* ========================================================================= */
 
 CWindowACCOUNTINFO::CWindowACCOUNTINFO()
@@ -35,9 +35,9 @@ CWindowACCOUNTINFO::CWindowACCOUNTINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowACCOUNTINFO::~CWindowACCOUNTINFO							 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2006/12/29														 */
+/* é–¢æ•°åï¼š	CWindowACCOUNTINFO::~CWindowACCOUNTINFO							 */
+/* å†…å®¹ï¼š	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2006/12/29														 */
 /* ========================================================================= */
 
 CWindowACCOUNTINFO::~CWindowACCOUNTINFO()
@@ -46,9 +46,9 @@ CWindowACCOUNTINFO::~CWindowACCOUNTINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowACCOUNTINFO::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/12/29														 */
+/* é–¢æ•°å	:CWindowACCOUNTINFO::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/12/29														 */
 /* ========================================================================= */
 
 void CWindowACCOUNTINFO::Create(CMgrData *pMgrData)
@@ -61,9 +61,9 @@ void CWindowACCOUNTINFO::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CWindowACCOUNTINFO::Draw										 */
-/* “à—eF	•`‰æ															 */
-/* “ú•tF	2006/12/29														 */
+/* é–¢æ•°åï¼š	CWindowACCOUNTINFO::Draw										 */
+/* å†…å®¹ï¼š	æç”»															 */
+/* æ—¥ä»˜ï¼š	2006/12/29														 */
 /* ========================================================================= */
 
 void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
@@ -92,12 +92,12 @@ void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	strTmp.Format ("ƒLƒƒƒ‰–¼:%s", (LPCSTR)pInfoChar->m_strCharName);
+	strTmp.Format ("ã‚­ãƒ£ãƒ©å:%s", (LPCSTR)pInfoChar->m_strCharName);
 	TextOut2 (hDC, 16, 16 + 16 * 0, strTmp,	clText);
-	strTmp.Format ("ƒAƒJƒEƒ“ƒgì¬“úŽž:");
+	strTmp.Format ("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆæ—¥æ™‚:");
 	TextOut2 (hDC, 16, 16 + 16 * 1, strTmp,	clText);
-	TextOut2 (hDC, 16, 16 + 16 * 2, "‘O‰ñƒƒOƒCƒ““úŽž:",	clText);
-	TextOut2 (hDC, 16, 16 + 16 * 3, "ƒƒOƒCƒ“‰ñ”:",		clText);
+	TextOut2 (hDC, 16, 16 + 16 * 2, "å‰å›žãƒ­ã‚°ã‚¤ãƒ³æ—¥æ™‚:",	clText);
+	TextOut2 (hDC, 16, 16 + 16 * 3, "ãƒ­ã‚°ã‚¤ãƒ³å›žæ•°:",		clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

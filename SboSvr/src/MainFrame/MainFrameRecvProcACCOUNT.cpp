@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcACCOUNT.cpp								 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒAƒJƒEƒ“ƒgŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcACCOUNT.cpp								 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,24 +19,24 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcACCOUNT									 */
-/* “à—e		:ŽóMˆ—(ƒAƒJƒEƒ“ƒgŒn)											 */
-/* “ú•t		:2006/11/07														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcACCOUNT									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³»)											 */
+/* æ—¥ä»˜		:2006/11/07														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcACCOUNT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_ACCOUNT_REQ_ACCOUNTINFO:	RecvProcACCOUNT_REQ_ACCOUNTINFO (pData, dwSessionID);	break;	/* ƒAƒJƒEƒ“ƒgî•ñ—v‹ */
-	case SBOCOMMANDID_SUB_ACCOUNT_REQ_MAKECHAR:		RecvProcACCOUNT_REQ_MAKECHAR	(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰ì¬—v‹ */
+	case SBOCOMMANDID_SUB_ACCOUNT_REQ_ACCOUNTINFO:	RecvProcACCOUNT_REQ_ACCOUNTINFO (pData, dwSessionID);	break;	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ACCOUNT_REQ_MAKECHAR:		RecvProcACCOUNT_REQ_MAKECHAR	(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©ä½œæˆè¦æ±‚ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcACCOUNT_REQ_ACCOUNTINFO					 */
-/* “à—e		:ŽóMˆ—(ƒAƒJƒEƒ“ƒgî•ñ—v‹)									 */
-/* “ú•t		:2006/11/07														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcACCOUNT_REQ_ACCOUNTINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±è¦æ±‚)									 */
+/* æ—¥ä»˜		:2006/11/07														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcACCOUNT_REQ_ACCOUNTINFO(PBYTE pData, DWORD dwSessionID)
@@ -60,9 +60,9 @@ void CMainFrame::RecvProcACCOUNT_REQ_ACCOUNTINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR						 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰ì¬—v‹)										 */
-/* “ú•t		:2006/12/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©ä½œæˆè¦æ±‚)										 */
+/* æ—¥ä»˜		:2006/12/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
@@ -114,7 +114,7 @@ void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
 	pInfoChar->m_wGrpIDHairType		= pInfoCharPacket->m_wGrpIDHairType;
 	pInfoChar->m_wGrpIDHairColor	= pInfoCharPacket->m_wGrpIDHairColor;
 	pInfoChar->m_dwMotionTypeID		= pInfoCharPacket->m_dwMotionTypeID;
-	if (pInfoCharPacket->m_strCharName == "t‚¤‚ç‚ç") {
+	if (pInfoCharPacket->m_strCharName == "æ˜¥ã†ã‚‰ã‚‰") {
 		pInfoChar->m_wGrpIDSP = 1;
 		pInfoChar->m_clName		= RGB (255, 200, 100);
 		pInfoChar->m_clSpeak	= RGB (255, 200, 100);
@@ -124,22 +124,22 @@ void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
 		pInfoChar->m_clName		= RGB (255, 150, 150);
 		pInfoChar->m_clSpeak	= RGB (255, 150, 150);
 		pInfoChar->m_abyMark.Add (3);
-	} else if (pInfoCharPacket->m_strCharName == "‚ ‚â‚µ‚¢‚Ì") {
+	} else if (pInfoCharPacket->m_strCharName == "ã‚ã‚„ã—ã„ã®") {
 		pInfoChar->m_wGrpIDSP = 3;
 	}
 	pInfoChar->m_abyMark.Add (1);
 #if 0
 	switch (pInfoChar->m_wFamilyID) {
-	case FAMILYTYPE_HUMAN:				/* ƒjƒ“ƒQƒ“ */
+	case FAMILYTYPE_HUMAN:				/* ãƒ‹ãƒ³ã‚²ãƒ³ */
 		pInfoChar->m_wGrpIDCloth = 1;
 		break;
-	case FAMILYTYPE_ELF:				/* ƒGƒ‹ƒt */
+	case FAMILYTYPE_ELF:				/* ã‚¨ãƒ«ãƒ• */
 		pInfoChar->m_wGrpIDCloth = 2;
 		break;
-	case FAMILYTYPE_BST:				/* ƒWƒ…ƒEƒWƒ“ */
+	case FAMILYTYPE_BST:				/* ã‚¸ãƒ¥ã‚¦ã‚¸ãƒ³ */
 		pInfoChar->m_wGrpIDCloth = 3;
 		break;
-	case FAMILYTYPE_DAEMON:				/* ƒ}ƒ]ƒN */
+	case FAMILYTYPE_DAEMON:				/* ãƒžã‚¾ã‚¯ */
 		pInfoChar->m_wGrpIDCloth = 4;
 		break;
 	}

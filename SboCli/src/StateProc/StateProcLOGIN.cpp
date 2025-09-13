@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcLOGIN.cpp											 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(ƒƒOƒCƒ“‰æ–Ê) ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcLOGIN.cpp											 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,9 +17,9 @@
 #include "StateProcLOGIN.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGIN::CStateProcLOGIN								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGIN::CStateProcLOGIN								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 CStateProcLOGIN::CStateProcLOGIN()
@@ -29,9 +29,9 @@ CStateProcLOGIN::CStateProcLOGIN()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGIN::~CStateProcLOGIN								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGIN::~CStateProcLOGIN								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 CStateProcLOGIN::~CStateProcLOGIN()
@@ -40,9 +40,9 @@ CStateProcLOGIN::~CStateProcLOGIN()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGIN::Init											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CStateProcLOGIN::Init											 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 void CStateProcLOGIN::Init(void)
@@ -61,9 +61,9 @@ void CStateProcLOGIN::Init(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGIN::TimerProc										 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2007/03/26														 */
+/* é–¢æ•°å	:CStateProcLOGIN::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/03/26														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGIN::TimerProc(void)
@@ -88,9 +88,9 @@ BOOL CStateProcLOGIN::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGIN::OnLButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/04/02														 */
+/* é–¢æ•°å	:CStateProcLOGIN::OnLButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/04/02														 */
 /* ========================================================================= */
 
 void CStateProcLOGIN::OnLButtonDown(int x, int y)
@@ -103,9 +103,9 @@ void CStateProcLOGIN::OnLButtonDown(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGIN::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/04/02														 */
+/* é–¢æ•°å	:CStateProcLOGIN::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/04/02														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGIN::OnX(BOOL bDown)
@@ -117,9 +117,9 @@ BOOL CStateProcLOGIN::OnX(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGIN::OnMgrDrawSTART_FADEIN							 */
-/* “à—e		:ƒtƒF[ƒhƒCƒ“ŠJŽn												 */
-/* “ú•t		:2007/03/26														 */
+/* é–¢æ•°å	:CStateProcLOGIN::OnMgrDrawSTART_FADEIN							 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³é–‹å§‹												 */
+/* æ—¥ä»˜		:2007/03/26														 */
 /* ========================================================================= */
 
 void CStateProcLOGIN::OnMgrDrawSTART_FADEIN(DWORD dwPara)

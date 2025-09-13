@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharBase.h												 */
-/* “à—e			:ƒLƒƒƒ‰î•ñŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharBase.h												 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,265 +12,265 @@
 #include "InfoMotion.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
+/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
 enum {
-	CHARMOTIONID_STAND = 0,		/* —§‚¿ */
-	CHARMOTIONID_WALK,			/* •à‚« */
-	CHARMOTIONID_SIT,			/* À‚è */
-	CHARMOTIONID_BATTLESTAND,	/* í“¬—§‚¿ */
-	CHARMOTIONID_BATTLEWALK,	/* ‚·‚è‘« */
-	CHARMOTIONID_ATACK,			/* UŒ‚ */
-	CHARMOTIONID_BATTLEDEFENSE,	/* –hŒä */
-	CHARMOTIONID_ANIME,			/* ƒAƒjƒ[ƒVƒ‡ƒ“ */
-	CHARMOTIONID_INTERRUUPT,	/* Š„‚èž‚ÝÄ¶ */
+	CHARMOTIONID_STAND = 0,		/* ç«‹ã¡ */
+	CHARMOTIONID_WALK,			/* æ­©ã */
+	CHARMOTIONID_SIT,			/* åº§ã‚Š */
+	CHARMOTIONID_BATTLESTAND,	/* æˆ¦é—˜ç«‹ã¡ */
+	CHARMOTIONID_BATTLEWALK,	/* ã™ã‚Šè¶³ */
+	CHARMOTIONID_ATACK,			/* æ”»æ’ƒ */
+	CHARMOTIONID_BATTLEDEFENSE,	/* é˜²å¾¡ */
+	CHARMOTIONID_ANIME,			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CHARMOTIONID_INTERRUUPT,	/* å‰²ã‚Šè¾¼ã¿å†ç”Ÿ */
 	CHARMOTIONID_MAX
 };
 
-/* s“®ó‘Ô */
+/* è¡Œå‹•çŠ¶æ…‹ */
 enum {
-	CHARPROCSTATEID_NORMAL = 0,		/* ’Êíó‘Ô */
-	CHARPROCSTATEID_FISHING,		/* ’Þ‚èó‘Ô */
+	CHARPROCSTATEID_NORMAL = 0,		/* é€šå¸¸çŠ¶æ…‹ */
+	CHARPROCSTATEID_FISHING,		/* é‡£ã‚ŠçŠ¶æ…‹ */
 	CHARPROCSTATEID_MAX
 };
 
-/* ƒLƒƒƒ‰ˆÚ“®Ží•Ê */
+/* ã‚­ãƒ£ãƒ©ç§»å‹•ç¨®åˆ¥ */
 enum {
-	CHARMOVETYPE_PC = 0,							/* ƒvƒŒƒCƒ„[ƒLƒƒƒ‰ */
-	CHARMOVETYPE_STAND,								/* ˆÚ“®‚µ‚È‚¢ */
-	CHARMOVETYPE_BALL,								/* ƒ{[ƒ‹ */
-	CHARMOVETYPE_SCORE,								/* “¾“_ */
-	CHARMOVETYPE_STYLECOPY_PUT,						/* —eŽpƒRƒs[(Žæ‚èž‚Ý) */
-	CHARMOVETYPE_ATACKANIME,						/* UŒ‚Žó‚¯‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“ */
-	CHARMOVETYPE_MOVEATACK,							/* ˆÚ“®‚µ‚ÄUŒ‚ */
-	CHARMOVETYPE_STYLECOPY_GET,						/* —eŽpƒRƒs[(”½‰f) */
-	CHARMOVETYPE_PUTNPC,							/* NPC”­¶ */
-	CHARMOVETYPE_BATTLE1,							/* í“¬1 */
-	CHARMOVETYPE_BATTLE2,							/* í“¬2 */
+	CHARMOVETYPE_PC = 0,							/* ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚­ãƒ£ãƒ© */
+	CHARMOVETYPE_STAND,								/* ç§»å‹•ã—ãªã„ */
+	CHARMOVETYPE_BALL,								/* ãƒœãƒ¼ãƒ« */
+	CHARMOVETYPE_SCORE,								/* å¾—ç‚¹ */
+	CHARMOVETYPE_STYLECOPY_PUT,						/* å®¹å§¿ã‚³ãƒ”ãƒ¼(å–ã‚Šè¾¼ã¿) */
+	CHARMOVETYPE_ATACKANIME,						/* æ”»æ’ƒå—ã‘ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CHARMOVETYPE_MOVEATACK,							/* ç§»å‹•ã—ã¦æ”»æ’ƒ */
+	CHARMOVETYPE_STYLECOPY_GET,						/* å®¹å§¿ã‚³ãƒ”ãƒ¼(åæ˜ ) */
+	CHARMOVETYPE_PUTNPC,							/* NPCç™ºç”Ÿ */
+	CHARMOVETYPE_BATTLE1,							/* æˆ¦é—˜1 */
+	CHARMOVETYPE_BATTLE2,							/* æˆ¦é—˜2 */
 	CHARMOVETYPE_MAX
 };
 
-/* ƒLƒƒƒ‰ˆÚ“®ó‘Ô */
+/* ã‚­ãƒ£ãƒ©ç§»å‹•çŠ¶æ…‹ */
 enum {
-	CHARMOVESTATE_STAND = 0,						/* —§‚¿ */
-	CHARMOVESTATE_SIT,								/* À‚è’† */
-	CHARMOVESTATE_MOVE,								/* ˆÚ“®’† */
-	CHARMOVESTATE_DELETEREADY,						/* Á‹Ž€”õ */
-	CHARMOVESTATE_DELETE,							/* Á‹Ž */
-	CHARMOVESTATE_BATTLE,							/* í“¬’† */
-	CHARMOVESTATE_BATTLEMOVE,						/* í“¬ˆÚ“®’† */
-	CHARMOVESTATE_BATTLEATACK,						/* í“¬UŒ‚’† */
-	CHARMOVESTATE_BATTLEATACK_WAIT,					/* í“¬UŒ‚Œã‚Ì‘Ò‚¿ŽžŠÔ */
-	CHARMOVESTATE_ANIME,							/* ƒAƒjƒ[ƒVƒ‡ƒ“ */
-	CHARMOVESTATE_WALKANIME,						/* ‘«“¥‚Ý */
-	CHARMOVESTATE_SWOON,							/* ‹Câ */
-	CHARMOVESTATE_DAMAGE,							/* ƒ_ƒ[ƒW */
-	CHARMOVESTATE_BATTLE_DEFENSE,					/* –hŒä’† */
-	CHARMOVESTATE_SLEEPTIMER,						/* ‚¨‚â‚·‚Ýƒ^ƒCƒ}[’† */
+	CHARMOVESTATE_STAND = 0,						/* ç«‹ã¡ */
+	CHARMOVESTATE_SIT,								/* åº§ã‚Šä¸­ */
+	CHARMOVESTATE_MOVE,								/* ç§»å‹•ä¸­ */
+	CHARMOVESTATE_DELETEREADY,						/* æ¶ˆåŽ»æº–å‚™ */
+	CHARMOVESTATE_DELETE,							/* æ¶ˆåŽ» */
+	CHARMOVESTATE_BATTLE,							/* æˆ¦é—˜ä¸­ */
+	CHARMOVESTATE_BATTLEMOVE,						/* æˆ¦é—˜ç§»å‹•ä¸­ */
+	CHARMOVESTATE_BATTLEATACK,						/* æˆ¦é—˜æ”»æ’ƒä¸­ */
+	CHARMOVESTATE_BATTLEATACK_WAIT,					/* æˆ¦é—˜æ”»æ’ƒå¾Œã®å¾…ã¡æ™‚é–“ */
+	CHARMOVESTATE_ANIME,							/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ */
+	CHARMOVESTATE_WALKANIME,						/* è¶³è¸ã¿ */
+	CHARMOVESTATE_SWOON,							/* æ°—çµ¶ */
+	CHARMOVESTATE_DAMAGE,							/* ãƒ€ãƒ¡ãƒ¼ã‚¸ */
+	CHARMOVESTATE_BATTLE_DEFENSE,					/* é˜²å¾¡ä¸­ */
+	CHARMOVESTATE_SLEEPTIMER,						/* ãŠã‚„ã™ã¿ã‚¿ã‚¤ãƒžãƒ¼ä¸­ */
 	CHARMOVESTATE_MAX
 };
 
-#define MAX_ATACKGAUGE		100						/* ƒAƒ^ƒbƒNƒQ[ƒWÅ‘å’l */
-#define MAX_DEFENSEGAUGE	100						/* ƒK[ƒhƒQ[ƒWÅ‘å’l */
+#define MAX_ATACKGAUGE		100						/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸æœ€å¤§å€¤ */
+#define MAX_DEFENSEGAUGE	100						/* ã‚¬ãƒ¼ãƒ‰ã‚²ãƒ¼ã‚¸æœ€å¤§å€¤ */
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharBase : public CInfoBase
 {
 public:
-			CInfoCharBase();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharBase();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharBase();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharBase();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚ðÝ’è */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š */
 
-	BOOL	IsLogin				(void);								/* ƒƒOƒCƒ“’†‚©”»’è */
-	BOOL	IsStateBattle		(void);								/* í“¬ƒ‚[ƒh‚©”»’è */
-	BOOL	IsStateMove			(void);								/* ˆÚ“®’†‚©”»’è */
-	BOOL	IsViewArea			(DWORD dwMapID, POINT *pptPos);		/* Œ©‚¦‚é”ÍˆÍ‚©”»’è */
-	BOOL	IsNPC				(void);								/* NPC‚©”»’è */
-	BOOL	CheckSessionID		(DWORD dwSessionID);				/* ƒZƒbƒVƒ‡ƒ“ID‚ðƒ`ƒFƒbƒN */
-	void	GetFrontPos			(POINT &ptDst, int nDirection = -1, BOOL bMove=FALSE);	/* ˆê•à‘O‚ÌƒLƒƒƒ‰À•W‚ðŽæ“¾ */
-	void	GetFrontPos			(CmyArray<POINT, POINT> &aptPos, int nDirection = -1);	/* ˆê•à‘O‚ÌƒLƒƒƒ‰À•W‚ðŽæ“¾ */
-	void	GetFrontMapPos		(POINT &ptDst, int nDirection = -1);					/* ˆê•à‘O‚Ìƒ}ƒbƒvÀ•W‚ðŽæ“¾ */
-	void	GetFrontMapPosRect	(RECT &rcDst, int nDirection = -1);	/* ˆê•à‘O‚Ìƒ}ƒbƒvÀ•W‹éŒ`‚ðŽæ“¾ */
-	int		GetDirection		(int x, int y);						/* Žw’èÀ•W‚ÌŒü‚«‚ðŽæ“¾ */
-	int		GetAtackType		(void);								/* UŒ‚Ží•Ê‚ðŽæ“¾ */
-	void	SetAtackMotion		(int nMotionID);					/* UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ÌÝ’è */
-	int		GetDrawDirection	(int nDirection = -1);				/* •`‰æ—p‚É4•ûŒü‚ÅŒü‚«‚ðŽæ“¾ */
-	int		GetBackDirection	(void);								/* ”½‘Î•ûŒü‚ðŽæ“¾ */
-	DWORD	GetMoveWait			(void);								/* ó‘Ô‚É‰ž‚¶‚½ˆÚ“®‘¬“x‚ðŽæ“¾ */
-	void	GetPosRect			(RECT &rcDst, BOOL bFrontPos = FALSE);	/* À•W‹éŒ`‚ðŽæ“¾ */
-	void	GetPosRectOnce		(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 1•à•ª‚ÌÀ•W‹éŒ`‚ðŽæ“¾ */
-	void	GetMapPosRect		(RECT &rcDst);						/* ƒ}ƒbƒvÀ•W‹éŒ`‚ðŽæ“¾ */
+	BOOL	IsLogin				(void);								/* ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‹åˆ¤å®š */
+	BOOL	IsStateBattle		(void);								/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ã‹åˆ¤å®š */
+	BOOL	IsStateMove			(void);								/* ç§»å‹•ä¸­ã‹åˆ¤å®š */
+	BOOL	IsViewArea			(DWORD dwMapID, POINT *pptPos);		/* è¦‹ãˆã‚‹ç¯„å›²ã‹åˆ¤å®š */
+	BOOL	IsNPC				(void);								/* NPCã‹åˆ¤å®š */
+	BOOL	CheckSessionID		(DWORD dwSessionID);				/* ã‚»ãƒƒã‚·ãƒ§ãƒ³IDã‚’ãƒã‚§ãƒƒã‚¯ */
+	void	GetFrontPos			(POINT &ptDst, int nDirection = -1, BOOL bMove=FALSE);	/* ä¸€æ­©å‰ã®ã‚­ãƒ£ãƒ©åº§æ¨™ã‚’å–å¾— */
+	void	GetFrontPos			(CmyArray<POINT, POINT> &aptPos, int nDirection = -1);	/* ä¸€æ­©å‰ã®ã‚­ãƒ£ãƒ©åº§æ¨™ã‚’å–å¾— */
+	void	GetFrontMapPos		(POINT &ptDst, int nDirection = -1);					/* ä¸€æ­©å‰ã®ãƒžãƒƒãƒ—åº§æ¨™ã‚’å–å¾— */
+	void	GetFrontMapPosRect	(RECT &rcDst, int nDirection = -1);	/* ä¸€æ­©å‰ã®ãƒžãƒƒãƒ—åº§æ¨™çŸ©å½¢ã‚’å–å¾— */
+	int		GetDirection		(int x, int y);						/* æŒ‡å®šåº§æ¨™ã®å‘ãã‚’å–å¾— */
+	int		GetAtackType		(void);								/* æ”»æ’ƒç¨®åˆ¥ã‚’å–å¾— */
+	void	SetAtackMotion		(int nMotionID);					/* æ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š */
+	int		GetDrawDirection	(int nDirection = -1);				/* æç”»ç”¨ã«4æ–¹å‘ã§å‘ãã‚’å–å¾— */
+	int		GetBackDirection	(void);								/* åå¯¾æ–¹å‘ã‚’å–å¾— */
+	DWORD	GetMoveWait			(void);								/* çŠ¶æ…‹ã«å¿œã˜ãŸç§»å‹•é€Ÿåº¦ã‚’å–å¾— */
+	void	GetPosRect			(RECT &rcDst, BOOL bFrontPos = FALSE);	/* åº§æ¨™çŸ©å½¢ã‚’å–å¾— */
+	void	GetPosRectOnce		(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 1æ­©åˆ†ã®åº§æ¨™çŸ©å½¢ã‚’å–å¾— */
+	void	GetMapPosRect		(RECT &rcDst);						/* ãƒžãƒƒãƒ—åº§æ¨™çŸ©å½¢ã‚’å–å¾— */
 
-	void		SetItem			(ARRAYDWORD *padwItemID);						/* ƒAƒCƒeƒ€î•ñ‚ðÝ’è */
-	ARRAYDWORD	*GetItem		(void)	{ return &m_adwItemID; }				/* ƒAƒCƒeƒ€î•ñ‚ðŽæ“¾ */
-	BOOL		IsItemAdd		(void);											/* ƒAƒCƒeƒ€‚ð’Ç‰Á‚Å‚«‚é‚©”»’è */
-	void		DeleteItem		(DWORD dwItemID);								/* ŠŽƒAƒCƒeƒ€‚ðíœ */
-	BOOL		HaveItem		(DWORD dwItemID);								/* Žw’èƒAƒCƒeƒ€‚ðŽ‚Á‚Ä‚¢‚é‚©”»’è */
-	void		GetTargetPos	(POINT *ptTarget, POINT &ptDst, int nCount);	/* Žw’èÀ•W‚ðŽæ“¾ */
-	virtual void SetTarget		(CInfoCharBase *pCharTarget);					/* ƒ^[ƒQƒbƒgƒLƒƒƒ‰‚ðÝ’è */
-	void		SetSkill		(ARRAYDWORD *padwSkillID);						/* ƒXƒLƒ‹î•ñ‚ðÝ’è */
-	ARRAYDWORD	*GetSkill		(void)	{ return &m_adwSkillID; }				/* ƒXƒLƒ‹î•ñ‚ðŽæ“¾ */
-	BOOL		HaveSkill		(DWORD dwSkillID);								/* Žw’èƒXƒLƒ‹‚ðŽ‚Á‚Ä‚¢‚é‚©”»’è */
-	BOOL		AddSkill		(DWORD dwSkillID);								/* ƒXƒLƒ‹‚ð’Ç‰Á */
-	BOOL		DeleteSkill		(DWORD dwSkillID);								/* ƒXƒLƒ‹‚ðíœ */
+	void		SetItem			(ARRAYDWORD *padwItemID);						/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’è¨­å®š */
+	ARRAYDWORD	*GetItem		(void)	{ return &m_adwItemID; }				/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾— */
+	BOOL		IsItemAdd		(void);											/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿½åŠ ã§ãã‚‹ã‹åˆ¤å®š */
+	void		DeleteItem		(DWORD dwItemID);								/* æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã‚’å‰Šé™¤ */
+	BOOL		HaveItem		(DWORD dwItemID);								/* æŒ‡å®šã‚¢ã‚¤ãƒ†ãƒ ã‚’æŒã£ã¦ã„ã‚‹ã‹åˆ¤å®š */
+	void		GetTargetPos	(POINT *ptTarget, POINT &ptDst, int nCount);	/* æŒ‡å®šåº§æ¨™ã‚’å–å¾— */
+	virtual void SetTarget		(CInfoCharBase *pCharTarget);					/* ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚­ãƒ£ãƒ©ã‚’è¨­å®š */
+	void		SetSkill		(ARRAYDWORD *padwSkillID);						/* ã‚¹ã‚­ãƒ«æƒ…å ±ã‚’è¨­å®š */
+	ARRAYDWORD	*GetSkill		(void)	{ return &m_adwSkillID; }				/* ã‚¹ã‚­ãƒ«æƒ…å ±ã‚’å–å¾— */
+	BOOL		HaveSkill		(DWORD dwSkillID);								/* æŒ‡å®šã‚¹ã‚­ãƒ«ã‚’æŒã£ã¦ã„ã‚‹ã‹åˆ¤å®š */
+	BOOL		AddSkill		(DWORD dwSkillID);								/* ã‚¹ã‚­ãƒ«ã‚’è¿½åŠ  */
+	BOOL		DeleteSkill		(DWORD dwSkillID);								/* ã‚¹ã‚­ãƒ«ã‚’å‰Šé™¤ */
 
-	virtual BOOL IsMove				(void);							/* ˆÚ“®’†‚©”»’è */
-	virtual int  SetPos				(int x, int y, BOOL bBack = FALSE);	/* À•W‚ðŽw’è */
-	virtual void SetDirection		(int nDirection);				/* Œü‚«‚ðŽw’è */
-	virtual void SetMoveState		(int nMoveState);				/* ˆÚ“®ó‘Ô‚ð•ÏX */
-	virtual void SetProcState		(int nProcState);				/* s“®ó‘Ô‚ð•ÏX */
-	virtual void SetName			(LPCSTR pszName);				/* ƒLƒƒƒ‰–¼‚ðXV */
-	virtual void SetSpeak			(LPCSTR pszSpeak);				/* ”­Œ¾“à—e‚ðXV */
-	virtual void Copy				(CInfoCharBase *pSrc);			/* ƒRƒs[ */
-	virtual BOOL TimerProc			(DWORD dwTime);					/* ŽžŠÔˆ— */
-	virtual void RenewBlockMapArea	(int x, int y, int nDirection, BOOL bMoveOut = FALSE);	/* “–‚½‚è”»’è‘ÎÛ‚Ìƒ}ƒbƒvÀ•W‚ðXV */
-	virtual BOOL IsHitCharPos		(int x, int y, SIZE *psize = NULL);						/* ƒLƒƒƒ‰À•W‚Æ‚Ì“–‚½‚è”»’è */
-	virtual void GetViewCharPos		(POINT &ptDst);					/* •\Ž¦—p‚ÌÀ•W•â³’l‚ðŽæ“¾ */
-	virtual void GetCharSize		(SIZE &sizeDst);				/* ƒLƒƒƒ‰‚Ì•‚Æ‚‚³‚ðŽæ“¾ */
-	virtual BOOL IsEnableMove		(void);							/* ˆÚ“®‚Å‚«‚éó‘Ô‚©”»’è */
-	virtual BOOL IsEnableAtack		(void);							/* UŒ‚‚Å‚«‚éó‘Ô‚©”»’è */
-	virtual BOOL IsAtackTarget		(void);							/* UŒ‚‘ÎÛ‚Æ‚È‚é‚©”»’è */
-	virtual BOOL IsEnableHeal		(void);							/* ‰ñ•œ‚Å‚«‚éó‘Ô‚©”»’è */
-	virtual BOOL IsLogoutDelete		(void);							/* ƒƒOƒAƒEƒgŽž‚Éíœ‚·‚é‚©”»’è */
+	virtual BOOL IsMove				(void);							/* ç§»å‹•ä¸­ã‹åˆ¤å®š */
+	virtual int  SetPos				(int x, int y, BOOL bBack = FALSE);	/* åº§æ¨™ã‚’æŒ‡å®š */
+	virtual void SetDirection		(int nDirection);				/* å‘ãã‚’æŒ‡å®š */
+	virtual void SetMoveState		(int nMoveState);				/* ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´ */
+	virtual void SetProcState		(int nProcState);				/* è¡Œå‹•çŠ¶æ…‹ã‚’å¤‰æ›´ */
+	virtual void SetName			(LPCSTR pszName);				/* ã‚­ãƒ£ãƒ©åã‚’æ›´æ–° */
+	virtual void SetSpeak			(LPCSTR pszSpeak);				/* ç™ºè¨€å†…å®¹ã‚’æ›´æ–° */
+	virtual void Copy				(CInfoCharBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
+	virtual BOOL TimerProc			(DWORD dwTime);					/* æ™‚é–“å‡¦ç† */
+	virtual void RenewBlockMapArea	(int x, int y, int nDirection, BOOL bMoveOut = FALSE);	/* å½“ãŸã‚Šåˆ¤å®šå¯¾è±¡ã®ãƒžãƒƒãƒ—åº§æ¨™ã‚’æ›´æ–° */
+	virtual BOOL IsHitCharPos		(int x, int y, SIZE *psize = NULL);						/* ã‚­ãƒ£ãƒ©åº§æ¨™ã¨ã®å½“ãŸã‚Šåˆ¤å®š */
+	virtual void GetViewCharPos		(POINT &ptDst);					/* è¡¨ç¤ºç”¨ã®åº§æ¨™è£œæ­£å€¤ã‚’å–å¾— */
+	virtual void GetCharSize		(SIZE &sizeDst);				/* ã‚­ãƒ£ãƒ©ã®å¹…ã¨é«˜ã•ã‚’å–å¾— */
+	virtual BOOL IsEnableMove		(void);							/* ç§»å‹•ã§ãã‚‹çŠ¶æ…‹ã‹åˆ¤å®š */
+	virtual BOOL IsEnableAtack		(void);							/* æ”»æ’ƒã§ãã‚‹çŠ¶æ…‹ã‹åˆ¤å®š */
+	virtual BOOL IsAtackTarget		(void);							/* æ”»æ’ƒå¯¾è±¡ã¨ãªã‚‹ã‹åˆ¤å®š */
+	virtual BOOL IsEnableHeal		(void);							/* å›žå¾©ã§ãã‚‹çŠ¶æ…‹ã‹åˆ¤å®š */
+	virtual BOOL IsLogoutDelete		(void);							/* ãƒ­ã‚°ã‚¢ã‚¦ãƒˆæ™‚ã«å‰Šé™¤ã™ã‚‹ã‹åˆ¤å®š */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
-	DWORD		m_dwSessionID,						/* ‘€ì’†‚ÌƒZƒbƒVƒ‡ƒ“ID */
-				m_dwAccountID,						/* ƒAƒJƒEƒ“ƒgID */
-				m_dwLastTimeSpeak,					/* ÅI”­Œ¾ŽžŠÔ */
-				m_dwLastTimeMove,					/* ÅIˆÚ“®ˆ—ŽžŠÔ */
-				m_dwTailCharID,						/* •t‚¢‚Ä—ˆ‚Ä‚¢‚éƒLƒƒƒ‰ID */
-				m_dwFrontCharID,					/* •t‚¢‚Ä‚¢‚éƒLƒƒƒ‰ID */
-				m_dwParentCharID,					/* e‚ÌƒLƒƒƒ‰ID */
-				m_dwTargetCharID,					/* ƒ^[ƒQƒbƒgƒLƒƒƒ‰ID */
-				m_adwMotionID[CHARMOTIONID_MAX],	/* ƒ‚[ƒVƒ‡ƒ“ID */
-				m_dwLightTime;						/* “”‚è—LŒøŽžŠÔ */
-	WORD		m_wAtackGauge,						/* ƒAƒ^ƒbƒNƒQ[ƒW */
-				m_wDefenseGauge;					/* ƒK[ƒhƒQ[ƒW */
-	POINT		m_ptCharBack,						/* ‘O‰ñ‚ÌƒLƒƒƒ‰À•W */
-				m_ptViewCharPos,					/* •\Ž¦—p‚ÌÀ•W•â³’l */
-				m_ptTargetPos,						/* ƒ^[ƒQƒbƒgÀ•W */
-				m_ptStartPos;						/* ŠJŽnÀ•W */
-	int			m_nAnime,							/* ƒAƒjƒ[ƒVƒ‡ƒ“”Ô† */
-				m_nDirectionBack,					/* ‘O‰ñ‚ÌŒü‚« */
-				m_nProcState,						/* s“®ó‘Ô */
-				m_nMoveDirection,					/* ˆÚ“®•ûŒü */
-				m_nLightLevel,						/* “”‚èƒŒƒxƒ‹ */
-				m_nAtackTarget;						/* UŒ‚‘ÎÛ */
-	BOOL		m_bDelete,							/* íœƒtƒ‰ƒO */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
+	DWORD		m_dwSessionID,						/* æ“ä½œä¸­ã®ã‚»ãƒƒã‚·ãƒ§ãƒ³ID */
+				m_dwAccountID,						/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+				m_dwLastTimeSpeak,					/* æœ€çµ‚ç™ºè¨€æ™‚é–“ */
+				m_dwLastTimeMove,					/* æœ€çµ‚ç§»å‹•å‡¦ç†æ™‚é–“ */
+				m_dwTailCharID,						/* ä»˜ã„ã¦æ¥ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ID */
+				m_dwFrontCharID,					/* ä»˜ã„ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ID */
+				m_dwParentCharID,					/* è¦ªã®ã‚­ãƒ£ãƒ©ID */
+				m_dwTargetCharID,					/* ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚­ãƒ£ãƒ©ID */
+				m_adwMotionID[CHARMOTIONID_MAX],	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID */
+				m_dwLightTime;						/* ç¯ã‚Šæœ‰åŠ¹æ™‚é–“ */
+	WORD		m_wAtackGauge,						/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+				m_wDefenseGauge;					/* ã‚¬ãƒ¼ãƒ‰ã‚²ãƒ¼ã‚¸ */
+	POINT		m_ptCharBack,						/* å‰å›žã®ã‚­ãƒ£ãƒ©åº§æ¨™ */
+				m_ptViewCharPos,					/* è¡¨ç¤ºç”¨ã®åº§æ¨™è£œæ­£å€¤ */
+				m_ptTargetPos,						/* ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™ */
+				m_ptStartPos;						/* é–‹å§‹åº§æ¨™ */
+	int			m_nAnime,							/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå· */
+				m_nDirectionBack,					/* å‰å›žã®å‘ã */
+				m_nProcState,						/* è¡Œå‹•çŠ¶æ…‹ */
+				m_nMoveDirection,					/* ç§»å‹•æ–¹å‘ */
+				m_nLightLevel,						/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+				m_nAtackTarget;						/* æ”»æ’ƒå¯¾è±¡ */
+	BOOL		m_bDelete,							/* å‰Šé™¤ãƒ•ãƒ©ã‚° */
 				m_bNPC,								/* NPC */
-				m_bChargeAtack,						/* —­‚ßUŒ‚ */
-				m_bParentInfo;						/* e‚Ìî•ñ‚ðŽQÆ‚·‚é */
-	ARRAYBYTE	m_abyMark;							/* –¼‘O‚Ì‘O‚É•\Ž¦‚·‚éƒ}[ƒN”Ô† */
-	CmyArray<POINT, POINT> m_aposBockMapArea;		/* “–‚½‚è”»’è‘ÎÛ‚Ìƒ}ƒbƒvÀ•W */
+				m_bChargeAtack,						/* æºœã‚æ”»æ’ƒ */
+				m_bParentInfo;						/* è¦ªã®æƒ…å ±ã‚’å‚ç…§ã™ã‚‹ */
+	ARRAYBYTE	m_abyMark;							/* åå‰ã®å‰ã«è¡¨ç¤ºã™ã‚‹ãƒžãƒ¼ã‚¯ç•ªå· */
+	CmyArray<POINT, POINT> m_aposBockMapArea;		/* å½“ãŸã‚Šåˆ¤å®šå¯¾è±¡ã®ãƒžãƒƒãƒ—åº§æ¨™ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	BOOL		m_bBlock,					/* ‚Ô‚Â‚©‚é”»’è */
-				m_bPush;					/* ‰Ÿ‚¹‚é”»’è */
-	int			m_nMapX,					/* ƒ}ƒbƒvÀ•W(‰¡) */
-				m_nMapY,					/* ƒ}ƒbƒvÀ•W(c) */
-				m_nMoveState,				/* ˆÚ“®ó‘Ô */
-				m_nMoveType,				/* ˆÚ“®Ží•Ê */
-				m_nDirection,				/* Œü‚« */
-				m_nGrpSize,					/* ‰æ‘œƒTƒCƒY */
-				m_nSex,						/* «•Ê */
-				m_nMaxItemCount,			/* Å‘åƒAƒCƒeƒ€ŠŽ” */
-				m_nDropItemAverage,			/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-				m_nMoveAverage,				/* ˆÚ“®Šm—¦ */
-				m_nMoveAverageBattle;		/* í“¬ŽžˆÚ“®Šm—¦ */
-	WORD		m_wFamilyID,				/* Ží‘°ID */
-				m_wGrpIDNPC,				/* ‰æ‘œID(NPC) */
-				m_wGrpIDCloth,				/* ‰æ‘œID(•ž) */
-				m_wGrpIDEye,				/* ‰æ‘œID(–Ú) */
-				m_wGrpIDEyeColor,			/* ‰æ‘œID(–ÚF) */
-				m_wGrpIDHairType,			/* ‰æ‘œID(”¯) */
-				m_wGrpIDHairColor,			/* ‰æ‘œID(”¯F) */
-				m_wGrpIDSP,					/* ‰æ‘œID(“ÁŽê•ž) */
-				m_wGrpIDTmpMain,			/* ‰æ‘œID(ˆêŽž•ž:ƒƒCƒ“) */
-				m_wGrpIDTmpSub,				/* ‰æ‘œID(ˆêŽž•ž:ƒTƒu) */
-				m_wGrpIDAcce,				/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-				m_wGrpIDArmsMain,			/* ‰æ‘œID(Ž‚¿•¨:ƒƒCƒ“) */
-				m_wGrpIDArmsSub,			/* ‰æ‘œID(Ž‚¿•¨:ƒTƒu) */
-				m_wGrpIDArmsLeftMain,		/* ‰æ‘œID(‚:ƒƒCƒ“) */
-				m_wGrpIDArmsLeftSub,		/* ‰æ‘œID(‚:ƒTƒu) */
-				m_wGrpIDInitNPC,			/* ‰Šú‰æ‘œID(NPC) */
-				m_wGrpIDInitCloth,			/* ‰Šú‰æ‘œID(•ž) */
-				m_wGrpIDInitEye,			/* ‰Šú‰æ‘œID(–Ú) */
-				m_wGrpIDInitEyeColor,		/* ‰Šú‰æ‘œID(–ÚF) */
-				m_wGrpIDInitHairType,		/* ‰Šú‰æ‘œID(”¯) */
-				m_wGrpIDInitHairColor,		/* ‰Šú‰æ‘œID(”¯F) */
-				m_wGrpIDInitSP,				/* ‰Šú‰æ‘œID(“ÁŽê•ž) */
-				m_wLevel,					/* ƒŒƒxƒ‹ */
-				m_wStamina,					/* ƒXƒ^ƒ~ƒi */
-				m_wPower,					/* ˜r—Í */
-				m_wStrength,				/* ‘Ì—Í */
-				m_wMagic,					/* –‚—Í */
-				m_wSkillful,				/* Ší—p */
-				m_wAbillityAT,				/* UŒ‚‹Z”\ */
-				m_wAbillityDF,				/* –hŒä‹Z”\ */
-				m_wPAtack,					/* UŒ‚—Í */
-				m_wPDefense,				/* –hŒä—Í */
-				m_wPMagic,					/* –‚–@—Í */
-				m_wPMagicDefense,			/* –‚–@–hŒä—Í */
-				m_wPHitAverage,				/* –½’†—¦ */
-				m_wPAvoidAverage,			/* ‰ñ”ð—¦ */
-				m_wPCriticalAverage,		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-				m_wAttrFire,				/* ‘®«[‰Î] */
-				m_wAttrWind,				/* ‘®«[•—] */
-				m_wAttrWater,				/* ‘®«[…] */
-				m_wAttrEarth,				/* ‘®«[“y] */
-				m_wAttrLight,				/* ‘®«[Œõ] */
-				m_wAttrDark;				/* ‘®«[ˆÅ] */
-	DWORD		m_dwCharID,					/* ƒLƒƒƒ‰ID */
-				m_dwMapID,					/* ƒ}ƒbƒvID */
-				m_dwMotionTypeID,			/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-				m_dwEquipItemIDCloth,		/* ‘•”õƒAƒCƒeƒ€ID:•ž */
-				m_dwEquipItemIDAcce1,		/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ1 */
-				m_dwEquipItemIDAcce2,		/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ2 */
-				m_dwEquipItemIDArmsRight,	/* ‘•”õƒAƒCƒeƒ€ID:‰EŽè */
-				m_dwEquipItemIDArmsLeft,	/* ‘•”õƒAƒCƒeƒ€ID:¶Žè */
-				m_dwEquipItemIDHead,		/* ‘•”õƒAƒCƒeƒ€ID:“ª */
-				m_dwMoveWait,				/* ˆÚ“®‘Ò‚¿ŽžŠÔ */
-				m_dwMoveWaitBattle,			/* í“¬ŽžˆÚ“®‘Ò‚¿ŽžŠÔ */
-				m_dwExp,					/* ŒoŒ±’l */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	BOOL		m_bBlock,					/* ã¶ã¤ã‹ã‚‹åˆ¤å®š */
+				m_bPush;					/* æŠ¼ã›ã‚‹åˆ¤å®š */
+	int			m_nMapX,					/* ãƒžãƒƒãƒ—åº§æ¨™(æ¨ª) */
+				m_nMapY,					/* ãƒžãƒƒãƒ—åº§æ¨™(ç¸¦) */
+				m_nMoveState,				/* ç§»å‹•çŠ¶æ…‹ */
+				m_nMoveType,				/* ç§»å‹•ç¨®åˆ¥ */
+				m_nDirection,				/* å‘ã */
+				m_nGrpSize,					/* ç”»åƒã‚µã‚¤ã‚º */
+				m_nSex,						/* æ€§åˆ¥ */
+				m_nMaxItemCount,			/* æœ€å¤§ã‚¢ã‚¤ãƒ†ãƒ æ‰€æŒæ•° */
+				m_nDropItemAverage,			/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—çŽ‡ */
+				m_nMoveAverage,				/* ç§»å‹•ç¢ºçŽ‡ */
+				m_nMoveAverageBattle;		/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºçŽ‡ */
+	WORD		m_wFamilyID,				/* ç¨®æ—ID */
+				m_wGrpIDNPC,				/* ç”»åƒID(NPC) */
+				m_wGrpIDCloth,				/* ç”»åƒID(æœ) */
+				m_wGrpIDEye,				/* ç”»åƒID(ç›®) */
+				m_wGrpIDEyeColor,			/* ç”»åƒID(ç›®è‰²) */
+				m_wGrpIDHairType,			/* ç”»åƒID(é«ª) */
+				m_wGrpIDHairColor,			/* ç”»åƒID(é«ªè‰²) */
+				m_wGrpIDSP,					/* ç”»åƒID(ç‰¹æ®Šæœ) */
+				m_wGrpIDTmpMain,			/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+				m_wGrpIDTmpSub,				/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
+				m_wGrpIDAcce,				/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+				m_wGrpIDArmsMain,			/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+				m_wGrpIDArmsSub,			/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+				m_wGrpIDArmsLeftMain,		/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+				m_wGrpIDArmsLeftSub,		/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+				m_wGrpIDInitNPC,			/* åˆæœŸç”»åƒID(NPC) */
+				m_wGrpIDInitCloth,			/* åˆæœŸç”»åƒID(æœ) */
+				m_wGrpIDInitEye,			/* åˆæœŸç”»åƒID(ç›®) */
+				m_wGrpIDInitEyeColor,		/* åˆæœŸç”»åƒID(ç›®è‰²) */
+				m_wGrpIDInitHairType,		/* åˆæœŸç”»åƒID(é«ª) */
+				m_wGrpIDInitHairColor,		/* åˆæœŸç”»åƒID(é«ªè‰²) */
+				m_wGrpIDInitSP,				/* åˆæœŸç”»åƒID(ç‰¹æ®Šæœ) */
+				m_wLevel,					/* ãƒ¬ãƒ™ãƒ« */
+				m_wStamina,					/* ã‚¹ã‚¿ãƒŸãƒŠ */
+				m_wPower,					/* è…•åŠ› */
+				m_wStrength,				/* ä½“åŠ› */
+				m_wMagic,					/* é­”åŠ› */
+				m_wSkillful,				/* å™¨ç”¨ */
+				m_wAbillityAT,				/* æ”»æ’ƒæŠ€èƒ½ */
+				m_wAbillityDF,				/* é˜²å¾¡æŠ€èƒ½ */
+				m_wPAtack,					/* æ”»æ’ƒåŠ› */
+				m_wPDefense,				/* é˜²å¾¡åŠ› */
+				m_wPMagic,					/* é­”æ³•åŠ› */
+				m_wPMagicDefense,			/* é­”æ³•é˜²å¾¡åŠ› */
+				m_wPHitAverage,				/* å‘½ä¸­çŽ‡ */
+				m_wPAvoidAverage,			/* å›žé¿çŽ‡ */
+				m_wPCriticalAverage,		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+				m_wAttrFire,				/* å±žæ€§[ç«] */
+				m_wAttrWind,				/* å±žæ€§[é¢¨] */
+				m_wAttrWater,				/* å±žæ€§[æ°´] */
+				m_wAttrEarth,				/* å±žæ€§[åœŸ] */
+				m_wAttrLight,				/* å±žæ€§[å…‰] */
+				m_wAttrDark;				/* å±žæ€§[é—‡] */
+	DWORD		m_dwCharID,					/* ã‚­ãƒ£ãƒ©ID */
+				m_dwMapID,					/* ãƒžãƒƒãƒ—ID */
+				m_dwMotionTypeID,			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+				m_dwEquipItemIDCloth,		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:æœ */
+				m_dwEquipItemIDAcce1,		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+				m_dwEquipItemIDAcce2,		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª2 */
+				m_dwEquipItemIDArmsRight,	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å³æ‰‹ */
+				m_dwEquipItemIDArmsLeft,	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å·¦æ‰‹ */
+				m_dwEquipItemIDHead,		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:é ­ */
+				m_dwMoveWait,				/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+				m_dwMoveWaitBattle,			/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+				m_dwExp,					/* çµŒé¨“å€¤ */
 				m_dwHP,						/* HP */
-				m_dwMaxHP,					/* Å‘åHP */
+				m_dwMaxHP,					/* æœ€å¤§HP */
 				m_dwSP,						/* SP */
-				m_dwMaxSP;					/* Å‘åSP */
-	COLORREF	m_clName,					/* –¼‘O‚Ì•`‰æF */
-				m_clSpeak;					/* ”­Œ¾‚Ì•`‰æF */
-	CmyString	m_strCharName,				/* ƒLƒƒƒ‰–¼ */
-				m_strSpeak,					/* ”­Œ¾“à—e */
-				m_strTalk;					/* ‰ï˜bƒf[ƒ^ */
-	ARRAYDWORD	m_adwItemID,				/* ŠŽƒAƒCƒeƒ€ */
-				m_adwSkillID;				/* ŠŽƒXƒLƒ‹ */
-	SIZE		m_sizeSearchDistance;		/* ô“G”ÍˆÍ */
+				m_dwMaxSP;					/* æœ€å¤§SP */
+	COLORREF	m_clName,					/* åå‰ã®æç”»è‰² */
+				m_clSpeak;					/* ç™ºè¨€ã®æç”»è‰² */
+	CmyString	m_strCharName,				/* ã‚­ãƒ£ãƒ©å */
+				m_strSpeak,					/* ç™ºè¨€å†…å®¹ */
+				m_strTalk;					/* ä¼šè©±ãƒ‡ãƒ¼ã‚¿ */
+	ARRAYDWORD	m_adwItemID,				/* æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ  */
+				m_adwSkillID;				/* æ‰€æŒã‚¹ã‚­ãƒ« */
+	SIZE		m_sizeSearchDistance;		/* ç­–æ•µç¯„å›² */
 
-	/* ˆÚ“®Ží•Ê‚É‚æ‚éŒÂ•Êî•ñ */
+	/* ç§»å‹•ç¨®åˆ¥ã«ã‚ˆã‚‹å€‹åˆ¥æƒ…å ± */
 
-	/* NPC”­¶ */
-	DWORD		m_dwPutCycle;				/* ”­¶ŽüŠú */
-	int			m_nPutMoveType;				/* ”­¶‚³‚¹‚éˆÚ“®Ží•Ê */
-	int			m_nMaxPutCount;				/* “¯Žž”­¶” */
-	int			m_nPutAverage;				/* ”­¶Šm—¦ */
-	POINT		m_ptPutArea;				/* ”­¶”ÍˆÍ(”¼Œa) */
+	/* NPCç™ºç”Ÿ */
+	DWORD		m_dwPutCycle;				/* ç™ºç”Ÿå‘¨æœŸ */
+	int			m_nPutMoveType;				/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	int			m_nMaxPutCount;				/* åŒæ™‚ç™ºç”Ÿæ•° */
+	int			m_nPutAverage;				/* ç™ºç”Ÿç¢ºçŽ‡ */
+	POINT		m_ptPutArea;				/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 } CInfoCharBase, *PCInfoCharBase;
 typedef CmyArray<PCInfoCharBase, PCInfoCharBase>	  ARRAYINFOCHARBASE;
 typedef CmyArray<PCInfoCharBase, PCInfoCharBase>	*PARRAYINFOCHARBASE;

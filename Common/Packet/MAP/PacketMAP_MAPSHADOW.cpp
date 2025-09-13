@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPSHADOW.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒv‰eî•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPSHADOW.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—å½±æƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/05													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -13,9 +13,9 @@
 #include "PacketMAP_MAPSHADOW.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPSHADOW::CPacketMAP_MAPSHADOW						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CPacketMAP_MAPSHADOW::CPacketMAP_MAPSHADOW						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPSHADOW::CPacketMAP_MAPSHADOW()
@@ -25,9 +25,9 @@ CPacketMAP_MAPSHADOW::CPacketMAP_MAPSHADOW()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPSHADOW::~CPacketMAP_MAPSHADOW					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CPacketMAP_MAPSHADOW::~CPacketMAP_MAPSHADOW					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPSHADOW::~CPacketMAP_MAPSHADOW()
@@ -37,13 +37,13 @@ CPacketMAP_MAPSHADOW::~CPacketMAP_MAPSHADOW()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPSHADOW::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CPacketMAP_MAPSHADOW::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPSHADOW::Make(
-	CLibInfoMapShadow *pLibInfo)		/* [in] ƒ}ƒbƒv‰eî•ñ */
+	CLibInfoMapShadow *pLibInfo)		/* [in] ãƒãƒƒãƒ—å½±æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -63,7 +63,7 @@ void CPacketMAP_MAPSHADOW::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_MAPSHADOW;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒ}ƒbƒv‰eî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ãƒãƒƒãƒ—å½±æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -72,13 +72,13 @@ void CPacketMAP_MAPSHADOW::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPSHADOW::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CPacketMAP_MAPSHADOW::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPSHADOW::Make(
-	CInfoMapShadow *pInfo)		/* [in] ƒ}ƒbƒv‰eî•ñ */
+	CInfoMapShadow *pInfo)		/* [in] ãƒãƒƒãƒ—å½±æƒ…å ± */
 {
 	PCInfoMapShadow pInfoTmp;
 	CLibInfoMapShadow LibInfoMapShadow;
@@ -94,9 +94,9 @@ void CPacketMAP_MAPSHADOW::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPSHADOW::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/06/05														 */
+/* é–¢æ•°å	:CPacketMAP_MAPSHADOW::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/06/05														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_MAPSHADOW::Set(PBYTE pPacket)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcLOGINMENU.cpp										 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(ƒƒOƒCƒ“‰æ–Ê) ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcLOGINMENU.cpp										 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -30,21 +30,21 @@
 #include "StateProcLOGINMENU.h"
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 enum {
-	STATE_MENU = 0,										/* ƒƒjƒ…[‘I‘ð’† */
-	STATE_SELECTPLAYCHAR,								/* ƒLƒƒƒ‰‘I‘ð’† */
-	STATE_SELECTDELETECHAR,								/* íœƒLƒƒƒ‰‘I‘ð’† */
-	STATE_BACK,											/* –ß‚é */
+	STATE_MENU = 0,										/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼é¸æŠžä¸­ */
+	STATE_SELECTPLAYCHAR,								/* ã‚­ãƒ£ãƒ©é¸æŠžä¸­ */
+	STATE_SELECTDELETECHAR,								/* å‰Šé™¤ã‚­ãƒ£ãƒ©é¸æŠžä¸­ */
+	STATE_BACK,											/* æˆ»ã‚‹ */
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::CStateProcLOGINMENU						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::CStateProcLOGINMENU						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CStateProcLOGINMENU::CStateProcLOGINMENU()
@@ -65,9 +65,9 @@ CStateProcLOGINMENU::CStateProcLOGINMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::~CStateProcLOGINMENU						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::~CStateProcLOGINMENU						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CStateProcLOGINMENU::~CStateProcLOGINMENU()
@@ -77,9 +77,9 @@ CStateProcLOGINMENU::~CStateProcLOGINMENU()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::Init(void)
@@ -100,26 +100,26 @@ void CStateProcLOGINMENU::Init(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnWindowMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG)								 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnWindowMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG)								 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::OnWindowMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case WINDOWTYPE_LOGINMENU:		OnWindowMsgLOGINMENU (dwPara);		break;	/* ƒƒjƒ…[ */
-	case WINDOWTYPE_FAMILYTYPE:		OnWindowMsgFAMILYTYPE (dwPara);		break;	/* Ží‘°‘I‘ð */
-	case WINDOWTYPE_STYLESELECT:	OnWindowMsgSTYLESELECT (dwPara);	break;	/* —eŽp‘I‘ð */
-	case WINDOWTYPE_NAMEINPUT:		OnWindowMsgNAMEINPUT (dwPara);		break;	/* –¼‘O“ü—Í */
+	case WINDOWTYPE_LOGINMENU:		OnWindowMsgLOGINMENU (dwPara);		break;	/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	case WINDOWTYPE_FAMILYTYPE:		OnWindowMsgFAMILYTYPE (dwPara);		break;	/* ç¨®æ—é¸æŠž */
+	case WINDOWTYPE_STYLESELECT:	OnWindowMsgSTYLESELECT (dwPara);	break;	/* å®¹å§¿é¸æŠž */
+	case WINDOWTYPE_NAMEINPUT:		OnWindowMsgNAMEINPUT (dwPara);		break;	/* åå‰å…¥åŠ› */
 
-	case WINDOWTYPE_CHARNAME:		/* ƒLƒƒƒ‰–¼“ü—Í */
+	case WINDOWTYPE_CHARNAME:		/* ã‚­ãƒ£ãƒ©åå…¥åŠ› */
 		m_pWindowNAMEINPUT->OnWindowMsg (nType, dwPara);
 		break;
-	case WINDOWTYPE_SEX:			/* «•Ê */
-	case WINDOWTYPE_HAIRTYPE:		/* ”¯Œ^‘I‘ð */
-	case WINDOWTYPE_HAIRCOLOR:		/* ”¯F‘I‘ð */
-	case WINDOWTYPE_EYECOLOR:		/* –ÚF‘I‘ð */
+	case WINDOWTYPE_SEX:			/* æ€§åˆ¥ */
+	case WINDOWTYPE_HAIRTYPE:		/* é«ªåž‹é¸æŠž */
+	case WINDOWTYPE_HAIRCOLOR:		/* é«ªè‰²é¸æŠž */
+	case WINDOWTYPE_EYECOLOR:		/* ç›®è‰²é¸æŠž */
 		m_pWindowSTYLESELECT->OnWindowMsg (nType, dwPara);
 		break;
 	}
@@ -127,31 +127,31 @@ void CStateProcLOGINMENU::OnWindowMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnMainFrame								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnMainFrame								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RES_MAKECHAR:			/* ƒLƒƒƒ‰ì¬‰ž“š */
+	case MAINFRAMEMSG_RES_MAKECHAR:			/* ã‚­ãƒ£ãƒ©ä½œæˆå¿œç­” */
 		switch (dwParam) {
-		case MAKECHARRES_NG_USE:		/* Žg—pÏ‚Ý */
-			m_pMgrWindow->MakeWindowMSG ("‚»‚Ì–¼‘O‚ÍŽg—pÏ‚Ý‚Å‚·", 3000, 4);
+		case MAKECHARRES_NG_USE:		/* ä½¿ç”¨æ¸ˆã¿ */
+			m_pMgrWindow->MakeWindowMSG ("ãã®åå‰ã¯ä½¿ç”¨æ¸ˆã¿ã§ã™", 3000, 4);
 			break;
-		case MAKECHARRES_NG_SPACE:		/* ‹ó”’‚ªŽg—p‚³‚ê‚Ä‚¢‚é */
-			m_pMgrWindow->MakeWindowMSG ("ƒLƒƒƒ‰–¼‚É‹ó”’‚ÍŽg‚¦‚Ü‚¹‚ñ", 3000, 4);
+		case MAKECHARRES_NG_SPACE:		/* ç©ºç™½ãŒä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ */
+			m_pMgrWindow->MakeWindowMSG ("ã‚­ãƒ£ãƒ©åã«ç©ºç™½ã¯ä½¿ãˆã¾ã›ã‚“", 3000, 4);
 			break;
 		default:
-			m_pMgrWindow->MakeWindowMSG ("ƒLƒƒƒ‰ƒNƒ^[‚ðì¬‚µ‚Ü‚µ‚½", 3000, 4);
+			m_pMgrWindow->MakeWindowMSG ("ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚’ä½œæˆã—ã¾ã—ãŸ", 3000, 4);
 			m_pMgrWindow->Delete (WINDOWTYPE_NAMEINPUT);
 			m_pWindowLOGINMENU->SetPos (0);
 			break;
 		}
 		m_pMgrWindow->Update ();
 		break;
-	case MAINFRAMEMSG_RENEWACCOUNTINFO:		/* ƒAƒJƒEƒ“ƒgî•ñXV */
+	case MAINFRAMEMSG_RENEWACCOUNTINFO:		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
 		{
 			int i, nCount;
 			CPacketCHAR_REQ_CHARINFO Packet;
@@ -165,7 +165,7 @@ void CStateProcLOGINMENU::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 			}
 		}
 		break;
-	case MAINFRAMEMSG_RENEWCHARINFO:		/* ƒLƒƒƒ‰î•ñXV */
+	case MAINFRAMEMSG_RENEWCHARINFO:		/* ã‚­ãƒ£ãƒ©æƒ…å ±æ›´æ–° */
 		m_pMgrWindow->Update ();
 		break;
 	default:
@@ -176,9 +176,9 @@ void CStateProcLOGINMENU::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnLeft									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2005/07/09														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnLeft									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2005/07/09														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGINMENU::OnLeft(BOOL bDown)
@@ -218,9 +218,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnRight									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2005/07/09														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnRight									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2005/07/09														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGINMENU::OnRight(BOOL bDown)
@@ -260,9 +260,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnX										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2005/06/26														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnX										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2005/06/26														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGINMENU::OnX(BOOL bDown)
@@ -283,9 +283,9 @@ BOOL CStateProcLOGINMENU::OnX(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnZ										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2005/06/26														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnZ										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2005/06/26														 */
 /* ========================================================================= */
 
 BOOL CStateProcLOGINMENU::OnZ(BOOL bDown)
@@ -305,9 +305,9 @@ BOOL CStateProcLOGINMENU::OnZ(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnMgrDrawEND_FADEOUT						 */
-/* “à—e		:ƒtƒF[ƒhƒAƒEƒgŠ®—¹												 */
-/* “ú•t		:2007/02/27														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnMgrDrawEND_FADEOUT						 */
+/* å†…å®¹		:ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆå®Œäº†												 */
+/* æ—¥ä»˜		:2007/02/27														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::OnMgrDrawEND_FADEOUT(DWORD dwPara)
@@ -317,7 +317,7 @@ void CStateProcLOGINMENU::OnMgrDrawEND_FADEOUT(DWORD dwPara)
 	CPacketCONNECT_REQ_PLAY PacketCONNECT_REQ_PLAY;
 
 	switch (m_nState) {
-	case STATE_SELECTPLAYCHAR:	/* ƒLƒƒƒ‰‘I‘ð */
+	case STATE_SELECTPLAYCHAR:	/* ã‚­ãƒ£ãƒ©é¸æŠž */
 		pLibInfoCharCli = m_pMgrData->GetLibInfoChar ();
 		pLibInfoCharCli->DeleteAll ();
 
@@ -327,7 +327,7 @@ void CStateProcLOGINMENU::OnMgrDrawEND_FADEOUT(DWORD dwPara)
 		m_pSock->Send (&PacketCONNECT_REQ_PLAY);
 		break;
 
-	case STATE_BACK:			/* –ß‚é */
+	case STATE_BACK:			/* æˆ»ã‚‹ */
 		m_pSock->Destroy ();
 		PostMessage (m_hWndMain, WM_MAINFRAME, MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGIN);
 		break;
@@ -336,9 +336,9 @@ void CStateProcLOGINMENU::OnMgrDrawEND_FADEOUT(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnWindowMsgLOGINMENU						 */
-/* “à—e		:ƒƒjƒ…[ƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m									 */
-/* “ú•t		:2007/04/24														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnWindowMsgLOGINMENU						 */
+/* å†…å®¹		:ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥									 */
+/* æ—¥ä»˜		:2007/04/24														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
@@ -346,7 +346,7 @@ void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
 	PCLayerCharSelect pLayer;
 
 	switch (dwPara) {
-	case 0:		/* ƒLƒƒƒ‰‘I‘ð */
+	case 0:		/* ã‚­ãƒ£ãƒ©é¸æŠž */
 		m_nState = STATE_SELECTPLAYCHAR;
 		m_pWindowLOGINMENU->SetActive (FALSE);
 		m_pWindowLOGINMENU->SetInput (FALSE);
@@ -354,14 +354,14 @@ void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
 		pLayer->SetSelect (0);
 		break;
 
-	case 1:		/* V‹Kì¬ */
+	case 1:		/* æ–°è¦ä½œæˆ */
 		m_pMgrWindow->MakeWindowFAMILYTYPE ();
 		break;
 
-	case 2:		/* ƒLƒƒƒ‰íœ */
+	case 2:		/* ã‚­ãƒ£ãƒ©å‰Šé™¤ */
 		break;
 
-	case 3:		/* –ß‚é */
+	case 3:		/* æˆ»ã‚‹ */
 		m_nState = STATE_BACK;
 		m_pMgrDraw->SetFadeState (FADESTATE_FADEOUT);
 		break;
@@ -370,9 +370,9 @@ void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnWindowMsgFAMILYTYPE						 */
-/* “à—e		:Ží‘°‘I‘ðƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m									 */
-/* “ú•t		:2007/04/24														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnWindowMsgFAMILYTYPE						 */
+/* å†…å®¹		:ç¨®æ—é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥									 */
+/* æ—¥ä»˜		:2007/04/24														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::OnWindowMsgFAMILYTYPE(DWORD dwPara)
@@ -386,13 +386,13 @@ void CStateProcLOGINMENU::OnWindowMsgFAMILYTYPE(DWORD dwPara)
 
 		pWindow = (PCWindowFAMILYTYPE)m_pMgrWindow->GetWindow (WINDOWTYPE_FAMILYTYPE);
 		if (pWindow) {
-			/* Ží‘°‘I‘ð‰æ–Ê‚©‚ç—ˆ‚½ */
+			/* ç¨®æ—é¸æŠžç”»é¢ã‹ã‚‰æ¥ãŸ */
 			m_pInfoCharCli->m_wFamilyID = pWindow->GetType ();
 			m_pMgrWindow->Delete (WINDOWTYPE_FAMILYTYPE);
 			m_pWindowSTYLESELECT->SetFamilyType (m_pInfoCharCli->m_wFamilyID);
 
 		} else {
-			/* —eŽp‘I‘ð‰æ–Ê‚©‚ç–ß‚Á‚Ä‚«‚½ */
+			/* å®¹å§¿é¸æŠžç”»é¢ã‹ã‚‰æˆ»ã£ã¦ããŸ */
 			m_pWindowSTYLESELECT->SetInfoChar (m_pInfoCharCli);
 		}
 		break;
@@ -401,9 +401,9 @@ void CStateProcLOGINMENU::OnWindowMsgFAMILYTYPE(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnWindowMsgSTYLESELECT					 */
-/* “à—e		:—eŽp‘I‘ðƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m									 */
-/* “ú•t		:2007/04/24														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnWindowMsgSTYLESELECT					 */
+/* å†…å®¹		:å®¹å§¿é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥									 */
+/* æ—¥ä»˜		:2007/04/24														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::OnWindowMsgSTYLESELECT(DWORD dwPara)
@@ -419,7 +419,7 @@ void CStateProcLOGINMENU::OnWindowMsgSTYLESELECT(DWORD dwPara)
 		break;
 
 	case -1:
-		/* ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚½‚Ì‚Å‘O‚Ì‰æ–Ê‚É–ß‚é */
+		/* ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚ŒãŸã®ã§å‰ã®ç”»é¢ã«æˆ»ã‚‹ */
 		m_pMgrWindow->Delete (WINDOWTYPE_STYLESELECT);
 		PostMessage (m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_LOGINMENU, 1);
 		break;
@@ -428,9 +428,9 @@ void CStateProcLOGINMENU::OnWindowMsgSTYLESELECT(DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStateProcLOGINMENU::OnWindowMsgNAMEINPUT						 */
-/* “à—e		:–¼‘O“ü—ÍƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m									 */
-/* “ú•t		:2007/04/24														 */
+/* é–¢æ•°å	:CStateProcLOGINMENU::OnWindowMsgNAMEINPUT						 */
+/* å†…å®¹		:åå‰å…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥									 */
+/* æ—¥ä»˜		:2007/04/24														 */
 /* ========================================================================= */
 
 void CStateProcLOGINMENU::OnWindowMsgNAMEINPUT(DWORD dwPara)
@@ -445,7 +445,7 @@ void CStateProcLOGINMENU::OnWindowMsgNAMEINPUT(DWORD dwPara)
 		break;
 
 	case -1:
-		/* ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚½‚Ì‚Å‘O‚Ì‰æ–Ê‚É–ß‚é */
+		/* ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚ŒãŸã®ã§å‰ã®ç”»é¢ã«æˆ»ã‚‹ */
 		m_pMgrWindow->Delete (WINDOWTYPE_NAMEINPUT);
 		PostMessage (m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_FAMILYTYPE, 0);
 		break;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowSETDRAWMODE.cpp										 */
-/* “à—e			:•\Ž¦“à—e‚ÌÝ’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowSETDRAWMODE.cpp										 */
+/* å†…å®¹			:è¡¨ç¤ºå†…å®¹ã®è¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::CWindowSETDRAWMODE							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::CWindowSETDRAWMODE							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 CWindowSETDRAWMODE::CWindowSETDRAWMODE()
@@ -34,9 +34,9 @@ CWindowSETDRAWMODE::CWindowSETDRAWMODE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::~CWindowSETDRAWMODE						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::~CWindowSETDRAWMODE						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 CWindowSETDRAWMODE::~CWindowSETDRAWMODE()
@@ -45,9 +45,9 @@ CWindowSETDRAWMODE::~CWindowSETDRAWMODE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 void CWindowSETDRAWMODE::Create(CMgrData *pMgrData)
@@ -62,9 +62,9 @@ void CWindowSETDRAWMODE::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::Draw										 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::Draw										 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 void CWindowSETDRAWMODE::Draw(PCImg32 pDst)
@@ -85,8 +85,8 @@ void CWindowSETDRAWMODE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "–¼‘O‚ð•\Ž¦‚·‚é",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "–¼‘O‚ð•\Ž¦‚µ‚È‚¢",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, "åå‰ã‚’è¡¨ç¤ºã™ã‚‹",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, "åå‰ã‚’è¡¨ç¤ºã—ãªã„",	clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -104,9 +104,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::OnUp										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::OnUp										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CWindowSETDRAWMODE::OnUp(void)
@@ -130,9 +130,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::OnDown										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::OnDown										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CWindowSETDRAWMODE::OnDown(void)
@@ -156,9 +156,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::OnLeft										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::OnLeft										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CWindowSETDRAWMODE::OnLeft(void)
@@ -173,9 +173,9 @@ BOOL CWindowSETDRAWMODE::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::OnRight									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::OnRight									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CWindowSETDRAWMODE::OnRight(void)
@@ -190,9 +190,9 @@ BOOL CWindowSETDRAWMODE::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::OnX										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::OnX										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CWindowSETDRAWMODE::OnX(BOOL bDown)
@@ -214,9 +214,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowSETDRAWMODE::OnZ										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CWindowSETDRAWMODE::OnZ										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CWindowSETDRAWMODE::OnZ(BOOL bDown)

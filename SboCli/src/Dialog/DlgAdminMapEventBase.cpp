@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventBase.cpp									 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventBase.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::DoDataExchange(CDataExchange* pDX)
@@ -58,9 +58,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::CDlgAdminMapEventBase					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::CDlgAdminMapEventBase					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventBase::CDlgAdminMapEventBase(CWnd* pParent /*=NULL*/)
@@ -85,9 +85,9 @@ CDlgAdminMapEventBase::CDlgAdminMapEventBase(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::~CDlgAdminMapEventBase					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::~CDlgAdminMapEventBase					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventBase::~CDlgAdminMapEventBase()
@@ -97,9 +97,9 @@ CDlgAdminMapEventBase::~CDlgAdminMapEventBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::Init(CMgrData *pMgrData, CWnd **pWndNotify)
@@ -111,9 +111,9 @@ void CDlgAdminMapEventBase::Init(CMgrData *pMgrData, CWnd **pWndNotify)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::Get										 */
-/* “à—e		:•ÒW“à—e‚ğæ“¾													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::Get										 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::Get(CInfoMapEventBase *&pDst)
@@ -131,9 +131,9 @@ void CDlgAdminMapEventBase::Get(CInfoMapEventBase *&pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::SetModify								 */
-/* “à—e		:•ÒWƒ‚[ƒh‚Æ‚µ‚Äİ’è											 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::SetModify								 */
+/* å†…å®¹		:ç·¨é›†ãƒ¢ãƒ¼ãƒ‰ã¨ã—ã¦è¨­å®š											 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::SetModify(CInfoMapEventBase *pSrc)
@@ -154,9 +154,9 @@ void CDlgAdminMapEventBase::SetModify(CInfoMapEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapEventBase::OnInitDialog()
@@ -173,40 +173,40 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	}
 
 	if (m_bModeModify) {
-		SetWindowText ("ƒ}ƒbƒvƒCƒxƒ“ƒg‚Ì•ÒW");
+		SetWindowText ("ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã®ç·¨é›†");
 	}
 
-	m_ctlType.InsertString (0, "–¢İ’è");
+	m_ctlType.InsertString (0, "æœªè¨­å®š");
 	m_ctlType.SetItemData (0, MAPEVENTTYPE_NONE);
-	m_ctlType.InsertString (1, "ƒ}ƒbƒv“àˆÚ“®");
+	m_ctlType.InsertString (1, "ãƒãƒƒãƒ—å†…ç§»å‹•");
 	m_ctlType.SetItemData (1, MAPEVENTTYPE_MOVE);
-	m_ctlType.InsertString (2, "ƒ}ƒbƒvŠÔˆÚ“®");
+	m_ctlType.InsertString (2, "ãƒãƒƒãƒ—é–“ç§»å‹•");
 	m_ctlType.SetItemData (2, MAPEVENTTYPE_MAPMOVE);
-	m_ctlType.InsertString (3, "ƒSƒ~” ");
+	m_ctlType.InsertString (3, "ã‚´ãƒŸç®±");
 	m_ctlType.SetItemData (3, MAPEVENTTYPE_TRASHBOX);
-	m_ctlType.InsertString (4, "ƒXƒe[ƒ^ƒX‰Šú‰»");
+	m_ctlType.InsertString (4, "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ–");
 	m_ctlType.SetItemData (4, MAPEVENTTYPE_INITSTATUS);
-	m_ctlType.InsertString (5, "ˆê‰æ‘œİ’è");
+	m_ctlType.InsertString (5, "ä¸€æ™‚ç”»åƒè¨­å®š");
 	m_ctlType.SetItemData (5, MAPEVENTTYPE_GRPIDTMP);
-	m_ctlType.InsertString (6, "“”‚è");
+	m_ctlType.InsertString (6, "ç¯ã‚Š");
 	m_ctlType.SetItemData (6, MAPEVENTTYPE_LIGHT);
 
-	m_ctlHitType.InsertString (0, "ƒ}ƒbƒvÀ•Wc‰¡‚¢‚¸‚ê‚©");
+	m_ctlHitType.InsertString (0, "ãƒãƒƒãƒ—åº§æ¨™ç¸¦æ¨ªã„ãšã‚Œã‹");
 	m_ctlHitType.SetItemData (0, MAPEVENTHITTYPE_MAPPOS);
-	m_ctlHitType.InsertString (1, "ƒLƒƒƒ‰À•W");
+	m_ctlHitType.InsertString (1, "ã‚­ãƒ£ãƒ©åº§æ¨™");
 	m_ctlHitType.SetItemData (1, MAPEVENTHITTYPE_CHARPOS);
-	m_ctlHitType.InsertString (2, "”ÍˆÍ");
+	m_ctlHitType.InsertString (2, "ç¯„å›²");
 	m_ctlHitType.SetItemData (2, MAPEVENTHITTYPE_AREA);
-	m_ctlHitType.InsertString (3, "ƒ}ƒbƒvÀ•WŠ®‘Sˆê’v");
+	m_ctlHitType.InsertString (3, "ãƒãƒƒãƒ—åº§æ¨™å®Œå…¨ä¸€è‡´");
 	m_ctlHitType.SetItemData (3, MAPEVENTHITTYPE_MAPPOS2);
 
-	m_ctlDirection.InsertString (0, "ã");
-	m_ctlDirection.InsertString (1, "‰º");
-	m_ctlDirection.InsertString (2, "¶");
-	m_ctlDirection.InsertString (3, "‰E");
-	m_ctlDirection.InsertString (4, "w’è–³‚µ");
+	m_ctlDirection.InsertString (0, "ä¸Š");
+	m_ctlDirection.InsertString (1, "ä¸‹");
+	m_ctlDirection.InsertString (2, "å·¦");
+	m_ctlDirection.InsertString (3, "å³");
+	m_ctlDirection.InsertString (4, "æŒ‡å®šç„¡ã—");
 
-	m_ctlSoundID.InsertString (0, "–³‚µ");
+	m_ctlSoundID.InsertString (0, "ç„¡ã—");
 
 	nNo = 0;
 	nCount = LibSboSoundLoader.GetSoundCount ();
@@ -270,20 +270,20 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CAdminWindow::OnAdminMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CAdminWindow::OnAdminMsg										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapEventBase::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_nPosX = HIWORD (lParam);
 		m_nPosY = LOWORD (lParam);
 		UpdateData (FALSE);
 		break;
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:		/* ‰EƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:		/* å³ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		if (m_pDlgType == NULL) {
 			break;
 		}
@@ -296,9 +296,9 @@ LRESULT CDlgAdminMapEventBase::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::PostNcDestroy()
@@ -308,9 +308,9 @@ void CDlgAdminMapEventBase::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::OnSelchangeType							 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::OnSelchangeType							 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::OnSelchangeType()
@@ -328,19 +328,19 @@ void CDlgAdminMapEventBase::OnSelchangeType()
 		m_pDlgType = NULL;
 	}
 	switch (nEventType) {
-	case MAPEVENTTYPE_MOVE:			/* ƒ}ƒbƒv“àˆÚ“® */
+	case MAPEVENTTYPE_MOVE:			/* ãƒãƒƒãƒ—å†…ç§»å‹• */
 		m_pDlgType = new CDlgAdminMapEventMOVE(this);
 		break;
-	case MAPEVENTTYPE_MAPMOVE:		/* ƒ}ƒbƒvŠÔˆÚ“® */
+	case MAPEVENTTYPE_MAPMOVE:		/* ãƒãƒƒãƒ—é–“ç§»å‹• */
 		m_pDlgType = new CDlgAdminMapEventMAPMOVE(this);
 		break;
-	case MAPEVENTTYPE_INITSTATUS:	/* ƒXƒe[ƒ^ƒX‰Šú‰» */
+	case MAPEVENTTYPE_INITSTATUS:	/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ– */
 		m_pDlgType = new CDlgAdminMapEventINITSTATUS(this);
 		break;
-	case MAPEVENTTYPE_GRPIDTMP:		/* ˆê‰æ‘œİ’è */
+	case MAPEVENTTYPE_GRPIDTMP:		/* ä¸€æ™‚ç”»åƒè¨­å®š */
 		m_pDlgType = new CDlgAdminMapEventGRPIDTMP(this);
 		break;
-	case MAPEVENTTYPE_LIGHT:		/* “”‚è */
+	case MAPEVENTTYPE_LIGHT:		/* ç¯ã‚Š */
 		m_pDlgType = new CDlgAdminMapEventLIGHT(this);
 		break;
 	default:
@@ -369,9 +369,9 @@ void CDlgAdminMapEventBase::OnSelchangeType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::OnSelchangeHitType						 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/10/26														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::OnSelchangeHitType						 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/10/26														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::OnSelchangeHitType()
@@ -389,9 +389,9 @@ void CDlgAdminMapEventBase::OnSelchangeHitType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::OnSelchangeDirection					 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/11/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::OnSelchangeDirection					 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/11/24														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::OnSelchangeDirection()
@@ -412,9 +412,9 @@ void CDlgAdminMapEventBase::OnSelchangeDirection()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::OnSelchangeSoundID						 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/12/05														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::OnSelchangeSoundID						 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/12/05														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::OnSelchangeSoundID()
@@ -432,9 +432,9 @@ void CDlgAdminMapEventBase::OnSelchangeSoundID()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::OnBnClickedPlay							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Ä¶)											 */
-/* “ú•t		:2008/12/05														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::OnBnClickedPlay							 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å†ç”Ÿ)											 */
+/* æ—¥ä»˜		:2008/12/05														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::OnBnClickedPlay()
@@ -461,9 +461,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::OnOK()
@@ -485,9 +485,9 @@ void CDlgAdminMapEventBase::OnOK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventBase::SelectSound								 */
-/* “à—e		:Às‚ÌŒø‰Ê‰¹ID‚ğ‘I‘ğ											 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CDlgAdminMapEventBase::SelectSound								 */
+/* å†…å®¹		:å®Ÿè¡Œæ™‚ã®åŠ¹æœéŸ³IDã‚’é¸æŠ											 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventBase::SelectSound(DWORD dwSoundID)

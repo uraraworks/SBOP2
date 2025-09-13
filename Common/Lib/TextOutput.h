@@ -1,38 +1,38 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	TextOutput.h												 */
-/* “à—eF		ƒeƒLƒXƒgo—ÍƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/04/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	TextOutput.h												 */
+/* å†…å®¹ï¼š		ãƒ†ã‚­ã‚¹ãƒˆå‡ºåŠ›ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/04/01													 */
 /* ========================================================================= */
 
 #ifndef _TEXTOUTPUT_H
 #define _TEXTOUTPUT_H
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CTextOutput
 {
 public:
-			CTextOutput();											/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CTextOutput();											/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CTextOutput();											/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CTextOutput();											/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL Create		(LPCSTR pszFileName, BOOL bHeader, BOOL m_bReturn);		/* ‰Šú‰» */
-	void Destroy	(void);													/* ”jŠü */
-	void Write		(LPCSTR format, ...);									/* ‘‚«‚İ */
-
-
-protected:
-	void WriteProc	(LPCSTR pszText);										/* ‘‚«‚İˆ— */
+	BOOL Create		(LPCSTR pszFileName, BOOL bHeader, BOOL m_bReturn);		/* åˆæœŸåŒ– */
+	void Destroy	(void);													/* ç ´æ£„ */
+	void Write		(LPCSTR format, ...);									/* æ›¸ãè¾¼ã¿ */
 
 
 protected:
-	LPSTR				m_pszFileName;			/* ƒtƒ@ƒCƒ‹–¼ */
-	BOOL				m_bHeader;				/* ƒwƒbƒ_‚ğ‘‚«‚Ş */
-	BOOL				m_bReturn;				/* ‰üsƒR[ƒh‚ğ‘‚«‚Ş */
-	CRITICAL_SECTION	m_csWrite;				/* ‘‚«‚İ”r‘¼—p */
+	void WriteProc	(LPCSTR pszText);										/* æ›¸ãè¾¼ã¿å‡¦ç† */
+
+
+protected:
+	LPSTR				m_pszFileName;			/* ãƒ•ã‚¡ã‚¤ãƒ«å */
+	BOOL				m_bHeader;				/* ãƒ˜ãƒƒãƒ€ã‚’æ›¸ãè¾¼ã‚€ */
+	BOOL				m_bReturn;				/* æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’æ›¸ãè¾¼ã‚€ */
+	CRITICAL_SECTION	m_csWrite;				/* æ›¸ãè¾¼ã¿æ’ä»–ç”¨ */
 };
 
 #endif

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkEventBase.h									 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒg‚Ìİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkEventBase.h									 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/23													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,27 +15,27 @@ class CDlgAdminTalkEventNONE;
 class CInfoTalkEventBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminTalkEventBase : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkEventBase(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminTalkEventBase();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminTalkEventBase(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminTalkEventBase();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData, int nPage, CInfoTalkEventBase *pInfo = NULL);	/* ‰Šú‰» */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	Get			(CInfoTalkEventBase *&pDst);					/* æ“¾ */
-
-
-protected:
+	void	Init		(CMgrData *pMgrData, int nPage, CInfoTalkEventBase *pInfo = NULL);	/* åˆæœŸåŒ– */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	Get			(CInfoTalkEventBase *&pDst);					/* å–å¾— */
 
 
 protected:
-	int						m_nPageCount;	/* ƒy[ƒW” */
-	CDlgAdminTalkEventNONE	*m_pDlgType;	/* •ÒW’†‚ÌƒCƒxƒ“ƒgí•Êƒ_ƒCƒAƒƒO */
-	CInfoTalkEventBase		*m_pInfo;		/* •ÒW’†‚ÌƒCƒxƒ“ƒgî•ñ */
+
+
+protected:
+	int						m_nPageCount;	/* ãƒšãƒ¼ã‚¸æ•° */
+	CDlgAdminTalkEventNONE	*m_pDlgType;	/* ç·¨é›†ä¸­ã®ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ãƒ€ã‚¤ã‚¢ãƒ­ã‚° */
+	CInfoTalkEventBase		*m_pInfo;		/* ç·¨é›†ä¸­ã®ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 
 
 
@@ -47,7 +47,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminTalkEventBase)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

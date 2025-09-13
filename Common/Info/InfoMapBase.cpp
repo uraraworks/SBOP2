@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMapBase.cpp											 */
-/* “à—e			:ƒ}ƒbƒvî•ñŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMapBase.cpp											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—æƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,32 +15,32 @@
 #include "InfoMapBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"sizeMap",					/* ƒ}ƒbƒvƒTƒCƒY */
-	"dwMapID",					/* ƒ}ƒbƒvID */
+	"sizeMap",					/* ãƒãƒƒãƒ—ã‚µã‚¤ã‚º */
+	"dwMapID",					/* ãƒãƒƒãƒ—ID */
 	"m_dwBGMID",				/* BGMID */
-	"m_dwWeatherType",			/* “V‹Cí•Ê */
-	"m_bEnableBattle",			/* í“¬‹–‰Â */
-	"m_bRecovery",				/* ‹CâŒã‰ñ•œ‚·‚é */
-	"m_byLevel",				/* ˆÃ‚³ƒŒƒxƒ‹ */
-	"pwMap",					/* ƒ}ƒbƒv */
-	"pwMapPile",				/* ƒ}ƒbƒvd‚Ë‡‚í‚¹ */
-	"pwMapShadow",				/* ƒ}ƒbƒv‰e */
-	"strMapName",				/* ƒ}ƒbƒv–¼ */
-	"pLibInfoMapEvent",			/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
-	"pLibInfoMapObjectData",	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ */
+	"m_dwWeatherType",			/* å¤©æ°—ç¨®åˆ¥ */
+	"m_bEnableBattle",			/* æˆ¦é—˜è¨±å¯ */
+	"m_bRecovery",				/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	"m_byLevel",				/* æš—ã•ãƒ¬ãƒ™ãƒ« */
+	"pwMap",					/* ãƒãƒƒãƒ— */
+	"pwMapPile",				/* ãƒãƒƒãƒ—é‡ã­åˆã‚ã› */
+	"pwMapShadow",				/* ãƒãƒƒãƒ—å½± */
+	"strMapName",				/* ãƒãƒƒãƒ—å */
+	"pLibInfoMapEvent",			/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
+	"pLibInfoMapObjectData",	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::CInfoMapBase										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/08														 */
+/* é–¢æ•°å	:CInfoMapBase::CInfoMapBase										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/08														 */
 /* ========================================================================= */
 
 CInfoMapBase::CInfoMapBase()
@@ -49,8 +49,8 @@ CInfoMapBase::CInfoMapBase()
 	m_dwMapID		= 0;
 	m_dwBGMID		= 0;
 	m_dwWeatherType	= 0;
-	m_bEnableBattle	= TRUE;		/* í“¬‹–‰Â */
-	m_bRecovery		= TRUE;		/* ‹CâŒã‰ñ•œ‚·‚é */
+	m_bEnableBattle	= TRUE;		/* æˆ¦é—˜è¨±å¯ */
+	m_bRecovery		= TRUE;		/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
 	m_pbyMapEvent	= NULL;
 	m_pbyHitTmp		= NULL;
 	m_pwMap			= NULL;
@@ -68,9 +68,9 @@ CInfoMapBase::CInfoMapBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::~CInfoMapBase									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/08														 */
+/* é–¢æ•°å	:CInfoMapBase::~CInfoMapBase									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/08														 */
 /* ========================================================================= */
 
 CInfoMapBase::~CInfoMapBase()
@@ -86,9 +86,9 @@ CInfoMapBase::~CInfoMapBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CInfoMapBase::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 void CInfoMapBase::Create(CLibInfoMapParts *pLibInfoMapParts)
@@ -102,16 +102,16 @@ void CInfoMapBase::Create(CLibInfoMapParts *pLibInfoMapParts)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::Init												 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2006/10/15														 */
+/* é–¢æ•°å	:CInfoMapBase::Init												 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2006/10/15														 */
 /* ========================================================================= */
 
 void CInfoMapBase::Init(
-	int cx,								/* [in] ‰¡• */
-	int cy,								/* [in] c• */
-	WORD wParts,						/* [in] “h‚è‚Â‚Ô‚·ƒp[ƒcID */
-	BOOL bDeleteMapEvent/*=TRUE*/)		/* [in] ƒ}ƒbƒvƒCƒxƒ“ƒg‚ğ‰Šú‰»‚·‚é */
+	int cx,								/* [in] æ¨ªå¹… */
+	int cy,								/* [in] ç¸¦å¹… */
+	WORD wParts,						/* [in] å¡—ã‚Šã¤ã¶ã™ãƒ‘ãƒ¼ãƒ„ID */
+	BOOL bDeleteMapEvent/*=TRUE*/)		/* [in] ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹ */
 {
 	int x, y;
 
@@ -154,9 +154,9 @@ void CInfoMapBase::Init(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::RenewSize										 */
-/* “à—e		:ƒTƒCƒYXV														 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CInfoMapBase::RenewSize										 */
+/* å†…å®¹		:ã‚µã‚¤ã‚ºæ›´æ–°														 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CInfoMapBase::RenewSize(int nDirection, int nSize)
@@ -190,7 +190,7 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 	nDstEndY	= sizeBack.cy;
 
 	switch (nDirection) {
-	case 0:		/* ã */
+	case 0:		/* ä¸Š */
 		Init (sizeBack.cx, sizeBack.cy + nSize, 0, FALSE);
 		if (nSize < 0) {
 			nSrcStartY	= nSize * -1;
@@ -199,13 +199,13 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 			nDstStartY	= nSize;
 		}
 		break;
-	case 1:		/* ‰º */
+	case 1:		/* ä¸‹ */
 		Init (sizeBack.cx, sizeBack.cy + nSize, 0, FALSE);
 		if (nSize < 0) {
 			nSrcEndY = sizeBack.cy + nSize;
 		}
 		break;
-	case 2:		/* ¶ */
+	case 2:		/* å·¦ */
 		Init (sizeBack.cx + nSize, sizeBack.cy, 0, FALSE);
 		if (nSize < 0) {
 			nSrcStartX	= nSize * -1;
@@ -214,14 +214,14 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 			nDstStartX	= nSize;
 		}
 		break;
-	case 3:		/* ‰E */
+	case 3:		/* å³ */
 		Init (sizeBack.cx + nSize, sizeBack.cy, 0, FALSE);
 		if (nSize < 0) {
 			nSrcEndX = sizeBack.cx + nSize;
 		}
 		break;
 	}
-	/* ‚¸‚ç‚·ˆÊ’u‚ğl—¶‚µ‚È‚ª‚çV‚µ‚¢ƒ}ƒbƒv‚ÖƒRƒs[ */
+	/* ãšã‚‰ã™ä½ç½®ã‚’è€ƒæ…®ã—ãªãŒã‚‰æ–°ã—ã„ãƒãƒƒãƒ—ã¸ã‚³ãƒ”ãƒ¼ */
 	for (y = 0; y < nSrcEndY; y ++) {
 		for (x = 0; x < nSrcEndX; x ++) {
 			m_pwMap[(m_sizeMap.cx * (nDstStartY + y)) + x + nDstStartX] =
@@ -253,9 +253,9 @@ void CInfoMapBase::RenewSize(int nDirection, int nSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::FillShadow										 */
-/* “à—e		:‹éŒ`‚ğ“h‚è‚Â‚Ô‚µ												 */
-/* “ú•t		:2007/06/09														 */
+/* é–¢æ•°å	:CInfoMapBase::FillShadow										 */
+/* å†…å®¹		:çŸ©å½¢ã‚’å¡—ã‚Šã¤ã¶ã—												 */
+/* æ—¥ä»˜		:2007/06/09														 */
 /* ========================================================================= */
 
 void CInfoMapBase::FillShadow(int x, int y, int cx, int cy, WORD wShadowID)
@@ -277,9 +277,9 @@ void CInfoMapBase::FillShadow(int x, int y, int cx, int cy, WORD wShadowID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoMapBase::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 int CInfoMapBase::GetElementNo(LPCSTR pszName)
@@ -300,9 +300,9 @@ int CInfoMapBase::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoMapBase::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoMapBase::GetDataSize(void)
@@ -313,10 +313,10 @@ DWORD CInfoMapBase::GetDataSize(void)
 	dwRet += sizeof (m_sizeMap);
 	dwRet += sizeof (m_dwMapID);
 	dwRet += sizeof (m_dwBGMID);				/* BGMID */
-	dwRet += sizeof (m_dwWeatherType);			/* “V‹Cí•Ê */
-	dwRet += sizeof (m_bEnableBattle);			/* í“¬‹–‰Â */
-	dwRet += sizeof (m_bRecovery);				/* ‹CâŒã‰ñ•œ‚·‚é */
-	dwRet += sizeof (m_byLevel);				/* ˆÃ‚³ƒŒƒxƒ‹ */
+	dwRet += sizeof (m_dwWeatherType);			/* å¤©æ°—ç¨®åˆ¥ */
+	dwRet += sizeof (m_bEnableBattle);			/* æˆ¦é—˜è¨±å¯ */
+	dwRet += sizeof (m_bRecovery);				/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	dwRet += sizeof (m_byLevel);				/* æš—ã•ãƒ¬ãƒ™ãƒ« */
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
@@ -333,9 +333,9 @@ DWORD CInfoMapBase::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoMapBase::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoMapBase::GetDataSizeNo(int nNo)
@@ -348,10 +348,10 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 	case 0:	dwRet = sizeof (m_sizeMap);								break;
 	case 1:	dwRet = sizeof (m_dwMapID);								break;
 	case 2:	dwRet = sizeof (m_dwBGMID);								break;	/* BGMID */
-	case 3:	dwRet = sizeof (m_dwWeatherType);						break;	/* “V‹Cí•Ê */
-	case 4:	dwRet = sizeof (m_bEnableBattle);						break;	/* í“¬‹–‰Â */
-	case 5:	dwRet = sizeof (m_bRecovery);							break;	/* ‹CâŒã‰ñ•œ‚·‚é */
-	case 6:	dwRet = sizeof (m_byLevel);								break;	/* ˆÃ‚³ƒŒƒxƒ‹ */
+	case 3:	dwRet = sizeof (m_dwWeatherType);						break;	/* å¤©æ°—ç¨®åˆ¥ */
+	case 4:	dwRet = sizeof (m_bEnableBattle);						break;	/* æˆ¦é—˜è¨±å¯ */
+	case 5:	dwRet = sizeof (m_bRecovery);							break;	/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	case 6:	dwRet = sizeof (m_byLevel);								break;	/* æš—ã•ãƒ¬ãƒ™ãƒ« */
 	case 7:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
 	case 8:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
 	case 9:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
@@ -373,9 +373,9 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetName											 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoMapBase::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMapBase::GetName(int nNo)
@@ -385,9 +385,9 @@ LPCSTR CInfoMapBase::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetWriteData										 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoMapBase::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
@@ -409,10 +409,10 @@ PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 0:	pSrc = (PBYTE)&m_sizeMap;			break;
 	case 1:	pSrc = (PBYTE)&m_dwMapID;			break;
 	case 2:	pSrc = (PBYTE)&m_dwBGMID;			break;		/* BGMID */
-	case 3:	pSrc = (PBYTE)&m_dwWeatherType;		break;		/* “V‹Cí•Ê */
-	case 4:	pSrc = (PBYTE)&m_bEnableBattle;		break;		/* í“¬‹–‰Â */
-	case 5:	pSrc = (PBYTE)&m_bRecovery;			break;		/* ‹CâŒã‰ñ•œ‚·‚é */
-	case 6:	pSrc = (PBYTE)&m_byLevel;			break;		/* ˆÃ‚³ƒŒƒxƒ‹ */
+	case 3:	pSrc = (PBYTE)&m_dwWeatherType;		break;		/* å¤©æ°—ç¨®åˆ¥ */
+	case 4:	pSrc = (PBYTE)&m_bEnableBattle;		break;		/* æˆ¦é—˜è¨±å¯ */
+	case 5:	pSrc = (PBYTE)&m_bRecovery;			break;		/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	case 6:	pSrc = (PBYTE)&m_byLevel;			break;		/* æš—ã•ãƒ¬ãƒ™ãƒ« */
 	case 7:	pSrc = (PBYTE)m_pwMap;				break;
 	case 8:	pSrc = (PBYTE)m_pwMapPile;			break;
 	case 9:	pSrc = (PBYTE)m_pwMapShadow;		break;
@@ -445,14 +445,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::ReadElementData									 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2005/05/01														 */
+/* é–¢æ•°å	:CInfoMapBase::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2005/05/01														 */
 /* ========================================================================= */
 
 DWORD CInfoMapBase::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -464,10 +464,10 @@ DWORD CInfoMapBase::ReadElementData(
 	case 0: pDst = (PBYTE)&m_sizeMap;		dwSize = sizeof (m_sizeMap);		break;
 	case 1:	pDst = (PBYTE)&m_dwMapID;		dwSize = sizeof (m_dwMapID);		break;
 	case 2:	pDst = (PBYTE)&m_dwBGMID;		dwSize = sizeof (m_dwBGMID);		break;		/* BGMID */
-	case 3:	pDst = (PBYTE)&m_dwWeatherType;	dwSize = sizeof (m_dwWeatherType);	break;		/* “V‹Cí•Ê */
-	case 4:	pDst = (PBYTE)&m_bEnableBattle;	dwSize = sizeof (m_bEnableBattle);	break;		/* í“¬‹–‰Â */
-	case 5:	pDst = (PBYTE)&m_bRecovery;		dwSize = sizeof (m_bRecovery);		break;		/* ‹CâŒã‰ñ•œ‚·‚é */
-	case 6:	pDst = (PBYTE)&m_byLevel;		dwSize = sizeof (m_byLevel);		break;		/* ˆÃ‚³ƒŒƒxƒ‹ */
+	case 3:	pDst = (PBYTE)&m_dwWeatherType;	dwSize = sizeof (m_dwWeatherType);	break;		/* å¤©æ°—ç¨®åˆ¥ */
+	case 4:	pDst = (PBYTE)&m_bEnableBattle;	dwSize = sizeof (m_bEnableBattle);	break;		/* æˆ¦é—˜è¨±å¯ */
+	case 5:	pDst = (PBYTE)&m_bRecovery;		dwSize = sizeof (m_bRecovery);		break;		/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	case 6:	pDst = (PBYTE)&m_byLevel;		dwSize = sizeof (m_byLevel);		break;		/* æš—ã•ãƒ¬ãƒ™ãƒ« */
 	case 7:
 		Init (m_sizeMap.cx, m_sizeMap.cy, 0, FALSE);
 		pDst	= (PBYTE)m_pwMap;
@@ -508,9 +508,9 @@ DWORD CInfoMapBase::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2006/10/08														 */
+/* é–¢æ•°å	:CInfoMapBase::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/10/08														 */
 /* ========================================================================= */
 
 void CInfoMapBase::TimerProc(DWORD dwTime)
@@ -519,10 +519,10 @@ void CInfoMapBase::TimerProc(DWORD dwTime)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::IsMapEvent										 */
-/* “à—e		:w’èÀ•W‚Éƒ}ƒbƒvƒCƒxƒ“ƒg‚ª‚ ‚é‚©”»’è							 */
-/* “ú•t		:2008/06/28														 */
-/* –ß‚è’l	:TRUE:ƒ}ƒbƒvƒCƒxƒ“ƒg‚ ‚è										 */
+/* é–¢æ•°å	:CInfoMapBase::IsMapEvent										 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã«ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãŒã‚ã‚‹ã‹åˆ¤å®š							 */
+/* æ—¥ä»˜		:2008/06/28														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚ã‚Š										 */
 /* ========================================================================= */
 
 BOOL CInfoMapBase::IsMapEvent(int x, int y)
@@ -553,10 +553,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::IsHitMapEvent									 */
-/* “à—e		:w’èÀ•W‚Åƒ}ƒbƒvƒCƒxƒ“ƒg‚É‚Ô‚Â‚©‚é‚©”»’è						 */
-/* “ú•t		:2009/01/31														 */
-/* –ß‚è’l	:TRUE:ƒ}ƒbƒvƒCƒxƒ“ƒg‚ ‚è										 */
+/* é–¢æ•°å	:CInfoMapBase::IsHitMapEvent									 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã§ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã«ã¶ã¤ã‹ã‚‹ã‹åˆ¤å®š						 */
+/* æ—¥ä»˜		:2009/01/31														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚ã‚Š										 */
 /* ========================================================================= */
 
 BOOL CInfoMapBase::IsHitMapEvent(RECT *pPos)
@@ -584,9 +584,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetMapEventType									 */
-/* “à—e		:w’èÀ•W‚Ìƒ}ƒbƒvƒCƒxƒ“ƒgí•Ê‚ğæ“¾								 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CInfoMapBase::GetMapEventType									 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 int CInfoMapBase::GetMapEventType(int x, int y)
@@ -608,9 +608,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetParts											 */
-/* “à—e		:w’èÀ•W‚Ìƒp[ƒc”Ô†‚ğæ“¾										 */
-/* “ú•t		:2006/10/08														 */
+/* é–¢æ•°å	:CInfoMapBase::GetParts											 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2006/10/08														 */
 /* ========================================================================= */
 
 WORD CInfoMapBase::GetParts(int x, int y)
@@ -630,9 +630,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::SetParts											 */
-/* “à—e		:w’èÀ•W‚Ìƒp[ƒc”Ô†‚ğİ’è										 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoMapBase::SetParts											 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’è¨­å®š										 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CInfoMapBase::SetParts(int x, int y, DWORD dwPartsID)
@@ -646,9 +646,9 @@ void CInfoMapBase::SetParts(int x, int y, DWORD dwPartsID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetPartsPile										 */
-/* “à—e		:w’èÀ•W‚Ìd‚Ë‡‚í‚¹ƒp[ƒc”Ô†‚ğæ“¾							 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CInfoMapBase::GetPartsPile										 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®é‡ã­åˆã‚ã›ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 WORD CInfoMapBase::GetPartsPile(int x, int y)
@@ -668,9 +668,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::SetPartsPile										 */
-/* “à—e		:w’èÀ•W‚Ìd‚Ë‡‚í‚¹ƒp[ƒc”Ô†‚ğİ’è							 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CInfoMapBase::SetPartsPile										 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®é‡ã­åˆã‚ã›ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’è¨­å®š							 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 void CInfoMapBase::SetPartsPile(int x, int y, DWORD dwPartsID)
@@ -684,10 +684,10 @@ void CInfoMapBase::SetPartsPile(int x, int y, DWORD dwPartsID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::IsMove											 */
-/* “à—e		:i“ü‰Â”\‚©”»’è													 */
-/* –ß‚è’l	:TRUE:’Ê‚ê‚é FALSE:‚Ô‚Â‚©‚é										 */
-/* “ú•t		:2006/10/15														 */
+/* é–¢æ•°å	:CInfoMapBase::IsMove											 */
+/* å†…å®¹		:é€²å…¥å¯èƒ½ã‹åˆ¤å®š													 */
+/* æˆ»ã‚Šå€¤	:TRUE:é€šã‚Œã‚‹ FALSE:ã¶ã¤ã‹ã‚‹										 */
+/* æ—¥ä»˜		:2006/10/15														 */
 /* ========================================================================= */
 
 BOOL CInfoMapBase::IsMove(int x, int y, int nDirection)
@@ -735,10 +735,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::IsMoveOut										 */
-/* “à—e		:’Eo‰Â”\‚©”»’è													 */
-/* –ß‚è’l	:TRUE:‰Â FALSE:•s‰Â												 */
-/* “ú•t		:2007/05/26														 */
+/* é–¢æ•°å	:CInfoMapBase::IsMoveOut										 */
+/* å†…å®¹		:è„±å‡ºå¯èƒ½ã‹åˆ¤å®š													 */
+/* æˆ»ã‚Šå€¤	:TRUE:å¯ FALSE:ä¸å¯												 */
+/* æ—¥ä»˜		:2007/05/26														 */
 /* ========================================================================= */
 
 BOOL CInfoMapBase::IsMoveOut(int x, int y, int nDirection)
@@ -782,9 +782,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::DeleteParts										 */
-/* “à—e		:w’èƒp[ƒc‚ğíœ												 */
-/* “ú•t		:2007/05/04														 */
+/* é–¢æ•°å	:CInfoMapBase::DeleteParts										 */
+/* å†…å®¹		:æŒ‡å®šãƒ‘ãƒ¼ãƒ„ã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2007/05/04														 */
 /* ========================================================================= */
 
 void CInfoMapBase::DeleteParts(DWORD dwPartsID)
@@ -808,9 +808,9 @@ void CInfoMapBase::DeleteParts(DWORD dwPartsID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetShadow										 */
-/* “à—e		:w’èÀ•W‚Ì‰e”Ô†‚ğæ“¾											 */
-/* “ú•t		:2007/06/03														 */
+/* é–¢æ•°å	:CInfoMapBase::GetShadow										 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®å½±ç•ªå·ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/06/03														 */
 /* ========================================================================= */
 
 WORD CInfoMapBase::GetShadow(int x, int y)
@@ -830,9 +830,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::SetShadow										 */
-/* “à—e		:w’èÀ•W‚Ì‰e”Ô†‚ğİ’è											 */
-/* “ú•t		:2007/06/03														 */
+/* é–¢æ•°å	:CInfoMapBase::SetShadow										 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®å½±ç•ªå·ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2007/06/03														 */
 /* ========================================================================= */
 
 void CInfoMapBase::SetShadow(int x, int y, DWORD dwShadowID)
@@ -846,9 +846,9 @@ void CInfoMapBase::SetShadow(int x, int y, DWORD dwShadowID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::DeleteShadow										 */
-/* “à—e		:w’è‰e‚ğíœ													 */
-/* “ú•t		:2007/06/03														 */
+/* é–¢æ•°å	:CInfoMapBase::DeleteShadow										 */
+/* å†…å®¹		:æŒ‡å®šå½±ã‚’å‰Šé™¤													 */
+/* æ—¥ä»˜		:2007/06/03														 */
 /* ========================================================================= */
 
 void CInfoMapBase::DeleteShadow(DWORD dwShadowID)
@@ -868,9 +868,9 @@ void CInfoMapBase::DeleteShadow(DWORD dwShadowID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetMapObject										 */
-/* “à—e		:w’èÀ•W‚Ìƒ}ƒbƒvƒIƒuƒWƒFƒNƒgID‚ğæ“¾							 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CInfoMapBase::GetMapObject										 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆIDã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 DWORD CInfoMapBase::GetMapObject(int x, int y)
@@ -901,9 +901,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::IsFlg											 */
-/* “à—e		:w’è‘®«‚©”»’è													 */
-/* “ú•t		:2008/01/04														 */
+/* é–¢æ•°å	:CInfoMapBase::IsFlg											 */
+/* å†…å®¹		:æŒ‡å®šå±æ€§ã‹åˆ¤å®š													 */
+/* æ—¥ä»˜		:2008/01/04														 */
 /* ========================================================================= */
 
 BOOL CInfoMapBase::IsFlg(int x, int y, DWORD dwFlg)
@@ -935,9 +935,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::IsEnableBattle									 */
-/* “à—e		:í“¬‹–‰Â‚©”»’è													 */
-/* “ú•t		:2008/11/29														 */
+/* é–¢æ•°å	:CInfoMapBase::IsEnableBattle									 */
+/* å†…å®¹		:æˆ¦é—˜è¨±å¯ã‹åˆ¤å®š													 */
+/* æ—¥ä»˜		:2008/11/29														 */
 /* ========================================================================= */
 
 BOOL CInfoMapBase::IsEnableBattle(void)
@@ -955,9 +955,9 @@ BOOL CInfoMapBase::IsEnableBattle(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CInfoMapBase::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 DWORD CInfoMapBase::GetSendDataSize(void)
@@ -968,10 +968,10 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 	dwRet += sizeof (m_sizeMap);
 	dwRet += sizeof (m_dwMapID);
 	dwRet += sizeof (m_dwBGMID);				/* BGMID */
-	dwRet += sizeof (m_dwWeatherType);			/* “V‹Cí•Ê */
-	dwRet += sizeof (m_bEnableBattle);			/* í“¬‹–‰Â */
-	dwRet += sizeof (m_bRecovery);				/* ‹CâŒã‰ñ•œ‚·‚é */
-	dwRet += sizeof (m_byLevel);				/* ˆÃ‚³ƒŒƒxƒ‹ */
+	dwRet += sizeof (m_dwWeatherType);			/* å¤©æ°—ç¨®åˆ¥ */
+	dwRet += sizeof (m_bEnableBattle);			/* æˆ¦é—˜è¨±å¯ */
+	dwRet += sizeof (m_bRecovery);				/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	dwRet += sizeof (m_byLevel);				/* æš—ã•ãƒ¬ãƒ™ãƒ« */
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
@@ -988,9 +988,9 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CInfoMapBase::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapBase::GetSendData(void)
@@ -1004,33 +1004,33 @@ PBYTE CInfoMapBase::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	pDataTmp	= pData;
 
-	CopyMemoryRenew (pDataTmp, &m_sizeMap,			sizeof (m_sizeMap),			pDataTmp);	/* ƒ}ƒbƒvƒTƒCƒY */
-	CopyMemoryRenew (pDataTmp, &m_dwMapID,			sizeof (m_dwMapID),			pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (pDataTmp, &m_sizeMap,			sizeof (m_sizeMap),			pDataTmp);	/* ãƒãƒƒãƒ—ã‚µã‚¤ã‚º */
+	CopyMemoryRenew (pDataTmp, &m_dwMapID,			sizeof (m_dwMapID),			pDataTmp);	/* ãƒãƒƒãƒ—ID */
 	CopyMemoryRenew (pDataTmp, &m_dwBGMID,			sizeof (m_dwBGMID),			pDataTmp);	/* BGMID */
-	CopyMemoryRenew (pDataTmp, &m_dwWeatherType,	sizeof (m_dwWeatherType),	pDataTmp);	/* “V‹Cí•Ê */
-	CopyMemoryRenew (pDataTmp, &m_bEnableBattle,	sizeof (m_bEnableBattle),	pDataTmp);	/* í“¬‹–‰Â */
-	CopyMemoryRenew (pDataTmp, &m_bRecovery,		sizeof (m_bRecovery),		pDataTmp);	/* ‹CâŒã‰ñ•œ‚·‚é */
-	CopyMemoryRenew (pDataTmp, &m_byLevel,			sizeof (m_byLevel),			pDataTmp);	/* ˆÃ‚³ƒŒƒxƒ‹ */
-	strcpyRenew ((LPSTR)pDataTmp, m_strMapName, pDataTmp);					/* ƒ}ƒbƒv–¼ */
+	CopyMemoryRenew (pDataTmp, &m_dwWeatherType,	sizeof (m_dwWeatherType),	pDataTmp);	/* å¤©æ°—ç¨®åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &m_bEnableBattle,	sizeof (m_bEnableBattle),	pDataTmp);	/* æˆ¦é—˜è¨±å¯ */
+	CopyMemoryRenew (pDataTmp, &m_bRecovery,		sizeof (m_bRecovery),		pDataTmp);	/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	CopyMemoryRenew (pDataTmp, &m_byLevel,			sizeof (m_byLevel),			pDataTmp);	/* æš—ã•ãƒ¬ãƒ™ãƒ« */
+	strcpyRenew ((LPSTR)pDataTmp, m_strMapName, pDataTmp);					/* ãƒãƒƒãƒ—å */
 	if (m_pwMap) {
-		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMap, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);		/* ƒ}ƒbƒv */
+		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMap, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);		/* ãƒãƒƒãƒ— */
 	}
 	if (m_pwMapPile) {
-		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMapPile, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ƒ}ƒbƒvd‚Ë‡‚í‚¹ */
+		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMapPile, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ãƒãƒƒãƒ—é‡ã­åˆã‚ã› */
 	}
 	if (m_pwMapShadow) {
-		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMapShadow, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ƒ}ƒbƒv‰e */
+		CopyMemoryRenew (pDataTmp, (PBYTE)m_pwMapShadow, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ãƒãƒƒãƒ—å½± */
 	}
 	if (m_pLibInfoMapEvent) {
 		pDataLibInfoTmp	= m_pLibInfoMapEvent->GetSendData ();
 		dwSizeLibInfo	= m_pLibInfoMapEvent->GetSendDataSize ();
-		CopyMemoryRenew (pDataTmp, pDataLibInfoTmp, dwSizeLibInfo, pDataTmp);	/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
+		CopyMemoryRenew (pDataTmp, pDataLibInfoTmp, dwSizeLibInfo, pDataTmp);	/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 		SAFE_DELETE_ARRAY (pDataLibInfoTmp);
 	}
 	if (m_pLibInfoMapObjectData) {
 		pDataLibInfoTmp	= m_pLibInfoMapObjectData->GetSendData ();
 		dwSizeLibInfo	= m_pLibInfoMapObjectData->GetSendDataSize ();
-		CopyMemoryRenew (pDataTmp, pDataLibInfoTmp, dwSizeLibInfo, pDataTmp);	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ */
+		CopyMemoryRenew (pDataTmp, pDataLibInfoTmp, dwSizeLibInfo, pDataTmp);	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ */
 		SAFE_DELETE_ARRAY (pDataLibInfoTmp);
 	}
 
@@ -1040,10 +1040,10 @@ PBYTE CInfoMapBase::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğİ’è												 */
-/* “ú•t		:2007/01/04														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CInfoMapBase::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2007/01/04														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CInfoMapBase::SetSendData(PBYTE pSrc)
@@ -1053,19 +1053,19 @@ PBYTE CInfoMapBase::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_sizeMap,		pDataTmp, sizeof (m_sizeMap),		pDataTmp);	/* ƒ}ƒbƒvƒTƒCƒY */
-	CopyMemoryRenew (&m_dwMapID,		pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (&m_sizeMap,		pDataTmp, sizeof (m_sizeMap),		pDataTmp);	/* ãƒãƒƒãƒ—ã‚µã‚¤ã‚º */
+	CopyMemoryRenew (&m_dwMapID,		pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* ãƒãƒƒãƒ—ID */
 	CopyMemoryRenew (&m_dwBGMID,		pDataTmp, sizeof (m_dwBGMID),		pDataTmp);	/* BGMID */
-	CopyMemoryRenew (&m_dwWeatherType,	pDataTmp, sizeof (m_dwWeatherType),	pDataTmp);	/* “V‹Cí•Ê */
-	CopyMemoryRenew (&m_bEnableBattle,	pDataTmp, sizeof (m_bEnableBattle),	pDataTmp);	/* í“¬‹–‰Â */
-	CopyMemoryRenew (&m_bRecovery,		pDataTmp, sizeof (m_bRecovery),		pDataTmp);	/* ‹CâŒã‰ñ•œ‚·‚é */
-	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);	/* ˆÃ‚³ƒŒƒxƒ‹ */
-	StoreRenew (m_strMapName, (LPCSTR)pDataTmp, pDataTmp);					/* ƒ}ƒbƒv–¼ */
+	CopyMemoryRenew (&m_dwWeatherType,	pDataTmp, sizeof (m_dwWeatherType),	pDataTmp);	/* å¤©æ°—ç¨®åˆ¥ */
+	CopyMemoryRenew (&m_bEnableBattle,	pDataTmp, sizeof (m_bEnableBattle),	pDataTmp);	/* æˆ¦é—˜è¨±å¯ */
+	CopyMemoryRenew (&m_bRecovery,		pDataTmp, sizeof (m_bRecovery),		pDataTmp);	/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);	/* æš—ã•ãƒ¬ãƒ™ãƒ« */
+	StoreRenew (m_strMapName, (LPCSTR)pDataTmp, pDataTmp);					/* ãƒãƒƒãƒ—å */
 	Init (m_sizeMap.cx, m_sizeMap.cy, 0);
 	if ((m_sizeMap.cx != 0) || (m_sizeMap.cy != 0)) {
-		CopyMemoryRenew ((PBYTE)m_pwMap,		pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ƒ}ƒbƒv */
-		CopyMemoryRenew ((PBYTE)m_pwMapPile,	pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ƒ}ƒbƒvd‚Ë‡‚í‚¹ */
-		CopyMemoryRenew ((PBYTE)m_pwMapShadow,	pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ƒ}ƒbƒv‰e */
+		CopyMemoryRenew ((PBYTE)m_pwMap,		pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ãƒãƒƒãƒ— */
+		CopyMemoryRenew ((PBYTE)m_pwMapPile,	pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ãƒãƒƒãƒ—é‡ã­åˆã‚ã› */
+		CopyMemoryRenew ((PBYTE)m_pwMapShadow,	pDataTmp, (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy, pDataTmp);	/* ãƒãƒƒãƒ—å½± */
 	}
 	if (m_pLibInfoMapEvent) {
 		pDataTmp = m_pLibInfoMapEvent->SetSendData (pDataTmp);
@@ -1080,9 +1080,9 @@ PBYTE CInfoMapBase::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CInfoMapBase::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 void CInfoMapBase::Copy(CInfoMapBase *pSrc)
@@ -1090,12 +1090,12 @@ void CInfoMapBase::Copy(CInfoMapBase *pSrc)
 	PBYTE pTmp;
 
 	CopyMemory (&m_sizeMap, &pSrc->m_sizeMap, sizeof (m_sizeMap));
-	m_dwMapID		= pSrc->m_dwMapID;			/* ƒ}ƒbƒvID */
+	m_dwMapID		= pSrc->m_dwMapID;			/* ãƒãƒƒãƒ—ID */
 	m_dwBGMID		= pSrc->m_dwBGMID;			/* BGMID */
-	m_dwWeatherType	= pSrc->m_dwWeatherType;	/* “V‹Cí•Ê */
-	m_bEnableBattle	= pSrc->m_bEnableBattle;	/* í“¬‹–‰Â */
-	m_bRecovery		= pSrc->m_bRecovery;		/* ‹CâŒã‰ñ•œ‚·‚é */
-	m_byLevel		= pSrc->m_byLevel;			/* ˆÃ‚³ƒŒƒxƒ‹ */
+	m_dwWeatherType	= pSrc->m_dwWeatherType;	/* å¤©æ°—ç¨®åˆ¥ */
+	m_bEnableBattle	= pSrc->m_bEnableBattle;	/* æˆ¦é—˜è¨±å¯ */
+	m_bRecovery		= pSrc->m_bRecovery;		/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	m_byLevel		= pSrc->m_byLevel;			/* æš—ã•ãƒ¬ãƒ™ãƒ« */
 	m_strMapName	= pSrc->m_strMapName;
 	Init (pSrc->m_sizeMap.cx, pSrc->m_sizeMap.cy, 0);
 	if ((m_sizeMap.cx != 0) || (m_sizeMap.cy != 0)) {
@@ -1113,9 +1113,9 @@ void CInfoMapBase::Copy(CInfoMapBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::RenewHitTmp										 */
-/* “à—e		:ƒ}ƒbƒvƒp[ƒcˆÈŠO‚Å‚Ì“–‚½‚è”»’è‚ğXV							 */
-/* “ú•t		:2008/11/12														 */
+/* é–¢æ•°å	:CInfoMapBase::RenewHitTmp										 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ä»¥å¤–ã§ã®å½“ãŸã‚Šåˆ¤å®šã‚’æ›´æ–°							 */
+/* æ—¥ä»˜		:2008/11/12														 */
 /* ========================================================================= */
 
 void CInfoMapBase::RenewHitTmp(void)
@@ -1158,9 +1158,9 @@ void CInfoMapBase::RenewHitTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::RenewMapEvent									 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒgXV												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CInfoMapBase::RenewMapEvent									 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæ›´æ–°												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 void CInfoMapBase::RenewMapEvent(void)
@@ -1177,7 +1177,7 @@ void CInfoMapBase::RenewMapEvent(void)
 		for (i = 0; i < nCount; i ++) {
 			pInfo = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
 
-			/* ”ÍˆÍ‚Å”»’èH */
+			/* ç¯„å›²ã§åˆ¤å®šï¼Ÿ */
 			if (pInfo->m_nHitType == MAPEVENTHITTYPE_AREA) {
 				nCountX = pInfo->m_ptPos2.x - pInfo->m_ptPos.x + 1;
 				nCountY = pInfo->m_ptPos2.y - pInfo->m_ptPos.y + 1;
@@ -1196,9 +1196,9 @@ void CInfoMapBase::RenewMapEvent(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetEventCount									 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒg”‚ğæ“¾											 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CInfoMapBase::GetEventCount									 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæ•°ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 int CInfoMapBase::GetEventCount(void)
@@ -1217,9 +1217,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetEvent											 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒg‚ğæ“¾											 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CInfoMapBase::GetEvent											 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 CInfoMapEventBase *CInfoMapBase::GetEvent(int nNo)
@@ -1238,14 +1238,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetEvent											 */
-/* “à—e		:ƒ}ƒbƒvƒCƒxƒ“ƒg‚ğæ“¾											 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CInfoMapBase::GetEvent											 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 CInfoMapEventBase *CInfoMapBase::GetEvent(
-	int x,		/* [in] ƒ}ƒbƒvÀ•WX */
-	int y)		/* [in] ƒ}ƒbƒvÀ•WY */
+	int x,		/* [in] ãƒãƒƒãƒ—åº§æ¨™X */
+	int y)		/* [in] ãƒãƒƒãƒ—åº§æ¨™Y */
 {
 	int i, nCount;
 	PCInfoMapEventBase pRet, pInfo;
@@ -1259,7 +1259,7 @@ CInfoMapEventBase *CInfoMapBase::GetEvent(
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
 		switch (pInfo->m_nHitType) {
-		case MAPEVENTHITTYPE_AREA:			/* ”ÍˆÍ‚Å”»’è */
+		case MAPEVENTHITTYPE_AREA:			/* ç¯„å›²ã§åˆ¤å®š */
 			if ((x >= pInfo->m_ptPos.x) && (x <= pInfo->m_ptPos2.x)) {
 				if ((y >= pInfo->m_ptPos.y) && (y <= pInfo->m_ptPos2.y)) {
 					pRet = pInfo;
@@ -1280,9 +1280,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetMapObjectDataCount							 */
-/* “à—e		:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^”‚ğæ“¾							 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CInfoMapBase::GetMapObjectDataCount							 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 int CInfoMapBase::GetMapObjectDataCount(void)
@@ -1301,9 +1301,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetObjectData									 */
-/* “à—e		:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^‚ğæ“¾								 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CInfoMapBase::GetObjectData									 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 CInfoMapObjectData *CInfoMapBase::GetObjectData(int nNo)
@@ -1322,14 +1322,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMapBase::GetEvent											 */
-/* “à—e		:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^‚ğæ“¾								 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CInfoMapBase::GetEvent											 */
+/* å†…å®¹		:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 CInfoMapObjectData *CInfoMapBase::GetObjectData(
-	int x,		/* [in] ƒ}ƒbƒvÀ•WX */
-	int y)		/* [in] ƒ}ƒbƒvÀ•WY */
+	int x,		/* [in] ãƒãƒƒãƒ—åº§æ¨™X */
+	int y)		/* [in] ãƒãƒƒãƒ—åº§æ¨™Y */
 {
 	int i, nCount;
 	PCInfoMapObjectData pRet, pInfo;

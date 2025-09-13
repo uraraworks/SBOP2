@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketACCOUNT_RES_MAKECHAR.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒAƒJƒEƒ“ƒgŒn:ƒLƒƒƒ‰ì¬‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/12/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketACCOUNT_RES_MAKECHAR.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³»:ã‚­ãƒ£ãƒ©ä½œæˆå¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,34 +11,34 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 enum {
 	MAKECHARRES_NONE = 0,
-	MAKECHARRES_OK,								/* –â‘è–³‚µ */
-	MAKECHARRES_NG_USE,							/* Žg—pÏ‚Ý */
-	MAKECHARRES_NG_SPACE,						/* ‹ó”’‚ªŽg—p‚³‚ê‚Ä‚¢‚é */
+	MAKECHARRES_OK,								/* å•é¡Œç„¡ã— */
+	MAKECHARRES_NG_USE,							/* ä½¿ç”¨æ¸ˆã¿ */
+	MAKECHARRES_NG_SPACE,						/* ç©ºç™½ãŒä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketACCOUNT_RES_MAKECHAR : public CPacketBase
 {
 public:
-			CPacketACCOUNT_RES_MAKECHAR();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketACCOUNT_RES_MAKECHAR();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketACCOUNT_RES_MAKECHAR();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketACCOUNT_RES_MAKECHAR();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(int nResult, DWORD dwCharID);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(int nResult, DWORD dwCharID);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int		m_nResult;					/* Œ‹‰Ê */
-	DWORD	m_dwCharID;					/* ƒLƒƒƒ‰ID */
+	int		m_nResult;					/* çµæžœ */
+	DWORD	m_dwCharID;					/* ã‚­ãƒ£ãƒ©ID */
 } CPacketACCOUNT_RES_MAKECHAR, *PCPacketACCOUNT_RES_MAKECHAR;
 
 /* Copyright(C)URARA-works 2006 */

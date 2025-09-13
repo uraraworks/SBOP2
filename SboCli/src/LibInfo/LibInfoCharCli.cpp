@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoCharCli.cpp											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoCharCli.cpp											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,9 +22,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::CLibInfoCharCli								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CLibInfoCharCli::CLibInfoCharCli								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CLibInfoCharCli::CLibInfoCharCli()
@@ -36,9 +36,9 @@ CLibInfoCharCli::CLibInfoCharCli()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::~CLibInfoCharCli								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CLibInfoCharCli::~CLibInfoCharCli								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CLibInfoCharCli::~CLibInfoCharCli()
@@ -47,9 +47,9 @@ CLibInfoCharCli::~CLibInfoCharCli()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CLibInfoCharCli::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CLibInfoCharCli::Create(CMgrData *pMgrData)
@@ -62,10 +62,10 @@ void CLibInfoCharCli::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::Proc											 */
-/* “à—e		:ˆ—															 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALS:ˆ—‚µ‚Ä‚¢‚È‚¢								 */
-/* “ú•t		:2007/01/24														 */
+/* é–¢æ•°å	:CLibInfoCharCli::Proc											 */
+/* å†…å®¹		:å‡¦ç†															 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALS:å‡¦ç†ã—ã¦ã„ãªã„								 */
+/* æ—¥ä»˜		:2007/01/24														 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharCli::Proc(void)
@@ -94,7 +94,7 @@ BOOL CLibInfoCharCli::Proc(void)
 
 		bResult = FALSE;
 		switch (pInfoChar->m_nMoveState) {
-		case CHARMOVESTATE_DELETE:			/* Á‹ */
+		case CHARMOVESTATE_DELETE:			/* æ¶ˆå» */
 			if (pInfoChar == m_pMgrData->GetPlayerChar ()) {
 				m_pMgrData->SetPlayerChar (NULL);
 			}
@@ -103,9 +103,9 @@ BOOL CLibInfoCharCli::Proc(void)
 			m_nProcNo --;
 			bResult = TRUE;
 			break;
-//		case CHARMOVESTATE_STAND:			/* —§‚¿ */
-//		case CHARMOVESTATE_MOVE:			/* ˆÚ“®’† */
-//		case CHARMOVESTATE_DELETEREADY:		/* Á‹€”õ */
+//		case CHARMOVESTATE_STAND:			/* ç«‹ã¡ */
+//		case CHARMOVESTATE_MOVE:			/* ç§»å‹•ä¸­ */
+//		case CHARMOVESTATE_DELETEREADY:		/* æ¶ˆå»æº–å‚™ */
 		default:
 			bResult = pInfoChar->TimerProc (timeGetTime ());
 			break;
@@ -119,10 +119,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::DeleteOutScreen								 */
-/* “à—e		:‰æ–ÊŠO‚ÌƒLƒƒƒ‰‚ğíœ											 */
-/* –ß‚è’l	:TRUE:íœ‚³‚ê‚½												 */
-/* “ú•t		:2007/02/12														 */
+/* é–¢æ•°å	:CLibInfoCharCli::DeleteOutScreen								 */
+/* å†…å®¹		:ç”»é¢å¤–ã®ã‚­ãƒ£ãƒ©ã‚’å‰Šé™¤											 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‰Šé™¤ã•ã‚ŒãŸ												 */
+/* æ—¥ä»˜		:2007/02/12														 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/)
@@ -147,9 +147,9 @@ BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/
 		if (pCharTmp == pChar) {
 			continue;
 		}
-		/* “¯ƒ}ƒbƒvH */
+		/* åŒãƒãƒƒãƒ—ï¼Ÿ */
 		if (pCharTmp->m_dwMapID == pChar->m_dwMapID) {
-			/* ‰æ–Ê“àH */
+			/* ç”»é¢å†…ï¼Ÿ */
 			if ((abs (pCharTmp->m_nMapX - pChar->m_nMapX) < (DRAW_PARTS_X * 2) + 1) &&
 				(abs (pCharTmp->m_nMapY - pChar->m_nMapY) < (DRAW_PARTS_Y * 2) + 1)) {
 				continue;
@@ -164,9 +164,9 @@ BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::RenewMotionInfo								 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚ğXV											 */
-/* “ú•t		:2007/11/24														 */
+/* é–¢æ•°å	:CLibInfoCharCli::RenewMotionInfo								 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2007/11/24														 */
 /* ========================================================================= */
 
 void CLibInfoCharCli::RenewMotionInfo(DWORD dwCharID)
@@ -189,9 +189,9 @@ void CLibInfoCharCli::RenewMotionInfo(DWORD dwCharID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::RenewMotionInfo								 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚ğXV											 */
-/* “ú•t		:2007/11/24														 */
+/* é–¢æ•°å	:CLibInfoCharCli::RenewMotionInfo								 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2007/11/24														 */
 /* ========================================================================= */
 
 void CLibInfoCharCli::RenewMotionInfo(CInfoCharCli *pChar)
@@ -212,15 +212,15 @@ void CLibInfoCharCli::RenewMotionInfo(CInfoCharCli *pChar)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::SetMotionInfo									 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚ğİ’è											 */
-/* “ú•t		:2008/01/03														 */
+/* é–¢æ•°å	:CLibInfoCharCli::SetMotionInfo									 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2008/01/03														 */
 /* ========================================================================= */
 
 void CLibInfoCharCli::SetMotionInfo(
-	CInfoCharCli *pChar,		/* [in] ƒLƒƒƒ‰î•ñ */
-	DWORD dwMotionID,			/* [in] ƒ‚[ƒVƒ‡ƒ“ID */
-	DWORD dwListID)				/* [in] ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
+	CInfoCharCli *pChar,		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
+	DWORD dwMotionID,			/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID */
+	DWORD dwListID)				/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
 {
 	int i;
 	DWORD dwMotionType;
@@ -231,10 +231,10 @@ void CLibInfoCharCli::SetMotionInfo(
 	pLibInfoItem	= m_pMgrData->GetLibInfoItem ();
 
 	switch (dwMotionID) {
-	case CHARMOTIONID_ATACK:			// UŒ‚
+	case CHARMOTIONID_ATACK:			// æ”»æ’ƒ
 		dwListID	 = CHARMOTIONLISTID_SWING_UP;
 		dwMotionType = pLibInfoItem->GetMotionIDAtack (pChar->m_dwEquipItemIDArmsRight);
-//Todo:b’è
+//Todo:æš«å®š
 		if ((dwMotionType & INFOITEMARMS_MOTION_SWING) && (dwMotionType & INFOITEMARMS_MOTION_POKE)) {
 			if (rand () % 100 > 50) {
 				dwListID = CHARMOTIONLISTID_SWING_UP;
@@ -259,19 +259,19 @@ void CLibInfoCharCli::SetMotionInfo(
 			dwListID = CHARMOTIONLISTID_FISHING_UP;
 		}
 		break;
-	case CHARMOTIONID_BATTLESTAND:		// í“¬—§‚¿
+	case CHARMOTIONID_BATTLESTAND:		// æˆ¦é—˜ç«‹ã¡
 		dwListID = pLibInfoItem->GetMotionIDBattleStand (pChar->m_dwEquipItemIDArmsRight);
 		if (dwListID == 0) {
 			dwListID = CHARMOTIONLISTID_BATTLESTAND_UP;
 		}
 		break;
-	case CHARMOTIONID_BATTLEWALK:		// ‚·‚è‘«
+	case CHARMOTIONID_BATTLEWALK:		// ã™ã‚Šè¶³
 		dwListID = pLibInfoItem->GetMotionIDBattleWalk (pChar->m_dwEquipItemIDArmsRight);
 		if (dwListID == 0) {
 			dwListID = CHARMOTIONLISTID_BATTLEWALK_UP;
 		}
 		break;
-	case CHARMOTIONID_BATTLEDEFENSE:	// –hŒä
+	case CHARMOTIONID_BATTLEDEFENSE:	// é˜²å¾¡
 		dwListID = CHARMOTIONLISTID_DEFENSE_UP;
 		dwMotionType = pLibInfoItem->GetMotionIDAtack (pChar->m_dwEquipItemIDArmsRight);
 		if (dwMotionType & INFOITEMARMS_MOTION_BOW) {
@@ -279,7 +279,7 @@ void CLibInfoCharCli::SetMotionInfo(
 		}
 		break;
 	}
-	/* Œü‚«‚É‰‚¶‚Äƒ‚[ƒVƒ‡ƒ“‚ğØ‚è‘Ö‚¦‚éH */
+	/* å‘ãã«å¿œã˜ã¦ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ï¼Ÿ */
 	if (pChar->m_bMotionDirection) {
 		for (i = 0; i < 4; i ++) {
 			pLibInfoMotion->GetMotionInfo (pChar->m_dwMotionTypeID, dwListID + i, pChar->m_aMotion[dwMotionID][i]);
@@ -291,9 +291,9 @@ void CLibInfoCharCli::SetMotionInfo(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharSvr::RenewGrpID									 */
-/* “à—e		:‘•”õ‰æ‘œID‚ğXV												 */
-/* “ú•t		:2007/12/22														 */
+/* é–¢æ•°å	:CLibInfoCharSvr::RenewGrpID									 */
+/* å†…å®¹		:è£…å‚™ç”»åƒIDã‚’æ›´æ–°												 */
+/* æ—¥ä»˜		:2007/12/22														 */
 /* ========================================================================= */
 
 void CLibInfoCharCli::RenewGrpID(DWORD dwCharID)
@@ -317,22 +317,22 @@ void CLibInfoCharCli::RenewGrpID(DWORD dwCharID)
 			i = nCount;
 		}
 
-		/* • */
+		/* æœ */
 		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDCloth);
 		if (pInfoItemType) {
 			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDCloth, &pInfoChar->m_wGrpIDSP);
 		}
-		/* ƒAƒNƒZƒTƒŠ */
+		/* ã‚¢ã‚¯ã‚»ã‚µãƒª */
 		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDAcce1);
 		if (pInfoItemType) {
 			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDAcce, NULL);
 		}
-		/* ‚¿•¨ */
+		/* æŒã¡ç‰© */
 		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDArmsRight);
 		if (pInfoItemType) {
 			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDArmsMain, &pInfoChar->m_wGrpIDArmsSub);
 		}
-		/* ‚ */
+		/* ç›¾ */
 		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDArmsLeft);
 		if (pInfoItemType) {
 			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDArmsLeftMain, &pInfoChar->m_wGrpIDArmsLeftSub);
@@ -342,15 +342,15 @@ void CLibInfoCharCli::RenewGrpID(DWORD dwCharID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharCli::IsMove										 */
-/* “à—e		:w’è•ûŒü‚Éi‚ß‚é‚©ƒ`ƒFƒbƒN										 */
-/* “ú•t		:2008/06/03														 */
-/* –ß‚è’l	:TRUE:i‚ß‚é													 */
+/* é–¢æ•°å	:CLibInfoCharCli::IsMove										 */
+/* å†…å®¹		:æŒ‡å®šæ–¹å‘ã«é€²ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯										 */
+/* æ—¥ä»˜		:2008/06/03														 */
+/* æˆ»ã‚Šå€¤	:TRUE:é€²ã‚ã‚‹													 */
 /* ========================================================================= */
 
 BOOL CLibInfoCharCli::IsMove(
-	PCInfoCharBase pInfoChar,		/* [in] ƒLƒƒƒ‰î•ñ */
-	int &nDirection)				/* [in/ou] ˆÚ“®‚·‚éŒü‚« */
+	PCInfoCharBase pInfoChar,		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
+	int &nDirection)				/* [in/ou] ç§»å‹•ã™ã‚‹å‘ã */
 {
 	int x, y, nDirectionTmp;
 	BOOL bRet, bResult;
@@ -450,7 +450,7 @@ BOOL CLibInfoCharCli::IsMove(
 		break;
 	}
 
-	/* ’Eo‰Â”\‚©ƒ`ƒFƒbƒN */
+	/* è„±å‡ºå¯èƒ½ã‹ãƒã‚§ãƒƒã‚¯ */
 	bResult = FALSE;
 	pInfoChar->GetFrontMapPosRect (rcMap, nDirection);
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
@@ -463,7 +463,7 @@ BOOL CLibInfoCharCli::IsMove(
 		goto Exit;
 	}
 
-	/* i‚ß‚é‚©ƒ`ƒFƒbƒN */
+	/* é€²ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
 	bResult = FALSE;
 	pInfoChar->GetFrontMapPosRect (rcMap, nDirection);
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
@@ -486,9 +486,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharBase::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CLibInfoCharBase::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CInfoBase *CLibInfoCharCli::GetNew(int nType)
@@ -496,10 +496,10 @@ CInfoBase *CLibInfoCharCli::GetNew(int nType)
 	PCInfoCharCli pNew;
 
 	switch (nType) {
-	case CHARMOVETYPE_BALL:			pNew = (PCInfoCharCli)new CInfoCharBALLCli;			break;	/* ƒ{[ƒ‹ */
-	case CHARMOVETYPE_SCORE:		pNew = (PCInfoCharCli)new CInfoCharSCORECli;		break;	/* “¾“_ */
-	case CHARMOVETYPE_ATACKANIME:	pNew = (PCInfoCharCli)new CInfoCharATACKANIMECli;	break;	/* UŒ‚ó‚¯‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“ */
-	case CHARMOVETYPE_MOVEATACK:	pNew = (PCInfoCharCli)new CInfoCharMOVEATACKCli;	break;	/* ˆÚ“®‚µ‚ÄUŒ‚ */
+	case CHARMOVETYPE_BALL:			pNew = (PCInfoCharCli)new CInfoCharBALLCli;			break;	/* ãƒœãƒ¼ãƒ« */
+	case CHARMOVETYPE_SCORE:		pNew = (PCInfoCharCli)new CInfoCharSCORECli;		break;	/* å¾—ç‚¹ */
+	case CHARMOVETYPE_ATACKANIME:	pNew = (PCInfoCharCli)new CInfoCharATACKANIMECli;	break;	/* æ”»æ’ƒå—ã‘ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ */
+	case CHARMOVETYPE_MOVEATACK:	pNew = (PCInfoCharCli)new CInfoCharMOVEATACKCli;	break;	/* ç§»å‹•ã—ã¦æ”»æ’ƒ */
 	default:						pNew = (PCInfoCharCli)new CInfoCharCli;				break;
 	}
 	pNew->Create (m_pMgrData);
@@ -510,9 +510,9 @@ CInfoBase *CLibInfoCharCli::GetNew(int nType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharBase::GetPtr										 */
-/* “à—e		:ƒLƒƒƒ‰î•ñ‚ğæ“¾												 */
-/* “ú•t		:2007/03/21														 */
+/* é–¢æ•°å	:CLibInfoCharBase::GetPtr										 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/03/21														 */
 /* ========================================================================= */
 
 CInfoBase *CLibInfoCharCli::GetPtr(int nNo)
@@ -522,9 +522,9 @@ CInfoBase *CLibInfoCharCli::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoCharBase::GetNew										 */
-/* “à—e		:ƒLƒƒƒ‰î•ñ‚ğæ“¾												 */
-/* “ú•t		:2007/03/21														 */
+/* é–¢æ•°å	:CLibInfoCharBase::GetNew										 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/03/21														 */
 /* ========================================================================= */
 
 CInfoBase *CLibInfoCharCli::GetPtr(DWORD dwCharID)

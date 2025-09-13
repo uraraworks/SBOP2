@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketEFFECT_DELETEBALLOONINFO.cpp							 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ï¨èoÇµån:ï¨èoÇµèÓïÒçÌèú) é¿ëïÉtÉ@ÉCÉã				 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/12/24													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketEFFECT_DELETEBALLOONINFO.cpp							 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(Âô¥Âá∫„ÅóÁ≥ª:Âô¥Âá∫„ÅóÊÉÖÂ†±ÂâäÈô§) ÂÆüË£Ö„Éï„Ç°„Ç§„É´				 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/12/24													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketEFFECT_DELETEBALLOONINFO.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEBALLOONINFO::CPacketEFFECT_DELETEBALLOONINFO */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/12/24														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEBALLOONINFO::CPacketEFFECT_DELETEBALLOONINFO */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/12/24														 */
 /* ========================================================================= */
 
 CPacketEFFECT_DELETEBALLOONINFO::CPacketEFFECT_DELETEBALLOONINFO()
@@ -23,9 +23,9 @@ CPacketEFFECT_DELETEBALLOONINFO::CPacketEFFECT_DELETEBALLOONINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEBALLOONINFO::~CPacketEFFECT_DELETEBALLOONINFO */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/12/24														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEBALLOONINFO::~CPacketEFFECT_DELETEBALLOONINFO */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/12/24														 */
 /* ========================================================================= */
 
 CPacketEFFECT_DELETEBALLOONINFO::~CPacketEFFECT_DELETEBALLOONINFO()
@@ -34,13 +34,13 @@ CPacketEFFECT_DELETEBALLOONINFO::~CPacketEFFECT_DELETEBALLOONINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEBALLOONINFO::Make							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/12/24														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEBALLOONINFO::Make							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/12/24														 */
 /* ========================================================================= */
 
 void CPacketEFFECT_DELETEBALLOONINFO::Make(
-	DWORD dwBalloonID)		/* [in] ï¨èoÇµID */
+	DWORD dwBalloonID)		/* [in] Âô¥Âá∫„ÅóID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketEFFECT_DELETEBALLOONINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_EFFECT_DELETEBALLOONINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwBalloonID, sizeof (dwBalloonID), pDataTmp);	/* ï¨èoÇµID */
+	CopyMemoryRenew (pDataTmp, &dwBalloonID, sizeof (dwBalloonID), pDataTmp);	/* Âô¥Âá∫„ÅóID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEBALLOONINFO::Set							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/12/24														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEBALLOONINFO::Set							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/12/24														 */
 /* ========================================================================= */
 
 PBYTE CPacketEFFECT_DELETEBALLOONINFO::Set(PBYTE pPacket)
@@ -76,7 +76,7 @@ PBYTE CPacketEFFECT_DELETEBALLOONINFO::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwBalloonID, pDataTmp, sizeof (m_dwBalloonID), pDataTmp);	/* ï¨èoÇµID */
+	CopyMemoryRenew (&m_dwBalloonID, pDataTmp, sizeof (m_dwBalloonID), pDataTmp);	/* Âô¥Âá∫„ÅóID */
 
 	pRet = pDataTmp;
 	return pRet;

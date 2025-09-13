@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_REQ_FILELIST.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹ƒŠƒXƒg—v‹) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/03/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_REQ_FILELIST.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆè¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/03/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,16 +11,16 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketVERSION_REQ_FILELIST : public CPacketBase
 {
 public:
-			CPacketVERSION_REQ_FILELIST();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketVERSION_REQ_FILELIST();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketVERSION_REQ_FILELIST();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketVERSION_REQ_FILELIST();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(void);										/* ƒpƒPƒbƒg‚ðì¬ */
+	void	Make	(void);										/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
 } CPacketVERSION_REQ_FILELIST, *PCPacketVERSION_REQ_FILELIST;
 
 /* Copyright(C)URARA-works 2006 */

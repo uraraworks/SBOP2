@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_DELETEPARTS.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒp[ƒcíœ) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/05/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_DELETEPARTS.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„å‰Šé™¤) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_DELETEPARTS : public CPacketBase
 {
 public:
-			CPacketMAP_DELETEPARTS();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_DELETEPARTS();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_DELETEPARTS();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_DELETEPARTS();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwPartsID);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwPartsID);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwPartsID;			/* ƒp[ƒcID */
+	DWORD	m_dwPartsID;			/* ãƒ‘ãƒ¼ãƒ„ID */
 } CPacketMAP_DELETEPARTS, *PCPacketMAP_DELETEPARTS;
 
 /* Copyright(C)URARA-works 2007 */

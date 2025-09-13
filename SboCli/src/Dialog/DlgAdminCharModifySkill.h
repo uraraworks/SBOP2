@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifySkill.h									 */
-/* “à—e			:‘I‘ğƒLƒƒƒ‰î•ñ•ÒW[ŠƒXƒLƒ‹‚Ìİ’è]ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifySkill.h									 */
+/* å†…å®¹			:é¸æŠã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[æ‰€æŒã‚¹ã‚­ãƒ«ã®è¨­å®š]ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/18													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,24 +14,24 @@ class CInfoCharCli;
 class CLibInfoSkill;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharModifySkill : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharModifySkill(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharModifySkill();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharModifySkill(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharModifySkill();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);						/* ‰Šú‰» */
-	void	Renew		(void);										/* XV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);			/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
+	void	Init		(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	void	Renew		(void);										/* æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
 
 
 protected:
-	CInfoCharCli	*m_pInfoChar;					/* •ÒW’†‚ÌƒLƒƒƒ‰î•ñ */
-	CLibInfoSkill	*m_pLibInfoSkill;				/* ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠ */
+	CInfoCharCli	*m_pInfoChar;					/* ç·¨é›†ä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
+	CLibInfoSkill	*m_pLibInfoSkill;				/* ã‚¹ã‚­ãƒ«æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 
 
 
@@ -46,7 +46,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharModifySkill)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

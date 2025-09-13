@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcMAP.cpp									 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒ}ƒbƒvŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/01/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcMAP.cpp									 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ãƒžãƒƒãƒ—ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/04													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -30,40 +30,40 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP										 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvŒn)												 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ç³»)												 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_MAP_RES_MAPINFO:			RecvProcMAP_RES_MAPINFO			(pData);	break;	/* ƒ}ƒbƒvî•ñ‰ž“š */
-	case SBOCOMMANDID_SUB_MAP_ONLINE:				RecvProcMAP_ONLINE				(pData);	break;	/* ƒIƒ“ƒ‰ƒCƒ“”’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_SYSTEMMSG:			RecvProcMAP_SYSTEMMSG			(pData);	break;	/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_FORMATMSG:			RecvProcMAP_FORMATMSG			(pData);	break;	/* ƒtƒH[ƒ}ƒbƒgƒƒbƒZ[ƒW’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_MAPOBJECT:			RecvProcMAP_MAPOBJECT			(pData);	break;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_MAPOBJECTDATA:		RecvProcMAP_MAPOBJECTDATA		(pData);	break;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_DELETEMAPOBJECTDATA:	RecvProcMAP_DELETEMAPOBJECTDATA	(pData);	break;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^íœ */
-	case SBOCOMMANDID_SUB_MAP_MAPPARTS:				RecvProcMAP_MAPPARTS			(pData);	break;	/* ƒ}ƒbƒvƒp[ƒcî•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_SETPARTS:				RecvProcMAP_SETPARTS			(pData);	break;	/* ƒ}ƒbƒvƒp[ƒc”z’u */
-	case SBOCOMMANDID_SUB_MAP_RENEWMAPSIZE:			RecvProcMAP_RENEWMAPSIZE		(pData);	break;	/* ƒ}ƒbƒvƒTƒCƒYXV */
-	case SBOCOMMANDID_SUB_MAP_DELETEPARTS:			RecvProcMAP_DELETEPARTS			(pData);	break;	/* ƒ}ƒbƒvƒp[ƒcíœ */
-	case SBOCOMMANDID_SUB_MAP_MAPSHADOW:			RecvProcMAP_MAPSHADOW			(pData);	break;	/* ƒ}ƒbƒv‰eî•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_SETMAPSHADOW:			RecvProcMAP_SETMAPSHADOW		(pData);	break;	/* ƒ}ƒbƒv‰e”z’u */
-	case SBOCOMMANDID_SUB_MAP_DELETEMAPSHADOW:		RecvProcMAP_DELETEMAPSHADOW		(pData);	break;	/* ƒ}ƒbƒv‰eíœ */
-	case SBOCOMMANDID_SUB_MAP_MAPNAME:				RecvProcMAP_MAPNAME				(pData);	break;	/* ƒ}ƒbƒv–¼’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_MAPEVENT:				RecvProcMAP_MAPEVENT			(pData);	break;	/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_MAP_DELETEEVENT:			RecvProcMAP_DELETEEVENT			(pData);	break;	/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñíœ */
-	case SBOCOMMANDID_SUB_MAP_FADEINOUT:			RecvProcMAP_FADEINOUT			(pData);	break;	/* ƒtƒF[ƒhƒCƒ“/ƒAƒEƒg’Ê’m */
+	case SBOCOMMANDID_SUB_MAP_RES_MAPINFO:			RecvProcMAP_RES_MAPINFO			(pData);	break;	/* ãƒžãƒƒãƒ—æƒ…å ±å¿œç­” */
+	case SBOCOMMANDID_SUB_MAP_ONLINE:				RecvProcMAP_ONLINE				(pData);	break;	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_SYSTEMMSG:			RecvProcMAP_SYSTEMMSG			(pData);	break;	/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_FORMATMSG:			RecvProcMAP_FORMATMSG			(pData);	break;	/* ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_MAPOBJECT:			RecvProcMAP_MAPOBJECT			(pData);	break;	/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_MAPOBJECTDATA:		RecvProcMAP_MAPOBJECTDATA		(pData);	break;	/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_DELETEMAPOBJECTDATA:	RecvProcMAP_DELETEMAPOBJECTDATA	(pData);	break;	/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_MAP_MAPPARTS:				RecvProcMAP_MAPPARTS			(pData);	break;	/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_SETPARTS:				RecvProcMAP_SETPARTS			(pData);	break;	/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„é…ç½® */
+	case SBOCOMMANDID_SUB_MAP_RENEWMAPSIZE:			RecvProcMAP_RENEWMAPSIZE		(pData);	break;	/* ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–° */
+	case SBOCOMMANDID_SUB_MAP_DELETEPARTS:			RecvProcMAP_DELETEPARTS			(pData);	break;	/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_MAP_MAPSHADOW:			RecvProcMAP_MAPSHADOW			(pData);	break;	/* ãƒžãƒƒãƒ—å½±æƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_SETMAPSHADOW:			RecvProcMAP_SETMAPSHADOW		(pData);	break;	/* ãƒžãƒƒãƒ—å½±é…ç½® */
+	case SBOCOMMANDID_SUB_MAP_DELETEMAPSHADOW:		RecvProcMAP_DELETEMAPSHADOW		(pData);	break;	/* ãƒžãƒƒãƒ—å½±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_MAP_MAPNAME:				RecvProcMAP_MAPNAME				(pData);	break;	/* ãƒžãƒƒãƒ—åé€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_MAPEVENT:				RecvProcMAP_MAPEVENT			(pData);	break;	/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_MAP_DELETEEVENT:			RecvProcMAP_DELETEEVENT			(pData);	break;	/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_MAP_FADEINOUT:			RecvProcMAP_FADEINOUT			(pData);	break;	/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³/ã‚¢ã‚¦ãƒˆé€šçŸ¥ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_RES_MAPINFO							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvî•ñ‰ž“š)										 */
-/* “ú•t		:2007/01/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_RES_MAPINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—æƒ…å ±å¿œç­”)										 */
+/* æ—¥ä»˜		:2007/01/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
@@ -107,9 +107,9 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_ONLINE									 */
-/* “à—e		:ŽóMˆ—(ƒIƒ“ƒ‰ƒCƒ“”’Ê’m)										 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_ONLINE									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°é€šçŸ¥)										 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_ONLINE(PBYTE pData)
@@ -124,9 +124,9 @@ void CMainFrame::RecvProcMAP_ONLINE(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_SYSTEMMSG								 */
-/* “à—e		:ŽóMˆ—(ƒVƒXƒeƒ€ƒƒbƒZ[ƒW’Ê’m)								 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_SYSTEMMSG								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥)								 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_SYSTEMMSG(PBYTE pData)
@@ -156,9 +156,9 @@ void CMainFrame::RecvProcMAP_SYSTEMMSG(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_FORMATMSG								 */
-/* “à—e		:ŽóMˆ—(ƒtƒH[ƒ}ƒbƒgƒƒbƒZ[ƒW’Ê’m)							 */
-/* “ú•t		:2008/07/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_FORMATMSG								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥)							 */
+/* æ—¥ä»˜		:2008/07/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
@@ -183,21 +183,21 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 	}
 
 	switch (Packet.m_dwMsgID) {
-	case FORMATMSGID_DAMAGE1:				/* %s‚©‚ç %d ‚Ìƒ_ƒ[ƒW */
+	case FORMATMSGID_DAMAGE1:				/* %sã‹ã‚‰ %d ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%s‚©‚ç %d ‚Ìƒ_ƒ[ƒW", (LPCSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
+		strMsg.Format ("%sã‹ã‚‰ %d ã®ãƒ€ãƒ¡ãƒ¼ã‚¸", (LPCSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
 		break;
-	case FORMATMSGID_DAMAGE2:				/* %s‚É %d ‚Ìƒ_ƒ[ƒW */
+	case FORMATMSGID_DAMAGE2:				/* %sã« %d ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%s‚É %d ‚Ìƒ_ƒ[ƒW", (LPCSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
+		strMsg.Format ("%sã« %d ã®ãƒ€ãƒ¡ãƒ¼ã‚¸", (LPCSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
 		break;
-	case FORMATMSGID_SWOON1:				/* %s‚Í%s‚ð“|‚µ‚½ */
+	case FORMATMSGID_SWOON1:				/* %sã¯%sã‚’å€’ã—ãŸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
@@ -209,33 +209,33 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if ((pInfoChar == pInfoCharPlayer) || (pInfoChar2 == pInfoCharPlayer)) {
 			return;
 		}
-		strMsg.Format ("%s‚Í%s‚ð“|‚µ‚½", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar2->m_strCharName);
+		strMsg.Format ("%sã¯%sã‚’å€’ã—ãŸ", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar2->m_strCharName);
 		break;
-	case FORMATMSGID_SWOON2:				/* %s‚ð“|‚µ‚½ */
+	case FORMATMSGID_SWOON2:				/* %sã‚’å€’ã—ãŸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%s‚ð“|‚µ‚½", (LPCSTR)pInfoChar->m_strCharName);
+		strMsg.Format ("%sã‚’å€’ã—ãŸ", (LPCSTR)pInfoChar->m_strCharName);
 		break;
-	case FORMATMSGID_SWOON3:				/* %s‚É“|‚³‚ê‚½ */
+	case FORMATMSGID_SWOON3:				/* %sã«å€’ã•ã‚ŒãŸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%s‚É“|‚³‚ê‚½", (LPCSTR)pInfoChar->m_strCharName);
+		strMsg.Format ("%sã«å€’ã•ã‚ŒãŸ", (LPCSTR)pInfoChar->m_strCharName);
 		break;
-	case FORMATMSGID_NOUSE:					/* %s‚ÍŒø‰Ê‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½ */
+	case FORMATMSGID_NOUSE:					/* %sã¯åŠ¹æžœãŒã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸ */
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (Packet.m_dwPara1);
 		if (pInfoItem == NULL) {
 			return;
 		}
-		strMsg.Format ("%s ‚ÍŒø‰Ê‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½", (LPCSTR)pInfoItem->m_strName);
+		strMsg.Format ("%s ã¯åŠ¹æžœãŒã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸ", (LPCSTR)pInfoItem->m_strName);
 		break;
-	case FORMATMSGID_NOUNEQUIP_ITEMFULL:	/* Ž‚¿•¨‚ª‚¢‚Á‚Ï‚¢‚Å‘•”õ‚ðŠO‚¹‚Ü‚¹‚ñ */
-		strMsg.Format ("Ž‚¿•¨‚ª‚¢‚Á‚Ï‚¢‚Å‘•”õ‚ðŠO‚¹‚Ü‚¹‚ñ");
+	case FORMATMSGID_NOUNEQUIP_ITEMFULL:	/* æŒã¡ç‰©ãŒã„ã£ã±ã„ã§è£…å‚™ã‚’å¤–ã›ã¾ã›ã‚“ */
+		strMsg.Format ("æŒã¡ç‰©ãŒã„ã£ã±ã„ã§è£…å‚™ã‚’å¤–ã›ã¾ã›ã‚“");
 		break;
-	case FORMATMSGID_DROPITEM:				/* %s‚Í%s‚ð—Ž‚Æ‚µ‚½ */
+	case FORMATMSGID_DROPITEM:				/* %sã¯%sã‚’è½ã¨ã—ãŸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
@@ -244,9 +244,9 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if (pInfoItem == NULL) {
 			return;
 		}
-		strMsg.Format ("%s‚Í %s ‚ð—Ž‚Æ‚µ‚½", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoItem->m_strName);
+		strMsg.Format ("%sã¯ %s ã‚’è½ã¨ã—ãŸ", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoItem->m_strName);
 		break;
-	case FORMATMSGID_ADDSKILL:				/* %s‚Í %s ‚ðK“¾‚µ‚Ü‚µ‚½ */
+	case FORMATMSGID_ADDSKILL:				/* %sã¯ %s ã‚’ç¿’å¾—ã—ã¾ã—ãŸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
@@ -255,9 +255,9 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if (pInfoSkill == NULL) {
 			return;
 		}
-		strMsg.Format ("%s‚Í %s ‚ðK“¾‚µ‚Ü‚µ‚½", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
+		strMsg.Format ("%sã¯ %s ã‚’ç¿’å¾—ã—ã¾ã—ãŸ", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
 		break;
-	case FORMATMSGID_USESKILL:				/* %s‚Í %s ‚ðŽg‚Á‚½ */
+	case FORMATMSGID_USESKILL:				/* %sã¯ %s ã‚’ä½¿ã£ãŸ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
@@ -266,7 +266,7 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if (pInfoSkill == NULL) {
 			break;
 		}
-		strMsg.Format ("%s‚Í %s ‚ðŽg‚Á‚½", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
+		strMsg.Format ("%sã¯ %s ã‚’ä½¿ã£ãŸ", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
 		break;
 	default:
 		return;
@@ -283,9 +283,9 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_MAPOBJECT								 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ’Ê’m)							 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_MAPOBJECT								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±é€šçŸ¥)							 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_MAPOBJECT(PBYTE pData)
@@ -302,9 +302,9 @@ void CMainFrame::RecvProcMAP_MAPOBJECT(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_MAPOBJECTDATA							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^’Ê’m)						 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_MAPOBJECTDATA							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿é€šçŸ¥)						 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_MAPOBJECTDATA(PBYTE pData)
@@ -327,9 +327,9 @@ void CMainFrame::RecvProcMAP_MAPOBJECTDATA(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA					 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^íœ)						 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿å‰Šé™¤)						 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA(PBYTE pData)
@@ -352,9 +352,9 @@ void CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_MAPPARTS								 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒp[ƒcî•ñ’Ê’m)									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_MAPPARTS								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±é€šçŸ¥)									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_MAPPARTS(PBYTE pData)
@@ -371,9 +371,9 @@ void CMainFrame::RecvProcMAP_MAPPARTS(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_SETPARTS								 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒp[ƒc”z’u)										 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_SETPARTS								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„é…ç½®)										 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_SETPARTS(PBYTE pData)
@@ -396,9 +396,9 @@ void CMainFrame::RecvProcMAP_SETPARTS(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_RENEWMAPSIZE							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒTƒCƒYXV)										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_RENEWMAPSIZE							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–°)										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_RENEWMAPSIZE(PBYTE pData)
@@ -423,9 +423,9 @@ void CMainFrame::RecvProcMAP_RENEWMAPSIZE(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_DELETEPARTS							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒp[ƒcíœ)										 */
-/* “ú•t		:2007/05/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_DELETEPARTS							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„å‰Šé™¤)										 */
+/* æ—¥ä»˜		:2007/05/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_DELETEPARTS(PBYTE pData)
@@ -442,9 +442,9 @@ void CMainFrame::RecvProcMAP_DELETEPARTS(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_MAPSHADOW								 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv‰eî•ñ’Ê’m)										 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_MAPSHADOW								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—å½±æƒ…å ±é€šçŸ¥)										 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_MAPSHADOW(PBYTE pData)
@@ -459,9 +459,9 @@ void CMainFrame::RecvProcMAP_MAPSHADOW(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_SETMAPSHADOW							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv‰e”z’u)											 */
-/* “ú•t		:2007/06/09														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_SETMAPSHADOW							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—å½±é…ç½®)											 */
+/* æ—¥ä»˜		:2007/06/09														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_SETMAPSHADOW(PBYTE pData)
@@ -480,9 +480,9 @@ void CMainFrame::RecvProcMAP_SETMAPSHADOW(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_DELETEMAPSHADOW						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv‰eíœ)											 */
-/* “ú•t		:2007/06/09														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_DELETEMAPSHADOW						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—å½±å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/06/09														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_DELETEMAPSHADOW(PBYTE pData)
@@ -499,9 +499,9 @@ void CMainFrame::RecvProcMAP_DELETEMAPSHADOW(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_MAPNAME								 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv–¼’Ê’m)											 */
-/* “ú•t		:2008/05/24														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_MAPNAME								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—åé€šçŸ¥)											 */
+/* æ—¥ä»˜		:2008/05/24														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
@@ -520,13 +520,13 @@ void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
 
 	pInfoMap->m_strMapName		= Packet.m_strMapName;
 	pInfoMap->m_dwBGMID			= Packet.m_dwBGMID;			/* BGMID */
-	pInfoMap->m_dwWeatherType	= Packet.m_dwWeatherType;	/* “V‹CŽí•Ê */
-	pInfoMap->m_bEnableBattle	= Packet.m_bEnableBattle;	/* í“¬‹–‰Â */
-	pInfoMap->m_bRecovery		= Packet.m_bRecovery;		/* ‹CâŒã‰ñ•œ‚·‚é */
-	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* –¾‚é‚³ƒŒƒxƒ‹ */
+	pInfoMap->m_dwWeatherType	= Packet.m_dwWeatherType;	/* å¤©æ°—ç¨®åˆ¥ */
+	pInfoMap->m_bEnableBattle	= Packet.m_bEnableBattle;	/* æˆ¦é—˜è¨±å¯ */
+	pInfoMap->m_bRecovery		= Packet.m_bRecovery;		/* æ°—çµ¶å¾Œå›žå¾©ã™ã‚‹ */
+	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* æ˜Žã‚‹ã•ãƒ¬ãƒ™ãƒ« */
 
 	if (pInfoMap->m_strMapName != strMapNameBack) {
-		strTmp.Format ("ƒ}ƒbƒv–¼‚ª[%s]‚É•ÏX‚³‚ê‚Ü‚µ‚½", (LPCSTR)pInfoMap->m_strMapName);
+		strTmp.Format ("ãƒžãƒƒãƒ—åãŒ[%s]ã«å¤‰æ›´ã•ã‚Œã¾ã—ãŸ", (LPCSTR)pInfoMap->m_strMapName);
 		m_pMgrData->AddSystemMsg (TRUE, strTmp, RGB (0, 200, 255));
 		m_pMgrSound->PlaySound (SOUNDID_W_CHAT);
 	}
@@ -538,9 +538,9 @@ void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_MAPEVENT								 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ’Ê’m)								 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_MAPEVENT								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±é€šçŸ¥)								 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_MAPEVENT(PBYTE pData)
@@ -563,9 +563,9 @@ void CMainFrame::RecvProcMAP_MAPEVENT(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_DELETEEVENT							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñíœ)								 */
-/* “ú•t		:2008/07/22														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_DELETEEVENT							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±å‰Šé™¤)								 */
+/* æ—¥ä»˜		:2008/07/22														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_DELETEEVENT(PBYTE pData)
@@ -588,9 +588,9 @@ void CMainFrame::RecvProcMAP_DELETEEVENT(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcMAP_FADEINOUT								 */
-/* “à—e		:ŽóMˆ—(ƒtƒF[ƒhƒCƒ“/ƒAƒEƒg’Ê’m)								 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcMAP_FADEINOUT								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³/ã‚¢ã‚¦ãƒˆé€šçŸ¥)								 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcMAP_FADEINOUT(PBYTE pData)
@@ -599,11 +599,11 @@ void CMainFrame::RecvProcMAP_FADEINOUT(PBYTE pData)
 
 	Packet.Set (pData);
 
-	/* ƒtƒF[ƒhƒCƒ“H */
+	/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ï¼Ÿ */
 	if (Packet.m_dwPara == 0) {
 		m_pMgrDraw->SetFadeState (FADESTATE_FADEIN);
 
-	/* ƒtƒF[ƒhƒAƒEƒg */
+	/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ */
 	} else {
 		m_pMgrDraw->SetFadeState (FADESTATE_FADEOUT);
 		m_pMgrWindow->DeleteAll ();

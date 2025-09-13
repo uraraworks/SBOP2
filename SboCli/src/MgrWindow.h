@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrWindow.h												 */
-/* “à—e			:ƒEƒBƒ“ƒhƒEƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrWindow.h												 */
+/* å†…å®¹			:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒžãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -17,127 +17,127 @@ class CMgrKeyInput;
 class CInfoTalkEvent;
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
-/* ƒEƒBƒ“ƒhƒEID */
+/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ID */
 enum {
 	WINDOWTYPE_NONE = 0,
-	WINDOWTYPE_LOGIN,						/* ƒƒOƒCƒ“ */
-	WINDOWTYPE_MSG,							/* ƒƒbƒZ[ƒW•\Ž¦ */
-	WINDOWTYPE_LOGINMENU,					/* ƒƒjƒ…[ */
-	WINDOWTYPE_CHARNAME,					/* ƒLƒƒƒ‰–¼“ü—Í */
-	WINDOWTYPE_SEX,							/* «•Ê */
-	WINDOWTYPE_MAKECHAR,					/* ƒLƒƒƒ‰ì¬ */
-	WINDOWTYPE_ACCOUNTINFO,					/* ƒAƒJƒEƒ“ƒgî•ñ */
-	WINDOWTYPE_STATUS,						/* ‹­‚³ */
-	WINDOWTYPE_CHAT,						/* ƒ`ƒƒƒbƒg“ü—Í */
-	WINDOWTYPE_FAMILYTYPE,					/* Ží‘°‘I‘ð */
-	WINDOWTYPE_HAIRTYPE,					/* ”¯Œ^‘I‘ð */
-	WINDOWTYPE_HAIRCOLOR,					/* ”¯F‘I‘ð */
-	WINDOWTYPE_EYECOLOR,					/* –ÚF‘I‘ð */
-	WINDOWTYPE_STYLESELECT,					/* —eŽp‘I‘ð */
-	WINDOWTYPE_NAMEINPUT,					/* –¼‘O“ü—Í */
-	WINDOWTYPE_SYSTEMMENU,					/* ƒVƒXƒeƒ€ƒƒjƒ…[ */
-	WINDOWTYPE_SETCOLOR,					/* –¼‘O‚Æ”­Œ¾F‚ÌÝ’è */
-	WINDOWTYPE_SETBGMVOLUME,				/* BGM‰¹—Ê‚ÌÝ’è */
-	WINDOWTYPE_SETSOUNDVOLUME,				/* Œø‰Ê‰¹‰¹—Ê‚ÌÝ’è */
-	WINDOWTYPE_SETDRAWMODE,					/* •\Ž¦“à—e‚ÌÝ’è */
-	WINDOWTYPE_ITEMMENU,					/* ƒAƒCƒeƒ€ƒƒjƒ…[ */
-	WINDOWTYPE_ITEMMENU_SELECT,				/* ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[ */
-	WINDOWTYPE_OPTION,						/* ƒIƒvƒVƒ‡ƒ“ƒƒjƒ…[ */
-	WINDOWTYPE_OPTION_VIEWSET,				/* ƒIƒvƒVƒ‡ƒ“-•\Ž¦Ý’èƒƒjƒ…[ */
-	WINDOWTYPE_OPTION_VOLUMESET,			/* ƒIƒvƒVƒ‡ƒ“-‰¹—ÊÝ’èƒƒjƒ…[ */
-	WINDOWTYPE_OPTION_INPUTSET,				/* ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’èƒƒjƒ…[ */
-	WINDOWTYPE_OPTION_TASKBAR,				/* ƒIƒvƒVƒ‡ƒ“ƒƒjƒ…[(”­Œ¾Žž‚Éƒ`ƒJƒ`ƒJ) */
-	WINDOWTYPE_OPTION_INPUTSET_SETDEVICE,	/* ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è-“ü—ÍƒfƒoƒCƒX‚ÌÝ’è */
-	WINDOWTYPE_OPTION_ACTIONSET,			/* ƒIƒvƒVƒ‡ƒ“-“®ìÝ’èƒƒjƒ…[ */
-	WINDOWTYPE_OPTION_ACTIONSET_SLEEPTIMER,	/* ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è-‚¨‚Ð‚é‚Ëƒ^ƒCƒ}[‚ÌÝ’è */
-	WINDOWTYPE_COMMANDMENU,					/* ƒRƒ}ƒ“ƒhƒƒjƒ…[ */
-	WINDOWTYPE_CHAR_STATUS,					/* ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX */
-	WINDOWTYPE_CHAR_STATUS2,				/* ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX2 */
-	WINDOWTYPE_CHAR_STATUS3,				/* ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX3 */
-	WINDOWTYPE_CHAR_STATUS4,				/* ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX4 */
-	WINDOWTYPE_TEXTMSG,						/* ƒeƒLƒXƒgƒƒbƒZ[ƒW */
-	WINDOWTYPE_SWOON,						/* ‹Câƒƒjƒ…[ */
-	WINDOWTYPE_SKILLMENU,					/* ƒXƒLƒ‹ƒƒjƒ…[ */
-	WINDOWTYPE_PLACEINFORMATION,			/* êŠî•ñ */
+	WINDOWTYPE_LOGIN,						/* ãƒ­ã‚°ã‚¤ãƒ³ */
+	WINDOWTYPE_MSG,							/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
+	WINDOWTYPE_LOGINMENU,					/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_CHARNAME,					/* ã‚­ãƒ£ãƒ©åå…¥åŠ› */
+	WINDOWTYPE_SEX,							/* æ€§åˆ¥ */
+	WINDOWTYPE_MAKECHAR,					/* ã‚­ãƒ£ãƒ©ä½œæˆ */
+	WINDOWTYPE_ACCOUNTINFO,					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
+	WINDOWTYPE_STATUS,						/* å¼·ã• */
+	WINDOWTYPE_CHAT,						/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ› */
+	WINDOWTYPE_FAMILYTYPE,					/* ç¨®æ—é¸æŠž */
+	WINDOWTYPE_HAIRTYPE,					/* é«ªåž‹é¸æŠž */
+	WINDOWTYPE_HAIRCOLOR,					/* é«ªè‰²é¸æŠž */
+	WINDOWTYPE_EYECOLOR,					/* ç›®è‰²é¸æŠž */
+	WINDOWTYPE_STYLESELECT,					/* å®¹å§¿é¸æŠž */
+	WINDOWTYPE_NAMEINPUT,					/* åå‰å…¥åŠ› */
+	WINDOWTYPE_SYSTEMMENU,					/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_SETCOLOR,					/* åå‰ã¨ç™ºè¨€è‰²ã®è¨­å®š */
+	WINDOWTYPE_SETBGMVOLUME,				/* BGMéŸ³é‡ã®è¨­å®š */
+	WINDOWTYPE_SETSOUNDVOLUME,				/* åŠ¹æžœéŸ³éŸ³é‡ã®è¨­å®š */
+	WINDOWTYPE_SETDRAWMODE,					/* è¡¨ç¤ºå†…å®¹ã®è¨­å®š */
+	WINDOWTYPE_ITEMMENU,					/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_ITEMMENU_SELECT,				/* ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_OPTION,						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_OPTION_VIEWSET,				/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®šãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_OPTION_VOLUMESET,			/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-éŸ³é‡è¨­å®šãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_OPTION_INPUTSET,				/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®šãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_OPTION_TASKBAR,				/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼(ç™ºè¨€æ™‚ã«ãƒã‚«ãƒã‚«) */
+	WINDOWTYPE_OPTION_INPUTSET_SETDEVICE,	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®š */
+	WINDOWTYPE_OPTION_ACTIONSET,			/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®šãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_OPTION_ACTIONSET_SLEEPTIMER,	/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š-ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒžãƒ¼ã®è¨­å®š */
+	WINDOWTYPE_COMMANDMENU,					/* ã‚³ãƒžãƒ³ãƒ‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_CHAR_STATUS,					/* ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ */
+	WINDOWTYPE_CHAR_STATUS2,				/* ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹2 */
+	WINDOWTYPE_CHAR_STATUS3,				/* ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹3 */
+	WINDOWTYPE_CHAR_STATUS4,				/* ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹4 */
+	WINDOWTYPE_TEXTMSG,						/* ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	WINDOWTYPE_SWOON,						/* æ°—çµ¶ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_SKILLMENU,					/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	WINDOWTYPE_PLACEINFORMATION,			/* å ´æ‰€æƒ…å ± */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CMgrWindow
 {
 public:
-			CMgrWindow();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrWindow();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrWindow();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMgrWindow();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void		Create		(CMgrData *pMgrData);				/* ì¬ */
-	void		Destroy		(void);								/* ”jŠü */
+	void		Create		(CMgrData *pMgrData);				/* ä½œæˆ */
+	void		Destroy		(void);								/* ç ´æ£„ */
 
-	void		Update		(void);								/* ‘S‚Ä‚ÌƒEƒBƒ“ƒhƒE‚ðXV */
-	void		Draw		(CImg32 *pDst);						/* •`‰æ */
-	BOOL		TimerProc	(void);								/* ŽžŠÔˆ— */
-	void		KeyProc		(BYTE byEvent, BOOL bDown);			/* ƒL[ˆ— */
-	void		DeleteAll	(void);								/* ‘S‚Ä‚ÌƒEƒBƒ“ƒhƒE‚ð”jŠü */
-	void		Delete		(int nID);							/* Žw’èID‚ÌƒEƒBƒ“ƒhƒE‚ðíœ */
-	CWindowBase	*GetWindow	(int nID);							/* Žw’èID‚ÌƒEƒBƒ“ƒhƒE‚ðŽæ“¾ */
-	BOOL		IsKeyInput	(void);								/* ƒL[ˆ—‚Ì•K—v‚ª‚ ‚é‚©”»’è */
+	void		Update		(void);								/* å…¨ã¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æ›´æ–° */
+	void		Draw		(CImg32 *pDst);						/* æç”» */
+	BOOL		TimerProc	(void);								/* æ™‚é–“å‡¦ç† */
+	void		KeyProc		(BYTE byEvent, BOOL bDown);			/* ã‚­ãƒ¼å‡¦ç† */
+	void		DeleteAll	(void);								/* å…¨ã¦ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ç ´æ£„ */
+	void		Delete		(int nID);							/* æŒ‡å®šIDã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å‰Šé™¤ */
+	CWindowBase	*GetWindow	(int nID);							/* æŒ‡å®šIDã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å–å¾— */
+	BOOL		IsKeyInput	(void);								/* ã‚­ãƒ¼å‡¦ç†ã®å¿…è¦ãŒã‚ã‚‹ã‹åˆ¤å®š */
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
-	void MakeWindowLOGIN			(void);						/* ƒƒOƒCƒ“î•ñ */
-	void MakeWindowMSG				(LPCSTR pszMsg, DWORD dwTime = 0, int nType = 0);	/* ƒƒbƒZ[ƒW•\Ž¦ */
-	void MakeWindowLOGINMENU		(void);						/* ƒƒjƒ…[ */
-	void MakeWindowCHARNAME			(void);						/* ƒLƒƒƒ‰–¼“ü—Í */
-	void MakeWindowSEX				(void);						/* «•Ê */
-	void MakeWindowACCOUNTINFO		(void);						/* ƒAƒJƒEƒ“ƒgî•ñ */
-	void MakeWindowSTATUS			(BOOL bShow = TRUE);		/* ‹­‚³ */
-	void MakeWindowCHAT				(void);						/* ƒ`ƒƒƒbƒg“ü—Í */
-	void MakeWindowFAMILYTYPE		(void);						/* Ží‘°‘I‘ð */
-	void MakeWindowHAIRTYPE			(void);						/* ”¯Œ^‘I‘ð */
-	void MakeWindowHAIRCOLOR		(void);						/* ”¯F‘I‘ð */
-	void MakeWindowEYECOLOR			(void);						/* –ÚF‘I‘ð */
-	void MakeWindowSTYLESELECT		(void);						/* —eŽp‘I‘ð */
-	void MakeWindowNAMEINPUT		(void);						/* –¼‘O“ü—Í */
-	void MakeWindowSYSTEMMENU		(void);						/* ƒVƒXƒeƒ€ƒƒjƒ…[ */
-	void MakeWindowSETCOLOR			(void);						/* –¼‘O‚Æ”­Œ¾F‚ÌÝ’è */
-	void MakeWindowSETBGMVOLUME		(void);						/* BGM‰¹—Ê‚ÌÝ’è */
-	void MakeWindowSETSOUNDVOLUME	(void);						/* Œø‰Ê‰¹‰¹—Ê‚ÌÝ’è */
-	void MakeWindowSETDRAWMODE		(void);						/* •\Ž¦“à—e‚ÌÝ’è */
-	void MakeWindowITEMMENU			(void);						/* ƒAƒCƒeƒ€ƒƒjƒ…[ */
-	void MakeWindowITEMMENU_SELECT	(int nPos, DWORD dwItemID);	/* ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[ */
-	void MakeWindowOPTION			(void);						/* ƒIƒvƒVƒ‡ƒ“ */
-	void MakeWindowOPTION_VIEWSET	(void);						/* ƒIƒvƒVƒ‡ƒ“-•\Ž¦Ý’è */
-	void MakeWindowOPTION_VOLUMESET	(void);						/* ƒIƒvƒVƒ‡ƒ“-‰¹—ÊÝ’è */
-	void MakeWindowOPTION_INPUTSET	(void);						/* ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è */
-	void MakeWindowOPTION_TASKBAR	(void);						/* ƒIƒvƒVƒ‡ƒ“(”­Œ¾Žž‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ) */
-	void MakeWindowOPTION_INPUTSET_SETDEVICE	(void);			/* ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è-“ü—ÍƒfƒoƒCƒX‚ÌÝ’è */
-	void MakeWindowOPTION_ACTIONSET	(void);						/* ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è */
-	void MakeWindowOPTION_ACTIONSET_SLEEPTIMER	(void);			/* ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è-‚¨‚Ð‚é‚Ëƒ^ƒCƒ}[‚ÌÝ’è */
-	void MakeWindowCOMMANDMENU		(void);						/* ƒRƒ}ƒ“ƒhƒƒjƒ…[ */
-	void MakeWindowCHAR_STATUS		(void);						/* ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX */
-	void MakeWindowCHAR_STATUS4		(void);						/* ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX4 */
-	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg);			/* ƒeƒLƒXƒgƒƒbƒZ[ƒW */
-	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo);	/* ƒeƒLƒXƒgƒƒbƒZ[ƒW */
-	void MakeWindowSWOON			(void);						/* ‹Câƒƒjƒ…[ */
-	void MakeWindowSKILLMENU		(int nType = -1);			/* ƒXƒLƒ‹ƒƒjƒ…[ */
-	void MakeWindowPLACEINFORMATION	(void);						/* êŠî•ñ */
-
-
-private:
-	void SetActive				(void);								/* ƒAƒNƒeƒBƒu‚ÈƒEƒBƒ“ƒhƒE‚ÌÝ’è */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
+	void MakeWindowLOGIN			(void);						/* ãƒ­ã‚°ã‚¤ãƒ³æƒ…å ± */
+	void MakeWindowMSG				(LPCSTR pszMsg, DWORD dwTime = 0, int nType = 0);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
+	void MakeWindowLOGINMENU		(void);						/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeWindowCHARNAME			(void);						/* ã‚­ãƒ£ãƒ©åå…¥åŠ› */
+	void MakeWindowSEX				(void);						/* æ€§åˆ¥ */
+	void MakeWindowACCOUNTINFO		(void);						/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
+	void MakeWindowSTATUS			(BOOL bShow = TRUE);		/* å¼·ã• */
+	void MakeWindowCHAT				(void);						/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ› */
+	void MakeWindowFAMILYTYPE		(void);						/* ç¨®æ—é¸æŠž */
+	void MakeWindowHAIRTYPE			(void);						/* é«ªåž‹é¸æŠž */
+	void MakeWindowHAIRCOLOR		(void);						/* é«ªè‰²é¸æŠž */
+	void MakeWindowEYECOLOR			(void);						/* ç›®è‰²é¸æŠž */
+	void MakeWindowSTYLESELECT		(void);						/* å®¹å§¿é¸æŠž */
+	void MakeWindowNAMEINPUT		(void);						/* åå‰å…¥åŠ› */
+	void MakeWindowSYSTEMMENU		(void);						/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeWindowSETCOLOR			(void);						/* åå‰ã¨ç™ºè¨€è‰²ã®è¨­å®š */
+	void MakeWindowSETBGMVOLUME		(void);						/* BGMéŸ³é‡ã®è¨­å®š */
+	void MakeWindowSETSOUNDVOLUME	(void);						/* åŠ¹æžœéŸ³éŸ³é‡ã®è¨­å®š */
+	void MakeWindowSETDRAWMODE		(void);						/* è¡¨ç¤ºå†…å®¹ã®è¨­å®š */
+	void MakeWindowITEMMENU			(void);						/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeWindowITEMMENU_SELECT	(int nPos, DWORD dwItemID);	/* ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeWindowOPTION			(void);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³ */
+	void MakeWindowOPTION_VIEWSET	(void);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®š */
+	void MakeWindowOPTION_VOLUMESET	(void);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-éŸ³é‡è¨­å®š */
+	void MakeWindowOPTION_INPUTSET	(void);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š */
+	void MakeWindowOPTION_TASKBAR	(void);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³(ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«) */
+	void MakeWindowOPTION_INPUTSET_SETDEVICE	(void);			/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®š */
+	void MakeWindowOPTION_ACTIONSET	(void);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š */
+	void MakeWindowOPTION_ACTIONSET_SLEEPTIMER	(void);			/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š-ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒžãƒ¼ã®è¨­å®š */
+	void MakeWindowCOMMANDMENU		(void);						/* ã‚³ãƒžãƒ³ãƒ‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeWindowCHAR_STATUS		(void);						/* ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ */
+	void MakeWindowCHAR_STATUS4		(void);						/* ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹4 */
+	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg);			/* ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	void MakeWindowTEXTMSG			(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo);	/* ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	void MakeWindowSWOON			(void);						/* æ°—çµ¶ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeWindowSKILLMENU		(int nType = -1);			/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void MakeWindowPLACEINFORMATION	(void);						/* å ´æ‰€æƒ…å ± */
 
 
 private:
-	BOOL				m_bDraw,						/* •`‰æƒtƒ‰ƒO */
-						m_bKeyInput;					/* ƒL[ˆ—‚Ì•K—v‚ª‚ ‚é‚© */
-	PARRAYWINDOWBASE	m_paWindow;						/* ƒEƒBƒ“ƒhƒEî•ñ */
-	CMgrData			*m_pMgrData;					/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData			*m_pMgrGrpData;					/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CMgrKeyInput		*m_pMgrKeyInput;				/* ƒL[“ü—ÍŠÇ— */
+	void SetActive				(void);								/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¨­å®š */
+
+
+private:
+	BOOL				m_bDraw,						/* æç”»ãƒ•ãƒ©ã‚° */
+						m_bKeyInput;					/* ã‚­ãƒ¼å‡¦ç†ã®å¿…è¦ãŒã‚ã‚‹ã‹ */
+	PARRAYWINDOWBASE	m_paWindow;						/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æƒ…å ± */
+	CMgrData			*m_pMgrData;					/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData			*m_pMgrGrpData;					/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrKeyInput		*m_pMgrKeyInput;				/* ã‚­ãƒ¼å…¥åŠ›ç®¡ç† */
 } CMgrWindow, *PCMgrWindow;
 
 /* Copyright(C)URARA-works 2006 */

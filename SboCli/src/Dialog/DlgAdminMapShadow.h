@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapShadow.h										 */
-/* “à—e			:ƒ}ƒbƒv‰e•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapShadow.h										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -17,37 +17,37 @@ class CLibInfoMapShadow;
 class CUraraSockTCPSBO;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CDlgAdminMapShadow : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapShadow(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapShadow();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapShadow(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapShadow();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);						/* ‰Šú‰» */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-
-
-protected:
-	void	RenewMessage			(LPCSTR pszMsg);	/* ƒƒbƒZ[ƒW—“‚ğXV */
-	void	MakeShadowImage			(void);				/* ‰eˆê——‰æ‘œ‚ğì¬ */
-	DWORD	GetSelectMapShadowID	(void);				/* ‘I‘ğ’†‚Ì‰eID‚ğæ“¾ */
+	void	Init		(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
 
 
 protected:
-	int		m_nSelectType,						/* İ’è€–Ú */
-			m_nState;							/* ó‘Ô */
-	DWORD	m_dwSelectShadowID;					/* ‘I‘ğ’†‚Ì‰eID */
-	CPoint	m_ptCursor,							/* ƒJ[ƒ\ƒ‹‚Ì‚ ‚éˆÊ’u */
-			m_ptMoveSrc,						/* ˆÚ“®Œ³‚ÌˆÊ’u */
-			m_ptMoveDst;						/* ˆÚ“®æ‚ÌˆÊ’u */
+	void	RenewMessage			(LPCSTR pszMsg);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ¬„ã‚’æ›´æ–° */
+	void	MakeShadowImage			(void);				/* å½±ä¸€è¦§ç”»åƒã‚’ä½œæˆ */
+	DWORD	GetSelectMapShadowID	(void);				/* é¸æŠä¸­ã®å½±IDã‚’å–å¾— */
 
-	CMgrGrpData			*m_pMgrGrpData;			/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CImg32				*m_pImgShadow;			/* ‰eˆê——‰æ‘œ */
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* •ÒW’†‚Ìƒ}ƒbƒv‰eî•ñ */
-	CUraraSockTCPSBO	*m_pSock;				/* ’ÊMƒ}ƒl[ƒWƒƒ */
+
+protected:
+	int		m_nSelectType,						/* è¨­å®šé …ç›® */
+			m_nState;							/* çŠ¶æ…‹ */
+	DWORD	m_dwSelectShadowID;					/* é¸æŠä¸­ã®å½±ID */
+	CPoint	m_ptCursor,							/* ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚ã‚‹ä½ç½® */
+			m_ptMoveSrc,						/* ç§»å‹•å…ƒã®ä½ç½® */
+			m_ptMoveDst;						/* ç§»å‹•å…ˆã®ä½ç½® */
+
+	CMgrGrpData			*m_pMgrGrpData;			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CImg32				*m_pImgShadow;			/* å½±ä¸€è¦§ç”»åƒ */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* ç·¨é›†ä¸­ã®ãƒãƒƒãƒ—å½±æƒ…å ± */
+	CUraraSockTCPSBO	*m_pSock;				/* é€šä¿¡ãƒãƒãƒ¼ã‚¸ãƒ£ */
 
 
 
@@ -64,7 +64,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapShadow)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

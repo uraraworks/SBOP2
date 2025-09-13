@@ -1,17 +1,17 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MyArrayImpl.h												 */
-/* “à—e			:MFC‚ÌCArray‚İ‚½‚¢‚È”z—ñƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/01/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MyArrayImpl.h												 */
+/* å†…å®¹			:MFCã®CArrayã¿ãŸã„ãªé…åˆ—ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/01/18													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::CmyArray								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::CmyArray								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
@@ -23,9 +23,9 @@ CmyArray<TYPE, ARG_TYPE>::CmyArray()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::~CmyArray							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::~CmyArray							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
@@ -36,10 +36,10 @@ CmyArray<TYPE, ARG_TYPE>::~CmyArray()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::GetSize								 */
-/* “à—e		:—v‘f”‚ğæ“¾													 */
-/* –ß‚è’l	:—v‘f”															 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::GetSize								 */
+/* å†…å®¹		:è¦ç´ æ•°ã‚’å–å¾—													 */
+/* æˆ»ã‚Šå€¤	:è¦ç´ æ•°															 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
@@ -50,9 +50,9 @@ int CmyArray<TYPE, ARG_TYPE>::GetSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::RemoveAll							 */
-/* “à—e		:‘S—v‘f‚ğíœ													 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::RemoveAll							 */
+/* å†…å®¹		:å…¨è¦ç´ ã‚’å‰Šé™¤													 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
@@ -67,15 +67,15 @@ void CmyArray<TYPE, ARG_TYPE>::RemoveAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::GetAt								 */
-/* “à—e		:w’è—v‘f‚ğæ“¾													 */
-/* –ß‚è’l	:—v‘f‚Ìƒf[ƒ^													 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::GetAt								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã‚’å–å¾—													 */
+/* æˆ»ã‚Šå€¤	:è¦ç´ ã®ãƒ‡ãƒ¼ã‚¿													 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
 TYPE CmyArray<TYPE, ARG_TYPE>::GetAt(
-	int nIndex)		/* [in] —v‘fID */
+	int nIndex)		/* [in] è¦ç´ ID */
 {
 	TYPE Ret;
 
@@ -93,15 +93,15 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::SetAt								 */
-/* “à—e		:w’è—v‘f‚ğXV													 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::SetAt								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã‚’æ›´æ–°													 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
 void CmyArray<TYPE, ARG_TYPE>::SetAt(
-	int nIndex,					/* [in] —v‘fID */
-	ARG_TYPE newElement)		/* [in] V‚µ‚¢ƒf[ƒ^ */
+	int nIndex,					/* [in] è¦ç´ ID */
+	ARG_TYPE newElement)		/* [in] æ–°ã—ã„ãƒ‡ãƒ¼ã‚¿ */
 {
 	if (nIndex >= m_nCount) {
 		goto Exit;
@@ -115,60 +115,60 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::Add									 */
-/* “à—e		:—v‘f‚ğ’Ç‰Á														 */
-/* –ß‚è’l	:’Ç‰Á‚³‚ê‚½—v‘fID												 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::Add									 */
+/* å†…å®¹		:è¦ç´ ã‚’è¿½åŠ 														 */
+/* æˆ»ã‚Šå€¤	:è¿½åŠ ã•ã‚ŒãŸè¦ç´ ID												 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
 int CmyArray<TYPE, ARG_TYPE>::Add(
-	ARG_TYPE newElement)		/* [in] ’Ç‰Á‚·‚éƒf[ƒ^ */
+	ARG_TYPE newElement)		/* [in] è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
 {
 	int i;
 	TYPE *pData;
 
-	/* ’Ç‰Á•ª‚Ì—v‘f‚ğŠm•Û */
+	/* è¿½åŠ åˆ†ã®è¦ç´ ã‚’ç¢ºä¿ */
 	pData = new TYPE[m_nCount + 1];
 
-	/* ’Ç‰Á‘O‚Ìƒf[ƒ^‚ğƒRƒs[ */
+	/* è¿½åŠ å‰ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚³ãƒ”ãƒ¼ */
 	for (i = 0; i < m_nCount; i ++) {
 		pData[i] = m_pData[i];
 	}
 	pData[m_nCount] = newElement;
 
 	if (m_pData) {
-		/* ¡‚Ü‚Å‚Ìƒf[ƒ^‚ğ”jŠü */
+		/* ä»Šã¾ã§ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç ´æ£„ */
 		delete [] m_pData;
 	}
 
 	m_pData = pData;
 	m_nCount ++;
 
-	/* V‚µ‚¢ID‚ğ•Ô‚· */
+	/* æ–°ã—ã„IDã‚’è¿”ã™ */
 	return (m_nCount - 1);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::InsertAt								 */
-/* “à—e		:w’èˆÊ’u‚É’Ç‰Á													 */
-/* “ú•t		:2005/08/19														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::InsertAt								 */
+/* å†…å®¹		:æŒ‡å®šä½ç½®ã«è¿½åŠ 													 */
+/* æ—¥ä»˜		:2005/08/19														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
 void CmyArray<TYPE, ARG_TYPE>::InsertAt(
-	int nIndex,					/* [in] —v‘fID */
-	ARG_TYPE newElement)		/* [in] ’Ç‰Á‚·‚éƒf[ƒ^ */
+	int nIndex,					/* [in] è¦ç´ ID */
+	ARG_TYPE newElement)		/* [in] è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
 {
 	int i, nTmp;
 	TYPE *pData;
 
-	/* ’Ç‰Á•ª‚Ì—v‘f‚ğŠm•Û */
+	/* è¿½åŠ åˆ†ã®è¦ç´ ã‚’ç¢ºä¿ */
 	pData = new TYPE[m_nCount + 1];
 
 	nTmp = 0;
-	/* ’Ç‰Á‘O‚Ìƒf[ƒ^‚ğƒRƒs[ */
+	/* è¿½åŠ å‰ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã‚³ãƒ”ãƒ¼ */
 	for (i = 0; i < m_nCount + 1; i ++) {
 		if (i == nIndex) {
 			continue;
@@ -179,7 +179,7 @@ void CmyArray<TYPE, ARG_TYPE>::InsertAt(
 	pData[nIndex] = newElement;
 
 	if (m_pData) {
-		/* ¡‚Ü‚Å‚Ìƒf[ƒ^‚ğ”jŠü */
+		/* ä»Šã¾ã§ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç ´æ£„ */
 		delete [] m_pData;
 	}
 
@@ -189,29 +189,29 @@ void CmyArray<TYPE, ARG_TYPE>::InsertAt(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::RemoveAt								 */
-/* “à—e		:w’è—v‘f‚ğíœ													 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::RemoveAt								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã‚’å‰Šé™¤													 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
 void CmyArray<TYPE, ARG_TYPE>::RemoveAt(
-	int nIndex,		/* [in] —v‘fID */
-	int nCount)		/* [in] íœ” */
+	int nIndex,		/* [in] è¦ç´ ID */
+	int nCount)		/* [in] å‰Šé™¤æ•° */
 {
 	int i, j, nID;
 	TYPE *pData;
 
-	/* w’è•ª‚¾‚¯—v‘f‚ğíœ‚·‚éƒ‹[ƒv */
+	/* æŒ‡å®šåˆ†ã ã‘è¦ç´ ã‚’å‰Šé™¤ã™ã‚‹ãƒ«ãƒ¼ãƒ— */
 	for (j = 0; j < nCount; j ++) {
-		/* ”z—ñ‚©‚ç‚Í‚İo‚·H */
+		/* é…åˆ—ã‹ã‚‰ã¯ã¿å‡ºã™ï¼Ÿ */
 		if (nIndex >= m_nCount) {
 			break;
 		}
 
-		/* íœ‚µ‚½•ª‚Ìƒf[ƒ^‚ğŠm•Û */
+		/* å‰Šé™¤ã—ãŸåˆ†ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç¢ºä¿ */
 		pData = new TYPE[m_nCount - 1];
-		/* w’è—v‘fˆÈŠO‚ğƒRƒs[‚·‚éƒ‹[ƒv */
+		/* æŒ‡å®šè¦ç´ ä»¥å¤–ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹ãƒ«ãƒ¼ãƒ— */
 		for (i = 0, nID = 0; i < m_nCount; i ++) {
 			if (nIndex == i) {
 				continue;
@@ -229,14 +229,14 @@ void CmyArray<TYPE, ARG_TYPE>::RemoveAt(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::Copy									 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2005/06/03														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::Copy									 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2005/06/03														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
 void CmyArray<TYPE, ARG_TYPE>::Copy(
-	CmyArray *pSrc)		/* [in] ƒRƒs[Œ³ */
+	CmyArray *pSrc)		/* [in] ã‚³ãƒ”ãƒ¼å…ƒ */
 {
 	int i, nCount;
 
@@ -249,15 +249,15 @@ void CmyArray<TYPE, ARG_TYPE>::Copy(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CmyArray<TYPE, ARG_TYPE>::operator []							 */
-/* “à—e		:w’è—v‘f‚Ö’¼ÚƒAƒNƒZƒX											 */
-/* –ß‚è’l	:—v‘f															 */
-/* “ú•t		:2005/01/18														 */
+/* é–¢æ•°å	:CmyArray<TYPE, ARG_TYPE>::operator []							 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã¸ç›´æ¥ã‚¢ã‚¯ã‚»ã‚¹											 */
+/* æˆ»ã‚Šå€¤	:è¦ç´ 															 */
+/* æ—¥ä»˜		:2005/01/18														 */
 /* ========================================================================= */
 
 template<class TYPE, class ARG_TYPE>
 TYPE& CmyArray<TYPE, ARG_TYPE>::operator [](
-	int nIndex)		/* [in] —v‘fID */
+	int nIndex)		/* [in] è¦ç´ ID */
 {
 	return m_pData[nIndex];
 }

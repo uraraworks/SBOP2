@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillMOVEATACK.cpp								 */
-/* “à—e			:ƒXƒLƒ‹(ˆÚ“®‚µ‚ÄUŒ‚)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharSkillMOVEATACK.cpp								 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«(ç§»å‹•ã—ã¦æ”»æ’ƒ)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -21,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillMOVEATACK::DoDataExchange(CDataExchange* pDX)
@@ -53,9 +53,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK(CWnd* pParent /*=NULL*/)
@@ -76,9 +76,9 @@ CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK(CWnd* pParent /*=NULL*/
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillMOVEATACK::~CDlgAdminCharSkillMOVEATACK		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillMOVEATACK::~CDlgAdminCharSkillMOVEATACK		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillMOVEATACK::~CDlgAdminCharSkillMOVEATACK()
@@ -87,9 +87,9 @@ CDlgAdminCharSkillMOVEATACK::~CDlgAdminCharSkillMOVEATACK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillMOVEATACK::Init								 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2009/01/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillMOVEATACK::Init								 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2009/01/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillMOVEATACK::Init(CMgrData *pMgrData)
@@ -99,9 +99,9 @@ void CDlgAdminCharSkillMOVEATACK::Init(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillMOVEATACK::Set								 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2009/01/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillMOVEATACK::Set								 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2009/01/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
@@ -122,15 +122,15 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 	}
 	m_ctlTarget.SetCurSel (nNo);
 
-	m_dwAliveTime		= pSrcTmp->m_dwAliveTime;		/* ‘Ï‹vŠÔ */
-	m_dwWaitTime		= pSrcTmp->m_dwWaitTime;		/* ˆÚ“®‘¬“x */
-	m_dwValue1			= pSrcTmp->m_dwValue1;			/* Œø‰Ê1 */
-	m_dwValue2			= pSrcTmp->m_dwValue2;			/* Œø‰Ê2 */
-	m_dwDistance		= pSrcTmp->m_dwDistance;		/* Ë’ö‹——£ */
-	m_bHitQuit			= pSrcTmp->m_bHitQuit;			/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete;	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	m_dwAliveTime		= pSrcTmp->m_dwAliveTime;		/* è€ä¹…æ™‚é–“ */
+	m_dwWaitTime		= pSrcTmp->m_dwWaitTime;		/* ç§»å‹•é€Ÿåº¦ */
+	m_dwValue1			= pSrcTmp->m_dwValue1;			/* åŠ¹æœ1 */
+	m_dwValue2			= pSrcTmp->m_dwValue2;			/* åŠ¹æœ2 */
+	m_dwDistance		= pSrcTmp->m_dwDistance;		/* å°„ç¨‹è·é›¢ */
+	m_bHitQuit			= pSrcTmp->m_bHitQuit;			/* ãƒ’ãƒƒãƒˆã™ã‚‹ã¨æ¶ˆæ»… */
+	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete;	/* å°„ç¨‹è·é›¢ã¾ã§è¡Œãã¨æ¶ˆãˆã‚‹ */
 
-	/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
+	/* å‘ãã«ã‚ˆã‚‹è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 	for (j = 0; j < 4; j ++) {
 		pCombo = apCtlEffectID[j];
 		nNo = 0;
@@ -145,7 +145,7 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 		pCombo->SetCurSel (nNo);
 	}
 
-	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
+	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 	pCombo = &m_ctlHitEffect;
 	nNo = 0;
 	nCount = pCombo->GetCount ();
@@ -158,7 +158,7 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 	}
 	pCombo->SetCurSel (nNo);
 
-	/* ”­Ëí•Ê */
+	/* ç™ºå°„ç¨®åˆ¥ */
 	pCombo = &m_ctlPutType;
 	nNo = 0;
 	nCount = pCombo->GetCount ();
@@ -176,9 +176,9 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillMOVEATACK::Get								 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2009/01/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillMOVEATACK::Get								 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2009/01/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
@@ -190,34 +190,34 @@ void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 	UpdateData ();
 
 	nNo = m_ctlTarget.GetCurSel ();
-	pDstTmp->m_dwTartgetType	= m_ctlTarget.GetItemData (nNo);	/* UŒ‚‘ÎÛ */
-	pDstTmp->m_dwAliveTime		= m_dwAliveTime;		/* ‘Ï‹vŠÔ */
-	pDstTmp->m_dwWaitTime		= m_dwWaitTime;			/* ˆÚ“®‘¬“x */
-	pDstTmp->m_dwValue1			= m_dwValue1;			/* Œø‰Ê1 */
-	pDstTmp->m_dwValue2			= m_dwValue2;			/* Œø‰Ê2 */
-	pDstTmp->m_dwDistance		= m_dwDistance;			/* Ë’ö‹——£ */
-	pDstTmp->m_bHitQuit			= m_bHitQuit;			/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-	pDstTmp->m_bDistanceDelete	= m_bDistanceDelete;	/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	pDstTmp->m_dwTartgetType	= m_ctlTarget.GetItemData (nNo);	/* æ”»æ’ƒå¯¾è±¡ */
+	pDstTmp->m_dwAliveTime		= m_dwAliveTime;		/* è€ä¹…æ™‚é–“ */
+	pDstTmp->m_dwWaitTime		= m_dwWaitTime;			/* ç§»å‹•é€Ÿåº¦ */
+	pDstTmp->m_dwValue1			= m_dwValue1;			/* åŠ¹æœ1 */
+	pDstTmp->m_dwValue2			= m_dwValue2;			/* åŠ¹æœ2 */
+	pDstTmp->m_dwDistance		= m_dwDistance;			/* å°„ç¨‹è·é›¢ */
+	pDstTmp->m_bHitQuit			= m_bHitQuit;			/* ãƒ’ãƒƒãƒˆã™ã‚‹ã¨æ¶ˆæ»… */
+	pDstTmp->m_bDistanceDelete	= m_bDistanceDelete;	/* å°„ç¨‹è·é›¢ã¾ã§è¡Œãã¨æ¶ˆãˆã‚‹ */
 
-	/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
+	/* å‘ãã«ã‚ˆã‚‹è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 	for (i = 0; i < 4; i ++) {
 		pCombo = apCtlEffectID[i];
 		nNo = pCombo->GetCurSel ();
 		pDstTmp->m_adwEffectID[i] = pCombo->GetItemData (nNo);
 	}
-	/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
+	/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 	nNo = m_ctlHitEffect.GetCurSel ();
 	pDstTmp->m_dwHitEffectID = m_ctlHitEffect.GetItemData (nNo);
-	/* ”­Ëí•Ê */
+	/* ç™ºå°„ç¨®åˆ¥ */
 	nNo = m_ctlPutType.GetCurSel ();
 	pDstTmp->m_dwPutType = m_ctlPutType.GetItemData (nNo);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillMOVEATACK::OnInitDialog						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2009/01/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillMOVEATACK::OnInitDialog						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2009/01/07														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
@@ -227,16 +227,16 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	PCLibInfoEffect pLibInfoEffect;
 	STINTLPCSTR *pIntLpcstr,
 		astTarget[] = {
-			ATACKTARGETTYPE_NONE,			"–¢İ’è",
-			ATACKTARGETTYPE_PC,				"ƒvƒŒƒCƒ„[",
+			ATACKTARGETTYPE_NONE,			"æœªè¨­å®š",
+			ATACKTARGETTYPE_PC,				"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼",
 			ATACKTARGETTYPE_NPC,			"NPC",
-			ATACKTARGETTYPE_ALL,			"‘S‚Ä",
+			ATACKTARGETTYPE_ALL,			"å…¨ã¦",
 			-1, NULL
 		},
 		astPutType[] = {
-			SKILLMOVEATACKPUTTYPE_NONE,		"–¢İ’è",
-			SKILLMOVEATACKPUTTYPE_FRONT,	"‘O•û",
-			SKILLMOVEATACKPUTTYPE_CROSS,	"ã‰º¶‰E",
+			SKILLMOVEATACKPUTTYPE_NONE,		"æœªè¨­å®š",
+			SKILLMOVEATACKPUTTYPE_FRONT,	"å‰æ–¹",
+			SKILLMOVEATACKPUTTYPE_CROSS,	"ä¸Šä¸‹å·¦å³",
 			-1, NULL
 		};
 	CComboBox *pCombo, *apCtlEffectID[] = { &m_ctlUp, &m_ctlDown, &m_ctlLeft, &m_ctlRight, &m_ctlHitEffect };
@@ -244,7 +244,7 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	CDlgAdminCharSkillNONE::OnInitDialog();
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
 
-	/* UŒ‚‘ÎÛ */
+	/* æ”»æ’ƒå¯¾è±¡ */
 	for (i = 0; ; i ++) {
 		pIntLpcstr = &astTarget[i];
 		if (pIntLpcstr->nValue == -1) {
@@ -255,10 +255,10 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	}
 	m_ctlTarget.SetCurSel (0);
 
-	/* ƒGƒtƒFƒNƒgID */
+	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	for (j = 0; j < 5; j ++) {
 		pCombo = apCtlEffectID[j];
-		pCombo->InsertString (0, "–³‚µ");
+		pCombo->InsertString (0, "ç„¡ã—");
 	}
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
@@ -274,7 +274,7 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 		pCombo->SetCurSel (0);
 	}
 
-	/* ”­Ëí•Ê */
+	/* ç™ºå°„ç¨®åˆ¥ */
 	for (i = 0; ; i ++) {
 		pIntLpcstr = &astPutType[i];
 		if (pIntLpcstr->nValue == -1) {
@@ -290,9 +290,9 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillMOVEATACK::OnAdminMsg						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2009/01/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillMOVEATACK::OnAdminMsg						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2009/01/07														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminCharSkillMOVEATACK::OnAdminMsg(WPARAM wParam, LPARAM lParam)

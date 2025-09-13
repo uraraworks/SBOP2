@@ -1,31 +1,31 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* �t�@�C����	:InfoMapEventGRPIDTMP.cpp									 */
-/* ���e			:�C�x���g���(�ꎞ�摜�ݒ�)�N���X �����t�@�C��				 */
-/* �쐬			:�N����N���t�����(URARA-works)							 */
-/* �쐬�J�n��	:2008/10/12													 */
+/* ファイル名	:InfoMapEventGRPIDTMP.cpp									 */
+/* 内容			:イベント情報(一時画像設定)クラス 実装ファイル				 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2008/10/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMapEventGRPIDTMP.h"
 
 /* ========================================================================= */
-/* �萔��`																	 */
+/* 定数定義																	 */
 /* ========================================================================= */
 
-/* �w�b�_��� */
+/* ヘッダ情報 */
 static LPCSTR s_aszName[] = {
-	"m_nSetType",		/* �ݒ��� */
-	"m_dwIDMain",		/* �摜ID���C�� */
-	"m_dwIDSub",		/* �摜ID�T�u */
+	"m_nSetType",		/* 設定種別 */
+	"m_dwIDMain",		/* 画像IDメイン */
+	"m_dwIDSub",		/* 画像IDサブ */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::CInfoMapEventGRPIDTMP					 */
-/* ���e		:�R���X�g���N�^													 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::CInfoMapEventGRPIDTMP					 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 CInfoMapEventGRPIDTMP::CInfoMapEventGRPIDTMP()
@@ -42,9 +42,9 @@ CInfoMapEventGRPIDTMP::CInfoMapEventGRPIDTMP()
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::~CInfoMapEventGRPIDTMP					 */
-/* ���e		:�f�X�g���N�^													 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::~CInfoMapEventGRPIDTMP					 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 CInfoMapEventGRPIDTMP::~CInfoMapEventGRPIDTMP()
@@ -53,9 +53,9 @@ CInfoMapEventGRPIDTMP::~CInfoMapEventGRPIDTMP()
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::GetElementNo							 */
-/* ���e		:�v�f�ԍ����擾													 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::GetElementNo							 */
+/* 内容		:要素番号を取得													 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 int CInfoMapEventGRPIDTMP::GetElementNo(LPCSTR pszName)
@@ -83,9 +83,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::GetDataSize								 */
-/* ���e		:�f�[�^�T�C�Y���擾												 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::GetDataSize								 */
+/* 内容		:データサイズを取得												 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventGRPIDTMP::GetDataSize(void)
@@ -102,9 +102,9 @@ DWORD CInfoMapEventGRPIDTMP::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::GetDataSizeNo							 */
-/* ���e		:�w��v�f�̃f�[�^�T�C�Y���擾									 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::GetDataSizeNo							 */
+/* 内容		:指定要素のデータサイズを取得									 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventGRPIDTMP::GetDataSizeNo(int nNo)
@@ -115,9 +115,9 @@ DWORD CInfoMapEventGRPIDTMP::GetDataSizeNo(int nNo)
 		dwRet = CInfoMapEventBase::GetDataSizeNo (nNo);
 	} else {
 		switch (nNo - m_nElementCountBase) {
-		case 0:	dwRet = sizeof (m_nSetType);	break;	/* �ݒ��� */
-		case 1:	dwRet = sizeof (m_dwIDMain);	break;	/* �摜ID���C�� */
-		case 2:	dwRet = sizeof (m_dwIDSub);		break;	/* �摜ID�T�u */
+		case 0:	dwRet = sizeof (m_nSetType);	break;	/* 設定種別 */
+		case 1:	dwRet = sizeof (m_dwIDMain);	break;	/* 画像IDメイン */
+		case 2:	dwRet = sizeof (m_dwIDSub);		break;	/* 画像IDサブ */
 		}
 	}
 
@@ -126,9 +126,9 @@ DWORD CInfoMapEventGRPIDTMP::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::GetName									 */
-/* ���e		:�v�f�����擾													 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::GetName									 */
+/* 内容		:要素名を取得													 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMapEventGRPIDTMP::GetName(int nNo)
@@ -142,9 +142,9 @@ LPCSTR CInfoMapEventGRPIDTMP::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::GetWriteData							 */
-/* ���e		:�w��v�f�̕ۑ��p�f�[�^���擾									 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::GetWriteData							 */
+/* 内容		:指定要素の保存用データを取得									 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventGRPIDTMP::GetWriteData(int nNo, PDWORD pdwSize)
@@ -166,9 +166,9 @@ PBYTE CInfoMapEventGRPIDTMP::GetWriteData(int nNo, PDWORD pdwSize)
 		pRet = new BYTE[dwSize];
 
 		switch (nNo - m_nElementCountBase) {
-		case 0:	pSrc = (PBYTE)&m_nSetType;		break;	/* �ݒ��� */
-		case 1:	pSrc = (PBYTE)&m_dwIDMain;		break;	/* �摜ID���C�� */
-		case 2:	pSrc = (PBYTE)&m_dwIDSub;		break;	/* �摜ID�T�u */
+		case 0:	pSrc = (PBYTE)&m_nSetType;		break;	/* 設定種別 */
+		case 1:	pSrc = (PBYTE)&m_dwIDMain;		break;	/* 画像IDメイン */
+		case 2:	pSrc = (PBYTE)&m_dwIDSub;		break;	/* 画像IDサブ */
 		}
 
 		if (pSrc) {
@@ -182,14 +182,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::ReadElementData							 */
-/* ���e		:�w��v�f�f�[�^��ǂݍ���										 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::ReadElementData							 */
+/* 内容		:指定要素データを読み込み										 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventGRPIDTMP::ReadElementData(
-	PBYTE pSrc,		/* [in] �f�[�^�̓ǂݍ��݌� */
-	int nNo)		/* [in] �v�f�ԍ� */
+	PBYTE pSrc,		/* [in] データの読み込み元 */
+	int nNo)		/* [in] 要素番号 */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -201,9 +201,9 @@ DWORD CInfoMapEventGRPIDTMP::ReadElementData(
 		dwSize = CInfoMapEventBase::ReadElementData (pSrc, nNo);
 	} else {
 		switch (nNo - m_nElementCountBase) {
-		case 0:	pDst = (PBYTE)&m_nSetType;	dwSize = sizeof (m_nSetType);	break;	/* �ݒ��� */
-		case 1:	pDst = (PBYTE)&m_dwIDMain;	dwSize = sizeof (m_dwIDMain);	break;	/* �摜ID���C�� */
-		case 2:	pDst = (PBYTE)&m_dwIDSub;	dwSize = sizeof (m_dwIDSub);	break;	/* �摜ID�T�u */
+		case 0:	pDst = (PBYTE)&m_nSetType;	dwSize = sizeof (m_nSetType);	break;	/* 設定種別 */
+		case 1:	pDst = (PBYTE)&m_dwIDMain;	dwSize = sizeof (m_dwIDMain);	break;	/* 画像IDメイン */
+		case 2:	pDst = (PBYTE)&m_dwIDSub;	dwSize = sizeof (m_dwIDSub);	break;	/* 画像IDサブ */
 		}
 
 		if (pDst) {
@@ -216,9 +216,9 @@ DWORD CInfoMapEventGRPIDTMP::ReadElementData(
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::GetSendDataSize							 */
-/* ���e		:���M�f�[�^�T�C�Y���擾											 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::GetSendDataSize							 */
+/* 内容		:送信データサイズを取得											 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 DWORD CInfoMapEventGRPIDTMP::GetSendDataSize(void)
@@ -235,9 +235,9 @@ DWORD CInfoMapEventGRPIDTMP::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::GetSendData								 */
-/* ���e		:���M�f�[�^���擾												 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::GetSendData								 */
+/* 内容		:送信データを取得												 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventGRPIDTMP::GetSendData(void)
@@ -255,9 +255,9 @@ PBYTE CInfoMapEventGRPIDTMP::GetSendData(void)
 
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 
-	CopyMemoryRenew (pDataTmp, &m_nSetType,	sizeof (m_nSetType), pDataTmp);		/* �ݒ��� */
-	CopyMemoryRenew (pDataTmp, &m_dwIDMain,	sizeof (m_dwIDMain), pDataTmp);		/* �摜ID���C�� */
-	CopyMemoryRenew (pDataTmp, &m_dwIDSub,	sizeof (m_dwIDSub),	 pDataTmp);		/* �摜ID�T�u */
+	CopyMemoryRenew (pDataTmp, &m_nSetType,	sizeof (m_nSetType), pDataTmp);		/* 設定種別 */
+	CopyMemoryRenew (pDataTmp, &m_dwIDMain,	sizeof (m_dwIDMain), pDataTmp);		/* 画像IDメイン */
+	CopyMemoryRenew (pDataTmp, &m_dwIDSub,	sizeof (m_dwIDSub),	 pDataTmp);		/* 画像IDサブ */
 
 	SAFE_DELETE_ARRAY (pDataBase);
 
@@ -266,9 +266,9 @@ PBYTE CInfoMapEventGRPIDTMP::GetSendData(void)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::SetSendData								 */
-/* ���e		:���M�f�[�^�����荞��											 */
-/* ���t		:2008/10/12														 */
+/* 関数名	:CInfoMapEventGRPIDTMP::SetSendData								 */
+/* 内容		:送信データから取り込み											 */
+/* 日付		:2008/10/12														 */
 /* ========================================================================= */
 
 PBYTE CInfoMapEventGRPIDTMP::SetSendData(PBYTE pSrc)
@@ -280,9 +280,9 @@ PBYTE CInfoMapEventGRPIDTMP::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 	pDataTmp = CInfoMapEventBase::SetSendData (pSrc);
 
-	CopyMemoryRenew (&m_nSetType,	pDataTmp, sizeof (m_nSetType),	pDataTmp);		/* �ݒ��� */
-	CopyMemoryRenew (&m_dwIDMain,	pDataTmp, sizeof (m_dwIDMain),	pDataTmp);		/* �摜ID���C�� */
-	CopyMemoryRenew (&m_dwIDSub,	pDataTmp, sizeof (m_dwIDSub),	pDataTmp);		/* �摜ID�T�u */
+	CopyMemoryRenew (&m_nSetType,	pDataTmp, sizeof (m_nSetType),	pDataTmp);		/* 設定種別 */
+	CopyMemoryRenew (&m_dwIDMain,	pDataTmp, sizeof (m_dwIDMain),	pDataTmp);		/* 画像IDメイン */
+	CopyMemoryRenew (&m_dwIDSub,	pDataTmp, sizeof (m_dwIDSub),	pDataTmp);		/* 画像IDサブ */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -290,10 +290,10 @@ PBYTE CInfoMapEventGRPIDTMP::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* �֐���	:CInfoMapEventGRPIDTMP::Copy									 */
-/* ���e		:�R�s�[															 */
-/* ���t		:2008/10/12														 */
-/* ���l		:��ʂ��Ⴄ�ꍇ�͂������Ȃ��ƂɂȂ�̂Œ���						 */
+/* 関数名	:CInfoMapEventGRPIDTMP::Copy									 */
+/* 内容		:コピー															 */
+/* 日付		:2008/10/12														 */
+/* 備考		:種別が違う場合はおかしなことになるので注意						 */
 /* ========================================================================= */
 
 void CInfoMapEventGRPIDTMP::Copy(CInfoMapEventBase *pSrc)
@@ -305,9 +305,9 @@ void CInfoMapEventGRPIDTMP::Copy(CInfoMapEventBase *pSrc)
 	}
 	CInfoMapEventBase::Copy (pSrc);
 
-	m_nSetType	= pSrcTmp->m_nSetType;	/* �ݒ��� */
-	m_dwIDMain	= pSrcTmp->m_dwIDMain;	/* �摜ID���C�� */
-	m_dwIDSub	= pSrcTmp->m_dwIDSub;	/* �摜ID�T�u */
+	m_nSetType	= pSrcTmp->m_nSetType;	/* 設定種別 */
+	m_dwIDMain	= pSrcTmp->m_dwIDMain;	/* 画像IDメイン */
+	m_dwIDSub	= pSrcTmp->m_dwIDSub;	/* 画像IDサブ */
 }
 
 /* Copyright(C)URARA-works 2008 */

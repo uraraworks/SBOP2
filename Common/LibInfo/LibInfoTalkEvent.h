@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoTalkEvent.h											 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoTalkEvent.h											 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,42 +12,42 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoTalkEvent : public CLibInfoBase
 {
 public:
-			CLibInfoTalkEvent();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoTalkEvent();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoTalkEvent();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoTalkEvent();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);									/* ì¬ */
-	void Destroy		(void);									/* ”jŠü */
+	void Create			(void);									/* ä½œæˆ */
+	void Destroy		(void);									/* ç ´æ£„ */
 
-	PCInfoBase GetNew	(void);									/* V‹Kƒf[ƒ^‚ğæ“¾ */
+	PCInfoBase GetNew	(void);									/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
 
-	int		GetCount	(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);						/* ’Ç‰Á */
-	void	Delete		(int nNo);								/* íœ */
-	void	Delete		(DWORD dwTalkEventID);					/* íœ */
-	void	DeleteAll	(void);									/* ‘S‚Äíœ */
-	void	Merge		(CLibInfoTalkEvent *pSrc);				/* æ‚è‚İ */
+	int		GetCount	(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);						/* è¿½åŠ  */
+	void	Delete		(int nNo);								/* å‰Šé™¤ */
+	void	Delete		(DWORD dwTalkEventID);					/* å‰Šé™¤ */
+	void	DeleteAll	(void);									/* å…¨ã¦å‰Šé™¤ */
+	void	Merge		(CLibInfoTalkEvent *pSrc);				/* å–ã‚Šè¾¼ã¿ */
 
-	CInfoTalkEvent	*Renew	(CInfoTalkEvent *pSrc);				/* XV */
-	PCInfoBase		GetPtr	(int nNo);							/* î•ñ‚ğæ“¾ */
-	PCInfoBase		GetPtr	(DWORD dwTalkEventID);				/* î•ñ‚ğæ“¾ */
+	CInfoTalkEvent	*Renew	(CInfoTalkEvent *pSrc);				/* æ›´æ–° */
+	PCInfoBase		GetPtr	(int nNo);							/* æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase		GetPtr	(DWORD dwTalkEventID);				/* æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);							/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);							/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);					/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ID‚ğæ“¾ */
+	DWORD	GetSendDataSize		(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);					/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 protected:
-	PARRAYTALKEVENTINFO	m_paInfo;				/* ‰ï˜bƒCƒxƒ“ƒgî•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„IDã‚’å–å¾— */
+
+
+protected:
+	PARRAYTALKEVENTINFO	m_paInfo;				/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 } CLibInfoTalkEvent, *PCLibInfoTalkEvent;
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_RES_ACCOUNT.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒAƒJƒEƒ“ƒgî•ñ‰“š) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_RES_ACCOUNT.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±å¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/07													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_CHAR_RES_ACCOUNT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ACCOUNT::CPacketADMIN_CHAR_RES_ACCOUNT	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ACCOUNT::CPacketADMIN_CHAR_RES_ACCOUNT	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RES_ACCOUNT::CPacketADMIN_CHAR_RES_ACCOUNT()
@@ -25,9 +25,9 @@ CPacketADMIN_CHAR_RES_ACCOUNT::CPacketADMIN_CHAR_RES_ACCOUNT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ACCOUNT::~CPacketADMIN_CHAR_RES_ACCOUNT	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ACCOUNT::~CPacketADMIN_CHAR_RES_ACCOUNT	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_RES_ACCOUNT::~CPacketADMIN_CHAR_RES_ACCOUNT()
@@ -36,15 +36,15 @@ CPacketADMIN_CHAR_RES_ACCOUNT::~CPacketADMIN_CHAR_RES_ACCOUNT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ACCOUNT::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ACCOUNT::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CPacketADMIN_CHAR_RES_ACCOUNT::Make(
-	CInfoAccount *pInfoAccount,		/* [in] ƒAƒJƒEƒ“ƒgî•ñ */
-	DWORD dwIP,						/* [in] IPƒAƒhƒŒƒX */
-	LPCSTR pszMacAddress)			/* [in] MACƒAƒhƒŒƒX */
+	CInfoAccount *pInfoAccount,		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
+	DWORD dwIP,						/* [in] IPã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	LPCSTR pszMacAddress)			/* [in] MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -65,20 +65,20 @@ void CPacketADMIN_CHAR_RES_ACCOUNT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_CHAR_RES_ACCOUNT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &pInfoAccount->m_dwAccountID, sizeof (pInfoAccount->m_dwAccountID), pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (pDataTmp, &dwIP, sizeof (dwIP), pDataTmp);													/* IPƒAƒhƒŒƒX */
-	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strAccount,  pDataTmp);										/* ƒAƒJƒEƒ“ƒg */
-	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strPassword, pDataTmp);										/* ƒpƒXƒ[ƒh */
-	strcpyRenew ((LPSTR)pDataTmp, pszMacAddress, pDataTmp);														/* MACƒAƒhƒŒƒX */
+	CopyMemoryRenew (pDataTmp, &pInfoAccount->m_dwAccountID, sizeof (pInfoAccount->m_dwAccountID), pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &dwIP, sizeof (dwIP), pDataTmp);													/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strAccount,  pDataTmp);										/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strPassword, pDataTmp);										/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	strcpyRenew ((LPSTR)pDataTmp, pszMacAddress, pDataTmp);														/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_RES_ACCOUNT::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_RES_ACCOUNT::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_RES_ACCOUNT::Set(PBYTE pPacket)
@@ -88,11 +88,11 @@ PBYTE CPacketADMIN_CHAR_RES_ACCOUNT::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (&m_dwIP, pDataTmp, sizeof (m_dwIP), pDataTmp);					/* IPƒAƒhƒŒƒX */
-	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);						/* ƒAƒJƒEƒ“ƒg */
-	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);						/* ƒpƒXƒ[ƒh */
-	StoreRenew (m_strMacAddress,(LPCSTR)pDataTmp, pDataTmp);						/* MACƒAƒhƒŒƒX */
+	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (&m_dwIP, pDataTmp, sizeof (m_dwIP), pDataTmp);					/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);						/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);						/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	StoreRenew (m_strMacAddress,(LPCSTR)pDataTmp, pDataTmp);						/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 
 	pRet = pDataTmp;
 	return pRet;

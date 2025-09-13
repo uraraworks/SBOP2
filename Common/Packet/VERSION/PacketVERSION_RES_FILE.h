@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_RES_FILE.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/01/20													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_RES_FILE.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/20													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,24 +11,24 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketVERSION_RES_FILE : public CPacketBase
 {
 public:
-			CPacketVERSION_RES_FILE();											/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketVERSION_RES_FILE();											/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketVERSION_RES_FILE();											/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketVERSION_RES_FILE();											/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwOffset, DWORD dwDataSize, LPCSTR pszFileName, PBYTE pFileData);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);															/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwOffset, DWORD dwDataSize, LPCSTR pszFileName, PBYTE pFileData);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);															/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD		m_dwOffset,						/* ŠJŽnƒIƒtƒZƒbƒg */
-				m_dwSize;						/* ƒTƒCƒY */
-	CmyString	m_strFileName;					/* ‘Š‘ÎƒpƒX•t‚«ƒtƒ@ƒCƒ‹–¼ */
-	PBYTE		m_pFileData;					/* ƒtƒ@ƒCƒ‹ƒf[ƒ^ */
+	DWORD		m_dwOffset,						/* é–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+				m_dwSize;						/* ã‚µã‚¤ã‚º */
+	CmyString	m_strFileName;					/* ç›¸å¯¾ãƒ‘ã‚¹ä»˜ããƒ•ã‚¡ã‚¤ãƒ«å */
+	PBYTE		m_pFileData;					/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿ */
 } CPacketVERSION_RES_FILE, *PCPacketVERSION_RES_FILE;
 
 /* Copyright(C)URARA-works 2008 */

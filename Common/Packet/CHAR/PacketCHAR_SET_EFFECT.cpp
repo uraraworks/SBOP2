@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketCHAR_SET_EFFECT.cpp									 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ÉLÉÉÉâån:ÉGÉtÉFÉNÉgÇéwíË) é¿ëïÉtÉ@ÉCÉã			 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/07/27													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketCHAR_SET_EFFECT.cpp									 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Ç≠„É£„É©Á≥ª:„Ç®„Éï„Çß„ÇØ„Éà„ÇíÊåáÂÆö) ÂÆüË£Ö„Éï„Ç°„Ç§„É´			 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/07/27													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCHAR_SET_EFFECT.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFFECT::CPacketCHAR_SET_EFFECT					 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/07/27														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFFECT::CPacketCHAR_SET_EFFECT					 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/07/27														 */
 /* ========================================================================= */
 
 CPacketCHAR_SET_EFFECT::CPacketCHAR_SET_EFFECT()
@@ -24,9 +24,9 @@ CPacketCHAR_SET_EFFECT::CPacketCHAR_SET_EFFECT()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFFECT::~CPacketCHAR_SET_EFFECT				 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/07/27														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFFECT::~CPacketCHAR_SET_EFFECT				 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/07/27														 */
 /* ========================================================================= */
 
 CPacketCHAR_SET_EFFECT::~CPacketCHAR_SET_EFFECT()
@@ -35,14 +35,14 @@ CPacketCHAR_SET_EFFECT::~CPacketCHAR_SET_EFFECT()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFFECT::Make									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/07/27														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFFECT::Make									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/07/27														 */
 /* ========================================================================= */
 
 void CPacketCHAR_SET_EFFECT::Make(
-	DWORD dwCharID,			/* [in] ÉLÉÉÉâID */
-	DWORD dwEffectID)		/* [in] ÉGÉtÉFÉNÉgID */
+	DWORD dwCharID,			/* [in] „Ç≠„É£„É©ID */
+	DWORD dwEffectID)		/* [in] „Ç®„Éï„Çß„ÇØ„ÉàID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketCHAR_SET_EFFECT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CHAR_SET_EFFECT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),		pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (pDataTmp, &dwEffectID,	sizeof (dwEffectID),	pDataTmp);	/* ÉGÉtÉFÉNÉgID */
+	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),		pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (pDataTmp, &dwEffectID,	sizeof (dwEffectID),	pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketCHAR_SET_EFFECT::Set									 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/07/27														 */
+/* Èñ¢Êï∞Âêç	:CPacketCHAR_SET_EFFECT::Set									 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/07/27														 */
 /* ========================================================================= */
 
 PBYTE CPacketCHAR_SET_EFFECT::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketCHAR_SET_EFFECT::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* ÉLÉÉÉâID */
-	CopyMemoryRenew (&m_dwEffectID,	pDataTmp, sizeof (m_dwEffectID),	pDataTmp);	/* ÉGÉtÉFÉNÉgID */
+	CopyMemoryRenew (&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* „Ç≠„É£„É©ID */
+	CopyMemoryRenew (&m_dwEffectID,	pDataTmp, sizeof (m_dwEffectID),	pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
 
 	pRet = pDataTmp;
 	return pRet;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:WindowOPTION_ACTIONSET.cpp									 */
-/* ì‡óe			:ÉIÉvÉVÉáÉì-ìÆçÏê›íËÉEÉBÉìÉhÉEÉNÉâÉX é¿ëïÉtÉ@ÉCÉã			 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2008/07/21													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:WindowOPTION_ACTIONSET.cpp									 */
+/* ÂÜÖÂÆπ			:„Ç™„Éó„Ç∑„Éß„É≥-Âãï‰ΩúË®≠ÂÆö„Ç¶„Ç£„É≥„Éâ„Ç¶„ÇØ„É©„Çπ ÂÆüË£Ö„Éï„Ç°„Ç§„É´			 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2008/07/21													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::CWindowOPTION_ACTIONSET				 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::CWindowOPTION_ACTIONSET				 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 CWindowOPTION_ACTIONSET::CWindowOPTION_ACTIONSET()
@@ -34,9 +34,9 @@ CWindowOPTION_ACTIONSET::CWindowOPTION_ACTIONSET()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::~CWindowOPTION_ACTIONSET				 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::~CWindowOPTION_ACTIONSET				 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 CWindowOPTION_ACTIONSET::~CWindowOPTION_ACTIONSET()
@@ -45,9 +45,9 @@ CWindowOPTION_ACTIONSET::~CWindowOPTION_ACTIONSET()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::Create								 */
-/* ì‡óe		:çÏê¨															 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::Create								 */
+/* ÂÜÖÂÆπ		:‰ΩúÊàê															 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 void CWindowOPTION_ACTIONSET::Create(CMgrData *pMgrData)
@@ -62,9 +62,9 @@ void CWindowOPTION_ACTIONSET::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::Draw									 */
-/* ì‡óe		:ï`âÊ															 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::Draw									 */
+/* ÂÜÖÂÆπ		:ÊèèÁîª															 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 void CWindowOPTION_ACTIONSET::Draw(PCImg32 pDst)
@@ -85,7 +85,7 @@ void CWindowOPTION_ACTIONSET::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "Ç®Ç–ÇÈÇÀÉ^ÉCÉ}Å[ÇÃê›íË", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, "„Åä„Å≤„Çã„Å≠„Çø„Ç§„Éû„Éº„ÅÆË®≠ÂÆö", clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -103,9 +103,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::OnUp									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å™)												 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::OnUp									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üë)												 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET::OnUp(void)
@@ -129,9 +129,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::OnDown								 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å´)												 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::OnDown								 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üì)												 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET::OnDown(void)
@@ -155,9 +155,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::OnLeft								 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å©)												 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::OnLeft								 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üê)												 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET::OnLeft(void)
@@ -172,9 +172,9 @@ BOOL CWindowOPTION_ACTIONSET::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::OnRight								 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å®)												 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::OnRight								 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üí)												 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET::OnRight(void)
@@ -189,9 +189,9 @@ BOOL CWindowOPTION_ACTIONSET::OnRight(void)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::OnX									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(X)												 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::OnX									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(X)												 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET::OnX(BOOL bDown)
@@ -213,9 +213,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowOPTION_ACTIONSET::OnZ									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Z)												 */
-/* ì˙ït		:2008/07/21														 */
+/* Èñ¢Êï∞Âêç	:CWindowOPTION_ACTIONSET::OnZ									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(Z)												 */
+/* Êó•‰ªò		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET::OnZ(BOOL bDown)

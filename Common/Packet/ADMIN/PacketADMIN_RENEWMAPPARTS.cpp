@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_RENEWMAPPARTS.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒ}ƒbƒvƒp[ƒcXV) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_RENEWMAPPARTS.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/29													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_RENEWMAPPARTS.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPPARTS::CPacketADMIN_RENEWMAPPARTS			 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPPARTS::CPacketADMIN_RENEWMAPPARTS			 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEWMAPPARTS::CPacketADMIN_RENEWMAPPARTS()
@@ -24,9 +24,9 @@ CPacketADMIN_RENEWMAPPARTS::CPacketADMIN_RENEWMAPPARTS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPPARTS::~CPacketADMIN_RENEWMAPPARTS		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPPARTS::~CPacketADMIN_RENEWMAPPARTS		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEWMAPPARTS::~CPacketADMIN_RENEWMAPPARTS()
@@ -36,13 +36,13 @@ CPacketADMIN_RENEWMAPPARTS::~CPacketADMIN_RENEWMAPPARTS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPPARTS::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPPARTS::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 void CPacketADMIN_RENEWMAPPARTS::Make(
-	CInfoMapParts *pInfo)		/* [in] ƒ}ƒbƒvƒp[ƒcî•ñ */
+	CInfoMapParts *pInfo)		/* [in] ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketADMIN_RENEWMAPPARTS::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_RENEWMAPPARTS;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒ}ƒbƒvƒp[ƒcî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketADMIN_RENEWMAPPARTS::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPPARTS::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPPARTS::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_RENEWMAPPARTS::Set(PBYTE pPacket)

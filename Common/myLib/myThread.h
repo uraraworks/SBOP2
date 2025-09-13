@@ -1,39 +1,39 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:myThread.h													 */
-/* “à—e			:ƒXƒŒƒbƒhƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:myThread.h													 */
+/* å†…å®¹			:ã‚¹ãƒ¬ãƒƒãƒ‰ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/28													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CmyThread
 {
 public:
-			CmyThread();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CmyThread();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CmyThread();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CmyThread();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual BOOL Create		(void);					/* ì¬ */
-	virtual void Destroy	(void);					/* ”jŠü */
-
-
-protected:
-	static	UINT __stdcall ThreadEntry(void* pParam);	/* ƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒg */
-	virtual	DWORD	ThreadInit(void);					/* ‰Šú‰» */
-	virtual	void	ThreadMain(void);					/* ƒƒCƒ“ˆ— */
-	virtual	void	ThreadExit(void);					/* I—¹ˆ— */
+	virtual BOOL Create		(void);					/* ä½œæˆ */
+	virtual void Destroy	(void);					/* ç ´æ£„ */
 
 
 protected:
-	BOOL		m_dwInitResult;			/* ‰Šú‰»Œ‹‰Ê */
-	HANDLE		m_hThread,				/* ƒXƒŒƒbƒhƒnƒ“ƒhƒ‹ */
-				m_hInitEvent,			/* ‰Šú‰»“¯ŠúƒCƒxƒ“ƒg */
-				m_hExitEvent;			/* I—¹—v‹ƒCƒxƒ“ƒg */
+	static	UINT __stdcall ThreadEntry(void* pParam);	/* ã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ãƒˆ */
+	virtual	DWORD	ThreadInit(void);					/* åˆæœŸåŒ– */
+	virtual	void	ThreadMain(void);					/* ãƒ¡ã‚¤ãƒ³å‡¦ç† */
+	virtual	void	ThreadExit(void);					/* çµ‚äº†å‡¦ç† */
+
+
+protected:
+	BOOL		m_dwInitResult;			/* åˆæœŸåŒ–çµæœ */
+	HANDLE		m_hThread,				/* ã‚¹ãƒ¬ãƒƒãƒ‰ãƒãƒ³ãƒ‰ãƒ« */
+				m_hInitEvent,			/* åˆæœŸåŒ–åŒæœŸã‚¤ãƒ™ãƒ³ãƒˆ */
+				m_hExitEvent;			/* çµ‚äº†è¦æ±‚ã‚¤ãƒ™ãƒ³ãƒˆ */
 };
 
 /* Copyright(C)URARA-works 2007 */

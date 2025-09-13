@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowOPTION_VOLUMESET.cpp									 */
-/* “à—e			:ƒIƒvƒVƒ‡ƒ“-•\Ž¦Ý’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowOPTION_VOLUMESET.cpp									 */
+/* å†…å®¹			:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/28													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::CWindowOPTION_VOLUMESET				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::CWindowOPTION_VOLUMESET				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 CWindowOPTION_VOLUMESET::CWindowOPTION_VOLUMESET()
@@ -34,9 +34,9 @@ CWindowOPTION_VOLUMESET::CWindowOPTION_VOLUMESET()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::~CWindowOPTION_VOLUMESET				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::~CWindowOPTION_VOLUMESET				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 CWindowOPTION_VOLUMESET::~CWindowOPTION_VOLUMESET()
@@ -45,9 +45,9 @@ CWindowOPTION_VOLUMESET::~CWindowOPTION_VOLUMESET()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::Create								 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::Create								 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 void CWindowOPTION_VOLUMESET::Create(CMgrData *pMgrData)
@@ -65,9 +65,9 @@ void CWindowOPTION_VOLUMESET::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::Draw									 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::Draw									 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
@@ -75,7 +75,7 @@ void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
 	int i, nLevel;
 	HDC hDC;
 	HFONT hFontOld;
-	LPCSTR apszTmp[] = {"‚O", "‚P", "‚Q", "‚R", "‚S", "MAX"};
+	LPCSTR apszTmp[] = {"ï¼", "ï¼‘", "ï¼’", "ï¼“", "ï¼”", "MAX"};
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -90,7 +90,7 @@ void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
 	SetBkMode (hDC, TRANSPARENT);
 
 	TextOut2 (hDC, 32, 16 + 16 * 0, "BGM", clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "Œø‰Ê‰¹", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, "åŠ¹æžœéŸ³", clText);
 	TextOut2 (hDC, 32 + 72, 16 + 16 * 0, "MIN", clText);
 	TextOut2 (hDC, 32 + 72, 16 + 16 * 1, "MIN", clText);
 	for (i = 0; i < 6; i ++) {
@@ -117,9 +117,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::OnUp									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::OnUp									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VOLUMESET::OnUp(void)
@@ -143,9 +143,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::OnDown								 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::OnDown								 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VOLUMESET::OnDown(void)
@@ -169,9 +169,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::OnLeft								 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::OnLeft								 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VOLUMESET::OnLeft(void)
@@ -183,7 +183,7 @@ BOOL CWindowOPTION_VOLUMESET::OnLeft(void)
 		m_pMgrData->SetBGMVolume (m_nVolumeBgm);
 		m_pMgrSound->SetBGMVolume (m_nVolumeBgm);
 		break;
-	case 1:		/* Œø‰Ê‰¹ */
+	case 1:		/* åŠ¹æžœéŸ³ */
 		m_nVolumeSound --;
 		m_nVolumeSound = max (m_nVolumeSound, 0);
 		m_pMgrData->SetSEVolume (m_nVolumeSound);
@@ -200,9 +200,9 @@ BOOL CWindowOPTION_VOLUMESET::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::OnRight								 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::OnRight								 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VOLUMESET::OnRight(void)
@@ -214,7 +214,7 @@ BOOL CWindowOPTION_VOLUMESET::OnRight(void)
 		m_pMgrData->SetBGMVolume (m_nVolumeBgm);
 		m_pMgrSound->SetBGMVolume (m_nVolumeBgm);
 		break;
-	case 1:		/* Œø‰Ê‰¹ */
+	case 1:		/* åŠ¹æžœéŸ³ */
 		m_nVolumeSound ++;
 		m_nVolumeSound = min (m_nVolumeSound, 4);
 		m_pMgrData->SetSEVolume (m_nVolumeSound);
@@ -231,9 +231,9 @@ BOOL CWindowOPTION_VOLUMESET::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::OnX									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::OnX									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VOLUMESET::OnX(BOOL bDown)
@@ -256,9 +256,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_VOLUMESET::OnZ									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CWindowOPTION_VOLUMESET::OnZ									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_VOLUMESET::OnZ(BOOL bDown)

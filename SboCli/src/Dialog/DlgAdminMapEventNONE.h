@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventNONE.h										 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg(–¢İ’è)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventNONE.h										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ(æœªè¨­å®š)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CInfoMapEventBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminMapEventNONE : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapEventNONE(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapEventNONE();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapEventNONE(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapEventNONE();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Init	(CMgrData *pMgrData);						/* ‰Šú‰» */
-	virtual void	Set		(CInfoMapEventBase *pSrc);					/* İ’è */
-	virtual void	Get		(CInfoMapEventBase *pDst);					/* æ“¾ */
+	virtual void	Init	(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	virtual void	Set		(CInfoMapEventBase *pSrc);					/* è¨­å®š */
+	virtual void	Get		(CInfoMapEventBase *pDst);					/* å–å¾— */
 
 
 protected:
-	int		m_nResourceID;			/* ƒ_ƒCƒAƒƒOƒŠƒ\[ƒXID */
+	int		m_nResourceID;			/* ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãƒªã‚½ãƒ¼ã‚¹ID */
 
 
 
@@ -39,7 +39,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapEventNONE)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

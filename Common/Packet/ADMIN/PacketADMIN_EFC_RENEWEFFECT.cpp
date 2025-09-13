@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketADMIN_EFC_RENEWEFFECT.cpp							 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ä«óùé“ån:ÉGÉtÉFÉNÉgèÓïÒÇÃçXêV) é¿ëïÉtÉ@ÉCÉã		 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2008/07/06													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketADMIN_EFC_RENEWEFFECT.cpp							 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(ÁÆ°ÁêÜËÄÖÁ≥ª:„Ç®„Éï„Çß„ÇØ„ÉàÊÉÖÂ†±„ÅÆÊõ¥Êñ∞) ÂÆüË£Ö„Éï„Ç°„Ç§„É´		 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2008/07/06													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_EFC_RENEWEFFECT.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_EFC_RENEWEFFECT::CPacketADMIN_EFC_RENEWEFFECT		 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/07/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_EFC_RENEWEFFECT::CPacketADMIN_EFC_RENEWEFFECT		 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/07/06														 */
 /* ========================================================================= */
 
 CPacketADMIN_EFC_RENEWEFFECT::CPacketADMIN_EFC_RENEWEFFECT()
@@ -25,9 +25,9 @@ CPacketADMIN_EFC_RENEWEFFECT::CPacketADMIN_EFC_RENEWEFFECT()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_EFC_RENEWEFFECT::~CPacketADMIN_EFC_RENEWEFFECT	 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/07/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_EFC_RENEWEFFECT::~CPacketADMIN_EFC_RENEWEFFECT	 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/07/06														 */
 /* ========================================================================= */
 
 CPacketADMIN_EFC_RENEWEFFECT::~CPacketADMIN_EFC_RENEWEFFECT()
@@ -37,14 +37,14 @@ CPacketADMIN_EFC_RENEWEFFECT::~CPacketADMIN_EFC_RENEWEFFECT()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_EFC_RENEWEFFECT::Make								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2008/07/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_EFC_RENEWEFFECT::Make								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2008/07/06														 */
 /* ========================================================================= */
 
 void CPacketADMIN_EFC_RENEWEFFECT::Make(
-	DWORD dwEffectID,		/* [in] ÉGÉtÉFÉNÉgID */
-	CInfoEffect *pSrc)		/* [in] ÉGÉtÉFÉNÉgèÓïÒ */
+	DWORD dwEffectID,		/* [in] „Ç®„Éï„Çß„ÇØ„ÉàID */
+	CInfoEffect *pSrc)		/* [in] „Ç®„Éï„Çß„ÇØ„ÉàÊÉÖÂ†± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -64,8 +64,8 @@ void CPacketADMIN_EFC_RENEWEFFECT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_EFC_RENEWEFFECT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwEffectID,		sizeof (dwEffectID),	pDataTmp);	/* ÉGÉtÉFÉNÉgID */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,	 		pDataTmp);	/* ÉGÉtÉFÉNÉgèÓïÒ */
+	CopyMemoryRenew (pDataTmp, &dwEffectID,		sizeof (dwEffectID),	pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,	 		pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàÊÉÖÂ†± */
 
 	RenewPacket (pData, dwSize);
 
@@ -74,9 +74,9 @@ void CPacketADMIN_EFC_RENEWEFFECT::Make(
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_EFC_RENEWEFFECT::Set								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2008/07/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_EFC_RENEWEFFECT::Set								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2008/07/06														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_EFC_RENEWEFFECT::Set(PBYTE pPacket)
@@ -86,7 +86,7 @@ PBYTE CPacketADMIN_EFC_RENEWEFFECT::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);	/* ÉGÉtÉFÉNÉgID */
+	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
 
 	SAFE_DELETE (m_pInfo);
 	m_pInfo		= new CInfoEffect;

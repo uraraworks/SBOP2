@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndSelectMapShadowGrp.h									 */
-/* “à—e			:ƒ}ƒbƒv‰e‰æ‘œ‘I‘ğƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndSelectMapShadowGrp.h									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ç”»åƒé¸æŠã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,27 +13,27 @@ class CMgrGrpData;
 class CImg32;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWndSelectMapShadowGrp : public CWnd
 {
 public:
-			CWndSelectMapShadowGrp();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWndSelectMapShadowGrp();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWndSelectMapShadowGrp();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWndSelectMapShadowGrp();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
 
 
 protected:
-	int			m_nSelect;						/* ‘I‘ğ‚³‚ê‚½ƒp[ƒc”Ô† */
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgBack;					/* ƒoƒbƒNƒoƒbƒtƒ@ */
+	int			m_nSelect;						/* é¸æŠã•ã‚ŒãŸãƒ‘ãƒ¼ãƒ„ç•ªå· */
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgBack;					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
 
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 
 
 

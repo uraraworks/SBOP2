@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminAccountAdd.cpp										 */
-/* “à—e			:ƒAƒJƒEƒ“ƒg’Ç‰Áƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminAccountAdd.cpp										 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆè¿½åŠ ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/17													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -21,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminAccountAdd::DoDataExchange(CDataExchange* pDX)
@@ -41,9 +41,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminAccountAdd::CDlgAdminAccountAdd						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CDlgAdminAccountAdd::CDlgAdminAccountAdd						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 CDlgAdminAccountAdd::CDlgAdminAccountAdd(CWnd* pParent /*=NULL*/)
@@ -57,9 +57,9 @@ CDlgAdminAccountAdd::CDlgAdminAccountAdd(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminAccountAdd::~CDlgAdminAccountAdd						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CDlgAdminAccountAdd::~CDlgAdminAccountAdd						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 CDlgAdminAccountAdd::~CDlgAdminAccountAdd()
@@ -68,25 +68,25 @@ CDlgAdminAccountAdd::~CDlgAdminAccountAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminAccountAdd::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CDlgAdminAccountAdd::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 void CDlgAdminAccountAdd::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminAccountAdd::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminAccountAdd::OnSend									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CDlgAdminAccountAdd::OnSend									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 void CDlgAdminAccountAdd::OnSend()
@@ -94,7 +94,7 @@ void CDlgAdminAccountAdd::OnSend()
 	int nResult;
 	CPacketADMIN_ACCOUNT_REQ_ADD Packet;
 
-	nResult = MessageBox ("ƒAƒJƒEƒ“ƒgî•ñ‚ğ‘—M‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚’é€ä¿¡ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

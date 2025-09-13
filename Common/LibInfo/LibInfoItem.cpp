@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoItem.cpp											 */
-/* “à—e			:ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/05/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoItem.cpp											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,9 +15,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::CLibInfoItem										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::CLibInfoItem										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 CLibInfoItem::CLibInfoItem()
@@ -30,9 +30,9 @@ CLibInfoItem::CLibInfoItem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::~CLibInfoItem									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::~CLibInfoItem									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 CLibInfoItem::~CLibInfoItem()
@@ -42,9 +42,9 @@ CLibInfoItem::~CLibInfoItem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CLibInfoItem::Create(void)
@@ -54,9 +54,9 @@ void CLibInfoItem::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::Destroy											 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::Destroy											 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CLibInfoItem::Destroy(void)
@@ -67,9 +67,9 @@ void CLibInfoItem::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::SetTypeInfo										 */
-/* “à—e		:ƒAƒCƒeƒ€Ží•Êî•ñ‚ðÝ’è											 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CLibInfoItem::SetTypeInfo										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CLibInfoItem::SetTypeInfo(CLibInfoItemType *pLibInfoItemType)
@@ -79,9 +79,9 @@ void CLibInfoItem::SetTypeInfo(CLibInfoItemType *pLibInfoItemType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::SetWeaponInfo									 */
-/* “à—e		:•Šíî•ñ‚ðÝ’è													 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CLibInfoItem::SetWeaponInfo									 */
+/* å†…å®¹		:æ­¦å™¨æƒ…å ±ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CLibInfoItem::SetWeaponInfo(CLibInfoItemWeapon *pLibInfoItemWeapon)
@@ -91,9 +91,9 @@ void CLibInfoItem::SetWeaponInfo(CLibInfoItemWeapon *pLibInfoItemWeapon)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::RenewSize										 */
-/* “à—e		:ƒ}ƒbƒvƒTƒCƒYXV												 */
-/* “ú•t		:2007/08/25														 */
+/* é–¢æ•°å	:CLibInfoItem::RenewSize										 */
+/* å†…å®¹		:ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–°												 */
+/* æ—¥ä»˜		:2007/08/25														 */
 /* ========================================================================= */
 
 void CLibInfoItem::RenewSize(DWORD dwMapID, int nDirection, int nSize)
@@ -101,7 +101,7 @@ void CLibInfoItem::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 	int i, nCount;
 	PCInfoItem pInfoItem;
 
-	/* ƒ}ƒbƒvƒTƒCƒY‚ðƒLƒƒƒ‰ƒTƒCƒY‚É•ÏX */
+	/* ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºã‚’ã‚­ãƒ£ãƒ©ã‚µã‚¤ã‚ºã«å¤‰æ›´ */
 	nSize *= 2;
 
 	nCount = GetCount ();
@@ -113,17 +113,17 @@ void CLibInfoItem::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 		}
 
 		switch (nDirection) {
-		case 0:		/* ã */
+		case 0:		/* ä¸Š */
 			pInfoItem->m_ptPos.y += nSize;
 			pInfoItem->m_ptPos.y = max (pInfoItem->m_ptPos.y, 0);
 			break;
-		case 1:		/* ‰º */
+		case 1:		/* ä¸‹ */
 			break;
-		case 2:		/* ¶ */
+		case 2:		/* å·¦ */
 			pInfoItem->m_ptPos.x += nSize;
 			pInfoItem->m_ptPos.x = max (pInfoItem->m_ptPos.x, 0);
 			break;
-		case 3:		/* ‰E */
+		case 3:		/* å³ */
 			break;
 		}
 	}
@@ -131,9 +131,9 @@ void CLibInfoItem::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetNew											 */
-/* “à—e		:V‹Kƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetNew											 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetNew(void)
@@ -147,9 +147,9 @@ PCInfoBase CLibInfoItem::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetCount											 */
-/* “à—e		:ƒf[ƒ^”‚ðŽæ“¾													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetCount											 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 int CLibInfoItem::GetCount(void)
@@ -169,9 +169,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::Add												 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::Add												 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CLibInfoItem::Add(PCInfoBase pInfo)
@@ -188,13 +188,13 @@ void CLibInfoItem::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::Delete											 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::Delete											 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CLibInfoItem::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	int i, nCount;
 	PCInfoItem pInfo;
@@ -215,13 +215,13 @@ void CLibInfoItem::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::Delete											 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::Delete											 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CLibInfoItem::Delete(
-	DWORD dwItemID)		/* [in] ƒAƒCƒeƒ€ID */
+	DWORD dwItemID)		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ID */
 {
 	int i, nCount, nNo;
 	PCInfoItem pInfoTmp;
@@ -249,9 +249,9 @@ void CLibInfoItem::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::DeleteAll										 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::DeleteAll										 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CLibInfoItem::DeleteAll(void)
@@ -270,10 +270,10 @@ void CLibInfoItem::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::Sort												 */
-/* “à—e		:•\Ž¦ˆÊ’u‚É‡‚í‚¹‚Äƒ\[ƒg										 */
-/* 			:•\Ž¦—p‚Ìƒe[ƒuƒ‹‚Ì‚Ýƒ\[ƒg‚·‚é									 */
-/* “ú•t		:2008/06/03														 */
+/* é–¢æ•°å	:CLibInfoItem::Sort												 */
+/* å†…å®¹		:è¡¨ç¤ºä½ç½®ã«åˆã‚ã›ã¦ã‚½ãƒ¼ãƒˆ										 */
+/* 			:è¡¨ç¤ºç”¨ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã®ã¿ã‚½ãƒ¼ãƒˆã™ã‚‹									 */
+/* æ—¥ä»˜		:2008/06/03														 */
 /* ========================================================================= */
 
 void CLibInfoItem::Sort(void)
@@ -327,9 +327,9 @@ void CLibInfoItem::Sort(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetTypeName										 */
-/* “à—e		:ƒAƒCƒeƒ€Ží•Ê–¼‚ðŽæ“¾											 */
-/* “ú•t		:2007/09/23														 */
+/* é–¢æ•°å	:CLibInfoItem::GetTypeName										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥åã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/09/23														 */
 /* ========================================================================= */
 
 LPCSTR CLibInfoItem::GetTypeName(DWORD dwTypeID)
@@ -343,9 +343,9 @@ LPCSTR CLibInfoItem::GetTypeName(DWORD dwTypeID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetItemType										 */
-/* “à—e		:ƒAƒCƒeƒ€Ží•Ê‚ðŽæ“¾												 */
-/* “ú•t		:2007/10/07														 */
+/* é–¢æ•°å	:CLibInfoItem::GetItemType										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/10/07														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::GetItemType(DWORD dwItemID)
@@ -370,9 +370,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetItemTypeID									 */
-/* “à—e		:ƒAƒCƒeƒ€Ží•ÊID‚ðŽæ“¾											 */
-/* “ú•t		:2008/08/08														 */
+/* é–¢æ•°å	:CLibInfoItem::GetItemTypeID									 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥IDã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/08/08														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::GetItemTypeID(DWORD dwItemID)
@@ -397,9 +397,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetMotionIDAtack									 */
-/* “à—e		:Žg—p‰Â”\‚ÈUŒ‚ƒ‚[ƒVƒ‡ƒ“ID‚ðŽæ“¾								 */
-/* “ú•t		:2007/12/09														 */
+/* é–¢æ•°å	:CLibInfoItem::GetMotionIDAtack									 */
+/* å†…å®¹		:ä½¿ç”¨å¯èƒ½ãªæ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³IDã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2007/12/09														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::GetMotionIDAtack(DWORD dwItemID)
@@ -432,9 +432,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetMotionIDBattleStand							 */
-/* “à—e		:í“¬ƒ‚[ƒh’†‚Ì—§‚¿ƒ‚[ƒVƒ‡ƒ“ID‚ðŽæ“¾							 */
-/* “ú•t		:2007/12/09														 */
+/* é–¢æ•°å	:CLibInfoItem::GetMotionIDBattleStand							 */
+/* å†…å®¹		:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ç«‹ã¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³IDã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2007/12/09														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::GetMotionIDBattleStand(DWORD dwItemID)
@@ -467,9 +467,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetMotionIDBattleWalk							 */
-/* “à—e		:í“¬ƒ‚[ƒh’†‚Ì‚·‚è‘«ƒ‚[ƒVƒ‡ƒ“ID‚ðŽæ“¾							 */
-/* “ú•t		:2007/12/09														 */
+/* é–¢æ•°å	:CLibInfoItem::GetMotionIDBattleWalk							 */
+/* å†…å®¹		:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­ã®ã™ã‚Šè¶³ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³IDã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2007/12/09														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::GetMotionIDBattleWalk(DWORD dwItemID)
@@ -502,9 +502,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetPtr											 */
-/* “à—e		:ƒAƒCƒeƒ€î•ñ‚ðŽæ“¾												 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetPtr											 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetPtr(int nNo)
@@ -514,13 +514,13 @@ PCInfoBase CLibInfoItem::GetPtr(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetPtr											 */
-/* “à—e		:ƒAƒCƒeƒ€î•ñ‚ðŽæ“¾												 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetPtr											 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetPtr(
-	DWORD dwItemID)		/* [in] ƒAƒCƒeƒ€ID */
+	DWORD dwItemID)		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ID */
 {
 	int i, nCount;
 	PCInfoItem pRet, pInfoTmp;
@@ -542,15 +542,15 @@ PCInfoBase CLibInfoItem::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetPtr											 */
-/* “à—e		:ƒAƒCƒeƒ€î•ñ‚ðŽæ“¾												 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetPtr											 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetPtr(
-	DWORD dwMapID,			/* [in] —Ž‚¿‚Ä‚¢‚éƒ}ƒbƒvID */
-	POINT *pptPos,			/* [in] —Ž‚¿‚Ä‚¢‚éÀ•W */
-	BOOL bPoint)/*=TRUE*/	/* [in] TRUE:Š®‘Sˆê’v‚Ìˆê“_‚Ì‚Ý‘ÎÛ‚É‚·‚é */
+	DWORD dwMapID,			/* [in] è½ã¡ã¦ã„ã‚‹ãƒžãƒƒãƒ—ID */
+	POINT *pptPos,			/* [in] è½ã¡ã¦ã„ã‚‹åº§æ¨™ */
+	BOOL bPoint)/*=TRUE*/	/* [in] TRUE:å®Œå…¨ä¸€è‡´ã®ä¸€ç‚¹ã®ã¿å¯¾è±¡ã«ã™ã‚‹ */
 {
 	int i, nCount;
 	PCInfoItem pRet, pInfoTmp;
@@ -583,9 +583,9 @@ PCInfoBase CLibInfoItem::GetPtr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetItemTypePtr									 */
-/* “à—e		:ƒAƒCƒeƒ€Ží•Êî•ñ‚ðŽæ“¾											 */
-/* “ú•t		:2007/12/23														 */
+/* é–¢æ•°å	:CLibInfoItem::GetItemTypePtr									 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/12/23														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetItemTypePtr(DWORD dwItemID)
@@ -613,9 +613,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::GetSendDataSize(void)
@@ -626,7 +626,7 @@ DWORD CLibInfoItem::GetSendDataSize(void)
 
 	dwRet = dwSize = 0;
 
-	/* ƒf[ƒ^”•ª‚ÌƒTƒCƒY */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°åˆ†ã®ã‚µã‚¤ã‚º */
 	dwSize += sizeof (DWORD);
 
 	nCount = GetCount ();
@@ -642,9 +642,9 @@ DWORD CLibInfoItem::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoItem::GetSendData(void)
@@ -660,12 +660,12 @@ PBYTE CLibInfoItem::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	dwOffset	= 0;
 
-	/* ƒf[ƒ^”‚ð‘‚«ž‚Ý */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’æ›¸ãè¾¼ã¿ */
 	dwCount = (DWORD)GetCount ();
 	CopyMemory (pData, &dwCount, sizeof (dwCount));
 	dwOffset += sizeof (dwCount);
 
-	/* ƒAƒCƒeƒ€î•ñ‚ð‘‚«ž‚Ý */
+	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’æ›¸ãè¾¼ã¿ */
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pItem = (PCInfoItem)GetPtr (i);
@@ -684,10 +684,10 @@ PBYTE CLibInfoItem::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2007/05/05														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CLibInfoItem::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/05/05														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CLibInfoItem::SetSendData(PBYTE pSrc)
@@ -702,7 +702,7 @@ PBYTE CLibInfoItem::SetSendData(PBYTE pSrc)
 
 	DeleteAll ();
 
-	/* ƒf[ƒ^”‚ð“Ç‚Ýž‚Ý */
+	/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’èª­ã¿è¾¼ã¿ */
 	CopyMemory (&dwCount, pDataTmp, sizeof (dwCount));
 	nCount		= (int)dwCount;
 	pDataTmp	+= sizeof (dwCount);
@@ -721,9 +721,9 @@ PBYTE CLibInfoItem::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::AddItem											 */
-/* “à—e		:ŠŽƒAƒCƒeƒ€‚ð’Ç‰Á												 */
-/* “ú•t		:2007/08/11														 */
+/* é–¢æ•°å	:CLibInfoItem::AddItem											 */
+/* å†…å®¹		:æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿½åŠ 												 */
+/* æ—¥ä»˜		:2007/08/11														 */
 /* ========================================================================= */
 
 void CLibInfoItem::AddItem(DWORD dwCharID, DWORD dwItemID, ARRAYDWORD *padwItemID)
@@ -737,7 +737,7 @@ void CLibInfoItem::AddItem(DWORD dwCharID, DWORD dwItemID, ARRAYDWORD *padwItemI
 		return;
 	}
 
-	/* ‹ó‚¢‚Ä‚¢‚éêŠ‚ð¶ã‚©‚ç’T‚· */
+	/* ç©ºã„ã¦ã„ã‚‹å ´æ‰€ã‚’å·¦ä¸Šã‹ã‚‰æŽ¢ã™ */
 	bResult = GetFreePos (ptTmp, padwItemID);
 	if (bResult == FALSE) {
 		return;
@@ -753,9 +753,9 @@ void CLibInfoItem::AddItem(DWORD dwCharID, DWORD dwItemID, ARRAYDWORD *padwItemI
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::DeleteItem										 */
-/* “à—e		:ŠŽƒAƒCƒeƒ€‚ðíœ												 */
-/* “ú•t		:2007/08/11														 */
+/* é–¢æ•°å	:CLibInfoItem::DeleteItem										 */
+/* å†…å®¹		:æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2007/08/11														 */
 /* ========================================================================= */
 
 void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNoPos)
@@ -778,7 +778,7 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 			break;
 		}
 	}
-	/* Œ©‚Â‚©‚ç‚È‚©‚Á‚½H */
+	/* è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸï¼Ÿ */
 	if (i >= nCount) {
 		return;
 	}
@@ -786,7 +786,7 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 	pInfo->m_dwCharID = 0;
 	ZeroMemory (&pInfo->m_ptBackPack, sizeof (pInfo->m_ptBackPack));
 
-	/* ”z’u‚µ‚È‚¢H */
+	/* é…ç½®ã—ãªã„ï¼Ÿ */
 	if (bNoPos) {
 		pInfo->m_dwMapID = 0;
 		pInfo->m_ptPos.x = pInfo->m_ptPos.y = 0;
@@ -797,7 +797,7 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 
 		pInfo->m_dwMapID	= pInfoChar->m_dwMapID;
 		pInfo->m_ptPos		= ptTmp;
-		/* ƒAƒCƒeƒ€‚ª’u‚©‚ê‚Ä‚¢‚éH */
+		/* ã‚¢ã‚¤ãƒ†ãƒ ãŒç½®ã‹ã‚Œã¦ã„ã‚‹ï¼Ÿ */
 		if (pInfoTmp) {
 			pInfo->m_nPosZ = pInfoTmp->m_nPosZ + 1;
 		}
@@ -807,9 +807,9 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::Equip											 */
-/* “à—e		:ƒAƒCƒeƒ€ˆÊ’u‚ð‘•”õ—p‚É“ü‚ê‘Ö‚¦									 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CLibInfoItem::Equip											 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ä½ç½®ã‚’è£…å‚™ç”¨ã«å…¥ã‚Œæ›¿ãˆ									 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 void CLibInfoItem::Equip(CInfoCharBase *pInfoChar, DWORD dwItemIDOld, DWORD dwItemIDNew)
@@ -844,7 +844,7 @@ void CLibInfoItem::Equip(CInfoCharBase *pInfoChar, DWORD dwItemIDOld, DWORD dwIt
 		pInfoNew->m_ptBackPack.x = pInfoNew->m_ptBackPack.y = 0;
 	}
 	if (pInfoOld) {
-		/* “ü‚ê‘Ö‚¦H */
+		/* å…¥ã‚Œæ›¿ãˆï¼Ÿ */
 		if (pInfoNew) {
 			pInfoOld->m_ptBackPack = ptNew;
 		} else {
@@ -856,15 +856,15 @@ void CLibInfoItem::Equip(CInfoCharBase *pInfoChar, DWORD dwItemIDOld, DWORD dwIt
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::MakeItem											 */
-/* “à—e		:Žw’èêŠ‚ÉƒAƒCƒeƒ€‚ðì¬										 */
-/* “ú•t		:2007/10/20														 */
+/* é–¢æ•°å	:CLibInfoItem::MakeItem											 */
+/* å†…å®¹		:æŒ‡å®šå ´æ‰€ã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½œæˆ										 */
+/* æ—¥ä»˜		:2007/10/20														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::MakeItem(
-	DWORD dwMapID,			/* [in] ƒ}ƒbƒvID */
-	POINT *pptPos,			/* [in] À•W */
-	DWORD dwItemTypeID)		/* [in] ƒAƒCƒeƒ€Ží•ÊID */
+	DWORD dwMapID,			/* [in] ãƒžãƒƒãƒ—ID */
+	POINT *pptPos,			/* [in] åº§æ¨™ */
+	DWORD dwItemTypeID)		/* [in] ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
 {
 	DWORD dwRet;
 	PCInfoItemTypeBase pInfoItemType;
@@ -897,9 +897,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetFreePos										 */
-/* “à—e		:ƒAƒCƒeƒ€‚Ì‹ó‚«êŠ‚ðŽæ“¾										 */
-/* “ú•t		:2007/10/08														 */
+/* é–¢æ•°å	:CLibInfoItem::GetFreePos										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ã®ç©ºãå ´æ‰€ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/10/08														 */
 /* ========================================================================= */
 
 BOOL CLibInfoItem::GetFreePos(POINT &ptDst, ARRAYDWORD *padwItemID)
@@ -910,7 +910,7 @@ BOOL CLibInfoItem::GetFreePos(POINT &ptDst, ARRAYDWORD *padwItemID)
 
 	bRet = FALSE;
 
-	/* ‹ó‚¢‚Ä‚¢‚éêŠ‚ð¶ã‚©‚ç’T‚· */
+	/* ç©ºã„ã¦ã„ã‚‹å ´æ‰€ã‚’å·¦ä¸Šã‹ã‚‰æŽ¢ã™ */
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
 			ptTmp.x = x;
@@ -922,7 +922,7 @@ BOOL CLibInfoItem::GetFreePos(POINT &ptDst, ARRAYDWORD *padwItemID)
 			}
 		}
 	}
-	/* ‹ó‚«‚ª‚È‚©‚Á‚½H */
+	/* ç©ºããŒãªã‹ã£ãŸï¼Ÿ */
 	if (bResult) {
 		goto Exit;
 	}
@@ -935,9 +935,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::IsUseItem										 */
-/* “à—e		:Žg—p‚Å‚«‚éƒAƒCƒeƒ€‚©”»’è										 */
-/* “ú•t		:2008/07/05														 */
+/* é–¢æ•°å	:CLibInfoItem::IsUseItem										 */
+/* å†…å®¹		:ä½¿ç”¨ã§ãã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‹åˆ¤å®š										 */
+/* æ—¥ä»˜		:2008/07/05														 */
 /* ========================================================================= */
 
 BOOL CLibInfoItem::IsUseItem(DWORD dwItemID)
@@ -958,8 +958,8 @@ BOOL CLibInfoItem::IsUseItem(DWORD dwItemID)
 	}
 
 	switch (pInfoItemType->m_dwItemTypeID) {
-	case ITEMTYPEID_HP:		/* HP‘Œ¸ */
-	case ITEMTYPEID_LIGHT:	/* “”‚è*/
+	case ITEMTYPEID_HP:		/* HPå¢—æ¸› */
+	case ITEMTYPEID_LIGHT:	/* ç¯ã‚Š*/
 		break;
 	default:
 		goto Exit;
@@ -972,9 +972,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::SetArea											 */
-/* “à—e		:”ÍˆÍŽw’èˆê——ì¬												 */
-/* “ú•t		:2008/06/14														 */
+/* é–¢æ•°å	:CLibInfoItem::SetArea											 */
+/* å†…å®¹		:ç¯„å›²æŒ‡å®šä¸€è¦§ä½œæˆ												 */
+/* æ—¥ä»˜		:2008/06/14														 */
 /* ========================================================================= */
 
 void CLibInfoItem::SetArea(DWORD dwMapID, RECT *prcArea)
@@ -1000,9 +1000,9 @@ void CLibInfoItem::SetArea(DWORD dwMapID, RECT *prcArea)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetAreaCount										 */
-/* “à—e		:”ÍˆÍŽw’èˆê——”Žæ“¾												 */
-/* “ú•t		:2008/06/14														 */
+/* é–¢æ•°å	:CLibInfoItem::GetAreaCount										 */
+/* å†…å®¹		:ç¯„å›²æŒ‡å®šä¸€è¦§æ•°å–å¾—												 */
+/* æ—¥ä»˜		:2008/06/14														 */
 /* ========================================================================= */
 
 int CLibInfoItem::GetAreaCount(void)
@@ -1012,9 +1012,9 @@ int CLibInfoItem::GetAreaCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetPtrArea										 */
-/* “à—e		:”ÍˆÍŽw’èˆê——‚©‚çƒAƒCƒeƒ€î•ñ‚ðŽæ“¾								 */
-/* “ú•t		:2008/06/14														 */
+/* é–¢æ•°å	:CLibInfoItem::GetPtrArea										 */
+/* å†…å®¹		:ç¯„å›²æŒ‡å®šä¸€è¦§ã‹ã‚‰ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/06/14														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetPtrArea(int nNo)
@@ -1024,9 +1024,9 @@ PCInfoBase CLibInfoItem::GetPtrArea(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::GetNewID											 */
-/* “à—e		:V‚µ‚¢ƒAƒCƒeƒ€ID‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLibInfoItem::GetNewID											 */
+/* å†…å®¹		:æ–°ã—ã„ã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 DWORD CLibInfoItem::GetNewID(void)
@@ -1056,10 +1056,10 @@ DWORD CLibInfoItem::GetNewID(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoItem::IsItemPos										 */
-/* “à—e		:Žw’èêŠ‚ªŽg—pÏ‚Ý‚©ƒ`ƒFƒbƒN									 */
-/* –ß‚è’l	:TRUE:Žg—pÏ‚Ý													 */
-/* “ú•t		:2007/08/12														 */
+/* é–¢æ•°å	:CLibInfoItem::IsItemPos										 */
+/* å†…å®¹		:æŒ‡å®šå ´æ‰€ãŒä½¿ç”¨æ¸ˆã¿ã‹ãƒã‚§ãƒƒã‚¯									 */
+/* æˆ»ã‚Šå€¤	:TRUE:ä½¿ç”¨æ¸ˆã¿													 */
+/* æ—¥ä»˜		:2007/08/12														 */
 /* ========================================================================= */
 
 BOOL CLibInfoItem::IsItemPos(POINT *ptItem, ARRAYDWORD *padwItemID)

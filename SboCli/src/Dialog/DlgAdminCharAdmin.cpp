@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharAdmin.cpp										 */
-/* “à—e			:ŠÇ—ÒŒ ŒÀ‚Ìİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharAdmin.cpp										 */
+/* å†…å®¹			:ç®¡ç†è€…æ¨©é™ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharAdmin::DoDataExchange(CDataExchange* pDX)
@@ -45,9 +45,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAdmin::CDlgAdminCharAdmin							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CDlgAdminCharAdmin::CDlgAdminCharAdmin							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 CDlgAdminCharAdmin::CDlgAdminCharAdmin(CWnd* pParent /*=NULL*/)
@@ -63,9 +63,9 @@ CDlgAdminCharAdmin::CDlgAdminCharAdmin(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAdmin::~CDlgAdminCharAdmin						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CDlgAdminCharAdmin::~CDlgAdminCharAdmin						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 CDlgAdminCharAdmin::~CDlgAdminCharAdmin()
@@ -74,25 +74,25 @@ CDlgAdminCharAdmin::~CDlgAdminCharAdmin()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAdmin::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CDlgAdminCharAdmin::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAdmin::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharAdmin::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAdmin::Renew										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CDlgAdminCharAdmin::Renew										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAdmin::Renew(void)
@@ -120,9 +120,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAdmin::OnAdminMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharAdmin::OnAdminMsg									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAdmin::OnAdminMsg(int nType, DWORD dwPara)
@@ -130,17 +130,17 @@ void CDlgAdminCharAdmin::OnAdminMsg(int nType, DWORD dwPara)
 	CPacketADMIN_REQ_ADMINLEVEL Packet;
 
 	switch (nType) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_dwAccountID = dwPara;
 		if (m_dwAccountID == 0) {
 			break;
 		}
 
-		/* ‘I‘ğ‚³‚ê‚½ƒAƒJƒEƒ“ƒg‚ÌŠÇ—ÒŒ ŒÀƒŒƒxƒ‹‚ğ—v‹ */
+		/* é¸æŠã•ã‚ŒãŸã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«ã‚’è¦æ±‚ */
 		Packet.Make (m_dwAccountID);
 		m_pSock->Send (&Packet);
 		break;
-	case ADMINMSG_ADMINLEVEL:					/* ŠÇ—ÒƒŒƒxƒ‹’Ê’m */
+	case ADMINMSG_ADMINLEVEL:					/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ«é€šçŸ¥ */
 		m_nAdminLevel = dwPara;
 		break;
 	default:
@@ -152,9 +152,9 @@ void CDlgAdminCharAdmin::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAdmin::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/07/05														 */
+/* é–¢æ•°å	:CDlgAdminCharAdmin::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/07/05														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharAdmin::OnInitDialog()
@@ -169,9 +169,9 @@ BOOL CDlgAdminCharAdmin::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharAdmin::OnSend										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharAdmin::OnSend										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharAdmin::OnSend()

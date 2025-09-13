@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapShadowEdit.h									 */
-/* “à—e			:ƒ}ƒbƒv‰e•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapShadowEdit.h									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,36 +16,36 @@ class CWndMapPartsGrp;
 class CInfoMapShadow;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CDlgAdminMapShadowEdit : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapShadowEdit(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual	~CDlgAdminMapShadowEdit();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapShadowEdit(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual	~CDlgAdminMapShadowEdit();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int DoModal (CMgrData *pMgrData);								/* ƒ‚[ƒ_ƒ‹ƒ_ƒCƒAƒƒO•\¦ */
+	int DoModal (CMgrData *pMgrData);								/* ãƒ¢ãƒ¼ãƒ€ãƒ«ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤º */
 
 
 protected:
-	void	SetData				(void);					/* ƒf[ƒ^‚ğ‰æ–Ê‚É”½‰f */
-	void	GetData				(void);					/* ‰æ–Ê‚©‚çƒf[ƒ^‚ğæ“¾ */
-	void	OnSelectAnime		(void);					/* ƒRƒ}‘I‘ğˆ— */
-	void	RenewButtonState	(void);					/* ƒ{ƒ^ƒ“ó‘Ô‚Ìİ’è */
+	void	SetData				(void);					/* ãƒ‡ãƒ¼ã‚¿ã‚’ç”»é¢ã«åæ˜  */
+	void	GetData				(void);					/* ç”»é¢ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	void	OnSelectAnime		(void);					/* ã‚³ãƒé¸æŠå‡¦ç† */
+	void	RenewButtonState	(void);					/* ãƒœã‚¿ãƒ³çŠ¶æ…‹ã®è¨­å®š */
 
 
 public:
-	int						m_nSelectType,				/* ‚Ç‚¿‚ç‚Ì‰æ‘œ‚ğ‘I‘ğ‚µ‚Ä‚¢‚é‚© */
-							m_nAnimeNo;					/* ƒAƒjƒ[ƒVƒ‡ƒ“’†‚Ì”Ô† */
-	WORD					m_wShadowGrpID;				/* ‰e‰æ‘œID */
-	DWORD					m_dwTimeLastAnime;			/* ÅŒã‚ÉƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚½ŠÔ */
-	SIZE					m_sizeWindow;				/* •\¦ŠJn‚ÌƒEƒBƒ“ƒhƒEƒTƒCƒY */
-	CMgrData				*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData				*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CWndMapShadowAnimeList	*m_pWndMapShadowAnimeList;	/* ƒ}ƒbƒv‰eƒAƒjƒ[ƒVƒ‡ƒ“ˆê——ƒEƒBƒ“ƒhƒE */
-	CInfoMapShadow			*m_pInfoMapShadow;			/* ƒ}ƒbƒv‰eî•ñ */
-	CWndMapPartsGrp			*m_pWndMapShadowGrp;		/* ƒ}ƒbƒv‰e‰æ‘œˆê—— */
+	int						m_nSelectType,				/* ã©ã¡ã‚‰ã®ç”»åƒã‚’é¸æŠã—ã¦ã„ã‚‹ã‹ */
+							m_nAnimeNo;					/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ã®ç•ªå· */
+	WORD					m_wShadowGrpID;				/* å½±ç”»åƒID */
+	DWORD					m_dwTimeLastAnime;			/* æœ€å¾Œã«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã—ãŸæ™‚é–“ */
+	SIZE					m_sizeWindow;				/* è¡¨ç¤ºé–‹å§‹æ™‚ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º */
+	CMgrData				*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData				*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CWndMapShadowAnimeList	*m_pWndMapShadowAnimeList;	/* ãƒãƒƒãƒ—å½±ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CInfoMapShadow			*m_pInfoMapShadow;			/* ãƒãƒƒãƒ—å½±æƒ…å ± */
+	CWndMapPartsGrp			*m_pWndMapShadowGrp;		/* ãƒãƒƒãƒ—å½±ç”»åƒä¸€è¦§ */
 
 
 
@@ -64,7 +64,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapShadowEdit)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPNAME.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒv–¼’Ê’m) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/05/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPNAME.cpp										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—åé€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/24													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,26 +11,26 @@
 #include "PacketMAP_MAPNAME.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPNAME::CPacketMAP_MAPNAME							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/24														 */
+/* é–¢æ•°å	:CPacketMAP_MAPNAME::CPacketMAP_MAPNAME							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/24														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPNAME::CPacketMAP_MAPNAME()
 {
-	m_dwMapID		= 0;			/* ƒ}ƒbƒvID */
+	m_dwMapID		= 0;			/* ãƒãƒƒãƒ—ID */
 	m_dwBGMID		= 0;			/* BGMID */
-	m_dwWeatherType	= 0;			/* “V‹Cí•Ê */
-	m_bEnableBattle	= TRUE;			/* í“¬‹–‰Â */
-	m_bRecovery		= TRUE;			/* ‹CâŒã‰ñ•œ‚·‚é */
-	m_byLevel		= 0;			/* –¾‚é‚³ƒŒƒxƒ‹ */
+	m_dwWeatherType	= 0;			/* å¤©æ°—ç¨®åˆ¥ */
+	m_bEnableBattle	= TRUE;			/* æˆ¦é—˜è¨±å¯ */
+	m_bRecovery		= TRUE;			/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	m_byLevel		= 0;			/* æ˜ã‚‹ã•ãƒ¬ãƒ™ãƒ« */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPNAME::~CPacketMAP_MAPNAME						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/24														 */
+/* é–¢æ•°å	:CPacketMAP_MAPNAME::~CPacketMAP_MAPNAME						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/24														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPNAME::~CPacketMAP_MAPNAME()
@@ -39,19 +39,19 @@ CPacketMAP_MAPNAME::~CPacketMAP_MAPNAME()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPNAME::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/05/24														 */
+/* é–¢æ•°å	:CPacketMAP_MAPNAME::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/05/24														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPNAME::Make(
-	DWORD dwMapID,			/* [in] ƒ}ƒbƒvID */
+	DWORD dwMapID,			/* [in] ãƒãƒƒãƒ—ID */
 	DWORD dwBGMID,			/* [in] BGMID */
-	DWORD dwWeatherType,	/* [in] “V‹Cí•Ê */
-	BOOL bEnableBattle,		/* [in] í“¬‹–‰Â */
-	BOOL bRecovery,			/* [in] ‹CâŒã‰ñ•œ‚·‚é */
-	BYTE byLevel,			/* [in] –¾‚é‚³ƒŒƒxƒ‹ */
-	LPCSTR pszMapName)		/* [in] ƒ}ƒbƒv–¼ */
+	DWORD dwWeatherType,	/* [in] å¤©æ°—ç¨®åˆ¥ */
+	BOOL bEnableBattle,		/* [in] æˆ¦é—˜è¨±å¯ */
+	BOOL bRecovery,			/* [in] æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	BYTE byLevel,			/* [in] æ˜ã‚‹ã•ãƒ¬ãƒ™ãƒ« */
+	LPCSTR pszMapName)		/* [in] ãƒãƒƒãƒ—å */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -74,22 +74,22 @@ void CPacketMAP_MAPNAME::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_MAPNAME;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMapID,		sizeof (dwMapID),		pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (pDataTmp, &dwMapID,		sizeof (dwMapID),		pDataTmp);	/* ãƒãƒƒãƒ—ID */
 	CopyMemoryRenew (pDataTmp, &dwBGMID,		sizeof (dwBGMID),		pDataTmp);	/* BGMID */
-	CopyMemoryRenew (pDataTmp, &dwWeatherType,	sizeof (dwWeatherType),	pDataTmp);	/* “V‹Cí•Ê */
-	CopyMemoryRenew (pDataTmp, &bEnableBattle,	sizeof (bEnableBattle),	pDataTmp);	/* í“¬‹–‰Â */
-	CopyMemoryRenew (pDataTmp, &bRecovery,		sizeof (bRecovery),		pDataTmp);	/* ‹CâŒã‰ñ•œ‚·‚é */
-	CopyMemoryRenew (pDataTmp, &byLevel,		sizeof (byLevel),		pDataTmp);	/* –¾‚é‚³ƒŒƒxƒ‹ */
-	strcpyRenew ((LPSTR)pDataTmp, pszMapName, pDataTmp);				/* ƒ}ƒbƒv–¼ */
+	CopyMemoryRenew (pDataTmp, &dwWeatherType,	sizeof (dwWeatherType),	pDataTmp);	/* å¤©æ°—ç¨®åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &bEnableBattle,	sizeof (bEnableBattle),	pDataTmp);	/* æˆ¦é—˜è¨±å¯ */
+	CopyMemoryRenew (pDataTmp, &bRecovery,		sizeof (bRecovery),		pDataTmp);	/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	CopyMemoryRenew (pDataTmp, &byLevel,		sizeof (byLevel),		pDataTmp);	/* æ˜ã‚‹ã•ãƒ¬ãƒ™ãƒ« */
+	strcpyRenew ((LPSTR)pDataTmp, pszMapName, pDataTmp);				/* ãƒãƒƒãƒ—å */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPNAME::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/05/24														 */
+/* é–¢æ•°å	:CPacketMAP_MAPNAME::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/05/24														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_MAPNAME::Set(PBYTE pPacket)
@@ -99,13 +99,13 @@ PBYTE CPacketMAP_MAPNAME::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMapID,		pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (&m_dwMapID,		pDataTmp, sizeof (m_dwMapID),		pDataTmp);	/* ãƒãƒƒãƒ—ID */
 	CopyMemoryRenew (&m_dwBGMID,		pDataTmp, sizeof (m_dwBGMID),		pDataTmp);	/* BGMID */
-	CopyMemoryRenew (&m_dwWeatherType,	pDataTmp, sizeof (m_dwWeatherType),	pDataTmp);	/* “V‹Cí•Ê */
-	CopyMemoryRenew (&m_bEnableBattle,	pDataTmp, sizeof (m_bEnableBattle),	pDataTmp);	/* í“¬‹–‰Â */
-	CopyMemoryRenew (&m_bRecovery,		pDataTmp, sizeof (m_bRecovery),		pDataTmp);	/* ‹CâŒã‰ñ•œ‚·‚é */
-	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);	/* –¾‚é‚³ƒŒƒxƒ‹ */
-	StoreRenew (m_strMapName, (LPCSTR)pDataTmp, pDataTmp);					/* ƒ}ƒbƒv–¼ */
+	CopyMemoryRenew (&m_dwWeatherType,	pDataTmp, sizeof (m_dwWeatherType),	pDataTmp);	/* å¤©æ°—ç¨®åˆ¥ */
+	CopyMemoryRenew (&m_bEnableBattle,	pDataTmp, sizeof (m_bEnableBattle),	pDataTmp);	/* æˆ¦é—˜è¨±å¯ */
+	CopyMemoryRenew (&m_bRecovery,		pDataTmp, sizeof (m_bRecovery),		pDataTmp);	/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	CopyMemoryRenew (&m_byLevel,		pDataTmp, sizeof (m_byLevel),		pDataTmp);	/* æ˜ã‚‹ã•ãƒ¬ãƒ™ãƒ« */
+	StoreRenew (m_strMapName, (LPCSTR)pDataTmp, pDataTmp);					/* ãƒãƒƒãƒ—å */
 
 	pRet = pDataTmp;
 	return pRet;

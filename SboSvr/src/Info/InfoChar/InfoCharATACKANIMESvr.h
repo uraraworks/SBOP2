@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharATACKANIMESvr.h									 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(UŒ‚Žó‚¯‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“)ƒT[ƒo[ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharATACKANIMESvr.h									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(æ”»æ’ƒå—ã‘ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,17 +11,17 @@
 #include "InfoCharSvr.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharATACKANIMESvr : public CInfoCharSvr
 {
 public:
-			CInfoCharATACKANIMESvr();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharATACKANIMESvr();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharATACKANIMESvr();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharATACKANIMESvr();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL ProcHit	(CInfoCharSvr *pInfoChar);					/* ˆ—(UŒ‚‚ðŽó‚¯‚½Žž) */
-	BOOL TimerProc	(DWORD dwTime);								/* ŽžŠÔˆ— */
+	BOOL ProcHit	(CInfoCharSvr *pInfoChar);					/* å‡¦ç†(æ”»æ’ƒã‚’å—ã‘ãŸæ™‚) */
+	BOOL TimerProc	(DWORD dwTime);								/* æ™‚é–“å‡¦ç† */
 
 
 public:

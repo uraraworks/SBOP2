@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPPARTS.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒp[ƒcî•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/04/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPPARTS.h										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,22 +14,22 @@ class CLibInfoMapParts;
 class CInfoMapParts;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_MAPPARTS : public CPacketBase
 {
 public:
-			CPacketMAP_MAPPARTS();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_MAPPARTS();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_MAPPARTS();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_MAPPARTS();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CLibInfoMapParts *pLibInfo);			/* ƒpƒPƒbƒg‚ğì¬ */
-	void	Make	(CInfoMapParts *pInfo);					/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(CLibInfoMapParts *pLibInfo);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	void	Make	(CInfoMapParts *pInfo);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CLibInfoMapParts	*m_pLibInfoMapParts;		/* ƒ}ƒbƒvƒp[ƒcî•ñ */
+	CLibInfoMapParts	*m_pLibInfoMapParts;		/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 } CPacketMAP_MAPPARTS, *PCPacketMAP_MAPPARTS;
 
 /* Copyright(C)URARA-works 2007 */

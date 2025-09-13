@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_RES_FILELIST.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹ƒŠƒXƒg‰ž“š) ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/03/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_RES_FILELIST.cpp								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/03/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketVERSION_RES_FILELIST.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_RES_FILELIST::CPacketVERSION_RES_FILELIST		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CPacketVERSION_RES_FILELIST::CPacketVERSION_RES_FILELIST		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 CPacketVERSION_RES_FILELIST::CPacketVERSION_RES_FILELIST()
@@ -24,9 +24,9 @@ CPacketVERSION_RES_FILELIST::CPacketVERSION_RES_FILELIST()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_RES_FILELIST::~CPacketVERSION_RES_FILELIST		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CPacketVERSION_RES_FILELIST::~CPacketVERSION_RES_FILELIST		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 CPacketVERSION_RES_FILELIST::~CPacketVERSION_RES_FILELIST()
@@ -36,9 +36,9 @@ CPacketVERSION_RES_FILELIST::~CPacketVERSION_RES_FILELIST()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_RES_FILELIST::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ðì¬													 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CPacketVERSION_RES_FILELIST::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CPacketVERSION_RES_FILELIST::Make(CInfoFileList *pSrc)
@@ -65,9 +65,9 @@ void CPacketVERSION_RES_FILELIST::Make(CInfoFileList *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILE::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ðÝ’è													 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILE::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 PBYTE CPacketVERSION_RES_FILELIST::Set(PBYTE pPacket)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoFishing.h												 */
-/* “à—e			:’Ş‚èî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoFishing.h												 */
+/* å†…å®¹			:é‡£ã‚Šæƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/02													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,52 +11,52 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^														 */
+/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿														 */
 /* ========================================================================= */
 typedef struct _INFOFISHINGPARAM {
-	DWORD		dwItemTypeID;			/* ƒAƒCƒeƒ€í•ÊID */
-	int			nAverage;				/* ’Ş‚è‚«‚éŠm—¦ */
+	DWORD		dwItemTypeID;			/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	int			nAverage;				/* é‡£ã‚Šãã‚‹ç¢ºç‡ */
 } INFOFISHINGPARAM, *PINFOFISHINGPARAM;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoFishing : public CInfoBase
 {
 public:
-			CInfoFishing();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoFishing();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoFishing();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoFishing();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	void	Copy				(CInfoFishing *pSrc);				/* ƒRƒs[ */
+	void	Copy				(CInfoFishing *pSrc);				/* ã‚³ãƒ”ãƒ¼ */
 
-	int		GetCount			(void);								/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^”‚ğæ“¾ */
-	void	AddParam			(DWORD dwItemTypeID, int nAverage);	/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğ’Ç‰Á */
-	void	DeleteParam			(int nNo);							/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğíœ */
-	void	DeleteAllParam		(void);								/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğ‘S‚Äíœ */
-	PINFOFISHINGPARAM	GetPtr	(int nNo);							/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^‚ğæ“¾ */
+	int		GetCount			(void);								/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	AddParam			(DWORD dwItemTypeID, int nAverage);	/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿½åŠ  */
+	void	DeleteParam			(int nNo);							/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å‰Šé™¤ */
+	void	DeleteAllParam		(void);								/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å…¨ã¦å‰Šé™¤ */
+	PINFOFISHINGPARAM	GetPtr	(int nNo);							/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’å–å¾— */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	DWORD		m_dwFishingID;					/* ’Ş‚èID */
-	int			m_nAverage;						/* ’Ş‚ê‚éŠm—¦ */
-	CmyString	m_strName;						/* ’Ş‚èê–¼ */
-	CmyArray <PINFOFISHINGPARAM, PINFOFISHINGPARAM>	m_apParam;	/* ’Ş‚èî•ñƒpƒ‰ƒ[ƒ^ */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	DWORD		m_dwFishingID;					/* é‡£ã‚ŠID */
+	int			m_nAverage;						/* é‡£ã‚Œã‚‹ç¢ºç‡ */
+	CmyString	m_strName;						/* é‡£ã‚Šå ´å */
+	CmyArray <PINFOFISHINGPARAM, PINFOFISHINGPARAM>	m_apParam;	/* é‡£ã‚Šæƒ…å ±ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ */
 } CInfoFishing, *PCInfoFishing;
 typedef CmyArray<PCInfoFishing, PCInfoFishing>	   ARRAYITEMINFO;
 typedef CmyArray<PCInfoFishing, PCInfoFishing>	 *PARRAYITEMINFO;

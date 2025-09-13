@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowEYECOLOR.cpp											 */
-/* “à—e			:–ÚF‘I‘ðƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowEYECOLOR.cpp											 */
+/* å†…å®¹			:ç›®è‰²é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,9 +15,9 @@
 #include "WindowEYECOLOR.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::CWindowEYECOLOR								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::CWindowEYECOLOR								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 CWindowEYECOLOR::CWindowEYECOLOR()
@@ -35,9 +35,9 @@ CWindowEYECOLOR::CWindowEYECOLOR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::~CWindowEYECOLOR								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::~CWindowEYECOLOR								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 CWindowEYECOLOR::~CWindowEYECOLOR()
@@ -46,9 +46,9 @@ CWindowEYECOLOR::~CWindowEYECOLOR()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 void CWindowEYECOLOR::Create(CMgrData *pMgrData)
@@ -63,9 +63,9 @@ void CWindowEYECOLOR::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::Draw											 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::Draw											 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 void CWindowEYECOLOR::Draw(PCImg32 pDst)
@@ -86,7 +86,7 @@ void CWindowEYECOLOR::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 56, 8, "–Ú‚ÌF", clText);
+	TextOut4 (hDC, 56, 8, "ç›®ã®è‰²", clText);
 	strTmp.Format ("%02d", m_nPos);
 	TextOut4 (hDC, 16, 32, strTmp, clText);
 	TextOut2 (hDC, 40, 32, m_pMgrData->GetEyeColorName ((WORD)m_nPos), clText);
@@ -105,9 +105,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::TimerProc										 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowEYECOLOR::TimerProc(void)
@@ -131,9 +131,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::SetType										 */
-/* “à—e		:–ÚF‚ðÝ’è														 */
-/* “ú•t		:2007/04/18														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::SetType										 */
+/* å†…å®¹		:ç›®è‰²ã‚’è¨­å®š														 */
+/* æ—¥ä»˜		:2007/04/18														 */
 /* ========================================================================= */
 
 void CWindowEYECOLOR::SetType(WORD wEyeColor)
@@ -144,9 +144,9 @@ void CWindowEYECOLOR::SetType(WORD wEyeColor)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::GetType										 */
-/* “à—e		:–ÚF‚ðŽæ“¾														 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::GetType										 */
+/* å†…å®¹		:ç›®è‰²ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 WORD CWindowEYECOLOR::GetType(void)
@@ -156,9 +156,9 @@ WORD CWindowEYECOLOR::GetType(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::OnUp											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::OnUp											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowEYECOLOR::OnUp(void)
@@ -187,9 +187,9 @@ BOOL CWindowEYECOLOR::OnUp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::OnDown										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::OnDown										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowEYECOLOR::OnDown(void)
@@ -220,9 +220,9 @@ BOOL CWindowEYECOLOR::OnDown(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::OnLeft										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::OnLeft										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowEYECOLOR::OnLeft(void)
@@ -237,9 +237,9 @@ BOOL CWindowEYECOLOR::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::OnRight										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::OnRight										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowEYECOLOR::OnRight(void)
@@ -254,9 +254,9 @@ BOOL CWindowEYECOLOR::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowEYECOLOR::OnX(BOOL bDown)
@@ -278,9 +278,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowEYECOLOR::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowEYECOLOR::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowEYECOLOR::OnZ(BOOL bDown)

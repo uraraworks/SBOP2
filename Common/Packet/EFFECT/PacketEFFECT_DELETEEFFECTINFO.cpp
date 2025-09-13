@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketEFFECT_DELETEEFFECTINFO.cpp							 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ÉGÉtÉFÉNÉgån:ÉGÉtÉFÉNÉgèÓïÒçÌèú) é¿ëïÉtÉ@ÉCÉã		 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/07/26													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketEFFECT_DELETEEFFECTINFO.cpp							 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Ç®„Éï„Çß„ÇØ„ÉàÁ≥ª:„Ç®„Éï„Çß„ÇØ„ÉàÊÉÖÂ†±ÂâäÈô§) ÂÆüË£Ö„Éï„Ç°„Ç§„É´		 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/07/26													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEEFFECTINFO::CPacketEFFECT_DELETEEFFECTINFO	 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEEFFECTINFO::CPacketEFFECT_DELETEEFFECTINFO	 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketEFFECT_DELETEEFFECTINFO::CPacketEFFECT_DELETEEFFECTINFO()
@@ -24,9 +24,9 @@ CPacketEFFECT_DELETEEFFECTINFO::CPacketEFFECT_DELETEEFFECTINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEEFFECTINFO::~CPacketEFFECT_DELETEEFFECTINFO */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEEFFECTINFO::~CPacketEFFECT_DELETEEFFECTINFO */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketEFFECT_DELETEEFFECTINFO::~CPacketEFFECT_DELETEEFFECTINFO()
@@ -35,13 +35,13 @@ CPacketEFFECT_DELETEEFFECTINFO::~CPacketEFFECT_DELETEEFFECTINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEEFFECTINFO::Make							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEEFFECTINFO::Make							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 void CPacketEFFECT_DELETEEFFECTINFO::Make(
-	DWORD dwEffectID)		/* [in] ÉGÉtÉFÉNÉgID */
+	DWORD dwEffectID)		/* [in] „Ç®„Éï„Çß„ÇØ„ÉàID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -58,16 +58,16 @@ void CPacketEFFECT_DELETEEFFECTINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_EFFECT_DELETEEFFECTINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwEffectID, sizeof (dwEffectID), pDataTmp);	/* ÉGÉtÉFÉNÉgID */
+	CopyMemoryRenew (pDataTmp, &dwEffectID, sizeof (dwEffectID), pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_DELETEEFFECTINFO::Set							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_DELETEEFFECTINFO::Set							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 PBYTE CPacketEFFECT_DELETEEFFECTINFO::Set(PBYTE pPacket)
@@ -77,7 +77,7 @@ PBYTE CPacketEFFECT_DELETEEFFECTINFO::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);	/* ÉGÉtÉFÉNÉgID */
+	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
 
 	pRet = pDataTmp;
 	return pRet;

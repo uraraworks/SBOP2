@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowITEMMENU_SELECT.cpp									 */
-/* “à—e			:ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowITEMMENU_SELECT.cpp									 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/13													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -18,9 +18,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::CWindowITEMMENU_SELECT					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::CWindowITEMMENU_SELECT					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 CWindowITEMMENU_SELECT::CWindowITEMMENU_SELECT()
@@ -40,9 +40,9 @@ CWindowITEMMENU_SELECT::CWindowITEMMENU_SELECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::~CWindowITEMMENU_SELECT				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::~CWindowITEMMENU_SELECT				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 CWindowITEMMENU_SELECT::~CWindowITEMMENU_SELECT()
@@ -51,9 +51,9 @@ CWindowITEMMENU_SELECT::~CWindowITEMMENU_SELECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU_SELECT::Create(CMgrData *pMgrData)
@@ -69,9 +69,9 @@ void CWindowITEMMENU_SELECT::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::Draw									 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::Draw									 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
@@ -99,10 +99,10 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 	for (i = 0; i < nCount; i ++) {
 		pszTmp = "";
 		switch (m_anCommand[i]) {
-		case ITEMMENU_SELECT_COMMAND_PUT:			pszTmp = "’n–Ê‚É’u‚­";	break;	/* ’n–Ê‚É’u‚­ */
-		case ITEMMENU_SELECT_COMMAND_EQUIP:			pszTmp = "‘•”õ‚·‚é";	break;	/* ‘•”õ‚·‚é */
-		case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	pszTmp = "‘•”õ‚ðŠO‚·";	break;	/* ‘•”õ‚ðŠO‚· */
-		case ITEMMENU_SELECT_COMMAND_USE:			pszTmp = "Žg‚¤";		break;	/* Žg‚¤ */
+		case ITEMMENU_SELECT_COMMAND_PUT:			pszTmp = "åœ°é¢ã«ç½®ã";	break;	/* åœ°é¢ã«ç½®ã */
+		case ITEMMENU_SELECT_COMMAND_EQUIP:			pszTmp = "è£…å‚™ã™ã‚‹";	break;	/* è£…å‚™ã™ã‚‹ */
+		case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	pszTmp = "è£…å‚™ã‚’å¤–ã™";	break;	/* è£…å‚™ã‚’å¤–ã™ */
+		case ITEMMENU_SELECT_COMMAND_USE:			pszTmp = "ä½¿ã†";		break;	/* ä½¿ã† */
 		}
 		TextOut2 (hDC, 32, 16 + 16 * i, pszTmp, clText);
 	}
@@ -123,9 +123,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::SetItemID								 */
-/* “à—e		:ƒAƒCƒeƒ€ID‚ðŽw’è												 */
-/* “ú•t		:2007/10/07														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::SetItemID								 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ IDã‚’æŒ‡å®š												 */
+/* æ—¥ä»˜		:2007/10/07														 */
 /* ========================================================================= */
 
 void CWindowITEMMENU_SELECT::SetItemID(int nType, DWORD dwItemID)
@@ -148,10 +148,10 @@ void CWindowITEMMENU_SELECT::SetItemID(int nType, DWORD dwItemID)
 	} else {
 		dwItemTypeID = m_pLibInfoItem->GetItemType (m_pInfoItem->m_dwItemID);
 		switch (dwItemTypeID) {
-		case ITEMTYPEID_CLOTH:		/* •ž */
-		case ITEMTYPEID_ACCE:		/* ƒAƒNƒZƒTƒŠ */
-		case ITEMTYPEID_ARMS:		/* Ž‚¿•¨ */
-		case ITEMTYPEID_SHIELD:		/* ‚ */
+		case ITEMTYPEID_CLOTH:		/* æœ */
+		case ITEMTYPEID_ACCE:		/* ã‚¢ã‚¯ã‚»ã‚µãƒª */
+		case ITEMTYPEID_ARMS:		/* æŒã¡ç‰© */
+		case ITEMTYPEID_SHIELD:		/* ç›¾ */
 			m_anCommand.Add (ITEMMENU_SELECT_COMMAND_EQUIP);
 			break;
 		}
@@ -163,7 +163,7 @@ void CWindowITEMMENU_SELECT::SetItemID(int nType, DWORD dwItemID)
 	m_nPos		= min (m_nPos, m_nPosMax);
 	if (nPosMaxBack != m_nPosMax) {
 		m_pDib->Destroy ();
-		/* ƒTƒCƒY‚ª•Ï‚í‚Á‚½‚Ì‚Å‰æ‘œÄì¬ */
+		/* ã‚µã‚¤ã‚ºãŒå¤‰ã‚ã£ãŸã®ã§ç”»åƒå†ä½œæˆ */
 		m_sizeWindow.cy	= 16 * 2 + 16 * (m_nPosMax + 1);
 		m_pDib->Create (m_sizeWindow.cx, m_sizeWindow.cy);
 		m_pDib->SetColorKey (0);
@@ -173,9 +173,9 @@ void CWindowITEMMENU_SELECT::SetItemID(int nType, DWORD dwItemID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::OnUp									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::OnUp									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU_SELECT::OnUp(void)
@@ -199,9 +199,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::OnDown									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::OnDown									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU_SELECT::OnDown(void)
@@ -225,9 +225,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::OnLeft									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::OnLeft									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU_SELECT::OnLeft(void)
@@ -242,9 +242,9 @@ BOOL CWindowITEMMENU_SELECT::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::OnRight								 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::OnRight								 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU_SELECT::OnRight(void)
@@ -259,9 +259,9 @@ BOOL CWindowITEMMENU_SELECT::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::OnX									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::OnX									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU_SELECT::OnX(BOOL bDown)
@@ -283,9 +283,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowITEMMENU_SELECT::OnZ									 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/08/13														 */
+/* é–¢æ•°å	:CWindowITEMMENU_SELECT::OnZ									 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/08/13														 */
 /* ========================================================================= */
 
 BOOL CWindowITEMMENU_SELECT::OnZ(BOOL bDown)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowOPTION_VOLUMESET.h									 */
-/* “à—e			:ƒIƒvƒVƒ‡ƒ“-‰¹—ÊÝ’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/06/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowOPTION_VOLUMESET.h									 */
+/* å†…å®¹			:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-éŸ³é‡è¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,33 +14,33 @@ class CImg32;
 class CMgrData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowOPTION_VOLUMESET : public CWindowBase
 {
 public:
-			CWindowOPTION_VOLUMESET();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowOPTION_VOLUMESET();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowOPTION_VOLUMESET();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowOPTION_VOLUMESET();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
 
 
 private:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
 
 
 protected:
-	int		m_nVolumeBgm,			/* BGM‰¹—Ê */
-			m_nVolumeSound,			/* Œø‰Ê‰¹‰¹—Ê */
-			m_nBackVolumeBgm,		/* •ÏX‘O‚ÌBGM‰¹—Ê */
-			m_nBackVolumeSound;		/* •ÏX‘O‚ÌŒø‰Ê‰¹‰¹—Ê */
+	int		m_nVolumeBgm,			/* BGMéŸ³é‡ */
+			m_nVolumeSound,			/* åŠ¹æžœéŸ³éŸ³é‡ */
+			m_nBackVolumeBgm,		/* å¤‰æ›´å‰ã®BGMéŸ³é‡ */
+			m_nBackVolumeSound;		/* å¤‰æ›´å‰ã®åŠ¹æžœéŸ³éŸ³é‡ */
 } CWindowOPTION_VOLUMESET, *PCWindowOPTION_VOLUMESET;
 
 /* Copyright(C)URARA-works 2008 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowITEMMENU.h											 */
-/* “à—e			:ƒAƒCƒeƒ€ƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowITEMMENU.h											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/30													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,45 +16,45 @@ class CInfoCharCli;
 class CLibInfoItem;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowITEMMENU : public CWindowBase
 {
 public:
-			CWindowITEMMENU();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowITEMMENU();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowITEMMENU();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowITEMMENU();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);					/* ì¬ */
-	void	Draw		(CImg32 *pDst);							/* •`‰æ */
-	void	DragOff		(void);									/* ƒhƒ‰ƒbƒO‰ðœ */
+	void	Create		(CMgrData *pMgrData);					/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);							/* æç”» */
+	void	DragOff		(void);									/* ãƒ‰ãƒ©ãƒƒã‚°è§£é™¤ */
 
-	DWORD	GetSelectItemID	(void)	{ return m_dwSelectItemID;	}	/* ‘I‘ð‚³‚ê‚Ä‚¢‚éƒAƒCƒeƒ€ID‚ðŽæ“¾ */
-	DWORD	GetDragItemID	(void)	{ return m_dwDragItemID;	}	/* ƒhƒ‰ƒbƒO‚³‚ê‚½ƒAƒCƒeƒ€ID‚ðŽæ“¾ */
-	POINT	GetDragPos		(void)	{ return m_ptDrop;			}	/* ƒhƒƒbƒvˆÊ’u‚ðŽæ“¾ */
-	int		GetPos			(void)	{ return m_nPos;			}	/* ƒJ[ƒ\ƒ‹ˆÊ’u‚ðŽæ“¾ */
-
-
-protected:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnB			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(B) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	void	DrawEquip	(int nType, DWORD dwEquipItemID);	/* ‘•”õƒAƒCƒeƒ€‚ð•`‰æ */
-	void	GetDrawPos	(int nPos, int &nDstX, int &nDstY);	/* ƒAƒCƒeƒ€•`‰æˆÊ’u‚ðŽæ“¾ */
+	DWORD	GetSelectItemID	(void)	{ return m_dwSelectItemID;	}	/* é¸æŠžã•ã‚Œã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾— */
+	DWORD	GetDragItemID	(void)	{ return m_dwDragItemID;	}	/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ IDã‚’å–å¾— */
+	POINT	GetDragPos		(void)	{ return m_ptDrop;			}	/* ãƒ‰ãƒ­ãƒƒãƒ—ä½ç½®ã‚’å–å¾— */
+	int		GetPos			(void)	{ return m_nPos;			}	/* ã‚«ãƒ¼ã‚½ãƒ«ä½ç½®ã‚’å–å¾— */
 
 
 protected:
-	POINT			m_ptDrag,				/* ƒhƒ‰ƒbƒOŠJŽnÀ•W */
-					m_ptDrop;				/* ƒhƒ‰ƒbƒOI—¹À•W */
-	DWORD			m_dwSelectItemID,		/* ‘I‘ð‚³‚ê‚½ƒAƒCƒeƒ€ID */
-					m_dwDragItemID;			/* ƒhƒ‰ƒbƒO‚³‚ê‚½ƒAƒCƒeƒ€ID */
-	CmyString		m_strName;				/* ‘I‘ð’†‚ÌƒAƒCƒeƒ€–¼ */
-	CInfoCharCli	*m_pPlayerChar;			/* ‘€ì’†‚ÌƒLƒƒƒ‰î•ñ */
-	CLibInfoItem	*m_pLibInfoItem;		/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnB			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	void	DrawEquip	(int nType, DWORD dwEquipItemID);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ã‚’æç”» */
+	void	GetDrawPos	(int nPos, int &nDstX, int &nDstY);	/* ã‚¢ã‚¤ãƒ†ãƒ æç”»ä½ç½®ã‚’å–å¾— */
+
+
+protected:
+	POINT			m_ptDrag,				/* ãƒ‰ãƒ©ãƒƒã‚°é–‹å§‹åº§æ¨™ */
+					m_ptDrop;				/* ãƒ‰ãƒ©ãƒƒã‚°çµ‚äº†åº§æ¨™ */
+	DWORD			m_dwSelectItemID,		/* é¸æŠžã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ID */
+					m_dwDragItemID;			/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ID */
+	CmyString		m_strName;				/* é¸æŠžä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ å */
+	CInfoCharCli	*m_pPlayerChar;			/* æ“ä½œä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
+	CLibInfoItem	*m_pLibInfoItem;		/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 } CWindowITEMMENU, *PCWindowITEMMENU;
 
 /* Copyright(C)URARA-works 2007 */

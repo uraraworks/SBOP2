@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoSkill.h												 */
-/* “à—e			:ƒXƒLƒ‹î•ñƒ‰ƒCƒuƒ‰ƒŠƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoSkill.h												 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -12,44 +12,44 @@
 #include "LibInfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLibInfoSkill : public CLibInfoBase
 {
 public:
-			CLibInfoSkill();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLibInfoSkill();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLibInfoSkill();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLibInfoSkill();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create			(void);									/* ì¬ */
-	void Destroy		(void);									/* ”jŠü */
+	void Create			(void);									/* ä½œæˆ */
+	void Destroy		(void);									/* ç ´æ£„ */
 
-	PCInfoBase GetNew	(void);									/* V‹Kƒf[ƒ^‚ğæ“¾ */
-	PCInfoBase GetNew	(int nTypeMain, int nTypeSub);			/* V‹Kƒf[ƒ^‚ğæ“¾ */
-	PCInfoBase RenewInfo(int nNo);								/* “à—e‚É‰‚¶‚ÄXV */
+	PCInfoBase GetNew	(void);									/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PCInfoBase GetNew	(int nTypeMain, int nTypeSub);			/* æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PCInfoBase RenewInfo(int nNo);								/* å†…å®¹ã«å¿œã˜ã¦æ›´æ–° */
 
-	int		GetCount	(void);									/* ƒf[ƒ^”‚ğæ“¾ */
-	void	Add			(PCInfoBase pInfo);						/* ’Ç‰Á */
-	void	Delete		(int nNo);								/* íœ */
-	void	Delete		(DWORD dwSkillID);						/* íœ */
-	void	DeleteAll	(void);									/* ‘S‚Äíœ */
-	void	Merge		(CLibInfoSkill *pSrc);					/* æ‚è‚İ */
+	int		GetCount	(void);									/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	void	Add			(PCInfoBase pInfo);						/* è¿½åŠ  */
+	void	Delete		(int nNo);								/* å‰Šé™¤ */
+	void	Delete		(DWORD dwSkillID);						/* å‰Šé™¤ */
+	void	DeleteAll	(void);									/* å…¨ã¦å‰Šé™¤ */
+	void	Merge		(CLibInfoSkill *pSrc);					/* å–ã‚Šè¾¼ã¿ */
 
-	CInfoSkillBase	*Renew		(CInfoSkillBase *pSrc);			/* XV */
-	PCInfoBase		GetPtr		(int nNo);						/* î•ñ‚ğæ“¾ */
-	PCInfoBase		GetPtr		(DWORD dwSkillID);				/* î•ñ‚ğæ“¾ */
+	CInfoSkillBase	*Renew		(CInfoSkillBase *pSrc);			/* æ›´æ–° */
+	PCInfoBase		GetPtr		(int nNo);						/* æƒ…å ±ã‚’å–å¾— */
+	PCInfoBase		GetPtr		(DWORD dwSkillID);				/* æƒ…å ±ã‚’å–å¾— */
 
-	DWORD	GetSendDataSize		(void);							/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);							/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);					/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* V‚µ‚¢ID‚ğæ“¾ */
+	DWORD	GetSendDataSize		(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);					/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 protected:
-	PARRAYSKILLBASEINFO	m_paInfo;				/* ƒXƒLƒ‹î•ñ */
+	DWORD	GetNewID	(void);									/* æ–°ã—ã„IDã‚’å–å¾— */
+
+
+protected:
+	PARRAYSKILLBASEINFO	m_paInfo;				/* ã‚¹ã‚­ãƒ«æƒ…å ± */
 } CLibInfoSkill, *PCLibInfoSkill;
 
 /* Copyright(C)URARA-works 2008 */

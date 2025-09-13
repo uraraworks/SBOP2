@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowBase.h												 */
-/* “à—e			:ƒEƒBƒ“ƒhƒEŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowBase.h												 */
+/* å†…å®¹			:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,96 +16,96 @@ class CMgrSound;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowBase
 {
 public:
-			CWindowBase();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowBase();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowBase();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowBase();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Create		(CMgrData *pMgrData);					/* ì¬ */
-	virtual void	OnWindowMsg	(int nType, DWORD dwPara);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG) */
-	virtual void	Update		(void);									/* XV */
-	virtual void	Draw		(CImg32 *pDst);							/* •`‰æ */
-	virtual BOOL	TimerProc	(void);									/* ŠÔˆ— */
-	virtual void	KeyProc		(BYTE byCode, BOOL bDown);				/* ƒL[ˆ— */
-			BOOL	IsDelete	(void) { return m_bDelete;	}			/* íœ”»’è */
-			BOOL	IsInput		(void) { return m_bInput;	}			/* ƒL[“ü—Í‚ğs‚¤‚©”»’è */
-			BOOL	IsActive	(void) { return m_bActive;	}			/* ƒAƒNƒeƒBƒu‚©”»’è */
-			BOOL	IsShow		(void) { return m_bShow;	}			/* •\¦‚·‚é‚©”»’è */
-			int		GetID		(void) { return m_nID;		}			/* ƒEƒBƒ“ƒhƒEID‚ğæ“¾ */
-	virtual void	SetShow		(BOOL bShow);							/* •\¦‚·‚é‚©İ’è */
-	virtual void	SetActive	(BOOL bActive) { m_bActive = bActive; }	/* ƒAƒNƒeƒBƒu‚©İ’è */
-	virtual void	SetInput	(BOOL bInput) { m_bInput = bInput; }	/* ƒL[“ü—Í‚ğs‚¤‚©İ’è */
-			void	Redraw		(void);									/* Ä•`‰æ */
-			void	SetPos		(int nPos);								/* ˆÊ’u‚Ìİ’è */
-			void	AddChild	(CWindowBase *pChild);					/* qƒEƒBƒ“ƒhƒE‚ğ’Ç‰Á */
-			void	DeleteChild	(CWindowBase *pChild);					/* qƒEƒBƒ“ƒhƒE‚ğíœ */
+	virtual void	Create		(CMgrData *pMgrData);					/* ä½œæˆ */
+	virtual void	OnWindowMsg	(int nType, DWORD dwPara);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG) */
+	virtual void	Update		(void);									/* æ›´æ–° */
+	virtual void	Draw		(CImg32 *pDst);							/* æç”» */
+	virtual BOOL	TimerProc	(void);									/* æ™‚é–“å‡¦ç† */
+	virtual void	KeyProc		(BYTE byCode, BOOL bDown);				/* ã‚­ãƒ¼å‡¦ç† */
+			BOOL	IsDelete	(void) { return m_bDelete;	}			/* å‰Šé™¤åˆ¤å®š */
+			BOOL	IsInput		(void) { return m_bInput;	}			/* ã‚­ãƒ¼å…¥åŠ›ã‚’è¡Œã†ã‹åˆ¤å®š */
+			BOOL	IsActive	(void) { return m_bActive;	}			/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹åˆ¤å®š */
+			BOOL	IsShow		(void) { return m_bShow;	}			/* è¡¨ç¤ºã™ã‚‹ã‹åˆ¤å®š */
+			int		GetID		(void) { return m_nID;		}			/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦IDã‚’å–å¾— */
+	virtual void	SetShow		(BOOL bShow);							/* è¡¨ç¤ºã™ã‚‹ã‹è¨­å®š */
+	virtual void	SetActive	(BOOL bActive) { m_bActive = bActive; }	/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹è¨­å®š */
+	virtual void	SetInput	(BOOL bInput) { m_bInput = bInput; }	/* ã‚­ãƒ¼å…¥åŠ›ã‚’è¡Œã†ã‹è¨­å®š */
+			void	Redraw		(void);									/* å†æç”» */
+			void	SetPos		(int nPos);								/* ä½ç½®ã®è¨­å®š */
+			void	AddChild	(CWindowBase *pChild);					/* å­ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¿½åŠ  */
+			void	DeleteChild	(CWindowBase *pChild);					/* å­ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å‰Šé™¤ */
 
 
 protected:
-	virtual BOOL OnUp		(void);										/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	virtual BOOL OnDown		(void);										/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	virtual BOOL OnLeft		(void);										/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	virtual BOOL OnRight	(void);										/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	virtual BOOL OnB		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(B) */
-	virtual BOOL OnF		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(F) */
-	virtual BOOL OnI		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(I) */
-	virtual BOOL OnJ		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(J) */
-	virtual BOOL OnK		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(K) */
-	virtual BOOL OnL		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(L) */
-	virtual BOOL OnS		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(S) */
-	virtual BOOL OnX		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	virtual BOOL OnZ		(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	virtual BOOL OnEscape	(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(Escape) */
-	virtual BOOL OnSpace	(BOOL bDown);								/* ƒL[ƒnƒ“ƒhƒ‰(Space) */
-	void TextOut2			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	/* •‰æ‚è‚Å•¶š•`‰æ */
-	void TextOut3			(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, COLORREF Color);		/* •‰æ‚è‚Å•¶š•`‰æ(‰E‹l) */
-	void TextOut4			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFrame, COLORREF Color = RGB (255, 255, 255));	/* •‰æ‚è‚Å•¶š•`‰æ */
-	void DrawFrame			(int nType = 0);							/* ƒtƒŒ[ƒ€‚ğ•`‰æ */
-	void DrawFrame			(int x, int y, int cx, int cy, int nType, BOOL bRightErace=FALSE);	/* ƒtƒŒ[ƒ€‚ğ•`‰æ */
-	void DrawFrame2			(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	/* ƒtƒŒ[ƒ€‚ğ•`‰æ */
-	void DrawFrame3			(int x, int y, int cx, int cy, int nType);	/* ƒtƒŒ[ƒ€‚ğ•`‰æ */
-	void DrawCursor			(int x, int y);								/* ƒJ[ƒ\ƒ‹‚ğ•`‰æ */
-	void DrawInputFrame1	(int x, int y, int cx, int cy, int nType);	/* “ü—Í—“—pƒtƒŒ[ƒ€‚ğ•`‰æ1 */
-	void DrawIconFrame		(int x, int y);								/* ƒAƒCƒRƒ“—pƒtƒŒ[ƒ€‚ğ•`‰æ */
+	virtual BOOL OnUp		(void);										/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	virtual BOOL OnDown		(void);										/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	virtual BOOL OnLeft		(void);										/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	virtual BOOL OnRight	(void);										/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	virtual BOOL OnB		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B) */
+	virtual BOOL OnF		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(F) */
+	virtual BOOL OnI		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(I) */
+	virtual BOOL OnJ		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(J) */
+	virtual BOOL OnK		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(K) */
+	virtual BOOL OnL		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(L) */
+	virtual BOOL OnS		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(S) */
+	virtual BOOL OnX		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	virtual BOOL OnZ		(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	virtual BOOL OnEscape	(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Escape) */
+	virtual BOOL OnSpace	(BOOL bDown);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Space) */
+	void TextOut2			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	/* é»’ç¸å–ã‚Šã§æ–‡å­—æç”» */
+	void TextOut3			(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, COLORREF Color);		/* é»’ç¸å–ã‚Šã§æ–‡å­—æç”»(å³è©°) */
+	void TextOut4			(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFrame, COLORREF Color = RGB (255, 255, 255));	/* é»’ç¸å–ã‚Šã§æ–‡å­—æç”» */
+	void DrawFrame			(int nType = 0);							/* ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”» */
+	void DrawFrame			(int x, int y, int cx, int cy, int nType, BOOL bRightErace=FALSE);	/* ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”» */
+	void DrawFrame2			(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	/* ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”» */
+	void DrawFrame3			(int x, int y, int cx, int cy, int nType);	/* ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”» */
+	void DrawCursor			(int x, int y);								/* ã‚«ãƒ¼ã‚½ãƒ«ã‚’æç”» */
+	void DrawInputFrame1	(int x, int y, int cx, int cy, int nType);	/* å…¥åŠ›æ¬„ç”¨ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”»1 */
+	void DrawIconFrame		(int x, int y);								/* ã‚¢ã‚¤ã‚³ãƒ³ç”¨ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”» */
 
 
 public:
-	HWND			m_hWndMain;						/* ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹ */
-	DWORD			m_dwLastTimerProc,				/* ‘O‰ñ‚ÌŠÔˆ—ŠÔ */
-					m_dwLastTimeCursor,				/* ‘O‰ñ‚ÌƒJ[ƒ\ƒ‹ˆ—ŠÔ */
-					m_dwLastTimeKey;				/* ‘O‰ñ‚ÌƒL[ˆ—ŠÔ */
-	BOOL			m_bShow,						/* •\¦‚·‚é */
-					m_bDelete,						/* íœƒtƒ‰ƒO */
-					m_bInput,						/* ƒL[“ü—Í‚ğs‚¤ */
-					m_bActive;						/* ƒAƒNƒeƒBƒu‚ÈƒEƒBƒ“ƒhƒE */
-	int				m_nCursorAnime,					/* ƒJ[ƒ\ƒ‹ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”Ô† */
-					m_nCountKeyRepeate;				/* ƒL[ƒŠƒs[ƒg‰ñ” */
+	HWND			m_hWndMain;						/* ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ« */
+	DWORD			m_dwLastTimerProc,				/* å‰å›ã®æ™‚é–“å‡¦ç†æ™‚é–“ */
+					m_dwLastTimeCursor,				/* å‰å›ã®ã‚«ãƒ¼ã‚½ãƒ«å‡¦ç†æ™‚é–“ */
+					m_dwLastTimeKey;				/* å‰å›ã®ã‚­ãƒ¼å‡¦ç†æ™‚é–“ */
+	BOOL			m_bShow,						/* è¡¨ç¤ºã™ã‚‹ */
+					m_bDelete,						/* å‰Šé™¤ãƒ•ãƒ©ã‚° */
+					m_bInput,						/* ã‚­ãƒ¼å…¥åŠ›ã‚’è¡Œã† */
+					m_bActive;						/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	int				m_nCursorAnime,					/* ã‚«ãƒ¼ã‚½ãƒ«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒç•ªå· */
+					m_nCountKeyRepeate;				/* ã‚­ãƒ¼ãƒªãƒ”ãƒ¼ãƒˆå›æ•° */
 
-	int				m_nID;							/* ƒEƒBƒ“ƒhƒEID */
-	POINT			m_ptViewPos;					/* •\¦À•W */
-	SIZE			m_sizeWindow;					/* ƒEƒBƒ“ƒhƒEƒTƒCƒY */
-	int				m_nPos,							/* ˆÊ’u */
-					m_nPosMax;						/* ˆÊ’u‚ÌÅ‘å’l */
-	DWORD			m_dwTimeDrawStart;				/* •`‰æ‚µ‚½ŠÔ */
-	HFONT			m_hFont,						/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg */
-					m_hFont12,						/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg(12ƒhƒbƒg) */
-					m_hFont12Bold,					/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg(12ƒhƒbƒg) */
-					m_hFont14,						/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg(14ƒhƒbƒg) */
-					m_hFont16,						/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg(16ƒhƒbƒg) */
-					m_hFont16Normal;				/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg(16ƒhƒbƒg) */
+	int				m_nID;							/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ID */
+	POINT			m_ptViewPos;					/* è¡¨ç¤ºåº§æ¨™ */
+	SIZE			m_sizeWindow;					/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º */
+	int				m_nPos,							/* ä½ç½® */
+					m_nPosMax;						/* ä½ç½®ã®æœ€å¤§å€¤ */
+	DWORD			m_dwTimeDrawStart;				/* æç”»ã—ãŸæ™‚é–“ */
+	HFONT			m_hFont,						/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ */
+					m_hFont12,						/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ(12ãƒ‰ãƒƒãƒˆ) */
+					m_hFont12Bold,					/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ(12ãƒ‰ãƒƒãƒˆ) */
+					m_hFont14,						/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ(14ãƒ‰ãƒƒãƒˆ) */
+					m_hFont16,						/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ(16ãƒ‰ãƒƒãƒˆ) */
+					m_hFont16Normal;				/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ(16ãƒ‰ãƒƒãƒˆ) */
 
-	CWindowBase		*m_pParent;						/* eƒEƒBƒ“ƒhƒE */
-	CImg32			*m_pDib,						/* ƒrƒbƒgƒ}ƒbƒv */
-					*m_pDibSystem;					/* ƒVƒXƒeƒ€‰æ‘œ */
-	CMgrData		*m_pMgrData;					/* ƒf[ƒ^ŠÇ— */
-	CMgrDraw		*m_pMgrDraw;					/* •`‰æŠÇ— */
-	CMgrSound		*m_pMgrSound;					/* ƒTƒEƒ“ƒhŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;					/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CmyArray<CWindowBase *, CWindowBase *>	m_apChild;	/* qƒEƒBƒ“ƒhƒE */
+	CWindowBase		*m_pParent;						/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32			*m_pDib,						/* ãƒ“ãƒƒãƒˆãƒãƒƒãƒ— */
+					*m_pDibSystem;					/* ã‚·ã‚¹ãƒ†ãƒ ç”»åƒ */
+	CMgrData		*m_pMgrData;					/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrDraw		*m_pMgrDraw;					/* æç”»ç®¡ç† */
+	CMgrSound		*m_pMgrSound;					/* ã‚µã‚¦ãƒ³ãƒ‰ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;					/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CmyArray<CWindowBase *, CWindowBase *>	m_apChild;	/* å­ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 } CWindowBase, *PCWindowBase;
 typedef CmyArray<PCWindowBase, PCWindowBase>	  ARRAYWINDOWBASE;
 typedef CmyArray<PCWindowBase, PCWindowBase>	*PARRAYWINDOWBASE;

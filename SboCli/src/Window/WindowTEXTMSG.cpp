@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowTEXTMSG.cpp											 */
-/* “à—e			:ƒeƒLƒXƒgƒƒbƒZ[ƒW•\¦ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowTEXTMSG.cpp											 */
+/* å†…å®¹			:ãƒ†ã‚­ã‚¹ãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤ºã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/22													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,17 +23,17 @@
 #include "MgrSound.h"
 #include "WindowTEXTMSG.h"
 
-/* •\¦ó‘Ô */
+/* è¡¨ç¤ºçŠ¶æ…‹ */
 enum {
-	STATE_TEXT = 0,			/* ƒƒbƒZ[ƒW•\¦ */
-	STATE_MENU,				/* €–Ú‘I‘ğ */
-	STATE_EVENTPROC,		/* ‰ï˜bƒCƒxƒ“ƒgˆ— */
+	STATE_TEXT = 0,			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
+	STATE_MENU,				/* é …ç›®é¸æŠ */
+	STATE_EVENTPROC,		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç† */
 };
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::CWindowTEXTMSG									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::CWindowTEXTMSG									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 CWindowTEXTMSG::CWindowTEXTMSG()
@@ -64,9 +64,9 @@ CWindowTEXTMSG::CWindowTEXTMSG()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::~CWindowTEXTMSG								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::~CWindowTEXTMSG								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 CWindowTEXTMSG::~CWindowTEXTMSG()
@@ -78,9 +78,9 @@ CWindowTEXTMSG::~CWindowTEXTMSG()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::Create(CMgrData *pMgrData)
@@ -100,9 +100,9 @@ void CWindowTEXTMSG::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::Draw											 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2005/06/12														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::Draw											 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2005/06/12														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::Draw(PCImg32 pDst)
@@ -115,18 +115,18 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 	}
 
 	sizeWindow = m_sizeWindow;
-	/* ‰Šú‰» */
+	/* åˆæœŸåŒ– */
 	switch (m_nState) {
-	case STATE_TEXT:		/* ƒƒbƒZ[ƒW•\¦ */
+	case STATE_TEXT:		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
 		break;
-	case STATE_MENU:		/* €–Ú‘I‘ğ */
+	case STATE_MENU:		/* é …ç›®é¸æŠ */
 		sizeWindow.cx /= 2;
 		break;
 	}
 
 	m_pDib->FillRect (0, 0, m_pDib->Width (), m_pDib->Height (), RGB (0, 0, 0));
 	switch (m_nState) {
-	case STATE_TEXT:		/* ƒƒbƒZ[ƒW•\¦ */
+	case STATE_TEXT:		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
 		if ((m_ptDraw.x == 0) && (m_ptDraw.y == 0)) {
 			break;
 		}
@@ -150,7 +150,7 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 
 		m_pDib->Blt (16, 16 + m_nSpaceHeight, m_pDibText->Width (), m_pDibText->Height (), m_pDibText, 0, 0, TRUE);
 		break;
-	case STATE_MENU:		/* €–Ú‘I‘ğ */
+	case STATE_MENU:		/* é …ç›®é¸æŠ */
 		sizeWindow.cy = m_astrMenu.GetSize () * 16 + 32;
 		DrawFrame (0, m_nSpaceHeight, sizeWindow.cx, sizeWindow.cy, m_nType);
 
@@ -199,9 +199,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 BOOL CWindowTEXTMSG::TimerProc(void)
@@ -232,7 +232,7 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 	m_dwLastProc = timeGetTime ();
 
 	switch (m_nState) {
-	case STATE_TEXT:		/* ƒƒbƒZ[ƒW•\¦ */
+	case STATE_TEXT:		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
 		ZeroMemory (szTmp, sizeof (szTmp));
 		pnProcPos = &m_nProcPos;
 		pszTmp = (LPCSTR)m_strMsg;
@@ -267,9 +267,9 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 			DrawChar (szTmp);
 		}
 		break;
-	case STATE_MENU:		/* €–Ú‘I‘ğ */
+	case STATE_MENU:		/* é …ç›®é¸æŠ */
 		break;
-	case STATE_EVENTPROC:	/* ‰ï˜bƒCƒxƒ“ƒgˆ— */
+	case STATE_EVENTPROC:	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç† */
 		{
 			PCLibInfoItem pLibInfoItem = m_pMgrData->GetLibInfoItem ();
 			PCInfoTalkEventBase pInfoTalkEvent = m_pInfoTalkEvent->GetPtr (m_nProcEventPage, m_nProcEventNo);
@@ -278,7 +278,7 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 				break;
 			}
 			switch (pInfoTalkEvent->m_nEventType) {
-			case TALKEVENTTYPE_PAGE:			/* ƒy[ƒWØ‚è‘Ö‚¦ */
+			case TALKEVENTTYPE_PAGE:			/* ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆ */
 				{
 					int i, nCount;
 					BOOL bJump;
@@ -287,8 +287,8 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 
 					bJump = FALSE;
 					switch (pInfoTmp->m_nPageChgCondition) {
-					case CHGPAGECONDITION_ITEM:			/* ƒAƒCƒeƒ€‚ ‚è */
-					case CHGPAGECONDITION_NOITEM:		/* ƒAƒCƒeƒ€‚È‚µ */
+					case CHGPAGECONDITION_ITEM:			/* ã‚¢ã‚¤ãƒ†ãƒ ã‚ã‚Š */
+					case CHGPAGECONDITION_NOITEM:		/* ã‚¢ã‚¤ãƒ†ãƒ ãªã— */
 						padwItemID = pPlayerChar->GetItem ();
 						nCount = padwItemID->GetSize ();
 						for (i = 0; i < nCount; i ++) {
@@ -297,12 +297,12 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 							}
 						}
 						switch (pInfoTmp->m_nPageChgCondition) {
-						case CHGPAGECONDITION_ITEM:			/* ƒAƒCƒeƒ€‚ ‚è */
+						case CHGPAGECONDITION_ITEM:			/* ã‚¢ã‚¤ãƒ†ãƒ ã‚ã‚Š */
 							if (i < nCount) {
 								bJump = TRUE;
 							}
 							break;
-						case CHGPAGECONDITION_NOITEM:		/* ƒAƒCƒeƒ€‚È‚µ */
+						case CHGPAGECONDITION_NOITEM:		/* ã‚¢ã‚¤ãƒ†ãƒ ãªã— */
 							if (i >= nCount) {
 								bJump = TRUE;
 							}
@@ -320,11 +320,11 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 					}
 				}
 				break;
-			case TALKEVENTTYPE_MSG:				/* ƒƒbƒZ[ƒW•\¦ */
+			case TALKEVENTTYPE_MSG:				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
 				SetMsg ((LPCSTR)pInfoTalkEvent->m_strText);
 				m_nState = STATE_TEXT;
 				break;
-			case TALKEVENTTYPE_MENU:			/* €–Ú‘I‘ğ */
+			case TALKEVENTTYPE_MENU:			/* é …ç›®é¸æŠ */
 				{
 					int i, nCount;
 					PSTTALKEVENTMENUINFO pMenuInfo;	
@@ -341,7 +341,7 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 					m_nPosMax	= nCount - 1;
 				}
 				break;
-			case TALKEVENTTYPE_ADDSKILL:		/* ƒXƒLƒ‹’Ç‰Á */
+			case TALKEVENTTYPE_ADDSKILL:		/* ã‚¹ã‚­ãƒ«è¿½åŠ  */
 				{
 					CPacketCHAR_PARA1 PacketPara1;
 
@@ -364,9 +364,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::SetTitle										 */
-/* “à—e		:Œ¨‘‚«‚ğİ’è													 */
-/* “ú•t		:2008/11/24														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::SetTitle										 */
+/* å†…å®¹		:è‚©æ›¸ãã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/11/24														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::SetTitle(LPCSTR pszTitle)
@@ -378,9 +378,9 @@ void CWindowTEXTMSG::SetTitle(LPCSTR pszTitle)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::SetName										 */
-/* “à—e		:–¼‘O‚ğİ’è														 */
-/* “ú•t		:2008/11/24														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::SetName										 */
+/* å†…å®¹		:åå‰ã‚’è¨­å®š														 */
+/* æ—¥ä»˜		:2008/11/24														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::SetName(LPCSTR pszName)
@@ -397,9 +397,9 @@ void CWindowTEXTMSG::SetName(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::SetMsg											 */
-/* “à—e		:ƒƒbƒZ[ƒWİ’è													 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::SetMsg											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¨­å®š													 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::SetMsg(LPCSTR pszMsg)
@@ -414,9 +414,9 @@ void CWindowTEXTMSG::SetMsg(LPCSTR pszMsg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::SetTalkEvent									 */
-/* “à—e		:‰ï˜bƒCƒxƒ“ƒgİ’è												 */
-/* “ú•t		:2008/12/28														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::SetTalkEvent									 */
+/* å†…å®¹		:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š												 */
+/* æ—¥ä»˜		:2008/12/28														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::SetTalkEvent(CInfoTalkEvent *pInfo)
@@ -432,9 +432,9 @@ void CWindowTEXTMSG::SetTalkEvent(CInfoTalkEvent *pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::OnUp											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::OnUp											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 BOOL CWindowTEXTMSG::OnUp(void)
@@ -444,7 +444,7 @@ BOOL CWindowTEXTMSG::OnUp(void)
 	bRet = FALSE;
 
 	switch (m_nState) {
-	case STATE_MENU:		/* €–Ú‘I‘ğ */
+	case STATE_MENU:		/* é …ç›®é¸æŠ */
 		if (m_nPos <= 0) {
 			goto Exit;
 		}
@@ -462,9 +462,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::OnDown											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::OnDown											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 BOOL CWindowTEXTMSG::OnDown(void)
@@ -474,7 +474,7 @@ BOOL CWindowTEXTMSG::OnDown(void)
 	bRet = FALSE;
 
 	switch (m_nState) {
-	case STATE_MENU:		/* €–Ú‘I‘ğ */
+	case STATE_MENU:		/* é …ç›®é¸æŠ */
 		if (m_nPos >= m_nPosMax) {
 			goto Exit;
 		}
@@ -492,15 +492,15 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::OnLeft											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::OnLeft											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 BOOL CWindowTEXTMSG::OnLeft(void)
 {
 	switch (m_nState) {
-	case STATE_MENU:		/* €–Ú‘I‘ğ */
+	case STATE_MENU:		/* é …ç›®é¸æŠ */
 		m_nPos = 0;
 		m_nCursorAnime = 0;
 		m_dwLastTimeCursor = 0;
@@ -513,15 +513,15 @@ BOOL CWindowTEXTMSG::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::OnRight										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::OnRight										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 BOOL CWindowTEXTMSG::OnRight(void)
 {
 	switch (m_nState) {
-	case STATE_MENU:		/* €–Ú‘I‘ğ */
+	case STATE_MENU:		/* é …ç›®é¸æŠ */
 		m_nPos = m_nPosMax;
 		m_nCursorAnime = 0;
 		m_dwLastTimeCursor = 0;
@@ -534,16 +534,16 @@ BOOL CWindowTEXTMSG::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 {
 	if (bDown == FALSE) {
 		switch (m_nState) {
-		case STATE_TEXT:		/* ƒƒbƒZ[ƒW•\¦ */
+		case STATE_TEXT:		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
 			if (m_bSkip) {
 				m_bSkip = FALSE;
 				break;
@@ -559,7 +559,7 @@ BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 				m_bDelete = TRUE;
 			}
 			break;
-		case STATE_MENU:		/* €–Ú‘I‘ğ */
+		case STATE_MENU:		/* é …ç›®é¸æŠ */
 			m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 			m_nState = STATE_TEXT;
 			if (m_pInfoTalkEvent) {
@@ -583,22 +583,22 @@ BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 BOOL CWindowTEXTMSG::OnZ(BOOL bDown)
 {
 	if (bDown == FALSE) {
 		switch (m_nState) {
-		case STATE_TEXT:		/* ƒƒbƒZ[ƒW•\¦ */
+		case STATE_TEXT:		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
 			if (m_bInputWait) {
 				m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 				m_bDelete = TRUE;
 			}
 			break;
-		case STATE_MENU:		/* €–Ú‘I‘ğ */
+		case STATE_MENU:		/* é …ç›®é¸æŠ */
 			m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 			m_bDelete = TRUE;
 			break;
@@ -610,9 +610,9 @@ BOOL CWindowTEXTMSG::OnZ(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::DrawChar										 */
-/* “à—e		:‚P•¶š•\¦														 */
-/* “ú•t		:2008/11/24														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::DrawChar										 */
+/* å†…å®¹		:ï¼‘æ–‡å­—è¡¨ç¤º														 */
+/* æ—¥ä»˜		:2008/11/24														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
@@ -658,9 +658,9 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::RenewTitle										 */
-/* “à—e		:Œ¨‘‚Æ–¼‘O‰æ‘œ‚ğXV											 */
-/* “ú•t		:2008/11/24														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::RenewTitle										 */
+/* å†…å®¹		:è‚©æ›¸ã¨åå‰ç”»åƒã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2008/11/24														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::RenewTitle(void)
@@ -693,9 +693,9 @@ void CWindowTEXTMSG::RenewTitle(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::InitText										 */
-/* “à—e		:ƒƒbƒZ[ƒW‰æ‘œ‚ğ‰Šú‰»											 */
-/* “ú•t		:2008/11/26														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::InitText										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”»åƒã‚’åˆæœŸåŒ–											 */
+/* æ—¥ä»˜		:2008/11/26														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::InitText(void)
@@ -706,9 +706,9 @@ void CWindowTEXTMSG::InitText(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::MsgProc										 */
-/* “à—e		:ƒƒbƒZ[ƒW‰ğÍˆ—												 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::MsgProc										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è§£æå‡¦ç†												 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::MsgProc(void)
@@ -729,7 +729,7 @@ void CWindowTEXTMSG::MsgProc(void)
 	m_astrMenu.RemoveAll ();
 
 	nPos = 0;
-	/* ƒƒjƒ…[H */
+	/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ï¼Ÿ */
 	if (_strnicmp(&pszTmp[nPos], "@menu", 5) == 0) {
 		while (1) {
 			nPos += (strTmp.GetLength () + 2);
@@ -758,7 +758,7 @@ void CWindowTEXTMSG::MsgProc(void)
 			m_nState = STATE_MENU;
 		}
 
-	/* €–Ú‘I‘ğH */
+	/* é …ç›®é¸æŠï¼Ÿ */
 	} else if (_strnicmp(&pszTmp[nPos], "@select", 7) == 0) {
 		szTmp[0] = pszTmp[nPos + 8];
 		szTmp[1] = 0;
@@ -795,9 +795,9 @@ void CWindowTEXTMSG::MsgProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::GetLineText									 */
-/* “à—e		:1sæ“¾														 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::GetLineText									 */
+/* å†…å®¹		:1è¡Œå–å¾—														 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::GetLineText(LPCSTR pszSrc, CmyString &strDst)
@@ -825,9 +825,9 @@ void CWindowTEXTMSG::GetLineText(LPCSTR pszSrc, CmyString &strDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::TrimSpace										 */
-/* “à—e		:‘OŒã‚Ì‹ó”’‚ğœ‹												 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::TrimSpace										 */
+/* å†…å®¹		:å‰å¾Œã®ç©ºç™½ã‚’é™¤å»												 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::TrimSpace(CmyString &strSrc)
@@ -848,7 +848,7 @@ void CWindowTEXTMSG::TrimSpace(CmyString &strSrc)
 			break;
 		}
 
-		if ((strcmp (szTmp, " ") == 0) || (strcmp (szTmp, "@") == 0)) {
+		if ((strcmp (szTmp, " ") == 0) || (strcmp (szTmp, "ã€€") == 0)) {
 			i += strlen (szTmp);
 			continue;
 		}
@@ -859,9 +859,9 @@ void CWindowTEXTMSG::TrimSpace(CmyString &strSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowTEXTMSG::GetBlock										 */
-/* “à—e		:‘å‚©‚Á‚±1ƒuƒƒbƒN•ªæ“¾										 */
-/* “ú•t		:2008/11/27														 */
+/* é–¢æ•°å	:CWindowTEXTMSG::GetBlock										 */
+/* å†…å®¹		:å¤§ã‹ã£ã“1ãƒ–ãƒ­ãƒƒã‚¯åˆ†å–å¾—										 */
+/* æ—¥ä»˜		:2008/11/27														 */
 /* ========================================================================= */
 
 void CWindowTEXTMSG::GetBlock(LPCSTR pszSrc, CmyString &strDst)

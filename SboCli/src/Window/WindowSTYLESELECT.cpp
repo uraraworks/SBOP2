@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:WindowSTYLESELECT.cpp										 */
-/* ì‡óe			:óeépëIëÉEÉBÉìÉhÉEÉNÉâÉX é¿ëïÉtÉ@ÉCÉã						 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/04/10													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:WindowSTYLESELECT.cpp										 */
+/* ÂÜÖÂÆπ			:ÂÆπÂßøÈÅ∏Êäû„Ç¶„Ç£„É≥„Éâ„Ç¶„ÇØ„É©„Çπ ÂÆüË£Ö„Éï„Ç°„Ç§„É´						 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/04/10													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,9 +22,9 @@
 #include "WindowSTYLESELECT.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::CWindowSTYLESELECT							 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::CWindowSTYLESELECT							 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 CWindowSTYLESELECT::CWindowSTYLESELECT()
@@ -61,9 +61,9 @@ CWindowSTYLESELECT::CWindowSTYLESELECT()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::~CWindowSTYLESELECT						 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::~CWindowSTYLESELECT						 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 CWindowSTYLESELECT::~CWindowSTYLESELECT()
@@ -73,9 +73,9 @@ CWindowSTYLESELECT::~CWindowSTYLESELECT()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::Create										 */
-/* ì‡óe		:çÏê¨															 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::Create										 */
+/* ÂÜÖÂÆπ		:‰ΩúÊàê															 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 void CWindowSTYLESELECT::Create(CMgrData *pMgrData)
@@ -97,9 +97,9 @@ void CWindowSTYLESELECT::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::SetFamilyType								 */
-/* ì‡óe		:éÌë∞Çê›íË														 */
-/* ì˙ït		:2007/04/11														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::SetFamilyType								 */
+/* ÂÜÖÂÆπ		:Á®ÆÊóè„ÇíË®≠ÂÆö														 */
+/* Êó•‰ªò		:2007/04/11														 */
 /* ========================================================================= */
 
 void CWindowSTYLESELECT::SetFamilyType(WORD wFamilyID)
@@ -110,9 +110,9 @@ void CWindowSTYLESELECT::SetFamilyType(WORD wFamilyID)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::SetFamilyType								 */
-/* ì‡óe		:ÉLÉÉÉâèÓïÒÇê›íË												 */
-/* ì˙ït		:2007/04/23														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::SetFamilyType								 */
+/* ÂÜÖÂÆπ		:„Ç≠„É£„É©ÊÉÖÂ†±„ÇíË®≠ÂÆö												 */
+/* Êó•‰ªò		:2007/04/23														 */
 /* ========================================================================= */
 
 void CWindowSTYLESELECT::SetInfoChar(CInfoCharCli *pInfoCharCli)
@@ -128,9 +128,9 @@ void CWindowSTYLESELECT::SetInfoChar(CInfoCharCli *pInfoCharCli)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::OnWindowMsg								 */
-/* ì‡óe		:ÉÅÉbÉZÅ[ÉWÉnÉìÉhÉâ(WM_WINDOWMSG)								 */
-/* ì˙ït		:2007/04/11														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::OnWindowMsg								 */
+/* ÂÜÖÂÆπ		:„É°„ÉÉ„Çª„Éº„Ç∏„Éè„É≥„Éâ„É©(WM_WINDOWMSG)								 */
+/* Êó•‰ªò		:2007/04/11														 */
 /* ========================================================================= */
 
 void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
@@ -141,7 +141,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 	bAnime	= FALSE;
 
 	switch (nType) {
-	case WINDOWTYPE_SEX:			/* ê´ï  */
+	case WINDOWTYPE_SEX:			/* ÊÄßÂà• */
 		switch (dwPara) {
 		case 0:
 			m_nSex = m_pWindowSEX->GetType ();
@@ -158,7 +158,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 		m_pInfoCharCli->m_nSex = m_nSex;
 		bMake = TRUE;
 		break;
-	case WINDOWTYPE_HAIRTYPE:		/* îØå^ */
+	case WINDOWTYPE_HAIRTYPE:		/* È´™Âûã */
 		switch (dwPara) {
 		case 0:
 			m_wHairTypeID = m_pWindowHAIRTYPE->GetType ();
@@ -179,7 +179,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 		m_pInfoCharCli->m_wGrpIDHairType = m_wHairTypeID;
 		bMake = TRUE;
 		break;
-	case WINDOWTYPE_HAIRCOLOR:		/* îØêF */
+	case WINDOWTYPE_HAIRCOLOR:		/* È´™Ëâ≤ */
 		switch (dwPara) {
 		case 0:
 			m_wHairColorID = m_pWindowHAIRCOLOR->GetType ();
@@ -200,7 +200,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 		m_pInfoCharCli->m_wGrpIDHairColor = m_wHairColorID;
 		bMake = TRUE;
 		break;
-	case WINDOWTYPE_EYECOLOR:		/* ñ⁄êF */
+	case WINDOWTYPE_EYECOLOR:		/* ÁõÆËâ≤ */
 		switch (dwPara) {
 		case 0:
 			m_wEyeColorID = m_pWindowEYECOLOR->GetType ();
@@ -235,9 +235,9 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::Draw										 */
-/* ì‡óe		:ï`âÊ															 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::Draw										 */
+/* ÂÜÖÂÆπ		:ÊèèÁîª															 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 void CWindowSTYLESELECT::Draw(PCImg32 pDst)
@@ -271,33 +271,33 @@ void CWindowSTYLESELECT::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 88,	24,	"êVãKÉLÉÉÉâÉNÉ^Å[çÏê¨", clText);
-	TextOut4 (hDC, 136,	48,	"óeépëIë", clText);
+	TextOut4 (hDC, 88,	24,	"Êñ∞Ë¶è„Ç≠„É£„É©„ÇØ„Çø„Éº‰ΩúÊàê", clText);
+	TextOut4 (hDC, 136,	48,	"ÂÆπÂßøÈÅ∏Êäû", clText);
 
-	TextOut4 (hDC, nCursorPos[0].x + 26, nCursorPos[0].y - 24, "ê´ï ", clText);
+	TextOut4 (hDC, nCursorPos[0].x + 26, nCursorPos[0].y - 24, "ÊÄßÂà•", clText);
 	strTmp.Empty ();
 	switch (m_nSex) {
-	case SEX_MALE:		strTmp = "ÅâÅ@ÉIÉgÉR";	break;
-	case SEX_FEMALE:	strTmp = "ÅäÅ@ÉIÉìÉi";	break;
+	case SEX_MALE:		strTmp = "‚ôÇ„ÄÄ„Ç™„Éà„Ç≥";	break;
+	case SEX_FEMALE:	strTmp = "‚ôÄ„ÄÄ„Ç™„É≥„Éä";	break;
 	}
 	TextOut2 (hDC, 40, nCursorPos[0].y - 2, strTmp, clText);
-	TextOut4 (hDC, nCursorPos[1].x + 26, nCursorPos[1].y - 24, "îØå^", clText);
+	TextOut4 (hDC, nCursorPos[1].x + 26, nCursorPos[1].y - 24, "È´™Âûã", clText);
 	strTmp.Format ("%02d", m_wHairTypeID);
 //	strTmp = m_pMgrData->GetHairTypeName (m_wHairTypeID);
 	TextOut2 (hDC, 40, nCursorPos[1].y - 2, strTmp, clText);
 #if 0
-	TextOut4 (hDC, nCursorPos[2].x + 26, nCursorPos[2].y - 24, "îØÇÃêF", clText);
+	TextOut4 (hDC, nCursorPos[2].x + 26, nCursorPos[2].y - 24, "È´™„ÅÆËâ≤", clText);
 //	strTmp.Format ("%02d", m_wHairColorID);
 	strTmp = m_pMgrData->GetHairColorName (m_wHairColorID);
 	TextOut2 (hDC, 40, nCursorPos[2].y - 2, strTmp, clText);
-	TextOut4 (hDC, nCursorPos[3].x + 26, nCursorPos[3].y - 24, "ñ⁄ÇÃêF", clText);
+	TextOut4 (hDC, nCursorPos[3].x + 26, nCursorPos[3].y - 24, "ÁõÆ„ÅÆËâ≤", clText);
 //	strTmp.Format ("%02d", m_wEyeColorID);
 	strTmp = m_pMgrData->GetEyeColorName (m_wEyeColorID);
 	TextOut2 (hDC, 40, nCursorPos[3].y - 2, strTmp, clText);
 #endif
 
-	TextOut4 (hDC, 132,	288,	"éüÇ÷ >>", clText);
-	TextOut4 (hDC, 256,	288,	"ÇQÅ^ÇR", clText);
+	TextOut4 (hDC, 132,	288,	"Ê¨°„Å∏ >>", clText);
+	TextOut4 (hDC, 256,	288,	"ÔºíÔºèÔºì", clText);
 	
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -317,9 +317,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::TimerProc									 */
-/* ì‡óe		:éûä‘èàóù														 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::TimerProc									 */
+/* ÂÜÖÂÆπ		:ÊôÇÈñìÂá¶ÁêÜ														 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowSTYLESELECT::TimerProc(void)
@@ -356,9 +356,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::OnUp										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å™)												 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::OnUp										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üë)												 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowSTYLESELECT::OnUp(void)
@@ -386,9 +386,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::OnDown										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å´)												 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::OnDown										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üì)												 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowSTYLESELECT::OnDown(void)
@@ -416,9 +416,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::OnLeft										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å©)												 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::OnLeft										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üê)												 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowSTYLESELECT::OnLeft(void)
@@ -432,9 +432,9 @@ BOOL CWindowSTYLESELECT::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::OnRight									 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Å®)												 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::OnRight									 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(‚Üí)												 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowSTYLESELECT::OnRight(void)
@@ -448,9 +448,9 @@ BOOL CWindowSTYLESELECT::OnRight(void)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::OnX										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(X)												 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::OnX										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(X)												 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowSTYLESELECT::OnX(BOOL bDown)
@@ -465,32 +465,32 @@ BOOL CWindowSTYLESELECT::OnX(BOOL bDown)
 	m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 
 	switch (m_nPos) {
-	case 0:	/* ê´ï  */
+	case 0:	/* ÊÄßÂà• */
 		m_pMgrWindow->MakeWindowSEX ();
 		m_pWindowSEX = (PCWindowSEX)m_pMgrWindow->GetWindow (WINDOWTYPE_SEX);
 		m_pWindowSEX->SetType (m_nSex);
 		break;
-	case 1:	/* îØå^ */
+	case 1:	/* È´™Âûã */
 		m_pMgrWindow->MakeWindowHAIRTYPE ();
 		m_pWindowHAIRTYPE = (PCWindowHAIRTYPE)m_pMgrWindow->GetWindow (WINDOWTYPE_HAIRTYPE);
 		m_pWindowHAIRTYPE->SetType (m_wHairTypeID);
 		m_bAnime = TRUE;
 		break;
 #if 0
-	case 2:	/* îØêF */
+	case 2:	/* È´™Ëâ≤ */
 		m_pMgrWindow->MakeWindowHAIRCOLOR ();
 		m_pWindowHAIRCOLOR = (PCWindowHAIRCOLOR)m_pMgrWindow->GetWindow (WINDOWTYPE_HAIRCOLOR);
 		m_pWindowHAIRCOLOR->SetType (m_wHairColorID);
 		m_bAnime = TRUE;
 		break;
-	case 3:	/* ñ⁄êF */
+	case 3:	/* ÁõÆËâ≤ */
 		m_pMgrWindow->MakeWindowEYECOLOR ();
 		m_pWindowEYECOLOR = (PCWindowEYECOLOR)m_pMgrWindow->GetWindow (WINDOWTYPE_EYECOLOR);
 		m_pWindowEYECOLOR->SetType (m_wEyeColorID);
 		break;
 #endif
-//	case 4:	/* éüÇ÷ */
-	case 2:	/* éüÇ÷ */
+//	case 4:	/* Ê¨°„Å∏ */
+	case 2:	/* Ê¨°„Å∏ */
 		PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 0);
 		break;
 	}
@@ -502,9 +502,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowSTYLESELECT::OnZ										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Z)												 */
-/* ì˙ït		:2007/04/10														 */
+/* Èñ¢Êï∞Âêç	:CWindowSTYLESELECT::OnZ										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(Z)												 */
+/* Êó•‰ªò		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowSTYLESELECT::OnZ(BOOL bDown)

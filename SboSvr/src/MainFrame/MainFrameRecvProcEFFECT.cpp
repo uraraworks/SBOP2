@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcEFFECT.cpp								 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒGƒtƒFƒNƒgŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcEFFECT.cpp								 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,24 +15,24 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT										 */
-/* “à—e		:ŽóMˆ—(ƒGƒtƒFƒNƒgŒn)											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»)											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_EFFECT_REQ_BALLOONINFO:	RecvProcEFFECT_REQ_BALLOONINFO		(pData, dwSessionID);	break;	/* •¬o‚µî•ñ—v‹ */
-	case SBOCOMMANDID_SUB_EFFECT_DELETEBALLOONINFO:	RecvProcEFFECT_DELETEBALLOONINFO	(pData, dwSessionID);	break;	/* •¬o‚µî•ñíœ */
+	case SBOCOMMANDID_SUB_EFFECT_REQ_BALLOONINFO:	RecvProcEFFECT_REQ_BALLOONINFO		(pData, dwSessionID);	break;	/* å™´å‡ºã—æƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_EFFECT_DELETEBALLOONINFO:	RecvProcEFFECT_DELETEBALLOONINFO	(pData, dwSessionID);	break;	/* å™´å‡ºã—æƒ…å ±å‰Šé™¤ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT_REQ_BALLOONINFO						 */
-/* “à—e		:ŽóMˆ—(•¬o‚µî•ñ—v‹)										 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT_REQ_BALLOONINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(å™´å‡ºã—æƒ…å ±è¦æ±‚)										 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT_REQ_BALLOONINFO(PBYTE pData, DWORD dwSessionID)
@@ -44,9 +44,9 @@ void CMainFrame::RecvProcEFFECT_REQ_BALLOONINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcEFFECT_DELETEBALLOONINFO					 */
-/* “à—e		:ŽóMˆ—(•¬o‚µî•ñíœ)										 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcEFFECT_DELETEBALLOONINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(å™´å‡ºã—æƒ…å ±å‰Šé™¤)										 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcEFFECT_DELETEBALLOONINFO(PBYTE pData, DWORD dwSessionID)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MakeFileListDlg.cpp										 */
-/* “à—e			:ƒƒCƒ“ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MakeFileListDlg.cpp										 */
+/* å†…å®¹			:ãƒ¡ã‚¤ãƒ³ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* CMakeFileListDlgƒNƒ‰ƒX‚Ìİ’è												 */
+/* CMakeFileListDlgã‚¯ãƒ©ã‚¹ã®è¨­å®š												 */
 /* ========================================================================= */
 
 void CMakeFileListDlg::DoDataExchange(CDataExchange* pDX)
@@ -39,9 +39,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMakeFileListDlg::CMakeFileListDlg								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/26														 */
+/* é–¢æ•°å	:CMakeFileListDlg::CMakeFileListDlg								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/26														 */
 /* ========================================================================= */
 
 CMakeFileListDlg::CMakeFileListDlg(CWnd* pParent /*=NULL*/)
@@ -54,17 +54,17 @@ CMakeFileListDlg::CMakeFileListDlg(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMakeFileListDlg::OnInitDialog									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/08/26														 */
+/* é–¢æ•°å	:CMakeFileListDlg::OnInitDialog									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/08/26														 */
 /* ========================================================================= */
 
 BOOL CMakeFileListDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	SetIcon(m_hIcon, TRUE);			// ‘å‚«‚¢ƒAƒCƒRƒ“‚ğİ’è
-	SetIcon(m_hIcon, FALSE);		// ¬‚³‚¢ƒAƒCƒRƒ“‚ğİ’è
+	SetIcon(m_hIcon, TRUE);			// å¤§ãã„ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¨­å®š
+	SetIcon(m_hIcon, FALSE);		// å°ã•ã„ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¨­å®š
 
 	ReadIniFile ();
 	MakeHashList ();
@@ -76,9 +76,9 @@ BOOL CMakeFileListDlg::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMakeFileListDlg::ReadIniFile									 */
-/* “à—e		:iniƒtƒ@ƒCƒ‹“Ç‚İ‚İ											 */
-/* “ú•t		:2007/08/26														 */
+/* é–¢æ•°å	:CMakeFileListDlg::ReadIniFile									 */
+/* å†…å®¹		:iniãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/08/26														 */
 /* ========================================================================= */
 
 void CMakeFileListDlg::ReadIniFile(void)
@@ -91,7 +91,7 @@ void CMakeFileListDlg::ReadIniFile(void)
 	GetModuleFileName (NULL, szFileName, MAX_PATH);
 	strcpy (szFileName + strlen (szFileName) - 3, "ini");
 
-	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg“Ç‚İ‚İ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆèª­ã¿è¾¼ã¿ */
 	for (i = 0; ; i ++) {
 		strTmp.Format ("%d", i + 1);
 		ZeroMemory (szTmp, sizeof (szTmp));
@@ -105,9 +105,9 @@ void CMakeFileListDlg::ReadIniFile(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMakeFileListDlg::MakeHashList									 */
-/* “à—e		:ƒtƒ@ƒCƒ‹ƒnƒbƒVƒ…ƒŠƒXƒgì¬										 */
-/* “ú•t		:2007/08/26														 */
+/* é–¢æ•°å	:CMakeFileListDlg::MakeHashList									 */
+/* å†…å®¹		:ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒƒã‚·ãƒ¥ãƒªã‚¹ãƒˆä½œæˆ										 */
+/* æ—¥ä»˜		:2007/08/26														 */
 /* ========================================================================= */
 
 void CMakeFileListDlg::MakeHashList(void)
@@ -145,7 +145,7 @@ void CMakeFileListDlg::MakeHashList(void)
 		adwFileSize.Add (dwFileSize);
 	}
 
-	/* ƒnƒbƒVƒ…ƒŠƒXƒg‚ğ•Û‘¶ */
+	/* ãƒãƒƒã‚·ãƒ¥ãƒªã‚¹ãƒˆã‚’ä¿å­˜ */
 	strFileName.Format ("%sSBOHashList.txt", szPath);
 	destFile.Open (strFileName, CFile::modeWrite | CFile::modeCreate, NULL);
 

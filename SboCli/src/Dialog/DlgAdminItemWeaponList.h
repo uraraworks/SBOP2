@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemWeaponList.h									 */
-/* “à—e			:ƒAƒCƒeƒ€•Šíî•ñˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemWeaponList.h									 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ±ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,27 +13,27 @@
 class CLibInfoItemWeapon;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminItemWeaponList : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemWeaponList(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminItemWeaponList();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminItemWeaponList(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminItemWeaponList();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);							/* ‰Šú‰» */
-	void	Renew		(void);											/* ˆê——‚ğXV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
-
-
-protected:
+	void	Init		(CMgrData *pMgrData);							/* åˆæœŸåŒ– */
+	void	Renew		(void);											/* ä¸€è¦§ã‚’æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* ’Ê’mæƒEƒBƒ“ƒhƒE */
-	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;		/* ƒAƒCƒeƒ€•Šíî•ñ */
+
+
+protected:
+	CWnd				*m_pWndNotify;				/* é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;		/* ã‚¢ã‚¤ãƒ†ãƒ æ­¦å™¨æƒ…å ± */
 
 
 
@@ -45,7 +45,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminItemWeaponList)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

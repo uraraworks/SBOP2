@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventMOVE.cpp									 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒgˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventMOVE.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventMOVE::DoDataExchange(CDataExchange* pDX)
@@ -40,9 +40,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventMOVE::CDlgAdminMapEventMOVE					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventMOVE::CDlgAdminMapEventMOVE					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventMOVE::CDlgAdminMapEventMOVE(CWnd* pParent /*=NULL*/)
@@ -59,9 +59,9 @@ CDlgAdminMapEventMOVE::CDlgAdminMapEventMOVE(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventMOVE::~CDlgAdminMapEventMOVE					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventMOVE::~CDlgAdminMapEventMOVE					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventMOVE::~CDlgAdminMapEventMOVE()
@@ -70,9 +70,9 @@ CDlgAdminMapEventMOVE::~CDlgAdminMapEventMOVE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventMOVE::Set										 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2008/06/26														 */
+/* é–¢æ•°å	:CDlgAdminMapEventMOVE::Set										 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2008/06/26														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventMOVE::Set(CInfoMapEventBase *pSrc)
@@ -91,9 +91,9 @@ void CDlgAdminMapEventMOVE::Set(CInfoMapEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventMOVE::Get										 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2008/06/26														 */
+/* é–¢æ•°å	:CDlgAdminMapEventMOVE::Get										 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2008/06/26														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventMOVE::Get(CInfoMapEventBase *pDst)
@@ -112,20 +112,20 @@ void CDlgAdminMapEventMOVE::Get(CInfoMapEventBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventMOVE::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/06/24														 */
+/* é–¢æ•°å	:CDlgAdminMapEventMOVE::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/06/24														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapEventMOVE::OnInitDialog()
 {
 	CDlgAdminMapEventNONE::OnInitDialog();
 
-	m_ctlDirection.InsertString (0, "ã");
-	m_ctlDirection.InsertString (1, "‰º");
-	m_ctlDirection.InsertString (2, "¶");
-	m_ctlDirection.InsertString (3, "‰E");
-	m_ctlDirection.InsertString (4, "w’è–³‚µ");
+	m_ctlDirection.InsertString (0, "ä¸Š");
+	m_ctlDirection.InsertString (1, "ä¸‹");
+	m_ctlDirection.InsertString (2, "å·¦");
+	m_ctlDirection.InsertString (3, "å³");
+	m_ctlDirection.InsertString (4, "æŒ‡å®šç„¡ã—");
 
 	if (m_nDirection < 0) {
 		m_nDirection = 4;
@@ -137,15 +137,15 @@ BOOL CDlgAdminMapEventMOVE::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventMOVE::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CDlgAdminMapEventMOVE::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapEventMOVE::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam) {
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:		/* ‰EƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:		/* å³ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_nPosX = HIWORD (lParam);
 		m_nPosY = LOWORD (lParam);
 		UpdateData (FALSE);

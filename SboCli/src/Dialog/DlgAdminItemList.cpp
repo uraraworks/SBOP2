@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemList.cpp										 */
-/* “à—e			:ƒAƒCƒeƒ€ˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemList.cpp										 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/14													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -29,11 +29,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define TIMERID_RENEW	(100)		/* ˆê——XVƒ^ƒCƒ}[ */
-#define TIMER_RENEW		(100)		/* ˆê——XVƒ^ƒCƒ}[üŠú */
+#define TIMERID_RENEW	(100)		/* ä¸€è¦§æ›´æ–°ã‚¿ã‚¤ãƒãƒ¼ */
+#define TIMER_RENEW		(100)		/* ä¸€è¦§æ›´æ–°ã‚¿ã‚¤ãƒãƒ¼å‘¨æœŸ */
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::DoDataExchange(CDataExchange* pDX)
@@ -61,9 +61,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::CDlgAdminItemList							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CDlgAdminItemList::CDlgAdminItemList							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 CDlgAdminItemList::CDlgAdminItemList(CWnd* pParent /*=NULL*/)
@@ -81,9 +81,9 @@ CDlgAdminItemList::CDlgAdminItemList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::~CDlgAdminItemList							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CDlgAdminItemList::~CDlgAdminItemList							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 CDlgAdminItemList::~CDlgAdminItemList()
@@ -92,9 +92,9 @@ CDlgAdminItemList::~CDlgAdminItemList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CDlgAdminItemList::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::Init(CMgrData *pMgrData)
@@ -104,16 +104,16 @@ void CDlgAdminItemList::Init(CMgrData *pMgrData)
 	m_pLibInfoItemType	= m_pMgrData->GetLibInfoItemType ();
 	m_pLibInfoItem		= m_pMgrData->GetLibInfoItem ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminItemList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::Renew										 */
-/* “à—e		:ˆê——‚ğXV														 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CDlgAdminItemList::Renew										 */
+/* å†…å®¹		:ä¸€è¦§ã‚’æ›´æ–°														 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::Renew(void)
@@ -157,10 +157,10 @@ void CDlgAdminItemList::Renew(void)
 		strTmp.Format ("%d", pInfoItem->m_dwItemID);
 		m_List.InsertItem (nIndex, strTmp);
 		m_List.SetItemData (nIndex, pInfoItem->m_dwItemID);		/* ID */
-		m_List.SetItemText (nIndex, 1, pInfoItem->m_strName);	/* ƒAƒCƒeƒ€–¼ */
+		m_List.SetItemText (nIndex, 1, pInfoItem->m_strName);	/* ã‚¢ã‚¤ãƒ†ãƒ å */
 
 		strTmp = m_pLibInfoItemType->GetTypeNameTypeID (pInfoItem->m_dwItemTypeID);
-		m_List.SetItemText (nIndex, 2, strTmp);					/* í•Ê */
+		m_List.SetItemText (nIndex, 2, strTmp);					/* ç¨®åˆ¥ */
 
 		strTmp.Empty ();
 		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
@@ -171,13 +171,13 @@ void CDlgAdminItemList::Renew(void)
 				strTmp.Format ("[%u]", pInfoItem->m_dwCharID);
 			}
 		}
-		m_List.SetItemText (nIndex, 3, strTmp);					/* ŠƒLƒƒƒ‰ */
+		m_List.SetItemText (nIndex, 3, strTmp);					/* æ‰€æŒã‚­ãƒ£ãƒ© */
 
 		strTmp.Empty ();
 		if (pInfoItem->m_dwMapID) {
 			strTmp.Format ("MAPID:%u (%d, %d)", pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
 		}
-		m_List.SetItemText (nIndex, 4, strTmp);					/* ”z’uÀ•W */
+		m_List.SetItemText (nIndex, 4, strTmp);					/* é…ç½®åº§æ¨™ */
 		nIndex ++;
 	}
 
@@ -192,9 +192,9 @@ void CDlgAdminItemList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnAdminMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/08/23														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnAdminMsg									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/08/23														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnAdminMsg(int nType, DWORD dwPara)
@@ -203,17 +203,17 @@ void CDlgAdminItemList::OnAdminMsg(int nType, DWORD dwPara)
 	UINT unState;
 
 	switch (nType) {
-	case ADMINMSG_RENEWMAPINFO:	/* ƒ}ƒbƒvî•ñXV */
+	case ADMINMSG_RENEWMAPINFO:	/* ãƒãƒƒãƒ—æƒ…å ±æ›´æ–° */
 		SetTimer (TIMERID_RENEW, TIMER_RENEW, NULL);
 		break;
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		switch (m_pMgrData->GetAdminNotifyTypeL ()) {
-		case ADMINNOTIFYTYPE_ITEMID:			/* ƒAƒCƒeƒ€ID */
+		case ADMINNOTIFYTYPE_ITEMID:			/* ã‚¢ã‚¤ãƒ†ãƒ ID */
 			nResult = GetIndex (dwPara);
 			if (nResult < 0) {
 				break;
 			}
-			/* ƒNƒŠƒbƒN‚³‚ê‚½ƒAƒCƒeƒ€‚¾‚¯‚ğ‘I‘ğ */
+			/* ã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã ã‘ã‚’é¸æŠ */
 			nCount = m_List.GetItemCount ();
 			for (i = 0; i < nCount; i ++) {
 				unState = 0;
@@ -225,7 +225,7 @@ void CDlgAdminItemList::OnAdminMsg(int nType, DWORD dwPara)
 			m_List.EnsureVisible (nResult, FALSE);
 			break;
 
-		case ADMINNOTIFYTYPE_CHARPOS:			/* ƒLƒƒƒ‰À•W */
+		case ADMINNOTIFYTYPE_CHARPOS:			/* ã‚­ãƒ£ãƒ©åº§æ¨™ */
 			{
 				PCInfoCharCli pInfoChar;
 				PCDlgAdminItemNew pDlg;
@@ -248,9 +248,9 @@ void CDlgAdminItemList::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/08/14														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/08/14														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminItemList::OnInitDialog()
@@ -259,15 +259,15 @@ BOOL CDlgAdminItemList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒAƒCƒeƒ€–¼",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "í•Ê",			LVCFMT_LEFT, 120);
-	m_List.InsertColumn (3, "ŠƒLƒƒƒ‰",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (4, "”z’uÀ•W",		LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "ã‚¢ã‚¤ãƒ†ãƒ å",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, "ç¨®åˆ¥",			LVCFMT_LEFT, 120);
+	m_List.InsertColumn (3, "æ‰€æŒã‚­ãƒ£ãƒ©",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (4, "é…ç½®åº§æ¨™",		LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	/* ‘SƒAƒCƒeƒ€î•ñ‚ğ—v‹ */
+	/* å…¨ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’è¦æ±‚ */
 	OnRenew ();
 
 	return TRUE;
@@ -275,9 +275,9 @@ BOOL CDlgAdminItemList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnTimer										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•t		:2008/11/29														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnTimer										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜		:2008/11/29														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnTimer(UINT_PTR nIDEvent)
@@ -294,15 +294,15 @@ void CDlgAdminItemList::OnTimer(UINT_PTR nIDEvent)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnMainFrame									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnMainFrame									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWITEMINFO:		/* ƒAƒCƒeƒ€î•ñXV */
+	case MAINFRAMEMSG_RENEWITEMINFO:		/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–° */
 		SetTimer (TIMERID_RENEW, TIMER_RENEW, NULL);
 		break;
 	}
@@ -310,9 +310,9 @@ void CDlgAdminItemList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnAdd										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(V‹K’Ç‰Á)										 */
-/* “ú•t		:2007/08/15														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnAdd										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ–°è¦è¿½åŠ )										 */
+/* æ—¥ä»˜		:2007/08/15														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnAdd()
@@ -324,7 +324,7 @@ void CDlgAdminItemList::OnAdd()
 
 	nResult = m_pLibInfoItemType->GetCount ();
 	if (nResult <= 0) {
-		MessageBox ("ƒAƒCƒeƒ€í•Ê‚ª–³‚¢‚Ì‚Å’Ç‰Á‚Å‚«‚Ü‚¹‚ñ", "ƒGƒ‰[", MB_OK | MB_ICONINFORMATION);
+		MessageBox ("ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ãŒç„¡ã„ã®ã§è¿½åŠ ã§ãã¾ã›ã‚“", "ã‚¨ãƒ©ãƒ¼", MB_OK | MB_ICONINFORMATION);
 		return;
 	}
 
@@ -351,9 +351,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnModify									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnModify									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç·¨é›†)											 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnModify()
@@ -396,9 +396,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnCopy										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒRƒs[)											 */
-/* “ú•t		:2007/09/22														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnCopy										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚³ãƒ”ãƒ¼)											 */
+/* æ—¥ä»˜		:2007/09/22														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnCopy()
@@ -418,7 +418,7 @@ void CDlgAdminItemList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("‘I‘ğ‚³‚ê‚Ä‚¢‚éƒAƒCƒeƒ€‚ğƒRƒs[‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -429,9 +429,9 @@ void CDlgAdminItemList::OnCopy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnDelete									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnDelete									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnDelete()
@@ -463,11 +463,11 @@ void CDlgAdminItemList::OnDelete()
 	}
 	if (nCount == 1) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (adwItemID[0]);
-		strTmp.Format ("[%s]‚ğíœ‚µ‚Ü‚·‚©H", (LPCSTR)pInfoItem->m_strName);
+		strTmp.Format ("[%s]ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ", (LPCSTR)pInfoItem->m_strName);
 	} else {
-		strTmp.Format ("‘I‘ğ‚³‚ê‚Ä‚¢‚éƒAƒCƒeƒ€‚ğíœ‚µ‚Ü‚·‚©H");
+		strTmp.Format ("é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ");
 	}
-	nResult = MessageBox (strTmp, "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox (strTmp, "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -478,25 +478,25 @@ void CDlgAdminItemList::OnDelete()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnRenew										 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(XV)											 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnRenew										 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ›´æ–°)											 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnRenew()
 {
 	CPacketITEM_REQ_ITEMINFO Packet;
 
-	/* ‘SƒAƒCƒeƒ€î•ñ‚ğ—v‹ */
+	/* å…¨ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’è¦æ±‚ */
 	Packet.Make (0);
 	m_pSock->Send (&Packet);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnBnClickedDrop								 */
-/* “à—e		:ƒ`ƒFƒbƒNƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(—‚¿‚Ä‚¢‚é‚à‚Ì‚¾‚¯•\¦)					 */
-/* “ú•t		:2008/11/29														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnBnClickedDrop								 */
+/* å†…å®¹		:ãƒã‚§ãƒƒã‚¯ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è½ã¡ã¦ã„ã‚‹ã‚‚ã®ã ã‘è¡¨ç¤º)					 */
+/* æ—¥ä»˜		:2008/11/29														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnBnClickedDrop()
@@ -507,9 +507,9 @@ void CDlgAdminItemList::OnBnClickedDrop()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::OnBnClickedDrop								 */
-/* “à—e		:ƒ`ƒFƒbƒNƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Œ»İ‚Ìƒ}ƒbƒv‚Ì‚İ)						 */
-/* “ú•t		:2008/11/29														 */
+/* é–¢æ•°å	:CDlgAdminItemList::OnBnClickedDrop								 */
+/* å†…å®¹		:ãƒã‚§ãƒƒã‚¯ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç¾åœ¨ã®ãƒãƒƒãƒ—ã®ã¿)						 */
+/* æ—¥ä»˜		:2008/11/29														 */
 /* ========================================================================= */
 
 void CDlgAdminItemList::OnBnClickedMap()
@@ -520,9 +520,9 @@ void CDlgAdminItemList::OnBnClickedMap()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemList::GetIndex									 */
-/* “à—e		:ƒAƒCƒeƒ€ID‚©‚çƒCƒ“ƒfƒbƒNƒX‚ğæ“¾								 */
-/* “ú•t		:2007/08/23														 */
+/* é–¢æ•°å	:CDlgAdminItemList::GetIndex									 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ IDã‹ã‚‰ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2007/08/23														 */
 /* ========================================================================= */
 
 int CDlgAdminItemList::GetIndex(DWORD dwItemID)

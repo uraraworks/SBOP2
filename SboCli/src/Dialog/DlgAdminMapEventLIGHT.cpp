@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventLIGHT.cpp									 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg(“”‚è)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventLIGHT.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ(ç¯ã‚Š)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventLIGHT::DoDataExchange(CDataExchange* pDX)
@@ -37,9 +37,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventLIGHT::CDlgAdminMapEventLIGHT					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminMapEventLIGHT::CDlgAdminMapEventLIGHT					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventLIGHT::CDlgAdminMapEventLIGHT(CWnd* pParent /*=NULL*/)
@@ -54,9 +54,9 @@ CDlgAdminMapEventLIGHT::CDlgAdminMapEventLIGHT(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventLIGHT::~CDlgAdminMapEventLIGHT				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminMapEventLIGHT::~CDlgAdminMapEventLIGHT				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventLIGHT::~CDlgAdminMapEventLIGHT()
@@ -65,9 +65,9 @@ CDlgAdminMapEventLIGHT::~CDlgAdminMapEventLIGHT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventLIGHT::Set									 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminMapEventLIGHT::Set									 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventLIGHT::Set(CInfoMapEventBase *pSrc)
@@ -85,9 +85,9 @@ void CDlgAdminMapEventLIGHT::Set(CInfoMapEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventLIGHT::Get									 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminMapEventLIGHT::Get									 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventLIGHT::Get(CInfoMapEventBase *pDst)
@@ -105,9 +105,9 @@ void CDlgAdminMapEventLIGHT::Get(CInfoMapEventBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventLIGHT::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminMapEventLIGHT::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapEventLIGHT::OnInitDialog()

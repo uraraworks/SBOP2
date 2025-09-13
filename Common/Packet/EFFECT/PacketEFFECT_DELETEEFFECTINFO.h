@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketEFFECT_DELETEEFFECTINFO.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒGƒtƒFƒNƒgŒn:ƒGƒtƒFƒNƒgî•ñíœ) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketEFFECT_DELETEEFFECTINFO.h							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³»:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±å‰Šé™¤) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketEFFECT_DELETEEFFECTINFO : public CPacketBase
 {
 public:
-			CPacketEFFECT_DELETEEFFECTINFO();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketEFFECT_DELETEEFFECTINFO();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketEFFECT_DELETEEFFECTINFO();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketEFFECT_DELETEEFFECTINFO();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwEffectID);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwEffectID);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwEffectID;			/* ƒGƒtƒFƒNƒgID */
+	DWORD	m_dwEffectID;			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 } CPacketEFFECT_DELETEEFFECTINFO, *PCPacketEFFECT_DELETEEFFECTINFO;
 
 /* Copyright(C)URARA-works 2007 */

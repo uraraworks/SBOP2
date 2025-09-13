@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminServerInfo.cpp										 */
-/* “à—e			:ƒT[ƒo[î•ñƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/07/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminServerInfo.cpp										 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminServerInfo::DoDataExchange(CDataExchange* pDX)
@@ -47,9 +47,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminServerInfo::CDlgAdminServerInfo						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CDlgAdminServerInfo::CDlgAdminServerInfo						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 CDlgAdminServerInfo::CDlgAdminServerInfo(CWnd* pParent /*=NULL*/)
@@ -61,9 +61,9 @@ CDlgAdminServerInfo::CDlgAdminServerInfo(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminServerInfo::~CDlgAdminServerInfo						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CDlgAdminServerInfo::~CDlgAdminServerInfo						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 CDlgAdminServerInfo::~CDlgAdminServerInfo()
@@ -72,25 +72,25 @@ CDlgAdminServerInfo::~CDlgAdminServerInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminServerInfo::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CDlgAdminServerInfo::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 void CDlgAdminServerInfo::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminServerInfo::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminServerInfo::OnSave									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒT[ƒo[î•ñ•Û‘¶)								 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CDlgAdminServerInfo::OnSave									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä¿å­˜)								 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 void CDlgAdminServerInfo::OnSave()
@@ -103,9 +103,9 @@ void CDlgAdminServerInfo::OnSave()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminServerInfo::OnBnClickedPlaysound						 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ú‘—‘O‚Ì‚¨’m‚ç‚¹‰¹)								 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CDlgAdminServerInfo::OnBnClickedPlaysound						 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ”¾é€å‰ã®ãŠçŸ¥ã‚‰ã›éŸ³)								 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CDlgAdminServerInfo::OnBnClickedPlaysound()
@@ -118,9 +118,9 @@ void CDlgAdminServerInfo::OnBnClickedPlaysound()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminServerInfo::OnBnClickedRenewClientversion				 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“XV)						 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CDlgAdminServerInfo::OnBnClickedRenewClientversion				 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³æ›´æ–°)						 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CDlgAdminServerInfo::OnBnClickedRenewClientversion()

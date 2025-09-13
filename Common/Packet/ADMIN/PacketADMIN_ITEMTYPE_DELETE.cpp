@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketADMIN_ITEMTYPE_DELETE.cpp							 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ä«óùé“ån:ÉAÉCÉeÉÄéÌï èÓïÒçÌèú) é¿ëïÉtÉ@ÉCÉã		 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/10/01													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketADMIN_ITEMTYPE_DELETE.cpp							 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(ÁÆ°ÁêÜËÄÖÁ≥ª:„Ç¢„Ç§„ÉÜ„É†Á®ÆÂà•ÊÉÖÂ†±ÂâäÈô§) ÂÆüË£Ö„Éï„Ç°„Ç§„É´		 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/10/01													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_ITEMTYPE_DELETE::CPacketADMIN_ITEMTYPE_DELETE		 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/10/01														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_ITEMTYPE_DELETE::CPacketADMIN_ITEMTYPE_DELETE		 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/10/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEMTYPE_DELETE::CPacketADMIN_ITEMTYPE_DELETE()
@@ -24,9 +24,9 @@ CPacketADMIN_ITEMTYPE_DELETE::CPacketADMIN_ITEMTYPE_DELETE()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_ITEMTYPE_DELETE::~CPacketADMIN_ITEMTYPE_DELETE	 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/10/01														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_ITEMTYPE_DELETE::~CPacketADMIN_ITEMTYPE_DELETE	 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/10/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_ITEMTYPE_DELETE::~CPacketADMIN_ITEMTYPE_DELETE()
@@ -35,13 +35,13 @@ CPacketADMIN_ITEMTYPE_DELETE::~CPacketADMIN_ITEMTYPE_DELETE()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_ITEMTYPE_DELETE::Make								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/10/01														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_ITEMTYPE_DELETE::Make								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/10/01														 */
 /* ========================================================================= */
 
 void CPacketADMIN_ITEMTYPE_DELETE::Make(
-	DWORD dwTypeID)		/* [in] éÌï ID */
+	DWORD dwTypeID)		/* [in] Á®ÆÂà•ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -58,16 +58,16 @@ void CPacketADMIN_ITEMTYPE_DELETE::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_DELETE;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwTypeID, sizeof (dwTypeID), pDataTmp);	/* éÌï ID */
+	CopyMemoryRenew (pDataTmp, &dwTypeID, sizeof (dwTypeID), pDataTmp);	/* Á®ÆÂà•ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketADMIN_ITEMTYPE_DELETE::Set								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/10/01														 */
+/* Èñ¢Êï∞Âêç	:CPacketADMIN_ITEMTYPE_DELETE::Set								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/10/01														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_ITEMTYPE_DELETE::Set(PBYTE pPacket)
@@ -77,7 +77,7 @@ PBYTE CPacketADMIN_ITEMTYPE_DELETE::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwTypeID, pDataTmp, sizeof (m_dwTypeID), pDataTmp);	/* éÌï ID */
+	CopyMemoryRenew (&m_dwTypeID, pDataTmp, sizeof (m_dwTypeID), pDataTmp);	/* Á®ÆÂà•ID */
 
 	pRet = pDataTmp;
 	return pRet;

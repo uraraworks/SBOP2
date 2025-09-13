@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_REQ_FILELISTCHECK.cpp						 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN—v‹) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_REQ_FILELISTCHECK.cpp						 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/28													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketVERSION_REQ_FILELISTCHECK.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILELISTCHECK::CPacketVERSION_REQ_FILELISTCHECK */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/28														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILELISTCHECK::CPacketVERSION_REQ_FILELISTCHECK */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/28														 */
 /* ========================================================================= */
 
 CPacketVERSION_REQ_FILELISTCHECK::CPacketVERSION_REQ_FILELISTCHECK()
@@ -22,9 +22,9 @@ CPacketVERSION_REQ_FILELISTCHECK::CPacketVERSION_REQ_FILELISTCHECK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILELISTCHECK::~CPacketVERSION_REQ_FILELISTCHECK */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/08/28														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILELISTCHECK::~CPacketVERSION_REQ_FILELISTCHECK */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/08/28														 */
 /* ========================================================================= */
 
 CPacketVERSION_REQ_FILELISTCHECK::~CPacketVERSION_REQ_FILELISTCHECK()
@@ -33,13 +33,13 @@ CPacketVERSION_REQ_FILELISTCHECK::~CPacketVERSION_REQ_FILELISTCHECK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILELISTCHECK::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/08/28														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILELISTCHECK::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/08/28														 */
 /* ========================================================================= */
 
 void CPacketVERSION_REQ_FILELISTCHECK::Make(
-	LPCSTR pszFileListHash)		/* [in] ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒnƒbƒVƒ… */
+	LPCSTR pszFileListHash)		/* [in] ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒãƒƒã‚·ãƒ¥ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -56,16 +56,16 @@ void CPacketVERSION_REQ_FILELISTCHECK::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_VERSION_REQ_FILELISTCHECK;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	strcpyRenew ((LPSTR)pDataTmp, pszFileListHash, pDataTmp);		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒnƒbƒVƒ… */
+	strcpyRenew ((LPSTR)pDataTmp, pszFileListHash, pDataTmp);		/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒãƒƒã‚·ãƒ¥ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILELISTCHECK::Set							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/08/28														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILELISTCHECK::Set							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/08/28														 */
 /* ========================================================================= */
 
 PBYTE CPacketVERSION_REQ_FILELISTCHECK::Set(PBYTE pPacket)
@@ -75,7 +75,7 @@ PBYTE CPacketVERSION_REQ_FILELISTCHECK::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	StoreRenew (m_strFileListHash, (LPCSTR)pDataTmp, pDataTmp);		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒnƒbƒVƒ… */
+	StoreRenew (m_strFileListHash, (LPCSTR)pDataTmp, pDataTmp);		/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒãƒƒã‚·ãƒ¥ */
 
 	pRet = pDataTmp;
 	return pRet;

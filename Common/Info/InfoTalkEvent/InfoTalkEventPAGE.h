@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTalkEventPAGE.h										 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñ(ƒy[ƒWØ‚è‘Ö‚¦)ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTalkEventPAGE.h										 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±(ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆ)ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/29													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,46 +11,46 @@
 #include "InfoTalkEventBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒy[ƒWØ‚è‘Ö‚¦ğŒ */
+/* ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆæ¡ä»¶ */
 enum {
 	CHGPAGECONDITION_NONE = 0,
-	CHGPAGECONDITION_ITEM,		/* ƒAƒCƒeƒ€‚ ‚è */
-	CHGPAGECONDITION_NOITEM,	/* ƒAƒCƒeƒ€‚È‚µ */
+	CHGPAGECONDITION_ITEM,		/* ã‚¢ã‚¤ãƒ†ãƒ ã‚ã‚Š */
+	CHGPAGECONDITION_NOITEM,	/* ã‚¢ã‚¤ãƒ†ãƒ ãªã— */
 	CHGPAGECONDITION_MAX
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoTalkEventPAGE : public CInfoTalkEventBase
 {
 public:
-			CInfoTalkEventPAGE();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoTalkEventPAGE();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoTalkEventPAGE();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoTalkEventPAGE();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementCount		(void);								/* —v‘f”‚ğæ“¾ */
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual int		GetElementCount		(void);								/* è¦ç´ æ•°ã‚’å–å¾— */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoTalkEventBase *pSrc);			/* ƒRƒs[ */
+	virtual void	Copy				(CInfoTalkEventBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	int		m_nPageChgCondition,			/* ƒy[ƒWØ‚è‘Ö‚¦ğŒ */
-			m_nPageJump;					/* ƒy[ƒWØ‚è‘Ö‚¦æ */
+	int		m_nPageChgCondition,			/* ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆæ¡ä»¶ */
+			m_nPageJump;					/* ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆå…ˆ */
 } CInfoTalkEventPAGE, *PCInfoTalkEventPAGE;
 
 /* Copyright(C)URARA-works 2008 */

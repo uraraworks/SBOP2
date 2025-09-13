@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_SYSTEMMSG.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒVƒXƒeƒ€ƒƒbƒZ[ƒW’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/02/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_SYSTEMMSG.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/02/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,36 +11,36 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒƒbƒZ[ƒWŽí•Ê */
+/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 enum {
-	SYSTEMMSGTYPE_DEFAULT = 0,		/* ’Êí */
-	SYSTEMMSGTYPE_NOLOG,			/* ƒƒO‚ÉŽc‚³‚È‚¢ */
-	SYSTEMMSGTYPE_BATTLE,			/* í“¬ŠÖ˜A */
+	SYSTEMMSGTYPE_DEFAULT = 0,		/* é€šå¸¸ */
+	SYSTEMMSGTYPE_NOLOG,			/* ãƒ­ã‚°ã«æ®‹ã•ãªã„ */
+	SYSTEMMSGTYPE_BATTLE,			/* æˆ¦é—˜é–¢é€£ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_SYSTEMMSG : public CPacketBase
 {
 public:
-			CPacketMAP_SYSTEMMSG();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_SYSTEMMSG();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_SYSTEMMSG();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_SYSTEMMSG();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(LPCSTR pszMsg, COLORREF clMsg = 0, BOOL bSound = TRUE, int nMsgType = SYSTEMMSGTYPE_DEFAULT);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);											/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(LPCSTR pszMsg, COLORREF clMsg = 0, BOOL bSound = TRUE, int nMsgType = SYSTEMMSGTYPE_DEFAULT);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);											/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int			m_nMsgType;			/* ƒƒbƒZ[ƒWŽí•Ê */
-	BOOL		m_bSound;			/* •\Ž¦‚·‚éŽž‚É‰¹‚ð‚È‚ç‚·‚©”»’è */
-	COLORREF	m_clMsg;			/* •\Ž¦F */
-	CmyString	m_strMsg;			/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW */
+	int			m_nMsgType;			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
+	BOOL		m_bSound;			/* è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	COLORREF	m_clMsg;			/* è¡¨ç¤ºè‰² */
+	CmyString	m_strMsg;			/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
 } CPacketMAP_SYSTEMMSG, *PCPacketMAP_SYSTEMMSG;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,51 +1,51 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSystem.cpp												 */
-/* “à—e			:ƒVƒXƒeƒ€î•ñƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/09/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoSystem.cpp												 */
+/* å†…å®¹			:ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/25													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoSystem.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"wStamina",					/* ƒXƒ^ƒ~ƒi */
-	"wPower",					/* ˜r—Í */
-	"wStrength",				/* ‘Ì—Í */
-	"wMagic",					/* –‚—Í */
-	"wSkillful",				/* Ší—p */
-	"wAbillityAT",				/* UŒ‚‹Z”\ */
-	"wAbillityDF",				/* –hŒä‹Z”\ */
-	"wPAtack",					/* UŒ‚—Í */
-	"wPDefense",				/* –hŒä—Í */
-	"wPMagic",					/* –‚–@—Í */
-	"wPMagicDefense",			/* –‚–@–hŒä—Í */
-	"wPHitAverage",				/* –½’†—¦ */
-	"wPAvoidAverage",			/* ‰ñ”ð—¦ */
-	"wPCriticalAverage",		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	"wAttrFire",				/* ‘®«[‰Î] */
-	"wAttrWind",				/* ‘®«[•—] */
-	"wAttrWater",				/* ‘®«[…] */
-	"wAttrEarth",				/* ‘®«[“y] */
-	"wAttrLight",				/* ‘®«[Œõ] */
-	"wAttrDark",				/* ‘®«[ˆÅ] */
-	"dwMaxHP",					/* Å‘åHP */
-	"dwMaxSP",					/* Å‘åSP */
-	"dwInitPosMapID",			/* ‰ŠúˆÊ’uƒ}ƒbƒvID */
-	"ptInitPos",				/* ‰ŠúˆÊ’uÀ•W */
+	"wStamina",					/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	"wPower",					/* è…•åŠ› */
+	"wStrength",				/* ä½“åŠ› */
+	"wMagic",					/* é­”åŠ› */
+	"wSkillful",				/* å™¨ç”¨ */
+	"wAbillityAT",				/* æ”»æ’ƒæŠ€èƒ½ */
+	"wAbillityDF",				/* é˜²å¾¡æŠ€èƒ½ */
+	"wPAtack",					/* æ”»æ’ƒåŠ› */
+	"wPDefense",				/* é˜²å¾¡åŠ› */
+	"wPMagic",					/* é­”æ³•åŠ› */
+	"wPMagicDefense",			/* é­”æ³•é˜²å¾¡åŠ› */
+	"wPHitAverage",				/* å‘½ä¸­çŽ‡ */
+	"wPAvoidAverage",			/* å›žé¿çŽ‡ */
+	"wPCriticalAverage",		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	"wAttrFire",				/* å±žæ€§[ç«] */
+	"wAttrWind",				/* å±žæ€§[é¢¨] */
+	"wAttrWater",				/* å±žæ€§[æ°´] */
+	"wAttrEarth",				/* å±žæ€§[åœŸ] */
+	"wAttrLight",				/* å±žæ€§[å…‰] */
+	"wAttrDark",				/* å±žæ€§[é—‡] */
+	"dwMaxHP",					/* æœ€å¤§HP */
+	"dwMaxSP",					/* æœ€å¤§SP */
+	"dwInitPosMapID",			/* åˆæœŸä½ç½®ãƒžãƒƒãƒ—ID */
+	"ptInitPos",				/* åˆæœŸä½ç½®åº§æ¨™ */
 	NULL
 };
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::CInfoSystem										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::CInfoSystem										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 CInfoSystem::CInfoSystem()
@@ -58,9 +58,9 @@ CInfoSystem::CInfoSystem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::~CInfoSystem										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::~CInfoSystem										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 CInfoSystem::~CInfoSystem()
@@ -70,9 +70,9 @@ CInfoSystem::~CInfoSystem()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ðŽæ“¾													 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 int CInfoSystem::GetElementNo(LPCSTR pszName)
@@ -93,9 +93,9 @@ int CInfoSystem::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾												 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 DWORD CInfoSystem::GetDataSize(void)
@@ -103,39 +103,39 @@ DWORD CInfoSystem::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	dwRet += sizeof (m_pInitCharStatus->wStamina);				/* ƒXƒ^ƒ~ƒi */
-	dwRet += sizeof (m_pInitCharStatus->wPower);				/* ˜r—Í */
-	dwRet += sizeof (m_pInitCharStatus->wStrength);				/* ‘Ì—Í */
-	dwRet += sizeof (m_pInitCharStatus->wMagic);				/* –‚—Í */
-	dwRet += sizeof (m_pInitCharStatus->wSkillful);				/* Ší—p */
-	dwRet += sizeof (m_pInitCharStatus->wAbillityAT);			/* UŒ‚‹Z”\ */
-	dwRet += sizeof (m_pInitCharStatus->wAbillityDF);			/* –hŒä‹Z”\ */
-	dwRet += sizeof (m_pInitCharStatus->wPAtack);				/* UŒ‚—Í */
-	dwRet += sizeof (m_pInitCharStatus->wPDefense);				/* –hŒä—Í */
-	dwRet += sizeof (m_pInitCharStatus->wPMagic);				/* –‚–@—Í */
-	dwRet += sizeof (m_pInitCharStatus->wPMagicDefense);		/* –‚–@–hŒä—Í */
-	dwRet += sizeof (m_pInitCharStatus->wPHitAverage);			/* –½’†—¦ */
-	dwRet += sizeof (m_pInitCharStatus->wPAvoidAverage);		/* ‰ñ”ð—¦ */
-	dwRet += sizeof (m_pInitCharStatus->wPCriticalAverage);		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	dwRet += sizeof (m_pInitCharStatus->wAttrFire);				/* ‘®«[‰Î] */
-	dwRet += sizeof (m_pInitCharStatus->wAttrWind);				/* ‘®«[•—] */
-	dwRet += sizeof (m_pInitCharStatus->wAttrWater);			/* ‘®«[…] */
-	dwRet += sizeof (m_pInitCharStatus->wAttrEarth);			/* ‘®«[“y] */
-	dwRet += sizeof (m_pInitCharStatus->wAttrLight);			/* ‘®«[Œõ] */
-	dwRet += sizeof (m_pInitCharStatus->wAttrDark);				/* ‘®«[ˆÅ] */
-	dwRet += sizeof (m_pInitCharStatus->dwMaxHP);				/* Å‘åHP */
-	dwRet += sizeof (m_pInitCharStatus->dwMaxSP);				/* Å‘åSP */
-	dwRet += sizeof (m_pInitCharStatus->dwInitPosMapID);		/* ‰ŠúˆÊ’uƒ}ƒbƒvID */
-	dwRet += sizeof (m_pInitCharStatus->ptInitPos);				/* ‰ŠúˆÊ’uÀ•W */
+	dwRet += sizeof (m_pInitCharStatus->wStamina);				/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	dwRet += sizeof (m_pInitCharStatus->wPower);				/* è…•åŠ› */
+	dwRet += sizeof (m_pInitCharStatus->wStrength);				/* ä½“åŠ› */
+	dwRet += sizeof (m_pInitCharStatus->wMagic);				/* é­”åŠ› */
+	dwRet += sizeof (m_pInitCharStatus->wSkillful);				/* å™¨ç”¨ */
+	dwRet += sizeof (m_pInitCharStatus->wAbillityAT);			/* æ”»æ’ƒæŠ€èƒ½ */
+	dwRet += sizeof (m_pInitCharStatus->wAbillityDF);			/* é˜²å¾¡æŠ€èƒ½ */
+	dwRet += sizeof (m_pInitCharStatus->wPAtack);				/* æ”»æ’ƒåŠ› */
+	dwRet += sizeof (m_pInitCharStatus->wPDefense);				/* é˜²å¾¡åŠ› */
+	dwRet += sizeof (m_pInitCharStatus->wPMagic);				/* é­”æ³•åŠ› */
+	dwRet += sizeof (m_pInitCharStatus->wPMagicDefense);		/* é­”æ³•é˜²å¾¡åŠ› */
+	dwRet += sizeof (m_pInitCharStatus->wPHitAverage);			/* å‘½ä¸­çŽ‡ */
+	dwRet += sizeof (m_pInitCharStatus->wPAvoidAverage);		/* å›žé¿çŽ‡ */
+	dwRet += sizeof (m_pInitCharStatus->wPCriticalAverage);		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	dwRet += sizeof (m_pInitCharStatus->wAttrFire);				/* å±žæ€§[ç«] */
+	dwRet += sizeof (m_pInitCharStatus->wAttrWind);				/* å±žæ€§[é¢¨] */
+	dwRet += sizeof (m_pInitCharStatus->wAttrWater);			/* å±žæ€§[æ°´] */
+	dwRet += sizeof (m_pInitCharStatus->wAttrEarth);			/* å±žæ€§[åœŸ] */
+	dwRet += sizeof (m_pInitCharStatus->wAttrLight);			/* å±žæ€§[å…‰] */
+	dwRet += sizeof (m_pInitCharStatus->wAttrDark);				/* å±žæ€§[é—‡] */
+	dwRet += sizeof (m_pInitCharStatus->dwMaxHP);				/* æœ€å¤§HP */
+	dwRet += sizeof (m_pInitCharStatus->dwMaxSP);				/* æœ€å¤§SP */
+	dwRet += sizeof (m_pInitCharStatus->dwInitPosMapID);		/* åˆæœŸä½ç½®ãƒžãƒƒãƒ—ID */
+	dwRet += sizeof (m_pInitCharStatus->ptInitPos);				/* åˆæœŸä½ç½®åº§æ¨™ */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::GetDataSizeNo										 */
-/* “à—e		:Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::GetDataSizeNo										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 DWORD CInfoSystem::GetDataSizeNo(int nNo)
@@ -145,30 +145,30 @@ DWORD CInfoSystem::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_pInitCharStatus->wStamina);			break;	/* ƒXƒ^ƒ~ƒi */
-	case 1:		dwRet = sizeof (m_pInitCharStatus->wPower);				break;	/* ˜r—Í */
-	case 2:		dwRet = sizeof (m_pInitCharStatus->wStrength);			break;	/* ‘Ì—Í */
-	case 3:		dwRet = sizeof (m_pInitCharStatus->wMagic);				break;	/* –‚—Í */
-	case 4:		dwRet = sizeof (m_pInitCharStatus->wSkillful);			break;	/* Ší—p */
-	case 5:		dwRet = sizeof (m_pInitCharStatus->wAbillityAT);		break;	/* UŒ‚‹Z”\ */
-	case 6:		dwRet = sizeof (m_pInitCharStatus->wAbillityDF);		break;	/* –hŒä‹Z”\ */
-	case 7:		dwRet = sizeof (m_pInitCharStatus->wPAtack);			break;	/* UŒ‚—Í */
-	case 8:		dwRet = sizeof (m_pInitCharStatus->wPDefense);			break;	/* –hŒä—Í */
-	case 9:		dwRet = sizeof (m_pInitCharStatus->wPMagic);			break;	/* –‚–@—Í */
-	case 10:	dwRet = sizeof (m_pInitCharStatus->wPMagicDefense);		break;	/* –‚–@–hŒä—Í */
-	case 11:	dwRet = sizeof (m_pInitCharStatus->wPHitAverage);		break;	/* –½’†—¦ */
-	case 12:	dwRet = sizeof (m_pInitCharStatus->wPAvoidAverage);		break;	/* ‰ñ”ð—¦ */
-	case 13:	dwRet = sizeof (m_pInitCharStatus->wPCriticalAverage);	break;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	case 14:	dwRet = sizeof (m_pInitCharStatus->wAttrFire);			break;	/* ‘®«[‰Î] */
-	case 15:	dwRet = sizeof (m_pInitCharStatus->wAttrWind);			break;	/* ‘®«[•—] */
-	case 16:	dwRet = sizeof (m_pInitCharStatus->wAttrWater);			break;	/* ‘®«[…] */
-	case 17:	dwRet = sizeof (m_pInitCharStatus->wAttrEarth);			break;	/* ‘®«[“y] */
-	case 18:	dwRet = sizeof (m_pInitCharStatus->wAttrLight);			break;	/* ‘®«[Œõ] */
-	case 19:	dwRet = sizeof (m_pInitCharStatus->wAttrDark);			break;	/* ‘®«[ˆÅ] */
-	case 20:	dwRet = sizeof (m_pInitCharStatus->dwMaxHP);			break;	/* Å‘åHP */
-	case 21:	dwRet = sizeof (m_pInitCharStatus->dwMaxSP);			break;	/* Å‘åSP */
-	case 22:	dwRet = sizeof (m_pInitCharStatus->dwInitPosMapID);		break;	/* ‰ŠúˆÊ’uƒ}ƒbƒvID */
-	case 23:	dwRet = sizeof (m_pInitCharStatus->ptInitPos);			break;	/* ‰ŠúˆÊ’uÀ•W */
+	case 0:		dwRet = sizeof (m_pInitCharStatus->wStamina);			break;	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	case 1:		dwRet = sizeof (m_pInitCharStatus->wPower);				break;	/* è…•åŠ› */
+	case 2:		dwRet = sizeof (m_pInitCharStatus->wStrength);			break;	/* ä½“åŠ› */
+	case 3:		dwRet = sizeof (m_pInitCharStatus->wMagic);				break;	/* é­”åŠ› */
+	case 4:		dwRet = sizeof (m_pInitCharStatus->wSkillful);			break;	/* å™¨ç”¨ */
+	case 5:		dwRet = sizeof (m_pInitCharStatus->wAbillityAT);		break;	/* æ”»æ’ƒæŠ€èƒ½ */
+	case 6:		dwRet = sizeof (m_pInitCharStatus->wAbillityDF);		break;	/* é˜²å¾¡æŠ€èƒ½ */
+	case 7:		dwRet = sizeof (m_pInitCharStatus->wPAtack);			break;	/* æ”»æ’ƒåŠ› */
+	case 8:		dwRet = sizeof (m_pInitCharStatus->wPDefense);			break;	/* é˜²å¾¡åŠ› */
+	case 9:		dwRet = sizeof (m_pInitCharStatus->wPMagic);			break;	/* é­”æ³•åŠ› */
+	case 10:	dwRet = sizeof (m_pInitCharStatus->wPMagicDefense);		break;	/* é­”æ³•é˜²å¾¡åŠ› */
+	case 11:	dwRet = sizeof (m_pInitCharStatus->wPHitAverage);		break;	/* å‘½ä¸­çŽ‡ */
+	case 12:	dwRet = sizeof (m_pInitCharStatus->wPAvoidAverage);		break;	/* å›žé¿çŽ‡ */
+	case 13:	dwRet = sizeof (m_pInitCharStatus->wPCriticalAverage);	break;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	case 14:	dwRet = sizeof (m_pInitCharStatus->wAttrFire);			break;	/* å±žæ€§[ç«] */
+	case 15:	dwRet = sizeof (m_pInitCharStatus->wAttrWind);			break;	/* å±žæ€§[é¢¨] */
+	case 16:	dwRet = sizeof (m_pInitCharStatus->wAttrWater);			break;	/* å±žæ€§[æ°´] */
+	case 17:	dwRet = sizeof (m_pInitCharStatus->wAttrEarth);			break;	/* å±žæ€§[åœŸ] */
+	case 18:	dwRet = sizeof (m_pInitCharStatus->wAttrLight);			break;	/* å±žæ€§[å…‰] */
+	case 19:	dwRet = sizeof (m_pInitCharStatus->wAttrDark);			break;	/* å±žæ€§[é—‡] */
+	case 20:	dwRet = sizeof (m_pInitCharStatus->dwMaxHP);			break;	/* æœ€å¤§HP */
+	case 21:	dwRet = sizeof (m_pInitCharStatus->dwMaxSP);			break;	/* æœ€å¤§SP */
+	case 22:	dwRet = sizeof (m_pInitCharStatus->dwInitPosMapID);		break;	/* åˆæœŸä½ç½®ãƒžãƒƒãƒ—ID */
+	case 23:	dwRet = sizeof (m_pInitCharStatus->ptInitPos);			break;	/* åˆæœŸä½ç½®åº§æ¨™ */
 	}
 
 	return dwRet;
@@ -176,9 +176,9 @@ DWORD CInfoSystem::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::GetName											 */
-/* “à—e		:—v‘f–¼‚ðŽæ“¾													 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 LPCSTR CInfoSystem::GetName(int nNo)
@@ -188,9 +188,9 @@ LPCSTR CInfoSystem::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::GetWriteData										 */
-/* “à—e		:Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾									 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 PBYTE CInfoSystem::GetWriteData(int nNo, PDWORD pdwSize)
@@ -209,30 +209,30 @@ PBYTE CInfoSystem::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_pInitCharStatus->wStamina;				break;	/* ƒXƒ^ƒ~ƒi */
-	case 1:		pSrc = (PBYTE)&m_pInitCharStatus->wPower;				break;	/* ˜r—Í */
-	case 2:		pSrc = (PBYTE)&m_pInitCharStatus->wStrength;			break;	/* ‘Ì—Í */
-	case 3:		pSrc = (PBYTE)&m_pInitCharStatus->wMagic;				break;	/* –‚—Í */
-	case 4:		pSrc = (PBYTE)&m_pInitCharStatus->wSkillful;			break;	/* Ší—p */
-	case 5:		pSrc = (PBYTE)&m_pInitCharStatus->wAbillityAT;			break;	/* UŒ‚‹Z”\ */
-	case 6:		pSrc = (PBYTE)&m_pInitCharStatus->wAbillityDF;			break;	/* –hŒä‹Z”\ */
-	case 7:		pSrc = (PBYTE)&m_pInitCharStatus->wPAtack;				break;	/* UŒ‚—Í */
-	case 8:		pSrc = (PBYTE)&m_pInitCharStatus->wPDefense;			break;	/* –hŒä—Í */
-	case 9:		pSrc = (PBYTE)&m_pInitCharStatus->wPMagic;				break;	/* –‚–@—Í */
-	case 10:	pSrc = (PBYTE)&m_pInitCharStatus->wPMagicDefense;		break;	/* –‚–@–hŒä—Í */
-	case 11:	pSrc = (PBYTE)&m_pInitCharStatus->wPHitAverage;			break;	/* –½’†—¦ */
-	case 12:	pSrc = (PBYTE)&m_pInitCharStatus->wPAvoidAverage;		break;	/* ‰ñ”ð—¦ */
-	case 13:	pSrc = (PBYTE)&m_pInitCharStatus->wPCriticalAverage;	break;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	case 14:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrFire;			break;	/* ‘®«[‰Î] */
-	case 15:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrWind;			break;	/* ‘®«[•—] */
-	case 16:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrWater;			break;	/* ‘®«[…] */
-	case 17:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrEarth;			break;	/* ‘®«[“y] */
-	case 18:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrLight;			break;	/* ‘®«[Œõ] */
-	case 19:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrDark;			break;	/* ‘®«[ˆÅ] */
-	case 20:	pSrc = (PBYTE)&m_pInitCharStatus->dwMaxHP;				break;	/* Å‘åHP */
-	case 21:	pSrc = (PBYTE)&m_pInitCharStatus->dwMaxSP;				break;	/* Å‘åSP */
-	case 22:	pSrc = (PBYTE)&m_pInitCharStatus->dwInitPosMapID;		break;	/* ‰ŠúˆÊ’uƒ}ƒbƒvID */
-	case 23:	pSrc = (PBYTE)&m_pInitCharStatus->ptInitPos;			break;	/* ‰ŠúˆÊ’uÀ•W */
+	case 0:		pSrc = (PBYTE)&m_pInitCharStatus->wStamina;				break;	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	case 1:		pSrc = (PBYTE)&m_pInitCharStatus->wPower;				break;	/* è…•åŠ› */
+	case 2:		pSrc = (PBYTE)&m_pInitCharStatus->wStrength;			break;	/* ä½“åŠ› */
+	case 3:		pSrc = (PBYTE)&m_pInitCharStatus->wMagic;				break;	/* é­”åŠ› */
+	case 4:		pSrc = (PBYTE)&m_pInitCharStatus->wSkillful;			break;	/* å™¨ç”¨ */
+	case 5:		pSrc = (PBYTE)&m_pInitCharStatus->wAbillityAT;			break;	/* æ”»æ’ƒæŠ€èƒ½ */
+	case 6:		pSrc = (PBYTE)&m_pInitCharStatus->wAbillityDF;			break;	/* é˜²å¾¡æŠ€èƒ½ */
+	case 7:		pSrc = (PBYTE)&m_pInitCharStatus->wPAtack;				break;	/* æ”»æ’ƒåŠ› */
+	case 8:		pSrc = (PBYTE)&m_pInitCharStatus->wPDefense;			break;	/* é˜²å¾¡åŠ› */
+	case 9:		pSrc = (PBYTE)&m_pInitCharStatus->wPMagic;				break;	/* é­”æ³•åŠ› */
+	case 10:	pSrc = (PBYTE)&m_pInitCharStatus->wPMagicDefense;		break;	/* é­”æ³•é˜²å¾¡åŠ› */
+	case 11:	pSrc = (PBYTE)&m_pInitCharStatus->wPHitAverage;			break;	/* å‘½ä¸­çŽ‡ */
+	case 12:	pSrc = (PBYTE)&m_pInitCharStatus->wPAvoidAverage;		break;	/* å›žé¿çŽ‡ */
+	case 13:	pSrc = (PBYTE)&m_pInitCharStatus->wPCriticalAverage;	break;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	case 14:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrFire;			break;	/* å±žæ€§[ç«] */
+	case 15:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrWind;			break;	/* å±žæ€§[é¢¨] */
+	case 16:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrWater;			break;	/* å±žæ€§[æ°´] */
+	case 17:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrEarth;			break;	/* å±žæ€§[åœŸ] */
+	case 18:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrLight;			break;	/* å±žæ€§[å…‰] */
+	case 19:	pSrc = (PBYTE)&m_pInitCharStatus->wAttrDark;			break;	/* å±žæ€§[é—‡] */
+	case 20:	pSrc = (PBYTE)&m_pInitCharStatus->dwMaxHP;				break;	/* æœ€å¤§HP */
+	case 21:	pSrc = (PBYTE)&m_pInitCharStatus->dwMaxSP;				break;	/* æœ€å¤§SP */
+	case 22:	pSrc = (PBYTE)&m_pInitCharStatus->dwInitPosMapID;		break;	/* åˆæœŸä½ç½®ãƒžãƒƒãƒ—ID */
+	case 23:	pSrc = (PBYTE)&m_pInitCharStatus->ptInitPos;			break;	/* åˆæœŸä½ç½®åº§æ¨™ */
 	}
 
 	if (pSrc) {
@@ -245,14 +245,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::ReadElementData									 */
-/* “à—e		:Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 DWORD CInfoSystem::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚Ýž‚ÝŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -261,30 +261,30 @@ DWORD CInfoSystem::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_pInitCharStatus->wStamina;				dwSize = sizeof (m_pInitCharStatus->wStamina);			break;	/* ƒXƒ^ƒ~ƒi */
-	case 1:		pDst = (PBYTE)&m_pInitCharStatus->wPower;				dwSize = sizeof (m_pInitCharStatus->wPower);			break;	/* ˜r—Í */
-	case 2:		pDst = (PBYTE)&m_pInitCharStatus->wStrength;			dwSize = sizeof (m_pInitCharStatus->wStrength);			break;	/* ‘Ì—Í */
-	case 3:		pDst = (PBYTE)&m_pInitCharStatus->wMagic;				dwSize = sizeof (m_pInitCharStatus->wMagic);			break;	/* –‚—Í */
-	case 4:		pDst = (PBYTE)&m_pInitCharStatus->wSkillful;			dwSize = sizeof (m_pInitCharStatus->wSkillful);			break;	/* Ší—p */
-	case 5:		pDst = (PBYTE)&m_pInitCharStatus->wAbillityAT;			dwSize = sizeof (m_pInitCharStatus->wAbillityAT);		break;	/* UŒ‚‹Z”\ */
-	case 6:		pDst = (PBYTE)&m_pInitCharStatus->wAbillityDF;			dwSize = sizeof (m_pInitCharStatus->wAbillityDF);		break;	/* –hŒä‹Z”\ */
-	case 7:		pDst = (PBYTE)&m_pInitCharStatus->wPAtack;				dwSize = sizeof (m_pInitCharStatus->wPAtack);			break;	/* UŒ‚—Í */
-	case 8:		pDst = (PBYTE)&m_pInitCharStatus->wPDefense;			dwSize = sizeof (m_pInitCharStatus->wPDefense);			break;	/* –hŒä—Í */
-	case 9:		pDst = (PBYTE)&m_pInitCharStatus->wPMagic;				dwSize = sizeof (m_pInitCharStatus->wPMagic);			break;	/* –‚–@—Í */
-	case 10:	pDst = (PBYTE)&m_pInitCharStatus->wPMagicDefense;		dwSize = sizeof (m_pInitCharStatus->wPMagicDefense);	break;	/* –‚–@–hŒä—Í */
-	case 11:	pDst = (PBYTE)&m_pInitCharStatus->wPHitAverage;			dwSize = sizeof (m_pInitCharStatus->wPHitAverage);		break;	/* –½’†—¦ */
-	case 12:	pDst = (PBYTE)&m_pInitCharStatus->wPAvoidAverage;		dwSize = sizeof (m_pInitCharStatus->wPAvoidAverage);	break;	/* ‰ñ”ð—¦ */
-	case 13:	pDst = (PBYTE)&m_pInitCharStatus->wPCriticalAverage;	dwSize = sizeof (m_pInitCharStatus->wPCriticalAverage);	break;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	case 14:	pDst = (PBYTE)&m_pInitCharStatus->wAttrFire;			dwSize = sizeof (m_pInitCharStatus->wAttrFire);			break;	/* ‘®«[‰Î] */
-	case 15:	pDst = (PBYTE)&m_pInitCharStatus->wAttrWind;			dwSize = sizeof (m_pInitCharStatus->wAttrWind);			break;	/* ‘®«[•—] */
-	case 16:	pDst = (PBYTE)&m_pInitCharStatus->wAttrWater;			dwSize = sizeof (m_pInitCharStatus->wAttrWater);		break;	/* ‘®«[…] */
-	case 17:	pDst = (PBYTE)&m_pInitCharStatus->wAttrEarth;			dwSize = sizeof (m_pInitCharStatus->wAttrEarth);		break;	/* ‘®«[“y] */
-	case 18:	pDst = (PBYTE)&m_pInitCharStatus->wAttrLight;			dwSize = sizeof (m_pInitCharStatus->wAttrLight);		break;	/* ‘®«[Œõ] */
-	case 19:	pDst = (PBYTE)&m_pInitCharStatus->wAttrDark;			dwSize = sizeof (m_pInitCharStatus->wAttrDark);			break;	/* ‘®«[ˆÅ] */
-	case 20:	pDst = (PBYTE)&m_pInitCharStatus->dwMaxHP;				dwSize = sizeof (m_pInitCharStatus->dwMaxHP);			break;	/* Å‘åHP */
-	case 21:	pDst = (PBYTE)&m_pInitCharStatus->dwMaxSP;				dwSize = sizeof (m_pInitCharStatus->dwMaxSP);			break;	/* Å‘åSP */
-	case 22:	pDst = (PBYTE)&m_pInitCharStatus->dwInitPosMapID;		dwSize = sizeof (m_pInitCharStatus->dwInitPosMapID);	break;	/* ‰ŠúˆÊ’uƒ}ƒbƒvID */
-	case 23:	pDst = (PBYTE)&m_pInitCharStatus->ptInitPos;			dwSize = sizeof (m_pInitCharStatus->ptInitPos);			break;	/* ‰ŠúˆÊ’uÀ•W */
+	case 0:		pDst = (PBYTE)&m_pInitCharStatus->wStamina;				dwSize = sizeof (m_pInitCharStatus->wStamina);			break;	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	case 1:		pDst = (PBYTE)&m_pInitCharStatus->wPower;				dwSize = sizeof (m_pInitCharStatus->wPower);			break;	/* è…•åŠ› */
+	case 2:		pDst = (PBYTE)&m_pInitCharStatus->wStrength;			dwSize = sizeof (m_pInitCharStatus->wStrength);			break;	/* ä½“åŠ› */
+	case 3:		pDst = (PBYTE)&m_pInitCharStatus->wMagic;				dwSize = sizeof (m_pInitCharStatus->wMagic);			break;	/* é­”åŠ› */
+	case 4:		pDst = (PBYTE)&m_pInitCharStatus->wSkillful;			dwSize = sizeof (m_pInitCharStatus->wSkillful);			break;	/* å™¨ç”¨ */
+	case 5:		pDst = (PBYTE)&m_pInitCharStatus->wAbillityAT;			dwSize = sizeof (m_pInitCharStatus->wAbillityAT);		break;	/* æ”»æ’ƒæŠ€èƒ½ */
+	case 6:		pDst = (PBYTE)&m_pInitCharStatus->wAbillityDF;			dwSize = sizeof (m_pInitCharStatus->wAbillityDF);		break;	/* é˜²å¾¡æŠ€èƒ½ */
+	case 7:		pDst = (PBYTE)&m_pInitCharStatus->wPAtack;				dwSize = sizeof (m_pInitCharStatus->wPAtack);			break;	/* æ”»æ’ƒåŠ› */
+	case 8:		pDst = (PBYTE)&m_pInitCharStatus->wPDefense;			dwSize = sizeof (m_pInitCharStatus->wPDefense);			break;	/* é˜²å¾¡åŠ› */
+	case 9:		pDst = (PBYTE)&m_pInitCharStatus->wPMagic;				dwSize = sizeof (m_pInitCharStatus->wPMagic);			break;	/* é­”æ³•åŠ› */
+	case 10:	pDst = (PBYTE)&m_pInitCharStatus->wPMagicDefense;		dwSize = sizeof (m_pInitCharStatus->wPMagicDefense);	break;	/* é­”æ³•é˜²å¾¡åŠ› */
+	case 11:	pDst = (PBYTE)&m_pInitCharStatus->wPHitAverage;			dwSize = sizeof (m_pInitCharStatus->wPHitAverage);		break;	/* å‘½ä¸­çŽ‡ */
+	case 12:	pDst = (PBYTE)&m_pInitCharStatus->wPAvoidAverage;		dwSize = sizeof (m_pInitCharStatus->wPAvoidAverage);	break;	/* å›žé¿çŽ‡ */
+	case 13:	pDst = (PBYTE)&m_pInitCharStatus->wPCriticalAverage;	dwSize = sizeof (m_pInitCharStatus->wPCriticalAverage);	break;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«çŽ‡ */
+	case 14:	pDst = (PBYTE)&m_pInitCharStatus->wAttrFire;			dwSize = sizeof (m_pInitCharStatus->wAttrFire);			break;	/* å±žæ€§[ç«] */
+	case 15:	pDst = (PBYTE)&m_pInitCharStatus->wAttrWind;			dwSize = sizeof (m_pInitCharStatus->wAttrWind);			break;	/* å±žæ€§[é¢¨] */
+	case 16:	pDst = (PBYTE)&m_pInitCharStatus->wAttrWater;			dwSize = sizeof (m_pInitCharStatus->wAttrWater);		break;	/* å±žæ€§[æ°´] */
+	case 17:	pDst = (PBYTE)&m_pInitCharStatus->wAttrEarth;			dwSize = sizeof (m_pInitCharStatus->wAttrEarth);		break;	/* å±žæ€§[åœŸ] */
+	case 18:	pDst = (PBYTE)&m_pInitCharStatus->wAttrLight;			dwSize = sizeof (m_pInitCharStatus->wAttrLight);		break;	/* å±žæ€§[å…‰] */
+	case 19:	pDst = (PBYTE)&m_pInitCharStatus->wAttrDark;			dwSize = sizeof (m_pInitCharStatus->wAttrDark);			break;	/* å±žæ€§[é—‡] */
+	case 20:	pDst = (PBYTE)&m_pInitCharStatus->dwMaxHP;				dwSize = sizeof (m_pInitCharStatus->dwMaxHP);			break;	/* æœ€å¤§HP */
+	case 21:	pDst = (PBYTE)&m_pInitCharStatus->dwMaxSP;				dwSize = sizeof (m_pInitCharStatus->dwMaxSP);			break;	/* æœ€å¤§SP */
+	case 22:	pDst = (PBYTE)&m_pInitCharStatus->dwInitPosMapID;		dwSize = sizeof (m_pInitCharStatus->dwInitPosMapID);	break;	/* åˆæœŸä½ç½®ãƒžãƒƒãƒ—ID */
+	case 23:	pDst = (PBYTE)&m_pInitCharStatus->ptInitPos;			dwSize = sizeof (m_pInitCharStatus->ptInitPos);			break;	/* åˆæœŸä½ç½®åº§æ¨™ */
 	}
 
 	if (pDst) {
@@ -296,9 +296,9 @@ DWORD CInfoSystem::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 DWORD CInfoSystem::GetSendDataSize(void)
@@ -313,9 +313,9 @@ DWORD CInfoSystem::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 PBYTE CInfoSystem::GetSendData(void)
@@ -329,7 +329,7 @@ PBYTE CInfoSystem::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	pDataTmp	= pData;
 
-	CopyMemoryRenew (pDataTmp, m_pInitCharStatus, sizeof (STSYSTEM_INITCHARSTATUS), pDataTmp);	/* ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l */
+	CopyMemoryRenew (pDataTmp, m_pInitCharStatus, sizeof (STSYSTEM_INITCHARSTATUS), pDataTmp);	/* ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ */
 
 	pRet = pData;
 	return pRet;
@@ -337,10 +337,10 @@ PBYTE CInfoSystem::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðÝ’è												 */
-/* “ú•t		:2008/09/25														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CInfoSystem::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2008/09/25														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CInfoSystem::SetSendData(PBYTE pSrc)
@@ -350,7 +350,7 @@ PBYTE CInfoSystem::SetSendData(PBYTE pSrc)
 	pRet = pSrc;
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (m_pInitCharStatus, pDataTmp, sizeof (STSYSTEM_INITCHARSTATUS), pDataTmp);	/* ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l */
+	CopyMemoryRenew (m_pInitCharStatus, pDataTmp, sizeof (STSYSTEM_INITCHARSTATUS), pDataTmp);	/* ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -358,14 +358,14 @@ PBYTE CInfoSystem::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoSystem::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2008/09/25														 */
+/* é–¢æ•°å	:CInfoSystem::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2008/09/25														 */
 /* ========================================================================= */
 
 void CInfoSystem::Copy(CInfoSystem *pSrc)
 {
-	CopyMemory (m_pInitCharStatus, pSrc->m_pInitCharStatus, sizeof (STSYSTEM_INITCHARSTATUS));	/* ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l */
+	CopyMemory (m_pInitCharStatus, pSrc->m_pInitCharStatus, sizeof (STSYSTEM_INITCHARSTATUS));	/* ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ */
 }
 
 /* Copyright(C)URARA-works 2008 */

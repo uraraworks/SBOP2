@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowCHARNAME.h											 */
-/* “à—e			:ƒLƒƒƒ‰–¼“ü—ÍƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowCHARNAME.h											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©åå…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,33 +15,33 @@ class CMgrData;
 class CMgrGrpData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowCHARNAME : public CWindowBase
 {
 public:
-			CWindowCHARNAME();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowCHARNAME();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowCHARNAME();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowCHARNAME();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	void	SetActive	(BOOL bActive);								/* ƒAƒNƒeƒBƒu‚©Ý’è */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	void	SetActive	(BOOL bActive);								/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‹è¨­å®š */
 
 
 private:
-	void	MakeWindow	(void);										/* ƒEƒBƒ“ƒhƒEì¬ */
-	static LRESULT CALLBACK CharNameWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ƒLƒƒƒ‰–¼“ü—Í—“ƒvƒƒV[ƒWƒƒ */
+	void	MakeWindow	(void);										/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
+	static LRESULT CALLBACK CharNameWndProc		(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	/* ã‚­ãƒ£ãƒ©åå…¥åŠ›æ¬„ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
 
 
 public:
-	CmyString	m_strName;						/* “ü—Í‚³‚ê‚½ƒLƒƒƒ‰–¼ */
+	CmyString	m_strName;						/* å…¥åŠ›ã•ã‚ŒãŸã‚­ãƒ£ãƒ©å */
 
 
 private:
-	HWND	m_hWndCharName;							/* ƒLƒƒƒ‰–¼“ü—Í—“ */
+	HWND	m_hWndCharName;							/* ã‚­ãƒ£ãƒ©åå…¥åŠ›æ¬„ */
 
-	WNDPROC	m_OrgWndProcCharName;					/* ƒLƒƒƒ‰–¼“ü—Í—“‚ÌŒ³ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ */
+	WNDPROC	m_OrgWndProcCharName;					/* ã‚­ãƒ£ãƒ©åå…¥åŠ›æ¬„ã®å…ƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ */
 } CWindowCHARNAME, *PCWindowCHARNAME;
 
 /* Copyright(C)URARA-works 2006 */

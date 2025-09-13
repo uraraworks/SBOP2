@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_REQ_TAIL.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:•t‚¢‚Äs‚­—v‹) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_REQ_TAIL.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ä»˜ã„ã¦è¡Œãè¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,23 +11,23 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_REQ_TAIL : public CPacketBase
 {
 public:
-			CPacketCHAR_REQ_TAIL();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_REQ_TAIL();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_REQ_TAIL();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_REQ_TAIL();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, DWORD dwTargetCharID, BOOL bTail);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);										/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID, DWORD dwTargetCharID, BOOL bTail);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);										/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	BOOL	m_bTail;						/* ‚Â‚¢‚Ä‚¢‚­‚©‰ðœ‚© */
-	DWORD	m_dwCharID,						/* ƒLƒƒƒ‰ID */
-			m_dwTargetCharID;				/* •t‚¢‚Äs‚­‘ŠŽè‚ÌƒLƒƒƒ‰ID */
+	BOOL	m_bTail;						/* ã¤ã„ã¦ã„ãã‹è§£é™¤ã‹ */
+	DWORD	m_dwCharID,						/* ã‚­ãƒ£ãƒ©ID */
+			m_dwTargetCharID;				/* ä»˜ã„ã¦è¡Œãç›¸æ‰‹ã®ã‚­ãƒ£ãƒ©ID */
 } CPacketCHAR_REQ_TAIL, *PCPacketCHAR_REQ_TAIL;
 
 /* Copyright(C)URARA-works 2007 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcBATTLE.cpp								 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(í“¬ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcBATTLE.cpp								 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (æˆ¦é—˜ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/27													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,23 +16,23 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcBATTLE										 */
-/* “à—e		:ŽóMˆ—(í“¬Œn)												 */
-/* “ú•t		:2007/07/27														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcBATTLE										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æˆ¦é—˜ç³»)												 */
+/* æ—¥ä»˜		:2007/07/27														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcBATTLE(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_BATTLE_REQ_ATACK:	RecvProcBATTLE_REQ_ATACK (pData, dwSessionID);	break;	/* UŒ‚—v‹ */
+	case SBOCOMMANDID_SUB_BATTLE_REQ_ATACK:	RecvProcBATTLE_REQ_ATACK (pData, dwSessionID);	break;	/* æ”»æ’ƒè¦æ±‚ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcBATTLE_REQ_ATACK							 */
-/* “à—e		:ŽóMˆ—(UŒ‚—v‹)												 */
-/* “ú•t		:2007/07/27														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcBATTLE_REQ_ATACK							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ”»æ’ƒè¦æ±‚)												 */
+/* æ—¥ä»˜		:2007/07/27														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcBATTLE_REQ_ATACK(PBYTE pData, DWORD dwSessionID)

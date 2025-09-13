@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StateProcMAP.h												 */
-/* “à—e			:ó‘Ôˆ—ƒNƒ‰ƒX(ƒ}ƒbƒv‰æ–Ê) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StateProcMAP.h												 */
+/* å†…å®¹			:çŠ¶æ…‹å‡¦ç†ã‚¯ãƒ©ã‚¹(ãƒžãƒƒãƒ—ç”»é¢) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -20,102 +20,102 @@ class CDlgDbg;
 class CAdminWindow;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStateProcMAP : public CStateProcBase
 {
 public:
-			CStateProcMAP();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStateProcMAP();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStateProcMAP();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStateProcMAP();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void Create				(CMgrData *pMgrData, CUraraSockTCPSBO *pSock);	/* ì¬ */
-	void Init				(void);											/* ‰Šú‰» */
-	void GetMsgLogRect		(RECT &rcDst);									/* ƒƒbƒZ[ƒWƒƒOƒEƒBƒ“ƒhƒE‚Ì‹éŒ`‚ðŽæ“¾ */
-	BOOL TimerProc			(void);											/* ŽžŠÔˆ— */
-	void KeyProc			(BYTE byCode, BOOL bDown);						/* ƒL[ˆ— */
-	void OnWindowMsg		(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG) */
-	void OnLButtonDown		(int x, int y);									/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN) */
-	void OnRButtonDown		(int x, int y);									/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN) */
-	void OnRButtonDblClk	(int x, int y);									/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDBLCLK) */
-	void OnMouseMove		(int x, int y);									/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE) */
-	void OnMainFrame		(DWORD dwCommand, DWORD dwParam);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
-	void OnAdminMsg			(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-
-
-protected:
-	void	TimerProcSleepTimer			(void);											/* ŽžŠÔˆ—(‚¨‚Ð‚é‚Ëƒ^ƒCƒ}[) */
-	void	TimerProcChargeAtack		(void);											/* ŽžŠÔˆ—(—­‚ßUŒ‚) */
-	void	TimerProcGauge				(void);											/* ŽžŠÔˆ—(ƒQ[ƒW‰ñ•œ) */
-	BOOL	IsKeyInputEnable			(void);											/* ƒL[“ü—Í‚ð‹–‰Â‚·‚é‚©”»’è */
-	BOOL	OnUp						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
-	BOOL	OnS							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(S) */
-	BOOL	OnR							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(R) */
-	BOOL	OnB							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(B) */
-	BOOL	OnN							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(N) */
-	BOOL	OnV							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(V) */
-	BOOL	OnF							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(F) */
-	BOOL	OnJ							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(J) */
-	BOOL	OnL							(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(L) */
-	BOOL	OnAt						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(@) */
-	BOOL	OnEnter						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(Enter) */
-	BOOL	OnEscape					(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(Escape) */
-	BOOL	OnTab						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(Tab) */
-	BOOL	OnShift						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(Shift) */
-	BOOL	OnCtrl						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(Ctrl) */
-	BOOL	OnSpace						(BOOL bDown);									/* ƒL[ƒnƒ“ƒhƒ‰(Space) */
-	void	OnMgrDrawSTART_FADEIN		(DWORD dwPara);									/* ƒtƒF[ƒhƒCƒ“ŠJŽn */
-	void	OnMgrDrawEND_FADEIN			(DWORD dwPara);									/* ƒtƒF[ƒhƒCƒ“Š®—¹ */
-	BOOL	MoveProc					(int x, int y, int xx, int yy, int nDirection);	/* ˆÚ“®ˆ— */
-	BOOL	OnWindowMsgCHAT				(DWORD dwPara);									/* ƒ`ƒƒƒbƒg“ü—Í */
-	BOOL	OnWindowMsgSYSTEMMENU		(DWORD dwPara);									/* ƒVƒXƒeƒ€ƒƒjƒ…[ */
-	BOOL	OnWindowMsgSETCOLOR			(DWORD dwPara);									/* –¼‘O‚Æ”­Œ¾F‚ÌÝ’è */
-	BOOL	OnWindowMsgSETDRAWMODE		(DWORD dwPara);									/* •\Ž¦“à—e‚ÌÝ’è */
-	BOOL	OnWindowMsgITEMMENU			(DWORD dwPara);									/* ƒAƒCƒeƒ€ƒƒjƒ…[ */
-	BOOL	OnWindowMsgITEMMENU_SELECT	(DWORD dwPara);									/* ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[ */
-	BOOL	OnWindowMsgOPTION			(DWORD dwPara);									/* ƒIƒvƒVƒ‡ƒ“ */
-	BOOL	OnWindowMsgOPTION_VIEWSET	(DWORD dwPara);									/* ƒIƒvƒVƒ‡ƒ“-•\Ž¦Ý’è */
-	BOOL	OnWindowMsgOPTION_INPUTSET	(DWORD dwPara);									/* ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è */
-	BOOL	OnWindowMsgOPTION_TASKBAR	(DWORD dwPara);									/* ƒIƒvƒVƒ‡ƒ“(”­Œ¾Žž‚Éƒ^ƒXƒNƒo[ƒ`ƒJƒ`ƒJ) */
-	BOOL	OnWindowMsgOPTION_INPUTSET_SETDEVICE	(DWORD dwPara);						/* ƒIƒvƒVƒ‡ƒ“-“ü—ÍÝ’è-“ü—ÍƒfƒoƒCƒX‚ÌÝ’è */
-	BOOL	OnWindowMsgOPTION_ACTIONSET	(DWORD dwPara);									/* ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è */
-	BOOL	OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER	(DWORD dwPara);						/* ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è-‚¨‚Ð‚é‚Ëƒ^ƒCƒ}[‚ÌÝ’è */
-	BOOL	OnWindowMsgCOMMANDMENU		(DWORD dwPara);									/* ƒRƒ}ƒ“ƒhƒƒjƒ…[ */
-	BOOL	OnWindowMsgSWOON			(DWORD dwPara);									/* ‹Câƒƒjƒ…[ */
-	BOOL	OnWindowMsgSKILLMENU		(DWORD dwPara);									/* ƒXƒLƒ‹ƒƒjƒ…[ */
-	void	OnMainFrameRENEWITEMINFO	(DWORD dwItemID);								/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)[ƒAƒCƒeƒ€î•ñXV] */
-	void	OnMainFrameRENEWTALKEVENT	(DWORD dwParam);								/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)[‰ï˜bƒCƒxƒ“ƒgî•ñXV] */
-	BOOL	OnXChar						(DWORD dwCharID);								/* ƒLƒƒƒ‰‚ÉXƒL[‚ð‰Ÿ‚µ‚½Žž‚Ìˆ— */
-	void	AddSystemMsg				(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);		/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW‚ð’Ç‰Á */
-	void	DefenseOff					(void);											/* –hŒä‰ðœ */
-	DWORD	GetTalkCharID				(DWORD dwCharID, int nDirection);				/* ‰ï˜b‚Å‚«‚éƒLƒƒƒ‰ID‚ðŽæ“¾ */
+	void Create				(CMgrData *pMgrData, CUraraSockTCPSBO *pSock);	/* ä½œæˆ */
+	void Init				(void);											/* åˆæœŸåŒ– */
+	void GetMsgLogRect		(RECT &rcDst);									/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®çŸ©å½¢ã‚’å–å¾— */
+	BOOL TimerProc			(void);											/* æ™‚é–“å‡¦ç† */
+	void KeyProc			(BYTE byCode, BOOL bDown);						/* ã‚­ãƒ¼å‡¦ç† */
+	void OnWindowMsg		(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG) */
+	void OnLButtonDown		(int x, int y);									/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN) */
+	void OnRButtonDown		(int x, int y);									/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN) */
+	void OnRButtonDblClk	(int x, int y);									/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDBLCLK) */
+	void OnMouseMove		(int x, int y);									/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE) */
+	void OnMainFrame		(DWORD dwCommand, DWORD dwParam);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
+	void OnAdminMsg			(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
 
 
 protected:
-	BOOL			m_bChgScrollMode,					/* ƒXƒNƒ[ƒ‹ƒ‚[ƒh‚Ì•ÏX‚É“ü‚ê‚é‚©ƒ`ƒFƒbƒN */
-					m_bSendCheckMapEvent;				/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN‚ð‘—M‚µ‚½‚©”»’è */
-	int				m_nScrollMode;						/* ƒXƒNƒ[ƒ‹ƒ‚[ƒh */
-	DWORD			m_dwLastTimeMove,					/* ÅŒã‚ÉˆÚ“®‚µ‚½ŽžŠÔ */
-					m_dwLastTimeKeepAlive,				/* ÅŒã‚É¶‘¶Šm”F’Ê’m‚ð‘—M‚µ‚½ŽžŠÔ */
-					m_dwLastTimeGauge,					/* ƒQ[ƒW‰ñ•œŽžŠÔ */
-					m_dwLastBalloonID,					/* ÅŒã‚ÉŽg‚Á‚½•¬o‚µID */
-					m_dwLastKeyInput,					/* ÅŒã‚ÉƒL[“ü—Í‚µ‚½ŽžŠÔ */
-					m_dwStartChargeTime;				/* —­‚ßŠJŽnŽžŠÔ */
+	void	TimerProcSleepTimer			(void);											/* æ™‚é–“å‡¦ç†(ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒžãƒ¼) */
+	void	TimerProcChargeAtack		(void);											/* æ™‚é–“å‡¦ç†(æºœã‚æ”»æ’ƒ) */
+	void	TimerProcGauge				(void);											/* æ™‚é–“å‡¦ç†(ã‚²ãƒ¼ã‚¸å›žå¾©) */
+	BOOL	IsKeyInputEnable			(void);											/* ã‚­ãƒ¼å…¥åŠ›ã‚’è¨±å¯ã™ã‚‹ã‹åˆ¤å®š */
+	BOOL	OnUp						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+	BOOL	OnS							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(S) */
+	BOOL	OnR							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(R) */
+	BOOL	OnB							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B) */
+	BOOL	OnN							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(N) */
+	BOOL	OnV							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(V) */
+	BOOL	OnF							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(F) */
+	BOOL	OnJ							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(J) */
+	BOOL	OnL							(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(L) */
+	BOOL	OnAt						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(@) */
+	BOOL	OnEnter						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Enter) */
+	BOOL	OnEscape					(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Escape) */
+	BOOL	OnTab						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Tab) */
+	BOOL	OnShift						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Shift) */
+	BOOL	OnCtrl						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Ctrl) */
+	BOOL	OnSpace						(BOOL bDown);									/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Space) */
+	void	OnMgrDrawSTART_FADEIN		(DWORD dwPara);									/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³é–‹å§‹ */
+	void	OnMgrDrawEND_FADEIN			(DWORD dwPara);									/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³å®Œäº† */
+	BOOL	MoveProc					(int x, int y, int xx, int yy, int nDirection);	/* ç§»å‹•å‡¦ç† */
+	BOOL	OnWindowMsgCHAT				(DWORD dwPara);									/* ãƒãƒ£ãƒƒãƒˆå…¥åŠ› */
+	BOOL	OnWindowMsgSYSTEMMENU		(DWORD dwPara);									/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	BOOL	OnWindowMsgSETCOLOR			(DWORD dwPara);									/* åå‰ã¨ç™ºè¨€è‰²ã®è¨­å®š */
+	BOOL	OnWindowMsgSETDRAWMODE		(DWORD dwPara);									/* è¡¨ç¤ºå†…å®¹ã®è¨­å®š */
+	BOOL	OnWindowMsgITEMMENU			(DWORD dwPara);									/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	BOOL	OnWindowMsgITEMMENU_SELECT	(DWORD dwPara);									/* ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	BOOL	OnWindowMsgOPTION			(DWORD dwPara);									/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³ */
+	BOOL	OnWindowMsgOPTION_VIEWSET	(DWORD dwPara);									/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-è¡¨ç¤ºè¨­å®š */
+	BOOL	OnWindowMsgOPTION_INPUTSET	(DWORD dwPara);									/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š */
+	BOOL	OnWindowMsgOPTION_TASKBAR	(DWORD dwPara);									/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³(ç™ºè¨€æ™‚ã«ã‚¿ã‚¹ã‚¯ãƒãƒ¼ãƒã‚«ãƒã‚«) */
+	BOOL	OnWindowMsgOPTION_INPUTSET_SETDEVICE	(DWORD dwPara);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å…¥åŠ›è¨­å®š-å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ã®è¨­å®š */
+	BOOL	OnWindowMsgOPTION_ACTIONSET	(DWORD dwPara);									/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š */
+	BOOL	OnWindowMsgOPTION_ACTIONSET_SLEEPTIMER	(DWORD dwPara);						/* ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š-ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒžãƒ¼ã®è¨­å®š */
+	BOOL	OnWindowMsgCOMMANDMENU		(DWORD dwPara);									/* ã‚³ãƒžãƒ³ãƒ‰ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	BOOL	OnWindowMsgSWOON			(DWORD dwPara);									/* æ°—çµ¶ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	BOOL	OnWindowMsgSKILLMENU		(DWORD dwPara);									/* ã‚¹ã‚­ãƒ«ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	void	OnMainFrameRENEWITEMINFO	(DWORD dwItemID);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)[ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–°] */
+	void	OnMainFrameRENEWTALKEVENT	(DWORD dwParam);								/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)[ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–°] */
+	BOOL	OnXChar						(DWORD dwCharID);								/* ã‚­ãƒ£ãƒ©ã«Xã‚­ãƒ¼ã‚’æŠ¼ã—ãŸæ™‚ã®å‡¦ç† */
+	void	AddSystemMsg				(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);		/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿½åŠ  */
+	void	DefenseOff					(void);											/* é˜²å¾¡è§£é™¤ */
+	DWORD	GetTalkCharID				(DWORD dwCharID, int nDirection);				/* ä¼šè©±ã§ãã‚‹ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
 
-	CAdminWindow	*m_pAdminWindow;					/* ŠÇ—ŽÒƒEƒBƒ“ƒhƒE */
-	CInfoCharCli	*m_pPlayerChar;						/* ‘€ì’†‚ÌƒLƒƒƒ‰î•ñ */
-	CInfoMapBase	*m_pMap;							/* •\Ž¦’†‚Ìƒ}ƒbƒvî•ñ */
 
-	CLibInfoCharCli	*m_pLibInfoChar;					/* ƒLƒƒƒ‰î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapBase	*m_pLibInfoMap;						/* ƒ}ƒbƒvî•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoItem	*m_pLibInfoItem;					/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CDlgMsgLog		*m_pDlgMsgLog;						/* ƒƒbƒZ[ƒWƒƒOƒEƒBƒ“ƒhƒE */
-	CDlgDbg			*m_pDlgDbg;							/* ƒfƒoƒbƒOƒEƒBƒ“ƒhƒE */
+protected:
+	BOOL			m_bChgScrollMode,					/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒ¢ãƒ¼ãƒ‰ã®å¤‰æ›´ã«å…¥ã‚Œã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
+					m_bSendCheckMapEvent;				/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯ã‚’é€ä¿¡ã—ãŸã‹åˆ¤å®š */
+	int				m_nScrollMode;						/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒ¢ãƒ¼ãƒ‰ */
+	DWORD			m_dwLastTimeMove,					/* æœ€å¾Œã«ç§»å‹•ã—ãŸæ™‚é–“ */
+					m_dwLastTimeKeepAlive,				/* æœ€å¾Œã«ç”Ÿå­˜ç¢ºèªé€šçŸ¥ã‚’é€ä¿¡ã—ãŸæ™‚é–“ */
+					m_dwLastTimeGauge,					/* ã‚²ãƒ¼ã‚¸å›žå¾©æ™‚é–“ */
+					m_dwLastBalloonID,					/* æœ€å¾Œã«ä½¿ã£ãŸå™´å‡ºã—ID */
+					m_dwLastKeyInput,					/* æœ€å¾Œã«ã‚­ãƒ¼å…¥åŠ›ã—ãŸæ™‚é–“ */
+					m_dwStartChargeTime;				/* æºœã‚é–‹å§‹æ™‚é–“ */
+
+	CAdminWindow	*m_pAdminWindow;					/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CInfoCharCli	*m_pPlayerChar;						/* æ“ä½œä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
+	CInfoMapBase	*m_pMap;							/* è¡¨ç¤ºä¸­ã®ãƒžãƒƒãƒ—æƒ…å ± */
+
+	CLibInfoCharCli	*m_pLibInfoChar;					/* ã‚­ãƒ£ãƒ©æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapBase	*m_pLibInfoMap;						/* ãƒžãƒƒãƒ—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoItem	*m_pLibInfoItem;					/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CDlgMsgLog		*m_pDlgMsgLog;						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CDlgDbg			*m_pDlgDbg;							/* ãƒ‡ãƒãƒƒã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 } CStateProcMAP, *PCStateProcMAP;
 
 /* Copyright(C)URARA-works 2006 */

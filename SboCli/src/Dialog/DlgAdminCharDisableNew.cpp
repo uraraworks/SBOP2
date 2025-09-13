@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharDisableNew.cpp									 */
-/* “à—e			:‹‘”ÛMACƒAƒhƒŒƒX‚Ì’Ç‰Áƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/04/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharDisableNew.cpp									 */
+/* å†…å®¹			:æ‹’å¦MACã‚¢ãƒ‰ãƒ¬ã‚¹ã®è¿½åŠ ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/04/11													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisableNew::DoDataExchange(CDataExchange* pDX)
@@ -35,9 +35,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisableNew::CDlgAdminCharDisableNew				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CDlgAdminCharDisableNew::CDlgAdminCharDisableNew				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 CDlgAdminCharDisableNew::CDlgAdminCharDisableNew(CWnd* pParent /*=NULL*/)
@@ -50,9 +50,9 @@ CDlgAdminCharDisableNew::CDlgAdminCharDisableNew(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisableNew::~CDlgAdminCharDisableNew				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CDlgAdminCharDisableNew::~CDlgAdminCharDisableNew				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 CDlgAdminCharDisableNew::~CDlgAdminCharDisableNew()
@@ -61,9 +61,9 @@ CDlgAdminCharDisableNew::~CDlgAdminCharDisableNew()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisableNew::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CDlgAdminCharDisableNew::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisableNew::PostNcDestroy()
@@ -73,9 +73,9 @@ void CDlgAdminCharDisableNew::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharDisableNew::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CDlgAdminCharDisableNew::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CDlgAdminCharDisableNew::OnOK()

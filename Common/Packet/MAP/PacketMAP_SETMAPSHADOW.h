@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_SETMAPSHADOW.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒv‰e”z’u) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/06/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_SETMAPSHADOW.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ãƒžãƒƒãƒ—å½±é…ç½®) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,23 +11,23 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_SETMAPSHADOW : public CPacketBase
 {
 public:
-			CPacketMAP_SETMAPSHADOW();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_SETMAPSHADOW();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_SETMAPSHADOW();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_SETMAPSHADOW();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMapID, int x, int y, DWORD dwShadowID);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwMapID, int x, int y, DWORD dwShadowID);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	POINT	m_ptPos;				/* À•W */
-	DWORD	m_dwMapID,				/* ƒ}ƒbƒvID */
-			m_dwShadowID;			/* ƒ}ƒbƒv‰eID */
+	POINT	m_ptPos;				/* åº§æ¨™ */
+	DWORD	m_dwMapID,				/* ãƒžãƒƒãƒ—ID */
+			m_dwShadowID;			/* ãƒžãƒƒãƒ—å½±ID */
 } CPacketMAP_SETMAPSHADOW, *PCPacketMAP_SETMAPSHADOW;
 
 /* Copyright(C)URARA-works 2007 */

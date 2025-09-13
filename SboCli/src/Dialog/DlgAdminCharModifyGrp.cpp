@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyGrp.cpp									 */
-/* “à—e			:‘I‘ğƒLƒƒƒ‰î•ñ•ÒW[‰æ‘œ‚Ìİ’è]ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyGrp.cpp									 */
+/* å†…å®¹			:é¸æŠã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†[ç”»åƒã®è¨­å®š]ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/02													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::DoDataExchange(CDataExchange* pDX)
@@ -50,9 +50,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp(CWnd* pParent /*=NULL*/)
@@ -75,9 +75,9 @@ CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyGrp::~CDlgAdminCharModifyGrp				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyGrp::~CDlgAdminCharModifyGrp				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyGrp::~CDlgAdminCharModifyGrp()
@@ -86,25 +86,25 @@ CDlgAdminCharModifyGrp::~CDlgAdminCharModifyGrp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyGrp::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyGrp::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminCharModifyGrp::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyGrp::Renew									 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyGrp::Renew									 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::Renew(void)
@@ -132,9 +132,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyGrp::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyGrp::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::OnAdminMsg(int nType, DWORD dwPara)
@@ -149,9 +149,9 @@ void CDlgAdminCharModifyGrp::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyGrp::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyGrp::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharModifyGrp::OnInitDialog()
@@ -163,9 +163,9 @@ BOOL CDlgAdminCharModifyGrp::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyGrp::OnSend									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyGrp::OnSend									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::OnSend()

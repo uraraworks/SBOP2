@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcADMIN.cpp									 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ŠÇ—ŽÒŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/03/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcADMIN.cpp									 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ç®¡ç†è€…ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/03/18													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -34,9 +34,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN										 */
-/* “à—e		:ŽóMˆ—(ŠÇ—ŽÒŒn)												 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç®¡ç†è€…ç³»)												 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
@@ -48,71 +48,71 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 	if (pInfoAccount->m_nAdminLevel == ADMINLEVEL_NONE) {
-		m_pLog->Write ("¡ Œ ŒÀ–³‚µ‚©‚ç‚Ì—v‹ dwSessionID:[%d] byCmdSub:[%d]", dwSessionID, byCmdSub);
+		m_pLog->Write ("â–  æ¨©é™ç„¡ã—ã‹ã‚‰ã®è¦æ±‚ dwSessionID:[%d] byCmdSub:[%d]", dwSessionID, byCmdSub);
 		PostMessage (m_hWnd, WM_DISCONNECT, 0, dwSessionID);
 		return;
 	}
 
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_ADMIN_CHARINFO:				RecvProcADMIN_CHARINFO				(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰î•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_ADMIN_DELETECHARINFO:			RecvProcADMIN_DELETECHARINFO		(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰î•ñíœ */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPOBJECT:		RecvProcADMIN_MAP_RENEWMAPOBJECT	(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgXV */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWOBJECTDATA:	RecvProcADMIN_MAP_RENEWOBJECTDATA	(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^XV */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEOBJECTDATA:	RecvProcADMIN_MAP_DELETEOBJECTDATA	(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^íœ */
-	case SBOCOMMANDID_SUB_ADMIN_RENEWMAPPARTS:			RecvProcADMIN_RENEWMAPPARTS			(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒp[ƒcXV */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_SETPARTS:			RecvProcADMIN_MAP_SETPARTS			(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒp[ƒc”z’u */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPSIZE:		RecvProcADMIN_MAP_RENEWMAPSIZE		(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒTƒCƒYXV */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEPARTS:		RecvProcADMIN_MAP_DELETEPARTS		(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒp[ƒcíœ */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_COPYPARTS:			RecvProcADMIN_MAP_COPYPARTS			(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒp[ƒcƒRƒs[ */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_SETMAPNAME:			RecvProcADMIN_MAP_SETMAPNAME		(pData, dwSessionID);	break;	/* ƒ}ƒbƒv–¼•ÏX */
-	case SBOCOMMANDID_SUB_ADMIN_RENEWMAPSHADOW:			RecvProcADMIN_RENEWMAPSHADOW		(pData, dwSessionID);	break;	/* ƒ}ƒbƒv‰eXV */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_SETMAPSHADOW:		RecvProcADMIN_MAP_SETMAPSHADOW		(pData, dwSessionID);	break;	/* ƒ}ƒbƒv‰e”z’u */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEMAPSHADOW:	RecvProcADMIN_MAP_DELETEMAPSHADOW	(pData, dwSessionID);	break;	/* ƒ}ƒbƒv‰eíœ */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWEVENT:			RecvProcADMIN_MAP_RENEWEVENT		(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñXV */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEEVENT:		RecvProcADMIN_MAP_DELETEEVENT		(pData, dwSessionID);	break;	/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñíœ */
-	case SBOCOMMANDID_SUB_ADMIN_MAP_ADD:				RecvProcADMIN_MAP_ADD				(pData, dwSessionID);	break;	/* ƒ}ƒbƒv’Ç‰Á */
-	case SBOCOMMANDID_SUB_ADMIN_REQ_ADMINLEVEL:			RecvProcADMIN_REQ_ADMINILEVEL		(pData, dwSessionID);	break;	/* ŠÇ—ŽÒŒ ŒÀƒŒƒxƒ‹—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_RENEWADMINLEVEL:		RecvProcADMIN_RENEWADMINILEVEL		(pData, dwSessionID);	break;	/* ŠÇ—ŽÒŒ ŒÀƒŒƒxƒ‹XV */
-	case SBOCOMMANDID_SUB_ADMIN_SERVER_SAVEINFO:		RecvProcADMIN_SERVER_SAVEINFO		(pData, dwSessionID);	break;	/* ƒT[ƒo[î•ñ•Û‘¶ */
-	case SBOCOMMANDID_SUB_ADMIN_ITEM_ADD:				RecvProcADMIN_ITEM_ADD				(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€î•ñ’Ç‰Á */
-	case SBOCOMMANDID_SUB_ADMIN_ITEM_COPY:				RecvProcADMIN_ITEM_COPY				(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€î•ñƒRƒs[ */
-	case SBOCOMMANDID_SUB_ADMIN_ITEM_DELETE:			RecvProcADMIN_ITEM_DELETE			(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€î•ñíœ */
-	case SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_ADD:			RecvProcADMIN_ITEMTYPE_ADD			(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñ’Ç‰Á */
-	case SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_COPY:			RecvProcADMIN_ITEMTYPE_COPY			(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñƒRƒs[ */
-	case SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_DELETE:		RecvProcADMIN_ITEMTYPE_DELETE		(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñíœ */
-	case SBOCOMMANDID_SUB_ADMIN_ITEMWEAPON_ADD:			RecvProcADMIN_ITEMWEAPON_ADD		(pData, dwSessionID);	break;	/* •Šíî•ñ’Ç‰Á */
-	case SBOCOMMANDID_SUB_ADMIN_ITEMWEAPON_RENEW:		RecvProcADMIN_ITEMWEAPON_RENEW		(pData, dwSessionID);	break;	/* •Šíî•ñXV */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_ADDNPC:			RecvProcADMIN_CHAR_ADDNPC			(pData, dwSessionID);	break;	/* NPC‚Ì’Ç‰Á */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_MODIFYITEM:		RecvProcADMIN_CHAR_MODIFYITEM		(pData, dwSessionID);	break;	/* ŠŽƒAƒCƒeƒ€‚Ì•ÏX */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_MODIFYSKILL:		RecvProcADMIN_CHAR_MODIFYSKILL		(pData, dwSessionID);	break;	/* ŠŽƒXƒLƒ‹‚Ì•ÏX */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTION:		RecvProcADMIN_CHAR_RENEWMOTION		(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“î•ñ‚ÌXV */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_ADDMOTIONTYPE:		RecvProcADMIN_CHAR_ADDMOTIONTYPE	(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“î•ñŽí•Ê‚Ì’Ç‰Á */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTIONTYPE:	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(pData, dwSessionID);	break;	/* ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“î•ñŽí•Ê‚ÌXV */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWSTATUS:		RecvProcADMIN_CHAR_RENEWSTATUS		(pData, dwSessionID);	break;	/* ƒXƒe[ƒ^ƒXî•ñXV */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_STATUS:		RecvProcADMIN_CHAR_REQ_STATUS		(pData, dwSessionID);	break;	/* ƒXƒe[ƒ^ƒXî•ñ—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ONLINE:		RecvProcADMIN_CHAR_REQ_ONLINE		(pData, dwSessionID);	break;	/* ƒIƒ“ƒ‰ƒCƒ“’†ƒLƒƒƒ‰ˆê———v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_EFC_RENEWBALLOON:		RecvProcADMIN_EFC_RENEWBALLOON		(pData, dwSessionID);	break;	/* •¬o‚µî•ñ‚ÌXV */
-	case SBOCOMMANDID_SUB_ADMIN_EFC_RENEWEFFECT:		RecvProcADMIN_EFC_RENEWEFFECT		(pData, dwSessionID);	break;	/* ƒGƒtƒFƒNƒgî•ñ‚ÌXV */
-	case SBOCOMMANDID_SUB_ADMIN_REQ_PLAYSOUND:			RecvProcADMIN_REQ_PLAYSOUND			(pData, dwSessionID);	break;	/* Œø‰Ê‰¹‚ÌÄ¶—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ACCOUNT:		RecvProcADMIN_CHAR_REQ_ACCOUNT		(pData, dwSessionID);	break;	/* ƒAƒJƒEƒ“ƒgî•ñ—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEW_ACCOUNT:		RecvProcADMIN_CHAR_RENEW_ACCOUNT	(pData, dwSessionID);	break;	/* ƒAƒJƒEƒ“ƒgî•ñXV */
-	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEW_TALKEVENT:	RecvProcADMIN_CHAR_RENEW_TALKEVENT	(pData, dwSessionID);	break;	/* ‰ï˜bƒCƒxƒ“ƒgî•ñXV */
-	case SBOCOMMANDID_SUB_ADMIN_RENEW_CLIENTVERSION:	RecvProcADMIN_RENEW_CLIENTVERSION	(pData, dwSessionID);	break;	/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“XV */
-	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_REQ_INFO:		RecvProcADMIN_SYSTEM_REQ_INFO		(pData, dwSessionID);	break;	/* ƒVƒXƒeƒ€î•ñ—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO:		RecvProcADMIN_SYSTEM_RENEWINFO		(pData, dwSessionID);	break;	/* ƒVƒXƒeƒ€î•ñ‚ÌXV */
-	case SBOCOMMANDID_SUB_ADMIN_SKILL_RENEWSKILL:		RecvProcADMIN_SKILL_RENEWSKILL		(pData, dwSessionID);	break;	/* ƒXƒLƒ‹î•ñXV */
-	case SBOCOMMANDID_SUB_ADMIN_ACCOUNT_REQ_ADD:		RecvProcADMIN_ACCOUNT_REQ_ADD		(pData, dwSessionID);	break;	/* ƒAƒJƒEƒ“ƒg‚Ì’Ç‰Á—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_INFO:		RecvProcADMIN_DISABLE_REQ_INFO		(pData, dwSessionID);	break;	/* ‹‘”Ûî•ñ—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_DELETE:		RecvProcADMIN_DISABLE_REQ_DELETE	(pData, dwSessionID);	break;	/* ‹‘”Ûî•ñ‚Ìíœ—v‹ */
-	case SBOCOMMANDID_SUB_ADMIN_DISABLE_RENEWINFO:		RecvProcADMIN_DISABLE_RENEWINFO		(pData, dwSessionID);	break;	/* ‹‘”Ûî•ñ‚ÌXV */
+	case SBOCOMMANDID_SUB_ADMIN_CHARINFO:				RecvProcADMIN_CHARINFO				(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©æƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_ADMIN_DELETECHARINFO:			RecvProcADMIN_DELETECHARINFO		(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©æƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPOBJECT:		RecvProcADMIN_MAP_RENEWMAPOBJECT	(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWOBJECTDATA:	RecvProcADMIN_MAP_RENEWOBJECTDATA	(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEOBJECTDATA:	RecvProcADMIN_MAP_DELETEOBJECTDATA	(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ADMIN_RENEWMAPPARTS:			RecvProcADMIN_RENEWMAPPARTS			(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_SETPARTS:			RecvProcADMIN_MAP_SETPARTS			(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„é…ç½® */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWMAPSIZE:		RecvProcADMIN_MAP_RENEWMAPSIZE		(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEPARTS:		RecvProcADMIN_MAP_DELETEPARTS		(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_COPYPARTS:			RecvProcADMIN_MAP_COPYPARTS			(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚³ãƒ”ãƒ¼ */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_SETMAPNAME:			RecvProcADMIN_MAP_SETMAPNAME		(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—åå¤‰æ›´ */
+	case SBOCOMMANDID_SUB_ADMIN_RENEWMAPSHADOW:			RecvProcADMIN_RENEWMAPSHADOW		(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—å½±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_SETMAPSHADOW:		RecvProcADMIN_MAP_SETMAPSHADOW		(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—å½±é…ç½® */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEMAPSHADOW:	RecvProcADMIN_MAP_DELETEMAPSHADOW	(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—å½±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_RENEWEVENT:			RecvProcADMIN_MAP_RENEWEVENT		(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_DELETEEVENT:		RecvProcADMIN_MAP_DELETEEVENT		(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ADMIN_MAP_ADD:				RecvProcADMIN_MAP_ADD				(pData, dwSessionID);	break;	/* ãƒžãƒƒãƒ—è¿½åŠ  */
+	case SBOCOMMANDID_SUB_ADMIN_REQ_ADMINLEVEL:			RecvProcADMIN_REQ_ADMINILEVEL		(pData, dwSessionID);	break;	/* ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_RENEWADMINLEVEL:		RecvProcADMIN_RENEWADMINILEVEL		(pData, dwSessionID);	break;	/* ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_SERVER_SAVEINFO:		RecvProcADMIN_SERVER_SAVEINFO		(pData, dwSessionID);	break;	/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä¿å­˜ */
+	case SBOCOMMANDID_SUB_ADMIN_ITEM_ADD:				RecvProcADMIN_ITEM_ADD				(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±è¿½åŠ  */
+	case SBOCOMMANDID_SUB_ADMIN_ITEM_COPY:				RecvProcADMIN_ITEM_COPY				(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚³ãƒ”ãƒ¼ */
+	case SBOCOMMANDID_SUB_ADMIN_ITEM_DELETE:			RecvProcADMIN_ITEM_DELETE			(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_ADD:			RecvProcADMIN_ITEMTYPE_ADD			(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¿½åŠ  */
+	case SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_COPY:			RecvProcADMIN_ITEMTYPE_COPY			(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ã‚³ãƒ”ãƒ¼ */
+	case SBOCOMMANDID_SUB_ADMIN_ITEMTYPE_DELETE:		RecvProcADMIN_ITEMTYPE_DELETE		(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ADMIN_ITEMWEAPON_ADD:			RecvProcADMIN_ITEMWEAPON_ADD		(pData, dwSessionID);	break;	/* æ­¦å™¨æƒ…å ±è¿½åŠ  */
+	case SBOCOMMANDID_SUB_ADMIN_ITEMWEAPON_RENEW:		RecvProcADMIN_ITEMWEAPON_RENEW		(pData, dwSessionID);	break;	/* æ­¦å™¨æƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_ADDNPC:			RecvProcADMIN_CHAR_ADDNPC			(pData, dwSessionID);	break;	/* NPCã®è¿½åŠ  */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_MODIFYITEM:		RecvProcADMIN_CHAR_MODIFYITEM		(pData, dwSessionID);	break;	/* æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã®å¤‰æ›´ */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_MODIFYSKILL:		RecvProcADMIN_CHAR_MODIFYSKILL		(pData, dwSessionID);	break;	/* æ‰€æŒã‚¹ã‚­ãƒ«ã®å¤‰æ›´ */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTION:		RecvProcADMIN_CHAR_RENEWMOTION		(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_ADDMOTIONTYPE:		RecvProcADMIN_CHAR_ADDMOTIONTYPE	(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ç¨®åˆ¥ã®è¿½åŠ  */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWMOTIONTYPE:	RecvProcADMIN_CHAR_RENEWMOTIONTYPE	(pData, dwSessionID);	break;	/* ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ç¨®åˆ¥ã®æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEWSTATUS:		RecvProcADMIN_CHAR_RENEWSTATUS		(pData, dwSessionID);	break;	/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_STATUS:		RecvProcADMIN_CHAR_REQ_STATUS		(pData, dwSessionID);	break;	/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ONLINE:		RecvProcADMIN_CHAR_REQ_ONLINE		(pData, dwSessionID);	break;	/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©ä¸€è¦§è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_EFC_RENEWBALLOON:		RecvProcADMIN_EFC_RENEWBALLOON		(pData, dwSessionID);	break;	/* å™´å‡ºã—æƒ…å ±ã®æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_EFC_RENEWEFFECT:		RecvProcADMIN_EFC_RENEWEFFECT		(pData, dwSessionID);	break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ã®æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_REQ_PLAYSOUND:			RecvProcADMIN_REQ_PLAYSOUND			(pData, dwSessionID);	break;	/* åŠ¹æžœéŸ³ã®å†ç”Ÿè¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ACCOUNT:		RecvProcADMIN_CHAR_REQ_ACCOUNT		(pData, dwSessionID);	break;	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEW_ACCOUNT:		RecvProcADMIN_CHAR_RENEW_ACCOUNT	(pData, dwSessionID);	break;	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_CHAR_RENEW_TALKEVENT:	RecvProcADMIN_CHAR_RENEW_TALKEVENT	(pData, dwSessionID);	break;	/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_RENEW_CLIENTVERSION:	RecvProcADMIN_RENEW_CLIENTVERSION	(pData, dwSessionID);	break;	/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_REQ_INFO:		RecvProcADMIN_SYSTEM_REQ_INFO		(pData, dwSessionID);	break;	/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_SYSTEM_RENEWINFO:		RecvProcADMIN_SYSTEM_RENEWINFO		(pData, dwSessionID);	break;	/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã®æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_SKILL_RENEWSKILL:		RecvProcADMIN_SKILL_RENEWSKILL		(pData, dwSessionID);	break;	/* ã‚¹ã‚­ãƒ«æƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ADMIN_ACCOUNT_REQ_ADD:		RecvProcADMIN_ACCOUNT_REQ_ADD		(pData, dwSessionID);	break;	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_INFO:		RecvProcADMIN_DISABLE_REQ_INFO		(pData, dwSessionID);	break;	/* æ‹’å¦æƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_DELETE:		RecvProcADMIN_DISABLE_REQ_DELETE	(pData, dwSessionID);	break;	/* æ‹’å¦æƒ…å ±ã®å‰Šé™¤è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ADMIN_DISABLE_RENEWINFO:		RecvProcADMIN_DISABLE_RENEWINFO		(pData, dwSessionID);	break;	/* æ‹’å¦æƒ…å ±ã®æ›´æ–° */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHARINFO								 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰î•ñ’Ê’m)										 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHARINFO								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©æƒ…å ±é€šçŸ¥)										 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
@@ -131,7 +131,7 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		return;
 	}
-	/* ˆÚ“®Ží•Ê‚ª•Ï‚í‚Á‚½H */
+	/* ç§»å‹•ç¨®åˆ¥ãŒå¤‰ã‚ã£ãŸï¼Ÿ */
 	if (Packet.m_pInfoChar->m_nMoveType != pInfoChar->m_nMoveType) {
 		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetNew (Packet.m_pInfoChar->m_nMoveType);
 		pInfoCharTmp->CopyAll (pInfoChar);
@@ -146,7 +146,7 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 	Packet.m_pInfoChar->m_nMoveState		= pInfoChar->m_nMoveState;
 
 	if (pInfoChar->m_dwMapID != Packet.m_pInfoChar->m_dwMapID) {
-		/* Žü‚è‚ÌƒLƒƒƒ‰‚É’Ê’m */
+		/* å‘¨ã‚Šã®ã‚­ãƒ£ãƒ©ã«é€šçŸ¥ */
 		PacketCHAR_STATE.Make (pInfoChar->m_dwCharID, CHARMOVESTATE_DELETE);
 		SendToScreenChar (pInfoChar, &PacketCHAR_STATE);
 	}
@@ -164,7 +164,7 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar->m_bChgScreenPos) {
 		pInfoChar->m_bChgPosRenew = TRUE;
 	}
-	/* ƒ}ƒbƒvˆÚ“®‚µ‚½H */
+	/* ãƒžãƒƒãƒ—ç§»å‹•ã—ãŸï¼Ÿ */
 	if (Packet.m_pInfoChar->m_dwMapID != dwMapIDBack) {
 		pInfoChar->m_bChgMap = TRUE;
 		pInfoChar->m_bChgPosRenew = FALSE;
@@ -173,9 +173,9 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_DELETECHARINFO						 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰î•ñíœ)										 */
-/* “ú•t		:2008/11/28														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_DELETECHARINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©æƒ…å ±å‰Šé™¤)										 */
+/* æ—¥ä»˜		:2008/11/28														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_DELETECHARINFO(PBYTE pData, DWORD dwSessionID)
@@ -198,9 +198,9 @@ void CMainFrame::RecvProcADMIN_DELETECHARINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT					 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgXV)								 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°)								 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT(PBYTE pData, DWORD dwSessionID)
@@ -226,16 +226,16 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWMAPOBJECT(PBYTE pData, DWORD dwSessionID
 
 	m_pLibInfoMap->RenewHitTmp ();
 
-	/* XV‚³‚ê‚½ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ‚ð‘SƒNƒ‰ƒCƒAƒ“ƒg‚Ö’Ê’m */
+	/* æ›´æ–°ã•ã‚ŒãŸãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±ã‚’å…¨ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€šçŸ¥ */
 	PacketMAP_MAPOBJECT.Make (pInfo);
 	m_pSock->SendTo (0, &PacketMAP_MAPOBJECT);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA					 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^XV)						 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿æ›´æ–°)						 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA(PBYTE pData, DWORD dwSessionID)
@@ -257,13 +257,13 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA(PBYTE pData, DWORD dwSessionI
 		return;
 	}
 
-	/* ’Ç‰ÁH */
+	/* è¿½åŠ ï¼Ÿ */
 	if (Packet.m_pInfo->m_dwDataID == 0) {
 		pObjectData = (PCInfoMapObjectData)pLibInfo->GetNew ();
 		pObjectData->Copy (Packet.m_pInfo);
 		pLibInfo->Add (pObjectData);
 
-	/* XV */
+	/* æ›´æ–° */
 	} else {
 		pObjectData = pLibInfo->Renew (Packet.m_pInfo->m_dwDataID, Packet.m_pInfo);
 		if (pObjectData == NULL) {
@@ -279,9 +279,9 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWOBJECTDATA(PBYTE pData, DWORD dwSessionI
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_DELETEOBJECTDATA					 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^íœ)						 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_DELETEOBJECTDATA					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿å‰Šé™¤)						 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_DELETEOBJECTDATA(PBYTE pData, DWORD dwSessionID)
@@ -311,9 +311,9 @@ void CMainFrame::RecvProcADMIN_MAP_DELETEOBJECTDATA(PBYTE pData, DWORD dwSession
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_RENEWMAPPARTS						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒp[ƒcXV)										 */
-/* “ú•t		:2007/04/29														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_RENEWMAPPARTS						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æ›´æ–°)										 */
+/* æ—¥ä»˜		:2007/04/29														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_RENEWMAPPARTS(PBYTE pData, DWORD dwSessionID)
@@ -331,16 +331,16 @@ void CMainFrame::RecvProcADMIN_RENEWMAPPARTS(PBYTE pData, DWORD dwSessionID)
 	}
 	pInfoMapParts->Copy (Packet.m_pInfoMapParts);
 
-	/* XV‚³‚ê‚½ƒ}ƒbƒvƒp[ƒcî•ñ‚ð‘SƒNƒ‰ƒCƒAƒ“ƒg‚Ö’Ê’m */
+	/* æ›´æ–°ã•ã‚ŒãŸãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±ã‚’å…¨ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€šçŸ¥ */
 	PacketMAP_MAPPARTS.Make (pInfoMapParts);
 	m_pSock->SendTo (0, &PacketMAP_MAPPARTS);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_SETPARTS							 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒp[ƒc”z’u)										 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_SETPARTS							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„é…ç½®)										 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_SETPARTS(PBYTE pData, DWORD dwSessionID)
@@ -367,9 +367,9 @@ void CMainFrame::RecvProcADMIN_MAP_SETPARTS(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_RENEWMAPSIZE						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒTƒCƒYXV)										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_RENEWMAPSIZE						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–°)										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_RENEWMAPSIZE(PBYTE pData, DWORD dwSessionID)
@@ -394,9 +394,9 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWMAPSIZE(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_DELETEPARTS						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒp[ƒcíœ)										 */
-/* “ú•t		:2007/05/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_DELETEPARTS						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„å‰Šé™¤)										 */
+/* æ—¥ä»˜		:2007/05/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_DELETEPARTS(PBYTE pData, DWORD dwSessionID)
@@ -412,20 +412,20 @@ void CMainFrame::RecvProcADMIN_MAP_DELETEPARTS(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	/* ƒ}ƒbƒv“à‚ÅŽg—p‚µ‚Ä‚¢‚é•”•ª‚ðƒNƒŠƒA‚·‚é */
+	/* ãƒžãƒƒãƒ—å†…ã§ä½¿ç”¨ã—ã¦ã„ã‚‹éƒ¨åˆ†ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹ */
 	m_pLibInfoMap->DeleteParts (Packet.m_dwPartsID);
-	/* ƒp[ƒc‚ðíœ‚·‚é */
+	/* ãƒ‘ãƒ¼ãƒ„ã‚’å‰Šé™¤ã™ã‚‹ */
 	m_pLibInfoMapParts->Delete (Packet.m_dwPartsID);
-	/* ‘SƒNƒ‰ƒCƒAƒ“ƒg‚Ö’Ê’m */
+	/* å…¨ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€šçŸ¥ */
 	PacketMAP_DELETEPARTS.Make (Packet.m_dwPartsID);
 	m_pSock->SendTo (0, &PacketMAP_DELETEPARTS);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_COPYPARTS						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒp[ƒcƒRƒs[)									 */
-/* “ú•t		:2007/06/14														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_COPYPARTS						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚³ãƒ”ãƒ¼)									 */
+/* æ—¥ä»˜		:2007/06/14														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_COPYPARTS(PBYTE pData, DWORD dwSessionID)
@@ -446,16 +446,16 @@ void CMainFrame::RecvProcADMIN_MAP_COPYPARTS(PBYTE pData, DWORD dwSessionID)
 	pInfoMapPartsTmp->m_ptViewPos = Packet.m_ptViewPos;
 	m_pLibInfoMapParts->Add (pInfoMapPartsTmp);
 
-	/* XV‚³‚ê‚½ƒ}ƒbƒvƒp[ƒcî•ñ‚ð‘SƒNƒ‰ƒCƒAƒ“ƒg‚Ö’Ê’m */
+	/* æ›´æ–°ã•ã‚ŒãŸãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±ã‚’å…¨ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€šçŸ¥ */
 	PacketMAP_MAPPARTS.Make (pInfoMapPartsTmp);
 	m_pSock->SendTo (0, &PacketMAP_MAPPARTS);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_SETMAPNAME						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv–¼•ÏX)											 */
-/* “ú•t		:2008/05/24														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_SETMAPNAME						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—åå¤‰æ›´)											 */
+/* æ—¥ä»˜		:2008/05/24														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_SETMAPNAME(PBYTE pData, DWORD dwSessionID)
@@ -472,10 +472,10 @@ void CMainFrame::RecvProcADMIN_MAP_SETMAPNAME(PBYTE pData, DWORD dwSessionID)
 	}
 	pInfoMap->m_strMapName		= Packet.m_strMapName;
 	pInfoMap->m_dwBGMID			= Packet.m_dwBGMID;			/* BGMID */
-	pInfoMap->m_dwWeatherType	= Packet.m_dwWeatherType;	/* “V‹CŽí•Ê */
-	pInfoMap->m_bEnableBattle	= Packet.m_bEnableBattle;	/* í“¬‹–‰Â */
-	pInfoMap->m_bRecovery		= Packet.m_bRecovery;		/* ‹CâŒã‰ñ•œ‚·‚é */
-	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* –¾‚é‚³ƒŒƒxƒ‹ */
+	pInfoMap->m_dwWeatherType	= Packet.m_dwWeatherType;	/* å¤©æ°—ç¨®åˆ¥ */
+	pInfoMap->m_bEnableBattle	= Packet.m_bEnableBattle;	/* æˆ¦é—˜è¨±å¯ */
+	pInfoMap->m_bRecovery		= Packet.m_bRecovery;		/* æ°—çµ¶å¾Œå›žå¾©ã™ã‚‹ */
+	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* æ˜Žã‚‹ã•ãƒ¬ãƒ™ãƒ« */
 
 	PacketMAP_MAPNAME.Make (
 			pInfoMap->m_dwMapID,
@@ -491,9 +491,9 @@ void CMainFrame::RecvProcADMIN_MAP_SETMAPNAME(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_RENEWMAPSHADOW						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv‰eXV)											 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_RENEWMAPSHADOW						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—å½±æ›´æ–°)											 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_RENEWMAPSHADOW(PBYTE pData, DWORD dwSessionID)
@@ -511,16 +511,16 @@ void CMainFrame::RecvProcADMIN_RENEWMAPSHADOW(PBYTE pData, DWORD dwSessionID)
 	}
 	pInfoMapShadow->Copy (Packet.m_pInfoMapShadow);
 
-	/* XV‚³‚ê‚½ƒ}ƒbƒvƒp[ƒcî•ñ‚ð‘SƒNƒ‰ƒCƒAƒ“ƒg‚Ö’Ê’m */
+	/* æ›´æ–°ã•ã‚ŒãŸãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±ã‚’å…¨ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€šçŸ¥ */
 	PacketMAP_MAPSHADOW.Make (pInfoMapShadow);
 	m_pSock->SendTo (0, &PacketMAP_MAPSHADOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_SETMAPSHADOW						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv‰e”z’u)											 */
-/* “ú•t		:2007/06/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_SETMAPSHADOW						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—å½±é…ç½®)											 */
+/* æ—¥ä»˜		:2007/06/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_SETMAPSHADOW(PBYTE pData, DWORD dwSessionID)
@@ -543,9 +543,9 @@ void CMainFrame::RecvProcADMIN_MAP_SETMAPSHADOW(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_DELETEMAPSHADOW					 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv‰eíœ)											 */
-/* “ú•t		:2007/06/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_DELETEMAPSHADOW					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—å½±å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/06/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_DELETEMAPSHADOW(PBYTE pData, DWORD dwSessionID)
@@ -561,20 +561,20 @@ void CMainFrame::RecvProcADMIN_MAP_DELETEMAPSHADOW(PBYTE pData, DWORD dwSessionI
 		return;
 	}
 
-	/* ƒ}ƒbƒv“à‚ÅŽg—p‚µ‚Ä‚¢‚é•”•ª‚ðƒNƒŠƒA‚·‚é */
+	/* ãƒžãƒƒãƒ—å†…ã§ä½¿ç”¨ã—ã¦ã„ã‚‹éƒ¨åˆ†ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹ */
 	m_pLibInfoMap->DeleteShadow (Packet.m_dwShadowID);
-	/* ƒ}ƒbƒv‰e‚ðíœ‚·‚é */
+	/* ãƒžãƒƒãƒ—å½±ã‚’å‰Šé™¤ã™ã‚‹ */
 	m_pLibInfoMapShadow->Delete (Packet.m_dwShadowID);
-	/* ‘SƒNƒ‰ƒCƒAƒ“ƒg‚Ö’Ê’m */
+	/* å…¨ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€šçŸ¥ */
 	PacketMAP_DELETEMAPSHADOW.Make (Packet.m_dwShadowID);
 	m_pSock->SendTo (0, &PacketMAP_DELETEMAPSHADOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_RENEWEVENT						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñXV)								 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_RENEWEVENT						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–°)								 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_RENEWEVENT(PBYTE pData, DWORD dwSessionID)
@@ -596,13 +596,13 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWEVENT(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	/* ’Ç‰ÁH */
+	/* è¿½åŠ ï¼Ÿ */
 	if (Packet.m_pInfo->m_dwMapEventID == 0) {
 		pInfoMapEvent = (PCInfoMapEventBase)pLibInfo->GetNew (Packet.m_pInfo->m_nType);
 		pInfoMapEvent->Copy (Packet.m_pInfo);
 		pLibInfo->Add (pInfoMapEvent);
 
-	/* XV */
+	/* æ›´æ–° */
 	} else {
 		pInfoMapEvent = pLibInfo->Renew (Packet.m_pInfo->m_dwMapEventID, Packet.m_pInfo);
 		if (pInfoMapEvent == NULL) {
@@ -617,9 +617,9 @@ void CMainFrame::RecvProcADMIN_MAP_RENEWEVENT(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_DELETEEVENT						 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñíœ)								 */
-/* “ú•t		:2008/07/22														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_DELETEEVENT						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±å‰Šé™¤)								 */
+/* æ—¥ä»˜		:2008/07/22														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_DELETEEVENT(PBYTE pData, DWORD dwSessionID)
@@ -648,9 +648,9 @@ void CMainFrame::RecvProcADMIN_MAP_DELETEEVENT(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_MAP_ADD								 */
-/* “à—e		:ŽóMˆ—(ƒ}ƒbƒv’Ç‰Á)											 */
-/* “ú•t		:2008/07/27														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_MAP_ADD								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒžãƒƒãƒ—è¿½åŠ )											 */
+/* æ—¥ä»˜		:2008/07/27														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_MAP_ADD(PBYTE pData, DWORD dwSessionID)
@@ -664,7 +664,7 @@ void CMainFrame::RecvProcADMIN_MAP_ADD(PBYTE pData, DWORD dwSessionID)
 	Packet.Set (pData);
 
 	pInfoMapTmp = NULL;
-	/* Šù‘¶ƒ}ƒbƒv‚©‚ç‚ÌƒRƒs[H */
+	/* æ—¢å­˜ãƒžãƒƒãƒ—ã‹ã‚‰ã®ã‚³ãƒ”ãƒ¼ï¼Ÿ */
 	if (Packet.m_dwPara1 != 0) {
 		pInfoMapTmp = (PCInfoMapBase)m_pLibInfoMap->GetPtr (Packet.m_dwPara1);
 		if (pInfoMapTmp == NULL) {
@@ -683,16 +683,16 @@ void CMainFrame::RecvProcADMIN_MAP_ADD(PBYTE pData, DWORD dwSessionID)
 		pInfoMap->m_dwMapID = dwMapID;
 	}
 
-	strTmp.Format ("SYSTEM:ƒ}ƒbƒvID[%d]‚ª’Ç‰Á‚³‚ê‚Ü‚µ‚½", pInfoMap->m_dwMapID);
+	strTmp.Format ("SYSTEM:ãƒžãƒƒãƒ—ID[%d]ãŒè¿½åŠ ã•ã‚Œã¾ã—ãŸ", pInfoMap->m_dwMapID);
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_REQ_ADMINILEVEL						 */
-/* “à—e		:ŽóMˆ—(ŠÇ—ŽÒŒ ŒÀƒŒƒxƒ‹—v‹)									 */
-/* “ú•t		:2007/07/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_REQ_ADMINILEVEL						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«è¦æ±‚)									 */
+/* æ—¥ä»˜		:2007/07/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_REQ_ADMINILEVEL(PBYTE pData, DWORD dwSessionID)
@@ -713,9 +713,9 @@ void CMainFrame::RecvProcADMIN_REQ_ADMINILEVEL(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_RENEWADMINILEVEL						 */
-/* “à—e		:ŽóMˆ—(ŠÇ—ŽÒŒ ŒÀƒŒƒxƒ‹XV)									 */
-/* “ú•t		:2007/07/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_RENEWADMINILEVEL						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«æ›´æ–°)									 */
+/* æ—¥ä»˜		:2007/07/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_RENEWADMINILEVEL(PBYTE pData, DWORD dwSessionID)
@@ -730,7 +730,7 @@ void CMainFrame::RecvProcADMIN_RENEWADMINILEVEL(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	/* •Ï‰»‚µ‚È‚¢H */
+	/* å¤‰åŒ–ã—ãªã„ï¼Ÿ */
 	if (pInfoAccount->m_nAdminLevel == Packet.m_nAdminLevel) {
 		return;
 	}
@@ -744,9 +744,9 @@ void CMainFrame::RecvProcADMIN_RENEWADMINILEVEL(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_SERVER_SAVEINFO						 */
-/* “à—e		:ŽóMˆ—(ƒT[ƒo[î•ñ•Û‘¶)										 */
-/* “ú•t		:2007/07/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_SERVER_SAVEINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä¿å­˜)										 */
+/* æ—¥ä»˜		:2007/07/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_SERVER_SAVEINFO(PBYTE pData, DWORD dwSessionID)
@@ -755,7 +755,7 @@ void CMainFrame::RecvProcADMIN_SERVER_SAVEINFO(PBYTE pData, DWORD dwSessionID)
 	CmyString strTmp;
 
 	m_pMgrData->Save ();
-	strTmp.Format ("ƒT[ƒo[î•ñ‚ð•Û‘¶‚µ‚Ü‚µ‚½");
+	strTmp.Format ("ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ã‚’ä¿å­˜ã—ã¾ã—ãŸ");
 	Packet.Make (strTmp);
 	m_pSock->SendTo (0, &Packet);
 	UpdateServerInfo (FALSE, TRUE);
@@ -763,9 +763,9 @@ void CMainFrame::RecvProcADMIN_SERVER_SAVEINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEM_ADD								 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñ’Ç‰Á)										 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEM_ADD								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±è¿½åŠ )										 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEM_ADD(PBYTE pData, DWORD dwSessionID)
@@ -782,11 +782,11 @@ void CMainFrame::RecvProcADMIN_ITEM_ADD(PBYTE pData, DWORD dwSessionID)
 	pInfoItem->Copy (Packet.m_pInfoItem);
 	m_pLibInfoItem->Add (pInfoItem);
 
-	/* Ž‚½‚¹‚éƒLƒƒƒ‰‚ªŽw’è‚³‚ê‚Ä‚¢‚éH */
+	/* æŒãŸã›ã‚‹ã‚­ãƒ£ãƒ©ãŒæŒ‡å®šã•ã‚Œã¦ã„ã‚‹ï¼Ÿ */
 	if (pInfoItem->m_dwCharID) {
 		pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
 		if (pInfoChar) {
-			/* ƒAƒCƒeƒ€‚ð’Ç‰Á */
+			/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿½åŠ  */
 			m_pLibInfoItem->AddItem (pInfoChar->m_dwCharID, pInfoItem->m_dwItemID, &pInfoChar->m_adwItemID);
 
 			PacketCHAR_ITEMINFO.Make (pInfoChar->m_dwCharID, &pInfoChar->m_adwItemID);
@@ -800,9 +800,9 @@ void CMainFrame::RecvProcADMIN_ITEM_ADD(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEM_COPY							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñƒRƒs[)									 */
-/* “ú•t		:2007/09/22														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEM_COPY							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚³ãƒ”ãƒ¼)									 */
+/* æ—¥ä»˜		:2007/09/22														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEM_COPY(PBYTE pData, DWORD dwSessionID)
@@ -835,9 +835,9 @@ void CMainFrame::RecvProcADMIN_ITEM_COPY(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEM_DELETE							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñíœ)										 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEM_DELETE							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å‰Šé™¤)										 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEM_DELETE(PBYTE pData, DWORD dwSessionID)
@@ -863,7 +863,7 @@ void CMainFrame::RecvProcADMIN_ITEM_DELETE(PBYTE pData, DWORD dwSessionID)
 		if (pInfoItem->m_dwCharID) {
 			pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (pInfoItem->m_dwCharID);
 			if (pInfoChar) {
-				/* ƒLƒƒƒ‰‚ÌŠŽƒAƒCƒeƒ€‚©‚çíœ‚·‚é */
+				/* ã‚­ãƒ£ãƒ©ã®æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰å‰Šé™¤ã™ã‚‹ */
 				pInfoChar->DeleteItem (pInfoItem->m_dwItemID);
 				m_pLibInfoItem->DeleteItem (pInfoItem->m_dwItemID, pInfoChar);
 
@@ -884,9 +884,9 @@ void CMainFrame::RecvProcADMIN_ITEM_DELETE(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEMTYPE_ADD							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñ’Ç‰Á)									 */
-/* “ú•t		:2007/10/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEMTYPE_ADD							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¿½åŠ )									 */
+/* æ—¥ä»˜		:2007/10/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEMTYPE_ADD(PBYTE pData, DWORD dwSessionID)
@@ -907,9 +907,9 @@ void CMainFrame::RecvProcADMIN_ITEMTYPE_ADD(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEMTYPE_COPY						 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñƒRƒs[)								 */
-/* “ú•t		:2007/10/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEMTYPE_COPY						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±ã‚³ãƒ”ãƒ¼)								 */
+/* æ—¥ä»˜		:2007/10/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEMTYPE_COPY(PBYTE pData, DWORD dwSessionID)
@@ -936,9 +936,9 @@ void CMainFrame::RecvProcADMIN_ITEMTYPE_COPY(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEMTYPE_DELETE						 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñíœ)									 */
-/* “ú•t		:2007/10/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEMTYPE_DELETE						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±å‰Šé™¤)									 */
+/* æ—¥ä»˜		:2007/10/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEMTYPE_DELETE(PBYTE pData, DWORD dwSessionID)
@@ -962,9 +962,9 @@ void CMainFrame::RecvProcADMIN_ITEMTYPE_DELETE(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEMWEAPON_ADD						 */
-/* “à—e		:ŽóMˆ—(•Šíî•ñ’Ç‰Á)											 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEMWEAPON_ADD						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ­¦å™¨æƒ…å ±è¿½åŠ )											 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEMWEAPON_ADD(PBYTE pData, DWORD dwSessionID)
@@ -985,9 +985,9 @@ void CMainFrame::RecvProcADMIN_ITEMWEAPON_ADD(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ITEMWEAPON_RENEW						 */
-/* “à—e		:ŽóMˆ—(•Šíî•ñXV)											 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ITEMWEAPON_RENEW						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ­¦å™¨æƒ…å ±æ›´æ–°)											 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ITEMWEAPON_RENEW(PBYTE pData, DWORD dwSessionID)
@@ -1009,9 +1009,9 @@ void CMainFrame::RecvProcADMIN_ITEMWEAPON_RENEW(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_ADDNPC							 */
-/* “à—e		:ŽóMˆ—(NPC‚Ì’Ç‰Á)											 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_ADDNPC							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(NPCã®è¿½åŠ )											 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_ADDNPC(PBYTE pData, DWORD dwSessionID)
@@ -1025,9 +1025,9 @@ void CMainFrame::RecvProcADMIN_CHAR_ADDNPC(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_MODIFYITEM						 */
-/* “à—e		:ŽóMˆ—(ŠŽƒAƒCƒeƒ€‚Ì•ÏX)									 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_MODIFYITEM						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã®å¤‰æ›´)									 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_MODIFYITEM(PBYTE pData, DWORD dwSessionID)
@@ -1051,17 +1051,17 @@ void CMainFrame::RecvProcADMIN_CHAR_MODIFYITEM(PBYTE pData, DWORD dwSessionID)
 	}
 
 	switch (Packet.m_nType) {
-	case CHARMODIFYITEMTYPE_ADD:		/* ’Ç‰Á */
+	case CHARMODIFYITEMTYPE_ADD:		/* è¿½åŠ  */
 		bResult = pInfoChar->IsItemAdd ();
 		if (bResult == FALSE) {
 			return;
 		}
-		/* ƒAƒCƒeƒ€‚ð’Ç‰Á */
+		/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿½åŠ  */
 		m_pLibInfoItem->AddItem (pInfoChar->m_dwCharID, pInfoItem->m_dwItemID, &pInfoChar->m_adwItemID);
 		break;
 
-	case CHARMODIFYITEMTYPE_DELETE:		/* íœ */
-		/* ƒAƒCƒeƒ€‚ðƒLƒƒƒ‰‚©‚çíœ */
+	case CHARMODIFYITEMTYPE_DELETE:		/* å‰Šé™¤ */
+		/* ã‚¢ã‚¤ãƒ†ãƒ ã‚’ã‚­ãƒ£ãƒ©ã‹ã‚‰å‰Šé™¤ */
 		pInfoChar->DeleteItem (pInfoItem->m_dwItemID);
 		m_pLibInfoItem->DeleteItem (pInfoItem->m_dwItemID, pInfoChar, TRUE);
 		break;
@@ -1076,9 +1076,9 @@ void CMainFrame::RecvProcADMIN_CHAR_MODIFYITEM(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_MODIFYSKILL						 */
-/* “à—e		:ŽóMˆ—(ŠŽƒXƒLƒ‹‚Ì•ÏX)										 */
-/* “ú•t		:2009/01/18														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_MODIFYSKILL						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ‰€æŒã‚¹ã‚­ãƒ«ã®å¤‰æ›´)										 */
+/* æ—¥ä»˜		:2009/01/18														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_MODIFYSKILL(PBYTE pData, DWORD dwSessionID)
@@ -1101,14 +1101,14 @@ void CMainFrame::RecvProcADMIN_CHAR_MODIFYSKILL(PBYTE pData, DWORD dwSessionID)
 	}
 
 	switch (Packet.m_nType) {
-	case CHARMODIFYSKILLTYPE_ADD:		/* ’Ç‰Á */
+	case CHARMODIFYSKILLTYPE_ADD:		/* è¿½åŠ  */
 		bResult = pInfoChar->AddSkill (Packet.m_dwSkillID);
 		if (bResult == FALSE) {
 			return;
 		}
 		break;
 
-	case CHARMODIFYSKILLTYPE_DELETE:	/* íœ */
+	case CHARMODIFYSKILLTYPE_DELETE:	/* å‰Šé™¤ */
 		bResult = pInfoChar->DeleteSkill (Packet.m_dwSkillID);
 		if (bResult == FALSE) {
 			return;
@@ -1122,9 +1122,9 @@ void CMainFrame::RecvProcADMIN_CHAR_MODIFYSKILL(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_RENEWMOTION						 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“î•ñ‚ÌXV)							 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_RENEWMOTION						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®æ›´æ–°)							 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_RENEWMOTION(PBYTE pData, DWORD dwSessionID)
@@ -1142,9 +1142,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEWMOTION(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_ADDMOTIONTYPE					 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ‚Ì’Ç‰Á)						 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_ADDMOTIONTYPE					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ã®è¿½åŠ )						 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_ADDMOTIONTYPE(PBYTE pData, DWORD dwSessionID)
@@ -1165,9 +1165,9 @@ void CMainFrame::RecvProcADMIN_CHAR_ADDMOTIONTYPE(PBYTE pData, DWORD dwSessionID
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_RENEWMOTIONTYPE					 */
-/* “à—e		:ŽóMˆ—(ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ‚ÌXV)						 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_RENEWMOTIONTYPE					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ã®æ›´æ–°)						 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_RENEWMOTIONTYPE(PBYTE pData, DWORD dwSessionID)
@@ -1188,9 +1188,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEWMOTIONTYPE(PBYTE pData, DWORD dwSession
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS						 */
-/* “à—e		:ŽóMˆ—(ƒXƒe[ƒ^ƒXî•ñXV)									 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±æ›´æ–°)									 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS(PBYTE pData, DWORD dwSessionID)
@@ -1201,7 +1201,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS(PBYTE pData, DWORD dwSessionID)
 	Packet.Set (pData);
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr (Packet.m_dwCharID);
-	/* ’m‚ç‚È‚¢ƒLƒƒƒ‰H */
+	/* çŸ¥ã‚‰ãªã„ã‚­ãƒ£ãƒ©ï¼Ÿ */
 	if (pInfoChar == NULL) {
 		return;
 	}
@@ -1215,9 +1215,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_REQ_STATUS						 */
-/* “à—e		:ŽóMˆ—(ƒXƒe[ƒ^ƒXî•ñ—v‹)									 */
-/* “ú•t		:2008/07/22														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_REQ_STATUS						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±è¦æ±‚)									 */
+/* æ—¥ä»˜		:2008/07/22														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_REQ_STATUS(PBYTE pData, DWORD dwSessionID)
@@ -1229,7 +1229,7 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_STATUS(PBYTE pData, DWORD dwSessionID)
 	Packet.Set (pData);
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
-	/* ’m‚ç‚È‚¢ƒLƒƒƒ‰H */
+	/* çŸ¥ã‚‰ãªã„ã‚­ãƒ£ãƒ©ï¼Ÿ */
 	if (pInfoChar == NULL) {
 		return;
 	}
@@ -1239,9 +1239,9 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_STATUS(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_REQ_ONLINE						 */
-/* “à—e		:ŽóMˆ—(ƒIƒ“ƒ‰ƒCƒ“’†ƒLƒƒƒ‰ˆê———v‹)							 */
-/* “ú•t		:2008/12/01														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_REQ_ONLINE						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©ä¸€è¦§è¦æ±‚)							 */
+/* æ—¥ä»˜		:2008/12/01														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_REQ_ONLINE(PBYTE pData, DWORD dwSessionID)
@@ -1272,9 +1272,9 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ONLINE(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_EFC_RENEWBALLOON						 */
-/* “à—e		:ŽóMˆ—(•¬o‚µî•ñ‚ÌXV)										 */
-/* “ú•t		:2007/12/30														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_EFC_RENEWBALLOON						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(å™´å‡ºã—æƒ…å ±ã®æ›´æ–°)										 */
+/* æ—¥ä»˜		:2007/12/30														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_EFC_RENEWBALLOON(PBYTE pData, DWORD dwSessionID)
@@ -1292,9 +1292,9 @@ void CMainFrame::RecvProcADMIN_EFC_RENEWBALLOON(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_EFC_RENEWEFFECT						 */
-/* “à—e		:ŽóMˆ—(ƒGƒtƒFƒNƒgî•ñ‚ÌXV)									 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_EFC_RENEWEFFECT						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ã®æ›´æ–°)									 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_EFC_RENEWEFFECT(PBYTE pData, DWORD dwSessionID)
@@ -1323,9 +1323,9 @@ void CMainFrame::RecvProcADMIN_EFC_RENEWEFFECT(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_REQ_PLAYSOUND						 */
-/* “à—e		:ŽóMˆ—(Œø‰Ê‰¹‚ÌÄ¶—v‹)										 */
-/* “ú•t		:2008/06/02														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_REQ_PLAYSOUND						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(åŠ¹æžœéŸ³ã®å†ç”Ÿè¦æ±‚)										 */
+/* æ—¥ä»˜		:2008/06/02														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_REQ_PLAYSOUND(PBYTE pData, DWORD dwSessionID)
@@ -1341,9 +1341,9 @@ void CMainFrame::RecvProcADMIN_REQ_PLAYSOUND(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT						 */
-/* “à—e		:ŽóMˆ—(ƒAƒJƒEƒ“ƒgî•ñ—v‹)									 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±è¦æ±‚)									 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
@@ -1368,9 +1368,9 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT					 */
-/* “à—e		:ŽóMˆ—(ƒAƒJƒEƒ“ƒgî•ñXV)									 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±æ›´æ–°)									 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID)
@@ -1389,7 +1389,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 		}
 		if (pInfoAccount) {
 			pInfoAccount->m_bDisable = Packet.m_bDisable;
-			strTmp.Format ("ƒAƒJƒEƒ“ƒg[%s]‚ðƒƒOƒCƒ“‹‘”Û‚µ‚Ü‚µ‚½",
+			strTmp.Format ("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ[%s]ã‚’ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ã—ã¾ã—ãŸ",
 					(LPCSTR)pInfoAccount->m_strAccount,
 					(LPCSTR)pInfoAccount->m_strPassword);
 			PacketMsg.Make (strTmp, RGB (255, 255, 255));
@@ -1406,7 +1406,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 	pInfoAccount->m_strAccount	= Packet.m_strAccount;
 	pInfoAccount->m_strPassword	= Packet.m_strPassword;
 
-	strTmp.Format ("ƒAƒJƒEƒ“ƒg‚ð[%s] ƒpƒXƒ[ƒh‚ð[%s]‚É•ÏX‚µ‚Ü‚µ‚½",
+	strTmp.Format ("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’[%s] ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’[%s]ã«å¤‰æ›´ã—ã¾ã—ãŸ",
 			(LPCSTR)pInfoAccount->m_strAccount,
 			(LPCSTR)pInfoAccount->m_strPassword);
 	PacketMsg.Make (strTmp, RGB (255, 255, 255));
@@ -1415,9 +1415,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_CHAR_RENEW_TALKEVENT					 */
-/* “à—e		:ŽóMˆ—(‰ï˜bƒCƒxƒ“ƒgî•ñXV)									 */
-/* “ú•t		:2008/12/27														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_CHAR_RENEW_TALKEVENT					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–°)									 */
+/* æ—¥ä»˜		:2008/12/27														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_CHAR_RENEW_TALKEVENT(PBYTE pData, DWORD dwSessionID)
@@ -1443,9 +1443,9 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_TALKEVENT(PBYTE pData, DWORD dwSession
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_RENEW_CLIENTVERSION					 */
-/* “à—e		:ŽóMˆ—(ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“XV)							 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_RENEW_CLIENTVERSION					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³æ›´æ–°)							 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_RENEW_CLIENTVERSION(PBYTE pData, DWORD dwSessionID)
@@ -1457,19 +1457,19 @@ void CMainFrame::RecvProcADMIN_RENEW_CLIENTVERSION(PBYTE pData, DWORD dwSessionI
 	Packet.Set (pData);
 	m_pMgrData->SetClientVersion ((LPCSTR)Packet.m_strClientVersion);
 
-	strTmp.Format ("SYSTEM:ƒNƒ‰ƒCƒAƒ“ƒgƒtƒ@ƒCƒ‹‚ª[Ver%s]‚ÉXV‚³‚ê‚Ü‚µ‚½", (LPCSTR)Packet.m_strClientVersion);
+	strTmp.Format ("SYSTEM:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãŒ[Ver%s]ã«æ›´æ–°ã•ã‚Œã¾ã—ãŸ", (LPCSTR)Packet.m_strClientVersion);
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:ƒNƒ‰ƒCƒAƒ“ƒg‚ðI—¹‚µ‚Äƒ‰ƒ“ƒ`ƒƒ[‚É‚ÄXV‚µ‚Ä‚­‚¾‚³‚¢");
+	strTmp.Format ("SYSTEM:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚’çµ‚äº†ã—ã¦ãƒ©ãƒ³ãƒãƒ£ãƒ¼ã«ã¦æ›´æ–°ã—ã¦ãã ã•ã„");
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_SYSTEM_REQ_INFO						 */
-/* “à—e		:ŽóMˆ—(ƒVƒXƒeƒ€î•ñ—v‹)										 */
-/* “ú•t		:2008/10/03														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_SYSTEM_REQ_INFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±è¦æ±‚)										 */
+/* æ—¥ä»˜		:2008/10/03														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_SYSTEM_REQ_INFO(PBYTE pData, DWORD dwSessionID)
@@ -1485,9 +1485,9 @@ void CMainFrame::RecvProcADMIN_SYSTEM_REQ_INFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_SYSTEM_RENEWINFO						 */
-/* “à—e		:ŽóMˆ—(ƒVƒXƒeƒ€î•ñ‚ÌXV)									 */
-/* “ú•t		:2008/10/04														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_SYSTEM_RENEWINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã®æ›´æ–°)									 */
+/* æ—¥ä»˜		:2008/10/04														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_SYSTEM_RENEWINFO(PBYTE pData, DWORD dwSessionID)
@@ -1507,9 +1507,9 @@ void CMainFrame::RecvProcADMIN_SYSTEM_RENEWINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL						 */
-/* “à—e		:ŽóMˆ—(ƒXƒLƒ‹î•ñXV)										 */
-/* “ú•t		:2008/12/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¹ã‚­ãƒ«æƒ…å ±æ›´æ–°)										 */
+/* æ—¥ä»˜		:2008/12/08														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL(PBYTE pData, DWORD dwSessionID)
@@ -1520,13 +1520,13 @@ void CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL(PBYTE pData, DWORD dwSessionID)
 
 	Packet.Set (pData);
 
-	/* ’Ç‰ÁH */
+	/* è¿½åŠ ï¼Ÿ */
 	if (Packet.m_pInfo->m_dwSkillID == 0) {
 		pInfo = (PCInfoSkillBase)m_pLibInfoSkill->GetNew (Packet.m_pInfo->m_nTypeMain, Packet.m_pInfo->m_nTypeSub);
 		pInfo->Copy (Packet.m_pInfo);
 		m_pLibInfoSkill->Add (pInfo);
 
-	/* XV */
+	/* æ›´æ–° */
 	} else {
 		pInfo = m_pLibInfoSkill->Renew (Packet.m_pInfo);
 		if (pInfo == NULL) {
@@ -1540,9 +1540,9 @@ void CMainFrame::RecvProcADMIN_SKILL_RENEWSKILL(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD						 */
-/* “à—e		:ŽóMˆ—(ƒAƒJƒEƒ“ƒg‚Ì’Ç‰Á—v‹)									 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ è¦æ±‚)									 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
@@ -1556,13 +1556,13 @@ void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
 
 	pInfoAccount = m_pLibInfoAccount->GetPtr ((LPCSTR)Packet.m_strAccount);
 	if (pInfoAccount) {
-		strTmp = "‚»‚ÌƒAƒJƒEƒ“ƒg–¼‚Í“o˜^Ï‚Ý‚Å‚·";
+		strTmp = "ãã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆåã¯ç™»éŒ²æ¸ˆã¿ã§ã™";
 	} else {
 		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew ();
 		TrimViewString (pInfoAccount->m_strAccount,  Packet.m_strAccount);
 		TrimViewString (pInfoAccount->m_strPassword, Packet.m_strPassword);
 		m_pLibInfoAccount->Add (pInfoAccount);
-		strTmp = "ƒAƒJƒEƒ“ƒg‚ð“o˜^‚µ‚Ü‚µ‚½";
+		strTmp = "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ç™»éŒ²ã—ã¾ã—ãŸ";
 	}
 
 	PacketMAP_SYSTEMMSG.Make ((LPCSTR)strTmp, RGB (255, 255,255), TRUE, SYSTEMMSGTYPE_NOLOG);
@@ -1571,9 +1571,9 @@ void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_DISABLE_REQ_INFO						 */
-/* “à—e		:ŽóMˆ—(‹‘”Ûî•ñ—v‹)											 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_DISABLE_REQ_INFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ‹’å¦æƒ…å ±è¦æ±‚)											 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_DISABLE_REQ_INFO(PBYTE pData, DWORD dwSessionID)
@@ -1588,9 +1588,9 @@ void CMainFrame::RecvProcADMIN_DISABLE_REQ_INFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_DISABLE_REQ_DELETE					 */
-/* “à—e		:ŽóMˆ—(‹‘”Ûî•ñ‚Ìíœ—v‹)									 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_DISABLE_REQ_DELETE					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ‹’å¦æƒ…å ±ã®å‰Šé™¤è¦æ±‚)									 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_DISABLE_REQ_DELETE(PBYTE pData, DWORD dwSessionID)
@@ -1607,9 +1607,9 @@ void CMainFrame::RecvProcADMIN_DISABLE_REQ_DELETE(PBYTE pData, DWORD dwSessionID
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcADMIN_DISABLE_RENEWINFO					 */
-/* “à—e		:ŽóMˆ—(‹‘”Ûî•ñ‚ÌXV)										 */
-/* “ú•t		:2009/04/11														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcADMIN_DISABLE_RENEWINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ‹’å¦æƒ…å ±ã®æ›´æ–°)										 */
+/* æ—¥ä»˜		:2009/04/11														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcADMIN_DISABLE_RENEWINFO(PBYTE pData, DWORD dwSessionID)

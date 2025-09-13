@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoMapShadow.cpp									 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚İ‚İƒNƒ‰ƒX(ƒ}ƒbƒv‰eî•ñ) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoMapShadow.cpp									 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(ãƒãƒƒãƒ—å½±æƒ…å ±) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,22 +12,22 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoMapShadow::CSaveLoadInfoMapShadow					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CSaveLoadInfoMapShadow::CSaveLoadInfoMapShadow					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CSaveLoadInfoMapShadow::CSaveLoadInfoMapShadow()
 {
-	/* ƒtƒ@ƒCƒ‹–¼‚Ìİ’è */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®è¨­å®š */
 	SetFileName ("SBODATA\\SboDataMapShadow.dat");
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoMapShadow::~CSaveLoadInfoMapShadow				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CSaveLoadInfoMapShadow::~CSaveLoadInfoMapShadow				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CSaveLoadInfoMapShadow::~CSaveLoadInfoMapShadow()
@@ -36,9 +36,9 @@ CSaveLoadInfoMapShadow::~CSaveLoadInfoMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoMapShadow::SetHeaderInfo							 */
-/* “à—e		:ƒwƒbƒ_î•ñ‚ğİ’è												 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CSaveLoadInfoMapShadow::SetHeaderInfo							 */
+/* å†…å®¹		:ãƒ˜ãƒƒãƒ€æƒ…å ±ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CSaveLoadInfoMapShadow::SetHeaderInfo(PCInfoBase pInfo)

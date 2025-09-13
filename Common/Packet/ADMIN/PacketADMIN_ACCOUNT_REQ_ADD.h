@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ACCOUNT_REQ_ADD.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒAƒJƒEƒ“ƒg‚Ì’Ç‰Á—v‹) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/01/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ACCOUNT_REQ_ADD.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_ACCOUNT_REQ_ADD : public CPacketBase
 {
 public:
-			CPacketADMIN_ACCOUNT_REQ_ADD();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_ACCOUNT_REQ_ADD();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_ACCOUNT_REQ_ADD();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_ACCOUNT_REQ_ADD();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(LPCSTR pszAccount, LPCSTR pszPassword);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(LPCSTR pszAccount, LPCSTR pszPassword);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CmyString	m_strAccount,				/* ƒAƒJƒEƒ“ƒg */
-				m_strPassword;				/* ƒpƒXƒ[ƒh */
+	CmyString	m_strAccount,				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+				m_strPassword;				/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 } CPacketADMIN_ACCOUNT_REQ_ADD, *PCPacketADMIN_ACCOUNT_REQ_ADD;
 
 /* Copyright(C)URARA-works 2009 */

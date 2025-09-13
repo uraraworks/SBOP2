@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_RES_PLAY.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:ƒQ[ƒ€ŠJn‰“š) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_RES_PLAY.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(æ¥ç¶šç³»:ã‚²ãƒ¼ãƒ é–‹å§‹å¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCONNECT_RES_PLAY.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_RES_PLAY::CPacketCONNECT_RES_PLAY				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_RES_PLAY::CPacketCONNECT_RES_PLAY				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 CPacketCONNECT_RES_PLAY::CPacketCONNECT_RES_PLAY()
@@ -23,9 +23,9 @@ CPacketCONNECT_RES_PLAY::CPacketCONNECT_RES_PLAY()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_RES_PLAY::~CPacketCONNECT_RES_PLAY				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_RES_PLAY::~CPacketCONNECT_RES_PLAY				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 CPacketCONNECT_RES_PLAY::~CPacketCONNECT_RES_PLAY()
@@ -34,13 +34,13 @@ CPacketCONNECT_RES_PLAY::~CPacketCONNECT_RES_PLAY()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_RES_PLAY::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_RES_PLAY::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CPacketCONNECT_RES_PLAY::Make(
-	int nResult)		/* [in] Œ‹‰Ê */
+	int nResult)		/* [in] çµæœ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketCONNECT_RES_PLAY::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CONNECT_RES_PLAY;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &nResult, sizeof (nResult), pDataTmp);	/* Œ‹‰Ê */
+	CopyMemoryRenew (pDataTmp, &nResult, sizeof (nResult), pDataTmp);	/* çµæœ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_RES_PLAY::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_RES_PLAY::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 PBYTE CPacketCONNECT_RES_PLAY::Set(PBYTE pPacket)
@@ -76,7 +76,7 @@ PBYTE CPacketCONNECT_RES_PLAY::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_nResult, pDataTmp, sizeof (m_nResult), pDataTmp);	/* Œ‹‰Ê */
+	CopyMemoryRenew (&m_nResult, pDataTmp, sizeof (m_nResult), pDataTmp);	/* çµæœ */
 
 	pRet = pDataTmp;
 	return pRet;

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SaveLoadInfoEfcBalloon.cpp									 */
-/* “à—e			:ƒf[ƒ^•Û‘¶E“Ç‚Ýž‚ÝƒNƒ‰ƒX(•¬o‚µî•ñ) ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SaveLoadInfoEfcBalloon.cpp									 */
+/* å†…å®¹			:ãƒ‡ãƒ¼ã‚¿ä¿å­˜ãƒ»èª­ã¿è¾¼ã¿ã‚¯ãƒ©ã‚¹(å™´å‡ºã—æƒ…å ±) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,22 +11,22 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoEfcBalloon::CSaveLoadInfoEfcBalloon				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CSaveLoadInfoEfcBalloon::CSaveLoadInfoEfcBalloon				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CSaveLoadInfoEfcBalloon::CSaveLoadInfoEfcBalloon()
 {
-	/* ƒtƒ@ƒCƒ‹–¼‚ÌÝ’è */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®è¨­å®š */
 	SetFileName ("SBODATA\\SboDataEfcBalloon.dat");
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSaveLoadInfoEfcBalloon::~CSaveLoadInfoEfcBalloon				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CSaveLoadInfoEfcBalloon::~CSaveLoadInfoEfcBalloon				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CSaveLoadInfoEfcBalloon::~CSaveLoadInfoEfcBalloon()

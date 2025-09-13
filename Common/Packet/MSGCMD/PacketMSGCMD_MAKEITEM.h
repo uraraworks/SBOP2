@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMSGCMD_MAKEITEM.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŒn:ƒAƒCƒeƒ€ì¬) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/10/20													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMSGCMD_MAKEITEM.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒžãƒ³ãƒ‰ç³»:ã‚¢ã‚¤ãƒ†ãƒ ä½œæˆ) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/20													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMSGCMD_MAKEITEM : public CPacketBase
 {
 public:
-			CPacketMSGCMD_MAKEITEM();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMSGCMD_MAKEITEM();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMSGCMD_MAKEITEM();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMSGCMD_MAKEITEM();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwCharID, DWORD dwItemTypeID);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwCharID, DWORD dwItemTypeID);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwCharID,				/* ƒLƒƒƒ‰ID */
-			m_dwItemTypeID;			/* ƒAƒCƒeƒ€Ží•ÊID */
+	DWORD	m_dwCharID,				/* ã‚­ãƒ£ãƒ©ID */
+			m_dwItemTypeID;			/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
 } CPacketMSGCMD_MAKEITEM, *PCPacketMSGCMD_MAKEITEM;
 
 /* Copyright(C)URARA-works 2007 */

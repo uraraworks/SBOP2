@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharBALLCli.cpp										 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(ƒ{[ƒ‹)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharBALLCli.cpp										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(ãƒœãƒ¼ãƒ«)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/02													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBALLCli::CInfoCharBALLCli								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CInfoCharBALLCli::CInfoCharBALLCli								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 CInfoCharBALLCli::CInfoCharBALLCli()
@@ -22,15 +22,15 @@ CInfoCharBALLCli::CInfoCharBALLCli()
 	m_dwMoveWait		= 6;
 	m_bMotionDirection	= FALSE;
 
-	m_adwMotionID[CHARMOTIONID_STAND]	= CHARMOTIONLISTID_STAND;	/* ƒ‚[ƒVƒ‡ƒ“ID(—§‚¿) */
-	m_adwMotionID[CHARMOTIONID_WALK]	= CHARMOTIONLISTID_WALK;	/* ƒ‚[ƒVƒ‡ƒ“ID(•à‚«) */
+	m_adwMotionID[CHARMOTIONID_STAND]	= CHARMOTIONLISTID_STAND;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(ç«‹ã¡) */
+	m_adwMotionID[CHARMOTIONID_WALK]	= CHARMOTIONLISTID_WALK;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(æ­©ã) */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBALLCli::~CInfoCharBALLCli							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CInfoCharBALLCli::~CInfoCharBALLCli							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 CInfoCharBALLCli::~CInfoCharBALLCli()
@@ -39,9 +39,9 @@ CInfoCharBALLCli::~CInfoCharBALLCli()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBALLCli::ChgMoveState									 */
-/* “à—e		:ˆÚ“®ó‘Ô•ÏX													 */
-/* “ú•t		:2007/09/02														 */
+/* é–¢æ•°å	:CInfoCharBALLCli::ChgMoveState									 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹å¤‰æ›´													 */
+/* æ—¥ä»˜		:2007/09/02														 */
 /* ========================================================================= */
 
 void CInfoCharBALLCli::ChgMoveState(int nMoveState)
@@ -49,7 +49,7 @@ void CInfoCharBALLCli::ChgMoveState(int nMoveState)
 	CInfoCharCli::ChgMoveState (nMoveState);
 
 	switch (nMoveState) {
-	case CHARMOVESTATE_MOVE:		/* ˆÚ“®’† */
+	case CHARMOVESTATE_MOVE:		/* ç§»å‹•ä¸­ */
 		m_nAnime = 0;
 		m_dwLastTimeAnime = timeGetTime ();
 		break;

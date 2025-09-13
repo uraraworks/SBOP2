@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapObjectData.h									 */
-/* “à—e			:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapObjectData.h									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,25 +15,25 @@ class CLibInfoMapObject;
 class CLibInfoMapObjectData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminMapObjectData : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapObjectData(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminMapObjectData();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapObjectData(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminMapObjectData();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);							/* ‰Šú‰» */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	Renew		(void);											/* ˆê——‚ğXV */
+	void	Init		(CMgrData *pMgrData);							/* åˆæœŸåŒ– */
+	void	OnAdminMsg	(int nType, DWORD dwPara);						/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	Renew		(void);											/* ä¸€è¦§ã‚’æ›´æ–° */
 
 
 protected:
-	CWnd					*m_pWndNotify;				/* ’Ê’mæƒEƒBƒ“ƒhƒE */
-	CInfoMapBase			*m_pInfoMap;				/* •ÒW’†‚Ìƒ}ƒbƒvî•ñ */
-	CLibInfoMapObject		*m_pLibInfoMapObject;		/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgƒf[ƒ^ƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ƒ‰ƒCƒuƒ‰ƒŠ */
+	CWnd					*m_pWndNotify;				/* é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CInfoMapBase			*m_pInfoMap;				/* ç·¨é›†ä¸­ã®ãƒãƒƒãƒ—æƒ…å ± */
+	CLibInfoMapObject		*m_pLibInfoMapObject;		/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
 
 
 
@@ -45,7 +45,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapObjectData)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

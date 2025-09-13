@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WndMap.cpp													 */
-/* “à—e			:ƒ}ƒbƒvƒEƒBƒ“ƒhƒEƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WndMap.cpp													 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,22 +25,22 @@ static char THIS_FILE[] = __FILE__;
 
 #define ID_VIEW_TOOLBAR1	100
 enum {
-	TOOLBAR_COPY = 1,		/* ƒRƒs[ */
-	TOOLBAR_PASTE,			/* “\‚è•t‚¯ */
-	TOOLBAR_PAINT,			/* “h‚è‚Â‚Ô‚µ */
-	TOOLBAR_RANGE,			/* ”ÍˆÍ‘I‘ğ */
-	TOOLBAR_GRID,			/* ƒOƒŠƒbƒh•\¦ */
+	TOOLBAR_COPY = 1,		/* ã‚³ãƒ”ãƒ¼ */
+	TOOLBAR_PASTE,			/* è²¼ã‚Šä»˜ã‘ */
+	TOOLBAR_PAINT,			/* å¡—ã‚Šã¤ã¶ã— */
+	TOOLBAR_RANGE,			/* ç¯„å›²é¸æŠ */
+	TOOLBAR_GRID,			/* ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º */
 };
 
-/* ƒXƒe[ƒ^ƒXƒo[İ’è—pî•ñ */
+/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼è¨­å®šç”¨æƒ…å ± */
 static UINT indicators[] =
 {
-	ID_SEPARATOR,           // ƒXƒe[ƒ^ƒX ƒ‰ƒCƒ“ ƒCƒ“ƒWƒP[ƒ^
+	ID_SEPARATOR,           // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ ãƒ©ã‚¤ãƒ³ ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CWndMap, CWnd)
@@ -75,9 +75,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::CWndMap												 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::CWndMap												 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 CWndMap::CWndMap()
@@ -104,9 +104,9 @@ CWndMap::CWndMap()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::~CWndMap												 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::~CWndMap												 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 CWndMap::~CWndMap()
@@ -119,9 +119,9 @@ CWndMap::~CWndMap()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::Create												 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::Create												 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 BOOL CWndMap::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify)
@@ -146,7 +146,7 @@ BOOL CWndMap::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify)
 	bRet = CWnd::CreateEx (
 			WS_EX_TOOLWINDOW,
 			AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS),
-			"ƒ}ƒbƒvƒEƒBƒ“ƒhƒE",
+			"ãƒãƒƒãƒ—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦",
 			WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME | WS_HSCROLL | WS_VSCROLL,
 			rc,
 			pParent,
@@ -161,9 +161,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::Destroy												 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::Destroy												 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::Destroy(void)
@@ -173,9 +173,9 @@ void CWndMap::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnCreate												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnCreate												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -196,7 +196,7 @@ int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	RenewToolbar ();
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚Ìİ’è */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®è¨­å®š */
 	ModifyStyle (0, WS_VSCROLL | WS_HSCROLL);
 	nCount = m_pMgrGrpData->GetMapPartsCount ();
 	cx = m_pInfoMap->m_sizeMap.cx;
@@ -214,7 +214,7 @@ int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	sizeTmp = m_pMgrData->GetWndMap ();
 	SetWindowPos (NULL, 0, 0, sizeTmp.cx, sizeTmp.cy, SWP_NOZORDER | SWP_NOMOVE);
 
-	/* ƒXƒe[ƒ^ƒXƒo[‚Ìİ’è */
+	/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®è¨­å®š */
 	if (!m_StatusBar.Create (this) ||
 		!m_StatusBar.SetIndicators (indicators, sizeof (indicators) / sizeof (UINT))) {
 		return -1;
@@ -226,9 +226,9 @@ int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnUpdateCommandUI										 */
-/* “à—e		:ƒc[ƒ‹ƒo[ƒ{ƒ^ƒ“‰Ÿ‰ºó‘Ôƒ`ƒFƒbƒNƒnƒ“ƒhƒ‰						 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::OnUpdateCommandUI										 */
+/* å†…å®¹		:ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ãƒœã‚¿ãƒ³æŠ¼ä¸‹çŠ¶æ…‹ãƒã‚§ãƒƒã‚¯ãƒãƒ³ãƒ‰ãƒ©						 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::OnUpdateCommandUI(CCmdUI* pCmdUI)
@@ -238,9 +238,9 @@ void CWndMap::OnUpdateCommandUI(CCmdUI* pCmdUI)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnClose												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CLOSE)									 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnClose												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CLOSE)									 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::OnClose()
@@ -264,9 +264,9 @@ void CWndMap::OnClose()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnPaint												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnPaint												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::OnPaint()
@@ -316,9 +316,9 @@ void CWndMap::OnPaint()
 		rcRangeTmp.bottom	= m_rcCopy.top;
 	}
 
-	/* ’£‚è•t‚¯’†H */
+	/* å¼µã‚Šä»˜ã‘ä¸­ï¼Ÿ */
 	if (GetCheck (TOOLBAR_PASTE)) {
-		/* “\‚è•t‚¯ƒvƒŒƒrƒ…[‚ğ•\¦‚·‚é */
+		/* è²¼ã‚Šä»˜ã‘ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹ */
 		for (yy = 0; yy < rcRangeTmp.Height (); yy ++) {
 			for (xx = 0; xx < rcRangeTmp.Width (); xx ++) {
 				dwPartsID = m_pdwParts[xx + yy * rcRangeTmp.Width ()];
@@ -365,9 +365,9 @@ void CWndMap::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnSize												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnSize												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::OnSize(UINT nType, int cx, int cy)
@@ -379,7 +379,7 @@ void CWndMap::OnSize(UINT nType, int cx, int cy)
 	size = m_wndToolBar.CalcFixedLayout (FALSE, TRUE);
 	m_wndToolBar.MoveWindow(0, 0, cx, size.cy);
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÅ‘å’l‚ğXV */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®æœ€å¤§å€¤ã‚’æ›´æ–° */
 	RenewScrollRange (cx, cy - size.cy);
 
 	RepositionBars (AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
@@ -387,9 +387,9 @@ void CWndMap::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnHScroll												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnHScroll												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -405,28 +405,28 @@ void CWndMap::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	GetScrollInfo (SB_HORZ, &stScrollInfo);
 
 	switch (nSBCode) {
-	case SB_LEFT:			/* ¶’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LEFT:			/* å·¦ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_HORZ, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_RIGHT:			/* ‰E’[‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_RIGHT:			/* å³ç«¯ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_HORZ, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINELEFT:		/* ¶‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINELEFT:		/* å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - 1;
 		break;
-	case SB_PAGELEFT:		/* 1ƒy[ƒW¶‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGELEFT:		/* 1ãƒšãƒ¼ã‚¸å·¦ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - stScrollInfo.nPage;
 		break;
-	case SB_LINERIGHT:		/* ‰E‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINERIGHT:		/* å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + 1;
 		break;
-	case SB_PAGERIGHT:		/* 1ƒy[ƒW‰E‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGERIGHT:		/* 1ãƒšãƒ¼ã‚¸å³ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + stScrollInfo.nPage;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		bChange = FALSE;
@@ -442,9 +442,9 @@ void CWndMap::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnVScroll												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_VSCROLL)									 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnVScroll												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_VSCROLL)									 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -460,28 +460,28 @@ void CWndMap::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	GetScrollInfo (SB_VERT, &stScrollInfo);
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1”Ôã‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_TOP:			/* 1ç•ªä¸Šã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_VERT, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1”Ô‰º‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_BOTTOM:			/* 1ç•ªä¸‹ã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		GetScrollRange (SB_VERT, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1sã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEUP:			/* 1è¡Œä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - 1;
 		break;
-	case SB_PAGEUP:			/* 1ƒy[ƒWã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGEUP:			/* 1ãƒšãƒ¼ã‚¸ä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow - stScrollInfo.nPage;
 		break;
-	case SB_LINEDOWN:		/* 1s‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEDOWN:		/* 1è¡Œä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + 1;
 		break;
-	case SB_PAGEDOWN:		/* 1ƒy[ƒW‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGEDOWN:		/* 1ãƒšãƒ¼ã‚¸ä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + stScrollInfo.nPage;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		bChange = FALSE;
@@ -497,9 +497,9 @@ void CWndMap::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnSetCursor											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SETCURSOR)								 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnSetCursor											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SETCURSOR)								 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 BOOL CWndMap::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
@@ -519,9 +519,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnLButtonDown											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnLButtonDown											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
@@ -548,7 +548,7 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 	m_ptBack.x = x;
 	m_ptBack.y = y;
 
-	/* ”ÍˆÍ‘I‘ğ’†H */
+	/* ç¯„å›²é¸æŠä¸­ï¼Ÿ */
 	if (GetCheck (TOOLBAR_RANGE)) {
 		if (nFlags != -1) {
 			m_rcRange.SetRect (x, y, x, y);
@@ -557,7 +557,7 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 			m_rcRange.bottom = y;
 		}
 
-	/* “\‚è•t‚¯’†H */
+	/* è²¼ã‚Šä»˜ã‘ä¸­ï¼Ÿ */
 	} else if (GetCheck (TOOLBAR_PASTE)) {
 		if (m_rcCopy.left != -1) {
 			for (yy = 0; yy < m_rcCopy.Height (); yy ++) {
@@ -581,9 +581,9 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnLButtonUp											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONUP)								 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::OnLButtonUp											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONUP)								 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::OnLButtonUp(UINT nFlags, CPoint point)
@@ -606,7 +606,7 @@ void CWndMap::OnLButtonUp(UINT nFlags, CPoint point)
 		return;
 	}
 
-	/* ”ÍˆÍ‘I‘ğ’†H */
+	/* ç¯„å›²é¸æŠä¸­ï¼Ÿ */
 	if (GetCheck (TOOLBAR_RANGE)) {
 		m_wndToolBar.GetToolBarCtrl ().EnableButton (TOOLBAR_COPY,  TRUE);
 		m_wndToolBar.GetToolBarCtrl ().EnableButton (TOOLBAR_PASTE, TRUE);
@@ -615,9 +615,9 @@ void CWndMap::OnLButtonUp(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnRButtonDown											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnRButtonDown											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
@@ -643,25 +643,25 @@ void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
 	m_ptBack.x = x;
 	m_ptBack.y = y;
 
-	/* ”ÍˆÍ‘I‘ğ’†H */
+	/* ç¯„å›²é¸æŠä¸­ï¼Ÿ */
 	if (GetCheck (TOOLBAR_RANGE)) {
 		if (m_bRClickFirst == FALSE) {
 			m_bRClickFirst = TRUE;
-			/* ƒp[ƒc‚ğE‚¤ */
+			/* ãƒ‘ãƒ¼ãƒ„ã‚’æ‹¾ã† */
 			dwPartsID = m_pInfoMap->GetParts (x, y);
 			m_pMgrData->SetSelectMapPartsID (dwPartsID);
 		} else {
 			m_rcRange.SetRect (x, y, x, y);
 		}
 
-	/* “\‚è•t‚¯’†H */
+	/* è²¼ã‚Šä»˜ã‘ä¸­ï¼Ÿ */
 	} else if (GetCheck (TOOLBAR_PASTE)) {
 		m_rcRange.left = -1;
 		m_rcCopy.left = -1;
 		SetCheck (TOOLBAR_PASTE, FALSE);
 
 	} else {
-		/* ƒp[ƒc‚ğE‚¤ */
+		/* ãƒ‘ãƒ¼ãƒ„ã‚’æ‹¾ã† */
 		dwPartsID = m_pInfoMap->GetParts (x, y);
 		m_pMgrData->SetSelectMapPartsID (dwPartsID);
 	}
@@ -669,9 +669,9 @@ void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnRButtonUp											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONUP)								 */
-/* “ú•t		:2008/09/14														 */
+/* é–¢æ•°å	:CWndMap::OnRButtonUp											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONUP)								 */
+/* æ—¥ä»˜		:2008/09/14														 */
 /* ========================================================================= */
 
 void CWndMap::OnRButtonUp(UINT nFlags, CPoint point)
@@ -695,7 +695,7 @@ void CWndMap::OnRButtonUp(UINT nFlags, CPoint point)
 		return;
 	}
 
-	/* ”ÍˆÍ‘I‘ğ’†H */
+	/* ç¯„å›²é¸æŠä¸­ï¼Ÿ */
 	if (GetCheck (TOOLBAR_RANGE)) {
 		if (m_bRClickFirst == FALSE) {
 			rcTmp = m_rcRange;
@@ -723,9 +723,9 @@ void CWndMap::OnRButtonUp(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnRButtonDblClk										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDBLCLK)							 */
-/* “ú•t		:2008/09/14														 */
+/* é–¢æ•°å	:CWndMap::OnRButtonDblClk										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDBLCLK)							 */
+/* æ—¥ä»˜		:2008/09/14														 */
 /* ========================================================================= */
 
 void CWndMap::OnRButtonDblClk(UINT nFlags, CPoint point)
@@ -734,7 +734,7 @@ void CWndMap::OnRButtonDblClk(UINT nFlags, CPoint point)
 		return;
 	}
 
-	/* ”ÍˆÍ‘I‘ğ’†H */
+	/* ç¯„å›²é¸æŠä¸­ï¼Ÿ */
 	if (GetCheck (TOOLBAR_RANGE)) {
 		m_rcRange.left = -1;
 		m_rcCopy.left = -1;
@@ -746,9 +746,9 @@ void CWndMap::OnRButtonDblClk(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnMouseWheel											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::OnMouseWheel											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 BOOL CWndMap::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -767,9 +767,9 @@ BOOL CWndMap::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnMouseMove											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/25														 */
+/* é–¢æ•°å	:CWndMap::OnMouseMove											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/04/25														 */
 /* ========================================================================= */
 
 void CWndMap::OnMouseMove(UINT nFlags, CPoint point)
@@ -828,9 +828,9 @@ void CWndMap::OnMouseMove(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnGetMinMaxInfo										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MINMAXINFO)								 */
-/* “ú•t		:2007/11/04														 */
+/* é–¢æ•°å	:CWndMap::OnGetMinMaxInfo										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MINMAXINFO)								 */
+/* æ—¥ä»˜		:2007/11/04														 */
 /* ========================================================================= */
 
 void CWndMap::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
@@ -859,9 +859,9 @@ void CWndMap::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::PostNcDestroy											 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::PostNcDestroy											 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::PostNcDestroy()
@@ -871,9 +871,9 @@ void CWndMap::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::RenewScrollRange										 */
-/* “à—e		:ƒXƒNƒ[ƒ‹ƒo[‚Ì”ÍˆÍ‚ğXV										 */
-/* “ú•t		:2008/09/12														 */
+/* é–¢æ•°å	:CWndMap::RenewScrollRange										 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ç¯„å›²ã‚’æ›´æ–°										 */
+/* æ—¥ä»˜		:2008/09/12														 */
 /* ========================================================================= */
 
 void CWndMap::RenewScrollRange(int cx, int cy)
@@ -890,7 +890,7 @@ void CWndMap::RenewScrollRange(int cx, int cy)
 		return;
 	}
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÅ‘å’l‚ğXV */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®æœ€å¤§å€¤ã‚’æ›´æ–° */
 	SetScrollRange (SB_HORZ, 0, m_pInfoMap->m_sizeMap.cx);
 	SetScrollRange (SB_VERT, 0, m_pInfoMap->m_sizeMap.cy);
 
@@ -904,9 +904,9 @@ void CWndMap::RenewScrollRange(int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::RenewToolbar											 */
-/* “à—e		:ƒc[ƒ‹ƒo[‚ğXV												 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::RenewToolbar											 */
+/* å†…å®¹		:ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã‚’æ›´æ–°												 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::RenewToolbar(void)
@@ -944,9 +944,9 @@ void CWndMap::RenewToolbar(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::RenewStatusText										 */
-/* “à—e		:ƒXƒe[ƒ^ƒXƒo[‚ÌƒeƒLƒXƒg‚ğXV									 */
-/* “ú•t		:2008/11/08														 */
+/* é–¢æ•°å	:CWndMap::RenewStatusText										 */
+/* å†…å®¹		:ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’æ›´æ–°									 */
+/* æ—¥ä»˜		:2008/11/08														 */
 /* ========================================================================= */
 
 void CWndMap::RenewStatusText(void)
@@ -968,9 +968,9 @@ void CWndMap::RenewStatusText(void)
 	x += (point.x / 16);
 	y += (point.y / 16);
 
-	strPane.Format ("À•W(%3d,%3d)", x, y);
+	strPane.Format ("åº§æ¨™(%3d,%3d)", x, y);
 
-	/* ”ÍˆÍ‘I‘ğ’†H */
+	/* ç¯„å›²é¸æŠä¸­ï¼Ÿ */
 	bResult = GetCheck (TOOLBAR_RANGE);
 	if (bResult) {
 		rcRangeTmp = m_rcRange;
@@ -983,12 +983,12 @@ void CWndMap::RenewStatusText(void)
 			rcRangeTmp.bottom	= m_rcRange.top;
 		}
 		if (rcRangeTmp.left != -1) {
-			strTmp.Format (" ‘I‘ğ(%3d,%3d) ”ÍˆÍ(%3d,%3d)",
+			strTmp.Format (" é¸æŠ(%3d,%3d) ç¯„å›²(%3d,%3d)",
 					rcRangeTmp.left, rcRangeTmp.top, rcRangeTmp.Width () + 1, rcRangeTmp.Height () + 1);
 			strPane += strTmp;
 		}
 	}
-	/* ’£‚è•t‚¯’†H */
+	/* å¼µã‚Šä»˜ã‘ä¸­ï¼Ÿ */
 	bResult = GetCheck (TOOLBAR_PASTE);
 	if (bResult) {
 		rcRangeTmp = m_rcCopy;
@@ -1001,7 +1001,7 @@ void CWndMap::RenewStatusText(void)
 			rcRangeTmp.bottom	= m_rcCopy.top;
 		}
 		if (rcRangeTmp.left != -1) {
-			strTmp.Format (" ‘I‘ğ(%3d,%3d) ”ÍˆÍ(%3d,%3d)",
+			strTmp.Format (" é¸æŠ(%3d,%3d) ç¯„å›²(%3d,%3d)",
 					rcRangeTmp.left, rcRangeTmp.top, rcRangeTmp.Width (), rcRangeTmp.Height ());
 			strPane += strTmp;
 		}
@@ -1012,9 +1012,9 @@ void CWndMap::RenewStatusText(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::GetCheck												 */
-/* “à—e		:ƒc[ƒ‹ƒo[‚Ìƒ{ƒ^ƒ“ó‘Ô‚ğæ“¾									 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::GetCheck												 */
+/* å†…å®¹		:ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒœã‚¿ãƒ³çŠ¶æ…‹ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 BOOL CWndMap::GetCheck(int nNo)
@@ -1033,9 +1033,9 @@ BOOL CWndMap::GetCheck(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::SetCheck												 */
-/* “à—e		:ƒc[ƒ‹ƒo[‚Ìƒ{ƒ^ƒ“ó‘Ô‚ğİ’è									 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::SetCheck												 */
+/* å†…å®¹		:ãƒ„ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒœã‚¿ãƒ³çŠ¶æ…‹ã‚’è¨­å®š									 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::SetCheck(int nNo, BOOL bCheck)
@@ -1048,9 +1048,9 @@ void CWndMap::SetCheck(int nNo, BOOL bCheck)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnCopy												 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒRƒs[)											 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::OnCopy												 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚³ãƒ”ãƒ¼)											 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::OnCopy()
@@ -1075,7 +1075,7 @@ void CWndMap::OnCopy()
 	SAFE_DELETE (m_pdwParts);
 	m_pdwParts = new DWORD[m_rcCopy.Width () * m_rcCopy.Height ()];
 
-	/* ƒRƒs[“à—e‚ğì¬ */
+	/* ã‚³ãƒ”ãƒ¼å†…å®¹ã‚’ä½œæˆ */
 	for (yy = 0; yy < m_rcCopy.Height (); yy ++) {
 		for (xx = 0; xx < m_rcCopy.Width (); xx ++) {
 			dwPartsID = m_pInfoMap->GetParts (m_rcCopy.left + xx, m_rcCopy.top + yy);
@@ -1086,9 +1086,9 @@ void CWndMap::OnCopy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnPaste												 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(“\‚è•t‚¯)										 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::OnPaste												 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è²¼ã‚Šä»˜ã‘)										 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::OnPaste()
@@ -1101,9 +1101,9 @@ void CWndMap::OnPaste()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnToolPaint											 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(“h‚è‚Â‚Ô‚µ)										 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::OnToolPaint											 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å¡—ã‚Šã¤ã¶ã—)										 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::OnToolPaint()
@@ -1137,9 +1137,9 @@ void CWndMap::OnToolPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnRange												 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(”ÍˆÍw’è)										 */
-/* “ú•t		:2008/09/13														 */
+/* é–¢æ•°å	:CWndMap::OnRange												 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç¯„å›²æŒ‡å®š)										 */
+/* æ—¥ä»˜		:2008/09/13														 */
 /* ========================================================================= */
 
 void CWndMap::OnRange()
@@ -1149,9 +1149,9 @@ void CWndMap::OnRange()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWndMap::OnGrid												 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒOƒŠƒbƒh•\¦)									 */
-/* “ú•t		:2008/11/25														 */
+/* é–¢æ•°å	:CWndMap::OnGrid												 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º)									 */
+/* æ—¥ä»˜		:2008/11/25														 */
 /* ========================================================================= */
 
 void CWndMap::OnGrid()

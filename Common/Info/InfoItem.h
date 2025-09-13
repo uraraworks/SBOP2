@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* �t�@�C����	:InfoItem.h													 */
-/* ���e			:�A�C�e�����N���X ��`�t�@�C��							 */
-/* �쐬			:�N����N���t�����(URARA-works)							 */
-/* �쐬�J�n��	:2007/05/05													 */
+/* ファイル名	:InfoItem.h													 */
+/* 内容			:アイテム情報クラス 定義ファイル							 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2007/05/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,45 +11,45 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* �N���X�錾																 */
+/* クラス宣言																 */
 /* ========================================================================= */
 
 typedef class CInfoItem : public CInfoBase
 {
 public:
-			CInfoItem();									/* �R���X�g���N�^ */
-	virtual ~CInfoItem();									/* �f�X�g���N�^ */
+			CInfoItem();									/* コンストラクタ */
+	virtual ~CInfoItem();									/* デストラクタ */
 
-	int		GetElementNo		(LPCSTR pszName);					/* �v�f�ԍ����擾 */
-	DWORD	GetDataSize			(void);								/* �f�[�^�T�C�Y���擾 */
-	DWORD	GetDataSizeNo		(int nNo);							/* �w��v�f�̃f�[�^�T�C�Y���擾 */
-	LPCSTR	GetName				(int nNo);							/* �v�f�����擾 */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* �w��v�f�̕ۑ��p�f�[�^���擾 */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* �w��v�f�f�[�^��ǂݍ��� */
+	int		GetElementNo		(LPCSTR pszName);					/* 要素番号を取得 */
+	DWORD	GetDataSize			(void);								/* データサイズを取得 */
+	DWORD	GetDataSizeNo		(int nNo);							/* 指定要素のデータサイズを取得 */
+	LPCSTR	GetName				(int nNo);							/* 要素名を取得 */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* 指定要素の保存用データを取得 */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* 指定要素データを読み込み */
 
-	DWORD	GetSendDataSize		(void);								/* ���M�f�[�^�T�C�Y���擾 */
-	PBYTE	GetSendData			(void);								/* ���M�f�[�^���擾 */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ���M�f�[�^�����荞�� */
+	DWORD	GetSendDataSize		(void);								/* 送信データサイズを取得 */
+	PBYTE	GetSendData			(void);								/* 送信データを取得 */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* 送信データから取り込み */
 
-	void	Copy				(CInfoItem *pSrc);					/* �R�s�[ */
+	void	Copy				(CInfoItem *pSrc);					/* コピー */
 
 
 public:
-	/* �ۑ����Ȃ��f�[�^ */
+	/* 保存しないデータ */
 
-	/* �ۑ�����f�[�^ */
-	BOOL		m_bPutOn;									/* ��ɒu���邩���� */
-	DWORD		m_dwItemID,									/* �A�C�e��ID */
-				m_dwItemTypeID,								/* �A�C�e�����ID */
-				m_dwGrpID,									/* �n�ʂɂ��鎞�̉摜ID */
-				m_dwIconGrpID,								/* �o�b�N�p�b�N���̉摜ID */
-				m_dwMapID,									/* �����Ă���}�b�vID */
-				m_dwCharID,									/* ���L�҃L����ID */
-				m_dwDropSoundID;							/* �������Ƃ��̌��ʉ�ID */
-	int			m_nPosZ;									/* �����Ă��鍂��(0���n��) */
-	POINT		m_ptPos,									/* �����Ă�����W */
-				m_ptBackPack;								/* �o�b�N�p�b�N���̈ʒu */
-	CmyString	m_strName;									/* �A�C�e���� */
+	/* 保存するデータ */
+	BOOL		m_bPutOn;									/* 上に置けるか判定 */
+	DWORD		m_dwItemID,									/* アイテムID */
+				m_dwItemTypeID,								/* アイテム種別ID */
+				m_dwGrpID,									/* 地面にある時の画像ID */
+				m_dwIconGrpID,								/* バックパック内の画像ID */
+				m_dwMapID,									/* 落ちているマップID */
+				m_dwCharID,									/* 所有者キャラID */
+				m_dwDropSoundID;							/* 落ちたときの効果音ID */
+	int			m_nPosZ;									/* 落ちている高さ(0が地面) */
+	POINT		m_ptPos,									/* 落ちている座標 */
+				m_ptBackPack;								/* バックパック内の位置 */
+	CmyString	m_strName;									/* アイテム名 */
 } CInfoItem, *PCInfoItem;
 typedef CmyArray<PCInfoItem, PCInfoItem>	   ARRAYITEMINFO;
 typedef CmyArray<PCInfoItem, PCInfoItem>	 *PARRAYITEMINFO;

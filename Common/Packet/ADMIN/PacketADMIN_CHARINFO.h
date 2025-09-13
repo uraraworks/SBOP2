@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHARINFO.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒLƒƒƒ‰î•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/03/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHARINFO.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚­ãƒ£ãƒ©æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/03/18													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CInfoCharBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_CHARINFO : public CPacketBase
 {
 public:
-			CPacketADMIN_CHARINFO();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_CHARINFO();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_CHARINFO();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_CHARINFO();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoCharBase *pInfo, BOOL bChgScreenPos);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoCharBase *pInfo, BOOL bChgScreenPos);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	BOOL			m_bChgScreenPos;			/* ‰æ–ÊˆÊ’u•ÏX */
-	CInfoCharBase	*m_pInfoChar;				/* ƒLƒƒƒ‰î•ñ */
+	BOOL			m_bChgScreenPos;			/* ç”»é¢ä½ç½®å¤‰æ›´ */
+	CInfoCharBase	*m_pInfoChar;				/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CPacketADMIN_CHARINFO, *PCPacketADMIN_CHARINFO;
 
 /* Copyright(C)URARA-works 2007 */

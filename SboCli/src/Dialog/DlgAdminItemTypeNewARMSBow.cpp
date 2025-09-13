@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemTypeNewARMSBow.cpp								 */
-/* “à—e			:ƒAƒCƒeƒ€í•Ê(‚¿•¨[‹|—p‚Ìİ’è])İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/08/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemTypeNewARMSBow.cpp								 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥(æŒã¡ç‰©[å¼“ç”¨ã®è¨­å®š])è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/08/29													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,7 +12,7 @@
 #include "DlgAdminItemTypeNewARMSBow.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 IMPLEMENT_DYNAMIC(CDlgAdminItemTypeNewARMSBow, CDlgAdminBase)
@@ -29,9 +29,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewARMSBow::CDlgAdminItemTypeNewARMSBow		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/08/29														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewARMSBow::CDlgAdminItemTypeNewARMSBow		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/08/29														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeNewARMSBow::CDlgAdminItemTypeNewARMSBow(CWnd* pParent /*=NULL*/)
@@ -43,9 +43,9 @@ CDlgAdminItemTypeNewARMSBow::CDlgAdminItemTypeNewARMSBow(CWnd* pParent /*=NULL*/
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewARMSBow::~CDlgAdminItemTypeNewARMSBow		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/08/29														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewARMSBow::~CDlgAdminItemTypeNewARMSBow		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/08/29														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeNewARMSBow::~CDlgAdminItemTypeNewARMSBow()
@@ -54,32 +54,32 @@ CDlgAdminItemTypeNewARMSBow::~CDlgAdminItemTypeNewARMSBow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewARMSBow::Set								 */
-/* “à—e		:•ÒW“à—e‚ğİ’è													 */
-/* “ú•t		:2009/08/29														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewARMSBow::Set								 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2009/08/29														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewARMSBow::Set(CInfoItemTypeBase *pSrc)
 {
-	m_dwMoveWait	= pSrc->m_dwMoveWait;			/* ‘¬“x */
-	m_dwMoveCount	= pSrc->m_dwMoveCount;			/* ”ò‹——£ */
+	m_dwMoveWait	= pSrc->m_dwMoveWait;			/* é€Ÿåº¦ */
+	m_dwMoveCount	= pSrc->m_dwMoveCount;			/* é£›è·é›¢ */
 
 	UpdateData(FALSE);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewARMSBow::Get								 */
-/* “à—e		:•ÒW“à—e‚ğæ“¾													 */
-/* “ú•t		:2009/08/29														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewARMSBow::Get								 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/08/29														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewARMSBow::Get(CInfoItemTypeBase *&pDst)
 {
 	UpdateData();
 
-	pDst->m_dwMoveWait	= m_dwMoveWait;			/* ‘¬“x */
-	pDst->m_dwMoveCount	= m_dwMoveCount;		/* ”ò‹——£ */
+	pDst->m_dwMoveWait	= m_dwMoveWait;			/* é€Ÿåº¦ */
+	pDst->m_dwMoveCount	= m_dwMoveCount;		/* é£›è·é›¢ */
 }
 
 /* Copyright(C)URARA-works 2009 */

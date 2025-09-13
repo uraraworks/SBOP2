@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_RENEWADMINLEVEL.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ŠÇ—ŽÒŒ ŒÀƒŒƒxƒ‹XV) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_RENEWADMINLEVEL.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ç®¡ç†è€…æ¨©é™ãƒ¬ãƒ™ãƒ«æ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_RENEWADMINLEVEL : public CPacketBase
 {
 public:
-			CPacketADMIN_RENEWADMINLEVEL();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_RENEWADMINLEVEL();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_RENEWADMINLEVEL();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_RENEWADMINLEVEL();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwAccountID, int nLevel);			/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwAccountID, int nLevel);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwAccountID;					/* ƒAƒJƒEƒ“ƒgID */
-	int		m_nAdminLevel;					/* ŠÇ—ŽÒƒŒƒxƒ‹ */
+	DWORD	m_dwAccountID;					/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	int		m_nAdminLevel;					/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ« */
 } CPacketADMIN_RENEWADMINLEVEL, *PCPacketADMIN_RENEWADMINLEVEL;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerMap.h													 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(ƒ}ƒbƒv) À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerMap.h													 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ãƒãƒƒãƒ—) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -28,9 +28,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::CLayerMap											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::CLayerMap											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CLayerMap::CLayerMap()
@@ -67,14 +67,14 @@ CLayerMap::CLayerMap()
 	m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
 			TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::~CLayerMap											 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::~CLayerMap											 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CLayerMap::~CLayerMap()
@@ -94,13 +94,13 @@ CLayerMap::~CLayerMap()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::Create												 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::Create												 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CLayerMap::Create(
-	CMgrData	*pMgrData)		/* [in] ƒf[ƒ^ŠÇ— */
+	CMgrData	*pMgrData)		/* [in] ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 {
 	CLayerBase::Create (pMgrData);
 
@@ -130,9 +130,9 @@ void CLayerMap::Create(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::Draw												 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::Draw												 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CLayerMap::Draw(PCImg32 pDst)
@@ -184,9 +184,9 @@ void CLayerMap::Draw(PCImg32 pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::TimerProc											 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::TimerProc											 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CLayerMap::TimerProc(void)
@@ -226,16 +226,16 @@ BOOL CLayerMap::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::IsScrollPos											 */
-/* “à—e		:ƒXƒNƒ[ƒ‹‚·‚éêŠ‚©”»’è										 */
-/* “ú•t		:2006/11/01														 */
-/* –ß‚è’l	:-1:ƒXƒNƒ[ƒ‹•s—v ‚»‚Ì‘¼:ƒXƒNƒ[ƒ‹‚·‚éŒü‚«					 */
+/* é–¢æ•°å	:CLayerMap::IsScrollPos											 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹å ´æ‰€ã‹åˆ¤å®š										 */
+/* æ—¥ä»˜		:2006/11/01														 */
+/* æˆ»ã‚Šå€¤	:-1:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸è¦ ãã®ä»–:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹å‘ã					 */
 /* ========================================================================= */
 
 int CLayerMap::IsScrollPos(
-	int x,				/* [in] ƒLƒƒƒ‰À•W(‰¡) */
-	int y,				/* [in] ƒLƒƒƒ‰À•W(c) */
-	int nDirection)		/* [in] Œü‚« */
+	int x,				/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(æ¨ª) */
+	int y,				/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(ç¸¦) */
+	int nDirection)		/* [in] å‘ã */
 {
 	int yy, nRet, nMaxX, nMaxY;
 	PCInfoMapBase pMap;
@@ -328,15 +328,15 @@ int CLayerMap::IsScrollPos(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::IsScrollArea										 */
-/* “à—e		:ƒXƒNƒ[ƒ‹‚Å‚«‚é‚©”»’è											 */
-/* “ú•t		:2006/11/01														 */
+/* é–¢æ•°å	:CLayerMap::IsScrollArea										 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã§ãã‚‹ã‹åˆ¤å®š											 */
+/* æ—¥ä»˜		:2006/11/01														 */
 /* ========================================================================= */
 
 BOOL CLayerMap::IsScrollArea(
-	int x,				/* [in] ƒLƒƒƒ‰À•W(‰¡) */
-	int y,				/* [in] ƒLƒƒƒ‰À•W(c) */
-	int &nDirection)	/* [in] Œü‚« */
+	int x,				/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(æ¨ª) */
+	int y,				/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(ç¸¦) */
+	int &nDirection)	/* [in] å‘ã */
 {
 	BOOL bRet, bResult;
 	int nDirectionTmp;
@@ -453,9 +453,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::IsScroll											 */
-/* “à—e		:ƒXƒNƒ[ƒ‹’†‚©”»’è												 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::IsScroll											 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­ã‹åˆ¤å®š												 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CLayerMap::IsScroll(void)
@@ -465,15 +465,15 @@ BOOL CLayerMap::IsScroll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::IsInScreen											 */
-/* “à—e		:w’èÀ•W‚ª‰æ–Ê“à‚É‚¢‚é‚©ƒ`ƒFƒbƒN								 */
-/* –ß‚è’l	:TRUE:‰æ–Ê“à													 */
-/* “ú•t		:2007/02/21														 */
+/* é–¢æ•°å	:CLayerMap::IsInScreen											 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ãŒç”»é¢å†…ã«ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯								 */
+/* æˆ»ã‚Šå€¤	:TRUE:ç”»é¢å†…													 */
+/* æ—¥ä»˜		:2007/02/21														 */
 /* ========================================================================= */
 
 BOOL CLayerMap::IsInScreen(
-	int x,		/* [in] ƒLƒƒƒ‰À•W(‰¡) */
-	int y)		/* [in] ƒLƒƒƒ‰À•W(c) */
+	int x,		/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(æ¨ª) */
+	int y)		/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(ç¸¦) */
 {
 	BOOL bRet;
 	int nMapX, nMapY;
@@ -505,9 +505,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::Scroll												 */
-/* “à—e		:ƒXƒNƒ[ƒ‹														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::Scroll												 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BYTE CLayerMap::Scroll(BYTE byDirection, BOOL bNoCheck)
@@ -518,7 +518,7 @@ BYTE CLayerMap::Scroll(BYTE byDirection, BOOL bNoCheck)
 
 	byRet = 0;
 
-	/* ƒXƒNƒ[ƒ‹‚µ‚È‚¢ƒ‚[ƒhH */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã—ãªã„ãƒ¢ãƒ¼ãƒ‰ï¼Ÿ */
 	if (m_bScroll == FALSE) {
 		goto Exit;
 	}
@@ -638,14 +638,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::SetCenterPos										 */
-/* “à—e		:w’èÀ•W‚ª‰æ–Ê’†‰›‚É‚È‚é‚æ‚¤‚Éİ’è								 */
-/* “ú•t		:2007/02/15														 */
+/* é–¢æ•°å	:CLayerMap::SetCenterPos										 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ãŒç”»é¢ä¸­å¤®ã«ãªã‚‹ã‚ˆã†ã«è¨­å®š								 */
+/* æ—¥ä»˜		:2007/02/15														 */
 /* ========================================================================= */
 
 void CLayerMap::SetCenterPos(
-	int x,		/* [in] ƒLƒƒƒ‰À•W(‰¡) */
-	int y)		/* [in] ƒLƒƒƒ‰À•W(c) */
+	int x,		/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(æ¨ª) */
+	int y)		/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(ç¸¦) */
 {
 	int xx, yy, nMapX, nMapY;
 	PCInfoMapBase pMap;
@@ -675,9 +675,9 @@ void CLayerMap::SetCenterPos(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::SetScrollWait										 */
-/* “à—e		:ƒXƒNƒ[ƒ‹ˆÚ“®‘Ò‚¿ŠÔ‚ğİ’è									 */
-/* “ú•t		:2007/02/15														 */
+/* é–¢æ•°å	:CLayerMap::SetScrollWait										 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ç§»å‹•å¾…ã¡æ™‚é–“ã‚’è¨­å®š									 */
+/* æ—¥ä»˜		:2007/02/15														 */
 /* ========================================================================= */
 
 void CLayerMap::SetScrollWait(int nMoveWait)
@@ -687,9 +687,9 @@ void CLayerMap::SetScrollWait(int nMoveWait)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::SetScrollMode										 */
-/* “à—e		:ƒXƒNƒ[ƒ‹‚·‚é‚©İ’è											 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CLayerMap::SetScrollMode										 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹ã‹è¨­å®š											 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 void CLayerMap::SetScrollMode(BOOL bScroll, int nViewIcon)
@@ -702,9 +702,9 @@ void CLayerMap::SetScrollMode(BOOL bScroll, int nViewIcon)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::SetSystemIconMode									 */
-/* “à—e		:ƒVƒXƒeƒ€ƒAƒCƒRƒ“ƒ‚[ƒh‚ğİ’è									 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CLayerMap::SetSystemIconMode									 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³ãƒ¢ãƒ¼ãƒ‰ã‚’è¨­å®š									 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CLayerMap::SetSystemIconMode(int nMode)
@@ -719,9 +719,9 @@ void CLayerMap::SetSystemIconMode(int nMode)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::GetViewMapPos										 */
-/* “à—e		:‹“_‚ğƒ}ƒbƒvÀ•W‚Åæ“¾											 */
-/* “ú•t		:2008/04/19														 */
+/* é–¢æ•°å	:CLayerMap::GetViewMapPos										 */
+/* å†…å®¹		:è¦–ç‚¹ã‚’ãƒãƒƒãƒ—åº§æ¨™ã§å–å¾—											 */
+/* æ—¥ä»˜		:2008/04/19														 */
 /* ========================================================================= */
 
 void CLayerMap::GetViewMapPos(int &nDstX, int &nDstY)
@@ -732,9 +732,9 @@ void CLayerMap::GetViewMapPos(int &nDstX, int &nDstY)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::RenewLevel											 */
-/* “à—e		:–¾“xƒŒƒxƒ‹‰æ‘œ‚ğXV											 */
-/* “ú•t		:2008/09/20														 */
+/* é–¢æ•°å	:CLayerMap::RenewLevel											 */
+/* å†…å®¹		:æ˜åº¦ãƒ¬ãƒ™ãƒ«ç”»åƒã‚’æ›´æ–°											 */
+/* æ—¥ä»˜		:2008/09/20														 */
 /* ========================================================================= */
 
 void CLayerMap::RenewLevel(void)
@@ -795,9 +795,9 @@ void CLayerMap::RenewLevel(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::RenewMapName										 */
-/* “à—e		:ƒ}ƒbƒv–¼•\¦—p‰æ‘œ‚ğXV										 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CLayerMap::RenewMapName										 */
+/* å†…å®¹		:ãƒãƒƒãƒ—åè¡¨ç¤ºç”¨ç”»åƒã‚’æ›´æ–°										 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CLayerMap::RenewMapName(LPCSTR pszMapName)
@@ -835,9 +835,9 @@ void CLayerMap::RenewMapName(LPCSTR pszMapName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::TimerProcScroll										 */
-/* “à—e		:ŠÔˆ—(ƒXƒNƒ[ƒ‹)											 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CLayerMap::TimerProcScroll										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«)											 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 BOOL CLayerMap::TimerProcScroll(void)
@@ -886,9 +886,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::TimerProcSystemIcon									 */
-/* “à—e		:ŠÔˆ—(ƒVƒXƒeƒ€ƒAƒCƒRƒ“)										 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CLayerMap::TimerProcSystemIcon									 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³)										 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 BOOL CLayerMap::TimerProcSystemIcon(void)
@@ -901,12 +901,12 @@ BOOL CLayerMap::TimerProcSystemIcon(void)
 	nMove	= 4;
 
 	switch (m_nSystemIconMode) {
-	case 0:		/* ã‚É“oê */
+	case 0:		/* ä¸Šã«ç™»å ´ */
 		if (m_nSyatemIconOffset < 0) {
 			goto Exit;
 		}
 		break;
-	case 1:		/* ‰º‚Ö‘Şê */
+	case 1:		/* ä¸‹ã¸é€€å ´ */
 		if (m_nSyatemIconOffset >= nMax) {
 			goto Exit;
 		}
@@ -921,10 +921,10 @@ BOOL CLayerMap::TimerProcSystemIcon(void)
 	m_dwLastTimeSystemIconMode = timeGetTime ();
 
 	switch (m_nSystemIconMode) {
-	case 0:		/* ã‚É“oê */
+	case 0:		/* ä¸Šã«ç™»å ´ */
 		m_nSyatemIconOffset = max (m_nSyatemIconOffset - nMove, 0);
 		break;
-	case 1:		/* ‰º‚Ö‘Şê */
+	case 1:		/* ä¸‹ã¸é€€å ´ */
 		m_nSyatemIconOffset = min (m_nSyatemIconOffset + nMove, nMax);
 		break;
 	}
@@ -938,9 +938,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::TimerProcMapName									 */
-/* “à—e		:ŠÔˆ—(ƒ}ƒbƒv–¼•\¦)											 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CLayerMap::TimerProcMapName									 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(ãƒãƒƒãƒ—åè¡¨ç¤º)											 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 BOOL CLayerMap::TimerProcMapName(void)
@@ -966,7 +966,7 @@ BOOL CLayerMap::TimerProcMapName(void)
 	m_nLevelMapName = min (m_nLevelMapName, 100);
 	m_nLevelMapName = max (m_nLevelMapName, 0);
 
-	/* I—¹H */
+	/* çµ‚äº†ï¼Ÿ */
 	if (m_nLevelMapName == 0) {
 		RenewMapName (NULL);
 	}
@@ -978,9 +978,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawPartsBase										 */
-/* “à—e		:•`‰æ(“y‘ä)														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::DrawPartsBase										 */
+/* å†…å®¹		:æç”»(åœŸå°)														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
@@ -1061,9 +1061,9 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawMapPile											 */
-/* “à—e		:•`‰æ(ƒ}ƒbƒvd‚Ë‡‚í‚¹)											 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CLayerMap::DrawMapPile											 */
+/* å†…å®¹		:æç”»(ãƒãƒƒãƒ—é‡ã­åˆã‚ã›)											 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
@@ -1141,9 +1141,9 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::GetDrawMapPos										 */
-/* “à—e		:ƒ}ƒbƒvÀ•W‚Ì•`‰æˆÊ’u‚ğŠ“¾										 */
-/* “ú•t		:2008/04/13														 */
+/* é–¢æ•°å	:CLayerMap::GetDrawMapPos										 */
+/* å†…å®¹		:ãƒãƒƒãƒ—åº§æ¨™ã®æç”»ä½ç½®ã‚’æ‰€å¾—										 */
+/* æ—¥ä»˜		:2008/04/13														 */
 /* ========================================================================= */
 
 void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
@@ -1151,7 +1151,7 @@ void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, aPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 
-	/* ƒXƒNƒ[ƒ‹’†H */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­ï¼Ÿ */
 	if (m_nMoveX > 0 || m_nMoveY > 0) {
 		nDstX += (int)m_nMoveX * aMoveX[m_byDirection];
 		nDstY += (int)m_nMoveY * aMoveY[m_byDirection];
@@ -1164,9 +1164,9 @@ void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::GetDrawMovePos										 */
-/* “à—e		:ƒXƒNƒ[ƒ‹’†‚Ì•`‰æˆÊ’u‚ğŠ“¾									 */
-/* “ú•t		:2009/03/14														 */
+/* é–¢æ•°å	:CLayerMap::GetDrawMovePos										 */
+/* å†…å®¹		:ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­ã®æç”»ä½ç½®ã‚’æ‰€å¾—									 */
+/* æ—¥ä»˜		:2009/03/14														 */
 /* ========================================================================= */
 
 void CLayerMap::GetDrawMovePos(POINT &ptMove, POINT &ptPos)
@@ -1189,7 +1189,7 @@ void CLayerMap::GetDrawMovePos(POINT &ptMove, POINT &ptPos)
 		}
 
 	} else {
-		/* ˆÚ“®’†‚ÌÀ•W‚ğ•â³ */
+		/* ç§»å‹•ä¸­ã®åº§æ¨™ã‚’è£œæ­£ */
 		nMoveX *= aMoveX[m_byDirection];
 		nMoveY *= aMoveY[m_byDirection];
 		switch (m_byDirection) {
@@ -1243,9 +1243,9 @@ void CLayerMap::GetDrawMovePos(POINT &ptMove, POINT &ptPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawPartsPile										 */
-/* “à—e		:•`‰æ(d‚Ë‡‚í‚¹)												 */
-/* “ú•t		:2007/05/26														 */
+/* é–¢æ•°å	:CLayerMap::DrawPartsPile										 */
+/* å†…å®¹		:æç”»(é‡ã­åˆã‚ã›)												 */
+/* æ—¥ä»˜		:2007/05/26														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
@@ -1354,9 +1354,9 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawShadow											 */
-/* “à—e		:•`‰æ(ƒ}ƒbƒv‰e)													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CLayerMap::DrawShadow											 */
+/* å†…å®¹		:æç”»(ãƒãƒƒãƒ—å½±)													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
@@ -1423,9 +1423,9 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawMapObject										 */
-/* “à—e		:•`‰æ(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg)										 */
-/* “ú•t		:2008/11/03														 */
+/* é–¢æ•°å	:CLayerMap::DrawMapObject										 */
+/* å†…å®¹		:æç”»(ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ)										 */
+/* æ—¥ä»˜		:2008/11/03														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
@@ -1504,9 +1504,9 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawItem											 */
-/* “à—e		:•`‰æ(ƒAƒCƒeƒ€)													 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CLayerMap::DrawItem											 */
+/* å†…å®¹		:æç”»(ã‚¢ã‚¤ãƒ†ãƒ )													 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
@@ -1533,7 +1533,7 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 	}
 
 	xx = yy = 0;
-	/* ƒXƒNƒ[ƒ‹’†H */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­ï¼Ÿ */
 	if (m_nMoveX > 0 || m_nMoveY > 0) {
 		xx += (int)m_nMoveX * aMoveX[m_byDirection];
 		yy += (int)m_nMoveY * aMoveY[m_byDirection];
@@ -1582,9 +1582,9 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::GetDrawPos											 */
-/* “à—e		:•`‰æˆÊ’u‚ğæ“¾													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::GetDrawPos											 */
+/* å†…å®¹		:æç”»ä½ç½®ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
@@ -1592,7 +1592,7 @@ void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, aPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 
-	/* ƒXƒNƒ[ƒ‹’†H */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­ï¼Ÿ */
 	if (m_nMoveX > 0 || m_nMoveY > 0) {
 		nDstX += (int)m_nMoveX * aMoveX[m_byDirection];
 		nDstY += (int)m_nMoveY * aMoveY[m_byDirection];
@@ -1605,9 +1605,9 @@ void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawChar											 */
-/* “à—e		:•`‰æ(ƒLƒƒƒ‰)													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::DrawChar											 */
+/* å†…å®¹		:æç”»(ã‚­ãƒ£ãƒ©)													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
@@ -1639,9 +1639,9 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawCharText										 */
-/* “à—e		:•`‰æ(ƒLƒƒƒ‰ŠÖ˜A‚ÌƒeƒLƒXƒg)										 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CLayerMap::DrawCharText										 */
+/* å†…å®¹		:æç”»(ã‚­ãƒ£ãƒ©é–¢é€£ã®ãƒ†ã‚­ã‚¹ãƒˆ)										 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
@@ -1680,18 +1680,18 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 		y += pChar->m_ptMove.y;
 		pChar->GetViewCharPos (ptViewCharPos);
 
-		/* •¶šƒGƒtƒFƒNƒg */
+		/* æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 		nCount2 = pChar->GetTextEffectCount ();
 		for (j = 0; j < nCount2; j ++) {
 			pInfoTextEffect = pChar->GetTextEffect (j);
 			m_pMgrDraw->DrawTextEffect (pDst, x + pChar->m_nGrpSize, y - 20 - ptViewCharPos.y, pInfoTextEffect);
 		}
 
-		/* •¬o‚µ */
+		/* å™´å‡ºã— */
 		cy = m_pMgrGrpData->GetGrpSize (GRPIDMAIN_EFCBALLOON);
 		m_pMgrDraw->DrawBalloon (pDst, x, y - (cy * 2) - ptViewCharPos.y, pChar->GetBalloonGrpID ());
 
-		/* ƒLƒƒƒ‰–¼‚Ì•\¦ */
+		/* ã‚­ãƒ£ãƒ©åã®è¡¨ç¤º */
 		if (bDraw) {
 			nWidth	= pChar->m_pDibName->Width ();
 			nHeight	= pChar->m_pDibName->Height ();
@@ -1704,7 +1704,7 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 			pDst->Blt (xx, yy, nWidth, nHeight, pChar->m_pDibName, 0, 0, TRUE);
 		}
 
-		/* ”­Œ¾“à—e‚Ì•\¦ */
+		/* ç™ºè¨€å†…å®¹ã®è¡¨ç¤º */
 		if (bDrawChat && pChar->m_strSpeak.GetLength ()) {
 			nWidth	= pChar->m_pDibSpeak->Width ();
 			nHeight	= pChar->m_pDibSpeak->Height ();
@@ -1723,9 +1723,9 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawSystemIcon										 */
-/* “à—e		:•`‰æ(ƒVƒXƒeƒ€ƒAƒCƒRƒ“)											 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CLayerMap::DrawSystemIcon										 */
+/* å†…å®¹		:æç”»(ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³)											 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawSystemIcon(PCImg32 pDst)
@@ -1738,25 +1738,25 @@ void CLayerMap::DrawSystemIcon(PCImg32 pDst)
 
 	nOffset = m_nSyatemIconOffset;
 
-//	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688, 0, TRUE);			/* ƒ`ƒƒƒbƒg */
-//	pDst->BltFrom256 (SCRSIZEX - 64,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 1, 0, TRUE);	/* ƒAƒCƒeƒ€ */
-//	pDst->BltFrom256 (SCRSIZEX - 32,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 7, 0, TRUE);	/* ‹xŒe */
-//	pDst->BltFrom256 (SCRSIZEX,		nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 6, 0, TRUE);	/* ƒVƒXƒeƒ€ */
-//	pDst->BltFrom256 (64,			nOffset + SCRSIZEY - 8,	32, 32, m_pDibSystem, 688 + 64, 48, TRUE);		/* ‹“_ */
-	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 40,112, 32, m_pDibSystem, 688, 112, TRUE);			/* à–¾ */
-	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,128, 36, m_pDibSystem, 688, 208, TRUE);			/* à–¾ */
+//	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688, 0, TRUE);			/* ãƒãƒ£ãƒƒãƒˆ */
+//	pDst->BltFrom256 (SCRSIZEX - 64,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 1, 0, TRUE);	/* ã‚¢ã‚¤ãƒ†ãƒ  */
+//	pDst->BltFrom256 (SCRSIZEX - 32,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 7, 0, TRUE);	/* ä¼‘æ†© */
+//	pDst->BltFrom256 (SCRSIZEX,		nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 6, 0, TRUE);	/* ã‚·ã‚¹ãƒ†ãƒ  */
+//	pDst->BltFrom256 (64,			nOffset + SCRSIZEY - 8,	32, 32, m_pDibSystem, 688 + 64, 48, TRUE);		/* è¦–ç‚¹ */
+	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 40,112, 32, m_pDibSystem, 688, 112, TRUE);			/* èª¬æ˜ */
+	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,128, 36, m_pDibSystem, 688, 208, TRUE);			/* èª¬æ˜ */
 
 	if (m_nViewIcon > 0) {
-		/* ‹“_ƒ‚[ƒh */
+		/* è¦–ç‚¹ãƒ¢ãƒ¼ãƒ‰ */
 		pDst->BltFrom256 (32, nOffset + SCRSIZEY - 80, 32, 32, m_pDibSystem, 688 + (m_nViewIcon - 1) * 32, 48, TRUE);
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawGauge											 */
-/* “à—e		:•`‰æ(ƒQ[ƒW—Ş)													 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CLayerMap::DrawGauge											 */
+/* å†…å®¹		:æç”»(ã‚²ãƒ¼ã‚¸é¡)													 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawGauge(PCImg32 pDst)
@@ -1793,19 +1793,19 @@ void CLayerMap::DrawGauge(PCImg32 pDst)
 		pDst->BltFrom256 (x + 3, y + 3 + 70 - nTmp, 70, nTmp, m_pDibSystem, 224, 128 + 70 - nTmp, TRUE);
 	}
 
-	/* ƒAƒ^ƒbƒNƒQ[ƒW */
+	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
 	x = 32 + 32 * 6;
 	y = 32 + SCRSIZEY - 66;
 	fAverage = (float)pPlayerChar->m_wAtackGauge * 100 / MAX_ATACKGAUGE;
 	nTmp	 = (int)(98 * fAverage * 0.01f) + 1;
-	pDst->BltFrom256 (x,		y,		104, 34, m_pDibSystem, 504, 52, TRUE);	/* ƒQ[ƒW•”•ª */
-	pDst->BltFrom256 (x + 104,	y + 8,  28, 30, m_pDibSystem, 608, 60, TRUE);	/* ƒAƒCƒRƒ“•”•ª */
+	pDst->BltFrom256 (x,		y,		104, 34, m_pDibSystem, 504, 52, TRUE);	/* ã‚²ãƒ¼ã‚¸éƒ¨åˆ† */
+	pDst->BltFrom256 (x + 104,	y + 8,  28, 30, m_pDibSystem, 608, 60, TRUE);	/* ã‚¢ã‚¤ã‚³ãƒ³éƒ¨åˆ† */
 	if (pPlayerChar->m_wAtackGauge > 0) {
 		pDst->BltFrom256 (x + 3, y + 15, nTmp, 16, m_pDibSystem, 448, 128);
 	}
 
 	if (pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-		/* ƒK[ƒhƒQ[ƒW */
+		/* ã‚¬ãƒ¼ãƒ‰ã‚²ãƒ¼ã‚¸ */
 		x = 32 + 32 * 6;
 		y = 32 + SCRSIZEY - 30;
 		fAverage = (float)pPlayerChar->m_wDefenseGauge * 100 / MAX_DEFENSEGAUGE;
@@ -1819,9 +1819,9 @@ void CLayerMap::DrawGauge(PCImg32 pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLayerMap::DrawMapName											 */
-/* “à—e		:•`‰æ(ƒ}ƒbƒv–¼)													 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CLayerMap::DrawMapName											 */
+/* å†…å®¹		:æç”»(ãƒãƒƒãƒ—å)													 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CLayerMap::DrawMapName(PCImg32 pDst)

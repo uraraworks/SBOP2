@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerCloud.h												 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(‰_) ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/09/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerCloud.h												 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(é›²) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/09/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,32 +15,32 @@ class CMgrData;
 class CLayerMap;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerCloud : public CLayerBase
 {
 public:
-			CLayerCloud();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerCloud();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerCloud();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerCloud();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);			/* ì¬ */
-	void	Draw		(CImg32 *pDst);					/* •`‰æ */
-	BOOL	TimerProc	(void);							/* ŠÔˆ— */
+	void	Create		(CMgrData *pMgrData);			/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);					/* æç”» */
+	BOOL	TimerProc	(void);							/* æ™‚é–“å‡¦ç† */
 
 
 public:
-	CLayerMap		*m_pLayerMap;						/* ƒ}ƒbƒvƒŒƒCƒ„[ */
+	CLayerMap		*m_pLayerMap;						/* ãƒãƒƒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ */
 
 
 protected:
-	int				m_nCount,							/* ˆÚ“®ƒJƒEƒ“ƒ^ */
-					m_nPosXBack,						/* Šî€“_(‰¡) */
-					m_nPosYBack,						/* Šî€“_(c) */
-					m_nPosX,							/* Šî€“_(‰¡) */
-					m_nPosY;							/* Šî€“_(c) */
-	DWORD			m_dwLastProc;						/* ‘O‰ñ‚Ìˆ—ŠÔ */
-	CImg32			*m_pDibCloud;						/* ‰_‰æ‘œ */
+	int				m_nCount,							/* ç§»å‹•ã‚«ã‚¦ãƒ³ã‚¿ */
+					m_nPosXBack,						/* åŸºæº–ç‚¹(æ¨ª) */
+					m_nPosYBack,						/* åŸºæº–ç‚¹(ç¸¦) */
+					m_nPosX,							/* åŸºæº–ç‚¹(æ¨ª) */
+					m_nPosY;							/* åŸºæº–ç‚¹(ç¸¦) */
+	DWORD			m_dwLastProc;						/* å‰å›ã®å‡¦ç†æ™‚é–“ */
+	CImg32			*m_pDibCloud;						/* é›²ç”»åƒ */
 } CLayerCloud, *PCLayerCloud;
 
 /* Copyright(C)URARA-works 2005 */

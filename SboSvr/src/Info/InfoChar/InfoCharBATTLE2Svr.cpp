@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharBATTLE2Svr.cpp										 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(ˆÚ“®‚µ‚ÄUŒ‚)ƒT[ƒo[ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2009/07/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharBATTLE2Svr.cpp										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(ç§»å‹•ã—ã¦æ”»æ’ƒ)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/07/17													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -13,9 +13,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBATTLE2Svr::CInfoCharBATTLE2Svr						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/07/17														 */
+/* é–¢æ•°å	:CInfoCharBATTLE2Svr::CInfoCharBATTLE2Svr						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/07/17														 */
 /* ========================================================================= */
 
 CInfoCharBATTLE2Svr::CInfoCharBATTLE2Svr()
@@ -24,9 +24,9 @@ CInfoCharBATTLE2Svr::CInfoCharBATTLE2Svr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBATTLE2Svr::~CInfoCharBATTLE2Svr						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/07/17														 */
+/* é–¢æ•°å	:CInfoCharBATTLE2Svr::~CInfoCharBATTLE2Svr						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/07/17														 */
 /* ========================================================================= */
 
 CInfoCharBATTLE2Svr::~CInfoCharBATTLE2Svr()
@@ -35,9 +35,9 @@ CInfoCharBATTLE2Svr::~CInfoCharBATTLE2Svr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBATTLE2Svr::TimerProcSTAND							 */
-/* “à—e		:ŽžŠÔˆ—(—§‚¿)													 */
-/* “ú•t		:2008/07/24														 */
+/* é–¢æ•°å	:CInfoCharBATTLE2Svr::TimerProcSTAND							 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†(ç«‹ã¡)													 */
+/* æ—¥ä»˜		:2008/07/24														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBATTLE2Svr::TimerProcSTAND(DWORD dwTime)
@@ -50,7 +50,7 @@ BOOL CInfoCharBATTLE2Svr::TimerProcSTAND(DWORD dwTime)
 	bRet = FALSE;
 
 	dwTmp = dwTime - m_dwLastTimeMove;
-	/* 1ƒ^[ƒ“‚Í100ms‚É‚µ‚Ä‚¨‚­ */
+	/* 1ã‚¿ãƒ¼ãƒ³ã¯100msã«ã—ã¦ãŠã */
 	if (dwTmp < 100) {
 		goto Exit;
 	}
@@ -77,7 +77,7 @@ BOOL CInfoCharBATTLE2Svr::TimerProcSTAND(DWORD dwTime)
 	nDirection = genrand () % 4;
 	bResult = IsMoveDirection (nDirection);
 
-	/* i‚ß‚éH */
+	/* é€²ã‚ã‚‹ï¼Ÿ */
 	if (bResult) {
 		m_nDirection = nDirection;
 		GetFrontPos (ptFront, m_nDirection, TRUE);

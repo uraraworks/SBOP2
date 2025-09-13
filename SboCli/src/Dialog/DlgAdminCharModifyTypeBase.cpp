@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyTypeBase.cpp								 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ ˆÚ“®í•Ê‚Ìİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyTypeBase.cpp								 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ± ç§»å‹•ç¨®åˆ¥ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypeBase::DoDataExchange(CDataExchange* pDX)
@@ -36,9 +36,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypeBase::CDlgAdminCharModifyTypeBase		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypeBase::CDlgAdminCharModifyTypeBase		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyTypeBase::CDlgAdminCharModifyTypeBase(CWnd* pParent /*=NULL*/)
@@ -54,9 +54,9 @@ CDlgAdminCharModifyTypeBase::CDlgAdminCharModifyTypeBase(int nResourceID, CWnd* 
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypeBase::~CDlgAdminCharModifyTypeBase		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypeBase::~CDlgAdminCharModifyTypeBase		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 CDlgAdminCharModifyTypeBase::~CDlgAdminCharModifyTypeBase()
@@ -65,9 +65,9 @@ CDlgAdminCharModifyTypeBase::~CDlgAdminCharModifyTypeBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypeBase::Set								 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypeBase::Set								 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypeBase::Set(CInfoCharCli *pSrc)
@@ -76,9 +76,9 @@ void CDlgAdminCharModifyTypeBase::Set(CInfoCharCli *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypeBase::Get								 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypeBase::Get								 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypeBase::Get(CInfoCharCli *pDst)
@@ -87,9 +87,9 @@ void CDlgAdminCharModifyTypeBase::Get(CInfoCharCli *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModifyTypeBase::PostNcDestroy						 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModifyTypeBase::PostNcDestroy						 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModifyTypeBase::PostNcDestroy()

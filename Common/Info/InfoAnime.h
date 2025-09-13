@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoAnime.h												 */
-/* “à—e			:ƒAƒjƒ[ƒVƒ‡ƒ“î•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2005/04/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoAnime.h												 */
+/* å†…å®¹			:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/04/29													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,45 +11,45 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-#define PREFIX_INFOANIME		"pAnime_"					/* —v‘f–¼‚ÌƒvƒŒƒtƒBƒbƒNƒX */
+#define PREFIX_INFOANIME		"pAnime_"					/* è¦ç´ åã®ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹ */
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoAnime : public CInfoBase
 {
 public:
-			CInfoAnime();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoAnime();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoAnime();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoAnime();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementCount		(void);								/* —v‘f”‚ðŽæ“¾ */
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	int		GetElementCount		(void);								/* è¦ç´ æ•°ã‚’å–å¾— */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	void	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	void	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 public:
-	int			m_nElementCount;							/* —v‘f” */
+	int			m_nElementCount;							/* è¦ç´ æ•° */
 
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	BYTE		m_byWait,									/* ‘Ò‚¿ŽžŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-				m_byLevel;									/* “§–¾“x */
-	WORD		m_wGrpIDBase,								/* ƒOƒ‰ƒtƒBƒbƒNID(‰º’n) */
-				m_wGrpIDPile;								/* ƒOƒ‰ƒtƒBƒbƒNID(d‚Ë‡‚í‚¹—pID) */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	BYTE		m_byWait,									/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+				m_byLevel;									/* é€æ˜Žåº¦ */
+	WORD		m_wGrpIDBase,								/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ID(ä¸‹åœ°) */
+				m_wGrpIDPile;								/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ID(é‡ã­åˆã‚ã›ç”¨ID) */
 } CInfoAnime, *PCInfoAnime;
 typedef CmyArray<PCInfoAnime, PCInfoAnime>	   ARRAYANIMEINFO;
 typedef CmyArray<PCInfoAnime, PCInfoAnime>	 *PARRAYANIMEINFO;

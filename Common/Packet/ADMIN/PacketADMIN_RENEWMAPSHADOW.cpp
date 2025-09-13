@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_RENEWMAPSHADOW.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒ}ƒbƒv‰eXV) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_RENEWMAPSHADOW.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ãƒãƒƒãƒ—å½±æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_RENEWMAPSHADOW.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPSHADOW::CPacketADMIN_RENEWMAPSHADOW		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPSHADOW::CPacketADMIN_RENEWMAPSHADOW		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEWMAPSHADOW::CPacketADMIN_RENEWMAPSHADOW()
@@ -24,9 +24,9 @@ CPacketADMIN_RENEWMAPSHADOW::CPacketADMIN_RENEWMAPSHADOW()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPSHADOW::~CPacketADMIN_RENEWMAPSHADOW		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPSHADOW::~CPacketADMIN_RENEWMAPSHADOW		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEWMAPSHADOW::~CPacketADMIN_RENEWMAPSHADOW()
@@ -36,13 +36,13 @@ CPacketADMIN_RENEWMAPSHADOW::~CPacketADMIN_RENEWMAPSHADOW()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPSHADOW::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPSHADOW::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CPacketADMIN_RENEWMAPSHADOW::Make(
-	CInfoMapShadow *pInfo)		/* [in] ƒ}ƒbƒv‰eî•ñ */
+	CInfoMapShadow *pInfo)		/* [in] ãƒãƒƒãƒ—å½±æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketADMIN_RENEWMAPSHADOW::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_RENEWMAPSHADOW;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒ}ƒbƒv‰eî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ãƒãƒƒãƒ—å½±æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketADMIN_RENEWMAPSHADOW::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEWMAPSHADOW::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEWMAPSHADOW::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_RENEWMAPSHADOW::Set(PBYTE pPacket)

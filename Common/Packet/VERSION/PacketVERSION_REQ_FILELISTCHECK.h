@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_REQ_FILELISTCHECK.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN—v‹) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_REQ_FILELISTCHECK.h							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,21 +11,21 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketVERSION_REQ_FILELISTCHECK : public CPacketBase
 {
 public:
-			CPacketVERSION_REQ_FILELISTCHECK();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketVERSION_REQ_FILELISTCHECK();		/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketVERSION_REQ_FILELISTCHECK();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketVERSION_REQ_FILELISTCHECK();		/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(LPCSTR pszFileListHash);					/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(LPCSTR pszFileListHash);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CmyString	m_strFileListHash;				/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒnƒbƒVƒ… */
+	CmyString	m_strFileListHash;				/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒãƒƒã‚·ãƒ¥ */
 } CPacketVERSION_REQ_FILELISTCHECK, *PCPacketVERSION_REQ_FILELISTCHECK;
 
 /* Copyright(C)URARA-works 2006 */

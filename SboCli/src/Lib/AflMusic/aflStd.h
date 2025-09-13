@@ -15,7 +15,7 @@ namespace Afl{
 #define isSJIS(a) ((BYTE)a >= 0x81 && (BYTE)a <= 0x9f || (BYTE)a >= 0xe0 && (BYTE)a<=0xfc)
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflTClassProc
-// ƒNƒ‰ƒXŠÖ”ƒR[ƒ‹ƒoƒbƒN—pŠÖ”ƒeƒ“ƒvƒŒ[ƒg
+// ã‚¯ãƒ©ã‚¹é–¢æ•°ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ç”¨é–¢æ•°ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 template<class T,DWORD (T::*pFunction)(LPVOID)>
 	DWORD AflTProc(LPVOID pClass,LPVOID pVoid)
@@ -28,7 +28,7 @@ template<class T,DWORD (T::*pFunction)(LPVOID)>
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflCall
-// ƒNƒ‰ƒXŠÖ”ŒÄ‚Ño‚µ•â•ƒNƒ‰ƒX
+// ã‚¯ãƒ©ã‚¹é–¢æ•°å‘¼ã³å‡ºã—è£œåŠ©ã‚¯ãƒ©ã‚¹
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class AflClassProc
 {
@@ -48,7 +48,7 @@ protected:
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflClassCallBack
-// ƒNƒ‰ƒXŠÖ”ƒR[ƒ‹ƒoƒbƒN—pŠî–{ƒNƒ‰ƒX
+// ã‚¯ãƒ©ã‚¹é–¢æ•°ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ç”¨åŸºæœ¬ã‚¯ãƒ©ã‚¹
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 typedef class AflClassCallBack AFLCLASSCALLBACK,*PAFLCLASSCALLBACK,*LPAFLCLASSCALLBACK;
 class AflClassCallBack
@@ -60,7 +60,7 @@ public:
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflClassCallBack
-// ƒNƒ‰ƒXŠÖ”ƒR[ƒ‹ƒoƒbƒN—p”h¶ƒeƒ“ƒvƒŒ[ƒg
+// ã‚¯ãƒ©ã‚¹é–¢æ•°ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ç”¨æ´¾ç”Ÿãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 template<class T> class AflTClassCallBack : public AflClassCallBack
 {
@@ -100,7 +100,7 @@ template<class T> DWORD AflTClassCallBack<T>::callProcess(LPVOID pvData)
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflCom
-// COMƒRƒ“ƒ|[ƒlƒ“ƒg©“®‰ğ•ú—p
+// COMã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆè‡ªå‹•è§£æ”¾ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 class AflCom
@@ -171,7 +171,7 @@ protected:
 };
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // aflThread
-// ƒXƒŒƒbƒhÀs—pŠî–{ƒNƒ‰ƒX
+// ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œç”¨åŸºæœ¬ã‚¯ãƒ©ã‚¹
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 typedef class AflThread AFLTHREAD,*PAFLTHREAD,*LPAFLTHREAD;
 class AflThread
@@ -192,12 +192,12 @@ protected:
 	static DWORD threadProcServer(LPVOID pVoid);
 	DWORD threadProcRouter(LPVOID pvData);
 
-	THANDLE m_hThread;						//ƒXƒŒƒbƒhƒnƒ“ƒhƒ‹
-	DWORD m_dwThreadID;						//ƒXƒŒƒbƒhID
-	volatile  DWORD m_dwExitCode;			//I—¹ƒR[ƒh
-	volatile  bool m_bEnable;				//ó‘Ô
-	AflClassProc* m_paflClassCallBack;	//ƒƒ“ƒoƒR[ƒ‹ƒoƒbƒN—p
-	class AflThreadProc* m_paflThreadProc;	//ƒXƒŒƒbƒh”h¶ƒNƒ‰ƒX—p
+	THANDLE m_hThread;						//ã‚¹ãƒ¬ãƒƒãƒ‰ãƒãƒ³ãƒ‰ãƒ«
+	DWORD m_dwThreadID;						//ã‚¹ãƒ¬ãƒƒãƒ‰ID
+	volatile  DWORD m_dwExitCode;			//çµ‚äº†ã‚³ãƒ¼ãƒ‰
+	volatile  bool m_bEnable;				//çŠ¶æ…‹
+	AflClassProc* m_paflClassCallBack;	//ãƒ¡ãƒ³ãƒã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ç”¨
+	class AflThreadProc* m_paflThreadProc;	//ã‚¹ãƒ¬ãƒƒãƒ‰æ´¾ç”Ÿã‚¯ãƒ©ã‚¹ç”¨
 };
 
 class AflThreadProc
@@ -208,7 +208,7 @@ protected:
 };
 //------------------------------------------------------------
 // AflSyncObject
-// “¯Šú§Œä—p
+// åŒæœŸåˆ¶å¾¡ç”¨
 //------------------------------------------------------------
 class AflSyncObject
 {
@@ -220,7 +220,7 @@ public:
 
 //------------------------------------------------------------
 // AflCritical
-// “¯Šú§Œä—p
+// åŒæœŸåˆ¶å¾¡ç”¨
 //------------------------------------------------------------
 #ifdef _WIN32
 class AflCritical : public AflSyncObject
@@ -248,7 +248,7 @@ protected:
 
 //------------------------------------------------------------
 // AflStringHistry
-// —š—ğ•t‚«•¶š—ñ
+// å±¥æ­´ä»˜ãæ–‡å­—åˆ—
 //------------------------------------------------------------
 class AflStringHistory
 {
@@ -274,7 +274,7 @@ protected:
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFile
-// ƒtƒ@ƒCƒ‹§Œä—p
+// ãƒ•ã‚¡ã‚¤ãƒ«åˆ¶å¾¡ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class AflFile
 {
@@ -306,7 +306,7 @@ protected:
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflStd
-// ”Ä—p
+// æ±ç”¨
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class AflStd
 {

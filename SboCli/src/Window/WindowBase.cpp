@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowBase.cpp												 */
-/* “à—e			:ƒEƒBƒ“ƒhƒEŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowBase.cpp												 */
+/* å†…å®¹			:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -14,9 +14,9 @@
 #include "WindowBase.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::CWindowBase										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowBase::CWindowBase										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 CWindowBase::CWindowBase()
@@ -49,36 +49,36 @@ CWindowBase::CWindowBase()
 	m_hFont = CreateFont (16, 0, 0, 0, FW_ULTRABOLD,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 	m_hFont12 = CreateFont (12, 0, 0, 0, FW_NORMAL,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 	m_hFont12Bold = CreateFont (12, 0, 0, 0, FW_ULTRABOLD,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 	m_hFont14 = CreateFont (14, 0, 0, 0, FW_ULTRABOLD,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ‚oƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 	m_hFont16 = CreateFont (16, 0, 0, 0, FW_ULTRABOLD,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯");
 	m_hFont16Normal = CreateFont (16, 0, 0, 0, FW_NORMAL,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯");
 
 	m_pDib->SetColorKey (RGB (255, 0, 255));
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::~CWindowBase										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowBase::~CWindowBase										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 CWindowBase::~CWindowBase()
@@ -124,9 +124,9 @@ CWindowBase::~CWindowBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/11/03														 */
+/* é–¢æ•°å	:CWindowBase::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/11/03														 */
 /* ========================================================================= */
 
 void CWindowBase::Create(CMgrData *pMgrData)
@@ -141,9 +141,9 @@ void CWindowBase::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnWindowMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG)								 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowBase::OnWindowMsg										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG)								 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 void CWindowBase::OnWindowMsg(int nType, DWORD dwPara)
@@ -152,9 +152,9 @@ void CWindowBase::OnWindowMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::Update											 */
-/* “à—e		:XV															 */
-/* “ú•t		:2006/11/08														 */
+/* é–¢æ•°å	:CWindowBase::Update											 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2006/11/08														 */
 /* ========================================================================= */
 
 void CWindowBase::Update(void)
@@ -164,9 +164,9 @@ void CWindowBase::Update(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::Draw												 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowBase::Draw												 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CWindowBase::Draw(PCImg32 pDst)
@@ -183,9 +183,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::TimerProc											 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2005/06/12														 */
+/* é–¢æ•°å	:CWindowBase::TimerProc											 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2005/06/12														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::TimerProc(void)
@@ -211,14 +211,14 @@ BOOL CWindowBase::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::KeyProc											 */
-/* “à—e		:ƒL[ˆ—														 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowBase::KeyProc											 */
+/* å†…å®¹		:ã‚­ãƒ¼å‡¦ç†														 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CWindowBase::KeyProc(
-	BYTE byCode,		/* [in] ƒCƒxƒ“ƒg */
-	BOOL bDown)			/* [in] ‰Ÿ‰ºó‘Ô */
+	BYTE byCode,		/* [in] ã‚¤ãƒ™ãƒ³ãƒˆ */
+	BOOL bDown)			/* [in] æŠ¼ä¸‹çŠ¶æ…‹ */
 {
 	BOOL bResult;
 	DWORD dwTime, dwTimeTmp;
@@ -303,9 +303,9 @@ void CWindowBase::KeyProc(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::SetShow											 */
-/* “à—e		:•\¦‚·‚é‚©İ’è													 */
-/* “ú•t		:2005/06/26														 */
+/* é–¢æ•°å	:CWindowBase::SetShow											 */
+/* å†…å®¹		:è¡¨ç¤ºã™ã‚‹ã‹è¨­å®š													 */
+/* æ—¥ä»˜		:2005/06/26														 */
 /* ========================================================================= */
 
 void CWindowBase::SetShow(BOOL bShow)
@@ -316,9 +316,9 @@ void CWindowBase::SetShow(BOOL bShow)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::Redraw											 */
-/* “à—e		:Ä•`‰æ															 */
-/* “ú•t		:2007/04/07														 */
+/* é–¢æ•°å	:CWindowBase::Redraw											 */
+/* å†…å®¹		:å†æç”»															 */
+/* æ—¥ä»˜		:2007/04/07														 */
 /* ========================================================================= */
 
 void CWindowBase::Redraw(void)
@@ -328,9 +328,9 @@ void CWindowBase::Redraw(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::SetPos											 */
-/* “à—e		:ˆÊ’u‚Ìİ’è														 */
-/* “ú•t		:2007/04/23														 */
+/* é–¢æ•°å	:CWindowBase::SetPos											 */
+/* å†…å®¹		:ä½ç½®ã®è¨­å®š														 */
+/* æ—¥ä»˜		:2007/04/23														 */
 /* ========================================================================= */
 
 void CWindowBase::SetPos(int nPos)
@@ -340,9 +340,9 @@ void CWindowBase::SetPos(int nPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::AddChild											 */
-/* “à—e		:qƒEƒBƒ“ƒhƒE‚ğ’Ç‰Á												 */
-/* “ú•t		:2008/10/27														 */
+/* é–¢æ•°å	:CWindowBase::AddChild											 */
+/* å†…å®¹		:å­ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’è¿½åŠ 												 */
+/* æ—¥ä»˜		:2008/10/27														 */
 /* ========================================================================= */
 
 void CWindowBase::AddChild(CWindowBase *pChild)
@@ -352,9 +352,9 @@ void CWindowBase::AddChild(CWindowBase *pChild)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DeleteChild										 */
-/* “à—e		:qƒEƒBƒ“ƒhƒE‚ğíœ												 */
-/* “ú•t		:2008/10/27														 */
+/* é–¢æ•°å	:CWindowBase::DeleteChild										 */
+/* å†…å®¹		:å­ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2008/10/27														 */
 /* ========================================================================= */
 
 void CWindowBase::DeleteChild(CWindowBase *pChild)
@@ -372,9 +372,9 @@ void CWindowBase::DeleteChild(CWindowBase *pChild)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnUp												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CWindowBase::OnUp												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnUp(void)
@@ -384,9 +384,9 @@ BOOL CWindowBase::OnUp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnDown											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CWindowBase::OnDown											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnDown(void)
@@ -396,9 +396,9 @@ BOOL CWindowBase::OnDown(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnLeft											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CWindowBase::OnLeft											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnLeft(void)
@@ -408,9 +408,9 @@ BOOL CWindowBase::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnRight											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2005/06/17														 */
+/* é–¢æ•°å	:CWindowBase::OnRight											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2005/06/17														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnRight(void)
@@ -420,9 +420,9 @@ BOOL CWindowBase::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnB												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(B)												 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CWindowBase::OnB												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(B)												 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnB(BOOL bDown)
@@ -432,9 +432,9 @@ BOOL CWindowBase::OnB(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnF												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(F)												 */
-/* “ú•t		:2009/04/18														 */
+/* é–¢æ•°å	:CWindowBase::OnF												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(F)												 */
+/* æ—¥ä»˜		:2009/04/18														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnF(BOOL bDown)
@@ -444,9 +444,9 @@ BOOL CWindowBase::OnF(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnI												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(I)												 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CWindowBase::OnI												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(I)												 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnI(BOOL bDown)
@@ -456,9 +456,9 @@ BOOL CWindowBase::OnI(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnJ												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(J)												 */
-/* “ú•t		:2009/04/02														 */
+/* é–¢æ•°å	:CWindowBase::OnJ												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(J)												 */
+/* æ—¥ä»˜		:2009/04/02														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnJ(BOOL bDown)
@@ -468,9 +468,9 @@ BOOL CWindowBase::OnJ(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnK												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(K)												 */
-/* “ú•t		:2009/04/18														 */
+/* é–¢æ•°å	:CWindowBase::OnK												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(K)												 */
+/* æ—¥ä»˜		:2009/04/18														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnK(BOOL bDown)
@@ -480,9 +480,9 @@ BOOL CWindowBase::OnK(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnL												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(L)												 */
-/* “ú•t		:2009/04/18														 */
+/* é–¢æ•°å	:CWindowBase::OnL												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(L)												 */
+/* æ—¥ä»˜		:2009/04/18														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnL(BOOL bDown)
@@ -492,9 +492,9 @@ BOOL CWindowBase::OnL(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnS												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(S)												 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CWindowBase::OnS												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(S)												 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnS(BOOL bDown)
@@ -504,9 +504,9 @@ BOOL CWindowBase::OnS(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnX												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2005/06/21														 */
+/* é–¢æ•°å	:CWindowBase::OnX												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2005/06/21														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnX(BOOL bDown)
@@ -516,9 +516,9 @@ BOOL CWindowBase::OnX(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnZ												 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2005/06/22														 */
+/* é–¢æ•°å	:CWindowBase::OnZ												 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2005/06/22														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnZ(BOOL bDown)
@@ -528,9 +528,9 @@ BOOL CWindowBase::OnZ(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnEscape											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Escape)											 */
-/* “ú•t		:2007/06/19														 */
+/* é–¢æ•°å	:CWindowBase::OnEscape											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Escape)											 */
+/* æ—¥ä»˜		:2007/06/19														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnEscape(BOOL bDown)
@@ -540,9 +540,9 @@ BOOL CWindowBase::OnEscape(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::OnSpace											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Space)											 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CWindowBase::OnSpace											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Space)											 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 BOOL CWindowBase::OnSpace(BOOL bDown)
@@ -552,9 +552,9 @@ BOOL CWindowBase::OnSpace(BOOL bDown)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::TextOut2											 */
-/* “à—e		:•‰æ‚è‚Å•¶š•`‰æ												 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowBase::TextOut2											 */
+/* å†…å®¹		:é»’ç¸å–ã‚Šã§æ–‡å­—æç”»												 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
@@ -562,7 +562,7 @@ void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, B
 	int nLen;
 
 	nLen = strlen (pStr);
-	/* ‰æ‚è‚·‚éH */
+	/* ç¸å–ã‚Šã™ã‚‹ï¼Ÿ */
 	if (bDraw) {
 		SetTextColor (hDC, ColorFrame);
 		TextOut (hDC, x - 1, y, pStr, nLen);
@@ -576,9 +576,9 @@ void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, B
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::TextOut3											 */
-/* “à—e		:•‰æ‚è‚Å•¶š•`‰æ(‰E‹l)										 */
-/* “ú•t		:2005/06/26														 */
+/* é–¢æ•°å	:CWindowBase::TextOut3											 */
+/* å†…å®¹		:é»’ç¸å–ã‚Šã§æ–‡å­—æç”»(å³è©°)										 */
+/* æ—¥ä»˜		:2005/06/26														 */
 /* ========================================================================= */
 
 void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, COLORREF Color)
@@ -601,9 +601,9 @@ void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, C
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::TextOut4											 */
-/* “à—e		:•‰æ‚è‚Å•¶š•`‰æ												 */
-/* “ú•t		:2007/04/03														 */
+/* é–¢æ•°å	:CWindowBase::TextOut4											 */
+/* å†…å®¹		:é»’ç¸å–ã‚Šã§æ–‡å­—æç”»												 */
+/* æ—¥ä»˜		:2007/04/03														 */
 /* ========================================================================= */
 
 void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFrame, COLORREF Color)
@@ -642,9 +642,9 @@ void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFra
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DrawFrame											 */
-/* “à—e		:ƒtƒŒ[ƒ€‚ğ•`‰æ													 */
-/* “ú•t		:2005/05/06														 */
+/* é–¢æ•°å	:CWindowBase::DrawFrame											 */
+/* å†…å®¹		:ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”»													 */
+/* æ—¥ä»˜		:2005/05/06														 */
 /* ========================================================================= */
 
 void CWindowBase::DrawFrame(int nType)
@@ -654,19 +654,19 @@ void CWindowBase::DrawFrame(int nType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DrawFrame											 */
-/* “à—e		:ƒtƒŒ[ƒ€‚ğ•`‰æ													 */
-/* “ú•t		:2007/04/01														 */
-/* ƒƒ‚		:‚PƒuƒƒbƒN‚ª16x16ƒhƒbƒg‚Ì˜g‚ğ•`‰æ								 */
+/* é–¢æ•°å	:CWindowBase::DrawFrame											 */
+/* å†…å®¹		:ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”»													 */
+/* æ—¥ä»˜		:2007/04/01														 */
+/* ãƒ¡ãƒ¢		:ï¼‘ãƒ–ãƒ­ãƒƒã‚¯ãŒ16x16ãƒ‰ãƒƒãƒˆã®æ ã‚’æç”»								 */
 /* ========================================================================= */
 
 void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRightErace/*FALSE*/)
 {
 	typedef struct _FRAMEINFO {
-		POINT		pt;		/* ¶ã‚ÌŠJnˆÊ’u */
-		COLORREF	cl;		/* ”wŒiF */
-		int			nSize;	/* ˜g‚ÌƒTƒCƒY */
-		int			nPos;	/* •\¦ˆÊ’u•â³ */
+		POINT		pt;		/* å·¦ä¸Šã®é–‹å§‹ä½ç½® */
+		COLORREF	cl;		/* èƒŒæ™¯è‰² */
+		int			nSize;	/* æ ã®ã‚µã‚¤ã‚º */
+		int			nPos;	/* è¡¨ç¤ºä½ç½®è£œæ­£ */
 	} FRAMEINFO, *PFRAMEINFO;
 	int i, nTmp, xx, yy, nSize, nPos;
 	COLORREF clTmp;
@@ -688,17 +688,17 @@ void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRight
 	nSize	= astFrameinfo[nType].nSize;
 	nPos	= astFrameinfo[nType].nPos;
 
-	/* ”wŒi“h‚è‚Â‚Ô‚µ */
+	/* èƒŒæ™¯å¡—ã‚Šã¤ã¶ã— */
 	m_pDib->FillRect (x + 0, y + 8, cx -  0, cy - 16, clTmp);
 	m_pDib->FillRect (x + 8, y + 0, cx - 16, cy -  0, clTmp);
 
-	/* ‰¡ü */
+	/* æ¨ªç·š */
 	for (i = 0; i < cx / 8 - 2; i ++) {
 		m_pDib->BltFrom256 (x + (i + 1) * 8, y,				8, 16, m_pDibSystem, xx + 16, yy, TRUE);
 		m_pDib->BltFrom256 (x + (i + 1) * 8, y + cy - 8,	8, 8,  m_pDibSystem, xx + 16, yy + 40, TRUE);
 	}
 
-	/* cü */
+	/* ç¸¦ç·š */
 	for (i = 0; i < cy / 8 - 2; i ++) {
 		if ((i == 1) && (nTmp != 0)) {
 			m_pDib->BltFrom256 (x,			y + (i + 1) * 8 + nTmp, 8, 8 - nTmp, m_pDibSystem, xx,			yy + 16 + nTmp, TRUE);
@@ -709,7 +709,7 @@ void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRight
 		}
 	}
 
-	/* l‹÷ */
+	/* å››éš… */
 	m_pDib->BltFrom256 (x, y,			16, 16 + nTmp,	m_pDibSystem, xx, yy, TRUE);
 	m_pDib->BltFrom256 (x, y + cy - 16,	16, 16,			m_pDibSystem, xx, yy + 32, TRUE);
 	if (bRightErace == FALSE) {
@@ -720,9 +720,9 @@ void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRight
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DrawFrame2										 */
-/* “à—e		:ƒtƒŒ[ƒ€‚ğ•`‰æ													 */
-/* “ú•t		:2005/05/29														 */
+/* é–¢æ•°å	:CWindowBase::DrawFrame2										 */
+/* å†…å®¹		:ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”»													 */
+/* æ—¥ä»˜		:2005/05/29														 */
 /* ========================================================================= */
 
 void CWindowBase::DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pDst/*NULL*/, int nBottom/*0*/)
@@ -744,22 +744,22 @@ void CWindowBase::DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pD
 		cy += (8 - (cy % 8));
 	}
 
-	/* ”wŒi“h‚è‚Â‚Ô‚µ */
+	/* èƒŒæ™¯å¡—ã‚Šã¤ã¶ã— */
 	pDst->FillRect (x, y, cx, cy - nBottom, clTmp);
 
-	/* l‹÷ */
+	/* å››éš… */
 	pDst->BltFrom256 (x - 8,	y - 8,	8, 8, m_pDibSystem, xx,		 yy, TRUE);
 	pDst->BltFrom256 (x + cx,	y - 8,	8, 8, m_pDibSystem, xx + 16, yy, TRUE);
 	pDst->BltFrom256 (x - 8,	y + cy - nBottom, 8, 8, m_pDibSystem, xx,		yy + 16, TRUE);
 	pDst->BltFrom256 (x + cx,	y + cy - nBottom, 8, 8, m_pDibSystem, xx + 16,  yy + 16, TRUE);
 
-	/* ‰¡ü */
+	/* æ¨ªç·š */
 	for (i = 0; i < cx / 8; i ++) {
 		pDst->BltFrom256 (x + i * 8, y - 8, 8, 8, m_pDibSystem, xx + 8, yy, TRUE);
 		pDst->BltFrom256 (x + i * 8, y + cy - nBottom, 8, 8, m_pDibSystem, xx + 8, yy + 16,	TRUE);
 	}
 
-	/* cü */
+	/* ç¸¦ç·š */
 	for (i = 0; i < cy / 8; i ++) {
 		pDst->BltFrom256 (x - 8, y + i * 8, 8, 8, m_pDibSystem, xx, yy + 8, TRUE);
 		pDst->BltFrom256 (x + cx, y + i * 8 - nBottom, 8, 8, m_pDibSystem, xx + 16,	yy + 8, TRUE);
@@ -768,9 +768,9 @@ void CWindowBase::DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pD
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DrawFrame3										 */
-/* “à—e		:ƒtƒŒ[ƒ€‚ğ•`‰æ													 */
-/* “ú•t		:2007/04/02														 */
+/* é–¢æ•°å	:CWindowBase::DrawFrame3										 */
+/* å†…å®¹		:ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”»													 */
+/* æ—¥ä»˜		:2007/04/02														 */
 /* ========================================================================= */
 
 void CWindowBase::DrawFrame3(int x, int y, int cx, int cy, int nType)
@@ -782,22 +782,22 @@ void CWindowBase::DrawFrame3(int x, int y, int cx, int cy, int nType)
 	yy		= aTypeY[nType];
 	clTmp	= clType[nType];
 
-	/* ”wŒi“h‚è‚Â‚Ô‚µ */
+	/* èƒŒæ™¯å¡—ã‚Šã¤ã¶ã— */
 	m_pDib->FillRect (x + 16, y + 32, cx - 32, cy - 32, clTmp);
 
-	/* l‹÷ */
+	/* å››éš… */
 	m_pDib->BltFrom256 (x,				y,				16, 32, m_pDibSystem, xx,		yy,			TRUE);
 	m_pDib->BltFrom256 (x + cx - 16,	y,				16, 32, m_pDibSystem, xx + 32,	yy,			TRUE);
 	m_pDib->BltFrom256 (x,				y + cy - 16,	16, 16, m_pDibSystem, xx,		yy + 32,	TRUE);
 	m_pDib->BltFrom256 (x + cx - 16,	y + cy - 16,	16, 16, m_pDibSystem, xx + 32,	yy + 32,	TRUE);
 
-	/* ‰¡ü */
+	/* æ¨ªç·š */
 	for (i = 0; i < cx / 16 - 2; i ++) {
 		m_pDib->BltFrom256 (x + 16 + i * 16, y,			16, 32, m_pDibSystem, xx + 16, yy,		TRUE);
 		m_pDib->BltFrom256 (x + 16 + i * 16, y + cy - 16,	16, 16, m_pDibSystem, xx + 16, yy + 32,	TRUE);
 	}
 
-	/* cü */
+	/* ç¸¦ç·š */
 	for (i = 0; i < cy / 16 - 2; i ++) {
 		m_pDib->BltFrom256 (x,				y + 32 + i * 16, 16, 16, m_pDibSystem, xx,		yy + 24, TRUE);
 		m_pDib->BltFrom256 (x + cx - 16,	y + 32 + i * 16, 16, 16, m_pDibSystem, xx + 32,	yy + 24, TRUE);
@@ -806,9 +806,9 @@ void CWindowBase::DrawFrame3(int x, int y, int cx, int cy, int nType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DrawCursor										 */
-/* “à—e		:ƒJ[ƒ\ƒ‹‚ğ•`‰æ													 */
-/* “ú•t		:2005/06/16														 */
+/* é–¢æ•°å	:CWindowBase::DrawCursor										 */
+/* å†…å®¹		:ã‚«ãƒ¼ã‚½ãƒ«ã‚’æç”»													 */
+/* æ—¥ä»˜		:2005/06/16														 */
 /* ========================================================================= */
 
 void CWindowBase::DrawCursor(int x, int y)
@@ -822,9 +822,9 @@ void CWindowBase::DrawCursor(int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DrawInputFrame1									 */
-/* “à—e		:“ü—Í—“—pƒtƒŒ[ƒ€‚ğ•`‰æ1										 */
-/* “ú•t		:2005/06/16														 */
+/* é–¢æ•°å	:CWindowBase::DrawInputFrame1									 */
+/* å†…å®¹		:å…¥åŠ›æ¬„ç”¨ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”»1										 */
+/* æ—¥ä»˜		:2005/06/16														 */
 /* ========================================================================= */
 
 void CWindowBase::DrawInputFrame1(int x, int y, int cx, int cy, int nType)
@@ -843,9 +843,9 @@ void CWindowBase::DrawInputFrame1(int x, int y, int cx, int cy, int nType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowBase::DrawIconFrame										 */
-/* “à—e		:ƒAƒCƒRƒ“—pƒtƒŒ[ƒ€‚ğ•`‰æ										 */
-/* “ú•t		:2008/03/14														 */
+/* é–¢æ•°å	:CWindowBase::DrawIconFrame										 */
+/* å†…å®¹		:ã‚¢ã‚¤ã‚³ãƒ³ç”¨ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”»										 */
+/* æ—¥ä»˜		:2008/03/14														 */
 /* ========================================================================= */
 
 void CWindowBase::DrawIconFrame(int x, int y)

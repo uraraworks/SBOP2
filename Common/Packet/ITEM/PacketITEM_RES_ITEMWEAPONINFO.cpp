@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketITEM_RES_ITEMWEAPONINFO.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒAƒCƒeƒ€Œn:•Šíî•ñ‰“š) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketITEM_RES_ITEMWEAPONINFO.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚¢ã‚¤ãƒ†ãƒ ç³»:æ­¦å™¨æƒ…å ±å¿œç­”) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketITEM_RES_ITEMWEAPONINFO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RES_ITEMWEAPONINFO::CPacketITEM_RES_ITEMWEAPONINFO	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketITEM_RES_ITEMWEAPONINFO::CPacketITEM_RES_ITEMWEAPONINFO	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CPacketITEM_RES_ITEMWEAPONINFO::CPacketITEM_RES_ITEMWEAPONINFO()
@@ -24,9 +24,9 @@ CPacketITEM_RES_ITEMWEAPONINFO::CPacketITEM_RES_ITEMWEAPONINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RES_ITEMWEAPONINFO::~CPacketITEM_RES_ITEMWEAPONINFO */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketITEM_RES_ITEMWEAPONINFO::~CPacketITEM_RES_ITEMWEAPONINFO */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CPacketITEM_RES_ITEMWEAPONINFO::~CPacketITEM_RES_ITEMWEAPONINFO()
@@ -36,13 +36,13 @@ CPacketITEM_RES_ITEMWEAPONINFO::~CPacketITEM_RES_ITEMWEAPONINFO()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RES_ITEMWEAPONINFO::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketITEM_RES_ITEMWEAPONINFO::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CPacketITEM_RES_ITEMWEAPONINFO::Make(
-	CInfoItemWeapon *pInfo)		/* [in] •Šíî•ñ */
+	CInfoItemWeapon *pInfo)		/* [in] æ­¦å™¨æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketITEM_RES_ITEMWEAPONINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ITEM_RES_ITEMWEAPONINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* •Šíî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* æ­¦å™¨æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketITEM_RES_ITEMWEAPONINFO::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketITEM_RES_ITEMWEAPONINFO::Set							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CPacketITEM_RES_ITEMWEAPONINFO::Set							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 PBYTE CPacketITEM_RES_ITEMWEAPONINFO::Set(PBYTE pPacket)

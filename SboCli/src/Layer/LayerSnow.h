@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerSnow.h												 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(á) ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerSnow.h												 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(é›ª) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -15,51 +15,51 @@ class CMgrData;
 class CLayerMap;
 
 /* ========================================================================= */
-/* \‘¢‘ÌéŒ¾																 */
+/* æ§‹é€ ä½“å®£è¨€																 */
 /* ========================================================================= */
-/* áî•ñ */
+/* é›ªæƒ…å ± */
 typedef struct _STLAYERSNOW_SNOWINFO {
-	int		nState,			/* ó‘Ô */
-			nLevel,			/* “§–¾“x */
-			nSize,			/* ƒTƒCƒY */
-			nStartY,		/* ŠJn’n“_ */
-			nEndY,			/* ’…’n“_ */
-			x,				/* ‰¡À•W */
-			y;				/* cÀ•W */
-	DWORD	dwStartWait,	/* ŠJn‚Ü‚Å‚Ì‘Ò‚¿ŠÔ */
-			dwWait,			/* ‘¬“x */
-			dwLastProc;		/* ‘O‰ñ‚Ìˆ—ŠÔ */
+	int		nState,			/* çŠ¶æ…‹ */
+			nLevel,			/* é€æ˜åº¦ */
+			nSize,			/* ã‚µã‚¤ã‚º */
+			nStartY,		/* é–‹å§‹åœ°ç‚¹ */
+			nEndY,			/* ç€åœ°ç‚¹ */
+			x,				/* æ¨ªåº§æ¨™ */
+			y;				/* ç¸¦åº§æ¨™ */
+	DWORD	dwStartWait,	/* é–‹å§‹ã¾ã§ã®å¾…ã¡æ™‚é–“ */
+			dwWait,			/* é€Ÿåº¦ */
+			dwLastProc;		/* å‰å›ã®å‡¦ç†æ™‚é–“ */
 } STLAYERSNOW_SNOWINFO, *PSTLAYERSNOW_SNOWINFO;
 typedef CmyArray<PSTLAYERSNOW_SNOWINFO, PSTLAYERSNOW_SNOWINFO> ARRAYSNOWINFO;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerSnow : public CLayerBase
 {
 public:
-			CLayerSnow();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerSnow();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerSnow();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerSnow();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);			/* ì¬ */
-	void	Draw		(CImg32 *pDst);					/* •`‰æ */
-	BOOL	TimerProc	(void);							/* ŠÔˆ— */
+	void	Create		(CMgrData *pMgrData);			/* ä½œæˆ */
+	void	Draw		(CImg32 *pDst);					/* æç”» */
+	BOOL	TimerProc	(void);							/* æ™‚é–“å‡¦ç† */
 
 
 protected:
-	void	RenewSnowInfo		(int nCount);			/* áî•ñ‚ğXV */
-	void	DeleteSnowInfoAll	(void);					/* áî•ñ‚ğ‘S‚Äíœ */
+	void	RenewSnowInfo		(int nCount);			/* é›ªæƒ…å ±ã‚’æ›´æ–° */
+	void	DeleteSnowInfoAll	(void);					/* é›ªæƒ…å ±ã‚’å…¨ã¦å‰Šé™¤ */
 
 
 public:
-	CLayerMap		*m_pLayerMap;						/* ƒ}ƒbƒvƒŒƒCƒ„[ */
+	CLayerMap		*m_pLayerMap;						/* ãƒãƒƒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ */
 
 
 protected:
-	DWORD			m_dwLastProc;		/* ‘O‰ñ‚Ìˆ—ŠÔ */
-	ARRAYSNOWINFO	m_aSnowInfo;		/* áî•ñ */
-	CImg32			*m_pImgTmp;			/* ‰æ‘œƒeƒ“ƒ|ƒ‰ƒŠ */
+	DWORD			m_dwLastProc;		/* å‰å›ã®å‡¦ç†æ™‚é–“ */
+	ARRAYSNOWINFO	m_aSnowInfo;		/* é›ªæƒ…å ± */
+	CImg32			*m_pImgTmp;			/* ç”»åƒãƒ†ãƒ³ãƒãƒ©ãƒª */
 } CLayerSnow, *PCLayerSnow;
 
 /* Copyright(C)URARA-works 2008 */

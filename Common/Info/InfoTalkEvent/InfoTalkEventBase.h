@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTalkEventBase.h										 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTalkEventBase.h										 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/16													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,49 +11,49 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ‰ï˜bƒCƒxƒ“ƒgí•Ê */
+/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
 enum {
 	TALKEVENTTYPE_NONE = 0,
-	TALKEVENTTYPE_PAGE,			/* ƒy[ƒWØ‚è‘Ö‚¦ */
-	TALKEVENTTYPE_MSG,			/* ƒƒbƒZ[ƒW•\¦ */
-	TALKEVENTTYPE_MENU,			/* €–Ú‘I‘ğ */
-	TALKEVENTTYPE_ADDSKILL,		/* ƒXƒLƒ‹’Ç‰Á */
+	TALKEVENTTYPE_PAGE,			/* ãƒšãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆ */
+	TALKEVENTTYPE_MSG,			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º */
+	TALKEVENTTYPE_MENU,			/* é …ç›®é¸æŠ */
+	TALKEVENTTYPE_ADDSKILL,		/* ã‚¹ã‚­ãƒ«è¿½åŠ  */
 	TALKEVENTTYPE_MAX
 };
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoTalkEventBase : public CInfoBase
 {
 public:
-			CInfoTalkEventBase();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoTalkEventBase();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoTalkEventBase();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoTalkEventBase();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoTalkEventBase *pSrc);			/* ƒRƒs[ */
+	virtual void	Copy				(CInfoTalkEventBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	int			m_nElementCountBase,			/* Šî’êƒNƒ‰ƒX‚Ì—v‘f” */
-				m_nEventType,					/* ‰ï˜bƒCƒxƒ“ƒgí•Ê */
-				m_nPage;						/* Š‘®ƒy[ƒW”Ô† */
-	DWORD		m_dwData;						/* ƒoƒCƒiƒŠƒf[ƒ^ */
-	CmyString	m_strText;						/* •¶š—ñƒf[ƒ^ */
+	int			m_nElementCountBase,			/* åŸºåº•ã‚¯ãƒ©ã‚¹ã®è¦ç´ æ•° */
+				m_nEventType,					/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ */
+				m_nPage;						/* æ‰€å±ãƒšãƒ¼ã‚¸ç•ªå· */
+	DWORD		m_dwData;						/* ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ */
+	CmyString	m_strText;						/* æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ */
 } CInfoTalkEventBase, *PCInfoTalkEventBase;
 typedef CmyArray<PCInfoTalkEventBase, PCInfoTalkEventBase>	  ARRAYTALKEVENTBASEINFO;
 typedef CmyArray<PCInfoTalkEventBase, PCInfoTalkEventBase>	*PARRAYTALKEVENTBASEINFO;

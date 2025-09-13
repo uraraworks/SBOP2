@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemList.h											 */
-/* “à—e			:ƒAƒCƒeƒ€ˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemList.h											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,29 +14,29 @@ class CLibInfoItemType;
 class CLibInfoItem;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminItemList : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemList(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminItemList();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminItemList(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminItemList();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);						/* ‰Šú‰» */
-	void	Renew		(void);										/* ˆê——‚ğXV */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);			/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME) */
-
-
-protected:
-	int		GetIndex	(DWORD dwItemID);							/* ƒAƒCƒeƒ€ID‚©‚çƒCƒ“ƒfƒbƒNƒX‚ğæ“¾ */
+	void	Init		(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	void	Renew		(void);										/* ä¸€è¦§ã‚’æ›´æ–° */
+	void	OnAdminMsg	(int nType, DWORD dwPara);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);			/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME) */
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* ’Ê’mæƒEƒBƒ“ƒhƒE */
-	CLibInfoItemType	*m_pLibInfoItemType;		/* ƒAƒCƒeƒ€í•Êî•ñ */
-	CLibInfoItem		*m_pLibInfoItem;			/* •ÒW’†‚ÌƒAƒCƒeƒ€î•ñ */
+	int		GetIndex	(DWORD dwItemID);							/* ã‚¢ã‚¤ãƒ†ãƒ IDã‹ã‚‰ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾— */
+
+
+protected:
+	CWnd				*m_pWndNotify;				/* é€šçŸ¥å…ˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CLibInfoItemType	*m_pLibInfoItemType;		/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ± */
+	CLibInfoItem		*m_pLibInfoItem;			/* ç·¨é›†ä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ± */
 
 
 
@@ -50,7 +50,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminItemList)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

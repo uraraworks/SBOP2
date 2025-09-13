@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboLaunchDlg.cpp											 */
-/* “à—e			:ƒƒCƒ“ƒ_ƒCƒAƒƒO À‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/01/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboLaunchDlg.cpp											 */
+/* å†…å®¹			:ãƒ¡ã‚¤ãƒ³ãƒ€ã‚¤ã‚¢ãƒ­ã‚° å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/27													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -44,15 +44,15 @@ BEGIN_MESSAGE_MAP(CSboLaunchDlg, CDialog)
 	ON_BN_CLICKED(IDC_RETRY, &CSboLaunchDlg::OnBnClickedRetry)
 END_MESSAGE_MAP()
 
-#define TIMERID_CONNECT		(100)			/* ƒT[ƒo[‚ÖÚ‘±‚·‚éƒ^ƒCƒ}[ */
-#define TIMERID_CHECKFILE	(101)			/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğƒ`ƒFƒbƒN‚·‚éƒ^ƒCƒ}[ */
-#define TIMERID_GETFILE		(102)			/* ƒtƒ@ƒCƒ‹‚ğæ“¾‚·‚éƒ^ƒCƒ}[ */
+#define TIMERID_CONNECT		(100)			/* ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶šã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼ */
+#define TIMERID_CHECKFILE	(101)			/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼ */
+#define TIMERID_GETFILE		(102)			/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼ */
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::CSboLaunchDlg									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchDlg::CSboLaunchDlg									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 CSboLaunchDlg::CSboLaunchDlg(CWnd* pParent /*=NULL*/)
@@ -74,9 +74,9 @@ CSboLaunchDlg::CSboLaunchDlg(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::~CSboLaunchDlg									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchDlg::~CSboLaunchDlg									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 CSboLaunchDlg::~CSboLaunchDlg()
@@ -89,9 +89,9 @@ CSboLaunchDlg::~CSboLaunchDlg()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnInitDialog									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnInitDialog									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 BOOL CSboLaunchDlg::OnInitDialog()
@@ -113,9 +113,9 @@ BOOL CSboLaunchDlg::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnEraseBkgnd									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ERASEBKGND)								 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnEraseBkgnd									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ERASEBKGND)								 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 BOOL CSboLaunchDlg::OnEraseBkgnd(CDC* pDC)
@@ -135,16 +135,16 @@ BOOL CSboLaunchDlg::OnEraseBkgnd(CDC* pDC)
 		goto Exit;
 	}
 
-	/* ƒƒbƒZ[ƒW—“‚ğ“h‚è‚Â‚Ô‚µ */
+	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ¬„ã‚’å¡—ã‚Šã¤ã¶ã— */
 	pWnd->GetClientRect (&rcMsg);
 	pDC->FillSolidRect (rc, RGB (255, 255,255));
 
-	/* ƒZƒbƒgƒAƒbƒvƒAƒCƒRƒ“‚ğ•\¦ */
+	/* ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã‚¢ã‚¤ã‚³ãƒ³ã‚’è¡¨ç¤º */
 	hIcon = (HICON)LoadImage (AfxGetInstanceHandle (), MAKEINTRESOURCE (IDR_MAINFRAME), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_SHARED);
 	pDC->DrawIcon (rc.right - 48, 8, hIcon);
 	DestroyIcon (hIcon);
 
-	/* ƒƒbƒZ[ƒW—“‰º‚Ìü‚ğˆø‚­ */
+	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ¬„ä¸‹ã®ç·šã‚’å¼•ã */
 	rc.top = 50;
 	rc.bottom = rc.top + 2;
 	Brush.CreateSysColorBrush (COLOR_3DHILIGHT);
@@ -162,19 +162,19 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnTimer											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnTimer											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::OnTimer(UINT nIDEvent)
 {
 	switch (nIDEvent) {
-	case TIMERID_CONNECT:		/* ƒT[ƒo[‚ÖÚ‘±‚·‚éƒ^ƒCƒ}[ */
+	case TIMERID_CONNECT:		/* ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶šã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼ */
 		ChgState (GAMESTATE_CONNECT);
 		KillTimer (TIMERID_CONNECT);
 		break;
-	case TIMERID_CHECKFILE:		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğƒ`ƒFƒbƒN‚·‚éƒ^ƒCƒ}[ */
+	case TIMERID_CHECKFILE:		/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼ */
 		ProcCHECKFILELIST ();
 		break;
 	}
@@ -184,9 +184,9 @@ void CSboLaunchDlg::OnTimer(UINT nIDEvent)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnCtlColor										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CTLCOLOR)								 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnCtlColor										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CTLCOLOR)								 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 HBRUSH CSboLaunchDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
@@ -194,8 +194,8 @@ HBRUSH CSboLaunchDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
 
 	switch (nCtlColor) {
-	case CTLCOLOR_STATIC:		/* ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ */
-		/* ƒƒbƒZ[ƒW—“H*/
+	case CTLCOLOR_STATIC:		/* ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ« */
+		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ¬„ï¼Ÿ*/
 		if (pWnd->m_hWnd == GetDlgItem (IDC_MSG)->m_hWnd) {
 			pDC->SetBkMode (TRANSPARENT);
 			return (HBRUSH)GetStockObject (WHITE_BRUSH);
@@ -208,9 +208,9 @@ HBRUSH CSboLaunchDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnBnClickedRetry								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Äƒ`ƒFƒbƒN)										 */
-/* “ú•t		:2008/05/28														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnBnClickedRetry								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å†ãƒã‚§ãƒƒã‚¯)										 */
+/* æ—¥ä»˜		:2008/05/28														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::OnBnClickedRetry()
@@ -220,9 +220,9 @@ void CSboLaunchDlg::OnBnClickedRetry()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnBnClickedOk									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒQ[ƒ€ŠJn)										 */
-/* “ú•t		:2008/05/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnBnClickedOk									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ã‚²ãƒ¼ãƒ é–‹å§‹)										 */
+/* æ—¥ä»˜		:2008/05/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::OnBnClickedOk()
@@ -243,7 +243,7 @@ void CSboLaunchDlg::OnBnClickedOk()
 	strcpy (szTmp, strFileName);
 	bResult = CreateProcess (NULL, szTmp, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, szPath,  &stStartupInfo, &stProcInfo);
 	if (bResult == FALSE) {
-		MessageBox ("ƒNƒ‰ƒCƒAƒ“ƒg‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½", "ƒGƒ‰[", MB_OK);
+		MessageBox ("ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸ", "ã‚¨ãƒ©ãƒ¼", MB_OK);
 		goto Exit;
 	}
 
@@ -260,9 +260,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnBnClickedOk									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(XV—š—ğ)										 */
-/* “ú•t		:2008/05/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnBnClickedOk									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ›´æ–°å±¥æ­´)										 */
+/* æ—¥ä»˜		:2008/05/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::OnBnClickedHistory()
@@ -271,15 +271,15 @@ void CSboLaunchDlg::OnBnClickedHistory()
 	CmyString strFileName;
 
 	GetModuleFilePath (szPath, sizeof (szPath));
-	strFileName.Format ("%sXV—š—ğ.txt", szPath);
+	strFileName.Format ("%sæ›´æ–°å±¥æ­´.txt", szPath);
 	ShellExecute (NULL, "open", strFileName, NULL, NULL, SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnBnClickedOk									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(—V‚Ñ•û)											 */
-/* “ú•t		:2008/05/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnBnClickedOk									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(éŠã³æ–¹)											 */
+/* æ—¥ä»˜		:2008/05/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::OnBnClickedHowto()
@@ -289,9 +289,9 @@ void CSboLaunchDlg::OnBnClickedHowto()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::DefWindowProc									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰												 */
-/* “ú•t		:2008/02/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::DefWindowProc									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©												 */
+/* æ—¥ä»˜		:2008/02/25														 */
 /* ========================================================================= */
 
 LRESULT CSboLaunchDlg::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam)
@@ -300,19 +300,19 @@ LRESULT CSboLaunchDlg::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 	if ((message >= URARASOCK_MSGBASE) && (message < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
 		switch (message - URARASOCK_MSGBASE) {
-		case WM_URARASOCK_CONNECT:				/* ƒT[ƒo[‚ÉÚ‘±‚µ‚½ */
-			AddMsg ("ƒT[ƒo[‚ÉÚ‘±‚µ‚Ü‚µ‚½\r\n");
+		case WM_URARASOCK_CONNECT:				/* ã‚µãƒ¼ãƒãƒ¼ã«æ¥ç¶šã—ãŸ */
+			AddMsg ("ã‚µãƒ¼ãƒãƒ¼ã«æ¥ç¶šã—ã¾ã—ãŸ\r\n");
 			m_bConnect = TRUE;
 			ChgState (GAMESTATE_GETFILELIST);
 			break;
-		case WM_URARASOCK_DISCONNECT:			/* ƒT[ƒo[‚ÆØ’f‚µ‚½ */
+		case WM_URARASOCK_DISCONNECT:			/* ã‚µãƒ¼ãƒãƒ¼ã¨åˆ‡æ–­ã—ãŸ */
 			nState = GAMESTATE_DISCONNECT;
 			if (m_bConnect == FALSE) {
 				nState = GAMESTATE_CONNECTMISS;
 			}
 			ChgState (nState);
 			break;
-		case WM_URARASOCK_RECV:					/* ƒf[ƒ^óM */
+		case WM_URARASOCK_RECV:					/* ãƒ‡ãƒ¼ã‚¿å—ä¿¡ */
 			OnRecv ((PBYTE)wParam);
 			break;
 		}
@@ -324,9 +324,9 @@ LRESULT CSboLaunchDlg::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::AddMsg											 */
-/* “à—e		:ƒƒbƒZ[ƒW’Ç‰Á													 */
-/* “ú•t		:2008/02/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::AddMsg											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¿½åŠ 													 */
+/* æ—¥ä»˜		:2008/02/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::AddMsg(LPCSTR pszMsg)
@@ -337,9 +337,9 @@ void CSboLaunchDlg::AddMsg(LPCSTR pszMsg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ReadIniData										 */
-/* “à—e		:iniƒtƒ@ƒCƒ‹‚©‚çİ’è‚ğ“Ç‚İ‚İ									 */
-/* “ú•t		:2008/01/27														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ReadIniData										 */
+/* å†…å®¹		:iniãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰è¨­å®šã‚’èª­ã¿è¾¼ã¿									 */
+/* æ—¥ä»˜		:2008/01/27														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ReadIniData(void)
@@ -349,18 +349,18 @@ void CSboLaunchDlg::ReadIniData(void)
 	GetModuleFilePath (szFileName, sizeof (szFileName));
 	strcat (szFileName, "SboCli.ini");
 
-	/* ƒT[ƒo[ƒAƒhƒŒƒX */
+	/* ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ */
 	GetPrivateProfileString ("Setting", "ServerAddr", "127.0.0.1", szTmp, sizeof (szTmp) - 1, szFileName);
 	m_strServerAddr = szTmp;
-	/* ‘Ò‚¿‚¤‚¯ƒ|[ƒg */
+	/* å¾…ã¡ã†ã‘ãƒãƒ¼ãƒˆ */
 	m_wServerPort = GetPrivateProfileInt ("Setting", "ServerPort", 2006, szFileName);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgState										 */
-/* “à—e		:ó‘Ô‘JˆÚ														 */
-/* “ú•t		:2008/02/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgState										 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»														 */
+/* æ—¥ä»˜		:2008/02/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgState(int nState)
@@ -370,34 +370,34 @@ void CSboLaunchDlg::ChgState(int nState)
 	m_ctlProgressAll. SetRange (0, 0);
 
 	switch (nState) {
-	case GAMESTATE_NONE:				/* ’â~’† */
+	case GAMESTATE_NONE:				/* åœæ­¢ä¸­ */
 		ChgStateNONE ();
 		break;
-	case GAMESTATE_CONNECT:				/* ƒT[ƒo[‚ÖÚ‘± */
+	case GAMESTATE_CONNECT:				/* ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶š */
 		ChgStateCONNECT ();
 		break;
-	case GAMESTATE_CONNECTMISS:			/* ƒT[ƒo[‚ÖÚ‘±¸”s */
+	case GAMESTATE_CONNECTMISS:			/* ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶šå¤±æ•— */
 		ChgStateCONNECTMISS ();
 		break;
-	case GAMESTATE_DISCONNECT:			/* ƒT[ƒo[‚ÆØ’f */
+	case GAMESTATE_DISCONNECT:			/* ã‚µãƒ¼ãƒãƒ¼ã¨åˆ‡æ–­ */
 		ChgStateDISCONNECT ();
 		break;
-	case GAMESTATE_GETFILELIST:			/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgæ“¾ */
+	case GAMESTATE_GETFILELIST:			/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå–å¾— */
 		ChgStateGETFILELIST ();
 		break;
-	case GAMESTATE_CHECKFILELIST:		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN */
+	case GAMESTATE_CHECKFILELIST:		/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯ */
 		ChgStateCHECKFILELIST ();
 		break;
-	case GAMESTATE_GETFILE:				/* ƒtƒ@ƒCƒ‹æ“¾ */
+	case GAMESTATE_GETFILE:				/* ãƒ•ã‚¡ã‚¤ãƒ«å–å¾— */
 		ChgStateGETFILE ();
 		break;
-	case GAMESTATE_MAKEFILELIST:		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgo—Í */
+	case GAMESTATE_MAKEFILELIST:		/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå‡ºåŠ› */
 		ChgStateMAKEFILELIST ();
 		break;
-	case GAMESTATE_RUNUPDATE:			/* ƒAƒbƒvƒf[ƒ^‹N“® */
+	case GAMESTATE_RUNUPDATE:			/* ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿èµ·å‹• */
 		ChgStateRUNUPDATE ();
 		break;
-	case GAMESTATE_QUIT:				/* I—¹ */
+	case GAMESTATE_QUIT:				/* çµ‚äº† */
 		ChgStateQUIT ();
 		break;
 	}
@@ -405,9 +405,9 @@ void CSboLaunchDlg::ChgState(int nState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateNONE									 */
-/* “à—e		:ó‘Ô‘JˆÚ(’â~’†)												 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateNONE									 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(åœæ­¢ä¸­)												 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateNONE(void)
@@ -423,9 +423,9 @@ void CSboLaunchDlg::ChgStateNONE(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateCONNECT									 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒT[ƒo[‚ÖÚ‘±)										 */
-/* “ú•t		:2008/02/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateCONNECT									 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶š)										 */
+/* æ—¥ä»˜		:2008/02/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateCONNECT(void)
@@ -435,7 +435,7 @@ void CSboLaunchDlg::ChgStateCONNECT(void)
 	m_bConnect = FALSE;
 	GetDlgItem (IDC_RETRY)->EnableWindow (FALSE);
 
-	AddMsg ("ƒT[ƒo[‚ÖÚ‘±‚µ‚Ü‚·...\r\n");
+	AddMsg ("ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶šã—ã¾ã™...\r\n");
 	bResult = m_pSock->Connect (m_hWnd, URARASOCK_MSGBASE, URARASOCK_PRECHECK, m_wServerPort, m_strServerAddr);
 	if (bResult == FALSE) {
 		ChgState (GAMESTATE_CONNECTMISS);
@@ -444,60 +444,60 @@ void CSboLaunchDlg::ChgStateCONNECT(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateCONNECTMISS								 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒT[ƒo[‚ÖÚ‘±¸”s)									 */
-/* “ú•t		:2008/02/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateCONNECTMISS								 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶šå¤±æ•—)									 */
+/* æ—¥ä»˜		:2008/02/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateCONNECTMISS(void)
 {
-	AddMsg ("ƒT[ƒo[‚ÉÚ‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½\r\n");
+	AddMsg ("ã‚µãƒ¼ãƒãƒ¼ã«æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸ\r\n");
 	ChgState (GAMESTATE_NONE);
 	GetDlgItem (IDC_RETRY)->EnableWindow (TRUE);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateDISCONNECT								 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒT[ƒo[‚ÆØ’f)										 */
-/* “ú•t		:2008/02/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateDISCONNECT								 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ã‚µãƒ¼ãƒãƒ¼ã¨åˆ‡æ–­)										 */
+/* æ—¥ä»˜		:2008/02/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateDISCONNECT(void)
 {
-	AddMsg ("ƒT[ƒo[‚ÆØ’f‚µ‚Ü‚µ‚½\r\n");
+	AddMsg ("ã‚µãƒ¼ãƒãƒ¼ã¨åˆ‡æ–­ã—ã¾ã—ãŸ\r\n");
 	ChgState (GAMESTATE_NONE);
 	GetDlgItem (IDC_RETRY)->EnableWindow (TRUE);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateGETFILELIST								 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹ƒŠƒXƒgæ“¾)									 */
-/* “ú•t		:2008/02/25														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateGETFILELIST								 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå–å¾—)									 */
+/* æ—¥ä»˜		:2008/02/25														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateGETFILELIST(void)
 {
 	CPacketVERSION_REQ_FILELIST Packet;
 
-	AddMsg ("ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğæ“¾‚µ‚Ä‚¢‚Ü‚·...\r\n");
+	AddMsg ("ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã—ã¦ã„ã¾ã™...\r\n");
 	Packet.Make ();
 	m_pSock->Send (&Packet);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateCHECKFILELIST							 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN)								 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateCHECKFILELIST							 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯)								 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateCHECKFILELIST(void)
 {
 	int nCount;
 
-	AddMsg ("XV‚·‚éƒtƒ@ƒCƒ‹‚ğƒ`ƒFƒbƒN‚µ‚Ä‚¢‚Ü‚·\r\n");
+	AddMsg ("æ›´æ–°ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦ã„ã¾ã™\r\n");
 
 	SAFE_DELETE (m_pstCheckFlieList);
 	m_pstCheckFlieList = new CHECKFILELIST;
@@ -512,16 +512,16 @@ void CSboLaunchDlg::ChgStateCHECKFILELIST(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateGETFILE									 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹æ“¾)											 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateGETFILE									 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—)											 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateGETFILE(void)
 {
 	int nCount;
 
-	AddMsg ("ƒtƒ@ƒCƒ‹‚ğƒ_ƒEƒ“ƒ[ƒh‚µ‚Ä‚¢‚Ü‚·...\r\n");
+	AddMsg ("ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ã¦ã„ã¾ã™...\r\n");
 
 	m_pstGetFileInfo = new GETFILEINFO;
 	m_pstGetFileInfo->nNo			= 0;
@@ -536,9 +536,9 @@ void CSboLaunchDlg::ChgStateGETFILE(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateMAKEFILELIST							 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒtƒ@ƒCƒ‹ƒŠƒXƒgo—Í)									 */
-/* “ú•t		:2008/03/15														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateMAKEFILELIST							 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå‡ºåŠ›)									 */
+/* æ—¥ä»˜		:2008/03/15														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateMAKEFILELIST(void)
@@ -553,10 +553,10 @@ void CSboLaunchDlg::ChgStateMAKEFILELIST(void)
 	GetModuleFilePath (szPath, sizeof (szPath));
 	strFileName.Format ("%sUpdate\\FileList.txt", szPath);
 
-	/* ƒtƒ@ƒCƒ‹‚ğŠJ‚­ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã */
 	hFile = CreateFile (strFileName, GENERIC_WRITE, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (hFile == INVALID_HANDLE_VALUE) {
-		strTmp.Format ("ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½[%d]\r\n", GetLastError ());
+		strTmp.Format ("ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã®å‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ[%d]\r\n", GetLastError ());
 		AddMsg ((LPCSTR)strTmp);
 		return;
 	}
@@ -577,9 +577,9 @@ void CSboLaunchDlg::ChgStateMAKEFILELIST(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateRUNUPDATE								 */
-/* “à—e		:ó‘Ô‘JˆÚ(ƒAƒbƒvƒf[ƒ^‹N“®)										 */
-/* “ú•t		:2008/03/15														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateRUNUPDATE								 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿èµ·å‹•)										 */
+/* æ—¥ä»˜		:2008/03/15														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateRUNUPDATE(void)
@@ -590,7 +590,7 @@ void CSboLaunchDlg::ChgStateRUNUPDATE(void)
 	PROCESS_INFORMATION stProcInfo;
 	CmyString strFileName, strTmp;
 
-	AddMsg ("ƒtƒ@ƒCƒ‹‚ğXV‚µ‚Ä‚¢‚Ü‚·\r\n");
+	AddMsg ("ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›´æ–°ã—ã¦ã„ã¾ã™\r\n");
 
 	GetModuleFilePath (szPath, sizeof (szPath));
 	strcat (szPath, "Update\\");
@@ -603,7 +603,7 @@ void CSboLaunchDlg::ChgStateRUNUPDATE(void)
 	strcpy (szTmp, strFileName);
 	bResult = CreateProcess (NULL, szTmp, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, szPath,  &stStartupInfo, &stProcInfo);
 	if (bResult == FALSE) {
-		strTmp.Format ("ƒAƒbƒvƒf[ƒ^‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½[%d]\r\n", GetLastError ());
+		strTmp.Format ("ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸ[%d]\r\n", GetLastError ());
 		AddMsg ((LPCSTR)strTmp);
 		goto Exit;
 	}
@@ -619,16 +619,16 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ChgStateQUIT									 */
-/* “à—e		:ó‘Ô‘JˆÚ(I—¹)													 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ChgStateQUIT									 */
+/* å†…å®¹		:çŠ¶æ…‹é·ç§»(çµ‚äº†)													 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ChgStateQUIT(void)
 {
 	char szPath[MAX_PATH];
 
-	AddMsg ("ƒtƒ@ƒCƒ‹‚Ìƒ`ƒFƒbƒN‚ªI—¹‚µ‚Ü‚µ‚½\r\n");
+	AddMsg ("ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒã‚§ãƒƒã‚¯ãŒçµ‚äº†ã—ã¾ã—ãŸ\r\n");
 	m_pSock->Destroy ();
 
 	GetModuleFilePath (szPath, sizeof (szPath));
@@ -648,9 +648,9 @@ void CSboLaunchDlg::ChgStateQUIT(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ProcCHECKFILELIST								 */
-/* “à—e		:ˆ—(ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN)									 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ProcCHECKFILELIST								 */
+/* å†…å®¹		:å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯)									 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ProcCHECKFILELIST(void)
@@ -663,11 +663,11 @@ void CSboLaunchDlg::ProcCHECKFILELIST(void)
 	CString strFileName, strTmp;
 
 	nCount = m_pInfoFileList->GetCount ();
-	/* I—¹H */
+	/* çµ‚äº†ï¼Ÿ */
 	if (m_pstCheckFlieList->nNo >= nCount) {
 		KillTimer (TIMERID_CHECKFILE);
 		nState = GAMESTATE_GETFILE;
-		/* ƒAƒbƒvƒf[ƒ^‚Í–ˆ‰ñ‚ ‚é‚Ì‚Å2‚ÂˆÈã‚Ìê‡‚Ì‚İƒ_ƒEƒ“ƒ[ƒh‘ÎÛ‚Æ‚·‚é */
+		/* ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã¯æ¯å›ã‚ã‚‹ã®ã§2ã¤ä»¥ä¸Šã®å ´åˆã®ã¿ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰å¯¾è±¡ã¨ã™ã‚‹ */
 		if (m_pstCheckFlieList->anGetFlieNo.GetSize () <= 1) {
 			nState = GAMESTATE_QUIT;
 		}
@@ -701,9 +701,9 @@ void CSboLaunchDlg::ProcCHECKFILELIST(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::ProcGETFILE										 */
-/* “à—e		:ˆ—(ƒtƒ@ƒCƒ‹æ“¾)												 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:CSboLaunchDlg::ProcGETFILE										 */
+/* å†…å®¹		:å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—)												 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::ProcGETFILE(void)
@@ -725,7 +725,7 @@ void CSboLaunchDlg::ProcGETFILE(void)
 
 	pInfo = m_pInfoFileList->GetPtr (m_pstCheckFlieList->anGetFlieNo[m_pstGetFileInfo->nNo]);
 
-	/* óMŠ®—¹H */
+	/* å—ä¿¡å®Œäº†ï¼Ÿ */
 	if (m_pstGetFileInfo->dwRecvSize == pInfo->dwFileSize) {
 		m_ctlProgressAll.SetPos (m_ctlProgressAll.GetPos () + 1);
 
@@ -737,10 +737,10 @@ void CSboLaunchDlg::ProcGETFILE(void)
 			*pszFileName = 0;
 		}
 		AllCreateDirectory (szPath);
-		/* ƒtƒ@ƒCƒ‹‚ğŠJ‚­ */
+		/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã */
 		hFile = CreateFile (strFileName, GENERIC_WRITE, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 		if (hFile == INVALID_HANDLE_VALUE) {
-			strTmp.Format ("ƒtƒ@ƒCƒ‹‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½[%d]\r\n", GetLastError ());
+			strTmp.Format ("ãƒ•ã‚¡ã‚¤ãƒ«ã®å‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ[%d]\r\n", GetLastError ());
 			AddMsg ((LPCSTR)strTmp);
 			return;
 		}
@@ -753,11 +753,11 @@ void CSboLaunchDlg::ProcGETFILE(void)
 		m_pstGetFileInfo->dwRecvSize	= 0;
 		m_pstGetFileInfo->pRecvDataTmp	= NULL;
 
-		/* ‘S‚Äƒ_ƒEƒ“ƒ[ƒhŠ®—¹H */
+		/* å…¨ã¦ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰å®Œäº†ï¼Ÿ */
 		if (m_pstGetFileInfo->nNo >= m_pstCheckFlieList->anGetFlieNo.GetSize ()) {
 			m_strFile.Empty ();
 			UpdateData (FALSE);
-			AddMsg ("ƒtƒ@ƒCƒ‹‚Ìƒ_ƒEƒ“ƒ[ƒh‚ªŠ®—¹‚µ‚Ü‚µ‚½\r\n");
+			AddMsg ("ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ãŒå®Œäº†ã—ã¾ã—ãŸ\r\n");
 			ChgState (GAMESTATE_MAKEFILELIST);
 			return;
 		}
@@ -771,7 +771,7 @@ void CSboLaunchDlg::ProcGETFILE(void)
 	Packet.Make (m_pstGetFileInfo->dwRecvSize, dwRecvSize, pInfo->strFileName);
 	m_pSock->Send (&Packet);
 
-	/* ‰‰ñH */
+	/* åˆå›ï¼Ÿ */
 	if (m_pstGetFileInfo->dwRecvSize == 0) {
 		strTmp.Format ("%s\r\n", (LPCSTR)pInfo->strFileName);
 		AddMsg ((LPCSTR)strTmp);
@@ -786,9 +786,9 @@ void CSboLaunchDlg::ProcGETFILE(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboLaunchDlg::OnRecv											 */
-/* “à—e		:ƒf[ƒ^óM														 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CSboLaunchDlg::OnRecv											 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿å—ä¿¡														 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::OnRecv(PBYTE pRecvData)
@@ -798,7 +798,7 @@ void CSboLaunchDlg::OnRecv(PBYTE pRecvData)
 	Packet.Set (pRecvData);
 
 	switch (Packet.m_byCmdMain) {
-	case SBOCOMMANDID_MAIN_VERSION:	RecvProcVERSION	(Packet.m_byCmdSub, pRecvData);		break;		/* ƒo[ƒWƒ‡ƒ“Œn */
+	case SBOCOMMANDID_MAIN_VERSION:	RecvProcVERSION	(Packet.m_byCmdSub, pRecvData);		break;		/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³» */
 	}
 
 	SAFE_DELETE_ARRAY (pRecvData);
@@ -806,24 +806,24 @@ void CSboLaunchDlg::OnRecv(PBYTE pRecvData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION									 */
-/* “à—e		:óMˆ—(ƒo[ƒWƒ‡ƒ“Œn)											 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION									 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»)											 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::RecvProcVERSION(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_VERSION_RES_FILELIST:	RecvProcVERSION_RES_FILELIST	(pData);	break;	/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg‰“š */
-	case SBOCOMMANDID_SUB_VERSION_RES_FILE:		RecvProcVERSION_RES_FILE		(pData);	break;	/* ƒtƒ@ƒCƒ‹‰“š */
+	case SBOCOMMANDID_SUB_VERSION_RES_FILELIST:	RecvProcVERSION_RES_FILELIST	(pData);	break;	/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå¿œç­” */
+	case SBOCOMMANDID_SUB_VERSION_RES_FILE:		RecvProcVERSION_RES_FILE		(pData);	break;	/* ãƒ•ã‚¡ã‚¤ãƒ«å¿œç­” */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_RES_FILELIST						 */
-/* “à—e		:óMˆ—(ƒtƒ@ƒCƒ‹ƒŠƒXƒg‰“š)									 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_RES_FILELIST						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå¿œç­”)									 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::RecvProcVERSION_RES_FILELIST(PBYTE pData)
@@ -832,7 +832,7 @@ void CSboLaunchDlg::RecvProcVERSION_RES_FILELIST(PBYTE pData)
 
 	Packet.Set (pData);
 
-	AddMsg ("ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğæ“¾‚µ‚Ü‚µ‚½\r\n");
+	AddMsg ("ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã—ã¾ã—ãŸ\r\n");
 
 	SAFE_DELETE (m_pInfoFileList);
 	m_pInfoFileList = new CInfoFileList;
@@ -843,9 +843,9 @@ void CSboLaunchDlg::RecvProcVERSION_RES_FILELIST(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcVERSION_RES_FILE							 */
-/* “à—e		:óMˆ—(ƒtƒ@ƒCƒ‹‰“š)											 */
-/* “ú•t		:2008/03/09														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcVERSION_RES_FILE							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ãƒ•ã‚¡ã‚¤ãƒ«å¿œç­”)											 */
+/* æ—¥ä»˜		:2008/03/09														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::RecvProcVERSION_RES_FILE(PBYTE pData)
@@ -872,9 +872,9 @@ void CSboLaunchDlg::RecvProcVERSION_RES_FILE(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::DeleteAllFiles										 */
-/* “à—e		:w’èƒpƒXˆÈ‰º‚Ìƒtƒ@ƒCƒ‹‚ğ‘S‚Äíœ								 */
-/* “ú•t		:2008/03/15														 */
+/* é–¢æ•°å	:CMainFrame::DeleteAllFiles										 */
+/* å†…å®¹		:æŒ‡å®šãƒ‘ã‚¹ä»¥ä¸‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦å‰Šé™¤								 */
+/* æ—¥ä»˜		:2008/03/15														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::DeleteAllFiles(LPCSTR pszPath)
@@ -888,7 +888,7 @@ void CSboLaunchDlg::DeleteAllFiles(LPCSTR pszPath)
 	hFind = INVALID_HANDLE_VALUE;
 	strTmp.Format ("%s*.*", pszPath);
 
-	/* Å‰‚ÌŒŸõ */
+	/* æœ€åˆã®æ¤œç´¢ */
 	hFind = FindFirstFile (strTmp, &stFindData);
 	if (hFind == INVALID_HANDLE_VALUE) {
 		return;
@@ -904,16 +904,16 @@ void CSboLaunchDlg::DeleteAllFiles(LPCSTR pszPath)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::DeleteAllFilesTmp									 */
-/* “à—e		:w’èƒpƒXˆÈ‰º‚Ìƒtƒ@ƒCƒ‹‚ğ‘S‚Äíœ(ˆ—)							 */
-/* “ú•t		:2008/03/15														 */
+/* é–¢æ•°å	:CMainFrame::DeleteAllFilesTmp									 */
+/* å†…å®¹		:æŒ‡å®šãƒ‘ã‚¹ä»¥ä¸‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å…¨ã¦å‰Šé™¤(å‡¦ç†)							 */
+/* æ—¥ä»˜		:2008/03/15														 */
 /* ========================================================================= */
 
 void CSboLaunchDlg::DeleteAllFilesTmp(
-	HANDLE hFind,						/* [in] ŒŸõƒnƒ“ƒhƒ‹ */
-	LPCSTR pszPath1,					/* [in] â‘ÎƒpƒX */
-	LPCSTR pszPath2,					/* [in] ‘Š‘ÎƒpƒX */
-	CmyStringArray &astrFolderPath)		/* [in/ou] íœ‚·‚éƒtƒHƒ‹ƒ_ */
+	HANDLE hFind,						/* [in] æ¤œç´¢ãƒãƒ³ãƒ‰ãƒ« */
+	LPCSTR pszPath1,					/* [in] çµ¶å¯¾ãƒ‘ã‚¹ */
+	LPCSTR pszPath2,					/* [in] ç›¸å¯¾ãƒ‘ã‚¹ */
+	CmyStringArray &astrFolderPath)		/* [in/ou] å‰Šé™¤ã™ã‚‹ãƒ•ã‚©ãƒ«ãƒ€ */
 {
 	BOOL bResult;
 	char szFullPath[MAX_PATH];
@@ -935,22 +935,22 @@ void CSboLaunchDlg::DeleteAllFilesTmp(
 			break;
 		}
 
-		/* ƒtƒHƒ‹ƒ_H */
+		/* ãƒ•ã‚©ãƒ«ãƒ€ï¼Ÿ */
 		if (stFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 			if (strcmp (".", stFindData.cFileName) &&
 				strcmp ("..", stFindData.cFileName)) {
-				/* ‘Š‘ÎƒpƒX‚ğXV */
+				/* ç›¸å¯¾ãƒ‘ã‚¹ã‚’æ›´æ–° */
 				strPathTmp2  = pszPath2;
 				strPathTmp2 += stFindData.cFileName;
 				strPathTmp2 += "\\";
 
-				/* â‘ÎƒpƒX‚ğXV */
+				/* çµ¶å¯¾ãƒ‘ã‚¹ã‚’æ›´æ–° */
 				strPathTmp1 = pszPath1;
 				strPathTmp1 += pszPath2;
 				strPathTmp1 += stFindData.cFileName;
 				strPathTmp1 += "\\*.*";
 
-				/* Ÿ‚ÌƒtƒHƒ‹ƒ_‚ğŒŸõ */
+				/* æ¬¡ã®ãƒ•ã‚©ãƒ«ãƒ€ã‚’æ¤œç´¢ */
 				hFindNew = FindFirstFile (strPathTmp1, &stFindData);
 				if (hFindNew == INVALID_HANDLE_VALUE) {
 					goto Exit;
@@ -963,7 +963,7 @@ void CSboLaunchDlg::DeleteAllFilesTmp(
 			PathAddBackslash (szFullPath);
 			strcat (szFullPath, stFindData.cFileName);
 			DeleteFile (szFullPath);
-			/* Ÿ‚Ìg—p‚ÉŒü‚¯‚Äƒtƒ@ƒCƒ‹–¼‚ğíœ‚µ‚Ä‚¨‚­ */
+			/* æ¬¡ã®ä½¿ç”¨ã«å‘ã‘ã¦ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å‰Šé™¤ã—ã¦ãŠã */
 			PathRemoveFileSpec (szFullPath);
 		}
 	}

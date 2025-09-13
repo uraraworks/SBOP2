@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerMap.h													 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(ƒ}ƒbƒv) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerMap.h													 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ãƒãƒƒãƒ—) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -19,79 +19,79 @@ class CLayerMisty;
 class CLayerSnow;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerMap : public CLayerBase
 {
 public:
-			CLayerMap();											/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerMap();											/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerMap();											/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerMap();											/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create				(CMgrData *pMgrData);						/* ì¬ */
-	void	Draw				(CImg32 *pDst);								/* •`‰æ */
-	BOOL	TimerProc			(void);										/* ŠÔˆ— */
-	int		IsScrollPos			(int x, int y, int nDirection);				/* ƒXƒNƒ[ƒ‹‚·‚éêŠ‚©”»’è */
-	BOOL	IsScrollArea		(int x, int y, int &nDirection);			/* ƒXƒNƒ[ƒ‹‚Å‚«‚é‚©”»’è */
-	BOOL	IsScroll			(void);										/* ƒXƒNƒ[ƒ‹’†‚©”»’è */
-	BOOL	IsInScreen			(int x, int y);								/* w’èÀ•W‚ª‰æ–Ê“à‚É‚¢‚é‚©ƒ`ƒFƒbƒN */
-	BYTE	Scroll				(BYTE byDirection, BOOL bNoCheck = FALSE);	/* ƒXƒNƒ[ƒ‹ */
-	void	SetCenterPos		(int x, int y);								/* w’èÀ•W‚ª‰æ–Ê’†‰›‚É‚È‚é‚æ‚¤‚Éİ’è */
-	void	SetScrollWait		(int nMoveWait);							/* ƒXƒNƒ[ƒ‹ˆÚ“®‘Ò‚¿ŠÔ‚ğİ’è */
-	void	SetScrollMode		(BOOL bScroll, int nViewIcon = -1);			/* ƒXƒNƒ[ƒ‹‚·‚é‚©İ’è */
-	void	SetSystemIconMode	(int nMode);								/* ƒVƒXƒeƒ€ƒAƒCƒRƒ“ƒ‚[ƒh‚ğİ’è */
-	void	GetViewMapPos		(int &nDstX, int &nDstY);					/* ‹“_‚ğƒ}ƒbƒvÀ•W‚Åæ“¾ */
-	void	RenewLevel			(void);										/* –¾“xƒŒƒxƒ‹‰æ‘œ‚ğXV */
-	void	RenewMapName		(LPCSTR pszMapName);						/* ƒ}ƒbƒv–¼•\¦—p‰æ‘œ‚ğXV */
+	void	Create				(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	Draw				(CImg32 *pDst);								/* æç”» */
+	BOOL	TimerProc			(void);										/* æ™‚é–“å‡¦ç† */
+	int		IsScrollPos			(int x, int y, int nDirection);				/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹å ´æ‰€ã‹åˆ¤å®š */
+	BOOL	IsScrollArea		(int x, int y, int &nDirection);			/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã§ãã‚‹ã‹åˆ¤å®š */
+	BOOL	IsScroll			(void);										/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­ã‹åˆ¤å®š */
+	BOOL	IsInScreen			(int x, int y);								/* æŒ‡å®šåº§æ¨™ãŒç”»é¢å†…ã«ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ */
+	BYTE	Scroll				(BYTE byDirection, BOOL bNoCheck = FALSE);	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	void	SetCenterPos		(int x, int y);								/* æŒ‡å®šåº§æ¨™ãŒç”»é¢ä¸­å¤®ã«ãªã‚‹ã‚ˆã†ã«è¨­å®š */
+	void	SetScrollWait		(int nMoveWait);							/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ç§»å‹•å¾…ã¡æ™‚é–“ã‚’è¨­å®š */
+	void	SetScrollMode		(BOOL bScroll, int nViewIcon = -1);			/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹ã‹è¨­å®š */
+	void	SetSystemIconMode	(int nMode);								/* ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³ãƒ¢ãƒ¼ãƒ‰ã‚’è¨­å®š */
+	void	GetViewMapPos		(int &nDstX, int &nDstY);					/* è¦–ç‚¹ã‚’ãƒãƒƒãƒ—åº§æ¨™ã§å–å¾— */
+	void	RenewLevel			(void);										/* æ˜åº¦ãƒ¬ãƒ™ãƒ«ç”»åƒã‚’æ›´æ–° */
+	void	RenewMapName		(LPCSTR pszMapName);						/* ãƒãƒƒãƒ—åè¡¨ç¤ºç”¨ç”»åƒã‚’æ›´æ–° */
 
 
 private:
-	BOOL	TimerProcScroll		(void);											/* ŠÔˆ—(ƒXƒNƒ[ƒ‹) */
-	BOOL	TimerProcSystemIcon	(void);											/* ŠÔˆ—(ƒVƒXƒeƒ€ƒAƒCƒRƒ“) */
-	BOOL	TimerProcMapName	(void);											/* ŠÔˆ—(ƒ}ƒbƒv–¼•\¦) */
-	void	DrawPartsBase		(CImg32 *pDst, int nDrawY = -99);				/* •`‰æ(“y‘ä) */
-	void	DrawMapPile			(CImg32 *pDst, int nDrawY = -99);				/* •`‰æ(ƒ}ƒbƒvd‚Ë‡‚í‚¹) */
-	void	GetDrawMapPos		(POINT *ptPos, int &nDstX, int &nDstY);			/* ƒ}ƒbƒvÀ•W‚Ì•`‰æˆÊ’u‚ğŠ“¾ */
-	void	GetDrawMovePos		(POINT &ptMove, POINT &ptPos);					/* ƒXƒNƒ[ƒ‹’†‚Ì•`‰æˆÊ’u‚ğŠ“¾ */
-	void	DrawPartsPile		(CImg32 *pDst, int nDrawY = -99);				/* •`‰æ(d‚Ë‡‚í‚¹) */
-	void	DrawShadow			(CImg32 *pDst, int nDrawY = -99);				/* •`‰æ(ƒ}ƒbƒv‰e) */
-	void	DrawMapObject		(CImg32 *pDst, int nDrawY = -99);				/* •`‰æ(ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg) */
-	void	DrawItem			(CImg32 *pDst, int nType, int nDrawY = -99);	/* •`‰æ(ƒAƒCƒeƒ€) */
-	void	GetDrawPos			(CInfoCharCli *pChar, int &nDstX, int &nDstY);	/* •`‰æˆÊ’u‚ğæ“¾ */
-	void	DrawChar			(CImg32 *pDst, int nDrawY = -99);				/* •`‰æ(ƒLƒƒƒ‰) */
-	void	DrawCharText		(CImg32 *pDst, int nDrawY = -99);				/* •`‰æ(ƒLƒƒƒ‰ŠÖ˜A‚ÌƒeƒLƒXƒg) */
-	void	DrawSystemIcon		(CImg32 *pDst);									/* •`‰æ(ƒVƒXƒeƒ€ƒAƒCƒRƒ“) */
-	void	DrawGauge			(CImg32 *pDst);									/* •`‰æ(ƒQ[ƒW—Ş) */
-	void	DrawMapName			(CImg32 *pDst);									/* •`‰æ(ƒ}ƒbƒv–¼) */
+	BOOL	TimerProcScroll		(void);											/* æ™‚é–“å‡¦ç†(ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«) */
+	BOOL	TimerProcSystemIcon	(void);											/* æ™‚é–“å‡¦ç†(ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³) */
+	BOOL	TimerProcMapName	(void);											/* æ™‚é–“å‡¦ç†(ãƒãƒƒãƒ—åè¡¨ç¤º) */
+	void	DrawPartsBase		(CImg32 *pDst, int nDrawY = -99);				/* æç”»(åœŸå°) */
+	void	DrawMapPile			(CImg32 *pDst, int nDrawY = -99);				/* æç”»(ãƒãƒƒãƒ—é‡ã­åˆã‚ã›) */
+	void	GetDrawMapPos		(POINT *ptPos, int &nDstX, int &nDstY);			/* ãƒãƒƒãƒ—åº§æ¨™ã®æç”»ä½ç½®ã‚’æ‰€å¾— */
+	void	GetDrawMovePos		(POINT &ptMove, POINT &ptPos);					/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­ã®æç”»ä½ç½®ã‚’æ‰€å¾— */
+	void	DrawPartsPile		(CImg32 *pDst, int nDrawY = -99);				/* æç”»(é‡ã­åˆã‚ã›) */
+	void	DrawShadow			(CImg32 *pDst, int nDrawY = -99);				/* æç”»(ãƒãƒƒãƒ—å½±) */
+	void	DrawMapObject		(CImg32 *pDst, int nDrawY = -99);				/* æç”»(ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ) */
+	void	DrawItem			(CImg32 *pDst, int nType, int nDrawY = -99);	/* æç”»(ã‚¢ã‚¤ãƒ†ãƒ ) */
+	void	GetDrawPos			(CInfoCharCli *pChar, int &nDstX, int &nDstY);	/* æç”»ä½ç½®ã‚’å–å¾— */
+	void	DrawChar			(CImg32 *pDst, int nDrawY = -99);				/* æç”»(ã‚­ãƒ£ãƒ©) */
+	void	DrawCharText		(CImg32 *pDst, int nDrawY = -99);				/* æç”»(ã‚­ãƒ£ãƒ©é–¢é€£ã®ãƒ†ã‚­ã‚¹ãƒˆ) */
+	void	DrawSystemIcon		(CImg32 *pDst);									/* æç”»(ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³) */
+	void	DrawGauge			(CImg32 *pDst);									/* æç”»(ã‚²ãƒ¼ã‚¸é¡) */
+	void	DrawMapName			(CImg32 *pDst);									/* æç”»(ãƒãƒƒãƒ—å) */
 
 
 public:
-	HFONT		m_hFont32;					/* •`‰æ‚Ég‚¤ƒtƒHƒ“ƒg(32ƒhƒbƒg) */
-	BOOL		m_bScroll;					/* ƒXƒNƒ[ƒ‹‚·‚é”»’è */
-	BYTE		m_byDirection;				/* ƒXƒNƒ[ƒ‹Œü‚« */
-	int			m_nViewIcon,				/* ‹“_ƒAƒCƒRƒ“ */
-				m_nMoveWait,				/* ƒXƒNƒ[ƒ‹ˆÚ“®‘Ò‚¿ŠÔ */
-				m_nViewX,					/* ‹“_(‰¡) */
-				m_nViewY,					/* ‹“_(c) */
-				m_nMoveX,					/* ƒXƒNƒ[ƒ‹’†(‰¡) */
-				m_nMoveY,					/* ƒXƒNƒ[ƒ‹’†(c) */
-				m_nSystemIconMode,			/* ƒVƒXƒeƒ€ƒAƒCƒRƒ“•\¦ƒ‚[ƒh */
-				m_nSyatemIconOffset,		/* ƒVƒXƒeƒ€ƒAƒCƒRƒ“•\¦ƒIƒtƒZƒbƒg */
-				m_nLevelMapName;			/* ƒ}ƒbƒv–¼•\¦—p“§‰ßƒŒƒxƒ‹ */
-	DWORD		m_dwLastTimeScroll,			/* ‘O‰ñ‚ÌƒXƒNƒ[ƒ‹ˆ—ŠÔ */
-				m_dwLastTimeSystemIconMode,	/* ‘O‰ñ‚ÌƒVƒXƒeƒ€ƒAƒCƒRƒ“•\¦ƒ‚[ƒhˆ—ŠÔ */
-				m_dwLastTimeMapName,		/* ‘O‰ñ‚Ìƒ}ƒbƒv–¼•\¦ˆ—ŠÔ */
-				m_dwMoveWaitOnce;			/* ˆê“x‚¾‚¯‚ÌˆÚ“®‘Ò‚¿ŠÔ */
+	HFONT		m_hFont32;					/* æç”»ã«ä½¿ã†ãƒ•ã‚©ãƒ³ãƒˆ(32ãƒ‰ãƒƒãƒˆ) */
+	BOOL		m_bScroll;					/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹åˆ¤å®š */
+	BYTE		m_byDirection;				/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å‘ã */
+	int			m_nViewIcon,				/* è¦–ç‚¹ã‚¢ã‚¤ã‚³ãƒ³ */
+				m_nMoveWait,				/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ç§»å‹•å¾…ã¡æ™‚é–“ */
+				m_nViewX,					/* è¦–ç‚¹(æ¨ª) */
+				m_nViewY,					/* è¦–ç‚¹(ç¸¦) */
+				m_nMoveX,					/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­(æ¨ª) */
+				m_nMoveY,					/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸­(ç¸¦) */
+				m_nSystemIconMode,			/* ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ */
+				m_nSyatemIconOffset,		/* ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³è¡¨ç¤ºã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+				m_nLevelMapName;			/* ãƒãƒƒãƒ—åè¡¨ç¤ºç”¨é€éãƒ¬ãƒ™ãƒ« */
+	DWORD		m_dwLastTimeScroll,			/* å‰å›ã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å‡¦ç†æ™‚é–“ */
+				m_dwLastTimeSystemIconMode,	/* å‰å›ã®ã‚·ã‚¹ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰å‡¦ç†æ™‚é–“ */
+				m_dwLastTimeMapName,		/* å‰å›ã®ãƒãƒƒãƒ—åè¡¨ç¤ºå‡¦ç†æ™‚é–“ */
+				m_dwMoveWaitOnce;			/* ä¸€åº¦ã ã‘ã®ç§»å‹•å¾…ã¡æ™‚é–“ */
 
-	CImg32		*m_pDibLevel,					/* –¾“xƒŒƒxƒ‹‰æ‘œ */
-				*m_pDibLevelTmp,				/* “”‚è•`‰æ—pƒeƒ“ƒ|ƒ‰ƒŠ */
-				*m_pDibMapName;					/* ƒ}ƒbƒv–¼•\¦—p‰æ‘œ */
-	CLibInfoItem		*m_pLibInfoItem;		/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	CLibInfoMapParts	*m_pLibInfoMapParts;	/* ƒ}ƒbƒvƒp[ƒcî•ñ */
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* ƒ}ƒbƒv‰eî•ñ */
-	CLayerCloud			*m_pLayerCould;			/* ‰_ƒŒƒCƒ„[ */
-	CLayerMisty			*m_pLayerMisty;			/* –¶ƒŒƒCƒ„[ */
-	CLayerSnow			*m_pLayerSnow;			/* áƒŒƒCƒ„[ */
+	CImg32		*m_pDibLevel,					/* æ˜åº¦ãƒ¬ãƒ™ãƒ«ç”»åƒ */
+				*m_pDibLevelTmp,				/* ç¯ã‚Šæç”»ç”¨ãƒ†ãƒ³ãƒãƒ©ãƒª */
+				*m_pDibMapName;					/* ãƒãƒƒãƒ—åè¡¨ç¤ºç”¨ç”»åƒ */
+	CLibInfoItem		*m_pLibInfoItem;		/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	CLibInfoMapParts	*m_pLibInfoMapParts;	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* ãƒãƒƒãƒ—å½±æƒ…å ± */
+	CLayerCloud			*m_pLayerCould;			/* é›²ãƒ¬ã‚¤ãƒ¤ãƒ¼ */
+	CLayerMisty			*m_pLayerMisty;			/* éœ§ãƒ¬ã‚¤ãƒ¤ãƒ¼ */
+	CLayerSnow			*m_pLayerSnow;			/* é›ªãƒ¬ã‚¤ãƒ¤ãƒ¼ */
 } CLayerMap, *PCLayerMap;
 
 /* Copyright(C)URARA-works 2006 */

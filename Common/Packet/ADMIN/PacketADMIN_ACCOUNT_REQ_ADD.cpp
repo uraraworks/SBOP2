@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_ACCOUNT_REQ_ADD.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒAƒJƒEƒ“ƒg‚Ì’Ç‰Á—v‹) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_ACCOUNT_REQ_ADD.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/14													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketADMIN_ACCOUNT_REQ_ADD.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ACCOUNT_REQ_ADD::CPacketADMIN_ACCOUNT_REQ_ADD		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/14														 */
+/* é–¢æ•°å	:CPacketADMIN_ACCOUNT_REQ_ADD::CPacketADMIN_ACCOUNT_REQ_ADD		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/14														 */
 /* ========================================================================= */
 
 CPacketADMIN_ACCOUNT_REQ_ADD::CPacketADMIN_ACCOUNT_REQ_ADD()
@@ -22,9 +22,9 @@ CPacketADMIN_ACCOUNT_REQ_ADD::CPacketADMIN_ACCOUNT_REQ_ADD()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ACCOUNT_REQ_ADD::~CPacketADMIN_ACCOUNT_REQ_ADD	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2009/01/14														 */
+/* é–¢æ•°å	:CPacketADMIN_ACCOUNT_REQ_ADD::~CPacketADMIN_ACCOUNT_REQ_ADD	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2009/01/14														 */
 /* ========================================================================= */
 
 CPacketADMIN_ACCOUNT_REQ_ADD::~CPacketADMIN_ACCOUNT_REQ_ADD()
@@ -33,14 +33,14 @@ CPacketADMIN_ACCOUNT_REQ_ADD::~CPacketADMIN_ACCOUNT_REQ_ADD()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ACCOUNT_REQ_ADD::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2009/01/14														 */
+/* é–¢æ•°å	:CPacketADMIN_ACCOUNT_REQ_ADD::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2009/01/14														 */
 /* ========================================================================= */
 
 void CPacketADMIN_ACCOUNT_REQ_ADD::Make(
-	LPCSTR pszAccount,		/* [in] ƒAƒJƒEƒ“ƒg */
-	LPCSTR pszPassword)		/* [in] ƒpƒXƒ[ƒh */
+	LPCSTR pszAccount,		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	LPCSTR pszPassword)		/* [in] ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,18 +60,18 @@ void CPacketADMIN_ACCOUNT_REQ_ADD::Make(
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
 	strTmp = pszAccount;
-	strcpyRenew ((LPSTR)pDataTmp, strTmp, pDataTmp);	/* ƒAƒJƒEƒ“ƒg */
+	strcpyRenew ((LPSTR)pDataTmp, strTmp, pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
 	strTmp = pszPassword;
-	strcpyRenew ((LPSTR)pDataTmp, strTmp, pDataTmp);	/* ƒpƒXƒ[ƒh */
+	strcpyRenew ((LPSTR)pDataTmp, strTmp, pDataTmp);	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_ACCOUNT_REQ_ADD::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2009/01/14														 */
+/* é–¢æ•°å	:CPacketADMIN_ACCOUNT_REQ_ADD::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2009/01/14														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_ACCOUNT_REQ_ADD::Set(PBYTE pPacket)
@@ -81,8 +81,8 @@ PBYTE CPacketADMIN_ACCOUNT_REQ_ADD::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);	/* ƒAƒJƒEƒ“ƒg */
-	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);	/* ƒpƒXƒ[ƒh */
+	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);	/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
 
 	pRet = pDataTmp;
 	return pRet;

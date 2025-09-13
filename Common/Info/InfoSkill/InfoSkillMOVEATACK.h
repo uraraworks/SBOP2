@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSkillMOVEATACK.h										 */
-/* “à—e			:ƒXƒLƒ‹î•ñ(ˆÚ“®‚µ‚ÄUŒ‚)ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoSkillMOVEATACK.h										 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«æƒ…å ±(ç§»å‹•ã—ã¦æ”»æ’ƒ)ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,59 +11,59 @@
 #include "InfoSkillBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ”­Ëí•Ê */
+/* ç™ºå°„ç¨®åˆ¥ */
 enum {
-	SKILLMOVEATACKPUTTYPE_NONE = 0,			/* –¢İ’è */
-	SKILLMOVEATACKPUTTYPE_FRONT,			/* ‘O•û */
-	SKILLMOVEATACKPUTTYPE_CROSS,			/* ã‰º¶‰E */
+	SKILLMOVEATACKPUTTYPE_NONE = 0,			/* æœªè¨­å®š */
+	SKILLMOVEATACKPUTTYPE_FRONT,			/* å‰æ–¹ */
+	SKILLMOVEATACKPUTTYPE_CROSS,			/* ä¸Šä¸‹å·¦å³ */
 	SKILLMOVEATACKPUTTYPE_MAX
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoSkillMOVEATACK : public CInfoSkillBase
 {
 public:
-			CInfoSkillMOVEATACK();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoSkillMOVEATACK();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoSkillMOVEATACK();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoSkillMOVEATACK();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementNoTmp		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSizeTmp		(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNoTmp	(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetNameTmp			(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteDataTmp		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementDataTmp	(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual int		GetElementNoTmp		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSizeTmp		(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNoTmp	(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetNameTmp			(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteDataTmp		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementDataTmp	(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetDerivationSize		(void);							/* ”h¶ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetDerivationWriteData	(PDWORD pdwSize);				/* ”h¶ƒf[ƒ^‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadDerivationData		(PBYTE pSrc);					/* ”h¶ƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual DWORD	GetDerivationSize		(void);							/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetDerivationWriteData	(PDWORD pdwSize);				/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadDerivationData		(PBYTE pSrc);					/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoSkillBase *pSrc);				/* ƒRƒs[ */
+	virtual void	Copy				(CInfoSkillBase *pSrc);				/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	int		m_nElementCountDerivation;	/* —v‘f” */
-	DWORD	m_dwTartgetType,			/* UŒ‚‘ÎÛ */
-			m_dwHitEffectID,			/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-			m_adwEffectID[4],			/* Œü‚«‚É‚æ‚é•\¦ƒGƒtƒFƒNƒg */
-			m_dwPutType,				/* ”­Ëí•Ê */
-			m_dwAliveTime,				/* ‘Ï‹vŠÔ */
-			m_dwWaitTime,				/* ˆÚ“®‘¬“x */
-			m_dwValue1,					/* Œø‰Ê1 */
-			m_dwValue2,					/* Œø‰Ê2 */
-			m_dwDistance;				/* Ë’ö‹——£ */
-	BOOL	m_bHitQuit,					/* ƒqƒbƒg‚·‚é‚ÆÁ–Å */
-			m_bDistanceDelete;			/* Ë’ö‹——£‚Ü‚Ås‚­‚ÆÁ‚¦‚é */
+	int		m_nElementCountDerivation;	/* è¦ç´ æ•° */
+	DWORD	m_dwTartgetType,			/* æ”»æ’ƒå¯¾è±¡ */
+			m_dwHitEffectID,			/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+			m_adwEffectID[4],			/* å‘ãã«ã‚ˆã‚‹è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+			m_dwPutType,				/* ç™ºå°„ç¨®åˆ¥ */
+			m_dwAliveTime,				/* è€ä¹…æ™‚é–“ */
+			m_dwWaitTime,				/* ç§»å‹•é€Ÿåº¦ */
+			m_dwValue1,					/* åŠ¹æœ1 */
+			m_dwValue2,					/* åŠ¹æœ2 */
+			m_dwDistance;				/* å°„ç¨‹è·é›¢ */
+	BOOL	m_bHitQuit,					/* ãƒ’ãƒƒãƒˆã™ã‚‹ã¨æ¶ˆæ»… */
+			m_bDistanceDelete;			/* å°„ç¨‹è·é›¢ã¾ã§è¡Œãã¨æ¶ˆãˆã‚‹ */
 } CInfoSkillMOVEATACK, *PCInfoSkillMOVEATACK;
 typedef CmyArray<PCInfoSkillMOVEATACK, PCInfoSkillMOVEATACK>	  ARRAYSKILLMOVEATACKINFO;
 typedef CmyArray<PCInfoSkillMOVEATACK, PCInfoSkillMOVEATACK>	*PARRAYSKILLMOVEATACKINFO;

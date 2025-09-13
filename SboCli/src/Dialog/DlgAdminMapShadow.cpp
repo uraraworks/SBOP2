@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapShadow.cpp										 */
-/* “à—e			:ƒ}ƒbƒv‰e•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapShadow.cpp										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::DoDataExchange(CDataExchange* pDX)
@@ -58,9 +58,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::CDlgAdminMapShadow							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::CDlgAdminMapShadow							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CDlgAdminMapShadow::CDlgAdminMapShadow(CWnd* pParent /*=NULL*/)
@@ -87,9 +87,9 @@ CDlgAdminMapShadow::CDlgAdminMapShadow(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::~CDlgAdminMapShadow						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::~CDlgAdminMapShadow						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CDlgAdminMapShadow::~CDlgAdminMapShadow()
@@ -102,9 +102,9 @@ CDlgAdminMapShadow::~CDlgAdminMapShadow()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::Init(CMgrData *pMgrData)
@@ -117,22 +117,22 @@ void CDlgAdminMapShadow::Init(CMgrData *pMgrData)
 
 	m_pMgrGrpData->ReadMapShadowTmp ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminMapShadow::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnAdminMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnAdminMsg									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_RENEWMAPSHADOW:	/* ƒ}ƒbƒv‰eî•ñXV */
+	case ADMINMSG_RENEWMAPSHADOW:	/* ãƒãƒƒãƒ—å½±æƒ…å ±æ›´æ–° */
 		MakeShadowImage ();
 		break;
 	}
@@ -140,9 +140,9 @@ void CDlgAdminMapShadow::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapShadow::OnInitDialog()
@@ -155,11 +155,11 @@ BOOL CDlgAdminMapShadow::OnInitDialog()
 
 	m_ctlMapShadow.Create (this, m_pMgrData);
 
-	m_cbType.AddString ("ƒ}ƒbƒv•ÒW—p‚É‘I‘ğ");
-	m_cbType.AddString ("‰e‚Ì’Ç‰Á");
-	m_cbType.AddString ("‰e‚Ì•ÒW");
-	m_cbType.AddString ("‰e‚ÌˆÚ“®");
-	m_cbType.AddString ("‰e‚Ìíœ");
+	m_cbType.AddString ("ãƒãƒƒãƒ—ç·¨é›†ç”¨ã«é¸æŠ");
+	m_cbType.AddString ("å½±ã®è¿½åŠ ");
+	m_cbType.AddString ("å½±ã®ç·¨é›†");
+	m_cbType.AddString ("å½±ã®ç§»å‹•");
+	m_cbType.AddString ("å½±ã®å‰Šé™¤");
 	m_cbType.SetCurSel (0);
 
 	pWnd = GetDlgItem (IDC_MAPSHADOW);
@@ -168,7 +168,7 @@ BOOL CDlgAdminMapShadow::OnInitDialog()
 	rc.bottom = rc.top + 32 * 8;
 	pWnd->SetWindowPos (NULL, 0, 0, rc.Width (), rc.Height (), SWP_NOZORDER | SWP_NOMOVE);
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚Ìİ’è */
+	/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®è¨­å®š */
 	ScreenToClient (rc);
 	m_ctlScroll.GetWindowRect (rcTmp);
 	m_ctlScroll.SetWindowPos (NULL, rc.right, rc.top, rcTmp.Width (), rc.Height (), SWP_NOZORDER);
@@ -188,9 +188,9 @@ BOOL CDlgAdminMapShadow::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnSize										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnSize										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnSize(UINT nType, int cx, int cy)
@@ -209,9 +209,9 @@ void CDlgAdminMapShadow::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnPaint									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnPaint									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnPaint()
@@ -254,9 +254,9 @@ void CDlgAdminMapShadow::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnMouseMove								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnMouseMove								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnMouseMove(UINT nFlags, CPoint point)
@@ -287,9 +287,9 @@ void CDlgAdminMapShadow::OnMouseMove(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnLButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
@@ -310,17 +310,17 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 	GetDlgItem (IDC_MAPSHADOW)->SetFocus ();
 
 	switch (m_nSelectType) {
-	case 0:		/* ƒ}ƒbƒv•ÒW—p‚É‘I‘ğ */
-	case 2:		/* •ÒW */
+	case 0:		/* ãƒãƒƒãƒ—ç·¨é›†ç”¨ã«é¸æŠ */
+	case 2:		/* ç·¨é›† */
 		m_dwSelectShadowID = GetSelectMapShadowID ();
 		m_pMgrData->SetSelectMapShadowID (m_dwSelectShadowID);
 		m_strID.Format ("ID:%u", m_dwSelectShadowID);
 		UpdateData (FALSE);
 		break;
-	case 1:		/* ’Ç‰Á */
+	case 1:		/* è¿½åŠ  */
 		m_dwSelectShadowID = GetSelectMapShadowID ();
 		if (m_dwSelectShadowID) {
-			RenewMessage ("‚»‚±‚É‚Í’Ç‰Á‚Å‚«‚Ü‚¹‚ñ");
+			RenewMessage ("ãã“ã«ã¯è¿½åŠ ã§ãã¾ã›ã‚“");
 			break;
 		}
 		pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetNew ();
@@ -328,27 +328,27 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pLibInfoMapShadow->Add (pInfoMapShadow);
 		MakeShadowImage ();
 		break;
-	case 3:		/* ˆÚ“® */
+	case 3:		/* ç§»å‹• */
 		{
 			CPacketADMIN_RENEWMAPSHADOW Packet;
 
 			switch (m_nState) {
-			case 0:			/* ˆÚ“®Œ³‚Ì‘I‘ğ */
+			case 0:			/* ç§»å‹•å…ƒã®é¸æŠ */
 				m_dwSelectShadowID = GetSelectMapShadowID ();
 				if (m_dwSelectShadowID == 0) {
 					break;
 				}
 				m_ptMoveSrc	= m_ptCursor;
 				m_nState	= 1;
-				RenewMessage ("ˆÚ“®æ‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+				RenewMessage ("ç§»å‹•å…ˆã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãã ã•ã„");
 				break;
-			case 1:			/* ˆÚ“®æ‚Ì‘I‘ğ */
+			case 1:			/* ç§»å‹•å…ˆã®é¸æŠ */
 				m_ptMoveDst = m_ptCursor;
 
 				dwTmp = GetSelectMapShadowID ();
 				pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr (&m_ptMoveDst);
 				if (pInfoMapShadow) {
-					/* ˆÚ“®æ‚É‰e‚ª‚ ‚Á‚½ê‡‚Í“ü‚êŠ·‚¦‚é */
+					/* ç§»å‹•å…ˆã«å½±ãŒã‚ã£ãŸå ´åˆã¯å…¥ã‚Œæ›ãˆã‚‹ */
 					pInfoMapShadow->m_ptViewPos = m_ptMoveSrc;
 					Packet.Make (pInfoMapShadow);
 					m_pSock->Send (&Packet);
@@ -365,7 +365,7 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 		break;
-	case 4:		/* íœ */
+	case 4:		/* å‰Šé™¤ */
 		{
 			int nResult;
 			CPacketADMIN_MAP_DELETEMAPSHADOW Packet;
@@ -375,7 +375,7 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 
-			nResult = MessageBox ("‘I‘ğ‚µ‚Ä‚¢‚é‰e‚ğíœ‚µ‚Ü‚·‚©H", "Šm”F", MB_ICONQUESTION | MB_YESNO);
+			nResult = MessageBox ("é¸æŠã—ã¦ã„ã‚‹å½±ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MB_ICONQUESTION | MB_YESNO);
 			if (nResult != IDYES) {
 				break;
 			}
@@ -390,9 +390,9 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnRButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/09/08														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnRButtonDown								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/09/08														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnRButtonDown(UINT nFlags, CPoint point)
@@ -400,7 +400,7 @@ void CDlgAdminMapShadow::OnRButtonDown(UINT nFlags, CPoint point)
 	PCInfoMapShadow pInfoMapShadow;
 
 	switch (m_nSelectType) {
-	case 2:		/* •ÒW */
+	case 2:		/* ç·¨é›† */
 		{
 			int nResult;
 			CDlgAdminMapShadowEdit Dlg(this);
@@ -428,9 +428,9 @@ void CDlgAdminMapShadow::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnWndClose									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WNDCLOSE)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnWndClose									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WNDCLOSE)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 LRESULT  CDlgAdminMapShadow::OnWndClose(WPARAM wParam, LPARAM lParam)
@@ -438,7 +438,7 @@ LRESULT  CDlgAdminMapShadow::OnWndClose(WPARAM wParam, LPARAM lParam)
 	PCInfoMapShadow pInfoMapShadow;
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPSHADOWGRP:	/* ƒ}ƒbƒv‰e‰æ‘œ‘I‘ğ */
+	case WINDOWID_SELECTMAPSHADOWGRP:	/* ãƒãƒƒãƒ—å½±ç”»åƒé¸æŠ */
 		if (lParam < 0) {
 			break;
 		}
@@ -456,9 +456,9 @@ LRESULT  CDlgAdminMapShadow::OnWndClose(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnVScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_VSCROLL)									 */
-/* “ú•t		:2007/05/04														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnVScroll									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_VSCROLL)									 */
+/* æ—¥ä»˜		:2007/05/04														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -471,28 +471,28 @@ void CDlgAdminMapShadow::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollB
 	bChange = TRUE;
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1”Ôã‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_TOP:			/* 1ç•ªä¸Šã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		pScrollBar->GetScrollRange (&nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1”Ô‰º‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_BOTTOM:			/* 1ç•ªä¸‹ã¾ã§ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		pScrollBar->GetScrollRange (&nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1sã‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEUP:			/* 1ƒy[ƒWã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEUP:			/* 1è¡Œä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEUP:			/* 1ãƒšãƒ¼ã‚¸ä¸Šã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow;
 		if (nPosNow == 0) {
 			break;
 		}
 		nPos --;
 		break;
-	case SB_LINEDOWN:		/* 1s‰º‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_PAGEDOWN:		/* 1ƒy[ƒW‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEDOWN:		/* 1è¡Œä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_PAGEDOWN:		/* 1ãƒšãƒ¼ã‚¸ä¸‹ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* çµ¶å¯¾ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ« */
+	case SB_THUMBTRACK:		/* ãƒ‰ãƒ©ãƒƒã‚°ã•ã‚ŒãŸ */
 		break;
 	default:
 		bChange = FALSE;
@@ -509,9 +509,9 @@ void CDlgAdminMapShadow::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollB
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnMouseWheel								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/05/04														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnMouseWheel								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/05/04														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapShadow::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -532,9 +532,9 @@ BOOL CDlgAdminMapShadow::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::OnSelchangeType							 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::OnSelchangeType							 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::OnSelchangeType()
@@ -545,17 +545,17 @@ void CDlgAdminMapShadow::OnSelchangeType()
 	m_nSelectType	= m_cbType.GetCurSel ();
 
 	switch (m_nSelectType) {
-	case 1:		/* ’Ç‰Á */
-		RenewMessage ("’Ç‰Á‚·‚éêŠ‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 1:		/* è¿½åŠ  */
+		RenewMessage ("è¿½åŠ ã™ã‚‹å ´æ‰€ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãã ã•ã„");
 		break;
-	case 2:		/* •ÒW */
-		RenewMessage ("•ÒW‚·‚é‰e‚ğ‰EƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 2:		/* ç·¨é›† */
+		RenewMessage ("ç·¨é›†ã™ã‚‹å½±ã‚’å³ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãã ã•ã„");
 		break;
-	case 3:		/* ˆÚ“® */
-		RenewMessage ("ˆÚ“®‚·‚é‰e‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 3:		/* ç§»å‹• */
+		RenewMessage ("ç§»å‹•ã™ã‚‹å½±ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãã ã•ã„");
 		break;
-	case 4:		/* íœ */
-		RenewMessage ("íœ‚·‚é‰e‚ğƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 4:		/* å‰Šé™¤ */
+		RenewMessage ("å‰Šé™¤ã™ã‚‹å½±ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãã ã•ã„");
 		break;
 	default:
 		RenewMessage ("");
@@ -565,9 +565,9 @@ void CDlgAdminMapShadow::OnSelchangeType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::RenewMessage								 */
-/* “à—e		:ƒƒbƒZ[ƒW—“‚ğXV												 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::RenewMessage								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ¬„ã‚’æ›´æ–°												 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::RenewMessage(LPCSTR pszMsg)
@@ -578,9 +578,9 @@ void CDlgAdminMapShadow::RenewMessage(LPCSTR pszMsg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::MakeShadowImage							 */
-/* “à—e		:‰eˆê——‰æ‘œ‚ğì¬												 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::MakeShadowImage							 */
+/* å†…å®¹		:å½±ä¸€è¦§ç”»åƒã‚’ä½œæˆ												 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadow::MakeShadowImage(void)
@@ -590,9 +590,9 @@ void CDlgAdminMapShadow::MakeShadowImage(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadow::GetSelectMapShadowID						 */
-/* “à—e		:‘I‘ğ’†‚Ìƒ}ƒbƒv‰eID‚ğæ“¾										 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadow::GetSelectMapShadowID						 */
+/* å†…å®¹		:é¸æŠä¸­ã®ãƒãƒƒãƒ—å½±IDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminMapShadow::GetSelectMapShadowID(void)

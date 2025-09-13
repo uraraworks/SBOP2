@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:myArray.h													 */
-/* “à—e			:MFC‚ÌCArray‚İ‚½‚¢‚È”z—ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/01/18													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:myArray.h													 */
+/* å†…å®¹			:MFCã®CArrayã¿ãŸã„ãªé…åˆ—ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/01/18													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,29 +11,29 @@
 #include "myString.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 template<class TYPE, class ARG_TYPE> class CmyArray
 {
 public:
-			CmyArray();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CmyArray();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CmyArray();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CmyArray();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetSize		(void);										/* —v‘f”‚ğæ“¾ */
-	void	RemoveAll	(void);										/* ‘S—v‘f‚ğíœ */
-	TYPE	GetAt		(int nIndex);								/* w’è—v‘f‚ğæ“¾ */
-	void	SetAt		(int nIndex, ARG_TYPE newElement);			/* w’è—v‘f‚ğXV */
-	int		Add			(ARG_TYPE newElement);						/* —v‘f‚ğ’Ç‰Á */
-	void	InsertAt	(int nIndex, ARG_TYPE newElement);			/* w’èˆÊ’u‚É’Ç‰Á */
-	void	RemoveAt	(int nIndex, int nCount = 1);				/* w’è—v‘f‚ğíœ */
-	void	Copy		(CmyArray *pSrc);							/* ƒRƒs[ */
+	int		GetSize		(void);										/* è¦ç´ æ•°ã‚’å–å¾— */
+	void	RemoveAll	(void);										/* å…¨è¦ç´ ã‚’å‰Šé™¤ */
+	TYPE	GetAt		(int nIndex);								/* æŒ‡å®šè¦ç´ ã‚’å–å¾— */
+	void	SetAt		(int nIndex, ARG_TYPE newElement);			/* æŒ‡å®šè¦ç´ ã‚’æ›´æ–° */
+	int		Add			(ARG_TYPE newElement);						/* è¦ç´ ã‚’è¿½åŠ  */
+	void	InsertAt	(int nIndex, ARG_TYPE newElement);			/* æŒ‡å®šä½ç½®ã«è¿½åŠ  */
+	void	RemoveAt	(int nIndex, int nCount = 1);				/* æŒ‡å®šè¦ç´ ã‚’å‰Šé™¤ */
+	void	Copy		(CmyArray *pSrc);							/* ã‚³ãƒ”ãƒ¼ */
 
-	TYPE& operator [](int nIndex);								/* w’è—v‘f‚Ö’¼ÚƒAƒNƒZƒX */
+	TYPE& operator [](int nIndex);								/* æŒ‡å®šè¦ç´ ã¸ç›´æ¥ã‚¢ã‚¯ã‚»ã‚¹ */
 
 
 private:
-	TYPE		*m_pData;					/* ƒf[ƒ^ */
-	int			m_nCount;					/* —v‘f” */
+	TYPE		*m_pData;					/* ãƒ‡ãƒ¼ã‚¿ */
+	int			m_nCount;					/* è¦ç´ æ•° */
 };
 
 typedef CmyArray<int, int>				  ARRAYINT;
@@ -44,7 +44,7 @@ typedef CmyArray<BYTE, BYTE>			  ARRAYBYTE;
 typedef CmyArray<BYTE, BYTE>			*PARRAYBYTE;
 typedef CmyArray<CmyString, CmyString>	CmyStringArray;
 
-/* À‘••”•ª‚ğƒCƒ“ƒNƒ‹[ƒh */
+/* å®Ÿè£…éƒ¨åˆ†ã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ */
 #include "myArrayImpl.h"
 
 /* Copyright(C)URARA-works 2005 */

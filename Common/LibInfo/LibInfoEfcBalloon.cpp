@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoEfcBalloon.cpp										 */
-/* “à—e			:•¬o‚µî•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoEfcBalloon.cpp										 */
+/* å†…å®¹			:å™´å‡ºã—æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::CLibInfoEfcBalloon							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::CLibInfoEfcBalloon							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CLibInfoEfcBalloon::CLibInfoEfcBalloon()
@@ -25,9 +25,9 @@ CLibInfoEfcBalloon::CLibInfoEfcBalloon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::~CLibInfoEfcBalloon						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::~CLibInfoEfcBalloon						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 CLibInfoEfcBalloon::~CLibInfoEfcBalloon()
@@ -37,9 +37,9 @@ CLibInfoEfcBalloon::~CLibInfoEfcBalloon()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::Create(void)
@@ -49,9 +49,9 @@ void CLibInfoEfcBalloon::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::Destroy									 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::Destroy									 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::Destroy(void)
@@ -62,9 +62,9 @@ void CLibInfoEfcBalloon::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoEfcBalloon::GetNew(void)
@@ -78,9 +78,9 @@ PCInfoBase CLibInfoEfcBalloon::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetPtr										 */
-/* “à—e		:î•ñ‚ðŽæ“¾														 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoEfcBalloon::GetPtr(int nNo)
@@ -98,9 +98,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetCount									 */
-/* “à—e		:ƒf[ƒ^”‚ðŽæ“¾													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetCount									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 int CLibInfoEfcBalloon::GetCount(void)
@@ -120,9 +120,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::Add										 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::Add										 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::Add(PCInfoBase pInfo)
@@ -139,13 +139,13 @@ void CLibInfoEfcBalloon::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoEfcBalloon pInfo;
 
@@ -156,13 +156,13 @@ void CLibInfoEfcBalloon::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::Delete(
-	DWORD dwEfcBalloonID)		/* [in] ƒ‚[ƒVƒ‡ƒ“ID */
+	DWORD dwEfcBalloonID)		/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID */
 {
 	int i, nCount, nNo;
 	PCInfoEfcBalloon pInfoTmp;
@@ -186,9 +186,9 @@ void CLibInfoEfcBalloon::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::DeleteAll									 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::DeleteAll									 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::DeleteAll(void)
@@ -207,9 +207,9 @@ void CLibInfoEfcBalloon::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::SetList									 */
-/* “à—e		:Žw’èID‚ÌƒŠƒXƒg‚ðÝ’è											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::SetList									 */
+/* å†…å®¹		:æŒ‡å®šIDã®ãƒªã‚¹ãƒˆã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::SetList(DWORD dwListID, CLibInfoEfcBalloon *pSrc)
@@ -217,7 +217,7 @@ void CLibInfoEfcBalloon::SetList(DWORD dwListID, CLibInfoEfcBalloon *pSrc)
 	int i, nCount;
 	PCInfoEfcBalloon pInfo, pInfoTmp;
 
-	/* ‚Ü‚¸‚Í‘ÎÛ‚Æ‚È‚éƒŠƒXƒgID‚Ìî•ñ‚ðíœ */
+	/* ã¾ãšã¯å¯¾è±¡ã¨ãªã‚‹ãƒªã‚¹ãƒˆIDã®æƒ…å ±ã‚’å‰Šé™¤ */
 	nCount = m_paInfo->GetSize ();
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfo = m_paInfo->GetAt (i);
@@ -247,9 +247,9 @@ void CLibInfoEfcBalloon::SetList(DWORD dwListID, CLibInfoEfcBalloon *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetListID									 */
-/* “à—e		:Ží•ÊIDˆê——‚ðŽæ“¾												 */
-/* “ú•t		:2007/12/29														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetListID									 */
+/* å†…å®¹		:ç¨®åˆ¥IDä¸€è¦§ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/29														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::GetListID(ARRAYDWORD &aDst)
@@ -278,14 +278,14 @@ void CLibInfoEfcBalloon::GetListID(ARRAYDWORD &aDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetName									 */
-/* “à—e		:•¬o‚µ–¼‚ðŽæ“¾													 */
-/* “ú•t		:2007/12/29														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetName									 */
+/* å†…å®¹		:å™´å‡ºã—åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/12/29														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::GetName(
-	DWORD dwListID,			/* [in] Ží•ÊID */
-	CmyString &strDst)		/* [ou] •¬o‚µ–¼ */
+	DWORD dwListID,			/* [in] ç¨®åˆ¥ID */
+	CmyString &strDst)		/* [ou] å™´å‡ºã—å */
 {
 	int i, nCount;
 	PCInfoEfcBalloon pInfo;
@@ -305,9 +305,9 @@ void CLibInfoEfcBalloon::GetName(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::Sort										 */
-/* “à—e		:Ží•ÊID‚Åƒ\[ƒg													 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::Sort										 */
+/* å†…å®¹		:ç¨®åˆ¥IDã§ã‚½ãƒ¼ãƒˆ													 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::Sort(void)
@@ -326,7 +326,7 @@ void CLibInfoEfcBalloon::Sort(void)
 			break;
 		}
 		dwListID = -1;
-		/* Å¬‚ÌŽí•ÊID‚ð’T‚· */
+		/* æœ€å°ã®ç¨®åˆ¥IDã‚’æŽ¢ã™ */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = apInfo[i];
 			if (pInfo->m_dwListID > dwListID) {
@@ -350,14 +350,14 @@ void CLibInfoEfcBalloon::Sort(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetNextAnimeID								 */
-/* “à—e		:ŽŸ‚ÌƒRƒ}”Ô†‚ðŽæ“¾												 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetNextAnimeID								 */
+/* å†…å®¹		:æ¬¡ã®ã‚³ãƒžç•ªå·ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 DWORD CLibInfoEfcBalloon::GetNextAnimeID(
-	DWORD dwListID,			/* [in] Ží•ÊID */
-	DWORD dwAnimeID)		/* [in] ƒRƒ}”Ô† */
+	DWORD dwListID,			/* [in] ç¨®åˆ¥ID */
+	DWORD dwAnimeID)		/* [in] ã‚³ãƒžç•ªå· */
 {
 	int i, nCount;
 	DWORD dwRet;
@@ -375,7 +375,7 @@ DWORD CLibInfoEfcBalloon::GetNextAnimeID(
 		}
 		break;
 	}
-	/* ‘±‚«‚ª‚ ‚éH */
+	/* ç¶šããŒã‚ã‚‹ï¼Ÿ */
 	if (i < nCount) {
 		dwRet = dwAnimeID + 1;
 	}
@@ -385,14 +385,14 @@ DWORD CLibInfoEfcBalloon::GetNextAnimeID(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetPtr										 */
-/* “à—e		:•¬o‚µî•ñ‚ðŽæ“¾												 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetPtr										 */
+/* å†…å®¹		:å™´å‡ºã—æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 CInfoEfcBalloon *CLibInfoEfcBalloon::GetPtr(
-	DWORD dwListID,			/* [in] Ží•ÊID */
-	DWORD dwAnimeID)		/* [in] ƒRƒ}”Ô† */
+	DWORD dwListID,			/* [in] ç¨®åˆ¥ID */
+	DWORD dwAnimeID)		/* [in] ã‚³ãƒžç•ªå· */
 {
 	int i, nCount;
 	PCInfoEfcBalloon pRet, pInfo;
@@ -420,9 +420,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetEfcBalloonInfo							 */
-/* “à—e		:Žw’èŽí•ÊID‚Ìî•ñ‚ðÝ’è											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetEfcBalloonInfo							 */
+/* å†…å®¹		:æŒ‡å®šç¨®åˆ¥IDã®æƒ…å ±ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 void CLibInfoEfcBalloon::GetEfcBalloonInfo(DWORD dwListID, ARRAYEFCBALLOON &aDst)
@@ -449,9 +449,9 @@ void CLibInfoEfcBalloon::GetEfcBalloonInfo(DWORD dwListID, ARRAYEFCBALLOON &aDst
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 DWORD CLibInfoEfcBalloon::GetSendDataSize(DWORD dwListID)
@@ -473,16 +473,16 @@ DWORD CLibInfoEfcBalloon::GetSendDataSize(DWORD dwListID)
 		dwRet += pInfo->GetSendDataSize ();
 	}
 
-	dwRet += sizeof (DWORD);	/* I’[•ª */
+	dwRet += sizeof (DWORD);	/* çµ‚ç«¯åˆ† */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoEfcBalloon::GetSendData(DWORD dwListID)
@@ -521,9 +521,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoEfcBalloon::SetSendData(PBYTE pSrc)
@@ -552,9 +552,9 @@ PBYTE CLibInfoEfcBalloon::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoEfcBalloon::GetNewID									 */
-/* “à—e		:V‚µ‚¢ID‚ðŽæ“¾													 */
-/* “ú•t		:2007/12/24														 */
+/* é–¢æ•°å	:CLibInfoEfcBalloon::GetNewID									 */
+/* å†…å®¹		:æ–°ã—ã„IDã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/12/24														 */
 /* ========================================================================= */
 
 DWORD CLibInfoEfcBalloon::GetNewID(void)

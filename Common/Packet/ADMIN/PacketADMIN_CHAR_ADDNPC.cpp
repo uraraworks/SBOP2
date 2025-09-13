@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_ADDNPC.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:NPC‚Ì’Ç‰Á) À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_ADDNPC.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:NPCã®è¿½åŠ ) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/01													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_CHAR_ADDNPC.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDNPC::CPacketADMIN_CHAR_ADDNPC				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDNPC::CPacketADMIN_CHAR_ADDNPC				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_ADDNPC::CPacketADMIN_CHAR_ADDNPC()
@@ -24,9 +24,9 @@ CPacketADMIN_CHAR_ADDNPC::CPacketADMIN_CHAR_ADDNPC()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDNPC::~CPacketADMIN_CHAR_ADDNPC			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDNPC::~CPacketADMIN_CHAR_ADDNPC			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 CPacketADMIN_CHAR_ADDNPC::~CPacketADMIN_CHAR_ADDNPC()
@@ -36,13 +36,13 @@ CPacketADMIN_CHAR_ADDNPC::~CPacketADMIN_CHAR_ADDNPC()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDNPC::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDNPC::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 void CPacketADMIN_CHAR_ADDNPC::Make(
-	CInfoCharBase *pInfo)		/* [in] ƒLƒƒƒ‰î•ñ */
+	CInfoCharBase *pInfo)		/* [in] ã‚­ãƒ£ãƒ©æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -62,7 +62,7 @@ void CPacketADMIN_CHAR_ADDNPC::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_CHAR_ADDNPC;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒLƒƒƒ‰î•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ã‚­ãƒ£ãƒ©æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -71,9 +71,9 @@ void CPacketADMIN_CHAR_ADDNPC::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_CHAR_ADDNPC::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/09/01														 */
+/* é–¢æ•°å	:CPacketADMIN_CHAR_ADDNPC::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/01														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_ADDNPC::Set(PBYTE pPacket)

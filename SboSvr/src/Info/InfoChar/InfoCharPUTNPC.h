@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharPUTNPC.h											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(NPC”­¶)ƒT[ƒo[ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharPUTNPC.h											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(NPCç™ºç”Ÿ)ã‚µãƒ¼ãƒãƒ¼ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,25 +11,25 @@
 #include "InfoCharSvr.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharPUTNPC : public CInfoCharSvr
 {
 public:
-			CInfoCharPUTNPC();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharPUTNPC();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharPUTNPC();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharPUTNPC();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void SetMoveState	(int nMoveState);						/* ˆÚ“®ó‘Ô‚ð•ÏX */
-	BOOL TimerProc		(DWORD dwTime);							/* ŽžŠÔˆ— */
+	void SetMoveState	(int nMoveState);						/* ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´ */
+	BOOL TimerProc		(DWORD dwTime);							/* æ™‚é–“å‡¦ç† */
 
-	void IncPutCount	(void);									/* ”­¶NPC”‚ð‘‰Á */
-	void DecPutCount	(void);									/* ”­¶NPC”‚ðŒ¸­ */
+	void IncPutCount	(void);									/* ç™ºç”ŸNPCæ•°ã‚’å¢—åŠ  */
+	void DecPutCount	(void);									/* ç™ºç”ŸNPCæ•°ã‚’æ¸›å°‘ */
 
 
 public:
-	DWORD	m_dwLastTimePut;			/* ‘O‰ñ‚Ì”­¶Žž */
-	int		m_nPutCount;				/* ”­¶’†‚Ì” */
+	DWORD	m_dwLastTimePut;			/* å‰å›žã®ç™ºç”Ÿæ™‚åˆ» */
+	int		m_nPutCount;				/* ç™ºç”Ÿä¸­ã®æ•° */
 } CInfoCharPUTNPC, *PCInfoCharPUTNPC;
 
 /* Copyright(C)URARA-works 2008 */

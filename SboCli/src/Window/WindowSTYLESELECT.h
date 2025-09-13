@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowSTYLESELECT.h										 */
-/* “à—e			:—eŽp‘I‘ðƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowSTYLESELECT.h										 */
+/* å†…å®¹			:å®¹å§¿é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -22,55 +22,55 @@ class CWindowEYECOLOR;
 class CInfoCharCli;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowSTYLESELECT : public CWindowBase
 {
 public:
-			CWindowSTYLESELECT();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowSTYLESELECT();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowSTYLESELECT();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowSTYLESELECT();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create			(CMgrData *pMgrData);					/* ì¬ */
-	void	SetFamilyType	(WORD wFamilyID);						/* Ží‘°‚ðÝ’è */
-	void	SetInfoChar		(CInfoCharCli *pInfoCharCli);			/* ƒLƒƒƒ‰î•ñ‚ðÝ’è */
-	void	OnWindowMsg		(int nType, DWORD dwPara);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG) */
-	void	Draw			(CImg32 *pDst);							/* •`‰æ */
-	BOOL	TimerProc		(void);									/* ŽžŠÔˆ— */
+	void	Create			(CMgrData *pMgrData);					/* ä½œæˆ */
+	void	SetFamilyType	(WORD wFamilyID);						/* ç¨®æ—ã‚’è¨­å®š */
+	void	SetInfoChar		(CInfoCharCli *pInfoCharCli);			/* ã‚­ãƒ£ãƒ©æƒ…å ±ã‚’è¨­å®š */
+	void	OnWindowMsg		(int nType, DWORD dwPara);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG) */
+	void	Draw			(CImg32 *pDst);							/* æç”» */
+	BOOL	TimerProc		(void);									/* æ™‚é–“å‡¦ç† */
 
 
 private:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Y) */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Y) */
 
 
 public:
-	CInfoCharCli		*m_pInfoCharCli;			/* ì¬’†‚ÌƒLƒƒƒ‰î•ñ */
+	CInfoCharCli		*m_pInfoCharCli;			/* ä½œæˆä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
 
 
 private:
-	BOOL		m_bAnime;							/* ƒAƒjƒ[ƒVƒ‡ƒ“‚·‚é”»’è */
-	int			m_nSex,								/* «•Ê */
-				m_nSexBack,							/* «•Ê•Û‘¶—p */
-				m_nDirection;						/* Œü‚«”Ô† */
-	WORD		m_wFamilyID,						/* Ží‘°ID */
-				m_wFamilyIDBack,					/* Ží‘°ID•Û‘¶—p */
-				m_wHairTypeID,						/* ”¯Œ^ID */
-				m_wHairTypeIDBack,					/* ”¯Œ^ID•Û‘¶—p */
-				m_wHairColorID,						/* ”¯FID */
-				m_wHairColorIDBack,					/* ”¯FID•Û‘¶—p */
-				m_wEyeColorID,						/* –ÚFID */
-				m_wEyeColorIDBack;					/* –ÚFID•Û‘¶—p */
-	CMgrWindow			*m_pMgrWindow;				/* ƒEƒBƒ“ƒhƒEƒ}ƒl[ƒWƒƒ */
-	CMgrDraw			*m_pMgrDraw;				/* •`‰æƒ}ƒl[ƒWƒƒ */
-	CWindowSEX			*m_pWindowSEX;				/* «•Ê“ü—ÍƒEƒBƒ“ƒhƒE */
-	CWindowHAIRTYPE		*m_pWindowHAIRTYPE;			/* ”¯Œ^‘I‘ðƒEƒBƒ“ƒhƒE */
-	CWindowHAIRCOLOR	*m_pWindowHAIRCOLOR;		/* ”¯F‘I‘ðƒEƒBƒ“ƒhƒE */
-	CWindowEYECOLOR		*m_pWindowEYECOLOR;			/* –ÚF‘I‘ðƒEƒBƒ“ƒhƒE */
+	BOOL		m_bAnime;							/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã™ã‚‹åˆ¤å®š */
+	int			m_nSex,								/* æ€§åˆ¥ */
+				m_nSexBack,							/* æ€§åˆ¥ä¿å­˜ç”¨ */
+				m_nDirection;						/* å‘ãç•ªå· */
+	WORD		m_wFamilyID,						/* ç¨®æ—ID */
+				m_wFamilyIDBack,					/* ç¨®æ—IDä¿å­˜ç”¨ */
+				m_wHairTypeID,						/* é«ªåž‹ID */
+				m_wHairTypeIDBack,					/* é«ªåž‹IDä¿å­˜ç”¨ */
+				m_wHairColorID,						/* é«ªè‰²ID */
+				m_wHairColorIDBack,					/* é«ªè‰²IDä¿å­˜ç”¨ */
+				m_wEyeColorID,						/* ç›®è‰²ID */
+				m_wEyeColorIDBack;					/* ç›®è‰²IDä¿å­˜ç”¨ */
+	CMgrWindow			*m_pMgrWindow;				/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒžãƒãƒ¼ã‚¸ãƒ£ */
+	CMgrDraw			*m_pMgrDraw;				/* æç”»ãƒžãƒãƒ¼ã‚¸ãƒ£ */
+	CWindowSEX			*m_pWindowSEX;				/* æ€§åˆ¥å…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CWindowHAIRTYPE		*m_pWindowHAIRTYPE;			/* é«ªåž‹é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CWindowHAIRCOLOR	*m_pWindowHAIRCOLOR;		/* é«ªè‰²é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CWindowEYECOLOR		*m_pWindowEYECOLOR;			/* ç›®è‰²é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 } CWindowSTYLESELECT, *PCWindowSTYLESELECT;
 
 /* Copyright(C)URARA-works 2007 */

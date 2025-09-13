@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminSelectEffect.cpp									 */
-/* “à—e			:ƒGƒtƒFƒNƒg‘I‘ğƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/11													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminSelectEffect.cpp									 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆé¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/11													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -18,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminSelectEffect::DoDataExchange(CDataExchange* pDX)
@@ -36,9 +36,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectEffect::CDlgAdminSelectEffect					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminSelectEffect::CDlgAdminSelectEffect					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CDlgAdminSelectEffect::CDlgAdminSelectEffect(CWnd* pParent /*=NULL*/)
@@ -52,9 +52,9 @@ CDlgAdminSelectEffect::CDlgAdminSelectEffect(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectEffect::~CDlgAdminSelectEffect					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminSelectEffect::~CDlgAdminSelectEffect					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 CDlgAdminSelectEffect::~CDlgAdminSelectEffect()
@@ -63,9 +63,9 @@ CDlgAdminSelectEffect::~CDlgAdminSelectEffect()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectEffect::GetSelectID								 */
-/* “à—e		:‘I‘ğ‚³‚ê‚½ƒGƒtƒFƒNƒgID‚ğæ“¾									 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminSelectEffect::GetSelectID								 */
+/* å†…å®¹		:é¸æŠã•ã‚ŒãŸã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminSelectEffect::GetSelectID()
@@ -75,9 +75,9 @@ DWORD CDlgAdminSelectEffect::GetSelectID()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectEffect::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminSelectEffect::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminSelectEffect::OnInitDialog()
@@ -95,9 +95,9 @@ BOOL CDlgAdminSelectEffect::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectEffect::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminSelectEffect::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminSelectEffect::PostNcDestroy()
@@ -107,9 +107,9 @@ void CDlgAdminSelectEffect::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSelectEffect::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CDlgAdminSelectEffect::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CDlgAdminSelectEffect::OnOK()

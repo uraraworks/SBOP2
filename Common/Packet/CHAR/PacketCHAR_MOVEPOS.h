@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_MOVEPOS.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ˆÚ“®’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/01/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_MOVEPOS.h										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ç§»å‹•é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/01/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,25 +11,25 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_MOVEPOS : public CPacketBase
 {
 public:
-			CPacketCHAR_MOVEPOS();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_MOVEPOS();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_MOVEPOS();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_MOVEPOS();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMapID, DWORD dwCharID, int nDirection, int x, int y, BOOL bUpdate);	/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(DWORD dwMapID, DWORD dwCharID, int nDirection, int x, int y, BOOL bUpdate);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	BOOL	m_bUpdate;					/* ©ƒLƒƒƒ‰‚ÌÀ•W‚ğXV‚·‚é */
-	DWORD	m_dwMapID,					/* ƒ}ƒbƒvID */
-			m_dwCharID;					/* ƒLƒƒƒ‰ID */
-	int		m_nDirection;				/* Œü‚« */
-	POINT	m_pos;						/* À•W */
+	BOOL	m_bUpdate;					/* è‡ªã‚­ãƒ£ãƒ©ã®åº§æ¨™ã‚’æ›´æ–°ã™ã‚‹ */
+	DWORD	m_dwMapID,					/* ãƒãƒƒãƒ—ID */
+			m_dwCharID;					/* ã‚­ãƒ£ãƒ©ID */
+	int		m_nDirection;				/* å‘ã */
+	POINT	m_pos;						/* åº§æ¨™ */
 } CPacketCHAR_MOVEPOS, *PCPacketCHAR_MOVEPOS;
 
 /* Copyright(C)URARA-works 2007 */

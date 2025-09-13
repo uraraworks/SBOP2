@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcITEM.cpp									 */
-/* “à—e			:ƒT[ƒo[ƒƒCƒ“ƒtƒŒ[ƒ€(ƒAƒCƒeƒ€ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcITEM.cpp									 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚¢ã‚¤ãƒ†ãƒ ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/16													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,27 +17,27 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM										 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Œn)											 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç³»)											 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_ITEM_REQ_ITEMINFO:		RecvProcITEM_REQ_ITEMINFO		(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€î•ñ—v‹ */
-	case SBOCOMMANDID_SUB_ITEM_RENEWITEMINFO:		RecvProcITEM_RENEWITEMINFO		(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€î•ñXV */
-	case SBOCOMMANDID_SUB_ITEM_REQ_ITEMTYPEINFO:	RecvProcITEM_REQ_ITEMTYPEINFO	(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñ—v‹ */
-	case SBOCOMMANDID_SUB_ITEM_RENEWITEMTYPEINFO:	RecvProcITEM_RENEWITEMTYPEINFO	(pData, dwSessionID);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñXV */
-	case SBOCOMMANDID_SUB_ITEM_REQ_ITEMWEAPONINFO:	RecvProcITEM_REQ_ITEMWEAPONINFO	(pData, dwSessionID);	break;	/* •Šíî•ñ—v‹ */
+	case SBOCOMMANDID_SUB_ITEM_REQ_ITEMINFO:		RecvProcITEM_REQ_ITEMINFO		(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ITEM_RENEWITEMINFO:		RecvProcITEM_RENEWITEMINFO		(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ITEM_REQ_ITEMTYPEINFO:	RecvProcITEM_REQ_ITEMTYPEINFO	(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¦æ±‚ */
+	case SBOCOMMANDID_SUB_ITEM_RENEWITEMTYPEINFO:	RecvProcITEM_RENEWITEMTYPEINFO	(pData, dwSessionID);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ›´æ–° */
+	case SBOCOMMANDID_SUB_ITEM_REQ_ITEMWEAPONINFO:	RecvProcITEM_REQ_ITEMWEAPONINFO	(pData, dwSessionID);	break;	/* æ­¦å™¨æƒ…å ±è¦æ±‚ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_REQ_ITEMINFO							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñ—v‹)										 */
-/* “ú•t		:2007/08/16														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_REQ_ITEMINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±è¦æ±‚)										 */
+/* æ—¥ä»˜		:2007/08/16														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_REQ_ITEMINFO(PBYTE pData, DWORD dwSessionID)
@@ -51,7 +51,7 @@ void CMainFrame::RecvProcITEM_REQ_ITEMINFO(PBYTE pData, DWORD dwSessionID)
 	pPacket = NULL;
 	Packet.Set (pData);
 
-	/* ‘S‚ÄH */
+	/* å…¨ã¦ï¼Ÿ */
 	if (Packet.m_dwItemID == 0) {
 		PacketITEM_ITEMINFO.Make (m_pLibInfoItem);
 		pPacket = &PacketITEM_ITEMINFO;
@@ -71,9 +71,9 @@ void CMainFrame::RecvProcITEM_REQ_ITEMINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_RENEWITEMINFO							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñXV)										 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_RENEWITEMINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–°)										 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_RENEWITEMINFO(PBYTE pData, DWORD dwSessionID)
@@ -99,9 +99,9 @@ void CMainFrame::RecvProcITEM_RENEWITEMINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_REQ_ITEMTYPEINFO						 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñ—v‹)									 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_REQ_ITEMTYPEINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±è¦æ±‚)									 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_REQ_ITEMTYPEINFO(PBYTE pData, DWORD dwSessionID)
@@ -115,7 +115,7 @@ void CMainFrame::RecvProcITEM_REQ_ITEMTYPEINFO(PBYTE pData, DWORD dwSessionID)
 	pPacket = NULL;
 	Packet.Set (pData);
 
-	/* ‘S‚ÄH */
+	/* å…¨ã¦ï¼Ÿ */
 	if (Packet.m_dwTypeID == 0) {
 		PacketITEM_ITEMTYPEINFO.Make (m_pLibInfoItemType);
 		pPacket = &PacketITEM_ITEMTYPEINFO;
@@ -134,9 +134,9 @@ void CMainFrame::RecvProcITEM_REQ_ITEMTYPEINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_RENEWITEMTYPEINFO						 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñXV)									 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_RENEWITEMTYPEINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ›´æ–°)									 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_RENEWITEMTYPEINFO(PBYTE pData, DWORD dwSessionID)
@@ -161,9 +161,9 @@ void CMainFrame::RecvProcITEM_RENEWITEMTYPEINFO(PBYTE pData, DWORD dwSessionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_REQ_ITEMWEAPONINFO					 */
-/* “à—e		:ŽóMˆ—(•Šíî•ñ—v‹)											 */
-/* “ú•t		:2008/08/11														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_REQ_ITEMWEAPONINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ­¦å™¨æƒ…å ±è¦æ±‚)											 */
+/* æ—¥ä»˜		:2008/08/11														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_REQ_ITEMWEAPONINFO(PBYTE pData, DWORD dwSessionID)
@@ -177,7 +177,7 @@ void CMainFrame::RecvProcITEM_REQ_ITEMWEAPONINFO(PBYTE pData, DWORD dwSessionID)
 	pPacket = NULL;
 	Packet.Set (pData);
 
-	/* ‘S‚ÄH */
+	/* å…¨ã¦ï¼Ÿ */
 	if (Packet.m_dwWeaponInfoID == 0) {
 		PacketITEM_ITEMWEAPONINFO.Make (m_pLibInfoItemWeapon);
 		pPacket = &PacketITEM_ITEMWEAPONINFO;

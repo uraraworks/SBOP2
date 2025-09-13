@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LayerCharSelect.h											 */
-/* “à—e			:ƒŒƒCƒ„[•`‰æƒNƒ‰ƒX(ƒLƒƒƒ‰‘I‘ğ) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2005/07/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LayerCharSelect.h											 */
+/* å†…å®¹			:ãƒ¬ã‚¤ãƒ¤ãƒ¼æç”»ã‚¯ãƒ©ã‚¹(ã‚­ãƒ£ãƒ©é¸æŠ) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/07/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,33 +14,33 @@ class CImg32;
 class CInfoAccount;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CLayerCharSelect : public CLayerBase
 {
 public:
-			CLayerCharSelect();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CLayerCharSelect();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CLayerCharSelect();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CLayerCharSelect();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create			(CMgrData *pMgrData, DWORD dwAccountID);	/* ì¬ */
-	void	Draw			(CImg32 *pDst);								/* •`‰æ */
-	BOOL	TimerProc		(void);										/* ŠÔˆ— */
+	void	Create			(CMgrData *pMgrData, DWORD dwAccountID);	/* ä½œæˆ */
+	void	Draw			(CImg32 *pDst);								/* æç”» */
+	BOOL	TimerProc		(void);										/* æ™‚é–“å‡¦ç† */
 
-	void	SetSelect		(int nNo);									/* ‘I‘ğˆÊ’u‚ğİ’è */
-	DWORD	GetSelectCharID	(void);										/* ‘I‘ğ’†‚ÌƒLƒƒƒ‰ID‚ğæ“¾ */
-
-
-private:
-	void DrawFrame			(CImg32 *pDst, int x, int y, int cx, int cy, int nType);	/* ƒtƒŒ[ƒ€‚ğ•`‰æ */
+	void	SetSelect		(int nNo);									/* é¸æŠä½ç½®ã‚’è¨­å®š */
+	DWORD	GetSelectCharID	(void);										/* é¸æŠä¸­ã®ã‚­ãƒ£ãƒ©IDã‚’å–å¾— */
 
 
 private:
-	int				m_nSelect;						/* ‘I‘ğˆÊ’u */
-	BYTE			m_byAnime;						/* ƒAƒjƒ[ƒVƒ‡ƒ“”Ô† */
-	DWORD			m_dwTimeLastAnime;				/* ‘O‰ñ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ˆ—ŠÔ */
+	void DrawFrame			(CImg32 *pDst, int x, int y, int cx, int cy, int nType);	/* ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’æç”» */
 
-	CInfoAccount	*m_pInfoAccount;				/* ƒAƒJƒEƒ“ƒgî•ñ */
+
+private:
+	int				m_nSelect;						/* é¸æŠä½ç½® */
+	BYTE			m_byAnime;						/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå· */
+	DWORD			m_dwTimeLastAnime;				/* å‰å›ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å‡¦ç†æ™‚é–“ */
+
+	CInfoAccount	*m_pInfoAccount;				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ± */
 } CLayerCharSelect, *PCLayerCharSelect;
 
 /* Copyright(C)URARA-works 2005 */

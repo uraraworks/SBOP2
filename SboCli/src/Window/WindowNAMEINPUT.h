@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowNAMEINPUT.h											 */
-/* “à—e			:–¼‘O“ü—ÍƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowNAMEINPUT.h											 */
+/* å†…å®¹			:åå‰å…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -18,35 +18,35 @@ class CWindowCHARNAME;
 class CInfoCharCli;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowNAMEINPUT : public CWindowBase
 {
 public:
-			CWindowNAMEINPUT();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowNAMEINPUT();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowNAMEINPUT();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowNAMEINPUT();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(CMgrData *pMgrData);						/* ì¬ */
-	void	OnWindowMsg	(int nType, DWORD dwPara);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG) */
-	void	Draw		(CImg32 *pDst);								/* •`‰æ */
-	BOOL	TimerProc	(void);										/* ŽžŠÔˆ— */
+	void	Create		(CMgrData *pMgrData);						/* ä½œæˆ */
+	void	OnWindowMsg	(int nType, DWORD dwPara);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG) */
+	void	Draw		(CImg32 *pDst);								/* æç”» */
+	BOOL	TimerProc	(void);										/* æ™‚é–“å‡¦ç† */
 
 
 private:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Y) */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Y) */
 
 
 public:
-	CMgrWindow			*m_pMgrWindow;				/* ƒEƒBƒ“ƒhƒEƒ}ƒl[ƒWƒƒ */
-	CMgrDraw			*m_pMgrDraw;				/* •`‰æƒ}ƒl[ƒWƒƒ */
-	CWindowCHARNAME		*m_pWindowCHARNAME;			/* ƒLƒƒƒ‰–¼“ü—ÍƒEƒBƒ“ƒhƒE */
-	CInfoCharCli		*m_pInfoCharCli;			/* ì¬’†‚ÌƒLƒƒƒ‰î•ñ */
+	CMgrWindow			*m_pMgrWindow;				/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒžãƒãƒ¼ã‚¸ãƒ£ */
+	CMgrDraw			*m_pMgrDraw;				/* æç”»ãƒžãƒãƒ¼ã‚¸ãƒ£ */
+	CWindowCHARNAME		*m_pWindowCHARNAME;			/* ã‚­ãƒ£ãƒ©åå…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CInfoCharCli		*m_pInfoCharCli;			/* ä½œæˆä¸­ã®ã‚­ãƒ£ãƒ©æƒ…å ± */
 } CWindowNAMEINPUT, *PCWindowNAMEINPUT;
 
 /* Copyright(C)URARA-works 2007 */

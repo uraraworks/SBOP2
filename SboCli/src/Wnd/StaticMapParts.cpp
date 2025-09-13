@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StaticMapParts.cpp											 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒcˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StaticMapParts.cpp											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/10													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CStaticMapParts, CStatic)
@@ -36,9 +36,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::CStaticMapParts								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::CStaticMapParts								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 CStaticMapParts::CStaticMapParts()
@@ -58,9 +58,9 @@ CStaticMapParts::CStaticMapParts()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::~CStaticMapParts								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::~CStaticMapParts								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 CStaticMapParts::~CStaticMapParts()
@@ -70,9 +70,9 @@ CStaticMapParts::~CStaticMapParts()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 BOOL CStaticMapParts::Create(CWnd *pParent, CMgrData *pMgrData)
@@ -89,9 +89,9 @@ BOOL CStaticMapParts::Create(CWnd *pParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::Renew											 */
-/* “à—e		:ƒp[ƒcˆê——‰æ‘œ‚ğì¬‚µ‚ÄÄ•`‰æ									 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::Renew											 */
+/* å†…å®¹		:ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒã‚’ä½œæˆã—ã¦å†æç”»									 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 void CStaticMapParts::Renew(void)
@@ -102,9 +102,9 @@ void CStaticMapParts::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::SetScrollPos									 */
-/* “à—e		:cƒXƒNƒ[ƒ‹ˆÊ’u‚ğİ’è											 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::SetScrollPos									 */
+/* å†…å®¹		:ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 void CStaticMapParts::SetScrollPos(int nPos)
@@ -115,9 +115,9 @@ void CStaticMapParts::SetScrollPos(int nPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::OnLButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::OnLButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 void CStaticMapParts::OnLButtonDown(CPoint point)
@@ -126,9 +126,9 @@ void CStaticMapParts::OnLButtonDown(CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::OnRButtonDown									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::OnRButtonDown									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 void CStaticMapParts::OnRButtonDown(CPoint point)
@@ -137,9 +137,9 @@ void CStaticMapParts::OnRButtonDown(CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::OnMouseWheel									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::OnMouseWheel									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 void CStaticMapParts::OnMouseWheel(short zDelta, CPoint pt)
@@ -148,9 +148,9 @@ void CStaticMapParts::OnMouseWheel(short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::OnMouseMove									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/25														 */
+/* é–¢æ•°å	:CStaticMapParts::OnMouseMove									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/04/25														 */
 /* ========================================================================= */
 
 void CStaticMapParts::OnMouseMove(CPoint point)
@@ -169,9 +169,9 @@ void CStaticMapParts::OnMouseMove(CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::OnCreate										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::OnCreate										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 int CStaticMapParts::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -185,9 +185,9 @@ int CStaticMapParts::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::OnPaint										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::OnPaint										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 void CStaticMapParts::OnPaint()
@@ -224,9 +224,9 @@ void CStaticMapParts::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::OnSize										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/05/10														 */
+/* é–¢æ•°å	:CStaticMapParts::OnSize										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_SIZE)									 */
+/* æ—¥ä»˜		:2007/05/10														 */
 /* ========================================================================= */
 
 void CStaticMapParts::OnSize(UINT nType, int cx, int cy)
@@ -238,9 +238,9 @@ void CStaticMapParts::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CStaticMapParts::MakePartsImage								 */
-/* “à—e		:ƒp[ƒcˆê——‰æ‘œ‚ğì¬											 */
-/* “ú•t		:2007/04/25														 */
+/* é–¢æ•°å	:CStaticMapParts::MakePartsImage								 */
+/* å†…å®¹		:ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒã‚’ä½œæˆ											 */
+/* æ—¥ä»˜		:2007/04/25														 */
 /* ========================================================================= */
 
 void CStaticMapParts::MakePartsImage(void)

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkEventMSG.cpp									 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgİ’è(ƒƒbƒZ[ƒW•\¦)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkEventMSG.cpp									 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š(ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/23													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventMSG::DoDataExchange(CDataExchange* pDX)
@@ -40,9 +40,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/23														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/23														 */
 /* ========================================================================= */
 
 CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG(CWnd* pParent /*=NULL*/)
@@ -57,9 +57,9 @@ CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/23														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/23														 */
 /* ========================================================================= */
 
 CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG()
@@ -68,9 +68,9 @@ CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventMSG::Set										 */
-/* “à—e		:İ’è‚©‚ç‰æ–Ê‚É”½‰f												 */
-/* “ú•t		:2008/12/26														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventMSG::Set										 */
+/* å†…å®¹		:è¨­å®šã‹ã‚‰ç”»é¢ã«åæ˜ 												 */
+/* æ—¥ä»˜		:2008/12/26														 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventMSG::Set(CInfoTalkEventBase *pSrc)
@@ -82,9 +82,9 @@ void CDlgAdminTalkEventMSG::Set(CInfoTalkEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventMSG::Get										 */
-/* “à—e		:‰æ–Ê‚©‚çİ’è‚É”½‰f												 */
-/* “ú•t		:2008/12/26														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventMSG::Get										 */
+/* å†…å®¹		:ç”»é¢ã‹ã‚‰è¨­å®šã«åæ˜ 												 */
+/* æ—¥ä»˜		:2008/12/26														 */
 /* ========================================================================= */
 
 void CDlgAdminTalkEventMSG::Get(CInfoTalkEventBase *pDst)
@@ -96,9 +96,9 @@ void CDlgAdminTalkEventMSG::Get(CInfoTalkEventBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminTalkEventMSG::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/12/23														 */
+/* é–¢æ•°å	:CDlgAdminTalkEventMSG::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/12/23														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminTalkEventMSG::OnInitDialog()

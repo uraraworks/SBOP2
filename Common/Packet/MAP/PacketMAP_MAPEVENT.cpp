@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPEVENT.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPEVENT.cpp										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/25													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -13,9 +13,9 @@
 #include "PacketMAP_MAPEVENT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPEVENT::CPacketMAP_MAPEVENT						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketMAP_MAPEVENT::CPacketMAP_MAPEVENT						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPEVENT::CPacketMAP_MAPEVENT()
@@ -25,9 +25,9 @@ CPacketMAP_MAPEVENT::CPacketMAP_MAPEVENT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPEVENT::~CPacketMAP_MAPEVENT						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketMAP_MAPEVENT::~CPacketMAP_MAPEVENT						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPEVENT::~CPacketMAP_MAPEVENT()
@@ -37,14 +37,14 @@ CPacketMAP_MAPEVENT::~CPacketMAP_MAPEVENT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPEVENT::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketMAP_MAPEVENT::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPEVENT::Make(
-	DWORD dwMapID,					/* [in] ƒ}ƒbƒvID */
-	CLibInfoMapEvent *pLibInfo)		/* [in] ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
+	DWORD dwMapID,					/* [in] ãƒãƒƒãƒ—ID */
+	CLibInfoMapEvent *pLibInfo)		/* [in] ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -65,8 +65,8 @@ void CPacketMAP_MAPEVENT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_MAPEVENT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwMapID, sizeof (dwMapID), pDataTmp);	/* ƒ}ƒbƒvID */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
+	CopyMemoryRenew (pDataTmp, &dwMapID, sizeof (dwMapID), pDataTmp);	/* ãƒãƒƒãƒ—ID */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -75,14 +75,14 @@ void CPacketMAP_MAPEVENT::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPEVENT::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketMAP_MAPEVENT::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPEVENT::Make(
-	DWORD dwMapID,					/* [in] ƒ}ƒbƒvID */
-	CInfoMapEventBase *pInfo)		/* [in] ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
+	DWORD dwMapID,					/* [in] ãƒãƒƒãƒ—ID */
+	CInfoMapEventBase *pInfo)		/* [in] ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 {
 	PCInfoMapEventBase pInfoTmp;
 	CLibInfoMapEvent LibInfoMapEvent;
@@ -98,9 +98,9 @@ void CPacketMAP_MAPEVENT::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPEVENT::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/06/25														 */
+/* é–¢æ•°å	:CPacketMAP_MAPEVENT::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/25														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_MAPEVENT::Set(PBYTE pPacket)
@@ -110,7 +110,7 @@ PBYTE CPacketMAP_MAPEVENT::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ƒ}ƒbƒvID */
+	CopyMemoryRenew (&m_dwMapID, pDataTmp, sizeof (m_dwMapID), pDataTmp);	/* ãƒãƒƒãƒ—ID */
 
 	SAFE_DELETE (m_pLibInfo);
 	m_pLibInfo	= new CLibInfoMapEvent;

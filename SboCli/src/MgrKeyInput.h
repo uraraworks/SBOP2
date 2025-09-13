@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrKeyInput.h												 */
-/* “à—e			:ƒL[“ü—ÍŠÇ—ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrKeyInput.h												 */
+/* å†…å®¹			:ã‚­ãƒ¼å…¥åŠ›ç®¡ç†ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,38 +11,38 @@
 class CDInputUtil;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CMgrKeyInput
 {
 public:
-			CMgrKeyInput();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMgrKeyInput();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMgrKeyInput();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMgrKeyInput();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create		(void);								/* ì¬ */
-	void	Destroy		(void);								/* ”jŠü */
+	void	Create		(void);								/* ä½œæˆ */
+	void	Destroy		(void);								/* ç ´æ£„ */
 
-	void	Renew		(BYTE &byCode, BOOL &bDown);		/* ó‘ÔXV */
-	void	Reset		(void);								/* ‰Šú‰» */
-	BOOL	IsInput		(BYTE byCode);						/* ‰Ÿ‰º”»’è */
+	void	Renew		(BYTE &byCode, BOOL &bDown);		/* çŠ¶æ…‹æ›´æ–° */
+	void	Reset		(void);								/* åˆæœŸåŒ– */
+	BOOL	IsInput		(BYTE byCode);						/* æŠ¼ä¸‹åˆ¤å®š */
 
-	/* ƒWƒ‡ƒCƒpƒbƒhŠÖ˜A */
-	void	SetDevice		(int nNo, HWND hWnd);			/* g—pƒfƒoƒCƒX‚ğİ’è */
-	void	SetDevice		(GUID &stSrc, HWND hWnd);		/* g—pƒfƒoƒCƒX‚ğİ’è */
-	void	Enum			(void);							/* ƒWƒ‡ƒCƒpƒbƒh‚ğ—ñ‹“ */
-	int		GetDeviceCount	(void);							/* ƒfƒoƒCƒX”‚ğæ“¾ */
-	BOOL	GetDeviceName	(int nNo, CmyString &strDst);	/* ƒfƒoƒCƒX–¼‚ğæ“¾ */
-	BOOL	GetGUID			(int nNo, GUID &stDst);			/* w’èƒfƒoƒCƒX‚ÌGUID‚ğæ“¾ */
+	/* ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰é–¢é€£ */
+	void	SetDevice		(int nNo, HWND hWnd);			/* ä½¿ç”¨ãƒ‡ãƒã‚¤ã‚¹ã‚’è¨­å®š */
+	void	SetDevice		(GUID &stSrc, HWND hWnd);		/* ä½¿ç”¨ãƒ‡ãƒã‚¤ã‚¹ã‚’è¨­å®š */
+	void	Enum			(void);							/* ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰ã‚’åˆ—æŒ™ */
+	int		GetDeviceCount	(void);							/* ãƒ‡ãƒã‚¤ã‚¹æ•°ã‚’å–å¾— */
+	BOOL	GetDeviceName	(int nNo, CmyString &strDst);	/* ãƒ‡ãƒã‚¤ã‚¹åã‚’å–å¾— */
+	BOOL	GetGUID			(int nNo, GUID &stDst);			/* æŒ‡å®šãƒ‡ãƒã‚¤ã‚¹ã®GUIDã‚’å–å¾— */
 
 
 
 private:
-	BYTE		m_abyCode[256];					/* “ü—Íƒ`ƒFƒbƒN‚·‚éƒR[ƒh */
-	BYTE		m_abyKeyState[256];				/* ƒL[“ü—Íî•ñ */
-	BYTE		m_abyKeyStateBack[256];			/* ‘O‰ñ‚Ì“ü—Íó‘Ô */
+	BYTE		m_abyCode[256];					/* å…¥åŠ›ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚³ãƒ¼ãƒ‰ */
+	BYTE		m_abyKeyState[256];				/* ã‚­ãƒ¼å…¥åŠ›æƒ…å ± */
+	BYTE		m_abyKeyStateBack[256];			/* å‰å›ã®å…¥åŠ›çŠ¶æ…‹ */
 
-	CDInputUtil	*m_pDInputUtil;					/* DirectInputƒ†[ƒeƒBƒŠƒeƒB */
+	CDInputUtil	*m_pDInputUtil;					/* DirectInputãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ */
 } CMgrKeyInput, *PCMgrKeyInput;
 
 /* Copyright(C)URARA-works 2006 */

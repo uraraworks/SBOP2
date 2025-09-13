@@ -1,31 +1,31 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MakeFileListDlg.h											 */
-/* “à—e			:ƒƒCƒ“ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/08/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MakeFileListDlg.h											 */
+/* å†…å®¹			:ãƒ¡ã‚¤ãƒ³ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/26													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CMakeFileListDlg : public CDialog
 {
 public:
-	CMakeFileListDlg(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
+	CMakeFileListDlg(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
 protected:
-	void	ReadIniFile		(void);						/* iniƒtƒ@ƒCƒ‹“Ç‚İ‚İ */
-	void	MakeHashList	(void);						/* ƒtƒ@ƒCƒ‹ƒnƒbƒVƒ…ƒŠƒXƒgì¬ */
+	void	ReadIniFile		(void);						/* iniãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ */
+	void	MakeHashList	(void);						/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒƒã‚·ãƒ¥ãƒªã‚¹ãƒˆä½œæˆ */
 
 
 protected:
-	CStringArray	m_astrFileList,				/* ƒtƒ@ƒCƒ‹ƒŠƒXƒg */
-					m_astrHashList;				/* ƒtƒ@ƒCƒ‹ƒnƒbƒVƒ…ƒŠƒXƒg */
+	CStringArray	m_astrFileList,				/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ */
+					m_astrHashList;				/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒƒã‚·ãƒ¥ãƒªã‚¹ãƒˆ */
 
 
 
@@ -36,7 +36,7 @@ public:
 
 	//{{AFX_VIRTUAL(CMakeFileListDlg)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV ‚ÌƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV ã®ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

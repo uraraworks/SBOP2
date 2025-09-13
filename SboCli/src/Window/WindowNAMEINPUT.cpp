@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowNAMEINPUT.cpp										 */
-/* “à—e			:–¼‘O“ü—ÍƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowNAMEINPUT.cpp										 */
+/* å†…å®¹			:åå‰å…¥åŠ›ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/10													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,9 +20,9 @@
 #include "WindowNAMEINPUT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::CWindowNAMEINPUT								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::CWindowNAMEINPUT								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 CWindowNAMEINPUT::CWindowNAMEINPUT()
@@ -44,9 +44,9 @@ CWindowNAMEINPUT::CWindowNAMEINPUT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::~CWindowNAMEINPUT							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::~CWindowNAMEINPUT							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 CWindowNAMEINPUT::~CWindowNAMEINPUT()
@@ -56,9 +56,9 @@ CWindowNAMEINPUT::~CWindowNAMEINPUT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 void CWindowNAMEINPUT::Create(CMgrData *pMgrData)
@@ -81,15 +81,15 @@ void CWindowNAMEINPUT::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::OnWindowMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG)								 */
-/* “ú•t		:2007/04/11														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::OnWindowMsg									 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG)								 */
+/* æ—¥ä»˜		:2007/04/11														 */
 /* ========================================================================= */
 
 void CWindowNAMEINPUT::OnWindowMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case WINDOWTYPE_CHARNAME:		/* ƒLƒƒƒ‰–¼“ü—Í */
+	case WINDOWTYPE_CHARNAME:		/* ã‚­ãƒ£ãƒ©åå…¥åŠ› */
 		m_pInfoCharCli->m_strCharName = m_pWindowCHARNAME->m_strName;
 		m_pMgrWindow->Delete (WINDOWTYPE_CHARNAME);
 		m_pWindowCHARNAME = NULL;
@@ -100,9 +100,9 @@ void CWindowNAMEINPUT::OnWindowMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::Draw											 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::Draw											 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 void CWindowNAMEINPUT::Draw(PCImg32 pDst)
@@ -128,11 +128,11 @@ void CWindowNAMEINPUT::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 88,	24,		"V‹KƒLƒƒƒ‰ƒNƒ^[ì¬", clText);
-	TextOut4 (hDC, 136,	48,		"–¼‘O“ü—Í", clText);
-	TextOut4 (hDC, 112,	216,	"ƒLƒƒƒ‰ƒNƒ^[–¼", clText);
-	TextOut4 (hDC, 148,	288,	"“o˜^", clText);
-	TextOut4 (hDC, 256,	288,	"‚R^‚R", clText);
+	TextOut4 (hDC, 88,	24,		"æ–°è¦ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ä½œæˆ", clText);
+	TextOut4 (hDC, 136,	48,		"åå‰å…¥åŠ›", clText);
+	TextOut4 (hDC, 112,	216,	"ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼å", clText);
+	TextOut4 (hDC, 148,	288,	"ç™»éŒ²", clText);
+	TextOut4 (hDC, 256,	288,	"ï¼“ï¼ï¼“", clText);
 	TextOut2 (hDC, 108, 240 - 2, m_pInfoCharCli->m_strCharName, clText);
 
 	SelectObject (hDC, hFontOld);
@@ -149,9 +149,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::TimerProc									 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::TimerProc									 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowNAMEINPUT::TimerProc(void)
@@ -175,9 +175,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::OnUp											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::OnUp											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowNAMEINPUT::OnUp(void)
@@ -200,9 +200,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::OnDown										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::OnDown										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowNAMEINPUT::OnDown(void)
@@ -225,9 +225,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::OnLeft										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::OnLeft										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowNAMEINPUT::OnLeft(void)
@@ -241,9 +241,9 @@ BOOL CWindowNAMEINPUT::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::OnRight										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::OnRight										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowNAMEINPUT::OnRight(void)
@@ -257,9 +257,9 @@ BOOL CWindowNAMEINPUT::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowNAMEINPUT::OnX(BOOL bDown)
@@ -273,18 +273,18 @@ BOOL CWindowNAMEINPUT::OnX(BOOL bDown)
 	}
 
 	switch (m_nPos) {
-	case 0:	/* –¼‘O */
+	case 0:	/* åå‰ */
 		m_pMgrWindow->MakeWindowCHARNAME ();
 		m_pWindowCHARNAME = (PCWindowCHARNAME)m_pMgrWindow->GetWindow (WINDOWTYPE_CHARNAME);
 		break;
-	case 1:	/* “o˜^ */
+	case 1:	/* ç™»éŒ² */
 		if (m_pInfoCharCli->m_strCharName.IsEmpty ()) {
-			m_pMgrWindow->MakeWindowMSG ("–¼‘O‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢", 3000);
+			m_pMgrWindow->MakeWindowMSG ("åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„", 3000);
 			break;
 		}
 		bResult = LibInfoChar.NameCheck (m_pInfoCharCli->m_strCharName);
 		if (bResult == FALSE) {
-			m_pMgrWindow->MakeWindowMSG ("–¼‘O‚É‹ó”’‚ÍŽg‚¦‚Ü‚¹‚ñ", 3000);
+			m_pMgrWindow->MakeWindowMSG ("åå‰ã«ç©ºç™½ã¯ä½¿ãˆã¾ã›ã‚“", 3000);
 			break;
 		}
 		PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 0);
@@ -299,9 +299,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowNAMEINPUT::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/04/10														 */
+/* é–¢æ•°å	:CWindowNAMEINPUT::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/04/10														 */
 /* ========================================================================= */
 
 BOOL CWindowNAMEINPUT::OnZ(BOOL bDown)

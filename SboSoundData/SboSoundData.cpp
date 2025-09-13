@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboSoundData.cpp											 */
-/* “à—e			:‰¹ŠÖ˜ADLL ŽÀ‘•ƒtƒ@ƒCƒ‹										 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/05/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboSoundData.cpp											 */
+/* å†…å®¹			:éŸ³é–¢é€£DLL å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«										 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/03													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -13,115 +13,115 @@
 #include "SboSoundData.h"
 
 /* ========================================================================= */
-/* \‘¢‘Ì‚Ì’è‹`																 */
+/* æ§‹é€ ä½“ã®å®šç¾©																 */
 /* ========================================================================= */
 
-/* Œø‰Ê‰¹î•ñ */
+/* åŠ¹æžœéŸ³æƒ…å ± */
 typedef struct _SOUNDDATAINFO {
-	DWORD	dwSoundID;			/* Œø‰Ê‰¹ID */
-	int		nResourceID;		/* ƒŠƒ\[ƒXID */
-	LPCSTR	pszSoundName;		/* Œø‰Ê‰¹–¼ */
+	DWORD	dwSoundID;			/* åŠ¹æžœéŸ³ID */
+	int		nResourceID;		/* ãƒªã‚½ãƒ¼ã‚¹ID */
+	LPCSTR	pszSoundName;		/* åŠ¹æžœéŸ³å */
 } SOUNDDATAINFO, *PSOUNDDATAINFO;
 
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 static SOUNDDATAINFO g_aSoundDataTbl[] = {
-	SOUNDID_OK_PI73,			IDR_WAVE_PI73,			"Œˆ’è‰¹(pi73.wav)",
-	SOUNDID_FOOT_ASI_2,			IDR_WAVE_ASI_2,			"‘«‰¹(asi_2.wav)",
-	SOUNDID_CURSORMOVE,			IDR_WAVE_SELECT,		"ƒJ[ƒ\ƒ‹ˆÚ“®",
-	SOUNDID_CANCEL,				IDR_WAVE_PUSH51_C,		"ƒLƒƒƒ“ƒZƒ‹",
-	SOUNDID_CHARI14_A,			IDR_WAVE_CHARI14_A,		"í“¬ŠJŽn",
-	SOUNDID_SWING24_C,			IDR_WAVE_SWING24_C,		"•ŠíU‚è",
-	SOUNDID_SWING25_C,			IDR_WAVE_SWING25_C,		"•Ší“Ë‚«",
-	SOUNDID_HIT0,				IDR_WAVE_HIT0,			"ƒqƒbƒg0",
-	SOUNDID_HIT1,				IDR_WAVE_HIT1,			"ƒqƒbƒg1",
-	SOUNDID_DROP_MONEY,			IDR_WAVE_MONEY,			"ƒhƒƒbƒv:‚¨‹à",
-	SOUNDID_DROP_ITEM_SMALL,	IDR_WAVE_ITEM_SMALL,	"ƒhƒƒbƒv:¬ƒAƒCƒeƒ€",
-	SOUNDID_DROP_ITEM_MIDIUM,	IDR_WAVE_ITEM_MIDIUM,	"ƒhƒƒbƒv:’†ƒAƒCƒeƒ€",
-	SOUNDID_DROP_ITEM_LARGE,	IDR_WAVE_ITEM_LARGE,	"ƒhƒƒbƒv:‘åƒAƒCƒeƒ€",
-	SOUNDID_DROP_MATERIAL,		IDR_WAVE_MATERIAL,		"ƒhƒƒbƒv:‘fÞ",
-	SOUNDID_DROP_WEAPON,		IDR_WAVE_WEAPON,		"ƒhƒƒbƒv:•Ší",
-	SOUNDID_DROP_CLOTH,			IDR_WAVE_CLOTH,			"ƒhƒƒbƒv:•žEƒ[ƒu",
-	SOUNDID_CRASH20_D,			IDR_WAVE_CRASH20_D,		"’M‚ª‰ó‚ê‚é‰¹",
-	SOUNDID_KUSA,				IDR_WAVE_KUSA,			"‘‚ðŠ ‚é‰¹",
-	SOUNDID_KAI,				IDR_WAVE_KAI,			"ŠL‚ª‰ó‚ê‚é‰¹",
-	SOUNDID_CHAT,				IDR_WAVE_CHAT,			"ƒ`ƒƒƒbƒg",
-	SOUNDID_W_CHAT,				IDR_WAVE_W_CHAT,		"ƒAƒiƒEƒ“ƒX",
-	SOUNDID_CLAP02,				IDR_WAVE_CLAP02,		"”Žè2",
-	SOUNDID_CLAP03,				IDR_WAVE_CLAP03,		"”Žè3",
-	SOUNDID_CLAP0203,			IDR_WAVE_CLAP02,		"”Žè2‚©”Žè3",
-	SOUNDID_BALLOON1,			IDR_WAVE_BALLOON1,		"•¬o‚µ",
-	SOUNDID_BIKKURI,			IDR_WAVE_BIKKURI,		"‚Ñ‚Á‚­‚è",
-	SOUNDID_WHISTLES,			IDR_WAVE_WHISTLES,		"ƒzƒCƒbƒXƒ‹‚r",
-	SOUNDID_WHISTLEL,			IDR_WAVE_WHISTLEL,		"ƒzƒCƒbƒXƒ‹‚k",
-	SOUNDID_GIMON,				IDR_WAVE_GIMON,			"‹^–â",
-	SOUNDID_NIKU,				IDR_WAVE_NIKU,			"“÷",
-	SOUNDID_KIZUKU,				IDR_WAVE_KIZUKU,		"‹C•t‚­",
-	SOUNDID_PINPONPANPON,		IDR_PINPONPANPON,		"•ú‘—‘O‚Ì‚¨’m‚ç‚¹‰¹",
-	SOUNDID_SWOON,				IDR_WAVE_SWOON,			"‹Câ",
-	SOUNDID_URARA_WORKS,		IDR_WAVE_URARA_WORKS,	"ƒEƒ‰ƒ‰ƒ[ƒNƒX",
-	SOUNDID_PUYON_ATACK,		IDR_WAVE_PUYON_ATACK,	"ƒvƒˆƒ“UŒ‚",
-	SOUNDID_LIQUID,				IDR_WAVE_LIQUID,		"‰t‘Ì",
-	SOUNDID_BOW_ATACK,			IDR_WAVE_BOW_ATACK,		"‹|UŒ‚",
-	SOUNDID_MEAL,				IDR_WAVE_MEAL,			"HŽ–",
-	SOUNDID_DEFENSE,			IDR_WAVE_DEFENSE,		"–hŒä",
-	SOUNDID_SHIELD,				IDR_WAVE_SHIELD,		"‚\‚¦",
-	SOUNDID_PUYON_MOVE,			IDR_WAVE_PUYON_MOVE,	"ƒvƒˆƒ“ˆÚ“®",
-	SOUNDID_PUYON_DEAD,			IDR_WAVE_PUYON_DEAD,	"ƒvƒˆƒ“Ž€–S",
-	SOUNDID_EXIST,				IDR_WAVE_EXIST,			"Á–Å",
-	SOUNDID_TRASH,				IDR_WAVE_TRASH,			"ƒSƒ~” ŠJ‚­EŽÌ‚Ä‚é",
-	SOUNDID_DROP_BIN,			IDR_WAVE_DROP_BIN,		"ƒhƒƒbƒvFƒrƒ“",
-	SOUNDID_OPEN_BAG,			IDR_WAVE_OPEN_BAG,		"ƒoƒbƒOŠJ‚­",
-	SOUNDID_MISS,				IDR_WAVE_MISS,			"ƒ~ƒX",
-	SOUNDID_LVUP,				IDR_WAVE_LVUP,			"ƒŒƒxƒ‹ƒAƒbƒv",
-	SOUNDID_CRITICAL1,			IDR_WAVE_CRITICAL1,		"ŽaŒ‚ƒNƒŠƒeƒBƒJƒ‹",
-	SOUNDID_HIT2,				IDR_WAVE_HIT2,			"ŽaŒ‚ƒqƒbƒg‚P",
-	SOUNDID_HIT3,				IDR_WAVE_HIT3,			"ŽaŒ‚ƒqƒbƒg‚Q",
-	SOUNDID_OPEN_WINDOW,		IDR_WAVE_OPEN_WINDOW,	"‘‹ŠJ‚­",
-	SOUNDID_CRITICAL2,			IDR_WAVE_CRITICAL2,		"‘ÅŒ‚ƒNƒŠƒeƒBƒJƒ‹",
-	SOUNDID_CRITICAL3,			IDR_WAVE_CRITICAL3,		"–îƒNƒŠƒeƒBƒJƒ‹",
-	SOUNDID_HIT4,				IDR_WAVE_HIT4,			"–îƒqƒbƒg",
-	SOUNDID_CHARGE,				IDR_WAVE_CHARGE,		"—­‚ß",
-	SOUNDID_CHARGE2,			IDR_WAVE_CHARGE2,		"—­‚ß‚Q",
-	SOUNDID_DR_BASS01,			IDR_WAVE_DR_BASS01,		"ƒx[ƒX‚P",
-	SOUNDID_DR_BASS02,			IDR_WAVE_DR_BASS02,		"ƒx[ƒX‚Q",
-	SOUNDID_DR_BASS05,			IDR_WAVE_DR_BASS05,		"ƒx[ƒX‚T",
-	SOUNDID_DR_CLAP01,			IDR_WAVE_DR_CLAP01,		"ƒNƒ‰ƒbƒv‚P",
-	SOUNDID_DR_SNE02,			IDR_WAVE_DR_SNE02,		"ƒXƒlƒA‚Q",
-	SOUNDID_KIE_ATACK,			IDR_WAVE_KIE_ATACK,		"ƒL[UŒ‚",
-	SOUNDID_KIE_DEAD,			IDR_WAVE_KIE_DEAD,		"ƒL[Ž€–S",
-	SOUNDID_FLY,				IDR_WAVE_FLY,			"‰H‚Î‚½‚«",
-	SOUNDID_STEP03,				IDR_WAVE_STEP03,		"ŠK’iˆÚ“®",
+	SOUNDID_OK_PI73,			IDR_WAVE_PI73,			"æ±ºå®šéŸ³(pi73.wav)",
+	SOUNDID_FOOT_ASI_2,			IDR_WAVE_ASI_2,			"è¶³éŸ³(asi_2.wav)",
+	SOUNDID_CURSORMOVE,			IDR_WAVE_SELECT,		"ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•",
+	SOUNDID_CANCEL,				IDR_WAVE_PUSH51_C,		"ã‚­ãƒ£ãƒ³ã‚»ãƒ«",
+	SOUNDID_CHARI14_A,			IDR_WAVE_CHARI14_A,		"æˆ¦é—˜é–‹å§‹",
+	SOUNDID_SWING24_C,			IDR_WAVE_SWING24_C,		"æ­¦å™¨æŒ¯ã‚Š",
+	SOUNDID_SWING25_C,			IDR_WAVE_SWING25_C,		"æ­¦å™¨çªã",
+	SOUNDID_HIT0,				IDR_WAVE_HIT0,			"ãƒ’ãƒƒãƒˆ0",
+	SOUNDID_HIT1,				IDR_WAVE_HIT1,			"ãƒ’ãƒƒãƒˆ1",
+	SOUNDID_DROP_MONEY,			IDR_WAVE_MONEY,			"ãƒ‰ãƒ­ãƒƒãƒ—:ãŠé‡‘",
+	SOUNDID_DROP_ITEM_SMALL,	IDR_WAVE_ITEM_SMALL,	"ãƒ‰ãƒ­ãƒƒãƒ—:å°ã‚¢ã‚¤ãƒ†ãƒ ",
+	SOUNDID_DROP_ITEM_MIDIUM,	IDR_WAVE_ITEM_MIDIUM,	"ãƒ‰ãƒ­ãƒƒãƒ—:ä¸­ã‚¢ã‚¤ãƒ†ãƒ ",
+	SOUNDID_DROP_ITEM_LARGE,	IDR_WAVE_ITEM_LARGE,	"ãƒ‰ãƒ­ãƒƒãƒ—:å¤§ã‚¢ã‚¤ãƒ†ãƒ ",
+	SOUNDID_DROP_MATERIAL,		IDR_WAVE_MATERIAL,		"ãƒ‰ãƒ­ãƒƒãƒ—:ç´ æ",
+	SOUNDID_DROP_WEAPON,		IDR_WAVE_WEAPON,		"ãƒ‰ãƒ­ãƒƒãƒ—:æ­¦å™¨",
+	SOUNDID_DROP_CLOTH,			IDR_WAVE_CLOTH,			"ãƒ‰ãƒ­ãƒƒãƒ—:æœãƒ»ãƒ­ãƒ¼ãƒ–",
+	SOUNDID_CRASH20_D,			IDR_WAVE_CRASH20_D,		"æ¨½ãŒå£Šã‚Œã‚‹éŸ³",
+	SOUNDID_KUSA,				IDR_WAVE_KUSA,			"è‰ã‚’åˆˆã‚‹éŸ³",
+	SOUNDID_KAI,				IDR_WAVE_KAI,			"è²ãŒå£Šã‚Œã‚‹éŸ³",
+	SOUNDID_CHAT,				IDR_WAVE_CHAT,			"ãƒãƒ£ãƒƒãƒˆ",
+	SOUNDID_W_CHAT,				IDR_WAVE_W_CHAT,		"ã‚¢ãƒŠã‚¦ãƒ³ã‚¹",
+	SOUNDID_CLAP02,				IDR_WAVE_CLAP02,		"æ‹æ‰‹2",
+	SOUNDID_CLAP03,				IDR_WAVE_CLAP03,		"æ‹æ‰‹3",
+	SOUNDID_CLAP0203,			IDR_WAVE_CLAP02,		"æ‹æ‰‹2ã‹æ‹æ‰‹3",
+	SOUNDID_BALLOON1,			IDR_WAVE_BALLOON1,		"å™´å‡ºã—",
+	SOUNDID_BIKKURI,			IDR_WAVE_BIKKURI,		"ã³ã£ãã‚Š",
+	SOUNDID_WHISTLES,			IDR_WAVE_WHISTLES,		"ãƒ›ã‚¤ãƒƒã‚¹ãƒ«ï¼³",
+	SOUNDID_WHISTLEL,			IDR_WAVE_WHISTLEL,		"ãƒ›ã‚¤ãƒƒã‚¹ãƒ«ï¼¬",
+	SOUNDID_GIMON,				IDR_WAVE_GIMON,			"ç–‘å•",
+	SOUNDID_NIKU,				IDR_WAVE_NIKU,			"è‚‰",
+	SOUNDID_KIZUKU,				IDR_WAVE_KIZUKU,		"æ°—ä»˜ã",
+	SOUNDID_PINPONPANPON,		IDR_PINPONPANPON,		"æ”¾é€å‰ã®ãŠçŸ¥ã‚‰ã›éŸ³",
+	SOUNDID_SWOON,				IDR_WAVE_SWOON,			"æ°—çµ¶",
+	SOUNDID_URARA_WORKS,		IDR_WAVE_URARA_WORKS,	"ã‚¦ãƒ©ãƒ©ãƒ¯ãƒ¼ã‚¯ã‚¹",
+	SOUNDID_PUYON_ATACK,		IDR_WAVE_PUYON_ATACK,	"ãƒ—ãƒ¨ãƒ³æ”»æ’ƒ",
+	SOUNDID_LIQUID,				IDR_WAVE_LIQUID,		"æ¶²ä½“",
+	SOUNDID_BOW_ATACK,			IDR_WAVE_BOW_ATACK,		"å¼“æ”»æ’ƒ",
+	SOUNDID_MEAL,				IDR_WAVE_MEAL,			"é£Ÿäº‹",
+	SOUNDID_DEFENSE,			IDR_WAVE_DEFENSE,		"é˜²å¾¡",
+	SOUNDID_SHIELD,				IDR_WAVE_SHIELD,		"ç›¾æ§‹ãˆ",
+	SOUNDID_PUYON_MOVE,			IDR_WAVE_PUYON_MOVE,	"ãƒ—ãƒ¨ãƒ³ç§»å‹•",
+	SOUNDID_PUYON_DEAD,			IDR_WAVE_PUYON_DEAD,	"ãƒ—ãƒ¨ãƒ³æ­»äº¡",
+	SOUNDID_EXIST,				IDR_WAVE_EXIST,			"æ¶ˆæ»…",
+	SOUNDID_TRASH,				IDR_WAVE_TRASH,			"ã‚´ãƒŸç®±é–‹ããƒ»æ¨ã¦ã‚‹",
+	SOUNDID_DROP_BIN,			IDR_WAVE_DROP_BIN,		"ãƒ‰ãƒ­ãƒƒãƒ—ï¼šãƒ“ãƒ³",
+	SOUNDID_OPEN_BAG,			IDR_WAVE_OPEN_BAG,		"ãƒãƒƒã‚°é–‹ã",
+	SOUNDID_MISS,				IDR_WAVE_MISS,			"ãƒŸã‚¹",
+	SOUNDID_LVUP,				IDR_WAVE_LVUP,			"ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—",
+	SOUNDID_CRITICAL1,			IDR_WAVE_CRITICAL1,		"æ–¬æ’ƒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«",
+	SOUNDID_HIT2,				IDR_WAVE_HIT2,			"æ–¬æ’ƒãƒ’ãƒƒãƒˆï¼‘",
+	SOUNDID_HIT3,				IDR_WAVE_HIT3,			"æ–¬æ’ƒãƒ’ãƒƒãƒˆï¼’",
+	SOUNDID_OPEN_WINDOW,		IDR_WAVE_OPEN_WINDOW,	"çª“é–‹ã",
+	SOUNDID_CRITICAL2,			IDR_WAVE_CRITICAL2,		"æ‰“æ’ƒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«",
+	SOUNDID_CRITICAL3,			IDR_WAVE_CRITICAL3,		"çŸ¢ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«",
+	SOUNDID_HIT4,				IDR_WAVE_HIT4,			"çŸ¢ãƒ’ãƒƒãƒˆ",
+	SOUNDID_CHARGE,				IDR_WAVE_CHARGE,		"æºœã‚",
+	SOUNDID_CHARGE2,			IDR_WAVE_CHARGE2,		"æºœã‚ï¼’",
+	SOUNDID_DR_BASS01,			IDR_WAVE_DR_BASS01,		"ãƒ™ãƒ¼ã‚¹ï¼‘",
+	SOUNDID_DR_BASS02,			IDR_WAVE_DR_BASS02,		"ãƒ™ãƒ¼ã‚¹ï¼’",
+	SOUNDID_DR_BASS05,			IDR_WAVE_DR_BASS05,		"ãƒ™ãƒ¼ã‚¹ï¼•",
+	SOUNDID_DR_CLAP01,			IDR_WAVE_DR_CLAP01,		"ã‚¯ãƒ©ãƒƒãƒ—ï¼‘",
+	SOUNDID_DR_SNE02,			IDR_WAVE_DR_SNE02,		"ã‚¹ãƒã‚¢ï¼’",
+	SOUNDID_KIE_ATACK,			IDR_WAVE_KIE_ATACK,		"ã‚­ãƒ¼æ”»æ’ƒ",
+	SOUNDID_KIE_DEAD,			IDR_WAVE_KIE_DEAD,		"ã‚­ãƒ¼æ­»äº¡",
+	SOUNDID_FLY,				IDR_WAVE_FLY,			"ç¾½ã°ãŸã",
+	SOUNDID_STEP03,				IDR_WAVE_STEP03,		"éšŽæ®µç§»å‹•",
 	0, 0, ""
 };
 
 
 /* ========================================================================= */
-/* ƒOƒ[ƒoƒ‹•Ï”‚Ì’è‹`														 */
+/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®å®šç¾©														 */
 /* ========================================================================= */
 
-static int	g_nSoundDataCount;							/* Œø‰Ê‰¹” */
-
-
-/* ========================================================================= */
-/* ŠÖ”‚Ì’è‹`																 */
-/* ========================================================================= */
-
-SOUNDDATA_API	int		GetSoundCount		(void);					/* Œø‰Ê‰¹”‚ðŽæ“¾ */
-SOUNDDATA_API	int		GetSoundResourceID	(int nNo);				/* Œø‰Ê‰¹‚ÌƒŠƒ\[ƒXID‚ðŽæ“¾ */
-SOUNDDATA_API	int		GetSoundNo			(DWORD dwSoundID);		/* Œø‰Ê‰¹‚ÌƒCƒ“ƒfƒbƒNƒX‚ðŽæ“¾ */
-SOUNDDATA_API	LPCSTR	GetSoundName		(DWORD dwSoundID);		/* Œø‰Ê‰¹–¼‚ðŽæ“¾ */
-static			void	Init				(void);					/* ‰Šú‰» */
-static			PSOUNDDATAINFO	GetSoundDataPtr	(DWORD dwSoundID);	/* Œø‰Ê‰¹î•ñ‚ðŽæ“¾ */
+static int	g_nSoundDataCount;							/* åŠ¹æžœéŸ³æ•° */
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:DllMain														 */
-/* “à—e		:DLLƒƒCƒ“ˆ—													 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°ã®å®šç¾©																 */
+/* ========================================================================= */
+
+SOUNDDATA_API	int		GetSoundCount		(void);					/* åŠ¹æžœéŸ³æ•°ã‚’å–å¾— */
+SOUNDDATA_API	int		GetSoundResourceID	(int nNo);				/* åŠ¹æžœéŸ³ã®ãƒªã‚½ãƒ¼ã‚¹IDã‚’å–å¾— */
+SOUNDDATA_API	int		GetSoundNo			(DWORD dwSoundID);		/* åŠ¹æžœéŸ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾— */
+SOUNDDATA_API	LPCSTR	GetSoundName		(DWORD dwSoundID);		/* åŠ¹æžœéŸ³åã‚’å–å¾— */
+static			void	Init				(void);					/* åˆæœŸåŒ– */
+static			PSOUNDDATAINFO	GetSoundDataPtr	(DWORD dwSoundID);	/* åŠ¹æžœéŸ³æƒ…å ±ã‚’å–å¾— */
+
+
+/* ========================================================================= */
+/* é–¢æ•°å	:DllMain														 */
+/* å†…å®¹		:DLLãƒ¡ã‚¤ãƒ³å‡¦ç†													 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
@@ -133,9 +133,9 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:GetSoundCount													 */
-/* “à—e		:Œø‰Ê‰¹”‚ðŽæ“¾													 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:GetSoundCount													 */
+/* å†…å®¹		:åŠ¹æžœéŸ³æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 SOUNDDATA_API int GetSoundCount(void)
@@ -145,9 +145,9 @@ SOUNDDATA_API int GetSoundCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:GetSoundResourceID												 */
-/* “à—e		:Œø‰Ê‰¹‚ÌƒŠƒ\[ƒXID‚ðŽæ“¾										 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:GetSoundResourceID												 */
+/* å†…å®¹		:åŠ¹æžœéŸ³ã®ãƒªã‚½ãƒ¼ã‚¹IDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 SOUNDDATA_API int GetSoundResourceID(int nNo)
@@ -169,9 +169,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:GetSoundID														 */
-/* “à—e		:Œø‰Ê‰¹ID‚ðŽæ“¾‚ðŽæ“¾											 */
-/* “ú•t		:2007/09/19														 */
+/* é–¢æ•°å	:GetSoundID														 */
+/* å†…å®¹		:åŠ¹æžœéŸ³IDã‚’å–å¾—ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/09/19														 */
 /* ========================================================================= */
 
 SOUNDDATA_API DWORD GetSoundID(int nNo)
@@ -193,9 +193,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:GetSoundNo														 */
-/* “à—e		:Œø‰Ê‰¹‚ÌƒCƒ“ƒfƒbƒNƒX‚ðŽæ“¾										 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:GetSoundNo														 */
+/* å†…å®¹		:åŠ¹æžœéŸ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 SOUNDDATA_API int GetSoundNo(DWORD dwSoundID)
@@ -223,9 +223,9 @@ SOUNDDATA_API int GetSoundNo(DWORD dwSoundID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:GetSoundName													 */
-/* “à—e		:Œø‰Ê‰¹–¼‚ðŽæ“¾													 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:GetSoundName													 */
+/* å†…å®¹		:åŠ¹æžœéŸ³åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 SOUNDDATA_API LPCSTR GetSoundName(DWORD dwSoundID)
@@ -247,9 +247,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:Init															 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:Init															 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 void Init(void)
@@ -257,7 +257,7 @@ void Init(void)
 	int i;
 	PSOUNDDATAINFO pSoundData;
 
-	/* Œø‰Ê‰¹”‚ð‹‚ß‚é */
+	/* åŠ¹æžœéŸ³æ•°ã‚’æ±‚ã‚ã‚‹ */
 	g_nSoundDataCount = 0;
 	for (i = 0; ; i ++) {
 		pSoundData = &g_aSoundDataTbl[i];
@@ -270,9 +270,9 @@ void Init(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:GetSoundDataPtr												 */
-/* “à—e		:Œø‰Ê‰¹î•ñ‚ðŽæ“¾												 */
-/* “ú•t		:2007/05/03														 */
+/* é–¢æ•°å	:GetSoundDataPtr												 */
+/* å†…å®¹		:åŠ¹æžœéŸ³æƒ…å ±ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/05/03														 */
 /* ========================================================================= */
 
 PSOUNDDATAINFO GetSoundDataPtr(DWORD dwSoundID)
@@ -282,7 +282,7 @@ PSOUNDDATAINFO GetSoundDataPtr(DWORD dwSoundID)
 
 	pRet = NULL;
 
-	/* Œø‰Ê‰¹”‚ð‹‚ß‚é */
+	/* åŠ¹æžœéŸ³æ•°ã‚’æ±‚ã‚ã‚‹ */
 	for (i = 0; i < g_nSoundDataCount; i ++) {
 		pSoundData = &g_aSoundDataTbl[i];
 		if (pSoundData->dwSoundID != dwSoundID) {

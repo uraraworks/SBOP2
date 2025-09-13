@@ -1,47 +1,47 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketBase.h												 */
-/* “à—e			:ƒRƒ}ƒ“ƒhŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/08/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketBase.h												 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/08/01													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* \‘¢‘ÌéŒ¾																 */
+/* æ§‹é€ ä½“å®£è¨€																 */
 /* ========================================================================= */
 
 typedef struct _PACKETBASE {
-	BYTE	byCmdMain,					/* ƒRƒ}ƒ“ƒhID(ƒƒCƒ“) */
-			byCmdSub;					/* ƒRƒ}ƒ“ƒhID(ƒTƒu) */
+	BYTE	byCmdMain,					/* ã‚³ãƒãƒ³ãƒ‰ID(ãƒ¡ã‚¤ãƒ³) */
+			byCmdSub;					/* ã‚³ãƒãƒ³ãƒ‰ID(ã‚µãƒ–) */
 } PACKETBASE, *PPACKETBASE;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketBase
 {
 public:
-			CPacketBase();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketBase();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketBase();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketBase();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	DWORD	GetSize		(void);									/* ƒpƒPƒbƒgƒTƒCƒY‚ğæ“¾ */
-	PBYTE	Get			(void);									/* ƒpƒPƒbƒg‚ğæ“¾ */
-	PBYTE	Set			(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ğİ’è */
+	DWORD	GetSize		(void);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	Get			(void);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’å–å¾— */
+	PBYTE	Set			(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 protected:
-	void	RenewPacket		(PBYTE pPacket, DWORD dwSize);		/* ƒpƒPƒbƒg‚ğXV */
+	void	RenewPacket		(PBYTE pPacket, DWORD dwSize);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’æ›´æ–° */
 
 
 public:
-	PBYTE	m_pPacket;							/* ƒpƒPƒbƒg */
-	DWORD	m_dwPacketSize;						/* ƒpƒPƒbƒgƒTƒCƒY */
-	BYTE	m_byCmdMain,						/* ƒRƒ}ƒ“ƒhID(ƒƒCƒ“) */
-			m_byCmdSub;							/* ƒRƒ}ƒ“ƒhID(ƒTƒu) */
+	PBYTE	m_pPacket;							/* ãƒ‘ã‚±ãƒƒãƒˆ */
+	DWORD	m_dwPacketSize;						/* ãƒ‘ã‚±ãƒƒãƒˆã‚µã‚¤ã‚º */
+	BYTE	m_byCmdMain,						/* ã‚³ãƒãƒ³ãƒ‰ID(ãƒ¡ã‚¤ãƒ³) */
+			m_byCmdSub;							/* ã‚³ãƒãƒ³ãƒ‰ID(ã‚µãƒ–) */
 } CPacketBase, *PCPacketBase;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_RENEW_CLIENTVERSION.cpp						 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“XV) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_RENEW_CLIENTVERSION.cpp						 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/07													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketADMIN_RENEW_CLIENTVERSION.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEW_CLIENTVERSION::CPacketADMIN_RENEW_CLIENTVERSION */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEW_CLIENTVERSION::CPacketADMIN_RENEW_CLIENTVERSION */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEW_CLIENTVERSION::CPacketADMIN_RENEW_CLIENTVERSION()
@@ -22,9 +22,9 @@ CPacketADMIN_RENEW_CLIENTVERSION::CPacketADMIN_RENEW_CLIENTVERSION()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEW_CLIENTVERSION::~CPacketADMIN_RENEW_CLIENTVERSION */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEW_CLIENTVERSION::~CPacketADMIN_RENEW_CLIENTVERSION */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 CPacketADMIN_RENEW_CLIENTVERSION::~CPacketADMIN_RENEW_CLIENTVERSION()
@@ -33,13 +33,13 @@ CPacketADMIN_RENEW_CLIENTVERSION::~CPacketADMIN_RENEW_CLIENTVERSION()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEW_CLIENTVERSION::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEW_CLIENTVERSION::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 void CPacketADMIN_RENEW_CLIENTVERSION::Make(
-	LPCSTR pszClientVersion)		/* [in] ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“ */
+	LPCSTR pszClientVersion)		/* [in] ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -56,16 +56,16 @@ void CPacketADMIN_RENEW_CLIENTVERSION::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_RENEW_CLIENTVERSION;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, (PBYTE)pszClientVersion, strlen (pszClientVersion) + 1, pDataTmp);	/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“ */
+	CopyMemoryRenew (pDataTmp, (PBYTE)pszClientVersion, strlen (pszClientVersion) + 1, pDataTmp);	/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_RENEW_CLIENTVERSION::Set							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/06/07														 */
+/* é–¢æ•°å	:CPacketADMIN_RENEW_CLIENTVERSION::Set							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/06/07														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_RENEW_CLIENTVERSION::Set(PBYTE pPacket)
@@ -75,7 +75,7 @@ PBYTE CPacketADMIN_RENEW_CLIENTVERSION::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	StoreRenew (m_strClientVersion, (LPCSTR)pDataTmp, pDataTmp);	/* ƒNƒ‰ƒCƒAƒ“ƒgƒo[ƒWƒ‡ƒ“ */
+	StoreRenew (m_strClientVersion, (LPCSTR)pDataTmp, pDataTmp);	/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒãƒ¼ã‚¸ãƒ§ãƒ³ */
 
 	pRet = pDataTmp;
 	return pRet;

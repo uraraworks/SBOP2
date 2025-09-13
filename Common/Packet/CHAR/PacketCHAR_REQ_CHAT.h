@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_REQ_CHAT.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒ`ƒƒƒbƒg—v‹) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/02/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_REQ_CHAT.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ãƒãƒ£ãƒƒãƒˆè¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/02/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,35 +11,35 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
 enum {
-	CHATTYPE_NORMAL = 0,							/* ’Êí */
-	CHATTYPE_PARTY,									/* ƒp[ƒeƒBƒ`ƒƒƒbƒg */
-	CHATTYPE_MAP,									/* ƒ}ƒbƒv“à•ú‘— */
-	CHATTYPE_ADMIN,									/* ˆêÄ•ú‘— */
+	CHATTYPE_NORMAL = 0,							/* é€šå¸¸ */
+	CHATTYPE_PARTY,									/* ãƒ‘ãƒ¼ãƒ†ã‚£ãƒãƒ£ãƒƒãƒˆ */
+	CHATTYPE_MAP,									/* ãƒžãƒƒãƒ—å†…æ”¾é€ */
+	CHATTYPE_ADMIN,									/* ä¸€æ–‰æ”¾é€ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_REQ_CHAT : public CPacketBase
 {
 public:
-			CPacketCHAR_REQ_CHAT();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_REQ_CHAT();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_REQ_CHAT();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_REQ_CHAT();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(int nType, DWORD dwCharID, LPCSTR pszChat);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(int nType, DWORD dwCharID, LPCSTR pszChat);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int			m_nType;					/* ƒ`ƒƒƒbƒgŽí•Ê */
-	DWORD		m_dwCharID;					/* ƒLƒƒƒ‰ID */
-	CmyString	m_strChat;					/* ”­Œ¾“à—e */
+	int			m_nType;					/* ãƒãƒ£ãƒƒãƒˆç¨®åˆ¥ */
+	DWORD		m_dwCharID;					/* ã‚­ãƒ£ãƒ©ID */
+	CmyString	m_strChat;					/* ç™ºè¨€å†…å®¹ */
 } CPacketCHAR_REQ_CHAT, *PCPacketCHAR_REQ_CHAT;
 
 /* Copyright(C)URARA-works 2007 */

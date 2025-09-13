@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketSKILL_PARA2.cpp										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒXƒLƒ‹Œn:”Ä—p[ƒpƒ‰ƒ[ƒ^2ŒÂ]) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketSKILL_PARA2.cpp										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚¹ã‚­ãƒ«ç³»:æ±ç”¨[ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2å€‹]) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/06													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketSKILL_PARA2.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_PARA2::CPacketSKILL_PARA2							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_PARA2::CPacketSKILL_PARA2							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 CPacketSKILL_PARA2::CPacketSKILL_PARA2()
@@ -24,9 +24,9 @@ CPacketSKILL_PARA2::CPacketSKILL_PARA2()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_PARA2::~CPacketSKILL_PARA2						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_PARA2::~CPacketSKILL_PARA2						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 CPacketSKILL_PARA2::~CPacketSKILL_PARA2()
@@ -35,15 +35,15 @@ CPacketSKILL_PARA2::~CPacketSKILL_PARA2()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_PARA2::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_PARA2::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 void CPacketSKILL_PARA2::Make(
-	BYTE byCmdSub,			/* [in] ƒRƒ}ƒ“ƒhIDƒTƒu */
-	DWORD dwPara1/*0*/,		/* [in] ƒpƒ‰ƒ[ƒ^1 */
-	DWORD dwPara2/*0*/)		/* [in] ƒpƒ‰ƒ[ƒ^2 */
+	BYTE byCmdSub,			/* [in] ã‚³ãƒãƒ³ãƒ‰IDã‚µãƒ– */
+	DWORD dwPara1/*0*/,		/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+	DWORD dwPara2/*0*/)		/* [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -61,17 +61,17 @@ void CPacketSKILL_PARA2::Make(
 	pPacketBase->byCmdSub	= byCmdSub;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwPara1, sizeof (dwPara1), pDataTmp);	/* ƒpƒ‰ƒ[ƒ^1 */
-	CopyMemoryRenew (pDataTmp, &dwPara2, sizeof (dwPara2), pDataTmp);	/* ƒpƒ‰ƒ[ƒ^2 */
+	CopyMemoryRenew (pDataTmp, &dwPara1, sizeof (dwPara1), pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+	CopyMemoryRenew (pDataTmp, &dwPara2, sizeof (dwPara2), pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketSKILL_PARA2::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/12/06														 */
+/* é–¢æ•°å	:CPacketSKILL_PARA2::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/12/06														 */
 /* ========================================================================= */
 
 PBYTE CPacketSKILL_PARA2::Set(PBYTE pPacket)
@@ -81,8 +81,8 @@ PBYTE CPacketSKILL_PARA2::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwPara1, pDataTmp, sizeof (m_dwPara1), pDataTmp);	/* ƒpƒ‰ƒ[ƒ^1 */
-	CopyMemoryRenew (&m_dwPara2, pDataTmp, sizeof (m_dwPara2), pDataTmp);	/* ƒpƒ‰ƒ[ƒ^2 */
+	CopyMemoryRenew (&m_dwPara1, pDataTmp, sizeof (m_dwPara1), pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿1 */
+	CopyMemoryRenew (&m_dwPara2, pDataTmp, sizeof (m_dwPara2), pDataTmp);	/* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿2 */
 
 	pRet = pDataTmp;
 	return pRet;

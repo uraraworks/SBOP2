@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:UpdateServerInfo.cpp										 */
-/* “à—e			:ƒT[ƒo[î•ñXVƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/05/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:UpdateServerInfo.cpp										 */
+/* å†…å®¹			:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±æ›´æ–°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/22													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -13,12 +13,12 @@
 #include "SBOGlobal.h"
 #include "UpdateServerInfo.h"
 
-#define SERVERINFOFILENAME	"ServerInfo.csv"		/* ƒT[ƒo[î•ñƒtƒ@ƒCƒ‹–¼ */
+#define SERVERINFOFILENAME	"ServerInfo.csv"		/* ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ãƒ•ã‚¡ã‚¤ãƒ«å */
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::CUpdateServerInfo							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::CUpdateServerInfo							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 CUpdateServerInfo::CUpdateServerInfo()
@@ -32,9 +32,9 @@ CUpdateServerInfo::CUpdateServerInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::~CUpdateServerInfo							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::~CUpdateServerInfo							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 CUpdateServerInfo::~CUpdateServerInfo()
@@ -44,27 +44,27 @@ CUpdateServerInfo::~CUpdateServerInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 BOOL CUpdateServerInfo::Create(
-	LPCSTR pszAccount,			/* [in] FTPƒAƒJƒEƒ“ƒg */
-	LPCSTR pszPassword,			/* [in] FTPƒpƒXƒ[ƒh */
-	LPCSTR pszServerAddr,		/* [in] ƒT[ƒo[ƒAƒhƒŒƒX */
-	LPCSTR pszUploadPath)		/* [in] ƒAƒbƒvƒ[ƒhæ */
+	LPCSTR pszAccount,			/* [in] FTPã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	LPCSTR pszPassword,			/* [in] FTPãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	LPCSTR pszServerAddr,		/* [in] ã‚µãƒ¼ãƒãƒ¼ã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	LPCSTR pszUploadPath)		/* [in] ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰å…ˆ */
 {
 	BOOL bRet;
 
 	bRet = FALSE;
 
-	/* ‚·‚Å‚Éì¬‚³‚ê‚Ä‚¢‚é */
+	/* ã™ã§ã«ä½œæˆã•ã‚Œã¦ã„ã‚‹ */
 	if(m_hThread != NULL){
 		return TRUE;
 	}
 
-	/* ƒCƒxƒ“ƒg‚ğì¬ */
+	/* ã‚¤ãƒ™ãƒ³ãƒˆã‚’ä½œæˆ */
 	m_hInitEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
 	if (m_hInitEvent == NULL) {
 		goto Exit;
@@ -83,14 +83,14 @@ BOOL CUpdateServerInfo::Create(
 	m_strServerAddr	= pszServerAddr;
 	m_strUploadPath	= pszUploadPath;
 
-	/* ƒXƒŒƒbƒh‚ğ‹N“® */
+	/* ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’èµ·å‹• */
 	UINT threadID = 0;
 	m_hThread = (HANDLE)_beginthreadex (NULL, 0, ThreadEntry, (PVOID)this, 0, &threadID);
 	if (m_hThread == NULL) {
 		goto Exit;
 	}
 
-	/* ‰Šú‰»Š®—¹‚ğ‘Ò‹@ */
+	/* åˆæœŸåŒ–å®Œäº†ã‚’å¾…æ©Ÿ */
 	WaitForSingleObject (m_hInitEvent, INFINITE);
 
 	bRet = TRUE;
@@ -104,20 +104,20 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::Destroy										 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::Destroy										 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 void CUpdateServerInfo::Destroy(void)
 {
-	/* ƒXƒŒƒbƒh‚ğ’â~ */
+	/* ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’åœæ­¢ */
 	if (m_hThread != NULL) {
 		SetEvent (m_hExitEvent);
 		WaitForSingleObject (m_hThread, INFINITE);
 	}
 
-	/* ƒCƒxƒ“ƒg‚ğ”jŠü */
+	/* ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç ´æ£„ */
 	if (m_hExitEvent) {
 		CloseHandle (m_hExitEvent);
 		m_hExitEvent = NULL;
@@ -143,15 +143,15 @@ void CUpdateServerInfo::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::Update										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::Update										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 void CUpdateServerInfo::Update(
-	int nCount,				/* [in] ƒƒOƒCƒ“l” */
-	LPCSTR pszPlace,		/* [in] Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
-	BOOL bUpload/*=FALSE*/)	/* [in] TRUE:‚·‚®‚ÉƒAƒbƒvƒ[ƒh */
+	int nCount,				/* [in] ãƒ­ã‚°ã‚¤ãƒ³äººæ•° */
+	LPCSTR pszPlace,		/* [in] æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
+	BOOL bUpload/*=FALSE*/)	/* [in] TRUE:ã™ãã«ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ */
 {
 	m_csUpdate.Enter ();
 
@@ -166,9 +166,9 @@ void CUpdateServerInfo::Update(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::ThreadEntry									 */
-/* “à—e		:ƒXƒŒƒbƒhƒƒCƒ“ˆ—												 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::ThreadEntry									 */
+/* å†…å®¹		:ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ¡ã‚¤ãƒ³å‡¦ç†												 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 UINT __stdcall CUpdateServerInfo::ThreadEntry(LPVOID lpParam)
@@ -182,9 +182,9 @@ UINT __stdcall CUpdateServerInfo::ThreadEntry(LPVOID lpParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::ThreadMain									 */
-/* “à—e		:ƒXƒŒƒbƒhƒƒCƒ“ˆ—												 */
-/* “ú•t		:2008/05/23														 */
+/* é–¢æ•°å	:CUpdateServerInfo::ThreadMain									 */
+/* å†…å®¹		:ã‚¹ãƒ¬ãƒƒãƒ‰ãƒ¡ã‚¤ãƒ³å‡¦ç†												 */
+/* æ—¥ä»˜		:2008/05/23														 */
 /* ========================================================================= */
 
 void CUpdateServerInfo::ThreadMain(void)
@@ -192,7 +192,7 @@ void CUpdateServerInfo::ThreadMain(void)
 	DWORD dwResult;
 	HANDLE aHandle[] = {m_hExitEvent, m_hUpdate};
 
-	/* ŠJnŠ®—¹ */
+	/* é–‹å§‹å®Œäº† */
 	SetEvent (m_hInitEvent);
 
 	MakeServerInfo ();
@@ -226,9 +226,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::MakeServerInfo								 */
-/* “à—e		:ƒT[ƒo[î•ñì¬												 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::MakeServerInfo								 */
+/* å†…å®¹		:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä½œæˆ												 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 void CUpdateServerInfo::MakeServerInfo(void)
@@ -248,9 +248,9 @@ void CUpdateServerInfo::MakeServerInfo(void)
 
 	time (&timeTmp);
 	strTmp.Format ("%d,%d,%s\r\n",
-			(int)timeTmp,			/* 0:•Û‘¶‚³‚ê‚½UNIXŠÔ */
-			m_nCount,				/* 1:ƒƒOƒCƒ“l” */
-			(LPCSTR)m_strPlace);	/* 2:Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
+			(int)timeTmp,			/* 0:ä¿å­˜ã•ã‚ŒãŸUNIXæ™‚é–“ */
+			m_nCount,				/* 1:ãƒ­ã‚°ã‚¤ãƒ³äººæ•° */
+			(LPCSTR)m_strPlace);	/* 2:æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
 
 	dwBytes = 0;
 	WriteFile (hFile, (LPCSTR)strTmp, strTmp.GetLength (), &dwBytes, NULL);
@@ -262,9 +262,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::Upload										 */
-/* “à—e		:ƒAƒbƒvƒ[ƒh													 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::Upload										 */
+/* å†…å®¹		:ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰													 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 void CUpdateServerInfo::Upload(void)
@@ -282,16 +282,16 @@ void CUpdateServerInfo::Upload(void)
 	}
 
 	GetFileName (strFileName);
-	/* ƒtƒ@ƒCƒ‹–¼‚Ìì¬ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®ä½œæˆ */
 	wsprintf (szUpAddr, "%s/%s", (LPCSTR)m_strUploadPath, SERVERINFOFILENAME);
 
-	/* ƒCƒ“ƒ^[ƒlƒbƒg‚ğŠJ‚­ */
+	/* ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã‚’é–‹ã */
 	hInternet = InternetOpen ("ScrapBookOnlineServer", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 	if (hInternet == NULL) {
 		goto Exit;
 	}
 
-	/* ƒT[ƒo[‚ÉÚ‘± */
+	/* ã‚µãƒ¼ãƒãƒ¼ã«æ¥ç¶š */
 	hHost = InternetConnect(
 		hInternet,
 		m_strServerAddr,
@@ -305,7 +305,7 @@ void CUpdateServerInfo::Upload(void)
 		goto Exit;
    }
 
-   /* ƒtƒ@ƒCƒ‹‚ğƒAƒbƒvƒ[ƒh */
+   /* ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ */
    bResult = FtpPutFile(
 		hHost,
 		(LPCSTR)strFileName,
@@ -324,16 +324,16 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUpdateServerInfo::GetFileName									 */
-/* “à—e		:ƒT[ƒo[î•ñƒtƒ@ƒCƒ‹–¼‚ğæ“¾									 */
-/* “ú•t		:2008/05/22														 */
+/* é–¢æ•°å	:CUpdateServerInfo::GetFileName									 */
+/* å†…å®¹		:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/05/22														 */
 /* ========================================================================= */
 
 void CUpdateServerInfo::GetFileName(CmyString &strDst)
 {
 	char szPath[MAX_PATH];
 
-	/* ƒtƒ@ƒCƒ‹–¼‚Ìì¬ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®ä½œæˆ */
 	GetModuleFilePath (szPath, sizeof (szPath));
 	strDst.Format ("%sSBODATA\\%s", szPath, SERVERINFOFILENAME);
 }

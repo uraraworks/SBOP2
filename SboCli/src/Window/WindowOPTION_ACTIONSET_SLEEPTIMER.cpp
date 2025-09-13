@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowOPTION_ACTIONSET_SLEEPTIMER.cpp						 */
-/* “à—e			:ƒIƒvƒVƒ‡ƒ“-“®ìÝ’è-‚¨‚Ð‚é‚Ëƒ^ƒCƒ}[‚ÌÝ’èƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/07/21													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowOPTION_ACTIONSET_SLEEPTIMER.cpp						 */
+/* å†…å®¹			:ã‚ªãƒ—ã‚·ãƒ§ãƒ³-å‹•ä½œè¨­å®š-ãŠã²ã‚‹ã­ã‚¿ã‚¤ãƒžãƒ¼ã®è¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/21													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -16,9 +16,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::CWindowOPTION_ACTIONSET_SLEEPTIMER */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::CWindowOPTION_ACTIONSET_SLEEPTIMER */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 CWindowOPTION_ACTIONSET_SLEEPTIMER::CWindowOPTION_ACTIONSET_SLEEPTIMER()
@@ -34,9 +34,9 @@ CWindowOPTION_ACTIONSET_SLEEPTIMER::CWindowOPTION_ACTIONSET_SLEEPTIMER()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::~CWindowOPTION_ACTIONSET_SLEEPTIMER */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::~CWindowOPTION_ACTIONSET_SLEEPTIMER */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 CWindowOPTION_ACTIONSET_SLEEPTIMER::~CWindowOPTION_ACTIONSET_SLEEPTIMER()
@@ -45,9 +45,9 @@ CWindowOPTION_ACTIONSET_SLEEPTIMER::~CWindowOPTION_ACTIONSET_SLEEPTIMER()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::Create						 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::Create						 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CWindowOPTION_ACTIONSET_SLEEPTIMER::Create(CMgrData *pMgrData)
@@ -64,9 +64,9 @@ void CWindowOPTION_ACTIONSET_SLEEPTIMER::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw						 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw						 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw(PCImg32 pDst)
@@ -74,7 +74,7 @@ void CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw(PCImg32 pDst)
 	int i, nLevel;
 	HDC hDC;
 	HFONT hFontOld;
-	LPCSTR apszTmp[] = {"‚R•ª", "‚T•ª", "10•ª", "30•ª", "60•ª"};
+	LPCSTR apszTmp[] = {"ï¼“åˆ†", "ï¼•åˆ†", "10åˆ†", "30åˆ†", "60åˆ†"};
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -88,7 +88,7 @@ void CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "‚È‚µ", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, "ãªã—", clText);
 	for (i = 0; i < 5; i ++) {
 		TextOut2 (hDC, 32 + 51 + (i * 51), 16 + 16 * 0, apszTmp[i], clText);
 	}
@@ -110,9 +110,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnUp						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnUp						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnUp(void)
@@ -133,9 +133,9 @@ BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnUp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnDown						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnDown						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnDown(void)
@@ -156,9 +156,9 @@ BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnDown(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnLeft						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnLeft						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnLeft(void)
@@ -175,9 +175,9 @@ BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnRight					 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnRight					 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnRight(void)
@@ -194,9 +194,9 @@ BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnX						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnX						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnX(BOOL bDown)
@@ -219,9 +219,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnZ						 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CWindowOPTION_ACTIONSET_SLEEPTIMER::OnZ						 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnZ(BOOL bDown)

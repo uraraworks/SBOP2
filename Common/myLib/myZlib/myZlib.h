@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	myZlib.h													 */
-/* “à—eF		zlib‚ðˆµ‚¤ˆ×‚ÌƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2005/02/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	myZlib.h													 */
+/* å†…å®¹ï¼š		zlibã‚’æ‰±ã†ç‚ºã®ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/02/02													 */
 /* ========================================================================= */
 
 #ifndef MYZLIB_H
@@ -12,28 +12,28 @@
 #include "zlib.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CmyZlib
 {
 public:
-			CmyZlib();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CmyZlib();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CmyZlib();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CmyZlib();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	/* ˆ³k */
-	BOOL	DeflateInit	(int nLevel = Z_DEFAULT_COMPRESSION);							/* ‰Šú‰» */
-	DWORD	Deflate		(LPBYTE pSrc, DWORD dwSrcSize, LPBYTE pDst, DWORD dwDstSize);	/* ˆ³kˆ— */
-	void	DeflateEnd	(void);															/* Œãˆ— */
+	/* åœ§ç¸® */
+	BOOL	DeflateInit	(int nLevel = Z_DEFAULT_COMPRESSION);							/* åˆæœŸåŒ– */
+	DWORD	Deflate		(LPBYTE pSrc, DWORD dwSrcSize, LPBYTE pDst, DWORD dwDstSize);	/* åœ§ç¸®å‡¦ç† */
+	void	DeflateEnd	(void);															/* å¾Œå‡¦ç† */
 
-	/* ‰ð“€ */
-	BOOL	InflateInit	(void);															/* ‰Šú‰» */
-	DWORD	Inflate		(LPBYTE pSrc, DWORD dwSrcSize, LPBYTE pDst, DWORD dwDstSize);	/* ‰ð“€ˆ— */
-	void	InflateEnd	(void);															/* Œãˆ— */
+	/* è§£å‡ */
+	BOOL	InflateInit	(void);															/* åˆæœŸåŒ– */
+	DWORD	Inflate		(LPBYTE pSrc, DWORD dwSrcSize, LPBYTE pDst, DWORD dwDstSize);	/* è§£å‡å‡¦ç† */
+	void	InflateEnd	(void);															/* å¾Œå‡¦ç† */
 
 
 private:
-	z_stream		*m_pStream;									/* ˆ³kE‰ð“€—p\‘¢‘Ì */
+	z_stream		*m_pStream;									/* åœ§ç¸®ãƒ»è§£å‡ç”¨æ§‹é€ ä½“ */
 };
 
 #endif

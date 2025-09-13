@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapShadowEdit.cpp									 */
-/* “à—e			:ƒ}ƒbƒv‰e•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/06/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapShadowEdit.cpp									 */
+/* å†…å®¹			:ãƒãƒƒãƒ—å½±ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::DoDataExchange(CDataExchange* pDX)
@@ -65,9 +65,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::CDlgAdminMapShadowEdit					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::CDlgAdminMapShadowEdit					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CDlgAdminMapShadowEdit::CDlgAdminMapShadowEdit(CWnd* pParent /*=NULL*/)
@@ -99,9 +99,9 @@ CDlgAdminMapShadowEdit::CDlgAdminMapShadowEdit(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::~CDlgAdminMapShadowEdit				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::~CDlgAdminMapShadowEdit				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 CDlgAdminMapShadowEdit::~CDlgAdminMapShadowEdit()
@@ -111,9 +111,9 @@ CDlgAdminMapShadowEdit::~CDlgAdminMapShadowEdit()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::DoModal								 */
-/* “à—e		:ƒ‚[ƒ_ƒ‹ƒ_ƒCƒAƒƒO•\¦											 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::DoModal								 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ãƒ€ãƒ«ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤º											 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 int CDlgAdminMapShadowEdit::DoModal(CMgrData *pMgrData)
@@ -126,9 +126,9 @@ int CDlgAdminMapShadowEdit::DoModal(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapShadowEdit::OnInitDialog()
@@ -160,7 +160,7 @@ BOOL CDlgAdminMapShadowEdit::OnInitDialog()
 
 	nCount = m_pMgrData->GetMgrGrpData ()->GetMapShadowCount () / 1024;
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("‰æ‘œ %d –‡–Ú", i + 1);
+		strTmp.Format ("ç”»åƒ %d æšç›®", i + 1);
 		m_cbGrpNo.AddString (strTmp);
 	}
 	m_nGrpNo = m_pMgrData->GetLastSelectGrpNo ();
@@ -178,9 +178,9 @@ BOOL CDlgAdminMapShadowEdit::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnPaint								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnPaint								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnPaint()
@@ -196,7 +196,7 @@ void CDlgAdminMapShadowEdit::OnPaint()
 	ImgTmp.SetColorKey (RGB (255, 0, 255));
 	ImgPreview.Create (32, 32);
 
-	/* ‰º’n */
+	/* ä¸‹åœ° */
 	no = m_wShadowGrpID;
 	pImg = m_pMgrGrpData->GetDibMapShadow (no / 1024);
 	if (pImg == NULL) {
@@ -204,7 +204,7 @@ void CDlgAdminMapShadowEdit::OnPaint()
 	}
 	ImgPreview.BltFrom256 (0, 0, 16, 16, pImg, (no % 1024) % 32 * 16, (no % 1024) / 32 * 16);
 
-	/* ƒvƒŒƒrƒ…[ */
+	/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ */
 	hDC		= ImgPreview.Lock ();
 	pDCTmp	= dc.FromHandle (hDC);
 	pDC		= GetDlgItem (IDC_PREVIEW)->GetDC ();
@@ -214,9 +214,9 @@ void CDlgAdminMapShadowEdit::OnPaint()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnWndClose								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WNDCLOSE)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnWndClose								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WNDCLOSE)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapShadowEdit::OnWndClose(WPARAM wParam, LPARAM lParam)
@@ -225,7 +225,7 @@ LRESULT CDlgAdminMapShadowEdit::OnWndClose(WPARAM wParam, LPARAM lParam)
 	PCInfoAnime pInfo;
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPPARTSGRP:	/* ƒ}ƒbƒv‰e‰æ‘œ‘I‘ğ */
+	case WINDOWID_SELECTMAPPARTSGRP:	/* ãƒãƒƒãƒ—å½±ç”»åƒé¸æŠ */
 		if (lParam >= 0) {
 			if (m_nSelectType == 1) {
 				m_wShadowGrpID = (WORD)lParam;
@@ -250,19 +250,19 @@ LRESULT CDlgAdminMapShadowEdit::OnWndClose(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/05/18														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/05/18														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapShadowEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_nSelectType = 1;
 		PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPPARTSGRP, lParam);
 		break;
-	case ADMINMSG_SELECT_ANIME:					/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‘I‘ğ */
+	case ADMINMSG_SELECT_ANIME:					/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒé¸æŠ */
 		m_nAnimeNo = lParam;
 		m_Slider.SetPos (m_nAnimeNo);
 		OnSelectAnime ();
@@ -274,9 +274,9 @@ LRESULT CDlgAdminMapShadowEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnHScroll								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_HSCROLL)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnHScroll								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_HSCROLL)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -288,9 +288,9 @@ void CDlgAdminMapShadowEdit::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnGetMinMaxInfo						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_GETMINMAXINFO)							 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnGetMinMaxInfo						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_GETMINMAXINFO)							 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
@@ -305,9 +305,9 @@ void CDlgAdminMapShadowEdit::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnMouseMove							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/05/16														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnMouseMove							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/05/16														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnMouseMove(UINT nFlags, CPoint point)
@@ -317,9 +317,9 @@ void CDlgAdminMapShadowEdit::OnMouseMove(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnLButtonDown							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONUP)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnLButtonDown							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONUP)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnLButtonDown(UINT nFlags, CPoint point)
@@ -329,9 +329,9 @@ void CDlgAdminMapShadowEdit::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnMouseWheel							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnMouseWheel							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL)								 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapShadowEdit::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -341,9 +341,9 @@ BOOL CDlgAdminMapShadowEdit::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnTimer								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnTimer								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnTimer(UINT nIDEvent)
@@ -375,9 +375,9 @@ void CDlgAdminMapShadowEdit::OnTimer(UINT nIDEvent)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnChangeLevel							 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(ENM_CHANGE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnChangeLevel							 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(ENM_CHANGE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnChangeLevel()
@@ -397,9 +397,9 @@ void CDlgAdminMapShadowEdit::OnChangeLevel()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnChangeViewtime						 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(ENM_CHANGE)									 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnChangeViewtime						 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(ENM_CHANGE)									 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnChangeViewtime()
@@ -419,9 +419,9 @@ void CDlgAdminMapShadowEdit::OnChangeViewtime()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnAdd									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(è¿½åŠ )											 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnAdd()
@@ -440,9 +440,9 @@ void CDlgAdminMapShadowEdit::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnDel									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnDel									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnDel()
@@ -466,9 +466,9 @@ void CDlgAdminMapShadowEdit::OnDel()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnPlay									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(Ä¶)											 */
-/* “ú•t		:2007/05/28														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnPlay									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å†ç”Ÿ)											 */
+/* æ—¥ä»˜		:2007/05/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnPlay()
@@ -484,9 +484,9 @@ void CDlgAdminMapShadowEdit::OnPlay()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnStop									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’â~)											 */
-/* “ú•t		:2007/05/28														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnStop									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(åœæ­¢)											 */
+/* æ—¥ä»˜		:2007/05/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnStop()
@@ -502,9 +502,9 @@ void CDlgAdminMapShadowEdit::OnStop()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnSelchangeGrpNo						 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2008/10/11														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnSelchangeGrpNo						 */
+/* å†…å®¹		:ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©(CBN_SELCHANGE)								 */
+/* æ—¥ä»˜		:2008/10/11														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnSelchangeGrpNo()
@@ -516,9 +516,9 @@ void CDlgAdminMapShadowEdit::OnSelchangeGrpNo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnOK									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(OK)												 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnOK									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(OK)												 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnOK()
@@ -538,9 +538,9 @@ void CDlgAdminMapShadowEdit::OnOK()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::SetData								 */
-/* “à—e		:ƒf[ƒ^‚ğ‰æ–Ê‚É”½‰f												 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::SetData								 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚’ç”»é¢ã«åæ˜ 												 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::SetData(void)
@@ -570,9 +570,9 @@ void CDlgAdminMapShadowEdit::SetData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::GetData								 */
-/* “à—e		:‰æ–Ê‚©‚çƒf[ƒ^‚ğæ“¾											 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::GetData								 */
+/* å†…å®¹		:ç”»é¢ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::GetData(void)
@@ -585,9 +585,9 @@ void CDlgAdminMapShadowEdit::GetData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::OnSelectAnime							 */
-/* “à—e		:ƒRƒ}‘I‘ğˆ—													 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::OnSelectAnime							 */
+/* å†…å®¹		:ã‚³ãƒé¸æŠå‡¦ç†													 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::OnSelectAnime(void)
@@ -613,9 +613,9 @@ void CDlgAdminMapShadowEdit::OnSelectAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::RenewButtonState						 */
-/* “à—e		:ƒ{ƒ^ƒ“ó‘Ô‚Ìİ’è												 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::RenewButtonState						 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³çŠ¶æ…‹ã®è¨­å®š												 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::RenewButtonState(void)
@@ -638,9 +638,9 @@ void CDlgAdminMapShadowEdit::RenewButtonState(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapShadowEdit::PostNcDestroy							 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/06/06														 */
+/* é–¢æ•°å	:CDlgAdminMapShadowEdit::PostNcDestroy							 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/06/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapShadowEdit::PostNcDestroy()

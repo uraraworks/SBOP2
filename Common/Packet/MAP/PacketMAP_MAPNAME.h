@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPNAME.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒv–¼’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/05/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPNAME.h										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—åé€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,27 +11,27 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_MAPNAME : public CPacketBase
 {
 public:
-			CPacketMAP_MAPNAME();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_MAPNAME();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_MAPNAME();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_MAPNAME();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMapID, DWORD dwBGMID, DWORD dwWeatherType, BOOL bEnableBattle, BOOL bRecovery, BYTE byLevel, LPCSTR pszMapName);			/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(DWORD dwMapID, DWORD dwBGMID, DWORD dwWeatherType, BOOL bEnableBattle, BOOL bRecovery, BYTE byLevel, LPCSTR pszMapName);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD		m_dwMapID,					/* ƒ}ƒbƒvID */
+	DWORD		m_dwMapID,					/* ãƒãƒƒãƒ—ID */
 				m_dwBGMID,					/* BGMID */
-				m_dwWeatherType;			/* “V‹Cí•Ê */
-	BOOL		m_bEnableBattle,			/* í“¬‹–‰Â */
-				m_bRecovery;				/* ‹CâŒã‰ñ•œ‚·‚é */
-	BYTE		m_byLevel;					/* –¾‚é‚³ƒŒƒxƒ‹ */
-	CmyString	m_strMapName;				/* ƒ}ƒbƒv–¼ */
+				m_dwWeatherType;			/* å¤©æ°—ç¨®åˆ¥ */
+	BOOL		m_bEnableBattle,			/* æˆ¦é—˜è¨±å¯ */
+				m_bRecovery;				/* æ°—çµ¶å¾Œå›å¾©ã™ã‚‹ */
+	BYTE		m_byLevel;					/* æ˜ã‚‹ã•ãƒ¬ãƒ™ãƒ« */
+	CmyString	m_strMapName;				/* ãƒãƒƒãƒ—å */
 } CPacketMAP_MAPNAME, *PCPacketMAP_MAPNAME;
 
 /* Copyright(C)URARA-works 2008 */

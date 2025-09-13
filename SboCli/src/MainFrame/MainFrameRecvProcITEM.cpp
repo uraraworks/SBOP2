@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrameRecvProcITEM.cpp									 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€(ƒAƒCƒeƒ€ŒnŽóMˆ—) ŽÀ‘•ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/05/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrameRecvProcITEM.cpp									 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ (ã‚¢ã‚¤ãƒ†ãƒ ç³»å—ä¿¡å‡¦ç†) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -21,30 +21,30 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM										 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Œn)											 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM										 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç³»)											 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM(BYTE byCmdSub, PBYTE pData)
 {
 	switch (byCmdSub) {
-	case SBOCOMMANDID_SUB_ITEM_RES_ITEMINFO:		RecvProcITEM_RES_ITEMINFO		(pData);	break;	/* ƒAƒCƒeƒ€î•ñ‰ž“š */
-	case SBOCOMMANDID_SUB_ITEM_ITEMINFO:			RecvProcITEM_ITEMINFO			(pData);	break;	/* ƒAƒCƒeƒ€î•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_ITEM_DELETEITEMINFO:		RecvProcITEM_DELETEITEMINFO		(pData);	break;	/* ƒAƒCƒeƒ€î•ñíœ */
-	case SBOCOMMANDID_SUB_ITEM_RES_ITEMTYPEINFO:	RecvProcITEM_RES_ITEMTYPEINFO	(pData);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñ‰ž“š */
-	case SBOCOMMANDID_SUB_ITEM_ITEMTYPEINFO:		RecvProcITEM_ITEMTYPEINFO		(pData);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñ’Ê’m */
-	case SBOCOMMANDID_SUB_ITEM_DELETEITEMTYPEINFO:	RecvProcITEM_DELETEITEMTYPEINFO	(pData);	break;	/* ƒAƒCƒeƒ€Ží•Êî•ñíœ */
-	case SBOCOMMANDID_SUB_ITEM_RES_ITEMWEAPONINFO:	RecvProcITEM_RES_ITEMWEAPONINFO	(pData);	break;	/* •Šíî•ñ‰ž“š */
-	case SBOCOMMANDID_SUB_ITEM_ITEMWEAPONINFO:		RecvProcITEM_ITEMWEAPONINFO		(pData);	break;	/* •Šíî•ñ’Ê’m */
+	case SBOCOMMANDID_SUB_ITEM_RES_ITEMINFO:		RecvProcITEM_RES_ITEMINFO		(pData);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å¿œç­” */
+	case SBOCOMMANDID_SUB_ITEM_ITEMINFO:			RecvProcITEM_ITEMINFO			(pData);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_ITEM_DELETEITEMINFO:		RecvProcITEM_DELETEITEMINFO		(pData);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ITEM_RES_ITEMTYPEINFO:	RecvProcITEM_RES_ITEMTYPEINFO	(pData);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±å¿œç­” */
+	case SBOCOMMANDID_SUB_ITEM_ITEMTYPEINFO:		RecvProcITEM_ITEMTYPEINFO		(pData);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±é€šçŸ¥ */
+	case SBOCOMMANDID_SUB_ITEM_DELETEITEMTYPEINFO:	RecvProcITEM_DELETEITEMTYPEINFO	(pData);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±å‰Šé™¤ */
+	case SBOCOMMANDID_SUB_ITEM_RES_ITEMWEAPONINFO:	RecvProcITEM_RES_ITEMWEAPONINFO	(pData);	break;	/* æ­¦å™¨æƒ…å ±å¿œç­” */
+	case SBOCOMMANDID_SUB_ITEM_ITEMWEAPONINFO:		RecvProcITEM_ITEMWEAPONINFO		(pData);	break;	/* æ­¦å™¨æƒ…å ±é€šçŸ¥ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_RES_ITEMINFO							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñ‰ž“š)										 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_RES_ITEMINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å¿œç­”)										 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_RES_ITEMINFO(PBYTE pData)
@@ -72,9 +72,9 @@ void CMainFrame::RecvProcITEM_RES_ITEMINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_ITEMINFO								 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñ’Ê’m)										 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_ITEMINFO								 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±é€šçŸ¥)										 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_ITEMINFO(PBYTE pData)
@@ -104,9 +104,9 @@ void CMainFrame::RecvProcITEM_ITEMINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_DELETEITEMINFO						 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€î•ñíœ)										 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_DELETEITEMINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±å‰Šé™¤)										 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_DELETEITEMINFO(PBYTE pData)
@@ -122,9 +122,9 @@ void CMainFrame::RecvProcITEM_DELETEITEMINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_RES_ITEMINFO							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñ‰ž“š)									 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_RES_ITEMINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±å¿œç­”)									 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_RES_ITEMTYPEINFO(PBYTE pData)
@@ -150,9 +150,9 @@ void CMainFrame::RecvProcITEM_RES_ITEMTYPEINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_ITEMTYPEINFO							 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñ’Ê’m)									 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_ITEMTYPEINFO							 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±é€šçŸ¥)									 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_ITEMTYPEINFO(PBYTE pData)
@@ -181,9 +181,9 @@ void CMainFrame::RecvProcITEM_ITEMTYPEINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_DELETEITEMTYPEINFO					 */
-/* “à—e		:ŽóMˆ—(ƒAƒCƒeƒ€Ží•Êî•ñíœ)									 */
-/* “ú•t		:2007/10/06														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_DELETEITEMTYPEINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±å‰Šé™¤)									 */
+/* æ—¥ä»˜		:2007/10/06														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_DELETEITEMTYPEINFO(PBYTE pData)
@@ -200,9 +200,9 @@ void CMainFrame::RecvProcITEM_DELETEITEMTYPEINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_RES_ITEMWEAPONINFO					 */
-/* “à—e		:ŽóMˆ—(•Šíî•ñ‰ž“š)											 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_RES_ITEMWEAPONINFO					 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ­¦å™¨æƒ…å ±å¿œç­”)											 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_RES_ITEMWEAPONINFO(PBYTE pData)
@@ -227,9 +227,9 @@ void CMainFrame::RecvProcITEM_RES_ITEMWEAPONINFO(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RecvProcITEM_ITEMWEAPONINFO						 */
-/* “à—e		:ŽóMˆ—(•Šíî•ñ’Ê’m)											 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMainFrame::RecvProcITEM_ITEMWEAPONINFO						 */
+/* å†…å®¹		:å—ä¿¡å‡¦ç†(æ­¦å™¨æƒ…å ±é€šçŸ¥)											 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 void CMainFrame::RecvProcITEM_ITEMWEAPONINFO(PBYTE pData)

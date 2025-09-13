@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_MOTIONTYPE.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/05/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_MOTIONTYPE.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,22 +13,22 @@
 class CLibInfoMotionType;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_MOTIONTYPE : public CPacketBase
 {
 public:
-			CPacketCHAR_MOTIONTYPE();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_MOTIONTYPE();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_MOTIONTYPE();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_MOTIONTYPE();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMotionTypeID, CLibInfoMotionType *pSrc);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwMotionTypeID, CLibInfoMotionType *pSrc);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD				m_dwMotionTypeID;	/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	CLibInfoMotionType	*m_pInfo;			/* ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñ */
+	DWORD				m_dwMotionTypeID;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	CLibInfoMotionType	*m_pInfo;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ± */
 } CPacketCHAR_MOTIONTYPE, *PCPacketCHAR_MOTIONTYPE;
 
 /* Copyright(C)URARA-works 2008 */

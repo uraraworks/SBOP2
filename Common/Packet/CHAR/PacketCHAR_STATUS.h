@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCHAR_STATUS.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒLƒƒƒ‰Œn:ƒXƒe[ƒ^ƒXî•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/29													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCHAR_STATUS.h										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ã‚­ãƒ£ãƒ©ç³»:ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/29													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,60 +13,60 @@
 class CInfoCharBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCHAR_STATUS : public CPacketBase
 {
 public:
-			CPacketCHAR_STATUS();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCHAR_STATUS();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCHAR_STATUS();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCHAR_STATUS();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make		(CInfoCharBase *pInfo);					/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set			(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ğİ’è */
-	void	SetParam	(CInfoCharBase *pInfo);					/* w’èƒLƒƒƒ‰î•ñ‚Öƒpƒ‰ƒ[ƒ^‚ğ”½‰f */
+	void	Make		(CInfoCharBase *pInfo);					/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set			(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
+	void	SetParam	(CInfoCharBase *pInfo);					/* æŒ‡å®šã‚­ãƒ£ãƒ©æƒ…å ±ã¸ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’åæ˜  */
 
 
 public:
-	BYTE	m_byCmdMain,				/* ƒRƒ}ƒ“ƒhIDƒƒCƒ“ */
-			m_byCmdSub;					/* ƒRƒ}ƒ“ƒhIDƒTƒu */
-	WORD	m_wAtackGauge,				/* ƒAƒ^ƒbƒNƒQ[ƒW */
-			m_wDefenseGauge,			/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-			m_wLevel,					/* ƒŒƒxƒ‹ */
-			m_wStamina,					/* ƒXƒ^ƒ~ƒi */
-			m_wPower,					/* ˜r—Í */
-			m_wStrength,				/* ‘Ì—Í */
-			m_wMagic,					/* –‚—Í */
-			m_wSkillful,				/* Ší—p */
-			m_wAbillityAT,				/* UŒ‚‹Z”\ */
-			m_wAbillityDF,				/* –hŒä‹Z”\ */
-			m_wPAtack,					/* UŒ‚—Í */
-			m_wPDefense,				/* –hŒä—Í */
-			m_wPMagic,					/* –‚–@—Í */
-			m_wPMagicDefense,			/* –‚–@–hŒä—Í */
-			m_wPHitAverage,				/* –½’†—¦ */
-			m_wPAvoidAverage,			/* ‰ñ”ğ—¦ */
-			m_wPCriticalAverage,		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-			m_wAttrFire,				/* ‘®«[‰Î] */
-			m_wAttrWind,				/* ‘®«[•—] */
-			m_wAttrWater,				/* ‘®«[…] */
-			m_wAttrEarth,				/* ‘®«[“y] */
-			m_wAttrLight,				/* ‘®«[Œõ] */
-			m_wAttrDark;				/* ‘®«[ˆÅ] */
-	DWORD	m_dwCharID,					/* ƒLƒƒƒ‰ID */
-			m_dwMoveWait,				/* ˆÚ“®‘Ò‚¿ŠÔ */
-			m_dwMoveWaitBattle,			/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-			m_dwExp,					/* ŒoŒ±’l */
+	BYTE	m_byCmdMain,				/* ã‚³ãƒãƒ³ãƒ‰IDãƒ¡ã‚¤ãƒ³ */
+			m_byCmdSub;					/* ã‚³ãƒãƒ³ãƒ‰IDã‚µãƒ– */
+	WORD	m_wAtackGauge,				/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+			m_wDefenseGauge,			/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+			m_wLevel,					/* ãƒ¬ãƒ™ãƒ« */
+			m_wStamina,					/* ã‚¹ã‚¿ãƒŸãƒŠ */
+			m_wPower,					/* è…•åŠ› */
+			m_wStrength,				/* ä½“åŠ› */
+			m_wMagic,					/* é­”åŠ› */
+			m_wSkillful,				/* å™¨ç”¨ */
+			m_wAbillityAT,				/* æ”»æ’ƒæŠ€èƒ½ */
+			m_wAbillityDF,				/* é˜²å¾¡æŠ€èƒ½ */
+			m_wPAtack,					/* æ”»æ’ƒåŠ› */
+			m_wPDefense,				/* é˜²å¾¡åŠ› */
+			m_wPMagic,					/* é­”æ³•åŠ› */
+			m_wPMagicDefense,			/* é­”æ³•é˜²å¾¡åŠ› */
+			m_wPHitAverage,				/* å‘½ä¸­ç‡ */
+			m_wPAvoidAverage,			/* å›é¿ç‡ */
+			m_wPCriticalAverage,		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+			m_wAttrFire,				/* å±æ€§[ç«] */
+			m_wAttrWind,				/* å±æ€§[é¢¨] */
+			m_wAttrWater,				/* å±æ€§[æ°´] */
+			m_wAttrEarth,				/* å±æ€§[åœŸ] */
+			m_wAttrLight,				/* å±æ€§[å…‰] */
+			m_wAttrDark;				/* å±æ€§[é—‡] */
+	DWORD	m_dwCharID,					/* ã‚­ãƒ£ãƒ©ID */
+			m_dwMoveWait,				/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+			m_dwMoveWaitBattle,			/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+			m_dwExp,					/* çµŒé¨“å€¤ */
 			m_dwHP,						/* HP */
-			m_dwMaxHP,					/* Å‘åHP */
+			m_dwMaxHP,					/* æœ€å¤§HP */
 			m_dwSP,						/* SP */
-			m_dwMaxSP,					/* Å‘åSP */
-			m_dwLightTime;				/* “”‚èŒp‘±ŠÔ */
-	int		m_nDropItemAverage,			/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-			m_nMoveAverage,				/* ˆÚ“®Šm—¦ */
-			m_nMoveAverageBattle,		/* í“¬ˆÚ“®Šm—¦ */
-			m_nLightLevel;				/* “”‚èƒŒƒxƒ‹ */
-	SIZE	m_sizeSearchDistance;		/* ô“G”ÍˆÍ */
+			m_dwMaxSP,					/* æœ€å¤§SP */
+			m_dwLightTime;				/* ç¯ã‚Šç¶™ç¶šæ™‚é–“ */
+	int		m_nDropItemAverage,			/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+			m_nMoveAverage,				/* ç§»å‹•ç¢ºç‡ */
+			m_nMoveAverageBattle,		/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
+			m_nLightLevel;				/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	SIZE	m_sizeSearchDistance;		/* ç­–æ•µç¯„å›² */
 } CPacketCHAR_STATUS, *PCPacketCHAR_STATUS;
 
 /* Copyright(C)URARA-works 2008 */

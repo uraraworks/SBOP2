@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminTalkEventNONE.h									 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgİ’è(–¢‘I‘ğ)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminTalkEventNONE.h									 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆè¨­å®š(æœªé¸æŠ)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/23													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,24 +13,24 @@
 class CInfoTalkEventBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminTalkEventNONE : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkEventNONE(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminTalkEventNONE();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminTalkEventNONE(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminTalkEventNONE();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Init		(CMgrData *pMgrData, int nPage);		/* ‰Šú‰» */
-	virtual void	OnAdminMsg	(int nType, DWORD dwPara);				/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG) */
-	virtual void	Set			(CInfoTalkEventBase *pSrc);				/* İ’è‚©‚ç‰æ–Ê‚É”½‰f */
-	virtual void	Get			(CInfoTalkEventBase *pDst);				/* ‰æ–Ê‚©‚çİ’è‚É”½‰f */
+	virtual void	Init		(CMgrData *pMgrData, int nPage);		/* åˆæœŸåŒ– */
+	virtual void	OnAdminMsg	(int nType, DWORD dwPara);				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG) */
+	virtual void	Set			(CInfoTalkEventBase *pSrc);				/* è¨­å®šã‹ã‚‰ç”»é¢ã«åæ˜  */
+	virtual void	Get			(CInfoTalkEventBase *pDst);				/* ç”»é¢ã‹ã‚‰è¨­å®šã«åæ˜  */
 
 
 protected:
-	int		m_nResourceID,		/* ƒ_ƒCƒAƒƒOƒŠƒ\[ƒXID */
-			m_nPageCount;		/* ƒy[ƒW” */
+	int		m_nResourceID,		/* ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãƒªã‚½ãƒ¼ã‚¹ID */
+			m_nPageCount;		/* ãƒšãƒ¼ã‚¸æ•° */
 
 
 protected:
@@ -44,7 +44,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminTalkEventNONE)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_SERVER_SAVEINFO.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒT[ƒo[î•ñ•Û‘¶) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_SERVER_SAVEINFO.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚µãƒ¼ãƒãƒ¼æƒ…å ±ä¿å­˜) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,16 +11,16 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_SERVER_SAVEINFO : public CPacketBase
 {
 public:
-			CPacketADMIN_SERVER_SAVEINFO();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_SERVER_SAVEINFO();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_SERVER_SAVEINFO();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_SERVER_SAVEINFO();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(void);										/* ƒpƒPƒbƒg‚ðì¬ */
+	void	Make	(void);										/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
 } CPacketADMIN_SERVER_SAVEINFO, *PCPacketADMIN_SERVER_SAVEINFO;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemTypeList.cpp									 */
-/* “à—e			:ƒAƒCƒeƒ€í•Êˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/28													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:DlgAdminItemTypeList.cpp									 */
+/* â€œÃ â€”e			:Æ’AÆ’CÆ’eÆ’â‚¬Å½Ã­â€¢ÃŠË†Ãªâ€”â€”Æ’_Æ’CÆ’AÆ’ÂÆ’OÆ’NÆ’â€°Æ’X Å½Ã€â€˜â€¢Æ’tÆ’@Æ’CÆ’â€¹				 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2007/09/28													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* Æ’NÆ’â€°Æ’Xâ€šÃŒÂÃâ€™Ã¨																 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::DoDataExchange(CDataExchange* pDX)
@@ -50,9 +50,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::CDlgAdminItemTypeList					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::CDlgAdminItemTypeList					 */
+/* â€œÃ â€”e		:Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeList::CDlgAdminItemTypeList(CWnd* pParent /*=NULL*/)
@@ -67,9 +67,9 @@ CDlgAdminItemTypeList::CDlgAdminItemTypeList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::~CDlgAdminItemTypeList					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::~CDlgAdminItemTypeList					 */
+/* â€œÃ â€”e		:Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeList::~CDlgAdminItemTypeList()
@@ -78,9 +78,9 @@ CDlgAdminItemTypeList::~CDlgAdminItemTypeList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::Init									 */
+/* â€œÃ â€”e		:Ââ€°Å Ãºâ€°Â»															 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::Init(CMgrData *pMgrData)
@@ -89,16 +89,16 @@ void CDlgAdminItemTypeList::Init(CMgrData *pMgrData)
 
 	m_pLibInfoItemType = m_pMgrData->GetLibInfoItemType ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* Æ’EÆ’BÆ’â€œÆ’hÆ’EÂÃ¬ÂÂ¬ */
 	Create (CDlgAdminItemTypeList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::Renew									 */
-/* “à—e		:ˆê——‚ğXV														 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::Renew									 */
+/* â€œÃ â€”e		:Ë†Ãªâ€”â€”â€šÃ°ÂXÂV														 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::Renew(void)
@@ -115,18 +115,18 @@ void CDlgAdminItemTypeList::Renew(void)
 		strTmp.Format ("%d", pInfoItemType->m_dwTypeID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemType->m_dwTypeID);		/* ID */
-		m_List.SetItemText (i, 1, pInfoItemType->m_strName);	/* ƒAƒCƒeƒ€–¼ */
+		m_List.SetItemText (i, 1, pInfoItemType->m_strName);	/* Æ’AÆ’CÆ’eÆ’â‚¬â€“Â¼ */
 
 		strTmp = m_pLibInfoItemType->GetTypeName (pInfoItemType->m_dwItemTypeID);
-		m_List.SetItemText (i, 2, strTmp);					/* í•Ê */
+		m_List.SetItemText (i, 2, strTmp);					/* Å½Ã­â€¢ÃŠ */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnAdminMsg								 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_ADMINMSG)								 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnAdminMsg(int nType, DWORD dwPara)
@@ -135,9 +135,9 @@ void CDlgAdminItemTypeList::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnInitDialog							 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_INITDIALOG)								 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminItemTypeList::OnInitDialog()
@@ -146,13 +146,13 @@ BOOL CDlgAdminItemTypeList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒAƒCƒeƒ€–¼",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "í•Ê",			LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "Æ’AÆ’CÆ’eÆ’â‚¬â€“Â¼",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, "Å½Ã­â€¢ÃŠ",			LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	/* ‘SƒAƒCƒeƒ€î•ñ‚ğ—v‹ */
+	/* â€˜SÆ’AÆ’CÆ’eÆ’â‚¬ÂÃ®â€¢Ã±â€šÃ°â€”vâ€¹Â */
 	OnRenew ();
 
 	return TRUE;
@@ -160,15 +160,15 @@ BOOL CDlgAdminItemTypeList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnMainFrame								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnMainFrame								 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MAINFRAME)								 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWITEMTYPEINFO:		/* ƒAƒCƒeƒ€í•Êî•ñXV */
+	case MAINFRAMEMSG_RENEWITEMTYPEINFO:		/* Æ’AÆ’CÆ’eÆ’â‚¬Å½Ã­â€¢ÃŠÂÃ®â€¢Ã±ÂXÂV */
 		Renew ();
 		break;
 	}
@@ -176,9 +176,9 @@ void CDlgAdminItemTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(V‹K’Ç‰Á)										 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnAdd									 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(ÂVâ€¹Kâ€™Ã‡â€°Ã)										 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnAdd()
@@ -207,9 +207,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnModify								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnModify								 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(â€¢Ã’ÂW)											 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnModify()
@@ -252,9 +252,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnCopy									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒRƒs[)											 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnCopy									 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(Æ’RÆ’sÂ[)											 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnCopy()
@@ -274,7 +274,7 @@ void CDlgAdminItemTypeList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("‘I‘ğ‚³‚ê‚Ä‚¢‚éƒAƒCƒeƒ€‚ğƒRƒs[‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("â€˜Iâ€˜Ã°â€šÂ³â€šÃªâ€šÃ„â€šÂ¢â€šÃ©Æ’AÆ’CÆ’eÆ’â‚¬â€šÃ°Æ’RÆ’sÂ[â€šÂµâ€šÃœâ€šÂ·â€šÂ©ÂH", "Å mâ€F", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -285,9 +285,9 @@ void CDlgAdminItemTypeList::OnCopy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnDelete								 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(ÂÃ­ÂÅ“)											 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnDelete()
@@ -308,8 +308,8 @@ void CDlgAdminItemTypeList::OnDelete()
 		return;
 	}
 
-	strTmp.Format ("[%s]‚ğíœ‚µ‚Ü‚·‚©H", (LPCSTR)pInfoItem->m_strName);
-	nResult = MessageBox (strTmp, "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	strTmp.Format ("[%s]â€šÃ°ÂÃ­ÂÅ“â€šÂµâ€šÃœâ€šÂ·â€šÂ©ÂH", (LPCSTR)pInfoItem->m_strName);
+	nResult = MessageBox (strTmp, "Å mâ€F", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -320,25 +320,25 @@ void CDlgAdminItemTypeList::OnDelete()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnRenew									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(XV)											 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::OnRenew									 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(ÂXÂV)											 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnRenew()
 {
 	CPacketITEM_REQ_ITEMTYPEINFO Packet;
 
-	/* ‘SƒAƒCƒeƒ€í•Êî•ñ‚ğ—v‹ */
+	/* â€˜SÆ’AÆ’CÆ’eÆ’â‚¬Å½Ã­â€¢ÃŠÂÃ®â€¢Ã±â€šÃ°â€”vâ€¹Â */
 	Packet.Make (0);
 	m_pSock->Send (&Packet);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::GetIndex								 */
-/* “à—e		:ƒAƒCƒeƒ€ID‚©‚çƒCƒ“ƒfƒbƒNƒX‚ğæ“¾								 */
-/* “ú•t		:2007/09/28														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminItemTypeList::GetIndex								 */
+/* â€œÃ â€”e		:Æ’AÆ’CÆ’eÆ’â‚¬IDâ€šÂ©â€šÃ§Æ’CÆ’â€œÆ’fÆ’bÆ’NÆ’Xâ€šÃ°Å½Ã¦â€œÂ¾								 */
+/* â€œÃºâ€¢t		:2007/09/28														 */
 /* ========================================================================= */
 
 int CDlgAdminItemTypeList::GetIndex(DWORD dwItemID)

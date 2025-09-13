@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketACCOUNT_REQ_ACCOUNTINFO.cpp							 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ÉAÉJÉEÉìÉgån:ÉAÉJÉEÉìÉgèÓïÒóvãÅ) é¿ëïÉtÉ@ÉCÉã		 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2006/11/06													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketACCOUNT_REQ_ACCOUNTINFO.cpp							 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Ç¢„Ç´„Ç¶„É≥„ÉàÁ≥ª:„Ç¢„Ç´„Ç¶„É≥„ÉàÊÉÖÂ†±Ë¶ÅÊ±Ç) ÂÆüË£Ö„Éï„Ç°„Ç§„É´		 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2006/11/06													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketACCOUNT_REQ_ACCOUNTINFO.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketACCOUNT_REQ_ACCOUNTINFO::CPacketACCOUNT_REQ_ACCOUNTINFO	 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2006/11/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketACCOUNT_REQ_ACCOUNTINFO::CPacketACCOUNT_REQ_ACCOUNTINFO	 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2006/11/06														 */
 /* ========================================================================= */
 
 CPacketACCOUNT_REQ_ACCOUNTINFO::CPacketACCOUNT_REQ_ACCOUNTINFO()
@@ -23,9 +23,9 @@ CPacketACCOUNT_REQ_ACCOUNTINFO::CPacketACCOUNT_REQ_ACCOUNTINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketACCOUNT_REQ_ACCOUNTINFO::~CPacketACCOUNT_REQ_ACCOUNTINFO */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2006/11/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketACCOUNT_REQ_ACCOUNTINFO::~CPacketACCOUNT_REQ_ACCOUNTINFO */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2006/11/06														 */
 /* ========================================================================= */
 
 CPacketACCOUNT_REQ_ACCOUNTINFO::~CPacketACCOUNT_REQ_ACCOUNTINFO()
@@ -34,13 +34,13 @@ CPacketACCOUNT_REQ_ACCOUNTINFO::~CPacketACCOUNT_REQ_ACCOUNTINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketACCOUNT_REQ_ACCOUNTINFO::Make							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2006/11/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketACCOUNT_REQ_ACCOUNTINFO::Make							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2006/11/06														 */
 /* ========================================================================= */
 
 void CPacketACCOUNT_REQ_ACCOUNTINFO::Make(
-	DWORD dwAccountID)		/* [in] ÉAÉJÉEÉìÉgID */
+	DWORD dwAccountID)		/* [in] „Ç¢„Ç´„Ç¶„É≥„ÉàID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketACCOUNT_REQ_ACCOUNTINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ACCOUNT_REQ_ACCOUNTINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwAccountID, sizeof (dwAccountID), pDataTmp);	/* ÉAÉJÉEÉìÉgID */
+	CopyMemoryRenew (pDataTmp, &dwAccountID, sizeof (dwAccountID), pDataTmp);	/* „Ç¢„Ç´„Ç¶„É≥„ÉàID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketACCOUNT_REQ_ACCOUNTINFO::Set							 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2006/11/06														 */
+/* Èñ¢Êï∞Âêç	:CPacketACCOUNT_REQ_ACCOUNTINFO::Set							 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2006/11/06														 */
 /* ========================================================================= */
 
 PBYTE CPacketACCOUNT_REQ_ACCOUNTINFO::Set(PBYTE pPacket)
@@ -76,7 +76,7 @@ PBYTE CPacketACCOUNT_REQ_ACCOUNTINFO::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* ÉAÉJÉEÉìÉgID */
+	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* „Ç¢„Ç´„Ç¶„É≥„ÉàID */
 
 	pRet = pDataTmp;
 	return pRet;

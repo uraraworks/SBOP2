@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowITEMMENU_SELECT.h									 */
-/* “à—e			:ƒAƒCƒeƒ€‚Ç‚¤‚·‚é‚©ƒƒjƒ…[ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/13													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowITEMMENU_SELECT.h									 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ã©ã†ã™ã‚‹ã‹ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/13													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,49 +16,49 @@ class CInfoItem;
 class CLibInfoItem;
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
 enum {
 	ITEMMENU_SELECT_COMMAND_NONE = 0,	
-	ITEMMENU_SELECT_COMMAND_PUT,			/* ’n–Ê‚É’u‚­ */
-	ITEMMENU_SELECT_COMMAND_EQUIP,			/* ‘•”õ‚·‚é */
-	ITEMMENU_SELECT_COMMAND_EQUIP_UNSET,	/* ‘•”õ‚ðŠO‚· */
-	ITEMMENU_SELECT_COMMAND_USE,			/* Žg‚¤ */
+	ITEMMENU_SELECT_COMMAND_PUT,			/* åœ°é¢ã«ç½®ã */
+	ITEMMENU_SELECT_COMMAND_EQUIP,			/* è£…å‚™ã™ã‚‹ */
+	ITEMMENU_SELECT_COMMAND_EQUIP_UNSET,	/* è£…å‚™ã‚’å¤–ã™ */
+	ITEMMENU_SELECT_COMMAND_USE,			/* ä½¿ã† */
 	ITEMMENU_SELECT_COMMAND_MAX
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWindowITEMMENU_SELECT : public CWindowBase
 {
 public:
-			CWindowITEMMENU_SELECT();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWindowITEMMENU_SELECT();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWindowITEMMENU_SELECT();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWindowITEMMENU_SELECT();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Create			(CMgrData *pMgrData);					/* ì¬ */
-	void	Draw			(CImg32 *pDst);							/* •`‰æ */
-	void	SetItemID		(int nType, DWORD dwItemID);			/* ƒAƒCƒeƒ€ID‚ðŽw’è */
-	int		GetType			(void)	{ return m_nType; }				/* ƒAƒCƒeƒ€‚ÌŽí—Þ‚ðŽæ“¾ */
-
-
-protected:
-	BOOL	OnUp		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(ª) */
-	BOOL	OnDown		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(«) */
-	BOOL	OnLeft		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(©) */
-	BOOL	OnRight		(void);								/* ƒL[ƒnƒ“ƒhƒ‰(¨) */
-	BOOL	OnX			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(X) */
-	BOOL	OnZ			(BOOL bDown);						/* ƒL[ƒnƒ“ƒhƒ‰(Z) */
+	void	Create			(CMgrData *pMgrData);					/* ä½œæˆ */
+	void	Draw			(CImg32 *pDst);							/* æç”» */
+	void	SetItemID		(int nType, DWORD dwItemID);			/* ã‚¢ã‚¤ãƒ†ãƒ IDã‚’æŒ‡å®š */
+	int		GetType			(void)	{ return m_nType; }				/* ã‚¢ã‚¤ãƒ†ãƒ ã®ç¨®é¡žã‚’å–å¾— */
 
 
 protected:
-	int				m_nType;					/* ƒAƒCƒeƒ€‚ÌŽí—Þ */
-	CInfoItem		*m_pInfoItem;				/* ˆ—’†‚ÌƒAƒCƒeƒ€î•ñ */
-	CLibInfoItem	*m_pLibInfoItem;			/* ƒAƒCƒeƒ€î•ñƒ‰ƒCƒuƒ‰ƒŠ */
-	ARRAYINT		m_anCommand;				/* ƒRƒ}ƒ“ƒhŽí•Ê */
+	BOOL	OnUp		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘) */
+	BOOL	OnDown		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“) */
+	BOOL	OnLeft		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†) */
+	BOOL	OnRight		(void);								/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’) */
+	BOOL	OnX			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X) */
+	BOOL	OnZ			(BOOL bDown);						/* ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z) */
+
+
+protected:
+	int				m_nType;					/* ã‚¢ã‚¤ãƒ†ãƒ ã®ç¨®é¡ž */
+	CInfoItem		*m_pInfoItem;				/* å‡¦ç†ä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ± */
+	CLibInfoItem	*m_pLibInfoItem;			/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒª */
+	ARRAYINT		m_anCommand;				/* ã‚³ãƒžãƒ³ãƒ‰ç¨®åˆ¥ */
 } CWindowITEMMENU_SELECT, *PCWindowITEMMENU_SELECT;
 
 /* Copyright(C)URARA-works 2007 */

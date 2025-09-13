@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_SYSTEMMSG.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒVƒXƒeƒ€ƒƒbƒZ[ƒW’Ê’m) À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/02/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_SYSTEMMSG.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/02/10													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketMAP_SYSTEMMSG.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_SYSTEMMSG::CPacketMAP_SYSTEMMSG						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_SYSTEMMSG::CPacketMAP_SYSTEMMSG						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 CPacketMAP_SYSTEMMSG::CPacketMAP_SYSTEMMSG()
@@ -25,9 +25,9 @@ CPacketMAP_SYSTEMMSG::CPacketMAP_SYSTEMMSG()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_SYSTEMMSG::~CPacketMAP_SYSTEMMSG					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_SYSTEMMSG::~CPacketMAP_SYSTEMMSG					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 CPacketMAP_SYSTEMMSG::~CPacketMAP_SYSTEMMSG()
@@ -36,16 +36,16 @@ CPacketMAP_SYSTEMMSG::~CPacketMAP_SYSTEMMSG()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_SYSTEMMSG::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_SYSTEMMSG::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 void CPacketMAP_SYSTEMMSG::Make(
-	LPCSTR pszMsg,								/* [in] ƒVƒXƒeƒ€ƒƒbƒZ[ƒW */
-	COLORREF clMsg,	/*=0*/						/* [in] •\¦F */
-	BOOL bSound,	/*=TRUE*/					/* [in] •\¦‚·‚é‚É‰¹‚ğ‚È‚ç‚·‚©”»’è */
-	int nMsgType)	/*=SYSTEMMSGTYPE_DEFAULT*/	/* [in] ƒƒbƒZ[ƒWí•Ê */
+	LPCSTR pszMsg,								/* [in] ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	COLORREF clMsg,	/*=0*/						/* [in] è¡¨ç¤ºè‰² */
+	BOOL bSound,	/*=TRUE*/					/* [in] è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	int nMsgType)	/*=SYSTEMMSGTYPE_DEFAULT*/	/* [in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -69,19 +69,19 @@ void CPacketMAP_SYSTEMMSG::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_SYSTEMMSG;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	strcpyRenew ((LPSTR)pDataTmp, pszMsg, pDataTmp);						/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW */
-	CopyMemoryRenew (pDataTmp, &clMsg,		sizeof (clMsg),		pDataTmp);	/* •\¦F */
-	CopyMemoryRenew (pDataTmp, &bSound,		sizeof (bSound),	pDataTmp);	/* •\¦‚·‚é‚É‰¹‚ğ‚È‚ç‚·‚©”»’è */
-	CopyMemoryRenew (pDataTmp, &nMsgType,	sizeof (nMsgType),	pDataTmp);	/* ƒƒbƒZ[ƒWí•Ê */
+	strcpyRenew ((LPSTR)pDataTmp, pszMsg, pDataTmp);						/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	CopyMemoryRenew (pDataTmp, &clMsg,		sizeof (clMsg),		pDataTmp);	/* è¡¨ç¤ºè‰² */
+	CopyMemoryRenew (pDataTmp, &bSound,		sizeof (bSound),	pDataTmp);	/* è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	CopyMemoryRenew (pDataTmp, &nMsgType,	sizeof (nMsgType),	pDataTmp);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_SYSTEMMSG::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/02/10														 */
+/* é–¢æ•°å	:CPacketMAP_SYSTEMMSG::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/02/10														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_SYSTEMMSG::Set(PBYTE pPacket)
@@ -91,10 +91,10 @@ PBYTE CPacketMAP_SYSTEMMSG::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	StoreRenew (m_strMsg, (LPCSTR)pDataTmp, pDataTmp);							/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW */
-	CopyMemoryRenew (&m_clMsg,		pDataTmp, sizeof (m_clMsg),		pDataTmp);	/* •\¦F */
-	CopyMemoryRenew (&m_bSound,		pDataTmp, sizeof (m_bSound),	pDataTmp);	/* •\¦‚·‚é‚É‰¹‚ğ‚È‚ç‚·‚©”»’è */
-	CopyMemoryRenew (&m_nMsgType,	pDataTmp, sizeof (m_nMsgType),	pDataTmp);	/* ƒƒbƒZ[ƒWí•Ê */
+	StoreRenew (m_strMsg, (LPCSTR)pDataTmp, pDataTmp);							/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	CopyMemoryRenew (&m_clMsg,		pDataTmp, sizeof (m_clMsg),		pDataTmp);	/* è¡¨ç¤ºè‰² */
+	CopyMemoryRenew (&m_bSound,		pDataTmp, sizeof (m_bSound),	pDataTmp);	/* è¡¨ç¤ºã™ã‚‹æ™‚ã«éŸ³ã‚’ãªã‚‰ã™ã‹åˆ¤å®š */
+	CopyMemoryRenew (&m_nMsgType,	pDataTmp, sizeof (m_nMsgType),	pDataTmp);	/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç¨®åˆ¥ */
 
 	pRet = pDataTmp;
 	return pRet;

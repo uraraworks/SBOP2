@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_RENEWMAPSIZE.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒTƒCƒYXV) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/05/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_RENEWMAPSIZE.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ãƒžãƒƒãƒ—ã‚µã‚¤ã‚ºæ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,23 +11,23 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_RENEWMAPSIZE : public CPacketBase
 {
 public:
-			CPacketMAP_RENEWMAPSIZE();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_RENEWMAPSIZE();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_RENEWMAPSIZE();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_RENEWMAPSIZE();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMapID, int nDirection, int nSize);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwMapID, int nDirection, int nSize);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwMapID;				/* ƒ}ƒbƒvID */
-	int		m_nDirection,			/* ‘Œ¸‚·‚é•ûŒü */
-			m_nSize;				/* ‘Œ¸‚·‚é‹——£ */
+	DWORD	m_dwMapID;				/* ãƒžãƒƒãƒ—ID */
+	int		m_nDirection,			/* å¢—æ¸›ã™ã‚‹æ–¹å‘ */
+			m_nSize;				/* å¢—æ¸›ã™ã‚‹è·é›¢ */
 } CPacketMAP_RENEWMAPSIZE, *PCPacketMAP_RENEWMAPSIZE;
 
 /* Copyright(C)URARA-works 2007 */

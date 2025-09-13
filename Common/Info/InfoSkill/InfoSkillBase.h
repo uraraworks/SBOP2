@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSkillBase.h											 */
-/* “à—e			:ƒXƒLƒ‹î•ñŠî’êƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoSkillBase.h											 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«æƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,92 +11,92 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒXƒLƒ‹Ží•Ê(ƒƒCƒ“) */
+/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
 enum {
-	SKILLTYPEMAIN_NONE = 0,			/* ”\—Í */
-	SKILLTYPEMAIN_BATTLE,			/* í“¬ */
-	SKILLTYPEMAIN_LIFE,				/* ¶Šˆ */
+	SKILLTYPEMAIN_NONE = 0,			/* èƒ½åŠ› */
+	SKILLTYPEMAIN_BATTLE,			/* æˆ¦é—˜ */
+	SKILLTYPEMAIN_LIFE,				/* ç”Ÿæ´» */
 	SKILLTYPEMAIN_MAX
 };
 
-/* ƒXƒLƒ‹Ží•Ê(ƒTƒu:”\—Í) */
+/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–:èƒ½åŠ›) */
 enum {
 	SKILLTYPESUB_NONE_NONE = 0,
 };
 
-/* ƒXƒLƒ‹Ží•Ê(ƒTƒu:í“¬) */
+/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–:æˆ¦é—˜) */
 enum {
 	SKILLTYPESUB_BATTLE_NONE = 0,
-	SKILLTYPESUB_BATTLE_MOVEATACK,	/* ˆÚ“®‚µ‚ÄUŒ‚ */
-	SKILLTYPESUB_BATTLE_HEAL,		/* ‰ñ•œ */
+	SKILLTYPESUB_BATTLE_MOVEATACK,	/* ç§»å‹•ã—ã¦æ”»æ’ƒ */
+	SKILLTYPESUB_BATTLE_HEAL,		/* å›žå¾© */
 	SKILLTYPESUB_BATTLE_MAX
 };
 
-/* ƒXƒLƒ‹Ží•Ê(ƒTƒu:¶Šˆ) */
+/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–:ç”Ÿæ´») */
 enum {
 	SKILLTYPESUB_LIFE_NONE = 0,
-	SKILLTYPESUB_LIFE_FISHING,		/* ’Þ‚è */
+	SKILLTYPESUB_LIFE_FISHING,		/* é‡£ã‚Š */
 	SKILLTYPESUB_LIFE_MAX
 };
 
-/* Žg—p§ŒÀ */
+/* ä½¿ç”¨åˆ¶é™ */
 enum {
-	SKILLUSE_ANY = 0,			/* §ŒÀ–³‚µ */
-	SKILLUSE_NORMAL,			/* ’ÊíŽž */
-	SKILLUSE_BATTLE,			/* í“¬ƒ‚[ƒhŽž */
+	SKILLUSE_ANY = 0,			/* åˆ¶é™ç„¡ã— */
+	SKILLUSE_NORMAL,			/* é€šå¸¸æ™‚ */
+	SKILLUSE_BATTLE,			/* æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰æ™‚ */
 	SKILLUSE_MAX
 };
 
-/* ƒNƒ‰ƒXŽí•Ê */
+/* ã‚¯ãƒ©ã‚¹ç¨®åˆ¥ */
 enum {
-	INFOSKILLTYPE_BASE = 0,		/* Šî’ê */
-	INFOSKILLTYPE_MOVEATACK,	/* ˆÚ“®‚µ‚ÄUŒ‚ */
-	INFOSKILLTYPE_HEAL,			/* ‰ñ•œ */
+	INFOSKILLTYPE_BASE = 0,		/* åŸºåº• */
+	INFOSKILLTYPE_MOVEATACK,	/* ç§»å‹•ã—ã¦æ”»æ’ƒ */
+	INFOSKILLTYPE_HEAL,			/* å›žå¾© */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoSkillBase : public CInfoBase
 {
 public:
-			CInfoSkillBase();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoSkillBase();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoSkillBase();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoSkillBase();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetDerivationSize		(void);							/* ”h¶ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual PBYTE	GetDerivationWriteData	(PDWORD pdwSize);				/* ”h¶ƒf[ƒ^‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	virtual DWORD	ReadDerivationData		(PBYTE pSrc);					/* ”h¶ƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	virtual DWORD	GetDerivationSize		(void);							/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetDerivationWriteData	(PDWORD pdwSize);				/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadDerivationData		(PBYTE pSrc);					/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoSkillBase *pSrc);			/* ƒRƒs[ */
+	virtual void	Copy				(CInfoSkillBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	int			m_nElementCountBase,			/* Šî’êƒNƒ‰ƒX‚Ì—v‘f” */
-				m_nClassType;					/* ƒNƒ‰ƒXŽí•Ê */
+	int			m_nElementCountBase,			/* åŸºåº•ã‚¯ãƒ©ã‚¹ã®è¦ç´ æ•° */
+				m_nClassType;					/* ã‚¯ãƒ©ã‚¹ç¨®åˆ¥ */
 
-	DWORD		m_dwSkillID,					/* ƒXƒLƒ‹ID */
-				m_dwSP,							/* Á”ïSP */
-				m_dwIconID;						/* ƒAƒCƒRƒ“‰æ‘œID */
-	int			m_nTypeMain,					/* ƒXƒLƒ‹Ží•Ê(ƒƒCƒ“) */
-				m_nTypeSub,						/* ƒXƒLƒ‹Ží•Ê(ƒTƒu) */
-				m_nUse;							/* Žg—p§ŒÀ */
-	CmyString	m_strName;						/* ƒXƒLƒ‹–¼ */
+	DWORD		m_dwSkillID,					/* ã‚¹ã‚­ãƒ«ID */
+				m_dwSP,							/* æ¶ˆè²»SP */
+				m_dwIconID;						/* ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒID */
+	int			m_nTypeMain,					/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+				m_nTypeSub,						/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+				m_nUse;							/* ä½¿ç”¨åˆ¶é™ */
+	CmyString	m_strName;						/* ã‚¹ã‚­ãƒ«å */
 } CInfoSkillBase, *PCInfoSkillBase;
 typedef CmyArray<PCInfoSkillBase, PCInfoSkillBase>	  ARRAYSKILLBASEINFO;
 typedef CmyArray<PCInfoSkillBase, PCInfoSkillBase>	*PARRAYSKILLBASEINFO;

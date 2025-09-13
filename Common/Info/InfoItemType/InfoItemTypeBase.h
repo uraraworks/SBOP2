@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoItemTypeBase.h											 */
-/* “à—e			:ƒAƒCƒeƒ€Ží•ÊŠî’êî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoItemTypeBase.h											 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥åŸºåº•æƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/26													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,104 +11,104 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒAƒCƒeƒ€Ží•Ê */
+/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ */
 enum {
-	ITEMTYPEID_NONE = 0,				/* Œø‰Ê–³‚µ */
-	ITEMTYPEID_CLOTH,					/* •ž */
-	ITEMTYPEID_ACCE,					/* ƒAƒNƒZƒTƒŠ */
-	ITEMTYPEID_ARMS,					/* Ž‚¿•¨ */
-	ITEMTYPEID_SHIELD,					/* ‚ */
-	ITEMTYPEID_HP,						/* HP‘Œ¸ */
-	ITEMTYPEID_LIGHT,					/* “”‚è */
+	ITEMTYPEID_NONE = 0,				/* åŠ¹æžœç„¡ã— */
+	ITEMTYPEID_CLOTH,					/* æœ */
+	ITEMTYPEID_ACCE,					/* ã‚¢ã‚¯ã‚»ã‚µãƒª */
+	ITEMTYPEID_ARMS,					/* æŒã¡ç‰© */
+	ITEMTYPEID_SHIELD,					/* ç›¾ */
+	ITEMTYPEID_HP,						/* HPå¢—æ¸› */
+	ITEMTYPEID_LIGHT,					/* ç¯ã‚Š */
 	ITEMTYPEID_MAX
 };
 
-/* ‰æ‘œIDƒƒCƒ“(•ž) */
+/* ç”»åƒIDãƒ¡ã‚¤ãƒ³(æœ) */
 enum {
-	ITEMGRPIDMAIN_CLOTH_NONE = 0,		/* –¢Ý’è */
-	ITEMGRPIDMAIN_CLOTH_SP,				/* “ÁŽê•ž */
+	ITEMGRPIDMAIN_CLOTH_NONE = 0,		/* æœªè¨­å®š */
+	ITEMGRPIDMAIN_CLOTH_SP,				/* ç‰¹æ®Šæœ */
 	ITEMGRPIDMAIN_CLOTH_MAX
 };
 
-/* ‰æ‘œIDƒƒCƒ“(Ž‚¿•¨) */
+/* ç”»åƒIDãƒ¡ã‚¤ãƒ³(æŒã¡ç‰©) */
 enum {
-	ITEMGRPIDMAIN_ARMS_NONE = 0,		/* –¢Ý’è */
-	ITEMGRPIDMAIN_ARMS_BOW,				/* ‹| */
-	ITEMGRPIDMAIN_WEAPON_GLOVE,			/* •Ší(‘ÅŒ‚) */
-	ITEMGRPIDMAIN_WEAPON_ETC,			/* •Ší(‚»‚Ì‘¼) */
-	ITEMGRPIDMAIN_2X2_ARMS,				/* Ž‚¿•¨(2x2) */
-	ITEMGRPIDMAIN_2X2_SHIELD,			/* ‚(2x2) */
-	ITEMGRPIDMAIN_2X2_ARMSSP,			/* “ÁŽêŽ‚¿•¨(2x2) */
-	ITEMGRPIDMAIN_2X2_BOW,				/* ‹|(2x2) */
+	ITEMGRPIDMAIN_ARMS_NONE = 0,		/* æœªè¨­å®š */
+	ITEMGRPIDMAIN_ARMS_BOW,				/* å¼“ */
+	ITEMGRPIDMAIN_WEAPON_GLOVE,			/* æ­¦å™¨(æ‰“æ’ƒ) */
+	ITEMGRPIDMAIN_WEAPON_ETC,			/* æ­¦å™¨(ãã®ä»–) */
+	ITEMGRPIDMAIN_2X2_ARMS,				/* æŒã¡ç‰©(2x2) */
+	ITEMGRPIDMAIN_2X2_SHIELD,			/* ç›¾(2x2) */
+	ITEMGRPIDMAIN_2X2_ARMSSP,			/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
+	ITEMGRPIDMAIN_2X2_BOW,				/* å¼“(2x2) */
 	ITEMGRPIDMAIN_ARMS_MAX
 };
 
-/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê */
+/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ */
 #define INFOITEMARMS_MOTION_NONE		0x00000000
-#define INFOITEMARMS_MOTION_SWING		0x00000001		/* U‚è */
-#define INFOITEMARMS_MOTION_POKE		0x00000002		/* “Ë‚« */
-#define INFOITEMARMS_MOTION_BOW			0x00000004		/* ‹| */
-#define INFOITEMARMS_MOTION_BLOW		0x00000008		/* ‘ÅŒ‚ */
-#define INFOITEMARMS_MOTION_FISHING		0x00000010		/* ’Þ‚è */
+#define INFOITEMARMS_MOTION_SWING		0x00000001		/* æŒ¯ã‚Š */
+#define INFOITEMARMS_MOTION_POKE		0x00000002		/* çªã */
+#define INFOITEMARMS_MOTION_BOW			0x00000004		/* å¼“ */
+#define INFOITEMARMS_MOTION_BLOW		0x00000008		/* æ‰“æ’ƒ */
+#define INFOITEMARMS_MOTION_FISHING		0x00000010		/* é‡£ã‚Š */
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoItemTypeBase : public CInfoBase
 {
 public:
-			CInfoItemTypeBase();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoItemTypeBase();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoItemTypeBase();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoItemTypeBase();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoItemTypeBase *pSrc);			/* ƒRƒs[ */
-	virtual void	SetGrpID			(WORD *pwDst1, WORD *pwDst2);		/* ‰æ‘œID‚ðÝ’è */
+	virtual void	Copy				(CInfoItemTypeBase *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
+	virtual void	SetGrpID			(WORD *pwDst1, WORD *pwDst2);		/* ç”»åƒIDã‚’è¨­å®š */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	BYTE		m_byDelAverage,					/* Žg‚Á‚Ä‚È‚­‚È‚éŠm—¦ */
-				m_byTarget,						/* Žg—p‘ÎÛ */
-				m_byArea;						/* Žg—p”ÍˆÍ */
-	BOOL		m_bPutOn;						/* ã‚É’u‚¯‚é‚©”»’è */
-	WORD		m_wGrpIDMain,					/* ‰æ‘œIDƒƒCƒ“ */
-				m_wGrpIDSub;					/* ‰æ‘œIDƒTƒu */
-	DWORD		m_dwTypeID,						/* Ží•ÊID */
-				m_dwItemTypeID,					/* ƒAƒCƒeƒ€Ží•ÊID */
-				m_dwGrpID,						/* ’n–Ê‚É‚ ‚éŽž‚Ì‰æ‘œID */
-				m_dwIconGrpID,					/* ƒoƒbƒNƒpƒbƒN“à‚Ì‰æ‘œID */
-				m_dwDropSoundID,				/* —Ž‚¿‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
-				m_dwUseEffectID,				/* Žg‚Á‚½Žž‚ÉÄ¶‚·‚éƒGƒtƒFƒNƒgID */
-				m_dwUseSoundID;					/* Žg‚Á‚½Žž‚ÉÄ¶‚·‚éŒø‰Ê‰¹ID */
-	CmyString	m_strName;						/* ƒAƒCƒeƒ€–¼ */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	BYTE		m_byDelAverage,					/* ä½¿ã£ã¦ãªããªã‚‹ç¢ºçŽ‡ */
+				m_byTarget,						/* ä½¿ç”¨å¯¾è±¡ */
+				m_byArea;						/* ä½¿ç”¨ç¯„å›² */
+	BOOL		m_bPutOn;						/* ä¸Šã«ç½®ã‘ã‚‹ã‹åˆ¤å®š */
+	WORD		m_wGrpIDMain,					/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ */
+				m_wGrpIDSub;					/* ç”»åƒIDã‚µãƒ– */
+	DWORD		m_dwTypeID,						/* ç¨®åˆ¥ID */
+				m_dwItemTypeID,					/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+				m_dwGrpID,						/* åœ°é¢ã«ã‚ã‚‹æ™‚ã®ç”»åƒID */
+				m_dwIconGrpID,					/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ç”»åƒID */
+				m_dwDropSoundID,				/* è½ã¡ãŸã¨ãã®åŠ¹æžœéŸ³ID */
+				m_dwUseEffectID,				/* ä½¿ã£ãŸæ™‚ã«å†ç”Ÿã™ã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+				m_dwUseSoundID;					/* ä½¿ã£ãŸæ™‚ã«å†ç”Ÿã™ã‚‹åŠ¹æžœéŸ³ID */
+	CmyString	m_strName;						/* ã‚¢ã‚¤ãƒ†ãƒ å */
 
-	/* Ž‚¿•¨ */
-	DWORD		m_dwWeaponInfoID,				/* •Šíî•ñID */
-				m_dwValue,						/* UŒ‚—Í */
-				m_dwMoveWait,					/* ‘¬“x */
-				m_dwMoveCount;					/* ”ò‹——£ */
-	/* HP‘Œ¸ */
-	DWORD		m_dwValue2;						/* Œø‰Ê(Å‘å)Å¬‚Ím_dwValue */
-	/* “”‚è */
-//	DWORD		m_dwValue,						/* “”‚èƒŒƒxƒ‹ */
-//				m_dwValue2;						/* Ž‘±ŽžŠÔ */
+	/* æŒã¡ç‰© */
+	DWORD		m_dwWeaponInfoID,				/* æ­¦å™¨æƒ…å ±ID */
+				m_dwValue,						/* æ”»æ’ƒåŠ› */
+				m_dwMoveWait,					/* é€Ÿåº¦ */
+				m_dwMoveCount;					/* é£›è·é›¢ */
+	/* HPå¢—æ¸› */
+	DWORD		m_dwValue2;						/* åŠ¹æžœ(æœ€å¤§)æœ€å°ã¯m_dwValue */
+	/* ç¯ã‚Š */
+//	DWORD		m_dwValue,						/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+//				m_dwValue2;						/* æŒç¶šæ™‚é–“ */
 } CInfoItemTypeBase, *PCInfoItemTypeBase;
 typedef CmyArray<PCInfoItemTypeBase, PCInfoItemTypeBase>	   ARRAYITEMTYPEINFO;
 typedef CmyArray<PCInfoItemTypeBase, PCInfoItemTypeBase>	 *PARRAYITEMTYPEINFO;

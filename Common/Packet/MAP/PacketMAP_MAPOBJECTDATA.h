@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPOBJECTDATA.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/11/03													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPOBJECTDATA.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/03													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,23 +14,23 @@ class CLibInfoMapObjectData;
 class CInfoMapObjectData;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_MAPOBJECTDATA : public CPacketBase
 {
 public:
-			CPacketMAP_MAPOBJECTDATA();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_MAPOBJECTDATA();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_MAPOBJECTDATA();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_MAPOBJECTDATA();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMapID, CLibInfoMapObjectData *pLibInfo);	/* ƒpƒPƒbƒg‚ðì¬ */
-	void	Make	(DWORD dwMapID, CInfoMapObjectData *pInfo);			/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);									/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwMapID, CLibInfoMapObjectData *pLibInfo);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	void	Make	(DWORD dwMapID, CInfoMapObjectData *pInfo);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);									/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD					m_dwMapID;			/* ƒ}ƒbƒvID */
-	CLibInfoMapObjectData	*m_pLibInfo;		/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg”z’uƒf[ƒ^ */
+	DWORD					m_dwMapID;			/* ãƒžãƒƒãƒ—ID */
+	CLibInfoMapObjectData	*m_pLibInfo;		/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®ãƒ‡ãƒ¼ã‚¿ */
 } CPacketMAP_MAPOBJECTDATA, *PCPacketMAP_MAPOBJECTDATA;
 
 /* Copyright(C)URARA-works 2008 */

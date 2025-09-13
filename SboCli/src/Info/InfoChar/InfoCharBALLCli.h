@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharBALLCli.h											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(ƒ{[ƒ‹)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharBALLCli.h											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(ãƒœãƒ¼ãƒ«)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/02													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,16 +11,16 @@
 #include "InfoCharCli.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharBALLCli : public CInfoCharCli
 {
 public:
-			CInfoCharBALLCli();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharBALLCli();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharBALLCli();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharBALLCli();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void		ChgMoveState	(int nMoveState);				/* ˆÚ“®ó‘Ô•ÏX */
+	void		ChgMoveState	(int nMoveState);				/* ç§»å‹•çŠ¶æ…‹å¤‰æ›´ */
 } CInfoCharBALLCli, *PCInfoCharBALLCli;
 
 /* Copyright(C)URARA-works 2007 */

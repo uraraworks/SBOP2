@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoEfcBalloon.h											 */
-/* “à—e			:•¬o‚µî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/12/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoEfcBalloon.h											 */
+/* å†…å®¹			:å™´å‡ºã—æƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/24													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,40 +11,40 @@
 #include "InfoAnime.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoEfcBalloon : public CInfoBase
 {
 public:
-			CInfoEfcBalloon();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoEfcBalloon();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoEfcBalloon();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoEfcBalloon();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ðŽæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ðŽæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	void	Copy				(CInfoEfcBalloon *pSrc);			/* ƒRƒs[ */
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
+	void	Copy				(CInfoEfcBalloon *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢ƒf[ƒ^ */
+	/* ä¿å­˜ã—ãªã„ãƒ‡ãƒ¼ã‚¿ */
 
-	/* •Û‘¶‚·‚éƒf[ƒ^ */
-	BYTE		m_byWait;							/* ‘Ò‚¿ŽžŠÔ(~‚P‚Oƒ~ƒŠ•b) */
-	BOOL		m_bLoop;							/* ƒ‹[ƒvÄ¶ */
-	DWORD		m_dwEfcBalloonID,					/* •¬o‚µID */
-				m_dwListID,							/* •¬o‚µŽí•ÊID */
-				m_dwAnimeID,						/* ƒRƒ}”Ô† */
-				m_dwSoundID,						/* Œø‰Ê‰¹ID */
-				m_dwGrpID;							/* ‰æ‘œID */
-	CmyString	m_strName;							/* •¬o‚µ–¼ */
+	/* ä¿å­˜ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ */
+	BYTE		m_byWait;							/* å¾…ã¡æ™‚é–“(Ã—ï¼‘ï¼ãƒŸãƒªç§’) */
+	BOOL		m_bLoop;							/* ãƒ«ãƒ¼ãƒ—å†ç”Ÿ */
+	DWORD		m_dwEfcBalloonID,					/* å™´å‡ºã—ID */
+				m_dwListID,							/* å™´å‡ºã—ç¨®åˆ¥ID */
+				m_dwAnimeID,						/* ã‚³ãƒžç•ªå· */
+				m_dwSoundID,						/* åŠ¹æžœéŸ³ID */
+				m_dwGrpID;							/* ç”»åƒID */
+	CmyString	m_strName;							/* å™´å‡ºã—å */
 } CInfoEfcBalloon, *PCInfoEfcBalloon;
 typedef CmyArray<PCInfoEfcBalloon, PCInfoEfcBalloon>	  ARRAYEFCBALLOON;
 typedef CmyArray<PCInfoEfcBalloon, PCInfoEfcBalloon>	*PARRAYEFCBALLOON;

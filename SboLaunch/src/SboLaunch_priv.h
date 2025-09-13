@@ -1,30 +1,30 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboLaunch_priv.h											 */
-/* “à—e			:SBOƒ‰ƒ“ƒ`ƒƒ[—p’è‹`ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/01/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboLaunch_priv.h											 */
+/* å†…å®¹			:SBOãƒ©ãƒ³ãƒãƒ£ãƒ¼ç”¨å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/27													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒQ[ƒ€ó‘Ô */
+/* ã‚²ãƒ¼ãƒ çŠ¶æ…‹ */
 enum {
 	GAMESTATE_NONE = 0,
-	GAMESTATE_CONNECT,							/* ƒT[ƒo[‚ÖÚ‘± */
-	GAMESTATE_CONNECTMISS,						/* ƒT[ƒo[‚ÖÚ‘±Ž¸”s */
-	GAMESTATE_DISCONNECT,						/* ƒT[ƒo[‚ÆØ’f */
-	GAMESTATE_GETFILELIST,						/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgŽæ“¾ */
-	GAMESTATE_CHECKFILELIST,					/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN */
-	GAMESTATE_GETFILE,							/* ƒtƒ@ƒCƒ‹Žæ“¾ */
-	GAMESTATE_MAKEFILELIST,						/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgo—Í */
-	GAMESTATE_RUNUPDATE,						/* ƒAƒbƒvƒf[ƒ^‹N“® */
-	GAMESTATE_RUNSBOCLI,						/* ƒNƒ‰ƒCƒAƒ“ƒg‹N“® */
-	GAMESTATE_QUIT,								/* I—¹ */
+	GAMESTATE_CONNECT,							/* ã‚µãƒ¼ãƒãƒ¼ã¸æŽ¥ç¶š */
+	GAMESTATE_CONNECTMISS,						/* ã‚µãƒ¼ãƒãƒ¼ã¸æŽ¥ç¶šå¤±æ•— */
+	GAMESTATE_DISCONNECT,						/* ã‚µãƒ¼ãƒãƒ¼ã¨åˆ‡æ–­ */
+	GAMESTATE_GETFILELIST,						/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå–å¾— */
+	GAMESTATE_CHECKFILELIST,					/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯ */
+	GAMESTATE_GETFILE,							/* ãƒ•ã‚¡ã‚¤ãƒ«å–å¾— */
+	GAMESTATE_MAKEFILELIST,						/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå‡ºåŠ› */
+	GAMESTATE_RUNUPDATE,						/* ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿èµ·å‹• */
+	GAMESTATE_RUNSBOCLI,						/* ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆèµ·å‹• */
+	GAMESTATE_QUIT,								/* çµ‚äº† */
 };
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,31 +1,31 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoMotionType.cpp											 */
-/* “à—e			:ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/05/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoMotionType.cpp											 */
+/* å†…å®¹			:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoMotionType.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_dwMotionTypeID",		/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	"m_wGrpIDSub",			/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	"m_strName",			/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	"m_dwMotionTypeID",		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	"m_wGrpIDSub",			/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	"m_strName",			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::CInfoMotionType								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::CInfoMotionType								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 CInfoMotionType::CInfoMotionType()
@@ -38,9 +38,9 @@ CInfoMotionType::CInfoMotionType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::~CInfoMotionType								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::~CInfoMotionType								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 CInfoMotionType::~CInfoMotionType()
@@ -49,9 +49,9 @@ CInfoMotionType::~CInfoMotionType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ðŽæ“¾													 */
-/* “ú•t		:2005/05/01														 */
+/* é–¢æ•°å	:CInfoMotionType::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2005/05/01														 */
 /* ========================================================================= */
 
 int CInfoMotionType::GetElementNo(LPCSTR pszName)
@@ -72,9 +72,9 @@ int CInfoMotionType::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::GetDataSize									 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾												 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::GetDataSize									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 DWORD CInfoMotionType::GetDataSize(void)
@@ -90,9 +90,9 @@ DWORD CInfoMotionType::GetDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::GetDataSizeNo									 */
-/* “à—e		:Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 DWORD CInfoMotionType::GetDataSizeNo(int nNo)
@@ -102,9 +102,9 @@ DWORD CInfoMotionType::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_dwMotionTypeID);		break;		/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	case 1:		dwRet = sizeof (m_wGrpIDSub);			break;		/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	case 2:		dwRet = (m_strName.GetLength () + 1);	break;		/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	case 0:		dwRet = sizeof (m_dwMotionTypeID);		break;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	case 1:		dwRet = sizeof (m_wGrpIDSub);			break;		/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	case 2:		dwRet = (m_strName.GetLength () + 1);	break;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 	}
 
 	return dwRet;
@@ -112,9 +112,9 @@ DWORD CInfoMotionType::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::GetName										 */
-/* “à—e		:—v‘f–¼‚ðŽæ“¾													 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::GetName										 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 LPCSTR CInfoMotionType::GetName(int nNo)
@@ -124,9 +124,9 @@ LPCSTR CInfoMotionType::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::GetWriteData									 */
-/* “à—e		:Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾									 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 PBYTE CInfoMotionType::GetWriteData(int nNo, PDWORD pdwSize)
@@ -145,9 +145,9 @@ PBYTE CInfoMotionType::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_dwMotionTypeID;	break;		/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	case 1:		pSrc = (PBYTE)&m_wGrpIDSub;			break;		/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	case 2:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;		/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	case 0:		pSrc = (PBYTE)&m_dwMotionTypeID;	break;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	case 1:		pSrc = (PBYTE)&m_wGrpIDSub;			break;		/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	case 2:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 	}
 
 	if (pSrc) {
@@ -160,14 +160,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::ReadElementData								 */
-/* “à—e		:Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::ReadElementData								 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 DWORD CInfoMotionType::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚Ýž‚ÝŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst;
 	DWORD dwSize;
@@ -176,9 +176,9 @@ DWORD CInfoMotionType::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_dwMotionTypeID;	dwSize = sizeof (m_dwMotionTypeID);	break;		/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	case 1:		pDst = (PBYTE)&m_wGrpIDSub;			dwSize = sizeof (m_wGrpIDSub);		break;		/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	case 2:		/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	case 0:		pDst = (PBYTE)&m_dwMotionTypeID;	dwSize = sizeof (m_dwMotionTypeID);	break;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	case 1:		pDst = (PBYTE)&m_wGrpIDSub;			dwSize = sizeof (m_wGrpIDSub);		break;		/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	case 2:		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
@@ -193,9 +193,9 @@ DWORD CInfoMotionType::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::GetSendDataSize								 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::GetSendDataSize								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 DWORD CInfoMotionType::GetSendDataSize(void)
@@ -205,9 +205,9 @@ DWORD CInfoMotionType::GetSendDataSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::GetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::GetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 PBYTE CInfoMotionType::GetSendData(void)
@@ -220,18 +220,18 @@ PBYTE CInfoMotionType::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeID,	sizeof (m_dwMotionTypeID),	pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDSub,		sizeof (m_wGrpIDSub),		pDataTmp);	/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);										/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeID,	sizeof (m_dwMotionTypeID),	pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDSub,		sizeof (m_wGrpIDSub),		pDataTmp);	/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp);										/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 
 	return pData;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::SetSendData									 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CInfoMotionType::SetSendData									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 PBYTE CInfoMotionType::SetSendData(PBYTE pSrc)
@@ -240,25 +240,25 @@ PBYTE CInfoMotionType::SetSendData(PBYTE pSrc)
 
 	pDataTmp = pSrc;
 
-	CopyMemoryRenew (&m_dwMotionTypeID, pDataTmp, sizeof (m_dwMotionTypeID), pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	CopyMemoryRenew (&m_wGrpIDSub,		pDataTmp, sizeof (m_wGrpIDSub),		 pDataTmp);	/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);									/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	CopyMemoryRenew (&m_dwMotionTypeID, pDataTmp, sizeof (m_dwMotionTypeID), pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	CopyMemoryRenew (&m_wGrpIDSub,		pDataTmp, sizeof (m_wGrpIDSub),		 pDataTmp);	/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp);									/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 
 	return pDataTmp;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoMotionType::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2007/11/23														 */
+/* é–¢æ•°å	:CInfoMotionType::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2007/11/23														 */
 /* ========================================================================= */
 
 void CInfoMotionType::Copy(CInfoMotionType *pSrc)
 {
-	m_dwMotionTypeID	= pSrc->m_dwMotionTypeID;	/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-	m_wGrpIDSub			= pSrc->m_wGrpIDSub;		/* ƒvƒŒƒrƒ…[—pƒOƒ‰ƒtƒBƒbƒNIDƒTƒu */
-	m_strName			= pSrc->m_strName;			/* ƒ‚[ƒVƒ‡ƒ“Ží•Ê–¼ */
+	m_dwMotionTypeID	= pSrc->m_dwMotionTypeID;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	m_wGrpIDSub			= pSrc->m_wGrpIDSub;		/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚µãƒ– */
+	m_strName			= pSrc->m_strName;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥å */
 }
 
 /* Copyright(C)URARA-works 2008 */

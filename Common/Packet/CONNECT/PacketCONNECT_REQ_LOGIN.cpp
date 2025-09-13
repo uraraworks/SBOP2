@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_REQ_LOGIN.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:ƒƒOƒCƒ“—v‹) À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_REQ_LOGIN.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(æ¥ç¶šç³»:ãƒ­ã‚°ã‚¤ãƒ³è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCONNECT_REQ_LOGIN.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_LOGIN::CPacketCONNECT_REQ_LOGIN				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_LOGIN::CPacketCONNECT_REQ_LOGIN				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CPacketCONNECT_REQ_LOGIN::CPacketCONNECT_REQ_LOGIN()
@@ -23,9 +23,9 @@ CPacketCONNECT_REQ_LOGIN::CPacketCONNECT_REQ_LOGIN()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_LOGIN::~CPacketCONNECT_REQ_LOGIN			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_LOGIN::~CPacketCONNECT_REQ_LOGIN			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CPacketCONNECT_REQ_LOGIN::~CPacketCONNECT_REQ_LOGIN()
@@ -34,15 +34,15 @@ CPacketCONNECT_REQ_LOGIN::~CPacketCONNECT_REQ_LOGIN()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_LOGIN::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_LOGIN::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CPacketCONNECT_REQ_LOGIN::Make(
-	LPCSTR pszAccount,		/* [in] ƒAƒJƒEƒ“ƒg */
-	LPCSTR pszPassword,		/* [in] ƒpƒXƒ[ƒh */
-	PBYTE pbyMacAddr)		/* [in] MACƒAƒhƒŒƒX */
+	LPCSTR pszAccount,		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	LPCSTR pszPassword,		/* [in] ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	PBYTE pbyMacAddr)		/* [in] MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -61,18 +61,18 @@ void CPacketCONNECT_REQ_LOGIN::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CONNECT_REQ_LOGIN;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	strcpyRenew ((LPSTR)pDataTmp, pszAccount, pDataTmp);		/* ƒAƒJƒEƒ“ƒg */
-	strcpyRenew ((LPSTR)pDataTmp, pszPassword, pDataTmp);		/* ƒpƒXƒ[ƒh */
-	CopyMemoryRenew (pDataTmp, pbyMacAddr, 6, pDataTmp);		/* MACƒAƒhƒŒƒX*/
+	strcpyRenew ((LPSTR)pDataTmp, pszAccount, pDataTmp);		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	strcpyRenew ((LPSTR)pDataTmp, pszPassword, pDataTmp);		/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	CopyMemoryRenew (pDataTmp, pbyMacAddr, 6, pDataTmp);		/* MACã‚¢ãƒ‰ãƒ¬ã‚¹*/
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_LOGIN::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_LOGIN::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PBYTE CPacketCONNECT_REQ_LOGIN::Set(PBYTE pPacket)
@@ -82,9 +82,9 @@ PBYTE CPacketCONNECT_REQ_LOGIN::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);		/* ƒAƒJƒEƒ“ƒg */
-	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);		/* ƒpƒXƒ[ƒh */
-	CopyMemoryRenew (m_byMacAddr, pDataTmp, 6, pDataTmp);			/* MACƒAƒhƒŒƒX*/
+	StoreRenew (m_strAccount,	(LPCSTR)pDataTmp, pDataTmp);		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+	StoreRenew (m_strPassword,	(LPCSTR)pDataTmp, pDataTmp);		/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+	CopyMemoryRenew (m_byMacAddr, pDataTmp, 6, pDataTmp);			/* MACã‚¢ãƒ‰ãƒ¬ã‚¹*/
 
 	pRet = pDataTmp;
 	return pRet;

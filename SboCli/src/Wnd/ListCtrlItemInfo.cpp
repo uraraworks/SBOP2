@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:ListCtrlItemInfo.cpp										 */
-/* “à—e			:ƒAƒCƒeƒ€ˆê——ƒŠƒXƒgƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:ListCtrlItemInfo.cpp										 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ãƒªã‚¹ãƒˆã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -21,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXİ’è																 */
+/* ã‚¯ãƒ©ã‚¹è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CListCtrlItemInfo, CListCtrl)
@@ -31,9 +31,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlItemInfo::CListCtrlItemInfo							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CListCtrlItemInfo::CListCtrlItemInfo							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 CListCtrlItemInfo::CListCtrlItemInfo()
@@ -45,9 +45,9 @@ CListCtrlItemInfo::CListCtrlItemInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlItemInfo::~CListCtrlItemInfo							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CListCtrlItemInfo::~CListCtrlItemInfo							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 CListCtrlItemInfo::~CListCtrlItemInfo()
@@ -56,9 +56,9 @@ CListCtrlItemInfo::~CListCtrlItemInfo()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlItemInfo::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CListCtrlItemInfo::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 BOOL CListCtrlItemInfo::Create(CWnd *pParent, CMgrData *pMgrData)
@@ -69,10 +69,10 @@ BOOL CListCtrlItemInfo::Create(CWnd *pParent, CMgrData *pMgrData)
 
 	SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	InsertColumn (1, "ƒAƒCƒeƒ€–¼",	LVCFMT_LEFT, 120);
-	InsertColumn (2, "í•Ê",		LVCFMT_LEFT, 120);
-	InsertColumn (3, "ŠƒLƒƒƒ‰",	LVCFMT_LEFT, 120);
-	InsertColumn (4, "”z’uÀ•W",	LVCFMT_LEFT, 120);
+	InsertColumn (1, "ã‚¢ã‚¤ãƒ†ãƒ å",	LVCFMT_LEFT, 120);
+	InsertColumn (2, "ç¨®åˆ¥",		LVCFMT_LEFT, 120);
+	InsertColumn (3, "æ‰€æŒã‚­ãƒ£ãƒ©",	LVCFMT_LEFT, 120);
+	InsertColumn (4, "é…ç½®åº§æ¨™",	LVCFMT_LEFT, 120);
 
 	Renew ();
 
@@ -81,9 +81,9 @@ BOOL CListCtrlItemInfo::Create(CWnd *pParent, CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CListCtrlItemInfo::Renew										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/09/24														 */
+/* é–¢æ•°å	:CListCtrlItemInfo::Renew										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/09/24														 */
 /* ========================================================================= */
 
 void CListCtrlItemInfo::Renew(void)
@@ -108,23 +108,23 @@ void CListCtrlItemInfo::Renew(void)
 		strTmp.Format ("%d", pInfoItem->m_dwItemID);
 		InsertItem (i, strTmp);
 		SetItemData (i, pInfoItem->m_dwItemID);		/* ID */
-		SetItemText (i, 1, pInfoItem->m_strName);	/* ƒAƒCƒeƒ€–¼ */
+		SetItemText (i, 1, pInfoItem->m_strName);	/* ã‚¢ã‚¤ãƒ†ãƒ å */
 
 		strTmp = m_pLibInfoItem->GetTypeName (pInfoItem->m_dwItemTypeID);
-		SetItemText (i, 2, strTmp);					/* í•Ê */
+		SetItemText (i, 2, strTmp);					/* ç¨®åˆ¥ */
 
 		strTmp.Empty ();
 		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
 		if (pInfoChar) {
 			strTmp.Format ("[%u]%s", pInfoChar->m_dwCharID, (LPCSTR)pInfoChar->m_strCharName);
 		}
-		SetItemText (i, 3, strTmp);					/* ŠƒLƒƒƒ‰ */
+		SetItemText (i, 3, strTmp);					/* æ‰€æŒã‚­ãƒ£ãƒ© */
 
 		strTmp.Empty ();
 		if (pInfoItem->m_dwMapID) {
 			strTmp.Format ("MAPID:%u (%d, %d)", pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
 		}
-		SetItemText (i, 4, strTmp);					/* ”z’uÀ•W */
+		SetItemText (i, 4, strTmp);					/* é…ç½®åº§æ¨™ */
 	}
 }
 

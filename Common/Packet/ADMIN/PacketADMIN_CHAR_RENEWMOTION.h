@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_CHAR_RENEWMOTION.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ŽÒŒn:ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“î•ñ‚ÌXV) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/11/23													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_CHAR_RENEWMOTION.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ç®¡ç†è€…ç³»:ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®æ›´æ–°) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/11/23													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,23 +13,23 @@
 class CLibInfoMotion;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketADMIN_CHAR_RENEWMOTION : public CPacketBase
 {
 public:
-			CPacketADMIN_CHAR_RENEWMOTION();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketADMIN_CHAR_RENEWMOTION();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketADMIN_CHAR_RENEWMOTION();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketADMIN_CHAR_RENEWMOTION();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMotionTypeID, DWORD dwMotionListID, CLibInfoMotion *pSrc);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwMotionTypeID, DWORD dwMotionListID, CLibInfoMotion *pSrc);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD			m_dwMotionTypeID,	/* ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
-					m_dwMotionListID;	/* ƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
-	CLibInfoMotion	*m_pInfo;			/* ƒ‚[ƒVƒ‡ƒ“î•ñ */
+	DWORD			m_dwMotionTypeID,	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+					m_dwMotionListID;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
+	CLibInfoMotion	*m_pInfo;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ± */
 } CPacketADMIN_CHAR_RENEWMOTION, *PCPacketADMIN_CHAR_RENEWMOTION;
 
 /* Copyright(C)URARA-works 2007 */

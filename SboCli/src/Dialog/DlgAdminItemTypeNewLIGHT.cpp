@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemTypeNewLIGHT.cpp								 */
-/* “à—e			:ƒAƒCƒeƒ€í•Ê(“”‚è)İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/10/19													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemTypeNewLIGHT.cpp								 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥(ç¯ã‚Š)è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/19													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewLIGHT::DoDataExchange(CDataExchange* pDX)
@@ -38,9 +38,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewLIGHT::CDlgAdminItemTypeNewLIGHT			 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/19														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewLIGHT::CDlgAdminItemTypeNewLIGHT			 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/19														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeNewLIGHT::CDlgAdminItemTypeNewLIGHT(CWnd* pParent /*=NULL*/)
@@ -54,9 +54,9 @@ CDlgAdminItemTypeNewLIGHT::CDlgAdminItemTypeNewLIGHT(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewLIGHT::~CDlgAdminItemTypeNewLIGHT			 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/19														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewLIGHT::~CDlgAdminItemTypeNewLIGHT			 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/19														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeNewLIGHT::~CDlgAdminItemTypeNewLIGHT()
@@ -65,35 +65,35 @@ CDlgAdminItemTypeNewLIGHT::~CDlgAdminItemTypeNewLIGHT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewLIGHT::Set									 */
-/* “à—e		:•ÒW“à—e‚ğİ’è													 */
-/* “ú•t		:2008/10/19														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewLIGHT::Set									 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/10/19														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewLIGHT::Set(CInfoItemTypeBase *pSrc)
 {
-	m_nValue1	= (int)pSrc->m_dwValue;		/* “”‚èƒŒƒxƒ‹ */
-	m_nValue2	= (int)pSrc->m_dwValue2;	/* ‘±ŠÔ */
+	m_nValue1	= (int)pSrc->m_dwValue;		/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	m_nValue2	= (int)pSrc->m_dwValue2;	/* æŒç¶šæ™‚é–“ */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewLIGHT::Get									 */
-/* “à—e		:•ÒW“à—e‚ğæ“¾													 */
-/* “ú•t		:2008/10/19														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewLIGHT::Get									 */
+/* å†…å®¹		:ç·¨é›†å†…å®¹ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/10/19														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewLIGHT::Get(CInfoItemTypeBase *&pDst)
 {
-	pDst->m_dwValue		= m_nValue1;		/* “”‚èƒŒƒxƒ‹ */
-	pDst->m_dwValue2	= m_nValue2;		/* ‘±ŠÔ */
+	pDst->m_dwValue		= m_nValue1;		/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	pDst->m_dwValue2	= m_nValue2;		/* æŒç¶šæ™‚é–“ */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeNewLIGHT::PostNcDestroy						 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2008/10/19														 */
+/* é–¢æ•°å	:CDlgAdminItemTypeNewLIGHT::PostNcDestroy						 */
+/* å†…å®¹		:çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜		:2008/10/19														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeNewLIGHT::PostNcDestroy()

@@ -1,42 +1,42 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:TextInput.h												 */
-/* “à—e			:ƒeƒLƒXƒg“ü—ÍƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/05/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:TextInput.h												 */
+/* å†…å®¹			:ãƒ†ã‚­ã‚¹ãƒˆå…¥åŠ›ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/05/16													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CTextInput
 {
 public:
-			CTextInput();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CTextInput();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CTextInput();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CTextInput();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL		Create			(LPCSTR pszFileName);			/* ‰Šú‰» */
-	void		Destroy			(void);							/* ”jŠü */
-	void		SetLine			(DWORD dwLine);					/* “Ç‚Ýž‚Þs‚ðÝ’è */
-	CmyString	ReadLine		(DWORD dwLine);					/* Žw’ès‚©‚ç1s“Ç‚Ýž‚Ý */
-	CmyString	ReadLine		(void);							/* Œ»ÝˆÊ’u‚©‚ç1s“Ç‚Ýž‚Ý */
-	DWORD		GetLineCount	(void);							/* s”‚ðŽæ“¾ */
-
-
-protected:
-	BOOL		Open			(LPCSTR pszFileName);			/* ƒtƒ@ƒCƒ‹‚ðŠJ‚­ */
-	void		Close			(void);							/* ƒtƒ@ƒCƒ‹‚ð•Â‚¶‚é */
-	CmyString	ReadProc		(void);							/* Œ»ÝˆÊ’u‚©‚ç‚Ì“Ç‚Ýž‚Ýˆ— */
-	BOOL		IsCSVCheck		(LPCSTR pszText);				/* CSVŒ`Ž®•¶Žš—ñ‚Æ‚µ‚Ä³‚µ‚¢‚©”»’è */
+	BOOL		Create			(LPCSTR pszFileName);			/* åˆæœŸåŒ– */
+	void		Destroy			(void);							/* ç ´æ£„ */
+	void		SetLine			(DWORD dwLine);					/* èª­ã¿è¾¼ã‚€è¡Œã‚’è¨­å®š */
+	CmyString	ReadLine		(DWORD dwLine);					/* æŒ‡å®šè¡Œã‹ã‚‰1è¡Œèª­ã¿è¾¼ã¿ */
+	CmyString	ReadLine		(void);							/* ç¾åœ¨ä½ç½®ã‹ã‚‰1è¡Œèª­ã¿è¾¼ã¿ */
+	DWORD		GetLineCount	(void);							/* è¡Œæ•°ã‚’å–å¾— */
 
 
 protected:
-	DWORD		m_dwLine;				/* Œ»Ý‚Ì“Ç‚Ýž‚ÝˆÊ’u */
-	LPSTR		m_pszFileName;			/* ƒtƒ@ƒCƒ‹–¼ */
-	HANDLE		m_hFile;				/* ƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹ */
+	BOOL		Open			(LPCSTR pszFileName);			/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã */
+	void		Close			(void);							/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹ */
+	CmyString	ReadProc		(void);							/* ç¾åœ¨ä½ç½®ã‹ã‚‰ã®èª­ã¿è¾¼ã¿å‡¦ç† */
+	BOOL		IsCSVCheck		(LPCSTR pszText);				/* CSVå½¢å¼æ–‡å­—åˆ—ã¨ã—ã¦æ­£ã—ã„ã‹åˆ¤å®š */
+
+
+protected:
+	DWORD		m_dwLine;				/* ç¾åœ¨ã®èª­ã¿è¾¼ã¿ä½ç½® */
+	LPSTR		m_pszFileName;			/* ãƒ•ã‚¡ã‚¤ãƒ«å */
+	HANDLE		m_hFile;				/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ³ãƒ‰ãƒ« */
 };
 
 /* Copyright(C)URARA-works 2006 */

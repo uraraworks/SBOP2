@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPSHADOW.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒv‰eî•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/06/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPSHADOW.h										 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒžãƒƒãƒ—ç³»:ãƒžãƒƒãƒ—å½±æƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/06/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,22 +14,22 @@ class CLibInfoMapShadow;
 class CInfoMapShadow;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_MAPSHADOW : public CPacketBase
 {
 public:
-			CPacketMAP_MAPSHADOW();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_MAPSHADOW();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_MAPSHADOW();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_MAPSHADOW();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CLibInfoMapShadow *pLibInfo);			/* ƒpƒPƒbƒg‚ðì¬ */
-	void	Make	(CInfoMapShadow *pInfo);				/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);						/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CLibInfoMapShadow *pLibInfo);			/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	void	Make	(CInfoMapShadow *pInfo);				/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;		/* ƒ}ƒbƒv‰eî•ñ */
+	CLibInfoMapShadow	*m_pLibInfoMapShadow;		/* ãƒžãƒƒãƒ—å½±æƒ…å ± */
 } CPacketMAP_MAPSHADOW, *PCPacketMAP_MAPSHADOW;
 
 /* Copyright(C)URARA-works 2007 */

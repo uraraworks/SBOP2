@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoAccount.h												 */
-/* “à—e			:ƒAƒJƒEƒ“ƒgî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/11/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoAccount.h												 */
+/* å†…å®¹			:ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/04													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,54 +11,54 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoAccount : public CInfoBase
 {
 public:
-			CInfoAccount();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoAccount();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoAccount();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoAccount();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementNo		(LPCSTR pszName);			/* —v‘f”Ô†‚ğæ“¾ */
-	DWORD	GetDataSize			(void);						/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);					/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	LPCSTR	GetName				(int nNo);					/* —v‘f–¼‚ğæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);	/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);		/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	int		GetElementNo		(LPCSTR pszName);			/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);						/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);					/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);					/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);	/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);		/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize	(void);							/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData		(void);							/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData		(PBYTE pSrc);					/* ‘—Mƒf[ƒ^‚ğİ’è */
+	DWORD	GetSendDataSize	(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData		(void);							/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData		(PBYTE pSrc);					/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š */
 
-	int		GetCharCount	(void);							/* ƒLƒƒƒ‰”‚ğæ“¾ */
-	void	Copy			(CInfoAccount *pSrc);			/* ƒRƒs[ */
+	int		GetCharCount	(void);							/* ã‚­ãƒ£ãƒ©æ•°ã‚’å–å¾— */
+	void	Copy			(CInfoAccount *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
-	PBYTE	GetTmpData		(DWORD &dwDataSize);			/* ƒf[ƒ^ƒLƒƒƒbƒVƒ…—p‚Éæ“¾ */
-	void	SetTmpData		(PBYTE pSrc);					/* ƒf[ƒ^ƒLƒƒƒbƒVƒ…‚©‚çİ’è */
+	PBYTE	GetTmpData		(DWORD &dwDataSize);			/* ãƒ‡ãƒ¼ã‚¿ã‚­ãƒ£ãƒƒã‚·ãƒ¥ç”¨ã«å–å¾— */
+	void	SetTmpData		(PBYTE pSrc);					/* ãƒ‡ãƒ¼ã‚¿ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‹ã‚‰è¨­å®š */
 
 
 public:
-	/* •Û‘¶‚µ‚È‚¢î•ñ */
-	DWORD		m_dwLastKeepalive,			/* ÅŒã‚ÉóM‚µ‚½¶‘¶Šm”F’Ê’m‚ÌŠÔ */
-				m_dwIP;						/* IPƒAƒhƒŒƒX */
-	CmyString	m_strLastMacAddr;			/* ƒƒOƒCƒ“‚ÌMACƒAƒhƒŒƒX */
+	/* ä¿å­˜ã—ãªã„æƒ…å ± */
+	DWORD		m_dwLastKeepalive,			/* æœ€å¾Œã«å—ä¿¡ã—ãŸç”Ÿå­˜ç¢ºèªé€šçŸ¥ã®æ™‚é–“ */
+				m_dwIP;						/* IPã‚¢ãƒ‰ãƒ¬ã‚¹ */
+	CmyString	m_strLastMacAddr;			/* ãƒ­ã‚°ã‚¤ãƒ³æ™‚ã®MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 
-	/* ‘—óM‚·‚éî•ñ */
-	DWORD		m_dwAccountID,				/* ƒAƒJƒEƒ“ƒgID */
-				m_dwCharID,					/* g—p’†‚ÌƒLƒƒƒ‰ID */
-				m_dwTimeLastLogin,			/* ‘O‰ñ‚ÌƒƒOƒCƒ““ú */
-				m_dwTimeMakeAccount,		/* ƒAƒJƒEƒ“ƒgì¬“ú */
-				m_dwLoginCount;				/* ƒƒOƒCƒ“‰ñ” */
-	ARRAYDWORD	m_adwCharID;				/* ƒLƒƒƒ‰IDƒe[ƒuƒ‹ */
+	/* é€å—ä¿¡ã™ã‚‹æƒ…å ± */
+	DWORD		m_dwAccountID,				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+				m_dwCharID,					/* ä½¿ç”¨ä¸­ã®ã‚­ãƒ£ãƒ©ID */
+				m_dwTimeLastLogin,			/* å‰å›ã®ãƒ­ã‚°ã‚¤ãƒ³æ—¥æ™‚ */
+				m_dwTimeMakeAccount,		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆæ—¥æ™‚ */
+				m_dwLoginCount;				/* ãƒ­ã‚°ã‚¤ãƒ³å›æ•° */
+	ARRAYDWORD	m_adwCharID;				/* ã‚­ãƒ£ãƒ©IDãƒ†ãƒ¼ãƒ–ãƒ« */
 
-	/* ‘—óM‚¹‚¸‚ÉƒT[ƒo[‘¤‚¾‚¯‚Åˆµ‚¤î•ñ */
-	BOOL		m_bDisable;					/* ƒƒOƒCƒ“‹‘”Û */
-	int			m_nAdminLevel;				/* ŠÇ—ÒƒŒƒxƒ‹ */
-	DWORD		m_dwSessionID;				/* g—pÒ‚ÌƒZƒbƒVƒ‡ƒ“ID */
-	CmyString	m_strAccount,				/* ƒAƒJƒEƒ“ƒg */
-				m_strPassword,				/* ƒpƒXƒ[ƒh */
-				m_strMacAddr;				/* ƒAƒJƒEƒ“ƒg“o˜^MACƒAƒhƒŒƒX */
+	/* é€å—ä¿¡ã›ãšã«ã‚µãƒ¼ãƒãƒ¼å´ã ã‘ã§æ‰±ã†æƒ…å ± */
+	BOOL		m_bDisable;					/* ãƒ­ã‚°ã‚¤ãƒ³æ‹’å¦ */
+	int			m_nAdminLevel;				/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ« */
+	DWORD		m_dwSessionID;				/* ä½¿ç”¨è€…ã®ã‚»ãƒƒã‚·ãƒ§ãƒ³ID */
+	CmyString	m_strAccount,				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ */
+				m_strPassword,				/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ */
+				m_strMacAddr;				/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²MACã‚¢ãƒ‰ãƒ¬ã‚¹ */
 } CInfoAccount, *PCInfoAccount;
 typedef CmyArray<PCInfoAccount, PCInfoAccount>	  ARRAYINFOACCOUNT;
 typedef CmyArray<PCInfoAccount, PCInfoAccount>	*PARRAYINFOACCOUNT;

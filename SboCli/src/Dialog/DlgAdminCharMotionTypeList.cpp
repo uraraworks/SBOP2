@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharMotionTypeList.cpp								 */
-/* “à—e			:ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“í•ÊƒŠƒXƒgƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/05/26													 */
+/* Æ’tÆ’@Æ’CÆ’â€¹â€“Â¼	:DlgAdminCharMotionTypeList.cpp								 */
+/* â€œÃ â€”e			:Æ’LÆ’Æ’Æ’â€°Æ’â€šÂ[Æ’VÆ’â€¡Æ’â€œÅ½Ã­â€¢ÃŠÆ’Å Æ’XÆ’gÆ’_Æ’CÆ’AÆ’ÂÆ’OÆ’NÆ’â€°Æ’X Å½Ã€â€˜â€¢Æ’tÆ’@Æ’CÆ’â€¹	 */
+/* ÂÃ¬ÂÂ¬			:â€Nâ€šÂªâ€šÃ§â€Nâ€™â€ Âtâ€šÂ¤â€šÃ§â€šÃ§(URARA-works)							 */
+/* ÂÃ¬ÂÂ¬Å JÅ½nâ€œÃº	:2008/05/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* Æ’NÆ’â€°Æ’Xâ€šÃŒÂÃâ€™Ã¨																 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::DoDataExchange(CDataExchange* pDX)
@@ -46,9 +46,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList		 */
+/* â€œÃ â€”e		:Æ’RÆ’â€œÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2008/05/26														 */
 /* ========================================================================= */
 
 CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList(CWnd* pParent /*=NULL*/)
@@ -62,9 +62,9 @@ CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList(CWnd* pParent /*=NULL*/
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList		 */
+/* â€œÃ â€”e		:Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^													 */
+/* â€œÃºâ€¢t		:2008/05/26														 */
 /* ========================================================================= */
 
 CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList()
@@ -73,9 +73,9 @@ CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::Init								 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/05/26														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::Init								 */
+/* â€œÃ â€”e		:Ââ€°Å Ãºâ€°Â»															 */
+/* â€œÃºâ€¢t		:2008/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::Init(CMgrData *pMgrData)
@@ -84,16 +84,16 @@ void CDlgAdminCharMotionTypeList::Init(CMgrData *pMgrData)
 
 	m_pLibInfoMotionType = m_pMgrData->GetLibInfoMotionType ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* Æ’EÆ’BÆ’â€œÆ’hÆ’EÂÃ¬ÂÂ¬ */
 	Create (CDlgAdminCharMotionTypeList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::Renew								 */
-/* “à—e		:ƒŠƒXƒgXV														 */
-/* “ú•t		:2008/05/27														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::Renew								 */
+/* â€œÃ â€”e		:Æ’Å Æ’XÆ’gÂXÂV														 */
+/* â€œÃºâ€¢t		:2008/05/27														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::Renew(void)
@@ -117,15 +117,15 @@ void CDlgAdminCharMotionTypeList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnMainFrame						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2008/05/26														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::OnMainFrame						 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_MAINFRAME)								 */
+/* â€œÃºâ€¢t		:2008/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWMOTIONTYPE:		/* ƒ‚[ƒVƒ‡ƒ“í•Êî•ñXV */
+	case MAINFRAMEMSG_RENEWMOTIONTYPE:		/* Æ’â€šÂ[Æ’VÆ’â€¡Æ’â€œÅ½Ã­â€¢ÃŠÂÃ®â€¢Ã±ÂXÂV */
 		Renew ();
 		break;
 	}
@@ -133,9 +133,9 @@ void CDlgAdminCharMotionTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnInitDialog						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/05/26														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::OnInitDialog						 */
+/* â€œÃ â€”e		:Æ’ÂÆ’bÆ’ZÂ[Æ’WÆ’nÆ’â€œÆ’hÆ’â€°(WM_INITDIALOG)								 */
+/* â€œÃºâ€¢t		:2008/05/26														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharMotionTypeList::OnInitDialog()
@@ -146,7 +146,7 @@ BOOL CDlgAdminCharMotionTypeList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒ‚[ƒVƒ‡ƒ“–¼",	LVCFMT_LEFT, 300);
+	m_List.InsertColumn (1, "Æ’â€šÂ[Æ’VÆ’â€¡Æ’â€œâ€“Â¼",	LVCFMT_LEFT, 300);
 
 	Renew ();
 
@@ -155,9 +155,9 @@ BOOL CDlgAdminCharMotionTypeList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnAdd								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2008/05/27														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::OnAdd								 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(â€™Ã‡â€°Ã)											 */
+/* â€œÃºâ€¢t		:2008/05/27														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnAdd()
@@ -170,9 +170,9 @@ void CDlgAdminCharMotionTypeList::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnModify							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2008/05/26														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::OnModify							 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(â€¢Ã’ÂW)											 */
+/* â€œÃºâ€¢t		:2008/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnModify()
@@ -211,9 +211,9 @@ void CDlgAdminCharMotionTypeList::OnModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnDelete							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2008/05/27														 */
+/* Å Ã–Ââ€â€“Â¼	:CDlgAdminCharMotionTypeList::OnDelete							 */
+/* â€œÃ â€”e		:Æ’{Æ’^Æ’â€œÆ’nÆ’â€œÆ’hÆ’â€°(ÂÃ­ÂÅ“)											 */
+/* â€œÃºâ€¢t		:2008/05/27														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnDelete()

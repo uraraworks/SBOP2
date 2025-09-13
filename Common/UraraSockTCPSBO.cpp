@@ -1,8 +1,8 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* UraraSockTCPSBO.cpp														 */
-/* ”Ä—pTCP’ÊMƒNƒ‰ƒX														 */
-/* 2006/11/05 ì¬ŠJn														 */
+/* æ±ç”¨TCPé€šä¿¡ã‚¯ãƒ©ã‚¹														 */
+/* 2006/11/05 ä½œæˆé–‹å§‹														 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -10,9 +10,9 @@
 #include "UraraSockTCPSBO.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::CUraraSockTCPSBO								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::CUraraSockTCPSBO								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CUraraSockTCPSBO::CUraraSockTCPSBO(void)
@@ -36,9 +36,9 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::~CUraraSockTCPSBO							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::~CUraraSockTCPSBO							 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 CUraraSockTCPSBO::~CUraraSockTCPSBO(void)
@@ -61,9 +61,9 @@ void CUraraSockTCPSBO::DeleteRecvData(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Destroy										 */
-/* “à—e		:Œãn––															 */
-/* “ú•t		:2003/10/28														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::Destroy										 */
+/* å†…å®¹		:å¾Œå§‹æœ«															 */
+/* æ—¥ä»˜		:2003/10/28														 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::Destroy(void)
@@ -77,9 +77,9 @@ void CUraraSockTCPSBO::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Host											 */
-/* “à—e		:Ú‘±‘Ò‚¿ŠJn													 */
-/* “ú•t		:2003/10/28														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::Host											 */
+/* å†…å®¹		:æ¥ç¶šå¾…ã¡é–‹å§‹													 */
+/* æ—¥ä»˜		:2003/10/28														 */
 /* ========================================================================= */
 
 BOOL CUraraSockTCPSBO::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)
@@ -93,9 +93,9 @@ BOOL CUraraSockTCPSBO::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD 
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Connect										 */
-/* “à—e		:ƒT[ƒo[‚ÖÚ‘±													 */
-/* “ú•t		:2003/10/29														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::Connect										 */
+/* å†…å®¹		:ã‚µãƒ¼ãƒãƒ¼ã¸æ¥ç¶š													 */
+/* æ—¥ä»˜		:2003/10/29														 */
 /* ========================================================================= */
 
 BOOL CUraraSockTCPSBO::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)
@@ -109,9 +109,9 @@ BOOL CUraraSockTCPSBO::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WO
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::DeleteClient									 */
-/* “à—e		:ƒNƒ‰ƒCƒAƒ“ƒg‚ğØ’f												 */
-/* “ú•t		:2003/11/03														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::DeleteClient									 */
+/* å†…å®¹		:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚’åˆ‡æ–­												 */
+/* æ—¥ä»˜		:2003/11/03														 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::DeleteClient(DWORD dwID)
@@ -125,9 +125,9 @@ void CUraraSockTCPSBO::DeleteClient(DWORD dwID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::SendCancel									 */
-/* “à—e		:‘—MƒLƒƒƒ“ƒZƒ‹													 */
-/* “ú•t		:2003/11/03														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::SendCancel									 */
+/* å†…å®¹		:é€ä¿¡ã‚­ãƒ£ãƒ³ã‚»ãƒ«													 */
+/* æ—¥ä»˜		:2003/11/03														 */
 /* ========================================================================= */
 void CUraraSockTCPSBO::SendCancel(DWORD dwID)
 {
@@ -140,9 +140,9 @@ void CUraraSockTCPSBO::SendCancel(DWORD dwID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Send											 */
-/* “à—e		:ƒT[ƒo[‚Öƒf[ƒ^‘—M											 */
-/* “ú•t		:2003/11/01														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::Send											 */
+/* å†…å®¹		:ã‚µãƒ¼ãƒãƒ¼ã¸ãƒ‡ãƒ¼ã‚¿é€ä¿¡											 */
+/* æ—¥ä»˜		:2003/11/01														 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::Send(CPacketBase *pPacket)
@@ -156,9 +156,9 @@ void CUraraSockTCPSBO::Send(CPacketBase *pPacket)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::SendTo										 */
-/* “à—e		:ƒNƒ‰ƒCƒAƒ“ƒg‚Öƒf[ƒ^‘—M										 */
-/* “ú•t		:2003/11/02														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::SendTo										 */
+/* å†…å®¹		:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸ãƒ‡ãƒ¼ã‚¿é€ä¿¡										 */
+/* æ—¥ä»˜		:2003/11/02														 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::SendTo(DWORD dwID, CPacketBase *pPacket)
@@ -172,9 +172,9 @@ void CUraraSockTCPSBO::SendTo(DWORD dwID, CPacketBase *pPacket)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetThrowghPutSend							 */
-/* “à—e		:ƒŠƒ“ƒNEƒXƒ‹[ƒvƒbƒg—Ê‚ğæ“¾									 */
-/* “ú•t		:2003/11/08														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::GetThrowghPutSend							 */
+/* å†…å®¹		:ãƒªãƒ³ã‚¯ãƒ»ã‚¹ãƒ«ãƒ¼ãƒ—ãƒƒãƒˆé‡ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2003/11/08														 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetThrowghPutSend(DWORD dwID)
@@ -188,9 +188,9 @@ DWORD CUraraSockTCPSBO::GetThrowghPutSend(DWORD dwID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetThrowghPutRecv							 */
-/* “à—e		:ƒŠƒ“ƒNEƒXƒ‹[ƒvƒbƒg—Ê‚ğæ“¾									 */
-/* “ú•t		:2003/11/08														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::GetThrowghPutRecv							 */
+/* å†…å®¹		:ãƒªãƒ³ã‚¯ãƒ»ã‚¹ãƒ«ãƒ¼ãƒ—ãƒƒãƒˆé‡ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2003/11/08														 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetThrowghPutRecv(DWORD dwID)
@@ -204,9 +204,9 @@ DWORD CUraraSockTCPSBO::GetThrowghPutRecv(DWORD dwID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetQueCount									 */
-/* “à—e		:ƒLƒ…[”‚ğæ“¾													 */
-/* “ú•t		:2003/11/08														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::GetQueCount									 */
+/* å†…å®¹		:ã‚­ãƒ¥ãƒ¼æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2003/11/08														 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetQueCount(DWORD dwID)
@@ -220,9 +220,9 @@ DWORD CUraraSockTCPSBO::GetQueCount(DWORD dwID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetIPAddress									 */
-/* “à—e		:IPƒAƒhƒŒƒX‚ğæ“¾												 */
-/* “ú•t		:2005/03/28														 */
+/* é–¢æ•°å	:CUraraSockTCPSBO::GetIPAddress									 */
+/* å†…å®¹		:IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2005/03/28														 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetIPAddress(DWORD dwID)

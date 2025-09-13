@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillBase.h									 */
-/* “à—e			:ƒXƒLƒ‹•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharSkillBase.h									 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/07													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,32 +16,32 @@ class CDlgAdminCharSkillNONE;
 class CWndSelectGrp;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharSkillBase : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharSkillBase(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharSkillBase();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharSkillBase(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharSkillBase();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init		(CMgrData *pMgrData);						/* ‰Šú‰» */
-	void	Get			(CInfoSkillBase *&pDst);					/* •ÒW“à—e‚ğæ“¾ */
-	void	SetModify	(CInfoSkillBase *pSrc);						/* •ÒWƒ‚[ƒh‚Æ‚µ‚Äİ’è */
-
-
-protected:
+	void	Init		(CMgrData *pMgrData);						/* åˆæœŸåŒ– */
+	void	Get			(CInfoSkillBase *&pDst);					/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
+	void	SetModify	(CInfoSkillBase *pSrc);						/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰ã¨ã—ã¦è¨­å®š */
 
 
 protected:
-	BOOL		m_bInit;						/* ‰Šú‰»’† */
-	int			m_nTypeMain,					/* ƒXƒLƒ‹í•Ê(ƒƒCƒ“) */
-				m_nTypeSub,						/* ƒXƒLƒ‹í•Ê(ƒTƒu) */
-				m_nUse;							/* g—p§ŒÀ */
-	BOOL		m_bModeModify;					/* •ÒWƒ‚[ƒh”»’è */
-	CDlgAdminCharSkillNONE	*m_pDlgType;		/* •ÒW’†‚ÌƒCƒxƒ“ƒgí•Êƒ_ƒCƒAƒƒO */
-	CInfoSkillBase			*m_pInfo;			/* •ÒW’†‚ÌƒXƒLƒ‹î•ñ */
-	CWndSelectGrp			*m_pWndSelectGrp;	/* ‰æ‘œ‘I‘ğƒEƒBƒ“ƒhƒE */
+
+
+protected:
+	BOOL		m_bInit;						/* åˆæœŸåŒ–ä¸­ */
+	int			m_nTypeMain,					/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ãƒ¡ã‚¤ãƒ³) */
+				m_nTypeSub,						/* ã‚¹ã‚­ãƒ«ç¨®åˆ¥(ã‚µãƒ–) */
+				m_nUse;							/* ä½¿ç”¨åˆ¶é™ */
+	BOOL		m_bModeModify;					/* ç·¨é›†ãƒ¢ãƒ¼ãƒ‰åˆ¤å®š */
+	CDlgAdminCharSkillNONE	*m_pDlgType;		/* ç·¨é›†ä¸­ã®ã‚¤ãƒ™ãƒ³ãƒˆç¨®åˆ¥ãƒ€ã‚¤ã‚¢ãƒ­ã‚° */
+	CInfoSkillBase			*m_pInfo;			/* ç·¨é›†ä¸­ã®ã‚¹ã‚­ãƒ«æƒ…å ± */
+	CWndSelectGrp			*m_pWndSelectGrp;	/* ç”»åƒé¸æŠã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 
 
 
@@ -59,7 +59,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillBase)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

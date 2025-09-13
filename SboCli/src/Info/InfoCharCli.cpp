@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharCli.cpp											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharCli.cpp											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,9 +20,9 @@
 #include "InfoCharCli.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::CInfoCharCli										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharCli::CInfoCharCli										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CInfoCharCli::CInfoCharCli()
@@ -59,14 +59,14 @@ CInfoCharCli::CInfoCharCli()
 	m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
 			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
 			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "‚l‚r ƒSƒVƒbƒN");
+			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯");
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::~CInfoCharCli									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharCli::~CInfoCharCli									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CInfoCharCli::~CInfoCharCli()
@@ -85,9 +85,9 @@ CInfoCharCli::~CInfoCharCli()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::Create											 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharCli::Create											 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CInfoCharCli::Create(CMgrData *pMgrData)
@@ -99,18 +99,18 @@ void CInfoCharCli::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::ChgDirection										 */
-/* “à—e		:Œü‚«•ÏX														 */
-/* “ú•t		:2006/10/08														 */
+/* é–¢æ•°å	:CInfoCharCli::ChgDirection										 */
+/* å†…å®¹		:å‘ãå¤‰æ›´														 */
+/* æ—¥ä»˜		:2006/10/08														 */
 /* ========================================================================= */
 
 void CInfoCharCli::ChgDirection(int nDirection)
 {
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_STAND:			/* —§‚¿ */
-	case CHARMOVESTATE_SIT:				/* À‚è’† */
-	case CHARMOVESTATE_BATTLE:			/* í“¬’† */
-	case CHARMOVESTATE_BATTLE_DEFENSE:	/* –hŒä’† */
+	case CHARMOVESTATE_STAND:			/* ç«‹ã¡ */
+	case CHARMOVESTATE_SIT:				/* åº§ã‚Šä¸­ */
+	case CHARMOVESTATE_BATTLE:			/* æˆ¦é—˜ä¸­ */
+	case CHARMOVESTATE_BATTLE_DEFENSE:	/* é˜²å¾¡ä¸­ */
 		break;
 	default:
 		goto Exit;
@@ -123,9 +123,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::ChgMoveState										 */
-/* “à—e		:ˆÚ“®ó‘Ô•ÏX													 */
-/* “ú•t		:2006/10/08														 */
+/* é–¢æ•°å	:CInfoCharCli::ChgMoveState										 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹å¤‰æ›´													 */
+/* æ—¥ä»˜		:2006/10/08														 */
 /* ========================================================================= */
 
 void CInfoCharCli::ChgMoveState(int nMoveState)
@@ -160,9 +160,9 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 	}
 
 	switch (nMoveState) {
-	case CHARMOVESTATE_STAND:		/* —§‚¿ */
-	case CHARMOVESTATE_SIT:			/* À‚è’† */
-	case CHARMOVESTATE_WALKANIME:	/* ‘«“¥‚İ */
+	case CHARMOVESTATE_STAND:		/* ç«‹ã¡ */
+	case CHARMOVESTATE_SIT:			/* åº§ã‚Šä¸­ */
+	case CHARMOVESTATE_WALKANIME:	/* è¶³è¸ã¿ */
 		if (bResult) {
 			AddMovePosQue (nMoveState, -1, -1, -1);
 			return;
@@ -171,12 +171,12 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		nAnime = 0;
 		m_nMoveDirection = -1;
 		RenewBlockMapArea (0, 0, -1);
-		/* —­‚ßUŒ‚‰ğœ */
+		/* æºœã‚æ”»æ’ƒè§£é™¤ */
 		m_bChargeAtack = FALSE;
 		bCheck = FALSE;
 		break;
-	case CHARMOVESTATE_MOVE:		/* ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEMOVE:	/* í“¬ˆÚ“®’† */
+	case CHARMOVESTATE_MOVE:		/* ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEMOVE:	/* æˆ¦é—˜ç§»å‹•ä¸­ */
 		if (bChange) {
 			nAnime = m_nAnimeBack;
 		}
@@ -184,11 +184,11 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		m_ptMove.y = anInitMovePosY[nDirection];
 		bCheck = FALSE;
 		break;
-	case CHARMOVESTATE_BATTLE:		/* í“¬’† */
+	case CHARMOVESTATE_BATTLE:		/* æˆ¦é—˜ä¸­ */
 		if (m_nMoveState == CHARMOVESTATE_BATTLEATACK) {
 			if (m_nMoveStateReserve == 0) {
 				if (m_nAnime <= nCount - 1 && m_nProcState == 0) {
-					/* ƒ‚[ƒVƒ‡ƒ“I‚í‚Á‚Ä‚©‚ç‘JˆÚ‚·‚é‚æ‚¤‚É—\–ñ‚µ‚Ä‚¨‚­ */
+					/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³çµ‚ã‚ã£ã¦ã‹ã‚‰é·ç§»ã™ã‚‹ã‚ˆã†ã«äºˆç´„ã—ã¦ãŠã */
 					m_nMoveStateReserve = nMoveState;
 					return;
 				}
@@ -199,12 +199,12 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		nAnime = 0;
 		RenewBlockMapArea (0, 0, -1);
 		break;
-	case CHARMOVESTATE_BATTLEATACK:		/* í“¬UŒ‚’† */
+	case CHARMOVESTATE_BATTLEATACK:		/* æˆ¦é—˜æ”»æ’ƒä¸­ */
 		if (m_nMoveState == nMoveState) {
 			break;
 		}
 		if (m_bChargeAtack) {
-			/* —­‚ßUŒ‚‰ğœ */
+			/* æºœã‚æ”»æ’ƒè§£é™¤ */
 			m_bChargeAtack = FALSE;
 			nAnime = 1;
 		} else {
@@ -212,23 +212,23 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		}
 		m_dwLastTimeAnime = timeGetTime ();
 		break;
-	case CHARMOVESTATE_ANIME:			/* ƒAƒjƒ[ƒVƒ‡ƒ“ */
+	case CHARMOVESTATE_ANIME:			/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ */
 		nAnime = 0;
 		m_dwLastTimeAnime = timeGetTime ();
 		break;
-	case CHARMOVESTATE_SWOON:			/* ‹Câ */
-		/* —­‚ßUŒ‚‰ğœ */
+	case CHARMOVESTATE_SWOON:			/* æ°—çµ¶ */
+		/* æºœã‚æ”»æ’ƒè§£é™¤ */
 		m_bChargeAtack = FALSE;
 		m_bModeSleepTimer = FALSE;
 		nAnime = 0;
 		break;
-	case CHARMOVESTATE_BATTLE_DEFENSE:	/* –hŒä’† */
+	case CHARMOVESTATE_BATTLE_DEFENSE:	/* é˜²å¾¡ä¸­ */
 		nAnime = 0;
 		if (bChange == FALSE) {
 			bCheck = FALSE;
 		}
 		break;
-	case CHARMOVESTATE_DELETEREADY:		/* Á‹€”õ */
+	case CHARMOVESTATE_DELETEREADY:		/* æ¶ˆå»æº–å‚™ */
 		if (bResult) {
 			AddMovePosQue (nMoveState, -1, -1, -1);
 			return;
@@ -243,9 +243,9 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 	m_nMoveStateBack = nMoveState;
 	SetMoveState (nMoveState);
 
-	/* ƒ‚[ƒVƒ‡ƒ“‚Ìs“®ƒ`ƒFƒbƒN‚·‚éH */
+	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®è¡Œå‹•ãƒã‚§ãƒƒã‚¯ã™ã‚‹ï¼Ÿ */
 	if (bCheck) {
-		/* 1ƒRƒ}–ÚˆÈŠO‚©‚çŠJn‚Ìê‡‚És“®‚ğ‚Æ‚è‚±‚Ú‚·‚Ì‚Åƒ`ƒFƒbƒN */
+		/* 1ã‚³ãƒç›®ä»¥å¤–ã‹ã‚‰é–‹å§‹ã®å ´åˆã«è¡Œå‹•ã‚’ã¨ã‚Šã“ã¼ã™ã®ã§ãƒã‚§ãƒƒã‚¯ */
 		for (i = 0; i <= nAnime; i ++) {
 			m_nAnime = i;
 			RenewAnime (0, 0);
@@ -262,9 +262,9 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharCli::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::TimerProc(DWORD dwTime)
@@ -278,11 +278,11 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 
 	bResult |= RenewAnime			(dwTime);
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_MOVE:		/* ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEMOVE:	/* í“¬ˆÚ“®’† */
+	case CHARMOVESTATE_MOVE:		/* ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEMOVE:	/* æˆ¦é—˜ç§»å‹•ä¸­ */
 		bResult |= TimerProcMove	(dwTime);
 		break;
-	case CHARMOVESTATE_BATTLEATACK:	/* í“¬UŒ‚’† */
+	case CHARMOVESTATE_BATTLEATACK:	/* æˆ¦é—˜æ”»æ’ƒä¸­ */
 		bResult |= TimerProcAtack	(dwTime);
 		break;
 	}
@@ -314,9 +314,9 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 		}
 		bResult |= bResultTmp;
 		bResultTmp = m_pInfoEffect->IsAnimeEnd ();
-		/* ƒAƒjƒ[ƒVƒ‡ƒ“I—¹H */
+		/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ï¼Ÿ */
 		if (bResultTmp) {
-			/* ƒGƒtƒFƒNƒg‰ğœ */
+			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè§£é™¤ */
 			SetEffectID (0);
 		}
 	}
@@ -333,26 +333,26 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::SetMoveState										 */
-/* “à—e		:ˆÚ“®ó‘Ô‚ğ•ÏX													 */
-/* “ú•t		:2007/02/26														 */
+/* é–¢æ•°å	:CInfoCharCli::SetMoveState										 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´													 */
+/* æ—¥ä»˜		:2007/02/26														 */
 /* ========================================================================= */
 
 void CInfoCharCli::SetMoveState(int nMoveState)
 {
 	switch (nMoveState) {
-	case CHARMOVESTATE_DAMAGE:			/* ƒ_ƒ[ƒW */
+	case CHARMOVESTATE_DAMAGE:			/* ãƒ€ãƒ¡ãƒ¼ã‚¸ */
 		m_dwLastTimeDamage = timeGetTime ();
-		/* ŠÔ‚ÌXV‚¾‚¯‚Åó‘Ô‚Í•ÏX‚µ‚È‚¢ */
+		/* æ™‚é–“ã®æ›´æ–°ã ã‘ã§çŠ¶æ…‹ã¯å¤‰æ›´ã—ãªã„ */
 		return;
 	}
 
 	m_nMoveStateBack = nMoveState;
 	CInfoCharBase::SetMoveState (nMoveState);
 
-	/* Á‹€”õH */
+	/* æ¶ˆå»æº–å‚™ï¼Ÿ */
 	if (m_nMoveState == CHARMOVESTATE_DELETEREADY) {
-		/* ƒtƒF[ƒhƒAƒEƒg‚µ‚Ä‚©‚çÁ‚·‚æ‚¤‚É‚·‚é */
+		/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã—ã¦ã‹ã‚‰æ¶ˆã™ã‚ˆã†ã«ã™ã‚‹ */
 		SetViewState (INFOCHARCLI_VIEWSTATE_FADEOUT);
 	}
 
@@ -360,9 +360,9 @@ void CInfoCharCli::SetMoveState(int nMoveState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::MakeCharGrp										 */
-/* “à—e		:ƒLƒƒƒ‰‰æ‘œ‚ğì¬												 */
-/* “ú•t		:2007/03/25														 */
+/* é–¢æ•°å	:CInfoCharCli::MakeCharGrp										 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©ç”»åƒã‚’ä½œæˆ												 */
+/* æ—¥ä»˜		:2007/03/25														 */
 /* ========================================================================= */
 
 void CInfoCharCli::MakeCharGrp(void)
@@ -372,12 +372,12 @@ void CInfoCharCli::MakeCharGrp(void)
 	PCMgrGrpData pMgrGrpData;
 	PCImg32 pImgBody, pImgEar, pImgCloth, pImgHairD, pImgHairU, pImgEye, pImgAcce;
 
-	/* “Áêˆ— */
+	/* ç‰¹æ®Šå‡¦ç† */
 	if (m_wGrpIDNPC == (WORD)-1) {
 		SetEffectID (m_wGrpIDCloth);
 	}
 
-	/* •à‚«—p‚Ì‰æ‘œ‚ğ—pˆÓ */
+	/* æ­©ãç”¨ã®ç”»åƒã‚’ç”¨æ„ */
 	SAFE_DELETE (m_pDibChar);
 	m_pDibChar = new CImg32;
 	m_pDibChar->CreateWithoutGdi (m_nGrpSize * 16, m_nGrpSize);
@@ -397,7 +397,7 @@ void CInfoCharCli::MakeCharGrp(void)
 	pImgHairU	= pMgrGrpData->GetDibHairU	(m_wGrpIDHairColor - 1);
 	pImgEye		= pMgrGrpData->GetDibEye	(m_wGrpIDEyeColor - 1);
 
-//Todo:b’è
+//Todo:æš«å®š
 //	m_ptViewCharPos.x = m_ptViewCharPos.y = 0;
 	if (m_dwMotionTypeID != 1) {
 		m_ptViewCharPos.x = 16;
@@ -433,8 +433,8 @@ void CInfoCharCli::MakeCharGrp(void)
 	y		= 16;
 	nHairY	= m_wGrpIDHairType * m_nGrpSize;
 
-	/* ŠeŒü‚«—p‚Ì‰æ‘œ‚ğì¬ */
-	/* ã */
+	/* å„å‘ãç”¨ã®ç”»åƒã‚’ä½œæˆ */
+	/* ä¸Š */
 	if ((m_wGrpIDSP != 0) || (wGrpIDNPC != 0)) {
 		m_pDibChar->BltFrom256 (0, 0, m_nGrpSize * 4, m_nGrpSize, pImgCloth, x, nClothY, TRUE);
 	} else {
@@ -446,7 +446,7 @@ void CInfoCharCli::MakeCharGrp(void)
 	}
 	m_pDibChar->BltFrom256 (0, 0, m_nGrpSize * 4, m_nGrpSize, pImgAcce, nAcceX, nAcceY, TRUE);
 
-	/* ‰º */
+	/* ä¸‹ */
 	nTmp = 4 * m_nGrpSize;
 	if ((m_wGrpIDSP != 0) || (wGrpIDNPC != 0)) {
 		m_pDibChar->BltFrom256 (nTmp, 0, m_nGrpSize * 4, m_nGrpSize, pImgCloth, x + nTmp, nClothY, TRUE);
@@ -465,7 +465,7 @@ void CInfoCharCli::MakeCharGrp(void)
 	}
 	m_pDibChar->BltFrom256 (nTmp, 0, m_nGrpSize * 4, m_nGrpSize, pImgAcce, nAcceX + nTmp, nAcceY, TRUE);
 
-	/* ¶ */
+	/* å·¦ */
 	nTmp = 8 * m_nGrpSize;
 	if ((m_wGrpIDSP != 0) || (wGrpIDNPC != 0)) {
 		m_pDibChar->BltFrom256 (nTmp, 0, m_nGrpSize * 4, m_nGrpSize, pImgCloth, x + nTmp, nClothY, TRUE);
@@ -484,7 +484,7 @@ void CInfoCharCli::MakeCharGrp(void)
 	}
 	m_pDibChar->BltFrom256 (nTmp, 0, m_nGrpSize * 4, m_nGrpSize, pImgAcce, nAcceX + nTmp, nAcceY, TRUE);
 
-	/* ‰E */
+	/* å³ */
 	nTmp = 12 * m_nGrpSize;
 	if ((m_wGrpIDSP != 0) || (wGrpIDNPC != 0)) {
 		m_pDibChar->BltFrom256 (nTmp, 0, m_nGrpSize * 4, m_nGrpSize, pImgCloth, x + nTmp, nClothY, TRUE);
@@ -506,9 +506,9 @@ void CInfoCharCli::MakeCharGrp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::SetName											 */
-/* “à—e		:ƒLƒƒƒ‰–¼‚ğXV													 */
-/* “ú•t		:2007/01/28														 */
+/* é–¢æ•°å	:CInfoCharCli::SetName											 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©åã‚’æ›´æ–°													 */
+/* æ—¥ä»˜		:2007/01/28														 */
 /* ========================================================================= */
 
 void CInfoCharCli::SetName(LPCSTR pszName)
@@ -557,9 +557,9 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::SetSpeak											 */
-/* “à—e		:”­Œ¾“à—e‚ğXV													 */
-/* “ú•t		:2007/02/04														 */
+/* é–¢æ•°å	:CInfoCharCli::SetSpeak											 */
+/* å†…å®¹		:ç™ºè¨€å†…å®¹ã‚’æ›´æ–°													 */
+/* æ—¥ä»˜		:2007/02/04														 */
 /* ========================================================================= */
 
 void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
@@ -582,13 +582,13 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 		return;
 	}
 
-	/* ‰æ‘œì¬€”õ */
+	/* ç”»åƒä½œæˆæº–å‚™ */
 	nPos	= 0;
 	nLine	= 0;
 	nWidth	= (nLen > 20) ? 20 : nLen;
 	nHeight = nLen / 20 + 1;
 	if (nLen % 20 == 0) {
-		/* ‰üs’š“x‚Ì•¶š”‚Ìê‡‚Í‰æ‘œƒTƒCƒY‚ğ1s•ªŒ¸‚ç‚· */
+		/* æ”¹è¡Œä¸åº¦ã®æ–‡å­—æ•°ã®å ´åˆã¯ç”»åƒã‚µã‚¤ã‚ºã‚’1è¡Œåˆ†æ¸›ã‚‰ã™ */
 		nHeight --;
 		nHeight = max (nHeight, 1);
 	}
@@ -601,10 +601,10 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont);
 	SetBkMode (hDCTmp, TRANSPARENT);
 
-	/* ‘SŠp10•¶š’PˆÊ‚Å1s‚¸‚Â‰æ‘œ‚ğì¬ */
+	/* å…¨è§’10æ–‡å­—å˜ä½ã§1è¡Œãšã¤ç”»åƒã‚’ä½œæˆ */
 	while (1) {
 		ZeroMemory (szTmp, sizeof (szTmp));
-		/* 1s•ª‚Ì•¶š—ñ‚ğì¬ */
+		/* 1è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’ä½œæˆ */
 		for (nCount = 0; nCount < 20; nCount ++) {
 			if (nPos + nCount >= nLen) {
 				break;
@@ -612,7 +612,7 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 			szTmp[nCount] = pszSpeak[nPos + nCount];
 			bResult = IsDBCSLeadByte (pszSpeak[nPos + nCount]);
 			if (bResult) {
-				/* ‘SŠp•¶š‚Ìæ“ªƒoƒCƒg‚Ì‚ÍŒã‚ë‚Ì1ƒoƒCƒg‚à’Ç‰Á */
+				/* å…¨è§’æ–‡å­—ã®å…ˆé ­ãƒã‚¤ãƒˆã®æ™‚ã¯å¾Œã‚ã®1ãƒã‚¤ãƒˆã‚‚è¿½åŠ  */
 				nCount ++;
 				szTmp[nCount] = pszSpeak[nPos + nCount];
 			}
@@ -641,9 +641,9 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::SetSleepTimer									 */
-/* “à—e		:‚¨‚â‚·‚İƒ^ƒCƒ}[‚ğİ’è											 */
-/* “ú•t		:2008/07/21														 */
+/* é–¢æ•°å	:CInfoCharCli::SetSleepTimer									 */
+/* å†…å®¹		:ãŠã‚„ã™ã¿ã‚¿ã‚¤ãƒãƒ¼ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2008/07/21														 */
 /* ========================================================================= */
 
 void CInfoCharCli::SetSleepTimer(BOOL bSleepTimer)
@@ -652,7 +652,7 @@ void CInfoCharCli::SetSleepTimer(BOOL bSleepTimer)
 
 	m_bModeSleepTimer = bSleepTimer;
 	if (bSleepTimer && (m_dwBalloonID == 0)) {
-//Todo:b’è
+//Todo:æš«å®š
 		Packet.Make (SBOCOMMANDID_SUB_MSGCMD_BALLOON, m_dwCharID, 33);
 		m_pSock->Send (&Packet);
 	}
@@ -660,9 +660,9 @@ void CInfoCharCli::SetSleepTimer(BOOL bSleepTimer)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::SetViewState										 */
-/* “à—e		:•\¦ó‘Ôİ’è													 */
-/* “ú•t		:2007/02/26														 */
+/* é–¢æ•°å	:CInfoCharCli::SetViewState										 */
+/* å†…å®¹		:è¡¨ç¤ºçŠ¶æ…‹è¨­å®š													 */
+/* æ—¥ä»˜		:2007/02/26														 */
 /* ========================================================================= */
 
 void CInfoCharCli::SetViewState(int nViewState)
@@ -675,10 +675,10 @@ void CInfoCharCli::SetViewState(int nViewState)
 		m_dwLastTimeViewState	= 0;
 		m_nFadeLevel			= 0;
 		break;
-	case INFOCHARCLI_VIEWSTATE_FADEIN:			/* ƒtƒF[ƒhƒCƒ“ */
+	case INFOCHARCLI_VIEWSTATE_FADEIN:			/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ */
 		m_nFadeLevel = 99;
 		break;
-	case INFOCHARCLI_VIEWSTATE_FADEOUT:			/* ƒtƒF[ƒhƒAƒEƒg */
+	case INFOCHARCLI_VIEWSTATE_FADEOUT:			/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ */
 		m_nFadeLevel = 1;
 		break;
 	}
@@ -686,9 +686,9 @@ void CInfoCharCli::SetViewState(int nViewState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetMotionInfo									 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚ğæ“¾											 */
-/* “ú•t		:2007/11/24														 */
+/* é–¢æ•°å	:CInfoCharCli::GetMotionInfo									 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/11/24														 */
 /* ========================================================================= */
 
 CInfoMotion *CInfoCharCli::GetMotionInfo(int *pnCount)
@@ -708,24 +708,24 @@ CInfoMotion *CInfoCharCli::GetMotionInfo(int *pnCount)
 	}
 	nMoveState = m_nMoveState;
 	switch (nMoveState) {
-	case CHARMOVESTATE_DELETE:		/* Á‹ */
-	case CHARMOVESTATE_DELETEREADY:	/* Á‹€”õ */
+	case CHARMOVESTATE_DELETE:		/* æ¶ˆå» */
+	case CHARMOVESTATE_DELETEREADY:	/* æ¶ˆå»æº–å‚™ */
 		nMoveState = m_nMoveStateBack;
 		break;
 	}
 
-	/* Š„‚è‚İÄ¶‚ ‚èH */
+	/* å‰²ã‚Šè¾¼ã¿å†ç”Ÿã‚ã‚Šï¼Ÿ */
 	if (m_bMotionInterrupt) {
 		paMotionInfo = &m_aMotion[CHARMOTIONID_INTERRUUPT][nDirection];
 
 	} else {
-		/* —­‚ßUŒ‚’†H */
+		/* æºœã‚æ”»æ’ƒä¸­ï¼Ÿ */
 		if (m_bChargeAtack) {
 			switch (nMoveState) {
-			case CHARMOVESTATE_BATTLEMOVE:	/* í“¬ˆÚ“®’† */
+			case CHARMOVESTATE_BATTLEMOVE:	/* æˆ¦é—˜ç§»å‹•ä¸­ */
 				break;
 			default:
-				/* —­‚ß’†‚ÍUŒ‚ƒ‚[ƒVƒ‡ƒ“‚Ì1ƒRƒ}–Ú‚ğ•\¦‚·‚é */
+				/* æºœã‚ä¸­ã¯æ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®1ã‚³ãƒç›®ã‚’è¡¨ç¤ºã™ã‚‹ */
 				nAnime		= 0;
 				nMoveState	= CHARMOVESTATE_BATTLEATACK;
 				break;
@@ -733,33 +733,33 @@ CInfoMotion *CInfoCharCli::GetMotionInfo(int *pnCount)
 		}
 
 		switch (nMoveState) {
-		case CHARMOVESTATE_STAND:		/* —§‚¿ */
-		case CHARMOVESTATE_DELETE:		/* Á‹ */
-		case CHARMOVESTATE_DELETEREADY:	/* Á‹€”õ */
+		case CHARMOVESTATE_STAND:		/* ç«‹ã¡ */
+		case CHARMOVESTATE_DELETE:		/* æ¶ˆå» */
+		case CHARMOVESTATE_DELETEREADY:	/* æ¶ˆå»æº–å‚™ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_STAND][nDirection];
 			break;
-		case CHARMOVESTATE_SIT:			/* À‚è’† */
-		case CHARMOVESTATE_SWOON:		/* ‹Câ */
-		case CHARMOVESTATE_SLEEPTIMER:	/* ‚¨‚â‚·‚İƒ^ƒCƒ}[’† */
+		case CHARMOVESTATE_SIT:			/* åº§ã‚Šä¸­ */
+		case CHARMOVESTATE_SWOON:		/* æ°—çµ¶ */
+		case CHARMOVESTATE_SLEEPTIMER:	/* ãŠã‚„ã™ã¿ã‚¿ã‚¤ãƒãƒ¼ä¸­ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_SIT][nDirection];
 			break;
-		case CHARMOVESTATE_MOVE:		/* ˆÚ“®’† */
-		case CHARMOVESTATE_WALKANIME:	/* ‘«“¥‚İ */
+		case CHARMOVESTATE_MOVE:		/* ç§»å‹•ä¸­ */
+		case CHARMOVESTATE_WALKANIME:	/* è¶³è¸ã¿ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_WALK][nDirection];
 			break;
-		case CHARMOVESTATE_BATTLE:		/* í“¬’† */
+		case CHARMOVESTATE_BATTLE:		/* æˆ¦é—˜ä¸­ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_BATTLESTAND][nDirection];
 			break;
-		case CHARMOVESTATE_BATTLEMOVE:	/* í“¬ˆÚ“®’† */
+		case CHARMOVESTATE_BATTLEMOVE:	/* æˆ¦é—˜ç§»å‹•ä¸­ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_BATTLEWALK][nDirection];
 			break;
-		case CHARMOVESTATE_BATTLEATACK:	/* í“¬UŒ‚’† */
+		case CHARMOVESTATE_BATTLEATACK:	/* æˆ¦é—˜æ”»æ’ƒä¸­ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_ATACK][nDirection];
 			break;
-		case CHARMOVESTATE_ANIME:		/* ƒAƒjƒ[ƒVƒ‡ƒ“ */
+		case CHARMOVESTATE_ANIME:		/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_ANIME][nDirection];
 			break;
-		case CHARMOVESTATE_BATTLE_DEFENSE:	/* –hŒä */
+		case CHARMOVESTATE_BATTLE_DEFENSE:	/* é˜²å¾¡ */
 			paMotionInfo = &m_aMotion[CHARMOTIONID_BATTLEDEFENSE][nDirection];
 			break;
 		}
@@ -786,9 +786,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::IsChgWait										 */
-/* “à—e		:ó‘Ô•ÏX‘Ò‚¿‚©”»’è												 */
-/* “ú•t		:2007/07/24														 */
+/* é–¢æ•°å	:CInfoCharCli::IsChgWait										 */
+/* å†…å®¹		:çŠ¶æ…‹å¤‰æ›´å¾…ã¡ã‹åˆ¤å®š												 */
+/* æ—¥ä»˜		:2007/07/24														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::IsChgWait(void)
@@ -808,9 +808,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::SetEffectID										 */
-/* “à—e		:ƒGƒtƒFƒNƒgID‚ğw’è												 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoCharCli::SetEffectID										 */
+/* å†…å®¹		:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆIDã‚’æŒ‡å®š												 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CInfoCharCli::SetEffectID(DWORD dwEffectID)
@@ -838,9 +838,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::SetBalloonID										 */
-/* “à—e		:•¬o‚µID‚ğw’è													 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CInfoCharCli::SetBalloonID										 */
+/* å†…å®¹		:å™´å‡ºã—IDã‚’æŒ‡å®š													 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 void CInfoCharCli::SetBalloonID(DWORD dwBalloonID)
@@ -857,10 +857,10 @@ void CInfoCharCli::SetBalloonID(DWORD dwBalloonID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetGrpID											 */
-/* “à—e		:ƒOƒ‰ƒtƒBƒbƒNID‚ğæ“¾											 */
-/* “ú•t		:2007/12/01														 */
-/* ”õl		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚ÌID‚©‚ç•Ší‰æ‘œ‚Ìê‡‚ÉID‚ğ•ÏŠ·‚·‚é				 */
+/* é–¢æ•°å	:CInfoCharCli::GetGrpID											 */
+/* å†…å®¹		:ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯IDã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/12/01														 */
+/* å‚™è€ƒ		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®IDã‹ã‚‰æ­¦å™¨ç”»åƒã®å ´åˆã«IDã‚’å¤‰æ›ã™ã‚‹				 */
 /* ========================================================================= */
 
 void CInfoCharCli::GetGrpID(WORD &wGrpIDMain, WORD &wGrpIDSub)
@@ -874,16 +874,16 @@ void CInfoCharCli::GetGrpID(WORD &wGrpIDMain, WORD &wGrpIDSub)
 	bInit		= TRUE;
 
 	switch (wGrpIDMain) {
-	case GRPIDMAIN_WEAPON:			/* •Ší */
-	case GRPIDMAIN_WEAPON_BOW:		/* •Ší(‹|) */
-	case GRPIDMAIN_WEAPON_GLOVE:	/* •Ší(‘ÅŒ‚) */
-	case GRPIDMAIN_WEAPON_ETC:		/* •Ší(‚»‚Ì‘¼) */
-	case GRPIDMAIN_2X2_ARMS:		/* ‚¿•¨(2x2) */
+	case GRPIDMAIN_WEAPON:			/* æ­¦å™¨ */
+	case GRPIDMAIN_WEAPON_BOW:		/* æ­¦å™¨(å¼“) */
+	case GRPIDMAIN_WEAPON_GLOVE:	/* æ­¦å™¨(æ‰“æ’ƒ) */
+	case GRPIDMAIN_WEAPON_ETC:		/* æ­¦å™¨(ãã®ä»–) */
+	case GRPIDMAIN_2X2_ARMS:		/* æŒã¡ç‰©(2x2) */
 		if (m_dwEquipItemIDArmsRight == 0) {
 			goto Exit;
 		}
 		break;
-	case GRPIDMAIN_2X2_SHIELD:		/* ‚(2x2) */
+	case GRPIDMAIN_2X2_SHIELD:		/* ç›¾(2x2) */
 		if (m_dwEquipItemIDArmsLeft == 0) {
 			goto Exit;
 		}
@@ -894,20 +894,20 @@ void CInfoCharCli::GetGrpID(WORD &wGrpIDMain, WORD &wGrpIDSub)
 	wGrpIDSubTmp	= wGrpIDSub;
 
 	switch (wGrpIDMainTmp) {
-	case GRPIDMAIN_WEAPON:			/* •Ší */
+	case GRPIDMAIN_WEAPON:			/* æ­¦å™¨ */
 		wGrpIDMain = GRPIDMAIN_WEAPON;
 		break;
-	case GRPIDMAIN_WEAPON_BOW:		/* •Ší(‹|) */
+	case GRPIDMAIN_WEAPON_BOW:		/* æ­¦å™¨(å¼“) */
 		wGrpIDMain = GRPIDMAIN_WEAPON_BOW;
 		break;
-	case GRPIDMAIN_WEAPON_GLOVE:	/* •Ší(‘ÅŒ‚) */
+	case GRPIDMAIN_WEAPON_GLOVE:	/* æ­¦å™¨(æ‰“æ’ƒ) */
 		wGrpIDMain = GRPIDMAIN_WEAPON_GLOVE;
 		break;
-	case GRPIDMAIN_WEAPON_ETC:		/* •Ší(‚»‚Ì‘¼) */
+	case GRPIDMAIN_WEAPON_ETC:		/* æ­¦å™¨(ãã®ä»–) */
 		wGrpIDMain = GRPIDMAIN_WEAPON_ETC;
 		break;
-	case GRPIDMAIN_2X2_ARMS:		/* ‚¿•¨(2x2) */
-	case GRPIDMAIN_2X2_SHIELD:		/* ‚(2x2) */
+	case GRPIDMAIN_2X2_ARMS:		/* æŒã¡ç‰©(2x2) */
+	case GRPIDMAIN_2X2_SHIELD:		/* ç›¾(2x2) */
 		wGrpIDMain = wGrpIDMainTmp;
 		break;
 	default:
@@ -917,11 +917,11 @@ void CInfoCharCli::GetGrpID(WORD &wGrpIDMain, WORD &wGrpIDSub)
 	nCountX = pMgrGrpData->GetGrpCountX (wGrpIDMain);
 
 	switch (wGrpIDMainTmp) {
-	case GRPIDMAIN_WEAPON:			/* •Ší */
-	case GRPIDMAIN_WEAPON_BOW:		/* •Ší(‹|) */
-	case GRPIDMAIN_WEAPON_GLOVE:	/* •Ší(‘ÅŒ‚) */
-	case GRPIDMAIN_WEAPON_ETC:		/* •Ší(‚»‚Ì‘¼) */
-	case GRPIDMAIN_2X2_ARMS:		/* ‚¿•¨(2x2) */
+	case GRPIDMAIN_WEAPON:			/* æ­¦å™¨ */
+	case GRPIDMAIN_WEAPON_BOW:		/* æ­¦å™¨(å¼“) */
+	case GRPIDMAIN_WEAPON_GLOVE:	/* æ­¦å™¨(æ‰“æ’ƒ) */
+	case GRPIDMAIN_WEAPON_ETC:		/* æ­¦å™¨(ãã®ä»–) */
+	case GRPIDMAIN_2X2_ARMS:		/* æŒã¡ç‰©(2x2) */
 		if ((wGrpIDSub == 0) || (m_wGrpIDArmsSub == 0)) {
 			break;
 		}
@@ -929,7 +929,7 @@ void CInfoCharCli::GetGrpID(WORD &wGrpIDMain, WORD &wGrpIDSub)
 		wGrpIDSub += ((m_wGrpIDArmsSub - 1) * nCountX);
 		bInit = FALSE;
 		break;
-	case GRPIDMAIN_2X2_SHIELD:		/* ‚(2x2) */
+	case GRPIDMAIN_2X2_SHIELD:		/* ç›¾(2x2) */
 		if ((wGrpIDSub == 0) || (m_wGrpIDArmsLeftSub == 0)) {
 			break;
 		}
@@ -950,9 +950,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::InitMotionInfo									 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚Ì‰Šú‰»											 */
-/* “ú•t		:2008/01/03														 */
+/* é–¢æ•°å	:CInfoCharCli::InitMotionInfo									 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®åˆæœŸåŒ–											 */
+/* æ—¥ä»˜		:2008/01/03														 */
 /* ========================================================================= */
 
 void CInfoCharCli::InitMotionInfo(DWORD dwMotionID)
@@ -971,9 +971,9 @@ void CInfoCharCli::InitMotionInfo(DWORD dwMotionID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetEfcGrpPos										 */
-/* “à—e		:ƒGƒtƒFƒNƒg‰æ‘œ‚ÌŠJnÀ•W‚ğæ“¾									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoCharCli::GetEfcGrpPos										 */
+/* å†…å®¹		:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã®é–‹å§‹åº§æ¨™ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CInfoCharCli::GetEfcGrpPos(POINT &ptDst)
@@ -992,7 +992,7 @@ void CInfoCharCli::GetEfcGrpPos(POINT &ptDst)
 		goto Exit;
 	}
 
-//Todo:2–‡–ÚˆÈ~‚Ì‘Î‰
+//Todo:2æšç›®ä»¥é™ã®å¯¾å¿œ
 	wGrpID = m_pInfoEffect->GetGrpID () - 1;
 	ptDst.x = (wGrpID % nCountX) * nSize;
 	ptDst.y = (wGrpID / nCountX) * nSize;
@@ -1003,9 +1003,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetEfcImg										 */
-/* “à—e		:•`‰æŒ³‚ÌƒGƒtƒFƒNƒg‰æ‘œƒCƒ[ƒW‚ğæ“¾							 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoCharCli::GetEfcImg										 */
+/* å†…å®¹		:æç”»å…ƒã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 CImg32 *CInfoCharCli::GetEfcImg(void)
@@ -1016,7 +1016,7 @@ CImg32 *CInfoCharCli::GetEfcImg(void)
 	if (m_pInfoEffect == NULL) {
 		goto Exit;
 	}
-//Todo:2–‡–ÚˆÈ~‚Ìw’è
+//Todo:2æšç›®ä»¥é™ã®æŒ‡å®š
 	pRet = m_pMgrData->GetMgrGrpData ()->GetDib (m_pInfoEffect->m_dwGrpIDMain, 0, 0);
 Exit:
 	return pRet;
@@ -1024,9 +1024,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetEfcLevel										 */
-/* “à—e		:ƒGƒtƒFƒNƒg‰æ‘œ‚Ì“§‰ßƒŒƒxƒ‹‚ğæ“¾								 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoCharCli::GetEfcLevel										 */
+/* å†…å®¹		:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã®é€éãƒ¬ãƒ™ãƒ«ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 int CInfoCharCli::GetEfcLevel(void)
@@ -1045,9 +1045,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetEfcGrpSize									 */
-/* “à—e		:ƒGƒtƒFƒNƒg‰æ‘œ‚ÌƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoCharCli::GetEfcGrpSize									 */
+/* å†…å®¹		:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã®ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 int CInfoCharCli::GetEfcGrpSize(void)
@@ -1060,9 +1060,9 @@ int CInfoCharCli::GetEfcGrpSize(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetEfcDrawPos									 */
-/* “à—e		:ƒGƒtƒFƒNƒg‰æ‘œ‚Ì•`‰æ•â³•‚ğæ“¾								 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoCharCli::GetEfcDrawPos									 */
+/* å†…å®¹		:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”»åƒã®æç”»è£œæ­£å¹…ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CInfoCharCli::GetEfcDrawPos(POINT &ptDst)
@@ -1071,9 +1071,9 @@ void CInfoCharCli::GetEfcDrawPos(POINT &ptDst)
 	ptDst.y = -1 * (m_nGrpSize / 2);
 
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_BATTLE:		/* í“¬’† */
-	case CHARMOVESTATE_BATTLEATACK:	/* í“¬UŒ‚’† */
-	case CHARMOVESTATE_BATTLEMOVE:	/* í“¬ˆÚ“®’† */
+	case CHARMOVESTATE_BATTLE:		/* æˆ¦é—˜ä¸­ */
+	case CHARMOVESTATE_BATTLEATACK:	/* æˆ¦é—˜æ”»æ’ƒä¸­ */
+	case CHARMOVESTATE_BATTLEMOVE:	/* æˆ¦é—˜ç§»å‹•ä¸­ */
 		ptDst.x = ptDst.y = 0;
 		break;
 	}
@@ -1081,9 +1081,9 @@ void CInfoCharCli::GetEfcDrawPos(POINT &ptDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetBalloonGrpID									 */
-/* “à—e		:•¬o‚µ‰æ‘œID‚ğæ“¾												 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CInfoCharCli::GetBalloonGrpID									 */
+/* å†…å®¹		:å™´å‡ºã—ç”»åƒIDã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 DWORD CInfoCharCli::GetBalloonGrpID(void)
@@ -1093,10 +1093,10 @@ DWORD CInfoCharCli::GetBalloonGrpID(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::IsEnableMove										 */
-/* “à—e		:ˆÚ“®‚Å‚«‚éó‘Ô‚©”»’è											 */
-/* “ú•t		:2008/06/28														 */
-/* –ß‚è’l	:TRUE:ˆÚ“®‰Â													 */
+/* é–¢æ•°å	:CInfoCharCli::IsEnableMove										 */
+/* å†…å®¹		:ç§»å‹•ã§ãã‚‹çŠ¶æ…‹ã‹åˆ¤å®š											 */
+/* æ—¥ä»˜		:2008/06/28														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ç§»å‹•å¯													 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::IsEnableMove(void)
@@ -1107,7 +1107,7 @@ BOOL CInfoCharCli::IsEnableMove(void)
 	if (bRet == FALSE) {
 		goto Exit;
 	}
-	/* ƒ}ƒbƒvƒCƒxƒ“ƒgƒ`ƒFƒbƒN‘Ò‚¿H */
+	/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆãƒã‚§ãƒƒã‚¯å¾…ã¡ï¼Ÿ */
 	if (m_bWaitCheckMapEvent) {
 		bRet = FALSE;
 		goto Exit;
@@ -1120,9 +1120,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::IsDamage											 */
-/* “à—e		:ƒ_ƒ[ƒWó‚¯’†‚©”»’è											 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CInfoCharCli::IsDamage											 */
+/* å†…å®¹		:ãƒ€ãƒ¡ãƒ¼ã‚¸å—ã‘ä¸­ã‹åˆ¤å®š											 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::IsDamage(void)
@@ -1140,9 +1140,9 @@ BOOL CInfoCharCli::IsDamage(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetTextEffectCount								 */
-/* “à—e		:“o˜^”‚ğæ“¾													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::GetTextEffectCount								 */
+/* å†…å®¹		:ç™»éŒ²æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 int CInfoCharCli::GetTextEffectCount(void)
@@ -1152,9 +1152,9 @@ int CInfoCharCli::GetTextEffectCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::AddTextEffect									 */
-/* “à—e		:•¶šƒGƒtƒFƒNƒg‚ğ’Ç‰Á											 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::AddTextEffect									 */
+/* å†…å®¹		:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’è¿½åŠ 											 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 void CInfoCharCli::AddTextEffect(DWORD dwData, int nColor, int nSize)
@@ -1162,7 +1162,7 @@ void CInfoCharCli::AddTextEffect(DWORD dwData, int nColor, int nSize)
 	PCInfoTextEffect pInfo;
 
 	pInfo = new CInfoTextEffect;
-//Todo;w’è•û–@
+//Todo;æŒ‡å®šæ–¹æ³•
 	pInfo->Set (dwData, TEXTEFFECTTYPE_WAVE, nColor, nSize);
 
 	m_aTextEffect.Add (pInfo);
@@ -1170,9 +1170,9 @@ void CInfoCharCli::AddTextEffect(DWORD dwData, int nColor, int nSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::AddTextEffect									 */
-/* “à—e		:•¶šƒGƒtƒFƒNƒg‚ğ’Ç‰Á											 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::AddTextEffect									 */
+/* å†…å®¹		:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’è¿½åŠ 											 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 void CInfoCharCli::AddTextEffect(LPCSTR pszData, int nColor, int nSize)
@@ -1180,7 +1180,7 @@ void CInfoCharCli::AddTextEffect(LPCSTR pszData, int nColor, int nSize)
 	PCInfoTextEffect pInfo;
 
 	pInfo = new CInfoTextEffect;
-//Todo;w’è•û–@
+//Todo;æŒ‡å®šæ–¹æ³•
 	pInfo->Set (pszData, TEXTEFFECTTYPE_NORMAL, nColor, nSize);
 
 	m_aTextEffect.Add (pInfo);
@@ -1188,9 +1188,9 @@ void CInfoCharCli::AddTextEffect(LPCSTR pszData, int nColor, int nSize)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::DeleteAllTextEffect								 */
-/* “à—e		:•¶šƒGƒtƒFƒNƒg‚ğ‘S‚Äíœ										 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::DeleteAllTextEffect								 */
+/* å†…å®¹		:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å…¨ã¦å‰Šé™¤										 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 void CInfoCharCli::DeleteAllTextEffect(void)
@@ -1208,9 +1208,9 @@ void CInfoCharCli::DeleteAllTextEffect(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetTextEffectGrpCount							 */
-/* “à—e		:‰æ‘œ”‚ğæ“¾													 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::GetTextEffectGrpCount							 */
+/* å†…å®¹		:ç”»åƒæ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 int CInfoCharCli::GetTextEffectGrpCount(int nIndex)
@@ -1220,9 +1220,9 @@ int CInfoCharCli::GetTextEffectGrpCount(int nIndex)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetTextEffectGrpNo								 */
-/* “à—e		:w’è”Ô†‚Ì”’l‚ğæ“¾											 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::GetTextEffectGrpNo								 */
+/* å†…å®¹		:æŒ‡å®šç•ªå·ã®æ•°å€¤ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 int CInfoCharCli::GetTextEffectGrpNo(int nIndex, int nNo)
@@ -1232,10 +1232,10 @@ int CInfoCharCli::GetTextEffectGrpNo(int nIndex, int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetTextEffectDrawPos								 */
-/* “à—e		:w’è”Ô†‚Ì•\¦ˆÊ’u•â³’l‚ğæ“¾									 */
-/* –ß‚è’l	:TRUE:•`‰æ‚·‚é FALSE:•`‰æ‚µ‚È‚¢									 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::GetTextEffectDrawPos								 */
+/* å†…å®¹		:æŒ‡å®šç•ªå·ã®è¡¨ç¤ºä½ç½®è£œæ­£å€¤ã‚’å–å¾—									 */
+/* æˆ»ã‚Šå€¤	:TRUE:æç”»ã™ã‚‹ FALSE:æç”»ã—ãªã„									 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::GetTextEffectDrawPos(int nIndex, int nNo, POINT &ptDst, BYTE &byLevel)
@@ -1245,9 +1245,9 @@ BOOL CInfoCharCli::GetTextEffectDrawPos(int nIndex, int nNo, POINT &ptDst, BYTE 
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetTextEffectData								 */
-/* “à—e		:w’è”Ô†‚Ì•\¦ˆÊ’u•â³’l‚ğæ“¾									 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::GetTextEffectData								 */
+/* å†…å®¹		:æŒ‡å®šç•ªå·ã®è¡¨ç¤ºä½ç½®è£œæ­£å€¤ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 DWORD CInfoCharCli::GetTextEffectData(int nIndex)
@@ -1257,9 +1257,9 @@ DWORD CInfoCharCli::GetTextEffectData(int nIndex)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::GetTextEffect									 */
-/* “à—e		:•¶šƒGƒtƒFƒNƒg‚ğæ“¾											 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CInfoCharCli::GetTextEffect									 */
+/* å†…å®¹		:æ–‡å­—ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 CInfoTextEffect *CInfoCharCli::GetTextEffect(int nIndex)
@@ -1269,9 +1269,9 @@ CInfoTextEffect *CInfoCharCli::GetTextEffect(int nIndex)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::AddMovePosQue									 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2008/08/13														 */
+/* é–¢æ•°å	:CInfoCharCli::AddMovePosQue									 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2008/08/13														 */
 /* ========================================================================= */
 
 void CInfoCharCli::AddMovePosQue(int nState, int nDirection, int x, int y)
@@ -1293,9 +1293,9 @@ void CInfoCharCli::AddMovePosQue(int nState, int nDirection, int x, int y)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::DeleteMovePosQue									 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/08/13														 */
+/* é–¢æ•°å	:CInfoCharCli::DeleteMovePosQue									 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/08/13														 */
 /* ========================================================================= */
 
 void CInfoCharCli::DeleteMovePosQue(int nNo)
@@ -1312,9 +1312,9 @@ void CInfoCharCli::DeleteMovePosQue(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::DeleteAllMovePosQue								 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2008/08/13														 */
+/* é–¢æ•°å	:CInfoCharCli::DeleteAllMovePosQue								 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2008/08/13														 */
 /* ========================================================================= */
 
 void CInfoCharCli::DeleteAllMovePosQue(void)
@@ -1330,14 +1330,14 @@ void CInfoCharCli::DeleteAllMovePosQue(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::RenewAnime										 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV											 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharCli::RenewAnime										 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°											 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::RenewAnime(
-	DWORD dwTime,		/* [in] ŠÔ */
-	int nAdd/*=1*/)		/* [in] Ÿ‚Ìƒpƒ^[ƒ“‚Ö‚Ì‘‰Á•ª */
+	DWORD dwTime,		/* [in] æ™‚é–“ */
+	int nAdd/*=1*/)		/* [in] æ¬¡ã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã¸ã®å¢—åŠ åˆ† */
 {
 	BOOL bRet, bCheck;
 	int nCount;
@@ -1351,7 +1351,7 @@ BOOL CInfoCharCli::RenewAnime(
 		goto Exit;
 	}
 	if (pInfoMotion->m_byWait == 0) {
-		/* ‘Ò‚¿ŠÔ–¢İ’è‚Ìê‡‚ÍƒRƒ}ˆÚ“®‚µ‚È‚¢ */
+		/* å¾…ã¡æ™‚é–“æœªè¨­å®šã®å ´åˆã¯ã‚³ãƒç§»å‹•ã—ãªã„ */
 		goto Exit;
 	}
 
@@ -1371,12 +1371,12 @@ BOOL CInfoCharCli::RenewAnime(
 			m_dwLastTimeAnime = dwTime;
 		} else {
 			switch (pInfoMotion->m_dwMotionListID) {
-			case CHARMOTIONLISTID_DEAD_UP:			/* €–S(ã) */
-			case CHARMOTIONLISTID_DEAD_DOWN:		/* €–S(‰º) */
-			case CHARMOTIONLISTID_DEAD_LEFT:		/* €–S(¶) */
-			case CHARMOTIONLISTID_DEAD_RIGHT:		/* €–S(‰E) */
+			case CHARMOTIONLISTID_DEAD_UP:			/* æ­»äº¡(ä¸Š) */
+			case CHARMOTIONLISTID_DEAD_DOWN:		/* æ­»äº¡(ä¸‹) */
+			case CHARMOTIONLISTID_DEAD_LEFT:		/* æ­»äº¡(å·¦) */
+			case CHARMOTIONLISTID_DEAD_RIGHT:		/* æ­»äº¡(å³) */
 				m_dwLastTimeAnime = dwTime;
-				/* €–Sƒ‚[ƒVƒ‡ƒ“Œã‚Í‚»‚Ì‚Ü‚Ü‚É‚µ‚Ä‚¨‚­ */
+				/* æ­»äº¡ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³å¾Œã¯ãã®ã¾ã¾ã«ã—ã¦ãŠã */
 				break;
 			default:
 				if (m_bMotionInterrupt) {
@@ -1384,7 +1384,7 @@ BOOL CInfoCharCli::RenewAnime(
 				}
 				m_bMotionInterrupt = FALSE;
 				if (m_nMoveStateReserve) {
-					/* —\–ñ‚µ‚Ä‚¢‚½ó‘Ô‚Ö‘JˆÚ */
+					/* äºˆç´„ã—ã¦ã„ãŸçŠ¶æ…‹ã¸é·ç§» */
 					ChgMoveState (m_nMoveStateReserve);
 				}
 				break;
@@ -1417,9 +1417,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::TimerProcMove									 */
-/* “à—e		:ˆÚ“®ˆ—														 */
-/* “ú•t		:2006/10/08														 */
+/* é–¢æ•°å	:CInfoCharCli::TimerProcMove									 */
+/* å†…å®¹		:ç§»å‹•å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/10/08														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
@@ -1436,16 +1436,16 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 	}
 	if (m_bSkipMove) {
 		if (m_apMovePosQue.GetSize () > 0) {
-			/* ƒLƒ…[‚ÉÏ‚Ü‚ê‚Ä‚¢‚éê‡‚Í‘Ò‚¿ŠÔ–³‚µ */
+			/* ã‚­ãƒ¥ãƒ¼ã«ç©ã¾ã‚Œã¦ã„ã‚‹å ´åˆã¯å¾…ã¡æ™‚é–“ç„¡ã— */
 			dwWait = 1;
 		}
 	}
 	nStandState	= CHARMOVESTATE_STAND;
 
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_MOVE:		/* ˆÚ“®’† */
+	case CHARMOVESTATE_MOVE:		/* ç§»å‹•ä¸­ */
 		break;
-	case CHARMOVESTATE_BATTLEMOVE:	/* í“¬ˆÚ“®’† */
+	case CHARMOVESTATE_BATTLEMOVE:	/* æˆ¦é—˜ç§»å‹•ä¸­ */
 		nStandState = CHARMOVESTATE_BATTLE;
 		break;
 	default:
@@ -1470,19 +1470,19 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 	dwTmp /= dwWait;
 
 	switch (nDirection) {
-	case 0:		/* ã */
+	case 0:		/* ä¸Š */
 		m_ptMove.y -= dwTmp;
 		m_ptMove.y = max (0, m_ptMove.y);
 		break;
-	case 1:		/* ‰º */
+	case 1:		/* ä¸‹ */
 		m_ptMove.y += dwTmp;
 		m_ptMove.y = min (0, m_ptMove.y);
 		break;
-	case 2:		/* ¶ */
+	case 2:		/* å·¦ */
 		m_ptMove.x -= dwTmp;
 		m_ptMove.x = max (0, m_ptMove.x);
 		break;
-	case 3:		/* ‰E */
+	case 3:		/* å³ */
 		m_ptMove.x += dwTmp;
 		m_ptMove.x = min (0, m_ptMove.x);
 		break;
@@ -1550,9 +1550,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::TimerProcViewState								 */
-/* “à—e		:•\¦ó‘Ôˆ—													 */
-/* “ú•t		:2007/02/26														 */
+/* é–¢æ•°å	:CInfoCharCli::TimerProcViewState								 */
+/* å†…å®¹		:è¡¨ç¤ºçŠ¶æ…‹å‡¦ç†													 */
+/* æ—¥ä»˜		:2007/02/26														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::TimerProcViewState(DWORD dwTime)
@@ -1572,19 +1572,19 @@ BOOL CInfoCharCli::TimerProcViewState(DWORD dwTime)
 	switch (m_nViewState) {
 	case INFOCHARCLI_VIEWSTATE_NONE:
 		goto Exit;
-	case INFOCHARCLI_VIEWSTATE_FADEIN:			/* ƒtƒF[ƒhƒCƒ“ */
+	case INFOCHARCLI_VIEWSTATE_FADEIN:			/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ */
 		m_nFadeLevel -= dwTmp;
 		if (m_nFadeLevel < 0) {
 			SetViewState (INFOCHARCLI_VIEWSTATE_NONE);
 		}
 		break;
-	case INFOCHARCLI_VIEWSTATE_FADEOUT:			/* ƒtƒF[ƒhƒAƒEƒg */
+	case INFOCHARCLI_VIEWSTATE_FADEOUT:			/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ */
 		m_nFadeLevel += dwTmp;
 		if (m_nFadeLevel > 100) {
 			m_nFadeLevel = 100;
 			if ((m_pInfoEffect == NULL) || (m_pInfoEffect && m_pInfoEffect->m_bLoop)) {
 				SetViewState (INFOCHARCLI_VIEWSTATE_NONE);
-				/* Á‹€”õH */
+				/* æ¶ˆå»æº–å‚™ï¼Ÿ */
 				if (m_nMoveState == CHARMOVESTATE_DELETEREADY) {
 					SetMoveState (CHARMOVESTATE_DELETE);
 				} else {
@@ -1602,9 +1602,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::TimerProcAtack									 */
-/* “à—e		:UŒ‚ˆ—														 */
-/* “ú•t		:2007/07/12														 */
+/* é–¢æ•°å	:CInfoCharCli::TimerProcAtack									 */
+/* å†…å®¹		:æ”»æ’ƒå‡¦ç†														 */
+/* æ—¥ä»˜		:2007/07/12														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::TimerProcAtack(DWORD dwTime)
@@ -1622,7 +1622,7 @@ BOOL CInfoCharCli::TimerProcAtack(DWORD dwTime)
 		}
 		dwTmp  = dwTime - m_dwLastTimeAnime;
 		dwWait = (DWORD)pInfoMotion->m_byWait * 10;
-		/* ÅIƒRƒ}‚ÌŠÔ‚Ì2”{‚ÌŠÔ•\¦‚µ‚½H */
+		/* æœ€çµ‚ã‚³ãƒã®æ™‚é–“ã®2å€ã®é–“è¡¨ç¤ºã—ãŸï¼Ÿ */
 		if (dwTmp < dwWait * 2) {
 			goto Exit;
 		}
@@ -1637,9 +1637,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::TimerProcBalloon									 */
-/* “à—e		:•¬o‚µˆ—														 */
-/* “ú•t		:2007/12/31														 */
+/* é–¢æ•°å	:CInfoCharCli::TimerProcBalloon									 */
+/* å†…å®¹		:å™´å‡ºã—å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/12/31														 */
 /* ========================================================================= */
 
 BOOL CInfoCharCli::TimerProcBalloon(DWORD dwTime)
@@ -1660,7 +1660,7 @@ BOOL CInfoCharCli::TimerProcBalloon(DWORD dwTime)
 		goto Exit;
 	}
 
-	/* ‰‰ñH */
+	/* åˆå›ï¼Ÿ */
 	if (m_dwBalloonGrpID == 0) {
 		m_dwBalloonGrpID	= pInfo->m_dwGrpID;
 		m_dwLastTimeBalloon	= dwTime;
@@ -1701,9 +1701,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharCli::MotionProc										 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“ˆ—													 */
-/* “ú•t		:2008/01/01														 */
+/* é–¢æ•°å	:CInfoCharCli::MotionProc										 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³å‡¦ç†													 */
+/* æ—¥ä»˜		:2008/01/01														 */
 /* ========================================================================= */
 
 void CInfoCharCli::MotionProc(DWORD dwProcID)
@@ -1721,11 +1721,11 @@ void CInfoCharCli::MotionProc(DWORD dwProcID)
 	}
 
 	switch (dwProcID) {
-	case CHARMOTIONPROCID_ATACK:			/* UŒ‚ */
+	case CHARMOTIONPROCID_ATACK:			/* æ”»æ’ƒ */
 		PacketBATTLE_REQ_ATACK.Make (m_dwCharID, 0);
 		m_pSock->Send (&PacketBATTLE_REQ_ATACK);
 		break;
-	case CHARMOTIONPROCID_FISHING:			/* ’Ş‚è */
+	case CHARMOTIONPROCID_FISHING:			/* é‡£ã‚Š */
 		{
 			CPacketCHAR_PARA1 Packet;
 

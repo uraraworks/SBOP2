@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:StaticMapParts.h											 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒcˆê——ƒXƒ^ƒeƒBƒbƒNƒRƒ“ƒgƒ[ƒ‹ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/10													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:StaticMapParts.h											 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ã‚¹ã‚¿ãƒ†ã‚£ãƒƒã‚¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/10													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,43 +14,43 @@ class CImg32;
 class CLibInfoMapParts;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CStaticMapParts : public CStatic
 {
 public:
-			CStaticMapParts();						/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CStaticMapParts();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CStaticMapParts();						/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CStaticMapParts();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
 
-	void	Renew			(void);							/* ƒp[ƒcˆê——‰æ‘œ‚ğì¬‚µ‚ÄÄ•`‰æ */
-	void	SetScrollPos	(int nPos);						/* cƒXƒNƒ[ƒ‹ˆÊ’u‚ğİ’è */
+	void	Renew			(void);							/* ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒã‚’ä½œæˆã—ã¦å†æç”» */
+	void	SetScrollPos	(int nPos);						/* ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’è¨­å®š */
 
-	void	OnLButtonDown	(CPoint point);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN) */
-	void	OnRButtonDown	(CPoint point);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN) */
-	void	OnMouseWheel	(short zDelta, CPoint pt);		/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL) */
-	void	OnMouseMove		(CPoint point);					/* ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE) */
-
-
-protected:
-	void	MakePartsImage		(void);				/* ƒp[ƒcˆê——‰æ‘œ‚ğì¬ */
+	void	OnLButtonDown	(CPoint point);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN) */
+	void	OnRButtonDown	(CPoint point);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN) */
+	void	OnMouseWheel	(short zDelta, CPoint pt);		/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEWHEEL) */
+	void	OnMouseMove		(CPoint point);					/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE) */
 
 
 protected:
-	int			m_nPos;							/* cƒXƒNƒ[ƒ‹ˆÊ’u */
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgParts;					/* ƒoƒbƒNƒoƒbƒtƒ@ */
-	CPoint		m_ptCursor,						/* ƒJ[ƒ\ƒ‹‚Ì‚ ‚éƒp[ƒcˆÊ’u */
-				m_ptMoveSrc,					/* ˆÚ“®Œ³‚ÌˆÊ’u */
-				m_ptMoveDst;					/* ˆÚ“®æ‚ÌˆÊ’u */
+	void	MakePartsImage		(void);				/* ãƒ‘ãƒ¼ãƒ„ä¸€è¦§ç”»åƒã‚’ä½œæˆ */
 
-	CMgrData			*m_pMgrData;			/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData			*m_pMgrGrpData;			/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CLibInfoMapParts	*m_pLibInfoMapParts;	/* ƒ}ƒbƒvƒp[ƒcî•ñ */
+
+protected:
+	int			m_nPos;							/* ç¸¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½® */
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgParts;					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
+	CPoint		m_ptCursor,						/* ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚ã‚‹ãƒ‘ãƒ¼ãƒ„ä½ç½® */
+				m_ptMoveSrc,					/* ç§»å‹•å…ƒã®ä½ç½® */
+				m_ptMoveDst;					/* ç§»å‹•å…ˆã®ä½ç½® */
+
+	CMgrData			*m_pMgrData;			/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData			*m_pMgrGrpData;			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CLibInfoMapParts	*m_pLibInfoMapParts;	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
 
 
 

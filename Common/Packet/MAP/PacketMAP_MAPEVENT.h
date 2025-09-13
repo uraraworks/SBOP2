@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPEVENT.h										 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ’Ê’m) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/06/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPEVENT.h										 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±é€šçŸ¥) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/06/25													 */
 /* ========================================================================= */
 
 #pragma once
@@ -14,23 +14,23 @@ class CLibInfoMapEvent;
 class CInfoMapEventBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketMAP_MAPEVENT : public CPacketBase
 {
 public:
-			CPacketMAP_MAPEVENT();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketMAP_MAPEVENT();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketMAP_MAPEVENT();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketMAP_MAPEVENT();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwMapID, CLibInfoMapEvent *pLibInfo);	/* ƒpƒPƒbƒg‚ğì¬ */
-	void	Make	(DWORD dwMapID, CInfoMapEventBase *pInfo);		/* ƒpƒPƒbƒg‚ğì¬ */
-	PBYTE	Set		(PBYTE pPacket);								/* ƒpƒPƒbƒg‚ğİ’è */
+	void	Make	(DWORD dwMapID, CLibInfoMapEvent *pLibInfo);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	void	Make	(DWORD dwMapID, CInfoMapEventBase *pInfo);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwMapID;						/* ƒ}ƒbƒvID */
-	CLibInfoMapEvent	*m_pLibInfo;		/* ƒ}ƒbƒvƒCƒxƒ“ƒgî•ñ */
+	DWORD	m_dwMapID;						/* ãƒãƒƒãƒ—ID */
+	CLibInfoMapEvent	*m_pLibInfo;		/* ãƒãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ± */
 } CPacketMAP_MAPEVENT, *PCPacketMAP_MAPEVENT;
 
 /* Copyright(C)URARA-works 2008 */

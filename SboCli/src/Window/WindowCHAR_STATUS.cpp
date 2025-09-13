@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:WindowCHAR_STATUS.cpp										 */
-/* ì‡óe			:ÉLÉÉÉâ-ÉXÉeÅ[É^ÉXÉEÉBÉìÉhÉEÉNÉâÉX é¿ëïÉtÉ@ÉCÉã				 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2008/10/27													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:WindowCHAR_STATUS.cpp										 */
+/* ÂÜÖÂÆπ			:„Ç≠„É£„É©-„Çπ„ÉÜ„Éº„Çø„Çπ„Ç¶„Ç£„É≥„Éâ„Ç¶„ÇØ„É©„Çπ ÂÆüË£Ö„Éï„Ç°„Ç§„É´				 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2008/10/27													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,9 +17,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowCHAR_STATUS::CWindowCHAR_STATUS							 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/10/27														 */
+/* Èñ¢Êï∞Âêç	:CWindowCHAR_STATUS::CWindowCHAR_STATUS							 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/10/27														 */
 /* ========================================================================= */
 
 CWindowCHAR_STATUS::CWindowCHAR_STATUS()
@@ -35,9 +35,9 @@ CWindowCHAR_STATUS::CWindowCHAR_STATUS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowCHAR_STATUS::~CWindowCHAR_STATUS						 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2008/10/27														 */
+/* Èñ¢Êï∞Âêç	:CWindowCHAR_STATUS::~CWindowCHAR_STATUS						 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2008/10/27														 */
 /* ========================================================================= */
 
 CWindowCHAR_STATUS::~CWindowCHAR_STATUS()
@@ -46,9 +46,9 @@ CWindowCHAR_STATUS::~CWindowCHAR_STATUS()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowCHAR_STATUS::Create										 */
-/* ì‡óe		:çÏê¨															 */
-/* ì˙ït		:2008/10/27														 */
+/* Èñ¢Êï∞Âêç	:CWindowCHAR_STATUS::Create										 */
+/* ÂÜÖÂÆπ		:‰ΩúÊàê															 */
+/* Êó•‰ªò		:2008/10/27														 */
 /* ========================================================================= */
 
 void CWindowCHAR_STATUS::Create(CMgrData *pMgrData)
@@ -62,9 +62,9 @@ void CWindowCHAR_STATUS::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowCHAR_STATUS::Draw										 */
-/* ì‡óe		:ï`âÊ															 */
-/* ì˙ït		:2008/10/27														 */
+/* Èñ¢Êï∞Âêç	:CWindowCHAR_STATUS::Draw										 */
+/* ÂÜÖÂÆπ		:ÊèèÁîª															 */
+/* Êó•‰ªò		:2008/10/27														 */
 /* ========================================================================= */
 
 void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
@@ -89,19 +89,19 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 
 	DrawFrame (5);
 	DrawFrame (12, 7, 80, 24, 7);
-	TextOut2 (hDC, 12 + 5, 7 + 4, "ÉLÉÉÉâèÓïÒ(J)", RGB (255, 255, 255));
+	TextOut2 (hDC, 12 + 5, 7 + 4, "„Ç≠„É£„É©ÊÉÖÂ†±(J)", RGB (255, 255, 255));
 	y = 8 * 3;
 	DrawFrame (4, y, 200, 64, 6);
 	y += 6;
 	x = 12;
 	DrawFrame (x, y, 184, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ñºëO", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ÂêçÂâç", RGB (255, 255, 255));
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)pInfoChar->m_strCharName, RGB (1, 1, 1));
 	y += 18;
 	DrawFrame (x, y, 120, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "êEã∆", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ËÅ∑Ê•≠", RGB (255, 255, 255));
 	x = 12 + 8 * 16;
 	DrawFrame (x, y, 56, 16, 6);
 	DrawFrame (x, y, 32, 16, 7, TRUE);
@@ -112,12 +112,12 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 	x = 12;
 	DrawFrame (x, y, 184, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "èäëÆ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ÊâÄÂ±û", RGB (255, 255, 255));
 
 	y = 8 * 11 + 7;
 	x = 12;
 	DrawFrame (x, y, 48, 24, 7);
-	TextOut2 (hDC, x + 5, y + 4, "äÓñ{íl", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 4, "Âü∫Êú¨ÂÄ§", RGB (255, 255, 255));
 	y += 16;
 	DrawFrame (4, y, 200, 64, 6);
 	y += 6;
@@ -137,131 +137,131 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5 + 6, y + 2, "óÕ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5 + 6, y + 2, "Âäõ", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wPower);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ñÇóÕ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "È≠îÂäõ", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wMagic);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ëÃóÕ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "‰ΩìÂäõ", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wStrength);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "äÌóp", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "Âô®Áî®", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wSkillful);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 
 	y += 8 * 4;
 	x = 12;
 	DrawFrame (x, y, 64, 24, 7);
-	TextOut2 (hDC, x + 5, y + 4, "ÉXÉeÅ[É^ÉX", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 4, "„Çπ„ÉÜ„Éº„Çø„Çπ", RGB (255, 255, 255));
 	y += 16;
 	DrawFrame (4, y, 200, 152, 6);
 	y += 6;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "çUåÇ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ÊîªÊíÉ", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wPAtack);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ñhå‰", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "Èò≤Âæ°", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wPDefense);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "çUèp", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ÊîªË°ì", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wAbillityAT);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ñhèp", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "Èò≤Ë°ì", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wAbillityDF);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ñÇçU", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "È≠îÊîª", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wPMagic);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ñÇñh", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "È≠îÈò≤", RGB (255, 255, 255));
 	strTmp.Format("%d", pInfoChar->m_wPMagicDefense);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ñΩíÜ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ÂëΩ‰∏≠", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wPHitAverage);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "âÒî", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ÂõûÈÅø", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wPAvoidAverage);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5, y + 2, "ïKéE", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5, y + 2, "ÂøÖÊÆ∫", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wPCriticalAverage);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5 + 6, y + 2, "âŒ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5 + 6, y + 2, "ÁÅ´", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wAttrFire);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5 + 6, y + 2, "êÖ", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5 + 6, y + 2, "Ê∞¥", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wAttrWater);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5 + 6, y + 2, "ïó", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5 + 6, y + 2, "È¢®", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wAttrWind);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5 + 6, y + 2, "ìy", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5 + 6, y + 2, "Âúü", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wAttrEarth);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	y += 18;
 	x = 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5 + 6, y + 2, "åı", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5 + 6, y + 2, "ÂÖâ", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wAttrLight);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 	x = 12 + 8 * 12;
 	DrawFrame (x, y, 8 * 11, 16, 6);
 	DrawFrame (x, y, 40, 16, 7, TRUE);
-	TextOut2 (hDC, x + 5 + 6, y + 2, "à≈", RGB (255, 255, 255));
+	TextOut2 (hDC, x + 5 + 6, y + 2, "Èóá", RGB (255, 255, 255));
 	strTmp.Format("%d%%", pInfoChar->m_wAttrDark);
 	TextOut2 (hDC, x + 35, y + 2, (LPCSTR)strTmp, RGB (1, 1, 1));
 
@@ -271,7 +271,7 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 	y = 0;
 	TextOut2 (hDC, 16, 12 + 12 * y, (LPCSTR)pInfoChar->m_strCharName, clText);
 	y ++;
-	strTmp = "ÉåÉxÉã";
+	strTmp = "„É¨„Éô„É´";
 	TextOut2 (hDC, 16, 16 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%d", pInfoChar->m_wLevel);
 	TextOut2 (hDC, 16 + 12 * 7, 16 + 12 * y, (LPCSTR)strTmp, clText);
@@ -302,9 +302,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowCHAR_STATUS::OnX										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(X)												 */
-/* ì˙ït		:2008/10/27														 */
+/* Èñ¢Êï∞Âêç	:CWindowCHAR_STATUS::OnX										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(X)												 */
+/* Êó•‰ªò		:2008/10/27														 */
 /* ========================================================================= */
 
 BOOL CWindowCHAR_STATUS::OnX(BOOL bDown)
@@ -326,9 +326,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowCHAR_STATUS::OnZ										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(Z)												 */
-/* ì˙ït		:2008/10/27														 */
+/* Èñ¢Êï∞Âêç	:CWindowCHAR_STATUS::OnZ										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(Z)												 */
+/* Êó•‰ªò		:2008/10/27														 */
 /* ========================================================================= */
 
 BOOL CWindowCHAR_STATUS::OnZ(BOOL bDown)
@@ -350,9 +350,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CWindowCHAR_STATUS::OnJ										 */
-/* ì‡óe		:ÉLÅ[ÉnÉìÉhÉâ(J)												 */
-/* ì˙ït		:2009/04/02														 */
+/* Èñ¢Êï∞Âêç	:CWindowCHAR_STATUS::OnJ										 */
+/* ÂÜÖÂÆπ		:„Ç≠„Éº„Éè„É≥„Éâ„É©(J)												 */
+/* Êó•‰ªò		:2009/04/02														 */
 /* ========================================================================= */
 
 BOOL CWindowCHAR_STATUS::OnJ(BOOL bDown)

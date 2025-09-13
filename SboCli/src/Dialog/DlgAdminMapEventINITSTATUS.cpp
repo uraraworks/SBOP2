@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapEventINITSTATUS.cpp								 */
-/* “à—e			:ƒ}ƒbƒvƒCƒxƒ“ƒg(ƒXƒe[ƒ^ƒX‰Šú‰»)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/10/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapEventINITSTATUS.cpp								 */
+/* å†…å®¹			:ãƒžãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ(ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸåŒ–)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/05													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventINITSTATUS::DoDataExchange(CDataExchange* pDX)
@@ -38,9 +38,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventINITSTATUS::CDlgAdminMapEventINITSTATUS		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CDlgAdminMapEventINITSTATUS::CDlgAdminMapEventINITSTATUS		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventINITSTATUS::CDlgAdminMapEventINITSTATUS(CWnd* pParent /*=NULL*/)
@@ -56,9 +56,9 @@ CDlgAdminMapEventINITSTATUS::CDlgAdminMapEventINITSTATUS(CWnd* pParent /*=NULL*/
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventINITSTATUS::~CDlgAdminMapEventINITSTATUS		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CDlgAdminMapEventINITSTATUS::~CDlgAdminMapEventINITSTATUS		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 CDlgAdminMapEventINITSTATUS::~CDlgAdminMapEventINITSTATUS()
@@ -67,9 +67,9 @@ CDlgAdminMapEventINITSTATUS::~CDlgAdminMapEventINITSTATUS()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventINITSTATUS::Set								 */
-/* “à—e		:Ý’è															 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CDlgAdminMapEventINITSTATUS::Set								 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventINITSTATUS::Set(CInfoMapEventBase *pSrc)
@@ -79,7 +79,7 @@ void CDlgAdminMapEventINITSTATUS::Set(CInfoMapEventBase *pSrc)
 
 	m_dwEffectID = pSrcTmp->m_dwEffectID;
 
-	/* ƒGƒtƒFƒNƒgID */
+	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
 	nNo = 0;
 	nCount = m_ctlEffectID.GetCount ();
 	for (i = 0; i < nCount; i ++) {
@@ -93,9 +93,9 @@ void CDlgAdminMapEventINITSTATUS::Set(CInfoMapEventBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventINITSTATUS::Get								 */
-/* “à—e		:Žæ“¾															 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CDlgAdminMapEventINITSTATUS::Get								 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 void CDlgAdminMapEventINITSTATUS::Get(CInfoMapEventBase *pDst)
@@ -109,9 +109,9 @@ void CDlgAdminMapEventINITSTATUS::Get(CInfoMapEventBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapEventINITSTATUS::OnInitDialog						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/10/05														 */
+/* é–¢æ•°å	:CDlgAdminMapEventINITSTATUS::OnInitDialog						 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/10/05														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapEventINITSTATUS::OnInitDialog()
@@ -122,8 +122,8 @@ BOOL CDlgAdminMapEventINITSTATUS::OnInitDialog()
 
 	CDlgAdminMapEventNONE::OnInitDialog();
 
-	/* ƒGƒtƒFƒNƒgID */
-	m_ctlEffectID.InsertString (0, "–³‚µ");
+	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	m_ctlEffectID.InsertString (0, "ç„¡ã—");
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {

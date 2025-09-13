@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MainFrame.cpp												 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒgƒƒCƒ“ƒtƒŒ[ƒ€ ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MainFrame.cpp												 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ  å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -36,43 +36,43 @@
 
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-#define CLNAME "SboCli"								/* “o˜^ƒNƒ‰ƒX–¼ */
-#define TIMERID_TOOLCHECK	100						/* ƒc[ƒ‹ƒ`ƒFƒbƒNƒ^ƒCƒ}[ */
-#define TIMER_TOOLCHECK		1000					/* ƒc[ƒ‹ƒ`ƒFƒbƒNƒ^ƒCƒ}[ŽüŠú */
-#define TIMERID_ACTIVECHECK	101						/* ƒAƒNƒeƒBƒuƒEƒBƒ“ƒhƒEƒ`ƒFƒbƒNƒ^ƒCƒ}[ */
-#define TIMER_ACTIVECHECK	1000					/* ƒAƒNƒeƒBƒuƒEƒBƒ“ƒhƒEƒ`ƒFƒbƒNƒ^ƒCƒ}[ŽüŠú */
+#define CLNAME "SboCli"								/* ç™»éŒ²ã‚¯ãƒ©ã‚¹å */
+#define TIMERID_TOOLCHECK	100						/* ãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒƒã‚¯ã‚¿ã‚¤ãƒžãƒ¼ */
+#define TIMER_TOOLCHECK		1000					/* ãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒƒã‚¯ã‚¿ã‚¤ãƒžãƒ¼å‘¨æœŸ */
+#define TIMERID_ACTIVECHECK	101						/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒã‚§ãƒƒã‚¯ã‚¿ã‚¤ãƒžãƒ¼ */
+#define TIMER_ACTIVECHECK	1000					/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒã‚§ãƒƒã‚¯ã‚¿ã‚¤ãƒžãƒ¼å‘¨æœŸ */
 
-/* ƒƒbƒZ[ƒWƒRƒ}ƒ“ƒhŽí•Ê */
+/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚³ãƒžãƒ³ãƒ‰ç¨®åˆ¥ */
 enum {
 	MSGCMDTYPE_NONE = 0,
-	MSGCMDTYPE_CHGFACE,								/* •\î•ÏX */
-	MSGCMDTYPE_CHGHAIR,								/* ”¯•ÏX */
-	MSGCMDTYPE_CHGCLOTH,							/* •ž‘••ÏX */
-	MSGCMDTYPE_CHGACCE,								/* ƒAƒNƒZƒTƒŠ•ÏX */
-	MSGCMDTYPE_BGMVOLUME,							/* BGM‰¹—ÊÝ’è */
-	MSGCMDTYPE_CHGCOLOR,							/* F•ÏX */
-	MSGCMDTYPE_SEVOLUME,							/* Œø‰Ê‰¹—ÊÝ’è */
-	MSGCMDTYPE_CHGARMS,								/* Ž‚¿•¨•ÏX */
-	MSGCMDTYPE_CHGSHIELD,							/* ‚•ÏX */
-	MSGCMDTYPE_SETITEM,								/* ”z’uƒAƒCƒeƒ€•ÏX */
-	MSGCMDTYPE_MAKEITEM,							/* ƒAƒCƒeƒ€ì¬ */
-	MSGCMDTYPE_BALLOON,								/* •¬o‚µ */
-	MSGCMDTYPE_DICE,								/* ƒTƒCƒRƒ */
-	MSGCMDTYPE_RND,									/* ƒ‰ƒ“ƒ_ƒ€ */
-	MSGCMDTYPE_NOW,									/* Œ»ÝŽž */
-	MSGCMDTYPE_EFFECT,								/* ƒGƒtƒFƒNƒg */
-	MSGCMDTYPE_WHERE,								/* Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
+	MSGCMDTYPE_CHGFACE,								/* è¡¨æƒ…å¤‰æ›´ */
+	MSGCMDTYPE_CHGHAIR,								/* é«ªå¤‰æ›´ */
+	MSGCMDTYPE_CHGCLOTH,							/* æœè£…å¤‰æ›´ */
+	MSGCMDTYPE_CHGACCE,								/* ã‚¢ã‚¯ã‚»ã‚µãƒªå¤‰æ›´ */
+	MSGCMDTYPE_BGMVOLUME,							/* BGMéŸ³é‡è¨­å®š */
+	MSGCMDTYPE_CHGCOLOR,							/* è‰²å¤‰æ›´ */
+	MSGCMDTYPE_SEVOLUME,							/* åŠ¹æžœéŸ³é‡è¨­å®š */
+	MSGCMDTYPE_CHGARMS,								/* æŒã¡ç‰©å¤‰æ›´ */
+	MSGCMDTYPE_CHGSHIELD,							/* ç›¾å¤‰æ›´ */
+	MSGCMDTYPE_SETITEM,								/* é…ç½®ã‚¢ã‚¤ãƒ†ãƒ å¤‰æ›´ */
+	MSGCMDTYPE_MAKEITEM,							/* ã‚¢ã‚¤ãƒ†ãƒ ä½œæˆ */
+	MSGCMDTYPE_BALLOON,								/* å™´å‡ºã— */
+	MSGCMDTYPE_DICE,								/* ã‚µã‚¤ã‚³ãƒ­ */
+	MSGCMDTYPE_RND,									/* ãƒ©ãƒ³ãƒ€ãƒ  */
+	MSGCMDTYPE_NOW,									/* ç¾åœ¨æ™‚åˆ» */
+	MSGCMDTYPE_EFFECT,								/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+	MSGCMDTYPE_WHERE,								/* æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
 	MSGCMDTYPE_MAX
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::CMainFrame											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2005/05/04														 */
+/* é–¢æ•°å	:CMainFrame::CMainFrame											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2005/05/04														 */
 /* ========================================================================= */
 
 CMainFrame::CMainFrame()
@@ -118,9 +118,9 @@ CMainFrame::CMainFrame()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::~CMainFrame										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::~CMainFrame										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CMainFrame::~CMainFrame()
@@ -137,9 +137,9 @@ CMainFrame::~CMainFrame()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::MainLoop											 */
-/* “à—e		:ƒƒCƒ“ƒ‹[ƒv													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::MainLoop											 */
+/* å†…å®¹		:ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 int CMainFrame::MainLoop(HINSTANCE hInstance)
@@ -164,17 +164,17 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	wc.cbWndExtra		= 0;
 	wc.hbrBackground	= (HBRUSH)GetStockObject (BLACK_BRUSH);
 
-	/* ƒEƒBƒ“ƒhƒE‚ÌƒNƒ‰ƒX‚ð“o˜^ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚¯ãƒ©ã‚¹ã‚’ç™»éŒ² */
 	if (!RegisterClass (&wc)) {
 		return FALSE;
 	}
 
-	/* ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ðŒvŽZ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’è¨ˆç®— */
 	dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_CLIPCHILDREN | WS_MINIMIZEBOX;
 	SetRect (&rcTmp, 0, 0, SCRSIZEX, SCRSIZEY);
 	AdjustWindowRect (&rcTmp, dwStyle, FALSE);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	wsprintf (szBuf, "%s Ver%s", WNDTITLE, VERTEXT);
 	m_hWnd = CreateWindow (
 				CLNAME,
@@ -191,7 +191,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	timeGetDevCaps (&tc, sizeof (TIMECAPS));
-	/* ƒ}ƒ‹ƒ`ƒƒfƒBƒAƒ^ƒCƒ}[‚ÌƒT[ƒrƒX¸“x‚ðÅ‘å‚É */
+	/* ãƒžãƒ«ãƒãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¤ãƒžãƒ¼ã®ã‚µãƒ¼ãƒ“ã‚¹ç²¾åº¦ã‚’æœ€å¤§ã« */
 	timeBeginPeriod (tc.wPeriodMin);
 
 	byFps		= 0;
@@ -216,7 +216,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 			dwTimeTmp	= timeGetTime ();
 			bResult		= TimerProc ();
 			bDraw		|= bResult;
-			/* ŽžŠÔ“I‚É•`‰æ‚·‚é‚¾‚ë‚¤ƒtƒŒ[ƒ€”Ô†‚ð‹‚ß‚é */
+			/* æ™‚é–“çš„ã«æç”»ã™ã‚‹ã ã‚ã†ãƒ•ãƒ¬ãƒ¼ãƒ ç•ªå·ã‚’æ±‚ã‚ã‚‹ */
 			byNowFrame = (BYTE)((dwTimeTmp - dwTimeStart) / m_nFPS);
 			if ((byFps <= m_nDrawCount) && (byFrameBack != byNowFrame)) {
 				if (byFps && (byNowFrame - byFrameBack != 1)) {
@@ -237,7 +237,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 			}
 
 			if (dwTimeTmp > dwTimeStart + 1000) {
-				/* FPS‚ÌXV */
+				/* FPSã®æ›´æ–° */
 				dwTimeStart = dwTimeFps = timeGetTime ();
 				m_dwDrawTime = 0;
 				byFps = 0;
@@ -249,15 +249,15 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	timeEndPeriod (tc.wPeriodMin);
 	UnregisterClass (CLNAME, hInstance);
 
-	/* I—¹ƒƒbƒZ[ƒW‚É‚æ‚èƒvƒƒOƒ‰ƒ€I—¹ */
+	/* çµ‚äº†ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«ã‚ˆã‚Šãƒ—ãƒ­ã‚°ãƒ©ãƒ çµ‚äº† */
 	return (int)msg.wParam;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::DisConnectProc										 */
-/* “à—e		:Ø’fˆ—														 */
-/* “ú•t		:2005/06/12														 */
+/* é–¢æ•°å	:CMainFrame::DisConnectProc										 */
+/* å†…å®¹		:åˆ‡æ–­å‡¦ç†														 */
+/* æ—¥ä»˜		:2005/06/12														 */
 /* ========================================================================= */
 
 void CMainFrame::DisConnectProc(int nID)
@@ -272,28 +272,28 @@ void CMainFrame::DisConnectProc(int nID)
 	}
 
 	switch (nID) {
-	case DISCONNECTID_CONNECT:		/* Ú‘±Ž¸”s */
-		m_pMgrWindow->MakeWindowMSG ("ƒT[ƒo[‚ÉÚ‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½", 3000);
+	case DISCONNECTID_CONNECT:		/* æŽ¥ç¶šå¤±æ•— */
+		m_pMgrWindow->MakeWindowMSG ("ã‚µãƒ¼ãƒãƒ¼ã«æŽ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸ", 3000);
 		pWindow->Enable (TRUE);
 		break;
-	case DISCONNECTID_VERSION:		/* ƒo[ƒWƒ‡ƒ“•sˆê’v */
-		m_pMgrWindow->MakeWindowMSG ("ƒNƒ‰ƒCƒAƒ“ƒg‚ðÅV‚É‚µ‚Ä‚­‚¾‚³‚¢", 3000);
+	case DISCONNECTID_VERSION:		/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ä¸ä¸€è‡´ */
+		m_pMgrWindow->MakeWindowMSG ("ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚’æœ€æ–°ã«ã—ã¦ãã ã•ã„", 3000);
 		pWindow->Enable (TRUE);
 		break;
-	case DISCONNECTID_USER:			/* –žˆõ */
-	case DISCONNECTID_DISABLE:		/* ‹ÖŽ~ */
+	case DISCONNECTID_USER:			/* æº€å“¡ */
+	case DISCONNECTID_DISABLE:		/* ç¦æ­¢ */
 		pWindow->Enable (TRUE);
 		break;
-	case DISCONNECTID_PASSWORD:		/* ƒpƒXƒ[ƒh•sˆê’v */
-		m_pMgrWindow->MakeWindowMSG ("ƒpƒXƒ[ƒh‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·", 3000);
+	case DISCONNECTID_PASSWORD:		/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¸ä¸€è‡´ */
+		m_pMgrWindow->MakeWindowMSG ("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé–“é•ã£ã¦ã„ã¾ã™", 3000);
 		pWindow->Enable (TRUE);
 		break;
-	case DISCONNECTID_LOGIN:		/* ƒƒOƒCƒ“Ï‚Ý */
-		m_pMgrWindow->MakeWindowMSG ("ƒƒOƒCƒ“Ï‚Ý‚Å‚·", 3000);
+	case DISCONNECTID_LOGIN:		/* ãƒ­ã‚°ã‚¤ãƒ³æ¸ˆã¿ */
+		m_pMgrWindow->MakeWindowMSG ("ãƒ­ã‚°ã‚¤ãƒ³æ¸ˆã¿ã§ã™", 3000);
 		pWindow->Enable (TRUE);
 		break;
-	case DISCONNECTID_MAC:			/* ì¬Ï‚Ý */
-		m_pMgrWindow->MakeWindowMSG ("‚±‚ÌPC‚Å‚ÍƒAƒJƒEƒ“ƒgì¬Ï‚Ý‚Å‚·", 3000);
+	case DISCONNECTID_MAC:			/* ä½œæˆæ¸ˆã¿ */
+		m_pMgrWindow->MakeWindowMSG ("ã“ã®PCã§ã¯ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆæ¸ˆã¿ã§ã™", 3000);
 		pWindow->Enable (TRUE);
 		break;
 	}
@@ -301,13 +301,13 @@ void CMainFrame::DisConnectProc(int nID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::ChgMoveState										 */
-/* “à—e		:ƒvƒŒƒCƒ„[ˆÚ“®ó‘Ô•ÏXˆ—										 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CMainFrame::ChgMoveState										 */
+/* å†…å®¹		:ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç§»å‹•çŠ¶æ…‹å¤‰æ›´å‡¦ç†										 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 void CMainFrame::ChgMoveState(
-	BOOL bChgBGM)		/* [in] TRUE:BGM‚ð•Ï‚¦‚é */
+	BOOL bChgBGM)		/* [in] TRUE:BGMã‚’å¤‰ãˆã‚‹ */
 {
 	BOOL bChgWait;
 	DWORD dwMoveWait;
@@ -333,19 +333,19 @@ void CMainFrame::ChgMoveState(
 	}
 
 	switch (pPlayerChar->m_nMoveState) {
-	case CHARMOVESTATE_MOVE:			/* ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEMOVE:		/* í“¬ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEATACK:		/* í“¬UŒ‚’† */
+	case CHARMOVESTATE_MOVE:			/* ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEMOVE:		/* æˆ¦é—˜ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEATACK:		/* æˆ¦é—˜æ”»æ’ƒä¸­ */
 		bChgWait = TRUE;
 		break;
-	case CHARMOVESTATE_STAND:			/* —§‚¿ */
-	case CHARMOVESTATE_SWOON:			/* ‹Câ */
+	case CHARMOVESTATE_STAND:			/* ç«‹ã¡ */
+	case CHARMOVESTATE_SWOON:			/* æ°—çµ¶ */
 		if (bChgBGM) {
 			m_pMgrSound->PlayBGM (pInfoMap->m_dwBGMID);
 		}
 		bChgWait = TRUE;
 		break;
-	case CHARMOVESTATE_BATTLE:			/* í“¬’† */
+	case CHARMOVESTATE_BATTLE:			/* æˆ¦é—˜ä¸­ */
 		if (bChgBGM) {
 			m_pMgrSound->PlaySound (SOUNDID_CHARI14_A);
 			m_pMgrSound->PlayBGM (BGMID_DAICHI_S);
@@ -360,9 +360,9 @@ void CMainFrame::ChgMoveState(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::RenewItemArea										 */
-/* “à—e		:‰æ–Ê“à‚ÌƒAƒCƒeƒ€î•ñ‚ðXV										 */
-/* “ú•t		:2008/06/29														 */
+/* é–¢æ•°å	:CMainFrame::RenewItemArea										 */
+/* å†…å®¹		:ç”»é¢å†…ã®ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’æ›´æ–°										 */
+/* æ—¥ä»˜		:2008/06/29														 */
 /* ========================================================================= */
 
 void CMainFrame::RenewItemArea(void)
@@ -389,9 +389,9 @@ void CMainFrame::RenewItemArea(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::WndProcEntry										 */
-/* “à—e		:ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ(ƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒg)					 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::WndProcEntry										 */
+/* å†…å®¹		:ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£(ã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ãƒˆ)					 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 LRESULT CALLBACK CMainFrame::WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -402,7 +402,7 @@ LRESULT CALLBACK CMainFrame::WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LP
 		SetWindowLong (hWnd, GWL_USERDATA, (LONG)(((LPCREATESTRUCT)lParam)->lpCreateParams));
 	}
 
-	/* ƒ†[ƒUƒf[ƒ^‚©‚ç this ƒ|ƒCƒ“ƒ^‚ðŽæ“¾‚µAˆ—‚ðs‚¤ */
+	/* ãƒ¦ãƒ¼ã‚¶ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ this ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã—ã€å‡¦ç†ã‚’è¡Œã† */
 	pThis = (CMainFrame *)GetWindowLong (hWnd, GWL_USERDATA);
 	if (pThis) {
 		return pThis->WndProc (hWnd, msg, wParam, lParam);
@@ -412,9 +412,9 @@ LRESULT CALLBACK CMainFrame::WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LP
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::SendChat											 */
-/* “à—e		:ƒ`ƒƒƒbƒg”­Œ¾													 */
-/* “ú•t		:2008/07/25														 */
+/* é–¢æ•°å	:CMainFrame::SendChat											 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆç™ºè¨€													 */
+/* æ—¥ä»˜		:2008/07/25														 */
 /* ========================================================================= */
 
 void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
@@ -433,7 +433,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 	}
 
 	switch (nCmdType) {
-	case MSGCMDTYPE_CHGFACE:			/* •\î•ÏX */
+	case MSGCMDTYPE_CHGFACE:			/* è¡¨æƒ…å¤‰æ›´ */
 		{
 			CPacketMSGCMD_CHGFACE Packet;
 
@@ -441,7 +441,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_CHGHAIR:			/* ”¯•ÏX */
+	case MSGCMDTYPE_CHGHAIR:			/* é«ªå¤‰æ›´ */
 		{
 			CPacketMSGCMD_PARA1 Packet;
 
@@ -449,7 +449,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_CHGCLOTH:			/* •ž‘••ÏX */
+	case MSGCMDTYPE_CHGCLOTH:			/* æœè£…å¤‰æ›´ */
 		{
 			CPacketMSGCMD_CHGCLOTH Packet;
 
@@ -457,7 +457,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_CHGACCE:			/* ƒAƒNƒZƒTƒŠ•ÏX */
+	case MSGCMDTYPE_CHGACCE:			/* ã‚¢ã‚¯ã‚»ã‚µãƒªå¤‰æ›´ */
 		{
 			CPacketMSGCMD_CHGACCE Packet;
 
@@ -465,12 +465,12 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_BGMVOLUME:			/* BGM‰¹—ÊÝ’è */
+	case MSGCMDTYPE_BGMVOLUME:			/* BGMéŸ³é‡è¨­å®š */
 		nTmp = atoi (ParamUtil.GetParam (1));
 		m_pMgrData->SetBGMVolume (nTmp);
 		m_pMgrSound->SetBGMVolume (nTmp);
 		break;
-	case MSGCMDTYPE_CHGCOLOR:			/* F•ÏX */
+	case MSGCMDTYPE_CHGCOLOR:			/* è‰²å¤‰æ›´ */
 		{
 			CPacketMSGCMD_CHGCOLOR Packet;
 
@@ -478,12 +478,12 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_SEVOLUME:			/* Œø‰Ê‰¹—ÊÝ’è */
+	case MSGCMDTYPE_SEVOLUME:			/* åŠ¹æžœéŸ³é‡è¨­å®š */
 		nTmp = atoi (ParamUtil.GetParam (1));
 		m_pMgrData->SetSEVolume (nTmp);
 		m_pMgrSound->SetSEVolume (nTmp);
 		break;
-	case MSGCMDTYPE_CHGARMS:			/* Ž‚¿•¨•ÏX */
+	case MSGCMDTYPE_CHGARMS:			/* æŒã¡ç‰©å¤‰æ›´ */
 		{
 			CPacketMSGCMD_CHGARMS Packet;
 
@@ -491,7 +491,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_CHGSHIELD:			/* ‚•ÏX */
+	case MSGCMDTYPE_CHGSHIELD:			/* ç›¾å¤‰æ›´ */
 		{
 			int nTmp;
 			LPCSTR pszTmp;
@@ -506,10 +506,10 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_SETITEM:			/* ”z’uƒAƒCƒeƒ€•ÏX */
+	case MSGCMDTYPE_SETITEM:			/* é…ç½®ã‚¢ã‚¤ãƒ†ãƒ å¤‰æ›´ */
 		m_pMgrData->SetSetItemID (atoi (ParamUtil.GetParam (1)));
 		break;
-	case MSGCMDTYPE_MAKEITEM:			/* ƒAƒCƒeƒ€ì¬ */
+	case MSGCMDTYPE_MAKEITEM:			/* ã‚¢ã‚¤ãƒ†ãƒ ä½œæˆ */
 		{
 			CPacketMSGCMD_MAKEITEM Packet;
 
@@ -517,7 +517,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_BALLOON:			/* •¬o‚µ */
+	case MSGCMDTYPE_BALLOON:			/* å™´å‡ºã— */
 		{
 			LPCSTR pszTmp;
 			CPacketMSGCMD_PARA1 Packet;
@@ -530,7 +530,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			}
 		}
 		break;
-	case MSGCMDTYPE_DICE:			/* ƒTƒCƒRƒ */
+	case MSGCMDTYPE_DICE:			/* ã‚µã‚¤ã‚³ãƒ­ */
 		{
 			CPacketMSGCMD_PARA1 Packet;
 
@@ -538,7 +538,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_RND:			/* ƒ‰ƒ“ƒ_ƒ€ */
+	case MSGCMDTYPE_RND:			/* ãƒ©ãƒ³ãƒ€ãƒ  */
 		{
 			int nTmp;
 			LPCSTR pszTmp;
@@ -553,7 +553,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_NOW:			/* Œ»ÝŽž */
+	case MSGCMDTYPE_NOW:			/* ç¾åœ¨æ™‚åˆ» */
 		{
 			SYSTEMTIME sysTime;
 			CPacketCHAR_REQ_CHAT Packet;
@@ -565,7 +565,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case MSGCMDTYPE_EFFECT:			/* ƒGƒtƒFƒNƒg */
+	case MSGCMDTYPE_EFFECT:			/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
 		{
 			LPCSTR pszTmp;
 			CPacketMSGCMD_PARA1 Packet;
@@ -578,7 +578,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			}
 		}
 		break;
-	case MSGCMDTYPE_WHERE:			/* Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
+	case MSGCMDTYPE_WHERE:			/* æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
 		{
 			CPacketMSGCMD_PARA1 Packet;
 
@@ -599,9 +599,9 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::WndProc											 */
-/* “à—e		:ƒƒCƒ“ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::WndProc											 */
+/* å†…å®¹		:ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -620,7 +620,7 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	HANDLE_MSG (hWnd, WM_RBUTTONDBLCLK,	OnRButtonDblClk);
 	HANDLE_MSG (hWnd, WM_MOUSEMOVE,		OnMouseMove);
 
-	case WM_INITEND:				/* ‰Šú‰»Š®—¹ */
+	case WM_INITEND:				/* åˆæœŸåŒ–å®Œäº† */
 		OnInitEnd (hWnd);
 		break;
 	case WM_CTLCOLORSTATIC:
@@ -635,16 +635,16 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			SetTextColor (hDC, RGB(0, 0, 0));
 		}
 		return (LRESULT)GetStockObject(NULL_BRUSH);
-	case WM_MAINFRAME:				/* ƒƒCƒ“ƒtƒŒ[ƒ€‚Ö‚Ì’Ê’m */
+	case WM_MAINFRAME:				/* ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ ã¸ã®é€šçŸ¥ */
 		OnMainFrame (wParam, lParam);
 		break;
-	case WM_WINDOWMSG:				/* ƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m */
+	case WM_WINDOWMSG:				/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥ */
 		OnWindowMsg (wParam, lParam);
 		break;
-	case WM_ADMINMSG:				/* ŠÇ—ŽÒƒEƒBƒ“ƒhƒEŠÖ˜A‚Ì’Ê’m */
+	case WM_ADMINMSG:				/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®é€šçŸ¥ */
 		OnAdminMsg (wParam, lParam);
 		break;
-	case WM_MGRDRAW:				/* •`‰æŠÇ—‚©‚ç‚Ì’Ê’m */
+	case WM_MGRDRAW:				/* æç”»ç®¡ç†ã‹ã‚‰ã®é€šçŸ¥ */
 		OnMgrDraw (wParam, lParam);
 		break;
 	case WM_ERASEBKGND:
@@ -653,13 +653,13 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	default:
 		if ((msg >= URARASOCK_MSGBASE) && (msg < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
 			switch (msg - URARASOCK_MSGBASE) {
-			case WM_URARASOCK_CONNECT:		/* Ú‘± */
+			case WM_URARASOCK_CONNECT:		/* æŽ¥ç¶š */
 				OnConnect ();
 				break;
-			case WM_URARASOCK_DISCONNECT:	/* Ø’f */
+			case WM_URARASOCK_DISCONNECT:	/* åˆ‡æ–­ */
 				OnDisConnect ();
 				break;
-			case WM_URARASOCK_RECV:			/* ŽóM */
+			case WM_URARASOCK_RECV:			/* å—ä¿¡ */
 				OnRecv ((PBYTE)wParam);
 				break;
 			}
@@ -672,9 +672,9 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnCreate											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CREATE)									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::OnCreate											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CREATE)									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
@@ -701,9 +701,9 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnInitEnd											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITEND)									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::OnInitEnd											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITEND)									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMainFrame::OnInitEnd(HWND hWnd)
@@ -715,7 +715,7 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 
 	bRet = FALSE;
 
-	/* Šeƒ}ƒl[ƒWƒƒƒNƒ‰ƒX‚ðì¬ */
+	/* å„ãƒžãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ã‚’ä½œæˆ */
 	m_pMgrData->	SetWindowInfo (GetModuleHandle (NULL), hWnd);
 	m_pMgrData->	Create (this, m_pMgrGrpData);
 	m_pMgrData->	SetUraraSockTCP (m_pSock);
@@ -741,10 +741,10 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	m_pLibInfoSystem		= m_pMgrData->GetLibInfoSystem ();
 	m_pLibInfoSkill			= m_pMgrData->GetLibInfoSkill ();
 
-	/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^DLL‚Ì“Ç‚Ýž‚Ý */
+	/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿DLLã®èª­ã¿è¾¼ã¿ */
 	bResult = m_pMgrGrpData->Load ();
 	if (bResult == FALSE) {
-		MessageBox (hWnd, "ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^DLL‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s‚µ‚Ü‚µ‚½", "ƒGƒ‰[", MB_OK);
+		MessageBox (hWnd, "ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿DLLã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ", "ã‚¨ãƒ©ãƒ¼", MB_OK);
 		goto Exit;
 	}
 
@@ -778,9 +778,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnClose											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_CLOSE)									 */
-/* “ú•t		:2008/06/09														 */
+/* é–¢æ•°å	:CMainFrame::OnClose											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_CLOSE)									 */
+/* æ—¥ä»˜		:2008/06/09														 */
 /* ========================================================================= */
 
 void CMainFrame::OnClose(HWND hWnd)
@@ -798,14 +798,14 @@ void CMainFrame::OnClose(HWND hWnd)
 	if ((IsIconic (hWnd) == FALSE) && (IsWindowVisible (hWnd))) {
 		GetWindowRect (hWnd, &rc);
 
-		/* ƒƒCƒ“ƒEƒBƒ“ƒhƒE */
+		/* ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 		strTmp.Format ("%d", rc.left);
 		WritePrivateProfileString ("Pos", "MainX", strTmp, szFileName);
 		strTmp.Format ("%d", rc.top);
 		WritePrivateProfileString ("Pos", "MainY", strTmp, szFileName);
 
 		if (m_nGameState == GAMESTATE_MAP) {
-			/* ƒƒOƒEƒBƒ“ƒhƒE */
+			/* ãƒ­ã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 			((CStateProcMAP *)m_pStateProc)->GetMsgLogRect (rc);
 			strTmp.Format ("%d", rc.left);
 			WritePrivateProfileString ("Pos", "LogLeft", strTmp, szFileName);
@@ -818,7 +818,7 @@ void CMainFrame::OnClose(HWND hWnd)
 
 			hWndTmp = m_pMgrData->GetAdminWindow ();
 			if (hWndTmp) {
-				/* ŠÇ—ŽÒƒEƒBƒ“ƒhƒE */
+				/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 				GetWindowRect (hWndTmp, &rc);
 				strTmp.Format ("%d", rc.left);
 				WritePrivateProfileString ("Pos", "AdminX", strTmp, szFileName);
@@ -828,7 +828,7 @@ void CMainFrame::OnClose(HWND hWnd)
 
 			hWndTmp = m_pMgrData->GetDebugWindow ();
 			if (hWndTmp) {
-				/* ƒfƒoƒbƒOƒEƒBƒ“ƒhƒE */
+				/* ãƒ‡ãƒãƒƒã‚°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
 				GetWindowRect (hWndTmp, &rc);
 				strTmp.Format ("%d", rc.left);
 				WritePrivateProfileString ("Pos", "DebugX", strTmp, szFileName);
@@ -845,9 +845,9 @@ void CMainFrame::OnClose(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnDestroy											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_DESTROY)									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::OnDestroy											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_DESTROY)									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMainFrame::OnDestroy(HWND hWnd)
@@ -857,9 +857,9 @@ void CMainFrame::OnDestroy(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnPaint											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_PAINT)									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::OnPaint											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_PAINT)									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMainFrame::OnPaint(HWND hWnd)
@@ -884,15 +884,15 @@ void CMainFrame::OnPaint(HWND hWnd)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnTimer											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_TIMER)									 */
-/* “ú•t		:2008/08/03														 */
+/* é–¢æ•°å	:CMainFrame::OnTimer											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_TIMER)									 */
+/* æ—¥ä»˜		:2008/08/03														 */
 /* ========================================================================= */
 
 void CMainFrame::OnTimer(HWND hWnd, UINT id)
 {
 	switch (id) {
-	case TIMERID_TOOLCHECK:		/* ƒc[ƒ‹ƒ`ƒFƒbƒNƒ^ƒCƒ}[ */
+	case TIMERID_TOOLCHECK:		/* ãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒƒã‚¯ã‚¿ã‚¤ãƒžãƒ¼ */
 		{
 			DWORD dwTmp, dwScond, dwTimeTmp;
 			SYSTEMTIME sysTime;
@@ -925,7 +925,7 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 		}
 		break;
 
-	case TIMERID_ACTIVECHECK:	/* ƒAƒNƒeƒBƒuƒEƒBƒ“ƒhƒEƒ`ƒFƒbƒNƒ^ƒCƒ}[ */
+	case TIMERID_ACTIVECHECK:	/* ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒã‚§ãƒƒã‚¯ã‚¿ã‚¤ãƒžãƒ¼ */
 		{
 			HWND hWnd;
 
@@ -941,16 +941,16 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnCommand											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2005/06/11														 */
+/* é–¢æ•°å	:CMainFrame::OnCommand											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2005/06/11														 */
 /* ========================================================================= */
 
 void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
 {
-	/* ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½H */
+	/* ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸï¼Ÿ */
 	if (codeNotify == BN_CLICKED) {
-		/* ŠeƒEƒBƒ“ƒhƒE‚Åˆ—‚³‚¹‚é */
+		/* å„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§å‡¦ç†ã•ã›ã‚‹ */
 		PostMessage (hWndCtl, WM_COMMAND, MAKELONG (codeNotify, id), (LPARAM)hWndCtl);
 		return;
 	}
@@ -958,14 +958,14 @@ void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnActivate											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ACTIVATE)								 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMainFrame::OnActivate											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ACTIVATE)								 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CMainFrame::OnActivate(HWND hWnd, UINT state, HWND hwndActDeact, BOOL fMinimized)
 {
-	/* ”ñƒAƒNƒeƒBƒu‚É‚È‚éH */
+	/* éžã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã‚‹ï¼Ÿ */
 	if (state == WA_INACTIVE) {
 		m_bWindowActive = FALSE;
 		m_pMgrKeyInput->Reset ();
@@ -977,9 +977,9 @@ void CMainFrame::OnActivate(HWND hWnd, UINT state, HWND hwndActDeact, BOOL fMini
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnKeyUp											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_KEYUP)									 */
-/* “ú•t		:2007/02/13														 */
+/* é–¢æ•°å	:CMainFrame::OnKeyUp											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_KEYUP)									 */
+/* æ—¥ä»˜		:2007/02/13														 */
 /* ========================================================================= */
 
 void CMainFrame::OnKeyUp(HWND hWnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
@@ -994,9 +994,9 @@ void CMainFrame::OnKeyUp(HWND hWnd, UINT vk, BOOL fDown, int cRepeat, UINT flags
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:OnLButtonDown													 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:OnLButtonDown													 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_LBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 void CMainFrame::OnLButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
@@ -1009,9 +1009,9 @@ void CMainFrame::OnLButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT 
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:OnRButtonDown													 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:OnRButtonDown													 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDOWN)								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CMainFrame::OnRButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
@@ -1024,9 +1024,9 @@ void CMainFrame::OnRButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT 
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:OnRButtonDblClk												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDBLCLK)							 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:OnRButtonDblClk												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_RBUTTONDBLCLK)							 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CMainFrame::OnRButtonDblClk(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
@@ -1039,9 +1039,9 @@ void CMainFrame::OnRButtonDblClk(HWND hWnd, BOOL fDoubleClick, int x, int y, UIN
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:OnMouseMove													 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:OnMouseMove													 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MOUSEMOVE)								 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 void CMainFrame::OnMouseMove(HWND hWnd, int x, int y, UINT keyFlags)
@@ -1054,9 +1054,9 @@ void CMainFrame::OnMouseMove(HWND hWnd, int x, int y, UINT keyFlags)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnMgrDraw											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MGTDRAW)									 */
-/* “ú•t		:2007/02/27														 */
+/* é–¢æ•°å	:CMainFrame::OnMgrDraw											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MGTDRAW)									 */
+/* æ—¥ä»˜		:2007/02/27														 */
 /* ========================================================================= */
 
 void CMainFrame::OnMgrDraw(int nCode, DWORD dwPara)
@@ -1069,9 +1069,9 @@ void CMainFrame::OnMgrDraw(int nCode, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnWindowMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WINDOWMSG)								 */
-/* “ú•t		:2005/06/22														 */
+/* é–¢æ•°å	:CMainFrame::OnWindowMsg										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_WINDOWMSG)								 */
+/* æ—¥ä»˜		:2005/06/22														 */
 /* ========================================================================= */
 
 void CMainFrame::OnWindowMsg(int nCode, DWORD dwPara)
@@ -1084,9 +1084,9 @@ void CMainFrame::OnWindowMsg(int nCode, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnAdminMsg											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CMainFrame::OnAdminMsg											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CMainFrame::OnAdminMsg(int nCode, DWORD dwPara)
@@ -1099,9 +1099,9 @@ void CMainFrame::OnAdminMsg(int nCode, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnMainFrame										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2006/11/03														 */
+/* é–¢æ•°å	:CMainFrame::OnMainFrame										 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2006/11/03														 */
 /* ========================================================================= */
 
 void CMainFrame::OnMainFrame(DWORD dwCommand, DWORD dwParam)
@@ -1110,13 +1110,13 @@ void CMainFrame::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		return;
 	}
 	switch (dwCommand) {
-	case MAINFRAMEMSG_CHGSTATE:			/* ó‘Ô•ÏX */
+	case MAINFRAMEMSG_CHGSTATE:			/* çŠ¶æ…‹å¤‰æ›´ */
 		ChgGameState (dwParam);
 		break;
-	case MAINFRAMEMSG_CONNECT:			/* Ú‘± */
+	case MAINFRAMEMSG_CONNECT:			/* æŽ¥ç¶š */
 		Connect ();
 		break;
-	case MAINFRAMEMSG_RENEWVIEWSET:		/* •\Ž¦Ý’èXV */
+	case MAINFRAMEMSG_RENEWVIEWSET:		/* è¡¨ç¤ºè¨­å®šæ›´æ–° */
 		m_nDrawCount = 30;
 		if (m_pMgrData->GetOption60Frame () == TRUE) {
 			m_nDrawCount = 60;
@@ -1131,9 +1131,9 @@ void CMainFrame::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnConnect											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_CONNECT)						 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::OnConnect											 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_CONNECT)						 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::OnConnect(void)
@@ -1146,26 +1146,26 @@ void CMainFrame::OnConnect(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMainFrame::OnDisConnect										 */
-/* “à—eF	ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_DISCONNECT)						 */
-/* “ú•tF	2005/06/12														 */
+/* é–¢æ•°åï¼š	CMainFrame::OnDisConnect										 */
+/* å†…å®¹ï¼š	ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_DISCONNECT)						 */
+/* æ—¥ä»˜ï¼š	2005/06/12														 */
 /* ========================================================================= */
 
 void CMainFrame::OnDisConnect(void)
 {
 	switch (m_nGameState) {
-	case GAMESTATE_LOGIN:		/* ƒƒOƒCƒ“‰æ–Ê */
+	case GAMESTATE_LOGIN:		/* ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢ */
 		DisConnectProc (DISCONNECTID_CONNECT);
 		break;
-	case GAMESTATE_MAP:			/* ƒ}ƒbƒv‰æ–Ê */
-		m_pMgrData->AddSystemMsg (TRUE, "ƒT[ƒo[‚Æ‚ÌÚ‘±‚ªØ‚ê‚Ü‚µ‚½", RGB (0, 200, 255));
+	case GAMESTATE_MAP:			/* ãƒžãƒƒãƒ—ç”»é¢ */
+		m_pMgrData->AddSystemMsg (TRUE, "ã‚µãƒ¼ãƒãƒ¼ã¨ã®æŽ¥ç¶šãŒåˆ‡ã‚Œã¾ã—ãŸ", RGB (0, 200, 255));
 		m_pMgrSound->PlaySound (SOUNDID_W_CHAT);
 
 		SendMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 		FlashMainWindow ();
 		ChgGameState (GAMESTATE_DISCONNECT);
 		break;
-	default:					/* ‚»‚Ì‘¼ */
+	default:					/* ãã®ä»– */
 		ChgGameState (GAMESTATE_DISCONNECT);
 		break;
 	}
@@ -1173,9 +1173,9 @@ void CMainFrame::OnDisConnect(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::OnRecv												 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_URARASOCK_RECV)							 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMainFrame::OnRecv												 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_URARASOCK_RECV)							 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 void CMainFrame::OnRecv(PBYTE pData)
@@ -1185,16 +1185,16 @@ void CMainFrame::OnRecv(PBYTE pData)
 	Packet.Set (pData);
 
 	switch (Packet.m_byCmdMain) {
-	case SBOCOMMANDID_MAIN_VERSION:	RecvProcVERSION	(Packet.m_byCmdSub, pData);		break;		/* ƒo[ƒWƒ‡ƒ“Œn */
-	case SBOCOMMANDID_MAIN_CONNECT:	RecvProcCONNECT	(Packet.m_byCmdSub, pData);		break;		/* Ú‘±Œn */
-	case SBOCOMMANDID_MAIN_ACCOUNT:	RecvProcACCOUNT	(Packet.m_byCmdSub, pData);		break;		/* ƒAƒJƒEƒ“ƒgŒn */
-	case SBOCOMMANDID_MAIN_CHAR:	RecvProcCHAR	(Packet.m_byCmdSub, pData);		break;		/* ƒLƒƒƒ‰Œn */
-	case SBOCOMMANDID_MAIN_MAP:		RecvProcMAP		(Packet.m_byCmdSub, pData);		break;		/* ƒ}ƒbƒvŒn */
-	case SBOCOMMANDID_MAIN_ITEM:	RecvProcITEM	(Packet.m_byCmdSub, pData);		break;		/* ƒAƒCƒeƒ€Œn */
-	case SBOCOMMANDID_MAIN_ADMIN:	RecvProcADMIN	(Packet.m_byCmdSub, pData);		break;		/* ŠÇ—ŽÒŒn */
-	case SBOCOMMANDID_MAIN_EFFECT:	RecvProcEFFECT	(Packet.m_byCmdSub, pData);		break;		/* ƒGƒtƒFƒNƒgŒn */
-	case SBOCOMMANDID_MAIN_SYSTEM:	RecvProcSYSTEM	(Packet.m_byCmdSub, pData);		break;		/* ƒVƒXƒeƒ€Œn */
-	case SBOCOMMANDID_MAIN_SKILL:	RecvProcSKILL	(Packet.m_byCmdSub, pData);		break;		/* ƒXƒLƒ‹Œn */
+	case SBOCOMMANDID_MAIN_VERSION:	RecvProcVERSION	(Packet.m_byCmdSub, pData);		break;		/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³» */
+	case SBOCOMMANDID_MAIN_CONNECT:	RecvProcCONNECT	(Packet.m_byCmdSub, pData);		break;		/* æŽ¥ç¶šç³» */
+	case SBOCOMMANDID_MAIN_ACCOUNT:	RecvProcACCOUNT	(Packet.m_byCmdSub, pData);		break;		/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç³» */
+	case SBOCOMMANDID_MAIN_CHAR:	RecvProcCHAR	(Packet.m_byCmdSub, pData);		break;		/* ã‚­ãƒ£ãƒ©ç³» */
+	case SBOCOMMANDID_MAIN_MAP:		RecvProcMAP		(Packet.m_byCmdSub, pData);		break;		/* ãƒžãƒƒãƒ—ç³» */
+	case SBOCOMMANDID_MAIN_ITEM:	RecvProcITEM	(Packet.m_byCmdSub, pData);		break;		/* ã‚¢ã‚¤ãƒ†ãƒ ç³» */
+	case SBOCOMMANDID_MAIN_ADMIN:	RecvProcADMIN	(Packet.m_byCmdSub, pData);		break;		/* ç®¡ç†è€…ç³» */
+	case SBOCOMMANDID_MAIN_EFFECT:	RecvProcEFFECT	(Packet.m_byCmdSub, pData);		break;		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç³» */
+	case SBOCOMMANDID_MAIN_SYSTEM:	RecvProcSYSTEM	(Packet.m_byCmdSub, pData);		break;		/* ã‚·ã‚¹ãƒ†ãƒ ç³» */
+	case SBOCOMMANDID_MAIN_SKILL:	RecvProcSKILL	(Packet.m_byCmdSub, pData);		break;		/* ã‚¹ã‚­ãƒ«ç³» */
 	}
 
 	m_pSock->DeleteRecvData (pData);
@@ -1202,9 +1202,9 @@ void CMainFrame::OnRecv(PBYTE pData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::TimerProc											 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMainFrame::TimerProc											 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CMainFrame::TimerProc(void)
@@ -1229,7 +1229,7 @@ BOOL CMainFrame::TimerProc(void)
 		m_bRenewCharInfo = FALSE;
 		pPlayerChar = m_pMgrData->GetPlayerChar ();
 		if (pPlayerChar) {
-			/* d‚È‚è’²® */
+			/* é‡ãªã‚Šèª¿æ•´ */
 			m_pLibInfoChar->SortY ();
 
 			bResult = m_pLibInfoChar->DeleteOutScreen (pPlayerChar);
@@ -1247,9 +1247,9 @@ BOOL CMainFrame::TimerProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::KeyProc											 */
-/* “à—e		:ƒL[“ü—Íˆ—													 */
-/* “ú•t		:2007/03/19														 */
+/* é–¢æ•°å	:CMainFrame::KeyProc											 */
+/* å†…å®¹		:ã‚­ãƒ¼å…¥åŠ›å‡¦ç†													 */
+/* æ—¥ä»˜		:2007/03/19														 */
 /* ========================================================================= */
 
 void CMainFrame::KeyProc(void)
@@ -1266,7 +1266,7 @@ void CMainFrame::KeyProc(void)
 		return;
 	}
 
-	/* ƒEƒBƒ“ƒhƒE‚Å•K—v‚Å‚ ‚ê‚ÎƒEƒBƒ“ƒhƒEA‚»‚¤‚Å‚È‚¯‚ê‚Îó‘Ôˆ—‚ÌƒL[ˆ—‚ðs‚¤ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§å¿…è¦ã§ã‚ã‚Œã°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã€ãã†ã§ãªã‘ã‚Œã°çŠ¶æ…‹å‡¦ç†ã®ã‚­ãƒ¼å‡¦ç†ã‚’è¡Œã† */
 	m_pMgrKeyInput->Renew (byCode, bDown);
 	if (byCode == 0) {
 		for (i = 0; ; i ++) {
@@ -1298,9 +1298,9 @@ void CMainFrame::KeyProc(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::ChgGameState										 */
-/* “à—e		:ƒQ[ƒ€ó‘Ô‚ðØ‚è‘Ö‚¦‚é											 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CMainFrame::ChgGameState										 */
+/* å†…å®¹		:ã‚²ãƒ¼ãƒ çŠ¶æ…‹ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹											 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 void CMainFrame::ChgGameState(int nGameState)
@@ -1312,12 +1312,12 @@ void CMainFrame::ChgGameState(int nGameState)
 	m_nGameState = nGameState;
 
 	switch (nGameState) {
-	case GAMESTATE_LOGO:		m_pStateProc = new CStateProcLOGO;			break;	/* URARA-worksƒƒS */
-	case GAMESTATE_LOGIN:		m_pStateProc = new CStateProcLOGIN;			break;	/* ƒƒOƒCƒ“‰æ–Ê */
-	case GAMESTATE_DISCONNECT:	m_pStateProc = new CStateProcDISCONNECT;	break;	/* Ø’f */
-	case GAMESTATE_INFO:		m_pStateProc = new CStateProcINFO;			break;	/* ‚¨’m‚ç‚¹‰æ–Ê */
-	case GAMESTATE_LOGINMENU:	m_pStateProc = new CStateProcLOGINMENU;		break;	/* ƒƒjƒ…[‰æ–Ê */
-	case GAMESTATE_MAP:			m_pStateProc = new CStateProcMAP;			break;	/* ƒ}ƒbƒv‰æ–Ê */
+	case GAMESTATE_LOGO:		m_pStateProc = new CStateProcLOGO;			break;	/* URARA-worksãƒ­ã‚´ */
+	case GAMESTATE_LOGIN:		m_pStateProc = new CStateProcLOGIN;			break;	/* ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢ */
+	case GAMESTATE_DISCONNECT:	m_pStateProc = new CStateProcDISCONNECT;	break;	/* åˆ‡æ–­ */
+	case GAMESTATE_INFO:		m_pStateProc = new CStateProcINFO;			break;	/* ãŠçŸ¥ã‚‰ã›ç”»é¢ */
+	case GAMESTATE_LOGINMENU:	m_pStateProc = new CStateProcLOGINMENU;		break;	/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ */
+	case GAMESTATE_MAP:			m_pStateProc = new CStateProcMAP;			break;	/* ãƒžãƒƒãƒ—ç”»é¢ */
 	}
 
 	if (m_pStateProc) {
@@ -1328,9 +1328,9 @@ void CMainFrame::ChgGameState(int nGameState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::Connect											 */
-/* “à—e		:ƒT[ƒo[‚ÖÚ‘±													 */
-/* “ú•t		:2005/06/09														 */
+/* é–¢æ•°å	:CMainFrame::Connect											 */
+/* å†…å®¹		:ã‚µãƒ¼ãƒãƒ¼ã¸æŽ¥ç¶š													 */
+/* æ—¥ä»˜		:2005/06/09														 */
 /* ========================================================================= */
 
 void CMainFrame::Connect(void)
@@ -1341,15 +1341,15 @@ void CMainFrame::Connect(void)
 	strTmp	= m_pMgrData->GetServerAddr ();
 	wPort	= m_pMgrData->GetServerPort ();
 
-	m_pMgrWindow->MakeWindowMSG ("ƒT[ƒo[‚ÉÚ‘±‚µ‚Ä‚¢‚Ü‚·");
+	m_pMgrWindow->MakeWindowMSG ("ã‚µãƒ¼ãƒãƒ¼ã«æŽ¥ç¶šã—ã¦ã„ã¾ã™");
 	m_pSock->Connect (m_hWnd, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, strTmp);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::FlashMainWindow									 */
-/* “à—e		:ƒEƒBƒ“ƒhƒE‚ð“_–Å‚³‚¹‚é											 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMainFrame::FlashMainWindow									 */
+/* å†…å®¹		:ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’ç‚¹æ»…ã•ã›ã‚‹											 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 void CMainFrame::FlashMainWindow(void)
@@ -1382,9 +1382,9 @@ void CMainFrame::FlashMainWindow(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMainFrame::GetMsgCmdType										 */
-/* “à—e		:ƒ`ƒƒƒbƒg“ü—Íˆ—												 */
-/* “ú•t		:2007/05/02														 */
+/* é–¢æ•°å	:CMainFrame::GetMsgCmdType										 */
+/* å†…å®¹		:ãƒãƒ£ãƒƒãƒˆå…¥åŠ›å‡¦ç†												 */
+/* æ—¥ä»˜		:2007/05/02														 */
 /* ========================================================================= */
 
 int CMainFrame::GetMsgCmdType(LPCSTR pszText)
@@ -1411,67 +1411,67 @@ int CMainFrame::GetMsgCmdType(LPCSTR pszText)
 	nCount	= ParamUtil.GetCount ();
 	pszTmp	= ParamUtil.GetParam (0);
 
-	/* •\î•ÏX */
+	/* è¡¨æƒ…å¤‰æ›´ */
 	if (strcmp (&pszTmp[1], "face") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_CHGFACE;
 		}
 
-	/* ”¯•ÏX */
+	/* é«ªå¤‰æ›´ */
 	} else if (strcmp (&pszTmp[1], "hair") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_CHGHAIR;
 		}
 
-	/* •ž‘••ÏX */
+	/* æœè£…å¤‰æ›´ */
 	} else if (strcmp (&pszTmp[1], "cloth") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_CHGCLOTH;
 		}
 
-	/* ƒAƒNƒZƒTƒŠ•ÏX */
+	/* ã‚¢ã‚¯ã‚»ã‚µãƒªå¤‰æ›´ */
 	} else if (strcmp (&pszTmp[1], "acce") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_CHGACCE;
 		}
 
-	/* BGM‰¹—ÊÝ’è */
+	/* BGMéŸ³é‡è¨­å®š */
 	} else if (strcmp (&pszTmp[1], "bgm") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_BGMVOLUME;
 		}
 
-	/* F•ÏX */
+	/* è‰²å¤‰æ›´ */
 	} else if (strcmp (&pszTmp[1], "color") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_CHGCOLOR;
 		}
 
-	/* Œø‰Ê‰¹—ÊÝ’è */
+	/* åŠ¹æžœéŸ³é‡è¨­å®š */
 	} else if (strcmp (&pszTmp[1], "se") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_SEVOLUME;
 		}
 
-	/* Ž‚¿•¨•ÏX */
+	/* æŒã¡ç‰©å¤‰æ›´ */
 	} else if (strcmp (&pszTmp[1], "arms") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_CHGARMS;
 		}
 
-	/* ‚•ÏX */
+	/* ç›¾å¤‰æ›´ */
 	} else if (strcmp (&pszTmp[1], "shield") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_CHGSHIELD;
 		}
 
-	/* ”z’uƒAƒCƒeƒ€•ÏX */
+	/* é…ç½®ã‚¢ã‚¤ãƒ†ãƒ å¤‰æ›´ */
 	} else if (strcmp (&pszTmp[1], "item") == 0) {
 		if (nCount == 2) {
 			nRet = MSGCMDTYPE_SETITEM;
 		}
 
-	/* ƒAƒCƒeƒ€ì¬ */
+	/* ã‚¢ã‚¤ãƒ†ãƒ ä½œæˆ */
 	} else if (strcmp (&pszTmp[1], "makeitem") == 0) {
 		if (m_pMgrData->GetAdminLevel () > ADMINLEVEL_NONE) {
 			if (nCount == 2) {
@@ -1479,31 +1479,31 @@ int CMainFrame::GetMsgCmdType(LPCSTR pszText)
 			}
 		}
 
-	/* •¬o‚µ */
+	/* å™´å‡ºã— */
 //	} else if (strcmp (&pszTmp[1], "balloon") == 0) {
 //		if (nCount == 2) {
 //			nRet = MSGCMDTYPE_BALLOON;
 //		}
 
-	/* ƒTƒCƒRƒ */
+	/* ã‚µã‚¤ã‚³ãƒ­ */
 	} else if (strcmp (&pszTmp[1], "dice") == 0) {
 		if (nCount == 1) {
 			nRet = MSGCMDTYPE_DICE;
 		}
 
-	/* ƒ‰ƒ“ƒ_ƒ€ */
+	/* ãƒ©ãƒ³ãƒ€ãƒ  */
 	} else if (strcmp (&pszTmp[1], "rnd") == 0) {
 		if (nCount <= 2) {
 			nRet = MSGCMDTYPE_RND;
 		}
 
-	/* Œ»ÝŽž */
+	/* ç¾åœ¨æ™‚åˆ» */
 	} else if (strcmp (&pszTmp[1], "now") == 0) {
 		if (nCount == 1) {
 			nRet = MSGCMDTYPE_NOW;
 		}
 
-	/* Å‚àW‚Ü‚Á‚Ä‚¢‚éêŠ */
+	/* æœ€ã‚‚é›†ã¾ã£ã¦ã„ã‚‹å ´æ‰€ */
 	} else if (strcmp (&pszTmp[1], "where") == 0) {
 		if (nCount == 1) {
 			nRet = MSGCMDTYPE_WHERE;

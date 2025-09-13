@@ -1,19 +1,19 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	myZlib.cpp													 */
-/* “à—eF		zlib‚ğˆµ‚¤ˆ×‚ÌƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/02/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	myZlib.cpp													 */
+/* å†…å®¹ï¼š		zlibã‚’æ‰±ã†ç‚ºã®ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/02/02													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "myZlib.h"
 
-#if 0	/* ˆÈ‰º‚ğ”CˆÓ‚Ìƒtƒ@ƒCƒ‹‚ÉƒRƒs[‚µ‚Äg—p‚·‚é‚Æ•Ö—˜ */
-/* libƒtƒ@ƒCƒ‹‚ÌƒpƒX */
+#if 0	/* ä»¥ä¸‹ã‚’ä»»æ„ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚³ãƒ”ãƒ¼ã—ã¦ä½¿ç”¨ã™ã‚‹ã¨ä¾¿åˆ© */
+/* libãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ */
 #define LIBCMNPATH	""
 
-/* ƒRƒ“ƒpƒCƒ‹ƒIƒvƒVƒ‡ƒ“•Ê‚ÌƒŠƒ“ƒNİ’è */
+/* ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚ªãƒ—ã‚·ãƒ§ãƒ³åˆ¥ã®ãƒªãƒ³ã‚¯è¨­å®š */
 #ifdef _DEBUG
 	#pragma comment(lib, LIBCMNPATH "zlibD.lib")
 #else
@@ -22,9 +22,9 @@
 #endif
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::CmyZlib												 */
-/* “à—eF	ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/02/02														 */
+/* é–¢æ•°åï¼š	CmyZlib::CmyZlib												 */
+/* å†…å®¹ï¼š	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
 /* ========================================================================= */
 
 CmyZlib::CmyZlib()
@@ -34,9 +34,9 @@ CmyZlib::CmyZlib()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::~CmyZlib												 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/02/02														 */
+/* é–¢æ•°åï¼š	CmyZlib::~CmyZlib												 */
+/* å†…å®¹ï¼š	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
 /* ========================================================================= */
 
 CmyZlib::~CmyZlib()
@@ -48,13 +48,13 @@ CmyZlib::~CmyZlib()
 }
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::DeflateInit											 */
-/* “à—eF	ˆ³k:‰Šú‰»														 */
-/* “ú•tF	2005/02/02														 */
+/* é–¢æ•°åï¼š	CmyZlib::DeflateInit											 */
+/* å†…å®¹ï¼š	åœ§ç¸®:åˆæœŸåŒ–														 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
 /* ========================================================================= */
 
 BOOL CmyZlib::DeflateInit(
-	int nLevel)		/* [in] ˆ³kƒŒƒxƒ‹ */
+	int nLevel)		/* [in] åœ§ç¸®ãƒ¬ãƒ™ãƒ« */
 {
 	BOOL bRet;
 	int nResult;
@@ -65,13 +65,13 @@ BOOL CmyZlib::DeflateInit(
 		goto Exit;
 	}
 
-	/* î•ñ\‘¢‘Ì‚ğŠm•Û‚µ‚Ä‰Šú‰» */
+	/* æƒ…å ±æ§‹é€ ä½“ã‚’ç¢ºä¿ã—ã¦åˆæœŸåŒ– */
 	m_pStream = new z_stream;
 	m_pStream->zalloc	= Z_NULL;
 	m_pStream->zfree	= Z_NULL;
 	m_pStream->opaque	= Z_NULL;
 
-	/* zlib‚Ì‰Šú‰»ŠÖ”‚ğŒÄ‚Ô */
+	/* zlibã®åˆæœŸåŒ–é–¢æ•°ã‚’å‘¼ã¶ */
 	nResult = deflateInit (m_pStream, nLevel);
 	if (nResult != Z_OK) {
 		delete m_pStream;
@@ -86,17 +86,17 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::Deflate												 */
-/* “à—eF	ˆ³k:ˆ³kˆ—													 */
-/* “ú•tF	2005/02/02														 */
-/* –ß‚è’lF	ˆ³kŒã‚ÌƒTƒCƒY													 */
+/* é–¢æ•°åï¼š	CmyZlib::Deflate												 */
+/* å†…å®¹ï¼š	åœ§ç¸®:åœ§ç¸®å‡¦ç†													 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
+/* æˆ»ã‚Šå€¤ï¼š	åœ§ç¸®å¾Œã®ã‚µã‚¤ã‚º													 */
 /* ========================================================================= */
 
 DWORD CmyZlib::Deflate(
-	LPBYTE pSrc,			/* [in] ˆ³kŒ³ */
-	DWORD dwSrcSize,		/* [in] ˆ³kŒ³ƒTƒCƒY */
-	LPBYTE pDst,			/* [in] ˆ³kæ */
-	DWORD dwDstSize)		/* [in] ˆ³kæƒTƒCƒY */
+	LPBYTE pSrc,			/* [in] åœ§ç¸®å…ƒ */
+	DWORD dwSrcSize,		/* [in] åœ§ç¸®å…ƒã‚µã‚¤ã‚º */
+	LPBYTE pDst,			/* [in] åœ§ç¸®å…ˆ */
+	DWORD dwDstSize)		/* [in] åœ§ç¸®å…ˆã‚µã‚¤ã‚º */
 {
 	DWORD dwRet;
 	int nResult;
@@ -108,10 +108,10 @@ DWORD CmyZlib::Deflate(
 	m_pStream->avail_out	= dwDstSize;
 	deflateReset(m_pStream);
 
-	/* ˆ³k */
+	/* åœ§ç¸® */
 	nResult = deflate (m_pStream, Z_FINISH);
 	if (nResult == Z_STREAM_END) {
-		/* ˆ³kŒã‚ÌƒTƒCƒY‚ğæ“¾ */
+		/* åœ§ç¸®å¾Œã®ã‚µã‚¤ã‚ºã‚’å–å¾— */
 		dwRet = m_pStream->total_out;
 	}
 
@@ -120,9 +120,9 @@ DWORD CmyZlib::Deflate(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::DeflateEnd												 */
-/* “à—eF	ˆ³k:Œãˆ—														 */
-/* “ú•tF	2005/02/02														 */
+/* é–¢æ•°åï¼š	CmyZlib::DeflateEnd												 */
+/* å†…å®¹ï¼š	åœ§ç¸®:å¾Œå‡¦ç†														 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
 /* ========================================================================= */
 
 void CmyZlib::DeflateEnd(void)
@@ -131,7 +131,7 @@ void CmyZlib::DeflateEnd(void)
 		return;
 	}
 
-	/* Œãˆ—ŠÖ”‚ğŒÄ‚Ô */
+	/* å¾Œå‡¦ç†é–¢æ•°ã‚’å‘¼ã¶ */
 	deflateEnd (m_pStream);
 
 	delete m_pStream;
@@ -140,9 +140,9 @@ void CmyZlib::DeflateEnd(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::InflateInit											 */
-/* “à—eF	‰ğ“€:‰Šú‰»														 */
-/* “ú•tF	2005/02/02														 */
+/* é–¢æ•°åï¼š	CmyZlib::InflateInit											 */
+/* å†…å®¹ï¼š	è§£å‡:åˆæœŸåŒ–														 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
 /* ========================================================================= */
 
 BOOL CmyZlib::InflateInit(void)
@@ -156,13 +156,13 @@ BOOL CmyZlib::InflateInit(void)
 		goto Exit;
 	}
 
-	/* î•ñ\‘¢‘Ì‚ğŠm•Û‚µ‚Ä‰Šú‰» */
+	/* æƒ…å ±æ§‹é€ ä½“ã‚’ç¢ºä¿ã—ã¦åˆæœŸåŒ– */
 	m_pStream = new z_stream;
 	m_pStream->zalloc	= Z_NULL;
 	m_pStream->zfree	= Z_NULL;
 	m_pStream->opaque	= Z_NULL;
 
-	/* zlib‚Ì‰Šú‰»ŠÖ”‚ğŒÄ‚Ô */
+	/* zlibã®åˆæœŸåŒ–é–¢æ•°ã‚’å‘¼ã¶ */
 	nResult = inflateInit (m_pStream);
 	if (nResult != Z_OK) {
 		delete m_pStream;
@@ -177,17 +177,17 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::Inflate												 */
-/* “à—eF	‰ğ“€:ˆ³kˆ—													 */
-/* “ú•tF	2005/02/02														 */
-/* –ß‚è’lF	‰ğ“€Œã‚ÌƒTƒCƒY													 */
+/* é–¢æ•°åï¼š	CmyZlib::Inflate												 */
+/* å†…å®¹ï¼š	è§£å‡:åœ§ç¸®å‡¦ç†													 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
+/* æˆ»ã‚Šå€¤ï¼š	è§£å‡å¾Œã®ã‚µã‚¤ã‚º													 */
 /* ========================================================================= */
 
 DWORD CmyZlib::Inflate(
-	LPBYTE pSrc,			/* [in] ‰ğ“€Œ³ */
-	DWORD dwSrcSize,		/* [in] ‰ğ“€Œ³ƒTƒCƒY */
-	LPBYTE pDst,			/* [in] ‰ğ“€æ */
-	DWORD dwDstSize)		/* [in] ‰ğ“€æƒTƒCƒY */
+	LPBYTE pSrc,			/* [in] è§£å‡å…ƒ */
+	DWORD dwSrcSize,		/* [in] è§£å‡å…ƒã‚µã‚¤ã‚º */
+	LPBYTE pDst,			/* [in] è§£å‡å…ˆ */
+	DWORD dwDstSize)		/* [in] è§£å‡å…ˆã‚µã‚¤ã‚º */
 {
 	DWORD dwRet;
 	int nResult;
@@ -199,10 +199,10 @@ DWORD CmyZlib::Inflate(
 	m_pStream->avail_out	= dwDstSize;
 	inflateReset (m_pStream);
 
-	/* ‰ğ“€ */
+	/* è§£å‡ */
 	nResult = inflate (m_pStream, Z_FINISH);
 	if (nResult == Z_STREAM_END) {
-		/* ‰ğ“€Œã‚ÌƒTƒCƒY‚ğæ“¾ */
+		/* è§£å‡å¾Œã®ã‚µã‚¤ã‚ºã‚’å–å¾— */
 		dwRet = m_pStream->total_out;
 	}
 
@@ -211,9 +211,9 @@ DWORD CmyZlib::Inflate(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CmyZlib::InflateEnd												 */
-/* “à—eF	‰ğ“€:Œãˆ—														 */
-/* “ú•tF	2005/02/02														 */
+/* é–¢æ•°åï¼š	CmyZlib::InflateEnd												 */
+/* å†…å®¹ï¼š	è§£å‡:å¾Œå‡¦ç†														 */
+/* æ—¥ä»˜ï¼š	2005/02/02														 */
 /* ========================================================================= */
 
 void CmyZlib::InflateEnd(void)
@@ -222,7 +222,7 @@ void CmyZlib::InflateEnd(void)
 		return;
 	}
 
-	/* Œãˆ—ŠÖ”‚ğŒÄ‚Ô */
+	/* å¾Œå‡¦ç†é–¢æ•°ã‚’å‘¼ã¶ */
 	inflateEnd (m_pStream);
 
 	delete m_pStream;

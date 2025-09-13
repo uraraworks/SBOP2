@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:MgrGrpData.h												 */
-/* “à—e			:ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ƒ}ƒl[ƒWƒƒƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:MgrGrpData.h												 */
+/* å†…å®¹			:ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ãƒžãƒãƒ¼ã‚¸ãƒ£ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -14,7 +14,7 @@
 
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
 typedef struct{
@@ -24,9 +24,9 @@ typedef struct{
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::CMgrGrpData										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrGrpData::CMgrGrpData										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CMgrGrpData::CMgrGrpData()
@@ -80,9 +80,9 @@ CMgrGrpData::CMgrGrpData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::~CMgrGrpData										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrGrpData::~CMgrGrpData										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CMgrGrpData::~CMgrGrpData()
@@ -140,9 +140,9 @@ CMgrGrpData::~CMgrGrpData()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::Load												 */
-/* “à—e		:“Ç‚Ýž‚Ý														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrGrpData::Load												 */
+/* å†…å®¹		:èª­ã¿è¾¼ã¿														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CMgrGrpData::Load(void)
@@ -167,7 +167,7 @@ BOOL CMgrGrpData::Load(void)
 
 	bRet = FALSE;
 
-	/* ƒtƒ@ƒCƒ‹–¼‚Ìì¬ */
+	/* ãƒ•ã‚¡ã‚¤ãƒ«åã®ä½œæˆ */
 	GetModuleFileName (NULL, szName, MAX_PATH);
 	pszTmp		= strrchr (szName, '\\');
 	pszTmp[1]	= 0;
@@ -178,22 +178,22 @@ BOOL CMgrGrpData::Load(void)
 		goto Exit;
 	}
 
-	/* ƒVƒXƒeƒ€ */
+	/* ã‚·ã‚¹ãƒ†ãƒ  */
 	Read256 ("IDP_SYSTEM", &m_pImgSystem, 1);
-	/* ƒAƒCƒRƒ“ */
+	/* ã‚¢ã‚¤ã‚³ãƒ³ */
 	Read256 ("IDP_ICON", &m_pImgIcon, 1);
-	/* ‰e‰æ‘œ */
+	/* å½±ç”»åƒ */
 	Read256 ("IDP_SHADOW", &m_pImgShadow, 1);
-	/* ƒAƒCƒeƒ€‰æ‘œ */
+	/* ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒ */
 	Read256 ("IDP_ITEM_01", &m_pImgItem, 1);
-	/* ”Žš(S) */
+	/* æ•°å­—(S) */
 	Read256 ("IDP_NUM_S", &m_pImgNumS, 1);
-	/* ”Žš(M) */
+	/* æ•°å­—(M) */
 	Read256 ("IDP_NUM_M", &m_pImgNumM, 1);
-	/* ”Žš(L) */
+	/* æ•°å­—(L) */
 	Read256 ("IDP_NUM_L", &m_pImgNumL, 1);
 
-	/* ƒ}ƒbƒv */
+	/* ãƒžãƒƒãƒ— */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_MAP_%02d", i + 1);
 		pImg	= new CImg32;
@@ -206,7 +206,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	m_nMapPartsCount = i;
 
-	/* ƒ}ƒbƒv‰e */
+	/* ãƒžãƒƒãƒ—å½± */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_MAPSHADOW_%02d", i + 1);
 		pImg	= new CImg32;
@@ -219,7 +219,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	m_nMapShadowCount = i;
 
-	/* ‘Ì */
+	/* ä½“ */
 	for (i = 0; ; i += 2) {
 		pszTmp = apszBodyTbl[i];
 		if (pszTmp == NULL) {
@@ -234,7 +234,7 @@ BOOL CMgrGrpData::Load(void)
 		m_paImgBody->Add (pImg);
 
 		pImg = NULL;
-		/* Ž¨ */
+		/* è€³ */
 		pszTmp = apszBodyTbl[i + 1];
 		if (pszTmp) {
 			pImg	= new CImg32;
@@ -245,7 +245,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgEar->Add (pImg);
 	}
-	/* •ž */
+	/* æœ */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_CLOTH_%02d", i + 1);
 		pImg	= new CImg32;
@@ -256,7 +256,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgCloth->Add (pImg);
 	}
-	/* –Ú */
+	/* ç›® */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_EYE_%02d", i + 1);
 		pImg	= new CImg32;
@@ -267,7 +267,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgEye->Add (pImg);
 	}
-	/* ”¯(‰º) */
+	/* é«ª(ä¸‹) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_HAIR_D%02d", i + 1);
 		pImg	= new CImg32;
@@ -278,7 +278,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgHairD->Add (pImg);
 	}
-	/* ”¯(ã) */
+	/* é«ª(ä¸Š) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_HAIR_U%02d", i + 1);
 		pImg	= new CImg32;
@@ -300,7 +300,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgNPC->Add (pImg);
 	}
-	/* “ÁŽê•ž */
+	/* ç‰¹æ®Šæœ */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_CLOTH_SP%02d", i + 1);
 		pImg	= new CImg32;
@@ -311,7 +311,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgSP->Add (pImg);
 	}
-	/* ƒAƒNƒZƒTƒŠ */
+	/* ã‚¢ã‚¯ã‚»ã‚µãƒª */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_ACCE_%02d", i + 1);
 		pImg	= new CImg32;
@@ -322,7 +322,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgAcce->Add (pImg);
 	}
-	/* ƒGƒtƒFƒNƒg(32) */
+	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_EFC_32_%02d", i + 1);
 		pImg	= new CImg32;
@@ -333,7 +333,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgEfc32->Add (pImg);
 	}
-	/* ƒGƒtƒFƒNƒg(64) */
+	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_EFC_64_%02d", i + 1);
 		pImg	= new CImg32;
@@ -344,7 +344,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgEfc64->Add (pImg);
 	}
-	/* •Ší */
+	/* æ­¦å™¨ */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_WEAPON_%02d", i + 1);
 		pImg	= new CImg32;
@@ -355,7 +355,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgWeapon->Add (pImg);
 	}
-	/* •Ší(‹|) */
+	/* æ­¦å™¨(å¼“) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_WEAPON_BOW_%02d", i + 1);
 		pImg	= new CImg32;
@@ -366,7 +366,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgWeaponBow->Add (pImg);
 	}
-	/* •Ší(–î) */
+	/* æ­¦å™¨(çŸ¢) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_WEAPON_ARROW_%02d", i + 1);
 		pImg	= new CImg32;
@@ -377,7 +377,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgWeaponArrow->Add (pImg);
 	}
-	/* •Ší(‘ÅŒ‚) */
+	/* æ­¦å™¨(æ‰“æ’ƒ) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_WEAPON_GLOVE_%02d", i + 1);
 		pImg	= new CImg32;
@@ -388,7 +388,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgWeaponGlove->Add (pImg);
 	}
-	/* •Ší(‚»‚Ì‘¼) */
+	/* æ­¦å™¨(ãã®ä»–) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_WEAPON_ETC_%02d", i + 1);
 		pImg	= new CImg32;
@@ -399,7 +399,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgWeaponEtc->Add (pImg);
 	}
-	/* •¬o‚µ */
+	/* å™´å‡ºã— */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_BALLOON_%02d", i + 1);
 		pImg	= new CImg32;
@@ -410,7 +410,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImgEfcBalloon->Add (pImg);
 	}
-	/* 2x2‘Ì */
+	/* 2x2ä½“ */
 	for (i = 0; ; i += 2) {
 		pszTmp = apsz2x2BodyTbl[i];
 		if (pszTmp == NULL) {
@@ -425,7 +425,7 @@ BOOL CMgrGrpData::Load(void)
 		m_paImg2x2Body->Add (pImg);
 
 		pImg = NULL;
-		/* Ž¨ */
+		/* è€³ */
 		pszTmp = apsz2x2BodyTbl[i + 1];
 		if (pszTmp) {
 			pImg	= new CImg32;
@@ -435,7 +435,7 @@ BOOL CMgrGrpData::Load(void)
 			}
 		}
 	}
-	/* •ž */
+	/* æœ */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_CLOTH_%02d", i);
 		pImg	= new CImg32;
@@ -446,7 +446,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2Cloth->Add (pImg);
 	}
-	/* –Ú */
+	/* ç›® */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_EYE_%02d", i + 1);
 		pImg	= new CImg32;
@@ -457,7 +457,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2Eye->Add (pImg);
 	}
-	/* ”¯ */
+	/* é«ª */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_HAIR_%02d", i + 1);
 		pImg	= new CImg32;
@@ -468,7 +468,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2Hair->Add (pImg);
 	}
-	/* “ÁŽê•ž */
+	/* ç‰¹æ®Šæœ */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_SP_CLOTH_%02d", i + 1);
 		pImg	= new CImg32;
@@ -479,7 +479,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2SPCloth->Add (pImg);
 	}
-	/* “ÁŽê”¯ */
+	/* ç‰¹æ®Šé«ª */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_SP_HAIR_%02d", i + 1);
 		pImg	= new CImg32;
@@ -490,7 +490,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2SPHair->Add (pImg);
 	}
-	/* Ž‚¿•¨(2x2) */
+	/* æŒã¡ç‰©(2x2) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_ARMS_%02d", i + 1);
 		pImg	= new CImg32;
@@ -501,7 +501,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2Arms->Add (pImg);
 	}
-	/* ‚(2x2) */
+	/* ç›¾(2x2) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_SHIELD_%02d", i + 1);
 		pImg	= new CImg32;
@@ -512,7 +512,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2Shield->Add (pImg);
 	}
-	/* “ÁŽêŽ‚¿•¨(2x2) */
+	/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_ARMS_SP_%02d", i + 1);
 		pImg	= new CImg32;
@@ -523,7 +523,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2ArmsSP->Add (pImg);
 	}
-	/* ‹|(2x2) */
+	/* å¼“(2x2) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_BOW_%02d", i + 1);
 		pImg	= new CImg32;
@@ -545,7 +545,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2NPC->Add (pImg);
 	}
-	/* ƒLƒƒƒ‰‰e(2x2) */
+	/* ã‚­ãƒ£ãƒ©å½±(2x2) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_CHAR_SHADOW_%02d", i + 1);
 		pImg	= new CImg32;
@@ -556,7 +556,7 @@ BOOL CMgrGrpData::Load(void)
 		}
 		m_paImg2x2CharShadow->Add (pImg);
 	}
-	/* NPC‰e(2x2) */
+	/* NPCå½±(2x2) */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_2X2_NPC_%03d_SHADOW", i + 1);
 		pImg	= new CImg32;
@@ -576,9 +576,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::CheckVersion										 */
-/* “à—e		:ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN												 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrGrpData::CheckVersion										 */
+/* å†…å®¹		:ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯												 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CMgrGrpData::CheckVersion(LPCSTR pszVersion)
@@ -589,7 +589,7 @@ BOOL CMgrGrpData::CheckVersion(LPCSTR pszVersion)
 	bRet = FALSE;
 
 	ZeroMemory (szTmp, sizeof (szTmp));
-	/* ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN */
+	/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ */
 	LoadString (m_hDll, IDS_DLLVER, szTmp, sizeof (szTmp));
 	if (strcmp (szTmp, pszVersion) != 0) {
 		goto Exit;
@@ -602,9 +602,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::Write												 */
-/* “à—e		:PNGƒf[ƒ^‚Ì•Û‘¶												 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrGrpData::Write												 */
+/* å†…å®¹		:PNGãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜												 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 void CMgrGrpData::Write(LPCSTR pszFileName, CImg32 *pSrc)
@@ -661,9 +661,9 @@ void CMgrGrpData::Write(LPCSTR pszFileName, CImg32 *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibSystem										 */
-/* “à—e		:ƒVƒXƒeƒ€‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2006/11/05														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibSystem										 */
+/* å†…å®¹		:ã‚·ã‚¹ãƒ†ãƒ ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2006/11/05														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibSystem(void)
@@ -673,9 +673,9 @@ PCImg32 CMgrGrpData::GetDibSystem(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibIcon										 */
-/* “à—e		:ƒAƒCƒRƒ“‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibIcon										 */
+/* å†…å®¹		:ã‚¢ã‚¤ã‚³ãƒ³ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibIcon(void)
@@ -685,9 +685,9 @@ PCImg32 CMgrGrpData::GetDibIcon(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibShadow										 */
-/* “à—e		:‰e‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2007/04/19														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibShadow										 */
+/* å†…å®¹		:å½±ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/04/19														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibShadow(void)
@@ -697,9 +697,9 @@ PCImg32 CMgrGrpData::GetDibShadow(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibMapParts									 */
-/* “à—e		:ƒ}ƒbƒvƒp[ƒc‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibMapParts									 */
+/* å†…å®¹		:ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibMapParts(int nNo)
@@ -719,9 +719,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibMapShadow									 */
-/* “à—e		:ƒ}ƒbƒvƒp[ƒc‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibMapShadow									 */
+/* å†…å®¹		:ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibMapShadow(int nNo)
@@ -741,9 +741,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibItem										 */
-/* “à—e		:ƒAƒCƒeƒ€‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/05/05														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibItem										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/05														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibItem(int nNo)
@@ -753,9 +753,9 @@ PCImg32 CMgrGrpData::GetDibItem(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibNumS										 */
-/* “à—e		:”Žš(S)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibNumS										 */
+/* å†…å®¹		:æ•°å­—(S)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibNumS(void)
@@ -765,9 +765,9 @@ PCImg32 CMgrGrpData::GetDibNumS(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibNumM										 */
-/* “à—e		:”Žš(M)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/07/13														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibNumM										 */
+/* å†…å®¹		:æ•°å­—(M)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/07/13														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibNumM(void)
@@ -777,9 +777,9 @@ PCImg32 CMgrGrpData::GetDibNumM(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibNumL										 */
-/* “à—e		:”Žš(L)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/09/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibNumL										 */
+/* å†…å®¹		:æ•°å­—(L)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/09/17														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibNumL(void)
@@ -789,9 +789,9 @@ PCImg32 CMgrGrpData::GetDibNumL(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibNPC											 */
-/* “à—e		:NPC‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibNPC											 */
+/* å†…å®¹		:NPCç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibNPC(int nNo)
@@ -811,9 +811,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibBody										 */
-/* “à—e		:‘Ì‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibBody										 */
+/* å†…å®¹		:ä½“ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibBody(WORD wFamilyID)
@@ -825,10 +825,10 @@ PCImg32 CMgrGrpData::GetDibBody(WORD wFamilyID)
 	pImg	= NULL;
 
 	switch (wFamilyID) {
-	case FAMILYTYPE_HUMAN:	nNo = 3;	break;	/* ƒjƒ“ƒQƒ“ */
-	case FAMILYTYPE_ELF:	nNo = 2;	break;	/* ƒGƒ‹ƒt */
-	case FAMILYTYPE_BST:	nNo = 0;	break;	/* ƒWƒ…ƒEƒWƒ“ */
-	case FAMILYTYPE_DAEMON:	nNo = 1;	break;	/* ƒ}ƒ]ƒN */
+	case FAMILYTYPE_HUMAN:	nNo = 3;	break;	/* ãƒ‹ãƒ³ã‚²ãƒ³ */
+	case FAMILYTYPE_ELF:	nNo = 2;	break;	/* ã‚¨ãƒ«ãƒ• */
+	case FAMILYTYPE_BST:	nNo = 0;	break;	/* ã‚¸ãƒ¥ã‚¦ã‚¸ãƒ³ */
+	case FAMILYTYPE_DAEMON:	nNo = 1;	break;	/* ãƒžã‚¾ã‚¯ */
 	default:
 		goto Exit;
 	}
@@ -840,9 +840,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibEar											 */
-/* “à—e		:Ž¨‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibEar											 */
+/* å†…å®¹		:è€³ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibEar(WORD wFamilyID)
@@ -854,10 +854,10 @@ PCImg32 CMgrGrpData::GetDibEar(WORD wFamilyID)
 	pImg	= NULL;
 
 	switch (wFamilyID) {
-//	case FAMILYTYPE_HUMAN:	nNo = 3;	break;	/* ƒjƒ“ƒQƒ“ */
-	case FAMILYTYPE_ELF:	nNo = 2;	break;	/* ƒGƒ‹ƒt */
-	case FAMILYTYPE_BST:	nNo = 0;	break;	/* ƒWƒ…ƒEƒWƒ“ */
-	case FAMILYTYPE_DAEMON:	nNo = 1;	break;	/* ƒ}ƒ]ƒN */
+//	case FAMILYTYPE_HUMAN:	nNo = 3;	break;	/* ãƒ‹ãƒ³ã‚²ãƒ³ */
+	case FAMILYTYPE_ELF:	nNo = 2;	break;	/* ã‚¨ãƒ«ãƒ• */
+	case FAMILYTYPE_BST:	nNo = 0;	break;	/* ã‚¸ãƒ¥ã‚¦ã‚¸ãƒ³ */
+	case FAMILYTYPE_DAEMON:	nNo = 1;	break;	/* ãƒžã‚¾ã‚¯ */
 	default:
 		goto Exit;
 	}
@@ -869,9 +869,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibCloth										 */
-/* “à—e		:•ž‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibCloth										 */
+/* å†…å®¹		:æœç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibCloth(int nNo)
@@ -892,9 +892,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibEye											 */
-/* “à—e		:–Ú‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibEye											 */
+/* å†…å®¹		:ç›®ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibEye(int nNo)
@@ -915,9 +915,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibHairD										 */
-/* “à—e		:”¯(‰º)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibHairD										 */
+/* å†…å®¹		:é«ª(ä¸‹)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibHairD(WORD wHairColorID)
@@ -937,9 +937,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibHairU										 */
-/* “à—e		:”¯(ã)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibHairU										 */
+/* å†…å®¹		:é«ª(ä¸Š)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibHairU(WORD wHairColorID)
@@ -959,9 +959,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibSP											 */
-/* “à—e		:“ÁŽê•ž‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibSP											 */
+/* å†…å®¹		:ç‰¹æ®Šæœç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibSP(int nNo)
@@ -982,9 +982,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibAcce										 */
-/* “à—e		:ƒAƒNƒZƒTƒŠ‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2007/05/04														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibAcce										 */
+/* å†…å®¹		:ã‚¢ã‚¯ã‚»ã‚µãƒªç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/05/04														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibAcce(int nNo)
@@ -1005,9 +1005,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibEfc32										 */
-/* “à—e		:ƒGƒtƒFƒNƒg(32)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾								 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibEfc32										 */
+/* å†…å®¹		:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibEfc32(int nNo)
@@ -1028,9 +1028,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibEfc(64)										 */
-/* “à—e		:ƒGƒtƒFƒNƒg(64)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾								 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibEfc(64)										 */
+/* å†…å®¹		:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibEfc64(int nNo)
@@ -1051,9 +1051,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibWeapon										 */
-/* “à—e		:•Ší‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2007/07/09														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibWeapon										 */
+/* å†…å®¹		:æ­¦å™¨ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/07/09														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibWeapon(int nNo)
@@ -1074,9 +1074,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibWeaponBow									 */
-/* “à—e		:•Ší(‹|)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibWeaponBow									 */
+/* å†…å®¹		:æ­¦å™¨(å¼“)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibWeaponBow(int nNo)
@@ -1097,9 +1097,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibWeaponArrow									 */
-/* “à—e		:•Ší(–î)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibWeaponArrow									 */
+/* å†…å®¹		:æ­¦å™¨(çŸ¢)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibWeaponArrow(int nNo)
@@ -1120,9 +1120,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibWeaponGlove									 */
-/* “à—e		:•Ší(‘ÅŒ‚)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2007/12/02														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibWeaponGlove									 */
+/* å†…å®¹		:æ­¦å™¨(æ‰“æ’ƒ)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/12/02														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibWeaponGlove(int nNo)
@@ -1143,9 +1143,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibWeaponEtc									 */
-/* “à—e		:•Ší(‚»‚Ì‘¼)‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2007/12/02														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibWeaponEtc									 */
+/* å†…å®¹		:æ­¦å™¨(ãã®ä»–)ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/12/02														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibWeaponEtc(int nNo)
@@ -1166,9 +1166,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibEfcBalloon									 */
-/* “à—e		:•¬o‚µ‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/12/26														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibEfcBalloon									 */
+/* å†…å®¹		:å™´å‡ºã—ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/12/26														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibEfcBalloon(int nNo)
@@ -1189,9 +1189,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2Body										 */
-/* “à—e		:2x2‘Ì‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/06/14														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2Body										 */
+/* å†…å®¹		:2x2ä½“ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/06/14														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2Body(WORD wFamilyID)
@@ -1204,10 +1204,10 @@ PCImg32 CMgrGrpData::GetDib2x2Body(WORD wFamilyID)
 
 #if 0
 	switch (wFamilyID) {
-	case FAMILYTYPE_HUMAN:	nNo = 3;	break;	/* ƒjƒ“ƒQƒ“ */
-	case FAMILYTYPE_ELF:	nNo = 2;	break;	/* ƒGƒ‹ƒt */
-	case FAMILYTYPE_BST:	nNo = 0;	break;	/* ƒWƒ…ƒEƒWƒ“ */
-	case FAMILYTYPE_DAEMON:	nNo = 1;	break;	/* ƒ}ƒ]ƒN */
+	case FAMILYTYPE_HUMAN:	nNo = 3;	break;	/* ãƒ‹ãƒ³ã‚²ãƒ³ */
+	case FAMILYTYPE_ELF:	nNo = 2;	break;	/* ã‚¨ãƒ«ãƒ• */
+	case FAMILYTYPE_BST:	nNo = 0;	break;	/* ã‚¸ãƒ¥ã‚¦ã‚¸ãƒ³ */
+	case FAMILYTYPE_DAEMON:	nNo = 1;	break;	/* ãƒžã‚¾ã‚¯ */
 	default:
 		goto Exit;
 	}
@@ -1220,9 +1220,9 @@ PCImg32 CMgrGrpData::GetDib2x2Body(WORD wFamilyID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2Cloth									 */
-/* “à—e		:•ž‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2008/06/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2Cloth									 */
+/* å†…å®¹		:æœç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/17														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2Cloth(WORD wClothID)
@@ -1248,9 +1248,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2Eye										 */
-/* “à—e		:–Ú‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2008/06/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2Eye										 */
+/* å†…å®¹		:ç›®ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/17														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2Eye(int nNo)
@@ -1271,9 +1271,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2Hair										 */
-/* “à—e		:”¯‰æ‘œƒCƒ[ƒW‚ðŽæ“¾											 */
-/* “ú•t		:2008/06/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2Hair										 */
+/* å†…å®¹		:é«ªç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/06/17														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2Hair(WORD wHairColorID)
@@ -1297,9 +1297,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2SPCloth									 */
-/* “à—e		:“ÁŽê•ž‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/06/20														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2SPCloth									 */
+/* å†…å®¹		:ç‰¹æ®Šæœç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/06/20														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2SPCloth(WORD wSPClothID)
@@ -1323,9 +1323,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2SPHair									 */
-/* “à—e		:“ÁŽê”¯‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/06/20														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2SPHair									 */
+/* å†…å®¹		:ç‰¹æ®Šé«ªç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/06/20														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2SPHair(WORD wSPHairID)
@@ -1349,9 +1349,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2Arms										 */
-/* “à—e		:2x2Ž‚¿•¨‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2Arms										 */
+/* å†…å®¹		:2x2æŒã¡ç‰©ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2Arms(WORD wArmsID)
@@ -1371,9 +1371,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2Shield									 */
-/* “à—e		:2x2‚‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2Shield									 */
+/* å†…å®¹		:2x2ç›¾ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2Shield(WORD wShieldID)
@@ -1393,9 +1393,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2ArmsSP									 */
-/* “à—e		:2x2“ÁŽêŽ‚¿•¨‰æ‘œƒCƒ[ƒW‚ðŽæ“¾								 */
-/* “ú•t		:2008/06/30														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2ArmsSP									 */
+/* å†…å®¹		:2x2ç‰¹æ®ŠæŒã¡ç‰©ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2008/06/30														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2ArmsSP(WORD wArmsID)
@@ -1415,9 +1415,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2Bow										 */
-/* “à—e		:2x2‹|‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/07/02														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2Bow										 */
+/* å†…å®¹		:2x2å¼“ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/07/02														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2Bow(WORD wBowID)
@@ -1437,9 +1437,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2NPC										 */
-/* “à—e		:2x2NPC‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/07/05														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2NPC										 */
+/* å†…å®¹		:2x2NPCç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/07/05														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2NPC(WORD wNPCID)
@@ -1459,9 +1459,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2CharShadow								 */
-/* “à—e		:2x2ƒLƒƒƒ‰‰e‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2008/08/02														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2CharShadow								 */
+/* å†…å®¹		:2x2ã‚­ãƒ£ãƒ©å½±ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/08/02														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2CharShadow(int nNo)
@@ -1481,9 +1481,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib2x2NPCShadow								 */
-/* “à—e		:2x2NPC‰e‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2008/08/24														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib2x2NPCShadow								 */
+/* å†…å®¹		:2x2NPCå½±ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/08/24														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib2x2NPCShadow(int nNo)
@@ -1503,9 +1503,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDib											 */
-/* “à—e		:‰æ‘œƒCƒ[ƒW‚ðŽæ“¾												 */
-/* “ú•t		:2007/11/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDib											 */
+/* å†…å®¹		:ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/11/17														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDib(DWORD dwGrpIDMain, DWORD dwGrpIDSub, DWORD dwParam)
@@ -1515,73 +1515,73 @@ PCImg32 CMgrGrpData::GetDib(DWORD dwGrpIDMain, DWORD dwGrpIDSub, DWORD dwParam)
 	pRet = NULL;
 
 	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:			/* ƒLƒƒƒ‰‰æ‘œ */
+	case GRPIDMAIN_CHAR:			/* ã‚­ãƒ£ãƒ©ç”»åƒ */
 		pRet = GetDibBody ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_WEAPON:			/* •Ší */
+	case GRPIDMAIN_WEAPON:			/* æ­¦å™¨ */
 		pRet = GetDibWeapon (0);
 		break;
-	case GRPIDMAIN_WEAPON_BOW:		/* ‹| */
+	case GRPIDMAIN_WEAPON_BOW:		/* å¼“ */
 		pRet = GetDibWeaponBow (0);
 		break;
-	case GRPIDMAIN_EFFECT32:		/* ƒGƒtƒFƒNƒg(32) */
+	case GRPIDMAIN_EFFECT32:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32) */
 		pRet = GetDibEfc32 (0);
 		break;
-	case GRPIDMAIN_WEAPON_GLOVE:	/* •Ší(‘ÅŒ‚) */
+	case GRPIDMAIN_WEAPON_GLOVE:	/* æ­¦å™¨(æ‰“æ’ƒ) */
 		pRet = GetDibWeaponGlove (0);
 		break;
-	case GRPIDMAIN_WEAPON_ETC:		/* •Ší(‚»‚Ì‘¼) */
+	case GRPIDMAIN_WEAPON_ETC:		/* æ­¦å™¨(ãã®ä»–) */
 		pRet = GetDibWeaponEtc (0);
 		break;
-	case GRPIDMAIN_NPC:				/* ƒLƒƒƒ‰(NPC) */
+	case GRPIDMAIN_NPC:				/* ã‚­ãƒ£ãƒ©(NPC) */
 		pRet = GetDibNPC (0);
 		break;
-	case GRPIDMAIN_EFCBALLOON:		/* •¬o‚µ */
+	case GRPIDMAIN_EFCBALLOON:		/* å™´å‡ºã— */
 		pRet = GetDibEfcBalloon (0);
 		break;
-	case GRPIDMAIN_2X2_CHAR:		/* ƒLƒƒƒ‰(32x32)‰æ‘œ */
+	case GRPIDMAIN_2X2_CHAR:		/* ã‚­ãƒ£ãƒ©(32x32)ç”»åƒ */
 		pRet = GetDib2x2Body ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_CLOTH:		/* •ž(32x32) */
+	case GRPIDMAIN_2X2_CLOTH:		/* æœ(32x32) */
 		pRet = GetDib2x2Cloth ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_EYE:			/* –Ú(32x32) */
+	case GRPIDMAIN_2X2_EYE:			/* ç›®(32x32) */
 		pRet = GetDib2x2Eye ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_HAIR:		/* ”¯(32x32) */
+	case GRPIDMAIN_2X2_HAIR:		/* é«ª(32x32) */
 		if (dwParam < 10000) {
 			pRet = GetDib2x2Hair ((WORD)dwParam);
 		} else {
 			pRet = GetDib2x2SPHair ((WORD)dwParam - 10000);
 		}
 		break;
-	case GRPIDMAIN_2X2_SPCLOTH:		/* “ÁŽê•ž(32x32) */
+	case GRPIDMAIN_2X2_SPCLOTH:		/* ç‰¹æ®Šæœ(32x32) */
 		pRet = GetDib2x2SPCloth ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_SPHAIR:		/* “ÁŽê”¯(32x32) */
+	case GRPIDMAIN_2X2_SPHAIR:		/* ç‰¹æ®Šé«ª(32x32) */
 		pRet = GetDib2x2SPHair ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_ARMS:		/* Ž‚¿•¨(2x2) */
+	case GRPIDMAIN_2X2_ARMS:		/* æŒã¡ç‰©(2x2) */
 		dwParam = dwGrpIDSub / GetGrpCountX (dwGrpIDMain);
 		dwParam = dwParam / GetGrpCountY (dwGrpIDMain);
 		pRet = GetDib2x2Arms ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_SHIELD:		/* ‚(2x2) */
+	case GRPIDMAIN_2X2_SHIELD:		/* ç›¾(2x2) */
 		pRet = GetDib2x2Shield ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_ARMSSP:		/* “ÁŽêŽ‚¿•¨(2x2) */
+	case GRPIDMAIN_2X2_ARMSSP:		/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
 		pRet = GetDib2x2ArmsSP ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_2X2_BOW:			/* ‹|(2x2) */
+	case GRPIDMAIN_2X2_BOW:			/* å¼“(2x2) */
 		pRet = GetDib2x2Bow ((WORD)dwParam);
 		break;
 	case GRPIDMAIN_2X2_NPC:			/* NPC(2x2) */
 		pRet = GetDib2x2NPC ((WORD)dwParam);
 		break;
-	case GRPIDMAIN_EFFECT64:		/* ƒGƒtƒFƒNƒg(64) */
+	case GRPIDMAIN_EFFECT64:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64) */
 		pRet = GetDibEfc64 (0);
 		break;
-	case GRPIDMAIN_ICON32:			/* ƒAƒCƒRƒ“(‚Q”{•\Ž¦) */
+	case GRPIDMAIN_ICON32:			/* ã‚¢ã‚¤ã‚³ãƒ³(ï¼’å€è¡¨ç¤º) */
 		pRet = GetDibIcon ();
 		break;
 	}
@@ -1591,9 +1591,9 @@ PCImg32 CMgrGrpData::GetDib(DWORD dwGrpIDMain, DWORD dwGrpIDSub, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibTmpLogo										 */
-/* “à—e		:URARA-worksƒƒS‰æ‘œƒCƒ[ƒW‚ðŽæ“¾								 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibTmpLogo										 */
+/* å†…å®¹		:URARA-worksãƒ­ã‚´ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibTmpLogo(void)
@@ -1614,9 +1614,9 @@ PCImg32 CMgrGrpData::GetDibTmpLogo(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibTmpTitle									 */
-/* “à—e		:ƒ^ƒCƒgƒ‹‰æ‘œƒCƒ[ƒW‚ðŽæ“¾										 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibTmpTitle									 */
+/* å†…å®¹		:ã‚¿ã‚¤ãƒˆãƒ«ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibTmpTitle(void)
@@ -1637,9 +1637,9 @@ PCImg32 CMgrGrpData::GetDibTmpTitle(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibTmpTitleBack								 */
-/* “à—e		:ƒ^ƒCƒgƒ‹”wŒi‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibTmpTitleBack								 */
+/* å†…å®¹		:ã‚¿ã‚¤ãƒˆãƒ«èƒŒæ™¯ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibTmpTitleBack(void)
@@ -1658,9 +1658,9 @@ PCImg32 CMgrGrpData::GetDibTmpTitleBack(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibTmpTitleCloud								 */
-/* “à—e		:ƒ^ƒCƒgƒ‹‰_‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2008/05/02														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibTmpTitleCloud								 */
+/* å†…å®¹		:ã‚¿ã‚¤ãƒˆãƒ«é›²ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2008/05/02														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibTmpTitleCloud(void)
@@ -1679,9 +1679,9 @@ PCImg32 CMgrGrpData::GetDibTmpTitleCloud(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibTmpLoginMenuBack							 */
-/* “à—e		:ƒƒOƒCƒ“ƒƒjƒ…[”wŒi‰æ‘œƒCƒ[ƒW‚ðŽæ“¾							 */
-/* “ú•t		:2007/05/01														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibTmpLoginMenuBack							 */
+/* å†…å®¹		:ãƒ­ã‚°ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼èƒŒæ™¯ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—							 */
+/* æ—¥ä»˜		:2007/05/01														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibTmpLoginMenuBack(void)
@@ -1700,9 +1700,9 @@ PCImg32 CMgrGrpData::GetDibTmpLoginMenuBack(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetMapPartsCount									 */
-/* “à—e		:ƒ}ƒbƒvƒp[ƒc”‚ðŽæ“¾											 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CMgrGrpData::GetMapPartsCount									 */
+/* å†…å®¹		:ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æ•°ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 int CMgrGrpData::GetMapPartsCount(void)
@@ -1712,9 +1712,9 @@ int CMgrGrpData::GetMapPartsCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibMapPartsTmp									 */
-/* “à—e		:“™”{ƒ}ƒbƒvƒp[ƒc‰æ‘œƒCƒ[ƒW‚ðŽæ“¾								 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibMapPartsTmp									 */
+/* å†…å®¹		:ç­‰å€ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—								 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibMapPartsTmp(int nNo)
@@ -1734,9 +1734,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::ReadMapPartsTmp									 */
-/* “à—e		:“™”{ƒ}ƒbƒvƒp[ƒc‰æ‘œ‚ð“Ç‚Ýž‚Ý									 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CMgrGrpData::ReadMapPartsTmp									 */
+/* å†…å®¹		:ç­‰å€ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒã‚’èª­ã¿è¾¼ã¿									 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CMgrGrpData::ReadMapPartsTmp(void)
@@ -1749,7 +1749,7 @@ void CMgrGrpData::ReadMapPartsTmp(void)
 	pImg = NULL;
 
 	FreeInfo (m_paImgMapPartsTmp, pImg);
-	/* ƒ}ƒbƒv */
+	/* ãƒžãƒƒãƒ— */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_MAP_%02d", i + 1);
 		pImg	= new CImg32;
@@ -1764,9 +1764,9 @@ void CMgrGrpData::ReadMapPartsTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::DeleteMapPartsTmp									 */
-/* “à—e		:“™”{ƒ}ƒbƒvƒp[ƒc‰æ‘œ‚ðíœ										 */
-/* “ú•t		:2007/05/14														 */
+/* é–¢æ•°å	:CMgrGrpData::DeleteMapPartsTmp									 */
+/* å†…å®¹		:ç­‰å€ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒã‚’å‰Šé™¤										 */
+/* æ—¥ä»˜		:2007/05/14														 */
 /* ========================================================================= */
 
 void CMgrGrpData::DeleteMapPartsTmp(void)
@@ -1780,9 +1780,9 @@ void CMgrGrpData::DeleteMapPartsTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetMapShadowCount									 */
-/* “à—e		:ƒ}ƒbƒv‰e‰æ‘œ”‚ðŽæ“¾											 */
-/* “ú•t		:2007/04/28														 */
+/* é–¢æ•°å	:CMgrGrpData::GetMapShadowCount									 */
+/* å†…å®¹		:ãƒžãƒƒãƒ—å½±ç”»åƒæ•°ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/04/28														 */
 /* ========================================================================= */
 
 int CMgrGrpData::GetMapShadowCount(void)
@@ -1792,9 +1792,9 @@ int CMgrGrpData::GetMapShadowCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibMapShadowTmp								 */
-/* “à—e		:“™”{ƒ}ƒbƒv‰e‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2007/06/03														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibMapShadowTmp								 */
+/* å†…å®¹		:ç­‰å€ãƒžãƒƒãƒ—å½±ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/06/03														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibMapShadowTmp(int nNo)
@@ -1814,9 +1814,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::ReadMapShadowTmp									 */
-/* “à—e		:“™”{ƒ}ƒbƒv‰e‰æ‘œ‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2007/06/03														 */
+/* é–¢æ•°å	:CMgrGrpData::ReadMapShadowTmp									 */
+/* å†…å®¹		:ç­‰å€ãƒžãƒƒãƒ—å½±ç”»åƒã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/06/03														 */
 /* ========================================================================= */
 
 void CMgrGrpData::ReadMapShadowTmp(void)
@@ -1829,7 +1829,7 @@ void CMgrGrpData::ReadMapShadowTmp(void)
 	pImg = NULL;
 
 	FreeInfo (m_paImgMapShadowTmp, pImg);
-	/* ƒ}ƒbƒv */
+	/* ãƒžãƒƒãƒ— */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_MAPSHADOW_%02d", i + 1);
 		pImg	= new CImg32;
@@ -1844,9 +1844,9 @@ void CMgrGrpData::ReadMapShadowTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::DeleteMapShadowTmp								 */
-/* “à—e		:“™”{ƒ}ƒbƒv‰e‰æ‘œ‚ðíœ											 */
-/* “ú•t		:2007/06/03														 */
+/* é–¢æ•°å	:CMgrGrpData::DeleteMapShadowTmp								 */
+/* å†…å®¹		:ç­‰å€ãƒžãƒƒãƒ—å½±ç”»åƒã‚’å‰Šé™¤											 */
+/* æ—¥ä»˜		:2007/06/03														 */
 /* ========================================================================= */
 
 void CMgrGrpData::DeleteMapShadowTmp(void)
@@ -1860,9 +1860,9 @@ void CMgrGrpData::DeleteMapShadowTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetItemCount										 */
-/* “à—e		:ƒAƒCƒeƒ€‰æ‘œ”‚ðŽæ“¾											 */
-/* “ú•t		:2007/08/22														 */
+/* é–¢æ•°å	:CMgrGrpData::GetItemCount										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒæ•°ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/08/22														 */
 /* ========================================================================= */
 
 int CMgrGrpData::GetItemCount(void)
@@ -1872,9 +1872,9 @@ int CMgrGrpData::GetItemCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetDibItemTmp										 */
-/* “à—e		:“™”{ƒAƒCƒeƒ€‰æ‘œƒCƒ[ƒW‚ðŽæ“¾									 */
-/* “ú•t		:2007/08/12														 */
+/* é–¢æ•°å	:CMgrGrpData::GetDibItemTmp										 */
+/* å†…å®¹		:ç­‰å€ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/08/12														 */
 /* ========================================================================= */
 
 PCImg32 CMgrGrpData::GetDibItemTmp(int nNo)
@@ -1894,9 +1894,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::ReadItemTmp										 */
-/* “à—e		:“™”{ƒAƒCƒeƒ€‰æ‘œ‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2007/08/12														 */
+/* é–¢æ•°å	:CMgrGrpData::ReadItemTmp										 */
+/* å†…å®¹		:ç­‰å€ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/08/12														 */
 /* ========================================================================= */
 
 void CMgrGrpData::ReadItemTmp(void)
@@ -1909,7 +1909,7 @@ void CMgrGrpData::ReadItemTmp(void)
 	pImg = NULL;
 
 	FreeInfo (m_paImgItemTmp, pImg);
-	/* ƒAƒCƒeƒ€ */
+	/* ã‚¢ã‚¤ãƒ†ãƒ  */
 	for (i = 0; ; i ++) {
 		wsprintf (szTmp, "IDP_ITEM_%02d", i + 1);
 		pImg	= new CImg32;
@@ -1924,9 +1924,9 @@ void CMgrGrpData::ReadItemTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::DeleteItemTmp										 */
-/* “à—e		:“™”{ƒAƒCƒeƒ€‰æ‘œ‚ðíœ											 */
-/* “ú•t		:2007/08/12														 */
+/* é–¢æ•°å	:CMgrGrpData::DeleteItemTmp										 */
+/* å†…å®¹		:ç­‰å€ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒã‚’å‰Šé™¤											 */
+/* æ—¥ä»˜		:2007/08/12														 */
 /* ========================================================================= */
 
 void CMgrGrpData::DeleteItemTmp(void)
@@ -1940,9 +1940,9 @@ void CMgrGrpData::DeleteItemTmp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetGrpSize										 */
-/* “à—e		:‰æ‘œ‚P‚Â‚ ‚½‚è‚ÌƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2007/11/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetGrpSize										 */
+/* å†…å®¹		:ç”»åƒï¼‘ã¤ã‚ãŸã‚Šã®ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/11/17														 */
 /* ========================================================================= */
 
 int CMgrGrpData::GetGrpSize(DWORD dwGrpIDMain)
@@ -1952,33 +1952,33 @@ int CMgrGrpData::GetGrpSize(DWORD dwGrpIDMain)
 	nRet = 0;
 
 	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:			/* ƒLƒƒƒ‰‰æ‘œ */
-	case GRPIDMAIN_NPC:				/* ƒLƒƒƒ‰(NPC) */
-	case GRPIDMAIN_EFCBALLOON:		/* •¬o‚µ */
-	case GRPIDMAIN_2X2_SHIELD:		/* ‚(2x2) */
-	case GRPIDMAIN_ICON32:			/* ƒAƒCƒRƒ“(‚Q”{•\Ž¦) */
+	case GRPIDMAIN_CHAR:			/* ã‚­ãƒ£ãƒ©ç”»åƒ */
+	case GRPIDMAIN_NPC:				/* ã‚­ãƒ£ãƒ©(NPC) */
+	case GRPIDMAIN_EFCBALLOON:		/* å™´å‡ºã— */
+	case GRPIDMAIN_2X2_SHIELD:		/* ç›¾(2x2) */
+	case GRPIDMAIN_ICON32:			/* ã‚¢ã‚¤ã‚³ãƒ³(ï¼’å€è¡¨ç¤º) */
 		nRet = 16;
 		break;
-	case GRPIDMAIN_WEAPON:			/* •Ší */
-	case GRPIDMAIN_WEAPON_BOW:		/* ‹| */
-	case GRPIDMAIN_EFFECT32:		/* ƒGƒtƒFƒNƒg(32) */
-	case GRPIDMAIN_WEAPON_GLOVE:	/* •Ší(‘ÅŒ‚) */
-	case GRPIDMAIN_WEAPON_ETC:		/* •Ší(‚»‚Ì‘¼) */
-	case GRPIDMAIN_2X2_CHAR:		/* ƒLƒƒƒ‰(32x32)‰æ‘œ */
-	case GRPIDMAIN_2X2_CLOTH:		/* •ž(32x32) */
-	case GRPIDMAIN_2X2_EYE:			/* –Ú(32x32) */
-	case GRPIDMAIN_2X2_HAIR:		/* ”¯(32x32) */
-	case GRPIDMAIN_2X2_SPCLOTH:		/* “ÁŽê•ž(32x32) */
-	case GRPIDMAIN_2X2_SPHAIR:		/* “ÁŽê”¯(32x32) */
+	case GRPIDMAIN_WEAPON:			/* æ­¦å™¨ */
+	case GRPIDMAIN_WEAPON_BOW:		/* å¼“ */
+	case GRPIDMAIN_EFFECT32:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32) */
+	case GRPIDMAIN_WEAPON_GLOVE:	/* æ­¦å™¨(æ‰“æ’ƒ) */
+	case GRPIDMAIN_WEAPON_ETC:		/* æ­¦å™¨(ãã®ä»–) */
+	case GRPIDMAIN_2X2_CHAR:		/* ã‚­ãƒ£ãƒ©(32x32)ç”»åƒ */
+	case GRPIDMAIN_2X2_CLOTH:		/* æœ(32x32) */
+	case GRPIDMAIN_2X2_EYE:			/* ç›®(32x32) */
+	case GRPIDMAIN_2X2_HAIR:		/* é«ª(32x32) */
+	case GRPIDMAIN_2X2_SPCLOTH:		/* ç‰¹æ®Šæœ(32x32) */
+	case GRPIDMAIN_2X2_SPHAIR:		/* ç‰¹æ®Šé«ª(32x32) */
 	case GRPIDMAIN_2X2_NPC:			/* NPC(2x2) */
 		nRet = 32;
 		break;
-	case GRPIDMAIN_2X2_ARMS:		/* Ž‚¿•¨(2x2) */
-	case GRPIDMAIN_2X2_ARMSSP:		/* “ÁŽêŽ‚¿•¨(2x2) */
-	case GRPIDMAIN_2X2_BOW:			/* ‹|(2x2) */
+	case GRPIDMAIN_2X2_ARMS:		/* æŒã¡ç‰©(2x2) */
+	case GRPIDMAIN_2X2_ARMSSP:		/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
+	case GRPIDMAIN_2X2_BOW:			/* å¼“(2x2) */
 		nRet = 24;
 		break;
-	case GRPIDMAIN_EFFECT64:		/* ƒGƒtƒFƒNƒg(64) */
+	case GRPIDMAIN_EFFECT64:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64) */
 		nRet = 64;
 		break;
 	}
@@ -1988,9 +1988,9 @@ int CMgrGrpData::GetGrpSize(DWORD dwGrpIDMain)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetGrpCountX										 */
-/* “à—e		:‰æ‘œ‚Pƒtƒ@ƒCƒ‹‚Ì‰¡ŒÂ”‚ðŽæ“¾									 */
-/* “ú•t		:2007/11/17														 */
+/* é–¢æ•°å	:CMgrGrpData::GetGrpCountX										 */
+/* å†…å®¹		:ç”»åƒï¼‘ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¨ªå€‹æ•°ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/11/17														 */
 /* ========================================================================= */
 
 int CMgrGrpData::GetGrpCountX(DWORD dwGrpIDMain)
@@ -2000,47 +2000,47 @@ int CMgrGrpData::GetGrpCountX(DWORD dwGrpIDMain)
 	nRet = 0;
 
 	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:			/* ƒLƒƒƒ‰‰æ‘œ */
+	case GRPIDMAIN_CHAR:			/* ã‚­ãƒ£ãƒ©ç”»åƒ */
 		nRet = 32;
 		break;
-	case GRPIDMAIN_NPC:				/* ƒLƒƒƒ‰(NPC) */
+	case GRPIDMAIN_NPC:				/* ã‚­ãƒ£ãƒ©(NPC) */
 		nRet = 16;
 		break;
-	case GRPIDMAIN_WEAPON:			/* •Ší */
+	case GRPIDMAIN_WEAPON:			/* æ­¦å™¨ */
 		nRet = 32;
 		break;
-	case GRPIDMAIN_WEAPON_BOW:		/* ‹| */
-	case GRPIDMAIN_WEAPON_GLOVE:	/* •Ší(‘ÅŒ‚) */
-	case GRPIDMAIN_WEAPON_ETC:		/* •Ší(‚»‚Ì‘¼) */
-	case GRPIDMAIN_ICON32:			/* ƒAƒCƒRƒ“(‚Q”{•\Ž¦) */
+	case GRPIDMAIN_WEAPON_BOW:		/* å¼“ */
+	case GRPIDMAIN_WEAPON_GLOVE:	/* æ­¦å™¨(æ‰“æ’ƒ) */
+	case GRPIDMAIN_WEAPON_ETC:		/* æ­¦å™¨(ãã®ä»–) */
+	case GRPIDMAIN_ICON32:			/* ã‚¢ã‚¤ã‚³ãƒ³(ï¼’å€è¡¨ç¤º) */
 		nRet = 20;
 		break;
-	case GRPIDMAIN_EFFECT32:		/* ƒGƒtƒFƒNƒg(32) */
+	case GRPIDMAIN_EFFECT32:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32) */
 		nRet = 16;
 		break;
-	case GRPIDMAIN_EFCBALLOON:		/* •¬o‚µ */
+	case GRPIDMAIN_EFCBALLOON:		/* å™´å‡ºã— */
 		nRet = 10;
 		break;
-	case GRPIDMAIN_2X2_CHAR:		/* ƒLƒƒƒ‰(32x32)‰æ‘œ */
-	case GRPIDMAIN_2X2_CLOTH:		/* •ž(32x32) */
-	case GRPIDMAIN_2X2_HAIR:		/* ”¯(32x32) */
-	case GRPIDMAIN_2X2_SPCLOTH:		/* “ÁŽê•ž(32x32) */
-	case GRPIDMAIN_2X2_SPHAIR:		/* “ÁŽê”¯(32x32) */
+	case GRPIDMAIN_2X2_CHAR:		/* ã‚­ãƒ£ãƒ©(32x32)ç”»åƒ */
+	case GRPIDMAIN_2X2_CLOTH:		/* æœ(32x32) */
+	case GRPIDMAIN_2X2_HAIR:		/* é«ª(32x32) */
+	case GRPIDMAIN_2X2_SPCLOTH:		/* ç‰¹æ®Šæœ(32x32) */
+	case GRPIDMAIN_2X2_SPHAIR:		/* ç‰¹æ®Šé«ª(32x32) */
 	case GRPIDMAIN_2X2_NPC:			/* NPC(2x2) */
 		nRet = 16;
 		break;
-	case GRPIDMAIN_2X2_EYE:			/* –Ú(32x32) */
-	case GRPIDMAIN_2X2_ARMS:		/* Ž‚¿•¨(2x2) */
+	case GRPIDMAIN_2X2_EYE:			/* ç›®(32x32) */
+	case GRPIDMAIN_2X2_ARMS:		/* æŒã¡ç‰©(2x2) */
 		nRet = 12;
 		break;
-	case GRPIDMAIN_2X2_ARMSSP:		/* “ÁŽêŽ‚¿•¨(2x2) */
-	case GRPIDMAIN_2X2_BOW:			/* ‹|(2x2) */
+	case GRPIDMAIN_2X2_ARMSSP:		/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
+	case GRPIDMAIN_2X2_BOW:			/* å¼“(2x2) */
 		nRet = 11;
 		break;
-	case GRPIDMAIN_2X2_SHIELD:		/* ‚(2x2) */
+	case GRPIDMAIN_2X2_SHIELD:		/* ç›¾(2x2) */
 		nRet = 5;
 		break;
-	case GRPIDMAIN_EFFECT64:		/* ƒGƒtƒFƒNƒg(64) */
+	case GRPIDMAIN_EFFECT64:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64) */
 		nRet = 8;
 		break;
 	}
@@ -2050,9 +2050,9 @@ int CMgrGrpData::GetGrpCountX(DWORD dwGrpIDMain)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetGrpCountY										 */
-/* “à—e		:‰æ‘œ‚Pƒtƒ@ƒCƒ‹‚ÌcŒÂ”‚ðŽæ“¾									 */
-/* “ú•t		:2007/11/24														 */
+/* é–¢æ•°å	:CMgrGrpData::GetGrpCountY										 */
+/* å†…å®¹		:ç”»åƒï¼‘ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¸¦å€‹æ•°ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/11/24														 */
 /* ========================================================================= */
 
 int CMgrGrpData::GetGrpCountY(DWORD dwGrpIDMain)
@@ -2062,43 +2062,43 @@ int CMgrGrpData::GetGrpCountY(DWORD dwGrpIDMain)
 	nRet = 0;
 
 	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:			/* ƒLƒƒƒ‰‰æ‘œ */
+	case GRPIDMAIN_CHAR:			/* ã‚­ãƒ£ãƒ©ç”»åƒ */
 		nRet = 1;
 		break;
-	case GRPIDMAIN_WEAPON:			/* •Ší */
-	case GRPIDMAIN_WEAPON_BOW:		/* ‹| */
-	case GRPIDMAIN_WEAPON_GLOVE:	/* •Ší(‘ÅŒ‚) */
-	case GRPIDMAIN_WEAPON_ETC:		/* •Ší(‚»‚Ì‘¼) */
+	case GRPIDMAIN_WEAPON:			/* æ­¦å™¨ */
+	case GRPIDMAIN_WEAPON_BOW:		/* å¼“ */
+	case GRPIDMAIN_WEAPON_GLOVE:	/* æ­¦å™¨(æ‰“æ’ƒ) */
+	case GRPIDMAIN_WEAPON_ETC:		/* æ­¦å™¨(ãã®ä»–) */
 		nRet = 18;
 		break;
-	case GRPIDMAIN_EFFECT32:		/* ƒGƒtƒFƒNƒg(32) */
+	case GRPIDMAIN_EFFECT32:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(32) */
 		nRet = 16;
 		break;
-	case GRPIDMAIN_NPC:				/* ƒLƒƒƒ‰(NPC) */
+	case GRPIDMAIN_NPC:				/* ã‚­ãƒ£ãƒ©(NPC) */
 		nRet = 32;
 		break;
-	case GRPIDMAIN_EFCBALLOON:		/* •¬o‚µ */
+	case GRPIDMAIN_EFCBALLOON:		/* å™´å‡ºã— */
 		nRet = 15;
 		break;
-	case GRPIDMAIN_2X2_CHAR:		/* ƒLƒƒƒ‰(32x32)‰æ‘œ */
-	case GRPIDMAIN_2X2_CLOTH:		/* •ž(32x32) */
-	case GRPIDMAIN_2X2_EYE:			/* –Ú(32x32) */
-	case GRPIDMAIN_2X2_HAIR:		/* ”¯(32x32) */
-	case GRPIDMAIN_2X2_SPCLOTH:		/* “ÁŽê•ž(32x32) */
-	case GRPIDMAIN_2X2_SPHAIR:		/* “ÁŽê”¯(32x32) */
+	case GRPIDMAIN_2X2_CHAR:		/* ã‚­ãƒ£ãƒ©(32x32)ç”»åƒ */
+	case GRPIDMAIN_2X2_CLOTH:		/* æœ(32x32) */
+	case GRPIDMAIN_2X2_EYE:			/* ç›®(32x32) */
+	case GRPIDMAIN_2X2_HAIR:		/* é«ª(32x32) */
+	case GRPIDMAIN_2X2_SPCLOTH:		/* ç‰¹æ®Šæœ(32x32) */
+	case GRPIDMAIN_2X2_SPHAIR:		/* ç‰¹æ®Šé«ª(32x32) */
 	case GRPIDMAIN_2X2_NPC:			/* NPC(2x2) */
 		nRet = 8;
 		break;
-	case GRPIDMAIN_2X2_ARMS:		/* Ž‚¿•¨(2x2) */
-	case GRPIDMAIN_2X2_SHIELD:		/* ‚(2x2) */
-	case GRPIDMAIN_2X2_ARMSSP:		/* “ÁŽêŽ‚¿•¨(2x2) */
-	case GRPIDMAIN_2X2_BOW:			/* ‹|(2x2) */
+	case GRPIDMAIN_2X2_ARMS:		/* æŒã¡ç‰©(2x2) */
+	case GRPIDMAIN_2X2_SHIELD:		/* ç›¾(2x2) */
+	case GRPIDMAIN_2X2_ARMSSP:		/* ç‰¹æ®ŠæŒã¡ç‰©(2x2) */
+	case GRPIDMAIN_2X2_BOW:			/* å¼“(2x2) */
 		nRet = 25;
 		break;
-	case GRPIDMAIN_EFFECT64:		/* ƒGƒtƒFƒNƒg(64) */
+	case GRPIDMAIN_EFFECT64:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(64) */
 		nRet = 8;
 		break;
-	case GRPIDMAIN_ICON32:			/* ƒAƒCƒRƒ“(‚Q”{•\Ž¦) */
+	case GRPIDMAIN_ICON32:			/* ã‚¢ã‚¤ã‚³ãƒ³(ï¼’å€è¡¨ç¤º) */
 		nRet = 20;
 		break;
 	}
@@ -2108,16 +2108,16 @@ int CMgrGrpData::GetGrpCountY(DWORD dwGrpIDMain)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CMgrGrpData::GetGrpPos											 */
-/* “à—e		:Žw’è‰æ‘œ‚ÌˆÊ’u‚ðŽæ“¾											 */
-/* “ú•t		:2007/11/24														 */
+/* é–¢æ•°å	:CMgrGrpData::GetGrpPos											 */
+/* å†…å®¹		:æŒ‡å®šç”»åƒã®ä½ç½®ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/11/24														 */
 /* ========================================================================= */
 
 void CMgrGrpData::GetGrpPos(
-	DWORD dwGrpIDMain,		/* [in] ‰æ‘œIDƒƒCƒ“ */
-	DWORD dwGrpIDSub,		/* [in] ‰æ‘œIDƒTƒu */
-	POINT &ptDst,			/* [ou] ‰æ‘œˆÊ’u */
-	WORD wGrpID)			/* [in] cˆÊ’u‚ð‚¸‚ç‚·ŒÂ” */
+	DWORD dwGrpIDMain,		/* [in] ç”»åƒIDãƒ¡ã‚¤ãƒ³ */
+	DWORD dwGrpIDSub,		/* [in] ç”»åƒIDã‚µãƒ– */
+	POINT &ptDst,			/* [ou] ç”»åƒä½ç½® */
+	WORD wGrpID)			/* [in] ç¸¦ä½ç½®ã‚’ãšã‚‰ã™å€‹æ•° */
 {
 	int nCountX, nCountY, nSize;
 	DWORD dwGrpIDSubTmp;
@@ -2149,9 +2149,9 @@ void CMgrGrpData::GetGrpPos(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:PngReadFunc													 */
-/* “à—e		:PNG“Ç‚Ýž‚Ý—pƒR[ƒ‹ƒoƒbƒNŠÖ”									 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:PngReadFunc													 */
+/* å†…å®¹		:PNGèª­ã¿è¾¼ã¿ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°									 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 static void PngReadFunc(png_struct *Png,png_bytep buf,png_size_t size)
@@ -2163,9 +2163,9 @@ static void PngReadFunc(png_struct *Png,png_bytep buf,png_size_t size)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:Read															 */
-/* “à—e		:PNGƒf[ƒ^‚Ì“Ç‚Ýž‚Ý											 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:Read															 */
+/* å†…å®¹		:PNGãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
@@ -2191,7 +2191,7 @@ BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
 	pDibTmp			= NULL;
 	pDibTmp2		= NULL;
 
-	/* Žw’è‚³‚ê‚½ƒŠƒ\[ƒX‚ð“Ç‚Ýž‚Ý */
+	/* æŒ‡å®šã•ã‚ŒãŸãƒªã‚½ãƒ¼ã‚¹ã‚’èª­ã¿è¾¼ã¿ */
 	HGLOBAL hRes = LoadResource (m_hDll, FindResource (m_hDll, pszName, "PNG"));
 	if (hRes == NULL) {
 		goto Exit;
@@ -2231,7 +2231,7 @@ BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
 	pData	= pDibTmp->GetBits ();
 	pTmp	= pData;
 
-	/* ‚Pƒ‰ƒCƒ“‚¸‚ÂPNGƒf[ƒ^‚ð“Ç‚Ýž‚Þ */
+	/* ï¼‘ãƒ©ã‚¤ãƒ³ãšã¤PNGãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ */
 	for (y = 0; y < (int)Height; y ++) {
 		png_read_row (pPng, pLineBuf, NULL);
 		pTmp = pData + (Height - y - 1) * Width * 4;
@@ -2254,7 +2254,7 @@ BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
 	hDCBmp	= pDibTmp->Lock ();
 	hDCBmp2	= pDibTmp2->Lock ();
 
-	/* Žw’èƒTƒCƒY‚ÉŠg‘å‚µ‚ÄDIB‚ÉƒRƒs[ */
+	/* æŒ‡å®šã‚µã‚¤ã‚ºã«æ‹¡å¤§ã—ã¦DIBã«ã‚³ãƒ”ãƒ¼ */
 	StretchBlt (hDCBmp2, 0, 0, Width * nSize, Height * nSize,
 			hDCBmp, 0, 0, Width, Height, SRCCOPY);
 
@@ -2273,9 +2273,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:Read256														 */
-/* “à—e		:PNGƒf[ƒ^‚Ì“Ç‚Ýž‚Ý											 */
-/* “ú•t		:2008/07/04														 */
+/* é–¢æ•°å	:Read256														 */
+/* å†…å®¹		:PNGãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/07/04														 */
 /* ========================================================================= */
 
 BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
@@ -2300,7 +2300,7 @@ BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
 	pDibTmp			= NULL;
 	pDibTmp2		= NULL;
 
-	/* Žw’è‚³‚ê‚½ƒŠƒ\[ƒX‚ð“Ç‚Ýž‚Ý */
+	/* æŒ‡å®šã•ã‚ŒãŸãƒªã‚½ãƒ¼ã‚¹ã‚’èª­ã¿è¾¼ã¿ */
 	HGLOBAL hRes = LoadResource (m_hDll, FindResource (m_hDll, pszName, "PNG"));
 	if (hRes == NULL) {
 		goto Exit;
@@ -2342,7 +2342,7 @@ BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
 		pDibNew->SetPallet (i, Palette[i].red, Palette[i].green, Palette[i].blue);
 	}
 
-	/* ‚Pƒ‰ƒCƒ“‚¸‚ÂPNGƒf[ƒ^‚ð“Ç‚Ýž‚Þ */
+	/* ï¼‘ãƒ©ã‚¤ãƒ³ãšã¤PNGãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ */
 	for (y = 0; y < (int)Height; y ++) {
 		png_read_row (pPng, pLineBuf, NULL);
 		pTmp = pData + (Height - y - 1) * Width;

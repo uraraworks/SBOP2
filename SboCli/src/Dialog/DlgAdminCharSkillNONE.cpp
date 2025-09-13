@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillNONE.cpp									 */
-/* “à—e			:ƒXƒLƒ‹(–¢İ’è)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharSkillNONE.cpp									 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«(æœªè¨­å®š)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillNONE::DoDataExchange(CDataExchange* pDX)
@@ -38,9 +38,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillNONE::CDlgAdminCharSkillNONE					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillNONE::CDlgAdminCharSkillNONE					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillNONE::CDlgAdminCharSkillNONE(CWnd* pParent /*=NULL*/)
@@ -54,9 +54,9 @@ CDlgAdminCharSkillNONE::CDlgAdminCharSkillNONE(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillNONE::~CDlgAdminCharSkillNONE				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillNONE::~CDlgAdminCharSkillNONE				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillNONE::~CDlgAdminCharSkillNONE()
@@ -65,25 +65,25 @@ CDlgAdminCharSkillNONE::~CDlgAdminCharSkillNONE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillNONE::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillNONE::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillNONE::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (m_nResourceID, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillNONE::Set									 */
-/* “à—e		:İ’è															 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillNONE::Set									 */
+/* å†…å®¹		:è¨­å®š															 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillNONE::Set(CInfoSkillBase *pSrc)
@@ -92,9 +92,9 @@ void CDlgAdminCharSkillNONE::Set(CInfoSkillBase *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillNONE::Get									 */
-/* “à—e		:æ“¾															 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillNONE::Get									 */
+/* å†…å®¹		:å–å¾—															 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillNONE::Get(CInfoSkillBase *pDst)
@@ -103,9 +103,9 @@ void CDlgAdminCharSkillNONE::Get(CInfoSkillBase *pDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillNONE::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/12/07														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillNONE::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/12/07														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharSkillNONE::OnInitDialog()
@@ -117,9 +117,9 @@ BOOL CDlgAdminCharSkillNONE::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillNONE::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2008/06/28														 */
+/* é–¢æ•°å	:CDlgAdminCharSkillNONE::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2008/06/28														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminCharSkillNONE::OnAdminMsg(WPARAM wParam, LPARAM lParam)

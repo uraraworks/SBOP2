@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharMotion.h										 */
-/* “à—e			:ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/10/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharMotion.h										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/10/27													 */
 /* ========================================================================= */
 
 #pragma once
@@ -18,37 +18,37 @@ class CWndSelectGrp;
 class CLibInfoMotion;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharMotion : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharMotion(CWnd* pParent = NULL);			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharMotion();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharMotion(CWnd* pParent = NULL);			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharMotion();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Init	(CMgrData *pMgrData, DWORD dwMotionTypeID, DWORD dwMotionListID, int nGrpIDSub);	/* ‰Šú‰» */
-	void	GetList	(CLibInfoMotion *pDst);								/* æ“¾ */
-	void	SetList	(CLibInfoMotion *pSrc);								/* İ’è */
-
-
-protected:
-	void	RenewSlider		(void);							/* ƒXƒ‰ƒCƒ_[‚ğXV */
-	void	RenewPreview	(void);							/* ƒvƒŒƒrƒ…[‰æ‘œ‚ğXV */
-	void	OnSelectAnime	(void);							/* ƒRƒ}‘I‘ğˆ— */
-	void	Enable			(BOOL bEnable);					/* “ü—Í‹Ö~İ’è */
-	void	Set				(int nNo);						/* ƒ‚[ƒVƒ‡ƒ“î•ñ‚Öİ’è */
-	void	Get				(int nNo);						/* ƒ‚[ƒVƒ‡ƒ“î•ñ‚©‚çæ“¾ */
+	void	Init	(CMgrData *pMgrData, DWORD dwMotionTypeID, DWORD dwMotionListID, int nGrpIDSub);	/* åˆæœŸåŒ– */
+	void	GetList	(CLibInfoMotion *pDst);								/* å–å¾— */
+	void	SetList	(CLibInfoMotion *pSrc);								/* è¨­å®š */
 
 
 protected:
-	int				m_nSelect,				/* ‘I‘ğ’†‚Ì”Ô† */
-					m_nGrpIDSub;			/* ƒOƒ‰ƒtƒBƒbƒNƒTƒuID */
-	DWORD			m_dwMotionTypeID,		/* •ÒW’†‚Ìƒ‚[ƒVƒ‡ƒ“í•ÊID */
-					m_dwMotionListID,		/* •ÒW’†‚Ìƒ‚[ƒVƒ‡ƒ“ƒŠƒXƒgID */
-					m_dwLastTimeAnime;		/* ‘O‰ñ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ŠÔ */
-	CWndSelectGrp	*m_pWndSelectGrp;		/* ‰æ‘œ‘I‘ğƒEƒBƒ“ƒhƒE */
-	CLibInfoMotion	*m_pLibInfoMotion;		/* •ÒW’†‚Ìƒ‚[ƒVƒ‡ƒ“î•ñ */
+	void	RenewSlider		(void);							/* ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’æ›´æ–° */
+	void	RenewPreview	(void);							/* ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”»åƒã‚’æ›´æ–° */
+	void	OnSelectAnime	(void);							/* ã‚³ãƒé¸æŠå‡¦ç† */
+	void	Enable			(BOOL bEnable);					/* å…¥åŠ›ç¦æ­¢è¨­å®š */
+	void	Set				(int nNo);						/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã¸è¨­å®š */
+	void	Get				(int nNo);						/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‹ã‚‰å–å¾— */
+
+
+protected:
+	int				m_nSelect,				/* é¸æŠä¸­ã®ç•ªå· */
+					m_nGrpIDSub;			/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚µãƒ–ID */
+	DWORD			m_dwMotionTypeID,		/* ç·¨é›†ä¸­ã®ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+					m_dwMotionListID,		/* ç·¨é›†ä¸­ã®ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ãƒªã‚¹ãƒˆID */
+					m_dwLastTimeAnime;		/* å‰å›ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ™‚é–“ */
+	CWndSelectGrp	*m_pWndSelectGrp;		/* ç”»åƒé¸æŠã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CLibInfoMotion	*m_pLibInfoMotion;		/* ç·¨é›†ä¸­ã®ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ± */
 
 
 
@@ -98,7 +98,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharMotion)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

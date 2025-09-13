@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketEFFECT_REQ_EFFECTINFO.cpp							 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(ÉGÉtÉFÉNÉgån:ÉGÉtÉFÉNÉgèÓïÒóvãÅ) é¿ëïÉtÉ@ÉCÉã		 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/07/26													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketEFFECT_REQ_EFFECTINFO.cpp							 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Ç®„Éï„Çß„ÇØ„ÉàÁ≥ª:„Ç®„Éï„Çß„ÇØ„ÉàÊÉÖÂ†±Ë¶ÅÊ±Ç) ÂÆüË£Ö„Éï„Ç°„Ç§„É´		 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/07/26													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketEFFECT_REQ_EFFECTINFO.h"
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_REQ_EFFECTINFO::CPacketEFFECT_REQ_EFFECTINFO		 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_REQ_EFFECTINFO::CPacketEFFECT_REQ_EFFECTINFO		 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketEFFECT_REQ_EFFECTINFO::CPacketEFFECT_REQ_EFFECTINFO()
@@ -23,9 +23,9 @@ CPacketEFFECT_REQ_EFFECTINFO::CPacketEFFECT_REQ_EFFECTINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_REQ_EFFECTINFO::~CPacketEFFECT_REQ_EFFECTINFO	 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_REQ_EFFECTINFO::~CPacketEFFECT_REQ_EFFECTINFO	 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 CPacketEFFECT_REQ_EFFECTINFO::~CPacketEFFECT_REQ_EFFECTINFO()
@@ -34,13 +34,13 @@ CPacketEFFECT_REQ_EFFECTINFO::~CPacketEFFECT_REQ_EFFECTINFO()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_REQ_EFFECTINFO::Make								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_REQ_EFFECTINFO::Make								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 void CPacketEFFECT_REQ_EFFECTINFO::Make(
-	DWORD dwEffectID)		/* [in] ÉGÉtÉFÉNÉgID */
+	DWORD dwEffectID)		/* [in] „Ç®„Éï„Çß„ÇØ„ÉàID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -57,16 +57,16 @@ void CPacketEFFECT_REQ_EFFECTINFO::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_EFFECT_REQ_EFFECTINFO;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwEffectID, sizeof (dwEffectID), pDataTmp);	/* ÉGÉtÉFÉNÉgID */
+	CopyMemoryRenew (pDataTmp, &dwEffectID, sizeof (dwEffectID), pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketEFFECT_REQ_EFFECTINFO::Set								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/07/26														 */
+/* Èñ¢Êï∞Âêç	:CPacketEFFECT_REQ_EFFECTINFO::Set								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/07/26														 */
 /* ========================================================================= */
 
 PBYTE CPacketEFFECT_REQ_EFFECTINFO::Set(PBYTE pPacket)
@@ -76,7 +76,7 @@ PBYTE CPacketEFFECT_REQ_EFFECTINFO::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);	/* ÉGÉtÉFÉNÉgID */
+	CopyMemoryRenew (&m_dwEffectID, pDataTmp, sizeof (m_dwEffectID), pDataTmp);	/* „Ç®„Éï„Çß„ÇØ„ÉàID */
 
 	pRet = pDataTmp;
 	return pRet;

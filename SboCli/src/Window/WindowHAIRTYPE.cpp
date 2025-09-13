@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowHAIRTYPE.cpp											 */
-/* “à—e			:”¯Œ^‘I‘ðƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowHAIRTYPE.cpp											 */
+/* å†…å®¹			:é«ªåž‹é¸æŠžã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/04/08													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -15,9 +15,9 @@
 #include "WindowHAIRTYPE.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::CWindowHAIRTYPE								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::CWindowHAIRTYPE								 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 CWindowHAIRTYPE::CWindowHAIRTYPE()
@@ -35,9 +35,9 @@ CWindowHAIRTYPE::CWindowHAIRTYPE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::~CWindowHAIRTYPE								 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::~CWindowHAIRTYPE								 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 CWindowHAIRTYPE::~CWindowHAIRTYPE()
@@ -46,9 +46,9 @@ CWindowHAIRTYPE::~CWindowHAIRTYPE()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 void CWindowHAIRTYPE::Create(CMgrData *pMgrData)
@@ -63,9 +63,9 @@ void CWindowHAIRTYPE::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::Draw											 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::Draw											 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 void CWindowHAIRTYPE::Draw(PCImg32 pDst)
@@ -86,7 +86,7 @@ void CWindowHAIRTYPE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 64, 8, "”¯Œ^", clText);
+	TextOut4 (hDC, 64, 8, "é«ªåž‹", clText);
 	strTmp.Format ("%02d", m_nPos);
 	TextOut4 (hDC, 16, 32, strTmp, clText);
 //	TextOut2 (hDC, 40, 32, m_pMgrData->GetHairTypeName ((WORD)m_nPos), clText);
@@ -105,9 +105,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::TimerProc										 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowHAIRTYPE::TimerProc(void)
@@ -131,9 +131,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::SetType										 */
-/* “à—e		:”¯Œ^‚ðÝ’è														 */
-/* “ú•t		:2007/04/18														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::SetType										 */
+/* å†…å®¹		:é«ªåž‹ã‚’è¨­å®š														 */
+/* æ—¥ä»˜		:2007/04/18														 */
 /* ========================================================================= */
 
 void CWindowHAIRTYPE::SetType(WORD wHairType)
@@ -144,9 +144,9 @@ void CWindowHAIRTYPE::SetType(WORD wHairType)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::GetType										 */
-/* “à—e		:”¯Œ^‚ðŽæ“¾														 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::GetType										 */
+/* å†…å®¹		:é«ªåž‹ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 WORD CWindowHAIRTYPE::GetType(void)
@@ -156,9 +156,9 @@ WORD CWindowHAIRTYPE::GetType(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::OnUp											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(ª)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::OnUp											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†‘)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowHAIRTYPE::OnUp(void)
@@ -187,9 +187,9 @@ BOOL CWindowHAIRTYPE::OnUp(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::OnDown										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(«)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::OnDown										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†“)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowHAIRTYPE::OnDown(void)
@@ -220,9 +220,9 @@ BOOL CWindowHAIRTYPE::OnDown(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::OnLeft										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(©)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::OnLeft										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowHAIRTYPE::OnLeft(void)
@@ -237,9 +237,9 @@ BOOL CWindowHAIRTYPE::OnLeft(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::OnRight										 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(¨)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::OnRight										 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(â†’)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowHAIRTYPE::OnRight(void)
@@ -254,9 +254,9 @@ BOOL CWindowHAIRTYPE::OnRight(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::OnX											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(X)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::OnX											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(X)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowHAIRTYPE::OnX(BOOL bDown)
@@ -278,9 +278,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowHAIRTYPE::OnZ											 */
-/* “à—e		:ƒL[ƒnƒ“ƒhƒ‰(Z)												 */
-/* “ú•t		:2007/04/08														 */
+/* é–¢æ•°å	:CWindowHAIRTYPE::OnZ											 */
+/* å†…å®¹		:ã‚­ãƒ¼ãƒãƒ³ãƒ‰ãƒ©(Z)												 */
+/* æ—¥ä»˜		:2007/04/08														 */
 /* ========================================================================= */
 
 BOOL CWindowHAIRTYPE::OnZ(BOOL bDown)

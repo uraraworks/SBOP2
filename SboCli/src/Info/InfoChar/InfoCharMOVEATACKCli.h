@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharMOVEATACKCli.h										 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(ˆÚ“®‚µ‚ÄUŒ‚)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharMOVEATACKCli.h										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(ç§»å‹•ã—ã¦æ”»æ’ƒ)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/17													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,19 +13,19 @@
 class CInfoMotion;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoCharMOVEATACKCli : public CInfoCharCli
 {
 public:
-			CInfoCharMOVEATACKCli();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoCharMOVEATACKCli();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoCharMOVEATACKCli();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoCharMOVEATACKCli();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	ChgMoveState	(int nMoveState);					/* ˆÚ“®ó‘Ô•ÏX */
-	void	SetViewState	(int nViewState);					/* •\Ž¦ó‘ÔÝ’è */
+	void	ChgMoveState	(int nMoveState);					/* ç§»å‹•çŠ¶æ…‹å¤‰æ›´ */
+	void	SetViewState	(int nViewState);					/* è¡¨ç¤ºçŠ¶æ…‹è¨­å®š */
 
-	CInfoMotion *GetMotionInfo	(int *pnCount = NULL);			/* ƒ‚[ƒVƒ‡ƒ“î•ñ‚ðŽæ“¾ */
+	CInfoMotion *GetMotionInfo	(int *pnCount = NULL);			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’å–å¾— */
 } CInfoCharMOVEATACKCli, *PCInfoCharMOVEATACKCli;
 
 /* Copyright(C)URARA-works 2007 */

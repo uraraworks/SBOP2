@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapPartsEdit.h										 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/05/14													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminMapPartsEdit.h										 */
+/* å†…å®¹			:ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/05/14													 */
 /* ========================================================================= */
 
 #pragma once
@@ -16,39 +16,39 @@ class CWndMapPartsGrp;
 class CInfoMapParts;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 class CDlgAdminMapPartsEdit : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapPartsEdit(CWnd* pParent = NULL);	/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual	~CDlgAdminMapPartsEdit();						/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminMapPartsEdit(CWnd* pParent = NULL);	/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual	~CDlgAdminMapPartsEdit();						/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int DoModal (CMgrData *pMgrData);								/* ƒ‚[ƒ_ƒ‹ƒ_ƒCƒAƒƒO•\¦ */
+	int DoModal (CMgrData *pMgrData);								/* ãƒ¢ãƒ¼ãƒ€ãƒ«ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤º */
 
 
 protected:
-	void	SetData				(void);					/* ƒf[ƒ^‚ğ‰æ–Ê‚É”½‰f */
-	void	GetData				(void);					/* ‰æ–Ê‚©‚çƒf[ƒ^‚ğæ“¾ */
-	void	SetPartsType		(DWORD dwType);			/* ƒp[ƒcí•Ê‚É‰‚¶‚Äƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚ğİ’è */
-	DWORD	GetPartsType		(void);					/* ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚Ìó‘Ô‚É‰‚¶‚Äƒp[ƒcí•Ê‚ğæ“¾ */
-	void	OnSelectAnime		(void);					/* ƒRƒ}‘I‘ğˆ— */
-	void	RenewButtonState	(void);					/* ƒ{ƒ^ƒ“ó‘Ô‚Ìİ’è */
+	void	SetData				(void);					/* ãƒ‡ãƒ¼ã‚¿ã‚’ç”»é¢ã«åæ˜  */
+	void	GetData				(void);					/* ç”»é¢ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	void	SetPartsType		(DWORD dwType);			/* ãƒ‘ãƒ¼ãƒ„ç¨®åˆ¥ã«å¿œã˜ã¦ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã®çŠ¶æ…‹ã‚’è¨­å®š */
+	DWORD	GetPartsType		(void);					/* ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã®çŠ¶æ…‹ã«å¿œã˜ã¦ãƒ‘ãƒ¼ãƒ„ç¨®åˆ¥ã‚’å–å¾— */
+	void	OnSelectAnime		(void);					/* ã‚³ãƒé¸æŠå‡¦ç† */
+	void	RenewButtonState	(void);					/* ãƒœã‚¿ãƒ³çŠ¶æ…‹ã®è¨­å®š */
 
 
 public:
-	int						m_nSelectType,				/* ‚Ç‚¿‚ç‚Ì‰æ‘œ‚ğ‘I‘ğ‚µ‚Ä‚¢‚é‚© */
-							m_nAnimeNo;					/* ƒAƒjƒ[ƒVƒ‡ƒ“’†‚Ì”Ô† */
-	WORD					m_wPartsBase,				/* ‰º’n */
-							m_wPartsPile;				/* d‚Ë‡‚í‚¹ */
-	DWORD					m_dwTimeLastAnime;			/* ÅŒã‚ÉƒAƒjƒ[ƒVƒ‡ƒ“‚µ‚½ŠÔ */
-	SIZE					m_sizeWindow;				/* •\¦ŠJn‚ÌƒEƒBƒ“ƒhƒEƒTƒCƒY */
-	CMgrData				*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData				*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
-	CWndMapPartsAnimeList	*m_pWndMapPartsAnimeList;	/* ƒ}ƒbƒvƒp[ƒcƒAƒjƒ[ƒVƒ‡ƒ“ˆê——ƒEƒBƒ“ƒhƒE */
-	CInfoMapParts			*m_pInfoMapParts;			/* ƒ}ƒbƒvƒp[ƒcî•ñ */
-	CWndMapPartsGrp			*m_pWndMapPartsGrp;			/* ƒ}ƒbƒvƒp[ƒc‰æ‘œˆê—— */
+	int						m_nSelectType,				/* ã©ã¡ã‚‰ã®ç”»åƒã‚’é¸æŠã—ã¦ã„ã‚‹ã‹ */
+							m_nAnimeNo;					/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸­ã®ç•ªå· */
+	WORD					m_wPartsBase,				/* ä¸‹åœ° */
+							m_wPartsPile;				/* é‡ã­åˆã‚ã› */
+	DWORD					m_dwTimeLastAnime;			/* æœ€å¾Œã«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã—ãŸæ™‚é–“ */
+	SIZE					m_sizeWindow;				/* è¡¨ç¤ºé–‹å§‹æ™‚ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º */
+	CMgrData				*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData				*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CWndMapPartsAnimeList	*m_pWndMapPartsAnimeList;	/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä¸€è¦§ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CInfoMapParts			*m_pInfoMapParts;			/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ± */
+	CWndMapPartsGrp			*m_pWndMapPartsGrp;			/* ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒä¸€è¦§ */
 
 
 
@@ -76,7 +76,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminMapPartsEdit)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

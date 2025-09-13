@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_RES_FILELIST.h								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹ƒŠƒXƒg‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/03/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_RES_FILELIST.h								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆå¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/03/08													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoFileList;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketVERSION_RES_FILELIST : public CPacketBase
 {
 public:
-			CPacketVERSION_RES_FILELIST();				/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketVERSION_RES_FILELIST();				/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketVERSION_RES_FILELIST();				/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketVERSION_RES_FILELIST();				/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(CInfoFileList *pSrc);						/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(CInfoFileList *pSrc);						/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	CInfoFileList	*m_pInfo;					/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ */
+	CInfoFileList	*m_pInfo;					/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ± */
 } CPacketVERSION_RES_FILELIST, *PCPacketVERSION_RES_FILELIST;
 
 /* Copyright(C)URARA-works 2006 */

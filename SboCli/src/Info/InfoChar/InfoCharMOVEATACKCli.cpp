@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharMOVEATACKCli.cpp									 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ(ˆÚ“®‚µ‚ÄUŒ‚)ƒNƒ‰ƒCƒAƒ“ƒgƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharMOVEATACKCli.cpp									 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±(ç§»å‹•ã—ã¦æ”»æ’ƒ)ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/09/17													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKCli::CInfoCharMOVEATACKCli					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKCli::CInfoCharMOVEATACKCli					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 CInfoCharMOVEATACKCli::CInfoCharMOVEATACKCli()
@@ -22,16 +22,16 @@ CInfoCharMOVEATACKCli::CInfoCharMOVEATACKCli()
 	m_bSkipMove			= FALSE;
 	m_bMotionDirection	= FALSE;
 
-	m_adwMotionID[CHARMOTIONID_STAND]		= CHARMOTIONLISTID_STAND_SIMPLE;	/* ƒ‚[ƒVƒ‡ƒ“ID(—§‚¿) */
-	m_adwMotionID[CHARMOTIONID_WALK]		= CHARMOTIONLISTID_STAND_SIMPLE;	/* ƒ‚[ƒVƒ‡ƒ“ID(•à‚«) */
-	m_adwMotionID[CHARMOTIONID_BATTLESTAND]	= CHARMOTIONLISTID_STAND_SIMPLE;	/* í“¬—§‚¿ */
+	m_adwMotionID[CHARMOTIONID_STAND]		= CHARMOTIONLISTID_STAND_SIMPLE;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(ç«‹ã¡) */
+	m_adwMotionID[CHARMOTIONID_WALK]		= CHARMOTIONLISTID_STAND_SIMPLE;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(æ­©ã) */
+	m_adwMotionID[CHARMOTIONID_BATTLESTAND]	= CHARMOTIONLISTID_STAND_SIMPLE;	/* æˆ¦é—˜ç«‹ã¡ */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKCli::~CInfoCharMOVEATACKCli					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKCli::~CInfoCharMOVEATACKCli					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 CInfoCharMOVEATACKCli::~CInfoCharMOVEATACKCli()
@@ -40,9 +40,9 @@ CInfoCharMOVEATACKCli::~CInfoCharMOVEATACKCli()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKCli::ChgMoveState							 */
-/* “à—e		:ˆÚ“®ó‘Ô•ÏX													 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKCli::ChgMoveState							 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹å¤‰æ›´													 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
@@ -52,7 +52,7 @@ void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
 	if (nMoveState < 0) {
 		return;
 	}
-	/* í“¬’† */
+	/* æˆ¦é—˜ä¸­ */
 	if (nMoveState == CHARMOVESTATE_BATTLE) {
 		nMoveState = CHARMOVESTATE_MOVE;
 	}
@@ -60,26 +60,26 @@ void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
 	bResult = IsStateMove ();
 	if (bResult) {
 		switch (nMoveState) {
-		case CHARMOVESTATE_STAND:				/* —§‚¿ */
-		case CHARMOVESTATE_BATTLEATACK:			/* í“¬UŒ‚’† */
+		case CHARMOVESTATE_STAND:				/* ç«‹ã¡ */
+		case CHARMOVESTATE_BATTLEATACK:			/* æˆ¦é—˜æ”»æ’ƒä¸­ */
 			AddMovePosQue (nMoveState, -1, -1, -1);
 			return;
-		case CHARMOVESTATE_MOVE:				/* ˆÚ“®’† */
+		case CHARMOVESTATE_MOVE:				/* ç§»å‹•ä¸­ */
 			CInfoCharBase::SetMoveState (nMoveState);
 			return;
 		}
 	}
 	bInitMove = FALSE;
 	switch (nMoveState) {
-	case CHARMOVESTATE_STAND:				/* —§‚¿ */
-	case CHARMOVESTATE_MOVE:				/* ˆÚ“®’† */
+	case CHARMOVESTATE_STAND:				/* ç«‹ã¡ */
+	case CHARMOVESTATE_MOVE:				/* ç§»å‹•ä¸­ */
 		m_dwLastTimeMove = 0;
 		break;
-	case CHARMOVESTATE_DELETEREADY:			/* Á‹Ž€”õ */
-	case CHARMOVESTATE_DELETE:				/* Á‹Ž */
+	case CHARMOVESTATE_DELETEREADY:			/* æ¶ˆåŽ»æº–å‚™ */
+	case CHARMOVESTATE_DELETE:				/* æ¶ˆåŽ» */
 		break;
-	case CHARMOVESTATE_BATTLEMOVE:			/* í“¬ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEATACK:			/* í“¬UŒ‚’† */
+	case CHARMOVESTATE_BATTLEMOVE:			/* æˆ¦é—˜ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEATACK:			/* æˆ¦é—˜æ”»æ’ƒä¸­ */
 		if (nMoveState == CHARMOVESTATE_BATTLEATACK) {
 			bInitMove = TRUE;
 		}
@@ -104,9 +104,9 @@ void CInfoCharMOVEATACKCli::ChgMoveState(int nMoveState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKCli::SetViewState							 */
-/* “à—e		:•\Ž¦ó‘ÔÝ’è													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKCli::SetViewState							 */
+/* å†…å®¹		:è¡¨ç¤ºçŠ¶æ…‹è¨­å®š													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 void CInfoCharMOVEATACKCli::SetViewState(int nViewState)
@@ -117,15 +117,15 @@ void CInfoCharMOVEATACKCli::SetViewState(int nViewState)
 		m_nFadeLevel = 50;
 		return;
 	}
-	/* ƒtƒF[ƒhƒCƒ“EƒtƒF[ƒhƒAƒEƒg‚Í–³‚µ */
+	/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ãƒ»ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã¯ç„¡ã— */
 	m_dwLastTimeViewState = 0;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharMOVEATACKCli::GetMotionInfo							 */
-/* “à—e		:ƒ‚[ƒVƒ‡ƒ“î•ñ‚ðŽæ“¾											 */
-/* “ú•t		:2007/12/23														 */
+/* é–¢æ•°å	:CInfoCharMOVEATACKCli::GetMotionInfo							 */
+/* å†…å®¹		:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/12/23														 */
 /* ========================================================================= */
 
 CInfoMotion *CInfoCharMOVEATACKCli::GetMotionInfo(int *pnCount)

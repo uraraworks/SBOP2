@@ -1,114 +1,114 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoCharBase.cpp											 */
-/* “à—e			:ƒLƒƒƒ‰î•ñŠî’êƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/10/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoCharBase.cpp											 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ±åŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/10/01													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoCharBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"m_nMapX",					/* ƒ}ƒbƒvÀ•W(‰¡) */
-	"m_nMapY",					/* ƒ}ƒbƒvÀ•W(c) */
-	"m_nMoveState",				/* ˆÚ“®ó‘Ô */
-	"m_nMoveType",				/* ˆÚ“®í•Ê */
-	"m_nDirection",				/* Œü‚« */
-	"m_nGrpSize",				/* ‰æ‘œƒTƒCƒY */
-	"m_nSex",					/* «•Ê */
-	"m_nMaxItemCount",			/* Å‘åƒAƒCƒeƒ€Š” */
-	"m_nDropItemAverage",		/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	"m_nMoveAverage",			/* ˆÚ“®Šm—¦ */
-	"m_nMoveAverageBattle",		/* í“¬ˆÚ“®Šm—¦ */
-	"m_wFamilyID",				/* í‘°ID */
-	"m_wGrpIDNPC",				/* ‰æ‘œID(NPC) */
-	"m_wGrpIDCloth",			/* ‰æ‘œID(•) */
-	"m_wGrpIDEye",				/* ‰æ‘œID(–Ú) */
-	"m_wGrpIDEyeColor",			/* ‰æ‘œID(–ÚF) */
-	"m_wGrpIDHairType",			/* ‰æ‘œID(”¯) */
-	"m_wGrpIDHairColor",		/* ‰æ‘œID(”¯F) */
-	"m_wGrpIDSP",				/* ‰æ‘œID(“Áê•) */
-	"m_wGrpIDTmpMain",			/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	"m_wGrpIDTmpSub",			/* ‰æ‘œID(ˆê•:ƒTƒu) */
-	"m_wGrpIDAcce",				/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-	"m_wGrpIDArmsMain",			/* ‰æ‘œID(‚¿•¨:ƒƒCƒ“) */
-	"m_wGrpIDArmsSub",			/* ‰æ‘œID(‚¿•¨:ƒTƒu) */
-	"m_wGrpIDArmsLeftMain",		/* ‰æ‘œID(‚:ƒƒCƒ“) */
-	"m_wGrpIDArmsLeftSub",		/* ‰æ‘œID(‚:ƒTƒu) */
-	"m_dwCharID",				/* ƒLƒƒƒ‰ID */
-	"m_dwMapID",				/* ƒ}ƒbƒvID */
-	"m_dwMotionTypeID",			/* ƒ‚[ƒVƒ‡ƒ“í•ÊID */
-	"m_clName",					/* –¼‘O‚Ì•`‰æF */
-	"m_clSpeak",				/* ”­Œ¾‚Ì•`‰æF */
-	"m_strCharName",			/* ƒLƒƒƒ‰–¼ */
-	"m_strSpeak",				/* ”­Œ¾“à—e */
-	"m_strTalk",				/* ‰ï˜bƒf[ƒ^ */
-	"m_adwItemID",				/* ŠƒAƒCƒeƒ€ */
-	"m_adwSkillID",				/* ŠƒXƒLƒ‹ */
-	"m_bBlock",					/* ‚Ô‚Â‚©‚é”»’è */
-	"m_bPush",					/* ‰Ÿ‚¹‚é”»’è */
-	"m_dwEquipItemIDCloth",		/* ‘•”õƒAƒCƒeƒ€ID:• */
-	"m_dwEquipItemIDAcce1",		/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ1 */
-	"m_dwEquipItemIDAcce2",		/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ2 */
-	"m_dwEquipItemIDArmsRight",	/* ‘•”õƒAƒCƒeƒ€ID:‰Eè */
-	"m_dwEquipItemIDArmsLeft",	/* ‘•”õƒAƒCƒeƒ€ID:¶è */
-	"m_dwEquipItemIDHead",		/* ‘•”õƒAƒCƒeƒ€ID:“ª */
-	"m_wGrpIDInitNPC",			/* ‰Šú‰æ‘œID(NPC) */
-	"m_wGrpIDInitCloth",		/* ‰Šú‰æ‘œID(•) */
-	"m_wGrpIDInitEye",			/* ‰Šú‰æ‘œID(–Ú) */
-	"m_wGrpIDInitEyeColor",		/* ‰Šú‰æ‘œID(–ÚF) */
-	"m_wGrpIDInitHairType",		/* ‰Šú‰æ‘œID(”¯) */
-	"m_wGrpIDInitHairColor",	/* ‰Šú‰æ‘œID(”¯F) */
-	"m_wGrpIDInitSP",			/* ‰Šú‰æ‘œID(“Áê•) */
-	"m_wLevel",					/* ƒŒƒxƒ‹ */
-	"m_wStamina",				/* ƒXƒ^ƒ~ƒi */
-	"m_wPower",					/* ˜r—Í */
-	"m_wStrength",				/* ‘Ì—Í */
-	"m_wMagic",					/* –‚—Í */
-	"m_wSkillful",				/* Ší—p */
-	"m_wAbillityAT",			/* UŒ‚‹Z”\ */
-	"m_wAbillityDF",			/* –hŒä‹Z”\ */
-	"m_wPAtack",				/* UŒ‚—Í */
-	"m_wPDefense",				/* –hŒä—Í */
-	"m_wPMagic",				/* –‚–@—Í */
-	"m_wPMagicDefense",			/* –‚–@–hŒä—Í */
-	"m_wPHitAverage",			/* –½’†—¦ */
-	"m_wPAvoidAverage",			/* ‰ñ”ğ—¦ */
-	"m_wPCriticalAverage",		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	"m_wAttrFire",				/* ‘®«[‰Î] */
-	"m_wAttrWind",				/* ‘®«[•—] */
-	"m_wAttrWater",				/* ‘®«[…] */
-	"m_wAttrEarth",				/* ‘®«[“y] */
-	"m_wAttrLight",				/* ‘®«[Œõ] */
-	"m_wAttrDark",				/* ‘®«[ˆÅ] */
-	"m_dwMoveWait",				/* ˆÚ“®‘Ò‚¿ŠÔ */
-	"m_dwMoveWaitBattle",		/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	"m_dwExp",					/* ŒoŒ±’l */
+	"m_nMapX",					/* ãƒãƒƒãƒ—åº§æ¨™(æ¨ª) */
+	"m_nMapY",					/* ãƒãƒƒãƒ—åº§æ¨™(ç¸¦) */
+	"m_nMoveState",				/* ç§»å‹•çŠ¶æ…‹ */
+	"m_nMoveType",				/* ç§»å‹•ç¨®åˆ¥ */
+	"m_nDirection",				/* å‘ã */
+	"m_nGrpSize",				/* ç”»åƒã‚µã‚¤ã‚º */
+	"m_nSex",					/* æ€§åˆ¥ */
+	"m_nMaxItemCount",			/* æœ€å¤§ã‚¢ã‚¤ãƒ†ãƒ æ‰€æŒæ•° */
+	"m_nDropItemAverage",		/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	"m_nMoveAverage",			/* ç§»å‹•ç¢ºç‡ */
+	"m_nMoveAverageBattle",		/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
+	"m_wFamilyID",				/* ç¨®æ—ID */
+	"m_wGrpIDNPC",				/* ç”»åƒID(NPC) */
+	"m_wGrpIDCloth",			/* ç”»åƒID(æœ) */
+	"m_wGrpIDEye",				/* ç”»åƒID(ç›®) */
+	"m_wGrpIDEyeColor",			/* ç”»åƒID(ç›®è‰²) */
+	"m_wGrpIDHairType",			/* ç”»åƒID(é«ª) */
+	"m_wGrpIDHairColor",		/* ç”»åƒID(é«ªè‰²) */
+	"m_wGrpIDSP",				/* ç”»åƒID(ç‰¹æ®Šæœ) */
+	"m_wGrpIDTmpMain",			/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	"m_wGrpIDTmpSub",			/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
+	"m_wGrpIDAcce",				/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	"m_wGrpIDArmsMain",			/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+	"m_wGrpIDArmsSub",			/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+	"m_wGrpIDArmsLeftMain",		/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+	"m_wGrpIDArmsLeftSub",		/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+	"m_dwCharID",				/* ã‚­ãƒ£ãƒ©ID */
+	"m_dwMapID",				/* ãƒãƒƒãƒ—ID */
+	"m_dwMotionTypeID",			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	"m_clName",					/* åå‰ã®æç”»è‰² */
+	"m_clSpeak",				/* ç™ºè¨€ã®æç”»è‰² */
+	"m_strCharName",			/* ã‚­ãƒ£ãƒ©å */
+	"m_strSpeak",				/* ç™ºè¨€å†…å®¹ */
+	"m_strTalk",				/* ä¼šè©±ãƒ‡ãƒ¼ã‚¿ */
+	"m_adwItemID",				/* æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ  */
+	"m_adwSkillID",				/* æ‰€æŒã‚¹ã‚­ãƒ« */
+	"m_bBlock",					/* ã¶ã¤ã‹ã‚‹åˆ¤å®š */
+	"m_bPush",					/* æŠ¼ã›ã‚‹åˆ¤å®š */
+	"m_dwEquipItemIDCloth",		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:æœ */
+	"m_dwEquipItemIDAcce1",		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+	"m_dwEquipItemIDAcce2",		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª2 */
+	"m_dwEquipItemIDArmsRight",	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å³æ‰‹ */
+	"m_dwEquipItemIDArmsLeft",	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å·¦æ‰‹ */
+	"m_dwEquipItemIDHead",		/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:é ­ */
+	"m_wGrpIDInitNPC",			/* åˆæœŸç”»åƒID(NPC) */
+	"m_wGrpIDInitCloth",		/* åˆæœŸç”»åƒID(æœ) */
+	"m_wGrpIDInitEye",			/* åˆæœŸç”»åƒID(ç›®) */
+	"m_wGrpIDInitEyeColor",		/* åˆæœŸç”»åƒID(ç›®è‰²) */
+	"m_wGrpIDInitHairType",		/* åˆæœŸç”»åƒID(é«ª) */
+	"m_wGrpIDInitHairColor",	/* åˆæœŸç”»åƒID(é«ªè‰²) */
+	"m_wGrpIDInitSP",			/* åˆæœŸç”»åƒID(ç‰¹æ®Šæœ) */
+	"m_wLevel",					/* ãƒ¬ãƒ™ãƒ« */
+	"m_wStamina",				/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	"m_wPower",					/* è…•åŠ› */
+	"m_wStrength",				/* ä½“åŠ› */
+	"m_wMagic",					/* é­”åŠ› */
+	"m_wSkillful",				/* å™¨ç”¨ */
+	"m_wAbillityAT",			/* æ”»æ’ƒæŠ€èƒ½ */
+	"m_wAbillityDF",			/* é˜²å¾¡æŠ€èƒ½ */
+	"m_wPAtack",				/* æ”»æ’ƒåŠ› */
+	"m_wPDefense",				/* é˜²å¾¡åŠ› */
+	"m_wPMagic",				/* é­”æ³•åŠ› */
+	"m_wPMagicDefense",			/* é­”æ³•é˜²å¾¡åŠ› */
+	"m_wPHitAverage",			/* å‘½ä¸­ç‡ */
+	"m_wPAvoidAverage",			/* å›é¿ç‡ */
+	"m_wPCriticalAverage",		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	"m_wAttrFire",				/* å±æ€§[ç«] */
+	"m_wAttrWind",				/* å±æ€§[é¢¨] */
+	"m_wAttrWater",				/* å±æ€§[æ°´] */
+	"m_wAttrEarth",				/* å±æ€§[åœŸ] */
+	"m_wAttrLight",				/* å±æ€§[å…‰] */
+	"m_wAttrDark",				/* å±æ€§[é—‡] */
+	"m_dwMoveWait",				/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	"m_dwMoveWaitBattle",		/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	"m_dwExp",					/* çµŒé¨“å€¤ */
 	"m_dwHP",					/* HP */
-	"m_dwMaxHP",				/* Å‘åHP */
+	"m_dwMaxHP",				/* æœ€å¤§HP */
 	"m_dwSP",					/* SP */
-	"m_dwMaxSP",				/* Å‘åSP */
-	"m_sizeSearchDistance",		/* ô“G”ÍˆÍ */
-	/* NPC”­¶ */
-	"m_dwPutCycle",				/* ”­¶üŠú */
-	"m_nPutMoveType",			/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	"m_nMaxPutCount",			/* “¯”­¶” */
-	"m_nPutAverage",			/* ”­¶Šm—¦ */
-	"m_ptPutArea",				/* ”­¶”ÍˆÍ(”¼Œa) */
+	"m_dwMaxSP",				/* æœ€å¤§SP */
+	"m_sizeSearchDistance",		/* ç­–æ•µç¯„å›² */
+	/* NPCç™ºç”Ÿ */
+	"m_dwPutCycle",				/* ç™ºç”Ÿå‘¨æœŸ */
+	"m_nPutMoveType",			/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	"m_nMaxPutCount",			/* åŒæ™‚ç™ºç”Ÿæ•° */
+	"m_nPutAverage",			/* ç™ºç”Ÿç¢ºç‡ */
+	"m_ptPutArea",				/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::CInfoCharBase									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharBase::CInfoCharBase									 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CInfoCharBase::CInfoCharBase()
@@ -117,7 +117,7 @@ CInfoCharBase::CInfoCharBase()
 	m_bBlock				= FALSE;
 	m_bPush					= FALSE;
 	m_bParentInfo			= TRUE;
-	m_nAtackTarget			= 0;				/* UŒ‚‘ÎÛ */
+	m_nAtackTarget			= 0;				/* æ”»æ’ƒå¯¾è±¡ */
 	m_nAnime				= 0;
 	m_nDirectionBack		= 0;
 	m_nMapX					= 1;
@@ -125,17 +125,17 @@ CInfoCharBase::CInfoCharBase()
 	m_nMoveState			= CHARMOVESTATE_STAND;
 	m_nProcState			= CHARPROCSTATEID_NORMAL;
 	m_nMoveDirection		= -1;
-	m_nLightLevel			= 0;				/* “”‚èƒŒƒxƒ‹ */
+	m_nLightLevel			= 0;				/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
 	m_nMoveType				= CHARMOVETYPE_PC;
 	m_nDirection			= 1;
 	m_nGrpSize				= 16;
 	m_nSex					= SEX_MALE;
 	m_nMaxItemCount			= 25;
 	m_nDropItemAverage		= 0;
-	m_nMoveAverage			= 0;				/* ˆÚ“®Šm—¦ */
-	m_nMoveAverageBattle	= 0;				/* í“¬ˆÚ“®Šm—¦ */
+	m_nMoveAverage			= 0;				/* ç§»å‹•ç¢ºç‡ */
+	m_nMoveAverageBattle	= 0;				/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
 	m_bNPC					= FALSE;
-	m_bChargeAtack			= FALSE;			/* —­‚ßUŒ‚ */
+	m_bChargeAtack			= FALSE;			/* æºœã‚æ”»æ’ƒ */
 	m_wFamilyID				= FAMILYTYPE_HUMAN;
 	m_wGrpIDNPC				= 0;
 	m_wGrpIDCloth			= 0;
@@ -158,29 +158,29 @@ CInfoCharBase::CInfoCharBase()
 	m_wGrpIDInitHairType	= m_wGrpIDHairType;
 	m_wGrpIDInitHairColor	= m_wGrpIDHairColor;
 	m_wGrpIDInitSP			= m_wGrpIDSP;
-	m_wAtackGauge			= 0;					/* ƒAƒ^ƒbƒNƒQ[ƒW */
-	m_wDefenseGauge			= 0;					/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	m_wLevel				= 1;					/* ƒŒƒxƒ‹ */
-	m_wStamina				= 0;					/* ƒXƒ^ƒ~ƒi */
-	m_wPower				= 0;					/* ˜r—Í */
-	m_wStrength				= 0;					/* ‘Ì—Í */
-	m_wMagic				= 0;					/* –‚—Í */
-	m_wSkillful				= 0;					/* Ší—p */
-	m_wAbillityAT			= 0;					/* UŒ‚‹Z”\ */
-	m_wAbillityDF			= 0;					/* –hŒä‹Z”\ */
-	m_wPAtack				= 0;					/* UŒ‚—Í */
-	m_wPDefense				= 0;					/* –hŒä—Í */
-	m_wPMagic				= 0;					/* –‚–@—Í */
-	m_wPMagicDefense		= 0;					/* –‚–@–hŒä—Í */
-	m_wPHitAverage			= 0;					/* –½’†—¦ */
-	m_wPAvoidAverage		= 0;					/* ‰ñ”ğ—¦ */
-	m_wPCriticalAverage		= 0;					/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	m_wAttrFire				= 0;					/* ‘®«[‰Î] */
-	m_wAttrWind				= 0;					/* ‘®«[•—] */
-	m_wAttrWater			= 0;					/* ‘®«[…] */
-	m_wAttrEarth			= 0;					/* ‘®«[“y] */
-	m_wAttrLight			= 0;					/* ‘®«[Œõ] */
-	m_wAttrDark				= 0;					/* ‘®«[ˆÅ] */
+	m_wAtackGauge			= 0;					/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+	m_wDefenseGauge			= 0;					/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	m_wLevel				= 1;					/* ãƒ¬ãƒ™ãƒ« */
+	m_wStamina				= 0;					/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	m_wPower				= 0;					/* è…•åŠ› */
+	m_wStrength				= 0;					/* ä½“åŠ› */
+	m_wMagic				= 0;					/* é­”åŠ› */
+	m_wSkillful				= 0;					/* å™¨ç”¨ */
+	m_wAbillityAT			= 0;					/* æ”»æ’ƒæŠ€èƒ½ */
+	m_wAbillityDF			= 0;					/* é˜²å¾¡æŠ€èƒ½ */
+	m_wPAtack				= 0;					/* æ”»æ’ƒåŠ› */
+	m_wPDefense				= 0;					/* é˜²å¾¡åŠ› */
+	m_wPMagic				= 0;					/* é­”æ³•åŠ› */
+	m_wPMagicDefense		= 0;					/* é­”æ³•é˜²å¾¡åŠ› */
+	m_wPHitAverage			= 0;					/* å‘½ä¸­ç‡ */
+	m_wPAvoidAverage		= 0;					/* å›é¿ç‡ */
+	m_wPCriticalAverage		= 0;					/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	m_wAttrFire				= 0;					/* å±æ€§[ç«] */
+	m_wAttrWind				= 0;					/* å±æ€§[é¢¨] */
+	m_wAttrWater			= 0;					/* å±æ€§[æ°´] */
+	m_wAttrEarth			= 0;					/* å±æ€§[åœŸ] */
+	m_wAttrLight			= 0;					/* å±æ€§[å…‰] */
+	m_wAttrDark				= 0;					/* å±æ€§[é—‡] */
 	m_dwCharID				= 0;
 	m_dwMapID				= 1;
 	m_dwMotionTypeID		= 1;
@@ -192,7 +192,7 @@ CInfoCharBase::CInfoCharBase()
 	m_dwFrontCharID			= 0;
 	m_dwParentCharID		= 0;
 	m_dwTargetCharID		= 0;
-	m_dwLightTime			= 0;					/* “”‚è—LŒøŠÔ */
+	m_dwLightTime			= 0;					/* ç¯ã‚Šæœ‰åŠ¹æ™‚é–“ */
 
 	m_dwEquipItemIDCloth		= 0;
 	m_dwEquipItemIDAcce1		= 0;
@@ -210,12 +210,12 @@ CInfoCharBase::CInfoCharBase()
 
 	ZeroMemory (&m_sizeSearchDistance, sizeof (m_sizeSearchDistance));
 	ZeroMemory (m_adwMotionID, sizeof (m_adwMotionID));
-	m_adwMotionID[CHARMOTIONID_STAND]		= CHARMOTIONLISTID_STAND_UP;		/* ƒ‚[ƒVƒ‡ƒ“ID(—§‚¿) */
-	m_adwMotionID[CHARMOTIONID_WALK]		= CHARMOTIONLISTID_WALK_UP;			/* ƒ‚[ƒVƒ‡ƒ“ID(•à‚«) */
-	m_adwMotionID[CHARMOTIONID_SIT]			= CHARMOTIONLISTID_SIT_UP;			/* ƒ‚[ƒVƒ‡ƒ“ID(À‚è) */
-	m_adwMotionID[CHARMOTIONID_BATTLESTAND]	= CHARMOTIONLISTID_BATTLESTAND_UP;	/* ƒ‚[ƒVƒ‡ƒ“ID(í“¬—§‚¿) */
-	m_adwMotionID[CHARMOTIONID_BATTLEWALK]	= CHARMOTIONLISTID_BATTLEWALK_UP;	/* ƒ‚[ƒVƒ‡ƒ“ID(‚·‚è‘«) */
-	m_adwMotionID[CHARMOTIONID_ATACK]		= CHARMOTIONLISTID_SWING_UP;		/* ƒ‚[ƒVƒ‡ƒ“ID(UŒ‚) */
+	m_adwMotionID[CHARMOTIONID_STAND]		= CHARMOTIONLISTID_STAND_UP;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(ç«‹ã¡) */
+	m_adwMotionID[CHARMOTIONID_WALK]		= CHARMOTIONLISTID_WALK_UP;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(æ­©ã) */
+	m_adwMotionID[CHARMOTIONID_SIT]			= CHARMOTIONLISTID_SIT_UP;			/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(åº§ã‚Š) */
+	m_adwMotionID[CHARMOTIONID_BATTLESTAND]	= CHARMOTIONLISTID_BATTLESTAND_UP;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(æˆ¦é—˜ç«‹ã¡) */
+	m_adwMotionID[CHARMOTIONID_BATTLEWALK]	= CHARMOTIONLISTID_BATTLEWALK_UP;	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(ã™ã‚Šè¶³) */
+	m_adwMotionID[CHARMOTIONID_ATACK]		= CHARMOTIONLISTID_SWING_UP;		/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(æ”»æ’ƒ) */
 
 	m_clName	= RGB (255, 255, 255);
 	m_clSpeak	= RGB (255, 255, 255);
@@ -223,21 +223,21 @@ CInfoCharBase::CInfoCharBase()
 	m_ptViewCharPos.x = m_ptViewCharPos.y = 0;
 	ZeroMemory (&m_ptStartPos, sizeof (m_ptStartPos));
 
-	/* NPC”­¶ */
-	m_dwPutCycle		= 0;				/* ”­¶üŠú */
-	m_nPutMoveType		= 0;				/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	m_nMaxPutCount		= 0;				/* “¯”­¶” */
-	m_nPutAverage		= 0;				/* ”­¶Šm—¦ */
-	m_ptPutArea.x = m_ptPutArea.y = 0;		/* ”­¶”ÍˆÍ(”¼Œa) */
+	/* NPCç™ºç”Ÿ */
+	m_dwPutCycle		= 0;				/* ç™ºç”Ÿå‘¨æœŸ */
+	m_nPutMoveType		= 0;				/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	m_nMaxPutCount		= 0;				/* åŒæ™‚ç™ºç”Ÿæ•° */
+	m_nPutAverage		= 0;				/* ç™ºç”Ÿç¢ºç‡ */
+	m_ptPutArea.x = m_ptPutArea.y = 0;		/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::~CInfoCharBase									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharBase::~CInfoCharBase									 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 CInfoCharBase::~CInfoCharBase()
@@ -246,9 +246,9 @@ CInfoCharBase::~CInfoCharBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetElementNo									 */
-/* “à—e		:—v‘f”Ô†‚ğæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoCharBase::GetElementNo									 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 int CInfoCharBase::GetElementNo(LPCSTR pszName)
@@ -269,9 +269,9 @@ int CInfoCharBase::GetElementNo(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ğæ“¾												 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoCharBase::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoCharBase::GetDataSize(void)
@@ -290,8 +290,8 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += sizeof (m_nSex);
 	dwRet += sizeof (m_nMaxItemCount);
 	dwRet += sizeof (m_nDropItemAverage);
-	dwRet += sizeof (m_nMoveAverage),			/* ˆÚ“®Šm—¦ */
-	dwRet += sizeof (m_nMoveAverageBattle),		/* í“¬ˆÚ“®Šm—¦ */
+	dwRet += sizeof (m_nMoveAverage),			/* ç§»å‹•ç¢ºç‡ */
+	dwRet += sizeof (m_nMoveAverageBattle),		/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
 	dwRet += sizeof (m_wFamilyID);
 	dwRet += sizeof (m_wGrpIDNPC);
 	dwRet += sizeof (m_wGrpIDCloth);
@@ -314,27 +314,27 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += sizeof (m_wGrpIDInitHairType);
 	dwRet += sizeof (m_wGrpIDInitHairColor);
 	dwRet += sizeof (m_wGrpIDInitSP);
-	dwRet += sizeof (m_wLevel);					/* ƒŒƒxƒ‹ */
-	dwRet += sizeof (m_wStamina);				/* ƒXƒ^ƒ~ƒi */
-	dwRet += sizeof (m_wPower);					/* ˜r—Í */
-	dwRet += sizeof (m_wStrength);				/* ‘Ì—Í */
-	dwRet += sizeof (m_wMagic);					/* –‚—Í */
-	dwRet += sizeof (m_wSkillful);				/* Ší—p */
-	dwRet += sizeof (m_wAbillityAT);			/* UŒ‚‹Z”\ */
-	dwRet += sizeof (m_wAbillityDF);			/* –hŒä‹Z”\ */
-	dwRet += sizeof (m_wPAtack);				/* UŒ‚—Í */
-	dwRet += sizeof (m_wPDefense);				/* –hŒä—Í */
-	dwRet += sizeof (m_wPMagic);				/* –‚–@—Í */
-	dwRet += sizeof (m_wPMagicDefense);			/* –‚–@–hŒä—Í */
-	dwRet += sizeof (m_wPHitAverage);			/* –½’†—¦ */
-	dwRet += sizeof (m_wPAvoidAverage);			/* ‰ñ”ğ—¦ */
-	dwRet += sizeof (m_wPCriticalAverage);		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	dwRet += sizeof (m_wAttrFire);				/* ‘®«[‰Î] */
-	dwRet += sizeof (m_wAttrWind);				/* ‘®«[•—] */
-	dwRet += sizeof (m_wAttrWater);				/* ‘®«[…] */
-	dwRet += sizeof (m_wAttrEarth);				/* ‘®«[“y] */
-	dwRet += sizeof (m_wAttrLight);				/* ‘®«[Œõ] */
-	dwRet += sizeof (m_wAttrDark);				/* ‘®«[ˆÅ] */
+	dwRet += sizeof (m_wLevel);					/* ãƒ¬ãƒ™ãƒ« */
+	dwRet += sizeof (m_wStamina);				/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	dwRet += sizeof (m_wPower);					/* è…•åŠ› */
+	dwRet += sizeof (m_wStrength);				/* ä½“åŠ› */
+	dwRet += sizeof (m_wMagic);					/* é­”åŠ› */
+	dwRet += sizeof (m_wSkillful);				/* å™¨ç”¨ */
+	dwRet += sizeof (m_wAbillityAT);			/* æ”»æ’ƒæŠ€èƒ½ */
+	dwRet += sizeof (m_wAbillityDF);			/* é˜²å¾¡æŠ€èƒ½ */
+	dwRet += sizeof (m_wPAtack);				/* æ”»æ’ƒåŠ› */
+	dwRet += sizeof (m_wPDefense);				/* é˜²å¾¡åŠ› */
+	dwRet += sizeof (m_wPMagic);				/* é­”æ³•åŠ› */
+	dwRet += sizeof (m_wPMagicDefense);			/* é­”æ³•é˜²å¾¡åŠ› */
+	dwRet += sizeof (m_wPHitAverage);			/* å‘½ä¸­ç‡ */
+	dwRet += sizeof (m_wPAvoidAverage);			/* å›é¿ç‡ */
+	dwRet += sizeof (m_wPCriticalAverage);		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	dwRet += sizeof (m_wAttrFire);				/* å±æ€§[ç«] */
+	dwRet += sizeof (m_wAttrWind);				/* å±æ€§[é¢¨] */
+	dwRet += sizeof (m_wAttrWater);				/* å±æ€§[æ°´] */
+	dwRet += sizeof (m_wAttrEarth);				/* å±æ€§[åœŸ] */
+	dwRet += sizeof (m_wAttrLight);				/* å±æ€§[å…‰] */
+	dwRet += sizeof (m_wAttrDark);				/* å±æ€§[é—‡] */
 	dwRet += sizeof (m_dwCharID);
 	dwRet += sizeof (m_dwMapID);
 	dwRet += sizeof (m_dwMotionTypeID);
@@ -344,9 +344,9 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += sizeof (m_dwEquipItemIDArmsRight);
 	dwRet += sizeof (m_dwEquipItemIDArmsLeft);
 	dwRet += sizeof (m_dwEquipItemIDHead);
-	dwRet += sizeof (m_dwMoveWait);				/* ˆÚ“®‘Ò‚¿ŠÔ */
-	dwRet += sizeof (m_dwMoveWaitBattle);		/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	dwRet += sizeof (m_dwExp);					/* ŒoŒ±’l */
+	dwRet += sizeof (m_dwMoveWait);				/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	dwRet += sizeof (m_dwMoveWaitBattle);		/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	dwRet += sizeof (m_dwExp);					/* çµŒé¨“å€¤ */
 	dwRet += sizeof (m_dwHP);
 	dwRet += sizeof (m_dwMaxHP);
 	dwRet += sizeof (m_dwSP);
@@ -358,22 +358,22 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += (m_strTalk.GetLength () + 1);
 	dwRet += ((m_adwItemID.GetSize () + 1) * sizeof (DWORD));
 	dwRet += ((m_adwSkillID.GetSize () + 1) * sizeof (DWORD));
-	dwRet += sizeof (m_sizeSearchDistance);		/* ô“G”ÍˆÍ */
-	/* NPC”­¶ */
-	dwRet += sizeof (m_dwPutCycle);				/* ”­¶üŠú */
-	dwRet += sizeof (m_nPutMoveType);			/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	dwRet += sizeof (m_nMaxPutCount);			/* “¯”­¶” */
-	dwRet += sizeof (m_nPutAverage);			/* ”­¶Šm—¦ */
-	dwRet += sizeof (m_ptPutArea);				/* ”­¶”ÍˆÍ(”¼Œa) */
+	dwRet += sizeof (m_sizeSearchDistance);		/* ç­–æ•µç¯„å›² */
+	/* NPCç™ºç”Ÿ */
+	dwRet += sizeof (m_dwPutCycle);				/* ç™ºç”Ÿå‘¨æœŸ */
+	dwRet += sizeof (m_nPutMoveType);			/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	dwRet += sizeof (m_nMaxPutCount);			/* åŒæ™‚ç™ºç”Ÿæ•° */
+	dwRet += sizeof (m_nPutAverage);			/* ç™ºç”Ÿç¢ºç‡ */
+	dwRet += sizeof (m_ptPutArea);				/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetDataSizeNo									 */
-/* “à—e		:w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoCharBase::GetDataSizeNo									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoCharBase::GetDataSizeNo(int nNo)
@@ -391,9 +391,9 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 5:		dwRet = sizeof (m_nGrpSize);				break;
 	case 6:		dwRet = sizeof (m_nSex);					break;
 	case 7:		dwRet = sizeof (m_nMaxItemCount);			break;
-	case 8:		dwRet = sizeof (m_nDropItemAverage);		break;		/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	case 9:		dwRet = sizeof (m_nMoveAverage);			break;		/* ˆÚ“®Šm—¦ */
-	case 10:	dwRet = sizeof (m_nMoveAverageBattle);		break;		/* í“¬ˆÚ“®Šm—¦ */
+	case 8:		dwRet = sizeof (m_nDropItemAverage);		break;		/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	case 9:		dwRet = sizeof (m_nMoveAverage);			break;		/* ç§»å‹•ç¢ºç‡ */
+	case 10:	dwRet = sizeof (m_nMoveAverageBattle);		break;		/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
 	case 11:	dwRet = sizeof (m_wFamilyID);				break;
 	case 12:	dwRet = sizeof (m_wGrpIDNPC);				break;
 	case 13:	dwRet = sizeof (m_wGrpIDCloth);				break;
@@ -402,8 +402,8 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 16:	dwRet = sizeof (m_wGrpIDHairType);			break;
 	case 17:	dwRet = sizeof (m_wGrpIDHairColor);			break;
 	case 18:	dwRet = sizeof (m_wGrpIDSP);				break;
-	case 19:	dwRet = sizeof (m_wGrpIDTmpMain);			break;		/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	case 20:	dwRet = sizeof (m_wGrpIDTmpSub);			break;		/* ‰æ‘œID(ˆê•:ƒTƒu) */
+	case 19:	dwRet = sizeof (m_wGrpIDTmpMain);			break;		/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	case 20:	dwRet = sizeof (m_wGrpIDTmpSub);			break;		/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 	case 21:	dwRet = sizeof (m_wGrpIDAcce);				break;
 	case 22:	dwRet = sizeof (m_wGrpIDArmsMain);			break;
 	case 23:	dwRet = sizeof (m_wGrpIDArmsSub);			break;
@@ -434,41 +434,41 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 48:	dwRet = sizeof (m_wGrpIDInitHairType);		break;
 	case 49:	dwRet = sizeof (m_wGrpIDInitHairColor);		break;
 	case 50:	dwRet = sizeof (m_wGrpIDInitSP);			break;
-	case 51:	dwRet = sizeof (m_wLevel);					break;	/* ƒŒƒxƒ‹ */
-	case 52:	dwRet = sizeof (m_wStamina);				break;	/* ƒXƒ^ƒ~ƒi */
-	case 53:	dwRet = sizeof (m_wPower);					break;	/* ˜r—Í */
-	case 54:	dwRet = sizeof (m_wStrength);				break;	/* ‘Ì—Í */
-	case 55:	dwRet = sizeof (m_wMagic);					break;	/* –‚—Í */
-	case 56:	dwRet = sizeof (m_wSkillful);				break;	/* Ší—p */
-	case 57:	dwRet = sizeof (m_wAbillityAT);				break;	/* UŒ‚‹Z”\ */
-	case 58:	dwRet = sizeof (m_wAbillityDF);				break;	/* –hŒä‹Z”\ */
-	case 59:	dwRet = sizeof (m_wPAtack);					break;	/* UŒ‚—Í */
-	case 60:	dwRet = sizeof (m_wPDefense);				break;	/* –hŒä—Í */
-	case 61:	dwRet = sizeof (m_wPMagic);					break;	/* –‚–@—Í */
-	case 62:	dwRet = sizeof (m_wPMagicDefense);			break;	/* –‚–@–hŒä—Í */
-	case 63:	dwRet = sizeof (m_wPHitAverage);			break;	/* –½’†—¦ */
-	case 64:	dwRet = sizeof (m_wPAvoidAverage);			break;	/* ‰ñ”ğ—¦ */
-	case 65:	dwRet = sizeof (m_wPCriticalAverage);		break;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	case 66:	dwRet = sizeof (m_wAttrFire);				break;	/* ‘®«[‰Î] */
-	case 67:	dwRet = sizeof (m_wAttrWind);				break;	/* ‘®«[•—] */
-	case 68:	dwRet = sizeof (m_wAttrWater);				break;	/* ‘®«[…] */
-	case 69:	dwRet = sizeof (m_wAttrEarth);				break;	/* ‘®«[“y] */
-	case 70:	dwRet = sizeof (m_wAttrLight);				break;	/* ‘®«[Œõ] */
-	case 71:	dwRet = sizeof (m_wAttrDark);				break;	/* ‘®«[ˆÅ] */
-	case 72:	dwRet = sizeof (m_dwMoveWait);				break;	/* ˆÚ“®‘Ò‚¿ŠÔ */
-	case 73:	dwRet = sizeof (m_dwMoveWaitBattle);		break;	/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	case 74:	dwRet = sizeof (m_dwExp);					break;	/* ŒoŒ±’l */
+	case 51:	dwRet = sizeof (m_wLevel);					break;	/* ãƒ¬ãƒ™ãƒ« */
+	case 52:	dwRet = sizeof (m_wStamina);				break;	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	case 53:	dwRet = sizeof (m_wPower);					break;	/* è…•åŠ› */
+	case 54:	dwRet = sizeof (m_wStrength);				break;	/* ä½“åŠ› */
+	case 55:	dwRet = sizeof (m_wMagic);					break;	/* é­”åŠ› */
+	case 56:	dwRet = sizeof (m_wSkillful);				break;	/* å™¨ç”¨ */
+	case 57:	dwRet = sizeof (m_wAbillityAT);				break;	/* æ”»æ’ƒæŠ€èƒ½ */
+	case 58:	dwRet = sizeof (m_wAbillityDF);				break;	/* é˜²å¾¡æŠ€èƒ½ */
+	case 59:	dwRet = sizeof (m_wPAtack);					break;	/* æ”»æ’ƒåŠ› */
+	case 60:	dwRet = sizeof (m_wPDefense);				break;	/* é˜²å¾¡åŠ› */
+	case 61:	dwRet = sizeof (m_wPMagic);					break;	/* é­”æ³•åŠ› */
+	case 62:	dwRet = sizeof (m_wPMagicDefense);			break;	/* é­”æ³•é˜²å¾¡åŠ› */
+	case 63:	dwRet = sizeof (m_wPHitAverage);			break;	/* å‘½ä¸­ç‡ */
+	case 64:	dwRet = sizeof (m_wPAvoidAverage);			break;	/* å›é¿ç‡ */
+	case 65:	dwRet = sizeof (m_wPCriticalAverage);		break;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	case 66:	dwRet = sizeof (m_wAttrFire);				break;	/* å±æ€§[ç«] */
+	case 67:	dwRet = sizeof (m_wAttrWind);				break;	/* å±æ€§[é¢¨] */
+	case 68:	dwRet = sizeof (m_wAttrWater);				break;	/* å±æ€§[æ°´] */
+	case 69:	dwRet = sizeof (m_wAttrEarth);				break;	/* å±æ€§[åœŸ] */
+	case 70:	dwRet = sizeof (m_wAttrLight);				break;	/* å±æ€§[å…‰] */
+	case 71:	dwRet = sizeof (m_wAttrDark);				break;	/* å±æ€§[é—‡] */
+	case 72:	dwRet = sizeof (m_dwMoveWait);				break;	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	case 73:	dwRet = sizeof (m_dwMoveWaitBattle);		break;	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	case 74:	dwRet = sizeof (m_dwExp);					break;	/* çµŒé¨“å€¤ */
 	case 75:	dwRet = sizeof (m_dwHP);					break;
 	case 76:	dwRet = sizeof (m_dwMaxHP);					break;
 	case 77:	dwRet = sizeof (m_dwSP);					break;
 	case 78:	dwRet = sizeof (m_dwMaxSP);					break;
-	case 79:	dwRet = sizeof (m_sizeSearchDistance);		break;	/* ô“G”ÍˆÍ */
-	/* NPC”­¶ */
-	case 80:	dwRet = sizeof (m_dwPutCycle);				break;	/* ”­¶üŠú */
-	case 81:	dwRet = sizeof (m_nPutMoveType);			break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	case 82:	dwRet = sizeof (m_nMaxPutCount);			break;	/* “¯”­¶” */
-	case 83:	dwRet = sizeof (m_nPutAverage);				break;	/* ”­¶Šm—¦ */
-	case 84:	dwRet = sizeof (m_ptPutArea);				break;	/* ”­¶”ÍˆÍ(”¼Œa) */
+	case 79:	dwRet = sizeof (m_sizeSearchDistance);		break;	/* ç­–æ•µç¯„å›² */
+	/* NPCç™ºç”Ÿ */
+	case 80:	dwRet = sizeof (m_dwPutCycle);				break;	/* ç™ºç”Ÿå‘¨æœŸ */
+	case 81:	dwRet = sizeof (m_nPutMoveType);			break;	/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	case 82:	dwRet = sizeof (m_nMaxPutCount);			break;	/* åŒæ™‚ç™ºç”Ÿæ•° */
+	case 83:	dwRet = sizeof (m_nPutAverage);				break;	/* ç™ºç”Ÿç¢ºç‡ */
+	case 84:	dwRet = sizeof (m_ptPutArea);				break;	/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 	}
 
 	return dwRet;
@@ -476,9 +476,9 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetName											 */
-/* “à—e		:—v‘f–¼‚ğæ“¾													 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoCharBase::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 LPCSTR CInfoCharBase::GetName(int nNo)
@@ -488,9 +488,9 @@ LPCSTR CInfoCharBase::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetWriteData									 */
-/* “à—e		:w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾									 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoCharBase::GetWriteData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
@@ -518,9 +518,9 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 5:		pSrc = (PBYTE)&m_nGrpSize;				break;
 	case 6:		pSrc = (PBYTE)&m_nSex;					break;
 	case 7:		pSrc = (PBYTE)&m_nMaxItemCount;			break;
-	case 8:		pSrc = (PBYTE)&m_nDropItemAverage;		break;		/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	case 9:		pSrc = (PBYTE)&m_nMoveAverage;			break;		/* ˆÚ“®Šm—¦ */
-	case 10:	pSrc = (PBYTE)&m_nMoveAverageBattle;	break;		/* æ“ªˆÚ“®Šm—¦ */
+	case 8:		pSrc = (PBYTE)&m_nDropItemAverage;		break;		/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	case 9:		pSrc = (PBYTE)&m_nMoveAverage;			break;		/* ç§»å‹•ç¢ºç‡ */
+	case 10:	pSrc = (PBYTE)&m_nMoveAverageBattle;	break;		/* å…ˆé ­æ™‚ç§»å‹•ç¢ºç‡ */
 	case 11:	pSrc = (PBYTE)&m_wFamilyID;				break;
 	case 12:	pSrc = (PBYTE)&m_wGrpIDNPC;				break;
 	case 13:	pSrc = (PBYTE)&m_wGrpIDCloth;			break;
@@ -529,8 +529,8 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 16:	pSrc = (PBYTE)&m_wGrpIDHairType;		break;
 	case 17:	pSrc = (PBYTE)&m_wGrpIDHairColor;		break;
 	case 18:	pSrc = (PBYTE)&m_wGrpIDSP;				break;
-	case 19:	pSrc = (PBYTE)&m_wGrpIDTmpMain;			break;		/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	case 20:	pSrc = (PBYTE)&m_wGrpIDTmpSub;			break;		/* ‰æ‘œID(ˆê•:ƒTƒu) */
+	case 19:	pSrc = (PBYTE)&m_wGrpIDTmpMain;			break;		/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	case 20:	pSrc = (PBYTE)&m_wGrpIDTmpSub;			break;		/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 	case 21:	pSrc = (PBYTE)&m_wGrpIDAcce;			break;
 	case 22:	pSrc = (PBYTE)&m_wGrpIDArmsMain;		break;
 	case 23:	pSrc = (PBYTE)&m_wGrpIDArmsSub;			break;
@@ -581,41 +581,41 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 48:	pSrc = (PBYTE)&m_wGrpIDInitHairType;		break;
 	case 49:	pSrc = (PBYTE)&m_wGrpIDInitHairColor;		break;
 	case 50:	pSrc = (PBYTE)&m_wGrpIDInitSP;				break;
-	case 51:	pSrc = (PBYTE)&m_wLevel;					break;	/* ƒŒƒxƒ‹ */
-	case 52:	pSrc = (PBYTE)&m_wStamina;					break;	/* ƒXƒ^ƒ~ƒi */
-	case 53:	pSrc = (PBYTE)&m_wPower;					break;	/* ˜r—Í */
-	case 54:	pSrc = (PBYTE)&m_wStrength;					break;	/* ‘Ì—Í */
-	case 55:	pSrc = (PBYTE)&m_wMagic;					break;	/* –‚—Í */
-	case 56:	pSrc = (PBYTE)&m_wSkillful;					break;	/* Ší—p */
-	case 57:	pSrc = (PBYTE)&m_wAbillityAT;				break;	/* UŒ‚‹Z”\ */
-	case 58:	pSrc = (PBYTE)&m_wAbillityDF;				break;	/* –hŒä‹Z”\ */
-	case 59:	pSrc = (PBYTE)&m_wPAtack;					break;	/* UŒ‚—Í */
-	case 60:	pSrc = (PBYTE)&m_wPDefense;					break;	/* –hŒä—Í */
-	case 61:	pSrc = (PBYTE)&m_wPMagic;					break;	/* –‚–@—Í */
-	case 62:	pSrc = (PBYTE)&m_wPMagicDefense;			break;	/* –‚–@–hŒä—Í */
-	case 63:	pSrc = (PBYTE)&m_wPHitAverage;				break;	/* –½’†—¦ */
-	case 64:	pSrc = (PBYTE)&m_wPAvoidAverage;			break;	/* ‰ñ”ğ—¦ */
-	case 65:	pSrc = (PBYTE)&m_wPCriticalAverage;			break;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	case 66:	pSrc = (PBYTE)&m_wAttrFire;					break;	/* ‘®«[‰Î] */
-	case 67:	pSrc = (PBYTE)&m_wAttrWind;					break;	/* ‘®«[•—] */
-	case 68:	pSrc = (PBYTE)&m_wAttrWater;				break;	/* ‘®«[…] */
-	case 69:	pSrc = (PBYTE)&m_wAttrEarth;				break;	/* ‘®«[“y] */
-	case 70:	pSrc = (PBYTE)&m_wAttrLight;				break;	/* ‘®«[Œõ] */
-	case 71:	pSrc = (PBYTE)&m_wAttrDark;					break;	/* ‘®«[ˆÅ] */
-	case 72:	pSrc = (PBYTE)&m_dwMoveWait;				break;	/* ˆÚ“®‘Ò‚¿ŠÔ */
-	case 73:	pSrc = (PBYTE)&m_dwMoveWaitBattle;			break;	/* æ“ªˆÚ“®‘Ò‚¿ŠÔ */
-	case 74:	pSrc = (PBYTE)&m_dwExp;						break;	/* ŒoŒ±’l */
+	case 51:	pSrc = (PBYTE)&m_wLevel;					break;	/* ãƒ¬ãƒ™ãƒ« */
+	case 52:	pSrc = (PBYTE)&m_wStamina;					break;	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	case 53:	pSrc = (PBYTE)&m_wPower;					break;	/* è…•åŠ› */
+	case 54:	pSrc = (PBYTE)&m_wStrength;					break;	/* ä½“åŠ› */
+	case 55:	pSrc = (PBYTE)&m_wMagic;					break;	/* é­”åŠ› */
+	case 56:	pSrc = (PBYTE)&m_wSkillful;					break;	/* å™¨ç”¨ */
+	case 57:	pSrc = (PBYTE)&m_wAbillityAT;				break;	/* æ”»æ’ƒæŠ€èƒ½ */
+	case 58:	pSrc = (PBYTE)&m_wAbillityDF;				break;	/* é˜²å¾¡æŠ€èƒ½ */
+	case 59:	pSrc = (PBYTE)&m_wPAtack;					break;	/* æ”»æ’ƒåŠ› */
+	case 60:	pSrc = (PBYTE)&m_wPDefense;					break;	/* é˜²å¾¡åŠ› */
+	case 61:	pSrc = (PBYTE)&m_wPMagic;					break;	/* é­”æ³•åŠ› */
+	case 62:	pSrc = (PBYTE)&m_wPMagicDefense;			break;	/* é­”æ³•é˜²å¾¡åŠ› */
+	case 63:	pSrc = (PBYTE)&m_wPHitAverage;				break;	/* å‘½ä¸­ç‡ */
+	case 64:	pSrc = (PBYTE)&m_wPAvoidAverage;			break;	/* å›é¿ç‡ */
+	case 65:	pSrc = (PBYTE)&m_wPCriticalAverage;			break;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	case 66:	pSrc = (PBYTE)&m_wAttrFire;					break;	/* å±æ€§[ç«] */
+	case 67:	pSrc = (PBYTE)&m_wAttrWind;					break;	/* å±æ€§[é¢¨] */
+	case 68:	pSrc = (PBYTE)&m_wAttrWater;				break;	/* å±æ€§[æ°´] */
+	case 69:	pSrc = (PBYTE)&m_wAttrEarth;				break;	/* å±æ€§[åœŸ] */
+	case 70:	pSrc = (PBYTE)&m_wAttrLight;				break;	/* å±æ€§[å…‰] */
+	case 71:	pSrc = (PBYTE)&m_wAttrDark;					break;	/* å±æ€§[é—‡] */
+	case 72:	pSrc = (PBYTE)&m_dwMoveWait;				break;	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	case 73:	pSrc = (PBYTE)&m_dwMoveWaitBattle;			break;	/* å…ˆé ­æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	case 74:	pSrc = (PBYTE)&m_dwExp;						break;	/* çµŒé¨“å€¤ */
 	case 75:	pSrc = (PBYTE)&m_dwHP;						break;
 	case 76:	pSrc = (PBYTE)&m_dwMaxHP;					break;
 	case 77:	pSrc = (PBYTE)&m_dwSP;						break;
 	case 78:	pSrc = (PBYTE)&m_dwMaxSP;					break;
-	case 79:	pSrc = (PBYTE)&m_sizeSearchDistance;		break;	/* ô“G”ÍˆÍ */
-	/* NPC”­¶ */
-	case 80:	pSrc = (PBYTE)&m_dwPutCycle;				break;	/* ”­¶üŠú */
-	case 81:	pSrc = (PBYTE)&m_nPutMoveType;				break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	case 82:	pSrc = (PBYTE)&m_nMaxPutCount;				break;	/* “¯”­¶” */
-	case 83:	pSrc = (PBYTE)&m_nPutAverage;				break;	/* ”­¶Šm—¦ */
-	case 84:	pSrc = (PBYTE)&m_ptPutArea;					break;	/* ”­¶”ÍˆÍ(”¼Œa) */
+	case 79:	pSrc = (PBYTE)&m_sizeSearchDistance;		break;	/* ç­–æ•µç¯„å›² */
+	/* NPCç™ºç”Ÿ */
+	case 80:	pSrc = (PBYTE)&m_dwPutCycle;				break;	/* ç™ºç”Ÿå‘¨æœŸ */
+	case 81:	pSrc = (PBYTE)&m_nPutMoveType;				break;	/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	case 82:	pSrc = (PBYTE)&m_nMaxPutCount;				break;	/* åŒæ™‚ç™ºç”Ÿæ•° */
+	case 83:	pSrc = (PBYTE)&m_nPutAverage;				break;	/* ç™ºç”Ÿç¢ºç‡ */
+	case 84:	pSrc = (PBYTE)&m_ptPutArea;					break;	/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 	}
 
 	if (pSrc) {
@@ -628,14 +628,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::ReadElementData									 */
-/* “à—e		:w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ										 */
-/* “ú•t		:2007/04/30														 */
+/* é–¢æ•°å	:CInfoCharBase::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/04/30														 */
 /* ========================================================================= */
 
 DWORD CInfoCharBase::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚İ‚İŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	PBYTE pDst, pTmp;
 	DWORD dwSize, dwTmp;
@@ -652,9 +652,9 @@ DWORD CInfoCharBase::ReadElementData(
 	case 5:		pDst = (PBYTE)&m_nGrpSize;				dwSize = sizeof (m_nGrpSize);			break;
 	case 6:		pDst = (PBYTE)&m_nSex;					dwSize = sizeof (m_nSex);				break;
 	case 7:		pDst = (PBYTE)&m_nMaxItemCount;			dwSize = sizeof (m_nMaxItemCount);		break;
-	case 8:		pDst = (PBYTE)&m_nDropItemAverage;		dwSize = sizeof (m_nDropItemAverage);	break;	/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	case 9:		pDst = (PBYTE)&m_nMoveAverage;			dwSize = sizeof (m_nMoveAverage);		break;	/* ˆÚ“®Šm—¦ */
-	case 10:	pDst = (PBYTE)&m_nMoveAverageBattle;	dwSize = sizeof (m_nMoveAverageBattle);	break;	/* í“¬ˆÚ“®Šm—¦ */
+	case 8:		pDst = (PBYTE)&m_nDropItemAverage;		dwSize = sizeof (m_nDropItemAverage);	break;	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	case 9:		pDst = (PBYTE)&m_nMoveAverage;			dwSize = sizeof (m_nMoveAverage);		break;	/* ç§»å‹•ç¢ºç‡ */
+	case 10:	pDst = (PBYTE)&m_nMoveAverageBattle;	dwSize = sizeof (m_nMoveAverageBattle);	break;	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
 	case 11:	pDst = (PBYTE)&m_wFamilyID;				dwSize = sizeof (m_wFamilyID);			break;
 	case 12:	pDst = (PBYTE)&m_wGrpIDNPC;				dwSize = sizeof (m_wGrpIDNPC);			break;
 	case 13:	pDst = (PBYTE)&m_wGrpIDCloth;			dwSize = sizeof (m_wGrpIDCloth);		break;
@@ -663,8 +663,8 @@ DWORD CInfoCharBase::ReadElementData(
 	case 16:	pDst = (PBYTE)&m_wGrpIDHairType;		dwSize = sizeof (m_wGrpIDHairType);		break;
 	case 17:	pDst = (PBYTE)&m_wGrpIDHairColor;		dwSize = sizeof (m_wGrpIDHairColor);	break;
 	case 18:	pDst = (PBYTE)&m_wGrpIDSP;				dwSize = sizeof (m_wGrpIDSP);			break;
-	case 19:	pDst = (PBYTE)&m_wGrpIDTmpMain;			dwSize = sizeof (m_wGrpIDTmpMain);		break;	/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	case 20:	pDst = (PBYTE)&m_wGrpIDTmpSub;			dwSize = sizeof (m_wGrpIDTmpSub);		break;	/* ‰æ‘œID(ˆê•:ƒTƒu) */
+	case 19:	pDst = (PBYTE)&m_wGrpIDTmpMain;			dwSize = sizeof (m_wGrpIDTmpMain);		break;	/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	case 20:	pDst = (PBYTE)&m_wGrpIDTmpSub;			dwSize = sizeof (m_wGrpIDTmpSub);		break;	/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 	case 21:	pDst = (PBYTE)&m_wGrpIDAcce;			dwSize = sizeof (m_wGrpIDAcce);			break;
 	case 22:	pDst = (PBYTE)&m_wGrpIDArmsMain;		dwSize = sizeof (m_wGrpIDArmsMain);		break;
 	case 23:	pDst = (PBYTE)&m_wGrpIDArmsSub;			dwSize = sizeof (m_wGrpIDArmsSub);		break;
@@ -728,41 +728,41 @@ DWORD CInfoCharBase::ReadElementData(
 	case 48:	pDst = (PBYTE)&m_wGrpIDInitHairType;		dwSize = sizeof (m_wGrpIDInitHairType);		break;
 	case 49:	pDst = (PBYTE)&m_wGrpIDInitHairColor;		dwSize = sizeof (m_wGrpIDInitHairColor);	break;
 	case 50:	pDst = (PBYTE)&m_wGrpIDInitSP;				dwSize = sizeof (m_wGrpIDInitSP);			break;
-	case 51:	pDst = (PBYTE)&m_wLevel;					dwSize = sizeof (m_wLevel);					break;	/* ƒŒƒxƒ‹ */
-	case 52:	pDst = (PBYTE)&m_wStamina;					dwSize = sizeof (m_wStamina);				break;	/* ƒXƒ^ƒ~ƒi */
-	case 53:	pDst = (PBYTE)&m_wPower;					dwSize = sizeof (m_wPower);					break;	/* ˜r—Í */
-	case 54:	pDst = (PBYTE)&m_wStrength;					dwSize = sizeof (m_wStrength);				break;	/* ‘Ì—Í */
-	case 55:	pDst = (PBYTE)&m_wMagic;					dwSize = sizeof (m_wMagic);					break;	/* –‚—Í */
-	case 56:	pDst = (PBYTE)&m_wSkillful;					dwSize = sizeof (m_wSkillful);				break;	/* Ší—p */
-	case 57:	pDst = (PBYTE)&m_wAbillityAT;				dwSize = sizeof (m_wAbillityAT);			break;	/* UŒ‚‹Z”\ */
-	case 58:	pDst = (PBYTE)&m_wAbillityDF;				dwSize = sizeof (m_wAbillityDF);			break;	/* –hŒä‹Z”\ */
-	case 59:	pDst = (PBYTE)&m_wPAtack;					dwSize = sizeof (m_wPAtack);				break;	/* UŒ‚—Í */
-	case 60:	pDst = (PBYTE)&m_wPDefense;					dwSize = sizeof (m_wPDefense);				break;	/* –hŒä—Í */
-	case 61:	pDst = (PBYTE)&m_wPMagic;					dwSize = sizeof (m_wPMagic);				break;	/* –‚–@—Í */
-	case 62:	pDst = (PBYTE)&m_wPMagicDefense;			dwSize = sizeof (m_wPMagicDefense);			break;	/* –‚–@–hŒä—Í */
-	case 63:	pDst = (PBYTE)&m_wPHitAverage;				dwSize = sizeof (m_wPHitAverage);			break;	/* –½’†—¦ */
-	case 64:	pDst = (PBYTE)&m_wPAvoidAverage;			dwSize = sizeof (m_wPAvoidAverage);			break;	/* ‰ñ”ğ—¦ */
-	case 65:	pDst = (PBYTE)&m_wPCriticalAverage;			dwSize = sizeof (m_wPCriticalAverage);		break;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	case 66:	pDst = (PBYTE)&m_wAttrFire;					dwSize = sizeof (m_wAttrFire);				break;	/* ‘®«[‰Î] */
-	case 67:	pDst = (PBYTE)&m_wAttrWind;					dwSize = sizeof (m_wAttrWind);				break;	/* ‘®«[•—] */
-	case 68:	pDst = (PBYTE)&m_wAttrWater;				dwSize = sizeof (m_wAttrWater);				break;	/* ‘®«[…] */
-	case 69:	pDst = (PBYTE)&m_wAttrEarth;				dwSize = sizeof (m_wAttrEarth);				break;	/* ‘®«[“y] */
-	case 70:	pDst = (PBYTE)&m_wAttrLight;				dwSize = sizeof (m_wAttrLight);				break;	/* ‘®«[Œõ] */
-	case 71:	pDst = (PBYTE)&m_wAttrDark;					dwSize = sizeof (m_wAttrDark);				break;	/* ‘®«[ˆÅ] */
-	case 72:	pDst = (PBYTE)&m_dwMoveWait;				dwSize = sizeof (m_dwMoveWait);				break;	/* ˆÚ“®‘Ò‚¿ŠÔ */
-	case 73:	pDst = (PBYTE)&m_dwMoveWaitBattle;			dwSize = sizeof (m_dwMoveWaitBattle);		break;	/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	case 74:	pDst = (PBYTE)&m_dwExp;						dwSize = sizeof (m_dwExp);					break;	/* ŒoŒ±’l */
+	case 51:	pDst = (PBYTE)&m_wLevel;					dwSize = sizeof (m_wLevel);					break;	/* ãƒ¬ãƒ™ãƒ« */
+	case 52:	pDst = (PBYTE)&m_wStamina;					dwSize = sizeof (m_wStamina);				break;	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	case 53:	pDst = (PBYTE)&m_wPower;					dwSize = sizeof (m_wPower);					break;	/* è…•åŠ› */
+	case 54:	pDst = (PBYTE)&m_wStrength;					dwSize = sizeof (m_wStrength);				break;	/* ä½“åŠ› */
+	case 55:	pDst = (PBYTE)&m_wMagic;					dwSize = sizeof (m_wMagic);					break;	/* é­”åŠ› */
+	case 56:	pDst = (PBYTE)&m_wSkillful;					dwSize = sizeof (m_wSkillful);				break;	/* å™¨ç”¨ */
+	case 57:	pDst = (PBYTE)&m_wAbillityAT;				dwSize = sizeof (m_wAbillityAT);			break;	/* æ”»æ’ƒæŠ€èƒ½ */
+	case 58:	pDst = (PBYTE)&m_wAbillityDF;				dwSize = sizeof (m_wAbillityDF);			break;	/* é˜²å¾¡æŠ€èƒ½ */
+	case 59:	pDst = (PBYTE)&m_wPAtack;					dwSize = sizeof (m_wPAtack);				break;	/* æ”»æ’ƒåŠ› */
+	case 60:	pDst = (PBYTE)&m_wPDefense;					dwSize = sizeof (m_wPDefense);				break;	/* é˜²å¾¡åŠ› */
+	case 61:	pDst = (PBYTE)&m_wPMagic;					dwSize = sizeof (m_wPMagic);				break;	/* é­”æ³•åŠ› */
+	case 62:	pDst = (PBYTE)&m_wPMagicDefense;			dwSize = sizeof (m_wPMagicDefense);			break;	/* é­”æ³•é˜²å¾¡åŠ› */
+	case 63:	pDst = (PBYTE)&m_wPHitAverage;				dwSize = sizeof (m_wPHitAverage);			break;	/* å‘½ä¸­ç‡ */
+	case 64:	pDst = (PBYTE)&m_wPAvoidAverage;			dwSize = sizeof (m_wPAvoidAverage);			break;	/* å›é¿ç‡ */
+	case 65:	pDst = (PBYTE)&m_wPCriticalAverage;			dwSize = sizeof (m_wPCriticalAverage);		break;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	case 66:	pDst = (PBYTE)&m_wAttrFire;					dwSize = sizeof (m_wAttrFire);				break;	/* å±æ€§[ç«] */
+	case 67:	pDst = (PBYTE)&m_wAttrWind;					dwSize = sizeof (m_wAttrWind);				break;	/* å±æ€§[é¢¨] */
+	case 68:	pDst = (PBYTE)&m_wAttrWater;				dwSize = sizeof (m_wAttrWater);				break;	/* å±æ€§[æ°´] */
+	case 69:	pDst = (PBYTE)&m_wAttrEarth;				dwSize = sizeof (m_wAttrEarth);				break;	/* å±æ€§[åœŸ] */
+	case 70:	pDst = (PBYTE)&m_wAttrLight;				dwSize = sizeof (m_wAttrLight);				break;	/* å±æ€§[å…‰] */
+	case 71:	pDst = (PBYTE)&m_wAttrDark;					dwSize = sizeof (m_wAttrDark);				break;	/* å±æ€§[é—‡] */
+	case 72:	pDst = (PBYTE)&m_dwMoveWait;				dwSize = sizeof (m_dwMoveWait);				break;	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	case 73:	pDst = (PBYTE)&m_dwMoveWaitBattle;			dwSize = sizeof (m_dwMoveWaitBattle);		break;	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	case 74:	pDst = (PBYTE)&m_dwExp;						dwSize = sizeof (m_dwExp);					break;	/* çµŒé¨“å€¤ */
 	case 75:	pDst = (PBYTE)&m_dwHP;						dwSize = sizeof (m_dwHP);					break;
 	case 76:	pDst = (PBYTE)&m_dwMaxHP;					dwSize = sizeof (m_dwMaxHP);				break;
 	case 77:	pDst = (PBYTE)&m_dwSP;						dwSize = sizeof (m_dwSP);					break;
 	case 78:	pDst = (PBYTE)&m_dwMaxSP;					dwSize = sizeof (m_dwMaxSP);				break;
-	case 79:	pDst = (PBYTE)&m_sizeSearchDistance;		dwSize = sizeof (m_sizeSearchDistance);		break;	/* ô“G”ÍˆÍ */
-	/* NPC”­¶ */
-	case 80:	pDst = (PBYTE)&m_dwPutCycle;				dwSize = sizeof (m_dwPutCycle);				break;	/* ”­¶üŠú */
-	case 81:	pDst = (PBYTE)&m_nPutMoveType;				dwSize = sizeof (m_nPutMoveType);			break;	/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	case 82:	pDst = (PBYTE)&m_nMaxPutCount;				dwSize = sizeof (m_nMaxPutCount);			break;	/* “¯”­¶” */
-	case 83:	pDst = (PBYTE)&m_nPutAverage;				dwSize = sizeof (m_nPutAverage);			break;	/* ”­¶Šm—¦ */
-	case 84:	pDst = (PBYTE)&m_ptPutArea;					dwSize = sizeof (m_ptPutArea);				break;	/* ”­¶”ÍˆÍ(”¼Œa) */
+	case 79:	pDst = (PBYTE)&m_sizeSearchDistance;		dwSize = sizeof (m_sizeSearchDistance);		break;	/* ç­–æ•µç¯„å›² */
+	/* NPCç™ºç”Ÿ */
+	case 80:	pDst = (PBYTE)&m_dwPutCycle;				dwSize = sizeof (m_dwPutCycle);				break;	/* ç™ºç”Ÿå‘¨æœŸ */
+	case 81:	pDst = (PBYTE)&m_nPutMoveType;				dwSize = sizeof (m_nPutMoveType);			break;	/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	case 82:	pDst = (PBYTE)&m_nMaxPutCount;				dwSize = sizeof (m_nMaxPutCount);			break;	/* åŒæ™‚ç™ºç”Ÿæ•° */
+	case 83:	pDst = (PBYTE)&m_nPutAverage;				dwSize = sizeof (m_nPutAverage);			break;	/* ç™ºç”Ÿç¢ºç‡ */
+	case 84:	pDst = (PBYTE)&m_ptPutArea;					dwSize = sizeof (m_ptPutArea);				break;	/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 	}
 
 	if (pDst) {
@@ -776,9 +776,9 @@ DWORD CInfoCharBase::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾											 */
-/* “ú•t		:2006/11/06														 */
+/* é–¢æ•°å	:CInfoCharBase::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2006/11/06														 */
 /* ========================================================================= */
 
 DWORD CInfoCharBase::GetSendDataSize(void)
@@ -793,7 +793,7 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof (m_dwParentCharID);
 	dwRet += sizeof (m_dwMapID);
 	dwRet += sizeof (m_dwMotionTypeID);
-	dwRet += sizeof (m_ptViewCharPos);			/* •\¦—p‚ÌÀ•W•â³’l */
+	dwRet += sizeof (m_ptViewCharPos);			/* è¡¨ç¤ºç”¨ã®åº§æ¨™è£œæ­£å€¤ */
 	dwRet += sizeof (m_bBlock);
 	dwRet += sizeof (m_bPush);
 	dwRet += sizeof (m_nAnime);
@@ -804,9 +804,9 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof (m_nDirection);
 	dwRet += sizeof (m_nSex);
 	dwRet += sizeof (m_nMaxItemCount);
-	dwRet += sizeof (m_nDropItemAverage);		/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	dwRet += sizeof (m_nMoveAverage);			/* ˆÚ“®Šm—¦ */
-	dwRet += sizeof (m_nMoveAverageBattle);		/* í“¬ˆÚ“®Šm—¦ */
+	dwRet += sizeof (m_nDropItemAverage);		/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	dwRet += sizeof (m_nMoveAverage);			/* ç§»å‹•ç¢ºç‡ */
+	dwRet += sizeof (m_nMoveAverageBattle);		/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
 	dwRet += sizeof (m_wFamilyID);
 	dwRet += sizeof (m_wGrpIDNPC);
 	dwRet += sizeof (m_wGrpIDCloth);
@@ -815,8 +815,8 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof (m_wGrpIDHairType);
 	dwRet += sizeof (m_wGrpIDHairColor);
 	dwRet += sizeof (m_wGrpIDSP);
-	dwRet += sizeof (m_wGrpIDTmpMain);			/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	dwRet += sizeof (m_wGrpIDTmpSub);			/* ‰æ‘œID(ˆê•:ƒTƒu) */
+	dwRet += sizeof (m_wGrpIDTmpMain);			/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	dwRet += sizeof (m_wGrpIDTmpSub);			/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 	dwRet += sizeof (m_wGrpIDAcce);
 	dwRet += sizeof (m_wGrpIDArmsMain);
 	dwRet += sizeof (m_wGrpIDArmsSub);
@@ -829,38 +829,38 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof (m_wGrpIDInitHairType);
 	dwRet += sizeof (m_wGrpIDInitHairColor);
 	dwRet += sizeof (m_wGrpIDInitSP);
-	dwRet += sizeof (m_wAtackGauge);			/* ƒAƒ^ƒbƒNƒQ[ƒW */
-	dwRet += sizeof (m_wDefenseGauge);			/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	dwRet += sizeof (m_wLevel);					/* ƒŒƒxƒ‹ */
-	dwRet += sizeof (m_wStamina);				/* ƒXƒ^ƒ~ƒi */
-	dwRet += sizeof (m_wPower);					/* ˜r—Í */
-	dwRet += sizeof (m_wStrength);				/* ‘Ì—Í */
-	dwRet += sizeof (m_wMagic);					/* –‚—Í */
-	dwRet += sizeof (m_wSkillful);				/* Ší—p */
-	dwRet += sizeof (m_wAbillityAT);			/* UŒ‚‹Z”\ */
-	dwRet += sizeof (m_wAbillityDF);			/* –hŒä‹Z”\ */
-	dwRet += sizeof (m_wPAtack);				/* UŒ‚—Í */
-	dwRet += sizeof (m_wPDefense);				/* –hŒä—Í */
-	dwRet += sizeof (m_wPMagic);				/* –‚–@—Í */
-	dwRet += sizeof (m_wPMagicDefense);			/* –‚–@–hŒä—Í */
-	dwRet += sizeof (m_wPHitAverage);			/* –½’†—¦ */
-	dwRet += sizeof (m_wPAvoidAverage);			/* ‰ñ”ğ—¦ */
-	dwRet += sizeof (m_wPCriticalAverage);		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	dwRet += sizeof (m_wAttrFire);				/* ‘®«[‰Î] */
-	dwRet += sizeof (m_wAttrWind);				/* ‘®«[•—] */
-	dwRet += sizeof (m_wAttrWater);				/* ‘®«[…] */
-	dwRet += sizeof (m_wAttrEarth);				/* ‘®«[“y] */
-	dwRet += sizeof (m_wAttrLight);				/* ‘®«[Œõ] */
-	dwRet += sizeof (m_wAttrDark);				/* ‘®«[ˆÅ] */
+	dwRet += sizeof (m_wAtackGauge);			/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+	dwRet += sizeof (m_wDefenseGauge);			/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	dwRet += sizeof (m_wLevel);					/* ãƒ¬ãƒ™ãƒ« */
+	dwRet += sizeof (m_wStamina);				/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	dwRet += sizeof (m_wPower);					/* è…•åŠ› */
+	dwRet += sizeof (m_wStrength);				/* ä½“åŠ› */
+	dwRet += sizeof (m_wMagic);					/* é­”åŠ› */
+	dwRet += sizeof (m_wSkillful);				/* å™¨ç”¨ */
+	dwRet += sizeof (m_wAbillityAT);			/* æ”»æ’ƒæŠ€èƒ½ */
+	dwRet += sizeof (m_wAbillityDF);			/* é˜²å¾¡æŠ€èƒ½ */
+	dwRet += sizeof (m_wPAtack);				/* æ”»æ’ƒåŠ› */
+	dwRet += sizeof (m_wPDefense);				/* é˜²å¾¡åŠ› */
+	dwRet += sizeof (m_wPMagic);				/* é­”æ³•åŠ› */
+	dwRet += sizeof (m_wPMagicDefense);			/* é­”æ³•é˜²å¾¡åŠ› */
+	dwRet += sizeof (m_wPHitAverage);			/* å‘½ä¸­ç‡ */
+	dwRet += sizeof (m_wPAvoidAverage);			/* å›é¿ç‡ */
+	dwRet += sizeof (m_wPCriticalAverage);		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	dwRet += sizeof (m_wAttrFire);				/* å±æ€§[ç«] */
+	dwRet += sizeof (m_wAttrWind);				/* å±æ€§[é¢¨] */
+	dwRet += sizeof (m_wAttrWater);				/* å±æ€§[æ°´] */
+	dwRet += sizeof (m_wAttrEarth);				/* å±æ€§[åœŸ] */
+	dwRet += sizeof (m_wAttrLight);				/* å±æ€§[å…‰] */
+	dwRet += sizeof (m_wAttrDark);				/* å±æ€§[é—‡] */
 	dwRet += sizeof (m_dwEquipItemIDCloth);
 	dwRet += sizeof (m_dwEquipItemIDAcce1);
 	dwRet += sizeof (m_dwEquipItemIDAcce2);
 	dwRet += sizeof (m_dwEquipItemIDArmsRight);
 	dwRet += sizeof (m_dwEquipItemIDArmsLeft);
 	dwRet += sizeof (m_dwEquipItemIDHead);
-	dwRet += sizeof (m_dwMoveWait);				/* ˆÚ“®‘Ò‚¿ŠÔ */
-	dwRet += sizeof (m_dwMoveWaitBattle);		/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	dwRet += sizeof (m_dwExp);					/* ŒoŒ±’l */
+	dwRet += sizeof (m_dwMoveWait);				/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	dwRet += sizeof (m_dwMoveWaitBattle);		/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	dwRet += sizeof (m_dwExp);					/* çµŒé¨“å€¤ */
 	dwRet += sizeof (m_dwHP);
 	dwRet += sizeof (m_dwMaxHP);
 	dwRet += sizeof (m_dwSP);
@@ -873,22 +873,22 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += (m_abyMark.	GetSize () + 1);
 	dwRet += ((m_adwItemID.	GetSize () + 1) * sizeof (DWORD));
 	dwRet += ((m_adwSkillID.GetSize () + 1) * sizeof (DWORD));
-	dwRet += sizeof (m_sizeSearchDistance);		/* ô“G”ÍˆÍ */
-	/* NPC”­¶ */
-	dwRet += sizeof (m_dwPutCycle);				/* ”­¶üŠú */
-	dwRet += sizeof (m_nPutMoveType);			/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	dwRet += sizeof (m_nMaxPutCount);			/* “¯”­¶” */
-	dwRet += sizeof (m_nPutAverage);			/* ”­¶Šm—¦ */
-	dwRet += sizeof (m_ptPutArea);				/* ”­¶”ÍˆÍ(”¼Œa) */
+	dwRet += sizeof (m_sizeSearchDistance);		/* ç­–æ•µç¯„å›² */
+	/* NPCç™ºç”Ÿ */
+	dwRet += sizeof (m_dwPutCycle);				/* ç™ºç”Ÿå‘¨æœŸ */
+	dwRet += sizeof (m_nPutMoveType);			/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	dwRet += sizeof (m_nMaxPutCount);			/* åŒæ™‚ç™ºç”Ÿæ•° */
+	dwRet += sizeof (m_nPutAverage);			/* ç™ºç”Ÿç¢ºç‡ */
+	dwRet += sizeof (m_ptPutArea);				/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğæ“¾												 */
-/* “ú•t		:2006/11/06														 */
+/* é–¢æ•°å	:CInfoCharBase::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2006/11/06														 */
 /* ========================================================================= */
 
 PBYTE CInfoCharBase::GetSendData(void)
@@ -904,120 +904,120 @@ PBYTE CInfoCharBase::GetSendData(void)
 	pData		= ZeroNew (dwSize);
 	pDataTmp	= pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwCharID,					sizeof (m_dwCharID),				pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &m_dwAccountID,				sizeof (m_dwAccountID),				pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (pDataTmp, &m_dwTailCharID,				sizeof (m_dwTailCharID),			pDataTmp);	/* •t‚¢‚Ä—ˆ‚Ä‚¢‚éƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &m_dwFrontCharID,			sizeof (m_dwFrontCharID),			pDataTmp);	/* •t‚¢‚Ä‚¢‚éƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &m_dwParentCharID,			sizeof (m_dwParentCharID),			pDataTmp);	/* e‚ÌƒLƒƒƒ‰ID */
-	CopyMemoryRenew (pDataTmp, &m_bBlock,					sizeof (m_bBlock),					pDataTmp);	/* ‚Ô‚Â‚©‚é”»’è */
-	CopyMemoryRenew (pDataTmp, &m_ptViewCharPos,			sizeof (m_ptViewCharPos),			pDataTmp);	/* •\¦—p‚ÌÀ•W•â³’l */
-	CopyMemoryRenew (pDataTmp, &m_bPush,					sizeof (m_bPush),					pDataTmp);	/* ‰Ÿ‚¹‚é”»’è */
-	CopyMemoryRenew (pDataTmp, &m_dwMapID,					sizeof (m_dwMapID),					pDataTmp);	/* ƒ}ƒbƒvID */
-	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeID,			sizeof (m_dwMotionTypeID),			pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“í•ÊID */
-	CopyMemoryRenew (pDataTmp, &m_nAnime,					sizeof (m_nAnime),					pDataTmp);	/* ƒAƒjƒ[ƒVƒ‡ƒ“”Ô† */
-	CopyMemoryRenew (pDataTmp, &m_nMapX,					sizeof (m_nMapX),					pDataTmp);	/* ƒ}ƒbƒvÀ•W(‰¡) */
-	CopyMemoryRenew (pDataTmp, &m_nMapY,					sizeof (m_nMapY),					pDataTmp);	/* ƒ}ƒbƒvÀ•W(c) */
-	CopyMemoryRenew (pDataTmp, &m_nMoveState,				sizeof (m_nMoveState),				pDataTmp);	/* ˆÚ“®ó‘Ô */
-	CopyMemoryRenew (pDataTmp, &m_nMoveType,				sizeof (m_nMoveType),				pDataTmp);	/* ˆÚ“®í•Ê */
-	CopyMemoryRenew (pDataTmp, &m_nDirection,				sizeof (m_nDirection),				pDataTmp);	/* Œü‚« */
-	CopyMemoryRenew (pDataTmp, &m_nSex,						sizeof (m_nSex),					pDataTmp);	/* «•Ê */
-	CopyMemoryRenew (pDataTmp, &m_nMaxItemCount,			sizeof (m_nMaxItemCount),			pDataTmp);	/* Å‘åƒAƒCƒeƒ€Š” */
-	CopyMemoryRenew (pDataTmp, &m_nDropItemAverage,			sizeof (m_nDropItemAverage),		pDataTmp);	/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	CopyMemoryRenew (pDataTmp, &m_nMoveAverage,				sizeof (m_nMoveAverage),			pDataTmp);	/* ˆÚ“®Šm—¦ */
-	CopyMemoryRenew (pDataTmp, &m_nMoveAverageBattle,		sizeof (m_nMoveAverageBattle),		pDataTmp);	/* í“¬ˆÚ“®Šm—¦ */
-	CopyMemoryRenew (pDataTmp, &m_wFamilyID,				sizeof (m_wFamilyID),				pDataTmp);	/* í‘°ID */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDNPC,				sizeof (m_wGrpIDNPC),				pDataTmp);	/* ‰æ‘œID(NPC) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDCloth,				sizeof (m_wGrpIDCloth),				pDataTmp);	/* ‰æ‘œID(•) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDEye,				sizeof (m_wGrpIDEye),				pDataTmp);	/* ‰æ‘œID(–Ú) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDEyeColor,			sizeof (m_wGrpIDEyeColor),			pDataTmp);	/* ‰æ‘œID(–ÚF) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDHairType,			sizeof (m_wGrpIDHairType),			pDataTmp);	/* ‰æ‘œID(”¯) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDHairColor,			sizeof (m_wGrpIDHairColor),			pDataTmp);	/* ‰æ‘œID(”¯F) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDSP,					sizeof (m_wGrpIDSP),				pDataTmp);	/* ‰æ‘œID(“Áê•) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDTmpMain,			sizeof (m_wGrpIDTmpMain),			pDataTmp);	/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDTmpSub,				sizeof (m_wGrpIDTmpSub),			pDataTmp);	/* ‰æ‘œID(ˆê•:ƒTƒu) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDAcce,				sizeof (m_wGrpIDAcce),				pDataTmp);	/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsMain,			sizeof (m_wGrpIDArmsMain),			pDataTmp);	/* ‰æ‘œID(‚¿•¨:ƒƒCƒ“) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsSub,			sizeof (m_wGrpIDArmsSub),			pDataTmp);	/* ‰æ‘œID(‚¿•¨:ƒTƒu) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsLeftMain,		sizeof (m_wGrpIDArmsLeftMain),		pDataTmp);	/* ‰æ‘œID(‚:ƒƒCƒ“) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsLeftSub,		sizeof (m_wGrpIDArmsLeftSub),		pDataTmp);	/* ‰æ‘œID(‚:ƒTƒu) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitNPC,			sizeof (m_wGrpIDInitNPC),			pDataTmp);	/* ‰Šú‰æ‘œID(NPC) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitCloth,			sizeof (m_wGrpIDInitCloth),			pDataTmp);	/* ‰Šú‰æ‘œID(•) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitEye,			sizeof (m_wGrpIDInitEye),			pDataTmp);	/* ‰Šú‰æ‘œID(–Ú) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitEyeColor,		sizeof (m_wGrpIDInitEyeColor),		pDataTmp);	/* ‰Šú‰æ‘œID(–ÚF) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitHairType,		sizeof (m_wGrpIDInitHairType),		pDataTmp);	/* ‰Šú‰æ‘œID(”¯) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitHairColor,		sizeof (m_wGrpIDInitHairColor),		pDataTmp);	/* ‰Šú‰æ‘œID(”¯F) */
-	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitSP,				sizeof (m_wGrpIDInitSP),			pDataTmp);	/* ‰Šú‰æ‘œID(“Áê•) */
-	CopyMemoryRenew (pDataTmp, &m_wAtackGauge,				sizeof (m_wAtackGauge),				pDataTmp);	/* ƒAƒ^ƒbƒNƒQ[ƒW */
-	CopyMemoryRenew (pDataTmp, &m_wDefenseGauge,			sizeof (m_wDefenseGauge),			pDataTmp);	/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	CopyMemoryRenew (pDataTmp, &m_wLevel,					sizeof (m_wLevel),					pDataTmp);	/* ƒŒƒxƒ‹ */
-	CopyMemoryRenew (pDataTmp, &m_wStamina,					sizeof (m_wStamina),				pDataTmp);	/* ƒXƒ^ƒ~ƒi */
-	CopyMemoryRenew (pDataTmp, &m_wPower,					sizeof (m_wPower),					pDataTmp);	/* ˜r—Í */
-	CopyMemoryRenew (pDataTmp, &m_wStrength,				sizeof (m_wStrength),				pDataTmp);	/* ‘Ì—Í */
-	CopyMemoryRenew (pDataTmp, &m_wMagic,					sizeof (m_wMagic),					pDataTmp);	/* –‚—Í */
-	CopyMemoryRenew (pDataTmp, &m_wSkillful,				sizeof (m_wSkillful),				pDataTmp);	/* Ší—p */
-	CopyMemoryRenew (pDataTmp, &m_wAbillityAT,				sizeof (m_wAbillityAT),				pDataTmp);	/* UŒ‚‹Z”\ */
-	CopyMemoryRenew (pDataTmp, &m_wAbillityDF,				sizeof (m_wAbillityDF),				pDataTmp);	/* –hŒä‹Z”\ */
-	CopyMemoryRenew (pDataTmp, &m_wPAtack,					sizeof (m_wPAtack),					pDataTmp);	/* UŒ‚—Í */
-	CopyMemoryRenew (pDataTmp, &m_wPDefense,				sizeof (m_wPDefense),				pDataTmp);	/* –hŒä—Í */
-	CopyMemoryRenew (pDataTmp, &m_wPMagic,					sizeof (m_wPMagic),					pDataTmp);	/* –‚–@—Í */
-	CopyMemoryRenew (pDataTmp, &m_wPMagicDefense,			sizeof (m_wPMagicDefense),			pDataTmp);	/* –‚–@–hŒä—Í */
-	CopyMemoryRenew (pDataTmp, &m_wPHitAverage,				sizeof (m_wPHitAverage),			pDataTmp);	/* –½’†—¦ */
-	CopyMemoryRenew (pDataTmp, &m_wPAvoidAverage,			sizeof (m_wPAvoidAverage),			pDataTmp);	/* ‰ñ”ğ—¦ */
-	CopyMemoryRenew (pDataTmp, &m_wPCriticalAverage,		sizeof (m_wPCriticalAverage),		pDataTmp);	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	CopyMemoryRenew (pDataTmp, &m_wAttrFire,				sizeof (m_wAttrFire),				pDataTmp);	/* ‘®«[‰Î] */
-	CopyMemoryRenew (pDataTmp, &m_wAttrWind,				sizeof (m_wAttrWind),				pDataTmp);	/* ‘®«[•—] */
-	CopyMemoryRenew (pDataTmp, &m_wAttrWater,				sizeof (m_wAttrWater),				pDataTmp);	/* ‘®«[…] */
-	CopyMemoryRenew (pDataTmp, &m_wAttrEarth,				sizeof (m_wAttrEarth),				pDataTmp);	/* ‘®«[“y] */
-	CopyMemoryRenew (pDataTmp, &m_wAttrLight,				sizeof (m_wAttrLight),				pDataTmp);	/* ‘®«[Œõ] */
-	CopyMemoryRenew (pDataTmp, &m_wAttrDark,				sizeof (m_wAttrDark),				pDataTmp);	/* ‘®«[ˆÅ] */
-	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDCloth,		sizeof (m_dwEquipItemIDCloth),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:• */
-	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDAcce1,		sizeof (m_dwEquipItemIDAcce1),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ1 */
-	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDAcce2,		sizeof (m_dwEquipItemIDAcce2),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ2 */
-	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDArmsRight,	sizeof (m_dwEquipItemIDArmsRight),	pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:‰Eè */
-	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDArmsLeft,	sizeof (m_dwEquipItemIDArmsLeft),	pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:¶è */
-	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDHead,		sizeof (m_dwEquipItemIDHead),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:“ª */
-	CopyMemoryRenew (pDataTmp, &m_dwMoveWait,				sizeof (m_dwMoveWait),				pDataTmp);	/* ˆÚ“®‘Ò‚¿ŠÔ */
-	CopyMemoryRenew (pDataTmp, &m_dwMoveWaitBattle,			sizeof (m_dwMoveWaitBattle),		pDataTmp);	/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	CopyMemoryRenew (pDataTmp, &m_dwExp,					sizeof (m_dwExp),					pDataTmp);	/* ŒoŒ±’l */
+	CopyMemoryRenew (pDataTmp, &m_dwCharID,					sizeof (m_dwCharID),				pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &m_dwAccountID,				sizeof (m_dwAccountID),				pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &m_dwTailCharID,				sizeof (m_dwTailCharID),			pDataTmp);	/* ä»˜ã„ã¦æ¥ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &m_dwFrontCharID,			sizeof (m_dwFrontCharID),			pDataTmp);	/* ä»˜ã„ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &m_dwParentCharID,			sizeof (m_dwParentCharID),			pDataTmp);	/* è¦ªã®ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (pDataTmp, &m_bBlock,					sizeof (m_bBlock),					pDataTmp);	/* ã¶ã¤ã‹ã‚‹åˆ¤å®š */
+	CopyMemoryRenew (pDataTmp, &m_ptViewCharPos,			sizeof (m_ptViewCharPos),			pDataTmp);	/* è¡¨ç¤ºç”¨ã®åº§æ¨™è£œæ­£å€¤ */
+	CopyMemoryRenew (pDataTmp, &m_bPush,					sizeof (m_bPush),					pDataTmp);	/* æŠ¼ã›ã‚‹åˆ¤å®š */
+	CopyMemoryRenew (pDataTmp, &m_dwMapID,					sizeof (m_dwMapID),					pDataTmp);	/* ãƒãƒƒãƒ—ID */
+	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeID,			sizeof (m_dwMotionTypeID),			pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	CopyMemoryRenew (pDataTmp, &m_nAnime,					sizeof (m_nAnime),					pDataTmp);	/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå· */
+	CopyMemoryRenew (pDataTmp, &m_nMapX,					sizeof (m_nMapX),					pDataTmp);	/* ãƒãƒƒãƒ—åº§æ¨™(æ¨ª) */
+	CopyMemoryRenew (pDataTmp, &m_nMapY,					sizeof (m_nMapY),					pDataTmp);	/* ãƒãƒƒãƒ—åº§æ¨™(ç¸¦) */
+	CopyMemoryRenew (pDataTmp, &m_nMoveState,				sizeof (m_nMoveState),				pDataTmp);	/* ç§»å‹•çŠ¶æ…‹ */
+	CopyMemoryRenew (pDataTmp, &m_nMoveType,				sizeof (m_nMoveType),				pDataTmp);	/* ç§»å‹•ç¨®åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &m_nDirection,				sizeof (m_nDirection),				pDataTmp);	/* å‘ã */
+	CopyMemoryRenew (pDataTmp, &m_nSex,						sizeof (m_nSex),					pDataTmp);	/* æ€§åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &m_nMaxItemCount,			sizeof (m_nMaxItemCount),			pDataTmp);	/* æœ€å¤§ã‚¢ã‚¤ãƒ†ãƒ æ‰€æŒæ•° */
+	CopyMemoryRenew (pDataTmp, &m_nDropItemAverage,			sizeof (m_nDropItemAverage),		pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	CopyMemoryRenew (pDataTmp, &m_nMoveAverage,				sizeof (m_nMoveAverage),			pDataTmp);	/* ç§»å‹•ç¢ºç‡ */
+	CopyMemoryRenew (pDataTmp, &m_nMoveAverageBattle,		sizeof (m_nMoveAverageBattle),		pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
+	CopyMemoryRenew (pDataTmp, &m_wFamilyID,				sizeof (m_wFamilyID),				pDataTmp);	/* ç¨®æ—ID */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDNPC,				sizeof (m_wGrpIDNPC),				pDataTmp);	/* ç”»åƒID(NPC) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDCloth,				sizeof (m_wGrpIDCloth),				pDataTmp);	/* ç”»åƒID(æœ) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDEye,				sizeof (m_wGrpIDEye),				pDataTmp);	/* ç”»åƒID(ç›®) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDEyeColor,			sizeof (m_wGrpIDEyeColor),			pDataTmp);	/* ç”»åƒID(ç›®è‰²) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDHairType,			sizeof (m_wGrpIDHairType),			pDataTmp);	/* ç”»åƒID(é«ª) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDHairColor,			sizeof (m_wGrpIDHairColor),			pDataTmp);	/* ç”»åƒID(é«ªè‰²) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDSP,					sizeof (m_wGrpIDSP),				pDataTmp);	/* ç”»åƒID(ç‰¹æ®Šæœ) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDTmpMain,			sizeof (m_wGrpIDTmpMain),			pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDTmpSub,				sizeof (m_wGrpIDTmpSub),			pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDAcce,				sizeof (m_wGrpIDAcce),				pDataTmp);	/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsMain,			sizeof (m_wGrpIDArmsMain),			pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsSub,			sizeof (m_wGrpIDArmsSub),			pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsLeftMain,		sizeof (m_wGrpIDArmsLeftMain),		pDataTmp);	/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDArmsLeftSub,		sizeof (m_wGrpIDArmsLeftSub),		pDataTmp);	/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitNPC,			sizeof (m_wGrpIDInitNPC),			pDataTmp);	/* åˆæœŸç”»åƒID(NPC) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitCloth,			sizeof (m_wGrpIDInitCloth),			pDataTmp);	/* åˆæœŸç”»åƒID(æœ) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitEye,			sizeof (m_wGrpIDInitEye),			pDataTmp);	/* åˆæœŸç”»åƒID(ç›®) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitEyeColor,		sizeof (m_wGrpIDInitEyeColor),		pDataTmp);	/* åˆæœŸç”»åƒID(ç›®è‰²) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitHairType,		sizeof (m_wGrpIDInitHairType),		pDataTmp);	/* åˆæœŸç”»åƒID(é«ª) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitHairColor,		sizeof (m_wGrpIDInitHairColor),		pDataTmp);	/* åˆæœŸç”»åƒID(é«ªè‰²) */
+	CopyMemoryRenew (pDataTmp, &m_wGrpIDInitSP,				sizeof (m_wGrpIDInitSP),			pDataTmp);	/* åˆæœŸç”»åƒID(ç‰¹æ®Šæœ) */
+	CopyMemoryRenew (pDataTmp, &m_wAtackGauge,				sizeof (m_wAtackGauge),				pDataTmp);	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+	CopyMemoryRenew (pDataTmp, &m_wDefenseGauge,			sizeof (m_wDefenseGauge),			pDataTmp);	/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	CopyMemoryRenew (pDataTmp, &m_wLevel,					sizeof (m_wLevel),					pDataTmp);	/* ãƒ¬ãƒ™ãƒ« */
+	CopyMemoryRenew (pDataTmp, &m_wStamina,					sizeof (m_wStamina),				pDataTmp);	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	CopyMemoryRenew (pDataTmp, &m_wPower,					sizeof (m_wPower),					pDataTmp);	/* è…•åŠ› */
+	CopyMemoryRenew (pDataTmp, &m_wStrength,				sizeof (m_wStrength),				pDataTmp);	/* ä½“åŠ› */
+	CopyMemoryRenew (pDataTmp, &m_wMagic,					sizeof (m_wMagic),					pDataTmp);	/* é­”åŠ› */
+	CopyMemoryRenew (pDataTmp, &m_wSkillful,				sizeof (m_wSkillful),				pDataTmp);	/* å™¨ç”¨ */
+	CopyMemoryRenew (pDataTmp, &m_wAbillityAT,				sizeof (m_wAbillityAT),				pDataTmp);	/* æ”»æ’ƒæŠ€èƒ½ */
+	CopyMemoryRenew (pDataTmp, &m_wAbillityDF,				sizeof (m_wAbillityDF),				pDataTmp);	/* é˜²å¾¡æŠ€èƒ½ */
+	CopyMemoryRenew (pDataTmp, &m_wPAtack,					sizeof (m_wPAtack),					pDataTmp);	/* æ”»æ’ƒåŠ› */
+	CopyMemoryRenew (pDataTmp, &m_wPDefense,				sizeof (m_wPDefense),				pDataTmp);	/* é˜²å¾¡åŠ› */
+	CopyMemoryRenew (pDataTmp, &m_wPMagic,					sizeof (m_wPMagic),					pDataTmp);	/* é­”æ³•åŠ› */
+	CopyMemoryRenew (pDataTmp, &m_wPMagicDefense,			sizeof (m_wPMagicDefense),			pDataTmp);	/* é­”æ³•é˜²å¾¡åŠ› */
+	CopyMemoryRenew (pDataTmp, &m_wPHitAverage,				sizeof (m_wPHitAverage),			pDataTmp);	/* å‘½ä¸­ç‡ */
+	CopyMemoryRenew (pDataTmp, &m_wPAvoidAverage,			sizeof (m_wPAvoidAverage),			pDataTmp);	/* å›é¿ç‡ */
+	CopyMemoryRenew (pDataTmp, &m_wPCriticalAverage,		sizeof (m_wPCriticalAverage),		pDataTmp);	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	CopyMemoryRenew (pDataTmp, &m_wAttrFire,				sizeof (m_wAttrFire),				pDataTmp);	/* å±æ€§[ç«] */
+	CopyMemoryRenew (pDataTmp, &m_wAttrWind,				sizeof (m_wAttrWind),				pDataTmp);	/* å±æ€§[é¢¨] */
+	CopyMemoryRenew (pDataTmp, &m_wAttrWater,				sizeof (m_wAttrWater),				pDataTmp);	/* å±æ€§[æ°´] */
+	CopyMemoryRenew (pDataTmp, &m_wAttrEarth,				sizeof (m_wAttrEarth),				pDataTmp);	/* å±æ€§[åœŸ] */
+	CopyMemoryRenew (pDataTmp, &m_wAttrLight,				sizeof (m_wAttrLight),				pDataTmp);	/* å±æ€§[å…‰] */
+	CopyMemoryRenew (pDataTmp, &m_wAttrDark,				sizeof (m_wAttrDark),				pDataTmp);	/* å±æ€§[é—‡] */
+	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDCloth,		sizeof (m_dwEquipItemIDCloth),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:æœ */
+	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDAcce1,		sizeof (m_dwEquipItemIDAcce1),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDAcce2,		sizeof (m_dwEquipItemIDAcce2),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª2 */
+	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDArmsRight,	sizeof (m_dwEquipItemIDArmsRight),	pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å³æ‰‹ */
+	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDArmsLeft,	sizeof (m_dwEquipItemIDArmsLeft),	pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å·¦æ‰‹ */
+	CopyMemoryRenew (pDataTmp, &m_dwEquipItemIDHead,		sizeof (m_dwEquipItemIDHead),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:é ­ */
+	CopyMemoryRenew (pDataTmp, &m_dwMoveWait,				sizeof (m_dwMoveWait),				pDataTmp);	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (pDataTmp, &m_dwMoveWaitBattle,			sizeof (m_dwMoveWaitBattle),		pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (pDataTmp, &m_dwExp,					sizeof (m_dwExp),					pDataTmp);	/* çµŒé¨“å€¤ */
 	CopyMemoryRenew (pDataTmp, &m_dwHP,						sizeof (m_dwHP),					pDataTmp);	/* HP */
-	CopyMemoryRenew (pDataTmp, &m_dwMaxHP,					sizeof (m_dwMaxHP),					pDataTmp);	/* Å‘åHP */
+	CopyMemoryRenew (pDataTmp, &m_dwMaxHP,					sizeof (m_dwMaxHP),					pDataTmp);	/* æœ€å¤§HP */
 	CopyMemoryRenew (pDataTmp, &m_dwSP,						sizeof (m_dwSP),					pDataTmp);	/* SP */
-	CopyMemoryRenew (pDataTmp, &m_dwMaxSP,					sizeof (m_dwMaxSP),					pDataTmp);	/* Å‘åSP */
-	CopyMemoryRenew (pDataTmp, &m_clName,					sizeof (m_clName),					pDataTmp);	/* –¼‘O‚Ì•`‰æF */
-	CopyMemoryRenew (pDataTmp, &m_clSpeak,					sizeof (m_clSpeak),					pDataTmp);	/* ”­Œ¾‚Ì•`‰æF */
-	strcpyRenew ((LPSTR)pDataTmp, m_strCharName, pDataTmp);													/* ƒLƒƒƒ‰–¼ */
-	strcpyRenew ((LPSTR)pDataTmp, m_strSpeak, pDataTmp);													/* ”­Œ¾“à—e */
-	strcpyRenew ((LPSTR)pDataTmp, m_strTalk,  pDataTmp);													/* ‰ï˜bƒf[ƒ^ */
+	CopyMemoryRenew (pDataTmp, &m_dwMaxSP,					sizeof (m_dwMaxSP),					pDataTmp);	/* æœ€å¤§SP */
+	CopyMemoryRenew (pDataTmp, &m_clName,					sizeof (m_clName),					pDataTmp);	/* åå‰ã®æç”»è‰² */
+	CopyMemoryRenew (pDataTmp, &m_clSpeak,					sizeof (m_clSpeak),					pDataTmp);	/* ç™ºè¨€ã®æç”»è‰² */
+	strcpyRenew ((LPSTR)pDataTmp, m_strCharName, pDataTmp);													/* ã‚­ãƒ£ãƒ©å */
+	strcpyRenew ((LPSTR)pDataTmp, m_strSpeak, pDataTmp);													/* ç™ºè¨€å†…å®¹ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strTalk,  pDataTmp);													/* ä¼šè©±ãƒ‡ãƒ¼ã‚¿ */
 
 	nCount = m_abyMark.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		byTmp = m_abyMark[i];
-		CopyMemoryRenew (pDataTmp, &byTmp, sizeof (byTmp), pDataTmp);	/* –¼‘O‚Ì‘O‚É•\¦‚·‚éƒ}[ƒN”Ô† */
+		CopyMemoryRenew (pDataTmp, &byTmp, sizeof (byTmp), pDataTmp);	/* åå‰ã®å‰ã«è¡¨ç¤ºã™ã‚‹ãƒãƒ¼ã‚¯ç•ªå· */
 	}
 	byTmp = 0;
 	CopyMemoryRenew (pDataTmp, &byTmp, sizeof (byTmp), pDataTmp);
 	nCount = m_adwItemID.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwItemID[i];
-		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* ŠƒAƒCƒeƒ€ */
+		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ  */
 	}
 	dwTmp = 0;
 	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
 	nCount = m_adwSkillID.GetSize ();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwSkillID[i];
-		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* ŠƒXƒLƒ‹ */
+		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* æ‰€æŒã‚¹ã‚­ãƒ« */
 	}
 	dwTmp = 0;
 	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
-	CopyMemoryRenew (pDataTmp, &m_sizeSearchDistance, sizeof (m_sizeSearchDistance), pDataTmp);		/* ô“G”ÍˆÍ */
+	CopyMemoryRenew (pDataTmp, &m_sizeSearchDistance, sizeof (m_sizeSearchDistance), pDataTmp);		/* ç­–æ•µç¯„å›² */
 
-	/* NPC”­¶ */
-	CopyMemoryRenew (pDataTmp, &m_dwPutCycle,	sizeof (m_dwPutCycle),		pDataTmp);		/* ”­¶üŠú */
-	CopyMemoryRenew (pDataTmp, &m_nPutMoveType,	sizeof (m_nPutMoveType),	pDataTmp);		/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	CopyMemoryRenew (pDataTmp, &m_nMaxPutCount,	sizeof (m_nMaxPutCount),	pDataTmp);		/* “¯”­¶” */
-	CopyMemoryRenew (pDataTmp, &m_nPutAverage,	sizeof (m_nPutAverage),		pDataTmp);		/* ”­¶Šm—¦ */
-	CopyMemoryRenew (pDataTmp, &m_ptPutArea,	sizeof (m_ptPutArea),		pDataTmp);		/* ”­¶”ÍˆÍ(”¼Œa) */
+	/* NPCç™ºç”Ÿ */
+	CopyMemoryRenew (pDataTmp, &m_dwPutCycle,	sizeof (m_dwPutCycle),		pDataTmp);		/* ç™ºç”Ÿå‘¨æœŸ */
+	CopyMemoryRenew (pDataTmp, &m_nPutMoveType,	sizeof (m_nPutMoveType),	pDataTmp);		/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	CopyMemoryRenew (pDataTmp, &m_nMaxPutCount,	sizeof (m_nMaxPutCount),	pDataTmp);		/* åŒæ™‚ç™ºç”Ÿæ•° */
+	CopyMemoryRenew (pDataTmp, &m_nPutAverage,	sizeof (m_nPutAverage),		pDataTmp);		/* ç™ºç”Ÿç¢ºç‡ */
+	CopyMemoryRenew (pDataTmp, &m_ptPutArea,	sizeof (m_ptPutArea),		pDataTmp);		/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 
 	pRet = pData;
 	return pRet;
@@ -1025,10 +1025,10 @@ PBYTE CInfoCharBase::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ğİ’è												 */
-/* “ú•t		:2006/11/06														 */
-/* –ß‚è’l	:ˆ—‚µ‚½Œã‚ÌƒAƒhƒŒƒX											 */
+/* é–¢æ•°å	:CInfoCharBase::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2006/11/06														 */
+/* æˆ»ã‚Šå€¤	:å‡¦ç†ã—ãŸå¾Œã®ã‚¢ãƒ‰ãƒ¬ã‚¹											 */
 /* ========================================================================= */
 
 PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
@@ -1044,124 +1044,124 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 	m_adwSkillID.RemoveAll ();
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_dwCharID,				pDataTmp, sizeof (m_dwCharID),					pDataTmp);	/* ƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwAccountID,			pDataTmp, sizeof (m_dwAccountID),				pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (&m_dwTailCharID,			pDataTmp, sizeof (m_dwTailCharID),				pDataTmp);	/* •t‚¢‚Ä—ˆ‚Ä‚¢‚éƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwFrontCharID,			pDataTmp, sizeof (m_dwFrontCharID),				pDataTmp);	/* •t‚¢‚Ä‚¢‚éƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_dwParentCharID,			pDataTmp, sizeof (m_dwParentCharID),			pDataTmp);	/* e‚ÌƒLƒƒƒ‰ID */
-	CopyMemoryRenew (&m_bBlock,					pDataTmp, sizeof (m_bBlock),					pDataTmp);	/* ‚Ô‚Â‚©‚é”»’è */
-	CopyMemoryRenew (&m_ptViewCharPos,			pDataTmp, sizeof (m_ptViewCharPos),				pDataTmp);	/* •\¦—p‚ÌÀ•W•â³’l */
-	CopyMemoryRenew (&m_bPush,					pDataTmp, sizeof (m_bPush),						pDataTmp);	/* ‰Ÿ‚¹‚é”»’è */
-	CopyMemoryRenew (&m_dwMapID,				pDataTmp, sizeof (m_dwMapID),					pDataTmp);	/* ƒ}ƒbƒvID */
-	CopyMemoryRenew (&m_dwMotionTypeID,			pDataTmp, sizeof (m_dwMotionTypeID),			pDataTmp);	/* ƒ‚[ƒVƒ‡ƒ“í•ÊID */
-	CopyMemoryRenew (&m_nAnime,					pDataTmp, sizeof (m_nAnime),					pDataTmp);	/* ƒAƒjƒ[ƒVƒ‡ƒ“”Ô† */
-	CopyMemoryRenew (&m_nMapX,					pDataTmp, sizeof (m_nMapX),						pDataTmp);	/* ƒ}ƒbƒvÀ•W(‰¡) */
-	CopyMemoryRenew (&m_nMapY,					pDataTmp, sizeof (m_nMapY),						pDataTmp);	/* ƒ}ƒbƒvÀ•W(c) */
-	CopyMemoryRenew (&m_nMoveState,				pDataTmp, sizeof (m_nMoveState),				pDataTmp);	/* ˆÚ“®ó‘Ô */
-	CopyMemoryRenew (&m_nMoveType,				pDataTmp, sizeof (m_nMoveType),					pDataTmp);	/* ˆÚ“®í•Ê */
-	CopyMemoryRenew (&m_nDirection,				pDataTmp, sizeof (m_nDirection),				pDataTmp);	/* Œü‚« */
-	CopyMemoryRenew (&m_nSex,					pDataTmp, sizeof (m_nSex),						pDataTmp);	/* «•Ê */
-	CopyMemoryRenew (&m_nMaxItemCount,			pDataTmp, sizeof (m_nMaxItemCount),				pDataTmp);	/* Å‘åƒAƒCƒeƒ€Š” */
-	CopyMemoryRenew (&m_nDropItemAverage,		pDataTmp, sizeof (m_nDropItemAverage),			pDataTmp);	/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	CopyMemoryRenew (&m_nMoveAverage,			pDataTmp, sizeof (m_nMoveAverage),				pDataTmp);	/* ˆÚ“®Šm—¦ */
-	CopyMemoryRenew (&m_nMoveAverageBattle,		pDataTmp, sizeof (m_nMoveAverageBattle),		pDataTmp);	/* í“¬ˆÚ“®Šm—¦ */
-	CopyMemoryRenew (&m_wFamilyID,				pDataTmp, sizeof (m_wFamilyID),					pDataTmp);	/* í‘°ID */
-	CopyMemoryRenew (&m_wGrpIDNPC,				pDataTmp, sizeof (m_wGrpIDNPC),					pDataTmp);	/* ‰æ‘œID(NPC) */
-	CopyMemoryRenew (&m_wGrpIDCloth,			pDataTmp, sizeof (m_wGrpIDCloth),				pDataTmp);	/* ‰æ‘œID(•) */
-	CopyMemoryRenew (&m_wGrpIDEye,				pDataTmp, sizeof (m_wGrpIDEye),					pDataTmp);	/* ‰æ‘œID(–Ú) */
-	CopyMemoryRenew (&m_wGrpIDEyeColor,			pDataTmp, sizeof (m_wGrpIDEyeColor),			pDataTmp);	/* ‰æ‘œID(–ÚF) */
-	CopyMemoryRenew (&m_wGrpIDHairType,			pDataTmp, sizeof (m_wGrpIDHairType),			pDataTmp);	/* ‰æ‘œID(”¯) */
-	CopyMemoryRenew (&m_wGrpIDHairColor,		pDataTmp, sizeof (m_wGrpIDHairColor),			pDataTmp);	/* ‰æ‘œID(”¯F) */
-	CopyMemoryRenew (&m_wGrpIDSP,				pDataTmp, sizeof (m_wGrpIDSP),					pDataTmp);	/* ‰æ‘œID(“Áê•) */
-	CopyMemoryRenew (&m_wGrpIDTmpMain,			pDataTmp, sizeof (m_wGrpIDTmpMain),				pDataTmp);	/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	CopyMemoryRenew (&m_wGrpIDTmpSub,			pDataTmp, sizeof (m_wGrpIDTmpSub),				pDataTmp);	/* ‰æ‘œID(ˆê•:ƒTƒu) */
-	CopyMemoryRenew (&m_wGrpIDAcce,				pDataTmp, sizeof (m_wGrpIDAcce),				pDataTmp);	/* ‰æ‘œID(ƒAƒNƒZƒTƒŠ) */
-	CopyMemoryRenew (&m_wGrpIDArmsMain,			pDataTmp, sizeof (m_wGrpIDArmsMain),			pDataTmp);	/* ‰æ‘œID(‚¿•¨:ƒƒCƒ“) */
-	CopyMemoryRenew (&m_wGrpIDArmsSub,			pDataTmp, sizeof (m_wGrpIDArmsSub),				pDataTmp);	/* ‰æ‘œID(‚¿•¨:ƒTƒu) */
-	CopyMemoryRenew (&m_wGrpIDArmsLeftMain,		pDataTmp, sizeof (m_wGrpIDArmsLeftMain),		pDataTmp);	/* ‰æ‘œID(‚:ƒƒCƒ“) */
-	CopyMemoryRenew (&m_wGrpIDArmsLeftSub,		pDataTmp, sizeof (m_wGrpIDArmsLeftSub),			pDataTmp);	/* ‰æ‘œID(‚:ƒTƒu) */
-	CopyMemoryRenew (&m_wGrpIDInitNPC,			pDataTmp, sizeof (m_wGrpIDInitNPC),				pDataTmp);	/* ‰Šú‰æ‘œID(NPC) */
-	CopyMemoryRenew (&m_wGrpIDInitCloth,		pDataTmp, sizeof (m_wGrpIDInitCloth),			pDataTmp);	/* ‰Šú‰æ‘œID(•) */
-	CopyMemoryRenew (&m_wGrpIDInitEye,			pDataTmp, sizeof (m_wGrpIDInitEye),				pDataTmp);	/* ‰Šú‰æ‘œID(–Ú) */
-	CopyMemoryRenew (&m_wGrpIDInitEyeColor,		pDataTmp, sizeof (m_wGrpIDInitEyeColor),		pDataTmp);	/* ‰Šú‰æ‘œID(–ÚF) */
-	CopyMemoryRenew (&m_wGrpIDInitHairType,		pDataTmp, sizeof (m_wGrpIDInitHairType),		pDataTmp);	/* ‰Šú‰æ‘œID(”¯) */
-	CopyMemoryRenew (&m_wGrpIDInitHairColor,	pDataTmp, sizeof (m_wGrpIDInitHairColor),		pDataTmp);	/* ‰Šú‰æ‘œID(”¯F) */
-	CopyMemoryRenew (&m_wGrpIDInitSP,			pDataTmp, sizeof (m_wGrpIDInitSP),				pDataTmp);	/* ‰Šú‰æ‘œID(“Áê•) */
-	CopyMemoryRenew (&m_wAtackGauge,			pDataTmp, sizeof (m_wAtackGauge),				pDataTmp);	/* ƒAƒ^ƒbƒNƒQ[ƒW */
-	CopyMemoryRenew (&m_wDefenseGauge,			pDataTmp, sizeof (m_wDefenseGauge),				pDataTmp);	/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	CopyMemoryRenew (&m_wLevel,					pDataTmp, sizeof (m_wLevel),					pDataTmp);	/* ƒŒƒxƒ‹ */
-	CopyMemoryRenew (&m_wStamina,				pDataTmp, sizeof (m_wStamina),					pDataTmp);	/* ƒXƒ^ƒ~ƒi */
-	CopyMemoryRenew (&m_wPower,					pDataTmp, sizeof (m_wPower),					pDataTmp);	/* ˜r—Í */
-	CopyMemoryRenew (&m_wStrength,				pDataTmp, sizeof (m_wStrength),					pDataTmp);	/* ‘Ì—Í */
-	CopyMemoryRenew (&m_wMagic,					pDataTmp, sizeof (m_wMagic),					pDataTmp);	/* –‚—Í */
-	CopyMemoryRenew (&m_wSkillful,				pDataTmp, sizeof (m_wSkillful),					pDataTmp);	/* Ší—p */
-	CopyMemoryRenew (&m_wAbillityAT,			pDataTmp, sizeof (m_wAbillityAT),				pDataTmp);	/* UŒ‚‹Z”\ */
-	CopyMemoryRenew (&m_wAbillityDF,			pDataTmp, sizeof (m_wAbillityDF),				pDataTmp);	/* –hŒä‹Z”\ */
-	CopyMemoryRenew (&m_wPAtack,				pDataTmp, sizeof (m_wPAtack),					pDataTmp);	/* UŒ‚—Í */
-	CopyMemoryRenew (&m_wPDefense,				pDataTmp, sizeof (m_wPDefense),					pDataTmp);	/* –hŒä—Í */
-	CopyMemoryRenew (&m_wPMagic,				pDataTmp, sizeof (m_wPMagic),					pDataTmp);	/* –‚–@—Í */
-	CopyMemoryRenew (&m_wPMagicDefense,			pDataTmp, sizeof (m_wPMagicDefense),			pDataTmp);	/* –‚–@–hŒä—Í */
-	CopyMemoryRenew (&m_wPHitAverage,			pDataTmp, sizeof (m_wPHitAverage),				pDataTmp);	/* –½’†—¦ */
-	CopyMemoryRenew (&m_wPAvoidAverage,			pDataTmp, sizeof (m_wPAvoidAverage),			pDataTmp);	/* ‰ñ”ğ—¦ */
-	CopyMemoryRenew (&m_wPCriticalAverage,		pDataTmp, sizeof (m_wPCriticalAverage),			pDataTmp);	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	CopyMemoryRenew (&m_wAttrFire,				pDataTmp, sizeof (m_wAttrFire),					pDataTmp);	/* ‘®«[‰Î] */
-	CopyMemoryRenew (&m_wAttrWind,				pDataTmp, sizeof (m_wAttrWind),					pDataTmp);	/* ‘®«[•—] */
-	CopyMemoryRenew (&m_wAttrWater,				pDataTmp, sizeof (m_wAttrWater),				pDataTmp);	/* ‘®«[…] */
-	CopyMemoryRenew (&m_wAttrEarth,				pDataTmp, sizeof (m_wAttrEarth),				pDataTmp);	/* ‘®«[“y] */
-	CopyMemoryRenew (&m_wAttrLight,				pDataTmp, sizeof (m_wAttrLight),				pDataTmp);	/* ‘®«[Œõ] */
-	CopyMemoryRenew (&m_wAttrDark,				pDataTmp, sizeof (m_wAttrDark),					pDataTmp);	/* ‘®«[ˆÅ] */
-	CopyMemoryRenew (&m_dwEquipItemIDCloth,		pDataTmp, sizeof (m_dwEquipItemIDCloth),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:• */
-	CopyMemoryRenew (&m_dwEquipItemIDAcce1,		pDataTmp, sizeof (m_dwEquipItemIDAcce1),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ1 */
-	CopyMemoryRenew (&m_dwEquipItemIDAcce2,		pDataTmp, sizeof (m_dwEquipItemIDAcce2),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:ƒAƒNƒZƒTƒŠ2 */
-	CopyMemoryRenew (&m_dwEquipItemIDArmsRight,	pDataTmp, sizeof (m_dwEquipItemIDArmsRight),	pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:‰Eè */
-	CopyMemoryRenew (&m_dwEquipItemIDArmsLeft,	pDataTmp, sizeof (m_dwEquipItemIDArmsLeft),		pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:¶è */
-	CopyMemoryRenew (&m_dwEquipItemIDHead,		pDataTmp, sizeof (m_dwEquipItemIDHead),			pDataTmp);	/* ‘•”õƒAƒCƒeƒ€ID:“ª */
-	CopyMemoryRenew (&m_dwMoveWait,				pDataTmp, sizeof (m_dwMoveWait),				pDataTmp);	/* ˆÚ“®‘Ò‚¿ŠÔ */
-	CopyMemoryRenew (&m_dwMoveWaitBattle,		pDataTmp, sizeof (m_dwMoveWaitBattle),			pDataTmp);	/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	CopyMemoryRenew (&m_dwExp,					pDataTmp, sizeof (m_dwExp),						pDataTmp);	/* ŒoŒ±’l */
+	CopyMemoryRenew (&m_dwCharID,				pDataTmp, sizeof (m_dwCharID),					pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwAccountID,			pDataTmp, sizeof (m_dwAccountID),				pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (&m_dwTailCharID,			pDataTmp, sizeof (m_dwTailCharID),				pDataTmp);	/* ä»˜ã„ã¦æ¥ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwFrontCharID,			pDataTmp, sizeof (m_dwFrontCharID),				pDataTmp);	/* ä»˜ã„ã¦ã„ã‚‹ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_dwParentCharID,			pDataTmp, sizeof (m_dwParentCharID),			pDataTmp);	/* è¦ªã®ã‚­ãƒ£ãƒ©ID */
+	CopyMemoryRenew (&m_bBlock,					pDataTmp, sizeof (m_bBlock),					pDataTmp);	/* ã¶ã¤ã‹ã‚‹åˆ¤å®š */
+	CopyMemoryRenew (&m_ptViewCharPos,			pDataTmp, sizeof (m_ptViewCharPos),				pDataTmp);	/* è¡¨ç¤ºç”¨ã®åº§æ¨™è£œæ­£å€¤ */
+	CopyMemoryRenew (&m_bPush,					pDataTmp, sizeof (m_bPush),						pDataTmp);	/* æŠ¼ã›ã‚‹åˆ¤å®š */
+	CopyMemoryRenew (&m_dwMapID,				pDataTmp, sizeof (m_dwMapID),					pDataTmp);	/* ãƒãƒƒãƒ—ID */
+	CopyMemoryRenew (&m_dwMotionTypeID,			pDataTmp, sizeof (m_dwMotionTypeID),			pDataTmp);	/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
+	CopyMemoryRenew (&m_nAnime,					pDataTmp, sizeof (m_nAnime),					pDataTmp);	/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå· */
+	CopyMemoryRenew (&m_nMapX,					pDataTmp, sizeof (m_nMapX),						pDataTmp);	/* ãƒãƒƒãƒ—åº§æ¨™(æ¨ª) */
+	CopyMemoryRenew (&m_nMapY,					pDataTmp, sizeof (m_nMapY),						pDataTmp);	/* ãƒãƒƒãƒ—åº§æ¨™(ç¸¦) */
+	CopyMemoryRenew (&m_nMoveState,				pDataTmp, sizeof (m_nMoveState),				pDataTmp);	/* ç§»å‹•çŠ¶æ…‹ */
+	CopyMemoryRenew (&m_nMoveType,				pDataTmp, sizeof (m_nMoveType),					pDataTmp);	/* ç§»å‹•ç¨®åˆ¥ */
+	CopyMemoryRenew (&m_nDirection,				pDataTmp, sizeof (m_nDirection),				pDataTmp);	/* å‘ã */
+	CopyMemoryRenew (&m_nSex,					pDataTmp, sizeof (m_nSex),						pDataTmp);	/* æ€§åˆ¥ */
+	CopyMemoryRenew (&m_nMaxItemCount,			pDataTmp, sizeof (m_nMaxItemCount),				pDataTmp);	/* æœ€å¤§ã‚¢ã‚¤ãƒ†ãƒ æ‰€æŒæ•° */
+	CopyMemoryRenew (&m_nDropItemAverage,		pDataTmp, sizeof (m_nDropItemAverage),			pDataTmp);	/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	CopyMemoryRenew (&m_nMoveAverage,			pDataTmp, sizeof (m_nMoveAverage),				pDataTmp);	/* ç§»å‹•ç¢ºç‡ */
+	CopyMemoryRenew (&m_nMoveAverageBattle,		pDataTmp, sizeof (m_nMoveAverageBattle),		pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
+	CopyMemoryRenew (&m_wFamilyID,				pDataTmp, sizeof (m_wFamilyID),					pDataTmp);	/* ç¨®æ—ID */
+	CopyMemoryRenew (&m_wGrpIDNPC,				pDataTmp, sizeof (m_wGrpIDNPC),					pDataTmp);	/* ç”»åƒID(NPC) */
+	CopyMemoryRenew (&m_wGrpIDCloth,			pDataTmp, sizeof (m_wGrpIDCloth),				pDataTmp);	/* ç”»åƒID(æœ) */
+	CopyMemoryRenew (&m_wGrpIDEye,				pDataTmp, sizeof (m_wGrpIDEye),					pDataTmp);	/* ç”»åƒID(ç›®) */
+	CopyMemoryRenew (&m_wGrpIDEyeColor,			pDataTmp, sizeof (m_wGrpIDEyeColor),			pDataTmp);	/* ç”»åƒID(ç›®è‰²) */
+	CopyMemoryRenew (&m_wGrpIDHairType,			pDataTmp, sizeof (m_wGrpIDHairType),			pDataTmp);	/* ç”»åƒID(é«ª) */
+	CopyMemoryRenew (&m_wGrpIDHairColor,		pDataTmp, sizeof (m_wGrpIDHairColor),			pDataTmp);	/* ç”»åƒID(é«ªè‰²) */
+	CopyMemoryRenew (&m_wGrpIDSP,				pDataTmp, sizeof (m_wGrpIDSP),					pDataTmp);	/* ç”»åƒID(ç‰¹æ®Šæœ) */
+	CopyMemoryRenew (&m_wGrpIDTmpMain,			pDataTmp, sizeof (m_wGrpIDTmpMain),				pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (&m_wGrpIDTmpSub,			pDataTmp, sizeof (m_wGrpIDTmpSub),				pDataTmp);	/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
+	CopyMemoryRenew (&m_wGrpIDAcce,				pDataTmp, sizeof (m_wGrpIDAcce),				pDataTmp);	/* ç”»åƒID(ã‚¢ã‚¯ã‚»ã‚µãƒª) */
+	CopyMemoryRenew (&m_wGrpIDArmsMain,			pDataTmp, sizeof (m_wGrpIDArmsMain),			pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (&m_wGrpIDArmsSub,			pDataTmp, sizeof (m_wGrpIDArmsSub),				pDataTmp);	/* ç”»åƒID(æŒã¡ç‰©:ã‚µãƒ–) */
+	CopyMemoryRenew (&m_wGrpIDArmsLeftMain,		pDataTmp, sizeof (m_wGrpIDArmsLeftMain),		pDataTmp);	/* ç”»åƒID(ç›¾:ãƒ¡ã‚¤ãƒ³) */
+	CopyMemoryRenew (&m_wGrpIDArmsLeftSub,		pDataTmp, sizeof (m_wGrpIDArmsLeftSub),			pDataTmp);	/* ç”»åƒID(ç›¾:ã‚µãƒ–) */
+	CopyMemoryRenew (&m_wGrpIDInitNPC,			pDataTmp, sizeof (m_wGrpIDInitNPC),				pDataTmp);	/* åˆæœŸç”»åƒID(NPC) */
+	CopyMemoryRenew (&m_wGrpIDInitCloth,		pDataTmp, sizeof (m_wGrpIDInitCloth),			pDataTmp);	/* åˆæœŸç”»åƒID(æœ) */
+	CopyMemoryRenew (&m_wGrpIDInitEye,			pDataTmp, sizeof (m_wGrpIDInitEye),				pDataTmp);	/* åˆæœŸç”»åƒID(ç›®) */
+	CopyMemoryRenew (&m_wGrpIDInitEyeColor,		pDataTmp, sizeof (m_wGrpIDInitEyeColor),		pDataTmp);	/* åˆæœŸç”»åƒID(ç›®è‰²) */
+	CopyMemoryRenew (&m_wGrpIDInitHairType,		pDataTmp, sizeof (m_wGrpIDInitHairType),		pDataTmp);	/* åˆæœŸç”»åƒID(é«ª) */
+	CopyMemoryRenew (&m_wGrpIDInitHairColor,	pDataTmp, sizeof (m_wGrpIDInitHairColor),		pDataTmp);	/* åˆæœŸç”»åƒID(é«ªè‰²) */
+	CopyMemoryRenew (&m_wGrpIDInitSP,			pDataTmp, sizeof (m_wGrpIDInitSP),				pDataTmp);	/* åˆæœŸç”»åƒID(ç‰¹æ®Šæœ) */
+	CopyMemoryRenew (&m_wAtackGauge,			pDataTmp, sizeof (m_wAtackGauge),				pDataTmp);	/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+	CopyMemoryRenew (&m_wDefenseGauge,			pDataTmp, sizeof (m_wDefenseGauge),				pDataTmp);	/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	CopyMemoryRenew (&m_wLevel,					pDataTmp, sizeof (m_wLevel),					pDataTmp);	/* ãƒ¬ãƒ™ãƒ« */
+	CopyMemoryRenew (&m_wStamina,				pDataTmp, sizeof (m_wStamina),					pDataTmp);	/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	CopyMemoryRenew (&m_wPower,					pDataTmp, sizeof (m_wPower),					pDataTmp);	/* è…•åŠ› */
+	CopyMemoryRenew (&m_wStrength,				pDataTmp, sizeof (m_wStrength),					pDataTmp);	/* ä½“åŠ› */
+	CopyMemoryRenew (&m_wMagic,					pDataTmp, sizeof (m_wMagic),					pDataTmp);	/* é­”åŠ› */
+	CopyMemoryRenew (&m_wSkillful,				pDataTmp, sizeof (m_wSkillful),					pDataTmp);	/* å™¨ç”¨ */
+	CopyMemoryRenew (&m_wAbillityAT,			pDataTmp, sizeof (m_wAbillityAT),				pDataTmp);	/* æ”»æ’ƒæŠ€èƒ½ */
+	CopyMemoryRenew (&m_wAbillityDF,			pDataTmp, sizeof (m_wAbillityDF),				pDataTmp);	/* é˜²å¾¡æŠ€èƒ½ */
+	CopyMemoryRenew (&m_wPAtack,				pDataTmp, sizeof (m_wPAtack),					pDataTmp);	/* æ”»æ’ƒåŠ› */
+	CopyMemoryRenew (&m_wPDefense,				pDataTmp, sizeof (m_wPDefense),					pDataTmp);	/* é˜²å¾¡åŠ› */
+	CopyMemoryRenew (&m_wPMagic,				pDataTmp, sizeof (m_wPMagic),					pDataTmp);	/* é­”æ³•åŠ› */
+	CopyMemoryRenew (&m_wPMagicDefense,			pDataTmp, sizeof (m_wPMagicDefense),			pDataTmp);	/* é­”æ³•é˜²å¾¡åŠ› */
+	CopyMemoryRenew (&m_wPHitAverage,			pDataTmp, sizeof (m_wPHitAverage),				pDataTmp);	/* å‘½ä¸­ç‡ */
+	CopyMemoryRenew (&m_wPAvoidAverage,			pDataTmp, sizeof (m_wPAvoidAverage),			pDataTmp);	/* å›é¿ç‡ */
+	CopyMemoryRenew (&m_wPCriticalAverage,		pDataTmp, sizeof (m_wPCriticalAverage),			pDataTmp);	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	CopyMemoryRenew (&m_wAttrFire,				pDataTmp, sizeof (m_wAttrFire),					pDataTmp);	/* å±æ€§[ç«] */
+	CopyMemoryRenew (&m_wAttrWind,				pDataTmp, sizeof (m_wAttrWind),					pDataTmp);	/* å±æ€§[é¢¨] */
+	CopyMemoryRenew (&m_wAttrWater,				pDataTmp, sizeof (m_wAttrWater),				pDataTmp);	/* å±æ€§[æ°´] */
+	CopyMemoryRenew (&m_wAttrEarth,				pDataTmp, sizeof (m_wAttrEarth),				pDataTmp);	/* å±æ€§[åœŸ] */
+	CopyMemoryRenew (&m_wAttrLight,				pDataTmp, sizeof (m_wAttrLight),				pDataTmp);	/* å±æ€§[å…‰] */
+	CopyMemoryRenew (&m_wAttrDark,				pDataTmp, sizeof (m_wAttrDark),					pDataTmp);	/* å±æ€§[é—‡] */
+	CopyMemoryRenew (&m_dwEquipItemIDCloth,		pDataTmp, sizeof (m_dwEquipItemIDCloth),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:æœ */
+	CopyMemoryRenew (&m_dwEquipItemIDAcce1,		pDataTmp, sizeof (m_dwEquipItemIDAcce1),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª1 */
+	CopyMemoryRenew (&m_dwEquipItemIDAcce2,		pDataTmp, sizeof (m_dwEquipItemIDAcce2),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:ã‚¢ã‚¯ã‚»ã‚µãƒª2 */
+	CopyMemoryRenew (&m_dwEquipItemIDArmsRight,	pDataTmp, sizeof (m_dwEquipItemIDArmsRight),	pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å³æ‰‹ */
+	CopyMemoryRenew (&m_dwEquipItemIDArmsLeft,	pDataTmp, sizeof (m_dwEquipItemIDArmsLeft),		pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:å·¦æ‰‹ */
+	CopyMemoryRenew (&m_dwEquipItemIDHead,		pDataTmp, sizeof (m_dwEquipItemIDHead),			pDataTmp);	/* è£…å‚™ã‚¢ã‚¤ãƒ†ãƒ ID:é ­ */
+	CopyMemoryRenew (&m_dwMoveWait,				pDataTmp, sizeof (m_dwMoveWait),				pDataTmp);	/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (&m_dwMoveWaitBattle,		pDataTmp, sizeof (m_dwMoveWaitBattle),			pDataTmp);	/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	CopyMemoryRenew (&m_dwExp,					pDataTmp, sizeof (m_dwExp),						pDataTmp);	/* çµŒé¨“å€¤ */
 	CopyMemoryRenew (&m_dwHP,					pDataTmp, sizeof (m_dwHP),						pDataTmp);	/* HP */
-	CopyMemoryRenew (&m_dwMaxHP,				pDataTmp, sizeof (m_dwMaxHP),					pDataTmp);	/* Å‘åHP */
+	CopyMemoryRenew (&m_dwMaxHP,				pDataTmp, sizeof (m_dwMaxHP),					pDataTmp);	/* æœ€å¤§HP */
 	CopyMemoryRenew (&m_dwSP,					pDataTmp, sizeof (m_dwSP),						pDataTmp);	/* SP */
-	CopyMemoryRenew (&m_dwMaxSP,				pDataTmp, sizeof (m_dwMaxSP),					pDataTmp);	/* Å‘åSP */
-	CopyMemoryRenew (&m_clName,					pDataTmp, sizeof (m_clName),					pDataTmp);	/* –¼‘O‚Ì•`‰æF */
-	CopyMemoryRenew (&m_clSpeak,				pDataTmp, sizeof (m_clSpeak),					pDataTmp);	/* ”­Œ¾‚Ì•`‰æF */
-	StoreRenew (m_strCharName,	(LPCSTR)pDataTmp, pDataTmp);												/* ƒLƒƒƒ‰–¼ */
-	StoreRenew (m_strSpeak,		(LPCSTR)pDataTmp, pDataTmp);												/* ”­Œ¾“à—e */
-	StoreRenew (m_strTalk,		(LPCSTR)pDataTmp, pDataTmp);												/* ‰ï˜bƒf[ƒ^ */
+	CopyMemoryRenew (&m_dwMaxSP,				pDataTmp, sizeof (m_dwMaxSP),					pDataTmp);	/* æœ€å¤§SP */
+	CopyMemoryRenew (&m_clName,					pDataTmp, sizeof (m_clName),					pDataTmp);	/* åå‰ã®æç”»è‰² */
+	CopyMemoryRenew (&m_clSpeak,				pDataTmp, sizeof (m_clSpeak),					pDataTmp);	/* ç™ºè¨€ã®æç”»è‰² */
+	StoreRenew (m_strCharName,	(LPCSTR)pDataTmp, pDataTmp);												/* ã‚­ãƒ£ãƒ©å */
+	StoreRenew (m_strSpeak,		(LPCSTR)pDataTmp, pDataTmp);												/* ç™ºè¨€å†…å®¹ */
+	StoreRenew (m_strTalk,		(LPCSTR)pDataTmp, pDataTmp);												/* ä¼šè©±ãƒ‡ãƒ¼ã‚¿ */
 
 	SetName (m_strCharName);
 	SetSpeak (m_strSpeak);
 
 	while (1) {
-		CopyMemoryRenew (&byTmp, pDataTmp, sizeof (byTmp), pDataTmp);	/* –¼‘O‚Ì‘O‚É•\¦‚·‚éƒ}[ƒN”Ô† */
+		CopyMemoryRenew (&byTmp, pDataTmp, sizeof (byTmp), pDataTmp);	/* åå‰ã®å‰ã«è¡¨ç¤ºã™ã‚‹ãƒãƒ¼ã‚¯ç•ªå· */
 		if (byTmp == 0) {
 			break;
 		}
 		m_abyMark.Add (byTmp);
 	}
 	while (1) {
-		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* ŠƒAƒCƒeƒ€ */
+		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ  */
 		if (dwTmp == 0) {
 			break;
 		}
 		m_adwItemID.Add (dwTmp);
 	}
 	while (1) {
-		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* ŠƒXƒLƒ‹ */
+		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* æ‰€æŒã‚¹ã‚­ãƒ« */
 		if (dwTmp == 0) {
 			break;
 		}
 		m_adwSkillID.Add (dwTmp);
 	}
 
-	CopyMemoryRenew (&m_sizeSearchDistance, pDataTmp, sizeof (m_sizeSearchDistance), pDataTmp);		/* ô“G”ÍˆÍ */
+	CopyMemoryRenew (&m_sizeSearchDistance, pDataTmp, sizeof (m_sizeSearchDistance), pDataTmp);		/* ç­–æ•µç¯„å›² */
 
-	/* NPC”­¶ */
-	CopyMemoryRenew (&m_dwPutCycle,		pDataTmp, sizeof (m_dwPutCycle),	pDataTmp);		/* ”­¶üŠú */
-	CopyMemoryRenew (&m_nPutMoveType,	pDataTmp, sizeof (m_nPutMoveType),	pDataTmp);		/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	CopyMemoryRenew (&m_nMaxPutCount,	pDataTmp, sizeof (m_nMaxPutCount),	pDataTmp);		/* “¯”­¶” */
-	CopyMemoryRenew (&m_nPutAverage,	pDataTmp, sizeof (m_nPutAverage),	pDataTmp);		/* ”­¶Šm—¦ */
-	CopyMemoryRenew (&m_ptPutArea,		pDataTmp, sizeof (m_ptPutArea),		pDataTmp);		/* ”­¶”ÍˆÍ(”¼Œa) */
+	/* NPCç™ºç”Ÿ */
+	CopyMemoryRenew (&m_dwPutCycle,		pDataTmp, sizeof (m_dwPutCycle),	pDataTmp);		/* ç™ºç”Ÿå‘¨æœŸ */
+	CopyMemoryRenew (&m_nPutMoveType,	pDataTmp, sizeof (m_nPutMoveType),	pDataTmp);		/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	CopyMemoryRenew (&m_nMaxPutCount,	pDataTmp, sizeof (m_nMaxPutCount),	pDataTmp);		/* åŒæ™‚ç™ºç”Ÿæ•° */
+	CopyMemoryRenew (&m_nPutAverage,	pDataTmp, sizeof (m_nPutAverage),	pDataTmp);		/* ç™ºç”Ÿç¢ºç‡ */
+	CopyMemoryRenew (&m_ptPutArea,		pDataTmp, sizeof (m_ptPutArea),		pDataTmp);		/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 
 	pRet = pDataTmp;
 	return pRet;
@@ -1169,10 +1169,10 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsLogin											 */
-/* “à—e		:ƒƒOƒCƒ“’†‚©”»’è												 */
-/* “ú•t		:2007/02/12														 */
-/* –ß‚è’l	:TRUE:ƒƒOƒCƒ“’† FALS:ƒƒOƒAƒEƒg’†								 */
+/* é–¢æ•°å	:CInfoCharBase::IsLogin											 */
+/* å†…å®¹		:ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã‹åˆ¤å®š												 */
+/* æ—¥ä»˜		:2007/02/12														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ãƒ­ã‚°ã‚¤ãƒ³ä¸­ FALS:ãƒ­ã‚°ã‚¢ã‚¦ãƒˆä¸­								 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsLogin(void)
@@ -1199,10 +1199,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsStateBattle									 */
-/* “à—e		:í“¬ƒ‚[ƒh‚©”»’è												 */
-/* “ú•t		:2007/07/21														 */
-/* –ß‚è’l	:TRUE:í“¬ƒ‚[ƒh’†												 */
+/* é–¢æ•°å	:CInfoCharBase::IsStateBattle									 */
+/* å†…å®¹		:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ã‹åˆ¤å®š												 */
+/* æ—¥ä»˜		:2007/07/21														 */
+/* æˆ»ã‚Šå€¤	:TRUE:æˆ¦é—˜ãƒ¢ãƒ¼ãƒ‰ä¸­												 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsStateBattle(void)
@@ -1212,10 +1212,10 @@ BOOL CInfoCharBase::IsStateBattle(void)
 	bRet = FALSE;
 
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_BATTLE:			/* í“¬’† */
-	case CHARMOVESTATE_BATTLEATACK:		/* í“¬UŒ‚’† */
-	case CHARMOVESTATE_BATTLEMOVE:		/* í“¬ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLE_DEFENSE:	/* –hŒä’† */
+	case CHARMOVESTATE_BATTLE:			/* æˆ¦é—˜ä¸­ */
+	case CHARMOVESTATE_BATTLEATACK:		/* æˆ¦é—˜æ”»æ’ƒä¸­ */
+	case CHARMOVESTATE_BATTLEMOVE:		/* æˆ¦é—˜ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLE_DEFENSE:	/* é˜²å¾¡ä¸­ */
 		break;
 	default:
 		goto Exit;
@@ -1228,10 +1228,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsStateMove										 */
-/* “à—e		:ˆÚ“®’†‚©”»’è													 */
-/* “ú•t		:2008/08/13														 */
-/* –ß‚è’l	:TRUE:ˆÚ“®’†													 */
+/* é–¢æ•°å	:CInfoCharBase::IsStateMove										 */
+/* å†…å®¹		:ç§»å‹•ä¸­ã‹åˆ¤å®š													 */
+/* æ—¥ä»˜		:2008/08/13														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ç§»å‹•ä¸­													 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsStateMove(void)
@@ -1241,8 +1241,8 @@ BOOL CInfoCharBase::IsStateMove(void)
 	bRet = FALSE;
 
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_MOVE:			/* ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEMOVE:		/* í“¬ˆÚ“®’† */
+	case CHARMOVESTATE_MOVE:			/* ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEMOVE:		/* æˆ¦é—˜ç§»å‹•ä¸­ */
 		break;
 	default:
 		goto Exit;
@@ -1255,10 +1255,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsViewArea										 */
-/* “à—e		:Œ©‚¦‚é”ÍˆÍ‚©”»’è												 */
-/* “ú•t		:2007/09/08														 */
-/* –ß‚è’l	:TRUE:Œ©‚¦‚é”ÍˆÍ												 */
+/* é–¢æ•°å	:CInfoCharBase::IsViewArea										 */
+/* å†…å®¹		:è¦‹ãˆã‚‹ç¯„å›²ã‹åˆ¤å®š												 */
+/* æ—¥ä»˜		:2007/09/08														 */
+/* æˆ»ã‚Šå€¤	:TRUE:è¦‹ãˆã‚‹ç¯„å›²												 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsViewArea(DWORD dwMapID, POINT *pptPos)
@@ -1282,9 +1282,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsNPC											 */
-/* “à—e		:NPC‚©”»’è														 */
-/* “ú•t		:2007/09/09														 */
+/* é–¢æ•°å	:CInfoCharBase::IsNPC											 */
+/* å†…å®¹		:NPCã‹åˆ¤å®š														 */
+/* æ—¥ä»˜		:2007/09/09														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsNPC(void)
@@ -1304,9 +1304,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::CheckSessionID									 */
-/* “à—e		:ƒZƒbƒVƒ‡ƒ“ID‚ğƒ`ƒFƒbƒN											 */
-/* “ú•t		:2008/01/05														 */
+/* é–¢æ•°å	:CInfoCharBase::CheckSessionID									 */
+/* å†…å®¹		:ã‚»ãƒƒã‚·ãƒ§ãƒ³IDã‚’ãƒã‚§ãƒƒã‚¯											 */
+/* æ—¥ä»˜		:2008/01/05														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::CheckSessionID(DWORD dwSessionID)
@@ -1326,15 +1326,15 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetFrontPos										 */
-/* “à—e		:ˆê•à‘O‚ÌƒLƒƒƒ‰À•W‚ğæ“¾										 */
-/* “ú•t		:2007/07/27														 */
+/* é–¢æ•°å	:CInfoCharBase::GetFrontPos										 */
+/* å†…å®¹		:ä¸€æ­©å‰ã®ã‚­ãƒ£ãƒ©åº§æ¨™ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/07/27														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetFrontPos(
-	POINT &ptDst,					/* [ou] æ“¾æ */
-	int nDirection	/*-1*/,			/* [in] Œü‚« */
-	BOOL bMove		/*FALSE*/)		/* [in] TRUE:ˆÚ“®æ—p‚ÌƒLƒƒƒ‰À•W */
+	POINT &ptDst,					/* [ou] å–å¾—å…ˆ */
+	int nDirection	/*-1*/,			/* [in] å‘ã */
+	BOOL bMove		/*FALSE*/)		/* [in] TRUE:ç§»å‹•å…ˆç”¨ã®ã‚­ãƒ£ãƒ©åº§æ¨™ */
 {
 	RECT rcTmp;
 
@@ -1385,14 +1385,14 @@ void CInfoCharBase::GetFrontPos(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetFrontPos										 */
-/* “à—e		:ˆê•à‘O‚ÌƒLƒƒƒ‰À•W‚ğæ“¾										 */
-/* “ú•t		:2008/05/01														 */
+/* é–¢æ•°å	:CInfoCharBase::GetFrontPos										 */
+/* å†…å®¹		:ä¸€æ­©å‰ã®ã‚­ãƒ£ãƒ©åº§æ¨™ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/05/01														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetFrontPos(
-	CmyArray<POINT, POINT> &aptPos,		/* [ou] æ“¾æ */
-	int nDirection	/*-1*/)				/* [in] Œü‚« */
+	CmyArray<POINT, POINT> &aptPos,		/* [ou] å–å¾—å…ˆ */
+	int nDirection	/*-1*/)				/* [in] å‘ã */
 {
 	int i, nCount;
 	SIZE sizeChar;
@@ -1454,14 +1454,14 @@ void CInfoCharBase::GetFrontPos(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetFrontMapPos									 */
-/* “à—e		:ˆê•à‘O‚Ìƒ}ƒbƒvÀ•W‚ğæ“¾										 */
-/* “ú•t		:2008/05/24														 */
+/* é–¢æ•°å	:CInfoCharBase::GetFrontMapPos									 */
+/* å†…å®¹		:ä¸€æ­©å‰ã®ãƒãƒƒãƒ—åº§æ¨™ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/05/24														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetFrontMapPos(
-	POINT &ptDst,				/* [ou] æ“¾æ */
-	int nDirection	/*-1*/)		/* [in] Œü‚« */
+	POINT &ptDst,				/* [ou] å–å¾—å…ˆ */
+	int nDirection	/*-1*/)		/* [in] å‘ã */
 {
 	int x, y, nFrontPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, nFrontPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	SIZE sizeChar;
@@ -1498,14 +1498,14 @@ void CInfoCharBase::GetFrontMapPos(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetFrontMapPosRect								 */
-/* “à—e		:ˆê•à‘O‚Ìƒ}ƒbƒvÀ•W‹éŒ`‚ğæ“¾									 */
-/* “ú•t		:2009/01/31														 */
+/* é–¢æ•°å	:CInfoCharBase::GetFrontMapPosRect								 */
+/* å†…å®¹		:ä¸€æ­©å‰ã®ãƒãƒƒãƒ—åº§æ¨™çŸ©å½¢ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2009/01/31														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetFrontMapPosRect(
-	RECT &rcDst,				/* [ou] æ“¾æ */
-	int nDirection	/*-1*/)		/* [in] Œü‚« */
+	RECT &rcDst,				/* [ou] å–å¾—å…ˆ */
+	int nDirection	/*-1*/)		/* [in] å‘ã */
 {
 	int nFrontPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, nFrontPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 
@@ -1545,14 +1545,14 @@ void CInfoCharBase::GetFrontMapPosRect(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetDirection									 */
-/* “à—e		:w’èÀ•W‚ÌŒü‚«‚ğæ“¾											 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CInfoCharBase::GetDirection									 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã®å‘ãã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 int CInfoCharBase::GetDirection(
-	int x,		/* [in] ˆÚ“®æ‚ÌÀ•W(X) */
-	int y)		/* [in] ˆÚ“®æ‚ÌÀ•W(Y) */
+	int x,		/* [in] ç§»å‹•å…ˆã®åº§æ¨™(X) */
+	int y)		/* [in] ç§»å‹•å…ˆã®åº§æ¨™(Y) */
 {
 	int nRet;
 
@@ -1588,9 +1588,9 @@ int CInfoCharBase::GetDirection(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetAtackType									 */
-/* “à—e		:UŒ‚í•Ê‚ğæ“¾													 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharBase::GetAtackType									 */
+/* å†…å®¹		:æ”»æ’ƒç¨®åˆ¥ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 int CInfoCharBase::GetAtackType(void)
@@ -1599,15 +1599,15 @@ int CInfoCharBase::GetAtackType(void)
 
 	nRet = 0;
 
-//Todo:‰æ‘œ‚Å‚Í‚È‚­•Ší‚Ì‘®«‚ğŒ©‚é‚æ‚¤‚É
+//Todo:ç”»åƒã§ã¯ãªãæ­¦å™¨ã®å±æ€§ã‚’è¦‹ã‚‹ã‚ˆã†ã«
 	switch (m_wGrpIDArmsMain) {
-	case 0:		/* –³‚µ */
+	case 0:		/* ç„¡ã— */
 		nRet = WEAPONTYPE_SWING;
 		break;
-//	case 1:		/* U‚èE“Ë‚« */
+//	case 1:		/* æŒ¯ã‚Šãƒ»çªã */
 //		nRet = WEAPONTYPE_POKE;
 //		break;
-	case 1:		/* ‹| */
+	case 1:		/* å¼“ */
 		nRet = WEAPONTYPE_BOW;
 		break;
 	}
@@ -1617,26 +1617,26 @@ int CInfoCharBase::GetAtackType(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetAtackMotion									 */
-/* “à—e		:UŒ‚ƒ‚[ƒVƒ‡ƒ“‚Ìİ’è											 */
-/* “ú•t		:2007/12/05														 */
+/* é–¢æ•°å	:CInfoCharBase::SetAtackMotion									 */
+/* å†…å®¹		:æ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã®è¨­å®š											 */
+/* æ—¥ä»˜		:2007/12/05														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetAtackMotion(
-	int nMotionID)		/* [in] ƒ‚[ƒVƒ‡ƒ“ID(4•ûŒü‚Ìæ“ª) */
+	int nMotionID)		/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ID(4æ–¹å‘ã®å…ˆé ­) */
 {
 	m_adwMotionID[CHARMOTIONID_ATACK] = nMotionID;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetDrawDirection								 */
-/* “à—e		:•`‰æ—p‚É4•ûŒü‚ÅŒü‚«‚ğæ“¾										 */
-/* “ú•t		:2008/06/21														 */
+/* é–¢æ•°å	:CInfoCharBase::GetDrawDirection								 */
+/* å†…å®¹		:æç”»ç”¨ã«4æ–¹å‘ã§å‘ãã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/06/21														 */
 /* ========================================================================= */
 
 int CInfoCharBase::GetDrawDirection(
-	int nDirection/*-1*/)		/* [in] Œü‚« */
+	int nDirection/*-1*/)		/* [in] å‘ã */
 {
 	int anDirection[] = {0, 1, 2, 3, 0, 1, 1, 0};
 
@@ -1649,9 +1649,9 @@ int CInfoCharBase::GetDrawDirection(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetBackDirection								 */
-/* “à—e		:”½‘Î•ûŒü‚ğæ“¾													 */
-/* “ú•t		:2008/11/24														 */
+/* é–¢æ•°å	:CInfoCharBase::GetBackDirection								 */
+/* å†…å®¹		:åå¯¾æ–¹å‘ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/11/24														 */
 /* ========================================================================= */
 
 int CInfoCharBase::GetBackDirection(void)
@@ -1663,9 +1663,9 @@ int CInfoCharBase::GetBackDirection(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetMoveWait										 */
-/* “à—e		:ó‘Ô‚É‰‚¶‚½ˆÚ“®‘¬“x‚ğæ“¾										 */
-/* “ú•t		:2008/08/09														 */
+/* é–¢æ•°å	:CInfoCharBase::GetMoveWait										 */
+/* å†…å®¹		:çŠ¶æ…‹ã«å¿œã˜ãŸç§»å‹•é€Ÿåº¦ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/08/09														 */
 /* ========================================================================= */
 
 DWORD CInfoCharBase::GetMoveWait(void)
@@ -1686,9 +1686,9 @@ DWORD CInfoCharBase::GetMoveWait(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetPosRect										 */
-/* “à—e		:À•W‹éŒ`‚ğæ“¾													 */
-/* “ú•t		:2009/01/28														 */
+/* é–¢æ•°å	:CInfoCharBase::GetPosRect										 */
+/* å†…å®¹		:åº§æ¨™çŸ©å½¢ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2009/01/28														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetPosRect(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
@@ -1713,9 +1713,9 @@ void CInfoCharBase::GetPosRect(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetPosRectOnce									 */
-/* “à—e		:1•à•ª‚ÌÀ•W‹éŒ`‚ğæ“¾											 */
-/* “ú•t		:2009/05/10														 */
+/* é–¢æ•°å	:CInfoCharBase::GetPosRectOnce									 */
+/* å†…å®¹		:1æ­©åˆ†ã®åº§æ¨™çŸ©å½¢ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/05/10														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetPosRectOnce(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
@@ -1740,9 +1740,9 @@ void CInfoCharBase::GetPosRectOnce(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetMapPosRect									 */
-/* “à—e		:ƒ}ƒbƒvÀ•W‹éŒ`‚ğæ“¾											 */
-/* “ú•t		:2009/01/31														 */
+/* é–¢æ•°å	:CInfoCharBase::GetMapPosRect									 */
+/* å†…å®¹		:ãƒãƒƒãƒ—åº§æ¨™çŸ©å½¢ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2009/01/31														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetMapPosRect(RECT &rcDst)
@@ -1756,9 +1756,9 @@ void CInfoCharBase::GetMapPosRect(RECT &rcDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetItem											 */
-/* “à—e		:ƒAƒCƒeƒ€î•ñ‚ğİ’è												 */
-/* “ú•t		:2007/08/05														 */
+/* é–¢æ•°å	:CInfoCharBase::SetItem											 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2007/08/05														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetItem(ARRAYDWORD *padwItemID)
@@ -1768,9 +1768,9 @@ void CInfoCharBase::SetItem(ARRAYDWORD *padwItemID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsItemAdd										 */
-/* “à—e		:ƒAƒCƒeƒ€‚ğ’Ç‰Á‚Å‚«‚é‚©”»’è										 */
-/* “ú•t		:2007/08/11														 */
+/* é–¢æ•°å	:CInfoCharBase::IsItemAdd										 */
+/* å†…å®¹		:ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿½åŠ ã§ãã‚‹ã‹åˆ¤å®š										 */
+/* æ—¥ä»˜		:2007/08/11														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsItemAdd(void)
@@ -1781,7 +1781,7 @@ BOOL CInfoCharBase::IsItemAdd(void)
 	bRet = FALSE;
 
 	nCount = m_adwItemID.GetSize ();
-	/* ‚à‚¤‚Ä‚È‚¢H */
+	/* ã‚‚ã†æŒã¦ãªã„ï¼Ÿ */
 	if (nCount >= m_nMaxItemCount) {
 		goto Exit;
 	}
@@ -1793,21 +1793,21 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::DeleteItem										 */
-/* “à—e		:ŠƒAƒCƒeƒ€‚ğíœ												 */
-/* “ú•t		:2007/08/19														 */
+/* é–¢æ•°å	:CInfoCharBase::DeleteItem										 */
+/* å†…å®¹		:æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã‚’å‰Šé™¤												 */
+/* æ—¥ä»˜		:2007/08/19														 */
 /* ========================================================================= */
 
 void CInfoCharBase::DeleteItem(DWORD dwItemID)
 {
-	//Todo:‘•”õ•i‚Ì‰ğœ‚È‚Ç‚Ìˆ—‚ğÀ‘•‚·‚é
+	//Todo:è£…å‚™å“ã®è§£é™¤ãªã©ã®å‡¦ç†ã‚’å®Ÿè£…ã™ã‚‹
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::HaveItem										 */
-/* “à—e		:w’èƒAƒCƒeƒ€‚ğ‚Á‚Ä‚¢‚é‚©”»’è									 */
-/* “ú•t		:2008/06/10														 */
+/* é–¢æ•°å	:CInfoCharBase::HaveItem										 */
+/* å†…å®¹		:æŒ‡å®šã‚¢ã‚¤ãƒ†ãƒ ã‚’æŒã£ã¦ã„ã‚‹ã‹åˆ¤å®š									 */
+/* æ—¥ä»˜		:2008/06/10														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::HaveItem(DWORD dwItemID)
@@ -1833,15 +1833,15 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetTargetPos									 */
-/* “à—e		:w’èÀ•W‚ğæ“¾													 */
-/* “ú•t		:2008/08/09														 */
+/* é–¢æ•°å	:CInfoCharBase::GetTargetPos									 */
+/* å†…å®¹		:æŒ‡å®šåº§æ¨™ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/08/09														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetTargetPos(
-	POINT *ptTarget,		/* [in] ÅIˆÚ“®æ */
-	POINT &ptDst,			/* [out] óææ */
-	int nCount)				/* [in] w’è•à” */
+	POINT *ptTarget,		/* [in] æœ€çµ‚ç§»å‹•å…ˆ */
+	POINT &ptDst,			/* [out] å—å–å…ˆ */
+	int nCount)				/* [in] æŒ‡å®šæ­©æ•° */
 {
 	int i, E, dx, dy, sx, sy, x0, x1, y0, y1, nCountTmp;
 
@@ -1857,7 +1857,7 @@ void CInfoCharBase::GetTargetPos(
 	sy = (y1 > y0) ? 1 : -1;
 
 	nCountTmp = 0;
-	/* ŒX‚«‚ª1ˆÈ‰º‚Ìê‡ */
+	/* å‚¾ããŒ1ä»¥ä¸‹ã®å ´åˆ */
 	if (dx >= dy) {
 		E = -dx;
 		for (i = 0 ; i <= dx ; i ++) {
@@ -1877,7 +1877,7 @@ void CInfoCharBase::GetTargetPos(
 			nCountTmp ++;
 		}
 
-	/* ŒX‚«‚ª1‚æ‚è‘å‚«‚¢ê‡ */
+	/* å‚¾ããŒ1ã‚ˆã‚Šå¤§ãã„å ´åˆ */
 	} else {
 		E = -dy;
 		for (i = 0 ; i <= dy ; i ++) {
@@ -1901,9 +1901,9 @@ void CInfoCharBase::GetTargetPos(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetTarget										 */
-/* “à—e		:ƒ^[ƒQƒbƒgƒLƒƒƒ‰‚ğİ’è											 */
-/* “ú•t		:2008/08/09														 */
+/* é–¢æ•°å	:CInfoCharBase::SetTarget										 */
+/* å†…å®¹		:ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚­ãƒ£ãƒ©ã‚’è¨­å®š											 */
+/* æ—¥ä»˜		:2008/08/09														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetTarget(CInfoCharBase *pCharTarget)
@@ -1937,9 +1937,9 @@ void CInfoCharBase::SetTarget(CInfoCharBase *pCharTarget)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetSkill										 */
-/* “à—e		:ƒXƒLƒ‹î•ñ‚ğİ’è												 */
-/* “ú•t		:2008/12/31														 */
+/* é–¢æ•°å	:CInfoCharBase::SetSkill										 */
+/* å†…å®¹		:ã‚¹ã‚­ãƒ«æƒ…å ±ã‚’è¨­å®š												 */
+/* æ—¥ä»˜		:2008/12/31														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetSkill(ARRAYDWORD *padwSkillID)
@@ -1949,9 +1949,9 @@ void CInfoCharBase::SetSkill(ARRAYDWORD *padwSkillID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::HaveSkill										 */
-/* “à—e		:w’èƒXƒLƒ‹‚ğ‚Á‚Ä‚¢‚é‚©”»’è									 */
-/* “ú•t		:2009/01/01														 */
+/* é–¢æ•°å	:CInfoCharBase::HaveSkill										 */
+/* å†…å®¹		:æŒ‡å®šã‚¹ã‚­ãƒ«ã‚’æŒã£ã¦ã„ã‚‹ã‹åˆ¤å®š									 */
+/* æ—¥ä»˜		:2009/01/01														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::HaveSkill(DWORD dwSkillID)
@@ -1977,9 +1977,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::AddSkill										 */
-/* “à—e		:ƒXƒLƒ‹‚ğ’Ç‰Á													 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CInfoCharBase::AddSkill										 */
+/* å†…å®¹		:ã‚¹ã‚­ãƒ«ã‚’è¿½åŠ 													 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::AddSkill(DWORD dwSkillID)
@@ -2005,9 +2005,9 @@ BOOL CInfoCharBase::AddSkill(DWORD dwSkillID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::DeleteSkill										 */
-/* “à—e		:ƒXƒLƒ‹‚ğíœ													 */
-/* “ú•t		:2009/01/17														 */
+/* é–¢æ•°å	:CInfoCharBase::DeleteSkill										 */
+/* å†…å®¹		:ã‚¹ã‚­ãƒ«ã‚’å‰Šé™¤													 */
+/* æ—¥ä»˜		:2009/01/17														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::DeleteSkill(DWORD dwSkillID)
@@ -2031,10 +2031,10 @@ BOOL CInfoCharBase::DeleteSkill(DWORD dwSkillID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetPos											 */
-/* “à—e		:À•W‚ğw’è														 */
-/* “ú•t		:2008/04/29														 */
-/* –ß‚è’l	:ˆÚ“®•ûŒü														 */
+/* é–¢æ•°å	:CInfoCharBase::SetPos											 */
+/* å†…å®¹		:åº§æ¨™ã‚’æŒ‡å®š														 */
+/* æ—¥ä»˜		:2008/04/29														 */
+/* æˆ»ã‚Šå€¤	:ç§»å‹•æ–¹å‘														 */
 /* ========================================================================= */
 
 int CInfoCharBase::SetPos(int x, int y, BOOL bBack/*FALSE*/)
@@ -2078,10 +2078,10 @@ int CInfoCharBase::SetPos(int x, int y, BOOL bBack/*FALSE*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsMove											 */
-/* “à—e		:ˆÚ“®’†‚©”»’è													 */
-/* “ú•t		:2007/01/21														 */
-/* –ß‚è’l	:TRUE:ˆÚ“®’† FALSE:’â~’†										 */
+/* é–¢æ•°å	:CInfoCharBase::IsMove											 */
+/* å†…å®¹		:ç§»å‹•ä¸­ã‹åˆ¤å®š													 */
+/* æ—¥ä»˜		:2007/01/21														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ç§»å‹•ä¸­ FALSE:åœæ­¢ä¸­										 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsMove(void)
@@ -2091,9 +2091,9 @@ BOOL CInfoCharBase::IsMove(void)
 	bRet = FALSE;
 
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_MOVE:		/* ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEMOVE:	/* í“¬ˆÚ“®’† */
-	case CHARMOVESTATE_BATTLEATACK:	/* í“¬UŒ‚’† (ˆÚ“®‚Å‚«‚È‚¢‚Æ‚¢‚¤ˆÓ–¡‚Å) */
+	case CHARMOVESTATE_MOVE:		/* ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEMOVE:	/* æˆ¦é—˜ç§»å‹•ä¸­ */
+	case CHARMOVESTATE_BATTLEATACK:	/* æˆ¦é—˜æ”»æ’ƒä¸­ (ç§»å‹•ã§ããªã„ã¨ã„ã†æ„å‘³ã§) */
 		bRet = TRUE;
 		break;
 	}
@@ -2103,9 +2103,9 @@ BOOL CInfoCharBase::IsMove(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetDirection									 */
-/* “à—e		:Œü‚«‚ğw’è														 */
-/* “ú•t		:2008/04/29														 */
+/* é–¢æ•°å	:CInfoCharBase::SetDirection									 */
+/* å†…å®¹		:å‘ãã‚’æŒ‡å®š														 */
+/* æ—¥ä»˜		:2008/04/29														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetDirection(int nDirection)
@@ -2118,9 +2118,9 @@ void CInfoCharBase::SetDirection(int nDirection)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetMoveState									 */
-/* “à—e		:ˆÚ“®ó‘Ô‚ğ•ÏX													 */
-/* “ú•t		:2007/02/26														 */
+/* é–¢æ•°å	:CInfoCharBase::SetMoveState									 */
+/* å†…å®¹		:ç§»å‹•çŠ¶æ…‹ã‚’å¤‰æ›´													 */
+/* æ—¥ä»˜		:2007/02/26														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetMoveState(int nMoveState)
@@ -2130,9 +2130,9 @@ void CInfoCharBase::SetMoveState(int nMoveState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetProcState									 */
-/* “à—e		:s“®ó‘Ô‚ğ•ÏX													 */
-/* “ú•t		:2008/06/11														 */
+/* é–¢æ•°å	:CInfoCharBase::SetProcState									 */
+/* å†…å®¹		:è¡Œå‹•çŠ¶æ…‹ã‚’å¤‰æ›´													 */
+/* æ—¥ä»˜		:2008/06/11														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetProcState(int nProcState)
@@ -2142,9 +2142,9 @@ void CInfoCharBase::SetProcState(int nProcState)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetName											 */
-/* “à—e		:ƒLƒƒƒ‰–¼‚ğXV													 */
-/* “ú•t		:2007/01/28														 */
+/* é–¢æ•°å	:CInfoCharBase::SetName											 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©åã‚’æ›´æ–°													 */
+/* æ—¥ä»˜		:2007/01/28														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetName(LPCSTR pszName)
@@ -2154,9 +2154,9 @@ void CInfoCharBase::SetName(LPCSTR pszName)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::SetSpeak										 */
-/* “à—e		:”­Œ¾“à—e‚ğXV													 */
-/* “ú•t		:2007/02/04														 */
+/* é–¢æ•°å	:CInfoCharBase::SetSpeak										 */
+/* å†…å®¹		:ç™ºè¨€å†…å®¹ã‚’æ›´æ–°													 */
+/* æ—¥ä»˜		:2007/02/04														 */
 /* ========================================================================= */
 
 void CInfoCharBase::SetSpeak(LPCSTR pszSpeak)
@@ -2173,25 +2173,25 @@ void CInfoCharBase::SetSpeak(LPCSTR pszSpeak)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::Copy											 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CInfoCharBase::Copy											 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 {
 	int i, nCount;
 
-	m_dwLightTime				= m_dwLightTime;				/* “”‚è—LŒøŠÔ */
-	m_nLightLevel				= m_nLightLevel;				/* “”‚èƒŒƒxƒ‹ */
+	m_dwLightTime				= m_dwLightTime;				/* ç¯ã‚Šæœ‰åŠ¹æ™‚é–“ */
+	m_nLightLevel				= m_nLightLevel;				/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
 
 	m_dwAccountID				= pSrc->m_dwAccountID;
 	m_dwTailCharID				= pSrc->m_dwTailCharID;
 	m_dwFrontCharID				= pSrc->m_dwFrontCharID;
 	m_dwParentCharID			= pSrc->m_dwParentCharID;
 	m_bBlock					= pSrc->m_bBlock;
-	m_ptViewCharPos				= pSrc->m_ptViewCharPos;		/* •\¦—p‚ÌÀ•W•â³’l */
-	m_ptStartPos				= pSrc->m_ptStartPos;			/* ŠJnÀ•W */
+	m_ptViewCharPos				= pSrc->m_ptViewCharPos;		/* è¡¨ç¤ºç”¨ã®åº§æ¨™è£œæ­£å€¤ */
+	m_ptStartPos				= pSrc->m_ptStartPos;			/* é–‹å§‹åº§æ¨™ */
 	m_bPush						= pSrc->m_bPush;
 	m_nAnime					= pSrc->m_nAnime;
 	m_nMapX						= pSrc->m_nMapX;
@@ -2202,10 +2202,10 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_nGrpSize					= pSrc->m_nGrpSize;
 	m_nSex						= pSrc->m_nSex;
 	m_nMaxItemCount				= pSrc->m_nMaxItemCount;
-	m_nDropItemAverage			= pSrc->m_nDropItemAverage;		/* ƒAƒCƒeƒ€ƒhƒƒbƒv—¦ */
-	m_nMoveAverage				= pSrc->m_nMoveAverage;			/* ˆÚ“®Šm—¦ */
-	m_nMoveAverageBattle		= pSrc->m_nMoveAverageBattle;	/* í“¬ˆÚ“®Šm—¦ */
-	m_bChargeAtack				= pSrc->m_bChargeAtack;			/* —­‚ßUŒ‚ */
+	m_nDropItemAverage			= pSrc->m_nDropItemAverage;		/* ã‚¢ã‚¤ãƒ†ãƒ ãƒ‰ãƒ­ãƒƒãƒ—ç‡ */
+	m_nMoveAverage				= pSrc->m_nMoveAverage;			/* ç§»å‹•ç¢ºç‡ */
+	m_nMoveAverageBattle		= pSrc->m_nMoveAverageBattle;	/* æˆ¦é—˜æ™‚ç§»å‹•ç¢ºç‡ */
+	m_bChargeAtack				= pSrc->m_bChargeAtack;			/* æºœã‚æ”»æ’ƒ */
 	m_wFamilyID					= pSrc->m_wFamilyID;
 	m_wGrpIDNPC					= pSrc->m_wGrpIDNPC;
 	m_wGrpIDCloth				= pSrc->m_wGrpIDCloth;
@@ -2214,8 +2214,8 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_wGrpIDHairType			= pSrc->m_wGrpIDHairType;
 	m_wGrpIDHairColor			= pSrc->m_wGrpIDHairColor;
 	m_wGrpIDSP					= pSrc->m_wGrpIDSP;
-	m_wGrpIDTmpMain				= pSrc->m_wGrpIDTmpMain;		/* ‰æ‘œID(ˆê•:ƒƒCƒ“) */
-	m_wGrpIDTmpSub				= pSrc->m_wGrpIDTmpSub;			/* ‰æ‘œID(ˆê•:ƒTƒu) */
+	m_wGrpIDTmpMain				= pSrc->m_wGrpIDTmpMain;		/* ç”»åƒID(ä¸€æ™‚æœ:ãƒ¡ã‚¤ãƒ³) */
+	m_wGrpIDTmpSub				= pSrc->m_wGrpIDTmpSub;			/* ç”»åƒID(ä¸€æ™‚æœ:ã‚µãƒ–) */
 	m_wGrpIDAcce				= pSrc->m_wGrpIDAcce;
 	m_wGrpIDArmsMain			= pSrc->m_wGrpIDArmsMain;
 	m_wGrpIDArmsSub				= pSrc->m_wGrpIDArmsSub;
@@ -2228,29 +2228,29 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_wGrpIDInitHairType		= pSrc->m_wGrpIDInitHairType;
 	m_wGrpIDInitHairColor		= pSrc->m_wGrpIDInitHairColor;
 	m_wGrpIDInitSP				= pSrc->m_wGrpIDInitSP;
-	m_wAtackGauge				= pSrc->m_wAtackGauge;			/* ƒAƒ^ƒbƒNƒQ[ƒW */
-	m_wDefenseGauge				= pSrc->m_wDefenseGauge;		/* ƒfƒBƒtƒFƒ“ƒXƒQ[ƒW */
-	m_wLevel					= pSrc->m_wLevel;				/* ƒŒƒxƒ‹ */
-	m_wStamina					= pSrc->m_wStamina;				/* ƒXƒ^ƒ~ƒi */
-	m_wPower					= pSrc->m_wPower;				/* ˜r—Í */
-	m_wStrength					= pSrc->m_wStrength;			/* ‘Ì—Í */
-	m_wMagic					= pSrc->m_wMagic;				/* –‚—Í */
-	m_wSkillful					= pSrc->m_wSkillful;			/* Ší—p */
-	m_wAbillityAT				= pSrc->m_wAbillityAT;			/* UŒ‚‹Z”\ */
-	m_wAbillityDF				= pSrc->m_wAbillityDF;			/* –hŒä‹Z”\ */
-	m_wPAtack					= pSrc->m_wPAtack;				/* UŒ‚—Í */
-	m_wPDefense					= pSrc->m_wPDefense;			/* –hŒä—Í */
-	m_wPMagic					= pSrc->m_wPMagic;				/* –‚–@—Í */
-	m_wPMagicDefense			= pSrc->m_wPMagicDefense;		/* –‚–@–hŒä—Í */
-	m_wPHitAverage				= pSrc->m_wPHitAverage;			/* –½’†—¦ */
-	m_wPAvoidAverage			= pSrc->m_wPAvoidAverage;		/* ‰ñ”ğ—¦ */
-	m_wPCriticalAverage			= pSrc->m_wPCriticalAverage;	/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-	m_wAttrFire					= pSrc->m_wAttrFire;			/* ‘®«[‰Î] */
-	m_wAttrWind					= pSrc->m_wAttrWind;			/* ‘®«[•—] */
-	m_wAttrWater				= pSrc->m_wAttrWater;			/* ‘®«[…] */
-	m_wAttrEarth				= pSrc->m_wAttrEarth;			/* ‘®«[“y] */
-	m_wAttrLight				= pSrc->m_wAttrLight;			/* ‘®«[Œõ] */
-	m_wAttrDark					= pSrc->m_wAttrDark;			/* ‘®«[ˆÅ] */
+	m_wAtackGauge				= pSrc->m_wAtackGauge;			/* ã‚¢ã‚¿ãƒƒã‚¯ã‚²ãƒ¼ã‚¸ */
+	m_wDefenseGauge				= pSrc->m_wDefenseGauge;		/* ãƒ‡ã‚£ãƒ•ã‚§ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ */
+	m_wLevel					= pSrc->m_wLevel;				/* ãƒ¬ãƒ™ãƒ« */
+	m_wStamina					= pSrc->m_wStamina;				/* ã‚¹ã‚¿ãƒŸãƒŠ */
+	m_wPower					= pSrc->m_wPower;				/* è…•åŠ› */
+	m_wStrength					= pSrc->m_wStrength;			/* ä½“åŠ› */
+	m_wMagic					= pSrc->m_wMagic;				/* é­”åŠ› */
+	m_wSkillful					= pSrc->m_wSkillful;			/* å™¨ç”¨ */
+	m_wAbillityAT				= pSrc->m_wAbillityAT;			/* æ”»æ’ƒæŠ€èƒ½ */
+	m_wAbillityDF				= pSrc->m_wAbillityDF;			/* é˜²å¾¡æŠ€èƒ½ */
+	m_wPAtack					= pSrc->m_wPAtack;				/* æ”»æ’ƒåŠ› */
+	m_wPDefense					= pSrc->m_wPDefense;			/* é˜²å¾¡åŠ› */
+	m_wPMagic					= pSrc->m_wPMagic;				/* é­”æ³•åŠ› */
+	m_wPMagicDefense			= pSrc->m_wPMagicDefense;		/* é­”æ³•é˜²å¾¡åŠ› */
+	m_wPHitAverage				= pSrc->m_wPHitAverage;			/* å‘½ä¸­ç‡ */
+	m_wPAvoidAverage			= pSrc->m_wPAvoidAverage;		/* å›é¿ç‡ */
+	m_wPCriticalAverage			= pSrc->m_wPCriticalAverage;	/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+	m_wAttrFire					= pSrc->m_wAttrFire;			/* å±æ€§[ç«] */
+	m_wAttrWind					= pSrc->m_wAttrWind;			/* å±æ€§[é¢¨] */
+	m_wAttrWater				= pSrc->m_wAttrWater;			/* å±æ€§[æ°´] */
+	m_wAttrEarth				= pSrc->m_wAttrEarth;			/* å±æ€§[åœŸ] */
+	m_wAttrLight				= pSrc->m_wAttrLight;			/* å±æ€§[å…‰] */
+	m_wAttrDark					= pSrc->m_wAttrDark;			/* å±æ€§[é—‡] */
 	m_dwCharID					= pSrc->m_dwCharID;
 	m_dwMapID					= pSrc->m_dwMapID;
 	m_dwMotionTypeID			= pSrc->m_dwMotionTypeID;
@@ -2260,16 +2260,16 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_dwEquipItemIDArmsRight	= pSrc->m_dwEquipItemIDArmsRight;
 	m_dwEquipItemIDArmsLeft		= pSrc->m_dwEquipItemIDArmsLeft;
 	m_dwEquipItemIDHead			= pSrc->m_dwEquipItemIDHead;
-	m_dwMoveWait				= pSrc->m_dwMoveWait;			/* ˆÚ“®‘Ò‚¿ŠÔ */
-	m_dwMoveWaitBattle			= pSrc->m_dwMoveWaitBattle;		/* í“¬ˆÚ“®‘Ò‚¿ŠÔ */
-	m_dwExp						= pSrc->m_dwExp;				/* ŒoŒ±’l */
+	m_dwMoveWait				= pSrc->m_dwMoveWait;			/* ç§»å‹•å¾…ã¡æ™‚é–“ */
+	m_dwMoveWaitBattle			= pSrc->m_dwMoveWaitBattle;		/* æˆ¦é—˜æ™‚ç§»å‹•å¾…ã¡æ™‚é–“ */
+	m_dwExp						= pSrc->m_dwExp;				/* çµŒé¨“å€¤ */
 	m_dwHP						= pSrc->m_dwHP;
 	m_dwMaxHP					= pSrc->m_dwMaxHP;
 	m_dwSP						= pSrc->m_dwSP;
 	m_dwMaxSP					= pSrc->m_dwMaxSP;
 	m_clName					= pSrc->m_clName;
 	m_clSpeak					= pSrc->m_clSpeak;
-	m_strTalk					= pSrc->m_strTalk;				/* ‰ï˜bƒf[ƒ^ */
+	m_strTalk					= pSrc->m_strTalk;				/* ä¼šè©±ãƒ‡ãƒ¼ã‚¿ */
 
 	m_abyMark.RemoveAll ();
 	nCount = pSrc->m_abyMark.GetSize ();
@@ -2290,19 +2290,19 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	SetName (pSrc->m_strCharName);
 	SetSpeak (pSrc->m_strSpeak);
 
-	m_sizeSearchDistance = pSrc->m_sizeSearchDistance;	/* ô“G”ÍˆÍ */
-	m_dwPutCycle		= pSrc->m_dwPutCycle;		/* ”­¶üŠú */
-	m_nPutMoveType		= pSrc->m_nPutMoveType;		/* ”­¶‚³‚¹‚éˆÚ“®í•Ê */
-	m_nMaxPutCount		= pSrc->m_nMaxPutCount;		/* “¯”­¶” */
-	m_nPutAverage		= pSrc->m_nPutAverage;		/* ”­¶Šm—¦ */
-	m_ptPutArea			= pSrc->m_ptPutArea;		/* ”­¶”ÍˆÍ(”¼Œa) */
+	m_sizeSearchDistance = pSrc->m_sizeSearchDistance;	/* ç­–æ•µç¯„å›² */
+	m_dwPutCycle		= pSrc->m_dwPutCycle;		/* ç™ºç”Ÿå‘¨æœŸ */
+	m_nPutMoveType		= pSrc->m_nPutMoveType;		/* ç™ºç”Ÿã•ã›ã‚‹ç§»å‹•ç¨®åˆ¥ */
+	m_nMaxPutCount		= pSrc->m_nMaxPutCount;		/* åŒæ™‚ç™ºç”Ÿæ•° */
+	m_nPutAverage		= pSrc->m_nPutAverage;		/* ç™ºç”Ÿç¢ºç‡ */
+	m_ptPutArea			= pSrc->m_ptPutArea;		/* ç™ºç”Ÿç¯„å›²(åŠå¾„) */
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::TimerProc										 */
-/* “à—e		:ŠÔˆ—														 */
-/* “ú•t		:2006/10/01														 */
+/* é–¢æ•°å	:CInfoCharBase::TimerProc										 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/10/01														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::TimerProc(DWORD dwTime)
@@ -2313,7 +2313,7 @@ BOOL CInfoCharBase::TimerProc(DWORD dwTime)
 
 	if (m_dwLastTimeSpeak > 0) {
 		if (timeGetTime () - m_dwLastTimeSpeak > 1000 * 10) {
-			/* ‚P‚O•bŒo‰ß‚µ‚½‚Ì‚ÅÁ‹ */
+			/* ï¼‘ï¼ç§’çµŒéã—ãŸã®ã§æ¶ˆå» */
 			SetSpeak ("");
 			bRet = TRUE;
 		}
@@ -2324,27 +2324,27 @@ BOOL CInfoCharBase::TimerProc(DWORD dwTime)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::RenewBlockMapArea								 */
-/* “à—e		:“–‚½‚è”»’è‘ÎÛ‚Ìƒ}ƒbƒvÀ•W‚ğXV								 */
-/* “ú•t		:2008/04/13														 */
+/* é–¢æ•°å	:CInfoCharBase::RenewBlockMapArea								 */
+/* å†…å®¹		:å½“ãŸã‚Šåˆ¤å®šå¯¾è±¡ã®ãƒãƒƒãƒ—åº§æ¨™ã‚’æ›´æ–°								 */
+/* æ—¥ä»˜		:2008/04/13														 */
 /* ========================================================================= */
 
 void CInfoCharBase::RenewBlockMapArea(
-	int x,				/* [in] ˆÚ“®Œã‚ÌƒLƒƒƒ‰À•W(‰¡) */
-	int y,				/* [in] ˆÚ“®Œã‚ÌƒLƒƒƒ‰À•W(c) */
-	int nDirection,		/* [in] ’²‚×‚éŒü‚« */
-	BOOL bMoveOut)		/* [in] TRUE:ŠO‚Ö‚ÌˆÚ“®—p‚É‹ô”‚Ì‚İ‘ÎÛ‚Æ‚·‚é */
+	int x,				/* [in] ç§»å‹•å¾Œã®ã‚­ãƒ£ãƒ©åº§æ¨™(æ¨ª) */
+	int y,				/* [in] ç§»å‹•å¾Œã®ã‚­ãƒ£ãƒ©åº§æ¨™(ç¸¦) */
+	int nDirection,		/* [in] èª¿ã¹ã‚‹å‘ã */
+	BOOL bMoveOut)		/* [in] TRUE:å¤–ã¸ã®ç§»å‹•ç”¨ã«å¶æ•°æ™‚ã®ã¿å¯¾è±¡ã¨ã™ã‚‹ */
 {
 	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	POINT ptTmp, ptTmpBack;
 
 	m_aposBockMapArea.RemoveAll ();
 	if (nDirection < 0) {
-		/* ƒNƒŠƒA‚Ì‚İ */
+		/* ã‚¯ãƒªã‚¢ã®ã¿ */
 		return;
 	}
 
-//todo:ƒLƒƒƒ‰ƒTƒCƒY
+//todo:ã‚­ãƒ£ãƒ©ã‚µã‚¤ã‚º
 
 	if (bMoveOut) {
 		if (nDirection < 4) {
@@ -2416,16 +2416,16 @@ void CInfoCharBase::RenewBlockMapArea(
 }
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsHitCharPos									 */
-/* “à—e		:ƒLƒƒƒ‰À•W‚Æ‚Ì“–‚½‚è”»’è										 */
-/* –ß‚è’l	:TRUE:“–‚½‚é													 */
-/* “ú•t		:2008/04/29														 */
+/* é–¢æ•°å	:CInfoCharBase::IsHitCharPos									 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©åº§æ¨™ã¨ã®å½“ãŸã‚Šåˆ¤å®š										 */
+/* æˆ»ã‚Šå€¤	:TRUE:å½“ãŸã‚‹													 */
+/* æ—¥ä»˜		:2008/04/29														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsHitCharPos(
-	int x,					/* [in] ƒLƒƒƒ‰À•W(‰¡) */
-	int y,					/* [in] ƒLƒƒƒ‰À•W(c) */
-	SIZE *psize/*NULL*/)	/* [in] ƒLƒƒƒ‰ƒTƒCƒY */
+	int x,					/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(æ¨ª) */
+	int y,					/* [in] ã‚­ãƒ£ãƒ©åº§æ¨™(ç¸¦) */
+	SIZE *psize/*NULL*/)	/* [in] ã‚­ãƒ£ãƒ©ã‚µã‚¤ã‚º */
 {
 	BOOL bRet;
 	int nPos;
@@ -2461,10 +2461,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetViewCharPos									 */
-/* “à—e		:•\¦—p‚ÌÀ•W•â³’l‚ğæ“¾										 */
-/* “ú•t		:2008/05/01														 */
-/* ƒƒ‚		:•\¦‚·‚é‚ÉÀ•W‚©‚ç‚¸‚ç‚·’l‚ğæ“¾‚·‚é							 */
+/* é–¢æ•°å	:CInfoCharBase::GetViewCharPos									 */
+/* å†…å®¹		:è¡¨ç¤ºç”¨ã®åº§æ¨™è£œæ­£å€¤ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/05/01														 */
+/* ãƒ¡ãƒ¢		:è¡¨ç¤ºã™ã‚‹æ™‚ã«åº§æ¨™ã‹ã‚‰ãšã‚‰ã™å€¤ã‚’å–å¾—ã™ã‚‹							 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetViewCharPos(POINT &ptDst)
@@ -2474,9 +2474,9 @@ void CInfoCharBase::GetViewCharPos(POINT &ptDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::GetCharSize										 */
-/* “à—e		:ƒLƒƒƒ‰‚Ì•‚Æ‚‚³‚ğæ“¾											 */
-/* “ú•t		:2008/05/01														 */
+/* é–¢æ•°å	:CInfoCharBase::GetCharSize										 */
+/* å†…å®¹		:ã‚­ãƒ£ãƒ©ã®å¹…ã¨é«˜ã•ã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/05/01														 */
 /* ========================================================================= */
 
 void CInfoCharBase::GetCharSize(SIZE &sizeDst)
@@ -2487,10 +2487,10 @@ void CInfoCharBase::GetCharSize(SIZE &sizeDst)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsEnableMove									 */
-/* “à—e		:ˆÚ“®‚Å‚«‚éó‘Ô‚©”»’è											 */
-/* “ú•t		:2008/06/11														 */
-/* –ß‚è’l	:TRUE:ˆÚ“®‰Â													 */
+/* é–¢æ•°å	:CInfoCharBase::IsEnableMove									 */
+/* å†…å®¹		:ç§»å‹•ã§ãã‚‹çŠ¶æ…‹ã‹åˆ¤å®š											 */
+/* æ—¥ä»˜		:2008/06/11														 */
+/* æˆ»ã‚Šå€¤	:TRUE:ç§»å‹•å¯													 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsEnableMove(void)
@@ -2504,16 +2504,16 @@ BOOL CInfoCharBase::IsEnableMove(void)
 	if (IsMove ()) {
 		goto Exit;
 	}
-	/* ‚Â‚¢‚Ä‚¢‚Á‚Ä‚¢‚éH */
+	/* ã¤ã„ã¦ã„ã£ã¦ã„ã‚‹ï¼Ÿ */
 	if (m_dwFrontCharID) {
 		goto Exit;
 	}
 
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_SWOON:				/* ‹Câ */
-	case CHARMOVESTATE_BATTLEATACK:			/* í“¬UŒ‚’† */
-	case CHARMOVESTATE_BATTLEATACK_WAIT:	/* í“¬UŒ‚Œã‚Ì‘Ò‚¿ŠÔ */
-	case CHARMOVESTATE_BATTLE_DEFENSE:		/* –hŒä’† */
+	case CHARMOVESTATE_SWOON:				/* æ°—çµ¶ */
+	case CHARMOVESTATE_BATTLEATACK:			/* æˆ¦é—˜æ”»æ’ƒä¸­ */
+	case CHARMOVESTATE_BATTLEATACK_WAIT:	/* æˆ¦é—˜æ”»æ’ƒå¾Œã®å¾…ã¡æ™‚é–“ */
+	case CHARMOVESTATE_BATTLE_DEFENSE:		/* é˜²å¾¡ä¸­ */
 		goto Exit;
 	}
 
@@ -2524,10 +2524,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsEnableAtack									 */
-/* “à—e		:UŒ‚‚Å‚«‚éó‘Ô‚©”»’è											 */
-/* “ú•t		:2008/07/26														 */
-/* –ß‚è’l	:TRUE:UŒ‚‰Â													 */
+/* é–¢æ•°å	:CInfoCharBase::IsEnableAtack									 */
+/* å†…å®¹		:æ”»æ’ƒã§ãã‚‹çŠ¶æ…‹ã‹åˆ¤å®š											 */
+/* æ—¥ä»˜		:2008/07/26														 */
+/* æˆ»ã‚Šå€¤	:TRUE:æ”»æ’ƒå¯													 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsEnableAtack(void)
@@ -2540,7 +2540,7 @@ BOOL CInfoCharBase::IsEnableAtack(void)
 		goto Exit;
 	}
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_SWOON:				/* ‹Câ */
+	case CHARMOVESTATE_SWOON:				/* æ°—çµ¶ */
 		goto Exit;
 	}
 
@@ -2551,10 +2551,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsEnableHeal									 */
-/* “à—e		:‰ñ•œ‚Å‚«‚éó‘Ô‚©”»’è											 */
-/* “ú•t		:2009/05/24														 */
-/* –ß‚è’l	:TRUE:‰ñ•œ‰Â													 */
+/* é–¢æ•°å	:CInfoCharBase::IsEnableHeal									 */
+/* å†…å®¹		:å›å¾©ã§ãã‚‹çŠ¶æ…‹ã‹åˆ¤å®š											 */
+/* æ—¥ä»˜		:2009/05/24														 */
+/* æˆ»ã‚Šå€¤	:TRUE:å›å¾©å¯													 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsEnableHeal(void)
@@ -2567,7 +2567,7 @@ BOOL CInfoCharBase::IsEnableHeal(void)
 		goto Exit;
 	}
 	switch (m_nMoveState) {
-	case CHARMOVESTATE_SWOON:				/* ‹Câ */
+	case CHARMOVESTATE_SWOON:				/* æ°—çµ¶ */
 		goto Exit;
 	}
 
@@ -2578,10 +2578,10 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsAtackTarget									 */
-/* “à—e		:UŒ‚‘ÎÛ‚Æ‚È‚é‚©”»’è											 */
-/* “ú•t		:2008/07/12														 */
-/* –ß‚è’l	:TRUE:UŒ‚‰Â													 */
+/* é–¢æ•°å	:CInfoCharBase::IsAtackTarget									 */
+/* å†…å®¹		:æ”»æ’ƒå¯¾è±¡ã¨ãªã‚‹ã‹åˆ¤å®š											 */
+/* æ—¥ä»˜		:2008/07/12														 */
+/* æˆ»ã‚Šå€¤	:TRUE:æ”»æ’ƒå¯													 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsAtackTarget(void)
@@ -2601,9 +2601,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoCharBase::IsLogoutDelete									 */
-/* “à—e		:ƒƒOƒAƒEƒg‚Éíœ‚·‚é‚©”»’è									 */
-/* “ú•t		:2007/09/17														 */
+/* é–¢æ•°å	:CInfoCharBase::IsLogoutDelete									 */
+/* å†…å®¹		:ãƒ­ã‚°ã‚¢ã‚¦ãƒˆæ™‚ã«å‰Šé™¤ã™ã‚‹ã‹åˆ¤å®š									 */
+/* æ—¥ä»˜		:2007/09/17														 */
 /* ========================================================================= */
 
 BOOL CInfoCharBase::IsLogoutDelete(void)

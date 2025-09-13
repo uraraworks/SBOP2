@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSkillHEAL.h											 */
-/* “à—e			:ƒXƒLƒ‹î•ñ(‰ñ•œ)ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2009/01/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoSkillHEAL.h											 */
+/* å†…å®¹			:ã‚¹ã‚­ãƒ«æƒ…å ±(å›å¾©)ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2009/01/22													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,20 +11,20 @@
 #include "InfoSkillBase.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ”ÍˆÍ */
+/* ç¯„å›² */
 enum {
-	SKILLHEAL_AREA_NONE = 0,		/* ©•ªˆÊ’u */
-	SKILLHEAL_AREA_FRONT,			/* ‘O•û */
-	SKILLHEAL_AREA_AREA,			/* üˆÍ */
+	SKILLHEAL_AREA_NONE = 0,		/* è‡ªåˆ†ä½ç½® */
+	SKILLHEAL_AREA_FRONT,			/* å‰æ–¹ */
+	SKILLHEAL_AREA_AREA,			/* å‘¨å›² */
 	SKILLHEAL_AREA_MAX
 };
 
-/* ‰ñ•œí•Ê */
+/* å›å¾©ç¨®åˆ¥ */
 enum {
-	SKILLHEAL_HEALTYPE_NONE = 0,	/* –¢İ’è */
+	SKILLHEAL_HEALTYPE_NONE = 0,	/* æœªè¨­å®š */
 	SKILLHEAL_HEALTYPE_HP,			/* HP */
 	SKILLHEAL_HEALTYPE_SP,			/* SP */
 	SKILLHEAL_HEALTYPE_MAX
@@ -32,41 +32,41 @@ enum {
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoSkillHEAL : public CInfoSkillBase
 {
 public:
-			CInfoSkillHEAL();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoSkillHEAL();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoSkillHEAL();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoSkillHEAL();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementNoTmp		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSizeTmp		(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNoTmp	(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetNameTmp			(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteDataTmp		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementDataTmp	(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual int		GetElementNoTmp		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSizeTmp		(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNoTmp	(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetNameTmp			(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteDataTmp		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementDataTmp	(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetDerivationSize		(void);							/* ”h¶ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetDerivationWriteData	(PDWORD pdwSize);				/* ”h¶ƒf[ƒ^‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadDerivationData		(PBYTE pSrc);					/* ”h¶ƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual DWORD	GetDerivationSize		(void);							/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetDerivationWriteData	(PDWORD pdwSize);				/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadDerivationData		(PBYTE pSrc);					/* æ´¾ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoSkillBase *pSrc);				/* ƒRƒs[ */
+	virtual void	Copy				(CInfoSkillBase *pSrc);				/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	int		m_nElementCountDerivation;	/* —v‘f” */
-	DWORD	m_dwArea,				/* ”ÍˆÍ */
-			m_dwHealType,			/* ‰ñ•œí•Ê */
-			m_dwHitEffectID,		/* ƒqƒbƒg‚Ì•\¦ƒGƒtƒFƒNƒg */
-			m_dwValue1,				/* Œø‰Ê1 */
-			m_dwValue2,				/* Œø‰Ê2 */
-			m_dwDistance;			/* Ë’ö‹——£ */
+	int		m_nElementCountDerivation;	/* è¦ç´ æ•° */
+	DWORD	m_dwArea,				/* ç¯„å›² */
+			m_dwHealType,			/* å›å¾©ç¨®åˆ¥ */
+			m_dwHitEffectID,		/* ãƒ’ãƒƒãƒˆæ™‚ã®è¡¨ç¤ºã‚¨ãƒ•ã‚§ã‚¯ãƒˆ */
+			m_dwValue1,				/* åŠ¹æœ1 */
+			m_dwValue2,				/* åŠ¹æœ2 */
+			m_dwDistance;			/* å°„ç¨‹è·é›¢ */
 } CInfoSkillHEAL, *PCInfoSkillHEAL;
 typedef CmyArray<PCInfoSkillHEAL, PCInfoSkillHEAL>	  ARRAYSKILLHEALINFO;
 typedef CmyArray<PCInfoSkillHEAL, PCInfoSkillHEAL>	*PARRAYSKILLHEALINFO;

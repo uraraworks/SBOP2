@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModifyTypePUTNPC.h								 */
-/* “à—e			:ƒLƒƒƒ‰î•ñ ˆÚ“®í•Ê‚Ìİ’è(NPC”­¶)ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹ */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModifyTypePUTNPC.h								 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©æƒ…å ± ç§»å‹•ç¨®åˆ¥ã®è¨­å®š(NPCç™ºç”Ÿ)ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ« */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/12													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,21 +13,21 @@
 class CInfoCharCli;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminCharModifyTypePUTNPC : public CDlgAdminCharModifyTypeBase
 {
 public:
-			CDlgAdminCharModifyTypePUTNPC(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminCharModifyTypePUTNPC();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminCharModifyTypePUTNPC(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminCharModifyTypePUTNPC();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual void	Set	(CInfoCharCli *pSrc);									/* İ’è */
-	virtual void	Get	(CInfoCharCli *pDst);									/* æ“¾ */
+	virtual void	Set	(CInfoCharCli *pSrc);									/* è¨­å®š */
+	virtual void	Get	(CInfoCharCli *pDst);									/* å–å¾— */
 
 
 protected:
-	int	m_nPutMoveType;			/* ˆÚ“®í•Ê */
+	int	m_nPutMoveType;			/* ç§»å‹•ç¨®åˆ¥ */
 
 
 
@@ -45,7 +45,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminCharModifyTypePUTNPC)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	//}}AFX_VIRTUAL
 
 protected:

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharModify.cpp										 */
-/* “à—e			:‘I‘ğƒLƒƒƒ‰î•ñ•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/03/17													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminCharModify.cpp										 */
+/* å†…å®¹			:é¸æŠã‚­ãƒ£ãƒ©æƒ…å ±ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/03/17													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -31,10 +31,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define COLORCOUNT	(14)		/* Fí—Ş */
+#define COLORCOUNT	(14)		/* è‰²ç¨®é¡ */
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::DoDataExchange(CDataExchange* pDX)
@@ -66,9 +66,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::CDlgAdminCharModify						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::CDlgAdminCharModify						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent /*=NULL*/)
@@ -92,9 +92,9 @@ CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::~CDlgAdminCharModify						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::~CDlgAdminCharModify						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 CDlgAdminCharModify::~CDlgAdminCharModify()
@@ -104,24 +104,24 @@ CDlgAdminCharModify::~CDlgAdminCharModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::Init										 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::Renew										 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::Renew										 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::Renew(void)
@@ -184,9 +184,9 @@ void CDlgAdminCharModify::Renew(void)
 	m_ctlMotionType.SetCurSel (nNo);
 
 	m_ctlSex.ResetContent ();
-	m_ctlSex.AddString ("’j«");
+	m_ctlSex.AddString ("ç”·æ€§");
 	m_ctlSex.SetItemData (0, SEX_MALE);
-	m_ctlSex.AddString ("—«");
+	m_ctlSex.AddString ("å¥³æ€§");
 	m_ctlSex.SetItemData (1, SEX_FEMALE);
 	nNo = 0;
 	if (m_pInfoChar->m_nSex == SEX_FEMALE) {
@@ -195,20 +195,20 @@ void CDlgAdminCharModify::Renew(void)
 	m_ctlSex.SetCurSel (nNo);
 
 	m_ctlColor.ResetContent ();
-	m_ctlColor.AddString ("Ô");
-	m_ctlColor.AddString ("‰©");
-	m_ctlColor.AddString ("—Î");
-	m_ctlColor.AddString ("Â—Î");
-	m_ctlColor.AddString ("Â");
-	m_ctlColor.AddString ("‡");
-	m_ctlColor.AddString ("”’");
-	m_ctlColor.AddString ("(”Z)Ô");
-	m_ctlColor.AddString ("(”Z)ò");
-	m_ctlColor.AddString ("(”Z)Â");
-	m_ctlColor.AddString ("(”Z)‡");
-	m_ctlColor.AddString ("(”Z)‰©—Î");
-	m_ctlColor.AddString ("(”Z)—Î");
-	m_ctlColor.AddString ("(”Z)…");
+	m_ctlColor.AddString ("èµ¤");
+	m_ctlColor.AddString ("é»„");
+	m_ctlColor.AddString ("ç·‘");
+	m_ctlColor.AddString ("é’ç·‘");
+	m_ctlColor.AddString ("é’");
+	m_ctlColor.AddString ("ç´«");
+	m_ctlColor.AddString ("ç™½");
+	m_ctlColor.AddString ("(æ¿ƒ)èµ¤");
+	m_ctlColor.AddString ("(æ¿ƒ)æ©™");
+	m_ctlColor.AddString ("(æ¿ƒ)é’");
+	m_ctlColor.AddString ("(æ¿ƒ)ç´«");
+	m_ctlColor.AddString ("(æ¿ƒ)é»„ç·‘");
+	m_ctlColor.AddString ("(æ¿ƒ)ç·‘");
+	m_ctlColor.AddString ("(æ¿ƒ)æ°´");
 	for (i = 0; i < COLORCOUNT; i ++) {
 		if (m_pInfoChar->m_clName == GetColor (i)) {
 			break;
@@ -225,9 +225,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
@@ -238,7 +238,7 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 	CPacketCHAR_PARA1 Packet;
 
 	switch (nType) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* ¶ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		dwCharID = dwPara;
 		if (dwPara == (DWORD)-1) {
 			dwCharID = m_dwCharID;
@@ -263,19 +263,19 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* ‰EƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* å³ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_dwMapID	= m_pMgrData->GetMapID ();
 		m_nPosX		= HIWORD (dwPara);
 		m_nPosY		= LOWORD (dwPara);
 		UpdateData (FALSE);
 		break;
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK:	/* ‰Eƒ_ƒuƒ‹ƒNƒŠƒbƒN’Ê’m */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK:	/* å³ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
 		m_nPosX = HIWORD (dwPara);
 		m_nPosY = LOWORD (dwPara);
 		UpdateData (FALSE);
 		Send (TRUE);
 		break;
-	case ADMINMSG_RENEWTALKEVENT:			/* ‰ï˜bƒCƒxƒ“ƒgî•ñXV */
+	case ADMINMSG_RENEWTALKEVENT:			/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
 		if (m_pInfoChar == NULL) {
 			break;
 		}
@@ -289,34 +289,34 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/03/17														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::OnInitDialog								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2007/03/17														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharModify::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog ();
 
-	m_ctlMoveType.AddString ("ƒvƒŒƒCƒ„[ƒLƒƒƒ‰");
+	m_ctlMoveType.AddString ("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚­ãƒ£ãƒ©");
 	m_ctlMoveType.SetItemData (0, CHARMOVETYPE_PC);
-	m_ctlMoveType.AddString ("ˆÚ“®‚µ‚È‚¢");
+	m_ctlMoveType.AddString ("ç§»å‹•ã—ãªã„");
 	m_ctlMoveType.SetItemData (1, CHARMOVETYPE_STAND);
-	m_ctlMoveType.AddString ("ƒ{[ƒ‹");
+	m_ctlMoveType.AddString ("ãƒœãƒ¼ãƒ«");
 	m_ctlMoveType.SetItemData (2, CHARMOVETYPE_BALL);
-	m_ctlMoveType.AddString ("“¾“_");
+	m_ctlMoveType.AddString ("å¾—ç‚¹");
 	m_ctlMoveType.SetItemData (3, CHARMOVETYPE_SCORE);
-	m_ctlMoveType.AddString ("—epƒRƒs[(æ‚è‚İ)");
+	m_ctlMoveType.AddString ("å®¹å§¿ã‚³ãƒ”ãƒ¼(å–ã‚Šè¾¼ã¿)");
 	m_ctlMoveType.SetItemData (4, CHARMOVETYPE_STYLECOPY_PUT);
-	m_ctlMoveType.AddString ("UŒ‚ó‚¯‚é‚ÆƒAƒjƒ[ƒVƒ‡ƒ“");
+	m_ctlMoveType.AddString ("æ”»æ’ƒå—ã‘ã‚‹ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³");
 	m_ctlMoveType.SetItemData (5, CHARMOVETYPE_ATACKANIME);
-	m_ctlMoveType.AddString ("—epƒRƒs[(”½‰f)");
+	m_ctlMoveType.AddString ("å®¹å§¿ã‚³ãƒ”ãƒ¼(åæ˜ )");
 	m_ctlMoveType.SetItemData (6, CHARMOVETYPE_STYLECOPY_GET);
-	m_ctlMoveType.AddString ("NPC”­¶");
+	m_ctlMoveType.AddString ("NPCç™ºç”Ÿ");
 	m_ctlMoveType.SetItemData (7, CHARMOVETYPE_PUTNPC);
-	m_ctlMoveType.AddString ("í“¬1");
+	m_ctlMoveType.AddString ("æˆ¦é—˜1");
 	m_ctlMoveType.SetItemData (8, CHARMOVETYPE_BATTLE1);
-	m_ctlMoveType.AddString ("í“¬2");
+	m_ctlMoveType.AddString ("æˆ¦é—˜2");
 	m_ctlMoveType.SetItemData (9, CHARMOVETYPE_BATTLE2);
 	m_ctlMoveType.SetCurSel (0);
 
@@ -327,9 +327,9 @@ BOOL CDlgAdminCharModify::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::OnSend									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2007/03/18														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::OnSend									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::OnSend()
@@ -339,9 +339,9 @@ void CDlgAdminCharModify::OnSend()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::OnDelete									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2008/11/28														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::OnDelete									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2008/11/28														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::OnDelete()
@@ -357,8 +357,8 @@ void CDlgAdminCharModify::OnDelete()
 		return;
 	}
 
-	strTmp.Format ("[%s]‚ğíœ‚µ‚Ü‚·‚©H", (LPCSTR)m_pInfoChar->m_strCharName);
-	nResult = MessageBox (strTmp, "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	strTmp.Format ("[%s]ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ", (LPCSTR)m_pInfoChar->m_strCharName);
+	nResult = MessageBox (strTmp, "ç¢ºèª", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -369,9 +369,9 @@ void CDlgAdminCharModify::OnDelete()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::OnTalk									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‰ï˜bƒf[ƒ^‚Ì•ÒW)								 */
-/* “ú•t		:2008/11/22														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::OnTalk									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ä¼šè©±ãƒ‡ãƒ¼ã‚¿ã®ç·¨é›†)								 */
+/* æ—¥ä»˜		:2008/11/22														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::OnTalk()
@@ -396,9 +396,9 @@ void CDlgAdminCharModify::OnTalk()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::OnSetMoveType								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ˆÚ“®í•Ê‚Ìİ’è)									 */
-/* “ú•t		:2008/07/12														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::OnSetMoveType								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç§»å‹•ç¨®åˆ¥ã®è¨­å®š)									 */
+/* æ—¥ä»˜		:2008/07/12														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::OnSetMoveType()
@@ -410,7 +410,7 @@ void CDlgAdminCharModify::OnSetMoveType()
 
 	nMoveType = m_ctlMoveType.GetItemData (m_ctlMoveType.GetCurSel ());
 	switch (nMoveType) {
-	case CHARMOVETYPE_PUTNPC:	/* NPC”­¶ */
+	case CHARMOVETYPE_PUTNPC:	/* NPCç™ºç”Ÿ */
 		pDlg = new CDlgAdminCharModifyTypePUTNPC(this);
 		break;
 	}
@@ -428,9 +428,9 @@ void CDlgAdminCharModify::OnSetMoveType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::Send										 */
-/* “à—e		:‘—Mˆ—														 */
-/* “ú•t		:2007/09/16														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::Send										 */
+/* å†…å®¹		:é€ä¿¡å‡¦ç†														 */
+/* æ—¥ä»˜		:2007/09/16														 */
 /* ========================================================================= */
 
 void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
@@ -472,28 +472,28 @@ void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharModify::GetColor									 */
-/* “à—e		:”Ô†‚©‚çF‚ğæ“¾												 */
-/* “ú•t		:2008/11/23														 */
+/* é–¢æ•°å	:CDlgAdminCharModify::GetColor									 */
+/* å†…å®¹		:ç•ªå·ã‹ã‚‰è‰²ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/11/23														 */
 /* ========================================================================= */
 
 COLORREF CDlgAdminCharModify::GetColor(int nNo)
 {
 	COLORREF clRet, acl[] = {
-		RGB (255, 200, 200),	/* Ô */
-		RGB (255, 255, 200),	/* ‰© */
-		RGB (200, 255, 200),	/* —Î */
-		RGB (200, 255, 255),	/* Â—Î */
-		RGB (200, 200, 255),	/* Â */
-		RGB (255, 200, 255),	/* ‡ */
-		RGB (255, 255, 255),	/* ”’ */
-		RGB (255, 150, 150),	/* Ôiƒsƒ“ƒNj */
-		RGB (255, 200, 100),	/* ò */
-		RGB (150, 150, 255),	/* Â */
-		RGB (200, 100, 255),	/* ‡ */
-		RGB (200, 255, 150),	/* ‰©—Î */
-		RGB (150, 255, 150),	/* —Î */
-		RGB (100, 200, 255),	/* … */
+		RGB (255, 200, 200),	/* èµ¤ */
+		RGB (255, 255, 200),	/* é»„ */
+		RGB (200, 255, 200),	/* ç·‘ */
+		RGB (200, 255, 255),	/* é’ç·‘ */
+		RGB (200, 200, 255),	/* é’ */
+		RGB (255, 200, 255),	/* ç´« */
+		RGB (255, 255, 255),	/* ç™½ */
+		RGB (255, 150, 150),	/* èµ¤ï¼ˆãƒ”ãƒ³ã‚¯ï¼‰ */
+		RGB (255, 200, 100),	/* æ©™ */
+		RGB (150, 150, 255),	/* é’ */
+		RGB (200, 100, 255),	/* ç´« */
+		RGB (200, 255, 150),	/* é»„ç·‘ */
+		RGB (150, 255, 150),	/* ç·‘ */
+		RGB (100, 200, 255),	/* æ°´ */
 	};
 
 	if (nNo >= COLORCOUNT) {

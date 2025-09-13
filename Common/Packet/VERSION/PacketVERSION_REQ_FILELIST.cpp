@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_REQ_FILELIST.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹ƒŠƒXƒg—v‹) ŽÀ‘•ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/03/08													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_REQ_FILELIST.cpp								 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆè¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/03/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketVERSION_REQ_FILELIST.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILELIST::CPacketVERSION_REQ_FILELIST		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILELIST::CPacketVERSION_REQ_FILELIST		 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 CPacketVERSION_REQ_FILELIST::CPacketVERSION_REQ_FILELIST()
@@ -22,9 +22,9 @@ CPacketVERSION_REQ_FILELIST::CPacketVERSION_REQ_FILELIST()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILELIST::~CPacketVERSION_REQ_FILELIST		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILELIST::~CPacketVERSION_REQ_FILELIST		 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 CPacketVERSION_REQ_FILELIST::~CPacketVERSION_REQ_FILELIST()
@@ -33,9 +33,9 @@ CPacketVERSION_REQ_FILELIST::~CPacketVERSION_REQ_FILELIST()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketVERSION_REQ_FILELIST::Make								 */
-/* “à—e		:ƒpƒPƒbƒg‚ðì¬													 */
-/* “ú•t		:2008/03/08														 */
+/* é–¢æ•°å	:CPacketVERSION_REQ_FILELIST::Make								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/03/08														 */
 /* ========================================================================= */
 
 void CPacketVERSION_REQ_FILELIST::Make(void)

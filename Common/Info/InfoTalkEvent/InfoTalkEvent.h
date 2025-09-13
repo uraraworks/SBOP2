@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoTalkEvent.h											 */
-/* “à—e			:‰ï˜bƒCƒxƒ“ƒgî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/12/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoTalkEvent.h											 */
+/* å†…å®¹			:ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/12/16													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,46 +11,46 @@
 #include "InfoTalkEventBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoTalkEvent : public CInfoBase
 {
 public:
-			CInfoTalkEvent();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoTalkEvent();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoTalkEvent();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoTalkEvent();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	virtual int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	virtual DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	virtual int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	virtual DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	virtual PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	virtual DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	virtual PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	virtual DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	virtual PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	virtual PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	virtual void	Copy				(CInfoTalkEvent *pSrc);				/* ƒRƒs[ */
+	virtual void	Copy				(CInfoTalkEvent *pSrc);				/* ã‚³ãƒ”ãƒ¼ */
 
-	PCInfoTalkEventBase	GetNew			(int nType);									/* V‚µ‚¢‰ï˜bƒCƒxƒ“ƒg‚ğæ“¾ */
-	PCInfoTalkEventBase	GetPtr			(int nPage, int nNo);							/* ‰ï˜bƒCƒxƒ“ƒg‚ğæ“¾ */
-	void	SetPtr						(int nPage, int nNo, CInfoTalkEventBase *pInfo);/* ‰ï˜bƒCƒxƒ“ƒg‚ğ·‚µ‘Ö‚¦ */
-	void	GetEventArray				(int nPage, ARRAYTALKEVENTBASEINFO &aDst);		/* w’èƒy[ƒW”Ô†‚ÌƒCƒxƒ“ƒgˆê——‚ğæ“¾ */
-	int		GetTalkEventCount			(int nPage);						/* ‰ï˜bƒCƒxƒ“ƒgƒy[ƒW”‚ğæ“¾ */
-	int		GetPageCount				(void);								/* ‰ï˜bƒCƒxƒ“ƒgƒy[ƒW”‚ğæ“¾ */
-	void	AddTalkEvent				(CInfoTalkEventBase *pInfo);		/* ‰ï˜bƒCƒxƒ“ƒg‚ğ’Ç‰Á */
-	void	UpTalkEvent					(int nPage, int nNo);				/* w’èƒCƒxƒ“ƒg‚ğ1‚Âã‚ÉˆÚ“® */
-	void	DownTalkEvent				(int nPage, int nNo);				/* w’èƒCƒxƒ“ƒg‚ğ1‚Â‰º‚ÉˆÚ“® */
-	void	DeleteTalkEvent				(int nNo);							/* ‰ï˜bƒCƒxƒ“ƒg‚ğíœ */
-	void	DeleteTalkEvent				(int nPage, int nNo);				/* ‰ï˜bƒCƒxƒ“ƒg‚ğíœ */
-	void	DeleteTalkEvent				(CInfoTalkEventBase *pInfo);		/* ‰ï˜bƒCƒxƒ“ƒg‚ğíœ */
-	void	DeleteAllTalkEvent			(void);								/* ‰ï˜bƒCƒxƒ“ƒg‚ğ‘S‚Äíœ */
+	PCInfoTalkEventBase	GetNew			(int nType);									/* æ–°ã—ã„ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾— */
+	PCInfoTalkEventBase	GetPtr			(int nPage, int nNo);							/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾— */
+	void	SetPtr						(int nPage, int nNo, CInfoTalkEventBase *pInfo);/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å·®ã—æ›¿ãˆ */
+	void	GetEventArray				(int nPage, ARRAYTALKEVENTBASEINFO &aDst);		/* æŒ‡å®šãƒšãƒ¼ã‚¸ç•ªå·ã®ã‚¤ãƒ™ãƒ³ãƒˆä¸€è¦§ã‚’å–å¾— */
+	int		GetTalkEventCount			(int nPage);						/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãƒšãƒ¼ã‚¸æ•°ã‚’å–å¾— */
+	int		GetPageCount				(void);								/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãƒšãƒ¼ã‚¸æ•°ã‚’å–å¾— */
+	void	AddTalkEvent				(CInfoTalkEventBase *pInfo);		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’è¿½åŠ  */
+	void	UpTalkEvent					(int nPage, int nNo);				/* æŒ‡å®šã‚¤ãƒ™ãƒ³ãƒˆã‚’1ã¤ä¸Šã«ç§»å‹• */
+	void	DownTalkEvent				(int nPage, int nNo);				/* æŒ‡å®šã‚¤ãƒ™ãƒ³ãƒˆã‚’1ã¤ä¸‹ã«ç§»å‹• */
+	void	DeleteTalkEvent				(int nNo);							/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‰Šé™¤ */
+	void	DeleteTalkEvent				(int nPage, int nNo);				/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‰Šé™¤ */
+	void	DeleteTalkEvent				(CInfoTalkEventBase *pInfo);		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‰Šé™¤ */
+	void	DeleteAllTalkEvent			(void);								/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆã‚’å…¨ã¦å‰Šé™¤ */
 
 
 public:
-	DWORD	m_dwTalkEventID;						/* ‰ï˜bƒCƒxƒ“ƒgID */
-	ARRAYTALKEVENTBASEINFO		m_apTalkEvent;		/* ‰ï˜bƒCƒxƒ“ƒg */
+	DWORD	m_dwTalkEventID;						/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆID */
+	ARRAYTALKEVENTBASEINFO		m_apTalkEvent;		/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆ */
 } CInfoTalkEvent, *PCInfoTalkEvent;
 typedef CmyArray<PCInfoTalkEvent, PCInfoTalkEvent>	  ARRAYTALKEVENTINFO;
 typedef CmyArray<PCInfoTalkEvent, PCInfoTalkEvent>	*PARRAYTALKEVENTINFO;

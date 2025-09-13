@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2003 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	DXAudio.cpp													 */
-/* “à—eF		DirectX Audio‚ğg‚¤‚½‚ß‚ÌƒNƒ‰ƒX								 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2003/03/16													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	DXAudio.cpp													 */
+/* å†…å®¹ï¼š		DirectX Audioã‚’ä½¿ã†ãŸã‚ã®ã‚¯ãƒ©ã‚¹								 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2003/03/16													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -14,16 +14,16 @@
 #pragma comment (lib, "dxguid.lib")
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
 #define SAFE_RELEASE(x)	{if(x){(x)->Release();x=NULL;}}
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::CDXAudio												 */
-/* “à—eF	ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::CDXAudio												 */
+/* å†…å®¹ï¼š	ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 CDXAudio::CDXAudio()
@@ -37,9 +37,9 @@ CDXAudio::CDXAudio()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::~CDXAudio												 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::~CDXAudio												 */
+/* å†…å®¹ï¼š	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 CDXAudio::~CDXAudio()
@@ -49,16 +49,16 @@ CDXAudio::~CDXAudio()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::Create												 */
-/* “à—eF	‰Šú‰»															 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::Create												 */
+/* å†…å®¹ï¼š	åˆæœŸåŒ–															 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 BOOL CDXAudio::Create(void)
 {
 	HRESULT hr;
 
-	/* ƒpƒtƒH[ƒ}ƒ“ƒX‚Ìì¬ */
+	/* ãƒ‘ãƒ•ã‚©ãƒ¼ãƒãƒ³ã‚¹ã®ä½œæˆ */
 	hr = CoCreateInstance (
 				CLSID_DirectMusicPerformance,
 				NULL,
@@ -69,7 +69,7 @@ BOOL CDXAudio::Create(void)
 		return FALSE;
 	}
 
-	/* ‰Šú‰» */
+	/* åˆæœŸåŒ– */
 	m_pPerformance->InitAudio (
 			NULL, NULL, NULL,
 			DMUS_APATH_DYNAMIC_STEREO,
@@ -80,7 +80,7 @@ BOOL CDXAudio::Create(void)
 		return FALSE;
 	}
 
-	/* ƒfƒtƒHƒ‹ƒg‚ÌƒI[ƒfƒBƒIƒpƒX‚ğæ“¾ */
+	/* ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‘ã‚¹ã‚’å–å¾— */
 	m_pPerformance->GetDefaultAudioPath (&m_pDefAudioPath);
 	if (FAILED (hr)) {
 		return FALSE;
@@ -102,9 +102,9 @@ BOOL CDXAudio::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::Destroy												 */
-/* “à—eF	I—¹ˆ—														 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::Destroy												 */
+/* å†…å®¹ï¼š	çµ‚äº†å‡¦ç†														 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 void CDXAudio::Destroy(void)
@@ -121,9 +121,9 @@ void CDXAudio::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::SetResourceHandle										 */
-/* “à—eF	ƒŠƒ\[ƒXƒnƒ“ƒhƒ‹‚Ìİ’è											 */
-/* “ú•tF	2003/09/01														 */
+/* é–¢æ•°åï¼š	CDXAudio::SetResourceHandle										 */
+/* å†…å®¹ï¼š	ãƒªã‚½ãƒ¼ã‚¹ãƒãƒ³ãƒ‰ãƒ«ã®è¨­å®š											 */
+/* æ—¥ä»˜ï¼š	2003/09/01														 */
 /* ========================================================================= */
 
 void CDXAudio::SetResourceHandle(HMODULE hResource)
@@ -133,9 +133,9 @@ void CDXAudio::SetResourceHandle(HMODULE hResource)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::GetSegFromRes											 */
-/* “à—eF	ƒŠƒ\[ƒX‚©‚ç‚ÌƒZƒOƒƒ“ƒg“Ç‚İ‚İ								 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::GetSegFromRes											 */
+/* å†…å®¹ï¼š	ãƒªã‚½ãƒ¼ã‚¹ã‹ã‚‰ã®ã‚»ã‚°ãƒ¡ãƒ³ãƒˆèª­ã¿è¾¼ã¿								 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi)
@@ -144,17 +144,17 @@ BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi
 	DMUS_OBJECTDESC ObjDesc;
 	IDirectMusicSegment8 *pTmp;
 
-	/* ƒŠƒ\[ƒX‚ğ“Ç‚İ‚İ */
+	/* ãƒªã‚½ãƒ¼ã‚¹ã‚’èª­ã¿è¾¼ã¿ */
 	HGLOBAL hRes = LoadResource (m_hResource, hSrc);
 
-	/* \‘¢‘Ì‚ğİ’è */
+	/* æ§‹é€ ä½“ã‚’è¨­å®š */
 	ObjDesc.dwSize		= sizeof (DMUS_OBJECTDESC);
 	ObjDesc.guidClass	= CLSID_DirectMusicSegment;
 	ObjDesc.dwValidData	= DMUS_OBJ_CLASS | DMUS_OBJ_MEMORY;
 	ObjDesc.pbMemData	= (BYTE *)LockResource (hRes);
 	ObjDesc.llMemLength	= SizeofResource (m_hResource, hSrc);
 
-	/* ƒZƒOƒƒ“ƒg‚ğ“Ç‚İ‚İ */
+	/* ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã‚’èª­ã¿è¾¼ã¿ */
 	pTmp = *pSeg;
 
 	hr = m_pLoader->GetObject (&ObjDesc, IID_IDirectMusicSegment8, (void **)&pTmp);
@@ -166,7 +166,7 @@ BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi
 		pTmp->SetParam (GUID_StandardMIDIFile, 0xFFFFFFFF, 0, 0, NULL);
 	}
 
-	/* ƒoƒ“ƒh‚ğƒ_ƒEƒ“ƒ[ƒh */
+	/* ãƒãƒ³ãƒ‰ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ */
 	hr = pTmp->Download (m_pPerformance);
 	if (FAILED (hr)) {
 		return FALSE;
@@ -178,9 +178,9 @@ BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::ReleaseSeg											 */
-/* “à—eF	ƒZƒOƒƒ“ƒgŠJ•ú													 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::ReleaseSeg											 */
+/* å†…å®¹ï¼š	ã‚»ã‚°ãƒ¡ãƒ³ãƒˆé–‹æ”¾													 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg)
@@ -195,9 +195,9 @@ void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::PlayPrimary											 */
-/* “à—eF	ƒvƒ‰ƒCƒ}ƒŠƒZƒOƒƒ“ƒg‚Æ‚µ‚ÄÄ¶									 */
-/* “ú•tF	2003/07/13														 */
+/* é–¢æ•°åï¼š	CDXAudio::PlayPrimary											 */
+/* å†…å®¹ï¼š	ãƒ—ãƒ©ã‚¤ãƒãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã¨ã—ã¦å†ç”Ÿ									 */
+/* æ—¥ä»˜ï¼š	2003/07/13														 */
 /* ========================================================================= */
 
 BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg)
@@ -225,9 +225,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::PlaySecoundary										 */
-/* “à—eF	ƒZƒJƒ“ƒ_ƒŠƒZƒOƒƒ“ƒg‚Æ‚µ‚ÄÄ¶									 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::PlaySecoundary										 */
+/* å†…å®¹ï¼š	ã‚»ã‚«ãƒ³ãƒ€ãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã¨ã—ã¦å†ç”Ÿ									 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 BOOL CDXAudio::PlaySecoundary(IDirectMusicSegment8 *pSeg)
@@ -260,9 +260,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::SetVolPrimary											 */
-/* “à—eF	ƒvƒ‰ƒCƒ}ƒŠƒZƒOƒƒ“ƒg‚Ì‰¹—Êİ’è									 */
-/* “ú•tF	2003/11/30														 */
+/* é–¢æ•°åï¼š	CDXAudio::SetVolPrimary											 */
+/* å†…å®¹ï¼š	ãƒ—ãƒ©ã‚¤ãƒãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®éŸ³é‡è¨­å®š									 */
+/* æ—¥ä»˜ï¼š	2003/11/30														 */
 /* ========================================================================= */
 
 void CDXAudio::SetVolPrimary(long lVol)
@@ -278,9 +278,9 @@ void CDXAudio::SetVolPrimary(long lVol)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::SetVolSecoundary										 */
-/* “à—eF	ƒZƒJƒ“ƒ_ƒŠƒZƒOƒƒ“ƒg‚Ì‰¹—Êİ’è									 */
-/* “ú•tF	2003/11/30														 */
+/* é–¢æ•°åï¼š	CDXAudio::SetVolSecoundary										 */
+/* å†…å®¹ï¼š	ã‚»ã‚«ãƒ³ãƒ€ãƒªã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®éŸ³é‡è¨­å®š									 */
+/* æ—¥ä»˜ï¼š	2003/11/30														 */
 /* ========================================================================= */
 
 void CDXAudio::SetVolSecoundary(long lVol)
@@ -296,9 +296,9 @@ void CDXAudio::SetVolSecoundary(long lVol)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::Stop													 */
-/* “à—eF	Ä¶’â~														 */
-/* “ú•tF	2003/03/16														 */
+/* é–¢æ•°åï¼š	CDXAudio::Stop													 */
+/* å†…å®¹ï¼š	å†ç”Ÿåœæ­¢														 */
+/* æ—¥ä»˜ï¼š	2003/03/16														 */
 /* ========================================================================= */
 
 void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD dwFlg)
@@ -311,15 +311,15 @@ void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD dwFlg)
 		m_pPerformance->StopEx (m_pDefAudioPath2, 0, 0);
 		dwFlg = 0;
 	}
-	/* Ä¶’â~ */
+	/* å†ç”Ÿåœæ­¢ */
 	m_pPerformance->StopEx (pSeg, 0, dwFlg);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::SetLoopPoints											 */
-/* “à—eF	ƒ‹[ƒv”ÍˆÍ‚Ìİ’è												 */
-/* “ú•tF	2003/03/22														 */
+/* é–¢æ•°åï¼š	CDXAudio::SetLoopPoints											 */
+/* å†…å®¹ï¼š	ãƒ«ãƒ¼ãƒ—ç¯„å›²ã®è¨­å®š												 */
+/* æ—¥ä»˜ï¼š	2003/03/22														 */
 /* ========================================================================= */
 
 void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwFlg)
@@ -334,9 +334,9 @@ void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwFlg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CDXAudio::IsPlaying												 */
-/* “à—eF	Ä¶’†”»’è														 */
-/* “ú•tF	2003/05/05														 */
+/* é–¢æ•°åï¼š	CDXAudio::IsPlaying												 */
+/* å†…å®¹ï¼š	å†ç”Ÿä¸­åˆ¤å®š														 */
+/* æ—¥ä»˜ï¼š	2003/05/05														 */
 /* ========================================================================= */
 
 BOOL CDXAudio::IsPlaying(IDirectMusicSegment8 *pSeg)

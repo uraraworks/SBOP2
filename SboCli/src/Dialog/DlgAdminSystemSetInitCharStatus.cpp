@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminSystemSetInitCharStatus.cpp						 */
-/* “à—e			:ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l‚Ìİ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/22													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminSystemSetInitCharStatus.cpp						 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ã®è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/22													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminSystemSetInitCharStatus::DoDataExchange(CDataExchange* pDX)
@@ -67,9 +67,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::CDlgAdminSystemSetInitCharStatus	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::CDlgAdminSystemSetInitCharStatus	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 CDlgAdminSystemSetInitCharStatus::CDlgAdminSystemSetInitCharStatus(CWnd* pParent /*=NULL*/)
@@ -106,9 +106,9 @@ CDlgAdminSystemSetInitCharStatus::CDlgAdminSystemSetInitCharStatus(CWnd* pParent
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::~CDlgAdminSystemSetInitCharStatus */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::~CDlgAdminSystemSetInitCharStatus */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 CDlgAdminSystemSetInitCharStatus::~CDlgAdminSystemSetInitCharStatus()
@@ -117,25 +117,25 @@ CDlgAdminSystemSetInitCharStatus::~CDlgAdminSystemSetInitCharStatus()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::Init							 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::Init							 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 void CDlgAdminSystemSetInitCharStatus::Init(CMgrData *pMgrData)
 {
 	CDlgAdminBase::Init (pMgrData);
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminSystemSetInitCharStatus::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::Renew						 */
-/* “à—e		:XV															 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::Renew						 */
+/* å†…å®¹		:æ›´æ–°															 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 void CDlgAdminSystemSetInitCharStatus::Renew(void)
@@ -177,9 +177,9 @@ void CDlgAdminSystemSetInitCharStatus::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::OnAdminMsg					 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::OnAdminMsg					 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 void CDlgAdminSystemSetInitCharStatus::OnAdminMsg(int nType, DWORD dwPara)
@@ -188,15 +188,15 @@ void CDlgAdminSystemSetInitCharStatus::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::OnMainFrame					 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::OnMainFrame					 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 void CDlgAdminSystemSetInitCharStatus::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWSYSTEMINFO:		/* ƒVƒXƒeƒ€î•ñXV */
+	case MAINFRAMEMSG_RENEWSYSTEMINFO:		/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -204,9 +204,9 @@ void CDlgAdminSystemSetInitCharStatus::OnMainFrame(DWORD dwCommand, DWORD dwPara
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::OnInitDialog					 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::OnInitDialog					 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminSystemSetInitCharStatus::OnInitDialog()
@@ -223,9 +223,9 @@ BOOL CDlgAdminSystemSetInitCharStatus::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminSystemSetInitCharStatus::OnSend						 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(‘—M)											 */
-/* “ú•t		:2008/09/22														 */
+/* é–¢æ•°å	:CDlgAdminSystemSetInitCharStatus::OnSend						 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(é€ä¿¡)											 */
+/* æ—¥ä»˜		:2008/09/22														 */
 /* ========================================================================= */
 
 void CDlgAdminSystemSetInitCharStatus::OnSend()

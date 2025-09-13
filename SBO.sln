@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeFileList", "Tool\MakeFileList\MakeFileList.vcxproj", "{D8A863BC-58D1-4912-80F7-BE3220B6560E}"

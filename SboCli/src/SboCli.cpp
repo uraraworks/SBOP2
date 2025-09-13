@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboCli.cpp													 */
-/* “à—e			:ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/09/24													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboCli.cpp													 */
+/* å†…å®¹			:ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/09/24													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 BEGIN_MESSAGE_MAP(CSboCliApp, CWinApp)
@@ -26,14 +26,14 @@ BEGIN_MESSAGE_MAP(CSboCliApp, CWinApp)
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/* —Bˆê‚Ì CSboCliApp ƒIƒuƒWƒFƒNƒg */
+/* å”¯ä¸€ã® CSboCliApp ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ */
 CSboCliApp theApp;
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboCliApp::CSboCliApp											 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CSboCliApp::CSboCliApp											 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 CSboCliApp::CSboCliApp()
@@ -42,9 +42,9 @@ CSboCliApp::CSboCliApp()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CSboCliApp::InitInstance										 */
-/* “à—e		:‰Šú‰»ˆ—														 */
-/* “ú•t		:2006/09/24														 */
+/* é–¢æ•°å	:CSboCliApp::InitInstance										 */
+/* å†…å®¹		:åˆæœŸåŒ–å‡¦ç†														 */
+/* æ—¥ä»˜		:2006/09/24														 */
 /* ========================================================================= */
 
 BOOL CSboCliApp::InitInstance()
@@ -57,7 +57,7 @@ BOOL CSboCliApp::InitInstance()
 	bRet = FALSE;
 	hMutexMain = NULL;
 
-	/* winSock‚ð‰Šú‰» */
+	/* winSockã‚’åˆæœŸåŒ– */
 	WSAStartup (MAKEWORD (2, 0), &wsaData);
 
 	CWinApp::InitInstance();

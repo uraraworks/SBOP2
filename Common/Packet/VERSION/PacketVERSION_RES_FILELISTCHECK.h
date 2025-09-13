@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_RES_FILELISTCHECK.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹ƒŠƒXƒgƒ`ƒFƒbƒN‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/08/28													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_RES_FILELISTCHECK.h							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/08/28													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,32 +11,32 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 enum {
 	FILELISTCHECKRES_NONE = 0,
-	FILELISTCHECKRES_OK,					/* –â‘è–³‚µ */
-	FILELISTCHECKRES_NG,					/* •sˆê’v */
+	FILELISTCHECKRES_OK,					/* å•é¡Œç„¡ã— */
+	FILELISTCHECKRES_NG,					/* ä¸ä¸€è‡´ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketVERSION_RES_FILELISTCHECK : public CPacketBase
 {
 public:
-			CPacketVERSION_RES_FILELISTCHECK();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketVERSION_RES_FILELISTCHECK();		/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketVERSION_RES_FILELISTCHECK();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketVERSION_RES_FILELISTCHECK();		/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(int nResult);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(int nResult);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int		m_nResult;					/* Œ‹‰Ê */
+	int		m_nResult;					/* çµæžœ */
 } CPacketVERSION_RES_FILELISTCHECK, *PCPacketVERSION_RES_FILELISTCHECK;
 
 /* Copyright(C)URARA-works 2007 */

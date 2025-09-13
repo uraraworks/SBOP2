@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	WndSelectMapPartsGrp.h										 */
-/* “à—eF		ƒ}ƒbƒvƒp[ƒc‰æ‘œ‘I‘ğƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/10/07													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	WndSelectMapPartsGrp.h										 */
+/* å†…å®¹ï¼š		ãƒãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒé¸æŠã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/10/07													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,27 +13,27 @@ class CMgrGrpData;
 class CImg32;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CWndSelectMapPartsGrp : public CWnd
 {
 public:
-			CWndSelectMapPartsGrp();							/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CWndSelectMapPartsGrp();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CWndSelectMapPartsGrp();							/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CWndSelectMapPartsGrp();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ì¬ */
-	void	Destroy	(void);									/* ”jŠü */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* ä½œæˆ */
+	void	Destroy	(void);									/* ç ´æ£„ */
 
 
 protected:
-	int			m_nSelect;						/* ‘I‘ğ‚³‚ê‚½ƒp[ƒc”Ô† */
-	CWnd		*m_pWndParent;					/* eƒEƒBƒ“ƒhƒE */
-	CImg32		*m_pImgBack;					/* ƒoƒbƒNƒoƒbƒtƒ@ */
+	int			m_nSelect;						/* é¸æŠã•ã‚ŒãŸãƒ‘ãƒ¼ãƒ„ç•ªå· */
+	CWnd		*m_pWndParent;					/* è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ */
+	CImg32		*m_pImgBack;					/* ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ */
 
-	CMgrData		*m_pMgrData;				/* ƒf[ƒ^ŠÇ— */
-	CMgrGrpData		*m_pMgrGrpData;				/* ƒOƒ‰ƒtƒBƒbƒNƒf[ƒ^ŠÇ— */
+	CMgrData		*m_pMgrData;				/* ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
+	CMgrGrpData		*m_pMgrGrpData;				/* ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ç®¡ç† */
 
 
 

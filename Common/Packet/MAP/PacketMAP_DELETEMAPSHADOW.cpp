@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:PacketMAP_DELETEMAPSHADOW.cpp								 */
-/* ì‡óe			:ÉRÉ}ÉìÉh(É}ÉbÉvån:É}ÉbÉvâeçÌèú) é¿ëïÉtÉ@ÉCÉã				 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2007/06/08													 */
+/* „Éï„Ç°„Ç§„É´Âêç	:PacketMAP_DELETEMAPSHADOW.cpp								 */
+/* ÂÜÖÂÆπ			:„Ç≥„Éû„É≥„Éâ(„Éû„ÉÉ„ÉóÁ≥ª:„Éû„ÉÉ„ÉóÂΩ±ÂâäÈô§) ÂÆüË£Ö„Éï„Ç°„Ç§„É´				 */
+/* ‰ΩúÊàê			:Âπ¥„Åå„ÇâÂπ¥‰∏≠Êò•„ÅÜ„Çâ„Çâ(URARA-works)							 */
+/* ‰ΩúÊàêÈñãÂßãÊó•	:2007/06/08													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEMAPSHADOW::CPacketMAP_DELETEMAPSHADOW			 */
-/* ì‡óe		:ÉRÉìÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEMAPSHADOW::CPacketMAP_DELETEMAPSHADOW			 */
+/* ÂÜÖÂÆπ		:„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 CPacketMAP_DELETEMAPSHADOW::CPacketMAP_DELETEMAPSHADOW()
@@ -24,9 +24,9 @@ CPacketMAP_DELETEMAPSHADOW::CPacketMAP_DELETEMAPSHADOW()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEMAPSHADOW::~CPacketMAP_DELETEMAPSHADOW		 */
-/* ì‡óe		:ÉfÉXÉgÉâÉNÉ^													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEMAPSHADOW::~CPacketMAP_DELETEMAPSHADOW		 */
+/* ÂÜÖÂÆπ		:„Éá„Çπ„Éà„É©„ÇØ„Çø													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 CPacketMAP_DELETEMAPSHADOW::~CPacketMAP_DELETEMAPSHADOW()
@@ -35,13 +35,13 @@ CPacketMAP_DELETEMAPSHADOW::~CPacketMAP_DELETEMAPSHADOW()
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEMAPSHADOW::Make								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇçÏê¨													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEMAPSHADOW::Make								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„Çí‰ΩúÊàê													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 void CPacketMAP_DELETEMAPSHADOW::Make(
-	DWORD dwShadowID)		/* [in] É}ÉbÉvâeID */
+	DWORD dwShadowID)		/* [in] „Éû„ÉÉ„ÉóÂΩ±ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -58,16 +58,16 @@ void CPacketMAP_DELETEMAPSHADOW::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_DELETEMAPSHADOW;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwShadowID, sizeof (dwShadowID), pDataTmp);	/* É}ÉbÉvâeID */
+	CopyMemoryRenew (pDataTmp, &dwShadowID, sizeof (dwShadowID), pDataTmp);	/* „Éû„ÉÉ„ÉóÂΩ±ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ä÷êîñº	:CPacketMAP_DELETEMAPSHADOW::Set								 */
-/* ì‡óe		:ÉpÉPÉbÉgÇê›íË													 */
-/* ì˙ït		:2007/06/08														 */
+/* Èñ¢Êï∞Âêç	:CPacketMAP_DELETEMAPSHADOW::Set								 */
+/* ÂÜÖÂÆπ		:„Éë„Ç±„ÉÉ„Éà„ÇíË®≠ÂÆö													 */
+/* Êó•‰ªò		:2007/06/08														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_DELETEMAPSHADOW::Set(PBYTE pPacket)
@@ -77,7 +77,7 @@ PBYTE CPacketMAP_DELETEMAPSHADOW::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwShadowID,	pDataTmp, sizeof (m_dwShadowID), pDataTmp);	/* É}ÉbÉvâeID */
+	CopyMemoryRenew (&m_dwShadowID,	pDataTmp, sizeof (m_dwShadowID), pDataTmp);	/* „Éû„ÉÉ„ÉóÂΩ±ID */
 
 	pRet = pDataTmp;
 	return pRet;

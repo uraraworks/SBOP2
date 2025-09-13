@@ -1,175 +1,175 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:SboCli_priv.h												 */
-/* “à—e			:ƒNƒ‰ƒCƒAƒ“ƒg—p’è‹`ƒtƒ@ƒCƒ‹									 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2005/05/04													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:SboCli_priv.h												 */
+/* å†…å®¹			:ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆç”¨å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«									 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2005/05/04													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-#define MAPPARTSSIZE	(32)										/* ƒ}ƒbƒvƒp[ƒcƒTƒCƒY */
-#define SCRSIZEX		(MAPPARTSSIZE * DRAW_PARTS_X)				/* ƒ}ƒbƒv•\Ž¦ƒTƒCƒY(‰¡) */
-#define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)				/* ƒ}ƒbƒv•\Ž¦ƒTƒCƒY(c) */
-#define SCROLLSIZE		(16)										/* ƒXƒNƒ[ƒ‹’PˆÊ */
-#define MAXCOUNT_CHARGRPCOUNTONEFILE	(16)						/* ƒLƒƒƒ‰‰æ‘œ‚Ì1ƒtƒ@ƒCƒ‹‚É“o˜^‚³‚ê‚Ä‚¢‚éƒLƒƒƒ‰” */
+#define MAPPARTSSIZE	(32)										/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ã‚µã‚¤ã‚º */
+#define SCRSIZEX		(MAPPARTSSIZE * DRAW_PARTS_X)				/* ãƒžãƒƒãƒ—è¡¨ç¤ºã‚µã‚¤ã‚º(æ¨ª) */
+#define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)				/* ãƒžãƒƒãƒ—è¡¨ç¤ºã‚µã‚¤ã‚º(ç¸¦) */
+#define SCROLLSIZE		(16)										/* ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å˜ä½ */
+#define MAXCOUNT_CHARGRPCOUNTONEFILE	(16)						/* ã‚­ãƒ£ãƒ©ç”»åƒã®1ãƒ•ã‚¡ã‚¤ãƒ«ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‚­ãƒ£ãƒ©æ•° */
 
-/* ƒEƒBƒ“ƒhƒEƒƒbƒZ[ƒW */
+/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
 enum {
-	WM_INITEND = WM_APP,								/* ‰Šú‰»Š®—¹ */
-	WM_WNDCLOSE,										/* ƒEƒBƒ“ƒhƒE‚ª•Â‚¶‚½ */
-	WM_WINDOWMSG,										/* ƒEƒBƒ“ƒhƒE‚©‚ç‚Ì’Ê’m */
-	WM_MGRDRAW,											/* •`‰æŠÇ—‚©‚ç‚Ì’Ê’m */
-	WM_MAINFRAME,										/* ƒƒCƒ“ƒtƒŒ[ƒ€‚Ö‚Ì’Ê’m */
-	WM_RECVCOMMAND,										/* ƒRƒ}ƒ“ƒhŽóM */
-	WM_ADMINMSG,										/* ŠÇ—ŽÒƒEƒBƒ“ƒhƒEŠÖ˜A‚Ì’Ê’m */
+	WM_INITEND = WM_APP,								/* åˆæœŸåŒ–å®Œäº† */
+	WM_WNDCLOSE,										/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒé–‰ã˜ãŸ */
+	WM_WINDOWMSG,										/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰ã®é€šçŸ¥ */
+	WM_MGRDRAW,											/* æç”»ç®¡ç†ã‹ã‚‰ã®é€šçŸ¥ */
+	WM_MAINFRAME,										/* ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ ã¸ã®é€šçŸ¥ */
+	WM_RECVCOMMAND,										/* ã‚³ãƒžãƒ³ãƒ‰å—ä¿¡ */
+	WM_ADMINMSG,										/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®é€šçŸ¥ */
 };
 
-/* ƒEƒBƒ“ƒhƒEID */
+/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ID */
 enum {
-	WINDOWID_SELECTMAPPARTSGRP = 1,						/* ƒ}ƒbƒvƒp[ƒc‰æ‘œ‘I‘ð */
-	WINDOWID_SELECTMAPSHADOWGRP,						/* ƒ}ƒbƒv‰e‰æ‘œ‘I‘ð */
+	WINDOWID_SELECTMAPPARTSGRP = 1,						/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„ç”»åƒé¸æŠž */
+	WINDOWID_SELECTMAPSHADOWGRP,						/* ãƒžãƒƒãƒ—å½±ç”»åƒé¸æŠž */
 };
 
-/* ƒŠƒ\[ƒXID */
+/* ãƒªã‚½ãƒ¼ã‚¹ID */
 enum {
-	IDC_SAVEPASSWORD = 1000,							/* ƒpƒXƒ[ƒh‚ð‹L˜^‚·‚éƒ`ƒFƒbƒN */
-	IDC_CONNECT,										/* Ú‘±ƒ{ƒ^ƒ“ */
+	IDC_SAVEPASSWORD = 1000,							/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨˜éŒ²ã™ã‚‹ãƒã‚§ãƒƒã‚¯ */
+	IDC_CONNECT,										/* æŽ¥ç¶šãƒœã‚¿ãƒ³ */
 };
 
-/* •`‰æƒ}ƒl[ƒWƒƒ‚©‚ç‚Ì’Ê’m */
+/* æç”»ãƒžãƒãƒ¼ã‚¸ãƒ£ã‹ã‚‰ã®é€šçŸ¥ */
 enum {
 	MGRDRAWMSG_NONE = 0,
-	MGRDRAWMSG_START_FADEIN,							/* ƒtƒF[ƒhƒCƒ“ŠJŽn */
-	MGRDRAWMSG_START_FADEOUT,							/* ƒtƒF[ƒhƒAƒEƒgŠJŽn */
-	MGRDRAWMSG_END_FADEIN,								/* ƒtƒF[ƒhƒCƒ“Š®—¹ */
-	MGRDRAWMSG_END_FADEOUT,								/* ƒtƒF[ƒhƒAƒEƒgŠ®—¹ */
+	MGRDRAWMSG_START_FADEIN,							/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³é–‹å§‹ */
+	MGRDRAWMSG_START_FADEOUT,							/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆé–‹å§‹ */
+	MGRDRAWMSG_END_FADEIN,								/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³å®Œäº† */
+	MGRDRAWMSG_END_FADEOUT,								/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆå®Œäº† */
 };
 
-/* ƒƒCƒ“ƒtƒŒ[ƒ€‚Ö‚Ì’Ê’m */
+/* ãƒ¡ã‚¤ãƒ³ãƒ•ãƒ¬ãƒ¼ãƒ ã¸ã®é€šçŸ¥ */
 enum {
 	MAINFRAMEMSG_NONE = 0,
-	MAINFRAMEMSG_CHGSTATE,								/* ó‘Ô•ÏX */
-	MAINFRAMEMSG_CONNECT,								/* Ú‘± */
-	MAINFRAMEMSG_DISCONNECT,							/* Ø’f */
-	MAINFRAMEMSG_CHARNAME,								/* ƒLƒƒƒ‰–¼“ü—ÍŠ®—¹ */
-	MAINFRAMEMSG_RENEWACCOUNTINFO,						/* ƒAƒJƒEƒ“ƒgî•ñXV */
-	MAINFRAMEMSG_RES_MAKECHAR,							/* ƒLƒƒƒ‰ì¬‰ž“š */
-	MAINFRAMEMSG_RENEWCHARINFO,							/* ƒLƒƒƒ‰î•ñXV */
-	MAINFRAMEMSG_RENEWCHARCHAT,							/* ”­Œ¾“à—eXV */
-	MAINFRAMEMSG_RENEWCHARCOUNT,						/* ƒLƒƒƒ‰”XV */
-	MAINFRAMEMSG_RENEWMAPINFO,							/* ƒ}ƒbƒvî•ñXV */
-	MAINFRAMEMSG_RENEWONLINECOUNT,						/* ƒIƒ“ƒ‰ƒCƒ“”XV */
-	MAINFRAMEMSG_RENEWSYSTEMMSG,						/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒWXV */
-	MAINFRAMEMSG_RENEWADMINLEVEL,						/* ŠÇ—ŽÒŒ ŒÀ•ÏX */
-	MAINFRAMEMSG_RENEWITEMTYPEINFO,						/* ƒAƒCƒeƒ€Ží•Êî•ñXV */
-	MAINFRAMEMSG_RENEWITEMINFO,							/* ƒAƒCƒeƒ€î•ñXV */
-	MAINFRAMEMSG_RENEWITEMWEAPONINFO,					/* •Šíî•ñXV */
-	MAINFRAMEMSG_RENEWMOTION,							/* ƒ‚[ƒVƒ‡ƒ“î•ñXV */
-	MAINFRAMEMSG_RENEWMOTIONTYPE,						/* ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñXV */
-	MAINFRAMEMSG_RENEWBALLOON,							/* •¬o‚µî•ñXV */
-	MAINFRAMEMSG_RENEWEFFECT,							/* ƒGƒtƒFƒNƒgî•ñXV */
-	MAINFRAMEMSG_RENEWSTATUS,							/* ƒXƒe[ƒ^ƒXî•ñXV */
-	MAINFRAMEMSG_RENEWSYSTEMINFO,						/* ƒVƒXƒeƒ€î•ñXV */
-	MAINFRAMEMSG_RENEWVIEWSET,							/* •\Ž¦Ý’èXV */
-	MAINFRAMEMSG_RENEWSKILLINFO,						/* ƒXƒLƒ‹î•ñXV */
-	MAINFRAMEMSG_RENEWTALKEVENT,						/* ‰ï˜bƒCƒxƒ“ƒgî•ñXV */
-	MAINFRAMEMSG_DAMAGE,								/* ƒ_ƒ[ƒW‚ðŽó‚¯‚½ */
+	MAINFRAMEMSG_CHGSTATE,								/* çŠ¶æ…‹å¤‰æ›´ */
+	MAINFRAMEMSG_CONNECT,								/* æŽ¥ç¶š */
+	MAINFRAMEMSG_DISCONNECT,							/* åˆ‡æ–­ */
+	MAINFRAMEMSG_CHARNAME,								/* ã‚­ãƒ£ãƒ©åå…¥åŠ›å®Œäº† */
+	MAINFRAMEMSG_RENEWACCOUNTINFO,						/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RES_MAKECHAR,							/* ã‚­ãƒ£ãƒ©ä½œæˆå¿œç­” */
+	MAINFRAMEMSG_RENEWCHARINFO,							/* ã‚­ãƒ£ãƒ©æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWCHARCHAT,							/* ç™ºè¨€å†…å®¹æ›´æ–° */
+	MAINFRAMEMSG_RENEWCHARCOUNT,						/* ã‚­ãƒ£ãƒ©æ•°æ›´æ–° */
+	MAINFRAMEMSG_RENEWMAPINFO,							/* ãƒžãƒƒãƒ—æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWONLINECOUNT,						/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³æ•°æ›´æ–° */
+	MAINFRAMEMSG_RENEWSYSTEMMSG,						/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ›´æ–° */
+	MAINFRAMEMSG_RENEWADMINLEVEL,						/* ç®¡ç†è€…æ¨©é™å¤‰æ›´ */
+	MAINFRAMEMSG_RENEWITEMTYPEINFO,						/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWITEMINFO,							/* ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWITEMWEAPONINFO,					/* æ­¦å™¨æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWMOTION,							/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWMOTIONTYPE,						/* ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWBALLOON,							/* å™´å‡ºã—æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWEFFECT,							/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWSTATUS,							/* ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWSYSTEMINFO,						/* ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWVIEWSET,							/* è¡¨ç¤ºè¨­å®šæ›´æ–° */
+	MAINFRAMEMSG_RENEWSKILLINFO,						/* ã‚¹ã‚­ãƒ«æƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_RENEWTALKEVENT,						/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	MAINFRAMEMSG_DAMAGE,								/* ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸ */
 };
 
-/* ŠÇ—ŽÒƒEƒBƒ“ƒhƒEŠÖ˜A‚Ì’Ê’m */
+/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–¢é€£ã®é€šçŸ¥ */
 enum {
 	ADMINMSG_NONE = 0,
-	ADMINMSG_NOTIFYTYPE_LBUTTONDOWN,					/* ¶ƒNƒŠƒbƒN’Ê’m */
-	ADMINMSG_NOTIFYTYPE_RBUTTONDOWN,					/* ‰EƒNƒŠƒbƒN’Ê’m */
-	ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK,					/* ‰Eƒ_ƒuƒ‹ƒNƒŠƒbƒN’Ê’m */
-	ADMINMSG_RENEWMAPINFO,								/* ƒ}ƒbƒvî•ñXV */
-	ADMINMSG_RENEWMAPOBJECT,							/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñXV */
-	ADMINMSG_RENEWMAPPARTS,								/* ƒ}ƒbƒvƒp[ƒcî•ñXV */
-	ADMINMSG_RENEWMAPSHADOW,							/* ƒ}ƒbƒv‰eî•ñXV */
-	ADMINMSG_RENEWTALKEVENT,							/* ‰ï˜bƒCƒxƒ“ƒgî•ñXV */
-	ADMINMSG_RENEWDISABLE,								/* ‹‘”Ûî•ñXV */
-	ADMINMSG_ADMINLEVEL,								/* ŠÇ—ŽÒƒŒƒxƒ‹’Ê’m */
-	ADMINMSG_SELECT_ANIME,								/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‘I‘ð */
-	ADMINMSG_ACCOUNTINFO,								/* ƒAƒJƒEƒ“ƒgî•ñŽæ“¾ */
-	ADMINMSG_CHAR_ONLINE,								/* ƒIƒ“ƒ‰ƒCƒ“’†ƒLƒƒƒ‰ˆê——XV */
+	ADMINMSG_NOTIFYTYPE_LBUTTONDOWN,					/* å·¦ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
+	ADMINMSG_NOTIFYTYPE_RBUTTONDOWN,					/* å³ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
+	ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK,					/* å³ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯é€šçŸ¥ */
+	ADMINMSG_RENEWMAPINFO,								/* ãƒžãƒƒãƒ—æƒ…å ±æ›´æ–° */
+	ADMINMSG_RENEWMAPOBJECT,							/* ãƒžãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±æ›´æ–° */
+	ADMINMSG_RENEWMAPPARTS,								/* ãƒžãƒƒãƒ—ãƒ‘ãƒ¼ãƒ„æƒ…å ±æ›´æ–° */
+	ADMINMSG_RENEWMAPSHADOW,							/* ãƒžãƒƒãƒ—å½±æƒ…å ±æ›´æ–° */
+	ADMINMSG_RENEWTALKEVENT,							/* ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆæƒ…å ±æ›´æ–° */
+	ADMINMSG_RENEWDISABLE,								/* æ‹’å¦æƒ…å ±æ›´æ–° */
+	ADMINMSG_ADMINLEVEL,								/* ç®¡ç†è€…ãƒ¬ãƒ™ãƒ«é€šçŸ¥ */
+	ADMINMSG_SELECT_ANIME,								/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžé¸æŠž */
+	ADMINMSG_ACCOUNTINFO,								/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±å–å¾— */
+	ADMINMSG_CHAR_ONLINE,								/* ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ä¸­ã‚­ãƒ£ãƒ©ä¸€è¦§æ›´æ–° */
 };
 
-/* ŠÇ—ŽÒƒEƒBƒ“ƒhƒE‚Ö‚Ì’Ê’mŽí•Ê */
+/* ç®¡ç†è€…ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¸ã®é€šçŸ¥ç¨®åˆ¥ */
 enum {
 	ADMINNOTIFYTYPE_NONE = 0,
-	ADMINNOTIFYTYPE_CHARID,								/* ƒLƒƒƒ‰ID */
-	ADMINNOTIFYTYPE_ACCOUNTID,							/* ƒAƒJƒEƒ“ƒgID */
-	ADMINNOTIFYTYPE_MAPEDIT,							/* ƒ}ƒbƒv•ÒW(’Ê’m‚Í–³‚µ) */
-	ADMINNOTIFYTYPE_MAPSHADOWEDIT,						/* ƒ}ƒbƒv‰e•ÒW(’Ê’m‚Í–³‚µ) */
-	ADMINNOTIFYTYPE_ITEMID,								/* ƒAƒCƒeƒ€ID */
-	ADMINNOTIFYTYPE_POS,								/* ƒ}ƒbƒvÀ•W */
-	ADMINNOTIFYTYPE_CHARPOS,							/* ƒLƒƒƒ‰À•W */
+	ADMINNOTIFYTYPE_CHARID,								/* ã‚­ãƒ£ãƒ©ID */
+	ADMINNOTIFYTYPE_ACCOUNTID,							/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	ADMINNOTIFYTYPE_MAPEDIT,							/* ãƒžãƒƒãƒ—ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
+	ADMINNOTIFYTYPE_MAPSHADOWEDIT,						/* ãƒžãƒƒãƒ—å½±ç·¨é›†(é€šçŸ¥ã¯ç„¡ã—) */
+	ADMINNOTIFYTYPE_ITEMID,								/* ã‚¢ã‚¤ãƒ†ãƒ ID */
+	ADMINNOTIFYTYPE_POS,								/* ãƒžãƒƒãƒ—åº§æ¨™ */
+	ADMINNOTIFYTYPE_CHARPOS,							/* ã‚­ãƒ£ãƒ©åº§æ¨™ */
 };
 
-/* ƒtƒF[ƒhó‘Ô */
+/* ãƒ•ã‚§ãƒ¼ãƒ‰çŠ¶æ…‹ */
 enum {
 	FADESTATE_NONE = 0,
-	FADESTATE_FADEIN,									/* ƒtƒF[ƒhƒCƒ“’† */
-	FADESTATE_FADEOUT,									/* ƒtƒF[ƒhƒAƒEƒg’† */
+	FADESTATE_FADEIN,									/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ä¸­ */
+	FADESTATE_FADEOUT,									/* ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆä¸­ */
 };
 
-/* ƒŒƒCƒ„[ID */
+/* ãƒ¬ã‚¤ãƒ¤ãƒ¼ID */
 enum {
 	LAYERTYPE_NONE = 0,
-	LAYERTYPE_LOGO,										/* ƒƒS */
-	LAYERTYPE_TITLE,									/* ƒ^ƒCƒgƒ‹ */
-	LAYERTYPE_PRODUCT,									/* ƒvƒƒ_ƒNƒg */
-	LAYERTYPE_LOGINMENU,								/* ƒƒOƒCƒ“ƒƒjƒ…[ */
-	LAYERTYPE_CHARSELECT,								/* ƒLƒƒƒ‰‘I‘ð */
-	LAYERTYPE_MAP,										/* ƒ}ƒbƒv */
-	LAYERTYPE_INFO,										/* ‚¨’m‚ç‚¹ */
-	LAYERTYPE_CLOUD,									/* ‰_ */
-	LAYERTYPE_SYSTEMMSG,								/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW */
+	LAYERTYPE_LOGO,										/* ãƒ­ã‚´ */
+	LAYERTYPE_TITLE,									/* ã‚¿ã‚¤ãƒˆãƒ« */
+	LAYERTYPE_PRODUCT,									/* ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆ */
+	LAYERTYPE_LOGINMENU,								/* ãƒ­ã‚°ã‚¤ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ */
+	LAYERTYPE_CHARSELECT,								/* ã‚­ãƒ£ãƒ©é¸æŠž */
+	LAYERTYPE_MAP,										/* ãƒžãƒƒãƒ— */
+	LAYERTYPE_INFO,										/* ãŠçŸ¥ã‚‰ã› */
+	LAYERTYPE_CLOUD,									/* é›² */
+	LAYERTYPE_SYSTEMMSG,								/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
 };
 
-/* ƒQ[ƒ€ó‘Ô */
+/* ã‚²ãƒ¼ãƒ çŠ¶æ…‹ */
 enum {
 	GAMESTATE_NONE = 0,
-	GAMESTATE_LOGO,										/* URARA-worksƒƒS */
-	GAMESTATE_TITLE,									/* ƒ^ƒCƒgƒ‹‰æ–Ê */
-	GAMESTATE_LOGIN,									/* ƒƒOƒCƒ“‰æ–Ê */
-	GAMESTATE_DISCONNECT,								/* Ø’f */
-	GAMESTATE_INFO,										/* ‚¨’m‚ç‚¹‰æ–Ê */
-	GAMESTATE_LOGINMENU,								/* ƒƒjƒ…[‰æ–Ê */
-	GAMESTATE_MAP,										/* ƒ}ƒbƒv‰æ–Ê */
+	GAMESTATE_LOGO,										/* URARA-worksãƒ­ã‚´ */
+	GAMESTATE_TITLE,									/* ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ */
+	GAMESTATE_LOGIN,									/* ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢ */
+	GAMESTATE_DISCONNECT,								/* åˆ‡æ–­ */
+	GAMESTATE_INFO,										/* ãŠçŸ¥ã‚‰ã›ç”»é¢ */
+	GAMESTATE_LOGINMENU,								/* ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ */
+	GAMESTATE_MAP,										/* ãƒžãƒƒãƒ—ç”»é¢ */
 };
 
-/* Ø’f——R */
+/* åˆ‡æ–­ç†ç”± */
 enum {
-	DISCONNECTID_CONNECT = 0,							/* Ú‘±Ž¸”s */
-	DISCONNECTID_VERSION,								/* ƒo[ƒWƒ‡ƒ“•sˆê’v */
-	DISCONNECTID_USER,									/* –žˆõ */
-	DISCONNECTID_DISABLE,								/* ‹ÖŽ~ */
-	DISCONNECTID_PASSWORD,								/* ƒpƒXƒ[ƒh•sˆê’v */
-	DISCONNECTID_LOGIN,									/* ƒƒOƒCƒ“Ï‚Ý */
-	DISCONNECTID_MAC,									/* ì¬Ï‚Ý */
+	DISCONNECTID_CONNECT = 0,							/* æŽ¥ç¶šå¤±æ•— */
+	DISCONNECTID_VERSION,								/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ä¸ä¸€è‡´ */
+	DISCONNECTID_USER,									/* æº€å“¡ */
+	DISCONNECTID_DISABLE,								/* ç¦æ­¢ */
+	DISCONNECTID_PASSWORD,								/* ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¸ä¸€è‡´ */
+	DISCONNECTID_LOGIN,									/* ãƒ­ã‚°ã‚¤ãƒ³æ¸ˆã¿ */
+	DISCONNECTID_MAC,									/* ä½œæˆæ¸ˆã¿ */
 };
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
-/* ƒVƒXƒeƒ€ƒƒbƒZ[ƒW\‘¢‘Ì */
+/* ã‚·ã‚¹ãƒ†ãƒ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ§‹é€ ä½“ */
 typedef struct _STSYSTEMMSG {
-	BOOL		bAddLog;			/* ƒƒO‚Ö’Ç‰Á‚·‚éH */
-	CmyString	strMsg;				/* ƒƒbƒZ[ƒW */
-	COLORREF	clMsg;				/* •`‰æF */
+	BOOL		bAddLog;			/* ãƒ­ã‚°ã¸è¿½åŠ ã™ã‚‹ï¼Ÿ */
+	CmyString	strMsg;				/* ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ */
+	COLORREF	clMsg;				/* æç”»è‰² */
 } STSYSTEMMSG, *PSTSYSTEMMSG;
 
-/* ”’l‚Æ•¶Žš—ñƒ|ƒCƒ“ƒ^\‘¢‘Ì */
+/* æ•°å€¤ã¨æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿æ§‹é€ ä½“ */
 typedef struct _STINTLPCSTR {
-	int			nValue;				/* ”’l */
-	LPCSTR		pszText;			/* •¶Žš—ñƒ|ƒCƒ“ƒ^ */
+	int			nValue;				/* æ•°å€¤ */
+	LPCSTR		pszText;			/* æ–‡å­—åˆ—ãƒã‚¤ãƒ³ã‚¿ */
 } STINTLPCSTR, *PSTINTLPCSTR;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketADMIN_EFC_RENEWBALLOON.cpp							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ŠÇ—ÒŒn:•¬o‚µî•ñ‚ÌXV) À‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2007/12/30													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketADMIN_EFC_RENEWBALLOON.cpp							 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ç®¡ç†è€…ç³»:å™´å‡ºã—æƒ…å ±ã®æ›´æ–°) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/12/30													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -12,9 +12,9 @@
 #include "PacketADMIN_EFC_RENEWBALLOON.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_EFC_RENEWBALLOON::CPacketADMIN_EFC_RENEWBALLOON	 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/30														 */
+/* é–¢æ•°å	:CPacketADMIN_EFC_RENEWBALLOON::CPacketADMIN_EFC_RENEWBALLOON	 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/30														 */
 /* ========================================================================= */
 
 CPacketADMIN_EFC_RENEWBALLOON::CPacketADMIN_EFC_RENEWBALLOON()
@@ -25,9 +25,9 @@ CPacketADMIN_EFC_RENEWBALLOON::CPacketADMIN_EFC_RENEWBALLOON()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_EFC_RENEWBALLOON::~CPacketADMIN_EFC_RENEWBALLOON	 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/12/30														 */
+/* é–¢æ•°å	:CPacketADMIN_EFC_RENEWBALLOON::~CPacketADMIN_EFC_RENEWBALLOON	 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/12/30														 */
 /* ========================================================================= */
 
 CPacketADMIN_EFC_RENEWBALLOON::~CPacketADMIN_EFC_RENEWBALLOON()
@@ -37,14 +37,14 @@ CPacketADMIN_EFC_RENEWBALLOON::~CPacketADMIN_EFC_RENEWBALLOON()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_EFC_RENEWBALLOON::Make							 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2007/12/30														 */
+/* é–¢æ•°å	:CPacketADMIN_EFC_RENEWBALLOON::Make							 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2007/12/30														 */
 /* ========================================================================= */
 
 void CPacketADMIN_EFC_RENEWBALLOON::Make(
-	DWORD dwListID,					/* [in] í•ÊID */
-	CLibInfoEfcBalloon *pSrc)		/* [in] •¬o‚µî•ñ */
+	DWORD dwListID,					/* [in] ç¨®åˆ¥ID */
+	CLibInfoEfcBalloon *pSrc)		/* [in] å™´å‡ºã—æƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -64,8 +64,8 @@ void CPacketADMIN_EFC_RENEWBALLOON::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_EFC_RENEWBALLOON;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwListID,		sizeof (dwListID),	pDataTmp);	/* í•ÊID */
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,	 	pDataTmp);	/* •¬o‚µî•ñ */
+	CopyMemoryRenew (pDataTmp, &dwListID,		sizeof (dwListID),	pDataTmp);	/* ç¨®åˆ¥ID */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp,	dwSizeDataTmp,	 	pDataTmp);	/* å™´å‡ºã—æƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -74,9 +74,9 @@ void CPacketADMIN_EFC_RENEWBALLOON::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketADMIN_EFC_RENEWBALLOON::Set								 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2007/12/30														 */
+/* é–¢æ•°å	:CPacketADMIN_EFC_RENEWBALLOON::Set								 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2007/12/30														 */
 /* ========================================================================= */
 
 PBYTE CPacketADMIN_EFC_RENEWBALLOON::Set(PBYTE pPacket)
@@ -86,7 +86,7 @@ PBYTE CPacketADMIN_EFC_RENEWBALLOON::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwListID, pDataTmp, sizeof (m_dwListID), pDataTmp);	/* í•ÊID */
+	CopyMemoryRenew (&m_dwListID, pDataTmp, sizeof (m_dwListID), pDataTmp);	/* ç¨®åˆ¥ID */
 
 	SAFE_DELETE (m_pInfo);
 	m_pInfo		= new CLibInfoEfcBalloon;

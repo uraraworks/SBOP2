@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:LibInfoMotionType.cpp										 */
-/* “à—e			:ƒ‚[ƒVƒ‡ƒ“î•ñƒ‰ƒCƒuƒ‰ƒŠŠî’êƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/05/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:LibInfoMotionType.cpp										 */
+/* å†…å®¹			:ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåŸºåº•ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/05/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -11,9 +11,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::CLibInfoMotionType							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::CLibInfoMotionType							 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 CLibInfoMotionType::CLibInfoMotionType()
@@ -24,9 +24,9 @@ CLibInfoMotionType::CLibInfoMotionType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::~CLibInfoMotionType						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::~CLibInfoMotionType						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 CLibInfoMotionType::~CLibInfoMotionType()
@@ -36,9 +36,9 @@ CLibInfoMotionType::~CLibInfoMotionType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::Create										 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::Create										 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 void CLibInfoMotionType::Create(void)
@@ -48,9 +48,9 @@ void CLibInfoMotionType::Create(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::Destroy									 */
-/* “à—e		:”jŠü															 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::Destroy									 */
+/* å†…å®¹		:ç ´æ£„															 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 void CLibInfoMotionType::Destroy(void)
@@ -61,9 +61,9 @@ void CLibInfoMotionType::Destroy(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::GetNew										 */
-/* “à—e		:V‹Kƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::GetNew										 */
+/* å†…å®¹		:æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMotionType::GetNew(void)
@@ -77,9 +77,9 @@ PCInfoBase CLibInfoMotionType::GetNew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::GetPtr										 */
-/* “à—e		:î•ñ‚ðŽæ“¾														 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMotionType::GetPtr(int nNo)
@@ -97,9 +97,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::GetPtr										 */
-/* “à—e		:î•ñ‚ðŽæ“¾														 */
-/* “ú•t		:2008/05/27														 */
+/* é–¢æ•°å	:CLibInfoMotionType::GetPtr										 */
+/* å†…å®¹		:æƒ…å ±ã‚’å–å¾—														 */
+/* æ—¥ä»˜		:2008/05/27														 */
 /* ========================================================================= */
 
 PCInfoBase CLibInfoMotionType::GetPtr(DWORD dwMotionTypeID)
@@ -124,9 +124,9 @@ PCInfoBase CLibInfoMotionType::GetPtr(DWORD dwMotionTypeID)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::GetCount									 */
-/* “à—e		:ƒf[ƒ^”‚ðŽæ“¾													 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::GetCount									 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 int CLibInfoMotionType::GetCount(void)
@@ -146,9 +146,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::Add										 */
-/* “à—e		:’Ç‰Á															 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::Add										 */
+/* å†…å®¹		:è¿½åŠ 															 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 void CLibInfoMotionType::Add(PCInfoBase pInfo)
@@ -165,13 +165,13 @@ void CLibInfoMotionType::Add(PCInfoBase pInfo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 void CLibInfoMotionType::Delete(
-	int nNo)		/* [in] ”z—ñ”Ô† */
+	int nNo)		/* [in] é…åˆ—ç•ªå· */
 {
 	PCInfoMotionType pInfo;
 
@@ -182,13 +182,13 @@ void CLibInfoMotionType::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::Delete										 */
-/* “à—e		:íœ															 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::Delete										 */
+/* å†…å®¹		:å‰Šé™¤															 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 void CLibInfoMotionType::Delete(
-	DWORD dwMotionTypeID)		/* [in] ƒ‚[ƒVƒ‡ƒ“Ží•ÊID */
+	DWORD dwMotionTypeID)		/* [in] ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ID */
 {
 	int i, nCount, nNo;
 	PCInfoMotionType pInfoTmp;
@@ -212,9 +212,9 @@ void CLibInfoMotionType::Delete(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::DeleteAll									 */
-/* “à—e		:‘S‚Äíœ														 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::DeleteAll									 */
+/* å†…å®¹		:å…¨ã¦å‰Šé™¤														 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 void CLibInfoMotionType::DeleteAll(void)
@@ -233,9 +233,9 @@ void CLibInfoMotionType::DeleteAll(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::GetSendDataSize							 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::GetSendDataSize							 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMotionType::GetSendDataSize(DWORD dwMotionTypeID)
@@ -257,16 +257,16 @@ DWORD CLibInfoMotionType::GetSendDataSize(DWORD dwMotionTypeID)
 		dwRet += pInfo->GetSendDataSize ();
 	}
 
-	dwRet += sizeof (DWORD);	/* I’[•ª */
+	dwRet += sizeof (DWORD);	/* çµ‚ç«¯åˆ† */
 
 	return dwRet;
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::GetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::GetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMotionType::GetSendData(DWORD dwMotionTypeID)
@@ -305,9 +305,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::SetSendData								 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::SetSendData								 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 PBYTE CLibInfoMotionType::SetSendData(PBYTE pSrc)
@@ -341,9 +341,9 @@ PBYTE CLibInfoMotionType::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CLibInfoMotionType::GetNewID									 */
-/* “à—e		:V‚µ‚¢ƒ‚[ƒVƒ‡ƒ“ID‚ðŽæ“¾										 */
-/* “ú•t		:2008/05/26														 */
+/* é–¢æ•°å	:CLibInfoMotionType::GetNewID									 */
+/* å†…å®¹		:æ–°ã—ã„ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³IDã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2008/05/26														 */
 /* ========================================================================= */
 
 DWORD CLibInfoMotionType::GetNewID(void)

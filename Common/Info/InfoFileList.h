@@ -1,52 +1,52 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoFileList.h												 */
-/* “à—e			:ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹						 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/03/02													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoFileList.h												 */
+/* å†…å®¹			:ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«						 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/03/02													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
-/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ */
+/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ± */
 typedef struct _FILELISTINFO {
-	CmyString	strMD5,					/* MD5ƒnƒbƒVƒ… */
-				strFileName;			/* ƒtƒ@ƒCƒ‹–¼ */
-	DWORD		dwFileSize;				/* ƒtƒ@ƒCƒ‹ƒTƒCƒY */
+	CmyString	strMD5,					/* MD5ãƒãƒƒã‚·ãƒ¥ */
+				strFileName;			/* ãƒ•ã‚¡ã‚¤ãƒ«å */
+	DWORD		dwFileSize;				/* ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º */
 } FILELISTINFO, *PFILELISTINFO;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoFileList
 {
 public:
-			CInfoFileList();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoFileList();										/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoFileList();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoFileList();										/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void			Add			(LPCSTR pszHash, LPCSTR pszFileName, DWORD dwFileSize);	/* ’Ç‰Á */
-	int				GetCount	(void);										/* ƒf[ƒ^”‚ðŽæ“¾ */
-	PFILELISTINFO	GetPtr		(int nNo);									/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ‚ðŽæ“¾ */
-	void			DeleteAll	(void);										/* ‘S‚Äíœ */
+	void			Add			(LPCSTR pszHash, LPCSTR pszFileName, DWORD dwFileSize);	/* è¿½åŠ  */
+	int				GetCount	(void);										/* ãƒ‡ãƒ¼ã‚¿æ•°ã‚’å–å¾— */
+	PFILELISTINFO	GetPtr		(int nNo);									/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ±ã‚’å–å¾— */
+	void			DeleteAll	(void);										/* å…¨ã¦å‰Šé™¤ */
 
-	void	Copy				(CInfoFileList *pSrc);						/* ƒRƒs[ */
-	DWORD	GetSendDataSize		(void);										/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾ */
-	PBYTE	GetSendData			(void);										/* ‘—Mƒf[ƒ^‚ðŽæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);								/* ‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý */
-
-
-protected:
-	PFILELISTINFO	GetNew		(void);					/* V‹Kƒf[ƒ^Žæ“¾ */
+	void	Copy				(CInfoFileList *pSrc);						/* ã‚³ãƒ”ãƒ¼ */
+	DWORD	GetSendDataSize		(void);										/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);										/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
 
 protected:
-	CmyArray<PFILELISTINFO, PFILELISTINFO>	m_aFileListInfo;		/* ƒtƒ@ƒCƒ‹ƒŠƒXƒgî•ñ */
+	PFILELISTINFO	GetNew		(void);					/* æ–°è¦ãƒ‡ãƒ¼ã‚¿å–å¾— */
+
+
+protected:
+	CmyArray<PFILELISTINFO, PFILELISTINFO>	m_aFileListInfo;		/* ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆæƒ…å ± */
 } CInfoFileList, *PCInfoFileList;
 
 /* Copyright(C)URARA-works 2008 */

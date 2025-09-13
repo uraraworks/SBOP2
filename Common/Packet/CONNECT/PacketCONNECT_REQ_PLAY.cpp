@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:CPacketCONNECT_REQ_PLAY.cpp								 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:ƒQ[ƒ€ŠJn—v‹) À‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:CPacketCONNECT_REQ_PLAY.cpp								 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(æ¥ç¶šç³»:ã‚²ãƒ¼ãƒ é–‹å§‹è¦æ±‚) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -11,9 +11,9 @@
 #include "PacketCONNECT_REQ_PLAY.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_PLAY::CPacketCONNECT_REQ_PLAY				 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_PLAY::CPacketCONNECT_REQ_PLAY				 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 CPacketCONNECT_REQ_PLAY::CPacketCONNECT_REQ_PLAY()
@@ -24,9 +24,9 @@ CPacketCONNECT_REQ_PLAY::CPacketCONNECT_REQ_PLAY()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_PLAY::~CPacketCONNECT_REQ_PLAY				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_PLAY::~CPacketCONNECT_REQ_PLAY				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 CPacketCONNECT_REQ_PLAY::~CPacketCONNECT_REQ_PLAY()
@@ -35,14 +35,14 @@ CPacketCONNECT_REQ_PLAY::~CPacketCONNECT_REQ_PLAY()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_PLAY::Make									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_PLAY::Make									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 void CPacketCONNECT_REQ_PLAY::Make(
-	DWORD dwAccountID,		/* [in] ƒAƒJƒEƒ“ƒgID */
-	DWORD dwCharID)			/* [in] ƒLƒƒƒ‰ID */
+	DWORD dwAccountID,		/* [in] ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	DWORD dwCharID)			/* [in] ã‚­ãƒ£ãƒ©ID */
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -60,17 +60,17 @@ void CPacketCONNECT_REQ_PLAY::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_CONNECT_REQ_PLAY;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwAccountID,	sizeof (dwAccountID),	pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),		pDataTmp);	/* ƒLƒƒƒ‰ID */
+	CopyMemoryRenew (pDataTmp, &dwAccountID,	sizeof (dwAccountID),	pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &dwCharID,		sizeof (dwCharID),		pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
 
 	RenewPacket (pData, dwSize);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketCONNECT_REQ_PLAY::Set									 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2006/12/31														 */
+/* é–¢æ•°å	:CPacketCONNECT_REQ_PLAY::Set									 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2006/12/31														 */
 /* ========================================================================= */
 
 PBYTE CPacketCONNECT_REQ_PLAY::Set(PBYTE pPacket)
@@ -80,8 +80,8 @@ PBYTE CPacketCONNECT_REQ_PLAY::Set(PBYTE pPacket)
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
 
-	CopyMemoryRenew (&m_dwAccountID,	pDataTmp, sizeof (m_dwAccountID),	pDataTmp);	/* ƒAƒJƒEƒ“ƒgID */
-	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* ƒLƒƒƒ‰ID */
+	CopyMemoryRenew (&m_dwAccountID,	pDataTmp, sizeof (m_dwAccountID),	pDataTmp);	/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+	CopyMemoryRenew (&m_dwCharID,		pDataTmp, sizeof (m_dwCharID),		pDataTmp);	/* ã‚­ãƒ£ãƒ©ID */
 
 	pRet = pDataTmp;
 	return pRet;

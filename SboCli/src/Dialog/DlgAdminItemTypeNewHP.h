@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemTypeNewHP.h									 */
-/* “à—e			:ƒAƒCƒeƒ€í•Ê(HP‘Œ¸)İ’èƒ_ƒCƒAƒƒOƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹		 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/08/15													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminItemTypeNewHP.h									 */
+/* å†…å®¹			:ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥(HPå¢—æ¸›)è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«		 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/08/15													 */
 /* ========================================================================= */
 
 #pragma once
@@ -13,29 +13,29 @@
 class CInfoItemTypeBase;
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CDlgAdminItemTypeNewHP : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemTypeNewHP(CWnd* pParent = NULL);		/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CDlgAdminItemTypeNewHP();							/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CDlgAdminItemTypeNewHP(CWnd* pParent = NULL);		/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CDlgAdminItemTypeNewHP();							/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Set		(CInfoItemTypeBase *pSrc);							/* •ÒW“à—e‚ğİ’è */
-	void	Get		(CInfoItemTypeBase *&pDst);							/* •ÒW“à—e‚ğæ“¾ */
-
-
-protected:
-	void	SetTarget	(BYTE byTarget);			/* g—p‘ÎÛ‚ğİ’è */
-	BYTE	GetTarget	(void);						/* g—p‘ÎÛ‚ğæ“¾ */
-	void	SetArea		(BYTE byArea);				/* g—p”ÍˆÍ‚ğİ’è */
-	BYTE	GetArea		(void);						/* g—p”ÍˆÍ‚ğæ“¾ */
+	void	Set		(CInfoItemTypeBase *pSrc);							/* ç·¨é›†å†…å®¹ã‚’è¨­å®š */
+	void	Get		(CInfoItemTypeBase *&pDst);							/* ç·¨é›†å†…å®¹ã‚’å–å¾— */
 
 
 protected:
-	BYTE	m_byTarget;				/* g—p‘ÎÛ */
-	BYTE	m_byArea;				/* g—p”ÍˆÍ */
+	void	SetTarget	(BYTE byTarget);			/* ä½¿ç”¨å¯¾è±¡ã‚’è¨­å®š */
+	BYTE	GetTarget	(void);						/* ä½¿ç”¨å¯¾è±¡ã‚’å–å¾— */
+	void	SetArea		(BYTE byArea);				/* ä½¿ç”¨ç¯„å›²ã‚’è¨­å®š */
+	BYTE	GetArea		(void);						/* ä½¿ç”¨ç¯„å›²ã‚’å–å¾— */
+
+
+protected:
+	BYTE	m_byTarget;				/* ä½¿ç”¨å¯¾è±¡ */
+	BYTE	m_byArea;				/* ä½¿ç”¨ç¯„å›² */
 
 
 
@@ -51,7 +51,7 @@ public:
 
 	//{{AFX_VIRTUAL(CDlgAdminItemTypeNewHP)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ƒTƒ|[ƒg
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ã‚µãƒãƒ¼ãƒˆ
 	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminEfcEffectList.cpp									 */
-/* “à—e			:•¬o‚µˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX À‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/07/06													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:DlgAdminEfcEffectList.cpp									 */
+/* å†…å®¹			:å™´å‡ºã—ä¸€è¦§ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«					 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/07/06													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚Ìİ’è																 */
+/* ã‚¯ãƒ©ã‚¹ã®è¨­å®š																 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::DoDataExchange(CDataExchange* pDX)
@@ -45,9 +45,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::CDlgAdminEfcEffectList					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::CDlgAdminEfcEffectList					 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 CDlgAdminEfcEffectList::CDlgAdminEfcEffectList(CWnd* pParent /*=NULL*/)
@@ -59,9 +59,9 @@ CDlgAdminEfcEffectList::CDlgAdminEfcEffectList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::~CDlgAdminEfcEffectList				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::~CDlgAdminEfcEffectList				 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 CDlgAdminEfcEffectList::~CDlgAdminEfcEffectList()
@@ -70,9 +70,9 @@ CDlgAdminEfcEffectList::~CDlgAdminEfcEffectList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::Init									 */
+/* å†…å®¹		:åˆæœŸåŒ–															 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::Init(CMgrData *pMgrData)
@@ -81,16 +81,16 @@ void CDlgAdminEfcEffectList::Init(CMgrData *pMgrData)
 
 	m_pLibInfo = m_pMgrData->GetLibInfoEffect ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ */
 	Create (CDlgAdminEfcEffectList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::Renew									 */
-/* “à—e		:ˆê——‚ğXV														 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::Renew									 */
+/* å†…å®¹		:ä¸€è¦§ã‚’æ›´æ–°														 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::Renew(void)
@@ -113,9 +113,9 @@ void CDlgAdminEfcEffectList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::OnAdminMsg								 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_ADMINMSG)								 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnAdminMsg(int nType, DWORD dwPara)
@@ -124,9 +124,9 @@ void CDlgAdminEfcEffectList::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::OnInitDialog							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_INITDIALOG)								 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminEfcEffectList::OnInitDialog()
@@ -135,7 +135,7 @@ BOOL CDlgAdminEfcEffectList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒGƒtƒFƒNƒg–¼",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå",	LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -147,15 +147,15 @@ BOOL CDlgAdminEfcEffectList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::OnMainFrame							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::OnMainFrame							 */
+/* å†…å®¹		:ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ‰ãƒ©(WM_MAINFRAME)								 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWEFFECT:		/* ƒGƒtƒFƒNƒgî•ñXV */
+	case MAINFRAMEMSG_RENEWEFFECT:		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±æ›´æ–° */
 		Renew ();
 		break;
 	}
@@ -163,9 +163,9 @@ void CDlgAdminEfcEffectList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(V‹K’Ç‰Á)										 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::OnAdd									 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ–°è¦è¿½åŠ )										 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnAdd()
@@ -191,9 +191,9 @@ void CDlgAdminEfcEffectList::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::OnModify								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::OnModify								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(ç·¨é›†)											 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnModify()
@@ -224,9 +224,9 @@ void CDlgAdminEfcEffectList::OnModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::OnDelete								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(å‰Šé™¤)											 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnDelete()
@@ -235,9 +235,9 @@ void CDlgAdminEfcEffectList::OnDelete()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminEfcEffectList::OnRenew								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(XV)											 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CDlgAdminEfcEffectList::OnRenew								 */
+/* å†…å®¹		:ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©(æ›´æ–°)											 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnRenew()

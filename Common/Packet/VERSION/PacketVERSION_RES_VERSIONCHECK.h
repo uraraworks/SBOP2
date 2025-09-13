@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_RES_VERSIONCHECK.h							 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/11/05													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_RES_VERSIONCHECK.h							 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/11/05													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,32 +11,32 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 enum {
 	VERSIONCHECKRES_NONE = 0,
-	VERSIONCHECKRES_OK,							/* –â‘è–³‚µ */
-	VERSIONCHECKRES_NG_VERSION,					/* ƒo[ƒWƒ‡ƒ“•sˆê’v */
+	VERSIONCHECKRES_OK,							/* å•é¡Œç„¡ã— */
+	VERSIONCHECKRES_NG_VERSION,					/* ãƒãƒ¼ã‚¸ãƒ§ãƒ³ä¸ä¸€è‡´ */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketVERSION_RES_VERSIONCHECK : public CPacketBase
 {
 public:
-			CPacketVERSION_RES_VERSIONCHECK();			/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketVERSION_RES_VERSIONCHECK();			/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketVERSION_RES_VERSIONCHECK();			/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketVERSION_RES_VERSIONCHECK();			/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(int nResult);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(int nResult);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int		m_nResult;					/* Œ‹‰Ê */
+	int		m_nResult;					/* çµæžœ */
 } CPacketVERSION_RES_VERSIONCHECK, *PCPacketVERSION_RES_VERSIONCHECK;
 
 /* Copyright(C)URARA-works 2006 */

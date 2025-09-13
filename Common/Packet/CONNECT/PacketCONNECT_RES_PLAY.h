@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_RES_PLAY.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:ƒQ[ƒ€ŠJŽn‰ž“š) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_RES_PLAY.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(æŽ¥ç¶šç³»:ã‚²ãƒ¼ãƒ é–‹å§‹å¿œç­”) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,32 +11,32 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ’è”‚Ì’è‹`																 */
+/* å®šæ•°ã®å®šç¾©																 */
 /* ========================================================================= */
 
 enum {
 	PLAYRES_NONE = 0,
-	PLAYRES_OK,						/* –â‘è–³‚µ */
-	PLAYRES_ADMINLEVEL_ALL,			/* ŠÇ—ŽÒ(‘SŒ ŒÀ) */
+	PLAYRES_OK,						/* å•é¡Œç„¡ã— */
+	PLAYRES_ADMINLEVEL_ALL,			/* ç®¡ç†è€…(å…¨æ¨©é™) */
 };
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCONNECT_RES_PLAY : public CPacketBase
 {
 public:
-			CPacketCONNECT_RES_PLAY();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCONNECT_RES_PLAY();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCONNECT_RES_PLAY();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCONNECT_RES_PLAY();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(int nResult);								/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(int nResult);								/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	int		m_nResult;					/* Œ‹‰Ê */
+	int		m_nResult;					/* çµæžœ */
 } CPacketCONNECT_RES_PLAY, *PCPacketCONNECT_RES_PLAY;
 
 /* Copyright(C)URARA-works 2006 */

@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoSystem.h												 */
-/* “à—e			:ƒVƒXƒeƒ€î•ñƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/09/25													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoSystem.h												 */
+/* å†…å®¹			:ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/09/25													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,63 +11,63 @@
 #include "InfoBase.h"
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
-/* ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l */
+/* ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ */
 typedef struct _STSYSTEM_INITCHARSTATUS {
-	WORD		wStamina,				/* ƒXƒ^ƒ~ƒi */
-				wPower,					/* ˜r—Í */
-				wStrength,				/* ‘Ì—Í */
-				wMagic,					/* –‚—Í */
-				wSkillful,				/* Ší—p */
-				wAbillityAT,			/* UŒ‚‹Z”\ */
-				wAbillityDF,			/* –hŒä‹Z”\ */
-				wPAtack,				/* UŒ‚—Í */
-				wPDefense,				/* –hŒä—Í */
-				wPMagic,				/* –‚–@—Í */
-				wPMagicDefense,			/* –‚–@–hŒä—Í */
-				wPHitAverage,			/* –½’†—¦ */
-				wPAvoidAverage,			/* ‰ñ”ğ—¦ */
-				wPCriticalAverage,		/* ƒNƒŠƒeƒBƒJƒ‹—¦ */
-				wAttrFire,				/* ‘®«[‰Î] */
-				wAttrWind,				/* ‘®«[•—] */
-				wAttrWater,				/* ‘®«[…] */
-				wAttrEarth,				/* ‘®«[“y] */
-				wAttrLight,				/* ‘®«[Œõ] */
-				wAttrDark;				/* ‘®«[ˆÅ] */
-	DWORD		dwMaxHP,				/* Å‘åHP */
-				dwMaxSP,				/* Å‘åSP */
-				dwInitPosMapID;			/* ‰ŠúˆÊ’uƒ}ƒbƒvID */
-	POINT		ptInitPos;				/* ‰ŠúˆÊ’uÀ•W */
+	WORD		wStamina,				/* ã‚¹ã‚¿ãƒŸãƒŠ */
+				wPower,					/* è…•åŠ› */
+				wStrength,				/* ä½“åŠ› */
+				wMagic,					/* é­”åŠ› */
+				wSkillful,				/* å™¨ç”¨ */
+				wAbillityAT,			/* æ”»æ’ƒæŠ€èƒ½ */
+				wAbillityDF,			/* é˜²å¾¡æŠ€èƒ½ */
+				wPAtack,				/* æ”»æ’ƒåŠ› */
+				wPDefense,				/* é˜²å¾¡åŠ› */
+				wPMagic,				/* é­”æ³•åŠ› */
+				wPMagicDefense,			/* é­”æ³•é˜²å¾¡åŠ› */
+				wPHitAverage,			/* å‘½ä¸­ç‡ */
+				wPAvoidAverage,			/* å›é¿ç‡ */
+				wPCriticalAverage,		/* ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ */
+				wAttrFire,				/* å±æ€§[ç«] */
+				wAttrWind,				/* å±æ€§[é¢¨] */
+				wAttrWater,				/* å±æ€§[æ°´] */
+				wAttrEarth,				/* å±æ€§[åœŸ] */
+				wAttrLight,				/* å±æ€§[å…‰] */
+				wAttrDark;				/* å±æ€§[é—‡] */
+	DWORD		dwMaxHP,				/* æœ€å¤§HP */
+				dwMaxSP,				/* æœ€å¤§SP */
+				dwInitPosMapID;			/* åˆæœŸä½ç½®ãƒãƒƒãƒ—ID */
+	POINT		ptInitPos;				/* åˆæœŸä½ç½®åº§æ¨™ */
 } STSYSTEM_INITCHARSTATUS, *PSTSYSTEM_INITCHARSTATUS;
 
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CInfoSystem : public CInfoBase
 {
 public:
-			CInfoSystem();									/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CInfoSystem();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CInfoSystem();									/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CInfoSystem();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	int		GetElementNo		(LPCSTR pszName);					/* —v‘f”Ô†‚ğæ“¾ */
-	DWORD	GetDataSize			(void);								/* ƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	DWORD	GetDataSizeNo		(int nNo);							/* w’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	LPCSTR	GetName				(int nNo);							/* —v‘f–¼‚ğæ“¾ */
-	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* w’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ğæ“¾ */
-	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* w’è—v‘fƒf[ƒ^‚ğ“Ç‚İ‚İ */
+	int		GetElementNo		(LPCSTR pszName);					/* è¦ç´ ç•ªå·ã‚’å–å¾— */
+	DWORD	GetDataSize			(void);								/* ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	DWORD	GetDataSizeNo		(int nNo);							/* æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	LPCSTR	GetName				(int nNo);							/* è¦ç´ åã‚’å–å¾— */
+	PBYTE	GetWriteData		(int nNo, PDWORD pdwSize);			/* æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	DWORD	ReadElementData		(PBYTE pSrc, int nNo);				/* æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿ */
 
-	DWORD	GetSendDataSize		(void);								/* ‘—Mƒf[ƒ^ƒTƒCƒY‚ğæ“¾ */
-	PBYTE	GetSendData			(void);								/* ‘—Mƒf[ƒ^‚ğæ“¾ */
-	PBYTE	SetSendData			(PBYTE pSrc);						/* ‘—Mƒf[ƒ^‚©‚çæ‚è‚İ */
+	DWORD	GetSendDataSize		(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾— */
+	PBYTE	GetSendData			(void);								/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾— */
+	PBYTE	SetSendData			(PBYTE pSrc);						/* é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿ */
 
-	void	Copy				(CInfoSystem *pSrc);			/* ƒRƒs[ */
+	void	Copy				(CInfoSystem *pSrc);			/* ã‚³ãƒ”ãƒ¼ */
 
 
 public:
-	PSTSYSTEM_INITCHARSTATUS	m_pInitCharStatus;		/* ƒLƒƒƒ‰ƒXƒe[ƒ^ƒX‰Šú’l */
+	PSTSYSTEM_INITCHARSTATUS	m_pInitCharStatus;		/* ã‚­ãƒ£ãƒ©ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹åˆæœŸå€¤ */
 } CInfoSystem, *PCInfoSystem;
 typedef CmyArray<PCInfoSystem, PCInfoSystem>	   ARRAYSYSTEMINFO;
 typedef CmyArray<PCInfoSystem, PCInfoSystem>	 *PARRAYSYSTEMINFO;

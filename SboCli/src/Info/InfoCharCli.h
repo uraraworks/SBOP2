@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* �t�@�C����	:InfoCharCli.h												 */
-/* ���e			:�L�������N���C�A���g�N���X ��`�t�@�C��					 */
-/* �쐬			:�N����N���t�����(URARA-works)							 */
-/* �쐬�J�n��	:2006/10/01													 */
+/* ファイル名	:InfoCharCli.h												 */
+/* 内容			:キャラ情報クライアントクラス 定義ファイル					 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2006/10/01													 */
 /* ========================================================================= */
 
 #pragma once
@@ -18,132 +18,132 @@ class CInfoEffect;
 class CUraraSockTCPSBO;
 
 /* ========================================================================= */
-/* �萔�錾																	 */
+/* 定数宣言																	 */
 /* ========================================================================= */
 
 enum {
 	INFOCHARCLI_VIEWSTATE_NONE = 0,
-	INFOCHARCLI_VIEWSTATE_FADEIN,						/* �t�F�[�h�C�� */
-	INFOCHARCLI_VIEWSTATE_FADEOUT,						/* �t�F�[�h�A�E�g */
+	INFOCHARCLI_VIEWSTATE_FADEIN,						/* フェードイン */
+	INFOCHARCLI_VIEWSTATE_FADEOUT,						/* フェードアウト */
 };
 
 /* ========================================================================= */
-/* �\���̐錾																 */
+/* 構造体宣言																 */
 /* ========================================================================= */
 
-/* ���W�ύX�L���[ */
+/* 座標変更キュー */
 typedef struct _MOVEPOSQUE {
-	int		nState,			/* ��� */
-			nDirection;		/* ���� */
-	POINT	ptPos;			/* ���W */
+	int		nState,			/* 状態 */
+			nDirection;		/* 向き */
+	POINT	ptPos;			/* 座標 */
 } MOVEPOSQUE, *PMOVEPOSQUE;
 
 
 /* ========================================================================= */
-/* �N���X�錾																 */
+/* クラス宣言																 */
 /* ========================================================================= */
 
 typedef class CInfoCharCli : public CInfoCharBase
 {
 public:
-			CInfoCharCli();								/* �R���X�g���N�^ */
-	virtual ~CInfoCharCli();							/* �f�X�g���N�^ */
+			CInfoCharCli();								/* コンストラクタ */
+	virtual ~CInfoCharCli();							/* デストラクタ */
 
-	void Create			(CMgrData *pMgrData);					/* �쐬 */
+	void Create			(CMgrData *pMgrData);					/* 作成 */
 
-			void	ChgDirection	(int nDirection);			/* �����ύX */
-	virtual void	ChgMoveState	(int nMoveState);			/* �ړ���ԕύX */
-			BOOL	TimerProc		(DWORD dwTime);				/* ���ԏ��� */
+			void	ChgDirection	(int nDirection);			/* 向き変更 */
+	virtual void	ChgMoveState	(int nMoveState);			/* 移動状態変更 */
+			BOOL	TimerProc		(DWORD dwTime);				/* 時間処理 */
 
-	void		SetMoveState		(int nMoveState);			/* �ړ���Ԃ�ύX */
-	void		MakeCharGrp			(void);						/* �L�����摜���쐬 */
-	void		SetName				(LPCSTR pszName);			/* �L���������X�V */
-	void		SetSpeak			(LPCSTR pszSpeak);			/* �������e���X�V */
-	void		SetSleepTimer		(BOOL bSleepTimer);			/* ���₷�݃^�C�}�[��ݒ� */
+	void		SetMoveState		(int nMoveState);			/* 移動状態を変更 */
+	void		MakeCharGrp			(void);						/* キャラ画像を作成 */
+	void		SetName				(LPCSTR pszName);			/* キャラ名を更新 */
+	void		SetSpeak			(LPCSTR pszSpeak);			/* 発言内容を更新 */
+	void		SetSleepTimer		(BOOL bSleepTimer);			/* おやすみタイマーを設定 */
 
-	virtual void		SetViewState	(int nViewState);		/* �\����Ԑݒ� */
-	virtual CInfoMotion *GetMotionInfo	(int *pnCount = NULL);	/* ���[�V���������擾 */
+	virtual void		SetViewState	(int nViewState);		/* 表示状態設定 */
+	virtual CInfoMotion *GetMotionInfo	(int *pnCount = NULL);	/* モーション情報を取得 */
 
-	BOOL		IsChgWait			(void);								/* ��ԕύX�҂������� */
-	void		SetEffectID			(DWORD dwEffectID);					/* �G�t�F�N�gID���w�� */
-	void		SetBalloonID		(DWORD dwBalloonID);				/* ���o��ID���w�� */
-	void		GetGrpID			(WORD &wGrpIDMain, WORD &wGrpIDSub);/* �O���t�B�b�NID���擾 */
-	void		InitMotionInfo		(DWORD dwMotionID);					/* ���[�V�������̏����� */
+	BOOL		IsChgWait			(void);								/* 状態変更待ちか判定 */
+	void		SetEffectID			(DWORD dwEffectID);					/* エフェクトIDを指定 */
+	void		SetBalloonID		(DWORD dwBalloonID);				/* 噴出しIDを指定 */
+	void		GetGrpID			(WORD &wGrpIDMain, WORD &wGrpIDSub);/* グラフィックIDを取得 */
+	void		InitMotionInfo		(DWORD dwMotionID);					/* モーション情報の初期化 */
 
-	void		GetEfcGrpPos		(POINT &ptDst);						/* �G�t�F�N�g�摜�̊J�n���W���擾 */
-	CImg32		*GetEfcImg			(void);								/* �`�挳�̃G�t�F�N�g�摜�C���[�W���擾 */
-	int			GetEfcLevel			(void);								/* �G�t�F�N�g�摜�̓��߃��x�����擾 */
-	int			GetEfcGrpSize		(void);								/* �G�t�F�N�g�摜�̃T�C�Y���擾 */
-	void		GetEfcDrawPos		(POINT &ptDst);						/* �G�t�F�N�g�摜�̕`��␳�����擾 */
+	void		GetEfcGrpPos		(POINT &ptDst);						/* エフェクト画像の開始座標を取得 */
+	CImg32		*GetEfcImg			(void);								/* 描画元のエフェクト画像イメージを取得 */
+	int			GetEfcLevel			(void);								/* エフェクト画像の透過レベルを取得 */
+	int			GetEfcGrpSize		(void);								/* エフェクト画像のサイズを取得 */
+	void		GetEfcDrawPos		(POINT &ptDst);						/* エフェクト画像の描画補正幅を取得 */
 
-	DWORD		GetBalloonGrpID		(void);								/* ���o���摜ID���擾 */
-	BOOL		IsEnableMove		(void);								/* �ړ��ł����Ԃ����� */
-	BOOL		IsDamage			(void);								/* �_���[�W�󂯒������� */
+	DWORD		GetBalloonGrpID		(void);								/* 噴出し画像IDを取得 */
+	BOOL		IsEnableMove		(void);								/* 移動できる状態か判定 */
+	BOOL		IsDamage			(void);								/* ダメージ受け中か判定 */
 
-	void	SetChgWait		(BOOL bChgWait)	{ m_bChgWait = bChgWait; }	/* ��ԕύX�҂����ݒ� */
+	void	SetChgWait		(BOOL bChgWait)	{ m_bChgWait = bChgWait; }	/* 状態変更待ちか設定 */
 
-	/* �����G�t�F�N�g�֘A */
-	int		GetTextEffectCount		(void);									/* �o�^�����擾 */
-	void	AddTextEffect			(DWORD dwData, int nColor, int nSize);	/* �ǉ� */
-	void	AddTextEffect			(LPCSTR pszData, int nColor, int nSize);/* �ǉ� */
-	void	DeleteAllTextEffect		(void);									/* �S�č폜 */
-	int		GetTextEffectGrpCount	(int nIndex);							/* �摜�����擾 */
-	int		GetTextEffectGrpNo		(int nIndex, int nNo);					/* �w��ԍ��̐��l���擾 */
-	BOOL	GetTextEffectDrawPos	(int nIndex, int nNo, POINT &ptDst, BYTE &byLevel);	/* �w��ԍ��̕\���ʒu�␳�l���擾 */
-	DWORD	GetTextEffectData		(int nIndex);							/* ���l�f�[�^���擾 */
-	CInfoTextEffect	*GetTextEffect	(int nIndex);							/* �����G�t�F�N�g���擾 */
+	/* 文字エフェクト関連 */
+	int		GetTextEffectCount		(void);									/* 登録数を取得 */
+	void	AddTextEffect			(DWORD dwData, int nColor, int nSize);	/* 追加 */
+	void	AddTextEffect			(LPCSTR pszData, int nColor, int nSize);/* 追加 */
+	void	DeleteAllTextEffect		(void);									/* 全て削除 */
+	int		GetTextEffectGrpCount	(int nIndex);							/* 画像数を取得 */
+	int		GetTextEffectGrpNo		(int nIndex, int nNo);					/* 指定番号の数値を取得 */
+	BOOL	GetTextEffectDrawPos	(int nIndex, int nNo, POINT &ptDst, BYTE &byLevel);	/* 指定番号の表示位置補正値を取得 */
+	DWORD	GetTextEffectData		(int nIndex);							/* 数値データを取得 */
+	CInfoTextEffect	*GetTextEffect	(int nIndex);							/* 文字エフェクトを取得 */
 
-	/* ���W�ύX�L���[�֘A */
-	void	AddMovePosQue			(int nState, int nDirection, int x, int y);	/* �ǉ� */
-	void	DeleteMovePosQue		(int nNo);									/* �폜 */
-	void	DeleteAllMovePosQue		(void);										/* �S�č폜 */
+	/* 座標変更キュー関連 */
+	void	AddMovePosQue			(int nState, int nDirection, int x, int y);	/* 追加 */
+	void	DeleteMovePosQue		(int nNo);									/* 削除 */
+	void	DeleteAllMovePosQue		(void);										/* 全て削除 */
 
 
 protected:
-	virtual BOOL RenewAnime			(DWORD dwTime, int nAdd = 1);	/* �A�j���[�V�����̍X�V */
+	virtual BOOL RenewAnime			(DWORD dwTime, int nAdd = 1);	/* アニメーションの更新 */
 
-	BOOL TimerProcMove				(DWORD dwTime);				/* �ړ����� */
-	BOOL TimerProcViewState			(DWORD dwTime);				/* �\����ԏ��� */
-	BOOL TimerProcAtack				(DWORD dwTime);				/* �U������ */
-	BOOL TimerProcBalloon			(DWORD dwTime);				/* ���o������ */
-	void MotionProc					(DWORD dwProcID);			/* ���[�V�������� */
+	BOOL TimerProcMove				(DWORD dwTime);				/* 移動処理 */
+	BOOL TimerProcViewState			(DWORD dwTime);				/* 表示状態処理 */
+	BOOL TimerProcAtack				(DWORD dwTime);				/* 攻撃処理 */
+	BOOL TimerProcBalloon			(DWORD dwTime);				/* 噴出し処理 */
+	void MotionProc					(DWORD dwProcID);			/* モーション処理 */
 
 
 public:
-	BOOL	m_bRedraw,						/* �ĕ`�悳���� */
-			m_bChgWait,						/* ��ԕύX�҂� */
-			m_bSkipMove,					/* �ړ����Ԃɍ���Ȃ��ꍇ�͑҂����Ԃ𖳎����� */
-			m_bWaitCheckMapEvent,			/* �}�b�v�C�x���g�`�F�b�N�҂� */
-			m_bMotionDirection,				/* �����ɉ����ă��[�V������؂�ւ��� */
-			m_bMotionInterrupt,				/* ���[�V�������荞�ݍĐ� */
-			m_bModeSleepTimer;				/* ���₷�݃^�C�}�[ */
-	int		m_nAnimeBack,					/* �O��̃A�j���[�V�����R�}�ԍ� */
-			m_nViewState,					/* �\����� */
-			m_nFadeLevel,					/* ���߃��x�� */
-			m_nMoveStateReserve,			/* ���[�V�����I�������ɕύX����ړ���� */
-			m_nMoveStateBack;				/* �O��̈ړ���� */
-	POINT	m_ptMove;						/* �ړ����̍��W */
-	DWORD	m_dwMoveWaitOnce,				/* ��x�����̈ړ��҂����� */
-			m_dwLastTimeAnime,				/* �ŏI�A�j���[�V������������ */
-			m_dwLastTimeViewState,			/* �ŏI�\������ */
-			m_dwBalloonID,					/* ���o��ID */
-			m_dwBalloonGrpID,				/* ���o���摜ID */
-			m_dwBalloonAnimeID,				/* ���o���R�}�ԍ� */
-			m_dwLastTimeBalloon,			/* �ŏI���o���X�V���� */
-			m_dwLastTimeDamage;				/* �ŏI�_���[�W�󂯂����� */
-	HFONT	m_hFont;						/* �`��Ɏg���t�H���g */
+	BOOL	m_bRedraw,						/* 再描画させる */
+			m_bChgWait,						/* 状態変更待ち */
+			m_bSkipMove,					/* 移動が間に合わない場合は待ち時間を無視する */
+			m_bWaitCheckMapEvent,			/* マップイベントチェック待ち */
+			m_bMotionDirection,				/* 向きに応じてモーションを切り替える */
+			m_bMotionInterrupt,				/* モーション割り込み再生 */
+			m_bModeSleepTimer;				/* おやすみタイマー */
+	int		m_nAnimeBack,					/* 前回のアニメーションコマ番号 */
+			m_nViewState,					/* 表示状態 */
+			m_nFadeLevel,					/* 透過レベル */
+			m_nMoveStateReserve,			/* モーション終わった後に変更する移動種別 */
+			m_nMoveStateBack;				/* 前回の移動状態 */
+	POINT	m_ptMove;						/* 移動中の座標 */
+	DWORD	m_dwMoveWaitOnce,				/* 一度だけの移動待ち時間 */
+			m_dwLastTimeAnime,				/* 最終アニメーション処理時間 */
+			m_dwLastTimeViewState,			/* 最終表示時間 */
+			m_dwBalloonID,					/* 噴出しID */
+			m_dwBalloonGrpID,				/* 噴出し画像ID */
+			m_dwBalloonAnimeID,				/* 噴出しコマ番号 */
+			m_dwLastTimeBalloon,			/* 最終噴出し更新時間 */
+			m_dwLastTimeDamage;				/* 最終ダメージ受けた時間 */
+	HFONT	m_hFont;						/* 描画に使うフォント */
 
-	CMgrData			*m_pMgrData;		/* �f�[�^�}�l�[�W�� */
-	CMgrSound			*m_pMgrSound;		/* �T�E���h�Ǘ� */
-	CImg32				*m_pDibChar,		/* �L�����摜 */
-						*m_pDibName,		/* �L�������摜 */
-						*m_pDibSpeak,		/* �������e�摜 */
-						*m_pDibBattle;		/* �퓬�p�摜 */
-	CInfoEffect			*m_pInfoEffect;		/* �G�t�F�N�g��� */
-	CUraraSockTCPSBO	*m_pSock;			/* �ʐM�}�l�[�W�� */
-	ARRAYMOTIONINFO		m_aMotion[CHARMOTIONID_MAX][4];	/* ���[�V������� */
-	ARRAYTEXTEFFECT		m_aTextEffect;		/* �����G�t�F�N�g */
-	CArray<PMOVEPOSQUE, PMOVEPOSQUE>	m_apMovePosQue;	/* ���W�ύX�L���[ */
+	CMgrData			*m_pMgrData;		/* データマネージャ */
+	CMgrSound			*m_pMgrSound;		/* サウンド管理 */
+	CImg32				*m_pDibChar,		/* キャラ画像 */
+						*m_pDibName,		/* キャラ名画像 */
+						*m_pDibSpeak,		/* 発言内容画像 */
+						*m_pDibBattle;		/* 戦闘用画像 */
+	CInfoEffect			*m_pInfoEffect;		/* エフェクト情報 */
+	CUraraSockTCPSBO	*m_pSock;			/* 通信マネージャ */
+	ARRAYMOTIONINFO		m_aMotion[CHARMOTIONID_MAX][4];	/* モーション情報 */
+	ARRAYTEXTEFFECT		m_aTextEffect;		/* 文字エフェクト */
+	CArray<PMOVEPOSQUE, PMOVEPOSQUE>	m_apMovePosQue;	/* 座標変更キュー */
 } CInfoCharCli, *PCInfoCharCli;
 
 /* Copyright(C)URARA-works 2006 */

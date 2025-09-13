@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketVERSION_REQ_FILE.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒo[ƒWƒ‡ƒ“Œn:ƒtƒ@ƒCƒ‹—v‹) ’è‹`ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/01/20													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketVERSION_REQ_FILE.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç³»:ãƒ•ã‚¡ã‚¤ãƒ«è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/01/20													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,23 +11,23 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketVERSION_REQ_FILE : public CPacketBase
 {
 public:
-			CPacketVERSION_REQ_FILE();								/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketVERSION_REQ_FILE();								/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketVERSION_REQ_FILE();								/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketVERSION_REQ_FILE();								/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwOffset, DWORD dwReqSize, LPCSTR pszFileName);	/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);										/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwOffset, DWORD dwReqSize, LPCSTR pszFileName);	/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);										/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD		m_dwOffset,						/* ŠJŽnƒIƒtƒZƒbƒg */
-				m_dwReqSize;					/* —v‹ƒTƒCƒY */
-	CmyString	m_strFileName;					/* ‘Š‘ÎƒpƒX•t‚«ƒtƒ@ƒCƒ‹–¼ */
+	DWORD		m_dwOffset,						/* é–‹å§‹ã‚ªãƒ•ã‚»ãƒƒãƒˆ */
+				m_dwReqSize;					/* è¦æ±‚ã‚µã‚¤ã‚º */
+	CmyString	m_strFileName;					/* ç›¸å¯¾ãƒ‘ã‚¹ä»˜ããƒ•ã‚¡ã‚¤ãƒ«å */
 } CPacketVERSION_REQ_FILE, *PCPacketVERSION_REQ_FILE;
 
 /* Copyright(C)URARA-works 2008 */

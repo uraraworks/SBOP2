@@ -1,35 +1,35 @@
 /* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	MacAddr.h													 */
-/* “à—eF		MACƒAƒhƒŒƒXæ“¾ƒNƒ‰ƒX ’è‹`ƒtƒ@ƒCƒ‹							 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJn“úF	2005/04/12													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«åï¼š	MacAddr.h													 */
+/* å†…å®¹ï¼š		MACã‚¢ãƒ‰ãƒ¬ã‚¹å–å¾—ã‚¯ãƒ©ã‚¹ å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«							 */
+/* ä½œæˆï¼š		å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)								 */
+/* ä½œæˆé–‹å§‹æ—¥ï¼š	2005/04/12													 */
 /* ========================================================================= */
 
 #pragma once
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CMacAddr
 {
 public:
-			CMacAddr();										/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CMacAddr();									/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CMacAddr();										/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CMacAddr();									/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	BOOL	Get				(PBYTE pDst, int nNo = 0);				/* MACƒAƒhƒŒƒX‚ğæ“¾ */
-	BOOL	GetStr			(LPSTR pszDst, int nNo = 0);			/* MACƒAƒhƒŒƒX‚ğæ“¾(•¶š—ñ) */
-	int		GetCount		(void);									/* NIC”‚ğæ“¾ */
-	BOOL	GetDeviceName	(LPSTR pszDst, int nNo = 0);			/* ƒfƒoƒCƒX–¼‚ğæ“¾ */
-
-
-protected:
-	int		GetNICCount	(void);								/* NIC”‚ğæ“¾ */
+	BOOL	Get				(PBYTE pDst, int nNo = 0);				/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾— */
+	BOOL	GetStr			(LPSTR pszDst, int nNo = 0);			/* MACã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—(æ–‡å­—åˆ—) */
+	int		GetCount		(void);									/* NICæ•°ã‚’å–å¾— */
+	BOOL	GetDeviceName	(LPSTR pszDst, int nNo = 0);			/* ãƒ‡ãƒã‚¤ã‚¹åã‚’å–å¾— */
 
 
 protected:
-	int		m_nCount;										/* NIC” */
+	int		GetNICCount	(void);								/* NICæ•°ã‚’å–å¾— */
+
+
+protected:
+	int		m_nCount;										/* NICæ•° */
 } CMacAddr, *PCMacAddr;
 
 /* Copyright(C)URARA-works 2005 */

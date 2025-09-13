@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketMAP_MAPOBJECT.cpp									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(ƒ}ƒbƒvŒn:ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ’Ê’m) À‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJn“ú	:2008/11/01													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketMAP_MAPOBJECT.cpp									 */
+/* å†…å®¹			:ã‚³ãƒãƒ³ãƒ‰(ãƒãƒƒãƒ—ç³»:ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ±é€šçŸ¥) å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«	 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/11/01													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -13,9 +13,9 @@
 #include "PacketMAP_MAPOBJECT.h"
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECT::CPacketMAP_MAPOBJECT						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECT::CPacketMAP_MAPOBJECT						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPOBJECT::CPacketMAP_MAPOBJECT()
@@ -25,9 +25,9 @@ CPacketMAP_MAPOBJECT::CPacketMAP_MAPOBJECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECT::~CPacketMAP_MAPOBJECT					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECT::~CPacketMAP_MAPOBJECT					 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 CPacketMAP_MAPOBJECT::~CPacketMAP_MAPOBJECT()
@@ -37,13 +37,13 @@ CPacketMAP_MAPOBJECT::~CPacketMAP_MAPOBJECT()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECT::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECT::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPOBJECT::Make(
-	CLibInfoMapObject *pLibInfo)		/* [in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
+	CLibInfoMapObject *pLibInfo)		/* [in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
 {
 	PBYTE pData, pDataTmp, pInfoDataTmp;
 	DWORD dwSize, dwSizeDataTmp;
@@ -63,7 +63,7 @@ void CPacketMAP_MAPOBJECT::Make(
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_MAP_MAPOBJECT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
+	CopyMemoryRenew (pDataTmp, pInfoDataTmp, dwSizeDataTmp, pDataTmp);	/* ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
 
 	RenewPacket (pData, dwSize);
 
@@ -72,13 +72,13 @@ void CPacketMAP_MAPOBJECT::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECT::Make										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğì¬													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECT::Make										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 void CPacketMAP_MAPOBJECT::Make(
-	CInfoMapObject *pInfo)		/* [in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒgî•ñ */
+	CInfoMapObject *pInfo)		/* [in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæƒ…å ± */
 {
 	PCInfoMapObject pInfoTmp;
 	CLibInfoMapObject LibInfoMapObject;
@@ -94,9 +94,9 @@ void CPacketMAP_MAPOBJECT::Make(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CPacketMAP_MAPOBJECT::Set										 */
-/* “à—e		:ƒpƒPƒbƒg‚ğİ’è													 */
-/* “ú•t		:2008/11/01														 */
+/* é–¢æ•°å	:CPacketMAP_MAPOBJECT::Set										 */
+/* å†…å®¹		:ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š													 */
+/* æ—¥ä»˜		:2008/11/01														 */
 /* ========================================================================= */
 
 PBYTE CPacketMAP_MAPOBJECT::Set(PBYTE pPacket)

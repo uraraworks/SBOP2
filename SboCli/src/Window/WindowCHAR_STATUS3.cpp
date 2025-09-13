@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:WindowCHAR_STATUS3.cpp										 */
-/* “à—e			:ƒLƒƒƒ‰-ƒXƒe[ƒ^ƒX3ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/10/27													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:WindowCHAR_STATUS3.cpp										 */
+/* å†…å®¹			:ã‚­ãƒ£ãƒ©-ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹3ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«			 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2008/10/27													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -17,9 +17,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS3::CWindowCHAR_STATUS3						 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/27														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS3::CWindowCHAR_STATUS3						 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/27														 */
 /* ========================================================================= */
 
 CWindowCHAR_STATUS3::CWindowCHAR_STATUS3()
@@ -34,9 +34,9 @@ CWindowCHAR_STATUS3::CWindowCHAR_STATUS3()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS3::~CWindowCHAR_STATUS3						 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/10/27														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS3::~CWindowCHAR_STATUS3						 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2008/10/27														 */
 /* ========================================================================= */
 
 CWindowCHAR_STATUS3::~CWindowCHAR_STATUS3()
@@ -45,9 +45,9 @@ CWindowCHAR_STATUS3::~CWindowCHAR_STATUS3()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS3::Create									 */
-/* “à—e		:ì¬															 */
-/* “ú•t		:2008/10/27														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS3::Create									 */
+/* å†…å®¹		:ä½œæˆ															 */
+/* æ—¥ä»˜		:2008/10/27														 */
 /* ========================================================================= */
 
 void CWindowCHAR_STATUS3::Create(CMgrData *pMgrData)
@@ -60,9 +60,9 @@ void CWindowCHAR_STATUS3::Create(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CWindowCHAR_STATUS3::Draw										 */
-/* “à—e		:•`‰æ															 */
-/* “ú•t		:2008/10/27														 */
+/* é–¢æ•°å	:CWindowCHAR_STATUS3::Draw										 */
+/* å†…å®¹		:æç”»															 */
+/* æ—¥ä»˜		:2008/10/27														 */
 /* ========================================================================= */
 
 void CWindowCHAR_STATUS3::Draw(PCImg32 pDst)
@@ -89,33 +89,33 @@ void CWindowCHAR_STATUS3::Draw(PCImg32 pDst)
 	clText = RGB (1, 1, 1);
 
 	x = y = 0;
-	strTmp = "‘®«[‰Î]";
+	strTmp = "å±žæ€§[ç«]";
 	TextOut2 (hDC, 16 + 12 * 7 * x, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%3d%%", pInfoChar->m_wAttrFire);
 	TextOut2 (hDC, 16 + 12 * 7 * x + 12 * 4, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	x ++;
-	strTmp = "‘®«[•—]";
+	strTmp = "å±žæ€§[é¢¨]";
 	TextOut2 (hDC, 16 + 12 * 7 * x, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%3d%%", pInfoChar->m_wAttrWind);
 	TextOut2 (hDC, 16 + 12 * 7 * x + 12 * 4, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	x ++;
-	strTmp = "‘®«[…]";
+	strTmp = "å±žæ€§[æ°´]";
 	TextOut2 (hDC, 16 + 12 * 7 * x, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%3d%%", pInfoChar->m_wAttrWater);
 	TextOut2 (hDC, 16 + 12 * 7 * x + 12 * 4, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	x = 0;
 	y ++;
-	strTmp = "‘®«[“y]";
+	strTmp = "å±žæ€§[åœŸ]";
 	TextOut2 (hDC, 16 + 12 * 7 * x, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%3d%%", pInfoChar->m_wAttrEarth);
 	TextOut2 (hDC, 16 + 12 * 7 * x + 12 * 4, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	x ++;
-	strTmp = "‘®«[Œõ]";
+	strTmp = "å±žæ€§[å…‰]";
 	TextOut2 (hDC, 16 + 12 * 7 * x, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%3d%%", pInfoChar->m_wAttrLight);
 	TextOut2 (hDC, 16 + 12 * 7 * x + 12 * 4, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	x ++;
-	strTmp = "‘®«[ˆÅ]";
+	strTmp = "å±žæ€§[é—‡]";
 	TextOut2 (hDC, 16 + 12 * 7 * x, 12 + 12 * y, (LPCSTR)strTmp, clText);
 	strTmp.Format ("%3d%%", pInfoChar->m_wAttrDark);
 	TextOut2 (hDC, 16 + 12 * 7 * x + 12 * 4, 12 + 12 * y, (LPCSTR)strTmp, clText);

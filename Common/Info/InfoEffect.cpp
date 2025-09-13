@@ -1,35 +1,35 @@
 /* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:InfoEffect.cpp												 */
-/* “à—e			:ƒGƒtƒFƒNƒgƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹								 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/07/26													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:InfoEffect.cpp												 */
+/* å†…å®¹			:ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹ å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«								 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2007/07/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "InfoEffect.h"
 
 /* ========================================================================= */
-/* ’è”’è‹`																	 */
+/* å®šæ•°å®šç¾©																	 */
 /* ========================================================================= */
 
-/* ƒwƒbƒ_î•ñ */
+/* ãƒ˜ãƒƒãƒ€æƒ…å ± */
 static LPCSTR s_aszName[] = {
-	"byAnimeCount",		/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	"dwEffectID",		/* ƒGƒtƒFƒNƒgID */
-	"dwSoundID",		/* Œø‰Ê‰¹ID */
-	"bLoop",			/* ƒ‹[ƒv”»’è */
-	"m_bLoopSound",		/* ƒ‹[ƒvŽž‚ÉŒø‰Ê‰¹‚ðÄ¶‚·‚é */
-	"m_dwGrpIDMain",	/* ‰æ‘œƒƒCƒ“ID */
-	"m_strName",		/* ƒGƒtƒFƒNƒg–¼ */
+	"byAnimeCount",		/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•° */
+	"dwEffectID",		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	"dwSoundID",		/* åŠ¹æžœéŸ³ID */
+	"bLoop",			/* ãƒ«ãƒ¼ãƒ—åˆ¤å®š */
+	"m_bLoopSound",		/* ãƒ«ãƒ¼ãƒ—æ™‚ã«åŠ¹æžœéŸ³ã‚’å†ç”Ÿã™ã‚‹ */
+	"m_dwGrpIDMain",	/* ç”»åƒãƒ¡ã‚¤ãƒ³ID */
+	"m_strName",		/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
 	NULL
 };
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::CInfoEffect										 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::CInfoEffect										 */
+/* å†…å®¹		:ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 CInfoEffect::CInfoEffect()
@@ -52,9 +52,9 @@ CInfoEffect::CInfoEffect()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::~CInfoEffect										 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::~CInfoEffect										 */
+/* å†…å®¹		:ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 CInfoEffect::~CInfoEffect()
@@ -68,9 +68,9 @@ CInfoEffect::~CInfoEffect()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetElementCount									 */
-/* “à—e		:—v‘f”‚ðŽæ“¾													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetElementCount									 */
+/* å†…å®¹		:è¦ç´ æ•°ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 int CInfoEffect::GetElementCount(void)
@@ -89,9 +89,9 @@ int CInfoEffect::GetElementCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetElementNo										 */
-/* “à—e		:—v‘f”Ô†‚ðŽæ“¾													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetElementNo										 */
+/* å†…å®¹		:è¦ç´ ç•ªå·ã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 int CInfoEffect::GetElementNo(LPCSTR pszName)
@@ -133,9 +133,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetDataSize										 */
-/* “à—e		:ƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾												 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetDataSize										 */
+/* å†…å®¹		:ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 DWORD CInfoEffect::GetDataSize(void)
@@ -169,9 +169,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetDataSizeNo										 */
-/* “à—e		:Žw’è—v‘f‚Ìƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetDataSizeNo										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 DWORD CInfoEffect::GetDataSizeNo(int nNo)
@@ -183,13 +183,13 @@ DWORD CInfoEffect::GetDataSizeNo(int nNo)
 	dwRet = 0;
 
 	switch (nNo) {
-	case 0:		dwRet = sizeof (m_byAnimeCount);		break;	/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	case 1:		dwRet = sizeof (m_dwEffectID);			break;	/* ƒGƒtƒFƒNƒgID */
-	case 2:		dwRet = sizeof (m_dwSoundID);			break;	/* Œø‰Ê‰¹ID */
-	case 3:		dwRet = sizeof (m_bLoop);				break;	/* ƒ‹[ƒv”»’è */
-	case 4:		dwRet = sizeof (m_bLoopSound);			break;	/* ƒ‹[ƒvŽž‚ÉŒø‰Ê‰¹‚ðÄ¶‚·‚é */
-	case 5:		dwRet = sizeof (m_dwGrpIDMain);			break;	/* ‰æ‘œƒƒCƒ“ID */
-	case 6:		dwRet = (m_strName.GetLength () + 1);	break;	/* ƒGƒtƒFƒNƒg–¼ */
+	case 0:		dwRet = sizeof (m_byAnimeCount);		break;	/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•° */
+	case 1:		dwRet = sizeof (m_dwEffectID);			break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	case 2:		dwRet = sizeof (m_dwSoundID);			break;	/* åŠ¹æžœéŸ³ID */
+	case 3:		dwRet = sizeof (m_bLoop);				break;	/* ãƒ«ãƒ¼ãƒ—åˆ¤å®š */
+	case 4:		dwRet = sizeof (m_bLoopSound);			break;	/* ãƒ«ãƒ¼ãƒ—æ™‚ã«åŠ¹æžœéŸ³ã‚’å†ç”Ÿã™ã‚‹ */
+	case 5:		dwRet = sizeof (m_dwGrpIDMain);			break;	/* ç”»åƒãƒ¡ã‚¤ãƒ³ID */
+	case 6:		dwRet = (m_strName.GetLength () + 1);	break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
 	default:
 		nCount = m_paAnimeInfo->GetSize ();
 		for (i = 0; i < nCount; i ++) {
@@ -204,9 +204,9 @@ DWORD CInfoEffect::GetDataSizeNo(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetName											 */
-/* “à—e		:—v‘f–¼‚ðŽæ“¾													 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetName											 */
+/* å†…å®¹		:è¦ç´ åã‚’å–å¾—													 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 LPCSTR CInfoEffect::GetName(int nNo)
@@ -216,9 +216,9 @@ LPCSTR CInfoEffect::GetName(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetWriteData										 */
-/* “à—e		:Žw’è—v‘f‚Ì•Û‘¶—pƒf[ƒ^‚ðŽæ“¾									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetWriteData										 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ã®ä¿å­˜ç”¨ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 PBYTE CInfoEffect::GetWriteData(int nNo, PDWORD pdwSize)
@@ -239,13 +239,13 @@ PBYTE CInfoEffect::GetWriteData(int nNo, PDWORD pdwSize)
 	pRet = new BYTE[dwSize];
 
 	switch (nNo) {
-	case 0:		pSrc = &m_byAnimeCount;				break;	/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	case 1:		pSrc = (PBYTE)&m_dwEffectID;		break;	/* ƒGƒtƒFƒNƒgID */
-	case 2:		pSrc = (PBYTE)&m_dwSoundID;			break;	/* Œø‰Ê‰¹ID */
-	case 3:		pSrc = (PBYTE)&m_bLoop;				break;	/* ƒ‹[ƒv”»’è */
-	case 4:		pSrc = (PBYTE)&m_bLoopSound;		break;	/* ƒ‹[ƒvŽž‚ÉŒø‰Ê‰¹‚ðÄ¶‚·‚é */
-	case 5:		pSrc = (PBYTE)&m_dwGrpIDMain;		break;	/* ‰æ‘œƒƒCƒ“ID */
-	case 6:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* ƒGƒtƒFƒNƒg–¼ */
+	case 0:		pSrc = &m_byAnimeCount;				break;	/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•° */
+	case 1:		pSrc = (PBYTE)&m_dwEffectID;		break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	case 2:		pSrc = (PBYTE)&m_dwSoundID;			break;	/* åŠ¹æžœéŸ³ID */
+	case 3:		pSrc = (PBYTE)&m_bLoop;				break;	/* ãƒ«ãƒ¼ãƒ—åˆ¤å®š */
+	case 4:		pSrc = (PBYTE)&m_bLoopSound;		break;	/* ãƒ«ãƒ¼ãƒ—æ™‚ã«åŠ¹æžœéŸ³ã‚’å†ç”Ÿã™ã‚‹ */
+	case 5:		pSrc = (PBYTE)&m_dwGrpIDMain;		break;	/* ç”»åƒãƒ¡ã‚¤ãƒ³ID */
+	case 6:		pSrc = (PBYTE)(LPCSTR)m_strName;	break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
 	default:
 		{
 			PBYTE pTmp;
@@ -275,14 +275,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::ReadElementData									 */
-/* “à—e		:Žw’è—v‘fƒf[ƒ^‚ð“Ç‚Ýž‚Ý										 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::ReadElementData									 */
+/* å†…å®¹		:æŒ‡å®šè¦ç´ ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¿										 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 DWORD CInfoEffect::ReadElementData(
-	PBYTE pSrc,		/* [in] ƒf[ƒ^‚Ì“Ç‚Ýž‚ÝŒ³ */
-	int nNo)		/* [in] —v‘f”Ô† */
+	PBYTE pSrc,		/* [in] ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿å…ƒ */
+	int nNo)		/* [in] è¦ç´ ç•ªå· */
 {
 	int i;
 	PBYTE pDst, pSrcTmp;
@@ -301,12 +301,12 @@ DWORD CInfoEffect::ReadElementData(
 			m_paAnimeInfo->Add (pAnime);
 		}
 		break;
-	case 1:	pDst = (PBYTE)&m_dwEffectID;	dwSize = sizeof (m_dwEffectID);		break;	/* ƒGƒtƒFƒNƒgID */
-	case 2:	pDst = (PBYTE)&m_dwSoundID;		dwSize = sizeof (m_dwSoundID);		break;	/* Œø‰Ê‰¹ID */
-	case 3:	pDst = (PBYTE)&m_bLoop;			dwSize = sizeof (m_bLoop);			break;	/* ƒ‹[ƒv”»’è */
-	case 4:	pDst = (PBYTE)&m_bLoopSound;	dwSize = sizeof (m_bLoopSound);		break;	/* ƒ‹[ƒvŽž‚ÉŒø‰Ê‰¹‚ðÄ¶‚·‚é */
-	case 5:	pDst = (PBYTE)&m_dwGrpIDMain;	dwSize = sizeof (m_dwGrpIDMain);	break;	/* ‰æ‘œƒƒCƒ“ID */
-	case 6: 																		  	/* ƒGƒtƒFƒNƒg–¼ */
+	case 1:	pDst = (PBYTE)&m_dwEffectID;	dwSize = sizeof (m_dwEffectID);		break;	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	case 2:	pDst = (PBYTE)&m_dwSoundID;		dwSize = sizeof (m_dwSoundID);		break;	/* åŠ¹æžœéŸ³ID */
+	case 3:	pDst = (PBYTE)&m_bLoop;			dwSize = sizeof (m_bLoop);			break;	/* ãƒ«ãƒ¼ãƒ—åˆ¤å®š */
+	case 4:	pDst = (PBYTE)&m_bLoopSound;	dwSize = sizeof (m_bLoopSound);		break;	/* ãƒ«ãƒ¼ãƒ—æ™‚ã«åŠ¹æžœéŸ³ã‚’å†ç”Ÿã™ã‚‹ */
+	case 5:	pDst = (PBYTE)&m_dwGrpIDMain;	dwSize = sizeof (m_dwGrpIDMain);	break;	/* ç”»åƒãƒ¡ã‚¤ãƒ³ID */
+	case 6: 																		  	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
 		m_strName = (LPCSTR)pSrc;
 		dwSize = m_strName.GetLength () + 1;
 		break;
@@ -330,9 +330,9 @@ DWORD CInfoEffect::ReadElementData(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::Copy												 */
-/* “à—e		:ƒRƒs[															 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::Copy												 */
+/* å†…å®¹		:ã‚³ãƒ”ãƒ¼															 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CInfoEffect::Copy(CInfoEffect *pSrc)
@@ -346,9 +346,9 @@ void CInfoEffect::Copy(CInfoEffect *pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetSendDataSize									 */
-/* “à—e		:‘—Mƒf[ƒ^ƒTƒCƒY‚ðŽæ“¾											 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetSendDataSize									 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’å–å¾—											 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 DWORD CInfoEffect::GetSendDataSize(void)
@@ -381,9 +381,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚ðŽæ“¾												 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 PBYTE CInfoEffect::GetSendData(void)
@@ -399,13 +399,13 @@ PBYTE CInfoEffect::GetSendData(void)
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwEffectID,	sizeof (m_dwEffectID),		pDataTmp);	/* ƒGƒtƒFƒNƒgID */
-	CopyMemoryRenew (pDataTmp, &m_dwSoundID,	sizeof (m_dwSoundID),		pDataTmp);	/* Œø‰Ê‰¹ID */
-	CopyMemoryRenew (pDataTmp, &m_dwGrpIDMain,	sizeof (m_dwGrpIDMain),		pDataTmp);	/* ‰æ‘œƒƒCƒ“ID */
-	CopyMemoryRenew (pDataTmp, &m_byAnimeCount,	sizeof (m_byAnimeCount),	pDataTmp);	/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	CopyMemoryRenew (pDataTmp, &m_bLoop,		sizeof (m_bLoop),			pDataTmp);	/* ƒ‹[ƒv”»’è */
-	CopyMemoryRenew (pDataTmp, &m_bLoopSound,	sizeof (m_bLoopSound),		pDataTmp);	/* ƒ‹[ƒvŽž‚ÉŒø‰Ê‰¹‚ðÄ¶‚·‚é */
-	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp); 							  	/* ƒGƒtƒFƒNƒg–¼ */
+	CopyMemoryRenew (pDataTmp, &m_dwEffectID,	sizeof (m_dwEffectID),		pDataTmp);	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	CopyMemoryRenew (pDataTmp, &m_dwSoundID,	sizeof (m_dwSoundID),		pDataTmp);	/* åŠ¹æžœéŸ³ID */
+	CopyMemoryRenew (pDataTmp, &m_dwGrpIDMain,	sizeof (m_dwGrpIDMain),		pDataTmp);	/* ç”»åƒãƒ¡ã‚¤ãƒ³ID */
+	CopyMemoryRenew (pDataTmp, &m_byAnimeCount,	sizeof (m_byAnimeCount),	pDataTmp);	/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•° */
+	CopyMemoryRenew (pDataTmp, &m_bLoop,		sizeof (m_bLoop),			pDataTmp);	/* ãƒ«ãƒ¼ãƒ—åˆ¤å®š */
+	CopyMemoryRenew (pDataTmp, &m_bLoopSound,	sizeof (m_bLoopSound),		pDataTmp);	/* ãƒ«ãƒ¼ãƒ—æ™‚ã«åŠ¹æžœéŸ³ã‚’å†ç”Ÿã™ã‚‹ */
+	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp); 							  	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
 
 	nCount = m_paAnimeInfo->GetSize ();
 	for (i = 0; i < nCount; i ++) {
@@ -421,9 +421,9 @@ PBYTE CInfoEffect::GetSendData(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::SetSendData										 */
-/* “à—e		:‘—Mƒf[ƒ^‚©‚çŽæ‚èž‚Ý											 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::SetSendData										 */
+/* å†…å®¹		:é€ä¿¡ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å–ã‚Šè¾¼ã¿											 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 PBYTE CInfoEffect::SetSendData(PBYTE pSrc)
@@ -435,13 +435,13 @@ PBYTE CInfoEffect::SetSendData(PBYTE pSrc)
 	DeleteAllAnime ();
 	pDataTmp = pSrc;
 
-	CopyMemoryRenew (&m_dwEffectID,		pDataTmp, sizeof (m_dwEffectID),	pDataTmp);	/* ƒGƒtƒFƒNƒgID */
-	CopyMemoryRenew (&m_dwSoundID,		pDataTmp, sizeof (m_dwSoundID),		pDataTmp);	/* Œø‰Ê‰¹ID */
-	CopyMemoryRenew (&m_dwGrpIDMain,	pDataTmp, sizeof (m_dwGrpIDMain),	pDataTmp);	/* ‰æ‘œƒƒCƒ“ID */
-	CopyMemoryRenew (&m_byAnimeCount,	pDataTmp, sizeof (m_byAnimeCount),	pDataTmp);	/* ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}” */
-	CopyMemoryRenew (&m_bLoop,			pDataTmp, sizeof (m_bLoop),			pDataTmp);	/* ƒ‹[ƒv”»’è */
-	CopyMemoryRenew (&m_bLoopSound,		pDataTmp, sizeof (m_bLoopSound),	pDataTmp);	/* ƒ‹[ƒvŽž‚ÉŒø‰Ê‰¹‚ðÄ¶‚·‚é */
-	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp); 							 	/* ƒGƒtƒFƒNƒg–¼ */
+	CopyMemoryRenew (&m_dwEffectID,		pDataTmp, sizeof (m_dwEffectID),	pDataTmp);	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	CopyMemoryRenew (&m_dwSoundID,		pDataTmp, sizeof (m_dwSoundID),		pDataTmp);	/* åŠ¹æžœéŸ³ID */
+	CopyMemoryRenew (&m_dwGrpIDMain,	pDataTmp, sizeof (m_dwGrpIDMain),	pDataTmp);	/* ç”»åƒãƒ¡ã‚¤ãƒ³ID */
+	CopyMemoryRenew (&m_byAnimeCount,	pDataTmp, sizeof (m_byAnimeCount),	pDataTmp);	/* ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•° */
+	CopyMemoryRenew (&m_bLoop,			pDataTmp, sizeof (m_bLoop),			pDataTmp);	/* ãƒ«ãƒ¼ãƒ—åˆ¤å®š */
+	CopyMemoryRenew (&m_bLoopSound,		pDataTmp, sizeof (m_bLoopSound),	pDataTmp);	/* ãƒ«ãƒ¼ãƒ—æ™‚ã«åŠ¹æžœéŸ³ã‚’å†ç”Ÿã™ã‚‹ */
+	StoreRenew (m_strName, (LPCSTR)pDataTmp, pDataTmp); 							 	/* ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå */
 
 	nCount = m_byAnimeCount;
 	for (i = 0; i < nCount; i ++) {
@@ -456,10 +456,10 @@ PBYTE CInfoEffect::SetSendData(PBYTE pSrc)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::TimerProc											 */
-/* “à—e		:ŽžŠÔˆ—														 */
-/* –ß‚è’l	:TRUE:ˆ—‚µ‚½ FALSE:ˆ—‚µ‚Ä‚¢‚È‚¢								 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::TimerProc											 */
+/* å†…å®¹		:æ™‚é–“å‡¦ç†														 */
+/* æˆ»ã‚Šå€¤	:TRUE:å‡¦ç†ã—ãŸ FALSE:å‡¦ç†ã—ã¦ã„ãªã„								 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 BOOL CInfoEffect::TimerProc(DWORD dwTime)
@@ -503,9 +503,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetAnimeCount										 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}”‚ðŽæ“¾										 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetAnimeCount										 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžæ•°ã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 int CInfoEffect::GetAnimeCount(void)
@@ -515,9 +515,9 @@ int CInfoEffect::GetAnimeCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::AddAnime											 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ð’Ç‰Á										 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::AddAnime											 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’è¿½åŠ 										 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CInfoEffect::AddAnime(void)
@@ -531,9 +531,9 @@ void CInfoEffect::AddAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::DeleteAnime										 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ðíœ										 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::DeleteAnime										 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å‰Šé™¤										 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CInfoEffect::DeleteAnime(int nNo)
@@ -548,9 +548,9 @@ void CInfoEffect::DeleteAnime(int nNo)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::DeleteAllAnime									 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ð‘S‚Äíœ									 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::DeleteAllAnime									 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å…¨ã¦å‰Šé™¤									 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 void CInfoEffect::DeleteAllAnime(void)
@@ -565,9 +565,9 @@ void CInfoEffect::DeleteAllAnime(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetAnimePtr										 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“ƒRƒ}‚ðŽæ“¾										 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetAnimePtr										 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚³ãƒžã‚’å–å¾—										 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 PCInfoAnime CInfoEffect::GetAnimePtr(int nNo)
@@ -589,9 +589,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetGrpID											 */
-/* “à—e		:Œ»Ý‚Ì‰æ‘œID‚ðŽæ“¾												 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::GetGrpID											 */
+/* å†…å®¹		:ç¾åœ¨ã®ç”»åƒIDã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 WORD CInfoEffect::GetGrpID(void)
@@ -617,9 +617,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::GetLevel											 */
-/* “à—e		:Œ»Ý‚Ì“§–¾“x‚ðŽæ“¾												 */
-/* “ú•t		:2008/07/06														 */
+/* é–¢æ•°å	:CInfoEffect::GetLevel											 */
+/* å†…å®¹		:ç¾åœ¨ã®é€æ˜Žåº¦ã‚’å–å¾—												 */
+/* æ—¥ä»˜		:2008/07/06														 */
 /* ========================================================================= */
 
 BYTE CInfoEffect::GetLevel(void)
@@ -645,9 +645,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CInfoEffect::IsAnimeEnd										 */
-/* “à—e		:ƒAƒjƒ[ƒVƒ‡ƒ“I—¹‚©”»’è										 */
-/* “ú•t		:2007/07/26														 */
+/* é–¢æ•°å	:CInfoEffect::IsAnimeEnd										 */
+/* å†…å®¹		:ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã‹åˆ¤å®š										 */
+/* æ—¥ä»˜		:2007/07/26														 */
 /* ========================================================================= */
 
 BOOL CInfoEffect::IsAnimeEnd(void)

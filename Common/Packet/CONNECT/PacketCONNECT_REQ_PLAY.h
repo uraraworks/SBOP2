@@ -1,9 +1,9 @@
 /* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:PacketCONNECT_REQ_PLAY.h									 */
-/* “à—e			:ƒRƒ}ƒ“ƒh(Ú‘±Œn:ƒQ[ƒ€ŠJŽn—v‹) ’è‹`ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2006/12/31													 */
+/* ãƒ•ã‚¡ã‚¤ãƒ«å	:PacketCONNECT_REQ_PLAY.h									 */
+/* å†…å®¹			:ã‚³ãƒžãƒ³ãƒ‰(æŽ¥ç¶šç³»:ã‚²ãƒ¼ãƒ é–‹å§‹è¦æ±‚) å®šç¾©ãƒ•ã‚¡ã‚¤ãƒ«				 */
+/* ä½œæˆ			:å¹´ãŒã‚‰å¹´ä¸­æ˜¥ã†ã‚‰ã‚‰(URARA-works)							 */
+/* ä½œæˆé–‹å§‹æ—¥	:2006/12/31													 */
 /* ========================================================================= */
 
 #pragma once
@@ -11,22 +11,22 @@
 #include "PacketBase.h"
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒXéŒ¾																 */
+/* ã‚¯ãƒ©ã‚¹å®£è¨€																 */
 /* ========================================================================= */
 
 typedef class CPacketCONNECT_REQ_PLAY : public CPacketBase
 {
 public:
-			CPacketCONNECT_REQ_PLAY();					/* ƒRƒ“ƒXƒgƒ‰ƒNƒ^ */
-	virtual ~CPacketCONNECT_REQ_PLAY();					/* ƒfƒXƒgƒ‰ƒNƒ^ */
+			CPacketCONNECT_REQ_PLAY();					/* ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
+	virtual ~CPacketCONNECT_REQ_PLAY();					/* ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ */
 
-	void	Make	(DWORD dwAccountID, DWORD dwCharID);		/* ƒpƒPƒbƒg‚ðì¬ */
-	PBYTE	Set		(PBYTE pPacket);							/* ƒpƒPƒbƒg‚ðÝ’è */
+	void	Make	(DWORD dwAccountID, DWORD dwCharID);		/* ãƒ‘ã‚±ãƒƒãƒˆã‚’ä½œæˆ */
+	PBYTE	Set		(PBYTE pPacket);							/* ãƒ‘ã‚±ãƒƒãƒˆã‚’è¨­å®š */
 
 
 public:
-	DWORD	m_dwAccountID,						/* ƒAƒJƒEƒ“ƒgID */
-			m_dwCharID;							/* ƒLƒƒƒ‰ID */
+	DWORD	m_dwAccountID,						/* ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID */
+			m_dwCharID;							/* ã‚­ãƒ£ãƒ©ID */
 } CPacketCONNECT_REQ_PLAY, *PCPacketCONNECT_REQ_PLAY;
 
 /* Copyright(C)URARA-works 2006 */

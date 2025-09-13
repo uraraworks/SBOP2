@@ -1,15 +1,15 @@
 #pragma once
 
 /* ========================================================================= */
-/* \‘¢‘Ì’è‹`																 */
+/* æ§‹é€ ä½“å®šç¾©																 */
 /* ========================================================================= */
 
-/* ƒAƒCƒeƒ€Ží•Êî•ñ\‘¢‘Ì(Ž‚¿•¨) */
+/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ§‹é€ ä½“(æŒã¡ç‰©) */
 struct stInfoItemTypeArms {
-	DWORD		dwWeaponInfoID;				/* •Šíî•ñID */
-	DWORD		dwValue;					/* UŒ‚—Í */
-	DWORD		dwMoveWait;					/* ‘¬“x */
-	DWORD		dwMoveCount;				/* ”ò‹——£ */
+	DWORD		dwWeaponInfoID;				/* æ­¦å™¨æƒ…å ±ID */
+	DWORD		dwValue;					/* æ”»æ’ƒåŠ› */
+	DWORD		dwMoveWait;					/* é€Ÿåº¦ */
+	DWORD		dwMoveCount;				/* é£›è·é›¢ */
 
 	stInfoItemTypeArms()
 	: dwWeaponInfoID(0)
@@ -19,10 +19,10 @@ struct stInfoItemTypeArms {
 	{}
 };
 
-/* ƒAƒCƒeƒ€Ží•Êî•ñ\‘¢‘Ì(HP‘Œ¸) */
+/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ§‹é€ ä½“(HPå¢—æ¸›) */
 struct stInfoItemTypeHp {
-	DWORD		dwMin;						/* Œø‰Ê(Å¬) */
-	DWORD		dwMax;						/* Œø‰Ê(Å‘å) */
+	DWORD		dwMin;						/* åŠ¹æžœ(æœ€å°) */
+	DWORD		dwMax;						/* åŠ¹æžœ(æœ€å¤§) */
 
 	stInfoItemTypeHp()
 	: dwMin(0)
@@ -30,10 +30,10 @@ struct stInfoItemTypeHp {
 	{}
 };
 
-/* ƒAƒCƒeƒ€Ží•Êî•ñ\‘¢‘Ì(“”‚è) */
+/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ§‹é€ ä½“(ç¯ã‚Š) */
 struct stInfoItemTypeLight {
-	DWORD		dwLevel;					/* “”‚èƒŒƒxƒ‹ */
-	DWORD		dwTime;						/* Ž‘±ŽžŠÔ */
+	DWORD		dwLevel;					/* ç¯ã‚Šãƒ¬ãƒ™ãƒ« */
+	DWORD		dwTime;						/* æŒç¶šæ™‚é–“ */
 
 	stInfoItemTypeLight()
 	: dwLevel(0)
@@ -41,27 +41,27 @@ struct stInfoItemTypeLight {
 	{}
 };
 
-/* ƒAƒCƒeƒ€Ží•Êî•ñ\‘¢‘Ì */
+/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥æƒ…å ±æ§‹é€ ä½“ */
 struct stInfoItemType {
-	BYTE		byDelAverage;				/* Žg‚Á‚Ä‚È‚­‚È‚éŠm—¦ */
-	BYTE		byTarget;					/* Žg—p‘ÎÛ */
-	BYTE		byArea;						/* Žg—p”ÍˆÍ */
-	BOOL		bPutOn;						/* ã‚É’u‚¯‚é‚©”»’è */
-	WORD		wGrpIDMain;					/* ‰æ‘œIDƒƒCƒ“ */
-	WORD		wGrpIDSub;					/* ‰æ‘œIDƒTƒu */
-	DWORD		dwTypeID;					/* Ží•ÊID */
-	DWORD		dwItemTypeID;				/* ƒAƒCƒeƒ€Ží•ÊID */
-	DWORD		dwGrpID;					/* ’n–Ê‚É‚ ‚éŽž‚Ì‰æ‘œID */
-	DWORD		dwIconGrpID;				/* ƒoƒbƒNƒpƒbƒN“à‚Ì‰æ‘œID */
-	DWORD		dwDropSoundID;				/* —Ž‚¿‚½‚Æ‚«‚ÌŒø‰Ê‰¹ID */
-	DWORD		dwUseEffectID;				/* Žg‚Á‚½Žž‚ÉÄ¶‚·‚éƒGƒtƒFƒNƒgID */
-	DWORD		dwUseSoundID;				/* Žg‚Á‚½Žž‚ÉÄ¶‚·‚éŒø‰Ê‰¹ID */
-	CmyString	strName;					/* ƒAƒCƒeƒ€–¼ */
+	BYTE		byDelAverage;				/* ä½¿ã£ã¦ãªããªã‚‹ç¢ºçŽ‡ */
+	BYTE		byTarget;					/* ä½¿ç”¨å¯¾è±¡ */
+	BYTE		byArea;						/* ä½¿ç”¨ç¯„å›² */
+	BOOL		bPutOn;						/* ä¸Šã«ç½®ã‘ã‚‹ã‹åˆ¤å®š */
+	WORD		wGrpIDMain;					/* ç”»åƒIDãƒ¡ã‚¤ãƒ³ */
+	WORD		wGrpIDSub;					/* ç”»åƒIDã‚µãƒ– */
+	DWORD		dwTypeID;					/* ç¨®åˆ¥ID */
+	DWORD		dwItemTypeID;				/* ã‚¢ã‚¤ãƒ†ãƒ ç¨®åˆ¥ID */
+	DWORD		dwGrpID;					/* åœ°é¢ã«ã‚ã‚‹æ™‚ã®ç”»åƒID */
+	DWORD		dwIconGrpID;				/* ãƒãƒƒã‚¯ãƒ‘ãƒƒã‚¯å†…ã®ç”»åƒID */
+	DWORD		dwDropSoundID;				/* è½ã¡ãŸã¨ãã®åŠ¹æžœéŸ³ID */
+	DWORD		dwUseEffectID;				/* ä½¿ã£ãŸæ™‚ã«å†ç”Ÿã™ã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆID */
+	DWORD		dwUseSoundID;				/* ä½¿ã£ãŸæ™‚ã«å†ç”Ÿã™ã‚‹åŠ¹æžœéŸ³ID */
+	CmyString	strName;					/* ã‚¢ã‚¤ãƒ†ãƒ å */
 
 	union Type {
-		stInfoItemTypeArms	Arms;			/* Ž‚¿•¨ */
-		stInfoItemTypeHp	Hp;				/* HP‘Œ¸ */
-		stInfoItemTypeLight	Light;			/* “”‚è */
+		stInfoItemTypeArms	Arms;			/* æŒã¡ç‰© */
+		stInfoItemTypeHp	Hp;				/* HPå¢—æ¸› */
+		stInfoItemTypeLight	Light;			/* ç¯ã‚Š */
 	};
 
 	stInfoItemType()
