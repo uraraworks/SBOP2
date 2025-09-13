@@ -26,4 +26,11 @@
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "Rpcrt4.lib")
 
+// Visual Studio 2015以降のリンクエラー対策用コード
+FILE _iob[] = { *stdin, *stdout, *stderr };
+extern "C" FILE * __cdecl __iob_func(void)
+{
+	return _iob;
+}
+
 /* Copyright(C)URARA-works 2006 */

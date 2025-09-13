@@ -9,7 +9,8 @@
 #pragma once
 
 #define VC_EXTRALEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します。
-#define WINVER 0x0500
+#define WINVER 0x0602
+#define _WIN32_WINNT 0x0602
 #include <afxwin.h>         // MFC のコアおよび標準コンポーネント
 #include <afxext.h>         // MFC の拡張部分
 #include <afxdisp.h>        // MFC のオートメーション クラス

@@ -132,7 +132,7 @@ BOOL CDlgDbg::OnInitDialog()
 		rc.right + GetSystemMetrics (SM_CXFIXEDFRAME) * 2, rc.top,
 		0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 
-	Initialize (m_hWnd);
+	CLayoutHelper::Initialize (m_hWnd);
 	SetTimer(100, 1000, NULL);
 
 	ZeroMemory (szFileName, sizeof (szFileName));
