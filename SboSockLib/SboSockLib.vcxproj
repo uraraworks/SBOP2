@@ -258,6 +258,10 @@
     <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
     <ClCompile Include="..\Common\UraraSockTCPSBO.cpp" />
+    <ClCompile Include="..\\common\\crc.cpp" />
+    <ClCompile Include="..\\Common\\UraraSockTCP.cpp" />
+    <ClCompile Include="..\\Common\\CWinsockStart.cpp" />
+    <ClCompile Include="..\\Common\\myLib\\myZlib\\myZlib.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -418,6 +422,7 @@
     <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.h" />
     <ClInclude Include="..\Common\SBOGlobal.h" />
     <ClInclude Include="..\common\UraraSockTCP.h" />
+    <ClInclude Include="..\common\CWinsockStart.h" />
     <ClInclude Include="..\Common\UraraSockTCPSBO.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
