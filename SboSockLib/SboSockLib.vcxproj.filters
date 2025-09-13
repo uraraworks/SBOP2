@@ -110,6 +110,18 @@
     <ClCompile Include="..\Common\UraraSockTCPSBO.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\crc.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\UraraSockTCP.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\CWinsockStart.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\myLib\myZlib\myZlib.cpp">
+      <Filter>Source Files\Common\myLib</Filter>
+    </ClCompile>
     <ClCompile Include="..\Common\myLib\myString.cpp">
       <Filter>Source Files\Common\myLib</Filter>
     </ClCompile>
@@ -557,6 +569,9 @@
       <Filter>Header Files\Common No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\common\UraraSockTCP.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\CWinsockStart.h">
       <Filter>Header Files\Common No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\UraraSockTCPSBO.h">

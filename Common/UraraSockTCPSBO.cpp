@@ -1,237 +1,121 @@
-/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* UraraSockTCPSBO.cpp														 */
-/* ”Ä—pTCP’ÊMƒNƒ‰ƒX														 */
-/* 2006/11/05 ì¬ŠJŽn														 */
-/* ========================================================================= */
-
 #include "StdAfx.h"
 #include "Packet/PacketBase.h"
 #include "UraraSockTCPSBO.h"
 
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::CUraraSockTCPSBO								 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
-/* ========================================================================= */
-
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 {
-	char szFileName[MAX_PATH];
-	PFGETURARASOCKTCP pfGetUraraSockTCP;
-
-	ZeroMemory (szFileName, sizeof (szFileName));
-
-	GetModuleFilePath (szFileName, sizeof (szFileName));
-	strcat (szFileName, "UraraSockTCP.dll");
-
-	m_pSock = NULL;
-
-	m_hDll = LoadLibrary(szFileName);
-	pfGetUraraSockTCP = (PFGETURARASOCKTCP)GetProcAddress (m_hDll, "GetUraraSockTCP");
-	if (pfGetUraraSockTCP) {
-		m_pSock = pfGetUraraSockTCP ();
-	}
+    m_pSock = new CUraraSockTCP;
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::~CUraraSockTCPSBO							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2006/11/05														 */
-/* ========================================================================= */
-
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 CUraraSockTCPSBO::~CUraraSockTCPSBO(void)
 {
-	SAFE_DELETE (m_pSock);
-	if (m_hDll) {
-		FreeLibrary (m_hDll);
-	}
+    SAFE_DELETE(m_pSock);
 }
 
-
+// å—ä¿¡ãƒ‡ãƒ¼ã‚¿ã®è§£æ”¾
 void CUraraSockTCPSBO::DeleteRecvData(PBYTE pData)
 {
-	if (m_pSock == NULL) {
-		return;
-	}
-
-	m_pSock->DeleteRecvData (pData);
+    SAFE_DELETE_ARRAY(pData);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Destroy										 */
-/* “à—e		:ŒãŽn––															 */
-/* “ú•t		:2003/10/28														 */
-/* ========================================================================= */
-
+// å¾Œå§‹æœ«
 void CUraraSockTCPSBO::Destroy(void)
 {
-	if (m_pSock == NULL) {
-		return;
-	}
-
-	m_pSock->Destroy ();
+    if (m_pSock == NULL) {
+        return;
+    }
+    m_pSock->Destroy();
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Host											 */
-/* “à—e		:Ú‘±‘Ò‚¿ŠJŽn													 */
-/* “ú•t		:2003/10/28														 */
-/* ========================================================================= */
-
+// ã‚µãƒ¼ãƒãƒ¼å¾…ã¡å—ã‘é–‹å§‹
 BOOL CUraraSockTCPSBO::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)
 {
-	if (m_pSock == NULL) {
-		return FALSE;
-	}
-
-	return m_pSock->Host (hWndParent, dwMsgBase, dwKey, wPort, dwCount);
+    if (m_pSock == NULL) {
+        return FALSE;
+    }
+    return m_pSock->Host(hWndParent, wPort, dwCount);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Connect										 */
-/* “à—e		:ƒT[ƒo[‚ÖÚ‘±													 */
-/* “ú•t		:2003/10/29														 */
-/* ========================================================================= */
-
+// ã‚µãƒ¼ãƒãƒ¼ã¸æŽ¥ç¶š
 BOOL CUraraSockTCPSBO::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)
 {
-	if (m_pSock == NULL) {
-		return FALSE;
-	}
-
-	return m_pSock->Connect (hWndParent, dwMsgBase, dwKey, wPort, pszAddr);
+    if (m_pSock == NULL) {
+        return FALSE;
+    }
+    return m_pSock->Connect(hWndParent, wPort, const_cast<LPSTR>(pszAddr));
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::DeleteClient									 */
-/* “à—e		:ƒNƒ‰ƒCƒAƒ“ƒg‚ðØ’f												 */
-/* “ú•t		:2003/11/03														 */
-/* ========================================================================= */
-
+// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆåˆ‡æ–­
 void CUraraSockTCPSBO::DeleteClient(DWORD dwID)
 {
-	if (m_pSock == NULL) {
-		return;
-	}
-
-	m_pSock->DeleteClient (dwID);
+    if (m_pSock == NULL) {
+        return;
+    }
+    m_pSock->DeleteClient(dwID);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::SendCancel									 */
-/* “à—e		:‘—MƒLƒƒƒ“ƒZƒ‹													 */
-/* “ú•t		:2003/11/03														 */
-/* ========================================================================= */
+// é€ä¿¡ã‚­ãƒ£ãƒ³ã‚»ãƒ«
 void CUraraSockTCPSBO::SendCancel(DWORD dwID)
 {
-	if (m_pSock == NULL) {
-		return;
-	}
-
-	m_pSock->SendCancel (dwID);
+    if (m_pSock == NULL) {
+        return;
+    }
+    m_pSock->SendCancel(dwID);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::Send											 */
-/* “à—e		:ƒT[ƒo[‚Öƒf[ƒ^‘—M											 */
-/* “ú•t		:2003/11/01														 */
-/* ========================================================================= */
-
+// ãƒ‡ãƒ¼ã‚¿é€ä¿¡ï¼ˆã‚µãƒ¼ãƒãƒ¼ï¼‰
 void CUraraSockTCPSBO::Send(CPacketBase *pPacket)
 {
-	if (m_pSock == NULL) {
-		return;
-	}
-
-	m_pSock->Send (pPacket->m_pPacket, pPacket->m_dwPacketSize);
+    if (m_pSock == NULL) {
+        return;
+    }
+    m_pSock->Send(pPacket->m_pPacket, pPacket->m_dwPacketSize);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::SendTo										 */
-/* “à—e		:ƒNƒ‰ƒCƒAƒ“ƒg‚Öƒf[ƒ^‘—M										 */
-/* “ú•t		:2003/11/02														 */
-/* ========================================================================= */
-
+// ãƒ‡ãƒ¼ã‚¿é€ä¿¡ï¼ˆã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆæŒ‡å®šï¼‰
 void CUraraSockTCPSBO::SendTo(DWORD dwID, CPacketBase *pPacket)
 {
-	if (m_pSock == NULL) {
-		return;
-	}
-
-	m_pSock->SendTo (dwID, pPacket->m_pPacket, pPacket->m_dwPacketSize);
+    if (m_pSock == NULL) {
+        return;
+    }
+    m_pSock->SendTo(dwID, pPacket->m_pPacket, pPacket->m_dwPacketSize);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetThrowghPutSend							 */
-/* “à—e		:ƒŠƒ“ƒNEƒXƒ‹[ƒvƒbƒg—Ê‚ðŽæ“¾									 */
-/* “ú•t		:2003/11/08														 */
-/* ========================================================================= */
-
+// é€ä¿¡ã‚¹ãƒ«ãƒ¼ãƒ—ãƒƒãƒˆå–å¾—
 DWORD CUraraSockTCPSBO::GetThrowghPutSend(DWORD dwID)
 {
-	if (m_pSock == NULL) {
-		return 0;
-	}
-
-	return m_pSock->GetThrowghPutSend (dwID);
+    if (m_pSock == NULL) {
+        return 0;
+    }
+    return m_pSock->GetThrowghPutSend(dwID);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetThrowghPutRecv							 */
-/* “à—e		:ƒŠƒ“ƒNEƒXƒ‹[ƒvƒbƒg—Ê‚ðŽæ“¾									 */
-/* “ú•t		:2003/11/08														 */
-/* ========================================================================= */
-
+// å—ä¿¡ã‚¹ãƒ«ãƒ¼ãƒ—ãƒƒãƒˆå–å¾—
 DWORD CUraraSockTCPSBO::GetThrowghPutRecv(DWORD dwID)
 {
-	if (m_pSock == NULL) {
-		return 0;
-	}
-
-	return m_pSock->GetThrowghPutRecv (dwID);
+    if (m_pSock == NULL) {
+        return 0;
+    }
+    return m_pSock->GetThrowghPutRecv(dwID);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetQueCount									 */
-/* “à—e		:ƒLƒ…[”‚ðŽæ“¾													 */
-/* “ú•t		:2003/11/08														 */
-/* ========================================================================= */
-
+// é€ä¿¡ã‚­ãƒ¥ãƒ¼æ•°å–å¾—
 DWORD CUraraSockTCPSBO::GetQueCount(DWORD dwID)
 {
-	if (m_pSock == NULL) {
-		return 0;
-	}
-
-	return m_pSock->GetQueCount (dwID);
+    if (m_pSock == NULL) {
+        return 0;
+    }
+    return m_pSock->GetQueCount(dwID);
 }
 
-
-/* ========================================================================= */
-/* ŠÖ”–¼	:CUraraSockTCPSBO::GetIPAddress									 */
-/* “à—e		:IPƒAƒhƒŒƒX‚ðŽæ“¾												 */
-/* “ú•t		:2005/03/28														 */
-/* ========================================================================= */
-
+// IPã‚¢ãƒ‰ãƒ¬ã‚¹å–å¾—
 DWORD CUraraSockTCPSBO::GetIPAddress(DWORD dwID)
 {
-	if (m_pSock == NULL) {
-		return 0;
-	}
-
-	return m_pSock->GetIPAddress (dwID);
+    if (m_pSock == NULL) {
+        return 0;
+    }
+    return m_pSock->GetIPAddress(dwID);
 }
 
-/* Copyright(C)URARA-works 2006 */

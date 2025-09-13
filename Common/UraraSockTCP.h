@@ -1,74 +1,212 @@
-/* Copyright(C)URARA-works 2008 */
+/* Copyright(C)URARA-works 2003-2005 */
 /* ========================================================================= */
-/* ÉtÉ@ÉCÉãñº	:UraraSockTCP.h												 */
-/* ì‡óe			:îƒópTCPí êMÉNÉâÉX íËã`ÉtÉ@ÉCÉã								 */
-/* çÏê¨			:îNÇ™ÇÁîNíÜètÇ§ÇÁÇÁ(URARA-works)							 */
-/* çÏê¨äJénì˙	:2003/10/28													 */
+/* CUraraSockTCP.h                                                            */
+/* Ê±éÁî®TCPÈÄö‰ø°„ÇØ„É©„Çπ                                                         */
 /* ========================================================================= */
 
-#pragma once
+#ifndef CURARASOCKTCP_H
+#define CURARASOCKTCP_H
 
-#define DLLURARASOCKTCP_API __declspec(dllexport)
+#define URARASOCK_USEZLIB
 
-/* ========================================================================= */
-/* íËêîÇÃíËã`																 */
-/* ========================================================================= */
-
-#ifndef SAFE_DELETE
-	#define SAFE_DELETE(p)			{ if(p) { delete (p);	(p)=NULL; } }
-#endif
-#ifndef SAFE_DELETE_ARRAY
-	#define SAFE_DELETE_ARRAY(p)	{ if(p) { delete[] (p);	(p)=NULL; } }
+#include "CWinsockStart.h"
+#ifdef URARASOCK_USEZLIB
+#include "myZlib/myZlib.h"
 #endif
 
-#define URARASOCK_SENDALL		0x00000000						/* ëSàıÇ…ëóêM */
+#include "myArray.h"
 
-/* ÉEÉBÉìÉhÉEÉÅÉbÉZÅ[ÉW(ê›íËÇµÇΩäÓèÄílÅ{à»â∫ÇÃíl) */
+class CCRC;
+
+// ÂÆöÊï∞ÂÆöÁæ©
+#define WNDCLNAMESVR    "TCPMainWindowSvr"
+#define WNDCLNAMECLI    "TCPMainWindowCli"
+#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
+#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
+
+#define URARASOCK_MAXCONNECT    200
+#define URARASOCK_IDBASE        100000
+#define URARASOCK_SENDALL       0xFFFFFFFF
+#define URARASOCK_PRECHECK      0x56BB3E5E
+#define URARASOCK_RECVBUFSIZE   (1024*64)
+#define URARASOCK_USEZLIBSIZE   (128)
+
+#define TIMERID_KEEPALIVE       0
+#define TIMERID_KEEPALIVE_CLI   1
+#define TIME_KEEPALIVE          60000
+#define TIME_KEEPALIVE_CLI      30000
+
+// „Ç¶„Ç£„É≥„Éâ„Ç¶„É°„ÉÉ„Çª„Éº„Ç∏
 enum {
-	WM_URARASOCK_HOST = 0,										/* ë“ÇøéÛÇØäJén */
-	WM_URARASOCK_ADDCLIENT,										/* ÉNÉâÉCÉAÉìÉgÇ™ê⁄ë±ÇµÇΩ */
-	WM_URARASOCK_DECCLIENT,										/* ÉNÉâÉCÉAÉìÉgÇ™êÿífÇµÇΩ */
-	WM_URARASOCK_CONNECT,										/* ÉTÅ[ÉoÅ[Ç…ê⁄ë±ÇµÇΩ */
-	WM_URARASOCK_DISCONNECT,									/* ÉTÅ[ÉoÅ[Ç∆êÿífÇµÇΩ */
-	WM_URARASOCK_RECV,											/* ÉfÅ[É^éÛêM */
-	WM_URARASOCK_SEND,											/* ÉfÅ[É^ëóêM */
-	WM_URARASOCK_MAX
+    WM_SOCKADDQUE = WM_APP + 200,
+    WM_SOCKCANCELQUE,
+    WM_SOCKPRECHECK,
+
+    WM_URARASOCK_HOST,
+    WM_URARASOCK_ADDCLIENT,
+    WM_URARASOCK_DECCLIENT,
+    WM_URARASOCK_CONNECT,
+    WM_URARASOCK_DISCONNECT,
+    WM_URARASOCK_RECV,
+
+    WM_URARASOCK_SEND,
+    WM_SOCKEVENT,
 };
 
-/* ëóêMóDêÊèáà  */
+// ÈÄÅ‰ø°ÂÑ™ÂÖàÈ†Ü‰Ωç
 enum URARASOCK_SENDPRIORITY {
-	URARASOCK_SENDPRIORITY_HIGH = 0,							/* çÇÇ¢ */
-	URARASOCK_SENDPRIORITY_MIDDLE,								/* ïÅí  */
-	URARASOCK_SENDPRIORITY_LOW,									/* í·Ç¢ */
+    URARASOCK_SENDPRIORITY_HIGH = 0,
+    URARASOCK_SENDPRIORITY_MIDDLE,
+    URARASOCK_SENDPRIORITY_LOW,
 };
 
+// Âãï‰Ωú„É¢„Éº„Éâ
+enum {
+    URARASOCKMODE_SREVER = 0,
+    URARASOCKMODE_CLIENT,
+};
 
-/* ========================================================================= */
-/* ÉNÉâÉXêÈåæ																 */
-/* ========================================================================= */
+// ÊßãÈÄ†‰Ωì
+typedef struct _URARASOCK_PACKETINFO {
+    DWORD dwSize;
+    DWORD dwCRC;
+} URARASOCK_PACKETINFO, *PURARASOCK_PACKETINFO;
 
-class CUraraSockTCP
-{
+typedef struct _URARASOCK_QUEINFO {
+    URARASOCK_PACKETINFO PacketInfo;
+    BYTE  byPriority;
+    PBYTE pData;
+    DWORD dwSize;
+    DWORD dwTimeMake;
+    DWORD dwTimeOut;
+} URARASOCK_QUEINFO, *PURARASOCK_QUEINFO;
+
+typedef struct _URARASOCK_ADDQUEINFO {
+    BYTE  byPriority;
+    PBYTE pData;
+    DWORD dwSize;
+    DWORD dwTimeOut;
+    DWORD dwCRC;
+} URARASOCK_ADDQUEINFO, *PURARASOCK_ADDQUEINFO;
+
+// „Çπ„É≠„ÉÉ„Éà„ÇØ„É©„Çπ
+class CUraraSockTCPSlot {
 public:
-	virtual void	DeleteRecvData		(PBYTE pData)									= 0;	/* éÛêMÉfÅ[É^ÇçÌèú */
-	virtual void	Destroy				(void)											= 0;	/* å„énññ */
-	virtual BOOL	Host				(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)	= 0;	/* ê⁄ë±ë“ÇøäJén */
-	virtual BOOL	Connect				(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)	= 0;	/* ÉTÅ[ÉoÅ[Ç÷ê⁄ë± */
-	virtual void	DeleteClient		(DWORD dwID)									= 0;	/* ÉNÉâÉCÉAÉìÉgÇêÿíf */
-	virtual void	SendCancel			(DWORD dwID = 0)								= 0;	/* ëóêMÉLÉÉÉìÉZÉã */
-	virtual void	Send				(PBYTE pData, DWORD dwSize, BYTE byPriority = URARASOCK_SENDPRIORITY_MIDDLE)				= 0;	/* ÉTÅ[ÉoÅ[Ç÷ÉfÅ[É^ëóêM */
-	virtual void	SendTo				(DWORD dwID, PBYTE pData, DWORD dwSize, BYTE byPriority = URARASOCK_SENDPRIORITY_MIDDLE)	= 0;	/* ÉNÉâÉCÉAÉìÉgÇ÷ÉfÅ[É^ëóêM */
-	virtual DWORD	GetThrowghPutSend	(DWORD dwID)									= 0;	/* ÉäÉìÉNÅEÉXÉãÅ[ÉvÉbÉgó ÇéÊìæ */
-	virtual DWORD	GetThrowghPutRecv	(DWORD dwID)									= 0;	/* ÉäÉìÉNÅEÉXÉãÅ[ÉvÉbÉgó ÇéÊìæ */
-	virtual DWORD	GetQueCount			(DWORD dwID)									= 0;	/* ÉLÉÖÅ[êîÇéÊìæ */
-	virtual DWORD	GetIPAddress		(DWORD dwID)									= 0;	/* IPÉAÉhÉåÉXÇéÊìæ */
+    CUraraSockTCPSlot(void);
+    virtual ~CUraraSockTCPSlot(void);
+
+    BOOL Create(SOCKET, DWORD, HWND, DWORD);
+    void AddQue(PURARASOCK_ADDQUEINFO);
+    void Combine(CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> *);
+    void CancelQue(void);
+    void Destroy(void);
+    DWORD GetThrowghPutSend(void);
+    DWORD GetThrowghPutRecv(void);
+    DWORD GetQueCount(void);
+    DWORD GetIPAddress(void);
+
+    void OnFD_WRITE(void);
+    void OnFD_READ(void);
+
+private:
+    void RenewThrowghPut(void);
+
+public:
+    SOCKET  m_socket;
+    DWORD   m_dwSockID;
+    DWORD   m_dwTimeLastRecv;
+    DWORD   m_dwPreCheck;
+    BOOL    m_bPreCheck;
+
+private:
+    CCRC    *m_pCrc;
+    SOCKADDR_IN m_sockAddr;
+    WORD    m_wPort;
+    DWORD   m_dwMsgID;
+    DWORD   m_dwTimeConnect;
+    DWORD   m_dwSendSize;
+    DWORD   m_dwRecvSize;
+    DWORD   m_dwRecvSizeTarget;
+    DWORD   m_dwRecvCrc;
+    DWORD   m_dwSendDataSize;
+    DWORD   m_dwRecvDataSize;
+    DWORD   m_dwThrowghPutSend;
+    DWORD   m_dwThrowghPutRecv;
+    DWORD   m_dwTimeThrowghPut;
+    PBYTE   m_pRecvTmp;
+    PBYTE   m_pRecvBuffer;
+    HWND    m_hWndParent;
+    HWND    m_hWnd;
+    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> *m_SendQueInfo;
+    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> m_QueInfoHi;
+    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> m_QueInfoMid;
+    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> m_QueInfoLow;
 };
 
-extern "C"{
-DLLURARASOCKTCP_API CUraraSockTCP *GetUraraSockTCP(void);			/* ÉNÉâÉXÇÃÉ|ÉCÉìÉ^ÇéÊìæ */
-DLLURARASOCKTCP_API void ReleaseUraraSockTCP(CUraraSockTCP *&pSrc);	/* ÉNÉâÉXÇÃÉ|ÉCÉìÉ^Çâï˙ */
-}
-typedef CUraraSockTCP *(*PFGETURARASOCKTCP)(void);
-typedef void (*PFRELEASEURARASOCKTCP)(CUraraSockTCP *&pSrc);
+// „É°„Ç§„É≥„ÇØ„É©„Çπ
+class CUraraSockTCP {
+public:
+    CUraraSockTCP(void);
+    virtual ~CUraraSockTCP(void);
 
-/* Copyright(C)URARA-works 2008 */
+    void DeleteRecvData(PBYTE pData);
+    void Destroy(void);
+    BOOL Host(HWND, WORD, DWORD);
+    BOOL Connect(HWND, WORD, LPSTR);
+    void DeleteClient(DWORD);
+    void SendCancel(DWORD dwID = 0);
+    void Send(PBYTE, DWORD);
+    void Send(PBYTE, DWORD, BYTE);
+    void Send(PBYTE, DWORD, DWORD);
+    void Send(PBYTE, DWORD, DWORD, BYTE);
+    void SendTo(DWORD, PBYTE, DWORD);
+    void SendTo(DWORD, PBYTE, DWORD, BYTE);
+    void SendTo(DWORD, PBYTE, DWORD, DWORD);
+    void SendTo(DWORD, PBYTE, DWORD, DWORD, BYTE);
+    DWORD GetThrowghPutSend(DWORD);
+    DWORD GetThrowghPutRecv(DWORD);
+    DWORD GetQueCount(DWORD);
+    DWORD GetIPAddress(DWORD);
+
+private:
+    static void __cdecl ThreadEntry(void* pParam);
+    BOOL ThreadInit();
+    void ThreadMain();
+    void ThreadExit();
+
+    void InitData(void);
+    static LRESULT CALLBACK MainProcEntry(HWND, UINT, WPARAM, LPARAM);
+    LRESULT WndProc(HWND, UINT, WPARAM, LPARAM);
+    BOOL MainOnCreate(HWND, LPCREATESTRUCT);
+    void MainOnDestroy(HWND);
+    void MainOnSockEvent(HWND, int, DWORD);
+    void OnSockACCEPT(void);
+    void OnConnect(void);
+    void OnSockClose(DWORD);
+    void OnSockWrite(DWORD);
+    void OnSockRead(DWORD);
+
+private:
+    CCRC            *m_pCrc;
+    CWinsockStart   m_Winsock;
+    SOCKADDR_IN     m_sockAddr;
+    SOCKET          m_socket;
+    HANDLE          m_hThread;
+    HANDLE          m_hEvent;
+    WORD            m_wPort;
+    DWORD           m_dwConnectCount;
+    DWORD           m_dwSendID;
+    DWORD           m_dwMaxConnectCount;
+    HWND            m_hWndParent;
+    HWND            m_hWnd;
+    BYTE            m_byMode;
+    CUraraSockTCPSlot *m_pSlot;
+#ifdef URARASOCK_USEZLIB
+    CmyZlib         m_Zlib;
+#endif
+};
+
+#endif
+
+/* Copyright(C)URARA-works 2003-2005 */
+
