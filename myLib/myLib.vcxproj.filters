@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{2d39cc4c-54f7-4b78-87e2-a147601d2d47}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\myZlib">
+      <UniqueIdentifier>{9d041f69-629d-4100-af54-926b9599d29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{cc5a2ff7-2ed6-4a8e-b59d-1b829bc6ea21}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\myZlib No. 1">
+      <UniqueIdentifier>{8b5f017c-5f90-4d29-abcd-ed56fd5e8037}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Common\myLib\mySection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\myLib\myString.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\myLib\myThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\myLib\myZlib\myZlib.cpp">
+      <Filter>Source Files\myZlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\myLib\myArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myArrayImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\myLib\mySection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\myLib\myThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myZlib\myZlib.h">
+      <Filter>Header Files\myZlib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myZlib\zconf.h">
+      <Filter>Header Files\myZlib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myZlib\zlib.h">
+      <Filter>Header Files\myZlib No. 1</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

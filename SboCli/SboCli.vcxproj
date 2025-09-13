@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7A9104A8-45F0-40D3-AE44-A404B5F8F394}</ProjectGuid>
+    <RootNamespace>SboCli</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.31515.66</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/SboCli.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Debug/SboCli.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+      <AdditionalIncludeDirectories>..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>.\Debug/SboCli.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <ProgramDatabaseFile>.\Debug/SboCli.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/SboCli.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/SboCli.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>.\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Release/SboCli.pch</PrecompiledHeaderOutputFile>
+      <AssemblerOutput>All</AssemblerOutput>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+      <AdditionalIncludeDirectories>..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/Ignore:4089 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>../Release/SboCli.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Release/SboCli.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/SboCli.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common\crc.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAccount.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
+    <ClCompile Include="..\Common\Info\InfoBase.cpp" />
+    <ClCompile Include="..\common\Info\InfoCharBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoDisable.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEffect.cpp" />
+    <ClCompile Include="..\Common\Info\InfoFileList.cpp" />
+    <ClCompile Include="..\Common\Info\InfoFishing.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItemType\InfoItemTypeBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItemWeapon.cpp" />
+    <ClCompile Include="..\common\Info\InfoMapBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObject.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapParts.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMotion.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMotionType.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSystem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTextEffect.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoAccount.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoBase.cpp" />
+    <ClCompile Include="..\common\LibInfo\LibInfoCharBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoDisable.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEffect.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItem.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemWeapon.cpp" />
+    <ClCompile Include="..\common\LibInfo\LibInfoMapBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapEvent.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObject.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapParts.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotion.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoSystem.cpp" />
+    <ClCompile Include="..\Common\Lib\CryptUtil.cpp" />
+    <ClCompile Include="..\Common\Lib\DataSlot.cpp" />
+    <ClCompile Include="..\Common\Lib\LayoutHelper.cpp" />
+    <ClCompile Include="..\Common\Lib\mfc\LogViewCtrl.cpp" />
+    <ClCompile Include="..\Common\Lib\ParamUtil.cpp" />
+    <ClCompile Include="..\Common\Lib\TextOutput.cpp" />
+    <ClCompile Include="..\common\mt19937int.cpp" />
+    <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="src\AdminWindow.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminAccountAdd.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminBase.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharAccountInfo.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharAddNPC.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharAdmin.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharDisable.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharDisableNew.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharModify.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyGrp.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyItem.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharModifySkill.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyStatus.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyTypeBase.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyTypePUTNPC.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharMotion.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharMotionList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharMotionTypeList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillBase.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillHEAL.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillMOVEATACK.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillNONE.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminEfcBalloon.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminEfcBalloonList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminEfcEffect.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminEfcEffectList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemNew.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNew.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewARMS.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewARMSBow.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewHP.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewLIGHT.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemWeaponList.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminItemWeaponNew.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEvent.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEventBase.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEventGRPIDTMP.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEventINITSTATUS.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEventLIGHT.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEventMAPMOVE.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEventMOVE.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapEventNONE.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapInfo.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapObject.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapObjectData.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapObjectDataEdit.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapObjectEdit.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapParts.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapPartsEdit.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapShadow.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminMapShadowEdit.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminSelectEffect.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminSelectItem.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminServerInfo.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminSystemSetInitCharStatus.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventADDSKILL.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventBase.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventMENU.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventMENUSet.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventMSG.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventNONE.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventPAGE.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventSet.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventTab.cpp" />
+    <ClCompile Include="src\Dialog\DlgAdminTalkSet.cpp" />
+    <ClCompile Include="src\Dialog\DlgDbg.cpp" />
+    <ClCompile Include="src\Dialog\DlgMsgLog.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoCharCli.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharATACKANIMECli.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharBALLCli.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharMOVEATACKCli.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharSCORECli.cpp" />
+    <ClCompile Include="src\Layer\LayerBase.cpp" />
+    <ClCompile Include="src\Layer\LayerCharSelect.cpp" />
+    <ClCompile Include="src\Layer\LayerCloud.cpp" />
+    <ClCompile Include="src\Layer\LayerInfo.cpp" />
+    <ClCompile Include="src\Layer\LayerLoginMenu.cpp" />
+    <ClCompile Include="src\Layer\LayerLogo.cpp" />
+    <ClCompile Include="src\Layer\LayerMap.cpp" />
+    <ClCompile Include="src\Layer\LayerMisty.cpp" />
+    <ClCompile Include="src\Layer\LayerSnow.cpp" />
+    <ClCompile Include="src\Layer\LayerSystemMsg.cpp" />
+    <ClCompile Include="src\Layer\LayerTitle.cpp" />
+    <ClCompile Include="src\LibInfo\LibInfoCharCli.cpp" />
+    <ClCompile Include="src\LibSboSoundLoader.cpp" />
+    <ClCompile Include="src\Lib\DInputUtil.cpp" />
+    <ClCompile Include="src\Lib\DXAudio.cpp" />
+    <ClCompile Include="src\Lib\Img32.cpp" />
+    <ClCompile Include="src\Lib\LibMusicLoader.cpp" />
+    <ClCompile Include="src\Lib\MacAddr.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrame.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCHAR.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCONNECT.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcEFFECT.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcITEM.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcMAP.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcSKILL.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcSYSTEM.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp" />
+    <ClCompile Include="src\MgrData.cpp" />
+    <ClCompile Include="src\MgrDraw.cpp" />
+    <ClCompile Include="src\MgrGrpData.cpp" />
+    <ClCompile Include="src\MgrKeyInput.cpp" />
+    <ClCompile Include="src\MgrLayer.cpp" />
+    <ClCompile Include="src\MgrSound.cpp" />
+    <ClCompile Include="src\MgrWindow.cpp" />
+    <ClCompile Include="src\SboCli.cpp" />
+    <ClCompile Include="src\StateProc\StateProcBase.cpp" />
+    <ClCompile Include="src\StateProc\StateProcDISCONNECT.cpp" />
+    <ClCompile Include="src\StateProc\StateProcINFO.cpp" />
+    <ClCompile Include="src\StateProc\StateProcLOGIN.cpp" />
+    <ClCompile Include="src\StateProc\StateProcLOGINMENU.cpp" />
+    <ClCompile Include="src\StateProc\StateProcLOGO.cpp" />
+    <ClCompile Include="src\StateProc\StateProcMAP.cpp" />
+    <ClCompile Include="src\Window\WindowACCOUNTINFO.cpp" />
+    <ClCompile Include="src\Window\WindowBase.cpp" />
+    <ClCompile Include="src\Window\WindowCHARNAME.cpp" />
+    <ClCompile Include="src\Window\WindowCHAR_STATUS.cpp" />
+    <ClCompile Include="src\Window\WindowCHAR_STATUS2.cpp" />
+    <ClCompile Include="src\Window\WindowCHAR_STATUS3.cpp" />
+    <ClCompile Include="src\Window\WindowCHAR_STATUS4.cpp" />
+    <ClCompile Include="src\Window\WindowCHAT.cpp" />
+    <ClCompile Include="src\Window\WindowCOMMANDMENU.cpp" />
+    <ClCompile Include="src\Window\WindowEYECOLOR.cpp" />
+    <ClCompile Include="src\Window\WindowFAMILYTYPE.cpp" />
+    <ClCompile Include="src\Window\WindowHAIRCOLOR.cpp" />
+    <ClCompile Include="src\Window\WindowHAIRTYPE.cpp" />
+    <ClCompile Include="src\Window\WindowITEMMENU.cpp" />
+    <ClCompile Include="src\Window\WindowITEMMENU_SELECT.cpp" />
+    <ClCompile Include="src\Window\WindowLOGIN.cpp" />
+    <ClCompile Include="src\Window\WindowLOGINMENU.cpp" />
+    <ClCompile Include="src\Window\WindowMSG.cpp" />
+    <ClCompile Include="src\Window\WindowNAMEINPUT.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION_ACTIONSET.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION_ACTIONSET_SLEEPTIMER.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION_INPUTSET.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION_INPUTSET_SETDEVICE.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION_TASKBAR.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION_VIEWSET.cpp" />
+    <ClCompile Include="src\Window\WindowOPTION_VOLUMESET.cpp" />
+    <ClCompile Include="src\Window\WindowPLACEINFORMATION.cpp" />
+    <ClCompile Include="src\Window\WindowSETBGMVOLUME.cpp" />
+    <ClCompile Include="src\Window\WindowSETCOLOR.cpp" />
+    <ClCompile Include="src\Window\WindowSETDRAWMODE.cpp" />
+    <ClCompile Include="src\Window\WindowSETSOUNDVOLUME.cpp" />
+    <ClCompile Include="src\Window\WindowSEX.cpp" />
+    <ClCompile Include="src\Window\WindowSKILLMENU.cpp" />
+    <ClCompile Include="src\Window\WindowSTATUS.cpp" />
+    <ClCompile Include="src\Window\WindowSTYLESELECT.cpp" />
+    <ClCompile Include="src\Window\WindowSWOON.cpp" />
+    <ClCompile Include="src\Window\WindowSYSTEMMENU.cpp" />
+    <ClCompile Include="src\Window\WindowTEXTMSG.cpp" />
+    <ClCompile Include="src\Wnd\ListCtrlEffectInfo.cpp" />
+    <ClCompile Include="src\Wnd\ListCtrlItemInfo.cpp" />
+    <ClCompile Include="src\Wnd\StaticGrp.cpp" />
+    <ClCompile Include="src\Wnd\StaticMapObjectGrp.cpp" />
+    <ClCompile Include="src\Wnd\StaticMapParts.cpp" />
+    <ClCompile Include="src\Wnd\StaticMapShadow.cpp" />
+    <ClCompile Include="src\Wnd\WndMap.cpp" />
+    <ClCompile Include="src\Wnd\WndMapPartsAnimeList.cpp" />
+    <ClCompile Include="src\Wnd\WndMapPartsGrp.cpp" />
+    <ClCompile Include="src\Wnd\WndMapShadowAnimeList.cpp" />
+    <ClCompile Include="src\Wnd\WndMapShadowGrp.cpp" />
+    <ClCompile Include="src\Wnd\WndSelectGrp.cpp" />
+    <ClCompile Include="src\Wnd\WndSelectItemGrp.cpp" />
+    <ClCompile Include="src\Wnd\WndSelectMapPartsGrp.cpp" />
+    <ClCompile Include="src\Wnd\WndSelectMapShadowGrp.cpp" />
+    <ClCompile Include="src\Wnd\WndToolbar.cpp" />
+    <ClCompile Include="StdAfx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\crc.h" />
+    <ClInclude Include="..\common\GlobalDefine.h" />
+    <ClInclude Include="..\Common\Info\InfoAccount.h" />
+    <ClInclude Include="..\Common\Info\InfoAnime.h" />
+    <ClInclude Include="..\Common\Info\InfoBase.h" />
+    <ClInclude Include="..\common\Info\InfoCharBase.h" />
+    <ClInclude Include="..\Common\Info\InfoDisable.h" />
+    <ClInclude Include="..\Common\Info\InfoEfcBalloon.h" />
+    <ClInclude Include="..\Common\Info\InfoEffect.h" />
+    <ClInclude Include="..\Common\Info\InfoFileList.h" />
+    <ClInclude Include="..\Common\Info\InfoFishing.h" />
+    <ClInclude Include="..\Common\Info\InfoItem.h" />
+    <ClInclude Include="..\Common\Info\InfoItemType\InfoItemTypeBase.h" />
+    <ClInclude Include="..\Common\Info\InfoItemWeapon.h" />
+    <ClInclude Include="..\common\Info\InfoMapBase.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEvent.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.h" />
+    <ClInclude Include="..\Common\Info\InfoMapObject.h" />
+    <ClInclude Include="..\Common\Info\InfoMapObjectData.h" />
+    <ClInclude Include="..\Common\Info\InfoMapParts.h" />
+    <ClInclude Include="..\Common\Info\InfoMapShadow.h" />
+    <ClInclude Include="..\Common\Info\InfoMotion.h" />
+    <ClInclude Include="..\Common\Info\InfoMotionType.h" />
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillBase.h" />
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillHEAL.h" />
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.h" />
+    <ClInclude Include="..\Common\Info\InfoSystem.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.h" />
+    <ClInclude Include="..\Common\Info\InfoTextEffect.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoAccount.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoBase.h" />
+    <ClInclude Include="..\common\LibInfo\LibInfoCharBase.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoDisable.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoEfcBalloon.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoEffect.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoItem.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemType.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemWeapon.h" />
+    <ClInclude Include="..\common\LibInfo\LibInfoMapBase.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapEvent.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObject.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObjectData.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapParts.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapShadow.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotion.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotionType.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoSkill.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoSystem.h" />
+    <ClInclude Include="..\Common\Lib\CryptUtil.h" />
+    <ClInclude Include="..\Common\Lib\DataSlot.h" />
+    <ClInclude Include="..\Common\Lib\LayoutHelper.h" />
+    <ClInclude Include="..\Common\Lib\mfc\LogViewCtrl.h" />
+    <ClInclude Include="..\Common\Lib\ParamUtil.h" />
+    <ClInclude Include="..\Common\Lib\TextOutput.h" />
+    <ClInclude Include="..\Common\SBOGlobal.h" />
+    <ClInclude Include="..\Common\SBOVersion.h" />
+    <ClInclude Include="..\SboSoundData\SboSoundData.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="src\AdminWindow.h" />
+    <ClInclude Include="src\Dialog\DlgAdminAccountAdd.h" />
+    <ClInclude Include="src\Dialog\DlgAdminBase.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharAccountInfo.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharAddNPC.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharAdmin.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharDisable.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharDisableNew.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharModify.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyGrp.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyItem.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharModifySkill.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyStatus.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyTypeBase.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyTypePUTNPC.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharMotion.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharMotionList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharMotionTypeList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillBase.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillHEAL.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillMOVEATACK.h" />
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillNONE.h" />
+    <ClInclude Include="src\Dialog\DlgAdminEfcBalloon.h" />
+    <ClInclude Include="src\Dialog\DlgAdminEfcBalloonList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminEfcEffect.h" />
+    <ClInclude Include="src\Dialog\DlgAdminEfcEffectList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemNew.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNew.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewARMS.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewARMSBow.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewHP.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewLIGHT.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemWeaponList.h" />
+    <ClInclude Include="src\Dialog\DlgAdminItemWeaponNew.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEvent.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEventBase.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEventGRPIDTMP.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEventINITSTATUS.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEventLIGHT.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEventMAPMOVE.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEventMOVE.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapEventNONE.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapInfo.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapObject.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapObjectData.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapObjectDataEdit.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapObjectEdit.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapParts.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapPartsEdit.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapShadow.h" />
+    <ClInclude Include="src\Dialog\DlgAdminMapShadowEdit.h" />
+    <ClInclude Include="src\Dialog\DlgAdminSelectEffect.h" />
+    <ClInclude Include="src\Dialog\DlgAdminSelectItem.h" />
+    <ClInclude Include="src\Dialog\DlgAdminServerInfo.h" />
+    <ClInclude Include="src\Dialog\DlgAdminSystemSetInitCharStatus.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventADDSKILL.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventBase.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventMENU.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventMENUSet.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventMSG.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventNONE.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventPAGE.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventSet.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventTab.h" />
+    <ClInclude Include="src\Dialog\DlgAdminTalkSet.h" />
+    <ClInclude Include="src\Dialog\DlgDbg.h" />
+    <ClInclude Include="src\Dialog\DlgMsgLog.h" />
+    <ClInclude Include="src\Info\InfoCharCli.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharATACKANIMECli.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharBALLCli.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharMOVEATACKCli.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharSCORECli.h" />
+    <ClInclude Include="src\Layer\LayerBase.h" />
+    <ClInclude Include="src\Layer\LayerCharSelect.h" />
+    <ClInclude Include="src\Layer\LayerCloud.h" />
+    <ClInclude Include="src\Layer\LayerInfo.h" />
+    <ClInclude Include="src\Layer\LayerLoginMenu.h" />
+    <ClInclude Include="src\Layer\LayerLogo.h" />
+    <ClInclude Include="src\Layer\LayerMap.h" />
+    <ClInclude Include="src\Layer\LayerMisty.h" />
+    <ClInclude Include="src\Layer\LayerSnow.h" />
+    <ClInclude Include="src\Layer\LayerSystemMsg.h" />
+    <ClInclude Include="src\Layer\LayerTitle.h" />
+    <ClInclude Include="src\LibInfo\LibInfoCharCli.h" />
+    <ClInclude Include="src\LibSboSoundLoader.h" />
+    <ClInclude Include="src\Lib\Audiere\Audiere.h" />
+    <ClInclude Include="src\Lib\DInputUtil.h" />
+    <ClInclude Include="src\Lib\DXAudio.h" />
+    <ClInclude Include="src\Lib\Img32.h" />
+    <ClInclude Include="src\Lib\LibMusicLoader.h" />
+    <ClInclude Include="src\Lib\MacAddr.h" />
+    <ClInclude Include="src\Lib\Png\png.h" />
+    <ClInclude Include="src\Lib\Png\pngconf.h" />
+    <ClInclude Include="src\MainFrame\MainFrame.h" />
+    <ClInclude Include="src\MgrData.h" />
+    <ClInclude Include="src\MgrDraw.h" />
+    <ClInclude Include="src\MgrGrpData.h" />
+    <ClInclude Include="src\MgrKeyInput.h" />
+    <ClInclude Include="src\MgrLayer.h" />
+    <ClInclude Include="src\MgrSound.h" />
+    <ClInclude Include="src\MgrWindow.h" />
+    <ClInclude Include="src\SboCli.h" />
+    <ClInclude Include="src\SboCli_priv.h" />
+    <ClInclude Include="src\StateProc\StateProc.h" />
+    <ClInclude Include="src\StateProc\StateProcBase.h" />
+    <ClInclude Include="src\StateProc\StateProcDISCONNECT.h" />
+    <ClInclude Include="src\StateProc\StateProcINFO.h" />
+    <ClInclude Include="src\StateProc\StateProcLOGIN.h" />
+    <ClInclude Include="src\StateProc\StateProcLOGINMENU.h" />
+    <ClInclude Include="src\StateProc\StateProcLOGO.h" />
+    <ClInclude Include="src\StateProc\StateProcMAP.h" />
+    <ClInclude Include="src\Window\WindowACCOUNTINFO.h" />
+    <ClInclude Include="src\Window\WindowBase.h" />
+    <ClInclude Include="src\Window\WindowCHARNAME.h" />
+    <ClInclude Include="src\Window\WindowCHAR_STATUS.h" />
+    <ClInclude Include="src\Window\WindowCHAR_STATUS2.h" />
+    <ClInclude Include="src\Window\WindowCHAR_STATUS3.h" />
+    <ClInclude Include="src\Window\WindowCHAR_STATUS4.h" />
+    <ClInclude Include="src\Window\WindowCHAT.h" />
+    <ClInclude Include="src\Window\WindowCOMMANDMENU.h" />
+    <ClInclude Include="src\Window\WindowEYECOLOR.h" />
+    <ClInclude Include="src\Window\WindowFAMILYTYPE.h" />
+    <ClInclude Include="src\Window\WindowHAIRCOLOR.h" />
+    <ClInclude Include="src\Window\WindowHAIRTYPE.h" />
+    <ClInclude Include="src\Window\WindowITEMMENU.h" />
+    <ClInclude Include="src\Window\WindowITEMMENU_SELECT.h" />
+    <ClInclude Include="src\Window\WindowLOGIN.h" />
+    <ClInclude Include="src\Window\WindowLOGINMENU.h" />
+    <ClInclude Include="src\Window\WindowMSG.h" />
+    <ClInclude Include="src\Window\WindowNAMEINPUT.h" />
+    <ClInclude Include="src\Window\WindowOPTION.h" />
+    <ClInclude Include="src\Window\WindowOPTION_ACTIONSET.h" />
+    <ClInclude Include="src\Window\WindowOPTION_ACTIONSET_SLEEPTIMER.h" />
+    <ClInclude Include="src\Window\WindowOPTION_INPUTSET.h" />
+    <ClInclude Include="src\Window\WindowOPTION_INPUTSET_SETDEVICE.h" />
+    <ClInclude Include="src\Window\WindowOPTION_TASKBAR.h" />
+    <ClInclude Include="src\Window\WindowOPTION_VIEWSET.h" />
+    <ClInclude Include="src\Window\WindowOPTION_VOLUMESET.h" />
+    <ClInclude Include="src\Window\WindowPLACEINFORMATION.h" />
+    <ClInclude Include="src\Window\WindowSETBGMVOLUME.h" />
+    <ClInclude Include="src\Window\WindowSETCOLOR.h" />
+    <ClInclude Include="src\Window\WindowSETDRAWMODE.h" />
+    <ClInclude Include="src\Window\WindowSETSOUNDVOLUME.h" />
+    <ClInclude Include="src\Window\WindowSEX.h" />
+    <ClInclude Include="src\Window\WindowSKILLMENU.h" />
+    <ClInclude Include="src\Window\WindowSTATUS.h" />
+    <ClInclude Include="src\Window\WindowSTYLESELECT.h" />
+    <ClInclude Include="src\Window\WindowSWOON.h" />
+    <ClInclude Include="src\Window\WindowSYSTEMMENU.h" />
+    <ClInclude Include="src\Window\WindowTEXTMSG.h" />
+    <ClInclude Include="src\Wnd\ListCtrlEffectInfo.h" />
+    <ClInclude Include="src\Wnd\ListCtrlItemInfo.h" />
+    <ClInclude Include="src\Wnd\StaticGrp.h" />
+    <ClInclude Include="src\Wnd\StaticMapObjectGrp.h" />
+    <ClInclude Include="src\Wnd\StaticMapParts.h" />
+    <ClInclude Include="src\Wnd\StaticMapShadow.h" />
+    <ClInclude Include="src\Wnd\WndMap.h" />
+    <ClInclude Include="src\Wnd\WndMapPartsAnimeList.h" />
+    <ClInclude Include="src\Wnd\WndMapPartsGrp.h" />
+    <ClInclude Include="src\Wnd\WndMapShadowAnimeList.h" />
+    <ClInclude Include="src\Wnd\WndMapShadowGrp.h" />
+    <ClInclude Include="src\Wnd\WndSelectGrp.h" />
+    <ClInclude Include="src\Wnd\WndSelectItemGrp.h" />
+    <ClInclude Include="src\Wnd\WndSelectMapPartsGrp.h" />
+    <ClInclude Include="src\Wnd\WndSelectMapShadowGrp.h" />
+    <ClInclude Include="src\Wnd\WndToolbar.h" />
+    <ClInclude Include="StdAfx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MsgLog.html" />
+    <None Include="res\SboCli.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\SboCli.exe.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\SboCli.ico" />
+    <Image Include="res\SBOｱｲｺﾝ.ico" />
+    <Image Include="res\Toolbar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboCli.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\myLib\myLib.vcxproj">
+      <Project>{277a614e-bccb-4abf-a0d9-856356071b8a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\SboSockLib\SboSockLib.vcxproj">
+      <Project>{36b127cf-63af-4864-93ab-4f9d40e17c9a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="SboCli.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

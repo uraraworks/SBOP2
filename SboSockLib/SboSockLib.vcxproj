@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{36B127CF-63AF-4864-93AB-4F9D40E17C9A}</ProjectGuid>
+    <RootNamespace>SboSockLib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.31515.66</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>.\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Packet\SKILL;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\LibInfo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Release/SboSockLib.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>.\Release\SboSockLib.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/SboSockLib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Packet\SKILL;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\LibInfo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Debug/SboSockLib.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>.\Debug\SboSockLib.lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/SboSockLib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Common\myLib\myString.cpp" />
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.cpp" />
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDMOTIONTYPE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDNPC.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYITEM.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYSKILL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTION.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTIONTYPE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWSTATUS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_ACCOUNT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_TALKEVENT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_REQ_ACCOUNT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ACCOUNT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ONLINE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RENEWINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RES_INFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWBALLOON.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWEFFECT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_COPY.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_DELETE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_RENEW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_COPY.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_DELETE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_COPYPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_EVENT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPOBJECT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPSIZE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWOBJECTDATA.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPNAME.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_PARA2.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_PLAYSOUND.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWADMINLEVEL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEW_CLIENTVERSION.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_ADMINLEVEL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_PLAYSOUND.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RES_ADMINLEVEL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SERVER_SAVEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SKILL_RENEWSKILL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SYSTEM_RENEWINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\BATTLE\PacketBATTLE_REQ_ATACK.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_CHARID.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_CHARINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_CHAT.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_GRP.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_ITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MODIFY_PARAM.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MOTION.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MOTIONTYPE.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MOVEPOS.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_PARA1.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO2.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHAT.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_DRAGITEM.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_EQUIP.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_MODIFY_PARAM.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_TAIL.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_USEITEM.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_CHARINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_PUTGET.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_TAIL.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_TALKEVENT.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFCBALLOON.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFFECT.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_SKILLINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_STATE.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_STATUS.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_TEXTEFFECT.cpp" />
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_KEEPALIVE.cpp" />
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.cpp" />
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.cpp" />
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_LOGIN.cpp" />
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_PLAY.cpp" />
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_BALLOONINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEBALLOONINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEEFFECTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_EFFECTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_BALLOONINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_EFFECTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_RES_EFFECTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMTYPEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_ITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_ITEMTYPEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_ITEMWEAPONINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMTYPEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMTYPEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMWEAPONINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMTYPEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMWEAPONINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_DELETEMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_DELETEPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_FORMATMSG.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPEVENT.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPNAME.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECT.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECTDATA.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_ONLINE.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_PARA1.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_RENEWMAPSIZE.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_REQ_MAPINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_RES_MAPINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_SETMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_SETPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_SYSTEMMSG.cpp" />
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGACCE.cpp" />
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGARMS.cpp" />
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCLOTH.cpp" />
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCOLOR.cpp" />
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGFACE.cpp" />
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_MAKEITEM.cpp" />
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_PARA1.cpp" />
+    <ClCompile Include="..\Common\Packet\PacketBase.cpp" />
+    <ClCompile Include="..\Common\Packet\SKILL\PacketSKILL_PARA2.cpp" />
+    <ClCompile Include="..\Common\Packet\SKILL\PacketSKILL_SKILLINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\SYSTEM\PacketSYSTEM_INFO.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILE.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELIST.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELISTCHECK.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_VERSIONCHECK.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILE.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELIST.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELISTCHECK.cpp" />
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.cpp" />
+    <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\UraraSockTCPSBO.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\GlobalDefine.h" />
+    <ClInclude Include="..\common\myLib\myArray.h" />
+    <ClInclude Include="..\common\myLib\myArrayImpl.h" />
+    <ClInclude Include="..\common\myLib\myString.h" />
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.h" />
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.h" />
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.h" />
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDMOTIONTYPE.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDNPC.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYITEM.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYSKILL.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTION.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTIONTYPE.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWSTATUS.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_ACCOUNT.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_TALKEVENT.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_REQ_ACCOUNT.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ACCOUNT.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ONLINE.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RENEWINFO.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RES_INFO.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWBALLOON.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWEFFECT.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_ADD.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_COPY.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_DELETE.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_ADD.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_RENEW.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_ADD.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_COPY.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_DELETE.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_COPYPARTS.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEMAPSHADOW.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEPARTS.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_EVENT.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPOBJECT.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPSIZE.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWOBJECTDATA.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPNAME.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPSHADOW.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETPARTS.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_PARA2.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_PLAYSOUND.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWADMINLEVEL.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPPARTS.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPSHADOW.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEW_CLIENTVERSION.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_ADMINLEVEL.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_PLAYSOUND.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RES_ADMINLEVEL.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_SERVER_SAVEINFO.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_SKILL_RENEWSKILL.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_SYSTEM_RENEWINFO.h" />
+    <ClInclude Include="..\Common\Packet\BATTLE\PacketBATTLE_REQ_ATACK.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_CHARID.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_CHARINFO.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_CHAT.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_GRP.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_ITEMINFO.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MODIFY_PARAM.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MOTION.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MOTIONTYPE.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MOVEPOS.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_PARA1.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO2.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHAT.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_DRAGITEM.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_EQUIP.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_MODIFY_PARAM.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_TAIL.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_USEITEM.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_CHARINFO.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_PUTGET.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_TAIL.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_TALKEVENT.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFCBALLOON.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFFECT.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_SKILLINFO.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_STATE.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_STATUS.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_TEXTEFFECT.h" />
+    <ClInclude Include="..\Common\Packet\Command.h" />
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_KEEPALIVE.h" />
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.h" />
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.h" />
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_LOGIN.h" />
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_PLAY.h" />
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_BALLOONINFO.h" />
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEBALLOONINFO.h" />
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEEFFECTINFO.h" />
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_EFFECTINFO.h" />
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_BALLOONINFO.h" />
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_EFFECTINFO.h" />
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_RES_EFFECTINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMTYPEINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_ITEMINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_ITEMTYPEINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_ITEMWEAPONINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMTYPEINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMTYPEINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMWEAPONINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMTYPEINFO.h" />
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMWEAPONINFO.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_DELETEMAPSHADOW.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_DELETEPARTS.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_FORMATMSG.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPEVENT.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPNAME.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECT.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECTDATA.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPPARTS.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPSHADOW.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_ONLINE.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_PARA1.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_RENEWMAPSIZE.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_REQ_MAPINFO.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_RES_MAPINFO.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_SETMAPSHADOW.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_SETPARTS.h" />
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_SYSTEMMSG.h" />
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGACCE.h" />
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGARMS.h" />
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCLOTH.h" />
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCOLOR.h" />
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGFACE.h" />
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_MAKEITEM.h" />
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_PARA1.h" />
+    <ClInclude Include="..\Common\Packet\Packet.h" />
+    <ClInclude Include="..\Common\Packet\PacketBase.h" />
+    <ClInclude Include="..\Common\Packet\SKILL\PacketSKILL_PARA2.h" />
+    <ClInclude Include="..\Common\Packet\SKILL\PacketSKILL_SKILLINFO.h" />
+    <ClInclude Include="..\Common\Packet\SYSTEM\PacketSYSTEM_INFO.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILE.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELIST.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELISTCHECK.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_VERSIONCHECK.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILE.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELIST.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELISTCHECK.h" />
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.h" />
+    <ClInclude Include="..\Common\SBOGlobal.h" />
+    <ClInclude Include="..\common\UraraSockTCP.h" />
+    <ClInclude Include="..\Common\UraraSockTCPSBO.h" />
+    <ClInclude Include="StdAfx.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

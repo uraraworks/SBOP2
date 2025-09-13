@@ -1,0 +1,1013 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5bba9798-4eb1-4ab6-aa72-9c83a24778cb}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{f29a705d-7a4e-4818-aee1-25f3150fbc21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\myLib">
+      <UniqueIdentifier>{9fe1ac75-5f5a-4906-bad7-366734a64e71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet">
+      <UniqueIdentifier>{5da551f0-5f51-49bd-8073-e693f2f7e1e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\ACCOUNT">
+      <UniqueIdentifier>{cf2de5e6-2ac8-48ab-bad9-ce1527593436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\ADMIN">
+      <UniqueIdentifier>{cee135a6-c8a6-4436-a3de-4a78ac4de4cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\BATTLE">
+      <UniqueIdentifier>{10d8436e-c741-472b-8241-31d3c557830d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\CHAR">
+      <UniqueIdentifier>{67591cd7-9fce-4d9f-8dad-78881b0bd735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\CONNECT">
+      <UniqueIdentifier>{b51a16d7-9c63-494a-bda7-d97619bb2a12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\EFFECT">
+      <UniqueIdentifier>{a0e2d8e1-b597-42fd-b73d-8cc93d85ddf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\ITEM">
+      <UniqueIdentifier>{5e84e44c-86cd-4d3d-b15f-a5541dd267ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\MAP">
+      <UniqueIdentifier>{62310638-2152-4ff6-bf62-bf17b9000423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\MSGCMD">
+      <UniqueIdentifier>{ecd9ecc4-d8cd-4a21-bf66-3000ea586da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\VERSION">
+      <UniqueIdentifier>{d7f34d79-aa26-4694-9a3d-2aac76e57c02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\SYSTEM">
+      <UniqueIdentifier>{5178f8c3-acd8-42c9-8478-d44f0bfc550f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Packet\SKILL">
+      <UniqueIdentifier>{2d2e6966-2768-4c08-b570-92484d4b61fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{66134ab4-fe50-40d2-a258-4aa72a3ee932}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1">
+      <UniqueIdentifier>{62475ac7-96e9-43c2-84ae-c5c5a5332172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1">
+      <UniqueIdentifier>{fe6f0419-b758-4c2d-a38d-64e6fdfb760f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1">
+      <UniqueIdentifier>{47e50839-281a-4352-ae75-aeaa04514945}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\BATTLE No. 1">
+      <UniqueIdentifier>{78f2e182-ad0a-4c6a-b2f2-0f01ec7ad341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\CHAR No. 1">
+      <UniqueIdentifier>{5c747a79-f415-46ce-bad3-6da9e4f92add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\CONNECT No. 1">
+      <UniqueIdentifier>{7bc7de17-0ae6-4d95-bede-7ca411ddf8ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\EFFECT No. 1">
+      <UniqueIdentifier>{1613f559-fad7-4ebc-9072-d30eec6c84f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\ITEM No. 1">
+      <UniqueIdentifier>{c2b9464b-ba6d-4901-ad3c-e6b34b20c1d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\MAP No. 1">
+      <UniqueIdentifier>{d32c52ba-0919-4afb-850f-68855fdc6fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1">
+      <UniqueIdentifier>{961a8746-dce9-42e5-8e72-7ae10c3963dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\VERSION No. 1">
+      <UniqueIdentifier>{0a1271d2-ff2b-4c4a-bcbe-382896a2b253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\ADMIN No. 1">
+      <UniqueIdentifier>{ab3df34a-25e1-4cb0-986c-7bcaf4eb42c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\SYSTEM">
+      <UniqueIdentifier>{4d0feb64-b639-4539-846e-1b5918885651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Packet No. 1\SKILL">
+      <UniqueIdentifier>{0396999f-7198-45a0-8b4b-aafb740d23a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\myLib No. 1">
+      <UniqueIdentifier>{55d5461d-28db-4437-8726-413d8cfe7702}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\SBOGlobal.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\UraraSockTCPSBO.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\myLib\myString.cpp">
+      <Filter>Source Files\Common\myLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\PacketBase.cpp">
+      <Filter>Source Files\Common\Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.cpp">
+      <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.cpp">
+      <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.cpp">
+      <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.cpp">
+      <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDMOTIONTYPE.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDNPC.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYITEM.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYSKILL.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_ACCOUNT.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_TALKEVENT.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTION.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTIONTYPE.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWSTATUS.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_REQ_ACCOUNT.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ACCOUNT.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ONLINE.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RENEWINFO.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RES_INFO.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWBALLOON.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWEFFECT.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_ADD.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_COPY.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_DELETE.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_ADD.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_COPY.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_DELETE.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_ADD.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_RENEW.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_COPYPARTS.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEMAPSHADOW.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEPARTS.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_EVENT.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPOBJECT.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPSIZE.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWOBJECTDATA.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPNAME.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPSHADOW.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETPARTS.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_PARA2.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_PLAYSOUND.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEW_CLIENTVERSION.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWADMINLEVEL.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPPARTS.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPSHADOW.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_ADMINLEVEL.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_PLAYSOUND.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RES_ADMINLEVEL.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SERVER_SAVEINFO.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SKILL_RENEWSKILL.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SYSTEM_RENEWINFO.cpp">
+      <Filter>Source Files\Common\Packet\ADMIN</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\BATTLE\PacketBATTLE_REQ_ATACK.cpp">
+      <Filter>Source Files\Common\Packet\BATTLE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_CHARID.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_CHARINFO.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_CHAT.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_GRP.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_ITEMINFO.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MODIFY_PARAM.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MOTION.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MOTIONTYPE.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_MOVEPOS.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_PARA1.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO2.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHAT.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_DRAGITEM.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_EQUIP.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_MODIFY_PARAM.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_TAIL.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_USEITEM.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_CHARINFO.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_PUTGET.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_TAIL.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_RES_TALKEVENT.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFCBALLOON.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFFECT.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_SKILLINFO.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_STATE.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_STATUS.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_TEXTEFFECT.cpp">
+      <Filter>Source Files\Common\Packet\CHAR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_KEEPALIVE.cpp">
+      <Filter>Source Files\Common\Packet\CONNECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.cpp">
+      <Filter>Source Files\Common\Packet\CONNECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.cpp">
+      <Filter>Source Files\Common\Packet\CONNECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_LOGIN.cpp">
+      <Filter>Source Files\Common\Packet\CONNECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_PLAY.cpp">
+      <Filter>Source Files\Common\Packet\CONNECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_BALLOONINFO.cpp">
+      <Filter>Source Files\Common\Packet\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEBALLOONINFO.cpp">
+      <Filter>Source Files\Common\Packet\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEEFFECTINFO.cpp">
+      <Filter>Source Files\Common\Packet\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_EFFECTINFO.cpp">
+      <Filter>Source Files\Common\Packet\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_BALLOONINFO.cpp">
+      <Filter>Source Files\Common\Packet\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_EFFECTINFO.cpp">
+      <Filter>Source Files\Common\Packet\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\EFFECT\PacketEFFECT_RES_EFFECTINFO.cpp">
+      <Filter>Source Files\Common\Packet\EFFECT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMTYPEINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_ITEMINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_ITEMTYPEINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_ITEMWEAPONINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMTYPEINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMTYPEINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMWEAPONINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMTYPEINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMWEAPONINFO.cpp">
+      <Filter>Source Files\Common\Packet\ITEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_DELETEMAPSHADOW.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_DELETEPARTS.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_FORMATMSG.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPEVENT.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPNAME.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECT.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECTDATA.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPPARTS.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_MAPSHADOW.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_ONLINE.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_PARA1.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_RENEWMAPSIZE.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_REQ_MAPINFO.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_RES_MAPINFO.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_SETMAPSHADOW.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_SETPARTS.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MAP\PacketMAP_SYSTEMMSG.cpp">
+      <Filter>Source Files\Common\Packet\MAP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGACCE.cpp">
+      <Filter>Source Files\Common\Packet\MSGCMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGARMS.cpp">
+      <Filter>Source Files\Common\Packet\MSGCMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCLOTH.cpp">
+      <Filter>Source Files\Common\Packet\MSGCMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCOLOR.cpp">
+      <Filter>Source Files\Common\Packet\MSGCMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGFACE.cpp">
+      <Filter>Source Files\Common\Packet\MSGCMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_MAKEITEM.cpp">
+      <Filter>Source Files\Common\Packet\MSGCMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\MSGCMD\PacketMSGCMD_PARA1.cpp">
+      <Filter>Source Files\Common\Packet\MSGCMD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILE.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELIST.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELISTCHECK.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_REQ_VERSIONCHECK.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILE.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELIST.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELISTCHECK.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.cpp">
+      <Filter>Source Files\Common\Packet\VERSION</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\SYSTEM\PacketSYSTEM_INFO.cpp">
+      <Filter>Source Files\Common\Packet\SYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\SKILL\PacketSKILL_PARA2.cpp">
+      <Filter>Source Files\Common\Packet\SKILL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\SKILL\PacketSKILL_SKILLINFO.cpp">
+      <Filter>Source Files\Common\Packet\SKILL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\GlobalDefine.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SBOGlobal.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\UraraSockTCP.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\UraraSockTCPSBO.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\Command.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\Packet.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\PacketBase.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\BATTLE\PacketBATTLE_REQ_ATACK.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\BATTLE No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_CHARID.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_CHARINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_CHAT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_GRP.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_ITEMINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MODIFY_PARAM.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MOTION.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MOTIONTYPE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_MOVEPOS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_PARA1.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO2.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHAT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_DRAGITEM.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_EQUIP.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_MODIFY_PARAM.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_TAIL.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_USEITEM.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_CHARINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_PUTGET.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_TAIL.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_TALKEVENT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFCBALLOON.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_SET_EFFECT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_SKILLINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_STATE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_STATUS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_TEXTEFFECT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_KEEPALIVE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_LOGIN.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_PLAY.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_BALLOONINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\EFFECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEBALLOONINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\EFFECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_DELETEEFFECTINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\EFFECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_EFFECTINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\EFFECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_BALLOONINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\EFFECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_REQ_EFFECTINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\EFFECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\EFFECT\PacketEFFECT_RES_EFFECTINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\EFFECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_DELETEITEMTYPEINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_ITEMINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_ITEMTYPEINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_ITEMWEAPONINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMTYPEINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMTYPEINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMWEAPONINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMTYPEINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ITEM\PacketITEM_RES_ITEMWEAPONINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ITEM No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_DELETEMAPSHADOW.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_DELETEPARTS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_FORMATMSG.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPEVENT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPNAME.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPOBJECTDATA.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPPARTS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_MAPSHADOW.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_ONLINE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_PARA1.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_RENEWMAPSIZE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_REQ_MAPINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_RES_MAPINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_SETMAPSHADOW.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_SETPARTS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MAP\PacketMAP_SYSTEMMSG.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MAP No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGACCE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGARMS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCLOTH.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGCOLOR.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_CHGFACE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_MAKEITEM.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\MSGCMD\PacketMSGCMD_PARA1.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\MSGCMD No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELIST.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_FILELISTCHECK.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_REQ_VERSIONCHECK.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELIST.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELISTCHECK.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\VERSION No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDMOTIONTYPE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDNPC.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYITEM.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYSKILL.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_ACCOUNT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_TALKEVENT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTION.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTIONTYPE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWSTATUS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_REQ_ACCOUNT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ACCOUNT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RES_ONLINE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RENEWINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RES_INFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWBALLOON.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWEFFECT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_ADD.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_COPY.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_DELETE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_ADD.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_COPY.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_DELETE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_ADD.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_RENEW.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_COPYPARTS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEMAPSHADOW.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEPARTS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_EVENT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPOBJECT.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPSIZE.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWOBJECTDATA.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPNAME.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPSHADOW.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETPARTS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_PARA2.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_PLAYSOUND.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEW_CLIENTVERSION.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWADMINLEVEL.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPPARTS.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPSHADOW.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_ADMINLEVEL.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_PLAYSOUND.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_RES_ADMINLEVEL.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_SERVER_SAVEINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_SKILL_RENEWSKILL.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_SYSTEM_RENEWINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ADMIN No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\SYSTEM\PacketSYSTEM_INFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\SYSTEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\SKILL\PacketSKILL_PARA2.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\SKILL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\SKILL\PacketSKILL_SKILLINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\SKILL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myArray.h">
+      <Filter>Header Files\Common No. 1\myLib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myArrayImpl.h">
+      <Filter>Header Files\Common No. 1\myLib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myString.h">
+      <Filter>Header Files\Common No. 1\myLib No. 1</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

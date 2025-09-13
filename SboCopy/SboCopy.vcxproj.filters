@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{b727b15b-7b5c-42bb-8997-096f5c278224}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{9f94b453-7581-4981-964d-5185e1e02e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\myLib">
+      <UniqueIdentifier>{fbcd9415-39e6-480d-89fb-6cd3167f781b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib">
+      <UniqueIdentifier>{dca16d77-1360-41ca-8f24-c25821aafbf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{a5bdc9ec-ac67-4a9a-af4a-30a0f4b42b9d}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1">
+      <UniqueIdentifier>{b627b01a-d918-45f0-a406-720d28082a18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\myLib No. 1">
+      <UniqueIdentifier>{12a1f330-6b87-4026-96c2-89e2fad1460b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Lib No. 1">
+      <UniqueIdentifier>{9d1df1bb-eca4-4302-9566-72723c82f6ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{b7b64d86-7f95-45c0-bd95-acc5ae8e875b}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SboCopy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\SBOGlobal.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\myLib\myString.cpp">
+      <Filter>Source Files\Common\myLib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\TextInput.cpp">
+      <Filter>Source Files\Common\Lib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\GlobalDefine.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SBOGlobal.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myArray.h">
+      <Filter>Header Files\Common No. 1\myLib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myArrayImpl.h">
+      <Filter>Header Files\Common No. 1\myLib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\myLib\myString.h">
+      <Filter>Header Files\Common No. 1\myLib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\TextInput.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

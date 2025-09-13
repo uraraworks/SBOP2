@@ -1,0 +1,716 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{ceb7a688-ea2b-47c3-a41e-acefa8057695}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{04cd1aec-321e-4f1a-b86b-f9d927a0c9ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info">
+      <UniqueIdentifier>{8f1bc463-9747-42fc-9185-511b6754ca1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoItemType">
+      <UniqueIdentifier>{247c7a9f-b1e4-43a9-ab59-20f5f365b3ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoMapEvent">
+      <UniqueIdentifier>{6c97385f-5195-4484-a992-d303f9188c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoSkill">
+      <UniqueIdentifier>{8eaa7b86-037b-4b56-998f-9a348a0bd9bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoTalkEvent">
+      <UniqueIdentifier>{daa57568-a0c5-4380-8a47-416de98390e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib">
+      <UniqueIdentifier>{6c19f497-ae7b-4ebf-bc38-33eb3a23a3f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib\md5">
+      <UniqueIdentifier>{f676f20c-e05c-4fe6-ade8-154ba9427b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\LibInfo">
+      <UniqueIdentifier>{19cdd03d-b899-4fc5-8be6-8846f2b8c097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibInfo No. 2">
+      <UniqueIdentifier>{f5eb74b6-1778-4a6a-bd18-3a5fded0f5a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Info No. 2">
+      <UniqueIdentifier>{5c1e7521-0e87-4f15-8d92-fc8f26524fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Info No. 2\InfoChar">
+      <UniqueIdentifier>{b66367e6-aaa4-4f1f-9e5e-4789db9962c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SaveLoad">
+      <UniqueIdentifier>{dd843775-7285-4347-a57b-8b25b7a69ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MainFrame">
+      <UniqueIdentifier>{0c1ea616-8c5b-4fd8-af45-e7f6d472dad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{c865217f-6345-4f58-a8e3-8701ac01a76a}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1">
+      <UniqueIdentifier>{b7214d5a-548b-4c26-b59a-5d05fa686587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1">
+      <UniqueIdentifier>{c667800f-d7c7-409d-baf9-6caeec877552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoItemType No. 1">
+      <UniqueIdentifier>{c7c0242b-4a1c-497f-a09f-9cbdc621adc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoMapEvent">
+      <UniqueIdentifier>{4504bd68-8083-4074-9e1a-4bc2b62440e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoSkill">
+      <UniqueIdentifier>{fce77ef1-374f-4a5f-b06a-69a10d5a4702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoTalkEvent">
+      <UniqueIdentifier>{3ca0871b-3fad-4b4e-87ab-4e00e1f2403a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Lib No. 1">
+      <UniqueIdentifier>{dc146393-292b-4269-89f2-8ebc4d9cfc19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Lib No. 1\md5 No. 1">
+      <UniqueIdentifier>{763c9d95-90ea-4499-8d71-c1ac3c4b9ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\LibInfo No. 1">
+      <UniqueIdentifier>{02972ba1-bda3-4107-97ef-b06ca8bef02a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MainFrame No. 1">
+      <UniqueIdentifier>{ac3367ab-219c-4e18-b66d-16488b3424b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibInfo No. 3">
+      <UniqueIdentifier>{4cb3e2ee-256d-41ba-a3ab-35daa933458b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Info No. 3">
+      <UniqueIdentifier>{b9c522d5-1155-4db2-999a-b7b440a6e368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Info No. 3\InfoChar No. 1">
+      <UniqueIdentifier>{f7f7c5e8-00ed-46d1-a7fd-45fbac441966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SaveLoad No. 1">
+      <UniqueIdentifier>{624b6930-7e65-4c2f-a4bf-dc4c94cb0d93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{e1b38db4-6c78-4702-a3cc-0670fb65d64c}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\MgrData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SboSvr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UpdateServerInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\crc.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\mt19937int.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\RouteSearch.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\SBOGlobal.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoAccount.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoAnime.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoBase.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoCharBase.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoDisable.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoEffect.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoFileList.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoFishing.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoItem.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoItemWeapon.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapBase.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapObject.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapObjectData.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapParts.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapShadow.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMotion.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMotionType.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSystem.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoItemType\InfoItemTypeBase.cpp">
+      <Filter>Source Files\Common\Info\InfoItemType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillBase.cpp">
+      <Filter>Source Files\Common\Info\InfoSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp">
+      <Filter>Source Files\Common\Info\InfoSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp">
+      <Filter>Source Files\Common\Info\InfoSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\ParamUtil.cpp">
+      <Filter>Source Files\Common\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\TextInput.cpp">
+      <Filter>Source Files\Common\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\TextOutput.cpp">
+      <Filter>Source Files\Common\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\md5\GetMD5.cpp">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\md5\GetMD5File.cpp">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\md5\md5c.c">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoAccount.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoBase.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoCharBase.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoDisable.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoEfcBalloon.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoEffect.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoItem.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemType.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemWeapon.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapBase.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapEvent.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObject.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObjectData.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapParts.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapShadow.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotion.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoSystem.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoTalkEvent.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LibInfo\LibInfoCharSvr.cpp">
+      <Filter>Source Files\LibInfo No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LibInfo\LibInfoCharSvrMapEvent.cpp">
+      <Filter>Source Files\LibInfo No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LibInfo\LibInfoCharSvrSkill.cpp">
+      <Filter>Source Files\LibInfo No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoCharSvr.cpp">
+      <Filter>Source Files\Info No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharATACKANIMESvr.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharBATTLE1Svr.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharBATTLE2Svr.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharMOVEATACKSvr.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharPUTNPC.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoAccount.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoBase.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoChar.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoDisable.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoEfcBalloon.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoEffect.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoItem.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoItemType.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoItemWeapon.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMap.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapObject.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapParts.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapShadow.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMotion.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMotionType.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoSkill.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoSystem.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoTalkEvent.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrame.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcBATTLE.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCHAR.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCONNECT.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcEFFECT.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcITEM.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcMAP.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcMSGCMD.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\MgrData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SboSvr_priv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UpdateServerInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\crc.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\GlobalDefine.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\RouteSearch.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SBOGlobal.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SBOVersion.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoAccount.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoAnime.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Info\InfoCharBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoDisable.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoEfcBalloon.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoEffect.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoFileList.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoFishing.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoItem.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoItemWeapon.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Info\InfoMapBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapObject.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapObjectData.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapParts.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapShadow.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMotion.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMotionType.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSystem.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoItemType\InfoItemTypeBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoItemType No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEvent.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillHEAL.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\ParamUtil.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\TextInput.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\TextOutput.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\md5\GetMD5.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1\md5 No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\md5\GetMD5File.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1\md5 No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\md5\md5.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1\md5 No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoAccount.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoBase.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\LibInfo\LibInfoCharBase.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoDisable.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoEfcBalloon.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoEffect.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoItem.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemType.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemWeapon.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\LibInfo\LibInfoMapBase.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapEvent.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObject.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObjectData.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapParts.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapShadow.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotion.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotionType.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoSkill.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoSystem.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoTalkEvent.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainFrame\MainFrame.h">
+      <Filter>Header Files\MainFrame No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LibInfo\LibInfoCharSvr.h">
+      <Filter>Header Files\LibInfo No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoCharSvr.h">
+      <Filter>Header Files\Info No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharATACKANIMESvr.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharBATTLE1Svr.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharBATTLE2Svr.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharMOVEATACKSvr.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharPUTNPC.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoad.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoAccount.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoBase.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoChar.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoDisable.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoEfcBalloon.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoEffect.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoItem.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoItemType.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoItemWeapon.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMap.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapObject.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapParts.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapShadow.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMotion.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMotionType.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoSkill.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoSystem.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoTalkEvent.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboSvr.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

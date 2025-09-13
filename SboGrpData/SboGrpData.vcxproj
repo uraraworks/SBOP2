@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{50F32FA9-DE14-43C2-9551-CBC31BEA628D}</ProjectGuid>
+    <RootNamespace>SboGrpData</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.31515.66</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/SboGrpData.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBOGRPDATA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Release/SboGrpData.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>../Release/SboGrpData.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Release/SboGrpData.pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\Release/SboGrpData.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/SboGrpData.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/SboGrpData.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBOGRPDATA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Debug/SboGrpData.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>.\Debug/SboGrpData.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/SboGrpData.pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\Debug/SboGrpData.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/SboGrpData.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="SboGrpData.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboGrpData.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="StdAfx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\2x2\2x2_arms01.png" />
+    <Image Include="res\2x2\2x2_arms02.png" />
+    <Image Include="res\2x2\2x2_arms03.png" />
+    <Image Include="res\2x2\2x2_arms_sp01.png" />
+    <Image Include="res\2x2\2x2_bow01.png" />
+    <Image Include="res\2x2\2x2_char_shadow_01.png" />
+    <Image Include="res\2x2\2x2_cloth00.png" />
+    <Image Include="res\2x2\2x2_cloth01.png" />
+    <Image Include="res\2x2\2x2_cloth02.png" />
+    <Image Include="res\2x2\2x2_cloth03.png" />
+    <Image Include="res\2x2\2x2_eye0.png" />
+    <Image Include="res\2x2\2x2_eye01.png" />
+    <Image Include="res\2x2\2x2_eye02.png" />
+    <Image Include="res\2x2\2x2_eye03.png" />
+    <Image Include="res\2x2\2x2_eye04.png" />
+    <Image Include="res\2x2\2x2_eye05.png" />
+    <Image Include="res\2x2\2x2_hair01.png" />
+    <Image Include="res\2x2\2x2_hair02.png" />
+    <Image Include="res\2x2\2x2_hair03.png" />
+    <Image Include="res\2x2\2x2_hair04.png" />
+    <Image Include="res\2x2\2x2_hum.png" />
+    <Image Include="res\2x2\2x2_hum_hair_u0.png" />
+    <Image Include="res\2x2\2x2_hum_hair_u01.png" />
+    <Image Include="res\2x2\2x2_npc001.png" />
+    <Image Include="res\2x2\2x2_npc001_shadow.png" />
+    <Image Include="res\2x2\2x2_npc002.png" />
+    <Image Include="res\2x2\2x2_npc002_shadow.png" />
+    <Image Include="res\2x2\2x2_npc003.png" />
+    <Image Include="res\2x2\2x2_npc003_shadow.png" />
+    <Image Include="res\2x2\2x2_npc004.png" />
+    <Image Include="res\2x2\2x2_npc004_shadow.png" />
+    <Image Include="res\2x2\2x2_npc005.png" />
+    <Image Include="res\2x2\2x2_npc005_shadow.png" />
+    <Image Include="res\2x2\2x2_npc006.png" />
+    <Image Include="res\2x2\2x2_npc006_shadow.png" />
+    <Image Include="res\2x2\2x2_shield01.png" />
+    <Image Include="res\2x2\2x2_sp_cloth01.png" />
+    <Image Include="res\2x2\2x2_sp_cloth02.png" />
+    <Image Include="res\2x2\2x2_sp_hair01.png" />
+    <Image Include="res\2x2\2x2_sp_hair02.png" />
+    <Image Include="res\acce01.png" />
+    <Image Include="res\acce02.png" />
+    <Image Include="res\balloon_01.png" />
+    <Image Include="res\char_back.png" />
+    <Image Include="res\efc_32_01.png" />
+    <Image Include="res\efc_64_01.png" />
+    <Image Include="res\icon.png" />
+    <Image Include="res\item.png" />
+    <Image Include="res\map01.png" />
+    <Image Include="res\map02.png" />
+    <Image Include="res\map03.png" />
+    <Image Include="res\map_shadow01.png" />
+    <Image Include="res\mark.png" />
+    <Image Include="res\NPC\npc01.png" />
+    <Image Include="res\NPC\npc02.png" />
+    <Image Include="res\num_l.png" />
+    <Image Include="res\num_m.png" />
+    <Image Include="res\num_s.png" />
+    <Image Include="res\shadow.png" />
+    <Image Include="res\System.png" />
+    <Image Include="res\title.png" />
+    <Image Include="res\title_back.png" />
+    <Image Include="res\title_cloud.png" />
+    <Image Include="res\URARA-worksロゴ.png" />
+    <Image Include="res\体\bst.png" />
+    <Image Include="res\体\bst_ear.png" />
+    <Image Include="res\体\drk.png" />
+    <Image Include="res\体\drk_ear.png" />
+    <Image Include="res\体\elf.png" />
+    <Image Include="res\体\elf_ear.png" />
+    <Image Include="res\体\hum.png" />
+    <Image Include="res\服\cloth01.png" />
+    <Image Include="res\服\cloth02.png" />
+    <Image Include="res\服\sp01.png" />
+    <Image Include="res\武器\weapon01.png" />
+    <Image Include="res\武器\weapon02.png" />
+    <Image Include="res\武器\weapon_arrow01.png" />
+    <Image Include="res\武器\weapon_bow01.png" />
+    <Image Include="res\武器\weapon_etc01.png" />
+    <Image Include="res\武器\weapon_glove01.png" />
+    <Image Include="res\目\eye01.png" />
+    <Image Include="res\目\eye02.png" />
+    <Image Include="res\目\eye03.png" />
+    <Image Include="res\目\eye04.png" />
+    <Image Include="res\目\eye05.png" />
+    <Image Include="res\目\eye06.png" />
+    <Image Include="res\髪\hair_d01.png" />
+    <Image Include="res\髪\hair_d02.png" />
+    <Image Include="res\髪\hair_d03.png" />
+    <Image Include="res\髪\hair_d04.png" />
+    <Image Include="res\髪\hair_d05.png" />
+    <Image Include="res\髪\hair_d06.png" />
+    <Image Include="res\髪\hair_d07.png" />
+    <Image Include="res\髪\hair_d08.png" />
+    <Image Include="res\髪\hair_d09.png" />
+    <Image Include="res\髪\hair_d10.png" />
+    <Image Include="res\髪\hair_d11.png" />
+    <Image Include="res\髪\hair_d12.png" />
+    <Image Include="res\髪\hair_d13.png" />
+    <Image Include="res\髪\hair_u01.png" />
+    <Image Include="res\髪\hair_u02.png" />
+    <Image Include="res\髪\hair_u03.png" />
+    <Image Include="res\髪\hair_u04.png" />
+    <Image Include="res\髪\hair_u05.png" />
+    <Image Include="res\髪\hair_u06.png" />
+    <Image Include="res\髪\hair_u07.png" />
+    <Image Include="res\髪\hair_u08.png" />
+    <Image Include="res\髪\hair_u09.png" />
+    <Image Include="res\髪\hair_u10.png" />
+    <Image Include="res\髪\hair_u11.png" />
+    <Image Include="res\髪\hair_u12.png" />
+    <Image Include="res\髪\hair_u13.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

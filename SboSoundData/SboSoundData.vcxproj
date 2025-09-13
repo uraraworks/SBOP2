@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9941AF59-02F8-4AD7-B1EF-3CE941E737A3}</ProjectGuid>
+    <RootNamespace>SboSoundData</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.31515.66</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/SboSoundData.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBOSOUNDDATA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Release/SboSoundData.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>../Release/SboSoundData.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Release/SboSoundData.pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\Release/SboSoundData.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/SboSoundData.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/SboSoundData.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBOSOUNDDATA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Debug/SboSoundData.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>.\Debug/SboSoundData.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/SboSoundData.pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\Debug/SboSoundData.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/SboSoundData.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="SboSoundData.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboSoundData.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SboSoundData.h" />
+    <ClInclude Include="StdAfx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\WAVE\asi_2.wav" />
+    <Media Include="res\WAVE\balloon1.wav" />
+    <Media Include="res\WAVE\bikkuri.wav" />
+    <Media Include="res\WAVE\chari14_a.wav" />
+    <Media Include="res\WAVE\chat.wav" />
+    <Media Include="res\WAVE\clap02_loop.wav" />
+    <Media Include="res\WAVE\clap03_loop.wav" />
+    <Media Include="res\WAVE\crash20_d.wav" />
+    <Media Include="res\WAVE\dr-bass01.wav" />
+    <Media Include="res\WAVE\dr-bass02.wav" />
+    <Media Include="res\WAVE\dr-bass05.wav" />
+    <Media Include="res\WAVE\dr-clap01.wav" />
+    <Media Include="res\WAVE\dr-sne02.wav" />
+    <Media Include="res\WAVE\gimon.wav" />
+    <Media Include="res\WAVE\hit0.wav" />
+    <Media Include="res\WAVE\hit1.wav" />
+    <Media Include="res\WAVE\kai.wav" />
+    <Media Include="res\WAVE\kizuku.wav" />
+    <Media Include="res\WAVE\kusa.wav" />
+    <Media Include="res\WAVE\niku.wav" />
+    <Media Include="res\WAVE\pi73.wav" />
+    <Media Include="res\WAVE\push51_c.wav" />
+    <Media Include="res\WAVE\select.wav" />
+    <Media Include="res\WAVE\step03.wav" />
+    <Media Include="res\WAVE\swing24_c.wav" />
+    <Media Include="res\WAVE\swing25_c.wav" />
+    <Media Include="res\WAVE\whistleL.wav" />
+    <Media Include="res\WAVE\whistleS.wav" />
+    <Media Include="res\WAVE\w_chat.wav" />
+    <Media Include="res\WAVE\お金.wav" />
+    <Media Include="res\WAVE\キー攻撃.wav" />
+    <Media Include="res\WAVE\キー死亡.wav" />
+    <Media Include="res\WAVE\ゴミ箱開く・捨てる.wav" />
+    <Media Include="res\WAVE\ドロップ：ビン.wav" />
+    <Media Include="res\WAVE\バッグ開く.wav" />
+    <Media Include="res\WAVE\ピンポンパンポーン.wav" />
+    <Media Include="res\WAVE\プヨン攻撃.wav" />
+    <Media Include="res\WAVE\プヨン死亡.wav" />
+    <Media Include="res\WAVE\プヨン移動.wav" />
+    <Media Include="res\WAVE\ミス.wav" />
+    <Media Include="res\WAVE\レベルアップ.wav" />
+    <Media Include="res\WAVE\中アイテム.wav" />
+    <Media Include="res\WAVE\大アイテム.wav" />
+    <Media Include="res\WAVE\小アイテム.wav" />
+    <Media Include="res\WAVE\弓攻撃.wav" />
+    <Media Include="res\WAVE\打撃クリティカル.wav" />
+    <Media Include="res\WAVE\斬撃クリティカル.wav" />
+    <Media Include="res\WAVE\斬撃ヒット１.wav" />
+    <Media Include="res\WAVE\斬撃ヒット２.wav" />
+    <Media Include="res\WAVE\服・ローブ.wav" />
+    <Media Include="res\WAVE\武器.wav" />
+    <Media Include="res\WAVE\気絶.wav" />
+    <Media Include="res\WAVE\消滅.wav" />
+    <Media Include="res\WAVE\液体.wav" />
+    <Media Include="res\WAVE\溜め.wav" />
+    <Media Include="res\WAVE\溜め２.wav" />
+    <Media Include="res\WAVE\盾構え.wav" />
+    <Media Include="res\WAVE\矢クリティカル.wav" />
+    <Media Include="res\WAVE\矢ヒット.wav" />
+    <Media Include="res\WAVE\窓開く.wav" />
+    <Media Include="res\WAVE\素材.wav" />
+    <Media Include="res\WAVE\羽ばたき.wav" />
+    <Media Include="res\WAVE\防御.wav" />
+    <Media Include="res\WAVE\食事.wav" />
+    <Media Include="res\WAVE\（加工済）ウララワークス(20050923).wav" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

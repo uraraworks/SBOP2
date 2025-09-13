@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2ED12E71-B998-4D20-BA8E-A1CFE84323A2}</ProjectGuid>
+    <RootNamespace>SboSvr</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.31515.66</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/SboSvr.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>.\Release/SboSvr.pch</PrecompiledHeaderOutputFile>
+      <AssemblerOutput>All</AssemblerOutput>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+      <AdditionalIncludeDirectories>..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/Ignore:4089 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>../Release/SboSvr.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <ProgramDatabaseFile>.\Release/SboSvr.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/SboSvr.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/SboSvr.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>.\Debug/SboSvr.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0411</Culture>
+      <AdditionalIncludeDirectories>..\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <OutputFile>.\Debug/SboSvr.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/SboSvr.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/SboSvr.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common\crc.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAccount.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
+    <ClCompile Include="..\Common\Info\InfoBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoCharBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoDisable.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEffect.cpp" />
+    <ClCompile Include="..\Common\Info\InfoFileList.cpp" />
+    <ClCompile Include="..\Common\Info\InfoFishing.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItemType\InfoItemTypeBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItemWeapon.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObject.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapParts.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMotion.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMotionType.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSystem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoAccount.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoCharBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoDisable.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEffect.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItem.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemWeapon.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapEvent.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObject.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapParts.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotion.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoSystem.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoTalkEvent.cpp" />
+    <ClCompile Include="..\Common\Lib\md5\GetMD5.cpp" />
+    <ClCompile Include="..\Common\Lib\md5\GetMD5File.cpp" />
+    <ClCompile Include="..\Common\Lib\md5\md5c.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\ParamUtil.cpp" />
+    <ClCompile Include="..\Common\Lib\TextInput.cpp" />
+    <ClCompile Include="..\Common\Lib\TextOutput.cpp" />
+    <ClCompile Include="..\common\mt19937int.cpp" />
+    <ClCompile Include="..\Common\RouteSearch.cpp" />
+    <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="src\Info\InfoCharSvr.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharATACKANIMESvr.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharBATTLE1Svr.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharBATTLE2Svr.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharMOVEATACKSvr.cpp" />
+    <ClCompile Include="src\Info\InfoChar\InfoCharPUTNPC.cpp" />
+    <ClCompile Include="src\LibInfo\LibInfoCharSvr.cpp" />
+    <ClCompile Include="src\LibInfo\LibInfoCharSvrMapEvent.cpp" />
+    <ClCompile Include="src\LibInfo\LibInfoCharSvrSkill.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrame.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcBATTLE.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCHAR.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCONNECT.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcEFFECT.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcITEM.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcMAP.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcMSGCMD.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp" />
+    <ClCompile Include="src\MgrData.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoAccount.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoBase.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoChar.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoDisable.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoEfcBalloon.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoEffect.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoItem.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoItemType.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoItemWeapon.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMap.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapObject.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapParts.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapShadow.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMotion.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMotionType.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoSkill.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoSystem.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoTalkEvent.cpp" />
+    <ClCompile Include="src\SboSvr.cpp" />
+    <ClCompile Include="src\UpdateServerInfo.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\crc.h" />
+    <ClInclude Include="..\common\GlobalDefine.h" />
+    <ClInclude Include="..\Common\Info\InfoAccount.h" />
+    <ClInclude Include="..\Common\Info\InfoAnime.h" />
+    <ClInclude Include="..\Common\Info\InfoBase.h" />
+    <ClInclude Include="..\common\Info\InfoCharBase.h" />
+    <ClInclude Include="..\Common\Info\InfoDisable.h" />
+    <ClInclude Include="..\Common\Info\InfoEfcBalloon.h" />
+    <ClInclude Include="..\Common\Info\InfoEffect.h" />
+    <ClInclude Include="..\Common\Info\InfoFileList.h" />
+    <ClInclude Include="..\Common\Info\InfoFishing.h" />
+    <ClInclude Include="..\Common\Info\InfoItem.h" />
+    <ClInclude Include="..\Common\Info\InfoItemType\InfoItemTypeBase.h" />
+    <ClInclude Include="..\Common\Info\InfoItemWeapon.h" />
+    <ClInclude Include="..\common\Info\InfoMapBase.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEvent.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.h" />
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.h" />
+    <ClInclude Include="..\Common\Info\InfoMapObject.h" />
+    <ClInclude Include="..\Common\Info\InfoMapObjectData.h" />
+    <ClInclude Include="..\Common\Info\InfoMapParts.h" />
+    <ClInclude Include="..\Common\Info\InfoMapShadow.h" />
+    <ClInclude Include="..\Common\Info\InfoMotion.h" />
+    <ClInclude Include="..\Common\Info\InfoMotionType.h" />
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillBase.h" />
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillHEAL.h" />
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.h" />
+    <ClInclude Include="..\Common\Info\InfoSystem.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.h" />
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoAccount.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoBase.h" />
+    <ClInclude Include="..\common\LibInfo\LibInfoCharBase.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoDisable.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoEfcBalloon.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoEffect.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoItem.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemType.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemWeapon.h" />
+    <ClInclude Include="..\common\LibInfo\LibInfoMapBase.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapEvent.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObject.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObjectData.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapParts.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapShadow.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotion.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotionType.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoSkill.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoSystem.h" />
+    <ClInclude Include="..\Common\LibInfo\LibInfoTalkEvent.h" />
+    <ClInclude Include="..\Common\Lib\md5\GetMD5.h" />
+    <ClInclude Include="..\Common\Lib\md5\GetMD5File.h" />
+    <ClInclude Include="..\Common\Lib\md5\md5.h" />
+    <ClInclude Include="..\Common\Lib\ParamUtil.h" />
+    <ClInclude Include="..\Common\Lib\TextInput.h" />
+    <ClInclude Include="..\Common\Lib\TextOutput.h" />
+    <ClInclude Include="..\Common\RouteSearch.h" />
+    <ClInclude Include="..\Common\SBOGlobal.h" />
+    <ClInclude Include="..\Common\SBOVersion.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Info\InfoCharSvr.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharATACKANIMESvr.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharBATTLE1Svr.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharBATTLE2Svr.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharMOVEATACKSvr.h" />
+    <ClInclude Include="src\Info\InfoChar\InfoCharPUTNPC.h" />
+    <ClInclude Include="src\LibInfo\LibInfoCharSvr.h" />
+    <ClInclude Include="src\MainFrame\MainFrame.h" />
+    <ClInclude Include="src\MgrData.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoad.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoAccount.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoBase.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoChar.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoDisable.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoEfcBalloon.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoEffect.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoItem.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoItemType.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoItemWeapon.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMap.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapObject.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapParts.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapShadow.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMotion.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMotionType.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoSkill.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoSystem.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoTalkEvent.h" />
+    <ClInclude Include="src\SboSvr_priv.h" />
+    <ClInclude Include="src\UpdateServerInfo.h" />
+    <ClInclude Include="StdAfx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboSvr.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\myLib\myLib.vcxproj">
+      <Project>{277a614e-bccb-4abf-a0d9-856356071b8a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\SboSockLib\SboSockLib.vcxproj">
+      <Project>{36b127cf-63af-4864-93ab-4f9d40e17c9a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

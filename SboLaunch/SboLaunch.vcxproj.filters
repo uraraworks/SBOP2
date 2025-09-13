@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{832f59a3-d37b-4ad3-8d4d-74118f5a37bb}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{1e28a0c8-1dfd-434b-9cb2-04af3aac828e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info">
+      <UniqueIdentifier>{09af44e3-967c-4b46-8a96-c0048a7bc0f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib">
+      <UniqueIdentifier>{17fcb183-b57a-44a4-8be2-1b5fcd6f0369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib\md5">
+      <UniqueIdentifier>{523a556d-40e8-440f-ae48-175f7e67948f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{5f6bfcd3-d717-48cc-878c-0cb996874cc5}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1">
+      <UniqueIdentifier>{d2b6db35-1938-4c6b-8649-a8940faacfd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1">
+      <UniqueIdentifier>{b1cde84f-bd35-4671-8efe-523142057ef4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{abf0fc27-3e04-486c-87bc-162357461624}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\SboLaunch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SboLaunchDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\mt19937int.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\SBOGlobal.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoFileList.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\md5\GetMD5.cpp">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\md5\GetMD5File.cpp">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\md5\md5c.c">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboLaunch.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SboLaunch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SboLaunch_priv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SboLaunchDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\GlobalDefine.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SBOGlobal.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\UraraSockTCP.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\UraraSockTCPSBO.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoFileList.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\SboLaunch.exe.manifest">
+      <Filter>Resource Files</Filter>
+    </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\SboLaunch.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\SBOｱｲｺﾝ.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

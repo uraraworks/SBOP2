@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1d7895f4-5997-4b74-a6d7-7f005ea654a8}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{3d5f108a-e508-4d2e-88eb-d6577a72fe1f}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{0dfb5d8d-1136-4cfd-a2e5-3e3613c17608}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\体">
+      <UniqueIdentifier>{ddf199cd-0881-47bc-9460-2b21e46cbd74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\髪">
+      <UniqueIdentifier>{1d3155f7-20fa-4884-a127-9b69d48ba8a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\服">
+      <UniqueIdentifier>{4b281db5-28a6-4423-8a15-ebb815f52954}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\目">
+      <UniqueIdentifier>{8cbf748d-e6aa-4965-808f-7d83ed3a8fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\武器">
+      <UniqueIdentifier>{ead091a6-0a5b-4871-9531-f03a516084d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\NPC">
+      <UniqueIdentifier>{541a7d20-d506-4270-9e18-0e8a664bde30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\2x2">
+      <UniqueIdentifier>{0d050ed5-214c-4909-a97b-9b336b3a529f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SboGrpData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboGrpData.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\acce01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\acce02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\balloon_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\char_back.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\efc_32_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\efc_64_01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\item.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\map01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\map02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\map03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\map_shadow01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\mark.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\num_l.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\num_m.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\num_s.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\shadow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\System.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\title.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\title_back.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\title_cloud.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\URARA-worksロゴ.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\体\bst.png">
+      <Filter>Resource Files\体</Filter>
+    </Image>
+    <Image Include="res\体\bst_ear.png">
+      <Filter>Resource Files\体</Filter>
+    </Image>
+    <Image Include="res\体\drk.png">
+      <Filter>Resource Files\体</Filter>
+    </Image>
+    <Image Include="res\体\drk_ear.png">
+      <Filter>Resource Files\体</Filter>
+    </Image>
+    <Image Include="res\体\elf.png">
+      <Filter>Resource Files\体</Filter>
+    </Image>
+    <Image Include="res\体\elf_ear.png">
+      <Filter>Resource Files\体</Filter>
+    </Image>
+    <Image Include="res\体\hum.png">
+      <Filter>Resource Files\体</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d01.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d02.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d03.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d04.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d05.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d06.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d07.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d08.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d09.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d10.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d11.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d12.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_d13.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u01.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u02.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u03.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u04.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u05.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u06.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u07.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u08.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u09.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u10.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u11.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u12.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\髪\hair_u13.png">
+      <Filter>Resource Files\髪</Filter>
+    </Image>
+    <Image Include="res\服\cloth01.png">
+      <Filter>Resource Files\服</Filter>
+    </Image>
+    <Image Include="res\服\cloth02.png">
+      <Filter>Resource Files\服</Filter>
+    </Image>
+    <Image Include="res\服\sp01.png">
+      <Filter>Resource Files\服</Filter>
+    </Image>
+    <Image Include="res\目\eye01.png">
+      <Filter>Resource Files\目</Filter>
+    </Image>
+    <Image Include="res\目\eye02.png">
+      <Filter>Resource Files\目</Filter>
+    </Image>
+    <Image Include="res\目\eye03.png">
+      <Filter>Resource Files\目</Filter>
+    </Image>
+    <Image Include="res\目\eye04.png">
+      <Filter>Resource Files\目</Filter>
+    </Image>
+    <Image Include="res\目\eye05.png">
+      <Filter>Resource Files\目</Filter>
+    </Image>
+    <Image Include="res\目\eye06.png">
+      <Filter>Resource Files\目</Filter>
+    </Image>
+    <Image Include="res\武器\weapon01.png">
+      <Filter>Resource Files\武器</Filter>
+    </Image>
+    <Image Include="res\武器\weapon02.png">
+      <Filter>Resource Files\武器</Filter>
+    </Image>
+    <Image Include="res\武器\weapon_arrow01.png">
+      <Filter>Resource Files\武器</Filter>
+    </Image>
+    <Image Include="res\武器\weapon_bow01.png">
+      <Filter>Resource Files\武器</Filter>
+    </Image>
+    <Image Include="res\武器\weapon_etc01.png">
+      <Filter>Resource Files\武器</Filter>
+    </Image>
+    <Image Include="res\武器\weapon_glove01.png">
+      <Filter>Resource Files\武器</Filter>
+    </Image>
+    <Image Include="res\NPC\npc01.png">
+      <Filter>Resource Files\NPC</Filter>
+    </Image>
+    <Image Include="res\NPC\npc02.png">
+      <Filter>Resource Files\NPC</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_arms01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_arms02.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_arms03.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_arms_sp01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_bow01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_char_shadow_01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_cloth00.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_cloth01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_cloth02.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_cloth03.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_eye0.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_eye01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_eye02.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_eye03.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_eye04.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_eye05.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_hair01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_hair02.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_hair03.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_hair04.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_hum.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_hum_hair_u0.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_hum_hair_u01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc001.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc001_shadow.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc002.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc002_shadow.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc003.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc003_shadow.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc004.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc004_shadow.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc005.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc005_shadow.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc006.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_npc006_shadow.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_shield01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_sp_cloth01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_sp_cloth02.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_sp_hair01.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+    <Image Include="res\2x2\2x2_sp_hair02.png">
+      <Filter>Resource Files\2x2</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{3bab05bb-3976-4974-9b07-6c23178d12fc}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{2c67c8a9-1649-4b78-8c30-0427e117c0c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib">
+      <UniqueIdentifier>{4ae54418-81f4-4d7d-a34e-14e896f898af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib\md5">
+      <UniqueIdentifier>{c3ccb88b-a0a2-4899-b641-64bf1ebe8f3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\myLib">
+      <UniqueIdentifier>{63ac607b-cd38-47e0-9a37-30fb0cd1cfc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{5de1bcc8-16da-4355-83fe-670e42e44a64}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1">
+      <UniqueIdentifier>{f7f8b2a0-6f41-4226-bfd6-769752cc04af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Lib No. 1">
+      <UniqueIdentifier>{cb6f4746-fdff-4cd6-9f4e-2bfc860c6f1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Lib No. 1\md5 No. 1">
+      <UniqueIdentifier>{c0626d6b-8f07-457d-8bfb-1d29f0eb42a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\myLib No. 1">
+      <UniqueIdentifier>{7b4e0894-d998-4e86-92e3-17d4ea31dfb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{a3d6498d-3f18-4fc3-95fe-4988ae37e83d}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\MakeFileList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MakeFileListDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\SBOGlobal.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Lib\md5\GetMD5.cpp">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Lib\md5\GetMD5File.cpp">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\Lib\md5\md5c.c">
+      <Filter>Source Files\Common\Lib\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\myLib\myString.cpp">
+      <Filter>Source Files\Common\myLib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MakeFileList.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\MakeFileList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MakeFileListDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\GlobalDefine.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\SBOGlobal.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Lib\md5\GetMD5.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1\md5 No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Lib\md5\GetMD5File.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1\md5 No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Lib\md5\md5.h">
+      <Filter>Header Files\Common No. 1\Lib No. 1\md5 No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\myLib\myString.h">
+      <Filter>Header Files\Common No. 1\myLib No. 1</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MakeFileList.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MakeFileList.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

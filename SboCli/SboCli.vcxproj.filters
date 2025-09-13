@@ -1,0 +1,1595 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8ccf5232-475f-4f09-81e2-76abac8b8b58}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{edc86ee7-c11a-4cd4-9a90-cd69cd3719db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info">
+      <UniqueIdentifier>{6141c59c-327f-4081-953a-1f3ba5fad889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoItemType">
+      <UniqueIdentifier>{8381a983-1086-48f6-9180-f6c562df4491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoMapEvent">
+      <UniqueIdentifier>{c8cae700-bcd3-4a0d-9257-34729da3343a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoSkill">
+      <UniqueIdentifier>{69b7dff1-044f-4cc7-a53b-41291427cacd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Info\InfoTalkEvent">
+      <UniqueIdentifier>{6589fa19-2178-45ad-be07-9c37b1a48ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib No. 2">
+      <UniqueIdentifier>{93f5a416-358b-4a29-be18-1f3a74596759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\Lib No. 2\mfc">
+      <UniqueIdentifier>{78835a7f-2481-43c5-80ea-ee3b27d9d829}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common\LibInfo">
+      <UniqueIdentifier>{f68239a0-2690-4672-b3df-d69671e844aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Info No. 2">
+      <UniqueIdentifier>{63419f02-277b-4159-8b36-6fe36d3ace79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Info No. 2\InfoChar">
+      <UniqueIdentifier>{15a717af-3bc3-43c6-92cf-a280afc286ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Layer">
+      <UniqueIdentifier>{619b18e2-8357-4791-9fb5-c0e0b2cd88ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lib">
+      <UniqueIdentifier>{6a9904a6-77e8-4b6f-8313-711adbed1258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibInfo No. 2">
+      <UniqueIdentifier>{ba7c67b2-a6c2-4d61-a40d-c611d26f7e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StateProc">
+      <UniqueIdentifier>{0e7cad8a-3dc9-46ce-b7f2-190cadaa7535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{770eaecb-b0bf-49a6-a745-07d7da557852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MainFrame">
+      <UniqueIdentifier>{b3ac3bef-71db-4dac-be47-d2e73e4a6ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Dialog">
+      <UniqueIdentifier>{78ad2243-a20c-44d7-8777-dc6ce55601d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Wnd">
+      <UniqueIdentifier>{22594c29-d5cb-4e8a-9196-c385131dd2cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{656e2dd6-184f-4140-bebf-99d41509fc88}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1">
+      <UniqueIdentifier>{6cfcc00b-5684-44ac-b376-1b0856281bba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1">
+      <UniqueIdentifier>{e7bdc921-6bee-44ec-9d6d-ba50cc981d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoItemType No. 1">
+      <UniqueIdentifier>{602f812b-7c31-4194-8bff-ca8be9d9e9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoMapEvent">
+      <UniqueIdentifier>{c1d551f1-c91e-42eb-9f8a-e2966e8e8617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoSkill">
+      <UniqueIdentifier>{54626c7a-f51a-43ba-86a6-a10e6b3d3b7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Info No. 1\InfoTalkEvent">
+      <UniqueIdentifier>{15b16cd0-cd0b-42fe-bf2f-90bfbbd8f28c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Lib No. 3">
+      <UniqueIdentifier>{65b6288f-e662-4065-a263-da3ea80ed0cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\Lib No. 3\mfc No. 1">
+      <UniqueIdentifier>{b0ca8467-c216-449d-87f6-921beb2d4933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common No. 1\LibInfo No. 1">
+      <UniqueIdentifier>{49366dc9-b1f8-408a-8e71-f6248f14bdb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Info No. 3">
+      <UniqueIdentifier>{e7787c64-d572-457c-ac2d-d4b0fd882447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Info No. 3\InfoChar No. 1">
+      <UniqueIdentifier>{abe4db96-2ca3-470c-8f2f-461e7dc5f880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Layer No. 1">
+      <UniqueIdentifier>{c12092aa-34f4-495f-b39b-2f796d2b1f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lib No. 1">
+      <UniqueIdentifier>{d751fd7f-6163-4b1e-b3e7-e723165be9bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lib No. 1\Png">
+      <UniqueIdentifier>{a47e3cfe-3a4a-40d9-b97c-1926afe646bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lib No. 1\Audiere">
+      <UniqueIdentifier>{338572c7-deea-453a-9508-93fd55fe9053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibInfo No. 3">
+      <UniqueIdentifier>{36b07fe9-6649-481f-be0a-d91c2fec3ebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\StateProc No. 1">
+      <UniqueIdentifier>{f2113dff-8c48-4973-9420-52b6584fc2bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window No. 1">
+      <UniqueIdentifier>{9926803c-69ab-49fa-95dd-a99ed8f8c6a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MainFrame No. 1">
+      <UniqueIdentifier>{d455eefb-0ac0-499d-97d7-85e4e4c418a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Dialog No. 1">
+      <UniqueIdentifier>{3f89697f-8a65-428f-b807-b97dbeccdb79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Wnd No. 1">
+      <UniqueIdentifier>{c7c2b9ae-48f0-4fa9-8841-7bf1539483c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{da23dc70-302c-4d86-869d-09bc4cc23c7a}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AdminWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LibSboSoundLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MgrData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MgrDraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MgrGrpData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MgrKeyInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MgrLayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MgrSound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MgrWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SboCli.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\crc.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\mt19937int.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\SBOGlobal.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoAccount.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoAnime.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoBase.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\Info\InfoCharBase.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoDisable.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoEffect.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoFileList.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoFishing.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoItem.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoItemWeapon.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\Info\InfoMapBase.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapObject.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapObjectData.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapParts.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapShadow.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMotion.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMotionType.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSystem.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTextEffect.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoItemType\InfoItemTypeBase.cpp">
+      <Filter>Source Files\Common\Info\InfoItemType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.cpp">
+      <Filter>Source Files\Common\Info\InfoMapEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillBase.cpp">
+      <Filter>Source Files\Common\Info\InfoSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp">
+      <Filter>Source Files\Common\Info\InfoSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp">
+      <Filter>Source Files\Common\Info\InfoSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.cpp">
+      <Filter>Source Files\Common\Info\InfoTalkEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\CryptUtil.cpp">
+      <Filter>Source Files\Common\Lib No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\DataSlot.cpp">
+      <Filter>Source Files\Common\Lib No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\LayoutHelper.cpp">
+      <Filter>Source Files\Common\Lib No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\ParamUtil.cpp">
+      <Filter>Source Files\Common\Lib No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\TextOutput.cpp">
+      <Filter>Source Files\Common\Lib No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Lib\mfc\LogViewCtrl.cpp">
+      <Filter>Source Files\Common\Lib No. 2\mfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoAccount.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoBase.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\LibInfo\LibInfoCharBase.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoDisable.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoEfcBalloon.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoEffect.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoItem.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemType.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemWeapon.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\LibInfo\LibInfoMapBase.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapEvent.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObject.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObjectData.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapParts.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapShadow.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotion.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoSystem.cpp">
+      <Filter>Source Files\Common\LibInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoCharCli.cpp">
+      <Filter>Source Files\Info No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharATACKANIMECli.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharBALLCli.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharMOVEATACKCli.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Info\InfoChar\InfoCharSCORECli.cpp">
+      <Filter>Source Files\Info No. 2\InfoChar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerBase.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerCharSelect.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerCloud.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerInfo.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerLoginMenu.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerLogo.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerMap.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerMisty.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerSnow.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerSystemMsg.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer\LayerTitle.cpp">
+      <Filter>Source Files\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lib\DInputUtil.cpp">
+      <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lib\DXAudio.cpp">
+      <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lib\Img32.cpp">
+      <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lib\LibMusicLoader.cpp">
+      <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lib\MacAddr.cpp">
+      <Filter>Source Files\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LibInfo\LibInfoCharCli.cpp">
+      <Filter>Source Files\LibInfo No. 2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateProc\StateProcBase.cpp">
+      <Filter>Source Files\StateProc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateProc\StateProcDISCONNECT.cpp">
+      <Filter>Source Files\StateProc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateProc\StateProcINFO.cpp">
+      <Filter>Source Files\StateProc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateProc\StateProcLOGIN.cpp">
+      <Filter>Source Files\StateProc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateProc\StateProcLOGINMENU.cpp">
+      <Filter>Source Files\StateProc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateProc\StateProcLOGO.cpp">
+      <Filter>Source Files\StateProc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateProc\StateProcMAP.cpp">
+      <Filter>Source Files\StateProc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowACCOUNTINFO.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowBase.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowCHAR_STATUS.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowCHAR_STATUS2.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowCHAR_STATUS3.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowCHAR_STATUS4.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowCHARNAME.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowCHAT.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowCOMMANDMENU.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowEYECOLOR.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowFAMILYTYPE.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowHAIRCOLOR.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowHAIRTYPE.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowITEMMENU.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowITEMMENU_SELECT.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowLOGIN.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowLOGINMENU.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowMSG.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowNAMEINPUT.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION_ACTIONSET.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION_ACTIONSET_SLEEPTIMER.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION_INPUTSET.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION_INPUTSET_SETDEVICE.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION_TASKBAR.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION_VIEWSET.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowOPTION_VOLUMESET.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowPLACEINFORMATION.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSETBGMVOLUME.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSETCOLOR.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSETDRAWMODE.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSETSOUNDVOLUME.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSEX.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSKILLMENU.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSTATUS.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSTYLESELECT.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSWOON.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowSYSTEMMENU.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\WindowTEXTMSG.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrame.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCHAR.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcCONNECT.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcEFFECT.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcITEM.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcMAP.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcSKILL.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcSYSTEM.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminAccountAdd.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminBase.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharAccountInfo.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharAddNPC.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharAdmin.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharDisable.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharDisableNew.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharModify.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyGrp.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyItem.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharModifySkill.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyStatus.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyTypeBase.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharModifyTypePUTNPC.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharMotion.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharMotionList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharMotionTypeList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillBase.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillHEAL.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillMOVEATACK.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminCharSkillNONE.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminEfcBalloon.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminEfcBalloonList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminEfcEffect.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminEfcEffectList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemNew.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNew.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewARMS.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewARMSBow.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewHP.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemTypeNewLIGHT.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemWeaponList.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminItemWeaponNew.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEvent.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEventBase.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEventGRPIDTMP.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEventINITSTATUS.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEventLIGHT.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEventMAPMOVE.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEventMOVE.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapEventNONE.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapInfo.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapObject.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapObjectData.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapObjectDataEdit.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapObjectEdit.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapParts.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapPartsEdit.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapShadow.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminMapShadowEdit.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminSelectEffect.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminSelectItem.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminServerInfo.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminSystemSetInitCharStatus.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventADDSKILL.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventBase.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventMENU.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventMENUSet.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventMSG.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventNONE.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventPAGE.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventSet.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkEventTab.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgAdminTalkSet.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgDbg.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dialog\DlgMsgLog.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\ListCtrlEffectInfo.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\ListCtrlItemInfo.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\StaticGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\StaticMapObjectGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\StaticMapParts.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\StaticMapShadow.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndMap.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndMapPartsAnimeList.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndMapPartsGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndMapShadowAnimeList.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndMapShadowGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndSelectGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndSelectItemGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndSelectMapPartsGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndSelectMapShadowGrp.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wnd\WndToolbar.cpp">
+      <Filter>Source Files\Wnd</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\AdminWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LibSboSoundLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MgrData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MgrDraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MgrGrpData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MgrKeyInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MgrLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MgrSound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MgrWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SboCli.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SboCli_priv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SboSoundData\SboSoundData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\crc.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\GlobalDefine.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SBOGlobal.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SBOVersion.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoAccount.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoAnime.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Info\InfoCharBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoDisable.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoEfcBalloon.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoEffect.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoFileList.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoFishing.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoItem.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoItemWeapon.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Info\InfoMapBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapObject.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapObjectData.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapParts.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapShadow.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMotion.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMotionType.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSystem.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTextEffect.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoItemType\InfoItemTypeBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoItemType No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEvent.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoMapEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillHEAL.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.h">
+      <Filter>Header Files\Common No. 1\Info No. 1\InfoTalkEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\CryptUtil.h">
+      <Filter>Header Files\Common No. 1\Lib No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\DataSlot.h">
+      <Filter>Header Files\Common No. 1\Lib No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\LayoutHelper.h">
+      <Filter>Header Files\Common No. 1\Lib No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\ParamUtil.h">
+      <Filter>Header Files\Common No. 1\Lib No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\TextOutput.h">
+      <Filter>Header Files\Common No. 1\Lib No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Lib\mfc\LogViewCtrl.h">
+      <Filter>Header Files\Common No. 1\Lib No. 3\mfc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoAccount.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoBase.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\LibInfo\LibInfoCharBase.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoDisable.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoEfcBalloon.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoEffect.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoItem.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemType.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoItemWeapon.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\LibInfo\LibInfoMapBase.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapEvent.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObject.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapObjectData.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapParts.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMapShadow.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotion.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoMotionType.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoSkill.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LibInfo\LibInfoSystem.h">
+      <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoCharCli.h">
+      <Filter>Header Files\Info No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharATACKANIMECli.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharBALLCli.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharMOVEATACKCli.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Info\InfoChar\InfoCharSCORECli.h">
+      <Filter>Header Files\Info No. 3\InfoChar No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerBase.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerCharSelect.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerCloud.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerInfo.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerLoginMenu.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerLogo.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerMap.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerMisty.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerSnow.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerSystemMsg.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer\LayerTitle.h">
+      <Filter>Header Files\Layer No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\DInputUtil.h">
+      <Filter>Header Files\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\DXAudio.h">
+      <Filter>Header Files\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\Img32.h">
+      <Filter>Header Files\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\LibMusicLoader.h">
+      <Filter>Header Files\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\MacAddr.h">
+      <Filter>Header Files\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\Png\png.h">
+      <Filter>Header Files\Lib No. 1\Png</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\Png\pngconf.h">
+      <Filter>Header Files\Lib No. 1\Png</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\Audiere\Audiere.h">
+      <Filter>Header Files\Lib No. 1\Audiere</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LibInfo\LibInfoCharCli.h">
+      <Filter>Header Files\LibInfo No. 3</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProc.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProcBase.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProcDISCONNECT.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProcINFO.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProcLOGIN.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProcLOGINMENU.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProcLOGO.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateProc\StateProcMAP.h">
+      <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowACCOUNTINFO.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowBase.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowCHAR_STATUS.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowCHAR_STATUS2.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowCHAR_STATUS3.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowCHAR_STATUS4.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowCHARNAME.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowCHAT.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowCOMMANDMENU.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowEYECOLOR.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowFAMILYTYPE.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowHAIRCOLOR.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowHAIRTYPE.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowITEMMENU.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowITEMMENU_SELECT.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowLOGIN.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowLOGINMENU.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowMSG.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowNAMEINPUT.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION_ACTIONSET.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION_ACTIONSET_SLEEPTIMER.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION_INPUTSET.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION_INPUTSET_SETDEVICE.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION_TASKBAR.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION_VIEWSET.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowOPTION_VOLUMESET.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowPLACEINFORMATION.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSETBGMVOLUME.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSETCOLOR.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSETDRAWMODE.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSETSOUNDVOLUME.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSEX.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSKILLMENU.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSTATUS.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSTYLESELECT.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSWOON.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowSYSTEMMENU.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowTEXTMSG.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainFrame\MainFrame.h">
+      <Filter>Header Files\MainFrame No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminAccountAdd.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminBase.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharAccountInfo.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharAddNPC.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharAdmin.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharDisable.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharDisableNew.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharModify.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyGrp.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyItem.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharModifySkill.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyStatus.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyTypeBase.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharModifyTypePUTNPC.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharMotion.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharMotionList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharMotionTypeList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillBase.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillHEAL.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillMOVEATACK.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminCharSkillNONE.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminEfcBalloon.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminEfcBalloonList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminEfcEffect.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminEfcEffectList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemNew.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNew.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewARMS.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewARMSBow.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewHP.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemTypeNewLIGHT.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemWeaponList.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminItemWeaponNew.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEvent.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEventBase.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEventGRPIDTMP.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEventINITSTATUS.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEventLIGHT.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEventMAPMOVE.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEventMOVE.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapEventNONE.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapInfo.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapObject.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapObjectData.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapObjectDataEdit.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapObjectEdit.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapParts.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapPartsEdit.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapShadow.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminMapShadowEdit.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminSelectEffect.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminSelectItem.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminServerInfo.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminSystemSetInitCharStatus.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventADDSKILL.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventBase.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventMENU.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventMENUSet.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventMSG.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventNONE.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventPAGE.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventSet.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkEventTab.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgAdminTalkSet.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgDbg.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Dialog\DlgMsgLog.h">
+      <Filter>Header Files\Dialog No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\ListCtrlEffectInfo.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\ListCtrlItemInfo.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\StaticGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\StaticMapObjectGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\StaticMapParts.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\StaticMapShadow.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndMap.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndMapPartsAnimeList.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndMapPartsGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndMapShadowAnimeList.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndMapShadowGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndSelectGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndSelectItemGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndSelectMapPartsGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndSelectMapShadowGrp.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wnd\WndToolbar.h">
+      <Filter>Header Files\Wnd No. 1</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MsgLog.html">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\SboCli.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\SboCli.exe.manifest">
+      <Filter>Resource Files</Filter>
+    </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\SboCli.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\SBOｱｲｺﾝ.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboCli.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

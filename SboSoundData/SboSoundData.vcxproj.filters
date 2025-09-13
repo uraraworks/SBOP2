@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{6ec64c2c-f647-452c-a939-20b9f36c2031}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ea08ae28-4ef3-4451-8f40-973b50377406}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{c87d9ca5-f2d3-4d5a-9b7d-c330f8605d31}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\WAVE">
+      <UniqueIdentifier>{a4953bf1-599c-4d40-9951-2cb90a9a4915}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SboSoundData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboSoundData.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SboSoundData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\WAVE\asi_2.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\balloon1.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\bikkuri.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\chari14_a.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\chat.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\clap02_loop.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\clap03_loop.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\crash20_d.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\dr-bass01.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\dr-bass02.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\dr-bass05.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\dr-clap01.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\dr-sne02.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\gimon.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\hit0.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\hit1.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\kai.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\kizuku.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\kusa.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\niku.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\pi73.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\push51_c.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\select.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\step03.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\swing24_c.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\swing25_c.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\w_chat.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\whistleL.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\whistleS.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\お金.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\キー攻撃.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\キー死亡.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\ゴミ箱開く・捨てる.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\ドロップ：ビン.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\バッグ開く.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\ピンポンパンポーン.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\プヨン攻撃.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\プヨン死亡.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\プヨン移動.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\ミス.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\レベルアップ.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\中アイテム.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\大アイテム.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\小アイテム.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\弓攻撃.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\打撃クリティカル.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\斬撃クリティカル.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\斬撃ヒット１.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\斬撃ヒット２.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\服・ローブ.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\武器.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\気絶.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\消滅.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\液体.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\溜め.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\溜め２.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\盾構え.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\矢クリティカル.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\矢ヒット.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\窓開く.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\素材.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\羽ばたき.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\防御.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\食事.wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+    <Media Include="res\WAVE\（加工済）ウララワークス(20050923).wav">
+      <Filter>Resource Files\WAVE</Filter>
+    </Media>
+  </ItemGroup>
+</Project>
