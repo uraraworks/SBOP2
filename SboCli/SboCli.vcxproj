@@ -103,6 +103,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalOptions>/ignore:4099 /ignore:4217 %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>MSVCRTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>xaudio2.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
@@ -146,6 +147,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/Ignore:4089 /ignore:4099 /ignore:4217 %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>MSVCRT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/SboCli.pdb</ProgramDatabaseFile>
