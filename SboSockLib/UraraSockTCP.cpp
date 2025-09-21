@@ -288,6 +288,9 @@ void CUraraSockTCPImplSlot::Combine(CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEI
     if (pQue == NULL) {
         return;
     }
+    if (pQue == m_SendQueInfo) {
+        return;
+    }
     int nCount = pQue->GetSize();
     if (nCount <= 1) {
         return;
