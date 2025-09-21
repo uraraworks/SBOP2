@@ -1,4 +1,4 @@
-// stdafx.h : 標準のシステム インクルード ファイル、
+﻿// stdafx.h : 標準のシステム インクルード ファイル、
 //            または参照回数が多く、かつあまり変更されない
 //            プロジェクト専用のインクルード ファイルを記述します。
 //
@@ -14,6 +14,14 @@
 // この位置にヘッダーを挿入してください
 #define WIN32_LEAN_AND_MEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します
 
+#include <rpcsal.h>
+#include <sal.h>
+#include <sdkddkver.h>
+#include <rpc.h>
+#include <rpcndr.h>
+#include <rpcsal.h>
+#include <sal.h>
+#include "../Common/rpcsal_fallback.h"
 #include <windows.h>
 
 // TODO: プログラムで必要なヘッダー参照を追加してください。

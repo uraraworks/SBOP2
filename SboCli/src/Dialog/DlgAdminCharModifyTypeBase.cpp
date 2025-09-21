@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:DlgAdminCharModifyTypeBase.cpp								 */
 /* 内容			:キャラ情報 移動種別の設定ダイアログクラス 実装ファイル		 */

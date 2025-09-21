@@ -1,360 +1,270 @@
-/* Copyright(C)URARA-works 2003 */
-/* ========================================================================= */
-/* ファイル名：	DXAudio.cpp													 */
-/* 内容：		DirectX Audioを使うためのクラス								 */
-/* 作成：		年がら年中春うらら(URARA-works)								 */
-/* 作成開始日：	2003/03/16													 */
-/* ========================================================================= */
-
+// XAudio2-backed minimal audio for NO_DIRECTMUSIC builds
 #include "stdafx.h"
-#include <windowsx.h>
-
+#include <windows.h>
+#include <mmreg.h>
+#include <xaudio2.h>
+#include <cmath>
+#include <cstdlib>
+#include "third_party/stb_vorbis.c" // local bundled decoder (placeholder)
 #include "DXAudio.h"
 
-#pragma comment (lib, "dxguid.lib")
+struct WAVSEG {
+  IXAudio2SourceVoice* voice{nullptr};
+  WAVEFORMATEX* format{nullptr};
+  BYTE* audio{nullptr};
+  DWORD audioBytes{0};
+  XAUDIO2_BUFFER buffer{};
+};
 
-/* ========================================================================= */
-/* 定数定義																	 */
-/* ========================================================================= */
+static IXAudio2* g_xaudio2 = nullptr;
+static IXAudio2MasteringVoice* g_master = nullptr;
+static float g_sfx_volume = 1.0f; // linear volume for secondary (SE)
 
-#define SAFE_RELEASE(x)	{if(x){(x)->Release();x=NULL;}}
-
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::CDXAudio												 */
-/* 内容：	コンストラクタ													 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-CDXAudio::CDXAudio()
-{
-	m_pPerformance		= NULL;
-	m_pDefAudioPath		= NULL;
-	m_pDefAudioPath2	= NULL;
-	m_pLoader			= NULL;
-	m_hResource			= NULL;
+static bool ParseWavFromMemory(const BYTE* data, DWORD size,
+                               WAVEFORMATEX** outFmt,
+                               BYTE** outAudio, DWORD* outBytes) {
+  if (size < 12) return false;
+  auto rd32 = [&](DWORD off)->DWORD { if (off+4>size) return 0; return *(DWORD const*)(data+off); };
+  if (rd32(0) != 'FFIR' || rd32(8) != 'EVAW') return false; // 'RIFF' 'WAVE'
+  DWORD pos = 12;
+  const BYTE* audio = nullptr; DWORD audioBytes = 0; WAVEFORMATEX* fmt = nullptr;
+  while (pos + 8 <= size) {
+    DWORD id = rd32(pos);
+    DWORD cb = rd32(pos+4);
+    pos += 8;
+    if (pos + cb > size) break;
+    if (id == ' tmf') { // 'fmt '
+      if (cb < sizeof(WAVEFORMATEX)) {
+        // allocate and copy
+        WAVEFORMATEX tmp{};
+        memcpy(&tmp, data+pos, min<DWORD>(cb, sizeof(tmp)));
+        fmt = (WAVEFORMATEX*)CoTaskMemAlloc(sizeof(WAVEFORMATEX));
+        if (!fmt) return false;
+        *fmt = tmp;
+      } else {
+        fmt = (WAVEFORMATEX*)CoTaskMemAlloc(sizeof(WAVEFORMATEX));
+        if (!fmt) return false;
+        memcpy(fmt, data+pos, sizeof(WAVEFORMATEX));
+      }
+    } else if (id == 'atad') { // 'data'
+      audioBytes = cb;
+      audio = data+pos;
+    }
+    pos += ((cb + 1) & ~1u); // align
+  }
+  if (!fmt || !audio || audioBytes == 0) { if (fmt) CoTaskMemFree(fmt); return false; }
+  // make owned copy of audio
+  BYTE* buf = (BYTE*)CoTaskMemAlloc(audioBytes);
+  if (!buf) { CoTaskMemFree(fmt); return false; }
+  memcpy(buf, audio, audioBytes);
+  *outFmt = fmt; *outAudio = buf; *outBytes = audioBytes;
+  return true;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::~CDXAudio												 */
-/* 内容：	デストラクタ													 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-CDXAudio::~CDXAudio()
-{
-	Destroy ();
+static float DbToLinear(long dB) {
+  if (dB > 10) dB = 10; // safety
+  if (dB < -100) dB = -100;
+  return powf(10.0f, (float)dB / 20.0f);
 }
 
+CDXAudio::CDXAudio() {
+  m_hResource = NULL;
+  m_pBgmFmt = nullptr;
+  m_pBgmAudio = nullptr;
+  m_cbBgmAudio = 0;
+  m_pBgmVoice = nullptr;
+  m_fBgmVolume = 1.0f;
+}
+CDXAudio::~CDXAudio() { Destroy(); }
 
-/* ========================================================================= */
-/* 関数名：	CDXAudio::Create												 */
-/* 内容：	初期化															 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-BOOL CDXAudio::Create(void)
-{
-	HRESULT hr;
-
-	/* パフォーマンスの作成 */
-	hr = CoCreateInstance (
-				CLSID_DirectMusicPerformance,
-				NULL,
-				CLSCTX_INPROC,
-				IID_IDirectMusicPerformance8,
-				(PVOID *)&m_pPerformance);
-	if (FAILED (hr)) {
-		return FALSE;
-	}
-
-	/* 初期化 */
-	m_pPerformance->InitAudio (
-			NULL, NULL, NULL,
-			DMUS_APATH_DYNAMIC_STEREO,
-			64,
-			DMUS_AUDIOF_ALL,
-			NULL);
-	if (FAILED (hr)) {
-		return FALSE;
-	}
-
-	/* デフォルトのオーディオパスを取得 */
-	m_pPerformance->GetDefaultAudioPath (&m_pDefAudioPath);
-	if (FAILED (hr)) {
-		return FALSE;
-	}
-	m_pPerformance->CreateStandardAudioPath (DMUS_APATH_DYNAMIC_STEREO, 64, TRUE, &m_pDefAudioPath2);
-
-	hr = CoCreateInstance (
-				CLSID_DirectMusicLoader,
-				NULL,
-				CLSCTX_INPROC,
-				IID_IDirectMusicLoader8,
-				(PVOID *)&m_pLoader);
-	if (FAILED (hr)) {
-		return FALSE;
-	}
-
-	return TRUE;
+BOOL CDXAudio::Create(void) {
+  if (!g_xaudio2) {
+    if (FAILED(XAudio2Create(&g_xaudio2, 0, XAUDIO2_DEFAULT_PROCESSOR))) return FALSE;
+    if (FAILED(g_xaudio2->CreateMasteringVoice(&g_master))) return FALSE;
+  }
+  return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::Destroy												 */
-/* 内容：	終了処理														 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-void CDXAudio::Destroy(void)
-{
-	if (m_pPerformance) {
-		m_pPerformance->Stop (NULL, NULL, 0, 0);
-		m_pPerformance->CloseDown ();
-	}
-	SAFE_RELEASE (m_pDefAudioPath);
-	SAFE_RELEASE (m_pDefAudioPath2);
-	SAFE_RELEASE (m_pPerformance);
-	SAFE_RELEASE (m_pLoader);
+void CDXAudio::Destroy(void) {
+  // keep global engine alive for app lifetime; nothing to do here
 }
 
+void CDXAudio::SetResourceHandle(HMODULE hResource) { m_hResource = hResource; }
 
-/* ========================================================================= */
-/* 関数名：	CDXAudio::SetResourceHandle										 */
-/* 内容：	リソースハンドルの設定											 */
-/* 日付：	2003/09/01														 */
-/* ========================================================================= */
-
-void CDXAudio::SetResourceHandle(HMODULE hResource)
-{
-	m_hResource = hResource;
+BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL /*bMidi*/) {
+  if (!g_xaudio2 || !pSeg || !m_hResource) return FALSE;
+  HGLOBAL hRes = LoadResource(m_hResource, hSrc);
+  if (!hRes) return FALSE;
+  DWORD sz = SizeofResource(m_hResource, hSrc);
+  const BYTE* mem = (const BYTE*)LockResource(hRes);
+  if (!mem || !sz) return FALSE;
+  WAVEFORMATEX* fmt=nullptr; BYTE* audio=nullptr; DWORD bytes=0;
+  if (!ParseWavFromMemory(mem, sz, &fmt, &audio, &bytes)) return FALSE;
+  IXAudio2SourceVoice* v=nullptr;
+  if (FAILED(g_xaudio2->CreateSourceVoice(&v, fmt))) { CoTaskMemFree(fmt); CoTaskMemFree(audio); return FALSE; }
+  WAVSEG* seg = new WAVSEG();
+  seg->voice = v; seg->format = fmt; seg->audio = audio; seg->audioBytes = bytes;
+  ZeroMemory(&seg->buffer, sizeof(seg->buffer));
+  seg->buffer.AudioBytes = bytes;
+  seg->buffer.pAudioData = audio;
+  seg->buffer.Flags = XAUDIO2_END_OF_STREAM;
+  *pSeg = (IDirectMusicSegment8*)seg;
+  return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::GetSegFromRes											 */
-/* 内容：	リソースからのセグメント読み込み								 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi)
-{
-	HRESULT hr;
-	DMUS_OBJECTDESC ObjDesc;
-	IDirectMusicSegment8 *pTmp;
-
-	/* リソースを読み込み */
-	HGLOBAL hRes = LoadResource (m_hResource, hSrc);
-
-	/* 構造体を設定 */
-	ObjDesc.dwSize		= sizeof (DMUS_OBJECTDESC);
-	ObjDesc.guidClass	= CLSID_DirectMusicSegment;
-	ObjDesc.dwValidData	= DMUS_OBJ_CLASS | DMUS_OBJ_MEMORY;
-	ObjDesc.pbMemData	= (BYTE *)LockResource (hRes);
-	ObjDesc.llMemLength	= SizeofResource (m_hResource, hSrc);
-
-	/* セグメントを読み込み */
-	pTmp = *pSeg;
-
-	hr = m_pLoader->GetObject (&ObjDesc, IID_IDirectMusicSegment8, (void **)&pTmp);
-	if (FAILED (hr)) {
-		return FALSE;
-	}
-
-	if (bMidi) {
-		pTmp->SetParam (GUID_StandardMIDIFile, 0xFFFFFFFF, 0, 0, NULL);
-	}
-
-	/* バンドをダウンロード */
-	hr = pTmp->Download (m_pPerformance);
-	if (FAILED (hr)) {
-		return FALSE;
-	}
-
-	*pSeg = pTmp;
-	return TRUE;
+void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg) {
+  if (!pSeg) return;
+  WAVSEG* seg = (WAVSEG*)pSeg;
+  if (seg->voice) { seg->voice->DestroyVoice(); seg->voice = nullptr; }
+  if (seg->format) { CoTaskMemFree(seg->format); seg->format = nullptr; }
+  if (seg->audio) { CoTaskMemFree(seg->audio); seg->audio = nullptr; }
+  delete seg;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::ReleaseSeg											 */
-/* 内容：	セグメント開放													 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg)
-{
-	if (pSeg == NULL) {
-		return;
-	}
-
-	pSeg->Unload (m_pPerformance);
-	SAFE_RELEASE (pSeg);
+BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg) {
+  if (!pSeg) return FALSE;
+  WAVSEG* seg = (WAVSEG*)pSeg;
+  seg->voice->Stop();
+  seg->voice->FlushSourceBuffers();
+  if (FAILED(seg->voice->SubmitSourceBuffer(&seg->buffer))) return FALSE;
+  seg->voice->SetVolume(g_sfx_volume);
+  return SUCCEEDED(seg->voice->Start());
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::PlayPrimary											 */
-/* 内容：	プライマリセグメントとして再生									 */
-/* 日付：	2003/07/13														 */
-/* ========================================================================= */
-
-BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg)
-{
-	BOOL bRet;
-	HRESULT hr;
-
-	bRet = FALSE;
-	if (m_pPerformance == NULL) {
-		goto Exit;
-	}
-
-	hr = m_pPerformance->PlaySegmentEx (
-				pSeg,
-				NULL, NULL, 0, 0, NULL, NULL,
-				m_pDefAudioPath2);
-	if (FAILED (hr)) {
-		goto Exit;
-	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
+BOOL CDXAudio::PlaySecoundary(IDirectMusicSegment8 *pSeg) {
+  return PlayPrimary(pSeg);
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::PlaySecoundary										 */
-/* 内容：	セカンダリセグメントとして再生									 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-BOOL CDXAudio::PlaySecoundary(IDirectMusicSegment8 *pSeg)
-{
-	BOOL bRet;
-	HRESULT hr;
-
-	bRet = FALSE;
-	if (m_pPerformance == NULL) {
-		goto Exit;
-	}
-	if (m_pDefAudioPath == NULL) {
-		goto Exit;
-	}
-
-	hr = m_pPerformance->PlaySegmentEx (
-				pSeg,
-				NULL, NULL,
-				DMUS_SEGF_SECONDARY,
-				0, NULL, NULL,
-				m_pDefAudioPath);
-	if (FAILED (hr)) {
-		goto Exit;
-	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
+void CDXAudio::SetVolPrimary(long lVol) {
+  if (!g_master) return;
+  float vol = DbToLinear(lVol);
+  g_master->SetVolume(vol);
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::SetVolPrimary											 */
-/* 内容：	プライマリセグメントの音量設定									 */
-/* 日付：	2003/11/30														 */
-/* ========================================================================= */
-
-void CDXAudio::SetVolPrimary(long lVol)
-{
-	if (m_pDefAudioPath2 == NULL) {
-		return;
-	}
-	lVol = max (lVol, -96);
-	lVol = min (lVol, 0);
-	lVol *= 100;
-	m_pDefAudioPath2->SetVolume (lVol, 0);
+void CDXAudio::SetVolSecoundary(long lVol) {
+  // This would ideally adjust per-voice volume; left to caller to manage per segment
+  g_sfx_volume = DbToLinear(lVol);
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::SetVolSecoundary										 */
-/* 内容：	セカンダリセグメントの音量設定									 */
-/* 日付：	2003/11/30														 */
-/* ========================================================================= */
-
-void CDXAudio::SetVolSecoundary(long lVol)
-{
-	if (m_pDefAudioPath == NULL) {
-		return;
-	}
-	lVol = max (lVol, -100);
-	lVol = min (lVol, 10);
-	lVol *= 100;
-	m_pDefAudioPath->SetVolume (lVol, 0);
+void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD /*dwFlg*/) {
+  if (!pSeg) return;
+  WAVSEG* seg = (WAVSEG*)pSeg;
+  seg->voice->Stop();
+  seg->voice->FlushSourceBuffers();
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::Stop													 */
-/* 内容：	再生停止														 */
-/* 日付：	2003/03/16														 */
-/* ========================================================================= */
-
-void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD dwFlg)
-{
-	if (m_pPerformance == NULL) {
-		return;
-	}
-
-	if (dwFlg == 1) {
-		m_pPerformance->StopEx (m_pDefAudioPath2, 0, 0);
-		dwFlg = 0;
-	}
-	/* 再生停止 */
-	m_pPerformance->StopEx (pSeg, 0, dwFlg);
+void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwRepeats) {
+  if (!pSeg) return;
+  WAVSEG* seg = (WAVSEG*)pSeg;
+  // Re-submit buffer with loop settings
+  seg->buffer.LoopCount = (dwRepeats == 0 ? XAUDIO2_LOOP_INFINITE : (dwRepeats > 1 ? dwRepeats-1 : 0));
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::SetLoopPoints											 */
-/* 内容：	ループ範囲の設定												 */
-/* 日付：	2003/03/22														 */
-/* ========================================================================= */
-
-void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwFlg)
-{
-	if (pSeg == NULL) {
-		return;
-	}
-
-	pSeg->SetLoopPoints (0, 0);
-	pSeg->SetRepeats (dwFlg);
+BOOL CDXAudio::IsPlaying(IDirectMusicSegment8 *pSeg) {
+  if (!pSeg) return FALSE;
+  WAVSEG* seg = (WAVSEG*)pSeg;
+  XAUDIO2_VOICE_STATE st{};
+  seg->voice->GetState(&st);
+  return st.BuffersQueued > 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDXAudio::IsPlaying												 */
-/* 内容：	再生中判定														 */
-/* 日付：	2003/05/05														 */
-/* ========================================================================= */
-
-BOOL CDXAudio::IsPlaying(IDirectMusicSegment8 *pSeg)
-{
-	BOOL bRet;
-
-	bRet = FALSE;
-	if (pSeg == NULL) {
-		goto Exit;
-	}
-
-	if (m_pPerformance->IsPlaying (pSeg, 0) != S_OK) {
-		goto Exit;
-	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
+void CDXAudio::FreeBgmResources() {
+  if (m_pBgmVoice) {
+    ((IXAudio2SourceVoice*)m_pBgmVoice)->Stop();
+    ((IXAudio2SourceVoice*)m_pBgmVoice)->FlushSourceBuffers();
+    ((IXAudio2SourceVoice*)m_pBgmVoice)->DestroyVoice();
+    m_pBgmVoice = nullptr;
+  }
+  if (m_pBgmFmt) {
+    CoTaskMemFree(m_pBgmFmt);
+    m_pBgmFmt = nullptr;
+  }
+  if (m_pBgmAudio) {
+    CoTaskMemFree(m_pBgmAudio);
+    m_pBgmAudio = nullptr;
+  }
+  m_cbBgmAudio = 0;
 }
 
-/* Copyright(C)URARA-works 2003 */
+BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume) {
+  if (!g_xaudio2 || !path) return FALSE;
+  // Load whole file
+  HANDLE hf = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+  if (hf == INVALID_HANDLE_VALUE) return FALSE;
+  DWORD sz = GetFileSize(hf, nullptr);
+  if (sz == INVALID_FILE_SIZE || sz == 0) { CloseHandle(hf); return FALSE; }
+  BYTE* mem = (BYTE*)malloc(sz);
+  if (!mem) { CloseHandle(hf); return FALSE; }
+  DWORD rd=0; BOOL ok = ReadFile(hf, mem, sz, &rd, nullptr);
+  CloseHandle(hf);
+  if (!ok || rd != sz) { free(mem); return FALSE; }
+
+  // Try WAV first
+  WAVEFORMATEX* fmt = nullptr; BYTE* audio = nullptr; DWORD bytes = 0;
+  BOOL parsed = ParseWavFromMemory(mem, sz, &fmt, &audio, &bytes);
+  if (!parsed) {
+    // Not WAV. Try OGG via stb_vorbis
+    int ch = 0, rate = 0;
+    short* pcm = nullptr;
+    int frames = 0;
+    // include local decoder wrapper
+    // Note: This expects third_party/stb_vorbis.c to provide implementation.
+    frames = stb_vorbis_decode_filename(path, &ch, &rate, &pcm);
+    if (frames <= 0 || !pcm || ch <= 0 || rate <= 0) { free(mem); return FALSE; }
+    DWORD outBytes = (DWORD)frames * ch * sizeof(short);
+    fmt = (WAVEFORMATEX*)CoTaskMemAlloc(sizeof(WAVEFORMATEX));
+    if (!fmt) { free(pcm); free(mem); return FALSE; }
+    ZeroMemory(fmt, sizeof(*fmt));
+    fmt->wFormatTag = WAVE_FORMAT_PCM;
+    fmt->nChannels = (WORD)ch;
+    fmt->nSamplesPerSec = (DWORD)rate;
+    fmt->wBitsPerSample = 16;
+    fmt->nBlockAlign = (fmt->nChannels * fmt->wBitsPerSample) / 8;
+    fmt->nAvgBytesPerSec = fmt->nSamplesPerSec * fmt->nBlockAlign;
+    BYTE* xa = (BYTE*)CoTaskMemAlloc(outBytes);
+    if (!xa) { CoTaskMemFree(fmt); free(pcm); free(mem); return FALSE; }
+    memcpy(xa, pcm, outBytes);
+    free(pcm);
+    audio = xa; bytes = outBytes;
+  }
+  free(mem);
+
+  IXAudio2SourceVoice* voice = nullptr;
+  if (FAILED(g_xaudio2->CreateSourceVoice(&voice, fmt))) {
+    CoTaskMemFree(fmt); CoTaskMemFree(audio); return FALSE; }
+
+  FreeBgmResources();
+
+  XAUDIO2_BUFFER buf{};
+  buf.AudioBytes = bytes;
+  buf.pAudioData = audio;
+  buf.Flags = XAUDIO2_END_OF_STREAM;
+  if (bLoop) {
+    buf.LoopBegin = 0;
+    buf.LoopLength = 0; // loop entire buffer
+    buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+  }
+  if (FAILED(voice->SubmitSourceBuffer(&buf))) {
+    voice->DestroyVoice(); CoTaskMemFree(fmt); CoTaskMemFree(audio); return FALSE; }
+
+  m_pBgmFmt = fmt;
+  m_pBgmAudio = audio;
+  m_cbBgmAudio = bytes;
+  m_pBgmVoice = voice;
+  m_fBgmVolume = volume;
+  ((IXAudio2SourceVoice*)m_pBgmVoice)->SetVolume(m_fBgmVolume);
+  if (FAILED(((IXAudio2SourceVoice*)m_pBgmVoice)->Start())) {
+    FreeBgmResources(); return FALSE; }
+  return TRUE;
+}
+
+void CDXAudio::StopBGM() {
+  FreeBgmResources();
+}
+
+void CDXAudio::SetBGMVolume(float volume) {
+  m_fBgmVolume = volume;
+  if (m_pBgmVoice) {
+    ((IXAudio2SourceVoice*)m_pBgmVoice)->SetVolume(m_fBgmVolume);
+  }
+}

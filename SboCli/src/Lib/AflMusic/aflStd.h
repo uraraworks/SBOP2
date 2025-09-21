@@ -1,4 +1,4 @@
-#if _MSC_VER >= 1100
+﻿#if _MSC_VER >= 1100
 #pragma once
 #endif // _MSC_VER >= 1100
 #ifndef __INC_AFLSTD

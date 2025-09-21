@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_RENEWMAPSHADOW.cpp								 */
 /* 内容			:コマンド(管理者系:マップ影更新) 実装ファイル				 */

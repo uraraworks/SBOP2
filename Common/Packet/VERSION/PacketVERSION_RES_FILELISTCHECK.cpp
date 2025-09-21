@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketVERSION_RES_FILELISTCHECK.cpp						 */
 /* 内容			:コマンド(バージョン系:ファイルリストチェック応答) 実装ファイル	 */

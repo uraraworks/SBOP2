@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:DlgAdminSystemSetInitCharStatus.cpp						 */
 /* 内容			:キャラステータス初期値の設定ダイアログクラス 実装ファイル	 */

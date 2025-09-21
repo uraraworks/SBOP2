@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_CHAR_ADDNPC.cpp								 */
 /* 内容			:コマンド(管理者系:NPCの追加) 実装ファイル					 */

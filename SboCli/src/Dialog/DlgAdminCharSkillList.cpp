@@ -1,9 +1,9 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharSkillList.cpp									 */
-/* “à—e			:ƒXƒLƒ‹ƒŠƒXƒgƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹					 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/12/07													 */
+/* ファイル名	:DlgAdminCharSkillList.cpp									 */
+/* 内容			:スキルリストダイアログクラス 実装ファイル					 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2008/12/07													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* クラスの設定																 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::DoDataExchange(CDataExchange* pDX)
@@ -43,9 +43,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::CDlgAdminCharSkillList					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::CDlgAdminCharSkillList					 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillList::CDlgAdminCharSkillList(CWnd* pParent /*=NULL*/)
@@ -59,9 +59,9 @@ CDlgAdminCharSkillList::CDlgAdminCharSkillList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::~CDlgAdminCharSkillList				 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::~CDlgAdminCharSkillList				 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 CDlgAdminCharSkillList::~CDlgAdminCharSkillList()
@@ -70,9 +70,9 @@ CDlgAdminCharSkillList::~CDlgAdminCharSkillList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::Init									 */
+/* 内容		:初期化															 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::Init(CMgrData *pMgrData)
@@ -81,16 +81,16 @@ void CDlgAdminCharSkillList::Init(CMgrData *pMgrData)
 
 	m_pLibInfoSkill = m_pMgrData->GetLibInfoSkill ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ウィンドウ作成 */
 	Create (CDlgAdminCharSkillList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::Renew									 */
-/* “à—e		:ƒŠƒXƒgXV														 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::Renew									 */
+/* 内容		:リスト更新														 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::Renew(void)
@@ -114,15 +114,15 @@ void CDlgAdminCharSkillList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnMainFrame							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::OnMainFrame							 */
+/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWSKILLINFO:		/* ƒXƒLƒ‹î•ñXV */
+	case MAINFRAMEMSG_RENEWSKILLINFO:		/* スキル情報更新 */
 		Renew ();
 		break;
 	}
@@ -130,9 +130,9 @@ void CDlgAdminCharSkillList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::OnInitDialog							 */
+/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharSkillList::OnInitDialog()
@@ -143,7 +143,7 @@ BOOL CDlgAdminCharSkillList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",		LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒXƒLƒ‹–¼",	LVCFMT_LEFT, 300);
+	m_List.InsertColumn (1, "スキル名",	LVCFMT_LEFT, 300);
 
 	Renew ();
 
@@ -152,9 +152,9 @@ BOOL CDlgAdminCharSkillList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::OnAdd									 */
+/* 内容		:ボタンハンドラ(追加)											 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnAdd()
@@ -183,9 +183,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnModify								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::OnModify								 */
+/* 内容		:ボタンハンドラ(編集)											 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnModify()
@@ -228,9 +228,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharSkillList::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2008/12/07														 */
+/* 関数名	:CDlgAdminCharSkillList::OnDelete								 */
+/* 内容		:ボタンハンドラ(削除)											 */
+/* 日付		:2008/12/07														 */
 /* ========================================================================= */
 
 void CDlgAdminCharSkillList::OnDelete()

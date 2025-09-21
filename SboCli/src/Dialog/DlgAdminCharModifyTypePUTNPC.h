@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:DlgAdminCharModifyTypePUTNPC.h								 */
 /* 内容			:キャラ情報 移動種別の設定(NPC発生)ダイアログクラス 定義ファイル */

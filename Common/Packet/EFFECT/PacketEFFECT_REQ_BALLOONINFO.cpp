@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketEFFECT_REQ_BALLOONINFO.cpp							 */
 /* 内容			:コマンド(噴出し系:噴出し情報要求) 実装ファイル			 */

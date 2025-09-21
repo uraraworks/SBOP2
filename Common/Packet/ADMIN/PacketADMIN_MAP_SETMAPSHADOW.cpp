@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_MAP_SETMAPSHADOW.cpp							 */
 /* 内容			:コマンド(管理者系:マップ影配置) 実装ファイル				 */

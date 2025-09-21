@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_SKILL_RENEWSKILL.cpp							 */
 /* 内容			:コマンド(管理者系:スキル情報通知) 実装ファイル				 */

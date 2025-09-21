@@ -1,4 +1,4 @@
-#ifndef	__LOGVIEWCTRL_H__
+﻿#ifndef	__LOGVIEWCTRL_H__
 #define	__LOGVIEWCTRL_H__
 
 #if _MSC_VER > 1000

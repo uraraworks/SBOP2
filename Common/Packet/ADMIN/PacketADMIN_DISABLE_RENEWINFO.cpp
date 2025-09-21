@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2009 */
+﻿/* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_DISABLE_RENEWINFO.cpp							 */
 /* 内容			:コマンド(管理者系:拒否情報の更新) 実装ファイル				 */

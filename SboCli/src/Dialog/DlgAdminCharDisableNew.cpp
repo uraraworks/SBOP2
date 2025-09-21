@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2009 */
+﻿/* Copyright(C)URARA-works 2009 */
 /* ========================================================================= */
 /* ファイル名	:DlgAdminCharDisableNew.cpp									 */
 /* 内容			:拒否MACアドレスの追加ダイアログクラス 実装ファイル			 */

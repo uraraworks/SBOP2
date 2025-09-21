@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2006 */
+﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:MgrSound.cpp												 */
 /* 内容			:サウンドデータ管理クラス 実装ファイル						 */
@@ -13,7 +13,7 @@
 #include "LibSboSoundLoader.h"
 #include "MgrSound.h"
 
-#pragma comment (lib, "src/lib/Audiere/audiere.lib")
+// Audiere dependency removed
 
 /* ========================================================================= */
 /* 関数名	:CMgrSound::CMgrSound											 */
@@ -31,8 +31,7 @@ CMgrSound::CMgrSound()
 	m_pLibMusicLoader		= new CLibMusicLoader;
 	m_pLibSboSoundLoader	= new CLibSboSoundLoader;
 	m_apDMSSound			= NULL;
-	m_pDevicePtr			= NULL;
-	m_pOutputStreamPtr		= NULL;
+    /* BGM: XAudio2 再生に切替のため未使用 */
 }
 
 
@@ -78,9 +77,7 @@ BOOL CMgrSound::Create(void)
 	m_pDXAudio->SetResourceHandle (m_hDllSoundData);
 
 	m_pLibMusicLoader->		Load ();
-	m_pLibSboSoundLoader->	Load ();
-
-	m_pDevicePtr = new AudioDevicePtr(OpenDevice ());
+    m_pLibSboSoundLoader->	Load ();
 
 	/* 効果音を読み込み */
 	ReadSoundData ();
@@ -102,10 +99,9 @@ void CMgrSound::Destroy(void)
 	if (m_pDXAudio) {
 		m_pDXAudio->Destroy ();
 	}
-	if (m_pLibMusicLoader) {
-		m_pLibMusicLoader->Free ();
-	}
-	SAFE_DELETE (m_pDevicePtr);
+    if (m_pLibMusicLoader) {
+        m_pLibMusicLoader->Free ();
+    }
 }
 
 
@@ -144,8 +140,7 @@ void CMgrSound::PlayBGM(
 	int nNo,		/* [in] BGMID */
 	BOOL bPlay)		/* [in] 既に同じIDのBGMが再生中の時はそのままにしておく */
 {
-	char szTmp[MAX_PATH];
-	OutputStream *pOutputStream;
+    char szTmp[MAX_PATH];
 
 	if (bPlay) {
 		if (m_dwSoundID == (DWORD)nNo) {
@@ -192,18 +187,20 @@ void CMgrSound::PlayBGM(
 	}
 	m_dwSoundID = (DWORD)nNo;
 
-	if (m_pOutputStreamPtr) {
-		m_pOutputStreamPtr->stop ();
-		m_pOutputStreamPtr = NULL;
-	}
-	pOutputStream = OpenSound (*m_pDevicePtr, szTmp, true);
-	if (pOutputStream == NULL) {
-		return;
-	}
-	m_pOutputStreamPtr = pOutputStream;
-	m_pOutputStreamPtr->setRepeat (true);
-	m_pOutputStreamPtr->setVolume(m_fBGMVolume);
-	m_pOutputStreamPtr->play ();
+    // 再生中のBGMを停止し、新しいBGMをXAudio2で再生
+    m_pDXAudio->StopBGM();
+    if (!m_pDXAudio->PlayBGMFile(szTmp, TRUE, m_fBGMVolume)) {
+        // .ogg 失敗時は .wav にフォールバック（資産変換時用）
+        size_t len = strlen(szTmp);
+        if (len >= 4 && _stricmp(szTmp + len - 4, ".ogg") == 0) {
+            strcpy(szTmp + len - 4, ".wav");
+            if (!m_pDXAudio->PlayBGMFile(szTmp, TRUE, m_fBGMVolume)) {
+                return;
+            }
+        } else {
+            return;
+        }
+    }
 }
 
 
@@ -217,11 +214,7 @@ void CMgrSound::StopBGM(void)
 {
 	m_dwSoundID = 0;
 
-	if (m_pOutputStreamPtr == NULL) {
-		return;
-	}
-	m_pOutputStreamPtr->stop ();
-	m_pOutputStreamPtr = NULL;
+    m_pDXAudio->StopBGM();
 }
 
 
@@ -250,9 +243,7 @@ void CMgrSound::SetBGMVolume(int nVolume)
 		m_fBGMVolume = 1.00f;
 		break;
 	}
-	if (m_pOutputStreamPtr) {
-		m_pOutputStreamPtr->setVolume(m_fBGMVolume);
-	}
+    m_pDXAudio->SetBGMVolume(m_fBGMVolume);
 }
 
 

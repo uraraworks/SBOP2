@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "LogViewCtrl.h"
 
 #ifdef _DEBUG

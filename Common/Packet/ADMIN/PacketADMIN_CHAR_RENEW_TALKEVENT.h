@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_CHAR_RENEW_TALKEVENT.h							 */
 /* 内容			:コマンド(管理者系:会話イベント情報更新) 定義ファイル		 */

@@ -1,9 +1,9 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminItemTypeList.cpp									 */
-/* “à—e			:ƒAƒCƒeƒ€Ží•Êˆê——ƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/09/28													 */
+/* ファイル名	:DlgAdminItemTypeList.cpp									 */
+/* 内容			:アイテム種別一覧ダイアログクラス 実装ファイル				 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2007/09/28													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* クラスの設定																 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::DoDataExchange(CDataExchange* pDX)
@@ -50,9 +50,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::CDlgAdminItemTypeList					 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::CDlgAdminItemTypeList					 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeList::CDlgAdminItemTypeList(CWnd* pParent /*=NULL*/)
@@ -67,9 +67,9 @@ CDlgAdminItemTypeList::CDlgAdminItemTypeList(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::~CDlgAdminItemTypeList					 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::~CDlgAdminItemTypeList					 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 CDlgAdminItemTypeList::~CDlgAdminItemTypeList()
@@ -78,9 +78,9 @@ CDlgAdminItemTypeList::~CDlgAdminItemTypeList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::Init									 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::Init									 */
+/* 内容		:初期化															 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::Init(CMgrData *pMgrData)
@@ -89,16 +89,16 @@ void CDlgAdminItemTypeList::Init(CMgrData *pMgrData)
 
 	m_pLibInfoItemType = m_pMgrData->GetLibInfoItemType ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ウィンドウ作成 */
 	Create (CDlgAdminItemTypeList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::Renew									 */
-/* “à—e		:ˆê——‚ðXV														 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::Renew									 */
+/* 内容		:一覧を更新														 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::Renew(void)
@@ -115,18 +115,18 @@ void CDlgAdminItemTypeList::Renew(void)
 		strTmp.Format ("%d", pInfoItemType->m_dwTypeID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemType->m_dwTypeID);		/* ID */
-		m_List.SetItemText (i, 1, pInfoItemType->m_strName);	/* ƒAƒCƒeƒ€–¼ */
+		m_List.SetItemText (i, 1, pInfoItemType->m_strName);	/* アイテム名 */
 
 		strTmp = m_pLibInfoItemType->GetTypeName (pInfoItemType->m_dwItemTypeID);
-		m_List.SetItemText (i, 2, strTmp);					/* Ží•Ê */
+		m_List.SetItemText (i, 2, strTmp);					/* 種別 */
 	}
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnAdminMsg								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnAdminMsg								 */
+/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnAdminMsg(int nType, DWORD dwPara)
@@ -135,9 +135,9 @@ void CDlgAdminItemTypeList::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnInitDialog							 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnInitDialog							 */
+/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminItemTypeList::OnInitDialog()
@@ -146,13 +146,13 @@ BOOL CDlgAdminItemTypeList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒAƒCƒeƒ€–¼",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "Ží•Ê",			LVCFMT_LEFT, 120);
+	m_List.InsertColumn (1, "アイテム名",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, "種別",			LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	/* ‘SƒAƒCƒeƒ€î•ñ‚ð—v‹ */
+	/* 全アイテム情報を要求 */
 	OnRenew ();
 
 	return TRUE;
@@ -160,15 +160,15 @@ BOOL CDlgAdminItemTypeList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnMainFrame								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnMainFrame								 */
+/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWITEMTYPEINFO:		/* ƒAƒCƒeƒ€Ží•Êî•ñXV */
+	case MAINFRAMEMSG_RENEWITEMTYPEINFO:		/* アイテム種別情報更新 */
 		Renew ();
 		break;
 	}
@@ -176,9 +176,9 @@ void CDlgAdminItemTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnAdd									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(V‹K’Ç‰Á)										 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnAdd									 */
+/* 内容		:ボタンハンドラ(新規追加)										 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnAdd()
@@ -207,9 +207,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnModify								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnModify								 */
+/* 内容		:ボタンハンドラ(編集)											 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnModify()
@@ -252,9 +252,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnCopy									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(ƒRƒs[)											 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnCopy									 */
+/* 内容		:ボタンハンドラ(コピー)											 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnCopy()
@@ -274,7 +274,7 @@ void CDlgAdminItemTypeList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("‘I‘ð‚³‚ê‚Ä‚¢‚éƒAƒCƒeƒ€‚ðƒRƒs[‚µ‚Ü‚·‚©H", "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -285,9 +285,9 @@ void CDlgAdminItemTypeList::OnCopy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnDelete								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnDelete								 */
+/* 内容		:ボタンハンドラ(削除)											 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnDelete()
@@ -308,8 +308,8 @@ void CDlgAdminItemTypeList::OnDelete()
 		return;
 	}
 
-	strTmp.Format ("[%s]‚ðíœ‚µ‚Ü‚·‚©H", (LPCSTR)pInfoItem->m_strName);
-	nResult = MessageBox (strTmp, "Šm”F", MB_YESNO | MB_ICONQUESTION);
+	strTmp.Format ("[%s]を削除しますか？", (LPCSTR)pInfoItem->m_strName);
+	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -320,25 +320,25 @@ void CDlgAdminItemTypeList::OnDelete()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::OnRenew									 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(XV)											 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::OnRenew									 */
+/* 内容		:ボタンハンドラ(更新)											 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnRenew()
 {
 	CPacketITEM_REQ_ITEMTYPEINFO Packet;
 
-	/* ‘SƒAƒCƒeƒ€Ží•Êî•ñ‚ð—v‹ */
+	/* 全アイテム種別情報を要求 */
 	Packet.Make (0);
 	m_pSock->Send (&Packet);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminItemTypeList::GetIndex								 */
-/* “à—e		:ƒAƒCƒeƒ€ID‚©‚çƒCƒ“ƒfƒbƒNƒX‚ðŽæ“¾								 */
-/* “ú•t		:2007/09/28														 */
+/* 関数名	:CDlgAdminItemTypeList::GetIndex								 */
+/* 内容		:アイテムIDからインデックスを取得								 */
+/* 日付		:2007/09/28														 */
 /* ========================================================================= */
 
 int CDlgAdminItemTypeList::GetIndex(DWORD dwItemID)

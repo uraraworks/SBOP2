@@ -1,9 +1,9 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminMapParts.cpp										 */
-/* “à—e			:ƒ}ƒbƒvƒp[ƒc•ÒWƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹				 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/04/25													 */
+/* ファイル名	:DlgAdminMapParts.cpp										 */
+/* 内容			:マップパーツ編集ダイアログクラス 実装ファイル				 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2007/04/25													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -27,7 +27,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* クラスの設定																 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::DoDataExchange(CDataExchange* pDX)
@@ -62,9 +62,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::CDlgAdminMapParts							 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/25														 */
+/* 関数名	:CDlgAdminMapParts::CDlgAdminMapParts							 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2007/04/25														 */
 /* ========================================================================= */
 
 CDlgAdminMapParts::CDlgAdminMapParts(CWnd* pParent /*=NULL*/)
@@ -94,9 +94,9 @@ CDlgAdminMapParts::CDlgAdminMapParts(CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::~CDlgAdminMapParts							 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/04/25														 */
+/* 関数名	:CDlgAdminMapParts::~CDlgAdminMapParts							 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2007/04/25														 */
 /* ========================================================================= */
 
 CDlgAdminMapParts::~CDlgAdminMapParts()
@@ -109,9 +109,9 @@ CDlgAdminMapParts::~CDlgAdminMapParts()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::Init										 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/04/25														 */
+/* 関数名	:CDlgAdminMapParts::Init										 */
+/* 内容		:初期化															 */
+/* 日付		:2007/04/25														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::Init(CMgrData *pMgrData)
@@ -124,22 +124,22 @@ void CDlgAdminMapParts::Init(CMgrData *pMgrData)
 
 	m_pMgrGrpData->ReadMapPartsTmp ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ウィンドウ作成 */
 	Create (CDlgAdminMapParts::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnAdminMsg									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/05/04														 */
+/* 関数名	:CDlgAdminMapParts::OnAdminMsg									 */
+/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
+/* 日付		:2007/05/04														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_RENEWMAPPARTS:	/* ƒ}ƒbƒvƒp[ƒcî•ñXV */
+	case ADMINMSG_RENEWMAPPARTS:	/* マップパーツ情報更新 */
 		MakePartsImage ();
 		break;
 	}
@@ -147,9 +147,9 @@ void CDlgAdminMapParts::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnInitDialog								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/04/25														 */
+/* 関数名	:CDlgAdminMapParts::OnInitDialog								 */
+/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
+/* 日付		:2007/04/25														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapParts::OnInitDialog()
@@ -162,12 +162,12 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 
 	m_ctlMapParts.Create (this, m_pMgrData);
 
-	m_cbType.AddString ("ƒ}ƒbƒv•ÒW—p‚É‘I‘ð");
-	m_cbType.AddString ("ƒp[ƒc‚Ì’Ç‰Á");
-	m_cbType.AddString ("ƒp[ƒc‚Ì•ÒW");
-	m_cbType.AddString ("ƒp[ƒc‚ÌˆÚ“®");
-	m_cbType.AddString ("ƒp[ƒc‚Ìíœ");
-	m_cbType.AddString ("ƒp[ƒc‚ÌƒRƒs[");
+	m_cbType.AddString ("マップ編集用に選択");
+	m_cbType.AddString ("パーツの追加");
+	m_cbType.AddString ("パーツの編集");
+	m_cbType.AddString ("パーツの移動");
+	m_cbType.AddString ("パーツの削除");
+	m_cbType.AddString ("パーツのコピー");
 	m_cbType.SetCurSel (0);
 
 	pWnd = GetDlgItem (IDC_MAPPARTS);
@@ -176,7 +176,7 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 	rc.bottom = rc.top + 32 * 7;
 	pWnd->SetWindowPos (NULL, 0, 0, rc.Width (), rc.Height (), SWP_NOZORDER | SWP_NOMOVE);
 
-	/* ƒXƒNƒ[ƒ‹ƒo[‚ÌÝ’è */
+	/* スクロールバーの設定 */
 	ScreenToClient (rc);
 	m_ctlScroll.GetWindowRect (rcTmp);
 	m_ctlScroll.SetWindowPos (NULL, rc.right, rc.top, rcTmp.Width (), rc.Height (), SWP_NOZORDER);
@@ -198,9 +198,9 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnSize										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/04/28														 */
+/* 関数名	:CDlgAdminMapParts::OnSize										 */
+/* 内容		:メッセージハンドラ(WM_SIZE)									 */
+/* 日付		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnSize(UINT nType, int cx, int cy)
@@ -219,9 +219,9 @@ void CDlgAdminMapParts::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnMouseMove									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEMOVE)								 */
-/* “ú•t		:2007/04/25														 */
+/* 関数名	:CDlgAdminMapParts::OnMouseMove									 */
+/* 内容		:メッセージハンドラ(WM_MOUSEMOVE)								 */
+/* 日付		:2007/04/25														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnMouseMove(UINT nFlags, CPoint point)
@@ -252,9 +252,9 @@ void CDlgAdminMapParts::OnMouseMove(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnLButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_LBUTTONDOWN)								 */
-/* “ú•t		:2007/04/28														 */
+/* 関数名	:CDlgAdminMapParts::OnLButtonDown								 */
+/* 内容		:メッセージハンドラ(WM_LBUTTONDOWN)								 */
+/* 日付		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
@@ -275,20 +275,20 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 	GetDlgItem (IDC_MAPPARTS)->SetFocus ();
 
 	switch (m_nSelectType) {
-	case 0:		/* ƒ}ƒbƒv•ÒW—p‚É‘I‘ð */
-	case 2:		/* •ÒW */
+	case 0:		/* マップ編集用に選択 */
+	case 2:		/* 編集 */
 		m_dwSelectPartsID = GetSelectMapPartsID ();
 		m_pMgrData->SetSelectMapPartsID (m_dwSelectPartsID);
 		m_strID.Format ("ID:%u", m_dwSelectPartsID);
 		RenewPartsInfo ();
 		break;
-	case 1:		/* ’Ç‰Á */
+	case 1:		/* 追加 */
 		{
 			CPacketADMIN_RENEWMAPPARTS Packet;
 
 			m_dwSelectPartsID = GetSelectMapPartsID ();
 			if (m_dwSelectPartsID) {
-				RenewMessage ("‚»‚±‚É‚Í’Ç‰Á‚Å‚«‚Ü‚¹‚ñ");
+				RenewMessage ("そこには追加できません");
 				break;
 			}
 			pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetNew ();
@@ -300,27 +300,27 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case 3:		/* ˆÚ“® */
+	case 3:		/* 移動 */
 		{
 			CPacketADMIN_RENEWMAPPARTS Packet;
 
 			switch (m_nState) {
-			case 0:			/* ˆÚ“®Œ³‚Ì‘I‘ð */
+			case 0:			/* 移動元の選択 */
 				m_dwSelectPartsID = GetSelectMapPartsID ();
 				if (m_dwSelectPartsID == 0) {
 					break;
 				}
 				m_ptMoveSrc	= m_ptCursor;
 				m_nState	= 1;
-				RenewMessage ("ˆÚ“®æ‚ðƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+				RenewMessage ("移動先をクリックしてください");
 				break;
-			case 1:			/* ˆÚ“®æ‚Ì‘I‘ð */
+			case 1:			/* 移動先の選択 */
 				m_ptMoveDst = m_ptCursor;
 
 				dwTmp = GetSelectMapPartsID ();
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (&m_ptMoveDst);
 				if (pInfoMapParts) {
-					/* ˆÚ“®æ‚Éƒp[ƒc‚ª‚ ‚Á‚½ê‡‚Í“ü‚êŠ·‚¦‚é */
+					/* 移動先にパーツがあった場合は入れ換える */
 					pInfoMapParts->m_ptViewPos = m_ptMoveSrc;
 					Packet.Make (pInfoMapParts);
 					m_pSock->Send (&Packet);
@@ -337,7 +337,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 		break;
-	case 4:		/* íœ */
+	case 4:		/* 削除 */
 		{
 			int nResult;
 			CPacketADMIN_MAP_DELETEPARTS Packet;
@@ -347,7 +347,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 
-			nResult = MessageBox ("‘I‘ð‚µ‚Ä‚¢‚éƒp[ƒc‚ðíœ‚µ‚Ü‚·‚©H", "Šm”F", MB_ICONQUESTION | MB_YESNO);
+			nResult = MessageBox ("選択しているパーツを削除しますか？", "確認", MB_ICONQUESTION | MB_YESNO);
 			if (nResult != IDYES) {
 				break;
 			}
@@ -355,25 +355,25 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 			m_pSock->Send (&Packet);
 		}
 		break;
-	case 5:		/* ƒRƒs[ */
+	case 5:		/* コピー */
 		{
 			CPacketADMIN_MAP_COPYPARTS Packet;
 
 			switch (m_nState) {
-			case 0:			/* ƒRƒs[Œ³‚Ì‘I‘ð */
+			case 0:			/* コピー元の選択 */
 				m_dwSelectPartsID = GetSelectMapPartsID ();
 				if (m_dwSelectPartsID == 0) {
 					break;
 				}
 				m_ptMoveSrc	= m_ptCursor;
 				m_nState	= 1;
-				RenewMessage ("ƒRƒs[æ‚ðƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+				RenewMessage ("コピー先をクリックしてください");
 				break;
-			case 1:			/* ˆÚ“®æ‚Ì‘I‘ð */
+			case 1:			/* 移動先の選択 */
 				dwTmp = GetSelectMapPartsID ();
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (&m_ptMoveDst);
 				if (pInfoMapParts) {
-					/* ƒRƒs[æ‚Éƒp[ƒc‚ª‚ ‚Á‚½ê‡‚Íˆ—‚µ‚È‚¢ */
+					/* コピー先にパーツがあった場合は処理しない */
 					break;
 				}
 				Packet.Make (m_dwSelectPartsID, m_ptCursor);
@@ -390,9 +390,9 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnRButtonDown								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_RBUTTONDOWN)								 */
-/* “ú•t		:2007/09/08														 */
+/* 関数名	:CDlgAdminMapParts::OnRButtonDown								 */
+/* 内容		:メッセージハンドラ(WM_RBUTTONDOWN)								 */
+/* 日付		:2007/09/08														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnRButtonDown(UINT nFlags, CPoint point)
@@ -400,7 +400,7 @@ void CDlgAdminMapParts::OnRButtonDown(UINT nFlags, CPoint point)
 	PCInfoMapParts pInfoMapParts;
 
 	switch (m_nSelectType) {
-	case 2:		/* •ÒW */
+	case 2:		/* 編集 */
 		{
 			int nResult;
 			CDlgAdminMapPartsEdit Dlg(this);
@@ -428,9 +428,9 @@ void CDlgAdminMapParts::OnRButtonDown(UINT nFlags, CPoint point)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnWndClose									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_WNDCLOSE)								 */
-/* “ú•t		:2007/04/28														 */
+/* 関数名	:CDlgAdminMapParts::OnWndClose									 */
+/* 内容		:メッセージハンドラ(WM_WNDCLOSE)								 */
+/* 日付		:2007/04/28														 */
 /* ========================================================================= */
 
 LRESULT CDlgAdminMapParts::OnWndClose(WPARAM wParam, LPARAM lParam)
@@ -438,7 +438,7 @@ LRESULT CDlgAdminMapParts::OnWndClose(WPARAM wParam, LPARAM lParam)
 	PCInfoMapParts pInfoMapParts;
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPPARTSGRP:	/* ƒ}ƒbƒvƒp[ƒc‰æ‘œ‘I‘ð */
+	case WINDOWID_SELECTMAPPARTSGRP:	/* マップパーツ画像選択 */
 		if (lParam < 0) {
 			break;
 		}
@@ -456,9 +456,9 @@ LRESULT CDlgAdminMapParts::OnWndClose(WPARAM wParam, LPARAM lParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnVScroll									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_VSCROLL)									 */
-/* “ú•t		:2007/05/04														 */
+/* 関数名	:CDlgAdminMapParts::OnVScroll									 */
+/* 内容		:メッセージハンドラ(WM_VSCROLL)									 */
+/* 日付		:2007/05/04														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -474,32 +474,32 @@ void CDlgAdminMapParts::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 	m_ctlScroll.GetScrollInfo (&stScrollInfo);
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1”Ôã‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_TOP:			/* 1番上までスクロール */
 		pScrollBar->GetScrollRange (&nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1”Ô‰º‚Ü‚ÅƒXƒNƒ[ƒ‹ */
+	case SB_BOTTOM:			/* 1番下までスクロール */
 		pScrollBar->GetScrollRange (&nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1sã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEUP:			/* 1行上へスクロール */
 		nPos = nPosNow;
 		if (nPosNow == 0) {
 			break;
 		}
 		nPos --;
 		break;
-	case SB_PAGEUP:			/* 1ƒy[ƒWã‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGEUP:			/* 1ページ上へスクロール */
 		nPos = nPosNow - stScrollInfo.nPage;
 		break;
-	case SB_LINEDOWN:		/* 1s‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_LINEDOWN:		/* 1行下へスクロール */
 		nPos = nPosNow + 1;
 		break;
-	case SB_PAGEDOWN:		/* 1ƒy[ƒW‰º‚ÖƒXƒNƒ[ƒ‹ */
+	case SB_PAGEDOWN:		/* 1ページ下へスクロール */
 		nPos = nPosNow + stScrollInfo.nPage;
 		break;
-	case SB_THUMBPOSITION:	/* â‘ÎˆÊ’u‚ÖƒXƒNƒ[ƒ‹ */
-	case SB_THUMBTRACK:		/* ƒhƒ‰ƒbƒO‚³‚ê‚½ */
+	case SB_THUMBPOSITION:	/* 絶対位置へスクロール */
+	case SB_THUMBTRACK:		/* ドラッグされた */
 		break;
 	default:
 		bChange = FALSE;
@@ -516,9 +516,9 @@ void CDlgAdminMapParts::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnMouseWheel								 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MOUSEWHEEL)								 */
-/* “ú•t		:2007/05/04														 */
+/* 関数名	:CDlgAdminMapParts::OnMouseWheel								 */
+/* 内容		:メッセージハンドラ(WM_MOUSEWHEEL)								 */
+/* 日付		:2007/05/04														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminMapParts::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
@@ -539,9 +539,9 @@ BOOL CDlgAdminMapParts::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnSelchangeType								 */
-/* “à—e		:ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰(CBN_SELCHANGE)								 */
-/* “ú•t		:2007/04/28														 */
+/* 関数名	:CDlgAdminMapParts::OnSelchangeType								 */
+/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
+/* 日付		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnSelchangeType()
@@ -552,20 +552,20 @@ void CDlgAdminMapParts::OnSelchangeType()
 	m_nSelectType	= m_cbType.GetCurSel ();
 
 	switch (m_nSelectType) {
-	case 1:		/* ’Ç‰Á */
-		RenewMessage ("’Ç‰Á‚·‚éêŠ‚ðƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 1:		/* 追加 */
+		RenewMessage ("追加する場所をクリックしてください");
 		break;
-	case 2:		/* •ÒW */
-		RenewMessage ("•ÒW‚·‚éƒp[ƒc‚ð‰EƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 2:		/* 編集 */
+		RenewMessage ("編集するパーツを右クリックしてください");
 		break;
-	case 3:		/* ˆÚ“® */
-		RenewMessage ("ˆÚ“®‚·‚éƒp[ƒc‚ðƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 3:		/* 移動 */
+		RenewMessage ("移動するパーツをクリックしてください");
 		break;
-	case 4:		/* íœ */
-		RenewMessage ("íœ‚·‚éƒp[ƒc‚ðƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 4:		/* 削除 */
+		RenewMessage ("削除するパーツをクリックしてください");
 		break;
-	case 5:		/* ƒRƒs[ */
-		RenewMessage ("ƒRƒs[Œ³‚Ìƒp[ƒc‚ðƒNƒŠƒbƒN‚µ‚Ä‚­‚¾‚³‚¢");
+	case 5:		/* コピー */
+		RenewMessage ("コピー元のパーツをクリックしてください");
 		break;
 	default:
 		RenewMessage ("");
@@ -575,9 +575,9 @@ void CDlgAdminMapParts::OnSelchangeType()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::OnBnClickedPile								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(d‚Ë—pƒ}ƒbƒv)									 */
-/* “ú•t		:2008/12/06														 */
+/* 関数名	:CDlgAdminMapParts::OnBnClickedPile								 */
+/* 内容		:ボタンハンドラ(重ね用マップ)									 */
+/* 日付		:2008/12/06														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::OnBnClickedPile()
@@ -588,9 +588,9 @@ void CDlgAdminMapParts::OnBnClickedPile()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::RenewMessage								 */
-/* “à—e		:ƒƒbƒZ[ƒW—“‚ðXV												 */
-/* “ú•t		:2007/04/28														 */
+/* 関数名	:CDlgAdminMapParts::RenewMessage								 */
+/* 内容		:メッセージ欄を更新												 */
+/* 日付		:2007/04/28														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::RenewMessage(LPCSTR pszMsg)
@@ -601,17 +601,17 @@ void CDlgAdminMapParts::RenewMessage(LPCSTR pszMsg)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::RenewPartsInfo								 */
-/* “à—e		:ƒp[ƒcî•ñ‚ðXV												 */
-/* “ú•t		:2007/06/11														 */
+/* 関数名	:CDlgAdminMapParts::RenewPartsInfo								 */
+/* 内容		:パーツ情報を更新												 */
+/* 日付		:2007/06/11														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::RenewPartsInfo(void)
 {
 	PCInfoMapParts pInfoMapParts;
 
-	m_strAttr  = "‘®«:";
-	m_strAttr2 = "i‚ß‚È‚¢•ûŒü:";
+	m_strAttr  = "属性:";
+	m_strAttr2 = "進めない方向:";
 
 	pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (m_dwSelectPartsID);
 	if (pInfoMapParts == NULL) {
@@ -619,13 +619,13 @@ void CDlgAdminMapParts::RenewPartsInfo(void)
 	}
 
 	if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_BLOCK) {
-		m_strAttr += "‚Ô‚Â‚©‚é ";
+		m_strAttr += "ぶつかる ";
 	}
 	if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_PILE) {
-		m_strAttr += "d‚È‚é ";
+		m_strAttr += "重なる ";
 	}
 	if (pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_PILEBACK) {
-		m_strAttr += "‰º’n‚àd‚Ë‚é ";
+		m_strAttr += "下地も重ねる ";
 	}
 
 	if (pInfoMapParts->m_byBlockDirection & BIT_PARTSBLOCK_UP) {
@@ -646,9 +646,9 @@ void CDlgAdminMapParts::RenewPartsInfo(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::MakePartsImage								 */
-/* “à—e		:ƒp[ƒcˆê——‰æ‘œ‚ðì¬											 */
-/* “ú•t		:2007/04/25														 */
+/* 関数名	:CDlgAdminMapParts::MakePartsImage								 */
+/* 内容		:パーツ一覧画像を作成											 */
+/* 日付		:2007/04/25														 */
 /* ========================================================================= */
 
 void CDlgAdminMapParts::MakePartsImage(void)
@@ -667,9 +667,9 @@ void CDlgAdminMapParts::MakePartsImage(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminMapParts::GetSelectMapPartsID							 */
-/* “à—e		:‘I‘ð’†‚Ìƒ}ƒbƒvƒp[ƒcID‚ðŽæ“¾									 */
-/* “ú•t		:2007/04/28														 */
+/* 関数名	:CDlgAdminMapParts::GetSelectMapPartsID							 */
+/* 内容		:選択中のマップパーツIDを取得									 */
+/* 日付		:2007/04/28														 */
 /* ========================================================================= */
 
 DWORD CDlgAdminMapParts::GetSelectMapPartsID(void)

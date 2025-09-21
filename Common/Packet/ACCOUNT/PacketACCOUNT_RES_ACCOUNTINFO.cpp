@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2006 */
+﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:PacketACCOUNT_RES_ACCOUNTINFO.cpp							 */
 /* 内容			:コマンド(アカウント系:アカウント情報応答) 実装ファイル		 */

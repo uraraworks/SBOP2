@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_CHAR_RENEW_ACCOUNT.cpp							 */
 /* 内容			:コマンド(管理者系:アカウント情報更新) 実装ファイル			 */

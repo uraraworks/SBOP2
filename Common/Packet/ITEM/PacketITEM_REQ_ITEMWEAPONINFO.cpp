@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:PacketITEM_REQ_ITEMWEAPONINFO.cpp							 */
 /* 内容			:コマンド(アイテム系:武器情報要求) 実装ファイル				 */

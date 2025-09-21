@@ -1,0 +1,72 @@
+// Ensures RPC SAL macros exist even when older headers are pulled in.
+// Prefer real headers if available; otherwise, provide no-op fallbacks.
+#pragma once
+
+// Do NOT include Windows/RPC headers here to avoid ordering issues.
+// This header only provides no-op macro fallbacks when the real
+// rpcsal/sal annotations are unavailable.
+
+#ifndef __RPC__in
+#define __RPC__in
+#endif
+#ifndef __RPC__in_opt
+#define __RPC__in_opt
+#endif
+#ifndef __RPC__out
+#define __RPC__out
+#endif
+#ifndef __RPC__out_opt
+#define __RPC__out_opt
+#endif
+#ifndef __RPC__inout
+#define __RPC__inout
+#endif
+#ifndef __RPC__inout_opt
+#define __RPC__inout_opt
+#endif
+
+#ifndef __RPC__deref_in
+#define __RPC__deref_in
+#endif
+#ifndef __RPC__deref_out
+#define __RPC__deref_out
+#endif
+#ifndef __RPC__deref_inout
+#define __RPC__deref_inout
+#endif
+#ifndef __RPC__deref_inout_opt
+#define __RPC__deref_inout_opt
+#endif
+
+#ifndef __RPC__in_range
+#define __RPC__in_range(...) 
+#endif
+
+#ifndef __RPC__in_xcount
+#define __RPC__in_xcount(...) 
+#endif
+#ifndef __RPC__in_xcount_full
+#define __RPC__in_xcount_full(...) 
+#endif
+#ifndef __RPC__out_xcount
+#define __RPC__out_xcount(...) 
+#endif
+#ifndef __RPC__out_xcount_part
+#define __RPC__out_xcount_part(...) 
+#endif
+#ifndef __RPC__inout_xcount
+#define __RPC__inout_xcount(...) 
+#endif
+
+#ifndef __RPC__in_ecount
+#define __RPC__in_ecount(...) 
+#endif
+#ifndef __RPC__in_ecount_full
+#define __RPC__in_ecount_full(...) 
+#endif
+#ifndef __RPC__out_ecount
+#define __RPC__out_ecount(...) 
+#endif
+#ifndef __RPC__out_ecount_part
+#define __RPC__out_ecount_part(...) 
+#endif

@@ -8,9 +8,44 @@
 
 #pragma once
 
+#include <winsock2.h>
+#ifndef _WINSOCKAPI_
+#define _WINSOCKAPI_
+#endif
+#include "../Common/rpcsal_fallback.h"
+
 #define VC_EXTRALEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します。
-#define WINVER 0x0602
-#define _WIN32_WINNT 0x0602
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef WINVER
+#define WINVER 0x0A00
+#endif
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0A00
+#endif
+// Ensure SAL/RPC SAL macros are available for Windows headers
+#include <sdkddkver.h>
+#include <rpc.h>
+#include <rpcndr.h>
+#include <rpcsal.h>
+#include <sal.h>
+
+// Fallback: if some toolchains pull older headers (e.g., DXSDK)
+// and RPC SAL macros are missing, define them as no-ops so
+// Windows SDK headers like objidlbase.h compile.
+#ifndef __RPC__in_xcount_full
+#define __RPC__in_xcount_full(_Size)
+#endif
+#ifndef __RPC__out_xcount_part
+#define __RPC__out_xcount_part(_Size,_Length)
+#endif
+#ifndef __RPC__in_ecount_full
+#define __RPC__in_ecount_full(_Count)
+#endif
+#ifndef __RPC__out_ecount_part
+#define __RPC__out_ecount_part(_Count,_Length)
+#endif
 #include <afxwin.h>         // MFC のコアおよび標準コンポーネント
 #include <afxext.h>         // MFC の拡張部分
 #include <afxdisp.h>        // MFC のオートメーション クラス

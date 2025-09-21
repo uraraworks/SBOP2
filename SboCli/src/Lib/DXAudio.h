@@ -1,46 +1,53 @@
-/* Copyright(C)URARA-works 2003-2005 */
-/* ========================================================================= */
-/* ファイル名：	DXAudio.h													 */
-/* 内容：		DirectX Audioを使うためのクラス								 */
-/* 作成：		年がら年中春うらら(URARA-works)								 */
-/* 作成開始日：	2003/03/16													 */
-/* ========================================================================= */
-
+// DXAudio.h - unified header with XAudio2 BGM support
 #pragma once
 
+#ifndef NO_DIRECTMUSIC
 #include <dmusici.h>
-
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+#else
+struct IDirectMusicSegment8;
+struct IDirectMusicPerformance8;
+struct IDirectMusicAudioPath8;
+struct IDirectMusicLoader8;
+#endif
 
 typedef class CDXAudio
 {
 public:
-			CDXAudio	();										/* コンストラクタ */
-	virtual	~CDXAudio	();										/* デストラクタ */
+            CDXAudio();
+    virtual ~CDXAudio();
 
-	BOOL Create				(void);										/* 初期化 */
-	void Destroy			(void);										/* 終了 */
-	void SetResourceHandle	(HMODULE hResource);						/* リソースハンドルの設定 */
+    BOOL Create            (void);
+    void Destroy           (void);
+    void SetResourceHandle (HMODULE hResource);
 
-	BOOL GetSegFromRes		(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi = FALSE);	/* リソースからのセグメント読み込み */
-	void ReleaseSeg			(IDirectMusicSegment8 *pSeg);				/* セグメントの開放 */
-	BOOL PlayPrimary		(IDirectMusicSegment8 *pSeg);				/* プライマリセグメントとして再生 */
-	BOOL PlaySecoundary		(IDirectMusicSegment8 *pSeg);				/* セカンダリセグメントとして再生 */
-	void SetVolPrimary		(long lVol);								/* プライマリセグメントの音量設定 */
-	void SetVolSecoundary	(long lVol);								/* セカンダリセグメントの音量設定 */
-	void Stop				(IDirectMusicSegment8 *pSeg, DWORD dwFlg);	/* 再生停止 */
-	void SetLoopPoints		(IDirectMusicSegment8 *pSeg, DWORD dwFlg);	/* ループ範囲の設定 */
-	BOOL IsPlaying			(IDirectMusicSegment8 *pSeg);				/* 再生中判定 */
+    BOOL GetSegFromRes     (HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi = FALSE);
+    void ReleaseSeg        (IDirectMusicSegment8 *pSeg);
+    BOOL PlayPrimary       (IDirectMusicSegment8 *pSeg);
+    BOOL PlaySecoundary    (IDirectMusicSegment8 *pSeg);
+    void SetVolPrimary     (long lVol);
+    void SetVolSecoundary  (long lVol);
+    void Stop              (IDirectMusicSegment8 *pSeg, DWORD dwFlg);
+    void SetLoopPoints     (IDirectMusicSegment8 *pSeg, DWORD dwFlg);
+    BOOL IsPlaying         (IDirectMusicSegment8 *pSeg);
 
+    // BGM (file from disk, decoded via Audiere, played by XAudio2)
+    BOOL PlayBGMFile       (const char* path, BOOL bLoop, float volume);
+    void StopBGM           ();
+    void SetBGMVolume      (float volume);
 
 private:
-	IDirectMusicPerformance8	*m_pPerformance;	/* パフォーマンスオブジェクト */
-	IDirectMusicAudioPath8		*m_pDefAudioPath;	/* オーディオパス */
-	IDirectMusicAudioPath8		*m_pDefAudioPath2;	/* オーディオパス2 */
-	IDirectMusicLoader8			*m_pLoader;			/* ローダー */
-	HMODULE						m_hResource;		/* リソースハンドル */
-} CDXAudio, *PCDXAudio;
+    IDirectMusicPerformance8 *m_pPerformance;
+    IDirectMusicAudioPath8   *m_pDefAudioPath;
+    IDirectMusicAudioPath8   *m_pDefAudioPath2;
+    IDirectMusicLoader8      *m_pLoader;
+    HMODULE                   m_hResource;
 
-/* Copyright(C)URARA-works 2003 */
+    // XAudio2-backed BGM state
+    void*                     m_pBgmFmt;    // WAVEFORMATEX*
+    unsigned char*            m_pBgmAudio;  // PCM data
+    unsigned long             m_cbBgmAudio; // size in bytes
+    void*                     m_pBgmVoice;  // IXAudio2SourceVoice*
+    float                     m_fBgmVolume; // 0.0 - 1.0
+
+    void FreeBgmResources();
+} CDXAudio, *PCDXAudio;

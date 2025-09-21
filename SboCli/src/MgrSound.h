@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2006 */
+﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名：	MgrSound.h													 */
 /* 内容：		サウンドデータ管理クラス 定義ファイル						 */
@@ -8,9 +8,11 @@
 
 #pragma once
 
+#ifndef NO_DIRECTMUSIC
 #include <dmusici.h>
-#include "Audiere.h"
-using namespace audiere;
+#else
+struct IDirectMusicSegment8;
+#endif
 #include "SboSoundData.h"
 
 class CDXAudio;
@@ -67,8 +69,7 @@ protected:
 	CLibMusicLoader			*m_pLibMusicLoader;			/* MIDI再生ライブラリ */
 	CLibSboSoundLoader		*m_pLibSboSoundLoader;		/* サウンドデータライブラリ */
 	IDirectMusicSegment8	**m_apDMSSound;				/* 効果音 */
-	AudioDevicePtr			*m_pDevicePtr;				/* BGM用デバイス */
-	OutputStream			*m_pOutputStreamPtr;		/* 再生するストリーム */
+	/* Audiere dependency removed */
 } CMgrSound, *PCMgrSound;
 
 /* Copyright(C)URARA-works 2006 */

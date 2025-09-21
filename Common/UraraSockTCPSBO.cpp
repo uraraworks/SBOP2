@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2006 */
+﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* UraraSockTCPSBO.cpp														 */
 /* 汎用TCP通信クラス														 */

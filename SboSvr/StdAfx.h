@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2006 */
+﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:stdafx.h													 */
 /* 内容			:プリコンパイルヘッダ 定義ファイル							 */
@@ -8,7 +8,17 @@
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します
+#include "../Common/rpcsal_fallback.h"
+
+#define WIN32_LEAN_AND_MEAN
+
+// Ensure SAL/RPC SAL macros are available for Windows headers
+#include <sdkddkver.h>
+#include <rpc.h>
+#include <rpcndr.h>
+#include <rpcsal.h>
+#include <sal.h>
+		// Windows ヘッダーから殆ど使用されないスタッフを除外します
 
 #include <winsock2.h>
 #include <windowsx.h>

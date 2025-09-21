@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2005 */
+﻿/* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
 /* ファイル名：	LibMusicLoader.cpp											 */
 /* 内容：		AflMusicライブラリ読み込みクラス 実装ファイル				 */

@@ -1,4 +1,4 @@
-/* png.h - header file for PNG reference library
+﻿/* png.h - header file for PNG reference library
  *
  * libpng version 1.2.8 - December 3, 2004
  * Copyright (c) 1998-2004 Glenn Randers-Pehrson

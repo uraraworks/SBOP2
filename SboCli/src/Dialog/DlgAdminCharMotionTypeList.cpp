@@ -1,9 +1,9 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminCharMotionTypeList.cpp								 */
-/* “à—e			:ƒLƒƒƒ‰ƒ‚[ƒVƒ‡ƒ“Ží•ÊƒŠƒXƒgƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹	 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2008/05/26													 */
+/* ファイル名	:DlgAdminCharMotionTypeList.cpp								 */
+/* 内容			:キャラモーション種別リストダイアログクラス 実装ファイル	 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2008/05/26													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* クラスの設定																 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::DoDataExchange(CDataExchange* pDX)
@@ -46,9 +46,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList		 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList		 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2008/05/26														 */
 /* ========================================================================= */
 
 CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList(CWnd* pParent /*=NULL*/)
@@ -62,9 +62,9 @@ CDlgAdminCharMotionTypeList::CDlgAdminCharMotionTypeList(CWnd* pParent /*=NULL*/
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList		 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2008/05/26														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList		 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2008/05/26														 */
 /* ========================================================================= */
 
 CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList()
@@ -73,9 +73,9 @@ CDlgAdminCharMotionTypeList::~CDlgAdminCharMotionTypeList()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::Init								 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2008/05/26														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::Init								 */
+/* 内容		:初期化															 */
+/* 日付		:2008/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::Init(CMgrData *pMgrData)
@@ -84,16 +84,16 @@ void CDlgAdminCharMotionTypeList::Init(CMgrData *pMgrData)
 
 	m_pLibInfoMotionType = m_pMgrData->GetLibInfoMotionType ();
 
-	/* ƒEƒBƒ“ƒhƒEì¬ */
+	/* ウィンドウ作成 */
 	Create (CDlgAdminCharMotionTypeList::IDD, m_pWndParent);
 	ShowWindow (SW_SHOW);
 }
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::Renew								 */
-/* “à—e		:ƒŠƒXƒgXV														 */
-/* “ú•t		:2008/05/27														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::Renew								 */
+/* 内容		:リスト更新														 */
+/* 日付		:2008/05/27														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::Renew(void)
@@ -117,15 +117,15 @@ void CDlgAdminCharMotionTypeList::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnMainFrame						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2008/05/26														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::OnMainFrame						 */
+/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
+/* 日付		:2008/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWMOTIONTYPE:		/* ƒ‚[ƒVƒ‡ƒ“Ží•Êî•ñXV */
+	case MAINFRAMEMSG_RENEWMOTIONTYPE:		/* モーション種別情報更新 */
 		Renew ();
 		break;
 	}
@@ -133,9 +133,9 @@ void CDlgAdminCharMotionTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnInitDialog						 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2008/05/26														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::OnInitDialog						 */
+/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
+/* 日付		:2008/05/26														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminCharMotionTypeList::OnInitDialog()
@@ -146,7 +146,7 @@ BOOL CDlgAdminCharMotionTypeList::OnInitDialog()
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "ƒ‚[ƒVƒ‡ƒ“–¼",	LVCFMT_LEFT, 300);
+	m_List.InsertColumn (1, "モーション名",	LVCFMT_LEFT, 300);
 
 	Renew ();
 
@@ -155,9 +155,9 @@ BOOL CDlgAdminCharMotionTypeList::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnAdd								 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(’Ç‰Á)											 */
-/* “ú•t		:2008/05/27														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::OnAdd								 */
+/* 内容		:ボタンハンドラ(追加)											 */
+/* 日付		:2008/05/27														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnAdd()
@@ -170,9 +170,9 @@ void CDlgAdminCharMotionTypeList::OnAdd()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnModify							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(•ÒW)											 */
-/* “ú•t		:2008/05/26														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::OnModify							 */
+/* 内容		:ボタンハンドラ(編集)											 */
+/* 日付		:2008/05/26														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnModify()
@@ -211,9 +211,9 @@ void CDlgAdminCharMotionTypeList::OnModify()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminCharMotionTypeList::OnDelete							 */
-/* “à—e		:ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰(íœ)											 */
-/* “ú•t		:2008/05/27														 */
+/* 関数名	:CDlgAdminCharMotionTypeList::OnDelete							 */
+/* 内容		:ボタンハンドラ(削除)											 */
+/* 日付		:2008/05/27														 */
 /* ========================================================================= */
 
 void CDlgAdminCharMotionTypeList::OnDelete()

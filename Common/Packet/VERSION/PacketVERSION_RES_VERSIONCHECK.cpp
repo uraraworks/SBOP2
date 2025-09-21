@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2006 */
+﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:PacketVERSION_RES_VERSIONCHECK.cpp							 */
 /* 内容			:コマンド(バージョン系:バージョンチェック応答) 実装ファイル	 */

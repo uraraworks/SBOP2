@@ -1,15 +1,17 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼	:DlgAdminBase.h												 */
-/* “à—e			:ŠÇ—ŽÒƒEƒBƒ“ƒhƒEŠî’êƒ_ƒCƒAƒƒOƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹			 */
-/* ì¬			:”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)							 */
-/* ì¬ŠJŽn“ú	:2007/03/18													 */
+/* ファイル名	:DlgAdminBase.h												 */
+/* 内容			:管理者ウィンドウ基底ダイアログクラス 実装ファイル			 */
+/* 作成			:年がら年中春うらら(URARA-works)							 */
+/* 作成開始日	:2007/03/18													 */
 /* ========================================================================= */
 
 #include "stdafx.h"
 #include "resource.h"
 #include "MgrData.h"
 #include "DlgAdminBase.h"
+
+IMPLEMENT_DYNAMIC(CDlgAdminBase, CDialog)
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -18,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /* ========================================================================= */
-/* ƒNƒ‰ƒX‚ÌÝ’è																 */
+/* クラスの設定																 */
 /* ========================================================================= */
 
 void CDlgAdminBase::DoDataExchange(CDataExchange* pDX)
@@ -36,9 +38,9 @@ END_MESSAGE_MAP()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::CDlgAdminBase									 */
-/* “à—e		:ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::CDlgAdminBase									 */
+/* 内容		:コンストラクタ													 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 CDlgAdminBase::CDlgAdminBase(int nResourceID, CWnd* pParent /*=NULL*/)
@@ -53,9 +55,9 @@ CDlgAdminBase::CDlgAdminBase(int nResourceID, CWnd* pParent /*=NULL*/)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::~CDlgAdminBase									 */
-/* “à—e		:ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::~CDlgAdminBase									 */
+/* 内容		:デストラクタ													 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 CDlgAdminBase::~CDlgAdminBase()
@@ -64,9 +66,9 @@ CDlgAdminBase::~CDlgAdminBase()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::Init											 */
-/* “à—e		:‰Šú‰»															 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::Init											 */
+/* 内容		:初期化															 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::Init(CMgrData *pMgrData)
@@ -77,9 +79,9 @@ void CDlgAdminBase::Init(CMgrData *pMgrData)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::Renew											 */
-/* “à—e		:XV															 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::Renew											 */
+/* 内容		:更新															 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::Renew(void)
@@ -88,15 +90,15 @@ void CDlgAdminBase::Renew(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnAdminMsg										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_ADMINMSG)								 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::OnAdminMsg										 */
+/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_ACCOUNTINFO:		/* ƒAƒJƒEƒ“ƒgî•ñŽæ“¾ */
+	case ADMINMSG_ACCOUNTINFO:		/* アカウント情報取得 */
 		m_pMgrData->Delete (dwPara);
 		break;
 	}
@@ -104,9 +106,9 @@ void CDlgAdminBase::OnAdminMsg(int nType, DWORD dwPara)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnMainFrame										 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_MAINFRAME)								 */
-/* “ú•t		:2007/08/16														 */
+/* 関数名	:CDlgAdminBase::OnMainFrame										 */
+/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
+/* 日付		:2007/08/16														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::OnMainFrame(DWORD dwCommand, DWORD dwParam)
@@ -115,9 +117,9 @@ void CDlgAdminBase::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnInitDialog									 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_INITDIALOG)								 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::OnInitDialog									 */
+/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 BOOL CDlgAdminBase::OnInitDialog()
@@ -131,9 +133,9 @@ BOOL CDlgAdminBase::OnInitDialog()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::OnSize											 */
-/* “à—e		:ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰(WM_SIZE)									 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::OnSize											 */
+/* 内容		:メッセージハンドラ(WM_SIZE)									 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::OnSize(UINT nType, int cx, int cy)
@@ -145,9 +147,9 @@ void CDlgAdminBase::OnSize(UINT nType, int cx, int cy)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::PostNcDestroy									 */
-/* “à—e		:I—¹ˆ—														 */
-/* “ú•t		:2007/03/18														 */
+/* 関数名	:CDlgAdminBase::PostNcDestroy									 */
+/* 内容		:終了処理														 */
+/* 日付		:2007/03/18														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::PostNcDestroy()
@@ -157,9 +159,9 @@ void CDlgAdminBase::PostNcDestroy()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼	:CDlgAdminBase::SelectCmb										 */
-/* “à—e		:€–Ú‚ð‘I‘ð														 */
-/* “ú•t		:2007/11/25														 */
+/* 関数名	:CDlgAdminBase::SelectCmb										 */
+/* 内容		:項目を選択														 */
+/* 日付		:2007/11/25														 */
 /* ========================================================================= */
 
 void CDlgAdminBase::SelectCmb(CComboBox *pCmb, DWORD dwID)

@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketEFFECT_DELETEBALLOONINFO.h							 */
 /* 内容			:コマンド(エフェクト系:噴出し情報削除) 定義ファイル			 */

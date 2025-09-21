@@ -1,9 +1,9 @@
-/* Copyright(C)URARA-works 2005 */
+﻿/* Copyright(C)URARA-works 2005 */
 /* ========================================================================= */
-/* ƒtƒ@ƒCƒ‹–¼F	MacAddr.cpp													 */
-/* “à—eF		MACƒAƒhƒŒƒXŽæ“¾ƒNƒ‰ƒX ŽÀ‘•ƒtƒ@ƒCƒ‹							 */
-/* ì¬F		”N‚ª‚ç”N’†t‚¤‚ç‚ç(URARA-works)								 */
-/* ì¬ŠJŽn“úF	2005/04/12													 */
+/* ファイル名：	MacAddr.cpp													 */
+/* 内容：		MACアドレス取得クラス 実装ファイル							 */
+/* 作成：		年がら年中春うらら(URARA-works)								 */
+/* 作成開始日：	2005/04/12													 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -14,9 +14,9 @@
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMacAddr::CMacAddr												 */
-/* “à—eF	ƒRƒ“ƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/04/12														 */
+/* 関数名：	CMacAddr::CMacAddr												 */
+/* 内容：	コンストラクタ													 */
+/* 日付：	2005/04/12														 */
 /* ========================================================================= */
 
 CMacAddr::CMacAddr()
@@ -26,9 +26,9 @@ CMacAddr::CMacAddr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMacAddr::~CMacAddr												 */
-/* “à—eF	ƒfƒXƒgƒ‰ƒNƒ^													 */
-/* “ú•tF	2005/04/12														 */
+/* 関数名：	CMacAddr::~CMacAddr												 */
+/* 内容：	デストラクタ													 */
+/* 日付：	2005/04/12														 */
 /* ========================================================================= */
 
 CMacAddr::~CMacAddr()
@@ -37,14 +37,14 @@ CMacAddr::~CMacAddr()
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMacAddr::Get													 */
-/* “à—eF	MACƒAƒhƒŒƒX‚ðŽæ“¾												 */
-/* “ú•tF	2005/04/12														 */
+/* 関数名：	CMacAddr::Get													 */
+/* 内容：	MACアドレスを取得												 */
+/* 日付：	2005/04/12														 */
 /* ========================================================================= */
 
 BOOL CMacAddr::Get(
-	PBYTE pDst,		/* [ou] Žæ“¾‚µ‚½MACƒAƒhƒŒƒX(ƒoƒCƒiƒŠ6ƒoƒCƒg) */
-	int nNo)		/* [in] Žæ“¾‚µ‚½‚¢NIC”Ô†(0‚ªÅ‰) */
+	PBYTE pDst,		/* [ou] 取得したMACアドレス(バイナリ6バイト) */
+	int nNo)		/* [in] 取得したいNIC番号(0が最初) */
 {
 	int		nCount;
 	DWORD	dwResult, dwSize;
@@ -56,13 +56,13 @@ BOOL CMacAddr::Get(
 	bRet	= FALSE;
 	dwSize	= 0;
 
-	/* •K—v‚ÈƒTƒCƒY‚ð‹‚ß‚é */
+	/* 必要なサイズを求める */
 	GetAdaptersInfo (NULL, &dwSize);
 
 	pBuff			= new BYTE[dwSize];
 	pAdapterInfo	= (PIP_ADAPTER_INFO)pBuff;
 
-	/* î•ñ‚ðŽæ“¾ */
+	/* 情報を取得 */
 	dwResult = GetAdaptersInfo (pAdapterInfo, &dwSize);
 	if (dwResult != ERROR_SUCCESS) {
 		goto Exit;
@@ -107,14 +107,14 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMacAddr::GetMACAddrStr											 */
-/* “à—eF	MACƒAƒhƒŒƒX‚ðŽæ“¾(•¶Žš—ñ)										 */
-/* “ú•tF	2005/04/12														 */
+/* 関数名：	CMacAddr::GetMACAddrStr											 */
+/* 内容：	MACアドレスを取得(文字列)										 */
+/* 日付：	2005/04/12														 */
 /* ========================================================================= */
 
 BOOL CMacAddr::GetStr(
-	LPSTR pszDst,		/* [ou] Žæ“¾‚µ‚½MACƒAƒhƒŒƒX */
-	int nNo)			/* [in] Žæ“¾‚µ‚½‚¢NIC”Ô†(0‚ªÅ‰) */
+	LPSTR pszDst,		/* [ou] 取得したMACアドレス */
+	int nNo)			/* [in] 取得したいNIC番号(0が最初) */
 {
 	BOOL bResult;
 	BYTE byMACAddr[6];
@@ -130,9 +130,9 @@ BOOL CMacAddr::GetStr(
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMacAddr::GetCount												 */
-/* “à—eF	NIC”‚ðŽæ“¾														 */
-/* “ú•tF	2005/04/12														 */
+/* 関数名：	CMacAddr::GetCount												 */
+/* 内容：	NIC数を取得														 */
+/* 日付：	2005/04/12														 */
 /* ========================================================================= */
 
 int CMacAddr::GetCount(void)
@@ -142,14 +142,14 @@ int CMacAddr::GetCount(void)
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMacAddr::GetDeviceName											 */
-/* “à—eF	ƒfƒoƒCƒX–¼‚ðŽæ“¾												 */
-/* “ú•tF	2005/04/12														 */
+/* 関数名：	CMacAddr::GetDeviceName											 */
+/* 内容：	デバイス名を取得												 */
+/* 日付：	2005/04/12														 */
 /* ========================================================================= */
 
 BOOL CMacAddr::GetDeviceName(
-	LPSTR pszDst,	/* [ou] Žæ“¾‚µ‚½ƒfƒoƒCƒX–¼(\•ª‚ÈƒTƒCƒY‚ª•K—v) */
-	int nNo)		/* [in] Žæ“¾‚µ‚½‚¢NIC”Ô†(0‚ªÅ‰) */
+	LPSTR pszDst,	/* [ou] 取得したデバイス名(十分なサイズが必要) */
+	int nNo)		/* [in] 取得したいNIC番号(0が最初) */
 {
 	int		nCount;
 	DWORD	dwResult, dwSize;
@@ -162,13 +162,13 @@ BOOL CMacAddr::GetDeviceName(
 	bRet	= FALSE;
 	dwSize	= 0;
 
-	/* •K—v‚ÈƒTƒCƒY‚ð‹‚ß‚é */
+	/* 必要なサイズを求める */
 	GetAdaptersInfo (NULL, &dwSize);
 
 	pBuff			= new BYTE[dwSize];
 	pAdapterInfo	= (PIP_ADAPTER_INFO)pBuff;
 
-	/* î•ñ‚ðŽæ“¾ */
+	/* 情報を取得 */
 	dwResult = GetAdaptersInfo (pAdapterInfo, &dwSize);
 	if (dwResult != ERROR_SUCCESS) {
 		goto Exit;
@@ -208,9 +208,9 @@ Exit:
 
 
 /* ========================================================================= */
-/* ŠÖ”–¼F	CMacAddr::GetNICCount											 */
-/* “à—eF	NIC”‚ðŽæ“¾														 */
-/* “ú•tF	2005/04/12														 */
+/* 関数名：	CMacAddr::GetNICCount											 */
+/* 内容：	NIC数を取得														 */
+/* 日付：	2005/04/12														 */
 /* ========================================================================= */
 
 int CMacAddr::GetNICCount(void)
@@ -224,13 +224,13 @@ int CMacAddr::GetNICCount(void)
 	nRet	= 0;
 	dwSize	= 0;
 
-	/* •K—v‚ÈƒTƒCƒY‚ð‹‚ß‚é */
+	/* 必要なサイズを求める */
 	GetAdaptersInfo (NULL, &dwSize);
 
 	pBuff			= new BYTE[dwSize];
 	pAdapterInfo	= (PIP_ADAPTER_INFO)pBuff;
 
-	/* î•ñ‚ðŽæ“¾ */
+	/* 情報を取得 */
 	dwResult = GetAdaptersInfo (pAdapterInfo, &dwSize);
 	if (dwResult != ERROR_SUCCESS) {
 		goto Exit;

@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:WindowOPTION_ACTIONSET_SLEEPTIMER.cpp						 */
 /* 内容			:オプション-動作設定-おひるねタイマーの設定ウィンドウクラス 実装ファイル */

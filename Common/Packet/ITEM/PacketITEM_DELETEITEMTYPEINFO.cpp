@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketITEM_DELETEITEMTYPEINFO.cpp							 */
 /* 内容			:コマンド(アイテム系:アイテム種別情報削除) 実装ファイル		 */

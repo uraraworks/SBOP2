@@ -1,0 +1,17 @@
+root = true
+
+# Enforce UTF-8 with BOM so VS detects Japanese text correctly
+# and avoids code page 932 prompts.
+[*]
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.{vcxproj,props,targets,vsprops,filters}]
+indent_size = 2
+
+[*.{h,hpp,hh,hxx,c,cpp,cc,cxx,rc,rc2,def,idl,mc,rcv}]
+indent_size = 2
+

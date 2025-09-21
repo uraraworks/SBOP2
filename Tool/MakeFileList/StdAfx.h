@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:stdafx.h													 */
 /* 内容			:プリコンパイルヘッダ 定義ファイル							 */
@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+
+// no rpcsal fallback needed here
 
 #define VC_EXTRALEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します。
 #define WINVER 0x0602

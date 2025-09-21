@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketEFFECT_DELETEEFFECTINFO.cpp							 */
 /* 内容			:コマンド(エフェクト系:エフェクト情報削除) 実装ファイル		 */

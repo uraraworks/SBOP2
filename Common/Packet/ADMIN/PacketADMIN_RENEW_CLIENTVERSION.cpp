@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2008 */
+﻿/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_RENEW_CLIENTVERSION.cpp						 */
 /* 内容			:コマンド(管理者系:クライアントバージョン更新) 実装ファイル	 */

@@ -1,4 +1,4 @@
-#ifndef __INC_AFLMUSIC
+﻿#ifndef __INC_AFLMUSIC
 
 #ifndef _INC_MMSYSTEM
 	#include <mmsystem.h>

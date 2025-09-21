@@ -1,4 +1,4 @@
-// SboGrpData.cpp : DLL アプリケーション用のエントリ ポイントを定義します。
+﻿// SboGrpData.cpp : DLL アプリケーション用のエントリ ポイントを定義します。
 //
 
 #include "stdafx.h"

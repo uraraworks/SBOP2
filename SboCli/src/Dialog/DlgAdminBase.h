@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:DlgAdminBase.h												 */
 /* 内容			:管理者ウィンドウ基底ダイアログクラス 定義ファイル			 */
@@ -59,6 +59,7 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+    DECLARE_DYNAMIC(CDlgAdminBase)
 } CDlgAdminBase, *PCDlgAdminBase;
 
 //{{AFX_INSERT_LOCATION}}

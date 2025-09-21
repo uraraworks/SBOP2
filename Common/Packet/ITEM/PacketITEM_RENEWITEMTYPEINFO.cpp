@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketITEM_RENEWITEMTYPEINFO.cpp							 */
 /* 内容			:コマンド(アイテム系:アイテム種別情報更新) 実装ファイル		 */

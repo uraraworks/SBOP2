@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2007 */
+﻿/* Copyright(C)URARA-works 2007 */
 /* ========================================================================= */
 /* ファイル名	:PacketADMIN_MAP_RENEWMAPSIZE.cpp							 */
 /* 内容			:コマンド(管理者系:マップサイズ更新) 実装ファイル			 */
