@@ -12,29 +12,47 @@ CWinsockStart::~CWinsockStart(void)
     WSACleanup();
 }
 
-DWORD CWinsockStart::GetIPaddr(char *pName)
+DWORD CWinsockStart::GetIPaddr(const char *pName)
 {
-    struct hostent *clHostent;
-    struct in_addr iaHost;
-
-    ZeroMemory(&iaHost, sizeof(iaHost));
-
-    iaHost.s_addr = inet_addr(pName);
-    if (iaHost.s_addr == INADDR_NONE) {
-        clHostent = gethostbyname(pName);
-    } else {
-        clHostent = gethostbyaddr(reinterpret_cast<const char *>(&iaHost), sizeof(iaHost), AF_INET);
-    }
-
-    if (clHostent == NULL) {
+    if ((pName == NULL) || (*pName == '\0')) {
         return 0;
     }
-    return *reinterpret_cast<PDWORD>(clHostent->h_addr);
+
+    IN_ADDR addr;
+    ZeroMemory(&addr, sizeof(addr));
+    if (InetPtonA(AF_INET, pName, &addr) == 1) {
+        return addr.S_un.S_addr;
+    }
+
+    ADDRINFOA hints;
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    PADDRINFOA result = NULL;
+    DWORD dwAddr = 0;
+    if (GetAddrInfoA(pName, NULL, &hints, &result) != 0) {
+        return 0;
+    }
+
+    for (PADDRINFOA ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+        if ((ptr->ai_family == AF_INET) && (ptr->ai_addrlen >= sizeof(sockaddr_in))) {
+            const sockaddr_in *sin = reinterpret_cast<const sockaddr_in *>(ptr->ai_addr);
+            dwAddr = sin->sin_addr.S_un.S_addr;
+            break;
+        }
+    }
+
+    FreeAddrInfoA(result);
+    return dwAddr;
 }
 
 BOOL CWinsockStart::GetMyPcAddr(char *szName, int iLen, IN_ADDR *pAddr)
 {
-    PHOSTENT phe;
+    if ((szName == NULL) || (iLen <= 0) || (pAddr == NULL)) {
+        return FALSE;
+    }
 
     ZeroMemory(szName, iLen);
     ZeroMemory(pAddr, sizeof(IN_ADDR));
@@ -42,11 +60,28 @@ BOOL CWinsockStart::GetMyPcAddr(char *szName, int iLen, IN_ADDR *pAddr)
     if (gethostname(szName, iLen - 1) != 0) {
         return FALSE;
     }
-    phe = gethostbyname(szName);
-    if (phe == NULL) {
+
+    ADDRINFOA hints;
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    PADDRINFOA result = NULL;
+    if (GetAddrInfoA(szName, NULL, &hints, &result) != 0) {
         return FALSE;
     }
 
-    CopyMemory(reinterpret_cast<char *>(pAddr), phe->h_addr, sizeof(IN_ADDR));
-    return TRUE;
+    BOOL bSuccess = FALSE;
+    for (PADDRINFOA ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+        if ((ptr->ai_family == AF_INET) && (ptr->ai_addrlen >= sizeof(sockaddr_in))) {
+            const sockaddr_in *sin = reinterpret_cast<const sockaddr_in *>(ptr->ai_addr);
+            *pAddr = sin->sin_addr;
+            bSuccess = TRUE;
+            break;
+        }
+    }
+
+    FreeAddrInfoA(result);
+    return bSuccess;
 }

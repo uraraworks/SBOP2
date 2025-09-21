@@ -475,7 +475,7 @@ void CUraraSockTCPImplSlot::OnFD_WRITE(void)
         } else {
             DWORD dwError = WSAGetLastError();
             if (dwError != WSAEWOULDBLOCK) {
-                PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, reinterpret_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
+                PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, static_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
             }
             break;
         }
@@ -501,7 +501,7 @@ void CUraraSockTCPImplSlot::OnFD_READ(void)
         } else {
             DWORD dwError = WSAGetLastError();
             if (dwError != 0 && dwError != WSAEWOULDBLOCK) {
-                PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, reinterpret_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
+                PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, static_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
                 return;
             }
             break;
@@ -541,7 +541,7 @@ void CUraraSockTCPImplSlot::OnFD_READ(void)
             m_pRecvTmp = (m_dwRecvSizeTarget ? new BYTE[m_dwRecvSizeTarget] : NULL);
 
             if (!m_bPreCheck && (m_dwRecvSizeTarget != sizeof(DWORD))) {
-                PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, reinterpret_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
+                PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, static_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
                 return;
             }
         }
@@ -550,14 +550,14 @@ void CUraraSockTCPImplSlot::OnFD_READ(void)
             if (!m_bPreCheck) {
                 if (m_dwRecvSize != sizeof(DWORD)) {
                     SAFE_DELETE_ARRAY(m_pRecvTmp);
-                    PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, reinterpret_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
+                    PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, static_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
                     return;
                 }
                 PostMessage(m_hWndParent, WM_SOCKPRECHECK, reinterpret_cast<WPARAM>(m_pRecvTmp), static_cast<LPARAM>(m_dwSockID + URARASOCK_IDBASE));
             } else {
                 if ((m_dwRecvCrc == 0) || (m_dwRecvCrc != m_pCrc->GetCRC(m_pRecvTmp, m_dwRecvSizeTarget))) {
                     SAFE_DELETE_ARRAY(m_pRecvTmp);
-                    PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, reinterpret_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
+                    PostMessage(m_hWndParent, WM_SOCKEVENT + m_dwSockID, static_cast<WPARAM>(m_socket), MAKELONG(FD_CLOSE, 0));
                     return;
                 }
                 PostMessage(m_hWndParent, WM_INTERNAL_RECV, reinterpret_cast<WPARAM>(m_pRecvTmp), static_cast<LPARAM>(m_dwSockID + URARASOCK_IDBASE));
@@ -670,20 +670,12 @@ BOOL CUraraSockTCPImpl::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, W
         return FALSE;
     }
 
-    struct hostent *clHostent;
-    struct in_addr iaHost;
-    ZeroMemory(&iaHost, sizeof(iaHost));
-    iaHost.s_addr = inet_addr(pszAddr);
-    if (iaHost.s_addr == INADDR_NONE) {
-        clHostent = gethostbyname(pszAddr);
-    } else {
-        clHostent = gethostbyaddr(reinterpret_cast<const char *>(&iaHost), static_cast<int>(strlen(pszAddr)), AF_INET);
-    }
-    if (clHostent == NULL) {
+    DWORD dwAddr = m_Winsock.GetIPaddr(pszAddr);
+    if (dwAddr == 0) {
         return FALSE;
     }
 
-    m_sockAddr.sin_addr.s_addr = *reinterpret_cast<PDWORD>(clHostent->h_addr);
+    m_sockAddr.sin_addr.s_addr = dwAddr;
     m_hWndParent = hWndParent;
     m_dwMsgBase = dwMsgBase;
     m_dwPreCheckKey = dwKey;
@@ -723,7 +715,7 @@ void CUraraSockTCPImpl::DeleteClient(DWORD dwID)
     if (dwIndex >= m_dwMaxConnectCount) {
         return;
     }
-    PostMessage(m_hWnd, WM_SOCKEVENT + dwIndex, reinterpret_cast<WPARAM>(m_pSlot[dwIndex].m_socket), MAKELONG(FD_CLOSE, 0));
+    PostMessage(m_hWnd, WM_SOCKEVENT + dwIndex, static_cast<WPARAM>(m_pSlot[dwIndex].m_socket), MAKELONG(FD_CLOSE, 0));
 }
 
 void CUraraSockTCPImpl::SendCancel(DWORD dwID)
@@ -877,7 +869,7 @@ LRESULT CUraraSockTCPImpl::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                     continue;
                 }
                 if (dwTime > m_pSlot[i].m_dwTimeLastRecv + TIME_KEEPALIVE) {
-                    PostMessage(hWnd, WM_SOCKEVENT + i, reinterpret_cast<WPARAM>(m_pSlot[i].m_socket), MAKELONG(FD_CLOSE, 0));
+                    PostMessage(hWnd, WM_SOCKEVENT + i, static_cast<WPARAM>(m_pSlot[i].m_socket), MAKELONG(FD_CLOSE, 0));
                 }
             }
         } else if (wParam == TIMERID_KEEPALIVE_CLI) {
@@ -989,7 +981,7 @@ LRESULT CUraraSockTCPImpl::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             DWORD dwIndex = static_cast<DWORD>(wParam);
             if (dwIndex < m_dwMaxConnectCount) {
                 CUraraSockTCPImplSlot *pSlot = &m_pSlot[dwIndex];
-                PostMessage(hWnd, WM_SOCKEVENT + pSlot->m_dwSockID, reinterpret_cast<WPARAM>(pSlot->m_socket), MAKELONG(FD_WRITE, 0));
+                PostMessage(hWnd, WM_SOCKEVENT + pSlot->m_dwSockID, static_cast<WPARAM>(pSlot->m_socket), MAKELONG(FD_WRITE, 0));
             }
         }
         break;
