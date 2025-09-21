@@ -326,6 +326,7 @@
     <ClCompile Include="src\Lib\Img32.cpp" />
     <ClCompile Include="src\Lib\LibMusicLoader.cpp" />
     <ClCompile Include="src\Lib\MacAddr.cpp" />
+    <ClCompile Include="src\Lib\third_party\lodepng.cpp" />
     <ClCompile Include="src\MainFrame\MainFrame.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
@@ -571,6 +572,7 @@
     <ClInclude Include="src\Lib\Img32.h" />
     <ClInclude Include="src\Lib\LibMusicLoader.h" />
     <ClInclude Include="src\Lib\MacAddr.h" />
+    <ClInclude Include="src\Lib\third_party\lodepng.h" />
     <ClInclude Include="src\Lib\Png\png.h" />
     <ClInclude Include="src\Lib\Png\pngconf.h" />
     <ClInclude Include="src\MainFrame\MainFrame.h" />

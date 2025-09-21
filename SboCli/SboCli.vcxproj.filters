@@ -417,6 +417,9 @@
     <ClCompile Include="src\Lib\MacAddr.cpp">
       <Filter>Source Files\Lib</Filter>
     </ClCompile>
+    <ClCompile Include="src\Lib\third_party\lodepng.cpp">
+      <Filter>Source Files\Lib</Filter>
+    </ClCompile>
     <ClCompile Include="src\LibInfo\LibInfoCharCli.cpp">
       <Filter>Source Files\LibInfo No. 2</Filter>
     </ClCompile>
@@ -1146,6 +1149,9 @@
       <Filter>Header Files\Lib No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\Lib\MacAddr.h">
+      <Filter>Header Files\Lib No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lib\third_party\lodepng.h">
       <Filter>Header Files\Lib No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\Lib\Png\png.h">

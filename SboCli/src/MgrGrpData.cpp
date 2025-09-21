@@ -9,18 +9,11 @@
 #include "stdafx.h"
 #include "../../SboGrpData/resource.h"
 #include "Img32.h"
-#include "png.h"
+#include "third_party/lodepng.h"
 #include "MgrGrpData.h"
 
+#include <vector>
 
-/* ========================================================================= */
-/* 構造体定義																 */
-/* ========================================================================= */
-
-typedef struct{
-	PBYTE	Buffer;
-	int		Pos;
-} TPngFileBuffer;
 
 
 /* ========================================================================= */
@@ -2149,216 +2142,173 @@ void CMgrGrpData::GetGrpPos(
 
 
 /* ========================================================================= */
-/* 関数名	:PngReadFunc													 */
-/* 内容		:PNG読み込み用コールバック関数									 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
-static void PngReadFunc(png_struct *Png,png_bytep buf,png_size_t size)
-{
-	TPngFileBuffer *PngFileBuffer = (TPngFileBuffer*)png_get_io_ptr (Png);
-    memcpy (buf, PngFileBuffer->Buffer+PngFileBuffer->Pos, size);
-	PngFileBuffer->Pos += size;
-}
-
-
-/* ========================================================================= */
-/* 関数名	:Read															 */
-/* 内容		:PNGデータの読み込み											 */
-/* 日付		:2006/09/24														 */
+/* 関数名       :Read                                                                     */
+/* 内容         :PNGデータの読み込み                                                         */
+/* 日付         :2006/09/24                                                                 */
 /* ========================================================================= */
 
 BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
 {
-	BOOL bRet;
-	int x, y, BitDepth, ColorType, InterlaceType, CompressionType,
-		FilterType, PaletteCount;
-	PBYTE pTmp, pData;
-	HDC hDCBmp, hDCBmp2;
-	png_uint_32 Width, Height;
-	png_struct *pPng;
-	png_info *pInfo;
-	png_byte *pLineBuf;
-	TPngFileBuffer PngFileBuffer = {NULL, 0};
-	CImg32 *pDibNew;
-	CImg32 *pDibTmp, *pDibTmp2;
+        BOOL bRet;
+        int x, y;
+        HRSRC hResInfo;
+        HGLOBAL hRes;
+        DWORD dwResourceSize;
+        const BYTE *pResourceData;
+        std::vector<unsigned char> image;
+        unsigned width, height;
+        CImg32 *pDibNew;
+        CImg32 *pDibTmp, *pDibTmp2;
+        BYTE *pData;
+        HDC hDCBmp, hDCBmp2;
 
-	bRet			= FALSE;
-	PaletteCount	= 0;
-	pPng			= NULL;
-	pInfo			= NULL;
-	pLineBuf		= NULL;
-	pDibTmp			= NULL;
-	pDibTmp2		= NULL;
+        bRet            = FALSE;
+        pDibTmp         = NULL;
+        pDibTmp2        = NULL;
 
-	/* 指定されたリソースを読み込み */
-	HGLOBAL hRes = LoadResource (m_hDll, FindResource (m_hDll, pszName, "PNG"));
-	if (hRes == NULL) {
-		goto Exit;
-	}
+        hResInfo = FindResource (m_hDll, pszName, "PNG");
+        if (hResInfo == NULL) {
+                goto Exit;
+        }
+        hRes = LoadResource (m_hDll, hResInfo);
+        if (hRes == NULL) {
+                goto Exit;
+        }
 
-	if (*pDib == NULL) {
-		*pDib = new CImg32;
-	}
-	pDibTmp	= new CImg32;
-	pDibNew	= *pDib;
-	pPng	= NULL;
-	pInfo	= NULL;
+        dwResourceSize = SizeofResource (m_hDll, hResInfo);
+        pResourceData = (const BYTE *)LockResource (hRes);
+        if ((pResourceData == NULL) || (dwResourceSize == 0)) {
+                goto Exit;
+        }
 
-	pPng	= png_create_read_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	pInfo	= png_create_info_struct (pPng);
+        if (lodepng::decode (image, width, height, pResourceData, dwResourceSize)) {
+                goto Exit;
+        }
+        if ((width == 0) || (height == 0)) {
+                goto Exit;
+        }
 
-	PngFileBuffer.Buffer	= (BYTE *)LockResource (hRes);
-	PngFileBuffer.Pos		= 0;
+        if (*pDib == NULL) {
+                *pDib = new CImg32;
+        }
+        pDibNew = *pDib;
+        pDibTmp = new CImg32;
 
-	png_set_read_fn (pPng, (png_voidp)&PngFileBuffer, (png_rw_ptr)PngReadFunc);
+        pDibTmp->Create (width, height);
+        pDibNew->CreateWithoutGdi (width * nSize, height * nSize);
+        pData = pDibTmp->GetBits ();
 
-	png_read_info (pPng, pInfo);
-	png_get_IHDR (pPng, pInfo, &Width, &Height, &BitDepth, &ColorType, &InterlaceType, &CompressionType, &FilterType);
-	BitDepth = 8;
+        for (y = 0; y < (int)height; y ++) {
+                BYTE *pDst = pData + (height - y - 1) * width * 4;
+                const unsigned char *pSrc = &image[(size_t)y * width * 4];
+                for (x = 0; x < (int)width; x ++) {
+                        pDst[0] = pSrc[2];
+                        pDst[1] = pSrc[1];
+                        pDst[2] = pSrc[0];
+                        pDst[3] = pSrc[3];
+                        pDst += 4;
+                        pSrc += 4;
+                }
+        }
 
-	png_set_bgr (pPng);
+        pDibTmp2 = new CImg32;
+        pDibTmp2->Create (width * nSize, height * nSize);
+        hDCBmp  = pDibTmp->Lock ();
+        hDCBmp2 = pDibTmp2->Lock ();
 
-	png_colorp Palette;
-	if (BitDepth == 8) {
-		png_get_PLTE (pPng, pInfo, &Palette, &PaletteCount);
-	}
+        StretchBlt (hDCBmp2, 0, 0, width * nSize, height * nSize,
+                        hDCBmp, 0, 0, width, height, SRCCOPY);
 
-	pLineBuf = new png_byte[Width * BitDepth / 8];
+        pDibTmp->Unlock ();
+        pDibTmp2->Unlock ();
 
-	pDibTmp->Create (Width, Height);
-	pDibNew->CreateWithoutGdi (Width * nSize, Height * nSize);
-	pData	= pDibTmp->GetBits ();
-	pTmp	= pData;
+        pDibNew->Blt (0, 0, width * nSize, height * nSize, pDibTmp2, 0, 0);
 
-	/* １ラインずつPNGデータを読み込む */
-	for (y = 0; y < (int)Height; y ++) {
-		png_read_row (pPng, pLineBuf, NULL);
-		pTmp = pData + (Height - y - 1) * Width * 4;
-		   for (x = 0; x < (int)Width; x ++) {
-			BYTE *Src = pLineBuf + x * BitDepth / 8;
-			if (BitDepth == 8) {
-				pTmp[0] = Palette[*Src].blue;
-				pTmp[1] = Palette[*Src].green;
-				pTmp[2] = Palette[*Src].red;
-			} else {
-				CopyMemory (pTmp, Src, 3);
-			}
-			pTmp += 4;
-		}
-	}
-	png_destroy_read_struct (&pPng, &pInfo, NULL);
-
-	pDibTmp2 = new CImg32;
-	pDibTmp2->Create (Width * nSize, Height * nSize);
-	hDCBmp	= pDibTmp->Lock ();
-	hDCBmp2	= pDibTmp2->Lock ();
-
-	/* 指定サイズに拡大してDIBにコピー */
-	StretchBlt (hDCBmp2, 0, 0, Width * nSize, Height * nSize,
-			hDCBmp, 0, 0, Width, Height, SRCCOPY);
-
-	pDibTmp->Unlock ();
-	pDibTmp2->Unlock ();
-
-	pDibNew->Blt (0, 0, Width * nSize, Height * nSize, pDibTmp2, 0, 0);
-
-	bRet = TRUE;
+        bRet = TRUE;
 Exit:
-	SAFE_DELETE (pDibTmp);
-	SAFE_DELETE (pDibTmp2);
-	SAFE_DELETE_ARRAY (pLineBuf);
-	return bRet;
+        SAFE_DELETE (pDibTmp);
+        SAFE_DELETE (pDibTmp2);
+        return bRet;
 }
 
 
 /* ========================================================================= */
-/* 関数名	:Read256														 */
-/* 内容		:PNGデータの読み込み											 */
-/* 日付		:2008/07/04														 */
+/* 関数名       :Read256                                                                  */
+/* 内容         :PNGデータの読み込み                                                         */
+/* 日付         :2008/07/04                                                                 */
 /* ========================================================================= */
 
 BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
 {
-	BOOL bRet;
-	int i, x, y, BitDepth, ColorType, InterlaceType, CompressionType,
-		FilterType, PaletteCount;
-	PBYTE pTmp, pData;
-	png_uint_32 Width, Height;
-	png_struct *pPng;
-	png_info *pInfo;
-	png_byte *pLineBuf;
-	TPngFileBuffer PngFileBuffer = {NULL, 0};
-	CImg32 *pDibNew;
-	CImg32 *pDibTmp, *pDibTmp2;
+        BOOL bRet;
+        int i, y;
+        HRSRC hResInfo;
+        HGLOBAL hRes;
+        DWORD dwResourceSize;
+        const BYTE *pResourceData;
+        std::vector<unsigned char> image;
+        unsigned width, height;
+        LodePNGState state;
+        CImg32 *pDibNew;
+        BYTE *pData;
 
-	bRet			= FALSE;
-	PaletteCount	= 0;
-	pPng			= NULL;
-	pInfo			= NULL;
-	pLineBuf		= NULL;
-	pDibTmp			= NULL;
-	pDibTmp2		= NULL;
+        bRet = FALSE;
+        lodepng_state_init (&state);
+        state.info_raw.colortype = LCT_PALETTE;
+        state.info_raw.bitdepth = 8;
 
-	/* 指定されたリソースを読み込み */
-	HGLOBAL hRes = LoadResource (m_hDll, FindResource (m_hDll, pszName, "PNG"));
-	if (hRes == NULL) {
-		goto Exit;
-	}
+        hResInfo = FindResource (m_hDll, pszName, "PNG");
+        if (hResInfo == NULL) {
+                goto Exit;
+        }
+        hRes = LoadResource (m_hDll, hResInfo);
+        if (hRes == NULL) {
+                goto Exit;
+        }
 
-	if (*pDib == NULL) {
-		*pDib = new CImg32;
-	}
-	pDibNew	= *pDib;
-	pPng	= NULL;
-	pInfo	= NULL;
+        dwResourceSize = SizeofResource (m_hDll, hResInfo);
+        pResourceData = (const BYTE *)LockResource (hRes);
+        if ((pResourceData == NULL) || (dwResourceSize == 0)) {
+                goto Exit;
+        }
 
-	pPng	= png_create_read_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	pInfo	= png_create_info_struct (pPng);
+        if (lodepng::decode (image, width, height, state, pResourceData, dwResourceSize)) {
+                goto Exit;
+        }
+        if ((width == 0) || (height == 0)) {
+                goto Exit;
+        }
+        if (state.info_png.color.colortype != LCT_PALETTE) {
+                goto Exit;
+        }
+        if ((state.info_png.color.palettesize == 0) || (state.info_png.color.palettesize > 256)) {
+                goto Exit;
+        }
+        if (image.size () != (size_t)width * height) {
+                goto Exit;
+        }
 
-	PngFileBuffer.Buffer	= (BYTE *)LockResource (hRes);
-	PngFileBuffer.Pos		= 0;
+        if (*pDib == NULL) {
+                *pDib = new CImg32;
+        }
+        pDibNew = *pDib;
+        pDibNew->CreateWithoutGdi256 (width * nSize, height * nSize);
+        pData = pDibNew->GetBits ();
 
-	png_set_read_fn (pPng, (png_voidp)&PngFileBuffer, (png_rw_ptr)PngReadFunc);
+        for (i = 0; i < (int)state.info_png.color.palettesize; i ++) {
+                const unsigned char *pEntry = &state.info_png.color.palette[i * 4];
+                pDibNew->SetPallet (i, pEntry[0], pEntry[1], pEntry[2]);
+        }
 
-	png_read_info (pPng, pInfo);
-	png_get_IHDR (pPng, pInfo, &Width, &Height, &BitDepth, &ColorType, &InterlaceType, &CompressionType, &FilterType);
-	BitDepth = 8;
+        for (y = 0; y < (int)height; y ++) {
+                BYTE *pDst = pData + (height - y - 1) * width;
+                CopyMemory (pDst, &image[(size_t)y * width], width);
+        }
 
-	png_set_bgr (pPng);
-
-	png_colorp Palette;
-	if (BitDepth == 8) {
-		png_get_PLTE (pPng, pInfo, &Palette, &PaletteCount);
-	}
-
-	pLineBuf = new png_byte[Width * BitDepth / 8];
-
-	pDibNew->CreateWithoutGdi256 (Width * nSize, Height * nSize);
-	pData	= pDibNew->GetBits ();
-	pTmp	= pData;
-
-	for (i = 0; i < PaletteCount; i ++) {
-		pDibNew->SetPallet (i, Palette[i].red, Palette[i].green, Palette[i].blue);
-	}
-
-	/* １ラインずつPNGデータを読み込む */
-	for (y = 0; y < (int)Height; y ++) {
-		png_read_row (pPng, pLineBuf, NULL);
-		pTmp = pData + (Height - y - 1) * Width;
-		BYTE *Src = pLineBuf + 0 * BitDepth / 8;
-		for (x = 0; x < (int)Width; x ++) {
-			if (BitDepth == 8) {
-				pTmp[x] = Src[x];
-			}
-		}
-	}
-	png_destroy_read_struct (&pPng, &pInfo, NULL);
-
-	bRet = TRUE;
+        bRet = TRUE;
 Exit:
-	SAFE_DELETE_ARRAY (pLineBuf);
-	return bRet;
+        lodepng_state_cleanup (&state);
+        return bRet;
 }
 
 /* Copyright(C)URARA-works 2006 */
