@@ -6,6 +6,23 @@
 // This header only provides no-op macro fallbacks when the real
 // rpcsal/sal annotations are unavailable.
 
+#if defined(__has_include)
+#if __has_include(<rpcsal.h>)
+#define RPCSAL_FALLBACK_HAS_NATIVE 1
+#endif
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1500)
+// Visual Studio 2008 以降では __has_include が利用可能だが、
+// もし <rpcsal.h> が存在する環境で __has_include が使えない場合にも
+// 再定義を避けられるようチェックしておく。
+#if !defined(RPCSAL_FALLBACK_HAS_NATIVE) && defined(_INC_RPCSAL)
+#define RPCSAL_FALLBACK_HAS_NATIVE 1
+#endif
+#endif
+
+#if !defined(RPCSAL_FALLBACK_HAS_NATIVE)
+
 #ifndef __RPC__in
 #define __RPC__in
 #endif
@@ -68,5 +85,7 @@
 #define __RPC__out_ecount(...) 
 #endif
 #ifndef __RPC__out_ecount_part
-#define __RPC__out_ecount_part(...) 
+#define __RPC__out_ecount_part(...)
 #endif
+
+#endif // !defined(RPCSAL_FALLBACK_HAS_NATIVE)
