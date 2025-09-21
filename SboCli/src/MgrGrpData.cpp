@@ -602,54 +602,47 @@ Exit:
 
 void CMgrGrpData::Write(LPCSTR pszFileName, CImg32 *pSrc)
 {
-	DWORD dwFileSize;
-	PBYTE *pSaveData;
 	FILE *fp;
+	unsigned width, height;
+	std::vector<unsigned char> raw;
+	std::vector<unsigned char> encoded;
+	unsigned error;
 	int x, y;
-	png_structp png_ptr;
-	png_infop info_ptr;
+
+	if (pSrc == NULL) {
+		return;
+	}
+
+	width = pSrc->Width ();
+	height = pSrc->Height ();
+	if ((width == 0) || (height == 0)) {
+		return;
+	}
 
 	fp = fopen (pszFileName, "wb");
 	if (fp == NULL) {
 		return;
 	}
 
-	png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	info_ptr = png_create_info_struct (png_ptr);
-	png_init_io (png_ptr, fp);
-	png_set_IHDR (png_ptr, info_ptr, pSrc->Width (), pSrc->Height (),
-			8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
-			PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-	png_write_info (png_ptr, info_ptr);
-
-
-	dwFileSize = pSrc->GetImageSize ();
-	pSaveData = new PBYTE[pSrc->Height ()];
-	ZeroMemory (pSaveData, sizeof (PBYTE) * pSrc->Height ());
-
-	LPBYTE pData = pSrc->GetBits ();
-	for (y = 0; y < pSrc->Height (); y ++) {
-		pData = pSrc->GetBits () + y * (pSrc->Width () * 4);
-		PBYTE pDataTmp = new BYTE[pSrc->Width () * 3];
-		for (x = 0; x < pSrc->Width (); x ++) {
-			pDataTmp[x * 3 + 0] = pData[2];
-			pDataTmp[x * 3 + 1] = pData[1];
-			pDataTmp[x * 3 + 2] = pData[0];
-			pData += 4;
+	raw.resize ((size_t)width * height * 3);
+	for (y = 0; y < (int)height; y ++) {
+		const BYTE *pSrcLine = pSrc->GetBits () + (height - 1 - y) * (width * 4);
+		unsigned char *pDst = &raw[(size_t)y * width * 3];
+		for (x = 0; x < (int)width; x ++) {
+			pDst[0] = pSrcLine[2];
+			pDst[1] = pSrcLine[1];
+			pDst[2] = pSrcLine[0];
+			pDst += 3;
+			pSrcLine += 4;
 		}
-		pSaveData[pSrc->Height () - 1 - y] = pDataTmp;
 	}
 
-	png_write_image (png_ptr, pSaveData);
-
-	png_write_end (png_ptr, info_ptr); 
-	png_destroy_write_struct (&png_ptr, &info_ptr); 
-	fclose(fp);
-
-	for (y = 0; y < pSrc->Height (); y ++) {
-		delete [] pSaveData[y];
+	error = lodepng::encode (encoded, raw, width, height, LCT_RGB, 8);
+	if ((error == 0) && (!encoded.empty ())) {
+		fwrite (&encoded[0], 1, encoded.size (), fp);
 	}
-	delete [] pSaveData;
+
+	fclose (fp);
 }
 
 
@@ -2248,12 +2241,12 @@ BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
         const BYTE *pResourceData;
         std::vector<unsigned char> image;
         unsigned width, height;
-        LodePNGState state;
+        lodepng::State state;
         CImg32 *pDibNew;
         BYTE *pData;
 
         bRet = FALSE;
-        lodepng_state_init (&state);
+        state.decoder.color_convert = 0;
         state.info_raw.colortype = LCT_PALETTE;
         state.info_raw.bitdepth = 8;
 
@@ -2307,7 +2300,6 @@ BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
 
         bRet = TRUE;
 Exit:
-        lodepng_state_cleanup (&state);
         return bRet;
 }
 
