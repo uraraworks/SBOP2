@@ -57,7 +57,7 @@
       <AdditionalIncludeDirectories>.\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Packet\SKILL;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\LibInfo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/SboSockLib.pch</PrecompiledHeaderOutputFile>
@@ -88,7 +88,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/SboSockLib.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
