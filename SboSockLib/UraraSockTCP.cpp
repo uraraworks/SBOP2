@@ -610,18 +610,19 @@ void CUraraSockTCPImpl::InitData(void)
     m_dwMsgBase = 0;
     m_dwPreCheckKey = 0;
     m_pSlot = NULL;
+    m_hThread = NULL;
+    m_hEvent = NULL;
     ZeroMemory(&m_sockAddr, sizeof(m_sockAddr));
     m_socket = INVALID_SOCKET;
 }
 
 void CUraraSockTCPImpl::Destroy(void)
 {
-    if (m_hThread) {
+    if (m_hThread && m_hThread != reinterpret_cast<HANDLE>(-1)) {
         if (IsWindow(m_hWnd)) {
             PostMessage(m_hWnd, WM_CLOSE, 0, 0);
         }
         WaitForSingleObject(m_hThread, INFINITE);
-        CloseHandle(m_hThread);
         m_hThread = NULL;
     }
 
