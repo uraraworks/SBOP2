@@ -1045,7 +1045,7 @@ BOOL CUraraSockTCPImpl::MainOnCreate(HWND hWnd, LPCREATESTRUCT)
 void CUraraSockTCPImpl::MainOnDestroy(HWND hWnd)
 {
     if (m_pSlot != NULL) {
-        if (m_dwMaxConnectCount > 1) {
+        if (m_byMode == URARASOCKMODE_SREVER) {
             delete[] m_pSlot;
         } else {
             delete m_pSlot;
