@@ -67,7 +67,7 @@
       <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/SboSvr.pch</PrecompiledHeaderOutputFile>
@@ -113,9 +113,9 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeaderOutputFile>.\Debug/SboSvr.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
