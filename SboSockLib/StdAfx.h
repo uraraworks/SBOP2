@@ -10,7 +10,12 @@
 
 #define WIN32_LEAN_AND_MEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します
 
+#ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
+
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #include <windowsx.h>
 #include <process.h>
 #include <shlwapi.h>

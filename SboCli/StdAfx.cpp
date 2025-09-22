@@ -9,15 +9,13 @@
 #include "stdafx.h"
 
 #ifdef _DEBUG
-	#pragma comment(lib, "../Common/myLib/myZlib/zlibD.lib")
-	#pragma comment(lib, "../myLib/debug/myLib.lib")
-	#pragma comment(lib, "../SboSockLib/Debug/SboSockLib.lib")
-	#pragma comment(lib, "src/Lib/Png/libpngD.lib")
+        #pragma comment(lib, "../Common/myLib/myZlib/zlibD.lib")
+        #pragma comment(lib, "../myLib/debug/myLib.lib")
+        #pragma comment(lib, "../SboSockLib/Debug/SboSockLib.lib")
 #else
-	#pragma comment(lib, "../Common/myLib/myZlib/zlib.lib")
-	#pragma comment(lib, "../myLib/Release/myLib.lib")
-	#pragma comment(lib, "../SboSockLib/Release/SboSockLib.lib")
-	#pragma comment(lib, "src/Lib/Png/libpng.lib")
+        #pragma comment(lib, "../Common/myLib/myZlib/zlib.lib")
+        #pragma comment(lib, "../myLib/Release/myLib.lib")
+        #pragma comment(lib, "../SboSockLib/Release/SboSockLib.lib")
 #endif
 
 #pragma comment(lib, "winmm.lib")

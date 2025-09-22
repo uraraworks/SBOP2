@@ -20,13 +20,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
-    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
-    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
@@ -72,7 +72,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;NO_DIRECTMUSIC;_WFL_NONDMUSIC;__RPC__in_xcount_full(_Size)=;__RPC__out_xcount_part(_Size,_Length)=;__RPC__in_ecount_full(_Count)=;__RPC__out_ecount_part(_Count,_Length)=;__RPC__inout_xcount(_Size)=;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/SboCli.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
@@ -103,6 +103,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalOptions>/ignore:4099 /ignore:4217 %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>MSVCRTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>xaudio2.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
@@ -125,7 +126,7 @@
       <AdditionalIncludeDirectories>.\;.\src;.\src\Dialog;.\src\Info;.\src\Info\InfoChar;.\src\Layer;.\src\Lib;.\src\Lib\Audiere;.\src\Lib\Png;.\src\LibInfo;.\src\MainFrame;.\src\StateProc;.\src\Window;.\src\Wnd;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;NO_DIRECTMUSIC;_WFL_NONDMUSIC;__RPC__in_xcount_full(_Size)=;__RPC__out_xcount_part(_Size,_Length)=;__RPC__in_ecount_full(_Count)=;__RPC__out_ecount_part(_Count,_Length)=;__RPC__inout_xcount(_Size)=;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/SboCli.pch</PrecompiledHeaderOutputFile>
@@ -146,6 +147,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/Ignore:4089 /ignore:4099 /ignore:4217 %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>MSVCRT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/SboCli.pdb</ProgramDatabaseFile>
@@ -326,6 +328,7 @@
     <ClCompile Include="src\Lib\Img32.cpp" />
     <ClCompile Include="src\Lib\LibMusicLoader.cpp" />
     <ClCompile Include="src\Lib\MacAddr.cpp" />
+    <ClCompile Include="src\Lib\third_party\lodepng.cpp" />
     <ClCompile Include="src\MainFrame\MainFrame.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
@@ -571,6 +574,7 @@
     <ClInclude Include="src\Lib\Img32.h" />
     <ClInclude Include="src\Lib\LibMusicLoader.h" />
     <ClInclude Include="src\Lib\MacAddr.h" />
+    <ClInclude Include="src\Lib\third_party\lodepng.h" />
     <ClInclude Include="src\Lib\Png\png.h" />
     <ClInclude Include="src\Lib\Png\pngconf.h" />
     <ClInclude Include="src\MainFrame\MainFrame.h" />

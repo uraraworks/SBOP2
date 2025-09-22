@@ -57,7 +57,7 @@
       <AdditionalIncludeDirectories>.\;..\Common;..\Common\myLib;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\ADMIN;..\Common\Packet\BATTLE;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\EFFECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\MSGCMD;..\Common\Packet\VERSION;..\Common\Packet\SKILL;..\Common\Info;..\Common\Info\InfoItemType;..\Common\Info\InfoMapEvent;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\LibInfo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/SboSockLib.pch</PrecompiledHeaderOutputFile>
@@ -88,7 +88,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/SboSockLib.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
@@ -260,6 +260,8 @@
     <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
     <ClCompile Include="..\Common\UraraSockTCPSBO.cpp" />
+    <ClCompile Include="CWinsockStart.cpp" />
+    <ClCompile Include="UraraSockTCP.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -419,6 +421,7 @@
     <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELISTCHECK.h" />
     <ClInclude Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.h" />
     <ClInclude Include="..\Common\SBOGlobal.h" />
+    <ClInclude Include="CWinsockStart.h" />
     <ClInclude Include="..\common\UraraSockTCP.h" />
     <ClInclude Include="..\Common\UraraSockTCPSBO.h" />
     <ClInclude Include="StdAfx.h" />

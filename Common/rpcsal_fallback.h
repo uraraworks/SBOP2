@@ -6,6 +6,23 @@
 // This header only provides no-op macro fallbacks when the real
 // rpcsal/sal annotations are unavailable.
 
+#if defined(__has_include)
+#if __has_include(<rpcsal.h>)
+#define RPCSAL_FALLBACK_HAS_NATIVE 1
+#endif
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1500)
+// Guard against double definitions even when __has_include is
+// unavailable but rpcsal.h has already been included by toolchain
+// headers bundled with Visual Studio 2008 or later.
+#if !defined(RPCSAL_FALLBACK_HAS_NATIVE) && defined(_INC_RPCSAL)
+#define RPCSAL_FALLBACK_HAS_NATIVE 1
+#endif
+#endif
+
+#if !defined(RPCSAL_FALLBACK_HAS_NATIVE)
+
 #ifndef __RPC__in
 #define __RPC__in
 #endif
@@ -68,5 +85,7 @@
 #define __RPC__out_ecount(...) 
 #endif
 #ifndef __RPC__out_ecount_part
-#define __RPC__out_ecount_part(...) 
+#define __RPC__out_ecount_part(...)
 #endif
+
+#endif // !defined(RPCSAL_FALLBACK_HAS_NATIVE)
