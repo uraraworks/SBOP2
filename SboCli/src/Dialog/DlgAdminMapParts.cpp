@@ -347,7 +347,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 
-			nResult = MessageBox ("選択しているパーツを削除しますか？", "確認", MB_ICONQUESTION | MB_YESNO);
+                        nResult = MessageBox (_T("選択しているパーツを削除しますか？"), _T("確認"), MB_ICONQUESTION | MB_YESNO);
 			if (nResult != IDYES) {
 				break;
 			}

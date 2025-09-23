@@ -743,8 +743,8 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 
 	/* グラフィックデータDLLの読み込み */
 	bResult = m_pMgrGrpData->Load ();
-	if (bResult == FALSE) {
-		MessageBox (hWnd, "グラフィックデータDLLの読み込みに失敗しました", "エラー", MB_OK);
+        if (bResult == FALSE) {
+                MessageBox (hWnd, _T("グラフィックデータDLLの読み込みに失敗しました"), _T("エラー"), MB_OK);
 		goto Exit;
 	}
 

@@ -805,7 +805,7 @@ void CMainFrame::OnCommandACCOUNT_DELETEALL(void)
 	int i, j, nCount, nCount2, nResult;
 	PCInfoAccount pInfoAccount;
 
-	nResult = MessageBox (m_hWnd, "全てのアカウントとキャラを削除しますか？", "確認", MB_YESNO | MB_ICONWARNING);
+        nResult = MessageBox (m_hWnd, _T("全てのアカウントとキャラを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONWARNING);
 	if (nResult != IDYES) {
 		return;
 	}

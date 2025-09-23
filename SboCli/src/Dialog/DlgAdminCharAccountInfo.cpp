@@ -197,7 +197,7 @@ void CDlgAdminCharAccountInfo::OnSend()
 	if (m_dwAccountID == 0) {
 		return;
 	}
-	nResult = MessageBox ("アカウント情報を送信しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("アカウント情報を送信しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -224,7 +224,7 @@ void CDlgAdminCharAccountInfo::OnDisable()
 	CPacketADMIN_CHAR_RENEW_ACCOUNT Packet;
 	CInfoAccount InfoAccount;
 
-	nResult = MessageBox ("ログイン拒否しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("ログイン拒否しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

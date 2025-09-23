@@ -214,7 +214,7 @@ void CDlgAdminCharDisable::OnBnClickedDelete()
 	}
 	dwDisableID = m_List.GetItemData (nNo);
 
-	nResult = MessageBox ("このMACアドレスの拒否を解除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("このMACアドレスの拒否を解除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

@@ -323,10 +323,10 @@ void CDlgAdminItemList::OnAdd()
 	CDlgAdminItemNew Dlg(this);
 
 	nResult = m_pLibInfoItemType->GetCount ();
-	if (nResult <= 0) {
-		MessageBox ("アイテム種別が無いので追加できません", "エラー", MB_OK | MB_ICONINFORMATION);
-		return;
-	}
+        if (nResult <= 0) {
+                MessageBox (_T("アイテム種別が無いので追加できません"), _T("エラー"), MB_OK | MB_ICONINFORMATION);
+                return;
+        }
 
 	pInfoItem = NULL;
 	m_pMgrData->SetAdminNotifyTypeL (ADMINNOTIFYTYPE_CHARPOS);
@@ -418,7 +418,7 @@ void CDlgAdminItemList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -463,11 +463,11 @@ void CDlgAdminItemList::OnDelete()
 	}
 	if (nCount == 1) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (adwItemID[0]);
-		strTmp.Format ("[%s]を削除しますか？", (LPCSTR)pInfoItem->m_strName);
-	} else {
-		strTmp.Format ("選択されているアイテムを削除しますか？");
-	}
-	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
+                strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
+        } else {
+                strTmp.Format (_T("選択されているアイテムを削除しますか？"));
+        }
+        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

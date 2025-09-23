@@ -328,7 +328,7 @@ void CDlgAdminMapInfo::OnCopy()
 	int nResult;
 	CPacketADMIN_PARA2 Packet;
 
-	nResult = MessageBox ("新しいマップとしてコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("新しいマップとしてコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

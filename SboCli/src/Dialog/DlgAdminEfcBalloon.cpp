@@ -358,7 +358,7 @@ void CDlgAdminEfcBalloon::OnDel()
 {
 	int nResult, nCount;
 
-	nResult = MessageBox ("このパターンを削除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("このパターンを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -417,8 +417,8 @@ void CDlgAdminEfcBalloon::OnOK()
 
 	Set (m_nSelect);
 
-	if (m_dwListID == 0) {
-		MessageBox ("種別IDを設定してください", "確認", MB_ICONINFORMATION | MB_OK);
+        if (m_dwListID == 0) {
+                MessageBox (_T("種別IDを設定してください"), _T("確認"), MB_ICONINFORMATION | MB_OK);
 		return;
 	}
 

@@ -373,7 +373,7 @@ void CDlgAdminEfcEffect::OnDel()
 {
 	int nResult, nCount;
 
-	nResult = MessageBox ("このパターンを削除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("このパターンを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
