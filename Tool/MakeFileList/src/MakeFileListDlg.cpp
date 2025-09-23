@@ -119,7 +119,7 @@ void CMakeFileListDlg::MakeHashList(void)
 	CString strFileName, strTmp;
 	CGetMD5File GetMD5;
 	CStdioFile destFile;
-	CArray <DWORD, DWORD> adwFileSize;
+	CStdArray<DWORD, DWORD> adwFileSize;
 
 	GetModuleFilePath (szPath, sizeof (szPath));
 

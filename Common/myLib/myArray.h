@@ -8,7 +8,7 @@
 #include "myString.h"
 
 //------------------------------------------------------------------------------
-// MFC 風の CmyArray を std::vector ベースのラッパークラスに置き換え
+// Lightweight wrapper that maps the legacy CmyArray API onto std::vector.
 //------------------------------------------------------------------------------
 template <class TYPE, class ARG_TYPE = TYPE>
 class CStdArray : public std::vector<TYPE>
@@ -31,6 +31,11 @@ public:
     int GetSize() const
     {
         return static_cast<int>(this->size());
+    }
+
+    int GetUpperBound() const
+    {
+        return GetSize() - 1;
     }
 
     void RemoveAll()

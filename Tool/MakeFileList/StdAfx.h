@@ -28,6 +28,7 @@ using namespace std;
 
 #include "GlobalDefine.h"
 #include "SBOGlobal.h"
+#include "myArray.h"
 #include "myString.h"
 
 //{{AFX_INSERT_LOCATION}}
