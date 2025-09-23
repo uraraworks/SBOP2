@@ -2,10 +2,9 @@
 #include <tchar.h>
 #include "myString.h"
 
-namespace {
-#ifdef _UNICODE
 CString Utf8ToTString(LPCSTR pszSrc)
 {
+#ifdef _UNICODE
         CString strResult;
         if (pszSrc == NULL) {
                 return strResult;
@@ -18,10 +17,18 @@ CString Utf8ToTString(LPCSTR pszSrc)
         MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen);
         strResult.ReleaseBuffer ();
         return strResult;
+#else
+        CString strResult;
+        if (pszSrc) {
+                strResult = pszSrc;
+        }
+        return strResult;
+#endif
 }
 
 CStringA TStringToUtf8(LPCTSTR pszSrc)
 {
+#ifdef _UNICODE
         CStringA strResult;
         if (pszSrc == NULL) {
                 return strResult;
@@ -34,9 +41,14 @@ CStringA TStringToUtf8(LPCTSTR pszSrc)
         WideCharToMultiByte (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen, NULL, NULL);
         strResult.ReleaseBuffer ();
         return strResult;
-}
+#else
+        CStringA strResult;
+        if (pszSrc) {
+                strResult = pszSrc;
+        }
+        return strResult;
 #endif
-} // namespace
+}
 
 /* ========================================================================= */
 /* 関数名       :CmyString::CmyString                                                                                    */

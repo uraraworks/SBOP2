@@ -224,77 +224,77 @@ BOOL CDlgAdminCharMotion::OnInitDialog()
 
 	m_ctlGrpChar.Set (1);
 
-	m_cmbTypeChar.InsertString (0, "標準(16x16)");
+	m_cmbTypeChar.InsertString (0, _T("標準(16x16)"));
 	m_cmbTypeChar.SetItemData (0, GRPIDMAIN_CHAR);
-	m_cmbTypeChar.InsertString (1, "NPC(16x16)");
+	m_cmbTypeChar.InsertString (1, _T("NPC(16x16)"));
 	m_cmbTypeChar.SetItemData (1, GRPIDMAIN_NPC);
-	m_cmbTypeChar.InsertString (2, "標準(32x32)");
+	m_cmbTypeChar.InsertString (2, _T("標準(32x32)"));
 	m_cmbTypeChar.SetItemData (2, GRPIDMAIN_2X2_CHAR);
-	m_cmbTypeChar.InsertString (3, "NPC(32x32)");
+	m_cmbTypeChar.InsertString (3, _T("NPC(32x32)"));
 	m_cmbTypeChar.SetItemData (3, GRPIDMAIN_2X2_NPC);
-	m_cmbTypePile1.InsertString (0, "無し");
+	m_cmbTypePile1.InsertString (0, _T("無し"));
 	m_cmbTypePile1.SetItemData (0, 0);
-	m_cmbTypePile1.InsertString (1, "武器");
+	m_cmbTypePile1.InsertString (1, _T("武器"));
 	m_cmbTypePile1.SetItemData (1, GRPIDMAIN_WEAPON);
-	m_cmbTypePile1.InsertString (2, "弓");
+	m_cmbTypePile1.InsertString (2, _T("弓"));
 	m_cmbTypePile1.SetItemData (2, GRPIDMAIN_WEAPON_BOW);
-	m_cmbTypePile1.InsertString (3, "エフェクト(32)");
+	m_cmbTypePile1.InsertString (3, _T("エフェクト(32)"));
 	m_cmbTypePile1.SetItemData (3, GRPIDMAIN_EFFECT32);
-	m_cmbTypePile1.InsertString (4, "エフェクト(64)");
+	m_cmbTypePile1.InsertString (4, _T("エフェクト(64)"));
 	m_cmbTypePile1.SetItemData (4, GRPIDMAIN_EFFECT64);
-	m_cmbTypePile1.InsertString (5, "打撃");
+	m_cmbTypePile1.InsertString (5, _T("打撃"));
 	m_cmbTypePile1.SetItemData (5, GRPIDMAIN_WEAPON_GLOVE);
-	m_cmbTypePile1.InsertString (6, "その他");
+	m_cmbTypePile1.InsertString (6, _T("その他"));
 	m_cmbTypePile1.SetItemData (6, GRPIDMAIN_WEAPON_ETC);
-	m_cmbTypePile1.InsertString (7, "持ち物(2x2)");
+	m_cmbTypePile1.InsertString (7, _T("持ち物(2x2)"));
 	m_cmbTypePile1.SetItemData (7, GRPIDMAIN_2X2_ARMS);
-	m_cmbTypePile1.InsertString (8, "特殊持ち物(2x2)");
+	m_cmbTypePile1.InsertString (8, _T("特殊持ち物(2x2)"));
 	m_cmbTypePile1.SetItemData (8, GRPIDMAIN_2X2_ARMSSP);
-	m_cmbTypePile1.InsertString (9, "弓(2x2)");
+	m_cmbTypePile1.InsertString (9, _T("弓(2x2)"));
 	m_cmbTypePile1.SetItemData (9, GRPIDMAIN_2X2_BOW);
-	m_cmbTypePile2.InsertString (0, "無し");
+	m_cmbTypePile2.InsertString (0, _T("無し"));
 	m_cmbTypePile2.SetItemData (0, 0);
-	m_cmbTypePile2.InsertString (1, "武器");
+	m_cmbTypePile2.InsertString (1, _T("武器"));
 	m_cmbTypePile2.SetItemData (1, GRPIDMAIN_WEAPON);
-	m_cmbTypePile2.InsertString (2, "弓");
+	m_cmbTypePile2.InsertString (2, _T("弓"));
 	m_cmbTypePile2.SetItemData (2, GRPIDMAIN_WEAPON_BOW);
-	m_cmbTypePile2.InsertString (3, "エフェクト(32)");
+	m_cmbTypePile2.InsertString (3, _T("エフェクト(32)"));
 	m_cmbTypePile2.SetItemData (3, GRPIDMAIN_EFFECT32);
-	m_cmbTypePile2.InsertString (4, "エフェクト(64)");
+	m_cmbTypePile2.InsertString (4, _T("エフェクト(64)"));
 	m_cmbTypePile2.SetItemData (4, GRPIDMAIN_EFFECT64);
-	m_cmbTypePile2.InsertString (5, "打撃");
+	m_cmbTypePile2.InsertString (5, _T("打撃"));
 	m_cmbTypePile2.SetItemData (5, GRPIDMAIN_WEAPON_GLOVE);
-	m_cmbTypePile2.InsertString (6, "その他");
+	m_cmbTypePile2.InsertString (6, _T("その他"));
 	m_cmbTypePile2.SetItemData (6, GRPIDMAIN_WEAPON_ETC);
-	m_cmbTypePile2.InsertString (7, "持ち物(2x2)");
+	m_cmbTypePile2.InsertString (7, _T("持ち物(2x2)"));
 	m_cmbTypePile2.SetItemData (7, GRPIDMAIN_2X2_ARMS);
-	m_cmbTypePile2.InsertString (8, "盾(2x2)");
+	m_cmbTypePile2.InsertString (8, _T("盾(2x2)"));
 	m_cmbTypePile2.SetItemData (8, GRPIDMAIN_2X2_SHIELD);
-	m_cmbTypePile2.InsertString (9, "特殊持ち物(2x2)");
+	m_cmbTypePile2.InsertString (9, _T("特殊持ち物(2x2)"));
 	m_cmbTypePile2.SetItemData (9, GRPIDMAIN_2X2_ARMSSP);
-	m_cmbTypePile2.InsertString (10, "弓(2x2)");
+	m_cmbTypePile2.InsertString (10, _T("弓(2x2)"));
 	m_cmbTypePile2.SetItemData (10, GRPIDMAIN_2X2_BOW);
-	m_cmbTypePile3.InsertString (0, "無し");
+	m_cmbTypePile3.InsertString (0, _T("無し"));
 	m_cmbTypePile3.SetItemData (0, 0);
-	m_cmbTypePile3.InsertString (1, "武器");
+	m_cmbTypePile3.InsertString (1, _T("武器"));
 	m_cmbTypePile3.SetItemData (1, GRPIDMAIN_WEAPON);
-	m_cmbTypePile3.InsertString (2, "弓");
+	m_cmbTypePile3.InsertString (2, _T("弓"));
 	m_cmbTypePile3.SetItemData (2, GRPIDMAIN_WEAPON_BOW);
-	m_cmbTypePile3.InsertString (3, "エフェクト(32)");
+	m_cmbTypePile3.InsertString (3, _T("エフェクト(32)"));
 	m_cmbTypePile3.SetItemData (3, GRPIDMAIN_EFFECT32);
-	m_cmbTypePile3.InsertString (4, "エフェクト(64)");
+	m_cmbTypePile3.InsertString (4, _T("エフェクト(64)"));
 	m_cmbTypePile3.SetItemData (4, GRPIDMAIN_EFFECT64);
-	m_cmbTypePile3.InsertString (5, "打撃");
+	m_cmbTypePile3.InsertString (5, _T("打撃"));
 	m_cmbTypePile3.SetItemData (5, GRPIDMAIN_WEAPON_GLOVE);
-	m_cmbTypePile3.InsertString (6, "その他");
+	m_cmbTypePile3.InsertString (6, _T("その他"));
 	m_cmbTypePile3.SetItemData (6, GRPIDMAIN_WEAPON_ETC);
-	m_cmbTypePile3.InsertString (7, "持ち物(2x2)");
+	m_cmbTypePile3.InsertString (7, _T("持ち物(2x2)"));
 	m_cmbTypePile3.SetItemData (7, GRPIDMAIN_2X2_ARMS);
-	m_cmbTypePile3.InsertString (8, "盾(2x2)");
+	m_cmbTypePile3.InsertString (8, _T("盾(2x2)"));
 	m_cmbTypePile3.SetItemData (8, GRPIDMAIN_2X2_SHIELD);
-	m_cmbTypePile3.InsertString (9, "特殊持ち物(2x2)");
+	m_cmbTypePile3.InsertString (9, _T("特殊持ち物(2x2)"));
 	m_cmbTypePile3.SetItemData (9, GRPIDMAIN_2X2_ARMSSP);
-	m_cmbTypePile3.InsertString (10, "弓(2x2)");
+	m_cmbTypePile3.InsertString (10, _T("弓(2x2)"));
 	m_cmbTypePile3.SetItemData (10, GRPIDMAIN_2X2_BOW);
 	m_ctlSpinX0.SetRange (-64, 64);
 	m_ctlSpinY0.SetRange (-64, 64);
@@ -305,18 +305,20 @@ BOOL CDlgAdminCharMotion::OnInitDialog()
 	m_ctlSpinX3.SetRange (-64, 64);
 	m_ctlSpinY3.SetRange (-64, 64);
 
-	m_cmbSoundID.InsertString (0, "無し");
+	m_cmbSoundID.InsertString (0, _T("無し"));
 	nCount = LibSboSoundLoader.GetSoundCount ();
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
-		m_cmbSoundID.InsertString (i + 1, pszTmp);
+		CString strSoundName = Utf8ToTString (pszTmp);
+		m_cmbSoundID.InsertString (i + 1, strSoundName);
 		m_cmbSoundID.SetItemData (i + 1, dwSoundID);
 	}
 
 	for (i = 0; i < CHARMOTIONPROCID_MAX; i ++) {
 		pszTmp = m_pMgrData->GetMotionProcName (i);
-		m_cmbProcID.InsertString (i, pszTmp);
+		CString strProcName = Utf8ToTString (pszTmp);
+		m_cmbProcID.InsertString (i, strProcName);
 		m_cmbProcID.SetItemData (i, i);
 	}
 
@@ -1011,7 +1013,7 @@ void CDlgAdminCharMotion::Get(int nNo)
 	int i, nCount;
 	PCInfoMotion pInfo;
 	ARRAYINT anTmp;
-	LPSTR paszName[] = {"下地", "重ね画像1", "重ね画像2", "重ね画像3"};
+	LPCTSTR paszName[] = {_T("下地"), _T("重ね画像1"), _T("重ね画像2"), _T("重ね画像3")};
 
 	pInfo = (PCInfoMotion)m_pLibInfoMotion->GetPtr (nNo);
 	if (pInfo == NULL) {

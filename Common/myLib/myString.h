@@ -1,4 +1,4 @@
-/* Copyright(C)URARA-works 2006 */
+﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名   :myString.h
 */
@@ -11,6 +11,11 @@
 #pragma once
 
 #include <atlstr.h>
+
+#ifdef __cplusplus
+CString Utf8ToTString(LPCSTR pszSrc);
+CStringA TStringToUtf8(LPCTSTR pszSrc);
+#endif
 
 /* ========================================================================= */
 /* クラス宣言
