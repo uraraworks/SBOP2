@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <atlbase.h>
 #include <atlstr.h>
 
 #ifdef __cplusplus
