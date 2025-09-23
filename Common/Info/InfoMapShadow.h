@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoAnime.h"
 
@@ -58,7 +59,7 @@ public:
 	POINT				m_ptViewPos;						/* 編集画面での表示位置 */
 	PARRAYANIMEINFO		m_paAnimeInfo;						/* アニメーション情報 */
 } CInfoMapShadow, *PCInfoMapShadow;
-typedef CmyArray<PCInfoMapShadow, PCInfoMapShadow>	  ARRAYMAPSHADOW;
-typedef CmyArray<PCInfoMapShadow, PCInfoMapShadow>	*PARRAYMAPSHADOW;
+typedef std::vector<PCInfoMapShadow>	  ARRAYMAPSHADOW;
+typedef std::vector<PCInfoMapShadow>	*PARRAYMAPSHADOW;
 
 /* Copyright(C)URARA-works 2007 */

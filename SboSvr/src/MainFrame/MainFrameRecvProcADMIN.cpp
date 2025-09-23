@@ -852,7 +852,7 @@ void CMainFrame::RecvProcADMIN_ITEM_DELETE(PBYTE pData, DWORD dwSessionID)
 
 	Packet.Set (pData);
 
-	nCount = Packet.m_adwItemID.GetSize ();
+	nCount = Packet.m_adwItemID.size();
 	for (i = 0; i < nCount; i ++) {
 		dwItemID = Packet.m_adwItemID[i];
 

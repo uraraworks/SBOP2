@@ -150,7 +150,7 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 	}
 	/* 対象キャラ情報を取得 */
 	GetAreaCharInfo (pInfoChar->m_dwMapID, &rcTarget, apInfoCharTarget);
-	nCount = apInfoCharTarget.GetSize ();
+	nCount = apInfoCharTarget.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = apInfoCharTarget[i];
 		if (pInfoChar->IsNPC () != pInfoCharTmp->IsNPC()) {
@@ -231,17 +231,17 @@ BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSki
 	switch (pInfoSkill->m_dwPutType) {
 	case SKILLMOVEATACKPUTTYPE_FRONT:		/* 前方 */
 		nDirection = pInfoChar->GetDrawDirection ();
-		anDirection.Add (nDirection);
+		anDirection.push_back (nDirection);
 		break;
 	case SKILLMOVEATACKPUTTYPE_CROSS:		/* 上下左右 */
-		anDirection.Add (0);
-		anDirection.Add (1);
-		anDirection.Add (2);
-		anDirection.Add (3);
+		anDirection.push_back (0);
+		anDirection.push_back (1);
+		anDirection.push_back (2);
+		anDirection.push_back (3);
 		break;
 	}
 
-	nCount = anDirection.GetSize ();
+	nCount = anDirection.size();
 	for (i = 0; i < nCount; i ++) {
 		nDirectionTmp = anDirection[i];
 		/* 進めるかチェック */

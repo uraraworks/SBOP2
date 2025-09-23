@@ -112,7 +112,7 @@ int CLibInfoEffect::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -148,9 +148,11 @@ void CLibInfoEffect::Delete(
 {
 	PCInfoEffect pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -168,12 +170,12 @@ void CLibInfoEffect::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwEffectID != dwEffectID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -198,7 +200,7 @@ void CLibInfoEffect::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -220,12 +222,12 @@ void CLibInfoEffect::GetName(
 
 	strDst.Empty ();
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (pInfo->m_dwEffectID != dwEffectID) {
 			continue;
-		}
+	}
 		strDst = pInfo->m_strName;
 		break;
 	}
@@ -243,11 +245,11 @@ PCInfoBase CLibInfoEffect::GetPtr(int nNo)
 	PCInfoBase pRet;
 
 	pRet = NULL;
-	if (nNo >= m_paInfo->GetSize ()) {
+	if (nNo >= m_paInfo->size()) {
 		goto Exit;
 	}
 
-	pRet = m_paInfo->GetAt (nNo);
+	pRet = m_paInfo->at(nNo);
 Exit:
 	return pRet;
 }
@@ -267,12 +269,12 @@ PCInfoBase CLibInfoEffect::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwEffectID != dwEffectID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -359,7 +361,7 @@ PBYTE CLibInfoEffect::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			pDataTmp += sizeof (DWORD);
 			break;
-		}
+	}
 		pInfoEffectTmp = (PCInfoEffect)GetNew ();
 		pDataTmp = pInfoEffectTmp->SetSendData (pDataTmp);
 
@@ -367,9 +369,9 @@ PBYTE CLibInfoEffect::SetSendData(PBYTE pSrc)
 		if (pInfoEffect) {
 			pInfoEffect->Copy (pInfoEffectTmp);
 			SAFE_DELETE (pInfoEffectTmp);
-		} else {
+	} else {
 			Add (pInfoEffectTmp);
-		}
+	}
 	}
 
 	return pDataTmp;
@@ -390,14 +392,14 @@ DWORD CLibInfoEffect::GetNewID(void)
 
 	dwRet = 1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwEffectID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 
 	return dwRet;

@@ -91,7 +91,7 @@ PCInfoBase CLibInfoEfcBalloon::GetPtr(int nNo)
 	if (nNo < 0 || nNo >= GetCount ()) {
 		goto Exit;
 	}
-	pRet = m_paInfo->GetAt (nNo);
+	pRet = m_paInfo->at(nNo);
 Exit:
 	return pRet;
 }
@@ -113,7 +113,7 @@ int CLibInfoEfcBalloon::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -149,9 +149,11 @@ void CLibInfoEfcBalloon::Delete(
 {
 	PCInfoEfcBalloon pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -169,12 +171,12 @@ void CLibInfoEfcBalloon::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwEfcBalloonID != dwEfcBalloonID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -199,7 +201,7 @@ void CLibInfoEfcBalloon::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -218,14 +220,14 @@ void CLibInfoEfcBalloon::SetList(DWORD dwListID, CLibInfoEfcBalloon *pSrc)
 	PCInfoEfcBalloon pInfo, pInfoTmp;
 
 	/* まずは対象となるリストIDの情報を削除 */
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (dwListID != 0) {
 			if (pInfo->m_dwListID != dwListID) {
 				continue;
-			}
 		}
+	}
 		Delete (i);
 	}
 
@@ -235,8 +237,8 @@ void CLibInfoEfcBalloon::SetList(DWORD dwListID, CLibInfoEfcBalloon *pSrc)
 		if (dwListID != 0) {
 			if (pInfo->m_dwListID != dwListID) {
 				continue;
-			}
 		}
+	}
 		pInfoTmp = new CInfoEfcBalloon;
 		pInfoTmp->Copy (pInfo);
 		Add (pInfoTmp);
@@ -257,22 +259,22 @@ void CLibInfoEfcBalloon::GetListID(ARRAYDWORD &aDst)
 	int i, j, nCount, nCountTmp;
 	PCInfoEfcBalloon pInfo;
 
-	aDst.RemoveAll ();
+	aDst.clear();
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 
-		nCountTmp = aDst.GetSize ();
+		nCountTmp = aDst.size();
 		for (j = 0; j < nCountTmp; j ++) {
 			if (pInfo->m_dwListID == aDst[j]) {
 				break;
-			}
 		}
+	}
 		if (j < nCountTmp) {
 			continue;
-		}
-		aDst.Add (pInfo->m_dwListID);
+	}
+		aDst.push_back (pInfo->m_dwListID);
 	}
 }
 
@@ -292,12 +294,12 @@ void CLibInfoEfcBalloon::GetName(
 
 	strDst.Empty ();
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (pInfo->m_dwListID != dwListID) {
 			continue;
-		}
+	}
 		strDst = pInfo->m_strName;
 		break;
 	}
@@ -317,34 +319,34 @@ void CLibInfoEfcBalloon::Sort(void)
 	PCInfoEfcBalloon pInfo;
 	ARRAYEFCBALLOON apInfo;
 
-	apInfo.Copy (m_paInfo);
-	m_paInfo->RemoveAll ();
+	apInfo = *m_paInfo;
+	m_paInfo->clear();
 
 	while (1) {
-		nCount = apInfo.GetSize ();
+		nCount = apInfo.size();
 		if (nCount <= 0) {
 			break;
-		}
+	}
 		dwListID = -1;
 		/* 最小の種別IDを探す */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = apInfo[i];
 			if (pInfo->m_dwListID > dwListID) {
 				continue;
-			}
-			dwListID = pInfo->m_dwListID;
 		}
+			dwListID = pInfo->m_dwListID;
+	}
 
 		for (i = 0; i < nCount; i ++) {
 			pInfo = apInfo[i];
 			if (pInfo->m_dwListID != dwListID) {
 				continue;
-			}
-			m_paInfo->Add (pInfo);
-			apInfo.RemoveAt (i);
-			i --;
-			nCount = apInfo.GetSize ();
 		}
+			m_paInfo->Add (pInfo);
+			apInfo.erase (apInfo.begin () + i);
+			i --;
+			nCount = apInfo.size();
+	}
 	}
 }
 
@@ -367,12 +369,12 @@ DWORD CLibInfoEfcBalloon::GetNextAnimeID(
 	dwRet = -1;
 
 	GetEfcBalloonInfo (dwListID, apBalloon);
-	nCount = apBalloon.GetSize ();
+	nCount = apBalloon.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = apBalloon[i];
 		if (dwAnimeID + 1 != pInfo->m_dwAnimeID) {
 			continue;
-		}
+	}
 		break;
 	}
 	/* 続きがある？ */
@@ -404,12 +406,12 @@ CInfoEfcBalloon *CLibInfoEfcBalloon::GetPtr(
 	}
 	GetEfcBalloonInfo (dwListID, apBalloon);
 
-	nCount = apBalloon.GetSize ();
+	nCount = apBalloon.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = apBalloon[i];
 		if (dwAnimeID != pInfo->m_dwAnimeID) {
 			continue;
-		}
+	}
 		pRet = pInfo;
 		break;
 	}
@@ -433,7 +435,7 @@ void CLibInfoEfcBalloon::GetEfcBalloonInfo(DWORD dwListID, ARRAYEFCBALLOON &aDst
 	if (dwListID == 0) {
 		return;
 	}
-	aDst.RemoveAll ();
+	aDst.clear();
 
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
@@ -441,9 +443,9 @@ void CLibInfoEfcBalloon::GetEfcBalloonInfo(DWORD dwListID, ARRAYEFCBALLOON &aDst
 		if (dwListID != 0) {
 			if (pInfo->m_dwListID != dwListID) {
 				continue;
-			}
 		}
-		aDst.Add (pInfo);
+	}
+		aDst.push_back (pInfo);
 	}
 }
 
@@ -462,14 +464,14 @@ DWORD CLibInfoEfcBalloon::GetSendDataSize(DWORD dwListID)
 
 	dwRet = 0;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (dwListID > 0) {
 			if (pInfo->m_dwListID != dwListID) {
 				continue;
-			}
 		}
+	}
 		dwRet += pInfo->GetSendDataSize ();
 	}
 
@@ -501,14 +503,14 @@ PBYTE CLibInfoEfcBalloon::GetSendData(DWORD dwListID)
 	pRet = ZeroNew (dwSize);
 	pPos = pRet;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (dwListID > 0) {
 			if (pInfo->m_dwListID != dwListID) {
 				continue;
-			}
 		}
+	}
 		dwSizeTmp	= pInfo->GetSendDataSize ();
 		pDataTmp	= pInfo->GetSendData ();
 		CopyMemoryRenew (pPos, pDataTmp, dwSizeTmp, pPos);
@@ -540,7 +542,7 @@ PBYTE CLibInfoEfcBalloon::SetSendData(PBYTE pSrc)
 		if (dwListID == 0) {
 			pDataTmp += sizeof (DWORD);
 			break;
-		}
+	}
 		pInfoEfcBalloon = new CInfoEfcBalloon;
 		pDataTmp = pInfoEfcBalloon->SetSendData (pDataTmp);
 		Add (pInfoEfcBalloon);
@@ -568,14 +570,14 @@ DWORD CLibInfoEfcBalloon::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwEfcBalloonID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 

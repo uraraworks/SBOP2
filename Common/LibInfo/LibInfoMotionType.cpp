@@ -90,7 +90,7 @@ PCInfoBase CLibInfoMotionType::GetPtr(int nNo)
 	if (nNo < 0 || nNo >= GetCount ()) {
 		goto Exit;
 	}
-	pRet = m_paInfo->GetAt (nNo);
+	pRet = m_paInfo->at(nNo);
 Exit:
 	return pRet;
 }
@@ -111,10 +111,10 @@ PCInfoBase CLibInfoMotionType::GetPtr(DWORD dwMotionTypeID)
 
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (pInfo->m_dwMotionTypeID != dwMotionTypeID) {
 			continue;
-		}
+	}
 		pRet = pInfo;
 		break;
 	}
@@ -139,7 +139,7 @@ int CLibInfoMotionType::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -175,9 +175,11 @@ void CLibInfoMotionType::Delete(
 {
 	PCInfoMotionType pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -195,12 +197,12 @@ void CLibInfoMotionType::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwMotionTypeID != dwMotionTypeID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -225,7 +227,7 @@ void CLibInfoMotionType::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -246,14 +248,14 @@ DWORD CLibInfoMotionType::GetSendDataSize(DWORD dwMotionTypeID)
 
 	dwRet = 0;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (dwMotionTypeID != 0) {
 			if (pInfo->m_dwMotionTypeID != dwMotionTypeID) {
 				continue;
-			}
 		}
+	}
 		dwRet += pInfo->GetSendDataSize ();
 	}
 
@@ -285,14 +287,14 @@ PBYTE CLibInfoMotionType::GetSendData(DWORD dwMotionTypeID)
 	pRet = ZeroNew (dwSize);
 	pPos = pRet;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (dwMotionTypeID != 0) {
 			if (pInfo->m_dwMotionTypeID != dwMotionTypeID) {
 				continue;
-			}
 		}
+	}
 		dwSizeTmp	= pInfo->GetSendDataSize ();
 		pDataTmp	= pInfo->GetSendData ();
 		CopyMemoryRenew (pPos, pDataTmp, dwSizeTmp, pPos);
@@ -324,15 +326,15 @@ PBYTE CLibInfoMotionType::SetSendData(PBYTE pSrc)
 		if (dwMotionTypeID == 0) {
 			pDataTmp += sizeof (DWORD);
 			break;
-		}
+	}
 		pInfoMotion = (PCInfoMotionType)GetPtr (dwMotionTypeID);
 		if (pInfoMotion == NULL) {
 			pInfoMotion = new CInfoMotionType;
 			pDataTmp = pInfoMotion->SetSendData (pDataTmp);
 			Add (pInfoMotion);
-		} else {
+	} else {
 			pDataTmp = pInfoMotion->SetSendData (pDataTmp);
-		}
+	}
 	}
 	pRet = pDataTmp;
 
@@ -357,14 +359,14 @@ DWORD CLibInfoMotionType::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwMotionTypeID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 

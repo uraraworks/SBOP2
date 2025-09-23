@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 /* ========================================================================= */
 /* 構造体定義																 */
@@ -46,7 +47,7 @@ protected:
 
 
 protected:
-	CmyArray<PFILELISTINFO, PFILELISTINFO>	m_aFileListInfo;		/* ファイルリスト情報 */
+	std::vector<PFILELISTINFO>	m_aFileListInfo;		/* ファイルリスト情報 */
 } CInfoFileList, *PCInfoFileList;
 
 /* Copyright(C)URARA-works 2008 */

@@ -45,7 +45,7 @@ void CPacketCHAR_CHARID::Make(
 	DWORD i, dwSize, dwCount, dwTmp;
 	PPACKETBASE pPacketBase;
 
-	dwCount = paSrc->GetSize ();
+	dwCount = paSrc->size();
 
 	dwSize = sizeof (PACKETBASE)	+
 			 sizeof (DWORD)			+
@@ -61,7 +61,7 @@ void CPacketCHAR_CHARID::Make(
 	pDataTmp = (PBYTE)(pPacketBase + 1);
 	CopyMemoryRenew (pDataTmp, &dwCount, sizeof (dwCount), pDataTmp);	/* 個数 */
 	for (i = 0; i < dwCount; i ++) {
-		dwTmp = paSrc->GetAt (i);
+		dwTmp = paSrc->at(i);
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* キャラID */
 	}
 
@@ -80,7 +80,7 @@ PBYTE CPacketCHAR_CHARID::Set(PBYTE pPacket)
 	DWORD i, dwCount, dwTmp;
 	PBYTE pRet, pDataTmp;
 
-	m_adwCharID.RemoveAll ();
+	m_adwCharID.clear();
 
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
@@ -88,7 +88,7 @@ PBYTE CPacketCHAR_CHARID::Set(PBYTE pPacket)
 	CopyMemoryRenew (&dwCount, pDataTmp, sizeof (dwCount), pDataTmp);	/* 個数 */
 	for (i = 0; i < dwCount; i ++) {
 		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* キャラID */
-		m_adwCharID.Add (dwTmp);
+		m_adwCharID.push_back (dwTmp);
 	}
 
 	pRet = pDataTmp;

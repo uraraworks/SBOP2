@@ -561,7 +561,7 @@ void CSboLaunchDlg::ChgStateMAKEFILELIST(void)
 		return;
 	}
 
-	nCount = m_pstCheckFlieList->anGetFlieNo.GetSize ();
+	nCount = m_pstCheckFlieList->anGetFlieNo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_pInfoFileList->GetPtr (m_pstCheckFlieList->anGetFlieNo[i]);
 		strTmp = pInfo->strFileName;
@@ -668,7 +668,7 @@ void CSboLaunchDlg::ProcCHECKFILELIST(void)
 		KillTimer (TIMERID_CHECKFILE);
 		nState = GAMESTATE_GETFILE;
 		/* アップデータは毎回あるので2つ以上の場合のみダウンロード対象とする */
-		if (m_pstCheckFlieList->anGetFlieNo.GetSize () <= 1) {
+		if (m_pstCheckFlieList->anGetFlieNo.size() <= 1) {
 			nState = GAMESTATE_QUIT;
 		}
 		ChgState (nState);
@@ -692,7 +692,7 @@ void CSboLaunchDlg::ProcCHECKFILELIST(void)
 	}
 
 	if (bGetFile) {
-		m_pstCheckFlieList->anGetFlieNo.Add (m_pstCheckFlieList->nNo);
+		m_pstCheckFlieList->anGetFlieNo.push_back (m_pstCheckFlieList->nNo);
 	}
 	m_pstCheckFlieList->nNo ++;
 	m_ctlProgressFile.SetPos (m_pstCheckFlieList->nNo);
@@ -754,7 +754,7 @@ void CSboLaunchDlg::ProcGETFILE(void)
 		m_pstGetFileInfo->pRecvDataTmp	= NULL;
 
 		/* 全てダウンロード完了？ */
-		if (m_pstGetFileInfo->nNo >= m_pstCheckFlieList->anGetFlieNo.GetSize ()) {
+		if (m_pstGetFileInfo->nNo >= m_pstCheckFlieList->anGetFlieNo.size()) {
 			m_strFile.Empty ();
 			UpdateData (FALSE);
 			AddMsg ("ファイルのダウンロードが完了しました\r\n");
@@ -896,7 +896,7 @@ void CSboLaunchDlg::DeleteAllFiles(LPCSTR pszPath)
 
 	DeleteAllFilesTmp (hFind, pszPath, "", astrFolderPath);
 	FindClose (hFind);
-	nCount = astrFolderPath.GetSize ();
+	nCount = astrFolderPath.size();
 	for (i = 0; i < nCount; i ++) {
 		RemoveDirectory (astrFolderPath[i]);
 	}
@@ -931,7 +931,7 @@ void CSboLaunchDlg::DeleteAllFilesTmp(
 		bResult = FindNextFile (hFind, &stFindData);
 		if (bResult == FALSE) {
 			strTmp = szFullPath;
-			astrFolderPath.Add (strTmp);
+			astrFolderPath.push_back (strTmp);
 			break;
 		}
 

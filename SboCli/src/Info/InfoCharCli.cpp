@@ -297,7 +297,7 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 		bResult |= pInfoTextEffect->TimerProc (dwTime);
 		if (pInfoTextEffect->m_bAnimeEnd) {
 			SAFE_DELETE (pInfoTextEffect);
-			m_aTextEffect.RemoveAt (i);
+			m_aTextEffect.erase (m_aTextEffect.begin () + i);
 			i --;
 			nCount --;
 		}
@@ -527,7 +527,7 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 	pDibSystem = m_pMgrData->GetMgrGrpData ()->GetDibSystem ();
 
 	x		= 0;
-	nCount	= m_abyMark.GetSize ();
+	nCount	= m_abyMark.size();
 
 	m_pDibName = new CImg32;
 	m_pDibName->Create (strlen (pszName) * 6 + 2 + (nCount * 16), 16);
@@ -768,14 +768,14 @@ CInfoMotion *CInfoCharCli::GetMotionInfo(int *pnCount)
 		goto Exit;
 	}
 
-	nCount = paMotionInfo->GetSize ();
+	nCount = paMotionInfo->size();
 	if (nCount == 0) {
 		goto Exit;
 	}
 	if (nAnime >= nCount) {
 		nAnime = 0;
 	}
-	pRet = paMotionInfo->GetAt (nAnime);
+	pRet = paMotionInfo->at(nAnime);
 
 Exit:
 	if (pnCount) {
@@ -1147,7 +1147,7 @@ BOOL CInfoCharCli::IsDamage(void)
 
 int CInfoCharCli::GetTextEffectCount(void)
 {
-	return m_aTextEffect.GetSize ();
+	return m_aTextEffect.size();
 }
 
 
@@ -1165,7 +1165,7 @@ void CInfoCharCli::AddTextEffect(DWORD dwData, int nColor, int nSize)
 //Todo;指定方法
 	pInfo->Set (dwData, TEXTEFFECTTYPE_WAVE, nColor, nSize);
 
-	m_aTextEffect.Add (pInfo);
+	m_aTextEffect.push_back (pInfo);
 }
 
 
@@ -1183,7 +1183,7 @@ void CInfoCharCli::AddTextEffect(LPCSTR pszData, int nColor, int nSize)
 //Todo;指定方法
 	pInfo->Set (pszData, TEXTEFFECTTYPE_NORMAL, nColor, nSize);
 
-	m_aTextEffect.Add (pInfo);
+	m_aTextEffect.push_back (pInfo);
 }
 
 
@@ -1198,12 +1198,12 @@ void CInfoCharCli::DeleteAllTextEffect(void)
 	int i, nCount;
 	PCInfoTextEffect pInfo;
 
-	nCount = m_aTextEffect.GetSize ();
+	nCount = m_aTextEffect.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aTextEffect[i];
 		SAFE_DELETE (pInfo);
 	}
-	m_aTextEffect.RemoveAll ();
+	m_aTextEffect.clear();
 }
 
 
@@ -1288,7 +1288,7 @@ void CInfoCharCli::AddMovePosQue(int nState, int nDirection, int x, int y)
 	pInfo->ptPos.x		= x;
 	pInfo->ptPos.y		= y;
 
-	m_apMovePosQue.Add (pInfo);
+	m_apMovePosQue.push_back (pInfo);
 }
 
 
@@ -1302,12 +1302,12 @@ void CInfoCharCli::DeleteMovePosQue(int nNo)
 {
 	PMOVEPOSQUE pInfo;
 
-	if (nNo >= m_apMovePosQue.GetSize ()) {
+	if (nNo >= m_apMovePosQue.size()) {
 		return;
 	}
 	pInfo = m_apMovePosQue[nNo];
 	SAFE_DELETE (pInfo);
-	m_apMovePosQue.RemoveAt (nNo);
+	m_apMovePosQue.erase (m_apMovePosQue.begin () + nNo);
 }
 
 
@@ -1321,11 +1321,11 @@ void CInfoCharCli::DeleteAllMovePosQue(void)
 {
 	int i, nCount;
 
-	nCount = m_apMovePosQue.GetSize ();
+	nCount = m_apMovePosQue.size();
 	for (i = 0; i < nCount; i ++) {
 		DeleteMovePosQue (0);
 	}
-	m_apMovePosQue.RemoveAll ();
+	m_apMovePosQue.clear();
 }
 
 
@@ -1435,7 +1435,7 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 		dwWait = m_dwMoveWaitOnce;
 	}
 	if (m_bSkipMove) {
-		if (m_apMovePosQue.GetSize () > 0) {
+		if (m_apMovePosQue.size() > 0) {
 			/* キューに積まれている場合は待ち時間無し */
 			dwWait = 1;
 		}
@@ -1518,14 +1518,14 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 	if ((m_ptMove.x == 0) && (m_ptMove.y == 0)) {
 		if (m_pMgrData->GetCharID () != m_dwCharID) {
 			if (dwTime - m_dwLastTimeMove < 250) {
-				if (m_apMovePosQue.GetSize () == 0) {
+				if (m_apMovePosQue.size() == 0) {
 					goto Exit;
 				}
 			}
 		}
 		m_nAnimeBack = m_nAnime;
 		m_nMoveState = 0;
-		if (m_apMovePosQue.GetSize () > 0) {
+		if (m_apMovePosQue.size() > 0) {
 			pQue = m_apMovePosQue[0];
 			nStandState = pQue->nState;
 			if (pQue->ptPos.x >= 0) {

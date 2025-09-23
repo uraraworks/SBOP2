@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoBase.h"
 
@@ -98,7 +99,7 @@ public:
 				m_nUse;							/* 使用制限 */
 	CmyString	m_strName;						/* スキル名 */
 } CInfoSkillBase, *PCInfoSkillBase;
-typedef CmyArray<PCInfoSkillBase, PCInfoSkillBase>	  ARRAYSKILLBASEINFO;
-typedef CmyArray<PCInfoSkillBase, PCInfoSkillBase>	*PARRAYSKILLBASEINFO;
+typedef std::vector<PCInfoSkillBase>	  ARRAYSKILLBASEINFO;
+typedef std::vector<PCInfoSkillBase>	*PARRAYSKILLBASEINFO;
 
 /* Copyright(C)URARA-works 2008 */

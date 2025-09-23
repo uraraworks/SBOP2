@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoBase.h"
 
@@ -40,7 +41,7 @@ public:
 				m_dwObjectID;					/* オブジェクトID */
 	POINT		m_ptPos;						/* 座標 */
 } CInfoMapObjectData, *PCInfoMapObjectData;
-typedef CmyArray<PCInfoMapObjectData, PCInfoMapObjectData>	  ARRAYMAPOBJECTDATAINFO;
-typedef CmyArray<PCInfoMapObjectData, PCInfoMapObjectData>	*PARRAYMAPOBJECTDATAINFO;
+typedef std::vector<PCInfoMapObjectData>	  ARRAYMAPOBJECTDATAINFO;
+typedef std::vector<PCInfoMapObjectData>	*PARRAYMAPOBJECTDATAINFO;
 
 /* Copyright(C)URARA-works 2008 */

@@ -99,7 +99,7 @@ void CMakeFileListDlg::ReadIniFile(void)
 		if (strlen (szTmp) <= 0) {
 			break;
 		}
-		m_astrFileList.Add (szTmp);
+		m_astrFileList.push_back (szTmp);
 	}
 }
 
@@ -123,7 +123,7 @@ void CMakeFileListDlg::MakeHashList(void)
 
 	GetModuleFilePath (szPath, sizeof (szPath));
 
-	nCount = m_astrFileList.GetSize ();
+	nCount = m_astrFileList.size();
 	for (i = 0; i < nCount; i ++) {
 		strFileName.Format ("%s%s", szPath, m_astrFileList[i]);
 
@@ -134,7 +134,7 @@ void CMakeFileListDlg::MakeHashList(void)
 		if (strlen (szHash) <= 0) {
 			continue;
 		}
-		m_astrHashList.Add (szHash);
+		m_astrHashList.push_back (szHash);
 
 		dwFileSize = 0;
 		hFile = CreateFile (strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -142,14 +142,14 @@ void CMakeFileListDlg::MakeHashList(void)
 			dwFileSize = GetFileSize (hFile, NULL);
 			CloseHandle (hFile);
 		}
-		adwFileSize.Add (dwFileSize);
+		adwFileSize.push_back (dwFileSize);
 	}
 
 	/* ハッシュリストを保存 */
 	strFileName.Format ("%sSBOHashList.txt", szPath);
 	destFile.Open (strFileName, CFile::modeWrite | CFile::modeCreate, NULL);
 
-	nCount = m_astrFileList.GetSize ();
+	nCount = m_astrFileList.size();
 	for (i = 0; i < nCount; i ++) {
 		strTmp.Format ("%s,%u,%s\n", m_astrHashList[i], adwFileSize[i], m_astrFileList[i]);
 		destFile.WriteString (strTmp);

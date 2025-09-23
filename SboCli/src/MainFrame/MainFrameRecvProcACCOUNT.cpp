@@ -64,7 +64,7 @@ void CMainFrame::RecvProcACCOUNT_RES_MAKECHAR(PBYTE pData)
 	switch (Packet.m_nResult) {
 	case MAKECHARRES_OK:			/* 問題無し */
 		pAccountInfo = m_pMgrData->GetAccount ();
-		pAccountInfo->m_adwCharID.Add (Packet.m_dwCharID);
+		pAccountInfo->m_adwCharID.push_back (Packet.m_dwCharID);
 		PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
 		break;
 	case MAKECHARRES_NG_USE:		/* 使用済み */

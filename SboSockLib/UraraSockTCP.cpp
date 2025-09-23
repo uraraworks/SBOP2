@@ -80,7 +80,7 @@ public:
 
     BOOL Create(SOCKET socket, DWORD dwAddr, HWND hWndParent, DWORD dwID);
     void AddQue(PURARASOCK_ADDQUEINFO pQueAdd);
-    void Combine(CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> *pQue);
+    void Combine(std::vector<PURARASOCK_QUEINFO> *pQue);
     void CancelQue(void);
     void Destroy(void);
     DWORD GetThrowghPutSend(void);
@@ -118,10 +118,10 @@ private:
     PBYTE                                        m_pRecvTmp;
     PBYTE                                        m_pRecvBuffer;
     HWND                                         m_hWndParent;
-    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> *m_SendQueInfo;
-    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO>  m_QueInfoHi;
-    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO>  m_QueInfoMid;
-    CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO>  m_QueInfoLow;
+    std::vector<PURARASOCK_QUEINFO> *m_SendQueInfo;
+    std::vector<PURARASOCK_QUEINFO>  m_QueInfoHi;
+    std::vector<PURARASOCK_QUEINFO>  m_QueInfoMid;
+    std::vector<PURARASOCK_QUEINFO>  m_QueInfoLow;
 };
 
 class CUraraSockTCPImpl : public CUraraSockTCP
@@ -266,16 +266,16 @@ void CUraraSockTCPImplSlot::AddQue(PURARASOCK_ADDQUEINFO pQueAdd)
 
     switch (pQue->byPriority) {
     case URARASOCK_SENDPRIORITY_HIGH:
-        m_QueInfoHi.Add(pQue);
+        m_QueInfoHi.push_back(pQue);
         Combine(&m_QueInfoHi);
         break;
     case URARASOCK_SENDPRIORITY_MIDDLE:
-        m_QueInfoMid.Add(pQue);
+        m_QueInfoMid.push_back(pQue);
         Combine(&m_QueInfoMid);
         break;
     case URARASOCK_SENDPRIORITY_LOW:
     default:
-        m_QueInfoLow.Add(pQue);
+        m_QueInfoLow.push_back(pQue);
         Combine(&m_QueInfoLow);
         break;
     }
@@ -283,7 +283,7 @@ void CUraraSockTCPImplSlot::AddQue(PURARASOCK_ADDQUEINFO pQueAdd)
     PostMessage(m_hWndParent, WM_INTERNAL_SEND, static_cast<WPARAM>(m_dwSockID), 0);
 }
 
-void CUraraSockTCPImplSlot::Combine(CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEINFO> *pQue)
+void CUraraSockTCPImplSlot::Combine(std::vector<PURARASOCK_QUEINFO> *pQue)
 {
     if (pQue == NULL) {
         return;
@@ -291,7 +291,7 @@ void CUraraSockTCPImplSlot::Combine(CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEI
     if (pQue == m_SendQueInfo) {
         return;
     }
-    int nCount = pQue->GetSize();
+    int nCount = pQue->size();
     if (nCount <= 1) {
         return;
     }
@@ -300,7 +300,7 @@ void CUraraSockTCPImplSlot::Combine(CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEI
     ZeroMemory(pQueNew, sizeof(URARASOCK_QUEINFO));
 
     for (int i = 0; i < nCount; ++i) {
-        PURARASOCK_QUEINFO pOld = pQue->GetAt(i);
+        PURARASOCK_QUEINFO pOld = pQue->at(i);
         if (pOld == NULL) {
             continue;
         }
@@ -320,36 +320,36 @@ void CUraraSockTCPImplSlot::Combine(CmyArray<PURARASOCK_QUEINFO, PURARASOCK_QUEI
         pQueNew->dwSize = dwNewSize;
         pQueNew->byPriority = byPriority;
     }
-    pQue->RemoveAll();
+    pQue->clear();
     pQueNew->dwTimeMake = GetTickCount();
     pQue->Add(pQueNew);
 }
 
 void CUraraSockTCPImplSlot::CancelQue(void)
 {
-    int nCount = m_QueInfoHi.GetSize();
+    int nCount = m_QueInfoHi.size();
     for (int i = 0; i < nCount; ++i) {
         PURARASOCK_QUEINFO pInfo = m_QueInfoHi[i];
         SAFE_DELETE_ARRAY(pInfo->pData);
         SAFE_DELETE(pInfo);
     }
-    m_QueInfoHi.RemoveAll();
+    m_QueInfoHi.clear();
 
-    nCount = m_QueInfoMid.GetSize();
+    nCount = m_QueInfoMid.size();
     for (int i = 0; i < nCount; ++i) {
         PURARASOCK_QUEINFO pInfo = m_QueInfoMid[i];
         SAFE_DELETE_ARRAY(pInfo->pData);
         SAFE_DELETE(pInfo);
     }
-    m_QueInfoMid.RemoveAll();
+    m_QueInfoMid.clear();
 
-    nCount = m_QueInfoLow.GetSize();
+    nCount = m_QueInfoLow.size();
     for (int i = 0; i < nCount; ++i) {
         PURARASOCK_QUEINFO pInfo = m_QueInfoLow[i];
         SAFE_DELETE_ARRAY(pInfo->pData);
         SAFE_DELETE(pInfo);
     }
-    m_QueInfoLow.RemoveAll();
+    m_QueInfoLow.clear();
 }
 
 void CUraraSockTCPImplSlot::Destroy(void)
@@ -410,7 +410,7 @@ DWORD CUraraSockTCPImplSlot::GetThrowghPutRecv(void)
 
 DWORD CUraraSockTCPImplSlot::GetQueCount(void)
 {
-    return static_cast<DWORD>(m_QueInfoHi.GetSize() + m_QueInfoMid.GetSize() + m_QueInfoLow.GetSize());
+    return static_cast<DWORD>(m_QueInfoHi.size() + m_QueInfoMid.size() + m_QueInfoLow.size());
 }
 
 DWORD CUraraSockTCPImplSlot::GetIPAddress(void)
@@ -428,16 +428,16 @@ void CUraraSockTCPImplSlot::OnFD_WRITE(void)
     while (true) {
         PURARASOCK_QUEINFO pQue = NULL;
         if (m_SendQueInfo == NULL) {
-            if (m_QueInfoHi.GetSize()) {
+            if (m_QueInfoHi.size()) {
                 m_SendQueInfo = &m_QueInfoHi;
-            } else if (m_QueInfoMid.GetSize()) {
+            } else if (m_QueInfoMid.size()) {
                 m_SendQueInfo = &m_QueInfoMid;
-            } else if (m_QueInfoLow.GetSize()) {
+            } else if (m_QueInfoLow.size()) {
                 m_SendQueInfo = &m_QueInfoLow;
             } else {
                 break;
             }
-            pQue = m_SendQueInfo->GetAt(0);
+            pQue = m_SendQueInfo->at(0);
             if (pQue == NULL) {
                 m_SendQueInfo = NULL;
                 break;
@@ -445,18 +445,18 @@ void CUraraSockTCPImplSlot::OnFD_WRITE(void)
             if (pQue->dwTimeOut && (GetTickCount() > pQue->dwTimeMake + pQue->dwTimeOut)) {
                 SAFE_DELETE_ARRAY(pQue->pData);
                 SAFE_DELETE(pQue);
-                m_SendQueInfo->RemoveAt(0);
+                m_SendQueInfo->erase(m_SendQueInfo->begin());
                 m_SendQueInfo = NULL;
                 m_dwSendSize = 0;
                 continue;
             }
         }
 
-        if (m_SendQueInfo == NULL || m_SendQueInfo->GetSize() <= 0) {
+        if (m_SendQueInfo == NULL || m_SendQueInfo->size() <= 0) {
             break;
         }
 
-        pQue = m_SendQueInfo->GetAt(0);
+        pQue = m_SendQueInfo->at(0);
         if (pQue == NULL) {
             m_SendQueInfo = NULL;
             break;
@@ -471,7 +471,7 @@ void CUraraSockTCPImplSlot::OnFD_WRITE(void)
             if (m_dwSendSize >= pQue->dwSize) {
                 SAFE_DELETE_ARRAY(pQue->pData);
                 SAFE_DELETE(pQue);
-                m_SendQueInfo->RemoveAt(0);
+                m_SendQueInfo->erase(m_SendQueInfo->begin());
                 m_SendQueInfo = NULL;
                 m_dwSendSize = 0;
             }

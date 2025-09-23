@@ -93,7 +93,7 @@ PARRAYSEARCHRESULT CRouteSearch::Search(void)
 		return NULL;
 	}
 
-	m_aResult.RemoveAll ();
+	m_aResult.clear();
 	m_nState = SEARCHSTATE_SEARCH;
 
 	bResult = TRUE;
@@ -146,7 +146,8 @@ void CRouteSearch::ProcSEARCH(void)
 		SearchInfo.byDirection	= anDirection[nDirection];
 		SearchInfo.byState		= 0;
 		SearchInfo.wScore		= abs (m_ptEnd.x - x) + abs (m_ptEnd.y - y) + abs (m_ptStart.x - x) + abs (m_ptStart.y - y);
-		nNo = m_aInfo.Add (SearchInfo);
+		m_aInfo.push_back (SearchInfo);
+		nNo = static_cast<int>(m_aInfo.size ()) - 1;
 		m_pMap[y * m_sizeMap.cx + x] = (WORD)(nNo + 1);
 	}
 }
@@ -171,7 +172,7 @@ BOOL CRouteSearch::ProcSEARCHMOVE(void)
 	nProcCount	= 0;
 
 	/* スコアが最小のルートを検索 */
-	nCount = m_aInfo.GetSize ();
+	nCount = m_aInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = &m_aInfo[i];
 		if (pInfo->byState > 0) {
@@ -225,12 +226,12 @@ void CRouteSearch::InfoCleanup(
 	ARRAYSEARCHINFO aSearchInfoTmp;
 
 	/* 最短ルートのみ残した配列を作成 */
-	nCount = m_aInfo.GetSize ();
+	nCount = m_aInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		nNo = m_pMap[m_sizeMap.cx * y + x] - 1;
 		pInfo = &m_aInfo[nNo];
 
-		aSearchInfoTmp.Add (*pInfo);
+		aSearchInfoTmp.push_back (*pInfo);
 		x += anPosX[pInfo->byDirection];
 		y += anPosY[pInfo->byDirection];
 		/* 開始位置？ */
@@ -239,7 +240,7 @@ void CRouteSearch::InfoCleanup(
 		}
 	}
 
-	nCount = aSearchInfoTmp.GetSize ();
+	nCount = aSearchInfoTmp.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfo = &aSearchInfoTmp[i];
 
@@ -253,6 +254,6 @@ void CRouteSearch::InfoCleanup(
 		} else {
 			Result.byDirection = anDirection[pInfo->byDirection];
 		}
-		m_aResult.Add (Result);
+		m_aResult.push_back (Result);
 	}
 }

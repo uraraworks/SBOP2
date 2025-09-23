@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 /* ========================================================================= */
 /* 構造体の定義																 */
@@ -52,7 +53,7 @@ protected:
 					m_CritDataLock;					/* データロック用のクリティカルセクション */
 	DWORD			m_dwNewID;						/* データIDテンポラリ */
 
-	CmyArray<DATASLOTINFO, DATASLOTINFO> m_DataSlot;	/* データスロット */
+	std::vector<DATASLOTINFO> m_DataSlot;	/* データスロット */
 } CDataSlot, *PCDataSlot;
 
 /* Copyright(C)URARA-works 2008 */

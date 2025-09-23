@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 class CImg32;
 class CWindowBase;
@@ -105,9 +106,9 @@ public:
 	CMgrDraw		*m_pMgrDraw;					/* 描画管理 */
 	CMgrSound		*m_pMgrSound;					/* サウンド管理 */
 	CMgrGrpData		*m_pMgrGrpData;					/* グラフィックデータ管理 */
-	CmyArray<CWindowBase *, CWindowBase *>	m_apChild;	/* 子ウィンドウ */
+	std::vector<CWindowBase *>	m_apChild;	/* 子ウィンドウ */
 } CWindowBase, *PCWindowBase;
-typedef CmyArray<PCWindowBase, PCWindowBase>	  ARRAYWINDOWBASE;
-typedef CmyArray<PCWindowBase, PCWindowBase>	*PARRAYWINDOWBASE;
+typedef std::vector<PCWindowBase>	  ARRAYWINDOWBASE;
+typedef std::vector<PCWindowBase>	*PARRAYWINDOWBASE;
 
 /* Copyright(C)URARA-works 2006 */

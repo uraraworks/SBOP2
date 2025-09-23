@@ -86,7 +86,7 @@ DWORD CInfoFishing::GetDataSize(void)
 	DWORD dwRet;
 
 	dwRet = 0;
-	nCount = m_apParam.GetSize ();
+	nCount = m_apParam.size();
 
 	dwRet += sizeof (m_dwFishingID);		/* 釣りID */
 	dwRet += sizeof (m_nAverage);			/* 釣れる確率 */
@@ -112,7 +112,7 @@ DWORD CInfoFishing::GetDataSizeNo(int nNo)
 	DWORD dwRet;
 
 	dwRet = 0;
-	nCount = m_apParam.GetSize ();
+	nCount = m_apParam.size();
 
 	switch (nNo) {
 	case 0:		dwRet = sizeof (m_dwFishingID);			break;	/* 釣りID */
@@ -156,7 +156,7 @@ PBYTE CInfoFishing::GetWriteData(int nNo, PDWORD pdwSize)
 	pSrc		= NULL;
 	dwSize		= GetDataSizeNo (nNo);
 	*pdwSize	= dwSize;
-	nCount		= m_apParam.GetSize ();
+	nCount		= m_apParam.size();
 
 	if (dwSize == 0) {
 		goto Exit;
@@ -210,7 +210,7 @@ DWORD CInfoFishing::ReadElementData(
 
 	pDst	= NULL;
 	dwSize	= GetDataSizeNo (nNo);
-	nCount	= m_apParam.GetSize ();
+	nCount	= m_apParam.size();
 
 	switch (nNo) {
 	case 0:		pDst = (PBYTE)&m_dwFishingID;		break;	/* 釣りID */
@@ -274,7 +274,7 @@ PBYTE CInfoFishing::GetSendData(void)
 	DWORD dwSize;
 	PINFOFISHINGPARAM pInfo;
 
-	nCount	= m_apParam.GetSize ();
+	nCount	= m_apParam.size();
 	dwSize	= GetSendDataSize ();
 	pData	= ZeroNew (dwSize);
 
@@ -334,7 +334,7 @@ PBYTE CInfoFishing::SetSendData(PBYTE pSrc)
 
 int CInfoFishing::GetCount(void)
 {
-	return m_apParam.GetSize ();
+	return m_apParam.size();
 }
 
 
@@ -354,7 +354,7 @@ void CInfoFishing::AddParam(
 	pInfo->dwItemTypeID	= dwItemTypeID;
 	pInfo->nAverage		= nAverage;
 
-	m_apParam.Add (pInfo);
+	m_apParam.push_back (pInfo);
 }
 
 
@@ -368,12 +368,14 @@ void CInfoFishing::DeleteParam(int nNo)
 {
 	PINFOFISHINGPARAM pInfo;
 
-	if (nNo >= m_apParam.GetSize ()) {
+	if (nNo >= m_apParam.size()) {
 		return;
 	}
 	pInfo = m_apParam[nNo];
 	SAFE_DELETE (pInfo);
-	m_apParam.RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_apParam.size()))) {
+		m_apParam.erase (m_apParam.begin () + nNo);
+	}
 }
 
 
@@ -405,7 +407,7 @@ PINFOFISHINGPARAM CInfoFishing::GetPtr(int nNo)
 	PINFOFISHINGPARAM pRet;
 
 	pRet = NULL;
-	if (nNo >= m_apParam.GetSize ()) {
+	if (nNo >= m_apParam.size()) {
 		goto Exit;
 	}
 

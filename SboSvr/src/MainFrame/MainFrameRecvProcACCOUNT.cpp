@@ -118,16 +118,16 @@ void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
 		pInfoChar->m_wGrpIDSP = 1;
 		pInfoChar->m_clName		= RGB (255, 200, 100);
 		pInfoChar->m_clSpeak	= RGB (255, 200, 100);
-		pInfoChar->m_abyMark.Add (2);
+		pInfoChar->m_abyMark.push_back (2);
 	} else if (pInfoCharPacket->m_strCharName == "VeLTiNA") {
 		pInfoChar->m_wGrpIDSP = 2;
 		pInfoChar->m_clName		= RGB (255, 150, 150);
 		pInfoChar->m_clSpeak	= RGB (255, 150, 150);
-		pInfoChar->m_abyMark.Add (3);
+		pInfoChar->m_abyMark.push_back (3);
 	} else if (pInfoCharPacket->m_strCharName == "あやしいの") {
 		pInfoChar->m_wGrpIDSP = 3;
 	}
-	pInfoChar->m_abyMark.Add (1);
+	pInfoChar->m_abyMark.push_back (1);
 #if 0
 	switch (pInfoChar->m_wFamilyID) {
 	case FAMILYTYPE_HUMAN:				/* ニンゲン */
@@ -153,7 +153,7 @@ void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
 	pInfoChar->m_wGrpIDInitHairColor	= pInfoChar->m_wGrpIDHairColor;
 	pInfoChar->m_wGrpIDInitSP			= pInfoChar->m_wGrpIDSP;
 	dwCharID = m_pLibInfoChar->Add (pInfoChar);
-	pInfoAccount->m_adwCharID.Add (dwCharID);
+	pInfoAccount->m_adwCharID.push_back (dwCharID);
 
 Exit:
 	PacketRES_MAKECHAR.Make (nResult, dwCharID);

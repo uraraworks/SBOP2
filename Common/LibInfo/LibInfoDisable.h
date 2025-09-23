@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoDisable.h"
 #include "LibInfoBase.h"
@@ -16,8 +17,8 @@ typedef struct _STDISABLEIPADDRESS {
 	ULONG	ulIPAddress;		/* IPアドレス */
 	DWORD	dwLastTime;			/* 最終ログイン時間 */
 } STDISABLEIPADDRESS, *PSTDISABLEIPADDRESS;
-typedef CmyArray<PSTDISABLEIPADDRESS, PSTDISABLEIPADDRESS>   ARRAYDISABLEIPADDRESS;
-typedef CmyArray<PSTDISABLEIPADDRESS, PSTDISABLEIPADDRESS> *PARRAYDISABLEIPADDRESS;
+typedef std::vector<PSTDISABLEIPADDRESS>   ARRAYDISABLEIPADDRESS;
+typedef std::vector<PSTDISABLEIPADDRESS> *PARRAYDISABLEIPADDRESS;
 
 /* ========================================================================= */
 /* クラス宣言																 */

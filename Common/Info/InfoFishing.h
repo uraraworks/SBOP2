@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoBase.h"
 
@@ -56,9 +57,9 @@ public:
 	DWORD		m_dwFishingID;					/* 釣りID */
 	int			m_nAverage;						/* 釣れる確率 */
 	CmyString	m_strName;						/* 釣り場名 */
-	CmyArray <PINFOFISHINGPARAM, PINFOFISHINGPARAM>	m_apParam;	/* 釣り情報パラメータ */
+	std::vector<PINFOFISHINGPARAM>	m_apParam;	/* 釣り情報パラメータ */
 } CInfoFishing, *PCInfoFishing;
-typedef CmyArray<PCInfoFishing, PCInfoFishing>	   ARRAYITEMINFO;
-typedef CmyArray<PCInfoFishing, PCInfoFishing>	 *PARRAYITEMINFO;
+typedef std::vector<PCInfoFishing>	   ARRAYITEMINFO;
+typedef std::vector<PCInfoFishing>	 *PARRAYITEMINFO;
 
 /* Copyright(C)URARA-works 2008 */

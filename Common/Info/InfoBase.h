@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -30,7 +31,7 @@ public:
 public:
 	int			m_nElementCount;					/* 要素数 */
 } CInfoBase, *PCInfoBase;
-typedef CmyArray<PCInfoBase, PCInfoBase>	  ARRAYBASEINFO;
-typedef CmyArray<PCInfoBase, PCInfoBase>	*PARRAYBASEINFO;
+typedef std::vector<PCInfoBase>	  ARRAYBASEINFO;
+typedef std::vector<PCInfoBase>	*PARRAYBASEINFO;
 
 /* Copyright(C)URARA-works 2005 */

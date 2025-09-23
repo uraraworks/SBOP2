@@ -110,7 +110,7 @@ DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
 	case 0:	dwRet = sizeof (m_dwTalkEventID);	break;	/* 会話イベントID */
 	case 1:		/* 会話イベント */
 		dwRet += sizeof (int);				/* データ数 */
-		nCount = m_apTalkEvent.GetSize ();
+		nCount = m_apTalkEvent.size();
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_apTalkEvent[i];
 			dwRet += sizeof (int);								/* 要素数 */
@@ -167,7 +167,7 @@ PBYTE CInfoTalkEvent::GetWriteData(int nNo, PDWORD pdwSize)
 	switch (nNo) {
 	case 0:	pSrc = (PBYTE)&m_dwTalkEventID;			break;	/* 会話イベントID */
 	case 1:			/* 会話イベント */
-		nCount = m_apTalkEvent.GetSize ();
+		nCount = m_apTalkEvent.size();
 		CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);		/* データ数 */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_apTalkEvent[i];
@@ -268,7 +268,7 @@ DWORD CInfoTalkEvent::GetSendDataSize(void)
 	/* データ数分のサイズ */
 	dwRet += sizeof (DWORD);
 
-	nCount = m_apTalkEvent.GetSize ();
+	nCount = m_apTalkEvent.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
 
@@ -300,7 +300,7 @@ PBYTE CInfoTalkEvent::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwTalkEventID, sizeof (m_dwTalkEventID), pDataTmp);	/* 会話イベントID */
 
 	/* データ数を書き込み */
-	dwCount = (DWORD)m_apTalkEvent.GetSize ();
+	dwCount = (DWORD)m_apTalkEvent.size();
 	CopyMemoryRenew (pDataTmp, &dwCount, sizeof (dwCount), pDataTmp);
 
 	/* イベント情報を書き込み */
@@ -419,7 +419,7 @@ PCInfoTalkEventBase CInfoTalkEvent::GetPtr(int nPage, int nNo)
 
 	pRet	 = NULL;
 	nNoCount = 0;
-	nCount   = m_apTalkEvent.GetSize ();
+	nCount   = m_apTalkEvent.size();
 
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
@@ -450,7 +450,7 @@ void CInfoTalkEvent::SetPtr(int nPage, int nNo, CInfoTalkEventBase *pInfo)
 	PCInfoTalkEventBase pInfoTmp;
 
 	nNoCount = 0;
-	nCount   = m_apTalkEvent.GetSize ();
+	nCount   = m_apTalkEvent.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoTmp = m_apTalkEvent[i];
 		if (pInfoTmp->m_nPage != nPage) {
@@ -460,10 +460,10 @@ void CInfoTalkEvent::SetPtr(int nPage, int nNo, CInfoTalkEventBase *pInfo)
 			nNoCount ++;
 			continue;
 		}
-		DeleteTalkEvent (pInfoTmp);
-		m_apTalkEvent.SetAt (i, pInfo);
-		break;
-	}
+                DeleteTalkEvent (pInfoTmp);
+                m_apTalkEvent[i] = pInfo;
+                break;
+        }
 }
 
 
@@ -478,15 +478,15 @@ void CInfoTalkEvent::GetEventArray(int nPage, ARRAYTALKEVENTBASEINFO &aDst)
 	int i, nCount;
 	PCInfoTalkEventBase pInfo;
 
-	aDst.RemoveAll ();
+	aDst.clear();
 
-	nCount = m_apTalkEvent.GetSize ();
+	nCount = m_apTalkEvent.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
 		if (pInfo->m_nPage != nPage) {
 			continue;
 		}
-		aDst.Add (pInfo);
+		aDst.push_back (pInfo);
 	}
 }
 
@@ -503,7 +503,7 @@ int CInfoTalkEvent::GetTalkEventCount(int nPage)
 
 	GetEventArray (nPage, aInfoTmp);
 
-	return aInfoTmp.GetSize ();
+	return aInfoTmp.size();
 }
 
 
@@ -520,7 +520,7 @@ int CInfoTalkEvent::GetPageCount(void)
 
 	nRet = 0;
 
-	nCount = m_apTalkEvent.GetSize ();
+	nCount = m_apTalkEvent.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
 		nRet = max (nRet, pInfo->m_nPage + 1);
@@ -538,7 +538,7 @@ int CInfoTalkEvent::GetPageCount(void)
 
 void CInfoTalkEvent::AddTalkEvent(CInfoTalkEventBase *pInfo)
 {
-	m_apTalkEvent.Add (pInfo);
+	m_apTalkEvent.push_back (pInfo);
 }
 
 
@@ -559,7 +559,7 @@ void CInfoTalkEvent::UpTalkEvent(int nPage, int nNo)
 
 	nNoFront = 0;
 	nNoCount = 0;
-	nCount   = m_apTalkEvent.GetSize ();
+	nCount   = m_apTalkEvent.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
 		if (pInfo->m_nPage != nPage) {
@@ -597,7 +597,7 @@ void CInfoTalkEvent::DownTalkEvent(int nPage, int nNo)
 
 	nNoBack = 0;
 	nNoCount = nCount - 1;
-	nCount   = m_apTalkEvent.GetSize ();
+	nCount   = m_apTalkEvent.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfo = m_apTalkEvent[i];
 		if (pInfo->m_nPage != nPage) {
@@ -627,13 +627,15 @@ void CInfoTalkEvent::DeleteTalkEvent(int nNo)
 {
 	PCInfoTalkEventBase pInfo;
 
-	if (nNo >= m_apTalkEvent.GetSize ()) {
+	if (nNo >= m_apTalkEvent.size()) {
 		return;
 	}
 
 	pInfo = m_apTalkEvent[nNo];
 	SAFE_DELETE (pInfo);
-	m_apTalkEvent.RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_apTalkEvent.size()))) {
+		m_apTalkEvent.erase (m_apTalkEvent.begin () + nNo);
+	}
 }
 
 
@@ -670,11 +672,11 @@ void CInfoTalkEvent::DeleteAllTalkEvent(void)
 {
 	int i, nCount;
 
-	nCount = m_apTalkEvent.GetSize ();
+	nCount = m_apTalkEvent.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		DeleteTalkEvent (i);
 	}
-	m_apTalkEvent.RemoveAll ();
+	m_apTalkEvent.clear();
 }
 
 /* Copyright(C)URARA-works 2008 */

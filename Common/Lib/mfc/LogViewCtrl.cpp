@@ -149,7 +149,7 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 				t.nStart = pszPrev - pszLine;
 				t.nLen = psz - pszPrev;
 				t.nType = nPrevType;
-				li.aTokens.Add(t);
+				li.aTokens.push_back(t);
 
 				pszPrev = psz;
 			}
@@ -159,7 +159,7 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 		}
 	}
 
-	m_aTexts.Add(li);
+	m_aTexts.push_back(li);
 	m_dwTextSize += _tcslen(pszLine);
 
 	// テキストの調整
@@ -186,7 +186,7 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 void CLogViewCtrl::Redraw()
 {
 	// データがないなら空欄表示
-	if (m_aTexts.GetSize() == 0) {
+	if (m_aTexts.size() == 0) {
 		Invalidate(FALSE);
 		return;
 	}
@@ -206,7 +206,7 @@ void CLogViewCtrl::Redraw()
 // クリア
 void CLogViewCtrl::Clear()
 {
-	m_aTexts.RemoveAll();
+	m_aTexts.clear();
 	m_dwTextSize = 0;
 	SCROLLINFO info;
 	info.fMask = SIF_DISABLENOSCROLL | SIF_PAGE | SIF_RANGE | SIF_POS;
@@ -294,7 +294,7 @@ void CLogViewCtrl::RecalcParam(const SIZE* psizeClient)
 // テキストの高さ(pixel)計算
 int CLogViewCtrl::GetTextHeight(CDC* pDC, int nIndex)
 {
-	if ((nIndex < 0) || (nIndex >= m_aTexts.GetSize())) {
+	if ((nIndex < 0) || (nIndex >= m_aTexts.size())) {
 		return 0;
 	}
 
@@ -320,15 +320,15 @@ void CLogViewCtrl::LimitText()
 	int	nDelCount = 0;
 	if (m_nLimitMode == LVC_TEXT_LIMIT_LINE) {
 		// 行数オーバーしている場合は先頭から削除する
-		nDelCount = m_aTexts.GetSize() - m_dwLimitSize;
-		if ((nDelCount > 0) && (nDelCount < m_aTexts.GetSize())) {
-			m_aTexts.RemoveAt(0, nDelCount);
+		nDelCount = m_aTexts.size() - m_dwLimitSize;
+		if ((nDelCount > 0) && (nDelCount < m_aTexts.size())) {
+			m_aTexts.erase(m_aTexts.begin(), m_aTexts.begin() + nDelCount);
 		}
 	} else if (m_nLimitMode == LVC_TEXT_LIMIT_SIZE) {
 		// サイズオーバーしている場合は先頭から削除する
-		while ((m_aTexts.GetSize() > 0) && (m_dwTextSize > m_dwLimitSize)) {
+		while ((m_aTexts.size() > 0) && (m_dwTextSize > m_dwLimitSize)) {
 			m_dwTextSize -= m_aTexts[0].strText.GetLength();
-			m_aTexts.RemoveAt(0);
+			m_aTexts.erase(m_aTexts.begin());
 			++nDelCount;
 		}
 	}
@@ -356,7 +356,7 @@ void CLogViewCtrl::LimitText()
 // クライアント座標から文字位置の計算
 BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 {
-	if (m_aTexts.GetSize() == 0) {
+	if (m_aTexts.size() == 0) {
 		// データがない
 		return FALSE;
 	}
@@ -434,7 +434,7 @@ BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 int CLogViewCtrl::FindToken(int nLine, int nChar)
 {
 	int i;
-	for (i = 0; i < m_aTexts[nLine].aTokens.GetSize(); ++i) {
+	for (i = 0; i < m_aTexts[nLine].aTokens.size(); ++i) {
 		if (nChar < m_aTexts[nLine].aTokens[i].nStart) {
 			return i - 1;
 		}
@@ -626,7 +626,7 @@ void CLogViewCtrl::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 
-	if (m_aTexts.GetSize() > 0) {
+	if (m_aTexts.size() > 0) {
 		// 描画パラメータの更新
 		RecalcParam(&CSize(cx, cy));
 	}
@@ -644,7 +644,7 @@ void CLogViewCtrl::OnPaint()
 
 	CRect	rcClient;
 	GetClientRect(&rcClient);
-	if (m_aTexts.GetSize() == 0) {
+	if (m_aTexts.size() == 0) {
 		// テキストを描画しないけど背景は描画しておく
 		dc.FillSolidRect(&rcClient, m_stSetting.crBack);
 		return;
@@ -865,7 +865,7 @@ void CLogViewCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CLogViewCtrl::OnLButtonUp(UINT nFlags, CPoint point) 
 {
-	if (m_aTexts.GetSize() == 0) {
+	if (m_aTexts.size() == 0) {
 		// 表示するデータがない場合は処理しない
 		return;
 	}
@@ -923,7 +923,7 @@ int CLogViewCtrl::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message
 
 void CLogViewCtrl::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if (m_aTexts.GetSize() == 0) {
+	if (m_aTexts.size() == 0) {
 		// 表示するデータがない場合は処理しない
 		return;
 	}
@@ -1000,7 +1000,7 @@ BOOL CLogViewCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 void CLogViewCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if (m_aTexts.GetSize() == 0) {
+	if (m_aTexts.size() == 0) {
 		// 表示するデータがない場合は処理しない
 		return;
 	}
@@ -1041,7 +1041,7 @@ void CLogViewCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CLogViewCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	if (m_aTexts.GetSize() > 0) {
+	if (m_aTexts.size() > 0) {
 		m_menuPopup.EnableMenuItem(ID_MENU_ALLSELECT, MF_BYCOMMAND | MF_ENABLED);
 	} else {
 		m_menuPopup.EnableMenuItem(ID_MENU_ALLSELECT, MF_BYCOMMAND | MF_GRAYED);
@@ -1067,7 +1067,7 @@ void CLogViewCtrl::OnMenuCopy()
 			nSelectCharStart = m_nSelectCharEnd;
 			nSelectCharEnd = m_nSelectCharStart;
 		}
-		if (m_nSelectLineStart < m_aTexts.GetSize()) {
+		if (m_nSelectLineStart < m_aTexts.size()) {
 			CString	str = m_aTexts[m_nSelectLineStart].strText.Mid(nSelectCharStart, nSelectCharEnd - nSelectCharStart);
 			hMem = GlobalAlloc(GHND, str.GetLength() + sizeof(_T('\0')));
 			if (hMem != NULL) {
@@ -1086,10 +1086,10 @@ void CLogViewCtrl::OnMenuCopy()
 			nSelectLineStart = m_nSelectLineEnd;
 			nSelectLineEnd = m_nSelectLineStart;
 		}
-		hMem = GlobalAlloc(GHND, m_dwTextSize + (sizeof(_T('\n')) + HEADER_COLUMN) * m_aTexts.GetSize() + sizeof(TCHAR));
+		hMem = GlobalAlloc(GHND, m_dwTextSize + (sizeof(_T('\n')) + HEADER_COLUMN) * m_aTexts.size() + sizeof(TCHAR));
 		if (hMem != NULL) {
 			LPTSTR	psz = reinterpret_cast<LPTSTR>(GlobalLock(hMem));
-			for (int i = nSelectLineStart; (i <= nSelectLineEnd) && (i < m_aTexts.GetSize()); ++i) {
+			for (int i = nSelectLineStart; (i <= nSelectLineEnd) && (i < m_aTexts.size()); ++i) {
 				CString	str;
 				str.Format(_T("[%02d:%02d:%02d] "), m_aTexts[i].stDateTime.wHour, m_aTexts[i].stDateTime.wMinute, m_aTexts[i].stDateTime.wSecond);
 				_tcscat(psz, str);
@@ -1123,14 +1123,14 @@ void CLogViewCtrl::OnMenuCopy()
 
 void CLogViewCtrl::OnMenuAllSelect()
 {
-	if (m_aTexts.GetSize() == 0) {
+	if (m_aTexts.size() == 0) {
 		// データがないので処理しない
 		return;
 	}
 
 	m_nSelect = SELECT_TYPE_LINE;
 	m_nSelectLineStart = 0;
-	m_nSelectLineEnd = m_aTexts.GetSize() - 1;
+	m_nSelectLineEnd = m_aTexts.size() - 1;
 	m_nSelectCharStart = 0;
 	m_nSelectCharEnd = 0;
 

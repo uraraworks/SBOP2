@@ -813,7 +813,7 @@ void CMainFrame::OnCommandACCOUNT_DELETEALL(void)
 	nCount = m_pLibInfoAccount->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetPtr (i);
-		nCount2 = pInfoAccount->m_adwCharID.GetSize ();
+		nCount2 = pInfoAccount->m_adwCharID.size();
 		for (j = 0; j < nCount2; j ++) {
 			m_pLibInfoChar->Delete (pInfoAccount->m_adwCharID[j]);
 		}

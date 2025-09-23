@@ -86,7 +86,7 @@ CWindowBase::~CWindowBase()
 	int i, nCount;
 	PCWindowBase pChild;
 
-	nCount = m_apChild.GetSize ();
+	nCount = m_apChild.size();
 	for (i = 0; i < nCount; i ++) {
 		pChild = m_apChild[i];
 		pChild->m_bDelete = TRUE;
@@ -347,7 +347,7 @@ void CWindowBase::SetPos(int nPos)
 
 void CWindowBase::AddChild(CWindowBase *pChild)
 {
-	m_apChild.Add (pChild);
+	m_apChild.push_back (pChild);
 }
 
 
@@ -362,10 +362,10 @@ void CWindowBase::DeleteChild(CWindowBase *pChild)
 	int i, nCount;
 	PCWindowBase pChildTmp;
 
-	nCount = m_apChild.GetSize ();
+	nCount = m_apChild.size();
 	for (i = 0; i < nCount; i ++) {
 		pChildTmp = m_apChild[i];
-		m_apChild.RemoveAt (i);
+		m_apChild.erase (m_apChild.begin () + i);
 		break;
 	}
 }

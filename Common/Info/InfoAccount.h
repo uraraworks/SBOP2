@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoBase.h"
 
@@ -60,7 +61,7 @@ public:
 				m_strPassword,				/* パスワード */
 				m_strMacAddr;				/* アカウント登録MACアドレス */
 } CInfoAccount, *PCInfoAccount;
-typedef CmyArray<PCInfoAccount, PCInfoAccount>	  ARRAYINFOACCOUNT;
-typedef CmyArray<PCInfoAccount, PCInfoAccount>	*PARRAYINFOACCOUNT;
+typedef std::vector<PCInfoAccount>	  ARRAYINFOACCOUNT;
+typedef std::vector<PCInfoAccount>	*PARRAYINFOACCOUNT;
 
 /* Copyright(C)URARA-works 2006 */

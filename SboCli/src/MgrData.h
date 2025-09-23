@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "DataSlot.h"
 
@@ -281,7 +282,7 @@ private:
 	CLibInfoSkill		*m_pLibInfoSkill;			/* スキル情報ライブラリ */
 	CLibInfoCharCli		*m_pLibInfoCharOnline;		/* ログイン中キャラ情報ライブラリ */
 
-	CmyArray<PSTSYSTEMMSG, PSTSYSTEMMSG>	m_aSystemMsg;	/* システムメッセージ */
+	std::vector<PSTSYSTEMMSG>	m_aSystemMsg;	/* システムメッセージ */
 } CMgrData, *PCMgrData;
 
 /* Copyright(C)URARA-works 2006 */

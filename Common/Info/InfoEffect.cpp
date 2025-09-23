@@ -155,11 +155,11 @@ DWORD CInfoEffect::GetDataSize(void)
 		goto Exit;
 	}
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		PCInfoAnime pAnime;
 
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		dwRet += pAnime->GetDataSize ();
 	}
 
@@ -191,9 +191,9 @@ DWORD CInfoEffect::GetDataSizeNo(int nNo)
 	case 5:		dwRet = sizeof (m_dwGrpIDMain);			break;	/* 画像メインID */
 	case 6:		dwRet = (m_strName.GetLength () + 1);	break;	/* エフェクト名 */
 	default:
-		nCount = m_paAnimeInfo->GetSize ();
+		nCount = m_paAnimeInfo->size();
 		for (i = 0; i < nCount; i ++) {
-			pAnime	= m_paAnimeInfo->GetAt (i);
+			pAnime	= m_paAnimeInfo->at(i);
 			dwRet	+= pAnime->GetDataSizeNo (nNo - m_nElementCount);
 		}
 		break;
@@ -251,12 +251,12 @@ PBYTE CInfoEffect::GetWriteData(int nNo, PDWORD pdwSize)
 			PBYTE pTmp;
 
 			pTmp = pRet;
-			nCount = m_paAnimeInfo->GetSize ();
+			nCount = m_paAnimeInfo->size();
 			for (i = 0; i < nCount; i ++) {
 				PBYTE pSrcTmp;
 				DWORD dwSizeTmp;
 
-				pAnime	= m_paAnimeInfo->GetAt (i);
+				pAnime	= m_paAnimeInfo->at(i);
 				pSrcTmp	= pAnime->GetWriteData (nNo - m_nElementCount, &dwSizeTmp);
 				CopyMemoryRenew (pTmp, pSrcTmp, dwSizeTmp, pTmp);
 				SAFE_DELETE_ARRAY (pSrcTmp);
@@ -313,7 +313,7 @@ DWORD CInfoEffect::ReadElementData(
 	default:
 		pSrcTmp	= pSrc;
 		for (i = 0; i < m_byAnimeCount; i ++) {
-			pAnime		= m_paAnimeInfo->GetAt (i);
+			pAnime		= m_paAnimeInfo->at(i);
 			dwSizeTmp	= pAnime->ReadElementData (pSrcTmp, nNo - m_nElementCount);
 			dwSize		+= dwSizeTmp;
 			pSrcTmp		+= dwSizeTmp;
@@ -369,9 +369,9 @@ DWORD CInfoEffect::GetSendDataSize(void)
 		goto Exit;
 	}
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		dwRet += pAnime->GetSendDataSize ();
 	}
 
@@ -407,9 +407,9 @@ PBYTE CInfoEffect::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_bLoopSound,	sizeof (m_bLoopSound),		pDataTmp);	/* ループ時に効果音を再生する */
 	strcpyRenew ((LPSTR)pDataTmp, m_strName, pDataTmp); 							  	/* エフェクト名 */
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		pDataAnimeTmp	= pAnime->GetSendData ();
 		dwSizeAnime		= pAnime->GetSendDataSize ();
 		CopyMemoryRenew (pDataTmp, pDataAnimeTmp, dwSizeAnime, pDataTmp);
@@ -476,7 +476,7 @@ BOOL CInfoEffect::TimerProc(DWORD dwTime)
 		goto Exit;
 	}
 
-	pAnime = m_paAnimeInfo->GetAt (m_byAnimeNo);
+	pAnime = m_paAnimeInfo->at(m_byAnimeNo);
 	dwTmp  = (DWORD)pAnime->m_byWait * 10;
 	if (dwTime - m_dwLastAnime >= dwTmp) {
 		if (m_dwLastAnime > 0) {
@@ -510,7 +510,7 @@ Exit:
 
 int CInfoEffect::GetAnimeCount(void)
 {
-	return m_paAnimeInfo->GetSize ();
+	return m_paAnimeInfo->size();
 }
 
 
@@ -526,7 +526,7 @@ void CInfoEffect::AddAnime(void)
 
 	pInfo = new CInfoAnime;
 	m_paAnimeInfo->Add (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->GetSize ();
+	m_byAnimeCount = m_paAnimeInfo->size();
 }
 
 
@@ -540,10 +540,10 @@ void CInfoEffect::DeleteAnime(int nNo)
 {
 	PCInfoAnime pInfo;
 
-	pInfo = m_paAnimeInfo->GetAt (nNo);
-	m_paAnimeInfo->RemoveAt (nNo);
+	pInfo = m_paAnimeInfo->at(nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paAnimeInfo->size()))) { m_paAnimeInfo->erase (m_paAnimeInfo->begin () + nNo); }
 	SAFE_DELETE (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->GetSize ();
+	m_byAnimeCount = m_paAnimeInfo->size();
 }
 
 
@@ -557,7 +557,7 @@ void CInfoEffect::DeleteAllAnime(void)
 {
 	int i, nCount;
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		DeleteAnime (0);
 	}
@@ -577,12 +577,12 @@ PCInfoAnime CInfoEffect::GetAnimePtr(int nNo)
 
 	pRet = NULL;
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	if ((nNo < 0) || (nNo >= nCount)) {
 		goto Exit;
 	}
 
-	pRet = m_paAnimeInfo->GetAt (nNo);
+	pRet = m_paAnimeInfo->at(nNo);
 Exit:
 	return pRet;
 }
@@ -605,7 +605,7 @@ WORD CInfoEffect::GetGrpID(void)
 		goto Exit;
 	}
 
-	pAnime = m_paAnimeInfo->GetAt (m_byAnimeNo);
+	pAnime = m_paAnimeInfo->at(m_byAnimeNo);
 	if (pAnime == NULL) {
 		goto Exit;
 	}
@@ -633,7 +633,7 @@ BYTE CInfoEffect::GetLevel(void)
 		goto Exit;
 	}
 
-	pAnime = m_paAnimeInfo->GetAt (m_byAnimeNo);
+	pAnime = m_paAnimeInfo->at(m_byAnimeNo);
 	if (pAnime == NULL) {
 		goto Exit;
 	}

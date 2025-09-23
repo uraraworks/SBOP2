@@ -65,8 +65,8 @@ void CWindowOPTION_VIEWSET::Create(CMgrData *pMgrData)
 	nCount = m_nPosMax + 1;
 	for (i = 0; i < nCount; i ++) {
 		bResult = GetCheck (i);
-		m_anCheck.Add ((bResult) ? 464 : 400);
-		m_adwCheckTime.Add (0);
+		m_anCheck.push_back ((bResult) ? 464 : 400);
+		m_adwCheckTime.push_back (0);
 	}
 }
 
@@ -107,7 +107,7 @@ void CWindowOPTION_VIEWSET::Draw(PCImg32 pDst)
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
 
-	nCount = m_adwCheckTime.GetSize ();
+	nCount = m_adwCheckTime.size();
 	for (i = 0; i < nCount; i ++) {
 		m_pDib->BltFrom256 (32, 16 + 16 * i, 16, 16, m_pDibSystem, m_anCheck[i], 0, TRUE);
 	}
@@ -139,7 +139,7 @@ BOOL CWindowOPTION_VIEWSET::TimerProc(void)
 	bRet = CWindowBase::TimerProc ();
 
 	dwTime = timeGetTime ();
-	nCount = m_adwCheckTime.GetSize ();
+	nCount = m_adwCheckTime.size();
 	for (i = 0; i < nCount; i ++) {
 		if (m_adwCheckTime[i] == 0) {
 			continue;

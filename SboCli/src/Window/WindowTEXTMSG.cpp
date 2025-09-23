@@ -151,7 +151,7 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 		m_pDib->Blt (16, 16 + m_nSpaceHeight, m_pDibText->Width (), m_pDibText->Height (), m_pDibText, 0, 0, TRUE);
 		break;
 	case STATE_MENU:		/* 項目選択 */
-		sizeWindow.cy = m_astrMenu.GetSize () * 16 + 32;
+		sizeWindow.cy = m_astrMenu.size() * 16 + 32;
 		DrawFrame (0, m_nSpaceHeight, sizeWindow.cx, sizeWindow.cy, m_nType);
 
 		nTmp = 0;
@@ -180,7 +180,7 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 			hFontOld	= (HFONT)SelectObject (hDC, m_hFont16Normal);
 			SetBkMode (hDC, TRANSPARENT);
 
-			nCount = m_astrMenu.GetSize ();
+			nCount = m_astrMenu.size();
 			for (i = 0; i < nCount; i ++) {
 				TextOut2 (hDC, 32, y + cy + i * 16, (LPCSTR)m_astrMenu[i], clText);
 			}
@@ -290,9 +290,9 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 					case CHGPAGECONDITION_ITEM:			/* アイテムあり */
 					case CHGPAGECONDITION_NOITEM:		/* アイテムなし */
 						padwItemID = pPlayerChar->GetItem ();
-						nCount = padwItemID->GetSize ();
+						nCount = padwItemID->size();
 						for (i = 0; i < nCount; i ++) {
-							if (pInfoTmp->m_dwData == pLibInfoItem->GetItemTypeID (padwItemID->GetAt (i))) {
+							if (pInfoTmp->m_dwData == pLibInfoItem->GetItemTypeID (padwItemID->at(i))) {
 								break;
 							}
 						}
@@ -330,11 +330,11 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 					PSTTALKEVENTMENUINFO pMenuInfo;	
 					PCInfoTalkEventMENU pInfoTmp = (PCInfoTalkEventMENU)pInfoTalkEvent;
 
-					m_astrMenu.RemoveAll ();
+					m_astrMenu.clear();
 					nCount = pInfoTmp->GetMenuInfoCount ();
 					for (i = 0; i < nCount; i ++) {
 						pMenuInfo = pInfoTmp->GetPtr (i);
-						m_astrMenu.Add (pMenuInfo->strName);
+						m_astrMenu.push_back (pMenuInfo->strName);
 					}
 					m_nState	= STATE_MENU;
 					m_nPos		= 0;
@@ -726,7 +726,7 @@ void CWindowTEXTMSG::MsgProc(void)
 	GetLineText (pszSrc, strTmp);
 	pszTmp = (LPCSTR)strTmp;
 
-	m_astrMenu.RemoveAll ();
+	m_astrMenu.clear();
 
 	nPos = 0;
 	/* メニュー？ */
@@ -748,11 +748,11 @@ void CWindowTEXTMSG::MsgProc(void)
 			}
 			strTmp2 = strTmp;
 			TrimSpace (strTmp2);
-			m_astrMenu.Add (strTmp2);
+			m_astrMenu.push_back (strTmp2);
 		}
 		m_nProcPos += nPos;
 		m_nPos		= 0;
-		m_nPosMax	= m_astrMenu.GetSize ();
+		m_nPosMax	= m_astrMenu.size();
 		if (m_nPosMax > 0) {
 			m_nPosMax --;
 			m_nState = STATE_MENU;

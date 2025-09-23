@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 class CImg32;
 class CMgrData;
@@ -54,7 +55,7 @@ protected:
 	CLibInfoCharCli	*m_pLibInfoChar;					/* キャラ情報ライブラリ */
 	CLibInfoMapBase	*m_pLibInfoMap;						/* マップ情報ライブラリ */
 } CLayerBase, *PCLayerBase;
-typedef CmyArray<PCLayerBase, PCLayerBase>	  ARRAYLAYERBASE;
-typedef CmyArray<PCLayerBase, PCLayerBase>	*PARRAYLAYERBASE;
+typedef std::vector<PCLayerBase>	  ARRAYLAYERBASE;
+typedef std::vector<PCLayerBase>	*PARRAYLAYERBASE;
 
 /* Copyright(C)URARA-works 2006 */

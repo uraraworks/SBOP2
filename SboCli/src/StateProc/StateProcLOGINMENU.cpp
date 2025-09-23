@@ -158,7 +158,7 @@ void CStateProcLOGINMENU::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 			m_pMgrWindow->Update ();
 			m_pInfoAccount = m_pMgrData->GetAccount ();
-			nCount = m_pInfoAccount->m_adwCharID.GetSize ();
+			nCount = m_pInfoAccount->m_adwCharID.size();
 			for (i = 0; i < nCount; i ++) {
 				Packet.Make (m_pInfoAccount->m_adwCharID[i]);
 				m_pSock->Send (&Packet);

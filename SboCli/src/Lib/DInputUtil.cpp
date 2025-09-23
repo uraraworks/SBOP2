@@ -181,7 +181,7 @@ void CDInputUtil::SetDevice(int nNo, HWND hWnd)
 		return;
 	}
 
-	pDeviceInfo = m_aDeviceInfo.GetAt (nNo);
+	pDeviceInfo = m_aDeviceInfo[nNo];
 
 	SetDevice (pDeviceInfo->guidInstance, hWnd);
 }
@@ -312,7 +312,7 @@ Exit:
 
 int CDInputUtil::GetDeviceCount(void)
 {
-	return m_aDeviceInfo.GetSize ();
+	return m_aDeviceInfo.size();
 }
 
 
@@ -330,7 +330,7 @@ BOOL CDInputUtil::GetDeviceName(
 	PDINPUTDEVICEINFO pInfo;
 
 	bRet = FALSE;
-	if (nNo >= m_aDeviceInfo.GetSize ()) {
+	if (nNo >= m_aDeviceInfo.size()) {
 		goto Exit;
 	}
 	if (nNo < 0) {
@@ -360,7 +360,7 @@ BOOL CDInputUtil::GetGUID(
 	PDINPUTDEVICEINFO pInfo;
 
 	bRet = FALSE;
-	if (nNo >= m_aDeviceInfo.GetSize ()) {
+	if (nNo >= m_aDeviceInfo.size()) {
 		goto Exit;
 	}
 	if (nNo < 0) {
@@ -411,7 +411,9 @@ void CDInputUtil::DeleteDeviceInfo(int nNo)
 
 	pInfo = m_aDeviceInfo[nNo];
 	SAFE_DELETE (pInfo);
-	m_aDeviceInfo.RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_aDeviceInfo.size()))) {
+		m_aDeviceInfo.erase (m_aDeviceInfo.begin () + nNo);
+	}
 }
 
 
@@ -425,7 +427,7 @@ void CDInputUtil::DeleteAllDeviceInfo(void)
 {
 	int i, nCount;
 
-	nCount = m_aDeviceInfo.GetSize ();
+	nCount = m_aDeviceInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		DeleteDeviceInfo (i);
 	}
@@ -440,7 +442,7 @@ void CDInputUtil::DeleteAllDeviceInfo(void)
 
 void CDInputUtil::AddDeviceInfo(PDINPUTDEVICEINFO pDeviceInfo)
 {
-	m_aDeviceInfo.Add (pDeviceInfo);
+	m_aDeviceInfo.push_back (pDeviceInfo);
 }
 
 /* Copyright(C)URARA-works 2007 */

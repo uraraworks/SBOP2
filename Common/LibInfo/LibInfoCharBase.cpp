@@ -95,7 +95,7 @@ void CLibInfoCharBase::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 
 		if (pInfoCharBase->m_dwMapID != dwMapID) {
 			continue;
-		}
+	}
 
 		switch (nDirection) {
 		case 0:		/* 上 */
@@ -110,7 +110,7 @@ void CLibInfoCharBase::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 			break;
 		case 3:		/* 右 */
 			break;
-		}
+	}
 	}
 }
 
@@ -150,16 +150,16 @@ void CLibInfoCharBase::GetSaveNo(ARRAYINT &anDst)
 	int i, nCount;
 	PCInfoCharBase pChar;
 
-	anDst.RemoveAll ();
+	anDst.clear();
 
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharBase)GetPtr (i);
 		if (pChar->IsLogoutDelete ()) {
 			continue;
-		}
+	}
 
-		anDst.Add (i);
+		anDst.push_back (i);
 	}
 }
 
@@ -180,7 +180,7 @@ int CLibInfoCharBase::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -207,7 +207,7 @@ int CLibInfoCharBase::GetCountScreen(PCInfoCharBase pCharBase)
 		bResult = IsScreenInside (pCharBase, pChar);
 		if (bResult == FALSE) {
 			continue;
-		}
+	}
 		nRet ++;
 	}
 
@@ -273,9 +273,11 @@ void CLibInfoCharBase::Delete(
 {
 	PCInfoCharBase pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -293,12 +295,12 @@ void CLibInfoCharBase::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwCharID != dwCharID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -323,7 +325,7 @@ void CLibInfoCharBase::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -344,43 +346,43 @@ void CLibInfoCharBase::SortY(void)
 	ARRAYINFOCHARBASE aTmp;
 	ARRAYINT anNo;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
-		nCountTmp = anNo.GetSize ();
+		pInfo = m_paInfo->at(i);
+		nCountTmp = anNo.size();
 		nNo = 0;
 		if (nCountTmp > 0) {
 			for (j = 0; j < nCountTmp; j ++) {
-				pInfoTmp = m_paInfo->GetAt (anNo[j]);
+				pInfoTmp = m_paInfo->at(anNo[j]);
 				if (pInfo->m_dwMapID < pInfoTmp->m_dwMapID) {
 					break;
-				}
+			}
 				if (pInfo->m_dwMapID == pInfoTmp->m_dwMapID) {
 					if (pInfo->m_nMapY < pInfoTmp->m_nMapY) {
 						break;
-					}
 				}
+			}
 				if (pInfo->m_dwMapID == pInfoTmp->m_dwMapID) {
 					if (pInfo->m_nMapY == pInfoTmp->m_nMapY) {
 						if (pInfo->m_nMapX < pInfoTmp->m_nMapX) {
 							break;
-						}
 					}
 				}
+			}
 				if (pInfo->m_dwMapID == pInfoTmp->m_dwMapID) {
 					if (pInfo->m_nMapY == pInfoTmp->m_nMapY) {
 						if (pInfo->m_nMapX == pInfoTmp->m_nMapX) {
 							if (pInfo->m_dwCharID < pInfoTmp->m_dwCharID) {
 								break;
-							}
 						}
 					}
 				}
 			}
-			nNo = j;
 		}
-		anNo.InsertAt (nNo, i);
-		aTmp.InsertAt (nNo, pInfo);
+			nNo = j;
+	}
+		anNo.insert (anNo.begin () + nNo, i);
+		aTmp.insert (aTmp.begin () + nNo, pInfo);
 	}
 
 	m_paInfo->Copy (&aTmp);
@@ -415,34 +417,34 @@ BOOL CLibInfoCharBase::IsBlockChar(
 	pChar->GetCharSize (size);
 	pChar->GetPosRect (rcSrc);
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfo->GetAt (i);
+		pInfoCharTmp = m_paInfo->at(i);
 		bResult = pInfoCharTmp->IsLogin ();
 		if (bResult == FALSE) {
 			continue;
-		}
+	}
 		if (pChar == pInfoCharTmp) {
 			continue;
-		}
+	}
 		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
-		}
+	}
 		GetDistance (sizeTmp, pChar, pInfoCharTmp, TRUE);
 		if ((sizeTmp.cx < 0) || (sizeTmp.cx + sizeTmp.cy >= 1)) {
 			continue;
-		}
+	}
 		if (bNoBlockFlg && (pInfoCharTmp->m_bBlock == FALSE)) {
 			continue;
-		}
+	}
 		if (bHitCheck) {
 			pInfoCharTmp->GetPosRect (rcTmp);
 			if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
 				(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
 				/* 重なる場合は対象外 */
 				continue;
-			}
 		}
+	}
 		bRet = TRUE;
 		break;
 	}
@@ -466,13 +468,13 @@ BOOL CLibInfoCharBase::IsUseName(LPCSTR pszName)
 
 	bRet = FALSE;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (pInfo->m_strCharName == pszName) {
 			bRet = TRUE;
 			break;
-		}
+	}
 	}
 
 	return bRet;
@@ -520,10 +522,10 @@ BOOL CLibInfoCharBase::NameCheck(LPCSTR pszName)
 		if (IsDBCSLeadByte (byTmp)) {
 			i ++;
 			continue;
-		}
+	}
 		if ((byTmp < 0x20) || ((byTmp >= 0x7F) && !((byTmp >= 0xA1) && (byTmp <= 0xDF)))) {
 			goto Exit;
-		}
+	}
 	}
 
 	bRet = TRUE;
@@ -644,21 +646,21 @@ DWORD CLibInfoCharBase::GetFrontCharID(DWORD dwCharID, int nDirection)
 	pInfoCharSrc->GetFrontPos (ptFront, nDirection, TRUE);
 	pInfoCharSrc->GetCharSize (size);
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfo->GetAt (i);
+		pInfoCharTmp = m_paInfo->at(i);
 		if (pInfoCharTmp == pInfoCharSrc) {
 			continue;
-		}
+	}
 		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
-		}
+	}
 		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
 			continue;
-		}
+	}
 		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
 			continue;
-		}
+	}
 		dwRet = pInfoCharTmp->m_dwCharID;
 		break;
 	}
@@ -691,27 +693,27 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 	pInfoCharSrc->GetFrontPos (ptFront, nDirection, TRUE);
 	pInfoCharSrc->GetCharSize (size);
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfo->GetAt (i);
+		pInfoCharTmp = m_paInfo->at(i);
 		if (pInfoCharSrc == pInfoCharTmp) {
 			continue;
-		}
+	}
 		if (pInfoCharTmp->m_bPush == FALSE) {
 			continue;
-		}
+	}
 		if (pInfoCharTmp->m_nMoveType == CHARMOVETYPE_PUTNPC) {
 			continue;
-		}
+	}
 		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
-		}
+	}
 		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
 			continue;
-		}
+	}
 		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
 			continue;
-		}
+	}
 		dwRet = pInfoCharTmp->m_dwCharID;
 		break;
 	}
@@ -742,21 +744,21 @@ DWORD CLibInfoCharBase::GetHitCharID(DWORD dwCharIDBase, int x, int y)
 	}
 	pInfoCharBase->GetCharSize (size);
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfo->GetAt (i);
+		pInfoCharTmp = m_paInfo->at(i);
 		if (pInfoCharBase == pInfoCharTmp) {
 			continue;
-		}
+	}
 		if (pInfoCharTmp->m_nMoveType == CHARMOVETYPE_PUTNPC) {
 			continue;
-		}
+	}
 		if (pInfoCharBase->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
-		}
+	}
 		if (pInfoCharTmp->IsHitCharPos (x, y, &size) == FALSE) {
 			continue;
-		}
+	}
 		dwRet = pInfoCharTmp->m_dwCharID;
 		break;
 	}
@@ -779,12 +781,12 @@ void CLibInfoCharBase::SetPtr(DWORD dwCharID, PCInfoCharBase pChar)
 
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		pTmp = (PCInfoCharBase)m_paInfo->GetAt (i);
-		if (pTmp->m_dwCharID == dwCharID) {
-			SAFE_DELETE (pTmp);
-			m_paInfo->SetAt (i, pChar);
-			break;
-		}
+		pTmp = (PCInfoCharBase)m_paInfo->at(i);
+                if (pTmp->m_dwCharID == dwCharID) {
+                        SAFE_DELETE (pTmp);
+                        (*m_paInfo)[i] = pChar;
+                        break;
+                }
 	}
 }
 
@@ -797,7 +799,7 @@ void CLibInfoCharBase::SetPtr(DWORD dwCharID, PCInfoCharBase pChar)
 
 PCInfoBase CLibInfoCharBase::GetPtr(int nNo)
 {
-	return (PCInfoBase)m_paInfo->GetAt (nNo);
+	return (PCInfoBase)m_paInfo->at(nNo);
 }
 
 
@@ -819,12 +821,12 @@ PCInfoBase CLibInfoCharBase::GetPtr(
 		return NULL;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwCharID != dwCharID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -851,12 +853,12 @@ PCInfoBase CLibInfoCharBase::GetPtrAccountID(
 		return NULL;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwAccountID != dwAccountID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -878,31 +880,31 @@ PCInfoBase CLibInfoCharBase::GetPtrFront(
 	BOOL bResult;
 	int i, j, nCount, nCount2;
 	PCInfoCharBase pRet, pInfoCharTmp;
-	CmyArray<POINT, POINT> aptFront;
+	std::vector<POINT> aptFront;
 
 	pRet = NULL;
 
 	pChar->GetFrontPos (aptFront, nDirection);
-	nCount2 = aptFront.GetSize ();
+	nCount2 = aptFront.size();
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfo->GetAt (i);
+		pInfoCharTmp = m_paInfo->at(i);
 		bResult = pInfoCharTmp->IsLogin ();
 		if (bResult == FALSE) {
 			continue;
-		}
+	}
 		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
-		}
+	}
 		for (j = 0; j < nCount2; j ++) {
 			if (pInfoCharTmp->IsHitCharPos (aptFront[j].x, aptFront[j].y)) {
 				break;
-			}
 		}
+	}
 		if (j >= nCount2) {
 			continue;
-		}
+	}
 		pRet = pInfoCharTmp;
 		break;
 	}
@@ -1046,7 +1048,7 @@ DWORD CLibInfoCharBase::GetDataSizeScreen(PCInfoCharBase pCharBase)
 		bResult = IsScreenInside (pCharBase, pChar);
 		if (bResult == FALSE) {
 			continue;
-		}
+	}
 		dwSize += pChar->GetSendDataSize ();
 	}
 
@@ -1087,12 +1089,12 @@ PBYTE CLibInfoCharBase::GetDataScreen(PCInfoCharBase pCharBase)
 
 		if (pCharBase->m_dwMapID != pChar->m_dwMapID) {
 			continue;
-		}
+	}
 		/* 画面外？ */
 		bResult = IsScreenInside (pCharBase, pChar);
 		if (bResult == FALSE) {
 			continue;
-		}
+	}
 		dwSizeTmp	= pChar->GetSendDataSize ();
 		pDataTmp	= pChar->GetSendData ();
 		CopyMemory (&pData[dwOffset], pDataTmp, dwSizeTmp);
@@ -1123,14 +1125,14 @@ DWORD CLibInfoCharBase::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwCharID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 

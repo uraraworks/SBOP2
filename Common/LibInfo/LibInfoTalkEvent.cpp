@@ -87,7 +87,7 @@ int CLibInfoTalkEvent::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -123,9 +123,11 @@ void CLibInfoTalkEvent::Delete(
 {
 	PCInfoTalkEvent pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -143,12 +145,12 @@ void CLibInfoTalkEvent::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwTalkEventID != dwTalkEventID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -173,7 +175,7 @@ void CLibInfoTalkEvent::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -199,7 +201,7 @@ void CLibInfoTalkEvent::Merge(CLibInfoTalkEvent *pSrc)
 			pInfoTmp = (PCInfoTalkEvent)GetNew ();
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
-		}
+	}
 		pInfoTmp->Copy (pInfoSrc);
 	}
 }
@@ -218,18 +220,18 @@ CInfoTalkEvent *CLibInfoTalkEvent::Renew(CInfoTalkEvent *pSrc)
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwTalkEventID != pSrc->m_dwTalkEventID) {
 			continue;
-		}
+	}
 		pInfo = (PCInfoTalkEvent)GetNew ();
 		pInfo->Copy (pSrc);
 		pInfo->m_dwTalkEventID = pInfoTmp->m_dwTalkEventID;
 
-		SAFE_DELETE (pInfoTmp);
-		m_paInfo->SetAt (i, pInfo);
+                SAFE_DELETE (pInfoTmp);
+                (*m_paInfo)[i] = pInfo;
 		pRet = pInfo;
 		break;
 	}
@@ -246,7 +248,7 @@ CInfoTalkEvent *CLibInfoTalkEvent::Renew(CInfoTalkEvent *pSrc)
 
 PCInfoBase CLibInfoTalkEvent::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -264,12 +266,12 @@ PCInfoBase CLibInfoTalkEvent::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwTalkEventID != dwTalkEventID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -355,7 +357,7 @@ PBYTE CLibInfoTalkEvent::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			pDataTmp += sizeof (DWORD);
 			break;
-		}
+	}
 		pDataTmpBack = pDataTmp;
 		InfoTmp.SetSendData (pDataTmp);
 		pInfoTalkEventTmp = (PCInfoTalkEvent)GetNew ();
@@ -365,9 +367,9 @@ PBYTE CLibInfoTalkEvent::SetSendData(PBYTE pSrc)
 		if (pInfoTalkEvent) {
 			pInfoTalkEvent->Copy (pInfoTalkEventTmp);
 			SAFE_DELETE (pInfoTalkEventTmp);
-		} else {
+	} else {
 			Add (pInfoTalkEventTmp);
-		}
+	}
 	}
 
 	return pDataTmp;
@@ -388,14 +390,14 @@ DWORD CLibInfoTalkEvent::GetNewID(void)
 
 	dwRet = 1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwTalkEventID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 
 	return dwRet;

@@ -111,7 +111,7 @@ BOOL CLibInfoAccount::IsUseMacAddr(LPCSTR pszMacAddr)
 		pInfoAccount = (PCInfoAccount)GetPtr (i);
 		if (pInfoAccount->m_strMacAddr == pszMacAddr) {
 			break;
-		}
+	}
 	}
 	if (i >= nCount) {
 		goto Exit;
@@ -151,7 +151,7 @@ int CLibInfoAccount::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -187,9 +187,11 @@ void CLibInfoAccount::Delete(
 {
 	PCInfoAccount pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -207,12 +209,12 @@ void CLibInfoAccount::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwAccountID != dwAccountID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -237,7 +239,7 @@ void CLibInfoAccount::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -260,11 +262,11 @@ DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
 
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		if (pInfo->m_dwCharID == dwCharID) {
 			dwRet = pInfo->m_dwAccountID;
 			break;
-		}
+	}
 	}
 
 	return dwRet;
@@ -279,7 +281,7 @@ DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
 
 PCInfoBase CLibInfoAccount::GetPtr(int nNo)
 {
-	return (PCInfoBase)m_paInfo->GetAt (nNo);
+	return (PCInfoBase)m_paInfo->at(nNo);
 }
 
 
@@ -297,12 +299,12 @@ PCInfoAccount CLibInfoAccount::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwAccountID != dwAccountID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -325,12 +327,12 @@ PCInfoAccount CLibInfoAccount::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_strAccount != pszAccount) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -353,12 +355,12 @@ PCInfoAccount CLibInfoAccount::GetPtrSessionID(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwSessionID != dwSessionID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -381,12 +383,12 @@ PCInfoAccount CLibInfoAccount::GetPtrMacAddr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_strMacAddr != pszMacAddr) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -409,14 +411,14 @@ DWORD CLibInfoAccount::GetNewID(void)
 
 	dwRet = 1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwAccountID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 
 	return dwRet;

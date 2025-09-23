@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "LayerCloud.h"
 
@@ -47,7 +48,7 @@ private:
 	DWORD		m_dwLastTimeProc;				/* 最終処理時間 */
 	CImg32		*m_pDibBack;					/* 背景画像 */
 
-	CmyArray<PSYSTEMMSGINFO, PSYSTEMMSGINFO>	m_aSystemMsgInfo;	/* システムメッセージ情報 */
+	std::vector<PSYSTEMMSGINFO>	m_aSystemMsgInfo;	/* システムメッセージ情報 */
 } CLayerSystemMsg, *PCLayerSystemMsg;
 
 /* Copyright(C)URARA-works 2007 */

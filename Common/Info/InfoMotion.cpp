@@ -163,7 +163,7 @@ DWORD CInfoMotion::GetDataSize(void)
 			sizeof (m_ptDrawPosPile3)	+
 			sizeof (m_ptDrawPosPile2)	+
 			sizeof (int)				+
-			(sizeof (int) * m_anDrawList.GetSize ());
+			(sizeof (int) * m_anDrawList.size());
 
 	return dwRet;
 }
@@ -207,7 +207,7 @@ DWORD CInfoMotion::GetDataSizeNo(int nNo)
 	case 22:	dwRet = sizeof (m_ptDrawPosPile2);	break;
 	case 23:	dwRet = sizeof (m_ptDrawPosPile3);	break;
 	case 24:	dwRet = sizeof (int);				break;
-	case 25:	dwRet = sizeof (int) * m_anDrawList.GetSize ();	break;
+	case 25:	dwRet = sizeof (int) * m_anDrawList.size();	break;
 	}
 
 	return dwRet;
@@ -274,12 +274,12 @@ PBYTE CInfoMotion::GetWriteData(int nNo, PDWORD pdwSize)
 	case 22:	pSrc = (PBYTE)&m_ptDrawPosPile2;	break;
 	case 23:	pSrc = (PBYTE)&m_ptDrawPosPile3;	break;
 	case 24:
-		nTmp = m_anDrawList.GetSize ();
+		nTmp = m_anDrawList.size();
 		pSrc = (PBYTE)&nTmp;
 		break;
 	case 25:
 		pTmp = pRet;
-		nCount = m_anDrawList.GetSize ();
+		nCount = m_anDrawList.size();
 		for (i = 0; i < nCount; i ++) {
 			nTmp = m_anDrawList[i];
 			CopyMemoryRenew (pTmp, &nTmp, sizeof (nTmp), pTmp);
@@ -339,16 +339,16 @@ DWORD CInfoMotion::ReadElementData(
 	case 22:	pDst = (PBYTE)&m_ptDrawPosPile2;	dwSize = sizeof (m_ptDrawPosPile2);		break;
 	case 23:	pDst = (PBYTE)&m_ptDrawPosPile3;	dwSize = sizeof (m_ptDrawPosPile3);		break;
 	case 24:
-		m_anDrawList.RemoveAll ();
+		m_anDrawList.clear();
 		CopyMemory (&nCount, pSrc, sizeof (nCount));
 		dwSize = sizeof (nCount);
 		for (i = 0; i < nCount; i ++) {
-			m_anDrawList.Add (0);
+			m_anDrawList.push_back (0);
 		}
 		break;
 	case 25:
 		pTmp = pSrc;
-		nCount = m_anDrawList.GetSize ();
+		nCount = m_anDrawList.size();
 		for (i = 0; i < nCount; i ++) {
 			CopyMemoryRenew (&nTmp, pTmp, sizeof (nTmp), pTmp);
 			m_anDrawList[i] = nTmp;
@@ -432,7 +432,7 @@ PBYTE CInfoMotion::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_ptDrawPosPile2,	sizeof (m_ptDrawPosPile2),	pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_ptDrawPosPile3,	sizeof (m_ptDrawPosPile3),	pDataTmp);
 
-	nCount = m_anDrawList.GetSize ();
+	nCount = m_anDrawList.size();
 	CopyMemoryRenew (pDataTmp, &nCount, sizeof (nCount), pDataTmp);
 	for (i = 0; i < nCount; i ++) {
 		nTmp = m_anDrawList[i];
@@ -481,11 +481,11 @@ PBYTE CInfoMotion::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_ptDrawPosPile2,		pDataTmp, sizeof (m_ptDrawPosPile2),	pDataTmp);
 	CopyMemoryRenew (&m_ptDrawPosPile3,		pDataTmp, sizeof (m_ptDrawPosPile3),	pDataTmp);
 
-	m_anDrawList.RemoveAll ();
+	m_anDrawList.clear();
 	CopyMemoryRenew (&nCount, pDataTmp, sizeof (nCount), pDataTmp);
 	for (i = 0; i < nCount; i ++) {
 		CopyMemoryRenew (&nTmp, pDataTmp, sizeof (nTmp), pDataTmp);
-		m_anDrawList.Add (nTmp);
+		m_anDrawList.push_back (nTmp);
 	}
 
 	return pDataTmp;
@@ -524,7 +524,7 @@ void CInfoMotion::Copy(CInfoMotion *pSrc)
 	m_ptDrawPosPile1	= pSrc->m_ptDrawPosPile1;
 	m_ptDrawPosPile2	= pSrc->m_ptDrawPosPile2;
 	m_ptDrawPosPile3	= pSrc->m_ptDrawPosPile3;
-	m_anDrawList.Copy (&pSrc->m_anDrawList);
+	m_anDrawList = pSrc->m_anDrawList;
 }
 
 /* Copyright(C)URARA-works 2007 */

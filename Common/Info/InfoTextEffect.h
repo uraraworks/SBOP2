@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoBase.h"
 
@@ -58,7 +59,7 @@ public:
 					m_dwData;				/* データ */
 	CmyString		m_strData;				/* データ */
 } CInfoTextEffect, *PCInfoTextEffect;
-typedef CmyArray<PCInfoTextEffect, PCInfoTextEffect>	  ARRAYTEXTEFFECT;
-typedef CmyArray<PCInfoTextEffect, PCInfoTextEffect>	*PARRAYTEXTEFFECT;
+typedef std::vector<PCInfoTextEffect>	  ARRAYTEXTEFFECT;
+typedef std::vector<PCInfoTextEffect>	*PARRAYTEXTEFFECT;
 
 /* Copyright(C)URARA-works 2008 */

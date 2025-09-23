@@ -455,7 +455,7 @@ void CDlgAdminItemList::OnDelete()
 		if (pInfoItem == NULL) {
 			continue;
 		}
-		adwItemID.Add (dwItemID);
+		adwItemID.push_back (dwItemID);
 		nCount ++;
 	}
 	if (nCount <= 0) {

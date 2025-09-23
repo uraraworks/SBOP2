@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoBase.h"
 
@@ -48,7 +49,7 @@ public:
 
 	/* 持ち物 */
 } CInfoItemWeapon, *PCInfoItemWeapon;
-typedef CmyArray<PCInfoItemWeapon, PCInfoItemWeapon>	   ARRAYWEAPONINFO;
-typedef CmyArray<PCInfoItemWeapon, PCInfoItemWeapon>	 *PARRAYWEAPONINFO;
+typedef std::vector<PCInfoItemWeapon>	   ARRAYWEAPONINFO;
+typedef std::vector<PCInfoItemWeapon>	 *PARRAYWEAPONINFO;
 
 /* Copyright(C)URARA-works 2008 */

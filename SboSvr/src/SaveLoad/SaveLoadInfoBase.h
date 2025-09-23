@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "LibInfoBase.h"
 
@@ -23,7 +24,7 @@ typedef struct _HEADERINFO {
 	DWORD		dwDataSize;							/* データサイズ */
 } HEADERINFO, *PHEADERINFO;
 
-typedef CmyArray<PHEADERINFO, PHEADERINFO>	ARRAYHEADERINFO;
+typedef std::vector<PHEADERINFO>	ARRAYHEADERINFO;
 
 
 /* ========================================================================= */

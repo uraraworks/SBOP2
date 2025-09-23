@@ -39,7 +39,7 @@ struct LINEINFO {
 		strText = li.strText;
 		crFore = li.crFore;
 		crBack = li.crBack;
-		aTokens.Copy(li.aTokens);
+		aTokens = li.aTokens;
 	}
 };
 

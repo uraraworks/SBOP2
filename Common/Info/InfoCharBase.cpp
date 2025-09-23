@@ -356,8 +356,8 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += (m_strCharName.GetLength () + 1);
 	dwRet += (m_strSpeak.GetLength () + 1);
 	dwRet += (m_strTalk.GetLength () + 1);
-	dwRet += ((m_adwItemID.GetSize () + 1) * sizeof (DWORD));
-	dwRet += ((m_adwSkillID.GetSize () + 1) * sizeof (DWORD));
+	dwRet += ((m_adwItemID.size() + 1) * sizeof (DWORD));
+	dwRet += ((m_adwSkillID.size() + 1) * sizeof (DWORD));
 	dwRet += sizeof (m_sizeSearchDistance);		/* 策敵範囲 */
 	/* NPC発生 */
 	dwRet += sizeof (m_dwPutCycle);				/* 発生周期 */
@@ -417,8 +417,8 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 31:	dwRet = (m_strCharName.	GetLength () + 1);	break;
 	case 32:	dwRet = (m_strSpeak.	GetLength () + 1);	break;
 	case 33:	dwRet = (m_strTalk.		GetLength () + 1);	break;
-	case 34:	dwRet = ((m_adwItemID.GetSize () + 1) * sizeof (DWORD));	break;
-	case 35:	dwRet = ((m_adwSkillID.GetSize () + 1) * sizeof (DWORD));	break;
+	case 34:	dwRet = ((m_adwItemID.size() + 1) * sizeof (DWORD));	break;
+	case 35:	dwRet = ((m_adwSkillID.size() + 1) * sizeof (DWORD));	break;
 	case 36:	dwRet = sizeof (m_bBlock);					break;
 	case 37:	dwRet = sizeof (m_bPush);					break;
 	case 38:	dwRet = sizeof (m_dwEquipItemIDCloth);		break;
@@ -546,7 +546,7 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 33:	pSrc = (PBYTE)(LPCSTR)m_strTalk;		break;
 	case 34:
 		pTmp	= pRet;
-		nCount	= m_adwItemID.GetSize ();
+		nCount	= m_adwItemID.size();
 
 		for (i = 0; i < nCount; i ++) {
 			dwTmp = m_adwItemID[i];
@@ -557,7 +557,7 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 		break;
 	case 35:
 		pTmp	= pRet;
-		nCount	= m_adwSkillID.GetSize ();
+		nCount	= m_adwSkillID.size();
 
 		for (i = 0; i < nCount; i ++) {
 			dwTmp = m_adwSkillID[i];
@@ -696,9 +696,9 @@ DWORD CInfoCharBase::ReadElementData(
 			if (dwTmp == 0) {
 				break;
 			}
-			m_adwItemID.Add (dwTmp);
+			m_adwItemID.push_back (dwTmp);
 		}
-		dwSize = (m_adwItemID.GetSize () + 1) * sizeof (DWORD);
+		dwSize = (m_adwItemID.size() + 1) * sizeof (DWORD);
 		break;
 	case 35:
 		pTmp	= pSrc;
@@ -709,9 +709,9 @@ DWORD CInfoCharBase::ReadElementData(
 			if (dwTmp == 0) {
 				break;
 			}
-			m_adwSkillID.Add (dwTmp);
+			m_adwSkillID.push_back (dwTmp);
 		}
-		dwSize = (m_adwSkillID.GetSize () + 1) * sizeof (DWORD);
+		dwSize = (m_adwSkillID.size() + 1) * sizeof (DWORD);
 		break;
 	case 36:	pDst = (PBYTE)&m_bBlock;					dwSize = sizeof (m_bBlock);					break;
 	case 37:	pDst = (PBYTE)&m_bPush;						dwSize = sizeof (m_bPush);					break;
@@ -872,7 +872,7 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += (m_strTalk.	GetLength () + 1);
 	dwRet += (m_abyMark.	GetSize () + 1);
 	dwRet += ((m_adwItemID.	GetSize () + 1) * sizeof (DWORD));
-	dwRet += ((m_adwSkillID.GetSize () + 1) * sizeof (DWORD));
+	dwRet += ((m_adwSkillID.size() + 1) * sizeof (DWORD));
 	dwRet += sizeof (m_sizeSearchDistance);		/* 策敵範囲 */
 	/* NPC発生 */
 	dwRet += sizeof (m_dwPutCycle);				/* 発生周期 */
@@ -989,21 +989,21 @@ PBYTE CInfoCharBase::GetSendData(void)
 	strcpyRenew ((LPSTR)pDataTmp, m_strSpeak, pDataTmp);													/* 発言内容 */
 	strcpyRenew ((LPSTR)pDataTmp, m_strTalk,  pDataTmp);													/* 会話データ */
 
-	nCount = m_abyMark.GetSize ();
+	nCount = m_abyMark.size();
 	for (i = 0; i < nCount; i ++) {
 		byTmp = m_abyMark[i];
 		CopyMemoryRenew (pDataTmp, &byTmp, sizeof (byTmp), pDataTmp);	/* 名前の前に表示するマーク番号 */
 	}
 	byTmp = 0;
 	CopyMemoryRenew (pDataTmp, &byTmp, sizeof (byTmp), pDataTmp);
-	nCount = m_adwItemID.GetSize ();
+	nCount = m_adwItemID.size();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwItemID[i];
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* 所持アイテム */
 	}
 	dwTmp = 0;
 	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
-	nCount = m_adwSkillID.GetSize ();
+	nCount = m_adwSkillID.size();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwSkillID[i];
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* 所持スキル */
@@ -1039,9 +1039,9 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 
 	pRet = pSrc;
 
-	m_abyMark.RemoveAll ();
-	m_adwItemID.RemoveAll ();
-	m_adwSkillID.RemoveAll ();
+	m_abyMark.clear();
+	m_adwItemID.clear();
+	m_adwSkillID.clear();
 
 	pDataTmp = pSrc;
 	CopyMemoryRenew (&m_dwCharID,				pDataTmp, sizeof (m_dwCharID),					pDataTmp);	/* キャラID */
@@ -1137,21 +1137,21 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 		if (byTmp == 0) {
 			break;
 		}
-		m_abyMark.Add (byTmp);
+		m_abyMark.push_back (byTmp);
 	}
 	while (1) {
 		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* 所持アイテム */
 		if (dwTmp == 0) {
 			break;
 		}
-		m_adwItemID.Add (dwTmp);
+		m_adwItemID.push_back (dwTmp);
 	}
 	while (1) {
 		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);	/* 所持スキル */
 		if (dwTmp == 0) {
 			break;
 		}
-		m_adwSkillID.Add (dwTmp);
+		m_adwSkillID.push_back (dwTmp);
 	}
 
 	CopyMemoryRenew (&m_sizeSearchDistance, pDataTmp, sizeof (m_sizeSearchDistance), pDataTmp);		/* 策敵範囲 */
@@ -1391,7 +1391,7 @@ void CInfoCharBase::GetFrontPos(
 /* ========================================================================= */
 
 void CInfoCharBase::GetFrontPos(
-	CmyArray<POINT, POINT> &aptPos,		/* [ou] 取得先 */
+	std::vector<POINT> &aptPos,		/* [ou] 取得先 */
 	int nDirection	/*-1*/)				/* [in] 向き */
 {
 	int i, nCount;
@@ -1399,7 +1399,7 @@ void CInfoCharBase::GetFrontPos(
 	POINT ptFront, ptTmp;
 	int nFrontPosX[] = {0, 0, 0, 1, 1, 1, 0, 0}, nFrontPosY[] = {0, 1, 0, 0, 0, 1, 1, 0};
 
-	aptPos.RemoveAll ();
+	aptPos.clear();
 	if (nDirection == -1) {
 		nDirection = m_nDirection;
 	}
@@ -1425,7 +1425,7 @@ void CInfoCharBase::GetFrontPos(
 		ptTmp.x += nFrontPosX[nDirection];
 		ptTmp.y += nFrontPosY[nDirection];
 		for (i = 0; i < nCount; i ++) {
-			aptPos.Add (ptTmp);
+			aptPos.push_back (ptTmp);
 			ptTmp.x ++;
 		}
 		break;
@@ -1438,14 +1438,14 @@ void CInfoCharBase::GetFrontPos(
 		ptTmp.x --;
 		ptTmp.y += nFrontPosY[nDirection];
 		for (i = 0; i < nCount + 1; i ++) {
-			aptPos.Add (ptTmp);
+			aptPos.push_back (ptTmp);
 			ptTmp.x ++;
 		}
 		ptTmp  = ptFront;
 		nCount = sizeChar.cy;
 		ptTmp.x += nFrontPosX[nDirection];
 		for (i = 0; i < nCount; i ++) {
-			aptPos.Add (ptTmp);
+			aptPos.push_back (ptTmp);
 			ptTmp.y ++;
 		}
 		break;
@@ -1763,7 +1763,7 @@ void CInfoCharBase::GetMapPosRect(RECT &rcDst)
 
 void CInfoCharBase::SetItem(ARRAYDWORD *padwItemID)
 {
-	m_adwItemID.Copy (padwItemID);
+	m_adwItemID = *padwItemID;
 }
 
 
@@ -1780,7 +1780,7 @@ BOOL CInfoCharBase::IsItemAdd(void)
 
 	bRet = FALSE;
 
-	nCount = m_adwItemID.GetSize ();
+	nCount = m_adwItemID.size();
 	/* もう持てない？ */
 	if (nCount >= m_nMaxItemCount) {
 		goto Exit;
@@ -1816,7 +1816,7 @@ BOOL CInfoCharBase::HaveItem(DWORD dwItemID)
 	int i, nCount;
 
 	bRet = FALSE;
-	nCount = m_adwItemID.GetSize ();
+	nCount = m_adwItemID.size();
 	for (i = 0; i < nCount; i ++) {
 		if (m_adwItemID[i] == dwItemID) {
 			break;
@@ -1944,7 +1944,7 @@ void CInfoCharBase::SetTarget(CInfoCharBase *pCharTarget)
 
 void CInfoCharBase::SetSkill(ARRAYDWORD *padwSkillID)
 {
-	m_adwSkillID.Copy (padwSkillID);
+	m_adwSkillID = *padwSkillID;
 }
 
 
@@ -1960,7 +1960,7 @@ BOOL CInfoCharBase::HaveSkill(DWORD dwSkillID)
 	int i, nCount;
 
 	bRet = FALSE;
-	nCount = m_adwSkillID.GetSize ();
+	nCount = m_adwSkillID.size();
 	for (i = 0; i < nCount; i ++) {
 		if (m_adwSkillID[i] == dwSkillID) {
 			break;
@@ -1989,14 +1989,14 @@ BOOL CInfoCharBase::AddSkill(DWORD dwSkillID)
 
 	bRet = FALSE;
 
-	nCount = m_adwSkillID.GetSize ();
+	nCount = m_adwSkillID.size();
 	for (i = 0; i < nCount; i ++) {
 		if (m_adwSkillID[i] == dwSkillID) {
 			break;
 		}
 	}
 	if (i >= nCount) {
-		m_adwSkillID.Add (dwSkillID);
+		m_adwSkillID.push_back (dwSkillID);
 		bRet = TRUE;
 	}
 
@@ -2017,10 +2017,10 @@ BOOL CInfoCharBase::DeleteSkill(DWORD dwSkillID)
 
 	bRet = FALSE;
 
-	nCount = m_adwSkillID.GetSize ();
+	nCount = m_adwSkillID.size();
 	for (i = 0; i < nCount; i ++) {
 		if (m_adwSkillID[i] == dwSkillID) {
-			m_adwSkillID.RemoveAt (i);
+			m_adwSkillID.erase (m_adwSkillID.begin () + i);
 			bRet = TRUE;
 			break;
 		}
@@ -2271,20 +2271,20 @@ void CInfoCharBase::Copy(CInfoCharBase *pSrc)
 	m_clSpeak					= pSrc->m_clSpeak;
 	m_strTalk					= pSrc->m_strTalk;				/* 会話データ */
 
-	m_abyMark.RemoveAll ();
-	nCount = pSrc->m_abyMark.GetSize ();
+	m_abyMark.clear();
+	nCount = pSrc->m_abyMark.size();
 	for (i = 0; i < nCount; i ++) {
-		m_abyMark.Add (pSrc->m_abyMark[i]);
+		m_abyMark.push_back (pSrc->m_abyMark[i]);
 	}
-	m_adwItemID.RemoveAll ();
-	nCount = pSrc->m_adwItemID.GetSize ();
+	m_adwItemID.clear();
+	nCount = pSrc->m_adwItemID.size();
 	for (i = 0; i < nCount; i ++) {
-		m_adwItemID.Add (pSrc->m_adwItemID[i]);
+		m_adwItemID.push_back (pSrc->m_adwItemID[i]);
 	}
-	m_adwSkillID.RemoveAll ();
-	nCount = pSrc->m_adwSkillID.GetSize ();
+	m_adwSkillID.clear();
+	nCount = pSrc->m_adwSkillID.size();
 	for (i = 0; i < nCount; i ++) {
-		m_adwSkillID.Add (pSrc->m_adwSkillID[i]);
+		m_adwSkillID.push_back (pSrc->m_adwSkillID[i]);
 	}
 
 	SetName (pSrc->m_strCharName);
@@ -2338,7 +2338,7 @@ void CInfoCharBase::RenewBlockMapArea(
 	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	POINT ptTmp, ptTmpBack;
 
-	m_aposBockMapArea.RemoveAll ();
+	m_aposBockMapArea.clear();
 	if (nDirection < 0) {
 		/* クリアのみ */
 		return;
@@ -2399,7 +2399,7 @@ void CInfoCharBase::RenewBlockMapArea(
 		}
 		break;
 	}
-	m_aposBockMapArea.Add (ptTmp);
+	m_aposBockMapArea.push_back (ptTmp);
 
 	ptTmpBack = ptTmp;
 	if (x % 2) {
@@ -2409,7 +2409,7 @@ void CInfoCharBase::RenewBlockMapArea(
 		case 4:
 		case 5:
 			ptTmp.x ++;
-			m_aposBockMapArea.Add (ptTmp);
+			m_aposBockMapArea.push_back (ptTmp);
 			break;
 		}
 	}

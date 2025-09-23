@@ -37,7 +37,7 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	PCInfoMapEventBase pInfoMapEventBase;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
 	CPacketCHAR_STATE PacketCHAR_STATE;
-	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
+	std::vector<PCInfoCharSvr> apInfoChar;
 
 	bRet = TRUE;
 	pInfoMapEventBase = NULL;
@@ -147,7 +147,7 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 	PCInfoCharSvr pInfoCharTmp;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
 	CPacketCHAR_STATE PacketCHAR_STATE;
-	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
+	std::vector<PCInfoCharSvr> apInfoChar;
 
 	bRet = FALSE;
 	pInfoMapEvent = (PCInfoMapEventMOVE)pInfoMapEventBase;
@@ -155,8 +155,8 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 	nDirection = pInfoMapEvent->m_nDirection;
 
 	GetTailCharInfo (pInfoChar, apInfoChar);
-	apInfoChar.InsertAt (0, pInfoChar);
-	nCount = apInfoChar.GetSize ();
+	apInfoChar.insert (apInfoChar.begin (), pInfoChar);
+	nCount = apInfoChar.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = apInfoChar[i];
 
@@ -195,7 +195,7 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 	PCInfoMapEventMAPMOVE pInfoMapEvent;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
 	CPacketCHAR_STATE PacketCHAR_STATE;
-	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
+	std::vector<PCInfoCharSvr> apInfoChar;
 
 	bRet = FALSE;
 	pInfoMapEvent = (PCInfoMapEventMAPMOVE)pInfoMapEventBase;
@@ -203,9 +203,9 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 	nDirection = pInfoMapEvent->m_nDirection;
 
 	GetTailCharInfo (pInfoChar, apInfoChar);
-	apInfoChar.InsertAt (0, pInfoChar);
+	apInfoChar.insert (apInfoChar.begin (), pInfoChar);
 
-	nCount = apInfoChar.GetSize ();
+	nCount = apInfoChar.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = apInfoChar[i];
 
@@ -241,7 +241,7 @@ BOOL CLibInfoCharSvr::MapEventProcINITSTATUS(CInfoCharSvr *pInfoChar, CInfoMapEv
 {
 	BOOL bRet;
 	PCInfoMapEventINITSTATUS pInfoMapEvent;
-	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
+	std::vector<PCInfoCharSvr> apInfoChar;
 
 	bRet = TRUE;
 	pInfoMapEvent = (PCInfoMapEventINITSTATUS)pInfoMapEventBase;

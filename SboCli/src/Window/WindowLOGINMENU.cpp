@@ -80,7 +80,7 @@ void CWindowLOGINMENU::Update(void)
 	SetEnable (1, FALSE);
 
 	pInfoAccount	= m_pMgrData->GetAccount ();
-	nCharCount		= pInfoAccount->m_adwCharID.GetSize ();
+	nCharCount		= pInfoAccount->m_adwCharID.size();
 	if (nCharCount == 0) {
 		SetEnable (0, FALSE);
 		SetEnable (2, FALSE);

@@ -239,15 +239,15 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 		nResult = PLAYRES_ADMINLEVEL_ALL;
 	}
 //Todo:
-	pInfoChar->m_abyMark.RemoveAll ();
+	pInfoChar->m_abyMark.clear();
 	if (pInfoChar->m_strCharName == "春うらら") {
-		pInfoChar->m_abyMark.Add (2);
+		pInfoChar->m_abyMark.push_back (2);
 		nResult = PLAYRES_ADMINLEVEL_ALL;
 	} else if (pInfoChar->m_strCharName == "VeLTiNA") {
-		pInfoChar->m_abyMark.Add (3);
+		pInfoChar->m_abyMark.push_back (3);
 		nResult = PLAYRES_ADMINLEVEL_ALL;
 	}
-	pInfoChar->m_abyMark.Add (1);
+	pInfoChar->m_abyMark.push_back (1);
 
 	PacketITEM_ITEMTYPEINFO.Make (m_pLibInfoItemType);
 	m_pSock->SendTo (dwSessionID, &PacketITEM_ITEMTYPEINFO);

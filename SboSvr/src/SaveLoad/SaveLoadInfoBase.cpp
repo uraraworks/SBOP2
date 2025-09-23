@@ -207,11 +207,11 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 	***************************/
 
 	m_dwDataSize	= 0;
-	nCountElement	= m_pHeaderInfo->GetSize ();
-	nCountData		= anSaveNo.GetSize ();
+	nCountElement	= m_pHeaderInfo->size();
+	nCountData		= anSaveNo.size();
 
 	for (i = 0; i < nCountElement; i ++) {
-		pInfoElement = m_pHeaderInfo->GetAt (i);
+		pInfoElement = m_pHeaderInfo->at(i);
 		pInfoElement->dwOffset		= 0;
 		pInfoElement->dwDataSize	= 0;
 
@@ -236,8 +236,8 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 	ZeroMemory (m_pData, m_dwHeaderSize + m_dwDataSize + 8);
 	pData = m_pData;
 
-	dwColumnCount	= m_pHeaderInfo->GetSize ();
-	dwDataCount		= anSaveNo.GetSize ();
+	dwColumnCount	= m_pHeaderInfo->size();
+	dwDataCount		= anSaveNo.size();
 
 	/* カラム数を書き込み */
 	CopyMemoryDataDst (pData, (PBYTE)&dwColumnCount, sizeof (dwColumnCount));
@@ -247,7 +247,7 @@ void CSaveLoadInfoBase::MakeWriteData(void)
 	/* ヘッダ部分を書き込み */
 	nCount = (int)dwColumnCount;
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_pHeaderInfo->GetAt (i);
+		pInfo = m_pHeaderInfo->at(i);
 
 		strcpy ((LPSTR)pData, pInfo->szName);
 		pData += (strlen (pInfo->szName) + 1);
@@ -318,9 +318,9 @@ void CSaveLoadInfoBase::ReadHeader(void)
 		データを読み込み
 	***********************/
 
-	dwCountElement = m_pHeaderInfo->GetSize ();
+	dwCountElement = m_pHeaderInfo->size();
 	for (i = 0; i < dwCountElement; i ++) {
-		pInfoElement = m_pHeaderInfo->GetAt (i);
+		pInfoElement = m_pHeaderInfo->at(i);
 		if (pInfoElement->dwOffset == 0) {
 			continue;
 		}
@@ -399,10 +399,10 @@ PHEADERINFO CSaveLoadInfoBase::GetHeaderInfo(LPCSTR pszName)
 	PHEADERINFO pRet, pInfo;
 
 	pRet	= NULL;
-	nCount	= m_pHeaderInfo->GetSize ();
+	nCount	= m_pHeaderInfo->size();
 
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_pHeaderInfo->GetAt (i);
+		pInfo = m_pHeaderInfo->at(i);
 		if (strcmp (pInfo->szName, pszName) == 0) {
 			pRet = pInfo;
 			break;
@@ -424,14 +424,14 @@ void CSaveLoadInfoBase::DelAllHeaderInfo(void)
 	int i, nCount;
 
 	if (m_pHeaderInfo) {
-		nCount = m_pHeaderInfo->GetSize ();
+		nCount = m_pHeaderInfo->size();
 		for (i = 0; i < nCount; i ++) {
 			PHEADERINFO pInfo;
 
-			pInfo = m_pHeaderInfo->GetAt (i);
+			pInfo = m_pHeaderInfo->at(i);
 			SAFE_DELETE (pInfo);
 		}
-		m_pHeaderInfo->RemoveAll ();
+		m_pHeaderInfo->clear();
 		m_dwHeaderSize = 0;
 	}
 }

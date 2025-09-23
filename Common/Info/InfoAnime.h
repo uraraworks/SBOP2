@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoBase.h"
 
@@ -51,7 +52,7 @@ public:
 	WORD		m_wGrpIDBase,								/* グラフィックID(下地) */
 				m_wGrpIDPile;								/* グラフィックID(重ね合わせ用ID) */
 } CInfoAnime, *PCInfoAnime;
-typedef CmyArray<PCInfoAnime, PCInfoAnime>	   ARRAYANIMEINFO;
-typedef CmyArray<PCInfoAnime, PCInfoAnime>	 *PARRAYANIMEINFO;
+typedef std::vector<PCInfoAnime>	   ARRAYANIMEINFO;
+typedef std::vector<PCInfoAnime>	 *PARRAYANIMEINFO;
 
 /* Copyright(C)URARA-works 2005 */

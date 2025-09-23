@@ -130,7 +130,7 @@ DWORD CInfoMapObject::GetDataSizeNo(int nNo)
 
 	dwRet = 0;
 
-	nTmp = m_aInfoAnime.GetSize ();
+	nTmp = m_aInfoAnime.size();
 
 	switch (nNo) {
 	case 0:		dwRet = sizeof (m_dwObjectID);			break;		/* オブジェクトID */
@@ -181,7 +181,7 @@ PBYTE CInfoMapObject::GetWriteData(int nNo, PDWORD pdwSize)
 	pSrc		= NULL;
 	dwSize		= GetDataSizeNo (nNo);
 	*pdwSize	= dwSize;
-	nCount		= m_aInfoAnime.GetSize ();
+	nCount		= m_aInfoAnime.size();
 
 	if (dwSize == 0) {
 		goto Exit;
@@ -281,7 +281,7 @@ DWORD CInfoMapObject::ReadElementData(
 		break;
 	case 8:		/* 待ち時間(×１０ミリ秒) */
 		pSrcTmp = pSrc;
-		nCount  = m_aInfoAnime.GetSize ();
+		nCount  = m_aInfoAnime.size();
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
 			CopyMemoryRenew (&pInfo->byWait, pSrcTmp, sizeof (pInfo->byWait), pSrcTmp);
@@ -290,7 +290,7 @@ DWORD CInfoMapObject::ReadElementData(
 		break;
 	case 9:		/* 透明度 */
 		pSrcTmp = pSrc;
-		nCount  = m_aInfoAnime.GetSize ();
+		nCount  = m_aInfoAnime.size();
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
 			CopyMemoryRenew (&pInfo->byLevel, pSrcTmp, sizeof (pInfo->byLevel), pSrcTmp);
@@ -299,7 +299,7 @@ DWORD CInfoMapObject::ReadElementData(
 		break;
 	case 10:	/* 画像ID */
 		pSrcTmp = pSrc;
-		nCount  = m_aInfoAnime.GetSize ();
+		nCount  = m_aInfoAnime.size();
 		for (i = 0; i < nCount; i ++) {
 			pInfo = GetAnimePtr (i);
 			dwSizeTmp = sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy;
@@ -364,7 +364,7 @@ PBYTE CInfoMapObject::GetSendData(void)
 	ZeroMemory (pData, dwSize);
 
 	pDataTmp = pData;
-	nCount   = m_aInfoAnime.GetSize ();
+	nCount   = m_aInfoAnime.size();
 
 	CopyMemoryRenew (pDataTmp, &m_dwObjectID,	sizeof (m_dwObjectID),	pDataTmp);		/* オブジェクトID */
 	CopyMemoryRenew (pDataTmp, &m_dwAttr,		sizeof (m_dwAttr),		pDataTmp);		/* オブジェクトの属性 */
@@ -447,7 +447,7 @@ PBYTE CInfoMapObject::SetSendData(PBYTE pSrc)
 
 int CInfoMapObject::GetAnimeCount(void)
 {
-	return m_aInfoAnime.GetSize ();
+	return m_aInfoAnime.size();
 }
 
 
@@ -467,7 +467,7 @@ void CInfoMapObject::AddAnime(void)
 	pInfo->pwGrpID = new WORD[m_sizeGrp.cx * m_sizeGrp.cy];
 	ZeroMemory ((PBYTE)pInfo->pwGrpID, sizeof (WORD) * m_sizeGrp.cx * m_sizeGrp.cy);
 
-	m_aInfoAnime.Add (pInfo);
+	m_aInfoAnime.push_back (pInfo);
 }
 
 
@@ -485,7 +485,9 @@ void CInfoMapObject::DeleteAnime(int nNo)
 	SAFE_DELETE_ARRAY (pInfo->pwGrpID);
 	SAFE_DELETE (pInfo);
 
-	m_aInfoAnime.RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_aInfoAnime.size()))) {
+		m_aInfoAnime.erase (m_aInfoAnime.begin () + nNo);
+	}
 }
 
 
@@ -499,7 +501,7 @@ void CInfoMapObject::DeleteAllAnime(void)
 {
 	int i, nCount;
 
-	nCount = m_aInfoAnime.GetSize ();
+	nCount = m_aInfoAnime.size();
 	for (i = 0; i < nCount; i ++) {
 		DeleteAnime (0);
 	}
@@ -548,7 +550,7 @@ void CInfoMapObject::RenewGrpSize(int cx/*-1*/, int cy/*-1*/)
 	m_pHit = pTmp;
 
 	/* アニメ毎の設定 */
-	nCount = m_aInfoAnime.GetSize ();
+	nCount = m_aInfoAnime.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetAnimePtr (i);
 
@@ -604,12 +606,12 @@ PSTMAPOBJECTANIMEINFO CInfoMapObject::GetAnimePtr(int nNo)
 
 	pRet = NULL;
 
-	nCount = m_aInfoAnime.GetSize ();
+	nCount = m_aInfoAnime.size();
 	if (nNo >= nCount) {
 		goto Exit;
 	}
 
-	pRet = m_aInfoAnime.GetAt (nNo);
+	pRet = m_aInfoAnime[nNo];
 Exit:
 	return pRet;
 }

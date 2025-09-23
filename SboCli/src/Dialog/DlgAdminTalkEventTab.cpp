@@ -267,7 +267,7 @@ void CDlgAdminTalkEventTab::Renew(void)
 	m_List.DeleteAllItems ();
 	m_pInfo->GetEventArray (m_nPage, apInfo);
 
-	nCount = apInfo.GetSize ();
+	nCount = apInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = apInfo[i];
 		strTmp = "未選択";

@@ -117,9 +117,9 @@ void CMgrWindow::Update(void)
 	int i, nCount;
 	PCWindowBase pWindow;
 
-	nCount = m_paWindow->GetSize ();
+	nCount = m_paWindow->size();
 	for (i = 0; i < nCount; i ++) {
-		pWindow = m_paWindow->GetAt (i);
+		pWindow = m_paWindow->at(i);
 		pWindow->Update ();
 	}
 }
@@ -136,9 +136,9 @@ void CMgrWindow::Draw(PCImg32 pDst)
 	int i, nCount;
 	PCWindowBase pWindow;
 
-	nCount = m_paWindow->GetSize ();
+	nCount = m_paWindow->size();
 	for (i = 0; i < nCount; i ++) {
-		pWindow = m_paWindow->GetAt (i);
+		pWindow = m_paWindow->at(i);
 		if (pWindow->IsShow () == FALSE) {
 			continue;
 		}
@@ -160,9 +160,9 @@ BOOL CMgrWindow::TimerProc(void)
 	PCWindowBase pWindow;
 
 	bRet = FALSE;
-	nCount = m_paWindow->GetSize ();
+	nCount = m_paWindow->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		pWindow = m_paWindow->GetAt (i);
+		pWindow = m_paWindow->at(i);
 		if (pWindow->IsDelete ()) {
 			Delete (pWindow->GetID ());
 			bRet = TRUE;
@@ -191,9 +191,9 @@ void CMgrWindow::KeyProc(BYTE byEvent, BOOL bDown)
 	int i, nCount;
 	PCWindowBase pWindow;
 
-	nCount = m_paWindow->GetSize ();
+	nCount = m_paWindow->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		pWindow = m_paWindow->GetAt (i);
+		pWindow = m_paWindow->at(i);
 		if (pWindow->IsActive ()) {
 			pWindow->KeyProc (byEvent, bDown);
 			break;
@@ -236,18 +236,18 @@ void CMgrWindow::Delete(int nID)
 	int i, j, nCount, nCount2;
 	PCWindowBase pWindow, pChild;
 
-	nCount = m_paWindow->GetSize ();
+	nCount = m_paWindow->size();
 	for (i = 0; i < nCount; i ++) {
-		pWindow = m_paWindow->GetAt (i);
+		pWindow = m_paWindow->at(i);
 		if (pWindow->GetID () == nID) {
-			nCount2 = pWindow->m_apChild.GetSize ();
+			nCount2 = pWindow->m_apChild.size();
 			for (j = 0; j < nCount2; j ++) {
 				pChild = pWindow->m_apChild[j];
 				pChild->m_bDelete = TRUE;
 			}
 
 			SAFE_DELETE (pWindow);
-			m_paWindow->RemoveAt (i);
+			m_paWindow->erase (m_paWindow->begin () + i);
 			SetActive ();
 			m_bDraw = TRUE;
 			m_pMgrKeyInput->Reset ();
@@ -269,10 +269,10 @@ CWindowBase *CMgrWindow::GetWindow(int nID)
 	PCWindowBase pRet, pTmp;
 
 	pRet	= NULL;
-	nCount	= m_paWindow->GetSize ();
+	nCount	= m_paWindow->size();
 
 	for (i = 0; i < nCount; i ++) {
-		pTmp = m_paWindow->GetAt (i);
+		pTmp = m_paWindow->at(i);
 		if (pTmp->GetID () == nID) {
 			pRet = pTmp;
 			break;
@@ -296,14 +296,14 @@ BOOL CMgrWindow::IsKeyInput(void)
 	PCWindowBase pTmp;
 
 	bRet	= FALSE;
-	nCount	= m_paWindow->GetSize ();
+	nCount	= m_paWindow->size();
 
 	if (nCount <= 0) {
 		goto Exit;
 	}
 
 	for (i = 0; i < nCount; i ++) {
-		pTmp = m_paWindow->GetAt (i);
+		pTmp = m_paWindow->at(i);
 		if (pTmp->IsActive ()) {
 			bRet = TRUE;
 			break;
@@ -1044,13 +1044,13 @@ void CMgrWindow::SetActive(void)
 
 	bSet		= FALSE;
 	m_bKeyInput	= FALSE;
-	nCount		= m_paWindow->GetSize ();
+	nCount		= m_paWindow->size();
 	if (nCount <= 0) {
 		return;
 	}
 
 	for (i = nCount - 1; i >= 0; i --) {
-		pWindow = m_paWindow->GetAt (i);
+		pWindow = m_paWindow->at(i);
 		if (pWindow->IsInput () == FALSE) {
 			continue;
 		}
