@@ -834,7 +834,7 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 //Todo:
 	/* 条件の判定など入れる */
 
-	paSkill->Add (Packet.m_dwPara);
+	paSkill->push_back (Packet.m_dwPara);
 	PacketCHAR_SKILLINFO.Make (Packet.m_dwCharID, paSkill);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_SKILLINFO);
 

@@ -408,15 +408,13 @@ void CInfoTalkEventMENU::DeleteMenuInfo(int nNo)
 {
 	PSTTALKEVENTMENUINFO pInfo;
 
-	if (nNo >= m_aMenuInfo.size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_aMenuInfo.size()))) {
 		return;
 	}
 
 	pInfo = m_aMenuInfo[nNo];
 	SAFE_DELETE (pInfo);
-	if ((nNo >= 0) && (nNo < static_cast<int>(m_aMenuInfo.size()))) {
-		m_aMenuInfo.erase (m_aMenuInfo.begin () + nNo);
-	}
+	m_aMenuInfo.erase (m_aMenuInfo.begin () + nNo);
 }
 
 
@@ -462,7 +460,7 @@ void CInfoTalkEventMENU::AddMenuInfo(int nPage, LPCSTR pszName)
 
 int CInfoTalkEventMENU::GetMenuInfoCount(void)
 {
-	return m_aMenuInfo.size();
+	return static_cast<int>(m_aMenuInfo.size());
 }
 
 
@@ -474,7 +472,7 @@ int CInfoTalkEventMENU::GetMenuInfoCount(void)
 
 PSTTALKEVENTMENUINFO CInfoTalkEventMENU::GetPtr(int nNo)
 {
-	if (nNo >= m_aMenuInfo.size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_aMenuInfo.size()))) {
 		return NULL;
 	}
 

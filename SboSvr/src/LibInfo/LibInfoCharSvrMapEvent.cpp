@@ -35,9 +35,9 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	POINT *pptPos1, *pptPos2;
 	PCInfoMapBase pInfoMap;
 	PCInfoMapEventBase pInfoMapEventBase;
-	CPacketMAP_PARA1 PacketMAP_PARA1;
-	CPacketCHAR_STATE PacketCHAR_STATE;
-	std::vector<PCInfoCharSvr> apInfoChar;
+       CPacketMAP_PARA1 PacketMAP_PARA1;
+       CPacketCHAR_STATE PacketCHAR_STATE;
+        ARRAYINFOCHARSVR apInfoChar;
 
 	bRet = TRUE;
 	pInfoMapEventBase = NULL;
@@ -147,7 +147,7 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 	PCInfoCharSvr pInfoCharTmp;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
 	CPacketCHAR_STATE PacketCHAR_STATE;
-	std::vector<PCInfoCharSvr> apInfoChar;
+        ARRAYINFOCHARSVR apInfoChar;
 
 	bRet = FALSE;
 	pInfoMapEvent = (PCInfoMapEventMOVE)pInfoMapEventBase;
@@ -195,7 +195,7 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 	PCInfoMapEventMAPMOVE pInfoMapEvent;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
 	CPacketCHAR_STATE PacketCHAR_STATE;
-	std::vector<PCInfoCharSvr> apInfoChar;
+        ARRAYINFOCHARSVR apInfoChar;
 
 	bRet = FALSE;
 	pInfoMapEvent = (PCInfoMapEventMAPMOVE)pInfoMapEventBase;
@@ -240,8 +240,8 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 BOOL CLibInfoCharSvr::MapEventProcINITSTATUS(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)
 {
 	BOOL bRet;
-	PCInfoMapEventINITSTATUS pInfoMapEvent;
-	std::vector<PCInfoCharSvr> apInfoChar;
+        PCInfoMapEventINITSTATUS pInfoMapEvent;
+        ARRAYINFOCHARSVR apInfoChar;
 
 	bRet = TRUE;
 	pInfoMapEvent = (PCInfoMapEventINITSTATUS)pInfoMapEventBase;

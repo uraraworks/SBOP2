@@ -627,15 +627,13 @@ void CInfoTalkEvent::DeleteTalkEvent(int nNo)
 {
 	PCInfoTalkEventBase pInfo;
 
-	if (nNo >= m_apTalkEvent.size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_apTalkEvent.size()))) {
 		return;
 	}
 
 	pInfo = m_apTalkEvent[nNo];
 	SAFE_DELETE (pInfo);
-	if ((nNo >= 0) && (nNo < static_cast<int>(m_apTalkEvent.size()))) {
-		m_apTalkEvent.erase (m_apTalkEvent.begin () + nNo);
-	}
+	m_apTalkEvent.erase (m_apTalkEvent.begin () + nNo);
 }
 
 

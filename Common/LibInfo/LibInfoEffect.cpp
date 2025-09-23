@@ -245,7 +245,7 @@ PCInfoBase CLibInfoEffect::GetPtr(int nNo)
 	PCInfoBase pRet;
 
 	pRet = NULL;
-	if (nNo >= m_paInfo->size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_paInfo->size()))) {
 		goto Exit;
 	}
 

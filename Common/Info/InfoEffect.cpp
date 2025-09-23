@@ -526,7 +526,7 @@ void CInfoEffect::AddAnime(void)
 
 	pInfo = new CInfoAnime;
 	m_paAnimeInfo->Add (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->size();
+	m_byAnimeCount = static_cast<BYTE>(m_paAnimeInfo->size());
 }
 
 
@@ -543,7 +543,7 @@ void CInfoEffect::DeleteAnime(int nNo)
 	pInfo = m_paAnimeInfo->at(nNo);
 	if ((nNo >= 0) && (nNo < static_cast<int>(m_paAnimeInfo->size()))) { m_paAnimeInfo->erase (m_paAnimeInfo->begin () + nNo); }
 	SAFE_DELETE (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->size();
+	m_byAnimeCount = static_cast<BYTE>(m_paAnimeInfo->size());
 }
 
 

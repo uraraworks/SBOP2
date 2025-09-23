@@ -73,7 +73,7 @@ PFILELISTINFO CInfoFileList::GetPtr(int nNo)
 	PFILELISTINFO pRet;
 
 	pRet = NULL;
-	if (nNo >= m_aFileListInfo.size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_aFileListInfo.size()))) {
 		goto Exit;
 	}
 

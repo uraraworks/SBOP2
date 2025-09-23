@@ -383,7 +383,7 @@ void CSaveLoadInfoBase::AddHeaderInfo(LPCSTR pszName)
 	m_dwHeaderSize += sizeof (DWORD);
 	m_dwHeaderSize += (strlen (pszName) + 1);
 
-	m_pHeaderInfo->Add (pInfo);
+	m_pHeaderInfo->push_back (pInfo);
 }
 
 

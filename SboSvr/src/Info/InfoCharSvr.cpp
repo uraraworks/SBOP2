@@ -624,7 +624,7 @@ void CInfoCharSvr::DeleteProcInfo(int nNo)
 {
 	PCHARPROCINFO pInfo;
 
-	if (nNo >= m_apProcInfo.size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_apProcInfo.size()))) {
 		return;
 	}
 

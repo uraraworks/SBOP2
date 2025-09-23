@@ -203,7 +203,7 @@ void CLibInfoCharSvr::LogIn(
 	pChar->m_strSpeak.Empty ();
 	pChar->m_ptCharBack.x = pChar->m_nMapX;
 	pChar->m_ptCharBack.y = pChar->m_nMapY;
-	m_paInfoLogin->Add (pChar);
+	m_paInfoLogin->push_back (pChar);
 }
 
 
@@ -299,7 +299,7 @@ void CLibInfoCharSvr::Revice(void)
 			pInfoChar->m_bNPC = TRUE;
 			nNo = GetNoLogIn (pInfoChar->m_dwCharID);
 			if (nNo < 0) {
-				m_paInfoLogin->Add (pInfoChar);
+				m_paInfoLogin->push_back (pInfoChar);
 			}
 		}
 		/* 不明アイテムIDの整理 */
@@ -1063,10 +1063,15 @@ DWORD CLibInfoCharSvr::GetPlaceName(CmyString &strDst)
 		if (pInfoChar->IsNPC ()) {
 			continue;
 		}
-		if ((int)pInfoChar->m_dwMapID - 1 >= anMapLoginCount.size()) {
+		DWORD dwMapIndex = pInfoChar->m_dwMapID;
+		if (dwMapIndex == 0) {
 			continue;
 		}
-		anMapLoginCount[pInfoChar->m_dwMapID - 1] ++;
+		size_t nMapIndex = static_cast<size_t>(dwMapIndex - 1);
+		if (nMapIndex >= anMapLoginCount.size()) {
+			continue;
+		}
+		anMapLoginCount[nMapIndex] ++;
 	}
 
 	nNo = 0;
@@ -1894,7 +1899,7 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 		if (padwCharID == NULL) {
 			break;
 		}
-		padwCharID->Add (dwRet);
+		padwCharID->push_back (dwRet);
 	}
 
 Exit:

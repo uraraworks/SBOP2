@@ -334,7 +334,7 @@ PBYTE CInfoFishing::SetSendData(PBYTE pSrc)
 
 int CInfoFishing::GetCount(void)
 {
-	return m_apParam.size();
+	return static_cast<int>(m_apParam.size());
 }
 
 
@@ -368,14 +368,12 @@ void CInfoFishing::DeleteParam(int nNo)
 {
 	PINFOFISHINGPARAM pInfo;
 
-	if (nNo >= m_apParam.size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_apParam.size()))) {
 		return;
 	}
 	pInfo = m_apParam[nNo];
 	SAFE_DELETE (pInfo);
-	if ((nNo >= 0) && (nNo < static_cast<int>(m_apParam.size()))) {
-		m_apParam.erase (m_apParam.begin () + nNo);
-	}
+	m_apParam.erase (m_apParam.begin () + nNo);
 }
 
 
@@ -407,7 +405,7 @@ PINFOFISHINGPARAM CInfoFishing::GetPtr(int nNo)
 	PINFOFISHINGPARAM pRet;
 
 	pRet = NULL;
-	if (nNo >= m_apParam.size()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_apParam.size()))) {
 		goto Exit;
 	}
 
