@@ -84,7 +84,7 @@ BOOL CLibInfoDisable::Proc(void)
 	if (m_paInfoIPADdress == NULL) {
 		goto Exit;
 	}
-	nCount = m_paInfoIPADdress->GetSize ();
+	nCount = m_paInfoIPADdress->size();
 	if (nCount <= 0) {
 		goto Exit;
 	}
@@ -97,12 +97,12 @@ BOOL CLibInfoDisable::Proc(void)
 	m_dwLastTimeProc = dwTime;
 
 	for (i = nCount - 1; i >= 0; i --) {
-		pInfo = m_paInfoIPADdress->GetAt (i);
+		pInfo = m_paInfoIPADdress->at(i);
 		/* 1時間以上経過している？ */
 		if (dwTime - pInfo->dwLastTime >= 1000 * 60 * 60) {
 			/* 拒否解除 */
 			DeleteIP (i);
-		}
+	}
 	}
 
 	bRet = TRUE;
@@ -143,7 +143,7 @@ int CLibInfoDisable::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -179,9 +179,11 @@ void CLibInfoDisable::Delete(
 {
 	PCInfoDisable pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -201,12 +203,12 @@ void CLibInfoDisable::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwDisableID != dwDisableID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -233,7 +235,7 @@ void CLibInfoDisable::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -305,7 +307,7 @@ void CLibInfoDisable::Merge(CLibInfoDisable *pSrc)
 			pInfoTmp = (PCInfoDisable)GetNew ();
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
-		}
+	}
 		pInfoTmp->Copy (pInfoSrc);
 	}
 }
@@ -319,7 +321,7 @@ void CLibInfoDisable::Merge(CLibInfoDisable *pSrc)
 
 PCInfoBase CLibInfoDisable::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -337,12 +339,12 @@ PCInfoBase CLibInfoDisable::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwDisableID != dwDisableID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -365,12 +367,12 @@ PCInfoBase CLibInfoDisable::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_strMacAddress != pszMacAddress) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -520,9 +522,9 @@ void CLibInfoDisable::DeleteIP(int nNo)
 {
 	PSTDISABLEIPADDRESS pInfo;
 
-	pInfo = m_paInfoIPADdress->GetAt (nNo);
+	pInfo = m_paInfoIPADdress->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfoIPADdress->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfoIPADdress->size()))) { m_paInfoIPADdress->erase (m_paInfoIPADdress->begin () + nNo); }
 }
 
 
@@ -539,7 +541,7 @@ void CLibInfoDisable::DeleteAllIP(void)
 	if (m_paInfoIPADdress == NULL) {
 		return;
 	}
-	nCount = m_paInfoIPADdress->GetSize ();
+	nCount = m_paInfoIPADdress->size();
 	for (i = nCount - 1; i >= 0; nCount --) {
 		DeleteIP (i);
 	}
@@ -560,12 +562,12 @@ BOOL CLibInfoDisable::IsDisableIP(ULONG ulIPAddress)
 
 	bRet = FALSE;
 
-	nCount = m_paInfoIPADdress->GetSize ();
+	nCount = m_paInfoIPADdress->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfoIPADdress->GetAt (i);
+		pInfo = m_paInfoIPADdress->at(i);
 		if (pInfo->ulIPAddress != ulIPAddress) {
 			continue;
-		}
+	}
 		bRet = TRUE;
 		break;
 	}
@@ -591,14 +593,14 @@ DWORD CLibInfoDisable::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwDisableID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 

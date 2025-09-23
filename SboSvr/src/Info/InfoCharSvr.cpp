@@ -255,7 +255,7 @@ void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 {
 	CInfoCharBase::Copy (pSrc);
 
-	m_abyMark.Copy (&pSrc->m_abyMark);
+	m_abyMark = pSrc->m_abyMark;
 	m_bNPC				= pSrc->m_bNPC;
 	m_dwSessionID		= pSrc->m_dwSessionID;
 	m_dwAccountID		= pSrc->m_dwAccountID;
@@ -454,7 +454,7 @@ void CInfoCharSvr::Proc(DWORD dwTime)
 	DWORD dwTimeTmp;
 	PCHARPROCINFO pInfo;
 
-	nCount = m_apProcInfo.GetSize ();
+	nCount = m_apProcInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apProcInfo[i];
 		dwTimeTmp = dwTime - pInfo->dwProcSetTime;
@@ -624,13 +624,13 @@ void CInfoCharSvr::DeleteProcInfo(int nNo)
 {
 	PCHARPROCINFO pInfo;
 
-	if (nNo >= m_apProcInfo.GetSize ()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_apProcInfo.size()))) {
 		return;
 	}
 
 	pInfo = m_apProcInfo[nNo];
 	SAFE_DELETE (pInfo);
-	m_apProcInfo.RemoveAt (nNo);
+	m_apProcInfo.erase (m_apProcInfo.begin () + nNo);
 }
 
 
@@ -645,7 +645,7 @@ void CInfoCharSvr::DeleteProcInfo(DWORD dwProcID)
 	int i, nCount;
 	PCHARPROCINFO pInfo;
 
-	nCount = m_apProcInfo.GetSize ();
+	nCount = m_apProcInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfo = m_apProcInfo[i];
 		if (pInfo->dwProcID != dwProcID) {
@@ -666,7 +666,7 @@ void CInfoCharSvr::DeleteAllProcInfo(void)
 {
 	int i, nCount;
 
-	nCount = m_apProcInfo.GetSize ();
+	nCount = m_apProcInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		DeleteProcInfo (i);
 	}
@@ -692,7 +692,7 @@ void CInfoCharSvr::AddProcInfo(
 	pInfo->dwProcStartTime	= dwStartTime;		/* 処理開始時間 */
 	pInfo->dwPara			= dwPara;			/* パラメータ */
 
-	m_apProcInfo.Add (pInfo);
+	m_apProcInfo.push_back (pInfo);
 }
 
 

@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -24,8 +26,8 @@ typedef struct _STMAPOBJECTANIMEINFO {
 			byLevel;			/* 透明度 */
 	PWORD	pwGrpID;			/* 画像ID */
 } STMAPOBJECTANIMEINFO, *PSTMAPOBJECTANIMEINFO;
-typedef CmyArray<PSTMAPOBJECTANIMEINFO, PSTMAPOBJECTANIMEINFO>	   ARRAYMAPOBJECTANIMEINFO;
-typedef CmyArray<PSTMAPOBJECTANIMEINFO, PSTMAPOBJECTANIMEINFO>	 *PARRAYMAPOBJECTANIMEINFO;
+using ARRAYMAPOBJECTANIMEINFO = CStdArray<PSTMAPOBJECTANIMEINFO>;
+using PARRAYMAPOBJECTANIMEINFO = ARRAYMAPOBJECTANIMEINFO *;
 
 
 /* ========================================================================= */
@@ -74,7 +76,7 @@ public:
 
 	ARRAYMAPOBJECTANIMEINFO	m_aInfoAnime;					/* オブジェクトアニメ情報 */
 } CInfoMapObject, *PCInfoMapObject;
-typedef CmyArray<PCInfoMapObject, PCInfoMapObject>	  ARRAYMAPOBJECT;
-typedef CmyArray<PCInfoMapObject, PCInfoMapObject>	*PARRAYMAPOBJECT;
+using ARRAYMAPOBJECT = CStdArray<PCInfoMapObject>;
+using PARRAYMAPOBJECT = ARRAYMAPOBJECT *;
 
 /* Copyright(C)URARA-works 2008 */

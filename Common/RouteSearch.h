@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 class CInfoMapBase;
 
@@ -19,8 +21,8 @@ typedef struct _SEARCHRESULT {
 	POINT	pt;					/* 座標 */
 	BYTE	byDirection;		/* 向き */
 } SEARCHRESULT, *PSEARCHRESULT;
-typedef CmyArray<SEARCHRESULT, SEARCHRESULT>	  ARRAYSEARCHRESULT;
-typedef CmyArray<SEARCHRESULT, SEARCHRESULT>	*PARRAYSEARCHRESULT;
+using ARRAYSEARCHRESULT = CStdArray<SEARCHRESULT>;
+using PARRAYSEARCHRESULT = ARRAYSEARCHRESULT *;
 
 /* 検索情報 */
 typedef struct _SEARCHINFO {
@@ -29,7 +31,7 @@ typedef struct _SEARCHINFO {
 	BYTE	byState;			/* 状態 */
 	WORD	wScore;				/* スコア */
 } SEARCHINFO, *PSEARCHINFO;
-typedef CmyArray<SEARCHINFO, SEARCHINFO>		ARRAYSEARCHINFO;
+using ARRAYSEARCHINFO = CStdArray<SEARCHINFO>;
 
 
 /* ========================================================================= */

@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -51,7 +53,7 @@ public:
 				m_ptBackPack;								/* バックパック内の位置 */
 	CmyString	m_strName;									/* アイテム名 */
 } CInfoItem, *PCInfoItem;
-typedef CmyArray<PCInfoItem, PCInfoItem>	   ARRAYITEMINFO;
-typedef CmyArray<PCInfoItem, PCInfoItem>	 *PARRAYITEMINFO;
+using ARRAYITEMINFO = CStdArray<PCInfoItem>;
+using PARRAYITEMINFO = ARRAYITEMINFO *;
 
 /* Copyright(C)URARA-works 2007 */

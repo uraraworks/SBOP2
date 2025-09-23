@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -42,7 +44,7 @@ public:
 	WORD		m_wGrpIDSub;					/* プレビュー用グラフィックIDサブ */
 	CmyString	m_strName;						/* モーション種別名 */
 } CInfoMotionType, *PCInfoMotionType;
-typedef CmyArray<PCInfoMotionType, PCInfoMotionType>	   ARRAYMOTIONTYPEINFO;
-typedef CmyArray<PCInfoMotionType, PCInfoMotionType>	 *PARRAYMOTIONTYPEINFO;
+using ARRAYMOTIONTYPEINFO = CStdArray<PCInfoMotionType>;
+using PARRAYMOTIONTYPEINFO = ARRAYMOTIONTYPEINFO *;
 
 /* Copyright(C)URARA-works 2008 */

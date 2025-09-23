@@ -113,7 +113,7 @@ int CLibInfoMapParts::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -150,9 +150,11 @@ void CLibInfoMapParts::Delete(
 {
 	PCInfoMapParts pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -170,12 +172,12 @@ void CLibInfoMapParts::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwPartsID != dwPartsID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -201,7 +203,7 @@ void CLibInfoMapParts::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -229,9 +231,9 @@ void CLibInfoMapParts::Merge(CLibInfoMapParts *pSrc)
 			pInfoTmp = (PCInfoMapParts)GetNew ();
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
-		} else {
+	} else {
 			pInfoTmp->Copy (pInfoSrc);
-		}
+	}
 	}
 }
 
@@ -264,7 +266,7 @@ void CLibInfoMapParts::ResetAnime(void)
 
 PCInfoBase CLibInfoMapParts::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -308,13 +310,13 @@ PCInfoBase CLibInfoMapParts::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (!((pInfoTmp->m_ptViewPos.x == pPos->x) &&
 			(pInfoTmp->m_ptViewPos.y == pPos->y))) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -401,7 +403,7 @@ PBYTE CLibInfoMapParts::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			pDataTmp += sizeof (DWORD);
 			break;
-		}
+	}
 		pInfoMapPartsTmp = (PCInfoMapParts)GetNew ();
 		pDataTmp = pInfoMapPartsTmp->SetSendData (pDataTmp);
 
@@ -409,9 +411,9 @@ PBYTE CLibInfoMapParts::SetSendData(PBYTE pSrc)
 		if (pInfoMapParts) {
 			pInfoMapParts->Copy (pInfoMapPartsTmp);
 			SAFE_DELETE (pInfoMapPartsTmp);
-		} else {
+	} else {
 			Add (pInfoMapPartsTmp);
-		}
+	}
 	}
 	RenewIDPtr ();
 
@@ -436,14 +438,14 @@ DWORD CLibInfoMapParts::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwPartsID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 

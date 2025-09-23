@@ -99,7 +99,7 @@ DWORD CInfoTalkEventMENU::GetDataSize(void)
 	DWORD dwRet;
 	PSTTALKEVENTMENUINFO pInfo;
 
-	nCount = m_aMenuInfo.GetSize ();
+	nCount = m_aMenuInfo.size();
 
 	dwRet = CInfoTalkEventBase::GetDataSize();
 	dwRet += sizeof (int);				/* 項目数 */
@@ -130,7 +130,7 @@ DWORD CInfoTalkEventMENU::GetDataSizeNo(int nNo)
 		return CInfoTalkEventBase::GetDataSizeNo (nNo);
 	}
 
-	nCount = m_aMenuInfo.GetSize ();
+	nCount = m_aMenuInfo.size();
 
 	switch (nNo - m_nElementCountBase) {
 	case 0:			/* 項目数 */
@@ -192,7 +192,7 @@ PBYTE CInfoTalkEventMENU::GetWriteData(int nNo, PDWORD pdwSize)
 		goto Exit;
 	}
 	pRet	 = ZeroNew (dwSize);
-	nCount	 = m_aMenuInfo.GetSize ();
+	nCount	 = m_aMenuInfo.size();
 	pDataTmp = pRet;
 
 	nNo -= m_nElementCountBase;
@@ -246,7 +246,7 @@ DWORD CInfoTalkEventMENU::ReadElementData(
 	}
 
 	pDataTmp = pSrc;
-	nCount	 = m_aMenuInfo.GetSize ();
+	nCount	 = m_aMenuInfo.size();
 
 	nNo -= m_nElementCountBase;
 	switch (nNo) {
@@ -324,7 +324,7 @@ PBYTE CInfoTalkEventMENU::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, pDataBase, dwSizeBase, pDataTmp);
 	SAFE_DELETE_ARRAY (pDataBase);
 
-	nCount = m_aMenuInfo.GetSize ();
+	nCount = m_aMenuInfo.size();
 	CopyMemoryRenew (pDataTmp, &nCount, sizeof (nCount), pDataTmp);		/* 項目数 */
 
 	for (i = 0; i < nCount; i ++) {
@@ -408,13 +408,13 @@ void CInfoTalkEventMENU::DeleteMenuInfo(int nNo)
 {
 	PSTTALKEVENTMENUINFO pInfo;
 
-	if (nNo >= m_aMenuInfo.GetSize ()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_aMenuInfo.size()))) {
 		return;
 	}
 
 	pInfo = m_aMenuInfo[nNo];
 	SAFE_DELETE (pInfo);
-	m_aMenuInfo.RemoveAt (nNo);
+	m_aMenuInfo.erase (m_aMenuInfo.begin () + nNo);
 }
 
 
@@ -448,7 +448,7 @@ void CInfoTalkEventMENU::AddMenuInfo(int nPage, LPCSTR pszName)
 	pInfo = new STTALKEVENTMENUINFO;
 	pInfo->nPage	= nPage;		/* ジャンプ先ページ番号 */
 	pInfo->strName	= pszName;		/* 項目名 */
-	m_aMenuInfo.Add (pInfo);
+	m_aMenuInfo.push_back (pInfo);
 }
 
 
@@ -460,7 +460,7 @@ void CInfoTalkEventMENU::AddMenuInfo(int nPage, LPCSTR pszName)
 
 int CInfoTalkEventMENU::GetMenuInfoCount(void)
 {
-	return m_aMenuInfo.GetSize ();
+	return static_cast<int>(m_aMenuInfo.size());
 }
 
 
@@ -472,7 +472,7 @@ int CInfoTalkEventMENU::GetMenuInfoCount(void)
 
 PSTTALKEVENTMENUINFO CInfoTalkEventMENU::GetPtr(int nNo)
 {
-	if (nNo >= m_aMenuInfo.GetSize ()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_aMenuInfo.size()))) {
 		return NULL;
 	}
 

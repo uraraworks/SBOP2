@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -55,7 +57,7 @@ public:
 	DWORD		m_dwData;						/* バイナリデータ */
 	CmyString	m_strText;						/* 文字列データ */
 } CInfoTalkEventBase, *PCInfoTalkEventBase;
-typedef CmyArray<PCInfoTalkEventBase, PCInfoTalkEventBase>	  ARRAYTALKEVENTBASEINFO;
-typedef CmyArray<PCInfoTalkEventBase, PCInfoTalkEventBase>	*PARRAYTALKEVENTBASEINFO;
+using ARRAYTALKEVENTBASEINFO = CStdArray<PCInfoTalkEventBase>;
+using PARRAYTALKEVENTBASEINFO = ARRAYTALKEVENTBASEINFO *;
 
 /* Copyright(C)URARA-works 2008 */

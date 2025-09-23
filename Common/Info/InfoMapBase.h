@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -110,7 +112,7 @@ public:
 	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* マップオブジェクト配置データ */
 	CLibInfoMapObject		*m_pLibInfoMapObject;		/* マップオブジェクト情報 */
 } CInfoMapBase, *PCInfoMapBase;
-typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	  ARRAYINFOMAPBASE;
-typedef CmyArray<PCInfoMapBase, PCInfoMapBase>	*PARRAYINFOMAPBASE;
+using ARRAYINFOMAPBASE = CStdArray<PCInfoMapBase>;
+using PARRAYINFOMAPBASE = ARRAYINFOMAPBASE *;
 
 /* Copyright(C)URARA-works 2006 */

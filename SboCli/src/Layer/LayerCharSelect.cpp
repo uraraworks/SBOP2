@@ -76,7 +76,7 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 	PCInfoCharCli pChar;
 	POINT ptViewCharPos;
 
-	nCount	= m_pInfoAccount->m_adwCharID.GetSize ();
+	nCount	= m_pInfoAccount->m_adwCharID.size();
 	nTmp	= SCRSIZEX / (3 + 1);
 
 	for (i = 0; i < 3; i ++) {
@@ -182,7 +182,7 @@ void CLayerCharSelect::SetSelect(int nNo)
 	m_byAnime			= 0;
 	m_dwTimeLastAnime	= timeGetTime ();
 
-	nCount = m_pInfoAccount->m_adwCharID.GetSize ();
+	nCount = m_pInfoAccount->m_adwCharID.size();
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (m_pInfoAccount->m_adwCharID[i]);
 		if (pChar == NULL) {
@@ -211,7 +211,7 @@ DWORD CLayerCharSelect::GetSelectCharID(void)
 	PCInfoCharCli pChar;
 
 	dwRet	= 0;
-	nCount	= m_pInfoAccount->m_adwCharID.GetSize ();
+	nCount	= m_pInfoAccount->m_adwCharID.size();
 
 	if ((nCount <= 0) || (m_nSelect >= nCount)) {
 		goto Exit;

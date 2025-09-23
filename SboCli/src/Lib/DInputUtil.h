@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include <dinput.h>
 
@@ -68,7 +69,7 @@ protected:
 protected:
 	LPDIRECTINPUT8			m_pDInput;			/* DirectInputインターフェイス */
 	LPDIRECTINPUTDEVICE8	m_pDevice;			/* 使用デバイス */
-	CmyArray <PDINPUTDEVICEINFO, PDINPUTDEVICEINFO>	m_aDeviceInfo;	/* デバイス情報 */
+	std::vector<PDINPUTDEVICEINFO>	m_aDeviceInfo;	/* デバイス情報 */
 } CDInputUtil, *PCDInputUtil;
 
 /* Copyright(C)URARA-works 2007 */

@@ -167,11 +167,11 @@ DWORD CInfoMapParts::GetDataSize(void)
 		goto Exit;
 	}
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		PCInfoAnime pAnime;
 
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		dwRet += pAnime->GetDataSize ();
 	}
 
@@ -207,9 +207,9 @@ DWORD CInfoMapParts::GetDataSizeNo(int nNo)
 	case 9:		dwRet = sizeof (m_dwPartsType);			break;
 	case 10:	dwRet = sizeof (m_ptViewPos);			break;
 	default:
-		nCount = m_paAnimeInfo->GetSize ();
+		nCount = m_paAnimeInfo->size();
 		for (i = 0; i < nCount; i ++) {
-			pAnime	= m_paAnimeInfo->GetAt (i);
+			pAnime	= m_paAnimeInfo->at(i);
 			dwRet	+= pAnime->GetDataSizeNo (nNo - m_nElementCount);
 		}
 		break;
@@ -271,12 +271,12 @@ PBYTE CInfoMapParts::GetWriteData(int nNo, PDWORD pdwSize)
 			PBYTE pTmp;
 
 			pTmp = pRet;
-			nCount = m_paAnimeInfo->GetSize ();
+			nCount = m_paAnimeInfo->size();
 			for (i = 0; i < nCount; i ++) {
 				PBYTE pSrcTmp;
 				DWORD dwSizeTmp;
 
-				pAnime	= m_paAnimeInfo->GetAt (i);
+				pAnime	= m_paAnimeInfo->at(i);
 				pSrcTmp	= pAnime->GetWriteData (nNo - m_nElementCount, &dwSizeTmp);
 				CopyMemoryRenew (pTmp, pSrcTmp, dwSizeTmp, pTmp);
 				SAFE_DELETE_ARRAY (pSrcTmp);
@@ -334,7 +334,7 @@ DWORD CInfoMapParts::ReadElementData(
 	default:
 		pSrcTmp	= pSrc;
 		for (i = 0; i < m_byAnimeCount; i ++) {
-			pAnime		= m_paAnimeInfo->GetAt (i);
+			pAnime		= m_paAnimeInfo->at(i);
 			dwSizeTmp	= pAnime->ReadElementData (pSrcTmp, nNo - m_nElementCount);
 			dwSize		+= dwSizeTmp;
 			pSrcTmp		+= dwSizeTmp;
@@ -394,9 +394,9 @@ DWORD CInfoMapParts::GetSendDataSize(void)
 		goto Exit;
 	}
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		dwRet += pAnime->GetSendDataSize ();
 	}
 
@@ -436,9 +436,9 @@ PBYTE CInfoMapParts::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwPartsType,		sizeof (m_dwPartsType),			pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_ptViewPos,		sizeof (m_ptViewPos),			pDataTmp);
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		pDataAnimeTmp	= pAnime->GetSendData ();
 		dwSizeAnime		= pAnime->GetSendDataSize ();
 		CopyMemoryRenew (pDataTmp, pDataAnimeTmp, dwSizeAnime, pDataTmp);
@@ -587,7 +587,7 @@ BOOL CInfoMapParts::TimerProc(DWORD dwTime)
 		goto Exit;
 	}
 
-	pAnime = m_paAnimeInfo->GetAt (m_byAnimeNo);
+	pAnime = m_paAnimeInfo->at(m_byAnimeNo);
 	if (pAnime->m_byWait == 0) {
 		goto Exit;
 	}
@@ -643,7 +643,7 @@ int CInfoMapParts::GetMoveDirection(void)
 
 int CInfoMapParts::GetAnimeCount(void)
 {
-	return m_paAnimeInfo->GetSize ();
+	return m_paAnimeInfo->size();
 }
 
 
@@ -659,7 +659,7 @@ void CInfoMapParts::AddAnime(void)
 
 	pInfo = new CInfoAnime;
 	m_paAnimeInfo->Add (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->GetSize ();
+	m_byAnimeCount = static_cast<BYTE>(m_paAnimeInfo->size());
 }
 
 
@@ -673,10 +673,10 @@ void CInfoMapParts::DeleteAnime(int nNo)
 {
 	PCInfoAnime pInfo;
 
-	pInfo = m_paAnimeInfo->GetAt (nNo);
-	m_paAnimeInfo->RemoveAt (nNo);
+	pInfo = m_paAnimeInfo->at(nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paAnimeInfo->size()))) { m_paAnimeInfo->erase (m_paAnimeInfo->begin () + nNo); }
 	SAFE_DELETE (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->GetSize ();
+	m_byAnimeCount = static_cast<BYTE>(m_paAnimeInfo->size());
 }
 
 
@@ -690,7 +690,7 @@ void CInfoMapParts::DeleteAllAnime(void)
 {
 	int i, nCount;
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		DeleteAnime (0);
 	}
@@ -710,12 +710,12 @@ PCInfoAnime CInfoMapParts::GetAnimePtr(int nNo)
 
 	pRet = NULL;
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	if (nNo >= nCount) {
 		goto Exit;
 	}
 
-	pRet = m_paAnimeInfo->GetAt (nNo);
+	pRet = m_paAnimeInfo->at(nNo);
 Exit:
 	return pRet;
 }

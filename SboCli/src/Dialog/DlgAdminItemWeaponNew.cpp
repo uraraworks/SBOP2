@@ -101,8 +101,8 @@ void CDlgAdminItemWeaponNew::Set(CInfoItemWeapon *pSrc)
 	m_dwMotionTypeWalk	= pSrc->m_dwMotionTypeWalk;
 	m_strName			= pSrc->m_strName;
 
-	m_adwEffectIDAtack.Copy (&pSrc->m_adwEffectIDAtack);
-	m_adwEffectIDCritical.Copy (&pSrc->m_adwEffectIDCritical);
+	m_adwEffectIDAtack = pSrc->m_adwEffectIDAtack;
+	m_adwEffectIDCritical = pSrc->m_adwEffectIDCritical;
 }
 
 
@@ -119,8 +119,8 @@ void CDlgAdminItemWeaponNew::Get(CInfoItemWeapon *&pDst)
 	pDst->m_dwMotionTypeWalk	= m_dwMotionTypeWalk;
 	pDst->m_strName				= m_strName;
 
-	pDst->m_adwEffectIDAtack.Copy (&m_adwEffectIDAtack);
-	pDst->m_adwEffectIDCritical.Copy (&m_adwEffectIDCritical);
+	pDst->m_adwEffectIDAtack = m_adwEffectIDAtack;
+	pDst->m_adwEffectIDCritical = m_adwEffectIDCritical;
 }
 
 
@@ -217,7 +217,7 @@ void CDlgAdminItemWeaponNew::OnBnClickedAddNormal()
 	if (dwID == 0) {
 		return;
 	}
-	m_adwEffectIDAtack.Add (dwID);
+	m_adwEffectIDAtack.push_back (dwID);
 	RenewList (&m_ctlListNormal, &m_adwEffectIDAtack);
 }
 
@@ -236,7 +236,9 @@ void CDlgAdminItemWeaponNew::OnBnClickedDelNormal()
 	if (nSelect < 0) {
 		return;
 	}
-	m_adwEffectIDAtack.RemoveAt (nSelect);
+	if ((nSelect >= 0) && (nSelect < static_cast<int>(m_adwEffectIDAtack.size()))) {
+		m_adwEffectIDAtack.erase (m_adwEffectIDAtack.begin () + nSelect);
+	}
 	RenewList (&m_ctlListNormal, &m_adwEffectIDAtack);
 }
 
@@ -262,7 +264,7 @@ void CDlgAdminItemWeaponNew::OnBnClickedAddCritical()
 	if (dwID == 0) {
 		return;
 	}
-	m_adwEffectIDCritical.Add (dwID);
+	m_adwEffectIDCritical.push_back (dwID);
 	RenewList (&m_ctlListCritical, &m_adwEffectIDCritical);
 }
 
@@ -281,7 +283,9 @@ void CDlgAdminItemWeaponNew::OnBnClickedDelCritical()
 	if (nSelect < 0) {
 		return;
 	}
-	m_adwEffectIDCritical.RemoveAt (nSelect);
+	if ((nSelect >= 0) && (nSelect < static_cast<int>(m_adwEffectIDCritical.size()))) {
+		m_adwEffectIDCritical.erase (m_adwEffectIDCritical.begin () + nSelect);
+	}
 	RenewList (&m_ctlListNormal, &m_adwEffectIDCritical);
 }
 
@@ -466,9 +470,9 @@ void CDlgAdminItemWeaponNew::RenewList(CListBox *pList, ARRAYDWORD *pSrc)
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
 	pList->ResetContent ();
 
-	nCount = pSrc->GetSize ();
+	nCount = pSrc->size();
 	for (i = 0; i < nCount; i ++) {
-		dwEffectID = pSrc->GetAt (i);
+		dwEffectID = pSrc->at(i);
 		pLibInfoEffect->GetName (dwEffectID, strTmp);
 		pList->InsertString (i, (LPCSTR)strTmp);
 		pList->SetItemData (i, dwEffectID);

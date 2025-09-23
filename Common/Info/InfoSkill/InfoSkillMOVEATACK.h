@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoSkillBase.h"
 
@@ -65,7 +67,7 @@ public:
 	BOOL	m_bHitQuit,					/* ヒットすると消滅 */
 			m_bDistanceDelete;			/* 射程距離まで行くと消える */
 } CInfoSkillMOVEATACK, *PCInfoSkillMOVEATACK;
-typedef CmyArray<PCInfoSkillMOVEATACK, PCInfoSkillMOVEATACK>	  ARRAYSKILLMOVEATACKINFO;
-typedef CmyArray<PCInfoSkillMOVEATACK, PCInfoSkillMOVEATACK>	*PARRAYSKILLMOVEATACKINFO;
+using ARRAYSKILLMOVEATACKINFO = CStdArray<PCInfoSkillMOVEATACK>;
+using PARRAYSKILLMOVEATACKINFO = ARRAYSKILLMOVEATACKINFO *;
 
 /* Copyright(C)URARA-works 2009 */

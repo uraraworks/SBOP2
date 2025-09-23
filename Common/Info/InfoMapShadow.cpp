@@ -158,11 +158,11 @@ DWORD CInfoMapShadow::GetDataSize(void)
 		goto Exit;
 	}
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		PCInfoAnime pAnime;
 
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		dwRet += pAnime->GetDataSize ();
 	}
 
@@ -195,9 +195,9 @@ DWORD CInfoMapShadow::GetDataSizeNo(int nNo)
 	case 6:		dwRet = sizeof (m_dwShadowID);			break;
 	case 7:		dwRet = sizeof (m_ptViewPos);			break;
 	default:
-		nCount = m_paAnimeInfo->GetSize ();
+		nCount = m_paAnimeInfo->size();
 		for (i = 0; i < nCount; i ++) {
-			pAnime	= m_paAnimeInfo->GetAt (i);
+			pAnime	= m_paAnimeInfo->at(i);
 			dwRet	+= pAnime->GetDataSizeNo (nNo - m_nElementCount);
 		}
 		break;
@@ -256,12 +256,12 @@ PBYTE CInfoMapShadow::GetWriteData(int nNo, PDWORD pdwSize)
 			PBYTE pTmp;
 
 			pTmp = pRet;
-			nCount = m_paAnimeInfo->GetSize ();
+			nCount = m_paAnimeInfo->size();
 			for (i = 0; i < nCount; i ++) {
 				PBYTE pSrcTmp;
 				DWORD dwSizeTmp;
 
-				pAnime	= m_paAnimeInfo->GetAt (i);
+				pAnime	= m_paAnimeInfo->at(i);
 				pSrcTmp	= pAnime->GetWriteData (nNo - m_nElementCount, &dwSizeTmp);
 				CopyMemoryRenew (pTmp, pSrcTmp, dwSizeTmp, pTmp);
 				SAFE_DELETE_ARRAY (pSrcTmp);
@@ -316,7 +316,7 @@ DWORD CInfoMapShadow::ReadElementData(
 	default:
 		pSrcTmp	= pSrc;
 		for (i = 0; i < m_byAnimeCount; i ++) {
-			pAnime		= m_paAnimeInfo->GetAt (i);
+			pAnime		= m_paAnimeInfo->at(i);
 			dwSizeTmp	= pAnime->ReadElementData (pSrcTmp, nNo - m_nElementCount);
 			dwSize		+= dwSizeTmp;
 			pSrcTmp		+= dwSizeTmp;
@@ -373,9 +373,9 @@ DWORD CInfoMapShadow::GetSendDataSize(void)
 		goto Exit;
 	}
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		dwRet += pAnime->GetSendDataSize ();
 	}
 
@@ -412,9 +412,9 @@ PBYTE CInfoMapShadow::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_wGrpID,		sizeof (m_wGrpID),			pDataTmp);
 	CopyMemoryRenew (pDataTmp, &m_ptViewPos,	sizeof (m_ptViewPos),		pDataTmp);
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pAnime = m_paAnimeInfo->GetAt (i);
+		pAnime = m_paAnimeInfo->at(i);
 		pDataAnimeTmp	= pAnime->GetSendData ();
 		dwSizeAnime		= pAnime->GetSendDataSize ();
 		CopyMemoryRenew (pDataTmp, pDataAnimeTmp, dwSizeAnime, pDataTmp);
@@ -481,7 +481,7 @@ BOOL CInfoMapShadow::TimerProc(DWORD dwTime)
 		goto Exit;
 	}
 
-	pAnime = m_paAnimeInfo->GetAt (m_byAnimeNo);
+	pAnime = m_paAnimeInfo->at(m_byAnimeNo);
 	if (dwTime - m_dwLastAnime >= (DWORD)(pAnime->m_byWait * 10)) {
 		if (m_dwLastAnime > 0) {
 			m_byAnimeNo ++;
@@ -507,7 +507,7 @@ Exit:
 
 int CInfoMapShadow::GetAnimeCount(void)
 {
-	return m_paAnimeInfo->GetSize ();
+	return m_paAnimeInfo->size();
 }
 
 
@@ -523,7 +523,7 @@ void CInfoMapShadow::AddAnime(void)
 
 	pInfo = new CInfoAnime;
 	m_paAnimeInfo->Add (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->GetSize ();
+	m_byAnimeCount = static_cast<BYTE>(m_paAnimeInfo->size());
 }
 
 
@@ -537,10 +537,10 @@ void CInfoMapShadow::DeleteAnime(int nNo)
 {
 	PCInfoAnime pInfo;
 
-	pInfo = m_paAnimeInfo->GetAt (nNo);
-	m_paAnimeInfo->RemoveAt (nNo);
+	pInfo = m_paAnimeInfo->at(nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paAnimeInfo->size()))) { m_paAnimeInfo->erase (m_paAnimeInfo->begin () + nNo); }
 	SAFE_DELETE (pInfo);
-	m_byAnimeCount = m_paAnimeInfo->GetSize ();
+	m_byAnimeCount = static_cast<BYTE>(m_paAnimeInfo->size());
 }
 
 
@@ -554,7 +554,7 @@ void CInfoMapShadow::DeleteAllAnime(void)
 {
 	int i, nCount;
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		DeleteAnime (0);
 	}
@@ -574,12 +574,12 @@ PCInfoAnime CInfoMapShadow::GetAnimePtr(int nNo)
 
 	pRet = NULL;
 
-	nCount = m_paAnimeInfo->GetSize ();
+	nCount = m_paAnimeInfo->size();
 	if (nNo >= nCount) {
 		goto Exit;
 	}
 
-	pRet = m_paAnimeInfo->GetAt (nNo);
+	pRet = m_paAnimeInfo->at(nNo);
 Exit:
 	return pRet;
 }

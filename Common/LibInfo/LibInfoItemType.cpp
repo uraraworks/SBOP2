@@ -137,7 +137,7 @@ int CLibInfoItemType::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -173,9 +173,11 @@ void CLibInfoItemType::Delete(
 {
 	PCInfoItemTypeBase pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -193,12 +195,12 @@ void CLibInfoItemType::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwTypeID != m_dwTypeID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -223,7 +225,7 @@ void CLibInfoItemType::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -296,7 +298,7 @@ LPCSTR CLibInfoItemType::GetGrpIDMainName(
 		switch (wGrpIDMain) {
 		case ITEMGRPIDMAIN_CLOTH_NONE:	pszRet = "種別の基本画像";	break;	/* 未設定 */
 		case ITEMGRPIDMAIN_CLOTH_SP:	pszRet = "特殊服";			break;	/* 特殊服 */
-		}
+	}
 		break;
 	case ITEMTYPEID_ARMS:	/* 持ち物 */
 		switch (wGrpIDMain) {
@@ -308,7 +310,7 @@ LPCSTR CLibInfoItemType::GetGrpIDMainName(
 		case ITEMGRPIDMAIN_2X2_SHIELD:		pszRet = "盾(2x2)";			break;	/* 盾(2x2) */
 		case ITEMGRPIDMAIN_2X2_ARMSSP:		pszRet = "特殊持ち物(2x2)";	break;	/* 特殊持ち物(2x2) */
 		case ITEMGRPIDMAIN_2X2_BOW:			pszRet = "弓(2x2)";			break;	/* 弓(2x2) */
-		}
+	}
 		break;
 	}
 
@@ -363,7 +365,7 @@ Exit:
 
 PCInfoBase CLibInfoItemType::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -381,12 +383,12 @@ PCInfoBase CLibInfoItemType::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwTypeID != dwTypeID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -543,14 +545,14 @@ DWORD CLibInfoItemType::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwTypeID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 

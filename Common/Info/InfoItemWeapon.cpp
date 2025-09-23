@@ -93,8 +93,8 @@ DWORD CInfoItemWeapon::GetDataSize(void)
 	dwRet += sizeof (m_dwMotionTypeStand);								/* 戦闘モード中の立ちモーション */
 	dwRet += sizeof (m_dwMotionTypeWalk);								/* 戦闘モード中のすり足モーション */
 	dwRet += (m_strName.GetLength () + 1);								/* 武器種別名 */
-	dwRet += ((m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD));	/* 通常攻撃時のエフェクトID */
-	dwRet += ((m_adwEffectIDCritical.GetSize () + 1) * sizeof (DWORD));	/* クリティカル時のエフェクトID */
+	dwRet += ((m_adwEffectIDAtack.size() + 1) * sizeof (DWORD));	/* 通常攻撃時のエフェクトID */
+	dwRet += ((m_adwEffectIDCritical.size() + 1) * sizeof (DWORD));	/* クリティカル時のエフェクトID */
 
 	return dwRet;
 }
@@ -118,8 +118,8 @@ DWORD CInfoItemWeapon::GetDataSizeNo(int nNo)
 	case 2:		dwRet = sizeof (m_dwMotionTypeStand);								break;	/* 戦闘モード中の立ちモーション */
 	case 3:		dwRet = sizeof (m_dwMotionTypeWalk);								break;	/* 戦闘モード中のすり足モーション */
 	case 4:		dwRet = (m_strName.GetLength () + 1);								break;	/* 武器種別名 */
-	case 5:		dwRet = ((m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD));		break;	/* 通常攻撃時のエフェクトID数 */
-	case 6:		dwRet = ((m_adwEffectIDCritical.GetSize () + 1) * sizeof (DWORD));	break;	/* クリティカル時のエフェクトID数 */
+	case 5:		dwRet = ((m_adwEffectIDAtack.size() + 1) * sizeof (DWORD));		break;	/* 通常攻撃時のエフェクトID数 */
+	case 6:		dwRet = ((m_adwEffectIDCritical.size() + 1) * sizeof (DWORD));	break;	/* クリティカル時のエフェクトID数 */
 
 	}
 
@@ -169,7 +169,7 @@ PBYTE CInfoItemWeapon::GetWriteData(int nNo, PDWORD pdwSize)
 	case 4:		pSrc = (PBYTE)(LPCSTR)m_strName;			break;	/* 武器種別名 */
 	case 5:		/* 通常攻撃時のエフェクトID */
 		pTmp	= pRet;
-		nCount	= m_adwEffectIDAtack.GetSize ();
+		nCount	= m_adwEffectIDAtack.size();
 
 		for (i = 0; i < nCount; i ++) {
 			dwTmp = m_adwEffectIDAtack[i];
@@ -181,7 +181,7 @@ PBYTE CInfoItemWeapon::GetWriteData(int nNo, PDWORD pdwSize)
 		break;
 	case 6:		/* クリティカル時のエフェクトID */
 		pTmp	= pRet;
-		nCount	= m_adwEffectIDCritical.GetSize ();
+		nCount	= m_adwEffectIDCritical.size();
 
 		for (i = 0; i < nCount; i ++) {
 			dwTmp = m_adwEffectIDCritical[i];
@@ -236,9 +236,9 @@ DWORD CInfoItemWeapon::ReadElementData(
 			if (dwTmp == 0) {
 				break;
 			}
-			m_adwEffectIDAtack.Add (dwTmp);
+			m_adwEffectIDAtack.push_back (dwTmp);
 		}
-		dwSize = (m_adwEffectIDAtack.GetSize () + 1) * sizeof (DWORD);
+		dwSize = (m_adwEffectIDAtack.size() + 1) * sizeof (DWORD);
 		break;
 	case 6:		/* クリティカル時のエフェクトID */
 		pTmp	= pSrc;
@@ -249,9 +249,9 @@ DWORD CInfoItemWeapon::ReadElementData(
 			if (dwTmp == 0) {
 				break;
 			}
-			m_adwEffectIDCritical.Add (dwTmp);
+			m_adwEffectIDCritical.push_back (dwTmp);
 		}
-		dwSize = (m_adwEffectIDCritical.GetSize () + 1) * sizeof (DWORD);
+		dwSize = (m_adwEffectIDCritical.size() + 1) * sizeof (DWORD);
 		break;
 	}
 
@@ -299,7 +299,7 @@ PBYTE CInfoItemWeapon::GetSendData(void)
 	strcpyRenew ((LPSTR)pDataTmp, (LPCSTR)m_strName, pDataTmp);										/* 武器種別名 */
 
 	/* 通常攻撃時のエフェクトID */
-	nCount = m_adwEffectIDAtack.GetSize ();
+	nCount = m_adwEffectIDAtack.size();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwEffectIDAtack[i];
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
@@ -309,7 +309,7 @@ PBYTE CInfoItemWeapon::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
 
 	/* クリティカル時のエフェクトID */
-	nCount = m_adwEffectIDCritical.GetSize ();
+	nCount = m_adwEffectIDCritical.size();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwEffectIDCritical[i];
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
@@ -337,8 +337,8 @@ PBYTE CInfoItemWeapon::SetSendData(PBYTE pSrc)
 
 	pDataTmp = pSrc;
 
-	m_adwEffectIDAtack.RemoveAll ();
-	m_adwEffectIDCritical.RemoveAll ();
+	m_adwEffectIDAtack.clear();
+	m_adwEffectIDCritical.clear();
 
 	CopyMemoryRenew (&m_dwWeaponInfoID,		pDataTmp, sizeof (m_dwWeaponInfoID),	pDataTmp);	/* 武器情報ID */
 	CopyMemoryRenew (&m_dwMotionType,		pDataTmp, sizeof (m_dwMotionType),		pDataTmp);	/* 使用可能な攻撃モーション */
@@ -352,7 +352,7 @@ PBYTE CInfoItemWeapon::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			break;
 		}
-		m_adwEffectIDAtack.Add (dwTmp);
+		m_adwEffectIDAtack.push_back (dwTmp);
 	}
 
 	/* クリティカル時のエフェクトID */
@@ -361,7 +361,7 @@ PBYTE CInfoItemWeapon::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			break;
 		}
-		m_adwEffectIDCritical.Add (dwTmp);
+		m_adwEffectIDCritical.push_back (dwTmp);
 	}
 
 	pRet = pDataTmp;
@@ -389,17 +389,17 @@ void CInfoItemWeapon::Copy(CInfoItemWeapon *pSrc)
 	m_strName				= pSrc->m_strName;				/* 武器種別名 */
 
 	/* 通常攻撃時のエフェクトID */
-	m_adwEffectIDAtack.RemoveAll ();
-	nCount = pSrc->m_adwEffectIDAtack.GetSize ();
+	m_adwEffectIDAtack.clear();
+	nCount = pSrc->m_adwEffectIDAtack.size();
 	for (i = 0; i < nCount; i ++) {
-		m_adwEffectIDAtack.Add (pSrc->m_adwEffectIDAtack[i]);
+		m_adwEffectIDAtack.push_back (pSrc->m_adwEffectIDAtack[i]);
 	}
 
 	/* クリティカル時のエフェクトID */
-	m_adwEffectIDCritical.RemoveAll ();
-	nCount = pSrc->m_adwEffectIDCritical.GetSize ();
+	m_adwEffectIDCritical.clear();
+	nCount = pSrc->m_adwEffectIDCritical.size();
 	for (i = 0; i < nCount; i ++) {
-		m_adwEffectIDCritical.Add (pSrc->m_adwEffectIDCritical[i]);
+		m_adwEffectIDCritical.push_back (pSrc->m_adwEffectIDCritical[i]);
 	}
 }
 

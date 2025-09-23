@@ -48,14 +48,14 @@ void CDataSlot::Destroy(void)
 	/* 確保されているデータを全て消去 */
 
 	/* データスロット */
-	nCount = m_DataSlot.GetSize ();
+	nCount = m_DataSlot.size();
 	for (i = 0; i < nCount; i ++) {
 		PDATASLOTINFO pInfo;
 
 		pInfo = &m_DataSlot[i];
 		SAFE_DELETE_ARRAY (pInfo->pData);
 	}
-	m_DataSlot.RemoveAll ();
+	m_DataSlot.clear();
 
 	m_CritData.Leave ();
 }
@@ -85,7 +85,7 @@ DWORD CDataSlot::Add(
 	Info.dwID	= m_dwNewID;		/* データID */
 	Info.dwSize	= dwSize;			/* データサイズ */
 	Info.pData	= pData;			/* データバッファ */
-	m_DataSlot.Add (Info);
+	m_DataSlot.push_back (Info);
 
 	while (1) {
 		m_dwNewID ++;
@@ -186,7 +186,7 @@ BOOL CDataSlot::Copy(
 	/* 削除指定？ */
 	if (bDelete) {
 		SAFE_DELETE_ARRAY (pInfo->pData);
-		m_DataSlot.RemoveAt (nID);
+		m_DataSlot.erase (m_DataSlot.begin () + nID);
 	}
 
 	bRet = TRUE;
@@ -257,7 +257,7 @@ void CDataSlot::Delete(
 
 	pInfo = &m_DataSlot[nID];
 	SAFE_DELETE_ARRAY (pInfo->pData);
-	m_DataSlot.RemoveAt (nID);
+	m_DataSlot.erase (m_DataSlot.begin () + nID);
 
 Exit:
 	m_CritData.Leave ();
@@ -302,7 +302,7 @@ int CDataSlot::GetID(
 	PDATASLOTINFO pInfo;
 
 	nRet = -1;
-	nCount = m_DataSlot.GetSize ();
+	nCount = m_DataSlot.size();
 
 	for (i = 0; i < nCount; i ++) {
 		pInfo = &m_DataSlot[i];

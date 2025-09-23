@@ -693,11 +693,11 @@ PCImg32 CMgrGrpData::GetDibMapParts(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImgMapParts->GetSize ()) {
+	if (nNo >= m_paImgMapParts->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgMapParts->GetAt (nNo);
+	pImg = m_paImgMapParts->at(nNo);
 
 Exit:
 	return pImg;
@@ -715,11 +715,11 @@ PCImg32 CMgrGrpData::GetDibMapShadow(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImgMapShadow->GetSize ()) {
+	if (nNo >= m_paImgMapShadow->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgMapShadow->GetAt (nNo);
+	pImg = m_paImgMapShadow->at(nNo);
 
 Exit:
 	return pImg;
@@ -785,11 +785,11 @@ PCImg32 CMgrGrpData::GetDibNPC(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImgNPC->GetSize ()) {
+	if (nNo >= m_paImgNPC->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgNPC->GetAt (nNo);
+	pImg = m_paImgNPC->at(nNo);
 
 Exit:
 	return pImg;
@@ -818,7 +818,7 @@ PCImg32 CMgrGrpData::GetDibBody(WORD wFamilyID)
 	default:
 		goto Exit;
 	}
-	pImg = m_paImgBody->GetAt (nNo);
+	pImg = m_paImgBody->at(nNo);
 
 Exit:
 	return pImg;
@@ -847,7 +847,7 @@ PCImg32 CMgrGrpData::GetDibEar(WORD wFamilyID)
 	default:
 		goto Exit;
 	}
-	pImg = m_paImgEar->GetAt (nNo);
+	pImg = m_paImgEar->at(nNo);
 
 Exit:
 	return pImg;
@@ -866,11 +866,11 @@ PCImg32 CMgrGrpData::GetDibCloth(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgCloth->GetSize ()) {
+	if (nNo >= m_paImgCloth->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgCloth->GetAt (nNo);
+	pImg = m_paImgCloth->at(nNo);
 
 Exit:
 	return pImg;
@@ -889,11 +889,11 @@ PCImg32 CMgrGrpData::GetDibEye(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgEye->GetSize ()) {
+	if (nNo >= m_paImgEye->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgEye->GetAt (nNo);
+	pImg = m_paImgEye->at(nNo);
 
 Exit:
 	return pImg;
@@ -911,11 +911,11 @@ PCImg32 CMgrGrpData::GetDibHairD(WORD wHairColorID)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (wHairColorID >= m_paImgHairD->GetSize ()) {
+	if (wHairColorID >= m_paImgHairD->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgHairD->GetAt (wHairColorID);
+	pImg = m_paImgHairD->at(wHairColorID);
 
 Exit:
 	return pImg;
@@ -933,11 +933,11 @@ PCImg32 CMgrGrpData::GetDibHairU(WORD wHairColorID)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (wHairColorID >= m_paImgHairU->GetSize ()) {
+	if (wHairColorID >= m_paImgHairU->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgHairU->GetAt (wHairColorID);
+	pImg = m_paImgHairU->at(wHairColorID);
 
 Exit:
 	return pImg;
@@ -956,11 +956,11 @@ PCImg32 CMgrGrpData::GetDibSP(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgSP->GetSize ()) {
+	if (nNo >= m_paImgSP->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgSP->GetAt (nNo);
+	pImg = m_paImgSP->at(nNo);
 
 Exit:
 	return pImg;
@@ -979,11 +979,11 @@ PCImg32 CMgrGrpData::GetDibAcce(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgAcce->GetSize ()) {
+	if (nNo >= m_paImgAcce->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgAcce->GetAt (nNo);
+	pImg = m_paImgAcce->at(nNo);
 
 Exit:
 	return pImg;
@@ -1002,11 +1002,11 @@ PCImg32 CMgrGrpData::GetDibEfc32(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgEfc32->GetSize ()) {
+	if (nNo >= m_paImgEfc32->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgEfc32->GetAt (nNo);
+	pImg = m_paImgEfc32->at(nNo);
 
 Exit:
 	return pImg;
@@ -1025,11 +1025,11 @@ PCImg32 CMgrGrpData::GetDibEfc64(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgEfc64->GetSize ()) {
+	if (nNo >= m_paImgEfc64->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgEfc64->GetAt (nNo);
+	pImg = m_paImgEfc64->at(nNo);
 
 Exit:
 	return pImg;
@@ -1048,11 +1048,11 @@ PCImg32 CMgrGrpData::GetDibWeapon(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgWeapon->GetSize ()) {
+	if (nNo >= m_paImgWeapon->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgWeapon->GetAt (nNo);
+	pImg = m_paImgWeapon->at(nNo);
 
 Exit:
 	return pImg;
@@ -1071,11 +1071,11 @@ PCImg32 CMgrGrpData::GetDibWeaponBow(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgWeaponBow->GetSize ()) {
+	if (nNo >= m_paImgWeaponBow->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgWeaponBow->GetAt (nNo);
+	pImg = m_paImgWeaponBow->at(nNo);
 
 Exit:
 	return pImg;
@@ -1094,11 +1094,11 @@ PCImg32 CMgrGrpData::GetDibWeaponArrow(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgWeaponArrow->GetSize ()) {
+	if (nNo >= m_paImgWeaponArrow->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgWeaponArrow->GetAt (nNo);
+	pImg = m_paImgWeaponArrow->at(nNo);
 
 Exit:
 	return pImg;
@@ -1117,11 +1117,11 @@ PCImg32 CMgrGrpData::GetDibWeaponGlove(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgWeaponGlove->GetSize ()) {
+	if (nNo >= m_paImgWeaponGlove->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgWeaponGlove->GetAt (nNo);
+	pImg = m_paImgWeaponGlove->at(nNo);
 
 Exit:
 	return pImg;
@@ -1140,11 +1140,11 @@ PCImg32 CMgrGrpData::GetDibWeaponEtc(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgWeaponEtc->GetSize ()) {
+	if (nNo >= m_paImgWeaponEtc->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgWeaponEtc->GetAt (nNo);
+	pImg = m_paImgWeaponEtc->at(nNo);
 
 Exit:
 	return pImg;
@@ -1163,11 +1163,11 @@ PCImg32 CMgrGrpData::GetDibEfcBalloon(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImgEfcBalloon->GetSize ()) {
+	if (nNo >= m_paImgEfcBalloon->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgEfcBalloon->GetAt (nNo);
+	pImg = m_paImgEfcBalloon->at(nNo);
 
 Exit:
 	return pImg;
@@ -1198,7 +1198,7 @@ PCImg32 CMgrGrpData::GetDib2x2Body(WORD wFamilyID)
 		goto Exit;
 	}
 #endif
-	pImg = m_paImg2x2Body->GetAt (0);
+	pImg = m_paImg2x2Body->at(0);
 
 //Exit:
 	return pImg;
@@ -1219,15 +1219,15 @@ PCImg32 CMgrGrpData::GetDib2x2Cloth(WORD wClothID)
 	if (wClothID == 0) {
 		goto Exit;
 	}
-	if (wClothID >= m_paImg2x2Cloth->GetSize ()) {
+	if (wClothID >= m_paImg2x2Cloth->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2Cloth->GetAt (wClothID);
+	pImg = m_paImg2x2Cloth->at(wClothID);
 
 Exit:
 	if (pImg == NULL) {
-		pImg = m_paImg2x2Cloth->GetAt (0);
+		pImg = m_paImg2x2Cloth->at(0);
 	}
 	return pImg;
 }
@@ -1245,11 +1245,11 @@ PCImg32 CMgrGrpData::GetDib2x2Eye(int nNo)
 
 	pImg = NULL;
 	nNo  = max (0, nNo);
-	if (nNo >= m_paImg2x2Eye->GetSize ()) {
+	if (nNo >= m_paImg2x2Eye->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2Eye->GetAt (nNo);
+	pImg = m_paImg2x2Eye->at(nNo);
 
 Exit:
 	return pImg;
@@ -1271,11 +1271,11 @@ PCImg32 CMgrGrpData::GetDib2x2Hair(WORD wHairColorID)
 		goto Exit;
 	}
 	wHairColorID --;
-	if (wHairColorID >= m_paImg2x2Hair->GetSize ()) {
+	if (wHairColorID >= m_paImg2x2Hair->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2Hair->GetAt (wHairColorID);
+	pImg = m_paImg2x2Hair->at(wHairColorID);
 
 Exit:
 	return pImg;
@@ -1297,11 +1297,11 @@ PCImg32 CMgrGrpData::GetDib2x2SPCloth(WORD wSPClothID)
 		goto Exit;
 	}
 	wSPClothID --;
-	if (wSPClothID >= m_paImg2x2SPCloth->GetSize ()) {
+	if (wSPClothID >= m_paImg2x2SPCloth->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2SPCloth->GetAt (wSPClothID);
+	pImg = m_paImg2x2SPCloth->at(wSPClothID);
 
 Exit:
 	return pImg;
@@ -1323,11 +1323,11 @@ PCImg32 CMgrGrpData::GetDib2x2SPHair(WORD wSPHairID)
 		goto Exit;
 	}
 	wSPHairID --;
-	if (wSPHairID >= m_paImg2x2SPHair->GetSize ()) {
+	if (wSPHairID >= m_paImg2x2SPHair->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2SPHair->GetAt (wSPHairID);
+	pImg = m_paImg2x2SPHair->at(wSPHairID);
 
 Exit:
 	return pImg;
@@ -1345,11 +1345,11 @@ PCImg32 CMgrGrpData::GetDib2x2Arms(WORD wArmsID)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (wArmsID >= m_paImg2x2Arms->GetSize ()) {
+	if (wArmsID >= m_paImg2x2Arms->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2Arms->GetAt (wArmsID);
+	pImg = m_paImg2x2Arms->at(wArmsID);
 
 Exit:
 	return pImg;
@@ -1367,11 +1367,11 @@ PCImg32 CMgrGrpData::GetDib2x2Shield(WORD wShieldID)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (wShieldID >= m_paImg2x2Shield->GetSize ()) {
+	if (wShieldID >= m_paImg2x2Shield->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2Shield->GetAt (wShieldID);
+	pImg = m_paImg2x2Shield->at(wShieldID);
 
 Exit:
 	return pImg;
@@ -1389,11 +1389,11 @@ PCImg32 CMgrGrpData::GetDib2x2ArmsSP(WORD wArmsID)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (wArmsID >= m_paImg2x2ArmsSP->GetSize ()) {
+	if (wArmsID >= m_paImg2x2ArmsSP->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2ArmsSP->GetAt (wArmsID);
+	pImg = m_paImg2x2ArmsSP->at(wArmsID);
 
 Exit:
 	return pImg;
@@ -1411,11 +1411,11 @@ PCImg32 CMgrGrpData::GetDib2x2Bow(WORD wBowID)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (wBowID >= m_paImg2x2Bow->GetSize ()) {
+	if (wBowID >= m_paImg2x2Bow->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2Bow->GetAt (wBowID);
+	pImg = m_paImg2x2Bow->at(wBowID);
 
 Exit:
 	return pImg;
@@ -1433,11 +1433,11 @@ PCImg32 CMgrGrpData::GetDib2x2NPC(WORD wNPCID)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (wNPCID >= m_paImg2x2NPC->GetSize ()) {
+	if (wNPCID >= m_paImg2x2NPC->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2NPC->GetAt (wNPCID);
+	pImg = m_paImg2x2NPC->at(wNPCID);
 
 Exit:
 	return pImg;
@@ -1455,11 +1455,11 @@ PCImg32 CMgrGrpData::GetDib2x2CharShadow(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImg2x2CharShadow->GetSize ()) {
+	if (nNo >= m_paImg2x2CharShadow->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2CharShadow->GetAt (nNo);
+	pImg = m_paImg2x2CharShadow->at(nNo);
 
 Exit:
 	return pImg;
@@ -1477,11 +1477,11 @@ PCImg32 CMgrGrpData::GetDib2x2NPCShadow(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImg2x2NPCShadow->GetSize ()) {
+	if (nNo >= m_paImg2x2NPCShadow->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImg2x2NPCShadow->GetAt (nNo);
+	pImg = m_paImg2x2NPCShadow->at(nNo);
 
 Exit:
 	return pImg;
@@ -1708,11 +1708,11 @@ PCImg32 CMgrGrpData::GetDibMapPartsTmp(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImgMapPartsTmp->GetSize ()) {
+	if (nNo >= m_paImgMapPartsTmp->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgMapPartsTmp->GetAt (nNo);
+	pImg = m_paImgMapPartsTmp->at(nNo);
 
 Exit:
 	return pImg;
@@ -1788,11 +1788,11 @@ PCImg32 CMgrGrpData::GetDibMapShadowTmp(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImgMapShadowTmp->GetSize ()) {
+	if (nNo >= m_paImgMapShadowTmp->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgMapShadowTmp->GetAt (nNo);
+	pImg = m_paImgMapShadowTmp->at(nNo);
 
 Exit:
 	return pImg;
@@ -1868,11 +1868,11 @@ PCImg32 CMgrGrpData::GetDibItemTmp(int nNo)
 	PCImg32 pImg;
 
 	pImg = NULL;
-	if (nNo >= m_paImgItemTmp->GetSize ()) {
+	if (nNo >= m_paImgItemTmp->size()) {
 		goto Exit;
 	}
 
-	pImg = m_paImgItemTmp->GetAt (nNo);
+	pImg = m_paImgItemTmp->at(nNo);
 
 Exit:
 	return pImg;

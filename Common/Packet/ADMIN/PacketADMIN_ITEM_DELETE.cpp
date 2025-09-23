@@ -44,7 +44,7 @@ void CPacketADMIN_ITEM_DELETE::Make(
 {
 	ARRAYDWORD adwItemID;
 
-	adwItemID.Add (dwItemID);
+	adwItemID.push_back (dwItemID);
 	Make (&adwItemID);
 }
 
@@ -63,7 +63,7 @@ void CPacketADMIN_ITEM_DELETE::Make(
 	DWORD dwItemID, dwSize;
 	PPACKETBASE pPacketBase;
 
-	nCount = padwItemID->GetSize ();
+	nCount = padwItemID->size();
 
 	dwSize = sizeof (PACKETBASE) +
 			 ((nCount + 1) * sizeof (DWORD));
@@ -77,7 +77,7 @@ void CPacketADMIN_ITEM_DELETE::Make(
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
 	for (i = 0; i < nCount; i ++) {
-		dwItemID = padwItemID->GetAt (i);
+		dwItemID = padwItemID->at(i);
 		CopyMemoryRenew (pDataTmp, &dwItemID, sizeof (dwItemID), pDataTmp);	/* アイテムID */
 	}
 	/* 終端用 */
@@ -99,7 +99,7 @@ PBYTE CPacketADMIN_ITEM_DELETE::Set(PBYTE pPacket)
 	DWORD dwItemID;
 	PBYTE pRet, pDataTmp;
 
-	m_adwItemID.RemoveAll ();
+	m_adwItemID.clear();
 
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
@@ -109,7 +109,7 @@ PBYTE CPacketADMIN_ITEM_DELETE::Set(PBYTE pPacket)
 		if (dwItemID == 0) {
 			break;
 		}
-		m_adwItemID.Add (dwItemID);
+		m_adwItemID.push_back (dwItemID);
 	}
 
 	pRet = pDataTmp;

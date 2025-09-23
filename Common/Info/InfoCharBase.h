@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 #include "InfoMotion.h"
@@ -104,7 +106,7 @@ public:
 	BOOL	IsNPC				(void);								/* NPCか判定 */
 	BOOL	CheckSessionID		(DWORD dwSessionID);				/* セッションIDをチェック */
 	void	GetFrontPos			(POINT &ptDst, int nDirection = -1, BOOL bMove=FALSE);	/* 一歩前のキャラ座標を取得 */
-	void	GetFrontPos			(CmyArray<POINT, POINT> &aptPos, int nDirection = -1);	/* 一歩前のキャラ座標を取得 */
+	void	GetFrontPos			(std::vector<POINT> &aptPos, int nDirection = -1);	/* 一歩前のキャラ座標を取得 */
 	void	GetFrontMapPos		(POINT &ptDst, int nDirection = -1);					/* 一歩前のマップ座標を取得 */
 	void	GetFrontMapPosRect	(RECT &rcDst, int nDirection = -1);	/* 一歩前のマップ座標矩形を取得 */
 	int		GetDirection		(int x, int y);						/* 指定座標の向きを取得 */
@@ -179,7 +181,7 @@ public:
 				m_bChargeAtack,						/* 溜め攻撃 */
 				m_bParentInfo;						/* 親の情報を参照する */
 	ARRAYBYTE	m_abyMark;							/* 名前の前に表示するマーク番号 */
-	CmyArray<POINT, POINT> m_aposBockMapArea;		/* 当たり判定対象のマップ座標 */
+	std::vector<POINT> m_aposBockMapArea;		/* 当たり判定対象のマップ座標 */
 
 	/* 保存するデータ */
 	BOOL		m_bBlock,					/* ぶつかる判定 */
@@ -272,7 +274,7 @@ public:
 	int			m_nPutAverage;				/* 発生確率 */
 	POINT		m_ptPutArea;				/* 発生範囲(半径) */
 } CInfoCharBase, *PCInfoCharBase;
-typedef CmyArray<PCInfoCharBase, PCInfoCharBase>	  ARRAYINFOCHARBASE;
-typedef CmyArray<PCInfoCharBase, PCInfoCharBase>	*PARRAYINFOCHARBASE;
+using ARRAYINFOCHARBASE = CStdArray<PCInfoCharBase>;
+using PARRAYINFOCHARBASE = ARRAYINFOCHARBASE *;
 
 /* Copyright(C)URARA-works 2006 */

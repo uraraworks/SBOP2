@@ -153,7 +153,7 @@ int CLibInfoMapBase::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -189,9 +189,11 @@ void CLibInfoMapBase::Delete(
 {
 	PCInfoMapBase pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -209,12 +211,12 @@ void CLibInfoMapBase::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwMapID != dwMapID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -239,7 +241,7 @@ void CLibInfoMapBase::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -257,9 +259,9 @@ void CLibInfoMapBase::DeleteParts(DWORD dwPartsID)
 	int i, nCount;
 	PCInfoMapBase pInfoTmp;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		pInfoTmp->DeleteParts (dwPartsID);
 	}
 }
@@ -276,9 +278,9 @@ void CLibInfoMapBase::DeleteShadow(DWORD dwShadowID)
 	int i, nCount;
 	PCInfoMapBase pInfoTmp;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		pInfoTmp->DeleteShadow (dwShadowID);
 	}
 }
@@ -292,7 +294,7 @@ void CLibInfoMapBase::DeleteShadow(DWORD dwShadowID)
 
 PCInfoBase CLibInfoMapBase::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -310,12 +312,12 @@ PCInfoBase CLibInfoMapBase::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwMapID != dwMapID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -338,14 +340,14 @@ DWORD CLibInfoMapBase::GetNewID(void)
 
 	dwRet = 1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwMapID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 
 	return dwRet;

@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -72,7 +74,7 @@ public:
 	POINT		m_ptPos,						/* 座標1 */
 				m_ptPos2;						/* 座標2 */
 } CInfoMapEventBase, *PCInfoMapEventBase;
-typedef CmyArray<PCInfoMapEventBase, PCInfoMapEventBase>	  ARRAYMAPEVENTBASEINFO;
-typedef CmyArray<PCInfoMapEventBase, PCInfoMapEventBase>	*PARRAYMAPEVENTBASEINFO;
+using ARRAYMAPEVENTBASEINFO = CStdArray<PCInfoMapEventBase>;
+using PARRAYMAPEVENTBASEINFO = ARRAYMAPEVENTBASEINFO *;
 
 /* Copyright(C)URARA-works 2007 */

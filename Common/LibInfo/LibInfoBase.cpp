@@ -115,11 +115,11 @@ void CLibInfoBase::GetSaveNo(ARRAYINT &anDst)
 {
 	int i, nCount;
 
-	anDst.RemoveAll ();
+	anDst.clear();
 
 	nCount = GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		anDst.Add (i);
+		anDst.push_back (i);
 	}
 }
 

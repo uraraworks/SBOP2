@@ -93,7 +93,7 @@ int CLibInfoMapObjectData::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -128,9 +128,11 @@ void CLibInfoMapObjectData::Delete(
 {
 	PCInfoMapObjectData pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -145,12 +147,12 @@ void CLibInfoMapObjectData::Delete(DWORD dwDataID)
 	int i, nCount;
 	PCInfoMapObjectData pInfoTmp;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwDataID != dwDataID) {
 			continue;
-		}
+	}
 		Delete (i);
 		break;
 	}
@@ -171,7 +173,7 @@ void CLibInfoMapObjectData::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -197,11 +199,11 @@ void CLibInfoMapObjectData::Merge(CLibInfoMapObjectData *pSrc)
 			pInfoTmp = (PCInfoMapObjectData)GetNew ();
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
-		} else {
+	} else {
 			pInfoDst = (PCInfoMapObjectData)GetNew ();
 			pInfoDst->Copy (pInfoSrc);
 			Renew (pInfoSrc->m_dwDataID, pInfoDst);
-		}
+	}
 	}
 }
 
@@ -219,18 +221,18 @@ CInfoMapObjectData *CLibInfoMapObjectData::Renew(DWORD dwDataID, CInfoMapObjectD
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwDataID != dwDataID) {
 			continue;
-		}
+	}
 		pInfo = (PCInfoMapObjectData)GetNew ();
 		pInfo->Copy (pSrc);
 		pInfo->m_dwDataID = pInfoTmp->m_dwDataID;
 
-		SAFE_DELETE (pInfoTmp);
-		m_paInfo->SetAt (i, pInfo);
+                SAFE_DELETE (pInfoTmp);
+                (*m_paInfo)[i] = pInfo;
 		pRet = pInfo;
 		break;
 	}
@@ -247,7 +249,7 @@ CInfoMapObjectData *CLibInfoMapObjectData::Renew(DWORD dwDataID, CInfoMapObjectD
 
 PCInfoBase CLibInfoMapObjectData::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -264,13 +266,13 @@ PCInfoBase CLibInfoMapObjectData::GetPtr(DWORD dwDataID)
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwDataID == dwDataID) {
 			pRet = pInfoTmp;
 			break;
-		}
+	}
 	}
 
 	return pRet;
@@ -292,16 +294,16 @@ DWORD CLibInfoMapObjectData::GetDataSize(void)
 	dwRet = 0;
 
 	dwRet += sizeof (int);									/* データ数 */
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		dwRet += sizeof (int);								/* 要素数 */
 		nCount2 = pInfo->GetElementCount ();
 		for (j = 0; j < nCount2; j ++) {
 			dwRet += (strlen (pInfo->GetName (j)) + 1);		/* 要素名 */
 			dwRet += sizeof (DWORD);						/* データサイズ */
 			dwRet += pInfo->GetDataSizeNo (j);				/* データ */
-		}
+	}
 	}
 
 	return dwRet;
@@ -332,10 +334,10 @@ PBYTE CLibInfoMapObjectData::GetWriteData(PDWORD pdwSize)
 	pRet = ZeroNew (dwSize);
 	pRetTmp = pRet;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);		/* データ数 */
 	for (i = 0; i < nCount; i ++) {
-		pInfo = m_paInfo->GetAt (i);
+		pInfo = m_paInfo->at(i);
 		nCount2 = pInfo->GetElementCount ();
 		CopyMemoryRenew (pRetTmp, &nCount2, sizeof (nCount2), pRetTmp);	/* 要素数 */
 
@@ -346,7 +348,7 @@ PBYTE CLibInfoMapObjectData::GetWriteData(PDWORD pdwSize)
 			pTmp = pInfo->GetWriteData (j, &dwTmp);
 			CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* データ */
 			SAFE_DELETE_ARRAY (pTmp);
-		}
+	}
 	}
 
 Exit:
@@ -385,9 +387,9 @@ DWORD CLibInfoMapObjectData::ReadElementData(PBYTE pSrc)
 			nNo = pInfo->GetElementNo ((LPCSTR)strTmp);
 			if (nNo >= 0) {
 				dwSizeTmp = pInfo->ReadElementData (pSrcTmp, nNo);
-			}
-			pSrcTmp += dwSizeTmp;
 		}
+			pSrcTmp += dwSizeTmp;
+	}
 		Add (pInfo);
 	}
 
@@ -521,14 +523,14 @@ DWORD CLibInfoMapObjectData::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwDataID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 

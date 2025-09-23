@@ -93,7 +93,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	int i, nCount, nResult;
 	PCInfoCharSvr pInfoChar, pInfoCharTmp, pInfoCharFront;
 	CPacketCHAR_MOVEPOS Packet;
-	CmyArray<PCInfoCharSvr, PCInfoCharSvr> apInfoChar;
+	std::vector<PCInfoCharSvr> apInfoChar;
 
 	Packet.Set (pData);
 
@@ -143,11 +143,11 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 			if (pInfoCharTmp == NULL) {
 				break;
 			}
-			apInfoChar.Add (pInfoCharTmp);
+			apInfoChar.push_back (pInfoCharTmp);
 		}
 
 		/* 前のキャラの座標へ進むように設定していく */
-		nCount = apInfoChar.GetSize ();
+		nCount = apInfoChar.size();
 		for (i = nCount - 1; i >= 0; i --) {
 			pInfoCharTmp	= apInfoChar[i];
 			pInfoCharFront	= (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn (pInfoCharTmp->m_dwFrontCharID);
@@ -277,7 +277,7 @@ void CMainFrame::RecvProcCHAR_REQ_CHARINFO2(PBYTE pData, DWORD dwSessionID)
 
 	LibInfoCharTmp.Create (m_pMgrData);
 
-	nCount = Packet.m_adwCharID.GetSize ();
+	nCount = Packet.m_adwCharID.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoChar = (PCInfoCharBase)m_pLibInfoChar->GetPtrLogIn (Packet.m_adwCharID[i]);
 		if (pInfoChar == NULL) {
@@ -309,7 +309,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 	CPacketCHAR_RES_PUTGET PacketCHAR_RES_PUTGET;
 	CPacketITEM_RES_ITEMINFO PacketITEM_RES_ITEMINFO;
 	CPacketCHAR_ITEMINFO PacketCHAR_ITEMINFO;
-	CmyArray<POINT, POINT> aptPos;
+	std::vector<POINT> aptPos;
 
 	Packet.Set (pData);
 
@@ -332,7 +332,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 	/* アイテムを拾う？ */
 	if (Packet.m_dwItemID == 0) {
 		pInfoChar->GetFrontPos (aptPos);
-		nCount = aptPos.GetSize ();
+		nCount = aptPos.size();
 		for (i = 0; i < nCount; i ++) {
 			ptPos = aptPos[i];
 			pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (pInfoChar->m_dwMapID, &ptPos, FALSE);
@@ -820,9 +820,9 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 	}
 
 	paSkill = pInfoChar->GetSkill ();
-	nCount = paSkill->GetSize ();
+	nCount = paSkill->size();
 	for (i = 0; i < nCount; i ++) {
-		if (paSkill->GetAt (i) == Packet.m_dwPara) {
+		if (paSkill->at(i) == Packet.m_dwPara) {
 			break;
 		}
 	}
@@ -834,7 +834,7 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 //Todo:
 	/* 条件の判定など入れる */
 
-	paSkill->Add (Packet.m_dwPara);
+	paSkill->push_back (Packet.m_dwPara);
 	PacketCHAR_SKILLINFO.Make (Packet.m_dwCharID, paSkill);
 	m_pSock->SendTo (dwSessionID, &PacketCHAR_SKILLINFO);
 

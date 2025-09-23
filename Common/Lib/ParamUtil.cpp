@@ -45,7 +45,7 @@ void CParamUtil::Set(LPCSTR pszText, char cSeparator)
 	LPCSTR pszTmp, pszStart;
 	CmyString strParam;
 
-	m_astrParam.RemoveAll ();
+	m_astrParam.clear();
 	if (pszText == NULL) {
 		return;
 	}
@@ -60,7 +60,7 @@ void CParamUtil::Set(LPCSTR pszText, char cSeparator)
 			CopyMemory (pszTextTmp, pszStart, &pszTmp[i] - pszStart + 1);
 			pszStart = &pszTmp[i + 2];
 			strParam = pszTextTmp;
-			m_astrParam.Add (strParam);
+			m_astrParam.push_back (strParam);
 		}
 	}
 	SAFE_DELETE_ARRAY (pszTextTmp);
@@ -75,7 +75,7 @@ void CParamUtil::Set(LPCSTR pszText, char cSeparator)
 
 int CParamUtil::GetCount(void)
 {
-	return m_astrParam.GetSize ();
+	return m_astrParam.size();
 }
 
 

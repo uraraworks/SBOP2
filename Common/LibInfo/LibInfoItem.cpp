@@ -110,7 +110,7 @@ void CLibInfoItem::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 
 		if (pInfoItem->m_dwMapID != dwMapID) {
 			continue;
-		}
+	}
 
 		switch (nDirection) {
 		case 0:		/* 上 */
@@ -125,7 +125,7 @@ void CLibInfoItem::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 			break;
 		case 3:		/* 右 */
 			break;
-		}
+	}
 	}
 }
 
@@ -162,7 +162,7 @@ int CLibInfoItem::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -199,18 +199,20 @@ void CLibInfoItem::Delete(
 	int i, nCount;
 	PCInfoItem pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 
-	nCount = m_adwAreaID.GetSize ();
+	nCount = m_adwAreaID.size();
 	for (i = 0; i < nCount; i ++) {
 		if (m_adwAreaID[i] == pInfo->m_dwItemID) {
-			m_adwAreaID.RemoveAt (i);
+			m_adwAreaID.erase (m_adwAreaID.begin () + i);
 			break;
-		}
+	}
 	}
 
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -230,12 +232,12 @@ void CLibInfoItem::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwItemID != dwItemID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -262,7 +264,7 @@ void CLibInfoItem::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -287,42 +289,42 @@ void CLibInfoItem::Sort(void)
 	nCount = GetAreaCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItem)GetPtrArea (i);
-		nCountTmp = anNo.GetSize ();
+		nCountTmp = anNo.size();
 		nNo = 0;
 		if (nCountTmp > 0) {
 			for (j = 0; j < nCountTmp; j ++) {
 				pInfoItemTmp = (PCInfoItem)GetPtrArea (anNo[j]);
 				if (pInfoItem->m_ptPos.y < pInfoItemTmp->m_ptPos.y) {
 					break;
-				}
+			}
 				if (pInfoItem->m_ptPos.y == pInfoItemTmp->m_ptPos.y) {
 					if (pInfoItem->m_ptPos.x < pInfoItemTmp->m_ptPos.x) {
 						break;
-					}
 				}
+			}
 				if (pInfoItem->m_ptPos.y == pInfoItemTmp->m_ptPos.y) {
 					if (pInfoItem->m_ptPos.x == pInfoItemTmp->m_ptPos.x) {
 						if (pInfoItem->m_nPosZ < pInfoItemTmp->m_nPosZ) {
 							break;
-						}
 					}
 				}
+			}
 				if (pInfoItem->m_ptPos.y == pInfoItemTmp->m_ptPos.y) {
 					if (pInfoItem->m_ptPos.x == pInfoItemTmp->m_ptPos.x) {
 						if (pInfoItem->m_nPosZ == pInfoItemTmp->m_nPosZ) {
 							if (pInfoItem->m_dwItemID < pInfoItemTmp->m_dwItemID) {
 								break;
-							}
 						}
 					}
 				}
 			}
-			nNo = j;
 		}
-		anNo.InsertAt (nNo, i);
-		adwNo.InsertAt (nNo, pInfoItem->m_dwItemID);
+			nNo = j;
 	}
-	m_adwAreaID.Copy (&adwNo);
+		anNo.insert (anNo.begin () + nNo, i);
+		adwNo.insert (adwNo.begin () + nNo, pInfoItem->m_dwItemID);
+	}
+	m_adwAreaID = adwNo;
 }
 
 
@@ -509,7 +511,7 @@ Exit:
 
 PCInfoBase CLibInfoItem::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -527,12 +529,12 @@ PCInfoBase CLibInfoItem::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwItemID != dwItemID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -557,23 +559,23 @@ PCInfoBase CLibInfoItem::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0 ; i --) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwMapID != dwMapID) {
 			continue;
-		}
+	}
 		if (bPoint) {
 			if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y == pptPos->y))) {
 				continue;
-			}
-		} else {
+		}
+	} else {
 			if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y == pptPos->y))) {
 				if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y + 1 == pptPos->y))) {
 					continue;
-				}
 			}
 		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -770,13 +772,13 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 		return;
 	}
 
-	nCount = pInfoChar->m_adwItemID.GetSize ();
+	nCount = pInfoChar->m_adwItemID.size();
 	for (i = 0; i < nCount; i ++) {
 		dwItemIDTmp = pInfoChar->m_adwItemID[i];
 		if (dwItemIDTmp == dwItemID) {
-			pInfoChar->m_adwItemID.RemoveAt (i);
+			pInfoChar->m_adwItemID.erase (pInfoChar->m_adwItemID.begin () + i);
 			break;
-		}
+	}
 	}
 	/* 見つからなかった？ */
 	if (i >= nCount) {
@@ -800,7 +802,7 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 		/* アイテムが置かれている？ */
 		if (pInfoTmp) {
 			pInfo->m_nPosZ = pInfoTmp->m_nPosZ + 1;
-		}
+	}
 	}
 	Sort ();
 }
@@ -833,24 +835,24 @@ void CLibInfoItem::Equip(CInfoCharBase *pInfoChar, DWORD dwItemIDOld, DWORD dwIt
 	}
 
 	if (pInfoNew) {
-		nCount = pInfoChar->m_adwItemID.GetSize ();
+		nCount = pInfoChar->m_adwItemID.size();
 		for (i = 0; i < nCount; i ++) {
 			dwItemIDTmp = pInfoChar->m_adwItemID[i];
 			if (dwItemIDTmp == dwItemIDNew) {
-				pInfoChar->m_adwItemID.RemoveAt (i);
+				pInfoChar->m_adwItemID.erase (pInfoChar->m_adwItemID.begin () + i);
 				break;
-			}
 		}
+	}
 		pInfoNew->m_ptBackPack.x = pInfoNew->m_ptBackPack.y = 0;
 	}
 	if (pInfoOld) {
 		/* 入れ替え？ */
 		if (pInfoNew) {
 			pInfoOld->m_ptBackPack = ptNew;
-		} else {
+	} else {
 			GetFreePos (pInfoOld->m_ptBackPack, &pInfoChar->m_adwItemID);
-		}
-		pInfoChar->m_adwItemID.Add (dwItemIDOld);
+	}
+		pInfoChar->m_adwItemID.push_back (dwItemIDOld);
 	}
 }
 
@@ -919,8 +921,8 @@ BOOL CLibInfoItem::GetFreePos(POINT &ptDst, ARRAYDWORD *padwItemID)
 			if (bResult == FALSE) {
 				x = y = 4;
 				break;
-			}
 		}
+	}
 	}
 	/* 空きがなかった？ */
 	if (bResult) {
@@ -982,19 +984,19 @@ void CLibInfoItem::SetArea(DWORD dwMapID, RECT *prcArea)
 	int i, nCount;
 	PCInfoItem pInfoTmp;
 
-	m_adwAreaID.RemoveAll ();
+	m_adwAreaID.clear();
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwMapID != dwMapID) {
 			continue;
-		}
+	}
 		if (!((pInfoTmp->m_ptPos.x >= prcArea->left) && (pInfoTmp->m_ptPos.x <= prcArea->right) &&
 			(pInfoTmp->m_ptPos.y >= prcArea->top) && (pInfoTmp->m_ptPos.y <= prcArea->bottom))) {
 			continue;
-		}
-		m_adwAreaID.Add (pInfoTmp->m_dwItemID);
+	}
+		m_adwAreaID.push_back (pInfoTmp->m_dwItemID);
 	}
 }
 
@@ -1007,7 +1009,7 @@ void CLibInfoItem::SetArea(DWORD dwMapID, RECT *prcArea)
 
 int CLibInfoItem::GetAreaCount(void)
 {
-	return m_adwAreaID.GetSize ();
+	return m_adwAreaID.size();
 }
 
 
@@ -1040,14 +1042,14 @@ DWORD CLibInfoItem::GetNewID(void)
 		dwRet = 1;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwItemID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 	m_dwNewIDTmp = dwRet;
 
@@ -1070,16 +1072,16 @@ BOOL CLibInfoItem::IsItemPos(POINT *ptItem, ARRAYDWORD *padwItemID)
 
 	bRet = TRUE;
 
-	nCount = padwItemID->GetSize ();
+	nCount = padwItemID->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = (PCInfoItem)GetPtr (padwItemID->GetAt (i));
+		pInfoTmp = (PCInfoItem)GetPtr (padwItemID->at(i));
 		if (pInfoTmp == NULL) {
 			continue;
-		}
+	}
 		if ((pInfoTmp->m_ptBackPack.x == ptItem->x) &&
 			(pInfoTmp->m_ptBackPack.y == ptItem->y)) {
 			goto Exit;
-		}
+	}
 	}
 
 	bRet = FALSE;

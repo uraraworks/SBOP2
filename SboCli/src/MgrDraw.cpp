@@ -237,7 +237,7 @@ void CMgrDraw::DrawChar(
 		break;
 	}
 
-	nCount = pInfoMotion->m_anDrawList.GetSize ();
+	nCount = pInfoMotion->m_anDrawList.size();
 	for (i = 0; i < nCount; i ++) {
 		switch (pInfoMotion->m_anDrawList[i]) {
 		case 0:
@@ -541,7 +541,7 @@ void CMgrDraw::DrawMapParts(
 	wGrpIDBase = pInfoMapParts->m_wGrpIDBase;
 	wGrpIDPile = pInfoMapParts->m_wGrpIDPile;
 	if (pInfoMapParts->GetAnimeCount () > 0) {
-		pAnime = pInfoMapParts->m_paAnimeInfo->GetAt (pInfoMapParts->m_byAnimeNo);
+		pAnime = pInfoMapParts->m_paAnimeInfo->at(pInfoMapParts->m_byAnimeNo);
 		wGrpIDBase = pAnime->m_wGrpIDBase;
 		wGrpIDPile = pAnime->m_wGrpIDPile;
 	}
@@ -628,7 +628,7 @@ void CMgrDraw::DrawMapShadow(
 
 	wGrpIDBase = pInfoMapShadow->m_wGrpID;
 	if (pInfoMapShadow->GetAnimeCount () > 0) {
-		pAnime = pInfoMapShadow->m_paAnimeInfo->GetAt (pInfoMapShadow->m_byAnimeNo);
+		pAnime = pInfoMapShadow->m_paAnimeInfo->at(pInfoMapShadow->m_byAnimeNo);
 		wGrpIDBase = pAnime->m_wGrpIDBase;
 	}
 	if (bSingleSize) {

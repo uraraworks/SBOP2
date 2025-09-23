@@ -707,7 +707,7 @@ LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 
 int CMgrData::GetSystemMsgCount(void)
 {
-	return m_aSystemMsg.GetSize ();
+	return m_aSystemMsg.size();
 }
 
 
@@ -723,7 +723,7 @@ PSTSYSTEMMSG CMgrData::GetSystemMsg(int nNo)
 
 	pRet = NULL;
 
-	if (nNo >= m_aSystemMsg.GetSize ()) {
+	if (nNo >= m_aSystemMsg.size()) {
 		goto Exit;
 	}
 
@@ -748,7 +748,7 @@ void CMgrData::AddSystemMsg(BOOL bAddLog, LPCSTR pszMsg, COLORREF clMsg)
 	pSystemMsg->strMsg	= pszMsg;
 	pSystemMsg->clMsg	= clMsg;
 
-	m_aSystemMsg.Add (pSystemMsg);
+	m_aSystemMsg.push_back (pSystemMsg);
 }
 
 
@@ -763,12 +763,12 @@ void CMgrData::DeleteAllSystemMsg(void)
 	int i, nCount;
 	PSTSYSTEMMSG pSystemMsg;
 
-	nCount = m_aSystemMsg.GetSize ();
+	nCount = m_aSystemMsg.size();
 	for (i = 0; i < nCount; i ++) {
 		pSystemMsg = m_aSystemMsg[i];
 		SAFE_DELETE (pSystemMsg);
 	}
-	m_aSystemMsg.RemoveAll ();
+	m_aSystemMsg.clear();
 }
 
 

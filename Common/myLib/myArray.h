@@ -1,50 +1,113 @@
-﻿/* Copyright(C)URARA-works 2005 */
-/* ========================================================================= */
-/* ファイル名	:myArray.h													 */
-/* 内容			:MFCのCArrayみたいな配列クラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2005/01/18													 */
-/* ========================================================================= */
-
 #pragma once
+
+#include <algorithm>
+#include <cstddef>
+#include <initializer_list>
+#include <vector>
 
 #include "myString.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
-template<class TYPE, class ARG_TYPE> class CmyArray
+//------------------------------------------------------------------------------
+// Lightweight wrapper that maps the legacy CmyArray API onto std::vector.
+//------------------------------------------------------------------------------
+template <class TYPE, class ARG_TYPE = TYPE>
+class CStdArray : public std::vector<TYPE>
 {
 public:
-			CmyArray();									/* コンストラクタ */
-	virtual ~CmyArray();								/* デストラクタ */
+    using base_type = std::vector<TYPE>;
+    using typename base_type::size_type;
+    using base_type::begin;
+    using base_type::cbegin;
+    using base_type::cend;
+    using base_type::data;
+    using base_type::end;
+    using base_type::operator[];
 
-	int		GetSize		(void);										/* 要素数を取得 */
-	void	RemoveAll	(void);										/* 全要素を削除 */
-	TYPE	GetAt		(int nIndex);								/* 指定要素を取得 */
-	void	SetAt		(int nIndex, ARG_TYPE newElement);			/* 指定要素を更新 */
-	int		Add			(ARG_TYPE newElement);						/* 要素を追加 */
-	void	InsertAt	(int nIndex, ARG_TYPE newElement);			/* 指定位置に追加 */
-	void	RemoveAt	(int nIndex, int nCount = 1);				/* 指定要素を削除 */
-	void	Copy		(CmyArray *pSrc);							/* コピー */
+    CStdArray() = default;
+    explicit CStdArray(size_type count) : base_type(count) {}
+    CStdArray(size_type count, const TYPE &value) : base_type(count, value) {}
+    CStdArray(std::initializer_list<TYPE> init) : base_type(init) {}
 
-	TYPE& operator [](int nIndex);								/* 指定要素へ直接アクセス */
+    int GetSize() const
+    {
+        return static_cast<int>(this->size());
+    }
 
+    int GetUpperBound() const
+    {
+        return GetSize() - 1;
+    }
 
-private:
-	TYPE		*m_pData;					/* データ */
-	int			m_nCount;					/* 要素数 */
+    void RemoveAll()
+    {
+        this->clear();
+    }
+
+    TYPE GetAt(int nIndex) const
+    {
+        if (nIndex < 0 || static_cast<size_type>(nIndex) >= this->size()) {
+            return TYPE();
+        }
+        return (*this)[static_cast<size_type>(nIndex)];
+    }
+
+    void SetAt(int nIndex, ARG_TYPE newElement)
+    {
+        if (nIndex < 0 || static_cast<size_type>(nIndex) >= this->size()) {
+            return;
+        }
+        (*this)[static_cast<size_type>(nIndex)] = newElement;
+    }
+
+    int Add(ARG_TYPE newElement)
+    {
+        this->push_back(newElement);
+        return GetSize() - 1;
+    }
+
+    void InsertAt(int nIndex, ARG_TYPE newElement)
+    {
+        if (nIndex < 0) {
+            nIndex = 0;
+        }
+        const size_type requested = static_cast<size_type>(nIndex);
+        const size_type pos = std::min(requested, this->size());
+        this->insert(this->begin() + static_cast<std::ptrdiff_t>(pos), newElement);
+    }
+
+    void RemoveAt(int nIndex, int nCount = 1)
+    {
+        if (nIndex < 0 || nCount <= 0) {
+            return;
+        }
+        const size_type start = static_cast<size_type>(nIndex);
+        if (start >= this->size()) {
+            return;
+        }
+
+        size_type end = start + static_cast<size_type>(nCount);
+        if (end > this->size()) {
+            end = this->size();
+        }
+        this->erase(this->begin() + static_cast<std::ptrdiff_t>(start),
+                    this->begin() + static_cast<std::ptrdiff_t>(end));
+    }
+
+    void Copy(const CStdArray *pSrc)
+    {
+        if (!pSrc) {
+            RemoveAll();
+            return;
+        }
+
+        this->operator=(*pSrc);
+    }
 };
 
-typedef CmyArray<int, int>				  ARRAYINT;
-typedef CmyArray<int, int>				*PARRAYINT;
-typedef CmyArray<DWORD, DWORD>			  ARRAYDWORD;
-typedef CmyArray<DWORD, DWORD>			*PARRAYDWORD;
-typedef CmyArray<BYTE, BYTE>			  ARRAYBYTE;
-typedef CmyArray<BYTE, BYTE>			*PARRAYBYTE;
-typedef CmyArray<CmyString, CmyString>	CmyStringArray;
-
-/* 実装部分をインクルード */
-#include "myArrayImpl.h"
-
-/* Copyright(C)URARA-works 2005 */
+using ARRAYINT = CStdArray<int, int>;
+using PARRAYINT = ARRAYINT *;
+using ARRAYDWORD = CStdArray<DWORD, DWORD>;
+using PARRAYDWORD = ARRAYDWORD *;
+using ARRAYBYTE = CStdArray<BYTE, BYTE>;
+using PARRAYBYTE = ARRAYBYTE *;
+using CmyStringArray = CStdArray<CmyString, const CmyString &>;

@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -39,7 +41,7 @@ public:
 	DWORD		m_dwDisableID;								/* 拒否情報ID */
 	CmyString	m_strMacAddress;							/* MACアドレス */
 } CInfoDisable, *PCInfoDisable;
-typedef CmyArray<PCInfoDisable, PCInfoDisable>	   ARRAYDISABLEINFO;
-typedef CmyArray<PCInfoDisable, PCInfoDisable>	 *PARRAYDISABLEINFO;
+using ARRAYDISABLEINFO = CStdArray<PCInfoDisable>;
+using PARRAYDISABLEINFO = ARRAYDISABLEINFO *;
 
 /* Copyright(C)URARA-works 2009 */

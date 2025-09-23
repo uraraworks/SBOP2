@@ -95,7 +95,7 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 
 	clText = RGB (1, 1, 1);
 
-	nCount = m_anCommand.GetSize ();
+	nCount = m_anCommand.size();
 	for (i = 0; i < nCount; i ++) {
 		pszTmp = "";
 		switch (m_anCommand[i]) {
@@ -141,10 +141,10 @@ void CWindowITEMMENU_SELECT::SetItemID(int nType, DWORD dwItemID)
 	m_nType		= nType;
 	nPosMaxBack	= m_nPosMax;
 
-	m_anCommand.RemoveAll ();
+	m_anCommand.clear();
 
 	if (m_nType < EQUIPTYPE_MAX) {
-		m_anCommand.Add (ITEMMENU_SELECT_COMMAND_EQUIP_UNSET);
+		m_anCommand.push_back (ITEMMENU_SELECT_COMMAND_EQUIP_UNSET);
 	} else {
 		dwItemTypeID = m_pLibInfoItem->GetItemType (m_pInfoItem->m_dwItemID);
 		switch (dwItemTypeID) {
@@ -152,14 +152,14 @@ void CWindowITEMMENU_SELECT::SetItemID(int nType, DWORD dwItemID)
 		case ITEMTYPEID_ACCE:		/* アクセサリ */
 		case ITEMTYPEID_ARMS:		/* 持ち物 */
 		case ITEMTYPEID_SHIELD:		/* 盾 */
-			m_anCommand.Add (ITEMMENU_SELECT_COMMAND_EQUIP);
+			m_anCommand.push_back (ITEMMENU_SELECT_COMMAND_EQUIP);
 			break;
 		}
-		m_anCommand.Add (ITEMMENU_SELECT_COMMAND_USE);
-		m_anCommand.Add (ITEMMENU_SELECT_COMMAND_PUT);
+		m_anCommand.push_back (ITEMMENU_SELECT_COMMAND_USE);
+		m_anCommand.push_back (ITEMMENU_SELECT_COMMAND_PUT);
 	}
 
-	m_nPosMax	= m_anCommand.GetSize () - 1;
+	m_nPosMax	= m_anCommand.size() - 1;
 	m_nPos		= min (m_nPos, m_nPosMax);
 	if (nPosMaxBack != m_nPosMax) {
 		m_pDib->Destroy ();

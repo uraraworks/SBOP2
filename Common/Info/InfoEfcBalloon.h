@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoAnime.h"
 
@@ -46,7 +48,7 @@ public:
 				m_dwGrpID;							/* 画像ID */
 	CmyString	m_strName;							/* 噴出し名 */
 } CInfoEfcBalloon, *PCInfoEfcBalloon;
-typedef CmyArray<PCInfoEfcBalloon, PCInfoEfcBalloon>	  ARRAYEFCBALLOON;
-typedef CmyArray<PCInfoEfcBalloon, PCInfoEfcBalloon>	*PARRAYEFCBALLOON;
+using ARRAYEFCBALLOON = CStdArray<PCInfoEfcBalloon>;
+using PARRAYEFCBALLOON = ARRAYEFCBALLOON *;
 
 /* Copyright(C)URARA-works 2007 */

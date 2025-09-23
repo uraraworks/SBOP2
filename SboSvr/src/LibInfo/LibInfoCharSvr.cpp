@@ -136,7 +136,7 @@ Exit:
 
 int CLibInfoCharSvr::GetCountLogIn(void)
 {
-	return m_paInfoLogin->GetSize ();
+	return m_paInfoLogin->size();
 }
 
 
@@ -157,9 +157,9 @@ int CLibInfoCharSvr::GetCountOnline(DWORD dwMapID/*0*/)
 		goto Exit;
 	}
 
-	nCount = m_paInfoLogin->GetSize ();
+	nCount = m_paInfoLogin->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoChar = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
+		pInfoChar = (PCInfoCharSvr)m_paInfoLogin->at(i);
 		if (pInfoChar->IsNPC ()) {
 			continue;
 		}
@@ -203,7 +203,7 @@ void CLibInfoCharSvr::LogIn(
 	pChar->m_strSpeak.Empty ();
 	pChar->m_ptCharBack.x = pChar->m_nMapX;
 	pChar->m_ptCharBack.y = pChar->m_nMapY;
-	m_paInfoLogin->Add (pChar);
+	m_paInfoLogin->push_back (pChar);
 }
 
 
@@ -222,7 +222,7 @@ void CLibInfoCharSvr::LogOut(DWORD dwCharID)
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pCharTmp = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
+		pCharTmp = (PCInfoCharSvr)m_paInfoLogin->at(i);
 		if (pCharTmp->m_dwCharID == dwCharID) {
 			break;
 		}
@@ -263,7 +263,7 @@ void CLibInfoCharSvr::LogOut(DWORD dwCharID)
 		pCharTmp->SetMoveState (CHARMOVESTATE_STAND);
 		pCharTmp->SetProcState (CHARPROCSTATEID_NORMAL);
 	}
-	m_paInfoLogin->RemoveAt (i);
+	m_paInfoLogin->erase (m_paInfoLogin->begin () + i);
 }
 
 
@@ -289,25 +289,25 @@ void CLibInfoCharSvr::Revice(void)
 		pInfoChar->Copy (pInfoCharTmp);
 
 		nNo = GetNoLogIn (pInfoChar->m_dwCharID);
-		if (nNo >= 0) {
-			m_paInfoLogin->SetAt (nNo, pInfoChar);
-		}
-		SAFE_DELETE (pInfoCharTmp);
-		m_paInfo->SetAt (i, pInfoChar);
+                if (nNo >= 0) {
+                        (*m_paInfoLogin)[nNo] = pInfoChar;
+                }
+                SAFE_DELETE (pInfoCharTmp);
+                (*m_paInfo)[i] = pInfoChar;
 
 		if (pInfoChar->m_nMoveType != CHARMOVETYPE_PC) {
 			pInfoChar->m_bNPC = TRUE;
 			nNo = GetNoLogIn (pInfoChar->m_dwCharID);
 			if (nNo < 0) {
-				m_paInfoLogin->Add (pInfoChar);
+				m_paInfoLogin->push_back (pInfoChar);
 			}
 		}
 		/* 不明アイテムIDの整理 */
-		nCount2 = pInfoChar->m_adwItemID.GetSize ();
+		nCount2 = pInfoChar->m_adwItemID.size();
 		for (j = nCount2 - 1; j >= 0; j --) {
 			pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (pInfoChar->m_adwItemID[j]);
 			if (pInfoItem == NULL) {
-				pInfoChar->m_adwItemID.RemoveAt (j);
+				pInfoChar->m_adwItemID.erase (pInfoChar->m_adwItemID.begin () + j);
 			}
 		}
 //Todo:マップからのはみ出しチェック
@@ -565,7 +565,7 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 
 	} else {
 		GetFrontCharIDTarget (pChar->m_dwCharID, -1, 1, &adwCharID);
-		nCount = adwCharID.GetSize ();
+		nCount = adwCharID.size();
 		for (i = 0; i < nCount; i ++) {
 			bRet |= AtackImple (pChar, adwCharID[i]);
 		}
@@ -957,7 +957,7 @@ void CLibInfoCharSvr::DragItem(CInfoCharSvr *pChar, DWORD dwItemID, POINT ptNewP
 	}
 
 	pInfoItemSrc = NULL;
-	nCount = pChar->m_adwItemID.GetSize ();
+	nCount = pChar->m_adwItemID.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItemTmp = (PCInfoItem)m_pLibInfoItem->GetPtr (pChar->m_adwItemID[i]);
 		if (pInfoItemTmp == NULL) {
@@ -1053,20 +1053,25 @@ DWORD CLibInfoCharSvr::GetPlaceName(CmyString &strDst)
 		return 0;
 	}
 	for (i = 0; i < nCount; i ++) {
-		anMapLoginCount.Add (0);
+		anMapLoginCount.push_back (0);
 	}
 
 	/* 各マップの人数を集計 */
-	nCount = m_paInfoLogin->GetSize ();
+	nCount = m_paInfoLogin->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoChar = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
+		pInfoChar = (PCInfoCharSvr)m_paInfoLogin->at(i);
 		if (pInfoChar->IsNPC ()) {
 			continue;
 		}
-		if ((int)pInfoChar->m_dwMapID - 1 >= anMapLoginCount.GetSize ()) {
+		DWORD dwMapIndex = pInfoChar->m_dwMapID;
+		if (dwMapIndex == 0) {
 			continue;
 		}
-		anMapLoginCount[pInfoChar->m_dwMapID - 1] ++;
+		size_t nMapIndex = static_cast<size_t>(dwMapIndex - 1);
+		if (nMapIndex >= anMapLoginCount.size()) {
+			continue;
+		}
+		anMapLoginCount[nMapIndex] ++;
 	}
 
 	nNo = 0;
@@ -1271,13 +1276,13 @@ void CLibInfoCharSvr::SetPtr(DWORD dwCharID, PCInfoCharBase pChar)
 	PCInfoCharBase pTmp;
 
 	/* 先にログイン中情報を書き換える */
-	nCount = m_paInfoLogin->GetSize ();
+	nCount = m_paInfoLogin->size();
 	for (i = 0; i < nCount; i ++) {
-		pTmp = (PCInfoCharBase)m_paInfoLogin->GetAt (i);
-		if (pTmp->m_dwCharID == dwCharID) {
-			m_paInfoLogin->SetAt (i, pChar);
-			break;
-		}
+		pTmp = (PCInfoCharBase)m_paInfoLogin->at(i);
+                if (pTmp->m_dwCharID == dwCharID) {
+                        (*m_paInfoLogin)[i] = pChar;
+                        break;
+                }
 	}
 
 	CLibInfoCharBase::SetPtr (dwCharID, pChar);
@@ -1299,7 +1304,7 @@ PCInfoCharBase CLibInfoCharSvr::GetPtrSessionID(DWORD dwSessionID)
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfoLogin->GetAt (i);
+		pInfoTmp = m_paInfoLogin->at(i);
 		if (pInfoTmp->m_dwSessionID == dwSessionID) {
 			pRet = pInfoTmp;
 			break;
@@ -1327,7 +1332,7 @@ PCInfoCharBase CLibInfoCharSvr::GetPtrLogIn(int nNo)
 	if (nNo >= nCount) {
 		goto Exit;
 	}
-	pRet = m_paInfoLogin->GetAt (nNo);
+	pRet = m_paInfoLogin->at(nNo);
 
 Exit:
 	return pRet;
@@ -1352,7 +1357,7 @@ PCInfoCharBase CLibInfoCharSvr::GetPtrLogIn(DWORD dwCharID)
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pCharTmp = m_paInfoLogin->GetAt (i);
+		pCharTmp = m_paInfoLogin->at(i);
 		if (pCharTmp->m_dwCharID == dwCharID) {
 			pRet = pCharTmp;
 			break;
@@ -1399,7 +1404,7 @@ int CLibInfoCharSvr::GetNoLogIn(DWORD dwCharID)
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfoLogin->GetAt (i);
+		pInfoCharTmp = m_paInfoLogin->at(i);
 		if (pInfoCharTmp->m_dwCharID == dwCharID) {
 			nRet = i;
 			break;
@@ -1423,7 +1428,7 @@ void CLibInfoCharSvr::GetScreenCharID(
 	int i, nCount;
 	PCInfoCharSvr pInfoCharTmp;
 
-	aDst.RemoveAll ();
+	aDst.clear();
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
@@ -1437,7 +1442,7 @@ void CLibInfoCharSvr::GetScreenCharID(
 			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y))) {
 			continue;
 		}
-		aDst.Add (pInfoCharTmp->m_dwCharID);
+		aDst.push_back (pInfoCharTmp->m_dwCharID);
 	}
 }
 
@@ -1457,7 +1462,7 @@ void CLibInfoCharSvr::GetScreenCharIDLineOut(
 		aPosY[] = {DRAW_PARTS_Y * 2 * -1, DRAW_PARTS_Y * 2, 0, 0};
 	PCInfoCharSvr pInfoCharTmp;
 
-	aDst.RemoveAll ();
+	aDst.clear();
 
 	x = pInfoChar->m_nMapX + aPosX[pInfoChar->m_nDirection];
 	y = pInfoChar->m_nMapY + aPosY[pInfoChar->m_nDirection];
@@ -1498,7 +1503,7 @@ void CLibInfoCharSvr::GetScreenCharIDLineOut(
 			}
 			break;
 		}
-		aDst.Add (pInfoCharTmp->m_dwCharID);
+		aDst.push_back (pInfoCharTmp->m_dwCharID);
 	}
 }
 
@@ -1518,7 +1523,7 @@ void CLibInfoCharSvr::GetAreaCharInfo(
 	RECT rcTmp;
 	PCInfoCharSvr pInfoCharTmp;
 
-	aDst.RemoveAll ();
+	aDst.clear();
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
@@ -1535,7 +1540,7 @@ void CLibInfoCharSvr::GetAreaCharInfo(
 			(prcSrc->bottom >= rcTmp.top))) {
 			continue;
 		}
-		aDst.Add (pInfoCharTmp);
+		aDst.push_back (pInfoCharTmp);
 	}
 }
 
@@ -1552,7 +1557,7 @@ void CLibInfoCharSvr::GetTailCharInfo(
 {
 	PCInfoCharSvr pInfoCharTmp;
 
-	aDst.RemoveAll ();
+	aDst.clear();
 
 	pInfoCharTmp = pInfoChar;
 	while (1) {
@@ -1563,7 +1568,7 @@ void CLibInfoCharSvr::GetTailCharInfo(
 		if (pInfoCharTmp == NULL) {
 			break;
 		}
-		aDst.Add (pInfoCharTmp);
+		aDst.push_back (pInfoCharTmp);
 	}
 }
 
@@ -1766,7 +1771,7 @@ DWORD CLibInfoCharSvr::GetFrontCharID(DWORD dwCharID, int nDirection)
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfoLogin->GetAt (i);
+		pInfoCharTmp = m_paInfoLogin->at(i);
 		if (pInfoCharSrc == pInfoCharTmp) {
 			continue;
 		}
@@ -1813,7 +1818,7 @@ DWORD CLibInfoCharSvr::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfoLogin->GetAt (i);
+		pInfoCharTmp = m_paInfoLogin->at(i);
 		if (pInfoCharSrc == pInfoCharTmp) {
 			continue;
 		}
@@ -1868,7 +1873,7 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
+		pInfoCharTmp = (PCInfoCharSvr)m_paInfoLogin->at(i);
 		if (pInfoCharSrc == pInfoCharTmp) {
 			continue;
 		}
@@ -1894,7 +1899,7 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 		if (padwCharID == NULL) {
 			break;
 		}
-		padwCharID->Add (dwRet);
+		padwCharID->push_back (dwRet);
 	}
 
 Exit:
@@ -1936,7 +1941,7 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = (PCInfoCharSvr)m_paInfoLogin->GetAt (i);
+		pInfoCharTmp = (PCInfoCharSvr)m_paInfoLogin->at(i);
 		if (pInfoCharSrc == pInfoCharTmp) {
 			continue;
 		}
@@ -1976,7 +1981,7 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 		if (pSearchResult == NULL) {
 			continue;
 		}
-		int nResult = pSearchResult->GetSize () * 2;
+		int nResult = pSearchResult->size() * 2;
 		if ((nResult <= 0) || (nResult >= nTmp)) {
 			continue;
 		}
@@ -2012,7 +2017,7 @@ void CLibInfoCharSvr::SetPos(
 		/* ついてきているキャラ一覧を取得 */
 		GetTailCharInfo (pInfoChar, apInfoChar);
 
-		nCount = apInfoChar.GetSize ();
+		nCount = apInfoChar.size();
 		for (i = nCount - 1; i >= 0; i --) {
 			pInfoCharTmp	= apInfoChar[i];
 			pInfoCharFront	= (PCInfoCharSvr)GetPtrLogIn (pInfoCharTmp->m_dwFrontCharID);
@@ -2689,7 +2694,7 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 
 	pInfoCharTmp = (PCInfoCharSvr)GetNew (pInfoChar->m_nPutMoveType);
 	pInfoCharTmp->Copy (pInfoChar);
-	pInfoCharTmp->GetItem ()->RemoveAll ();			/* アイテム情報はコピーしない */
+	pInfoCharTmp->GetItem ()->clear();			/* アイテム情報はコピーしない */
 	pInfoCharTmp->m_dwCharID		= 0;
 	pInfoCharTmp->m_dwParentCharID	= pInfoChar->m_dwCharID;
 	pInfoCharTmp->m_nMoveType		= pInfoChar->m_nPutMoveType;
@@ -2760,7 +2765,7 @@ void CLibInfoCharSvr::DropItem(CInfoCharSvr *pInfoChar)
 	}
 
 	paItem		= pInfoChar->GetItem ();
-	nItemCount	= paItem->GetSize ();
+	nItemCount	= paItem->size();
 	/* アイテムを持っていなければ親の所持品を対象とする */
 	if (nItemCount == 0) {
 		pInfoCharParent = (PCInfoCharSvr)GetPtrParent (pInfoChar);
@@ -2768,14 +2773,14 @@ void CLibInfoCharSvr::DropItem(CInfoCharSvr *pInfoChar)
 			return;
 		}
 		paItem		= pInfoCharParent->GetItem ();
-		nItemCount	= paItem->GetSize ();
+		nItemCount	= paItem->size();
 		if (nItemCount == 0) {
 			return;
 		}
 	}
 
 	/* 所持品から1つ選ぶ */
-	dwItemID = paItem->GetAt (genrand () % nItemCount);
+	dwItemID = paItem->at(genrand () % nItemCount);
 
 	ptPos.x = pInfoChar->m_nMapX;
 	ptPos.y = pInfoChar->m_nMapY;
@@ -2811,13 +2816,13 @@ void CLibInfoCharSvr::GetTargetCharID(CInfoCharSvr *pInfoChar, int nTarget, int 
 	int i, nCount;
 	PCInfoCharSvr pInfoCharTmp;
 
-	adstCharID.RemoveAll ();
+	adstCharID.clear();
 
 	nCount = GetCountLogIn ();
 
 	switch (nArea) {
 	case CHARAREA_SELF:			/* 自分 */
-		adstCharID.Add (pInfoChar->m_dwCharID);
+		adstCharID.push_back (pInfoChar->m_dwCharID);
 		break;
 	case CHARAREA_FRONT:		/* 1歩前 */
 	case CHARAREA_AROUND:		/* 周囲 */
@@ -2846,7 +2851,7 @@ void CLibInfoCharSvr::GetTargetCharID(CInfoCharSvr *pInfoChar, int nTarget, int 
 					continue;
 				}
 			}
-			adstCharID.Add (pInfoCharTmp->m_dwCharID);
+			adstCharID.push_back (pInfoCharTmp->m_dwCharID);
 		}
 	}
 }
@@ -3080,11 +3085,11 @@ DWORD CLibInfoCharSvr::GetAtackEffectID(CInfoCharSvr *pInfoChar, BOOL bCritical)
 	if (bCritical) {
 		padwEffectID = &pInfoItemWeapon->m_adwEffectIDCritical;
 	}
-	nCount = padwEffectID->GetSize ();
+	nCount = padwEffectID->size();
 	if (nCount <= 0) {
 		goto Exit;
 	}
-	dwRet = padwEffectID->GetAt (genrand () % nCount);
+	dwRet = padwEffectID->at(genrand () % nCount);
 
 Exit:
 	return dwRet;
@@ -3128,7 +3133,7 @@ int CLibInfoCharSvr::UseItemProcHP(CInfoCharSvr *pInfoChar, DWORD dwItemID)
 	}
 	GetTargetCharID (pInfoChar, pInfoItemType->m_byTarget, pInfoItemType->m_byArea, aCharID);
 
-	nCount = aCharID.GetSize ();
+	nCount = aCharID.size();
 	for (i = 0; i < nCount; i ++) {
 		nTmp = (int)pInfoItemType->m_dwValue2;
 		if (nTmp == 0) {

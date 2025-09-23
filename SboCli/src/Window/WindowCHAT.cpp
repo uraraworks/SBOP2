@@ -72,13 +72,13 @@ void CWindowCHAT::Create(CMgrData *pMgrData)
 
 	CWindowBase::Create (pMgrData);
 
-	m_aArrayType.Add (0);
+	m_aArrayType.push_back (0);
 	nResult = m_pMgrData->GetAdminLevel ();
 	if (nResult == ADMINLEVEL_ALL) {
-		m_aArrayType.Add (CHATTYPE_ADMIN);
+		m_aArrayType.push_back (CHATTYPE_ADMIN);
 	}
 	m_nType = m_pMgrData->GetChatModeBack ();
-	if (m_nType >= m_aArrayType.GetSize ()) {
+	if (m_nType >= m_aArrayType.size()) {
 		m_nType = 0;
 	}
 
@@ -231,7 +231,7 @@ LRESULT CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 	case WM_KEYDOWN:
 		{
 			int nCount;
-			nCount = m_aArrayType.GetSize ();
+			nCount = m_aArrayType.size();
 
 			switch (wParam) {
 			case VK_RETURN:

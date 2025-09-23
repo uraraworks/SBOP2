@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -30,7 +32,7 @@ public:
 public:
 	int			m_nElementCount;					/* 要素数 */
 } CInfoBase, *PCInfoBase;
-typedef CmyArray<PCInfoBase, PCInfoBase>	  ARRAYBASEINFO;
-typedef CmyArray<PCInfoBase, PCInfoBase>	*PARRAYBASEINFO;
+using ARRAYBASEINFO = CStdArray<PCInfoBase>;
+using PARRAYBASEINFO = ARRAYBASEINFO *;
 
 /* Copyright(C)URARA-works 2005 */

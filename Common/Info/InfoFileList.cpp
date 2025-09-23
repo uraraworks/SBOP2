@@ -46,7 +46,7 @@ void CInfoFileList::Add(LPCSTR pszHash, LPCSTR pszFileName, DWORD dwFileSize)
 	pInfo->strMD5		= pszHash;
 	pInfo->strFileName	= pszFileName;
 	pInfo->dwFileSize	= dwFileSize;
-	m_aFileListInfo.Add (pInfo);
+	m_aFileListInfo.push_back (pInfo);
 }
 
 
@@ -58,7 +58,7 @@ void CInfoFileList::Add(LPCSTR pszHash, LPCSTR pszFileName, DWORD dwFileSize)
 
 int CInfoFileList::GetCount(void)
 {
-	return m_aFileListInfo.GetSize ();
+	return m_aFileListInfo.size();
 }
 
 
@@ -73,7 +73,7 @@ PFILELISTINFO CInfoFileList::GetPtr(int nNo)
 	PFILELISTINFO pRet;
 
 	pRet = NULL;
-	if (nNo >= m_aFileListInfo.GetSize ()) {
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_aFileListInfo.size()))) {
 		goto Exit;
 	}
 
@@ -94,12 +94,12 @@ void CInfoFileList::DeleteAll(void)
 	int i, nCount;
 	PFILELISTINFO pInfo;
 
-	nCount = m_aFileListInfo.GetSize ();
+	nCount = m_aFileListInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aFileListInfo[i];
 		SAFE_DELETE (pInfo);
 	}
-	m_aFileListInfo.RemoveAll ();
+	m_aFileListInfo.clear();
 }
 
 

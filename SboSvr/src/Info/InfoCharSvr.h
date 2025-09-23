@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "InfoCharBase.h"
 
@@ -126,7 +127,7 @@ public:
 
 	CInfoMapBase	*m_pInfoMap;		/* マップ情報 */
 	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* キャラ情報ライブラリ */
-	CmyArray<PCHARPROCINFO, PCHARPROCINFO>	m_apProcInfo;	/* 行動情報 */
+	std::vector<PCHARPROCINFO>	m_apProcInfo;	/* 行動情報 */
 } CInfoCharSvr, *PCInfoCharSvr;
 
 /* Copyright(C)URARA-works 2007 */

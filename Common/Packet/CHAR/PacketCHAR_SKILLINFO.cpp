@@ -46,7 +46,7 @@ void CPacketCHAR_SKILLINFO::Make(
 	DWORD i, dwSize, dwCount, dwTmp;
 	PPACKETBASE pPacketBase;
 
-	dwCount = paSrc->GetSize ();
+	dwCount = paSrc->size();
 
 	dwSize = sizeof (PACKETBASE)	+
 			 sizeof (dwCharID)		+
@@ -64,7 +64,7 @@ void CPacketCHAR_SKILLINFO::Make(
 	CopyMemoryRenew (pDataTmp, &dwCharID,	sizeof (dwCharID),	pDataTmp);	/* キャラID */
 	CopyMemoryRenew (pDataTmp, &dwCount,	sizeof (dwCount),	pDataTmp);	/* 個数 */
 	for (i = 0; i < dwCount; i ++) {
-		dwTmp = paSrc->GetAt (i);
+		dwTmp = paSrc->at(i);
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);		/* スキルID */
 	}
 
@@ -83,7 +83,7 @@ PBYTE CPacketCHAR_SKILLINFO::Set(PBYTE pPacket)
 	DWORD i, dwCount, dwTmp;
 	PBYTE pRet, pDataTmp;
 
-	m_adwSkillID.RemoveAll ();
+	m_adwSkillID.clear();
 
 	pRet		= pPacket;
 	pDataTmp	= CPacketBase::Set (pPacket);
@@ -92,7 +92,7 @@ PBYTE CPacketCHAR_SKILLINFO::Set(PBYTE pPacket)
 	CopyMemoryRenew (&dwCount,		pDataTmp, sizeof (dwCount),		pDataTmp);	/* 個数 */
 	for (i = 0; i < dwCount; i ++) {
 		CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);			/* スキルID */
-		m_adwSkillID.Add (dwTmp);
+		m_adwSkillID.push_back (dwTmp);
 	}
 
 	pRet = pDataTmp;

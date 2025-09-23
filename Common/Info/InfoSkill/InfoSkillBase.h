@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -98,7 +100,7 @@ public:
 				m_nUse;							/* 使用制限 */
 	CmyString	m_strName;						/* スキル名 */
 } CInfoSkillBase, *PCInfoSkillBase;
-typedef CmyArray<PCInfoSkillBase, PCInfoSkillBase>	  ARRAYSKILLBASEINFO;
-typedef CmyArray<PCInfoSkillBase, PCInfoSkillBase>	*PARRAYSKILLBASEINFO;
+using ARRAYSKILLBASEINFO = CStdArray<PCInfoSkillBase>;
+using PARRAYSKILLBASEINFO = ARRAYSKILLBASEINFO *;
 
 /* Copyright(C)URARA-works 2008 */

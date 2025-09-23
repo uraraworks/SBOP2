@@ -49,7 +49,7 @@ void CLayerSystemMsg::Draw(PCImg32 pDst)
 	int i, nCount;
 	PSYSTEMMSGINFO pInfo;
 
-	nCount = m_aSystemMsgInfo.GetSize ();
+	nCount = m_aSystemMsgInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSystemMsgInfo[i];
 		pDst->Blt (
@@ -82,7 +82,7 @@ BOOL CLayerSystemMsg::TimerProc(void)
 	}
 	m_dwLastTimeProc = timeGetTime ();
 
-	nCount = m_aSystemMsgInfo.GetSize ();
+	nCount = m_aSystemMsgInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfo = m_aSystemMsgInfo[i];
 		pInfo->nPosY --;
@@ -110,7 +110,7 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 	HFONT hFontOld;
 	PSYSTEMMSGINFO pInfo, pInfoTmp;
 
-	nCount = m_aSystemMsgInfo.GetSize ();
+	nCount = m_aSystemMsgInfo.size();
 
 	pInfo = new SYSTEMMSGINFO;
 	pInfo->nPosY	= SCRSIZEY;
@@ -138,7 +138,7 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 	SelectObject (hDCTmp, hFontOld);
 	pInfo->pImg->Unlock ();
 
-	m_aSystemMsgInfo.Add (pInfo);
+	m_aSystemMsgInfo.push_back (pInfo);
 }
 
 
@@ -152,10 +152,12 @@ void CLayerSystemMsg::DeleteMsg(int nNo)
 {
 	PSYSTEMMSGINFO pInfo;
 
-	pInfo = m_aSystemMsgInfo[nNo];
-	SAFE_DELETE (pInfo->pImg);
-	SAFE_DELETE (pInfo);
-	m_aSystemMsgInfo.RemoveAt (nNo);
+        pInfo = m_aSystemMsgInfo[nNo];
+        SAFE_DELETE (pInfo->pImg);
+        SAFE_DELETE (pInfo);
+        if ((nNo >= 0) && (nNo < static_cast<int>(m_aSystemMsgInfo.size()))) {
+                m_aSystemMsgInfo.erase (m_aSystemMsgInfo.begin () + nNo);
+        }
 }
 
 
@@ -169,7 +171,7 @@ void CLayerSystemMsg::DeleteAllMsg(void)
 {
 	int i, nCount;
 
-	nCount = m_aSystemMsgInfo.GetSize ();
+	nCount = m_aSystemMsgInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		DeleteMsg (i);
 	}

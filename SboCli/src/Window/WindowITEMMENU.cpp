@@ -135,7 +135,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	pIntoItemDrag = NULL;
 
 	/* アイテムを描画 */
-	nCount = m_pPlayerChar->m_adwItemID.GetSize ();
+	nCount = m_pPlayerChar->m_adwItemID.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (m_pPlayerChar->m_adwItemID[i]);
 		if (pInfoItem == NULL) {
@@ -409,7 +409,7 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 		case EQUIPTYPE_ARMSLEFT:	dwItemID = m_pPlayerChar->m_dwEquipItemIDArmsLeft;	break;	/* 左手 */
 		}
 	} else {
-		nCount = m_pPlayerChar->m_adwItemID.GetSize ();
+		nCount = m_pPlayerChar->m_adwItemID.size();
 		for (i = 0; i < nCount; i ++) {
 			pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (m_pPlayerChar->m_adwItemID[i]);
 			if (pInfoItem == NULL) {

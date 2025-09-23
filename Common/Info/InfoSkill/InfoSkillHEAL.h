@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
+#include "myArray.h"
 
 #include "InfoSkillBase.h"
 
@@ -68,7 +70,7 @@ public:
 			m_dwValue2,				/* 効果2 */
 			m_dwDistance;			/* 射程距離 */
 } CInfoSkillHEAL, *PCInfoSkillHEAL;
-typedef CmyArray<PCInfoSkillHEAL, PCInfoSkillHEAL>	  ARRAYSKILLHEALINFO;
-typedef CmyArray<PCInfoSkillHEAL, PCInfoSkillHEAL>	*PARRAYSKILLHEALINFO;
+using ARRAYSKILLHEALINFO = CStdArray<PCInfoSkillHEAL>;
+using PARRAYSKILLHEALINFO = ARRAYSKILLHEALINFO *;
 
 /* Copyright(C)URARA-works 2009 */

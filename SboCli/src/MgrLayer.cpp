@@ -85,9 +85,9 @@ void CMgrLayer::Draw(PCImg32 pDst)
 	int i, nCount;
 	PCLayerBase pLayer;
 
-	nCount = m_paLayer->GetSize ();
+	nCount = m_paLayer->size();
 	for (i = 0; i < nCount; i ++) {
-		pLayer = m_paLayer->GetAt (i);
+		pLayer = m_paLayer->at(i);
 		pLayer->Draw (pDst);
 	}
 }
@@ -106,10 +106,10 @@ BOOL CMgrLayer::TimerProc(void)
 	PCLayerBase pLayer;
 
 	bRet	= FALSE;
-	nCount	= m_paLayer->GetSize ();
+	nCount	= m_paLayer->size();
 
 	for (i = 0; i < nCount; i ++) {
-		pLayer = m_paLayer->GetAt (i);
+		pLayer = m_paLayer->at(i);
 		bRet |= pLayer->TimerProc ();
 	}
 
@@ -128,12 +128,12 @@ void CMgrLayer::Delete(int nID)
 	int i, nCount;
 	PCLayerBase pLayer;
 
-	nCount = m_paLayer->GetSize ();
+	nCount = m_paLayer->size();
 	for (i = 0; i < nCount; i ++) {
-		pLayer = m_paLayer->GetAt (i);
+		pLayer = m_paLayer->at(i);
 		if (pLayer->GetID () == nID) {
 			SAFE_DELETE (pLayer);
-			m_paLayer->RemoveAt (i);
+			m_paLayer->erase (m_paLayer->begin () + i);
 			break;
 		}
 	}
@@ -152,12 +152,12 @@ void CMgrLayer::DeleteAll(void)
 	PCLayerBase pTmp;
 
 	if (m_paLayer) {
-		nCount = m_paLayer->GetSize ();
+		nCount = m_paLayer->size();
 		for (i = 0; i < nCount; i ++) {
-			pTmp = m_paLayer->GetAt (i);
+			pTmp = m_paLayer->at(i);
 			SAFE_DELETE (pTmp);
 		}
-		m_paLayer->RemoveAll ();
+		m_paLayer->clear();
 	}
 }
 
@@ -174,10 +174,10 @@ CLayerBase *CMgrLayer::Get(int nID)
 	PCLayerBase pRet, pLayer;
 
 	pRet	= NULL;
-	nCount	= m_paLayer->GetSize ();
+	nCount	= m_paLayer->size();
 
 	for (i = 0; i < nCount; i ++) {
-		pLayer = m_paLayer->GetAt (i);
+		pLayer = m_paLayer->at(i);
 		if (pLayer->GetID () == nID) {
 			pRet = pLayer;
 			break;

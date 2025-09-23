@@ -143,7 +143,7 @@ public:
 	CUraraSockTCPSBO	*m_pSock;			/* 通信マネージャ */
 	ARRAYMOTIONINFO		m_aMotion[CHARMOTIONID_MAX][4];	/* モーション情報 */
 	ARRAYTEXTEFFECT		m_aTextEffect;		/* 文字エフェクト */
-	CArray<PMOVEPOSQUE, PMOVEPOSQUE>	m_apMovePosQue;	/* 座標変更キュー */
+	CStdArray<PMOVEPOSQUE, PMOVEPOSQUE>	m_apMovePosQue;	/* 座標変更キュー */
 } CInfoCharCli, *PCInfoCharCli;
 
 /* Copyright(C)URARA-works 2006 */

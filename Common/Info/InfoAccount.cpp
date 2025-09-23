@@ -105,7 +105,7 @@ DWORD CInfoAccount::GetDataSize(void)
 	dwRet += sizeof (m_dwTimeLastLogin);
 	dwRet += sizeof (m_dwTimeMakeAccount);
 	dwRet += sizeof (m_dwLoginCount);
-	dwRet += ((m_adwCharID.GetSize () + 1) * sizeof (DWORD));
+	dwRet += ((m_adwCharID.size() + 1) * sizeof (DWORD));
 	dwRet += sizeof (m_nAdminLevel);
 	dwRet += (m_strAccount.GetLength () + 1);
 	dwRet += (m_strPassword.GetLength () + 1);
@@ -134,7 +134,7 @@ DWORD CInfoAccount::GetDataSizeNo(int nNo)
 	case 3:	dwRet = sizeof (m_dwTimeLastLogin);							break;
 	case 4:	dwRet = sizeof (m_dwTimeMakeAccount);						break;
 	case 5:	dwRet = sizeof (m_dwLoginCount);							break;
-	case 6:	dwRet = ((m_adwCharID.GetSize () + 1) * sizeof (DWORD));	break;
+	case 6:	dwRet = ((m_adwCharID.size() + 1) * sizeof (DWORD));	break;
 	case 7:	dwRet = sizeof (m_nAdminLevel);								break;
 	case 8:	dwRet = (m_strAccount.GetLength () + 1);					break;
 	case 9:	dwRet = (m_strPassword.GetLength () + 1);					break;
@@ -193,7 +193,7 @@ PBYTE CInfoAccount::GetWriteData(int nNo, PDWORD pdwSize)
 
 			pDataTmp = pRet;
 			ZeroMemory (pRet, dwSize);
-			nCount = m_adwCharID.GetSize ();
+			nCount = m_adwCharID.size();
 			for (i = 0; i < nCount; i ++) {
 				dwTmp = m_adwCharID[i];
 				CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);
@@ -244,14 +244,14 @@ DWORD CInfoAccount::ReadElementData(
 			PBYTE pDataTmp;
 
 			pDataTmp = pSrc;
-			m_adwCharID.RemoveAll ();
+			m_adwCharID.clear();
 			while (1) {
 				dwSize += sizeof (DWORD);
 				CopyMemoryRenew (&dwTmp, pDataTmp, sizeof (dwTmp), pDataTmp);
 				if (dwTmp == 0) {
 					break;
 				}
-				m_adwCharID.Add (dwTmp);
+				m_adwCharID.push_back (dwTmp);
 			}
 		}
 		break;
@@ -295,7 +295,7 @@ DWORD CInfoAccount::GetSendDataSize(void)
 	dwRet += sizeof (m_dwTimeLastLogin);
 	dwRet += sizeof (m_dwTimeMakeAccount);
 	dwRet += sizeof (m_dwLoginCount);
-	dwRet += (m_adwCharID.GetSize () * sizeof (DWORD));
+	dwRet += (m_adwCharID.size() * sizeof (DWORD));
 	dwRet += sizeof (DWORD);
 
 	return dwRet;
@@ -325,7 +325,7 @@ PBYTE CInfoAccount::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwTimeLastLogin,		sizeof (m_dwTimeLastLogin),		pDataTmp);	/* 前回のログイン日時 */
 	CopyMemoryRenew (pDataTmp, &m_dwTimeMakeAccount,	sizeof (m_dwTimeMakeAccount),	pDataTmp);	/* アカウント作成日時 */
 	CopyMemoryRenew (pDataTmp, &m_dwLoginCount,			sizeof (m_dwLoginCount),		pDataTmp);	/* ログイン数 */
-	nCount = m_adwCharID.GetSize ();
+	nCount = m_adwCharID.size();
 	for (i = 0; i < nCount; i ++) {
 		dwTmp = m_adwCharID[i];
 		CopyMemoryRenew (pDataTmp, &dwTmp, sizeof (dwTmp), pDataTmp);	/* キャラID */
@@ -350,7 +350,7 @@ PBYTE CInfoAccount::SetSendData(PBYTE pSrc)
 
 	pRet = pSrc;
 
-	m_adwCharID.RemoveAll ();
+	m_adwCharID.clear();
 
 	pDataTmp = pSrc;
 	CopyMemoryRenew (&m_dwAccountID,		pDataTmp, sizeof (m_dwAccountID), 		pDataTmp);	/* アカウントID */
@@ -364,7 +364,7 @@ PBYTE CInfoAccount::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			break;
 		}
-		m_adwCharID.Add (dwTmp);
+		m_adwCharID.push_back (dwTmp);
 	}
 
 	pRet = pDataTmp;
@@ -380,7 +380,7 @@ PBYTE CInfoAccount::SetSendData(PBYTE pSrc)
 
 int CInfoAccount::GetCharCount(void)
 {
-	return m_adwCharID.GetSize ();
+	return m_adwCharID.size();
 }
 
 
@@ -397,7 +397,7 @@ void CInfoAccount::Copy(CInfoAccount *pSrc)
 	m_dwTimeLastLogin	= pSrc->m_dwTimeLastLogin;
 	m_dwTimeMakeAccount	= pSrc->m_dwTimeMakeAccount;
 	m_dwLoginCount		= pSrc->m_dwLoginCount;
-	m_adwCharID.Copy (&pSrc->m_adwCharID);
+	m_adwCharID = pSrc->m_adwCharID;
 
 	m_dwSessionID		= pSrc->m_dwSessionID;
 	m_strAccount		= pSrc->m_strAccount;

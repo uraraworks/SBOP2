@@ -174,12 +174,12 @@ void FreeInfo(PARRAY pArray, PINFO pInfo)
 	int i, nCount;
 
 	if (pArray) {
-		nCount = pArray->GetSize ();
+		nCount = pArray->size();
 		for (i = nCount - 1; i >= 0; i --) {
-			pInfo = pArray->GetAt (i);
+			pInfo = pArray->at(i);
 			SAFE_DELETE (pInfo);
 		}
-		pArray->RemoveAll ();
+		pArray->clear();
 	}
 }
 

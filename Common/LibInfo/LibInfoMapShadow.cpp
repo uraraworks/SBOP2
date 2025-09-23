@@ -112,7 +112,7 @@ int CLibInfoMapShadow::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -171,9 +171,11 @@ void CLibInfoMapShadow::Delete(
 {
 	PCInfoMapShadow pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -191,12 +193,12 @@ void CLibInfoMapShadow::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwShadowID != dwShadowID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -222,7 +224,7 @@ void CLibInfoMapShadow::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -249,9 +251,9 @@ void CLibInfoMapShadow::Merge(CLibInfoMapShadow *pSrc)
 			pInfoTmp = (PCInfoMapShadow)GetNew ();
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
-		} else {
+	} else {
 			pInfoTmp->Copy (pInfoSrc);
-		}
+	}
 	}
 }
 
@@ -284,7 +286,7 @@ void CLibInfoMapShadow::ResetAnime(void)
 
 PCInfoBase CLibInfoMapShadow::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -328,13 +330,13 @@ PCInfoBase CLibInfoMapShadow::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (!((pInfoTmp->m_ptViewPos.x == pPos->x) &&
 			(pInfoTmp->m_ptViewPos.y == pPos->y))) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -421,7 +423,7 @@ PBYTE CLibInfoMapShadow::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			pDataTmp += sizeof (DWORD);
 			break;
-		}
+	}
 		pInfoMapShadowTmp = (PCInfoMapShadow)GetNew ();
 		pDataTmp = pInfoMapShadowTmp->SetSendData (pDataTmp);
 
@@ -429,9 +431,9 @@ PBYTE CLibInfoMapShadow::SetSendData(PBYTE pSrc)
 		if (pInfoMapShadow) {
 			pInfoMapShadow->Copy (pInfoMapShadowTmp);
 			SAFE_DELETE (pInfoMapShadowTmp);
-		} else {
+	} else {
 			Add (pInfoMapShadowTmp);
-		}
+	}
 	}
 	RenewIDPtr ();
 
@@ -453,14 +455,14 @@ DWORD CLibInfoMapShadow::GetNewID(void)
 
 	dwRet = 1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwShadowID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 
 	return dwRet;

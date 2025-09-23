@@ -96,7 +96,7 @@ PCInfoBase CLibInfoSkill::GetNew(int nTypeMain, int nTypeSub)
 		case SKILLTYPESUB_BATTLE_HEAL:			/* 回復 */
 			pInfo = new CInfoSkillHEAL;
 			break;
-		}
+	}
 		break;
 	case SKILLTYPEMAIN_LIFE:			/* 生活 */
 		break;
@@ -128,7 +128,7 @@ int CLibInfoSkill::GetCount(void)
 		goto Exit;
 	}
 
-	nRet = m_paInfo->GetSize ();
+	nRet = m_paInfo->size();
 Exit:
 	return nRet;
 }
@@ -164,9 +164,11 @@ void CLibInfoSkill::Delete(
 {
 	PCInfoSkillBase pInfo;
 
-	pInfo = m_paInfo->GetAt (nNo);
+	pInfo = m_paInfo->at(nNo);
 	SAFE_DELETE (pInfo);
-	m_paInfo->RemoveAt (nNo);
+	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
+		m_paInfo->erase (m_paInfo->begin () + nNo);
+	}
 }
 
 
@@ -184,12 +186,12 @@ void CLibInfoSkill::Delete(
 
 	nNo = -1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwSkillID != dwSkillID) {
 			continue;
-		}
+	}
 		nNo = i;
 		break;
 	}
@@ -214,7 +216,7 @@ void CLibInfoSkill::DeleteAll(void)
 		return;
 	}
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
 		Delete (i);
 	}
@@ -240,7 +242,7 @@ void CLibInfoSkill::Merge(CLibInfoSkill *pSrc)
 			pInfoTmp = (PCInfoSkillBase)GetNew (pInfoSrc->m_nTypeMain, pInfoSrc->m_nTypeSub);
 			pInfoTmp->Copy (pInfoSrc);
 			Add (pInfoTmp);
-		}
+	}
 		pInfoTmp->Copy (pInfoSrc);
 	}
 }
@@ -259,18 +261,18 @@ CInfoSkillBase *CLibInfoSkill::Renew(CInfoSkillBase *pSrc)
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwSkillID != pSrc->m_dwSkillID) {
 			continue;
-		}
+	}
 		pInfo = (PCInfoSkillBase)GetNew (pSrc->m_nTypeMain, pSrc->m_nTypeSub);
 		pInfo->Copy (pSrc);
 		pInfo->m_dwSkillID = pInfoTmp->m_dwSkillID;
 
-		SAFE_DELETE (pInfoTmp);
-		m_paInfo->SetAt (i, pInfo);
+                SAFE_DELETE (pInfoTmp);
+                (*m_paInfo)[i] = pInfo;
 		pRet = pInfo;
 		break;
 	}
@@ -287,7 +289,7 @@ CInfoSkillBase *CLibInfoSkill::Renew(CInfoSkillBase *pSrc)
 
 PCInfoBase CLibInfoSkill::GetPtr(int nNo)
 {
-	return m_paInfo->GetAt (nNo);
+	return m_paInfo->at(nNo);
 }
 
 
@@ -305,12 +307,12 @@ PCInfoBase CLibInfoSkill::GetPtr(
 
 	pRet = NULL;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwSkillID != dwSkillID) {
 			continue;
-		}
+	}
 		pRet = pInfoTmp;
 		break;
 	}
@@ -331,9 +333,9 @@ PCInfoBase CLibInfoSkill::RenewInfo(int nNo)
 
 	pInfoSkillBase = (PCInfoSkillBase)GetPtr (nNo);
 
-	pInfoTmp = (PCInfoSkillBase)GetNew (pInfoSkillBase->m_nTypeMain, pInfoSkillBase->m_nTypeSub);
-	pInfoTmp->Copy (pInfoSkillBase);
-	m_paInfo->SetAt (nNo, pInfoTmp);
+        pInfoTmp = (PCInfoSkillBase)GetNew (pInfoSkillBase->m_nTypeMain, pInfoSkillBase->m_nTypeSub);
+        pInfoTmp->Copy (pInfoSkillBase);
+        (*m_paInfo)[nNo] = pInfoTmp;
 	SAFE_DELETE (pInfoSkillBase);
 
 	return pInfoTmp;
@@ -418,7 +420,7 @@ PBYTE CLibInfoSkill::SetSendData(PBYTE pSrc)
 		if (dwTmp == 0) {
 			pDataTmp += sizeof (DWORD);
 			break;
-		}
+	}
 		pDataTmpBack = pDataTmp;
 		InfoTmp.SetSendData (pDataTmp);
 		pInfoSkillBaseTmp = (PCInfoSkillBase)GetNew (InfoTmp.m_nTypeMain, InfoTmp.m_nTypeSub);
@@ -428,9 +430,9 @@ PBYTE CLibInfoSkill::SetSendData(PBYTE pSrc)
 		if (pInfoSkillBase) {
 			pInfoSkillBase->Copy (pInfoSkillBaseTmp);
 			SAFE_DELETE (pInfoSkillBaseTmp);
-		} else {
+	} else {
 			Add (pInfoSkillBaseTmp);
-		}
+	}
 	}
 
 	return pDataTmp;
@@ -451,14 +453,14 @@ DWORD CLibInfoSkill::GetNewID(void)
 
 	dwRet = 1;
 
-	nCount = m_paInfo->GetSize ();
+	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_paInfo->GetAt (i);
+		pInfoTmp = m_paInfo->at(i);
 		if (pInfoTmp->m_dwSkillID == dwRet) {
 			dwRet ++;
 			i = -1;
 			continue;
-		}
+	}
 	}
 
 	return dwRet;

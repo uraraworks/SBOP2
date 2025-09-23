@@ -120,7 +120,7 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 
 	nTmp = 0;
 	/* スキルを描画 */
-	nCount = m_adwSkillID.GetSize ();
+	nCount = m_adwSkillID.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (m_adwSkillID[i]);
 		if (pInfoSkill == NULL) {
@@ -185,13 +185,13 @@ void CWindowSKILLMENU::SetType(int nType)
 	int anSkillType[] = {SKILLTYPEMAIN_BATTLE, SKILLTYPEMAIN_LIFE, SKILLTYPEMAIN_NONE};
 
 	m_nType = nType;
-	m_adwSkillID.RemoveAll ();
+	m_adwSkillID.clear();
 
 	/* スキルを描画 */
 	paSkillID = m_pPlayerChar->GetSkill ();
-	nCount = paSkillID->GetSize ();
+	nCount = paSkillID->size();
 	for (i = 0; i < nCount; i ++) {
-		dwSkillID = paSkillID->GetAt (i);
+		dwSkillID = paSkillID->at(i);
 		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (dwSkillID);
 		if (pInfoSkill == NULL) {
 			continue;
@@ -199,7 +199,7 @@ void CWindowSKILLMENU::SetType(int nType)
 		if (anSkillType[m_nType] != pInfoSkill->m_nTypeMain) {
 			continue;
 		}
-		m_adwSkillID.Add (dwSkillID);
+		m_adwSkillID.push_back (dwSkillID);
 	}
 }
 
@@ -423,7 +423,7 @@ BOOL CWindowSKILLMENU::OnX(BOOL bDown)
 		goto Exit;
 	}
 
-	if (m_nPos < m_adwSkillID.GetSize ()) {
+	if (m_nPos < m_adwSkillID.size()) {
 		dwSkillID = m_adwSkillID[m_nPos];
 	}
 	if (dwSkillID == 0) {

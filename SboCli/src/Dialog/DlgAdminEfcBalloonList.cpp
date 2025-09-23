@@ -103,7 +103,7 @@ void CDlgAdminEfcBalloonList::Renew(void)
 	m_List.DeleteAllItems ();
 
 	m_pLibInfo->GetListID (aIDList);
-	nCount = aIDList.GetSize ();
+	nCount = aIDList.size();
 	for (i = 0; i < nCount; i ++) {
 		dwListID = aIDList[i];
 		strTmp.Format ("%d", dwListID);

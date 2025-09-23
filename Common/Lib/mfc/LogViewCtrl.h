@@ -5,6 +5,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "../../myLib/myArray.h"
+
 // 表示設定
 struct LOGVIEWCTRLSETTING {
 	TCHAR		szFontText[LF_FACESIZE];	// フォント名(本文)
@@ -32,14 +34,14 @@ struct LINEINFO {
 		int		nLen;						// 単語の長さ(バイト)
 		int		nType;						// 単語の種類
 	};
-	CArray<TOKEN, TOKEN&>	aTokens;		// 単語情報
+	CStdArray<TOKEN, TOKEN>	aTokens;		// 単語情報
 
 	void operator=(const LINEINFO& li) {
 		stDateTime = li.stDateTime;
 		strText = li.strText;
 		crFore = li.crFore;
 		crBack = li.crBack;
-		aTokens.Copy(li.aTokens);
+		aTokens = li.aTokens;
 	}
 };
 
@@ -92,7 +94,7 @@ public:
 	void	SetTextLimit(int nLimit, DWORD dwSize);
 
 protected:
-	CArray<LINEINFO, LINEINFO&>	m_aTexts;	// 行情報
+	CStdArray<LINEINFO, LINEINFO>	m_aTexts;	// 行情報
 	int		m_nLimitMode;					// テキスト限界
 	DWORD	m_dwLimitSize;					// テキスト限界値
 	DWORD	m_dwTextSize;					// 現在のテキストのサイズ

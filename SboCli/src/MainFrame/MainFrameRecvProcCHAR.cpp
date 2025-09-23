@@ -394,16 +394,16 @@ void CMainFrame::RecvProcCHAR_CHARID(PBYTE pData)
 	Packet.Set (pData);
 
 	/* 知っているキャラを削除する */
-	nCount = Packet.m_adwCharID.GetSize ();
+	nCount = Packet.m_adwCharID.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_adwCharID[i]);
 		/* 知らないキャラ？ */
 		if (pInfoChar == NULL) {
 			continue;
 		}
-		Packet.m_adwCharID.RemoveAt (i);
+		Packet.m_adwCharID.erase (Packet.m_adwCharID.begin () + i);
 	}
-	if (Packet.m_adwCharID.GetSize () <= 0) {
+	if (Packet.m_adwCharID.size() <= 0) {
 		return;
 	}
 

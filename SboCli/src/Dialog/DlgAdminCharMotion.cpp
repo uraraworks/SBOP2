@@ -992,10 +992,10 @@ void CDlgAdminCharMotion::Set(int nNo)
 	nSelect = m_cmbProcID.GetCurSel ();
 	pInfo->m_dwProcID	= m_cmbProcID.GetItemData (nSelect);	/* 行動ID */
 
-	pInfo->m_anDrawList.RemoveAll ();
+	pInfo->m_anDrawList.clear();
 	nCount = m_ctlDrawList.GetCount ();
 	for (i = 0; i < nCount; i ++) {
-		pInfo->m_anDrawList.Add (m_ctlDrawList.GetItemData (i));
+		pInfo->m_anDrawList.push_back (m_ctlDrawList.GetItemData (i));
 	}
 }
 
@@ -1052,17 +1052,17 @@ void CDlgAdminCharMotion::Get(int nNo)
 	SelectCmb (&m_cmbProcID,	pInfo->m_dwProcID);
 
 	m_ctlDrawList.ResetContent ();
-	nCount = pInfo->m_anDrawList.GetSize ();
+	nCount = pInfo->m_anDrawList.size();
 	if (nCount == 0) {
 		for (i = 0; i < 4; i ++) {
-			anTmp.Add (i);
+			anTmp.push_back (i);
 		}
 	} else {
 		for (i = 0; i < nCount; i ++) {
-			anTmp.Add (pInfo->m_anDrawList[i]);
+			anTmp.push_back (pInfo->m_anDrawList[i]);
 		}
 	}
-	nCount = anTmp.GetSize ();
+	nCount = anTmp.size();
 	for (i = 0; i < nCount; i ++) {
 		m_ctlDrawList.InsertString (i, paszName[anTmp[i]]);
 		m_ctlDrawList.SetItemData (i, anTmp[i]);

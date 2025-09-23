@@ -1229,7 +1229,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	CPacketCHAR_MOVEPOS PacketCHAR_MOVEPOS;
 	CPacketCHAR_REQ_TAIL PacketCHAR_REQ_TAIL;
 	CPacketCHAR_PARA1 PacketCHAR_PARA1;
-	CmyArray<POINT, POINT> aptPos;
+	std::vector<POINT> aptPos;
 
 	bRet = FALSE;
 
@@ -1305,7 +1305,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 
 		m_pPlayerChar->GetFrontPos (ptFrontPos);
 		m_pPlayerChar->RenewBlockMapArea (ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
-		nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
+		nCount = m_pPlayerChar->m_aposBockMapArea.size();
 		for (i = 0; i < nCount; i ++) {
 			/* 進入可能かチェック */
 			bResult |= !m_pMap->IsMove (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
@@ -1313,7 +1313,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 		bResult = !bResult;
 		if (bResult) {
 			m_pPlayerChar->GetFrontPos (aptPos);
-			nCount = aptPos.GetSize ();
+			nCount = aptPos.size();
 			for (i = 0; i < nCount; i ++) {
 				ptPos = aptPos[i];
 				pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (m_pPlayerChar->m_dwMapID, &ptPos, FALSE);
@@ -2275,26 +2275,26 @@ BOOL CStateProcMAP::MoveProc(
 	nTmp = nDirection;
 	switch (nDirection) {
 	case 4:
-		anDirection.Add (0);
-		anDirection.Add (3);
+		anDirection.push_back (0);
+		anDirection.push_back (3);
 		break;
 	case 5:
-		anDirection.Add (1);
-		anDirection.Add (3);
+		anDirection.push_back (1);
+		anDirection.push_back (3);
 		break;
 	case 6:
-		anDirection.Add (1);
-		anDirection.Add (2);
+		anDirection.push_back (1);
+		anDirection.push_back (2);
 		break;
 	case 7:
-		anDirection.Add (0);
-		anDirection.Add (2);
+		anDirection.push_back (0);
+		anDirection.push_back (2);
 		break;
 	default:
-		anDirection.Add (nDirection);
+		anDirection.push_back (nDirection);
 		break;
 	}
-	if (anDirection.GetSize () == 1) {
+	if (anDirection.size() == 1) {
 		/* ぶつかる？ */
 		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
 		if (bResult) {
@@ -2597,7 +2597,7 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 		bResult = FALSE;
 		m_pPlayerChar->GetFrontPos (ptFrontPos);
 		m_pPlayerChar->RenewBlockMapArea (ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
-		nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
+		nCount = m_pPlayerChar->m_aposBockMapArea.size();
 		for (i = 0; i < nCount; i ++) {
 			/* 脱出可能かチェック */
 			bResult |= !m_pMap->IsMoveOut (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
@@ -2606,7 +2606,7 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 		if (bResult) {
 			bResult = FALSE;
 			m_pPlayerChar->RenewBlockMapArea (ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
-			nCount = m_pPlayerChar->m_aposBockMapArea.GetSize ();
+			nCount = m_pPlayerChar->m_aposBockMapArea.size();
 			for (i = 0; i < nCount; i ++) {
 				/* 進入可能かチェック */
 				bResult |= !m_pMap->IsMove (m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);

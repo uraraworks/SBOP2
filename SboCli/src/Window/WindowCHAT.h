@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #pragma once
+#include <vector>
 
 #include "WindowBase.h"
 
@@ -46,7 +47,7 @@ private:
 			m_bPushEsc;						/* ESCキー押下状態 */
 	HWND	m_hWndChat;						/* チャット入力欄 */
 
-	CmyArray<int, int> m_aArrayType;		/* チャット種別 */
+	std::vector<int> m_aArrayType;		/* チャット種別 */
 
 	WNDPROC	m_OrgWndProcChat;				/* チャット入力欄の元ウィンドウプロシージャ */
 } CWindowCHAT, *PCWindowCHAT;

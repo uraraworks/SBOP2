@@ -102,7 +102,7 @@ void CLayerSnow::Draw(PCImg32 pDst)
 	x = nPosX % (DRAW_PARTS_X * 2);
 	y = nPosY % (DRAW_PARTS_Y * 2);
 
-	nCount = m_aSnowInfo.GetSize ();
+	nCount = m_aSnowInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
 
@@ -135,7 +135,7 @@ BOOL CLayerSnow::TimerProc(void)
 		goto Exit;
 	}
 
-	nCount = m_aSnowInfo.GetSize ();
+	nCount = m_aSnowInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
 		if (dwTime - pInfo->dwLastProc < pInfo->dwWait) {
@@ -205,7 +205,7 @@ void CLayerSnow::RenewSnowInfo(int nCount)
 		pInfo->dwWait		= 50 + nTmp * 50;
 		pInfo->dwLastProc	= timeGetTime ();
 
-		m_aSnowInfo.Add (pInfo);
+		m_aSnowInfo.push_back (pInfo);
 	}
 }
 
@@ -220,12 +220,12 @@ void CLayerSnow::DeleteSnowInfoAll(void)
 	int i, nCount;
 	PSTLAYERSNOW_SNOWINFO pInfo;
 
-	nCount = m_aSnowInfo.GetSize ();
+	nCount = m_aSnowInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
 		SAFE_DELETE (pInfo);
 	}
-	m_aSnowInfo.RemoveAll ();
+	m_aSnowInfo.clear();
 }
 
 /* Copyright(C)URARA-works 2008 */

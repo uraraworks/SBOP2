@@ -16,7 +16,7 @@ typedef class CmyString
 {
 public:
 	CmyString();							/* コンストラクタ */
-	CmyString(CmyString &strSrc);
+	CmyString(const CmyString &strSrc);
 	CmyString(LPCSTR szSrc);
 	~CmyString();							/* デストラクタ */
 
@@ -25,11 +25,12 @@ public:
 	int		GetLength		(void);							/* 文字列長を取得 */
 	void	Format			(LPCSTR lpFormat, ...);			/* 書式文字列で初期化 */
 
-	void	operator =		(CmyString &strSrc);			/* 文字列を初期化 */
+	void	operator =		(const CmyString &strSrc);			/* 文字列を初期化 */
 	void	operator =		(LPCSTR pszSrc);				/* 文字列を初期化 */
 	void	operator +=		(LPCSTR pszSrc);				/* 文字列を追加 */
 	BOOL	operator ==		(LPCSTR pszSrc);				/* 文字列を比較 */
 	BOOL	operator !=		(LPCSTR pszSrc);				/* 文字列を比較 */
+			operator LPCTSTR	() const;						/* キャスト */
 			operator LPCTSTR	();							/* キャスト */
 
 	int		CompareNoCase	(LPCSTR pszSrc);				/* 文字列比較(大文字小文字区別無し) */

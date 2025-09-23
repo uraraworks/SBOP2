@@ -30,10 +30,14 @@ CmyString::CmyString()
 /* 日付		:2007/02/11														 */
 /* ========================================================================= */
 
-CmyString::CmyString(CmyString &strSrc)
+CmyString::CmyString(const CmyString &strSrc)
 {
 	m_pszString = NULL;
-	Renew ((LPCSTR)strSrc);
+	if (strSrc.m_pszString) {
+		Renew (strSrc.m_pszString);
+	} else {
+		Renew ("");
+	}
 }
 CmyString::CmyString(LPCTSTR szSrc)
 {
@@ -136,9 +140,13 @@ void CmyString::Format(LPCSTR lpFormat, ...)
 /* 日付		:2006/05/25														 */
 /* ========================================================================= */
 
-void CmyString::operator =(CmyString &strSrc)
+void CmyString::operator =(const CmyString &strSrc)
 {
-	Renew ((LPCSTR)strSrc);
+	if (strSrc.m_pszString) {
+		Renew (strSrc.m_pszString);
+	} else {
+		Renew ("");
+	}
 }
 
 
@@ -249,6 +257,11 @@ Exit:
 /* 内容		:文字列を初期化													 */
 /* 日付		:2006/05/25														 */
 /* ========================================================================= */
+
+CmyString::operator LPCTSTR() const
+{
+	return m_pszString;
+}
 
 CmyString::operator LPCTSTR()
 {

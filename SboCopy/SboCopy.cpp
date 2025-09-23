@@ -45,7 +45,7 @@ void ReadFileList(CmyStringArray &astrDst)
 	CTextInput TextInput;
 	CmyString strTmp;
 
-	astrDst.RemoveAll ();
+	astrDst.clear();
 
 	GetModuleFilePath (szFileName, sizeof (szFileName));
 	strcat (szFileName, "FileList.txt");
@@ -54,7 +54,7 @@ void ReadFileList(CmyStringArray &astrDst)
 	nCount = TextInput.GetLineCount ();
 	for (i = 0; i < nCount; i ++) {
 		strTmp = TextInput.ReadLine ();
-		astrDst.Add (strTmp);
+		astrDst.push_back (strTmp);
 	}
 }
 
@@ -74,7 +74,7 @@ void CopyFileList(CmyStringArray &astrSrc)
 
 	GetModuleFilePath (szPath, sizeof (szPath));
 
-	nCount = astrSrc.GetSize ();
+	nCount = astrSrc.size();
 	for (i = 0; i < nCount; i ++) {
 		strcpy (szFileNameSrc, szPath);
 		strcpy (szFileNameDst, szPath);
