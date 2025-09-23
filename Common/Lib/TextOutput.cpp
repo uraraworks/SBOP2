@@ -8,6 +8,8 @@
 
 #include "stdafx.h"
 #include <stdio.h>
+#include <strsafe.h>
+#include "../myLib/myString.h"
 #include "TextOutput.h"
 
 
@@ -138,11 +140,12 @@ void CTextOutput::WriteProc(
 	}
 
 	/* ファイルを開く */
-	hFile = CreateFile (
-			m_pszFileName,
-			GENERIC_WRITE | GENERIC_READ,
-			0,
-			0,
+        CString strFileName = Utf8ToTString (m_pszFileName);
+        hFile = CreateFile (
+                        strFileName,
+                        GENERIC_WRITE | GENERIC_READ,
+                        0,
+                        0,
 			OPEN_ALWAYS,
 			FILE_ATTRIBUTE_NORMAL,
 			0);
@@ -155,10 +158,10 @@ void CTextOutput::WriteProc(
 	/* ヘッダを書き込む？ */
 	if (m_bHeader) {
 		GetLocalTime (&stSysTime);
-		wsprintf (szTmp, "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
-				stSysTime.wYear, stSysTime.wMonth,  stSysTime.wDay,
-				stSysTime.wHour, stSysTime.wMinute, stSysTime.wSecond,
-				stSysTime.wMilliseconds);
+                StringCchPrintfA (szTmp, _countof (szTmp), "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
+                                stSysTime.wYear, stSysTime.wMonth,  stSysTime.wDay,
+                                stSysTime.wHour, stSysTime.wMinute, stSysTime.wSecond,
+                                stSysTime.wMilliseconds);
 		WriteFile (hFile, szTmp, strlen (szTmp), &dwBytes, NULL);
 	}
 

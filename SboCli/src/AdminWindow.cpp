@@ -367,7 +367,7 @@ BOOL CAdminWindow::PreCreateWindow(CREATESTRUCT& cs)
 	AfxRegisterClass (&wc);
 	cs.dwExStyle	&= ~WS_EX_CLIENTEDGE;
 	cs.style		= WS_OVERLAPPEDWINDOW & ~WS_SYSMENU;
-	cs.lpszName		= "管理者ウィンドウ";
+	cs.lpszName		= _T("管理者ウィンドウ");
 	cs.lpszClass	= AfxRegisterWndClass (wc.style, wc.hCursor, wc.hbrBackground, wc.hIcon);
 
 	return TRUE;
@@ -382,7 +382,7 @@ BOOL CAdminWindow::PreCreateWindow(CREATESTRUCT& cs)
 
 int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	char szFileName[MAX_PATH];
+	TCHAR szFileName[MAX_PATH];
 	POINT pt;
 
 	if (CWnd::OnCreate (lpCreateStruct) == -1) {
@@ -393,17 +393,23 @@ int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_hWnd = GetSafeHwnd ();
 	/* メニューの設定 */
-	m_Menu.LoadMenu ("IDR_MENU1");
+	m_Menu.LoadMenu (IDR_MENU1);
 	SetMenu (&m_Menu);
 
 	ChgScreen (SCRIDADMIN_CHAR_MODIFY);
 
 	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+	GetModuleFileName (NULL, szFileName, _countof (szFileName));
+	CString strIniPath (szFileName);
+	int nExtPos = strIniPath.ReverseFind (_T('.'));
+	if (nExtPos != -1) {
+		strIniPath = strIniPath.Left (nExtPos) + _T(".ini");
+	} else {
+		strIniPath += _T(".ini");
+	}
 
-	pt.x = GetPrivateProfileInt ("Pos", "AdminX", -1, szFileName);
-	pt.y = GetPrivateProfileInt ("Pos", "AdminY", -1, szFileName);
+	pt.x = GetPrivateProfileInt (_T("Pos"), _T("AdminX"), -1, strIniPath);
+	pt.y = GetPrivateProfileInt (_T("Pos"), _T("AdminY"), -1, strIniPath);
 	if (!((pt.x == -1) && (pt.y == -1))) {
 		SetWindowPos (NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 	}
@@ -558,7 +564,9 @@ void CAdminWindow::OnMapAdd()
 	int nResult;
 	CPacketADMIN_PARA2 Packet;
 
-	nResult = MessageBox ("マップを追加しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+	CString strMessage = Utf8ToTString ("マップを追加しますか？");
+	CString strCaption = Utf8ToTString ("確認");
+	nResult = MessageBox (strMessage, strCaption, MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

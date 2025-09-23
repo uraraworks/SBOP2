@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "LogViewCtrl.h"
+#include <limits>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -186,7 +187,7 @@ BOOL CLogViewCtrl::AddLine(LPCTSTR pszLine, COLORREF crFore, COLORREF crBack, BO
 void CLogViewCtrl::Redraw()
 {
 	// データがないなら空欄表示
-	if (m_aTexts.size() == 0) {
+	if (m_aTexts.empty()) {
 		Invalidate(FALSE);
 		return;
 	}
@@ -294,7 +295,8 @@ void CLogViewCtrl::RecalcParam(const SIZE* psizeClient)
 // テキストの高さ(pixel)計算
 int CLogViewCtrl::GetTextHeight(CDC* pDC, int nIndex)
 {
-	if ((nIndex < 0) || (nIndex >= m_aTexts.size())) {
+	const int nTextCount = static_cast<int>(m_aTexts.size());
+	if ((nIndex < 0) || (nIndex >= nTextCount)) {
 		return 0;
 	}
 
@@ -320,13 +322,17 @@ void CLogViewCtrl::LimitText()
 	int	nDelCount = 0;
 	if (m_nLimitMode == LVC_TEXT_LIMIT_LINE) {
 		// 行数オーバーしている場合は先頭から削除する
-		nDelCount = m_aTexts.size() - m_dwLimitSize;
-		if ((nDelCount > 0) && (nDelCount < m_aTexts.size())) {
-			m_aTexts.erase(m_aTexts.begin(), m_aTexts.begin() + nDelCount);
+		const int nTextCount = static_cast<int>(m_aTexts.size());
+		const int nLimit = (m_dwLimitSize > static_cast<DWORD>(std::numeric_limits<int>::max())) ? std::numeric_limits<int>::max() : static_cast<int>(m_dwLimitSize);
+		if (nTextCount > nLimit) {
+			nDelCount = nTextCount - nLimit;
+			if ((nDelCount > 0) && (nDelCount < nTextCount)) {
+				m_aTexts.erase(m_aTexts.begin(), m_aTexts.begin() + nDelCount);
+			}
 		}
 	} else if (m_nLimitMode == LVC_TEXT_LIMIT_SIZE) {
 		// サイズオーバーしている場合は先頭から削除する
-		while ((m_aTexts.size() > 0) && (m_dwTextSize > m_dwLimitSize)) {
+		while (!m_aTexts.empty() && (m_dwTextSize > m_dwLimitSize)) {
 			m_dwTextSize -= m_aTexts[0].strText.GetLength();
 			m_aTexts.erase(m_aTexts.begin());
 			++nDelCount;
@@ -356,7 +362,7 @@ void CLogViewCtrl::LimitText()
 // クライアント座標から文字位置の計算
 BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 {
-	if (m_aTexts.size() == 0) {
+	if (m_aTexts.empty()) {
 		// データがない
 		return FALSE;
 	}
@@ -434,7 +440,8 @@ BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 int CLogViewCtrl::FindToken(int nLine, int nChar)
 {
 	int i;
-	for (i = 0; i < m_aTexts[nLine].aTokens.size(); ++i) {
+	const int nTokenCount = static_cast<int>(m_aTexts[nLine].aTokens.size());
+	for (i = 0; i < nTokenCount; ++i) {
 		if (nChar < m_aTexts[nLine].aTokens[i].nStart) {
 			return i - 1;
 		}
@@ -626,7 +633,7 @@ void CLogViewCtrl::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 
-	if (m_aTexts.size() > 0) {
+	if (!m_aTexts.empty()) {
 		// 描画パラメータの更新
 		RecalcParam(&CSize(cx, cy));
 	}
@@ -644,7 +651,7 @@ void CLogViewCtrl::OnPaint()
 
 	CRect	rcClient;
 	GetClientRect(&rcClient);
-	if (m_aTexts.size() == 0) {
+	if (m_aTexts.empty()) {
 		// テキストを描画しないけど背景は描画しておく
 		dc.FillSolidRect(&rcClient, m_stSetting.crBack);
 		return;
@@ -865,7 +872,7 @@ void CLogViewCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CLogViewCtrl::OnLButtonUp(UINT nFlags, CPoint point) 
 {
-	if (m_aTexts.size() == 0) {
+	if (m_aTexts.empty()) {
 		// 表示するデータがない場合は処理しない
 		return;
 	}
@@ -923,7 +930,7 @@ int CLogViewCtrl::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message
 
 void CLogViewCtrl::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if (m_aTexts.size() == 0) {
+	if (m_aTexts.empty()) {
 		// 表示するデータがない場合は処理しない
 		return;
 	}
@@ -1000,7 +1007,7 @@ BOOL CLogViewCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 void CLogViewCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if (m_aTexts.size() == 0) {
+	if (m_aTexts.empty()) {
 		// 表示するデータがない場合は処理しない
 		return;
 	}
@@ -1041,7 +1048,7 @@ void CLogViewCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CLogViewCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	if (m_aTexts.size() > 0) {
+	if (!m_aTexts.empty()) {
 		m_menuPopup.EnableMenuItem(ID_MENU_ALLSELECT, MF_BYCOMMAND | MF_ENABLED);
 	} else {
 		m_menuPopup.EnableMenuItem(ID_MENU_ALLSELECT, MF_BYCOMMAND | MF_GRAYED);
@@ -1056,6 +1063,7 @@ void CLogViewCtrl::OnMenuCopy()
 	CWaitCursor	wc;
 
 	HANDLE	hMem = NULL;
+	const int nLineCount = static_cast<int>(m_aTexts.size());
 	if (m_nSelect == SELECT_TYPE_CHAR) {
 		// 文字選択
 		int	nSelectCharStart;
@@ -1067,7 +1075,7 @@ void CLogViewCtrl::OnMenuCopy()
 			nSelectCharStart = m_nSelectCharEnd;
 			nSelectCharEnd = m_nSelectCharStart;
 		}
-		if (m_nSelectLineStart < m_aTexts.size()) {
+		if ((m_nSelectLineStart >= 0) && (m_nSelectLineStart < nLineCount)) {
 			CString	str = m_aTexts[m_nSelectLineStart].strText.Mid(nSelectCharStart, nSelectCharEnd - nSelectCharStart);
 			hMem = GlobalAlloc(GHND, str.GetLength() + sizeof(_T('\0')));
 			if (hMem != NULL) {
@@ -1089,7 +1097,7 @@ void CLogViewCtrl::OnMenuCopy()
 		hMem = GlobalAlloc(GHND, m_dwTextSize + (sizeof(_T('\n')) + HEADER_COLUMN) * m_aTexts.size() + sizeof(TCHAR));
 		if (hMem != NULL) {
 			LPTSTR	psz = reinterpret_cast<LPTSTR>(GlobalLock(hMem));
-			for (int i = nSelectLineStart; (i <= nSelectLineEnd) && (i < m_aTexts.size()); ++i) {
+			for (int i = nSelectLineStart; (i <= nSelectLineEnd) && (i < nLineCount); ++i) {
 				CString	str;
 				str.Format(_T("[%02d:%02d:%02d] "), m_aTexts[i].stDateTime.wHour, m_aTexts[i].stDateTime.wMinute, m_aTexts[i].stDateTime.wSecond);
 				_tcscat(psz, str);
@@ -1123,14 +1131,14 @@ void CLogViewCtrl::OnMenuCopy()
 
 void CLogViewCtrl::OnMenuAllSelect()
 {
-	if (m_aTexts.size() == 0) {
+	if (m_aTexts.empty()) {
 		// データがないので処理しない
 		return;
 	}
 
 	m_nSelect = SELECT_TYPE_LINE;
 	m_nSelectLineStart = 0;
-	m_nSelectLineEnd = m_aTexts.size() - 1;
+	m_nSelectLineEnd = static_cast<int>(m_aTexts.size()) - 1;
 	m_nSelectCharStart = 0;
 	m_nSelectCharEnd = 0;
 

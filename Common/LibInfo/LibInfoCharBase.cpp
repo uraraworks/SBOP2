@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include <tchar.h>
 #include <math.h>
+#include <string.h>
 #include "LibInfoCharBase.h"
 
 
@@ -504,15 +505,15 @@ BOOL CLibInfoCharBase::NameCheck(LPCSTR pszName)
 	if (nLen <= 0) {
 		goto Exit;
 	}
-	pszTmp = _tcsstr (pszName, " ");
-	if (pszTmp) {
-		goto Exit;
-	}
-	pszTmp = _tcsstr (pszName, "　");
-	if (pszTmp) {
-		goto Exit;
-	}
-	pszTmp = _tcsstr (pszName, "\t");
+        pszTmp = strstr (pszName, " ");
+        if (pszTmp) {
+                goto Exit;
+        }
+        pszTmp = strstr (pszName, "　");
+        if (pszTmp) {
+                goto Exit;
+        }
+        pszTmp = strstr (pszName, "\t");
 	if (pszTmp) {
 		goto Exit;
 	}

@@ -18,8 +18,8 @@
 #define SAFE_DELETE_ARRAY(p) do { if ((p) != NULL) { delete[] (p);   (p) = NULL; } } while (0)
 #endif
 
-#define WNDCLNAMESVR            "TCPMainWindowSvr"
-#define WNDCLNAMECLI            "TCPMainWindowCli"
+#define WNDCLNAMESVR            _T("TCPMainWindowSvr")
+#define WNDCLNAMECLI            _T("TCPMainWindowCli")
 
 #define URARASOCK_MAXCONNECT    200
 #define URARASOCK_IDBASE        100000
@@ -836,7 +836,7 @@ void CUraraSockTCPImpl::ThreadMain(void)
 
 void CUraraSockTCPImpl::ThreadExit(void)
 {
-    const char *pszClass = (m_byMode == URARASOCKMODE_SREVER) ? WNDCLNAMESVR : WNDCLNAMECLI;
+    LPCTSTR pszClass = (m_byMode == URARASOCKMODE_SREVER) ? WNDCLNAMESVR : WNDCLNAMECLI;
     UnregisterClass(pszClass, GetModuleHandle(NULL));
     m_hWnd = NULL;
 }

@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include <stdlib.h>
+#include <strsafe.h>
 #include "CryptUtil.h"
 
 
@@ -92,9 +93,9 @@ void CCryptUtil::CryptStr(
 	strcpy ((LPSTR)pszDst, "");
 
 	nLen = strlen (pszSrc);
-	for (i = 0; i < nLen; i ++) {
-		wsprintf (&pszDst[i * 2], "%02X", (BYTE)pszSrc[i] ^ m_pCryptData[nKeyNo % 256]);
-	}
+        for (i = 0; i < nLen; i ++) {
+                StringCchPrintfA (&pszDst[i * 2], 3, "%02X", (BYTE)pszSrc[i] ^ m_pCryptData[nKeyNo % 256]);
+        }
 }
 
 
