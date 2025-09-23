@@ -129,9 +129,9 @@ BOOL CDlgAdminMapEventGRPIDTMP::OnInitDialog()
 	CDlgAdminMapEventNONE::OnInitDialog();
 
 	/* 画像IDメイン */
-	m_ctlIDMain.InsertString (0, "服(2x2)");
+	m_ctlIDMain.InsertString (0, _T("服(2x2)"));
 	m_ctlIDMain.SetItemData  (0, GRPIDMAIN_2X2_CLOTH);
-	m_ctlIDMain.InsertString (1, "特殊服(2x2)");
+	m_ctlIDMain.InsertString (1, _T("特殊服(2x2)"));
 	m_ctlIDMain.SetItemData  (1, GRPIDMAIN_2X2_SPCLOTH);
 
 	m_ctlIDMain.SetCurSel (0);

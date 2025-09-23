@@ -250,7 +250,7 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 		if (pIntLpcstr->nValue == -1) {
 			break;
 		}
-		m_ctlTarget.InsertString (i, pIntLpcstr->pszText);
+		m_ctlTarget.InsertString (i, Utf8ToTString (pIntLpcstr->pszText));
 		m_ctlTarget.SetItemData (i, pIntLpcstr->nValue);
 	}
 	m_ctlTarget.SetCurSel (0);
@@ -258,14 +258,14 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	/* エフェクトID */
 	for (j = 0; j < 5; j ++) {
 		pCombo = apCtlEffectID[j];
-		pCombo->InsertString (0, "無し");
+		pCombo->InsertString (0, _T("無し"));
 	}
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
 		for (j = 0; j < 5; j ++) {
 			pCombo = apCtlEffectID[j];
-			pCombo->InsertString (i + 1, (LPCSTR)pInfoEffect->m_strName);
+			pCombo->InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoEffect->m_strName));
 			pCombo->SetItemData (i + 1, pInfoEffect->m_dwEffectID);
 		}
 	}
@@ -280,7 +280,7 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 		if (pIntLpcstr->nValue == -1) {
 			break;
 		}
-		m_ctlPutType.InsertString (i, pIntLpcstr->pszText);
+		m_ctlPutType.InsertString (i, Utf8ToTString (pIntLpcstr->pszText));
 		m_ctlPutType.SetItemData (i, pIntLpcstr->nValue);
 	}
 	m_ctlPutType.SetCurSel (0);

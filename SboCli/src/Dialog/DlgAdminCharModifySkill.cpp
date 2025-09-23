@@ -195,13 +195,13 @@ BOOL CDlgAdminCharModifySkill::OnInitDialog()
 	CDlgAdminBase::OnInitDialog ();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID", LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "スキル名", LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"), LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("スキル名"), LVCFMT_LEFT, 120);
 
 	nCount = m_pLibInfoSkill->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (i);
-		m_Combo.InsertString (i, pInfoSkill->m_strName);
+		m_Combo.InsertString (i, Utf8ToTString ((LPCSTR)pInfoSkill->m_strName));
 		m_Combo.SetItemData (i, pInfoSkill->m_dwSkillID);
 	}
 	m_Combo.SetCurSel (0);

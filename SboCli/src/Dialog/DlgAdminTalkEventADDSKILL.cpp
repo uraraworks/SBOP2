@@ -119,7 +119,7 @@ BOOL CDlgAdminTalkEventADDSKILL::OnInitDialog()
 	nCount = pLibInfoSkill->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoSkill = (PCInfoSkillBase)pLibInfoSkill->GetPtr (i);
-		m_Combo.InsertString (i, (LPCSTR)pInfoSkill->m_strName);
+		m_Combo.InsertString (i, Utf8ToTString ((LPCSTR)pInfoSkill->m_strName));
 		m_Combo.SetItemData (i, pInfoSkill->m_dwSkillID);
 	}
 	m_Combo.SetCurSel (0);

@@ -123,12 +123,12 @@ BOOL CDlgAdminMapEventINITSTATUS::OnInitDialog()
 	CDlgAdminMapEventNONE::OnInitDialog();
 
 	/* エフェクトID */
-	m_ctlEffectID.InsertString (0, "無し");
+	m_ctlEffectID.InsertString (0, _T("無し"));
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
-		m_ctlEffectID.InsertString (i + 1, (LPCTSTR)pInfoEffect->m_strName);
+		m_ctlEffectID.InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoEffect->m_strName));
 		m_ctlEffectID.SetItemData (i + 1, pInfoEffect->m_dwEffectID);
 	}
 

@@ -173,47 +173,47 @@ BOOL CDlgAdminMapEventBase::OnInitDialog()
 	}
 
 	if (m_bModeModify) {
-		SetWindowText ("マップイベントの編集");
+		SetWindowText (_T("マップイベントの編集"));
 	}
 
-	m_ctlType.InsertString (0, "未設定");
+	m_ctlType.InsertString (0, _T("未設定"));
 	m_ctlType.SetItemData (0, MAPEVENTTYPE_NONE);
-	m_ctlType.InsertString (1, "マップ内移動");
+	m_ctlType.InsertString (1, _T("マップ内移動"));
 	m_ctlType.SetItemData (1, MAPEVENTTYPE_MOVE);
-	m_ctlType.InsertString (2, "マップ間移動");
+	m_ctlType.InsertString (2, _T("マップ間移動"));
 	m_ctlType.SetItemData (2, MAPEVENTTYPE_MAPMOVE);
-	m_ctlType.InsertString (3, "ゴミ箱");
+	m_ctlType.InsertString (3, _T("ゴミ箱"));
 	m_ctlType.SetItemData (3, MAPEVENTTYPE_TRASHBOX);
-	m_ctlType.InsertString (4, "ステータス初期化");
+	m_ctlType.InsertString (4, _T("ステータス初期化"));
 	m_ctlType.SetItemData (4, MAPEVENTTYPE_INITSTATUS);
-	m_ctlType.InsertString (5, "一時画像設定");
+	m_ctlType.InsertString (5, _T("一時画像設定"));
 	m_ctlType.SetItemData (5, MAPEVENTTYPE_GRPIDTMP);
-	m_ctlType.InsertString (6, "灯り");
+	m_ctlType.InsertString (6, _T("灯り"));
 	m_ctlType.SetItemData (6, MAPEVENTTYPE_LIGHT);
 
-	m_ctlHitType.InsertString (0, "マップ座標縦横いずれか");
+	m_ctlHitType.InsertString (0, _T("マップ座標縦横いずれか"));
 	m_ctlHitType.SetItemData (0, MAPEVENTHITTYPE_MAPPOS);
-	m_ctlHitType.InsertString (1, "キャラ座標");
+	m_ctlHitType.InsertString (1, _T("キャラ座標"));
 	m_ctlHitType.SetItemData (1, MAPEVENTHITTYPE_CHARPOS);
-	m_ctlHitType.InsertString (2, "範囲");
+	m_ctlHitType.InsertString (2, _T("範囲"));
 	m_ctlHitType.SetItemData (2, MAPEVENTHITTYPE_AREA);
-	m_ctlHitType.InsertString (3, "マップ座標完全一致");
+	m_ctlHitType.InsertString (3, _T("マップ座標完全一致"));
 	m_ctlHitType.SetItemData (3, MAPEVENTHITTYPE_MAPPOS2);
 
-	m_ctlDirection.InsertString (0, "上");
-	m_ctlDirection.InsertString (1, "下");
-	m_ctlDirection.InsertString (2, "左");
-	m_ctlDirection.InsertString (3, "右");
-	m_ctlDirection.InsertString (4, "指定無し");
+	m_ctlDirection.InsertString (0, _T("上"));
+	m_ctlDirection.InsertString (1, _T("下"));
+	m_ctlDirection.InsertString (2, _T("左"));
+	m_ctlDirection.InsertString (3, _T("右"));
+	m_ctlDirection.InsertString (4, _T("指定無し"));
 
-	m_ctlSoundID.InsertString (0, "無し");
+	m_ctlSoundID.InsertString (0, _T("無し"));
 
 	nNo = 0;
 	nCount = LibSboSoundLoader.GetSoundCount ();
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
-		m_ctlSoundID.InsertString (i + 1, pszTmp);
+		m_ctlSoundID.InsertString (i + 1, Utf8ToTString (pszTmp));
 		m_ctlSoundID.SetItemData (i + 1, dwSoundID);
 		if (m_pInfo && (m_pInfo->m_dwSoundID == dwSoundID)) {
 			m_dwSoundID = dwSoundID;

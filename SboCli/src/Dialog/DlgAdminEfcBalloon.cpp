@@ -162,12 +162,12 @@ BOOL CDlgAdminEfcBalloon::OnInitDialog()
 	m_ctlGrp.Create (this, m_pMgrData);
 	m_ctlGrp.Init (GRPIDMAIN_EFCBALLOON);
 
-	m_cmbSoundID.InsertString (0, "無し");
+	m_cmbSoundID.InsertString (0, _T("無し"));
 	nCount = LibSboSoundLoader.GetSoundCount ();
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
-		m_cmbSoundID.InsertString (i + 1, pszTmp);
+		m_cmbSoundID.InsertString (i + 1, Utf8ToTString (pszTmp));
 		m_cmbSoundID.SetItemData (i + 1, dwSoundID);
 	}
 

@@ -204,11 +204,11 @@ BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
 
 	/* エフェクトID */
-	m_ctlHitEffect.InsertString (0, "無し");
+	m_ctlHitEffect.InsertString (0, _T("無し"));
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
-		m_ctlHitEffect.InsertString (i + 1, (LPCSTR)pInfoEffect->m_strName);
+		m_ctlHitEffect.InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoEffect->m_strName));
 		m_ctlHitEffect.SetItemData (i + 1, pInfoEffect->m_dwEffectID);
 	}
 	m_ctlHitEffect.SetCurSel (0);
@@ -219,7 +219,7 @@ BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
 		if (pIntLpcstr->nValue == -1) {
 			break;
 		}
-		m_ctlHealType.InsertString (i, pIntLpcstr->pszText);
+		m_ctlHealType.InsertString (i, Utf8ToTString (pIntLpcstr->pszText));
 		m_ctlHealType.SetItemData (i, pIntLpcstr->nValue);
 	}
 	m_ctlHealType.SetCurSel (0);
@@ -230,7 +230,7 @@ BOOL CDlgAdminCharSkillHEAL::OnInitDialog()
 		if (pIntLpcstr->nValue == -1) {
 			break;
 		}
-		m_ctlArea.InsertString (i, pIntLpcstr->pszText);
+		m_ctlArea.InsertString (i, Utf8ToTString (pIntLpcstr->pszText));
 		m_ctlArea.SetItemData (i, pIntLpcstr->nValue);
 	}
 	m_ctlArea.SetCurSel (0);
