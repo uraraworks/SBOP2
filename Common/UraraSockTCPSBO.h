@@ -38,6 +38,7 @@ public:
 protected:
 	HMODULE			m_hDll;					/* 通信ライブラリDLL */
 	CUraraSockTCP	*m_pSock;				/* 通信ライブラリ */
+	PFRELEASEURARASOCKTCP m_pfRelease; /* Release function from DLL to free object */
 } CUraraSockTCPSBO, *PCUraraSockTCPSBO;
 
 /* Copyright(C)URARA-works 2003-2005 */

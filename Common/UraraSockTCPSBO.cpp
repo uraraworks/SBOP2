@@ -1,8 +1,8 @@
 ﻿/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
-/* UraraSockTCPSBO.cpp														 */
-/* 汎用TCP通信クラス														 */
-/* 2006/11/05 作成開始														 */
+/* UraraSockTCPSBO.cpp					 */
+/* 汎用TCP通信クラス					 */
+/* 2006/11/05 作成開始					 */
 /* ========================================================================= */
 
 #include "StdAfx.h"
@@ -10,15 +10,16 @@
 #include "UraraSockTCPSBO.h"
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::CUraraSockTCPSBO								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/11/05														 */
+/* 関数名	:CUraraSockTCPSBO::CUraraSockTCPSBO		 */
+/* 内容		:コンストラクタ					 */
+/* 日付		:2006/11/05					 */
 /* ========================================================================= */
 
 CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 {
 	char szFileName[MAX_PATH];
 	PFGETURARASOCKTCP pfGetUraraSockTCP;
+	PFRELEASEURARASOCKTCP pfReleaseUraraSockTCP = nullptr;
 
 	ZeroMemory (szFileName, sizeof (szFileName));
 
@@ -26,26 +27,44 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 	strcat (szFileName, "UraraSockTCP.dll");
 
 	m_pSock = NULL;
+	m_hDll = NULL;
+	m_pfRelease = nullptr;
 
 	m_hDll = LoadLibrary(szFileName);
-	pfGetUraraSockTCP = (PFGETURARASOCKTCP)GetProcAddress (m_hDll, "GetUraraSockTCP");
-	if (pfGetUraraSockTCP) {
-		m_pSock = pfGetUraraSockTCP ();
+	if (m_hDll) {
+		pfGetUraraSockTCP = (PFGETURARASOCKTCP)GetProcAddress (m_hDll, "GetUraraSockTCP");
+		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)GetProcAddress (m_hDll, "ReleaseUraraSockTCP");
+		if (pfGetUraraSockTCP) {
+			m_pSock = pfGetUraraSockTCP ();
+		}
+		if (pfReleaseUraraSockTCP) {
+			m_pfRelease = pfReleaseUraraSockTCP;
+		}
 	}
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::~CUraraSockTCPSBO							 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/11/05														 */
+/* 関数名	:CUraraSockTCPSBO::~CUraraSockTCPSBO	 */
+/* 内容		:デストラクタ					 */
+/* 日付		:2006/11/05					 */
 /* ========================================================================= */
 
 CUraraSockTCPSBO::~CUraraSockTCPSBO(void)
 {
-	SAFE_DELETE (m_pSock);
+	// Use the DLL provided release function when available, because the
+	// object was created inside the DLL and must be freed there to avoid
+	// CRT heap mismatch.
+	if (m_pfRelease && m_pSock) {
+		m_pfRelease(m_pSock);
+		m_pSock = nullptr;
+	} else {
+		SAFE_DELETE (m_pSock);
+	}
+
 	if (m_hDll) {
 		FreeLibrary (m_hDll);
+		m_hDll = NULL;
 	}
 }
 
@@ -61,9 +80,9 @@ void CUraraSockTCPSBO::DeleteRecvData(PBYTE pData)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::Destroy										 */
-/* 内容		:後始末															 */
-/* 日付		:2003/10/28														 */
+/* 関数名	:CUraraSockTCPSBO::Destroy		 */
+/* 内容		:後始末					 */
+/* 日付		:2003/10/28			 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::Destroy(void)
@@ -77,9 +96,9 @@ void CUraraSockTCPSBO::Destroy(void)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::Host											 */
-/* 内容		:接続待ち開始													 */
-/* 日付		:2003/10/28														 */
+/* 関数名	:CUraraSockTCPSBO::Host		 */
+/* 内容		:接続待ち開始				 */
+/* 日付		:2003/10/28			 */
 /* ========================================================================= */
 
 BOOL CUraraSockTCPSBO::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)
@@ -93,9 +112,9 @@ BOOL CUraraSockTCPSBO::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD 
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::Connect										 */
-/* 内容		:サーバーへ接続													 */
-/* 日付		:2003/10/29														 */
+/* 関数名	:CUraraSockTCPSBO::Connect	 */
+/* 内容		:サーバーへ接続			 */
+/* 日付		:2003/10/29			 */
 /* ========================================================================= */
 
 BOOL CUraraSockTCPSBO::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)
@@ -109,9 +128,9 @@ BOOL CUraraSockTCPSBO::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WO
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::DeleteClient									 */
-/* 内容		:クライアントを切断												 */
-/* 日付		:2003/11/03														 */
+/* 関数名	:CUraraSockTCPSBO::DeleteClient	 */
+/* 内容		:クライアントを切断			 */
+/* 日付		:2003/11/03			 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::DeleteClient(DWORD dwID)
@@ -125,9 +144,9 @@ void CUraraSockTCPSBO::DeleteClient(DWORD dwID)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::SendCancel									 */
-/* 内容		:送信キャンセル													 */
-/* 日付		:2003/11/03														 */
+/* 関数名	:CUraraSockTCPSBO::SendCancel	 */
+/* 内容		:送信キャンセル			 */
+/* 日付		:2003/11/03			 */
 /* ========================================================================= */
 void CUraraSockTCPSBO::SendCancel(DWORD dwID)
 {
@@ -140,9 +159,9 @@ void CUraraSockTCPSBO::SendCancel(DWORD dwID)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::Send											 */
-/* 内容		:サーバーへデータ送信											 */
-/* 日付		:2003/11/01														 */
+/* 関数名	:CUraraSockTCPSBO::Send		 */
+/* 内容		:サーバーへデータ送信		 */
+/* 日付		:2003/11/01			 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::Send(CPacketBase *pPacket)
@@ -156,9 +175,9 @@ void CUraraSockTCPSBO::Send(CPacketBase *pPacket)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::SendTo										 */
-/* 内容		:クライアントへデータ送信										 */
-/* 日付		:2003/11/02														 */
+/* 関数名	:CUraraSockTCPSBO::SendTo	 */
+/* 内容		:クライアントへデータ送信	 */
+/* 日付		:2003/11/02			 */
 /* ========================================================================= */
 
 void CUraraSockTCPSBO::SendTo(DWORD dwID, CPacketBase *pPacket)
@@ -172,9 +191,9 @@ void CUraraSockTCPSBO::SendTo(DWORD dwID, CPacketBase *pPacket)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::GetThrowghPutSend							 */
-/* 内容		:リンク・スループット量を取得									 */
-/* 日付		:2003/11/08														 */
+/* 関数名	:CUraraSockTCPSBO::GetThrowghPutSend */
+/* 内容		:リンク・スループット量を取得	 */
+/* 日付		:2003/11/08	 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetThrowghPutSend(DWORD dwID)
@@ -188,9 +207,9 @@ DWORD CUraraSockTCPSBO::GetThrowghPutSend(DWORD dwID)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::GetThrowghPutRecv							 */
-/* 内容		:リンク・スループット量を取得									 */
-/* 日付		:2003/11/08														 */
+/* 関数名	:CUraraSockTCPSBO::GetThrowghPutRecv */
+/* 内容		:リンク・スループット量を取得	 */
+/* 日付		:2003/11/08	 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetThrowghPutRecv(DWORD dwID)
@@ -204,9 +223,9 @@ DWORD CUraraSockTCPSBO::GetThrowghPutRecv(DWORD dwID)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::GetQueCount									 */
-/* 内容		:キュー数を取得													 */
-/* 日付		:2003/11/08														 */
+/* 関数名	:CUraraSockTCPSBO::GetQueCount	 */
+/* 内容		:キュー数を取得		 */
+/* 日付		:2003/11/08	 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetQueCount(DWORD dwID)
@@ -220,9 +239,9 @@ DWORD CUraraSockTCPSBO::GetQueCount(DWORD dwID)
 
 
 /* ========================================================================= */
-/* 関数名	:CUraraSockTCPSBO::GetIPAddress									 */
-/* 内容		:IPアドレスを取得												 */
-/* 日付		:2005/03/28														 */
+/* 関数名	:CUraraSockTCPSBO::GetIPAddress	 */
+/* 内容		:IPアドレスを取得		 */
+/* 日付		:2005/03/28	 */
 /* ========================================================================= */
 
 DWORD CUraraSockTCPSBO::GetIPAddress(DWORD dwID)
