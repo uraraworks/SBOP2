@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "LayerBase.h"
 
@@ -31,7 +32,7 @@ typedef struct _STLAYERSNOW_SNOWINFO {
 			dwWait,			/* 速度 */
 			dwLastProc;		/* 前回の処理時間 */
 } STLAYERSNOW_SNOWINFO, *PSTLAYERSNOW_SNOWINFO;
-typedef std::vector<PSTLAYERSNOW_SNOWINFO> ARRAYSNOWINFO;
+using ARRAYSNOWINFO = CStdArray<PSTLAYERSNOW_SNOWINFO>;
 
 /* ========================================================================= */
 /* クラス宣言																 */

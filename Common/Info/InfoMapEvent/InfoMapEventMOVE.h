@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoMapEventBase.h"
 
@@ -40,7 +41,7 @@ public:
 	POINT		m_ptDst;			/* 移動先 */
 	int			m_nDirection;		/* 移動後の向き */
 } CInfoMapEventMOVE, *PCInfoMapEventMOVE;
-typedef std::vector<PCInfoMapEventMOVE>	  ARRAYMAPEVENTMAPINFO;
-typedef std::vector<PCInfoMapEventMOVE>	*PARRAYMAPEVENTMAPINFO;
+using ARRAYMAPEVENTMAPINFO = CStdArray<PCInfoMapEventMOVE>;
+using PARRAYMAPEVENTMAPINFO = ARRAYMAPEVENTMAPINFO *;
 
 /* Copyright(C)URARA-works 2007 */

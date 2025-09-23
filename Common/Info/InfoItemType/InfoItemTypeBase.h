@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -111,7 +112,7 @@ public:
 //	DWORD		m_dwValue,						/* 灯りレベル */
 //				m_dwValue2;						/* 持続時間 */
 } CInfoItemTypeBase, *PCInfoItemTypeBase;
-typedef std::vector<PCInfoItemTypeBase>	   ARRAYITEMTYPEINFO;
-typedef std::vector<PCInfoItemTypeBase>	 *PARRAYITEMTYPEINFO;
+using ARRAYITEMTYPEINFO = CStdArray<PCInfoItemTypeBase>;
+using PARRAYITEMTYPEINFO = ARRAYITEMTYPEINFO *;
 
 /* Copyright(C)URARA-works 2007 */

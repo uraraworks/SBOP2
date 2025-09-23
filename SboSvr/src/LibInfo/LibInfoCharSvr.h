@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "LibInfoCharBase.h"
 
@@ -22,8 +23,8 @@ class CLibInfoItem;
 class CLibInfoItemWeapon;
 class CUraraSockTCPSBO;
 
-typedef std::vector<CInfoCharSvr *>	  ARRAYINFOCHARSVR;
-typedef std::vector<CInfoCharSvr *>	*PARRAYINFOCHARSVR;
+using ARRAYINFOCHARSVR = CStdArray<CInfoCharSvr *>;
+using PARRAYINFOCHARSVR = ARRAYINFOCHARSVR *;
 
 /* ========================================================================= */
 /* クラス宣言																 */

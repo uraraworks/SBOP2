@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -52,7 +53,7 @@ public:
 	WORD		m_wGrpIDBase,								/* グラフィックID(下地) */
 				m_wGrpIDPile;								/* グラフィックID(重ね合わせ用ID) */
 } CInfoAnime, *PCInfoAnime;
-typedef std::vector<PCInfoAnime>	   ARRAYANIMEINFO;
-typedef std::vector<PCInfoAnime>	 *PARRAYANIMEINFO;
+using ARRAYANIMEINFO = CStdArray<PCInfoAnime>;
+using PARRAYANIMEINFO = ARRAYANIMEINFO *;
 
 /* Copyright(C)URARA-works 2005 */

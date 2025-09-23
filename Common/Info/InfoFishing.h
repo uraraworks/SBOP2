@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -59,7 +60,7 @@ public:
 	CmyString	m_strName;						/* 釣り場名 */
 	std::vector<PINFOFISHINGPARAM>	m_apParam;	/* 釣り情報パラメータ */
 } CInfoFishing, *PCInfoFishing;
-typedef std::vector<PCInfoFishing>	   ARRAYITEMINFO;
-typedef std::vector<PCInfoFishing>	 *PARRAYITEMINFO;
+using ARRAYITEMINFO = CStdArray<PCInfoFishing>;
+using PARRAYITEMINFO = ARRAYITEMINFO *;
 
 /* Copyright(C)URARA-works 2008 */

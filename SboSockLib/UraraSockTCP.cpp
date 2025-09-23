@@ -322,7 +322,7 @@ void CUraraSockTCPImplSlot::Combine(std::vector<PURARASOCK_QUEINFO> *pQue)
     }
     pQue->clear();
     pQueNew->dwTimeMake = GetTickCount();
-    pQue->Add(pQueNew);
+    pQue->push_back(pQueNew);
 }
 
 void CUraraSockTCPImplSlot::CancelQue(void)

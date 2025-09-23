@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 class CImg32;
 
@@ -15,8 +16,8 @@ class CImg32;
 /* 定数宣言																	 */
 /* ========================================================================= */
 
-typedef std::vector<CImg32 *>	  ARRAYCIMG;
-typedef std::vector<CImg32 *>	*PARRAYCIMG;
+using ARRAYCIMG = CStdArray<CImg32 *>;
+using PARRAYCIMG = ARRAYCIMG *;
 
 
 /* ========================================================================= */

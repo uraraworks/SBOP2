@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoTalkEventBase.h"
 
@@ -20,8 +21,8 @@ typedef struct _STTALKEVENTMENUINFO {
 	int			nPage;		/* ジャンプ先ページ番号 */
 	CmyString	strName;	/* 項目名 */
 } STTALKEVENTMENUINFO, *PSTTALKEVENTMENUINFO;
-typedef std::vector<PSTTALKEVENTMENUINFO>	  ARRAYTALKEVENTMENUINFO;
-typedef std::vector<PSTTALKEVENTMENUINFO>	*PARRAYTALKEVENTMENUINFO;
+using ARRAYTALKEVENTMENUINFO = CStdArray<PSTTALKEVENTMENUINFO>;
+using PARRAYTALKEVENTMENUINFO = ARRAYTALKEVENTMENUINFO *;
 
 
 /* ========================================================================= */

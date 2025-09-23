@@ -1,3 +1,3 @@
 #pragma once
 
-#error "CmyArray は廃止されました。std::vector などのSTLコンテナを使用してください。"
+// 旧来の実装は廃止されました。新しい CStdArray テンプレートの定義は myArray.h を参照してください。

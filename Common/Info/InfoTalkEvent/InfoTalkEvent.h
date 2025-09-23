@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoTalkEventBase.h"
 
@@ -53,7 +54,7 @@ public:
 	DWORD	m_dwTalkEventID;						/* 会話イベントID */
 	ARRAYTALKEVENTBASEINFO		m_apTalkEvent;		/* 会話イベント */
 } CInfoTalkEvent, *PCInfoTalkEvent;
-typedef std::vector<PCInfoTalkEvent>	  ARRAYTALKEVENTINFO;
-typedef std::vector<PCInfoTalkEvent>	*PARRAYTALKEVENTINFO;
+using ARRAYTALKEVENTINFO = CStdArray<PCInfoTalkEvent>;
+using PARRAYTALKEVENTINFO = ARRAYTALKEVENTINFO *;
 
 /* Copyright(C)URARA-works 2008 */

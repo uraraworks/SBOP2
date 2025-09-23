@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -70,7 +71,7 @@ public:
 public:
 	PSTSYSTEM_INITCHARSTATUS	m_pInitCharStatus;		/* キャラステータス初期値 */
 } CInfoSystem, *PCInfoSystem;
-typedef std::vector<PCInfoSystem>	   ARRAYSYSTEMINFO;
-typedef std::vector<PCInfoSystem>	 *PARRAYSYSTEMINFO;
+using ARRAYSYSTEMINFO = CStdArray<PCInfoSystem>;
+using PARRAYSYSTEMINFO = ARRAYSYSTEMINFO *;
 
 /* Copyright(C)URARA-works 2008 */

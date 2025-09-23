@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoAnime.h"
 
@@ -61,7 +62,7 @@ public:
 	CmyString			m_strName;							/* エフェクト名 */
 	PARRAYANIMEINFO		m_paAnimeInfo;						/* アニメーション情報 */
 } CInfoEffect, *PCInfoEffect;
-typedef std::vector<PCInfoEffect>	  ARRAYEFFECT;
-typedef std::vector<PCInfoEffect>	*PARRAYEFFECT;
+using ARRAYEFFECT = CStdArray<PCInfoEffect>;
+using PARRAYEFFECT = ARRAYEFFECT *;
 
 /* Copyright(C)URARA-works 2007 */

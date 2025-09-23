@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 class CImg32;
 class CWindowBase;
@@ -108,7 +109,7 @@ public:
 	CMgrGrpData		*m_pMgrGrpData;					/* グラフィックデータ管理 */
 	std::vector<CWindowBase *>	m_apChild;	/* 子ウィンドウ */
 } CWindowBase, *PCWindowBase;
-typedef std::vector<PCWindowBase>	  ARRAYWINDOWBASE;
-typedef std::vector<PCWindowBase>	*PARRAYWINDOWBASE;
+using ARRAYWINDOWBASE = CStdArray<PCWindowBase>;
+using PARRAYWINDOWBASE = ARRAYWINDOWBASE *;
 
 /* Copyright(C)URARA-works 2006 */

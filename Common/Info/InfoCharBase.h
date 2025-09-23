@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 #include "InfoMotion.h"
@@ -273,7 +274,7 @@ public:
 	int			m_nPutAverage;				/* 発生確率 */
 	POINT		m_ptPutArea;				/* 発生範囲(半径) */
 } CInfoCharBase, *PCInfoCharBase;
-typedef std::vector<PCInfoCharBase>	  ARRAYINFOCHARBASE;
-typedef std::vector<PCInfoCharBase>	*PARRAYINFOCHARBASE;
+using ARRAYINFOCHARBASE = CStdArray<PCInfoCharBase>;
+using PARRAYINFOCHARBASE = ARRAYINFOCHARBASE *;
 
 /* Copyright(C)URARA-works 2006 */

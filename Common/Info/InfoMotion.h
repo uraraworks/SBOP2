@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoBase.h"
 
@@ -180,7 +181,7 @@ public:
 				m_ptDrawPosPile3;				/* 描画位置(重ね合わせ3) */
 	ARRAYINT	m_anDrawList;					/* 描画順リスト */
 } CInfoMotion, *PCInfoMotion;
-typedef std::vector<PCInfoMotion>	   ARRAYMOTIONINFO;
-typedef std::vector<PCInfoMotion>	 *PARRAYMOTIONINFO;
+using ARRAYMOTIONINFO = CStdArray<PCInfoMotion>;
+using PARRAYMOTIONINFO = ARRAYMOTIONINFO *;
 
 /* Copyright(C)URARA-works 2007 */

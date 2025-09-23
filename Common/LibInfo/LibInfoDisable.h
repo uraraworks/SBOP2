@@ -8,6 +8,7 @@
 
 #pragma once
 #include <vector>
+#include "myArray.h"
 
 #include "InfoDisable.h"
 #include "LibInfoBase.h"
@@ -17,8 +18,8 @@ typedef struct _STDISABLEIPADDRESS {
 	ULONG	ulIPAddress;		/* IPアドレス */
 	DWORD	dwLastTime;			/* 最終ログイン時間 */
 } STDISABLEIPADDRESS, *PSTDISABLEIPADDRESS;
-typedef std::vector<PSTDISABLEIPADDRESS>   ARRAYDISABLEIPADDRESS;
-typedef std::vector<PSTDISABLEIPADDRESS> *PARRAYDISABLEIPADDRESS;
+using ARRAYDISABLEIPADDRESS = CStdArray<PSTDISABLEIPADDRESS>;
+using PARRAYDISABLEIPADDRESS = ARRAYDISABLEIPADDRESS *;
 
 /* ========================================================================= */
 /* クラス宣言																 */
