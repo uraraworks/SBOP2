@@ -147,7 +147,7 @@ void CDlgAdminCharModify::Renew(void)
 		goto Exit;
 	}
 
-	m_strCharID.Format ("%u", m_pInfoChar->m_dwCharID);
+        m_strCharID.Format (_T("%u"), m_pInfoChar->m_dwCharID);
 	m_strCharName	= m_pInfoChar->m_strCharName;
 	m_bBlock		= m_pInfoChar->m_bBlock;
 	m_bPush			= m_pInfoChar->m_bPush;
@@ -169,7 +169,7 @@ void CDlgAdminCharModify::Renew(void)
 	nCount = pLibInfoMotionType->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoMotionType = (PCInfoMotionType)pLibInfoMotionType->GetPtr (i);
-		m_ctlMotionType.AddString ((LPCSTR)pInfoMotionType->m_strName);
+                m_ctlMotionType.AddString ((LPCTSTR)pInfoMotionType->m_strName);
 		m_ctlMotionType.SetItemData (i, pInfoMotionType->m_dwMotionTypeID);
 	}
 
@@ -184,9 +184,9 @@ void CDlgAdminCharModify::Renew(void)
 	m_ctlMotionType.SetCurSel (nNo);
 
 	m_ctlSex.ResetContent ();
-	m_ctlSex.AddString ("男性");
-	m_ctlSex.SetItemData (0, SEX_MALE);
-	m_ctlSex.AddString ("女性");
+        m_ctlSex.AddString (_T("男性"));
+        m_ctlSex.SetItemData (0, SEX_MALE);
+        m_ctlSex.AddString (_T("女性"));
 	m_ctlSex.SetItemData (1, SEX_FEMALE);
 	nNo = 0;
 	if (m_pInfoChar->m_nSex == SEX_FEMALE) {
@@ -195,20 +195,20 @@ void CDlgAdminCharModify::Renew(void)
 	m_ctlSex.SetCurSel (nNo);
 
 	m_ctlColor.ResetContent ();
-	m_ctlColor.AddString ("赤");
-	m_ctlColor.AddString ("黄");
-	m_ctlColor.AddString ("緑");
-	m_ctlColor.AddString ("青緑");
-	m_ctlColor.AddString ("青");
-	m_ctlColor.AddString ("紫");
-	m_ctlColor.AddString ("白");
-	m_ctlColor.AddString ("(濃)赤");
-	m_ctlColor.AddString ("(濃)橙");
-	m_ctlColor.AddString ("(濃)青");
-	m_ctlColor.AddString ("(濃)紫");
-	m_ctlColor.AddString ("(濃)黄緑");
-	m_ctlColor.AddString ("(濃)緑");
-	m_ctlColor.AddString ("(濃)水");
+        m_ctlColor.AddString (_T("赤"));
+        m_ctlColor.AddString (_T("黄"));
+        m_ctlColor.AddString (_T("緑"));
+        m_ctlColor.AddString (_T("青緑"));
+        m_ctlColor.AddString (_T("青"));
+        m_ctlColor.AddString (_T("紫"));
+        m_ctlColor.AddString (_T("白"));
+        m_ctlColor.AddString (_T("(濃)赤"));
+        m_ctlColor.AddString (_T("(濃)橙"));
+        m_ctlColor.AddString (_T("(濃)青"));
+        m_ctlColor.AddString (_T("(濃)紫"));
+        m_ctlColor.AddString (_T("(濃)黄緑"));
+        m_ctlColor.AddString (_T("(濃)緑"));
+        m_ctlColor.AddString (_T("(濃)水"));
 	for (i = 0; i < COLORCOUNT; i ++) {
 		if (m_pInfoChar->m_clName == GetColor (i)) {
 			break;
@@ -298,26 +298,26 @@ BOOL CDlgAdminCharModify::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog ();
 
-	m_ctlMoveType.AddString ("プレイヤーキャラ");
-	m_ctlMoveType.SetItemData (0, CHARMOVETYPE_PC);
-	m_ctlMoveType.AddString ("移動しない");
-	m_ctlMoveType.SetItemData (1, CHARMOVETYPE_STAND);
-	m_ctlMoveType.AddString ("ボール");
-	m_ctlMoveType.SetItemData (2, CHARMOVETYPE_BALL);
-	m_ctlMoveType.AddString ("得点");
-	m_ctlMoveType.SetItemData (3, CHARMOVETYPE_SCORE);
-	m_ctlMoveType.AddString ("容姿コピー(取り込み)");
-	m_ctlMoveType.SetItemData (4, CHARMOVETYPE_STYLECOPY_PUT);
-	m_ctlMoveType.AddString ("攻撃受けるとアニメーション");
-	m_ctlMoveType.SetItemData (5, CHARMOVETYPE_ATACKANIME);
-	m_ctlMoveType.AddString ("容姿コピー(反映)");
-	m_ctlMoveType.SetItemData (6, CHARMOVETYPE_STYLECOPY_GET);
-	m_ctlMoveType.AddString ("NPC発生");
-	m_ctlMoveType.SetItemData (7, CHARMOVETYPE_PUTNPC);
-	m_ctlMoveType.AddString ("戦闘1");
-	m_ctlMoveType.SetItemData (8, CHARMOVETYPE_BATTLE1);
-	m_ctlMoveType.AddString ("戦闘2");
-	m_ctlMoveType.SetItemData (9, CHARMOVETYPE_BATTLE2);
+        m_ctlMoveType.AddString (_T("プレイヤーキャラ"));
+        m_ctlMoveType.SetItemData (0, CHARMOVETYPE_PC);
+        m_ctlMoveType.AddString (_T("移動しない"));
+        m_ctlMoveType.SetItemData (1, CHARMOVETYPE_STAND);
+        m_ctlMoveType.AddString (_T("ボール"));
+        m_ctlMoveType.SetItemData (2, CHARMOVETYPE_BALL);
+        m_ctlMoveType.AddString (_T("得点"));
+        m_ctlMoveType.SetItemData (3, CHARMOVETYPE_SCORE);
+        m_ctlMoveType.AddString (_T("容姿コピー(取り込み)"));
+        m_ctlMoveType.SetItemData (4, CHARMOVETYPE_STYLECOPY_PUT);
+        m_ctlMoveType.AddString (_T("攻撃受けるとアニメーション"));
+        m_ctlMoveType.SetItemData (5, CHARMOVETYPE_ATACKANIME);
+        m_ctlMoveType.AddString (_T("容姿コピー(反映)"));
+        m_ctlMoveType.SetItemData (6, CHARMOVETYPE_STYLECOPY_GET);
+        m_ctlMoveType.AddString (_T("NPC発生"));
+        m_ctlMoveType.SetItemData (7, CHARMOVETYPE_PUTNPC);
+        m_ctlMoveType.AddString (_T("戦闘1"));
+        m_ctlMoveType.SetItemData (8, CHARMOVETYPE_BATTLE1);
+        m_ctlMoveType.AddString (_T("戦闘2"));
+        m_ctlMoveType.SetItemData (9, CHARMOVETYPE_BATTLE2);
 	m_ctlMoveType.SetCurSel (0);
 
 	m_pInfoTalkEvent = new CInfoTalkEvent;
@@ -357,8 +357,8 @@ void CDlgAdminCharModify::OnDelete()
 		return;
 	}
 
-	strTmp.Format ("[%s]を削除しますか？", (LPCSTR)m_pInfoChar->m_strCharName);
-	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
+        strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)m_pInfoChar->m_strCharName);
+        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
