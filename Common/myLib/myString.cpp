@@ -2,10 +2,10 @@
 #include <tchar.h>
 #include "myString.h"
 
-CString Utf8ToTString(LPCSTR pszSrc)
+ATL::CString Utf8ToTString(LPCSTR pszSrc)
 {
 #ifdef _UNICODE
-        CString strResult;
+        ATL::CString strResult;
         if (pszSrc == NULL) {
                 return strResult;
         }
@@ -18,7 +18,7 @@ CString Utf8ToTString(LPCSTR pszSrc)
         strResult.ReleaseBuffer ();
         return strResult;
 #else
-        CString strResult;
+        ATL::CString strResult;
         if (pszSrc) {
                 strResult = pszSrc;
         }
@@ -26,10 +26,10 @@ CString Utf8ToTString(LPCSTR pszSrc)
 #endif
 }
 
-CStringA TStringToUtf8(LPCTSTR pszSrc)
+ATL::CStringA TStringToUtf8(LPCTSTR pszSrc)
 {
 #ifdef _UNICODE
-        CStringA strResult;
+        ATL::CStringA strResult;
         if (pszSrc == NULL) {
                 return strResult;
         }
@@ -42,7 +42,7 @@ CStringA TStringToUtf8(LPCTSTR pszSrc)
         strResult.ReleaseBuffer ();
         return strResult;
 #else
-        CStringA strResult;
+        ATL::CStringA strResult;
         if (pszSrc) {
                 strResult = pszSrc;
         }
@@ -168,11 +168,11 @@ void CmyString::Format(LPCSTR lpFormat, ...)
         va_list argList;
         va_start (argList, lpFormat);
 #ifdef _UNICODE
-        CStringA strTmp;
+        ATL::CStringA strTmp;
         strTmp.FormatV (lpFormat, argList);
         RenewUtf8 (strTmp);
 #else
-        CStringA strTmp;
+        ATL::CStringA strTmp;
         strTmp.FormatV (lpFormat, argList);
         m_strString = strTmp;
         m_bUtf8Dirty = TRUE;
@@ -272,7 +272,7 @@ void CmyString::operator +=(LPCTSTR pszSrc)
 BOOL CmyString::operator ==(LPCSTR pszSrc) const
 {
 #ifdef _UNICODE
-        CString strTmp = Utf8ToTString (pszSrc);
+        ATL::CString strTmp = Utf8ToTString (pszSrc);
         return (m_strString.Compare (strTmp) == 0);
 #else
         if (pszSrc == NULL) {
@@ -357,7 +357,7 @@ CmyString::operator LPCSTR()
 int CmyString::CompareNoCase(LPCSTR pszSrc) const
 {
 #ifdef _UNICODE
-        CString strTmp = Utf8ToTString (pszSrc);
+        ATL::CString strTmp = Utf8ToTString (pszSrc);
         return m_strString.CompareNoCase (strTmp);
 #else
         if (pszSrc == NULL) {

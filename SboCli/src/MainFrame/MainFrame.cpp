@@ -679,15 +679,20 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 {
-	char szFileName[MAX_PATH];
-	POINT pt;
+    TCHAR szFileName[MAX_PATH];
+    POINT pt;
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+    ZeroMemory (szFileName, sizeof (szFileName));
+    GetModuleFileName (NULL, szFileName, _countof (szFileName));
+    size_t nNameLen = _tcslen (szFileName);
+    if (nNameLen >= 3) {
+            _tcscpy_s (szFileName + nNameLen - 3, _countof (szFileName) - (nNameLen - 3), _T("ini"));
+    } else {
+            _tcscat_s (szFileName, _T(".ini"));
+    }
 
-	pt.x = GetPrivateProfileInt ("Pos", "MainX", -1, szFileName);
-	pt.y = GetPrivateProfileInt ("Pos", "MainY", -1, szFileName);
+        pt.x = GetPrivateProfileInt (_T("Pos"), _T("MainX"), -1, szFileName);
+        pt.y = GetPrivateProfileInt (_T("Pos"), _T("MainY"), -1, szFileName);
 	if (!((pt.x == -1) && (pt.y == -1))) {
 		SetWindowPos (hWnd, NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE);
 	}
@@ -709,8 +714,8 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 void CMainFrame::OnInitEnd(HWND hWnd)
 {
 	BOOL bRet, bResult;
-	char szName[MAX_PATH], szTmp[MAX_PATH];
-	LPSTR pszTmp;
+	TCHAR szName[MAX_PATH], szTmp[MAX_PATH];
+	LPTSTR pszTmp;
 	GUID stGuid;
 
 	bRet = FALSE;
@@ -751,19 +756,21 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	stGuid = m_pMgrData->GetInputGuid ();
 	m_pMgrKeyInput->SetDevice (stGuid, hWnd);
 
-	GetModuleFileName (NULL, szName, MAX_PATH);
-	pszTmp		= strrchr (szName, '\\');
-	pszTmp[1]	= 0;
-	wsprintf (szTmp, _T("%sss"), szName);
+	ZeroMemory (szName, sizeof (szName));
+	GetModuleFileName (NULL, szName, _countof (szName));
+	pszTmp = _tcsrchr (szName, _T('\\'));
+	if (pszTmp) {
+		pszTmp[1] = _T('\0');
+	}
+	_stprintf_s (szTmp, _T("%sss"), szName);
 	CreateDirectory (szTmp, NULL);
-	wsprintf (szTmp, _T("%sLog"), szName);
+	_stprintf_s (szTmp, _T("%sLog"), szName);
 	CreateDirectory (szTmp, NULL);
 
 	bResult = m_pMgrData->GetDisableLogin();
 	if (bResult) {
 		goto Exit;
 	}
-
 	ChgGameState (GAMESTATE_LOGO);
 	ShowWindow (hWnd, SW_SHOW);
 
@@ -785,45 +792,50 @@ Exit:
 
 void CMainFrame::OnClose(HWND hWnd)
 {
-	RECT rc;
-	char szFileName[MAX_PATH];
-	HWND hWndTmp;
-	CmyString strTmp;
+        RECT rc;
+        TCHAR szFileName[MAX_PATH];
+        HWND hWndTmp;
+        CmyString strTmp;
 
-	ZeroMemory (szFileName, sizeof (szFileName));
+        ZeroMemory (szFileName, sizeof (szFileName));
 
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        GetModuleFileName (NULL, szFileName, _countof (szFileName));
+        size_t nNameLen = _tcslen (szFileName);
+        if (nNameLen >= 3) {
+                _tcscpy_s (szFileName + nNameLen - 3, _countof (szFileName) - (nNameLen - 3), _T("ini"));
+        } else {
+                _tcscat_s (szFileName, _T(".ini"));
+        }
 
 	if ((IsIconic (hWnd) == FALSE) && (IsWindowVisible (hWnd))) {
 		GetWindowRect (hWnd, &rc);
 
 		/* メインウィンドウ */
 		strTmp.Format(_T("%d"), rc.left);
-		WritePrivateProfileString ("Pos", "MainX", strTmp, szFileName);
-		strTmp.Format(_T("%d"), rc.top);
-		WritePrivateProfileString ("Pos", "MainY", strTmp, szFileName);
+                WritePrivateProfileString (_T("Pos"), _T("MainX"), strTmp, szFileName);
+                strTmp.Format(_T("%d"), rc.top);
+                WritePrivateProfileString (_T("Pos"), _T("MainY"), strTmp, szFileName);
 
 		if (m_nGameState == GAMESTATE_MAP) {
 			/* ログウィンドウ */
 			((CStateProcMAP *)m_pStateProc)->GetMsgLogRect (rc);
 			strTmp.Format(_T("%d"), rc.left);
-			WritePrivateProfileString ("Pos", "LogLeft", strTmp, szFileName);
-			strTmp.Format(_T("%d"), rc.top);
-			WritePrivateProfileString ("Pos", "LogTop", strTmp, szFileName);
-			strTmp.Format(_T("%d"), rc.right);
-			WritePrivateProfileString ("Pos", "LogRight", strTmp, szFileName);
-			strTmp.Format(_T("%d"), rc.bottom);
-			WritePrivateProfileString ("Pos", "LogBottom", strTmp, szFileName);
+                        WritePrivateProfileString (_T("Pos"), _T("LogLeft"), strTmp, szFileName);
+                        strTmp.Format(_T("%d"), rc.top);
+                        WritePrivateProfileString (_T("Pos"), _T("LogTop"), strTmp, szFileName);
+                        strTmp.Format(_T("%d"), rc.right);
+                        WritePrivateProfileString (_T("Pos"), _T("LogRight"), strTmp, szFileName);
+                        strTmp.Format(_T("%d"), rc.bottom);
+                        WritePrivateProfileString (_T("Pos"), _T("LogBottom"), strTmp, szFileName);
 
 			hWndTmp = m_pMgrData->GetAdminWindow ();
 			if (hWndTmp) {
 				/* 管理者ウィンドウ */
 				GetWindowRect (hWndTmp, &rc);
 				strTmp.Format(_T("%d"), rc.left);
-				WritePrivateProfileString ("Pos", "AdminX", strTmp, szFileName);
-				strTmp.Format(_T("%d"), rc.top);
-				WritePrivateProfileString ("Pos", "AdminY", strTmp, szFileName);
+                                WritePrivateProfileString (_T("Pos"), _T("AdminX"), strTmp, szFileName);
+                                strTmp.Format(_T("%d"), rc.top);
+                                WritePrivateProfileString (_T("Pos"), _T("AdminY"), strTmp, szFileName);
 			}
 
 			hWndTmp = m_pMgrData->GetDebugWindow ();
@@ -831,9 +843,9 @@ void CMainFrame::OnClose(HWND hWnd)
 				/* デバッグウィンドウ */
 				GetWindowRect (hWndTmp, &rc);
 				strTmp.Format(_T("%d"), rc.left);
-				WritePrivateProfileString ("Pos", "DebugX", strTmp, szFileName);
-				strTmp.Format(_T("%d"), rc.top);
-				WritePrivateProfileString ("Pos", "DebugY", strTmp, szFileName);
+                                WritePrivateProfileString (_T("Pos"), _T("DebugX"), strTmp, szFileName);
+                                strTmp.Format(_T("%d"), rc.top);
+                                WritePrivateProfileString (_T("Pos"), _T("DebugY"), strTmp, szFileName);
 			}
 		}
 	}

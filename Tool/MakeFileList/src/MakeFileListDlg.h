@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <vector>
+
 /* ========================================================================= */
 /* クラス宣言																 */
 /* ========================================================================= */
@@ -24,8 +26,8 @@ protected:
 
 
 protected:
-	CStringArray	m_astrFileList,				/* ファイルリスト */
-					m_astrHashList;				/* ファイルハッシュリスト */
+        std::vector<CString>     m_astrFileList;                 /* ファイルリスト */
+        std::vector<CString>     m_astrHashList;                 /* ファイルハッシュリスト */
 
 
 

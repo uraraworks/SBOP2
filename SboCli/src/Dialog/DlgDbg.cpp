@@ -121,9 +121,9 @@ void CDlgDbg::Renew(void)
 
 BOOL CDlgDbg::OnInitDialog()
 {
-	char szFileName[MAX_PATH];
-	CRect rc;
-	POINT pt;
+        TCHAR szFileName[MAX_PATH];
+        CRect rc;
+        POINT pt;
 
 	CDialog::OnInitDialog ();
 
@@ -135,13 +135,18 @@ BOOL CDlgDbg::OnInitDialog()
 	CLayoutHelper::Initialize (m_hWnd);
 	SetTimer(100, 1000, NULL);
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        ZeroMemory (szFileName, sizeof (szFileName));
+        GetModuleFileName (NULL, szFileName, _countof (szFileName));
+        size_t nLen = _tcslen (szFileName);
+        if (nLen >= 3) {
+                _tcscpy_s (szFileName + nLen - 3, _countof (szFileName) - (nLen - 3), _T("ini"));
+        } else {
+                _tcscat_s (szFileName, _T(".ini"));
+        }
 
-	m_pMgrData->SetDebugWindow (m_hWnd);
-	pt.x = GetPrivateProfileInt ("Pos", "DebugX", -1, szFileName);
-	pt.y = GetPrivateProfileInt ("Pos", "DebugY", -1, szFileName);
+        m_pMgrData->SetDebugWindow (m_hWnd);
+        pt.x = GetPrivateProfileInt (_T("Pos"), _T("DebugX"), -1, szFileName);
+        pt.y = GetPrivateProfileInt (_T("Pos"), _T("DebugY"), -1, szFileName);
 	if (!((pt.x == -1) && (pt.y == -1))) {
 		SetWindowPos (NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 	}

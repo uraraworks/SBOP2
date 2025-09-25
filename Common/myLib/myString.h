@@ -14,8 +14,8 @@
 #include <atlstr.h>
 
 #ifdef __cplusplus
-CString Utf8ToTString(LPCSTR pszSrc);
-CStringA TStringToUtf8(LPCTSTR pszSrc);
+ATL::CString Utf8ToTString(LPCSTR pszSrc);
+ATL::CStringA TStringToUtf8(LPCTSTR pszSrc);
 #endif
 
 /* ========================================================================= */
@@ -61,8 +61,8 @@ protected:
         void    UpdateUtf8Cache         () const;                                      /* UTF-8キャッシュを更新 */
 
 protected:
-        CString         m_strString;                                          /* 文字列データ */
-        mutable CStringA        m_strUtf8Cache;                        /* UTF-8キャッシュ */
+        ATL::CString            m_strString;                          /* 文字列データ */
+        mutable ATL::CStringA   m_strUtf8Cache;                       /* UTF-8キャッシュ */
         mutable BOOL            m_bUtf8Dirty;                          /* キャッシュ更新フラグ */
 } CmyString, *PCmyString;
 

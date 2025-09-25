@@ -84,23 +84,28 @@ BOOL CMakeFileListDlg::OnInitDialog()
 void CMakeFileListDlg::ReadIniFile(void)
 {
 	int i;
-	char szFileName[MAX_PATH], szTmp[MAX_PATH];
+	TCHAR szFileName[MAX_PATH], szTmp[MAX_PATH];
 	CString strTmp;
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+    ZeroMemory (szFileName, sizeof (szFileName));
+    GetModuleFileName (NULL, szFileName, _countof (szFileName));
+    size_t nNameLen = _tcslen (szFileName);
+    if (nNameLen >= 3) {
+            _tcscpy_s (szFileName + nNameLen - 3, _countof (szFileName) - (nNameLen - 3), _T("ini"));
+    } else {
+            _tcscat_s (szFileName, _T(".ini"));
+    }
 
 	/* ファイルリスト読み込み */
-	for (i = 0; ; i ++) {
-		strTmp.Format(_T("%d"), i + 1);
-		ZeroMemory (szTmp, sizeof (szTmp));
-		GetPrivateProfileString ("FileList", strTmp, "", szTmp, sizeof (szTmp) - 1, szFileName);
-		if (strlen (szTmp) <= 0) {
-			break;
-		}
-		m_astrFileList.push_back (szTmp);
-	}
+        for (i = 0; ; i ++) {
+                strTmp.Format(_T("%d"), i + 1);
+                ZeroMemory (szTmp, sizeof (szTmp));
+                GetPrivateProfileString (_T("FileList"), strTmp, _T(""), szTmp, _countof (szTmp), szFileName);
+                if (_tcslen (szTmp) <= 0) {
+                        break;
+                }
+                m_astrFileList.push_back (CString (szTmp));
+        }
 }
 
 
@@ -123,8 +128,8 @@ void CMakeFileListDlg::MakeHashList(void)
 
 	GetModuleFilePath (szPath, sizeof (szPath));
 
-	nCount = m_astrFileList.size();
-	for (i = 0; i < nCount; i ++) {
+        nCount = static_cast<int>(m_astrFileList.size());
+        for (i = 0; i < nCount; i ++) {
             CString strBasePath = Utf8ToTString (szPath);
             strFileName.Format(_T("%s%s"), (LPCTSTR)strBasePath, (LPCTSTR)m_astrFileList[i]);
 
@@ -135,7 +140,7 @@ void CMakeFileListDlg::MakeHashList(void)
 		if (strlen (szHash) <= 0) {
 			continue;
 		}
-		m_astrHashList.push_back (szHash);
+                m_astrHashList.push_back (Utf8ToTString (szHash));
 
 		dwFileSize = 0;
 		hFile = CreateFile (strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -151,8 +156,8 @@ void CMakeFileListDlg::MakeHashList(void)
     strFileName.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strBasePathAll);
 	destFile.Open (strFileName, CFile::modeWrite | CFile::modeCreate, NULL);
 
-	nCount = m_astrFileList.size();
-	for (i = 0; i < nCount; i ++) {
+        nCount = static_cast<int>(m_astrFileList.size());
+        for (i = 0; i < nCount; i ++) {
 		strTmp.Format(_T("%s,%u,%s\n"), m_astrHashList[i], adwFileSize[i], m_astrFileList[i]);
 		destFile.WriteString (strTmp);
 	}

@@ -346,16 +346,20 @@ void CSboLaunchDlg::AddMsg(LPCSTR pszMsg)
 
 void CSboLaunchDlg::ReadIniData(void)
 {
-	char szFileName[MAX_PATH], szTmp[128];
+        TCHAR szFileName[MAX_PATH];
+        TCHAR szTmp[128];
 
-	GetModuleFilePath (szFileName, sizeof (szFileName));
-	strcat (szFileName, "SboCli.ini");
+        ZeroMemory (szFileName, sizeof (szFileName));
+        ZeroMemory (szTmp, sizeof (szTmp));
 
-	/* サーバーアドレス */
-	GetPrivateProfileString ("Setting", "ServerAddr", "127.0.0.1", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strServerAddr = szTmp;
-	/* 待ちうけポート */
-	m_wServerPort = GetPrivateProfileInt ("Setting", "ServerPort", 2006, szFileName);
+        GetModuleFilePath (szFileName, _countof (szFileName));
+        _tcscat_s (szFileName, _T("SboCli.ini"));
+
+        /* サーバーアドレス */
+        GetPrivateProfileString (_T("Setting"), _T("ServerAddr"), _T("127.0.0.1"), szTmp, _countof (szTmp), szFileName);
+        m_strServerAddr = szTmp;
+        /* 待ちうけポート */
+        m_wServerPort = static_cast<WORD>(GetPrivateProfileInt (_T("Setting"), _T("ServerPort"), 2006, szFileName));
 }
 
 
