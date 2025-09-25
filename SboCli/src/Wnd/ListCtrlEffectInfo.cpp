@@ -66,8 +66,8 @@ BOOL CListCtrlEffectInfo::Create(CWnd *pParent, CMgrData *pMgrData)
 	m_pLibInfoEffect	= m_pMgrData->GetLibInfoEffect ();
 
 	SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	InsertColumn (0, "ID",				LVCFMT_LEFT, 40);
-	InsertColumn (1, "エフェクト名",	LVCFMT_LEFT, 120);
+	InsertColumn (0, _T("ID"),				LVCFMT_LEFT, 40);
+	InsertColumn (1, _T("エフェクト名"),	LVCFMT_LEFT, 120);
 
 	Renew ();
 

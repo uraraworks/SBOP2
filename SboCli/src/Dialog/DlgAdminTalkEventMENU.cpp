@@ -138,8 +138,8 @@ BOOL CDlgAdminTalkEventMENU::OnInitDialog()
 	RegisterControl (IDC_DEL,		LH_CTRL_Y);
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "項目名", 0, 150);
-	m_List.InsertColumn (1, "ジャンプ先", 0, 150);
+	m_List.InsertColumn (0, _T("項目名"), 0, 150);
+	m_List.InsertColumn (1, _T("ジャンプ先"), 0, 150);
 
 	return TRUE;
 }

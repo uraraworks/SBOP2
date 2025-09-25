@@ -283,7 +283,7 @@ void CUpdateServerInfo::Upload(void)
 
 	GetFileName (strFileName);
 	/* ファイル名の作成 */
-	wsprintf (szUpAddr, "%s/%s", (LPCSTR)m_strUploadPath, SERVERINFOFILENAME);
+	wsprintf (szUpAddr, _T("%s/%s"), (LPCSTR)m_strUploadPath, SERVERINFOFILENAME);
 
 	/* インターネットを開く */
 	hInternet = InternetOpen ("ScrapBookOnlineServer", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);

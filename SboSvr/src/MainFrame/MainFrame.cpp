@@ -125,7 +125,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	/* ウィンドウ作成 */
-	wsprintf (szBuf, "%s Ver%s", WNDTITLE, VERTEXT);
+	wsprintf (szBuf, _T("%s Ver%s"), WNDTITLE, VERTEXT);
 	m_hWnd = CreateWindow (
 				CLNAME,
 				szBuf,
@@ -383,7 +383,7 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	GetModuleFileName (NULL, szName, MAX_PATH);
 	pszTmp		= strrchr (szName, '\\');
 	pszTmp[1]	= 0;
-	wsprintf (szTmp, "%sSBODATA", szName);
+	wsprintf (szTmp, _T("%sSBODATA"), szName);
 	CreateDirectory (szTmp, NULL);
 
 	m_dwServerStartTime = timeGetTime ();
@@ -505,19 +505,19 @@ void CMainFrame::OnPaint(HWND hWnd)
 
 	SetTextColor (hDC, RGB(255, 255, 255));
 
-	wsprintf (szTmp, "%04d:%02d:%02d",
+	wsprintf (szTmp, _T("%04d:%02d:%02d"),
 			 dwTime / 3600000,
 			 (dwTime % 3600000 - ((dwTime % 60000) / 1000)) / 60000,
 			 (dwTime % 60000) / 1000);
 	MyTextOut (hDC, 120, 0, szTmp);
 
-	wsprintf (szTmp, "%d", m_pLibInfoChar->GetCountOnline ());
+	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCountOnline ());
 	MyTextOut (hDC, 120, 12 * 1, szTmp);
 
-	wsprintf (szTmp, "%d", m_pLibInfoChar->GetCount ());
+	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCount ());
 	MyTextOut (hDC, 120, 12 * 2, szTmp);
 
-	wsprintf (szTmp, "%d", m_pLibInfoMap->GetCount ());
+	wsprintf (szTmp, _T("%d"), m_pLibInfoMap->GetCount ());
 	MyTextOut (hDC, 120, 12 * 3, szTmp);
 
 	SelectObject (hDC, hFontOld);

@@ -145,8 +145,8 @@ BOOL CDlgAdminMapObject::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, "ID",				LVCFMT_LEFT, 50);
-	m_List.InsertColumn (2, "オブジェクト名",	LVCFMT_LEFT, 200);
+	m_List.InsertColumn (1, _T("ID"),				LVCFMT_LEFT, 50);
+	m_List.InsertColumn (2, _T("オブジェクト名"),	LVCFMT_LEFT, 200);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);

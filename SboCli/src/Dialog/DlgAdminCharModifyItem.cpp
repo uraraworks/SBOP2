@@ -200,9 +200,9 @@ BOOL CDlgAdminCharModifyItem::OnInitDialog()
 	CDlgAdminBase::OnInitDialog ();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID", LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "アイテム名", LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "種別", LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"), LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("アイテム名"), LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, _T("種別"), LVCFMT_LEFT, 120);
 
 	return TRUE;
 }

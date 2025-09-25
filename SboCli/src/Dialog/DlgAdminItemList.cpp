@@ -258,11 +258,11 @@ BOOL CDlgAdminItemList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "アイテム名",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "種別",			LVCFMT_LEFT, 120);
-	m_List.InsertColumn (3, "所持キャラ",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (4, "配置座標",		LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("アイテム名"),	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, _T("種別"),			LVCFMT_LEFT, 120);
+	m_List.InsertColumn (3, _T("所持キャラ"),	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (4, _T("配置座標"),		LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);

@@ -121,7 +121,7 @@ BOOL CMacAddr::GetStr(
 
 	ZeroMemory (byMACAddr, sizeof (byMACAddr));
 	bResult = Get (byMACAddr, nNo);
-	wsprintf (pszDst, "%02X-%02X-%02X-%02X-%02X-%02X",
+	wsprintf (pszDst, _T("%02X-%02X-%02X-%02X-%02X-%02X"),
 			byMACAddr[0], byMACAddr[1], byMACAddr[2], 
 			byMACAddr[3], byMACAddr[4], byMACAddr[5]);
 

@@ -1220,8 +1220,8 @@ void CMgrDraw::SaveScreenShot(void)
 
 	GetLocalTime (&sysTime);
 	strcat (szName, "ss\\Sbo");
-	wsprintf (szTmp2, "%04d", sysTime.wYear);
-	wsprintf (szTmp, "%s%02d%02d%02d%02d%02d",
+	wsprintf (szTmp2, _T("%04d"), sysTime.wYear);
+	wsprintf (szTmp, _T("%s%02d%02d%02d%02d%02d"),
 			&szTmp2[2],
 			sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 	strcat (szName, szTmp);

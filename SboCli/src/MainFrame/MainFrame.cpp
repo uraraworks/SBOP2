@@ -175,7 +175,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	AdjustWindowRect (&rcTmp, dwStyle, FALSE);
 
 	/* ウィンドウ作成 */
-	wsprintf (szBuf, "%s Ver%s", WNDTITLE, VERTEXT);
+	wsprintf (szBuf, _T("%s Ver%s"), WNDTITLE, VERTEXT);
 	m_hWnd = CreateWindow (
 				CLNAME,
 				szBuf,
@@ -754,9 +754,9 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	GetModuleFileName (NULL, szName, MAX_PATH);
 	pszTmp		= strrchr (szName, '\\');
 	pszTmp[1]	= 0;
-	wsprintf (szTmp, "%sss", szName);
+	wsprintf (szTmp, _T("%sss"), szName);
 	CreateDirectory (szTmp, NULL);
-	wsprintf (szTmp, "%sLog", szName);
+	wsprintf (szTmp, _T("%sLog"), szName);
 	CreateDirectory (szTmp, NULL);
 
 	bResult = m_pMgrData->GetDisableLogin();

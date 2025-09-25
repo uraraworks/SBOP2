@@ -142,8 +142,8 @@ BOOL CDlgAdminCharSkillList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog ();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",		LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "スキル名",	LVCFMT_LEFT, 300);
+	m_List.InsertColumn (0, _T("ID"),		LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("スキル名"),	LVCFMT_LEFT, 300);
 
 	Renew ();
 

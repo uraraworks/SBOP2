@@ -68,11 +68,11 @@ BOOL CListCtrlItemInfo::Create(CWnd *pParent, CMgrData *pMgrData)
 	m_pLibInfoItem	= m_pMgrData->GetLibInfoItem ();
 
 	SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	InsertColumn (1, "アイテム名",	LVCFMT_LEFT, 120);
-	InsertColumn (2, "種別",		LVCFMT_LEFT, 120);
-	InsertColumn (3, "所持キャラ",	LVCFMT_LEFT, 120);
-	InsertColumn (4, "配置座標",	LVCFMT_LEFT, 120);
+	InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	InsertColumn (1, _T("アイテム名"),	LVCFMT_LEFT, 120);
+	InsertColumn (2, _T("種別"),		LVCFMT_LEFT, 120);
+	InsertColumn (3, _T("所持キャラ"),	LVCFMT_LEFT, 120);
+	InsertColumn (4, _T("配置座標"),	LVCFMT_LEFT, 120);
 
 	Renew ();
 
