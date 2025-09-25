@@ -168,12 +168,12 @@ BOOL CLibInfoCharSvr::UseSkillNONE_HEAL(CInfoCharSvr *pInfoChar, CInfoSkillBase 
 		switch (pInfoSkill->m_dwHealType) {
 		case SKILLHEAL_HEALTYPE_HP:			/* HP */
 			nPoint = min ((DWORD)nPoint, pInfoCharTmp->m_dwMaxHP - pInfoCharTmp->m_dwHP);
-			strMsg.Format ("%s のHPが %d 回復しました", (LPCSTR)pInfoCharTmp->m_strCharName, nPoint);
+			strMsg.Format(_T("%s のHPが %d 回復しました"), (LPCTSTR)pInfoCharTmp->m_strCharName, nPoint);
 			pInfoCharTmp->m_dwHP += nPoint;
 			break;
 		case SKILLHEAL_HEALTYPE_SP:			/* SP */
 			nPoint = min ((DWORD)nPoint, pInfoCharTmp->m_dwMaxSP - pInfoCharTmp->m_dwSP);
-			strMsg.Format ("%s のSPが %d 回復しました", (LPCSTR)pInfoCharTmp->m_strCharName, nPoint);
+			strMsg.Format(_T("%s のSPが %d 回復しました"), (LPCTSTR)pInfoCharTmp->m_strCharName, nPoint);
 			pInfoCharTmp->m_dwSP += nPoint;
 			break;
 		}

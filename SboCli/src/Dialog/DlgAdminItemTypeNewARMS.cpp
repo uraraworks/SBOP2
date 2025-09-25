@@ -109,11 +109,11 @@ BOOL CDlgAdminItemTypeNewARMS::OnInitDialog()
 
 	pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon ();
 
-	m_ctlWeaponType.InsertString (0, "未指定");
+	m_ctlWeaponType.InsertString (0, _T("未指定"));
 	nCount = pLibInfoItemWeapon->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItemWeapon = (PCInfoItemWeapon)pLibInfoItemWeapon->GetPtr (i);
-		m_ctlWeaponType.InsertString (i + 1, (LPCSTR)pInfoItemWeapon->m_strName);
+		m_ctlWeaponType.InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoItemWeapon->m_strName));
 		m_ctlWeaponType.SetItemData (i + 1, pInfoItemWeapon->m_dwWeaponInfoID);
 	}
 

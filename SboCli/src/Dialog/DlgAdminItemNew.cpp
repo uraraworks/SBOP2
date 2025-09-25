@@ -180,7 +180,7 @@ BOOL CDlgAdminItemNew::OnInitDialog()
 	m_pMgrGrpData->ReadItemTmp ();
 
 	if (m_bModeModify) {
-		SetWindowText ("アイテム情報の編集");
+		SetWindowText (_T("アイテム情報の編集"));
 	}
 	/* 設置位置は指定しないモード？ */
 	if (m_bPosSet == FALSE) {
@@ -189,24 +189,24 @@ BOOL CDlgAdminItemNew::OnInitDialog()
 		GetDlgItem (IDC_POSY)->		EnableWindow (FALSE);
 	}
 
-	m_ctlDropSoundID.InsertString (0, "無し");
+	m_ctlDropSoundID.InsertString (0, _T("無し"));
 	nNo = 0;
 
 	nCount = LibSboSoundLoader.GetSoundCount ();
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
-		m_ctlDropSoundID.InsertString (i + 1, pszTmp);
+		m_ctlDropSoundID.InsertString (i + 1, Utf8ToTString (pszTmp));
 		m_ctlDropSoundID.SetItemData (i + 1, dwSoundID);
 	}
 
-	m_ctlType.InsertString (0, "未設定");
+	m_ctlType.InsertString (0, _T("未設定"));
 	m_ctlType.SetCurSel (0);
 
 	nCount = m_pLibInfoItemType->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (i);
-		m_ctlType.InsertString (i + 1, pInfoItem->m_strName);
+		m_ctlType.InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoItem->m_strName));
 		m_ctlType.SetItemData (i + 1, pInfoItem->m_dwTypeID);
 		if (m_dwSelectItemTypeID == pInfoItem->m_dwTypeID) {
 			m_ctlType.SetCurSel (i + 1);

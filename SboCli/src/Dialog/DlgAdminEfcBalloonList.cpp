@@ -106,7 +106,7 @@ void CDlgAdminEfcBalloonList::Renew(void)
 	nCount = aIDList.size();
 	for (i = 0; i < nCount; i ++) {
 		dwListID = aIDList[i];
-		strTmp.Format ("%d", dwListID);
+		strTmp.Format(_T("%d"), dwListID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, dwListID);
 		m_pLibInfo->GetName (dwListID, strTmp);
@@ -137,8 +137,8 @@ BOOL CDlgAdminEfcBalloonList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "噴出し名",		LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("噴出し名"),		LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);

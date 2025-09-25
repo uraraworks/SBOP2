@@ -115,12 +115,12 @@ void CDlgAdminMapEvent::Renew(void)
 	nCount = m_pLibInfoMapEvent->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
-		strTmp.Format ("%d", pInfo->m_dwMapEventID);	/* ID */
+		strTmp.Format(_T("%d"), pInfo->m_dwMapEventID);	/* ID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwMapEventID);
-		strTmp.Format ("%d", pInfo->m_ptPos.x);			/* X座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.x);			/* X座標 */
 		m_List.SetItemText (i, 1, strTmp);
-		strTmp.Format ("%d", pInfo->m_ptPos.y);			/* Y座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.y);			/* Y座標 */
 		m_List.SetItemText (i, 2, strTmp);
 
 		strTmp = m_pMgrData->GetMapEventName (pInfo->m_nType);
@@ -166,10 +166,10 @@ BOOL CDlgAdminMapEvent::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, "ID",			LVCFMT_LEFT, 50);
-	m_List.InsertColumn (2, "X座標",		LVCFMT_LEFT, 50);
-	m_List.InsertColumn (3, "Y座標",		LVCFMT_LEFT, 50);
-	m_List.InsertColumn (4, "イベント種別",	LVCFMT_LEFT, 200);
+	m_List.InsertColumn (1, _T("ID"),			LVCFMT_LEFT, 50);
+	m_List.InsertColumn (2, _T("X座標"),		LVCFMT_LEFT, 50);
+	m_List.InsertColumn (3, _T("Y座標"),		LVCFMT_LEFT, 50);
+	m_List.InsertColumn (4, _T("イベント種別"),	LVCFMT_LEFT, 200);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -280,7 +280,7 @@ void CDlgAdminMapEvent::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -314,7 +314,7 @@ void CDlgAdminMapEvent::OnDelete()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているイベントを削除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているイベントを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

@@ -17,20 +17,21 @@
 
 CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 {
-	char szFileName[MAX_PATH];
-	PFGETURARASOCKTCP pfGetUraraSockTCP;
-	PFRELEASEURARASOCKTCP pfReleaseUraraSockTCP = nullptr;
+        TCHAR szFileName[MAX_PATH];
+        PFGETURARASOCKTCP pfGetUraraSockTCP;
+        PFRELEASEURARASOCKTCP pfReleaseUraraSockTCP = nullptr;
 
-	ZeroMemory (szFileName, sizeof (szFileName));
+        ZeroMemory (szFileName, sizeof (szFileName));
 
-	GetModuleFilePath (szFileName, sizeof (szFileName));
-	strcat (szFileName, "UraraSockTCP.dll");
+        GetModuleFilePath (szFileName, _countof (szFileName));
+        CString strFileName (szFileName);
+        strFileName += _T("UraraSockTCP.dll");
 
 	m_pSock = NULL;
 	m_hDll = NULL;
 	m_pfRelease = nullptr;
 
-	m_hDll = LoadLibrary(szFileName);
+        m_hDll = LoadLibrary (strFileName);
 	if (m_hDll) {
 		pfGetUraraSockTCP = (PFGETURARASOCKTCP)GetProcAddress (m_hDll, "GetUraraSockTCP");
 		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)GetProcAddress (m_hDll, "ReleaseUraraSockTCP");

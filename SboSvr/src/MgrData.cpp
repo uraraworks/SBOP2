@@ -143,7 +143,8 @@ void CMgrData::Create(
 	pszTmp[1]	= 0;
 
 	/* ログファイルの作成 */
-	strTmp.Format ("%sSboSvrLog.txt", szName);
+    CString strBasePath = Utf8ToTString (szName);
+    strTmp.Format(_T("%sSboSvrLog.txt"), (LPCTSTR)strBasePath);
 	m_pLog->Create (strTmp, TRUE, TRUE);
 }
 
@@ -339,16 +340,20 @@ void CMgrData::ReadHashList(void)
 
 void CMgrData::SetClientVersion(LPCSTR pszVersion)
 {
-	char szFileName[MAX_PATH], szTmp[128];
+        TCHAR szFileName[MAX_PATH];
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	ZeroMemory (szTmp, sizeof (szTmp));
+        ZeroMemory (szFileName, sizeof (szFileName));
 
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        GetModuleFileName (NULL, szFileName, _countof (szFileName));
+        size_t nLen = _tcslen (szFileName);
+        if (nLen >= 3) {
+                _tcscpy_s (szFileName + nLen - 3, _countof (szFileName) - (nLen - 3), _T("ini"));
+        } else {
+                _tcscat_s (szFileName, _T(".ini"));
+        }
 
-	m_strClientVersion = pszVersion;
-	WritePrivateProfileString ("Info", "ClientVersion", m_strClientVersion, szFileName);
+        m_strClientVersion = pszVersion;
+        WritePrivateProfileString (_T("Info"), _T("ClientVersion"), m_strClientVersion, szFileName);
 }
 
 
@@ -360,36 +365,42 @@ void CMgrData::SetClientVersion(LPCSTR pszVersion)
 
 void CMgrData::ReadIniData(void)
 {
-	char szFileName[MAX_PATH], szTmp[128];
+        TCHAR szFileName[MAX_PATH];
+        TCHAR szTmp[128];
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	ZeroMemory (szTmp, sizeof (szTmp));
+        ZeroMemory (szFileName, sizeof (szFileName));
+        ZeroMemory (szTmp, sizeof (szTmp));
 
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        GetModuleFileName (NULL, szFileName, _countof (szFileName));
+        size_t nLen = _tcslen (szFileName);
+        if (nLen >= 3) {
+                _tcscpy_s (szFileName + nLen - 3, _countof (szFileName) - (nLen - 3), _T("ini"));
+        } else {
+                _tcscat_s (szFileName, _T(".ini"));
+        }
 
-	/* 待ちうけポート */
-	m_wPort = GetPrivateProfileInt ("Setting", "Port", 2006, szFileName);
-	/* 管理者権限アカウント */
-	GetPrivateProfileString ("Setting", "AdminAccount", "Admin", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strAdminAccount = szTmp;
+        /* 待ちうけポート */
+        m_wPort = static_cast<WORD>(GetPrivateProfileInt (_T("Setting"), _T("Port"), 2006, szFileName));
+        /* 管理者権限アカウント */
+        GetPrivateProfileString (_T("Setting"), _T("AdminAccount"), _T("Admin"), szTmp, _countof (szTmp), szFileName);
+        m_strAdminAccount = szTmp;
 
-	/* クライアントバージョン */
-	GetPrivateProfileString ("Info", "ClientVersion", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strClientVersion = szTmp;
+        /* クライアントバージョン */
+        GetPrivateProfileString (_T("Info"), _T("ClientVersion"), _T(""), szTmp, _countof (szTmp), szFileName);
+        m_strClientVersion = szTmp;
 
-	/* FTPアカウント */
-	GetPrivateProfileString ("FTP", "Account", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strFtpAccount = szTmp;
-	/* FTPパスワード */
-	GetPrivateProfileString ("FTP", "Password", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strFtpPassword = szTmp;
-	/* サーバーアドレス */
-	GetPrivateProfileString ("FTP", "ServerAddr", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strFtpServerAddr = szTmp;
-	/* アップロード先 */
-	GetPrivateProfileString ("FTP", "UploadPath", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strFtpUploadPath = szTmp;
+        /* FTPアカウント */
+        GetPrivateProfileString (_T("FTP"), _T("Account"), _T(""), szTmp, _countof (szTmp), szFileName);
+        m_strFtpAccount = szTmp;
+        /* FTPパスワード */
+        GetPrivateProfileString (_T("FTP"), _T("Password"), _T(""), szTmp, _countof (szTmp), szFileName);
+        m_strFtpPassword = szTmp;
+        /* サーバーアドレス */
+        GetPrivateProfileString (_T("FTP"), _T("ServerAddr"), _T(""), szTmp, _countof (szTmp), szFileName);
+        m_strFtpServerAddr = szTmp;
+        /* アップロード先 */
+        GetPrivateProfileString (_T("FTP"), _T("UploadPath"), _T(""), szTmp, _countof (szTmp), szFileName);
+        m_strFtpUploadPath = szTmp;
 }
 
 /* Copyright(C)URARA-works 2006 */

@@ -112,7 +112,7 @@ void CDlgAdminItemTypeList::Renew(void)
 	nCount = m_pLibInfoItemType->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (i);
-		strTmp.Format ("%d", pInfoItemType->m_dwTypeID);
+		strTmp.Format(_T("%d"), pInfoItemType->m_dwTypeID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemType->m_dwTypeID);		/* ID */
 		m_List.SetItemText (i, 1, pInfoItemType->m_strName);	/* アイテム名 */
@@ -145,9 +145,9 @@ BOOL CDlgAdminItemTypeList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "アイテム名",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "種別",			LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("アイテム名"),	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, _T("種別"),			LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -274,7 +274,7 @@ void CDlgAdminItemTypeList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -308,8 +308,8 @@ void CDlgAdminItemTypeList::OnDelete()
 		return;
 	}
 
-	strTmp.Format ("[%s]を削除しますか？", (LPCSTR)pInfoItem->m_strName);
-	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
+        strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
+        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

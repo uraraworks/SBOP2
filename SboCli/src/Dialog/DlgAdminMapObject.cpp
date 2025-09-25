@@ -126,7 +126,7 @@ void CDlgAdminMapObject::Renew(void)
 	nCount = m_pLibInfoMapObject->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr (i);
-		strTmp.Format ("%d", pInfo->m_dwObjectID);				/* ID */
+		strTmp.Format(_T("%d"), pInfo->m_dwObjectID);				/* ID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwObjectID);
 		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strName);	/* オブジェクト名 */
@@ -145,8 +145,8 @@ BOOL CDlgAdminMapObject::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, "ID",				LVCFMT_LEFT, 50);
-	m_List.InsertColumn (2, "オブジェクト名",	LVCFMT_LEFT, 200);
+	m_List.InsertColumn (1, _T("ID"),				LVCFMT_LEFT, 50);
+	m_List.InsertColumn (2, _T("オブジェクト名"),	LVCFMT_LEFT, 200);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -235,7 +235,7 @@ void CDlgAdminMapObject::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -270,7 +270,7 @@ void CDlgAdminMapObject::OnDelete()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているイベントを削除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているイベントを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

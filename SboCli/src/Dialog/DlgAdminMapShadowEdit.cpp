@@ -160,7 +160,7 @@ BOOL CDlgAdminMapShadowEdit::OnInitDialog()
 
 	nCount = m_pMgrData->GetMgrGrpData ()->GetMapShadowCount () / 1024;
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("画像 %d 枚目", i + 1);
+		strTmp.Format(_T("画像 %d 枚目"), i + 1);
 		m_cbGrpNo.AddString (strTmp);
 	}
 	m_nGrpNo = m_pMgrData->GetLastSelectGrpNo ();
@@ -430,7 +430,7 @@ void CDlgAdminMapShadowEdit::OnAdd()
 
 	m_pInfoMapShadow->AddAnime ();
 	nCount = m_pInfoMapShadow->GetAnimeCount ();
-	m_strCount.Format ("%d", nCount);
+	m_strCount.Format(_T("%d"), nCount);
 	m_Slider.SetRange (0, nCount - 1, TRUE);
 	m_Slider.SetPos (nCount - 1);
 
@@ -451,7 +451,7 @@ void CDlgAdminMapShadowEdit::OnDel()
 
 	if (m_pInfoMapShadow->GetAnimeCount () > 0) {
 		m_pInfoMapShadow->DeleteAnime (m_Slider.GetPos ());
-		m_strCount.Format ("%d", m_pInfoMapShadow->GetAnimeCount ());
+		m_strCount.Format(_T("%d"), m_pInfoMapShadow->GetAnimeCount ());
 		m_Slider.SetRange (0, m_pInfoMapShadow->GetAnimeCount () - 1, TRUE);
 	}
 
@@ -548,20 +548,20 @@ void CDlgAdminMapShadowEdit::SetData(void)
 	PCInfoAnime pAnime;
 
 	m_bLight = m_pInfoMapShadow->m_bLight;
-	m_strCount.Format ("%d", m_pInfoMapShadow->m_byAnimeCount);
+	m_strCount.Format(_T("%d"), m_pInfoMapShadow->m_byAnimeCount);
 	m_Slider.SetRange (0, m_pInfoMapShadow->m_byAnimeCount - 1, TRUE);
 	if (m_pInfoMapShadow->m_byAnimeCount > 0) {
 		pAnime = m_pInfoMapShadow->GetAnimePtr (0);
 		m_nLevel		= pAnime->m_byLevel;
 		m_nViewTime		= pAnime->m_byWait;
 		m_wShadowGrpID	= pAnime->m_wGrpIDBase;
-		m_strNow.Format ("%d", 1);
+		m_strNow.Format(_T("%d"), 1);
 
 	} else {
 		m_nLevel		= m_pInfoMapShadow->m_byLevel;
 		m_nViewTime		= 0;
 		m_wShadowGrpID	= m_pInfoMapShadow->m_wGrpID;
-		m_strNow.Format ("%d", 0);
+		m_strNow.Format(_T("%d"), 0);
 	}
 
 	UpdateData (FALSE);
@@ -606,7 +606,7 @@ void CDlgAdminMapShadowEdit::OnSelectAnime(void)
 		nNo = -1;
 	}
 
-	m_strNow.Format ("%d", nNo + 1);
+	m_strNow.Format(_T("%d"), nNo + 1);
 	UpdateData (FALSE);
 	InvalidateRect (NULL);
 }

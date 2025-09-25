@@ -110,13 +110,13 @@ BOOL CDlgAdminItemTypeNewHP::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog();
 
-	m_ctlTarget.InsertString (0, "味方");
-	m_ctlTarget.InsertString (1, "敵");
+	m_ctlTarget.InsertString (0, _T("味方"));
+	m_ctlTarget.InsertString (1, _T("敵"));
 
-	m_ctlArea.InsertString (0, "自分");
-	m_ctlArea.InsertString (1, "1歩前");
-	m_ctlArea.InsertString (2, "周囲");
-	m_ctlArea.InsertString (3, "画面内");
+	m_ctlArea.InsertString (0, _T("自分"));
+	m_ctlArea.InsertString (1, _T("1歩前"));
+	m_ctlArea.InsertString (2, _T("周囲"));
+	m_ctlArea.InsertString (3, _T("画面内"));
 
 	SetTarget (m_byTarget);
 	SetArea (m_byArea);

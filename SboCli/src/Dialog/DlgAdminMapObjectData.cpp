@@ -150,12 +150,12 @@ void CDlgAdminMapObjectData::Renew(void)
 		if (pInfoMapObject == NULL) {
 			continue;
 		}
-		strTmp.Format ("%d", pInfo->m_dwDataID);				/* ID */
+		strTmp.Format(_T("%d"), pInfo->m_dwDataID);				/* ID */
 		m_List.InsertItem (nCountTmp, strTmp);
 		m_List.SetItemData (nCountTmp, pInfo->m_dwDataID);
-		strTmp.Format ("%d", pInfo->m_ptPos.x);					/* X座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.x);					/* X座標 */
 		m_List.SetItemText (nCountTmp, 1, strTmp);
-		strTmp.Format ("%d", pInfo->m_ptPos.y);					/* Y座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.y);					/* Y座標 */
 		m_List.SetItemText (nCountTmp, 2, strTmp);
 		m_List.SetItemText (nCountTmp, 3, (LPCSTR)pInfoMapObject->m_strName);	/* オブジェクト名 */
 		nCountTmp ++;
@@ -174,10 +174,10 @@ BOOL CDlgAdminMapObjectData::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, "ID",				LVCFMT_LEFT, 50);
-	m_List.InsertColumn (2, "X座標",			LVCFMT_LEFT, 50);
-	m_List.InsertColumn (3, "Y座標",			LVCFMT_LEFT, 50);
-	m_List.InsertColumn (4, "オブジェクト名",	LVCFMT_LEFT, 200);
+	m_List.InsertColumn (1, _T("ID"),				LVCFMT_LEFT, 50);
+	m_List.InsertColumn (2, _T("X座標"),			LVCFMT_LEFT, 50);
+	m_List.InsertColumn (3, _T("Y座標"),			LVCFMT_LEFT, 50);
+	m_List.InsertColumn (4, _T("オブジェクト名"),	LVCFMT_LEFT, 200);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -279,7 +279,7 @@ void CDlgAdminMapObjectData::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -313,7 +313,7 @@ void CDlgAdminMapObjectData::OnDelete()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているデータを削除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているデータを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

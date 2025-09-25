@@ -162,12 +162,12 @@ BOOL CDlgAdminEfcBalloon::OnInitDialog()
 	m_ctlGrp.Create (this, m_pMgrData);
 	m_ctlGrp.Init (GRPIDMAIN_EFCBALLOON);
 
-	m_cmbSoundID.InsertString (0, "無し");
+	m_cmbSoundID.InsertString (0, _T("無し"));
 	nCount = LibSboSoundLoader.GetSoundCount ();
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
-		m_cmbSoundID.InsertString (i + 1, pszTmp);
+		m_cmbSoundID.InsertString (i + 1, Utf8ToTString (pszTmp));
 		m_cmbSoundID.SetItemData (i + 1, dwSoundID);
 	}
 
@@ -358,7 +358,7 @@ void CDlgAdminEfcBalloon::OnDel()
 {
 	int nResult, nCount;
 
-	nResult = MessageBox ("このパターンを削除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("このパターンを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -417,8 +417,8 @@ void CDlgAdminEfcBalloon::OnOK()
 
 	Set (m_nSelect);
 
-	if (m_dwListID == 0) {
-		MessageBox ("種別IDを設定してください", "確認", MB_ICONINFORMATION | MB_OK);
+        if (m_dwListID == 0) {
+                MessageBox (_T("種別IDを設定してください"), _T("確認"), MB_ICONINFORMATION | MB_OK);
 		return;
 	}
 
@@ -471,10 +471,10 @@ void CDlgAdminEfcBalloon::OnSelectAnime(void)
 	m_nSelect = m_ctlSlider.GetPos ();
 
 	nCount = m_pLibInfoEfcBalloon->GetCount ();
-	m_strCount.Format ("%d", nCount);
+	m_strCount.Format(_T("%d"), nCount);
 	m_strNow.Empty ();
 	if (nCount > 0) {
-		m_strNow.Format ("%d", m_nSelect + 1);
+		m_strNow.Format(_T("%d"), m_nSelect + 1);
 	}
 	UpdateData (FALSE);
 

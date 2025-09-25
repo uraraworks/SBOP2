@@ -187,7 +187,7 @@ BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 
 	nCount = m_pMgrData->GetMgrGrpData ()->GetMapPartsCount () / 1024;
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("画像 %d 枚目", i + 1);
+		strTmp.Format(_T("画像 %d 枚目"), i + 1);
 		m_cbGrpNo.AddString (strTmp);
 	}
 	m_nGrpNo = m_pMgrData->GetLastSelectGrpNo ();
@@ -506,7 +506,7 @@ void CDlgAdminMapPartsEdit::OnAdd()
 
 	m_pInfoMapParts->AddAnime ();
 	nCount = m_pInfoMapParts->GetAnimeCount ();
-	m_strCount.Format ("%d", nCount);
+	m_strCount.Format(_T("%d"), nCount);
 	m_Slider.SetRange (0, nCount - 1, TRUE);
 	m_Slider.SetPos (nCount - 1);
 
@@ -527,7 +527,7 @@ void CDlgAdminMapPartsEdit::OnDel()
 
 	if (m_pInfoMapParts->GetAnimeCount () > 0) {
 		m_pInfoMapParts->DeleteAnime (m_Slider.GetPos ());
-		m_strCount.Format ("%d", m_pInfoMapParts->GetAnimeCount ());
+		m_strCount.Format(_T("%d"), m_pInfoMapParts->GetAnimeCount ());
 		m_Slider.SetRange (0, m_pInfoMapParts->GetAnimeCount () - 1, TRUE);
 	}
 
@@ -625,7 +625,7 @@ void CDlgAdminMapPartsEdit::SetData(void)
 {
 	PCInfoAnime pAnime;
 
-	m_strCount.Format ("%d", m_pInfoMapParts->m_byAnimeCount);
+	m_strCount.Format(_T("%d"), m_pInfoMapParts->m_byAnimeCount);
 	m_Slider.SetRange (0, m_pInfoMapParts->m_byAnimeCount - 1, TRUE);
 	if (m_pInfoMapParts->m_byAnimeCount > 0) {
 		pAnime = m_pInfoMapParts->GetAnimePtr (0);
@@ -633,14 +633,14 @@ void CDlgAdminMapPartsEdit::SetData(void)
 		m_nViewTime		= pAnime->m_byWait;
 		m_wPartsBase	= pAnime->m_wGrpIDBase;
 		m_wPartsPile	= pAnime->m_wGrpIDPile;
-		m_strNow.Format ("%d", 1);
+		m_strNow.Format(_T("%d"), 1);
 
 	} else {
 		m_nLevel		= m_pInfoMapParts->m_byLevel;
 		m_nViewTime		= 0;
 		m_wPartsBase	= m_pInfoMapParts->m_wGrpIDBase;
 		m_wPartsPile	= m_pInfoMapParts->m_wGrpIDPile;
-		m_strNow.Format ("%d", 0);
+		m_strNow.Format(_T("%d"), 0);
 	}
 
 	m_bBlockUp		= (m_pInfoMapParts->m_byBlockDirection & BIT_PARTSBLOCK_UP)		? TRUE : FALSE;
@@ -772,7 +772,7 @@ void CDlgAdminMapPartsEdit::OnSelectAnime(void)
 		nNo = -1;
 	}
 
-	m_strNow.Format ("%d", nNo + 1);
+	m_strNow.Format(_T("%d"), nNo + 1);
 	UpdateData (FALSE);
 	InvalidateRect (NULL);
 }

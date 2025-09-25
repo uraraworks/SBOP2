@@ -75,8 +75,9 @@ void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionI
 	Packet.Set (pData);
 
 	/* ファイルリストのハッシュを取得 */
-	GetModuleFilePath (szTmp, sizeof (szTmp));
-	strTmp.Format ("%sSBOHashList.txt", szTmp);
+        GetModuleFilePath (szTmp, sizeof (szTmp));
+        CString strPath = Utf8ToTString (szTmp);
+        strTmp.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strPath);
 	GetMD5File.Init ();
 	GetMD5File.Update (strTmp);
 
@@ -129,8 +130,9 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 	pFileData = NULL;
 	Packet.Set (pData);
 
-	GetModuleFilePath (szTmp, sizeof (szTmp));
-	strFileName.Format ("%sUpdate\\%s", szTmp, (LPCSTR)Packet.m_strFileName);
+        GetModuleFilePath (szTmp, sizeof (szTmp));
+        CString strBasePath = Utf8ToTString (szTmp);
+        strFileName.Format(_T("%sUpdate\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)Packet.m_strFileName);
 	pszTmp = strstr ((LPCSTR)strFileName, "..");
 	if (pszTmp) {
 		return;

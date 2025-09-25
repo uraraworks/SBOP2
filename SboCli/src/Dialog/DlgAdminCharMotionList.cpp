@@ -115,15 +115,15 @@ BOOL CDlgAdminCharMotionList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog ();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",					LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "編集するモーション",	LVCFMT_LEFT, 300);
+	m_List.InsertColumn (0, _T("ID"),					LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("編集するモーション"),	LVCFMT_LEFT, 300);
 
 	for (i = CHARMOTIONLISTID_NONE + 1; i < CHARMOTIONLISTID_MAX; i ++) {
 		pszItem = m_pMgrData->GetMotionName (i);
 		if (pszItem == NULL) {
 			break;
 		}
-		strTmp.Format ("%d", i);
+		strTmp.Format(_T("%d"), i);
 		m_List.InsertItem (i - 1, strTmp);
 		m_List.SetItemText (i - 1, 1, pszItem);
 	}

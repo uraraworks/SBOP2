@@ -162,17 +162,17 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 	RegisterControl (IDCANCEL,	LH_CTRL_X | LH_CTRL_Y);
 
 	if (m_bModeModify) {
-		SetWindowText ("スキルの編集");
+		SetWindowText (_T("スキルの編集"));
 	}
 
 	m_ctlIconGrp.Create (this, m_pMgrData);
 	m_ctlIconGrp.Init (GRPIDMAIN_ICON32);
 
-	m_ctlTypeMain.InsertString (0, "能力");
+	m_ctlTypeMain.InsertString (0, _T("能力"));
 	m_ctlTypeMain.SetItemData (0, 0);
-	m_ctlTypeMain.InsertString (1, "戦闘");
+	m_ctlTypeMain.InsertString (1, _T("戦闘"));
 	m_ctlTypeMain.SetItemData (1, SKILLTYPEMAIN_BATTLE);
-	m_ctlTypeMain.InsertString (2, "生活");
+	m_ctlTypeMain.InsertString (2, _T("生活"));
 	m_ctlTypeMain.SetItemData (2, SKILLTYPEMAIN_LIFE);
 
 	nNo = nTmp = 0;
@@ -202,11 +202,11 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 	}
 	m_ctlTypeSub.SetCurSel (nNo);
 
-	m_ctlUse.InsertString (0, "制限無し");
+	m_ctlUse.InsertString (0, _T("制限無し"));
 	m_ctlUse.SetItemData (0, SKILLUSE_ANY);
-	m_ctlUse.InsertString (1, "通常時");
+	m_ctlUse.InsertString (1, _T("通常時"));
 	m_ctlUse.SetItemData (1, SKILLUSE_NORMAL);
-	m_ctlUse.InsertString (2, "戦闘モード時");
+	m_ctlUse.InsertString (2, _T("戦闘モード時"));
 	m_ctlUse.SetItemData (2, SKILLUSE_BATTLE);
 
 	nNo = 0;
@@ -281,7 +281,7 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeMain()
 
 	m_ctlTypeSub.ResetContent ();
 
-	m_ctlTypeSub.InsertString (0, "未設定");
+	m_ctlTypeSub.InsertString (0, _T("未設定"));
 	m_ctlTypeSub.SetItemData (0, 0);
 
 	nTypeMain = m_ctlTypeMain.GetItemData (m_ctlTypeMain.GetCurSel ());
@@ -289,13 +289,13 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeMain()
 	case SKILLTYPEMAIN_NONE:			/* 能力 */
 		break;
 	case SKILLTYPEMAIN_BATTLE:			/* 戦闘 */
-		m_ctlTypeSub.InsertString (1, "移動して攻撃");
+		m_ctlTypeSub.InsertString (1, _T("移動して攻撃"));
 		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_BATTLE_MOVEATACK);
-		m_ctlTypeSub.InsertString (2, "回復");
+		m_ctlTypeSub.InsertString (2, _T("回復"));
 		m_ctlTypeSub.SetItemData (2, SKILLTYPESUB_BATTLE_HEAL);
 		break;
 	case SKILLTYPEMAIN_LIFE:			/* 生活 */
-		m_ctlTypeSub.InsertString (1, "釣り");
+		m_ctlTypeSub.InsertString (1, _T("釣り"));
 		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_LIFE_FISHING);
 		break;
 	}

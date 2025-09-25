@@ -55,7 +55,7 @@ void CSaveLoadInfoMapParts::SetHeaderInfo(PCInfoBase pInfo)
 		if (pszName == NULL) {
 			break;
 		}
-		wsprintf (szTmp, "%s%s", PREFIX_INFOANIME, pszName);
+		wsprintf (szTmp, _T("%s%s"), PREFIX_INFOANIME, pszName);
 		AddHeaderInfo (szTmp);
 	}
 }

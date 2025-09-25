@@ -683,7 +683,7 @@ void CMainFrame::RecvProcADMIN_MAP_ADD(PBYTE pData, DWORD dwSessionID)
 		pInfoMap->m_dwMapID = dwMapID;
 	}
 
-	strTmp.Format ("SYSTEM:マップID[%d]が追加されました", pInfoMap->m_dwMapID);
+	strTmp.Format(_T("SYSTEM:マップID[%d]が追加されました"), pInfoMap->m_dwMapID);
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 }
@@ -755,7 +755,7 @@ void CMainFrame::RecvProcADMIN_SERVER_SAVEINFO(PBYTE pData, DWORD dwSessionID)
 	CmyString strTmp;
 
 	m_pMgrData->Save ();
-	strTmp.Format ("サーバー情報を保存しました");
+	strTmp.Format(_T("サーバー情報を保存しました"));
 	Packet.Make (strTmp);
 	m_pSock->SendTo (0, &Packet);
 	UpdateServerInfo (FALSE, TRUE);
@@ -1389,7 +1389,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 		}
 		if (pInfoAccount) {
 			pInfoAccount->m_bDisable = Packet.m_bDisable;
-			strTmp.Format ("アカウント[%s]をログイン拒否しました",
+			strTmp.Format(_T("アカウント[%s]をログイン拒否しました"),
 					(LPCSTR)pInfoAccount->m_strAccount,
 					(LPCSTR)pInfoAccount->m_strPassword);
 			PacketMsg.Make (strTmp, RGB (255, 255, 255));
@@ -1406,7 +1406,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 	pInfoAccount->m_strAccount	= Packet.m_strAccount;
 	pInfoAccount->m_strPassword	= Packet.m_strPassword;
 
-	strTmp.Format ("アカウントを[%s] パスワードを[%s]に変更しました",
+	strTmp.Format(_T("アカウントを[%s] パスワードを[%s]に変更しました"),
 			(LPCSTR)pInfoAccount->m_strAccount,
 			(LPCSTR)pInfoAccount->m_strPassword);
 	PacketMsg.Make (strTmp, RGB (255, 255, 255));
@@ -1457,10 +1457,10 @@ void CMainFrame::RecvProcADMIN_RENEW_CLIENTVERSION(PBYTE pData, DWORD dwSessionI
 	Packet.Set (pData);
 	m_pMgrData->SetClientVersion ((LPCSTR)Packet.m_strClientVersion);
 
-	strTmp.Format ("SYSTEM:クライアントファイルが[Ver%s]に更新されました", (LPCSTR)Packet.m_strClientVersion);
+	strTmp.Format(_T("SYSTEM:クライアントファイルが[Ver%s]に更新されました"), (LPCTSTR)Packet.m_strClientVersion);
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:クライアントを終了してランチャーにて更新してください");
+	strTmp.Format(_T("SYSTEM:クライアントを終了してランチャーにて更新してください"));
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 }

@@ -102,9 +102,9 @@ void CWindowCHAR_STATUS4::Draw(PCImg32 pDst)
 
 	SelectObject (hDC, hFontOld);
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12Bold);
-	strTmp.Format ("%d/%d", pInfoChar->m_dwHP, pInfoChar->m_dwMaxHP);
+	strTmp.Format(_T("%d/%d"), pInfoChar->m_dwHP, pInfoChar->m_dwMaxHP);
 	TextOut2 (hDC, 240 - (strTmp.GetLength () * 7), 23, (LPCSTR)strTmp, RGB (255, 255, 255), TRUE, RGB (1, 1, 1));
-	strTmp.Format ("%d/%d", pInfoChar->m_dwSP, pInfoChar->m_dwMaxSP);
+	strTmp.Format(_T("%d/%d"), pInfoChar->m_dwSP, pInfoChar->m_dwMaxSP);
 	TextOut2 (hDC, 240 - (strTmp.GetLength () * 7), 38, (LPCSTR)strTmp, RGB (255, 255, 255), TRUE, RGB (1, 1, 1));
 
 	SelectObject (hDC, hFontOld);

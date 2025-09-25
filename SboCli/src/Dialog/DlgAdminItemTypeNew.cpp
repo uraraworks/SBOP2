@@ -201,18 +201,18 @@ BOOL CDlgAdminItemTypeNew::OnInitDialog()
 	m_pMgrGrpData->ReadItemTmp ();
 
 	if (m_bModeModify) {
-		SetWindowText ("アイテム種別情報の編集");
+		SetWindowText (_T("アイテム種別情報の編集"));
 	}
 
 	/* 種別 */
 	for (i = ITEMTYPEID_NONE; i < ITEMTYPEID_MAX; i ++) {
 		pszTmp = m_pLibInfoItemType->GetTypeName ((DWORD)i);
-		m_ctlType.InsertString (i, pszTmp);
+		m_ctlType.InsertString (i, Utf8ToTString (pszTmp));
 		m_ctlType.SetItemData (i, (DWORD)i);
 	}
 
-	m_ctlDropSoundID.InsertString (0, "無し");
-	m_ctlUseSoundID.InsertString (0, "無し");
+	m_ctlDropSoundID.InsertString (0, _T("無し"));
+	m_ctlUseSoundID.InsertString (0, _T("無し"));
 	nNo = nNoUse = 0;
 
 	/* 効果音ID */
@@ -220,12 +220,12 @@ BOOL CDlgAdminItemTypeNew::OnInitDialog()
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
-		m_ctlDropSoundID.InsertString (i + 1, pszTmp);
+		m_ctlDropSoundID.InsertString (i + 1, Utf8ToTString (pszTmp));
 		m_ctlDropSoundID.SetItemData (i + 1, dwSoundID);
 		if (dwSoundID == m_dwSelectSoundID) {
 			nNo = i + 1;
 		}
-		m_ctlUseSoundID.InsertString (i + 1, pszTmp);
+		m_ctlUseSoundID.InsertString (i + 1, Utf8ToTString (pszTmp));
 		m_ctlUseSoundID.SetItemData (i + 1, dwSoundID);
 		if (dwSoundID == m_dwUseSoundID) {
 			nNoUse = i + 1;
@@ -234,12 +234,12 @@ BOOL CDlgAdminItemTypeNew::OnInitDialog()
 
 	/* エフェクトID */
 	nNoEffect = 0;
-	m_ctlUseEffectID.InsertString (0, "無し");
+	m_ctlUseEffectID.InsertString (0, _T("無し"));
 	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
 	nCount = pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
-		m_ctlUseEffectID.InsertString (i + 1, (LPCTSTR)pInfoEffect->m_strName);
+		m_ctlUseEffectID.InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoEffect->m_strName));
 		m_ctlUseEffectID.SetItemData (i + 1, pInfoEffect->m_dwEffectID);
 		if (pInfoEffect->m_dwEffectID == m_dwUseEffectID) {
 			nNoEffect = i + 1;
@@ -472,7 +472,7 @@ void CDlgAdminItemTypeNew::SetGrpIDMain(DWORD dwItemTypeID)
 	/* 装備メイン */
 	for (i = 0; i < nCount; i ++) {
 		pszTmp = m_pLibInfoItemType->GetGrpIDMainName (dwItemTypeID, (WORD)i);
-		m_ctlTypeGrpIDMain.InsertString (i, pszTmp);
+		m_ctlTypeGrpIDMain.InsertString (i, Utf8ToTString (pszTmp));
 		m_ctlTypeGrpIDMain.SetItemData (i, (DWORD)i);
 	}
 	m_ctlTypeGrpIDMain.SetCurSel (0);

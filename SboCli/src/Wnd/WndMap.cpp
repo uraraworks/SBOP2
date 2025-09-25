@@ -968,7 +968,7 @@ void CWndMap::RenewStatusText(void)
 	x += (point.x / 16);
 	y += (point.y / 16);
 
-	strPane.Format ("座標(%3d,%3d)", x, y);
+	strPane.Format(_T("座標(%3d,%3d)"), x, y);
 
 	/* 範囲選択中？ */
 	bResult = GetCheck (TOOLBAR_RANGE);
@@ -983,7 +983,7 @@ void CWndMap::RenewStatusText(void)
 			rcRangeTmp.bottom	= m_rcRange.top;
 		}
 		if (rcRangeTmp.left != -1) {
-			strTmp.Format (" 選択(%3d,%3d) 範囲(%3d,%3d)",
+			strTmp.Format(_T(" 選択(%3d,%3d) 範囲(%3d,%3d)"),
 					rcRangeTmp.left, rcRangeTmp.top, rcRangeTmp.Width () + 1, rcRangeTmp.Height () + 1);
 			strPane += strTmp;
 		}
@@ -1001,7 +1001,7 @@ void CWndMap::RenewStatusText(void)
 			rcRangeTmp.bottom	= m_rcCopy.top;
 		}
 		if (rcRangeTmp.left != -1) {
-			strTmp.Format (" 選択(%3d,%3d) 範囲(%3d,%3d)",
+			strTmp.Format(_T(" 選択(%3d,%3d) 範囲(%3d,%3d)"),
 					rcRangeTmp.left, rcRangeTmp.top, rcRangeTmp.Width (), rcRangeTmp.Height ());
 			strPane += strTmp;
 		}

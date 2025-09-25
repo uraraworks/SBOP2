@@ -159,7 +159,7 @@ BOOL CDlgAdminItemWeaponNew::OnInitDialog()
 			break;
 		}
 		pszTmp = MgrData.GetMotionName (nMotionID);
-		m_ctlStandMotion.InsertString (i, pszTmp);
+		m_ctlStandMotion.InsertString (i, Utf8ToTString (pszTmp));
 		m_ctlStandMotion.SetItemData (i, (DWORD)nMotionID);
 	}
 
@@ -169,7 +169,7 @@ BOOL CDlgAdminItemWeaponNew::OnInitDialog()
 			break;
 		}
 		pszTmp = MgrData.GetMotionName (nMotionID);
-		m_ctlWalkMotion.InsertString (i, pszTmp);
+		m_ctlWalkMotion.InsertString (i, Utf8ToTString (pszTmp));
 		m_ctlWalkMotion.SetItemData (i, (DWORD)nMotionID);
 	}
 
@@ -474,7 +474,7 @@ void CDlgAdminItemWeaponNew::RenewList(CListBox *pList, ARRAYDWORD *pSrc)
 	for (i = 0; i < nCount; i ++) {
 		dwEffectID = pSrc->at(i);
 		pLibInfoEffect->GetName (dwEffectID, strTmp);
-		pList->InsertString (i, (LPCSTR)strTmp);
+		pList->InsertString (i, Utf8ToTString ((LPCSTR)strTmp));
 		pList->SetItemData (i, dwEffectID);
 	}
 }

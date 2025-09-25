@@ -136,15 +136,15 @@ BOOL CDlgAdminTalkEventBase::OnInitDialog()
 
 	CDlgAdminBase::OnInitDialog();
 
-	m_Type.InsertString (0, "未設定");
+	m_Type.InsertString (0, _T("未設定"));
 	m_Type.SetItemData (0, TALKEVENTTYPE_NONE);
-	m_Type.InsertString (1, "ページ切り替え");
+	m_Type.InsertString (1, _T("ページ切り替え"));
 	m_Type.SetItemData (1, TALKEVENTTYPE_PAGE);
-	m_Type.InsertString (2, "メッセージ表示");
+	m_Type.InsertString (2, _T("メッセージ表示"));
 	m_Type.SetItemData (2, TALKEVENTTYPE_MSG);
-	m_Type.InsertString (3, "項目選択");
+	m_Type.InsertString (3, _T("項目選択"));
 	m_Type.SetItemData (3, TALKEVENTTYPE_MENU);
-	m_Type.InsertString (4, "スキル追加");
+	m_Type.InsertString (4, _T("スキル追加"));
 	m_Type.SetItemData (4, TALKEVENTTYPE_ADDSKILL);
 
 	nNo = 0;

@@ -233,8 +233,9 @@ void CSboLaunchDlg::OnBnClickedOk()
 	PROCESS_INFORMATION stProcInfo;
 	CmyString strFileName;
 
-	GetModuleFilePath (szPath, sizeof (szPath));
-	strFileName.Format ("%sSboCli.exe", szPath);
+        GetModuleFilePath (szPath, sizeof (szPath));
+        CString strModulePath = Utf8ToTString (szPath);
+        strFileName.Format(_T("%sSboCli.exe"), (LPCTSTR)strModulePath);
 
 	ZeroMemory (&stStartupInfo, sizeof (stStartupInfo));
 	ZeroMemory (&stProcInfo, sizeof (stProcInfo));
@@ -242,8 +243,8 @@ void CSboLaunchDlg::OnBnClickedOk()
 
 	strcpy (szTmp, strFileName);
 	bResult = CreateProcess (NULL, szTmp, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, szPath,  &stStartupInfo, &stProcInfo);
-	if (bResult == FALSE) {
-		MessageBox ("クライアントの起動に失敗しました", "エラー", MB_OK);
+        if (bResult == FALSE) {
+                MessageBox (_T("クライアントの起動に失敗しました"), _T("エラー"), MB_OK);
 		goto Exit;
 	}
 
@@ -270,8 +271,9 @@ void CSboLaunchDlg::OnBnClickedHistory()
 	char szPath[MAX_PATH];
 	CmyString strFileName;
 
-	GetModuleFilePath (szPath, sizeof (szPath));
-	strFileName.Format ("%s更新履歴.txt", szPath);
+        GetModuleFilePath (szPath, sizeof (szPath));
+        CString strModulePath = Utf8ToTString (szPath);
+        strFileName.Format(_T("%s更新履歴.txt"), (LPCTSTR)strModulePath);
 	ShellExecute (NULL, "open", strFileName, NULL, NULL, SW_SHOW);
 }
 
@@ -344,16 +346,20 @@ void CSboLaunchDlg::AddMsg(LPCSTR pszMsg)
 
 void CSboLaunchDlg::ReadIniData(void)
 {
-	char szFileName[MAX_PATH], szTmp[128];
+        TCHAR szFileName[MAX_PATH];
+        TCHAR szTmp[128];
 
-	GetModuleFilePath (szFileName, sizeof (szFileName));
-	strcat (szFileName, "SboCli.ini");
+        ZeroMemory (szFileName, sizeof (szFileName));
+        ZeroMemory (szTmp, sizeof (szTmp));
 
-	/* サーバーアドレス */
-	GetPrivateProfileString ("Setting", "ServerAddr", "127.0.0.1", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strServerAddr = szTmp;
-	/* 待ちうけポート */
-	m_wServerPort = GetPrivateProfileInt ("Setting", "ServerPort", 2006, szFileName);
+        GetModuleFilePath (szFileName, _countof (szFileName));
+        _tcscat_s (szFileName, _T("SboCli.ini"));
+
+        /* サーバーアドレス */
+        GetPrivateProfileString (_T("Setting"), _T("ServerAddr"), _T("127.0.0.1"), szTmp, _countof (szTmp), szFileName);
+        m_strServerAddr = szTmp;
+        /* 待ちうけポート */
+        m_wServerPort = static_cast<WORD>(GetPrivateProfileInt (_T("Setting"), _T("ServerPort"), 2006, szFileName));
 }
 
 
@@ -550,13 +556,14 @@ void CSboLaunchDlg::ChgStateMAKEFILELIST(void)
 	PFILELISTINFO pInfo;
 	CmyString strFileName, strTmp;
 
-	GetModuleFilePath (szPath, sizeof (szPath));
-	strFileName.Format ("%sUpdate\\FileList.txt", szPath);
+        GetModuleFilePath (szPath, sizeof (szPath));
+        CString strModulePath = Utf8ToTString (szPath);
+        strFileName.Format(_T("%sUpdate\\FileList.txt"), (LPCTSTR)strModulePath);
 
 	/* ファイルを開く */
 	hFile = CreateFile (strFileName, GENERIC_WRITE, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (hFile == INVALID_HANDLE_VALUE) {
-		strTmp.Format ("ファイルリストの出力に失敗しました[%d]\r\n", GetLastError ());
+		strTmp.Format(_T("ファイルリストの出力に失敗しました[%d]\r\n"), GetLastError ());
 		AddMsg ((LPCSTR)strTmp);
 		return;
 	}
@@ -592,9 +599,10 @@ void CSboLaunchDlg::ChgStateRUNUPDATE(void)
 
 	AddMsg ("ファイルを更新しています\r\n");
 
-	GetModuleFilePath (szPath, sizeof (szPath));
-	strcat (szPath, "Update\\");
-	strFileName.Format ("%sSboCopy.exe", szPath);
+        GetModuleFilePath (szPath, sizeof (szPath));
+        strcat (szPath, "Update\\");
+        CString strModulePath = Utf8ToTString (szPath);
+        strFileName.Format(_T("%sSboCopy.exe"), (LPCTSTR)strModulePath);
 
 	ZeroMemory (&stStartupInfo, sizeof (stStartupInfo));
 	ZeroMemory (&stProcInfo, sizeof (stProcInfo));
@@ -603,7 +611,7 @@ void CSboLaunchDlg::ChgStateRUNUPDATE(void)
 	strcpy (szTmp, strFileName);
 	bResult = CreateProcess (NULL, szTmp, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, szPath,  &stStartupInfo, &stProcInfo);
 	if (bResult == FALSE) {
-		strTmp.Format ("アップデータの起動に失敗しました[%d]\r\n", GetLastError ());
+		strTmp.Format(_T("アップデータの起動に失敗しました[%d]\r\n"), GetLastError ());
 		AddMsg ((LPCSTR)strTmp);
 		goto Exit;
 	}
@@ -677,10 +685,11 @@ void CSboLaunchDlg::ProcCHECKFILELIST(void)
 
 	bGetFile = FALSE;
 	ZeroMemory (szHash, sizeof (szHash));
-	GetModuleFilePath (szPath, sizeof (szPath));
-	pInfo = m_pInfoFileList->GetPtr (m_pstCheckFlieList->nNo);
+        GetModuleFilePath (szPath, sizeof (szPath));
+        CString strModulePath = Utf8ToTString (szPath);
+        pInfo = m_pInfoFileList->GetPtr (m_pstCheckFlieList->nNo);
 
-	strFileName.Format ("%s%s", szPath, (LPCSTR)pInfo->strFileName);
+        strFileName.Format(_T("%s%s"), (LPCTSTR)strModulePath, (LPCTSTR)pInfo->strFileName);
 	GetMD5.Init ();
 	GetMD5.Update (strFileName);
 	GetMD5.GetStr (szHash);
@@ -730,7 +739,8 @@ void CSboLaunchDlg::ProcGETFILE(void)
 		m_ctlProgressAll.SetPos (m_ctlProgressAll.GetPos () + 1);
 
 		GetModuleFilePath (szFileName, sizeof (szFileName));
-		strFileName.Format ("%sUpdate\\%s", szFileName, (LPCSTR)pInfo->strFileName);
+            CString strBaseName = Utf8ToTString (szFileName);
+            strFileName.Format(_T("%sUpdate\\%s"), (LPCTSTR)strBaseName, (LPCTSTR)pInfo->strFileName);
 		strcpy (szPath, strFileName);
 		pszFileName = PathFindFileName (szPath);
 		if (pszFileName) {
@@ -740,7 +750,7 @@ void CSboLaunchDlg::ProcGETFILE(void)
 		/* ファイルを開く */
 		hFile = CreateFile (strFileName, GENERIC_WRITE, 0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 		if (hFile == INVALID_HANDLE_VALUE) {
-			strTmp.Format ("ファイルの出力に失敗しました[%d]\r\n", GetLastError ());
+			strTmp.Format(_T("ファイルの出力に失敗しました[%d]\r\n"), GetLastError ());
 			AddMsg ((LPCSTR)strTmp);
 			return;
 		}
@@ -773,13 +783,13 @@ void CSboLaunchDlg::ProcGETFILE(void)
 
 	/* 初回？ */
 	if (m_pstGetFileInfo->dwRecvSize == 0) {
-		strTmp.Format ("%s\r\n", (LPCSTR)pInfo->strFileName);
+            strTmp.Format(_T("%s\r\n"), (LPCTSTR)pInfo->strFileName);
 		AddMsg ((LPCSTR)strTmp);
 
 		m_ctlProgressFile.SetRange32 (0, pInfo->dwFileSize);
 		m_ctlProgressFile.SetPos (0);
 		m_pstGetFileInfo->pRecvDataTmp = ZeroNew (pInfo->dwFileSize);
-		m_strFile.Format ("0/%d", pInfo->dwFileSize);
+		m_strFile.Format(_T("0/%d"), pInfo->dwFileSize);
 		UpdateData (FALSE);
 	}
 }
@@ -863,7 +873,7 @@ void CSboLaunchDlg::RecvProcVERSION_RES_FILE(PBYTE pData)
 	CopyMemory (&m_pstGetFileInfo->pRecvDataTmp[m_pstGetFileInfo->dwRecvSize], Packet.m_pFileData, Packet.m_dwSize);
 	m_pstGetFileInfo->dwRecvSize += Packet.m_dwSize;
 
-	m_strFile.Format ("%d/%d", m_pstGetFileInfo->dwRecvSize, pInfo->dwFileSize);
+	m_strFile.Format(_T("%d/%d"), m_pstGetFileInfo->dwRecvSize, pInfo->dwFileSize);
 	UpdateData (FALSE);
 
 	m_ctlProgressFile.SetPos (m_pstGetFileInfo->dwRecvSize);
@@ -886,7 +896,8 @@ void CSboLaunchDlg::DeleteAllFiles(LPCSTR pszPath)
 	CmyStringArray astrFolderPath;
 
 	hFind = INVALID_HANDLE_VALUE;
-	strTmp.Format ("%s*.*", pszPath);
+        CString strSearchPath = Utf8ToTString (pszPath);
+        strTmp.Format(_T("%s*.*"), (LPCTSTR)strSearchPath);
 
 	/* 最初の検索 */
 	hFind = FindFirstFile (strTmp, &stFindData);

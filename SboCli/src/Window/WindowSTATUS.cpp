@@ -105,57 +105,57 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 	TextOut2 (hDC, 16 + 8 * 0, 16 * 1, "レベル", RGB (0, 0, 0));
 #if 0
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 1, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byLevel);
+	wsprintf (szTmp, _T("%d"), pChar->m_byLevel);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 1, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 2, "力", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 2, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byPW);
+	wsprintf (szTmp, _T("%d"), pChar->m_byPW);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 2, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 3, "素早さ", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 3, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byDEX);
+	wsprintf (szTmp, _T("%d"), pChar->m_byDEX);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 3, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 4, "体力", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 4, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byST);
+	wsprintf (szTmp, _T("%d"), pChar->m_byST);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 4, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 5, "賢さ", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 5, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byIT);
+	wsprintf (szTmp, _T("%d"), pChar->m_byIT);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 5, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 6, "運のよさ", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 6, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byLK);
+	wsprintf (szTmp, _T("%d"), pChar->m_byLK);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 6, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 7, "最大HP", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 7, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_dwMaxHP);
+	wsprintf (szTmp, _T("%d"), pChar->m_dwMaxHP);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 7, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 8, "最大Mana", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 8, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_dwMaxMana);
+	wsprintf (szTmp, _T("%d"), pChar->m_dwMaxMana);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 8, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 9, "攻撃力", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 9, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byAT);
+	wsprintf (szTmp, _T("%d"), pChar->m_byAT);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 9, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 10, "防御力", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 10, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byDF);
+	wsprintf (szTmp, _T("%d"), pChar->m_byDF);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 10, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 11, "魔法防御", RGB (255, 255, 255));
 	TextOut2 (hDC, 32 + 8 * 9, 16 * 11, ":", RGB (255, 255, 255));
-	wsprintf (szTmp, "%d", pChar->m_byMagicDF);
+	wsprintf (szTmp, _T("%d"), pChar->m_byMagicDF);
 	TextOut2 (hDC, 32 + 8 * 10, 16 * 11, szTmp, RGB (150, 255, 200));
 
 	TextOut2 (hDC, 32 + 8 * 0, 16 * 12, "Exp:", RGB (255, 255, 255));

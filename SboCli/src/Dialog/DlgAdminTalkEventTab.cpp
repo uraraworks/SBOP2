@@ -133,7 +133,7 @@ BOOL CDlgAdminTalkEventTab::OnInitDialog()
 	RegisterControl (IDC_DOWN,		LH_CTRL_X | LH_CTRL_Y);
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "イベント種別", 0, 100);
+	m_List.InsertColumn (0, _T("イベント種別"), 0, 100);
 
 	Renew ();
 

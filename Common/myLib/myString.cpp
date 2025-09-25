@@ -1,319 +1,436 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:myString.cpp												 */
-/* 内容			:文字列クラス 定義ファイル									 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/05/25													 */
-/* ========================================================================= */
-
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include <tchar.h>
 #include "myString.h"
 
+ATL::CString Utf8ToTString(LPCSTR pszSrc)
+{
+#ifdef _UNICODE
+        ATL::CString strResult;
+        if (pszSrc == NULL) {
+                return strResult;
+        }
+        int nLen = MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, NULL, 0);
+        if (nLen <= 0) {
+                return strResult;
+        }
+        LPTSTR pszBuffer = strResult.GetBuffer (nLen);
+        MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen);
+        strResult.ReleaseBuffer ();
+        return strResult;
+#else
+        ATL::CString strResult;
+        if (pszSrc) {
+                strResult = pszSrc;
+        }
+        return strResult;
+#endif
+}
+
+ATL::CStringA TStringToUtf8(LPCTSTR pszSrc)
+{
+#ifdef _UNICODE
+        ATL::CStringA strResult;
+        if (pszSrc == NULL) {
+                return strResult;
+        }
+        int nLen = WideCharToMultiByte (CP_UTF8, 0, pszSrc, -1, NULL, 0, NULL, NULL);
+        if (nLen <= 0) {
+                return strResult;
+        }
+        LPSTR pszBuffer = strResult.GetBuffer (nLen);
+        WideCharToMultiByte (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen, NULL, NULL);
+        strResult.ReleaseBuffer ();
+        return strResult;
+#else
+        ATL::CStringA strResult;
+        if (pszSrc) {
+                strResult = pszSrc;
+        }
+        return strResult;
+#endif
+}
+
 /* ========================================================================= */
-/* 関数名	:CmyString::CmyString											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/05/25														 */
+/* 関数名       :CmyString::CmyString                                                                                    */
+/* 内容         :コンストラクタ
+*/
+/* 日付         :2006/05/25
+*/
 /* ========================================================================= */
 
 CmyString::CmyString()
 {
-	m_nLength	= 0;
-	m_pszString = NULL;
-	Empty ();
+        m_strString.Empty ();
+        m_strUtf8Cache.Empty ();
+        m_bUtf8Dirty = TRUE;
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::CmyString											 */
-/* 内容		:コピーコンストラクタ											 */
-/* 日付		:2007/02/11														 */
+/* 関数名       :CmyString::CmyString                                                                                    */
+/* 内容         :コピーコンストラクタ                                                                                    */
+/* 日付         :2007/02/11
+*/
 /* ========================================================================= */
 
 CmyString::CmyString(const CmyString &strSrc)
 {
-	m_pszString = NULL;
-	if (strSrc.m_pszString) {
-		Renew (strSrc.m_pszString);
-	} else {
-		Renew ("");
-	}
+        m_strString     = strSrc.m_strString;
+        m_strUtf8Cache  = strSrc.m_strUtf8Cache;
+        m_bUtf8Dirty    = strSrc.m_bUtf8Dirty;
 }
+
+CmyString::CmyString(LPCSTR szSrc)
+{
+        RenewUtf8 (szSrc);
+}
+
 CmyString::CmyString(LPCTSTR szSrc)
 {
-	m_pszString = NULL;
-	Renew (szSrc);
+        RenewWide (szSrc);
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::~CmyString											 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/05/25														 */
+/* 関数名       :CmyString::~CmyString                                                                                   */
+/* 内容         :デストラクタ
+*/
+/* 日付         :2006/05/25
+*/
 /* ========================================================================= */
 
 CmyString::~CmyString()
 {
-	if (m_pszString) {
-		delete [] m_pszString;
-		m_pszString = NULL;
-	}
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::Empty												 */
-/* 内容		:文字列を空にする												 */
-/* 日付		:2006/05/29														 */
+/* 関数名       :CmyString::Empty
+*/
+/* 内容         :文字列を空にする
+*/
+/* 日付         :2006/05/29
+*/
 /* ========================================================================= */
 
 void CmyString::Empty(void)
 {
-	Renew ("");
+        m_strString.Empty ();
+        m_strUtf8Cache.Empty ();
+        m_bUtf8Dirty = FALSE;
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::IsEmpty												 */
-/* 内容		:文字列が空か判定												 */
-/* 日付		:2006/05/29														 */
+/* 関数名       :CmyString::IsEmpty
+*/
+/* 内容         :文字列が空か判定
+*/
+/* 日付         :2006/05/29
+*/
 /* ========================================================================= */
 
-BOOL CmyString::IsEmpty(void)
+BOOL CmyString::IsEmpty(void) const
 {
-	BOOL bRet;
-
-	bRet = TRUE;
-
-	if (m_pszString == NULL) {
-		goto Exit;
-	}
-	if (m_nLength <= 0) {
-		goto Exit;
-	}
-
-	bRet = FALSE;
-Exit:
-	return bRet;
+        return m_strString.IsEmpty ();
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::GetLength											 */
-/* 内容		:文字列長を取得													 */
-/* 日付		:2006/05/30														 */
+/* 関数名       :CmyString::GetLength                                                                                    */
+/* 内容         :文字列長を取得
+*/
+/* 日付         :2006/05/30
+*/
 /* ========================================================================= */
 
-int CmyString::GetLength(void)
+int CmyString::GetLength(void) const
 {
-	return m_nLength;
+        return m_strString.GetLength ();
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::Format												 */
-/* 内容		:書式文字列で初期化												 */
-/* 日付		:2006/06/02														 */
-/* メモ：	バッファは1024バイトなのでそれ以上にはならないように注意		 */
+/* 関数名       :CmyString::Format
+*/
+/* 内容         :書式文字列で初期化
+*/
+/* 日付         :2006/06/02
+*/
 /* ========================================================================= */
 
 void CmyString::Format(LPCSTR lpFormat, ...)
 {
-	LPSTR pszTmp;
+        if (lpFormat == NULL) {
+                Empty ();
+                return;
+        }
+        va_list argList;
+        va_start (argList, lpFormat);
+#ifdef _UNICODE
+        ATL::CStringA strTmp;
+        strTmp.FormatV (lpFormat, argList);
+        RenewUtf8 (strTmp);
+#else
+        ATL::CStringA strTmp;
+        strTmp.FormatV (lpFormat, argList);
+        m_strString = strTmp;
+        m_bUtf8Dirty = TRUE;
+#endif
+        va_end (argList);
+}
 
-	pszTmp = new char[1024];
-
-	/* 文字列を書式化 */
-	va_list argList;
-	va_start (argList, lpFormat);
-	wvsprintf (pszTmp, lpFormat, argList);
-	va_end (argList);
-
-	Renew (pszTmp);
-	delete [] pszTmp;
+void CmyString::Format(LPCTSTR lpFormat, ...)
+{
+        if (lpFormat == NULL) {
+                Empty ();
+                return;
+        }
+        va_list argList;
+        va_start (argList, lpFormat);
+        m_strString.FormatV (lpFormat, argList);
+        va_end (argList);
+        m_bUtf8Dirty = TRUE;
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::operator =											 */
-/* 内容		:文字列を初期化													 */
-/* 日付		:2006/05/25														 */
+/* 関数名       :CmyString::operator =                                                                                   */
+/* 内容         :文字列を初期
+*/
+/* 日付         :2006/05/25
+*/
 /* ========================================================================= */
 
 void CmyString::operator =(const CmyString &strSrc)
 {
-	if (strSrc.m_pszString) {
-		Renew (strSrc.m_pszString);
-	} else {
-		Renew ("");
-	}
+        if (this == &strSrc) {
+                return;
+        }
+        m_strString     = strSrc.m_strString;
+        m_strUtf8Cache  = strSrc.m_strUtf8Cache;
+        m_bUtf8Dirty    = strSrc.m_bUtf8Dirty;
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::operator =											 */
-/* 内容		:文字列を初期化													 */
-/* 日付		:2006/05/25														 */
+/* 関数名       :CmyString::operator =                                                                                   */
+/* 内容         :文字列を初期化
+*/
+/* 日付         :2006/05/25
+*/
 /* ========================================================================= */
 
 void CmyString::operator =(LPCSTR pszSrc)
 {
-	Renew (pszSrc);
+        RenewUtf8 (pszSrc);
+}
+
+void CmyString::operator =(LPCTSTR pszSrc)
+{
+        RenewWide (pszSrc);
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::operator +=											 */
-/* 内容		:文字列を追加													 */
-/* 日付		:2006/05/25														 */
+/* 関数名       :CmyString::operator +=                                                                                  */
+/* 内容         :文字列を追加
+*/
+/* 日付         :2006/05/25
+*/
 /* ========================================================================= */
 
 void CmyString::operator +=(LPCSTR pszSrc)
 {
-	int nLen;
-	LPSTR pszTmp;
-
-	nLen	= 0;
-	pszTmp	= NULL;
-
-	if (m_pszString)	{	nLen += (strlen (m_pszString) + 1);	}
-	if (pszSrc)			{	nLen += (strlen (pszSrc) + 1);		}
-
-	if (nLen == 0) {
-		goto Exit;
-	}
-
-	pszTmp = new char[nLen];
-	ZeroMemory (pszTmp, nLen);
-
-	if (m_pszString)	{	strcpy (pszTmp, m_pszString);	}
-	if (pszSrc)			{	strcat (pszTmp, pszSrc);		}
-
-	Renew (pszTmp);
-
-Exit:
-	if (pszTmp) {
-		delete [] pszTmp;
-	}
+#ifdef _UNICODE
+        m_strString += Utf8ToTString (pszSrc);
+#else
+        if (pszSrc) {
+                m_strString += pszSrc;
+        }
+#endif
+        m_bUtf8Dirty = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CmyString::operator ==											 */
-/* 内容		:文字列を比較													 */
-/* 日付		:2006/06/01														 */
-/* ========================================================================= */
-
-BOOL CmyString::operator ==(LPCSTR pszSrc)
+void CmyString::operator +=(LPCTSTR pszSrc)
 {
-	int nResult;
-	BOOL bRet;
-
-	bRet = FALSE;
-
-	if (m_pszString == NULL) {
-		goto Exit;
-	}
-
-	nResult = strcmp (m_pszString, pszSrc);
-	if (nResult == 0) {
-		bRet = TRUE;
-	}
-
-Exit:
-	return bRet;
+        if (pszSrc) {
+                m_strString += pszSrc;
+                m_bUtf8Dirty = TRUE;
+        }
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::operator !=											 */
-/* 内容		:文字列を比較													 */
-/* 日付		:2006/11/05														 */
+/* 関数名       :CmyString::operator ==                                                                                  */
+/* 内容         :文字列を比較
+*/
+/* 日付         :2006/05/25
+*/
 /* ========================================================================= */
 
-BOOL CmyString::operator !=(LPCSTR pszSrc)
+BOOL CmyString::operator ==(LPCSTR pszSrc) const
 {
-	int nResult;
-	BOOL bRet;
+#ifdef _UNICODE
+        ATL::CString strTmp = Utf8ToTString (pszSrc);
+        return (m_strString.Compare (strTmp) == 0);
+#else
+        if (pszSrc == NULL) {
+                return m_strString.IsEmpty ();
+        }
+        return (m_strString.Compare (pszSrc) == 0);
+#endif
+}
 
-	bRet = FALSE;
-
-	if (m_pszString == NULL) {
-		goto Exit;
-	}
-
-	nResult = strcmp (m_pszString, pszSrc);
-	if (nResult != 0) {
-		bRet = TRUE;
-	}
-
-Exit:
-	return bRet;
+BOOL CmyString::operator ==(LPCTSTR pszSrc) const
+{
+        return (m_strString.Compare (pszSrc) == 0);
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::operator LPCTSTR()									 */
-/* 内容		:文字列を初期化													 */
-/* 日付		:2006/05/25														 */
+/* 関数名       :CmyString::operator !=                                                                                  */
+/* 内容         :文字列を比較
+*/
+/* 日付         :2006/05/25
+*/
+/* ========================================================================= */
+
+BOOL CmyString::operator !=(LPCSTR pszSrc) const
+{
+        return !(*this == pszSrc);
+}
+
+BOOL CmyString::operator !=(LPCTSTR pszSrc) const
+{
+        return !(*this == pszSrc);
+}
+
+
+/* ========================================================================= */
+/* 関数名       :CmyString::operator LPCTSTR                                                                             */
+/* 内容         :キャスト
+*/
+/* 日付         :2006/05/25
+*/
 /* ========================================================================= */
 
 CmyString::operator LPCTSTR() const
 {
-	return m_pszString;
+        return (LPCTSTR)m_strString;
 }
 
 CmyString::operator LPCTSTR()
 {
-	return m_pszString;
+        return (LPCTSTR)m_strString;
+}
+
+CmyString::operator LPCSTR() const
+{
+#ifdef _UNICODE
+        UpdateUtf8Cache ();
+        return (LPCSTR)m_strUtf8Cache;
+#else
+        return (LPCSTR)m_strString;
+#endif
+}
+
+CmyString::operator LPCSTR()
+{
+#ifdef _UNICODE
+        UpdateUtf8Cache ();
+        return (LPCSTR)m_strUtf8Cache;
+#else
+        return (LPCSTR)m_strString;
+#endif
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::CompareNoCase										 */
-/* 内容		:文字列を比較(大文字小文字区別無し)								 */
-/* 日付		:2007/02/14														 */
+/* 関数名       :CmyString::CompareNoCase                                                                                */
+/* 内容         :文字列比較(大文字小文字区別無し)
+*/
+/* 日付         :2006/09/26
+*/
 /* ========================================================================= */
 
-int CmyString::CompareNoCase(LPCSTR pszSrc)
+int CmyString::CompareNoCase(LPCSTR pszSrc) const
 {
-	int nRet;
+#ifdef _UNICODE
+        ATL::CString strTmp = Utf8ToTString (pszSrc);
+        return m_strString.CompareNoCase (strTmp);
+#else
+        if (pszSrc == NULL) {
+                return m_strString.IsEmpty () ? 0 : 1;
+        }
+        return m_strString.CompareNoCase (pszSrc);
+#endif
+}
 
-	nRet = -1;
-
-	if (m_pszString == NULL) {
-		goto Exit;
-	}
-
-	nRet = _tcsicmp (m_pszString, pszSrc);
-Exit:
-	return nRet;
+int CmyString::CompareNoCase(LPCTSTR pszSrc) const
+{
+        return m_strString.CompareNoCase (pszSrc);
 }
 
 
 /* ========================================================================= */
-/* 関数名	:CmyString::Renew												 */
-/* 内容		:文字列を更新													 */
-/* 日付		:2006/05/25														 */
+/* 関数名       :CmyString::RenewUtf8
+*/
+/* 内容         :UTF-8文字列を更新
+*/
 /* ========================================================================= */
 
-void CmyString::Renew(LPCSTR pszSrc)
+void CmyString::RenewUtf8(LPCSTR pszSrc)
 {
-	if (m_pszString == pszSrc) {
-		return;
-	}
-	if (m_pszString) {
-		delete [] m_pszString;
-		m_pszString = NULL;
-	}
+#ifdef _UNICODE
+        m_strString = Utf8ToTString (pszSrc);
+#else
+        if (pszSrc == NULL) {
+                m_strString.Empty ();
+        } else {
+                m_strString = pszSrc;
+        }
+#endif
+        m_bUtf8Dirty = TRUE;
+}
 
-	if (pszSrc == NULL) {
-		return;
-	}
 
-	m_nLength = strlen (pszSrc);
-	m_pszString = new char[m_nLength + 1];
-	strcpy (m_pszString, pszSrc);
+/* ========================================================================= */
+/* 関数名       :CmyString::RenewWide
+*/
+/* 内容         :Unicode文字列を更新
+*/
+/* ========================================================================= */
+
+void CmyString::RenewWide(LPCTSTR pszSrc)
+{
+        if (pszSrc == NULL) {
+                m_strString.Empty ();
+        } else {
+                m_strString = pszSrc;
+        }
+        m_bUtf8Dirty = TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名       :CmyString::UpdateUtf8Cache
+*/
+/* 内容         :UTF-8キャッシュを更新
+*/
+/* ========================================================================= */
+
+void CmyString::UpdateUtf8Cache() const
+{
+#ifdef _UNICODE
+        if (!m_bUtf8Dirty) {
+                return;
+        }
+        m_strUtf8Cache = TStringToUtf8 ((LPCTSTR)m_strString);
+        const_cast<CmyString *>(this)->m_bUtf8Dirty = FALSE;
+#else
+        UNREFERENCED_PARAMETER (this);
+#endif
 }
 
 /* Copyright(C)URARA-works 2006 */

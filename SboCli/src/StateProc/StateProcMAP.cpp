@@ -148,17 +148,22 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 
 void CStateProcMAP::Init(void)
 {
-	char szFileName[MAX_PATH];
+	TCHAR szFileName[MAX_PATH];
 	CRect rc;
 
 	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+	GetModuleFileName (NULL, szFileName, _countof (szFileName));
+	size_t nLen = _tcslen (szFileName);
+	if (nLen >= 3) {
+		_tcscpy_s (szFileName + nLen - 3, _countof (szFileName) - (nLen - 3), _T("ini"));
+	} else {
+		_tcscat_s (szFileName, _T(".ini"));
+	}
 
-	rc.left		= GetPrivateProfileInt ("Pos", "LogLeft",	-1, szFileName);
-	rc.top		= GetPrivateProfileInt ("Pos", "LogTop",	-1, szFileName);
-	rc.right	= GetPrivateProfileInt ("Pos", "LogRight",	-1, szFileName);
-	rc.bottom	= GetPrivateProfileInt ("Pos", "LogBottom",	-1, szFileName);
+	rc.left		= GetPrivateProfileInt (_T("Pos"), _T("LogLeft"),	-1, szFileName);
+	rc.top		= GetPrivateProfileInt (_T("Pos"), _T("LogTop"),	-1, szFileName);
+	rc.right	= GetPrivateProfileInt (_T("Pos"), _T("LogRight"),	-1, szFileName);
+	rc.bottom	= GetPrivateProfileInt (_T("Pos"), _T("LogBottom"),	-1, szFileName);
 	if (!((rc.left == -1) && (rc.top == -1))) {
 		m_pDlgMsgLog->SetWindowPos (NULL, rc.left, rc.top, rc.Width (), rc.Height (), SWP_NOZORDER | SWP_NOACTIVATE);
 	}
@@ -670,7 +675,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 			if (pInfoChar == m_pPlayerChar) {
 				KeyProc (0, FALSE);
 			}
-			strTmp.Format ("%s：%s", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar->m_strSpeak);
+			strTmp.Format(_T("%s：%s"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoChar->m_strSpeak);
 			m_pDlgMsgLog->Add (strTmp, pInfoChar->m_clSpeak);
 		}
 		break;
@@ -2905,9 +2910,9 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET_SETDEVICE(DWORD dwPara)
 		pMgrKeyInput->GetGUID (nNo, stGuid);
 		pMgrKeyInput->GetDeviceName (nNo, strName);
 
-		strTmp.Format ("[%s]を使用します", (LPCSTR)strName);
+		strTmp.Format(_T("[%s]を使用します"), (LPCTSTR)strName);
 	} else {
-		strTmp.Format ("ジョイパッドを使用しません");
+		strTmp.Format(_T("ジョイパッドを使用しません"));
 	}
 	m_pMgrData->SetInputGuid (stGuid);
 	m_pMgrData->SaveIniData ();
@@ -3141,7 +3146,7 @@ void CStateProcMAP::OnMainFrameRENEWTALKEVENT(DWORD dwParam)
 	pszName	  = NULL;
 	pInfoChar = (PCInfoCharBase)m_pLibInfoChar->GetPtr (pInfo->m_dwTalkEventID);
 	if (pInfoChar) {
-		pszName = (LPCSTR)pInfoChar->m_strCharName;
+		pszName = (LPCTSTR)pInfoChar->m_strCharName;
 	}
 
 	m_pMgrWindow->MakeWindowTEXTMSG (NULL, pszName, pInfo);
@@ -3206,7 +3211,7 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 			}
 		}
 		if (nLen > 0) {
-			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
+			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCTSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
 			break;
 		}
 		goto Exit;

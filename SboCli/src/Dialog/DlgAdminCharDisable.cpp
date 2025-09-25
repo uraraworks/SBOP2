@@ -145,7 +145,7 @@ BOOL CDlgAdminCharDisable::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, "拒否するMACアドレス",	LVCFMT_LEFT, 200);
+	m_List.InsertColumn (1, _T("拒否するMACアドレス"),	LVCFMT_LEFT, 200);
 
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
@@ -214,7 +214,7 @@ void CDlgAdminCharDisable::OnBnClickedDelete()
 	}
 	dwDisableID = m_List.GetItemData (nNo);
 
-	nResult = MessageBox ("このMACアドレスの拒否を解除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("このMACアドレスの拒否を解除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

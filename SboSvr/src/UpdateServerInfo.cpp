@@ -247,7 +247,7 @@ void CUpdateServerInfo::MakeServerInfo(void)
 	}
 
 	time (&timeTmp);
-	strTmp.Format ("%d,%d,%s\r\n",
+	strTmp.Format(_T("%d,%d,%s\r\n"),
 			(int)timeTmp,			/* 0:保存されたUNIX時間 */
 			m_nCount,				/* 1:ログイン人数 */
 			(LPCSTR)m_strPlace);	/* 2:最も集まっている場所 */
@@ -283,7 +283,7 @@ void CUpdateServerInfo::Upload(void)
 
 	GetFileName (strFileName);
 	/* ファイル名の作成 */
-	wsprintf (szUpAddr, "%s/%s", (LPCSTR)m_strUploadPath, SERVERINFOFILENAME);
+	wsprintf (szUpAddr, _T("%s/%s"), (LPCSTR)m_strUploadPath, SERVERINFOFILENAME);
 
 	/* インターネットを開く */
 	hInternet = InternetOpen ("ScrapBookOnlineServer", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
@@ -335,7 +335,9 @@ void CUpdateServerInfo::GetFileName(CmyString &strDst)
 
 	/* ファイル名の作成 */
 	GetModuleFilePath (szPath, sizeof (szPath));
-	strDst.Format ("%sSBODATA\\%s", szPath, SERVERINFOFILENAME);
+    CString strBasePath = Utf8ToTString (szPath);
+    CString strFileName = Utf8ToTString (SERVERINFOFILENAME);
+    strDst.Format(_T("%sSBODATA\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)strFileName);
 }
 
 /* Copyright(C)URARA-works 2008 */

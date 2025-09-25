@@ -14,6 +14,7 @@
 #include "LibInfoCharCli.h"
 #include "InfoCharCli.h"
 #include "MgrData.h"
+#include "SBOGlobal.h"
 #include "DlgAdminCharAddNPC.h"
 
 #ifdef _DEBUG
@@ -148,11 +149,15 @@ BOOL CDlgAdminCharAddNPC::OnInitDialog()
 
 	m_pInfoChar = m_pMgrData->GetPlayerChar ();
 
-	for (i = FAMILYTYPE_NONE + 1; i < FAMILYTYPE_MAX; i ++) {
-		pszFamilyName = m_pMgrData->GetFamilyTypeName (i);
-		m_ctlFamilyType.AddString (pszFamilyName);
-	}
-	m_ctlFamilyType.SetCurSel (0);
+        for (i = FAMILYTYPE_NONE + 1; i < FAMILYTYPE_MAX; i ++) {
+                pszFamilyName = m_pMgrData->GetFamilyTypeName (i);
+#ifdef _UNICODE
+                m_ctlFamilyType.AddString (Utf8ToTString (pszFamilyName));
+#else
+                m_ctlFamilyType.AddString (pszFamilyName);
+#endif
+        }
+        m_ctlFamilyType.SetCurSel (0);
 
 	return TRUE;
 }
@@ -172,12 +177,12 @@ void CDlgAdminCharAddNPC::OnSend()
 
 	UpdateData ();
 
-	if (m_nMapID == 0) {
-		MessageBox ("マップIDと座標を確認してください", "確認", MB_ICONINFORMATION | MB_OK);
-		return;
-	}
+        if (m_nMapID == 0) {
+                MessageBox (_T("マップIDと座標を確認してください"), _T("確認"), MB_ICONINFORMATION | MB_OK);
+                return;
+        }
 
-	nResult = MessageBox ("指定座標にNPCを追加しますか？", "確認", MB_ICONQUESTION | MB_YESNO);
+        nResult = MessageBox (_T("指定座標にNPCを追加しますか？"), _T("確認"), MB_ICONQUESTION | MB_YESNO);
 	if (nResult != IDYES) {
 		return;
 	}

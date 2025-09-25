@@ -273,66 +273,62 @@ void CMgrData::Destroy(void)
 
 void CMgrData::SaveIniData(void)
 {
-	char szFileName[MAX_PATH], szTmp[128];
-	WCHAR szwGuid[40];
-	_bstr_t bstrTmp;
-	CmyString strTmp;
-	CCryptUtil CryptUtil;
+        TCHAR szModulePath[MAX_PATH];
+        TCHAR szIniPath[MAX_PATH];
+    char szCrypt[128];
+        WCHAR szwGuid[40];
+        CmyString strTmp;
+        CCryptUtil CryptUtil;
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        ZeroMemory (szModulePath, sizeof (szModulePath));
+        GetModuleFileName (NULL, szModulePath, _countof (szModulePath));
+        _tcscpy_s (szIniPath, szModulePath);
+        int nExtPos = static_cast<int>(_tcslen (szIniPath)) - 3;
+        if (nExtPos >= 0) {
+                _tcscpy_s (&szIniPath[nExtPos], _countof (szIniPath) - nExtPos, _T("ini"));
+        } else {
+                _tcscat_s (szIniPath, _T(".ini"));
+        }
 
-	/* 暗号化 */
-	CryptUtil.CryptStr (m_strLastPassword, szTmp, 10);
-	/* 最終アカウント名 */
-	WritePrivateProfileString ("Account", "Account", m_strLastAccount, szFileName);
-	/* 最終パスワード */
-	WritePrivateProfileString ("Account", "Password", szTmp, szFileName);
-	/* パスワードを保存する？ */
-	strTmp.Format ("%d", m_bSavePassword);
-	WritePrivateProfileString ("Setting", "SavePassword", strTmp, szFileName);
-	/* ログイン拒否 */
-	strTmp.Format ("%d", m_bDisableLogin);
-	WritePrivateProfileString ("Setting", "DisableLogin", strTmp, szFileName);
-	/* 発言時にタスクバーチカチカ */
-	strTmp.Format ("%d", m_bOptionTaskbar);
-	WritePrivateProfileString ("Setting", "OptionTaskbar", strTmp, szFileName);
-	/* 発言を表示する */
-	strTmp.Format ("%d", m_bOptionViewChat);
-	WritePrivateProfileString ("Setting", "OptionViewChat", strTmp, szFileName);
-	/* アイテムを表示する */
-	strTmp.Format ("%d", m_bOptionViewItem);
-	WritePrivateProfileString ("Setting", "OptionViewItem", strTmp, szFileName);
-	/* アイテム名を表示する */
-	strTmp.Format ("%d", m_bOptionViewItemName);
-	WritePrivateProfileString ("Setting", "OptionViewItemName", strTmp, szFileName);
-	/* ヘルプアイコンを表示する */
-	strTmp.Format ("%d", m_bOptionViewHelpIcon);
-	WritePrivateProfileString ("Setting", "OptionViewHelpIcon", strTmp, szFileName);
-	/* 戦闘メッセージをログに残す */
-	strTmp.Format ("%d", m_bOptionBattleMsgLog);
-	WritePrivateProfileString ("Setting", "OptionBattleMsgLog", strTmp, szFileName);
-	/* 60フレームで表示する */
-	strTmp.Format ("%d", m_bOption60Frame);
-	WritePrivateProfileString ("Setting", "Option60Frame", strTmp, szFileName);
-	/* 効果音量 */
-	strTmp.Format ("%d", m_nSEVolume);
-	WritePrivateProfileString ("Setting", "SEVolume", strTmp, szFileName);
-	/* BGM音量 */
-	strTmp.Format ("%d", m_nBGMVolume);
-	WritePrivateProfileString ("Setting", "BGMVolume", strTmp, szFileName);
-	/* 描画モード */
-	strTmp.Format ("%d", m_nDrawMode);
-	WritePrivateProfileString ("Setting", "DrawMode", strTmp, szFileName);
-	/* 入力ジョイパッド */
-	StringFromGUID2 (m_stInputGuid, szwGuid, sizeof (szwGuid));
-	bstrTmp = szwGuid;
-	strcpy (szTmp, bstrTmp);
-	WritePrivateProfileString ("Setting", "InputDevice", szTmp, szFileName);
-	/* おひるねタイマー */
-	strTmp.Format ("%d", m_nSleepTimer);
-	WritePrivateProfileString ("Setting", "SleepTimer", strTmp, szFileName);
+        ZeroMemory (szCrypt, sizeof (szCrypt));
+    CStringA strPasswordUtf8 = TStringToUtf8 ((LPCTSTR)m_strLastPassword);
+    CryptUtil.CryptStr (strPasswordUtf8, szCrypt, 10);
+    CString strEncrypted = Utf8ToTString (szCrypt);
+
+        WritePrivateProfileString (_T("Account"), _T("Account"), (LPCTSTR)m_strLastAccount, szIniPath);
+        WritePrivateProfileString (_T("Account"), _T("Password"), strEncrypted, szIniPath);
+
+        strTmp.Format(_T("%d"), m_bSavePassword);
+        WritePrivateProfileString (_T("Setting"), _T("SavePassword"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bDisableLogin);
+        WritePrivateProfileString (_T("Setting"), _T("DisableLogin"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bOptionTaskbar);
+        WritePrivateProfileString (_T("Setting"), _T("OptionTaskbar"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bOptionViewChat);
+        WritePrivateProfileString (_T("Setting"), _T("OptionViewChat"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bOptionViewItem);
+        WritePrivateProfileString (_T("Setting"), _T("OptionViewItem"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bOptionViewItemName);
+        WritePrivateProfileString (_T("Setting"), _T("OptionViewItemName"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bOptionViewHelpIcon);
+        WritePrivateProfileString (_T("Setting"), _T("OptionViewHelpIcon"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bOptionBattleMsgLog);
+        WritePrivateProfileString (_T("Setting"), _T("OptionBattleMsgLog"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_bOption60Frame);
+        WritePrivateProfileString (_T("Setting"), _T("Option60Frame"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_nSEVolume);
+        WritePrivateProfileString (_T("Setting"), _T("SEVolume"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_nBGMVolume);
+        WritePrivateProfileString (_T("Setting"), _T("BGMVolume"), strTmp, szIniPath);
+        strTmp.Format(_T("%d"), m_nDrawMode);
+        WritePrivateProfileString (_T("Setting"), _T("DrawMode"), strTmp, szIniPath);
+
+        StringFromGUID2 (m_stInputGuid, szwGuid, _countof (szwGuid));
+        CString strGuid (szwGuid);
+        WritePrivateProfileString (_T("Setting"), _T("InputDevice"), strGuid, szIniPath);
+
+        strTmp.Format(_T("%d"), m_nSleepTimer);
+        WritePrivateProfileString (_T("Setting"), _T("SleepTimer"), strTmp, szIniPath);
 }
 
 
@@ -830,61 +826,59 @@ CInfoTalkEvent *CMgrData::GetInfoTalkEvent(void)
 
 void CMgrData::ReadIniData(void)
 {
-	int nTmp;
-	char szFileName[MAX_PATH], szTmp[128], szTmp2[128];
-	CCryptUtil CryptUtil;
-	_bstr_t bstrTmp;
+        int nTmp;
+        TCHAR szModulePath[MAX_PATH];
+        TCHAR szIniPath[MAX_PATH];
+        TCHAR szTmp[128];
+        char szDecrypted[128];
+        CCryptUtil CryptUtil;
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        ZeroMemory (szModulePath, sizeof (szModulePath));
+        GetModuleFileName (NULL, szModulePath, _countof (szModulePath));
+        _tcscpy_s (szIniPath, szModulePath);
+        int nExtPos = static_cast<int>(_tcslen (szIniPath)) - 3;
+        if (nExtPos >= 0) {
+                _tcscpy_s (&szIniPath[nExtPos], _countof (szIniPath) - nExtPos, _T("ini"));
+        } else {
+                _tcscat_s (szIniPath, _T(".ini"));
+        }
 
-	/* サーバーアドレス */
-	GetPrivateProfileString ("Setting", "ServerAddr", "127.0.0.1", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strServerAddr = szTmp;
-	/* 待ちうけポート */
-	m_wServerPort = GetPrivateProfileInt ("Setting", "ServerPort", 2006, szFileName);
-	/* パスワードを保存する？ */
-	m_bSavePassword = (BOOL)GetPrivateProfileInt ("Setting", "SavePassword", 0, szFileName);
-	/* ログイン拒否 */
-//	m_bDisableLogin = (BOOL)GetPrivateProfileInt ("Setting", "DisableLogin", 0, szFileName);
-	/* 発言時にタスクバーチカチカ */
-	m_bOptionTaskbar = (BOOL)GetPrivateProfileInt ("Setting", "OptionTaskbar", 0, szFileName);
-	/* 発言を表示する */
-	m_bOptionViewChat = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewChat", 1, szFileName);
-	/* アイテムを表示する */
-	m_bOptionViewItem = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewItem", 1, szFileName);
-	/* アイテム名を表示する */
-	m_bOptionViewItemName = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewItemName", 1, szFileName);
-	/* ヘルプアイコンを表示する */
-	m_bOptionViewHelpIcon = (BOOL)GetPrivateProfileInt ("Setting", "OptionViewHelpIcon", 1, szFileName);
-	/* 戦闘メッセージをログに残す */
-	m_bOptionBattleMsgLog = (BOOL)GetPrivateProfileInt ("Setting", "OptionBattleMsgLog", 0, szFileName);
-	/* 60フレームで表示する */
-	m_bOption60Frame = (BOOL)GetPrivateProfileInt ("Setting", "Option60Frame", 0, szFileName);
-	/* 最終アカウント名 */
-	GetPrivateProfileString ("Account", "Account", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	m_strLastAccount = szTmp;
-	/* 最終パスワード */
-	GetPrivateProfileString ("Account", "Password", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	CryptUtil.UnCryptStr (szTmp, szTmp2, 10);
-	m_strLastPassword = szTmp2;
-	/* 効果音量 */
-	nTmp = GetPrivateProfileInt ("Setting", "SEVolume", 2, szFileName);
-	m_nSEVolume = min (nTmp, 4);
-	/* BGM音量 */
-	nTmp = GetPrivateProfileInt ("Setting", "BGMVolume", 2, szFileName);
-	m_nBGMVolume = min (nTmp, 4);
-	/* 描画モード */
-	nTmp = GetPrivateProfileInt ("Setting", "DrawMode", 1, szFileName);
-	m_nDrawMode = min (nTmp, 4);
-	/* 入力ジョイパッド */
-	GetPrivateProfileString ("Setting", "InputDevice", "", szTmp, sizeof (szTmp) - 1, szFileName);
-	bstrTmp = szTmp;
-	CLSIDFromString (bstrTmp, &m_stInputGuid); 
-	/* おひるねタイマー */
-	nTmp = GetPrivateProfileInt ("Setting", "SleepTimer", 0, szFileName);
-	m_nSleepTimer = min (nTmp, 5);
+        GetPrivateProfileString (_T("Setting"), _T("ServerAddr"), _T("127.0.0.1"), szTmp, _countof (szTmp), szIniPath);
+        m_strServerAddr = szTmp;
+        m_wServerPort = static_cast<WORD>(GetPrivateProfileInt (_T("Setting"), _T("ServerPort"), 2006, szIniPath));
+        m_bSavePassword = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("SavePassword"), 0, szIniPath);
+//      m_bDisableLogin = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("DisableLogin"), 0, szIniPath);
+        m_bOptionTaskbar = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionTaskbar"), 0, szIniPath);
+        m_bOptionViewChat = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewChat"), 1, szIniPath);
+        m_bOptionViewItem = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewItem"), 1, szIniPath);
+        m_bOptionViewItemName = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewItemName"), 1, szIniPath);
+        m_bOptionViewHelpIcon = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewHelpIcon"), 1, szIniPath);
+        m_bOptionBattleMsgLog = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionBattleMsgLog"), 0, szIniPath);
+        m_bOption60Frame = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("Option60Frame"), 0, szIniPath);
+
+        GetPrivateProfileString (_T("Account"), _T("Account"), _T(""), szTmp, _countof (szTmp), szIniPath);
+        m_strLastAccount = szTmp;
+        GetPrivateProfileString (_T("Account"), _T("Password"), _T(""), szTmp, _countof (szTmp), szIniPath);
+        CStringA strEncrypted = TStringToUtf8 (szTmp);
+        ZeroMemory (szDecrypted, sizeof (szDecrypted));
+        CryptUtil.UnCryptStr (strEncrypted, szDecrypted, 10);
+        m_strLastPassword = szDecrypted;
+
+        nTmp = GetPrivateProfileInt (_T("Setting"), _T("SEVolume"), 2, szIniPath);
+        m_nSEVolume = min (nTmp, 4);
+        nTmp = GetPrivateProfileInt (_T("Setting"), _T("BGMVolume"), 2, szIniPath);
+        m_nBGMVolume = min (nTmp, 4);
+        nTmp = GetPrivateProfileInt (_T("Setting"), _T("DrawMode"), 1, szIniPath);
+        m_nDrawMode = min (nTmp, 4);
+
+        GetPrivateProfileString (_T("Setting"), _T("InputDevice"), _T(""), szTmp, _countof (szTmp), szIniPath);
+        if (_tcslen (szTmp) > 0) {
+                CLSIDFromString (szTmp, &m_stInputGuid);
+        }
+
+        nTmp = GetPrivateProfileInt (_T("Setting"), _T("SleepTimer"), 0, szIniPath);
+        m_nSleepTimer = min (nTmp, 5);
 }
+
 
 /* Copyright(C)URARA-works 2006 */

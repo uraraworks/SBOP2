@@ -120,7 +120,7 @@ void CDlgAdminCharModifyItem::Renew(void)
 		goto Exit;
 	}
 
-	m_strCharID.Format ("%u", m_pInfoChar->m_dwCharID);
+	m_strCharID.Format(_T("%u"), m_pInfoChar->m_dwCharID);
 	m_strCharName = m_pInfoChar->m_strCharName;
 
 	nCount = m_pInfoChar->m_adwItemID.size();
@@ -129,10 +129,10 @@ void CDlgAdminCharModifyItem::Renew(void)
 		if (pInfoItem == NULL) {
 			continue;
 		}
-		strTmp.Format ("%u", (LPCSTR)pInfoItem->m_dwItemID);
+		strTmp.Format(_T("%u"), pInfoItem->m_dwItemID);
 		m_List.InsertItem (i, strTmp, 0);			/* ID */
 		m_List.SetItemData (i, pInfoItem->m_dwItemID);
-		strTmp.Format ("%s", (LPCSTR)pInfoItem->m_strName);
+		strTmp.Format(_T("%s"), (LPCTSTR)pInfoItem->m_strName);
 		m_List.SetItemText (i, 1, strTmp);			/* アイテム名 */
 		strTmp = m_pLibInfoItem->GetTypeName (pInfoItem->m_dwItemTypeID);
 		m_List.SetItemText (i, 2, strTmp);			/* 種別 */
@@ -200,9 +200,9 @@ BOOL CDlgAdminCharModifyItem::OnInitDialog()
 	CDlgAdminBase::OnInitDialog ();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID", LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "アイテム名", LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "種別", LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"), LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("アイテム名"), LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, _T("種別"), LVCFMT_LEFT, 120);
 
 	return TRUE;
 }

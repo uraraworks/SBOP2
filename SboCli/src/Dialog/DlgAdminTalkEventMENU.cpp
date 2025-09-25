@@ -89,7 +89,7 @@ void CDlgAdminTalkEventMENU::Set(CInfoTalkEventBase *pSrc)
 	for (i = 0; i < nCount; i ++) {
 		pMenuInfo = pInfo->GetPtr (i);
 		m_List.InsertItem (i, pMenuInfo->strName);
-		strTmp.Format ("%d", pMenuInfo->nPage + 1);
+		strTmp.Format(_T("%d"), pMenuInfo->nPage + 1);
 		m_List.SetItemText (i, 1, strTmp);
 	}
 
@@ -138,8 +138,8 @@ BOOL CDlgAdminTalkEventMENU::OnInitDialog()
 	RegisterControl (IDC_DEL,		LH_CTRL_Y);
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "項目名", 0, 150);
-	m_List.InsertColumn (1, "ジャンプ先", 0, 150);
+	m_List.InsertColumn (0, _T("項目名"), 0, 150);
+	m_List.InsertColumn (1, _T("ジャンプ先"), 0, 150);
 
 	return TRUE;
 }
@@ -165,7 +165,7 @@ void CDlgAdminTalkEventMENU::OnBnClickedAdd()
 
 	nCount = m_List.GetItemCount ();
 	m_List.InsertItem (nCount, Dlg.m_strName);
-	strTmp.Format ("%d", Dlg.m_nPage + 1);
+	strTmp.Format(_T("%d"), Dlg.m_nPage + 1);
 	m_List.SetItemText (nCount, 1, strTmp);
 }
 
@@ -196,7 +196,7 @@ void CDlgAdminTalkEventMENU::OnBnClickedModify()
 	}
 
 	m_List.SetItemText (nSelect, 0, Dlg.m_strName);
-	strTmp.Format ("%d", Dlg.m_nPage + 1);
+	strTmp.Format(_T("%d"), Dlg.m_nPage + 1);
 	m_List.SetItemText (nSelect, 1, strTmp);
 }
 

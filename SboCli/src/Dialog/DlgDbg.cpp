@@ -121,9 +121,9 @@ void CDlgDbg::Renew(void)
 
 BOOL CDlgDbg::OnInitDialog()
 {
-	char szFileName[MAX_PATH];
-	CRect rc;
-	POINT pt;
+        TCHAR szFileName[MAX_PATH];
+        CRect rc;
+        POINT pt;
 
 	CDialog::OnInitDialog ();
 
@@ -135,13 +135,18 @@ BOOL CDlgDbg::OnInitDialog()
 	CLayoutHelper::Initialize (m_hWnd);
 	SetTimer(100, 1000, NULL);
 
-	ZeroMemory (szFileName, sizeof (szFileName));
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        ZeroMemory (szFileName, sizeof (szFileName));
+        GetModuleFileName (NULL, szFileName, _countof (szFileName));
+        size_t nLen = _tcslen (szFileName);
+        if (nLen >= 3) {
+                _tcscpy_s (szFileName + nLen - 3, _countof (szFileName) - (nLen - 3), _T("ini"));
+        } else {
+                _tcscat_s (szFileName, _T(".ini"));
+        }
 
-	m_pMgrData->SetDebugWindow (m_hWnd);
-	pt.x = GetPrivateProfileInt ("Pos", "DebugX", -1, szFileName);
-	pt.y = GetPrivateProfileInt ("Pos", "DebugY", -1, szFileName);
+        m_pMgrData->SetDebugWindow (m_hWnd);
+        pt.x = GetPrivateProfileInt (_T("Pos"), _T("DebugX"), -1, szFileName);
+        pt.y = GetPrivateProfileInt (_T("Pos"), _T("DebugY"), -1, szFileName);
 	if (!((pt.x == -1) && (pt.y == -1))) {
 		SetWindowPos (NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 	}
@@ -174,15 +179,15 @@ void CDlgDbg::OnTimer(UINT nIDEvent)
 {
 	PCInfoCharCli pChar;
 
-	m_strOnline.Format("オンライン：%d", m_pMgrData->GetOnlineCount ());
-	m_strCharCount.Format("キャラ数：%d", m_pMgrData->GetCharCount ());
-	m_strPing.Format("Ping：%dms 描画時間:%4dms", m_pMgrData->GetPing (), m_pMgrData->GetDrawTime ());
+	m_strOnline.Format(_T("オンライン：%d"), m_pMgrData->GetOnlineCount ());
+	m_strCharCount.Format(_T("キャラ数：%d"), m_pMgrData->GetCharCount ());
+	m_strPing.Format(_T("Ping：%dms 描画時間:%4dms"), m_pMgrData->GetPing (), m_pMgrData->GetDrawTime ());
 	m_strPos = "座標：";
 	pChar = m_pMgrData->GetPlayerChar ();
 	if (pChar) {
-		m_strPos.Format("座標：MAP:%d X:%3d Y:%3d", pChar->m_dwMapID, pChar->m_nMapX, pChar->m_nMapY);
+		m_strPos.Format(_T("座標：MAP:%d X:%3d Y:%3d"), pChar->m_dwMapID, pChar->m_nMapX, pChar->m_nMapY);
 	}
-	m_strThrowghput.Format("送信：%5dBps 受信：%5dBps", m_pSock->GetThrowghPutSend (0), m_pSock->GetThrowghPutRecv (0));
+	m_strThrowghput.Format(_T("送信：%5dBps 受信：%5dBps"), m_pSock->GetThrowghPutSend (0), m_pSock->GetThrowghPutRecv (0));
 
 	UpdateData(FALSE);
 	SetTimer(100, 1000, NULL);

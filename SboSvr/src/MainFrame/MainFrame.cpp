@@ -125,7 +125,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	/* ウィンドウ作成 */
-	wsprintf (szBuf, "%s Ver%s", WNDTITLE, VERTEXT);
+	wsprintf (szBuf, _T("%s Ver%s"), WNDTITLE, VERTEXT);
 	m_hWnd = CreateWindow (
 				CLNAME,
 				szBuf,
@@ -360,30 +360,37 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 {
-	WORD wPort;
-	char szName[MAX_PATH], szTmp[MAX_PATH];
-	LPSTR pszTmp;
+        WORD wPort;
+        TCHAR szName[MAX_PATH];
+        TCHAR szTmp[MAX_PATH];
+        LPTSTR pszTmp;
 	RECT rc;
 
 	sgenrand (GetTickCount ());
 
 	ZeroMemory (szName, sizeof (szName));
-	GetModuleFileName (NULL, szName, MAX_PATH);
-	strcpy (szName + strlen (szName) - 3, "ini");
+	ZeroMemory (szTmp, sizeof (szTmp));
+	GetModuleFileName (NULL, szName, _countof (szName));
+	size_t nLen = _tcslen (szName);
+	if (nLen >= 3) {
+		_tcscpy_s (szName + nLen - 3, _countof (szName) - (nLen - 3), _T("ini"));
+	} else {
+		_tcscat_s (szName, _T(".ini"));
+	}
 
-	rc.left		= GetPrivateProfileInt ("Pos", "MainLeft",		-1, szName);
-	rc.top		= GetPrivateProfileInt ("Pos", "MainTop",		-1, szName);
-	rc.right	= GetPrivateProfileInt ("Pos", "MainRight",		-1, szName);
-	rc.bottom	= GetPrivateProfileInt ("Pos", "MainBottom",	-1, szName);
+	rc.left		= GetPrivateProfileInt (_T("Pos"), _T("MainLeft"),		-1, szName);
+	rc.top		= GetPrivateProfileInt (_T("Pos"), _T("MainTop"),		-1, szName);
+	rc.right	= GetPrivateProfileInt (_T("Pos"), _T("MainRight"),		-1, szName);
+	rc.bottom	= GetPrivateProfileInt (_T("Pos"), _T("MainBottom"),	-1, szName);
 	if (!((rc.left == -1) && (rc.top == -1))) {
 		SetWindowPos (hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER);
 	}
 
 	/* 作業用フォルダを作成 */
-	GetModuleFileName (NULL, szName, MAX_PATH);
-	pszTmp		= strrchr (szName, '\\');
+	GetModuleFileName (NULL, szName, _countof (szName));
+	pszTmp		= _tcsrchr (szName, _T('\\'));
 	pszTmp[1]	= 0;
-	wsprintf (szTmp, "%sSBODATA", szName);
+	_stprintf_s (szTmp, _T("%sSBODATA"), szName);
 	CreateDirectory (szTmp, NULL);
 
 	m_dwServerStartTime = timeGetTime ();
@@ -435,28 +442,33 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 void CMainFrame::OnClose(HWND hWnd)
 {
-	RECT rc;
-	char szFileName[MAX_PATH];
-	CmyString strTmp;
+        RECT rc;
+        TCHAR szFileName[MAX_PATH];
+        CmyString strTmp;
 
-	ZeroMemory (szFileName, sizeof (szFileName));
+        ZeroMemory (szFileName, sizeof (szFileName));
 
-	GetModuleFileName (NULL, szFileName, MAX_PATH);
-	strcpy (szFileName + strlen (szFileName) - 3, "ini");
+        GetModuleFileName (NULL, szFileName, _countof (szFileName));
+        size_t nLen = _tcslen (szFileName);
+        if (nLen >= 3) {
+                _tcscpy_s (szFileName + nLen - 3, _countof (szFileName) - (nLen - 3), _T("ini"));
+        } else {
+                _tcscat_s (szFileName, _T(".ini"));
+        }
 
 	if ((IsIconic (hWnd) == FALSE) && (IsWindowVisible (hWnd))) {
 		GetWindowRect (hWnd, &rc);
 
 		/* メインウィンドウ */
-		strTmp.Format ("%d", rc.left);
-		WritePrivateProfileString ("Pos", "MainLeft", strTmp, szFileName);
-		strTmp.Format ("%d", rc.top);
-		WritePrivateProfileString ("Pos", "MainTop", strTmp, szFileName);
-		strTmp.Format ("%d", rc.right);
-		WritePrivateProfileString ("Pos", "MainRight", strTmp, szFileName);
-		strTmp.Format ("%d", rc.bottom);
-		WritePrivateProfileString ("Pos", "MainBottom", strTmp, szFileName);
-	}
+		strTmp.Format(_T("%d"), rc.left);
+                WritePrivateProfileString (_T("Pos"), _T("MainLeft"), strTmp, szFileName);
+                strTmp.Format(_T("%d"), rc.top);
+                WritePrivateProfileString (_T("Pos"), _T("MainTop"), strTmp, szFileName);
+                strTmp.Format(_T("%d"), rc.right);
+                WritePrivateProfileString (_T("Pos"), _T("MainRight"), strTmp, szFileName);
+                strTmp.Format(_T("%d"), rc.bottom);
+                WritePrivateProfileString (_T("Pos"), _T("MainBottom"), strTmp, szFileName);
+        }
 	m_pSock->Destroy ();
 
 	DestroyWindow (hWnd);
@@ -505,19 +517,19 @@ void CMainFrame::OnPaint(HWND hWnd)
 
 	SetTextColor (hDC, RGB(255, 255, 255));
 
-	wsprintf (szTmp, "%04d:%02d:%02d",
+	wsprintf (szTmp, _T("%04d:%02d:%02d"),
 			 dwTime / 3600000,
 			 (dwTime % 3600000 - ((dwTime % 60000) / 1000)) / 60000,
 			 (dwTime % 60000) / 1000);
 	MyTextOut (hDC, 120, 0, szTmp);
 
-	wsprintf (szTmp, "%d", m_pLibInfoChar->GetCountOnline ());
+	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCountOnline ());
 	MyTextOut (hDC, 120, 12 * 1, szTmp);
 
-	wsprintf (szTmp, "%d", m_pLibInfoChar->GetCount ());
+	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCount ());
 	MyTextOut (hDC, 120, 12 * 2, szTmp);
 
-	wsprintf (szTmp, "%d", m_pLibInfoMap->GetCount ());
+	wsprintf (szTmp, _T("%d"), m_pLibInfoMap->GetCount ());
 	MyTextOut (hDC, 120, 12 * 3, szTmp);
 
 	SelectObject (hDC, hFontOld);
@@ -547,7 +559,7 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 
 					m_pMgrData->SetLastSendClock ((BYTE)sysTime.wHour);
 
-					strTmp.Format ("SYSTEM:サーバーが%d時頃をお知らせします", (BYTE)sysTime.wHour);
+					strTmp.Format(_T("SYSTEM:サーバーが%d時頃をお知らせします"), (BYTE)sysTime.wHour);
 					Packet.Make (strTmp);
 					m_pSock->SendTo (0, &Packet);
 				}
@@ -562,7 +574,7 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 			CmyString strTmp;
 
 			m_pMgrData->Save ();
-			strTmp.Format ("SYSTEM:サーバー情報を保存しました");
+			strTmp.Format(_T("SYSTEM:サーバー情報を保存しました"));
 			Packet.Make (strTmp);
 			m_pSock->SendTo (0, &Packet);
 			UpdateServerInfo (FALSE, TRUE);
@@ -805,7 +817,7 @@ void CMainFrame::OnCommandACCOUNT_DELETEALL(void)
 	int i, j, nCount, nCount2, nResult;
 	PCInfoAccount pInfoAccount;
 
-	nResult = MessageBox (m_hWnd, "全てのアカウントとキャラを削除しますか？", "確認", MB_YESNO | MB_ICONWARNING);
+        nResult = MessageBox (m_hWnd, _T("全てのアカウントとキャラを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONWARNING);
 	if (nResult != IDYES) {
 		return;
 	}

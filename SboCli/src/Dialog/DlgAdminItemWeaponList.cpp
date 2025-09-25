@@ -115,7 +115,7 @@ void CDlgAdminItemWeaponList::Renew(void)
 		if (pInfoItemWeapon == NULL) {
 			continue;
 		}
-		strTmp.Format ("%d", pInfoItemWeapon->m_dwWeaponInfoID);
+		strTmp.Format(_T("%d"), pInfoItemWeapon->m_dwWeaponInfoID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemWeapon->m_dwWeaponInfoID);	/* ID */
 		m_List.SetItemText (i, 1, pInfoItemWeapon->m_strName);		/* 武器種別名 */
@@ -153,8 +153,8 @@ BOOL CDlgAdminItemWeaponList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "武器種別名",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("武器種別名"),	LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_LIST, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
@@ -280,7 +280,7 @@ void CDlgAdminItemWeaponList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -316,8 +316,8 @@ void CDlgAdminItemWeaponList::OnDelete()
 		return;
 	}
 
-	strTmp.Format ("[%s]を削除しますか？", (LPCSTR)pInfoItem->m_strName);
-	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
+        strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
+        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

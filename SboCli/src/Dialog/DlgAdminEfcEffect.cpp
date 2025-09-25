@@ -163,19 +163,19 @@ BOOL CDlgAdminEfcEffect::OnInitDialog()
 	m_ctlGrp.Create (this, m_pMgrData);
 	m_ctlGrp.Init (m_pInfoEffect->m_dwGrpIDMain);
 
-	m_cmbType.InsertString (0, "エフェクト(32)");
+	m_cmbType.InsertString (0, _T("エフェクト(32)"));
 	m_cmbType.SetItemData (0, GRPIDMAIN_EFFECT32);
-	m_cmbType.InsertString (1, "エフェクト(64)");
+	m_cmbType.InsertString (1, _T("エフェクト(64)"));
 	m_cmbType.SetItemData (1, GRPIDMAIN_EFFECT64);
 	m_cmbType.SetCurSel (0);
 
-	m_cmbSoundID.InsertString (0, "無し");
+	m_cmbSoundID.InsertString (0, _T("無し"));
 	m_cmbSoundID.SetItemData (0, 0);
 	nCount = LibSboSoundLoader.GetSoundCount ();
 	for (i = 0; i < nCount; i ++) {
 		dwSoundID	= LibSboSoundLoader.GetSoundID (i);
 		pszTmp		= LibSboSoundLoader.GetSoundName (dwSoundID);
-		m_cmbSoundID.InsertString (i + 1, pszTmp);
+		m_cmbSoundID.InsertString (i + 1, Utf8ToTString (pszTmp));
 		m_cmbSoundID.SetItemData (i + 1, dwSoundID);
 	}
 
@@ -373,7 +373,7 @@ void CDlgAdminEfcEffect::OnDel()
 {
 	int nResult, nCount;
 
-	nResult = MessageBox ("このパターンを削除しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("このパターンを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -483,10 +483,10 @@ void CDlgAdminEfcEffect::OnSelectAnime(void)
 	m_nSelect = m_ctlSlider.GetPos ();
 
 	nCount = m_pInfoEffect->GetAnimeCount ();
-	m_strCount.Format ("%d", nCount);
+	m_strCount.Format(_T("%d"), nCount);
 	m_strNow.Empty ();
 	if (nCount > 0) {
-		m_strNow.Format ("%d", m_nSelect + 1);
+		m_strNow.Format(_T("%d"), m_nSelect + 1);
 	}
 	UpdateData (FALSE);
 

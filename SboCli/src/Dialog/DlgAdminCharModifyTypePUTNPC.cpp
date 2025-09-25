@@ -119,10 +119,10 @@ BOOL CDlgAdminCharModifyTypePUTNPC::OnInitDialog()
 
 	CDlgAdminCharModifyTypeBase::OnInitDialog ();
 
-	m_ctlMoveType.AddString ("戦闘1");
-	m_ctlMoveType.SetItemData (0, CHARMOVETYPE_BATTLE1);
-	m_ctlMoveType.AddString ("戦闘2");
-	m_ctlMoveType.SetItemData (1, CHARMOVETYPE_BATTLE2);
+        m_ctlMoveType.AddString (_T("戦闘1"));
+        m_ctlMoveType.SetItemData (0, CHARMOVETYPE_BATTLE1);
+        m_ctlMoveType.AddString (_T("戦闘2"));
+        m_ctlMoveType.SetItemData (1, CHARMOVETYPE_BATTLE2);
 
 	nNo = 0;
 	nCount = m_ctlMoveType.GetCount ();

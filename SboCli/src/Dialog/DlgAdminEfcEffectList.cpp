@@ -104,7 +104,7 @@ void CDlgAdminEfcEffectList::Renew(void)
 	nCount = m_pLibInfo->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)m_pLibInfo->GetPtr (i);
-		strTmp.Format ("%d", pInfoEffect->m_dwEffectID);
+		strTmp.Format(_T("%d"), pInfoEffect->m_dwEffectID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoEffect->m_dwEffectID);
 		m_List.SetItemText (i, 1, (LPCTSTR)pInfoEffect->m_strName);
@@ -134,8 +134,8 @@ BOOL CDlgAdminEfcEffectList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "エフェクト名",	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("エフェクト名"),	LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);

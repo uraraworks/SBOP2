@@ -282,16 +282,16 @@ void CWindowSTYLESELECT::Draw(PCImg32 pDst)
 	}
 	TextOut2 (hDC, 40, nCursorPos[0].y - 2, strTmp, clText);
 	TextOut4 (hDC, nCursorPos[1].x + 26, nCursorPos[1].y - 24, "髪型", clText);
-	strTmp.Format ("%02d", m_wHairTypeID);
+	strTmp.Format(_T("%02d"), m_wHairTypeID);
 //	strTmp = m_pMgrData->GetHairTypeName (m_wHairTypeID);
 	TextOut2 (hDC, 40, nCursorPos[1].y - 2, strTmp, clText);
 #if 0
 	TextOut4 (hDC, nCursorPos[2].x + 26, nCursorPos[2].y - 24, "髪の色", clText);
-//	strTmp.Format ("%02d", m_wHairColorID);
+//	strTmp.Format(_T("%02d"), m_wHairColorID);
 	strTmp = m_pMgrData->GetHairColorName (m_wHairColorID);
 	TextOut2 (hDC, 40, nCursorPos[2].y - 2, strTmp, clText);
 	TextOut4 (hDC, nCursorPos[3].x + 26, nCursorPos[3].y - 24, "目の色", clText);
-//	strTmp.Format ("%02d", m_wEyeColorID);
+//	strTmp.Format(_T("%02d"), m_wEyeColorID);
 	strTmp = m_pMgrData->GetEyeColorName (m_wEyeColorID);
 	TextOut2 (hDC, 40, nCursorPos[3].y - 2, strTmp, clText);
 #endif

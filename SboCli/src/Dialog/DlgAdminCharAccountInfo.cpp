@@ -135,7 +135,7 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 				if (pInfoChar) {
 					m_dwAccountID = pInfoChar->m_dwAccountID;
 					m_strCharName = pInfoChar->m_strCharName;
-					m_strAccountID.Format ("%d", m_dwAccountID);
+					m_strAccountID.Format(_T("%d"), m_dwAccountID);
 					Packet.Make (m_dwAccountID);
 					m_pSock->Send (&Packet);
 				}
@@ -156,10 +156,10 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 			m_strAccount	= InfoAccount.m_strAccount;
 			m_strPassword	= InfoAccount.m_strPassword;
 			AddrTmp.S_un.S_addr = InfoAccount.m_dwIP;
-			m_strIP.Format("%d.%d.%d.%d",
+			m_strIP.Format(_T("%d.%d.%d.%d"),
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4);
 			m_strMac		= InfoAccount.m_strLastMacAddr;
-			m_strAccountID.Format ("%d", m_dwAccountID);
+			m_strAccountID.Format(_T("%d"), m_dwAccountID);
 			m_pMgrData->Delete (dwPara);
 			UpdateData (FALSE);
 		}
@@ -197,7 +197,7 @@ void CDlgAdminCharAccountInfo::OnSend()
 	if (m_dwAccountID == 0) {
 		return;
 	}
-	nResult = MessageBox ("アカウント情報を送信しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("アカウント情報を送信しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -224,7 +224,7 @@ void CDlgAdminCharAccountInfo::OnDisable()
 	CPacketADMIN_CHAR_RENEW_ACCOUNT Packet;
 	CInfoAccount InfoAccount;
 
-	nResult = MessageBox ("ログイン拒否しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("ログイン拒否しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

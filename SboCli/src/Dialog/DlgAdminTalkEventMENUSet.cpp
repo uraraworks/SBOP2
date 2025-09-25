@@ -96,7 +96,7 @@ BOOL CDlgAdminTalkEventMENUSet::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	for (i = 0; i < m_nPageCount; i ++) {
-		strTmp.Format ("ページ%d", i + 1);
+		strTmp.Format (_T("ページ%d"), i + 1);
 		m_Combo.InsertString (i, strTmp);
 	}
 	m_Combo.SetCurSel (m_nPage);

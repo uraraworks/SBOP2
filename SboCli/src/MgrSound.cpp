@@ -67,7 +67,8 @@ BOOL CMgrSound::Create(void)
 	bRet = FALSE;
 
 	GetModuleFilePath (szPath, sizeof (szPath));
-	strFileName.Format ("%sSboSoundData.dll", szPath);
+        CString strModulePath = Utf8ToTString (szPath);
+        strFileName.Format(_T("%sSboSoundData.dll"), (LPCTSTR)strModulePath);
 
 	bResult = m_pDXAudio->Create ();
 	if (bResult == FALSE) {

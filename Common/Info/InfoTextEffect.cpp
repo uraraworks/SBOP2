@@ -92,10 +92,10 @@ Exit:
 
 void CInfoTextEffect::Set(DWORD dwData, int nType, int nColor, int nSize)
 {
-	if (nColor == 5) {
-		m_strData = "0123";
+        if (nColor == 5) {
+                m_strData = _T("0123");
 	} else {
-		m_strData.Format ("%d", dwData);
+		m_strData.Format(_T("%d"), dwData);
 	}
 	m_nType			= nType;
 	m_nColor		= nColor;

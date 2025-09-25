@@ -146,13 +146,13 @@ BOOL CDlgAdminMapObjectDataEdit::OnInitDialog()
 	}
 
 	if (m_bModeModify) {
-		SetWindowText ("マップオブジェクト配置データの編集");
+		SetWindowText (_T("マップオブジェクト配置データの編集"));
 	}
 
 	nCount = m_pLibInfoMapObject->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr (i);
-		m_ctlType.InsertString (i, (LPCSTR)pInfo->m_strName);
+		m_ctlType.InsertString (i, Utf8ToTString ((LPCSTR)pInfo->m_strName));
 		m_ctlType.SetItemData (i, pInfo->m_dwObjectID);
 	}
 

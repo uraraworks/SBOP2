@@ -162,30 +162,30 @@ BOOL CDlgAdminMapInfo::OnInitDialog()
 
 	CheckRadioButton (IDC_UP, IDC_RIGHT, IDC_UP);
 
-	m_cmbBGMID.InsertString (0, "無し");
-	m_cmbBGMID.InsertString (1, "大地の鼓動 short ver.");
+	m_cmbBGMID.InsertString (0, _T("無し"));
+	m_cmbBGMID.InsertString (1, _T("大地の鼓動 short ver."));
 	m_cmbBGMID.SetItemData	(1, BGMID_DAICHI_S);
-	m_cmbBGMID.InsertString (2, "飛翔");
+	m_cmbBGMID.InsertString (2, _T("飛翔"));
 	m_cmbBGMID.SetItemData	(2, BGMID_HISYOU);
-	m_cmbBGMID.InsertString (3, "水車の見える情景");
+	m_cmbBGMID.InsertString (3, _T("水車の見える情景"));
 	m_cmbBGMID.SetItemData	(3, BGMID_SUISHA);
-	m_cmbBGMID.InsertString (4, "A Little Fairy Tale");
+	m_cmbBGMID.InsertString (4, _T("A Little Fairy Tale"));
 	m_cmbBGMID.SetItemData	(4, BGMID_FAIRYTALE);
-	m_cmbBGMID.InsertString (5, "Tabla_Image");
+	m_cmbBGMID.InsertString (5, _T("Tabla_Image"));
 	m_cmbBGMID.SetItemData	(5, BGMID_TABLA_IMAGE);
-	m_cmbBGMID.InsertString (6, "flowed piano solo");
+	m_cmbBGMID.InsertString (6, _T("flowed piano solo"));
 	m_cmbBGMID.SetItemData	(6, BGMID_FLOWED_PIANO);
-	m_cmbBGMID.InsertString (7, "冬の街　フルオケver");
+	m_cmbBGMID.InsertString (7, _T("冬の街　フルオケver"));
 	m_cmbBGMID.SetItemData	(7, BGMID_HUYUNOMATI_FULL);
-	m_cmbBGMID.InsertString (8, "スーパーおやこどん 並盛ver/北");
+	m_cmbBGMID.InsertString (8, _T("スーパーおやこどん 並盛ver/北"));
 	m_cmbBGMID.SetItemData	(8, BGMID_OYAKODON_NAMI);
 
-	m_cmbWeatherType.InsertString (0, "無し");
-	m_cmbWeatherType.InsertString (1, "雲");
+	m_cmbWeatherType.InsertString (0, _T("無し"));
+	m_cmbWeatherType.InsertString (1, _T("雲"));
 	m_cmbWeatherType.SetItemData  (1, WEATHERTYPE_CLOUD);
-	m_cmbWeatherType.InsertString (2, "霧");
+	m_cmbWeatherType.InsertString (2, _T("霧"));
 	m_cmbWeatherType.SetItemData  (2, WEATHERTYPE_MISTY);
-	m_cmbWeatherType.InsertString (3, "雪");
+	m_cmbWeatherType.InsertString (3, _T("雪"));
 	m_cmbWeatherType.SetItemData  (3, WEATHERTYPE_SNOW);
 
 	Renew ();
@@ -328,7 +328,7 @@ void CDlgAdminMapInfo::OnCopy()
 	int nResult;
 	CPacketADMIN_PARA2 Packet;
 
-	nResult = MessageBox ("新しいマップとしてコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("新しいマップとしてコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

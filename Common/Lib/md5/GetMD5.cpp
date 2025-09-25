@@ -87,7 +87,7 @@ void CGetMD5::GetStr(
 	MD5Final (aTmp, &m_stContext);
 
 	for (i = 0; i < 16; i ++) {
-		wsprintf (&pszDst[i * 2], "%02X", aTmp[i]);
+		wsprintf (&pszDst[i * 2], _T("%02X"), aTmp[i]);
 	}
 }
 

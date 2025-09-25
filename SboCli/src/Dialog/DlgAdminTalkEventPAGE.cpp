@@ -128,17 +128,17 @@ BOOL CDlgAdminTalkEventPAGE::OnInitDialog()
 
 	CDlgAdminTalkEventNONE::OnInitDialog();
 
-	m_Combo.InsertString (0, "未設定");
+	m_Combo.InsertString (0, _T("未設定"));
 	m_Combo.SetItemData (0, CHGPAGECONDITION_NONE);
-	m_Combo.InsertString (1, "アイテムあり");
+	m_Combo.InsertString (1, _T("アイテムあり"));
 	m_Combo.SetItemData (1, CHGPAGECONDITION_ITEM);
-	m_Combo.InsertString (2, "アイテムなし");
+	m_Combo.InsertString (2, _T("アイテムなし"));
 	m_Combo.SetItemData (2, CHGPAGECONDITION_NOITEM);
 	m_Combo.SetCurSel (0);
 	OnCbnSelchangeCombo ();
 
 	for (i = 0; i < m_nPageCount; i ++) {
-		strTmp.Format ("ページ%d", i + 1);
+		strTmp.Format (_T("ページ%d"), i + 1);
 		m_cmbJump.InsertString (i, strTmp);
 	}
 	m_cmbJump.SetCurSel (0);
@@ -147,7 +147,7 @@ BOOL CDlgAdminTalkEventPAGE::OnInitDialog()
 	nCount = pLibInfoItemType->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItemTypeBase)pLibInfoItemType->GetPtr (i);
-		m_cmbItem.InsertString (i, (LPCSTR)pInfoItem->m_strName);
+		m_cmbItem.InsertString (i, Utf8ToTString ((LPCSTR)pInfoItem->m_strName));
 		m_cmbItem.SetItemData (i, pInfoItem->m_dwTypeID);
 	}
 	m_cmbItem.SetCurSel (0);

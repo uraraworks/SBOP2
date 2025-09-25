@@ -121,11 +121,11 @@ BOOL CDlgAdminMapEventMOVE::OnInitDialog()
 {
 	CDlgAdminMapEventNONE::OnInitDialog();
 
-	m_ctlDirection.InsertString (0, "上");
-	m_ctlDirection.InsertString (1, "下");
-	m_ctlDirection.InsertString (2, "左");
-	m_ctlDirection.InsertString (3, "右");
-	m_ctlDirection.InsertString (4, "指定無し");
+	m_ctlDirection.InsertString (0, _T("上"));
+	m_ctlDirection.InsertString (1, _T("下"));
+	m_ctlDirection.InsertString (2, _T("左"));
+	m_ctlDirection.InsertString (3, _T("右"));
+	m_ctlDirection.InsertString (4, _T("指定無し"));
 
 	if (m_nDirection < 0) {
 		m_nDirection = 4;

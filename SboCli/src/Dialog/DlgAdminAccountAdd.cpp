@@ -94,7 +94,7 @@ void CDlgAdminAccountAdd::OnSend()
 	int nResult;
 	CPacketADMIN_ACCOUNT_REQ_ADD Packet;
 
-	nResult = MessageBox ("アカウント情報を送信しますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("アカウント情報を送信しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

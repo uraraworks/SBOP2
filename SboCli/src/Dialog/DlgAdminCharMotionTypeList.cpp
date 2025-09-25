@@ -108,7 +108,7 @@ void CDlgAdminCharMotionTypeList::Renew(void)
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMotionType)m_pLibInfoMotionType->GetPtr (i);
 
-		strTmp.Format ("%d", pInfo->m_dwMotionTypeID);
+		strTmp.Format(_T("%d"), pInfo->m_dwMotionTypeID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemText (i, 1, pInfo->m_strName);
 		m_List.SetItemData (i, pInfo->m_dwMotionTypeID);
@@ -145,8 +145,8 @@ BOOL CDlgAdminCharMotionTypeList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog ();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "モーション名",	LVCFMT_LEFT, 300);
+	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("モーション名"),	LVCFMT_LEFT, 300);
 
 	Renew ();
 

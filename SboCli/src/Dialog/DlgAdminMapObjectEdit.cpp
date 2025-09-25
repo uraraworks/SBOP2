@@ -152,7 +152,7 @@ BOOL CDlgAdminMapObjectEdit::OnInitDialog()
 
 	nCount = m_pMgrData->GetMgrGrpData ()->GetMapPartsCount () / 1024;
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("画像 %d 枚目", i + 1);
+		strTmp.Format(_T("画像 %d 枚目"), i + 1);
 		m_cbGrpNo.AddString (strTmp);
 	}
 	m_nGrpNo = m_pMgrData->GetLastSelectGrpNo ();

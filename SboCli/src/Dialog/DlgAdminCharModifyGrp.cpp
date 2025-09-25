@@ -116,7 +116,7 @@ void CDlgAdminCharModifyGrp::Renew(void)
 		goto Exit;
 	}
 
-	m_strCharID.Format ("%u", m_pInfoChar->m_dwCharID);
+	m_strCharID.Format(_T("%u"), m_pInfoChar->m_dwCharID);
 	m_strCharName		= m_pInfoChar->m_strCharName;
 	m_nGrpIDEye			= m_pInfoChar->m_wGrpIDEye;
 	m_nGrpIDEyeColor	= m_pInfoChar->m_wGrpIDEyeColor;

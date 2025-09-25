@@ -154,7 +154,7 @@ void CDlgAdminItemList::Renew(void)
 			}
 		}
 
-		strTmp.Format ("%d", pInfoItem->m_dwItemID);
+		strTmp.Format(_T("%d"), pInfoItem->m_dwItemID);
 		m_List.InsertItem (nIndex, strTmp);
 		m_List.SetItemData (nIndex, pInfoItem->m_dwItemID);		/* ID */
 		m_List.SetItemText (nIndex, 1, pInfoItem->m_strName);	/* アイテム名 */
@@ -165,17 +165,17 @@ void CDlgAdminItemList::Renew(void)
 		strTmp.Empty ();
 		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
 		if (pInfoChar) {
-			strTmp.Format ("[%u]%s", pInfoChar->m_dwCharID, (LPCSTR)pInfoChar->m_strCharName);
+			strTmp.Format(_T("[%u]%s"), pInfoChar->m_dwCharID, (LPCTSTR)pInfoChar->m_strCharName);
 		} else {
 			if (pInfoItem->m_dwCharID != 0) {
-				strTmp.Format ("[%u]", pInfoItem->m_dwCharID);
+				strTmp.Format(_T("[%u]"), pInfoItem->m_dwCharID);
 			}
 		}
 		m_List.SetItemText (nIndex, 3, strTmp);					/* 所持キャラ */
 
 		strTmp.Empty ();
 		if (pInfoItem->m_dwMapID) {
-			strTmp.Format ("MAPID:%u (%d, %d)", pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
+			strTmp.Format(_T("MAPID:%u (%d, %d)"), pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
 		}
 		m_List.SetItemText (nIndex, 4, strTmp);					/* 配置座標 */
 		nIndex ++;
@@ -258,11 +258,11 @@ BOOL CDlgAdminItemList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, "ID",			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, "アイテム名",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, "種別",			LVCFMT_LEFT, 120);
-	m_List.InsertColumn (3, "所持キャラ",	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (4, "配置座標",		LVCFMT_LEFT, 120);
+	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
+	m_List.InsertColumn (1, _T("アイテム名"),	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (2, _T("種別"),			LVCFMT_LEFT, 120);
+	m_List.InsertColumn (3, _T("所持キャラ"),	LVCFMT_LEFT, 120);
+	m_List.InsertColumn (4, _T("配置座標"),		LVCFMT_LEFT, 120);
 
 	RegisterControl (IDC_RENEW,	LH_CTRL_X);
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
@@ -323,10 +323,10 @@ void CDlgAdminItemList::OnAdd()
 	CDlgAdminItemNew Dlg(this);
 
 	nResult = m_pLibInfoItemType->GetCount ();
-	if (nResult <= 0) {
-		MessageBox ("アイテム種別が無いので追加できません", "エラー", MB_OK | MB_ICONINFORMATION);
-		return;
-	}
+        if (nResult <= 0) {
+                MessageBox (_T("アイテム種別が無いので追加できません"), _T("エラー"), MB_OK | MB_ICONINFORMATION);
+                return;
+        }
 
 	pInfoItem = NULL;
 	m_pMgrData->SetAdminNotifyTypeL (ADMINNOTIFYTYPE_CHARPOS);
@@ -418,7 +418,7 @@ void CDlgAdminItemList::OnCopy()
 		return;
 	}
 
-	nResult = MessageBox ("選択されているアイテムをコピーしますか？", "確認", MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
@@ -463,11 +463,11 @@ void CDlgAdminItemList::OnDelete()
 	}
 	if (nCount == 1) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (adwItemID[0]);
-		strTmp.Format ("[%s]を削除しますか？", (LPCSTR)pInfoItem->m_strName);
-	} else {
-		strTmp.Format ("選択されているアイテムを削除しますか？");
-	}
-	nResult = MessageBox (strTmp, "確認", MB_YESNO | MB_ICONQUESTION);
+                strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
+        } else {
+                strTmp.Format (_T("選択されているアイテムを削除しますか？"));
+        }
+        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}

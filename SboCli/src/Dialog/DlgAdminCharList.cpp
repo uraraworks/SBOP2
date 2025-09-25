@@ -107,15 +107,15 @@ void CDlgAdminCharList::Renew(void)
 	nCount = m_pLibInfoChar->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
-		strTmp.Format ("%d", pInfo->m_dwCharID);					/* キャラID */
+		strTmp.Format(_T("%d"), pInfo->m_dwCharID);					/* キャラID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwCharID);
 		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strCharName);	/* キャラ名 */
-		strTmp.Format ("%d", pInfo->m_dwMapID);						/* マップID */
+		strTmp.Format(_T("%d"), pInfo->m_dwMapID);						/* マップID */
 		m_List.SetItemText (i, 2, strTmp);
-		strTmp.Format ("%d", pInfo->m_nMapX);						/* X座標 */
+		strTmp.Format(_T("%d"), pInfo->m_nMapX);						/* X座標 */
 		m_List.SetItemText (i, 3, strTmp);
-		strTmp.Format ("%d", pInfo->m_nMapY);						/* Y座標 */
+		strTmp.Format(_T("%d"), pInfo->m_nMapY);						/* Y座標 */
 		m_List.SetItemText (i, 4, strTmp);
 	}
 }
@@ -148,11 +148,11 @@ BOOL CDlgAdminCharList::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, "キャラID",		LVCFMT_LEFT, 60);
-	m_List.InsertColumn (2, "キャラ名",		LVCFMT_LEFT, 130);
-	m_List.InsertColumn (3, "マップID",		LVCFMT_LEFT, 60);
-	m_List.InsertColumn (4, "X座標",		LVCFMT_LEFT, 50);
-	m_List.InsertColumn (5, "Y座標",		LVCFMT_LEFT, 50);
+	m_List.InsertColumn (1, _T("キャラID"),		LVCFMT_LEFT, 60);
+	m_List.InsertColumn (2, _T("キャラ名"),		LVCFMT_LEFT, 130);
+	m_List.InsertColumn (3, _T("マップID"),		LVCFMT_LEFT, 60);
+	m_List.InsertColumn (4, _T("X座標"),		LVCFMT_LEFT, 50);
+	m_List.InsertColumn (5, _T("Y座標"),		LVCFMT_LEFT, 50);
 
 	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
