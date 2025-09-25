@@ -562,7 +562,7 @@ void CDlgAdminEfcBalloon::Get(int nNo)
 	m_ctlGrp.Init (GRPIDMAIN_EFCBALLOON);	/* グラフィックIDメイン */
 	m_ctlGrp.Set (pInfo->m_dwGrpID);		/* グラフィックIDサブ */
 	if (nNo == 0) {
-		m_strName = pInfo->m_strName;		/* 噴出し名 */
+		m_strName = (LPCTSTR)pInfo->m_strName;		/* 噴出し名 */
 	}
 
 	nCount = m_cmbSoundID.GetCount ();

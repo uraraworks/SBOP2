@@ -194,7 +194,7 @@ void CDlgAdminCharMotionTypeList::OnModify()
 	}
 
 	Dlg.Init (m_pMgrData, dwMotionTypeID);
-	Dlg.m_strMotionName	= pInfo->m_strName;
+	Dlg.m_strMotionName	= (LPCTSTR)pInfo->m_strName;
 	Dlg.m_nGrpIDSub		= pInfo->m_wGrpIDSub;
 
 	nResult = Dlg.DoModal ();

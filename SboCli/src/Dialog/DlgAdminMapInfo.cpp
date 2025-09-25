@@ -122,7 +122,7 @@ void CDlgAdminMapInfo::Renew(void)
 	m_strMapSize.	Format ("(%d, %d)", m_pInfoMap->m_sizeMap.cx, m_pInfoMap->m_sizeMap.cy);
 	m_strMapID.		Format ("%u", m_pInfoMap->m_dwMapID);
 
-	m_strMapName = m_pInfoMap->m_strMapName;
+	m_strMapName = (LPCTSTR)m_pInfoMap->m_strMapName;
 
 	SelectCmb (&m_cmbBGMID,			m_pInfoMap->m_dwBGMID);
 	SelectCmb (&m_cmbWeatherType,	m_pInfoMap->m_dwWeatherType);

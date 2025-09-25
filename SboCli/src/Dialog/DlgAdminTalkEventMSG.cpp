@@ -75,7 +75,7 @@ CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG()
 
 void CDlgAdminTalkEventMSG::Set(CInfoTalkEventBase *pSrc)
 {
-	m_strMsg = pSrc->m_strText;
+	m_strMsg = (LPCTSTR)pSrc->m_strText;
 
 	UpdateData (FALSE);
 }
