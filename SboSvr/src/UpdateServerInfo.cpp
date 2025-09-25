@@ -271,7 +271,7 @@ void CUpdateServerInfo::Upload(void)
 {
 	BOOL bResult;
 	HINTERNET hHost, hInternet;
-	char szUpAddr[MAX_PATH + 1];
+	TCHAR szUpAddr[MAX_PATH + 1];
 	CmyString strFileName;
 
 	hHost		= NULL;
@@ -283,10 +283,10 @@ void CUpdateServerInfo::Upload(void)
 
 	GetFileName (strFileName);
 	/* ファイル名の作成 */
-	wsprintf (szUpAddr, _T("%s/%s"), (LPCSTR)m_strUploadPath, SERVERINFOFILENAME);
+	wsprintf (szUpAddr, _T("%s/%s"), (LPCTSTR)m_strUploadPath, _T(SERVERINFOFILENAME));
 
 	/* インターネットを開く */
-	hInternet = InternetOpen ("ScrapBookOnlineServer", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+	hInternet = InternetOpen (_T("ScrapBookOnlineServer"), INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 	if (hInternet == NULL) {
 		goto Exit;
 	}
@@ -308,8 +308,8 @@ void CUpdateServerInfo::Upload(void)
    /* ファイルをアップロード */
    bResult = FtpPutFile(
 		hHost,
-		(LPCSTR)strFileName,
-		szUpAddr,
+                (LPCTSTR)strFileName,
+                szUpAddr,
 		INTERNET_FLAG_TRANSFER_ASCII,
 		0);
 

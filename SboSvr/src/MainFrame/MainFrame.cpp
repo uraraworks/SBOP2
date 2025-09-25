@@ -103,18 +103,18 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::MainLoop(HINSTANCE hInstance)
 {
-	char szBuf[256];
+	TCHAR szBuf[256];
 	MSG msg;
 	TIMECAPS tc;
 	WNDCLASS wc;
 
 	wc.hInstance		= hInstance;
-	wc.lpszClassName	= CLNAME;
+	wc.lpszClassName	= _T(CLNAME);
 	wc.lpfnWndProc		= (WNDPROC)WndProcEntry;
 	wc.style			= 0;
 	wc.hIcon			= NULL;//LoadIcon (hInstance, (char *)IDI_MAINFRAME);
 	wc.hCursor			= LoadCursor ((HINSTANCE)NULL, IDC_ARROW);
-	wc.lpszMenuName		= "IDR_MENU";
+	wc.lpszMenuName		= _T("IDR_MENU");
 	wc.cbClsExtra		= 0;
 	wc.cbWndExtra		= 0;
 	wc.hbrBackground	= (HBRUSH)GetStockObject (BLACK_BRUSH);
@@ -125,9 +125,9 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	/* ウィンドウ作成 */
-	wsprintf (szBuf, _T("%s Ver%s"), WNDTITLE, VERTEXT);
+	wsprintf (szBuf, _T("%s Ver%s"), _T(WNDTITLE), _T(VERTEXT));
 	m_hWnd = CreateWindow (
-				CLNAME,
+				_T(CLNAME),
 				szBuf,
 				WS_OVERLAPPEDWINDOW,
 				CW_USEDEFAULT, CW_USEDEFAULT,
@@ -160,7 +160,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	timeEndPeriod (tc.wPeriodMin);
-	UnregisterClass (CLNAME, hInstance);
+	UnregisterClass (_T(CLNAME), hInstance);
 
 	/* 終了メッセージによりプログラム終了 */
 	return (int)msg.wParam;
@@ -776,7 +776,14 @@ void CMainFrame::TimerProcKeepalive(void)
 
 void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCSTR pStr)
 {
-	TextOut (hDC, x, y, pStr, strlen (pStr));
+	if (pStr == NULL) {
+		return;
+	}
+
+	USES_CONVERSION;
+	LPCTSTR pszText = A2CT(pStr);
+	int nLen = static_cast<int>(_tcslen(pszText));
+	::TextOut(hDC, x, y, pszText, nLen);
 }
 
 

@@ -144,7 +144,7 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::MainLoop(HINSTANCE hInstance)
 {
-	char szBuf[256];
+	TCHAR szBuf[256];
 	BYTE byFps, byNowFrame, byFrameBack, byFrameTmp;
 	DWORD dwStyle, dwTimeTmp, dwTimeFps, dwTimeStart;
 	BOOL bResult, bDraw;
@@ -154,7 +154,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	WNDCLASS wc;
 
 	wc.hInstance		= hInstance;
-	wc.lpszClassName	= CLNAME;
+	wc.lpszClassName	= _T(CLNAME);
 	wc.lpfnWndProc		= (WNDPROC)WndProcEntry;
 	wc.style			= CS_DBLCLKS;
 	wc.hIcon			= LoadIcon (hInstance, MAKEINTRESOURCE (IDI_SBO));
@@ -175,9 +175,9 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	AdjustWindowRect (&rcTmp, dwStyle, FALSE);
 
 	/* ウィンドウ作成 */
-	wsprintf (szBuf, _T("%s Ver%s"), WNDTITLE, VERTEXT);
+	wsprintf (szBuf, _T("%s Ver%s"), _T(WNDTITLE), _T(VERTEXT));
 	m_hWnd = CreateWindow (
-				CLNAME,
+				_T(CLNAME),
 				szBuf,
 				dwStyle,
 				CW_USEDEFAULT, CW_USEDEFAULT,
@@ -247,7 +247,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	timeEndPeriod (tc.wPeriodMin);
-	UnregisterClass (CLNAME, hInstance);
+	UnregisterClass (_T(CLNAME), hInstance);
 
 	/* 終了メッセージによりプログラム終了 */
 	return (int)msg.wParam;

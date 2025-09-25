@@ -122,11 +122,15 @@ BOOL CLayerBase::TimerProc(void)
 
 void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color)
 {
-	int nLen;
+        if (pStr == NULL) {
+                return;
+        }
 
-	nLen = strlen (pStr);
-	SetTextColor (hDC, color);
-	TextOut (hDC, x, y, pStr, nLen);
+        USES_CONVERSION;
+        LPCTSTR pszText = A2CT(pStr);
+        int nLen = static_cast<int>(_tcslen(pszText));
+        SetTextColor (hDC, color);
+        ::TextOut(hDC, x, y, pszText, nLen);
 }
 
 
@@ -138,16 +142,20 @@ void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color)
 
 void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame)
 {
-	int nLen;
+        if (pStr == NULL) {
+                return;
+        }
 
-	nLen = strlen (pStr);
-	SetTextColor (hDC, colorFrame);
-	TextOut (hDC, x - 1, y, pStr, nLen);
-	TextOut (hDC, x + 1, y, pStr, nLen);
-	TextOut (hDC, x, y - 1, pStr, nLen);
-	TextOut (hDC, x, y + 1, pStr, nLen);
-	SetTextColor (hDC, color);
-	TextOut (hDC, x, y, pStr, nLen);
+        USES_CONVERSION;
+        LPCTSTR pszText = A2CT(pStr);
+        int nLen = static_cast<int>(_tcslen(pszText));
+        SetTextColor (hDC, colorFrame);
+        ::TextOut(hDC, x - 1, y, pszText, nLen);
+        ::TextOut(hDC, x + 1, y, pszText, nLen);
+        ::TextOut(hDC, x, y - 1, pszText, nLen);
+        ::TextOut(hDC, x, y + 1, pszText, nLen);
+        SetTextColor (hDC, color);
+        ::TextOut(hDC, x, y, pszText, nLen);
 }
 
 
@@ -159,35 +167,39 @@ void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, CO
 
 void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame)
 {
-	int nLen;
+        if (pStr == NULL) {
+                return;
+        }
 
-	nLen = strlen (pStr);
-	SetTextColor (hDC, colorFrame);
-	TextOut (hDC, x - 2, y, pStr, nLen);
-	TextOut (hDC, x - 1, y, pStr, nLen);
-	TextOut (hDC, x - 1, y - 2, pStr, nLen);
-	TextOut (hDC, x - 2, y - 1, pStr, nLen);
-	TextOut (hDC, x - 1, y - 1, pStr, nLen);
-	TextOut (hDC, x - 2, y + 1, pStr, nLen);
-	TextOut (hDC, x - 1, y + 1, pStr, nLen);
-	TextOut (hDC, x - 1, y + 2, pStr, nLen);
+        USES_CONVERSION;
+        LPCTSTR pszText = A2CT(pStr);
+        int nLen = static_cast<int>(_tcslen(pszText));
+        SetTextColor (hDC, colorFrame);
+        ::TextOut(hDC, x - 2, y, pszText, nLen);
+        ::TextOut(hDC, x - 1, y, pszText, nLen);
+        ::TextOut(hDC, x - 1, y - 2, pszText, nLen);
+        ::TextOut(hDC, x - 2, y - 1, pszText, nLen);
+        ::TextOut(hDC, x - 1, y - 1, pszText, nLen);
+        ::TextOut(hDC, x - 2, y + 1, pszText, nLen);
+        ::TextOut(hDC, x - 1, y + 1, pszText, nLen);
+        ::TextOut(hDC, x - 1, y + 2, pszText, nLen);
 
-	TextOut (hDC, x + 2, y, pStr, nLen);
-	TextOut (hDC, x + 1, y, pStr, nLen);
-	TextOut (hDC, x + 1, y - 2, pStr, nLen);
-	TextOut (hDC, x + 2, y - 1, pStr, nLen);
-	TextOut (hDC, x + 1, y - 1, pStr, nLen);
-	TextOut (hDC, x + 2, y + 1, pStr, nLen);
-	TextOut (hDC, x + 1, y + 1, pStr, nLen);
-	TextOut (hDC, x + 1, y + 2, pStr, nLen);
+        ::TextOut(hDC, x + 2, y, pszText, nLen);
+        ::TextOut(hDC, x + 1, y, pszText, nLen);
+        ::TextOut(hDC, x + 1, y - 2, pszText, nLen);
+        ::TextOut(hDC, x + 2, y - 1, pszText, nLen);
+        ::TextOut(hDC, x + 1, y - 1, pszText, nLen);
+        ::TextOut(hDC, x + 2, y + 1, pszText, nLen);
+        ::TextOut(hDC, x + 1, y + 1, pszText, nLen);
+        ::TextOut(hDC, x + 1, y + 2, pszText, nLen);
 
-	TextOut (hDC, x, y - 2, pStr, nLen);
-	TextOut (hDC, x, y - 1, pStr, nLen);
-	TextOut (hDC, x, y + 2, pStr, nLen);
-	TextOut (hDC, x, y + 1, pStr, nLen);
+        ::TextOut(hDC, x, y - 2, pszText, nLen);
+        ::TextOut(hDC, x, y - 1, pszText, nLen);
+        ::TextOut(hDC, x, y + 2, pszText, nLen);
+        ::TextOut(hDC, x, y + 1, pszText, nLen);
 
-	SetTextColor (hDC, color);
-	TextOut (hDC, x, y, pStr, nLen);
+        SetTextColor (hDC, color);
+        ::TextOut(hDC, x, y, pszText, nLen);
 }
 
 /* Copyright(C)URARA-works 2005 */

@@ -12,6 +12,7 @@
 
 #include <atlbase.h>
 #include <atlstr.h>
+#include <atlconv.h>
 
 #ifdef __cplusplus
 ATL::CString Utf8ToTString(LPCSTR pszSrc);
