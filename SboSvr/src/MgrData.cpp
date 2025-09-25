@@ -143,7 +143,8 @@ void CMgrData::Create(
 	pszTmp[1]	= 0;
 
 	/* ログファイルの作成 */
-	strTmp.Format ("%sSboSvrLog.txt", szName);
+    CString strBasePath = Utf8ToTString (szName);
+    strTmp.Format(_T("%sSboSvrLog.txt"), (LPCTSTR)strBasePath);
 	m_pLog->Create (strTmp, TRUE, TRUE);
 }
 

@@ -279,7 +279,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 	case 2:		/* 編集 */
 		m_dwSelectPartsID = GetSelectMapPartsID ();
 		m_pMgrData->SetSelectMapPartsID (m_dwSelectPartsID);
-		m_strID.Format ("ID:%u", m_dwSelectPartsID);
+		m_strID.Format(_T("ID:%u"), m_dwSelectPartsID);
 		RenewPartsInfo ();
 		break;
 	case 1:		/* 追加 */

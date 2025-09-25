@@ -105,7 +105,7 @@ void CDlgAdminCharSkillList::Renew(void)
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr (i);
 
-		strTmp.Format ("%d", pInfo->m_dwSkillID);
+		strTmp.Format(_T("%d"), pInfo->m_dwSkillID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemText (i, 1, pInfo->m_strName);
 		m_List.SetItemData (i, pInfo->m_dwSkillID);

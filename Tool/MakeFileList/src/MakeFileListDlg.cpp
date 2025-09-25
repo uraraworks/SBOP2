@@ -93,7 +93,7 @@ void CMakeFileListDlg::ReadIniFile(void)
 
 	/* ファイルリスト読み込み */
 	for (i = 0; ; i ++) {
-		strTmp.Format ("%d", i + 1);
+		strTmp.Format(_T("%d"), i + 1);
 		ZeroMemory (szTmp, sizeof (szTmp));
 		GetPrivateProfileString ("FileList", strTmp, "", szTmp, sizeof (szTmp) - 1, szFileName);
 		if (strlen (szTmp) <= 0) {
@@ -125,7 +125,8 @@ void CMakeFileListDlg::MakeHashList(void)
 
 	nCount = m_astrFileList.size();
 	for (i = 0; i < nCount; i ++) {
-		strFileName.Format ("%s%s", szPath, m_astrFileList[i]);
+            CString strBasePath = Utf8ToTString (szPath);
+            strFileName.Format(_T("%s%s"), (LPCTSTR)strBasePath, (LPCTSTR)m_astrFileList[i]);
 
 		GetMD5.Init ();
 		GetMD5.Update (strFileName);
@@ -146,12 +147,13 @@ void CMakeFileListDlg::MakeHashList(void)
 	}
 
 	/* ハッシュリストを保存 */
-	strFileName.Format ("%sSBOHashList.txt", szPath);
+    CString strBasePathAll = Utf8ToTString (szPath);
+    strFileName.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strBasePathAll);
 	destFile.Open (strFileName, CFile::modeWrite | CFile::modeCreate, NULL);
 
 	nCount = m_astrFileList.size();
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("%s,%u,%s\n", m_astrHashList[i], adwFileSize[i], m_astrFileList[i]);
+		strTmp.Format(_T("%s,%u,%s\n"), m_astrHashList[i], adwFileSize[i], m_astrFileList[i]);
 		destFile.WriteString (strTmp);
 	}
 	destFile.Close ();

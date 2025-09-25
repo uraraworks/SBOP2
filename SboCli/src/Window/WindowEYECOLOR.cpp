@@ -87,7 +87,7 @@ void CWindowEYECOLOR::Draw(PCImg32 pDst)
 	SetBkMode (hDC, TRANSPARENT);
 
 	TextOut4 (hDC, 56, 8, "目の色", clText);
-	strTmp.Format ("%02d", m_nPos);
+	strTmp.Format(_T("%02d"), m_nPos);
 	TextOut4 (hDC, 16, 32, strTmp, clText);
 	TextOut2 (hDC, 40, 32, m_pMgrData->GetEyeColorName ((WORD)m_nPos), clText);
 

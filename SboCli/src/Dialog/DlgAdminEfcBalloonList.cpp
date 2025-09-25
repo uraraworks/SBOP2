@@ -106,7 +106,7 @@ void CDlgAdminEfcBalloonList::Renew(void)
 	nCount = aIDList.size();
 	for (i = 0; i < nCount; i ++) {
 		dwListID = aIDList[i];
-		strTmp.Format ("%d", dwListID);
+		strTmp.Format(_T("%d"), dwListID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, dwListID);
 		m_pLibInfo->GetName (dwListID, strTmp);

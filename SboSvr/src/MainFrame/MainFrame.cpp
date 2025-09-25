@@ -448,13 +448,13 @@ void CMainFrame::OnClose(HWND hWnd)
 		GetWindowRect (hWnd, &rc);
 
 		/* メインウィンドウ */
-		strTmp.Format ("%d", rc.left);
+		strTmp.Format(_T("%d"), rc.left);
 		WritePrivateProfileString ("Pos", "MainLeft", strTmp, szFileName);
-		strTmp.Format ("%d", rc.top);
+		strTmp.Format(_T("%d"), rc.top);
 		WritePrivateProfileString ("Pos", "MainTop", strTmp, szFileName);
-		strTmp.Format ("%d", rc.right);
+		strTmp.Format(_T("%d"), rc.right);
 		WritePrivateProfileString ("Pos", "MainRight", strTmp, szFileName);
-		strTmp.Format ("%d", rc.bottom);
+		strTmp.Format(_T("%d"), rc.bottom);
 		WritePrivateProfileString ("Pos", "MainBottom", strTmp, szFileName);
 	}
 	m_pSock->Destroy ();
@@ -547,7 +547,7 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 
 					m_pMgrData->SetLastSendClock ((BYTE)sysTime.wHour);
 
-					strTmp.Format ("SYSTEM:サーバーが%d時頃をお知らせします", (BYTE)sysTime.wHour);
+					strTmp.Format(_T("SYSTEM:サーバーが%d時頃をお知らせします"), (BYTE)sysTime.wHour);
 					Packet.Make (strTmp);
 					m_pSock->SendTo (0, &Packet);
 				}
@@ -562,7 +562,7 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 			CmyString strTmp;
 
 			m_pMgrData->Save ();
-			strTmp.Format ("SYSTEM:サーバー情報を保存しました");
+			strTmp.Format(_T("SYSTEM:サーバー情報を保存しました"));
 			Packet.Make (strTmp);
 			m_pSock->SendTo (0, &Packet);
 			UpdateServerInfo (FALSE, TRUE);

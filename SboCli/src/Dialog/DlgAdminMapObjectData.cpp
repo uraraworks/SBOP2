@@ -150,12 +150,12 @@ void CDlgAdminMapObjectData::Renew(void)
 		if (pInfoMapObject == NULL) {
 			continue;
 		}
-		strTmp.Format ("%d", pInfo->m_dwDataID);				/* ID */
+		strTmp.Format(_T("%d"), pInfo->m_dwDataID);				/* ID */
 		m_List.InsertItem (nCountTmp, strTmp);
 		m_List.SetItemData (nCountTmp, pInfo->m_dwDataID);
-		strTmp.Format ("%d", pInfo->m_ptPos.x);					/* X座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.x);					/* X座標 */
 		m_List.SetItemText (nCountTmp, 1, strTmp);
-		strTmp.Format ("%d", pInfo->m_ptPos.y);					/* Y座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.y);					/* Y座標 */
 		m_List.SetItemText (nCountTmp, 2, strTmp);
 		m_List.SetItemText (nCountTmp, 3, (LPCSTR)pInfoMapObject->m_strName);	/* オブジェクト名 */
 		nCountTmp ++;

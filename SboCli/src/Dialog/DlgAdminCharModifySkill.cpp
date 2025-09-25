@@ -114,7 +114,7 @@ void CDlgAdminCharModifySkill::Renew(void)
 		goto Exit;
 	}
 
-	m_strCharID.Format ("%u", m_pInfoChar->m_dwCharID);
+	m_strCharID.Format(_T("%u"), m_pInfoChar->m_dwCharID);
 	m_strCharName = m_pInfoChar->m_strCharName;
 
 	nCount = m_pInfoChar->m_adwSkillID.size();
@@ -123,10 +123,10 @@ void CDlgAdminCharModifySkill::Renew(void)
 		if (pInfoSkill == NULL) {
 			continue;
 		}
-		strTmp.Format ("%u", (LPCSTR)pInfoSkill->m_dwSkillID);
+		strTmp.Format(_T("%u"), pInfoSkill->m_dwSkillID);
 		m_List.InsertItem (i, strTmp, 0);			/* ID */
 		m_List.SetItemData (i, pInfoSkill->m_dwSkillID);
-		strTmp.Format ("%s", (LPCSTR)pInfoSkill->m_strName);
+		strTmp.Format(_T("%s"), (LPCTSTR)pInfoSkill->m_strName);
 		m_List.SetItemText (i, 1, strTmp);			/* スキル名 */
 	}
 

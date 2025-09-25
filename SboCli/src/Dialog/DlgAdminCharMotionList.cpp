@@ -123,7 +123,7 @@ BOOL CDlgAdminCharMotionList::OnInitDialog()
 		if (pszItem == NULL) {
 			break;
 		}
-		strTmp.Format ("%d", i);
+		strTmp.Format(_T("%d"), i);
 		m_List.InsertItem (i - 1, strTmp);
 		m_List.SetItemText (i - 1, 1, pszItem);
 	}

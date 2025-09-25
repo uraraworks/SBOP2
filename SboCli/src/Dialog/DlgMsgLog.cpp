@@ -130,10 +130,11 @@ void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 	}
 
 	/* ログファイルに書き込み */
-	strTmp.Format ("[%02d:%02d:%02d] %s", time.GetHour (), time.GetMinute (), time.GetSecond (), pszLog);
-	m_pLog->Write ("%s", strTmp);
+        CString strLog = Utf8ToTString (pszLog);
+        strTmp.Format(_T("[%02d:%02d:%02d] %s"), time.GetHour (), time.GetMinute (), time.GetSecond (), (LPCTSTR)strLog);
+        m_pLog->Write ("%s", strTmp);
 
-	m_wndLogViewCtrl.AddLine (pszLog, cl, RGB (40, 40, 40));
+        m_wndLogViewCtrl.AddLine ((LPCTSTR)strLog, cl, RGB (40, 40, 40));
 }
 
 
@@ -159,11 +160,12 @@ void CDlgMsgLog::MakeLogFile(void)
 	*pszTmp	= 0;
 	PathAddBackslash (szName);
 
-	strTmp.Format ("%sLog\\SBOログ(%d年%02d月%02d日).txt",
-		szName,
-		time.GetYear (),
-		time.GetMonth (),
-		time.GetDay ());
+        CString strBasePath = Utf8ToTString (szName);
+        strTmp.Format(_T("%sLog\\SBOログ(%d年%02d月%02d日).txt"),
+                (LPCTSTR)strBasePath,
+                time.GetYear (),
+                time.GetMonth (),
+                time.GetDay ());
 	/* ログファイルの作成 */
 	m_pLog->Destroy ();
 	m_pLog->Create (strTmp, FALSE, TRUE);

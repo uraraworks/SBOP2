@@ -314,7 +314,7 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 	case 2:		/* 編集 */
 		m_dwSelectShadowID = GetSelectMapShadowID ();
 		m_pMgrData->SetSelectMapShadowID (m_dwSelectShadowID);
-		m_strID.Format ("ID:%u", m_dwSelectShadowID);
+		m_strID.Format(_T("ID:%u"), m_dwSelectShadowID);
 		UpdateData (FALSE);
 		break;
 	case 1:		/* 追加 */

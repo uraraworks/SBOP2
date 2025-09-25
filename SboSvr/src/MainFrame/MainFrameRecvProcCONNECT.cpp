@@ -292,30 +292,31 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 
 	UpdateServerInfo ();
 
-	strTmp.Format ("SYSTEM:スクラップブックオンラインの世界へようこそ♪");
+	strTmp.Format(_T("SYSTEM:スクラップブックオンラインの世界へようこそ♪"));
 	PacketMAP_SYSTEMMSG.Make (strTmp);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:現在のオンライン数: %d", nOnlineCount);
+	strTmp.Format(_T("SYSTEM:現在のオンライン数: %d"), nOnlineCount);
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
-	strTmp.Format ("SYSTEM:最新クライアントバージョン: %s", m_pMgrData->GetClientVersion ());
+        CString strClientVer = Utf8ToTString (m_pMgrData->GetClientVersion ());
+        strTmp.Format(_T("SYSTEM:最新クライアントバージョン: %s"), (LPCTSTR)strClientVer);
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 
 	if (nOnlineCount % 10 == 0) {
-		strTmp.Format ("SYSTEM:オンライン数が %d になりました", nOnlineCount);
+		strTmp.Format(_T("SYSTEM:オンライン数が %d になりました"), nOnlineCount);
 		PacketMAP_SYSTEMMSG.Make (strTmp);
 		m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 	}
 
-	strTmp.Format ("SYSTEM:現在最も人が集まっている場所は");
+	strTmp.Format(_T("SYSTEM:現在最も人が集まっている場所は"));
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 	dwTmp = m_pLibInfoChar->GetPlaceName (strTmp2);
 	if (strTmp2.IsEmpty ()) {
-		strTmp.Format ("SYSTEM:マップ番号[%d]のようです", dwTmp);
+		strTmp.Format(_T("SYSTEM:マップ番号[%d]のようです"), dwTmp);
 	} else {
-		strTmp.Format ("SYSTEM:[%s]のようです", (LPCSTR)strTmp2);
+		strTmp.Format(_T("SYSTEM:[%s]のようです"), (LPCTSTR)strTmp2);
 	}
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);

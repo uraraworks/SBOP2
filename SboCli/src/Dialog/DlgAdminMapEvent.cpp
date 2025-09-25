@@ -115,12 +115,12 @@ void CDlgAdminMapEvent::Renew(void)
 	nCount = m_pLibInfoMapEvent->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (i);
-		strTmp.Format ("%d", pInfo->m_dwMapEventID);	/* ID */
+		strTmp.Format(_T("%d"), pInfo->m_dwMapEventID);	/* ID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwMapEventID);
-		strTmp.Format ("%d", pInfo->m_ptPos.x);			/* X座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.x);			/* X座標 */
 		m_List.SetItemText (i, 1, strTmp);
-		strTmp.Format ("%d", pInfo->m_ptPos.y);			/* Y座標 */
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.y);			/* Y座標 */
 		m_List.SetItemText (i, 2, strTmp);
 
 		strTmp = m_pMgrData->GetMapEventName (pInfo->m_nType);

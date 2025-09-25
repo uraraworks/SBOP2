@@ -395,7 +395,7 @@ void CMainFrame::RecvProcMSGCMD_DICE(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	strTmp.Format ("%sのサイコロ！[%d]が出ました", (LPCSTR)pInfoChar->m_strCharName, (genrand () % 6) + 1);
+	strTmp.Format(_T("%sのサイコロ！[%d]が出ました"), (LPCTSTR)pInfoChar->m_strCharName, (genrand () % 6) + 1);
 	PacketSYSTEMMSG.Make (strTmp, RGB (255, 255, 255), FALSE);
 	SendToScreenChar (pInfoChar, &PacketSYSTEMMSG);
 }
@@ -429,7 +429,7 @@ void CMainFrame::RecvProcMSGCMD_RND(PBYTE pData, DWORD dwSessionID)
 	} else {
 		nTmp = 1000;
 	}
-	strTmp.Format ("%sの 1～%d！！[%d]が出ました",
+	strTmp.Format(_T("%sの 1～%d！！[%d]が出ました"),
 			(LPCSTR)pInfoChar->m_strCharName,
 			nTmp,
 			(genrand () % nTmp) + 1);
@@ -481,16 +481,16 @@ void CMainFrame::RecvProcMSGCMD_WHERE(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	strTmp.Format ("SYSTEM:現在最も人が集まっている場所は");
+	strTmp.Format(_T("SYSTEM:現在最も人が集まっている場所は"));
 	PacketMAP_SYSTEMMSG.Make (strTmp, RGB (255, 255, 255), TRUE, SYSTEMMSGTYPE_NOLOG);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
 	dwTmp  = m_pLibInfoChar->GetPlaceName (strTmp2);
 	nCount = m_pLibInfoChar->GetCountOnline (dwTmp);
 
 	if (strTmp2.IsEmpty ()) {
-		strTmp.Format ("SYSTEM:オンライン数 %d でマップ番号[%d]のようです", nCount, dwTmp);
+		strTmp.Format(_T("SYSTEM:オンライン数 %d でマップ番号[%d]のようです"), nCount, dwTmp);
 	} else {
-		strTmp.Format ("SYSTEM:オンライン数 %d で[%s]のようです", nCount, (LPCSTR)strTmp2);
+		strTmp.Format(_T("SYSTEM:オンライン数 %d で[%s]のようです"), nCount, (LPCTSTR)strTmp2);
 	}
 	PacketMAP_SYSTEMMSG.Make (strTmp, RGB (255, 255, 255), FALSE, SYSTEMMSGTYPE_NOLOG);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);

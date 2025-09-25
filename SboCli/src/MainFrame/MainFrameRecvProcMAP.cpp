@@ -188,14 +188,14 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%sから %d のダメージ", (LPCSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
+		strMsg.Format(_T("%sから %d のダメージ"), (LPCTSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
 		break;
 	case FORMATMSGID_DAMAGE2:				/* %sに %d のダメージ */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%sに %d のダメージ", (LPCSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
+		strMsg.Format(_T("%sに %d のダメージ"), (LPCTSTR)pInfoChar->m_strCharName, Packet.m_dwPara2);
 		break;
 	case FORMATMSGID_SWOON1:				/* %sは%sを倒した */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
@@ -209,31 +209,31 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if ((pInfoChar == pInfoCharPlayer) || (pInfoChar2 == pInfoCharPlayer)) {
 			return;
 		}
-		strMsg.Format ("%sは%sを倒した", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar2->m_strCharName);
+		strMsg.Format(_T("%sは%sを倒した"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoChar2->m_strCharName);
 		break;
 	case FORMATMSGID_SWOON2:				/* %sを倒した */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%sを倒した", (LPCSTR)pInfoChar->m_strCharName);
+		strMsg.Format(_T("%sを倒した"), (LPCTSTR)pInfoChar->m_strCharName);
 		break;
 	case FORMATMSGID_SWOON3:				/* %sに倒された */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
 		if (pInfoChar == NULL) {
 			return;
 		}
-		strMsg.Format ("%sに倒された", (LPCSTR)pInfoChar->m_strCharName);
+		strMsg.Format(_T("%sに倒された"), (LPCTSTR)pInfoChar->m_strCharName);
 		break;
 	case FORMATMSGID_NOUSE:					/* %sは効果がありませんでした */
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (Packet.m_dwPara1);
 		if (pInfoItem == NULL) {
 			return;
 		}
-		strMsg.Format ("%s は効果がありませんでした", (LPCSTR)pInfoItem->m_strName);
+		strMsg.Format(_T("%s は効果がありませんでした"), (LPCTSTR)pInfoItem->m_strName);
 		break;
 	case FORMATMSGID_NOUNEQUIP_ITEMFULL:	/* 持ち物がいっぱいで装備を外せません */
-		strMsg.Format ("持ち物がいっぱいで装備を外せません");
+		strMsg.Format(_T("持ち物がいっぱいで装備を外せません"));
 		break;
 	case FORMATMSGID_DROPITEM:				/* %sは%sを落とした */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
@@ -244,7 +244,7 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if (pInfoItem == NULL) {
 			return;
 		}
-		strMsg.Format ("%sは %s を落とした", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoItem->m_strName);
+		strMsg.Format(_T("%sは %s を落とした"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoItem->m_strName);
 		break;
 	case FORMATMSGID_ADDSKILL:				/* %sは %s を習得しました */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
@@ -255,7 +255,7 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if (pInfoSkill == NULL) {
 			return;
 		}
-		strMsg.Format ("%sは %s を習得しました", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
+		strMsg.Format(_T("%sは %s を習得しました"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoSkill->m_strName);
 		break;
 	case FORMATMSGID_USESKILL:				/* %sは %s を使った */
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwPara1);
@@ -266,7 +266,7 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		if (pInfoSkill == NULL) {
 			break;
 		}
-		strMsg.Format ("%sは %s を使った", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoSkill->m_strName);
+		strMsg.Format(_T("%sは %s を使った"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoSkill->m_strName);
 		break;
 	default:
 		return;
@@ -526,7 +526,7 @@ void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
 	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* 明るさレベル */
 
 	if (pInfoMap->m_strMapName != strMapNameBack) {
-		strTmp.Format ("マップ名が[%s]に変更されました", (LPCSTR)pInfoMap->m_strMapName);
+		strTmp.Format(_T("マップ名が[%s]に変更されました"), (LPCTSTR)pInfoMap->m_strMapName);
 		m_pMgrData->AddSystemMsg (TRUE, strTmp, RGB (0, 200, 255));
 		m_pMgrSound->PlaySound (SOUNDID_W_CHAT);
 	}

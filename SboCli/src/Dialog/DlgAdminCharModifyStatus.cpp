@@ -203,7 +203,7 @@ void CDlgAdminCharModifyStatus::Renew(void)
 		goto Exit;
 	}
 
-	m_strCharID.Format ("%u", m_pInfoChar->m_dwCharID);
+	m_strCharID.Format(_T("%u"), m_pInfoChar->m_dwCharID);
 	m_strCharName			= m_pInfoChar->m_strCharName;
 	m_dwMoveWait			= m_pInfoChar->m_dwMoveWait;
 	m_dwMoveWaitBattle		= m_pInfoChar->m_dwMoveWaitBattle;

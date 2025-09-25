@@ -434,13 +434,13 @@ void CMainFrame::RecvProcCHAR_RES_PUTGET(PBYTE pData)
 
 	switch (Packet.m_nResult) {
 	case RESULTID_CHAR_RES_PUTGET_PUT:		/* 置いた */
-		strTmp.Format ("%sを置きました", (LPCSTR)pInfoItem->m_strName);
+		strTmp.Format(_T("%sを置きました"), (LPCTSTR)pInfoItem->m_strName);
 		break;
 	case RESULTID_CHAR_RES_PUTGET_GET:		/* 取得した */
-		strTmp.Format ("%sを拾いました", (LPCSTR)pInfoItem->m_strName);
+		strTmp.Format(_T("%sを拾いました"), (LPCTSTR)pInfoItem->m_strName);
 		break;
 	case RESULTID_CHAR_RES_PUTGET_DELETE:	/* 削除した */
-		strTmp.Format ("%sは処分されました", (LPCSTR)pInfoItem->m_strName);
+		strTmp.Format(_T("%sは処分されました"), (LPCTSTR)pInfoItem->m_strName);
 		break;
 	}
 
@@ -529,34 +529,34 @@ void CMainFrame::RecvProcCHAR_RES_TAIL(PBYTE pData)
 		switch (Packet.m_nResult) {
 		case RES_TAIL_RESULT_OK:			/* ついていく */
 			if (pInfoCharTarget) {
-				strTmp.Format ("%sについていきます", (LPCSTR)pInfoCharTarget->m_strCharName);
+				strTmp.Format(_T("%sについていきます"), (LPCTSTR)pInfoCharTarget->m_strCharName);
 			}
 			pInfoCharPlayer->m_dwFrontCharID = Packet.m_dwTargetCharID;
 			break;
 		case RES_TAIL_RESULT_PARGE:			/* ついていく解除 */
-			strTmp.Format ("ついていくのをやめました");
+			strTmp.Format(_T("ついていくのをやめました"));
 			pInfoCharPlayer->m_dwFrontCharID = Packet.m_dwTargetCharID;
 			break;
 		case RES_TAIL_RESULT_TAILPARGE:		/* つれていく解除 */
 			pInfoCharPlayer->m_dwTailCharID = 0;
-			strTmp.Format ("つれていくのをやめました");
+			strTmp.Format(_T("つれていくのをやめました"));
 			break;
 		case RES_TAIL_RESULT_NG_TAIL:		/* 既についていっている */
 			if (pInfoCharPara) {
 				strNamePara = (LPCSTR)pInfoCharPara->m_strCharName;
 			}
 			if (pInfoCharTarget) {
-				strTmp.Format ("%sには%sがついてきています", (LPCSTR)pInfoCharTarget->m_strCharName, (LPCSTR)strNamePara);
+				strTmp.Format(_T("%sには%sがついてきています"), (LPCTSTR)pInfoCharTarget->m_strCharName, (LPCTSTR)strNamePara);
 			}
 			break;
 		case RES_TAIL_RESULT_NG_STATE:		/* ついていけない状態 */
-			strTmp.Format ("%sは取り込み中のようです", (LPCSTR)pInfoCharTarget->m_strCharName);
+			strTmp.Format(_T("%sは取り込み中のようです"), (LPCTSTR)pInfoCharTarget->m_strCharName);
 			break;
 		case RES_TAIL_RESULT_NG_SWOON:		/* ついていけない */
-			strTmp.Format ("気絶中なのでついていくことはできません");
+			strTmp.Format(_T("気絶中なのでついていくことはできません"));
 			break;
 		case RES_TAIL_RESULT_NG_PLACE:		/* ついていけない場所 */
-			strTmp.Format ("%sがいる場所ではついていくことができません", (LPCSTR)pInfoCharTarget->m_strCharName);
+			strTmp.Format(_T("%sがいる場所ではついていくことができません"), (LPCTSTR)pInfoCharTarget->m_strCharName);
 			break;
 		}
 		if (strTmp.IsEmpty () == FALSE) {
@@ -567,13 +567,13 @@ void CMainFrame::RecvProcCHAR_RES_TAIL(PBYTE pData)
 	} else if (pInfoCharTarget == pInfoCharPlayer) {
 		switch (Packet.m_nResult) {
 		case RES_TAIL_RESULT_OK:
-			strTmp.Format ("%sがついてきます", (LPCSTR)pInfoChar->m_strCharName);
+			strTmp.Format(_T("%sがついてきます"), (LPCTSTR)pInfoChar->m_strCharName);
 			m_pMgrData->AddSystemMsg (FALSE, strTmp, RGB (255, 255, 255));
 			PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 			pInfoCharPlayer->m_dwTailCharID = Packet.m_dwCharID;
 			break;
 		case RES_TAIL_RESULT_PARGE:
-			strTmp.Format ("%sはついていくのをやめました", (LPCSTR)pInfoChar->m_strCharName);
+			strTmp.Format(_T("%sはついていくのをやめました"), (LPCTSTR)pInfoChar->m_strCharName);
 			m_pMgrData->AddSystemMsg (FALSE, strTmp, RGB (255, 255, 255));
 			PostMessage (m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 			pInfoCharPlayer->m_dwTailCharID = Packet.m_dwCharID;

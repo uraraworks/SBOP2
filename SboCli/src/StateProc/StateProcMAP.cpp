@@ -670,7 +670,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 			if (pInfoChar == m_pPlayerChar) {
 				KeyProc (0, FALSE);
 			}
-			strTmp.Format ("%s：%s", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar->m_strSpeak);
+			strTmp.Format(_T("%s：%s"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoChar->m_strSpeak);
 			m_pDlgMsgLog->Add (strTmp, pInfoChar->m_clSpeak);
 		}
 		break;
@@ -2905,9 +2905,9 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET_SETDEVICE(DWORD dwPara)
 		pMgrKeyInput->GetGUID (nNo, stGuid);
 		pMgrKeyInput->GetDeviceName (nNo, strName);
 
-		strTmp.Format ("[%s]を使用します", (LPCSTR)strName);
+		strTmp.Format(_T("[%s]を使用します"), (LPCTSTR)strName);
 	} else {
-		strTmp.Format ("ジョイパッドを使用しません");
+		strTmp.Format(_T("ジョイパッドを使用しません"));
 	}
 	m_pMgrData->SetInputGuid (stGuid);
 	m_pMgrData->SaveIniData ();
@@ -3141,7 +3141,7 @@ void CStateProcMAP::OnMainFrameRENEWTALKEVENT(DWORD dwParam)
 	pszName	  = NULL;
 	pInfoChar = (PCInfoCharBase)m_pLibInfoChar->GetPtr (pInfo->m_dwTalkEventID);
 	if (pInfoChar) {
-		pszName = (LPCSTR)pInfoChar->m_strCharName;
+		pszName = (LPCTSTR)pInfoChar->m_strCharName;
 	}
 
 	m_pMgrWindow->MakeWindowTEXTMSG (NULL, pszName, pInfo);
@@ -3206,7 +3206,7 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 			}
 		}
 		if (nLen > 0) {
-			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
+			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCTSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
 			break;
 		}
 		goto Exit;

@@ -471,10 +471,10 @@ void CDlgAdminEfcBalloon::OnSelectAnime(void)
 	m_nSelect = m_ctlSlider.GetPos ();
 
 	nCount = m_pLibInfoEfcBalloon->GetCount ();
-	m_strCount.Format ("%d", nCount);
+	m_strCount.Format(_T("%d"), nCount);
 	m_strNow.Empty ();
 	if (nCount > 0) {
-		m_strNow.Format ("%d", m_nSelect + 1);
+		m_strNow.Format(_T("%d"), m_nSelect + 1);
 	}
 	UpdateData (FALSE);
 

@@ -290,40 +290,40 @@ void CMgrData::SaveIniData(void)
 	/* 最終パスワード */
 	WritePrivateProfileString ("Account", "Password", szTmp, szFileName);
 	/* パスワードを保存する？ */
-	strTmp.Format ("%d", m_bSavePassword);
+	strTmp.Format(_T("%d"), m_bSavePassword);
 	WritePrivateProfileString ("Setting", "SavePassword", strTmp, szFileName);
 	/* ログイン拒否 */
-	strTmp.Format ("%d", m_bDisableLogin);
+	strTmp.Format(_T("%d"), m_bDisableLogin);
 	WritePrivateProfileString ("Setting", "DisableLogin", strTmp, szFileName);
 	/* 発言時にタスクバーチカチカ */
-	strTmp.Format ("%d", m_bOptionTaskbar);
+	strTmp.Format(_T("%d"), m_bOptionTaskbar);
 	WritePrivateProfileString ("Setting", "OptionTaskbar", strTmp, szFileName);
 	/* 発言を表示する */
-	strTmp.Format ("%d", m_bOptionViewChat);
+	strTmp.Format(_T("%d"), m_bOptionViewChat);
 	WritePrivateProfileString ("Setting", "OptionViewChat", strTmp, szFileName);
 	/* アイテムを表示する */
-	strTmp.Format ("%d", m_bOptionViewItem);
+	strTmp.Format(_T("%d"), m_bOptionViewItem);
 	WritePrivateProfileString ("Setting", "OptionViewItem", strTmp, szFileName);
 	/* アイテム名を表示する */
-	strTmp.Format ("%d", m_bOptionViewItemName);
+	strTmp.Format(_T("%d"), m_bOptionViewItemName);
 	WritePrivateProfileString ("Setting", "OptionViewItemName", strTmp, szFileName);
 	/* ヘルプアイコンを表示する */
-	strTmp.Format ("%d", m_bOptionViewHelpIcon);
+	strTmp.Format(_T("%d"), m_bOptionViewHelpIcon);
 	WritePrivateProfileString ("Setting", "OptionViewHelpIcon", strTmp, szFileName);
 	/* 戦闘メッセージをログに残す */
-	strTmp.Format ("%d", m_bOptionBattleMsgLog);
+	strTmp.Format(_T("%d"), m_bOptionBattleMsgLog);
 	WritePrivateProfileString ("Setting", "OptionBattleMsgLog", strTmp, szFileName);
 	/* 60フレームで表示する */
-	strTmp.Format ("%d", m_bOption60Frame);
+	strTmp.Format(_T("%d"), m_bOption60Frame);
 	WritePrivateProfileString ("Setting", "Option60Frame", strTmp, szFileName);
 	/* 効果音量 */
-	strTmp.Format ("%d", m_nSEVolume);
+	strTmp.Format(_T("%d"), m_nSEVolume);
 	WritePrivateProfileString ("Setting", "SEVolume", strTmp, szFileName);
 	/* BGM音量 */
-	strTmp.Format ("%d", m_nBGMVolume);
+	strTmp.Format(_T("%d"), m_nBGMVolume);
 	WritePrivateProfileString ("Setting", "BGMVolume", strTmp, szFileName);
 	/* 描画モード */
-	strTmp.Format ("%d", m_nDrawMode);
+	strTmp.Format(_T("%d"), m_nDrawMode);
 	WritePrivateProfileString ("Setting", "DrawMode", strTmp, szFileName);
 	/* 入力ジョイパッド */
 	StringFromGUID2 (m_stInputGuid, szwGuid, sizeof (szwGuid));
@@ -331,7 +331,7 @@ void CMgrData::SaveIniData(void)
 	strcpy (szTmp, bstrTmp);
 	WritePrivateProfileString ("Setting", "InputDevice", szTmp, szFileName);
 	/* おひるねタイマー */
-	strTmp.Format ("%d", m_nSleepTimer);
+	strTmp.Format(_T("%d"), m_nSleepTimer);
 	WritePrivateProfileString ("Setting", "SleepTimer", strTmp, szFileName);
 }
 

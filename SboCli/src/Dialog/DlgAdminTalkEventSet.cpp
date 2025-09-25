@@ -216,7 +216,7 @@ void CDlgAdminTalkEventSet::Renew(void)
 
 	nCount = m_pInfo->GetPageCount ();
 	for (i = 0; i < nCount; i ++) {
-		strTmp.Format ("ページ%d", i + 1);
+		strTmp.Format(_T("ページ%d"), i + 1);
 		m_Tab.InsertItem(nCount, strTmp);
 	}
 	if (nCount <= 0) {
@@ -237,7 +237,7 @@ void CDlgAdminTalkEventSet::AddPage()
 	CString strTmp;
 
 	nCount = m_pInfo->GetPageCount ();
-	strTmp.Format ("ページ%d", nCount + 1);
+	strTmp.Format(_T("ページ%d"), nCount + 1);
 	m_Tab.InsertItem(nCount, strTmp);
 }
 

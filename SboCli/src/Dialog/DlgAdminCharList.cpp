@@ -107,15 +107,15 @@ void CDlgAdminCharList::Renew(void)
 	nCount = m_pLibInfoChar->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
-		strTmp.Format ("%d", pInfo->m_dwCharID);					/* キャラID */
+		strTmp.Format(_T("%d"), pInfo->m_dwCharID);					/* キャラID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwCharID);
 		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strCharName);	/* キャラ名 */
-		strTmp.Format ("%d", pInfo->m_dwMapID);						/* マップID */
+		strTmp.Format(_T("%d"), pInfo->m_dwMapID);						/* マップID */
 		m_List.SetItemText (i, 2, strTmp);
-		strTmp.Format ("%d", pInfo->m_nMapX);						/* X座標 */
+		strTmp.Format(_T("%d"), pInfo->m_nMapX);						/* X座標 */
 		m_List.SetItemText (i, 3, strTmp);
-		strTmp.Format ("%d", pInfo->m_nMapY);						/* Y座標 */
+		strTmp.Format(_T("%d"), pInfo->m_nMapY);						/* Y座標 */
 		m_List.SetItemText (i, 4, strTmp);
 	}
 }

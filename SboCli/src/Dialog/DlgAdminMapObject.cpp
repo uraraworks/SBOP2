@@ -126,7 +126,7 @@ void CDlgAdminMapObject::Renew(void)
 	nCount = m_pLibInfoMapObject->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr (i);
-		strTmp.Format ("%d", pInfo->m_dwObjectID);				/* ID */
+		strTmp.Format(_T("%d"), pInfo->m_dwObjectID);				/* ID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwObjectID);
 		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strName);	/* オブジェクト名 */

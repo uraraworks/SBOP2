@@ -112,8 +112,9 @@ void ExecuteLauncher(void)
 	PROCESS_INFORMATION stProcInfo;
 	CmyString strFileName;
 
-	GetModuleFilePath (szPath, sizeof (szPath));
-	strFileName.Format ("%s..\\SboLaunch.exe", szPath);
+        GetModuleFilePath (szPath, sizeof (szPath));
+        CString strModulePath = Utf8ToTString (szPath);
+        strFileName.Format(_T("%s..\\SboLaunch.exe"), (LPCTSTR)strModulePath);
 
 	ZeroMemory (&stStartupInfo, sizeof (stStartupInfo));
 	ZeroMemory (&stProcInfo, sizeof (stProcInfo));

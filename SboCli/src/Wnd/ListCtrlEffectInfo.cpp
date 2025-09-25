@@ -96,7 +96,7 @@ void CListCtrlEffectInfo::Renew(void)
 	nCount = m_pLibInfoEffect->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)m_pLibInfoEffect->GetPtr (i);
-		strTmp.Format ("%d", pInfoEffect->m_dwEffectID);
+		strTmp.Format(_T("%d"), pInfoEffect->m_dwEffectID);
 		InsertItem (i, strTmp);
 		SetItemData (i, pInfoEffect->m_dwEffectID);				/* ID */
 		SetItemText (i, 1, (LPCSTR)pInfoEffect->m_strName);		/* エフェクト名 */

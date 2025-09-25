@@ -154,7 +154,7 @@ void CDlgAdminItemList::Renew(void)
 			}
 		}
 
-		strTmp.Format ("%d", pInfoItem->m_dwItemID);
+		strTmp.Format(_T("%d"), pInfoItem->m_dwItemID);
 		m_List.InsertItem (nIndex, strTmp);
 		m_List.SetItemData (nIndex, pInfoItem->m_dwItemID);		/* ID */
 		m_List.SetItemText (nIndex, 1, pInfoItem->m_strName);	/* アイテム名 */
@@ -165,17 +165,17 @@ void CDlgAdminItemList::Renew(void)
 		strTmp.Empty ();
 		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
 		if (pInfoChar) {
-			strTmp.Format ("[%u]%s", pInfoChar->m_dwCharID, (LPCSTR)pInfoChar->m_strCharName);
+			strTmp.Format(_T("[%u]%s"), pInfoChar->m_dwCharID, (LPCTSTR)pInfoChar->m_strCharName);
 		} else {
 			if (pInfoItem->m_dwCharID != 0) {
-				strTmp.Format ("[%u]", pInfoItem->m_dwCharID);
+				strTmp.Format(_T("[%u]"), pInfoItem->m_dwCharID);
 			}
 		}
 		m_List.SetItemText (nIndex, 3, strTmp);					/* 所持キャラ */
 
 		strTmp.Empty ();
 		if (pInfoItem->m_dwMapID) {
-			strTmp.Format ("MAPID:%u (%d, %d)", pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
+			strTmp.Format(_T("MAPID:%u (%d, %d)"), pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
 		}
 		m_List.SetItemText (nIndex, 4, strTmp);					/* 配置座標 */
 		nIndex ++;

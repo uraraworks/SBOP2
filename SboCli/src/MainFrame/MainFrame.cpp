@@ -560,7 +560,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 			CmyString strTmp;
 
 			GetLocalTime (&sysTime);
-			strTmp.Format ("%02d:%02d:%02d", sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
+			strTmp.Format(_T("%02d:%02d:%02d"), sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 			Packet.Make (nType, pPlayerChar->m_dwCharID, (LPCSTR)strTmp);
 			m_pSock->Send (&Packet);
 		}
@@ -799,30 +799,30 @@ void CMainFrame::OnClose(HWND hWnd)
 		GetWindowRect (hWnd, &rc);
 
 		/* メインウィンドウ */
-		strTmp.Format ("%d", rc.left);
+		strTmp.Format(_T("%d"), rc.left);
 		WritePrivateProfileString ("Pos", "MainX", strTmp, szFileName);
-		strTmp.Format ("%d", rc.top);
+		strTmp.Format(_T("%d"), rc.top);
 		WritePrivateProfileString ("Pos", "MainY", strTmp, szFileName);
 
 		if (m_nGameState == GAMESTATE_MAP) {
 			/* ログウィンドウ */
 			((CStateProcMAP *)m_pStateProc)->GetMsgLogRect (rc);
-			strTmp.Format ("%d", rc.left);
+			strTmp.Format(_T("%d"), rc.left);
 			WritePrivateProfileString ("Pos", "LogLeft", strTmp, szFileName);
-			strTmp.Format ("%d", rc.top);
+			strTmp.Format(_T("%d"), rc.top);
 			WritePrivateProfileString ("Pos", "LogTop", strTmp, szFileName);
-			strTmp.Format ("%d", rc.right);
+			strTmp.Format(_T("%d"), rc.right);
 			WritePrivateProfileString ("Pos", "LogRight", strTmp, szFileName);
-			strTmp.Format ("%d", rc.bottom);
+			strTmp.Format(_T("%d"), rc.bottom);
 			WritePrivateProfileString ("Pos", "LogBottom", strTmp, szFileName);
 
 			hWndTmp = m_pMgrData->GetAdminWindow ();
 			if (hWndTmp) {
 				/* 管理者ウィンドウ */
 				GetWindowRect (hWndTmp, &rc);
-				strTmp.Format ("%d", rc.left);
+				strTmp.Format(_T("%d"), rc.left);
 				WritePrivateProfileString ("Pos", "AdminX", strTmp, szFileName);
-				strTmp.Format ("%d", rc.top);
+				strTmp.Format(_T("%d"), rc.top);
 				WritePrivateProfileString ("Pos", "AdminY", strTmp, szFileName);
 			}
 
@@ -830,9 +830,9 @@ void CMainFrame::OnClose(HWND hWnd)
 			if (hWndTmp) {
 				/* デバッグウィンドウ */
 				GetWindowRect (hWndTmp, &rc);
-				strTmp.Format ("%d", rc.left);
+				strTmp.Format(_T("%d"), rc.left);
 				WritePrivateProfileString ("Pos", "DebugX", strTmp, szFileName);
-				strTmp.Format ("%d", rc.top);
+				strTmp.Format(_T("%d"), rc.top);
 				WritePrivateProfileString ("Pos", "DebugY", strTmp, szFileName);
 			}
 		}

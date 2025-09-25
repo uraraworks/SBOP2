@@ -115,7 +115,7 @@ void CDlgAdminItemWeaponList::Renew(void)
 		if (pInfoItemWeapon == NULL) {
 			continue;
 		}
-		strTmp.Format ("%d", pInfoItemWeapon->m_dwWeaponInfoID);
+		strTmp.Format(_T("%d"), pInfoItemWeapon->m_dwWeaponInfoID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemWeapon->m_dwWeaponInfoID);	/* ID */
 		m_List.SetItemText (i, 1, pInfoItemWeapon->m_strName);		/* 武器種別名 */

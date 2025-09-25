@@ -92,9 +92,9 @@ void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	strTmp.Format ("キャラ名:%s", (LPCSTR)pInfoChar->m_strCharName);
+	strTmp.Format(_T("キャラ名:%s"), (LPCTSTR)pInfoChar->m_strCharName);
 	TextOut2 (hDC, 16, 16 + 16 * 0, strTmp,	clText);
-	strTmp.Format ("アカウント作成日時:");
+	strTmp.Format(_T("アカウント作成日時:"));
 	TextOut2 (hDC, 16, 16 + 16 * 1, strTmp,	clText);
 	TextOut2 (hDC, 16, 16 + 16 * 2, "前回ログイン日時:",	clText);
 	TextOut2 (hDC, 16, 16 + 16 * 3, "ログイン回数:",		clText);

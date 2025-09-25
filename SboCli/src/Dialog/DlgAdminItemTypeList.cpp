@@ -112,7 +112,7 @@ void CDlgAdminItemTypeList::Renew(void)
 	nCount = m_pLibInfoItemType->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (i);
-		strTmp.Format ("%d", pInfoItemType->m_dwTypeID);
+		strTmp.Format(_T("%d"), pInfoItemType->m_dwTypeID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemType->m_dwTypeID);		/* ID */
 		m_List.SetItemText (i, 1, pInfoItemType->m_strName);	/* アイテム名 */

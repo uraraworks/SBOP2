@@ -110,7 +110,7 @@ void CDlgAdminCharAdmin::Renew(void)
 		goto Exit;
 	}
 
-	m_strAccountID.Format ("%u", m_dwAccountID);
+	m_strAccountID.Format(_T("%u"), m_dwAccountID);
 	m_strCharName = pInfoChar->m_strCharName;
 	m_ctAdminLevel.SetCurSel (m_nAdminLevel);
 

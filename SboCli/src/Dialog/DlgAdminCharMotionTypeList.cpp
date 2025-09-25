@@ -108,7 +108,7 @@ void CDlgAdminCharMotionTypeList::Renew(void)
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoMotionType)m_pLibInfoMotionType->GetPtr (i);
 
-		strTmp.Format ("%d", pInfo->m_dwMotionTypeID);
+		strTmp.Format(_T("%d"), pInfo->m_dwMotionTypeID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemText (i, 1, pInfo->m_strName);
 		m_List.SetItemData (i, pInfo->m_dwMotionTypeID);

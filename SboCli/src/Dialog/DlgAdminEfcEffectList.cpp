@@ -104,7 +104,7 @@ void CDlgAdminEfcEffectList::Renew(void)
 	nCount = m_pLibInfo->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoEffect = (PCInfoEffect)m_pLibInfo->GetPtr (i);
-		strTmp.Format ("%d", pInfoEffect->m_dwEffectID);
+		strTmp.Format(_T("%d"), pInfoEffect->m_dwEffectID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoEffect->m_dwEffectID);
 		m_List.SetItemText (i, 1, (LPCTSTR)pInfoEffect->m_strName);

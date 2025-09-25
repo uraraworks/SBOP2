@@ -3153,7 +3153,7 @@ int CLibInfoCharSvr::UseItemProcHP(CInfoCharSvr *pInfoChar, DWORD dwItemID)
 		if (nPoint >= 0) {
 			nPoint = min ((DWORD)nPoint, pCharTarget->m_dwMaxHP - pCharTarget->m_dwHP);
 
-			strMsg.Format ("HPが %d 回復しました", nPoint);
+			strMsg.Format(_T("HPが %d 回復しました"), nPoint);
 
 			pCharTarget->m_dwHP += nPoint;
 
@@ -3228,7 +3228,7 @@ int CLibInfoCharSvr::UseItemProcLIGHT(CInfoCharSvr *pInfoChar, DWORD dwItemID)
 	pInfoChar->m_dwLightTime = timeGetTime () + pInfoItemType->m_dwValue2;
 	pInfoChar->m_bChgStatus = TRUE;
 
-	strMsg.Format ("%s を使いました", (LPCSTR)pInfoItem->m_strName);
+	strMsg.Format(_T("%s を使いました"), (LPCTSTR)pInfoItem->m_strName);
 	SendSystemMsg (pInfoChar->m_dwSessionID, (LPCSTR)strMsg, SYSTEMMSGTYPE_NOLOG);
 
 	nRet = -1;

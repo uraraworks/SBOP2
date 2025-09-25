@@ -251,7 +251,7 @@ void CMainFrame::RecvProcCHAR_REQ_CHAT(PBYTE pData, DWORD dwSessionID)
 //	case CHATTYPE_PARTY:				/* パーティチャット */
 //	case CHATTYPE_MAP:					/* マップ内放送 */
 	case CHATTYPE_ADMIN:				/* 一斉放送 */
-		strTmp.Format ("%s:%s", (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)strChar);
+		strTmp.Format(_T("%s:%s"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)strChar);
 		PacketMAP_SYSTEMMSG.Make (strTmp);
 		m_pSock->SendTo (0, &PacketMAP_SYSTEMMSG);
 		break;

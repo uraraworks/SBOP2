@@ -105,7 +105,7 @@ void CListCtrlItemInfo::Renew(void)
 	nCount = m_pLibInfoItem->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (i);
-		strTmp.Format ("%d", pInfoItem->m_dwItemID);
+		strTmp.Format(_T("%d"), pInfoItem->m_dwItemID);
 		InsertItem (i, strTmp);
 		SetItemData (i, pInfoItem->m_dwItemID);		/* ID */
 		SetItemText (i, 1, pInfoItem->m_strName);	/* アイテム名 */
@@ -116,13 +116,13 @@ void CListCtrlItemInfo::Renew(void)
 		strTmp.Empty ();
 		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
 		if (pInfoChar) {
-			strTmp.Format ("[%u]%s", pInfoChar->m_dwCharID, (LPCSTR)pInfoChar->m_strCharName);
+			strTmp.Format(_T("[%u]%s"), pInfoChar->m_dwCharID, (LPCTSTR)pInfoChar->m_strCharName);
 		}
 		SetItemText (i, 3, strTmp);					/* 所持キャラ */
 
 		strTmp.Empty ();
 		if (pInfoItem->m_dwMapID) {
-			strTmp.Format ("MAPID:%u (%d, %d)", pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
+			strTmp.Format(_T("MAPID:%u (%d, %d)"), pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
 		}
 		SetItemText (i, 4, strTmp);					/* 配置座標 */
 	}
