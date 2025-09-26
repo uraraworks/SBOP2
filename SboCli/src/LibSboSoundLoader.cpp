@@ -50,7 +50,7 @@ void CLibSboSoundLoader::Load(void)
 	if (m_hLib) {
 		return;
 	}
-	m_hLib = LoadLibrary ("SboSoundData.dll");
+        m_hLib = LoadLibrary (_T("SboSoundData.dll"));
 	if (m_hLib == NULL) {
 		return;
 	}

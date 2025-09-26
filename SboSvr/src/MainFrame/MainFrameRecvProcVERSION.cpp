@@ -65,8 +65,9 @@ void CMainFrame::RecvProcVERSION_REQ_VERSIONCHECK(PBYTE pData, DWORD dwSessionID
 
 void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionID)
 {
-	int nResult;
-	char szTmp[MAX_PATH];
+        int nResult;
+        TCHAR szPath[MAX_PATH];
+        char szHash[33];
 	CPacketVERSION_REQ_FILELISTCHECK Packet;
 	CPacketVERSION_RES_FILELISTCHECK PacketVERSION_RES_FILELISTCHECK;
 	CGetMD5File GetMD5File;
@@ -75,19 +76,19 @@ void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionI
 	Packet.Set (pData);
 
 	/* ファイルリストのハッシュを取得 */
-        GetModuleFilePath (szTmp, sizeof (szTmp));
-        CString strPath = Utf8ToTString (szTmp);
+        GetModuleFilePath (szPath, _countof (szPath));
+        CString strPath (szPath);
         strTmp.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strPath);
-	GetMD5File.Init ();
-	GetMD5File.Update (strTmp);
+        GetMD5File.Init ();
+        GetMD5File.Update (strTmp);
 
-	ZeroMemory (szTmp, sizeof (szTmp));
-	GetMD5File.GetStr (szTmp);
+        ZeroMemory (szHash, sizeof (szHash));
+        GetMD5File.GetStr (szHash);
 
-	nResult = FILELISTCHECKRES_NG;
-	if (Packet.m_strFileListHash == szTmp) {
-		nResult = FILELISTCHECKRES_OK;
-	}
+        nResult = FILELISTCHECKRES_NG;
+        if (Packet.m_strFileListHash == szHash) {
+                nResult = FILELISTCHECKRES_OK;
+        }
 
 	PacketVERSION_RES_FILELISTCHECK.Make (nResult);
 	m_pSock->SendTo (dwSessionID, &PacketVERSION_RES_FILELISTCHECK);
@@ -118,7 +119,7 @@ void CMainFrame::RecvProcVERSION_REQ_FILELIST(PBYTE pData, DWORD dwSessionID)
 void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 {
 	BOOL bReuslt;
-	char szTmp[MAX_PATH];
+        TCHAR szPath[MAX_PATH];
 	PBYTE pFileData;
 	LPCSTR pszTmp;
 	HANDLE hFile;
@@ -130,8 +131,8 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 	pFileData = NULL;
 	Packet.Set (pData);
 
-        GetModuleFilePath (szTmp, sizeof (szTmp));
-        CString strBasePath = Utf8ToTString (szTmp);
+        GetModuleFilePath (szPath, _countof (szPath));
+        CString strBasePath (szPath);
         strFileName.Format(_T("%sUpdate\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)Packet.m_strFileName);
 	pszTmp = strstr ((LPCSTR)strFileName, "..");
 	if (pszTmp) {

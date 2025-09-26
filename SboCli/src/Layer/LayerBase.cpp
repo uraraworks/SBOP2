@@ -126,11 +126,13 @@ void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color)
                 return;
         }
 
-        USES_CONVERSION;
-        LPCTSTR pszText = A2CT(pStr);
-        int nLen = static_cast<int>(_tcslen(pszText));
+        CString strText = AnsiToTString (pStr);
+        int nLen = strText.GetLength ();
+        if (nLen <= 0) {
+                return;
+        }
         SetTextColor (hDC, color);
-        ::TextOut(hDC, x, y, pszText, nLen);
+        ::TextOut (hDC, x, y, strText, nLen);
 }
 
 
@@ -146,16 +148,18 @@ void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, CO
                 return;
         }
 
-        USES_CONVERSION;
-        LPCTSTR pszText = A2CT(pStr);
-        int nLen = static_cast<int>(_tcslen(pszText));
+        CString strText = AnsiToTString (pStr);
+        int nLen = strText.GetLength ();
+        if (nLen <= 0) {
+                return;
+        }
         SetTextColor (hDC, colorFrame);
-        ::TextOut(hDC, x - 1, y, pszText, nLen);
-        ::TextOut(hDC, x + 1, y, pszText, nLen);
-        ::TextOut(hDC, x, y - 1, pszText, nLen);
-        ::TextOut(hDC, x, y + 1, pszText, nLen);
+        ::TextOut (hDC, x - 1, y, strText, nLen);
+        ::TextOut (hDC, x + 1, y, strText, nLen);
+        ::TextOut (hDC, x, y - 1, strText, nLen);
+        ::TextOut (hDC, x, y + 1, strText, nLen);
         SetTextColor (hDC, color);
-        ::TextOut(hDC, x, y, pszText, nLen);
+        ::TextOut (hDC, x, y, strText, nLen);
 }
 
 
@@ -171,35 +175,37 @@ void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, CO
                 return;
         }
 
-        USES_CONVERSION;
-        LPCTSTR pszText = A2CT(pStr);
-        int nLen = static_cast<int>(_tcslen(pszText));
+        CString strText = AnsiToTString (pStr);
+        int nLen = strText.GetLength ();
+        if (nLen <= 0) {
+                return;
+        }
         SetTextColor (hDC, colorFrame);
-        ::TextOut(hDC, x - 2, y, pszText, nLen);
-        ::TextOut(hDC, x - 1, y, pszText, nLen);
-        ::TextOut(hDC, x - 1, y - 2, pszText, nLen);
-        ::TextOut(hDC, x - 2, y - 1, pszText, nLen);
-        ::TextOut(hDC, x - 1, y - 1, pszText, nLen);
-        ::TextOut(hDC, x - 2, y + 1, pszText, nLen);
-        ::TextOut(hDC, x - 1, y + 1, pszText, nLen);
-        ::TextOut(hDC, x - 1, y + 2, pszText, nLen);
+        ::TextOut (hDC, x - 2, y, strText, nLen);
+        ::TextOut (hDC, x - 1, y, strText, nLen);
+        ::TextOut (hDC, x - 1, y - 2, strText, nLen);
+        ::TextOut (hDC, x - 2, y - 1, strText, nLen);
+        ::TextOut (hDC, x - 1, y - 1, strText, nLen);
+        ::TextOut (hDC, x - 2, y + 1, strText, nLen);
+        ::TextOut (hDC, x - 1, y + 1, strText, nLen);
+        ::TextOut (hDC, x - 1, y + 2, strText, nLen);
 
-        ::TextOut(hDC, x + 2, y, pszText, nLen);
-        ::TextOut(hDC, x + 1, y, pszText, nLen);
-        ::TextOut(hDC, x + 1, y - 2, pszText, nLen);
-        ::TextOut(hDC, x + 2, y - 1, pszText, nLen);
-        ::TextOut(hDC, x + 1, y - 1, pszText, nLen);
-        ::TextOut(hDC, x + 2, y + 1, pszText, nLen);
-        ::TextOut(hDC, x + 1, y + 1, pszText, nLen);
-        ::TextOut(hDC, x + 1, y + 2, pszText, nLen);
+        ::TextOut (hDC, x + 2, y, strText, nLen);
+        ::TextOut (hDC, x + 1, y, strText, nLen);
+        ::TextOut (hDC, x + 1, y - 2, strText, nLen);
+        ::TextOut (hDC, x + 2, y - 1, strText, nLen);
+        ::TextOut (hDC, x + 1, y - 1, strText, nLen);
+        ::TextOut (hDC, x + 2, y + 1, strText, nLen);
+        ::TextOut (hDC, x + 1, y + 1, strText, nLen);
+        ::TextOut (hDC, x + 1, y + 2, strText, nLen);
 
-        ::TextOut(hDC, x, y - 2, pszText, nLen);
-        ::TextOut(hDC, x, y - 1, pszText, nLen);
-        ::TextOut(hDC, x, y + 2, pszText, nLen);
-        ::TextOut(hDC, x, y + 1, pszText, nLen);
+        ::TextOut (hDC, x, y - 2, strText, nLen);
+        ::TextOut (hDC, x, y - 1, strText, nLen);
+        ::TextOut (hDC, x, y + 2, strText, nLen);
+        ::TextOut (hDC, x, y + 1, strText, nLen);
 
         SetTextColor (hDC, color);
-        ::TextOut(hDC, x, y, pszText, nLen);
+        ::TextOut (hDC, x, y, strText, nLen);
 }
 
 /* Copyright(C)URARA-works 2005 */

@@ -17,6 +17,8 @@
 #ifdef __cplusplus
 CString Utf8ToTString(LPCSTR pszSrc);
 CStringA TStringToUtf8(LPCTSTR pszSrc);
+CString AnsiToTString(LPCSTR pszSrc, UINT codePage = CP_ACP);
+CStringA TStringToAnsi(LPCTSTR pszSrc, UINT codePage = CP_ACP);
 #endif
 
 /* ========================================================================= */

@@ -563,19 +563,21 @@ void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, B
                 return;
         }
 
-        USES_CONVERSION;
-        LPCTSTR pszText = A2CT(pStr);
-        int nLen = static_cast<int>(_tcslen(pszText));
+        CString strText = AnsiToTString (pStr);
+        int nLen = strText.GetLength ();
+        if (nLen <= 0) {
+                return;
+        }
         /* 縁取りする？ */
         if (bDraw) {
                 SetTextColor (hDC, ColorFrame);
-                ::TextOut(hDC, x - 1, y, pszText, nLen);
-                ::TextOut(hDC, x + 1, y, pszText, nLen);
-                ::TextOut(hDC, x, y - 1, pszText, nLen);
-                ::TextOut(hDC, x, y + 1, pszText, nLen);
+                ::TextOut (hDC, x - 1, y, strText, nLen);
+                ::TextOut (hDC, x + 1, y, strText, nLen);
+                ::TextOut (hDC, x, y - 1, strText, nLen);
+                ::TextOut (hDC, x, y + 1, strText, nLen);
         }
         SetTextColor (hDC, Color);
-        ::TextOut(hDC, x, y, pszText, nLen);
+        ::TextOut (hDC, x, y, strText, nLen);
 }
 
 
@@ -591,21 +593,24 @@ void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, C
 		return;
 	}
 
-	USES_CONVERSION;
-	LPCTSTR pszText = A2CT(pStr);
-	int nLen = static_cast<int>(_tcslen(pszText));
+	CString strText = AnsiToTString (pStr);
+	int nLen = strText.GetLength ();
+	if (nLen <= 0) {
+		return;
+	}
+
 	RECT rc;
 
 	SetRect (&rc, x, y, cx, cy);
 	SetTextColor (hDC, RGB(10, 10, 10));
 
-	SetRect (&rc, x - 1, y, x + cx, y + cy);	DrawText (hDC, pszText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-	SetRect (&rc, x + 1, y, x + cx, y + cy);	DrawText (hDC, pszText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-	SetRect (&rc, x, y - 1, x + cx, y + cy);	DrawText (hDC, pszText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-	SetRect (&rc, x, y + 1, x + cx, y + cy);	DrawText (hDC, pszText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
+	SetRect (&rc, x - 1, y, x + cx, y + cy);	DrawText (hDC, strText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
+	SetRect (&rc, x + 1, y, x + cx, y + cy);	DrawText (hDC, strText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
+	SetRect (&rc, x, y - 1, x + cx, y + cy);	DrawText (hDC, strText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
+	SetRect (&rc, x, y + 1, x + cx, y + cy);	DrawText (hDC, strText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
 
 	SetTextColor (hDC, Color);
-	SetRect (&rc, x, y, x + cx, y + cy);		DrawText (hDC, pszText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
+	SetRect (&rc, x, y, x + cx, y + cy);		DrawText (hDC, strText, nLen, &rc, DT_RIGHT | DT_NOCLIP);
 }
 
 
@@ -621,36 +626,38 @@ void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFra
 		return;
 	}
 
-	USES_CONVERSION;
-	LPCTSTR pszText = A2CT(pStr);
-	int nLen = static_cast<int>(_tcslen(pszText));
+	CString strText = AnsiToTString (pStr);
+	int nLen = strText.GetLength ();
+	if (nLen <= 0) {
+		return;
+	}
 	SetTextColor (hDC, ColorFrame);
 
-	::TextOut(hDC, x - 2, y, pszText, nLen);
-	::TextOut(hDC, x - 1, y, pszText, nLen);
-	::TextOut(hDC, x - 1, y - 2, pszText, nLen);
-	::TextOut(hDC, x - 2, y - 1, pszText, nLen);
-	::TextOut(hDC, x - 1, y - 1, pszText, nLen);
-	::TextOut(hDC, x - 2, y + 1, pszText, nLen);
-	::TextOut(hDC, x - 1, y + 1, pszText, nLen);
-	::TextOut(hDC, x - 1, y + 2, pszText, nLen);
+	::TextOut (hDC, x - 2, y, strText, nLen);
+	::TextOut (hDC, x - 1, y, strText, nLen);
+	::TextOut (hDC, x - 1, y - 2, strText, nLen);
+	::TextOut (hDC, x - 2, y - 1, strText, nLen);
+	::TextOut (hDC, x - 1, y - 1, strText, nLen);
+	::TextOut (hDC, x - 2, y + 1, strText, nLen);
+	::TextOut (hDC, x - 1, y + 1, strText, nLen);
+	::TextOut (hDC, x - 1, y + 2, strText, nLen);
 
-	::TextOut(hDC, x + 2, y, pszText, nLen);
-	::TextOut(hDC, x + 1, y, pszText, nLen);
-	::TextOut(hDC, x + 1, y - 2, pszText, nLen);
-	::TextOut(hDC, x + 2, y - 1, pszText, nLen);
-	::TextOut(hDC, x + 1, y - 1, pszText, nLen);
-	::TextOut(hDC, x + 2, y + 1, pszText, nLen);
-	::TextOut(hDC, x + 1, y + 1, pszText, nLen);
-	::TextOut(hDC, x + 1, y + 2, pszText, nLen);
+	::TextOut (hDC, x + 2, y, strText, nLen);
+	::TextOut (hDC, x + 1, y, strText, nLen);
+	::TextOut (hDC, x + 1, y - 2, strText, nLen);
+	::TextOut (hDC, x + 2, y - 1, strText, nLen);
+	::TextOut (hDC, x + 1, y - 1, strText, nLen);
+	::TextOut (hDC, x + 2, y + 1, strText, nLen);
+	::TextOut (hDC, x + 1, y + 1, strText, nLen);
+	::TextOut (hDC, x + 1, y + 2, strText, nLen);
 
-	::TextOut(hDC, x, y - 2, pszText, nLen);
-	::TextOut(hDC, x, y - 1, pszText, nLen);
-	::TextOut(hDC, x, y + 2, pszText, nLen);
-	::TextOut(hDC, x, y + 1, pszText, nLen);
+	::TextOut (hDC, x, y - 2, strText, nLen);
+	::TextOut (hDC, x, y - 1, strText, nLen);
+	::TextOut (hDC, x, y + 2, strText, nLen);
+	::TextOut (hDC, x, y + 1, strText, nLen);
 
 	SetTextColor (hDC, Color);
-	::TextOut(hDC, x, y, pszText, nLen);
+	::TextOut (hDC, x, y, strText, nLen);
 }
 
 

@@ -582,17 +582,18 @@ Exit:
 
 BOOL CMgrGrpData::CheckVersion(LPCSTR pszVersion)
 {
-	BOOL bRet;
-	char szTmp[64];
+        BOOL bRet;
+        TCHAR szTmp[64];
 
-	bRet = FALSE;
+        bRet = FALSE;
 
-	ZeroMemory (szTmp, sizeof (szTmp));
-	/* バージョンチェック */
-	LoadString (m_hDll, IDS_DLLVER, szTmp, sizeof (szTmp));
-	if (strcmp (szTmp, pszVersion) != 0) {
-		goto Exit;
-	}
+        ZeroMemory (szTmp, sizeof (szTmp));
+        /* バージョンチェック */
+        LoadString (m_hDll, IDS_DLLVER, szTmp, _countof (szTmp));
+        CStringA strDllVersion = TStringToAnsi (szTmp);
+        if (strDllVersion.Compare (pszVersion) != 0) {
+                goto Exit;
+        }
 
 	bRet = TRUE;
 Exit:
@@ -2146,7 +2147,7 @@ void CMgrGrpData::GetGrpPos(
 /* 日付         :2006/09/24                                                                 */
 /* ========================================================================= */
 
-BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
+BOOL CMgrGrpData::Read(LPCSTR pszName, PCImg32 *pDib, int nSize)
 {
         BOOL bRet;
         int x, y;
@@ -2165,7 +2166,9 @@ BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
         pDibTmp         = NULL;
         pDibTmp2        = NULL;
 
-        hResInfo = FindResource (m_hDll, pszName, "PNG");
+        CString strName = AnsiToTString (pszName);
+        LPCTSTR pszNameT = strName;
+        hResInfo = FindResource (m_hDll, pszNameT, _T("PNG"));
         if (hResInfo == NULL) {
                 goto Exit;
         }
@@ -2237,7 +2240,7 @@ Exit:
 /* 日付         :2008/07/04                                                                 */
 /* ========================================================================= */
 
-BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
+BOOL CMgrGrpData::Read256(LPCSTR pszName, PCImg32 *pDib, int nSize)
 {
         BOOL bRet;
         int i, y;
@@ -2256,7 +2259,9 @@ BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
         state.info_raw.colortype = LCT_PALETTE;
         state.info_raw.bitdepth = 8;
 
-        hResInfo = FindResource (m_hDll, pszName, "PNG");
+        CString strName = AnsiToTString (pszName);
+        LPCTSTR pszNameT = strName;
+        hResInfo = FindResource (m_hDll, pszNameT, _T("PNG"));
         if (hResInfo == NULL) {
                 goto Exit;
         }

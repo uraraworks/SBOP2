@@ -314,7 +314,8 @@ void CMgrData::Load(void)
 void CMgrData::ReadHashList(void)
 {
 	int i, nCount;
-	char szFileName[MAX_PATH];
+        char szFileName[MAX_PATH];
+        TCHAR szBasePath[MAX_PATH];
 	DWORD dwTmp;
 	CTextInput TextInput;
 	CParamUtil ParamUtil;
@@ -322,8 +323,10 @@ void CMgrData::ReadHashList(void)
 
 	m_pInfoFileList->DeleteAll ();
 
-	GetModuleFilePath (szFileName, MAX_PATH);
-	strcat (szFileName, "Update\\SBOHashList.txt");
+        GetModuleFilePath (szBasePath, _countof (szBasePath));
+        CStringA strBasePath = TStringToAnsi (szBasePath);
+        strcpy_s (szFileName, strBasePath);
+        strcat_s (szFileName, "Update\\SBOHashList.txt");
 
 	TextInput.Create (szFileName);
 

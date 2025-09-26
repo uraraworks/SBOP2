@@ -13,7 +13,7 @@
 #include "SBOGlobal.h"
 #include "UpdateServerInfo.h"
 
-#define SERVERINFOFILENAME	"ServerInfo.csv"		/* サーバー情報ファイル名 */
+#define SERVERINFOFILENAME	_T("ServerInfo.csv")		/* サーバー情報ファイル名 */
 
 /* ========================================================================= */
 /* 関数名	:CUpdateServerInfo::CUpdateServerInfo							 */
@@ -283,7 +283,7 @@ void CUpdateServerInfo::Upload(void)
 
 	GetFileName (strFileName);
 	/* ファイル名の作成 */
-	wsprintf (szUpAddr, _T("%s/%s"), (LPCTSTR)m_strUploadPath, _T(SERVERINFOFILENAME));
+   wsprintf (szUpAddr, _T("%s/%s"), (LPCTSTR)m_strUploadPath, SERVERINFOFILENAME);
 
 	/* インターネットを開く */
 	hInternet = InternetOpen (_T("ScrapBookOnlineServer"), INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
@@ -331,12 +331,12 @@ Exit:
 
 void CUpdateServerInfo::GetFileName(CmyString &strDst)
 {
-	char szPath[MAX_PATH];
+    TCHAR szPath[MAX_PATH];
 
 	/* ファイル名の作成 */
-	GetModuleFilePath (szPath, sizeof (szPath));
-    CString strBasePath = Utf8ToTString (szPath);
-    CString strFileName = Utf8ToTString (SERVERINFOFILENAME);
+        GetModuleFilePath (szPath, _countof (szPath));
+    CString strBasePath (szPath);
+    CString strFileName (SERVERINFOFILENAME);
     strDst.Format(_T("%sSBODATA\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)strFileName);
 }
 

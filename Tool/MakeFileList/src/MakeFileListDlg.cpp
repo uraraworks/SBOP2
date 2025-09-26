@@ -118,7 +118,8 @@ void CMakeFileListDlg::ReadIniFile(void)
 void CMakeFileListDlg::MakeHashList(void)
 {
 	int i, nCount;
-	char szPath[MAX_PATH], szHash[33];
+        TCHAR szPath[MAX_PATH];
+        char szHash[33];
 	DWORD dwFileSize;
 	HANDLE hFile;
 	CString strFileName, strTmp;
@@ -126,11 +127,11 @@ void CMakeFileListDlg::MakeHashList(void)
 	CStdioFile destFile;
 	CStdArray<DWORD, DWORD> adwFileSize;
 
-	GetModuleFilePath (szPath, sizeof (szPath));
+        GetModuleFilePath (szPath, _countof (szPath));
 
         nCount = static_cast<int>(m_astrFileList.size());
         for (i = 0; i < nCount; i ++) {
-            CString strBasePath = Utf8ToTString (szPath);
+            CString strBasePath (szPath);
             strFileName.Format(_T("%s%s"), (LPCTSTR)strBasePath, (LPCTSTR)m_astrFileList[i]);
 
 		GetMD5.Init ();
@@ -140,7 +141,7 @@ void CMakeFileListDlg::MakeHashList(void)
 		if (strlen (szHash) <= 0) {
 			continue;
 		}
-                m_astrHashList.push_back (Utf8ToTString (szHash));
+                m_astrHashList.push_back (AnsiToTString (szHash));
 
 		dwFileSize = 0;
 		hFile = CreateFile (strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -152,7 +153,7 @@ void CMakeFileListDlg::MakeHashList(void)
 	}
 
 	/* ハッシュリストを保存 */
-    CString strBasePathAll = Utf8ToTString (szPath);
+    CString strBasePathAll (szPath);
     strFileName.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strBasePathAll);
 	destFile.Open (strFileName, CFile::modeWrite | CFile::modeCreate, NULL);
 

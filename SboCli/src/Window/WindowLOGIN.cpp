@@ -251,7 +251,7 @@ void CWindowLOGIN::MakeWindow(void)
 	strPassword = m_pMgrData->GetLastPassword ();
 
 	/* アカウント入力欄 */
-	m_hWndAccount = CreateWindow ("EDIT", "", WS_CHILD |  ES_LOWERCASE,
+        m_hWndAccount = CreateWindow (_T("EDIT"), _T(""), WS_CHILD |  ES_LOWERCASE,
 			m_ptViewPos.x + 16 * 8, m_ptViewPos.y + 16, 8 * 12, 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcAccount = (WNDPROC)GetWindowLong (m_hWndAccount, GWL_WNDPROC);
 	SendMessage			(m_hWndAccount, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
@@ -261,7 +261,7 @@ void CWindowLOGIN::MakeWindow(void)
 	SetWindowText (m_hWndAccount, strAccount);
 
 	/* パスワード入力欄 */
-	m_hWndPassword = CreateWindow ("EDIT", "", WS_CHILD | ES_PASSWORD | ES_AUTOHSCROLL,
+        m_hWndPassword = CreateWindow (_T("EDIT"), _T(""), WS_CHILD | ES_PASSWORD | ES_AUTOHSCROLL,
 			m_ptViewPos.x + 16 * 8, m_ptViewPos.y + 42, 8 * 12, 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcPassword = (WNDPROC)GetWindowLong (m_hWndPassword, GWL_WNDPROC);
 	SendMessage			(m_hWndPassword, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
@@ -270,7 +270,7 @@ void CWindowLOGIN::MakeWindow(void)
 	SetWindowLong		(m_hWndPassword, GWL_WNDPROC, (LONG)PasswordWndProc);
 
 	/* パスワードを記録するチェック */
-	m_hWndSavePassword = CreateWindow ("BUTTON", "パスワードを記録する", WS_CHILD | BS_AUTOCHECKBOX,
+        m_hWndSavePassword = CreateWindow (_T("BUTTON"), _T("パスワードを記録する"), WS_CHILD | BS_AUTOCHECKBOX,
 			m_ptViewPos.x + 16, m_ptViewPos.y + 16 * 4 + 6, 6 * 23, 14, hWndMain, (HMENU)IDC_SAVEPASSWORD, hInstance, NULL);
 	m_OrgWndProcSavePassword = (WNDPROC)GetWindowLong (m_hWndSavePassword, GWL_WNDPROC);
 	SendMessage		(m_hWndSavePassword, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
@@ -285,14 +285,14 @@ void CWindowLOGIN::MakeWindow(void)
 	}
 
 	/* 接続ボタン */
-	m_hWndConnect = CreateWindow ("BUTTON", "接続", WS_CHILD | BS_PUSHBUTTON,
+        m_hWndConnect = CreateWindow (_T("BUTTON"), _T("接続"), WS_CHILD | BS_PUSHBUTTON,
 			m_ptViewPos.x + 16 * 11 - 2, m_ptViewPos.y + 16 * 4 + 2, 54, 18, hWndMain, (HMENU)IDC_CONNECT, hInstance, NULL);
 	m_OrgWndProcConnect = (WNDPROC)GetWindowLong (m_hWndConnect, GWL_WNDPROC);
 	SendMessage		(m_hWndConnect, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
 	SetWindowLong	(m_hWndConnect, GWL_USERDATA, (LONG)this);
 	SetWindowLong	(m_hWndConnect, GWL_WNDPROC, (LONG)ConnectWndProc);
 
-	hThemeModule = LoadLibrary("UxTheme.dll");
+        hThemeModule = LoadLibrary(_T("UxTheme.dll"));
 	if (hThemeModule) {
 		pfSetWindowTheme = (SETWINDOWTHEME)GetProcAddress(hThemeModule, "SetWindowTheme");
 		pfSetWindowTheme (m_hWndSavePassword, L" ", L" ");

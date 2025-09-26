@@ -542,17 +542,16 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 		x += 16;
 	}
 
-        nLen = strlen (pszName);
-        USES_CONVERSION;
-        LPCTSTR pszText = A2CT(pszName);
-        int nDrawLen = static_cast<int>(_tcslen(pszText));
+        nLen = static_cast<int>(strlen (pszName));
+        CString strText = AnsiToTString (pszName);
+        int nDrawLen = strText.GetLength ();
         SetTextColor (hDCTmp, RGB (10, 10, 10));
-        ::TextOut(hDCTmp, x + 0, 2, pszText, nDrawLen);
-        ::TextOut(hDCTmp, x + 2, 2, pszText, nDrawLen);
-        ::TextOut(hDCTmp, x + 1, 1, pszText, nDrawLen);
-        ::TextOut(hDCTmp, x + 1, 3, pszText, nDrawLen);
+        ::TextOut (hDCTmp, x + 0, 2, strText, nDrawLen);
+        ::TextOut (hDCTmp, x + 2, 2, strText, nDrawLen);
+        ::TextOut (hDCTmp, x + 1, 1, strText, nDrawLen);
+        ::TextOut (hDCTmp, x + 1, 3, strText, nDrawLen);
         SetTextColor (hDCTmp, m_clName);
-        ::TextOut(hDCTmp, x + 1, 2, pszText, nDrawLen);
+        ::TextOut (hDCTmp, x + 1, 2, strText, nDrawLen);
 
 	SelectObject (hDCTmp, hFontOld);
 	m_pDibName->Unlock ();
@@ -623,15 +622,15 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
                 nLenTmp = strlen (szTmp);
                 nPos += nCount;
                 if (nLenTmp > 0) {
-                        LPCTSTR pszLine = A2CT(szTmp);
-                        int nDrawLenTmp = static_cast<int>(_tcslen(pszLine));
+                        CString strLine = AnsiToTString (szTmp);
+                        int nDrawLenTmp = strLine.GetLength ();
                         SetTextColor (hDCTmp, RGB (10, 10, 10));
-                        ::TextOut(hDCTmp, 0, 1 + nLine * 14, pszLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 2, 1 + nLine * 14, pszLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 1, 0 + nLine * 14, pszLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 1, 2 + nLine * 14, pszLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 0, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 2, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 1, 0 + nLine * 14, strLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 1, 2 + nLine * 14, strLine, nDrawLenTmp);
                         SetTextColor (hDCTmp, m_clSpeak);
-                        ::TextOut(hDCTmp, 1, 1 + nLine * 14, pszLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 1, 1 + nLine * 14, strLine, nDrawLenTmp);
                         nLine ++;
                 }
 

@@ -145,7 +145,7 @@ void CWindowCHARNAME::MakeWindow(void)
 	hWndMain	= m_pMgrData->GetMainWindow ();
 
 	/* キャラ名入力欄 */
-	m_hWndCharName = CreateWindow ("EDIT", "", WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
+        m_hWndCharName = CreateWindow (_T("EDIT"), _T(""), WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
 			m_ptViewPos.x + 16, m_ptViewPos.y + 48, 8 * MAXLEN_CHARNAME, 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcCharName = (WNDPROC)GetWindowLong (m_hWndCharName, GWL_WNDPROC);
 	SendMessage			(m_hWndCharName, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
