@@ -169,8 +169,8 @@ void CWindowCHARNAME::MakeWindow(void)
 
 LRESULT CALLBACK CWindowCHARNAME::CharNameWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	int nCount;
-	char szTmp[128];
+        int nCount;
+        TCHAR szTmp[128];
 	LRESULT hResult;
 	HIMC hImc;
 	PCWindowCHARNAME pThis;
@@ -180,19 +180,23 @@ LRESULT CALLBACK CWindowCHARNAME::CharNameWndProc(HWND hWnd, UINT message, WPARA
 
 	switch (message) {
 	case WM_CHAR:
-		if (wParam == VK_RETURN) {
-			GetWindowText (hWnd, szTmp, sizeof (szTmp) - 1);
-			nCount = strlen (szTmp);
-			if (nCount > 0) {
-				if (nCount >= MAXLEN_CHARNAME) {
-					if (IsDBCSLeadByte ((BYTE)szTmp[MAXLEN_CHARNAME - 1])) {
-						szTmp[MAXLEN_CHARNAME - 1] = 0;
-					} else {
-						szTmp[MAXLEN_CHARNAME] = 0;
-					}
-				}
-				pThis->m_strName = szTmp;
-				TrimViewString (pThis->m_strName, szTmp);
+                if (wParam == VK_RETURN) {
+                        GetWindowText (hWnd, szTmp, _countof (szTmp));
+                        nCount = static_cast<int>(_tcslen (szTmp));
+                        if (nCount > 0) {
+                                if (nCount >= MAXLEN_CHARNAME) {
+#ifdef _UNICODE
+                                        szTmp[MAXLEN_CHARNAME] = _T('\0');
+#else
+                                        if (IsDBCSLeadByte ((BYTE)szTmp[MAXLEN_CHARNAME - 1])) {
+                                                szTmp[MAXLEN_CHARNAME - 1] = 0;
+                                        } else {
+                                                szTmp[MAXLEN_CHARNAME] = 0;
+                                        }
+#endif
+                                }
+                                pThis->m_strName = szTmp;
+                                TrimViewString (pThis->m_strName, szTmp);
 				PostMessage (pThis->m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_CHARNAME, 0);
 			}
 			/* IMEをオフにする */

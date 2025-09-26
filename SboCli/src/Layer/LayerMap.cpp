@@ -64,10 +64,10 @@ CLayerMap::CLayerMap()
 	m_pLayerMisty		= NULL;
 	m_pLayerSnow		= NULL;
 
-	m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
-			TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ Ｐゴシック");
+        m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
+                        TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
 }
 
 

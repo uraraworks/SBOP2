@@ -94,9 +94,9 @@ BOOL CWndMapShadowAnimeList::Create(CWnd *pParent, CMgrData *pMgrData, int nReso
 	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
 	m_pInfoMapShadow	= pInfoMapShadow;
 
-	bRet = CWnd::Create (
-			AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW),
-			"",
+        bRet = CWnd::Create (
+                        AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW),
+                        _T(""),
 			WS_CHILD | WS_VISIBLE,
 			rc,
 			pParent,

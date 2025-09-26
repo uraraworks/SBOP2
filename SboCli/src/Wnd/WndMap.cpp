@@ -143,10 +143,10 @@ BOOL CWndMap::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify)
 	rc.SetRect (rcParent.left, rcParent.top, rcParent.left + 460, rcParent.top + 300);
 	AdjustWindowRect (&rc, WS_EX_TOOLWINDOW, FALSE);
 
-	bRet = CWnd::CreateEx (
-			WS_EX_TOOLWINDOW,
-			AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS),
-			"マップウィンドウ",
+        bRet = CWnd::CreateEx (
+                        WS_EX_TOOLWINDOW,
+                        AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS),
+                        _T("マップウィンドウ"),
 			WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME | WS_HSCROLL | WS_VSCROLL,
 			rc,
 			pParent,

@@ -102,9 +102,9 @@ BOOL CWndMapPartsGrp::Create(CWnd *pParent, CMgrData *pMgrData, int nResourceID,
 	m_pMgrData		= pMgrData;
 	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
 
-	bRet = CWnd::Create (
-			AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW),
-			"",
+        bRet = CWnd::Create (
+                        AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW),
+                        _T(""),
 			WS_CHILD | WS_VISIBLE,
 			rc,
 			pParent,

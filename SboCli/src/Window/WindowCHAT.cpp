@@ -267,16 +267,16 @@ LRESULT CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		switch (wParam) {
 		case VK_RETURN:
 			{
-				char szTmp[256], szTmp2[256];
+                                TCHAR szTmp[256], szTmp2[256];
 
 				if (m_bPushEnter == FALSE) {
 					break;
 				}
-				GetWindowText (hWnd, szTmp, sizeof (szTmp) - 1);
-				if (strlen (szTmp) > 0) {
-					ZeroMemory (szTmp2, sizeof (szTmp2));
-					_tcsnccat (szTmp2, szTmp, 100);
-					TrimViewString (m_strChat, szTmp2);
+                                GetWindowText (hWnd, szTmp, _countof (szTmp));
+                                if (_tcslen (szTmp) > 0) {
+                                        ZeroMemory (szTmp2, sizeof (szTmp2));
+                                        _tcsnccat (szTmp2, szTmp, 100);
+                                        TrimViewString (m_strChat, szTmp2);
 					m_pMgrData->SetChatModeBack (m_nType);
 					PostMessage (m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
 

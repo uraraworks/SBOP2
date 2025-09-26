@@ -496,14 +496,14 @@ LRESULT CALLBACK CWindowLOGIN::ConnectWndProc(HWND hWnd, UINT message, WPARAM wP
 
 void CWindowLOGIN::OnConnect(void)
 {
-	char szTmp[256];
+        TCHAR szTmp[256];
 
 	m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
 
-	GetWindowText (m_hWndAccount, szTmp, sizeof (szTmp));
-	TrimViewString (m_strAccount, szTmp);
-	GetWindowText (m_hWndPassword, szTmp, sizeof (szTmp));
-	TrimViewString (m_strPassword, szTmp);
+        GetWindowText (m_hWndAccount, szTmp, _countof (szTmp));
+        TrimViewString (m_strAccount, szTmp);
+        GetWindowText (m_hWndPassword, szTmp, _countof (szTmp));
+        TrimViewString (m_strPassword, szTmp);
 	if (m_strAccount.IsEmpty ()) {
 		return;
 	}

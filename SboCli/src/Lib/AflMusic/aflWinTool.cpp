@@ -451,11 +451,26 @@ void AflFont::setFontName(LPCSTR pString)
 //-----------------------------------------------------
 BOOL AflFont::createFont()
 {
-	deleteFont();
-	m_hFont = ::CreateFont(m_sizeFont.cy,m_sizeFont.cx,0,0,m_iFontBold,FALSE,FALSE,FALSE,
-		DEFAULT_CHARSET,OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,FF_MODERN,
-		m_strFontName.c_str());
-	return m_hFont!=0;
+        deleteFont();
+
+#ifdef _UNICODE
+        std::wstring strFontNameW;
+        if (!m_strFontName.empty()) {
+                int nLength = MultiByteToWideChar(CP_ACP, 0, m_strFontName.c_str(), -1, NULL, 0);
+                if (nLength > 0) {
+                        strFontNameW.resize(nLength - 1);
+                        MultiByteToWideChar(CP_ACP, 0, m_strFontName.c_str(), -1, &strFontNameW[0], nLength);
+                }
+        }
+        LPCTSTR pszFontName = strFontNameW.empty() ? TEXT("") : strFontNameW.c_str();
+#else
+        LPCTSTR pszFontName = m_strFontName.c_str();
+#endif
+
+        m_hFont = ::CreateFont(m_sizeFont.cy,m_sizeFont.cx,0,0,m_iFontBold,FALSE,FALSE,FALSE,
+                DEFAULT_CHARSET,OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,FF_MODERN,
+                pszFontName);
+        return m_hFont!=0;
 }
 //-----------------------------------------------------
 void AflFont::deleteFont()

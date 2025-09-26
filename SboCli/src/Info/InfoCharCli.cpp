@@ -56,10 +56,10 @@ CInfoCharCli::CInfoCharCli()
 
 	m_ptMove.x = m_ptMove.y = 0;
 
-	m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ ゴシック");
+        m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
 }
 
 

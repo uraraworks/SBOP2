@@ -70,10 +70,10 @@ CMainFrame::CMainFrame()
 	m_pMgrData			= new CMgrData;
 	m_pUpdateServerInfo	= new CUpdateServerInfo;
 
-	m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ ゴシック");
+        m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
 }
 
 
