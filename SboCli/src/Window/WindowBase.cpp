@@ -46,30 +46,30 @@ CWindowBase::CWindowBase()
 	m_ptViewPos.x	= m_ptViewPos.y		= 0;
 	m_sizeWindow.cx	= m_sizeWindow.cy	= 0;
 
-	m_hFont = CreateFont (16, 0, 0, 0, FW_ULTRABOLD,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ Ｐゴシック");
-	m_hFont12 = CreateFont (12, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ Ｐゴシック");
-	m_hFont12Bold = CreateFont (12, 0, 0, 0, FW_ULTRABOLD,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ Ｐゴシック");
-	m_hFont14 = CreateFont (14, 0, 0, 0, FW_ULTRABOLD,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ Ｐゴシック");
-	m_hFont16 = CreateFont (16, 0, 0, 0, FW_ULTRABOLD,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ ゴシック");
-	m_hFont16Normal = CreateFont (16, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ ゴシック");
+        m_hFont = CreateFont (16, 0, 0, 0, FW_ULTRABOLD,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
+        m_hFont12 = CreateFont (12, 0, 0, 0, FW_NORMAL,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
+        m_hFont12Bold = CreateFont (12, 0, 0, 0, FW_ULTRABOLD,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
+        m_hFont14 = CreateFont (14, 0, 0, 0, FW_ULTRABOLD,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
+        m_hFont16 = CreateFont (16, 0, 0, 0, FW_ULTRABOLD,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
+        m_hFont16Normal = CreateFont (16, 0, 0, 0, FW_NORMAL,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
 
 	m_pDib->SetColorKey (RGB (255, 0, 255));
 }
@@ -557,21 +557,26 @@ BOOL CWindowBase::OnSpace(BOOL bDown)
 /* 日付		:2005/05/06														 */
 /* ========================================================================= */
 
-void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
+void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
 {
-	int nLen;
+        if (pStr == NULL) {
+                return;
+        }
 
-	nLen = strlen (pStr);
-	/* 縁取りする？ */
-	if (bDraw) {
-		SetTextColor (hDC, ColorFrame);
-		TextOut (hDC, x - 1, y, pStr, nLen);
-		TextOut (hDC, x + 1, y, pStr, nLen);
-		TextOut (hDC, x, y - 1, pStr, nLen);
-		TextOut (hDC, x, y + 1, pStr, nLen);
-	}
-	SetTextColor (hDC, Color);
-	TextOut (hDC, x, y, pStr, nLen);
+        int nLen = lstrlen (pStr);
+        if (nLen <= 0) {
+                return;
+        }
+        /* 縁取りする？ */
+        if (bDraw) {
+                SetTextColor (hDC, ColorFrame);
+                ::TextOut (hDC, x - 1, y, pStr, nLen);
+                ::TextOut (hDC, x + 1, y, pStr, nLen);
+                ::TextOut (hDC, x, y - 1, pStr, nLen);
+                ::TextOut (hDC, x, y + 1, pStr, nLen);
+        }
+        SetTextColor (hDC, Color);
+        ::TextOut (hDC, x, y, pStr, nLen);
 }
 
 
@@ -581,12 +586,19 @@ void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF Color, B
 /* 日付		:2005/06/26														 */
 /* ========================================================================= */
 
-void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, COLORREF Color)
+void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color)
 {
-	int nLen;
+	if (pStr == NULL) {
+		return;
+	}
+
+	int nLen = lstrlen (pStr);
+	if (nLen <= 0) {
+		return;
+	}
+
 	RECT rc;
 
-	nLen = strlen (pStr);
 	SetRect (&rc, x, y, cx, cy);
 	SetTextColor (hDC, RGB(10, 10, 10));
 
@@ -600,45 +612,52 @@ void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCSTR pStr, C
 }
 
 
+
 /* ========================================================================= */
 /* 関数名	:CWindowBase::TextOut4											 */
 /* 内容		:黒縁取りで文字描画												 */
 /* 日付		:2007/04/03														 */
 /* ========================================================================= */
 
-void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCSTR pStr, COLORREF ColorFrame, COLORREF Color)
+void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color)
 {
-	int nLen;
+	if (pStr == NULL) {
+		return;
+	}
 
-	nLen = strlen (pStr);
+	int nLen = lstrlen (pStr);
+	if (nLen <= 0) {
+		return;
+	}
 	SetTextColor (hDC, ColorFrame);
 
-	TextOut (hDC, x - 2, y, pStr, nLen);
-	TextOut (hDC, x - 1, y, pStr, nLen);
-	TextOut (hDC, x - 1, y - 2, pStr, nLen);
-	TextOut (hDC, x - 2, y - 1, pStr, nLen);
-	TextOut (hDC, x - 1, y - 1, pStr, nLen);
-	TextOut (hDC, x - 2, y + 1, pStr, nLen);
-	TextOut (hDC, x - 1, y + 1, pStr, nLen);
-	TextOut (hDC, x - 1, y + 2, pStr, nLen);
+	::TextOut (hDC, x - 2, y, pStr, nLen);
+	::TextOut (hDC, x - 1, y, pStr, nLen);
+	::TextOut (hDC, x - 1, y - 2, pStr, nLen);
+	::TextOut (hDC, x - 2, y - 1, pStr, nLen);
+	::TextOut (hDC, x - 1, y - 1, pStr, nLen);
+	::TextOut (hDC, x - 2, y + 1, pStr, nLen);
+	::TextOut (hDC, x - 1, y + 1, pStr, nLen);
+	::TextOut (hDC, x - 1, y + 2, pStr, nLen);
 
-	TextOut (hDC, x + 2, y, pStr, nLen);
-	TextOut (hDC, x + 1, y, pStr, nLen);
-	TextOut (hDC, x + 1, y - 2, pStr, nLen);
-	TextOut (hDC, x + 2, y - 1, pStr, nLen);
-	TextOut (hDC, x + 1, y - 1, pStr, nLen);
-	TextOut (hDC, x + 2, y + 1, pStr, nLen);
-	TextOut (hDC, x + 1, y + 1, pStr, nLen);
-	TextOut (hDC, x + 1, y + 2, pStr, nLen);
+	::TextOut (hDC, x + 2, y, pStr, nLen);
+	::TextOut (hDC, x + 1, y, pStr, nLen);
+	::TextOut (hDC, x + 1, y - 2, pStr, nLen);
+	::TextOut (hDC, x + 2, y - 1, pStr, nLen);
+	::TextOut (hDC, x + 1, y - 1, pStr, nLen);
+	::TextOut (hDC, x + 2, y + 1, pStr, nLen);
+	::TextOut (hDC, x + 1, y + 1, pStr, nLen);
+	::TextOut (hDC, x + 1, y + 2, pStr, nLen);
 
-	TextOut (hDC, x, y - 2, pStr, nLen);
-	TextOut (hDC, x, y - 1, pStr, nLen);
-	TextOut (hDC, x, y + 2, pStr, nLen);
-	TextOut (hDC, x, y + 1, pStr, nLen);
+	::TextOut (hDC, x, y - 2, pStr, nLen);
+	::TextOut (hDC, x, y - 1, pStr, nLen);
+	::TextOut (hDC, x, y + 2, pStr, nLen);
+	::TextOut (hDC, x, y + 1, pStr, nLen);
 
 	SetTextColor (hDC, Color);
-	TextOut (hDC, x, y, pStr, nLen);
+	::TextOut (hDC, x, y, pStr, nLen);
 }
+
 
 
 /* ========================================================================= */

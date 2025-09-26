@@ -90,7 +90,7 @@ void CWindowPLACEINFORMATION::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 34, 6, (LPCSTR)pInfoMap->m_strMapName, RGB (1, 1, 1));
+	TextOut2 (hDC, 34, 6, (LPCTSTR)pInfoMap->m_strMapName, RGB (1, 1, 1));
 
 	fTmp = (float)pInfoChar->m_dwHP * 100.0f / (float)pInfoChar->m_dwMaxHP;
 	nTmp = (int)((float)65 * fTmp / 100.0f);

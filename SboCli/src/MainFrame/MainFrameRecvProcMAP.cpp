@@ -525,7 +525,7 @@ void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
 	pInfoMap->m_bRecovery		= Packet.m_bRecovery;		/* 気絶後回復する */
 	pInfoMap->m_byLevel			= Packet.m_byLevel;			/* 明るさレベル */
 
-	if (pInfoMap->m_strMapName != strMapNameBack) {
+	if (pInfoMap->m_strMapName != (LPCTSTR)strMapNameBack) {
 		strTmp.Format(_T("マップ名が[%s]に変更されました"), (LPCTSTR)pInfoMap->m_strMapName);
 		m_pMgrData->AddSystemMsg (TRUE, strTmp, RGB (0, 200, 255));
 		m_pMgrSound->PlaySound (SOUNDID_W_CHAT);

@@ -171,7 +171,7 @@ void CWindowCHAT::MakeWindow(void)
 	hInstance	= m_pMgrData->GetInstance ();
 	hWndMain	= m_pMgrData->GetMainWindow ();
 
-	m_hWndChat = CreateWindow ("EDIT", "", WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
+        m_hWndChat = CreateWindow (_T("EDIT"), _T(""), WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
 			m_ptViewPos.x + 8 + 6, m_ptViewPos.y + 16 + 6, m_sizeWindow.cx - (16 + 6 + 6), 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcChat = (WNDPROC)GetWindowLong (m_hWndChat, GWL_WNDPROC);
 	SendMessage			(m_hWndChat, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
@@ -267,16 +267,16 @@ LRESULT CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		switch (wParam) {
 		case VK_RETURN:
 			{
-				char szTmp[256], szTmp2[256];
+                                TCHAR szTmp[256], szTmp2[256];
 
 				if (m_bPushEnter == FALSE) {
 					break;
 				}
-				GetWindowText (hWnd, szTmp, sizeof (szTmp) - 1);
-				if (strlen (szTmp) > 0) {
-					ZeroMemory (szTmp2, sizeof (szTmp2));
-					_tcsnccat (szTmp2, szTmp, 100);
-					TrimViewString (m_strChat, szTmp2);
+                                GetWindowText (hWnd, szTmp, _countof (szTmp));
+                                if (_tcslen (szTmp) > 0) {
+                                        ZeroMemory (szTmp2, sizeof (szTmp2));
+                                        _tcsnccat (szTmp2, szTmp, 100);
+                                        TrimViewString (m_strChat, szTmp2);
 					m_pMgrData->SetChatModeBack (m_nType);
 					PostMessage (m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
 

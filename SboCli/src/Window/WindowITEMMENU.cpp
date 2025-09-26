@@ -126,8 +126,8 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	hDC			= m_pDib->Lock ();
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
-	TextOut2 (hDC, 12 + 5, 7 + 4, "装備", RGB (255, 255, 255));
-	TextOut2 (hDC, 12 + 5, 134 + 3, "バッグ(B)", RGB (255, 255, 255));
+	TextOut2 (hDC, 12 + 5, 7 + 4, _T("装備"), RGB (255, 255, 255));
+	TextOut2 (hDC, 12 + 5, 134 + 3, _T("バッグ(B)"), RGB (255, 255, 255));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -186,7 +186,7 @@ Exit:
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
 		DrawFrame2 (x, y, m_strName.GetLength () * 6, 16, 0, pDst, 4);
-		TextOut2 (hDC, x, y, (LPCSTR)m_strName, RGB (10, 10, 10), FALSE);
+		TextOut2 (hDC, x, y, (LPCTSTR)m_strName, RGB (10, 10, 10), FALSE);
 
 		SelectObject (hDC, hFontOld);
 		pDst->Unlock ();

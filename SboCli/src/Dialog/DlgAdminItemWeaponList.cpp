@@ -118,7 +118,8 @@ void CDlgAdminItemWeaponList::Renew(void)
 		strTmp.Format(_T("%d"), pInfoItemWeapon->m_dwWeaponInfoID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoItemWeapon->m_dwWeaponInfoID);	/* ID */
-		m_List.SetItemText (i, 1, pInfoItemWeapon->m_strName);		/* 武器種別名 */
+		CString strName = (LPCTSTR)pInfoItemWeapon->m_strName;		/* 武器種別名 */
+		m_List.SetItemText (i, 1, strName);
 	}
 
 	if (nSelect >= 0) {

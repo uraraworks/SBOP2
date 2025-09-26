@@ -148,7 +148,7 @@ void CDlgAdminCharModify::Renew(void)
 	}
 
         m_strCharID.Format (_T("%u"), m_pInfoChar->m_dwCharID);
-	m_strCharName	= m_pInfoChar->m_strCharName;
+	m_strCharName	= (LPCTSTR)m_pInfoChar->m_strCharName;
 	m_bBlock		= m_pInfoChar->m_bBlock;
 	m_bPush			= m_pInfoChar->m_bPush;
 	for (i = 0; i < CHARMOVETYPE_MAX; i ++) {
@@ -169,7 +169,8 @@ void CDlgAdminCharModify::Renew(void)
 	nCount = pLibInfoMotionType->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoMotionType = (PCInfoMotionType)pLibInfoMotionType->GetPtr (i);
-                m_ctlMotionType.AddString ((LPCTSTR)pInfoMotionType->m_strName);
+                CString strMotionType = (LPCTSTR)pInfoMotionType->m_strName;
+                m_ctlMotionType.AddString (strMotionType);
 		m_ctlMotionType.SetItemData (i, pInfoMotionType->m_dwMotionTypeID);
 	}
 
@@ -385,7 +386,7 @@ void CDlgAdminCharModify::OnTalk()
 
 	Dlg.Init (m_pMgrData);
 	Dlg.m_pInfo->Copy (m_pInfoTalkEvent);
-	Dlg.m_strTalk = m_pInfoChar->m_strTalk;
+	Dlg.m_strTalk = (LPCTSTR)m_pInfoChar->m_strTalk;
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
 		return;

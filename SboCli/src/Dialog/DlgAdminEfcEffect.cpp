@@ -578,7 +578,7 @@ void CDlgAdminEfcEffect::Get(int nNo)
 
 	m_bLoop			= m_pInfoEffect->m_bLoop;		/* ループ再生 */
 	m_bLoopSound	= m_pInfoEffect->m_bLoopSound;	/* ループ時に効果音を再生する */
-	m_strName		= m_pInfoEffect->m_strName;		/* エフェクト名 */
+	m_strName		= (LPCTSTR)m_pInfoEffect->m_strName;		/* エフェクト名 */
 
 	nCount = m_cmbSoundID.GetCount ();
 	for (i = 0; i < nCount; i ++) {

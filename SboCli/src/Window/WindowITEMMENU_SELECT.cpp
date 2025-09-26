@@ -80,7 +80,7 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 	HDC hDC;
 	HFONT hFontOld;
 	COLORREF clText;
-	LPCSTR pszTmp;
+	LPCTSTR pszTmp;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
@@ -97,12 +97,12 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 
 	nCount = m_anCommand.size();
 	for (i = 0; i < nCount; i ++) {
-		pszTmp = "";
+		pszTmp = _T("");
 		switch (m_anCommand[i]) {
-		case ITEMMENU_SELECT_COMMAND_PUT:			pszTmp = "地面に置く";	break;	/* 地面に置く */
-		case ITEMMENU_SELECT_COMMAND_EQUIP:			pszTmp = "装備する";	break;	/* 装備する */
-		case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	pszTmp = "装備を外す";	break;	/* 装備を外す */
-		case ITEMMENU_SELECT_COMMAND_USE:			pszTmp = "使う";		break;	/* 使う */
+		case ITEMMENU_SELECT_COMMAND_PUT:			pszTmp = _T("地面に置く");	break;	/* 地面に置く */
+		case ITEMMENU_SELECT_COMMAND_EQUIP:			pszTmp = _T("装備する");	break;	/* 装備する */
+		case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	pszTmp = _T("装備を外す");	break;	/* 装備を外す */
+		case ITEMMENU_SELECT_COMMAND_USE:			pszTmp = _T("使う");		break;	/* 使う */
 		}
 		TextOut2 (hDC, 32, 16 + 16 * i, pszTmp, clText);
 	}

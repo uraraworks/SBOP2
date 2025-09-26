@@ -99,7 +99,7 @@ void CDlgAdminItemWeaponNew::Set(CInfoItemWeapon *pSrc)
 	m_dwMotionType		= pSrc->m_dwMotionType;
 	m_dwMotionTypeStand	= pSrc->m_dwMotionTypeStand;
 	m_dwMotionTypeWalk	= pSrc->m_dwMotionTypeWalk;
-	m_strName			= pSrc->m_strName;
+	m_strName			= (LPCTSTR)pSrc->m_strName;
 
 	m_adwEffectIDAtack = pSrc->m_adwEffectIDAtack;
 	m_adwEffectIDCritical = pSrc->m_adwEffectIDCritical;

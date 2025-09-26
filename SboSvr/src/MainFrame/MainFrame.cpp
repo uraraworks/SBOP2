@@ -70,10 +70,10 @@ CMainFrame::CMainFrame()
 	m_pMgrData			= new CMgrData;
 	m_pUpdateServerInfo	= new CUpdateServerInfo;
 
-	m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ ゴシック");
+        m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
 }
 
 
@@ -103,18 +103,18 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::MainLoop(HINSTANCE hInstance)
 {
-	char szBuf[256];
+	TCHAR szBuf[256];
 	MSG msg;
 	TIMECAPS tc;
 	WNDCLASS wc;
 
 	wc.hInstance		= hInstance;
-	wc.lpszClassName	= CLNAME;
+	wc.lpszClassName	= _T(CLNAME);
 	wc.lpfnWndProc		= (WNDPROC)WndProcEntry;
 	wc.style			= 0;
 	wc.hIcon			= NULL;//LoadIcon (hInstance, (char *)IDI_MAINFRAME);
 	wc.hCursor			= LoadCursor ((HINSTANCE)NULL, IDC_ARROW);
-	wc.lpszMenuName		= "IDR_MENU";
+	wc.lpszMenuName		= _T("IDR_MENU");
 	wc.cbClsExtra		= 0;
 	wc.cbWndExtra		= 0;
 	wc.hbrBackground	= (HBRUSH)GetStockObject (BLACK_BRUSH);
@@ -125,9 +125,9 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	/* ウィンドウ作成 */
-	wsprintf (szBuf, _T("%s Ver%s"), WNDTITLE, VERTEXT);
+	wsprintf (szBuf, _T("%s Ver%s"), _T(WNDTITLE), _T(VERTEXT));
 	m_hWnd = CreateWindow (
-				CLNAME,
+				_T(CLNAME),
 				szBuf,
 				WS_OVERLAPPEDWINDOW,
 				CW_USEDEFAULT, CW_USEDEFAULT,
@@ -160,7 +160,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	}
 
 	timeEndPeriod (tc.wPeriodMin);
-	UnregisterClass (CLNAME, hInstance);
+	UnregisterClass (_T(CLNAME), hInstance);
 
 	/* 終了メッセージによりプログラム終了 */
 	return (int)msg.wParam;
@@ -497,7 +497,7 @@ void CMainFrame::OnDestroy(HWND hWnd)
 
 void CMainFrame::OnPaint(HWND hWnd)
 {
-	char szTmp[100];
+	CString strTmp;
 	DWORD dwTime;
 	HFONT hFontOld;
 	HDC hDC;
@@ -510,27 +510,27 @@ void CMainFrame::OnPaint(HWND hWnd)
 	hFontOld = (HFONT)SelectObject (hDC, m_hFont);
 
 	SetTextColor (hDC, RGB(0, 255, 0));
-	MyTextOut (hDC, 0, 0, 		"サーバー稼動時間");
-	MyTextOut (hDC, 0, 12 * 1, 	"接続数");
-	MyTextOut (hDC, 0, 12 * 2, 	"処理キャラ数");
-	MyTextOut (hDC, 0, 12 * 3, 	"処理マップ数");
+	MyTextOut (hDC, 0, 0, 		_T("サーバー稼動時間"));
+	MyTextOut (hDC, 0, 12 * 1, 	_T("接続数"));
+	MyTextOut (hDC, 0, 12 * 2, 	_T("処理キャラ数"));
+	MyTextOut (hDC, 0, 12 * 3, 	_T("処理マップ数"));
 
 	SetTextColor (hDC, RGB(255, 255, 255));
 
-	wsprintf (szTmp, _T("%04d:%02d:%02d"),
+	strTmp.Format (_T("%04d:%02d:%02d"),
 			 dwTime / 3600000,
 			 (dwTime % 3600000 - ((dwTime % 60000) / 1000)) / 60000,
 			 (dwTime % 60000) / 1000);
-	MyTextOut (hDC, 120, 0, szTmp);
+	MyTextOut (hDC, 120, 0, strTmp);
 
-	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCountOnline ());
-	MyTextOut (hDC, 120, 12 * 1, szTmp);
+	strTmp.Format (_T("%d"), m_pLibInfoChar->GetCountOnline ());
+	MyTextOut (hDC, 120, 12 * 1, strTmp);
 
-	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCount ());
-	MyTextOut (hDC, 120, 12 * 2, szTmp);
+	strTmp.Format (_T("%d"), m_pLibInfoChar->GetCount ());
+	MyTextOut (hDC, 120, 12 * 2, strTmp);
 
-	wsprintf (szTmp, _T("%d"), m_pLibInfoMap->GetCount ());
-	MyTextOut (hDC, 120, 12 * 3, szTmp);
+	strTmp.Format (_T("%d"), m_pLibInfoMap->GetCount ());
+	MyTextOut (hDC, 120, 12 * 3, strTmp);
 
 	SelectObject (hDC, hFontOld);
 
@@ -774,9 +774,14 @@ void CMainFrame::TimerProcKeepalive(void)
 /* 日付		:2003/05/17														 */
 /* ========================================================================= */
 
-void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCSTR pStr)
+void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr)
 {
-	TextOut (hDC, x, y, pStr, strlen (pStr));
+	if (pStr == NULL) {
+		return;
+	}
+
+	int nLen = static_cast<int>(_tcslen(pStr));
+	::TextOut(hDC, x, y, pStr, nLen);
 }
 
 

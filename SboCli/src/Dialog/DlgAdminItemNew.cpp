@@ -150,7 +150,7 @@ void CDlgAdminItemNew::SetModify(CInfoItem *pInfoItem)
 	m_nMapID				= pInfoItem->m_dwMapID;
 	m_nPosX					= pInfoItem->m_ptPos.x;
 	m_nPosY					= pInfoItem->m_ptPos.y;
-	m_strName				= pInfoItem->m_strName;
+	m_strName				= (LPCTSTR)pInfoItem->m_strName;
 	m_nGrpID				= pInfoItem->m_dwGrpID;
 	m_bPutOn				= pInfoItem->m_bPutOn;
 
@@ -294,7 +294,7 @@ void CDlgAdminItemNew::OnSelchangeType()
 
 	UpdateData ();
 
-	m_strName	= pInfoItem->m_strName;
+	m_strName	= (LPCTSTR)pInfoItem->m_strName;
 	m_nGrpID	= pInfoItem->m_dwGrpID;
 	m_bPutOn	= pInfoItem->m_bPutOn;
 	SelectSound (pInfoItem->m_dwDropSoundID);

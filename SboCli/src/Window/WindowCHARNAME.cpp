@@ -95,7 +95,7 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 24, 16, "キャラクター名", RGB (255, 127, 53));
+	TextOut4 (hDC, 24, 16, _T("キャラクター名"), RGB (255, 127, 53));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
@@ -145,7 +145,7 @@ void CWindowCHARNAME::MakeWindow(void)
 	hWndMain	= m_pMgrData->GetMainWindow ();
 
 	/* キャラ名入力欄 */
-	m_hWndCharName = CreateWindow ("EDIT", "", WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
+        m_hWndCharName = CreateWindow (_T("EDIT"), _T(""), WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,
 			m_ptViewPos.x + 16, m_ptViewPos.y + 48, 8 * MAXLEN_CHARNAME, 14, hWndMain, NULL, hInstance, NULL);
 	m_OrgWndProcCharName = (WNDPROC)GetWindowLong (m_hWndCharName, GWL_WNDPROC);
 	SendMessage			(m_hWndCharName, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
@@ -169,8 +169,8 @@ void CWindowCHARNAME::MakeWindow(void)
 
 LRESULT CALLBACK CWindowCHARNAME::CharNameWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	int nCount;
-	char szTmp[128];
+        int nCount;
+        TCHAR szTmp[128];
 	LRESULT hResult;
 	HIMC hImc;
 	PCWindowCHARNAME pThis;
@@ -180,19 +180,23 @@ LRESULT CALLBACK CWindowCHARNAME::CharNameWndProc(HWND hWnd, UINT message, WPARA
 
 	switch (message) {
 	case WM_CHAR:
-		if (wParam == VK_RETURN) {
-			GetWindowText (hWnd, szTmp, sizeof (szTmp) - 1);
-			nCount = strlen (szTmp);
-			if (nCount > 0) {
-				if (nCount >= MAXLEN_CHARNAME) {
-					if (IsDBCSLeadByte ((BYTE)szTmp[MAXLEN_CHARNAME - 1])) {
-						szTmp[MAXLEN_CHARNAME - 1] = 0;
-					} else {
-						szTmp[MAXLEN_CHARNAME] = 0;
-					}
-				}
-				pThis->m_strName = szTmp;
-				TrimViewString (pThis->m_strName, szTmp);
+                if (wParam == VK_RETURN) {
+                        GetWindowText (hWnd, szTmp, _countof (szTmp));
+                        nCount = static_cast<int>(_tcslen (szTmp));
+                        if (nCount > 0) {
+                                if (nCount >= MAXLEN_CHARNAME) {
+#ifdef _UNICODE
+                                        szTmp[MAXLEN_CHARNAME] = _T('\0');
+#else
+                                        if (IsDBCSLeadByte ((BYTE)szTmp[MAXLEN_CHARNAME - 1])) {
+                                                szTmp[MAXLEN_CHARNAME - 1] = 0;
+                                        } else {
+                                                szTmp[MAXLEN_CHARNAME] = 0;
+                                        }
+#endif
+                                }
+                                pThis->m_strName = szTmp;
+                                TrimViewString (pThis->m_strName, szTmp);
 				PostMessage (pThis->m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_CHARNAME, 0);
 			}
 			/* IMEをオフにする */

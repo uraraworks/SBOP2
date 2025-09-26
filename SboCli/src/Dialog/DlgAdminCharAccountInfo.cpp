@@ -11,6 +11,7 @@
 #include "InfoAccount.h"
 #include "UraraSockTCPSBO.h"
 #include "Packet.h"
+#include "myString.h"
 #include "LayoutHelper.h"
 #include "InfoCharCli.h"
 #include "LibInfoCharCli.h"
@@ -134,7 +135,7 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 				m_strMac.		Empty ();
 				if (pInfoChar) {
 					m_dwAccountID = pInfoChar->m_dwAccountID;
-					m_strCharName = pInfoChar->m_strCharName;
+					m_strCharName = (LPCTSTR)pInfoChar->m_strCharName;
 					m_strAccountID.Format(_T("%d"), m_dwAccountID);
 					Packet.Make (m_dwAccountID);
 					m_pSock->Send (&Packet);
@@ -153,12 +154,12 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 			pData = m_pMgrData->GetPtr (dwPara);
 			InfoAccount.SetTmpData (pData);
 			m_dwAccountID	= InfoAccount.m_dwAccountID;
-			m_strAccount	= InfoAccount.m_strAccount;
-			m_strPassword	= InfoAccount.m_strPassword;
+			m_strAccount	= (LPCTSTR)InfoAccount.m_strAccount;
+			m_strPassword	= (LPCTSTR)InfoAccount.m_strPassword;
 			AddrTmp.S_un.S_addr = InfoAccount.m_dwIP;
 			m_strIP.Format(_T("%d.%d.%d.%d"),
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4);
-			m_strMac		= InfoAccount.m_strLastMacAddr;
+			m_strMac		= (LPCTSTR)InfoAccount.m_strLastMacAddr;
 			m_strAccountID.Format(_T("%d"), m_dwAccountID);
 			m_pMgrData->Delete (dwPara);
 			UpdateData (FALSE);
@@ -234,7 +235,9 @@ void CDlgAdminCharAccountInfo::OnDisable()
 	InfoAccount.m_dwAccountID	= m_dwAccountID;
 	InfoAccount.m_strAccount	= m_strAccount;
 	InfoAccount.m_strPassword	= m_strPassword;
-	Packet.Make (&InfoAccount, TRUE, m_strMac);
+	CStringA strMacA = TStringToUtf8(m_strMac);
+
+	Packet.Make (&InfoAccount, TRUE, strMacA);
 	m_pSock->Send (&Packet);
 }
 

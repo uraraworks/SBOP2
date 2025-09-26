@@ -107,7 +107,8 @@ void CDlgAdminEfcEffectList::Renew(void)
 		strTmp.Format(_T("%d"), pInfoEffect->m_dwEffectID);
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfoEffect->m_dwEffectID);
-		m_List.SetItemText (i, 1, (LPCTSTR)pInfoEffect->m_strName);
+		CString strName = (LPCTSTR)pInfoEffect->m_strName;
+		m_List.SetItemText (i, 1, strName);
 	}
 }
 

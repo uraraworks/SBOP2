@@ -10,6 +10,7 @@
 #include "resource.h"
 #include "UraraSockTCPSBO.h"
 #include "Packet.h"
+#include "myString.h"
 #include "LayoutHelper.h"
 #include "MgrData.h"
 #include "DlgAdminAccountAdd.h"
@@ -101,7 +102,10 @@ void CDlgAdminAccountAdd::OnSend()
 
 	UpdateData ();
 
-	Packet.Make ((LPCSTR)m_strAccount, (LPCSTR)m_strPassword);
+	CStringA strAccountA = TStringToUtf8(m_strAccount);
+	CStringA strPasswordA = TStringToUtf8(m_strPassword);
+
+	Packet.Make (strAccountA, strPasswordA);
 	m_pSock->Send (&Packet);
 }
 

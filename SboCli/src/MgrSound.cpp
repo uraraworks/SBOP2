@@ -61,20 +61,20 @@ CMgrSound::~CMgrSound()
 BOOL CMgrSound::Create(void)
 {
 	BOOL bRet, bResult;
-	char szPath[MAX_PATH];
-	CmyString strFileName;
+        TCHAR szPath[MAX_PATH];
+        CmyString strFileName;
 
 	bRet = FALSE;
 
-	GetModuleFilePath (szPath, sizeof (szPath));
-        CString strModulePath = Utf8ToTString (szPath);
-        strFileName.Format(_T("%sSboSoundData.dll"), (LPCTSTR)strModulePath);
+        GetModuleFilePath (szPath, _countof (szPath));
+        CString strModulePath (szPath);
+        strFileName.Format (_T("%sSboSoundData.dll"), (LPCTSTR)strModulePath);
 
 	bResult = m_pDXAudio->Create ();
 	if (bResult == FALSE) {
 		goto Exit;
 	}
-	m_hDllSoundData = LoadLibrary (strFileName);
+        m_hDllSoundData = LoadLibrary (strFileName);
 	m_pDXAudio->SetResourceHandle (m_hDllSoundData);
 
 	m_pLibMusicLoader->		Load ();
@@ -142,6 +142,7 @@ void CMgrSound::PlayBGM(
 	BOOL bPlay)		/* [in] 既に同じIDのBGMが再生中の時はそのままにしておく */
 {
     char szTmp[MAX_PATH];
+    TCHAR szBasePath[MAX_PATH];
 
 	if (bPlay) {
 		if (m_dwSoundID == (DWORD)nNo) {
@@ -149,8 +150,10 @@ void CMgrSound::PlayBGM(
 		}
 	}
 
-	GetModuleFilePath (szTmp, sizeof (szTmp));
-	strcat (szTmp, "BGM\\");
+        GetModuleFilePath (szBasePath, _countof (szBasePath));
+        CStringA strBasePath = TStringToAnsi (szBasePath);
+        strcpy_s (szTmp, strBasePath);
+        strcat_s (szTmp, "BGM\\");
 	switch (nNo) {
 //	case 0:
 //		strcat (szTmp, "v4.ogg");
@@ -162,28 +165,28 @@ void CMgrSound::PlayBGM(
 //		strcat (szTmp, "shinma_kourin.ogg");
 //		break;
 	case BGMID_DAICHI_S:
-		strcat (szTmp, "daichi_s.ogg");
+                strcat_s (szTmp, "daichi_s.ogg");
 		break;
 	case BGMID_HISYOU:
-		strcat (szTmp, "hisyou.ogg");
+                strcat_s (szTmp, "hisyou.ogg");
 		break;
 	case BGMID_SUISHA:
-		strcat (szTmp, "suisha.ogg");
+                strcat_s (szTmp, "suisha.ogg");
 		break;
 	case BGMID_FAIRYTALE:
-		strcat (szTmp, "fairytale.ogg");
+                strcat_s (szTmp, "fairytale.ogg");
 		break;
 	case BGMID_TABLA_IMAGE:
-		strcat (szTmp, "tabla_image.ogg");
+                strcat_s (szTmp, "tabla_image.ogg");
 		break;
 	case BGMID_FLOWED_PIANO:
-		strcat (szTmp, "flowed piano.ogg");
+                strcat_s (szTmp, "flowed piano.ogg");
 		break;
 	case BGMID_HUYUNOMATI_FULL:
-		strcat (szTmp, "huyunomati_full.ogg");
+                strcat_s (szTmp, "huyunomati_full.ogg");
 		break;
 	case BGMID_OYAKODON_NAMI:
-		strcat (szTmp, "oyakodon_nami.ogg");
+                strcat_s (szTmp, "oyakodon_nami.ogg");
 		break;
 	}
 	m_dwSoundID = (DWORD)nNo;
@@ -194,7 +197,7 @@ void CMgrSound::PlayBGM(
         // .ogg 失敗時は .wav にフォールバック（資産変換時用）
         size_t len = strlen(szTmp);
         if (len >= 4 && _stricmp(szTmp + len - 4, ".ogg") == 0) {
-            strcpy(szTmp + len - 4, ".wav");
+            strcpy_s(szTmp + len - 4, _countof(szTmp) - (len - 4), ".wav");
             if (!m_pDXAudio->PlayBGMFile(szTmp, TRUE, m_fBGMVolume)) {
                 return;
             }
@@ -297,7 +300,7 @@ void CMgrSound::ReadSoundData(void)
 			continue;
 		}
 		m_pDXAudio->GetSegFromRes (
-				FindResource (m_hDllSoundData, MAKEINTRESOURCE (nResourceID), "WAVE"),
+                            FindResource (m_hDllSoundData, MAKEINTRESOURCE (nResourceID), _T("WAVE")),
 				&m_apDMSSound[i]);
 	}
 }

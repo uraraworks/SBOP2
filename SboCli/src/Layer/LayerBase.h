@@ -37,9 +37,9 @@ public:
 
 
 protected:
-	void	TextOut1	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color);		/* 文字描画 */
-	void	TextOut2	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* 縁取り文字描画 */
-	void	TextOut3	(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* 縁取り文字描画 */
+	void    TextOut1        (HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color);		/* 文字描画 */
+	void    TextOut2        (HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* 縁取り文字描画 */
+	void    TextOut3        (HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB (10, 10, 10));		/* 縁取り文字描画 */
 
 
 protected:

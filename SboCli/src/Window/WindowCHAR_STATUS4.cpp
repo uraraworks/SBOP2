@@ -91,7 +91,7 @@ void CWindowCHAR_STATUS4::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 7, 6, (LPCSTR)pInfoChar->m_strCharName, RGB (255, 255, 255));
+	TextOut2 (hDC, 7, 6, (LPCTSTR)pInfoChar->m_strCharName, RGB (255, 255, 255));
 
 	fTmp = (float)pInfoChar->m_dwHP * 100.0f / (float)pInfoChar->m_dwMaxHP;
 	nTmp = (int)((float)200 * fTmp / 100.0f);
@@ -103,9 +103,9 @@ void CWindowCHAR_STATUS4::Draw(PCImg32 pDst)
 	SelectObject (hDC, hFontOld);
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont12Bold);
 	strTmp.Format(_T("%d/%d"), pInfoChar->m_dwHP, pInfoChar->m_dwMaxHP);
-	TextOut2 (hDC, 240 - (strTmp.GetLength () * 7), 23, (LPCSTR)strTmp, RGB (255, 255, 255), TRUE, RGB (1, 1, 1));
+	TextOut2 (hDC, 240 - (strTmp.GetLength () * 7), 23, (LPCTSTR)strTmp, RGB (255, 255, 255), TRUE, RGB (1, 1, 1));
 	strTmp.Format(_T("%d/%d"), pInfoChar->m_dwSP, pInfoChar->m_dwMaxSP);
-	TextOut2 (hDC, 240 - (strTmp.GetLength () * 7), 38, (LPCSTR)strTmp, RGB (255, 255, 255), TRUE, RGB (1, 1, 1));
+	TextOut2 (hDC, 240 - (strTmp.GetLength () * 7), 38, (LPCTSTR)strTmp, RGB (255, 255, 255), TRUE, RGB (1, 1, 1));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

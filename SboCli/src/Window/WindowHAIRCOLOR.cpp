@@ -12,6 +12,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "myString.h"
 #include "WindowHAIRCOLOR.h"
 
 /* ========================================================================= */
@@ -74,6 +75,7 @@ void CWindowHAIRCOLOR::Draw(PCImg32 pDst)
 	HFONT hFontOld;
 	COLORREF clText;
 	CmyString strTmp;
+	CString strHairColor;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
@@ -86,10 +88,11 @@ void CWindowHAIRCOLOR::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 56, 8, "髪の色", clText);
+	TextOut4 (hDC, 56, 8, _T("髪の色"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);
 	TextOut4 (hDC, 16, 32, strTmp, clText);
-	TextOut2 (hDC, 40, 32, m_pMgrData->GetHairColorName ((WORD)m_nPos), clText);
+        strHairColor = Utf8ToTString (m_pMgrData->GetHairColorName ((WORD)m_nPos));
+        TextOut2 (hDC, 40, 32, strHairColor, clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

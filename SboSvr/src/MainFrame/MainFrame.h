@@ -66,7 +66,7 @@ private:
 	void	OnDisconnect		(DWORD dwSessionID);								/* メッセージハンドラ(WM_DISCONNECT) */
 	void	TimerProc			(void);												/* 時間処理 */
 	void	TimerProcKeepalive	(void);												/* 時間処理(生存確認チェック) */
-	void	MyTextOut			(HDC hDC, int x, int y, LPCSTR pStr);				/* 文字列描画 */
+	void	MyTextOut			(HDC hDC, int x, int y, LPCTSTR pStr);				/* 文字列描画 */
 	void	UpdateServerInfo	(BOOL bSend = TRUE, BOOL bUpload = FALSE);			/* サーバー情報を更新 */
 
 	void	OnCommandACCOUNT_DELETEALL	(void);									/* メニューハンドラ(全アカウントを削除) */

@@ -13,6 +13,7 @@
 #include "MgrGrpData.h"
 
 #include <vector>
+#include <cstdio>
 
 
 
@@ -142,7 +143,8 @@ BOOL CMgrGrpData::Load(void)
 {
 	BOOL bResult;
 	int i;
-	char szName[MAX_PATH], szTmp[64];
+	TCHAR szName[MAX_PATH];
+	char szTmp[64];
 	BOOL bRet;
 	PCImg32 pImg;
 	LPSTR pszTmp,
@@ -161,10 +163,14 @@ BOOL CMgrGrpData::Load(void)
 	bRet = FALSE;
 
 	/* ファイル名の作成 */
-	GetModuleFileName (NULL, szName, MAX_PATH);
-	pszTmp		= strrchr (szName, '\\');
-	pszTmp[1]	= 0;
-	strcat (szName, "SboGrpData.dll");
+	GetModuleFileName (NULL, szName, _countof (szName));
+	LPTSTR pszPath = _tcsrchr (szName, _T('\\'));
+	if (pszPath != NULL) {
+		pszPath[1]	= _T('\0');
+	} else {
+		szName[0]	= _T('\0');
+	}
+	_tcscat_s (szName, _countof (szName), _T("SboGrpData.dll"));
 
 	m_hDll = LoadLibrary (szName);
 	if (m_hDll == NULL) {
@@ -188,7 +194,7 @@ BOOL CMgrGrpData::Load(void)
 
 	/* マップ */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_MAP_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_MAP_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -201,7 +207,7 @@ BOOL CMgrGrpData::Load(void)
 
 	/* マップ影 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_MAPSHADOW_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_MAPSHADOW_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -240,7 +246,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 服 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_CLOTH_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_CLOTH_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -251,7 +257,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 目 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_EYE_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_EYE_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -262,7 +268,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 髪(下) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_HAIR_D%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_HAIR_D%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -273,7 +279,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 髪(上) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_HAIR_U%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_HAIR_U%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -284,7 +290,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* NPC */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_NPC_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_NPC_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -295,7 +301,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 特殊服 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_CLOTH_SP%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_CLOTH_SP%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -306,7 +312,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* アクセサリ */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_ACCE_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_ACCE_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -317,7 +323,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* エフェクト(32) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_EFC_32_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_EFC_32_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -328,7 +334,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* エフェクト(64) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_EFC_64_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_EFC_64_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -339,7 +345,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 武器 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_WEAPON_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_WEAPON_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -350,7 +356,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 武器(弓) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_WEAPON_BOW_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_WEAPON_BOW_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -361,7 +367,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 武器(矢) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_WEAPON_ARROW_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_WEAPON_ARROW_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -372,7 +378,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 武器(打撃) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_WEAPON_GLOVE_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_WEAPON_GLOVE_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -383,7 +389,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 武器(その他) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_WEAPON_ETC_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_WEAPON_ETC_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -394,7 +400,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 噴出し */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_BALLOON_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_BALLOON_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -430,7 +436,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 服 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_CLOTH_%02d"), i);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_CLOTH_%02d", i);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -441,7 +447,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 目 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_EYE_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_EYE_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -452,7 +458,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 髪 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_HAIR_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_HAIR_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -463,7 +469,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 特殊服 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_SP_CLOTH_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_SP_CLOTH_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -474,7 +480,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 特殊髪 */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_SP_HAIR_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_SP_HAIR_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -485,7 +491,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 持ち物(2x2) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_ARMS_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_ARMS_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -496,7 +502,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 盾(2x2) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_SHIELD_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_SHIELD_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -507,7 +513,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 特殊持ち物(2x2) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_ARMS_SP_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_ARMS_SP_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -518,7 +524,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* 弓(2x2) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_BOW_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_BOW_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -529,7 +535,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* NPC(2x2) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_NPC_%03d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_NPC_%03d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -540,7 +546,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* キャラ影(2x2) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_CHAR_SHADOW_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_CHAR_SHADOW_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -551,7 +557,7 @@ BOOL CMgrGrpData::Load(void)
 	}
 	/* NPC影(2x2) */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_2X2_NPC_%03d_SHADOW"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_2X2_NPC_%03d_SHADOW", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -576,17 +582,18 @@ Exit:
 
 BOOL CMgrGrpData::CheckVersion(LPCSTR pszVersion)
 {
-	BOOL bRet;
-	char szTmp[64];
+        BOOL bRet;
+        TCHAR szTmp[64];
 
-	bRet = FALSE;
+        bRet = FALSE;
 
-	ZeroMemory (szTmp, sizeof (szTmp));
-	/* バージョンチェック */
-	LoadString (m_hDll, IDS_DLLVER, szTmp, sizeof (szTmp));
-	if (strcmp (szTmp, pszVersion) != 0) {
-		goto Exit;
-	}
+        ZeroMemory (szTmp, sizeof (szTmp));
+        /* バージョンチェック */
+        LoadString (m_hDll, IDS_DLLVER, szTmp, _countof (szTmp));
+        CStringA strDllVersion = TStringToAnsi (szTmp);
+        if (strDllVersion.Compare (pszVersion) != 0) {
+                goto Exit;
+        }
 
 	bRet = TRUE;
 Exit:
@@ -1737,7 +1744,7 @@ void CMgrGrpData::ReadMapPartsTmp(void)
 	FreeInfo (m_paImgMapPartsTmp, pImg);
 	/* マップ */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_MAP_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_MAP_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -1817,7 +1824,7 @@ void CMgrGrpData::ReadMapShadowTmp(void)
 	FreeInfo (m_paImgMapShadowTmp, pImg);
 	/* マップ */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_MAPSHADOW_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_MAPSHADOW_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -1897,7 +1904,7 @@ void CMgrGrpData::ReadItemTmp(void)
 	FreeInfo (m_paImgItemTmp, pImg);
 	/* アイテム */
 	for (i = 0; ; i ++) {
-		wsprintf (szTmp, _T("IDP_ITEM_%02d"), i + 1);
+		sprintf_s (szTmp, sizeof (szTmp), "IDP_ITEM_%02d", i + 1);
 		pImg	= new CImg32;
 		bResult	= Read256 (szTmp, &pImg, 1);
 		if (bResult == FALSE) {
@@ -2140,7 +2147,7 @@ void CMgrGrpData::GetGrpPos(
 /* 日付         :2006/09/24                                                                 */
 /* ========================================================================= */
 
-BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
+BOOL CMgrGrpData::Read(LPCSTR pszName, PCImg32 *pDib, int nSize)
 {
         BOOL bRet;
         int x, y;
@@ -2159,7 +2166,9 @@ BOOL CMgrGrpData::Read(LPSTR pszName, PCImg32 *pDib, int nSize)
         pDibTmp         = NULL;
         pDibTmp2        = NULL;
 
-        hResInfo = FindResource (m_hDll, pszName, "PNG");
+        CString strName = AnsiToTString (pszName);
+        LPCTSTR pszNameT = strName;
+        hResInfo = FindResource (m_hDll, pszNameT, _T("PNG"));
         if (hResInfo == NULL) {
                 goto Exit;
         }
@@ -2231,7 +2240,7 @@ Exit:
 /* 日付         :2008/07/04                                                                 */
 /* ========================================================================= */
 
-BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
+BOOL CMgrGrpData::Read256(LPCSTR pszName, PCImg32 *pDib, int nSize)
 {
         BOOL bRet;
         int i, y;
@@ -2250,7 +2259,9 @@ BOOL CMgrGrpData::Read256(LPSTR pszName, PCImg32 *pDib, int nSize)
         state.info_raw.colortype = LCT_PALETTE;
         state.info_raw.bitdepth = 8;
 
-        hResInfo = FindResource (m_hDll, pszName, "PNG");
+        CString strName = AnsiToTString (pszName);
+        LPCTSTR pszNameT = strName;
+        hResInfo = FindResource (m_hDll, pszNameT, _T("PNG"));
         if (hResInfo == NULL) {
                 goto Exit;
         }

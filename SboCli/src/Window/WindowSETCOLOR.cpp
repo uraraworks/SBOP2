@@ -82,13 +82,13 @@ void CWindowSETCOLOR::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "白",	RGB (255, 255, 255), TRUE);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "赤",	RGB (255, 200, 200), TRUE);
-	TextOut2 (hDC, 32, 16 + 16 * 2, "黄",	RGB (255, 255, 200), TRUE);
-	TextOut2 (hDC, 32, 16 + 16 * 3, "緑",	RGB (200, 255, 200), TRUE);
-	TextOut2 (hDC, 32, 16 + 16 * 4, "青緑",	RGB (200, 255, 255), TRUE);
-	TextOut2 (hDC, 32, 16 + 16 * 5, "青",	RGB (200, 200, 255), TRUE);
-	TextOut2 (hDC, 32, 16 + 16 * 6, "紫",	RGB (255, 200, 255), TRUE);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("白"),	RGB (255, 255, 255), TRUE);
+	TextOut2 (hDC, 32, 16 + 16 * 1, _T("赤"),	RGB (255, 200, 200), TRUE);
+	TextOut2 (hDC, 32, 16 + 16 * 2, _T("黄"),	RGB (255, 255, 200), TRUE);
+	TextOut2 (hDC, 32, 16 + 16 * 3, _T("緑"),	RGB (200, 255, 200), TRUE);
+	TextOut2 (hDC, 32, 16 + 16 * 4, _T("青緑"),	RGB (200, 255, 255), TRUE);
+	TextOut2 (hDC, 32, 16 + 16 * 5, _T("青"),	RGB (200, 200, 255), TRUE);
+	TextOut2 (hDC, 32, 16 + 16 * 6, _T("紫"),	RGB (255, 200, 255), TRUE);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

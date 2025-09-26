@@ -298,7 +298,7 @@ void CDlgAdminMapObjectEdit::OnBnClickedAdd()
 
 void CDlgAdminMapObjectEdit::Set(void)
 {
-	m_strName	= m_pInfoMapObject->m_strName;
+	m_strName	= (LPCTSTR)m_pInfoMapObject->m_strName;
 	m_nCx		= m_pInfoMapObject->m_sizeGrp.cx;
 	m_nCy		= m_pInfoMapObject->m_sizeGrp.cy;
 	m_nHideY	= m_pInfoMapObject->m_nHideY;

@@ -12,6 +12,7 @@
 #include "UraraSockTCPSBO.h"
 #include "LibInfoMotion.h"
 #include "MgrData.h"
+#include "myString.h"
 #include "DlgAdminCharMotion.h"
 #include "DlgAdminCharMotionList.h"
 
@@ -119,13 +120,14 @@ BOOL CDlgAdminCharMotionList::OnInitDialog()
 	m_List.InsertColumn (1, _T("編集するモーション"),	LVCFMT_LEFT, 300);
 
 	for (i = CHARMOTIONLISTID_NONE + 1; i < CHARMOTIONLISTID_MAX; i ++) {
-		pszItem = m_pMgrData->GetMotionName (i);
-		if (pszItem == NULL) {
-			break;
-		}
-		strTmp.Format(_T("%d"), i);
-		m_List.InsertItem (i - 1, strTmp);
-		m_List.SetItemText (i - 1, 1, pszItem);
+                pszItem = m_pMgrData->GetMotionName (i);
+                if (pszItem == NULL) {
+                        break;
+                }
+                strTmp.Format(_T("%d"), i);
+                m_List.InsertItem (i - 1, strTmp);
+                CString strName = Utf8ToTString (pszItem);
+                m_List.SetItemText (i - 1, 1, strName);
 	}
 
 	return TRUE;

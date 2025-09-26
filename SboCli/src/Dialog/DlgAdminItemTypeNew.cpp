@@ -164,7 +164,7 @@ void CDlgAdminItemTypeNew::SetModify(CInfoItemTypeBase *pInfoItemType)
 	m_dwSelectSoundID		= pInfoItemType->m_dwDropSoundID;
 	m_dwUseEffectID			= pInfoItemType->m_dwUseEffectID;
 	m_dwUseSoundID			= pInfoItemType->m_dwUseSoundID;
-	m_strName				= pInfoItemType->m_strName;
+	m_strName				= (LPCTSTR)pInfoItemType->m_strName;
 	m_nDelAverage			= pInfoItemType->m_byDelAverage;
 	m_nGrpID				= pInfoItemType->m_dwGrpID;
 	m_bPutOn				= pInfoItemType->m_bPutOn;

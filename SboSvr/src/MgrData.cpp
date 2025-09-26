@@ -108,7 +108,8 @@ void CMgrData::Create(
 	CMainFrame			*pMainFrame,	/* [in] メインフレーム */
 	CUraraSockTCPSBO	*pSock)			/* [in] 通信マネージャ */
 {
-	char szName[MAX_PATH], *pszTmp;
+	TCHAR szName[MAX_PATH];
+	LPTSTR pszPath;
 	CmyString strTmp;
 
 	ReadIniData ();
@@ -138,13 +139,17 @@ void CMgrData::Create(
 	m_pLibInfoItem->SetTypeInfo (m_pLibInfoItemType);
 	m_pLibInfoItem->SetWeaponInfo (m_pLibInfoItemWeapon);
 
-	GetModuleFileName (NULL, szName, MAX_PATH);
-	pszTmp		= strrchr (szName, '\\');
-	pszTmp[1]	= 0;
+	GetModuleFileName (NULL, szName, _countof (szName));
+	pszPath	= _tcsrchr (szName, _T('\\'));
+	if (pszPath != NULL) {
+		pszPath[1]	= _T('\0');
+	} else {
+		szName[0]	= _T('\0');
+	}
 
 	/* ログファイルの作成 */
-    CString strBasePath = Utf8ToTString (szName);
-    strTmp.Format(_T("%sSboSvrLog.txt"), (LPCTSTR)strBasePath);
+	CString strBasePath (szName);
+	strTmp.Format(_T("%sSboSvrLog.txt"), (LPCTSTR)strBasePath);
 	m_pLog->Create (strTmp, TRUE, TRUE);
 }
 
@@ -309,7 +314,8 @@ void CMgrData::Load(void)
 void CMgrData::ReadHashList(void)
 {
 	int i, nCount;
-	char szFileName[MAX_PATH];
+        char szFileName[MAX_PATH];
+        TCHAR szBasePath[MAX_PATH];
 	DWORD dwTmp;
 	CTextInput TextInput;
 	CParamUtil ParamUtil;
@@ -317,8 +323,10 @@ void CMgrData::ReadHashList(void)
 
 	m_pInfoFileList->DeleteAll ();
 
-	GetModuleFilePath (szFileName, MAX_PATH);
-	strcat (szFileName, "Update\\SBOHashList.txt");
+        GetModuleFilePath (szBasePath, _countof (szBasePath));
+        CStringA strBasePath = TStringToAnsi (szBasePath);
+        strcpy_s (szFileName, strBasePath);
+        strcat_s (szFileName, "Update\\SBOHashList.txt");
 
 	TextInput.Create (szFileName);
 

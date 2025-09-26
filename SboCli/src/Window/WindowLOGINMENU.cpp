@@ -125,13 +125,13 @@ void CWindowLOGINMENU::Draw(PCImg32 pDst)
 
 	clBack = RGB (1, 1, 1);
 	clText = (m_abEnable[0] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 0, "キャラ選択", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("キャラ選択"), clText);
 	clText = (m_abEnable[1] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "新規作成", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, _T("新規作成"), clText);
 	clText = (m_abEnable[2] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 2, "キャラ削除", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 2, _T("キャラ削除"), clText);
 	clText = (m_abEnable[3] == TRUE) ? RGB (1, 1, 1) : RGB (128, 128, 128);
-	TextOut2 (hDC, 32, 16 + 16 * 3, "戻る", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 3, _T("戻る"), clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

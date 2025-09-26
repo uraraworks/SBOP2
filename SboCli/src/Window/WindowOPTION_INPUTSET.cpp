@@ -85,7 +85,7 @@ void CWindowOPTION_INPUTSET::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "使用するジョイパッドの設定", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("使用するジョイパッドの設定"), clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

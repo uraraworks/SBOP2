@@ -85,7 +85,7 @@ void CWindowSKILLMENU::Create(CMgrData *pMgrData)
 
 void CWindowSKILLMENU::Draw(PCImg32 pDst)
 {
-	LPCSTR aszTitle[] = {"戦闘(F)", "生活(L)", "能力"};
+	LPCTSTR aszTitle[] = {_T("戦闘(F)"), _T("生活(L)"), _T("能力")};
 	int i, nCount, nLevel, x, y, nTmp;
 	HDC hDC;
 	HFONT hFontOld;
@@ -129,7 +129,7 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 		GetDrawPos (nTmp, x, y);
 		m_pMgrDraw->DrawIcon (m_pDib, x, y, pInfoSkill->m_dwIconID);
 		if (nTmp == m_nPos) {
-			m_strName = (LPCSTR)pInfoSkill->m_strName;
+			m_strName = (LPCTSTR)pInfoSkill->m_strName;
 		}
 		nTmp ++;
 	}
@@ -162,7 +162,7 @@ Exit:
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
 		DrawFrame2 (x, y, m_strName.GetLength () * 6, 16, 0, pDst, 4);
-		TextOut2 (hDC, x, y, (LPCSTR)m_strName, RGB (10, 10, 10), FALSE);
+		TextOut2 (hDC, x, y, (LPCTSTR)m_strName, RGB (10, 10, 10), FALSE);
 
 		SelectObject (hDC, hFontOld);
 		pDst->Unlock ();

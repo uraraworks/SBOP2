@@ -85,8 +85,8 @@ void CWindowSETDRAWMODE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "名前を表示する",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "名前を表示しない",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("名前を表示する"),	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, _T("名前を表示しない"),	clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

@@ -9,8 +9,7 @@
 #pragma once
 #include <vector>
 #include "myArray.h"
-
-class CImg32;
+#include "Lib/Img32.h"
 
 /* ========================================================================= */
 /* 定数宣言																	 */
@@ -101,8 +100,8 @@ public:
 
 
 private:
-	BOOL	Read	(LPSTR pszName, CImg32 **pDib, int nSize);	/* PNGデータの読み込み */
-	BOOL	Read256	(LPSTR pszName, CImg32 **pDib, int nSize);	/* PNGデータの読み込み */
+	BOOL	Read	(LPCSTR pszName, PCImg32 *pDib, int nSize);	/* PNGデータの読み込み */
+	BOOL	Read256	(LPCSTR pszName, PCImg32 *pDib, int nSize);	/* PNGデータの読み込み */
 
 
 private:

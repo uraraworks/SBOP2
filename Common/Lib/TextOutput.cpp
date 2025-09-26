@@ -131,6 +131,7 @@ void CTextOutput::WriteProc(
 	DWORD dwBytes;
 	char szTmp[128];
 	SYSTEMTIME stSysTime;
+	CString strFileName;
 
 	/* 排他開始 */
 	EnterCriticalSection (&m_csWrite);
@@ -140,7 +141,7 @@ void CTextOutput::WriteProc(
 	}
 
 	/* ファイルを開く */
-        CString strFileName = Utf8ToTString (m_pszFileName);
+        strFileName = Utf8ToTString (m_pszFileName);
         hFile = CreateFile (
                         strFileName,
                         GENERIC_WRITE | GENERIC_READ,

@@ -107,7 +107,7 @@ void CWindowOPTION_INPUTSET_SETDEVICE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "使用しない", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("使用しない"), clText);
 
 	for (i = 0; i < m_nPosMax; i ++) {
 		m_MgrKeyInput->GetDeviceName (i, strTmp);

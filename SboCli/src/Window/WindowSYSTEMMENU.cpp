@@ -85,8 +85,8 @@ void CWindowSYSTEMMENU::Draw(PCImg32 pDst)
 	SetBkMode (hDC, TRANSPARENT);
 
 	clText = RGB (1, 1, 1);
-	TextOut2 (hDC, 32, 16 + 16 * 0, "名前と発言色の設定",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "オプション",			clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("名前と発言色の設定"),	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, _T("オプション"),			clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

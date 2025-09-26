@@ -85,8 +85,8 @@ void CWindowOPTION_TASKBAR::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "ON",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "OFF",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("ON"),	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, _T("OFF"),	clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

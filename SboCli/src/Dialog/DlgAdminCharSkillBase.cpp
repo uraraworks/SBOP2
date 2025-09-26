@@ -135,7 +135,7 @@ void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 	m_pInfo = (PCInfoSkillBase)LibInfo.GetNew (pSrc->m_nTypeMain, pSrc->m_nTypeSub);
 	m_pInfo->Copy (pSrc);
 
-	m_strName	= m_pInfo->m_strName;
+	m_strName	= (LPCTSTR)m_pInfo->m_strName;
 	m_dwSP		= m_pInfo->m_dwSP;
 	m_nTypeMain	= m_pInfo->m_nTypeMain;
 	m_nTypeSub	= m_pInfo->m_nTypeSub;

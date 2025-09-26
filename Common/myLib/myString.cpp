@@ -2,54 +2,6 @@
 #include <tchar.h>
 #include "myString.h"
 
-ATL::CString Utf8ToTString(LPCSTR pszSrc)
-{
-#ifdef _UNICODE
-        ATL::CString strResult;
-        if (pszSrc == NULL) {
-                return strResult;
-        }
-        int nLen = MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, NULL, 0);
-        if (nLen <= 0) {
-                return strResult;
-        }
-        LPTSTR pszBuffer = strResult.GetBuffer (nLen);
-        MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen);
-        strResult.ReleaseBuffer ();
-        return strResult;
-#else
-        ATL::CString strResult;
-        if (pszSrc) {
-                strResult = pszSrc;
-        }
-        return strResult;
-#endif
-}
-
-ATL::CStringA TStringToUtf8(LPCTSTR pszSrc)
-{
-#ifdef _UNICODE
-        ATL::CStringA strResult;
-        if (pszSrc == NULL) {
-                return strResult;
-        }
-        int nLen = WideCharToMultiByte (CP_UTF8, 0, pszSrc, -1, NULL, 0, NULL, NULL);
-        if (nLen <= 0) {
-                return strResult;
-        }
-        LPSTR pszBuffer = strResult.GetBuffer (nLen);
-        WideCharToMultiByte (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen, NULL, NULL);
-        strResult.ReleaseBuffer ();
-        return strResult;
-#else
-        ATL::CStringA strResult;
-        if (pszSrc) {
-                strResult = pszSrc;
-        }
-        return strResult;
-#endif
-}
-
 /* ========================================================================= */
 /* 関数名       :CmyString::CmyString                                                                                    */
 /* 内容         :コンストラクタ
@@ -168,11 +120,11 @@ void CmyString::Format(LPCSTR lpFormat, ...)
         va_list argList;
         va_start (argList, lpFormat);
 #ifdef _UNICODE
-        ATL::CStringA strTmp;
+        CStringA strTmp;
         strTmp.FormatV (lpFormat, argList);
         RenewUtf8 (strTmp);
 #else
-        ATL::CStringA strTmp;
+        CStringA strTmp;
         strTmp.FormatV (lpFormat, argList);
         m_strString = strTmp;
         m_bUtf8Dirty = TRUE;
@@ -272,7 +224,7 @@ void CmyString::operator +=(LPCTSTR pszSrc)
 BOOL CmyString::operator ==(LPCSTR pszSrc) const
 {
 #ifdef _UNICODE
-        ATL::CString strTmp = Utf8ToTString (pszSrc);
+        CString strTmp = Utf8ToTString (pszSrc);
         return (m_strString.Compare (strTmp) == 0);
 #else
         if (pszSrc == NULL) {
@@ -357,7 +309,7 @@ CmyString::operator LPCSTR()
 int CmyString::CompareNoCase(LPCSTR pszSrc) const
 {
 #ifdef _UNICODE
-        ATL::CString strTmp = Utf8ToTString (pszSrc);
+        CString strTmp = Utf8ToTString (pszSrc);
         return m_strString.CompareNoCase (strTmp);
 #else
         if (pszSrc == NULL) {

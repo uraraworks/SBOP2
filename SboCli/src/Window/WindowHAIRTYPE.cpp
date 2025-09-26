@@ -86,7 +86,7 @@ void CWindowHAIRTYPE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 64, 8, "髪型", clText);
+	TextOut4 (hDC, 64, 8, _T("髪型"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);
 	TextOut4 (hDC, 16, 32, strTmp, clText);
 //	TextOut2 (hDC, 40, 32, m_pMgrData->GetHairTypeName ((WORD)m_nPos), clText);

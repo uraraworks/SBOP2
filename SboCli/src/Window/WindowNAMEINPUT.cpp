@@ -128,11 +128,11 @@ void CWindowNAMEINPUT::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 88,	24,		"新規キャラクター作成", clText);
-	TextOut4 (hDC, 136,	48,		"名前入力", clText);
-	TextOut4 (hDC, 112,	216,	"キャラクター名", clText);
-	TextOut4 (hDC, 148,	288,	"登録", clText);
-	TextOut4 (hDC, 256,	288,	"３／３", clText);
+	TextOut4 (hDC, 88,	24,		_T("新規キャラクター作成"), clText);
+	TextOut4 (hDC, 136,	48,		_T("名前入力"), clText);
+	TextOut4 (hDC, 112,	216,	_T("キャラクター名"), clText);
+	TextOut4 (hDC, 148,	288,	_T("登録"), clText);
+	TextOut4 (hDC, 256,	288,	_T("３／３"), clText);
 	TextOut2 (hDC, 108, 240 - 2, m_pInfoCharCli->m_strCharName, clText);
 
 	SelectObject (hDC, hFontOld);

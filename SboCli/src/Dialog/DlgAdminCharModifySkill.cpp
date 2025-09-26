@@ -115,7 +115,7 @@ void CDlgAdminCharModifySkill::Renew(void)
 	}
 
 	m_strCharID.Format(_T("%u"), m_pInfoChar->m_dwCharID);
-	m_strCharName = m_pInfoChar->m_strCharName;
+	m_strCharName = (LPCTSTR)m_pInfoChar->m_strCharName;
 
 	nCount = m_pInfoChar->m_adwSkillID.size();
 	for (i = 0; i < nCount; i ++) {

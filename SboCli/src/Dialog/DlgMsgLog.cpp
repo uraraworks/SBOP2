@@ -132,7 +132,8 @@ void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 	/* ログファイルに書き込み */
         CString strLog = Utf8ToTString (pszLog);
         strTmp.Format(_T("[%02d:%02d:%02d] %s"), time.GetHour (), time.GetMinute (), time.GetSecond (), (LPCTSTR)strLog);
-        m_pLog->Write ("%s", strTmp);
+        CStringA strLogLineA = TStringToUtf8 ((LPCTSTR)strTmp);
+        m_pLog->Write ("%s", (LPCSTR)strLogLineA);
 
         m_wndLogViewCtrl.AddLine ((LPCTSTR)strLog, cl, RGB (40, 40, 40));
 }
@@ -146,8 +147,8 @@ void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 
 void CDlgMsgLog::MakeLogFile(void)
 {
-	char szName[MAX_PATH];
-	LPSTR pszTmp;
+	TCHAR szName[MAX_PATH];
+	LPTSTR pszTmp;
 	CString strTmp;
 	CTime time;
 
@@ -155,20 +156,24 @@ void CDlgMsgLog::MakeLogFile(void)
 	m_timeMakeLog = CTime::CTime (time.GetYear (), time.GetMonth (), time.GetDay (), 0, 0, 0);
 
 //Todo:
-	GetModuleFileName (NULL, szName, MAX_PATH);
+	ZeroMemory (szName, sizeof (szName));
+	GetModuleFileName (NULL, szName, _countof (szName));
 	pszTmp	= PathFindFileName (szName);
-	*pszTmp	= 0;
+	if (pszTmp != NULL) {
+		*pszTmp	= 0;
+	}
 	PathAddBackslash (szName);
 
-        CString strBasePath = Utf8ToTString (szName);
+        CString strBasePath (szName);
         strTmp.Format(_T("%sLog\\SBOログ(%d年%02d月%02d日).txt"),
                 (LPCTSTR)strBasePath,
                 time.GetYear (),
                 time.GetMonth (),
                 time.GetDay ());
 	/* ログファイルの作成 */
-	m_pLog->Destroy ();
-	m_pLog->Create (strTmp, FALSE, TRUE);
+        m_pLog->Destroy ();
+        CStringA strLogPathA = TStringToUtf8 ((LPCTSTR)strTmp);
+        m_pLog->Create (strLogPathA, FALSE, TRUE);
 }
 
 
@@ -190,8 +195,8 @@ BOOL CDlgMsgLog::OnInitDialog()
 
 	/* ログ表示コントロールの設定 */
 	m_wndLogViewCtrl.GetSetting (&stLOGVIEWCTRLSETTING);
-	strcpy (stLOGVIEWCTRLSETTING.szFontText,	"ＭＳ Ｐゴシック");
-	strcpy (stLOGVIEWCTRLSETTING.szFontHeader,	"ＭＳ ゴシック");
+	_tcscpy_s (stLOGVIEWCTRLSETTING.szFontText, _countof (stLOGVIEWCTRLSETTING.szFontText), _T("ＭＳ Ｐゴシック"));
+	_tcscpy_s (stLOGVIEWCTRLSETTING.szFontHeader, _countof (stLOGVIEWCTRLSETTING.szFontHeader), _T("ＭＳ ゴシック"));
 	stLOGVIEWCTRLSETTING.crBack				= RGB (40, 40, 40);
 	stLOGVIEWCTRLSETTING.crSelectBack		= RGB (40, 40, 255);
 	stLOGVIEWCTRLSETTING.crSelectText		= RGB (255, 255, 255);
@@ -266,7 +271,7 @@ void CDlgMsgLog::OnLink(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NMLVCLINK* pnmLink = reinterpret_cast<NMLVCLINK*>(pNMHDR);
 
-	ShellExecute (NULL, "open", pnmLink->pszLink, NULL, NULL, SW_SHOW);
+	ShellExecute (NULL, _T("open"), pnmLink->pszLink, NULL, NULL, SW_SHOW);
 }
 
 
@@ -322,7 +327,7 @@ void CDlgMsgLog::OnBnClickedHideMainframe()
 
 LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	char szTmp[256];
+	TCHAR szTmp[256];
 	PCDlgMsgLog pThis;
 	LRESULT hResult;
 	CMainFrame *pMainFrame;
@@ -365,7 +370,7 @@ LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam,
 				ZeroMemory (szTmp, sizeof (szTmp));
 				_tcsnccat (szTmp, pThis->m_strChat, 100);
 				TrimViewString (strTmp, szTmp);
-				pThis->m_strChat = strTmp;
+				pThis->m_strChat = (LPCTSTR)strTmp;
 				::PostMessage (pThis->m_pMgrData->GetMainWindow (), WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
 
 				pMainFrame->SendChat (0, (LPCSTR)strTmp, NULL);

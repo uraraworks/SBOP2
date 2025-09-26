@@ -25,6 +25,7 @@
 #include "LayerMisty.h"
 #include "LayerSnow.h"
 #include "LayerMap.h"
+#include "myString.h"
 
 
 /* ========================================================================= */
@@ -64,10 +65,10 @@ CLayerMap::CLayerMap()
 	m_pLayerMisty		= NULL;
 	m_pLayerSnow		= NULL;
 
-	m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
-			TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ Ｐゴシック");
+        m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
+                        TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
 }
 
 
@@ -800,20 +801,22 @@ void CLayerMap::RenewLevel(void)
 /* 日付		:2008/11/22														 */
 /* ========================================================================= */
 
-void CLayerMap::RenewMapName(LPCSTR pszMapName)
+void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 {
-	int nLen;
 	HFONT hFontOld;
 	HDC hDCTmp;
+	CString strMapName;
 
 	m_nLevelMapName		= 0;
 	m_dwLastTimeMapName	= 0;
 	SAFE_DELETE (m_pDibMapName);
 
-	nLen = 0;
-	if (pszMapName) {
-		nLen = strlen (pszMapName);
+	if ((pszMapName == NULL) || (*pszMapName == 0)) {
+		return;
 	}
+
+	strMapName = pszMapName;
+	int nLen = strMapName.GetLength ();
 	if (nLen <= 0) {
 		return;
 	}
@@ -825,7 +828,7 @@ void CLayerMap::RenewMapName(LPCSTR pszMapName)
 	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont32);
 	SetBkMode (hDCTmp, TRANSPARENT);
 
-	TextOut3 (hDCTmp, 1, 2, pszMapName, RGB (255, 255, 255));//, RGB (124, 232, 123));
+	this->TextOut3 (hDCTmp, 1, 2, strMapName, RGB (255, 255, 255));//, RGB (124, 232, 123));
 
 	SelectObject (hDCTmp, hFontOld);
 	m_pDibMapName->Unlock ();
@@ -1572,7 +1575,7 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 			x += 16;
 			x -= (pInfoItem->m_strName.GetLength () * 6 / 2);
 			y += 32;
-			TextOut2 (hDC, x, y, (LPCSTR)pInfoItem->m_strName, RGB (255, 255, 255));
+			TextOut2 (hDC, x, y, (LPCTSTR)pInfoItem->m_strName, RGB (255, 255, 255));
 			SelectObject (hDC, hFontOld);
 			pDst->Unlock ();
 		}

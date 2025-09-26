@@ -85,7 +85,7 @@ void CWindowOPTION_ACTIONSET::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "おひるねタイマーの設定", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("おひるねタイマーの設定"), clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

@@ -84,9 +84,9 @@ void CWindowSEX::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 48, 8, "性別",	clText);
-	TextOut2 (hDC, 40, 16 + 16 * 1,		"♂ 男の子",	clText);
-	TextOut2 (hDC, 40, 16 + 16 * 2 + 8,	"♀ 女の子",	clText);
+	TextOut4 (hDC, 48, 8, _T("性別"),	clText);
+	TextOut2 (hDC, 40, 16 + 16 * 1,		_T("♂ 男の子"),	clText);
+	TextOut2 (hDC, 40, 16 + 16 * 2 + 8,	_T("♀ 女の子"),	clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

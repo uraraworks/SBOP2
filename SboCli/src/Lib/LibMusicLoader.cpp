@@ -45,7 +45,7 @@ void CLibMusicLoader::Load(void)
 	if (m_hLib) {
 		return;
 	}
-	m_hLib = LoadLibrary ("LibMusic.dll");
+        m_hLib = LoadLibrary (_T("LibMusic.dll"));
 	if (m_hLib == NULL) {
 		return;
 	}

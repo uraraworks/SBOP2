@@ -17,6 +17,7 @@
 #include "Command.h"
 #include "MgrData.h"
 #include "DlgAdminMapInfo.h"
+#include "myString.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -119,10 +120,10 @@ void CDlgAdminMapInfo::Renew(void)
 		return;
 	}
 
-	m_strMapSize.	Format ("(%d, %d)", m_pInfoMap->m_sizeMap.cx, m_pInfoMap->m_sizeMap.cy);
-	m_strMapID.		Format ("%u", m_pInfoMap->m_dwMapID);
+	m_strMapSize.	Format (_T("(%d, %d)"), m_pInfoMap->m_sizeMap.cx, m_pInfoMap->m_sizeMap.cy);
+	m_strMapID.		Format (_T("%u"), m_pInfoMap->m_dwMapID);
 
-	m_strMapName = m_pInfoMap->m_strMapName;
+	m_strMapName = (LPCTSTR)m_pInfoMap->m_strMapName;
 
 	SelectCmb (&m_cmbBGMID,			m_pInfoMap->m_dwBGMID);
 	SelectCmb (&m_cmbWeatherType,	m_pInfoMap->m_dwWeatherType);
@@ -305,6 +306,8 @@ void CDlgAdminMapInfo::OnChangemapname()
 	m_pInfoMap->m_bEnableBattle	= m_bEnableBattle;							/* 戦闘許可 */
 	m_pInfoMap->m_bRecovery		= m_bRecovery;								/* 気絶後回復する */
 
+	CStringA strMapNameA = TStringToUtf8(m_strMapName);
+
 	Packet.Make (
 			m_pInfoMap->m_dwMapID,
 			m_pInfoMap->m_dwBGMID,
@@ -312,7 +315,7 @@ void CDlgAdminMapInfo::OnChangemapname()
 			m_pInfoMap->m_bEnableBattle,
 			m_pInfoMap->m_bRecovery,
 			m_pInfoMap->m_byLevel,
-			(LPCSTR)m_strMapName);
+			strMapNameA);
 	m_pSock->Send (&Packet);
 }
 

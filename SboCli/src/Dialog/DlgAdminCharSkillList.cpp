@@ -107,7 +107,8 @@ void CDlgAdminCharSkillList::Renew(void)
 
 		strTmp.Format(_T("%d"), pInfo->m_dwSkillID);
 		m_List.InsertItem (i, strTmp);
-		m_List.SetItemText (i, 1, pInfo->m_strName);
+		CString strName = (LPCTSTR)pInfo->m_strName;
+		m_List.SetItemText (i, 1, strName);
 		m_List.SetItemData (i, pInfo->m_dwSkillID);
 	}
 }

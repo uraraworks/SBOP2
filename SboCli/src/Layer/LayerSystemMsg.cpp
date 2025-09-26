@@ -11,6 +11,7 @@
 #include "MgrGrpData.h"
 #include "Img32.h"
 #include "LayerSystemMsg.h"
+#include "myString.h"
 
 
 /* ========================================================================= */
@@ -127,13 +128,14 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 		}
 	}
 
-	nLen = strlen (pszMsg);
-	pInfo->pImg->Create (nLen * 14 + 1, 14);
+        CString strMsg = AnsiToTString (pszMsg);
+        nLen = strMsg.GetLength ();
+        pInfo->pImg->Create (nLen * 14 + 1, 14);
 
 	hDCTmp		= pInfo->pImg->Lock ();
 	hFontOld	= (HFONT)SelectObject (hDCTmp, m_hFont);
 	SetBkMode (hDCTmp, TRANSPARENT);
-	TextOut2 (hDCTmp, 1, 1, pszMsg, cl);
+        TextOut2 (hDCTmp, 1, 1, strMsg, cl);
 
 	SelectObject (hDCTmp, hFontOld);
 	pInfo->pImg->Unlock ();

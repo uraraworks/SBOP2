@@ -56,10 +56,10 @@ CInfoCharCli::CInfoCharCli()
 
 	m_ptMove.x = m_ptMove.y = 0;
 
-	m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "ＭＳ ゴシック");
+        m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
+                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
 }
 
 
@@ -542,14 +542,16 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 		x += 16;
 	}
 
-	nLen = strlen (pszName);
-	SetTextColor (hDCTmp, RGB (10, 10, 10));
-	TextOut (hDCTmp, x + 0, 2, pszName, nLen);
-	TextOut (hDCTmp, x + 2, 2, pszName, nLen);
-	TextOut (hDCTmp, x + 1, 1, pszName, nLen);
-	TextOut (hDCTmp, x + 1, 3, pszName, nLen);
-	SetTextColor (hDCTmp, m_clName);
-	TextOut (hDCTmp, x + 1, 2, pszName, nLen);
+        nLen = static_cast<int>(strlen (pszName));
+        CString strText = AnsiToTString (pszName);
+        int nDrawLen = strText.GetLength ();
+        SetTextColor (hDCTmp, RGB (10, 10, 10));
+        ::TextOut (hDCTmp, x + 0, 2, strText, nDrawLen);
+        ::TextOut (hDCTmp, x + 2, 2, strText, nDrawLen);
+        ::TextOut (hDCTmp, x + 1, 1, strText, nDrawLen);
+        ::TextOut (hDCTmp, x + 1, 3, strText, nDrawLen);
+        SetTextColor (hDCTmp, m_clName);
+        ::TextOut (hDCTmp, x + 1, 2, strText, nDrawLen);
 
 	SelectObject (hDCTmp, hFontOld);
 	m_pDibName->Unlock ();
@@ -617,18 +619,20 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 				szTmp[nCount] = pszSpeak[nPos + nCount];
 			}
 		}
-		nLenTmp = strlen (szTmp);
-		nPos += nCount;
-		if (nLenTmp > 0) {
-			SetTextColor (hDCTmp, RGB (10, 10, 10));
-			TextOut (hDCTmp, 0, 1 + nLine * 14, szTmp, nLenTmp);
-			TextOut (hDCTmp, 2, 1 + nLine * 14, szTmp, nLenTmp);
-			TextOut (hDCTmp, 1, 0 + nLine * 14, szTmp, nLenTmp);
-			TextOut (hDCTmp, 1, 2 + nLine * 14, szTmp, nLenTmp);
-			SetTextColor (hDCTmp, m_clSpeak);
-			TextOut (hDCTmp, 1, 1 + nLine * 14, szTmp, nLenTmp);
-			nLine ++;
-		}
+                nLenTmp = strlen (szTmp);
+                nPos += nCount;
+                if (nLenTmp > 0) {
+                        CString strLine = AnsiToTString (szTmp);
+                        int nDrawLenTmp = strLine.GetLength ();
+                        SetTextColor (hDCTmp, RGB (10, 10, 10));
+                        ::TextOut (hDCTmp, 0, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 2, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 1, 0 + nLine * 14, strLine, nDrawLenTmp);
+                        ::TextOut (hDCTmp, 1, 2 + nLine * 14, strLine, nDrawLenTmp);
+                        SetTextColor (hDCTmp, m_clSpeak);
+                        ::TextOut (hDCTmp, 1, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        nLine ++;
+                }
 
 		if (nPos >= nLen) {
 			break;

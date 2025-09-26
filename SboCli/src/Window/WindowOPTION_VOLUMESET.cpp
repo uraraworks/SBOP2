@@ -75,7 +75,7 @@ void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
 	int i, nLevel;
 	HDC hDC;
 	HFONT hFontOld;
-	LPCSTR apszTmp[] = {"０", "１", "２", "３", "４", "MAX"};
+	LPCTSTR apszTmp[] = {_T("０"), _T("１"), _T("２"), _T("３"), _T("４"), _T("MAX")};
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -89,10 +89,10 @@ void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut2 (hDC, 32, 16 + 16 * 0, "BGM", clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "効果音", clText);
-	TextOut2 (hDC, 32 + 72, 16 + 16 * 0, "MIN", clText);
-	TextOut2 (hDC, 32 + 72, 16 + 16 * 1, "MIN", clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("BGM"), clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, _T("効果音"), clText);
+	TextOut2 (hDC, 32 + 72, 16 + 16 * 0, _T("MIN"), clText);
+	TextOut2 (hDC, 32 + 72, 16 + 16 * 1, _T("MIN"), clText);
 	for (i = 0; i < 6; i ++) {
 		TextOut2 (hDC, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 0, apszTmp[i], clText);
 		TextOut2 (hDC, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 1, apszTmp[i], clText);

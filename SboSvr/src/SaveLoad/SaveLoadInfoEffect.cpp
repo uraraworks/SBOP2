@@ -44,8 +44,8 @@ CSaveLoadInfoEffect::~CSaveLoadInfoEffect()
 void CSaveLoadInfoEffect::SetHeaderInfo(PCInfoBase pInfo)
 {
 	int i;
-	char szTmp[256];
 	LPCSTR pszName;
+	CStringA strHeader;
 	CInfoAnime AnimeTmp;
 
 	CSaveLoadInfoBase::SetHeaderInfo (pInfo);
@@ -55,8 +55,8 @@ void CSaveLoadInfoEffect::SetHeaderInfo(PCInfoBase pInfo)
 		if (pszName == NULL) {
 			break;
 		}
-		wsprintf (szTmp, _T("%s%s"), PREFIX_INFOANIME, pszName);
-		AddHeaderInfo (szTmp);
+		strHeader.Format (_T("%s%s"), PREFIX_INFOANIME, pszName);
+		AddHeaderInfo (strHeader);
 	}
 }
 

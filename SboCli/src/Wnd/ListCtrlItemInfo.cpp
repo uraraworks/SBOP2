@@ -108,7 +108,8 @@ void CListCtrlItemInfo::Renew(void)
 		strTmp.Format(_T("%d"), pInfoItem->m_dwItemID);
 		InsertItem (i, strTmp);
 		SetItemData (i, pInfoItem->m_dwItemID);		/* ID */
-		SetItemText (i, 1, pInfoItem->m_strName);	/* アイテム名 */
+		strTmp = (LPCTSTR)pInfoItem->m_strName;	/* アイテム名 */
+		SetItemText (i, 1, strTmp);
 
 		strTmp = m_pLibInfoItem->GetTypeName (pInfoItem->m_dwItemTypeID);
 		SetItemText (i, 2, strTmp);					/* 種別 */

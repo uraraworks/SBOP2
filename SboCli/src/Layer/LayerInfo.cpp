@@ -62,7 +62,6 @@ void CLayerInfo::Create(
 
 void CLayerInfo::Draw(PCImg32 pDst)
 {
-	char szTmp[128];
 	HFONT hFontOld;
 	HDC hDCTmp;
 
@@ -72,8 +71,7 @@ void CLayerInfo::Draw(PCImg32 pDst)
 	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont);
 	SetBkMode (hDCTmp, TRANSPARENT);
 
-       wsprintf (szTmp, _T("お知らせ"));
-	TextOut1 (hDCTmp, m_nX + 16, m_nY + 32, szTmp, RGB (0, 0, 0));
+	TextOut1 (hDCTmp, m_nX + 16, m_nY + 32, _T("お知らせ"), RGB (0, 0, 0));
 
 	SelectObject (hDCTmp, hFontOld);
 	pDst->Unlock ();

@@ -157,7 +157,8 @@ void CDlgAdminMapObjectData::Renew(void)
 		m_List.SetItemText (nCountTmp, 1, strTmp);
 		strTmp.Format(_T("%d"), pInfo->m_ptPos.y);					/* Y座標 */
 		m_List.SetItemText (nCountTmp, 2, strTmp);
-		m_List.SetItemText (nCountTmp, 3, (LPCSTR)pInfoMapObject->m_strName);	/* オブジェクト名 */
+		CString strName = (LPCTSTR)pInfoMapObject->m_strName;	/* オブジェクト名 */
+		m_List.SetItemText (nCountTmp, 3, strName);
 		nCountTmp ++;
 	}
 }
