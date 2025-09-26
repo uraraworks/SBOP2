@@ -112,7 +112,7 @@ void CDlgAdminCharDisable::Renew(void)
 	nCount = m_pLibInfoDisable->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = (PCInfoDisable)m_pLibInfoDisable->GetPtr (i);
-		m_List.InsertItem (i, (LPCSTR)pInfo->m_strMacAddress);	/* 拒否するMACアドレス */
+		m_List.InsertItem (i, (LPCTSTR)pInfo->m_strMacAddress);	/* 拒否するMACアドレス */
 		m_List.SetItemData (i, pInfo->m_dwDisableID);
 	}
 }

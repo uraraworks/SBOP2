@@ -155,11 +155,11 @@ BOOL CDlgAdminMapShadow::OnInitDialog()
 
 	m_ctlMapShadow.Create (this, m_pMgrData);
 
-	m_cbType.AddString ("マップ編集用に選択");
-	m_cbType.AddString ("影の追加");
-	m_cbType.AddString ("影の編集");
-	m_cbType.AddString ("影の移動");
-	m_cbType.AddString ("影の削除");
+	m_cbType.AddString (_T("マップ編集用に選択"));
+	m_cbType.AddString (_T("影の追加"));
+	m_cbType.AddString (_T("影の編集"));
+	m_cbType.AddString (_T("影の移動"));
+	m_cbType.AddString (_T("影の削除"));
 	m_cbType.SetCurSel (0);
 
 	pWnd = GetDlgItem (IDC_MAPSHADOW);

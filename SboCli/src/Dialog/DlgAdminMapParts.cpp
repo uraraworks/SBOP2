@@ -162,12 +162,12 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 
 	m_ctlMapParts.Create (this, m_pMgrData);
 
-	m_cbType.AddString ("マップ編集用に選択");
-	m_cbType.AddString ("パーツの追加");
-	m_cbType.AddString ("パーツの編集");
-	m_cbType.AddString ("パーツの移動");
-	m_cbType.AddString ("パーツの削除");
-	m_cbType.AddString ("パーツのコピー");
+	m_cbType.AddString (_T("マップ編集用に選択"));
+	m_cbType.AddString (_T("パーツの追加"));
+	m_cbType.AddString (_T("パーツの編集"));
+	m_cbType.AddString (_T("パーツの移動"));
+	m_cbType.AddString (_T("パーツの削除"));
+	m_cbType.AddString (_T("パーツのコピー"));
 	m_cbType.SetCurSel (0);
 
 	pWnd = GetDlgItem (IDC_MAPPARTS);

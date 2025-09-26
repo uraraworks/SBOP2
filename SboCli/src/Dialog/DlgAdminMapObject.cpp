@@ -129,7 +129,7 @@ void CDlgAdminMapObject::Renew(void)
 		strTmp.Format(_T("%d"), pInfo->m_dwObjectID);				/* ID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwObjectID);
-		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strName);	/* オブジェクト名 */
+		m_List.SetItemText (i, 1, (LPCTSTR)pInfo->m_strName);	/* オブジェクト名 */
 	}
 }
 

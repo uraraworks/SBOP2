@@ -11,6 +11,7 @@
 #include "InfoAccount.h"
 #include "UraraSockTCPSBO.h"
 #include "Packet.h"
+#include "myString.h"
 #include "LayoutHelper.h"
 #include "InfoCharCli.h"
 #include "LibInfoCharCli.h"
@@ -234,7 +235,9 @@ void CDlgAdminCharAccountInfo::OnDisable()
 	InfoAccount.m_dwAccountID	= m_dwAccountID;
 	InfoAccount.m_strAccount	= m_strAccount;
 	InfoAccount.m_strPassword	= m_strPassword;
-	Packet.Make (&InfoAccount, TRUE, m_strMac);
+	CStringA strMacA = TStringToUtf8(m_strMac);
+
+	Packet.Make (&InfoAccount, TRUE, strMacA);
 	m_pSock->Send (&Packet);
 }
 

@@ -110,7 +110,7 @@ void CDlgAdminCharList::Renew(void)
 		strTmp.Format(_T("%d"), pInfo->m_dwCharID);					/* キャラID */
 		m_List.InsertItem (i, strTmp);
 		m_List.SetItemData (i, pInfo->m_dwCharID);
-		m_List.SetItemText (i, 1, (LPCSTR)pInfo->m_strCharName);	/* キャラ名 */
+		m_List.SetItemText (i, 1, (LPCTSTR)pInfo->m_strCharName);	/* キャラ名 */
 		strTmp.Format(_T("%d"), pInfo->m_dwMapID);						/* マップID */
 		m_List.SetItemText (i, 2, strTmp);
 		strTmp.Format(_T("%d"), pInfo->m_nMapX);						/* X座標 */

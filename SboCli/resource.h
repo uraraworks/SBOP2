@@ -9,6 +9,7 @@
 #define IDD_CHAR_MODIFY                 130
 #define IDD_BASE                        131
 #define IDD_MAP_PARTS                   132
+#define IDR_MENU1                       134
 #define IDI_SBO                         135
 #define IDD_PARTS_EDIT                  135
 #define IDD_MAP_INFO                    136

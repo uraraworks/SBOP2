@@ -15,6 +15,7 @@
 #include "MgrData.h"
 #include "DlgAdminTalkEventMENUSet.h"
 #include "DlgAdminTalkEventMENU.h"
+#include "myString.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -115,9 +116,13 @@ void CDlgAdminTalkEventMENU::Get(CInfoTalkEventBase *pDst)
 
 	nCount = m_List.GetItemCount ();
 	for (i = 0; i < nCount; i ++) {
+		CString strPage = m_List.GetItemText (i, 1);
+		CString strName = m_List.GetItemText (i, 0);
+		CStringA strNameA = TStringToUtf8(strName);
+
 		pInfo->AddMenuInfo (
-				atoi (m_List.GetItemText (i, 1)) - 1,
-				m_List.GetItemText (i, 0));
+				_ttoi (strPage) - 1,
+				strNameA);
 	}
 }
 
@@ -189,7 +194,7 @@ void CDlgAdminTalkEventMENU::OnBnClickedModify()
 
 	Dlg.Init (m_pMgrData, m_nPageCount);
 	Dlg.m_strName	= m_List.GetItemText (nSelect, 0);
-	Dlg.m_nPage		= atoi (m_List.GetItemText (nSelect, 1)) - 1;
+	Dlg.m_nPage		= _ttoi (m_List.GetItemText (nSelect, 1)) - 1;
 	nResult = Dlg.DoModal ();
 	if (nResult != IDOK) {
 		return;

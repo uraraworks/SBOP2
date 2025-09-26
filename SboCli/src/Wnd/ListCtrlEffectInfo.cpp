@@ -99,7 +99,7 @@ void CListCtrlEffectInfo::Renew(void)
 		strTmp.Format(_T("%d"), pInfoEffect->m_dwEffectID);
 		InsertItem (i, strTmp);
 		SetItemData (i, pInfoEffect->m_dwEffectID);				/* ID */
-		SetItemText (i, 1, (LPCSTR)pInfoEffect->m_strName);		/* エフェクト名 */
+		SetItemText (i, 1, (LPCTSTR)pInfoEffect->m_strName);		/* エフェクト名 */
 	}
 }
 
