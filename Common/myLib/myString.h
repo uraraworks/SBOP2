@@ -15,10 +15,101 @@
 #include <atlconv.h>
 
 #ifdef __cplusplus
-CString Utf8ToTString(LPCSTR pszSrc);
-CStringA TStringToUtf8(LPCTSTR pszSrc);
-CString AnsiToTString(LPCSTR pszSrc, UINT codePage = CP_ACP);
-CStringA TStringToAnsi(LPCTSTR pszSrc, UINT codePage = CP_ACP);
+inline CString Utf8ToTString(LPCSTR pszSrc)
+{
+#ifdef _UNICODE
+        CString strResult;
+        if (pszSrc == NULL) {
+                return strResult;
+        }
+        int nLen = MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, NULL, 0);
+        if (nLen <= 0) {
+                return strResult;
+        }
+        LPTSTR pszBuffer = strResult.GetBuffer (nLen);
+        MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen);
+        strResult.ReleaseBuffer ();
+        return strResult;
+#else
+        CString strResult;
+        if (pszSrc) {
+                strResult = pszSrc;
+        }
+        return strResult;
+#endif
+}
+
+inline CStringA TStringToUtf8(LPCTSTR pszSrc)
+{
+#ifdef _UNICODE
+        CStringA strResult;
+        if (pszSrc == NULL) {
+                return strResult;
+        }
+        int nLen = WideCharToMultiByte (CP_UTF8, 0, pszSrc, -1, NULL, 0, NULL, NULL);
+        if (nLen <= 0) {
+                return strResult;
+        }
+        LPSTR pszBuffer = strResult.GetBuffer (nLen);
+        WideCharToMultiByte (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen, NULL, NULL);
+        strResult.ReleaseBuffer ();
+        return strResult;
+#else
+        CStringA strResult;
+        if (pszSrc) {
+                strResult = pszSrc;
+        }
+        return strResult;
+#endif
+}
+
+inline CString AnsiToTString(LPCSTR pszSrc, UINT codePage = CP_ACP)
+{
+        CString strResult;
+        if (pszSrc == NULL) {
+                return strResult;
+        }
+#ifdef _UNICODE
+        if (codePage == 0) {
+                codePage = CP_ACP;
+        }
+        int nLen = MultiByteToWideChar (codePage, 0, pszSrc, -1, NULL, 0);
+        if (nLen <= 0) {
+                return strResult;
+        }
+        LPTSTR pszBuffer = strResult.GetBuffer (nLen);
+        MultiByteToWideChar (codePage, 0, pszSrc, -1, pszBuffer, nLen);
+        strResult.ReleaseBuffer ();
+        return strResult;
+#else
+        strResult = pszSrc;
+        return strResult;
+#endif
+}
+
+inline CStringA TStringToAnsi(LPCTSTR pszSrc, UINT codePage = CP_ACP)
+{
+        CStringA strResult;
+        if (pszSrc == NULL) {
+                return strResult;
+        }
+#ifdef _UNICODE
+        if (codePage == 0) {
+                codePage = CP_ACP;
+        }
+        int nLen = WideCharToMultiByte (codePage, 0, pszSrc, -1, NULL, 0, NULL, NULL);
+        if (nLen <= 0) {
+                return strResult;
+        }
+        LPSTR pszBuffer = strResult.GetBuffer (nLen);
+        WideCharToMultiByte (codePage, 0, pszSrc, -1, pszBuffer, nLen, NULL, NULL);
+        strResult.ReleaseBuffer ();
+        return strResult;
+#else
+        strResult = pszSrc;
+        return strResult;
+#endif
+}
 #endif
 
 /* ========================================================================= */
