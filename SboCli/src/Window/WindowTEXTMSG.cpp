@@ -22,6 +22,7 @@
 #include "MgrGrpData.h"
 #include "MgrSound.h"
 #include "WindowTEXTMSG.h"
+#include "myString.h"
 
 #ifdef _UNICODE
 namespace
@@ -238,7 +239,7 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 
 			nCount = m_astrMenu.size();
 			for (i = 0; i < nCount; i ++) {
-				TextOut2 (hDC, 32, y + cy + i * 16, (LPCSTR)m_astrMenu[i], clText);
+				TextOut2 (hDC, 32, y + cy + i * 16, (LPCTSTR)m_astrMenu[i], clText);
 			}
 
 			SelectObject (hDC, hFontOld);
@@ -678,27 +679,39 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 	HDC hDC;
 	HFONT hFontOld;
 	COLORREF clText;
+	LPCTSTR pszDraw = NULL;
 
 	if (pszText == NULL) {
+		return;
+	}
+
+#ifdef _UNICODE
+	CString strDraw = Utf8ToTString(pszText);
+	pszDraw = (LPCTSTR)strDraw;
+#else
+	pszDraw = pszText;
+#endif
+
+	if ((pszDraw == NULL) || (*pszDraw == 0)) {
 		return;
 	}
 
 	cx = m_pDibText->Width ();
 	cy = m_pDibText->Height () - 16;
 
-	clText		= RGB (1, 1, 1);
+	clText			= RGB (1, 1, 1);
 	hDC			= m_pDibText->Lock ();
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont16Normal);
 	SetBkMode (hDC, TRANSPARENT);
 
 	clText = RGB (1, 1, 1);
-	TextOut2 (hDC, m_ptDraw.x, m_ptDraw.y, pszText, clText);
+	TextOut2 (hDC, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
 
 	if (strncmp (pszText, "\r\n", 2) == 0) {
 		m_ptDraw.x = cx;
 	}
 
-	m_ptDraw.x += (strlen (pszText) * 8);
+	m_ptDraw.x += static_cast<int>(strlen (pszText) * 8);
 	if (m_ptDraw.x + 8 >= cx) {
 		m_ptDraw.x = 0;
 		m_ptDraw.y += 16;
@@ -737,11 +750,11 @@ void CWindowTEXTMSG::RenewTitle(void)
 	clText  = RGB (255, 255, 255);
 	clFrame = RGB (1, 1, 1);
 	if (m_strTitle.GetLength () > 0) {
-		TextOut2 (hDC, 1, 1, (LPCSTR)m_strTitle, clText, TRUE, clFrame);
+		TextOut2 (hDC, 1, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
 		y += 16;
 	}
 	if (m_strName.GetLength () > 0) {
-		TextOut2 (hDC, 1, y, (LPCSTR)m_strName, clText, TRUE, clFrame);
+		TextOut2 (hDC, 1, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
 	}
 
 	SelectObject (hDC, hFontOld);

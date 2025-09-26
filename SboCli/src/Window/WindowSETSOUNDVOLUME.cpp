@@ -87,11 +87,11 @@ void CWindowSETSOUNDVOLUME::Draw(PCImg32 pDst)
 	SetBkMode (hDC, TRANSPARENT);
 
 	clText = RGB (1, 1, 1);
-	TextOut2 (hDC, 32, 16 + 16 * 0, "無し",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 1, "１",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 2, "２",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 3, "３",	clText);
-	TextOut2 (hDC, 32, 16 + 16 * 4, "４",	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 0, _T("無し"),	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 1, _T("１"),	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 2, _T("２"),	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 3, _T("３"),	clText);
+	TextOut2 (hDC, 32, 16 + 16 * 4, _T("４"),	clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

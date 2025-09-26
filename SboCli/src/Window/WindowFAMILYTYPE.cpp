@@ -98,9 +98,9 @@ void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 88,	24,		"新規キャラクター作成", clText);
-	TextOut4 (hDC, 136,	48,		"種族選択", clText);
-	TextOut4 (hDC, 256,	288,	"１／３", clText);
+	TextOut4 (hDC, 88,	24,		_T("新規キャラクター作成"), clText);
+	TextOut4 (hDC, 136,	48,		_T("種族選択"), clText);
+	TextOut4 (hDC, 256,	288,	_T("１／３"), clText);
 
 	for (i = 0; i < nCount; i ++) {
 		TextOut2 (hDC, nCursorPos[i].x, nCursorPos[i].y - 4, m_pMgrData->GetFamilyTypeName ((WORD)(FAMILYTYPE_HUMAN + i)), clText);

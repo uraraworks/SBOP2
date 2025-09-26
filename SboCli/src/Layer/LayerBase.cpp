@@ -120,19 +120,18 @@ BOOL CLayerBase::TimerProc(void)
 /* 日付		:2006/09/24														 */
 /* ========================================================================= */
 
-void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color)
+void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color)
 {
         if (pStr == NULL) {
                 return;
         }
 
-        CString strText = AnsiToTString (pStr);
-        int nLen = strText.GetLength ();
+        int nLen = lstrlen (pStr);
         if (nLen <= 0) {
                 return;
         }
         SetTextColor (hDC, color);
-        ::TextOut (hDC, x, y, strText, nLen);
+        ::TextOut (hDC, x, y, pStr, nLen);
 }
 
 
@@ -142,24 +141,23 @@ void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color)
 /* 日付		:2006/09/24														 */
 /* ========================================================================= */
 
-void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame)
+void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
         if (pStr == NULL) {
                 return;
         }
 
-        CString strText = AnsiToTString (pStr);
-        int nLen = strText.GetLength ();
+        int nLen = lstrlen (pStr);
         if (nLen <= 0) {
                 return;
         }
         SetTextColor (hDC, colorFrame);
-        ::TextOut (hDC, x - 1, y, strText, nLen);
-        ::TextOut (hDC, x + 1, y, strText, nLen);
-        ::TextOut (hDC, x, y - 1, strText, nLen);
-        ::TextOut (hDC, x, y + 1, strText, nLen);
+        ::TextOut (hDC, x - 1, y, pStr, nLen);
+        ::TextOut (hDC, x + 1, y, pStr, nLen);
+        ::TextOut (hDC, x, y - 1, pStr, nLen);
+        ::TextOut (hDC, x, y + 1, pStr, nLen);
         SetTextColor (hDC, color);
-        ::TextOut (hDC, x, y, strText, nLen);
+        ::TextOut (hDC, x, y, pStr, nLen);
 }
 
 
@@ -169,43 +167,42 @@ void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, CO
 /* 日付		:2008/11/22														 */
 /* ========================================================================= */
 
-void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCSTR pStr, COLORREF color, COLORREF colorFrame)
+void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
         if (pStr == NULL) {
                 return;
         }
 
-        CString strText = AnsiToTString (pStr);
-        int nLen = strText.GetLength ();
+        int nLen = lstrlen (pStr);
         if (nLen <= 0) {
                 return;
         }
         SetTextColor (hDC, colorFrame);
-        ::TextOut (hDC, x - 2, y, strText, nLen);
-        ::TextOut (hDC, x - 1, y, strText, nLen);
-        ::TextOut (hDC, x - 1, y - 2, strText, nLen);
-        ::TextOut (hDC, x - 2, y - 1, strText, nLen);
-        ::TextOut (hDC, x - 1, y - 1, strText, nLen);
-        ::TextOut (hDC, x - 2, y + 1, strText, nLen);
-        ::TextOut (hDC, x - 1, y + 1, strText, nLen);
-        ::TextOut (hDC, x - 1, y + 2, strText, nLen);
+        ::TextOut (hDC, x - 2, y, pStr, nLen);
+        ::TextOut (hDC, x - 1, y, pStr, nLen);
+        ::TextOut (hDC, x - 1, y - 2, pStr, nLen);
+        ::TextOut (hDC, x - 2, y - 1, pStr, nLen);
+        ::TextOut (hDC, x - 1, y - 1, pStr, nLen);
+        ::TextOut (hDC, x - 2, y + 1, pStr, nLen);
+        ::TextOut (hDC, x - 1, y + 1, pStr, nLen);
+        ::TextOut (hDC, x - 1, y + 2, pStr, nLen);
 
-        ::TextOut (hDC, x + 2, y, strText, nLen);
-        ::TextOut (hDC, x + 1, y, strText, nLen);
-        ::TextOut (hDC, x + 1, y - 2, strText, nLen);
-        ::TextOut (hDC, x + 2, y - 1, strText, nLen);
-        ::TextOut (hDC, x + 1, y - 1, strText, nLen);
-        ::TextOut (hDC, x + 2, y + 1, strText, nLen);
-        ::TextOut (hDC, x + 1, y + 1, strText, nLen);
-        ::TextOut (hDC, x + 1, y + 2, strText, nLen);
+        ::TextOut (hDC, x + 2, y, pStr, nLen);
+        ::TextOut (hDC, x + 1, y, pStr, nLen);
+        ::TextOut (hDC, x + 1, y - 2, pStr, nLen);
+        ::TextOut (hDC, x + 2, y - 1, pStr, nLen);
+        ::TextOut (hDC, x + 1, y - 1, pStr, nLen);
+        ::TextOut (hDC, x + 2, y + 1, pStr, nLen);
+        ::TextOut (hDC, x + 1, y + 1, pStr, nLen);
+        ::TextOut (hDC, x + 1, y + 2, pStr, nLen);
 
-        ::TextOut (hDC, x, y - 2, strText, nLen);
-        ::TextOut (hDC, x, y - 1, strText, nLen);
-        ::TextOut (hDC, x, y + 2, strText, nLen);
-        ::TextOut (hDC, x, y + 1, strText, nLen);
+        ::TextOut (hDC, x, y - 2, pStr, nLen);
+        ::TextOut (hDC, x, y - 1, pStr, nLen);
+        ::TextOut (hDC, x, y + 2, pStr, nLen);
+        ::TextOut (hDC, x, y + 1, pStr, nLen);
 
         SetTextColor (hDC, color);
-        ::TextOut (hDC, x, y, strText, nLen);
+        ::TextOut (hDC, x, y, pStr, nLen);
 }
 
 /* Copyright(C)URARA-works 2005 */

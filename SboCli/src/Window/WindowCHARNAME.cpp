@@ -95,7 +95,7 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
 	SetBkMode (hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 24, 16, "キャラクター名", RGB (255, 127, 53));
+	TextOut4 (hDC, 24, 16, _T("キャラクター名"), RGB (255, 127, 53));
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
