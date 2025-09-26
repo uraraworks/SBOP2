@@ -169,7 +169,8 @@ void CDlgAdminCharModify::Renew(void)
 	nCount = pLibInfoMotionType->GetCount ();
 	for (i = 0; i < nCount; i ++) {
 		pInfoMotionType = (PCInfoMotionType)pLibInfoMotionType->GetPtr (i);
-                m_ctlMotionType.AddString ((LPCTSTR)pInfoMotionType->m_strName);
+                CString strMotionType = (LPCTSTR)pInfoMotionType->m_strName;
+                m_ctlMotionType.AddString (strMotionType);
 		m_ctlMotionType.SetItemData (i, pInfoMotionType->m_dwMotionTypeID);
 	}
 

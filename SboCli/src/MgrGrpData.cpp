@@ -143,7 +143,8 @@ BOOL CMgrGrpData::Load(void)
 {
 	BOOL bResult;
 	int i;
-	char szName[MAX_PATH], szTmp[64];
+	TCHAR szName[MAX_PATH];
+	char szTmp[64];
 	BOOL bRet;
 	PCImg32 pImg;
 	LPSTR pszTmp,
@@ -162,10 +163,14 @@ BOOL CMgrGrpData::Load(void)
 	bRet = FALSE;
 
 	/* ファイル名の作成 */
-	GetModuleFileName (NULL, szName, MAX_PATH);
-	pszTmp		= strrchr (szName, '\\');
-	pszTmp[1]	= 0;
-	strcat (szName, "SboGrpData.dll");
+	GetModuleFileName (NULL, szName, _countof (szName));
+	LPTSTR pszPath = _tcsrchr (szName, _T('\\'));
+	if (pszPath != NULL) {
+		pszPath[1]	= _T('\0');
+	} else {
+		szName[0]	= _T('\0');
+	}
+	_tcscat_s (szName, _countof (szName), _T("SboGrpData.dll"));
 
 	m_hDll = LoadLibrary (szName);
 	if (m_hDll == NULL) {

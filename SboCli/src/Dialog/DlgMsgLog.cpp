@@ -146,8 +146,8 @@ void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 
 void CDlgMsgLog::MakeLogFile(void)
 {
-	char szName[MAX_PATH];
-	LPSTR pszTmp;
+	TCHAR szName[MAX_PATH];
+	LPTSTR pszTmp;
 	CString strTmp;
 	CTime time;
 
@@ -155,12 +155,15 @@ void CDlgMsgLog::MakeLogFile(void)
 	m_timeMakeLog = CTime::CTime (time.GetYear (), time.GetMonth (), time.GetDay (), 0, 0, 0);
 
 //Todo:
-	GetModuleFileName (NULL, szName, MAX_PATH);
+	ZeroMemory (szName, sizeof (szName));
+	GetModuleFileName (NULL, szName, _countof (szName));
 	pszTmp	= PathFindFileName (szName);
-	*pszTmp	= 0;
+	if (pszTmp != NULL) {
+		*pszTmp	= 0;
+	}
 	PathAddBackslash (szName);
 
-        CString strBasePath = Utf8ToTString (szName);
+        CString strBasePath (szName);
         strTmp.Format(_T("%sLog\\SBOログ(%d年%02d月%02d日).txt"),
                 (LPCTSTR)strBasePath,
                 time.GetYear (),

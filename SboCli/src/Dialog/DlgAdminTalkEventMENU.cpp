@@ -89,7 +89,8 @@ void CDlgAdminTalkEventMENU::Set(CInfoTalkEventBase *pSrc)
 	nCount = pInfo->GetMenuInfoCount ();
 	for (i = 0; i < nCount; i ++) {
 		pMenuInfo = pInfo->GetPtr (i);
-		m_List.InsertItem (i, pMenuInfo->strName);
+		CString strName = (LPCTSTR)pMenuInfo->strName;
+		m_List.InsertItem (i, strName);
 		strTmp.Format(_T("%d"), pMenuInfo->nPage + 1);
 		m_List.SetItemText (i, 1, strTmp);
 	}

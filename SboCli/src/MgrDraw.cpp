@@ -20,6 +20,7 @@
 #include "MgrGrpData.h"
 #include "MgrLayer.h"
 #include "MgrWindow.h"
+#include "myString.h"
 #include "MgrDraw.h"
 
 
@@ -1208,30 +1209,39 @@ void CMgrDraw::Clear(void)
 void CMgrDraw::SaveScreenShot(void)
 {
 	int cx, cy;
-	char szName[MAX_PATH], szTmp[128], szTmp2[20];
-	LPSTR pszTmp;
+	TCHAR szName[MAX_PATH];
+	TCHAR szTmp[128];
+	TCHAR szTmp2[20];
+	LPTSTR pszTmp;
 	SYSTEMTIME sysTime;
 	CImg32 ImgTmp;
 
 	/* ファイル名の作成 */
-	GetModuleFileName (NULL, szName, MAX_PATH);
-	pszTmp		= strrchr (szName, '\\');
-	pszTmp[1]	= 0;
+	ZeroMemory (szName, sizeof (szName));
+	GetModuleFileName (NULL, szName, _countof (szName));
+	pszTmp = _tcsrchr (szName, _T('\\'));
+	if (pszTmp != NULL) {
+		pszTmp[1] = _T('\0');
+	} else {
+		szName[0] = _T('\0');
+	}
 
 	GetLocalTime (&sysTime);
-	strcat (szName, "ss\\Sbo");
-	sprintf_s (szTmp2, _countof (szTmp2), "%04d", sysTime.wYear);
-	sprintf_s (szTmp, _countof (szTmp), "%s%02d%02d%02d%02d%02d",
+	_tcscat_s (szName, _countof (szName), _T("ss\\Sbo"));
+	_stprintf_s (szTmp2, _countof (szTmp2), _T("%04d"), sysTime.wYear);
+	_stprintf_s (szTmp, _countof (szTmp), _T("%s%02d%02d%02d%02d%02d"),
 			&szTmp2[2],
 			sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
-	strcat (szName, szTmp);
-	strcat (szName, ".png");
+	_tcscat_s (szName, _countof (szName), szTmp);
+	_tcscat_s (szName, _countof (szName), _T(".png"));
+
+	CStringA szNameUtf8 = TStringToUtf8 (szName);
 
 	cx = m_pDibBack->Width ();
 	cy = m_pDibBack->Height ();
 	ImgTmp.CreateWithoutGdi (SCRSIZEX, SCRSIZEY);
 	ImgTmp.Blt (0, 0, SCRSIZEX, SCRSIZEY, m_pDibBack, (cx - SCRSIZEX) / 2, (cy - SCRSIZEY) / 2);
-	m_pMgrGrpData->Write (szName, &ImgTmp);
+	m_pMgrGrpData->Write (szNameUtf8, &ImgTmp);
 }
 
 
