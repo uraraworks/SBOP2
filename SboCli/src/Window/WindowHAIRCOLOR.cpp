@@ -90,8 +90,9 @@ void CWindowHAIRCOLOR::Draw(PCImg32 pDst)
 	TextOut4 (hDC, 56, 8, _T("髪の色"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);
 	TextOut4 (hDC, 16, 32, strTmp, clText);
-	CString strHairColor = Utf8ToTString (m_pMgrData->GetHairColorName ((WORD)m_nPos));
-	TextOut2 (hDC, 40, 32, strHairColor, clText);
+        CString strHairColor;
+        strHairColor = Utf8ToTString (m_pMgrData->GetHairColorName ((WORD)m_nPos));
+        TextOut2 (hDC, 40, 32, strHairColor, clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();
