@@ -7,6 +7,7 @@
 /* ========================================================================= */
 
 #include "StdAfx.h"
+#include <cstdio>
 #include "GetMD5.h"
 
 /* ========================================================================= */
@@ -86,9 +87,9 @@ void CGetMD5::GetStr(
 
 	MD5Final (aTmp, &m_stContext);
 
-	for (i = 0; i < 16; i ++) {
-		wsprintf (&pszDst[i * 2], _T("%02X"), aTmp[i]);
-	}
+       for (i = 0; i < 16; i ++) {
+               sprintf_s (&pszDst[i * 2], 3, "%02X", aTmp[i]);
+       }
 }
 
 /* Copyright(C)URARA-works 2005 */

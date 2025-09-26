@@ -497,7 +497,7 @@ void CMainFrame::OnDestroy(HWND hWnd)
 
 void CMainFrame::OnPaint(HWND hWnd)
 {
-	char szTmp[100];
+	CString strTmp;
 	DWORD dwTime;
 	HFONT hFontOld;
 	HDC hDC;
@@ -510,27 +510,27 @@ void CMainFrame::OnPaint(HWND hWnd)
 	hFontOld = (HFONT)SelectObject (hDC, m_hFont);
 
 	SetTextColor (hDC, RGB(0, 255, 0));
-	MyTextOut (hDC, 0, 0, 		"サーバー稼動時間");
-	MyTextOut (hDC, 0, 12 * 1, 	"接続数");
-	MyTextOut (hDC, 0, 12 * 2, 	"処理キャラ数");
-	MyTextOut (hDC, 0, 12 * 3, 	"処理マップ数");
+	MyTextOut (hDC, 0, 0, 		_T("サーバー稼動時間"));
+	MyTextOut (hDC, 0, 12 * 1, 	_T("接続数"));
+	MyTextOut (hDC, 0, 12 * 2, 	_T("処理キャラ数"));
+	MyTextOut (hDC, 0, 12 * 3, 	_T("処理マップ数"));
 
 	SetTextColor (hDC, RGB(255, 255, 255));
 
-	wsprintf (szTmp, _T("%04d:%02d:%02d"),
+	strTmp.Format (_T("%04d:%02d:%02d"),
 			 dwTime / 3600000,
 			 (dwTime % 3600000 - ((dwTime % 60000) / 1000)) / 60000,
 			 (dwTime % 60000) / 1000);
-	MyTextOut (hDC, 120, 0, szTmp);
+	MyTextOut (hDC, 120, 0, strTmp);
 
-	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCountOnline ());
-	MyTextOut (hDC, 120, 12 * 1, szTmp);
+	strTmp.Format (_T("%d"), m_pLibInfoChar->GetCountOnline ());
+	MyTextOut (hDC, 120, 12 * 1, strTmp);
 
-	wsprintf (szTmp, _T("%d"), m_pLibInfoChar->GetCount ());
-	MyTextOut (hDC, 120, 12 * 2, szTmp);
+	strTmp.Format (_T("%d"), m_pLibInfoChar->GetCount ());
+	MyTextOut (hDC, 120, 12 * 2, strTmp);
 
-	wsprintf (szTmp, _T("%d"), m_pLibInfoMap->GetCount ());
-	MyTextOut (hDC, 120, 12 * 3, szTmp);
+	strTmp.Format (_T("%d"), m_pLibInfoMap->GetCount ());
+	MyTextOut (hDC, 120, 12 * 3, strTmp);
 
 	SelectObject (hDC, hFontOld);
 
@@ -774,16 +774,14 @@ void CMainFrame::TimerProcKeepalive(void)
 /* 日付		:2003/05/17														 */
 /* ========================================================================= */
 
-void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCSTR pStr)
+void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr)
 {
 	if (pStr == NULL) {
 		return;
 	}
 
-	USES_CONVERSION;
-	LPCTSTR pszText = A2CT(pStr);
-	int nLen = static_cast<int>(_tcslen(pszText));
-	::TextOut(hDC, x, y, pszText, nLen);
+	int nLen = static_cast<int>(_tcslen(pStr));
+	::TextOut(hDC, x, y, pStr, nLen);
 }
 
 
