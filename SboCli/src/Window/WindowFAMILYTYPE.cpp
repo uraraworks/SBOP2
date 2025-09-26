@@ -13,6 +13,7 @@
 #include "MgrWindow.h"
 #include "MgrSound.h"
 #include "WindowFAMILYTYPE.h"
+#include "myString.h"
 
 /* ========================================================================= */
 /* 関数名	:CWindowFAMILYTYPE::CWindowFAMILYTYPE							 */
@@ -103,7 +104,8 @@ void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 	TextOut4 (hDC, 256,	288,	_T("１／３"), clText);
 
 	for (i = 0; i < nCount; i ++) {
-		TextOut2 (hDC, nCursorPos[i].x, nCursorPos[i].y - 4, m_pMgrData->GetFamilyTypeName ((WORD)(FAMILYTYPE_HUMAN + i)), clText);
+		CString strFamily = Utf8ToTString (m_pMgrData->GetFamilyTypeName ((WORD)(FAMILYTYPE_HUMAN + i)));
+		TextOut2 (hDC, nCursorPos[i].x, nCursorPos[i].y - 4, strFamily, clText);
 	}
 
 	SelectObject (hDC, hFontOld);

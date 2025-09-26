@@ -38,6 +38,7 @@
 #include "Command.h"
 #include "UraraSockTCPSBO.h"
 #include "LibInfoCharCli.h"
+#include "myString.h"
 #include "InfoCharCli.h"
 #include "LayerMap.h"
 #include "LayerSystemMsg.h"
@@ -2108,7 +2109,8 @@ void CStateProcMAP::OnMgrDrawEND_FADEIN(DWORD dwPara)
 	if (m_pMap == NULL) {
 		return;
 	}
-	pLayerMap->RenewMapName ((LPCSTR)m_pMap->m_strMapName);
+	CString strMapName = Utf8ToTString ((LPCSTR)m_pMap->m_strMapName);
+	pLayerMap->RenewMapName (strMapName);
 }
 
 

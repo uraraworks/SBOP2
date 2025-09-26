@@ -85,7 +85,7 @@ void CWindowSKILLMENU::Create(CMgrData *pMgrData)
 
 void CWindowSKILLMENU::Draw(PCImg32 pDst)
 {
-	LPCSTR aszTitle[] = {"戦闘(F)", "生活(L)", "能力"};
+	LPCTSTR aszTitle[] = {_T("戦闘(F)"), _T("生活(L)"), _T("能力")};
 	int i, nCount, nLevel, x, y, nTmp;
 	HDC hDC;
 	HFONT hFontOld;

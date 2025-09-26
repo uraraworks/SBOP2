@@ -803,18 +803,20 @@ void CLayerMap::RenewLevel(void)
 
 void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 {
-	int nLen;
 	HFONT hFontOld;
 	HDC hDCTmp;
+	CString strMapName;
 
 	m_nLevelMapName		= 0;
 	m_dwLastTimeMapName	= 0;
 	SAFE_DELETE (m_pDibMapName);
 
-	nLen = 0;
-	if (pszMapName) {
-		nLen = strlen (pszMapName);
+	if ((pszMapName == NULL) || (*pszMapName == 0)) {
+		return;
 	}
+
+	strMapName = pszMapName;
+	int nLen = strMapName.GetLength ();
 	if (nLen <= 0) {
 		return;
 	}
@@ -826,8 +828,7 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont32);
 	SetBkMode (hDCTmp, TRANSPARENT);
 
-    CString strMapName = AnsiToTString (pszMapName);
-    TextOut3 (hDCTmp, 1, 2, strMapName, RGB (255, 255, 255));//, RGB (124, 232, 123));
+	this->TextOut3 (hDCTmp, 1, 2, strMapName, RGB (255, 255, 255));//, RGB (124, 232, 123));
 
 	SelectObject (hDCTmp, hFontOld);
 	m_pDibMapName->Unlock ();

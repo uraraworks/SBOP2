@@ -12,6 +12,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "myString.h"
 #include "WindowEYECOLOR.h"
 
 /* ========================================================================= */
@@ -89,7 +90,8 @@ void CWindowEYECOLOR::Draw(PCImg32 pDst)
 	TextOut4 (hDC, 56, 8, _T("目の色"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);
 	TextOut4 (hDC, 16, 32, strTmp, clText);
-	TextOut2 (hDC, 40, 32, m_pMgrData->GetEyeColorName ((WORD)m_nPos), clText);
+	CString strEyeColor = Utf8ToTString (m_pMgrData->GetEyeColorName ((WORD)m_nPos));
+	TextOut2 (hDC, 40, 32, strEyeColor, clText);
 
 	SelectObject (hDC, hFontOld);
 	m_pDib->Unlock ();

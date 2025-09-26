@@ -42,7 +42,7 @@ public:
 	void	SetSystemIconMode	(int nMode);								/* システムアイコンモードを設定 */
 	void	GetViewMapPos		(int &nDstX, int &nDstY);					/* 視点をマップ座標で取得 */
 	void	RenewLevel			(void);										/* 明度レベル画像を更新 */
-	void	RenewMapName		(LPCSTR pszMapName);						/* マップ名表示用画像を更新 */
+	void	RenewMapName		(LPCTSTR pszMapName);						/* マップ名表示用画像を更新 */
 
 
 private:
