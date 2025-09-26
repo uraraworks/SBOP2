@@ -23,6 +23,62 @@
 #include "MgrSound.h"
 #include "WindowTEXTMSG.h"
 
+#ifdef _UNICODE
+namespace
+{
+static size_t GetUtf8CharLength(const char* psz)
+{
+        if ((psz == nullptr) || (*psz == '\0')) {
+                return 0;
+        }
+        const unsigned char ch = static_cast<unsigned char>(*psz);
+        if ((ch & 0x80u) == 0) {
+                return 1;
+        }
+        if ((ch & 0xE0u) == 0xC0u) {
+                return 2;
+        }
+        if ((ch & 0xF0u) == 0xE0u) {
+                return 3;
+        }
+        if ((ch & 0xF8u) == 0xF0u) {
+                return 4;
+        }
+        return 1;
+}
+
+static void CopyNextMessageChar(char* pszDst, size_t cchDst, const char* pszSrc)
+{
+        if ((pszDst == nullptr) || (pszSrc == nullptr) || (cchDst == 0)) {
+                return;
+        }
+
+        const size_t len = GetUtf8CharLength(pszSrc);
+        const size_t copyLen = (len < cchDst) ? len : (cchDst - 1);
+        memcpy(pszDst, pszSrc, copyLen);
+        pszDst[copyLen] = '\0';
+}
+}
+#else
+namespace
+{
+static void CopyNextMessageChar(char* pszDst, size_t cchDst, const char* pszSrc)
+{
+        if ((pszDst == nullptr) || (pszSrc == nullptr) || (cchDst == 0)) {
+                return;
+        }
+
+        const char* pszNext = ::CharNextA(pszSrc);
+        size_t len = static_cast<size_t>(pszNext - pszSrc);
+        if (len >= cchDst) {
+                len = cchDst - 1;
+        }
+        memcpy(pszDst, pszSrc, len);
+        pszDst[len] = '\0';
+}
+}
+#endif
+
 /* 表示状態 */
 enum {
 	STATE_TEXT = 0,			/* メッセージ表示 */
@@ -210,7 +266,7 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 	int *pnProcPos;
 	DWORD dwTimeTmp;
 	LPCSTR pszTmp;
-	char szTmp[3];
+	char szTmp[8];
 	PCInfoCharCli pPlayerChar;
 	PCMgrKeyInput pMgrKeyInput;
 
@@ -251,12 +307,13 @@ BOOL CWindowTEXTMSG::TimerProc(void)
 			goto Exit;
 		}
 
-		if (strncmp (&pszTmp[*pnProcPos], "\r\n", 2) == 0) {
-			CopyMemory (szTmp, "\r\n", 2);
+                if (strncmp (&pszTmp[*pnProcPos], "\r\n", 2) == 0) {
+                        CopyMemory (szTmp, "\r\n", 2);
+                        szTmp[2] = '\0';
 
-		} else {
-			_tcsnccpy (szTmp, &pszTmp[*pnProcPos], 1);
-		}
+                } else {
+                        CopyNextMessageChar (szTmp, _countof (szTmp), &pszTmp[*pnProcPos]);
+                }
 
 		if (szTmp[0] == '@') {
 			MsgProc ();
@@ -786,7 +843,7 @@ void CWindowTEXTMSG::MsgProc(void)
 			if (bSkip == FALSE) {
 				strTmp2 = strTmp;
 				TrimSpace (strTmp2);
-				m_strMsgTmp += strTmp2;
+                        m_strMsgTmp += (LPCTSTR)strTmp2;
 			}
 		}
 		m_nProcPos += nPos;
@@ -803,24 +860,24 @@ void CWindowTEXTMSG::MsgProc(void)
 void CWindowTEXTMSG::GetLineText(LPCSTR pszSrc, CmyString &strDst)
 {
 	int i, nLen;
-	char szTmp[3];
+	char szTmp[8];
 
 	strDst.Empty ();
 
 	nLen = strlen (pszSrc);
-	for (i = 0; i < nLen - 1;) {
-		ZeroMemory (szTmp, sizeof (szTmp));
-		_tcsnccpy (szTmp, &pszSrc[i], 1);
-		if (szTmp[0] == 0) {
-			break;
-		}
+        for (i = 0; i < nLen - 1;) {
+                ZeroMemory (szTmp, sizeof (szTmp));
+                CopyNextMessageChar (szTmp, _countof (szTmp), &pszSrc[i]);
+                if (szTmp[0] == 0) {
+                        break;
+                }
 
-		if (strncmp (&pszSrc[i], "\r\n", 2) == 0) {
-			break;
-		}
-		strDst += szTmp;
-		i += strlen (szTmp);
-	}
+                if (strncmp (&pszSrc[i], "\r\n", 2) == 0) {
+                        break;
+                }
+                strDst += szTmp;
+                i += static_cast<int>(strlen (szTmp));
+        }
 }
 
 
@@ -833,28 +890,28 @@ void CWindowTEXTMSG::GetLineText(LPCSTR pszSrc, CmyString &strDst)
 void CWindowTEXTMSG::TrimSpace(CmyString &strSrc)
 {
 	int i, nLen;
-	char szTmp[3];
+	char szTmp[8];
 	LPCSTR pszSrc;
 	CmyString strTmp;
 
 	strTmp = strSrc;
 	pszSrc = (LPCSTR)strTmp;
 
-	nLen = strSrc.GetLength ();
-	for (i = 0; i < nLen;) {
-		ZeroMemory (szTmp, sizeof (szTmp));
-		_tcsnccpy (szTmp, &pszSrc[i], 1);
-		if (szTmp[0] == 0) {
-			break;
-		}
+        nLen = strSrc.GetLength ();
+        for (i = 0; i < nLen;) {
+                ZeroMemory (szTmp, sizeof (szTmp));
+                CopyNextMessageChar (szTmp, _countof (szTmp), &pszSrc[i]);
+                if (szTmp[0] == 0) {
+                        break;
+                }
 
-		if ((strcmp (szTmp, " ") == 0) || (strcmp (szTmp, "　") == 0)) {
-			i += strlen (szTmp);
-			continue;
-		}
-		strSrc = &pszSrc[i];
-		break;
-	}
+                if ((strcmp (szTmp, " ") == 0) || (strcmp (szTmp, "　") == 0)) {
+                        i += static_cast<int>(strlen (szTmp));
+                        continue;
+                }
+                strSrc = &pszSrc[i];
+                break;
+        }
 }
 
 

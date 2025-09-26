@@ -2,6 +2,13 @@
 #include "LogViewCtrl.h"
 #include <limits>
 
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE

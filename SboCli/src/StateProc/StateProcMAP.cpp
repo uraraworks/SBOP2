@@ -3146,7 +3146,7 @@ void CStateProcMAP::OnMainFrameRENEWTALKEVENT(DWORD dwParam)
 	pszName	  = NULL;
 	pInfoChar = (PCInfoCharBase)m_pLibInfoChar->GetPtr (pInfo->m_dwTalkEventID);
 	if (pInfoChar) {
-		pszName = (LPCTSTR)pInfoChar->m_strCharName;
+		pszName = (LPCSTR)pInfoChar->m_strCharName;
 	}
 
 	m_pMgrWindow->MakeWindowTEXTMSG (NULL, pszName, pInfo);
@@ -3211,7 +3211,7 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 			}
 		}
 		if (nLen > 0) {
-			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCTSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
+			m_pMgrWindow->MakeWindowTEXTMSG (NULL, (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
 			break;
 		}
 		goto Exit;

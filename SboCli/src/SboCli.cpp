@@ -64,7 +64,7 @@ BOOL CSboCliApp::InitInstance()
 	AfxEnableControlContainer();
 
 #if 1
-	hMutexMain = CreateMutex (NULL, TRUE, "SboCli");
+	hMutexMain = CreateMutex (NULL, TRUE, _T("SboCli"));
 	if ((hMutexMain == NULL) || GetLastError () == ERROR_ALREADY_EXISTS) {
 		goto Exit;
 	}
