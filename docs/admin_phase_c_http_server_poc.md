@@ -44,7 +44,7 @@ PoC では WinSock ベースの `CHttpServer` を実装し、将来的にルー�
 | ✅ | `src/Web/HttpServer.h/.cpp` を追加し、WinSock ベースの最小 HTTP サーバーを実装 | 新規コード、WinSock 初期化/イベントループ/JSON 応答 |
 | ✅ | `CMainFrame` で `CHttpServer` を生成・起動・停止するフックを追加 | `MainFrame.cpp/.h` の初期化/終了処理、ログ出力 |
 | ✅ | `CMgrData` に `HttpPort` 設定値を読み書きする機能を追加 | `MgrData.cpp/.h`、`SboSvr.ini` 既定値の更新 |
-| ⬜️ | ルーティング抽象化 (`IApiHandler` 相当) と静的ファイル配信の追加 | 今後 `src/Web/` 配下で設計・実装 |
+| ✅ | ルーティング抽象化 (`IApiHandler`/`ApiRouter`) を導入し、`/health` をハンドラ経由で提供 | `src/Web/ApiHandler.h`、`src/Web/ApiRouter.*`、`src/Web/Handlers/HealthHandler.*` |
 | ⬜️ | 認証・監査・エラーハンドリング共通化 | フェーズC後半のタスク |
 
 ## 5. 検証結果と手順
@@ -62,7 +62,7 @@ PoC では WinSock ベースの `CHttpServer` を実装し、将来的にルー�
 5. ウィンドウを閉じる、または `OnClose` を呼び出してサーバーを終了し、ポートが解放されていることを `netstat -ano | findstr 18080` で確認する。
 
 ## 6. 今後の拡張計画
-- ルーティングテーブルとハンドラ登録インターフェースを `src/Web/` に追加し、REST API を段階的に実装する。
+- ルーティングテーブルとハンドラ登録インターフェースを `src/Web/` に追加し、REST API を段階的に実装する。（完了）
 - 認証方式（Basic 認証 + IP 制限）と監査ログを PoC の結果を踏まえて設計し、共通ミドル層に組み込む。
 - 静的ファイル配信やテンプレート処理を `admin_phase_c_platform.md` のマイルストーンに沿って実施する。
 - CI 上で簡易 HTTP テスト (`curl` or `restcli`) を実行し、ヘルスチェックの自動検証を行う。
@@ -74,7 +74,7 @@ PoC では WinSock ベースの `CHttpServer` を実装し、将来的にルー�
 - **文字コード混在**: 応答は UTF-8 固定とし、JSON で返却。将来エンコーディング要件が変わる場合はレスポンスヘッダで切り替える。
 
 ## 8. 次アクション
-- `src/Web/` にルーティング抽象化の雛形 (`IApiHandler`/`RouterBuilder`) を追加し、モジュール構成案をまとめる。
+- ルーティング抽象化の雛形 (`IApiHandler`/`ApiRouter`) を活用し、静的ファイル配信の設計と試作を行う。
 - 静的ファイル配信方式（メモリロード vs ファイルストリーム）を検討し、最小のサンプルを作成する。
 - `docs/runbooks/local_dev.md` の更新手順に `HttpPort` 設定とログ確認方法を追記する（本 PR で反映）。
 - CI/CD タスクの洗い出し（curl テスト、静的解析、ユニットテスト）を継続。

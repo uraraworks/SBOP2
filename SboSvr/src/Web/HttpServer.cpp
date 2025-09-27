@@ -5,6 +5,11 @@
 #include <sstream>
 #include <cstring>
 #include <process.h>
+#include <cctype>
+#include <memory>
+
+#include "HttpTypes.h"
+#include "Handlers/HealthHandler.h"
 
 CHttpServer::CHttpServer()
         : m_hListen(INVALID_SOCKET)
@@ -13,6 +18,7 @@ CHttpServer::CHttpServer()
         , m_wPort(0)
         , m_hStartedEvent(NULL)
         , m_bInitSucceeded(false)
+        , m_bHandlersRegistered(false)
 {
         ZeroMemory(&m_wsaData, sizeof(m_wsaData));
 }
@@ -29,6 +35,8 @@ bool CHttpServer::Start(unsigned short wPort)
         }
 
         m_wPort = wPort;
+
+        RegisterDefaultHandlers();
 
         m_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (m_hStopEvent == NULL) {
@@ -223,7 +231,11 @@ void CHttpServer::HandleClient(SOCKET hClient)
                                 continue;
                         }
                         if (nErr == WSAETIMEDOUT) {
-                                SendJsonResponse(hClient, "HTTP/1.1 408 Request Timeout", "{\"error\":\"timeout\"}");
+                                HttpResponse timeoutResponse;
+                                timeoutResponse.statusLine = "HTTP/1.1 408 Request Timeout";
+                                timeoutResponse.SetJsonBody("{\"error\":\"timeout\"}");
+                                timeoutResponse.EnsureContentLength();
+                                SendResponse(hClient, timeoutResponse);
                         }
                         shutdown(hClient, SD_BOTH);
                         return;
@@ -231,68 +243,45 @@ void CHttpServer::HandleClient(SOCKET hClient)
 
                 request.append(szBuffer, nRecv);
                 if (request.size() > 8192) {
-                        SendJsonResponse(hClient, "HTTP/1.1 413 Payload Too Large", "{\"error\":\"request_too_large\"}");
+                        HttpResponse tooLarge;
+                        tooLarge.statusLine = "HTTP/1.1 413 Payload Too Large";
+                        tooLarge.SetJsonBody("{\"error\":\"request_too_large\"}");
+                        tooLarge.EnsureContentLength();
+                        SendResponse(hClient, tooLarge);
                         shutdown(hClient, SD_BOTH);
                         return;
                 }
         }
 
-        size_t nPos = request.find("\r\n");
-        if (nPos == std::string::npos) {
-                SendJsonResponse(hClient, "HTTP/1.1 400 Bad Request", "{\"error\":\"bad_request\"}");
+        HttpRequest httpRequest;
+        if (!ParseHttpRequest(request, httpRequest)) {
+                HttpResponse badRequest;
+                badRequest.statusLine = "HTTP/1.1 400 Bad Request";
+                badRequest.SetJsonBody("{\"error\":\"bad_request\"}");
+                badRequest.EnsureContentLength();
+                SendResponse(hClient, badRequest);
                 shutdown(hClient, SD_BOTH);
                 return;
         }
 
-        std::string requestLine = request.substr(0, nPos);
-        std::istringstream iss(requestLine);
-        std::string method;
-        std::string path;
-        std::string version;
-        iss >> method >> path >> version;
+        HttpResponse httpResponse;
+        std::string allowedMethods;
+        CApiRouter::RouteResult result = m_router.Dispatch(httpRequest, httpResponse, &allowedMethods);
 
-        if (method.empty() || path.empty()) {
-                SendJsonResponse(hClient, "HTTP/1.1 400 Bad Request", "{\"error\":\"bad_request\"}");
-                shutdown(hClient, SD_BOTH);
-                return;
+        if (result == CApiRouter::RouteMethodNotAllowed) {
+                httpResponse.statusLine = "HTTP/1.1 405 Method Not Allowed";
+                httpResponse.SetJsonBody("{\"error\":\"method_not_allowed\"}");
+                if (!allowedMethods.empty()) {
+                        httpResponse.SetHeader("Allow", allowedMethods);
+                }
+        } else if (result == CApiRouter::RouteNotFound) {
+                httpResponse.statusLine = "HTTP/1.1 404 Not Found";
+                httpResponse.SetJsonBody("{\"error\":\"not_found\"}");
         }
 
-        if (method != "GET") {
-                SendJsonResponse(hClient, "HTTP/1.1 405 Method Not Allowed", "{\"error\":\"method_not_allowed\"}");
-                shutdown(hClient, SD_BOTH);
-                return;
-        }
-
-        if (path == "/health") {
-                SendJsonResponse(hClient, "HTTP/1.1 200 OK", "{\"status\":\"ok\"}");
-                shutdown(hClient, SD_BOTH);
-                return;
-        }
-
-        SendJsonResponse(hClient, "HTTP/1.1 404 Not Found", "{\"error\":\"not_found\"}");
+        httpResponse.EnsureContentLength();
+        SendResponse(hClient, httpResponse);
         shutdown(hClient, SD_BOTH);
-}
-
-void CHttpServer::SendJsonResponse(SOCKET hClient, LPCSTR pszStatus, LPCSTR pszBody)
-{
-        size_t nBodyLength = strlen(pszBody);
-
-        char szHeader[256];
-        int nHeaderLength = _snprintf_s(
-                szHeader,
-                _countof(szHeader),
-                _TRUNCATE,
-                "%s\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: %u\r\nConnection: close\r\n\r\n",
-                pszStatus,
-                static_cast<unsigned int>(nBodyLength));
-
-        if (nHeaderLength > 0) {
-                SendAll(hClient, szHeader, static_cast<size_t>(nHeaderLength));
-        }
-
-        if (nBodyLength > 0) {
-                SendAll(hClient, pszBody, nBodyLength);
-        }
 }
 
 bool CHttpServer::SendAll(SOCKET hSocket, const char *pData, size_t nLength)
@@ -316,4 +305,107 @@ bool CHttpServer::SendAll(SOCKET hSocket, const char *pData, size_t nLength)
         }
 
         return true;
+}
+
+bool CHttpServer::ParseHttpRequest(const std::string &rawRequest, HttpRequest &outRequest)
+{
+        size_t nHeaderEnd = rawRequest.find("\r\n\r\n");
+        if (nHeaderEnd == std::string::npos) {
+                return false;
+        }
+
+        size_t nFirstLineEnd = rawRequest.find("\r\n");
+        if (nFirstLineEnd == std::string::npos) {
+                return false;
+        }
+
+        std::string requestLine = rawRequest.substr(0, nFirstLineEnd);
+        std::istringstream iss(requestLine);
+        iss >> outRequest.method >> outRequest.path >> outRequest.version;
+
+        if (outRequest.method.empty() || outRequest.path.empty()) {
+                return false;
+        }
+
+        outRequest.headers.clear();
+
+        size_t nHeaderPos = nFirstLineEnd + 2;
+        while (nHeaderPos < nHeaderEnd) {
+                size_t nLineEnd = rawRequest.find("\r\n", nHeaderPos);
+                if ((nLineEnd == std::string::npos) || (nLineEnd > nHeaderEnd)) {
+                        nLineEnd = nHeaderEnd;
+                }
+
+                std::string headerLine = rawRequest.substr(nHeaderPos, nLineEnd - nHeaderPos);
+                size_t nColonPos = headerLine.find(':');
+                if (nColonPos != std::string::npos) {
+                        std::string name = Trim(headerLine.substr(0, nColonPos));
+                        std::string value = Trim(headerLine.substr(nColonPos + 1));
+                        if (!name.empty()) {
+                                HttpHeader header;
+                                header.name = name;
+                                header.value = value;
+                                outRequest.headers.push_back(header);
+                        }
+                }
+
+                if (nLineEnd >= nHeaderEnd) {
+                        break;
+                }
+                nHeaderPos = nLineEnd + 2;
+        }
+
+        size_t nBodyPos = nHeaderEnd + 4;
+        if (nBodyPos < rawRequest.size()) {
+                outRequest.body = rawRequest.substr(nBodyPos);
+        } else {
+                outRequest.body.clear();
+        }
+
+        return true;
+}
+
+std::string CHttpServer::Trim(const std::string &text)
+{
+        size_t nStart = 0;
+        while ((nStart < text.size()) && std::isspace(static_cast<unsigned char>(text[nStart]))) {
+                ++nStart;
+        }
+
+        size_t nEnd = text.size();
+        while ((nEnd > nStart) && std::isspace(static_cast<unsigned char>(text[nEnd - 1]))) {
+                --nEnd;
+        }
+
+        return text.substr(nStart, nEnd - nStart);
+}
+
+void CHttpServer::SendResponse(SOCKET hClient, const HttpResponse &response)
+{
+        std::ostringstream oss;
+        oss << response.statusLine << "\r\n";
+        for (std::vector<HttpHeader>::const_iterator it = response.headers.begin(); it != response.headers.end(); ++it) {
+                oss << it->name << ": " << it->value << "\r\n";
+        }
+        oss << "\r\n";
+
+        std::string headerBlock = oss.str();
+        if (!headerBlock.empty()) {
+                SendAll(hClient, headerBlock.c_str(), headerBlock.size());
+        }
+
+        if (!response.body.empty()) {
+                SendAll(hClient, response.body.c_str(), response.body.size());
+        }
+}
+
+void CHttpServer::RegisterDefaultHandlers()
+{
+        if (m_bHandlersRegistered) {
+                return;
+        }
+
+        std::unique_ptr<IApiHandler> healthHandler(new CHealthHandler());
+        m_router.Register("GET", "/health", std::move(healthHandler));
+        m_bHandlersRegistered = true;
 }

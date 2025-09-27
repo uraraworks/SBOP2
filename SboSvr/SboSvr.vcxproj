@@ -259,7 +259,10 @@
     <ClCompile Include="src\SaveLoad\SaveLoadInfoTalkEvent.cpp" />
     <ClCompile Include="src\SboSvr.cpp" />
     <ClCompile Include="src\UpdateServerInfo.cpp" />
+    <ClCompile Include="src\Web\ApiRouter.cpp" />
+    <ClCompile Include="src\Web\Handlers\HealthHandler.cpp" />
     <ClCompile Include="src\Web\HttpServer.cpp" />
+    <ClCompile Include="src\Web\HttpTypes.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -364,7 +367,11 @@
     <ClInclude Include="src\SaveLoad\SaveLoadInfoTalkEvent.h" />
     <ClInclude Include="src\SboSvr_priv.h" />
     <ClInclude Include="src\UpdateServerInfo.h" />
+    <ClInclude Include="src\Web\ApiHandler.h" />
+    <ClInclude Include="src\Web\ApiRouter.h" />
+    <ClInclude Include="src\Web\Handlers\HealthHandler.h" />
     <ClInclude Include="src\Web\HttpServer.h" />
+    <ClInclude Include="src\Web\HttpTypes.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>
