@@ -320,7 +320,7 @@ DWORD CInfoMapBase::GetDataSize(void)
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
-	dwRet += (m_strMapName.GetLength () + 1);
+	dwRet += (m_strMapName.GetUtf8Length () + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetDataSize ();
 	}
@@ -355,7 +355,7 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 	case 7:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
 	case 8:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
 	case 9:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
-	case 10:dwRet = m_strMapName.GetLength () + 1;					break;
+	case 10:dwRet = m_strMapName.GetUtf8Length () + 1;					break;
 	case 11:
 		if (m_pLibInfoMapEvent) {
 			dwRet = m_pLibInfoMapEvent->GetDataSize ();
@@ -485,7 +485,7 @@ DWORD CInfoMapBase::ReadElementData(
 		break;
 	case 10:
 		m_strMapName = (LPCSTR)pSrc;
-		dwSize = m_strMapName.GetLength () + 1;
+		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 11:
 		if (m_pLibInfoMapEvent) {
@@ -975,7 +975,7 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
-	dwRet += (m_strMapName.GetLength () + 1);
+	dwRet += (m_strMapName.GetUtf8Length () + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetSendDataSize ();
 	}

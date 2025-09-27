@@ -297,6 +297,16 @@ CmyString::operator LPCSTR()
 #endif
 }
 
+int CmyString::GetUtf8Length() const
+{
+#ifdef _UNICODE
+        UpdateUtf8Cache ();
+        return m_strUtf8Cache.GetLength ();
+#else
+        return m_strString.GetLength ();
+#endif
+}
+
 
 /* ========================================================================= */
 /* 関数名       :CmyString::CompareNoCase                                                                                */

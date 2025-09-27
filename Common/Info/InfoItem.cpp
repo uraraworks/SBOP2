@@ -111,7 +111,7 @@ DWORD CInfoItem::GetDataSize(void)
 	dwRet += sizeof (m_nPosZ);				/* 落ちている高さ(0が地面) */
 	dwRet += sizeof (m_ptPos);				/* 落ちている座標 */
 	dwRet += sizeof (m_ptBackPack);			/* バックパック内の位置 */
-	dwRet += (m_strName.GetLength () + 1);	/* アイテム名 */
+	dwRet += (m_strName.GetUtf8Length () + 1);	/* アイテム名 */
 
 	return dwRet;
 }
@@ -140,7 +140,7 @@ DWORD CInfoItem::GetDataSizeNo(int nNo)
 	case 7:		dwRet = sizeof (m_nPosZ);				break;	/* 落ちている高さ(0が地面) */
 	case 8:		dwRet = sizeof (m_ptPos);				break;	/* 落ちている座標 */
 	case 9:		dwRet = sizeof (m_ptBackPack);			break;	/* バックパック内の位置 */
-	case 10:	dwRet = (m_strName.GetLength () + 1);	break;	/* アイテム名 */
+	case 10:	dwRet = (m_strName.GetUtf8Length () + 1);	break;	/* アイテム名 */
 	case 11:	dwRet = sizeof (m_dwDropSoundID);		break;	/* 落ちたときの効果音ID */
 	}
 
@@ -234,7 +234,7 @@ DWORD CInfoItem::ReadElementData(
 	case 9:		pDst = (PBYTE)&m_ptBackPack;		dwSize = sizeof (m_ptBackPack);		break;	/* バックパック内の位置 */
 	case 10:	/* アイテム名 */
 		m_strName = (LPCSTR)pSrc;
-		dwSize = m_strName.GetLength () + 1;
+		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 11:	pDst = (PBYTE)&m_dwDropSoundID;		dwSize = sizeof (m_dwDropSoundID);	break;	/* 落ちたときの効果音ID */
 	}
@@ -268,7 +268,7 @@ DWORD CInfoItem::GetSendDataSize(void)
 			sizeof (m_nPosZ)			+
 			sizeof (m_ptPos)			+
 			sizeof (m_ptBackPack)		+
-			(m_strName.GetLength () + 1);
+			(m_strName.GetUtf8Length () + 1);
 
 	return dwRet;
 }
