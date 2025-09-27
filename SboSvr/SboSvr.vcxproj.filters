@@ -26,10 +26,10 @@
     <Filter Include="Source Files\Common\Lib">
       <UniqueIdentifier>{6c19f497-ae7b-4ebf-bc38-33eb3a23a3f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\\Web">
+    <Filter Include="Source Files\Web">
       <UniqueIdentifier>{130045af-6125-4c93-8e6a-f9775960486d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\\Web\\Handlers">
+    <Filter Include="Source Files\Web\Handlers">
       <UniqueIdentifier>{51d6b488-d619-4cf5-b89f-ed0a577d3895}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Common\Lib\md5">
@@ -81,10 +81,10 @@
     <Filter Include="Header Files\Common No. 1\Lib No. 1\md5 No. 1">
       <UniqueIdentifier>{763c9d95-90ea-4499-8d71-c1ac3c4b9ab7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\\Web">
+    <Filter Include="Header Files\Web">
       <UniqueIdentifier>{a6a04fc5-42a4-48e5-b181-96dd45d3d7c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\\Web\\Handlers">
+    <Filter Include="Header Files\Web\Handlers">
       <UniqueIdentifier>{5be85401-8f07-4de0-904a-382a576a41b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Common No. 1\LibInfo No. 1">
