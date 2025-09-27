@@ -55,7 +55,7 @@ void CSaveLoadInfoMapParts::SetHeaderInfo(PCInfoBase pInfo)
 		if (pszName == NULL) {
 			break;
 		}
-		strHeader.Format (_T("%s%s"), PREFIX_INFOANIME, pszName);
+		strHeader.Format ("%s%s", PREFIX_INFOANIME, pszName);
 		AddHeaderInfo (strHeader);
 	}
 }

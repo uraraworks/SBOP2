@@ -1559,8 +1559,8 @@ void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
 		strTmp = "そのアカウント名は登録済みです";
 	} else {
 		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew ();
-		TrimViewString (pInfoAccount->m_strAccount,  Packet.m_strAccount);
-		TrimViewString (pInfoAccount->m_strPassword, Packet.m_strPassword);
+		TrimViewString (pInfoAccount->m_strAccount,  (LPCTSTR)Packet.m_strAccount);
+		TrimViewString (pInfoAccount->m_strPassword, (LPCTSTR)Packet.m_strPassword);
 		m_pLibInfoAccount->Add (pInfoAccount);
 		strTmp = "アカウントを登録しました";
 	}
