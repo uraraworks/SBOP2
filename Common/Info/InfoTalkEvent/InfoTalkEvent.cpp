@@ -211,35 +211,34 @@ bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writ
 			return false;
 		}
 
-		DWORD dwDeclaredSize = pInfo->GetDataSizeNo(j);
-		writer.Append(&dwDeclaredSize, sizeof(dwDeclaredSize));
-		if (writer.HasFailed()) {
-			return false;
-		}
+                DWORD dwActualSize = 0;
+                std::unique_ptr<BYTE[]> pTmp(pInfo->GetWriteData(j, &dwActualSize));
+                if ((dwActualSize > 0) && (pTmp.get() == NULL)) {
+                        writer.Fail();
+                        return false;
+                }
 
-		if (dwDeclaredSize == 0) {
-			continue;
-		}
+                writer.Append(&dwActualSize, sizeof(dwActualSize));
+                if (writer.HasFailed()) {
+                        return false;
+                }
 
-		if (!writer.CanWrite()) {
-			writer.AddSize(dwDeclaredSize);
-			if (writer.HasFailed()) {
-				return false;
-			}
-			continue;
-		}
+                if (dwActualSize == 0) {
+                        continue;
+                }
 
-		DWORD dwActualSize = 0;
-		std::unique_ptr<BYTE[]> pTmp(pInfo->GetWriteData(j, &dwActualSize));
-		if ((pTmp.get() == NULL) || (dwActualSize != dwDeclaredSize)) {
-			writer.Fail();
-			return false;
-		}
+                if (!writer.CanWrite()) {
+                        writer.AddSize(dwActualSize);
+                        if (writer.HasFailed()) {
+                                return false;
+                        }
+                        continue;
+                }
 
-		writer.Append(pTmp.get(), dwActualSize);
-		if (writer.HasFailed()) {
-			return false;
-		}
+                writer.Append(pTmp.get(), dwActualSize);
+                if (writer.HasFailed()) {
+                        return false;
+                }
 	}
 
 	return true;
