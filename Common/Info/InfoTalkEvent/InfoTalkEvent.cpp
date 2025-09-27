@@ -130,7 +130,7 @@ public:
 		if (m_pBuffer != NULL) {
 			size_t nOffset = m_pBuffer->size();
 			m_pBuffer->resize(nOffset + nSize);
-			CopyMemory(&m_pBuffer->at(nOffset), pSrc, nSize);
+			CopyMemory(m_pBuffer->data() + nOffset, pSrc, nSize);
 		}
 
 		m_ullSize += nSize;
@@ -138,6 +138,24 @@ public:
 		if (m_ullSize > ullMax) {
 			m_bFailed = true;
 		}
+	}
+
+	void AddSize(size_t nSize)
+	{
+		if (m_bFailed || nSize == 0) {
+			return;
+		}
+
+		m_ullSize += nSize;
+		const unsigned long long ullMax = (std::numeric_limits<DWORD>::max)();
+		if (m_ullSize > ullMax) {
+			m_bFailed = true;
+		}
+	}
+
+	void Fail()
+	{
+		m_bFailed = true;
 	}
 
 	size_t GetSize() const
@@ -148,6 +166,11 @@ public:
 	bool HasFailed() const
 	{
 		return m_bFailed;
+	}
+
+	bool CanWrite() const
+	{
+		return (m_pBuffer != NULL);
 	}
 
 private:
@@ -175,7 +198,7 @@ bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writ
 		return false;
 	}
 
-		int nCount2 = pInfo->GetElementCount();
+	int nCount2 = pInfo->GetElementCount();
 	writer.Append(&nCount2, sizeof(nCount2));
 	if (writer.HasFailed()) {
 		return false;
@@ -188,21 +211,34 @@ bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writ
 			return false;
 		}
 
-		DWORD dwTmp = 0;
-		std::unique_ptr<BYTE[]> pTmp(pInfo->GetWriteData(j, &dwTmp));
-		writer.Append(&dwTmp, sizeof(dwTmp));
+		DWORD dwDeclaredSize = pInfo->GetDataSizeNo(j);
+		writer.Append(&dwDeclaredSize, sizeof(dwDeclaredSize));
 		if (writer.HasFailed()) {
 			return false;
 		}
-		if ((dwTmp > 0) && (pTmp.get() == NULL)) {
-			writer.Append(NULL, 1);
-			return false;
+
+		if (dwDeclaredSize == 0) {
+			continue;
 		}
-		if ((dwTmp > 0) && (pTmp.get() != NULL)) {
-			writer.Append(pTmp.get(), dwTmp);
+
+		if (!writer.CanWrite()) {
+			writer.AddSize(dwDeclaredSize);
 			if (writer.HasFailed()) {
 				return false;
 			}
+			continue;
+		}
+
+		DWORD dwActualSize = 0;
+		std::unique_ptr<BYTE[]> pTmp(pInfo->GetWriteData(j, &dwActualSize));
+		if ((pTmp.get() == NULL) || (dwActualSize != dwDeclaredSize)) {
+			writer.Fail();
+			return false;
+		}
+
+		writer.Append(pTmp.get(), dwActualSize);
+		if (writer.HasFailed()) {
+			return false;
 		}
 	}
 
