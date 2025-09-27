@@ -134,7 +134,8 @@ public:
 		}
 
 		m_ullSize += nSize;
-		if (m_ullSize > std::numeric_limits<DWORD>::max()) {
+		const unsigned long long ullMax = (std::numeric_limits<DWORD>::max)();
+		if (m_ullSize > ullMax) {
 			m_bFailed = true;
 		}
 	}
@@ -167,14 +168,14 @@ void AppendString(CSerializeBuffer &writer, LPCSTR pszString)
 	writer.Append(pszString, nLen);
 }
 
-bool SerializeTalkEventElement(const CInfoTalkEventBase *pInfo, CSerializeBuffer &writer)
+bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writer)
 {
 	if (pInfo == NULL) {
 		writer.Append(NULL, 1);
 		return false;
 	}
 
-	int nCount2 = pInfo->GetElementCount();
+		int nCount2 = pInfo->GetElementCount();
 	writer.Append(&nCount2, sizeof(nCount2));
 	if (writer.HasFailed()) {
 		return false;
@@ -208,7 +209,7 @@ bool SerializeTalkEventElement(const CInfoTalkEventBase *pInfo, CSerializeBuffer
 	return true;
 }
 
-bool SerializeTalkEvent(const CInfoTalkEvent *pEvent, int nNo, CSerializeBuffer &writer)
+bool SerializeTalkEvent(CInfoTalkEvent *pEvent, int nNo, CSerializeBuffer &writer)
 {
 	if (pEvent == NULL) {
 		writer.Append(NULL, 1);
@@ -228,7 +229,7 @@ bool SerializeTalkEvent(const CInfoTalkEvent *pEvent, int nNo, CSerializeBuffer 
 		}
 
 		for (int i = 0; i < nCount; i ++) {
-			const CInfoTalkEventBase *pInfo = pEvent->m_apTalkEvent[i];
+			CInfoTalkEventBase *pInfo = pEvent->m_apTalkEvent[i];
 			if (!SerializeTalkEventElement(pInfo, writer)) {
 				return false;
 			}
