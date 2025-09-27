@@ -10,7 +10,7 @@ public:
     void    Stop();
 
 private:
-    static DWORD WINAPI ThreadProc(LPVOID lpParam);
+    static unsigned __stdcall ThreadProc(void *lpParam);
 
     void    Run();
     bool    InitializeWinsock();
@@ -20,6 +20,7 @@ private:
     void    HandleAccept();
     void    HandleClient(SOCKET hClient);
     void    SendJsonResponse(SOCKET hClient, LPCSTR pszStatus, LPCSTR pszBody);
+    bool    SendAll(SOCKET hSocket, const char *pData, size_t nLength);
 
     SOCKET          m_hListen;
     WSAEVENT        m_hListenEvent;

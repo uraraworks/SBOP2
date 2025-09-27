@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <cstring>
+#include <process.h>
 
 CHttpServer::CHttpServer()
         : m_hListen(INVALID_SOCKET)
@@ -44,7 +45,8 @@ bool CHttpServer::Start(unsigned short wPort)
 
         m_bInitSucceeded = false;
 
-        m_hThread = CreateThread(NULL, 0, ThreadProc, this, 0, NULL);
+        unsigned uThreadId = 0;
+        m_hThread = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, ThreadProc, this, 0, &uThreadId));
         if (m_hThread == NULL) {
                 CloseHandle(m_hStartedEvent);
                 m_hStartedEvent = NULL;
@@ -84,7 +86,7 @@ void CHttpServer::Stop()
         }
 }
 
-DWORD WINAPI CHttpServer::ThreadProc(LPVOID lpParam)
+unsigned __stdcall CHttpServer::ThreadProc(void *lpParam)
 {
         CHttpServer *pServer = reinterpret_cast<CHttpServer *>(lpParam);
         if (pServer != NULL) {
@@ -215,6 +217,16 @@ void CHttpServer::HandleAccept()
                         break;
                 }
 
+                u_long ulBlocking = 0;
+                if (ioctlsocket(hClient, FIONBIO, &ulBlocking) == SOCKET_ERROR) {
+                        closesocket(hClient);
+                        continue;
+                }
+
+                DWORD dwTimeout = 5000;
+                setsockopt(hClient, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+                setsockopt(hClient, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+
                 HandleClient(hClient);
                 closesocket(hClient);
         }
@@ -228,7 +240,20 @@ void CHttpServer::HandleClient(SOCKET hClient)
         char szBuffer[512];
         while (request.find("\r\n\r\n") == std::string::npos) {
                 int nRecv = recv(hClient, szBuffer, sizeof(szBuffer), 0);
-                if (nRecv <= 0) {
+                if (nRecv == 0) {
+                        shutdown(hClient, SD_BOTH);
+                        return;
+                }
+
+                if (nRecv == SOCKET_ERROR) {
+                        int nErr = WSAGetLastError();
+                        if ((nErr == WSAEINTR) || (nErr == WSAEWOULDBLOCK)) {
+                                continue;
+                        }
+                        if (nErr == WSAETIMEDOUT) {
+                                SendJsonResponse(hClient, "HTTP/1.1 408 Request Timeout", "{\"error\":\"timeout\"}");
+                        }
+                        shutdown(hClient, SD_BOTH);
                         return;
                 }
 
@@ -253,6 +278,12 @@ void CHttpServer::HandleClient(SOCKET hClient)
         std::string path;
         std::string version;
         iss >> method >> path >> version;
+
+        if (method.empty() || path.empty()) {
+                SendJsonResponse(hClient, "HTTP/1.1 400 Bad Request", "{\"error\":\"bad_request\"}");
+                shutdown(hClient, SD_BOTH);
+                return;
+        }
 
         if (method != "GET") {
                 SendJsonResponse(hClient, "HTTP/1.1 405 Method Not Allowed", "{\"error\":\"method_not_allowed\"}");
@@ -284,10 +315,33 @@ void CHttpServer::SendJsonResponse(SOCKET hClient, LPCSTR pszStatus, LPCSTR pszB
                 static_cast<unsigned int>(nBodyLength));
 
         if (nHeaderLength > 0) {
-                send(hClient, szHeader, nHeaderLength, 0);
+                SendAll(hClient, szHeader, static_cast<size_t>(nHeaderLength));
         }
 
         if (nBodyLength > 0) {
-                send(hClient, pszBody, static_cast<int>(nBodyLength), 0);
+                SendAll(hClient, pszBody, nBodyLength);
         }
+}
+
+bool CHttpServer::SendAll(SOCKET hSocket, const char *pData, size_t nLength)
+{
+        size_t nTotalSent = 0;
+        while (nTotalSent < nLength) {
+                int nSent = send(hSocket, pData + nTotalSent, static_cast<int>(nLength - nTotalSent), 0);
+                if (nSent == SOCKET_ERROR) {
+                        int nErr = WSAGetLastError();
+                        if ((nErr == WSAEINTR) || (nErr == WSAETIMEDOUT) || (nErr == WSAEWOULDBLOCK)) {
+                                continue;
+                        }
+                        return false;
+                }
+
+                if (nSent == 0) {
+                        return false;
+                }
+
+                nTotalSent += static_cast<size_t>(nSent);
+        }
+
+        return true;
 }
