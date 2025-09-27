@@ -204,16 +204,41 @@ bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writ
 		return false;
 	}
 
-	for (int j = 0; j < nCount2; j ++) {
-		LPCSTR pszName = pInfo->GetName(j);
-		AppendString(writer, pszName);
-		if (writer.HasFailed()) {
-			return false;
-		}
+        for (int j = 0; j < nCount2; j ++) {
+                LPCSTR pszName = pInfo->GetName(j);
+                AppendString(writer, pszName);
+                if (writer.HasFailed()) {
+                        return false;
+                }
+
+                const DWORD dwExpectedSize = pInfo->GetDataSizeNo(j);
+
+                if (!writer.CanWrite()) {
+                        writer.Append(&dwExpectedSize, sizeof(dwExpectedSize));
+                        if (writer.HasFailed()) {
+                                return false;
+                        }
+
+                        if (dwExpectedSize == 0) {
+                                continue;
+                        }
+
+                        writer.AddSize(dwExpectedSize);
+                        if (writer.HasFailed()) {
+                                return false;
+                        }
+                        continue;
+                }
 
                 DWORD dwActualSize = 0;
                 std::unique_ptr<BYTE[]> pTmp(pInfo->GetWriteData(j, &dwActualSize));
                 if ((dwActualSize > 0) && (pTmp.get() == NULL)) {
+                        writer.Fail();
+                        return false;
+                }
+
+                if (dwActualSize != dwExpectedSize) {
+                        /* 計算サイズと実データサイズが一致しない場合は後続処理でのバッファ破壊を防ぐ */
                         writer.Fail();
                         return false;
                 }
@@ -227,19 +252,11 @@ bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writ
                         continue;
                 }
 
-                if (!writer.CanWrite()) {
-                        writer.AddSize(dwActualSize);
-                        if (writer.HasFailed()) {
-                                return false;
-                        }
-                        continue;
-                }
-
                 writer.Append(pTmp.get(), dwActualSize);
                 if (writer.HasFailed()) {
                         return false;
                 }
-	}
+        }
 
 	return true;
 }
