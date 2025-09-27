@@ -11,6 +11,10 @@
 #include "InfoTalkEventMENU.h"
 #include "InfoTalkEvent.h"
 
+#include <limits>
+#include <memory>
+#include <vector>
+
 /* ========================================================================= */
 /* 定数定義																	 */
 /* ========================================================================= */
@@ -98,33 +102,154 @@ DWORD CInfoTalkEvent::GetDataSize(void)
 /* 日付		:2008/12/16														 */
 /* ========================================================================= */
 
-DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
+namespace {
+
+class CSerializeBuffer
 {
-	int i, j, nCount, nCount2;
-	DWORD dwRet;
-	PCInfoTalkEventBase pInfo;
-
-	dwRet = 0;
-
-	switch (nNo) {
-	case 0:	dwRet = sizeof (m_dwTalkEventID);	break;	/* 会話イベントID */
-	case 1:		/* 会話イベント */
-		dwRet += sizeof (int);				/* データ数 */
-		nCount = m_apTalkEvent.size();
-		for (i = 0; i < nCount; i ++) {
-			pInfo = m_apTalkEvent[i];
-			dwRet += sizeof (int);								/* 要素数 */
-			nCount2 = pInfo->GetElementCount ();
-			for (j = 0; j < nCount2; j ++) {
-				dwRet += (strlen (pInfo->GetName (j)) + 1);		/* 要素名 */
-				dwRet += sizeof (DWORD);						/* データサイズ */
-				dwRet += pInfo->GetDataSizeNo (j);				/* データ */
-			}
-		}
-		break;
+public:
+	explicit CSerializeBuffer(std::vector<BYTE> *pBuffer)
+		: m_pBuffer(pBuffer)
+		, m_ullSize(0)
+		, m_bFailed(false)
+	{
 	}
 
-	return dwRet;
+	void Append(const void *pSrc, size_t nSize)
+	{
+		if (m_bFailed) {
+			return;
+		}
+		if ((pSrc == NULL) && (nSize > 0)) {
+			m_bFailed = true;
+			return;
+		}
+		if (nSize == 0) {
+			return;
+		}
+
+		if (m_pBuffer != NULL) {
+			size_t nOffset = m_pBuffer->size();
+			m_pBuffer->resize(nOffset + nSize);
+			CopyMemory(&m_pBuffer->at(nOffset), pSrc, nSize);
+		}
+
+		m_ullSize += nSize;
+		if (m_ullSize > std::numeric_limits<DWORD>::max()) {
+			m_bFailed = true;
+		}
+	}
+
+	size_t GetSize() const
+	{
+		return static_cast<size_t>(m_ullSize);
+	}
+
+	bool HasFailed() const
+	{
+		return m_bFailed;
+	}
+
+private:
+	std::vector<BYTE> *m_pBuffer;
+	unsigned long long m_ullSize;
+	bool m_bFailed;
+};
+
+void AppendString(CSerializeBuffer &writer, LPCSTR pszString)
+{
+	if (pszString == NULL) {
+		static const char szEmpty[1] = { '\0' };
+		writer.Append(szEmpty, sizeof(szEmpty));
+		return;
+	}
+
+	size_t nLen = strlen(pszString) + 1;
+	writer.Append(pszString, nLen);
+}
+
+bool SerializeTalkEventElement(const CInfoTalkEventBase *pInfo, CSerializeBuffer &writer)
+{
+	if (pInfo == NULL) {
+		writer.Append(NULL, 1);
+		return false;
+	}
+
+	int nCount2 = pInfo->GetElementCount();
+	writer.Append(&nCount2, sizeof(nCount2));
+	if (writer.HasFailed()) {
+		return false;
+	}
+
+	for (int j = 0; j < nCount2; j ++) {
+		LPCSTR pszName = pInfo->GetName(j);
+		AppendString(writer, pszName);
+		if (writer.HasFailed()) {
+			return false;
+		}
+
+		DWORD dwTmp = 0;
+		std::unique_ptr<BYTE[]> pTmp(pInfo->GetWriteData(j, &dwTmp));
+		writer.Append(&dwTmp, sizeof(dwTmp));
+		if (writer.HasFailed()) {
+			return false;
+		}
+		if ((dwTmp > 0) && (pTmp.get() == NULL)) {
+			writer.Append(NULL, 1);
+			return false;
+		}
+		if ((dwTmp > 0) && (pTmp.get() != NULL)) {
+			writer.Append(pTmp.get(), dwTmp);
+			if (writer.HasFailed()) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool SerializeTalkEvent(const CInfoTalkEvent *pEvent, int nNo, CSerializeBuffer &writer)
+{
+	if (pEvent == NULL) {
+		writer.Append(NULL, 1);
+		return false;
+	}
+
+	switch (nNo) {
+	case 0:
+		writer.Append(&pEvent->m_dwTalkEventID, sizeof(pEvent->m_dwTalkEventID));
+		return !writer.HasFailed();
+
+	case 1: {
+		int nCount = static_cast<int>(pEvent->m_apTalkEvent.size());
+		writer.Append(&nCount, sizeof(nCount));
+		if (writer.HasFailed()) {
+			return false;
+		}
+
+		for (int i = 0; i < nCount; i ++) {
+			const CInfoTalkEventBase *pInfo = pEvent->m_apTalkEvent[i];
+			if (!SerializeTalkEventElement(pInfo, writer)) {
+				return false;
+			}
+		}
+		return !writer.HasFailed();
+	}
+	}
+
+	return false;
+}
+
+} /* anonymous namespace */
+
+DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
+{
+	CSerializeBuffer writer(NULL);
+	if (!SerializeTalkEvent(this, nNo, writer) || writer.HasFailed()) {
+		return 0;
+	}
+
+	return static_cast<DWORD>(writer.GetSize());
 }
 
 
@@ -148,49 +273,17 @@ LPCSTR CInfoTalkEvent::GetName(int nNo)
 
 PBYTE CInfoTalkEvent::GetWriteData(int nNo, PDWORD pdwSize)
 {
-	int i, j, nCount, nCount2;
-	PBYTE pRet, pSrc, pRetTmp, pTmp;
-	DWORD dwSize, dwTmp;
-	PCInfoTalkEventBase pInfo;
+	std::vector<BYTE> buffer;
 
-	pRet		= NULL;
-	pSrc		= NULL;
-	dwSize		= GetDataSizeNo (nNo);
-	*pdwSize	= dwSize;
-
-	if (dwSize == 0) {
-		goto Exit;
-	}
-	pRet = ZeroNew (dwSize);
-	pRetTmp = pRet;
-
-	switch (nNo) {
-	case 0:	pSrc = (PBYTE)&m_dwTalkEventID;			break;	/* 会話イベントID */
-	case 1:			/* 会話イベント */
-		nCount = m_apTalkEvent.size();
-		CopyMemoryRenew (pRetTmp, &nCount, sizeof (nCount), pRetTmp);		/* データ数 */
-		for (i = 0; i < nCount; i ++) {
-			pInfo = m_apTalkEvent[i];
-			nCount2 = pInfo->GetElementCount ();
-			CopyMemoryRenew (pRetTmp, &nCount2, sizeof (nCount2), pRetTmp);	/* 要素数 */
-
-			for (j = 0; j < nCount2; j ++) {
-				strcpyRenew ((LPSTR)pRetTmp, pInfo->GetName (j), pRetTmp); 	/* 要素名 */
-				dwTmp = pInfo->GetDataSizeNo (j);
-				CopyMemoryRenew (pRetTmp, &dwTmp, sizeof (dwTmp), pRetTmp);	/* データサイズ */
-				pTmp = pInfo->GetWriteData (j, &dwTmp);
-				CopyMemoryRenew (pRetTmp, pTmp, dwTmp, pRetTmp);			/* データ */
-				SAFE_DELETE_ARRAY (pTmp);
-			}
-		}
-		break;
+	CSerializeBuffer writer(&buffer);
+	if (!SerializeTalkEvent(this, nNo, writer) || writer.HasFailed() || writer.GetSize() == 0) {
+		*pdwSize = 0;
+		return NULL;
 	}
 
-	if (pSrc) {
-		CopyMemory (pRet, pSrc, dwSize);
-	}
-
-Exit:
+	*pdwSize = static_cast<DWORD>(writer.GetSize());
+	PBYTE pRet = ZeroNew(*pdwSize);
+	CopyMemory(pRet, buffer.data(), *pdwSize);
 	return pRet;
 }
 
