@@ -179,7 +179,8 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	CPacketEFFECT_BALLOONINFO PacketEFFECT_BALLOONINFO;
 	CPacketSKILL_SKILLINFO PacketSKILL_SKILLINFO;
 	CLibInfoCharSvr LibInfoCharTmp;
-	CmyString strTmp, strTmp2;
+        CmyString strTmp, strTmp2;
+        CString strClientVer;
 
 	pTmp	= NULL;
 	nResult	= PLAYRES_NONE;

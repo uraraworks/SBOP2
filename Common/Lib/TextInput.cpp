@@ -247,7 +247,7 @@ CmyString CTextInput::ReadProc(void)
 				strTmp += (LPCSTR)szTmp;
 			}
 		}
-		strRet += strTmp;
+                strRet += (LPCSTR)strTmp;
 
 		bResult = IsCSVCheck (strRet);
 		/* CSV形式の1行として正しい？ */
