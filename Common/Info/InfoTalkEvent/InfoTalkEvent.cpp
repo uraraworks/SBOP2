@@ -697,15 +697,23 @@ void CInfoTalkEvent::SetPtr(int nPage, int nNo, CInfoTalkEventBase *pInfo)
 
 	nNoCount = 0;
 	nCount   = m_apTalkEvent.size();
-	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = m_apTalkEvent[i];
-		if (pInfoTmp->m_nPage != nPage) {
-			continue;
-		}
-		if (nNo != nNoCount) {
-			nNoCount ++;
-			continue;
-		}
+        for (i = 0; i < nCount; i ++) {
+                pInfoTmp = m_apTalkEvent[i];
+                if (pInfoTmp->m_nPage != nPage) {
+                        continue;
+                }
+                if (nNo != nNoCount) {
+                        nNoCount ++;
+                        continue;
+                }
+                if (pInfoTmp == pInfo) {
+                        /*
+                         * 編集ダイアログなどから同一ポインタが返ってきた場合は内容のみ更新済みとみなし、
+                         * delete せずにそのまま保持する。
+                         */
+                        return;
+                }
+
                 DeleteTalkEvent (pInfoTmp);
                 m_apTalkEvent[i] = pInfo;
                 break;
