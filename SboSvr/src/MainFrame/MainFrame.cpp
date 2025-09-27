@@ -23,6 +23,7 @@
 #include "MgrData.h"
 #include "UpdateServerInfo.h"
 #include "MainFrame.h"
+#include "Web/HttpServer.h"
 
 
 /* ========================================================================= */
@@ -65,10 +66,12 @@ CMainFrame::CMainFrame()
 	m_pLibInfoSkill			= NULL;
 	m_pLibInfoTalkEvent		= NULL;
 	m_pLog					= NULL;
+	m_pHttpServer			= NULL;
 
 	m_pSock				= new CUraraSockTCPSBO;
 	m_pMgrData			= new CMgrData;
 	m_pUpdateServerInfo	= new CUpdateServerInfo;
+	m_pHttpServer		= new CHttpServer;
 
         m_hFont = CreateFont (12, 0, 0, 0, FW_NORMAL,
                         FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
@@ -89,9 +92,13 @@ CMainFrame::~CMainFrame()
 		DeleteObject (m_hFont);
 		m_hFont = NULL;
 	}
+	if (m_pHttpServer) {
+		m_pHttpServer->Stop ();
+	}
 	SAFE_DELETE (m_pMgrData);
 	SAFE_DELETE (m_pSock);
 	SAFE_DELETE (m_pUpdateServerInfo);
+	SAFE_DELETE (m_pHttpServer);
 }
 
 
@@ -361,6 +368,7 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 {
         WORD wPort;
+        WORD wHttpPort;
         TCHAR szName[MAX_PATH];
         TCHAR szTmp[MAX_PATH];
         LPTSTR pszTmp;
@@ -399,9 +407,21 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	m_pMgrData->Load ();
 
 	wPort = m_pMgrData->GetPort ();
+        wHttpPort = m_pMgrData->GetHttpPort ();
 	m_pSock->Host (hWnd, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, 100);
 
 	m_pLog					= m_pMgrData->GetLog ();
+	if (m_pHttpServer) {
+		if (m_pHttpServer->Start (wHttpPort)) {
+			if (m_pLog) {
+				m_pLog->Write ("HTTPサーバーを起動しました [Port:%u]", wHttpPort);
+			}
+		} else {
+			if (m_pLog) {
+				m_pLog->Write ("HTTPサーバーの起動に失敗しました [Port:%u]", wHttpPort);
+			}
+		}
+	}
 	m_pLibInfoAccount		= m_pMgrData->GetLibInfoAccount ();
 	m_pLibInfoMap			= m_pMgrData->GetLibInfoMap ();
 	m_pLibInfoMapObject		= m_pMgrData->GetLibInfoMapObject ();
@@ -468,6 +488,12 @@ void CMainFrame::OnClose(HWND hWnd)
                 WritePrivateProfileString (_T("Pos"), _T("MainRight"), strTmp, szFileName);
                 strTmp.Format(_T("%d"), rc.bottom);
                 WritePrivateProfileString (_T("Pos"), _T("MainBottom"), strTmp, szFileName);
+        }
+        if (m_pHttpServer) {
+                m_pHttpServer->Stop ();
+                if (m_pLog) {
+                        m_pLog->Write ("HTTPサーバーを停止しました");
+                }
         }
 	m_pSock->Destroy ();
 

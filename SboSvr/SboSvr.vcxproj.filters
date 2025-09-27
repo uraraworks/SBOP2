@@ -110,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="src\UpdateServerInfo.cpp">
       <Filter>Source Files</Filter>
+    <ClCompile Include="src\Web\HttpServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     </ClCompile>
     <ClCompile Include="..\common\crc.cpp">
       <Filter>Source Files\Common</Filter>
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="src\UpdateServerInfo.h">
       <Filter>Header Files</Filter>
+    <ClInclude Include="src\Web\HttpServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     </ClInclude>
     <ClInclude Include="..\common\crc.h">
       <Filter>Header Files\Common No. 1</Filter>

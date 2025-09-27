@@ -13,6 +13,7 @@ class CMgrData;
 class CUraraSockTCPSBO;
 class CTextOutput;
 class CUpdateServerInfo;
+class CHttpServer;
 class CLibInfoAccount;
 class CLibInfoCharSvr;
 class CLibInfoDisable;
@@ -215,6 +216,7 @@ private:
 	CUraraSockTCPSBO	*m_pSock;						/* 通信マネージャ */
 	CTextOutput			*m_pLog;						/* ログファイル */
 	CUpdateServerInfo	*m_pUpdateServerInfo;			/* サーバー情報アップロード */
+        CHttpServer             *m_pHttpServer;                                /* 管理用HTTPサーバー */
 
 	CLibInfoAccount		*m_pLibInfoAccount;				/* アカウント情報ライブラリ */
 	CLibInfoCharSvr		*m_pLibInfoChar;				/* キャラ情報ライブラリ */
