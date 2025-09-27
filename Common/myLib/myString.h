@@ -14,6 +14,10 @@
 #include <atlstr.h>
 #include <atlconv.h>
 
+#ifndef MB_ERR_INVALID_CHARS
+#define MB_ERR_INVALID_CHARS 0x00000008
+#endif
+
 #ifdef __cplusplus
 inline CString Utf8ToTString(LPCSTR pszSrc)
 {
@@ -22,13 +26,40 @@ inline CString Utf8ToTString(LPCSTR pszSrc)
         if (pszSrc == NULL) {
                 return strResult;
         }
-        int nLen = MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, NULL, 0);
-        if (nLen <= 0) {
-                return strResult;
+
+        struct SCandidate
+        {
+                UINT    codePage;
+                DWORD   dwFlags;
+        };
+
+        const SCandidate aCandidate[] = {
+                { CP_UTF8, MB_ERR_INVALID_CHARS },
+                { 932,     0 },
+                { CP_ACP,  0 },
+        };
+
+        for (int i = 0; i < (int)(sizeof (aCandidate) / sizeof (aCandidate[0])); ++i) {
+                const UINT  codePage = aCandidate[i].codePage;
+                const DWORD dwFlags  = aCandidate[i].dwFlags;
+                int nLen = MultiByteToWideChar (codePage, dwFlags, pszSrc, -1, NULL, 0);
+                if (nLen <= 0) {
+                        continue;
+                }
+                LPTSTR pszBuffer = strResult.GetBuffer (nLen);
+                if (pszBuffer == NULL) {
+                        strResult.ReleaseBuffer (0);
+                        continue;
+                }
+                int nRet = MultiByteToWideChar (codePage, dwFlags, pszSrc, -1, pszBuffer, nLen);
+                if (nRet > 0) {
+                        strResult.ReleaseBuffer ();
+                        return strResult;
+                }
+                strResult.ReleaseBuffer (0);
+                strResult.Empty ();
         }
-        LPTSTR pszBuffer = strResult.GetBuffer (nLen);
-        MultiByteToWideChar (CP_UTF8, 0, pszSrc, -1, pszBuffer, nLen);
-        strResult.ReleaseBuffer ();
+
         return strResult;
 #else
         CString strResult;
