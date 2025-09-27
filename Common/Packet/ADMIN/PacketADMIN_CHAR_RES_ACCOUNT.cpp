@@ -53,8 +53,8 @@ void CPacketADMIN_CHAR_RES_ACCOUNT::Make(
 	dwSize = sizeof (PACKETBASE) +
 			 sizeof (dwIP) +
 			 sizeof (pInfoAccount->m_dwAccountID) +
-			 		(pInfoAccount->m_strAccount.GetLength () + 1) +
-			 		(pInfoAccount->m_strPassword.GetLength () + 1) +
+			 		(pInfoAccount->m_strAccount.GetUtf8Length () + 1) +
+			 		(pInfoAccount->m_strPassword.GetUtf8Length () + 1) +
 			(strlen (pszMacAddress) + 1);
 
 	pData = new BYTE[dwSize];

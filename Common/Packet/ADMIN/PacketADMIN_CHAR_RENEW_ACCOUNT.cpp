@@ -53,8 +53,8 @@ void CPacketADMIN_CHAR_RENEW_ACCOUNT::Make(
 	dwSize = sizeof (PACKETBASE) +
 			 sizeof (bDisable) +
 			 sizeof (pInfoAccount->m_dwAccountID) +
-			 		(pInfoAccount->m_strAccount.GetLength () + 1) +
-			 		(pInfoAccount->m_strPassword.GetLength () + 1);
+			 		(pInfoAccount->m_strAccount.GetUtf8Length () + 1) +
+			 		(pInfoAccount->m_strPassword.GetUtf8Length () + 1);
 	if (pszMacAddress) {
 		dwSize += strlen (pszMacAddress);
 	}

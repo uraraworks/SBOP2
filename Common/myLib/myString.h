@@ -177,6 +177,8 @@ public:
                         operator LPCSTR         () const;                                               /* UTF-8キャスト */
                         operator LPCSTR         ();                                                     /* UTF-8キャスト */
 
+        int             GetUtf8Length   () const;                                      /* UTF-8文字列長を取得 */
+
         int             CompareNoCase   (LPCSTR pszSrc) const;                 /* 文字列比較(大文字小文字区別無し) */
         int             CompareNoCase   (LPCTSTR pszSrc) const;                /* 文字列比較(大文字小文字区別無し) */
 
