@@ -166,7 +166,7 @@ BOOL CTextInput::Open(LPCSTR pszFileName)
 	bRet = FALSE;
 
 	/* ファイルを開く */
-	hFile = CreateFile (
+	hFile = CreateFileA (
 			pszFileName,
 			GENERIC_READ,
 			0,
@@ -238,16 +238,16 @@ CmyString CTextInput::ReadProc(void)
 				}
 				/* 「\r\n」をセットで追加 */
 				szTmp[0] = byTmp1;
-				strTmp += szTmp;
+				strTmp += (LPCSTR)szTmp;
 				szTmp[0] = byTmp2;
-				strTmp += szTmp;
+				strTmp += (LPCSTR)szTmp;
 
 			} else {
 				szTmp[0] = byTmp1;
-				strTmp += szTmp;
+				strTmp += (LPCSTR)szTmp;
 			}
 		}
-		strRet += strTmp;
+                strRet += (LPCSTR)strTmp;
 
 		bResult = IsCSVCheck (strRet);
 		/* CSV形式の1行として正しい？ */

@@ -357,7 +357,7 @@ void CSaveLoadInfoBase::SetFileName(LPCSTR pszName)
 	LPSTR pszTmp;
 
 	/* ファイル名の作成 */
-	GetModuleFileName (NULL, szName, MAX_PATH);
+	GetModuleFileNameA (NULL, szName, MAX_PATH);
 	pszTmp = strrchr (szName, '\\');
 	pszTmp[1] = 0;
 	strcat (szName, pszName);

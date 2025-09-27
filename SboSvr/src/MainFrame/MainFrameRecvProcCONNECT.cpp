@@ -53,6 +53,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	CPacketCONNECT_RES_LOGIN PacketRes;
 	CPacketCHAR_MOTION PacketCHAR_MOTION;
 	CmyString strTmp, strLog;
+	CString strClientVer;
 	IN_ADDR AddrTmp;
 
 	Packet.Set (pData);
@@ -90,8 +91,8 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 //		}
 		nResult = LOGINRES_OK;
 		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew ();
-		TrimViewString (pInfoAccount->m_strAccount,  Packet.m_strAccount);
-		TrimViewString (pInfoAccount->m_strPassword, Packet.m_strPassword);
+		TrimViewString (pInfoAccount->m_strAccount,  (LPCTSTR)Packet.m_strAccount);
+		TrimViewString (pInfoAccount->m_strPassword, (LPCTSTR)Packet.m_strPassword);
 		pInfoAccount->m_strMacAddr = strTmp;
 
 		/* 管理者権限アカウント？ */
@@ -178,7 +179,8 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	CPacketEFFECT_BALLOONINFO PacketEFFECT_BALLOONINFO;
 	CPacketSKILL_SKILLINFO PacketSKILL_SKILLINFO;
 	CLibInfoCharSvr LibInfoCharTmp;
-	CmyString strTmp, strTmp2;
+        CmyString strTmp, strTmp2;
+        CString strClientVer;
 
 	pTmp	= NULL;
 	nResult	= PLAYRES_NONE;
@@ -298,7 +300,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	strTmp.Format(_T("SYSTEM:現在のオンライン数: %d"), nOnlineCount);
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);
-        CString strClientVer = Utf8ToTString (m_pMgrData->GetClientVersion ());
+        strClientVer = Utf8ToTString (m_pMgrData->GetClientVersion ());
         strTmp.Format(_T("SYSTEM:最新クライアントバージョン: %s"), (LPCTSTR)strClientVer);
 	PacketMAP_SYSTEMMSG.Make (strTmp, 0, FALSE);
 	m_pSock->SendTo (dwSessionID, &PacketMAP_SYSTEMMSG);

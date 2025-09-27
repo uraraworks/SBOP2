@@ -45,7 +45,7 @@ void CGetMD5File::Update(LPCSTR pszFileName)
 
 	pTmp = NULL;
 
-	hFile = CreateFile (pszFileName, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	hFile = CreateFileA (pszFileName, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (hFile == INVALID_HANDLE_VALUE) {
 		goto Exit;
 	}

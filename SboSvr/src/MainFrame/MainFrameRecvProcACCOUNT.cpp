@@ -89,7 +89,7 @@ void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	TrimViewString (strName, pInfoCharPacket->m_strCharName);
+	TrimViewString (strName, (LPCTSTR)pInfoCharPacket->m_strCharName);
 	bResult = m_pLibInfoChar->IsUseName (strName);
 	if (bResult) {
 		goto Exit;

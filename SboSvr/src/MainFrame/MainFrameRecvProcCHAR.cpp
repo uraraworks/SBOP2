@@ -242,7 +242,7 @@ void CMainFrame::RecvProcCHAR_REQ_CHAT(PBYTE pData, DWORD dwSessionID)
 		PostMessage (m_hWnd, WM_DISCONNECT, 0, dwSessionID);
 		return;
 	}
-	TrimViewString (strChar, Packet.m_strChat);
+	TrimViewString (strChar, (LPCTSTR)Packet.m_strChat);
 
 	switch (Packet.m_nType) {
 	case CHATTYPE_NORMAL:				/* 通常 */
