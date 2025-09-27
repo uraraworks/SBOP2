@@ -23,7 +23,6 @@ private:
     bool    SendAll(SOCKET hSocket, const char *pData, size_t nLength);
 
     SOCKET          m_hListen;
-    WSAEVENT        m_hListenEvent;
     HANDLE          m_hThread;
     HANDLE          m_hStopEvent;
     HANDLE          m_hStartedEvent;

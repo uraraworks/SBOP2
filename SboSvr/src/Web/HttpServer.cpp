@@ -8,7 +8,6 @@
 
 CHttpServer::CHttpServer()
         : m_hListen(INVALID_SOCKET)
-        , m_hListenEvent(WSA_INVALID_EVENT)
         , m_hThread(NULL)
         , m_hStopEvent(NULL)
         , m_wPort(0)
@@ -153,25 +152,11 @@ bool CHttpServer::CreateListener()
                 return false;
         }
 
-        m_hListenEvent = WSACreateEvent();
-        if (m_hListenEvent == WSA_INVALID_EVENT) {
-                return false;
-        }
-
-        if (WSAEventSelect(m_hListen, m_hListenEvent, FD_ACCEPT) == SOCKET_ERROR) {
-                return false;
-        }
-
         return true;
 }
 
 void CHttpServer::CloseListener()
 {
-        if (m_hListenEvent != WSA_INVALID_EVENT) {
-                WSACloseEvent(m_hListenEvent);
-                m_hListenEvent = WSA_INVALID_EVENT;
-        }
-
         if (m_hListen != INVALID_SOCKET) {
                 closesocket(m_hListen);
                 m_hListen = INVALID_SOCKET;
@@ -180,56 +165,43 @@ void CHttpServer::CloseListener()
 
 void CHttpServer::ProcessLoop()
 {
-        HANDLE hEvents[2] = { m_hStopEvent, m_hListenEvent };
+        while (WaitForSingleObject(m_hStopEvent, 0) == WAIT_TIMEOUT) {
+                fd_set readSet;
+                FD_ZERO(&readSet);
+                FD_SET(m_hListen, &readSet);
 
-        while (true) {
-                DWORD dwWait = WaitForMultipleObjects(2, hEvents, FALSE, 1000);
-                if (dwWait == WAIT_OBJECT_0) {
+                timeval tv;
+                tv.tv_sec = 0;
+                tv.tv_usec = 500000; /* 500ms */
+
+                int nReady = select(0, &readSet, NULL, NULL, &tv);
+                if (nReady == SOCKET_ERROR) {
                         break;
                 }
 
-                if (dwWait == WAIT_OBJECT_0 + 1) {
-                        WSANETWORKEVENTS events;
-                        if (WSAEnumNetworkEvents(m_hListen, m_hListenEvent, &events) == SOCKET_ERROR) {
-                                break;
-                        }
-
-                        if ((events.lNetworkEvents & FD_ACCEPT) != 0) {
-                                HandleAccept();
-                        }
+                if (nReady == 0) {
+                        continue;
                 }
 
-                if (dwWait == WAIT_FAILED) {
-                        break;
+                if (FD_ISSET(m_hListen, &readSet)) {
+                        HandleAccept();
                 }
         }
 }
 
 void CHttpServer::HandleAccept()
 {
-        while (true) {
-                SOCKET hClient = accept(m_hListen, NULL, NULL);
-                if (hClient == INVALID_SOCKET) {
-                        int nErr = WSAGetLastError();
-                        if (nErr == WSAEWOULDBLOCK) {
-                                break;
-                        }
-                        break;
-                }
-
-                u_long ulBlocking = 0;
-                if (ioctlsocket(hClient, FIONBIO, &ulBlocking) == SOCKET_ERROR) {
-                        closesocket(hClient);
-                        continue;
-                }
-
-                DWORD dwTimeout = 5000;
-                setsockopt(hClient, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
-                setsockopt(hClient, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
-
-                HandleClient(hClient);
-                closesocket(hClient);
+        SOCKET hClient = accept(m_hListen, NULL, NULL);
+        if (hClient == INVALID_SOCKET) {
+                return;
         }
+
+        DWORD dwTimeout = 5000;
+        setsockopt(hClient, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+        setsockopt(hClient, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+
+        HandleClient(hClient);
+        closesocket(hClient);
 }
 
 void CHttpServer::HandleClient(SOCKET hClient)
