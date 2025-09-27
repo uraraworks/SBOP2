@@ -41,6 +41,7 @@
 CMgrData::CMgrData()
 {
 	m_wPort				= 2005;
+	m_wHttpPort		= 18080;
 	m_byOnline			= 0;
 	m_byLastSendClock	= -1;
 	m_pMainFrame		= NULL;
@@ -389,6 +390,8 @@ void CMgrData::ReadIniData(void)
 
         /* 待ちうけポート */
         m_wPort = static_cast<WORD>(GetPrivateProfileInt (_T("Setting"), _T("Port"), 2006, szFileName));
+        /* HTTP待ちうけポート */
+        m_wHttpPort = static_cast<WORD>(GetPrivateProfileInt (_T("Setting"), _T("HttpPort"), 18080, szFileName));
         /* 管理者権限アカウント */
         GetPrivateProfileString (_T("Setting"), _T("AdminAccount"), _T("Admin"), szTmp, _countof (szTmp), szFileName);
         m_strAdminAccount = szTmp;
