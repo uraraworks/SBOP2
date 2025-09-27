@@ -12,7 +12,6 @@
 #include "InfoTalkEvent.h"
 
 #include <limits>
-#include <memory>
 #include <vector>
 
 /* ========================================================================= */
@@ -191,10 +190,118 @@ void AppendString(CSerializeBuffer &writer, LPCSTR pszString)
 	writer.Append(pszString, nLen);
 }
 
+bool WriteBaseElementPayload(CInfoTalkEventBase *pInfo, int nIndex, CSerializeBuffer &writer)
+{
+        if (pInfo == NULL) {
+                writer.Fail();
+                return false;
+        }
+
+        switch (nIndex) {
+        case 0:
+                writer.Append(&pInfo->m_nEventType, sizeof(pInfo->m_nEventType));
+                return !writer.HasFailed();
+        case 1:
+                writer.Append(&pInfo->m_nPage, sizeof(pInfo->m_nPage));
+                return !writer.HasFailed();
+        case 2:
+                writer.Append(&pInfo->m_dwData, sizeof(pInfo->m_dwData));
+                return !writer.HasFailed();
+        case 3:
+                AppendString(writer, (LPCSTR)pInfo->m_strText);
+                return !writer.HasFailed();
+        }
+
+        writer.Fail();
+        return false;
+}
+
+bool WritePageElementPayload(CInfoTalkEventPAGE *pPage, int nIndex, CSerializeBuffer &writer)
+{
+        if (pPage == NULL) {
+                writer.Fail();
+                return false;
+        }
+
+        switch (nIndex) {
+        case 0:
+                writer.Append(&pPage->m_nPageChgCondition, sizeof(pPage->m_nPageChgCondition));
+                return !writer.HasFailed();
+        case 1:
+                writer.Append(&pPage->m_nPageJump, sizeof(pPage->m_nPageJump));
+                return !writer.HasFailed();
+        }
+
+        writer.Fail();
+        return false;
+}
+
+bool WriteMenuElementPayload(CInfoTalkEventMENU *pMenu, int nIndex, CSerializeBuffer &writer)
+{
+        if (pMenu == NULL) {
+                writer.Fail();
+                return false;
+        }
+
+        const int nCount = static_cast<int>(pMenu->m_aMenuInfo.size());
+        switch (nIndex) {
+        case 0: {
+                writer.Append(&nCount, sizeof(nCount));
+                return !writer.HasFailed();
+        }
+        case 1:
+                for (int i = 0; i < nCount; i ++) {
+                        PSTTALKEVENTMENUINFO pMenuInfo = pMenu->m_aMenuInfo[i];
+                        int nPage = (pMenuInfo != NULL) ? pMenuInfo->nPage : 0;
+                        writer.Append(&nPage, sizeof(nPage));
+                        if (writer.HasFailed()) {
+                                return false;
+                        }
+                }
+                return true;
+        case 2:
+                for (int i = 0; i < nCount; i ++) {
+                        PSTTALKEVENTMENUINFO pMenuInfo = pMenu->m_aMenuInfo[i];
+                        LPCSTR pszName = (pMenuInfo != NULL) ? (LPCSTR)pMenuInfo->strName : NULL;
+                        AppendString(writer, pszName);
+                        if (writer.HasFailed()) {
+                                return false;
+                        }
+                }
+                return true;
+        }
+
+        writer.Fail();
+        return false;
+}
+
+bool WriteTalkEventElementPayload(CInfoTalkEventBase *pInfo, int nIndex, CSerializeBuffer &writer)
+{
+        if (pInfo == NULL) {
+                writer.Fail();
+                return false;
+        }
+
+        if (nIndex < pInfo->m_nElementCountBase) {
+                return WriteBaseElementPayload(pInfo, nIndex, writer);
+        }
+
+        int nDerivedIndex = nIndex - pInfo->m_nElementCountBase;
+        switch (pInfo->m_nEventType) {
+        case TALKEVENTTYPE_PAGE:
+                return WritePageElementPayload(static_cast<CInfoTalkEventPAGE *>(pInfo), nDerivedIndex, writer);
+        case TALKEVENTTYPE_MENU:
+                return WriteMenuElementPayload(static_cast<CInfoTalkEventMENU *>(pInfo), nDerivedIndex, writer);
+        default:
+                writer.Fail();
+                return false;
+        }
+}
+
 bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writer)
 {
-	if (pInfo == NULL) {
-		writer.Append(NULL, 1);
+        if (pInfo == NULL) {
+                writer.Append(NULL, 1);
 		return false;
 	}
 
@@ -230,30 +337,23 @@ bool SerializeTalkEventElement(CInfoTalkEventBase *pInfo, CSerializeBuffer &writ
                         continue;
                 }
 
-                DWORD dwActualSize = 0;
-                std::unique_ptr<BYTE[]> pTmp(pInfo->GetWriteData(j, &dwActualSize));
-                if ((dwActualSize > 0) && (pTmp.get() == NULL)) {
-                        writer.Fail();
-                        return false;
-                }
-
-                if (dwActualSize != dwExpectedSize) {
-                        /* 計算サイズと実データサイズが一致しない場合は後続処理でのバッファ破壊を防ぐ */
-                        writer.Fail();
-                        return false;
-                }
-
-                writer.Append(&dwActualSize, sizeof(dwActualSize));
+                writer.Append(&dwExpectedSize, sizeof(dwExpectedSize));
                 if (writer.HasFailed()) {
                         return false;
                 }
 
-                if (dwActualSize == 0) {
+                if (dwExpectedSize == 0) {
                         continue;
                 }
 
-                writer.Append(pTmp.get(), dwActualSize);
-                if (writer.HasFailed()) {
+                size_t nStart = writer.GetSize();
+                if (!WriteTalkEventElementPayload(pInfo, j, writer)) {
+                        return false;
+                }
+
+                size_t nWritten = writer.GetSize() - nStart;
+                if (nWritten != dwExpectedSize) {
+                        writer.Fail();
                         return false;
                 }
         }
