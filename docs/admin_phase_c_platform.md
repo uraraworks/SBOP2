@@ -61,6 +61,6 @@
 - [x] `cpp-httplib` のバージョン選定とライセンス確認を完了し、結果を [`docs/admin_phase_c_http_server_poc.md`](admin_phase_c_http_server_poc.md) と [`docs/licenses/cpp-httplib.md`](licenses/cpp-httplib.md) に記録する。
 - [x] `CHttpServer` クラスを実装し、PoC として `/health` 応答とログ出力を確認する。
 - [x] `docs/runbooks/local_dev.md` のドラフトを用意し、ローカル開発環境セットアップ手順を記載する。
-- [ ] CI/CD パイプラインに追加するタスク一覧と必要なツールチェーン（CMake、Ninja、Node.js）を洗い出す。
+- [x] CI/CD パイプラインに追加するタスク一覧と必要なツールチェーン（CMake、Ninja、Node.js）を洗い出し、[ci_cd_backlog](devops/ci_cd_backlog.md) に集約した。
 
 以上の計画に沿って実装を進めることで、フェーズ D の管理機能移行作業に着手できる堅牢な基盤を整備します。
