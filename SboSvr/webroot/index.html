@@ -14,39 +14,101 @@
   <main>
     <section class="card" id="server-card">
       <h2>サーバー概要</h2>
-      <div class="status-row">
-        <span class="status-label">状態:</span>
-        <span class="status-value" id="server-status">読み込み中...</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">オンライン人数:</span>
-        <span class="status-value" id="server-online">-</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">最終パッチバージョン:</span>
-        <span class="status-value" id="server-version">-</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">CPU 使用率:</span>
-        <span class="status-value" id="server-cpu">-</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">メモリ使用率:</span>
-        <span class="status-value" id="server-memory">-</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">遅延 (ms):</span>
-        <span class="status-value" id="server-latency">-</span>
+      <div class="status-grid">
+        <div class="status-row">
+          <span class="status-label">状態:</span>
+          <span class="status-value" id="server-status">読み込み中...</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">オンライン人数:</span>
+          <span class="status-value" id="server-online">-</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">最終パッチバージョン:</span>
+          <span class="status-value" id="server-version">-</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">CPU 使用率:</span>
+          <span class="status-value" id="server-cpu">-</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">メモリ使用率:</span>
+          <span class="status-value" id="server-memory">-</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">遅延 (ms):</span>
+          <span class="status-value" id="server-latency">-</span>
+        </div>
       </div>
       <p class="timestamp" id="server-updated">更新時刻: -</p>
+      <div class="server-controls">
+        <button type="button" id="reload-server" class="button">再読み込み</button>
+      </div>
+      <p class="note">30秒ごとに自動更新されます。</p>
     </section>
-    <section class="card" id="help-card">
-      <h2>利用方法</h2>
-      <ol>
-        <li>SboSvr にログインしてセッション Cookie を取得します。</li>
-        <li>このページを表示すると `/api/server?includeMetrics=true` へアクセスし、サーバー情報を自動取得します。</li>
-        <li>エラーが表示された場合は <code>SboSvrLog.txt</code> を確認してください。</li>
-      </ol>
+
+    <section class="card" id="account-card">
+      <h2>管理アカウント作成</h2>
+      <p class="card-description">管理者用アカウントを追加する場合は以下のフォームに必要事項を入力してください。</p>
+      <form id="account-form" novalidate>
+        <div class="form-grid">
+          <label class="form-field">
+            <span>ログインID</span>
+            <input type="text" id="account-login" name="loginId" autocomplete="username" required />
+          </label>
+          <label class="form-field">
+            <span>表示名</span>
+            <input type="text" id="account-display" name="displayName" required />
+          </label>
+          <label class="form-field">
+            <span>メールアドレス</span>
+            <input type="email" id="account-email" name="email" autocomplete="email" />
+          </label>
+          <label class="form-field">
+            <span>パスワード</span>
+            <input type="password" id="account-password" name="password" autocomplete="new-password" required />
+          </label>
+          <label class="form-field">
+            <span>パスワード再入力</span>
+            <input type="password" id="account-password-confirm" name="passwordConfirm" autocomplete="new-password" required />
+          </label>
+        </div>
+        <fieldset class="form-field roles-field">
+          <legend>付与ロール</legend>
+          <div id="account-roles" class="roles-container" aria-live="polite"></div>
+        </fieldset>
+        <div class="form-actions">
+          <button type="submit" class="button primary">アカウントを作成</button>
+          <button type="reset" class="button secondary" id="account-reset">リセット</button>
+        </div>
+      </form>
+      <div id="account-result" class="result-message" role="alert"></div>
+    </section>
+
+    <section class="card" id="role-card">
+      <h2>ロール割り当て</h2>
+      <p class="card-description">既存アカウントの権限ロールを更新するにはアカウントIDを指定し、必要なロールを選択してください。</p>
+      <form id="role-form" novalidate>
+        <div class="form-grid">
+          <label class="form-field">
+            <span>アカウントID</span>
+            <input type="text" id="role-account-id" name="accountId" autocomplete="off" required />
+          </label>
+          <label class="form-field">
+            <span>コメント (任意)</span>
+            <input type="text" id="role-comment" name="comment" maxlength="256" />
+          </label>
+        </div>
+        <fieldset class="form-field roles-field">
+          <legend>付与ロール</legend>
+          <div id="role-checkboxes" class="roles-container" aria-live="polite"></div>
+        </fieldset>
+        <div class="form-actions">
+          <button type="submit" class="button primary">ロールを更新</button>
+          <button type="reset" class="button secondary" id="role-reset">リセット</button>
+        </div>
+      </form>
+      <div id="role-result" class="result-message" role="alert"></div>
     </section>
   </main>
   <footer class="page-footer">
