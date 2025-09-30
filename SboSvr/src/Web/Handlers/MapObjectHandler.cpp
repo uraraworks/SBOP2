@@ -1,9 +1,11 @@
 ﻿#include "stdafx.h"
 #include "MapObjectHandler.h"
 
+#include <algorithm>
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include <cstring>
 
 #include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
@@ -29,6 +31,57 @@ std::string RemoveUtf8Bom(std::string text)
         return text;
 }
 
+#ifndef _UNICODE
+bool TryConvertToUtf8(const char *pszSource, int srcLength, UINT codePage, std::string &out)
+{
+        if ((pszSource == NULL) || (srcLength <= 0) || (codePage == 0)) {
+                return false;
+        }
+
+        DWORD flags = (codePage == CP_UTF8) ? MB_ERR_INVALID_CHARS : 0;
+        int wideLength = MultiByteToWideChar(codePage, flags, pszSource, srcLength, NULL, 0);
+        if (wideLength <= 0) {
+                return false;
+        }
+
+        std::vector<wchar_t> wide(static_cast<size_t>(wideLength));
+        int converted = MultiByteToWideChar(codePage, flags, pszSource, srcLength, &wide[0], wideLength);
+        if (converted <= 0) {
+                return false;
+        }
+
+        if (!wide.empty() && wide.back() == L'\0') {
+                wide.pop_back();
+                converted = static_cast<int>(wide.size());
+        }
+
+        int utf8Length = WideCharToMultiByte(CP_UTF8, 0, &wide[0], converted, NULL, 0, NULL, NULL);
+        if (utf8Length <= 0) {
+                return false;
+        }
+
+        out.resize(static_cast<size_t>(utf8Length));
+        WideCharToMultiByte(CP_UTF8, 0, &wide[0], converted, &out[0], utf8Length, NULL, NULL);
+        return true;
+}
+#endif
+
+std::string RemoveControlCharacters(std::string text)
+{
+        text.erase(
+                std::remove_if(
+                        text.begin(),
+                        text.end(),
+                        [](unsigned char ch) {
+                                if (ch == '\n' || ch == '\r' || ch == '\t') {
+                                        return false;
+                                }
+                                return ch < 0x20;
+                        }),
+                text.end());
+        return text;
+}
+
 std::string ToUtf8String(const CmyString &value)
 {
 #ifdef _UNICODE
@@ -37,39 +90,27 @@ std::string ToUtf8String(const CmyString &value)
                 return std::string();
         }
         std::string converted(utf8.GetString(), static_cast<size_t>(utf8.GetLength()));
-        return RemoveUtf8Bom(converted);
+        return RemoveControlCharacters(RemoveUtf8Bom(converted));
 #else
         LPCSTR pszSource = static_cast<LPCSTR>(value);
         if ((pszSource == NULL) || (pszSource[0] == '\0')) {
                 return std::string();
         }
 
-        const UINT candidates[] = { CP_UTF8, 932u, CP_ACP };
-        for (size_t i = 0; i < sizeof(candidates) / sizeof(candidates[0]); ++i) {
-                UINT codePage = candidates[i];
-                if (codePage == 0) {
-                        continue;
-                }
-                DWORD flags = (codePage == CP_UTF8) ? MB_ERR_INVALID_CHARS : 0;
-                int wideLength = MultiByteToWideChar(codePage, flags, pszSource, -1, NULL, 0);
-                if (wideLength <= 1) {
-                        continue;
-                }
-                std::vector<wchar_t> wide(static_cast<size_t>(wideLength));
-                int converted = MultiByteToWideChar(codePage, flags, pszSource, -1, &wide[0], wideLength);
-                if (converted <= 1) {
-                        continue;
-                }
-                int utf8Length = WideCharToMultiByte(CP_UTF8, 0, &wide[0], converted - 1, NULL, 0, NULL, NULL);
-                if (utf8Length <= 0) {
-                        continue;
-                }
-                std::string utf8(static_cast<size_t>(utf8Length), '\0');
-                WideCharToMultiByte(CP_UTF8, 0, &wide[0], converted - 1, &utf8[0], utf8Length, NULL, NULL);
-                return RemoveUtf8Bom(utf8);
+        int srcLength = static_cast<int>(std::strlen(pszSource));
+        if (srcLength <= 0) {
+                return std::string();
         }
 
-        return RemoveUtf8Bom(std::string(pszSource));
+        const UINT candidates[] = { CP_UTF8, 932u, CP_ACP };
+        std::string utf8;
+        for (size_t i = 0; i < sizeof(candidates) / sizeof(candidates[0]); ++i) {
+                if (TryConvertToUtf8(pszSource, srcLength, candidates[i], utf8)) {
+                        return RemoveControlCharacters(RemoveUtf8Bom(utf8));
+                }
+        }
+
+        return RemoveControlCharacters(RemoveUtf8Bom(std::string(pszSource, static_cast<size_t>(srcLength))));
 #endif
 }
 }
