@@ -18,6 +18,17 @@
 
 namespace
 {
+std::string RemoveUtf8Bom(std::string text)
+{
+        if (text.size() >= 3 &&
+            static_cast<unsigned char>(text[0]) == 0xEF &&
+            static_cast<unsigned char>(text[1]) == 0xBB &&
+            static_cast<unsigned char>(text[2]) == 0xBF) {
+                text.erase(0, 3);
+        }
+        return text;
+}
+
 std::string ToUtf8String(const CmyString &value)
 {
 #ifdef _UNICODE
@@ -25,7 +36,8 @@ std::string ToUtf8String(const CmyString &value)
         if (utf8.IsEmpty()) {
                 return std::string();
         }
-        return std::string(utf8.GetString(), static_cast<size_t>(utf8.GetLength()));
+        std::string converted(utf8.GetString(), static_cast<size_t>(utf8.GetLength()));
+        return RemoveUtf8Bom(converted);
 #else
         LPCSTR pszSource = static_cast<LPCSTR>(value);
         if ((pszSource == NULL) || (pszSource[0] == '\0')) {
@@ -54,10 +66,10 @@ std::string ToUtf8String(const CmyString &value)
                 }
                 std::string utf8(static_cast<size_t>(utf8Length), '\0');
                 WideCharToMultiByte(CP_UTF8, 0, &wide[0], converted - 1, &utf8[0], utf8Length, NULL, NULL);
-                return utf8;
+                return RemoveUtf8Bom(utf8);
         }
 
-        return std::string(pszSource);
+        return RemoveUtf8Bom(std::string(pszSource));
 #endif
 }
 }
