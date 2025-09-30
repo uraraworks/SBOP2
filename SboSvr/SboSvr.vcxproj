@@ -151,7 +151,7 @@
       <OutputFile>.\Debug/SboSvr.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if exist "$(OutDir)webroot" rmdir /S /Q "$(OutDir)webroot"&#x0D;&#x0A;mkdir "$(OutDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y "$(ProjectDir)webroot\*" "$(OutDir)webroot\"</Command>
+      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -268,6 +268,7 @@
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\MapObjectHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\StaticFileHandler.cpp" />
     <ClCompile Include="src\Web\HttpServer.cpp" />
     <ClCompile Include="src\Web\HttpTypes.cpp" />
@@ -382,6 +383,7 @@
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
+    <ClInclude Include="src\Web\Handlers\MapObjectHandler.h" />
     <ClInclude Include="src\Web\Handlers\StaticFileHandler.h" />
     <ClInclude Include="src\Web\HttpServer.h" />
     <ClInclude Include="src\Web\HttpTypes.h" />

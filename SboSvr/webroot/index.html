@@ -267,16 +267,17 @@
       <section class="card" id="map-object-browser">
         <h2>マップオブジェクト配置</h2>
         <p class="card-description">
-          MFC 版 <code>DlgAdminMapObject</code> のワークフローを Web で再現する試験実装です。マップを選択すると、現在配置されているオブジェクト一覧と配置状況を確認できます。
+          MFC 版 <code>DlgAdminMapObject</code> のワークフローを Web で再現する試験実装です。マップを選択すると、サーバーから読み込んだ実データに基づくオブジェクト一覧と配置状況を確認できます。
         </p>
+        <p class="note">現段階では閲覧専用のため、編集・保存・削除操作は無効化されています。</p>
         <div class="map-object-controls">
           <label class="form-field compact">
             <span>マップ</span>
             <select id="map-object-map" name="mapId"></select>
           </label>
           <label class="form-field compact">
-            <span>オブジェクト種別</span>
-            <select id="map-object-filter" name="objectType"></select>
+            <span>表示条件</span>
+            <select id="map-object-filter" name="objectType" disabled></select>
           </label>
           <div class="map-object-summary" id="map-object-summary" aria-live="polite"></div>
         </div>
@@ -284,17 +285,18 @@
           <table class="data-table" id="map-object-table" aria-describedby="map-object-summary">
             <thead>
               <tr>
+                <th scope="col">配置ID</th>
+                <th scope="col">オブジェクトID</th>
                 <th scope="col">名称</th>
-                <th scope="col">種別</th>
-                <th scope="col">レイヤー</th>
                 <th scope="col">X</th>
                 <th scope="col">Y</th>
-                <th scope="col">リスポーン</th>
+                <th scope="col">属性</th>
+                <th scope="col">当たり判定</th>
               </tr>
             </thead>
             <tbody id="map-object-table-body">
               <tr>
-                <td colspan="6">マップを選択してください。</td>
+                <td colspan="7">マップ情報を読み込み中です。</td>
               </tr>
             </tbody>
           </table>
@@ -316,15 +318,15 @@
           <div class="form-grid compact">
             <label class="form-field">
               <span>表示名</span>
-              <input type="text" id="map-object-name" name="name" required maxlength="48" autocomplete="off" />
+              <input type="text" id="map-object-name" name="name" required maxlength="48" autocomplete="off" readonly />
             </label>
             <label class="form-field">
               <span>種別</span>
-              <select id="map-object-type" name="type" required></select>
+              <select id="map-object-type" name="type" required disabled></select>
             </label>
             <label class="form-field">
               <span>レイヤー</span>
-              <select id="map-object-layer" name="layer" required>
+              <select id="map-object-layer" name="layer" required disabled>
                 <option value="ground">地形レイヤー</option>
                 <option value="decoration">装飾レイヤー</option>
                 <option value="interaction">インタラクトレイヤー</option>
@@ -333,25 +335,25 @@
             </label>
             <label class="form-field coordinate">
               <span>座標 X</span>
-              <input type="number" id="map-object-x" name="x" min="0" required />
+              <input type="number" id="map-object-x" name="x" min="0" required readonly />
             </label>
             <label class="form-field coordinate">
               <span>座標 Y</span>
-              <input type="number" id="map-object-y" name="y" min="0" required />
+              <input type="number" id="map-object-y" name="y" min="0" required readonly />
             </label>
             <label class="form-field">
               <span>リスポーン (秒)</span>
-              <input type="number" id="map-object-respawn" name="respawn" min="0" max="86400" step="30" />
+              <input type="number" id="map-object-respawn" name="respawn" min="0" max="86400" step="30" disabled />
             </label>
           </div>
           <label class="form-field">
             <span>メモ</span>
-            <textarea id="map-object-notes" name="notes" rows="3" maxlength="140"></textarea>
+            <textarea id="map-object-notes" name="notes" rows="3" maxlength="140" readonly></textarea>
           </label>
           <div class="form-actions">
-            <button type="submit" class="button primary" id="map-object-save">配置を保存</button>
+            <button type="submit" class="button primary" id="map-object-save" disabled title="現在は閲覧専用です">配置を保存</button>
             <button type="button" class="button secondary" id="map-object-clear">選択をクリア</button>
-            <button type="button" class="button danger" id="map-object-delete" disabled>削除</button>
+            <button type="button" class="button danger" id="map-object-delete" disabled title="現在は閲覧専用です">削除</button>
           </div>
         </form>
         <div id="map-object-feedback" class="result-message" role="status"></div>

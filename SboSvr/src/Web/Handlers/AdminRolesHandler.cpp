@@ -22,6 +22,7 @@ const RoleDefinition g_roles[] = {
         {"ACCOUNT_CREATE", "Account Create", "Allows creating new administrator accounts.", {"ACCOUNT_CREATE"}, 1},
         {"ROLE_UPDATE", "Role Update", "Allows updating administrator role assignments.", {"ROLE_MANAGEMENT"}, 1},
         {"SERVER_ADMIN", "Server Admin", "Allows performing privileged server control operations.", {"SERVER_CONTROL"}, 1},
+        {"MAP_OBJECT_VIEW", "Map Object View", "Allows browsing map object placements.", {"MAP_OBJECT_BROWSER"}, 1},
 };
 const size_t g_roleCount = sizeof(g_roles) / sizeof(g_roles[0]);
 }
@@ -63,6 +64,7 @@ std::vector<std::string> ResolveRoles(int nAdminLevel)
                 roles.push_back("ROLE_UPDATE");
         }
         roles.push_back("SERVER_VIEW");
+        roles.push_back("MAP_OBJECT_VIEW");
         return roles;
 }
 
