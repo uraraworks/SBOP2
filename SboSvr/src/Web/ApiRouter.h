@@ -19,6 +19,7 @@ public:
         CApiRouter();
 
         void Register(const std::string &method, const std::string &path, std::unique_ptr<IApiHandler> handler);
+        void RegisterPrefix(const std::string &method, const std::string &pathPrefix, std::unique_ptr<IApiHandler> handler);
         RouteResult Dispatch(const HttpRequest &request, HttpResponse &response, std::string *pAllowedMethods) const;
 
 private:
@@ -26,6 +27,7 @@ private:
         {
                 std::string                     method;
                 std::string                     path;
+                bool                            prefix;
                 std::unique_ptr<IApiHandler>    handler;
         };
 

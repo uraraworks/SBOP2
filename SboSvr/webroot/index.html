@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sbo 管理ポータル プレビュー</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="page-header">
+    <h1>サーバー管理ポータル（試験版）</h1>
+    <p>このページは Web 管理機能の PoC として提供されるダッシュボードです。</p>
+  </header>
+  <nav class="main-nav" aria-label="主要メニュー">
+    <details open>
+      <summary>Wave 1（運用基盤）</summary>
+      <ul>
+        <li><a href="#server-dashboard" data-route="server-dashboard" class="nav-link">サーバー情報ダッシュボード</a></li>
+        <li><a href="#account-create" data-route="account-create" class="nav-link">アカウント作成</a></li>
+        <li><a href="#role-management" data-route="role-management" class="nav-link">管理者ロール設定</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Wave 2（キャラクター・マップ）</summary>
+      <ul>
+        <li><a href="#character-overview" data-route="character-overview" class="nav-link">キャラクター基本情報編集</a></li>
+        <li><a href="#character-list" data-route="character-list" class="nav-link">キャラクター一覧</a></li>
+        <li><a href="#character-account" data-route="character-account" class="nav-link">アカウント紐付け・状態変更</a></li>
+        <li><a href="#npc-management" data-route="npc-management" class="nav-link">NPC 追加</a></li>
+        <li><a href="#motion-management" data-route="motion-management" class="nav-link">モーション種別管理</a></li>
+        <li><a href="#skill-management" data-route="skill-management" class="nav-link">スキル一覧・編集</a></li>
+        <li><a href="#map-info" data-route="map-info" class="nav-link">マップ情報編集</a></li>
+        <li><a href="#map-events" data-route="map-events" class="nav-link">マップイベント一覧</a></li>
+        <li><a href="#map-parts" data-route="map-parts" class="nav-link">マップパーツ編集</a></li>
+        <li><a href="#map-objects" data-route="map-objects" class="nav-link">マップオブジェクト配置</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Wave 2（アイテム・エフェクト）</summary>
+      <ul>
+        <li><a href="#item-types" data-route="item-types" class="nav-link">アイテム種別一覧</a></li>
+        <li><a href="#item-list" data-route="item-list" class="nav-link">アイテム一覧</a></li>
+        <li><a href="#weapon-list" data-route="weapon-list" class="nav-link">武器一覧</a></li>
+        <li><a href="#effect-balloon" data-route="effect-balloon" class="nav-link">噴出し一覧</a></li>
+        <li><a href="#effect-library" data-route="effect-library" class="nav-link">エフェクト一覧</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Wave 3（監査・運用）</summary>
+      <ul>
+        <li><a href="#audit-reports" data-route="audit-reports" class="nav-link">監査レポートダウンロード</a></li>
+        <li><a href="#operation-history" data-route="operation-history" class="nav-link">操作履歴検索</a></li>
+        <li><a href="#failback-guide" data-route="failback-guide" class="nav-link">フェイルバック手順</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>システム設定</summary>
+      <ul>
+        <li><a href="#initial-status" data-route="initial-status" class="nav-link">初期ステータス設定</a></li>
+      </ul>
+    </details>
+  </nav>
+  <main id="view-container">
+    <div class="view" data-view="server-dashboard">
+      <section class="card" id="server-card">
+        <h2>サーバー概要</h2>
+        <div class="status-grid">
+          <div class="status-row">
+            <span class="status-label">状態:</span>
+            <span class="status-value" id="server-status">読み込み中...</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">オンライン人数:</span>
+            <span class="status-value" id="server-online">-</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">最終パッチバージョン:</span>
+            <span class="status-value" id="server-version">-</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">CPU 使用率:</span>
+            <span class="status-value" id="server-cpu">-</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">メモリ使用率:</span>
+            <span class="status-value" id="server-memory">-</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">遅延 (ms):</span>
+            <span class="status-value" id="server-latency">-</span>
+          </div>
+        </div>
+        <p class="timestamp" id="server-updated">更新時刻: -</p>
+        <div class="server-controls">
+          <button type="button" id="reload-server" class="button">再読み込み</button>
+        </div>
+        <p class="note">30秒ごとに自動更新されます。</p>
+      </section>
+    </div>
+    <div class="view" data-view="account-create">
+      <section class="card" id="account-card">
+        <h2>管理アカウント作成</h2>
+        <p class="card-description">管理者用アカウントを追加する場合は以下のフォームに必要事項を入力してください。</p>
+        <form id="account-form" novalidate>
+          <div class="form-grid">
+            <label class="form-field">
+              <span>ログインID</span>
+              <input type="text" id="account-login" name="loginId" autocomplete="username" required />
+            </label>
+            <label class="form-field">
+              <span>表示名</span>
+              <input type="text" id="account-display" name="displayName" required />
+            </label>
+            <label class="form-field">
+              <span>メールアドレス</span>
+              <input type="email" id="account-email" name="email" autocomplete="email" />
+            </label>
+            <label class="form-field">
+              <span>パスワード</span>
+              <input type="password" id="account-password" name="password" autocomplete="new-password" required />
+            </label>
+            <label class="form-field">
+              <span>パスワード再入力</span>
+              <input type="password" id="account-password-confirm" name="passwordConfirm" autocomplete="new-password" required />
+            </label>
+          </div>
+          <fieldset class="form-field roles-field">
+            <legend>付与ロール</legend>
+            <div id="account-roles" class="roles-container" aria-live="polite"></div>
+          </fieldset>
+          <div class="form-actions">
+            <button type="submit" class="button primary">アカウントを作成</button>
+            <button type="reset" class="button secondary" id="account-reset">リセット</button>
+          </div>
+        </form>
+        <div id="account-result" class="result-message" role="alert"></div>
+      </section>
+    </div>
+    <div class="view" data-view="role-management">
+      <section class="card" id="role-card">
+        <h2>ロール割り当て</h2>
+        <p class="card-description">既存アカウントの権限ロールを更新するにはアカウントIDを指定し、必要なロールを選択してください。</p>
+        <form id="role-form" novalidate>
+          <div class="form-grid">
+            <label class="form-field">
+              <span>アカウントID</span>
+              <input type="text" id="role-account-id" name="accountId" autocomplete="off" required />
+            </label>
+            <label class="form-field">
+              <span>コメント (任意)</span>
+              <input type="text" id="role-comment" name="comment" maxlength="256" />
+            </label>
+          </div>
+          <fieldset class="form-field roles-field">
+            <legend>付与ロール</legend>
+            <div id="role-checkboxes" class="roles-container" aria-live="polite"></div>
+          </fieldset>
+          <div class="form-actions">
+            <button type="submit" class="button primary">ロールを更新</button>
+            <button type="reset" class="button secondary" id="role-reset">リセット</button>
+          </div>
+        </form>
+        <div id="role-result" class="result-message" role="alert"></div>
+      </section>
+    </div>
+    <div class="view" data-view="character-overview">
+      <section class="card placeholder-card">
+        <h2>キャラクター基本情報編集（プレースホルダー）</h2>
+        <p>Wave 2 で実装予定のキャラクター編集画面です。基本属性・外見・装備・ステータスを編集できるフォームを配置します。</p>
+        <ul>
+          <li>キャラクター検索バーと概要表示</li>
+          <li>基本情報（名前、レベル、陣営など）の編集フォーム</li>
+          <li>外見・アバターパーツのプレビュー枠</li>
+          <li>保存時の差分確認モーダル</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="character-list">
+      <section class="card placeholder-card">
+        <h2>キャラクター一覧（プレースホルダー）</h2>
+        <p>Wave 2 で予定しているキャラクター検索・一覧画面です。既存 MFC 版のキャラリストを置き換えます。</p>
+        <ul>
+          <li>フィルター（名前、アカウントID、ステータス）</li>
+          <li>結果テーブル（ページング対応）</li>
+          <li>選択したキャラクターの詳細リンク</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="character-account">
+      <section class="card placeholder-card">
+        <h2>アカウント紐付け・状態変更（プレースホルダー）</h2>
+        <p>キャラクターとアカウントの結び付きや BAN 状態を変更する画面を予定しています。</p>
+        <ul>
+          <li>キャラクター選択と現在のアカウント情報表示</li>
+          <li>ステータス変更（凍結、警告など）の操作</li>
+          <li>変更履歴タイムライン</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="npc-management">
+      <section class="card placeholder-card">
+        <h2>NPC 追加（プレースホルダー）</h2>
+        <p>マップ上に NPC をスポーンさせる操作を Web 化する予定です。</p>
+        <ul>
+          <li>テンプレート NPC 一覧からの選択</li>
+          <li>座標入力とプレビュー</li>
+          <li>生成リクエストの確認ダイアログ</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="motion-management">
+      <section class="card placeholder-card">
+        <h2>モーション種別管理（プレースホルダー）</h2>
+        <p>キャラクターモーションを整理・編集する画面です。</p>
+        <ul>
+          <li>モーションカテゴリ一覧</li>
+          <li>モーション再生プレビュー</li>
+          <li>パラメータ編集フォーム</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="skill-management">
+      <section class="card placeholder-card">
+        <h2>スキル一覧・編集（プレースホルダー）</h2>
+        <p>所持スキルの確認と付け替えを行う画面を予定しています。</p>
+        <ul>
+          <li>スキル検索とフィルター</li>
+          <li>キャラクターへの付与/除外操作</li>
+          <li>クールダウンやレベル要件の表示</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="map-info">
+      <section class="card placeholder-card">
+        <h2>マップ情報編集（プレースホルダー）</h2>
+        <p>マップ名やサイズ、BGM、天候などを編集できる画面を想定しています。</p>
+        <ul>
+          <li>マップ一覧と基本情報フォーム</li>
+          <li>BGM/天候プリセット選択</li>
+          <li>反映結果のプレビュー/差分表示</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="map-events">
+      <section class="card placeholder-card">
+        <h2>マップイベント一覧（プレースホルダー）</h2>
+        <p>既存のイベントを確認・編集する画面を Web 化する予定です。</p>
+        <ul>
+          <li>イベントの検索・フィルター</li>
+          <li>イベント詳細編集モーダル</li>
+          <li>更新履歴表示</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="map-parts">
+      <section class="card placeholder-card">
+        <h2>マップパーツ編集（プレースホルダー）</h2>
+        <p>レイヤーや属性を編集する UI を配置予定です。</p>
+        <ul>
+          <li>パーツライブラリブラウザ</li>
+          <li>レイヤー構成の可視化</li>
+          <li>属性編集パネル</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="map-objects">
+      <section class="card placeholder-card">
+        <h2>マップオブジェクト配置（プレースホルダー）</h2>
+        <p>マップ上のオブジェクト配置・更新を行う予定の画面です。</p>
+        <ul>
+          <li>マップ座標ビューア</li>
+          <li>オブジェクト一覧とドラッグ&amp;ドロップ配置</li>
+          <li>配置ログと承認フロー</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="item-types">
+      <section class="card placeholder-card">
+        <h2>アイテム種別一覧（プレースホルダー）</h2>
+        <p>アイテム分類を管理する画面です。</p>
+        <ul>
+          <li>カテゴリツリー表示</li>
+          <li>種別追加・編集フォーム</li>
+          <li>関連マスタの参照</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="item-list">
+      <section class="card placeholder-card">
+        <h2>アイテム一覧（プレースホルダー）</h2>
+        <p>マップ上のアイテムを検索・生成する機能を想定しています。</p>
+        <ul>
+          <li>マップ/カテゴリフィルター</li>
+          <li>アイテム生成リクエスト</li>
+          <li>削除・移動操作の監査ログ</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="weapon-list">
+      <section class="card placeholder-card">
+        <h2>武器一覧（プレースホルダー）</h2>
+        <p>武器パラメータを確認する画面です。</p>
+        <ul>
+          <li>武器カテゴリ・レアリティでのソート</li>
+          <li>ステータス比較ビュー</li>
+          <li>エクスポート機能</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="effect-balloon">
+      <section class="card placeholder-card">
+        <h2>噴出し一覧（プレースホルダー）</h2>
+        <p>メッセージ吹き出し定義を管理する画面を予定しています。</p>
+        <ul>
+          <li>吹き出しテンプレのプレビュー</li>
+          <li>テキスト/スタイル編集</li>
+          <li>プレビュー再生</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="effect-library">
+      <section class="card placeholder-card">
+        <h2>エフェクト一覧（プレースホルダー）</h2>
+        <p>エフェクトパラメータを調整する画面です。</p>
+        <ul>
+          <li>エフェクト検索とタグ管理</li>
+          <li>アニメーションプレビュー</li>
+          <li>タイムライン編集</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="audit-reports">
+      <section class="card placeholder-card">
+        <h2>監査レポートダウンロード（プレースホルダー）</h2>
+        <p>Wave 3 で予定している監査ログ出力画面です。</p>
+        <ul>
+          <li>期間指定と CSV/JSON エクスポート</li>
+          <li>フィルター（操作種別、担当者）</li>
+          <li>自動配信スケジュール設定</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="operation-history">
+      <section class="card placeholder-card">
+        <h2>操作履歴検索（プレースホルダー）</h2>
+        <p>管理操作の履歴を検索・照会する画面です。</p>
+        <ul>
+          <li>クエリビルダー形式のフィルター</li>
+          <li>結果テーブルと詳細パネル</li>
+          <li>エクスポート・共有リンク生成</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="failback-guide">
+      <section class="card placeholder-card">
+        <h2>フェイルバック手順（プレースホルダー）</h2>
+        <p>Web UI 障害時に MFC へ切り戻す手順をナビゲートする画面です。</p>
+        <ul>
+          <li>現在のシステム状態チェック</li>
+          <li>切り戻し手順ステップ表示</li>
+          <li>復旧チェックリスト</li>
+        </ul>
+      </section>
+    </div>
+    <div class="view" data-view="initial-status">
+      <section class="card placeholder-card">
+        <h2>初期ステータス設定（プレースホルダー）</h2>
+        <p>新規キャラクターの初期パラメータを編集する画面です。</p>
+        <ul>
+          <li>テンプレート選択と複製</li>
+          <li>各種ステータス値の編集フォーム</li>
+          <li>バリデーション結果の表示</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <footer class="page-footer">
+    <small>&copy; 2024 Sbo Admin Platform Team</small>
+  </footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>
