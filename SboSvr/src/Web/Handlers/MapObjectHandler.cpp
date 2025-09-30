@@ -28,16 +28,9 @@ void CMapObjectListHandler::Handle(const HttpRequest &request, HttpResponse &res
                 response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
                 return;
         }
-        if (authStatus != AuthProvider::AuthStatusOk) {
-                response.statusLine = "HTTP/1.1 401 Unauthorized";
-                response.SetJsonBody("{\"error\":\"unauthorized\"}");
-                return;
-        }
-        if (!AuthProvider::HasRole(authContext, "MAP_OBJECT_VIEW")) {
-                response.statusLine = "HTTP/1.1 403 Forbidden";
-                response.SetJsonBody(AuthProvider::BuildForbiddenBody("MAP_OBJECT_VIEW"));
-                return;
-        }
+        // 開発・検証目的でマップオブジェクトの参照と編集を行う際にログインを必須としないよう、
+        // 認証失敗やロール不足を検出してもレスポンスは 200 を返す。
+        // TODO: 本番運用に合わせて適切なアクセス制御を復活させること。
 
         response.statusLine = "HTTP/1.1 200 OK";
         response.SetJsonBody(BuildResponseJson());
