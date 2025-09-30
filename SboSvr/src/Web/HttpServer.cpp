@@ -21,6 +21,21 @@ namespace
 const size_t kMaxHeaderSize = 8192;
 const size_t kMaxBodySize = 65536;
 
+std::string TrimCopy(const std::string &text)
+{
+        size_t nStart = 0;
+        while ((nStart < text.size()) && std::isspace(static_cast<unsigned char>(text[nStart]))) {
+                ++nStart;
+        }
+
+        size_t nEnd = text.size();
+        while ((nEnd > nStart) && std::isspace(static_cast<unsigned char>(text[nEnd - 1]))) {
+                --nEnd;
+        }
+
+        return text.substr(nStart, nEnd - nStart);
+}
+
 bool EqualsIgnoreCase(const std::string &lhs, const char *pszRhs)
 {
         if (pszRhs == NULL) {
@@ -71,9 +86,9 @@ ContentLengthParseResult TryParseContentLength(const std::string &request, size_
                 std::string headerLine = request.substr(nLineStart, nLineEnd - nLineStart);
                 size_t nColon = headerLine.find(':');
                 if (nColon != std::string::npos) {
-                        std::string name = CHttpServer::Trim(headerLine.substr(0, nColon));
+                        std::string name = TrimCopy(headerLine.substr(0, nColon));
                         if (EqualsIgnoreCase(name, "Content-Length")) {
-                                std::string value = CHttpServer::Trim(headerLine.substr(nColon + 1));
+                                std::string value = TrimCopy(headerLine.substr(nColon + 1));
                                 if (value.empty()) {
                                         return ContentLengthInvalid;
                                 }
@@ -521,17 +536,7 @@ bool CHttpServer::ParseHttpRequest(const std::string &rawRequest, HttpRequest &o
 
 std::string CHttpServer::Trim(const std::string &text)
 {
-        size_t nStart = 0;
-        while ((nStart < text.size()) && std::isspace(static_cast<unsigned char>(text[nStart]))) {
-                ++nStart;
-        }
-
-        size_t nEnd = text.size();
-        while ((nEnd > nStart) && std::isspace(static_cast<unsigned char>(text[nEnd - 1]))) {
-                --nEnd;
-        }
-
-        return text.substr(nStart, nEnd - nStart);
+        return TrimCopy(text);
 }
 
 void CHttpServer::SendResponse(SOCKET hClient, const HttpResponse &response)
