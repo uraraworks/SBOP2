@@ -90,7 +90,7 @@ DWORD CInfoFishing::GetDataSize(void)
 
 	dwRet += sizeof (m_dwFishingID);		/* 釣りID */
 	dwRet += sizeof (m_nAverage);			/* 釣れる確率 */
-	dwRet += (m_strName.GetUtf8Length () + 1);	/* 釣り場名 */
+	dwRet += (m_strName.GetStoreLength () + 1);	/* 釣り場名 */
 	dwRet += sizeof (int);					/* 釣り情報パラメータ数 */
 	/* 釣り情報パラメータ */
 	dwRet += (nCount * sizeof (DWORD));		/* アイテム種別ID */
@@ -117,7 +117,7 @@ DWORD CInfoFishing::GetDataSizeNo(int nNo)
 	switch (nNo) {
 	case 0:		dwRet = sizeof (m_dwFishingID);			break;	/* 釣りID */
 	case 1:		dwRet = sizeof (m_nAverage);			break;	/* 釣れる確率 */
-	case 2:		dwRet = (m_strName.GetUtf8Length () + 1);	break;	/* 釣り場名 */
+	case 2:		dwRet = (m_strName.GetStoreLength () + 1);	break;	/* 釣り場名 */
 	case 3:		dwRet = nCount * sizeof (int);			break;	/* 釣り情報パラメータ数 */
 	case 4:		dwRet = nCount * sizeof (DWORD);		break;	/* アイテム種別ID */
 	case 5:		dwRet = nCount * sizeof (int);			break;	/* 釣りきる確率 */
@@ -216,7 +216,7 @@ DWORD CInfoFishing::ReadElementData(
 	case 0:		pDst = (PBYTE)&m_dwFishingID;		break;	/* 釣りID */
 	case 1:		pDst = (PBYTE)&m_nAverage;			break;	/* 釣れる確率 */
 	case 2:		/* 釣り場名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 3:		/* 釣り情報パラメータ数 */

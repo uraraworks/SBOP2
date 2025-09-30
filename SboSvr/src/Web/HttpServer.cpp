@@ -14,6 +14,7 @@
 #include "Handlers/ServerInfoHandler.h"
 #include "Handlers/AccountCreateHandler.h"
 #include "Handlers/AdminRolesHandler.h"
+#include "Handlers/MapObjectHandler.h"
 #include "Handlers/StaticFileHandler.h"
 #include "MgrData.h"
 
@@ -579,6 +580,9 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> rolesUpdateHandler(new CAdminRolesUpdateHandler(m_pMgrData));
         m_router.Register("PUT", "/api/admin/roles", std::move(rolesUpdateHandler));
+
+        std::unique_ptr<IApiHandler> mapObjectsHandler(new CMapObjectListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/maps/objects", std::move(mapObjectsHandler));
 
         std::wstring webRoot;
         if (ResolveWebRootPath(webRoot)) {

@@ -31,33 +31,61 @@ inline CString Utf8ToTString(LPCSTR pszSrc)
         {
                 UINT    codePage;
                 DWORD   dwFlags;
+                bool    verifyUtf8;
         };
 
         const SCandidate aCandidate[] = {
-                { CP_UTF8, MB_ERR_INVALID_CHARS },
-                { 932,     0 },
-                { CP_ACP,  0 },
+                { CP_UTF8, MB_ERR_INVALID_CHARS, true },
+                { 932,     0,                    false },
+                { CP_ACP,  0,                    false },
         };
 
         for (int i = 0; i < (int)(sizeof (aCandidate) / sizeof (aCandidate[0])); ++i) {
                 const UINT  codePage = aCandidate[i].codePage;
                 const DWORD dwFlags  = aCandidate[i].dwFlags;
+                const bool  verifyUtf8 = aCandidate[i].verifyUtf8;
                 int nLen = MultiByteToWideChar (codePage, dwFlags, pszSrc, -1, NULL, 0);
                 if (nLen <= 0) {
                         continue;
                 }
-                LPTSTR pszBuffer = strResult.GetBuffer (nLen);
+
+                CString strTemp;
+                LPTSTR pszBuffer = strTemp.GetBuffer (nLen);
                 if (pszBuffer == NULL) {
-                        strResult.ReleaseBuffer (0);
+                        strTemp.ReleaseBuffer (0);
                         continue;
                 }
                 int nRet = MultiByteToWideChar (codePage, dwFlags, pszSrc, -1, pszBuffer, nLen);
-                if (nRet > 0) {
-                        strResult.ReleaseBuffer ();
-                        return strResult;
+                if (nRet <= 0) {
+                        strTemp.ReleaseBuffer (0);
+                        strTemp.Empty ();
+                        continue;
                 }
-                strResult.ReleaseBuffer (0);
-                strResult.Empty ();
+                strTemp.ReleaseBuffer ();
+
+                if (verifyUtf8) {
+                        int nUtf8Len = WideCharToMultiByte (CP_UTF8, 0, strTemp, -1, NULL, 0, NULL, NULL);
+                        if (nUtf8Len <= 0) {
+                                continue;
+                        }
+                        CStringA strRoundTrip;
+                        LPSTR pszUtf8 = strRoundTrip.GetBuffer (nUtf8Len);
+                        if (pszUtf8 == NULL) {
+                                strRoundTrip.ReleaseBuffer (0);
+                                continue;
+                        }
+                        int nUtf8Ret = WideCharToMultiByte (CP_UTF8, 0, strTemp, -1, pszUtf8, nUtf8Len, NULL, NULL);
+                        if (nUtf8Ret <= 0) {
+                                strRoundTrip.ReleaseBuffer (0);
+                                continue;
+                        }
+                        strRoundTrip.ReleaseBuffer ();
+                        if (strRoundTrip.Compare (pszSrc) != 0) {
+                                continue;
+                        }
+                }
+
+                return strTemp;
         }
 
         return strResult;
@@ -174,10 +202,12 @@ public:
         BOOL    operator !=             (LPCTSTR pszSrc) const;                /* 文字列を比較 */
                         operator LPCTSTR        () const;                                               /* キャスト */
                         operator LPCTSTR        ();                                                     /* キャスト */
-                        operator LPCSTR         () const;                                               /* UTF-8キャスト */
-                        operator LPCSTR         ();                                                     /* UTF-8キャスト */
+                        operator LPCSTR         () const;                                               /* 文字列キャスト */
+                        operator LPCSTR         ();                                                     /* 文字列キャスト */
 
-        int             GetUtf8Length   () const;                                      /* UTF-8文字列長を取得 */
+        LPCSTR  GetUtf8Pointer() const;                                         /* UTF-8文字列ポインタを取得 */
+        LPCSTR  GetAnsiPointer(UINT codePage = 932) const;                      /* 指定コードページの文字列ポインタを取得 */
+        int             GetStoreLength   (UINT codePage = 932) const;                   /* 保存用文字列長を取得 */
 
         int             CompareNoCase   (LPCSTR pszSrc) const;                 /* 文字列比較(大文字小文字区別無し) */
         int             CompareNoCase   (LPCTSTR pszSrc) const;                /* 文字列比較(大文字小文字区別無し) */
@@ -186,11 +216,15 @@ protected:
         void    RenewUtf8               (LPCSTR pszSrc);                               /* UTF-8文字列を更新 */
         void    RenewWide               (LPCTSTR pszSrc);                              /* Unicode文字列を更新 */
         void    UpdateUtf8Cache         () const;                                      /* UTF-8キャッシュを更新 */
+        void    UpdateAnsiCache         (UINT codePage) const;                         /* ANSIキャッシュを更新 */
 
 protected:
         CString                 m_strString;                          /* 文字列データ */
         mutable CStringA        m_strUtf8Cache;                       /* UTF-8キャッシュ */
-        mutable BOOL            m_bUtf8Dirty;                          /* キャッシュ更新フラグ */
+        mutable CStringA        m_strAnsiCache;                       /* ANSIキャッシュ */
+        mutable BOOL            m_bUtf8Dirty;                          /* UTF-8キャッシュ更新フラグ */
+        mutable BOOL            m_bAnsiDirty;                          /* ANSIキャッシュ更新フラグ */
+        mutable UINT            m_uAnsiCodePage;                      /* ANSIキャッシュのコードページ */
 } CmyString, *PCmyString;
 
 /* Copyright(C)URARA-works 2006 */

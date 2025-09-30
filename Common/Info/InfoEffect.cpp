@@ -149,7 +149,7 @@ DWORD CInfoEffect::GetDataSize(void)
 			sizeof (m_dwEffectID)	+
 			sizeof (m_dwSoundID)	+
 			sizeof (m_dwGrpIDMain)	+
-			(m_strName.GetUtf8Length () + 1);
+			(m_strName.GetStoreLength () + 1);
 
 	if (m_byAnimeCount == 0) {
 		goto Exit;
@@ -189,7 +189,7 @@ DWORD CInfoEffect::GetDataSizeNo(int nNo)
 	case 3:		dwRet = sizeof (m_bLoop);				break;	/* ループ判定 */
 	case 4:		dwRet = sizeof (m_bLoopSound);			break;	/* ループ時に効果音を再生する */
 	case 5:		dwRet = sizeof (m_dwGrpIDMain);			break;	/* 画像メインID */
-	case 6:		dwRet = (m_strName.GetUtf8Length () + 1);	break;	/* エフェクト名 */
+	case 6:		dwRet = (m_strName.GetStoreLength () + 1);	break;	/* エフェクト名 */
 	default:
 		nCount = m_paAnimeInfo->size();
 		for (i = 0; i < nCount; i ++) {
@@ -307,7 +307,7 @@ DWORD CInfoEffect::ReadElementData(
 	case 4:	pDst = (PBYTE)&m_bLoopSound;	dwSize = sizeof (m_bLoopSound);		break;	/* ループ時に効果音を再生する */
 	case 5:	pDst = (PBYTE)&m_dwGrpIDMain;	dwSize = sizeof (m_dwGrpIDMain);	break;	/* 画像メインID */
 	case 6: 																		  	/* エフェクト名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	default:
@@ -363,7 +363,7 @@ DWORD CInfoEffect::GetSendDataSize(void)
 			sizeof (m_dwSoundID)	+
 			sizeof (m_dwGrpIDMain)	+
 			sizeof (m_byAnimeCount)	+
-			(m_strName.GetUtf8Length () + 1);
+			(m_strName.GetStoreLength () + 1);
 
 	if (m_byAnimeCount == 0) {
 		goto Exit;

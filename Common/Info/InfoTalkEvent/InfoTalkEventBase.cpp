@@ -87,7 +87,7 @@ DWORD CInfoTalkEventBase::GetDataSize(void)
 	dwRet += sizeof (m_nEventType);					/* 会話イベント種別 */
 	dwRet += sizeof (m_nPage);						/* 所属ページ番号 */
 	dwRet += sizeof (m_dwData);						/* バイナリデータ */
-	dwRet += (m_strText.GetUtf8Length () + 1);			/* 文字列データ */
+	dwRet += (m_strText.GetStoreLength () + 1);			/* 文字列データ */
 
 	return dwRet;
 }
@@ -109,7 +109,7 @@ DWORD CInfoTalkEventBase::GetDataSizeNo(int nNo)
 	case 0:	dwRet = sizeof (m_nEventType);			break;	/* 会話イベント種別 */
 	case 1:	dwRet = sizeof (m_nPage);				break;	/* 所属ページ番号 */
 	case 2:	dwRet = sizeof (m_dwData);				break;	/* バイナリデータ */
-	case 3:	dwRet = m_strText.GetUtf8Length () + 1;		break;	/* 文字列データ */
+	case 3:	dwRet = m_strText.GetStoreLength () + 1;		break;	/* 文字列データ */
 	}
 
 	return dwRet;
@@ -186,7 +186,7 @@ DWORD CInfoTalkEventBase::ReadElementData(
 	case 1: pDst = (PBYTE)&m_nPage;				dwSize = sizeof (m_nPage);				break;		/* 所属ページ番号 */
 	case 2: pDst = (PBYTE)&m_dwData;			dwSize = sizeof (m_dwData);				break;		/* バイナリデータ */
 	case 3:				/* 文字列データ */
-		m_strText = (LPCSTR)pSrc;
+		m_strText = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	}
@@ -213,7 +213,7 @@ DWORD CInfoTalkEventBase::GetSendDataSize(void)
 	dwRet += sizeof (m_nEventType);					/* 会話イベント種別 */
 	dwRet += sizeof (m_nPage);						/* 所属ページ番号 */
 	dwRet += sizeof (m_dwData);						/* バイナリデータ */
-	dwRet += (m_strText.GetUtf8Length () + 1);			/* 文字列データ */
+	dwRet += (m_strText.GetStoreLength () + 1);			/* 文字列データ */
 
 	return dwRet;
 }

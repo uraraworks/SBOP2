@@ -83,7 +83,7 @@ DWORD CInfoMotionType::GetDataSize(void)
 
 	dwRet = sizeof (m_dwMotionTypeID)	+
 			sizeof (m_wGrpIDSub)		+
-			(m_strName.GetUtf8Length () + 1);
+			(m_strName.GetStoreLength () + 1);
 
 	return dwRet;
 }
@@ -104,7 +104,7 @@ DWORD CInfoMotionType::GetDataSizeNo(int nNo)
 	switch (nNo) {
 	case 0:		dwRet = sizeof (m_dwMotionTypeID);		break;		/* モーション種別ID */
 	case 1:		dwRet = sizeof (m_wGrpIDSub);			break;		/* プレビュー用グラフィックIDサブ */
-	case 2:		dwRet = (m_strName.GetUtf8Length () + 1);	break;		/* モーション種別名 */
+	case 2:		dwRet = (m_strName.GetStoreLength () + 1);	break;		/* モーション種別名 */
 	}
 
 	return dwRet;
@@ -179,7 +179,7 @@ DWORD CInfoMotionType::ReadElementData(
 	case 0:		pDst = (PBYTE)&m_dwMotionTypeID;	dwSize = sizeof (m_dwMotionTypeID);	break;		/* モーション種別ID */
 	case 1:		pDst = (PBYTE)&m_wGrpIDSub;			dwSize = sizeof (m_wGrpIDSub);		break;		/* プレビュー用グラフィックIDサブ */
 	case 2:		/* モーション種別名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	}

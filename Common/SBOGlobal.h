@@ -17,6 +17,7 @@ extern long genrand();                                                          
 extern PBYTE    ZeroNew                         (DWORD dwSize);                                                                /* 指定サイズのメモリを確保して0クリア */
 extern void             CopyMemoryRenew         (PVOID pDst, CONST PVOID pSrc, DWORD dwSize, PBYTE &pPos);      /* メモリコピーしてポインタを進める */
 extern void             strcpyRenew                     (LPSTR pszDst, LPCSTR pszSrc, PBYTE &pPos);                        /* 文字列コピーしてポインタを進める */
+extern void             strcpyRenew                     (LPSTR pszDst, const CmyString &strSrc, PBYTE &pPos);              /* 文字列コピーしてポインタを進める */
 extern void             StoreRenew                      (CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos);                      /* 文字列コピーしてポインタを進める */
 extern void             GetModuleFilePath       (LPTSTR pszDst, DWORD dwSize);                                                 /* モジュールパスを取得 */
 extern BOOL             AllCreateDirectory      (LPCTSTR, LPSECURITY_ATTRIBUTES pSAtt = NULL, BOOL bResult = TRUE);   /* 指定されたパスのフォルダを作成 */

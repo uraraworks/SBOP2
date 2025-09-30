@@ -62,6 +62,26 @@ void strcpyRenew(LPSTR pszDst, LPCSTR pszSrc, PBYTE &pPos)
         pPos += (strlen (pszSrc) + 1);
 }
 
+void strcpyRenew(LPSTR pszDst, const CmyString &strSrc, PBYTE &pPos)
+{
+#ifdef _UNICODE
+        CStringA strAnsi = TStringToAnsi (static_cast<LPCTSTR>(strSrc), 932);
+        LPCSTR pszSrc = strAnsi.GetString ();
+        int nLength = strAnsi.GetLength ();
+        if ((pszSrc == NULL) || (nLength <= 0)) {
+                if (pszDst) {
+                        pszDst[0] = '\0';
+                }
+                pPos ++;
+                return;
+        }
+        strcpy (pszDst, pszSrc);
+        pPos += (nLength + 1);
+#else
+        strcpyRenew (pszDst, static_cast<LPCSTR>(strSrc), pPos);
+#endif
+}
+
 
 /* ========================================================================= */
 /* 関数名       :StoreRenew
@@ -78,7 +98,8 @@ void StoreRenew(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos)
                 pPos ++;
                 return;
         }
-        strDst = pszSrc;
+        CString strConverted = AnsiToTString (pszSrc, 932);
+        strDst = (LPCTSTR)strConverted;
         pPos += (strlen (pszSrc) + 1);
 }
 
