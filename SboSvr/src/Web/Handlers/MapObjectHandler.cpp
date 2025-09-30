@@ -3,6 +3,7 @@
 
 #include <iomanip>
 #include <sstream>
+#include <vector>
 
 #include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
@@ -14,6 +15,52 @@
 #include "Info/InfoMapObjectData.h"
 #include "Info/InfoMapObject.h"
 #include "myLib/myString.h"
+
+namespace
+{
+std::string ToUtf8String(const CmyString &value)
+{
+#ifdef _UNICODE
+        CStringA utf8 = TStringToUtf8(static_cast<LPCTSTR>(value));
+        if (utf8.IsEmpty()) {
+                return std::string();
+        }
+        return std::string(utf8.GetString(), static_cast<size_t>(utf8.GetLength()));
+#else
+        LPCSTR pszSource = static_cast<LPCSTR>(value);
+        if ((pszSource == NULL) || (pszSource[0] == '\0')) {
+                return std::string();
+        }
+
+        const UINT candidates[] = { CP_UTF8, 932u, CP_ACP };
+        for (size_t i = 0; i < sizeof(candidates) / sizeof(candidates[0]); ++i) {
+                UINT codePage = candidates[i];
+                if (codePage == 0) {
+                        continue;
+                }
+                DWORD flags = (codePage == CP_UTF8) ? MB_ERR_INVALID_CHARS : 0;
+                int wideLength = MultiByteToWideChar(codePage, flags, pszSource, -1, NULL, 0);
+                if (wideLength <= 1) {
+                        continue;
+                }
+                std::vector<wchar_t> wide(static_cast<size_t>(wideLength));
+                int converted = MultiByteToWideChar(codePage, flags, pszSource, -1, &wide[0], wideLength);
+                if (converted <= 1) {
+                        continue;
+                }
+                int utf8Length = WideCharToMultiByte(CP_UTF8, 0, &wide[0], converted - 1, NULL, 0, NULL, NULL);
+                if (utf8Length <= 0) {
+                        continue;
+                }
+                std::string utf8(static_cast<size_t>(utf8Length), '\0');
+                WideCharToMultiByte(CP_UTF8, 0, &wide[0], converted - 1, &utf8[0], utf8Length, NULL, NULL);
+                return utf8;
+        }
+
+        return std::string(pszSource);
+#endif
+}
+}
 
 CMapObjectListHandler::CMapObjectListHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -86,11 +133,7 @@ void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMa
                 oss << "\"idHex\":null,";
         }
 
-        const char *pszMapName = static_cast<LPCSTR>(pMap->m_strMapName);
-        std::string mapName;
-        if (pszMapName != NULL) {
-                mapName.assign(pszMapName);
-        }
+        std::string mapName = ToUtf8String(pMap->m_strMapName);
         oss << "\"name\":\"" << JsonUtils::Escape(mapName) << "\",";
         oss << "\"width\":" << pMap->m_sizeMap.cx << ',';
         oss << "\"height\":" << pMap->m_sizeMap.cy << ',';
@@ -142,11 +185,7 @@ void CMapObjectListHandler::AppendObjectJson(std::ostringstream &oss, const CInf
         }
 
         if (pObject != NULL) {
-                const char *pszObjectName = static_cast<LPCSTR>(pObject->m_strName);
-                std::string objectName;
-                if (pszObjectName != NULL) {
-                        objectName.assign(pszObjectName);
-                }
+                std::string objectName = ToUtf8String(pObject->m_strName);
                 oss << ",\"name\":\"" << JsonUtils::Escape(objectName) << "\"";
                 oss << ",\"attribute\":" << pObject->m_dwAttr;
                 std::string attributeHex = FormatHex(pObject->m_dwAttr);
