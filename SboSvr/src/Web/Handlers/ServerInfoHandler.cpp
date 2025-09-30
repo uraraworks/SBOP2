@@ -9,6 +9,7 @@
 #include <iomanip>
 #include <sstream>
 
+#include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
 #include "MgrData.h"
 
@@ -19,15 +20,27 @@ CServerInfoHandler::CServerInfoHandler(CMgrData *pMgrData)
 
 void CServerInfoHandler::Handle(const HttpRequest &request, HttpResponse &response)
 {
-        bool includeMetrics = false;
-        std::string locale;
-        ParseQueryParameters(request.path, includeMetrics, locale);
-
-        if (m_pMgrData == NULL) {
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
                 response.statusLine = "HTTP/1.1 503 Service Unavailable";
                 response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
                 return;
         }
+        if (authStatus != AuthProvider::AuthStatusOk) {
+                response.statusLine = "HTTP/1.1 401 Unauthorized";
+                response.SetJsonBody("{\"error\":\"unauthorized\"}");
+                return;
+        }
+        if (!AuthProvider::HasRole(authContext, "SERVER_VIEW")) {
+                response.statusLine = "HTTP/1.1 403 Forbidden";
+                response.SetJsonBody(AuthProvider::BuildForbiddenBody("SERVER_VIEW"));
+                return;
+        }
+
+        bool includeMetrics = false;
+        std::string locale;
+        ParseQueryParameters(request.path, includeMetrics, locale);
 
         response.statusLine = "HTTP/1.1 200 OK";
         response.SetJsonBody(BuildResponseJson(includeMetrics, locale));

@@ -29,7 +29,7 @@ paths:
         '401':
           description: 未認証
         '403':
-          description: 権限不足。`ROLE_VIEW` が必要。
+          description: 権限不足。`ROLE_UPDATE` が必要。
     put:
       summary: アカウントのロール更新
       operationId: updateAccountRoles

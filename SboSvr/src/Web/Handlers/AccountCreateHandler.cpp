@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <sstream>
 
+#include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
 #include "AdminRolesHandler.h"
 #include "MgrData.h"
@@ -41,6 +42,24 @@ std::string TrimCopy(const std::string &text)
 
 void CAccountCreateHandler::Handle(const HttpRequest &request, HttpResponse &response)
 {
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (authStatus != AuthProvider::AuthStatusOk) {
+                response.statusLine = "HTTP/1.1 401 Unauthorized";
+                response.SetJsonBody("{\"error\":\"unauthorized\"}");
+                return;
+        }
+        if (!AuthProvider::HasRole(authContext, "ACCOUNT_CREATE")) {
+                response.statusLine = "HTTP/1.1 403 Forbidden";
+                response.SetJsonBody(AuthProvider::BuildForbiddenBody("ACCOUNT_CREATE"));
+                return;
+        }
+
         CLibInfoAccount *pAccountLib = GetAccountLibrary();
         if (pAccountLib == NULL) {
                 response.statusLine = "HTTP/1.1 503 Service Unavailable";

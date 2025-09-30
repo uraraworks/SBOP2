@@ -147,6 +147,9 @@
     <ClCompile Include="src\Web\JsonUtils.cpp">
       <Filter>Source Files\Web</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\AuthProvider.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
     <ClCompile Include="..\common\crc.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
@@ -492,6 +495,9 @@
       <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\JsonUtils.h">
+      <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\AuthProvider.h">
       <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="..\common\crc.h">

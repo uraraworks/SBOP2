@@ -8,6 +8,7 @@
 #include <windows.h>
 #endif
 
+#include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
 #include "MgrData.h"
 #include "GlobalDefine.h"
@@ -92,8 +93,26 @@ CAdminRolesListHandler::CAdminRolesListHandler(CMgrData *pMgrData)
 {
 }
 
-void CAdminRolesListHandler::Handle(const HttpRequest & /*request*/, HttpResponse &response)
+void CAdminRolesListHandler::Handle(const HttpRequest &request, HttpResponse &response)
 {
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (authStatus != AuthProvider::AuthStatusOk) {
+                response.statusLine = "HTTP/1.1 401 Unauthorized";
+                response.SetJsonBody("{\"error\":\"unauthorized\"}");
+                return;
+        }
+        if (!AuthProvider::HasRole(authContext, "ROLE_UPDATE")) {
+                response.statusLine = "HTTP/1.1 403 Forbidden";
+                response.SetJsonBody(AuthProvider::BuildForbiddenBody("ROLE_UPDATE"));
+                return;
+        }
+
         response.statusLine = "HTTP/1.1 200 OK";
         response.SetJsonBody(BuildResponse());
 }
@@ -133,6 +152,24 @@ CAdminRolesUpdateHandler::CAdminRolesUpdateHandler(CMgrData *pMgrData)
 
 void CAdminRolesUpdateHandler::Handle(const HttpRequest &request, HttpResponse &response)
 {
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (authStatus != AuthProvider::AuthStatusOk) {
+                response.statusLine = "HTTP/1.1 401 Unauthorized";
+                response.SetJsonBody("{\"error\":\"unauthorized\"}");
+                return;
+        }
+        if (!AuthProvider::HasRole(authContext, "ROLE_UPDATE")) {
+                response.statusLine = "HTTP/1.1 403 Forbidden";
+                response.SetJsonBody(AuthProvider::BuildForbiddenBody("ROLE_UPDATE"));
+                return;
+        }
+
         CLibInfoAccount *pAccountLib = GetAccountLibrary();
         if (pAccountLib == NULL) {
                 response.statusLine = "HTTP/1.1 503 Service Unavailable";
@@ -198,7 +235,7 @@ void CAdminRolesUpdateHandler::Handle(const HttpRequest &request, HttpResponse &
         response.statusLine = "HTTP/1.1 204 No Content";
         response.body.clear();
 
-        EmitAuditTrace(dwAccountId, roles, comment);
+        EmitAuditTrace(dwAccountId, roles, comment, authContext.loginId);
 }
 
 CLibInfoAccount *CAdminRolesUpdateHandler::GetAccountLibrary() const
@@ -286,12 +323,8 @@ bool CAdminRolesUpdateHandler::ValidateExclusiveConstraints(CLibInfoAccount *pAc
         return AdminRoleCatalog::ValidateExclusiveConstraints(pAccountLib, dwAccountId, nAdminLevel, outConflictRole);
 }
 
-void CAdminRolesUpdateHandler::EmitAuditTrace(DWORD dwAccountId, const std::vector<std::string> &roles, const std::string &comment) const
+void CAdminRolesUpdateHandler::EmitAuditTrace(DWORD dwAccountId, const std::vector<std::string> &roles, const std::string &comment, const std::string &actorLoginId) const
 {
-        if (comment.empty()) {
-                return;
-        }
-
         std::ostringstream oss;
         oss << "[AdminRoles] accountId=" << dwAccountId << " roles=";
         for (size_t i = 0; i < roles.size(); ++i) {
@@ -300,7 +333,12 @@ void CAdminRolesUpdateHandler::EmitAuditTrace(DWORD dwAccountId, const std::vect
                 }
                 oss << roles[i];
         }
-        oss << " comment=" << comment;
+        if (!comment.empty()) {
+                oss << " comment=" << comment;
+        }
+        if (!actorLoginId.empty()) {
+                oss << " actor=" << actorLoginId;
+        }
 #if defined(_WIN32)
         OutputDebugStringA(oss.str().c_str());
 #else
