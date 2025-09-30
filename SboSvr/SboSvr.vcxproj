@@ -105,6 +105,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Release/SboSvr.bsc</OutputFile>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>setlocal&#x0D;&#x0A;set "MAP_PARTS_SRC=$(SolutionDir)SboGrpData\res\MapParts"&#x0D;&#x0A;set "MAP_PARTS_DST=$(ProjectDir)webroot\assets\map-parts"&#x0D;&#x0A;if exist "%MAP_PARTS_SRC%" (&#x0D;&#x0A;  if exist "%MAP_PARTS_DST%" rmdir /S /Q "%MAP_PARTS_DST%"&#x0D;&#x0A;  mkdir "%MAP_PARTS_DST%"&#x0D;&#x0A;  xcopy /E /I /Y "%MAP_PARTS_SRC%" "%MAP_PARTS_DST%\"&#x0D;&#x0A;) else (&#x0D;&#x0A;  echo [WARN] マップパーツ画像のコピー元が見つかりませんでした: "%MAP_PARTS_SRC%"&#x0D;&#x0A;)&#x0D;&#x0A;if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -151,7 +154,7 @@
       <OutputFile>.\Debug/SboSvr.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"</Command>
+      <Command>setlocal&#x0D;&#x0A;set "MAP_PARTS_SRC=$(SolutionDir)SboGrpData\res\MapParts"&#x0D;&#x0A;set "MAP_PARTS_DST=$(ProjectDir)webroot\assets\map-parts"&#x0D;&#x0A;if exist "%MAP_PARTS_SRC%" (&#x0D;&#x0A;  if exist "%MAP_PARTS_DST%" rmdir /S /Q "%MAP_PARTS_DST%"&#x0D;&#x0A;  mkdir "%MAP_PARTS_DST%"&#x0D;&#x0A;  xcopy /E /I /Y "%MAP_PARTS_SRC%" "%MAP_PARTS_DST%\"&#x0D;&#x0A;) else (&#x0D;&#x0A;  echo [WARN] マップパーツ画像のコピー元が見つかりませんでした: "%MAP_PARTS_SRC%"&#x0D;&#x0A;)&#x0D;&#x0A;if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -2,6 +2,8 @@
 
 ブラウザ版管理画面では、マップパーツ画像を <code>SboSvr/webroot/assets/map-parts</code> 配下から読み込みます。元の MFC 版と同じ PNG を再利用しますが、リポジトリには追加しない方針のため、ビルド工程でコピーする運用を行ってください。
 
+2024 年時点では、SboSvr.vcxproj のビルド後イベントにより <code>SboGrpData/res/MapParts</code> → <code>SboSvr/webroot/assets/map-parts</code> へのコピーが自動化されています。ソースフォルダが存在しない場合は警告のみ表示されるため、開発環境に必要な PNG をあらかじめ配置しておいてください。
+
 ## 前提
 
 - 32×32 / 32×48 などのパーツ PNG は、リポジトリ外または既存の <code>SboGrpData/res</code> などに保管しておく。
@@ -31,8 +33,10 @@ python tools/sync_map_parts_assets.py --clean
 
 ## ビルド手順への組み込み例
 
-1. 既存のアセットリポジトリやファイルサーバーから PNG を取得する。
-2. 管理サーバーをビルドする前に <code>python tools/sync_map_parts_assets.py --clean</code> を実行し、最新の PNG を <code>webroot</code> に展開する。
+1. 既存のアセットリポジトリやファイルサーバーから PNG を取得し、<code>SboGrpData/res/MapParts</code> に配置する。
+2. Visual Studio で SboSvr プロジェクトをビルドすると、ビルド後イベントにより PNG が <code>SboSvr/webroot/assets/map-parts</code> へコピーされる。
 3. Web 管理画面を配布する際は、<code>webroot/assets/map-parts</code> を含めてデプロイする。
+
+ソースが別の場所にある場合や、手動でコピー内容を確認したい場合は引き続き `tools/sync_map_parts_assets.py` を利用できます。
 
 API からマップパーツのメタデータを返せない場合でも、サンプルデータが描画されるようにしているため、まずはコピー手順のみ整備しておけば UI の確認が可能です。
