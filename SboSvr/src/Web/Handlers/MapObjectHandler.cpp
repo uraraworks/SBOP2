@@ -179,18 +179,19 @@ std::string CMapObjectListHandler::FormatHex(unsigned long value)
 
 std::string CMapObjectListHandler::ResolveWeatherLabel(unsigned long weatherType)
 {
+        // VC++ の既定文字コード (Shift_JIS) と衝突しないよう、UTF-8 を明示したエスケープシーケンスで返す。
         switch (weatherType) {
         case WEATHERTYPE_NONE:
-                return "指定なし";
+                return std::string("\xE6\x8C\x87\xE5\xAE\x9A\xE3\x81\xAA\xE3\x81\x97");
         case WEATHERTYPE_CLOUD:
-                return "雲";
+                return std::string("\xE9\x9B\xB2");
         case WEATHERTYPE_MISTY:
-                return "霧";
+                return std::string("\xE9\x9C\xA7");
         case WEATHERTYPE_SNOW:
-                return "雪";
+                return std::string("\xE9\x9B\xAA");
         default:
                 break;
         }
-        return "不明";
+        return std::string("\xE4\xB8\x8D\xE6\x98\x8E");
 }
 
