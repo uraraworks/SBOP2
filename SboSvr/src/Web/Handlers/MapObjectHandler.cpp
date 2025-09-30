@@ -13,6 +13,7 @@
 #include "Info/InfoMapBase.h"
 #include "Info/InfoMapObjectData.h"
 #include "Info/InfoMapObject.h"
+#include "myLib/myString.h"
 
 CMapObjectListHandler::CMapObjectListHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -85,7 +86,8 @@ void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMa
                 oss << "\"idHex\":null,";
         }
 
-        std::string mapName = static_cast<LPCSTR>(pMap->m_strMapName);
+        CStringA mapNameUtf8 = TStringToUtf8((LPCTSTR)pMap->m_strMapName);
+        std::string mapName = static_cast<LPCSTR>(mapNameUtf8);
         oss << "\"name\":\"" << JsonUtils::Escape(mapName) << "\",";
         oss << "\"width\":" << pMap->m_sizeMap.cx << ',';
         oss << "\"height\":" << pMap->m_sizeMap.cy << ',';
@@ -137,7 +139,8 @@ void CMapObjectListHandler::AppendObjectJson(std::ostringstream &oss, const CInf
         }
 
         if (pObject != NULL) {
-                std::string objectName = static_cast<LPCSTR>(pObject->m_strName);
+                CStringA objectNameUtf8 = TStringToUtf8((LPCTSTR)pObject->m_strName);
+                std::string objectName = static_cast<LPCSTR>(objectNameUtf8);
                 oss << ",\"name\":\"" << JsonUtils::Escape(objectName) << "\"";
                 oss << ",\"attribute\":" << pObject->m_dwAttr;
                 std::string attributeHex = FormatHex(pObject->m_dwAttr);
