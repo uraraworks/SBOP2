@@ -216,7 +216,7 @@ DWORD CInfoFishing::ReadElementData(
 	case 0:		pDst = (PBYTE)&m_dwFishingID;		break;	/* 釣りID */
 	case 1:		pDst = (PBYTE)&m_nAverage;			break;	/* 釣れる確率 */
 	case 2:		/* 釣り場名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 3:		/* 釣り情報パラメータ数 */

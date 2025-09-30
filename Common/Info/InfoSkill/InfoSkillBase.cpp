@@ -214,7 +214,7 @@ DWORD CInfoSkillBase::ReadElementData(
 	case 4: pDst = (PBYTE)&m_nTypeSub;	dwSize = sizeof (m_nTypeSub);	break;	/* スキル種別(サブ) */
 	case 5: pDst = (PBYTE)&m_nUse;		dwSize = sizeof (m_nUse);		break;	/* 使用制限 */
 	case 6:		/* スキル名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 7:		/* 派生データ */

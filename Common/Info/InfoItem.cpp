@@ -233,7 +233,7 @@ DWORD CInfoItem::ReadElementData(
 	case 8:		pDst = (PBYTE)&m_ptPos;				dwSize = sizeof (m_ptPos);			break;	/* 落ちている座標 */
 	case 9:		pDst = (PBYTE)&m_ptBackPack;		dwSize = sizeof (m_ptBackPack);		break;	/* バックパック内の位置 */
 	case 10:	/* アイテム名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 11:	pDst = (PBYTE)&m_dwDropSoundID;		dwSize = sizeof (m_dwDropSoundID);	break;	/* 落ちたときの効果音ID */

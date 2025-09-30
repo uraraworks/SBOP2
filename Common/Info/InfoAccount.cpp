@@ -257,15 +257,15 @@ DWORD CInfoAccount::ReadElementData(
 		break;
 	case 7:	pDst = (PBYTE)&m_nAdminLevel;		dwSize = sizeof (m_nAdminLevel);		break;
 	case 8:
-		m_strAccount = (LPCSTR)pSrc;
+		m_strAccount = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 9:
-		m_strPassword = (LPCSTR)pSrc;
+		m_strPassword = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 10:
-		m_strMacAddr = (LPCSTR)pSrc;
+		m_strMacAddr = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	}

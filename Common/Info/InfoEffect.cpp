@@ -307,7 +307,7 @@ DWORD CInfoEffect::ReadElementData(
 	case 4:	pDst = (PBYTE)&m_bLoopSound;	dwSize = sizeof (m_bLoopSound);		break;	/* ループ時に効果音を再生する */
 	case 5:	pDst = (PBYTE)&m_dwGrpIDMain;	dwSize = sizeof (m_dwGrpIDMain);	break;	/* 画像メインID */
 	case 6: 																		  	/* エフェクト名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	default:

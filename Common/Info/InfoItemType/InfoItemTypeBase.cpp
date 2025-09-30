@@ -268,7 +268,7 @@ DWORD CInfoItemTypeBase::ReadElementData(
 	case 6:		pDst = (PBYTE)&m_dwGrpID;			dwSize = sizeof (m_dwGrpID);		break;	/* 地面にある時の画像ID */
 	case 7:		pDst = (PBYTE)&m_dwIconGrpID;		dwSize = sizeof (m_dwIconGrpID);	break;	/* バックパック内の画像ID */
 	case 8:		/* アイテム名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 9:		pDst = (PBYTE)&m_dwDropSoundID;		dwSize = sizeof (m_dwDropSoundID);		break;	/* 落ちたときの効果音ID */

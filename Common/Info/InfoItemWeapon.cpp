@@ -224,7 +224,7 @@ DWORD CInfoItemWeapon::ReadElementData(
 	case 2:		pDst = (PBYTE)&m_dwMotionTypeStand;			break;	/* 戦闘モード中の立ちモーション */
 	case 3:		pDst = (PBYTE)&m_dwMotionTypeWalk;			break;	/* 戦闘モード中のすり足モーション */
 	case 4:		/* 武器種別名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 5:		/* 通常攻撃時のエフェクトID */

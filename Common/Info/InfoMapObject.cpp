@@ -263,7 +263,7 @@ DWORD CInfoMapObject::ReadElementData(
 	case 3:		pDst = (PBYTE)&m_sizeGrp;		dwSize = sizeof (m_sizeGrp);		break;		/* 画像サイズ */
 	case 4:		pDst = (PBYTE)&m_bHit;			dwSize = sizeof (m_bHit);			break;		/* 当たり判定 */
 	case 5:		/* オブジェクト名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 6:		/* 当たり判定データ */

@@ -78,7 +78,8 @@ void StoreRenew(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos)
                 pPos ++;
                 return;
         }
-        strDst = pszSrc;
+        CString strConverted = AnsiToTString (pszSrc, 932);
+        strDst = (LPCTSTR)strConverted;
         pPos += (strlen (pszSrc) + 1);
 }
 

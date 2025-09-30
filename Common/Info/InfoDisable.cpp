@@ -174,7 +174,7 @@ DWORD CInfoDisable::ReadElementData(
 	switch (nNo) {
 	case 0:		pDst = (PBYTE)&m_dwDisableID;	dwSize = sizeof (m_dwDisableID);	break;	/* 拒否情報ID */
 	case 1:		/* MACアドレス */
-		m_strMacAddress = (LPCSTR)pSrc;
+		m_strMacAddress = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	}

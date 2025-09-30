@@ -209,7 +209,7 @@ DWORD CInfoEfcBalloon::ReadElementData(
 	case 5:		pDst = (PBYTE)&m_dwSoundID;			dwSize = sizeof (m_dwSoundID);		break;	/* 効果音ID */
 	case 6:		pDst = (PBYTE)&m_dwGrpID;			dwSize = sizeof (m_dwGrpID);		break;	/* 画像ID */
 	case 7: 																				  	/* 噴出し名 */
-		m_strName = (LPCSTR)pSrc;
+		m_strName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	}
