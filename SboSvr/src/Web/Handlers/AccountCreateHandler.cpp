@@ -9,7 +9,7 @@
 #include <sstream>
 
 #include "Web/JsonUtils.h"
-#include "Handlers/AdminRolesHandler.h"
+#include "AdminRolesHandler.h"
 #include "MgrData.h"
 #include "SBOGlobal.h"
 #include "GlobalDefine.h"

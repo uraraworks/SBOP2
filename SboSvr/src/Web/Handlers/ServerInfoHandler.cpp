@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include <ctime>
 #include <cstdio>
 #include <iomanip>
@@ -84,8 +85,8 @@ std::string CServerInfoHandler::BuildMetricsJson(bool includeMetrics, unsigned i
                 return "\"metrics\":null";
         }
 
-        double cpuUsage = std::min(95.0, 20.0 + static_cast<double>(nOnlinePlayers) * 1.5);
-        double memoryUsage = std::min(92.0, 30.0 + static_cast<double>(nOnlinePlayers) * 1.3);
+        double cpuUsage = std::fmin(95.0, 20.0 + static_cast<double>(nOnlinePlayers) * 1.5);
+        double memoryUsage = std::fmin(92.0, 30.0 + static_cast<double>(nOnlinePlayers) * 1.3);
         double latency = 18.0 + static_cast<double>(nOnlinePlayers) * 0.4;
 
         std::ostringstream metrics;
@@ -107,7 +108,7 @@ std::string CServerInfoHandler::ResolveDisplayName(const std::string &locale) co
         });
 
         if ((lowered == "ja-jp") || (lowered == "ja")) {
-                return "メインワールド";
+                return "Main World JP";
         }
         return "Main World";
 }
