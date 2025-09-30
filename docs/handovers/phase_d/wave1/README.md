@@ -7,13 +7,14 @@ Wave 1（サーバー情報、アカウント追加、管理者権限設定）�
 | 機能概要書 | [20240415_Wave1_機能概要書](20240415_functional_overview.md) | Draft | 2024-04-15 | Dev (YYYY) |
 | API 定義リンク集 | [20240415_Wave1_API定義リンク集](20240415_api_links.md) | Draft | 2024-04-15 | サーバー担当 (AAAA) |
 | テスト結果サマリー | [20240415_Wave1_テスト結果サマリー](20240415_test_plan.md) | Draft | 2024-04-15 | QA (CCCC) |
+| QA チェックリスト | [20240415_Wave1_QAチェックリスト](20240415_qa_checklist.md) | Draft | 2024-04-16 | QA (CCCC) |
 | 運用手順書 | [20240415_Wave1_運用手順書](20240415_operations_runbook.md) | Draft | 2024-04-15 | Ops (BBBB) |
 | リスク/アクションログ | [20240415_Wave1_リスク対応記録](20240415_risk_log.md) | Draft | 2024-04-15 | PO (XXXX) |
 
 ## アクションアイテム
 - [x] 詳細設計ワークショップ議事録を追加
 - [x] `/api/server` OpenAPI ドラフトへのリンクを追記
-- [ ] QA チェックリストを `shared/` 配下のテンプレートから複製して更新
+- [x] QA チェックリストを `shared/` 配下のテンプレートから複製して更新
 
 ## 補足資料
 - [20240415 Wave 1 詳細設計ワークショップ議事録](20240415_workshop_minutes.md)

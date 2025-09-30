@@ -10,7 +10,7 @@ Wave 1 のサーバー情報表示・アカウント追加・ロール更新機�
 ## 2. リリース前チェック
 1. `admin_web` コンテナの環境変数 `FEATURE_WEB_ADMIN_WAVE1` が `true` であること。
 2. OpenAPI スキーマと実装の差分確認 (`tools/scripts/check_api_diff.ps1` を暫定利用)。
-3. 管理者ロール `SERVER_ADMIN`, `ACCOUNT_OPERATOR`, `ROLE_MANAGER` のマッピングが Identity サービスに登録済み。
+3. 管理者ロール `SERVER_ADMIN`, `ACCOUNT_CREATE`, `ROLE_UPDATE` のマッピングが Identity サービスに登録済み。
 
 ## 3. 通常運用フロー
 1. **サーバー情報監視**: `/api/server` から取得したメトリクスを Grafana ダッシュボードに転送し、閾値超過時に Ops PagerDuty へ通知。
@@ -26,7 +26,7 @@ Wave 1 のサーバー情報表示・アカウント追加・ロール更新機�
 ## 5. 障害対応 FAQ
 - **API 503 が継続する場合**: `CMgrData` サービスのヘルスチェックを確認し、再起動。改善しない場合は Failback を実施。
 - **アカウント登録が 409 で失敗**: 既存アカウントの重複。CS チームに既存アカウントの利用を案内。
-- **ロール更新が 409**: 排他制約違反。`ROLE_MANAGER` ロールが他アカウントに付与済みの可能性。棚卸し結果を確認。
+- **ロール更新が 409**: 排他制約違反。`SERVER_ADMIN` ロールが他アカウントに付与済みの可能性。棚卸し結果を確認。
 
 ## 6. 連絡先
 - 当番 Ops: ops-oncall@example.com

@@ -3,6 +3,10 @@
 
 #include <cstdlib>
 #include <sstream>
+#include <cstdio>
+#if defined(_WIN32)
+#include <windows.h>
+#endif
 
 #include "Web/JsonUtils.h"
 #include "MgrData.h"
@@ -86,6 +90,13 @@ void CAdminRolesUpdateHandler::Handle(const HttpRequest &request, HttpResponse &
                 return;
         }
 
+        std::string comment;
+        if (!ParseComment(request.body, comment)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_comment\"}");
+                return;
+        }
+
         if (!ValidateRoles(roles)) {
                 response.statusLine = "HTTP/1.1 400 Bad Request";
                 response.SetJsonBody("{\"error\":\"unknown_role\"}");
@@ -103,11 +114,27 @@ void CAdminRolesUpdateHandler::Handle(const HttpRequest &request, HttpResponse &
                 return;
         }
 
+        std::string conflictRole;
+        if (!ValidateExclusiveConstraints(pAccountLib, dwAccountId, nAdminLevel, conflictRole)) {
+                pAccountLib->Leave();
+                response.statusLine = "HTTP/1.1 409 Conflict";
+                if (!conflictRole.empty()) {
+                        std::ostringstream oss;
+                        oss << "{\"error\":\"role_conflict\",\"conflictRole\":\"" << JsonUtils::Escape(conflictRole) << "\"}";
+                        response.SetJsonBody(oss.str());
+                } else {
+                        response.SetJsonBody("{\"error\":\"role_conflict\"}");
+                }
+                return;
+        }
+
         pAccount->m_nAdminLevel = nAdminLevel;
         pAccountLib->Leave();
 
         response.statusLine = "HTTP/1.1 204 No Content";
         response.body.clear();
+
+        EmitAuditTrace(dwAccountId, roles, comment);
 }
 
 CLibInfoAccount *CAdminRolesUpdateHandler::GetAccountLibrary() const
@@ -158,6 +185,23 @@ bool CAdminRolesUpdateHandler::ParseRoles(const std::string &body, std::vector<s
         return JsonUtils::TryGetStringArray(body, "roles", outRoles);
 }
 
+bool CAdminRolesUpdateHandler::ParseComment(const std::string &body, std::string &outComment) const
+{
+        outComment.clear();
+        if (JsonUtils::FindKey(body, "comment") == std::string::npos) {
+                return true;
+        }
+        if (!JsonUtils::TryGetString(body, "comment", outComment)) {
+                outComment.clear();
+                return false;
+        }
+        if (outComment.size() > 256) {
+                outComment.clear();
+                return false;
+        }
+        return true;
+}
+
 bool CAdminRolesUpdateHandler::ValidateRoles(const std::vector<std::string> &roles) const
 {
         for (std::vector<std::string>::const_iterator it = roles.begin(); it != roles.end(); ++it) {
@@ -183,5 +227,48 @@ int CAdminRolesUpdateHandler::DetermineAdminLevel(const std::vector<std::string>
                 }
         }
         return ADMINLEVEL_NONE;
+}
+
+bool CAdminRolesUpdateHandler::ValidateExclusiveConstraints(CLibInfoAccount *pAccountLib, DWORD dwAccountId, int nAdminLevel, std::string &outConflictRole) const
+{
+        outConflictRole.clear();
+        if ((pAccountLib == NULL) || (nAdminLevel != ADMINLEVEL_ALL)) {
+                return true;
+        }
+
+        int nCount = pAccountLib->GetCount();
+        for (int i = 0; i < nCount; ++i) {
+                PCInfoAccount pOther = static_cast<PCInfoAccount>(pAccountLib->GetPtr(i));
+                if ((pOther == NULL) || (pOther->m_dwAccountID == dwAccountId)) {
+                        continue;
+                }
+                if (pOther->m_nAdminLevel == ADMINLEVEL_ALL) {
+                        outConflictRole = "SERVER_ADMIN";
+                        return false;
+                }
+        }
+        return true;
+}
+
+void CAdminRolesUpdateHandler::EmitAuditTrace(DWORD dwAccountId, const std::vector<std::string> &roles, const std::string &comment) const
+{
+        if (comment.empty()) {
+                return;
+        }
+
+        std::ostringstream oss;
+        oss << "[AdminRoles] accountId=" << dwAccountId << " roles=";
+        for (size_t i = 0; i < roles.size(); ++i) {
+                if (i > 0) {
+                        oss << '|';
+                }
+                oss << roles[i];
+        }
+        oss << " comment=" << comment;
+#if defined(_WIN32)
+        OutputDebugStringA(oss.str().c_str());
+#else
+        std::fprintf(stderr, "%s\n", oss.str().c_str());
+#endif
 }
 

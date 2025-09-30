@@ -23,7 +23,8 @@
 
 ## 3. 宿題事項
 - [ ] Ops: 監査ログの保持期間（90日 vs 180日）についてセキュリティチームと調整。
-- [ ] Dev: `/api/admin/roles` の排他制約パターン（`ROLE_UPDATE` vs `ACCOUNT_LOCK`) を定義。
+- [x] Dev: `/api/admin/roles` の排他制約パターン（`ROLE_UPDATE` vs `ACCOUNT_LOCK`) を定義。
+  - Wave 1 では `SERVER_ADMIN` ロールを単一アカウントに制限し、2 件目以降は 409 (`conflictRole=SERVER_ADMIN`) を返す方針で合意。
 - [ ] QA: アカウント作成のバリデーションパターンテストケースを洗い出し、テストサマリーに追記。
 
 ## 4. リスク・懸念

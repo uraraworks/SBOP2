@@ -38,8 +38,11 @@ private:
         CLibInfoAccount *GetAccountLibrary() const;
         bool ParseAccountId(const std::string &path, DWORD &outAccountId) const;
         bool ParseRoles(const std::string &body, std::vector<std::string> &outRoles) const;
+        bool ParseComment(const std::string &body, std::string &outComment) const;
         int DetermineAdminLevel(const std::vector<std::string> &roles) const;
         bool ValidateRoles(const std::vector<std::string> &roles) const;
+        bool ValidateExclusiveConstraints(CLibInfoAccount *pAccountLib, DWORD dwAccountId, int nAdminLevel, std::string &outConflictRole) const;
+        void EmitAuditTrace(DWORD dwAccountId, const std::vector<std::string> &roles, const std::string &comment) const;
         CMgrData *m_pMgrData;
 };
 

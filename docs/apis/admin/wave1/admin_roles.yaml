@@ -62,7 +62,7 @@ paths:
         '404':
           description: 指定アカウントが存在しない。
         '409':
-          description: ロールの排他制約違反。
+          description: ロールの排他制約違反。`SERVER_ADMIN` は同時に 1 アカウントのみ保持できる。
       security:
         - cookieAuth: []
 components:
