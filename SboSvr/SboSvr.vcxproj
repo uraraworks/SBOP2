@@ -261,8 +261,12 @@
     <ClCompile Include="src\UpdateServerInfo.cpp" />
     <ClCompile Include="src\Web\ApiRouter.cpp" />
     <ClCompile Include="src\Web\Handlers\HealthHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
     <ClCompile Include="src\Web\HttpServer.cpp" />
     <ClCompile Include="src\Web\HttpTypes.cpp" />
+    <ClCompile Include="src\Web\JsonUtils.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -370,8 +374,12 @@
     <ClInclude Include="src\Web\ApiHandler.h" />
     <ClInclude Include="src\Web\ApiRouter.h" />
     <ClInclude Include="src\Web\Handlers\HealthHandler.h" />
+    <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h" />
+    <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
+    <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
     <ClInclude Include="src\Web\HttpServer.h" />
     <ClInclude Include="src\Web\HttpTypes.h" />
+    <ClInclude Include="src\Web\JsonUtils.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>

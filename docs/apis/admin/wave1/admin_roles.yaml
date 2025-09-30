@@ -1,0 +1,105 @@
+openapi: 3.0.3
+info:
+  title: Admin Web - 管理者ロール設定 API
+  version: 0.1.0
+  description: |
+    管理者の権限ロールを参照・更新する Wave 1 API。フィーチャーフラグで公開を制御する。
+  contact:
+    name: Admin Platform Team
+servers:
+  - url: https://admin.example.com
+  - url: https://stg-admin.example.com
+paths:
+  /api/admin/roles:
+    get:
+      summary: 付与可能ロール一覧取得
+      operationId: listAssignableRoles
+      tags:
+        - role
+      description: フロントエンドのロール選択ドロップダウンを初期化する。
+      responses:
+        '200':
+          description: ロール一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+        '401':
+          description: 未認証
+        '403':
+          description: 権限不足。`ROLE_VIEW` が必要。
+    put:
+      summary: アカウントのロール更新
+      operationId: updateAccountRoles
+      tags:
+        - role
+      description: 指定したアカウントの権限ロールを更新する。履歴は監査ログに記録される。
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          description: 権限を更新するアカウントID。
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRolesRequest'
+      responses:
+        '204':
+          description: 更新成功。本文なし。
+        '400':
+          description: リクエスト形式不正。
+        '401':
+          description: 未認証。
+        '403':
+          description: 権限不足。`ROLE_UPDATE` が必要。
+        '404':
+          description: 指定アカウントが存在しない。
+        '409':
+          description: ロールの排他制約違反。
+      security:
+        - cookieAuth: []
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: SESSID
+  schemas:
+    Role:
+      type: object
+      required: [id, name, description]
+      properties:
+        id:
+          type: string
+          example: SERVER_ADMIN
+        name:
+          type: string
+          example: サーバー管理者
+        description:
+          type: string
+          example: サーバー状態確認と再起動権限を持つ。
+        featureFlags:
+          type: array
+          items:
+            type: string
+          description: ロールが参照するフィーチャーフラグ。
+    UpdateRolesRequest:
+      type: object
+      required: [roles]
+      properties:
+        roles:
+          type: array
+          items:
+            type: string
+          description: 新しく付与するロールID一覧。
+        comment:
+          type: string
+          maxLength: 256
+          description: 更新理由（監査ログ出力用）。

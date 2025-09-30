@@ -10,6 +10,10 @@
 
 #include "HttpTypes.h"
 #include "Handlers/HealthHandler.h"
+#include "Handlers/ServerInfoHandler.h"
+#include "Handlers/AccountCreateHandler.h"
+#include "Handlers/AdminRolesHandler.h"
+#include "MgrData.h"
 
 CHttpServer::CHttpServer()
         : m_hListen(INVALID_SOCKET)
@@ -19,6 +23,7 @@ CHttpServer::CHttpServer()
         , m_hStartedEvent(NULL)
         , m_bInitSucceeded(false)
         , m_bHandlersRegistered(false)
+        , m_pMgrData(NULL)
 {
         ZeroMemory(&m_wsaData, sizeof(m_wsaData));
 }
@@ -91,6 +96,11 @@ void CHttpServer::Stop()
                 CloseHandle(m_hStartedEvent);
                 m_hStartedEvent = NULL;
         }
+}
+
+void CHttpServer::SetMgrData(CMgrData *pMgrData)
+{
+        m_pMgrData = pMgrData;
 }
 
 unsigned __stdcall CHttpServer::ThreadProc(void *lpParam)
@@ -407,5 +417,18 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> healthHandler(new CHealthHandler());
         m_router.Register("GET", "/health", std::move(healthHandler));
+
+        std::unique_ptr<IApiHandler> serverHandler(new CServerInfoHandler(m_pMgrData));
+        m_router.Register("GET", "/api/server", std::move(serverHandler));
+
+        std::unique_ptr<IApiHandler> accountCreateHandler(new CAccountCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/accounts", std::move(accountCreateHandler));
+
+        std::unique_ptr<IApiHandler> rolesListHandler(new CAdminRolesListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/admin/roles", std::move(rolesListHandler));
+
+        std::unique_ptr<IApiHandler> rolesUpdateHandler(new CAdminRolesUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/admin/roles", std::move(rolesUpdateHandler));
+
         m_bHandlersRegistered = true;
 }

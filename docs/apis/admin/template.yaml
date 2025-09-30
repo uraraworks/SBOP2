@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: SBO 管理者向け API - テンプレート
+  description: |
+    フェーズDで実装する管理者向け REST API のベーステンプレートです。
+    新規ファイル作成時は `title` と `description` を対象機能に合わせて編集し、`version` は `v1` から開始してください。
+  version: v1
+servers:
+  - url: https://admin.example.com/api
+    description: 本番環境
+  - url: https://stg-admin.example.com/api
+    description: ステージング環境
+  - url: http://localhost:18080/api
+    description: ローカル開発環境 (`SboSvr.ini` の `HttpPort` に合わせて変更)
+security:
+  - basicAuth: []
+tags:
+  - name: server
+    description: サーバー状態および設定に関する操作
+  - name: accounts
+    description: アカウント作成と管理者権限設定
+  - name: audit
+    description: 操作ログおよび監査関連のエンドポイント
+paths:
+  /server:
+    get:
+      tags: [server]
+      summary: サーバー情報を取得
+      operationId: getServerStatus
+      responses:
+        '200':
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerStatus'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+      security:
+        - basicAuth: []
+  /accounts:
+    post:
+      tags: [accounts]
+      summary: 新規アカウントを作成
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreateRequest'
+      responses:
+        '201':
+          description: 作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountCreateResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '409':
+          description: 既存ユーザーと重複
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalError'
+      security:
+        - basicAuth: []
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  responses:
+    UnauthorizedError:
+      description: 認証に失敗
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ValidationError:
+      description: バリデーションエラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+    InternalError:
+      description: サーバー内部エラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ServerStatus:
+      type: object
+      description: サーバー状態のサマリー
+      properties:
+        name:
+          type: string
+          description: サーバー識別子
+        status:
+          type: string
+          description: 稼働状態。`online` / `maintenance` / `offline`
+        currentPlayers:
+          type: integer
+          format: int32
+          description: 現在の接続プレイヤー数
+        maxPlayers:
+          type: integer
+          format: int32
+          description: 設定上の最大接続数
+        lastUpdated:
+          type: string
+          format: date-time
+          description: 情報更新日時 (UTC)
+      required: [name, status, currentPlayers, maxPlayers, lastUpdated]
+    AccountCreateRequest:
+      type: object
+      properties:
+        accountName:
+          type: string
+          description: 新規アカウントID
+        displayName:
+          type: string
+          description: 管理画面表示名
+        email:
+          type: string
+          format: email
+        roles:
+          type: array
+          description: 付与するロール一覧
+          items:
+            type: string
+        temporaryPassword:
+          type: string
+          description: 発行する仮パスワード
+      required: [accountName, roles]
+    AccountCreateResponse:
+      type: object
+      properties:
+        accountId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        temporaryPassword:
+          type: string
+          description: 発行した仮パスワード（表示する場合）
+      required: [accountId, createdAt]
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: `SBO-` から始まるエラーコード
+        message:
+          type: string
+        traceId:
+          type: string
+          description: 監査ログと紐付けるトレース ID
+      required: [code, message]
+    ValidationError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            details:
+              type: array
+              description: フィールド単位のエラー内容
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
+                  code:
+                    type: string
+                      

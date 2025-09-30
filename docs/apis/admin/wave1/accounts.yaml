@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Admin Web - アカウント登録 API
+  version: 0.1.0
+  description: |
+    フェーズD Wave 1で Web 管理画面から新規ゲームアカウントを登録するための API。
+    MFCクライアントで提供していた `PacketADMIN_ACCOUNT_ADD` に対応する。
+  contact:
+    name: Admin Platform Team
+servers:
+  - url: https://admin.example.com
+  - url: https://stg-admin.example.com
+paths:
+  /api/accounts:
+    post:
+      summary: 新規アカウント作成
+      operationId: createAccount
+      tags:
+        - account
+      description: |
+        認証済みの管理者が新規ゲームアカウントを作成する。パスワードはサーバー側でハッシュ化される。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+      responses:
+        '201':
+          description: アカウント作成完了
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResource'
+        '400':
+          description: バリデーションエラー。フィールドごとの詳細を返却。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: 未認証。
+        '403':
+          description: 権限不足。`ACCOUNT_CREATE` 権限が必要。
+        '409':
+          description: 既存アカウントと重複。
+        '422':
+          description: パスワードポリシー違反。
+      security:
+        - cookieAuth: []
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: SESSID
+  schemas:
+    CreateAccountRequest:
+      type: object
+      required: [loginId, password, displayName, roles]
+      properties:
+        loginId:
+          type: string
+          minLength: 4
+          maxLength: 32
+        password:
+          type: string
+          format: password
+          description: クライアント側ではマスキングのみ実施。
+        displayName:
+          type: string
+          maxLength: 64
+        email:
+          type: string
+          format: email
+          nullable: true
+        roles:
+          type: array
+          items:
+            type: string
+          description: 付与する管理ロールID。
+    AccountResource:
+      type: object
+      required: [accountId, loginId, displayName, createdAt]
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        loginId:
+          type: string
+        displayName:
+          type: string
+        email:
+          type: string
+          nullable: true
+        roles:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      required: [error, details]
+      properties:
+        error:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            required: [field, message]
+            properties:
+              field:
+                type: string
+              message:
+                type: string

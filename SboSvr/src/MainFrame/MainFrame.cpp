@@ -403,8 +403,12 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 	m_dwServerStartTime = timeGetTime ();
 
-	m_pMgrData->Create (this, m_pSock);
-	m_pMgrData->Load ();
+        m_pMgrData->Create (this, m_pSock);
+        m_pMgrData->Load ();
+
+        if (m_pHttpServer) {
+                m_pHttpServer->SetMgrData (m_pMgrData);
+        }
 
 	wPort = m_pMgrData->GetPort ();
         wHttpPort = m_pMgrData->GetHttpPort ();
