@@ -15,12 +15,18 @@ Wave ディレクトリは必要になったタイミングで作成してくだ
 2. **バージョン管理**: 破壊的変更を伴う場合はバージョン番号をインクリメントし、旧ファイルを残したまま `deprecated: true` を設定して移行手順を記述します。
 3. **レビュー手順**:
    - OpenAPI 仕様の Pull Request には必ず対応するサーバー実装およびテストコードを含めること。
-   - `tools/scripts/validate_openapi.ps1`（後日追加予定）でスキーマ検証を行い、結果ログを PR に添付します。
+   - `tools/scripts/validate_openapi.ps1` でスキーマ検証を行い、`docs/apis/validation_logs/` に保存したログへのリンクを PR に添付します。
 4. **共通セクション**: すべてのファイルで `info`, `servers`, `tags`, `components`（共通レスポンス/エラー）を定義してください。テンプレートに用意した要素を削除せず上書きする形で利用します。
 5. **成果物保管**: リリース判定に用いた OpenAPI ファイルは `docs/handovers/phase_d/` の成果物一覧にリンクを追加し、参照できるようにします。
 
+## OpenAPI 検証手順
+1. `pwsh` でリポジトリルートに移動します。
+2. `tools/scripts/validate_openapi.ps1` を実行します。例: `pwsh tools/scripts/validate_openapi.ps1`
+3. すべての OpenAPI ファイルが自動で検証され、結果は `docs/apis/validation_logs/` 配下に JSON 形式で保存されます。
+4. 失敗した場合はログを参照し、修正後に再実行してください。`-FailFast` パラメータを付与すると最初の失敗で処理を終了します。
+
 ## 今後の ToDo
-- `tools/scripts/validate_openapi.ps1` の実装と CI 連携。
+- `tools/scripts/validate_openapi.ps1` を CI パイプラインに組み込み、Pull Request で自動実行する。
 - Wave 1 API のスキーマを基にしたモックサーバー定義と統合テストケースの追加。
 - OpenAPI 仕様に基づく自動テスト（Newman/Rest CLI）のテストケースを `tests/api/` 配下に用意し、CI で実行する。
 

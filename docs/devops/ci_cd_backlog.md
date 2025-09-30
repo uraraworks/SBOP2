@@ -34,6 +34,7 @@
 4. フロントエンド用のプレースホルダーディレクトリ `web-ui/` と `package.json` の雛形を追加し、`frontend-assets` パイプラインの雛形を作る。
 5. ステージング向けの PowerShell デプロイスクリプト `tools/scripts/deploy_staging.ps1` を作成し、`deployment-smoke` から呼び出す。
 6. Runbook（`docs/runbooks/local_dev.md`）に CI/CD 実行フローと開発者向けチェックリストを追記する。
+7. OpenAPI Lint ステップとして `tools/scripts/validate_openapi.ps1` を `build-and-test` ワークフローへ追加し、検証ログをアーティファクト化する。
 
 ## 5. 依存関係と注意点
 - C++ ビルドは Windows ベースのエージェントを想定しているため、`runs-on: windows-latest` と `runs-on: ubuntu-latest` の両方で検証する必要がある。
