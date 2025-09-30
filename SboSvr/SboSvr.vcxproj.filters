@@ -129,10 +129,25 @@
     <ClCompile Include="src\Web\Handlers\HealthHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\HttpServer.cpp">
       <Filter>Source Files\Web</Filter>
     </ClCompile>
     <ClCompile Include="src\Web\HttpTypes.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\JsonUtils.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\AuthProvider.cpp">
       <Filter>Source Files\Web</Filter>
     </ClCompile>
     <ClCompile Include="..\common\crc.cpp">
@@ -464,10 +479,25 @@
     <ClInclude Include="src\Web\Handlers\HealthHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Web\HttpServer.h">
       <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\HttpTypes.h">
+      <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\JsonUtils.h">
+      <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\AuthProvider.h">
       <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="..\common\crc.h">

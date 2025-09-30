@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: Admin Web - サーバー情報 API
+  version: 0.1.0
+  description: |
+    フェーズD Wave 1で提供するサーバー情報ダッシュボード用 API。
+    ゲームワールドサーバーの状態を取得し、管理画面のトップカードに表示する。
+  contact:
+    name: Admin Platform Team
+    email: admin-platform@example.com
+servers:
+  - url: https://admin.example.com
+    description: 本番環境
+  - url: https://stg-admin.example.com
+    description: ステージング
+paths:
+  /api/server:
+    get:
+      summary: サーバー群のステータス一覧取得
+      operationId: listServers
+      tags:
+        - server
+      description: |
+        管理画面トップのサーバー情報カードで利用する。サーバー種別ごとに直近更新情報を返却する。
+      parameters:
+        - name: includeMetrics
+          in: query
+          description: CPU/メモリなどのパフォーマンスメトリクスを含めるかどうか。
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: locale
+          in: query
+          description: メッセージのローカライズに利用する言語コード (ja-JP / en-US)。
+          required: false
+          schema:
+            type: string
+            enum: [ja-JP, en-US]
+      responses:
+        '200':
+          description: 正常にサーバー情報を取得
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [updatedAt, items]
+                properties:
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: サーバー情報の取得時刻。
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServerCard'
+        '401':
+          description: 未認証。セッション切れまたはトークン無効。
+        '403':
+          description: 権限不足。`SERVER_VIEW` 権限を保有していない。
+        '429':
+          description: レート制限超過。最大10 req/min。
+        '503':
+          description: バックエンド (`CMgrData`) 応答なし。
+      security:
+        - cookieAuth: []
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: SESSID
+  schemas:
+    ServerCard:
+      type: object
+      required: [serverId, displayName, status, onlinePlayers]
+      properties:
+        serverId:
+          type: string
+          example: world-01
+        displayName:
+          type: string
+          example: ワールド1
+        status:
+          type: string
+          description: サーバー稼働状況。
+          enum: [ONLINE, MAINTENANCE, OFFLINE]
+        onlinePlayers:
+          type: integer
+          minimum: 0
+          description: 現在の接続プレイヤー数。
+        lastPatchVersion:
+          type: string
+          description: 適用済みのゲームバージョン。
+        metrics:
+          type: object
+          nullable: true
+          description: includeMetrics=true の場合のみ返却。
+          properties:
+            cpuUsage:
+              type: number
+              format: float
+              example: 42.1
+            memoryUsage:
+              type: number
+              format: float
+              example: 68.5
+            latencyMs:
+              type: number
+              format: float
+              example: 12.4

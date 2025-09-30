@@ -1,0 +1,33 @@
+# 管理系 OpenAPI ドキュメント運用ガイド
+
+本ディレクトリはフェーズDで提供する管理者向け REST API の OpenAPI 仕様書を管理するための場所です。Wave ごとにリリースする API を個別ファイルで管理し、Pull Request 単位でレビュアブルな状態を維持します。
+
+## ディレクトリ構成
+- `template.yaml`: 新規 API 定義作成時にコピーして利用するテンプレート。
+- `wave1/`: サーバー情報・アカウント・権限管理など、Wave 1 で提供する API 仕様を格納。
+- `wave2/`: キャラクター/マップ管理の API 仕様。
+- `wave3/`: 監査ログ・レポートダウンロードなど高度運用機能の API 仕様。
+
+Wave ディレクトリは必要になったタイミングで作成してください。複数 API を同一ファイルにまとめる場合でも、1 Wave あたり 1 サブディレクトリに収める方針です。
+
+## 運用ルール
+1. **命名規則**: ファイル名は `admin_<機能名>_v<バージョン>.yaml` とし、バージョンは `v1` から開始します。
+2. **バージョン管理**: 破壊的変更を伴う場合はバージョン番号をインクリメントし、旧ファイルを残したまま `deprecated: true` を設定して移行手順を記述します。
+3. **レビュー手順**:
+   - OpenAPI 仕様の Pull Request には必ず対応するサーバー実装およびテストコードを含めること。
+   - `tools/scripts/validate_openapi.ps1` でスキーマ検証を行い、`docs/apis/validation_logs/` に保存したログへのリンクを PR に添付します。
+4. **共通セクション**: すべてのファイルで `info`, `servers`, `tags`, `components`（共通レスポンス/エラー）を定義してください。テンプレートに用意した要素を削除せず上書きする形で利用します。
+5. **成果物保管**: リリース判定に用いた OpenAPI ファイルは `docs/handovers/phase_d/` の成果物一覧にリンクを追加し、参照できるようにします。
+
+## OpenAPI 検証手順
+1. `pwsh` でリポジトリルートに移動します。
+2. `tools/scripts/validate_openapi.ps1` を実行します。例: `pwsh tools/scripts/validate_openapi.ps1`
+3. すべての OpenAPI ファイルが自動で検証され、結果は `docs/apis/validation_logs/` 配下に JSON 形式で保存されます。
+4. 失敗した場合はログを参照し、修正後に再実行してください。`-FailFast` パラメータを付与すると最初の失敗で処理を終了します。
+
+## 今後の ToDo
+- `tools/scripts/validate_openapi.ps1` を CI パイプラインに組み込み、Pull Request で自動実行する。
+- Wave 1 API のスキーマを基にしたモックサーバー定義と統合テストケースの追加。
+- OpenAPI 仕様に基づく自動テスト（Newman/Rest CLI）のテストケースを `tests/api/` 配下に用意し、CI で実行する。
+
+以上。

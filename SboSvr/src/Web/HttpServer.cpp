@@ -7,9 +7,110 @@
 #include <process.h>
 #include <cctype>
 #include <memory>
+#include <cstdlib>
 
 #include "HttpTypes.h"
 #include "Handlers/HealthHandler.h"
+#include "Handlers/ServerInfoHandler.h"
+#include "Handlers/AccountCreateHandler.h"
+#include "Handlers/AdminRolesHandler.h"
+#include "MgrData.h"
+
+namespace
+{
+const size_t kMaxHeaderSize = 8192;
+const size_t kMaxBodySize = 65536;
+
+std::string TrimCopy(const std::string &text)
+{
+        size_t nStart = 0;
+        while ((nStart < text.size()) && std::isspace(static_cast<unsigned char>(text[nStart]))) {
+                ++nStart;
+        }
+
+        size_t nEnd = text.size();
+        while ((nEnd > nStart) && std::isspace(static_cast<unsigned char>(text[nEnd - 1]))) {
+                --nEnd;
+        }
+
+        return text.substr(nStart, nEnd - nStart);
+}
+
+bool EqualsIgnoreCase(const std::string &lhs, const char *pszRhs)
+{
+        if (pszRhs == NULL) {
+                return false;
+        }
+        size_t nLen = lhs.size();
+        for (size_t i = 0; i < nLen; ++i) {
+                unsigned char chL = static_cast<unsigned char>(lhs[i]);
+                unsigned char chR = static_cast<unsigned char>(pszRhs[i]);
+                if (chR == '\0') {
+                        return false;
+                }
+                int upperL = std::toupper(static_cast<unsigned char>(chL));
+                int upperR = std::toupper(static_cast<unsigned char>(chR));
+                if (upperL != upperR) {
+                        return false;
+                }
+        }
+        return pszRhs[nLen] == '\0';
+}
+
+enum ContentLengthParseResult
+{
+        ContentLengthNotPresent,
+        ContentLengthValid,
+        ContentLengthInvalid
+};
+
+ContentLengthParseResult TryParseContentLength(const std::string &request, size_t nHeaderEnd, size_t &outLength)
+{
+        outLength = 0;
+        if (nHeaderEnd == std::string::npos) {
+                return ContentLengthNotPresent;
+        }
+
+        size_t nLineStart = request.find("\r\n");
+        if (nLineStart == std::string::npos) {
+                return ContentLengthNotPresent;
+        }
+        nLineStart += 2; /* skip request line */
+
+        while (nLineStart < nHeaderEnd) {
+                size_t nLineEnd = request.find("\r\n", nLineStart);
+                if ((nLineEnd == std::string::npos) || (nLineEnd > nHeaderEnd)) {
+                        nLineEnd = nHeaderEnd;
+                }
+
+                std::string headerLine = request.substr(nLineStart, nLineEnd - nLineStart);
+                size_t nColon = headerLine.find(':');
+                if (nColon != std::string::npos) {
+                        std::string name = TrimCopy(headerLine.substr(0, nColon));
+                        if (EqualsIgnoreCase(name, "Content-Length")) {
+                                std::string value = TrimCopy(headerLine.substr(nColon + 1));
+                                if (value.empty()) {
+                                        return ContentLengthInvalid;
+                                }
+                                char *pEnd = NULL;
+                                unsigned long length = std::strtoul(value.c_str(), &pEnd, 10);
+                                if ((pEnd == NULL) || (*pEnd != '\0')) {
+                                        return ContentLengthInvalid;
+                                }
+                                outLength = static_cast<size_t>(length);
+                                return ContentLengthValid;
+                        }
+                }
+
+                if (nLineEnd >= nHeaderEnd) {
+                        break;
+                }
+                nLineStart = nLineEnd + 2;
+        }
+
+        return ContentLengthNotPresent;
+}
+}
 
 CHttpServer::CHttpServer()
         : m_hListen(INVALID_SOCKET)
@@ -19,6 +120,7 @@ CHttpServer::CHttpServer()
         , m_hStartedEvent(NULL)
         , m_bInitSucceeded(false)
         , m_bHandlersRegistered(false)
+        , m_pMgrData(NULL)
 {
         ZeroMemory(&m_wsaData, sizeof(m_wsaData));
 }
@@ -91,6 +193,11 @@ void CHttpServer::Stop()
                 CloseHandle(m_hStartedEvent);
                 m_hStartedEvent = NULL;
         }
+}
+
+void CHttpServer::SetMgrData(CMgrData *pMgrData)
+{
+        m_pMgrData = pMgrData;
 }
 
 unsigned __stdcall CHttpServer::ThreadProc(void *lpParam)
@@ -215,7 +322,7 @@ void CHttpServer::HandleAccept()
 void CHttpServer::HandleClient(SOCKET hClient)
 {
         std::string request;
-        request.reserve(512);
+        request.reserve(1024);
 
         char szBuffer[512];
         while (request.find("\r\n\r\n") == std::string::npos) {
@@ -242,15 +349,77 @@ void CHttpServer::HandleClient(SOCKET hClient)
                 }
 
                 request.append(szBuffer, nRecv);
-                if (request.size() > 8192) {
+                if (request.size() > kMaxHeaderSize) {
                         HttpResponse tooLarge;
-                        tooLarge.statusLine = "HTTP/1.1 413 Payload Too Large";
-                        tooLarge.SetJsonBody("{\"error\":\"request_too_large\"}");
+                        tooLarge.statusLine = "HTTP/1.1 431 Request Header Fields Too Large";
+                        tooLarge.SetJsonBody("{\"error\":\"request_headers_too_large\"}");
                         tooLarge.EnsureContentLength();
                         SendResponse(hClient, tooLarge);
                         shutdown(hClient, SD_BOTH);
                         return;
                 }
+        }
+
+        size_t nHeaderEnd = request.find("\r\n\r\n");
+        size_t nBodyStart = (nHeaderEnd == std::string::npos) ? request.size() : (nHeaderEnd + 4);
+
+        size_t nContentLength = 0;
+        ContentLengthParseResult lengthResult = TryParseContentLength(request, nHeaderEnd, nContentLength);
+        if (lengthResult == ContentLengthInvalid) {
+                HttpResponse badRequest;
+                badRequest.statusLine = "HTTP/1.1 400 Bad Request";
+                badRequest.SetJsonBody("{\"error\":\"invalid_content_length\"}");
+                badRequest.EnsureContentLength();
+                SendResponse(hClient, badRequest);
+                shutdown(hClient, SD_BOTH);
+                return;
+        }
+
+        if ((lengthResult == ContentLengthValid) && (nContentLength > kMaxBodySize)) {
+                HttpResponse tooLarge;
+                tooLarge.statusLine = "HTTP/1.1 413 Payload Too Large";
+                tooLarge.SetJsonBody("{\"error\":\"request_body_too_large\"}");
+                tooLarge.EnsureContentLength();
+                SendResponse(hClient, tooLarge);
+                shutdown(hClient, SD_BOTH);
+                return;
+        }
+
+        size_t nExistingBody = (nBodyStart < request.size()) ? (request.size() - nBodyStart) : 0;
+        if ((lengthResult == ContentLengthValid) && (nExistingBody < nContentLength)) {
+                request.reserve(nBodyStart + nContentLength);
+                while (nExistingBody < nContentLength) {
+                        size_t nRemaining = nContentLength - nExistingBody;
+                        size_t nToRead = (nRemaining < sizeof(szBuffer)) ? nRemaining : sizeof(szBuffer);
+                        int nRecv = recv(hClient, szBuffer, static_cast<int>(nToRead), 0);
+                        if (nRecv == 0) {
+                                shutdown(hClient, SD_BOTH);
+                                return;
+                        }
+
+                        if (nRecv == SOCKET_ERROR) {
+                                int nErr = WSAGetLastError();
+                                if ((nErr == WSAEINTR) || (nErr == WSAEWOULDBLOCK)) {
+                                        continue;
+                                }
+                                if (nErr == WSAETIMEDOUT) {
+                                        HttpResponse timeoutResponse;
+                                        timeoutResponse.statusLine = "HTTP/1.1 408 Request Timeout";
+                                        timeoutResponse.SetJsonBody("{\"error\":\"timeout\"}");
+                                        timeoutResponse.EnsureContentLength();
+                                        SendResponse(hClient, timeoutResponse);
+                                }
+                                shutdown(hClient, SD_BOTH);
+                                return;
+                        }
+
+                        request.append(szBuffer, nRecv);
+                        nExistingBody += static_cast<size_t>(nRecv);
+                }
+        }
+
+        if ((lengthResult == ContentLengthValid) && (nBodyStart + nContentLength < request.size())) {
+                request.resize(nBodyStart + nContentLength);
         }
 
         HttpRequest httpRequest;
@@ -367,17 +536,7 @@ bool CHttpServer::ParseHttpRequest(const std::string &rawRequest, HttpRequest &o
 
 std::string CHttpServer::Trim(const std::string &text)
 {
-        size_t nStart = 0;
-        while ((nStart < text.size()) && std::isspace(static_cast<unsigned char>(text[nStart]))) {
-                ++nStart;
-        }
-
-        size_t nEnd = text.size();
-        while ((nEnd > nStart) && std::isspace(static_cast<unsigned char>(text[nEnd - 1]))) {
-                --nEnd;
-        }
-
-        return text.substr(nStart, nEnd - nStart);
+        return TrimCopy(text);
 }
 
 void CHttpServer::SendResponse(SOCKET hClient, const HttpResponse &response)
@@ -407,5 +566,18 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> healthHandler(new CHealthHandler());
         m_router.Register("GET", "/health", std::move(healthHandler));
+
+        std::unique_ptr<IApiHandler> serverHandler(new CServerInfoHandler(m_pMgrData));
+        m_router.Register("GET", "/api/server", std::move(serverHandler));
+
+        std::unique_ptr<IApiHandler> accountCreateHandler(new CAccountCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/accounts", std::move(accountCreateHandler));
+
+        std::unique_ptr<IApiHandler> rolesListHandler(new CAdminRolesListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/admin/roles", std::move(rolesListHandler));
+
+        std::unique_ptr<IApiHandler> rolesUpdateHandler(new CAdminRolesUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/admin/roles", std::move(rolesUpdateHandler));
+
         m_bHandlersRegistered = true;
 }
