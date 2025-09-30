@@ -138,7 +138,7 @@ DWORD CInfoMapObject::GetDataSizeNo(int nNo)
 	case 2:		dwRet = sizeof (m_nHideY);				break;		/* 隠れる上からのマス数 */
 	case 3:		dwRet = sizeof (m_sizeGrp);				break;		/* 画像サイズ */
 	case 4:		dwRet = sizeof (m_bHit);				break;		/* 当たり判定 */
-	case 5:		dwRet = m_strName.GetUtf8Length () + 1;		break;		/* オブジェクト名 */
+	case 5:		dwRet = m_strName.GetStoreLength () + 1;		break;		/* オブジェクト名 */
 	case 6:		dwRet = m_sizeGrp.cx * m_sizeGrp.cy;	break;		/* 当たり判定データ */
 	case 7:		dwRet = sizeof (nTmp);					break;		/* オブジェクトアニメ数 */
 	case 8:		dwRet = sizeof (BYTE) * nTmp;			break;		/* 待ち時間(×１０ミリ秒) */

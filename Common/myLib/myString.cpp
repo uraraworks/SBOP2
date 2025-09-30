@@ -14,7 +14,10 @@ CmyString::CmyString()
 {
         m_strString.Empty ();
         m_strUtf8Cache.Empty ();
+        m_strAnsiCache.Empty ();
         m_bUtf8Dirty = TRUE;
+        m_bAnsiDirty = TRUE;
+        m_uAnsiCodePage = 932;
 }
 
 
@@ -29,7 +32,10 @@ CmyString::CmyString(const CmyString &strSrc)
 {
         m_strString     = strSrc.m_strString;
         m_strUtf8Cache  = strSrc.m_strUtf8Cache;
+        m_strAnsiCache  = strSrc.m_strAnsiCache;
         m_bUtf8Dirty    = strSrc.m_bUtf8Dirty;
+        m_bAnsiDirty    = strSrc.m_bAnsiDirty;
+        m_uAnsiCodePage = strSrc.m_uAnsiCodePage;
 }
 
 CmyString::CmyString(LPCSTR szSrc)
@@ -69,7 +75,10 @@ void CmyString::Empty(void)
 {
         m_strString.Empty ();
         m_strUtf8Cache.Empty ();
+        m_strAnsiCache.Empty ();
         m_bUtf8Dirty = FALSE;
+        m_bAnsiDirty = FALSE;
+        m_uAnsiCodePage = 932;
 }
 
 
@@ -128,6 +137,7 @@ void CmyString::Format(LPCSTR lpFormat, ...)
         strTmp.FormatV (lpFormat, argList);
         m_strString = strTmp;
         m_bUtf8Dirty = TRUE;
+        m_bAnsiDirty = TRUE;
 #endif
         va_end (argList);
 }
@@ -143,6 +153,7 @@ void CmyString::Format(LPCTSTR lpFormat, ...)
         m_strString.FormatV (lpFormat, argList);
         va_end (argList);
         m_bUtf8Dirty = TRUE;
+        m_bAnsiDirty = TRUE;
 }
 
 
@@ -161,7 +172,10 @@ void CmyString::operator =(const CmyString &strSrc)
         }
         m_strString     = strSrc.m_strString;
         m_strUtf8Cache  = strSrc.m_strUtf8Cache;
+        m_strAnsiCache  = strSrc.m_strAnsiCache;
         m_bUtf8Dirty    = strSrc.m_bUtf8Dirty;
+        m_bAnsiDirty    = strSrc.m_bAnsiDirty;
+        m_uAnsiCodePage = strSrc.m_uAnsiCodePage;
 }
 
 
@@ -202,6 +216,7 @@ void CmyString::operator +=(LPCSTR pszSrc)
         }
 #endif
         m_bUtf8Dirty = TRUE;
+        m_bAnsiDirty = TRUE;
 }
 
 void CmyString::operator +=(LPCTSTR pszSrc)
@@ -209,6 +224,7 @@ void CmyString::operator +=(LPCTSTR pszSrc)
         if (pszSrc) {
                 m_strString += pszSrc;
                 m_bUtf8Dirty = TRUE;
+                m_bAnsiDirty = TRUE;
         }
 }
 
@@ -280,8 +296,7 @@ CmyString::operator LPCTSTR()
 CmyString::operator LPCSTR() const
 {
 #ifdef _UNICODE
-        UpdateUtf8Cache ();
-        return (LPCSTR)m_strUtf8Cache;
+        return GetAnsiPointer (932);
 #else
         return (LPCSTR)m_strString;
 #endif
@@ -290,6 +305,15 @@ CmyString::operator LPCSTR() const
 CmyString::operator LPCSTR()
 {
 #ifdef _UNICODE
+        return GetAnsiPointer (932);
+#else
+        return (LPCSTR)m_strString;
+#endif
+}
+
+LPCSTR CmyString::GetUtf8Pointer() const
+{
+#ifdef _UNICODE
         UpdateUtf8Cache ();
         return (LPCSTR)m_strUtf8Cache;
 #else
@@ -297,12 +321,24 @@ CmyString::operator LPCSTR()
 #endif
 }
 
-int CmyString::GetUtf8Length() const
+LPCSTR CmyString::GetAnsiPointer(UINT codePage) const
 {
 #ifdef _UNICODE
-        UpdateUtf8Cache ();
-        return m_strUtf8Cache.GetLength ();
+        UpdateAnsiCache (codePage);
+        return (LPCSTR)m_strAnsiCache;
 #else
+        UNREFERENCED_PARAMETER (codePage);
+        return (LPCSTR)m_strString;
+#endif
+}
+
+int CmyString::GetStoreLength(UINT codePage) const
+{
+#ifdef _UNICODE
+        UpdateAnsiCache (codePage);
+        return m_strAnsiCache.GetLength ();
+#else
+        UNREFERENCED_PARAMETER (codePage);
         return m_strString.GetLength ();
 #endif
 }
@@ -354,6 +390,7 @@ void CmyString::RenewUtf8(LPCSTR pszSrc)
         }
 #endif
         m_bUtf8Dirty = TRUE;
+        m_bAnsiDirty = TRUE;
 }
 
 
@@ -372,6 +409,7 @@ void CmyString::RenewWide(LPCTSTR pszSrc)
                 m_strString = pszSrc;
         }
         m_bUtf8Dirty = TRUE;
+        m_bAnsiDirty = TRUE;
 }
 
 
@@ -392,6 +430,21 @@ void CmyString::UpdateUtf8Cache() const
         const_cast<CmyString *>(this)->m_bUtf8Dirty = FALSE;
 #else
         UNREFERENCED_PARAMETER (this);
+#endif
+}
+
+void CmyString::UpdateAnsiCache(UINT codePage) const
+{
+#ifdef _UNICODE
+        if (!m_bAnsiDirty && (m_uAnsiCodePage == codePage)) {
+                return;
+        }
+        m_strAnsiCache = TStringToAnsi ((LPCTSTR)m_strString, codePage);
+        const_cast<CmyString *>(this)->m_bAnsiDirty = FALSE;
+        const_cast<CmyString *>(this)->m_uAnsiCodePage = codePage;
+#else
+        UNREFERENCED_PARAMETER (codePage);
+        const_cast<CmyString *>(this)->m_bAnsiDirty = FALSE;
 #endif
 }
 

@@ -127,7 +127,7 @@ DWORD CInfoItemTypeBase::GetDataSize(void)
 	dwRet += sizeof (m_dwGrpID);			/* 地面にある時の画像ID */
 	dwRet += sizeof (m_dwIconGrpID);		/* バックパック内の画像ID */
 	dwRet += sizeof (m_dwDropSoundID);		/* 落ちたときの効果音ID */
-	dwRet += (m_strName.GetUtf8Length () + 1);	/* アイテム名 */
+	dwRet += (m_strName.GetStoreLength () + 1);	/* アイテム名 */
 	dwRet += sizeof (m_dwUseEffectID);		/* 使った時に再生するエフェクトID */
 	dwRet += sizeof (m_dwUseSoundID);		/* 使った時に再生する効果音ID */
 	dwRet += sizeof (m_dwWeaponInfoID);		/* 武器情報ID */
@@ -161,7 +161,7 @@ DWORD CInfoItemTypeBase::GetDataSizeNo(int nNo)
 	case 5:		dwRet = sizeof (m_dwItemTypeID);		break;	/* アイテム種別ID */
 	case 6:		dwRet = sizeof (m_dwGrpID);				break;	/* 地面にある時の画像ID */
 	case 7:		dwRet = sizeof (m_dwIconGrpID);			break;	/* バックパック内の画像ID */
-	case 8:		dwRet = (m_strName.GetUtf8Length () + 1);	break;	/* アイテム名 */
+	case 8:		dwRet = (m_strName.GetStoreLength () + 1);	break;	/* アイテム名 */
 	case 9:		dwRet = sizeof (m_dwDropSoundID);		break;	/* 落ちたときの効果音ID */
 	case 10:	dwRet = sizeof (m_wGrpIDMain);			break;	/* 画像IDメイン */
 	case 11:	dwRet = sizeof (m_wGrpIDSub);			break;	/* 画像IDサブ */
@@ -314,7 +314,7 @@ DWORD CInfoItemTypeBase::GetSendDataSize(void)
 			sizeof (m_wGrpIDSub)			+
 			sizeof (m_dwUseEffectID)		+	/* 使った時に再生するエフェクトID */
 			sizeof (m_dwUseSoundID)			+	/* 使った時に再生する効果音ID */
-			(m_strName.GetUtf8Length () + 1)	+
+			(m_strName.GetStoreLength () + 1)	+
 			sizeof (m_dwWeaponInfoID)		+	/* 武器情報ID */
 			sizeof (m_dwValue)				+	/* 攻撃力 */
 			sizeof (m_dwMoveWait)			+	/* 速度 */

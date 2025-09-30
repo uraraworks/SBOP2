@@ -99,7 +99,7 @@ DWORD CInfoSkillBase::GetDataSize(void)
 	dwRet += sizeof (m_nTypeMain);			/* スキル種別(メイン) */
 	dwRet += sizeof (m_nTypeSub);			/* スキル種別(サブ) */
 	dwRet += sizeof (m_nUse);				/* 使用制限 */
-	dwRet += (m_strName.GetUtf8Length () + 1);	/* スキル名 */
+	dwRet += (m_strName.GetStoreLength () + 1);	/* スキル名 */
 	dwRet += GetDerivationSize ();			/* 派生データ */
 
 	return dwRet;
@@ -125,7 +125,7 @@ DWORD CInfoSkillBase::GetDataSizeNo(int nNo)
 	case 3:	dwRet = sizeof (m_nTypeMain);			break;	/* スキル種別(メイン) */
 	case 4:	dwRet = sizeof (m_nTypeSub);			break;	/* スキル種別(サブ) */
 	case 5:	dwRet = sizeof (m_nUse);				break;	/* 使用制限 */
-	case 6:	dwRet = (m_strName.GetUtf8Length () + 1);	break;	/* スキル名 */
+	case 6:	dwRet = (m_strName.GetStoreLength () + 1);	break;	/* スキル名 */
 	case 7:	dwRet = GetDerivationSize ();			break;	/* 派生データ */
 	}
 
@@ -289,7 +289,7 @@ DWORD CInfoSkillBase::GetSendDataSize(void)
 	dwRet += sizeof (m_nTypeMain);			/* スキル種別(メイン) */
 	dwRet += sizeof (m_nTypeSub);			/* スキル種別(サブ) */
 	dwRet += sizeof (m_nUse);				/* 使用制限 */
-	dwRet += (m_strName.GetUtf8Length () + 1);	/* スキル名 */
+	dwRet += (m_strName.GetStoreLength () + 1);	/* スキル名 */
 
 	return dwRet;
 }
