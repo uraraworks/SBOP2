@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "MapObjectHandler.h"
 
 #include <iomanip>
@@ -86,8 +86,11 @@ void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMa
                 oss << "\"idHex\":null,";
         }
 
-        CStringA mapNameUtf8 = TStringToUtf8((LPCTSTR)pMap->m_strMapName);
-        std::string mapName = static_cast<LPCSTR>(mapNameUtf8);
+        const char *pszMapName = static_cast<LPCSTR>(pMap->m_strMapName);
+        std::string mapName;
+        if (pszMapName != NULL) {
+                mapName.assign(pszMapName);
+        }
         oss << "\"name\":\"" << JsonUtils::Escape(mapName) << "\",";
         oss << "\"width\":" << pMap->m_sizeMap.cx << ',';
         oss << "\"height\":" << pMap->m_sizeMap.cy << ',';
@@ -139,8 +142,11 @@ void CMapObjectListHandler::AppendObjectJson(std::ostringstream &oss, const CInf
         }
 
         if (pObject != NULL) {
-                CStringA objectNameUtf8 = TStringToUtf8((LPCTSTR)pObject->m_strName);
-                std::string objectName = static_cast<LPCSTR>(objectNameUtf8);
+                const char *pszObjectName = static_cast<LPCSTR>(pObject->m_strName);
+                std::string objectName;
+                if (pszObjectName != NULL) {
+                        objectName.assign(pszObjectName);
+                }
                 oss << ",\"name\":\"" << JsonUtils::Escape(objectName) << "\"";
                 oss << ",\"attribute\":" << pObject->m_dwAttr;
                 std::string attributeHex = FormatHex(pObject->m_dwAttr);
