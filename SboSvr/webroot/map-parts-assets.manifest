@@ -1,0 +1,4 @@
+# src_rel>dst_rel (dst_rel は省略可能)
+map01.png>terrain\stone_floor.png
+map02.png>structure\wooden_door.png
+map03.png>decoration\street_lamp.png
