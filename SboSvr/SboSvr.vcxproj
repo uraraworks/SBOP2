@@ -150,6 +150,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Debug/SboSvr.bsc</OutputFile>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>if exist "$(OutDir)webroot" rmdir /S /Q "$(OutDir)webroot"&#x0D;&#x0A;mkdir "$(OutDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y "$(ProjectDir)webroot\*" "$(OutDir)webroot\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\crc.cpp" />
