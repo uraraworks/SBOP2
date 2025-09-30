@@ -31,33 +31,61 @@ inline CString Utf8ToTString(LPCSTR pszSrc)
         {
                 UINT    codePage;
                 DWORD   dwFlags;
+                bool    verifyUtf8;
         };
 
         const SCandidate aCandidate[] = {
-                { CP_UTF8, MB_ERR_INVALID_CHARS },
-                { 932,     0 },
-                { CP_ACP,  0 },
+                { CP_UTF8, MB_ERR_INVALID_CHARS, true },
+                { 932,     0,                    false },
+                { CP_ACP,  0,                    false },
         };
 
         for (int i = 0; i < (int)(sizeof (aCandidate) / sizeof (aCandidate[0])); ++i) {
                 const UINT  codePage = aCandidate[i].codePage;
                 const DWORD dwFlags  = aCandidate[i].dwFlags;
+                const bool  verifyUtf8 = aCandidate[i].verifyUtf8;
                 int nLen = MultiByteToWideChar (codePage, dwFlags, pszSrc, -1, NULL, 0);
                 if (nLen <= 0) {
                         continue;
                 }
-                LPTSTR pszBuffer = strResult.GetBuffer (nLen);
+
+                CString strTemp;
+                LPTSTR pszBuffer = strTemp.GetBuffer (nLen);
                 if (pszBuffer == NULL) {
-                        strResult.ReleaseBuffer (0);
+                        strTemp.ReleaseBuffer (0);
                         continue;
                 }
                 int nRet = MultiByteToWideChar (codePage, dwFlags, pszSrc, -1, pszBuffer, nLen);
-                if (nRet > 0) {
-                        strResult.ReleaseBuffer ();
-                        return strResult;
+                if (nRet <= 0) {
+                        strTemp.ReleaseBuffer (0);
+                        strTemp.Empty ();
+                        continue;
                 }
-                strResult.ReleaseBuffer (0);
-                strResult.Empty ();
+                strTemp.ReleaseBuffer ();
+
+                if (verifyUtf8) {
+                        int nUtf8Len = WideCharToMultiByte (CP_UTF8, 0, strTemp, -1, NULL, 0, NULL, NULL);
+                        if (nUtf8Len <= 0) {
+                                continue;
+                        }
+                        CStringA strRoundTrip;
+                        LPSTR pszUtf8 = strRoundTrip.GetBuffer (nUtf8Len);
+                        if (pszUtf8 == NULL) {
+                                strRoundTrip.ReleaseBuffer (0);
+                                continue;
+                        }
+                        int nUtf8Ret = WideCharToMultiByte (CP_UTF8, 0, strTemp, -1, pszUtf8, nUtf8Len, NULL, NULL);
+                        if (nUtf8Ret <= 0) {
+                                strRoundTrip.ReleaseBuffer (0);
+                                continue;
+                        }
+                        strRoundTrip.ReleaseBuffer ();
+                        if (strRoundTrip.Compare (pszSrc) != 0) {
+                                continue;
+                        }
+                }
+
+                return strTemp;
         }
 
         return strResult;
