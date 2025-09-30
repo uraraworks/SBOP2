@@ -25,6 +25,68 @@ const RoleDefinition g_roles[] = {
 const size_t g_roleCount = sizeof(g_roles) / sizeof(g_roles[0]);
 }
 
+namespace AdminRoleCatalog
+{
+const RoleDefinition *GetRoles(size_t &outCount)
+{
+        outCount = g_roleCount;
+        return g_roles;
+}
+
+bool Contains(const std::string &roleId)
+{
+        for (size_t i = 0; i < g_roleCount; ++i) {
+                if (roleId == g_roles[i].pszId) {
+                        return true;
+                }
+        }
+        return false;
+}
+
+int DetermineAdminLevel(const std::vector<std::string> &roles)
+{
+        for (std::vector<std::string>::const_iterator it = roles.begin(); it != roles.end(); ++it) {
+                if ((*it == "SERVER_ADMIN") || (*it == "ACCOUNT_CREATE") || (*it == "ROLE_UPDATE")) {
+                        return ADMINLEVEL_ALL;
+                }
+        }
+        return ADMINLEVEL_NONE;
+}
+
+std::vector<std::string> ResolveRoles(int nAdminLevel)
+{
+        std::vector<std::string> roles;
+        if (nAdminLevel == ADMINLEVEL_ALL) {
+                roles.push_back("SERVER_ADMIN");
+                roles.push_back("ACCOUNT_CREATE");
+                roles.push_back("ROLE_UPDATE");
+        }
+        roles.push_back("SERVER_VIEW");
+        return roles;
+}
+
+bool ValidateExclusiveConstraints(CLibInfoAccount *pAccountLib, DWORD dwExcludeAccountId, int nAdminLevel, std::string &outConflictRole)
+{
+        outConflictRole.clear();
+        if ((pAccountLib == NULL) || (nAdminLevel != ADMINLEVEL_ALL)) {
+                return true;
+        }
+
+        int nCount = pAccountLib->GetCount();
+        for (int i = 0; i < nCount; ++i) {
+                PCInfoAccount pOther = static_cast<PCInfoAccount>(pAccountLib->GetPtr(i));
+                if ((pOther == NULL) || (pOther->m_dwAccountID == dwExcludeAccountId)) {
+                        continue;
+                }
+                if (pOther->m_nAdminLevel == ADMINLEVEL_ALL) {
+                        outConflictRole = "SERVER_ADMIN";
+                        return false;
+                }
+        }
+        return true;
+}
+}
+
 CAdminRolesListHandler::CAdminRolesListHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
 {
@@ -40,20 +102,22 @@ std::string CAdminRolesListHandler::BuildResponse() const
 {
         std::ostringstream oss;
         oss << '[';
-        for (size_t i = 0; i < g_roleCount; ++i) {
+        size_t nCount = 0;
+        const RoleDefinition *pRoles = AdminRoleCatalog::GetRoles(nCount);
+        for (size_t i = 0; i < nCount; ++i) {
                 if (i > 0) {
                         oss << ',';
                 }
                 oss << '{';
-                oss << "\"id\":\"" << JsonUtils::Escape(g_roles[i].pszId) << "\",";
-                oss << "\"name\":\"" << JsonUtils::Escape(g_roles[i].pszName) << "\",";
-                oss << "\"description\":\"" << JsonUtils::Escape(g_roles[i].pszDescription) << "\",";
+                oss << "\"id\":\"" << JsonUtils::Escape(pRoles[i].pszId) << "\",";
+                oss << "\"name\":\"" << JsonUtils::Escape(pRoles[i].pszName) << "\",";
+                oss << "\"description\":\"" << JsonUtils::Escape(pRoles[i].pszDescription) << "\",";
                 oss << "\"featureFlags\":[";
-                for (size_t j = 0; j < g_roles[i].nFeatureFlagCount; ++j) {
+                for (size_t j = 0; j < pRoles[i].nFeatureFlagCount; ++j) {
                         if (j > 0) {
                                 oss << ',';
                         }
-                        oss << "\"" << JsonUtils::Escape(g_roles[i].pszFeatureFlags[j]) << "\"";
+                        oss << "\"" << JsonUtils::Escape(pRoles[i].pszFeatureFlags[j]) << "\"";
                 }
                 oss << "]";
                 oss << '}';
@@ -205,14 +269,7 @@ bool CAdminRolesUpdateHandler::ParseComment(const std::string &body, std::string
 bool CAdminRolesUpdateHandler::ValidateRoles(const std::vector<std::string> &roles) const
 {
         for (std::vector<std::string>::const_iterator it = roles.begin(); it != roles.end(); ++it) {
-                bool bFound = false;
-                for (size_t i = 0; i < g_roleCount; ++i) {
-                        if (*it == g_roles[i].pszId) {
-                                bFound = true;
-                                break;
-                        }
-                }
-                if (!bFound) {
+                if (!AdminRoleCatalog::Contains(*it)) {
                         return false;
                 }
         }
@@ -221,33 +278,12 @@ bool CAdminRolesUpdateHandler::ValidateRoles(const std::vector<std::string> &rol
 
 int CAdminRolesUpdateHandler::DetermineAdminLevel(const std::vector<std::string> &roles) const
 {
-        for (std::vector<std::string>::const_iterator it = roles.begin(); it != roles.end(); ++it) {
-                if ((*it == "SERVER_ADMIN") || (*it == "ACCOUNT_CREATE") || (*it == "ROLE_UPDATE")) {
-                        return ADMINLEVEL_ALL;
-                }
-        }
-        return ADMINLEVEL_NONE;
+        return AdminRoleCatalog::DetermineAdminLevel(roles);
 }
 
 bool CAdminRolesUpdateHandler::ValidateExclusiveConstraints(CLibInfoAccount *pAccountLib, DWORD dwAccountId, int nAdminLevel, std::string &outConflictRole) const
 {
-        outConflictRole.clear();
-        if ((pAccountLib == NULL) || (nAdminLevel != ADMINLEVEL_ALL)) {
-                return true;
-        }
-
-        int nCount = pAccountLib->GetCount();
-        for (int i = 0; i < nCount; ++i) {
-                PCInfoAccount pOther = static_cast<PCInfoAccount>(pAccountLib->GetPtr(i));
-                if ((pOther == NULL) || (pOther->m_dwAccountID == dwAccountId)) {
-                        continue;
-                }
-                if (pOther->m_nAdminLevel == ADMINLEVEL_ALL) {
-                        outConflictRole = "SERVER_ADMIN";
-                        return false;
-                }
-        }
-        return true;
+        return AdminRoleCatalog::ValidateExclusiveConstraints(pAccountLib, dwAccountId, nAdminLevel, outConflictRole);
 }
 
 void CAdminRolesUpdateHandler::EmitAuditTrace(DWORD dwAccountId, const std::vector<std::string> &roles, const std::string &comment) const

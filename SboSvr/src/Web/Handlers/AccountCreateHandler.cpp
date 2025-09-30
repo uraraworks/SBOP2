@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "AccountCreateHandler.h"
 
+#include <algorithm>
+#include <cctype>
 #include <ctime>
 #include <cstring>
 #include <cstdio>
 #include <sstream>
 
 #include "Web/JsonUtils.h"
+#include "Handlers/AdminRolesHandler.h"
 #include "MgrData.h"
 #include "SBOGlobal.h"
 #include "GlobalDefine.h"
@@ -16,6 +19,24 @@
 CAccountCreateHandler::CAccountCreateHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
 {
+}
+
+namespace
+{
+std::string TrimCopy(const std::string &text)
+{
+        size_t nStart = 0;
+        while ((nStart < text.size()) && std::isspace(static_cast<unsigned char>(text[nStart]))) {
+                ++nStart;
+        }
+
+        size_t nEnd = text.size();
+        while ((nEnd > nStart) && std::isspace(static_cast<unsigned char>(text[nEnd - 1]))) {
+                --nEnd;
+        }
+
+        return text.substr(nStart, nEnd - nStart);
+}
 }
 
 void CAccountCreateHandler::Handle(const HttpRequest &request, HttpResponse &response)
@@ -30,30 +51,89 @@ void CAccountCreateHandler::Handle(const HttpRequest &request, HttpResponse &res
         std::string loginId;
         std::string password;
         std::string displayName;
+        std::string email;
+        bool bEmailProvided = false;
         std::vector<std::string> requestedRoles;
 
-        if (!JsonUtils::TryGetString(request.body, "loginId", loginId) ||
-                !JsonUtils::TryGetString(request.body, "password", password)) {
-                response.statusLine = "HTTP/1.1 400 Bad Request";
-                response.SetJsonBody("{\"error\":\"invalid_payload\"}");
-                return;
-        }
+        bool bHasLogin = JsonUtils::TryGetString(request.body, "loginId", loginId);
+        bool bHasPassword = JsonUtils::TryGetString(request.body, "password", password);
+        bool bHasDisplayName = JsonUtils::TryGetString(request.body, "displayName", displayName);
+        bool bHasRoles = JsonUtils::TryGetStringArray(request.body, "roles", requestedRoles);
 
-        if (JsonUtils::FindKey(request.body, "displayName") != std::string::npos) {
-                JsonUtils::TryGetString(request.body, "displayName", displayName);
-        }
-
-        if (JsonUtils::FindKey(request.body, "roles") != std::string::npos) {
-                if (!JsonUtils::TryGetStringArray(request.body, "roles", requestedRoles)) {
+        if (JsonUtils::FindKey(request.body, "email") != std::string::npos) {
+                if (JsonUtils::IsNull(request.body, "email")) {
+                        bEmailProvided = true;
+                        email.clear();
+                } else if (JsonUtils::TryGetString(request.body, "email", email)) {
+                        bEmailProvided = true;
+                } else {
+                        std::vector<ValidationIssue> errorDetails;
+                        ValidationIssue issue;
+                        issue.field = "email";
+                        issue.message = "email must be a string or null.";
+                        errorDetails.push_back(issue);
                         response.statusLine = "HTTP/1.1 400 Bad Request";
-                        response.SetJsonBody("{\"error\":\"invalid_roles\"}");
+                        response.SetJsonBody(BuildValidationErrorResponse("invalid_payload", errorDetails));
                         return;
                 }
         }
 
-        if (!ValidateInput(loginId, password)) {
+        if (!bHasLogin || !bHasPassword || !bHasDisplayName || !bHasRoles) {
+                std::vector<ValidationIssue> errorDetails;
+                if (!bHasLogin) {
+                        ValidationIssue issue;
+                        issue.field = "loginId";
+                        issue.message = "loginId is required.";
+                        errorDetails.push_back(issue);
+                }
+                if (!bHasPassword) {
+                        ValidationIssue issue;
+                        issue.field = "password";
+                        issue.message = "password is required.";
+                        errorDetails.push_back(issue);
+                }
+                if (!bHasDisplayName) {
+                        ValidationIssue issue;
+                        issue.field = "displayName";
+                        issue.message = "displayName is required.";
+                        errorDetails.push_back(issue);
+                }
+                if (!bHasRoles) {
+                        ValidationIssue issue;
+                        issue.field = "roles";
+                        issue.message = "roles must be an array of strings.";
+                        errorDetails.push_back(issue);
+                }
                 response.statusLine = "HTTP/1.1 400 Bad Request";
-                response.SetJsonBody("{\"error\":\"validation_failed\"}");
+                response.SetJsonBody(BuildValidationErrorResponse("invalid_payload", errorDetails));
+                return;
+        }
+
+        loginId = TrimCopy(loginId);
+        password = TrimCopy(password);
+        displayName = TrimCopy(displayName);
+        if (bEmailProvided) {
+                email = TrimCopy(email);
+        }
+
+        std::vector<ValidationIssue> errors;
+        std::vector<ValidationIssue> passwordPolicyErrors;
+        std::vector<std::string> normalizedRoles;
+        if (NormalizeRoles(requestedRoles, normalizedRoles, errors)) {
+                requestedRoles.swap(normalizedRoles);
+        }
+
+        ValidateInput(loginId, password, displayName, requestedRoles, email, bEmailProvided, errors, passwordPolicyErrors);
+
+        if (!errors.empty()) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody(BuildValidationErrorResponse("validation_failed", errors));
+                return;
+        }
+
+        if (!passwordPolicyErrors.empty()) {
+                response.statusLine = "HTTP/1.1 422 Unprocessable Entity";
+                response.SetJsonBody(BuildValidationErrorResponse("password_policy_violation", passwordPolicyErrors));
                 return;
         }
 
@@ -64,6 +144,17 @@ void CAccountCreateHandler::Handle(const HttpRequest &request, HttpResponse &res
                 pAccountLib->Leave();
                 response.statusLine = "HTTP/1.1 409 Conflict";
                 response.SetJsonBody("{\"error\":\"account_exists\"}");
+                return;
+        }
+
+        int nAdminLevel = DetermineAdminLevel(requestedRoles);
+        std::string conflictRole;
+        if (!AdminRoleCatalog::ValidateExclusiveConstraints(pAccountLib, 0, nAdminLevel, conflictRole)) {
+                pAccountLib->Leave();
+                response.statusLine = "HTTP/1.1 409 Conflict";
+                std::ostringstream oss;
+                oss << "{\"error\":\"role_conflict\",\"conflictRole\":\"" << JsonUtils::Escape(conflictRole) << "\"}";
+                response.SetJsonBody(oss.str());
                 return;
         }
 
@@ -93,52 +184,178 @@ void CAccountCreateHandler::Handle(const HttpRequest &request, HttpResponse &res
         pAccount->m_dwTimeLastLogin = 0;
         pAccount->m_dwLoginCount = 0;
         pAccount->m_bDisable = FALSE;
-        pAccount->m_nAdminLevel = DetermineAdminLevel(requestedRoles);
+        pAccount->m_nAdminLevel = nAdminLevel;
 
         pAccountLib->Add((PCInfoBase)pAccount);
-        std::vector<std::string> effectiveRoles = BuildEffectiveRoles(pAccount->m_nAdminLevel);
-        std::string responseBody = BuildResponse(pAccount, displayName, effectiveRoles);
+        std::vector<std::string> effectiveRoles = AdminRoleCatalog::ResolveRoles(pAccount->m_nAdminLevel);
+        std::string responseBody = BuildResponse(pAccount, displayName, effectiveRoles, email, bEmailProvided);
         pAccountLib->Leave();
 
         response.statusLine = "HTTP/1.1 201 Created";
         response.SetJsonBody(responseBody);
 }
 
-bool CAccountCreateHandler::ValidateInput(const std::string &loginId, const std::string &password) const
+bool CAccountCreateHandler::ValidateInput(const std::string &loginId,
+        const std::string &password,
+        const std::string &displayName,
+        const std::vector<std::string> &roles,
+        const std::string &email,
+        bool bEmailProvided,
+        std::vector<ValidationIssue> &outGeneralErrors,
+        std::vector<ValidationIssue> &outPasswordPolicyErrors) const
 {
-        if (loginId.size() < 4 || loginId.size() > 32) {
+        ValidationIssue issue;
+        if (!ValidateLoginId(loginId, issue)) {
+                outGeneralErrors.push_back(issue);
+        }
+
+        ValidationIssue passwordPolicy;
+        if (!ValidatePassword(password, passwordPolicy)) {
+                outPasswordPolicyErrors.push_back(passwordPolicy);
+        }
+
+        ValidationIssue displayIssue;
+        if (!ValidateDisplayName(displayName, displayIssue)) {
+                outGeneralErrors.push_back(displayIssue);
+        }
+
+        if (roles.empty()) {
+                ValidationIssue roleIssue;
+                roleIssue.field = "roles";
+                roleIssue.message = "roles must contain at least one entry.";
+                outGeneralErrors.push_back(roleIssue);
+        }
+
+        if (bEmailProvided) {
+                ValidationIssue emailIssue;
+                if (!ValidateEmail(email, emailIssue)) {
+                        outGeneralErrors.push_back(emailIssue);
+                }
+        }
+
+        return outGeneralErrors.empty() && outPasswordPolicyErrors.empty();
+}
+
+bool CAccountCreateHandler::ValidateLoginId(const std::string &loginId, ValidationIssue &outIssue) const
+{
+        if (loginId.empty()) {
+                outIssue.field = "loginId";
+                outIssue.message = "loginId must not be empty.";
                 return false;
         }
-        if (password.size() < 8 || password.size() > 64) {
+        if (loginId.size() < 4 || loginId.size() > 32) {
+                outIssue.field = "loginId";
+                outIssue.message = "loginId length must be between 4 and 32 characters.";
+                return false;
+        }
+        for (size_t i = 0; i < loginId.size(); ++i) {
+                unsigned char ch = static_cast<unsigned char>(loginId[i]);
+                if (std::isalnum(ch)) {
+                        continue;
+                }
+                if ((ch == '-') || (ch == '_') || (ch == '.') || (ch == '@')) {
+                        continue;
+                }
+                outIssue.field = "loginId";
+                outIssue.message = "loginId contains invalid characters.";
                 return false;
         }
         return true;
 }
 
-int CAccountCreateHandler::DetermineAdminLevel(const std::vector<std::string> &requestedRoles) const
+bool CAccountCreateHandler::ValidatePassword(const std::string &password, ValidationIssue &outPolicyIssue) const
 {
-        for (std::vector<std::string>::const_iterator it = requestedRoles.begin(); it != requestedRoles.end(); ++it) {
-                if ((*it == "SERVER_ADMIN") || (*it == "ACCOUNT_CREATE") || (*it == "ROLE_UPDATE")) {
-                        return ADMINLEVEL_ALL;
+        if (password.size() < 12 || password.size() > 64) {
+                outPolicyIssue.field = "password";
+                outPolicyIssue.message = "password length must be between 12 and 64 characters.";
+                return false;
+        }
+        return true;
+}
+
+bool CAccountCreateHandler::ValidateDisplayName(const std::string &displayName, ValidationIssue &outIssue) const
+{
+        if (displayName.empty()) {
+                outIssue.field = "displayName";
+                outIssue.message = "displayName must not be empty.";
+                return false;
+        }
+        if (displayName.size() > 64) {
+                outIssue.field = "displayName";
+                outIssue.message = "displayName must be 64 characters or fewer.";
+                return false;
+        }
+        return true;
+}
+
+bool CAccountCreateHandler::ValidateEmail(const std::string &email, ValidationIssue &outIssue) const
+{
+        if (email.empty()) {
+                return true;
+        }
+        if (email.size() > 128) {
+                outIssue.field = "email";
+                outIssue.message = "email must be 128 characters or fewer.";
+                return false;
+        }
+        if (email.find(' ') != std::string::npos) {
+                outIssue.field = "email";
+                outIssue.message = "email must not contain spaces.";
+                return false;
+        }
+        size_t atPos = email.find('@');
+        if ((atPos == std::string::npos) || (atPos == 0) || (atPos == email.size() - 1)) {
+                outIssue.field = "email";
+                outIssue.message = "email must contain '@' separating local and domain parts.";
+                return false;
+        }
+        size_t dotPos = email.find('.', atPos + 1);
+        if ((dotPos == std::string::npos) || (dotPos == atPos + 1) || (dotPos == email.size() - 1)) {
+                outIssue.field = "email";
+                outIssue.message = "email domain must contain a dot.";
+                return false;
+        }
+        return true;
+}
+
+bool CAccountCreateHandler::NormalizeRoles(const std::vector<std::string> &inputRoles, std::vector<std::string> &outRoles, std::vector<ValidationIssue> &outErrors) const
+{
+        outRoles.clear();
+        for (std::vector<std::string>::const_iterator it = inputRoles.begin(); it != inputRoles.end(); ++it) {
+                if (!AdminRoleCatalog::Contains(*it)) {
+                        ValidationIssue issue;
+                        issue.field = "roles";
+                        issue.message = "Unknown role: " + *it;
+                        outErrors.push_back(issue);
+                        continue;
+                }
+                if (std::find(outRoles.begin(), outRoles.end(), *it) == outRoles.end()) {
+                        outRoles.push_back(*it);
                 }
         }
-        return ADMINLEVEL_NONE;
+        return outErrors.empty();
 }
 
-std::vector<std::string> CAccountCreateHandler::BuildEffectiveRoles(int nAdminLevel) const
+std::string CAccountCreateHandler::BuildValidationErrorResponse(const std::string &errorCode, const std::vector<ValidationIssue> &issues) const
 {
-        std::vector<std::string> roles;
-        if (nAdminLevel == ADMINLEVEL_ALL) {
-                roles.push_back("SERVER_ADMIN");
-                roles.push_back("ACCOUNT_CREATE");
-                roles.push_back("ROLE_UPDATE");
-        } else {
-                roles.push_back("SERVER_VIEW");
+        std::ostringstream oss;
+        oss << "{\"error\":\"" << JsonUtils::Escape(errorCode) << "\",\"details\":[";
+        for (size_t i = 0; i < issues.size(); ++i) {
+                if (i > 0) {
+                        oss << ',';
+                }
+                oss << "{\"field\":\"" << JsonUtils::Escape(issues[i].field) << "\",\"message\":\"" << JsonUtils::Escape(issues[i].message) << "\"}";
         }
-        return roles;
+        oss << "]}";
+        return oss.str();
 }
 
-std::string CAccountCreateHandler::BuildResponse(const CInfoAccount *pAccount, const std::string &displayName, const std::vector<std::string> &roles) const
+int CAccountCreateHandler::DetermineAdminLevel(const std::vector<std::string> &requestedRoles) const
+{
+        return AdminRoleCatalog::DetermineAdminLevel(requestedRoles);
+}
+
+std::string CAccountCreateHandler::BuildResponse(const CInfoAccount *pAccount, const std::string &displayName, const std::vector<std::string> &roles, const std::string &email, bool bEmailProvided) const
 {
         std::string accountIdStr;
         if (pAccount != NULL) {
@@ -156,7 +373,15 @@ std::string CAccountCreateHandler::BuildResponse(const CInfoAccount *pAccount, c
         oss << "{\"accountId\":\"" << JsonUtils::Escape(accountIdStr) << "\",";
         oss << "\"loginId\":\"" << JsonUtils::Escape((LPCSTR)pAccount->m_strAccount) << "\",";
         oss << "\"displayName\":\"" << JsonUtils::Escape(resolvedDisplayName) << "\",";
-        oss << "\"email\":null,";
+        if (bEmailProvided) {
+                if (email.empty()) {
+                        oss << "\"email\":null,";
+                } else {
+                        oss << "\"email\":\"" << JsonUtils::Escape(email) << "\",";
+                }
+        } else {
+                oss << "\"email\":null,";
+        }
         oss << "\"roles\":[";
         for (size_t i = 0; i < roles.size(); ++i) {
                 if (i > 0) {

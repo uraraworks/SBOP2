@@ -91,6 +91,24 @@ size_t FindKey(const std::string &json, const std::string &key)
         return json.find(pattern);
 }
 
+bool IsNull(const std::string &json, const std::string &key)
+{
+        size_t nKeyPos = FindKey(json, key);
+        if (nKeyPos == std::string::npos) {
+                return false;
+        }
+
+        size_t nColonPos = json.find(':', nKeyPos + key.size() + 2);
+        if (nColonPos == std::string::npos) {
+                return false;
+        }
+        nColonPos = SkipWhitespace(json, nColonPos + 1);
+        if (nColonPos + 4 > json.size()) {
+                return false;
+        }
+        return json.compare(nColonPos, 4, "null") == 0;
+}
+
 bool TryGetString(const std::string &json, const std::string &key, std::string &outValue)
 {
         size_t nKeyPos = FindKey(json, key);

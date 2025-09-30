@@ -17,6 +17,15 @@ struct RoleDefinition
         size_t      nFeatureFlagCount;
 };
 
+namespace AdminRoleCatalog
+{
+const RoleDefinition *GetRoles(size_t &outCount);
+bool Contains(const std::string &roleId);
+int DetermineAdminLevel(const std::vector<std::string> &roles);
+std::vector<std::string> ResolveRoles(int nAdminLevel);
+bool ValidateExclusiveConstraints(CLibInfoAccount *pAccountLib, DWORD dwExcludeAccountId, int nAdminLevel, std::string &outConflictRole);
+}
+
 class CAdminRolesListHandler : public IApiHandler
 {
 public:
