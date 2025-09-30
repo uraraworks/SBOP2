@@ -35,7 +35,7 @@ std::string CServerInfoHandler::BuildResponseJson() const
         oss << "{\"updatedAt\":\"" << GetTimestamp() << "\",";
         oss << "\"items\":[{";
         oss << "\"serverId\":\"world-01\",";
-        oss << "\"displayName\":\"メインワールド\",";
+        oss << "\"displayName\":\"Main World\",";
         oss << "\"status\":\"ONLINE\",";
         oss << "\"onlinePlayers\":" << nOnlinePlayers << ',';
         if (!lastPatchVersion.empty()) {

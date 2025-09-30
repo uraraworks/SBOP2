@@ -13,10 +13,10 @@
 namespace
 {
 const RoleDefinition g_roles[] = {
-        {"SERVER_VIEW", "サーバー閲覧", "サーバー状態カードを閲覧できます。", {"SERVER_DASHBOARD"}, 1},
-        {"ACCOUNT_CREATE", "アカウント登録", "新規アカウントの作成が可能です。", {"ACCOUNT_CREATE"}, 1},
-        {"ROLE_UPDATE", "ロール更新", "管理者ロールの更新操作を実施できます。", {"ROLE_MANAGEMENT"}, 1},
-        {"SERVER_ADMIN", "サーバー管理者", "サーバー再起動などの管理操作を行えます。", {"SERVER_CONTROL"}, 1},
+        {"SERVER_VIEW", "Server View", "Allows viewing the server dashboard.", {"SERVER_DASHBOARD"}, 1},
+        {"ACCOUNT_CREATE", "Account Create", "Allows creating new administrator accounts.", {"ACCOUNT_CREATE"}, 1},
+        {"ROLE_UPDATE", "Role Update", "Allows updating administrator role assignments.", {"ROLE_MANAGEMENT"}, 1},
+        {"SERVER_ADMIN", "Server Admin", "Allows performing privileged server control operations.", {"SERVER_CONTROL"}, 1},
 };
 const size_t g_roleCount = sizeof(g_roles) / sizeof(g_roles[0]);
 }
