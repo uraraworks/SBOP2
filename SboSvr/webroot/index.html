@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sbo 管理ポータル プレビュー</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="page-header">
+    <h1>サーバー管理ポータル（試験版）</h1>
+    <p>このページは Web 管理機能の PoC として提供されるダッシュボードです。</p>
+  </header>
+  <main>
+    <section class="card" id="server-card">
+      <h2>サーバー概要</h2>
+      <div class="status-row">
+        <span class="status-label">状態:</span>
+        <span class="status-value" id="server-status">読み込み中...</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">オンライン人数:</span>
+        <span class="status-value" id="server-online">-</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">最終パッチバージョン:</span>
+        <span class="status-value" id="server-version">-</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">CPU 使用率:</span>
+        <span class="status-value" id="server-cpu">-</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">メモリ使用率:</span>
+        <span class="status-value" id="server-memory">-</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">遅延 (ms):</span>
+        <span class="status-value" id="server-latency">-</span>
+      </div>
+      <p class="timestamp" id="server-updated">更新時刻: -</p>
+    </section>
+    <section class="card" id="help-card">
+      <h2>利用方法</h2>
+      <ol>
+        <li>SboSvr にログインしてセッション Cookie を取得します。</li>
+        <li>このページを表示すると `/api/server?includeMetrics=true` へアクセスし、サーバー情報を自動取得します。</li>
+        <li>エラーが表示された場合は <code>SboSvrLog.txt</code> を確認してください。</li>
+      </ol>
+    </section>
+  </main>
+  <footer class="page-footer">
+    <small>&copy; 2024 Sbo Admin Platform Team</small>
+  </footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>

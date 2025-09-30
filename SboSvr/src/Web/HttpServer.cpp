@@ -14,6 +14,7 @@
 #include "Handlers/ServerInfoHandler.h"
 #include "Handlers/AccountCreateHandler.h"
 #include "Handlers/AdminRolesHandler.h"
+#include "Handlers/StaticFileHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -579,5 +580,45 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> rolesUpdateHandler(new CAdminRolesUpdateHandler(m_pMgrData));
         m_router.Register("PUT", "/api/admin/roles", std::move(rolesUpdateHandler));
 
+        std::wstring webRoot;
+        if (ResolveWebRootPath(webRoot)) {
+                std::unique_ptr<IApiHandler> staticHandler(new CStaticFileHandler(webRoot, L"index.html", "/"));
+                m_router.RegisterPrefix("GET", "/", std::move(staticHandler));
+        }
+
         m_bHandlersRegistered = true;
+}
+
+bool CHttpServer::ResolveWebRootPath(std::wstring &outPath) const
+{
+#if !defined(_WIN32)
+        (void)outPath;
+        return false;
+#else
+        wchar_t szModulePath[MAX_PATH];
+        DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
+        if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
+                return false;
+        }
+
+        wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
+        if (pSlash == NULL) {
+                return false;
+        }
+        *(pSlash + 1) = L'\0';
+
+        std::wstring basePath = szModulePath;
+        basePath.append(L"webroot");
+
+        DWORD dwAttributes = GetFileAttributesW(basePath.c_str());
+        if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
+                return false;
+        }
+        if ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+                return false;
+        }
+
+        outPath = basePath;
+        return true;
+#endif
 }

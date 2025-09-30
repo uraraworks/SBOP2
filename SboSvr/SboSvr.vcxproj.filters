@@ -138,6 +138,9 @@
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\StaticFileHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\HttpServer.cpp">
       <Filter>Source Files\Web</Filter>
     </ClCompile>
@@ -488,6 +491,9 @@
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Web\Handlers\StaticFileHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Web\HttpServer.h">
       <Filter>Header Files\Web</Filter>
     </ClInclude>
@@ -776,6 +782,17 @@
     <ClInclude Include="src\SaveLoad\SaveLoadInfoTalkEvent.h">
       <Filter>Header Files\SaveLoad No. 1</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="webroot\app.js">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="webroot\index.html">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="webroot\styles.css">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SboSvr.rc">

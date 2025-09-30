@@ -1,0 +1,85 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Segoe UI", "Hiragino Sans", "Meiryo", sans-serif;
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(17,24,39,1) 0%, rgba(30,41,59,1) 60%, rgba(15,23,42,1) 100%);
+}
+
+.page-header,
+.page-footer {
+  padding: 2rem clamp(1rem, 5vw, 3rem);
+  background-color: rgba(15, 23, 42, 0.8);
+}
+
+.page-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+.page-header p {
+  margin: 0;
+  opacity: 0.85;
+}
+
+main {
+  flex: 1;
+  display: grid;
+  gap: clamp(1rem, 4vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  padding: 2rem clamp(1rem, 5vw, 3rem);
+}
+
+.card {
+  background-color: rgba(30, 41, 59, 0.8);
+  border-radius: 16px;
+  padding: clamp(1rem, 4vw, 1.5rem);
+  box-shadow: 0 20px 45px rgba(15, 15, 45, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.4rem;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.4rem 0;
+  gap: 1rem;
+}
+
+.status-label {
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.status-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.timestamp {
+  margin-top: 1.5rem;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.page-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}

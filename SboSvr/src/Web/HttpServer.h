@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "ApiRouter.h"
 
 class CMgrData;
@@ -29,6 +31,7 @@ private:
         void    SendResponse(SOCKET hClient, const HttpResponse &response);
         bool    SendAll(SOCKET hSocket, const char *pData, size_t nLength);
         void    RegisterDefaultHandlers();
+        bool    ResolveWebRootPath(std::wstring &outPath) const;
 
         SOCKET          m_hListen;
         HANDLE          m_hThread;

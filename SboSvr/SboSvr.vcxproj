@@ -265,6 +265,7 @@
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\StaticFileHandler.cpp" />
     <ClCompile Include="src\Web\HttpServer.cpp" />
     <ClCompile Include="src\Web\HttpTypes.cpp" />
     <ClCompile Include="src\Web\JsonUtils.cpp" />
@@ -378,6 +379,7 @@
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
+    <ClInclude Include="src\Web\Handlers\StaticFileHandler.h" />
     <ClInclude Include="src\Web\HttpServer.h" />
     <ClInclude Include="src\Web\HttpTypes.h" />
     <ClInclude Include="src\Web\JsonUtils.h" />
@@ -386,6 +388,11 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SboSvr.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="webroot\app.js" />
+    <None Include="webroot\index.html" />
+    <None Include="webroot\styles.css" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\myLib\myLib.vcxproj">
