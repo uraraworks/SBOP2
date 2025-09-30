@@ -210,7 +210,10 @@ main {
 
 .form-field input[type="text"],
 .form-field input[type="email"],
-.form-field input[type="password"] {
+.form-field input[type="password"],
+.form-field input[type="number"],
+.form-field select,
+.form-field textarea {
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   border: 1px solid rgba(148, 163, 184, 0.35);
@@ -222,6 +225,25 @@ main {
 .form-field input:focus {
   outline: 2px solid rgba(96, 165, 250, 0.8);
   outline-offset: 2px;
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-field.compact span {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.form-grid.compact {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+}
+
+.form-field.coordinate input {
+  font-variant-numeric: tabular-nums;
 }
 
 .roles-field {
@@ -325,6 +347,167 @@ main {
 
 .button.secondary {
   background-color: rgba(148, 163, 184, 0.4);
+}
+
+.button.danger {
+  background-color: rgba(248, 113, 113, 0.35);
+}
+
+.button.danger:hover,
+.button.danger:focus-visible {
+  background-color: rgba(248, 113, 113, 0.55);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+  font-size: 0.92rem;
+}
+
+.data-table thead {
+  background-color: rgba(15, 23, 42, 0.75);
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  text-align: left;
+}
+
+.data-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(96, 165, 250, 0.1);
+}
+
+.data-table tbody tr.is-selected {
+  background-color: rgba(96, 165, 250, 0.25);
+}
+
+.map-object-controls {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: end;
+}
+
+.map-object-summary {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.8;
+  min-height: 2.2rem;
+}
+
+.map-object-selected {
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  background-color: rgba(96, 165, 250, 0.12);
+  color: #bfdbfe;
+}
+
+.map-object-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.map-object-grid {
+  display: grid;
+  gap: 4px;
+  background-color: rgba(15, 23, 42, 0.6);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  max-height: 420px;
+  overflow: auto;
+}
+
+.map-object-grid .empty-message {
+  grid-column: 1 / -1;
+  padding: 1rem;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.map-object-cell {
+  position: relative;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background-color: rgba(30, 41, 59, 0.7);
+  padding: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.1s ease, background-color 0.1s ease;
+}
+
+.map-object-cell:hover,
+.map-object-cell:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(96, 165, 250, 0.45);
+}
+
+.map-object-cell.has-object {
+  background: linear-gradient(145deg, rgba(96, 165, 250, 0.35), rgba(59, 130, 246, 0.25));
+}
+
+.map-object-cell.is-selected {
+  outline: 2px solid rgba(250, 204, 21, 0.9);
+  outline-offset: -2px;
+}
+
+.map-object-cell span {
+  position: absolute;
+  inset: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.85);
+}
+
+.map-object-legend {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.legend-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  display: inline-block;
+}
+
+.legend-marker.has-object {
+  background: linear-gradient(145deg, rgba(96, 165, 250, 0.35), rgba(59, 130, 246, 0.25));
+}
+
+.legend-marker.is-selected {
+  background-color: rgba(250, 204, 21, 0.45);
+  border-color: rgba(250, 204, 21, 0.8);
 }
 
 .result-message {

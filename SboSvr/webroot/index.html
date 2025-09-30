@@ -264,14 +264,97 @@
       </section>
     </div>
     <div class="view" data-view="map-objects">
-      <section class="card placeholder-card">
-        <h2>マップオブジェクト配置（プレースホルダー）</h2>
-        <p>マップ上のオブジェクト配置・更新を行う予定の画面です。</p>
-        <ul>
-          <li>マップ座標ビューア</li>
-          <li>オブジェクト一覧とドラッグ&amp;ドロップ配置</li>
-          <li>配置ログと承認フロー</li>
-        </ul>
+      <section class="card" id="map-object-browser">
+        <h2>マップオブジェクト配置</h2>
+        <p class="card-description">
+          MFC 版 <code>DlgAdminMapObject</code> のワークフローを Web で再現する試験実装です。マップを選択すると、現在配置されているオブジェクト一覧と配置状況を確認できます。
+        </p>
+        <div class="map-object-controls">
+          <label class="form-field compact">
+            <span>マップ</span>
+            <select id="map-object-map" name="mapId"></select>
+          </label>
+          <label class="form-field compact">
+            <span>オブジェクト種別</span>
+            <select id="map-object-filter" name="objectType"></select>
+          </label>
+          <div class="map-object-summary" id="map-object-summary" aria-live="polite"></div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="map-object-table" aria-describedby="map-object-summary">
+            <thead>
+              <tr>
+                <th scope="col">名称</th>
+                <th scope="col">種別</th>
+                <th scope="col">レイヤー</th>
+                <th scope="col">X</th>
+                <th scope="col">Y</th>
+                <th scope="col">リスポーン</th>
+              </tr>
+            </thead>
+            <tbody id="map-object-table-body">
+              <tr>
+                <td colspan="6">マップを選択してください。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="card" id="map-object-editor">
+        <h2>配置プレビューと編集</h2>
+        <p class="card-description">座標グリッドをクリックすると、該当セルに新規オブジェクトを配置できます。既存オブジェクトを選択すると詳細を編集できます。</p>
+        <div class="map-object-selected" id="map-object-selected-label" aria-live="polite">選択中: 新規配置</div>
+        <div class="map-object-preview">
+          <div class="map-object-grid" id="map-object-grid" role="grid" aria-label="マップ配置グリッド"></div>
+          <div class="map-object-legend">
+            <span class="legend-item"><span class="legend-marker"></span>空きセル</span>
+            <span class="legend-item"><span class="legend-marker has-object"></span>オブジェクトあり</span>
+            <span class="legend-item"><span class="legend-marker is-selected"></span>選択位置</span>
+          </div>
+        </div>
+        <form id="map-object-form" class="map-object-form" novalidate>
+          <div class="form-grid compact">
+            <label class="form-field">
+              <span>表示名</span>
+              <input type="text" id="map-object-name" name="name" required maxlength="48" autocomplete="off" />
+            </label>
+            <label class="form-field">
+              <span>種別</span>
+              <select id="map-object-type" name="type" required></select>
+            </label>
+            <label class="form-field">
+              <span>レイヤー</span>
+              <select id="map-object-layer" name="layer" required>
+                <option value="ground">地形レイヤー</option>
+                <option value="decoration">装飾レイヤー</option>
+                <option value="interaction">インタラクトレイヤー</option>
+                <option value="sky">空レイヤー</option>
+              </select>
+            </label>
+            <label class="form-field coordinate">
+              <span>座標 X</span>
+              <input type="number" id="map-object-x" name="x" min="0" required />
+            </label>
+            <label class="form-field coordinate">
+              <span>座標 Y</span>
+              <input type="number" id="map-object-y" name="y" min="0" required />
+            </label>
+            <label class="form-field">
+              <span>リスポーン (秒)</span>
+              <input type="number" id="map-object-respawn" name="respawn" min="0" max="86400" step="30" />
+            </label>
+          </div>
+          <label class="form-field">
+            <span>メモ</span>
+            <textarea id="map-object-notes" name="notes" rows="3" maxlength="140"></textarea>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="button primary" id="map-object-save">配置を保存</button>
+            <button type="button" class="button secondary" id="map-object-clear">選択をクリア</button>
+            <button type="button" class="button danger" id="map-object-delete" disabled>削除</button>
+          </div>
+        </form>
+        <div id="map-object-feedback" class="result-message" role="status"></div>
       </section>
     </div>
     <div class="view" data-view="item-types">
