@@ -21,6 +21,11 @@ const POLL_INTERVAL_MS = 30000;
 let serverTimerId = null;
 let cachedRoles = [];
 
+const DEFAULT_ROUTE = "server-dashboard";
+const views = document.querySelectorAll("[data-view]");
+const navLinks = document.querySelectorAll("[data-route]");
+let currentRoute = null;
+
 /**
  * サーバーから JSON を取得する共通関数。
  * レスポンス本文が JSON でない場合は text フィールドに文字列を格納する。
@@ -99,12 +104,17 @@ async function loadServerInfo(showToast = false) {
 
 /** 一定間隔でサーバー情報を更新するタイマーをセットする。 */
 function startServerPolling() {
-  if (serverTimerId !== null) {
-    clearInterval(serverTimerId);
-  }
+  stopServerPolling();
   serverTimerId = setInterval(() => {
     loadServerInfo(false);
   }, POLL_INTERVAL_MS);
+}
+
+function stopServerPolling() {
+  if (serverTimerId !== null) {
+    clearInterval(serverTimerId);
+    serverTimerId = null;
+  }
 }
 
 /** メッセージ用要素の内容とクラスを更新する。 */
@@ -373,9 +383,71 @@ function handleRoleReset() {
   renderRoleOptions();
 }
 
+function getValidRoute(route) {
+  if (!route) {
+    return DEFAULT_ROUTE;
+  }
+  const matchingView = Array.from(views).find((view) => view.dataset.view === route);
+  return matchingView ? route : DEFAULT_ROUTE;
+}
+
+function activateRoute(route, options = {}) {
+  const normalized = getValidRoute(route);
+  const shouldSkip = normalized === currentRoute && !options.forceReload && !options.initial;
+  if (shouldSkip) {
+    return;
+  }
+
+  views.forEach((view) => {
+    if (view.dataset.view === normalized) {
+      view.classList.add("is-active");
+    } else {
+      view.classList.remove("is-active");
+    }
+  });
+
+  navLinks.forEach((link) => {
+    link.classList.toggle("is-active", link.dataset.route === normalized);
+  });
+
+  if (normalized === "server-dashboard") {
+    const shouldReload = options.initial || options.forceReload || currentRoute !== "server-dashboard";
+    if (shouldReload) {
+      loadServerInfo(true);
+    }
+    startServerPolling();
+  } else {
+    stopServerPolling();
+  }
+
+  currentRoute = normalized;
+}
+
 window.addEventListener("load", () => {
-  loadServerInfo(true);
-  startServerPolling();
+  const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;
+  activateRoute(initialRoute, { initial: true });
+
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const targetRoute = link.dataset.route;
+      if (!targetRoute) {
+        return;
+      }
+      const currentHash = window.location.hash.replace(/^#/, "");
+      if (currentHash === targetRoute) {
+        activateRoute(targetRoute, { forceReload: true });
+      } else {
+        window.location.hash = `#${targetRoute}`;
+      }
+    });
+  });
+
+  window.addEventListener("hashchange", () => {
+    const nextRoute = window.location.hash.replace(/^#/, "");
+    activateRoute(nextRoute);
+  });
+
   loadRoles();
 
   if (reloadButton) {
