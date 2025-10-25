@@ -105,6 +105,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Release/SboSvr.bsc</OutputFile>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -151,7 +154,7 @@
       <OutputFile>.\Debug/SboSvr.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"</Command>
+      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -269,6 +272,7 @@
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MapObjectHandler.cpp" />
+  <ClCompile Include="src\Web\Handlers\MapPartsHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\StaticFileHandler.cpp" />
     <ClCompile Include="src\Web\HttpServer.cpp" />
     <ClCompile Include="src\Web\HttpTypes.cpp" />
@@ -384,6 +388,7 @@
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
     <ClInclude Include="src\Web\Handlers\MapObjectHandler.h" />
+  <ClInclude Include="src\Web\Handlers\MapPartsHandler.h" />
     <ClInclude Include="src\Web\Handlers\StaticFileHandler.h" />
     <ClInclude Include="src\Web\HttpServer.h" />
     <ClInclude Include="src\Web\HttpTypes.h" />
@@ -407,6 +412,12 @@
     <ProjectReference Include="..\SboSockLib\SboSockLib.vcxproj">
       <Project>{36b127cf-63af-4864-93ab-4f9d40e17c9a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\SboGrpData\SboGrpData.vcxproj">
+      <Project>{50f32fa9-de14-43c2-9551-cbc31bea628d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <SkipProjectReferenceBuild>false</SkipProjectReferenceBuild>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

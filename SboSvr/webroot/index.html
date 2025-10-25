@@ -253,14 +253,86 @@
       </section>
     </div>
     <div class="view" data-view="map-parts">
-      <section class="card placeholder-card">
-        <h2>マップパーツ編集（プレースホルダー）</h2>
-        <p>レイヤーや属性を編集する UI を配置予定です。</p>
-        <ul>
-          <li>パーツライブラリブラウザ</li>
-          <li>レイヤー構成の可視化</li>
-          <li>属性編集パネル</li>
-        </ul>
+      <section class="card" id="map-parts-browser">
+        <h2>マップパーツ一覧</h2>
+        <p class="card-description">
+          DLL に格納されたタイルシートからマップパーツを読み込み、プレビュー画像のみを一覧表示します。選択したパーツの詳細は右側に表示されます。
+        </p>
+        <div class="map-parts-controls">
+          <label class="form-field compact">
+            <span>フラグ</span>
+            <select id="map-parts-flag-filter" name="partsFlag">
+              <option value="all">すべて</option>
+              <option value="block">ぶつかる</option>
+              <option value="pile">重なる</option>
+              <option value="pileBack">下地も重ねる</option>
+              <option value="fishing">釣り場</option>
+              <option value="drawLast">最前面</option>
+              <option value="counter">カウンター</option>
+              <option value="movement">移動床あり</option>
+              <option value="overlay">重ね合わせスプライト</option>
+            </select>
+          </label>
+        </div>
+        <div class="map-parts-summary" id="map-parts-summary" aria-live="polite">マップパーツ情報を読み込み中です...</div>
+        <div class="map-parts-gallery-wrapper" aria-live="polite">
+          <div class="map-parts-gallery-scroll" role="presentation">
+            <div class="map-parts-gallery" id="map-parts-gallery" role="list" aria-describedby="map-parts-summary">
+              <div class="map-parts-gallery-message">マップパーツ情報を読み込み中です...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="card" id="map-parts-detail">
+        <h2>パーツ詳細</h2>
+        <div id="map-parts-feedback" class="result-message" role="status"></div>
+        <div class="map-parts-preview" aria-live="polite">
+          <div class="map-parts-tile-stack" aria-label="マップパーツ プレビュー">
+            <div class="map-parts-tile" id="map-parts-preview-base" title="基本スプライト"></div>
+            <div class="map-parts-tile overlay" id="map-parts-preview-overlay" title="重ね合わせスプライト"></div>
+          </div>
+          <div class="map-parts-sheet-hint" id="map-parts-sheet-hint">シート画像を読み込み中です...</div>
+        </div>
+        <dl class="map-parts-meta">
+          <div>
+            <dt>パーツID</dt>
+            <dd id="map-parts-detail-id">-</dd>
+          </div>
+          <div>
+            <dt>表示種別</dt>
+            <dd id="map-parts-detail-view">-</dd>
+          </div>
+          <div>
+            <dt>アニメーション</dt>
+            <dd id="map-parts-detail-anime">-</dd>
+          </div>
+          <div>
+            <dt>透明度</dt>
+            <dd id="map-parts-detail-level">-</dd>
+          </div>
+          <div>
+            <dt>配置座標</dt>
+            <dd id="map-parts-detail-position">-</dd>
+          </div>
+          <div>
+            <dt>移動方向</dt>
+            <dd id="map-parts-detail-move">-</dd>
+          </div>
+        </dl>
+        <div class="map-parts-sprite-info">
+          <div class="sprite-group">
+            <h3>基本スプライト</h3>
+            <p id="map-parts-sprite-base">-</p>
+          </div>
+          <div class="sprite-group">
+            <h3>重ね合わせ</h3>
+            <p id="map-parts-sprite-overlay">-</p>
+          </div>
+        </div>
+        <div>
+          <h3>付与フラグ</h3>
+          <ul id="map-parts-flags" class="map-parts-flag-list"></ul>
+        </div>
       </section>
     </div>
     <div class="view" data-view="map-objects">

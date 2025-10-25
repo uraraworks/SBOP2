@@ -36,6 +36,23 @@ const mapObjectDeleteButton = document.getElementById("map-object-delete");
 const mapObjectSaveButton = document.getElementById("map-object-save");
 const mapObjectFeedbackEl = document.getElementById("map-object-feedback");
 
+const mapPartsFlagFilter = document.getElementById("map-parts-flag-filter");
+const mapPartsSummaryEl = document.getElementById("map-parts-summary");
+const mapPartsGallery = document.getElementById("map-parts-gallery");
+const mapPartsFeedbackEl = document.getElementById("map-parts-feedback");
+const mapPartsDetailId = document.getElementById("map-parts-detail-id");
+const mapPartsDetailView = document.getElementById("map-parts-detail-view");
+const mapPartsDetailAnime = document.getElementById("map-parts-detail-anime");
+const mapPartsDetailLevel = document.getElementById("map-parts-detail-level");
+const mapPartsDetailPosition = document.getElementById("map-parts-detail-position");
+const mapPartsDetailMove = document.getElementById("map-parts-detail-move");
+const mapPartsFlagsList = document.getElementById("map-parts-flags");
+const mapPartsSpriteBaseInfo = document.getElementById("map-parts-sprite-base");
+const mapPartsSpriteOverlayInfo = document.getElementById("map-parts-sprite-overlay");
+const mapPartsPreviewBase = document.getElementById("map-parts-preview-base");
+const mapPartsPreviewOverlay = document.getElementById("map-parts-preview-overlay");
+const mapPartsSheetHint = document.getElementById("map-parts-sheet-hint");
+
 const POLL_INTERVAL_MS = 30000;
 let serverTimerId = null;
 let cachedRoles = [];
@@ -44,6 +61,38 @@ const MAP_OBJECT_TYPE_OPTIONS = [
   { value: "collision", label: "当たり判定あり" },
   { value: "no-collision", label: "当たり判定なし" }
 ];
+
+const MAP_PARTS_FLAG_LABELS = {
+  block: "ぶつかる",
+  pile: "重なる",
+  pileBack: "下地も重ねる",
+  fishing: "釣り場",
+  drawLast: "最前面",
+  counter: "カウンター"
+};
+
+const MAP_PARTS_DIRECTION_LABELS = {
+  up: "上",
+  down: "下",
+  left: "左",
+  right: "右"
+};
+
+const MAP_PARTS_VIEW_TYPE_LABELS = {
+  0: "通常レイヤー",
+  1: "背景レイヤー",
+  2: "装飾レイヤー",
+  3: "イベントレイヤー",
+  4: "水辺レイヤー",
+  5: "特殊レイヤー"
+};
+
+const MAP_PARTS_ANIME_TYPE_LABELS = {
+  0: "静止",
+  1: "往復",
+  2: "循環",
+  3: "ランダム"
+};
 
 const mapObjectState = {
   maps: [],
@@ -54,6 +103,24 @@ const mapObjectState = {
   isLoading: false,
   loadError: null
 };
+
+const mapPartsState = {
+  parts: [],
+  filtered: [],
+  flagFilter: "all",
+  selectedPartId: null,
+  sheetBaseUrl: "/api/assets/map-parts/sheets",
+  tileSize: 16,
+  sheetTileWidth: 32,
+  sheetTileHeight: 32,
+  sheetCount: 0,
+  sheets: [],
+  isLoading: false,
+  loadError: null
+};
+
+const MAP_PARTS_GALLERY_SCALE = 4;
+const MAP_PARTS_DETAIL_SCALE = 6;
 
 function formatHex(value) {
   if (value === null || value === undefined) {
@@ -1112,6 +1179,606 @@ function handleMapObjectDelete() {
   setMapObjectFeedback("現在は閲覧専用モードのため削除できません。", "error");
 }
 
+function getMapPartsViewTypeLabel(viewType) {
+  if (typeof viewType !== "number" || !Number.isFinite(viewType)) {
+    return "-";
+  }
+  const label = Object.prototype.hasOwnProperty.call(MAP_PARTS_VIEW_TYPE_LABELS, viewType)
+    ? MAP_PARTS_VIEW_TYPE_LABELS[viewType]
+    : `タイプ ${viewType}`;
+  return `${label} (${viewType})`;
+}
+
+function getMapPartsAnimeTypeLabel(animeType) {
+  if (typeof animeType !== "number" || !Number.isFinite(animeType)) {
+    return "-";
+  }
+  if (Object.prototype.hasOwnProperty.call(MAP_PARTS_ANIME_TYPE_LABELS, animeType)) {
+    return `${MAP_PARTS_ANIME_TYPE_LABELS[animeType]} (${animeType})`;
+  }
+  return `タイプ ${animeType}`;
+}
+
+function getMapPartsMovementLabel(direction) {
+  if (!direction) {
+    return "なし";
+  }
+  const normalized = direction.toLowerCase();
+  const label = Object.prototype.hasOwnProperty.call(MAP_PARTS_DIRECTION_LABELS, normalized)
+    ? MAP_PARTS_DIRECTION_LABELS[normalized]
+    : normalized;
+  return `${label} 方向`;
+}
+
+function normalizeMapPartSprite(rawSprite) {
+  if (!rawSprite || typeof rawSprite.sheet !== "number") {
+    return null;
+  }
+  const sheet = Number(rawSprite.sheet);
+  if (!Number.isFinite(sheet) || sheet < 0) {
+    return null;
+  }
+  const tileWidth = mapPartsState.sheetTileWidth || 32;
+  const tileHeight = mapPartsState.sheetTileHeight || 32;
+  let tile = Number(rawSprite.tile);
+  const tileXRaw = Number(rawSprite.tileX);
+  const tileYRaw = Number(rawSprite.tileY);
+  let tileX = Number.isFinite(tileXRaw) ? tileXRaw : 0;
+  let tileY = Number.isFinite(tileYRaw) ? tileYRaw : 0;
+
+  if (!Number.isFinite(tile)) {
+    tile = tileY * tileWidth + tileX;
+  } else {
+    if (!Number.isFinite(tileXRaw)) {
+      tileX = tile % tileWidth;
+    }
+    if (!Number.isFinite(tileYRaw)) {
+      tileY = Math.floor(tile / tileWidth);
+    }
+  }
+
+  tileX = Math.max(0, Math.min(tileWidth - 1, tileX));
+  tileY = Math.max(0, Math.min(tileHeight - 1, tileY));
+
+  return {
+    sheet,
+    tile: Number.isFinite(tile) ? tile : tileY * tileWidth + tileX,
+    tileX,
+    tileY
+  };
+}
+
+function normalizeMapPart(raw) {
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+
+  const partsIdRaw = raw.partsId ?? raw.partsID;
+  const partsId = Number(partsIdRaw);
+  const viewType = Number(raw.viewType);
+  const animeType = Number(raw.animeType);
+  const animeCount = Number(raw.animeCount);
+  const level = Number(raw.level);
+  const posX = Number(raw?.viewPosition?.x);
+  const posY = Number(raw?.viewPosition?.y);
+  const movementDirection = typeof raw?.movement?.direction === "string"
+    ? raw.movement.direction.trim().toLowerCase()
+    : null;
+
+  const flags = {
+    block: Boolean(raw?.flags?.block),
+    pile: Boolean(raw?.flags?.pile),
+    pileBack: Boolean(raw?.flags?.pileBack),
+    fishing: Boolean(raw?.flags?.fishing),
+    drawLast: Boolean(raw?.flags?.drawLast),
+    counter: Boolean(raw?.flags?.counter),
+    blockDirections: {
+      up: Boolean(raw?.flags?.blockDirections?.up),
+      down: Boolean(raw?.flags?.blockDirections?.down),
+      left: Boolean(raw?.flags?.blockDirections?.left),
+      right: Boolean(raw?.flags?.blockDirections?.right)
+    }
+  };
+
+  const sprites = {
+    base: normalizeMapPartSprite(raw?.sprites?.base),
+    overlay: normalizeMapPartSprite(raw?.sprites?.overlay)
+  };
+
+  const blockDirectionLabels = Object.entries(flags.blockDirections)
+    .filter(([, value]) => value)
+    .map(([key]) => MAP_PARTS_DIRECTION_LABELS[key] || key.toUpperCase());
+
+  const flagLabels = Object.entries(MAP_PARTS_FLAG_LABELS)
+    .filter(([key]) => flags[key])
+    .map(([, label]) => label);
+
+  if (blockDirectionLabels.length) {
+    flagLabels.push(`ぶつかり方向: ${blockDirectionLabels.join("・")}`);
+  }
+
+  return {
+    partsId: Number.isFinite(partsId) ? partsId : 0,
+    partsIdHex: formatHex(partsId),
+    viewType: Number.isFinite(viewType) ? viewType : null,
+    viewTypeLabel: getMapPartsViewTypeLabel(viewType),
+    animeType: Number.isFinite(animeType) ? animeType : null,
+    animeTypeLabel: getMapPartsAnimeTypeLabel(animeType),
+    animeCount: Number.isFinite(animeCount) ? animeCount : null,
+    level: Number.isFinite(level) ? level : null,
+    viewPosition: {
+      x: Number.isFinite(posX) ? posX : 0,
+      y: Number.isFinite(posY) ? posY : 0
+    },
+    movementDirection,
+    movementLabel: getMapPartsMovementLabel(movementDirection),
+    flags,
+    flagLabels,
+    sprites,
+    blockDirectionLabels
+  };
+}
+
+function describeSprite(sprite) {
+  if (!sprite) {
+    return "なし";
+  }
+  const sheetLabel = formatMapPartsSheetLabel(sprite.sheet);
+  return `${sheetLabel} / tile ${sprite.tile} (x: ${sprite.tileX}, y: ${sprite.tileY})`;
+}
+
+function getMapPartsSheetUrl(sheetIndex) {
+  if (sheetIndex === null || sheetIndex === undefined) {
+    return "";
+  }
+  const base = mapPartsState.sheetBaseUrl || "/api/assets/map-parts/sheets";
+  const normalized = base.endsWith("/") ? base.slice(0, -1) : base;
+  return `${normalized}/${sheetIndex}.png`;
+}
+
+function normalizeSheetIndex(sheetIndex) {
+  const numeric = Number(sheetIndex);
+  if (!Number.isFinite(numeric) || numeric < 0) {
+    return null;
+  }
+  return Math.trunc(numeric);
+}
+
+function buildMapPartsSheetSuffix(normalizedIndex) {
+  return String(normalizedIndex + 1).padStart(2, "0");
+}
+
+function getMapPartsSheetFileName(sheetIndex) {
+  const normalized = normalizeSheetIndex(sheetIndex);
+  if (normalized === null) {
+    return null;
+  }
+  const suffix = buildMapPartsSheetSuffix(normalized);
+  return `map${suffix}.png`;
+}
+
+function getMapPartsSheetResourceId(sheetIndex) {
+  const normalized = normalizeSheetIndex(sheetIndex);
+  if (normalized === null) {
+    return null;
+  }
+  const suffix = buildMapPartsSheetSuffix(normalized);
+  return `IDP_MAP_${suffix}`;
+}
+
+function formatMapPartsSheetLabel(sheetIndex) {
+  const normalized = normalizeSheetIndex(sheetIndex);
+  if (normalized === null) {
+    return `シート ${sheetIndex}`;
+  }
+  const fileName = getMapPartsSheetFileName(normalized);
+  const resourceId = getMapPartsSheetResourceId(normalized);
+  if (fileName && resourceId) {
+    return `${fileName} (${resourceId}, index ${normalized})`;
+  }
+  return `index ${normalized}`;
+}
+
+function updateSpriteLayer(element, sprite) {
+  if (!element) {
+    return;
+  }
+  const baseTileSize = mapPartsState.tileSize || 16;
+  const datasetTilePixel = Number(element.dataset.tilePixelSize);
+  const datasetScale = Number(element.dataset.previewScale);
+  const tilePixelSize = Number.isFinite(datasetTilePixel) && datasetTilePixel > 0
+    ? datasetTilePixel
+    : baseTileSize * (Number.isFinite(datasetScale) && datasetScale > 0 ? datasetScale : 1);
+  const sheetTileWidth = mapPartsState.sheetTileWidth || 32;
+  const sheetTileHeight = mapPartsState.sheetTileHeight || 32;
+  const sheetWidthPx = sheetTileWidth * tilePixelSize;
+  const sheetHeightPx = sheetTileHeight * tilePixelSize;
+
+  if (!sprite) {
+    element.classList.add("is-empty");
+    element.style.backgroundImage = "none";
+    element.style.backgroundSize = `${sheetWidthPx}px ${sheetHeightPx}px`;
+    element.style.backgroundPosition = "0 0";
+    return;
+  }
+
+  element.classList.remove("is-empty");
+
+  const offsetX = -(sprite.tileX * tilePixelSize);
+  const offsetY = -(sprite.tileY * tilePixelSize);
+
+  element.style.backgroundImage = `url(${getMapPartsSheetUrl(sprite.sheet)})`;
+  element.style.backgroundSize = `${sheetWidthPx}px ${sheetHeightPx}px`;
+  element.style.backgroundPosition = `${offsetX}px ${offsetY}px`;
+}
+
+function setMapPartsFeedback(message, type) {
+  if (!mapPartsFeedbackEl) {
+    return;
+  }
+  mapPartsFeedbackEl.textContent = message || "";
+  mapPartsFeedbackEl.className = "result-message";
+  if (type) {
+    mapPartsFeedbackEl.classList.add(type);
+  }
+}
+
+function setMapPartsSummary(message) {
+  if (!mapPartsSummaryEl) {
+    return;
+  }
+  mapPartsSummaryEl.textContent = message;
+}
+
+function updateMapPartsSummary() {
+  if (!mapPartsSummaryEl) {
+    return;
+  }
+  if (mapPartsState.isLoading) {
+    mapPartsSummaryEl.textContent = "マップパーツ情報を読み込み中です...";
+    return;
+  }
+  if (mapPartsState.loadError) {
+    mapPartsSummaryEl.textContent = mapPartsState.loadError;
+    return;
+  }
+  if (!mapPartsState.parts.length) {
+    mapPartsSummaryEl.textContent = "表示できるマップパーツがありません";
+    return;
+  }
+
+  const total = mapPartsState.parts.length;
+  const filtered = mapPartsState.filtered.length;
+  let sheetSummary = "-";
+  if (mapPartsState.sheets.length) {
+    const labels = mapPartsState.sheets.map((sheet) => {
+      const normalized = normalizeSheetIndex(sheet);
+      if (normalized === null) {
+        return `index ${sheet}`;
+      }
+      const fileName = getMapPartsSheetFileName(normalized);
+      return fileName ? `${fileName} (index ${normalized})` : `index ${normalized}`;
+    });
+    sheetSummary = labels.join(", ");
+  } else if (mapPartsState.sheetCount > 0) {
+    const lastIndex = Math.max(mapPartsState.sheetCount - 1, 0);
+    const firstFile = getMapPartsSheetFileName(0) || "index 0";
+    const lastFile = getMapPartsSheetFileName(lastIndex) || `index ${lastIndex}`;
+    sheetSummary = `${firstFile}〜${lastFile} (index 0〜${lastIndex})`;
+  }
+  const filterNote = mapPartsState.flagFilter !== "all" ? "（フィルター適用中）" : "";
+
+  mapPartsSummaryEl.textContent = `表示件数: ${filtered}/${total} 件 ${filterNote} / 使用シート: ${sheetSummary} / タイルサイズ: ${mapPartsState.tileSize}px`;
+}
+
+function renderMapPartsFlagList(part) {
+  if (!mapPartsFlagsList) {
+    return;
+  }
+  mapPartsFlagsList.innerHTML = "";
+  const labels = part && part.flagLabels ? part.flagLabels : [];
+  if (!labels.length) {
+    const item = document.createElement("li");
+    item.textContent = "フラグなし";
+    item.classList.add("is-empty");
+    mapPartsFlagsList.appendChild(item);
+    return;
+  }
+  labels.forEach((label) => {
+    const item = document.createElement("li");
+    item.textContent = label;
+    mapPartsFlagsList.appendChild(item);
+  });
+}
+
+function renderMapPartsPreview() {
+  if (!mapPartsDetailId) {
+    return;
+  }
+
+  const tileSize = mapPartsState.tileSize || 16;
+  const detailScale = MAP_PARTS_DETAIL_SCALE;
+  const detailTileSize = tileSize * detailScale;
+
+  if (mapPartsPreviewBase) {
+    mapPartsPreviewBase.dataset.previewScale = String(detailScale);
+    mapPartsPreviewBase.dataset.tilePixelSize = String(detailTileSize);
+  }
+  if (mapPartsPreviewOverlay) {
+    mapPartsPreviewOverlay.dataset.previewScale = String(detailScale);
+    mapPartsPreviewOverlay.dataset.tilePixelSize = String(detailTileSize);
+  }
+  if (mapPartsPreviewBase && mapPartsPreviewBase.parentElement) {
+    mapPartsPreviewBase.parentElement.style.setProperty("--map-parts-preview-size", `${detailTileSize}px`);
+  }
+
+  const part = mapPartsState.parts.find((item) => item.partsId === mapPartsState.selectedPartId)
+    || mapPartsState.filtered[0]
+    || null;
+
+  if (!part) {
+    mapPartsDetailId.textContent = "-";
+    mapPartsDetailView.textContent = "-";
+    mapPartsDetailAnime.textContent = "-";
+    mapPartsDetailLevel.textContent = "-";
+    mapPartsDetailPosition.textContent = "-";
+    mapPartsDetailMove.textContent = "-";
+    mapPartsSpriteBaseInfo.textContent = "-";
+    mapPartsSpriteOverlayInfo.textContent = "-";
+    if (mapPartsSheetHint) {
+      mapPartsSheetHint.textContent = "スプライトのプレビューはありません";
+    }
+    updateSpriteLayer(mapPartsPreviewBase, null);
+    updateSpriteLayer(mapPartsPreviewOverlay, null);
+    renderMapPartsFlagList(null);
+    return;
+  }
+
+  mapPartsState.selectedPartId = part.partsId;
+
+  const idLabel = part.partsIdHex
+    ? `${part.partsId} (${part.partsIdHex})`
+    : String(part.partsId);
+  mapPartsDetailId.textContent = idLabel;
+  mapPartsDetailView.textContent = part.viewTypeLabel;
+  mapPartsDetailAnime.textContent = part.animeCount !== null
+    ? `${part.animeTypeLabel} / コマ数: ${part.animeCount}`
+    : part.animeTypeLabel;
+  mapPartsDetailLevel.textContent = part.level !== null ? String(part.level) : "-";
+  mapPartsDetailPosition.textContent = `(${part.viewPosition.x}, ${part.viewPosition.y})`;
+  mapPartsDetailMove.textContent = part.movementLabel;
+
+  mapPartsSpriteBaseInfo.textContent = describeSprite(part.sprites.base);
+  mapPartsSpriteOverlayInfo.textContent = describeSprite(part.sprites.overlay);
+
+  const usedSheets = [part.sprites.base?.sheet, part.sprites.overlay?.sheet]
+    .filter((value) => value !== undefined && value !== null)
+    .map((value) => value);
+
+  if (mapPartsSheetHint) {
+    if (usedSheets.length) {
+      const uniqueSheets = Array.from(new Set(usedSheets)).sort((a, b) => a - b);
+      const sheetDescriptions = uniqueSheets.map((sheet) => formatMapPartsSheetLabel(sheet));
+      const urls = uniqueSheets.map((sheet) => getMapPartsSheetUrl(sheet));
+      mapPartsSheetHint.textContent = `参照シート: ${sheetDescriptions.join(" / ")} / URL: ${urls.join(" / ")}`;
+    } else {
+      mapPartsSheetHint.textContent = "参照シートはありません";
+    }
+  }
+
+  updateSpriteLayer(mapPartsPreviewBase, part.sprites.base);
+  updateSpriteLayer(mapPartsPreviewOverlay, part.sprites.overlay);
+  renderMapPartsFlagList(part);
+}
+
+function matchesMapPartsFlag(part, filter) {
+  if (!part) {
+    return false;
+  }
+  switch (filter) {
+    case "block":
+      return Boolean(part.flags.block);
+    case "pile":
+      return Boolean(part.flags.pile);
+    case "pileBack":
+      return Boolean(part.flags.pileBack);
+    case "fishing":
+      return Boolean(part.flags.fishing);
+    case "drawLast":
+      return Boolean(part.flags.drawLast);
+    case "counter":
+      return Boolean(part.flags.counter);
+    case "overlay":
+      return Boolean(part.sprites.overlay);
+    case "movement":
+      return Boolean(part.movementDirection);
+    case "all":
+    default:
+      return true;
+  }
+}
+
+function applyMapPartsFilters() {
+  if (!mapPartsGallery) {
+    return;
+  }
+
+  mapPartsState.filtered = mapPartsState.parts.filter((part) => matchesMapPartsFlag(part, mapPartsState.flagFilter));
+
+  if (mapPartsState.filtered.length) {
+    if (!mapPartsState.filtered.some((part) => part.partsId === mapPartsState.selectedPartId)) {
+      mapPartsState.selectedPartId = mapPartsState.filtered[0].partsId;
+    }
+  } else {
+    mapPartsState.selectedPartId = null;
+  }
+
+  renderMapPartsGallery();
+  renderMapPartsPreview();
+  updateMapPartsSummary();
+}
+function renderMapPartsGallery() {
+  if (!mapPartsGallery) {
+    return;
+  }
+  mapPartsGallery.innerHTML = "";
+
+  const appendMessage = (text) => {
+    const message = document.createElement("div");
+    message.className = "map-parts-gallery-message";
+    message.textContent = text;
+    mapPartsGallery.appendChild(message);
+  };
+
+  if (mapPartsState.isLoading) {
+    appendMessage("マップパーツ情報を読み込み中です...");
+    return;
+  }
+  if (mapPartsState.loadError) {
+    appendMessage(mapPartsState.loadError);
+    return;
+  }
+  if (!mapPartsState.filtered.length) {
+    appendMessage(mapPartsState.parts.length ? "条件に一致するパーツがありません" : "表示できるマップパーツがありません");
+    return;
+  }
+
+  mapPartsState.filtered
+    .slice()
+    .sort((a, b) => a.partsId - b.partsId)
+    .forEach((part) => {
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "map-parts-entry";
+      item.dataset.partId = String(part.partsId);
+      item.setAttribute("role", "listitem");
+      item.setAttribute("aria-label", `パーツID ${part.partsId}`);
+      if (part.partsId === mapPartsState.selectedPartId) {
+        item.classList.add("is-selected");
+      }
+      item.setAttribute("aria-pressed", part.partsId === mapPartsState.selectedPartId ? "true" : "false");
+
+    const thumb = document.createElement("div");
+    thumb.className = "map-parts-thumb";
+    const baseLayer = document.createElement("div");
+    baseLayer.className = "map-parts-tile";
+    const overlayLayer = document.createElement("div");
+    overlayLayer.className = "map-parts-tile overlay";
+    thumb.appendChild(baseLayer);
+    thumb.appendChild(overlayLayer);
+
+    const tileSize = mapPartsState.tileSize || 16;
+    const previewScale = MAP_PARTS_GALLERY_SCALE;
+    const previewTileSize = tileSize * previewScale;
+    thumb.style.width = "100%";
+    thumb.style.height = "100%";
+    baseLayer.dataset.previewScale = String(previewScale);
+    baseLayer.dataset.tilePixelSize = String(previewTileSize);
+    overlayLayer.dataset.previewScale = String(previewScale);
+    overlayLayer.dataset.tilePixelSize = String(previewTileSize);
+
+    updateSpriteLayer(baseLayer, part.sprites.base);
+    updateSpriteLayer(overlayLayer, part.sprites.overlay);
+
+    item.appendChild(thumb);
+
+      item.addEventListener("click", () => {
+        selectMapPart(part.partsId);
+      });
+
+      mapPartsGallery.appendChild(item);
+    });
+}
+
+function selectMapPart(partId) {
+  mapPartsState.selectedPartId = partId;
+  renderMapPartsGallery();
+  if (mapPartsGallery) {
+    const target = mapPartsGallery.querySelector(`[data-part-id="${String(partId)}"]`);
+    if (target && typeof target.focus === "function") {
+      target.focus({ preventScroll: false });
+    }
+  }
+  renderMapPartsPreview();
+}
+
+async function loadMapPartsData(forceReload = false) {
+  if (!mapPartsGallery) {
+    return;
+  }
+  if (mapPartsState.isLoading) {
+    return;
+  }
+  if (!forceReload && mapPartsState.parts.length && !mapPartsState.loadError) {
+    return;
+  }
+
+  mapPartsState.isLoading = true;
+  mapPartsState.loadError = null;
+  setMapPartsSummary("マップパーツ情報を読み込み中です...");
+  setMapPartsFeedback("マップパーツ情報を読み込み中です...", null);
+  renderMapPartsGallery();
+
+  try {
+    const { response, data } = await fetchJson("/api/maps/parts");
+    if (!response.ok || !data || !Array.isArray(data.parts)) {
+      throw new Error("invalid_response");
+    }
+
+    mapPartsState.tileSize = Number(data.tileSize) || mapPartsState.tileSize;
+    mapPartsState.sheetTileWidth = Number(data.sheetTileWidth) || mapPartsState.sheetTileWidth;
+    mapPartsState.sheetTileHeight = Number(data.sheetTileHeight) || mapPartsState.sheetTileHeight;
+    if (typeof data.sheetBaseUrl === "string" && data.sheetBaseUrl.length) {
+      mapPartsState.sheetBaseUrl = data.sheetBaseUrl;
+    }
+    mapPartsState.sheetCount = Number(data.sheetCount) || 0;
+    mapPartsState.sheets = Array.isArray(data.sheets)
+      ? data.sheets.slice().sort((a, b) => a - b)
+      : [];
+
+    mapPartsState.parts = data.parts
+      .map((item) => normalizeMapPart(item))
+      .filter(Boolean)
+      .sort((a, b) => a.partsId - b.partsId);
+
+    mapPartsState.isLoading = false;
+    applyMapPartsFilters();
+    if (mapPartsState.parts.length) {
+      setMapPartsFeedback(`パーツ ${mapPartsState.parts.length} 件を読み込みました`, "success");
+    } else {
+      setMapPartsFeedback("表示できるマップパーツがありません", "error");
+    }
+  } catch (error) {
+    console.error("Failed to load map parts", error);
+    mapPartsState.parts = [];
+    mapPartsState.filtered = [];
+    mapPartsState.selectedPartId = null;
+    mapPartsState.loadError = "マップパーツの取得に失敗しました";
+    mapPartsState.isLoading = false;
+    setMapPartsSummary(mapPartsState.loadError);
+    setMapPartsFeedback(mapPartsState.loadError, "error");
+    renderMapPartsGallery();
+    renderMapPartsPreview();
+  } finally {
+    updateMapPartsSummary();
+  }
+}
+
+function initializeMapPartsView() {
+  if (!mapPartsGallery) {
+    return;
+  }
+  updateMapPartsSummary();
+  renderMapPartsGallery();
+  renderMapPartsPreview();
+}
+
+function handleMapPartsFlagFilterChange(event) {
+  const value = event && event.target ? event.target.value : "all";
+  mapPartsState.flagFilter = value;
+  applyMapPartsFilters();
+}
+
 function getValidRoute(route) {
   if (!route) {
     return DEFAULT_ROUTE;
@@ -1154,6 +1821,14 @@ function activateRoute(route, options = {}) {
       loadMapObjectData(true);
     } else if (!mapObjectState.maps.length && !mapObjectState.isLoading && !mapObjectState.loadError) {
       loadMapObjectData(false);
+    }
+  }
+
+  if (normalized === "map-parts") {
+    if (options.forceReload) {
+      loadMapPartsData(true);
+    } else if (!mapPartsState.parts.length && !mapPartsState.isLoading && !mapPartsState.loadError) {
+      loadMapPartsData(false);
     }
   }
 
@@ -1220,5 +1895,12 @@ window.addEventListener("load", () => {
   }
   if (roleResetButton) {
     roleResetButton.addEventListener("click", handleRoleReset);
+  }
+
+  if (mapPartsGallery) {
+    initializeMapPartsView();
+    if (mapPartsFlagFilter) {
+      mapPartsFlagFilter.addEventListener("change", handleMapPartsFlagFilterChange);
+    }
   }
 });

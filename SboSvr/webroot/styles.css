@@ -510,6 +510,224 @@ main {
   border-color: rgba(250, 204, 21, 0.8);
 }
 
+.map-parts-controls {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: end;
+}
+
+.map-parts-summary {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  min-height: 1.5rem;
+}
+
+.map-parts-gallery-wrapper {
+  margin-top: 1rem;
+}
+
+.map-parts-gallery-scroll {
+  max-height: min(70vh, 640px);
+  overflow-y: auto;
+  padding-right: 0;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.map-parts-gallery-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.map-parts-gallery-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.35);
+  border-radius: 6px;
+}
+
+.map-parts-gallery-scroll::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.map-parts-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.map-parts-gallery-message {
+  grid-column: 1 / -1;
+  padding: 1.25rem;
+  text-align: center;
+  background-color: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+}
+
+.map-parts-entry {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.map-parts-entry:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.8);
+  outline-offset: -2px;
+}
+
+.map-parts-entry.is-selected::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(250, 204, 21, 0.95);
+  pointer-events: none;
+}
+
+.map-parts-thumb {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.map-parts-thumb .map-parts-tile {
+  width: 100%;
+  height: 100%;
+}
+
+.map-parts-thumb .map-parts-tile.is-empty {
+  opacity: 0;
+}
+
+.map-parts-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.map-parts-tile-stack {
+  position: relative;
+  width: var(--map-parts-preview-size, 120px);
+  height: var(--map-parts-preview-size, 120px);
+  border-radius: 12px;
+  background-color: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-parts-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  opacity: 0.95;
+  mix-blend-mode: normal;
+}
+
+.map-parts-tile.overlay {
+  opacity: 0.85;
+}
+
+.map-parts-tile.is-empty {
+  opacity: 0;
+}
+
+.map-parts-sheet-hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.map-parts-meta {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.map-parts-meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.map-parts-meta dt {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.map-parts-meta dd {
+  margin: 0;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-parts-sprite-info {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.sprite-group {
+  background-color: rgba(15, 23, 42, 0.55);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.sprite-group h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.map-parts-flag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.map-parts-flag-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  background-color: rgba(96, 165, 250, 0.18);
+  color: #bfdbfe;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+}
+
+.map-parts-flag-list li.is-empty {
+  background-color: rgba(148, 163, 184, 0.25);
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.meta-subtext {
+  display: block;
+  font-size: 0.78rem;
+  opacity: 0.65;
+  margin-top: 0.25rem;
+}
+
 .result-message {
   min-height: 1.4rem;
   font-size: 0.95rem;
