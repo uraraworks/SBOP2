@@ -717,7 +717,11 @@ void CMainFrame::OnRecv(PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_MAIN_BATTLE:	RecvProcBATTLE	(Packet.m_byCmdSub, pData, dwSessionID);	break;		/* 戦闘系 */
 	}
 
-	SAFE_DELETE_ARRAY (pData);
+	if (m_pSock) {
+		m_pSock->DeleteRecvData (pData);
+	} else {
+		SAFE_DELETE_ARRAY (pData);
+	}
 }
 
 

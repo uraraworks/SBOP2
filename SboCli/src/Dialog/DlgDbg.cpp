@@ -87,12 +87,20 @@ CDlgDbg::~CDlgDbg()
 BOOL CDlgDbg::Create(HWND hWndParent, CMgrData *pMgrData)
 {
 	CWnd *pWnd;
+	BOOL bCreated;
 
 	m_pMgrData	= pMgrData;
 	m_pSock		= m_pMgrData->GetUraraSockTCP ();
 	pWnd		= CWnd::FromHandle (hWndParent);
 
-	CDialog::Create (IDD, pWnd);
+	bCreated = CDialog::Create (IDD, pWnd);
+	if (!bCreated) {
+		DWORD dwErr = GetLastError ();
+		CString strErr;
+		strErr.Format (_T("CDlgDbg::Create failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString (strErr);
+		return FALSE;
+	}
 
 	ShowWindow (SW_SHOW);
 	pWnd->SetFocus ();

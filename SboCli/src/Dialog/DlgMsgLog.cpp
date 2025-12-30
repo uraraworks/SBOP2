@@ -91,11 +91,19 @@ CDlgMsgLog::~CDlgMsgLog()
 BOOL CDlgMsgLog::Create(HWND hWndParent, CMgrData *pMgrData)
 {
 	CWnd *pWnd;
+	BOOL bCreated;
 
 	m_pMgrData	= pMgrData;
 	pWnd		= CWnd::FromHandle (hWndParent);
 
-	CDialog::Create (IDD_MSGLOG, pWnd);
+	bCreated = CDialog::Create (IDD_MSGLOG, pWnd);
+	if (!bCreated) {
+		DWORD dwErr = GetLastError ();
+		CString strErr;
+		strErr.Format (_T("CDlgMsgLog::Create failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString (strErr);
+		return FALSE;
+	}
 
 	ShowWindow (SW_SHOW);
 	pWnd->SetFocus ();

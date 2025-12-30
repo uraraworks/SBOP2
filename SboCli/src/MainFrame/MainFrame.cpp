@@ -145,9 +145,10 @@ CMainFrame::~CMainFrame()
 int CMainFrame::MainLoop(HINSTANCE hInstance)
 {
 	TCHAR szBuf[256];
-	BYTE byFps, byNowFrame, byFrameBack, byFrameTmp;
+	BYTE byFps;
 	DWORD dwStyle, dwTimeTmp, dwTimeFps, dwTimeStart;
-	BOOL bResult, bDraw;
+	DWORD dwFrameInterval, dwAccumulated;
+	BOOL bDraw;
 	RECT rcTmp;
 	MSG msg;
 	TIMECAPS tc;
@@ -196,8 +197,13 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 
 	byFps		= 0;
 	m_nFPS		= 1000 / m_nDrawCount + 1;
-	byFrameBack	= 0;
+	dwFrameInterval = (m_nDrawCount > 0) ? (DWORD)(1000 / m_nDrawCount) : 16;
+	if (dwFrameInterval == 0) {
+		dwFrameInterval = 1;
+	}
+	dwAccumulated = 0;
 	dwTimeStart	= timeGetTime ();
+	dwTimeFps	= dwTimeStart;
 
 	while (1) {
 		if (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -213,35 +219,32 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 			DispatchMessage (&msg);
 
 		} else {
-			dwTimeTmp	= timeGetTime ();
-			bResult		= TimerProc ();
-			bDraw		|= bResult;
-			/* 時間的に描画するだろうフレーム番号を求める */
-			byNowFrame = (BYTE)((dwTimeTmp - dwTimeStart) / m_nFPS);
-			if ((byFps <= m_nDrawCount) && (byFrameBack != byNowFrame)) {
-				if (byFps && (byNowFrame - byFrameBack != 1)) {
-					bDraw = FALSE;
-				}
-				byFrameTmp = (BYTE)(m_dwDrawTime / m_nFPS);
-				if (byFrameTmp >= byNowFrame) {
-					bDraw = FALSE;
-				}
+			dwTimeTmp = timeGetTime ();
+			DWORD dwElapsed = dwTimeTmp - dwTimeFps;
+			dwTimeFps = dwTimeTmp;
+			dwAccumulated += dwElapsed;
+
+			while (dwAccumulated >= dwFrameInterval) {
+				dwAccumulated -= dwFrameInterval;
+
+				bDraw = TimerProc ();
 				KeyProc ();
 				if (bDraw) {
 					InvalidateRect (m_hWnd, NULL, FALSE);
-					OnPaint (m_hWnd);
+					UpdateWindow (m_hWnd);
 					byFps ++;
 				}
-				bDraw = FALSE;
-				byFrameBack = byNowFrame;
 			}
 
-			if (dwTimeTmp > dwTimeStart + 1000) {
-				/* FPSの更新 */
-				dwTimeStart = dwTimeFps = timeGetTime ();
+			if (dwAccumulated < dwFrameInterval / 2) {
+				Sleep (1);
+			}
+
+			if (dwTimeTmp - dwTimeStart >= 1000) {
+				m_nFPS = byFps;
 				m_dwDrawTime = 0;
 				byFps = 0;
-				bDraw = FALSE;
+				dwTimeStart = dwTimeTmp;
 			}
 		}
 	}
@@ -1195,6 +1198,31 @@ void CMainFrame::OnRecv(PBYTE pData)
 	CPacketBase Packet;
 
 	Packet.Set (pData);
+
+#ifdef _DEBUG
+	static TCHAR s_szLogPath[MAX_PATH] = {0};
+	if (s_szLogPath[0] == 0) {
+		if (GetModuleFileName(NULL, s_szLogPath, _countof(s_szLogPath))) {
+			LPTSTR p = _tcsrchr(s_szLogPath, _T('\\'));
+			if (p) {
+				*(p + 1) = 0;
+			}
+			_tcscat_s(s_szLogPath, _T("SboCli_PacketLog.txt"));
+		}
+	}
+	if (s_szLogPath[0] != 0) {
+		SYSTEMTIME st;
+		GetLocalTime(&st);
+		FILE *fp = NULL;
+		if (_tfopen_s(&fp, s_szLogPath, _T("a, ccs=UNICODE")) == 0 && fp) {
+			_ftprintf(fp, _T("%04d-%02d-%02d %02d:%02d:%02d.%03d\tmain=%u\tsub=%u\n"),
+				st.wYear, st.wMonth, st.wDay,
+				st.wHour, st.wMinute, st.wSecond, st.wMilliseconds,
+				Packet.m_byCmdMain, Packet.m_byCmdSub);
+			fclose(fp);
+		}
+	}
+#endif
 
 	switch (Packet.m_byCmdMain) {
 	case SBOCOMMANDID_MAIN_VERSION:	RecvProcVERSION	(Packet.m_byCmdSub, pData);		break;		/* バージョン系 */

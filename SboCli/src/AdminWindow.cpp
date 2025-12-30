@@ -137,6 +137,8 @@ CAdminWindow::~CAdminWindow()
 BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 {
 	BOOL bRet;
+	CRect rc;
+	LPCTSTR pszClass;
 
 	m_pMgrData		= pMgrData;
 	m_hWndParent	= hWndParent;
@@ -147,11 +149,36 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 		return FALSE;
 	}
 
-	bRet = CmyThread::Create ();
+	ZeroMemory (&rc, sizeof (rc));
+	if (m_hWndParent && IsWindow (m_hWndParent)) {
+		::GetWindowRect (m_hWndParent, &rc);
+	}
+	rc.left		= rc.right;
+	rc.right	= rc.left + 400;
+	rc.bottom	= rc.top + 300;
 
-	/* 初期化完了待ち */
-	WaitForSingleObject (m_hInitEventWindow, INFINITE);
+	pszClass = AfxRegisterWndClass(
+		CS_HREDRAW | CS_VREDRAW,
+		::LoadCursor(NULL, IDC_ARROW),
+		(HBRUSH)(COLOR_WINDOW + 1),
+		::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_SBO)));
 
+	bRet = CWnd::CreateEx(
+				0,
+				pszClass,
+				_T("管理者ウィンドウ"),
+				WS_OVERLAPPEDWINDOW & ~WS_SYSMENU,
+				rc,
+				NULL,
+				0);
+	if (!bRet) {
+		DWORD dwErr = GetLastError ();
+		CString strErr;
+		strErr.Format (_T("CAdminWindow::Create failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString (strErr);
+	}
+
+	SetEvent (m_hInitEventWindow);
 	return bRet;
 }
 
@@ -164,13 +191,9 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 
 void CAdminWindow::Destroy(void)
 {
-	if (m_hThread) {
-		if (m_hWnd) {
-			PostMessage (WM_CLOSE);
-		}
-		WaitForSingleObject (m_hThread, INFINITE);
+	if (m_hWnd) {
+		PostMessage (WM_CLOSE);
 	}
-	CmyThread::Destroy ();
 
 	if (m_hInitEventWindow) {
 		CloseHandle (m_hInitEventWindow);
@@ -393,8 +416,17 @@ int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_hWnd = GetSafeHwnd ();
 	/* メニューの設定 */
-	m_Menu.LoadMenu (IDR_MENU1);
-	SetMenu (&m_Menu);
+	if (!m_Menu.LoadMenu (IDR_MENU1)) {
+		DWORD dwErr = GetLastError ();
+		CString strErr;
+		strErr.Format (_T("CAdminWindow::OnCreate LoadMenu(IDR_MENU1) failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString (strErr);
+	} else if (!SetMenu (&m_Menu)) {
+		DWORD dwErr = GetLastError ();
+		CString strErr;
+		strErr.Format (_T("CAdminWindow::OnCreate SetMenu failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString (strErr);
+	}
 
 	ChgScreen (SCRIDADMIN_CHAR_MODIFY);
 
@@ -936,8 +968,10 @@ void CAdminWindow::ThreadMain(void)
 	BOOL bResult;
 	CRect rc;
 
-	m_pWndParent = CWnd::FromHandle (m_hWndParent);
-	m_pWndParent->GetWindowRect (rc);
+	ZeroMemory (&rc, sizeof (rc));
+	if (m_hWndParent && IsWindow (m_hWndParent)) {
+		::GetWindowRect (m_hWndParent, &rc);
+	}
 	rc.left		= rc.right;
 	rc.right	= rc.left + 400;
 	rc.bottom	= rc.top + 300;
@@ -948,13 +982,22 @@ void CAdminWindow::ThreadMain(void)
 					NULL,
 					AFX_WS_DEFAULT_VIEW,
 					rc,
-					m_pWndParent,
+					NULL,
 					0);
 	if (bResult == FALSE) {
+		DWORD dwErr = GetLastError ();
+		CString strErr;
+		strErr.Format (_T("CAdminWindow::ThreadMain Create failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString (strErr);
+		if (m_hInitEventWindow) {
+			SetEvent (m_hInitEventWindow);
+		}
 		goto Exit;
 	}
 
-	m_pWndParent->SetFocus ();
+	if (m_hWndParent && IsWindow (m_hWndParent)) {
+		::SetFocus (m_hWndParent);
+	}
 	ShowWindow (SW_SHOW);
 
 	while (1) {

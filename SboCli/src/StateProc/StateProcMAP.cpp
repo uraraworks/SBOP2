@@ -637,7 +637,10 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	if (m_pAdminWindow) {
-		m_pAdminWindow->PostMessage (WM_MAINFRAME, dwCommand, dwParam);
+		HWND hAdmin = m_pAdminWindow->GetSafeHwnd ();
+		if (hAdmin && ::IsWindow (hAdmin)) {
+			m_pAdminWindow->PostMessage (WM_MAINFRAME, dwCommand, dwParam);
+		}
 	}
 	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
 
@@ -720,8 +723,11 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		}
 		if (m_pMgrData->GetAdminLevel () > ADMINLEVEL_NONE) {
 			m_pAdminWindow = new CAdminWindow;
-			m_pAdminWindow->Create (m_pMgrData->GetMainWindow (), m_pMgrData);
-			m_hWndAdmin = m_pMgrData->GetAdminWindow ();
+			if (m_pAdminWindow->Create (m_pMgrData->GetMainWindow (), m_pMgrData)) {
+				m_hWndAdmin = m_pMgrData->GetAdminWindow ();
+			} else {
+				SAFE_DELETE (m_pAdminWindow);
+			}
 		}
 		break;
 
@@ -767,7 +773,10 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 void CStateProcMAP::OnAdminMsg(int nCode, DWORD dwPara)
 {
 	if (m_pAdminWindow) {
-		m_pAdminWindow->PostMessage (WM_ADMINMSG, nCode, dwPara);
+		HWND hAdmin = m_pAdminWindow->GetSafeHwnd ();
+		if (hAdmin && ::IsWindow (hAdmin)) {
+			m_pAdminWindow->PostMessage (WM_ADMINMSG, nCode, dwPara);
+		}
 	}
 }
 
