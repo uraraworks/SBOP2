@@ -711,7 +711,14 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 		m_ptDraw.x = cx;
 	}
 
-	m_ptDraw.x += static_cast<int>(strlen (pszText) * 8);
+	// 文字幅を実際の描画幅で進める
+	SIZE sizeText = {0, 0};
+#ifdef UNICODE
+	GetTextExtentPoint32W(hDC, pszDraw, (int)_tcslen(pszDraw), &sizeText);
+#else
+	GetTextExtentPoint32A(hDC, pszDraw, (int)strlen(pszDraw), &sizeText);
+#endif
+	m_ptDraw.x += sizeText.cx;
 	if (m_ptDraw.x + 8 >= cx) {
 		m_ptDraw.x = 0;
 		m_ptDraw.y += 16;

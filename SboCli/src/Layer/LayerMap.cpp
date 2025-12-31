@@ -816,24 +816,39 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	}
 
 	strMapName = pszMapName;
-	int nLen = strMapName.GetLength ();
+	int nLen = strMapName.GetLength();
 	if (nLen <= 0) {
 		return;
 	}
 
+	// 仮のDCとフォントでテキスト幅を取得
+	HDC hScreenDC = GetDC(NULL);
+	HFONT hOldFont = (HFONT)SelectObject(hScreenDC, m_hFont32);
+	SIZE sizeText = {0, 0};
+#ifdef UNICODE
+	GetTextExtentPoint32W(hScreenDC, strMapName, nLen, &sizeText);
+#else
+	GetTextExtentPoint32A(hScreenDC, strMapName, nLen, &sizeText);
+#endif
+	SelectObject(hScreenDC, hOldFont);
+	ReleaseDC(NULL, hScreenDC);
+
+	int nWidth = sizeText.cx + 8; // 余白
+	int nHeight = 36;
+
 	m_pDibMapName = new CImg32;
-	m_pDibMapName->Create (nLen * 16 + 8, 36);
+	m_pDibMapName->Create(nWidth, nHeight);
 
-	hDCTmp = m_pDibMapName->Lock ();
-	hFontOld = (HFONT)SelectObject (hDCTmp, m_hFont32);
-	SetBkMode (hDCTmp, TRANSPARENT);
+	hDCTmp = m_pDibMapName->Lock();
+	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont32);
+	SetBkMode(hDCTmp, TRANSPARENT);
 
-	this->TextOut3 (hDCTmp, 1, 2, strMapName, RGB (255, 255, 255));//, RGB (124, 232, 123));
+	this->TextOut3(hDCTmp, 1, 2, strMapName, RGB(255, 255, 255));
 
-	SelectObject (hDCTmp, hFontOld);
-	m_pDibMapName->Unlock ();
+	SelectObject(hDCTmp, hFontOld);
+	m_pDibMapName->Unlock();
 
-	m_dwLastTimeMapName = timeGetTime ();
+	m_dwLastTimeMapName = timeGetTime();
 }
 
 

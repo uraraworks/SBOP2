@@ -559,24 +559,38 @@ BOOL CWindowBase::OnSpace(BOOL bDown)
 
 void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
 {
-        if (pStr == NULL) {
-                return;
-        }
-
-        int nLen = lstrlen (pStr);
-        if (nLen <= 0) {
-                return;
-        }
-        /* 縁取りする？ */
-        if (bDraw) {
-                SetTextColor (hDC, ColorFrame);
-                ::TextOut (hDC, x - 1, y, pStr, nLen);
-                ::TextOut (hDC, x + 1, y, pStr, nLen);
-                ::TextOut (hDC, x, y - 1, pStr, nLen);
-                ::TextOut (hDC, x, y + 1, pStr, nLen);
-        }
-        SetTextColor (hDC, Color);
-        ::TextOut (hDC, x, y, pStr, nLen);
+	if (pStr == NULL) {
+		return;
+	}
+#ifdef UNICODE
+	int nLen = wcslen((LPCWSTR)pStr);
+#else
+	int nLen = strlen((LPCSTR)pStr);
+#endif
+	if (nLen <= 0) {
+		return;
+	}
+	/* 縁取りする？ */
+	if (bDraw) {
+		SetTextColor(hDC, ColorFrame);
+#ifdef UNICODE
+		::TextOutW(hDC, x - 1, y, (LPCWSTR)pStr, nLen);
+		::TextOutW(hDC, x + 1, y, (LPCWSTR)pStr, nLen);
+		::TextOutW(hDC, x, y - 1, (LPCWSTR)pStr, nLen);
+		::TextOutW(hDC, x, y + 1, (LPCWSTR)pStr, nLen);
+#else
+		::TextOutA(hDC, x - 1, y, (LPCSTR)pStr, nLen);
+		::TextOutA(hDC, x + 1, y, (LPCSTR)pStr, nLen);
+		::TextOutA(hDC, x, y - 1, (LPCSTR)pStr, nLen);
+		::TextOutA(hDC, x, y + 1, (LPCSTR)pStr, nLen);
+#endif
+	}
+	SetTextColor(hDC, Color);
+#ifdef UNICODE
+	::TextOutW(hDC, x, y, (LPCWSTR)pStr, nLen);
+#else
+	::TextOutA(hDC, x, y, (LPCSTR)pStr, nLen);
+#endif
 }
 
 

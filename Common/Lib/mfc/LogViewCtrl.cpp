@@ -734,34 +734,28 @@ void CLogViewCtrl::OnPaint()
 					dc.SetTextColor(m_aTexts[i].crFore);
 					dc.SetBkColor(m_aTexts[i].crBack);
 				}
-				UINT	uChar;
-				int		nChar;
-				if (_istlead(*psz) != 0) {
-					uChar = ((*reinterpret_cast<const WORD*>(psz) & 0x00ff) << 8) | (*reinterpret_cast<const WORD*>(psz) >> 8);
-					nChar = 2;
-				} else {
-					uChar = *reinterpret_cast<const BYTE*>(psz);
-					nChar = 1;
-				}
-				int		nWidth;
-				dc.GetOutputCharWidth(uChar, uChar, &nWidth);
-				if ((ptDraw.x + nWidth) > rcItem.right) {
-					// 改行
-					ptDraw.x = rcItem.left;
-					ptDraw.y += m_sizeChar.cy;
-				}
-				dc.TextOut(ptDraw.x, ptDraw.y, psz, nChar);
-				// リンクの場合の下線描画
-				if ((m_stSetting.nLinkNotifyType != LVC_LINK_NOTIFY_NONE) && (m_aTexts[i].aTokens[nToken].nType == TOKEN_TYPE_LINK)) {
-					dc.MoveTo(ptDraw.x, ptDraw.y + m_sizeChar.cy - 1);
-					dc.LineTo(ptDraw.x + nWidth, ptDraw.y + m_sizeChar.cy - 1);
-				}
-				// 背景塗り潰しリージョンの更新
-				CRgn	rgnChar;
-				rgnChar.CreateRectRgn(ptDraw.x, ptDraw.y, ptDraw.x + nWidth, ptDraw.y + m_sizeChar.cy);
-				rgnItem.CombineRgn(&rgnItem, &rgnChar, RGN_DIFF);
-				// 描画位置の更新
-				ptDraw.x += nWidth;
+				   // 1文字分の幅をGetTextExtentPoint32で取得
+				   int nChar = (int)(_tclen(psz));
+				   SIZE sizeText = {0, 0};
+				   ::GetTextExtentPoint32(dc.GetSafeHdc(), psz, nChar, &sizeText);
+				   int nWidth = sizeText.cx;
+				   if ((ptDraw.x + nWidth) > rcItem.right) {
+					   // 改行
+					   ptDraw.x = rcItem.left;
+					   ptDraw.y += m_sizeChar.cy;
+				   }
+				   dc.TextOut(ptDraw.x, ptDraw.y, psz, nChar);
+				   // リンクの場合の下線描画
+				   if ((m_stSetting.nLinkNotifyType != LVC_LINK_NOTIFY_NONE) && (m_aTexts[i].aTokens[nToken].nType == TOKEN_TYPE_LINK)) {
+					   dc.MoveTo(ptDraw.x, ptDraw.y + m_sizeChar.cy - 1);
+					   dc.LineTo(ptDraw.x + nWidth, ptDraw.y + m_sizeChar.cy - 1);
+				   }
+				   // 背景塗り潰しリージョンの更新
+				   CRgn   rgnChar;
+				   rgnChar.CreateRectRgn(ptDraw.x, ptDraw.y, ptDraw.x + nWidth, ptDraw.y + m_sizeChar.cy);
+				   rgnItem.CombineRgn(&rgnItem, &rgnChar, RGN_DIFF);
+				   // 描画位置の更新
+				   ptDraw.x += nWidth;
 			}
 			// 背景塗り潰し
 			if ((m_nSelect == SELECT_TYPE_LINE) && ((i >= nSelectLineStart) && (i <= nSelectLineEnd))) {

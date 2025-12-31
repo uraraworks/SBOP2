@@ -178,18 +178,26 @@ Exit:
 
 	/* アイテム名を表示 */
 	if (m_strName.IsEmpty () == FALSE) {
-		hDC			= pDst->Lock ();
-		hFontOld	= (HFONT)SelectObject (hDC, m_hFont12);
-		SetBkMode (hDC, TRANSPARENT);
+		hDC = pDst->Lock();
+		hFontOld = (HFONT)SelectObject(hDC, m_hFont12);
+		SetBkMode(hDC, TRANSPARENT);
 
-		GetDrawPos (m_nPos, x, y);
+		GetDrawPos(m_nPos, x, y);
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
-		DrawFrame2 (x, y, m_strName.GetLength () * 6, 16, 0, pDst, 4);
-		TextOut2 (hDC, x, y, (LPCTSTR)m_strName, RGB (10, 10, 10), FALSE);
 
-		SelectObject (hDC, hFontOld);
-		pDst->Unlock ();
+		SIZE sizeText = {0, 0};
+#ifdef UNICODE
+		GetTextExtentPoint32W(hDC, m_strName, m_strName.GetLength(), &sizeText);
+#else
+		GetTextExtentPoint32A(hDC, m_strName, m_strName.GetLength(), &sizeText);
+#endif
+		int nWidth = sizeText.cx;
+		DrawFrame2(x, y, nWidth, 16, 0, pDst, 4);
+		TextOut2(hDC, x, y, (LPCTSTR)m_strName, RGB(10, 10, 10), FALSE);
+
+		SelectObject(hDC, hFontOld);
+		pDst->Unlock();
 	}
 }
 
