@@ -148,6 +148,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	BYTE byFps;
 	DWORD dwStyle, dwTimeTmp, dwTimeFps, dwTimeStart;
 	DWORD dwFrameInterval, dwAccumulated;
+	const DWORD MAX_FRAME_SKIP = 5; // 1ループでの最大フレームスキップ数
 	BOOL bDraw;
 	RECT rcTmp;
 	MSG msg;
@@ -206,7 +207,7 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	dwTimeFps	= dwTimeStart;
 
 	while (1) {
-		if (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE)) {
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {
 				break;
 			}
@@ -215,29 +216,35 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 					continue;
 				}
 			}
-			TranslateMessage (&msg);
-			DispatchMessage (&msg);
-
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		} else {
-			dwTimeTmp = timeGetTime ();
+			dwTimeTmp = timeGetTime();
 			DWORD dwElapsed = dwTimeTmp - dwTimeFps;
 			dwTimeFps = dwTimeTmp;
 			dwAccumulated += dwElapsed;
 
-			while (dwAccumulated >= dwFrameInterval) {
+			DWORD frameSkipCount = 0;
+			while (dwAccumulated >= dwFrameInterval && frameSkipCount < MAX_FRAME_SKIP) {
 				dwAccumulated -= dwFrameInterval;
-
-				bDraw = TimerProc ();
-				KeyProc ();
+				bDraw = TimerProc();
+				KeyProc();
 				if (bDraw) {
-					InvalidateRect (m_hWnd, NULL, FALSE);
-					UpdateWindow (m_hWnd);
-					byFps ++;
+					InvalidateRect(m_hWnd, NULL, FALSE);
+					UpdateWindow(m_hWnd);
+					byFps++;
 				}
+				frameSkipCount++;
 			}
 
-			if (dwAccumulated < dwFrameInterval / 2) {
-				Sleep (1);
+			// 残り時間に応じてSleep時間を最適化
+			if (dwAccumulated < dwFrameInterval) {
+				DWORD sleepTime = dwFrameInterval - dwAccumulated;
+				if (sleepTime > 1) {
+					Sleep(sleepTime);
+				} else {
+					Sleep(1);
+				}
 			}
 
 			if (dwTimeTmp - dwTimeStart >= 1000) {
