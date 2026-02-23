@@ -124,6 +124,7 @@ CHttpServer::CHttpServer()
         , m_bInitSucceeded(false)
         , m_bHandlersRegistered(false)
         , m_pMgrData(NULL)
+        , m_pMainFrame(NULL)
 {
         ZeroMemory(&m_wsaData, sizeof(m_wsaData));
 }
@@ -201,6 +202,11 @@ void CHttpServer::Stop()
 void CHttpServer::SetMgrData(CMgrData *pMgrData)
 {
         m_pMgrData = pMgrData;
+}
+
+void CHttpServer::SetMainFrame(CMainFrame *pMainFrame)
+{
+        m_pMainFrame = pMainFrame;
 }
 
 unsigned __stdcall CHttpServer::ThreadProc(void *lpParam)
@@ -589,6 +595,15 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> mapPartsHandler(new CMapPartsListHandler(m_pMgrData, mapPartsProvider));
         m_router.Register("GET", "/api/maps/parts", std::move(mapPartsHandler));
+
+        std::unique_ptr<IApiHandler> mapPartsUpdateHandler(new CMapPartsUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/maps/parts", std::move(mapPartsUpdateHandler));
+
+        std::unique_ptr<IApiHandler> mapPartsCreateHandler(new CMapPartsCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps/parts", std::move(mapPartsCreateHandler));
+
+        std::unique_ptr<IApiHandler> mapPartsDeleteHandler(new CMapPartsDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/maps/parts", std::move(mapPartsDeleteHandler));
 
         std::unique_ptr<IApiHandler> mapSheetHandler(new CMapPartsSheetHandler(mapPartsProvider, "/api/assets/map-parts/sheets/"));
         m_router.RegisterPrefix("GET", "/api/assets/map-parts/sheets/", std::move(mapSheetHandler));

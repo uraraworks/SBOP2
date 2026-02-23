@@ -12,6 +12,10 @@
 #include "Web/JsonUtils.h"
 #include "Info/InfoMapParts.h"
 #include "LibInfo/LibInfoMapParts.h"
+#include "LibInfo/LibInfoMapBase.h"
+#include "UraraSockTCPSBO.h"
+#include "Packet/MAP/PacketMAP_MAPPARTS.h"
+#include "Packet/MAP/PacketMAP_DELETEPARTS.h"
 
 namespace
 {
@@ -404,4 +408,328 @@ bool CMapPartsSheetHandler::TryParseSheetIndex(const std::string &path, int &she
         }
         sheetIndex = static_cast<int>(value);
         return true;
+}
+
+namespace
+{
+void ParsePartsFlags(const std::string &json, DWORD &dwPartsType, BYTE &byBlockDirection)
+{
+        bool bFlag = false;
+        dwPartsType = 0;
+        byBlockDirection = 0;
+
+        if (JsonUtils::TryGetBool(json, "block", bFlag) && bFlag) {
+                dwPartsType |= BIT_PARTSHIT_BLOCK;
+        }
+        if (JsonUtils::TryGetBool(json, "pile", bFlag) && bFlag) {
+                dwPartsType |= BIT_PARTSHIT_PILE;
+        }
+        if (JsonUtils::TryGetBool(json, "pileBack", bFlag) && bFlag) {
+                dwPartsType |= BIT_PARTSHIT_PILEBACK;
+        }
+        if (JsonUtils::TryGetBool(json, "fishing", bFlag) && bFlag) {
+                dwPartsType |= BIT_PARTSHIT_FISHING;
+        }
+        if (JsonUtils::TryGetBool(json, "drawLast", bFlag) && bFlag) {
+                dwPartsType |= BIT_PARTSHIT_DRAWLAST;
+        }
+        if (JsonUtils::TryGetBool(json, "counter", bFlag) && bFlag) {
+                dwPartsType |= BIT_PARTSHIT_COUNTER;
+        }
+
+        if (JsonUtils::TryGetBool(json, "blockUp", bFlag) && bFlag) {
+                byBlockDirection |= BIT_PARTSBLOCK_UP;
+        }
+        if (JsonUtils::TryGetBool(json, "blockDown", bFlag) && bFlag) {
+                byBlockDirection |= BIT_PARTSBLOCK_DOWN;
+        }
+        if (JsonUtils::TryGetBool(json, "blockLeft", bFlag) && bFlag) {
+                byBlockDirection |= BIT_PARTSBLOCK_LEFT;
+        }
+        if (JsonUtils::TryGetBool(json, "blockRight", bFlag) && bFlag) {
+                byBlockDirection |= BIT_PARTSBLOCK_RIGHT;
+        }
+}
+
+void ParseMoveDirection(const std::string &json, BYTE &byMoveDirection)
+{
+        byMoveDirection = 0;
+        std::string direction;
+        if (!JsonUtils::TryGetString(json, "moveDirection", direction)) {
+                return;
+        }
+        if (direction == "up") {
+                byMoveDirection = BIT_PARTSMOVE_UP;
+        } else if (direction == "down") {
+                byMoveDirection = BIT_PARTSMOVE_DOWN;
+        } else if (direction == "left") {
+                byMoveDirection = BIT_PARTSMOVE_LEFT;
+        } else if (direction == "right") {
+                byMoveDirection = BIT_PARTSMOVE_RIGHT;
+        }
+}
+
+void ApplyJsonToPartsInfo(const std::string &json, CInfoMapParts *pInfo)
+{
+        int nVal = 0;
+        if (JsonUtils::TryGetInt(json, "viewType", nVal)) {
+                pInfo->m_byViewType = static_cast<BYTE>(nVal);
+        }
+        if (JsonUtils::TryGetInt(json, "animeType", nVal)) {
+                pInfo->m_byAnimeType = static_cast<BYTE>(nVal);
+        }
+        if (JsonUtils::TryGetInt(json, "level", nVal)) {
+                pInfo->m_byLevel = static_cast<BYTE>(nVal);
+        }
+        if (JsonUtils::TryGetInt(json, "grpIdBase", nVal)) {
+                pInfo->m_wGrpIDBase = static_cast<WORD>(nVal);
+        }
+        if (JsonUtils::TryGetInt(json, "grpIdPile", nVal)) {
+                pInfo->m_wGrpIDPile = static_cast<WORD>(nVal);
+        }
+        if (JsonUtils::TryGetInt(json, "viewPositionX", nVal)) {
+                pInfo->m_ptViewPos.x = nVal;
+        }
+        if (JsonUtils::TryGetInt(json, "viewPositionY", nVal)) {
+                pInfo->m_ptViewPos.y = nVal;
+        }
+
+        DWORD dwPartsType = 0;
+        BYTE byBlockDirection = 0;
+        ParsePartsFlags(json, dwPartsType, byBlockDirection);
+        pInfo->m_dwPartsType = dwPartsType;
+        pInfo->m_byBlockDirection = byBlockDirection;
+
+        BYTE byMoveDirection = 0;
+        ParseMoveDirection(json, byMoveDirection);
+        pInfo->m_byMoveDirection = byMoveDirection;
+}
+
+void BuildSinglePartJson(std::ostringstream &oss, const CInfoMapParts *pInfo)
+{
+        oss << '{';
+        oss << "\"partsId\":" << pInfo->m_dwPartsID << ',';
+        oss << "\"viewType\":" << static_cast<unsigned int>(pInfo->m_byViewType) << ',';
+        oss << "\"animeType\":" << static_cast<unsigned int>(pInfo->m_byAnimeType) << ',';
+        oss << "\"animeCount\":" << static_cast<unsigned int>(pInfo->m_byAnimeCount) << ',';
+        oss << "\"level\":" << static_cast<unsigned int>(pInfo->m_byLevel) << ',';
+        oss << "\"grpIdBase\":" << static_cast<unsigned int>(pInfo->m_wGrpIDBase) << ',';
+        oss << "\"grpIdPile\":" << static_cast<unsigned int>(pInfo->m_wGrpIDPile) << ',';
+
+        oss << "\"viewPosition\":{";
+        oss << "\"x\":" << pInfo->m_ptViewPos.x << ',';
+        oss << "\"y\":" << pInfo->m_ptViewPos.y << "},";
+
+        oss << "\"flags\":{";
+        oss << "\"block\":" << ((pInfo->m_dwPartsType & BIT_PARTSHIT_BLOCK) ? "true" : "false") << ',';
+        oss << "\"pile\":" << ((pInfo->m_dwPartsType & BIT_PARTSHIT_PILE) ? "true" : "false") << ',';
+        oss << "\"pileBack\":" << ((pInfo->m_dwPartsType & BIT_PARTSHIT_PILEBACK) ? "true" : "false") << ',';
+        oss << "\"fishing\":" << ((pInfo->m_dwPartsType & BIT_PARTSHIT_FISHING) ? "true" : "false") << ',';
+        oss << "\"drawLast\":" << ((pInfo->m_dwPartsType & BIT_PARTSHIT_DRAWLAST) ? "true" : "false") << ',';
+        oss << "\"counter\":" << ((pInfo->m_dwPartsType & BIT_PARTSHIT_COUNTER) ? "true" : "false") << ',';
+        oss << "\"blockDirections\":{";
+        oss << "\"up\":" << ((pInfo->m_byBlockDirection & BIT_PARTSBLOCK_UP) ? "true" : "false") << ',';
+        oss << "\"down\":" << ((pInfo->m_byBlockDirection & BIT_PARTSBLOCK_DOWN) ? "true" : "false") << ',';
+        oss << "\"left\":" << ((pInfo->m_byBlockDirection & BIT_PARTSBLOCK_LEFT) ? "true" : "false") << ',';
+        oss << "\"right\":" << ((pInfo->m_byBlockDirection & BIT_PARTSBLOCK_RIGHT) ? "true" : "false");
+        oss << "}},";
+
+        oss << "\"movement\":{\"direction\":";
+        if (pInfo->m_byMoveDirection & BIT_PARTSMOVE_UP) {
+                oss << "\"up\"";
+        } else if (pInfo->m_byMoveDirection & BIT_PARTSMOVE_DOWN) {
+                oss << "\"down\"";
+        } else if (pInfo->m_byMoveDirection & BIT_PARTSMOVE_LEFT) {
+                oss << "\"left\"";
+        } else if (pInfo->m_byMoveDirection & BIT_PARTSMOVE_RIGHT) {
+                oss << "\"right\"";
+        } else {
+                oss << "null";
+        }
+        oss << '}';
+
+        oss << '}';
+}
+}
+
+CMapPartsUpdateHandler::CMapPartsUpdateHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPartsUpdateHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapParts *pPartsLib = m_pMgrData->GetLibInfoMapParts();
+        CUraraSockTCPSBO *pSock = m_pMgrData->GetSock();
+        if (pPartsLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        const std::string &json = request.body;
+        int nPartsId = 0;
+        if (!JsonUtils::TryGetInt(json, "partsId", nPartsId) || nPartsId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_partsId\"}");
+                return;
+        }
+
+        pPartsLib->Enter();
+
+        PCInfoMapParts pInfo = (PCInfoMapParts)pPartsLib->GetPtr(static_cast<DWORD>(nPartsId));
+        if (pInfo == NULL) {
+                pPartsLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"parts_not_found\"}");
+                return;
+        }
+
+        ApplyJsonToPartsInfo(json, pInfo);
+
+        CPacketMAP_MAPPARTS packet;
+        packet.Make(pInfo);
+        pSock->SendTo(0, &packet);
+
+        std::ostringstream oss;
+        BuildSinglePartJson(oss, pInfo);
+
+        pPartsLib->Leave();
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+CMapPartsCreateHandler::CMapPartsCreateHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPartsCreateHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapParts *pPartsLib = m_pMgrData->GetLibInfoMapParts();
+        CUraraSockTCPSBO *pSock = m_pMgrData->GetSock();
+        if (pPartsLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pPartsLib->Enter();
+
+        PCInfoMapParts pInfo = (PCInfoMapParts)pPartsLib->GetNew();
+        if (pInfo == NULL) {
+                pPartsLib->Leave();
+                response.statusLine = "HTTP/1.1 500 Internal Server Error";
+                response.SetJsonBody("{\"error\":\"failed_to_create_parts\"}");
+                return;
+        }
+
+        ApplyJsonToPartsInfo(request.body, pInfo);
+        pPartsLib->Add(pInfo);
+
+        CPacketMAP_MAPPARTS packet;
+        packet.Make(pInfo);
+        pSock->SendTo(0, &packet);
+
+        std::ostringstream oss;
+        BuildSinglePartJson(oss, pInfo);
+
+        pPartsLib->Leave();
+
+        response.statusLine = "HTTP/1.1 201 Created";
+        response.SetJsonBody(oss.str());
+}
+
+CMapPartsDeleteHandler::CMapPartsDeleteHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPartsDeleteHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapParts *pPartsLib = m_pMgrData->GetLibInfoMapParts();
+        CLibInfoMapBase *pMapLib = m_pMgrData->GetLibInfoMap();
+        CUraraSockTCPSBO *pSock = m_pMgrData->GetSock();
+        if (pPartsLib == NULL || pMapLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        const std::string &json = request.body;
+        int nPartsId = 0;
+        if (!JsonUtils::TryGetInt(json, "partsId", nPartsId) || nPartsId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_partsId\"}");
+                return;
+        }
+
+        DWORD dwPartsId = static_cast<DWORD>(nPartsId);
+
+        pPartsLib->Enter();
+
+        PCInfoMapParts pInfo = (PCInfoMapParts)pPartsLib->GetPtr(dwPartsId);
+        if (pInfo == NULL) {
+                pPartsLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"parts_not_found\"}");
+                return;
+        }
+
+        pMapLib->DeleteParts(dwPartsId);
+        pPartsLib->Delete(dwPartsId);
+
+        CPacketMAP_DELETEPARTS packet;
+        packet.Make(dwPartsId);
+        pSock->SendTo(0, &packet);
+
+        pPartsLib->Leave();
+
+        std::ostringstream oss;
+        oss << "{\"deleted\":" << dwPartsId << "}";
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
 }

@@ -5,6 +5,7 @@
 #include "ApiRouter.h"
 
 class CMgrData;
+class CMainFrame;
 
 class CHttpServer
 {
@@ -15,6 +16,7 @@ public:
         bool    Start(unsigned short wPort);
         void    Stop();
         void    SetMgrData(CMgrData *pMgrData);
+        void    SetMainFrame(CMainFrame *pMainFrame);
 
 private:
         static unsigned __stdcall ThreadProc(void *lpParam);
@@ -43,4 +45,5 @@ private:
         CApiRouter      m_router;
         bool            m_bHandlersRegistered;
         CMgrData       *m_pMgrData;
+        CMainFrame     *m_pMainFrame;
 };

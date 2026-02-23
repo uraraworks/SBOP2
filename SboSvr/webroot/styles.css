@@ -29,10 +29,39 @@ body {
   opacity: 0.85;
 }
 
+.app-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
 .main-nav {
-  padding: 0 clamp(1rem, 5vw, 3rem) 1rem;
-  display: grid;
+  width: 260px;
+  min-width: 260px;
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: calc(100vh - 120px);
+  background-color: rgba(15, 23, 42, 0.5);
+  border-right: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.main-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main-nav::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.3);
+  border-radius: 3px;
+}
+
+.main-nav::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .main-nav details {
@@ -100,7 +129,10 @@ body {
 
 main {
   flex: 1;
-  padding: 1.5rem clamp(1rem, 5vw, 3rem) 2.5rem;
+  min-width: 0;
+  padding: 1.5rem clamp(1rem, 3vw, 2rem) 2.5rem;
+  overflow-y: auto;
+  height: calc(100vh - 120px);
 }
 
 .view {
@@ -467,6 +499,47 @@ main {
   outline-offset: -2px;
 }
 
+.map-object-grid.has-tiles {
+  gap: 0;
+  padding: 0.5rem;
+}
+
+.map-object-grid.has-tiles .map-object-cell {
+  border-radius: 0;
+  border: none;
+  image-rendering: pixelated;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  aspect-ratio: auto;
+}
+
+.map-object-grid.has-tiles .map-object-cell:hover,
+.map-object-grid.has-tiles .map-object-cell:focus-visible {
+  transform: none;
+  outline: 1px solid rgba(96, 165, 250, 0.6);
+  outline-offset: -1px;
+  z-index: 1;
+}
+
+.map-object-grid.has-tiles .map-object-cell.has-object {
+  background-blend-mode: normal;
+  position: relative;
+}
+
+.map-object-grid.has-tiles .map-object-cell.has-object::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(96, 165, 250, 0.4);
+  pointer-events: none;
+}
+
+.map-object-grid.has-tiles .map-object-cell.is-selected {
+  outline: 2px solid rgba(250, 204, 21, 0.9);
+  outline-offset: -2px;
+  z-index: 2;
+}
+
 .map-object-cell span {
   position: absolute;
   inset: 2px;
@@ -476,6 +549,11 @@ main {
   font-size: 0.7rem;
   font-weight: 600;
   color: rgba(248, 250, 252, 0.85);
+}
+
+.map-object-grid.has-tiles .map-object-cell span {
+  z-index: 1;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
 }
 
 .map-object-legend {
@@ -721,6 +799,62 @@ main {
   border-color: rgba(148, 163, 184, 0.35);
 }
 
+.map-parts-edit-form {
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.map-parts-edit-form h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.map-parts-edit-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.map-parts-edit-flags label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  background-color: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  transition: background-color 0.15s ease;
+}
+
+.map-parts-edit-flags label:hover {
+  background-color: rgba(96, 165, 250, 0.12);
+}
+
+.range-value {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-parts-edit-form .form-field select,
+.map-parts-edit-form .form-field input[type="number"] {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background-color: rgba(15, 23, 42, 0.6);
+  color: #f9fafb;
+  font-size: 0.95rem;
+}
+
+.map-parts-edit-form .form-field input[type="range"] {
+  width: 100%;
+  accent-color: #60a5fa;
+}
+
 .meta-subtext {
   display: block;
   font-size: 0.78rem;
@@ -750,8 +884,24 @@ main {
 }
 
 @media (max-width: 640px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
   .main-nav {
-    padding: 0 1rem 1rem;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    padding: 0.75rem;
+    overflow-y: visible;
+  }
+
+  main {
+    height: auto;
+    overflow-y: visible;
   }
 
   .main-nav details {

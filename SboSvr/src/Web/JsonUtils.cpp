@@ -139,6 +139,67 @@ bool TryGetString(const std::string &json, const std::string &key, std::string &
         return true;
 }
 
+bool TryGetInt(const std::string &json, const std::string &key, int &outValue)
+{
+        size_t nKeyPos = FindKey(json, key);
+        if (nKeyPos == std::string::npos) {
+                return false;
+        }
+
+        size_t nColonPos = json.find(':', nKeyPos + key.size() + 2);
+        if (nColonPos == std::string::npos) {
+                return false;
+        }
+
+        nColonPos = SkipWhitespace(json, nColonPos + 1);
+        if (nColonPos >= json.size()) {
+                return false;
+        }
+
+        char ch = json[nColonPos];
+        if (ch != '-' && !std::isdigit(static_cast<unsigned char>(ch))) {
+                return false;
+        }
+
+        char *pEnd = NULL;
+        long value = std::strtol(json.c_str() + nColonPos, &pEnd, 10);
+        if (pEnd == NULL || pEnd == json.c_str() + nColonPos) {
+                return false;
+        }
+
+        outValue = static_cast<int>(value);
+        return true;
+}
+
+bool TryGetBool(const std::string &json, const std::string &key, bool &outValue)
+{
+        size_t nKeyPos = FindKey(json, key);
+        if (nKeyPos == std::string::npos) {
+                return false;
+        }
+
+        size_t nColonPos = json.find(':', nKeyPos + key.size() + 2);
+        if (nColonPos == std::string::npos) {
+                return false;
+        }
+
+        nColonPos = SkipWhitespace(json, nColonPos + 1);
+        if (nColonPos >= json.size()) {
+                return false;
+        }
+
+        if (nColonPos + 4 <= json.size() && json.compare(nColonPos, 4, "true") == 0) {
+                outValue = true;
+                return true;
+        }
+        if (nColonPos + 5 <= json.size() && json.compare(nColonPos, 5, "false") == 0) {
+                outValue = false;
+                return true;
+        }
+
+        return false;
+}
+
 bool TryGetStringArray(const std::string &json, const std::string &key, std::vector<std::string> &outValues)
 {
         outValues.clear();

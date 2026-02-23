@@ -53,6 +53,30 @@ const mapPartsPreviewBase = document.getElementById("map-parts-preview-base");
 const mapPartsPreviewOverlay = document.getElementById("map-parts-preview-overlay");
 const mapPartsSheetHint = document.getElementById("map-parts-sheet-hint");
 
+const mapPartsEditForm = document.getElementById("map-parts-edit-form");
+const mapPartsEditViewType = document.getElementById("map-parts-edit-view-type");
+const mapPartsEditAnimeType = document.getElementById("map-parts-edit-anime-type");
+const mapPartsEditLevel = document.getElementById("map-parts-edit-level");
+const mapPartsEditLevelValue = document.getElementById("map-parts-edit-level-value");
+const mapPartsEditMoveDirection = document.getElementById("map-parts-edit-move-direction");
+const mapPartsEditPosX = document.getElementById("map-parts-edit-pos-x");
+const mapPartsEditPosY = document.getElementById("map-parts-edit-pos-y");
+const mapPartsEditGrpBase = document.getElementById("map-parts-edit-grp-base");
+const mapPartsEditGrpPile = document.getElementById("map-parts-edit-grp-pile");
+const mapPartsEditFlagBlock = document.getElementById("map-parts-edit-flag-block");
+const mapPartsEditFlagPile = document.getElementById("map-parts-edit-flag-pile");
+const mapPartsEditFlagPileBack = document.getElementById("map-parts-edit-flag-pile-back");
+const mapPartsEditFlagFishing = document.getElementById("map-parts-edit-flag-fishing");
+const mapPartsEditFlagDrawLast = document.getElementById("map-parts-edit-flag-draw-last");
+const mapPartsEditFlagCounter = document.getElementById("map-parts-edit-flag-counter");
+const mapPartsEditBlockUp = document.getElementById("map-parts-edit-block-up");
+const mapPartsEditBlockDown = document.getElementById("map-parts-edit-block-down");
+const mapPartsEditBlockLeft = document.getElementById("map-parts-edit-block-left");
+const mapPartsEditBlockRight = document.getElementById("map-parts-edit-block-right");
+const mapPartsSaveBtn = document.getElementById("map-parts-save-btn");
+const mapPartsCreateBtn = document.getElementById("map-parts-create-btn");
+const mapPartsDeleteBtn = document.getElementById("map-parts-delete-btn");
+
 const POLL_INTERVAL_MS = 30000;
 let serverTimerId = null;
 let cachedRoles = [];
@@ -101,7 +125,11 @@ const mapObjectState = {
   filterType: "all",
   previewSelection: null,
   isLoading: false,
-  loadError: null
+  loadError: null,
+  tileSize: 16,
+  sheetTileWidth: 32,
+  sheetTileHeight: 32,
+  sheetBaseUrl: "/api/assets/map-parts/sheets"
 };
 
 const mapPartsState = {
@@ -217,6 +245,7 @@ function normalizeMapEntry(rawMap) {
   const objects = Array.isArray(rawMap?.objects)
     ? rawMap.objects.map((item, index) => normalizeMapObject(item, id, index))
     : [];
+  const tiles = Array.isArray(rawMap?.tiles) ? rawMap.tiles : [];
 
   return {
     id,
@@ -228,7 +257,8 @@ function normalizeMapEntry(rawMap) {
     weatherLabel,
     battleEnabled: Boolean(rawMap?.battleEnabled),
     recoveryEnabled: Boolean(rawMap?.recoveryEnabled),
-    objects
+    objects,
+    tiles
   };
 }
 
@@ -272,6 +302,13 @@ async function loadMapObjectData(forceReload = false) {
     const { response, data } = await fetchJson("/api/maps/objects");
     if (!response.ok || !data || !Array.isArray(data.maps)) {
       throw new Error("invalid_response");
+    }
+
+    mapObjectState.tileSize = Number(data.tileSize) || mapObjectState.tileSize;
+    mapObjectState.sheetTileWidth = Number(data.sheetTileWidth) || mapObjectState.sheetTileWidth;
+    mapObjectState.sheetTileHeight = Number(data.sheetTileHeight) || mapObjectState.sheetTileHeight;
+    if (typeof data.sheetBaseUrl === "string" && data.sheetBaseUrl.length) {
+      mapObjectState.sheetBaseUrl = data.sheetBaseUrl;
     }
 
     const maps = data.maps.map((item) => normalizeMapEntry(item));
@@ -905,7 +942,20 @@ function renderMapPreview(map) {
     return;
   }
 
-  mapObjectGridEl.style.gridTemplateColumns = `repeat(${Math.max(map.width, 1)}, minmax(28px, 1fr))`;
+  const hasTiles = Array.isArray(map.tiles) && map.tiles.length > 0;
+  const tileSize = mapObjectState.tileSize || 16;
+  const cellPx = tileSize * 2;
+  const sheetTileWidth = mapObjectState.sheetTileWidth || 32;
+  const sheetTileHeight = mapObjectState.sheetTileHeight || 32;
+  const sheetBaseUrl = mapObjectState.sheetBaseUrl || "/api/assets/map-parts/sheets";
+
+  if (hasTiles) {
+    mapObjectGridEl.style.gridTemplateColumns = `repeat(${Math.max(map.width, 1)}, ${cellPx}px)`;
+    mapObjectGridEl.classList.add("has-tiles");
+  } else {
+    mapObjectGridEl.style.gridTemplateColumns = `repeat(${Math.max(map.width, 1)}, minmax(28px, 1fr))`;
+    mapObjectGridEl.classList.remove("has-tiles");
+  }
 
   const occupantMap = new Map();
   map.objects.forEach((object) => {
@@ -913,6 +963,8 @@ function renderMapPreview(map) {
   });
 
   const preview = mapObjectState.previewSelection;
+  const sheetWidthPx = sheetTileWidth * cellPx;
+  const sheetHeightPx = sheetTileHeight * cellPx;
 
   for (let y = 0; y < map.height; y += 1) {
     for (let x = 0; x < map.width; x += 1) {
@@ -925,6 +977,24 @@ function renderMapPreview(map) {
       cellButton.dataset.y = y.toString();
       cellButton.setAttribute("role", "gridcell");
       cellButton.setAttribute("aria-label", `X: ${x}, Y: ${y}`);
+
+      if (hasTiles) {
+        const tileIndex = y * map.width + x;
+        const grpId = Number(map.tiles[tileIndex]) || 0;
+        const sheet = Math.floor(grpId / 1024);
+        const tile = grpId % 1024;
+        const tileX = tile % sheetTileWidth;
+        const tileY = Math.floor(tile / sheetTileWidth);
+        const normalizedBase = sheetBaseUrl.endsWith("/") ? sheetBaseUrl.slice(0, -1) : sheetBaseUrl;
+        const sheetUrl = `${normalizedBase}/${sheet}.png`;
+        const offsetX = -(tileX * cellPx);
+        const offsetY = -(tileY * cellPx);
+        cellButton.style.width = `${cellPx}px`;
+        cellButton.style.height = `${cellPx}px`;
+        cellButton.style.backgroundImage = `url(${sheetUrl})`;
+        cellButton.style.backgroundSize = `${sheetWidthPx}px ${sheetHeightPx}px`;
+        cellButton.style.backgroundPosition = `${offsetX}px ${offsetY}px`;
+      }
 
       if (occupant) {
         cellButton.classList.add("has-object");
@@ -1531,6 +1601,7 @@ function renderMapPartsPreview() {
     updateSpriteLayer(mapPartsPreviewBase, null);
     updateSpriteLayer(mapPartsPreviewOverlay, null);
     renderMapPartsFlagList(null);
+    populateMapPartsEditForm(null);
     return;
   }
 
@@ -1569,6 +1640,7 @@ function renderMapPartsPreview() {
   updateSpriteLayer(mapPartsPreviewBase, part.sprites.base);
   updateSpriteLayer(mapPartsPreviewOverlay, part.sprites.overlay);
   renderMapPartsFlagList(part);
+  populateMapPartsEditForm(part.partsId);
 }
 
 function matchesMapPartsFlag(part, filter) {
@@ -1700,6 +1772,170 @@ function selectMapPart(partId) {
     }
   }
   renderMapPartsPreview();
+  populateMapPartsEditForm(partId);
+}
+
+function populateMapPartsEditForm(partId) {
+  if (!mapPartsEditForm) {
+    return;
+  }
+  const part = mapPartsState.parts.find((p) => p.partsId === partId) || null;
+  if (!part) {
+    mapPartsEditForm.style.display = "none";
+    return;
+  }
+  mapPartsEditForm.style.display = "";
+
+  if (mapPartsEditViewType) {
+    mapPartsEditViewType.value = part.viewType !== null ? String(part.viewType) : "0";
+  }
+  if (mapPartsEditAnimeType) {
+    mapPartsEditAnimeType.value = part.animeType !== null ? String(part.animeType) : "0";
+  }
+  if (mapPartsEditLevel) {
+    mapPartsEditLevel.value = part.level !== null ? String(part.level) : "0";
+    if (mapPartsEditLevelValue) {
+      mapPartsEditLevelValue.textContent = mapPartsEditLevel.value;
+    }
+  }
+  if (mapPartsEditMoveDirection) {
+    mapPartsEditMoveDirection.value = part.movementDirection || "";
+  }
+  if (mapPartsEditPosX) {
+    mapPartsEditPosX.value = part.viewPosition.x;
+  }
+  if (mapPartsEditPosY) {
+    mapPartsEditPosY.value = part.viewPosition.y;
+  }
+  if (mapPartsEditGrpBase) {
+    const base = part.sprites.base;
+    mapPartsEditGrpBase.value = base ? String(base.sheet * 1024 + base.tile) : "0";
+  }
+  if (mapPartsEditGrpPile) {
+    const overlay = part.sprites.overlay;
+    mapPartsEditGrpPile.value = overlay ? String(overlay.sheet * 1024 + overlay.tile) : "0";
+  }
+
+  if (mapPartsEditFlagBlock) { mapPartsEditFlagBlock.checked = part.flags.block; }
+  if (mapPartsEditFlagPile) { mapPartsEditFlagPile.checked = part.flags.pile; }
+  if (mapPartsEditFlagPileBack) { mapPartsEditFlagPileBack.checked = part.flags.pileBack; }
+  if (mapPartsEditFlagFishing) { mapPartsEditFlagFishing.checked = part.flags.fishing; }
+  if (mapPartsEditFlagDrawLast) { mapPartsEditFlagDrawLast.checked = part.flags.drawLast; }
+  if (mapPartsEditFlagCounter) { mapPartsEditFlagCounter.checked = part.flags.counter; }
+
+  if (mapPartsEditBlockUp) { mapPartsEditBlockUp.checked = part.flags.blockDirections.up; }
+  if (mapPartsEditBlockDown) { mapPartsEditBlockDown.checked = part.flags.blockDirections.down; }
+  if (mapPartsEditBlockLeft) { mapPartsEditBlockLeft.checked = part.flags.blockDirections.left; }
+  if (mapPartsEditBlockRight) { mapPartsEditBlockRight.checked = part.flags.blockDirections.right; }
+}
+
+function collectMapPartsEditData() {
+  return {
+    viewType: mapPartsEditViewType ? Number(mapPartsEditViewType.value) : 0,
+    animeType: mapPartsEditAnimeType ? Number(mapPartsEditAnimeType.value) : 0,
+    level: mapPartsEditLevel ? Number(mapPartsEditLevel.value) : 0,
+    moveDirection: mapPartsEditMoveDirection ? mapPartsEditMoveDirection.value : "",
+    viewPositionX: mapPartsEditPosX ? Number(mapPartsEditPosX.value) : 0,
+    viewPositionY: mapPartsEditPosY ? Number(mapPartsEditPosY.value) : 0,
+    grpIdBase: mapPartsEditGrpBase ? Number(mapPartsEditGrpBase.value) : 0,
+    grpIdPile: mapPartsEditGrpPile ? Number(mapPartsEditGrpPile.value) : 0,
+    block: mapPartsEditFlagBlock ? mapPartsEditFlagBlock.checked : false,
+    pile: mapPartsEditFlagPile ? mapPartsEditFlagPile.checked : false,
+    pileBack: mapPartsEditFlagPileBack ? mapPartsEditFlagPileBack.checked : false,
+    fishing: mapPartsEditFlagFishing ? mapPartsEditFlagFishing.checked : false,
+    drawLast: mapPartsEditFlagDrawLast ? mapPartsEditFlagDrawLast.checked : false,
+    counter: mapPartsEditFlagCounter ? mapPartsEditFlagCounter.checked : false,
+    blockUp: mapPartsEditBlockUp ? mapPartsEditBlockUp.checked : false,
+    blockDown: mapPartsEditBlockDown ? mapPartsEditBlockDown.checked : false,
+    blockLeft: mapPartsEditBlockLeft ? mapPartsEditBlockLeft.checked : false,
+    blockRight: mapPartsEditBlockRight ? mapPartsEditBlockRight.checked : false
+  };
+}
+
+async function handleMapPartsSave(event) {
+  event.preventDefault();
+  if (!mapPartsState.selectedPartId) {
+    setMapPartsFeedback("保存するパーツを選択してください", "error");
+    return;
+  }
+  const data = collectMapPartsEditData();
+  data.partsId = mapPartsState.selectedPartId;
+
+  setMapPartsFeedback("保存中...", null);
+  try {
+    const { response, data: result } = await fetchJson("/api/maps/parts", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+      const errMsg = result && result.error ? result.error : `HTTP ${response.status}`;
+      setMapPartsFeedback(`保存に失敗しました: ${errMsg}`, "error");
+      return;
+    }
+    setMapPartsFeedback("保存しました", "success");
+    await loadMapPartsData(true);
+    if (mapPartsState.selectedPartId) {
+      populateMapPartsEditForm(mapPartsState.selectedPartId);
+    }
+  } catch (error) {
+    setMapPartsFeedback("保存中にエラーが発生しました", "error");
+  }
+}
+
+async function handleMapPartsCreate() {
+  const data = collectMapPartsEditData();
+
+  setMapPartsFeedback("追加中...", null);
+  try {
+    const { response, data: result } = await fetchJson("/api/maps/parts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+      const errMsg = result && result.error ? result.error : `HTTP ${response.status}`;
+      setMapPartsFeedback(`追加に失敗しました: ${errMsg}`, "error");
+      return;
+    }
+    const newId = result && result.partsId ? result.partsId : null;
+    setMapPartsFeedback(newId ? `パーツ ${newId} を追加しました` : "パーツを追加しました", "success");
+    await loadMapPartsData(true);
+    if (newId) {
+      selectMapPart(newId);
+    }
+  } catch (error) {
+    setMapPartsFeedback("追加中にエラーが発生しました", "error");
+  }
+}
+
+async function handleMapPartsDelete() {
+  if (!mapPartsState.selectedPartId) {
+    setMapPartsFeedback("削除するパーツを選択してください", "error");
+    return;
+  }
+  if (!confirm(`パーツ ${mapPartsState.selectedPartId} を削除しますか？\nマップ上の使用箇所もクリアされます。`)) {
+    return;
+  }
+
+  setMapPartsFeedback("削除中...", null);
+  try {
+    const { response, data: result } = await fetchJson("/api/maps/parts", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ partsId: mapPartsState.selectedPartId })
+    });
+    if (!response.ok) {
+      const errMsg = result && result.error ? result.error : `HTTP ${response.status}`;
+      setMapPartsFeedback(`削除に失敗しました: ${errMsg}`, "error");
+      return;
+    }
+    setMapPartsFeedback("パーツを削除しました", "success");
+    mapPartsState.selectedPartId = null;
+    await loadMapPartsData(true);
+  } catch (error) {
+    setMapPartsFeedback("削除中にエラーが発生しました", "error");
+  }
 }
 
 async function loadMapPartsData(forceReload = false) {
@@ -1902,5 +2138,25 @@ window.addEventListener("load", () => {
     if (mapPartsFlagFilter) {
       mapPartsFlagFilter.addEventListener("change", handleMapPartsFlagFilterChange);
     }
+  }
+
+  if (mapPartsEditForm) {
+    mapPartsEditForm.addEventListener("submit", handleMapPartsSave);
+    if (mapPartsEditForm.style) {
+      mapPartsEditForm.style.display = "none";
+    }
+  }
+  if (mapPartsCreateBtn) {
+    mapPartsCreateBtn.addEventListener("click", handleMapPartsCreate);
+  }
+  if (mapPartsDeleteBtn) {
+    mapPartsDeleteBtn.addEventListener("click", handleMapPartsDelete);
+  }
+  if (mapPartsEditLevel) {
+    mapPartsEditLevel.addEventListener("input", function () {
+      if (mapPartsEditLevelValue) {
+        mapPartsEditLevelValue.textContent = mapPartsEditLevel.value;
+      }
+    });
   }
 });

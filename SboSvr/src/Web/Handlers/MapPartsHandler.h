@@ -17,7 +17,9 @@
 
 class CMgrData;
 class CLibInfoMapParts;
+class CLibInfoMapBase;
 class CInfoMapParts;
+class CUraraSockTCPSBO;
 
 class CMapPartsResourceProvider
 {
@@ -67,4 +69,39 @@ private:
 
         std::shared_ptr<CMapPartsResourceProvider>       m_provider;
         std::string                                      m_pathPrefix;
+};
+
+class CMapPartsUpdateHandler : public IApiHandler
+{
+public:
+        CMapPartsUpdateHandler(CMgrData *pMgrData);
+
+        void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+        void BuildPartJson(std::ostringstream &oss, const CInfoMapParts *pInfo) const;
+        CMgrData        *m_pMgrData;
+};
+
+class CMapPartsCreateHandler : public IApiHandler
+{
+public:
+        CMapPartsCreateHandler(CMgrData *pMgrData);
+
+        void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+        void BuildPartJson(std::ostringstream &oss, const CInfoMapParts *pInfo) const;
+        CMgrData        *m_pMgrData;
+};
+
+class CMapPartsDeleteHandler : public IApiHandler
+{
+public:
+        CMapPartsDeleteHandler(CMgrData *pMgrData);
+
+        void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+        CMgrData        *m_pMgrData;
 };

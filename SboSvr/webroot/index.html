@@ -11,6 +11,7 @@
     <h1>サーバー管理ポータル（試験版）</h1>
     <p>このページは Web 管理機能の PoC として提供されるダッシュボードです。</p>
   </header>
+  <div class="app-layout">
   <nav class="main-nav" aria-label="主要メニュー">
     <details open>
       <summary>Wave 1（運用基盤）</summary>
@@ -333,6 +334,87 @@
           <h3>付与フラグ</h3>
           <ul id="map-parts-flags" class="map-parts-flag-list"></ul>
         </div>
+        <form id="map-parts-edit-form" class="map-parts-edit-form" novalidate>
+          <h3>編集</h3>
+          <div class="form-grid compact">
+            <label class="form-field">
+              <span>表示種別</span>
+              <select id="map-parts-edit-view-type" name="viewType">
+                <option value="0">通常レイヤー (0)</option>
+                <option value="1">背景レイヤー (1)</option>
+                <option value="2">装飾レイヤー (2)</option>
+                <option value="3">イベントレイヤー (3)</option>
+                <option value="4">水辺レイヤー (4)</option>
+                <option value="5">特殊レイヤー (5)</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>アニメーション種別</span>
+              <select id="map-parts-edit-anime-type" name="animeType">
+                <option value="0">静止 (0)</option>
+                <option value="1">往復 (1)</option>
+                <option value="2">循環 (2)</option>
+                <option value="3">ランダム (3)</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>透明度</span>
+              <input type="range" id="map-parts-edit-level" name="level" min="0" max="255" value="0" />
+              <span class="range-value" id="map-parts-edit-level-value">0</span>
+            </label>
+            <label class="form-field">
+              <span>移動方向</span>
+              <select id="map-parts-edit-move-direction" name="moveDirection">
+                <option value="">なし</option>
+                <option value="up">上</option>
+                <option value="down">下</option>
+                <option value="left">左</option>
+                <option value="right">右</option>
+              </select>
+            </label>
+            <label class="form-field coordinate">
+              <span>表示位置 X</span>
+              <input type="number" id="map-parts-edit-pos-x" name="viewPositionX" min="0" />
+            </label>
+            <label class="form-field coordinate">
+              <span>表示位置 Y</span>
+              <input type="number" id="map-parts-edit-pos-y" name="viewPositionY" min="0" />
+            </label>
+            <label class="form-field">
+              <span>基本スプライトID</span>
+              <input type="number" id="map-parts-edit-grp-base" name="grpIdBase" min="0" max="65535" />
+            </label>
+            <label class="form-field">
+              <span>重ね合わせスプライトID</span>
+              <input type="number" id="map-parts-edit-grp-pile" name="grpIdPile" min="0" max="65535" />
+            </label>
+          </div>
+          <fieldset class="form-field roles-field">
+            <legend>フラグ</legend>
+            <div class="map-parts-edit-flags">
+              <label><input type="checkbox" id="map-parts-edit-flag-block" name="block" /> ぶつかる</label>
+              <label><input type="checkbox" id="map-parts-edit-flag-pile" name="pile" /> 重なる</label>
+              <label><input type="checkbox" id="map-parts-edit-flag-pile-back" name="pileBack" /> 下地も重ねる</label>
+              <label><input type="checkbox" id="map-parts-edit-flag-fishing" name="fishing" /> 釣り場</label>
+              <label><input type="checkbox" id="map-parts-edit-flag-draw-last" name="drawLast" /> 最前面</label>
+              <label><input type="checkbox" id="map-parts-edit-flag-counter" name="counter" /> カウンター</label>
+            </div>
+          </fieldset>
+          <fieldset class="form-field roles-field">
+            <legend>ぶつかり方向</legend>
+            <div class="map-parts-edit-flags">
+              <label><input type="checkbox" id="map-parts-edit-block-up" name="blockUp" /> 上</label>
+              <label><input type="checkbox" id="map-parts-edit-block-down" name="blockDown" /> 下</label>
+              <label><input type="checkbox" id="map-parts-edit-block-left" name="blockLeft" /> 左</label>
+              <label><input type="checkbox" id="map-parts-edit-block-right" name="blockRight" /> 右</label>
+            </div>
+          </fieldset>
+          <div class="form-actions">
+            <button type="submit" class="button primary" id="map-parts-save-btn">保存</button>
+            <button type="button" class="button" id="map-parts-create-btn">新規追加</button>
+            <button type="button" class="button danger" id="map-parts-delete-btn">削除</button>
+          </div>
+        </form>
       </section>
     </div>
     <div class="view" data-view="map-objects">
@@ -531,6 +613,7 @@
       </section>
     </div>
   </main>
+  </div>
   <footer class="page-footer">
     <small>&copy; 2024 Sbo Admin Platform Team</small>
   </footer>

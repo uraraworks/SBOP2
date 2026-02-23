@@ -13,9 +13,11 @@
 #include "LibInfo/LibInfoMapBase.h"
 #include "LibInfo/LibInfoMapObject.h"
 #include "LibInfo/LibInfoMapObjectData.h"
+#include "LibInfo/LibInfoMapParts.h"
 #include "Info/InfoMapBase.h"
 #include "Info/InfoMapObjectData.h"
 #include "Info/InfoMapObject.h"
+#include "Info/InfoMapParts.h"
 #include "myLib/myString.h"
 
 namespace
@@ -145,15 +147,24 @@ std::string CMapObjectListHandler::BuildResponseJson() const
 
         CLibInfoMapBase *pMapLib = m_pMgrData->GetLibInfoMap();
         CLibInfoMapObject *pObjectLib = m_pMgrData->GetLibInfoMapObject();
+        CLibInfoMapParts *pPartsLib = m_pMgrData->GetLibInfoMapParts();
         if ((pMapLib == NULL) || (pObjectLib == NULL)) {
                 return "{\"maps\":[]}";
         }
 
         pMapLib->Enter();
         pObjectLib->Enter();
+        if (pPartsLib != NULL) {
+                pPartsLib->Enter();
+        }
 
         std::ostringstream oss;
-        oss << "{\"maps\":[";
+        oss << "{";
+        oss << "\"tileSize\":16,";
+        oss << "\"sheetTileWidth\":32,";
+        oss << "\"sheetTileHeight\":32,";
+        oss << "\"sheetBaseUrl\":\"/api/assets/map-parts/sheets\",";
+        oss << "\"maps\":[";
         bool firstMap = true;
         int nMapCount = pMapLib->GetCount();
         for (int i = 0; i < nMapCount; ++i) {
@@ -165,17 +176,20 @@ std::string CMapObjectListHandler::BuildResponseJson() const
                         oss << ',';
                 }
                 firstMap = false;
-                AppendMapJson(oss, pMap, pObjectLib);
+                AppendMapJson(oss, pMap, pObjectLib, pPartsLib);
         }
         oss << "]}";
 
+        if (pPartsLib != NULL) {
+                pPartsLib->Leave();
+        }
         pObjectLib->Leave();
         pMapLib->Leave();
 
         return oss.str();
 }
 
-void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMapBase *pMap, CLibInfoMapObject *pObjectLib) const
+void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMapBase *pMap, CLibInfoMapObject *pObjectLib, CLibInfoMapParts *pPartsLib) const
 {
         oss << '{';
         oss << "\"id\":" << pMap->m_dwMapID << ',';
@@ -213,6 +227,25 @@ void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMa
                         AppendObjectJson(oss, pPlacement, pObjectLib);
                 }
                 pPlacementLib->Leave();
+        }
+        oss << "],";
+
+        /* タイルデータ (各座標のベースグラフィックID) */
+        oss << "\"tiles\":[";
+        int nTileCount = pMap->m_sizeMap.cx * pMap->m_sizeMap.cy;
+        if (pMap->m_pwMap != NULL && pPartsLib != NULL && nTileCount > 0) {
+                for (int i = 0; i < nTileCount; ++i) {
+                        if (i > 0) {
+                                oss << ',';
+                        }
+                        WORD wPartsID = pMap->m_pwMap[i];
+                        const CInfoMapParts *pParts = static_cast<const CInfoMapParts *>(pPartsLib->GetPtr(static_cast<DWORD>(wPartsID)));
+                        if (pParts != NULL) {
+                                oss << pParts->m_wGrpIDBase;
+                        } else {
+                                oss << 0;
+                        }
+                }
         }
         oss << ']';
         oss << '}';

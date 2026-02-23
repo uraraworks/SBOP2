@@ -9,6 +9,7 @@ class CMgrData;
 class CInfoMapBase;
 class CInfoMapObjectData;
 class CLibInfoMapObject;
+class CLibInfoMapParts;
 
 class CMapObjectListHandler : public IApiHandler
 {
@@ -18,7 +19,7 @@ public:
 
 private:
         std::string BuildResponseJson() const;
-        void AppendMapJson(std::ostringstream &oss, const CInfoMapBase *pMap, CLibInfoMapObject *pObjectLib) const;
+        void AppendMapJson(std::ostringstream &oss, const CInfoMapBase *pMap, CLibInfoMapObject *pObjectLib, CLibInfoMapParts *pPartsLib) const;
         void AppendObjectJson(std::ostringstream &oss, const CInfoMapObjectData *pPlacement, CLibInfoMapObject *pObjectLib) const;
         static std::string FormatHex(unsigned long value);
         static std::string ResolveWeatherLabel(unsigned long weatherType);
