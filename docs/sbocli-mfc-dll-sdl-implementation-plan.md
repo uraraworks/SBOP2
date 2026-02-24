@@ -1,4 +1,4 @@
-# SboCli 管理画面DLL分離 + ゲーム部SDL化 実装計画
+﻿# SboCli 管理画面DLL分離 + ゲーム部SDL化 実装計画
 
 ## 1. 背景と目的
 
@@ -69,6 +69,41 @@
 - 管理者ログイン時にDLL由来の管理画面が起動
 - 管理操作（通知、編集、反映）が既存同等で動作
 - DLL未配置でも通常プレイ（非管理者）が可能
+
+#### Phase 1 追加計画: 管理UI関連コードの段階的移管（現実解）
+`AdminWindow/Dialog/Wnd` を一括で DLL 側へ移すと、`MainFrame/MgrData/MgrDraw/Info*/Packet*` への暗黙依存でリンク破綻しやすいため、Phase1 では以下の順で段階移管する。
+
+1. **Step 1: 境界と所有権の固定（先行実施）**
+- ABI 定義の所有を `SboCliAdminMfc/include` に集約し、`SboCli` 側は互換ヘッダのみを保持。
+- `SboCli` は `LoadLibrary/GetProcAddress` と `AdminApi` 境界コードのみを保持する。
+
+2. **Step 2: 低依存ユニットの先行移管**
+- 依存が比較的浅い `Wnd/*` と一部 `Dialog/*` を選別し、DLL 側プロジェクトでコンパイル可能にする。
+- 選別基準:
+- `MainFrame` や描画マネージャへ直接依存しない
+- `Packet` 依存が限定的
+- リソース参照が DLL 側で閉じる
+- 各ユニット移管後に `SboCli` から該当 `.cpp/.h` を除外し、単位でビルド確認する。
+
+3. **Step 3: ホスト依存の抽象化**
+- 依存が重い箇所（`MainFrame/MgrData/MgrDraw`）を `IAdminUiHost` 経由に寄せる。
+- 追加する Host API は必要最小限で段階導入し、都度 DLL 境界仕様を更新する。
+- 目標: DLL 側が `SboCli` の具体型を直接 include しない状態を増やす。
+
+4. **Step 4: 高依存ユニットの移管**
+- `AdminWindow` 本体と高依存 `Dialog` 群を最後に移管する。
+- 必要に応じて一時アダプタ層（薄い中継クラス）を `SboCli` 側に残し、段階的に縮退する。
+
+5. **Step 5: Phase1完了判定の拡張**
+- 判定条件を以下に更新する:
+- `SboCli` は管理UI本体を直接 `new` しない
+- 管理UIの主要コンパイル単位（少なくとも `AdminWindow` + 主要 `Dialog/Wnd`）が DLL 側でビルドされる
+- `SboCliAdminMfc.dll` 未配置時に非管理者プレイが継続可能
+- Debug/Release の両構成でビルド成功
+
+6. **ロールバック方針（Phase1内）**
+- 単位移管で不安定化した場合は、該当ユニットのみ `SboCli` へ戻す（全面ロールバックしない）。
+- 変更は「境界ヘッダ」「プロジェクト定義」「対象ユニット」の3点セットで管理し、切り戻し可能性を常に維持する。
 
 ### Phase 2: SDL基盤導入（1〜2週）
 

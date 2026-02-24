@@ -65,7 +65,6 @@
 #include "DlgMsgLog.h"
 #include "DlgDbg.h"
 #include "MainFrame.h"
-#include "AdminWindow.h"
 #include "MgrData.h"
 #include "MgrSound.h"
 #include "MgrLayer.h"
@@ -92,7 +91,6 @@ CStateProcMAP::CStateProcMAP()
 	m_dwLastTimeGauge		= 0;
 	m_dwStartChargeTime		= 0;
 
-	m_pAdminWindow		= NULL;
 	m_pPlayerChar		= NULL;
 	m_pMap				= NULL;
 	m_pLibInfoChar		= NULL;
@@ -111,11 +109,7 @@ CStateProcMAP::CStateProcMAP()
 
 CStateProcMAP::~CStateProcMAP()
 {
-	if (m_pAdminWindow) {
-		m_pMgrData->SetAdminWindow (NULL);
-		m_pAdminWindow->Destroy ();
-		m_pAdminWindow = NULL;
-	}
+	DestroyAdminUi ();
 	m_pMgrSound->StopBGM ();
 }
 
@@ -175,11 +169,7 @@ void CStateProcMAP::Init(void)
 	m_pMgrLayer->MakeMAP ();
 	m_pMgrLayer->MakeSYSTEMMSG ();
 
-	if (m_pMgrData->GetAdminLevel () > ADMINLEVEL_NONE) {
-		m_pAdminWindow = new CAdminWindow;
-		m_pAdminWindow->Create (m_pMgrData->GetMainWindow (), m_pMgrData);
-		m_hWndAdmin = m_pMgrData->GetAdminWindow ();
-	}
+	CreateAdminUi ();
 
 	m_pMgrDraw->SetFadeState (FADESTATE_FADEIN);
 
@@ -357,8 +347,6 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 	pLayerMap->GetViewMapPos (nMapX, nMapY);
 	xx = (pLayerMap->m_nViewX % 2) ? x + 16 : x;
 	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
-	m_hWndAdmin = m_pMgrData->GetAdminWindow ();
-
 	nType = m_pMgrData->GetAdminNotifyTypeL ();
 	switch (nType) {
 	case ADMINNOTIFYTYPE_CHARID:			/* キャラID */
@@ -383,7 +371,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 					break;
 				}
 			}
-			PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
+			PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		}
 		break;
 
@@ -435,7 +423,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 				break;
 			}
 			dwNotifyData = pInfoItem->m_dwItemID;
-			PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
+			PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		}
 		break;
 
@@ -443,14 +431,14 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		dwNotifyData = MAKELPARAM (y, x);
-		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
+		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
 		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
 		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
 		dwNotifyData = MAKELPARAM (y, x);
-		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
+		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		break;
 	}
 }
@@ -502,14 +490,14 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		dwNotifyData = MAKELPARAM (y, x);
-		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, dwNotifyData);
+		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, dwNotifyData);
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
 		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
 		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
 		dwNotifyData = MAKELPARAM (y, x);
-		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, dwNotifyData);
+		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, dwNotifyData);
 		break;
 	}
 }
@@ -540,14 +528,14 @@ void CStateProcMAP::OnRButtonDblClk(int x, int y)
 		x = (xx / 32) + nMapX;
 		y = (yy / 32) + nMapY;
 		dwNotifyData = MAKELPARAM (y, x);
-		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK, dwNotifyData);
+		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK, dwNotifyData);
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
 		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
 		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
 		dwNotifyData = MAKELPARAM (y, x);
-		PostMessage (m_hWndAdmin, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK, dwNotifyData);
+		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK, dwNotifyData);
 		break;
 	}
 }
@@ -636,12 +624,7 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 
 void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
-	if (m_pAdminWindow) {
-		HWND hAdmin = m_pAdminWindow->GetSafeHwnd ();
-		if (hAdmin && ::IsWindow (hAdmin)) {
-			m_pAdminWindow->PostMessage (WM_MAINFRAME, dwCommand, dwParam);
-		}
-	}
+	PostAdminUiMessage (WM_MAINFRAME, dwCommand, dwParam);
 	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
 
 	switch (dwCommand) {
@@ -717,18 +700,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		break;
 
 	case MAINFRAMEMSG_RENEWADMINLEVEL:	/* 管理者権限変更 */
-		if (m_pAdminWindow) {
-			m_pMgrData->SetAdminWindow (NULL);
-			SAFE_DELETE (m_pAdminWindow);
-		}
-		if (m_pMgrData->GetAdminLevel () > ADMINLEVEL_NONE) {
-			m_pAdminWindow = new CAdminWindow;
-			if (m_pAdminWindow->Create (m_pMgrData->GetMainWindow (), m_pMgrData)) {
-				m_hWndAdmin = m_pMgrData->GetAdminWindow ();
-			} else {
-				SAFE_DELETE (m_pAdminWindow);
-			}
-		}
+		CreateAdminUi ();
 		break;
 
 	case MAINFRAMEMSG_RENEWITEMINFO:	/* アイテム情報更新 */
@@ -772,12 +744,36 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 void CStateProcMAP::OnAdminMsg(int nCode, DWORD dwPara)
 {
-	if (m_pAdminWindow) {
-		HWND hAdmin = m_pAdminWindow->GetSafeHwnd ();
-		if (hAdmin && ::IsWindow (hAdmin)) {
-			m_pAdminWindow->PostMessage (WM_ADMINMSG, nCode, dwPara);
-		}
+	PostAdminUiMessage (WM_ADMINMSG, nCode, dwPara);
+}
+
+void CStateProcMAP::CreateAdminUi(void)
+{
+	DestroyAdminUi ();
+
+	if ((m_pMgrData == NULL) || (m_pMgrData->GetAdminLevel () <= ADMINLEVEL_NONE)) {
+		return;
 	}
+	if (m_AdminUi.Create (m_pMgrData->GetMainWindow (), m_pMgrData)) {
+		m_hWndAdmin = m_AdminUi.GetWindow ();
+	} else {
+		m_hWndAdmin = NULL;
+	}
+}
+
+void CStateProcMAP::DestroyAdminUi(void)
+{
+	m_AdminUi.Destroy ();
+	m_hWndAdmin = NULL;
+	if (m_pMgrData) {
+		m_pMgrData->SetAdminWindow (NULL);
+	}
+}
+
+void CStateProcMAP::PostAdminUiMessage(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	m_AdminUi.Notify (message, wParam, lParam);
+	m_hWndAdmin = m_AdminUi.GetWindow ();
 }
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -135,7 +135,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\AdminWindow.cpp">
+    <ClCompile Include="src\AdminApi\AdminUiLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\LibSboSoundLoader.cpp">
@@ -594,267 +594,273 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp">
       <Filter>Source Files\MainFrame</Filter>
     </ClCompile>
+    <ClCompile Include="src\AdminWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminAccountAdd.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminBase.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharAccountInfo.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharAddNPC.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharAdmin.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharDisable.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharDisableNew.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharModify.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharModifyGrp.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharModifyItem.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharModifySkill.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharModifyStatus.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharModifyTypeBase.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharModifyTypePUTNPC.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharMotion.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharMotionList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharMotionTypeList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharSkillBase.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharSkillHEAL.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharSkillList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharSkillMOVEATACK.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminCharSkillNONE.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminEfcBalloon.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminEfcBalloonList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminEfcEffect.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminEfcEffectList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemNew.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemTypeList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemTypeNew.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemTypeNewARMS.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemTypeNewARMSBow.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemTypeNewHP.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemTypeNewLIGHT.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemWeaponList.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminItemWeaponNew.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEvent.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEventBase.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEventGRPIDTMP.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEventINITSTATUS.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEventLIGHT.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEventMAPMOVE.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEventMOVE.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapEventNONE.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapInfo.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapObject.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapObjectData.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapObjectDataEdit.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapObjectEdit.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapParts.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapPartsEdit.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapShadow.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminMapShadowEdit.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminSelectEffect.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminSelectItem.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminServerInfo.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminSystemSetInitCharStatus.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventADDSKILL.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventBase.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventMENU.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventMENUSet.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventMSG.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventNONE.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventPAGE.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventSet.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkEventTab.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgAdminTalkSet.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgDbg.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Dialog\DlgMsgLog.cpp">
-      <Filter>Source Files\Dialog</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\ListCtrlEffectInfo.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\ListCtrlItemInfo.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\StaticGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\StaticMapObjectGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\StaticMapParts.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\StaticMapShadow.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndMap.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndMapPartsAnimeList.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndMapPartsGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndMapShadowAnimeList.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndMapShadowGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndSelectGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndSelectItemGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndSelectMapPartsGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndSelectMapShadowGrp.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndToolbar.cpp">
-      <Filter>Source Files\Wnd</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AdminWindow.h">
+    <ClInclude Include="src\AdminApi\AdminUiApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AdminApi\AdminUiLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\LibSboSoundLoader.h">
@@ -1310,263 +1316,266 @@
     <ClInclude Include="src\MainFrame\MainFrame.h">
       <Filter>Header Files\MainFrame No. 1</Filter>
     </ClInclude>
+    <ClInclude Include="src\AdminWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminAccountAdd.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminBase.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharAccountInfo.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharAddNPC.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharAdmin.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharDisable.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharDisableNew.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharModify.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharModifyGrp.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharModifyItem.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharModifySkill.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharModifyStatus.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharModifyTypeBase.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharModifyTypePUTNPC.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharMotion.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharMotionList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharMotionTypeList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharSkillBase.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharSkillHEAL.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharSkillList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharSkillMOVEATACK.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminCharSkillNONE.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminEfcBalloon.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminEfcBalloonList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminEfcEffect.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminEfcEffectList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemNew.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemTypeList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemTypeNew.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemTypeNewARMS.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemTypeNewARMSBow.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemTypeNewHP.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemTypeNewLIGHT.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemWeaponList.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminItemWeaponNew.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEvent.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEventBase.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEventGRPIDTMP.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEventINITSTATUS.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEventLIGHT.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEventMAPMOVE.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEventMOVE.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapEventNONE.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapInfo.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapObject.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapObjectData.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapObjectDataEdit.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapObjectEdit.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapParts.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapPartsEdit.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapShadow.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminMapShadowEdit.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminSelectEffect.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminSelectItem.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminServerInfo.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminSystemSetInitCharStatus.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventADDSKILL.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventBase.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventMENU.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventMENUSet.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventMSG.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventNONE.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventPAGE.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventSet.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkEventTab.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgAdminTalkSet.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgDbg.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgMsgLog.h">
-      <Filter>Header Files\Dialog No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\ListCtrlEffectInfo.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\ListCtrlItemInfo.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\StaticGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\StaticMapObjectGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\StaticMapParts.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\StaticMapShadow.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndMap.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndMapPartsAnimeList.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndMapPartsGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndMapShadowAnimeList.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndMapShadowGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndSelectGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndSelectItemGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndSelectMapPartsGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndSelectMapShadowGrp.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndToolbar.h">
-      <Filter>Header Files\Wnd No. 1</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1586,7 +1595,7 @@
     <Image Include="res\SboCli.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\SBOｱｲｺﾝ.ico">
+    <Image Include="res\SBO・ｱ・ｲ・ｺ・・ico">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\Toolbar.bmp">

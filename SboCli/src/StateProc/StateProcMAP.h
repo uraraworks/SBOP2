@@ -9,6 +9,7 @@
 #pragma once
 
 #include "StateProcBase.h"
+#include "AdminApi/AdminUiLoader.h"
 
 class CInfoCharCli;
 class CInfoMapBase;
@@ -17,7 +18,6 @@ class CLibInfoMapBase;
 class CLibInfoItem;
 class CDlgMsgLog;
 class CDlgDbg;
-class CAdminWindow;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -90,6 +90,9 @@ protected:
 	BOOL	OnWindowMsgSKILLMENU		(DWORD dwPara);									/* スキルメニュー */
 	void	OnMainFrameRENEWITEMINFO	(DWORD dwItemID);								/* メッセージハンドラ(WM_MAINFRAME)[アイテム情報更新] */
 	void	OnMainFrameRENEWTALKEVENT	(DWORD dwParam);								/* メッセージハンドラ(WM_MAINFRAME)[会話イベント情報更新] */
+	void	CreateAdminUi				(void);											/* 管理UIを作成 */
+	void	DestroyAdminUi				(void);											/* 管理UIを破棄 */
+	void	PostAdminUiMessage			(UINT message, WPARAM wParam, LPARAM lParam);	/* 管理UIへメッセージ通知 */
 	BOOL	OnXChar						(DWORD dwCharID);								/* キャラにXキーを押した時の処理 */
 	void	AddSystemMsg				(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);		/* システムメッセージを追加 */
 	void	DefenseOff					(void);											/* 防御解除 */
@@ -107,7 +110,7 @@ protected:
 					m_dwLastKeyInput,					/* 最後にキー入力した時間 */
 					m_dwStartChargeTime;				/* 溜め開始時間 */
 
-	CAdminWindow	*m_pAdminWindow;					/* 管理者ウィンドウ */
+	CAdminUiLoader	m_AdminUi;						/* 管理者UIモジュール */
 	CInfoCharCli	*m_pPlayerChar;						/* 操作中のキャラ情報 */
 	CInfoMapBase	*m_pMap;							/* 表示中のマップ情報 */
 
