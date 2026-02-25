@@ -10,6 +10,9 @@
 #include "resource.h"
 #include "MgrData.h"
 #include "DlgAdminBase.h"
+#include "PacketBase.h"
+#include "AdminApi/AdminUiApi.h"
+#include "UraraSockTCPSBO.h"
 
 IMPLEMENT_DYNAMIC(CDlgAdminBase, CDialog)
 
@@ -51,6 +54,7 @@ CDlgAdminBase::CDlgAdminBase(int nResourceID, CWnd* pParent /*=NULL*/)
 
 	m_pMgrData		= NULL;
 	m_pWndParent	= pParent;
+	m_pHost			= NULL;
 }
 
 
@@ -74,7 +78,11 @@ CDlgAdminBase::~CDlgAdminBase()
 void CDlgAdminBase::Init(CMgrData *pMgrData)
 {
 	m_pMgrData	= pMgrData;
-	m_pSock		= m_pMgrData->GetUraraSockTCP ();
+}
+
+void CDlgAdminBase::SetHost(const SboAdminUiHost* pHost)
+{
+	m_pHost = pHost;
 }
 
 
@@ -181,6 +189,21 @@ void CDlgAdminBase::SelectCmb(CComboBox *pCmb, DWORD dwID)
 		break;
 	}
 	pCmb->SetCurSel (nNo);
+}
+
+void CDlgAdminBase::SendPacket(CPacketBase* pPacket)
+{
+	if (pPacket == NULL) {
+		return;
+	}
+	if ((m_pHost) && (m_pHost->SendAdminPacket)) {
+		if (m_pHost->SendAdminPacket (m_pHost->userData, pPacket)) {
+			return;
+		}
+	}
+	if (m_pMgrData && m_pMgrData->GetUraraSockTCP ()) {
+		m_pMgrData->GetUraraSockTCP ()->Send (pPacket);
+	}
 }
 
 /* Copyright(C)URARA-works 2007 */

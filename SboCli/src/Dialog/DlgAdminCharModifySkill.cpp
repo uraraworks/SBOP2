@@ -150,7 +150,7 @@ void CDlgAdminCharModifySkill::OnAdminMsg(int nType, DWORD dwPara)
 	m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (dwPara);
 
 	PacketCHAR_REQ_CHARINFO.Make (dwPara);
-	m_pSock->Send (&PacketCHAR_REQ_CHARINFO);
+	SendPacket (&PacketCHAR_REQ_CHARINFO);
 
 	Renew ();
 }
@@ -235,7 +235,7 @@ void CDlgAdminCharModifySkill::OnAdd()
 	}
 
 	Packet.Make (m_pInfoChar->m_dwCharID, dwSkillID, CHARMODIFYSKILLTYPE_ADD);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -262,7 +262,8 @@ void CDlgAdminCharModifySkill::OnDelete()
 	dwSkillID = m_List.GetItemData (nNo);
 
 	Packet.Make (m_pInfoChar->m_dwCharID, dwSkillID, CHARMODIFYSKILLTYPE_DELETE);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2007 */
+

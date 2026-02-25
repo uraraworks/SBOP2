@@ -200,7 +200,7 @@ void CDlgAdminItemTypeList::OnAdd()
 	Dlg.Get (pInfoItem);
 
 	Packet.Make (pInfoItem);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	SAFE_DELETE (pInfoItem);
@@ -245,7 +245,7 @@ void CDlgAdminItemTypeList::OnModify()
 	SAFE_DELETE (pInfoItemTmp);
 
 	Packet.Make (pInfoItem);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	return;
@@ -281,7 +281,7 @@ void CDlgAdminItemTypeList::OnCopy()
 	}
 
 	Packet.Make (dwItemID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -316,7 +316,7 @@ void CDlgAdminItemTypeList::OnDelete()
 	}
 
 	Packet.Make (dwItemID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -332,7 +332,7 @@ void CDlgAdminItemTypeList::OnRenew()
 
 	/* 全アイテム種別情報を要求 */
 	Packet.Make (0);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 

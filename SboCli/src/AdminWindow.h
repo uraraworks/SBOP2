@@ -14,6 +14,8 @@
 class CMgrData;
 class CWndMap;
 class CDlgAdminBase;
+struct tagSboAdminUiHost;
+typedef struct tagSboAdminUiHost SboAdminUiHost;
 
 /* ========================================================================= */
 /* 定数定義																	 */
@@ -62,7 +64,7 @@ public:
 	virtual ~CAdminWindow();							/* デストラクタ */
 
 
-	BOOL	Create		(HWND hWndParent, CMgrData *pMgrData);	/* 作成 */
+	BOOL	Create		(HWND hWndParent, CMgrData *pMgrData, const SboAdminUiHost* pHost = NULL);	/* 作成 */
 	void	Destroy		(void);									/* 破棄 */
 
 	void	Show		(void);									/* 表示 */
@@ -86,6 +88,7 @@ protected:
 	CMgrData			*m_pMgrData;			/* データマネージャ */
 	CLayoutHelper		*m_pLayoutHelper;		/* 配置補助 */
 	CDlgAdminBase		*m_pDlgBase;			/* 表示中の画面 */
+	const SboAdminUiHost*	m_pHost;			/* Host API */
 
 
 

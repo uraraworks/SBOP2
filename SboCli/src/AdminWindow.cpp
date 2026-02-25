@@ -41,6 +41,7 @@
 #include "MgrData.h"
 #include "WndMap.h"
 #include "AdminWindow.h"
+#include "AdminApi/AdminUiApi.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -113,6 +114,7 @@ CAdminWindow::CAdminWindow()
 	m_pMgrData			= NULL;
 	m_pWndParent		= NULL;
 	m_pWndMap			= NULL;
+	m_pHost				= NULL;
 }
 
 
@@ -134,7 +136,7 @@ CAdminWindow::~CAdminWindow()
 /* 日付		:2006/01/25														 */
 /* ========================================================================= */
 
-BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
+BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData, const SboAdminUiHost* pHost)
 {
 	BOOL bRet;
 	CRect rc;
@@ -142,6 +144,7 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData)
 
 	m_pMgrData		= pMgrData;
 	m_hWndParent	= hWndParent;
+	m_pHost			= pHost;
 
 	/* イベントを作成 */
 	m_hInitEventWindow = CreateEvent (NULL, FALSE, FALSE, NULL);
@@ -203,6 +206,7 @@ void CAdminWindow::Destroy(void)
 	/* 変数を初期化 */
 	m_pWndParent	= NULL;
 	m_hWnd			= NULL;
+	m_pHost			= NULL;
 }
 
 
@@ -358,12 +362,17 @@ void CAdminWindow::ChgScreen(int nScrID)
 		m_pDlgBase = new CDlgAdminAccountAdd(this);
 		break;
 	}
-	m_pMgrData->SetAdminNotifyTypeL (nTypeL);
-	m_pMgrData->SetAdminNotifyTypeR (nTypeR);
-	m_pMgrData->SetAdminNotifyTypeRR (nTypeR);
+	if ((m_pHost) && (m_pHost->SetAdminNotifyTypes)) {
+		m_pHost->SetAdminNotifyTypes (m_pHost->userData, nTypeL, nTypeR, nTypeR);
+	} else {
+		m_pMgrData->SetAdminNotifyTypeL (nTypeL);
+		m_pMgrData->SetAdminNotifyTypeR (nTypeR);
+		m_pMgrData->SetAdminNotifyTypeRR (nTypeR);
+	}
 
 	if (m_pDlgBase) {
 		m_pDlgBase->Init (m_pMgrData);
+		m_pDlgBase->SetHost (m_pHost);
 		m_pDlgBase->SetWindowPos (NULL, 0, 0, rc.right, rc.bottom, SWP_NOZORDER | SWP_NOMOVE | SWP_NOREDRAW);
 		RegisterControl (m_pDlgBase->m_hWnd, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 	}
@@ -447,7 +456,11 @@ int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	ShowWindow (SW_SHOW);
-	m_pMgrData->SetAdminWindow (m_hWnd);
+	if ((m_pHost) && (m_pHost->SetAdminWindow)) {
+		m_pHost->SetAdminWindow (m_pHost->userData, m_hWnd);
+	} else {
+		m_pMgrData->SetAdminWindow (m_hWnd);
+	}
 
 	return 0;
 }
@@ -603,6 +616,11 @@ void CAdminWindow::OnMapAdd()
 		return;
 	}
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_MAP_ADD, 0, 0);
+	if ((m_pHost) && (m_pHost->SendAdminPacket)) {
+		if (m_pHost->SendAdminPacket (m_pHost->userData, &Packet)) {
+			return;
+		}
+	}
 	m_pMgrData->GetUraraSockTCP ()->Send (&Packet);
 }
 
@@ -875,7 +893,11 @@ void CAdminWindow::OnDebugMoveNoBlock()
 {
 	BOOL bResult;
 
-	bResult = m_pMgrData->GetMoveNoBlock ();
+	if ((m_pHost) && (m_pHost->GetMoveNoBlock)) {
+		bResult = m_pHost->GetMoveNoBlock (m_pHost->userData);
+	} else {
+		bResult = m_pMgrData->GetMoveNoBlock ();
+	}
 	bResult = (bResult) ? FALSE : TRUE;
 
 	if (bResult) {
@@ -883,7 +905,11 @@ void CAdminWindow::OnDebugMoveNoBlock()
 	} else {
 		GetMenu ()->CheckMenuItem (IDM_DEBUG_MOVENOBLOCK, MF_BYCOMMAND | MF_UNCHECKED);
 	}
-	m_pMgrData->SetMoveNoBlock (bResult);
+	if ((m_pHost) && (m_pHost->SetMoveNoBlock)) {
+		m_pHost->SetMoveNoBlock (m_pHost->userData, bResult);
+	} else {
+		m_pMgrData->SetMoveNoBlock (bResult);
+	}
 }
 
 
@@ -898,7 +924,11 @@ void CAdminWindow::OnDebugGridOff()
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID_OFF,	MF_BYCOMMAND | MF_CHECKED);
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID,		MF_BYCOMMAND | MF_UNCHECKED);
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID_HALF,	MF_BYCOMMAND | MF_UNCHECKED);
-	m_pMgrData->SetViewGrid (0);
+	if ((m_pHost) && (m_pHost->SetViewGrid)) {
+		m_pHost->SetViewGrid (m_pHost->userData, 0);
+	} else {
+		m_pMgrData->SetViewGrid (0);
+	}
 }
 
 
@@ -913,7 +943,11 @@ void CAdminWindow::OnDebugGrid()
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID_OFF,	MF_BYCOMMAND | MF_UNCHECKED);
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID,		MF_BYCOMMAND | MF_CHECKED);
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID_HALF,	MF_BYCOMMAND | MF_UNCHECKED);
-	m_pMgrData->SetViewGrid (1);
+	if ((m_pHost) && (m_pHost->SetViewGrid)) {
+		m_pHost->SetViewGrid (m_pHost->userData, 1);
+	} else {
+		m_pMgrData->SetViewGrid (1);
+	}
 }
 
 
@@ -928,7 +962,11 @@ void CAdminWindow::OnDebugGridHalf()
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID_OFF,	MF_BYCOMMAND | MF_UNCHECKED);
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID,		MF_BYCOMMAND | MF_UNCHECKED);
 	GetMenu ()->CheckMenuItem (IDM_DEBUG_GRID_HALF,	MF_BYCOMMAND | MF_CHECKED);
-	m_pMgrData->SetViewGrid (2);
+	if ((m_pHost) && (m_pHost->SetViewGrid)) {
+		m_pHost->SetViewGrid (m_pHost->userData, 2);
+	} else {
+		m_pMgrData->SetViewGrid (2);
+	}
 }
 
 

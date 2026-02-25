@@ -58,7 +58,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\;.\src;.\include;..\SboCli\src\AdminApi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\src;.\include;..\SboCli;..\SboCli\src;..\SboCli\src\Dialog;..\SboCli\src\Info;..\SboCli\src\Info\InfoChar;..\SboCli\src\Layer;..\SboCli\src\Lib;..\SboCli\src\Lib\Audiere;..\SboCli\src\Lib\Png;..\SboCli\src\LibInfo;..\SboCli\src\MainFrame;..\SboCli\src\StateProc;..\SboCli\src\Window;..\SboCli\src\Wnd;..\SboCli\src\AdminApi;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData;..\SboGrpData;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AFXDLL;_WINDLL;_CRT_SECURE_NO_DEPRECATE;NO_DIRECTMUSIC;_WFL_NONDMUSIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeaderOutputFile>.\Debug\SboCliAdminMfc.pch</PrecompiledHeaderOutputFile>
@@ -84,7 +84,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.\;.\src;.\include;..\SboCli\src\AdminApi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\src;.\include;..\SboCli;..\SboCli\src;..\SboCli\src\Dialog;..\SboCli\src\Info;..\SboCli\src\Info\InfoChar;..\SboCli\src\Layer;..\SboCli\src\Lib;..\SboCli\src\Lib\Audiere;..\SboCli\src\Lib\Png;..\SboCli\src\LibInfo;..\SboCli\src\MainFrame;..\SboCli\src\StateProc;..\SboCli\src\Window;..\SboCli\src\Wnd;..\SboCli\src\AdminApi;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MAP;..\Common\Packet\SYSTEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;..\SboSoundData;..\SboGrpData;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_AFXDLL;_WINDLL;_CRT_SECURE_NO_DEPRECATE;NO_DIRECTMUSIC;_WFL_NONDMUSIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeaderOutputFile>.\Release\SboCliAdminMfc.pch</PrecompiledHeaderOutputFile>
@@ -106,7 +106,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AdminUiCompat.cpp" />
+    <ClCompile Include="..\Common\myLib\myString.cpp" />
+    <ClCompile Include="..\SboCli\src\Lib\Img32.cpp" />
+    <ClCompile Include="..\SboCli\src\Lib\third_party\lodepng.cpp">
+      <!-- サードパーティライブラリのためプリコンパイルヘッダを無効化 -->
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\SboCli\src\MgrGrpData.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\ListCtrlEffectInfo.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\ListCtrlItemInfo.cpp" />
     <ClCompile Include="src\AdminUiModule.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndSelectGrp.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndSelectItemGrp.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndToolbar.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>
@@ -121,3 +134,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
+

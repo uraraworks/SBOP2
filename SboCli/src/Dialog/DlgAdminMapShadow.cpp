@@ -9,7 +9,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "LibInfoMapShadow.h"
-#include "UraraSockTCPSBO.h"
 #include "PacketADMIN_RENEWMAPSHADOW.h"
 #include "PacketADMIN_MAP_DELETEPARTS.h"
 #include "PacketADMIN_MAP_DELETEMAPSHADOW.h"
@@ -79,7 +78,6 @@ CDlgAdminMapShadow::CDlgAdminMapShadow(CWnd* pParent /*=NULL*/)
 	m_pMgrGrpData		= NULL;
 	m_pImgShadow		= new CImg32;
 	m_pLibInfoMapShadow	= NULL;
-	m_pSock				= NULL;
 
 	m_ptMoveSrc.x = m_ptMoveSrc.y = 0;
 	m_ptMoveDst.x = m_ptMoveDst.y = 0;
@@ -113,7 +111,6 @@ void CDlgAdminMapShadow::Init(CMgrData *pMgrData)
 
 	m_pMgrGrpData		= m_pMgrData->GetMgrGrpData ();
 	m_pLibInfoMapShadow	= m_pMgrData->GetLibInfoMapShadow ();
-	m_pSock				= m_pMgrData->GetUraraSockTCP ();
 
 	m_pMgrGrpData->ReadMapShadowTmp ();
 
@@ -351,13 +348,13 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 					/* 移動先に影があった場合は入れ換える */
 					pInfoMapShadow->m_ptViewPos = m_ptMoveSrc;
 					Packet.Make (pInfoMapShadow);
-					m_pSock->Send (&Packet);
+					SendPacket (&Packet);
 				}
 				pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr (m_dwSelectShadowID);
 				if (pInfoMapShadow) {
 					pInfoMapShadow->m_ptViewPos = m_ptMoveDst;
 					Packet.Make (pInfoMapShadow);
-					m_pSock->Send (&Packet);
+					SendPacket (&Packet);
 				}
 				MakeShadowImage ();
 				OnSelchangeType ();
@@ -380,7 +377,7 @@ void CDlgAdminMapShadow::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 			Packet.Make (m_dwSelectShadowID);
-			m_pSock->Send (&Packet);
+			SendPacket (&Packet);
 		}
 		break;
 	}
@@ -420,7 +417,7 @@ void CDlgAdminMapShadow::OnRButtonDown(UINT nFlags, CPoint point)
 			MakeShadowImage ();
 
 			Packet.Make (pInfoMapShadow);
-			m_pSock->Send (&Packet);
+			SendPacket (&Packet);
 		}
 		break;
 	}
@@ -613,3 +610,4 @@ Exit:
 }
 
 /* Copyright(C)URARA-works 2007 */
+

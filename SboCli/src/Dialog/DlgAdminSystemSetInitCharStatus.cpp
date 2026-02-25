@@ -216,7 +216,7 @@ BOOL CDlgAdminSystemSetInitCharStatus::OnInitDialog()
 	CDlgAdminBase::OnInitDialog ();
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_SYSTEM_REQ_INFO);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 	return TRUE;
 }
@@ -268,7 +268,8 @@ void CDlgAdminSystemSetInitCharStatus::OnSend()
 	pInitCharStatus->wAttrDark			= (WORD)m_dwAttrDark;
 
 	Packet.Make (&InfoSystemTmp);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2008 */
+

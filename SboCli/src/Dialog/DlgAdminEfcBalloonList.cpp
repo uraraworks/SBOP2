@@ -186,7 +186,7 @@ void CDlgAdminEfcBalloonList::OnAdd()
 	Dlg.GetList (m_pLibInfo);
 
 	Packet.Make (Dlg.GetListID (), m_pLibInfo);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -217,7 +217,7 @@ void CDlgAdminEfcBalloonList::OnModify()
 	Dlg.GetList (m_pLibInfo);
 
 	Packet.Make (Dlg.GetListID (), m_pLibInfo);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -243,3 +243,4 @@ void CDlgAdminEfcBalloonList::OnRenew()
 }
 
 /* Copyright(C)URARA-works 2007 */
+

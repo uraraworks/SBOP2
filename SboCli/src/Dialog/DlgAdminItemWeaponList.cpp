@@ -161,7 +161,7 @@ BOOL CDlgAdminItemWeaponList::OnInitDialog()
 
 	/* 全武器情報を要求 */
 	Packet.Make (0);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 	return TRUE;
 }
@@ -208,7 +208,7 @@ void CDlgAdminItemWeaponList::OnAdd()
 	Dlg.Get (pInfoItemWeapon);
 
 	Packet.Make (pInfoItemWeapon);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	SAFE_DELETE (pInfoItemWeapon);
@@ -250,7 +250,7 @@ void CDlgAdminItemWeaponList::OnModify()
 	Dlg.Get (pInfoItemWeapon);
 
 	Packet.Make (pInfoItemWeapon);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	return;
@@ -287,7 +287,7 @@ void CDlgAdminItemWeaponList::OnCopy()
 	}
 
 	Packet.Make (dwItemID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 #endif
 }
 
@@ -324,8 +324,9 @@ void CDlgAdminItemWeaponList::OnDelete()
 	}
 
 	Packet.Make (dwItemID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 #endif
 }
 
 /* Copyright(C)URARA-works 2008 */
+

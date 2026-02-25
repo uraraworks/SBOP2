@@ -158,7 +158,7 @@ void CDlgAdminCharModifyItem::OnAdminMsg(int nType, DWORD dwPara)
 	m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (dwPara);
 
 	PacketCHAR_REQ_CHARINFO.Make (dwPara);
-	m_pSock->Send (&PacketCHAR_REQ_CHARINFO);
+	SendPacket (&PacketCHAR_REQ_CHARINFO);
 
 	Renew ();
 }
@@ -241,7 +241,7 @@ void CDlgAdminCharModifyItem::OnAddnew()
 	pInfoItem->m_dwCharID = m_pInfoChar->m_dwCharID;
 
 	Packet.Make (pInfoItem);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 	SAFE_DELETE (pInfoItem);
 }
@@ -280,7 +280,7 @@ void CDlgAdminCharModifyItem::OnAdd()
 	}
 
 	Packet.Make (m_pInfoChar->m_dwCharID, dwItemID, CHARMODIFYITEMTYPE_ADD);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -322,7 +322,7 @@ void CDlgAdminCharModifyItem::OnModify()
 	Dlg.Get (pInfoItem);
 
 	Packet.Make (pInfoItem);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -349,7 +349,8 @@ void CDlgAdminCharModifyItem::OnDelete()
 	dwItemID = m_List.GetItemData (nNo);
 
 	Packet.Make (m_pInfoChar->m_dwCharID, dwItemID, CHARMODIFYITEMTYPE_DELETE);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2007 */
+

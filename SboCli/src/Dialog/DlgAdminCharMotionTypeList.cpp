@@ -166,7 +166,7 @@ void CDlgAdminCharMotionTypeList::OnAdd()
 	CPacketADMIN_CHAR_ADDMOTIONTYPE Packet;
 
 	Packet.Make ();
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -207,7 +207,7 @@ void CDlgAdminCharMotionTypeList::OnModify()
 	Renew ();
 
 	Packet.Make (dwMotionTypeID, m_pLibInfoMotionType);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -222,3 +222,4 @@ void CDlgAdminCharMotionTypeList::OnDelete()
 }
 
 /* Copyright(C)URARA-works 2008 */
+

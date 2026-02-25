@@ -197,7 +197,7 @@ void CDlgAdminCharAddNPC::OnSend()
 	InfoCharTmp.m_wFamilyID		= m_ctlFamilyType.GetCurSel () + 1;
 
 	Packet.Make (&InfoCharTmp);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 	/* 送信したので二度押し防止に座標をクリアしておく */
 	m_nMapID = m_nPosX = m_nPosY = 0;
@@ -205,3 +205,4 @@ void CDlgAdminCharAddNPC::OnSend()
 }
 
 /* Copyright(C)URARA-works 2007 */
+

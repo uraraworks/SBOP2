@@ -11,8 +11,10 @@
 #include "LayoutHelper.h"
 
 class CMgrData;
-class CUraraSockTCPSBO;
 class CInfoItemTypeBase;
+class CPacketBase;
+struct tagSboAdminUiHost;
+typedef struct tagSboAdminUiHost SboAdminUiHost;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -30,16 +32,18 @@ public:
 	virtual void	OnMainFrame		(DWORD dwCommand, DWORD dwParam);		/* メッセージハンドラ(WM_MAINFRAME) */
 	virtual void	Set				(CInfoItemTypeBase *pSrc)  {}			/* 編集内容を設定 */
 	virtual void	Get				(CInfoItemTypeBase *&pDst) {}			/* 編集内容を取得 */
+	void			SetHost			(const SboAdminUiHost* pHost);			/* Host APIを設定 */
 
 
 protected:
 	void	SelectCmb		(CComboBox *pCmb, DWORD dwID);	/* 項目を選択 */
+	void	SendPacket		(CPacketBase* pPacket);			/* パケット送信 */
 
 
 protected:
 	CMgrData			*m_pMgrData;			/* データマネージャ */
-	CUraraSockTCPSBO	*m_pSock;				/* 通信マネージャ */
 	CWnd				*m_pWndParent;			/* 親ウィンドウ */
+	const SboAdminUiHost *m_pHost;			/* Host API */
 
 
 

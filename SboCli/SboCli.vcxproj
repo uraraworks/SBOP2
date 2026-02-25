@@ -390,8 +390,8 @@
     <ClCompile Include="src\Dialog\DlgAdminTalkSet.cpp" />
     <ClCompile Include="src\Dialog\DlgDbg.cpp" />
     <ClCompile Include="src\Dialog\DlgMsgLog.cpp" />
-    <ClCompile Include="src\Wnd\ListCtrlEffectInfo.cpp" />
-    <ClCompile Include="src\Wnd\ListCtrlItemInfo.cpp" />
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlEffectInfo.cpp" />
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlItemInfo.cpp" />
     <ClCompile Include="src\Wnd\StaticGrp.cpp" />
     <ClCompile Include="src\Wnd\StaticMapObjectGrp.cpp" />
     <ClCompile Include="src\Wnd\StaticMapParts.cpp" />
@@ -401,11 +401,11 @@
     <ClCompile Include="src\Wnd\WndMapPartsGrp.cpp" />
     <ClCompile Include="src\Wnd\WndMapShadowAnimeList.cpp" />
     <ClCompile Include="src\Wnd\WndMapShadowGrp.cpp" />
-    <ClCompile Include="src\Wnd\WndSelectGrp.cpp" />
-    <ClCompile Include="src\Wnd\WndSelectItemGrp.cpp" />
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndSelectGrp.cpp" />
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndSelectItemGrp.cpp" />
     <ClCompile Include="src\Wnd\WndSelectMapPartsGrp.cpp" />
     <ClCompile Include="src\Wnd\WndSelectMapShadowGrp.cpp" />
-    <ClCompile Include="src\Wnd\WndToolbar.cpp" />
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndToolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\crc.h" />

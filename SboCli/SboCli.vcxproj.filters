@@ -807,10 +807,10 @@
     <ClCompile Include="src\Dialog\DlgMsgLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Wnd\ListCtrlEffectInfo.cpp">
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlEffectInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Wnd\ListCtrlItemInfo.cpp">
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlItemInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\StaticGrp.cpp">
@@ -852,7 +852,7 @@
     <ClCompile Include="src\Wnd\WndSelectMapShadowGrp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Wnd\WndToolbar.cpp">
+    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndToolbar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

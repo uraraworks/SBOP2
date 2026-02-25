@@ -138,7 +138,7 @@ void CDlgAdminCharAccountInfo::OnAdminMsg(int nType, DWORD dwPara)
 					m_strCharName = (LPCTSTR)pInfoChar->m_strCharName;
 					m_strAccountID.Format(_T("%d"), m_dwAccountID);
 					Packet.Make (m_dwAccountID);
-					m_pSock->Send (&Packet);
+					SendPacket (&Packet);
 				}
 				UpdateData (FALSE);
 			}
@@ -209,7 +209,7 @@ void CDlgAdminCharAccountInfo::OnSend()
 	InfoAccount.m_strAccount	= m_strAccount;
 	InfoAccount.m_strPassword	= m_strPassword;
 	Packet.Make (&InfoAccount);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -238,7 +238,8 @@ void CDlgAdminCharAccountInfo::OnDisable()
 	CStringA strMacA = TStringToUtf8(m_strMac);
 
 	Packet.Make (&InfoAccount, TRUE, strMacA);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2008 */
+

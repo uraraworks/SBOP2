@@ -98,7 +98,7 @@ void CDlgAdminServerInfo::OnSave()
 	CPacketADMIN_SERVER_SAVEINFO Packet;
 
 	Packet.Make ();
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -113,7 +113,7 @@ void CDlgAdminServerInfo::OnBnClickedPlaysound()
 	CPacketADMIN_REQ_PLAYSOUND Packet;
 
 	Packet.Make (SOUNDID_PINPONPANPON);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -128,7 +128,8 @@ void CDlgAdminServerInfo::OnBnClickedRenewClientversion()
 	CPacketADMIN_RENEW_CLIENTVERSION Packet;
 
 	Packet.Make (VERTEXT);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2007 */
+

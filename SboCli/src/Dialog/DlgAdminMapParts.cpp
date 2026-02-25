@@ -9,7 +9,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "LibInfoMapParts.h"
-#include "UraraSockTCPSBO.h"
 #include "PacketADMIN_RENEWMAPPARTS.h"
 #include "PacketADMIN_MAP_DELETEPARTS.h"
 #include "PacketADMIN_MAP_COPYPARTS.h"
@@ -86,7 +85,6 @@ CDlgAdminMapParts::CDlgAdminMapParts(CWnd* pParent /*=NULL*/)
 	m_pMgrGrpData		= NULL;
 	m_pImgParts			= new CImg32;
 	m_pLibInfoMapParts	= NULL;
-	m_pSock				= NULL;
 
 	m_ptMoveSrc.x = m_ptMoveSrc.y = 0;
 	m_ptMoveDst.x = m_ptMoveDst.y = 0;
@@ -120,7 +118,6 @@ void CDlgAdminMapParts::Init(CMgrData *pMgrData)
 
 	m_pMgrGrpData		= m_pMgrData->GetMgrGrpData ();
 	m_pLibInfoMapParts	= m_pMgrData->GetLibInfoMapParts ();
-	m_pSock				= m_pMgrData->GetUraraSockTCP ();
 
 	m_pMgrGrpData->ReadMapPartsTmp ();
 
@@ -297,7 +294,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 			MakePartsImage ();
 
 			Packet.Make (pInfoMapParts);
-			m_pSock->Send (&Packet);
+			SendPacket (&Packet);
 		}
 		break;
 	case 3:		/* 移動 */
@@ -323,13 +320,13 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 					/* 移動先にパーツがあった場合は入れ換える */
 					pInfoMapParts->m_ptViewPos = m_ptMoveSrc;
 					Packet.Make (pInfoMapParts);
-					m_pSock->Send (&Packet);
+					SendPacket (&Packet);
 				}
 				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (m_dwSelectPartsID);
 				if (pInfoMapParts) {
 					pInfoMapParts->m_ptViewPos = m_ptMoveDst;
 					Packet.Make (pInfoMapParts);
-					m_pSock->Send (&Packet);
+					SendPacket (&Packet);
 				}
 				MakePartsImage ();
 				OnSelchangeType ();
@@ -352,7 +349,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 				break;
 			}
 			Packet.Make (m_dwSelectPartsID);
-			m_pSock->Send (&Packet);
+			SendPacket (&Packet);
 		}
 		break;
 	case 5:		/* コピー */
@@ -377,7 +374,7 @@ void CDlgAdminMapParts::OnLButtonDown(UINT nFlags, CPoint point)
 					break;
 				}
 				Packet.Make (m_dwSelectPartsID, m_ptCursor);
-				m_pSock->Send (&Packet);
+				SendPacket (&Packet);
 				OnSelchangeType ();
 				break;
 			}
@@ -420,7 +417,7 @@ void CDlgAdminMapParts::OnRButtonDown(UINT nFlags, CPoint point)
 			MakePartsImage ();
 
 			Packet.Make (pInfoMapParts);
-			m_pSock->Send (&Packet);
+			SendPacket (&Packet);
 		}
 		break;
 	}
@@ -690,3 +687,4 @@ Exit:
 }
 
 /* Copyright(C)URARA-works 2007 */
+

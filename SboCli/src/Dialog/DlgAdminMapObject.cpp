@@ -175,7 +175,7 @@ void CDlgAdminMapObject::OnAdd()
 		return;
 	}
 	Packet.Make (Dlg.m_pInfoMapObject);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -208,7 +208,7 @@ void CDlgAdminMapObject::OnModify()
 		return;
 	}
 	Packet.Make (Dlg.m_pInfoMapObject);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -242,7 +242,7 @@ void CDlgAdminMapObject::OnCopy()
 	}
 
 	Packet.Make (dwItemID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 #endif
 }
 
@@ -277,8 +277,9 @@ void CDlgAdminMapObject::OnDelete()
 	}
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_MAP_DELETEEVENT, m_pInfoMap->m_dwMapID, dwMapEventID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 #endif
 }
 
 /* Copyright(C)URARA-works 2008 */
+

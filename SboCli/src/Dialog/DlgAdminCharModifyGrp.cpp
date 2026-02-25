@@ -189,7 +189,8 @@ void CDlgAdminCharModifyGrp::OnSend()
 	InfoCharTmp.m_wGrpIDNPC			= m_nGrpIDNPC;
 
 	Packet.Make (&InfoCharTmp, FALSE);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2007 */
+

@@ -19,6 +19,11 @@ typedef struct tagSboAdminUiHost
 	void (__stdcall *DestroyLocalAdminUi)(void* userData);
 	void (__stdcall *NotifyLocalAdminUi)(void* userData, UINT message, WPARAM wParam, LPARAM lParam);
 	HWND (__stdcall *GetLocalAdminUiWindow)(void* userData);
+	BOOL (__stdcall *SendAdminPacket)(void* userData, void* pPacket);
+	void (__stdcall *SetAdminNotifyTypes)(void* userData, int nTypeL, int nTypeR, int nTypeRR);
+	BOOL (__stdcall *GetMoveNoBlock)(void* userData);
+	void (__stdcall *SetMoveNoBlock)(void* userData, BOOL bMoveNoBlock);
+	void (__stdcall *SetViewGrid)(void* userData, int nViewGrid);
 } SboAdminUiHost;
 
 typedef BOOL (__stdcall *SboAdminUiCreateProc)(void* context, const SboAdminUiHost* host, HWND hWndParent);
@@ -43,4 +48,3 @@ typedef struct tagSboAdminUiModule
 
 typedef BOOL (__stdcall *SboCreateAdminUiModuleProc)(const SboAdminUiHost* host, SboAdminUiModule* outModule);
 typedef void (__stdcall *SboDestroyAdminUiModuleProc)(SboAdminUiModule* module);
-

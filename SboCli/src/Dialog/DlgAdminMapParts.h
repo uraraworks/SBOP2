@@ -14,7 +14,6 @@
 class CMgrGrpData;
 class CImg32;
 class CLibInfoMapParts;
-class CUraraSockTCPSBO;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -48,7 +47,6 @@ protected:
 	CMgrGrpData			*m_pMgrGrpData;			/* グラフィックデータ管理 */
 	CImg32				*m_pImgParts;			/* パーツ一覧画像 */
 	CLibInfoMapParts	*m_pLibInfoMapParts;	/* 編集中のマップパーツ情報 */
-	CUraraSockTCPSBO	*m_pSock;				/* 通信マネージャ */
 
 
 public:

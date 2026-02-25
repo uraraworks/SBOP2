@@ -179,7 +179,7 @@ void CDlgAdminCharMotionList::OnModify()
 	Dlg.GetList (pLibInfo);
 
 	Packet.Make (m_dwMotionTypeID, dwMotionListID, pLibInfo);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -197,3 +197,4 @@ void CDlgAdminCharMotionList::OnOK()
 }
 
 /* Copyright(C)URARA-works 2007 */
+

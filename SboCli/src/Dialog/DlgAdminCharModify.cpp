@@ -251,7 +251,7 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 				CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
 
 				PacketCHAR_REQ_CHARINFO.Make (m_dwCharID);
-				m_pSock->Send (&PacketCHAR_REQ_CHARINFO);
+				SendPacket (&PacketCHAR_REQ_CHARINFO);
 				break;
 			}
 			dwCharID = 0;
@@ -261,7 +261,7 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 		Renew ();
 		if (m_dwCharID != 0) {
 			Packet.Make (SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT, m_dwCharID, m_dwCharID);
-			m_pSock->Send (&Packet);
+			SendPacket (&Packet);
 		}
 		break;
 	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* 右クリック通知 */
@@ -365,7 +365,7 @@ void CDlgAdminCharModify::OnDelete()
 	}
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_DELETECHARINFO, m_pInfoChar->m_dwCharID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -464,11 +464,11 @@ void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 	InfoCharTmp.m_clSpeak			= InfoCharTmp.m_clName;
 
 	Packet.Make (&InfoCharTmp, bChgScreenPos);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 	m_pInfoTalkEvent->m_dwTalkEventID = m_dwCharID;
 	PacketADMIN_CHAR_RENEW_TALKEVENT.Make (m_pInfoTalkEvent, m_dwCharID);
-	m_pSock->Send (&PacketADMIN_CHAR_RENEW_TALKEVENT);
+	SendPacket (&PacketADMIN_CHAR_RENEW_TALKEVENT);
 }
 
 
@@ -507,3 +507,4 @@ COLORREF CDlgAdminCharModify::GetColor(int nNo)
 }
 
 /* Copyright(C)URARA-works 2007 */
+

@@ -186,7 +186,7 @@ void CDlgAdminEfcEffectList::OnAdd()
 	Dlg.GetInfo (pInfoEffect);
 
 	Packet.Make (0, pInfoEffect);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 	SAFE_DELETE (pInfoEffect);
 }
 
@@ -220,7 +220,7 @@ void CDlgAdminEfcEffectList::OnModify()
 	Dlg.GetInfo (pInfoEffect);
 
 	Packet.Make (pInfoEffect->m_dwEffectID, pInfoEffect);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -246,3 +246,4 @@ void CDlgAdminEfcEffectList::OnRenew()
 }
 
 /* Copyright(C)URARA-works 2008 */
+

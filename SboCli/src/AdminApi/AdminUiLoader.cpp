@@ -3,6 +3,8 @@
 #include "AdminUiLoader.h"
 #include "MgrData.h"
 #include "AdminWindow.h"
+#include "PacketBase.h"
+#include "UraraSockTCPSBO.h"
 
 namespace
 {
@@ -120,6 +122,11 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 	m_Host.DestroyLocalAdminUi = HostDestroyLocalAdminUi;
 	m_Host.NotifyLocalAdminUi = HostNotifyLocalAdminUi;
 	m_Host.GetLocalAdminUiWindow = HostGetLocalAdminUiWindow;
+	m_Host.SendAdminPacket = HostSendAdminPacket;
+	m_Host.SetAdminNotifyTypes = HostSetAdminNotifyTypes;
+	m_Host.GetMoveNoBlock = HostGetMoveNoBlock;
+	m_Host.SetMoveNoBlock = HostSetMoveNoBlock;
+	m_Host.SetViewGrid = HostSetViewGrid;
 
 	m_hModule = LoadLibrary(_T("SboCliAdminMfc.dll"));
 	if (m_hModule) {
@@ -287,6 +294,69 @@ HWND __stdcall CAdminUiLoader::HostGetLocalAdminUiWindow(void* userData)
 	return pLoader->GetLocalAdminUiWindowInternal();
 }
 
+BOOL __stdcall CAdminUiLoader::HostSendAdminPacket(void* userData, void* pPacket)
+{
+	CAdminUiLoader* pLoader;
+	CPacketBase* pPacketBase;
+
+	pLoader = (CAdminUiLoader*)userData;
+	pPacketBase = (CPacketBase*)pPacket;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL) || (pPacketBase == NULL)) {
+		return FALSE;
+	}
+	if (pLoader->m_pMgrData->GetUraraSockTCP() == NULL) {
+		return FALSE;
+	}
+	pLoader->m_pMgrData->GetUraraSockTCP()->Send(pPacketBase);
+	return TRUE;
+}
+
+void __stdcall CAdminUiLoader::HostSetAdminNotifyTypes(void* userData, int nTypeL, int nTypeR, int nTypeRR)
+{
+	CAdminUiLoader* pLoader;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return;
+	}
+	pLoader->m_pMgrData->SetAdminNotifyTypeL(nTypeL);
+	pLoader->m_pMgrData->SetAdminNotifyTypeR(nTypeR);
+	pLoader->m_pMgrData->SetAdminNotifyTypeRR(nTypeRR);
+}
+
+BOOL __stdcall CAdminUiLoader::HostGetMoveNoBlock(void* userData)
+{
+	CAdminUiLoader* pLoader;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return FALSE;
+	}
+	return pLoader->m_pMgrData->GetMoveNoBlock();
+}
+
+void __stdcall CAdminUiLoader::HostSetMoveNoBlock(void* userData, BOOL bMoveNoBlock)
+{
+	CAdminUiLoader* pLoader;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return;
+	}
+	pLoader->m_pMgrData->SetMoveNoBlock(bMoveNoBlock);
+}
+
+void __stdcall CAdminUiLoader::HostSetViewGrid(void* userData, int nViewGrid)
+{
+	CAdminUiLoader* pLoader;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return;
+	}
+	pLoader->m_pMgrData->SetViewGrid((BYTE)nViewGrid);
+}
+
 BOOL CAdminUiLoader::CreateLocalAdminUiInternal(HWND hWndParent)
 {
 	if ((m_pMgrData == NULL) || (m_pLocalAdminWindow != NULL)) {
@@ -297,7 +367,7 @@ BOOL CAdminUiLoader::CreateLocalAdminUiInternal(HWND hWndParent)
 	if (m_pLocalAdminWindow == NULL) {
 		return FALSE;
 	}
-	if (m_pLocalAdminWindow->Create(hWndParent, m_pMgrData) == FALSE) {
+	if (m_pLocalAdminWindow->Create(hWndParent, m_pMgrData, &m_Host) == FALSE) {
 		delete m_pLocalAdminWindow;
 		m_pLocalAdminWindow = NULL;
 		return FALSE;

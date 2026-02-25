@@ -1,15 +1,5 @@
 #pragma once
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-
-#ifndef WINVER
-#define WINVER 0x0A00
-#endif
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0A00
-#endif
-
-#include <afxwin.h>
-#include <tchar.h>
+// Reuse the client precompiled-header baseline so legacy admin UI units
+// can be compiled in this DLL project without per-file compatibility shims.
+#include "../SboCli/StdAfx.h"

@@ -342,7 +342,7 @@ void CDlgAdminItemList::OnAdd()
 	Dlg.Get (pInfoItem);
 
 	Packet.Make (pInfoItem);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	m_pMgrData->SetAdminNotifyTypeL (ADMINNOTIFYTYPE_ITEMID);
@@ -388,7 +388,7 @@ void CDlgAdminItemList::OnModify()
 	Dlg.Get (pInfoItem);
 
 	Packet.Make (pInfoItem);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	m_pMgrData->SetAdminNotifyTypeL (ADMINNOTIFYTYPE_ITEMID);
@@ -425,7 +425,7 @@ void CDlgAdminItemList::OnCopy()
 	}
 
 	Packet.Make (dwItemID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -474,7 +474,7 @@ void CDlgAdminItemList::OnDelete()
 	}
 
 	Packet.Make (&adwItemID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -490,7 +490,7 @@ void CDlgAdminItemList::OnRenew()
 
 	/* 全アイテム情報を要求 */
 	Packet.Make (0);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 

@@ -27,6 +27,11 @@ private:
 	static void __stdcall HostDestroyLocalAdminUi(void* userData);
 	static void __stdcall HostNotifyLocalAdminUi(void* userData, UINT message, WPARAM wParam, LPARAM lParam);
 	static HWND __stdcall HostGetLocalAdminUiWindow(void* userData);
+	static BOOL __stdcall HostSendAdminPacket(void* userData, void* pPacket);
+	static void __stdcall HostSetAdminNotifyTypes(void* userData, int nTypeL, int nTypeR, int nTypeRR);
+	static BOOL __stdcall HostGetMoveNoBlock(void* userData);
+	static void __stdcall HostSetMoveNoBlock(void* userData, BOOL bMoveNoBlock);
+	static void __stdcall HostSetViewGrid(void* userData, int nViewGrid);
 
 	BOOL CreateLocalAdminUiInternal(HWND hWndParent);
 	void DestroyLocalAdminUiInternal(void);

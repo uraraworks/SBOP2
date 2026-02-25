@@ -138,7 +138,7 @@ void CDlgAdminCharAdmin::OnAdminMsg(int nType, DWORD dwPara)
 
 		/* 選択されたアカウントの管理者権限レベルを要求 */
 		Packet.Make (m_dwAccountID);
-		m_pSock->Send (&Packet);
+		SendPacket (&Packet);
 		break;
 	case ADMINMSG_ADMINLEVEL:					/* 管理者レベル通知 */
 		m_nAdminLevel = dwPara;
@@ -183,7 +183,8 @@ void CDlgAdminCharAdmin::OnSend()
 	}
 
 	Packet.Make (m_dwAccountID, m_ctAdminLevel.GetCurSel ());
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2007 */
+

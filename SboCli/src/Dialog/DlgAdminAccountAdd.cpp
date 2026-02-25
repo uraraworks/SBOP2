@@ -106,7 +106,7 @@ void CDlgAdminAccountAdd::OnSend()
 	CStringA strPasswordA = TStringToUtf8(m_strPassword);
 
 	Packet.Make (strAccountA, strPasswordA);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2009 */

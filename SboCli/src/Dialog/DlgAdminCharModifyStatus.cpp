@@ -263,7 +263,7 @@ void CDlgAdminCharModifyStatus::OnAdminMsg(int nType, DWORD dwPara)
 	}
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_STATUS, m_pInfoChar->m_dwCharID, 0);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -356,7 +356,8 @@ void CDlgAdminCharModifyStatus::OnSend()
 	InfoCharTmp.m_wAttrDark				= (WORD)m_dwAttrDark;
 
 	Packet.Make (&InfoCharTmp);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2008 */
+

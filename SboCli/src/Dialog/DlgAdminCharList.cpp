@@ -173,7 +173,8 @@ void CDlgAdminCharList::OnBnClickedRenew()
 	CPacketADMIN_PARA2 Packet;
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ONLINE);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2008 */
+

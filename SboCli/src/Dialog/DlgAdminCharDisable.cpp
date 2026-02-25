@@ -165,7 +165,7 @@ void CDlgAdminCharDisable::OnBnClickedRenew()
 	CPacketADMIN_PARA2 Packet;
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_INFO);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -192,7 +192,7 @@ void CDlgAdminCharDisable::OnBnClickedAdd()
 	m_pLibInfoDisable->Add (pInfo);
 
 	Packet.Make (pInfo);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 
@@ -220,7 +220,7 @@ void CDlgAdminCharDisable::OnBnClickedDelete()
 	}
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_DELETE, dwDisableID);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 }
 
 /* Copyright(C)URARA-works 2009 */

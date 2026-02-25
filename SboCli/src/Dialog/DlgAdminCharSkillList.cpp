@@ -176,7 +176,7 @@ void CDlgAdminCharSkillList::OnAdd()
 	Dlg.Get (pInfo);
 
 	Packet.Make (pInfo);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	SAFE_DELETE (pInfo);
@@ -221,7 +221,7 @@ void CDlgAdminCharSkillList::OnModify()
 	SAFE_DELETE (pInfoTmp);
 
 	Packet.Make (pInfo);
-	m_pSock->Send (&Packet);
+	SendPacket (&Packet);
 
 Exit:
 	return;
@@ -239,3 +239,4 @@ void CDlgAdminCharSkillList::OnDelete()
 }
 
 /* Copyright(C)URARA-works 2008 */
+
