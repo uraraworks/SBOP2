@@ -9,12 +9,13 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "InfoMapBase.h"
+#include "PacketBase.h"
 #include "PacketADMIN_MAP_SETPARTS.h"
-#include "UraraSockTCPSBO.h"
 #include "Img32.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "MgrDraw.h"
+#include "AdminApi/AdminUiApi.h"
 #include "WndMap.h"
 
 #ifdef _DEBUG
@@ -92,7 +93,7 @@ CWndMap::CWndMap()
 	m_pMgrGrpData	= NULL;
 	m_pInfoMap		= NULL;
 	m_pMgrDraw		= NULL;
-	m_pSock			= NULL;
+	m_pHost			= NULL;
 
 	m_pImgBack		= new CImg32;
 	m_pImgBase		= new CImg32;
@@ -124,7 +125,7 @@ CWndMap::~CWndMap()
 /* 日付		:2008/09/12														 */
 /* ========================================================================= */
 
-BOOL CWndMap::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify)
+BOOL CWndMap::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify, const SboAdminUiHost* pHost)
 {
 	BOOL bRet;
 	CRect rc, rcParent;
@@ -133,8 +134,12 @@ BOOL CWndMap::Create(CWnd *pParent, CMgrData *pMgrData, int nNotify)
 	m_pMgrData		= pMgrData;
 	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
 	m_nNotify		= nNotify;
-	m_pSock			= m_pMgrData->GetUraraSockTCP ();
-	m_pInfoMap		= m_pMgrData->GetMap ();
+	m_pHost			= pHost;
+	if ((m_pHost) && (m_pHost->GetMapData)) {
+		m_pInfoMap = (CInfoMapBase*)m_pHost->GetMapData (m_pHost->userData);
+	} else {
+		m_pInfoMap = m_pMgrData->GetMap ();
+	}
 
 	m_pMgrDraw = new CMgrDraw;
 	m_pMgrDraw->Create (m_pMgrData);
@@ -211,7 +216,14 @@ int CWndMap::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	stScrollInfo.nPage = 1;
 	SetScrollInfo (SB_VERT, &stScrollInfo);
 
-	sizeTmp = m_pMgrData->GetWndMap ();
+	if ((m_pHost) && (m_pHost->GetWndMapSize)) {
+		int nCx, nCy;
+		m_pHost->GetWndMapSize (m_pHost->userData, &nCx, &nCy);
+		sizeTmp.cx = nCx;
+		sizeTmp.cy = nCy;
+	} else {
+		sizeTmp = m_pMgrData->GetWndMap ();
+	}
 	SetWindowPos (NULL, 0, 0, sizeTmp.cx, sizeTmp.cy, SWP_NOZORDER | SWP_NOMOVE);
 
 	/* ステータスバーの設定 */
@@ -251,7 +263,11 @@ void CWndMap::OnClose()
 	GetWindowRect (rcTmp);
 	sizeTmp.cx = rcTmp.Width ();
 	sizeTmp.cy = rcTmp.Height ();
-	m_pMgrData->SetWndMap (sizeTmp);
+	if ((m_pHost) && (m_pHost->SetWndMapSize)) {
+		m_pHost->SetWndMapSize (m_pHost->userData, sizeTmp.cx, sizeTmp.cy);
+	} else {
+		m_pMgrData->SetWndMap (sizeTmp);
+	}
 
 	if (m_pWndParent) {
 		m_pWndParent->PostMessage (
@@ -565,15 +581,16 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 					dwPartsID = m_pdwParts[xx + yy * m_rcCopy.Width ()];
 					m_pInfoMap->SetParts (x + xx, y + yy, dwPartsID);
 					Packet.Make (m_pInfoMap->m_dwMapID, x + xx, y + yy, dwPartsID, FALSE);
-					m_pSock->Send (&Packet);
+					SendPacket (&Packet);
 				}
 			}
 		}
 
 	} else {
-		m_pInfoMap->SetParts (x, y, m_pMgrData->GetSelectMapPartsID ());
-		Packet.Make (m_pInfoMap->m_dwMapID, x, y, m_pMgrData->GetSelectMapPartsID (), FALSE);
-		m_pSock->Send (&Packet);
+		DWORD dwSelPartsID = ((m_pHost) && (m_pHost->GetSelectMapPartsID)) ? m_pHost->GetSelectMapPartsID (m_pHost->userData) : m_pMgrData->GetSelectMapPartsID ();
+		m_pInfoMap->SetParts (x, y, dwSelPartsID);
+		Packet.Make (m_pInfoMap->m_dwMapID, x, y, dwSelPartsID, FALSE);
+		SendPacket (&Packet);
 	}
 
 	InvalidateRect (NULL);
@@ -649,7 +666,11 @@ void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
 			m_bRClickFirst = TRUE;
 			/* パーツを拾う */
 			dwPartsID = m_pInfoMap->GetParts (x, y);
-			m_pMgrData->SetSelectMapPartsID (dwPartsID);
+			if ((m_pHost) && (m_pHost->SetSelectMapPartsID)) {
+				m_pHost->SetSelectMapPartsID (m_pHost->userData, dwPartsID);
+			} else {
+				m_pMgrData->SetSelectMapPartsID (dwPartsID);
+			}
 		} else {
 			m_rcRange.SetRect (x, y, x, y);
 		}
@@ -663,7 +684,11 @@ void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
 	} else {
 		/* パーツを拾う */
 		dwPartsID = m_pInfoMap->GetParts (x, y);
-		m_pMgrData->SetSelectMapPartsID (dwPartsID);
+		if ((m_pHost) && (m_pHost->SetSelectMapPartsID)) {
+			m_pHost->SetSelectMapPartsID (m_pHost->userData, dwPartsID);
+		} else {
+			m_pMgrData->SetSelectMapPartsID (dwPartsID);
+		}
 	}
 }
 
@@ -781,9 +806,17 @@ void CWndMap::OnMouseMove(UINT nFlags, CPoint point)
 	if (m_pInfoMap == NULL) {
 		return;
 	}
-	if (m_pInfoMap != m_pMgrData->GetMap ()) {
-		PostMessage (WM_CLOSE);
-		return;
+	{
+		CInfoMapBase* pCurrentMap;
+		if ((m_pHost) && (m_pHost->GetMapData)) {
+			pCurrentMap = (CInfoMapBase*)m_pHost->GetMapData (m_pHost->userData);
+		} else {
+			pCurrentMap = m_pMgrData->GetMap ();
+		}
+		if (m_pInfoMap != pCurrentMap) {
+			PostMessage (WM_CLOSE);
+			return;
+		}
 	}
 
 	ptTmp = point;
@@ -1122,13 +1155,13 @@ void CWndMap::OnToolPaint()
 	x  = m_rcRange.left;
 	y  = m_rcRange.top;
 
-	dwPartsID = m_pMgrData->GetSelectMapPartsID ();
+	dwPartsID = ((m_pHost) && (m_pHost->GetSelectMapPartsID)) ? m_pHost->GetSelectMapPartsID (m_pHost->userData) : m_pMgrData->GetSelectMapPartsID ();
 	if (m_rcRange.left != -1) {
 		for (yy = 0; yy <= m_rcRange.Height (); yy ++) {
 			for (xx = 0; xx <= m_rcRange.Width (); xx ++) {
 				m_pInfoMap->SetParts (x + xx, y + yy, dwPartsID);
 				Packet.Make (m_pInfoMap->m_dwMapID, x + xx, y + yy, dwPartsID, FALSE);
-				m_pSock->Send (&Packet);
+				SendPacket (&Packet);
 			}
 		}
 	}
@@ -1160,6 +1193,23 @@ void CWndMap::OnGrid()
 	SetCheck (TOOLBAR_GRID, m_bViewGrid);
 
 	InvalidateRect (NULL);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CWndMap::SendPacket											 */
+/* 内容		:パケット送信													 */
+/* 日付		:2026/02/27														 */
+/* ========================================================================= */
+
+void CWndMap::SendPacket(CPacketBase* pPacket)
+{
+	if (pPacket == NULL) {
+		return;
+	}
+	if ((m_pHost) && (m_pHost->SendAdminPacket)) {
+		m_pHost->SendAdminPacket (m_pHost->userData, pPacket);
+	}
 }
 
 /* Copyright(C)URARA-works 2008 */

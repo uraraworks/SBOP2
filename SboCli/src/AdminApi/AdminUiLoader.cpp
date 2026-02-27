@@ -127,6 +127,11 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 	m_Host.GetMoveNoBlock = HostGetMoveNoBlock;
 	m_Host.SetMoveNoBlock = HostSetMoveNoBlock;
 	m_Host.SetViewGrid = HostSetViewGrid;
+	m_Host.GetMapData = HostGetMapData;
+	m_Host.GetWndMapSize = HostGetWndMapSize;
+	m_Host.SetWndMapSize = HostSetWndMapSize;
+	m_Host.GetSelectMapPartsID = HostGetSelectMapPartsID;
+	m_Host.SetSelectMapPartsID = HostSetSelectMapPartsID;
 
 	m_hModule = LoadLibrary(_T("SboCliAdminMfc.dll"));
 	if (m_hModule) {
@@ -355,6 +360,69 @@ void __stdcall CAdminUiLoader::HostSetViewGrid(void* userData, int nViewGrid)
 		return;
 	}
 	pLoader->m_pMgrData->SetViewGrid((BYTE)nViewGrid);
+}
+
+void* __stdcall CAdminUiLoader::HostGetMapData(void* userData)
+{
+	CAdminUiLoader* pLoader;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return NULL;
+	}
+	return pLoader->m_pMgrData->GetMap();
+}
+
+void __stdcall CAdminUiLoader::HostGetWndMapSize(void* userData, int* pCx, int* pCy)
+{
+	CAdminUiLoader* pLoader;
+	SIZE sz;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		if (pCx) { *pCx = 0; }
+		if (pCy) { *pCy = 0; }
+		return;
+	}
+	sz = pLoader->m_pMgrData->GetWndMap();
+	if (pCx) { *pCx = sz.cx; }
+	if (pCy) { *pCy = sz.cy; }
+}
+
+void __stdcall CAdminUiLoader::HostSetWndMapSize(void* userData, int cx, int cy)
+{
+	CAdminUiLoader* pLoader;
+	SIZE sz;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return;
+	}
+	sz.cx = cx;
+	sz.cy = cy;
+	pLoader->m_pMgrData->SetWndMap(sz);
+}
+
+DWORD __stdcall CAdminUiLoader::HostGetSelectMapPartsID(void* userData)
+{
+	CAdminUiLoader* pLoader;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return 0;
+	}
+	return pLoader->m_pMgrData->GetSelectMapPartsID();
+}
+
+void __stdcall CAdminUiLoader::HostSetSelectMapPartsID(void* userData, DWORD dwPartsID)
+{
+	CAdminUiLoader* pLoader;
+
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
+		return;
+	}
+	pLoader->m_pMgrData->SetSelectMapPartsID(dwPartsID);
 }
 
 BOOL CAdminUiLoader::CreateLocalAdminUiInternal(HWND hWndParent)

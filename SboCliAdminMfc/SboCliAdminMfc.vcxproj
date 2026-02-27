@@ -70,6 +70,7 @@
       <DisableSpecificWarnings>4566;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm500 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -78,6 +79,7 @@
       <ProgramDatabaseFile>.\Debug\SboCliAdminMfc.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -95,6 +97,7 @@
       <DisableSpecificWarnings>4566;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm500 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -103,6 +106,7 @@
       <ProgramDatabaseFile>.\Release\SboCliAdminMfc.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -114,12 +118,228 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\SboCli\src\MgrGrpData.cpp" />
+    <!-- MgrDraw.cpp: excluded; shim provided in AdminUiCompat.cpp to avoid CLayer*/CWindow* chain -->
     <ClCompile Include="src\Migrated\Wnd\ListCtrlEffectInfo.cpp" />
     <ClCompile Include="src\Migrated\Wnd\ListCtrlItemInfo.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndMap.cpp" />
     <ClCompile Include="src\AdminUiModule.cpp" />
     <ClCompile Include="src\Migrated\Wnd\WndSelectGrp.cpp" />
     <ClCompile Include="src\Migrated\Wnd\WndSelectItemGrp.cpp" />
     <ClCompile Include="src\Migrated\Wnd\WndToolbar.cpp" />
+    <ClCompile Include="src\Migrated\AdminWindow.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminBase.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharModify.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharModifyStatus.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharModifyGrp.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharModifyItem.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharModifySkill.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharAdmin.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharAddNPC.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharMotionTypeList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharAccountInfo.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharSkillList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminCharDisable.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminMapInfo.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminMapEvent.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminMapParts.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminMapShadow.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminMapObject.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminMapObjectData.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminItemTypeList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminItemList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminItemWeaponList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminEfcBalloonList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminEfcEffectList.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminServerInfo.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminSystemSetInitCharStatus.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminAccountAdd.cpp" />
+    <!-- 依存キャリア: myLib -->
+    <ClCompile Include="..\Common\myLib\mySection.cpp" />
+    <ClCompile Include="..\Common\myLib\myThread.cpp" />
+    <!-- 依存キャリア: Lib -->
+    <ClCompile Include="..\Common\Lib\LayoutHelper.cpp" />
+    <ClCompile Include="..\Common\Lib\DataSlot.cpp" />
+    <!-- MgrDraw.cpp / MgrLayer.cpp / MgrWindow.cpp / MgrData.cpp / InfoCharCli.cpp は除外:
+         これらはゲームクライアントの描画・管理系で、DLL 側では使わない部分が多く、
+         連鎖的に CWindow* / CLayer* クラスを引き込む。
+         DLL 側で実際に使う最小限のシンボルは AdminUiCompat.cpp でシム提供。 -->
+    <!-- 依存キャリア: SboCli/src/Dialog (未移管) -->
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharModifyTypeBase.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharModifyTypePUTNPC.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharSkillNONE.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharSkillBase.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharSkillHEAL.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharSkillMOVEATACK.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharMotion.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharMotionList.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharDisableNew.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkSet.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventNONE.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventBase.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventMENU.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventMENUSet.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventMSG.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventPAGE.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventADDSKILL.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventSet.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventTab.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemNew.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemTypeNew.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemTypeNewARMS.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemTypeNewARMSBow.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemTypeNewHP.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemTypeNewLIGHT.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemWeaponNew.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminSelectItem.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminSelectEffect.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapPartsEdit.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapShadowEdit.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapObjectEdit.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapObjectDataEdit.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapEventBase.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapEventNONE.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapEventGRPIDTMP.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapEventINITSTATUS.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapEventMAPMOVE.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapEventMOVE.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminMapEventLIGHT.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminEfcBalloon.cpp" />
+    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminEfcEffect.cpp" />
+    <!-- 依存キャリア: Common/Info -->
+    <ClCompile Include="..\Common\Info\InfoMapBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapParts.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObject.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTextEffect.cpp" />
+    <ClCompile Include="..\Common\Info\InfoCharBase.cpp" />
+    <!-- 依存キャリア: Common/Info/InfoTalkEvent -->
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp" />
+    <!-- 依存キャリア: Common/SBOGlobal (strcpyRenew等) -->
+    <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <!-- 依存キャリア: Common/Info/InfoItemType -->
+    <ClCompile Include="..\Common\Info\InfoItemType\InfoItemTypeBase.cpp" />
+    <!-- 依存キャリア: Common/Info (追加分) -->
+    <ClCompile Include="..\Common\Info\InfoBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMotion.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSystem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAccount.cpp" />
+    <ClCompile Include="..\Common\Info\InfoDisable.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEffect.cpp" />
+    <ClCompile Include="..\Common\Info\InfoFileList.cpp" />
+    <ClCompile Include="..\Common\Info\InfoFishing.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItemWeapon.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMotionType.cpp" />
+    <!-- 依存キャリア: Common/Info/InfoSkill -->
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp" />
+    <!-- 依存キャリア: Common/LibInfo -->
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapParts.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObject.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItem.cpp" />
+    <!-- 依存キャリア: Common/LibInfo (追加分) -->
+    <ClCompile Include="..\Common\LibInfo\LibInfoSystem.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoDisable.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEffect.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemWeapon.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotion.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoTalkEvent.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoAccount.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapEvent.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoCharBase.cpp" />
+    <!-- 依存キャリア: Common/Info/InfoMapEvent -->
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.cpp" />
+    <!-- 依存キャリア: Common/Packet/PacketBase -->
+    <ClCompile Include="..\Common\Packet\PacketBase.cpp" />
+    <!-- 依存キャリア: Common/Packet/ADMIN -->
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDMOTIONTYPE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_ADDNPC.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYITEM.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_MODIFYSKILL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTIONTYPE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWSTATUS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_ACCOUNT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEW_TALKEVENT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_REQ_ACCOUNT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_DISABLE_RENEWINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWBALLOON.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_EFC_RENEWEFFECT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_COPY.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMTYPE_DELETE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEMWEAPON_RENEW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_ADD.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_COPY.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ITEM_DELETE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_COPYPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_DELETEPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_EVENT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPOBJECT.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWMAPSIZE.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWOBJECTDATA.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPNAME.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_PARA2.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWADMINLEVEL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPPARTS.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEWMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_RENEW_CLIENTVERSION.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_ADMINLEVEL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_REQ_PLAYSOUND.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SERVER_SAVEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SKILL_RENEWSKILL.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_SYSTEM_RENEWINFO.cpp" />
+    <!-- 依存キャリア: Common/Packet/CHAR -->
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_PARA1.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_STATUS.cpp" />
+    <!-- 依存キャリア: SboCli/src/Wnd (Static系) -->
+    <ClCompile Include="..\SboCli\src\Wnd\StaticGrp.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\StaticMapObjectGrp.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\StaticMapParts.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\StaticMapShadow.cpp" />
+    <!-- 依存キャリア: SboCli/src/Wnd (Wnd系追加) -->
+    <ClCompile Include="..\SboCli\src\Wnd\WndMapPartsAnimeList.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\WndMapPartsGrp.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\WndMapShadowAnimeList.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\WndMapShadowGrp.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\WndSelectMapPartsGrp.cpp" />
+    <ClCompile Include="..\SboCli\src\Wnd\WndSelectMapShadowGrp.cpp" />
+    <!-- 依存キャリア: SboCli/src (LibSboSoundLoader) -->
+    <ClCompile Include="..\SboCli\src\LibSboSoundLoader.cpp" />
+    <!-- 依存キャリア: Common/Packet/ADMIN (追加分) -->
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHAR_RENEWMOTION.cpp" />
+    <!-- 依存キャリア: Common/Packet/ITEM -->
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_RENEWITEMTYPEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMTYPEINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ITEM\PacketITEM_REQ_ITEMWEAPONINFO.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>

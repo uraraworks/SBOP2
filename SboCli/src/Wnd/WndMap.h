@@ -15,7 +15,9 @@ class CMgrGrpData;
 class CImg32;
 class CMgrDraw;
 class CInfoMapBase;
-class CUraraSockTCPSBO;
+class CPacketBase;
+struct tagSboAdminUiHost;
+typedef struct tagSboAdminUiHost SboAdminUiHost;
 
 /* ========================================================================= */
 /* クラス宣言																 */
@@ -27,7 +29,7 @@ public:
 			CWndMap();									/* コンストラクタ */
 	virtual ~CWndMap();									/* デストラクタ */
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nNotify);	/* 作成 */
+	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nNotify, const SboAdminUiHost* pHost = NULL);	/* 作成 */
 	void	Destroy	(void);												/* 破棄 */
 
 
@@ -37,6 +39,7 @@ protected:
 	void	RenewStatusText		(void);						/* ステータスバーのテキストを更新 */
 	BOOL	GetCheck			(int nNo);					/* ツールバーのボタン状態を取得 */
 	void	SetCheck			(int nNo, BOOL bCheck);		/* ツールバーのボタン状態を設定 */
+	void	SendPacket			(CPacketBase* pPacket);		/* パケット送信 */
 
 
 protected:
@@ -55,11 +58,11 @@ protected:
 				m_rcCopy;						/* コピーする範囲 */
 	POINT		m_ptBack;						/* 前回のマウス位置 */
 
-	CMgrData			*m_pMgrData;			/* データ管理 */
-	CMgrGrpData			*m_pMgrGrpData;			/* グラフィックデータ管理 */
-	CMgrDraw			*m_pMgrDraw;			/* 描画マネージャ */
-	CInfoMapBase		*m_pInfoMap;			/* マップ情報 */
-	CUraraSockTCPSBO	*m_pSock;				/* 通信マネージャ */
+	CMgrData				*m_pMgrData;			/* データ管理（Step4-B で除去予定） */
+	CMgrGrpData				*m_pMgrGrpData;			/* グラフィックデータ管理 */
+	CMgrDraw				*m_pMgrDraw;			/* 描画マネージャ */
+	CInfoMapBase			*m_pInfoMap;			/* マップ情報 */
+	const SboAdminUiHost	*m_pHost;				/* Host API */
 
 
 

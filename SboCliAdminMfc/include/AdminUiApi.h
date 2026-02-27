@@ -24,6 +24,12 @@ typedef struct tagSboAdminUiHost
 	BOOL (__stdcall *GetMoveNoBlock)(void* userData);
 	void (__stdcall *SetMoveNoBlock)(void* userData, BOOL bMoveNoBlock);
 	void (__stdcall *SetViewGrid)(void* userData, int nViewGrid);
+	/* WndMap 用 Host API */
+	void* (__stdcall *GetMapData)(void* userData);
+	void  (__stdcall *GetWndMapSize)(void* userData, int* pCx, int* pCy);
+	void  (__stdcall *SetWndMapSize)(void* userData, int cx, int cy);
+	DWORD (__stdcall *GetSelectMapPartsID)(void* userData);
+	void  (__stdcall *SetSelectMapPartsID)(void* userData, DWORD dwPartsID);
 } SboAdminUiHost;
 
 typedef BOOL (__stdcall *SboAdminUiCreateProc)(void* context, const SboAdminUiHost* host, HWND hWndParent);

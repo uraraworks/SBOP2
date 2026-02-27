@@ -32,6 +32,11 @@ private:
 	static BOOL __stdcall HostGetMoveNoBlock(void* userData);
 	static void __stdcall HostSetMoveNoBlock(void* userData, BOOL bMoveNoBlock);
 	static void __stdcall HostSetViewGrid(void* userData, int nViewGrid);
+	static void* __stdcall HostGetMapData(void* userData);
+	static void  __stdcall HostGetWndMapSize(void* userData, int* pCx, int* pCy);
+	static void  __stdcall HostSetWndMapSize(void* userData, int cx, int cy);
+	static DWORD __stdcall HostGetSelectMapPartsID(void* userData);
+	static void  __stdcall HostSetSelectMapPartsID(void* userData, DWORD dwPartsID);
 
 	BOOL CreateLocalAdminUiInternal(HWND hWndParent);
 	void DestroyLocalAdminUiInternal(void);
