@@ -364,3 +364,10 @@ FodyWeavers.xsd
 
 .claude
 ._*
+
+# サードパーティライブラリ（手動配置・コミット対象外）
+SDL2/
+
+# 作業用スクリプト（コミット対象外）
+fix_wndmap.ps1
+build_sbocli.ps1
