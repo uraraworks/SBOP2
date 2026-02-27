@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "command.h"
+#include "AdminApi/AdminUiApi.h"
 #include "InfoTalkEvent.h"
 #include "UraraSockTCPSBO.h"
 #include "PacketADMIN_CHARINFO.h"
@@ -283,7 +284,10 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 		if (dwPara != m_pInfoChar->m_dwCharID) {
 			break;
 		}
-		m_pInfoTalkEvent->Copy (m_pMgrData->GetInfoTalkEvent ());
+		/* Host API 経由で実体の CInfoTalkEvent を取得（シム CMgrData::GetInfoTalkEvent は NULL 返却のため） */
+		if (m_pHost && m_pHost->GetInfoTalkEvent) {
+			m_pInfoTalkEvent->Copy((CInfoTalkEvent*)m_pHost->GetInfoTalkEvent(m_pHost->userData));
+		}
 		break;
 	}
 }

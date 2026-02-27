@@ -2,63 +2,12 @@
 
 #include "AdminUiLoader.h"
 #include "MgrData.h"
-#include "AdminWindow.h"
 #include "PacketBase.h"
 #include "UraraSockTCPSBO.h"
+#include "InfoTalkEvent.h"
 
 namespace
 {
-	BOOL __stdcall FallbackCreate(void* context, const SboAdminUiHost* host, HWND hWndParent)
-	{
-		UNREFERENCED_PARAMETER(context);
-
-		if ((host == NULL) || (host->CreateLocalAdminUi == NULL)) {
-			return FALSE;
-		}
-		return host->CreateLocalAdminUi(host->userData, hWndParent);
-	}
-
-	void __stdcall FallbackDestroy(void* context)
-	{
-		SboAdminUiHost* pHost;
-
-		pHost = (SboAdminUiHost*)context;
-		if (pHost && pHost->DestroyLocalAdminUi) {
-			pHost->DestroyLocalAdminUi(pHost->userData);
-		}
-	}
-
-	void __stdcall FallbackShow(void* context)
-	{
-		UNREFERENCED_PARAMETER(context);
-	}
-
-	void __stdcall FallbackHide(void* context)
-	{
-		UNREFERENCED_PARAMETER(context);
-	}
-
-	void __stdcall FallbackNotify(void* context, UINT message, WPARAM wParam, LPARAM lParam)
-	{
-		SboAdminUiHost* pHost;
-
-		pHost = (SboAdminUiHost*)context;
-		if (pHost && pHost->NotifyLocalAdminUi) {
-			pHost->NotifyLocalAdminUi(pHost->userData, message, wParam, lParam);
-		}
-	}
-
-	HWND __stdcall FallbackGetWindow(void* context)
-	{
-		SboAdminUiHost* pHost;
-
-		pHost = (SboAdminUiHost*)context;
-		if ((pHost == NULL) || (pHost->GetLocalAdminUiWindow == NULL)) {
-			return NULL;
-		}
-		return pHost->GetLocalAdminUiWindow(pHost->userData);
-	}
-
 	BOOL IsValidModule(const SboAdminUiModule* pModule)
 	{
 		if (pModule == NULL) {
@@ -69,20 +18,6 @@ namespace
 		}
 		return (pModule->Create && pModule->Destroy && pModule->Notify && pModule->GetWindow);
 	}
-
-	void CreateFallbackModule(SboAdminUiHost* pHost, SboAdminUiModule* pModule)
-	{
-		ZeroMemory(pModule, sizeof(*pModule));
-		pModule->cb = sizeof(*pModule);
-		pModule->apiVersion = SBO_ADMINUI_API_VERSION_1;
-		pModule->context = pHost;
-		pModule->Create = FallbackCreate;
-		pModule->Destroy = FallbackDestroy;
-		pModule->Show = FallbackShow;
-		pModule->Hide = FallbackHide;
-		pModule->Notify = FallbackNotify;
-		pModule->GetWindow = FallbackGetWindow;
-	}
 }
 
 CAdminUiLoader::CAdminUiLoader()
@@ -92,7 +27,6 @@ CAdminUiLoader::CAdminUiLoader()
 	m_hModule = NULL;
 	m_pDestroyFactory = NULL;
 	m_pMgrData = NULL;
-	m_pLocalAdminWindow = NULL;
 	m_bLoadedFromDll = FALSE;
 }
 
@@ -118,10 +52,11 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 	m_Host.GetMainWindow = HostGetMainWindow;
 	m_Host.GetMgrData = HostGetMgrData;
 	m_Host.SetAdminWindow = HostSetAdminWindow;
-	m_Host.CreateLocalAdminUi = HostCreateLocalAdminUi;
-	m_Host.DestroyLocalAdminUi = HostDestroyLocalAdminUi;
-	m_Host.NotifyLocalAdminUi = HostNotifyLocalAdminUi;
-	m_Host.GetLocalAdminUiWindow = HostGetLocalAdminUiWindow;
+	/* DLL が AdminWindow を自前管理するため、LocalAdminUi 系 Host API は不要 */
+	m_Host.CreateLocalAdminUi = NULL;
+	m_Host.DestroyLocalAdminUi = NULL;
+	m_Host.NotifyLocalAdminUi = NULL;
+	m_Host.GetLocalAdminUiWindow = NULL;
 	m_Host.SendAdminPacket = HostSendAdminPacket;
 	m_Host.SetAdminNotifyTypes = HostSetAdminNotifyTypes;
 	m_Host.GetMoveNoBlock = HostGetMoveNoBlock;
@@ -132,36 +67,33 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 	m_Host.SetWndMapSize = HostSetWndMapSize;
 	m_Host.GetSelectMapPartsID = HostGetSelectMapPartsID;
 	m_Host.SetSelectMapPartsID = HostSetSelectMapPartsID;
+	m_Host.GetInfoTalkEvent = HostGetInfoTalkEvent;
 
 	m_hModule = LoadLibrary(_T("SboCliAdminMfc.dll"));
-	if (m_hModule) {
-		pCreateFactory = (SboCreateAdminUiModuleProc)GetProcAddress(m_hModule, "CreateAdminUiModule");
-		m_pDestroyFactory = (SboDestroyAdminUiModuleProc)GetProcAddress(m_hModule, "DestroyAdminUiModule");
-
-		if (pCreateFactory && pCreateFactory(&m_Host, &m_Module) && IsValidModule(&m_Module)) {
-			bCreated = m_Module.Create(m_Module.context, &m_Host, hWndParent);
-			if (bCreated) {
-				m_bLoadedFromDll = TRUE;
-				return TRUE;
-			}
-		}
-
-		if (m_pDestroyFactory) {
-			m_pDestroyFactory(&m_Module);
-		}
-		ZeroMemory(&m_Module, sizeof(m_Module));
-		m_pDestroyFactory = NULL;
-		FreeLibrary(m_hModule);
-		m_hModule = NULL;
-	}
-
-	CreateFallbackModule(&m_Host, &m_Module);
-	if (m_Module.Create(m_Module.context, &m_Host, hWndParent) == FALSE) {
-		ZeroMemory(&m_Module, sizeof(m_Module));
+	if (m_hModule == NULL) {
+		/* DLL が存在しない場合は管理者UI なしで動作（非管理者プレイ継続） */
 		return FALSE;
 	}
-	m_bLoadedFromDll = FALSE;
-	return TRUE;
+
+	pCreateFactory = (SboCreateAdminUiModuleProc)GetProcAddress(m_hModule, "CreateAdminUiModule");
+	m_pDestroyFactory = (SboDestroyAdminUiModuleProc)GetProcAddress(m_hModule, "DestroyAdminUiModule");
+
+	if (pCreateFactory && pCreateFactory(&m_Host, &m_Module) && IsValidModule(&m_Module)) {
+		bCreated = m_Module.Create(m_Module.context, &m_Host, hWndParent);
+		if (bCreated) {
+			m_bLoadedFromDll = TRUE;
+			return TRUE;
+		}
+	}
+
+	if (m_pDestroyFactory) {
+		m_pDestroyFactory(&m_Module);
+	}
+	ZeroMemory(&m_Module, sizeof(m_Module));
+	m_pDestroyFactory = NULL;
+	FreeLibrary(m_hModule);
+	m_hModule = NULL;
+	return FALSE;
 }
 
 void CAdminUiLoader::Destroy(void)
@@ -179,8 +111,6 @@ void CAdminUiLoader::Destroy(void)
 	if (m_hModule) {
 		FreeLibrary(m_hModule);
 	}
-
-	DestroyLocalAdminUiInternal();
 
 	ZeroMemory(&m_Module, sizeof(m_Module));
 	ZeroMemory(&m_Host, sizeof(m_Host));
@@ -255,48 +185,6 @@ void __stdcall CAdminUiLoader::HostSetAdminWindow(void* userData, HWND hWndAdmin
 		return;
 	}
 	pLoader->m_pMgrData->SetAdminWindow(hWndAdmin);
-}
-
-BOOL __stdcall CAdminUiLoader::HostCreateLocalAdminUi(void* userData, HWND hWndParent)
-{
-	CAdminUiLoader* pLoader;
-
-	pLoader = (CAdminUiLoader*)userData;
-	if (pLoader == NULL) {
-		return FALSE;
-	}
-	return pLoader->CreateLocalAdminUiInternal(hWndParent);
-}
-
-void __stdcall CAdminUiLoader::HostDestroyLocalAdminUi(void* userData)
-{
-	CAdminUiLoader* pLoader;
-
-	pLoader = (CAdminUiLoader*)userData;
-	if (pLoader) {
-		pLoader->DestroyLocalAdminUiInternal();
-	}
-}
-
-void __stdcall CAdminUiLoader::HostNotifyLocalAdminUi(void* userData, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	CAdminUiLoader* pLoader;
-
-	pLoader = (CAdminUiLoader*)userData;
-	if (pLoader) {
-		pLoader->NotifyLocalAdminUiInternal(message, wParam, lParam);
-	}
-}
-
-HWND __stdcall CAdminUiLoader::HostGetLocalAdminUiWindow(void* userData)
-{
-	CAdminUiLoader* pLoader;
-
-	pLoader = (CAdminUiLoader*)userData;
-	if (pLoader == NULL) {
-		return NULL;
-	}
-	return pLoader->GetLocalAdminUiWindowInternal();
 }
 
 BOOL __stdcall CAdminUiLoader::HostSendAdminPacket(void* userData, void* pPacket)
@@ -425,57 +313,13 @@ void __stdcall CAdminUiLoader::HostSetSelectMapPartsID(void* userData, DWORD dwP
 	pLoader->m_pMgrData->SetSelectMapPartsID(dwPartsID);
 }
 
-BOOL CAdminUiLoader::CreateLocalAdminUiInternal(HWND hWndParent)
+void* __stdcall CAdminUiLoader::HostGetInfoTalkEvent(void* userData)
 {
-	if ((m_pMgrData == NULL) || (m_pLocalAdminWindow != NULL)) {
-		return (m_pLocalAdminWindow != NULL);
-	}
+	CAdminUiLoader* pLoader;
 
-	m_pLocalAdminWindow = new CAdminWindow;
-	if (m_pLocalAdminWindow == NULL) {
-		return FALSE;
-	}
-	if (m_pLocalAdminWindow->Create(hWndParent, m_pMgrData, &m_Host) == FALSE) {
-		delete m_pLocalAdminWindow;
-		m_pLocalAdminWindow = NULL;
-		return FALSE;
-	}
-	m_pMgrData->SetAdminWindow(m_pLocalAdminWindow->GetSafeHwnd());
-	return TRUE;
-}
-
-void CAdminUiLoader::DestroyLocalAdminUiInternal(void)
-{
-	if (m_pLocalAdminWindow) {
-		m_pLocalAdminWindow->Destroy();
-		delete m_pLocalAdminWindow;
-		m_pLocalAdminWindow = NULL;
-	}
-	if (m_pMgrData) {
-		m_pMgrData->SetAdminWindow(NULL);
-	}
-}
-
-void CAdminUiLoader::NotifyLocalAdminUiInternal(UINT message, WPARAM wParam, LPARAM lParam)
-{
-	HWND hWndAdmin;
-
-	hWndAdmin = GetLocalAdminUiWindowInternal();
-	if (hWndAdmin && ::IsWindow(hWndAdmin)) {
-		m_pLocalAdminWindow->PostMessage(message, wParam, lParam);
-	}
-}
-
-HWND CAdminUiLoader::GetLocalAdminUiWindowInternal(void) const
-{
-	HWND hWndAdmin;
-
-	if (m_pLocalAdminWindow == NULL) {
+	pLoader = (CAdminUiLoader*)userData;
+	if ((pLoader == NULL) || (pLoader->m_pMgrData == NULL)) {
 		return NULL;
 	}
-	hWndAdmin = m_pLocalAdminWindow->GetSafeHwnd();
-	if ((hWndAdmin == NULL) || (::IsWindow(hWndAdmin) == FALSE)) {
-		return NULL;
-	}
-	return hWndAdmin;
+	return pLoader->m_pMgrData->GetInfoTalkEvent();
 }

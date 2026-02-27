@@ -9,7 +9,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "InfoTalkEvent.h"
-#include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "LayoutHelper.h"
 #include "MgrData.h"

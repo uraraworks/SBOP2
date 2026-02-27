@@ -119,7 +119,7 @@ LPCSTR CMgrData::GetMotionProcName(DWORD dwProcID)  { UNREFERENCED_PARAMETER(dwP
 void   CMgrData::Destroy(void)                      {}
 LPCSTR CMgrData::GetFamilyTypeName(WORD wFamilyTypeID)  { UNREFERENCED_PARAMETER(wFamilyTypeID); return ""; }
 LPCSTR CMgrData::GetMapEventName(int nMapEventType)     { UNREFERENCED_PARAMETER(nMapEventType);  return ""; }
-CInfoTalkEvent* CMgrData::GetInfoTalkEvent(void)        { return NULL; }
+/* GetInfoTalkEvent シムは削除。DlgAdminCharModify は Host API 経由で取得する */
 
 // --- CMgrSound shim ---
 // DlgAdminItemNew etc. call PlaySound for preview. Return silently.

@@ -30,6 +30,8 @@ typedef struct tagSboAdminUiHost
 	void  (__stdcall *SetWndMapSize)(void* userData, int cx, int cy);
 	DWORD (__stdcall *GetSelectMapPartsID)(void* userData);
 	void  (__stdcall *SetSelectMapPartsID)(void* userData, DWORD dwPartsID);
+	/* TalkEvent 取得（戻り値は CInfoTalkEvent* を void* として渡す） */
+	void* (__stdcall *GetInfoTalkEvent)(void* userData);
 } SboAdminUiHost;
 
 typedef BOOL (__stdcall *SboAdminUiCreateProc)(void* context, const SboAdminUiHost* host, HWND hWndParent);

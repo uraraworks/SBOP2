@@ -70,7 +70,7 @@
       <DisableSpecificWarnings>4566;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm500 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm1000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -97,7 +97,7 @@
       <DisableSpecificWarnings>4566;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm500 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm1000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -174,16 +174,16 @@
     <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharMotion.cpp" />
     <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharMotionList.cpp" />
     <ClCompile Include="..\SboCli\src\Dialog\DlgAdminCharDisableNew.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkSet.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventNONE.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventBase.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventMENU.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventMENUSet.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventMSG.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventPAGE.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventADDSKILL.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventSet.cpp" />
-    <ClCompile Include="..\SboCli\src\Dialog\DlgAdminTalkEventTab.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkSet.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventNONE.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventBase.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventMENU.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventMENUSet.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventMSG.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventPAGE.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventADDSKILL.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventSet.cpp" />
+    <ClCompile Include="src\Migrated\Dialog\DlgAdminTalkEventTab.cpp" />
     <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemNew.cpp" />
     <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemTypeNew.cpp" />
     <ClCompile Include="..\SboCli\src\Dialog\DlgAdminItemTypeNewARMS.cpp" />

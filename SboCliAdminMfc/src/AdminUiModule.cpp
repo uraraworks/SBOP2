@@ -1,26 +1,50 @@
 #include "StdAfx.h"
 
 #include "../include/AdminUiApi.h"
+#include "AdminWindow.h"
 
 namespace
 {
 	struct SDllAdminUiContext
 	{
 		SboAdminUiHost host;
-		BOOL bCreated;
+		CAdminWindow* pAdminWindow;
 	};
 
 	BOOL __stdcall DllCreate(void* context, const SboAdminUiHost* host, HWND hWndParent)
 	{
 		SDllAdminUiContext* pCtx;
+		CMgrData* pMgrData;
 
-		UNREFERENCED_PARAMETER(host);
 		pCtx = (SDllAdminUiContext*)context;
-		if ((pCtx == NULL) || (pCtx->host.CreateLocalAdminUi == NULL)) {
+		if (pCtx == NULL) {
 			return FALSE;
 		}
-		pCtx->bCreated = pCtx->host.CreateLocalAdminUi(pCtx->host.userData, hWndParent);
-		return pCtx->bCreated;
+		if (pCtx->pAdminWindow != NULL) {
+			return TRUE;
+		}
+
+		/* Host から CMgrData を取得 */
+		pMgrData = NULL;
+		if (pCtx->host.GetMgrData) {
+			pMgrData = (CMgrData*)pCtx->host.GetMgrData(pCtx->host.userData);
+		}
+
+		pCtx->pAdminWindow = new CAdminWindow;
+		if (pCtx->pAdminWindow == NULL) {
+			return FALSE;
+		}
+		if (pCtx->pAdminWindow->Create(hWndParent, pMgrData, &pCtx->host) == FALSE) {
+			delete pCtx->pAdminWindow;
+			pCtx->pAdminWindow = NULL;
+			return FALSE;
+		}
+
+		/* ホスト側に AdminWindow の HWND を通知 */
+		if (pCtx->host.SetAdminWindow) {
+			pCtx->host.SetAdminWindow(pCtx->host.userData, pCtx->pAdminWindow->GetSafeHwnd());
+		}
+		return TRUE;
 	}
 
 	void __stdcall DllDestroy(void* context)
@@ -28,45 +52,68 @@ namespace
 		SDllAdminUiContext* pCtx;
 
 		pCtx = (SDllAdminUiContext*)context;
-		if ((pCtx == NULL) || (pCtx->host.DestroyLocalAdminUi == NULL)) {
+		if ((pCtx == NULL) || (pCtx->pAdminWindow == NULL)) {
 			return;
 		}
-		if (pCtx->bCreated) {
-			pCtx->host.DestroyLocalAdminUi(pCtx->host.userData);
-			pCtx->bCreated = FALSE;
+		pCtx->pAdminWindow->Destroy();
+		delete pCtx->pAdminWindow;
+		pCtx->pAdminWindow = NULL;
+
+		/* ホスト側の AdminWindow 参照をクリア */
+		if (pCtx->host.SetAdminWindow) {
+			pCtx->host.SetAdminWindow(pCtx->host.userData, NULL);
 		}
 	}
 
 	void __stdcall DllShow(void* context)
 	{
-		UNREFERENCED_PARAMETER(context);
+		SDllAdminUiContext* pCtx;
+
+		pCtx = (SDllAdminUiContext*)context;
+		if (pCtx && pCtx->pAdminWindow) {
+			pCtx->pAdminWindow->Show();
+		}
 	}
 
 	void __stdcall DllHide(void* context)
 	{
-		UNREFERENCED_PARAMETER(context);
+		SDllAdminUiContext* pCtx;
+
+		pCtx = (SDllAdminUiContext*)context;
+		if (pCtx && pCtx->pAdminWindow) {
+			pCtx->pAdminWindow->Hide();
+		}
 	}
 
 	void __stdcall DllNotify(void* context, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		SDllAdminUiContext* pCtx;
+		HWND hWndAdmin;
 
 		pCtx = (SDllAdminUiContext*)context;
-		if ((pCtx == NULL) || (pCtx->host.NotifyLocalAdminUi == NULL)) {
+		if ((pCtx == NULL) || (pCtx->pAdminWindow == NULL)) {
 			return;
 		}
-		pCtx->host.NotifyLocalAdminUi(pCtx->host.userData, message, wParam, lParam);
+		hWndAdmin = pCtx->pAdminWindow->GetSafeHwnd();
+		if (hWndAdmin && ::IsWindow(hWndAdmin)) {
+			pCtx->pAdminWindow->PostMessage(message, wParam, lParam);
+		}
 	}
 
 	HWND __stdcall DllGetWindow(void* context)
 	{
 		SDllAdminUiContext* pCtx;
+		HWND hWndAdmin;
 
 		pCtx = (SDllAdminUiContext*)context;
-		if ((pCtx == NULL) || (pCtx->host.GetLocalAdminUiWindow == NULL)) {
+		if ((pCtx == NULL) || (pCtx->pAdminWindow == NULL)) {
 			return NULL;
 		}
-		return pCtx->host.GetLocalAdminUiWindow(pCtx->host.userData);
+		hWndAdmin = pCtx->pAdminWindow->GetSafeHwnd();
+		if ((hWndAdmin == NULL) || (::IsWindow(hWndAdmin) == FALSE)) {
+			return NULL;
+		}
+		return hWndAdmin;
 	}
 }
 
@@ -80,10 +127,6 @@ extern "C" __declspec(dllexport) BOOL __stdcall CreateAdminUiModule(const SboAdm
 	if ((host->cb < sizeof(SboAdminUiHost)) || (host->apiVersion != SBO_ADMINUI_API_VERSION_1)) {
 		return FALSE;
 	}
-	if ((host->CreateLocalAdminUi == NULL) || (host->DestroyLocalAdminUi == NULL) ||
-		(host->NotifyLocalAdminUi == NULL) || (host->GetLocalAdminUiWindow == NULL)) {
-		return FALSE;
-	}
 
 	pCtx = new SDllAdminUiContext;
 	if (pCtx == NULL) {
@@ -91,7 +134,7 @@ extern "C" __declspec(dllexport) BOOL __stdcall CreateAdminUiModule(const SboAdm
 	}
 	ZeroMemory(pCtx, sizeof(*pCtx));
 	pCtx->host = *host;
-	pCtx->bCreated = FALSE;
+	pCtx->pAdminWindow = NULL;
 
 	ZeroMemory(outModule, sizeof(*outModule));
 	outModule->cb = sizeof(*outModule);
@@ -115,8 +158,10 @@ extern "C" __declspec(dllexport) void __stdcall DestroyAdminUiModule(SboAdminUiM
 	}
 	pCtx = (SDllAdminUiContext*)module->context;
 	if (pCtx) {
-		if (pCtx->bCreated && pCtx->host.DestroyLocalAdminUi) {
-			pCtx->host.DestroyLocalAdminUi(pCtx->host.userData);
+		if (pCtx->pAdminWindow) {
+			pCtx->pAdminWindow->Destroy();
+			delete pCtx->pAdminWindow;
+			pCtx->pAdminWindow = NULL;
 		}
 		delete pCtx;
 	}
