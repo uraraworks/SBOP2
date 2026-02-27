@@ -1,4 +1,4 @@
-﻿/* Copyright(C)URARA-works 2006 */
+/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:MainFrame.h												 */
 /* 内容			:クライアントメインフレーム 定義ファイル					 */
@@ -7,6 +7,8 @@
 /* ========================================================================= */
 
 #pragma once
+
+#include "Platform/IGameLoopHost.h"
 
 class CMgrData;
 class CUraraSockTCPSBO;
@@ -37,17 +39,24 @@ class CStateProcBase;
 /* クラス宣言																 */
 /* ========================================================================= */
 
-class CMainFrame
+class CMainFrame : public IGameLoopHost
 {
 public:
-			CMainFrame();									/* コンストラクタ */
-	virtual ~CMainFrame();									/* デストラクタ */
+			CMainFrame();								/* コンストラクタ */
+	virtual ~CMainFrame();								/* デストラクタ */
 
-	int		MainLoop		(HINSTANCE hInstance);							/* メインループ */
+	int		MainLoop		(HINSTANCE hInstance);							/* メインループ（SDLApp::Run 経由） */
 	void	DisConnectProc	(int nID);										/* 切断処理 */
 	void	ChgMoveState	(BOOL bChgBGM);									/* プレイヤー移動状態変更処理 */
 	void	RenewItemArea	(void);											/* 画面内のアイテム情報を更新 */
 	void	SendChat		(int nType, LPCSTR pszMsg, DWORD *pdwDst=NULL);	/* チャット発言 */
+
+	/* IGameLoopHost 実装 */
+	virtual BOOL	OnSDLInit	(HWND hWnd);								/* SDL初期化コールバック */
+	virtual BOOL	OnFrame		(void);										/* 1フレーム更新（TimerProc+KeyProc） */
+	virtual void	OnDraw		(HDC hDC);									/* 描画（MgrDraw::Draw） */
+	virtual BOOL	IsQuit		(void);										/* 終了判定 */
+	virtual void	OnSDLDestroy(void);										/* 後片付け */
 
 
 private:

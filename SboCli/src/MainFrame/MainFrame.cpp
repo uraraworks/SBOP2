@@ -32,6 +32,7 @@
 #include "MgrWindow.h"
 #include "MgrKeyInput.h"
 #include "MgrSound.h"
+#include "Platform/SDLApp.h"
 #include "MainFrame.h"
 
 
@@ -144,123 +145,202 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::MainLoop(HINSTANCE hInstance)
 {
-	TCHAR szBuf[256];
-	BYTE byFps;
-	DWORD dwStyle, dwTimeTmp, dwTimeFps, dwTimeStart;
-	DWORD dwFrameInterval, dwAccumulated;
-	const DWORD MAX_FRAME_SKIP = 5; // 1ループでの最大フレームスキップ数
-	BOOL bDraw;
-	RECT rcTmp;
-	MSG msg;
-	TIMECAPS tc;
-	WNDCLASS wc;
+	/* Phase 2: SDL基盤に移行。Win32ウィンドウ生成・メッセージループは SDLApp に委譲する */
+	char szTitle[256];
+	CSDLApp sdlApp;
 
-	wc.hInstance		= hInstance;
-	wc.lpszClassName	= _T(CLNAME);
-	wc.lpfnWndProc		= (WNDPROC)WndProcEntry;
-	wc.style			= CS_DBLCLKS;
-	wc.hIcon			= LoadIcon (hInstance, MAKEINTRESOURCE (IDI_SBO));
-	wc.hCursor			= LoadCursor ((HINSTANCE)NULL, IDC_ARROW);
-	wc.lpszMenuName		= NULL;
-	wc.cbClsExtra		= 0;
-	wc.cbWndExtra		= 0;
-	wc.hbrBackground	= (HBRUSH)GetStockObject (BLACK_BRUSH);
+	sprintf_s (szTitle, "%s Ver%s", WNDTITLE, VERTEXT);
 
-	/* ウィンドウのクラスを登録 */
-	if (!RegisterClass (&wc)) {
-		return FALSE;
+	if (!sdlApp.Init ()) {
+		return -1;
 	}
 
-	/* ウィンドウサイズを計算 */
-	dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_CLIPCHILDREN | WS_MINIMIZEBOX;
-	SetRect (&rcTmp, 0, 0, SCRSIZEX, SCRSIZEY);
-	AdjustWindowRect (&rcTmp, dwStyle, FALSE);
+	int nRet = sdlApp.Run (this, szTitle, SCRSIZEX, SCRSIZEY);
+	sdlApp.Destroy ();
 
-	/* ウィンドウ作成 */
-	wsprintf (szBuf, _T("%s Ver%s"), _T(WNDTITLE), _T(VERTEXT));
-	m_hWnd = CreateWindow (
-				_T(CLNAME),
-				szBuf,
-				dwStyle,
-				CW_USEDEFAULT, CW_USEDEFAULT,
-				rcTmp.right - rcTmp.left, rcTmp.bottom - rcTmp.top,
-				NULL,
-				NULL,
-				hInstance,
-				this);
-	if (m_hWnd == NULL) {
-		return FALSE;
-	}
+	return nRet;
+}
 
-	timeGetDevCaps (&tc, sizeof (TIMECAPS));
-	/* マルチメディアタイマーのサービス精度を最大に */
-	timeBeginPeriod (tc.wPeriodMin);
 
-	byFps		= 0;
-	m_nFPS		= 1000 / m_nDrawCount + 1;
-	dwFrameInterval = (m_nDrawCount > 0) ? (DWORD)(1000 / m_nDrawCount) : 16;
-	if (dwFrameInterval == 0) {
-		dwFrameInterval = 1;
-	}
-	dwAccumulated = 0;
-	dwTimeStart	= timeGetTime ();
-	dwTimeFps	= dwTimeStart;
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLInit											 */
+/* 内容		:SDL初期化コールバック（IGameLoopHost）							 */
+/* 日付		:2025/06/01														 */
+/* 補足		:SDLウィンドウのHWNDを受け取り、WndProcをサブクラス化して		 */
+/*			 既存の OnCreate + OnInitEnd 相当の初期化処理を実行する			 */
+/* ========================================================================= */
 
-	while (1) {
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			if (msg.message == WM_QUIT) {
-				break;
-			}
-			if (msg.message == WM_SYSKEYDOWN) {
-				if ((msg.wParam == VK_MENU) || (msg.wParam == VK_F10)) {
-					continue;
-				}
-			}
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+BOOL CMainFrame::OnSDLInit(HWND hWnd)
+{
+	TCHAR szFileName[MAX_PATH];
+	POINT pt;
+
+	m_hWnd = hWnd;
+
+	/* SDLウィンドウをサブクラス化: WndProcEntry を Win32 ウィンドウプロシージャとして登録 */
+	/* これにより WM_MAINFRAME / WM_ADMINMSG / WM_URARASOCK_* 等の独自メッセージを受け取れる */
+	SetWindowLongPtr (hWnd, GWLP_USERDATA, (LONG_PTR)this);
+	SetWindowLongPtr (hWnd, GWLP_WNDPROC, (LONG_PTR)WndProcEntry);
+
+	/* ウィンドウ位置をINIから復元（OnCreate相当） */
+	ZeroMemory (szFileName, sizeof (szFileName));
+	GetModuleFileName (NULL, szFileName, _countof (szFileName));
+	{
+		size_t nNameLen = _tcslen (szFileName);
+		if (nNameLen >= 3) {
+			_tcscpy_s (szFileName + nNameLen - 3, _countof (szFileName) - (nNameLen - 3), _T("ini"));
 		} else {
-			dwTimeTmp = timeGetTime();
-			DWORD dwElapsed = dwTimeTmp - dwTimeFps;
-			dwTimeFps = dwTimeTmp;
-			dwAccumulated += dwElapsed;
+			_tcscat_s (szFileName, _T(".ini"));
+		}
+	}
+	pt.x = GetPrivateProfileInt (_T("Pos"), _T("MainX"), -1, szFileName);
+	pt.y = GetPrivateProfileInt (_T("Pos"), _T("MainY"), -1, szFileName);
+	if (!((pt.x == -1) && (pt.y == -1))) {
+		SetWindowPos (hWnd, NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE);
+	}
 
-			DWORD frameSkipCount = 0;
-			while (dwAccumulated >= dwFrameInterval && frameSkipCount < MAX_FRAME_SKIP) {
-				dwAccumulated -= dwFrameInterval;
-				bDraw = TimerProc();
-				KeyProc();
-				if (bDraw) {
-					InvalidateRect(m_hWnd, NULL, FALSE);
-					UpdateWindow(m_hWnd);
-					byFps++;
-				}
-				frameSkipCount++;
+	/* ツールチェック・アクティブチェックタイマー開始（OnCreate相当） */
+	SetTimer (hWnd, TIMERID_TOOLCHECK, TIMER_TOOLCHECK, NULL);
+	SetTimer (hWnd, TIMERID_ACTIVECHECK, TIMER_ACTIVECHECK, NULL);
+
+	/* 初期化処理を実行（OnInitEnd相当） */
+	/* WM_INITEND の PostMessage/DispatchMessage を経由しない直接呼び出し */
+	OnInitEnd (hWnd);
+
+	return TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnFrame											 */
+/* 内容		:1フレーム更新（IGameLoopHost）									 */
+/* 日付		:2025/06/01														 */
+/* ========================================================================= */
+
+BOOL CMainFrame::OnFrame(void)
+{
+	BOOL bDraw;
+
+	bDraw = TimerProc ();
+	KeyProc ();
+
+	return bDraw;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnDraw												 */
+/* 内容		:描画（IGameLoopHost）											 */
+/* 日付		:2025/06/01														 */
+/* ========================================================================= */
+
+void CMainFrame::OnDraw(HDC hDC)
+{
+	DWORD dwTmp;
+
+	if (m_pMgrDraw == NULL) {
+		return;
+	}
+	if (!IsWindowVisible (m_hWnd)) {
+		return;
+	}
+
+	dwTmp = timeGetTime ();
+	m_pMgrDraw->Draw (hDC);
+	dwTmp = timeGetTime () - dwTmp;
+	m_pMgrData->SetDrawTime (dwTmp);
+	m_dwDrawTime += dwTmp;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::IsQuit												 */
+/* 内容		:終了判定（IGameLoopHost）										 */
+/* 日付		:2025/06/01														 */
+/* 補足		:SDL_QUIT がメインの終了トリガーなので常にFALSEを返す			 */
+/* ========================================================================= */
+
+BOOL CMainFrame::IsQuit(void)
+{
+	return FALSE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLDestroy										 */
+/* 内容		:後片付け（IGameLoopHost）										 */
+/* 日付		:2025/06/01														 */
+/* 補足		:OnClose 相当の設定保存 + タイマー停止を行う					 */
+/*			 DestroyWindow/PostQuitMessage は SDL が管理するため呼ばない	 */
+/* ========================================================================= */
+
+void CMainFrame::OnSDLDestroy(void)
+{
+	RECT rc;
+	TCHAR szFileName[MAX_PATH];
+	HWND hWndTmp;
+	CmyString strTmp;
+
+	/* タイマー停止 */
+	KillTimer (m_hWnd, TIMERID_TOOLCHECK);
+	KillTimer (m_hWnd, TIMERID_ACTIVECHECK);
+
+	/* ウィンドウ位置等をINIに保存（OnClose相当） */
+	ZeroMemory (szFileName, sizeof (szFileName));
+	GetModuleFileName (NULL, szFileName, _countof (szFileName));
+	{
+		size_t nNameLen = _tcslen (szFileName);
+		if (nNameLen >= 3) {
+			_tcscpy_s (szFileName + nNameLen - 3, _countof (szFileName) - (nNameLen - 3), _T("ini"));
+		} else {
+			_tcscat_s (szFileName, _T(".ini"));
+		}
+	}
+
+	if (m_hWnd && (IsIconic (m_hWnd) == FALSE) && (IsWindowVisible (m_hWnd))) {
+		GetWindowRect (m_hWnd, &rc);
+		strTmp.Format (_T("%d"), rc.left);
+		WritePrivateProfileString (_T("Pos"), _T("MainX"), strTmp, szFileName);
+		strTmp.Format (_T("%d"), rc.top);
+		WritePrivateProfileString (_T("Pos"), _T("MainY"), strTmp, szFileName);
+
+		if (m_nGameState == GAMESTATE_MAP) {
+			((CStateProcMAP *)m_pStateProc)->GetMsgLogRect (rc);
+			strTmp.Format (_T("%d"), rc.left);
+			WritePrivateProfileString (_T("Pos"), _T("LogLeft"), strTmp, szFileName);
+			strTmp.Format (_T("%d"), rc.top);
+			WritePrivateProfileString (_T("Pos"), _T("LogTop"), strTmp, szFileName);
+			strTmp.Format (_T("%d"), rc.right);
+			WritePrivateProfileString (_T("Pos"), _T("LogRight"), strTmp, szFileName);
+			strTmp.Format (_T("%d"), rc.bottom);
+			WritePrivateProfileString (_T("Pos"), _T("LogBottom"), strTmp, szFileName);
+
+			hWndTmp = m_pMgrData->GetAdminWindow ();
+			if (hWndTmp) {
+				GetWindowRect (hWndTmp, &rc);
+				strTmp.Format (_T("%d"), rc.left);
+				WritePrivateProfileString (_T("Pos"), _T("AdminX"), strTmp, szFileName);
+				strTmp.Format (_T("%d"), rc.top);
+				WritePrivateProfileString (_T("Pos"), _T("AdminY"), strTmp, szFileName);
 			}
 
-			// 残り時間に応じてSleep時間を最適化
-			if (dwAccumulated < dwFrameInterval) {
-				DWORD sleepTime = dwFrameInterval - dwAccumulated;
-				if (sleepTime > 1) {
-					Sleep(sleepTime);
-				} else {
-					Sleep(1);
-				}
-			}
-
-			if (dwTimeTmp - dwTimeStart >= 1000) {
-				m_nFPS = byFps;
-				m_dwDrawTime = 0;
-				byFps = 0;
-				dwTimeStart = dwTimeTmp;
+			hWndTmp = m_pMgrData->GetDebugWindow ();
+			if (hWndTmp) {
+				GetWindowRect (hWndTmp, &rc);
+				strTmp.Format (_T("%d"), rc.left);
+				WritePrivateProfileString (_T("Pos"), _T("DebugX"), strTmp, szFileName);
+				strTmp.Format (_T("%d"), rc.top);
+				WritePrivateProfileString (_T("Pos"), _T("DebugY"), strTmp, szFileName);
 			}
 		}
 	}
 
-	timeEndPeriod (tc.wPeriodMin);
-	UnregisterClass (_T(CLNAME), hInstance);
-
-	/* 終了メッセージによりプログラム終了 */
-	return (int)msg.wParam;
+	if (m_pMgrData) {
+		m_pMgrData->SaveIniData ();
+	}
+	if (m_pSock) {
+		m_pSock->Destroy ();
+	}
 }
 
 
@@ -893,13 +973,14 @@ void CMainFrame::OnPaint(HWND hWnd)
 	dwTmp	= timeGetTime ();
 	hDC		= BeginPaint (hWnd, &ps);
 
-	if (IsWindowVisible (m_hWnd)) {
+	/* 初期化完了前の WM_PAINT に備えて nullptr チェック（OnDraw と同様） */
+	if (IsWindowVisible (m_hWnd) && m_pMgrDraw != NULL) {
 		m_pMgrDraw->Draw (hDC);
-	}
 
-	dwTmp = timeGetTime () - dwTmp;
-	m_pMgrData->SetDrawTime (dwTmp);
-	m_dwDrawTime += dwTmp;
+		dwTmp = timeGetTime () - dwTmp;
+		m_pMgrData->SetDrawTime (dwTmp);
+		m_dwDrawTime += dwTmp;
+	}
 
 	EndPaint (hWnd, &ps);
 }

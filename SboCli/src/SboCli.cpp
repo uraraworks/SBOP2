@@ -6,6 +6,9 @@
 /* 作成開始日	:2006/09/24													 */
 /* ========================================================================= */
 
+/* SDL_main マクロを無効化（MFCのエントリポイントと競合させない） */
+#define SDL_MAIN_HANDLED
+
 #include "stdafx.h"
 #include "MainFrame.h"
 #include "SboCli.h"
@@ -77,6 +80,8 @@ Exit:
 	ReleaseMutex (hMutexMain);
 	CloseHandle (hMutexMain);
 
+	/* SDLループ終了後、ソケットスレッド等が残存している場合でも確実に終了 */
+	ExitProcess (0);
 	return FALSE;
 }
 

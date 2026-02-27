@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 /* Admin UI module ABI (Phase 1) */
 

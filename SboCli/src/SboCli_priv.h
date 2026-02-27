@@ -13,6 +13,7 @@
 /* ========================================================================= */
 
 #define MAPPARTSSIZE	(32)										/* マップパーツサイズ */
+#define DRAWCOUNT		(30)										/* 描画フレームレート(FPS) */
 #define SCRSIZEX		(MAPPARTSSIZE * DRAW_PARTS_X)				/* マップ表示サイズ(横) */
 #define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)				/* マップ表示サイズ(縦) */
 #define SCROLLSIZE		(16)										/* スクロール単位 */
