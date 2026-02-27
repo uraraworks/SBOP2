@@ -593,6 +593,27 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> mapObjectsHandler(new CMapObjectListHandler(m_pMgrData));
         m_router.Register("GET", "/api/maps/objects", std::move(mapObjectsHandler));
 
+        std::unique_ptr<IApiHandler> mapObjectTemplatesHandler(new CMapObjectTemplateListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/maps/objects/templates", std::move(mapObjectTemplatesHandler));
+
+        std::unique_ptr<IApiHandler> mapObjectTemplateCreateHandler(new CMapObjectTemplateCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps/objects/templates", std::move(mapObjectTemplateCreateHandler));
+
+        std::unique_ptr<IApiHandler> mapObjectTemplateUpdateHandler(new CMapObjectTemplateUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/maps/objects/templates", std::move(mapObjectTemplateUpdateHandler));
+
+        std::unique_ptr<IApiHandler> mapObjectTemplateDeleteHandler(new CMapObjectTemplateDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/maps/objects/templates", std::move(mapObjectTemplateDeleteHandler));
+
+        std::unique_ptr<IApiHandler> mapPlacementCreateHandler(new CMapPlacementCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps/placements", std::move(mapPlacementCreateHandler));
+
+        std::unique_ptr<IApiHandler> mapPlacementUpdateHandler(new CMapPlacementUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/maps/placements", std::move(mapPlacementUpdateHandler));
+
+        std::unique_ptr<IApiHandler> mapPlacementDeleteHandler(new CMapPlacementDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/maps/placements", std::move(mapPlacementDeleteHandler));
+
         std::unique_ptr<IApiHandler> mapPartsHandler(new CMapPartsListHandler(m_pMgrData, mapPartsProvider));
         m_router.Register("GET", "/api/maps/parts", std::move(mapPartsHandler));
 

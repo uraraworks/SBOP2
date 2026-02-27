@@ -60,26 +60,40 @@ MFCデスクトップクライアント(SboCli)のマップ管理ダイアログ
 
 ---
 
-### Phase 2: マップオブジェクト管理のWeb化
+### Phase 2: マップオブジェクト管理のWeb化（2026-02-27 完了）
 
 #### 2-1. オブジェクトテンプレートAPI
 
-- [ ] `GET /api/maps/objects/templates` - オブジェクトテンプレート一覧
-- [ ] `POST /api/maps/objects/templates` - 新規テンプレート作成
-- [ ] `PUT /api/maps/objects/templates/{objectId}` - テンプレート更新
-- [ ] `DELETE /api/maps/objects/templates/{objectId}` - テンプレート削除
+- [x] `GET /api/maps/objects/templates` - オブジェクトテンプレート一覧
+- [x] `POST /api/maps/objects/templates` - 新規テンプレート作成（body: name, attribute, hideY, width, height, hasCollision）
+- [x] `PUT /api/maps/objects/templates` - テンプレート更新（body: objectId 含む）
+- [x] `DELETE /api/maps/objects/templates` - テンプレート削除（body: objectId）
+  - 削除後は `PacketMAP_MAPOBJECT::Make(CLibInfoMapObject*)` で全クライアントに再送
 
 #### 2-2. オブジェクト配置API
 
-- [ ] `POST /api/maps/{mapId}/placements` - オブジェクト配置追加
-- [ ] `PUT /api/maps/{mapId}/placements/{dataId}` - 配置更新
-- [ ] `DELETE /api/maps/{mapId}/placements/{dataId}` - 配置削除
+- [x] `POST /api/maps/placements` - オブジェクト配置追加（body: mapId, objectId, x, y）
+- [x] `PUT /api/maps/placements` - 配置更新（body: mapId, dataId, objectId, x, y）
+- [x] `DELETE /api/maps/placements` - 配置削除（body: mapId, dataId）
+  - 削除後は `PacketMAP_MAPOBJECTDATA::Make(mapId, CLibInfoMapObjectData*)` で再送
 
 #### 2-3. Web UI - オブジェクト管理画面
 
-- [ ] オブジェクトテンプレートの一覧・編集
-- [ ] マップ上のオブジェクト配置エディタ（グリッドビュー）
-- [ ] ドラッグ&ドロップでの配置操作
+- [x] オブジェクトテンプレートの一覧・編集（`#map-object-templates` ルート）
+  - テンプレート一覧テーブル（行クリックで選択）
+  - 編集フォーム（名称・属性・当たり判定・サイズ・隠れY）
+  - 新規追加・更新・削除ボタン
+- [x] マップ上のオブジェクト配置エディタ（`#map-objects` ルート）
+  - マップ選択後、グリッドまたはテーブル行クリックで配置選択
+  - objectId セレクトをテンプレート一覧から動的生成
+  - 配置の新規追加・更新・削除をAPI経由で実行
+- [ ] ドラッグ&ドロップでの配置操作（未実装、Phase 3 以降）
+
+#### 実装メモ
+- URLパラメータは `CApiRouter` が非対応のため、ID は全て request body に含める
+- テンプレート削除パケットは専用パケットなし → 全オブジェクト再送で対応
+- `CInfoMapObject::m_aInfoAnime`（アニメーション）はAPIから除外（Phase 3 以降）
+- `SetStringFromUtf8` ヘルパーを MapObjectHandler.cpp に追加（UTF-8 → CP932/UTF-16 変換）
 
 ---
 
@@ -144,7 +158,7 @@ MFCデスクトップクライアント(SboCli)のマップ管理ダイアログ
 | フェーズ | 状態 | 備考 |
 |---------|------|------|
 | Phase 1: マップパーツ編集 | **ほぼ完了** | API (CRUD) + UI実装済み。スプライト視覚選択UIのみ未着手 |
-| Phase 2: マップオブジェクト管理 | 未着手 | |
+| Phase 2: マップオブジェクト管理 | **完了** | テンプレートCRUD API + 配置CRUD API + Web UI (2026-02-27) |
 | Phase 3: マップ情報・イベント | 未着手 | |
 
 ### 2025-02-13 更新: Phase 1 詳細

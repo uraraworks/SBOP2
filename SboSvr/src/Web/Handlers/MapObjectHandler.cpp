@@ -19,6 +19,9 @@
 #include "Info/InfoMapObject.h"
 #include "Info/InfoMapParts.h"
 #include "myLib/myString.h"
+#include "UraraSockTCPSBO.h"
+#include "Packet/MAP/PacketMAP_MAPOBJECT.h"
+#include "Packet/MAP/PacketMAP_MAPOBJECTDATA.h"
 
 namespace
 {
@@ -114,6 +117,80 @@ std::string ToUtf8String(const CmyString &value)
 
         return RemoveControlCharacters(RemoveUtf8Bom(std::string(pszSource, static_cast<size_t>(srcLength))));
 #endif
+}
+
+/* UTF-8 文字列を内部文字コード (MBCS: CP932 / Unicode: UTF-16) に変換して CmyString へ代入 */
+bool SetStringFromUtf8(CmyString &out, const std::string &utf8)
+{
+        if (utf8.empty()) {
+                out = _T("");
+                return true;
+        }
+#ifdef _UNICODE
+        int wideLen = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), NULL, 0);
+        if (wideLen <= 0) {
+                return false;
+        }
+        std::vector<wchar_t> wide(static_cast<size_t>(wideLen) + 1, L'\0');
+        MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), &wide[0], wideLen);
+        out = &wide[0];
+#else
+        int wideLen = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), NULL, 0);
+        if (wideLen <= 0) {
+                return false;
+        }
+        std::vector<wchar_t> wide(static_cast<size_t>(wideLen) + 1, L'\0');
+        MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), &wide[0], wideLen);
+
+        int mbLen = WideCharToMultiByte(932, 0, &wide[0], wideLen, NULL, 0, NULL, NULL);
+        if (mbLen <= 0) {
+                return false;
+        }
+        std::vector<char> mb(static_cast<size_t>(mbLen) + 1, '\0');
+        WideCharToMultiByte(932, 0, &wide[0], wideLen, &mb[0], mbLen, NULL, NULL);
+        out = &mb[0];
+#endif
+        return true;
+}
+
+/* CInfoMapObject の内容を JSON に出力する */
+void BuildTemplateJson(std::ostringstream &oss, const CInfoMapObject *pInfo)
+{
+        oss << '{';
+        oss << "\"objectId\":" << pInfo->m_dwObjectID << ',';
+        oss << "\"name\":\"" << JsonUtils::Escape(ToUtf8String(pInfo->m_strName)) << "\",";
+        oss << "\"attribute\":" << pInfo->m_dwAttr << ',';
+        oss << "\"hasCollision\":" << (pInfo->m_bHit ? "true" : "false") << ',';
+        oss << "\"hideY\":" << pInfo->m_nHideY << ',';
+        oss << "\"width\":" << pInfo->m_sizeGrp.cx << ',';
+        oss << "\"height\":" << pInfo->m_sizeGrp.cy;
+        oss << '}';
+}
+
+/* JSON から CInfoMapObject へ値を適用する */
+void ApplyJsonToTemplate(const std::string &json, CInfoMapObject *pInfo)
+{
+        std::string name;
+        if (JsonUtils::TryGetString(json, "name", name)) {
+                SetStringFromUtf8(pInfo->m_strName, name);
+        }
+        int nVal = 0;
+        if (JsonUtils::TryGetInt(json, "attribute", nVal)) {
+                pInfo->m_dwAttr = static_cast<DWORD>(nVal);
+        }
+        bool bVal = false;
+        if (JsonUtils::TryGetBool(json, "hasCollision", bVal)) {
+                pInfo->m_bHit = bVal ? TRUE : FALSE;
+        }
+        if (JsonUtils::TryGetInt(json, "hideY", nVal)) {
+                pInfo->m_nHideY = nVal;
+        }
+        if (JsonUtils::TryGetInt(json, "width", nVal)) {
+                pInfo->m_sizeGrp.cx = nVal;
+        }
+        if (JsonUtils::TryGetInt(json, "height", nVal)) {
+                pInfo->m_sizeGrp.cy = nVal;
+        }
 }
 }
 
@@ -320,5 +397,518 @@ std::string CMapObjectListHandler::ResolveWeatherLabel(unsigned long weatherType
                 break;
         }
         return std::string("\xE4\xB8\x8D\xE6\x98\x8E");
+}
+
+/* ========================================================================= */
+/* CMapObjectTemplateListHandler                                              */
+/* ========================================================================= */
+
+CMapObjectTemplateListHandler::CMapObjectTemplateListHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapObjectTemplateListHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(BuildResponseJson());
+}
+
+std::string CMapObjectTemplateListHandler::BuildResponseJson() const
+{
+        if (m_pMgrData == NULL) {
+                return "{\"templates\":[]}";
+        }
+        CLibInfoMapObject *pObjectLib = m_pMgrData->GetLibInfoMapObject();
+        if (pObjectLib == NULL) {
+                return "{\"templates\":[]}";
+        }
+
+        pObjectLib->Enter();
+
+        std::ostringstream oss;
+        oss << "{\"templates\":[";
+        bool first = true;
+        int nCount = pObjectLib->GetCount();
+        for (int i = 0; i < nCount; ++i) {
+                const CInfoMapObject *pInfo = static_cast<const CInfoMapObject *>(pObjectLib->GetPtr(i));
+                if (pInfo == NULL) {
+                        continue;
+                }
+                if (!first) {
+                        oss << ',';
+                }
+                first = false;
+                BuildTemplateJson(oss, pInfo);
+        }
+        oss << "]}";
+
+        pObjectLib->Leave();
+        return oss.str();
+}
+
+/* ========================================================================= */
+/* CMapObjectTemplateCreateHandler                                            */
+/* ========================================================================= */
+
+CMapObjectTemplateCreateHandler::CMapObjectTemplateCreateHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapObjectTemplateCreateHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapObject *pObjectLib = m_pMgrData->GetLibInfoMapObject();
+        CUraraSockTCPSBO  *pSock      = m_pMgrData->GetSock();
+        if (pObjectLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pObjectLib->Enter();
+
+        PCInfoMapObject pInfo = static_cast<PCInfoMapObject>(pObjectLib->GetNew());
+        if (pInfo == NULL) {
+                pObjectLib->Leave();
+                response.statusLine = "HTTP/1.1 500 Internal Server Error";
+                response.SetJsonBody("{\"error\":\"failed_to_create_template\"}");
+                return;
+        }
+
+        ApplyJsonToTemplate(request.body, pInfo);
+        pObjectLib->Add(pInfo);
+
+        CPacketMAP_MAPOBJECT packet;
+        packet.Make(pInfo);
+        pSock->SendTo(0, &packet);
+
+        std::ostringstream oss;
+        BuildTemplateJson(oss, pInfo);
+
+        pObjectLib->Leave();
+
+        response.statusLine = "HTTP/1.1 201 Created";
+        response.SetJsonBody(oss.str());
+}
+
+/* ========================================================================= */
+/* CMapObjectTemplateUpdateHandler                                            */
+/* ========================================================================= */
+
+CMapObjectTemplateUpdateHandler::CMapObjectTemplateUpdateHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapObjectTemplateUpdateHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapObject *pObjectLib = m_pMgrData->GetLibInfoMapObject();
+        CUraraSockTCPSBO  *pSock      = m_pMgrData->GetSock();
+        if (pObjectLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        int nObjectId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "objectId", nObjectId) || nObjectId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_objectId\"}");
+                return;
+        }
+
+        pObjectLib->Enter();
+
+        PCInfoMapObject pInfo = static_cast<PCInfoMapObject>(pObjectLib->GetPtr(static_cast<DWORD>(nObjectId)));
+        if (pInfo == NULL) {
+                pObjectLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"template_not_found\"}");
+                return;
+        }
+
+        ApplyJsonToTemplate(request.body, pInfo);
+
+        CPacketMAP_MAPOBJECT packet;
+        packet.Make(pInfo);
+        pSock->SendTo(0, &packet);
+
+        std::ostringstream oss;
+        BuildTemplateJson(oss, pInfo);
+
+        pObjectLib->Leave();
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+/* ========================================================================= */
+/* CMapObjectTemplateDeleteHandler                                            */
+/* ========================================================================= */
+
+CMapObjectTemplateDeleteHandler::CMapObjectTemplateDeleteHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapObjectTemplateDeleteHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapObject *pObjectLib = m_pMgrData->GetLibInfoMapObject();
+        CUraraSockTCPSBO  *pSock      = m_pMgrData->GetSock();
+        if (pObjectLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        int nObjectId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "objectId", nObjectId) || nObjectId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_objectId\"}");
+                return;
+        }
+
+        DWORD dwObjectId = static_cast<DWORD>(nObjectId);
+
+        pObjectLib->Enter();
+
+        if (pObjectLib->GetPtr(dwObjectId) == NULL) {
+                pObjectLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"template_not_found\"}");
+                return;
+        }
+
+        pObjectLib->Delete(dwObjectId);
+
+        /* 削除後は全テンプレートを再送して各クライアントに反映 */
+        CPacketMAP_MAPOBJECT packet;
+        packet.Make(pObjectLib);
+        pSock->SendTo(0, &packet);
+
+        pObjectLib->Leave();
+
+        std::ostringstream oss;
+        oss << "{\"deleted\":" << dwObjectId << "}";
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+/* ========================================================================= */
+/* CMapPlacementCreateHandler                                                 */
+/* ========================================================================= */
+
+CMapPlacementCreateHandler::CMapPlacementCreateHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPlacementCreateHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapBase  *pMapLib = m_pMgrData->GetLibInfoMap();
+        CUraraSockTCPSBO *pSock   = m_pMgrData->GetSock();
+        if (pMapLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        int nMapId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "mapId", nMapId) || nMapId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_mapId\"}");
+                return;
+        }
+        int nObjectId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "objectId", nObjectId) || nObjectId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_objectId\"}");
+                return;
+        }
+        int nX = 0, nY = 0;
+        JsonUtils::TryGetInt(request.body, "x", nX);
+        JsonUtils::TryGetInt(request.body, "y", nY);
+
+        pMapLib->Enter();
+
+        CInfoMapBase *pMap = static_cast<CInfoMapBase *>(pMapLib->GetPtr(static_cast<DWORD>(nMapId)));
+        if (pMap == NULL || pMap->m_pLibInfoMapObjectData == NULL) {
+                pMapLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"map_not_found\"}");
+                return;
+        }
+
+        CLibInfoMapObjectData *pPlacementLib = pMap->m_pLibInfoMapObjectData;
+        pPlacementLib->Enter();
+
+        PCInfoMapObjectData pPlacement = static_cast<PCInfoMapObjectData>(pPlacementLib->GetNew());
+        if (pPlacement == NULL) {
+                pPlacementLib->Leave();
+                pMapLib->Leave();
+                response.statusLine = "HTTP/1.1 500 Internal Server Error";
+                response.SetJsonBody("{\"error\":\"failed_to_create_placement\"}");
+                return;
+        }
+
+        pPlacement->m_dwObjectID = static_cast<DWORD>(nObjectId);
+        pPlacement->m_ptPos.x    = nX;
+        pPlacement->m_ptPos.y    = nY;
+        pPlacementLib->Add(pPlacement);
+
+        DWORD dwDataId = pPlacement->m_dwDataID;
+        DWORD dwMapId  = static_cast<DWORD>(nMapId);
+
+        CPacketMAP_MAPOBJECTDATA packet;
+        packet.Make(dwMapId, pPlacement);
+        pSock->SendTo(0, &packet);
+
+        pPlacementLib->Leave();
+        pMapLib->Leave();
+
+        std::ostringstream oss;
+        oss << "{\"dataId\":" << dwDataId << ",\"mapId\":" << dwMapId << ",\"objectId\":" << nObjectId << ",\"x\":" << nX << ",\"y\":" << nY << "}";
+        response.statusLine = "HTTP/1.1 201 Created";
+        response.SetJsonBody(oss.str());
+}
+
+/* ========================================================================= */
+/* CMapPlacementUpdateHandler                                                 */
+/* ========================================================================= */
+
+CMapPlacementUpdateHandler::CMapPlacementUpdateHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPlacementUpdateHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapBase  *pMapLib = m_pMgrData->GetLibInfoMap();
+        CUraraSockTCPSBO *pSock   = m_pMgrData->GetSock();
+        if (pMapLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        int nMapId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "mapId", nMapId) || nMapId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_mapId\"}");
+                return;
+        }
+        int nDataId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "dataId", nDataId) || nDataId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_dataId\"}");
+                return;
+        }
+
+        pMapLib->Enter();
+
+        CInfoMapBase *pMap = static_cast<CInfoMapBase *>(pMapLib->GetPtr(static_cast<DWORD>(nMapId)));
+        if (pMap == NULL || pMap->m_pLibInfoMapObjectData == NULL) {
+                pMapLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"map_not_found\"}");
+                return;
+        }
+
+        CLibInfoMapObjectData *pPlacementLib = pMap->m_pLibInfoMapObjectData;
+        pPlacementLib->Enter();
+
+        PCInfoMapObjectData pPlacement = static_cast<PCInfoMapObjectData>(pPlacementLib->GetPtr(static_cast<DWORD>(nDataId)));
+        if (pPlacement == NULL) {
+                pPlacementLib->Leave();
+                pMapLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"placement_not_found\"}");
+                return;
+        }
+
+        int nVal = 0;
+        if (JsonUtils::TryGetInt(request.body, "objectId", nVal) && nVal > 0) {
+                pPlacement->m_dwObjectID = static_cast<DWORD>(nVal);
+        }
+        if (JsonUtils::TryGetInt(request.body, "x", nVal)) {
+                pPlacement->m_ptPos.x = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "y", nVal)) {
+                pPlacement->m_ptPos.y = nVal;
+        }
+
+        DWORD dwMapId = static_cast<DWORD>(nMapId);
+
+        CPacketMAP_MAPOBJECTDATA packet;
+        packet.Make(dwMapId, pPlacement);
+        pSock->SendTo(0, &packet);
+
+        std::ostringstream oss;
+        oss << "{\"dataId\":" << pPlacement->m_dwDataID << ",\"mapId\":" << dwMapId << ",\"objectId\":" << pPlacement->m_dwObjectID << ",\"x\":" << pPlacement->m_ptPos.x << ",\"y\":" << pPlacement->m_ptPos.y << "}";
+
+        pPlacementLib->Leave();
+        pMapLib->Leave();
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+/* ========================================================================= */
+/* CMapPlacementDeleteHandler                                                 */
+/* ========================================================================= */
+
+CMapPlacementDeleteHandler::CMapPlacementDeleteHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPlacementDeleteHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapBase  *pMapLib = m_pMgrData->GetLibInfoMap();
+        CUraraSockTCPSBO *pSock   = m_pMgrData->GetSock();
+        if (pMapLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        int nMapId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "mapId", nMapId) || nMapId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_mapId\"}");
+                return;
+        }
+        int nDataId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "dataId", nDataId) || nDataId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_dataId\"}");
+                return;
+        }
+
+        DWORD dwMapId  = static_cast<DWORD>(nMapId);
+        DWORD dwDataId = static_cast<DWORD>(nDataId);
+
+        pMapLib->Enter();
+
+        CInfoMapBase *pMap = static_cast<CInfoMapBase *>(pMapLib->GetPtr(dwMapId));
+        if (pMap == NULL || pMap->m_pLibInfoMapObjectData == NULL) {
+                pMapLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"map_not_found\"}");
+                return;
+        }
+
+        CLibInfoMapObjectData *pPlacementLib = pMap->m_pLibInfoMapObjectData;
+        pPlacementLib->Enter();
+
+        if (pPlacementLib->GetPtr(dwDataId) == NULL) {
+                pPlacementLib->Leave();
+                pMapLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"placement_not_found\"}");
+                return;
+        }
+
+        pPlacementLib->Delete(dwDataId);
+
+        /* 削除後はマップの全配置を再送して各クライアントに反映 */
+        CPacketMAP_MAPOBJECTDATA packet;
+        packet.Make(dwMapId, pPlacementLib);
+        pSock->SendTo(0, &packet);
+
+        pPlacementLib->Leave();
+        pMapLib->Leave();
+
+        std::ostringstream oss;
+        oss << "{\"deleted\":" << dwDataId << ",\"mapId\":" << dwMapId << "}";
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
 }
 

@@ -24,17 +24,31 @@ const mapObjectTableBody = document.getElementById("map-object-table-body");
 const mapObjectGridEl = document.getElementById("map-object-grid");
 const mapObjectSelectedLabel = document.getElementById("map-object-selected-label");
 const mapObjectForm = document.getElementById("map-object-form");
-const mapObjectNameInput = document.getElementById("map-object-name");
+const mapObjectDataIdInput = document.getElementById("map-object-data-id");
+const mapObjectPlacementIdDisplay = document.getElementById("map-object-placement-id-display");
 const mapObjectTypeSelect = document.getElementById("map-object-type");
-const mapObjectLayerSelect = document.getElementById("map-object-layer");
 const mapObjectXInput = document.getElementById("map-object-x");
 const mapObjectYInput = document.getElementById("map-object-y");
-const mapObjectRespawnInput = document.getElementById("map-object-respawn");
-const mapObjectNotesInput = document.getElementById("map-object-notes");
 const mapObjectClearButton = document.getElementById("map-object-clear");
 const mapObjectDeleteButton = document.getElementById("map-object-delete");
 const mapObjectSaveButton = document.getElementById("map-object-save");
 const mapObjectFeedbackEl = document.getElementById("map-object-feedback");
+
+/* オブジェクトテンプレート管理 */
+const mapObjectTemplateTableBody = document.getElementById("map-object-template-table-body");
+const mapObjectTemplateSummaryEl = document.getElementById("map-object-template-summary");
+const mapObjectTemplateForm = document.getElementById("map-object-template-form");
+const mapObjectTemplateFeedbackEl = document.getElementById("map-object-template-feedback");
+const mapObjectTemplateIdInput = document.getElementById("map-object-template-id");
+const mapObjectTemplateNameInput = document.getElementById("map-object-template-name");
+const mapObjectTemplateAttrInput = document.getElementById("map-object-template-attr");
+const mapObjectTemplateHideYInput = document.getElementById("map-object-template-hideY");
+const mapObjectTemplateWidthInput = document.getElementById("map-object-template-width");
+const mapObjectTemplateHeightInput = document.getElementById("map-object-template-height");
+const mapObjectTemplateCollisionInput = document.getElementById("map-object-template-collision");
+const mapObjectTemplateSaveBtn = document.getElementById("map-object-template-save-btn");
+const mapObjectTemplateNewBtn = document.getElementById("map-object-template-new-btn");
+const mapObjectTemplateDeleteBtn = document.getElementById("map-object-template-delete-btn");
 
 const mapPartsFlagFilter = document.getElementById("map-parts-flag-filter");
 const mapPartsSummaryEl = document.getElementById("map-parts-summary");
@@ -130,6 +144,12 @@ const mapObjectState = {
   sheetTileWidth: 32,
   sheetTileHeight: 32,
   sheetBaseUrl: "/api/assets/map-parts/sheets"
+};
+
+const mapObjectTemplateState = {
+  templates: [],
+  selectedId: null,
+  isLoading: false
 };
 
 const mapPartsState = {
@@ -712,23 +732,51 @@ function handleRoleReset() {
   renderRoleOptions();
 }
 
+function populateObjectTypeSelectFromTemplates() {
+  if (!mapObjectTypeSelect) {
+    return;
+  }
+  const prevValue = mapObjectTypeSelect.value;
+  mapObjectTypeSelect.innerHTML = "";
+  const emptyOpt = document.createElement("option");
+  emptyOpt.value = "";
+  emptyOpt.textContent = "-- オブジェクトを選択 --";
+  mapObjectTypeSelect.appendChild(emptyOpt);
+  mapObjectTemplateState.templates.forEach((tmpl) => {
+    const opt = document.createElement("option");
+    opt.value = String(tmpl.objectId);
+    opt.textContent = `[${tmpl.objectId}] ${tmpl.name || "(無名)"}`;
+    mapObjectTypeSelect.appendChild(opt);
+  });
+  if (prevValue) {
+    mapObjectTypeSelect.value = prevValue;
+  }
+}
+
 function initializeMapObjectView() {
   if (!mapObjectMapSelect) {
     return;
   }
   populateMapObjectTypeSelect(mapObjectFilterSelect, true);
-  populateMapObjectTypeSelect(mapObjectTypeSelect, false);
-  enforceMapObjectReadOnly();
   populateMapOptions();
   if (mapObjectFilterSelect) {
     mapObjectFilterSelect.value = mapObjectState.filterType;
-    mapObjectFilterSelect.disabled = true;
+    mapObjectFilterSelect.disabled = mapObjectState.maps.length === 0;
   }
 
   applyObjectToForm(null, getSelectedMapData());
   renderMapComponents();
-  setMapObjectFeedback("現在は閲覧専用モードです。", null);
-  loadMapObjectData(false);
+  setMapObjectFeedback("", null);
+  /* テンプレートを先にロードして objectId セレクトを初期化してからデータをロード */
+  if (!mapObjectTemplateState.templates.length && !mapObjectTemplateState.isLoading) {
+    loadObjectTemplates().then(() => {
+      populateObjectTypeSelectFromTemplates();
+      loadMapObjectData(false);
+    });
+  } else {
+    populateObjectTypeSelectFromTemplates();
+    loadMapObjectData(false);
+  }
 }
 
 function populateMapOptions() {
@@ -1044,37 +1092,7 @@ function clampCoordinate(value, max) {
 }
 
 function enforceMapObjectReadOnly() {
-  if (!mapObjectForm) {
-    return;
-  }
-  if (mapObjectNameInput) {
-    mapObjectNameInput.readOnly = true;
-  }
-  if (mapObjectTypeSelect) {
-    mapObjectTypeSelect.disabled = true;
-  }
-  if (mapObjectLayerSelect) {
-    mapObjectLayerSelect.disabled = true;
-  }
-  if (mapObjectXInput) {
-    mapObjectXInput.readOnly = true;
-  }
-  if (mapObjectYInput) {
-    mapObjectYInput.readOnly = true;
-  }
-  if (mapObjectRespawnInput) {
-    mapObjectRespawnInput.disabled = true;
-  }
-  if (mapObjectNotesInput) {
-    mapObjectNotesInput.readOnly = true;
-  }
-  if (mapObjectSaveButton) {
-    mapObjectSaveButton.disabled = true;
-    mapObjectSaveButton.title = "現在は閲覧専用です";
-  }
-  if (mapObjectDeleteButton) {
-    mapObjectDeleteButton.disabled = true;
-  }
+  /* 編集モードに変更したため何もしない */
 }
 
 function applyObjectToForm(object, map) {
@@ -1082,21 +1100,19 @@ function applyObjectToForm(object, map) {
     return;
   }
 
-  const typeDefault = MAP_OBJECT_TYPE_OPTIONS[0]?.value || "";
   const selectedMap = map || getSelectedMapData();
   const maxX = selectedMap ? selectedMap.width - 1 : 0;
   const maxY = selectedMap ? selectedMap.height - 1 : 0;
 
   if (object) {
-    if (mapObjectNameInput) {
-      mapObjectNameInput.value = object.name || "";
+    if (mapObjectDataIdInput) {
+      mapObjectDataIdInput.value = object.placementId !== null ? object.placementId : "";
     }
-    if (mapObjectTypeSelect) {
-      mapObjectTypeSelect.value = object.type || typeDefault;
+    if (mapObjectPlacementIdDisplay) {
+      mapObjectPlacementIdDisplay.value = object.placementId !== null ? String(object.placementId) : "(新規)";
     }
-    if (mapObjectLayerSelect) {
-      mapObjectLayerSelect.value = mapObjectLayerSelect.options.length ? mapObjectLayerSelect.options[0].value : "ground";
-      mapObjectLayerSelect.title = object.attributeHex ? `属性: ${object.attributeHex}` : "属性情報なし";
+    if (mapObjectTypeSelect && object.objectId !== null) {
+      mapObjectTypeSelect.value = String(object.objectId);
     }
     if (mapObjectXInput) {
       mapObjectXInput.value = clampCoordinate(object.x, maxX);
@@ -1104,34 +1120,23 @@ function applyObjectToForm(object, map) {
     if (mapObjectYInput) {
       mapObjectYInput.value = clampCoordinate(object.y, maxY);
     }
-    if (mapObjectRespawnInput) {
-      mapObjectRespawnInput.value = "";
+    const idLabel = object.objectIdHex ? ` (${object.objectIdHex})` : "";
+    if (mapObjectSelectedLabel) {
+      mapObjectSelectedLabel.textContent = `選択中: ${object.name}${idLabel}`;
     }
-    if (mapObjectNotesInput) {
-      mapObjectNotesInput.value = object.notes || "";
-    }
-    const idLabels = [];
-    if (object.placementId !== null) {
-      idLabels.push(`配置ID: ${object.placementId}`);
-    }
-    if (object.objectIdHex) {
-      idLabels.push(`オブジェクトID: ${object.objectIdHex}`);
-    }
-    mapObjectSelectedLabel.textContent = `選択中: ${object.name}${idLabels.length ? ` (${idLabels.join(" / ")})` : ""}`;
     if (mapObjectDeleteButton) {
-      mapObjectDeleteButton.disabled = true;
+      mapObjectDeleteButton.disabled = false;
     }
   } else {
     const preview = mapObjectState.previewSelection;
-    if (mapObjectNameInput) {
-      mapObjectNameInput.value = "";
+    if (mapObjectDataIdInput) {
+      mapObjectDataIdInput.value = "";
     }
-    if (mapObjectTypeSelect) {
-      mapObjectTypeSelect.value = mapObjectTypeSelect.options.length ? mapObjectTypeSelect.options[0].value : typeDefault;
+    if (mapObjectPlacementIdDisplay) {
+      mapObjectPlacementIdDisplay.value = "(新規)";
     }
-    if (mapObjectLayerSelect) {
-      mapObjectLayerSelect.value = mapObjectLayerSelect.options.length ? mapObjectLayerSelect.options[0].value : "ground";
-      mapObjectLayerSelect.title = "属性情報なし";
+    if (mapObjectTypeSelect && mapObjectTypeSelect.options.length) {
+      mapObjectTypeSelect.selectedIndex = 0;
     }
     if (mapObjectXInput) {
       mapObjectXInput.value = clampCoordinate(preview ? preview.x : 0, maxX);
@@ -1139,13 +1144,9 @@ function applyObjectToForm(object, map) {
     if (mapObjectYInput) {
       mapObjectYInput.value = clampCoordinate(preview ? preview.y : 0, maxY);
     }
-    if (mapObjectRespawnInput) {
-      mapObjectRespawnInput.value = "";
+    if (mapObjectSelectedLabel) {
+      mapObjectSelectedLabel.textContent = "選択中: 未選択";
     }
-    if (mapObjectNotesInput) {
-      mapObjectNotesInput.value = "";
-    }
-    mapObjectSelectedLabel.textContent = "選択中: 未選択 (閲覧のみ)";
     if (mapObjectDeleteButton) {
       mapObjectDeleteButton.disabled = true;
     }
@@ -1214,17 +1215,54 @@ function handleMapCellClick(x, y, objectId) {
   mapObjectXInput.value = x;
   mapObjectYInput.value = y;
   renderMapComponents();
-  setMapObjectFeedback(`座標 (${x}, ${y}) を選択しました (閲覧のみ)`, null);
+  setMapObjectFeedback(`座標 (${x}, ${y}) を選択しました。オブジェクトを選択して「配置を保存」で新規追加します。`, null);
 }
 
-function handleMapObjectFormSubmit(event) {
+async function handleMapObjectFormSubmit(event) {
   event.preventDefault();
   const map = getSelectedMapData();
-  if (!map) {
+  if (!map || !map.id) {
     setMapObjectFeedback("マップを選択してください", "error");
     return;
   }
-  setMapObjectFeedback("現在は閲覧専用モードのため保存できません。", "error");
+
+  const objectIdVal = mapObjectTypeSelect ? Number(mapObjectTypeSelect.value) : 0;
+  if (!objectIdVal || objectIdVal <= 0) {
+    setMapObjectFeedback("オブジェクトを選択してください", "error");
+    return;
+  }
+  const x = mapObjectXInput ? Number(mapObjectXInput.value) : 0;
+  const y = mapObjectYInput ? Number(mapObjectYInput.value) : 0;
+  const dataId = mapObjectDataIdInput ? Number(mapObjectDataIdInput.value) : 0;
+
+  setMapObjectFeedback("保存中...", null);
+
+  try {
+    const isUpdate = dataId > 0;
+    const payload = isUpdate
+      ? { mapId: map.id, dataId, objectId: objectIdVal, x, y }
+      : { mapId: map.id, objectId: objectIdVal, x, y };
+    const { response, data } = await fetchJson(
+      "/api/maps/placements",
+      { method: isUpdate ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
+    );
+    if (!response.ok) {
+      setMapObjectFeedback(`保存失敗: ${data?.error || response.status}`, "error");
+      return;
+    }
+    setMapObjectFeedback(`配置を${isUpdate ? "更新" : "追加"}しました (配置ID: ${data.dataId})`, "success");
+    await loadMapObjectData(true);
+    const newDataId = data.dataId;
+    const newMap = getSelectedMapData();
+    if (newMap) {
+      const addedPlacement = newMap.objects.find((o) => o.placementId === newDataId);
+      if (addedPlacement) {
+        selectMapObject(addedPlacement.id);
+      }
+    }
+  } catch (err) {
+    setMapObjectFeedback("保存中にエラーが発生しました", "error");
+  }
 }
 
 function handleMapObjectClear() {
@@ -1236,17 +1274,258 @@ function handleMapObjectClear() {
   setMapObjectFeedback("選択をクリアしました", null);
 }
 
-function handleMapObjectDelete() {
+async function handleMapObjectDelete() {
   const map = getSelectedMapData();
-  if (!map) {
+  if (!map || !map.id) {
     setMapObjectFeedback("マップを選択してください", "error");
     return;
   }
-  if (!mapObjectState.selectedObjectId) {
-    setMapObjectFeedback("削除するオブジェクトを選択してください", "error");
+  const dataId = mapObjectDataIdInput ? Number(mapObjectDataIdInput.value) : 0;
+  if (!dataId || dataId <= 0) {
+    setMapObjectFeedback("削除する配置を選択してください", "error");
     return;
   }
-  setMapObjectFeedback("現在は閲覧専用モードのため削除できません。", "error");
+  if (!window.confirm("この配置を削除しますか？")) {
+    return;
+  }
+
+  setMapObjectFeedback("削除中...", null);
+  try {
+    const { response, data } = await fetchJson(
+      "/api/maps/placements",
+      { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mapId: map.id, dataId }) }
+    );
+    if (!response.ok) {
+      setMapObjectFeedback(`削除失敗: ${data?.error || response.status}`, "error");
+      return;
+    }
+    setMapObjectFeedback("配置を削除しました", "success");
+    mapObjectState.selectedObjectId = null;
+    mapObjectState.previewSelection = null;
+    await loadMapObjectData(true);
+    applyObjectToForm(null, getSelectedMapData());
+    renderMapComponents();
+  } catch (err) {
+    setMapObjectFeedback("削除中にエラーが発生しました", "error");
+  }
+}
+
+/* ================================================================
+   オブジェクトテンプレート管理
+   ================================================================ */
+
+function setTemplateFeedback(message, type) {
+  if (!mapObjectTemplateFeedbackEl) {
+    return;
+  }
+  mapObjectTemplateFeedbackEl.textContent = message || "";
+  mapObjectTemplateFeedbackEl.className = "result-message";
+  if (type) {
+    mapObjectTemplateFeedbackEl.classList.add(type);
+  }
+}
+
+function renderTemplateTable() {
+  if (!mapObjectTemplateTableBody) {
+    return;
+  }
+  mapObjectTemplateTableBody.innerHTML = "";
+  if (!mapObjectTemplateState.templates.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 6;
+    cell.textContent = mapObjectTemplateState.isLoading ? "読み込み中..." : "テンプレートがありません";
+    row.appendChild(cell);
+    mapObjectTemplateTableBody.appendChild(row);
+    if (mapObjectTemplateSummaryEl) {
+      mapObjectTemplateSummaryEl.textContent = "テンプレートなし";
+    }
+    return;
+  }
+  if (mapObjectTemplateSummaryEl) {
+    mapObjectTemplateSummaryEl.textContent = `テンプレート数: ${mapObjectTemplateState.templates.length}`;
+  }
+  mapObjectTemplateState.templates.forEach((tmpl) => {
+    const row = document.createElement("tr");
+    if (tmpl.objectId === mapObjectTemplateState.selectedId) {
+      row.classList.add("is-selected-row");
+    }
+    row.style.cursor = "pointer";
+    const cells = [
+      tmpl.objectId,
+      tmpl.name || "(無名)",
+      tmpl.attribute,
+      tmpl.hasCollision ? "あり" : "なし",
+      `${tmpl.width}×${tmpl.height}`,
+      tmpl.hideY
+    ];
+    cells.forEach((text) => {
+      const td = document.createElement("td");
+      td.textContent = String(text);
+      row.appendChild(td);
+    });
+    row.addEventListener("click", () => {
+      selectTemplate(tmpl.objectId);
+    });
+    mapObjectTemplateTableBody.appendChild(row);
+  });
+}
+
+function selectTemplate(objectId) {
+  const tmpl = mapObjectTemplateState.templates.find((t) => t.objectId === objectId) || null;
+  mapObjectTemplateState.selectedId = tmpl ? tmpl.objectId : null;
+  applyTemplateToForm(tmpl);
+  renderTemplateTable();
+}
+
+function applyTemplateToForm(tmpl) {
+  if (!mapObjectTemplateForm) {
+    return;
+  }
+  if (tmpl) {
+    if (mapObjectTemplateIdInput) {
+      mapObjectTemplateIdInput.value = tmpl.objectId;
+    }
+    if (mapObjectTemplateNameInput) {
+      mapObjectTemplateNameInput.value = tmpl.name || "";
+    }
+    if (mapObjectTemplateAttrInput) {
+      mapObjectTemplateAttrInput.value = tmpl.attribute || 0;
+    }
+    if (mapObjectTemplateHideYInput) {
+      mapObjectTemplateHideYInput.value = tmpl.hideY || 0;
+    }
+    if (mapObjectTemplateWidthInput) {
+      mapObjectTemplateWidthInput.value = tmpl.width || 1;
+    }
+    if (mapObjectTemplateHeightInput) {
+      mapObjectTemplateHeightInput.value = tmpl.height || 1;
+    }
+    if (mapObjectTemplateCollisionInput) {
+      mapObjectTemplateCollisionInput.checked = Boolean(tmpl.hasCollision);
+    }
+    if (mapObjectTemplateDeleteBtn) {
+      mapObjectTemplateDeleteBtn.disabled = false;
+    }
+  } else {
+    if (mapObjectTemplateIdInput) {
+      mapObjectTemplateIdInput.value = "";
+    }
+    if (mapObjectTemplateNameInput) {
+      mapObjectTemplateNameInput.value = "";
+    }
+    if (mapObjectTemplateAttrInput) {
+      mapObjectTemplateAttrInput.value = 0;
+    }
+    if (mapObjectTemplateHideYInput) {
+      mapObjectTemplateHideYInput.value = 0;
+    }
+    if (mapObjectTemplateWidthInput) {
+      mapObjectTemplateWidthInput.value = 1;
+    }
+    if (mapObjectTemplateHeightInput) {
+      mapObjectTemplateHeightInput.value = 1;
+    }
+    if (mapObjectTemplateCollisionInput) {
+      mapObjectTemplateCollisionInput.checked = false;
+    }
+    if (mapObjectTemplateDeleteBtn) {
+      mapObjectTemplateDeleteBtn.disabled = true;
+    }
+  }
+}
+
+async function loadObjectTemplates() {
+  mapObjectTemplateState.isLoading = true;
+  renderTemplateTable();
+  try {
+    const { response, data } = await fetchJson("/api/maps/objects/templates");
+    if (!response.ok || !Array.isArray(data?.templates)) {
+      throw new Error("invalid_response");
+    }
+    mapObjectTemplateState.templates = data.templates;
+  } catch (err) {
+    mapObjectTemplateState.templates = [];
+  }
+  mapObjectTemplateState.isLoading = false;
+  renderTemplateTable();
+}
+
+async function handleTemplateSave(event) {
+  event.preventDefault();
+  const name = mapObjectTemplateNameInput ? mapObjectTemplateNameInput.value.trim() : "";
+  if (!name) {
+    setTemplateFeedback("名称を入力してください", "error");
+    return;
+  }
+  const objectId = mapObjectTemplateIdInput ? Number(mapObjectTemplateIdInput.value) : 0;
+  const attribute = mapObjectTemplateAttrInput ? Number(mapObjectTemplateAttrInput.value) : 0;
+  const hideY = mapObjectTemplateHideYInput ? Number(mapObjectTemplateHideYInput.value) : 0;
+  const width = mapObjectTemplateWidthInput ? Number(mapObjectTemplateWidthInput.value) : 1;
+  const height = mapObjectTemplateHeightInput ? Number(mapObjectTemplateHeightInput.value) : 1;
+  const hasCollision = mapObjectTemplateCollisionInput ? mapObjectTemplateCollisionInput.checked : false;
+
+  const isUpdate = objectId > 0;
+  const payload = { name, attribute, hideY, width, height, hasCollision };
+  if (isUpdate) {
+    payload.objectId = objectId;
+  }
+
+  setTemplateFeedback("保存中...", null);
+  try {
+    const { response, data } = await fetchJson(
+      "/api/maps/objects/templates",
+      { method: isUpdate ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
+    );
+    if (!response.ok) {
+      setTemplateFeedback(`保存失敗: ${data?.error || response.status}`, "error");
+      return;
+    }
+    setTemplateFeedback(`テンプレートを${isUpdate ? "更新" : "追加"}しました (ID: ${data.objectId})`, "success");
+    await loadObjectTemplates();
+    selectTemplate(data.objectId);
+    /* 配置フォームのobjSelectも更新 */
+    populateObjectTypeSelectFromTemplates();
+  } catch (err) {
+    setTemplateFeedback("保存中にエラーが発生しました", "error");
+  }
+}
+
+async function handleTemplateDelete() {
+  const objectId = mapObjectTemplateIdInput ? Number(mapObjectTemplateIdInput.value) : 0;
+  if (!objectId || objectId <= 0) {
+    setTemplateFeedback("削除するテンプレートを選択してください", "error");
+    return;
+  }
+  if (!window.confirm(`オブジェクトID ${objectId} のテンプレートを削除しますか？`)) {
+    return;
+  }
+
+  setTemplateFeedback("削除中...", null);
+  try {
+    const { response, data } = await fetchJson(
+      "/api/maps/objects/templates",
+      { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ objectId }) }
+    );
+    if (!response.ok) {
+      setTemplateFeedback(`削除失敗: ${data?.error || response.status}`, "error");
+      return;
+    }
+    setTemplateFeedback("テンプレートを削除しました", "success");
+    mapObjectTemplateState.selectedId = null;
+    await loadObjectTemplates();
+    applyTemplateToForm(null);
+    populateObjectTypeSelectFromTemplates();
+  } catch (err) {
+    setTemplateFeedback("削除中にエラーが発生しました", "error");
+  }
+}
+
+function handleTemplateNew() {
+  mapObjectTemplateState.selectedId = null;
+  applyTemplateToForm(null);
+  renderTemplateTable();
+  setTemplateFeedback("新規追加モード: 情報を入力して「保存」してください", null);
 }
 
 function getMapPartsViewTypeLabel(viewType) {
@@ -2060,6 +2339,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "map-object-templates") {
+    if (options.forceReload || (!mapObjectTemplateState.templates.length && !mapObjectTemplateState.isLoading)) {
+      loadObjectTemplates();
+    }
+  }
+
   if (normalized === "map-parts") {
     if (options.forceReload) {
       loadMapPartsData(true);
@@ -2113,6 +2398,18 @@ window.addEventListener("load", () => {
   }
   if (mapObjectDeleteButton) {
     mapObjectDeleteButton.addEventListener("click", handleMapObjectDelete);
+  }
+
+  /* テンプレート管理 */
+  if (mapObjectTemplateForm) {
+    applyTemplateToForm(null);
+    mapObjectTemplateForm.addEventListener("submit", handleTemplateSave);
+  }
+  if (mapObjectTemplateNewBtn) {
+    mapObjectTemplateNewBtn.addEventListener("click", handleTemplateNew);
+  }
+  if (mapObjectTemplateDeleteBtn) {
+    mapObjectTemplateDeleteBtn.addEventListener("click", handleTemplateDelete);
   }
 
   if (reloadButton) {
