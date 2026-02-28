@@ -16,8 +16,23 @@
 #define DRAWCOUNT		(30)										/* 描画フレームレート(FPS) */
 #define SCRSIZEX		(MAPPARTSSIZE * DRAW_PARTS_X)				/* マップ表示サイズ(横) */
 #define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)				/* マップ表示サイズ(縦) */
-#define SCROLLSIZE		(16)										/* スクロール単位 */
+#define SCROLLSIZE		(16)										/* スクロール単位（廃止予定：自由移動移行後は MAPPARTSSIZE に統一） */
 #define MAXCOUNT_CHARGRPCOUNTONEFILE	(16)						/* キャラ画像の1ファイルに登録されているキャラ数 */
+
+/* ========================================================================= */
+/* 座標変換ユーティリティ													 */
+/* 自由移動（ピクセル単位座標）への移行準備。Phase 2 以降で順次使用する。	 */
+/* タイル座標の唯一の変換係数として MAPPARTSSIZE(32) を確立する。			 */
+/* ========================================================================= */
+
+/* タイル座標 → ピクセル座標 */
+inline int TileToPixel(int tile)     { return tile * MAPPARTSSIZE; }
+
+/* ピクセル座標 → タイル座標（切り捨て） */
+inline int PixelToTile(int px)       { return px / MAPPARTSSIZE; }
+
+/* ピクセル座標 → そのタイルの中心ピクセル座標 */
+inline int PixelToTileCenter(int px) { return PixelToTile(px) * MAPPARTSSIZE + MAPPARTSSIZE / 2; }
 
 /* ウィンドウメッセージ */
 enum {
