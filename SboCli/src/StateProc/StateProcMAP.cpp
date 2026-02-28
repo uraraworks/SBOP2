@@ -1041,17 +1041,17 @@ BOOL CStateProcMAP::OnUp(BOOL bDown)
 	m_dwLastKeyInput = timeGetTime ();
 
 	x = 0;
-	y = -1;
+	y = -HALF_TILE;		/* ピクセル単位移動量（旧: -1 = 0.5タイル単位） */
 	nDirection = 0;
 	bResult = pMgrKeyInput->IsInput (VK_RIGHT);
 	if (bResult) {
 		nDirection = 4;
-		x = 1;
+		x = HALF_TILE;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_LEFT);
 	if (bResult) {
 		nDirection = 7;
-		x = -1;
+		x = -HALF_TILE;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -1093,17 +1093,17 @@ BOOL CStateProcMAP::OnDown(BOOL bDown)
 	m_dwLastKeyInput = timeGetTime ();
 
 	x = 0;
-	y = 1;
+	y = HALF_TILE;		/* ピクセル単位移動量（旧: 1 = 0.5タイル単位） */
 	nDirection = 1;
 	bResult = pMgrKeyInput->IsInput (VK_RIGHT);
 	if (bResult) {
 		nDirection = 5;
-		x = 1;
+		x = HALF_TILE;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_LEFT);
 	if (bResult) {
 		nDirection = 6;
-		x = -1;
+		x = -HALF_TILE;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -1144,18 +1144,18 @@ BOOL CStateProcMAP::OnLeft(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
-	x = -1;
+	x = -HALF_TILE;	/* ピクセル単位移動量（旧: -1 = 0.5タイル単位） */
 	y = 0;
 	nDirection = 2;
 	bResult = pMgrKeyInput->IsInput (VK_UP);
 	if (bResult) {
 		nDirection = 7;
-		y = -1;
+		y = -HALF_TILE;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_DOWN);
 	if (bResult) {
 		nDirection = 6;
-		y = 1;
+		y = HALF_TILE;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -1196,18 +1196,18 @@ BOOL CStateProcMAP::OnRight(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
-	x = 1;
+	x = HALF_TILE;	/* ピクセル単位移動量（旧: 1 = 0.5タイル単位） */
 	y = 0;
 	nDirection = 3;
 	bResult = pMgrKeyInput->IsInput (VK_UP);
 	if (bResult) {
 		nDirection = 4;
-		y = -1;
+		y = -HALF_TILE;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_DOWN);
 	if (bResult) {
 		nDirection = 5;
-		y = 1;
+		y = HALF_TILE;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -2262,8 +2262,8 @@ BOOL CStateProcMAP::MoveProc(
 	}
 	if (bResult) {
 		if (nTmp != nDirection) {
-			xx = anPosChangeX[nDirection];
-			yy = anPosChangeY[nDirection];
+			xx = anPosChangeX[nDirection] * HALF_TILE;	/* 方向転換時のデルタをピクセル単位に変換 */
+			yy = anPosChangeY[nDirection] * HALF_TILE;
 			m_pPlayerChar->ChgDirection (nDirection);
 		}
 
@@ -2331,8 +2331,8 @@ BOOL CStateProcMAP::MoveProc(
 		}
 	}
 	if (nTmp != nDirection) {
-		xx = anPosChangeX[nDirection];
-		yy = anPosChangeY[nDirection];
+		xx = anPosChangeX[nDirection] * HALF_TILE;	/* 方向転換時のデルタをピクセル単位に変換 */
+		yy = anPosChangeY[nDirection] * HALF_TILE;
 		m_pPlayerChar->ChgDirection (nDirection);
 	}
 
@@ -2374,8 +2374,8 @@ BOOL CStateProcMAP::MoveProc(
 ExitSend:
 	m_pPlayerChar->m_bRedraw = TRUE;
 	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirectionView))) {
-		/* サーバへ移動通知 */
-		Packet.Make (m_pPlayerChar->m_dwMapID, m_pPlayerChar->m_dwCharID, nDirectionView, x, y, FALSE);
+		/* サーバへ移動通知（送信互換：ピクセル→旧スケール。Phase 6 で除去予定） */
+		Packet.Make (m_pPlayerChar->m_dwMapID, m_pPlayerChar->m_dwCharID, nDirectionView, x / HALF_TILE, y / HALF_TILE, FALSE);
 		m_pSock->Send (&Packet);
 	}
 

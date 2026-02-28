@@ -247,12 +247,13 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData)
 		}
 	}
 
-	if (!((pInfoChar->m_nMapX == Packet.m_pos.x) && (pInfoChar->m_nMapY == Packet.m_pos.y))) {
+	/* 受信互換：旧スケール→ピクセル変換。Phase 6 で除去予定 */
+	if (!((pInfoChar->m_nMapX == Packet.m_pos.x * HALF_TILE) && (pInfoChar->m_nMapY == Packet.m_pos.y * HALF_TILE))) {
 		nState = nStateMove;
 	}
 
-	ptPos.x = Packet.m_pos.x;
-	ptPos.y = Packet.m_pos.y;
+	ptPos.x = Packet.m_pos.x / 2;		/* 旧スケール→タイル座標（IsViewArea 用）*/
+	ptPos.y = Packet.m_pos.y / 2;
 	bResult = TRUE;
 	if (pInfoCharPlayer) {
 		bResult = pInfoCharPlayer->IsViewArea (pInfoCharPlayer->m_dwMapID, &ptPos);
@@ -263,10 +264,10 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData)
 	} else {
 		bResult = pInfoChar->IsStateMove ();
 		if (bResult) {
-			pInfoChar->AddMovePosQue (nState, Packet.m_nDirection, Packet.m_pos.x, Packet.m_pos.y);
+			pInfoChar->AddMovePosQue (nState, Packet.m_nDirection, Packet.m_pos.x * HALF_TILE, Packet.m_pos.y * HALF_TILE);
 			nState = -1;
 		} else {
-			pInfoChar->SetPos (Packet.m_pos.x, Packet.m_pos.y);
+			pInfoChar->SetPos (Packet.m_pos.x * HALF_TILE, Packet.m_pos.y * HALF_TILE);
 			pInfoChar->SetDirection (Packet.m_nDirection);
 			pInfoChar->m_bRedraw = TRUE;
 		}
