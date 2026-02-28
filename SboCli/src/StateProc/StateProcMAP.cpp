@@ -345,8 +345,9 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		return;
 	}
 	pLayerMap->GetViewMapPos (nMapX, nMapY);
-	xx = (pLayerMap->m_nViewX % 2) ? x + 16 : x;
-	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
+	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算してタイル境界を正確に計算 */
+	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
+	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
 	nType = m_pMgrData->GetAdminNotifyTypeL ();
 	switch (nType) {
 	case ADMINNOTIFYTYPE_CHARID:			/* キャラID */
@@ -355,8 +356,9 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 			int i, nCount;
 			PCInfoCharCli pInfoChar;
 
-			x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
-			y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
+			/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
+			x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
+			y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
 			dwNotifyData = 0;
 			size.cx = size.cy = 1;
 
@@ -412,8 +414,9 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 			POINT ptTmp;
 			PCInfoItem pInfoItem;
 
-			x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
-			y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
+			/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
+			x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
+			y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
 			dwNotifyData = 0;
 			ptTmp.x = x;
 			ptTmp.y = y;
@@ -435,8 +438,9 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
-		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
-		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
+		/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
+		x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
+		y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		break;
@@ -463,8 +467,9 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 		return;
 	}
 	pLayerMap->GetViewMapPos (nMapX, nMapY);
-	xx = (pLayerMap->m_nViewX % 2) ? x + 16 : x;
-	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
+	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算 */
+	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
+	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
 
 	switch (m_pMgrData->GetAdminNotifyTypeR ()) {
 	case ADMINNOTIFYTYPE_MAPEDIT:			/* マップ編集(通知は無し) */
@@ -494,8 +499,9 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
-		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
-		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
+		/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
+		x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
+		y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, dwNotifyData);
 		break;
@@ -520,8 +526,9 @@ void CStateProcMAP::OnRButtonDblClk(int x, int y)
 		return;
 	}
 	pLayerMap->GetViewMapPos (nMapX, nMapY);
-	xx = (pLayerMap->m_nViewX % 2) ? x + 16 : x;
-	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
+	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算 */
+	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
+	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
 
 	switch (m_pMgrData->GetAdminNotifyTypeRR ()) {
 	case ADMINNOTIFYTYPE_POS:				/* マップ座標 */
@@ -532,8 +539,9 @@ void CStateProcMAP::OnRButtonDblClk(int x, int y)
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
-		x = (x / SCROLLSIZE) + (pLayerMap->m_nViewX);
-		y = (y / SCROLLSIZE) + (pLayerMap->m_nViewY);
+		/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
+		x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
+		y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK, dwNotifyData);
 		break;
@@ -557,8 +565,9 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 		return;
 	}
 	pLayerMap->GetViewMapPos (nMapX, nMapY);
-	xx = (pLayerMap->m_nViewX % 2) ? x + 16 : x;
-	yy = (pLayerMap->m_nViewY % 2) ? y + 16 : y;
+	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算 */
+	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
+	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
 
 	switch (m_pMgrData->GetAdminNotifyTypeL ()) {
 	case ADMINNOTIFYTYPE_MAPEDIT:	/* マップ編集(通知は無し) */
@@ -1998,10 +2007,11 @@ BOOL CStateProcMAP::OnCtrl(BOOL bDown)
 	}
 
 	if (pLayerMap) {
-		rcTmp.left	 = pLayerMap->m_nViewX - 2;
-		rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * 2) + 2;
-		rcTmp.top	 = pLayerMap->m_nViewY - 2;
-		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * 2) + 2;
+		/* Phase 3: m_nViewX/Y はpx単位 → /HALF_TILE で旧スケール変換してアイテム管理範囲を計算 */
+		rcTmp.left	 = pLayerMap->m_nViewX / HALF_TILE - 2;
+		rcTmp.right	 = pLayerMap->m_nViewX / HALF_TILE + (DRAW_PARTS_X * 2) + 2;
+		rcTmp.top	 = pLayerMap->m_nViewY / HALF_TILE - 2;
+		rcTmp.bottom = pLayerMap->m_nViewY / HALF_TILE + (DRAW_PARTS_Y * 2) + 2;
 		m_pLibInfoItem->SetArea (m_pPlayerChar->m_dwMapID, &rcTmp);
 	}
 
@@ -2088,10 +2098,11 @@ void CStateProcMAP::OnMgrDrawSTART_FADEIN(DWORD dwPara)
 	if (pLayerMap) {
 		pLayerMap->RenewMapName (NULL);
 		pLayerMap->SetCenterPos (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY);
-		rcTmp.left	 = pLayerMap->m_nViewX - 2;
-		rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * 2) + 2;
-		rcTmp.top	 = pLayerMap->m_nViewY - 2;
-		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * 2) + 2;
+		/* Phase 3: m_nViewX/Y はpx単位 → /HALF_TILE で旧スケール変換してアイテム管理範囲を計算 */
+		rcTmp.left	 = pLayerMap->m_nViewX / HALF_TILE - 2;
+		rcTmp.right	 = pLayerMap->m_nViewX / HALF_TILE + (DRAW_PARTS_X * 2) + 2;
+		rcTmp.top	 = pLayerMap->m_nViewY / HALF_TILE - 2;
+		rcTmp.bottom = pLayerMap->m_nViewY / HALF_TILE + (DRAW_PARTS_Y * 2) + 2;
 		m_pLibInfoItem->SetArea (m_pPlayerChar->m_dwMapID, &rcTmp);
 	}
 }
@@ -2133,7 +2144,7 @@ BOOL CStateProcMAP::MoveProc(
 	int yy,				/* [in] 増減(タテ) */
 	int nDirection)		/* [in] 向き */
 {
-	int nResult, nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
+	int nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
 		anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	BOOL bRet, bResult;
 	DWORD dwCharID;
@@ -2169,8 +2180,8 @@ BOOL CStateProcMAP::MoveProc(
 	/* 移動せずにスクロールだけ？ */
 	bResult = pMgrKeyInput->IsInput (VK_CONTROL);
 	if (bResult) {
-		/* 旧スケール変換：IsScrollArea は 0.5タイル単位の座標を期待（Phase 3 で除去予定） */
-		bResult = pLayerMap->IsScrollArea (x / HALF_TILE, y / HALF_TILE, nDirection);
+		/* Phase 3: m_nViewX/Y がpx単位になったので変換不要（IsScrollArea 内部も更新済み） */
+		bResult = pLayerMap->IsScrollArea (x, y, nDirection);
 		if (bResult) {
 			pLayerMap->SetScrollMode (TRUE, 1);
 			pLayerMap->Scroll (nDirection);
@@ -2351,17 +2362,8 @@ BOOL CStateProcMAP::MoveProc(
 		m_pLibInfoChar->SortY ();
 	}
 
-	nResult = pLayerMap->IsScrollPos (x + xx, y + yy, nDirection);
-	if (nResult >= 0) {
-		pLayerMap->Scroll (nResult);
-	}
-	/* 画面外に出る？ */
-	bResult = pLayerMap->IsInScreen (x + xx, y + yy);
-	if (bResult == FALSE) {
-		m_nScrollMode = 0;
-		pLayerMap->SetScrollMode (TRUE, m_nScrollMode);
-		pLayerMap->SetCenterPos (x + xx, y + yy);
-	}
+	/* Phase 3: カメラをキャラ移動後位置に追随（IsScrollPos/Scroll/IsInScreen は廃止） */
+	pLayerMap->SetCenterPos (x + xx, y + yy);
 
 	bResult = m_pLibInfoChar->DeleteOutScreen (m_pPlayerChar);
 	if (bResult) {
@@ -2395,10 +2397,11 @@ ExitSend:
 	bRet = TRUE;
 Exit:
 	if (bRet && pLayerMap) {
-		rcTmp.left	 = pLayerMap->m_nViewX - 2;
-		rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * 2) + 2;
-		rcTmp.top	 = pLayerMap->m_nViewY - 2;
-		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * 2) + 2;
+		/* Phase 3: m_nViewX/Y はpx単位 → /HALF_TILE で旧スケール変換してアイテム管理範囲を計算 */
+		rcTmp.left	 = pLayerMap->m_nViewX / HALF_TILE - 2;
+		rcTmp.right	 = pLayerMap->m_nViewX / HALF_TILE + (DRAW_PARTS_X * 2) + 2;
+		rcTmp.top	 = pLayerMap->m_nViewY / HALF_TILE - 2;
+		rcTmp.bottom = pLayerMap->m_nViewY / HALF_TILE + (DRAW_PARTS_Y * 2) + 2;
 		m_pLibInfoItem->SetArea (m_pPlayerChar->m_dwMapID, &rcTmp);
 		m_pDlgDbg->Renew();
 	}

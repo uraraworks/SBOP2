@@ -238,95 +238,8 @@ int CLayerMap::IsScrollPos(
 	int y,				/* [in] キャラ座標(縦) */
 	int nDirection)		/* [in] 向き */
 {
-	int yy, nRet, nMaxX, nMaxY;
-	PCInfoMapBase pMap;
-
-	nRet = -1;
-	pMap = m_pMgrData->GetMap ();
-	if (pMap == NULL) {
-		return nRet;
-	}
-
-	x /= HALF_TILE;		/* ピクセル→旧スケール変換（Phase 3 で除去予定） */
-	y /= HALF_TILE;
-	yy = y;
-	x = (x % 2) ? x / 2 + 1 : x / 2;
-	y = (y % 2) ? y / 2 + 1 : y / 2;
-	nMaxX = m_nViewX / 2;
-	nMaxY = m_nViewY / 2;
-
-	switch (nDirection) {
-	case 0:
-		if ((m_nViewY > 0) && (y - nMaxY <= DRAW_PARTS_Y / 2)) {
-			nRet = nDirection;
-		}
-		break;
-	case 1:
-		if ((nMaxY + DRAW_PARTS_Y < pMap->m_sizeMap.cy) && ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2)) {
-			nRet = nDirection;
-		}
-		break;
-	case 2:
-		if ((m_nViewX > 0) && (x - nMaxX <= DRAW_PARTS_X / 2)) {
-			nRet = nDirection;
-		}
-		break;
-	case 3:
-		if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
-			nRet = nDirection;
-		}
-		break;
-	case 4:
-		if ((m_nViewY > 0) && (y - nMaxY <= DRAW_PARTS_Y / 2)) {
-			nRet = 0;
-			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
-				nRet = nDirection;
-			}
-		} else {
-			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
-				nRet = 3;
-			}
-		}
-		break;
-	case 5:
-		if ((nMaxY + DRAW_PARTS_Y < pMap->m_sizeMap.cy) && ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2)) {
-			nRet = 1;
-			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
-				nRet = nDirection;
-			}
-		} else {
-			if ((nMaxX + DRAW_PARTS_X < pMap->m_sizeMap.cx) && ((nMaxX + DRAW_PARTS_X) - x <= DRAW_PARTS_X / 2)) {
-				nRet = 3;
-			}
-		}
-		break;
-	case 6:
-		if ((nMaxY + DRAW_PARTS_Y < pMap->m_sizeMap.cy) && ((nMaxY + DRAW_PARTS_Y) - y <= DRAW_PARTS_Y / 2)) {
-			nRet = 1;
-			if ((m_nViewX > 0) && (x - nMaxX <= DRAW_PARTS_X / 2)) {
-				nRet = nDirection;
-			}
-		} else {
-			if ((m_nViewX > 0) && (x - nMaxX <= DRAW_PARTS_X / 2)) {
-				nRet = 2;
-			}
-		}
-		break;
-	case 7:
-		if ((m_nViewY > 0) && (y - nMaxY <= DRAW_PARTS_Y / 2)) {
-			nRet = 0;
-			if ((m_nViewX > 0) && (x - nMaxX <= DRAW_PARTS_X / 2)) {
-				nRet = nDirection;
-			}
-		} else {
-			if ((m_nViewX > 0) && (x - nMaxX <= DRAW_PARTS_X / 2)) {
-				nRet = 2;
-			}
-		}
-		break;
-	}
-
-	return nRet;
+	/* Phase 3: カメラ追随のためスクロール判定不要 */
+	return -1;
 }
 
 
@@ -348,7 +261,8 @@ BOOL CLayerMap::IsScrollArea(
 
 	switch (nDirection) {
 	case 0:
-		if (y - m_nViewY >= (DRAW_PARTS_Y - 1) * 2) {
+		/* Phase 3: m_nViewY/x,y はpx単位。旧スケール*2→MAPPARTSSIZE に変換 */
+		if (y - m_nViewY >= (DRAW_PARTS_Y - 1) * MAPPARTSSIZE) {
 			goto Exit;
 		}
 		break;
@@ -358,7 +272,7 @@ BOOL CLayerMap::IsScrollArea(
 		}
 		break;
 	case 2:
-		if (x - m_nViewX >= (DRAW_PARTS_X - 1) * 2) {
+		if (x - m_nViewX >= (DRAW_PARTS_X - 1) * MAPPARTSSIZE) {
 			goto Exit;
 		}
 		break;
@@ -478,34 +392,8 @@ BOOL CLayerMap::IsInScreen(
 	int x,		/* [in] キャラ座標(横) */
 	int y)		/* [in] キャラ座標(縦) */
 {
-	BOOL bRet;
-	int nMapX, nMapY;
-
-	bRet = FALSE;
-
-	x /= HALF_TILE;		/* ピクセル→旧スケール変換（Phase 3 で除去予定） */
-	y /= HALF_TILE;
-	x = (x % 2) ? x / 2 + 1 : x / 2;
-	y = (y % 2) ? y / 2 + 1 : y / 2;
-	nMapX = (m_nViewX % 2) ? m_nViewX / 2 + 1 : m_nViewX / 2;
-	nMapY = (m_nViewY % 2) ? m_nViewY / 2 + 1 : m_nViewY / 2;
-
-	if (x < nMapX - 1) {
-		goto Exit;
-	}
-	if (x > nMapX + DRAW_PARTS_X) {
-		goto Exit;
-	}
-	if (y < nMapY - 1) {
-		goto Exit;
-	}
-	if (y > nMapY + DRAW_PARTS_Y) {
-		goto Exit;
-	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
+	/* Phase 3: カメラ追随のため常に画面内とみなす */
+	return TRUE;
 }
 
 
@@ -652,7 +540,6 @@ void CLayerMap::SetCenterPos(
 	int x,		/* [in] キャラ座標(横) */
 	int y)		/* [in] キャラ座標(縦) */
 {
-	int xx, yy, nMapX, nMapY;
 	PCInfoMapBase pMap;
 
 	pMap = m_pMgrData->GetMap ();
@@ -660,24 +547,15 @@ void CLayerMap::SetCenterPos(
 		return;
 	}
 
-	x /= HALF_TILE;		/* ピクセル→旧スケール変換（Phase 3 で除去予定） */
-	y /= HALF_TILE;
-	nMapX = (x % 2) ? x / 2 + 1 : x / 2;
-	nMapY = (y % 2) ? y / 2 + 1 : y / 2;
-	xx = yy = 0;
-
-	xx = nMapX - (DRAW_PARTS_X / 2);
-	yy = nMapY - (DRAW_PARTS_Y / 2);
-
-	xx = max (0, xx);
-	xx = min (pMap->m_sizeMap.cx - DRAW_PARTS_X, xx);
-	yy = max (0, yy);
-	yy = min (pMap->m_sizeMap.cy - DRAW_PARTS_Y, yy);
-
-	m_nViewX = (x % 2) ? (WORD)xx * 2 - 1 : (WORD)xx * 2;
-	m_nViewY = (y % 2) ? (WORD)yy * 2 - 1 : (WORD)yy * 2;
-	m_nViewX = max (0, m_nViewX);
-	m_nViewY = max (0, m_nViewY);
+	/* Phase 3: px単位のキャラ位置を受け取りカメラ左上座標を計算 */
+	int camX = x - (SCRSIZEX / 2);
+	int camY = y - (SCRSIZEY / 2);
+	camX = max (0, camX);
+	camX = min (pMap->m_sizeMap.cx * MAPPARTSSIZE - SCRSIZEX, camX);
+	camY = max (0, camY);
+	camY = min (pMap->m_sizeMap.cy * MAPPARTSSIZE - SCRSIZEY, camY);
+	m_nViewX = camX;
+	m_nViewY = camY;
 }
 
 
@@ -733,8 +611,9 @@ void CLayerMap::SetSystemIconMode(int nMode)
 
 void CLayerMap::GetViewMapPos(int &nDstX, int &nDstY)
 {
-	nDstX = m_nViewX / 2;
-	nDstY = m_nViewY / 2;
+	/* Phase 3: m_nViewX/Y はpx単位 → タイル座標 */
+	nDstX = m_nViewX / MAPPARTSSIZE;
+	nDstY = m_nViewY / MAPPARTSSIZE;
 }
 
 
@@ -866,46 +745,8 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 
 BOOL CLayerMap::TimerProcScroll(void)
 {
-	BOOL bRet;
-	int nTmp, nMoveWait, anPosChangeX[] = {0, 0, 1, 1, 1, 1, 1, 1}, anPosChangeY[] = {1, 1, 0, 0, 1, 1, 1, 1, };
-
-	bRet = FALSE;
-
-	if (m_dwLastTimeScroll == 0) {
-		goto Exit;
-	}
-
-	nTmp = timeGetTime () - m_dwLastTimeScroll;
-	nMoveWait = m_nMoveWait;
-	if (m_dwMoveWaitOnce != 0) {
-		nMoveWait = m_dwMoveWaitOnce;
-	}
-	nMoveWait = max (nMoveWait, 1);
-	if (nTmp < nMoveWait) {
-		goto Exit;
-	}
-
-	nTmp = nTmp / nMoveWait;
-	nTmp = max (nTmp, 1);
-	m_dwLastTimeScroll += (nTmp * nMoveWait);
-	m_nMoveX += (anPosChangeX[m_byDirection] * nTmp);
-	m_nMoveY += (anPosChangeY[m_byDirection] * nTmp);
-
-	if (m_nMoveX >= SCROLLSIZE) {
-		m_nMoveX = 0;
-	}
-	if (m_nMoveY >= SCROLLSIZE) {
-		m_nMoveY = 0;
-	}
-
-	if ((m_nMoveX <= 0) && (m_nMoveY <= 0)) {
-		m_dwLastTimeScroll = 0;
-		m_dwMoveWaitOnce = 0;
-	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
+	/* Phase 3: スクロールアニメーション廃止 */
+	return FALSE;
 }
 
 
@@ -1195,74 +1036,11 @@ void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 
 void CLayerMap::GetDrawMovePos(POINT &ptMove, POINT &ptPos)
 {
-	int nMoveX, nMoveY, nPosX, nPosY, aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
-		aScrollX[] = {-16, -16, -16, 16, 16, 16, -16, -16}, aScrollY[] = {-16, 16, -16, -16, -16, 16, 16, -16},
-		aPosX[] = {0, 0, 1, 0, 0, 0, 1, 1}, aPosY[] = {1, 0, 0, 0, 1, 0, 0, 1};
-
-	nMoveX	= m_nMoveX;
-	nMoveY	= m_nMoveY;
-	nPosX	= m_nViewX;
-	nPosY	= m_nViewY;
-
-	if ((nMoveX == 0) && (nMoveY == 0)) {
-		if (m_nViewX % 2) {
-			nMoveX -= 16;
-		}
-		if (m_nViewY % 2) {
-			nMoveY -= 16;
-		}
-
-	} else {
-		/* 移動中の座標を補正 */
-		nMoveX *= aMoveX[m_byDirection];
-		nMoveY *= aMoveY[m_byDirection];
-		switch (m_byDirection) {
-		case 0:
-		case 1:
-			if (m_nViewX % 2) {
-				nMoveX += aScrollX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		case 2:
-		case 3:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2) {
-				nMoveY += aScrollY[m_byDirection];
-			}
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			if (m_nViewX % 2 == 0) {
-				nMoveX += aScrollX[m_byDirection];
-			} else {
-				nPosX += aPosX[m_byDirection];
-			}
-			if (m_nViewY % 2 == 0) {
-				nMoveY += aScrollY[m_byDirection];
-			} else {
-				nPosY += aPosY[m_byDirection];
-			}
-			break;
-		}
-	}
-	nPosX /= 2;
-	nPosY /= 2;
-
-	ptMove.x = nMoveX;
-	ptMove.y = nMoveY;
-	ptPos.x = nPosX;
-	ptPos.y = nPosY;
+	/* Phase 3: カメラ追随方式。m_nViewX/Y はピクセル単位のカメラ左上座標 */
+	ptPos.x  = m_nViewX / MAPPARTSSIZE;		/* タイル開始インデックス(横) */
+	ptPos.y  = m_nViewY / MAPPARTSSIZE;		/* タイル開始インデックス(縦) */
+	ptMove.x = -(m_nViewX % MAPPARTSSIZE);	/* ピクセルオフセット(横, 0～-31) */
+	ptMove.y = -(m_nViewY % MAPPARTSSIZE);	/* ピクセルオフセット(縦, 0～-31) */
 }
 
 
@@ -1556,14 +1334,8 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 		}
 	}
 
+	/* Phase 3: スクロールアニメーション廃止（xx/yy は常に 0） */
 	xx = yy = 0;
-	/* スクロール中？ */
-	if (m_nMoveX > 0 || m_nMoveY > 0) {
-		xx += (int)m_nMoveX * aMoveX[m_byDirection];
-		yy += (int)m_nMoveY * aMoveY[m_byDirection];
-		xx += (aPosX[m_byDirection] * SCROLLSIZE);
-		yy += (aPosY[m_byDirection] * SCROLLSIZE);
-	}
 
 	nCount = m_pLibInfoItem->GetAreaCount ();
 	m_pMgrDraw->LockDibTmp ();
@@ -1573,13 +1345,15 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 			continue;
 		}
 		if (nDrawY != -99) {
-			if (nDrawY + m_nViewY != pInfoItem->m_ptPos.y) {
+			/* Phase 3: m_ptPos.y は旧スケール→/2 でタイル座標、m_nViewY/MAPPARTSSIZE でタイル座標 */
+			if (m_nViewY / MAPPARTSSIZE + nDrawY != pInfoItem->m_ptPos.y / 2) {
 				continue;
 			}
 		}
 
-		x = 32 + (pInfoItem->m_ptPos.x - m_nViewX) * SCROLLSIZE + xx;
-		y = 32 + (pInfoItem->m_ptPos.y - m_nViewY) * SCROLLSIZE + yy;
+		/* Phase 3: m_ptPos は旧スケール(HALF_TILE単位)→*HALF_TILE でpx変換後、m_nViewX/Y(px)と差分 */
+		x = 32 + (pInfoItem->m_ptPos.x * HALF_TILE - m_nViewX) + xx;
+		y = 32 + (pInfoItem->m_ptPos.y * HALF_TILE - m_nViewY) + yy;
 		y -= 16;
 		if (nType == 0) {
 			m_pMgrDraw->DrawItem (
@@ -1613,19 +1387,9 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 
 void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 {
-	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
-		aPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, aPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
-
-	/* スクロール中？ */
-	if (m_nMoveX > 0 || m_nMoveY > 0) {
-		nDstX += (int)m_nMoveX * aMoveX[m_byDirection];
-		nDstY += (int)m_nMoveY * aMoveY[m_byDirection];
-		nDstX += (aPosX[m_byDirection] * SCROLLSIZE);
-		nDstY += (aPosY[m_byDirection] * SCROLLSIZE);
-	}
-	/* m_nMapX/Y はピクセル単位のため旧スケールへ変換して m_nViewX/Y と比較（Phase 3 で除去予定） */
-	nDstX += ((pChar->m_nMapX / HALF_TILE - m_nViewX) * SCROLLSIZE);
-	nDstY += ((pChar->m_nMapY / HALF_TILE - m_nViewY) * SCROLLSIZE);
+	/* Phase 3: m_nMapX/Y・m_nViewX/Y ともにピクセル単位。スクロールアニメーション補正廃止 */
+	nDstX += (pChar->m_nMapX - m_nViewX);
+	nDstY += (pChar->m_nMapY - m_nViewY);
 }
 
 
@@ -1646,8 +1410,8 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
 		if (nDrawY != -99) {
-			/* m_nMapY はピクセル単位のため /MAPPARTSSIZE でタイル座標へ変換（Phase 3 で除去予定） */
-			if (m_nViewY / 2 + nDrawY != pChar->m_nMapY / MAPPARTSSIZE) {
+			/* Phase 3: m_nViewY/MAPPARTSSIZE でタイル行に変換して比較 */
+			if (m_nViewY / MAPPARTSSIZE + nDrawY != pChar->m_nMapY / MAPPARTSSIZE) {
 				continue;
 			}
 		}

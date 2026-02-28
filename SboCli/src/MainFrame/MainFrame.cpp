@@ -470,10 +470,11 @@ void CMainFrame::RenewItemArea(void)
 		return;
 	}
 
-	rcTmp.left	 = pLayerMap->m_nViewX - 2;
-	rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * 2) + 2;
-	rcTmp.top	 = pLayerMap->m_nViewY - 2;
-	rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * 2) + 2;
+	/* Phase 3: m_nViewX/Y はpx単位 → /HALF_TILE で旧スケール変換してアイテム管理範囲を計算 */
+	rcTmp.left	 = pLayerMap->m_nViewX / HALF_TILE - 2;
+	rcTmp.right	 = pLayerMap->m_nViewX / HALF_TILE + (DRAW_PARTS_X * 2) + 2;
+	rcTmp.top	 = pLayerMap->m_nViewY / HALF_TILE - 2;
+	rcTmp.bottom = pLayerMap->m_nViewY / HALF_TILE + (DRAW_PARTS_Y * 2) + 2;
 	m_pLibInfoItem->SetArea (pPlayerChar->m_dwMapID, &rcTmp);
 }
 
