@@ -2169,7 +2169,8 @@ BOOL CStateProcMAP::MoveProc(
 	/* 移動せずにスクロールだけ？ */
 	bResult = pMgrKeyInput->IsInput (VK_CONTROL);
 	if (bResult) {
-		bResult = pLayerMap->IsScrollArea (x, y, nDirection);
+		/* 旧スケール変換：IsScrollArea は 0.5タイル単位の座標を期待（Phase 3 で除去予定） */
+		bResult = pLayerMap->IsScrollArea (x / HALF_TILE, y / HALF_TILE, nDirection);
 		if (bResult) {
 			pLayerMap->SetScrollMode (TRUE, 1);
 			pLayerMap->Scroll (nDirection);

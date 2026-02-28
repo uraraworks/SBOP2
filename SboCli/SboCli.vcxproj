@@ -83,7 +83,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4005;4566;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ForcedIncludeFiles>..\Common\rpcsal_fallback.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <AdditionalOptions>/utf-8 /Zm500 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 /Zm800 %(AdditionalOptions)</AdditionalOptions>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
     </ClCompile>
     <ResourceCompile>

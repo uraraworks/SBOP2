@@ -247,6 +247,8 @@ int CLayerMap::IsScrollPos(
 		return nRet;
 	}
 
+	x /= HALF_TILE;		/* ピクセル→旧スケール変換（Phase 3 で除去予定） */
+	y /= HALF_TILE;
 	yy = y;
 	x = (x % 2) ? x / 2 + 1 : x / 2;
 	y = (y % 2) ? y / 2 + 1 : y / 2;
@@ -481,6 +483,8 @@ BOOL CLayerMap::IsInScreen(
 
 	bRet = FALSE;
 
+	x /= HALF_TILE;		/* ピクセル→旧スケール変換（Phase 3 で除去予定） */
+	y /= HALF_TILE;
 	x = (x % 2) ? x / 2 + 1 : x / 2;
 	y = (y % 2) ? y / 2 + 1 : y / 2;
 	nMapX = (m_nViewX % 2) ? m_nViewX / 2 + 1 : m_nViewX / 2;
@@ -656,6 +660,8 @@ void CLayerMap::SetCenterPos(
 		return;
 	}
 
+	x /= HALF_TILE;		/* ピクセル→旧スケール変換（Phase 3 で除去予定） */
+	y /= HALF_TILE;
 	nMapX = (x % 2) ? x / 2 + 1 : x / 2;
 	nMapY = (y % 2) ? y / 2 + 1 : y / 2;
 	xx = yy = 0;
@@ -1617,8 +1623,9 @@ void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 		nDstX += (aPosX[m_byDirection] * SCROLLSIZE);
 		nDstY += (aPosY[m_byDirection] * SCROLLSIZE);
 	}
-	nDstX += ((pChar->m_nMapX - m_nViewX) * SCROLLSIZE);
-	nDstY += ((pChar->m_nMapY - m_nViewY) * SCROLLSIZE);
+	/* m_nMapX/Y はピクセル単位のため旧スケールへ変換して m_nViewX/Y と比較（Phase 3 で除去予定） */
+	nDstX += ((pChar->m_nMapX / HALF_TILE - m_nViewX) * SCROLLSIZE);
+	nDstY += ((pChar->m_nMapY / HALF_TILE - m_nViewY) * SCROLLSIZE);
 }
 
 
@@ -1639,7 +1646,8 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
 		if (nDrawY != -99) {
-			if (m_nViewY / 2 + nDrawY != pChar->m_nMapY / 2) {
+			/* m_nMapY はピクセル単位のため /MAPPARTSSIZE でタイル座標へ変換（Phase 3 で除去予定） */
+			if (m_nViewY / 2 + nDrawY != pChar->m_nMapY / MAPPARTSSIZE) {
 				continue;
 			}
 		}
