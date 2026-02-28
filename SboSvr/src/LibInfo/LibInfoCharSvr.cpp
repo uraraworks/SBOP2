@@ -1981,7 +1981,7 @@ DWORD CLibInfoCharSvr::GetNearCharID(
 		if (pSearchResult == NULL) {
 			continue;
 		}
-		int nResult = pSearchResult->size() * 2;
+		int nResult = pSearchResult->size() * MAPPARTSSIZE;	/* Phase 5: RouteSearchステップ数×2(HALF_TILE換算)→×MAPPARTSSIZE(px条数) */
 		if ((nResult <= 0) || (nResult >= nTmp)) {
 			continue;
 		}

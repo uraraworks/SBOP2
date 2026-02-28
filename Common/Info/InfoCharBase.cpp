@@ -1364,35 +1364,35 @@ void CInfoCharBase::GetFrontPos(
 	switch (nDirection) {
 	case 0:
 		ptDst.x = rcTmp.left;
-		ptDst.y = rcTmp.top - 1;
+		ptDst.y = rcTmp.top - MAPPARTSSIZE;		/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
 		break;
 	case 1:
 		ptDst.x = rcTmp.left;
-		ptDst.y = rcTmp.bottom + 1;
+		ptDst.y = rcTmp.bottom + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
 		break;
 	case 2:
-		ptDst.x = rcTmp.left - 1;
+		ptDst.x = rcTmp.left - MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
 		ptDst.y = rcTmp.bottom;
 		break;
 	case 3:
-		ptDst.x = rcTmp.right + 1;
+		ptDst.x = rcTmp.right + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
 		ptDst.y = rcTmp.bottom;
 		break;
 	case 4:
-		ptDst.x = rcTmp.right + 1;
-		ptDst.y = rcTmp.top - 1;
+		ptDst.x = rcTmp.right + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.y = rcTmp.top - MAPPARTSSIZE;
 		break;
 	case 5:
-		ptDst.x = rcTmp.right + 1;
-		ptDst.y = rcTmp.bottom + 1;
+		ptDst.x = rcTmp.right + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.y = rcTmp.bottom + MAPPARTSSIZE;
 		break;
 	case 6:
-		ptDst.x = rcTmp.left - 1;
-		ptDst.y = rcTmp.bottom + 1;
+		ptDst.x = rcTmp.left - MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.y = rcTmp.bottom + MAPPARTSSIZE;
 		break;
 	case 7:
-		ptDst.x = rcTmp.left - 1;
-		ptDst.y = rcTmp.top - 1;
+		ptDst.x = rcTmp.left - MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.y = rcTmp.top - MAPPARTSSIZE;
 		break;
 	}
 }
