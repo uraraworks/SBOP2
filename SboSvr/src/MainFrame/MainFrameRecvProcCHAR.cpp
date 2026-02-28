@@ -112,7 +112,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	bResult = pInfoChar->IsEnableMove ();
 	if (bResult == FALSE) {
 		if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-			if (((pInfoChar->m_nMapX == Packet.m_pos.x) && (pInfoChar->m_nMapY == Packet.m_pos.y))) {
+			if (((pInfoChar->m_nMapX == Packet.m_pos.x * HALF_TILE) && (pInfoChar->m_nMapY == Packet.m_pos.y * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
 				pInfoChar->SetDirection (Packet.m_nDirection);
 				pInfoChar->m_bChgPos = TRUE;
 				/* 防御中の向き変更は処理する */
@@ -132,7 +132,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	}
 
 	/* 移動した？ */
-	if (!((pInfoChar->m_nMapX == Packet.m_pos.x) && (pInfoChar->m_nMapY == Packet.m_pos.y))) {
+	if (!((pInfoChar->m_nMapX == Packet.m_pos.x * HALF_TILE) && (pInfoChar->m_nMapY == Packet.m_pos.y * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
 		/* 付いて来ているキャラ一覧を作成 */
 		pInfoCharTmp = pInfoChar;
 		while (1) {
@@ -164,7 +164,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		}
 	}
 
-	pInfoChar->SetPos (Packet.m_pos.x, Packet.m_pos.y);
+	pInfoChar->SetPos (Packet.m_pos.x * HALF_TILE, Packet.m_pos.y * HALF_TILE);  /* Phase 2: パケットHALF_TILE値→px単位変換 */
 	pInfoChar->SetDirection (Packet.m_nDirection);
 	pInfoChar->m_bChgPos = TRUE;
 }

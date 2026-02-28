@@ -1438,8 +1438,8 @@ void CLibInfoCharSvr::GetScreenCharID(
 			continue;
 		}
 		/* 画面外？ */
-		if (!((abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * 2) &&
-			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y))) {
+		if (!((abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * MAPPARTSSIZE) &&	/* Phase 2: HALF_TILE単位→px単位 */
+			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * HALF_TILE))) {	/* Phase 2: HALF_TILE単位 (15×16=240px) */
 			continue;
 		}
 		aDst.push_back (pInfoCharTmp->m_dwCharID);
@@ -1458,8 +1458,8 @@ void CLibInfoCharSvr::GetScreenCharIDLineOut(
 	ARRAYDWORD &aDst)				/* [in] 出力先 */
 {
 	int i, nCount, x, y,
-		aPosX[] = {0, 0, DRAW_PARTS_X * 2 * -1, DRAW_PARTS_X * 2},
-		aPosY[] = {DRAW_PARTS_Y * 2 * -1, DRAW_PARTS_Y * 2, 0, 0};
+		aPosX[] = {0, 0, DRAW_PARTS_X * MAPPARTSSIZE * -1, DRAW_PARTS_X * MAPPARTSSIZE},	/* Phase 2: HALF_TILE単位→px単位 */
+		aPosY[] = {DRAW_PARTS_Y * MAPPARTSSIZE * -1, DRAW_PARTS_Y * MAPPARTSSIZE, 0, 0};	/* Phase 2: HALF_TILE単位→px単位 */
 	PCInfoCharSvr pInfoCharTmp;
 
 	aDst.clear();
@@ -1478,14 +1478,14 @@ void CLibInfoCharSvr::GetScreenCharIDLineOut(
 		case 0:
 		case 1:
 			/* 画面端？ */
-			if (abs (pInfoCharTmp->m_nMapY - y) > 2) {
+			if (abs (pInfoCharTmp->m_nMapY - y) > MAPPARTSSIZE) {	/* Phase 2: 2 HALF_TILE → 1 tile = MAPPARTSSIZE px */
 				continue;
 			}
 			break;
 		case 2:
 		case 3:
 			/* 画面端？ */
-			if (abs (pInfoCharTmp->m_nMapX - x) > 2) {
+			if (abs (pInfoCharTmp->m_nMapX - x) > MAPPARTSSIZE) {	/* Phase 2: 2 HALF_TILE → 1 tile = MAPPARTSSIZE px */
 				continue;
 			}
 			break;
@@ -1494,11 +1494,11 @@ void CLibInfoCharSvr::GetScreenCharIDLineOut(
 		case 6:
 		case 7:
 			/* 画面端？ */
-			if (abs (pInfoCharTmp->m_nMapY - y) > 2) {
+			if (abs (pInfoCharTmp->m_nMapY - y) > MAPPARTSSIZE) {	/* Phase 2: 2 HALF_TILE → 1 tile = MAPPARTSSIZE px */
 				continue;
 			}
 			/* 画面端？ */
-			if (abs (pInfoCharTmp->m_nMapX - x) > 2) {
+			if (abs (pInfoCharTmp->m_nMapX - x) > MAPPARTSSIZE) {	/* Phase 2: 2 HALF_TILE → 1 tile = MAPPARTSSIZE px */
 				continue;
 			}
 			break;
@@ -2487,8 +2487,8 @@ void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_dwMapID,
 			pInfoChar->m_dwCharID,
 			pInfoChar->m_nDirection,
-			pInfoChar->m_nMapX,
-			pInfoChar->m_nMapY,
+			pInfoChar->m_nMapX / HALF_TILE,		/* Phase 2: px単位→HALF_TILE変換送信 */
+			pInfoChar->m_nMapY / HALF_TILE,		/* Phase 2: px単位→HALF_TILE変換送信 */
 			pInfoChar->m_bChgUpdatePos);
 	m_pMainFrame->SendToScreenChar (pInfoChar, &Packet);
 

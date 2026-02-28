@@ -1013,18 +1013,11 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 
 void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 {
-	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
-		aPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, aPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
-
-	/* スクロール中？ */
-	if (m_nMoveX > 0 || m_nMoveY > 0) {
-		nDstX += (int)m_nMoveX * aMoveX[m_byDirection];
-		nDstY += (int)m_nMoveY * aMoveY[m_byDirection];
-		nDstX += (aPosX[m_byDirection] * MAPPARTSSIZE);
-		nDstY += (aPosY[m_byDirection] * MAPPARTSSIZE);
-	}
-	nDstX += ((ptPos->x - m_nViewX) * MAPPARTSSIZE);
-	nDstY += ((ptPos->y - m_nViewY) * MAPPARTSSIZE);
+	/* Phase 3: ptPos はタイル座標、m_nViewX/Y はpx単位カメラ左上。
+	   旧スクロールアニメーション(m_nMoveX/Y)は廃止済み。
+	   描画オフセット = タイル座標×MAPPARTSSIZE - カメラpx */
+	nDstX += ptPos->x * MAPPARTSSIZE - m_nViewX;
+	nDstY += ptPos->y * MAPPARTSSIZE - m_nViewY;
 }
 
 

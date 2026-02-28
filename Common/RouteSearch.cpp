@@ -50,11 +50,12 @@ void CRouteSearch::SetMapInfo(CInfoMapBase *pInfoMap)
 
 void CRouteSearch::SetSearchArea(const RECT &rcSearch)
 {
+	/* Phase 5: px単位の検索範囲をタイル座標へ変換（旧: /2 HALF_TILE→タイル） */
 	m_rcSearch = rcSearch;
-	m_rcSearch.left /= 2;
-	m_rcSearch.right /= 2;
-	m_rcSearch.top /= 2;
-	m_rcSearch.bottom /= 2;
+	m_rcSearch.left   /= MAPPARTSSIZE;
+	m_rcSearch.right  /= MAPPARTSSIZE;
+	m_rcSearch.top    /= MAPPARTSSIZE;
+	m_rcSearch.bottom /= MAPPARTSSIZE;
 
 	m_sizeMap = m_pInfoMap->m_sizeMap;
 //	m_sizeMap.cx = m_rcSearch.right - m_rcSearch.left + 1;
@@ -66,8 +67,9 @@ void CRouteSearch::SetSearchArea(const RECT &rcSearch)
 
 void CRouteSearch::SetStartPos(int x, int y)
 {
-	x /= 2;
-	y /= 2;
+	/* Phase 5: px単位の開始位置をタイル座標へ変換（旧: /2 HALF_TILE→タイル） */
+	x /= MAPPARTSSIZE;
+	y /= MAPPARTSSIZE;
 	m_ptStart.x = x;
 	m_ptStart.y = y;
 	m_ptNow.x = x;
@@ -76,8 +78,9 @@ void CRouteSearch::SetStartPos(int x, int y)
 
 void CRouteSearch::SetEndPos(int x, int y)
 {
-	x /= 2;
-	y /= 2;
+	/* Phase 5: px単位の終了位置をタイル座標へ変換（旧: /2 HALF_TILE→タイル） */
+	x /= MAPPARTSSIZE;
+	y /= MAPPARTSSIZE;
 	m_ptEnd.x = x;
 	m_ptEnd.y = y;
 }
