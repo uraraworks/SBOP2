@@ -1527,16 +1527,18 @@ void CInfoCharBase::GetFrontMapPosRect(
 		nDirection = m_nDirection;
 	}
 
-	GetPosRect (rcDst);
+	/* Phase 4: m_nMapX/Y がpx単位になったため GetMapPosRect()（px÷MAPPARTSSIZE）でタイル座標を直接取得。
+	   旧: GetPosRect()+/2 は 旧スケール(16px/unit)→タイル座標 の変換だったが px単位では不正確だった */
+	GetMapPosRect (rcDst);
 	switch (nDirection) {
 	case 0:
 	case 1:
-		rcDst.top		+= nFrontPosY[nDirection];
+		rcDst.top		+= nFrontPosY[nDirection];	/* ±1タイル */
 		rcDst.bottom	+= nFrontPosY[nDirection];
 		break;
 	case 2:
 	case 3:
-		rcDst.left		+= nFrontPosX[nDirection];
+		rcDst.left		+= nFrontPosX[nDirection];	/* ±1タイル */
 		rcDst.right		+= nFrontPosX[nDirection];
 		break;
 	default:
@@ -1547,14 +1549,9 @@ void CInfoCharBase::GetFrontMapPosRect(
 		break;
 	}
 
-	rcDst.right		/= 2;
-	rcDst.bottom	/= 2;
 	if ((rcDst.left < 0) || (rcDst.top < 0)) {
 		SetRect (&rcDst, -1, -1, -1, -1);
-		return;
 	}
-	rcDst.left		/= 2;
-	rcDst.top		/= 2;
 }
 
 

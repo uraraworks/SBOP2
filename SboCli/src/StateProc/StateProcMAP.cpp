@@ -1050,17 +1050,17 @@ BOOL CStateProcMAP::OnUp(BOOL bDown)
 	m_dwLastKeyInput = timeGetTime ();
 
 	x = 0;
-	y = -HALF_TILE;		/* ピクセル単位移動量（旧: -1 = 0.5タイル単位） */
+	y = -CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
 	nDirection = 0;
 	bResult = pMgrKeyInput->IsInput (VK_RIGHT);
 	if (bResult) {
 		nDirection = 4;
-		x = HALF_TILE;
+		x = CHAR_MOVE_SPEED;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_LEFT);
 	if (bResult) {
 		nDirection = 7;
-		x = -HALF_TILE;
+		x = -CHAR_MOVE_SPEED;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -1102,17 +1102,17 @@ BOOL CStateProcMAP::OnDown(BOOL bDown)
 	m_dwLastKeyInput = timeGetTime ();
 
 	x = 0;
-	y = HALF_TILE;		/* ピクセル単位移動量（旧: 1 = 0.5タイル単位） */
+	y = CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
 	nDirection = 1;
 	bResult = pMgrKeyInput->IsInput (VK_RIGHT);
 	if (bResult) {
 		nDirection = 5;
-		x = HALF_TILE;
+		x = CHAR_MOVE_SPEED;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_LEFT);
 	if (bResult) {
 		nDirection = 6;
-		x = -HALF_TILE;
+		x = -CHAR_MOVE_SPEED;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -1153,18 +1153,18 @@ BOOL CStateProcMAP::OnLeft(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
-	x = -HALF_TILE;	/* ピクセル単位移動量（旧: -1 = 0.5タイル単位） */
+	x = -CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
 	y = 0;
 	nDirection = 2;
 	bResult = pMgrKeyInput->IsInput (VK_UP);
 	if (bResult) {
 		nDirection = 7;
-		y = -HALF_TILE;
+		y = -CHAR_MOVE_SPEED;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_DOWN);
 	if (bResult) {
 		nDirection = 6;
-		y = HALF_TILE;
+		y = CHAR_MOVE_SPEED;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -1205,18 +1205,18 @@ BOOL CStateProcMAP::OnRight(BOOL bDown)
 	}
 	m_dwLastKeyInput = timeGetTime ();
 
-	x = HALF_TILE;	/* ピクセル単位移動量（旧: 1 = 0.5タイル単位） */
+	x = CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
 	y = 0;
 	nDirection = 3;
 	bResult = pMgrKeyInput->IsInput (VK_UP);
 	if (bResult) {
 		nDirection = 4;
-		y = -HALF_TILE;
+		y = -CHAR_MOVE_SPEED;
 	}
 	bResult = pMgrKeyInput->IsInput (VK_DOWN);
 	if (bResult) {
 		nDirection = 5;
-		y = HALF_TILE;
+		y = CHAR_MOVE_SPEED;
 	}
 
 	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
@@ -2192,11 +2192,7 @@ BOOL CStateProcMAP::MoveProc(
 		bRet = TRUE;
 		goto Exit;
 	}
-	bResult = m_pPlayerChar->IsMove ();
-	/* 移動中？ */
-	if (bResult) {
-		goto Exit;
-	}
+	/* Phase 4: カメラ追随・フレームごと移動のため IsMove() ブロック不要 */
 	bResult = m_pPlayerChar->IsChgWait ();
 	/* 状態変更待ち？ */
 	if (bResult) {
@@ -2274,8 +2270,8 @@ BOOL CStateProcMAP::MoveProc(
 	}
 	if (bResult) {
 		if (nTmp != nDirection) {
-			xx = anPosChangeX[nDirection] * HALF_TILE;	/* 方向転換時のデルタをピクセル単位に変換 */
-			yy = anPosChangeY[nDirection] * HALF_TILE;
+			xx = anPosChangeX[nDirection] * CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE→CHAR_MOVE_SPEED */
+			yy = anPosChangeY[nDirection] * CHAR_MOVE_SPEED;
 			m_pPlayerChar->ChgDirection (nDirection);
 		}
 
@@ -2343,8 +2339,8 @@ BOOL CStateProcMAP::MoveProc(
 		}
 	}
 	if (nTmp != nDirection) {
-		xx = anPosChangeX[nDirection] * HALF_TILE;	/* 方向転換時のデルタをピクセル単位に変換 */
-		yy = anPosChangeY[nDirection] * HALF_TILE;
+		xx = anPosChangeX[nDirection] * CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE→CHAR_MOVE_SPEED */
+		yy = anPosChangeY[nDirection] * CHAR_MOVE_SPEED;
 		m_pPlayerChar->ChgDirection (nDirection);
 	}
 
@@ -2356,6 +2352,8 @@ BOOL CStateProcMAP::MoveProc(
 	m_pPlayerChar->ChgDirection (nDirectionView);
 	m_pPlayerChar->SetPos (x + xx, y + yy);
 	m_pPlayerChar->ChgMoveState (nState);
+	/* Phase 4: タイル間スライドアニメ廃止。m_ptMove をクリアして描画オフセット=0 に */
+	m_pPlayerChar->m_ptMove.x = m_pPlayerChar->m_ptMove.y = 0;
 
 	if (nDirection <= 1) {
 		/* 重なり調整 */
