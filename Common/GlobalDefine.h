@@ -25,6 +25,8 @@ typedef map<DWORD, PVOID>	MapIDPtr;
 #define WNDTITLE				"Scrap Book Online Page.2"			/* ウィンドウタイトル */
 #define DRAW_PARTS_X			(15)								/* マップ表示数(横) */
 #define DRAW_PARTS_Y			(15)								/* マップ表示数(縦) */
+#define MAPPARTSSIZE			(32)								/* タイルサイズ（px） */
+#define HALF_TILE				(MAPPARTSSIZE / 2)					/* 0.5タイル（旧座標系1単位 = 16px） */
 #define MOVEWAIT				(1)								/* 移動周期（1秒間に60ドット基準） */
 #define BATTLEMOVEWAIT			(15)								/* 移動周期(戦闘中) */
 

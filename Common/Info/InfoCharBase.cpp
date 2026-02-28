@@ -120,8 +120,8 @@ CInfoCharBase::CInfoCharBase()
 	m_nAtackTarget			= 0;				/* 攻撃対象 */
 	m_nAnime				= 0;
 	m_nDirectionBack		= 0;
-	m_nMapX					= 1;
-	m_nMapY					= 1;
+	m_nMapX					= HALF_TILE;			/* ピクセル単位：旧値1×HALF_TILE=16px */
+	m_nMapY					= HALF_TILE;
 	m_nMoveState			= CHARMOVESTATE_STAND;
 	m_nProcState			= CHARPROCSTATEID_NORMAL;
 	m_nMoveDirection		= -1;
@@ -509,9 +509,13 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	}
 	pRet = new BYTE[dwSize];
 
+	/* セーブ互換用変換値（ピクセル→旧単位）。Phase 6 で除去予定 */
+	int nSaveMapX = m_nMapX / HALF_TILE;
+	int nSaveMapY = m_nMapY / HALF_TILE;
+
 	switch (nNo) {
-	case 0:		pSrc = (PBYTE)&m_nMapX;					break;
-	case 1:		pSrc = (PBYTE)&m_nMapY;					break;
+	case 0:		pSrc = (PBYTE)&nSaveMapX;				break;
+	case 1:		pSrc = (PBYTE)&nSaveMapY;				break;
 	case 2:		pSrc = (PBYTE)&m_nMoveState;			break;
 	case 3:		pSrc = (PBYTE)&m_nMoveType;				break;
 	case 4:		pSrc = (PBYTE)&m_nDirection;			break;
@@ -644,8 +648,8 @@ DWORD CInfoCharBase::ReadElementData(
 	dwSize	= 0;
 
 	switch (nNo) {
-	case 0:		pDst = (PBYTE)&m_nMapX;					dwSize = sizeof (m_nMapX);				break;
-	case 1:		pDst = (PBYTE)&m_nMapY;					dwSize = sizeof (m_nMapY);				break;
+	case 0: { int nTmp; CopyMemory (&nTmp, pSrc, sizeof (nTmp)); m_nMapX = nTmp * HALF_TILE; return sizeof (nTmp); }	/* 読込互換：旧単位→ピクセル */
+	case 1: { int nTmp; CopyMemory (&nTmp, pSrc, sizeof (nTmp)); m_nMapY = nTmp * HALF_TILE; return sizeof (nTmp); }
 	case 2:												dwSize = sizeof (m_nMoveState);			break;
 	case 3:		pDst = (PBYTE)&m_nMoveType;				dwSize = sizeof (m_nMoveType);			break;
 	case 4:		pDst = (PBYTE)&m_nDirection;			dwSize = sizeof (m_nDirection);			break;
@@ -915,8 +919,12 @@ PBYTE CInfoCharBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwMapID,					sizeof (m_dwMapID),					pDataTmp);	/* マップID */
 	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeID,			sizeof (m_dwMotionTypeID),			pDataTmp);	/* モーション種別ID */
 	CopyMemoryRenew (pDataTmp, &m_nAnime,					sizeof (m_nAnime),					pDataTmp);	/* アニメーション番号 */
-	CopyMemoryRenew (pDataTmp, &m_nMapX,					sizeof (m_nMapX),					pDataTmp);	/* マップ座標(横) */
-	CopyMemoryRenew (pDataTmp, &m_nMapY,					sizeof (m_nMapY),					pDataTmp);	/* マップ座標(縦) */
+	{	/* 送信互換：ピクセル→旧単位。Phase 6 で除去予定 */
+		int nSendX = m_nMapX / HALF_TILE;
+		int nSendY = m_nMapY / HALF_TILE;
+		CopyMemoryRenew (pDataTmp, &nSendX,				sizeof (nSendX),					pDataTmp);	/* マップ座標(横) */
+		CopyMemoryRenew (pDataTmp, &nSendY,				sizeof (nSendY),					pDataTmp);	/* マップ座標(縦) */
+	}
 	CopyMemoryRenew (pDataTmp, &m_nMoveState,				sizeof (m_nMoveState),				pDataTmp);	/* 移動状態 */
 	CopyMemoryRenew (pDataTmp, &m_nMoveType,				sizeof (m_nMoveType),				pDataTmp);	/* 移動種別 */
 	CopyMemoryRenew (pDataTmp, &m_nDirection,				sizeof (m_nDirection),				pDataTmp);	/* 向き */
@@ -1055,8 +1063,13 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_dwMapID,				pDataTmp, sizeof (m_dwMapID),					pDataTmp);	/* マップID */
 	CopyMemoryRenew (&m_dwMotionTypeID,			pDataTmp, sizeof (m_dwMotionTypeID),			pDataTmp);	/* モーション種別ID */
 	CopyMemoryRenew (&m_nAnime,					pDataTmp, sizeof (m_nAnime),					pDataTmp);	/* アニメーション番号 */
-	CopyMemoryRenew (&m_nMapX,					pDataTmp, sizeof (m_nMapX),						pDataTmp);	/* マップ座標(横) */
-	CopyMemoryRenew (&m_nMapY,					pDataTmp, sizeof (m_nMapY),						pDataTmp);	/* マップ座標(縦) */
+	{	/* 受信互換：旧単位→ピクセル。Phase 6 で除去予定 */
+		int nRecvX, nRecvY;
+		CopyMemoryRenew (&nRecvX,				pDataTmp, sizeof (nRecvX),						pDataTmp);	/* マップ座標(横) */
+		CopyMemoryRenew (&nRecvY,				pDataTmp, sizeof (nRecvY),						pDataTmp);	/* マップ座標(縦) */
+		m_nMapX = nRecvX * HALF_TILE;
+		m_nMapY = nRecvY * HALF_TILE;
+	}
 	CopyMemoryRenew (&m_nMoveState,				pDataTmp, sizeof (m_nMoveState),				pDataTmp);	/* 移動状態 */
 	CopyMemoryRenew (&m_nMoveType,				pDataTmp, sizeof (m_nMoveType),					pDataTmp);	/* 移動種別 */
 	CopyMemoryRenew (&m_nDirection,				pDataTmp, sizeof (m_nDirection),				pDataTmp);	/* 向き */
@@ -1270,8 +1283,9 @@ BOOL CInfoCharBase::IsViewArea(DWORD dwMapID, POINT *pptPos)
 	if (m_dwMapID != dwMapID) {
 		goto Exit;
 	}
-	if (!((abs (pptPos->x - m_nMapX) <= (DRAW_PARTS_X * 2) + 1) &&
-		(abs (pptPos->y - m_nMapY) <= (DRAW_PARTS_Y * 2) + 1))) {
+	/* pptPos はタイル座標、m_nMapX/Y はピクセル単位 → タイル変換して比較 */
+	if (!((abs (pptPos->x - m_nMapX / MAPPARTSSIZE) <= DRAW_PARTS_X + 1) &&
+		(abs (pptPos->y - m_nMapY / MAPPARTSSIZE) <= DRAW_PARTS_Y + 1))) {
 		goto Exit;
 	}
 
@@ -1486,14 +1500,14 @@ void CInfoCharBase::GetFrontMapPos(
 	if (nFrontPosY[nDirection] == -1) {
 		y -= sizeChar.cy;
 	}
-	if (x % 2) {
+	if (x % MAPPARTSSIZE) {
 		x -= (nFrontPosX[nDirection] * sizeChar.cx);
 	}
-	if (y % 2) {
+	if (y % MAPPARTSSIZE) {
 		y -= (nFrontPosY[nDirection] * sizeChar.cy);
 	}
-	ptDst.x = x / 2 + nFrontPosX[nDirection];
-	ptDst.y = y / 2 + nFrontPosY[nDirection];
+	ptDst.x = x / MAPPARTSSIZE + nFrontPosX[nDirection];
+	ptDst.y = y / MAPPARTSSIZE + nFrontPosY[nDirection];
 }
 
 
@@ -1748,10 +1762,10 @@ void CInfoCharBase::GetPosRectOnce(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 void CInfoCharBase::GetMapPosRect(RECT &rcDst)
 {
 	GetPosRect (rcDst);
-	rcDst.left		/= 2;
-	rcDst.right		/= 2;
-	rcDst.top		/= 2;
-	rcDst.bottom	/= 2;
+	rcDst.left		/= MAPPARTSSIZE;
+	rcDst.right		/= MAPPARTSSIZE;
+	rcDst.top		/= MAPPARTSSIZE;
+	rcDst.bottom	/= MAPPARTSSIZE;
 }
 
 
@@ -2349,19 +2363,19 @@ void CInfoCharBase::RenewBlockMapArea(
 	if (bMoveOut) {
 		if (nDirection < 4) {
 			if (anPosY[nDirection] != 0) {
-				if (y % 2) {
+				if (y % MAPPARTSSIZE) {
 					return;
 				}
 			} else if (anPosX[nDirection] != 0) {
-				if (x % 2) {
+				if (x % MAPPARTSSIZE) {
 					return;
 				}
 			}
 		} else {
 			if (anPosY[nDirection] != 0) {
-				if (y % 2) {
+				if (y % MAPPARTSSIZE) {
 					if (anPosX[nDirection] != 0) {
-						if (x % 2) {
+						if (x % MAPPARTSSIZE) {
 							return;
 						}
 					}
@@ -2370,7 +2384,7 @@ void CInfoCharBase::RenewBlockMapArea(
 		}
 	}
 
-	ptTmp.x = x / 2;
+	ptTmp.x = x / MAPPARTSSIZE;
 	if (x < 0) {
 		ptTmp.x = -1;
 	}
@@ -2378,15 +2392,15 @@ void CInfoCharBase::RenewBlockMapArea(
 	case 3:
 	case 4:
 	case 5:
-		if (x % 2) {
+		if (x % MAPPARTSSIZE) {
 			ptTmp.x += anPosX[nDirection];
 		}
 		break;
 	}
-	if (y % 2) {
-		y ++;
+	if (y % MAPPARTSSIZE) {
+		y += (MAPPARTSSIZE - y % MAPPARTSSIZE);	/* タイル境界へ繰り上げ */
 	}
-	ptTmp.y = y / 2;
+	ptTmp.y = y / MAPPARTSSIZE;
 	if (y < 0) {
 		ptTmp.y = -1;
 	}
@@ -2394,7 +2408,7 @@ void CInfoCharBase::RenewBlockMapArea(
 	case 1:
 	case 5:
 	case 6:
-		if (y % 2) {
+		if (y % MAPPARTSSIZE) {
 			ptTmp.y += anPosY[nDirection];
 		}
 		break;
@@ -2402,7 +2416,7 @@ void CInfoCharBase::RenewBlockMapArea(
 	m_aposBockMapArea.push_back (ptTmp);
 
 	ptTmpBack = ptTmp;
-	if (x % 2) {
+	if (x % MAPPARTSSIZE) {
 		switch (nDirection) {
 		case 0:
 		case 1:
@@ -2481,8 +2495,8 @@ void CInfoCharBase::GetViewCharPos(POINT &ptDst)
 
 void CInfoCharBase::GetCharSize(SIZE &sizeDst)
 {
-	sizeDst.cx = 2;
-	sizeDst.cy = 1;
+	sizeDst.cx = MAPPARTSSIZE;		/* ピクセル単位：1タイル幅=32px */
+	sizeDst.cy = HALF_TILE;			/* ピクセル単位：0.5タイル高=16px */
 }
 
 
