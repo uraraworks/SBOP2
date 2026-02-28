@@ -29,6 +29,7 @@ typedef map<DWORD, PVOID>	MapIDPtr;
 #define HALF_TILE				(MAPPARTSSIZE / 2)					/* 0.5タイル（旧座標系1単位 = 16px） */
 #define MOVEWAIT				(1)								/* 移動周期（1秒間に60ドット基準） */
 #define BATTLEMOVEWAIT			(15)								/* 移動周期(戦闘中) */
+#define SBO_ENABLE_LEGACY_MOVEPOS_RECV	(0)					/* 旧MOVEPOS受信互換(1:有効 0:無効) */
 
 #define MAXLEN_ACCOUNT			(10)								/* 最大アカウント名長 */
 #define MAXLEN_PASSWORD			(10)								/* 最大パスワード長 */

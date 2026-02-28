@@ -28,6 +28,10 @@
 #include "CHAR/PacketCHAR_REQ_CHARINFO.h"				/* キャラ系:キャラ情報要求 */
 #include "CHAR/PacketCHAR_RES_CHARINFO.h"				/* 			キャラ情報応答 */
 #include "CHAR/PacketCHAR_MOVEPOS.h"					/* 			移動通知 */
+#include "CHAR/PacketCHAR_MOVE_START.h"				/* 			移動開始通知(Dead Reckoning) */
+#include "CHAR/PacketCHAR_MOVE_DIR_CHANGE.h"		/* 			移動方向変更通知(Dead Reckoning) */
+#include "CHAR/PacketCHAR_MOVE_STOP.h"				/* 			移動停止通知(Dead Reckoning) */
+#include "CHAR/PacketCHAR_POS_SYNC.h"				/* 			座標同期通知(Dead Reckoning) */
 #include "CHAR/PacketCHAR_STATE.h"						/* 			状態通知 */
 #include "CHAR/PacketCHAR_CHARINFO.h"					/* 			キャラ情報通知 */
 #include "CHAR/PacketCHAR_REQ_CHAT.h"					/* 			チャット要求 */

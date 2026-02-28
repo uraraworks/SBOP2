@@ -109,6 +109,8 @@ protected:
 					m_dwLastBalloonID,					/* 最後に使った噴出しID */
 					m_dwLastKeyInput,					/* 最後にキー入力した時間 */
 					m_dwStartChargeTime;				/* 溜め開始時間 */
+	BOOL			m_bMoveSyncActive;					/* Dead Reckoning送信中か */
+	int				m_nMoveSyncDirection;				/* 最後に送信した移動方向 */
 
 	CAdminUiLoader	m_AdminUi;						/* 管理者UIモジュール */
 	CInfoCharCli	*m_pPlayerChar;						/* 操作中のキャラ情報 */

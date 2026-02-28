@@ -136,6 +136,7 @@ public:
 	CLibInfoItemType	*m_pLibInfoItemType;	/* アイテム種別情報 */
 	CLibInfoItem		*m_pLibInfoItem;		/* アイテム情報 */
 	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;	/* 武器情報 */
+	DWORD				m_dwLastPosSyncTime;	/* 最終座標同期通知時間 */
 
 	PARRAYINFOCHARBASE	m_paInfoLogin;			/* ログイン中のキャラ情報 */
 } CLibInfoCharSvr, *PCLibInfoCharSvr;

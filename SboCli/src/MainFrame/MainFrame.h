@@ -111,7 +111,11 @@ private:
 	void	RecvProcCHAR						(BYTE byCmdSub, PBYTE pData);	/* キャラ系 */
 	void	RecvProcCHAR_RES_CHARINFO			(PBYTE pData);					/* キャラ情報応答 */
 	void	RecvProcCHAR_CHARINFO				(PBYTE pData);					/* キャラ情報通知 */
-	void	RecvProcCHAR_MOVEPOS				(PBYTE pData);					/* 移動通知 */
+	void	RecvProcCHAR_MOVE_START			(PBYTE pData);					/* 移動開始通知(Dead Reckoning) */
+	void	RecvProcCHAR_MOVE_DIR_CHANGE		(PBYTE pData);					/* 移動方向変更通知(Dead Reckoning) */
+	void	RecvProcCHAR_MOVE_STOP			(PBYTE pData);					/* 移動停止通知(Dead Reckoning) */
+	void	RecvProcCHAR_MOVE_CORE			(DWORD dwCharID, int nDirection, int nPacketPosX, int nPacketPosY, BOOL bUpdate, BOOL bForceStop);	/* 移動受信共通処理 */
+	void	RecvProcCHAR_POS_SYNC				(PBYTE pData);					/* 座標同期通知(Dead Reckoning) */
 	void	RecvProcCHAR_STATE					(PBYTE pData);					/* 状態通知 */
 	void	RecvProcCHAR_PROCSTATE				(PBYTE pData);					/* 行動状態通知 */
 	void	RecvProcCHAR_CHAT					(PBYTE pData);					/* チャット通知 */

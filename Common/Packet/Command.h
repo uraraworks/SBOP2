@@ -106,6 +106,10 @@ enum {
 	SBOCOMMANDID_SUB_CHAR_REQ_ADDSKILL,			/* スキル追加要求 */
 	SBOCOMMANDID_SUB_CHAR_SKILLINFO,			/* スキル情報通知 */
 	SBOCOMMANDID_SUB_CHAR_REQ_USESKILL,			/* スキルを使う要求 */
+	SBOCOMMANDID_SUB_CHAR_MOVE_START,			/* 移動開始通知(Dead Reckoning) */
+	SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE,		/* 移動方向変更通知(Dead Reckoning) */
+	SBOCOMMANDID_SUB_CHAR_MOVE_STOP,			/* 移動停止通知(Dead Reckoning) */
+	SBOCOMMANDID_SUB_CHAR_POS_SYNC,				/* 座標同期通知(Dead Reckoning) */
 };
 
 /* コマンドID(マップ系) */

@@ -123,7 +123,9 @@ public:
 			m_dwChgWait,				/* 状態変更待ち時間 */
 			m_dwEfcBalloonID,			/* 噴出しID */
 			m_dwMotionID,				/* モーションID */
-			m_dwMoveCount;				/* 移動歩数 */
+			m_dwMoveCount,				/* 移動歩数 */
+			m_dwLastRecvMoveTime,		/* 最終移動受信時刻(ms) */
+			m_dwLastRecvMovePacketTime;	/* 最終移動受信パケット時刻(ms) */
 
 	CInfoMapBase	*m_pInfoMap;		/* マップ情報 */
 	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* キャラ情報ライブラリ */

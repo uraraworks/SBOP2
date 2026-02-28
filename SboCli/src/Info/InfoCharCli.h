@@ -98,6 +98,11 @@ public:
 	void	DeleteMovePosQue		(int nNo);									/* 削除 */
 	void	DeleteAllMovePosQue		(void);										/* 全て削除 */
 
+	/* Phase 6: Dead Reckoning（受信側予測） */
+	void		StartPredictedMove		(int nDirection, int x, int y, DWORD dwRecvTime);	/* 予測移動開始 */
+	void		StopPredictedMove		(int x, int y);									/* 予測移動停止 */
+	void		UpdatePredictedPos		(DWORD dwNowTime);								/* 予測座標更新 */
+
 
 protected:
 	virtual BOOL RenewAnime			(DWORD dwTime, int nAdd = 1);	/* アニメーションの更新 */
@@ -144,6 +149,12 @@ public:
 	ARRAYMOTIONINFO		m_aMotion[CHARMOTIONID_MAX][4];	/* モーション情報 */
 	ARRAYTEXTEFFECT		m_aTextEffect;		/* 文字エフェクト */
 	CStdArray<PMOVEPOSQUE, PMOVEPOSQUE>	m_apMovePosQue;	/* 座標変更キュー */
+	BOOL	m_bPredictedMove;				/* 予測移動中か */
+	int		m_nPredictBaseX,				/* 予測開始X(px) */
+			m_nPredictBaseY,				/* 予測開始Y(px) */
+			m_nPredictDirection,			/* 予測向き */
+			m_nPredictSpeed;				/* 予測速度(px/フレーム基準) */
+	DWORD	m_dwPredictRecvTime;			/* 受信タイムスタンプ */
 } CInfoCharCli, *PCInfoCharCli;
 
 /* Copyright(C)URARA-works 2006 */

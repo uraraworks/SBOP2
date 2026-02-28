@@ -55,6 +55,8 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwEfcBalloonID		= 0;
 	m_dwMotionID			= 0;
 	m_dwMoveCount			= 0;
+	m_dwLastRecvMoveTime	= 0;
+	m_dwLastRecvMovePacketTime = 0;
 
 	m_pLibInfoCharSvr		= NULL;
 }
@@ -270,6 +272,8 @@ void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 	m_bChgMoveState		= pSrc->m_bChgMoveState;
 	m_bChgScreenPos		= pSrc->m_bChgScreenPos;
 	m_bChgPosRenew		= pSrc->m_bChgPosRenew;
+	m_dwLastRecvMoveTime	= pSrc->m_dwLastRecvMoveTime;
+	m_dwLastRecvMovePacketTime = pSrc->m_dwLastRecvMovePacketTime;
 }
 
 

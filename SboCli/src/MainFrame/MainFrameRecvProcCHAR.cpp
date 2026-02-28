@@ -37,7 +37,10 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData)
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_CHAR_RES_CHARINFO:		RecvProcCHAR_RES_CHARINFO		(pData);	break;	/* キャラ情報応答 */
 	case SBOCOMMANDID_SUB_CHAR_CHARINFO:			RecvProcCHAR_CHARINFO			(pData);	break;	/* キャラ情報通知 */
-	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:				RecvProcCHAR_MOVEPOS			(pData);	break;	/* 移動通知 */
+	case SBOCOMMANDID_SUB_CHAR_MOVE_START:			RecvProcCHAR_MOVE_START			(pData);	break;	/* 移動開始通知(Dead Reckoning) */
+	case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:	RecvProcCHAR_MOVE_DIR_CHANGE		(pData);	break;	/* 移動方向変更通知(Dead Reckoning) */
+	case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:			RecvProcCHAR_MOVE_STOP			(pData);	break;	/* 移動停止通知(Dead Reckoning) */
+	case SBOCOMMANDID_SUB_CHAR_POS_SYNC:			RecvProcCHAR_POS_SYNC			(pData);	break;	/* 座標同期通知(Dead Reckoning) */
 	case SBOCOMMANDID_SUB_CHAR_STATE:				RecvProcCHAR_STATE				(pData);	break;	/* 状態通知 */
 	case SBOCOMMANDID_SUB_CHAR_PROCSTATE:			RecvProcCHAR_PROCSTATE			(pData);	break;	/* 行動状態通知 */
 	case SBOCOMMANDID_SUB_CHAR_CHAT:				RecvProcCHAR_CHAT				(pData);	break;	/* チャット通知 */
@@ -59,6 +62,60 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData)
 	case SBOCOMMANDID_SUB_CHAR_RES_TALKEVENT:		RecvProcCHAR_RES_TALKEVENT		(pData);	break;	/* 会話イベント情報応答 */
 	case SBOCOMMANDID_SUB_CHAR_SKILLINFO:			RecvProcCHAR_SKILLINFO			(pData);	break;	/* スキル情報通知 */
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_POS_SYNC							 */
+/* 内容		:受信処理(座標同期通知)                                              */
+/* 日付		:2026/02/28								 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
+{
+	int nDeltaX, nDeltaY, nDeltaMax;
+	int nSetX, nSetY;
+	DWORD dwRecvTime;
+	PCInfoCharCli pInfoChar;
+	CPacketCHAR_POS_SYNC Packet;
+
+	Packet.Set (pData);
+
+	if (m_pMgrData->GetCharID () == Packet.m_dwCharID) {
+		return;
+	}
+
+	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+
+	nDeltaX = Packet.m_pos.x - pInfoChar->m_nMapX;
+	nDeltaY = Packet.m_pos.y - pInfoChar->m_nMapY;
+	nDeltaMax = abs (nDeltaX);
+	if (nDeltaMax < abs (nDeltaY)) {
+		nDeltaMax = abs (nDeltaY);
+	}
+
+	if (nDeltaMax >= 32) {
+		pInfoChar->SetPos (Packet.m_pos.x, Packet.m_pos.y);
+	} else if (nDeltaMax >= 8) {
+		nSetX = pInfoChar->m_nMapX + (nDeltaX / 2);
+		nSetY = pInfoChar->m_nMapY + (nDeltaY / 2);
+		pInfoChar->SetPos (nSetX, nSetY);
+	}
+	pInfoChar->SetDirection (Packet.m_nDirection);
+
+	dwRecvTime = timeGetTime ();
+	if (Packet.m_bUpdate) {
+		pInfoChar->StartPredictedMove (Packet.m_nDirection, Packet.m_pos.x, Packet.m_pos.y, dwRecvTime);
+	} else {
+		pInfoChar->DeleteAllMovePosQue ();
+		pInfoChar->StopPredictedMove (Packet.m_pos.x, Packet.m_pos.y);
+	}
+
+	pInfoChar->m_bRedraw = TRUE;
+	m_bRenewCharInfo = TRUE;
 }
 
 
@@ -171,59 +228,123 @@ void CMainFrame::RecvProcCHAR_CHARINFO(PBYTE pData)
 	}
 }
 
-
 /* ========================================================================= */
-/* 関数名	:CMainFrame::RecvProcCHAR_MOVEPOS								 */
-/* 内容		:受信処理(移動通知)												 */
-/* 日付		:2007/01/14														 */
+/* 関数名	:CMainFrame::RecvProcCHAR_MOVE_START					 */
+/* 内容		:受信処理(移動開始通知)                                              */
+/* 日付		:2026/03/01								 */
 /* ========================================================================= */
 
-void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData)
+void CMainFrame::RecvProcCHAR_MOVE_START(PBYTE pData)
 {
-	int nState, nStateStand, nStateMove, nResult;
+	CPacketCHAR_MOVE_START Packet;
+
+	Packet.Set (pData);
+	RecvProcCHAR_MOVE_CORE (
+			Packet.m_dwCharID,
+			Packet.m_nDirection,
+			Packet.m_pos.x,
+			Packet.m_pos.y,
+			Packet.m_bUpdate,
+			FALSE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_MOVE_DIR_CHANGE			 */
+/* 内容		:受信処理(移動方向変更通知)                                          */
+/* 日付		:2026/03/01								 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_MOVE_DIR_CHANGE(PBYTE pData)
+{
+	CPacketCHAR_MOVE_DIR_CHANGE Packet;
+
+	Packet.Set (pData);
+	RecvProcCHAR_MOVE_CORE (
+			Packet.m_dwCharID,
+			Packet.m_nDirection,
+			Packet.m_pos.x,
+			Packet.m_pos.y,
+			Packet.m_bUpdate,
+			FALSE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_MOVE_STOP					 */
+/* 内容		:受信処理(移動停止通知)                                              */
+/* 日付		:2026/03/01								 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_MOVE_STOP(PBYTE pData)
+{
+	CPacketCHAR_MOVE_STOP Packet;
+
+	Packet.Set (pData);
+	RecvProcCHAR_MOVE_CORE (
+			Packet.m_dwCharID,
+			Packet.m_nDirection,
+			Packet.m_pos.x,
+			Packet.m_pos.y,
+			Packet.m_bUpdate,
+			TRUE);
+}
+
+
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::RecvProcCHAR_MOVE_CORE					 */
+/* 内容		:受信処理(移動受信共通)                                              */
+/* 日付		:2026/03/01								 */
+/* ========================================================================= */
+
+void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPacketPosX, int nPacketPosY, BOOL bUpdate, BOOL bForceStop)
+{
+	int nState, nStateStand, nStateMove, nResult, nStateStop;
 	BOOL bResult;
+	DWORD dwRecvTime;
 	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	PCLayerMap pLayerMap;
 	POINT ptPos;
-	CPacketCHAR_MOVEPOS Packet;
 
-	Packet.Set (pData);
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 
 	/* 自キャラ？ */
-	if (m_pMgrData->GetCharID () == Packet.m_dwCharID) {
+	if (m_pMgrData->GetCharID () == dwCharID) {
 		m_pStateProc->KeyProc (0, FALSE);
-		if (Packet.m_bUpdate == FALSE) {
+		if (bUpdate == FALSE) {
 			m_pLibInfoChar->SortY ();
 			return;
 		}
 		if (pLayerMap) {
-			nResult = pLayerMap->IsScrollPos (Packet.m_pos.x, Packet.m_pos.y, Packet.m_nDirection);
+			nResult = pLayerMap->IsScrollPos (nPacketPosX, nPacketPosY, nDirection);
 			if (nResult >= 0) {
 				pLayerMap->Scroll (nResult, TRUE);
 			}
 			/* 画面外に出る？ */
-			bResult = pLayerMap->IsInScreen (Packet.m_pos.x, Packet.m_pos.y);
+			bResult = pLayerMap->IsInScreen (nPacketPosX, nPacketPosY);
 			if (bResult == FALSE) {
 				pLayerMap->SetScrollMode (TRUE, 0);
-				pLayerMap->SetCenterPos (Packet.m_pos.x, Packet.m_pos.y);
+				pLayerMap->SetCenterPos (nPacketPosX, nPacketPosY);
 			}
 
 			RenewItemArea ();
 		}
 	}
 	pInfoCharPlayer = m_pMgrData->GetPlayerChar ();
+	dwRecvTime = timeGetTime ();
 
-	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_dwCharID);
+	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (dwCharID);
 	/* 知らないキャラ？ */
 	if (pInfoChar == NULL) {
 		CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
 
 		/* 画面内？ */
 		if (pLayerMap) {
-			bResult = pLayerMap->IsInScreen (Packet.m_pos.x, Packet.m_pos.y);
+			bResult = pLayerMap->IsInScreen (nPacketPosX, nPacketPosY);
 			if (bResult) {
-				PacketCHAR_REQ_CHARINFO.Make (Packet.m_dwCharID);
+				PacketCHAR_REQ_CHARINFO.Make (dwCharID);
 				m_pSock->Send (&PacketCHAR_REQ_CHARINFO);
 			}
 		}
@@ -241,35 +362,64 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData)
 		nStateMove	= CHARMOVESTATE_BATTLEMOVE;
 	}
 
-	if (pInfoChar->m_nDirection != Packet.m_nDirection) {
+	if (pInfoChar->m_nDirection != nDirection) {
 		if (pInfoChar->m_nMoveState != CHARMOVESTATE_SIT) {
 			nState = nStateStand;
 		}
 	}
 
 	/* 受信互換：旧スケール→ピクセル変換。Phase 6 で除去予定 */
-	if (!((pInfoChar->m_nMapX == Packet.m_pos.x * HALF_TILE) && (pInfoChar->m_nMapY == Packet.m_pos.y * HALF_TILE))) {
+	if (!((pInfoChar->m_nMapX == nPacketPosX * HALF_TILE) && (pInfoChar->m_nMapY == nPacketPosY * HALF_TILE))) {
 		nState = nStateMove;
 	}
 
-	ptPos.x = Packet.m_pos.x / 2;		/* 旧スケール→タイル座標（IsViewArea 用）*/
-	ptPos.y = Packet.m_pos.y / 2;
+	ptPos.x = nPacketPosX / 2;		/* 旧スケール→タイル座標（IsViewArea 用）*/
+	ptPos.y = nPacketPosY / 2;
 	bResult = TRUE;
 	if (pInfoCharPlayer) {
 		bResult = pInfoCharPlayer->IsViewArea (pInfoCharPlayer->m_dwMapID, &ptPos);
 	}
 	if (bResult == FALSE) {
 		nState = CHARMOVESTATE_DELETEREADY;
+		pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
 
 	} else {
-		bResult = pInfoChar->IsStateMove ();
-		if (bResult) {
-			pInfoChar->AddMovePosQue (nState, Packet.m_nDirection, Packet.m_pos.x * HALF_TILE, Packet.m_pos.y * HALF_TILE);
+		if (bForceStop) {
+			nStateStop = CHARMOVESTATE_STAND;
+			if (pInfoChar->IsStateBattle ()) {
+				nStateStop = CHARMOVESTATE_BATTLE;
+				if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
+					nStateStop = CHARMOVESTATE_BATTLE_DEFENSE;
+				}
+			}
+
+			pInfoChar->DeleteAllMovePosQue ();
+			pInfoChar->SetPos (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+			pInfoChar->SetDirection (nDirection);
+			pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+			pInfoChar->ChgMoveState (nStateStop);
 			nState = -1;
-		} else {
-			pInfoChar->SetPos (Packet.m_pos.x * HALF_TILE, Packet.m_pos.y * HALF_TILE);
-			pInfoChar->SetDirection (Packet.m_nDirection);
 			pInfoChar->m_bRedraw = TRUE;
+		} else {
+			bResult = pInfoChar->IsStateMove ();
+			if (bResult) {
+				pInfoChar->AddMovePosQue (nState, nDirection, nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+				if (nState == nStateMove) {
+					pInfoChar->StartPredictedMove (nDirection, nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE, dwRecvTime);
+				} else {
+					pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+				}
+				nState = -1;
+			} else {
+				pInfoChar->SetPos (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+				pInfoChar->SetDirection (nDirection);
+				if (nState == nStateMove) {
+					pInfoChar->StartPredictedMove (nDirection, nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE, dwRecvTime);
+				} else {
+					pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+				}
+				pInfoChar->m_bRedraw = TRUE;
+			}
 		}
 	}
 

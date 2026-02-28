@@ -35,7 +35,13 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO:		RecvProcCHAR_REQ_CHARINFO		(pData, dwSessionID);	break;	/* キャラ情報要求 */
+#if SBO_ENABLE_LEGACY_MOVEPOS_RECV
 	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:				RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* 移動通知 */
+#endif
+	case SBOCOMMANDID_SUB_CHAR_MOVE_START:			RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* 移動開始通知(Dead Reckoning) */
+	case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:	RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* 移動方向変更通知(Dead Reckoning) */
+	case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:			RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* 移動停止通知(Dead Reckoning) */
+	case SBOCOMMANDID_SUB_CHAR_POS_SYNC:			break;	/* 座標同期通知(Dead Reckoning): サーバー受信対象外 */
 	case SBOCOMMANDID_SUB_CHAR_STATE:				RecvProcCHAR_STATE				(pData, dwSessionID);	break;	/* 状態通知 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_CHAT:			RecvProcCHAR_REQ_CHAT			(pData, dwSessionID);	break;	/* チャット要求 */
 	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO2:		RecvProcCHAR_REQ_CHARINFO2		(pData, dwSessionID);	break;	/* キャラ情報要求(複数) */
@@ -90,18 +96,91 @@ void CMainFrame::RecvProcCHAR_REQ_CHARINFO(PBYTE pData, DWORD dwSessionID)
 void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 {
 	BOOL bResult;
-	int i, nCount, nResult;
+	int i, nCount, nResult, nCmdSub, nStopState;
+	int nNextPosX, nNextPosY, nMoveDist, nAllowDist, nSpeedLevel;
+	DWORD dwNowTime, dwElapsed, dwPacketTime;
+	BOOL bHasPacketTime;
 	PCInfoCharSvr pInfoChar, pInfoCharTmp, pInfoCharFront;
-	CPacketCHAR_MOVEPOS Packet;
+	DWORD dwMapID, dwCharID;
+	int nDirection, nPacketPosX, nPacketPosY;
+	BOOL bUpdate;
+	CPacketBase PacketBase;
 	std::vector<PCInfoCharSvr> apInfoChar;
 
-	Packet.Set (pData);
+	CPacketCHAR_MOVEPOS PacketMovePos;
+	CPacketCHAR_MOVE_START PacketMoveStart;
+	CPacketCHAR_MOVE_DIR_CHANGE PacketMoveDirChange;
+	CPacketCHAR_MOVE_STOP PacketMoveStop;
 
-	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr (Packet.m_dwCharID);
+	PacketBase.Set (pData);
+	nCmdSub = PacketBase.m_byCmdSub;
+
+	bUpdate = FALSE;
+	dwPacketTime = 0;
+	bHasPacketTime = FALSE;
+	nSpeedLevel = 1;
+
+	switch (nCmdSub) {
+	case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+		PacketMoveStart.Set (pData);
+		dwMapID = PacketMoveStart.m_dwMapID;
+		dwCharID = PacketMoveStart.m_dwCharID;
+		nDirection = PacketMoveStart.m_nDirection;
+		nPacketPosX = PacketMoveStart.m_pos.x;
+		nPacketPosY = PacketMoveStart.m_pos.y;
+		bUpdate = PacketMoveStart.m_bUpdate;
+		nSpeedLevel = PacketMoveStart.m_nSpeedLevel;
+		dwPacketTime = PacketMoveStart.m_dwTimeStamp;
+		bHasPacketTime = TRUE;
+		break;
+	case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+		PacketMoveDirChange.Set (pData);
+		dwMapID = PacketMoveDirChange.m_dwMapID;
+		dwCharID = PacketMoveDirChange.m_dwCharID;
+		nDirection = PacketMoveDirChange.m_nDirection;
+		nPacketPosX = PacketMoveDirChange.m_pos.x;
+		nPacketPosY = PacketMoveDirChange.m_pos.y;
+		bUpdate = PacketMoveDirChange.m_bUpdate;
+		nSpeedLevel = PacketMoveDirChange.m_nSpeedLevel;
+		dwPacketTime = PacketMoveDirChange.m_dwTimeStamp;
+		bHasPacketTime = TRUE;
+		break;
+	case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+		PacketMoveStop.Set (pData);
+		dwMapID = PacketMoveStop.m_dwMapID;
+		dwCharID = PacketMoveStop.m_dwCharID;
+		nDirection = PacketMoveStop.m_nDirection;
+		nPacketPosX = PacketMoveStop.m_pos.x;
+		nPacketPosY = PacketMoveStop.m_pos.y;
+		bUpdate = PacketMoveStop.m_bUpdate;
+		nSpeedLevel = PacketMoveStop.m_nSpeedLevel;
+		dwPacketTime = PacketMoveStop.m_dwTimeStamp;
+		bHasPacketTime = TRUE;
+		break;
+#if SBO_ENABLE_LEGACY_MOVEPOS_RECV
+	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:
+		PacketMovePos.Set (pData);
+		dwMapID = PacketMovePos.m_dwMapID;
+		dwCharID = PacketMovePos.m_dwCharID;
+		nDirection = PacketMovePos.m_nDirection;
+		nPacketPosX = PacketMovePos.m_pos.x;
+		nPacketPosY = PacketMovePos.m_pos.y;
+		bUpdate = PacketMovePos.m_bUpdate;
+		break;
+#endif
+	default:
+		return;
+	}
+
+	if (nSpeedLevel <= 0) {
+		nSpeedLevel = 1;
+	}
+
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr (dwCharID);
 	if (pInfoChar == NULL) {
 		return;
 	}
-	if (pInfoChar->m_dwMapID != Packet.m_dwMapID) {
+	if (pInfoChar->m_dwMapID != dwMapID) {
 		return;
 	}
 	bResult = pInfoChar->CheckSessionID (dwSessionID);
@@ -112,9 +191,13 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	bResult = pInfoChar->IsEnableMove ();
 	if (bResult == FALSE) {
 		if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-			if (((pInfoChar->m_nMapX == Packet.m_pos.x * HALF_TILE) && (pInfoChar->m_nMapY == Packet.m_pos.y * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
-				pInfoChar->SetDirection (Packet.m_nDirection);
+			if (((pInfoChar->m_nMapX == nPacketPosX * HALF_TILE) && (pInfoChar->m_nMapY == nPacketPosY * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
+				pInfoChar->SetDirection (nDirection);
 				pInfoChar->m_bChgPos = TRUE;
+				pInfoChar->m_bChgUpdatePos = bUpdate;
+				if (nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) {
+					pInfoChar->m_bChgUpdatePos = TRUE;
+				}
 				/* 防御中の向き変更は処理する */
 				return;
 			}
@@ -131,8 +214,73 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
+	nNextPosX = nPacketPosX * HALF_TILE;
+	nNextPosY = nPacketPosY * HALF_TILE;
+
+	nStopState = CHARMOVESTATE_STAND;
+	if (pInfoChar->IsStateBattle ()) {
+		nStopState = CHARMOVESTATE_BATTLE;
+		if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
+			nStopState = CHARMOVESTATE_BATTLE_DEFENSE;
+		}
+	}
+
+	/* 不正速度チェック（Phase 6: Dead Reckoning サーバー権威） */
+	if (!((pInfoChar->m_nMapX == nNextPosX) && (pInfoChar->m_nMapY == nNextPosY))) {
+		dwNowTime = timeGetTime ();
+		dwElapsed = 0;
+
+		if (bHasPacketTime && (dwPacketTime != 0) && (pInfoChar->m_dwLastRecvMovePacketTime != 0)) {
+			if (dwPacketTime <= pInfoChar->m_dwLastRecvMovePacketTime) {
+				m_pLog->Write (
+					"移動時刻逆行を拒否 dwSessionID:%u [CHAR:%s][受信:%u][前回:%u]",
+					dwSessionID,
+					(LPCSTR)pInfoChar->m_strCharName,
+					dwPacketTime,
+					pInfoChar->m_dwLastRecvMovePacketTime);
+				return;
+			}
+			dwElapsed = dwPacketTime - pInfoChar->m_dwLastRecvMovePacketTime;
+		} else if (pInfoChar->m_dwLastRecvMoveTime != 0) {
+			dwElapsed = dwNowTime - pInfoChar->m_dwLastRecvMoveTime;
+ 		}
+
+		if (dwElapsed != 0) {
+			if (dwElapsed > 3000) {
+				dwElapsed = 3000;
+			}
+
+			nMoveDist = abs (nNextPosX - pInfoChar->m_nMapX);
+			if (nMoveDist < abs (nNextPosY - pInfoChar->m_nMapY)) {
+				nMoveDist = abs (nNextPosY - pInfoChar->m_nMapY);
+			}
+
+			/* 基準120px/s(=4px*30fps) × 速度段階 + 16px余裕 */
+			nAllowDist = (int)((dwElapsed * 120 * nSpeedLevel) / 1000) + 16;
+			if (nMoveDist > nAllowDist) {
+				m_pLog->Write (
+					"移動速度超過を拒否 dwSessionID:%u [CHAR:%s][移動:%dpx][許容:%dpx][経過:%ums][段階:%d]",
+					dwSessionID,
+					(LPCSTR)pInfoChar->m_strCharName,
+					nMoveDist,
+					nAllowDist,
+					dwElapsed,
+					nSpeedLevel);
+				return;
+			}
+		}
+		pInfoChar->m_dwLastRecvMoveTime = dwNowTime;
+		if (bHasPacketTime && (dwPacketTime != 0)) {
+			pInfoChar->m_dwLastRecvMovePacketTime = dwPacketTime;
+		}
+	} else if (bHasPacketTime && (dwPacketTime != 0)) {
+		if (pInfoChar->m_dwLastRecvMovePacketTime < dwPacketTime) {
+			pInfoChar->m_dwLastRecvMovePacketTime = dwPacketTime;
+		}
+	}
+
 	/* 移動した？ */
-	if (!((pInfoChar->m_nMapX == Packet.m_pos.x * HALF_TILE) && (pInfoChar->m_nMapY == Packet.m_pos.y * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
+	if (!((pInfoChar->m_nMapX == nPacketPosX * HALF_TILE) && (pInfoChar->m_nMapY == nPacketPosY * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
 		/* 付いて来ているキャラ一覧を作成 */
 		pInfoCharTmp = pInfoChar;
 		while (1) {
@@ -164,9 +312,16 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		}
 	}
 
-	pInfoChar->SetPos (Packet.m_pos.x * HALF_TILE, Packet.m_pos.y * HALF_TILE);  /* Phase 2: パケットHALF_TILE値→px単位変換 */
-	pInfoChar->SetDirection (Packet.m_nDirection);
+	pInfoChar->SetPos (nNextPosX, nNextPosY);  /* Phase 2: パケットHALF_TILE値→px単位変換 */
+	pInfoChar->SetDirection (nDirection);
 	pInfoChar->m_bChgPos = TRUE;
+	pInfoChar->m_bChgUpdatePos = bUpdate;
+
+	if (nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) {
+		/* 停止通知は最終位置を確定同期させる */
+		pInfoChar->SetMoveState (nStopState);
+		pInfoChar->m_bChgUpdatePos = TRUE;
+	}
 }
 
 

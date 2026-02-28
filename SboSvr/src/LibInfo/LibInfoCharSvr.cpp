@@ -47,6 +47,7 @@ CLibInfoCharSvr::CLibInfoCharSvr()
 	m_pLibInfoItemType	= NULL;
 	m_pLibInfoItem		= NULL;
 	m_pSock				= NULL;
+	m_dwLastPosSyncTime	= 0;
 }
 
 
@@ -109,6 +110,7 @@ BOOL CLibInfoCharSvr::Proc(void)
 {
 	BOOL bRet, bResult;
 	int i, nCount;
+	DWORD dwNowTime;
 
 	bRet	= FALSE;
 	bResult	= FALSE;
@@ -118,6 +120,39 @@ BOOL CLibInfoCharSvr::Proc(void)
 	for (i = nCount - 1; i >= 0; i --) {
 		bResult |= ProcLocal (i);
 	}
+
+	dwNowTime = timeGetTime ();
+	if ((m_dwLastPosSyncTime == 0) || (dwNowTime - m_dwLastPosSyncTime >= 500)) {
+		CPacketCHAR_POS_SYNC PacketPosSync;
+		PCInfoCharSvr pInfoChar;
+
+		m_dwLastPosSyncTime = dwNowTime;
+
+		for (i = 0; i < nCount; i ++) {
+			pInfoChar = (PCInfoCharSvr)GetPtrLogIn (i);
+			if (pInfoChar == NULL) {
+				continue;
+			}
+			if (pInfoChar->IsLogin () == FALSE) {
+				continue;
+			}
+			if (pInfoChar->IsStateMove () == FALSE) {
+				continue;
+			}
+
+			PacketPosSync.Make (
+					pInfoChar->m_dwMapID,
+					pInfoChar->m_dwCharID,
+					pInfoChar->m_nDirection,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY,
+					TRUE,
+					1,
+					dwNowTime);
+			m_pMainFrame->SendToScreenChar (pInfoChar, &PacketPosSync);
+		}
+	}
+
 	if (bResult == FALSE) {
 		goto Exit;
 	}
@@ -2427,7 +2462,7 @@ Exit:
 
 void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 {
-	CPacketCHAR_MOVEPOS Packet;
+	CPacketCHAR_MOVE_DIR_CHANGE Packet;
 	CPacketCHAR_CHARID PacketCHAR_CHARID;
 	ARRAYDWORD adwCharID;
 
@@ -2438,7 +2473,9 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_nDirection,
 			pInfoChar->m_nMapX,
 			pInfoChar->m_nMapY,
-			pInfoChar->m_bChgUpdatePos);
+			pInfoChar->m_bChgUpdatePos,
+			1,
+			timeGetTime ());
 	m_pMainFrame->SendToScreenChar (pInfoChar, &Packet);
 
 	/* 移動後に見える範囲のキャラIDを通知 */
@@ -2478,7 +2515,7 @@ void CLibInfoCharSvr::ProcChgMap(CInfoCharSvr *pInfoChar)
 
 void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 {
-	CPacketCHAR_MOVEPOS Packet;
+	CPacketCHAR_MOVE_DIR_CHANGE Packet;
 	CPacketCHAR_CHARID PacketCHAR_CHARID;
 	ARRAYDWORD adwCharID;
 
@@ -2489,7 +2526,9 @@ void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_nDirection,
 			pInfoChar->m_nMapX / HALF_TILE,		/* Phase 2: px単位→HALF_TILE変換送信 */
 			pInfoChar->m_nMapY / HALF_TILE,		/* Phase 2: px単位→HALF_TILE変換送信 */
-			pInfoChar->m_bChgUpdatePos);
+			pInfoChar->m_bChgUpdatePos,
+			1,
+			timeGetTime ());
 	m_pMainFrame->SendToScreenChar (pInfoChar, &Packet);
 
 	/* 移動後に見える範囲のキャラIDを通知 */

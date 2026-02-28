@@ -121,7 +121,6 @@ void CMainFrame::RecvProcADMIN_CHARINFO(PBYTE pData, DWORD dwSessionID)
 	POINT ptPosBack;
 	PCInfoCharSvr pInfoChar, pInfoCharTmp;
 	CPacketADMIN_CHARINFO Packet;
-	CPacketCHAR_MOVEPOS PacketCHAR_MOVEPOS;
 	CPacketCHAR_CHARINFO PacketCHAR_CHARINFO;
 	CPacketCHAR_STATE PacketCHAR_STATE;
 

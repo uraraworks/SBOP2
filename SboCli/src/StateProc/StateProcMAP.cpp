@@ -14,7 +14,9 @@
 #include "InfoMapBase.h"
 #include "InfoTalkEvent.h"
 #include "PacketMAP_REQ_MAPINFO.h"
-#include "PacketCHAR_MOVEPOS.h"
+#include "PacketCHAR_MOVE_START.h"
+#include "PacketCHAR_MOVE_DIR_CHANGE.h"
+#include "PacketCHAR_MOVE_STOP.h"
 #include "PacketCHAR_STATE.h"
 #include "PacketCHAR_REQ_CHAT.h"
 #include "PacketCHAR_REQ_PUTGET.h"
@@ -90,6 +92,8 @@ CStateProcMAP::CStateProcMAP()
 	m_dwLastKeyInput		= 0;
 	m_dwLastTimeGauge		= 0;
 	m_dwStartChargeTime		= 0;
+	m_bMoveSyncActive		= FALSE;
+	m_nMoveSyncDirection	= -1;
 
 	m_pPlayerChar		= NULL;
 	m_pMap				= NULL;
@@ -282,6 +286,37 @@ void CStateProcMAP::KeyProc(
 	BYTE byCode,		/* [in] イベント */
 	BOOL bDown)			/* [in] 押下状態 */
 {
+	m_pPlayerChar = m_pMgrData->GetPlayerChar ();
+
+	if ((bDown == FALSE) &&
+		((byCode == VK_UP) || (byCode == VK_DOWN) || (byCode == VK_LEFT) || (byCode == VK_RIGHT))) {
+		PCMgrKeyInput pMgrKeyInput;
+		BOOL bUp, bDownKey, bLeft, bRight;
+
+		pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
+		if (pMgrKeyInput && m_bMoveSyncActive && m_pPlayerChar) {
+			bUp = pMgrKeyInput->IsInput (VK_UP);
+			bDownKey = pMgrKeyInput->IsInput (VK_DOWN);
+			bLeft = pMgrKeyInput->IsInput (VK_LEFT);
+			bRight = pMgrKeyInput->IsInput (VK_RIGHT);
+			if (!(bUp || bDownKey || bLeft || bRight)) {
+				CPacketCHAR_MOVE_STOP PacketMoveStop;
+				PacketMoveStop.Make (
+					m_pPlayerChar->m_dwMapID,
+					m_pPlayerChar->m_dwCharID,
+					m_pPlayerChar->m_nDirection,
+					m_pPlayerChar->m_nMapX / HALF_TILE,
+					m_pPlayerChar->m_nMapY / HALF_TILE,
+					FALSE,
+					0,
+					timeGetTime ());
+				m_pSock->Send (&PacketMoveStop);
+				m_bMoveSyncActive = FALSE;
+				m_nMoveSyncDirection = -1;
+			}
+		}
+	}
+
 	if ((byCode == 0) && (bDown == FALSE)) {
 		/* おひるねタイマー解除の為に時間更新 */
 		m_dwLastKeyInput = timeGetTime ();
@@ -1246,7 +1281,7 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	CMainFrame *pMainFrame;
 	CPacketCHAR_STATE PacketCHAR_STATE;
 	CPacketCHAR_REQ_PUTGET PacketCHAR_REQ_PUTGET;
-	CPacketCHAR_MOVEPOS PacketCHAR_MOVEPOS;
+	CPacketCHAR_MOVE_STOP PacketCHAR_MOVE_STOP;
 	CPacketCHAR_REQ_TAIL PacketCHAR_REQ_TAIL;
 	CPacketCHAR_PARA1 PacketCHAR_PARA1;
 	std::vector<POINT> aptPos;
@@ -1274,14 +1309,18 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 					m_pPlayerChar->m_wAtackGauge -= 10;
 					m_dwLastTimeGauge = timeGetTime ();
 
-					PacketCHAR_MOVEPOS.Make (
+					PacketCHAR_MOVE_STOP.Make (
 							m_pPlayerChar->m_dwMapID,
 							m_pPlayerChar->m_dwCharID,
 							anDirection[m_pPlayerChar->m_nDirection],
-							m_pPlayerChar->m_nMapX,
-							m_pPlayerChar->m_nMapY,
-							FALSE);
-					m_pSock->Send (&PacketCHAR_MOVEPOS);
+							m_pPlayerChar->m_nMapX / HALF_TILE,
+							m_pPlayerChar->m_nMapY / HALF_TILE,
+							FALSE,
+							1,
+							timeGetTime ());
+					m_pSock->Send (&PacketCHAR_MOVE_STOP);
+					m_bMoveSyncActive = FALSE;
+					m_nMoveSyncDirection = -1;
 
 					m_pPlayerChar->SetChgWait (TRUE);
 					PacketCHAR_STATE.Make (m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLEATACK);
@@ -2152,7 +2191,8 @@ BOOL CStateProcMAP::MoveProc(
 	PCInfoMapBase pMap;
 	PCLayerMap pLayerMap;
 	PCMgrKeyInput pMgrKeyInput;
-	CPacketCHAR_MOVEPOS Packet;
+	CPacketCHAR_MOVE_START PacketMoveStart;
+	CPacketCHAR_MOVE_DIR_CHANGE PacketMoveDirChange;
 	CPacketCHAR_REQ_PUSH PacketREQ_PUSH;
 	CPacketCHAR_STATE PacketSTATE;
 	ARRAYINT anDirection;
@@ -2375,9 +2415,33 @@ BOOL CStateProcMAP::MoveProc(
 ExitSend:
 	m_pPlayerChar->m_bRedraw = TRUE;
 	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirectionView))) {
-		/* サーバへ移動通知（送信互換：ピクセル→旧スケール。Phase 6 で除去予定） */
-		Packet.Make (m_pPlayerChar->m_dwMapID, m_pPlayerChar->m_dwCharID, nDirectionView, x / HALF_TILE, y / HALF_TILE, FALSE);
-		m_pSock->Send (&Packet);
+		/* サーバへ移動通知（Dead Reckoning専用） */
+		if (m_bMoveSyncActive == FALSE) {
+			PacketMoveStart.Make (
+				m_pPlayerChar->m_dwMapID,
+				m_pPlayerChar->m_dwCharID,
+				nDirectionView,
+				x / HALF_TILE,
+				y / HALF_TILE,
+				FALSE,
+				1,
+				timeGetTime ());
+			m_pSock->Send (&PacketMoveStart);
+			m_bMoveSyncActive = TRUE;
+			m_nMoveSyncDirection = nDirectionView;
+		} else if (m_nMoveSyncDirection != nDirectionView) {
+			PacketMoveDirChange.Make (
+				m_pPlayerChar->m_dwMapID,
+				m_pPlayerChar->m_dwCharID,
+				nDirectionView,
+				x / HALF_TILE,
+				y / HALF_TILE,
+				FALSE,
+				1,
+				timeGetTime ());
+			m_pSock->Send (&PacketMoveDirChange);
+			m_nMoveSyncDirection = nDirectionView;
+		}
 	}
 
 	if ((xBack != x) || (yBack != y)) {

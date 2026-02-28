@@ -53,6 +53,12 @@ CInfoCharCli::CInfoCharCli()
 	m_pDibSpeak				= NULL;
 	m_pInfoEffect			= NULL;
 	m_pSock					= NULL;
+	m_bPredictedMove		= FALSE;
+	m_nPredictBaseX			= 0;
+	m_nPredictBaseY			= 0;
+	m_nPredictDirection		= -1;
+	m_nPredictSpeed			= CHAR_MOVE_SPEED;
+	m_dwPredictRecvTime		= 0;
 
 	m_ptMove.x = m_ptMove.y = 0;
 
@@ -275,6 +281,11 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 
 	bRet	= FALSE;
 	bResult	= CInfoCharBase::TimerProc (dwTime);
+
+	/* Phase 6: 他プレイヤーのみ予測座標を毎フレーム更新 */
+	if (m_bPredictedMove && m_pMgrData && (m_pMgrData->GetCharID () != m_dwCharID)) {
+		UpdatePredictedPos (dwTime);
+	}
 
 	bResult |= RenewAnime			(dwTime);
 	switch (m_nMoveState) {
@@ -1330,6 +1341,75 @@ void CInfoCharCli::DeleteAllMovePosQue(void)
 		DeleteMovePosQue (0);
 	}
 	m_apMovePosQue.clear();
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::StartPredictedMove									 */
+/* 内容		:予測移動を開始											 */
+/* 日付		:2026/02/28										 */
+/* ========================================================================= */
+
+void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecvTime)
+{
+	m_bPredictedMove	= TRUE;
+	m_nPredictBaseX		= x;
+	m_nPredictBaseY		= y;
+	m_nPredictDirection	= nDirection;
+	m_nPredictSpeed		= CHAR_MOVE_SPEED;
+	m_dwPredictRecvTime	= dwRecvTime;
+	SetDirection (nDirection);
+	SetPos (x, y);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::StopPredictedMove									 */
+/* 内容		:予測移動を停止											 */
+/* 日付		:2026/02/28										 */
+/* ========================================================================= */
+
+void CInfoCharCli::StopPredictedMove(int x, int y)
+{
+	m_bPredictedMove = FALSE;
+	m_nPredictDirection = -1;
+	SetPos (x, y);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::UpdatePredictedPos								 */
+/* 内容		:予測座標を更新										 */
+/* 日付		:2026/02/28										 */
+/* ========================================================================= */
+
+void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
+{
+	int nFrame, nOffset, nX, nY;
+	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1};
+	int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+
+	if (m_bPredictedMove == FALSE) {
+		return;
+	}
+	if ((m_nPredictDirection < 0) || (m_nPredictDirection > 7)) {
+		return;
+	}
+	if (dwNowTime < m_dwPredictRecvTime) {
+		return;
+	}
+
+	nFrame = (int)(((ULONGLONG)(dwNowTime - m_dwPredictRecvTime) * DRAWCOUNT) / 1000);
+	if (nFrame <= 0) {
+		return;
+	}
+
+	nOffset = nFrame * m_nPredictSpeed;
+	nX = m_nPredictBaseX + anPosX[m_nPredictDirection] * nOffset;
+	nY = m_nPredictBaseY + anPosY[m_nPredictDirection] * nOffset;
+
+	SetPos (nX, nY);
+	m_bRedraw = TRUE;
 }
 
 
