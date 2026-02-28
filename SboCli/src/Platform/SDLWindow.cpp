@@ -19,6 +19,7 @@
 CSDLWindow::CSDLWindow()
 {
 	m_pWindow	= NULL;
+	m_pRenderer	= NULL;
 	m_hWnd		= NULL;
 }
 
@@ -80,8 +81,35 @@ BOOL CSDLWindow::Create(const char *pszTitle, int nWidth, int nHeight)
 /* 日付		:2025/06/01														 */
 /* ========================================================================= */
 
+/* ========================================================================= */
+/* 関数名	:CSDLWindow::CreateRenderer										 */
+/* 内容		:SDL_Renderer を生成する										 */
+/* 日付		:2025/06/01														 */
+/* 補足		:Create() でウィンドウ生成後に呼ぶこと							 */
+/*			 アクセラレーション + VSync 有効で生成							 */
+/* ========================================================================= */
+
+BOOL CSDLWindow::CreateRenderer(void)
+{
+	if (m_pWindow == NULL) {
+		return FALSE;
+	}
+
+	m_pRenderer = SDL_CreateRenderer (
+					m_pWindow,
+					-1,		/* 最初に利用可能なドライバを自動選択 */
+					SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	return (m_pRenderer != NULL) ? TRUE : FALSE;
+}
+
+
 void CSDLWindow::Destroy(void)
 {
+	if (m_pRenderer != NULL) {
+		SDL_DestroyRenderer (m_pRenderer);
+		m_pRenderer = NULL;
+	}
 	if (m_pWindow != NULL) {
 		SDL_DestroyWindow (m_pWindow);
 		m_pWindow = NULL;
@@ -111,6 +139,18 @@ HWND CSDLWindow::GetHWND(void) const
 SDL_Window *CSDLWindow::GetSDLWindow(void) const
 {
 	return m_pWindow;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CSDLWindow::GetRenderer										 */
+/* 内容		:SDL_Renderer ポインタを返す									 */
+/* 日付		:2025/06/01														 */
+/* ========================================================================= */
+
+SDL_Renderer *CSDLWindow::GetRenderer(void) const
+{
+	return m_pRenderer;
 }
 
 

@@ -24,6 +24,11 @@ public:
 	/* SDL_Scancode → Win32 仮想キーコード (VK_*) に変換する */
 	/* 対応がない場合は 0 を返す                              */
 	static int ScancodeToVK(SDL_Scancode scancode);
+
+	/* Win32 仮想キーコード (VK_*) → SDL_Scancode に変換する */
+	/* Phase 3 で SDL_GetKeyboardState() 移行時に使用        */
+	/* 対応がない場合は SDL_SCANCODE_UNKNOWN を返す           */
+	static SDL_Scancode VKToScancode(int vk);
 };
 
 /* Copyright(C)URARA-works 2025 */

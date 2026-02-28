@@ -1,12 +1,20 @@
-﻿/* Copyright(C)URARA-works 2006 */
+/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:MgrDraw.h													 */
 /* 内容			:描画マネージャクラス 定義ファイル							 */
 /* 作成			:年がら年中春うらら(URARA-works)							 */
 /* 作成開始日	:2006/09/24													 */
+/* 変更履歴		:Phase 3: Draw() を HDC → SDL_Renderer* に変更				 */
+/*				 CImg32 の内部描画ロジックはそのまま維持					 */
 /* ========================================================================= */
 
 #pragma once
+
+/* SDL_Renderer / SDL_Texture の前方宣言（SDL2 の typedef に合わせる）*/
+/* SboCliAdminMfc は SDL2 に依存しないため SDL.h はインクルード不可  */
+/* MgrDraw.cpp 側で SDL.h をインクルードして SDL API を使用する       */
+typedef struct SDL_Renderer SDL_Renderer;
+typedef struct SDL_Texture  SDL_Texture;
 
 class CImg32;
 class CMgrData;
@@ -34,7 +42,7 @@ public:
 	void	Create			(CMgrData *pMgrData);				/* 作成 */
 	void	Destroy			(void);								/* 破棄 */
 
-	void	Draw			(HDC hDC);							/* 描画 */
+	void	Draw			(SDL_Renderer *pRenderer);			/* 描画（SDL_RenderCopy経由） */
 	void	DrawChar		(CImg32 *pDst, int x, int y, CInfoCharCli *pInfoChar, BOOL bLock = TRUE);	/* キャラを描画 */
 	void	DrawChar		(CImg32 *pDst, int x, int y, BYTE byDirection, BYTE byAnimeNo, BYTE byLevel, CInfoCharCli *pInfoChar);	/* キャラを描画 */
 
@@ -76,6 +84,7 @@ private:
 	CmySection			m_CritDataLock;					/* データロック用のクリティカルセクション */
 	CImg32				*m_pDibBack,					/* バックバッファ */
 						*m_pDibTmp;						/* 描画用テンポラリ */
+	SDL_Texture			*m_pBackTexture;				/* バックバッファ用SDLテクスチャ（Lazy初期化） */
 	CMgrData			*m_pMgrData;					/* データマネージャ */
 	CMgrGrpData			*m_pMgrGrpData;					/* グラフィックデータマネージャ */
 	CMgrLayer			*m_pMgrLayer;					/* レイヤーマネージャ */

@@ -234,7 +234,7 @@ BOOL CMainFrame::OnFrame(void)
 /* 日付		:2025/06/01														 */
 /* ========================================================================= */
 
-void CMainFrame::OnDraw(HDC hDC)
+void CMainFrame::OnDraw(SDL_Renderer *pRenderer)
 {
 	DWORD dwTmp;
 
@@ -246,7 +246,7 @@ void CMainFrame::OnDraw(HDC hDC)
 	}
 
 	dwTmp = timeGetTime ();
-	m_pMgrDraw->Draw (hDC);
+	m_pMgrDraw->Draw (pRenderer);
 	dwTmp = timeGetTime () - dwTmp;
 	m_pMgrData->SetDrawTime (dwTmp);
 	m_dwDrawTime += dwTmp;
@@ -882,67 +882,13 @@ Exit:
 
 void CMainFrame::OnClose(HWND hWnd)
 {
-        RECT rc;
-        TCHAR szFileName[MAX_PATH];
-        HWND hWndTmp;
-        CmyString strTmp;
-
-        ZeroMemory (szFileName, sizeof (szFileName));
-
-        GetModuleFileName (NULL, szFileName, _countof (szFileName));
-        size_t nNameLen = _tcslen (szFileName);
-        if (nNameLen >= 3) {
-                _tcscpy_s (szFileName + nNameLen - 3, _countof (szFileName) - (nNameLen - 3), _T("ini"));
-        } else {
-                _tcscat_s (szFileName, _T(".ini"));
-        }
-
-	if ((IsIconic (hWnd) == FALSE) && (IsWindowVisible (hWnd))) {
-		GetWindowRect (hWnd, &rc);
-
-		/* メインウィンドウ */
-		strTmp.Format(_T("%d"), rc.left);
-                WritePrivateProfileString (_T("Pos"), _T("MainX"), strTmp, szFileName);
-                strTmp.Format(_T("%d"), rc.top);
-                WritePrivateProfileString (_T("Pos"), _T("MainY"), strTmp, szFileName);
-
-		if (m_nGameState == GAMESTATE_MAP) {
-			/* ログウィンドウ */
-			((CStateProcMAP *)m_pStateProc)->GetMsgLogRect (rc);
-			strTmp.Format(_T("%d"), rc.left);
-                        WritePrivateProfileString (_T("Pos"), _T("LogLeft"), strTmp, szFileName);
-                        strTmp.Format(_T("%d"), rc.top);
-                        WritePrivateProfileString (_T("Pos"), _T("LogTop"), strTmp, szFileName);
-                        strTmp.Format(_T("%d"), rc.right);
-                        WritePrivateProfileString (_T("Pos"), _T("LogRight"), strTmp, szFileName);
-                        strTmp.Format(_T("%d"), rc.bottom);
-                        WritePrivateProfileString (_T("Pos"), _T("LogBottom"), strTmp, szFileName);
-
-			hWndTmp = m_pMgrData->GetAdminWindow ();
-			if (hWndTmp) {
-				/* 管理者ウィンドウ */
-				GetWindowRect (hWndTmp, &rc);
-				strTmp.Format(_T("%d"), rc.left);
-                                WritePrivateProfileString (_T("Pos"), _T("AdminX"), strTmp, szFileName);
-                                strTmp.Format(_T("%d"), rc.top);
-                                WritePrivateProfileString (_T("Pos"), _T("AdminY"), strTmp, szFileName);
-			}
-
-			hWndTmp = m_pMgrData->GetDebugWindow ();
-			if (hWndTmp) {
-				/* デバッグウィンドウ */
-				GetWindowRect (hWndTmp, &rc);
-				strTmp.Format(_T("%d"), rc.left);
-                                WritePrivateProfileString (_T("Pos"), _T("DebugX"), strTmp, szFileName);
-                                strTmp.Format(_T("%d"), rc.top);
-                                WritePrivateProfileString (_T("Pos"), _T("DebugY"), strTmp, szFileName);
-			}
-		}
-	}
-	m_pMgrData->SaveIniData ();
-	m_pSock->Destroy ();
-
-	DestroyWindow (hWnd);
+	/* SDL ウィンドウを使用中のため DestroyWindow は SDL 側に委ねる。        */
+	/* SDL_QUIT をプッシュしてメインループを終了させる。                      */
+	/* 設定保存・ソケット破棄は OnSDLDestroy() に一本化する。                 */
+	SDL_Event ev;
+	ZeroMemory (&ev, sizeof (ev));
+	ev.type = SDL_QUIT;
+	SDL_PushEvent (&ev);
 }
 
 
@@ -967,21 +913,10 @@ void CMainFrame::OnDestroy(HWND hWnd)
 void CMainFrame::OnPaint(HWND hWnd)
 {
 	PAINTSTRUCT ps;
-	DWORD dwTmp;
-	HDC hDC;
 
-	dwTmp	= timeGetTime ();
-	hDC		= BeginPaint (hWnd, &ps);
-
-	/* 初期化完了前の WM_PAINT に備えて nullptr チェック（OnDraw と同様） */
-	if (IsWindowVisible (m_hWnd) && m_pMgrDraw != NULL) {
-		m_pMgrDraw->Draw (hDC);
-
-		dwTmp = timeGetTime () - dwTmp;
-		m_pMgrData->SetDrawTime (dwTmp);
-		m_dwDrawTime += dwTmp;
-	}
-
+	/* Phase 3: SDL_RenderPresent が描画済みのため WM_PAINT では GDI再描画不要 */
+	/* BeginPaint / EndPaint のペアは WM_PAINT ハンドラで必ず呼ぶ必要がある   */
+	BeginPaint (hWnd, &ps);
 	EndPaint (hWnd, &ps);
 }
 

@@ -7,6 +7,9 @@
 /* ========================================================================= */
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#include "SboCli_priv.h"	/* SCRSIZEX / SCRSIZEY */
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoMapObject.h"
@@ -44,6 +47,7 @@ CMgrDraw::CMgrDraw()
 	m_pLibInfoMapShadow		= NULL;
 	m_pLibInfoItem			= NULL;
 	m_pLibInfoMotionType	= NULL;
+	m_pBackTexture			= NULL;		/* SDLテクスチャ（Lazy初期化） */
 
 	m_pDibBack = new CImg32;
 	m_pDibBack->Create (SCRSIZEX + 64, SCRSIZEY + 64);
@@ -61,6 +65,10 @@ CMgrDraw::CMgrDraw()
 
 CMgrDraw::~CMgrDraw()
 {
+	if (m_pBackTexture != NULL) {
+		SDL_DestroyTexture (m_pBackTexture);
+		m_pBackTexture = NULL;
+	}
 	SAFE_DELETE (m_pDibBack);
 	SAFE_DELETE (m_pDibTmp);
 }
@@ -104,10 +112,8 @@ void CMgrDraw::Destroy(void)
 /* 日付		:2006/09/24														 */
 /* ========================================================================= */
 
-void CMgrDraw::Draw(HDC hDC)
+void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 {
-	HDC hDCTmp;
-
 	m_pMgrLayer->	Draw (m_pDibBack);		/* レイヤー */
 	m_pMgrWindow->	Draw (m_pDibBack);		/* ウィンドウ */
 
@@ -116,9 +122,54 @@ void CMgrDraw::Draw(HDC hDC)
 		m_pDibBack->ChgLevel (32, 32, SCRSIZEX, SCRSIZEY, (m_byLevel == 1) ? 0 : m_byLevel);
 	}
 
-	hDCTmp = m_pDibBack->Lock ();
-	BitBlt (hDC, 0, 0, SCRSIZEX, SCRSIZEY, hDCTmp, 32, 32, SRCCOPY);
-//	m_pDibBack->Unlock ();
+	if (pRenderer == NULL) {
+		return;
+	}
+
+	/* バックバッファを SDL_Texture 経由で描画 */
+	/* CImg32 は CreateDIBSection (biHeight > 0) のため							*/
+	/* メモリ上の先頭行が画像の最下行（ボトムアップ DIB）						*/
+	/* SDL_RenderCopyEx の SDL_FLIP_VERTICAL で垂直フリップして正しい向きに表示	*/
+	{
+		LPBYTE		pBits;
+		int			nW, nStride;
+		SDL_Rect	stDst;
+
+		pBits	= m_pDibBack->GetBits ();
+		nW		= m_pDibBack->Width ();
+		nStride	= nW * 4;					/* 1行あたりのバイト数（32bit BGRA） */
+
+		/* Lazy 初期化: テクスチャを初回のみ作成 */
+		if (m_pBackTexture == NULL) {
+			/* SDL_PIXELFORMAT_ARGB8888: CImg32(BI_RGB 32bit) のメモリ配置 [B][G][R][0x00] に対応 */
+			/* リトルエンディアンでは ARGB8888 のバイト順が [B][G][R][A] となり一致する    */
+			m_pBackTexture = SDL_CreateTexture (
+								pRenderer,
+								SDL_PIXELFORMAT_ARGB8888,
+								SDL_TEXTUREACCESS_STREAMING,
+								SCRSIZEX,
+								SCRSIZEY);
+		}
+		if (m_pBackTexture == NULL) {
+			return;
+		}
+
+		/* ボトムアップ DIB の (x=32, y=32) から SCRSIZEX × SCRSIZEY 行を転送 */
+		/* ボトムアップ DIBでは y=0 がメモリ先頭（画像の最下行）				*/
+		/* 下から 32行目（描画開始オフセット）: pBits + 32 * nStride + 32 * 4	*/
+		SDL_UpdateTexture (m_pBackTexture, NULL,
+							pBits + 32 * nStride + 32 * 4,
+							nStride);
+
+		/* SDL_FLIP_VERTICAL で垂直フリップ → ボトムアップ DIB を正しい向きに */
+		stDst.x = 0;
+		stDst.y = 0;
+		stDst.w = SCRSIZEX;
+		stDst.h = SCRSIZEY;
+		SDL_RenderCopyEx (pRenderer, m_pBackTexture, NULL, &stDst,
+							0.0, NULL, SDL_FLIP_VERTICAL);
+		SDL_RenderPresent (pRenderer);
+	}
 }
 
 

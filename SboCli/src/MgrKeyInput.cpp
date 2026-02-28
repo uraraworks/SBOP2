@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "DInputUtil.h"
 #include "MgrKeyInput.h"
+#include "Platform/SDLInput.h"
 
 
 /* ========================================================================= */
@@ -116,11 +117,13 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 	BOOL bBreak;
 	BYTE byCodeTmp;
 	DWORD dwKeyInput;
-
-//	GetKeyboardState (m_abyKeyState);
+	const Uint8 *pSDLState;
 
 	byCode	= 0;
 	bDown	= FALSE;
+
+	/* SDL キーボード状態を取得（SDLApp::Run() の SDL_PollEvent 後に更新済み） */
+	pSDLState = SDL_GetKeyboardState(NULL);
 
 	/* 入力状態の検出 */
 	dwKeyInput = m_pDInputUtil->GetKeyState ();
@@ -130,7 +133,22 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 			break;
 		}
 		bBreak = TRUE;
-		m_abyKeyState[byCodeTmp] = (BYTE)GetKeyState (byCodeTmp);
+
+		/* SDL_GetKeyboardState() でキー押下状態取得（GetKeyState() から移行） */
+		{
+			BOOL bPressed = FALSE;
+			if (byCodeTmp == VK_SHIFT) {
+				/* VK_SHIFT は左右両方のシフトキーをチェック */
+				bPressed = pSDLState[SDL_SCANCODE_LSHIFT] || pSDLState[SDL_SCANCODE_RSHIFT];
+			} else if (byCodeTmp == VK_CONTROL) {
+				/* VK_CONTROL は左右両方のCtrlキーをチェック */
+				bPressed = pSDLState[SDL_SCANCODE_LCTRL] || pSDLState[SDL_SCANCODE_RCTRL];
+			} else {
+				SDL_Scancode sc = CSDLInput::VKToScancode(byCodeTmp);
+				bPressed = (sc != SDL_SCANCODE_UNKNOWN) && pSDLState[sc];
+			}
+			m_abyKeyState[byCodeTmp] = bPressed ? 0x80 : 0;
+		}
 		switch (byCodeTmp) {
 		case VK_UP:			/* ↑ */
 			m_abyKeyState[byCodeTmp] |= (dwKeyInput & BUTTON_UP) ? 0x80 : 0;

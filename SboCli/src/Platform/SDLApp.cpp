@@ -115,6 +115,11 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		return -1;
 	}
 
+	/* SDL_Renderer 生成（Phase 3: GDI BitBlt → SDL_RenderCopy へ移行） */
+	if (!m_Window.CreateRenderer ()) {
+		return -1;
+	}
+
 	/* ゲーム側の初期化（CMainFrame::OnSDLInit） */
 	if (!pHost->OnSDLInit (m_Window.GetHWND ())) {
 		return -1;
@@ -149,8 +154,8 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
-				/* Phase 2: GetKeyState() がHWNDフォーカスで機能するため追加処理不要。 */
-				/* SDL が Win32 側に WM_KEYDOWN/WM_KEYUP を伝達する。          */
+				/* Phase 3: MgrKeyInput::Renew() が SDL_GetKeyboardState() を使用。 */
+				/* SDL_PollEvent() 呼び出し後に SDL のキー状態が更新される。  */
 				break;
 
 			default:
@@ -185,18 +190,15 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 				dwAccumulated -= dwFrameInterval;
 				bDraw = pHost->OnFrame ();
 
-				/* 描画が必要なフレームのみGDI描画を実行 */
+				/* 描画が必要なフレームのみ SDL 描画を実行 */
 				if (bDraw)
 				{
-					HWND hWnd = m_Window.GetHWND ();
-					if (hWnd)
+					SDL_Renderer *pRenderer = m_Window.GetRenderer ();
+					if (pRenderer)
 					{
-						HDC hDC = GetDC (hWnd);
-						if (hDC)
-						{
-							pHost->OnDraw (hDC);
-							ReleaseDC (hWnd, hDC);
-						}
+						SDL_RenderClear (pRenderer);
+						/* MgrDraw::Draw() が SDL_RenderPresent まで行う */
+						pHost->OnDraw (pRenderer);
 					}
 					byFps++;
 				}

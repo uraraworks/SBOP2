@@ -54,7 +54,7 @@ public:
 	/* IGameLoopHost 実装 */
 	virtual BOOL	OnSDLInit	(HWND hWnd);								/* SDL初期化コールバック */
 	virtual BOOL	OnFrame		(void);										/* 1フレーム更新（TimerProc+KeyProc） */
-	virtual void	OnDraw		(HDC hDC);									/* 描画（MgrDraw::Draw） */
+	virtual void	OnDraw		(SDL_Renderer *pRenderer);					/* 描画（MgrDraw::Draw） */
 	virtual BOOL	IsQuit		(void);										/* 終了判定 */
 	virtual void	OnSDLDestroy(void);										/* 後片付け */
 
