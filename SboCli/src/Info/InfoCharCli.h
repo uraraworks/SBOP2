@@ -64,6 +64,7 @@ public:
 
 	virtual void		SetViewState	(int nViewState);		/* 表示状態設定 */
 	virtual CInfoMotion *GetMotionInfo	(int *pnCount = NULL);	/* モーション情報を取得 */
+	virtual int			GetDrawDirection	(int nDirection = -1);	/* 描画用に4方向で向きを取得 */
 
 	BOOL		IsChgWait			(void);								/* 状態変更待ちか判定 */
 	void		SetEffectID			(DWORD dwEffectID);					/* エフェクトIDを指定 */
@@ -81,6 +82,8 @@ public:
 	DWORD		GetBalloonGrpID		(void);								/* 噴出し画像IDを取得 */
 	BOOL		IsEnableMove		(void);								/* 移動できる状態か判定 */
 	BOOL		IsDamage			(void);								/* ダメージ受け中か判定 */
+	void		SetDrawDirectionOverride(int nDirection);							/* 描画用向きの上書き */
+	void		ClearDrawDirectionOverride(void);								/* 描画用向きの上書きを解除 */
 
 	void	SetChgWait		(BOOL bChgWait)	{ m_bChgWait = bChgWait; }	/* 状態変更待ちか設定 */
 
@@ -158,7 +161,8 @@ public:
 	int		m_nPredictBaseX,				/* 予測開始X(px) */
 			m_nPredictBaseY,				/* 予測開始Y(px) */
 			m_nPredictDirection,			/* 予測向き */
-			m_nPredictSpeed;				/* 予測速度(px/sec基準) */
+			m_nPredictSpeed,				/* 予測速度(px/sec基準) */
+			m_nDrawDirectionOverride;		/* 描画用の向き上書き */
 	DWORD	m_dwPredictRecvTime,			/* 受信タイムスタンプ */
 			m_dwDrawMoveStartTime,			/* 描画補間開始時刻 */
 			m_dwDrawMoveEndTime;			/* 描画補間終了時刻 */

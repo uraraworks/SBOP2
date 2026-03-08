@@ -80,6 +80,7 @@ CInfoCharCli::CInfoCharCli()
 	m_nPredictBaseY			= 0;
 	m_nPredictDirection		= -1;
 	m_nPredictSpeed			= CHAR_MOVE_PIXELS_PER_SEC;
+	m_nDrawDirectionOverride = -1;
 	m_dwPredictRecvTime		= 0;
 	m_dwDrawMoveStartTime	= 0;
 	m_dwDrawMoveEndTime		= 0;
@@ -154,6 +155,45 @@ void CInfoCharCli::ChgDirection(int nDirection)
 
 Exit:
 	return;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::GetDrawDirection									 */
+/* 内容		:描画用に4方向で向きを取得										 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+int CInfoCharCli::GetDrawDirection(int nDirection/*-1*/)
+{
+	if ((nDirection == -1) && (m_nDrawDirectionOverride != -1)) {
+		nDirection = m_nDrawDirectionOverride;
+	}
+	return CInfoCharBase::GetDrawDirection (nDirection);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::SetDrawDirectionOverride							 */
+/* 内容		:描画用向きを上書き												 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+void CInfoCharCli::SetDrawDirectionOverride(int nDirection)
+{
+	m_nDrawDirectionOverride = nDirection;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::ClearDrawDirectionOverride							 */
+/* 内容		:描画用向き上書きを解除											 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+void CInfoCharCli::ClearDrawDirectionOverride(void)
+{
+	m_nDrawDirectionOverride = -1;
 }
 
 

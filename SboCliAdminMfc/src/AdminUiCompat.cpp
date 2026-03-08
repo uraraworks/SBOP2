@@ -59,6 +59,7 @@ void CInfoCharCli::SetName(LPCSTR pszName)         { UNREFERENCED_PARAMETER(pszN
 void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)       { UNREFERENCED_PARAMETER(pszSpeak); }
 void CInfoCharCli::SetViewState(int nViewState)    { UNREFERENCED_PARAMETER(nViewState); }
 CInfoMotion* CInfoCharCli::GetMotionInfo(int *pnCount) { UNREFERENCED_PARAMETER(pnCount); return NULL; }
+int CInfoCharCli::GetDrawDirection(int nDirection) { return CInfoCharBase::GetDrawDirection(nDirection); }
 BOOL CInfoCharCli::IsEnableMove(void)              { return FALSE; }
 BOOL CInfoCharCli::RenewAnime(DWORD dwTime, int nAdd) { UNREFERENCED_PARAMETER(dwTime); UNREFERENCED_PARAMETER(nAdd); return FALSE; }
 void CInfoCharCli::GetGrpID(WORD &wGrpIDMain, WORD &wGrpIDSub)

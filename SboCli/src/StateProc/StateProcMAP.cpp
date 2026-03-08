@@ -76,6 +76,46 @@
 #include "MgrDraw.h"
 #include "StateProcMAP.h"
 
+static double NormalizeMoveAngle(double dAngle)
+{
+	while (dAngle <= -3.14159265358979323846) {
+		dAngle += 6.28318530717958647692;
+	}
+	while (dAngle > 3.14159265358979323846) {
+		dAngle -= 6.28318530717958647692;
+	}
+	return dAngle;
+}
+
+static double GetDirectionAngle(int nDirection)
+{
+	int anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1};
+	int anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+
+	if ((nDirection < 0) || (nDirection > 7)) {
+		return 0.0;
+	}
+	return atan2 ((double)anPosChangeY[nDirection], (double)anPosChangeX[nDirection]);
+}
+
+static int GetAngleDirection(double dAngle)
+{
+	double dBestDiff, dDiff, dTargetAngle;
+	int i, nBestDirection;
+
+	nBestDirection = 0;
+	dBestDiff = 100.0;
+	for (i = 0; i < 8; i ++) {
+		dTargetAngle = GetDirectionAngle (i);
+		dDiff = fabs (NormalizeMoveAngle (dTargetAngle - dAngle));
+		if (dDiff < dBestDiff) {
+			dBestDiff = dDiff;
+			nBestDirection = i;
+		}
+	}
+	return nBestDirection;
+}
+
 /* ========================================================================= */
 /* 関数名	:CStateProcMAP::CStateProcMAP									 */
 /* 内容		:コンストラクタ													 */
@@ -98,10 +138,13 @@ CStateProcMAP::CStateProcMAP()
 	m_nMoveSyncDirection		= -1;
 	m_nMoveSpeedAccum			= 0;
 	m_dwLastPlayerMoveStepTime	= 0;
+	m_dwLastPlayerMoveTurnTime	= 0;
 	m_dwLastEventMapID		= 0;
 	m_bHasLastEventTile		= FALSE;
+	m_bHasPlayerMoveHeading	= FALSE;
 	m_nLastEventTileX		= 0;
 	m_nLastEventTileY		= 0;
+	m_dPlayerMoveHeading	= 0.0;
 
 	m_pPlayerChar		= NULL;
 	m_pMap				= NULL;
@@ -188,6 +231,8 @@ void CStateProcMAP::Init(void)
 	m_pMgrDraw->SetFadeState (FADESTATE_FADEIN);
 	m_nMoveSpeedAccum = 0;
 	m_dwLastPlayerMoveStepTime = 0;
+	m_dwLastPlayerMoveTurnTime = 0;
+	m_bHasPlayerMoveHeading = FALSE;
 
 	if (m_pMap) {
 		m_pMgrSound->PlayBGM (m_pMap->m_dwBGMID);
@@ -237,6 +282,52 @@ int CStateProcMAP::GetPlayerMoveStep(DWORD dwNowTime, int &nAccumOut, DWORD &dwL
 	nMoveStep = (int)(ullAccumulated / 1000);
 	nAccumOut = (int)(ullAccumulated % 1000);
 	return nMoveStep;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::GetSmoothedMoveDirection							 */
+/* 内容		:慣性付きの移動方向を取得										 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+int CStateProcMAP::GetSmoothedMoveDirection(int nTargetDirection, DWORD dwNowTime)
+{
+	double dTargetAngle, dDiff, dStep, dDt;
+
+	if ((nTargetDirection < 0) || (nTargetDirection > 7)) {
+		m_bHasPlayerMoveHeading = FALSE;
+		m_dwLastPlayerMoveTurnTime = 0;
+		return nTargetDirection;
+	}
+
+	dTargetAngle = GetDirectionAngle (nTargetDirection);
+	if ((m_bHasPlayerMoveHeading == FALSE) || (m_dwLastPlayerMoveTurnTime == 0)) {
+		m_dPlayerMoveHeading = dTargetAngle;
+		m_bHasPlayerMoveHeading = TRUE;
+		m_dwLastPlayerMoveTurnTime = dwNowTime;
+		return nTargetDirection;
+	}
+
+	dDt = (double)(dwNowTime - m_dwLastPlayerMoveTurnTime) / 1000.0;
+	m_dwLastPlayerMoveTurnTime = dwNowTime;
+	if (dDt < 0.0) {
+		dDt = 0.0;
+	}
+	if (dDt > 0.1) {
+		dDt = 0.1;
+	}
+
+	dStep = 7.0 * dDt;
+	dDiff = NormalizeMoveAngle (dTargetAngle - m_dPlayerMoveHeading);
+	if (fabs (dDiff) <= dStep) {
+		m_dPlayerMoveHeading = dTargetAngle;
+	} else if (dDiff > 0.0) {
+		m_dPlayerMoveHeading = NormalizeMoveAngle (m_dPlayerMoveHeading + dStep);
+	} else {
+		m_dPlayerMoveHeading = NormalizeMoveAngle (m_dPlayerMoveHeading - dStep);
+	}
+	return GetAngleDirection (m_dPlayerMoveHeading);
 }
 
 
@@ -359,7 +450,7 @@ void CStateProcMAP::KeyProc(
 		BOOL bUp, bDownKey, bLeft, bRight;
 
 		pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
-		if (pMgrKeyInput && m_bMoveSyncActive && m_pPlayerChar) {
+		if (pMgrKeyInput && m_pPlayerChar) {
 			bUp = pMgrKeyInput->IsInput (VK_UP);
 			bDownKey = pMgrKeyInput->IsInput (VK_DOWN);
 			bLeft = pMgrKeyInput->IsInput (VK_LEFT);
@@ -381,21 +472,26 @@ void CStateProcMAP::KeyProc(
 				m_pPlayerChar->m_ptMove.y = 0;
 				m_nMoveSpeedAccum = 0;
 				m_dwLastPlayerMoveStepTime = 0;
+				m_dwLastPlayerMoveTurnTime = 0;
+				m_bHasPlayerMoveHeading = FALSE;
+				m_pPlayerChar->ClearDrawDirectionOverride ();
 
-				CPacketCHAR_MOVE_STOP PacketMoveStop;
-				PacketMoveStop.Make (
-					m_pPlayerChar->m_dwMapID,
-					m_pPlayerChar->m_dwCharID,
-					m_pPlayerChar->m_nDirection,
-						m_pPlayerChar->m_nMapX,
-						m_pPlayerChar->m_nMapY,
-					FALSE,
-					0,
-					timeGetTime ());
-				m_pSock->Send (&PacketMoveStop);
-				m_bMoveSyncActive = FALSE;
-				m_nMoveSyncDirection = -1;
-				m_dwLastTimeMoveSyncSend = 0;
+				if (m_bMoveSyncActive) {
+					CPacketCHAR_MOVE_STOP PacketMoveStop;
+					PacketMoveStop.Make (
+						m_pPlayerChar->m_dwMapID,
+						m_pPlayerChar->m_dwCharID,
+						m_pPlayerChar->m_nDirection,
+							m_pPlayerChar->m_nMapX,
+							m_pPlayerChar->m_nMapY,
+						FALSE,
+						0,
+						timeGetTime ());
+					m_pSock->Send (&PacketMoveStop);
+					m_bMoveSyncActive = FALSE;
+					m_nMoveSyncDirection = -1;
+					m_dwLastTimeMoveSyncSend = 0;
+				}
 			}
 		}
 	}
@@ -1253,7 +1349,6 @@ BOOL CStateProcMAP::OnUp(BOOL bDown)
 			nDirection = 7;
 			x = -1;
 		}
-
 		xBefore = m_pPlayerChar->m_nMapX;
 		yBefore = m_pPlayerChar->m_nMapY;
 		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
@@ -1322,7 +1417,6 @@ BOOL CStateProcMAP::OnDown(BOOL bDown)
 			nDirection = 6;
 			x = -1;
 		}
-
 		xBefore = m_pPlayerChar->m_nMapX;
 		yBefore = m_pPlayerChar->m_nMapY;
 		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
@@ -1391,7 +1485,6 @@ BOOL CStateProcMAP::OnLeft(BOOL bDown)
 			nDirection = 6;
 			y = 1;
 		}
-
 		xBefore = m_pPlayerChar->m_nMapX;
 		yBefore = m_pPlayerChar->m_nMapY;
 		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
@@ -1460,7 +1553,6 @@ BOOL CStateProcMAP::OnRight(BOOL bDown)
 			nDirection = 5;
 			y = 1;
 		}
-
 		xBefore = m_pPlayerChar->m_nMapX;
 		yBefore = m_pPlayerChar->m_nMapY;
 		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
@@ -2398,7 +2490,7 @@ BOOL CStateProcMAP::MoveProc(
 	int nDirection,		/* [in] 向き */
 	BOOL bSyncSend)		/* [in] サーバ同期送信を行う */
 {
-	int nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack, nMovePixel,
+	int nDirectionBack, nDirectionView, nState, nTmp, nInputDirection, nKeepDirection, nOtherDirection, xBack, yBack, nMovePixel,
 		anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	BOOL bRet, bResult;
 	DWORD dwCharID;
@@ -2423,6 +2515,7 @@ BOOL CStateProcMAP::MoveProc(
 	xBack = m_pPlayerChar->m_nMapX;
 	yBack = m_pPlayerChar->m_nMapY;
 	nMovePixel = max (abs (xx), abs (yy));
+	nInputDirection = nDirection;
 	nDirectionView = nDirection;
 	nDirectionBack = m_pPlayerChar->m_nDirection;
 
@@ -2509,7 +2602,8 @@ BOOL CStateProcMAP::MoveProc(
 			nDirectionView = nDirectionBack;
 		}
 	}
-	m_pPlayerChar->ChgDirection (nDirectionView);
+	m_pPlayerChar->ChgDirection (nDirection);
+	m_pPlayerChar->ClearDrawDirectionOverride ();
 
 	/* 移動せずに向き変更だけ？ */
 	bResult = pMgrKeyInput->IsInput (VK_SHIFT);
@@ -2525,6 +2619,59 @@ BOOL CStateProcMAP::MoveProc(
 	}
 
 	nTmp = nDirection;
+	nKeepDirection = -1;
+	nOtherDirection = -1;
+	if ((nInputDirection >= 4) && (nInputDirection <= 7) && (nDirectionBack >= 0) && (nDirectionBack < 4)) {
+		switch (nInputDirection) {
+		case 4:
+			if (nDirectionBack == 0) {
+				nKeepDirection = 0;
+				nOtherDirection = 3;
+			} else if (nDirectionBack == 3) {
+				nKeepDirection = 3;
+				nOtherDirection = 0;
+			}
+			break;
+		case 5:
+			if (nDirectionBack == 1) {
+				nKeepDirection = 1;
+				nOtherDirection = 3;
+			} else if (nDirectionBack == 3) {
+				nKeepDirection = 3;
+				nOtherDirection = 1;
+			}
+			break;
+		case 6:
+			if (nDirectionBack == 1) {
+				nKeepDirection = 1;
+				nOtherDirection = 2;
+			} else if (nDirectionBack == 2) {
+				nKeepDirection = 2;
+				nOtherDirection = 1;
+			}
+			break;
+		case 7:
+			if (nDirectionBack == 0) {
+				nKeepDirection = 0;
+				nOtherDirection = 2;
+			} else if (nDirectionBack == 2) {
+				nKeepDirection = 2;
+				nOtherDirection = 0;
+			}
+			break;
+		}
+	}
+	if (nKeepDirection != -1) {
+		int nDirectionTmp;
+
+		nDirectionTmp = nOtherDirection;
+		bResult = m_pLibInfoChar->IsMove (m_pPlayerChar, nDirectionTmp);
+		if (bResult == FALSE) {
+			nDirection = nKeepDirection;
+			xx = anPosChangeX[nDirection] * nMovePixel;
+			yy = anPosChangeY[nDirection] * nMovePixel;
+		}
+	}
 	bResult = m_pMgrData->GetMoveNoBlock ();
 	if (bResult == FALSE) {
 		/* 当たり判定無効状態でないならチェック */
@@ -2605,13 +2752,15 @@ BOOL CStateProcMAP::MoveProc(
 		yy = anPosChangeY[nDirection] * nMovePixel;
 		m_pPlayerChar->ChgDirection (nDirection);
 	}
+	nDirectionView = GetSmoothedMoveDirection (nDirection, timeGetTime ());
 
 	nState = CHARMOVESTATE_MOVE;
 	if (m_pPlayerChar->IsStateBattle ()) {
 		nState = CHARMOVESTATE_BATTLEMOVE;
 	}
 
-	m_pPlayerChar->ChgDirection (nDirectionView);
+	m_pPlayerChar->ChgDirection (nDirection);
+	m_pPlayerChar->SetDrawDirectionOverride (nDirectionView);
 	m_pPlayerChar->SetPos (x + xx, y + yy);
 	m_pPlayerChar->ChgMoveState (nState);
 
@@ -2638,13 +2787,13 @@ ExitSend:
 		bRet = TRUE;
 		goto Exit;
 	}
-	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirectionView))) {
+	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirection))) {
 		/* サーバへ移動通知（Dead Reckoning専用） */
 		if (m_bMoveSyncActive == FALSE) {
 			PacketMoveStart.Make (
 				m_pPlayerChar->m_dwMapID,
 				m_pPlayerChar->m_dwCharID,
-				nDirectionView,
+				nDirection,
 				x,
 				y,
 				FALSE,
@@ -2652,26 +2801,26 @@ ExitSend:
 				timeGetTime ());
 			m_pSock->Send (&PacketMoveStart);
 			m_bMoveSyncActive = TRUE;
-			m_nMoveSyncDirection = nDirectionView;
+			m_nMoveSyncDirection = nDirection;
 			m_dwLastTimeMoveSyncSend = timeGetTime ();
-		} else if (m_nMoveSyncDirection != nDirectionView) {
+		} else if (m_nMoveSyncDirection != nDirection) {
 			PacketMoveDirChange.Make (
 				m_pPlayerChar->m_dwMapID,
 				m_pPlayerChar->m_dwCharID,
-				nDirectionView,
+				nDirection,
 				x,
 				y,
 				FALSE,
 				1,
 				timeGetTime ());
 			m_pSock->Send (&PacketMoveDirChange);
-			m_nMoveSyncDirection = nDirectionView;
+			m_nMoveSyncDirection = nDirection;
 			m_dwLastTimeMoveSyncSend = timeGetTime ();
 		} else if (timeGetTime () - m_dwLastTimeMoveSyncSend >= 100) {
 			PacketMoveDirChange.Make (
 				m_pPlayerChar->m_dwMapID,
 				m_pPlayerChar->m_dwCharID,
-				nDirectionView,
+				nDirection,
 				x,
 				y,
 				TRUE,

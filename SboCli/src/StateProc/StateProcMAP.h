@@ -72,6 +72,7 @@ protected:
 	BOOL	OnCtrl						(BOOL bDown);									/* キーハンドラ(Ctrl) */
 	BOOL	OnSpace						(BOOL bDown);									/* キーハンドラ(Space) */
 	int		GetPlayerMoveStep			(DWORD dwNowTime, int &nAccumOut, DWORD &dwLastStepTimeOut);	/* 自キャラの1更新あたり移動量を取得 */
+	int		GetSmoothedMoveDirection		(int nTargetDirection, DWORD dwNowTime);		/* 慣性付きの移動方向を取得 */
 	void	OnMgrDrawSTART_FADEIN		(DWORD dwPara);									/* フェードイン開始 */
 	void	OnMgrDrawEND_FADEIN			(DWORD dwPara);									/* フェードイン完了 */
 	BOOL	MoveProc					(int x, int y, int xx, int yy, int nDirection, BOOL bSyncSend = TRUE);	/* 移動処理 */
@@ -117,10 +118,13 @@ protected:
 	int				m_nMoveSyncDirection;				/* 最後に送信した移動方向 */
 	int				m_nMoveSpeedAccum;					/* 自キャラ速度のサブピクセル累積 */
 	DWORD			m_dwLastPlayerMoveStepTime;			/* 自キャラ速度計算の前回時刻 */
+	DWORD			m_dwLastPlayerMoveTurnTime;			/* 自キャラの回頭計算の前回時刻 */
 	DWORD			m_dwLastEventMapID;					/* 前回イベント判定マップID */
 	BOOL			m_bHasLastEventTile;				/* 前回イベント判定タイルを保持しているか */
+	BOOL			m_bHasPlayerMoveHeading;			/* 自キャラの移動方位を保持しているか */
 	int				m_nLastEventTileX,					/* 前回イベント判定タイルX */
 					m_nLastEventTileY;					/* 前回イベント判定タイルY */
+	double			m_dPlayerMoveHeading;				/* 自キャラの現在移動方位(rad) */
 
 	CAdminUiLoader	m_AdminUi;						/* 管理者UIモジュール */
 	CInfoCharCli	*m_pPlayerChar;						/* 操作中のキャラ情報 */
