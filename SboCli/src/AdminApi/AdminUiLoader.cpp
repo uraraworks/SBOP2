@@ -8,15 +8,26 @@
 
 namespace
 {
+	void WriteAdminUiLoaderDebug(LPCSTR pszText)
+	{
+		OutputDebugStringA (pszText);
+	}
+
 	BOOL IsValidModule(const SboAdminUiModule* pModule)
 	{
 		if (pModule == NULL) {
+			WriteAdminUiLoaderDebug ("[AdminUiLoader] module is null\n");
 			return FALSE;
 		}
 		if ((pModule->cb < sizeof(SboAdminUiModule)) || (pModule->apiVersion != SBO_ADMINUI_API_VERSION_1)) {
+			WriteAdminUiLoaderDebug ("[AdminUiLoader] module header mismatch\n");
 			return FALSE;
 		}
-		return (pModule->Create && pModule->Destroy && pModule->Notify && pModule->GetWindow);
+		if (!(pModule->Create && pModule->Destroy && pModule->Notify && pModule->GetWindow)) {
+			WriteAdminUiLoaderDebug ("[AdminUiLoader] module function table incomplete\n");
+			return FALSE;
+		}
+		return TRUE;
 	}
 }
 
@@ -39,6 +50,17 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 {
 	SboCreateAdminUiModuleProc pCreateFactory;
 	BOOL bCreated;
+	TCHAR szExePath[MAX_PATH];
+	TCHAR szExeDir[MAX_PATH];
+	TCHAR szCandidatePath[MAX_PATH];
+	LPCTSTR apszCandidates[] = {
+		_T("SboCliAdminMfc.dll"),
+		_T(".\\SboCliAdminMfc.dll"),
+		_T(".\\SboCli\\Debug\\SboCliAdminMfc.dll"),
+		_T(".\\SboCli\\Release\\SboCliAdminMfc.dll"),
+		NULL
+	};
+	int i;
 
 	Destroy();
 	if (pMgrData == NULL) {
@@ -69,21 +91,68 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 	m_Host.SetSelectMapPartsID = HostSetSelectMapPartsID;
 	m_Host.GetInfoTalkEvent = HostGetInfoTalkEvent;
 
-	m_hModule = LoadLibrary(_T("SboCliAdminMfc.dll"));
+	m_hModule = NULL;
+
+	for (i = 0; apszCandidates[i] != NULL; i ++) {
+		m_hModule = LoadLibrary (apszCandidates[i]);
+		if (m_hModule) {
+			WriteAdminUiLoaderDebug ("[AdminUiLoader] loaded admin ui dll from candidate path\n");
+			break;
+		}
+	}
+
+	if (m_hModule == NULL) {
+		szExePath[0] = 0;
+		szExeDir[0] = 0;
+		if (GetModuleFileName (NULL, szExePath, _countof (szExePath)) > 0) {
+			_tcscpy_s (szExeDir, _countof (szExeDir), szExePath);
+			for (i = (int)_tcslen (szExeDir) - 1; i >= 0; i --) {
+				if ((szExeDir[i] == _T('\\')) || (szExeDir[i] == _T('/'))) {
+					szExeDir[i] = 0;
+					break;
+				}
+			}
+			if (szExeDir[0]) {
+				_stprintf_s (szCandidatePath, _countof (szCandidatePath), _T("%s\\SboCliAdminMfc.dll"), szExeDir);
+				m_hModule = LoadLibrary (szCandidatePath);
+				if (m_hModule) {
+					WriteAdminUiLoaderDebug ("[AdminUiLoader] loaded admin ui dll from exe directory\n");
+				}
+			}
+		}
+	}
+
 	if (m_hModule == NULL) {
 		/* DLL が存在しない場合は管理者UI なしで動作（非管理者プレイ継続） */
+		WriteAdminUiLoaderDebug ("[AdminUiLoader] failed to load admin ui dll\n");
 		return FALSE;
 	}
 
 	pCreateFactory = (SboCreateAdminUiModuleProc)GetProcAddress(m_hModule, "CreateAdminUiModule");
+	if (pCreateFactory == NULL) {
+		pCreateFactory = (SboCreateAdminUiModuleProc)GetProcAddress(m_hModule, "_CreateAdminUiModule@8");
+	}
 	m_pDestroyFactory = (SboDestroyAdminUiModuleProc)GetProcAddress(m_hModule, "DestroyAdminUiModule");
+	if (m_pDestroyFactory == NULL) {
+		m_pDestroyFactory = (SboDestroyAdminUiModuleProc)GetProcAddress(m_hModule, "_DestroyAdminUiModule@4");
+	}
+	if (pCreateFactory == NULL) {
+		WriteAdminUiLoaderDebug ("[AdminUiLoader] CreateAdminUiModule export not found\n");
+	}
+	if (m_pDestroyFactory == NULL) {
+		WriteAdminUiLoaderDebug ("[AdminUiLoader] DestroyAdminUiModule export not found\n");
+	}
 
 	if (pCreateFactory && pCreateFactory(&m_Host, &m_Module) && IsValidModule(&m_Module)) {
 		bCreated = m_Module.Create(m_Module.context, &m_Host, hWndParent);
 		if (bCreated) {
 			m_bLoadedFromDll = TRUE;
+			WriteAdminUiLoaderDebug ("[AdminUiLoader] admin ui created successfully\n");
 			return TRUE;
 		}
+		WriteAdminUiLoaderDebug ("[AdminUiLoader] module Create returned FALSE\n");
+	} else {
+		WriteAdminUiLoaderDebug ("[AdminUiLoader] factory creation failed\n");
 	}
 
 	if (m_pDestroyFactory) {

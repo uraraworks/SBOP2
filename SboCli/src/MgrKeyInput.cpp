@@ -137,16 +137,25 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 		/* SDL_GetKeyboardState() でキー押下状態取得（GetKeyState() から移行） */
 		{
 			BOOL bPressed = FALSE;
+			BOOL bPressedWin = FALSE;
 			if (byCodeTmp == VK_SHIFT) {
 				/* VK_SHIFT は左右両方のシフトキーをチェック */
 				bPressed = pSDLState[SDL_SCANCODE_LSHIFT] || pSDLState[SDL_SCANCODE_RSHIFT];
+				bPressedWin =	((GetAsyncKeyState (VK_SHIFT) & 0x8000) != 0) ||
+							((GetAsyncKeyState (VK_LSHIFT) & 0x8000) != 0) ||
+							((GetAsyncKeyState (VK_RSHIFT) & 0x8000) != 0);
 			} else if (byCodeTmp == VK_CONTROL) {
 				/* VK_CONTROL は左右両方のCtrlキーをチェック */
 				bPressed = pSDLState[SDL_SCANCODE_LCTRL] || pSDLState[SDL_SCANCODE_RCTRL];
+				bPressedWin =	((GetAsyncKeyState (VK_CONTROL) & 0x8000) != 0) ||
+							((GetAsyncKeyState (VK_LCONTROL) & 0x8000) != 0) ||
+							((GetAsyncKeyState (VK_RCONTROL) & 0x8000) != 0);
 			} else {
 				SDL_Scancode sc = CSDLInput::VKToScancode(byCodeTmp);
 				bPressed = (sc != SDL_SCANCODE_UNKNOWN) && pSDLState[sc];
+				bPressedWin = ((GetAsyncKeyState (byCodeTmp) & 0x8000) != 0);
 			}
+			bPressed = bPressed || bPressedWin;
 			m_abyKeyState[byCodeTmp] = bPressed ? 0x80 : 0;
 		}
 		switch (byCodeTmp) {

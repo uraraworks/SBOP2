@@ -16,8 +16,27 @@
 #include "Img32.h"
 #include "MgrGrpData.h"
 #include "MgrData.h"
+#include "MgrLayer.h"
 #include "MgrSound.h"
 #include "InfoCharCli.h"
+#include "LayerMap.h"
+
+static BOOL IsCharInPlayableRange(PCInfoCharCli pInfoChar)
+{
+	PCLayerMap pLayerMap;
+
+	if ((pInfoChar == NULL) || (pInfoChar->m_pMgrData == NULL)) {
+		return FALSE;
+	}
+	if (pInfoChar->m_pMgrData->GetMgrLayer () == NULL) {
+		return FALSE;
+	}
+	pLayerMap = (PCLayerMap)pInfoChar->m_pMgrData->GetMgrLayer ()->Get (LAYERTYPE_MAP);
+	if (pLayerMap == NULL) {
+		return FALSE;
+	}
+	return pLayerMap->IsInScreen (pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+}
 
 /* ========================================================================= */
 /* 関数名	:CInfoCharCli::CInfoCharCli										 */
@@ -137,7 +156,7 @@ Exit:
 void CInfoCharCli::ChgMoveState(int nMoveState)
 {
 	BOOL bResult, bChange, bCheck = TRUE;
-	int i, nAnime, nCount, nDirection, anInitMovePosX[] = {0, 0, 16, -16, -16, -16, 16, 16}, anInitMovePosY[] = {16, -16, 0, 0, 16, -16, -16, 16};
+	int i, nAnime, nCount, nDirection;
 	PCInfoMotion pInfoMotion;
 
 	if (nMoveState < 0) {
@@ -186,8 +205,8 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		if (bChange) {
 			nAnime = m_nAnimeBack;
 		}
-		m_ptMove.x = anInitMovePosX[nDirection];
-		m_ptMove.y = anInitMovePosY[nDirection];
+		m_ptMove.x = m_ptCharBack.x - m_nMapX;
+		m_ptMove.y = m_ptCharBack.y - m_nMapY;
 		bCheck = FALSE;
 		break;
 	case CHARMOVESTATE_BATTLE:		/* 戦闘中 */
@@ -318,7 +337,7 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 		bResultTmp = m_pInfoEffect->TimerProc (dwTime);
 		if (bResultTmp) {
 			if ((m_pInfoEffect->m_byAnimeNo == 0) && (m_pInfoEffect->m_bLoopSound)) {
-				if (m_pInfoEffect->m_dwSoundID) {
+				if (m_pInfoEffect->m_dwSoundID && IsCharInPlayableRange (this)) {
 					m_pMgrSound->PlaySound (m_pInfoEffect->m_dwSoundID);
 				}
 			}
@@ -843,7 +862,7 @@ void CInfoCharCli::SetEffectID(DWORD dwEffectID)
 
 	m_pInfoEffect = new CInfoEffect;
 	m_pInfoEffect->Copy (pInfo);
-	if (m_pInfoEffect->m_dwSoundID) {
+	if (m_pInfoEffect->m_dwSoundID && IsCharInPlayableRange (this)) {
 		m_pMgrSound->PlaySound (m_pInfoEffect->m_dwSoundID);
 	}
 
@@ -1352,6 +1371,17 @@ void CInfoCharCli::DeleteAllMovePosQue(void)
 
 void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecvTime)
 {
+	int nDeltaMax;
+
+	if (IsNPC () || (m_nMoveType != CHARMOVETYPE_PC)) {
+		m_bPredictedMove = FALSE;
+		m_nPredictDirection = -1;
+		if ((m_nMapX != x) || (m_nMapY != y)) {
+			SetPos (x, y);
+		}
+		return;
+	}
+
 	m_bPredictedMove	= TRUE;
 	m_nPredictBaseX		= x;
 	m_nPredictBaseY		= y;
@@ -1359,7 +1389,19 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 	m_nPredictSpeed		= CHAR_MOVE_SPEED;
 	m_dwPredictRecvTime	= dwRecvTime;
 	SetDirection (nDirection);
-	SetPos (x, y);
+
+	/*
+	   連続移動中に毎回 SetPos すると m_dwLastTimeMove が更新され、
+	   補間がリセットされて一瞬止まる（コマ飛びに見える）場合がある。
+	   大きくズレた時のみ座標を寄せる。
+	*/
+	nDeltaMax = abs (x - m_nMapX);
+	if (nDeltaMax < abs (y - m_nMapY)) {
+		nDeltaMax = abs (y - m_nMapY);
+	}
+	if ((IsStateMove () == FALSE) || (nDeltaMax >= 8)) {
+		SetPos (x, y);
+	}
 }
 
 
@@ -1373,7 +1415,9 @@ void CInfoCharCli::StopPredictedMove(int x, int y)
 {
 	m_bPredictedMove = FALSE;
 	m_nPredictDirection = -1;
-	SetPos (x, y);
+	if ((m_nMapX != x) || (m_nMapY != y)) {
+		SetPos (x, y);
+	}
 }
 
 
@@ -1390,6 +1434,11 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 	int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 
 	if (m_bPredictedMove == FALSE) {
+		return;
+	}
+	if (IsNPC () || (m_nMoveType != CHARMOVETYPE_PC)) {
+		m_bPredictedMove = FALSE;
+		m_nPredictDirection = -1;
 		return;
 	}
 	if ((m_nPredictDirection < 0) || (m_nPredictDirection > 7)) {
@@ -1485,7 +1534,7 @@ BOOL CInfoCharCli::RenewAnime(
 	if (bCheck || (nAdd == 0)) {
 		pInfoMotion = GetMotionInfo (&nCount);
 		if (pInfoMotion) {
-			if (pInfoMotion->m_dwSoundID) {
+			if (pInfoMotion->m_dwSoundID && IsCharInPlayableRange (this)) {
 				m_pMgrSound->PlaySound (pInfoMotion->m_dwSoundID);
 			}
 			if (pInfoMotion->m_dwProcID) {
@@ -1748,7 +1797,7 @@ BOOL CInfoCharCli::TimerProcBalloon(DWORD dwTime)
 	if (m_dwBalloonGrpID == 0) {
 		m_dwBalloonGrpID	= pInfo->m_dwGrpID;
 		m_dwLastTimeBalloon	= dwTime;
-		if (pInfo->m_dwSoundID != 0) {
+		if ((pInfo->m_dwSoundID != 0) && IsCharInPlayableRange (this)) {
 			m_pMgrSound->PlaySound (pInfo->m_dwSoundID);
 		}
 		bRet = TRUE;
@@ -1773,7 +1822,7 @@ BOOL CInfoCharCli::TimerProcBalloon(DWORD dwTime)
 		}
 		m_dwLastTimeBalloon = dwTime;
 		m_dwBalloonGrpID	= pInfo->m_dwGrpID;
-		if (pInfo->m_dwSoundID != 0) {
+		if ((pInfo->m_dwSoundID != 0) && IsCharInPlayableRange (this)) {
 			m_pMgrSound->PlaySound (pInfo->m_dwSoundID);
 		}
 	}

@@ -1,0 +1,4 @@
+#include "resource.h"
+#include "afxres.h"
+
+#include "AdminResources.rc2"

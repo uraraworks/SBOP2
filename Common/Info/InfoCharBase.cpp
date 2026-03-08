@@ -919,12 +919,8 @@ PBYTE CInfoCharBase::GetSendData(void)
 	CopyMemoryRenew (pDataTmp, &m_dwMapID,					sizeof (m_dwMapID),					pDataTmp);	/* マップID */
 	CopyMemoryRenew (pDataTmp, &m_dwMotionTypeID,			sizeof (m_dwMotionTypeID),			pDataTmp);	/* モーション種別ID */
 	CopyMemoryRenew (pDataTmp, &m_nAnime,					sizeof (m_nAnime),					pDataTmp);	/* アニメーション番号 */
-	{	/* 送信互換：ピクセル→旧単位。Phase 6 で除去予定 */
-		int nSendX = m_nMapX / HALF_TILE;
-		int nSendY = m_nMapY / HALF_TILE;
-		CopyMemoryRenew (pDataTmp, &nSendX,				sizeof (nSendX),					pDataTmp);	/* マップ座標(横) */
-		CopyMemoryRenew (pDataTmp, &nSendY,				sizeof (nSendY),					pDataTmp);	/* マップ座標(縦) */
-	}
+	CopyMemoryRenew (pDataTmp, &m_nMapX,				sizeof (m_nMapX),					pDataTmp);	/* マップ座標(横) */
+	CopyMemoryRenew (pDataTmp, &m_nMapY,				sizeof (m_nMapY),					pDataTmp);	/* マップ座標(縦) */
 	CopyMemoryRenew (pDataTmp, &m_nMoveState,				sizeof (m_nMoveState),				pDataTmp);	/* 移動状態 */
 	CopyMemoryRenew (pDataTmp, &m_nMoveType,				sizeof (m_nMoveType),				pDataTmp);	/* 移動種別 */
 	CopyMemoryRenew (pDataTmp, &m_nDirection,				sizeof (m_nDirection),				pDataTmp);	/* 向き */
@@ -1063,13 +1059,8 @@ PBYTE CInfoCharBase::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew (&m_dwMapID,				pDataTmp, sizeof (m_dwMapID),					pDataTmp);	/* マップID */
 	CopyMemoryRenew (&m_dwMotionTypeID,			pDataTmp, sizeof (m_dwMotionTypeID),			pDataTmp);	/* モーション種別ID */
 	CopyMemoryRenew (&m_nAnime,					pDataTmp, sizeof (m_nAnime),					pDataTmp);	/* アニメーション番号 */
-	{	/* 受信互換：旧単位→ピクセル。Phase 6 で除去予定 */
-		int nRecvX, nRecvY;
-		CopyMemoryRenew (&nRecvX,				pDataTmp, sizeof (nRecvX),						pDataTmp);	/* マップ座標(横) */
-		CopyMemoryRenew (&nRecvY,				pDataTmp, sizeof (nRecvY),						pDataTmp);	/* マップ座標(縦) */
-		m_nMapX = nRecvX * HALF_TILE;
-		m_nMapY = nRecvY * HALF_TILE;
-	}
+	CopyMemoryRenew (&m_nMapX,				pDataTmp, sizeof (m_nMapX),						pDataTmp);	/* マップ座標(横) */
+	CopyMemoryRenew (&m_nMapY,				pDataTmp, sizeof (m_nMapY),						pDataTmp);	/* マップ座標(縦) */
 	CopyMemoryRenew (&m_nMoveState,				pDataTmp, sizeof (m_nMoveState),				pDataTmp);	/* 移動状態 */
 	CopyMemoryRenew (&m_nMoveType,				pDataTmp, sizeof (m_nMoveType),					pDataTmp);	/* 移動種別 */
 	CopyMemoryRenew (&m_nDirection,				pDataTmp, sizeof (m_nDirection),				pDataTmp);	/* 向き */
@@ -1351,6 +1342,7 @@ void CInfoCharBase::GetFrontPos(
 	BOOL bMove		/*FALSE*/)		/* [in] TRUE:移動先用のキャラ座標 */
 {
 	RECT rcTmp;
+	int nMoveDistance;
 
 	if (nDirection == -1) {
 		nDirection = m_nDirection;
@@ -1358,41 +1350,53 @@ void CInfoCharBase::GetFrontPos(
 
 	GetPosRect (rcTmp);
 	if (bMove) {
-		rcTmp.right = rcTmp.left;
-		rcTmp.bottom = rcTmp.top;
+		ptDst.x = m_nMapX;
+		ptDst.y = m_nMapY;
+		switch (nDirection) {
+		case 0: ptDst.y -= HALF_TILE; break;
+		case 1: ptDst.y += HALF_TILE; break;
+		case 2: ptDst.x -= HALF_TILE; break;
+		case 3: ptDst.x += HALF_TILE; break;
+		case 4: ptDst.x += HALF_TILE; ptDst.y -= HALF_TILE; break;
+		case 5: ptDst.x += HALF_TILE; ptDst.y += HALF_TILE; break;
+		case 6: ptDst.x -= HALF_TILE; ptDst.y += HALF_TILE; break;
+		case 7: ptDst.x -= HALF_TILE; ptDst.y -= HALF_TILE; break;
+		}
+		return;
 	}
+	nMoveDistance = MAPPARTSSIZE;
 	switch (nDirection) {
 	case 0:
 		ptDst.x = rcTmp.left;
-		ptDst.y = rcTmp.top - MAPPARTSSIZE;		/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.y = rcTmp.top - nMoveDistance;
 		break;
 	case 1:
 		ptDst.x = rcTmp.left;
-		ptDst.y = rcTmp.bottom + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.y = rcTmp.bottom + nMoveDistance;
 		break;
 	case 2:
-		ptDst.x = rcTmp.left - MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.x = rcTmp.left - nMoveDistance;
 		ptDst.y = rcTmp.bottom;
 		break;
 	case 3:
-		ptDst.x = rcTmp.right + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
+		ptDst.x = rcTmp.right + nMoveDistance;
 		ptDst.y = rcTmp.bottom;
 		break;
 	case 4:
-		ptDst.x = rcTmp.right + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
-		ptDst.y = rcTmp.top - MAPPARTSSIZE;
+		ptDst.x = rcTmp.right + nMoveDistance;
+		ptDst.y = rcTmp.top - nMoveDistance;
 		break;
 	case 5:
-		ptDst.x = rcTmp.right + MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
-		ptDst.y = rcTmp.bottom + MAPPARTSSIZE;
+		ptDst.x = rcTmp.right + nMoveDistance;
+		ptDst.y = rcTmp.bottom + nMoveDistance;
 		break;
 	case 6:
-		ptDst.x = rcTmp.left - MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
-		ptDst.y = rcTmp.bottom + MAPPARTSSIZE;
+		ptDst.x = rcTmp.left - nMoveDistance;
+		ptDst.y = rcTmp.bottom + nMoveDistance;
 		break;
 	case 7:
-		ptDst.x = rcTmp.left - MAPPARTSSIZE;	/* Phase 5: 旧±1(HALF_TILE業)→±MAPPARTSSIZE(1タイル=32px) */
-		ptDst.y = rcTmp.top - MAPPARTSSIZE;
+		ptDst.x = rcTmp.left - nMoveDistance;
+		ptDst.y = rcTmp.top - nMoveDistance;
 		break;
 	}
 }

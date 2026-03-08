@@ -133,7 +133,7 @@ public:
 		}
 
 		m_ullSize += nSize;
-		const unsigned long long ullMax = (std::numeric_limits<DWORD>::max)();
+		constexpr unsigned long long ullMax = (std::numeric_limits<DWORD>::max)();
 		if (m_ullSize > ullMax) {
 			m_bFailed = true;
 		}
@@ -146,7 +146,7 @@ public:
 		}
 
 		m_ullSize += nSize;
-		const unsigned long long ullMax = (std::numeric_limits<DWORD>::max)();
+		constexpr unsigned long long ullMax = (std::numeric_limits<DWORD>::max)();
 		if (m_ullSize > ullMax) {
 			m_bFailed = true;
 		}
@@ -459,6 +459,7 @@ DWORD CInfoTalkEvent::ReadElementData(
 
 	pDst	= NULL;
 	dwSize	= 0;
+	pInfo	= NULL;
 
 	switch (nNo) {
 	case 0: pDst = (PBYTE)&m_dwTalkEventID; dwSize = sizeof (m_dwTalkEventID); break;	/* 会話イベントID */
@@ -476,6 +477,10 @@ DWORD CInfoTalkEvent::ReadElementData(
 					CopyMemoryRenew (&nType, pSrcTmp, sizeof (nType), pSrcTmp);		/* イベント種別 */
 					pInfo = (PCInfoTalkEventBase)GetNew (nType);
 				} else {
+					if (pInfo == NULL) {
+						pSrcTmp += dwSizeTmp;
+						continue;
+					}
 					nNoTmp = pInfo->GetElementNo ((LPCSTR)strTmp);
 					if (nNoTmp >= 0) {
 						dwSizeTmp = pInfo->ReadElementData (pSrcTmp, nNoTmp);
@@ -483,7 +488,9 @@ DWORD CInfoTalkEvent::ReadElementData(
 					pSrcTmp += dwSizeTmp;
 				}
 			}
-			AddTalkEvent (pInfo);
+			if (pInfo) {
+				AddTalkEvent (pInfo);
+			}
 		}
 		dwSize = (pSrcTmp - pSrc);
 		break;

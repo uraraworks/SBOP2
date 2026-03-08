@@ -26,6 +26,7 @@ public:
 	void	Init		(CMgrData *pMgrData);						/* 初期化 */
 	void	Renew		(void);										/* 更新 */
 	void	OnAdminMsg	(int nType, DWORD dwPara);					/* メッセージハンドラ(WM_ADMINMSG) */
+	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);			/* メッセージハンドラ(WM_MAINFRAME) */
 
 
 protected:

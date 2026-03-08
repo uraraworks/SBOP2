@@ -20,6 +20,7 @@
 #define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)				/* マップ表示サイズ(縦) */
 #define SCROLLSIZE		(16)										/* スクロール単位（廃止予定：自由移動移行後は MAPPARTSSIZE に統一） */
 #define CHAR_MOVE_SPEED	(4)										/* キャラ移動速度 (px/フレーム)。4×30fps≈120px/s≈3.75tile/s */
+#define CHAR_MOVE_COLLISION_LOOKAHEAD	(CHAR_MOVE_SPEED)	/* 当たり判定先読み(px)。移動量未満だと斜め入力時に1px食い込む余地が残る */
 #define MAXCOUNT_CHARGRPCOUNTONEFILE	(16)						/* キャラ画像の1ファイルに登録されているキャラ数 */
 
 /* ========================================================================= */

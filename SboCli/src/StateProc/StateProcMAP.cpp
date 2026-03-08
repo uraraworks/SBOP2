@@ -68,6 +68,7 @@
 #include "DlgDbg.h"
 #include "MainFrame.h"
 #include "MgrData.h"
+
 #include "MgrSound.h"
 #include "MgrLayer.h"
 #include "MgrKeyInput.h"
@@ -91,9 +92,14 @@ CStateProcMAP::CStateProcMAP()
 	m_dwLastBalloonID		= 0;
 	m_dwLastKeyInput		= 0;
 	m_dwLastTimeGauge		= 0;
+	m_dwLastTimeMoveSyncSend = 0;
 	m_dwStartChargeTime		= 0;
 	m_bMoveSyncActive		= FALSE;
 	m_nMoveSyncDirection	= -1;
+	m_dwLastEventMapID		= 0;
+	m_bHasLastEventTile		= FALSE;
+	m_nLastEventTileX		= 0;
+	m_nLastEventTileY		= 0;
 
 	m_pPlayerChar		= NULL;
 	m_pMap				= NULL;
@@ -169,6 +175,8 @@ void CStateProcMAP::Init(void)
 
 	m_pPlayerChar	= m_pMgrData->GetPlayerChar ();
 	m_pMap			= m_pMgrData->GetMap ();
+	m_dwLastEventMapID = 0;
+	m_bHasLastEventTile = FALSE;
 
 	m_pMgrLayer->MakeMAP ();
 	m_pMgrLayer->MakeSYSTEMMSG ();
@@ -196,6 +204,21 @@ void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
 	if (m_pDlgMsgLog->IsWindowVisible ()) {
 		m_pDlgMsgLog->GetWindowRect (&rcDst);
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::SyncLastEventTile								 */
+/* 内容		:イベント再発火抑止用の基準タイルを同期							 */
+/* 日付		:2026/03/08														 */
+/* ========================================================================= */
+
+void CStateProcMAP::SyncLastEventTile(DWORD dwMapID, int x, int y)
+{
+	m_dwLastEventMapID = dwMapID;
+	m_nLastEventTileX = x / MAPPARTSSIZE;
+	m_nLastEventTileY = y / MAPPARTSSIZE;
+	m_bHasLastEventTile = TRUE;
 }
 
 
@@ -253,15 +276,12 @@ BOOL CStateProcMAP::TimerProc(void)
 			}
 		}
 		if (m_pPlayerChar->m_bWaitCheckMapEvent && (m_bSendCheckMapEvent == FALSE)) {
-			bResult = m_pPlayerChar->IsMove ();
-			if (bResult == FALSE) {
-				CPacketCHAR_PARA1 PacketPara1;
+			CPacketCHAR_PARA1 PacketPara1;
 
-				/* マップイベントチェック */
-				PacketPara1.Make (SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT, m_pPlayerChar->m_dwCharID, 0);
-				m_pSock->Send (&PacketPara1);
-				m_bSendCheckMapEvent = TRUE;
-			}
+			/* Phase 8: 自由移動では停止タイミング依存にすると取りこぼすため、待機フラグ時に即チェック要求する */
+			PacketPara1.Make (SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT, m_pPlayerChar->m_dwCharID, 0);
+			m_pSock->Send (&PacketPara1);
+			m_bSendCheckMapEvent = TRUE;
 		}
 	}
 
@@ -300,19 +320,35 @@ void CStateProcMAP::KeyProc(
 			bLeft = pMgrKeyInput->IsInput (VK_LEFT);
 			bRight = pMgrKeyInput->IsInput (VK_RIGHT);
 			if (!(bUp || bDownKey || bLeft || bRight)) {
+				int nStopState;
+
+				nStopState = CHARMOVESTATE_STAND;
+				if (m_pPlayerChar->IsStateBattle ()) {
+					nStopState = CHARMOVESTATE_BATTLE;
+					if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
+						nStopState = CHARMOVESTATE_BATTLE_DEFENSE;
+					}
+				}
+				if (m_pPlayerChar->IsStateMove ()) {
+					m_pPlayerChar->ChgMoveState (nStopState);
+				}
+				m_pPlayerChar->m_ptMove.x = 0;
+				m_pPlayerChar->m_ptMove.y = 0;
+
 				CPacketCHAR_MOVE_STOP PacketMoveStop;
 				PacketMoveStop.Make (
 					m_pPlayerChar->m_dwMapID,
 					m_pPlayerChar->m_dwCharID,
 					m_pPlayerChar->m_nDirection,
-					m_pPlayerChar->m_nMapX / HALF_TILE,
-					m_pPlayerChar->m_nMapY / HALF_TILE,
+						m_pPlayerChar->m_nMapX,
+						m_pPlayerChar->m_nMapY,
 					FALSE,
 					0,
 					timeGetTime ());
 				m_pSock->Send (&PacketMoveStop);
 				m_bMoveSyncActive = FALSE;
 				m_nMoveSyncDirection = -1;
+				m_dwLastTimeMoveSyncSend = 0;
 			}
 		}
 	}
@@ -388,25 +424,86 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 	case ADMINNOTIFYTYPE_CHARID:			/* キャラID */
 	case ADMINNOTIFYTYPE_ACCOUNTID:			/* アカウントID */
 		{
-			int i, nCount;
+			int i, nCount, nBestScore;
 			PCInfoCharCli pInfoChar;
+			SIZE sizeProbe;
+			int nProbeX, nProbeY;
+			RECT rcProbe;
 
-			/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
-			x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
-			y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
+			/* Phase 8: ドット移動後は見た目と足元判定がずれやすいので、
+			   管理者クリックは描画矩形ベースで少し広めに拾う。 */
+			x = x + pLayerMap->m_nViewX;
+			y = y + pLayerMap->m_nViewY;
 			dwNotifyData = 0;
-			size.cx = size.cy = 1;
+			sizeProbe.cx = MAPPARTSSIZE / 2;
+			sizeProbe.cy = HALF_TILE;
+			nProbeX = x - (sizeProbe.cx / 2);
+			nProbeY = y - (sizeProbe.cy / 2);
+			SetRect (&rcProbe, nProbeX, nProbeY, nProbeX + sizeProbe.cx - 1, nProbeY + sizeProbe.cy - 1);
+			nBestScore = INT_MAX;
 
 			nCount = m_pLibInfoChar->GetCount ();
 			for (i = 0; i < nCount; i ++) {
+				RECT rcChar;
+				RECT rcCharScreen;
+				int nScreenX, nScreenY;
 				pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
-				if (pInfoChar->IsHitCharPos (x, y, &size)) {
+				if (pInfoChar == NULL) {
+					continue;
+				}
+				SetRect (&rcChar,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY - HALF_TILE,
+					pInfoChar->m_nMapX + MAPPARTSSIZE - 1,
+					pInfoChar->m_nMapY + HALF_TILE - 1);
+				if ((rcChar.left <= rcProbe.right) && (rcProbe.left <= rcChar.right) &&
+					(rcChar.top <= rcProbe.bottom) && (rcProbe.top <= rcChar.bottom)) {
+					int nScore;
+
+					nScore = abs (pInfoChar->m_nMapX - x) + abs (pInfoChar->m_nMapY - y);
+					if (nScore >= nBestScore) {
+						continue;
+					}
+					nBestScore = nScore;
 					dwNotifyData = pInfoChar->m_dwCharID;
 					if (nType == ADMINNOTIFYTYPE_ACCOUNTID) {
 						dwNotifyData = pInfoChar->m_dwAccountID;
 					}
-					break;
 				}
+				nScreenX = pInfoChar->m_nMapX - pLayerMap->m_nViewX;
+				nScreenY = pInfoChar->m_nMapY - pLayerMap->m_nViewY - HALF_TILE;
+				SetRect (&rcCharScreen,
+					nScreenX - 8,
+					nScreenY - 8,
+					nScreenX + MAPPARTSSIZE - 1 + 8,
+					nScreenY + MAPPARTSSIZE - 1 + 8);
+				if ((x >= rcCharScreen.left) && (x <= rcCharScreen.right) &&
+					(y >= rcCharScreen.top) && (y <= rcCharScreen.bottom)) {
+					int nScore;
+
+					nScore = abs ((nScreenX + HALF_TILE) - x);
+					nScore += abs ((nScreenY + HALF_TILE) - y);
+					if (nScore >= nBestScore) {
+						continue;
+					}
+					nBestScore = nScore;
+					dwNotifyData = pInfoChar->m_dwCharID;
+					if (nType == ADMINNOTIFYTYPE_ACCOUNTID) {
+						dwNotifyData = pInfoChar->m_dwAccountID;
+					}
+				}
+			}
+			{
+				CString strDbg;
+				strDbg.Format (_T("[AdminCharPick] left_click screen=(%d,%d) world=(%d,%d) type=%d notify=%u count=%d\r\n"),
+					x - pLayerMap->m_nViewX,
+					y - pLayerMap->m_nViewY,
+					x,
+					y,
+					nType,
+					dwNotifyData,
+					nCount);
+				OutputDebugString (strDbg);
 			}
 			PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		}
@@ -473,9 +570,9 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
-		/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
-		x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
-		y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
+		/* Phase 8: キャラ座標通知はワールドpx座標で返す */
+		x = x + pLayerMap->m_nViewX;
+		y = y + pLayerMap->m_nViewY;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		break;
@@ -534,9 +631,9 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
-		/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
-		x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
-		y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
+		/* Phase 8: キャラ座標通知はワールドpx座標で返す */
+		x = x + pLayerMap->m_nViewX;
+		y = y + pLayerMap->m_nViewY;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDOWN, dwNotifyData);
 		break;
@@ -574,9 +671,9 @@ void CStateProcMAP::OnRButtonDblClk(int x, int y)
 		break;
 
 	case ADMINNOTIFYTYPE_CHARPOS:			/* キャラ座標 */
-		/* Phase 3: 画面クリックpx + カメラpx = ワールドpx → 旧スケール */
-		x = (x + pLayerMap->m_nViewX) / SCROLLSIZE;
-		y = (y + pLayerMap->m_nViewY) / SCROLLSIZE;
+		/* Phase 8: 右ダブルクリックも右クリックと同じくワールドpx座標で返す */
+		x = x + pLayerMap->m_nViewX;
+		y = y + pLayerMap->m_nViewY;
 		dwNotifyData = MAKELPARAM (y, x);
 		PostAdminUiMessage (WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK, dwNotifyData);
 		break;
@@ -799,6 +896,7 @@ void CStateProcMAP::CreateAdminUi(void)
 		return;
 	}
 	if (m_AdminUi.Create (m_pMgrData->GetMainWindow (), m_pMgrData)) {
+		m_AdminUi.Show ();
 		m_hWndAdmin = m_AdminUi.GetWindow ();
 	} else {
 		m_hWndAdmin = NULL;
@@ -1313,14 +1411,15 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 							m_pPlayerChar->m_dwMapID,
 							m_pPlayerChar->m_dwCharID,
 							anDirection[m_pPlayerChar->m_nDirection],
-							m_pPlayerChar->m_nMapX / HALF_TILE,
-							m_pPlayerChar->m_nMapY / HALF_TILE,
+							m_pPlayerChar->m_nMapX,
+							m_pPlayerChar->m_nMapY,
 							FALSE,
 							1,
 							timeGetTime ());
 					m_pSock->Send (&PacketCHAR_MOVE_STOP);
 					m_bMoveSyncActive = FALSE;
 					m_nMoveSyncDirection = -1;
+					m_dwLastTimeMoveSyncSend = 0;
 
 					m_pPlayerChar->SetChgWait (TRUE);
 					PacketCHAR_STATE.Make (m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLEATACK);
@@ -2356,19 +2455,19 @@ BOOL CStateProcMAP::MoveProc(
 	}
 	if (anDirection.size() == 1) {
 		/* ぶつかる？ */
-		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
+		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection, TRUE, TRUE);
 		if (bResult) {
 			bRet = TRUE;
 			goto Exit;
 		}
 	} else {
-		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection);
+		bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, nDirection, TRUE, TRUE);
 		if (bResult) {
-			bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, anDirection[0]);
+			bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, anDirection[0], TRUE, TRUE);
 			if (bResult == FALSE) {
 				nDirection = anDirection[0];
 			} else {
-				bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, anDirection[1]);
+				bResult = m_pLibInfoChar->IsBlockChar (m_pPlayerChar, anDirection[1], TRUE, TRUE);
 				if (bResult == FALSE) {
 					nDirection = anDirection[1];
 				} else {
@@ -2421,38 +2520,75 @@ ExitSend:
 				m_pPlayerChar->m_dwMapID,
 				m_pPlayerChar->m_dwCharID,
 				nDirectionView,
-				x / HALF_TILE,
-				y / HALF_TILE,
+				x,
+				y,
 				FALSE,
 				1,
 				timeGetTime ());
 			m_pSock->Send (&PacketMoveStart);
 			m_bMoveSyncActive = TRUE;
 			m_nMoveSyncDirection = nDirectionView;
+			m_dwLastTimeMoveSyncSend = timeGetTime ();
 		} else if (m_nMoveSyncDirection != nDirectionView) {
 			PacketMoveDirChange.Make (
 				m_pPlayerChar->m_dwMapID,
 				m_pPlayerChar->m_dwCharID,
 				nDirectionView,
-				x / HALF_TILE,
-				y / HALF_TILE,
+				x,
+				y,
 				FALSE,
 				1,
 				timeGetTime ());
 			m_pSock->Send (&PacketMoveDirChange);
 			m_nMoveSyncDirection = nDirectionView;
+			m_dwLastTimeMoveSyncSend = timeGetTime ();
+		} else if (timeGetTime () - m_dwLastTimeMoveSyncSend >= 100) {
+			PacketMoveDirChange.Make (
+				m_pPlayerChar->m_dwMapID,
+				m_pPlayerChar->m_dwCharID,
+				nDirectionView,
+				x,
+				y,
+				TRUE,
+				1,
+				timeGetTime ());
+			m_pSock->Send (&PacketMoveDirChange);
+			m_dwLastTimeMoveSyncSend = timeGetTime ();
 		}
 	}
 
 	if ((xBack != x) || (yBack != y)) {
-		/* マップ座標を矩形で取得 */
-		m_pPlayerChar->GetMapPosRect (rcTmp);
-		bResult = pMap->IsHitMapEvent (&rcTmp);
-		if (bResult) {
-			/* マップイベントチェック予約 */
+		int nCurTileX, nCurTileY;
+		BOOL bTileChanged;
+		BOOL bMapChanged;
+
+		nCurTileX = x / MAPPARTSSIZE;
+		nCurTileY = y / MAPPARTSSIZE;
+		bMapChanged = FALSE;
+		if (m_bHasLastEventTile && (m_dwLastEventMapID != m_pPlayerChar->m_dwMapID)) {
+			bMapChanged = TRUE;
+		}
+
+		bTileChanged = TRUE;
+		if (m_bHasLastEventTile && (m_dwLastEventMapID == m_pPlayerChar->m_dwMapID)) {
+			bTileChanged = !((m_nLastEventTileX == nCurTileX) && (m_nLastEventTileY == nCurTileY));
+		}
+
+		/* Phase 8: マップ切替直後は再発火防止のため、このフレームは基準更新のみ */
+		if (bMapChanged == FALSE && bTileChanged) {
+			/*
+			   再発火取りこぼし防止:
+			   クライアント側の単一点タイル判定では座標基準差で取りこぼすため、
+			   タイル遷移時はサーバーへチェック要求を出し、最終判定はサーバーに委譲する。
+			*/
 			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
 			m_bSendCheckMapEvent = FALSE;
 		}
+
+		m_dwLastEventMapID = m_pPlayerChar->m_dwMapID;
+		m_nLastEventTileX = nCurTileX;
+		m_nLastEventTileY = nCurTileY;
+		m_bHasLastEventTile = TRUE;
 		m_dwLastTimeGauge = timeGetTime ();
 	}
 

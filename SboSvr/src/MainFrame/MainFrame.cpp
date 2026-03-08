@@ -198,8 +198,8 @@ void CMainFrame::SendToScreenChar(
 		}
 		/* 画面外？ */
 		if (!(
-			(abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * 2 + 2) &&
-			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * 2 + 2))) {
+			(abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * MAPPARTSSIZE + MAPPARTSSIZE) &&
+			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * MAPPARTSSIZE + MAPPARTSSIZE))) {
 			continue;
 		}
 		if (pInfoCharTmp->m_dwSessionID) {

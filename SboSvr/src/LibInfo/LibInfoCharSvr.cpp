@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include <math.h>
+#include <stdio.h>
 #include "SBOGlobal.h"
 #include "UraraSockTCPSBO.h"
 #include "Packet.h"
@@ -1473,8 +1474,8 @@ void CLibInfoCharSvr::GetScreenCharID(
 			continue;
 		}
 		/* 画面外？ */
-		if (!((abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * MAPPARTSSIZE) &&	/* Phase 2: HALF_TILE単位→px単位 */
-			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * HALF_TILE))) {	/* Phase 2: HALF_TILE単位 (15×16=240px) */
+		if (!((abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * MAPPARTSSIZE) &&
+			(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * MAPPARTSSIZE))) {
 			continue;
 		}
 		aDst.push_back (pInfoCharTmp->m_dwCharID);
@@ -1839,8 +1840,8 @@ DWORD CLibInfoCharSvr::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 	int i, nCount;
 	DWORD dwRet;
 	PCInfoCharBase pInfoCharSrc, pInfoCharTmp;
-	POINT ptFront;
-	SIZE size;
+	POINT ptBack, ptFront;
+	RECT rcFrontRect, rcTmp;
 
 	dwRet = 0;
 
@@ -1849,7 +1850,13 @@ DWORD CLibInfoCharSvr::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 		goto Exit;
 	}
 	pInfoCharSrc->GetFrontPos (ptFront, nDirection, FALSE);
-	pInfoCharSrc->GetCharSize (size);
+	ptBack.x = pInfoCharSrc->m_nMapX;
+	ptBack.y = pInfoCharSrc->m_nMapY;
+	pInfoCharSrc->m_nMapX = ptFront.x;
+	pInfoCharSrc->m_nMapY = ptFront.y;
+	pInfoCharSrc->GetPosRect (rcFrontRect);
+	pInfoCharSrc->m_nMapX = ptBack.x;
+	pInfoCharSrc->m_nMapY = ptBack.y;
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
@@ -1866,7 +1873,9 @@ DWORD CLibInfoCharSvr::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
 			continue;
 		}
-		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
+		pInfoCharTmp->GetPosRect (rcTmp);
+		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
+			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
 			continue;
 		}
 		dwRet = pInfoCharTmp->m_dwCharID;
@@ -2371,10 +2380,9 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 
 		bResult = CheckMapEvent (pInfoChar);
 		pInfoChar->m_bWaitCheckMapEvent = FALSE;
-		if (bResult) {
-			Packet.Make (SBOCOMMANDID_SUB_CHAR_RES_CHECKMAPEVENT, pInfoChar->m_dwCharID, 0);
-			m_pMainFrame->SendToClient (pInfoChar->m_dwSessionID, &Packet);
-		}
+		/* Phase 8: 判定結果に関わらず応答を返して、クライアント側の待機フラグを確実に解除する */
+		Packet.Make (SBOCOMMANDID_SUB_CHAR_RES_CHECKMAPEVENT, pInfoChar->m_dwCharID, bResult ? 1 : 0);
+		m_pMainFrame->SendToClient (pInfoChar->m_dwSessionID, &Packet);
 
 	/* マップ内移動 */
 	} else if (pInfoChar->m_bProcMoveMapIn) {
@@ -2524,8 +2532,8 @@ void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_dwMapID,
 			pInfoChar->m_dwCharID,
 			pInfoChar->m_nDirection,
-			pInfoChar->m_nMapX / HALF_TILE,		/* Phase 2: px単位→HALF_TILE変換送信 */
-			pInfoChar->m_nMapY / HALF_TILE,		/* Phase 2: px単位→HALF_TILE変換送信 */
+			pInfoChar->m_nMapX,
+			pInfoChar->m_nMapY,
 			pInfoChar->m_bChgUpdatePos,
 			1,
 			timeGetTime ());
@@ -2703,11 +2711,16 @@ Exit:
 void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 {
 	int cx, cy;
+	int i;
+	int nGridLeft, nGridRight, nGridTop, nGridBottom;
 	BOOL bResult;
 	PCInfoMapBase pInfoMap;
 	PCInfoCharSvr pInfoCharTmp, pInfoCharAdd;
 	POINT ptPos;
 	RECT rcPut;
+#ifdef _DEBUG
+	char szDebug[512];
+#endif
 
 	pInfoCharTmp = NULL;
 
@@ -2717,19 +2730,46 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 	}
 
 	/* 座標を設定 */
-	rcPut.left		= pInfoChar->m_nMapX - pInfoChar->m_ptPutArea.x;
+	rcPut.left		= pInfoChar->m_nMapX - (pInfoChar->m_ptPutArea.x * HALF_TILE);
 	rcPut.left		= max (rcPut.left, 0);
-	rcPut.right		= pInfoChar->m_nMapX + pInfoChar->m_ptPutArea.x;
-	rcPut.right		= min (rcPut.right, (pInfoMap->m_sizeMap.cx - 1) * 2);
-	rcPut.top		= pInfoChar->m_nMapY - pInfoChar->m_ptPutArea.y;
+	rcPut.right		= pInfoChar->m_nMapX + (pInfoChar->m_ptPutArea.x * HALF_TILE);
+	rcPut.right		= min (rcPut.right, (pInfoMap->m_sizeMap.cx - 1) * MAPPARTSSIZE);
+	rcPut.top		= pInfoChar->m_nMapY - (pInfoChar->m_ptPutArea.y * HALF_TILE);
 	rcPut.top		= max (rcPut.top, 0);
-	rcPut.bottom	= pInfoChar->m_nMapY + pInfoChar->m_ptPutArea.y;
-	rcPut.bottom	= min (rcPut.bottom, (pInfoMap->m_sizeMap.cy - 1) * 2);
+	rcPut.bottom	= pInfoChar->m_nMapY + (pInfoChar->m_ptPutArea.y * HALF_TILE);
+	rcPut.bottom	= min (rcPut.bottom, (pInfoMap->m_sizeMap.cy - 1) * MAPPARTSSIZE);
 
-	cx = rcPut.right - rcPut.left + 1;
-	cy = rcPut.bottom - rcPut.top + 1;
-	ptPos.x = (genrand () % cx) + rcPut.left;
-	ptPos.y = (genrand () % cy) + rcPut.top;
+	nGridLeft	= rcPut.left / HALF_TILE;
+	nGridRight	= rcPut.right / HALF_TILE;
+	nGridTop	= rcPut.top / HALF_TILE;
+	nGridBottom	= rcPut.bottom / HALF_TILE;
+	if ((nGridLeft > nGridRight) || (nGridTop > nGridBottom)) {
+		goto Exit;
+	}
+
+	cx = nGridRight - nGridLeft + 1;
+	cy = nGridBottom - nGridTop + 1;
+	ptPos.x = ((genrand () % cx) + nGridLeft) * HALF_TILE;
+	ptPos.y = ((genrand () % cy) + nGridTop) * HALF_TILE;
+#ifdef _DEBUG
+	sprintf_s (
+		szDebug,
+		sizeof (szDebug),
+		"[PutNpc] parentCharID=%lu mapID=%lu parentPos=(%d,%d) putArea=(%d,%d) rc=(%ld,%ld)-(%ld,%ld) candidate=(%d,%d)\n",
+		(unsigned long)pInfoChar->m_dwCharID,
+		(unsigned long)pInfoChar->m_dwMapID,
+		pInfoChar->m_nMapX,
+		pInfoChar->m_nMapY,
+		pInfoChar->m_ptPutArea.x,
+		pInfoChar->m_ptPutArea.y,
+		rcPut.left,
+		rcPut.top,
+		rcPut.right,
+		rcPut.bottom,
+		ptPos.x,
+		ptPos.y);
+	OutputDebugStringA (szDebug);
+#endif
 
 	pInfoCharTmp = (PCInfoCharSvr)GetNew (pInfoChar->m_nPutMoveType);
 	pInfoCharTmp->Copy (pInfoChar);
@@ -2739,18 +2779,46 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 	pInfoCharTmp->m_nMoveType		= pInfoChar->m_nPutMoveType;
 	pInfoCharTmp->m_nMapX			= ptPos.x;
 	pInfoCharTmp->m_nMapY			= ptPos.y;
-	pInfoCharTmp->m_nDirection		= 1;
+	pInfoCharTmp->m_nDirection		= pInfoChar->m_nDirection;
 	pInfoCharTmp->m_ptStartPos.x	= ptPos.x;
 	pInfoCharTmp->m_ptStartPos.y	= ptPos.y;
 
-	bResult = IsMove (pInfoCharTmp, pInfoCharTmp->m_nDirection);
+	bResult = FALSE;
+	for (i = 0; i < 4; i ++) {
+		pInfoCharTmp->m_nDirection = i;
+		if (IsMove (pInfoCharTmp, pInfoCharTmp->m_nDirection)) {
+			bResult = TRUE;
+			break;
+		}
+	}
 	if (bResult == FALSE) {
+#ifdef _DEBUG
+		sprintf_s (
+			szDebug,
+			sizeof (szDebug),
+			"[PutNpc] rejected candidate parentCharID=%lu candidate=(%d,%d)\n",
+			(unsigned long)pInfoChar->m_dwCharID,
+			ptPos.x,
+			ptPos.y);
+		OutputDebugStringA (szDebug);
+#endif
 		goto Exit;
 	}
 
 	pInfoCharAdd = (PCInfoCharSvr)AddNPC (pInfoCharTmp);
 	pInfoCharAdd->SetMap (pInfoMap);
 	pInfoCharAdd->SetLibInfoChar (this);
+#ifdef _DEBUG
+	sprintf_s (
+		szDebug,
+		sizeof (szDebug),
+		"[PutNpc] added charID=%lu pos=(%d,%d) dir=%d\n",
+		(unsigned long)pInfoCharAdd->m_dwCharID,
+		pInfoCharAdd->m_nMapX,
+		pInfoCharAdd->m_nMapY,
+		pInfoCharAdd->m_nDirection);
+	OutputDebugStringA (szDebug);
+#endif
 
 	pInfoChar->IncPutCount ();
 	pInfoChar->m_bChgPutNpc = FALSE;
@@ -2877,8 +2945,8 @@ void CLibInfoCharSvr::GetTargetCharID(CInfoCharSvr *pInfoChar, int nTarget, int 
 			}
 			/* 画面外？ */
 			if (!(
-				(abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * 2 + 2) &&
-				(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * 2 + 2))) {
+				(abs (pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * MAPPARTSSIZE + MAPPARTSSIZE) &&
+				(abs (pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * MAPPARTSSIZE + MAPPARTSSIZE))) {
 				continue;
 			}
 			if (nTarget == CHARTARGET_ALLY) {

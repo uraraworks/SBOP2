@@ -125,7 +125,6 @@ CAdminWindow::CAdminWindow()
 
 CAdminWindow::~CAdminWindow()
 {
-	Destroy ();
 }
 
 
@@ -139,6 +138,10 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData, const SboAdminUiH
 {
 	BOOL bRet;
 	CRect rc;
+	CRect rcWork;
+	HWND hAnchorWnd;
+	HMONITOR hMonitor;
+	MONITORINFO mi;
 	LPCTSTR pszClass;
 
 	m_pMgrData		= pMgrData;
@@ -158,6 +161,26 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData, const SboAdminUiH
 	rc.left		= rc.right;
 	rc.right	= rc.left + 400;
 	rc.bottom	= rc.top + 300;
+
+	hAnchorWnd = (m_hWndParent && IsWindow (m_hWndParent)) ? m_hWndParent : ::GetDesktopWindow ();
+	hMonitor = MonitorFromWindow (hAnchorWnd, MONITOR_DEFAULTTONEAREST);
+	ZeroMemory (&mi, sizeof (mi));
+	mi.cbSize = sizeof (mi);
+	if (GetMonitorInfo (hMonitor, &mi)) {
+		rcWork = mi.rcWork;
+		if (rc.left < rcWork.left) {
+			rc.OffsetRect (rcWork.left - rc.left, 0);
+		}
+		if (rc.top < rcWork.top) {
+			rc.OffsetRect (0, rcWork.top - rc.top);
+		}
+		if (rc.right > rcWork.right) {
+			rc.OffsetRect (rcWork.right - rc.right, 0);
+		}
+		if (rc.bottom > rcWork.bottom) {
+			rc.OffsetRect (0, rcWork.bottom - rc.bottom);
+		}
+	}
 
 	pszClass = AfxRegisterWndClass(
 		CS_HREDRAW | CS_VREDRAW,
@@ -193,14 +216,26 @@ BOOL CAdminWindow::Create(HWND hWndParent, CMgrData *pMgrData, const SboAdminUiH
 
 void CAdminWindow::Destroy(void)
 {
-	if (m_hWnd) {
-		PostMessage (WM_CLOSE);
+	HWND hWndAdmin;
+
+	hWndAdmin = GetSafeHwnd ();
+	if (m_pWndMap) {
+		if (IsWindow (m_pWndMap->GetSafeHwnd ())) {
+			m_pWndMap->Destroy ();
+		}
+		m_pWndMap = NULL;
+	}
+	if (m_pDlgBase) {
+		if (IsWindow (m_pDlgBase->GetSafeHwnd ())) {
+			m_pDlgBase->DestroyWindow ();
+		}
+		m_pDlgBase = NULL;
+	}
+	if (hWndAdmin && IsWindow (hWndAdmin)) {
+		CWnd::DestroyWindow ();
 	}
 
-	if (m_hInitEventWindow) {
-		CloseHandle (m_hInitEventWindow);
-		m_hInitEventWindow = NULL;
-	}
+	m_hInitEventWindow = NULL;
 
 	/* 変数を初期化 */
 	m_pWndParent	= NULL;
@@ -362,16 +397,16 @@ void CAdminWindow::ChgScreen(int nScrID)
 		break;
 	}
 	if ((m_pHost) && (m_pHost->SetAdminNotifyTypes)) {
-		m_pHost->SetAdminNotifyTypes (m_pHost->userData, nTypeL, nTypeR, nTypeR);
+		m_pHost->SetAdminNotifyTypes (m_pHost->userData, nTypeL, nTypeR, nTypeRR);
 	} else {
 		m_pMgrData->SetAdminNotifyTypeL (nTypeL);
 		m_pMgrData->SetAdminNotifyTypeR (nTypeR);
-		m_pMgrData->SetAdminNotifyTypeRR (nTypeR);
+		m_pMgrData->SetAdminNotifyTypeRR (nTypeRR);
 	}
 
 	if (m_pDlgBase) {
-		m_pDlgBase->Init (m_pMgrData);
 		m_pDlgBase->SetHost (m_pHost);
+		m_pDlgBase->Init (m_pMgrData);
 		m_pDlgBase->SetWindowPos (NULL, 0, 0, rc.right, rc.bottom, SWP_NOZORDER | SWP_NOMOVE | SWP_NOREDRAW);
 		RegisterControl (m_pDlgBase->m_hWnd, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 	}
@@ -473,8 +508,25 @@ int CAdminWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CAdminWindow::OnDestroy()
 {
+	if (m_pWndMap) {
+		if (IsWindow (m_pWndMap->GetSafeHwnd ())) {
+			m_pWndMap->Destroy ();
+		}
+		m_pWndMap = NULL;
+	}
+	if (m_pDlgBase) {
+		if (IsWindow (m_pDlgBase->GetSafeHwnd ())) {
+			m_pDlgBase->DestroyWindow ();
+		}
+		m_pDlgBase = NULL;
+	}
+	if ((m_pHost) && (m_pHost->SetAdminWindow)) {
+		m_pHost->SetAdminWindow (m_pHost->userData, NULL);
+	} else if (m_pMgrData) {
+		m_pMgrData->SetAdminWindow (NULL);
+	}
+	m_hWnd = NULL;
 	CWnd::OnDestroy ();
-	PostQuitMessage (0);
 }
 
 
@@ -486,7 +538,7 @@ void CAdminWindow::OnDestroy()
 
 void CAdminWindow::PostNcDestroy()
 {
-//	delete this;
+	delete this;
 }
 
 

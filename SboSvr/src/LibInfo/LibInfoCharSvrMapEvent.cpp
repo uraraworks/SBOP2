@@ -17,6 +17,63 @@
 #include "MgrData.h"
 #include "LibInfoCharSvr.h"
 
+static int MapTileToPixelX(int x)
+{
+	return x * MAPPARTSSIZE;
+}
+
+static int MapTileToPixelY(int y)
+{
+	return y * MAPPARTSSIZE;
+}
+
+static void GetMapEventTileRect(RECT &rcDst, int x, int y)
+{
+	SetRect (
+		&rcDst,
+		MapTileToPixelX (x),
+		MapTileToPixelY (y),
+		MapTileToPixelX (x) + MAPPARTSSIZE - 1,
+		MapTileToPixelY (y) + MAPPARTSSIZE - 1);
+}
+
+static void GetMapEventCharRect(RECT &rcDst, PCInfoCharSvr pInfoChar)
+{
+	/*
+	   イベント判定は見た目に近い「足元 1 タイル x 0.5 タイル」で扱う。
+	   全身矩形だとドット移動移行後に上下イベントの見た目と判定がずれやすい。
+	*/
+	SetRect (
+		&rcDst,
+		pInfoChar->m_nMapX,
+		pInfoChar->m_nMapY - HALF_TILE + 1,
+		pInfoChar->m_nMapX + MAPPARTSSIZE - 1,
+		pInfoChar->m_nMapY);
+}
+
+static BOOL IsMapEventRectOverlapEnough(const RECT &rcChar, const RECT &rcEvent)
+{
+	int nOverlapX, nOverlapY;
+
+	nOverlapX = min (rcChar.right, rcEvent.right) - max (rcChar.left, rcEvent.left) + 1;
+	nOverlapY = min (rcChar.bottom, rcEvent.bottom) - max (rcChar.top, rcEvent.top) + 1;
+	if ((nOverlapX <= 0) || (nOverlapY <= 0)) {
+		return FALSE;
+	}
+
+	/*
+	   触れた瞬間ではなく、ある程度乗った状態で発火させる。
+	   8px は 32x16 の足元矩形に対して、見た目と操作感のバランスが良い最小重なり。
+	*/
+	if (nOverlapX < 8) {
+		return FALSE;
+	}
+	if (nOverlapY < 8) {
+		return FALSE;
+	}
+	return TRUE;
+}
+
 
 /* ========================================================================= */
 /* 関数名	:CLibInfoCharSvr::CheckMapEvent									 */
@@ -47,9 +104,21 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 		goto Exit;
 	}
 	pInfoMapEventBase = NULL;
-	/* 座標を矩形で取得 */
-	pInfoChar->GetPosRect (rcChar);
+	/* イベント判定用の足元矩形を取得 */
+	GetMapEventCharRect (rcChar, pInfoChar);
 	pInfoChar->GetMapPosRect (rcMap);
+
+	if (pInfoChar->m_bSuppressMapEventUntilLeave) {
+		if ((pInfoChar->m_dwSuppressMapEventMapID == pInfoChar->m_dwMapID) &&
+			(rcMap.left <= pInfoChar->m_nSuppressMapEventTileX) && (pInfoChar->m_nSuppressMapEventTileX <= rcMap.right) &&
+			(rcMap.top <= pInfoChar->m_nSuppressMapEventTileY) && (pInfoChar->m_nSuppressMapEventTileY <= rcMap.bottom)) {
+			bRet = FALSE;
+			goto Exit;
+		}
+
+		pInfoChar->m_bSuppressMapEventUntilLeave = FALSE;
+		pInfoChar->m_dwSuppressMapEventMapID = 0;
+	}
 
 	bBreak = FALSE;
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
@@ -63,22 +132,24 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 			pptPos2 = &pInfoMapEventBase->m_ptPos2;
 			switch (pInfoMapEventBase->m_nHitType) {
 			case MAPEVENTHITTYPE_MAPPOS:		/* マップ座標縦横いずれか */
-				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
-				bResult = IsInRect (&rcChar, &rcMapEvent);
+				GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
+				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
 				break;
 			case MAPEVENTHITTYPE_CHARPOS:		/* キャラ座標 */
-				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos1->x * 2 + 1, pptPos1->y * 2 + 1);
-				bResult = IsHitRect (&rcChar, &rcMapEvent);
+				GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
+				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
 				break;
 			case MAPEVENTHITTYPE_AREA:			/* 範囲 */
-				SetRect (&rcMapEvent, pptPos1->x * 2, pptPos1->y * 2, pptPos2->x * 2 + 1, pptPos2->y * 2 + 1);
-				bResult = IsInRect (&rcChar, &rcMapEvent);
+				SetRect (&rcMapEvent,
+					MapTileToPixelX (pptPos1->x),
+					MapTileToPixelY (pptPos1->y),
+					MapTileToPixelX (pptPos2->x) + MAPPARTSSIZE - 1,
+					MapTileToPixelY (pptPos2->y) + MAPPARTSSIZE - 1);
+				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
 				break;
 			case MAPEVENTHITTYPE_MAPPOS2:		/* マップ座標完全一致 */
-				bResult = FALSE;
-				if ((rcChar.left == pptPos1->x * 2) & (rcChar.top == pptPos1->y * 2 + 1)) {
-					bResult = TRUE;
-				}
+				GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
+				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
 				break;
 			}
 			if (bResult == FALSE) {
@@ -149,7 +220,7 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 	CPacketCHAR_STATE PacketCHAR_STATE;
         ARRAYINFOCHARSVR apInfoChar;
 
-	bRet = FALSE;
+	bRet = TRUE;
 	pInfoMapEvent = (PCInfoMapEventMOVE)pInfoMapEventBase;
 
 	nDirection = pInfoMapEvent->m_nDirection;
@@ -164,7 +235,14 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 		PacketCHAR_STATE.Make (pInfoCharTmp->m_dwCharID, CHARMOVESTATE_DELETE);
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_STATE);
 
-		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2 + 1, TRUE);
+		pInfoCharTmp->SetPos (
+			MapTileToPixelX (pInfoMapEvent->m_ptDst.x),
+			MapTileToPixelY (pInfoMapEvent->m_ptDst.y) + MAPPARTSSIZE,
+			TRUE);
+		pInfoCharTmp->m_bSuppressMapEventUntilLeave = TRUE;
+		pInfoCharTmp->m_dwSuppressMapEventMapID = pInfoCharTmp->m_dwMapID;
+		pInfoCharTmp->m_nSuppressMapEventTileX = pInfoMapEvent->m_ptDst.x;
+		pInfoCharTmp->m_nSuppressMapEventTileY = pInfoMapEvent->m_ptDst.y;
 		if (nDirection >= 0) {
 			pInfoCharTmp->SetDirection (nDirection);
 		}
@@ -197,7 +275,7 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 	CPacketCHAR_STATE PacketCHAR_STATE;
         ARRAYINFOCHARSVR apInfoChar;
 
-	bRet = FALSE;
+	bRet = TRUE;
 	pInfoMapEvent = (PCInfoMapEventMAPMOVE)pInfoMapEventBase;
 
 	nDirection = pInfoMapEvent->m_nDirection;
@@ -214,7 +292,14 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 		m_pMainFrame->SendToScreenChar (pInfoCharTmp, &PacketCHAR_STATE);
 
 		pInfoCharTmp->m_dwMapID = pInfoMapEvent->m_dwMapID;
-		pInfoCharTmp->SetPos (pInfoMapEvent->m_ptDst.x * 2, pInfoMapEvent->m_ptDst.y * 2 + 1, TRUE);
+		pInfoCharTmp->SetPos (
+			MapTileToPixelX (pInfoMapEvent->m_ptDst.x),
+			MapTileToPixelY (pInfoMapEvent->m_ptDst.y) + MAPPARTSSIZE,
+			TRUE);
+		pInfoCharTmp->m_bSuppressMapEventUntilLeave = TRUE;
+		pInfoCharTmp->m_dwSuppressMapEventMapID = pInfoCharTmp->m_dwMapID;
+		pInfoCharTmp->m_nSuppressMapEventTileX = pInfoMapEvent->m_ptDst.x;
+		pInfoCharTmp->m_nSuppressMapEventTileY = pInfoMapEvent->m_ptDst.y;
 		if (nDirection >= 0) {
 			pInfoCharTmp->SetDirection (nDirection);
 		}

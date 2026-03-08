@@ -21,6 +21,37 @@
 #include "LibInfoCharCli.h"
 
 
+static void GetMoveCheckMapRect(
+	PCInfoCharBase pInfoChar,
+	RECT &rcDst,
+	int nDirection)
+{
+	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	int nMapXBack, nMapYBack;
+	int nMovePixel;
+
+	nMapXBack = pInfoChar->m_nMapX;
+	nMapYBack = pInfoChar->m_nMapY;
+	nMovePixel = CHAR_MOVE_COLLISION_LOOKAHEAD;
+	if (nMovePixel <= 0) {
+		nMovePixel = 1;
+	}
+	if (nMovePixel > CHAR_MOVE_SPEED) {
+		nMovePixel = CHAR_MOVE_SPEED;
+	}
+
+	pInfoChar->m_nMapX = nMapXBack + anPosX[nDirection] * nMovePixel;
+	pInfoChar->m_nMapY = nMapYBack + anPosY[nDirection] * nMovePixel;
+	pInfoChar->GetMapPosRect (rcDst);
+	pInfoChar->m_nMapX = nMapXBack;
+	pInfoChar->m_nMapY = nMapYBack;
+
+	if ((rcDst.left < 0) || (rcDst.top < 0)) {
+		SetRect (&rcDst, -1, -1, -1, -1);
+	}
+}
+
+
 /* ========================================================================= */
 /* 関数名	:CLibInfoCharCli::CLibInfoCharCli								 */
 /* 内容		:コンストラクタ													 */
@@ -129,6 +160,7 @@ BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/
 {
 	BOOL bRet;
 	int i, nCount, nState;
+	int nViewRangeX, nViewRangeY;
 	PCInfoCharCli pCharTmp;
 
 	bRet = FALSE;
@@ -141,6 +173,11 @@ BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/
 		nState = CHARMOVESTATE_DELETE;
 	}
 
+	/* Phase 8: m_nMapX/Y はpx単位。旧判定(DRAW_PARTS_* * 2)は旧座標系向けのため、
+	   画面可視範囲(px)ベースへ更新して誤DELETEREADYを防ぐ。 */
+	nViewRangeX = DRAW_PARTS_X * MAPPARTSSIZE + MAPPARTSSIZE;
+	nViewRangeY = DRAW_PARTS_Y * MAPPARTSSIZE + MAPPARTSSIZE;
+
 	nCount = GetCount ();
 	for (i = nCount - 1; i >= 0; i --) {
 		pCharTmp = (PCInfoCharCli)GetPtr (i);
@@ -150,8 +187,8 @@ BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/
 		/* 同マップ？ */
 		if (pCharTmp->m_dwMapID == pChar->m_dwMapID) {
 			/* 画面内？ */
-			if ((abs (pCharTmp->m_nMapX - pChar->m_nMapX) < (DRAW_PARTS_X * 2) + 1) &&
-				(abs (pCharTmp->m_nMapY - pChar->m_nMapY) < (DRAW_PARTS_Y * 2) + 1)) {
+			if ((abs (pCharTmp->m_nMapX - pChar->m_nMapX) <= nViewRangeX) &&
+				(abs (pCharTmp->m_nMapY - pChar->m_nMapY) <= nViewRangeY)) {
 				continue;
 			}
 		}
@@ -452,7 +489,7 @@ BOOL CLibInfoCharCli::IsMove(
 
 	/* 脱出可能かチェック */
 	bResult = FALSE;
-	pInfoChar->GetFrontMapPosRect (rcMap, nDirection);
+	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
 		for (x = rcMap.left; x <= rcMap.right; x ++) {
 			bResult |= !pInfoMap->IsMoveOut (x, y, nDirection);
@@ -465,7 +502,7 @@ BOOL CLibInfoCharCli::IsMove(
 
 	/* 進めるかチェック */
 	bResult = FALSE;
-	pInfoChar->GetFrontMapPosRect (rcMap, nDirection);
+	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
 		for (x = rcMap.left; x <= rcMap.right; x ++) {
 			bResult |= !pInfoMap->IsMove (x, y, nDirection);

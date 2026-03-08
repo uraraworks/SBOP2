@@ -341,6 +341,7 @@ void CMainFrame::OnSDLDestroy(void)
 	if (m_pSock) {
 		m_pSock->Destroy ();
 	}
+	SAFE_DELETE (m_pStateProc);
 }
 
 
@@ -966,11 +967,17 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 
 	case TIMERID_ACTIVECHECK:	/* アクティブウィンドウチェックタイマー */
 		{
-			HWND hWnd;
+			HWND hWndFocus, hWndForeground;
+			SDL_Window *pFocusWindow;
 
 			m_bWindowActive = FALSE;
-			hWnd = GetFocus ();
-			if (m_hWnd == hWnd) {
+			hWndFocus = GetFocus ();
+			hWndForeground = GetForegroundWindow ();
+			pFocusWindow = SDL_GetKeyboardFocus ();
+			if ((m_hWnd == hWndFocus) ||
+				(m_hWnd == hWndForeground) ||
+				(pFocusWindow != NULL) ||
+				(hWndFocus && IsChild (m_hWnd, hWndFocus))) {
 				m_bWindowActive = TRUE;
 			}
 		}
@@ -1007,7 +1014,9 @@ void CMainFrame::OnActivate(HWND hWnd, UINT state, HWND hwndActDeact, BOOL fMini
 	/* 非アクティブになる？ */
 	if (state == WA_INACTIVE) {
 		m_bWindowActive = FALSE;
-		m_pMgrKeyInput->Reset ();
+		if (m_pMgrKeyInput) {
+			m_pMgrKeyInput->Reset ();
+		}
 
 	} else {
 		m_bWindowActive = TRUE;
@@ -1322,11 +1331,10 @@ void CMainFrame::KeyProc(void)
 	BOOL bResult, bDown;
 	BYTE byCode, byCodeTmp, abyCode[] = {VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT, 0};
 
-	if (m_bWindowActive == FALSE) {
+	if (m_pMgrKeyInput == NULL) {
 		return;
 	}
-	if (GetForegroundWindow () != m_hWnd) {
-		m_bWindowActive = FALSE;
+	if ((m_hWnd == NULL) || (IsWindowVisible (m_hWnd) == FALSE)) {
 		return;
 	}
 

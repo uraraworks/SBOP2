@@ -124,8 +124,12 @@ public:
 			m_dwEfcBalloonID,			/* 噴出しID */
 			m_dwMotionID,				/* モーションID */
 			m_dwMoveCount,				/* 移動歩数 */
+			m_dwSuppressMapEventMapID,	/* 再発火抑止中のマップID */
 			m_dwLastRecvMoveTime,		/* 最終移動受信時刻(ms) */
 			m_dwLastRecvMovePacketTime;	/* 最終移動受信パケット時刻(ms) */
+	int		m_nSuppressMapEventTileX,	/* 再発火抑止中のタイルX */
+			m_nSuppressMapEventTileY;	/* 再発火抑止中のタイルY */
+	BOOL	m_bSuppressMapEventUntilLeave;/* 抑止タイルを出るまでイベント再発火を抑止 */
 
 	CInfoMapBase	*m_pInfoMap;		/* マップ情報 */
 	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* キャラ情報ライブラリ */

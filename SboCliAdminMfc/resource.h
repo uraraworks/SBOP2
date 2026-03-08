@@ -1,0 +1,1 @@
+#include "..\\SboCli\\resource.h"

@@ -351,6 +351,9 @@
     <ClInclude Include="include\AdminUiApi.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SboCliAdminMfc.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -65,8 +65,12 @@ void CLayerCloud::Create(
 	pChar		= pMgrData->GetPlayerChar ();
 
 	if (pChar) {
-		m_nPosXBack	= pChar->m_nMapX;
-		m_nPosYBack	= pChar->m_nMapY;
+		/*
+		   雲レイヤーは旧来「HALF_TILE単位」を前提に視差計算しているため、
+		   自由移動(px)座標をそのまま使うと 16 倍速相当で流れてしまう。
+		*/
+		m_nPosXBack	= pChar->m_nMapX / HALF_TILE;
+		m_nPosYBack	= pChar->m_nMapY / HALF_TILE;
 	}
 
 	pMgrLayer	= pMgrData->GetMgrLayer ();
@@ -82,7 +86,8 @@ void CLayerCloud::Create(
 
 void CLayerCloud::Draw(PCImg32 pDst)
 {
-	int i, x, y, xx, yy, cx, cy, nTmp, nMoveX, nMoveY, nPosX, nPosY;
+	int i, x, y, xx, yy, cx, cy, nMoveX, nMoveY;
+	double dTmp, dPosX, dPosY, dX, dY;
 	int anPos[] = {
 			5, 10, 42, 26,
 			2, 40, 78, 46,
@@ -95,26 +100,27 @@ void CLayerCloud::Draw(PCImg32 pDst)
 
 	nMoveX	= 0;
 	nMoveY	= 0;
-	nPosX	= 0;
-	nPosY	= 0;
+	dPosX	= 0.0;
+	dPosY	= 0.0;
 
 	if (m_pLayerMap) {
 		nMoveX	= m_pLayerMap->m_nMoveX;
 		nMoveY	= m_pLayerMap->m_nMoveY;
-		nPosX	= m_pLayerMap->m_nViewX;
-		nPosY	= m_pLayerMap->m_nViewY;
+		/* m_nViewX/Y はpx単位。HALF_TILE正規化を実数で行い段階移動を防ぐ */
+		dPosX	= (double)m_pLayerMap->m_nViewX / (double)HALF_TILE;
+		dPosY	= (double)m_pLayerMap->m_nViewY / (double)HALF_TILE;
 
 		if (nMoveX || nMoveY) {
 			/* 移動中の座標を補正 */
 			nMoveX	*= aMoveX[m_pLayerMap->m_byDirection];
 			nMoveY	*= aMoveY[m_pLayerMap->m_byDirection];
-			nPosX	+= aPosX[m_pLayerMap->m_byDirection];
-			nPosY	+= aPosY[m_pLayerMap->m_byDirection];
+			dPosX	+= aPosX[m_pLayerMap->m_byDirection];
+			dPosY	+= aPosY[m_pLayerMap->m_byDirection];
 		}
 	}
 
-	nPosX = m_nCount + (m_nPosXBack - nPosX) * SCROLLSIZE;
-	nPosY = m_nCount + (m_nPosYBack - nPosY) * SCROLLSIZE;
+	dPosX = (double)m_nCount + ((double)m_nPosXBack - dPosX) * (double)SCROLLSIZE;
+	dPosY = (double)m_nCount + ((double)m_nPosYBack - dPosY) * (double)SCROLLSIZE;
 
 	/* 雲を表示 */
 	for (i = 0; ; i ++) {
@@ -122,13 +128,21 @@ void CLayerCloud::Draw(PCImg32 pDst)
 			break;
 		}
 
-		nTmp = SCRSIZEX + (anPos[i * 4 + 2] * 3);
-		x = ((nPosX + (anPos[i * 4 + 0] * 2)) % nTmp) - (anPos[i * 4 + 2] * 2) + nMoveX;
+		dTmp = (double)(SCRSIZEX + (anPos[i * 4 + 2] * 3));
+		dX = fmod (dPosX + (double)(anPos[i * 4 + 0] * 2), dTmp);
+		if (dX < 0) {
+			dX += dTmp;
+		}
+		x = (int)dX - (anPos[i * 4 + 2] * 2) + nMoveX;
 		cx = anPos[i * 4 + 2];
 		xx = anPos[i * 4 + 0];
 
-		nTmp = SCRSIZEY + (anPos[i * 4 + 3] * 3);
-		y = ((nPosY + (anPos[i * 4 + 1] * 2)) % nTmp) - (anPos[i * 4 + 3] * 2) + nMoveY;
+		dTmp = (double)(SCRSIZEY + (anPos[i * 4 + 3] * 3));
+		dY = fmod (dPosY + (double)(anPos[i * 4 + 1] * 2), dTmp);
+		if (dY < 0) {
+			dY += dTmp;
+		}
+		y = (int)dY - (anPos[i * 4 + 3] * 2) + nMoveY;
 		cy = anPos[i * 4 + 3];
 		yy = anPos[i * 4 + 1];
 

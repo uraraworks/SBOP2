@@ -406,17 +406,22 @@ BOOL CLibInfoCharBase::IsBlockChar(
 	BOOL bRet, bResult;
 	int i, nCount, nDirectionBack;
 	PCInfoCharBase pInfoCharTmp;
-	POINT ptFront;
-	RECT rcSrc, rcTmp;
-	SIZE size, sizeTmp;
+	POINT ptBack, ptFront;
+	RECT rcSrc, rcFront, rcTmp;
 
 	bRet = FALSE;
 
+	ptBack.x = pChar->m_nMapX;
+	ptBack.y = pChar->m_nMapY;
 	nDirectionBack = pChar->m_nDirection;
 	pChar->m_nDirection = nDirection;
 	pChar->GetFrontPos (ptFront, nDirection, TRUE);
-	pChar->GetCharSize (size);
 	pChar->GetPosRect (rcSrc);
+	pChar->m_nMapX = ptFront.x;
+	pChar->m_nMapY = ptFront.y;
+	pChar->GetPosRect (rcFront);
+	pChar->m_nMapX = ptBack.x;
+	pChar->m_nMapY = ptBack.y;
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
@@ -431,15 +436,15 @@ BOOL CLibInfoCharBase::IsBlockChar(
 		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 	}
-		GetDistance (sizeTmp, pChar, pInfoCharTmp, TRUE);
-		if ((sizeTmp.cx < 0) || (sizeTmp.cx + sizeTmp.cy >= 1)) {
+		pInfoCharTmp->GetPosRect (rcTmp);
+		if (!((rcFront.left <= rcTmp.right) && (rcTmp.left <= rcFront.right) &&
+			(rcFront.top <= rcTmp.bottom) && (rcTmp.top <= rcFront.bottom))) {
 			continue;
-	}
+		}
 		if (bNoBlockFlg && (pInfoCharTmp->m_bBlock == FALSE)) {
 			continue;
 	}
 		if (bHitCheck) {
-			pInfoCharTmp->GetPosRect (rcTmp);
 			if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
 				(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
 				/* 重なる場合は対象外 */
@@ -682,8 +687,8 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 	int i, nCount;
 	DWORD dwRet;
 	PCInfoCharBase pInfoCharSrc, pInfoCharTmp;
-	POINT ptFront;
-	SIZE size;
+	POINT ptBack, ptFront;
+	RECT rcFrontRect, rcTmp;
 
 	dwRet = 0;
 
@@ -692,7 +697,13 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 		goto Exit;
 	}
 	pInfoCharSrc->GetFrontPos (ptFront, nDirection, TRUE);
-	pInfoCharSrc->GetCharSize (size);
+	ptBack.x = pInfoCharSrc->m_nMapX;
+	ptBack.y = pInfoCharSrc->m_nMapY;
+	pInfoCharSrc->m_nMapX = ptFront.x;
+	pInfoCharSrc->m_nMapY = ptFront.y;
+	pInfoCharSrc->GetPosRect (rcFrontRect);
+	pInfoCharSrc->m_nMapX = ptBack.x;
+	pInfoCharSrc->m_nMapY = ptBack.y;
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
@@ -712,9 +723,11 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
 			continue;
 	}
-		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
+		pInfoCharTmp->GetPosRect (rcTmp);
+		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
+			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
 			continue;
-	}
+		}
 		dwRet = pInfoCharTmp->m_dwCharID;
 		break;
 	}

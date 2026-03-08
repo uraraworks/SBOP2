@@ -55,8 +55,12 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwEfcBalloonID		= 0;
 	m_dwMotionID			= 0;
 	m_dwMoveCount			= 0;
+	m_dwSuppressMapEventMapID = 0;
 	m_dwLastRecvMoveTime	= 0;
 	m_dwLastRecvMovePacketTime = 0;
+	m_nSuppressMapEventTileX = 0;
+	m_nSuppressMapEventTileY = 0;
+	m_bSuppressMapEventUntilLeave = FALSE;
 
 	m_pLibInfoCharSvr		= NULL;
 }
@@ -272,6 +276,10 @@ void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 	m_bChgMoveState		= pSrc->m_bChgMoveState;
 	m_bChgScreenPos		= pSrc->m_bChgScreenPos;
 	m_bChgPosRenew		= pSrc->m_bChgPosRenew;
+	m_dwSuppressMapEventMapID = pSrc->m_dwSuppressMapEventMapID;
+	m_nSuppressMapEventTileX = pSrc->m_nSuppressMapEventTileX;
+	m_nSuppressMapEventTileY = pSrc->m_nSuppressMapEventTileY;
+	m_bSuppressMapEventUntilLeave = pSrc->m_bSuppressMapEventUntilLeave;
 	m_dwLastRecvMoveTime	= pSrc->m_dwLastRecvMoveTime;
 	m_dwLastRecvMovePacketTime = pSrc->m_dwLastRecvMovePacketTime;
 }
@@ -291,6 +299,10 @@ void CInfoCharSvr::Copy(CInfoCharBase *pSrc)
 	CInfoCharBase::Copy (pSrc);
 
 	m_dwMoveCount	= pSrcTmp->m_dwMoveCount;
+	m_dwSuppressMapEventMapID = pSrcTmp->m_dwSuppressMapEventMapID;
+	m_nSuppressMapEventTileX = pSrcTmp->m_nSuppressMapEventTileX;
+	m_nSuppressMapEventTileY = pSrcTmp->m_nSuppressMapEventTileY;
+	m_bSuppressMapEventUntilLeave = pSrcTmp->m_bSuppressMapEventUntilLeave;
 }
 
 

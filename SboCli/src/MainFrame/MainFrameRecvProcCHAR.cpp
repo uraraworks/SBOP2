@@ -19,11 +19,34 @@
 #include "InfoCharCli.h"
 #include "LayerMap.h"
 #include "StateProcBase.h"
+#include "StateProcMAP.h"
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrSound.h"
 #include "MgrWindow.h"
 #include "MainFrame.h"
+
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+static void WritePosSyncDebugLog(DWORD dwCharID, int nBeforeX, int nBeforeY, int nSyncX, int nSyncY, int nApplyX, int nApplyY, int nDeltaMax, LPCSTR pszAdjustType, BOOL bUpdate)
+{
+	char szDbg[256];
+
+	sprintf_s (
+			szDbg,
+			"[POS_SYNC][CHAR:%u][補正:%s][誤差:%dpx][before:%d,%d][sync:%d,%d][apply:%d,%d][update:%d]\n",
+			dwCharID,
+			pszAdjustType,
+			nDeltaMax,
+			nBeforeX,
+			nBeforeY,
+			nSyncX,
+			nSyncY,
+			nApplyX,
+			nApplyY,
+			bUpdate ? 1 : 0);
+	OutputDebugStringA (szDbg);
+}
+#endif
 
 
 /* ========================================================================= */
@@ -74,7 +97,8 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData)
 void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 {
 	int nDeltaX, nDeltaY, nDeltaMax;
-	int nSetX, nSetY;
+	int nSetX, nSetY, nBeforeX, nBeforeY, nApplyX, nApplyY;
+	LPCSTR pszAdjustType;
 	DWORD dwRecvTime;
 	PCInfoCharCli pInfoChar;
 	CPacketCHAR_POS_SYNC Packet;
@@ -90,6 +114,12 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 		return;
 	}
 
+	nBeforeX = pInfoChar->m_nMapX;
+	nBeforeY = pInfoChar->m_nMapY;
+	nApplyX = nBeforeX;
+	nApplyY = nBeforeY;
+	pszAdjustType = "none";
+
 	nDeltaX = Packet.m_pos.x - pInfoChar->m_nMapX;
 	nDeltaY = Packet.m_pos.y - pInfoChar->m_nMapY;
 	nDeltaMax = abs (nDeltaX);
@@ -99,10 +129,16 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 
 	if (nDeltaMax >= 32) {
 		pInfoChar->SetPos (Packet.m_pos.x, Packet.m_pos.y);
+		nApplyX = Packet.m_pos.x;
+		nApplyY = Packet.m_pos.y;
+		pszAdjustType = "snap";
 	} else if (nDeltaMax >= 8) {
 		nSetX = pInfoChar->m_nMapX + (nDeltaX / 2);
 		nSetY = pInfoChar->m_nMapY + (nDeltaY / 2);
 		pInfoChar->SetPos (nSetX, nSetY);
+		nApplyX = nSetX;
+		nApplyY = nSetY;
+		pszAdjustType = "lerp";
 	}
 	pInfoChar->SetDirection (Packet.m_nDirection);
 
@@ -116,6 +152,20 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 
 	pInfoChar->m_bRedraw = TRUE;
 	m_bRenewCharInfo = TRUE;
+
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	WritePosSyncDebugLog (
+			Packet.m_dwCharID,
+			nBeforeX,
+			nBeforeY,
+			Packet.m_pos.x,
+			Packet.m_pos.y,
+			nApplyX,
+			nApplyY,
+			nDeltaMax,
+			pszAdjustType,
+			Packet.m_bUpdate);
+#endif
 }
 
 
@@ -127,6 +177,9 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 
 void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 {
+	DWORD dwMapIDBack;
+	int nMapXBack, nMapYBack;
+	BOOL bSyncEventTile, bPlayerPosChanged;
 	PCInfoCharCli pInfoChar;
 	PCInfoAccount pInfoAccount;
 	PCLayerMap pLayerMap;
@@ -134,6 +187,20 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 
 	pInfoChar = NULL;
 	Packet.Set (pData);
+	dwMapIDBack = 0;
+	nMapXBack = nMapYBack = 0;
+	bSyncEventTile = FALSE;
+	bPlayerPosChanged = FALSE;
+	{
+		CString strDbg;
+		strDbg.Format (_T("[RecvProcCHAR_RES_CHARINFO] charID=%u moveType=%d mapID=%u pos=(%d,%d)\r\n"),
+			Packet.m_pInfo->m_dwCharID,
+			Packet.m_pInfo->m_nMoveType,
+			Packet.m_pInfo->m_dwMapID,
+			Packet.m_pInfo->m_nMapX,
+			Packet.m_pInfo->m_nMapY);
+		OutputDebugString (strDbg);
+	}
 
 	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (Packet.m_pInfo->m_dwCharID);
 	if (pInfoChar == NULL) {
@@ -148,9 +215,9 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 			m_pLibInfoChar->SetPtr (Packet.m_pInfo->m_dwCharID, pInfoChar);
 		}
 	}
-	if (pInfoChar->m_nMoveState == CHARMOVESTATE_DELETEREADY) {
-		return;
-	}
+	dwMapIDBack = pInfoChar->m_dwMapID;
+	nMapXBack = pInfoChar->m_nMapX;
+	nMapYBack = pInfoChar->m_nMapY;
 
 	pInfoChar->Copy (Packet.m_pInfo);
 	pInfoChar->MakeCharGrp ();
@@ -164,12 +231,31 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 
 	/* 自キャラ？ */
 	if (m_pMgrData->GetCharID () == pInfoChar->m_dwCharID) {
-		if (Packet.m_bChgScreenPos) {
+		if ((dwMapIDBack != 0) &&
+			((dwMapIDBack != pInfoChar->m_dwMapID) ||
+			 (nMapXBack != pInfoChar->m_nMapX) ||
+			 (nMapYBack != pInfoChar->m_nMapY))) {
+			bPlayerPosChanged = TRUE;
+		}
+		if (bPlayerPosChanged &&
+			((dwMapIDBack != pInfoChar->m_dwMapID) ||
+			 (abs (nMapXBack - pInfoChar->m_nMapX) >= MAPPARTSSIZE) ||
+			 (abs (nMapYBack - pInfoChar->m_nMapY) >= MAPPARTSSIZE))) {
+			bSyncEventTile = TRUE;
+		}
+		if (bPlayerPosChanged || Packet.m_bChgScreenPos) {
 			pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 			if (pLayerMap) {
 				pLayerMap->SetCenterPos (pInfoChar->m_nMapX, pInfoChar->m_nMapY);
 			}
 			RenewItemArea ();
+			bSyncEventTile = TRUE;
+		}
+		if (bSyncEventTile && (m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
+			((CStateProcMAP *)m_pStateProc)->SyncLastEventTile (
+				pInfoChar->m_dwMapID,
+				pInfoChar->m_nMapX,
+				pInfoChar->m_nMapY);
 		}
 	}
 
@@ -209,9 +295,6 @@ void CMainFrame::RecvProcCHAR_CHARINFO(PBYTE pData)
 			pInfoChar->Copy (pInfoCharTmp);
 			m_pLibInfoChar->Add (pInfoChar);
 		} else {
-			if (pInfoChar->m_nMoveState == CHARMOVESTATE_DELETEREADY) {
-				continue;
-			}
 			pInfoChar->Copy (pInfoCharTmp);
 		}
 		pInfoChar->MakeCharGrp ();
@@ -306,31 +389,14 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 	DWORD dwRecvTime;
 	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	PCLayerMap pLayerMap;
-	POINT ptPos;
 
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 
 	/* 自キャラ？ */
 	if (m_pMgrData->GetCharID () == dwCharID) {
 		m_pStateProc->KeyProc (0, FALSE);
-		if (bUpdate == FALSE) {
-			m_pLibInfoChar->SortY ();
-			return;
-		}
-		if (pLayerMap) {
-			nResult = pLayerMap->IsScrollPos (nPacketPosX, nPacketPosY, nDirection);
-			if (nResult >= 0) {
-				pLayerMap->Scroll (nResult, TRUE);
-			}
-			/* 画面外に出る？ */
-			bResult = pLayerMap->IsInScreen (nPacketPosX, nPacketPosY);
-			if (bResult == FALSE) {
-				pLayerMap->SetScrollMode (TRUE, 0);
-				pLayerMap->SetCenterPos (nPacketPosX, nPacketPosY);
-			}
-
-			RenewItemArea ();
-		}
+		m_pLibInfoChar->SortY ();
+		return;
 	}
 	pInfoCharPlayer = m_pMgrData->GetPlayerChar ();
 	dwRecvTime = timeGetTime ();
@@ -368,20 +434,28 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		}
 	}
 
-	/* 受信互換：旧スケール→ピクセル変換。Phase 6 で除去予定 */
-	if (!((pInfoChar->m_nMapX == nPacketPosX * HALF_TILE) && (pInfoChar->m_nMapY == nPacketPosY * HALF_TILE))) {
+	if (!((pInfoChar->m_nMapX == nPacketPosX) && (pInfoChar->m_nMapY == nPacketPosY))) {
 		nState = nStateMove;
 	}
 
-	ptPos.x = nPacketPosX / 2;		/* 旧スケール→タイル座標（IsViewArea 用）*/
-	ptPos.y = nPacketPosY / 2;
 	bResult = TRUE;
 	if (pInfoCharPlayer) {
-		bResult = pInfoCharPlayer->IsViewArea (pInfoCharPlayer->m_dwMapID, &ptPos);
+		int nViewRangeX;
+		int nViewRangeY;
+
+		nViewRangeX = DRAW_PARTS_X * MAPPARTSSIZE + MAPPARTSSIZE;
+		nViewRangeY = DRAW_PARTS_Y * MAPPARTSSIZE + MAPPARTSSIZE;
+		bResult = FALSE;
+		if (pInfoCharPlayer->m_dwMapID == pInfoChar->m_dwMapID) {
+			if ((abs (nPacketPosX - pInfoCharPlayer->m_nMapX) <= nViewRangeX) &&
+				(abs (nPacketPosY - pInfoCharPlayer->m_nMapY) <= nViewRangeY)) {
+				bResult = TRUE;
+			}
+		}
 	}
 	if (bResult == FALSE) {
 		nState = CHARMOVESTATE_DELETEREADY;
-		pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+		pInfoChar->StopPredictedMove (nPacketPosX, nPacketPosY);
 
 	} else {
 		if (bForceStop) {
@@ -394,29 +468,34 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 			}
 
 			pInfoChar->DeleteAllMovePosQue ();
-			pInfoChar->SetPos (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+			pInfoChar->SetPos (nPacketPosX, nPacketPosY);
 			pInfoChar->SetDirection (nDirection);
-			pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+			pInfoChar->StopPredictedMove (nPacketPosX, nPacketPosY);
 			pInfoChar->ChgMoveState (nStateStop);
 			nState = -1;
 			pInfoChar->m_bRedraw = TRUE;
 		} else {
 			bResult = pInfoChar->IsStateMove ();
 			if (bResult) {
-				pInfoChar->AddMovePosQue (nState, nDirection, nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+				if ((nState != -1) ||
+					(pInfoChar->m_nMapX != nPacketPosX) ||
+					(pInfoChar->m_nMapY != nPacketPosY) ||
+					(pInfoChar->m_nDirection != nDirection)) {
+					pInfoChar->AddMovePosQue (nState, nDirection, nPacketPosX, nPacketPosY);
+				}
 				if (nState == nStateMove) {
-					pInfoChar->StartPredictedMove (nDirection, nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE, dwRecvTime);
-				} else {
-					pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+					pInfoChar->StartPredictedMove (nDirection, nPacketPosX, nPacketPosY, dwRecvTime);
+				} else if ((nState == nStateStand) || bForceStop) {
+					pInfoChar->StopPredictedMove (nPacketPosX, nPacketPosY);
 				}
 				nState = -1;
 			} else {
-				pInfoChar->SetPos (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+				pInfoChar->SetPos (nPacketPosX, nPacketPosY);
 				pInfoChar->SetDirection (nDirection);
 				if (nState == nStateMove) {
-					pInfoChar->StartPredictedMove (nDirection, nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE, dwRecvTime);
+					pInfoChar->StartPredictedMove (nDirection, nPacketPosX, nPacketPosY, dwRecvTime);
 				} else {
-					pInfoChar->StopPredictedMove (nPacketPosX * HALF_TILE, nPacketPosY * HALF_TILE);
+					pInfoChar->StopPredictedMove (nPacketPosX, nPacketPosY);
 				}
 				pInfoChar->m_bRedraw = TRUE;
 			}

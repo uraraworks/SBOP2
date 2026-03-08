@@ -392,7 +392,23 @@ BOOL CLayerMap::IsInScreen(
 	int x,		/* [in] キャラ座標(横) */
 	int y)		/* [in] キャラ座標(縦) */
 {
-	/* Phase 3: カメラ追随のため常に画面内とみなす */
+	int nMarginX;
+	int nMarginY;
+	int nLeft;
+	int nTop;
+	int nRight;
+	int nBottom;
+
+	nMarginX = MAPPARTSSIZE;
+	nMarginY = MAPPARTSSIZE;
+	nLeft = m_nViewX - nMarginX;
+	nTop = m_nViewY - HALF_TILE - nMarginY;
+	nRight = m_nViewX + SCRSIZEX + nMarginX;
+	nBottom = m_nViewY + SCRSIZEY + nMarginY;
+
+	if ((x < nLeft) || (x > nRight) || (y < nTop) || (y > nBottom)) {
+		return FALSE;
+	}
 	return TRUE;
 }
 
@@ -1382,7 +1398,8 @@ void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 {
 	/* Phase 3: m_nMapX/Y・m_nViewX/Y ともにピクセル単位。スクロールアニメーション補正廃止 */
 	nDstX += (pChar->m_nMapX - m_nViewX);
-	nDstY += (pChar->m_nMapY - m_nViewY);
+	/* Phase 8: m_nMapY は足元基準のため、描画は半キャラ(16px)上へ補正する */
+	nDstY += (pChar->m_nMapY - m_nViewY - HALF_TILE);
 }
 
 

@@ -289,6 +289,7 @@ void CWndMap::OnPaint()
 {
 	BOOL bResult;
 	int x, y, xx, yy, cx, cy, xxx, yyy;
+	const int nTileSize = MAPPARTSSIZE;
 	HDC hDC;
 	DWORD dwPartsID;
 	POINT ptTmp;
@@ -308,16 +309,16 @@ void CWndMap::OnPaint()
 	GetCursorPos (&ptTmp);
 	ptTmp.y -= size.cy;
 	ScreenToClient (&ptTmp);
-	xxx = ptTmp.x / 16;
-	yyy = ptTmp.y / 16;
+	xxx = ptTmp.x / nTileSize;
+	yyy = ptTmp.y / nTileSize;
 
-	for (yy = 0; yy < cy / 16 + 1; yy ++) {
-		for (xx = 0; xx < cx / 16 + 1; xx ++) {
+	for (yy = 0; yy < cy / nTileSize + 1; yy ++) {
+		for (xx = 0; xx < cx / nTileSize + 1; xx ++) {
 			dwPartsID = m_pInfoMap->GetParts (xx + x, yy + y);
-			m_pMgrDraw->DrawMapParts (m_pImgBack, xx * 16, yy * 16, dwPartsID, 2, TRUE);
+			m_pMgrDraw->DrawMapParts (m_pImgBack, xx * nTileSize, yy * nTileSize, dwPartsID, 1, TRUE);
 			if (m_bViewGrid) {
-				m_pImgBack->XorRect (xx * 16 + 15, yy * 16, 1, 16);
-				m_pImgBack->XorRect (xx * 16, yy * 16 + 15, 16, 1);
+				m_pImgBack->XorRect (xx * nTileSize + (nTileSize - 1), yy * nTileSize, 1, nTileSize);
+				m_pImgBack->XorRect (xx * nTileSize, yy * nTileSize + (nTileSize - 1), nTileSize, 1);
 			}
 		}
 	}
@@ -338,7 +339,7 @@ void CWndMap::OnPaint()
 		for (yy = 0; yy < rcRangeTmp.Height (); yy ++) {
 			for (xx = 0; xx < rcRangeTmp.Width (); xx ++) {
 				dwPartsID = m_pdwParts[xx + yy * rcRangeTmp.Width ()];
-				m_pMgrDraw->DrawMapParts (m_pImgBack, (xx + xxx) * 16, (yy + yyy) * 16, dwPartsID, 2, TRUE, FALSE, 40);
+				m_pMgrDraw->DrawMapParts (m_pImgBack, (xx + xxx) * nTileSize, (yy + yyy) * nTileSize, dwPartsID, 1, TRUE, FALSE, 40);
 			}
 		}
 	}
@@ -353,8 +354,8 @@ void CWndMap::OnPaint()
 		rcRangeTmp.bottom	= m_rcRange.top;
 	}
 
-	xx = ptTmp.x / 16 * 16;
-	yy = ptTmp.y / 16 * 16;
+	xx = ptTmp.x / nTileSize * nTileSize;
+	yy = ptTmp.y / nTileSize * nTileSize;
 
 	hDC = m_pImgBack->Lock ();
 	pDCTmp = dc.FromHandle (hDC);
@@ -362,14 +363,14 @@ void CWndMap::OnPaint()
 	bResult = GetCheck (TOOLBAR_RANGE);
 	if (bResult && (rcRangeTmp.left != -1)) {
 		rcTmp.SetRect (rcRangeTmp.left - x, rcRangeTmp.top - y, rcRangeTmp.right - x, rcRangeTmp.bottom - y);
-		rcTmp.left		*= 16;
-		rcTmp.top		*= 16;
-		rcTmp.right		*= 16;
-		rcTmp.bottom	*= 16;
-		rcTmp.right		+= 15;
-		rcTmp.bottom	+= 15;
+		rcTmp.left		*= nTileSize;
+		rcTmp.top		*= nTileSize;
+		rcTmp.right		*= nTileSize;
+		rcTmp.bottom	*= nTileSize;
+		rcTmp.right		+= nTileSize - 1;
+		rcTmp.bottom	+= nTileSize - 1;
 	} else {
-		rcTmp.SetRect (xx, yy, xx + 15, yy + 15);
+		rcTmp.SetRect (xx, yy, xx + nTileSize - 1, yy + nTileSize - 1);
 	}
 	pDCTmp->DrawEdge (rcTmp, EDGE_BUMP, BF_MONO | BF_RECT);
 
@@ -544,6 +545,7 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	DWORD dwPartsID;
 	int x, y, xx, yy;
+	const int nTileSize = MAPPARTSSIZE;
 	CSize size;
 	CPacketADMIN_MAP_SETPARTS Packet;
 
@@ -555,8 +557,8 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 
 	x  = GetScrollPos (SB_HORZ);
 	y  = GetScrollPos (SB_VERT);
-	x += (point.x / 16);
-	y += (point.y / 16);
+	x += (point.x / nTileSize);
+	y += (point.y / nTileSize);
 
 	if ((x >= m_pInfoMap->m_sizeMap.cx) || (y >= m_pInfoMap->m_sizeMap.cy)) {
 		return;
@@ -606,6 +608,7 @@ void CWndMap::OnLButtonDown(UINT nFlags, CPoint point)
 void CWndMap::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	int x, y;
+	const int nTileSize = MAPPARTSSIZE;
 	CSize size;
 
 	if (m_pInfoMap == NULL) {
@@ -616,8 +619,8 @@ void CWndMap::OnLButtonUp(UINT nFlags, CPoint point)
 
 	x  = GetScrollPos (SB_HORZ);
 	y  = GetScrollPos (SB_VERT);
-	x += (point.x / 16);
-	y += (point.y / 16);
+	x += (point.x / nTileSize);
+	y += (point.y / nTileSize);
 
 	if ((x >= m_pInfoMap->m_sizeMap.cx) || (y >= m_pInfoMap->m_sizeMap.cy)) {
 		return;
@@ -641,6 +644,7 @@ void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	int x, y;
 	DWORD dwPartsID;
+	const int nTileSize = MAPPARTSSIZE;
 	CSize size;
 
 	if (m_pInfoMap == NULL) {
@@ -651,8 +655,8 @@ void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
 
 	x  = GetScrollPos (SB_HORZ);
 	y  = GetScrollPos (SB_VERT);
-	x += (point.x / 16);
-	y += (point.y / 16);
+	x += (point.x / nTileSize);
+	y += (point.y / nTileSize);
 
 	if ((x >= m_pInfoMap->m_sizeMap.cx) || (y >= m_pInfoMap->m_sizeMap.cy)) {
 		return;
@@ -702,6 +706,7 @@ void CWndMap::OnRButtonDown(UINT nFlags, CPoint point)
 void CWndMap::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	int x, y;
+	const int nTileSize = MAPPARTSSIZE;
 	CSize size;
 	CRect rcTmp;
 
@@ -713,8 +718,8 @@ void CWndMap::OnRButtonUp(UINT nFlags, CPoint point)
 
 	x  = GetScrollPos (SB_HORZ);
 	y  = GetScrollPos (SB_VERT);
-	x += (point.x / 16);
-	y += (point.y / 16);
+	x += (point.x / nTileSize);
+	y += (point.y / nTileSize);
 
 	if ((x >= m_pInfoMap->m_sizeMap.cx) || (y >= m_pInfoMap->m_sizeMap.cy)) {
 		return;
@@ -800,6 +805,7 @@ BOOL CWndMap::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 void CWndMap::OnMouseMove(UINT nFlags, CPoint point)
 {
 	int x, y;
+	const int nTileSize = MAPPARTSSIZE;
 	SIZE size;
 	CPoint ptTmp;
 
@@ -825,8 +831,8 @@ void CWndMap::OnMouseMove(UINT nFlags, CPoint point)
 
 	x  = GetScrollPos (SB_HORZ);
 	y  = GetScrollPos (SB_VERT);
-	x += (ptTmp.x / 16);
-	y += (ptTmp.y / 16);
+	x += (ptTmp.x / nTileSize);
+	y += (ptTmp.y / nTileSize);
 	if ((x == m_ptBack.x) && (y == m_ptBack.y)) {
 		return;
 	}
@@ -913,6 +919,7 @@ void CWndMap::RenewScrollRange(int cx, int cy)
 {
 	CRect rc;
 	SCROLLINFO stScrollInfo;
+	const int nTileSize = MAPPARTSSIZE;
 
 	m_StatusBar.GetWindowRect (rc);
 
@@ -928,10 +935,10 @@ void CWndMap::RenewScrollRange(int cx, int cy)
 	SetScrollRange (SB_VERT, 0, m_pInfoMap->m_sizeMap.cy);
 
 	GetScrollInfo (SB_HORZ, &stScrollInfo);
-	stScrollInfo.nPage = (m_pImgBack->Width () / 16) - 1;
+	stScrollInfo.nPage = max (1, (m_pImgBack->Width () / nTileSize) - 1);
 	SetScrollInfo (SB_HORZ, &stScrollInfo);
 	GetScrollInfo (SB_VERT, &stScrollInfo);
-	stScrollInfo.nPage = (m_pImgBack->Height () / 16) - 1;
+	stScrollInfo.nPage = max (1, (m_pImgBack->Height () / nTileSize) - 1);
 	SetScrollInfo (SB_VERT, &stScrollInfo);
 }
 
@@ -986,6 +993,7 @@ void CWndMap::RenewStatusText(void)
 {
 	int x, y;
 	BOOL bResult;
+	const int nTileSize = MAPPARTSSIZE;
 	CPoint point;
 	CRect rcRangeTmp;
 	CSize size;
@@ -998,8 +1006,8 @@ void CWndMap::RenewStatusText(void)
 
 	x  = GetScrollPos (SB_HORZ);
 	y  = GetScrollPos (SB_VERT);
-	x += (point.x / 16);
-	y += (point.y / 16);
+	x += (point.x / nTileSize);
+	y += (point.y / nTileSize);
 
 	strPane.Format(_T("座標(%3d,%3d)"), x, y);
 

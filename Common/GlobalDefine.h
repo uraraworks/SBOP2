@@ -30,6 +30,7 @@ typedef map<DWORD, PVOID>	MapIDPtr;
 #define MOVEWAIT				(1)								/* 移動周期（1秒間に60ドット基準） */
 #define BATTLEMOVEWAIT			(15)								/* 移動周期(戦闘中) */
 #define SBO_ENABLE_LEGACY_MOVEPOS_RECV	(0)					/* 旧MOVEPOS受信互換(1:有効 0:無効) */
+#define SBO_ENABLE_POS_SYNC_DEBUG_LOG	(0)					/* 座標同期デバッグログ(1:有効 0:無効) */
 
 #define MAXLEN_ACCOUNT			(10)								/* 最大アカウント名長 */
 #define MAXLEN_PASSWORD			(10)								/* 最大パスワード長 */

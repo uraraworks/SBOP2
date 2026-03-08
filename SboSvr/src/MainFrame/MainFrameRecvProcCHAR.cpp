@@ -22,7 +22,23 @@
 #include "LibInfoTalkEvent.h"
 #include "InfoCharSvr.h"
 #include "MgrData.h"
+#include "TextOutput.h"
 #include "MainFrame.h"
+
+static LPCSTR GetMovePacketName(int nCmdSub)
+{
+	switch (nCmdSub) {
+	case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+		return "MOVE_START";
+	case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+		return "MOVE_DIR_CHANGE";
+	case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+		return "MOVE_STOP";
+	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:
+		return "MOVEPOS";
+	}
+	return "UNKNOWN";
+}
 
 
 /* ========================================================================= */
@@ -37,6 +53,10 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_CHAR_REQ_CHARINFO:		RecvProcCHAR_REQ_CHARINFO		(pData, dwSessionID);	break;	/* キャラ情報要求 */
 #if SBO_ENABLE_LEGACY_MOVEPOS_RECV
 	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:				RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* 移動通知 */
+#else
+	case SBOCOMMANDID_SUB_CHAR_MOVEPOS:
+		m_pLog->Write ("旧MOVEPOS受信を拒否 dwSessionID:%u [理由:互換受信無効]", dwSessionID);
+		break;
 #endif
 	case SBOCOMMANDID_SUB_CHAR_MOVE_START:			RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* 移動開始通知(Dead Reckoning) */
 	case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:	RecvProcCHAR_MOVEPOS			(pData, dwSessionID);	break;	/* 移動方向変更通知(Dead Reckoning) */
@@ -100,6 +120,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	int nNextPosX, nNextPosY, nMoveDist, nAllowDist, nSpeedLevel;
 	DWORD dwNowTime, dwElapsed, dwPacketTime;
 	BOOL bHasPacketTime;
+	LPCSTR pszPacketName;
 	PCInfoCharSvr pInfoChar, pInfoCharTmp, pInfoCharFront;
 	DWORD dwMapID, dwCharID;
 	int nDirection, nPacketPosX, nPacketPosY;
@@ -119,6 +140,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	dwPacketTime = 0;
 	bHasPacketTime = FALSE;
 	nSpeedLevel = 1;
+	pszPacketName = GetMovePacketName (nCmdSub);
 
 	switch (nCmdSub) {
 	case SBOCOMMANDID_SUB_CHAR_MOVE_START:
@@ -191,7 +213,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	bResult = pInfoChar->IsEnableMove ();
 	if (bResult == FALSE) {
 		if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-			if (((pInfoChar->m_nMapX == nPacketPosX * HALF_TILE) && (pInfoChar->m_nMapY == nPacketPosY * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
+			if (((pInfoChar->m_nMapX == nPacketPosX) && (pInfoChar->m_nMapY == nPacketPosY))) {
 				pInfoChar->SetDirection (nDirection);
 				pInfoChar->m_bChgPos = TRUE;
 				pInfoChar->m_bChgUpdatePos = bUpdate;
@@ -214,8 +236,21 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	nNextPosX = nPacketPosX * HALF_TILE;
-	nNextPosY = nPacketPosY * HALF_TILE;
+	nNextPosX = nPacketPosX;
+	nNextPosY = nPacketPosY;
+
+	if (nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) {
+		int nStopDeltaX, nStopDeltaY;
+
+		nStopDeltaX = nNextPosX - pInfoChar->m_nMapX;
+		nStopDeltaY = nNextPosY - pInfoChar->m_nMapY;
+		if ((abs (nStopDeltaX) <= HALF_TILE) && (abs (nStopDeltaY) <= HALF_TILE)) {
+			nNextPosX = pInfoChar->m_nMapX;
+			nNextPosY = pInfoChar->m_nMapY;
+			nPacketPosX = nNextPosX;
+			nPacketPosY = nNextPosY;
+		}
+	}
 
 	nStopState = CHARMOVESTATE_STAND;
 	if (pInfoChar->IsStateBattle ()) {
@@ -233,11 +268,14 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		if (bHasPacketTime && (dwPacketTime != 0) && (pInfoChar->m_dwLastRecvMovePacketTime != 0)) {
 			if (dwPacketTime <= pInfoChar->m_dwLastRecvMovePacketTime) {
 				m_pLog->Write (
-					"移動時刻逆行を拒否 dwSessionID:%u [CHAR:%s][受信:%u][前回:%u]",
+					"移動時刻逆行を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][受信:%u][前回:%u][座標:%d,%d]",
 					dwSessionID,
+					pszPacketName,
 					(LPCSTR)pInfoChar->m_strCharName,
 					dwPacketTime,
-					pInfoChar->m_dwLastRecvMovePacketTime);
+					pInfoChar->m_dwLastRecvMovePacketTime,
+					nPacketPosX,
+					nPacketPosY);
 				return;
 			}
 			dwElapsed = dwPacketTime - pInfoChar->m_dwLastRecvMovePacketTime;
@@ -259,9 +297,14 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 			nAllowDist = (int)((dwElapsed * 120 * nSpeedLevel) / 1000) + 16;
 			if (nMoveDist > nAllowDist) {
 				m_pLog->Write (
-					"移動速度超過を拒否 dwSessionID:%u [CHAR:%s][移動:%dpx][許容:%dpx][経過:%ums][段階:%d]",
+					"移動速度超過を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][現在:%d,%d][受信:%d,%d][移動:%dpx][許容:%dpx][経過:%ums][段階:%d]",
 					dwSessionID,
+					pszPacketName,
 					(LPCSTR)pInfoChar->m_strCharName,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY,
+					nNextPosX,
+					nNextPosY,
 					nMoveDist,
 					nAllowDist,
 					dwElapsed,
@@ -280,7 +323,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	}
 
 	/* 移動した？ */
-	if (!((pInfoChar->m_nMapX == nPacketPosX * HALF_TILE) && (pInfoChar->m_nMapY == nPacketPosY * HALF_TILE))) {  /* Phase 2: HALF_TILE→px変換比較 */
+	if (!((pInfoChar->m_nMapX == nPacketPosX) && (pInfoChar->m_nMapY == nPacketPosY))) {
 		/* 付いて来ているキャラ一覧を作成 */
 		pInfoCharTmp = pInfoChar;
 		while (1) {
@@ -312,7 +355,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		}
 	}
 
-	pInfoChar->SetPos (nNextPosX, nNextPosY);  /* Phase 2: パケットHALF_TILE値→px単位変換 */
+	pInfoChar->SetPos (nNextPosX, nNextPosY);
 	pInfoChar->SetDirection (nDirection);
 	pInfoChar->m_bChgPos = TRUE;
 	pInfoChar->m_bChgUpdatePos = bUpdate;
@@ -846,9 +889,7 @@ void CMainFrame::RecvProcCHAR_REQ_CHECKMAPEVENT(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		goto Exit;
 	}
-	if (pInfoChar->IsEnableMove () == FALSE) {
-		goto Exit;
-	}
+	/* Phase 8: 自由移動中もイベントを取りこぼさないよう、移動可否でチェック要求を拒否しない */
 	pInfoChar->m_bWaitCheckMapEvent = TRUE;
 
 Exit:

@@ -32,6 +32,7 @@ public:
 	void Create				(CMgrData *pMgrData, CUraraSockTCPSBO *pSock);	/* 作成 */
 	void Init				(void);											/* 初期化 */
 	void GetMsgLogRect		(RECT &rcDst);									/* メッセージログウィンドウの矩形を取得 */
+	void SyncLastEventTile	(DWORD dwMapID, int x, int y);					/* イベント再発火抑止用の基準タイルを同期 */
 	BOOL TimerProc			(void);											/* 時間処理 */
 	void KeyProc			(BYTE byCode, BOOL bDown);						/* キー処理 */
 	void OnWindowMsg		(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_WINDOWMSG) */
@@ -106,11 +107,16 @@ protected:
 	DWORD			m_dwLastTimeMove,					/* 最後に移動した時間 */
 					m_dwLastTimeKeepAlive,				/* 最後に生存確認通知を送信した時間 */
 					m_dwLastTimeGauge,					/* ゲージ回復時間 */
+					m_dwLastTimeMoveSyncSend,			/* 最後に移動同期を送信した時間 */
 					m_dwLastBalloonID,					/* 最後に使った噴出しID */
 					m_dwLastKeyInput,					/* 最後にキー入力した時間 */
 					m_dwStartChargeTime;				/* 溜め開始時間 */
 	BOOL			m_bMoveSyncActive;					/* Dead Reckoning送信中か */
 	int				m_nMoveSyncDirection;				/* 最後に送信した移動方向 */
+	DWORD			m_dwLastEventMapID;					/* 前回イベント判定マップID */
+	BOOL			m_bHasLastEventTile;				/* 前回イベント判定タイルを保持しているか */
+	int				m_nLastEventTileX,					/* 前回イベント判定タイルX */
+					m_nLastEventTileY;					/* 前回イベント判定タイルY */
 
 	CAdminUiLoader	m_AdminUi;						/* 管理者UIモジュール */
 	CInfoCharCli	*m_pPlayerChar;						/* 操作中のキャラ情報 */

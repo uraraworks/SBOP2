@@ -21,6 +21,7 @@
 #include "LayoutHelper.h"
 #include "LibInfoCharCli.h"
 #include "InfoCharCli.h"
+#include "InfoMapBase.h"
 #include "MgrData.h"
 #include "DlgAdminCharModifyTypePUTNPC.h"
 #include "DlgAdminTalkSet.h"
@@ -241,6 +242,11 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 
 	switch (nType) {
 	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* 左クリック通知 */
+		{
+			CString strDbg;
+			strDbg.Format (_T("[DlgAdminCharModify] LB down dwPara=%u current=%u\r\n"), dwPara, m_dwCharID);
+			OutputDebugString (strDbg);
+		}
 		dwCharID = dwPara;
 		if (dwPara == (DWORD)-1) {
 			dwCharID = m_dwCharID;
@@ -248,6 +254,9 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 		pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
 		pInfoCharTmp	= (PCInfoCharCli)pLibInfoChar->GetPtr (dwCharID);
 		if (pInfoCharTmp == NULL) {
+			CString strDbg;
+			strDbg.Format (_T("[DlgAdminCharModify] GetPtr(%u) returned NULL\r\n"), dwCharID);
+			OutputDebugString (strDbg);
 			if (dwPara == (DWORD)-1) {
 				CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
 
@@ -261,17 +270,44 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 		m_dwCharID = dwCharID;
 		Renew ();
 		if (m_dwCharID != 0) {
+			CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
+			CString strDbg;
+
+			PacketCHAR_REQ_CHARINFO.Make (m_dwCharID);
+			strDbg.Format (_T("[DlgAdminCharModify] sending CHAR_REQ_CHARINFO charID=%u\r\n"), m_dwCharID);
+			OutputDebugString (strDbg);
+			SendPacket (&PacketCHAR_REQ_CHARINFO);
+
 			Packet.Make (SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT, m_dwCharID, m_dwCharID);
 			SendPacket (&Packet);
 		}
 		break;
 	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* 右クリック通知 */
-		m_dwMapID	= m_pMgrData->GetMapID ();
+		if (m_pInfoChar) {
+			m_dwMapID = m_pInfoChar->m_dwMapID;
+		} else if ((m_pHost) && (m_pHost->GetMapData)) {
+			CInfoMapBase *pInfoMap;
+
+			pInfoMap = (CInfoMapBase*)m_pHost->GetMapData (m_pHost->userData);
+			m_dwMapID = pInfoMap ? pInfoMap->m_dwMapID : 0;
+		} else {
+			m_dwMapID = m_pMgrData->GetMapID ();
+		}
 		m_nPosX		= HIWORD (dwPara);
 		m_nPosY		= LOWORD (dwPara);
 		UpdateData (FALSE);
 		break;
 	case ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK:	/* 右ダブルクリック通知 */
+		if (m_pInfoChar) {
+			m_dwMapID = m_pInfoChar->m_dwMapID;
+		} else if ((m_pHost) && (m_pHost->GetMapData)) {
+			CInfoMapBase *pInfoMap;
+
+			pInfoMap = (CInfoMapBase*)m_pHost->GetMapData (m_pHost->userData);
+			m_dwMapID = pInfoMap ? pInfoMap->m_dwMapID : 0;
+		} else {
+			m_dwMapID = m_pMgrData->GetMapID ();
+		}
 		m_nPosX = HIWORD (dwPara);
 		m_nPosY = LOWORD (dwPara);
 		UpdateData (FALSE);
@@ -284,10 +320,36 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 		if (dwPara != m_pInfoChar->m_dwCharID) {
 			break;
 		}
-		/* Host API 経由で実体の CInfoTalkEvent を取得（シム CMgrData::GetInfoTalkEvent は NULL 返却のため） */
-		if (m_pHost && m_pHost->GetInfoTalkEvent) {
-			m_pInfoTalkEvent->Copy((CInfoTalkEvent*)m_pHost->GetInfoTalkEvent(m_pHost->userData));
+		/* EXE/DLL 間で CInfoTalkEvent の実体を直接 Copy すると CRT ヒープ境界を跨いで壊れるため、ここでは同期しない */
+		OutputDebugString (_T("[DlgAdminCharModify] ADMINMSG_RENEWTALKEVENT ignored to avoid cross-module CInfoTalkEvent copy\r\n"));
+		break;
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminCharModify::OnMainFrame								 */
+/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
+/* 日付		:2026/03/08														 */
+/* ========================================================================= */
+
+void CDlgAdminCharModify::OnMainFrame(DWORD dwCommand, DWORD dwParam)
+{
+	switch (dwCommand) {
+	case MAINFRAMEMSG_RENEWCHARINFO:		/* キャラ情報更新 */
+		{
+			CString strDbg;
+			strDbg.Format (_T("[DlgAdminCharModify] MAINFRAMEMSG_RENEWCHARINFO dwParam=%u current=%u info=%p\r\n"),
+				dwParam, m_dwCharID, m_pInfoChar);
+			OutputDebugString (strDbg);
 		}
+		if (m_pInfoChar == NULL) {
+			break;
+		}
+		if (m_pInfoChar->m_dwCharID != dwParam) {
+			break;
+		}
+		Renew ();
 		break;
 	}
 }

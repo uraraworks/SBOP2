@@ -1,13 +1,14 @@
-/* Copyright(C)URARA-works 2026 */
+﻿/* Copyright(C)URARA-works 2026 */
 /* ========================================================================= */
 /* ファイル名	:PacketCHAR_MOVE_STOP.h						 */
 /* 内容			:コマンド(キャラ系:移動停止通知) 定義ファイル			 */
-/* 作成開始日	:2026/02/28							 */
+/* 作成開始日	:2026/02/28								 */
 /* ========================================================================= */
 
 #pragma once
 
 #include "PacketBase.h"
+#include "Command.h"
 
 typedef class CPacketCHAR_MOVE_STOP : public CPacketBase
 {
