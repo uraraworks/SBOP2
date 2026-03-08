@@ -94,8 +94,10 @@ CStateProcMAP::CStateProcMAP()
 	m_dwLastTimeGauge		= 0;
 	m_dwLastTimeMoveSyncSend = 0;
 	m_dwStartChargeTime		= 0;
-	m_bMoveSyncActive		= FALSE;
-	m_nMoveSyncDirection	= -1;
+	m_bMoveSyncActive			= FALSE;
+	m_nMoveSyncDirection		= -1;
+	m_nMoveSpeedAccum			= 0;
+	m_dwLastPlayerMoveStepTime	= 0;
 	m_dwLastEventMapID		= 0;
 	m_bHasLastEventTile		= FALSE;
 	m_nLastEventTileX		= 0;
@@ -184,6 +186,8 @@ void CStateProcMAP::Init(void)
 	CreateAdminUi ();
 
 	m_pMgrDraw->SetFadeState (FADESTATE_FADEIN);
+	m_nMoveSpeedAccum = 0;
+	m_dwLastPlayerMoveStepTime = 0;
 
 	if (m_pMap) {
 		m_pMgrSound->PlayBGM (m_pMap->m_dwBGMID);
@@ -208,6 +212,35 @@ void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
 
 
 /* ========================================================================= */
+/* 関数名	:CStateProcMAP::GetPlayerMoveStep								 */
+/* 内容		:自キャラの1更新あたり移動量を取得								 */
+/* 日付		:2026/03/08														 */
+/* ========================================================================= */
+
+int CStateProcMAP::GetPlayerMoveStep(DWORD dwNowTime, int &nAccumOut, DWORD &dwLastStepTimeOut)
+{
+	ULONGLONG ullAccumulated;
+	int nMoveStep;
+	DWORD dwElapsed;
+
+	if (dwLastStepTimeOut == 0) {
+		dwLastStepTimeOut = dwNowTime;
+		return 0;
+	}
+	dwElapsed = dwNowTime - dwLastStepTimeOut;
+	dwLastStepTimeOut = dwNowTime;
+	if (dwElapsed == 0) {
+		return 0;
+	}
+
+	ullAccumulated = (ULONGLONG)nAccumOut + (ULONGLONG)dwElapsed * CHAR_MOVE_PIXELS_PER_SEC;
+	nMoveStep = (int)(ullAccumulated / 1000);
+	nAccumOut = (int)(ullAccumulated % 1000);
+	return nMoveStep;
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CStateProcMAP::SyncLastEventTile								 */
 /* 内容		:イベント再発火抑止用の基準タイルを同期							 */
 /* 日付		:2026/03/08														 */
@@ -219,6 +252,18 @@ void CStateProcMAP::SyncLastEventTile(DWORD dwMapID, int x, int y)
 	m_nLastEventTileX = x / MAPPARTSSIZE;
 	m_nLastEventTileY = y / MAPPARTSSIZE;
 	m_bHasLastEventTile = TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CStateProcMAP::ResetMapEventCheckSendState						 */
+/* 内容		:マップイベント送信状態をリセット								 */
+/* 日付		:2026/03/08														 */
+/* ========================================================================= */
+
+void CStateProcMAP::ResetMapEventCheckSendState(void)
+{
+	m_bSendCheckMapEvent = FALSE;
 }
 
 
@@ -334,6 +379,8 @@ void CStateProcMAP::KeyProc(
 				}
 				m_pPlayerChar->m_ptMove.x = 0;
 				m_pPlayerChar->m_ptMove.y = 0;
+				m_nMoveSpeedAccum = 0;
+				m_dwLastPlayerMoveStepTime = 0;
 
 				CPacketCHAR_MOVE_STOP PacketMoveStop;
 				PacketMoveStop.Make (
@@ -1164,7 +1211,8 @@ Exit:
 BOOL CStateProcMAP::OnUp(BOOL bDown)
 {
 	BOOL bRet, bResult;
-	int x, y, nDirection;
+	int i, x, y, xBefore, yBefore, nDirection, nMoveStep, nMoveSpeedAccum;
+	DWORD dwMoveStepTime;
 	PCMgrKeyInput pMgrKeyInput;
 
 	pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
@@ -1181,24 +1229,40 @@ BOOL CStateProcMAP::OnUp(BOOL bDown)
 		goto Exit;
 	}
 	m_dwLastKeyInput = timeGetTime ();
-
-	x = 0;
-	y = -CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
-	nDirection = 0;
-	bResult = pMgrKeyInput->IsInput (VK_RIGHT);
-	if (bResult) {
-		nDirection = 4;
-		x = CHAR_MOVE_SPEED;
-	}
-	bResult = pMgrKeyInput->IsInput (VK_LEFT);
-	if (bResult) {
-		nDirection = 7;
-		x = -CHAR_MOVE_SPEED;
-	}
-
-	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
-	if (bResult == FALSE) {
+	nMoveSpeedAccum = m_nMoveSpeedAccum;
+	dwMoveStepTime = m_dwLastPlayerMoveStepTime;
+	nMoveStep = GetPlayerMoveStep (m_dwLastKeyInput, nMoveSpeedAccum, dwMoveStepTime);
+	m_nMoveSpeedAccum = nMoveSpeedAccum;
+	m_dwLastPlayerMoveStepTime = dwMoveStepTime;
+	if (nMoveStep <= 0) {
+		bRet = TRUE;
 		goto Exit;
+	}
+
+	for (i = 0; i < nMoveStep; i ++) {
+		x = 0;
+		y = -1;
+		nDirection = 0;
+		bResult = pMgrKeyInput->IsInput (VK_RIGHT);
+		if (bResult) {
+			nDirection = 4;
+			x = 1;
+		}
+		bResult = pMgrKeyInput->IsInput (VK_LEFT);
+		if (bResult) {
+			nDirection = 7;
+			x = -1;
+		}
+
+		xBefore = m_pPlayerChar->m_nMapX;
+		yBefore = m_pPlayerChar->m_nMapY;
+		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
+		if (bResult == FALSE) {
+			goto Exit;
+		}
+		if ((xBefore == m_pPlayerChar->m_nMapX) && (yBefore == m_pPlayerChar->m_nMapY)) {
+			break;
+		}
 	}
 
 	bRet = TRUE;
@@ -1216,7 +1280,8 @@ Exit:
 BOOL CStateProcMAP::OnDown(BOOL bDown)
 {
 	BOOL bRet, bResult;
-	int x, y, nDirection;
+	int i, x, y, xBefore, yBefore, nDirection, nMoveStep, nMoveSpeedAccum;
+	DWORD dwMoveStepTime;
 	PCMgrKeyInput pMgrKeyInput;
 
 	pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
@@ -1233,24 +1298,40 @@ BOOL CStateProcMAP::OnDown(BOOL bDown)
 		goto Exit;
 	}
 	m_dwLastKeyInput = timeGetTime ();
-
-	x = 0;
-	y = CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
-	nDirection = 1;
-	bResult = pMgrKeyInput->IsInput (VK_RIGHT);
-	if (bResult) {
-		nDirection = 5;
-		x = CHAR_MOVE_SPEED;
-	}
-	bResult = pMgrKeyInput->IsInput (VK_LEFT);
-	if (bResult) {
-		nDirection = 6;
-		x = -CHAR_MOVE_SPEED;
-	}
-
-	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
-	if (bResult == FALSE) {
+	nMoveSpeedAccum = m_nMoveSpeedAccum;
+	dwMoveStepTime = m_dwLastPlayerMoveStepTime;
+	nMoveStep = GetPlayerMoveStep (m_dwLastKeyInput, nMoveSpeedAccum, dwMoveStepTime);
+	m_nMoveSpeedAccum = nMoveSpeedAccum;
+	m_dwLastPlayerMoveStepTime = dwMoveStepTime;
+	if (nMoveStep <= 0) {
+		bRet = TRUE;
 		goto Exit;
+	}
+
+	for (i = 0; i < nMoveStep; i ++) {
+		x = 0;
+		y = 1;
+		nDirection = 1;
+		bResult = pMgrKeyInput->IsInput (VK_RIGHT);
+		if (bResult) {
+			nDirection = 5;
+			x = 1;
+		}
+		bResult = pMgrKeyInput->IsInput (VK_LEFT);
+		if (bResult) {
+			nDirection = 6;
+			x = -1;
+		}
+
+		xBefore = m_pPlayerChar->m_nMapX;
+		yBefore = m_pPlayerChar->m_nMapY;
+		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
+		if (bResult == FALSE) {
+			goto Exit;
+		}
+		if ((xBefore == m_pPlayerChar->m_nMapX) && (yBefore == m_pPlayerChar->m_nMapY)) {
+			break;
+		}
 	}
 
 	bRet = TRUE;
@@ -1268,7 +1349,8 @@ Exit:
 BOOL CStateProcMAP::OnLeft(BOOL bDown)
 {
 	BOOL bRet, bResult;
-	int x, y, nDirection;
+	int i, x, y, xBefore, yBefore, nDirection, nMoveStep, nMoveSpeedAccum;
+	DWORD dwMoveStepTime;
 	PCMgrKeyInput pMgrKeyInput;
 
 	pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
@@ -1285,24 +1367,40 @@ BOOL CStateProcMAP::OnLeft(BOOL bDown)
 		goto Exit;
 	}
 	m_dwLastKeyInput = timeGetTime ();
-
-	x = -CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
-	y = 0;
-	nDirection = 2;
-	bResult = pMgrKeyInput->IsInput (VK_UP);
-	if (bResult) {
-		nDirection = 7;
-		y = -CHAR_MOVE_SPEED;
-	}
-	bResult = pMgrKeyInput->IsInput (VK_DOWN);
-	if (bResult) {
-		nDirection = 6;
-		y = CHAR_MOVE_SPEED;
-	}
-
-	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
-	if (bResult == FALSE) {
+	nMoveSpeedAccum = m_nMoveSpeedAccum;
+	dwMoveStepTime = m_dwLastPlayerMoveStepTime;
+	nMoveStep = GetPlayerMoveStep (m_dwLastKeyInput, nMoveSpeedAccum, dwMoveStepTime);
+	m_nMoveSpeedAccum = nMoveSpeedAccum;
+	m_dwLastPlayerMoveStepTime = dwMoveStepTime;
+	if (nMoveStep <= 0) {
+		bRet = TRUE;
 		goto Exit;
+	}
+
+	for (i = 0; i < nMoveStep; i ++) {
+		x = -1;
+		y = 0;
+		nDirection = 2;
+		bResult = pMgrKeyInput->IsInput (VK_UP);
+		if (bResult) {
+			nDirection = 7;
+			y = -1;
+		}
+		bResult = pMgrKeyInput->IsInput (VK_DOWN);
+		if (bResult) {
+			nDirection = 6;
+			y = 1;
+		}
+
+		xBefore = m_pPlayerChar->m_nMapX;
+		yBefore = m_pPlayerChar->m_nMapY;
+		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
+		if (bResult == FALSE) {
+			goto Exit;
+		}
+		if ((xBefore == m_pPlayerChar->m_nMapX) && (yBefore == m_pPlayerChar->m_nMapY)) {
+			break;
+		}
 	}
 
 	bRet = TRUE;
@@ -1320,7 +1418,8 @@ Exit:
 BOOL CStateProcMAP::OnRight(BOOL bDown)
 {
 	BOOL bRet, bResult;
-	int x, y, nDirection;
+	int i, x, y, xBefore, yBefore, nDirection, nMoveStep, nMoveSpeedAccum;
+	DWORD dwMoveStepTime;
 	PCMgrKeyInput pMgrKeyInput;
 
 	pMgrKeyInput = m_pMgrData->GetMgrKeyInput ();
@@ -1337,24 +1436,40 @@ BOOL CStateProcMAP::OnRight(BOOL bDown)
 		goto Exit;
 	}
 	m_dwLastKeyInput = timeGetTime ();
-
-	x = CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE(16)→CHAR_MOVE_SPEED(4) px/フレーム */
-	y = 0;
-	nDirection = 3;
-	bResult = pMgrKeyInput->IsInput (VK_UP);
-	if (bResult) {
-		nDirection = 4;
-		y = -CHAR_MOVE_SPEED;
-	}
-	bResult = pMgrKeyInput->IsInput (VK_DOWN);
-	if (bResult) {
-		nDirection = 5;
-		y = CHAR_MOVE_SPEED;
-	}
-
-	bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection);
-	if (bResult == FALSE) {
+	nMoveSpeedAccum = m_nMoveSpeedAccum;
+	dwMoveStepTime = m_dwLastPlayerMoveStepTime;
+	nMoveStep = GetPlayerMoveStep (m_dwLastKeyInput, nMoveSpeedAccum, dwMoveStepTime);
+	m_nMoveSpeedAccum = nMoveSpeedAccum;
+	m_dwLastPlayerMoveStepTime = dwMoveStepTime;
+	if (nMoveStep <= 0) {
+		bRet = TRUE;
 		goto Exit;
+	}
+
+	for (i = 0; i < nMoveStep; i ++) {
+		x = 1;
+		y = 0;
+		nDirection = 3;
+		bResult = pMgrKeyInput->IsInput (VK_UP);
+		if (bResult) {
+			nDirection = 4;
+			y = -1;
+		}
+		bResult = pMgrKeyInput->IsInput (VK_DOWN);
+		if (bResult) {
+			nDirection = 5;
+			y = 1;
+		}
+
+		xBefore = m_pPlayerChar->m_nMapX;
+		yBefore = m_pPlayerChar->m_nMapY;
+		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, x, y, nDirection, (i == nMoveStep - 1) ? TRUE : FALSE);
+		if (bResult == FALSE) {
+			goto Exit;
+		}
+		if ((xBefore == m_pPlayerChar->m_nMapX) && (yBefore == m_pPlayerChar->m_nMapY)) {
+			break;
+		}
 	}
 
 	bRet = TRUE;
@@ -2280,9 +2395,10 @@ BOOL CStateProcMAP::MoveProc(
 	int y,				/* [in] 現在位置(タテ) */
 	int xx,				/* [in] 増減(ヨコ) */
 	int yy,				/* [in] 増減(タテ) */
-	int nDirection)		/* [in] 向き */
+	int nDirection,		/* [in] 向き */
+	BOOL bSyncSend)		/* [in] サーバ同期送信を行う */
 {
-	int nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack,
+	int nDirectionBack, nDirectionView, nState, nTmp, xBack, yBack, nMovePixel,
 		anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	BOOL bRet, bResult;
 	DWORD dwCharID;
@@ -2306,6 +2422,7 @@ BOOL CStateProcMAP::MoveProc(
 
 	xBack = m_pPlayerChar->m_nMapX;
 	yBack = m_pPlayerChar->m_nMapY;
+	nMovePixel = max (abs (xx), abs (yy));
 	nDirectionView = nDirection;
 	nDirectionBack = m_pPlayerChar->m_nDirection;
 
@@ -2342,6 +2459,12 @@ BOOL CStateProcMAP::MoveProc(
 		goto Exit;
 	}
 	bResult = m_pPlayerChar->IsEnableMove ();
+	if ((bResult == FALSE) && (bSyncSend == FALSE)) {
+		if ((m_pPlayerChar->m_nMoveState == CHARMOVESTATE_MOVE) ||
+			(m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLEMOVE)) {
+			bResult = TRUE;
+		}
+	}
 	if (bResult == FALSE) {
 		if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
 			/* 防御中は向きの変更だけ */
@@ -2409,8 +2532,8 @@ BOOL CStateProcMAP::MoveProc(
 	}
 	if (bResult) {
 		if (nTmp != nDirection) {
-			xx = anPosChangeX[nDirection] * CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE→CHAR_MOVE_SPEED */
-			yy = anPosChangeY[nDirection] * CHAR_MOVE_SPEED;
+			xx = anPosChangeX[nDirection] * nMovePixel;
+			yy = anPosChangeY[nDirection] * nMovePixel;
 			m_pPlayerChar->ChgDirection (nDirection);
 		}
 
@@ -2478,8 +2601,8 @@ BOOL CStateProcMAP::MoveProc(
 		}
 	}
 	if (nTmp != nDirection) {
-		xx = anPosChangeX[nDirection] * CHAR_MOVE_SPEED;	/* Phase 4: HALF_TILE→CHAR_MOVE_SPEED */
-		yy = anPosChangeY[nDirection] * CHAR_MOVE_SPEED;
+		xx = anPosChangeX[nDirection] * nMovePixel;
+		yy = anPosChangeY[nDirection] * nMovePixel;
 		m_pPlayerChar->ChgDirection (nDirection);
 	}
 
@@ -2491,16 +2614,14 @@ BOOL CStateProcMAP::MoveProc(
 	m_pPlayerChar->ChgDirection (nDirectionView);
 	m_pPlayerChar->SetPos (x + xx, y + yy);
 	m_pPlayerChar->ChgMoveState (nState);
-	/* Phase 4: タイル間スライドアニメ廃止。m_ptMove をクリアして描画オフセット=0 に */
-	m_pPlayerChar->m_ptMove.x = m_pPlayerChar->m_ptMove.y = 0;
 
 	if (nDirection <= 1) {
 		/* 重なり調整 */
 		m_pLibInfoChar->SortY ();
 	}
 
-	/* Phase 3: カメラをキャラ移動後位置に追随（IsScrollPos/Scroll/IsInScreen は廃止） */
-	pLayerMap->SetCenterPos (x + xx, y + yy);
+	/* カメラは移動後位置へ滑らかに追従させる */
+	pLayerMap->SetCameraTargetCenterPos (x + xx, y + yy);
 
 	bResult = m_pLibInfoChar->DeleteOutScreen (m_pPlayerChar);
 	if (bResult) {
@@ -2513,6 +2634,10 @@ BOOL CStateProcMAP::MoveProc(
 	y += yy;
 ExitSend:
 	m_pPlayerChar->m_bRedraw = TRUE;
+	if (bSyncSend == FALSE) {
+		bRet = TRUE;
+		goto Exit;
+	}
 	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirectionView))) {
 		/* サーバへ移動通知（Dead Reckoning専用） */
 		if (m_bMoveSyncActive == FALSE) {
@@ -2559,7 +2684,6 @@ ExitSend:
 
 	if ((xBack != x) || (yBack != y)) {
 		int nCurTileX, nCurTileY;
-		BOOL bTileChanged;
 		BOOL bMapChanged;
 
 		nCurTileX = x / MAPPARTSSIZE;
@@ -2569,18 +2693,12 @@ ExitSend:
 			bMapChanged = TRUE;
 		}
 
-		bTileChanged = TRUE;
-		if (m_bHasLastEventTile && (m_dwLastEventMapID == m_pPlayerChar->m_dwMapID)) {
-			bTileChanged = !((m_nLastEventTileX == nCurTileX) && (m_nLastEventTileY == nCurTileY));
-		}
-
-		/* Phase 8: マップ切替直後は再発火防止のため、このフレームは基準更新のみ */
-		if (bMapChanged == FALSE && bTileChanged) {
-			/*
-			   再発火取りこぼし防止:
-			   クライアント側の単一点タイル判定では座標基準差で取りこぼすため、
-			   タイル遷移時はサーバーへチェック要求を出し、最終判定はサーバーに委譲する。
-			*/
+		/*
+		   キャラ座標・範囲イベントはタイル内でも発火しうるため、
+		   自キャラが実際に移動したフレームではサーバーへ判定を委譲する。
+		   マップ切替直後だけは再発火防止のため、このフレームでは送らない。
+		*/
+		if (bMapChanged == FALSE) {
 			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
 			m_bSendCheckMapEvent = FALSE;
 		}

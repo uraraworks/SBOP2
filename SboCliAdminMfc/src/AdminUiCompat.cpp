@@ -53,6 +53,7 @@ BOOL    CInfoCharCli::IsDamage(void)      { return FALSE; }
 // Additional virtual and non-virtual methods required by DlgAdminCharModify* and MgrDraw.
 void CInfoCharCli::ChgMoveState(int nMoveState)   { UNREFERENCED_PARAMETER(nMoveState); }
 BOOL CInfoCharCli::TimerProc(DWORD dwTime)         { UNREFERENCED_PARAMETER(dwTime); return FALSE; }
+int CInfoCharCli::SetPos(int x, int y, BOOL bBack) { return CInfoCharBase::SetPos(x, y, bBack); }
 void CInfoCharCli::SetMoveState(int nMoveState)    { UNREFERENCED_PARAMETER(nMoveState); }
 void CInfoCharCli::SetName(LPCSTR pszName)         { UNREFERENCED_PARAMETER(pszName); }
 void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)       { UNREFERENCED_PARAMETER(pszSpeak); }

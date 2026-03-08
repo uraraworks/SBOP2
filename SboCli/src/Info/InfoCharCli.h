@@ -54,6 +54,7 @@ public:
 			void	ChgDirection	(int nDirection);			/* 向き変更 */
 	virtual void	ChgMoveState	(int nMoveState);			/* 移動状態変更 */
 			BOOL	TimerProc		(DWORD dwTime);				/* 時間処理 */
+	virtual int		SetPos			(int x, int y, BOOL bBack = FALSE);	/* 座標を指定 */
 
 	void		SetMoveState		(int nMoveState);			/* 移動状態を変更 */
 	void		MakeCharGrp			(void);						/* キャラ画像を作成 */
@@ -75,6 +76,7 @@ public:
 	int			GetEfcLevel			(void);								/* エフェクト画像の透過レベルを取得 */
 	int			GetEfcGrpSize		(void);								/* エフェクト画像のサイズを取得 */
 	void		GetEfcDrawPos		(POINT &ptDst);						/* エフェクト画像の描画補正幅を取得 */
+	void		GetDrawMapPos		(POINT &ptDst) const;				/* 描画用の補間座標を取得 */
 
 	DWORD		GetBalloonGrpID		(void);								/* 噴出し画像IDを取得 */
 	BOOL		IsEnableMove		(void);								/* 移動できる状態か判定 */
@@ -107,6 +109,9 @@ public:
 protected:
 	virtual BOOL RenewAnime			(DWORD dwTime, int nAdd = 1);	/* アニメーションの更新 */
 
+	void GetDrawMapPosDouble			(double &dDstX, double &dDstY, DWORD dwNowTime) const;	/* 描画用補間座標を取得 */
+	void ResetDrawMoveSegment			(int x, int y, DWORD dwNowTime);						/* 描画補間を即時反映 */
+	DWORD GetDrawMoveDuration			(int nSrcX, int nSrcY, int nDstX, int nDstY);	/* 描画補間時間を取得 */
 	BOOL TimerProcMove				(DWORD dwTime);				/* 移動処理 */
 	BOOL TimerProcViewState			(DWORD dwTime);				/* 表示状態処理 */
 	BOOL TimerProcAtack				(DWORD dwTime);				/* 攻撃処理 */
@@ -153,8 +158,14 @@ public:
 	int		m_nPredictBaseX,				/* 予測開始X(px) */
 			m_nPredictBaseY,				/* 予測開始Y(px) */
 			m_nPredictDirection,			/* 予測向き */
-			m_nPredictSpeed;				/* 予測速度(px/フレーム基準) */
-	DWORD	m_dwPredictRecvTime;			/* 受信タイムスタンプ */
+			m_nPredictSpeed;				/* 予測速度(px/sec基準) */
+	DWORD	m_dwPredictRecvTime,			/* 受信タイムスタンプ */
+			m_dwDrawMoveStartTime,			/* 描画補間開始時刻 */
+			m_dwDrawMoveEndTime;			/* 描画補間終了時刻 */
+	double	m_dDrawMoveStartX,				/* 描画補間開始X */
+			m_dDrawMoveStartY,				/* 描画補間開始Y */
+			m_dDrawMoveEndX,				/* 描画補間終了X */
+			m_dDrawMoveEndY;				/* 描画補間終了Y */
 } CInfoCharCli, *PCInfoCharCli;
 
 /* Copyright(C)URARA-works 2006 */

@@ -974,6 +974,9 @@ void CMainFrame::RecvProcCHAR_RES_CHECKMAPEVENT(PBYTE pData)
 	}
 
 	pInfoChar->m_bWaitCheckMapEvent = FALSE;
+	if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
+		((CStateProcMAP *)m_pStateProc)->ResetMapEventCheckSendState ();
+	}
 }
 
 
@@ -1081,6 +1084,9 @@ void CMainFrame::RecvProcCHAR_RES_TALKEVENT(PBYTE pData)
 		pInfoCharPlayer = m_pMgrData->GetPlayerChar ();
 		if (pInfoCharPlayer) {
 			pInfoCharPlayer->m_bWaitCheckMapEvent = FALSE;
+		}
+		if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
+			((CStateProcMAP *)m_pStateProc)->ResetMapEventCheckSendState ();
 		}
 	}
 

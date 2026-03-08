@@ -220,8 +220,6 @@ void CMgrDraw::DrawChar(
 	}
 
 	nDirection = pInfoChar->GetDrawDirection (-1);
-	x += pInfoChar->m_ptMove.x;
-	y += pInfoChar->m_ptMove.y;
 	cx = cy = m_pMgrGrpData->GetGrpSize (wGrpIDMainBase);
 	cxChar = cyChar = cx;
 

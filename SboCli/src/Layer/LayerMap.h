@@ -37,6 +37,8 @@ public:
 	BOOL	IsInScreen			(int x, int y);								/* 指定座標が画面内にいるかチェック */
 	BYTE	Scroll				(BYTE byDirection, BOOL bNoCheck = FALSE);	/* スクロール */
 	void	SetCenterPos		(int x, int y);								/* 指定座標が画面中央になるように設定 */
+	void	SetCameraTargetCenterPos(int x, int y);							/* 指定座標へカメラ追従目標を設定 */
+	void	SnapCameraToCenterPos(int x, int y);								/* 指定座標へカメラを即時移動 */
 	void	SetScrollWait		(int nMoveWait);							/* スクロール移動待ち時間を設定 */
 	void	SetScrollMode		(BOOL bScroll, int nViewIcon = -1);			/* スクロールするか設定 */
 	void	SetSystemIconMode	(int nMode);								/* システムアイコンモードを設定 */
@@ -49,6 +51,7 @@ private:
 	BOOL	TimerProcScroll		(void);											/* 時間処理(スクロール) */
 	BOOL	TimerProcSystemIcon	(void);											/* 時間処理(システムアイコン) */
 	BOOL	TimerProcMapName	(void);											/* 時間処理(マップ名表示) */
+	void	CalcCameraPosFromCenter(int x, int y, double &dCamX, double &dCamY);	/* カメラ中心座標から視点位置を算出 */
 	void	DrawPartsBase		(CImg32 *pDst, int nDrawY = -99);				/* 描画(土台) */
 	void	DrawMapPile			(CImg32 *pDst, int nDrawY = -99);				/* 描画(マップ重ね合わせ) */
 	void	GetDrawMapPos		(POINT *ptPos, int &nDstX, int &nDstY);			/* マップ座標の描画位置を所得 */
@@ -73,15 +76,22 @@ public:
 				m_nMoveWait,				/* スクロール移動待ち時間 */
 				m_nViewX,					/* 視点(横) */
 				m_nViewY,					/* 視点(縦) */
+				m_nCameraSnapThreshold,		/* カメラスナップ閾値(px) */
 				m_nMoveX,					/* スクロール中(横) */
 				m_nMoveY,					/* スクロール中(縦) */
 				m_nSystemIconMode,			/* システムアイコン表示モード */
 				m_nSyatemIconOffset,		/* システムアイコン表示オフセット */
 				m_nLevelMapName;			/* マップ名表示用透過レベル */
 	DWORD		m_dwLastTimeScroll,			/* 前回のスクロール処理時間 */
+				m_dwLastTimeCameraUpdate,	/* 前回のカメラ追従更新時間 */
 				m_dwLastTimeSystemIconMode,	/* 前回のシステムアイコン表示モード処理時間 */
 				m_dwLastTimeMapName,		/* 前回のマップ名表示処理時間 */
 				m_dwMoveWaitOnce;			/* 一度だけの移動待ち時間 */
+	double		m_dCameraX,					/* カメラ現在位置(横) */
+				m_dCameraY,					/* カメラ現在位置(縦) */
+				m_dCameraTargetX,			/* カメラ目標位置(横) */
+				m_dCameraTargetY,			/* カメラ目標位置(縦) */
+				m_dCameraFollowSharpness;	/* カメラ追従の収束強度 */
 
 	CImg32		*m_pDibLevel,					/* 明度レベル画像 */
 				*m_pDibLevelTmp,				/* 灯り描画用テンポラリ */

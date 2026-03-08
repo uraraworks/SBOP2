@@ -15,12 +15,16 @@
 #ifndef MAPPARTSSIZE
 #define MAPPARTSSIZE	(32)										/* マップパーツサイズ */
 #endif
-#define DRAWCOUNT		(30)										/* 描画フレームレート(FPS) */
+#define GAME_UPDATE_FPS	(60)										/* 内部更新フレームレート(FPS) */
+#define DRAWCOUNT		(30)										/* 既定の描画フレームレート(FPS) */
 #define SCRSIZEX		(MAPPARTSSIZE * DRAW_PARTS_X)				/* マップ表示サイズ(横) */
 #define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)				/* マップ表示サイズ(縦) */
 #define SCROLLSIZE		(16)										/* スクロール単位（廃止予定：自由移動移行後は MAPPARTSSIZE に統一） */
-#define CHAR_MOVE_SPEED	(4)										/* キャラ移動速度 (px/フレーム)。4×30fps≈120px/s≈3.75tile/s */
-#define CHAR_MOVE_COLLISION_LOOKAHEAD	(CHAR_MOVE_SPEED)	/* 当たり判定先読み(px)。移動量未満だと斜め入力時に1px食い込む余地が残る */
+#define CHAR_MOVE_SPEED	(1)										/* 基本移動量(px/更新)。低速移動では 0/1px 配分で使う */
+#define CHAR_MOVE_SPEED_MAX	(1)									/* 自キャラの端数補間時に使う最大移動量(px/更新) */
+#define CHAR_MOVE_PIXELS_PER_SEC (128)								/* 自キャラの実移動速度(px/sec)。2x2キャラ見た目幅(約64px)で約2体/秒相当 */
+#define CHAR_MOVE_ANIME_BASE_PIXELS_PER_SEC (120)					/* 元の歩行アニメ調整基準(px/sec) */
+#define CHAR_MOVE_COLLISION_LOOKAHEAD	(CHAR_MOVE_SPEED_MAX)	/* 当たり判定先読み(px)。最大移動量未満だと斜め入力時に食い込む */
 #define MAXCOUNT_CHARGRPCOUNTONEFILE	(16)						/* キャラ画像の1ファイルに登録されているキャラ数 */
 
 /* ========================================================================= */
@@ -48,6 +52,8 @@ enum {
 	WM_RECVCOMMAND,										/* コマンド受信 */
 	WM_ADMINMSG,										/* 管理者ウィンドウ関連の通知 */
 };
+
+extern int g_nSboCliRenderFrameRate;
 
 /* ウィンドウID */
 enum {

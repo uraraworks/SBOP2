@@ -26,6 +26,7 @@
 #include "LayerSnow.h"
 #include "LayerMap.h"
 #include "myString.h"
+#include <math.h>
 
 
 /* ========================================================================= */
@@ -44,15 +45,22 @@ CLayerMap::CLayerMap()
 	m_nMoveWait			= MOVEWAIT;
 	m_nViewX			= 0;
 	m_nViewY			= 0;
+	m_nCameraSnapThreshold	= 1;
 	m_nMoveX			= 0;
 	m_nMoveY			= 0;
 	m_nSystemIconMode	= 0;
 	m_nSyatemIconOffset	= 0;
 	m_nLevelMapName		= 0;
 	m_dwLastTimeScroll	= 0;
+	m_dwLastTimeCameraUpdate = 0;
 	m_dwLastTimeSystemIconMode	= 0;
 	m_dwLastTimeMapName	= 0;
 	m_dwMoveWaitOnce	= 0;
+	m_dCameraX			= 0.0;
+	m_dCameraY			= 0.0;
+	m_dCameraTargetX	= 0.0;
+	m_dCameraTargetY	= 0.0;
+	m_dCameraFollowSharpness = 12.0;
 
 	m_pDibLevel			= NULL;
 	m_pDibLevelTmp		= NULL;
@@ -556,22 +564,46 @@ void CLayerMap::SetCenterPos(
 	int x,		/* [in] キャラ座標(横) */
 	int y)		/* [in] キャラ座標(縦) */
 {
-	PCInfoMapBase pMap;
+	SnapCameraToCenterPos (x, y);
+}
 
-	pMap = m_pMgrData->GetMap ();
-	if (pMap == NULL) {
-		return;
-	}
 
-	/* Phase 3: px単位のキャラ位置を受け取りカメラ左上座標を計算 */
-	int camX = x - (SCRSIZEX / 2);
-	int camY = y - (SCRSIZEY / 2);
-	camX = max (0, camX);
-	camX = min (pMap->m_sizeMap.cx * MAPPARTSSIZE - SCRSIZEX, camX);
-	camY = max (0, camY);
-	camY = min (pMap->m_sizeMap.cy * MAPPARTSSIZE - SCRSIZEY, camY);
-	m_nViewX = camX;
-	m_nViewY = camY;
+/* ========================================================================= */
+/* 関数名	:CLayerMap::SetCameraTargetCenterPos							 */
+/* 内容		:指定座標へカメラ追従目標を設定									 */
+/* ========================================================================= */
+
+void CLayerMap::SetCameraTargetCenterPos(
+	int x,		/* [in] キャラ座標(横) */
+	int y)		/* [in] キャラ座標(縦) */
+{
+	double dCamX, dCamY;
+
+	CalcCameraPosFromCenter (x, y, dCamX, dCamY);
+	m_dCameraTargetX = dCamX;
+	m_dCameraTargetY = dCamY;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::SnapCameraToCenterPos								 */
+/* 内容		:指定座標へカメラを即時移動										 */
+/* ========================================================================= */
+
+void CLayerMap::SnapCameraToCenterPos(
+	int x,		/* [in] キャラ座標(横) */
+	int y)		/* [in] キャラ座標(縦) */
+{
+	double dCamX, dCamY;
+
+	CalcCameraPosFromCenter (x, y, dCamX, dCamY);
+	m_dCameraX = dCamX;
+	m_dCameraY = dCamY;
+	m_dCameraTargetX = dCamX;
+	m_dCameraTargetY = dCamY;
+	m_nViewX = (int)(dCamX + 0.5);
+	m_nViewY = (int)(dCamY + 0.5);
+	m_dwLastTimeCameraUpdate = timeGetTime ();
 }
 
 
@@ -682,8 +714,6 @@ void CLayerMap::RenewLevel(void)
 
 		x = y = 32;
 		GetDrawPos (pChar, x, y);
-		x += pChar->m_ptMove.x;
-		y += pChar->m_ptMove.y;
 		pChar->GetViewCharPos (ptTmp);
 		y -= (ptTmp.y / 2);
 		cx = m_pMgrGrpData->GetGrpSize (wGrpIDMainBase);
@@ -761,8 +791,106 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 
 BOOL CLayerMap::TimerProcScroll(void)
 {
-	/* Phase 3: スクロールアニメーション廃止 */
-	return FALSE;
+	BOOL bRet;
+	DWORD dwNow, dwElapsed;
+	double dDt, dAlpha, dNextX, dNextY, dDiffX, dDiffY, dThreshold;
+	int nViewX, nViewY;
+
+	bRet = FALSE;
+	dwNow = timeGetTime ();
+	if (m_dwLastTimeCameraUpdate == 0) {
+		m_dwLastTimeCameraUpdate = dwNow;
+		return FALSE;
+	}
+	dwElapsed = dwNow - m_dwLastTimeCameraUpdate;
+	m_dwLastTimeCameraUpdate = dwNow;
+
+	if (m_bScroll == FALSE) {
+		return FALSE;
+	}
+	if (dwElapsed == 0) {
+		return FALSE;
+	}
+
+	dDt = (double)dwElapsed / 1000.0;
+	if (dDt > 0.10) {
+		dDt = 0.10;
+	}
+	dAlpha = 1.0 - exp (-m_dCameraFollowSharpness * dDt);
+	if (dAlpha < 0.0) {
+		dAlpha = 0.0;
+	} else if (dAlpha > 1.0) {
+		dAlpha = 1.0;
+	}
+
+	dNextX = m_dCameraX + (m_dCameraTargetX - m_dCameraX) * dAlpha;
+	dNextY = m_dCameraY + (m_dCameraTargetY - m_dCameraY) * dAlpha;
+
+	dThreshold = (double)m_nCameraSnapThreshold;
+	dDiffX = fabs (m_dCameraTargetX - dNextX);
+	dDiffY = fabs (m_dCameraTargetY - dNextY);
+	if ((dDiffX <= dThreshold) && (dDiffY <= dThreshold)) {
+		dNextX = m_dCameraTargetX;
+		dNextY = m_dCameraTargetY;
+	}
+
+	m_dCameraX = dNextX;
+	m_dCameraY = dNextY;
+
+	nViewX = (int)(m_dCameraX + 0.5);
+	nViewY = (int)(m_dCameraY + 0.5);
+	if ((nViewX != m_nViewX) || (nViewY != m_nViewY)) {
+		m_nViewX = nViewX;
+		m_nViewY = nViewY;
+		bRet = TRUE;
+	}
+	return bRet;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::CalcCameraPosFromCenter								 */
+/* 内容		:指定座標が画面中央になるカメラ座標を算出							 */
+/* ========================================================================= */
+
+void CLayerMap::CalcCameraPosFromCenter(
+	int x,
+	int y,
+	double &dCamX,
+	double &dCamY)
+{
+	PCInfoMapBase pMap;
+	int nMaxCamX, nMaxCamY;
+
+	dCamX = 0.0;
+	dCamY = 0.0;
+
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return;
+	}
+
+	nMaxCamX = pMap->m_sizeMap.cx * MAPPARTSSIZE - SCRSIZEX;
+	nMaxCamY = pMap->m_sizeMap.cy * MAPPARTSSIZE - SCRSIZEY;
+	if (nMaxCamX < 0) {
+		nMaxCamX = 0;
+	}
+	if (nMaxCamY < 0) {
+		nMaxCamY = 0;
+	}
+
+	dCamX = (double)(x - (SCRSIZEX / 2));
+	dCamY = (double)(y - (SCRSIZEY / 2));
+	if (dCamX < 0.0) {
+		dCamX = 0.0;
+	} else if (dCamX > (double)nMaxCamX) {
+		dCamX = (double)nMaxCamX;
+	}
+	if (dCamY < 0.0) {
+		dCamY = 0.0;
+	} else if (dCamY > (double)nMaxCamY) {
+		dCamY = (double)nMaxCamY;
+	}
 }
 
 
@@ -1396,10 +1524,13 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 
 void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 {
+	POINT ptDrawMapPos;
+
+	pChar->GetDrawMapPos (ptDrawMapPos);
 	/* Phase 3: m_nMapX/Y・m_nViewX/Y ともにピクセル単位。スクロールアニメーション補正廃止 */
-	nDstX += (pChar->m_nMapX - m_nViewX);
+	nDstX += (ptDrawMapPos.x - m_nViewX);
 	/* Phase 8: m_nMapY は足元基準のため、描画は半キャラ(16px)上へ補正する */
-	nDstY += (pChar->m_nMapY - m_nViewY - HALF_TILE);
+	nDstY += (ptDrawMapPos.y - m_nViewY - HALF_TILE);
 }
 
 
@@ -1448,7 +1579,7 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 {
 	BOOL bResult, bDraw, bDrawChat;
 	int i, j, nCount, nCount2, x, y, xx, yy, cy, nMaxX, nMaxY, nWidth, nHeight, nDrawMode;
-	POINT ptViewCharPos;
+	POINT ptViewCharPos, ptDrawMapPos;
 	PCInfoCharCli pChar;
 	PCInfoTextEffect pInfoTextEffect;
 
@@ -1470,14 +1601,13 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 				continue;
 			}
 		}
-		bResult = IsInScreen (pChar->m_nMapX, pChar->m_nMapY);
+		pChar->GetDrawMapPos (ptDrawMapPos);
+		bResult = IsInScreen (ptDrawMapPos.x, ptDrawMapPos.y);
 		if (bResult == FALSE) {
 			continue;
 		}
 		x = y = 32;
 		GetDrawPos (pChar, x, y);
-		x += pChar->m_ptMove.x;
-		y += pChar->m_ptMove.y;
 		pChar->GetViewCharPos (ptViewCharPos);
 
 		/* 文字エフェクト */

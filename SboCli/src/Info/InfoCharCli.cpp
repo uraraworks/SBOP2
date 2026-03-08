@@ -35,7 +35,10 @@ static BOOL IsCharInPlayableRange(PCInfoCharCli pInfoChar)
 	if (pLayerMap == NULL) {
 		return FALSE;
 	}
-	return pLayerMap->IsInScreen (pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+	POINT ptDrawMapPos;
+
+	pInfoChar->GetDrawMapPos (ptDrawMapPos);
+	return pLayerMap->IsInScreen (ptDrawMapPos.x, ptDrawMapPos.y);
 }
 
 /* ========================================================================= */
@@ -76,8 +79,14 @@ CInfoCharCli::CInfoCharCli()
 	m_nPredictBaseX			= 0;
 	m_nPredictBaseY			= 0;
 	m_nPredictDirection		= -1;
-	m_nPredictSpeed			= CHAR_MOVE_SPEED;
+	m_nPredictSpeed			= CHAR_MOVE_PIXELS_PER_SEC;
 	m_dwPredictRecvTime		= 0;
+	m_dwDrawMoveStartTime	= 0;
+	m_dwDrawMoveEndTime		= 0;
+	m_dDrawMoveStartX		= 0.0;
+	m_dDrawMoveStartY		= 0.0;
+	m_dDrawMoveEndX			= 0.0;
+	m_dDrawMoveEndY			= 0.0;
 
 	m_ptMove.x = m_ptMove.y = 0;
 
@@ -120,6 +129,7 @@ void CInfoCharCli::Create(CMgrData *pMgrData)
 	m_pMgrData	= pMgrData;
 	m_pMgrSound	= m_pMgrData->GetMgrSound ();
 	m_pSock		= m_pMgrData->GetUraraSockTCP ();
+	ResetDrawMoveSegment (m_nMapX, m_nMapY, timeGetTime ());
 }
 
 
@@ -144,6 +154,48 @@ void CInfoCharCli::ChgDirection(int nDirection)
 
 Exit:
 	return;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::SetPos											 */
+/* 内容		:座標を指定														 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+int CInfoCharCli::SetPos(int x, int y, BOOL bBack/*FALSE*/)
+{
+	int nRet, nDeltaX, nDeltaY, nDeltaMax;
+	DWORD dwNowTime, dwDuration;
+	double dDrawX, dDrawY;
+
+	dwNowTime = timeGetTime ();
+	nDeltaX = x - m_nMapX;
+	nDeltaY = y - m_nMapY;
+	nDeltaMax = abs (nDeltaX);
+	if (nDeltaMax < abs (nDeltaY)) {
+		nDeltaMax = abs (nDeltaY);
+	}
+	GetDrawMapPosDouble (dDrawX, dDrawY, dwNowTime);
+	nRet = CInfoCharBase::SetPos (x, y, bBack);
+	if ((nDeltaMax <= 0) || bBack || (nDeltaMax > MAPPARTSSIZE)) {
+		ResetDrawMoveSegment (x, y, dwNowTime);
+		return nRet;
+	}
+
+	dwDuration = GetDrawMoveDuration ((int)dDrawX, (int)dDrawY, x, y);
+	if (dwDuration <= 1) {
+		ResetDrawMoveSegment (x, y, dwNowTime);
+		return nRet;
+	}
+
+	m_dDrawMoveStartX = dDrawX;
+	m_dDrawMoveStartY = dDrawY;
+	m_dDrawMoveEndX = (double)x;
+	m_dDrawMoveEndY = (double)y;
+	m_dwDrawMoveStartTime = dwNowTime;
+	m_dwDrawMoveEndTime = dwNowTime + dwDuration;
+	return nRet;
 }
 
 
@@ -283,6 +335,111 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 	if (IsStateMove () == FALSE) {
 		DeleteAllMovePosQue ();
 	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::GetDrawMapPosDouble								 */
+/* 内容		:描画用の補間座標を取得(小数)										 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+void CInfoCharCli::GetDrawMapPosDouble(double &dDstX, double &dDstY, DWORD dwNowTime) const
+{
+	double dRate;
+
+	dDstX = (double)m_nMapX;
+	dDstY = (double)m_nMapY;
+	if (m_dwDrawMoveEndTime <= m_dwDrawMoveStartTime) {
+		return;
+	}
+	if (dwNowTime <= m_dwDrawMoveStartTime) {
+		dDstX = m_dDrawMoveStartX;
+		dDstY = m_dDrawMoveStartY;
+		return;
+	}
+	if (dwNowTime >= m_dwDrawMoveEndTime) {
+		dDstX = m_dDrawMoveEndX;
+		dDstY = m_dDrawMoveEndY;
+		return;
+	}
+
+	dRate = (double)(dwNowTime - m_dwDrawMoveStartTime) / (double)(m_dwDrawMoveEndTime - m_dwDrawMoveStartTime);
+	dDstX = m_dDrawMoveStartX + (m_dDrawMoveEndX - m_dDrawMoveStartX) * dRate;
+	dDstY = m_dDrawMoveStartY + (m_dDrawMoveEndY - m_dDrawMoveStartY) * dRate;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::ResetDrawMoveSegment								 */
+/* 内容		:描画補間を即時反映												 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+void CInfoCharCli::ResetDrawMoveSegment(int x, int y, DWORD dwNowTime)
+{
+	m_dDrawMoveStartX = (double)x;
+	m_dDrawMoveStartY = (double)y;
+	m_dDrawMoveEndX = (double)x;
+	m_dDrawMoveEndY = (double)y;
+	m_dwDrawMoveStartTime = dwNowTime;
+	m_dwDrawMoveEndTime = dwNowTime;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::GetDrawMoveDuration								 */
+/* 内容		:描画補間時間を取得												 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+DWORD CInfoCharCli::GetDrawMoveDuration(int nSrcX, int nSrcY, int nDstX, int nDstY)
+{
+	int nDeltaX, nDeltaY, nDeltaMax, nMoveSpeed;
+	DWORD dwDuration, dwWait;
+
+	nDeltaX = abs (nDstX - nSrcX);
+	nDeltaY = abs (nDstY - nSrcY);
+	nDeltaMax = nDeltaX;
+	if (nDeltaMax < nDeltaY) {
+		nDeltaMax = nDeltaY;
+	}
+	if (nDeltaMax <= 0) {
+		return 0;
+	}
+
+	if ((m_nMoveType != CHARMOVETYPE_PC) &&
+		((m_nMoveState == CHARMOVESTATE_MOVE) || (m_nMoveState == CHARMOVESTATE_BATTLEMOVE))) {
+		dwWait = GetMoveWait ();
+		if (m_dwMoveWaitOnce != 0) {
+			dwWait = m_dwMoveWaitOnce;
+		}
+		dwDuration = max ((DWORD)(((ULONGLONG)dwWait * (ULONGLONG)nDeltaMax + MAPPARTSSIZE - 1) / MAPPARTSSIZE), (DWORD)1);
+		return dwDuration;
+	}
+
+	nMoveSpeed = CHAR_MOVE_PIXELS_PER_SEC;
+	if (m_bPredictedMove && (m_nPredictSpeed > 0)) {
+		nMoveSpeed = m_nPredictSpeed;
+	}
+	dwDuration = max ((DWORD)(((ULONGLONG)nDeltaMax * 1000 + nMoveSpeed - 1) / nMoveSpeed), (DWORD)1);
+	return dwDuration;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharCli::GetDrawMapPos									 */
+/* 内容		:描画用の補間座標を取得											 */
+/* 日付		:2026/03/08														 */
+/* ========================================================================= */
+
+void CInfoCharCli::GetDrawMapPos(POINT &ptDst) const
+{
+	double dDrawX, dDrawY;
+
+	GetDrawMapPosDouble (dDrawX, dDrawY, timeGetTime ());
+	ptDst.x = (int)((dDrawX >= 0.0) ? (dDrawX + 0.5) : (dDrawX - 0.5));
+	ptDst.y = (int)((dDrawY >= 0.0) ? (dDrawY + 0.5) : (dDrawY - 0.5));
 }
 
 
@@ -1386,7 +1543,7 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 	m_nPredictBaseX		= x;
 	m_nPredictBaseY		= y;
 	m_nPredictDirection	= nDirection;
-	m_nPredictSpeed		= CHAR_MOVE_SPEED;
+	m_nPredictSpeed		= CHAR_MOVE_PIXELS_PER_SEC;
 	m_dwPredictRecvTime	= dwRecvTime;
 	SetDirection (nDirection);
 
@@ -1448,12 +1605,12 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 		return;
 	}
 
-	nFrame = (int)(((ULONGLONG)(dwNowTime - m_dwPredictRecvTime) * DRAWCOUNT) / 1000);
+	nFrame = (int)(((ULONGLONG)(dwNowTime - m_dwPredictRecvTime) * GAME_UPDATE_FPS) / 1000);
 	if (nFrame <= 0) {
 		return;
 	}
 
-	nOffset = nFrame * m_nPredictSpeed;
+	nOffset = (int)(((ULONGLONG)(dwNowTime - m_dwPredictRecvTime) * m_nPredictSpeed) / 1000);
 	nX = m_nPredictBaseX + anPosX[m_nPredictDirection] * nOffset;
 	nY = m_nPredictBaseY + anPosY[m_nPredictDirection] * nOffset;
 
@@ -1491,6 +1648,12 @@ BOOL CInfoCharCli::RenewAnime(
 	if (nAdd != 0) {
 		dwTmp  = dwTime - m_dwLastTimeAnime;
 		dwWait = (DWORD)pInfoMotion->m_byWait * 10;
+		if ((m_nMoveState == CHARMOVESTATE_MOVE) ||
+			(m_nMoveState == CHARMOVESTATE_WALKANIME) ||
+			(m_nMoveState == CHARMOVESTATE_BATTLEMOVE)) {
+			dwWait = (DWORD)(((ULONGLONG)dwWait * CHAR_MOVE_ANIME_BASE_PIXELS_PER_SEC + CHAR_MOVE_PIXELS_PER_SEC - 1) / CHAR_MOVE_PIXELS_PER_SEC);
+			dwWait = max (dwWait, (DWORD)1);
+		}
 		if (dwTmp < dwWait) {
 			goto Exit;
 		}
@@ -1601,7 +1764,6 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 
 	dwWait = max (dwWait, 1);
 	dwTmp /= dwWait;
-
 	switch (nDirection) {
 	case 0:		/* 上 */
 		m_ptMove.y -= dwTmp;

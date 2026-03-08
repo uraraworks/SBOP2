@@ -33,6 +33,7 @@ public:
 	void Init				(void);											/* 初期化 */
 	void GetMsgLogRect		(RECT &rcDst);									/* メッセージログウィンドウの矩形を取得 */
 	void SyncLastEventTile	(DWORD dwMapID, int x, int y);					/* イベント再発火抑止用の基準タイルを同期 */
+	void ResetMapEventCheckSendState(void);									/* マップイベント送信状態をリセット */
 	BOOL TimerProc			(void);											/* 時間処理 */
 	void KeyProc			(BYTE byCode, BOOL bDown);						/* キー処理 */
 	void OnWindowMsg		(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_WINDOWMSG) */
@@ -70,9 +71,10 @@ protected:
 	BOOL	OnShift						(BOOL bDown);									/* キーハンドラ(Shift) */
 	BOOL	OnCtrl						(BOOL bDown);									/* キーハンドラ(Ctrl) */
 	BOOL	OnSpace						(BOOL bDown);									/* キーハンドラ(Space) */
+	int		GetPlayerMoveStep			(DWORD dwNowTime, int &nAccumOut, DWORD &dwLastStepTimeOut);	/* 自キャラの1更新あたり移動量を取得 */
 	void	OnMgrDrawSTART_FADEIN		(DWORD dwPara);									/* フェードイン開始 */
 	void	OnMgrDrawEND_FADEIN			(DWORD dwPara);									/* フェードイン完了 */
-	BOOL	MoveProc					(int x, int y, int xx, int yy, int nDirection);	/* 移動処理 */
+	BOOL	MoveProc					(int x, int y, int xx, int yy, int nDirection, BOOL bSyncSend = TRUE);	/* 移動処理 */
 	BOOL	OnWindowMsgCHAT				(DWORD dwPara);									/* チャット入力 */
 	BOOL	OnWindowMsgSYSTEMMENU		(DWORD dwPara);									/* システムメニュー */
 	BOOL	OnWindowMsgSETCOLOR			(DWORD dwPara);									/* 名前と発言色の設定 */
@@ -113,6 +115,8 @@ protected:
 					m_dwStartChargeTime;				/* 溜め開始時間 */
 	BOOL			m_bMoveSyncActive;					/* Dead Reckoning送信中か */
 	int				m_nMoveSyncDirection;				/* 最後に送信した移動方向 */
+	int				m_nMoveSpeedAccum;					/* 自キャラ速度のサブピクセル累積 */
+	DWORD			m_dwLastPlayerMoveStepTime;			/* 自キャラ速度計算の前回時刻 */
 	DWORD			m_dwLastEventMapID;					/* 前回イベント判定マップID */
 	BOOL			m_bHasLastEventTile;				/* 前回イベント判定タイルを保持しているか */
 	int				m_nLastEventTileX,					/* 前回イベント判定タイルX */

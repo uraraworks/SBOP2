@@ -46,6 +46,8 @@
 #define TIMERID_ACTIVECHECK	101						/* アクティブウィンドウチェックタイマー */
 #define TIMER_ACTIVECHECK	1000					/* アクティブウィンドウチェックタイマー周期 */
 
+int g_nSboCliRenderFrameRate = DRAWCOUNT;
+
 /* メッセージコマンド種別 */
 enum {
 	MSGCMDTYPE_NONE = 0,
@@ -1169,6 +1171,7 @@ void CMainFrame::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		if (m_pMgrData->GetOption60Frame () == TRUE) {
 			m_nDrawCount = 60;
 		}
+		g_nSboCliRenderFrameRate = m_nDrawCount;
 		m_nFPS = 1000 / m_nDrawCount + 1;
 		break;
 	default:
