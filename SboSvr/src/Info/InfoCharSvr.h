@@ -124,12 +124,15 @@ public:
 			m_dwEfcBalloonID,			/* 噴出しID */
 			m_dwMotionID,				/* モーションID */
 			m_dwMoveCount,				/* 移動歩数 */
+			m_dwLastMoveSyncSendTime,	/* 最終移動同期送信時刻 */
 			m_dwSuppressMapEventMapID,	/* 再発火抑止中のマップID */
 			m_dwLastRecvMoveTime,		/* 最終移動受信時刻(ms) */
 			m_dwLastRecvMovePacketTime;	/* 最終移動受信パケット時刻(ms) */
 	int		m_nSuppressMapEventTileX,	/* 再発火抑止中のタイルX */
-			m_nSuppressMapEventTileY;	/* 再発火抑止中のタイルY */
-	BOOL	m_bSuppressMapEventUntilLeave;/* 抑止タイルを出るまでイベント再発火を抑止 */
+			m_nSuppressMapEventTileY,	/* 再発火抑止中のタイルY */
+			m_nLastMoveSyncDirection;	/* 最終移動同期向き */
+	BOOL	m_bSuppressMapEventUntilLeave,/* 抑止タイルを出るまでイベント再発火を抑止 */
+			m_bMoveSyncActive;			/* 移動同期中 */
 
 	CInfoMapBase	*m_pInfoMap;		/* マップ情報 */
 	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* キャラ情報ライブラリ */

@@ -256,6 +256,42 @@ void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
 }
 
 
+namespace {
+
+static DWORD GetPlayerMoveWaitBase(PCInfoCharCli pPlayerChar)
+{
+	DWORD dwMoveWait;
+
+	if (pPlayerChar == NULL) {
+		return 11;
+	}
+	dwMoveWait = pPlayerChar->GetMoveWait ();
+	if (dwMoveWait == 0) {
+		return 11;
+	}
+	return dwMoveWait;
+}
+
+static int GetPlayerMovePixelsPerSec(PCInfoCharCli pPlayerChar)
+{
+	DWORD dwMoveWait;
+	ULONGLONG ullSpeed;
+
+	dwMoveWait = GetPlayerMoveWaitBase (pPlayerChar);
+	ullSpeed = (ULONGLONG)CHAR_MOVE_PIXELS_PER_SEC * 11;
+	ullSpeed = (ullSpeed + dwMoveWait - 1) / dwMoveWait;
+	if (ullSpeed == 0) {
+		return 1;
+	}
+	if (ullSpeed > INT_MAX) {
+		return INT_MAX;
+	}
+	return (int)ullSpeed;
+}
+
+}	/* namespace */
+
+
 /* ========================================================================= */
 /* 関数名	:CStateProcMAP::GetPlayerMoveStep								 */
 /* 内容		:自キャラの1更新あたり移動量を取得								 */
@@ -266,6 +302,7 @@ int CStateProcMAP::GetPlayerMoveStep(DWORD dwNowTime, int &nAccumOut, DWORD &dwL
 {
 	ULONGLONG ullAccumulated;
 	int nMoveStep;
+	int nMovePixelsPerSec;
 	DWORD dwElapsed;
 
 	if (dwLastStepTimeOut == 0) {
@@ -278,7 +315,8 @@ int CStateProcMAP::GetPlayerMoveStep(DWORD dwNowTime, int &nAccumOut, DWORD &dwL
 		return 0;
 	}
 
-	ullAccumulated = (ULONGLONG)nAccumOut + (ULONGLONG)dwElapsed * CHAR_MOVE_PIXELS_PER_SEC;
+	nMovePixelsPerSec = GetPlayerMovePixelsPerSec (m_pPlayerChar);
+	ullAccumulated = (ULONGLONG)nAccumOut + (ULONGLONG)dwElapsed * nMovePixelsPerSec;
 	nMoveStep = (int)(ullAccumulated / 1000);
 	nAccumOut = (int)(ullAccumulated % 1000);
 	return nMoveStep;
@@ -921,10 +959,10 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 			pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 			pLayerMap->SetCenterPos (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY);
 
-			rcTmp.left	 = pLayerMap->m_nViewX - 2;
-			rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * 2) + 2;
-			rcTmp.top	 = pLayerMap->m_nViewY - 2;
-			rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * 2) + 2;
+			rcTmp.left	 = pLayerMap->m_nViewX - (MAPPARTSSIZE * 2);
+			rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
+			rcTmp.top	 = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
+			rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 			m_pLibInfoItem->SetArea (m_pMgrData->GetPlayerChar ()->m_dwMapID, &rcTmp);
 		}
 		break;
@@ -2352,11 +2390,10 @@ BOOL CStateProcMAP::OnCtrl(BOOL bDown)
 	}
 
 	if (pLayerMap) {
-		/* Phase 3: m_nViewX/Y はpx単位 → /HALF_TILE で旧スケール変換してアイテム管理範囲を計算 */
-		rcTmp.left	 = pLayerMap->m_nViewX / HALF_TILE - 2;
-		rcTmp.right	 = pLayerMap->m_nViewX / HALF_TILE + (DRAW_PARTS_X * 2) + 2;
-		rcTmp.top	 = pLayerMap->m_nViewY / HALF_TILE - 2;
-		rcTmp.bottom = pLayerMap->m_nViewY / HALF_TILE + (DRAW_PARTS_Y * 2) + 2;
+		rcTmp.left	 = pLayerMap->m_nViewX - (MAPPARTSSIZE * 2);
+		rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
+		rcTmp.top	 = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
+		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 		m_pLibInfoItem->SetArea (m_pPlayerChar->m_dwMapID, &rcTmp);
 	}
 
@@ -2443,11 +2480,10 @@ void CStateProcMAP::OnMgrDrawSTART_FADEIN(DWORD dwPara)
 	if (pLayerMap) {
 		pLayerMap->RenewMapName (NULL);
 		pLayerMap->SetCenterPos (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY);
-		/* Phase 3: m_nViewX/Y はpx単位 → /HALF_TILE で旧スケール変換してアイテム管理範囲を計算 */
-		rcTmp.left	 = pLayerMap->m_nViewX / HALF_TILE - 2;
-		rcTmp.right	 = pLayerMap->m_nViewX / HALF_TILE + (DRAW_PARTS_X * 2) + 2;
-		rcTmp.top	 = pLayerMap->m_nViewY / HALF_TILE - 2;
-		rcTmp.bottom = pLayerMap->m_nViewY / HALF_TILE + (DRAW_PARTS_Y * 2) + 2;
+		rcTmp.left	 = pLayerMap->m_nViewX - (MAPPARTSSIZE * 2);
+		rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
+		rcTmp.top	 = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
+		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 		m_pLibInfoItem->SetArea (m_pPlayerChar->m_dwMapID, &rcTmp);
 	}
 }
@@ -2862,11 +2898,10 @@ ExitSend:
 	bRet = TRUE;
 Exit:
 	if (bRet && pLayerMap) {
-		/* Phase 3: m_nViewX/Y はpx単位 → /HALF_TILE で旧スケール変換してアイテム管理範囲を計算 */
-		rcTmp.left	 = pLayerMap->m_nViewX / HALF_TILE - 2;
-		rcTmp.right	 = pLayerMap->m_nViewX / HALF_TILE + (DRAW_PARTS_X * 2) + 2;
-		rcTmp.top	 = pLayerMap->m_nViewY / HALF_TILE - 2;
-		rcTmp.bottom = pLayerMap->m_nViewY / HALF_TILE + (DRAW_PARTS_Y * 2) + 2;
+		rcTmp.left	 = pLayerMap->m_nViewX - (MAPPARTSSIZE * 2);
+		rcTmp.right	 = pLayerMap->m_nViewX + (DRAW_PARTS_X * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
+		rcTmp.top	 = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
+		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 		m_pLibInfoItem->SetArea (m_pPlayerChar->m_dwMapID, &rcTmp);
 		m_pDlgDbg->Renew();
 	}

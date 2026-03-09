@@ -26,6 +26,10 @@
 #include "MgrWindow.h"
 #include "MainFrame.h"
 
+namespace {
+
+}
+
 #if SBO_ENABLE_POS_SYNC_DEBUG_LOG
 static void WritePosSyncDebugLog(DWORD dwCharID, int nBeforeX, int nBeforeY, int nSyncX, int nSyncY, int nApplyX, int nApplyY, int nDeltaMax, LPCSTR pszAdjustType, BOOL bUpdate)
 {
@@ -132,17 +136,22 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 		nApplyX = Packet.m_pos.x;
 		nApplyY = Packet.m_pos.y;
 		pszAdjustType = "snap";
-	} else if (nDeltaMax >= 8) {
+	} else if ((pInfoChar->m_bPredictedMove == FALSE) && (nDeltaMax >= 8)) {
 		nSetX = pInfoChar->m_nMapX + (nDeltaX / 2);
 		nSetY = pInfoChar->m_nMapY + (nDeltaY / 2);
 		pInfoChar->SetPos (nSetX, nSetY);
 		nApplyX = nSetX;
 		nApplyY = nSetY;
 		pszAdjustType = "lerp";
+	} else if (pInfoChar->m_bPredictedMove && (nDeltaMax >= 8)) {
+		pszAdjustType = "skip";
 	}
 	pInfoChar->SetDirection (Packet.m_nDirection);
 
-	dwRecvTime = timeGetTime ();
+	dwRecvTime = Packet.m_dwTimeStamp;
+	if (dwRecvTime == 0) {
+		dwRecvTime = timeGetTime ();
+	}
 	if (Packet.m_bUpdate) {
 		pInfoChar->StartPredictedMove (Packet.m_nDirection, Packet.m_pos.x, Packet.m_pos.y, dwRecvTime);
 	} else {
@@ -490,11 +499,11 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 				}
 				nState = -1;
 			} else {
-				pInfoChar->SetPos (nPacketPosX, nPacketPosY);
 				pInfoChar->SetDirection (nDirection);
 				if (nState == nStateMove) {
 					pInfoChar->StartPredictedMove (nDirection, nPacketPosX, nPacketPosY, dwRecvTime);
 				} else {
+					pInfoChar->SetPos (nPacketPosX, nPacketPosY);
 					pInfoChar->StopPredictedMove (nPacketPosX, nPacketPosY);
 				}
 				pInfoChar->m_bRedraw = TRUE;
@@ -542,6 +551,11 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 	}
 	pInfoChar->ChgMoveState (nState);
 	pInfoChar->SetChgWait (FALSE);
+	if ((pInfoChar != pInfoCharPlayer) &&
+		(nState != CHARMOVESTATE_MOVE) &&
+		(nState != CHARMOVESTATE_BATTLEMOVE)) {
+		pInfoChar->StopPredictedMove (pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+	}
 
 	if (pInfoChar == pInfoCharPlayer) {
 		bChgBGM = FALSE;

@@ -308,7 +308,7 @@ void CMainFrame::RecvProcMSGCMD_MAKEITEM(PBYTE pData, DWORD dwSessionID)
 {
 	BOOL bResult;
 	DWORD dwItemID;
-	POINT ptPos;
+	POINT ptPos, ptMapPos;
 	PCInfoItem pInfoItem;
 	PCInfoMapBase pInfoMap;
 	PCInfoCharBase pInfoChar;
@@ -327,7 +327,8 @@ void CMainFrame::RecvProcMSGCMD_MAKEITEM(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 	pInfoChar->GetFrontPos (ptPos);
-	bResult = pInfoMap->IsMove (ptPos.x / 2, ptPos.y / 2, pInfoChar->m_nDirection);
+	pInfoChar->GetFrontMapPos (ptMapPos);
+	bResult = pInfoMap->IsMove (ptMapPos.x, ptMapPos.y, pInfoChar->m_nDirection);
 	if (bResult == FALSE) {
 		return;
 	}

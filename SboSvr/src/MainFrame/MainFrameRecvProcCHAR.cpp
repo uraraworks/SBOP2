@@ -572,7 +572,8 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 				return;
 			}
 		}
-		bResult = pInfoMap->IsMove (ptPos.x / 2, ptPos.y / 2, pInfoChar->m_nDirection);
+		pInfoChar->GetFrontMapPos (ptMapPos);
+		bResult = pInfoMap->IsMove (ptMapPos.x, ptMapPos.y, pInfoChar->m_nDirection);
 		if (bResult == FALSE) {
 			/* 移動できないところには置けない */
 			return;
@@ -593,7 +594,6 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 		nResult = RESULTID_CHAR_RES_PUTGET_PUT;
 
 		/* ゴミ箱処理 */
-		pInfoChar->GetFrontMapPos (ptMapPos);
 		nMapEventType = pInfoMap->GetMapEventType (ptMapPos.x, ptMapPos.y);
 		if (nMapEventType == MAPEVENTTYPE_TRASHBOX) {
 			nResult = RESULTID_CHAR_RES_PUTGET_DELETE;

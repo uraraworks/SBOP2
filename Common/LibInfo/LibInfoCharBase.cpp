@@ -416,10 +416,10 @@ BOOL CLibInfoCharBase::IsBlockChar(
 	nDirectionBack = pChar->m_nDirection;
 	pChar->m_nDirection = nDirection;
 	pChar->GetFrontPos (ptFront, nDirection, TRUE);
-	pChar->GetPosRect (rcSrc);
+	pChar->GetCollisionRect (rcSrc);
 	pChar->m_nMapX = ptFront.x;
 	pChar->m_nMapY = ptFront.y;
-	pChar->GetPosRect (rcFront);
+	pChar->GetCollisionRectOnce (rcFront);
 	pChar->m_nMapX = ptBack.x;
 	pChar->m_nMapY = ptBack.y;
 
@@ -436,7 +436,7 @@ BOOL CLibInfoCharBase::IsBlockChar(
 		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 	}
-		pInfoCharTmp->GetPosRect (rcTmp);
+		pInfoCharTmp->GetCollisionRect (rcTmp);
 		if (!((rcFront.left <= rcTmp.right) && (rcTmp.left <= rcFront.right) &&
 			(rcFront.top <= rcTmp.bottom) && (rcTmp.top <= rcFront.bottom))) {
 			continue;

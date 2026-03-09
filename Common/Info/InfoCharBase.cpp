@@ -1755,6 +1755,62 @@ void CInfoCharBase::GetPosRectOnce(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 
 
 /* ========================================================================= */
+/* 関数名	:CInfoCharBase::GetCollisionRect								 */
+/* 内容		:接触判定用の座標矩形を取得										 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+void CInfoCharBase::GetCollisionRect(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
+{
+	int x, y, nLeft, nRight, anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	SIZE sizeTmp;
+
+	GetCharSize (sizeTmp);
+	x = m_nMapX;
+	y = m_nMapY;
+	if (bFrontPos) {
+		x += anPosX[m_nDirection];
+		y += anPosY[m_nDirection];
+	}
+	nLeft = x + max ((sizeTmp.cx - HALF_TILE) / 2, 0);
+	nRight = nLeft + min (sizeTmp.cx, HALF_TILE) - 1;
+
+	SetRect (&rcDst,
+		nLeft,
+		y - (HALF_TILE - 1),
+		nRight,
+		y);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CInfoCharBase::GetCollisionRectOnce							 */
+/* 内容		:接触判定用の先頭矩形を取得										 */
+/* 日付		:2026/03/09														 */
+/* ========================================================================= */
+
+void CInfoCharBase::GetCollisionRectOnce(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
+{
+	GetCollisionRect (rcDst, bFrontPos);
+
+	switch (GetDrawDirection ()) {
+	case 0:
+		rcDst.bottom = rcDst.top;
+		break;
+	case 1:
+		rcDst.top = rcDst.bottom;
+		break;
+	case 2:
+		rcDst.right = rcDst.left;
+		break;
+	case 3:
+		rcDst.left = rcDst.right;
+		break;
+	}
+}
+
+
+/* ========================================================================= */
 /* 関数名	:CInfoCharBase::GetMapPosRect									 */
 /* 内容		:マップ座標矩形を取得											 */
 /* 日付		:2009/01/31														 */

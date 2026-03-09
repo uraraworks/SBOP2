@@ -32,6 +32,51 @@
 #include "MgrData.h"
 #include "LibInfoCharSvr.h"
 
+namespace {
+
+static const int SERVER_CHAR_MOVE_PIXELS_PER_SEC = 128;
+
+static DWORD GetMoveWaitBase(CInfoCharSvr *pInfoChar)
+{
+	DWORD dwMoveWait;
+
+	if (pInfoChar == NULL) {
+		return 11;
+	}
+	dwMoveWait = pInfoChar->GetMoveWait ();
+	if (dwMoveWait == 0) {
+		return 11;
+	}
+	return dwMoveWait;
+}
+
+static int GetMovePixelsPerSec(CInfoCharSvr *pInfoChar)
+{
+	DWORD dwMoveWait;
+	ULONGLONG ullSpeed;
+
+	dwMoveWait = GetMoveWaitBase (pInfoChar);
+	ullSpeed = (ULONGLONG)SERVER_CHAR_MOVE_PIXELS_PER_SEC * 11;
+	ullSpeed = (ullSpeed + dwMoveWait - 1) / dwMoveWait;
+	if (ullSpeed == 0) {
+		return 1;
+	}
+	if (ullSpeed > INT_MAX) {
+		return INT_MAX;
+	}
+	return (int)ullSpeed;
+}
+
+static int GetMoveSyncSpeedLevel(CInfoCharSvr *pInfoChar)
+{
+	int nMovePixelsPerSec;
+
+	nMovePixelsPerSec = GetMovePixelsPerSec (pInfoChar);
+	return max ((nMovePixelsPerSec + SERVER_CHAR_MOVE_PIXELS_PER_SEC - 1) / SERVER_CHAR_MOVE_PIXELS_PER_SEC, 1);
+}
+
+}	/* namespace */
+
 
 /* ========================================================================= */
 /* 関数名	:CLibInfoCharSvr::CLibInfoCharSvr								 */
@@ -138,6 +183,9 @@ BOOL CLibInfoCharSvr::Proc(void)
 				continue;
 			}
 			if (pInfoChar->IsStateMove () == FALSE) {
+				continue;
+			}
+			if (pInfoChar->IsNPC ()) {
 				continue;
 			}
 
@@ -1899,10 +1947,11 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 	int nXType/*0*/,				/* [in] 1:縦向きの時に、半キャラずれた状態は判定しない */
 	PARRAYDWORD padwCharID)/*NULL*/	/* [out] 対象キャラIDを全て取得 */
 {
-	int i, nCount;
+	int i, nCount, nDirectionBack, nDrawDirection;
 	DWORD dwRet;
 	RECT rcFrontRect, rcTmp;
 	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
+	const int nAttackReach = 12;
 
 	dwRet = 0;
 
@@ -1913,7 +1962,25 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 	if (nDirection == -1) {
 		nDirection = pInfoCharSrc->m_nDirection;
 	}
-	pInfoCharSrc->GetPosRectOnce (rcFrontRect, TRUE);
+	nDirectionBack = pInfoCharSrc->m_nDirection;
+	pInfoCharSrc->m_nDirection = nDirection;
+	pInfoCharSrc->GetCollisionRectOnce (rcFrontRect);
+	pInfoCharSrc->m_nDirection = nDirectionBack;
+	nDrawDirection = pInfoCharSrc->GetDrawDirection (nDirection);
+	switch (nDrawDirection) {
+	case 0:
+		rcFrontRect.top -= nAttackReach;
+		break;
+	case 1:
+		rcFrontRect.bottom += nAttackReach;
+		break;
+	case 2:
+		rcFrontRect.left -= nAttackReach;
+		break;
+	case 3:
+		rcFrontRect.right += nAttackReach;
+		break;
+	}
 
 	nCount = GetCountLogIn ();
 	for (i = 0; i < nCount; i ++) {
@@ -1933,7 +2000,7 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 			continue;
 		}
 
-		pInfoCharTmp->GetPosRect (rcTmp);
+		pInfoCharTmp->GetCollisionRect (rcTmp);
 		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
 			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
 			continue;
@@ -2249,6 +2316,24 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 
 	/* 移動状態が変わった？ */
 	} else if (pInfoChar->m_bChgMoveState) {
+		if (pInfoChar->IsNPC () && pInfoChar->m_bMoveSyncActive && (pInfoChar->IsStateMove () == FALSE)) {
+			CPacketCHAR_MOVE_STOP PacketMoveStop;
+
+			PacketMoveStop.Make (
+					pInfoChar->m_dwMapID,
+					pInfoChar->m_dwCharID,
+					pInfoChar->m_nDirection,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY,
+					TRUE,
+					GetMoveSyncSpeedLevel (pInfoChar),
+					timeGetTime ());
+			m_pMainFrame->SendToScreenChar (pInfoChar, &PacketMoveStop);
+			pInfoChar->m_bMoveSyncActive = FALSE;
+			pInfoChar->m_nLastMoveSyncDirection = -1;
+			pInfoChar->m_dwLastMoveSyncSendTime = 0;
+		}
+
 		CPacketCHAR_STATE Packet;
 
 		Packet.Make (pInfoChar->m_dwCharID, pInfoChar->m_nMoveState);
@@ -2470,21 +2555,82 @@ Exit:
 
 void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 {
-	CPacketCHAR_MOVE_DIR_CHANGE Packet;
+	CPacketCHAR_MOVE_START PacketMoveStart;
+	CPacketCHAR_MOVE_DIR_CHANGE PacketMoveDirChange;
 	CPacketCHAR_CHARID PacketCHAR_CHARID;
 	ARRAYDWORD adwCharID;
+	DWORD dwNowTime;
+	int nSpeedLevel;
+	int nStartX, nStartY;
+	DWORD dwStartTime;
+
+	dwNowTime = timeGetTime ();
+	nSpeedLevel = GetMoveSyncSpeedLevel (pInfoChar);
+	nStartX = pInfoChar->m_nMapX;
+	nStartY = pInfoChar->m_nMapY;
+	dwStartTime = dwNowTime;
+	if ((pInfoChar->m_ptCharBack.x != 0) || (pInfoChar->m_ptCharBack.y != 0)) {
+		nStartX = pInfoChar->m_ptCharBack.x;
+		nStartY = pInfoChar->m_ptCharBack.y;
+	}
+	if (pInfoChar->m_dwLastTimeMove != 0) {
+		dwStartTime = pInfoChar->m_dwLastTimeMove;
+	}
 
 	/* 周りのキャラに座標を通知 */
-	Packet.Make (
-			pInfoChar->m_dwMapID,
-			pInfoChar->m_dwCharID,
-			pInfoChar->m_nDirection,
-			pInfoChar->m_nMapX,
-			pInfoChar->m_nMapY,
-			pInfoChar->m_bChgUpdatePos,
-			1,
-			timeGetTime ());
-	m_pMainFrame->SendToScreenChar (pInfoChar, &Packet);
+	if (pInfoChar->IsNPC () && pInfoChar->IsStateMove ()) {
+		if (pInfoChar->m_bMoveSyncActive == FALSE) {
+			PacketMoveStart.Make (
+					pInfoChar->m_dwMapID,
+					pInfoChar->m_dwCharID,
+					pInfoChar->m_nDirection,
+					nStartX,
+					nStartY,
+					FALSE,
+					nSpeedLevel,
+					dwStartTime);
+			m_pMainFrame->SendToScreenChar (pInfoChar, &PacketMoveStart);
+			pInfoChar->m_bMoveSyncActive = TRUE;
+			pInfoChar->m_nLastMoveSyncDirection = pInfoChar->m_nDirection;
+			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
+		} else if (pInfoChar->m_nLastMoveSyncDirection != pInfoChar->m_nDirection) {
+			PacketMoveDirChange.Make (
+					pInfoChar->m_dwMapID,
+					pInfoChar->m_dwCharID,
+					pInfoChar->m_nDirection,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY,
+					FALSE,
+					nSpeedLevel,
+					dwNowTime);
+			m_pMainFrame->SendToScreenChar (pInfoChar, &PacketMoveDirChange);
+			pInfoChar->m_nLastMoveSyncDirection = pInfoChar->m_nDirection;
+			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
+		} else if (dwNowTime - pInfoChar->m_dwLastMoveSyncSendTime >= 100) {
+			PacketMoveDirChange.Make (
+					pInfoChar->m_dwMapID,
+					pInfoChar->m_dwCharID,
+					pInfoChar->m_nDirection,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY,
+					TRUE,
+					nSpeedLevel,
+					dwNowTime);
+			m_pMainFrame->SendToScreenChar (pInfoChar, &PacketMoveDirChange);
+			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
+		}
+	} else {
+		PacketMoveDirChange.Make (
+				pInfoChar->m_dwMapID,
+				pInfoChar->m_dwCharID,
+				pInfoChar->m_nDirection,
+				pInfoChar->m_nMapX,
+				pInfoChar->m_nMapY,
+				pInfoChar->m_bChgUpdatePos,
+				nSpeedLevel,
+				dwNowTime);
+		m_pMainFrame->SendToScreenChar (pInfoChar, &PacketMoveDirChange);
+	}
 
 	/* 移動後に見える範囲のキャラIDを通知 */
 	GetScreenCharID (pInfoChar, adwCharID);
@@ -2526,7 +2672,9 @@ void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 	CPacketCHAR_MOVE_DIR_CHANGE Packet;
 	CPacketCHAR_CHARID PacketCHAR_CHARID;
 	ARRAYDWORD adwCharID;
+	DWORD dwNowTime;
 
+	dwNowTime = timeGetTime ();
 	/* 周りのキャラに座標を通知 */
 	Packet.Make (
 			pInfoChar->m_dwMapID,
@@ -2534,10 +2682,15 @@ void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_nDirection,
 			pInfoChar->m_nMapX,
 			pInfoChar->m_nMapY,
-			pInfoChar->m_bChgUpdatePos,
-			1,
-			timeGetTime ());
+			TRUE,
+			GetMoveSyncSpeedLevel (pInfoChar),
+			dwNowTime);
 	m_pMainFrame->SendToScreenChar (pInfoChar, &Packet);
+	if (pInfoChar->IsNPC () && pInfoChar->IsStateMove ()) {
+		pInfoChar->m_bMoveSyncActive = TRUE;
+		pInfoChar->m_nLastMoveSyncDirection = pInfoChar->m_nDirection;
+		pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
+	}
 
 	/* 移動後に見える範囲のキャラIDを通知 */
 	GetScreenCharID (pInfoChar, adwCharID);

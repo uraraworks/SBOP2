@@ -117,6 +117,8 @@ public:
 	DWORD	GetMoveWait			(void);								/* 状態に応じた移動速度を取得 */
 	void	GetPosRect			(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 座標矩形を取得 */
 	void	GetPosRectOnce		(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 1歩分の座標矩形を取得 */
+	void	GetCollisionRect	(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 接触判定用の座標矩形を取得 */
+	void	GetCollisionRectOnce(RECT &rcDst, BOOL bFrontPos = FALSE);	/* 接触判定用の先頭矩形を取得 */
 	void	GetMapPosRect		(RECT &rcDst);						/* マップ座標矩形を取得 */
 
 	void		SetItem			(ARRAYDWORD *padwItemID);						/* アイテム情報を設定 */

@@ -570,11 +570,10 @@ PCInfoBase CLibInfoItem::GetPtr(
 				continue;
 		}
 	} else {
-			if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y == pptPos->y))) {
-				if (!((pInfoTmp->m_ptPos.x == pptPos->x) && (pInfoTmp->m_ptPos.y + 1 == pptPos->y))) {
-					continue;
+			if ((abs (pInfoTmp->m_ptPos.x - pptPos->x) > HALF_TILE) ||
+				(abs (pInfoTmp->m_ptPos.y - pptPos->y) > HALF_TILE)) {
+				continue;
 			}
-		}
 	}
 		pRet = pInfoTmp;
 		break;

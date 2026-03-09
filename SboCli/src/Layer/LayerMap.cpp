@@ -1482,15 +1482,13 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 			continue;
 		}
 		if (nDrawY != -99) {
-			/* Phase 3: m_ptPos.y は旧スケール→/2 でタイル座標、m_nViewY/MAPPARTSSIZE でタイル座標 */
-			if (m_nViewY / MAPPARTSSIZE + nDrawY != pInfoItem->m_ptPos.y / 2) {
+			if (m_nViewY / MAPPARTSSIZE + nDrawY != pInfoItem->m_ptPos.y / MAPPARTSSIZE) {
 				continue;
 			}
 		}
 
-		/* Phase 3: m_ptPos は旧スケール(HALF_TILE単位)→*HALF_TILE でpx変換後、m_nViewX/Y(px)と差分 */
-		x = 32 + (pInfoItem->m_ptPos.x * HALF_TILE - m_nViewX) + xx;
-		y = 32 + (pInfoItem->m_ptPos.y * HALF_TILE - m_nViewY) + yy;
+		x = 32 + (pInfoItem->m_ptPos.x - m_nViewX) + xx;
+		y = 32 + (pInfoItem->m_ptPos.y - m_nViewY) + yy;
 		y -= 16;
 		if (nType == 0) {
 			m_pMgrDraw->DrawItem (

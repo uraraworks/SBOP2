@@ -10,6 +10,51 @@
 #include "InfoMotion.h"
 #include "InfoCharSvr.h"
 
+namespace {
+
+static const int SERVER_CHAR_MOVE_PIXELS_PER_SEC = 128;
+
+static DWORD GetMoveWaitBase(CInfoCharSvr *pInfoChar)
+{
+	DWORD dwMoveWait;
+
+	if (pInfoChar == NULL) {
+		return 11;
+	}
+	dwMoveWait = pInfoChar->GetMoveWait ();
+	if (dwMoveWait == 0) {
+		return 11;
+	}
+	return dwMoveWait;
+}
+
+static int GetMovePixelsPerSec(CInfoCharSvr *pInfoChar)
+{
+	DWORD dwMoveWait;
+	ULONGLONG ullSpeed;
+
+	dwMoveWait = GetMoveWaitBase (pInfoChar);
+	ullSpeed = (ULONGLONG)SERVER_CHAR_MOVE_PIXELS_PER_SEC * 11;
+	ullSpeed = (ullSpeed + dwMoveWait - 1) / dwMoveWait;
+	if (ullSpeed == 0) {
+		return 1;
+	}
+	if (ullSpeed > INT_MAX) {
+		return INT_MAX;
+	}
+	return (int)ullSpeed;
+}
+
+static DWORD GetHalfTileMoveInterval(CInfoCharSvr *pInfoChar)
+{
+	int nMovePixelsPerSec;
+
+	nMovePixelsPerSec = GetMovePixelsPerSec (pInfoChar);
+	return max ((DWORD)(((ULONGLONG)HALF_TILE * 1000 + nMovePixelsPerSec - 1) / nMovePixelsPerSec), (DWORD)1);
+}
+
+}	/* namespace */
+
 
 /* ========================================================================= */
 /* 関数名	:CInfoCharSvr::CInfoCharSvr										 */
@@ -55,12 +100,15 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwEfcBalloonID		= 0;
 	m_dwMotionID			= 0;
 	m_dwMoveCount			= 0;
+	m_dwLastMoveSyncSendTime = 0;
 	m_dwSuppressMapEventMapID = 0;
 	m_dwLastRecvMoveTime	= 0;
 	m_dwLastRecvMovePacketTime = 0;
 	m_nSuppressMapEventTileX = 0;
 	m_nSuppressMapEventTileY = 0;
 	m_bSuppressMapEventUntilLeave = FALSE;
+	m_nLastMoveSyncDirection = -1;
+	m_bMoveSyncActive = FALSE;
 
 	m_pLibInfoCharSvr		= NULL;
 }
@@ -276,10 +324,13 @@ void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 	m_bChgMoveState		= pSrc->m_bChgMoveState;
 	m_bChgScreenPos		= pSrc->m_bChgScreenPos;
 	m_bChgPosRenew		= pSrc->m_bChgPosRenew;
+	m_dwLastMoveSyncSendTime = pSrc->m_dwLastMoveSyncSendTime;
 	m_dwSuppressMapEventMapID = pSrc->m_dwSuppressMapEventMapID;
 	m_nSuppressMapEventTileX = pSrc->m_nSuppressMapEventTileX;
 	m_nSuppressMapEventTileY = pSrc->m_nSuppressMapEventTileY;
 	m_bSuppressMapEventUntilLeave = pSrc->m_bSuppressMapEventUntilLeave;
+	m_nLastMoveSyncDirection = pSrc->m_nLastMoveSyncDirection;
+	m_bMoveSyncActive = pSrc->m_bMoveSyncActive;
 	m_dwLastRecvMoveTime	= pSrc->m_dwLastRecvMoveTime;
 	m_dwLastRecvMovePacketTime = pSrc->m_dwLastRecvMovePacketTime;
 }
@@ -379,15 +430,16 @@ BOOL CInfoCharSvr::TimerProcMOVE(DWORD dwTime)
 {
 	BOOL bRet;
 	DWORD dwTimeTmp;
+	DWORD dwMoveInterval;
 
 	bRet = FALSE;
 	if (m_nMoveCount == 0) {
 		goto Exit;
 	}
 
+	dwMoveInterval = GetHalfTileMoveInterval (this);
 	dwTimeTmp = dwTime - m_dwLastTimeMove;
-//Todo:暫定
-	if (dwTimeTmp < 150) {
+	if (dwTimeTmp < dwMoveInterval) {
 		goto Exit;
 	}
 	m_bChgMoveCount = TRUE;

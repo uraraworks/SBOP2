@@ -41,6 +41,75 @@ static BOOL IsCharInPlayableRange(PCInfoCharCli pInfoChar)
 	return pLayerMap->IsInScreen (ptDrawMapPos.x, ptDrawMapPos.y);
 }
 
+static DWORD GetPredictMoveWaitBase(PCInfoCharCli pInfoChar)
+{
+	DWORD dwMoveWait;
+
+	if (pInfoChar == NULL) {
+		return 11;
+	}
+	dwMoveWait = pInfoChar->GetMoveWait ();
+	if (dwMoveWait == 0) {
+		return 11;
+	}
+	return dwMoveWait;
+}
+
+static int GetPredictMovePixelsPerSec(PCInfoCharCli pInfoChar)
+{
+	DWORD dwMoveWait;
+	ULONGLONG ullSpeed;
+
+	dwMoveWait = GetPredictMoveWaitBase (pInfoChar);
+	ullSpeed = (ULONGLONG)CHAR_MOVE_PIXELS_PER_SEC * 11;
+	ullSpeed = (ullSpeed + dwMoveWait - 1) / dwMoveWait;
+	if (ullSpeed == 0) {
+		return 1;
+	}
+	if (ullSpeed > INT_MAX) {
+		return INT_MAX;
+	}
+	return (int)ullSpeed;
+}
+
+static void ClampPredictedMoveForward(PCInfoCharCli pInfoChar, int nDirection, int &nX, int &nY)
+{
+	if (pInfoChar == NULL) {
+		return;
+	}
+
+	switch (nDirection) {
+	case 0:
+		nY = min (nY, pInfoChar->m_nMapY);
+		break;
+	case 1:
+		nY = max (nY, pInfoChar->m_nMapY);
+		break;
+	case 2:
+		nX = min (nX, pInfoChar->m_nMapX);
+		break;
+	case 3:
+		nX = max (nX, pInfoChar->m_nMapX);
+		break;
+	case 4:
+		nX = max (nX, pInfoChar->m_nMapX);
+		nY = min (nY, pInfoChar->m_nMapY);
+		break;
+	case 5:
+		nX = max (nX, pInfoChar->m_nMapX);
+		nY = max (nY, pInfoChar->m_nMapY);
+		break;
+	case 6:
+		nX = min (nX, pInfoChar->m_nMapX);
+		nY = max (nY, pInfoChar->m_nMapY);
+		break;
+	case 7:
+		nX = min (nX, pInfoChar->m_nMapX);
+		nY = min (nY, pInfoChar->m_nMapY);
+		break;
+	}
+}
+
 /* ========================================================================= */
 /* 関数名	:CInfoCharCli::CInfoCharCli										 */
 /* 内容		:コンストラクタ													 */
@@ -448,20 +517,22 @@ DWORD CInfoCharCli::GetDrawMoveDuration(int nSrcX, int nSrcY, int nDstX, int nDs
 		return 0;
 	}
 
+	if (m_bPredictedMove && (m_nPredictSpeed > 0)) {
+		nMoveSpeed = m_nPredictSpeed;
+		dwDuration = max ((DWORD)(((ULONGLONG)nDeltaMax * 1000 + nMoveSpeed - 1) / nMoveSpeed), (DWORD)1);
+		return dwDuration;
+	}
+
 	if ((m_nMoveType != CHARMOVETYPE_PC) &&
 		((m_nMoveState == CHARMOVESTATE_MOVE) || (m_nMoveState == CHARMOVESTATE_BATTLEMOVE))) {
 		dwWait = GetMoveWait ();
 		if (m_dwMoveWaitOnce != 0) {
 			dwWait = m_dwMoveWaitOnce;
 		}
-		dwDuration = max ((DWORD)(((ULONGLONG)dwWait * (ULONGLONG)nDeltaMax + MAPPARTSSIZE - 1) / MAPPARTSSIZE), (DWORD)1);
+		dwDuration = max ((DWORD)((ULONGLONG)dwWait * (ULONGLONG)nDeltaMax), (DWORD)1);
 		return dwDuration;
 	}
-
 	nMoveSpeed = CHAR_MOVE_PIXELS_PER_SEC;
-	if (m_bPredictedMove && (m_nPredictSpeed > 0)) {
-		nMoveSpeed = m_nPredictSpeed;
-	}
 	dwDuration = max ((DWORD)(((ULONGLONG)nDeltaMax * 1000 + nMoveSpeed - 1) / nMoveSpeed), (DWORD)1);
 	return dwDuration;
 }
@@ -1569,8 +1640,9 @@ void CInfoCharCli::DeleteAllMovePosQue(void)
 void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecvTime)
 {
 	int nDeltaMax;
+	DWORD dwNowTime;
 
-	if (IsNPC () || (m_nMoveType != CHARMOVETYPE_PC)) {
+	if (m_pMgrData && (m_pMgrData->GetCharID () == m_dwCharID)) {
 		m_bPredictedMove = FALSE;
 		m_nPredictDirection = -1;
 		if ((m_nMapX != x) || (m_nMapY != y)) {
@@ -1579,12 +1651,13 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 		return;
 	}
 
+	dwNowTime = timeGetTime ();
 	m_bPredictedMove	= TRUE;
-	m_nPredictBaseX		= x;
-	m_nPredictBaseY		= y;
 	m_nPredictDirection	= nDirection;
-	m_nPredictSpeed		= CHAR_MOVE_PIXELS_PER_SEC;
-	m_dwPredictRecvTime	= dwRecvTime;
+	m_nPredictSpeed		= GetPredictMovePixelsPerSec (this);
+	DeleteAllMovePosQue ();
+	m_ptMove.x = 0;
+	m_ptMove.y = 0;
 	SetDirection (nDirection);
 
 	/*
@@ -1596,8 +1669,15 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 	if (nDeltaMax < abs (y - m_nMapY)) {
 		nDeltaMax = abs (y - m_nMapY);
 	}
-	if ((IsStateMove () == FALSE) || (nDeltaMax >= 8)) {
+	if (nDeltaMax >= MAPPARTSSIZE) {
 		SetPos (x, y);
+		m_nPredictBaseX = x;
+		m_nPredictBaseY = y;
+		m_dwPredictRecvTime = dwRecvTime;
+	} else {
+		m_nPredictBaseX = m_nMapX;
+		m_nPredictBaseY = m_nMapY;
+		m_dwPredictRecvTime = dwNowTime;
 	}
 }
 
@@ -1612,6 +1692,9 @@ void CInfoCharCli::StopPredictedMove(int x, int y)
 {
 	m_bPredictedMove = FALSE;
 	m_nPredictDirection = -1;
+	DeleteAllMovePosQue ();
+	m_ptMove.x = 0;
+	m_ptMove.y = 0;
 	if ((m_nMapX != x) || (m_nMapY != y)) {
 		SetPos (x, y);
 	}
@@ -1633,11 +1716,6 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 	if (m_bPredictedMove == FALSE) {
 		return;
 	}
-	if (IsNPC () || (m_nMoveType != CHARMOVETYPE_PC)) {
-		m_bPredictedMove = FALSE;
-		m_nPredictDirection = -1;
-		return;
-	}
 	if ((m_nPredictDirection < 0) || (m_nPredictDirection > 7)) {
 		return;
 	}
@@ -1653,6 +1731,7 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 	nOffset = (int)(((ULONGLONG)(dwNowTime - m_dwPredictRecvTime) * m_nPredictSpeed) / 1000);
 	nX = m_nPredictBaseX + anPosX[m_nPredictDirection] * nOffset;
 	nY = m_nPredictBaseY + anPosY[m_nPredictDirection] * nOffset;
+	ClampPredictedMoveForward (this, m_nPredictDirection, nX, nY);
 
 	SetPos (nX, nY);
 	m_bRedraw = TRUE;
@@ -1766,6 +1845,9 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 	PMOVEPOSQUE pQue;
 
 	bRet		= FALSE;
+	if (m_bPredictedMove && m_pMgrData && (m_pMgrData->GetCharID () != m_dwCharID)) {
+		goto Exit;
+	}
 	dwWait		= GetMoveWait ();
 	if (m_dwMoveWaitOnce != 0) {
 		dwWait = m_dwMoveWaitOnce;
