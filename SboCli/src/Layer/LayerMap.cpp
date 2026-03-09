@@ -60,7 +60,7 @@ CLayerMap::CLayerMap()
 	m_dCameraY			= 0.0;
 	m_dCameraTargetX	= 0.0;
 	m_dCameraTargetY	= 0.0;
-	m_dCameraFollowSharpness = 12.0;
+	m_dCameraFollowSharpness = 50.0;	/* カメラ追従強度（高いほど素早く追従、12→50に変更） */
 
 	m_pDibLevel			= NULL;
 	m_pDibLevelTmp		= NULL;
