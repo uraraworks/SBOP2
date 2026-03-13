@@ -2309,6 +2309,30 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 	/* 移動した？ */
 	} else if (pInfoChar->m_bChgPos) {
 		ProcChgPos (pInfoChar);
+		/* 移動と同時にマップイベントチェック待ちがある場合も処理する */
+		if (pInfoChar->m_bWaitCheckMapEvent) {
+			CPacketCHAR_PARA1 PacketEvent;
+			DWORD dwPara = 0;
+			pInfoChar->m_bWaitCheckMapEvent = FALSE;
+			if (!pInfoChar->m_bPendingMapEvent) {
+				/* Phase 1: クライアント自動移動前に検出のみ */
+				int nTileX = -1, nTileY = -1;
+				bResult = CheckMapEvent (pInfoChar, TRUE, &nTileX, &nTileY, TRUE);
+				if (bResult && nTileX >= 0 && nTileY >= 0) {
+					pInfoChar->m_bPendingMapEvent = TRUE;
+					pInfoChar->m_nPendingEventTileX = nTileX;
+					pInfoChar->m_nPendingEventTileY = nTileY;
+					dwPara = 0x80000000 | ((DWORD)(nTileX & 0x7FFF) << 16) | (DWORD)(nTileY & 0xFFFF);
+				}
+			} else {
+				/* Phase 2: クライアント自動移動後にイベント実行 */
+				pInfoChar->m_bPendingMapEvent = FALSE;
+				bResult = CheckMapEvent (pInfoChar, FALSE, NULL, NULL, TRUE);
+			}
+			/* 判定結果に関わらず応答を返してクライアント待機フラグを解除 */
+			PacketEvent.Make (SBOCOMMANDID_SUB_CHAR_RES_CHECKMAPEVENT, pInfoChar->m_dwCharID, dwPara);
+			m_pMainFrame->SendToClient (pInfoChar->m_dwSessionID, &PacketEvent);
+		}
 
 	/* マップ移動した？ */
 	} else if (pInfoChar->m_bChgMap) {
@@ -2463,10 +2487,25 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 	} else if (pInfoChar->m_bWaitCheckMapEvent) {
 		CPacketCHAR_PARA1 Packet;
 
-		bResult = CheckMapEvent (pInfoChar);
+		DWORD dwPara = 0;
 		pInfoChar->m_bWaitCheckMapEvent = FALSE;
+		if (!pInfoChar->m_bPendingMapEvent) {
+			/* Phase 1: detect only before client auto-walk */
+			int nTileX = -1, nTileY = -1;
+			bResult = CheckMapEvent (pInfoChar, TRUE, &nTileX, &nTileY, TRUE);
+			if (bResult && nTileX >= 0 && nTileY >= 0) {
+				pInfoChar->m_bPendingMapEvent = TRUE;
+				pInfoChar->m_nPendingEventTileX = nTileX;
+				pInfoChar->m_nPendingEventTileY = nTileY;
+				dwPara = 0x80000000 | ((DWORD)(nTileX & 0x7FFF) << 16) | (DWORD)(nTileY & 0xFFFF);
+			}
+		} else {
+			/* Phase 2: execute event after client auto-walked */
+			pInfoChar->m_bPendingMapEvent = FALSE;
+			bResult = CheckMapEvent (pInfoChar, FALSE, NULL, NULL, TRUE);
+		}
 		/* Phase 8: 判定結果に関わらず応答を返して、クライアント側の待機フラグを確実に解除する */
-		Packet.Make (SBOCOMMANDID_SUB_CHAR_RES_CHECKMAPEVENT, pInfoChar->m_dwCharID, bResult ? 1 : 0);
+		Packet.Make (SBOCOMMANDID_SUB_CHAR_RES_CHECKMAPEVENT, pInfoChar->m_dwCharID, dwPara);
 		m_pMainFrame->SendToClient (pInfoChar->m_dwSessionID, &Packet);
 
 	/* マップ内移動 */

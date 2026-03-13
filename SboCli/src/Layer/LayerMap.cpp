@@ -14,6 +14,7 @@
 #include "LibInfoMapObjectData.h"
 #include "LibInfoItem.h"
 #include "InfoMapBase.h"
+#include "InfoMapEventBase.h"
 #include "LibInfoCharCli.h"
 #include "InfoCharCli.h"
 #include "Img32.h"
@@ -189,6 +190,9 @@ void CLayerMap::Draw(PCImg32 pDst)
 	DrawGauge			(pDst);
 	DrawSystemIcon		(pDst);
 	DrawMapName			(pDst);
+	if (m_pMgrData->GetMapEventEditMode ()) {
+		DrawMapEventDebug (pDst);
+	}
 }
 
 
@@ -1770,6 +1774,56 @@ void CLayerMap::DrawMapName(PCImg32 pDst)
 
 	pDst->BltAlphaFrom256 (x, y, 50, 58, m_pDibSystem, 544, 320, 100 - m_nLevelMapName, TRUE);
 	pDst->BltAlpha (x + 32, y + 16, cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::DrawMapEventDebug									 */
+/* 内容		:描画(マップイベントデバッグ矩形)								 */
+/* 日付		:2026/03/10														 */
+/* ========================================================================= */
+
+void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
+{
+	int i, nCount, nScrX, nScrY;
+	PCInfoMapBase pMap;
+	PCInfoMapEventBase pEvent;
+	PCInfoCharCli pPlayer;
+
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return;
+	}
+
+	/* 全イベントタイルに黄色の矩形を描画 */
+	nCount = pMap->GetEventCount ();
+	for (i = 0; i < nCount; i ++) {
+		pEvent = pMap->GetEvent (i);
+		if (pEvent == NULL) {
+			continue;
+		}
+		nScrX = 32 + pEvent->m_ptPos.x * MAPPARTSSIZE - m_nViewX;
+		nScrY = 32 + pEvent->m_ptPos.y * MAPPARTSSIZE - m_nViewY;
+		if (pEvent->m_nHitType == MAPEVENTHITTYPE_AREA) {
+			int nWidth, nHeight;
+
+			nWidth = (pEvent->m_ptPos2.x - pEvent->m_ptPos.x + 1) * MAPPARTSSIZE;
+			nHeight = (pEvent->m_ptPos2.y - pEvent->m_ptPos.y + 1) * MAPPARTSSIZE;
+			pDst->Rectangle (nScrX, nScrY, nWidth, nHeight, RGB (255, 200, 0));
+		} else {
+			pDst->Rectangle (nScrX, nScrY, MAPPARTSSIZE, MAPPARTSSIZE, RGB (255, 255, 0));
+		}
+	}
+
+	/* プレイヤーの衝突判定矩形を緑色で描画 */
+	pPlayer = m_pMgrData->GetPlayerChar ();
+	if (pPlayer) {
+		RECT rcHit;
+		pPlayer->GetCollisionRect (rcHit);
+		nScrX = 32 + rcHit.left  - m_nViewX;
+		nScrY = 32 + rcHit.top   - m_nViewY;
+		pDst->Rectangle (nScrX, nScrY, rcHit.right - rcHit.left + 1, rcHit.bottom - rcHit.top + 1, RGB (0, 255, 0));
+	}
 }
 
 /* Copyright(C)URARA-works 2006 */

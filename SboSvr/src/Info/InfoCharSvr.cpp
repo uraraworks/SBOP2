@@ -109,6 +109,9 @@ CInfoCharSvr::CInfoCharSvr()
 	m_bSuppressMapEventUntilLeave = FALSE;
 	m_nLastMoveSyncDirection = -1;
 	m_bMoveSyncActive = FALSE;
+	m_bPendingMapEvent = FALSE;
+	m_nPendingEventTileX = 0;
+	m_nPendingEventTileY = 0;
 
 	m_pLibInfoCharSvr		= NULL;
 }

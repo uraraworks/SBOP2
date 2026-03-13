@@ -101,6 +101,12 @@ protected:
 	void	AddSystemMsg				(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);		/* システムメッセージを追加 */
 	void	DefenseOff					(void);											/* 防御解除 */
 	DWORD	GetTalkCharID				(DWORD dwCharID, int nDirection);				/* 会話できるキャラIDを取得 */
+	void	ProcAutoWalkToEvent			(void);											/* イベントタイルへの自動歩行処理 */
+	void	ResetPlayerMoveSyncState	(void);											/* 自キャラ移動同期状態をリセット */
+
+
+public:
+	void	StartAutoWalkToEvent		(int nTileX, int nTileY);						/* イベントタイルへの自動歩行開始 */
 
 
 protected:
@@ -122,9 +128,13 @@ protected:
 	DWORD			m_dwLastEventMapID;					/* 前回イベント判定マップID */
 	BOOL			m_bHasLastEventTile;				/* 前回イベント判定タイルを保持しているか */
 	BOOL			m_bHasPlayerMoveHeading;			/* 自キャラの移動方位を保持しているか */
+	BOOL			m_bNeedIdleMapEventCheck;			/* 停止直後のイベント判定が必要か */
 	int				m_nLastEventTileX,					/* 前回イベント判定タイルX */
 					m_nLastEventTileY;					/* 前回イベント判定タイルY */
 	double			m_dPlayerMoveHeading;				/* 自キャラの現在移動方位(rad) */
+	BOOL			m_bAutoWalkToEvent;					/* イベントタイルへ自動歩行中 */
+	int				m_nAutoWalkTargetX,					/* 自動歩行目標X（ピクセル） */
+					m_nAutoWalkTargetY;					/* 自動歩行目標Y（ピクセル） */
 
 	CAdminUiLoader	m_AdminUi;						/* 管理者UIモジュール */
 	CInfoCharCli	*m_pPlayerChar;						/* 操作中のキャラ情報 */

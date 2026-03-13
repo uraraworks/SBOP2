@@ -142,9 +142,13 @@ CStateProcMAP::CStateProcMAP()
 	m_dwLastEventMapID		= 0;
 	m_bHasLastEventTile		= FALSE;
 	m_bHasPlayerMoveHeading	= FALSE;
+	m_bNeedIdleMapEventCheck = FALSE;
 	m_nLastEventTileX		= 0;
 	m_nLastEventTileY		= 0;
 	m_dPlayerMoveHeading	= 0.0;
+	m_bAutoWalkToEvent	= FALSE;
+	m_nAutoWalkTargetX	= 0;
+	m_nAutoWalkTargetY	= 0;
 
 	m_pPlayerChar		= NULL;
 	m_pMap				= NULL;
@@ -222,6 +226,8 @@ void CStateProcMAP::Init(void)
 	m_pMap			= m_pMgrData->GetMap ();
 	m_dwLastEventMapID = 0;
 	m_bHasLastEventTile = FALSE;
+	m_bAutoWalkToEvent = FALSE;
+	m_bNeedIdleMapEventCheck = FALSE;
 
 	m_pMgrLayer->MakeMAP ();
 	m_pMgrLayer->MakeSYSTEMMSG ();
@@ -395,6 +401,126 @@ void CStateProcMAP::ResetMapEventCheckSendState(void)
 	m_bSendCheckMapEvent = FALSE;
 }
 
+void CStateProcMAP::ResetPlayerMoveSyncState(void)
+{
+	if (m_pPlayerChar) {
+		m_pPlayerChar->m_ptMove.x = 0;
+		m_pPlayerChar->m_ptMove.y = 0;
+		m_pPlayerChar->m_bWaitCheckMapEvent = FALSE;
+		m_pPlayerChar->ClearDrawDirectionOverride ();
+	}
+	m_bMoveSyncActive = FALSE;
+	m_nMoveSyncDirection = -1;
+	m_dwLastTimeMoveSyncSend = 0;
+	m_nMoveSpeedAccum = 0;
+	m_dwLastPlayerMoveStepTime = 0;
+	m_dwLastPlayerMoveTurnTime = 0;
+	m_bHasPlayerMoveHeading = FALSE;
+	m_bAutoWalkToEvent = FALSE;
+	m_bNeedIdleMapEventCheck = FALSE;
+	m_bSendCheckMapEvent = FALSE;
+}
+
+/* ========================================================================= */
+/* 髢｢謨ｰ蜷・:CStateProcMAP::StartAutoWalkToEvent							 */
+/* 蜀・ｮｹ		:繧､繝吶Φ繝医ち繧､繝ｫ縺ｸ縺ｮ閾ｪ蜍墓ｭｩ陦後ｒ髢句ｧ・							 */
+/* 譌･莉・	:2026/03/10														 */
+/* ========================================================================= */
+
+void CStateProcMAP::StartAutoWalkToEvent(int nTileX, int nTileY)
+{
+	/* 繧ｿ繧､繝ｫ荳ｭ螟ｮ繝斐け繧ｻ繝ｫ蠎ｧ讓吶ｒ險育ｮ・
+	   蠖薙◆繧顔洸蠖｢: left=X+8, right=X+23, top=Y-15, bottom=Y
+	   X: 繧ｿ繧､繝ｫ荳ｭ螟ｮ(nTileX*32+16) 縺ｫ繝偵ャ繝医・繝・け繧ｹ荳ｭ蠢・X+15)繧貞粋繧上○繧・竊・X = nTileX*32+1 竕・nTileX*32
+	   Y: 繝偵ャ繝医・繝・け繧ｹ荳狗ｫｯ(Y)繧偵ち繧､繝ｫ荳狗ｫｯ((nTileY+1)*32-1) 縺ｫ蜷医ｏ縺帙ｋ */
+	m_nAutoWalkTargetX = nTileX * MAPPARTSSIZE;
+	m_nAutoWalkTargetY = nTileY * MAPPARTSSIZE + (MAPPARTSSIZE / 2) + ((HALF_TILE - 1) / 2);
+	m_bAutoWalkToEvent = TRUE;
+	m_bNeedIdleMapEventCheck = FALSE;
+	m_bSendCheckMapEvent = FALSE;
+}
+
+
+/* ========================================================================= */
+/* 髢｢謨ｰ蜷・:CStateProcMAP::ProcAutoWalkToEvent								 */
+/* 蜀・ｮｹ		:繧､繝吶Φ繝医ち繧､繝ｫ縺ｸ縺ｮ閾ｪ蜍墓ｭｩ陦悟・逅・ｼ・imerProc 縺九ｉ豈弱ヵ繝ｬ繝ｼ繝蜻ｼ縺ｶ・・ */
+/* 譌･莉・	:2026/03/10														 */
+/* ========================================================================= */
+
+void CStateProcMAP::ProcAutoWalkToEvent(void)
+{
+	int i, nMoveStep, nMoveSpeedAccum, nDx, nDy, nDirection, nDistX, nDistY;
+	DWORD dwMoveStepTime;
+	BOOL bResult;
+
+	if (m_pPlayerChar == NULL) {
+		return;
+	}
+
+	nDistX = m_nAutoWalkTargetX - m_pPlayerChar->m_nMapX;
+	nDistY = m_nAutoWalkTargetY - m_pPlayerChar->m_nMapY;
+
+	/* 蛻ｰ驕泌愛螳・*/
+	if (nDistX == 0 && nDistY == 0) {
+		m_bAutoWalkToEvent = FALSE;
+		m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+		m_bSendCheckMapEvent = FALSE;
+		return;
+	}
+
+	/* 遘ｻ蜍墓婿蜷代ｒ豎ｺ螳・*/
+	nDx = (nDistX > 0) ? 1 : (nDistX < 0 ? -1 : 0);
+	nDy = (nDistY > 0) ? 1 : (nDistY < 0 ? -1 : 0);
+	if      (nDy < 0 && nDx == 0) nDirection = 0;	/* 荳・*/
+	else if (nDy > 0 && nDx == 0) nDirection = 1;	/* 荳・*/
+	else if (nDy == 0 && nDx < 0) nDirection = 2;	/* 蟾ｦ */
+	else if (nDy == 0 && nDx > 0) nDirection = 3;	/* 蜿ｳ */
+	else if (nDy < 0 && nDx > 0)  nDirection = 4;	/* 蜿ｳ荳・*/
+	else if (nDy > 0 && nDx > 0)  nDirection = 5;	/* 蜿ｳ荳・*/
+	else if (nDy > 0 && nDx < 0)  nDirection = 6;	/* 蟾ｦ荳・*/
+	else                           nDirection = 7;	/* 蟾ｦ荳・*/
+
+	/* 騾壼ｸｸ遘ｻ蜍輔→蜷後§騾溷ｺｦ縺ｧ繧ｹ繝・ャ繝玲焚繧貞叙蠕・*/
+	nMoveSpeedAccum = m_nMoveSpeedAccum;
+	dwMoveStepTime  = m_dwLastPlayerMoveStepTime;
+	nMoveStep = GetPlayerMoveStep (timeGetTime (), nMoveSpeedAccum, dwMoveStepTime);
+	m_nMoveSpeedAccum = nMoveSpeedAccum;
+	m_dwLastPlayerMoveStepTime = dwMoveStepTime;
+
+	for (i = 0; i < nMoveStep; i++) {
+		int dx = nDx, dy = nDy;
+		BOOL bSyncSend;
+		nDistX = m_nAutoWalkTargetX - m_pPlayerChar->m_nMapX;
+		nDistY = m_nAutoWalkTargetY - m_pPlayerChar->m_nMapY;
+		/* 逶ｮ讓吶↓驕斐＠縺溯ｻｸ縺ｯ蜍輔°縺輔↑縺・*/
+		if (dx != 0 && nDistX == 0) dx = 0;
+		if (dy != 0 && nDistY == 0) dy = 0;
+		if (dx == 0 && dy == 0) {
+			break;
+		}
+		bSyncSend = ((m_pPlayerChar->m_nMapX + dx) == m_nAutoWalkTargetX) &&
+					((m_pPlayerChar->m_nMapY + dy) == m_nAutoWalkTargetY);
+
+		bResult = MoveProc (m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY,
+		                    dx, dy, nDirection, bSyncSend);
+		if (!bResult) {
+			/* 遘ｻ蜍募､ｱ謨・ 迴ｾ蝨ｨ菴咲ｽｮ縺ｧ繝輔ぉ繝ｼ繧ｺ2縺ｫ騾ｲ繧 */
+			m_bAutoWalkToEvent = FALSE;
+			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+			m_bSendCheckMapEvent = FALSE;
+			return;
+		}
+		/* 蜷・せ繝・ャ繝励〒蛻ｰ驕斐メ繧ｧ繝・け */
+		if (m_pPlayerChar->m_nMapX == m_nAutoWalkTargetX &&
+		    m_pPlayerChar->m_nMapY == m_nAutoWalkTargetY) {
+			m_bAutoWalkToEvent = FALSE;
+			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+			m_bSendCheckMapEvent = FALSE;
+			return;
+		}
+	}
+}
+
 
 /* ========================================================================= */
 /* 関数名	:CStateProcMAP::TimerProc										 */
@@ -449,8 +575,41 @@ BOOL CStateProcMAP::TimerProc(void)
 				OnZ (TRUE);
 			}
 		}
+		/* 繧､繝吶Φ繝医ち繧､繝ｫ縺ｸ縺ｮ閾ｪ蜍墓ｭｩ陦悟・逅・*/
+		if (m_bAutoWalkToEvent) {
+			ProcAutoWalkToEvent ();
+		}
+		if (!m_bAutoWalkToEvent &&
+			m_bNeedIdleMapEventCheck &&
+			!m_pPlayerChar->m_bWaitCheckMapEvent &&
+			(m_pPlayerChar->IsStateMove () == FALSE)) {
+			BOOL bMoveKeyOn;
+
+			bMoveKeyOn = pMgrKeyInput->IsInput (VK_UP) ||
+						 pMgrKeyInput->IsInput (VK_DOWN) ||
+						 pMgrKeyInput->IsInput (VK_LEFT) ||
+						 pMgrKeyInput->IsInput (VK_RIGHT);
+			if (!bMoveKeyOn) {
+				m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+				m_bSendCheckMapEvent = FALSE;
+				m_bNeedIdleMapEventCheck = FALSE;
+			}
+		}
 		if (m_pPlayerChar->m_bWaitCheckMapEvent && (m_bSendCheckMapEvent == FALSE)) {
+			CPacketCHAR_MOVE_STOP PacketMoveStop;
 			CPacketCHAR_PARA1 PacketPara1;
+
+			/* 判定要求の直前に現在位置を強制同期して、サーバー側の取りこぼしを防ぐ */
+			PacketMoveStop.Make (
+				m_pPlayerChar->m_dwMapID,
+				m_pPlayerChar->m_dwCharID,
+				m_pPlayerChar->m_nDirection,
+				m_pPlayerChar->m_nMapX,
+				m_pPlayerChar->m_nMapY,
+				FALSE,
+				0,
+				timeGetTime ());
+			m_pSock->Send (&PacketMoveStop);
 
 			/* Phase 8: 自由移動では停止タイミング依存にすると取りこぼすため、待機フラグ時に即チェック要求する */
 			PacketPara1.Make (SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT, m_pPlayerChar->m_dwCharID, 0);
@@ -529,6 +688,12 @@ void CStateProcMAP::KeyProc(
 					m_bMoveSyncActive = FALSE;
 					m_nMoveSyncDirection = -1;
 					m_dwLastTimeMoveSyncSend = 0;
+				}
+				if (!m_bAutoWalkToEvent) {
+					/* 接触位置で止まっただけでも、停止直後にイベント判定を要求する */
+					m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+					m_bSendCheckMapEvent = FALSE;
+					m_bNeedIdleMapEventCheck = FALSE;
 				}
 			}
 		}
@@ -2475,6 +2640,7 @@ void CStateProcMAP::OnMgrDrawSTART_FADEIN(DWORD dwPara)
 	}
 	pMainFrame = m_pMgrData->GetMainFrame ();
 	pMainFrame->ChgMoveState (FALSE);
+	ResetPlayerMoveSyncState ();
 
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get (LAYERTYPE_MAP);
 	if (pLayerMap) {
@@ -2722,6 +2888,12 @@ BOOL CStateProcMAP::MoveProc(
 
 	} else {
 		m_pPlayerChar->RenewBlockMapArea (0, 0, -1);
+		/* 壁に当たって移動できない場合でも、現在位置でイベントチェックを行う
+		   （移動なしだと到達しない 2870 行のフラグ設定をここで補完する） */
+		if (!m_bAutoWalkToEvent) {
+			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+			m_bSendCheckMapEvent = FALSE;
+		}
 		if (nDirection != nDirectionBack) {
 			goto ExitSend;
 		} else {
@@ -2852,7 +3024,7 @@ ExitSend:
 			m_pSock->Send (&PacketMoveDirChange);
 			m_nMoveSyncDirection = nDirection;
 			m_dwLastTimeMoveSyncSend = timeGetTime ();
-		} else if (timeGetTime () - m_dwLastTimeMoveSyncSend >= 100) {
+		} else if (bSyncSend || (timeGetTime () - m_dwLastTimeMoveSyncSend >= 100)) {
 			PacketMoveDirChange.Make (
 				m_pPlayerChar->m_dwMapID,
 				m_pPlayerChar->m_dwCharID,
@@ -2883,15 +3055,31 @@ ExitSend:
 		   自キャラが実際に移動したフレームではサーバーへ判定を委譲する。
 		   マップ切替直後だけは再発火防止のため、このフレームでは送らない。
 		*/
-		if (bMapChanged == FALSE) {
+		if (bMapChanged == FALSE && !m_bAutoWalkToEvent) {
 			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
 			m_bSendCheckMapEvent = FALSE;
+			/* サーバーが最新位置でイベント判定できるよう現在位置を強制同期
+			   （MOVE_DIR_CHANGE は100ms毎のため、その間の移動分をここで補完する） */
+			if (m_bMoveSyncActive) {
+				PacketMoveDirChange.Make (
+					m_pPlayerChar->m_dwMapID,
+					m_pPlayerChar->m_dwCharID,
+					nDirection,
+					x,
+					y,
+					TRUE,
+					1,
+					timeGetTime ());
+				m_pSock->Send (&PacketMoveDirChange);
+				m_dwLastTimeMoveSyncSend = timeGetTime ();
+			}
 		}
 
 		m_dwLastEventMapID = m_pPlayerChar->m_dwMapID;
 		m_nLastEventTileX = nCurTileX;
 		m_nLastEventTileY = nCurTileY;
 		m_bHasLastEventTile = TRUE;
+		m_bNeedIdleMapEventCheck = TRUE;
 		m_dwLastTimeGauge = timeGetTime ();
 	}
 

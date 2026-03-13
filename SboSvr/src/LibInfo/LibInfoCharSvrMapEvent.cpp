@@ -39,19 +39,30 @@ static void GetMapEventTileRect(RECT &rcDst, int x, int y)
 
 static void GetMapEventCharRect(RECT &rcDst, PCInfoCharSvr pInfoChar)
 {
-	/*
-	   イベント判定は見た目に近い「足元 1 タイル x 0.5 タイル」で扱う。
-	   全身矩形だとドット移動移行後に上下イベントの見た目と判定がずれやすい。
-	*/
-	SetRect (
-		&rcDst,
-		pInfoChar->m_nMapX,
-		pInfoChar->m_nMapY - HALF_TILE + 1,
-		pInfoChar->m_nMapX + MAPPARTSSIZE - 1,
-		pInfoChar->m_nMapY);
+	/* 移動衝突判定と同じ矩形を使用（ドット単位） */
+	pInfoChar->GetCollisionRect (rcDst);
 }
 
-static BOOL IsMapEventRectOverlapEnough(const RECT &rcChar, const RECT &rcEvent)
+static void GetMapEventSearchTileRect(RECT &rcDst, const RECT &rcChar, BOOL bCheck)
+{
+	RECT rcSearch;
+
+	rcSearch = rcChar;
+	if (bCheck) {
+		/* 辺接触による自動移動開始を拾えるよう、探索範囲だけ 1px 広げる */
+		rcSearch.left -= 1;
+		rcSearch.top -= 1;
+		rcSearch.right += 1;
+		rcSearch.bottom += 1;
+	}
+
+	rcDst.left = rcSearch.left / MAPPARTSSIZE;
+	rcDst.right = rcSearch.right / MAPPARTSSIZE;
+	rcDst.top = rcSearch.top / MAPPARTSSIZE;
+	rcDst.bottom = rcSearch.bottom / MAPPARTSSIZE;
+}
+
+static BOOL IsMapEventRectOverlapEnough(const RECT &rcChar, const RECT &rcEvent, int nMinOverlap = 8)
 {
 	int nOverlapX, nOverlapY;
 
@@ -60,15 +71,25 @@ static BOOL IsMapEventRectOverlapEnough(const RECT &rcChar, const RECT &rcEvent)
 	if ((nOverlapX <= 0) || (nOverlapY <= 0)) {
 		return FALSE;
 	}
-
-	/*
-	   触れた瞬間ではなく、ある程度乗った状態で発火させる。
-	   8px は 32x16 の足元矩形に対して、見た目と操作感のバランスが良い最小重なり。
-	*/
-	if (nOverlapX < 8) {
+	if (nOverlapX < nMinOverlap) {
 		return FALSE;
 	}
-	if (nOverlapY < 8) {
+	if (nOverlapY < nMinOverlap) {
+		return FALSE;
+	}
+	return TRUE;
+}
+
+static BOOL IsMapEventRectTouchOrOverlap(const RECT &rcChar, const RECT &rcEvent)
+{
+	int nOverlapX, nOverlapY;
+
+	nOverlapX = min (rcChar.right, rcEvent.right) - max (rcChar.left, rcEvent.left) + 1;
+	nOverlapY = min (rcChar.bottom, rcEvent.bottom) - max (rcChar.top, rcEvent.top) + 1;
+	if (nOverlapX < 0) {
+		return FALSE;
+	}
+	if (nOverlapY < 0) {
 		return FALSE;
 	}
 	return TRUE;
@@ -84,95 +105,142 @@ static BOOL IsMapEventRectOverlapEnough(const RECT &rcChar, const RECT &rcEvent)
 
 BOOL CLibInfoCharSvr::CheckMapEvent(
 	CInfoCharSvr *pInfoChar,	/* [in] 対象キャラ */
-	BOOL bCheck/*FALSE*/)		/* [in] TRUE:チェックのみ */
+	BOOL bCheck/*FALSE*/,		/* [in] TRUE:チェックのみ */
+	int *pnTileX/*NULL*/,		/* [out] イベントタイルX（省略可） */
+	int *pnTileY/*NULL*/,		/* [out] イベントタイルY（省略可） */
+	BOOL bIgnoreDirection/*FALSE*/)	/* [in] TRUE:向き条件を無視 */
 {
-	BOOL bRet, bResult, bBreak;
-	int x, y;
-	RECT rcChar, rcMap, rcMapEvent;
+	BOOL bRet, bResult, bSuppressCurrentTile;
+	int i, nEventCount, nEventLeft, nEventTop, nEventRight, nEventBottom,
+		nCharCenterX, nCharCenterY, nEventCenterX, nEventCenterY, nDistSq, nBestDistSq;
+	RECT rcChar, rcMap, rcMapEvent, rcSuppressEvent;
 	POINT *pptPos1, *pptPos2;
 	PCInfoMapBase pInfoMap;
-	PCInfoMapEventBase pInfoMapEventBase;
+	PCInfoMapEventBase pInfoMapEventBase, pInfoMapEventBest;
        CPacketMAP_PARA1 PacketMAP_PARA1;
        CPacketCHAR_STATE PacketCHAR_STATE;
         ARRAYINFOCHARSVR apInfoChar;
 
 	bRet = TRUE;
 	pInfoMapEventBase = NULL;
+	pInfoMapEventBest = NULL;
+	bSuppressCurrentTile = FALSE;
 
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr (pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
 	pInfoMapEventBase = NULL;
+	nBestDistSq = INT_MAX;
 	/* イベント判定用の足元矩形を取得 */
 	GetMapEventCharRect (rcChar, pInfoChar);
-	pInfoChar->GetMapPosRect (rcMap);
+	GetMapEventSearchTileRect (rcMap, rcChar, bCheck);
+	nCharCenterX = (rcChar.left + rcChar.right) / 2;
+	nCharCenterY = (rcChar.top + rcChar.bottom) / 2;
 
 	if (pInfoChar->m_bSuppressMapEventUntilLeave) {
-		if ((pInfoChar->m_dwSuppressMapEventMapID == pInfoChar->m_dwMapID) &&
-			(rcMap.left <= pInfoChar->m_nSuppressMapEventTileX) && (pInfoChar->m_nSuppressMapEventTileX <= rcMap.right) &&
-			(rcMap.top <= pInfoChar->m_nSuppressMapEventTileY) && (pInfoChar->m_nSuppressMapEventTileY <= rcMap.bottom)) {
-			bRet = FALSE;
-			goto Exit;
+		if (pInfoChar->m_dwSuppressMapEventMapID == pInfoChar->m_dwMapID) {
+			GetMapEventTileRect (
+				rcSuppressEvent,
+				pInfoChar->m_nSuppressMapEventTileX,
+				pInfoChar->m_nSuppressMapEventTileY);
+			if (IsMapEventRectOverlapEnough (rcChar, rcSuppressEvent, 1)) {
+				bSuppressCurrentTile = TRUE;
+			}
 		}
 
-		pInfoChar->m_bSuppressMapEventUntilLeave = FALSE;
-		pInfoChar->m_dwSuppressMapEventMapID = 0;
+		if (!bSuppressCurrentTile) {
+			pInfoChar->m_bSuppressMapEventUntilLeave = FALSE;
+			pInfoChar->m_dwSuppressMapEventMapID = 0;
+		}
 	}
 
-	bBreak = FALSE;
-	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
-		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			pInfoMapEventBase = pInfoMap->GetEvent (x, y);
-			if (pInfoMapEventBase == NULL) {
-				continue;
-			}
-			bResult = TRUE;
-			pptPos1 = &pInfoMapEventBase->m_ptPos;
-			pptPos2 = &pInfoMapEventBase->m_ptPos2;
-			switch (pInfoMapEventBase->m_nHitType) {
-			case MAPEVENTHITTYPE_MAPPOS:		/* マップ座標縦横いずれか */
-				GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
-				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
-				break;
-			case MAPEVENTHITTYPE_CHARPOS:		/* キャラ座標 */
-				GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
-				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
-				break;
-			case MAPEVENTHITTYPE_AREA:			/* 範囲 */
-				SetRect (&rcMapEvent,
-					MapTileToPixelX (pptPos1->x),
-					MapTileToPixelY (pptPos1->y),
-					MapTileToPixelX (pptPos2->x) + MAPPARTSSIZE - 1,
-					MapTileToPixelY (pptPos2->y) + MAPPARTSSIZE - 1);
-				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
-				break;
-			case MAPEVENTHITTYPE_MAPPOS2:		/* マップ座標完全一致 */
-				GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
-				bResult = IsMapEventRectOverlapEnough (rcChar, rcMapEvent);
-				break;
-			}
-			if (bResult == FALSE) {
-				pInfoMapEventBase = NULL;
-				continue;
-			}
-			bBreak = TRUE;
+	nEventCount = pInfoMap->GetEventCount ();
+	for (i = 0; i < nEventCount; i ++) {
+		pInfoMapEventBase = pInfoMap->GetEvent (i);
+		if (pInfoMapEventBase == NULL) {
+			continue;
+		}
+
+		pptPos1 = &pInfoMapEventBase->m_ptPos;
+		pptPos2 = &pInfoMapEventBase->m_ptPos2;
+		nEventLeft = pptPos1->x;
+		nEventTop = pptPos1->y;
+		nEventRight = pptPos1->x;
+		nEventBottom = pptPos1->y;
+		if (pInfoMapEventBase->m_nHitType == MAPEVENTHITTYPE_AREA) {
+			nEventRight = pptPos2->x;
+			nEventBottom = pptPos2->y;
+		}
+		if ((nEventRight < rcMap.left) || (rcMap.right < nEventLeft) ||
+			(nEventBottom < rcMap.top) || (rcMap.bottom < nEventTop)) {
+			continue;
+		}
+
+		bResult = TRUE;
+		switch (pInfoMapEventBase->m_nHitType) {
+		case MAPEVENTHITTYPE_MAPPOS:		/* マップ座標縦横いずれか */
+			GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
+			bResult = bCheck
+				? IsMapEventRectTouchOrOverlap (rcChar, rcMapEvent)
+				: IsMapEventRectOverlapEnough (rcChar, rcMapEvent, 8);
+			break;
+		case MAPEVENTHITTYPE_CHARPOS:		/* キャラ座標 */
+			GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
+			bResult = bCheck
+				? IsMapEventRectTouchOrOverlap (rcChar, rcMapEvent)
+				: IsMapEventRectOverlapEnough (rcChar, rcMapEvent, 8);
+			break;
+		case MAPEVENTHITTYPE_AREA:			/* 範囲 */
+			SetRect (&rcMapEvent,
+				MapTileToPixelX (pptPos1->x),
+				MapTileToPixelY (pptPos1->y),
+				MapTileToPixelX (pptPos2->x) + MAPPARTSSIZE - 1,
+				MapTileToPixelY (pptPos2->y) + MAPPARTSSIZE - 1);
+			bResult = bCheck
+				? IsMapEventRectTouchOrOverlap (rcChar, rcMapEvent)
+				: IsMapEventRectOverlapEnough (rcChar, rcMapEvent, 8);
+			break;
+		case MAPEVENTHITTYPE_MAPPOS2:		/* マップ座標完全一致 */
+			GetMapEventTileRect (rcMapEvent, pptPos1->x, pptPos1->y);
+			bResult = bCheck
+				? IsMapEventRectTouchOrOverlap (rcChar, rcMapEvent)
+				: IsMapEventRectOverlapEnough (rcChar, rcMapEvent, 8);
 			break;
 		}
-		if (bBreak) {
-			break;
+		if (bResult && bSuppressCurrentTile) {
+			if ((nEventLeft <= pInfoChar->m_nSuppressMapEventTileX) && (pInfoChar->m_nSuppressMapEventTileX <= nEventRight) &&
+				(nEventTop <= pInfoChar->m_nSuppressMapEventTileY) && (pInfoChar->m_nSuppressMapEventTileY <= nEventBottom)) {
+				bResult = FALSE;
+			}
 		}
+		if (bResult) {
+			nEventCenterX = (rcMapEvent.left + rcMapEvent.right) / 2;
+			nEventCenterY = (rcMapEvent.top + rcMapEvent.bottom) / 2;
+			nDistSq = (nEventCenterX - nCharCenterX) * (nEventCenterX - nCharCenterX) +
+					  (nEventCenterY - nCharCenterY) * (nEventCenterY - nCharCenterY);
+			if ((pInfoMapEventBest == NULL) || (nDistSq < nBestDistSq)) {
+				pInfoMapEventBest = pInfoMapEventBase;
+				nBestDistSq = nDistSq;
+			}
+		}
+		pInfoMapEventBase = NULL;
 	}
+	pInfoMapEventBase = pInfoMapEventBest;
 	if (pInfoMapEventBase == NULL) {
 		goto Exit;
 	}
 	/* 向き指定あり？ */
-	if (pInfoMapEventBase->m_nHitDirection >= 0) {
+	if (!bIgnoreDirection && (pInfoMapEventBase->m_nHitDirection >= 0)) {
 		if (pInfoChar->m_nDirection != pInfoMapEventBase->m_nHitDirection) {
 			pInfoMapEventBase = NULL;
 			goto Exit;
 		}
 	}
+	/* イベントタイル座標を出力（省略可能） */
+	if (pnTileX != NULL) { *pnTileX = pInfoMapEventBase->m_ptPos.x; }
+	if (pnTileY != NULL) { *pnTileY = pInfoMapEventBase->m_ptPos.y; }
+
 	/* チェックのみ？ */
 	if (bCheck) {
 		goto Exit;

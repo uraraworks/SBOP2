@@ -987,9 +987,18 @@ void CMainFrame::RecvProcCHAR_RES_CHECKMAPEVENT(PBYTE pData)
 		return;
 	}
 
-	pInfoChar->m_bWaitCheckMapEvent = FALSE;
-	if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
-		((CStateProcMAP *)m_pStateProc)->ResetMapEventCheckSendState ();
+	if (Packet.m_dwPara & 0x80000000) {
+		int nTileX = (int)((Packet.m_dwPara >> 16) & 0x7FFF);
+		int nTileY = (int)(Packet.m_dwPara & 0xFFFF);
+		pInfoChar->m_bWaitCheckMapEvent = FALSE;
+		if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
+			((CStateProcMAP *)m_pStateProc)->StartAutoWalkToEvent (nTileX, nTileY);
+		}
+	} else {
+		pInfoChar->m_bWaitCheckMapEvent = FALSE;
+		if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
+			((CStateProcMAP *)m_pStateProc)->ResetMapEventCheckSendState ();
+		}
 	}
 }
 

@@ -132,7 +132,10 @@ public:
 			m_nSuppressMapEventTileY,	/* 再発火抑止中のタイルY */
 			m_nLastMoveSyncDirection;	/* 最終移動同期向き */
 	BOOL	m_bSuppressMapEventUntilLeave,/* 抑止タイルを出るまでイベント再発火を抑止 */
-			m_bMoveSyncActive;			/* 移動同期中 */
+			m_bMoveSyncActive,			/* 移動同期中 */
+			m_bPendingMapEvent;			/* イベント自動歩行フェーズ待機中 */
+	int		m_nPendingEventTileX,		/* 待機中イベントのタイルX */
+			m_nPendingEventTileY;		/* 待機中イベントのタイルY */
 
 	CInfoMapBase	*m_pInfoMap;		/* マップ情報 */
 	CLibInfoCharSvr	*m_pLibInfoCharSvr;	/* キャラ情報ライブラリ */
