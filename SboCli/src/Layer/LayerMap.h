@@ -66,6 +66,8 @@ private:
 	void	DrawSystemIcon		(CImg32 *pDst);									/* 描画(システムアイコン) */
 	void	DrawGauge			(CImg32 *pDst);									/* 描画(ゲージ類) */
 	void	DrawMapName			(CImg32 *pDst);									/* 描画(マップ名) */
+	void	DrawMapEventDebug	(CImg32 *pDst);									/* 描画(マップイベントデバッグ矩形) */
+	void	DrawMapPartsDebug	(CImg32 *pDst);									/* 描画(マップパーツデバッグ矩形) */
 
 
 public:

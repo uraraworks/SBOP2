@@ -71,6 +71,8 @@ CMgrData::CMgrData()
 	m_nSleepTimer			= 0;
 	m_bEditMapPile			= FALSE;
 	m_bMoveNoBlock			= FALSE;
+	m_bMapEventEditMode		= FALSE;
+	m_bMapPartsEditMode		= FALSE;
 	m_bDisableLogin			= FALSE;
 	m_bSavePassword			= FALSE;
 	m_bOptionTaskbar		= FALSE;

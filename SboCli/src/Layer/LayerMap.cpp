@@ -193,6 +193,9 @@ void CLayerMap::Draw(PCImg32 pDst)
 	if (m_pMgrData->GetMapEventEditMode ()) {
 		DrawMapEventDebug (pDst);
 	}
+	if (m_pMgrData->GetMapPartsEditMode ()) {
+		DrawMapPartsDebug (pDst);
+	}
 }
 
 
@@ -1823,6 +1826,85 @@ void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
 		nScrX = 32 + rcHit.left  - m_nViewX;
 		nScrY = 32 + rcHit.top   - m_nViewY;
 		pDst->Rectangle (nScrX, nScrY, rcHit.right - rcHit.left + 1, rcHit.bottom - rcHit.top + 1, RGB (0, 255, 0));
+	}
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CLayerMap::DrawMapPartsDebug									 */
+/* 内容		:描画(マップパーツデバッグ矩形)								 */
+/* 日付		:2026/03/13														 */
+/* ========================================================================= */
+
+void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
+{
+	int x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY;
+	DWORD dwPartsID;
+	POINT ptMove, ptPos;
+	RECT rcHit;
+	PCInfoCharCli pPlayer;
+	PCInfoMapBase pMap;
+	PCInfoMapParts pInfoMapParts;
+
+	pMap = m_pMgrData->GetMap ();
+	if (pMap == NULL) {
+		return;
+	}
+
+	GetDrawMovePos (ptMove, ptPos);
+	nMoveX = ptMove.x;
+	nMoveY = ptMove.y;
+	nPosX = ptPos.x;
+	nPosY = ptPos.y;
+
+	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
+		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
+			BOOL bHit;
+
+			xx = nPosX + x;
+			yy = nPosY + y;
+			bHit = FALSE;
+
+			dwPartsID = pMap->GetParts (xx, yy);
+			pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+			if (pInfoMapParts) {
+				if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_BLOCK) ||
+					(pInfoMapParts->m_byBlockDirection != 0)) {
+					bHit = TRUE;
+				}
+			}
+
+			if (bHit == FALSE) {
+				dwPartsID = pMap->GetPartsPile (xx, yy);
+				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+				if (pInfoMapParts) {
+					if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_BLOCK) ||
+						(pInfoMapParts->m_byBlockDirection != 0)) {
+						bHit = TRUE;
+					}
+				}
+			}
+
+			if (bHit) {
+				pDst->Rectangle (
+					32 + x * MAPPARTSSIZE + nMoveX,
+					32 + y * MAPPARTSSIZE + nMoveY,
+					MAPPARTSSIZE,
+					MAPPARTSSIZE,
+					RGB (0, 255, 255));
+			}
+		}
+	}
+
+	pPlayer = m_pMgrData->GetPlayerChar ();
+	if (pPlayer) {
+		pPlayer->GetCollisionRect (rcHit);
+		pDst->Rectangle (
+			32 + rcHit.left - m_nViewX,
+			32 + rcHit.top - m_nViewY,
+			rcHit.right - rcHit.left + 1,
+			rcHit.bottom - rcHit.top + 1,
+			RGB (0, 255, 0));
 	}
 }
 

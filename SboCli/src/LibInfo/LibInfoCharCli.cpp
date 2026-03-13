@@ -42,13 +42,115 @@ static void GetMoveCheckMapRect(
 
 	pInfoChar->m_nMapX = nMapXBack + anPosX[nDirection] * nMovePixel;
 	pInfoChar->m_nMapY = nMapYBack + anPosY[nDirection] * nMovePixel;
-	pInfoChar->GetMapPosRect (rcDst);
+	pInfoChar->GetCollisionRect (rcDst);
 	pInfoChar->m_nMapX = nMapXBack;
 	pInfoChar->m_nMapY = nMapYBack;
+
+	/* 直進時は進行先の先頭辺だけを調べ、壁沿い移動時の引っ掛かりを減らす */
+	switch (nDirection) {
+	case 0:
+		rcDst.bottom = rcDst.top;
+		break;
+	case 1:
+		rcDst.top = rcDst.bottom;
+		break;
+	case 2:
+		rcDst.right = rcDst.left;
+		break;
+	case 3:
+		rcDst.left = rcDst.right;
+		break;
+	}
+
+	rcDst.left		/= MAPPARTSSIZE;
+	rcDst.right		/= MAPPARTSSIZE;
+	rcDst.top		/= MAPPARTSSIZE;
+	rcDst.bottom	/= MAPPARTSSIZE;
 
 	if ((rcDst.left < 0) || (rcDst.top < 0)) {
 		SetRect (&rcDst, -1, -1, -1, -1);
 	}
+}
+
+static BOOL CanMoveDirection(
+	PCInfoMapBase pInfoMap,
+	PCInfoCharBase pInfoChar,
+	int nDirection)
+{
+	int x, y;
+	BOOL bResult;
+	RECT rcMap;
+
+	if (pInfoMap == NULL) {
+		return FALSE;
+	}
+
+	bResult = FALSE;
+	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			bResult |= !pInfoMap->IsMoveOut (x, y, nDirection);
+		}
+	}
+	bResult = !bResult;
+	if (bResult == FALSE) {
+		return FALSE;
+	}
+
+	bResult = FALSE;
+	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
+	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
+		for (x = rcMap.left; x <= rcMap.right; x ++) {
+			bResult |= !pInfoMap->IsMove (x, y, nDirection);
+		}
+	}
+	bResult = !bResult;
+	if (rcMap.top < 0) {
+		bResult = FALSE;
+	}
+
+	return bResult;
+}
+
+static BOOL TrySlideMove(
+	PCInfoMapBase pInfoMap,
+	PCInfoCharBase pInfoChar,
+	int nDirection,
+	const int *pnOffsets,
+	int nOffsetCount)
+{
+	int i;
+	int nBaseX, nBaseY;
+
+	nBaseX = pInfoChar->m_nMapX;
+	nBaseY = pInfoChar->m_nMapY;
+
+	for (i = 0; i < nOffsetCount; i ++) {
+		int nOffset;
+
+		nOffset = pnOffsets[i];
+		pInfoChar->m_nMapX = nBaseX;
+		pInfoChar->m_nMapY = nBaseY;
+		switch (nDirection) {
+		case 0:
+		case 1:
+			pInfoChar->m_nMapX += nOffset;
+			break;
+		case 2:
+		case 3:
+			pInfoChar->m_nMapY += nOffset;
+			break;
+		default:
+			break;
+		}
+		if (CanMoveDirection (pInfoMap, pInfoChar, nDirection)) {
+			return TRUE;
+		}
+	}
+
+	pInfoChar->m_nMapX = nBaseX;
+	pInfoChar->m_nMapY = nBaseY;
+	return FALSE;
 }
 
 
@@ -389,9 +491,8 @@ BOOL CLibInfoCharCli::IsMove(
 	PCInfoCharBase pInfoChar,		/* [in] キャラ情報 */
 	int &nDirection)				/* [in/ou] 移動する向き */
 {
-	int x, y, nDirectionTmp;
+	int nDirectionTmp;
 	BOOL bRet, bResult;
-	RECT rcMap;
 	PCInfoMapBase pInfoMap;
 	POINT ptFront, ptBack;
 
@@ -410,15 +511,16 @@ BOOL CLibInfoCharCli::IsMove(
 	   最大 4px 以内に通れる位置があれば滑り込ませる。
 	*/
 	static const int anCornerOffset[] = {0, -1, 1, -2, 2, -3, 3, -4, 4};
+	static const int anSlideOffset[] = {0, -1, 1, -2, 2, -3, 3, -4, 4, -5, 5, -6, 6, -7, 7, -8, 8};
 
 	/*
 	   斜め方向スナップ補正の計算根拠（GetCollisionRect より）:
-	     当たり矩形: left=X+8, right=X+23, top=Y-15, bottom=Y
+	     当たり矩形: left=X, right=X+31, top=Y-15, bottom=Y
 	     GetMoveCheckMapRect で 1px 先のタイルを判定するため:
 	       下ブロック: (Y+1)/32 のタイル → スナップ Y = ((Y+1)/32)*32-1
 	       上ブロック: (Y-16)/32 のタイル → スナップ Y = ((Y-16)/32+1)*32+15
-	       右ブロック: (X+24)/32 のタイル → スナップ X = ((X+24)/32)*32-24
-	       左ブロック: (X+7)/32 のタイル  → スナップ X = ((X+7)/32+1)*32-8
+	       右ブロック: (X+32)/32 のタイル → スナップ X = ((X+32)/32)*32-32
+	       左ブロック: (X-1)/32 のタイル  → スナップ X = ((X-1)/32+1)*32
 	   スナップは障害物に数px食み込んだ状態を境界手前に修正する。
 	   食み込みがない場合はスナップ前後で値が変わらないため副作用なし。
 	*/
@@ -473,7 +575,7 @@ BOOL CLibInfoCharCli::IsMove(
 			}
 			nDirection = 0;
 			/* 右がブロック（補正なし）: Xをブロックタイル左端にスナップ */
-			ptBack.x = ((ptBack.x + 24) / MAPPARTSSIZE) * MAPPARTSSIZE - 24;
+			ptBack.x = ((ptBack.x + MAPPARTSSIZE) / MAPPARTSSIZE) * MAPPARTSSIZE - MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
@@ -529,7 +631,7 @@ BOOL CLibInfoCharCli::IsMove(
 			}
 			nDirection = 1;
 			/* 右がブロック（補正なし）: Xをブロックタイル左端にスナップ */
-			ptBack.x = ((ptBack.x + 24) / MAPPARTSSIZE) * MAPPARTSSIZE - 24;
+			ptBack.x = ((ptBack.x + MAPPARTSSIZE) / MAPPARTSSIZE) * MAPPARTSSIZE - MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
@@ -585,7 +687,7 @@ BOOL CLibInfoCharCli::IsMove(
 			}
 			nDirection = 1;
 			/* 左がブロック（補正なし）: Xをブロックタイル右端にスナップ */
-			ptBack.x = ((ptBack.x + 7) / MAPPARTSSIZE + 1) * MAPPARTSSIZE - 8;
+			ptBack.x = ((ptBack.x - 1) / MAPPARTSSIZE + 1) * MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
@@ -641,7 +743,7 @@ BOOL CLibInfoCharCli::IsMove(
 			}
 			nDirection = 0;
 			/* 左がブロック（補正なし）: Xをブロックタイル右端にスナップ */
-			ptBack.x = ((ptBack.x + 7) / MAPPARTSSIZE + 1) * MAPPARTSSIZE - 8;
+			ptBack.x = ((ptBack.x - 1) / MAPPARTSSIZE + 1) * MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
@@ -649,33 +751,19 @@ BOOL CLibInfoCharCli::IsMove(
 		break;
 	}
 
-	/* 脱出可能かチェック */
-	bResult = FALSE;
-	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
-	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
-		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			bResult |= !pInfoMap->IsMoveOut (x, y, nDirection);
-		}
-	}
-	bResult = !bResult;
+	bResult = CanMoveDirection (pInfoMap, pInfoChar, nDirection);
 	if (bResult == FALSE) {
-		goto Exit;
-	}
-
-	/* 進めるかチェック */
-	bResult = FALSE;
-	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
-	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
-		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			bResult |= !pInfoMap->IsMove (x, y, nDirection);
+		if (nDirection < 4) {
+			bResult = TrySlideMove (
+				pInfoMap,
+				pInfoChar,
+				nDirection,
+				anSlideOffset,
+				sizeof (anSlideOffset) / sizeof (anSlideOffset[0]));
 		}
-	}
-	bResult = !bResult;
-	if (rcMap.top < 0) {
-		bResult = FALSE;
-	}
-	if (bResult == FALSE) {
-		goto Exit;
+		if (bResult == FALSE) {
+			goto Exit;
+		}
 	}
 
 	bRet = TRUE;

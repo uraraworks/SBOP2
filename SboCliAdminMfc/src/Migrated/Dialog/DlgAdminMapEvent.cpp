@@ -165,6 +165,10 @@ BOOL CDlgAdminMapEvent::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog();
 
+	if (m_pMgrData) {
+		m_pMgrData->SetMapEventEditMode (TRUE);
+	}
+
 	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	m_List.InsertColumn (1, _T("ID"),			LVCFMT_LEFT, 50);
 	m_List.InsertColumn (2, _T("X座標"),		LVCFMT_LEFT, 50);
@@ -321,6 +325,21 @@ void CDlgAdminMapEvent::OnDelete()
 
 	Packet.Make (SBOCOMMANDID_SUB_ADMIN_MAP_DELETEEVENT, m_pInfoMap->m_dwMapID, dwMapEventID);
 	SendPacket (&Packet);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CDlgAdminMapEvent::PostNcDestroy								 */
+/* 内容		:終了処理														 */
+/* 日付		:2026/03/10														 */
+/* ========================================================================= */
+
+void CDlgAdminMapEvent::PostNcDestroy()
+{
+	if (m_pMgrData) {
+		m_pMgrData->SetMapEventEditMode (FALSE);
+	}
+	CDialog::PostNcDestroy ();
 }
 
 /* Copyright(C)URARA-works 2008 */

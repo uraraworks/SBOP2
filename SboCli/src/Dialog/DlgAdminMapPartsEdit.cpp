@@ -159,6 +159,10 @@ BOOL CDlgAdminMapPartsEdit::OnInitDialog()
 
 	CDlgAdminBase::OnInitDialog();
 
+	if (m_pMgrData) {
+		m_pMgrData->SetMapPartsEditMode (TRUE);
+	}
+
 	m_pWndMapPartsGrp->Create (this, m_pMgrData, IDC_PARTS);
 	m_pWndMapPartsAnimeList->Create (this, m_pMgrData, IDC_LIST, m_pInfoMapParts);
 
@@ -811,6 +815,9 @@ void CDlgAdminMapPartsEdit::RenewButtonState(void)
 
 void CDlgAdminMapPartsEdit::PostNcDestroy()
 {
+	if (m_pMgrData) {
+		m_pMgrData->SetMapPartsEditMode (FALSE);
+	}
 }
 
 /* Copyright(C)URARA-works 2007 */

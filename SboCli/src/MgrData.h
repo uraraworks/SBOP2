@@ -81,6 +81,10 @@ public:
 	int				GetAdminNotifyTypeR		(void)			{ return m_nAdminNotifyTypeR;	}	/* 管理者ウィンドウへの通知種別(右クリック)を取得 */
 	void			SetAdminNotifyTypeRR	(int nType)		{ m_nAdminNotifyTypeRR = nType;	}	/* 管理者ウィンドウへの通知種別(右ダブルクリック)を設定 */
 	int				GetAdminNotifyTypeRR	(void)			{ return m_nAdminNotifyTypeRR;	}	/* 管理者ウィンドウへの通知種別(右ダブルクリック)を取得 */
+	void			SetMapEventEditMode		(BOOL bOn)		{ m_bMapEventEditMode = bOn;	}	/* マップイベント編集モードを設定 */
+	BOOL			GetMapEventEditMode		(void)			{ return m_bMapEventEditMode;	}	/* マップイベント編集モードを取得 */
+	void			SetMapPartsEditMode		(BOOL bOn)		{ m_bMapPartsEditMode = bOn;	}	/* マップパーツ編集モードを設定 */
+	BOOL			GetMapPartsEditMode		(void)			{ return m_bMapPartsEditMode;	}	/* マップパーツ編集モードを取得 */
 
 	void			SetLastAccount		(LPCSTR pszAccount)		{ m_strLastAccount = pszAccount;	}	/* 最終アカウント名を設定 */
 	LPCSTR			GetLastAccount		(void)					{ return m_strLastAccount;			}	/* 最終アカウント名を取得 */
@@ -230,7 +234,9 @@ private:
 						m_bOptionViewItemName,		/* アイテム名を表示する */
 						m_bOptionViewHelpIcon,		/* ヘルプアイコンを表示する */
 						m_bOptionBattleMsgLog,		/* 戦闘メッセージをログに残す */
-						m_bOption60Frame;			/* 60フレームで表示する */
+						m_bOption60Frame,			/* 60フレームで表示する */
+					m_bMapEventEditMode,		/* マップイベント編集モード */
+					m_bMapPartsEditMode;		/* マップパーツ編集モード */
 	BYTE				m_byViewGrid;				/* グリッド表示 */
 	GUID				m_stInputGuid;				/* 入力パッドのGUID */
 	SIZE				m_sizeDlgMapPartsEdit,		/* マップパーツ編集ダイアログサイズ */

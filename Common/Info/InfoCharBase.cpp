@@ -1762,7 +1762,7 @@ void CInfoCharBase::GetPosRectOnce(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 
 void CInfoCharBase::GetCollisionRect(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 {
-	int x, y, nLeft, nRight, anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	int x, y, anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	SIZE sizeTmp;
 
 	GetCharSize (sizeTmp);
@@ -1772,13 +1772,11 @@ void CInfoCharBase::GetCollisionRect(RECT &rcDst, BOOL bFrontPos/*FALSE*/)
 		x += anPosX[m_nDirection];
 		y += anPosY[m_nDirection];
 	}
-	nLeft = x + max ((sizeTmp.cx - HALF_TILE) / 2, 0);
-	nRight = nLeft + min (sizeTmp.cx, HALF_TILE) - 1;
 
 	SetRect (&rcDst,
-		nLeft,
+		x,
 		y - (HALF_TILE - 1),
-		nRight,
+		x + sizeTmp.cx - 1,
 		y);
 }
 

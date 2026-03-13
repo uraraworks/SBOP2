@@ -99,6 +99,9 @@ CDlgAdminMapParts::CDlgAdminMapParts(CWnd* pParent /*=NULL*/)
 
 CDlgAdminMapParts::~CDlgAdminMapParts()
 {
+	if (m_pMgrData) {
+		m_pMgrData->SetMapPartsEditMode (FALSE);
+	}
 	SAFE_DELETE (m_pImgParts);
 	if (m_pMgrGrpData) {
 		m_pMgrGrpData->DeleteMapPartsTmp ();
@@ -156,6 +159,10 @@ BOOL CDlgAdminMapParts::OnInitDialog()
 	SCROLLINFO stScrollInfo;
 
 	CDlgAdminBase::OnInitDialog();
+
+	if (m_pMgrData) {
+		m_pMgrData->SetMapPartsEditMode (TRUE);
+	}
 
 	m_ctlMapParts.Create (this, m_pMgrData);
 

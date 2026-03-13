@@ -47,6 +47,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminMapEvent)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
+	virtual void PostNcDestroy ();
 	//}}AFX_VIRTUAL
 
 protected:
