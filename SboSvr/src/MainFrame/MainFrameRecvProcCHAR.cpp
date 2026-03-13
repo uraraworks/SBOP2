@@ -239,18 +239,19 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	nNextPosX = nPacketPosX;
 	nNextPosY = nPacketPosY;
 
-	if (nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) {
-		int nStopDeltaX, nStopDeltaY;
-
-		nStopDeltaX = nNextPosX - pInfoChar->m_nMapX;
-		nStopDeltaY = nNextPosY - pInfoChar->m_nMapY;
-		if ((abs (nStopDeltaX) <= HALF_TILE) && (abs (nStopDeltaY) <= HALF_TILE)) {
-			nNextPosX = pInfoChar->m_nMapX;
-			nNextPosY = pInfoChar->m_nMapY;
-			nPacketPosX = nNextPosX;
-			nPacketPosY = nNextPosY;
-		}
-	}
+	/* Dead Reckoning Phase6: サーバーは独自予測を行わないためMOVE_STOPスナップ不要
+	   （スナップするとクライアントの停止位置がサーバーに反映されずイベント検出が失敗する） */
+	//if (nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) {
+	//	int nStopDeltaX, nStopDeltaY;
+	//	nStopDeltaX = nNextPosX - pInfoChar->m_nMapX;
+	//	nStopDeltaY = nNextPosY - pInfoChar->m_nMapY;
+	//	if ((abs (nStopDeltaX) <= HALF_TILE) && (abs (nStopDeltaY) <= HALF_TILE)) {
+	//		nNextPosX = pInfoChar->m_nMapX;
+	//		nNextPosY = pInfoChar->m_nMapY;
+	//		nPacketPosX = nNextPosX;
+	//		nPacketPosY = nNextPosY;
+	//	}
+	//}
 
 	nStopState = CHARMOVESTATE_STAND;
 	if (pInfoChar->IsStateBattle ()) {

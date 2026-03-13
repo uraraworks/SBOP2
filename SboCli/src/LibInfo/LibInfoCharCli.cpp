@@ -404,12 +404,34 @@ BOOL CLibInfoCharCli::IsMove(
 	ptBack.x = pInfoChar->m_nMapX;
 	ptBack.y = pInfoChar->m_nMapY;
 
+	/*
+	   コーナー補正のオフセット順序: 現在地(0), -1, +1, -2, +2 ... -4, +4
+	   16px 先からの横チェックが失敗した後、Y（または X）をずらして
+	   最大 4px 以内に通れる位置があれば滑り込ませる。
+	*/
+	static const int anCornerOffset[] = {0, -1, 1, -2, 2, -3, 3, -4, 4};
+
+	/*
+	   斜め方向スナップ補正の計算根拠（GetCollisionRect より）:
+	     当たり矩形: left=X+8, right=X+23, top=Y-15, bottom=Y
+	     GetMoveCheckMapRect で 1px 先のタイルを判定するため:
+	       下ブロック: (Y+1)/32 のタイル → スナップ Y = ((Y+1)/32)*32-1
+	       上ブロック: (Y-16)/32 のタイル → スナップ Y = ((Y-16)/32+1)*32+15
+	       右ブロック: (X+24)/32 のタイル → スナップ X = ((X+24)/32)*32-24
+	       左ブロック: (X+7)/32 のタイル  → スナップ X = ((X+7)/32+1)*32-8
+	   スナップは障害物に数px食み込んだ状態を境界手前に修正する。
+	   食み込みがない場合はスナップ前後で値が変わらないため副作用なし。
+	*/
 	switch (nDirection) {
-	case 4:
+	case 4:	/* 右上 = 上(0) + 右(3) */
 		nDirectionTmp = 0;
 		bRet = IsMove (pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 3;
+			/* 上がブロック: Yをブロックタイル下端にスナップ */
+			ptBack.y = ((ptBack.y - HALF_TILE) / MAPPARTSSIZE + 1) * MAPPARTSSIZE + (HALF_TILE - 1);
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 		} else {
 			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
@@ -421,15 +443,51 @@ BOOL CLibInfoCharCli::IsMove(
 			if (bRet) {
 				return TRUE;
 			}
+			/* 右がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			{
+				int nCorner;
+				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
+					int nOffset = anCornerOffset[nCorner];
+					pInfoChar->m_nMapY = ptBack.y + nOffset;
+					if (nOffset != 0) {
+						BOOL bCanSlide;
+						nDirectionTmp = (nOffset < 0) ? 0 : 1;
+						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						if (!bCanSlide) {
+							continue;
+						}
+						pInfoChar->m_nMapY = ptBack.y + nOffset;
+					}
+					nDirectionTmp = 3;
+					bRet = IsMove (pInfoChar, nDirectionTmp);
+					if (bRet) {
+						ptBack.y = pInfoChar->m_nMapY;
+						nDirection = 3;
+						pInfoChar->m_nMapX = ptBack.x;
+						pInfoChar->m_nMapY = ptBack.y;
+						return TRUE;
+					}
+				}
+				pInfoChar->m_nMapX = ptBack.x;
+				pInfoChar->m_nMapY = ptBack.y;
+			}
 			nDirection = 0;
+			/* 右がブロック（補正なし）: Xをブロックタイル左端にスナップ */
+			ptBack.x = ((ptBack.x + 24) / MAPPARTSSIZE) * MAPPARTSSIZE - 24;
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
 		}
 		break;
-	case 5:
+	case 5:	/* 右下 = 下(1) + 右(3) */
 		nDirectionTmp = 1;
 		bRet = IsMove (pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 3;
+			/* 下がブロック: Yをブロックタイル上端にスナップ */
+			ptBack.y = ((ptBack.y + 1) / MAPPARTSSIZE) * MAPPARTSSIZE - 1;
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 		} else {
 			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
@@ -441,15 +499,51 @@ BOOL CLibInfoCharCli::IsMove(
 			if (bRet) {
 				return TRUE;
 			}
+			/* 右がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			{
+				int nCorner;
+				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
+					int nOffset = anCornerOffset[nCorner];
+					pInfoChar->m_nMapY = ptBack.y + nOffset;
+					if (nOffset != 0) {
+						BOOL bCanSlide;
+						nDirectionTmp = (nOffset < 0) ? 0 : 1;
+						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						if (!bCanSlide) {
+							continue;
+						}
+						pInfoChar->m_nMapY = ptBack.y + nOffset;
+					}
+					nDirectionTmp = 3;
+					bRet = IsMove (pInfoChar, nDirectionTmp);
+					if (bRet) {
+						ptBack.y = pInfoChar->m_nMapY;
+						nDirection = 3;
+						pInfoChar->m_nMapX = ptBack.x;
+						pInfoChar->m_nMapY = ptBack.y;
+						return TRUE;
+					}
+				}
+				pInfoChar->m_nMapX = ptBack.x;
+				pInfoChar->m_nMapY = ptBack.y;
+			}
 			nDirection = 1;
+			/* 右がブロック（補正なし）: Xをブロックタイル左端にスナップ */
+			ptBack.x = ((ptBack.x + 24) / MAPPARTSSIZE) * MAPPARTSSIZE - 24;
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
 		}
 		break;
-	case 6:
+	case 6:	/* 左下 = 下(1) + 左(2) */
 		nDirectionTmp = 1;
 		bRet = IsMove (pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 2;
+			/* 下がブロック: Yをブロックタイル上端にスナップ */
+			ptBack.y = ((ptBack.y + 1) / MAPPARTSSIZE) * MAPPARTSSIZE - 1;
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 		} else {
 			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
@@ -461,15 +555,51 @@ BOOL CLibInfoCharCli::IsMove(
 			if (bRet) {
 				return TRUE;
 			}
+			/* 左がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			{
+				int nCorner;
+				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
+					int nOffset = anCornerOffset[nCorner];
+					pInfoChar->m_nMapY = ptBack.y + nOffset;
+					if (nOffset != 0) {
+						BOOL bCanSlide;
+						nDirectionTmp = (nOffset < 0) ? 0 : 1;
+						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						if (!bCanSlide) {
+							continue;
+						}
+						pInfoChar->m_nMapY = ptBack.y + nOffset;
+					}
+					nDirectionTmp = 2;
+					bRet = IsMove (pInfoChar, nDirectionTmp);
+					if (bRet) {
+						ptBack.y = pInfoChar->m_nMapY;
+						nDirection = 2;
+						pInfoChar->m_nMapX = ptBack.x;
+						pInfoChar->m_nMapY = ptBack.y;
+						return TRUE;
+					}
+				}
+				pInfoChar->m_nMapX = ptBack.x;
+				pInfoChar->m_nMapY = ptBack.y;
+			}
 			nDirection = 1;
+			/* 左がブロック（補正なし）: Xをブロックタイル右端にスナップ */
+			ptBack.x = ((ptBack.x + 7) / MAPPARTSSIZE + 1) * MAPPARTSSIZE - 8;
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
 		}
 		break;
-	case 7:
+	case 7:	/* 左上 = 上(0) + 左(2) */
 		nDirectionTmp = 0;
 		bRet = IsMove (pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 2;
+			/* 上がブロック: Yをブロックタイル下端にスナップ */
+			ptBack.y = ((ptBack.y - HALF_TILE) / MAPPARTSSIZE + 1) * MAPPARTSSIZE + (HALF_TILE - 1);
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 		} else {
 			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
@@ -481,7 +611,39 @@ BOOL CLibInfoCharCli::IsMove(
 			if (bRet) {
 				return TRUE;
 			}
+			/* 左がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			{
+				int nCorner;
+				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
+					int nOffset = anCornerOffset[nCorner];
+					pInfoChar->m_nMapY = ptBack.y + nOffset;
+					if (nOffset != 0) {
+						BOOL bCanSlide;
+						nDirectionTmp = (nOffset < 0) ? 0 : 1;
+						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						if (!bCanSlide) {
+							continue;
+						}
+						pInfoChar->m_nMapY = ptBack.y + nOffset;
+					}
+					nDirectionTmp = 2;
+					bRet = IsMove (pInfoChar, nDirectionTmp);
+					if (bRet) {
+						ptBack.y = pInfoChar->m_nMapY;
+						nDirection = 2;
+						pInfoChar->m_nMapX = ptBack.x;
+						pInfoChar->m_nMapY = ptBack.y;
+						return TRUE;
+					}
+				}
+				pInfoChar->m_nMapX = ptBack.x;
+				pInfoChar->m_nMapY = ptBack.y;
+			}
 			nDirection = 0;
+			/* 左がブロック（補正なし）: Xをブロックタイル右端にスナップ */
+			ptBack.x = ((ptBack.x + 7) / MAPPARTSSIZE + 1) * MAPPARTSSIZE - 8;
+			pInfoChar->m_nMapX = ptBack.x;
+			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
 		}
 		break;
