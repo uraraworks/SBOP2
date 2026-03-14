@@ -132,9 +132,10 @@ BOOL CDlgDbg::OnInitDialog()
         TCHAR szFileName[MAX_PATH];
         CRect rc;
         POINT pt;
-
+ 
 	CDialog::OnInitDialog ();
-
+	SetWindowText (Utf8ToTString (u8"デバッグウィンドウ"));
+ 
 	::GetWindowRect (m_pMgrData->GetMainWindow (), rc);
 	SetWindowPos (NULL,
 		rc.right + GetSystemMetrics (SM_CXFIXEDFRAME) * 2, rc.top,
@@ -151,7 +152,7 @@ BOOL CDlgDbg::OnInitDialog()
         } else {
                 _tcscat_s (szFileName, _T(".ini"));
         }
-
+ 
         m_pMgrData->SetDebugWindow (m_hWnd);
         pt.x = GetPrivateProfileInt (_T("Pos"), _T("DebugX"), -1, szFileName);
         pt.y = GetPrivateProfileInt (_T("Pos"), _T("DebugY"), -1, szFileName);
@@ -159,6 +160,7 @@ BOOL CDlgDbg::OnInitDialog()
 		SetWindowPos (NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 	}
 
+	OnTimer (100);
 	return TRUE;
 }
 

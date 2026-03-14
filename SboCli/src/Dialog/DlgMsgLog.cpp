@@ -195,9 +195,10 @@ BOOL CDlgMsgLog::OnInitDialog()
 {
 	CRect rc;
 	LOGVIEWCTRLSETTING stLOGVIEWCTRLSETTING;
-
+ 
 	CDialog::OnInitDialog ();
-
+	SetWindowText (Utf8ToTString (u8"メッセージログウィンドウ"));
+ 
 	::GetWindowRect (m_pMgrData->GetMainWindow (), rc);
 	SetWindowPos (NULL, rc.right, rc.top, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 
@@ -214,6 +215,13 @@ BOOL CDlgMsgLog::OnInitDialog()
 	m_wndLogViewCtrl.SetSetting (&stLOGVIEWCTRLSETTING);
 	m_wndLogViewCtrl.SetTextLimit (LVC_TEXT_LIMIT_LINE, 3000);
 
+	if (GetDlgItem (IDC_TOPMOST)) {
+		GetDlgItem (IDC_TOPMOST)->SetWindowText (Utf8ToTString (u8"最前面"));
+	}
+	if (GetDlgItem (IDC_HIDE_MAINFRAME)) {
+		GetDlgItem (IDC_HIDE_MAINFRAME)->SetWindowText (Utf8ToTString (u8"メインウィンドウを非表示"));
+	}
+
 	CLayoutHelper::Initialize (m_hWnd);
 	RegisterControl (m_wndLogViewCtrl.m_hWnd,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 	RegisterControl (IDC_ONLINE,				LH_CTRL_Y);
@@ -227,7 +235,7 @@ BOOL CDlgMsgLog::OnInitDialog()
 	::SendMessage		(m_hWndChat, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
 	SetWindowLong		(m_hWndChat, GWL_USERDATA, (LONG)this);
 	SetWindowLong		(m_hWndChat, GWL_WNDPROC, (LONG)ChatWndProc);
-
+ 
 	return TRUE;
 }
 
