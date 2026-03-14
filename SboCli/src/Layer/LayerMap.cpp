@@ -61,7 +61,7 @@ CLayerMap::CLayerMap()
 	m_dCameraY			= 0.0;
 	m_dCameraTargetX	= 0.0;
 	m_dCameraTargetY	= 0.0;
-	m_dCameraFollowSharpness = 50.0;	/* カメラ追従強度（高いほど素早く追従、12→50に変更） */
+	m_dCameraFollowSharpness = 8.0;	/* 停止後に約0.5秒で慣性っぽく収束 */
 
 	m_pDibLevel			= NULL;
 	m_pDibLevelTmp		= NULL;
@@ -241,7 +241,7 @@ BOOL CLayerMap::TimerProc(void)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::IsScrollPos											 */
 /* 内容		:スクロールする場所か判定										 */
 /* 日付		:2006/11/01														 */
@@ -384,7 +384,7 @@ Exit:
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::IsScroll											 */
 /* 内容		:スクロール中か判定												 */
 /* 日付		:2006/09/24														 */
@@ -395,13 +395,6 @@ BOOL CLayerMap::IsScroll(void)
 	return (m_dwLastTimeScroll) ? TRUE : FALSE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerMap::IsInScreen											 */
-/* 内容		:指定座標が画面内にいるかチェック								 */
-/* 戻り値	:TRUE:画面内													 */
-/* 日付		:2007/02/21														 */
-/* ========================================================================= */
 
 BOOL CLayerMap::IsInScreen(
 	int x,		/* [in] キャラ座標(横) */
@@ -561,7 +554,7 @@ Exit:
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::SetCenterPos										 */
 /* 内容		:指定座標が画面中央になるように設定								 */
 /* 日付		:2007/02/15														 */
@@ -569,20 +562,22 @@ Exit:
 
 void CLayerMap::SetCenterPos(
 	int x,		/* [in] キャラ座標(横) */
-	int y)		/* [in] キャラ座標(縦) */
+	int y		/* [in] キャラ座標(縦) */
+)
 {
 	SnapCameraToCenterPos (x, y);
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::SetCameraTargetCenterPos							 */
 /* 内容		:指定座標へカメラ追従目標を設定									 */
 /* ========================================================================= */
 
 void CLayerMap::SetCameraTargetCenterPos(
 	int x,		/* [in] キャラ座標(横) */
-	int y)		/* [in] キャラ座標(縦) */
+	int y		/* [in] キャラ座標(縦) */
+)
 {
 	double dCamX, dCamY;
 
@@ -592,14 +587,15 @@ void CLayerMap::SetCameraTargetCenterPos(
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::SnapCameraToCenterPos								 */
 /* 内容		:指定座標へカメラを即時移動										 */
 /* ========================================================================= */
 
 void CLayerMap::SnapCameraToCenterPos(
 	int x,		/* [in] キャラ座標(横) */
-	int y)		/* [in] キャラ座標(縦) */
+	int y		/* [in] キャラ座標(縦) */
+)
 {
 	double dCamX, dCamY;
 
@@ -614,7 +610,7 @@ void CLayerMap::SnapCameraToCenterPos(
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::SetScrollWait										 */
 /* 内容		:スクロール移動待ち時間を設定									 */
 /* 日付		:2007/02/15														 */
@@ -626,7 +622,7 @@ void CLayerMap::SetScrollWait(int nMoveWait)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::SetScrollMode										 */
 /* 内容		:スクロールするか設定											 */
 /* 日付		:2007/09/09														 */
@@ -641,7 +637,7 @@ void CLayerMap::SetScrollMode(BOOL bScroll, int nViewIcon)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::SetSystemIconMode									 */
 /* 内容		:システムアイコンモードを設定									 */
 /* 日付		:2007/09/16														 */
@@ -658,7 +654,7 @@ void CLayerMap::SetSystemIconMode(int nMode)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::GetViewMapPos										 */
 /* 内容		:視点をマップ座標で取得											 */
 /* 日付		:2008/04/19														 */
@@ -672,7 +668,7 @@ void CLayerMap::GetViewMapPos(int &nDstX, int &nDstY)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::RenewLevel											 */
 /* 内容		:明度レベル画像を更新											 */
 /* 日付		:2008/09/20														 */
@@ -733,7 +729,7 @@ void CLayerMap::RenewLevel(void)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::RenewMapName										 */
 /* 内容		:マップ名表示用画像を更新										 */
 /* 日付		:2008/11/22														 */
@@ -855,7 +851,7 @@ BOOL CLayerMap::TimerProcScroll(void)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::CalcCameraPosFromCenter								 */
 /* 内容		:指定座標が画面中央になるカメラ座標を算出							 */
 /* ========================================================================= */
@@ -901,7 +897,7 @@ void CLayerMap::CalcCameraPosFromCenter(
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::TimerProcSystemIcon									 */
 /* 内容		:時間処理(システムアイコン)										 */
 /* 日付		:2007/09/16														 */
@@ -953,7 +949,7 @@ Exit:
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::TimerProcMapName									 */
 /* 内容		:時間処理(マップ名表示)											 */
 /* 日付		:2008/11/22														 */
@@ -993,7 +989,7 @@ Exit:
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawPartsBase										 */
 /* 内容		:描画(土台)														 */
 /* 日付		:2006/09/24														 */
@@ -1076,7 +1072,7 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawMapPile											 */
 /* 内容		:描画(マップ重ね合わせ)											 */
 /* 日付		:2008/12/06														 */
@@ -1156,7 +1152,7 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::GetDrawMapPos										 */
 /* 内容		:マップ座標の描画位置を所得										 */
 /* 日付		:2008/04/13														 */
@@ -1172,7 +1168,7 @@ void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::GetDrawMovePos										 */
 /* 内容		:スクロール中の描画位置を所得									 */
 /* 日付		:2009/03/14														 */
@@ -1188,7 +1184,7 @@ void CLayerMap::GetDrawMovePos(POINT &ptMove, POINT &ptPos)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawPartsPile										 */
 /* 内容		:描画(重ね合わせ)												 */
 /* 日付		:2007/05/26														 */
@@ -1299,7 +1295,7 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawShadow											 */
 /* 内容		:描画(マップ影)													 */
 /* 日付		:2007/06/06														 */
@@ -1368,7 +1364,7 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawMapObject										 */
 /* 内容		:描画(マップオブジェクト)										 */
 /* 日付		:2008/11/03														 */
@@ -1399,7 +1395,7 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 	nPosY	= ptPos.y;
 
 	m_pMgrDraw->LockDibTmp ();
-	y = -1;
+y = -1;
 	if (nDrawY != -99) {
 		y = nDrawY;
 	}
@@ -1449,7 +1445,7 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawItem											 */
 /* 内容		:描画(アイテム)													 */
 /* 日付		:2007/05/05														 */
@@ -1521,7 +1517,7 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::GetDrawPos											 */
 /* 内容		:描画位置を取得													 */
 /* 日付		:2006/09/24														 */
@@ -1539,7 +1535,7 @@ void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawChar											 */
 /* 内容		:描画(キャラ)													 */
 /* 日付		:2006/09/24														 */
@@ -1573,25 +1569,19 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 	m_pMgrDraw->UnLockDibTmp ();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerMap::DrawCharText										 */
-/* 内容		:描画(キャラ関連のテキスト)										 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 {
 	BOOL bResult, bDraw, bDrawChat;
 	int i, j, nCount, nCount2, x, y, xx, yy, cy, nMaxX, nMaxY, nWidth, nHeight, nDrawMode;
+	DWORD dwBalloonID;
 	POINT ptViewCharPos, ptDrawMapPos;
 	PCInfoCharCli pChar;
 	PCInfoTextEffect pInfoTextEffect;
 
-	bDraw		= TRUE;
-	nMaxX		= SCRSIZEX + 32;
-	nMaxY		= SCRSIZEY + 32;
-	nDrawMode	= m_pMgrData->GetDrawMode ();
+	bDraw = TRUE;
+	nMaxX = SCRSIZEX + 32;
+	nMaxY = SCRSIZEY + 32;
+	nDrawMode = m_pMgrData->GetDrawMode ();
 	if (nDrawMode == 0) {
 		bDraw = FALSE;
 	}
@@ -1600,7 +1590,6 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 	nCount = m_pLibInfoChar->GetCount ();
 	for (i = nCount - 1; i >= 0; i --) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
-
 		if (pChar->m_nMoveType == CHARMOVETYPE_PUTNPC) {
 			if (m_pMgrData->GetAdminLevel () == ADMINLEVEL_NONE) {
 				continue;
@@ -1615,42 +1604,54 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 		GetDrawPos (pChar, x, y);
 		pChar->GetViewCharPos (ptViewCharPos);
 
-		/* 文字エフェクト */
 		nCount2 = pChar->GetTextEffectCount ();
 		for (j = 0; j < nCount2; j ++) {
 			pInfoTextEffect = pChar->GetTextEffect (j);
 			m_pMgrDraw->DrawTextEffect (pDst, x + pChar->m_nGrpSize, y - 20 - ptViewCharPos.y, pInfoTextEffect);
 		}
 
-		/* 噴出し */
 		cy = m_pMgrGrpData->GetGrpSize (GRPIDMAIN_EFCBALLOON);
-		m_pMgrDraw->DrawBalloon (pDst, x, y - (cy * 2) - ptViewCharPos.y, pChar->GetBalloonGrpID ());
+		dwBalloonID = pChar->GetBalloonGrpID ();
+		m_pMgrDraw->DrawBalloon (pDst, x, y - (cy * 2) - ptViewCharPos.y, dwBalloonID);
 
-		/* キャラ名の表示 */
 		if (bDraw) {
-			nWidth	= pChar->m_pDibName->Width ();
-			nHeight	= pChar->m_pDibName->Height ();
+			nWidth = pChar->m_pDibName->Width ();
+			nHeight = pChar->m_pDibName->Height ();
 			xx = x + pChar->m_nGrpSize - (nWidth / 2);
-			xx = (xx < 32) ? 32 : xx;
-			xx = (xx + nWidth >= nMaxX) ? nMaxX - nWidth : xx;
+			if (xx < 32) {
+				xx = 32;
+			}
+			if (xx + nWidth >= nMaxX) {
+				xx = nMaxX - nWidth;
+			}
 			yy = y + nHeight;
-			yy = (yy < 32) ? 32 : yy;
-			yy = (yy + nHeight >= nMaxY) ? nMaxY - nHeight : yy;
+			if (yy < 32) {
+				yy = 32;
+			}
+			if (yy + nHeight >= nMaxY) {
+				yy = nMaxY - nHeight;
+			}
 			pDst->Blt (xx, yy, nWidth, nHeight, pChar->m_pDibName, 0, 0, TRUE);
 		}
 
-		/* 発言内容の表示 */
-		if (bDrawChat && pChar->m_strSpeak.GetLength ()) {
-			nWidth	= pChar->m_pDibSpeak->Width ();
-			nHeight	= pChar->m_pDibSpeak->Height ();
-
+		if (bDrawChat && pChar->m_strSpeak.GetLength () > 0) {
+			nWidth = pChar->m_pDibSpeak->Width ();
+			nHeight = pChar->m_pDibSpeak->Height ();
 			xx = x + pChar->m_nGrpSize - (nWidth / 2) + 3;
-			xx = (xx < 32) ? 32: xx;
-			xx = (xx + nWidth >= nMaxX) ? nMaxX - nWidth: xx;
+			if (xx < 32) {
+				xx = 32;
+			}
+			if (xx + nWidth >= nMaxX) {
+				xx = nMaxX - nWidth;
+			}
 			yy = y - nHeight;
 			yy -= ptViewCharPos.y;
-			yy = (yy < 32) ? 32 : yy;
-			yy = (yy + nHeight >= nMaxY) ? nMaxY - nHeight : yy;
+			if (yy < 32) {
+				yy = 32;
+			}
+			if (yy + nHeight >= nMaxY) {
+				yy = nMaxY - nHeight;
+			}
 			pDst->Blt (xx, yy, nWidth, nHeight, pChar->m_pDibSpeak, 0, 0, TRUE);
 		}
 	}
@@ -1674,10 +1675,10 @@ void CLayerMap::DrawSystemIcon(PCImg32 pDst)
 	nOffset = m_nSyatemIconOffset;
 
 //	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688, 0, TRUE);			/* チャット */
-//	pDst->BltFrom256 (SCRSIZEX - 64,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 1, 0, TRUE);	/* アイテム */
-//	pDst->BltFrom256 (SCRSIZEX - 32,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 7, 0, TRUE);	/* 休憩 */
-//	pDst->BltFrom256 (SCRSIZEX,		nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 6, 0, TRUE);	/* システム */
-//	pDst->BltFrom256 (64,			nOffset + SCRSIZEY - 8,	32, 32, m_pDibSystem, 688 + 64, 48, TRUE);		/* 視点 */
+	pDst->BltFrom256 (SCRSIZEX - 64,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 1, 0, TRUE);	/* アイテム */
+	pDst->BltFrom256 (SCRSIZEX - 32,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 7, 0, TRUE);	/* 休憩 */
+	pDst->BltFrom256 (SCRSIZEX,		nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 6, 0, TRUE);	/* システム */
+	pDst->BltFrom256 (64,			nOffset + SCRSIZEY - 8,	32, 32, m_pDibSystem, 688 + 64, 48, TRUE);		/* 視点 */
 	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 40,112, 32, m_pDibSystem, 688, 112, TRUE);			/* 説明 */
 	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,128, 36, m_pDibSystem, 688, 208, TRUE);			/* 説明 */
 
@@ -1688,7 +1689,7 @@ void CLayerMap::DrawSystemIcon(PCImg32 pDst)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawGauge											 */
 /* 内容		:描画(ゲージ類)													 */
 /* 日付		:2008/06/29														 */
@@ -1753,7 +1754,7 @@ void CLayerMap::DrawGauge(PCImg32 pDst)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawMapName											 */
 /* 内容		:描画(マップ名)													 */
 /* 日付		:2008/11/22														 */
@@ -1780,7 +1781,7 @@ void CLayerMap::DrawMapName(PCImg32 pDst)
 }
 
 
-/* ========================================================================= */
+ /* ========================================================================= */
 /* 関数名	:CLayerMap::DrawMapEventDebug									 */
 /* 内容		:描画(マップイベントデバッグ矩形)								 */
 /* 日付		:2026/03/10														 */
@@ -1907,5 +1908,3 @@ void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 			RGB (0, 255, 0));
 	}
 }
-
-/* Copyright(C)URARA-works 2006 */
