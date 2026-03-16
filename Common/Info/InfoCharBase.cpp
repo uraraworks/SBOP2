@@ -1,4 +1,4 @@
-﻿/* Copyright(C)URARA-works 2006 */
+/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:InfoCharBase.cpp											 */
 /* 内容			:キャラ情報基底クラス 実装ファイル							 */
@@ -353,9 +353,9 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += sizeof (m_dwMaxSP);
 	dwRet += sizeof (m_clName);
 	dwRet += sizeof (m_clSpeak);
-	dwRet += (m_strCharName.GetStoreLength () + 1);
-	dwRet += (m_strSpeak.GetStoreLength () + 1);
-	dwRet += (m_strTalk.GetStoreLength () + 1);
+	dwRet += (m_strCharName.GetLegacyStoreLength () + 1);
+	dwRet += (m_strSpeak.GetLegacyStoreLength () + 1);
+	dwRet += (m_strTalk.GetLegacyStoreLength () + 1);
 	dwRet += ((m_adwItemID.size() + 1) * sizeof (DWORD));
 	dwRet += ((m_adwSkillID.size() + 1) * sizeof (DWORD));
 	dwRet += sizeof (m_sizeSearchDistance);		/* 策敵範囲 */
@@ -414,9 +414,9 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 28:	dwRet = sizeof (m_dwMotionTypeID);			break;
 	case 29:	dwRet = sizeof (m_clName);					break;
 	case 30:	dwRet = sizeof (m_clSpeak);					break;
-	case 31:	dwRet = (m_strCharName.GetStoreLength () + 1);	break;
-	case 32:	dwRet = (m_strSpeak.GetStoreLength () + 1);	break;
-	case 33:	dwRet = (m_strTalk.GetStoreLength () + 1);	break;
+	case 31:	dwRet = (m_strCharName.GetLegacyStoreLength () + 1);	break;
+	case 32:	dwRet = (m_strSpeak.GetLegacyStoreLength () + 1);	break;
+	case 33:	dwRet = (m_strTalk.GetLegacyStoreLength () + 1);	break;
 	case 34:	dwRet = ((m_adwItemID.size() + 1) * sizeof (DWORD));	break;
 	case 35:	dwRet = ((m_adwSkillID.size() + 1) * sizeof (DWORD));	break;
 	case 36:	dwRet = sizeof (m_bBlock);					break;
@@ -680,15 +680,15 @@ DWORD CInfoCharBase::ReadElementData(
 	case 29:	pDst = (PBYTE)&m_clName;				dwSize = sizeof (m_clName);				break;
 	case 30:	pDst = (PBYTE)&m_clSpeak;				dwSize = sizeof (m_clSpeak);			break;
 	case 31:
-		m_strCharName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
+		m_strCharName = (LPCTSTR)LegacyAnsiToTString ((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 32:
-		m_strSpeak = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
+		m_strSpeak = (LPCTSTR)LegacyAnsiToTString ((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 33:
-		m_strTalk = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
+		m_strTalk = (LPCTSTR)LegacyAnsiToTString ((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
 		break;
 	case 34:
@@ -871,9 +871,9 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof (m_dwMaxSP);
 	dwRet += sizeof (m_clName);
 	dwRet += sizeof (m_clSpeak);
-	dwRet += (m_strCharName.GetStoreLength () + 1);
-	dwRet += (m_strSpeak.GetStoreLength () + 1);
-	dwRet += (m_strTalk.GetStoreLength () + 1);
+	dwRet += (m_strCharName.GetLegacyStoreLength () + 1);
+	dwRet += (m_strSpeak.GetLegacyStoreLength () + 1);
+	dwRet += (m_strTalk.GetLegacyStoreLength () + 1);
 	dwRet += (m_abyMark.	GetSize () + 1);
 	dwRet += ((m_adwItemID.	GetSize () + 1) * sizeof (DWORD));
 	dwRet += ((m_adwSkillID.size() + 1) * sizeof (DWORD));

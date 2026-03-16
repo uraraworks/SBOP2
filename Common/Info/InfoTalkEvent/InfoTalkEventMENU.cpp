@@ -1,4 +1,4 @@
-﻿/* Copyright(C)URARA-works 2008 */
+/* Copyright(C)URARA-works 2008 */
 /* ========================================================================= */
 /* ファイル名	:InfoTalkEventMENU.cpp										 */
 /* 内容			:会話イベント情報(項目選択)クラス 実装ファイル				 */
@@ -106,7 +106,7 @@ DWORD CInfoTalkEventMENU::GetDataSize(void)
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aMenuInfo[i];
 		dwRet += sizeof (int);						/* ジャンプ先ページ番号 */
-		dwRet += (pInfo->strName.GetStoreLength () + 1);	/* 項目名 */
+		dwRet += (pInfo->strName.GetLegacyStoreLength () + 1);	/* 項目名 */
 	}
 
 	return dwRet;
@@ -142,7 +142,7 @@ DWORD CInfoTalkEventMENU::GetDataSizeNo(int nNo)
 	case 2:			/* 項目名 */
 		for (i = 0; i < nCount; i ++) {
 			pInfo = m_aMenuInfo[i];
-			dwRet += (pInfo->strName.GetStoreLength () + 1);
+			dwRet += (pInfo->strName.GetLegacyStoreLength () + 1);
 		}
 		break;
 	}

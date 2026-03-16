@@ -47,6 +47,16 @@
 #define TIMER_ACTIVECHECK	1000					/* アクティブウィンドウチェックタイマー周期 */
 
 int g_nSboCliRenderFrameRate = DRAWCOUNT;
+static WNDPROC g_pSDLBaseWndProc = NULL;
+
+static LRESULT ForwardToSDLBaseWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	if (g_pSDLBaseWndProc != NULL) {
+		return CallWindowProc (g_pSDLBaseWndProc, hWnd, msg, wParam, lParam);
+	}
+
+	return DefWindowProc (hWnd, msg, wParam, lParam);
+}
 
 /* メッセージコマンド種別 */
 enum {
@@ -117,6 +127,7 @@ CMainFrame::CMainFrame()
 
 	m_hCom = CoInitializeEx (0, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 	ZeroMemory (&m_stSystemTime, sizeof (m_stSystemTime));
+	g_pSDLBaseWndProc = NULL;
 }
 
 
@@ -182,7 +193,7 @@ BOOL CMainFrame::OnSDLInit(HWND hWnd)
 	/* SDLウィンドウをサブクラス化: WndProcEntry を Win32 ウィンドウプロシージャとして登録 */
 	/* これにより WM_MAINFRAME / WM_ADMINMSG / WM_URARASOCK_* 等の独自メッセージを受け取れる */
 	SetWindowLongPtr (hWnd, GWLP_USERDATA, (LONG_PTR)this);
-	SetWindowLongPtr (hWnd, GWLP_WNDPROC, (LONG_PTR)WndProcEntry);
+	g_pSDLBaseWndProc = (WNDPROC)SetWindowLongPtr (hWnd, GWLP_WNDPROC, (LONG_PTR)WndProcEntry);
 
 	/* ウィンドウ位置をINIから復元（OnCreate相当） */
 	ZeroMemory (szFileName, sizeof (szFileName));
@@ -342,6 +353,10 @@ void CMainFrame::OnSDLDestroy(void)
 	}
 	if (m_pSock) {
 		m_pSock->Destroy ();
+	}
+	if (m_hWnd && g_pSDLBaseWndProc) {
+		SetWindowLongPtr (m_hWnd, GWLP_WNDPROC, (LONG_PTR)g_pSDLBaseWndProc);
+		g_pSDLBaseWndProc = NULL;
 	}
 	SAFE_DELETE (m_pStateProc);
 }
@@ -703,15 +718,33 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	HANDLE_MSG (hWnd, WM_CREATE,		OnCreate);
 	HANDLE_MSG (hWnd, WM_CLOSE,			OnClose);
 	HANDLE_MSG (hWnd, WM_DESTROY,		OnDestroy);
-	HANDLE_MSG (hWnd, WM_PAINT,			OnPaint);
+	case WM_PAINT:
+		OnPaint (hWnd);
+		return 0;
 	HANDLE_MSG (hWnd, WM_TIMER,			OnTimer);
 	HANDLE_MSG (hWnd, WM_COMMAND,		OnCommand);
-	HANDLE_MSG (hWnd, WM_ACTIVATE,		OnActivate);
-	HANDLE_MSG (hWnd, WM_KEYUP,			OnKeyUp);
-	HANDLE_MSG (hWnd, WM_LBUTTONDOWN,	OnLButtonDown);
-	HANDLE_MSG (hWnd, WM_RBUTTONDOWN,	OnRButtonDown);
-	HANDLE_MSG (hWnd, WM_RBUTTONDBLCLK,	OnRButtonDblClk);
-	HANDLE_MSG (hWnd, WM_MOUSEMOVE,		OnMouseMove);
+	case WM_ACTIVATE:
+		OnActivate (hWnd, LOWORD(wParam), (HWND)lParam, (BOOL)HIWORD(wParam));
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+	case WM_KEYUP:
+		OnKeyUp (hWnd, (UINT)wParam, (BOOL)(lParam & (1UL << 31)), (int)(lParam & 0xFFFF), (UINT)((lParam >> 16) & 0xFFFF));
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+	case WM_KEYDOWN:
+	case WM_SYSKEYDOWN:
+	case WM_SYSKEYUP:
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+	case WM_LBUTTONDOWN:
+		OnLButtonDown (hWnd, FALSE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+	case WM_RBUTTONDOWN:
+		OnRButtonDown (hWnd, FALSE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+	case WM_RBUTTONDBLCLK:
+		OnRButtonDblClk (hWnd, TRUE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+	case WM_MOUSEMOVE:
+		OnMouseMove (hWnd, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
 
 	case WM_INITEND:				/* 初期化完了 */
 		OnInitEnd (hWnd);
@@ -719,13 +752,13 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_CTLCOLORSTATIC:
 		{
 			int nID = GetWindowLong ((HWND)lParam, GWL_ID);
-			HDC hDC = (HDC)wParam;
+				HDC hDC = (HDC)wParam;
 
-			if (nID != IDC_SAVEPASSWORD) {
-				return DefWindowProc (hWnd, msg, wParam, lParam);
-			}
-			SetBkMode (hDC, TRANSPARENT);
-			SetTextColor (hDC, RGB(0, 0, 0));
+				if (nID != IDC_SAVEPASSWORD) {
+					return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+				}
+				SetBkMode (hDC, TRANSPARENT);
+				SetTextColor (hDC, RGB(0, 0, 0));
 		}
 		return (LRESULT)GetStockObject(NULL_BRUSH);
 	case WM_MAINFRAME:				/* メインフレームへの通知 */
@@ -743,8 +776,8 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_ERASEBKGND:
 		break;
 
-	default:
-		if ((msg >= URARASOCK_MSGBASE) && (msg < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
+		default:
+			if ((msg >= URARASOCK_MSGBASE) && (msg < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
 			switch (msg - URARASOCK_MSGBASE) {
 			case WM_URARASOCK_CONNECT:		/* 接続 */
 				OnConnect ();
@@ -755,11 +788,11 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			case WM_URARASOCK_RECV:			/* 受信 */
 				OnRecv ((PBYTE)wParam);
 				break;
+				}
+			} else {
+				return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
 			}
-		} else {
-			return DefWindowProc (hWnd, msg, wParam, lParam);
 		}
-	}
 	return 0;
 }
 

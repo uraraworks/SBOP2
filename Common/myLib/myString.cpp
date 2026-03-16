@@ -17,7 +17,7 @@ CmyString::CmyString()
         m_strAnsiCache.Empty ();
         m_bUtf8Dirty = TRUE;
         m_bAnsiDirty = TRUE;
-        m_uAnsiCodePage = 932;
+        m_uAnsiCodePage = CP_UTF8;
 }
 
 
@@ -78,7 +78,7 @@ void CmyString::Empty(void)
         m_strAnsiCache.Empty ();
         m_bUtf8Dirty = FALSE;
         m_bAnsiDirty = FALSE;
-        m_uAnsiCodePage = 932;
+        m_uAnsiCodePage = CP_UTF8;
 }
 
 
@@ -296,7 +296,7 @@ CmyString::operator LPCTSTR()
 CmyString::operator LPCSTR() const
 {
 #ifdef _UNICODE
-        return GetAnsiPointer (932);
+        return GetLegacyAnsiPointer ();
 #else
         return (LPCSTR)m_strString;
 #endif
@@ -305,7 +305,7 @@ CmyString::operator LPCSTR() const
 CmyString::operator LPCSTR()
 {
 #ifdef _UNICODE
-        return GetAnsiPointer (932);
+        return GetLegacyAnsiPointer ();
 #else
         return (LPCSTR)m_strString;
 #endif
@@ -332,6 +332,11 @@ LPCSTR CmyString::GetAnsiPointer(UINT codePage) const
 #endif
 }
 
+LPCSTR CmyString::GetLegacyAnsiPointer() const
+{
+        return GetAnsiPointer (SBO_LEGACY_CODEPAGE);
+}
+
 int CmyString::GetStoreLength(UINT codePage) const
 {
 #ifdef _UNICODE
@@ -341,6 +346,11 @@ int CmyString::GetStoreLength(UINT codePage) const
         UNREFERENCED_PARAMETER (codePage);
         return m_strString.GetLength ();
 #endif
+}
+
+int CmyString::GetLegacyStoreLength() const
+{
+        return GetStoreLength (SBO_LEGACY_CODEPAGE);
 }
 
 

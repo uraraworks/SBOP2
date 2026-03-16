@@ -18,6 +18,10 @@
 #define MB_ERR_INVALID_CHARS 0x00000008
 #endif
 
+#ifndef SBO_LEGACY_CODEPAGE
+#define SBO_LEGACY_CODEPAGE 932
+#endif
+
 #ifdef __cplusplus
 inline CString Utf8ToTString(LPCSTR pszSrc)
 {
@@ -169,6 +173,16 @@ inline CStringA TStringToAnsi(LPCTSTR pszSrc, UINT codePage = CP_ACP)
         return strResult;
 #endif
 }
+
+inline CString LegacyAnsiToTString(LPCSTR pszSrc)
+{
+        return AnsiToTString (pszSrc, SBO_LEGACY_CODEPAGE);
+}
+
+inline CStringA TStringToLegacyAnsi(LPCTSTR pszSrc)
+{
+        return TStringToAnsi (pszSrc, SBO_LEGACY_CODEPAGE);
+}
 #endif
 
 /* ========================================================================= */
@@ -206,8 +220,10 @@ public:
                         operator LPCSTR         ();                                                     /* 文字列キャスト */
 
         LPCSTR  GetUtf8Pointer() const;                                         /* UTF-8文字列ポインタを取得 */
-        LPCSTR  GetAnsiPointer(UINT codePage = 932) const;                      /* 指定コードページの文字列ポインタを取得 */
-        int             GetStoreLength   (UINT codePage = 932) const;                   /* 保存用文字列長を取得 */
+        LPCSTR  GetAnsiPointer(UINT codePage = CP_UTF8) const;                  /* 指定コードページの文字列ポインタを取得 */
+        LPCSTR  GetLegacyAnsiPointer() const;                                   /* 旧保存形式互換(CP932)の文字列ポインタを取得 */
+        int             GetStoreLength   (UINT codePage = CP_UTF8) const;               /* 保存用文字列長を取得 */
+        int             GetLegacyStoreLength() const;                           /* 旧保存形式互換(CP932)の文字列長を取得 */
 
         int             CompareNoCase   (LPCSTR pszSrc) const;                 /* 文字列比較(大文字小文字区別無し) */
         int             CompareNoCase   (LPCTSTR pszSrc) const;                /* 文字列比較(大文字小文字区別無し) */

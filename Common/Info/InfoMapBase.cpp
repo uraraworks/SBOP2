@@ -1,4 +1,4 @@
-﻿/* Copyright(C)URARA-works 2006 */
+/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:InfoMapBase.cpp											 */
 /* 内容			:マップ情報基底クラス 実装ファイル							 */
@@ -320,7 +320,7 @@ DWORD CInfoMapBase::GetDataSize(void)
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
-	dwRet += (m_strMapName.GetStoreLength () + 1);
+	dwRet += (m_strMapName.GetLegacyStoreLength () + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetDataSize ();
 	}
@@ -355,7 +355,7 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 	case 7:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
 	case 8:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
 	case 9:	dwRet = (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;	break;
-	case 10:dwRet = m_strMapName.GetStoreLength () + 1;					break;
+	case 10:dwRet = m_strMapName.GetLegacyStoreLength () + 1;					break;
 	case 11:
 		if (m_pLibInfoMapEvent) {
 			dwRet = m_pLibInfoMapEvent->GetDataSize ();
@@ -484,7 +484,7 @@ DWORD CInfoMapBase::ReadElementData(
 		dwSize			= (m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy;
 		break;
         case 10:
-                m_strMapName = (LPCTSTR)AnsiToTString ((LPCSTR)pSrc, 932);
+                m_strMapName = (LPCTSTR)LegacyAnsiToTString ((LPCSTR)pSrc);
                 dwSize = (DWORD)(strlen ((LPCSTR)pSrc) + 1);
                 break;
 	case 11:
@@ -975,7 +975,7 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof (WORD)) * m_sizeMap.cy);
-	dwRet += (m_strMapName.GetStoreLength () + 1);
+	dwRet += (m_strMapName.GetLegacyStoreLength () + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetSendDataSize ();
 	}

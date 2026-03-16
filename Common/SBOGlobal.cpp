@@ -65,7 +65,8 @@ void strcpyRenew(LPSTR pszDst, LPCSTR pszSrc, PBYTE &pPos)
 void strcpyRenew(LPSTR pszDst, const CmyString &strSrc, PBYTE &pPos)
 {
 #ifdef _UNICODE
-        CStringA strAnsi = TStringToAnsi (static_cast<LPCTSTR>(strSrc), 932);
+        /* 旧パケット/保存形式との互換のため、この経路は CP932 を維持する */
+        CStringA strAnsi = TStringToAnsi (static_cast<LPCTSTR>(strSrc), SBO_LEGACY_CODEPAGE);
         LPCSTR pszSrc = strAnsi.GetString ();
         int nLength = strAnsi.GetLength ();
         if ((pszSrc == NULL) || (nLength <= 0)) {
@@ -98,7 +99,8 @@ void StoreRenew(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos)
                 pPos ++;
                 return;
         }
-        CString strConverted = AnsiToTString (pszSrc, 932);
+        /* 旧パケット/保存形式との互換のため、この経路は CP932 を維持する */
+        CString strConverted = AnsiToTString (pszSrc, SBO_LEGACY_CODEPAGE);
         strDst = (LPCTSTR)strConverted;
         pPos += (strlen (pszSrc) + 1);
 }

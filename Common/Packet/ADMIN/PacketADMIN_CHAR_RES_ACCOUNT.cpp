@@ -53,8 +53,8 @@ void CPacketADMIN_CHAR_RES_ACCOUNT::Make(
 	dwSize = sizeof (PACKETBASE) +
 			 sizeof (dwIP) +
 			 sizeof (pInfoAccount->m_dwAccountID) +
-			 		(pInfoAccount->m_strAccount.GetStoreLength () + 1) +
-			 		(pInfoAccount->m_strPassword.GetStoreLength () + 1) +
+			 		(pInfoAccount->m_strAccount.GetLegacyStoreLength () + 1) +
+			 		(pInfoAccount->m_strPassword.GetLegacyStoreLength () + 1) +
 			(strlen (pszMacAddress) + 1);
 
 	pData = new BYTE[dwSize];
@@ -67,8 +67,8 @@ void CPacketADMIN_CHAR_RES_ACCOUNT::Make(
 	pDataTmp = (PBYTE)(pPacketBase + 1);
 	CopyMemoryRenew (pDataTmp, &pInfoAccount->m_dwAccountID, sizeof (pInfoAccount->m_dwAccountID), pDataTmp);	/* アカウントID */
 	CopyMemoryRenew (pDataTmp, &dwIP, sizeof (dwIP), pDataTmp);													/* IPアドレス */
-	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strAccount,  pDataTmp);										/* アカウント */
-	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strPassword, pDataTmp);										/* パスワード */
+	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strAccount.GetLegacyAnsiPointer (),  pDataTmp);				/* アカウント */
+	strcpyRenew ((LPSTR)pDataTmp, pInfoAccount->m_strPassword.GetLegacyAnsiPointer (), pDataTmp);				/* パスワード */
 	strcpyRenew ((LPSTR)pDataTmp, pszMacAddress, pDataTmp);														/* MACアドレス */
 
 	RenewPacket (pData, dwSize);
