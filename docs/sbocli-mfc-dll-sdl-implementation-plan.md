@@ -8,6 +8,30 @@
 1. **最優先**: クライアント管理画面（MFC）を `SboCli` 本体から分離し、別DLL化する
 2. **次優先**: `SboCli` のゲーム実行部分（描画・入力・ループ）をSDLベースへ移行する
 
+## 1.5 現在の確認結果（2026-03-16）
+
+- `Phase 1` は実装上ほぼ完了している
+  - `SboCliAdminMfc/src/Migrated/Wnd/` に 6 本の `.cpp`
+  - `SboCliAdminMfc/src/Migrated/Dialog/` に 37 本の `.cpp`
+  - `AdminWindow.cpp` も DLL 側へ移管済み
+  - `SboCli` 側は `AdminApi/AdminUiLoader.cpp` で `LoadLibrary/GetProcAddress` により DLL をロードする構成
+- `Phase 2` は着手済み
+  - `SboCli/src/Platform/SDLApp.*`
+  - `SboCli/src/Platform/SDLWindow.*`
+  - `SboCli/src/Platform/SDLInput.*`
+  - `MainFrame::MainLoop()` は `CSDLApp::Run()` を使用する構成へ移行済み
+- `Phase 3` も一部前倒しで着手済み
+  - `MgrDraw::Draw()` は `SDL_Renderer*` を受ける形へ変更済み
+  - `MgrKeyInput::Renew()` は `SDL_GetKeyboardState()` を参照する構成へ変更済み
+- ただし、現時点は **SDL 導入 = Windows 依存脱却完了** ではない
+  - SDL ウィンドウから `HWND` を取得して既存 `WndProc` に橋渡ししている
+  - `PeekMessage` / `DispatchMessage` / `SetWindowLongPtr` など Win32 メッセージ依存が残存
+  - 描画内部では `CImg32` / `HDC` / GDI ベースの処理が大量に残存
+  - 入力では `GetAsyncKeyState` と `DInputUtil` が残存
+  - サウンドでは `DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存が残存
+
+詳細な棚卸しは `docs/windows-dependency-status.md` を参照。
+
 ## 2. 現状整理（SboCli）
 
 - `SboCli` は MFC静的リンク構成（`UseOfMfc=Static`）
@@ -118,6 +142,12 @@
 - SDLウィンドウ生成、イベントループ、終了処理が動作
 - ログイン〜マップ遷移までの基本操作が可能
 
+**2026-03-16 時点の評価**
+- プラットフォーム層の追加は完了
+- `MainFrame` のループ移行も完了
+- ただし `SDLWindow` が `SDL_GetWindowWMInfo()` で `HWND` を公開しており、メッセージ処理はなお Win32 依存
+- よって Phase 2 は「SDL基盤導入済み、Windows 非依存化は未完」の状態
+
 ### Phase 3: 描画・入力のSDL置換（3〜6週）
 
 **作業**
@@ -129,6 +159,13 @@
 **完了条件**
 - マップ描画、キャラ移動、チャット表示、基本UI表示がSDL経由で動作
 - 主要シーンで旧版比較の目視差分が許容範囲
+
+**2026-03-16 時点の評価**
+- `MgrDraw::Draw(SDL_Renderer*)` と `MgrKeyInput` の SDL 化は進んでいる
+- ただし描画の中核データは依然として `CImg32` / `HDC` / GDI に依存している
+- `Window/*` と `Layer/*` には `HDC` ベース描画が広く残存している
+- 入力も `SDL_GetKeyboardState()` と Win32 / DirectInput の併用段階であり、置換完了とは言えない
+- Phase 3 は「入口を SDL に置換済み、内部実装の置換はこれから」が現状
 
 ### Phase 4: 統合・安定化（2〜3週）
 
@@ -158,6 +195,14 @@
   - **対策**: 旧版比較チェックリスト（FPS、入力応答、表示崩れ）を運用
 - **リスク**: 工程長期化
   - **対策**: フェーズ毎に「動く最小構成」でマイルストーンを固定
+
+## 7.5 Windows依存脱却の直近優先タスク
+
+1. `Platform/SDLWindow` から `HWND` 公開を外し、`MainFrame` の `WndProc` / `SetWindowLongPtr` / `PeekMessage` 依存を縮退させる。
+2. `MgrKeyInput` から `GetAsyncKeyState` と `DInputUtil` を外し、SDL イベントまたは `SDL_GetKeyboardState()` のみに統一する。
+3. `MgrDraw` と `Window/*` / `Layer/*` の `HDC` / `CImg32` / GDI 描画を、SDL テクスチャと描画 API へ段階置換する。
+4. `DXAudio` / `AflMusic` / `winmm` / `DirectSound` まわりの Windows 固有音声経路を分離し、SDL_mixer など代替先を検討する。
+5. `CreateWindow` ベースの入力欄や MFC/Win32 補助 UI を、SDL 上の UI または別レイヤへ退避する。
 
 ## 8. 受け入れ基準（優先事項ベース）
 
