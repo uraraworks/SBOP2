@@ -117,13 +117,13 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 	BOOL bBreak;
 	BYTE byCodeTmp;
 	DWORD dwKeyInput;
-	const Uint8 *pSDLState;
+	const Uint8 *pKeyboardState;
 
 	byCode	= 0;
 	bDown	= FALSE;
 
 	/* SDL キーボード状態を取得（SDLApp::Run() の SDL_PollEvent 後に更新済み） */
-	pSDLState = SDL_GetKeyboardState(NULL);
+	pKeyboardState = SDL_GetKeyboardState (NULL);
 
 	/* 入力状態の検出 */
 	dwKeyInput = m_pDInputUtil->GetKeyState ();
@@ -134,30 +134,8 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 		}
 		bBreak = TRUE;
 
-		/* SDL_GetKeyboardState() でキー押下状態取得（GetKeyState() から移行） */
-		{
-			BOOL bPressed = FALSE;
-			BOOL bPressedWin = FALSE;
-			if (byCodeTmp == VK_SHIFT) {
-				/* VK_SHIFT は左右両方のシフトキーをチェック */
-				bPressed = pSDLState[SDL_SCANCODE_LSHIFT] || pSDLState[SDL_SCANCODE_RSHIFT];
-				bPressedWin =	((GetAsyncKeyState (VK_SHIFT) & 0x8000) != 0) ||
-							((GetAsyncKeyState (VK_LSHIFT) & 0x8000) != 0) ||
-							((GetAsyncKeyState (VK_RSHIFT) & 0x8000) != 0);
-			} else if (byCodeTmp == VK_CONTROL) {
-				/* VK_CONTROL は左右両方のCtrlキーをチェック */
-				bPressed = pSDLState[SDL_SCANCODE_LCTRL] || pSDLState[SDL_SCANCODE_RCTRL];
-				bPressedWin =	((GetAsyncKeyState (VK_CONTROL) & 0x8000) != 0) ||
-							((GetAsyncKeyState (VK_LCONTROL) & 0x8000) != 0) ||
-							((GetAsyncKeyState (VK_RCONTROL) & 0x8000) != 0);
-			} else {
-				SDL_Scancode sc = CSDLInput::VKToScancode(byCodeTmp);
-				bPressed = (sc != SDL_SCANCODE_UNKNOWN) && pSDLState[sc];
-				bPressedWin = ((GetAsyncKeyState (byCodeTmp) & 0x8000) != 0);
-			}
-			bPressed = bPressed || bPressedWin;
-			m_abyKeyState[byCodeTmp] = bPressed ? 0x80 : 0;
-		}
+		/* キーボードは SDL 状態を主系とし、ジョイパッドだけ DirectInput を併用する */
+		m_abyKeyState[byCodeTmp] = CSDLInput::IsVKPressed (byCodeTmp, pKeyboardState) ? 0x80 : 0;
 		switch (byCodeTmp) {
 		case VK_UP:			/* ↑ */
 			m_abyKeyState[byCodeTmp] |= (dwKeyInput & BUTTON_UP) ? 0x80 : 0;

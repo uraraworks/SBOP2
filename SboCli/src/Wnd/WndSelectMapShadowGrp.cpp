@@ -159,7 +159,7 @@ int CWndSelectMapShadowGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void CWndSelectMapShadowGrp::OnClose()
 {
 	if (m_pWndParent) {
-		m_pWndParent->PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPPARTSGRP, (LPARAM)m_nSelect);
+		m_pWndParent->PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPSHADOWGRP, (LPARAM)m_nSelect);
 	}
 	CWnd::OnClose ();
 }

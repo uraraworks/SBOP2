@@ -119,4 +119,36 @@ SDL_Scancode CSDLInput::VKToScancode(int vk)
 	}
 }
 
+
+/* ========================================================================= */
+/* 関数名	:CSDLInput::IsVKPressed										 */
+/* 内容		:Win32 仮想キーコードの押下状態を SDL キーボード状態から判定する */
+/* 日付		:2026/03/16														 */
+/* ========================================================================= */
+
+BOOL CSDLInput::IsVKPressed(int vk, const Uint8 *pKeyboardState)
+{
+	SDL_Scancode scancode;
+
+	if (pKeyboardState == NULL) {
+		return FALSE;
+	}
+
+	switch (vk)
+	{
+	case VK_SHIFT:
+		return pKeyboardState[SDL_SCANCODE_LSHIFT] || pKeyboardState[SDL_SCANCODE_RSHIFT];
+
+	case VK_CONTROL:
+		return pKeyboardState[SDL_SCANCODE_LCTRL] || pKeyboardState[SDL_SCANCODE_RCTRL];
+
+	default:
+		scancode = VKToScancode (vk);
+		if (scancode == SDL_SCANCODE_UNKNOWN) {
+			return FALSE;
+		}
+		return pKeyboardState[scancode] ? TRUE : FALSE;
+	}
+}
+
 /* Copyright(C)URARA-works 2025 */

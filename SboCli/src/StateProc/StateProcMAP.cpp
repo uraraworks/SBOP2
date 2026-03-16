@@ -74,7 +74,16 @@
 #include "MgrKeyInput.h"
 #include "MgrWindow.h"
 #include "MgrDraw.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "StateProcMAP.h"
+
+namespace {
+
+static BOOL IsLeftMousePressed(void)
+{
+	return (SDL_GetMouseState (NULL, NULL) & SDL_BUTTON_LMASK) ? TRUE : FALSE;
+}
 
 static double NormalizeMoveAngle(double dAngle)
 {
@@ -115,6 +124,8 @@ static int GetAngleDirection(double dAngle)
 	}
 	return nBestDirection;
 }
+
+}	/* namespace */
 
 /* ========================================================================= */
 /* 関数名	:CStateProcMAP::CStateProcMAP									 */
@@ -1055,7 +1066,7 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 			DWORD dwMapPartsID;
 			CPacketADMIN_MAP_SETPARTS Packet;
 
-			if ((GetAsyncKeyState (VK_LBUTTON) & 0x8000) == 0) {
+			if (IsLeftMousePressed () == FALSE) {
 				break;
 			}
 			x = (xx / 32) + nMapX;
@@ -1083,7 +1094,7 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 			DWORD dwMapShadowID;
 			CPacketADMIN_MAP_SETMAPSHADOW Packet;
 
-			if ((GetAsyncKeyState (VK_LBUTTON) & 0x8000) == 0) {
+			if (IsLeftMousePressed () == FALSE) {
 				break;
 			}
 			x = (xx / 32) + nMapX;

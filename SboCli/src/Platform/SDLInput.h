@@ -29,6 +29,10 @@ public:
 	/* Phase 3 で SDL_GetKeyboardState() 移行時に使用        */
 	/* 対応がない場合は SDL_SCANCODE_UNKNOWN を返す           */
 	static SDL_Scancode VKToScancode(int vk);
+
+	/* Win32 仮想キーコード (VK_*) の押下状態を SDL キーボード状態から判定 */
+	/* 対応がない場合は FALSE を返す                                        */
+	static BOOL IsVKPressed(int vk, const Uint8 *pKeyboardState);
 };
 
 /* Copyright(C)URARA-works 2025 */

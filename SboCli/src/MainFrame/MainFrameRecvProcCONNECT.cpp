@@ -15,6 +15,7 @@
 #include "WindowLOGIN.h"
 #include "MgrData.h"
 #include "MgrWindow.h"
+#include "Platform/SDLEventUtil.h"
 #include "MainFrame.h"
 
 
@@ -76,7 +77,7 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 	case LOGINRES_NG_DISABLE:	/* ログイン拒否 */
 		m_pMgrData->SetDisableLogin(TRUE);
 		m_pMgrData->SaveIniData();
-		PostMessage (m_hWnd, WM_CLOSE, 0, 0);
+		PushSDLQuitEvent ();
 		break;
 	}
 }

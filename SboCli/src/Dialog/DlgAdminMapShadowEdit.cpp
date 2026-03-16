@@ -225,7 +225,7 @@ LRESULT CDlgAdminMapShadowEdit::OnWndClose(WPARAM wParam, LPARAM lParam)
 	PCInfoAnime pInfo;
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPPARTSGRP:	/* マップ影画像選択 */
+	case WINDOWID_SELECTMAPSHADOWGRP:	/* マップ影画像選択 */
 		if (lParam >= 0) {
 			if (m_nSelectType == 1) {
 				m_wShadowGrpID = (WORD)lParam;
@@ -260,7 +260,7 @@ LRESULT CDlgAdminMapShadowEdit::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 	switch (wParam) {
 	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* 左クリック通知 */
 		m_nSelectType = 1;
-		PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPPARTSGRP, lParam);
+		PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPSHADOWGRP, lParam);
 		break;
 	case ADMINMSG_SELECT_ANIME:					/* アニメーションコマ選択 */
 		m_nAnimeNo = lParam;

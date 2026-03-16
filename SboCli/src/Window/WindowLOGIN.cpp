@@ -12,7 +12,21 @@
 #include "MgrSound.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "WindowLOGIN.h"
+
+namespace {
+
+static BOOL IsShiftPressed(void)
+{
+	SDL_Keymod keymod;
+
+	keymod = SDL_GetModState ();
+	return (keymod & KMOD_SHIFT) ? TRUE : FALSE;
+}
+
+}
 
 /* ========================================================================= */
 /* 関数名	:CWindowLOGIN::CWindowLOGIN										 */
@@ -326,7 +340,7 @@ LRESULT CALLBACK CWindowLOGIN::AccountWndProc(HWND hWnd, UINT message, WPARAM wP
 	switch (message) {
 	case WM_CHAR:
 		if (wParam == VK_TAB) {
-			if (GetKeyState (VK_SHIFT) & 0x8000) {
+			if (IsShiftPressed ()) {
 				SetFocus (pThis->m_hWndConnect);
 			} else {
 				SetFocus (pThis->m_hWndPassword);
@@ -364,7 +378,7 @@ LRESULT CALLBACK CWindowLOGIN::PasswordWndProc(HWND hWnd, UINT message, WPARAM w
 	switch (message) {
 	case WM_CHAR:
 		if (wParam == VK_TAB) {
-			if (GetKeyState (VK_SHIFT) & 0x8000) {
+			if (IsShiftPressed ()) {
 				SetFocus (pThis->m_hWndAccount);
 			} else {
 				SetFocus (pThis->m_hWndSavePassword);
@@ -402,7 +416,7 @@ LRESULT CALLBACK CWindowLOGIN::SavePasswordWndProc(HWND hWnd, UINT message, WPAR
 	switch (message) {
 	case WM_CHAR:
 		if (wParam == VK_TAB) {
-			if (GetKeyState (VK_SHIFT) & 0x8000) {
+			if (IsShiftPressed ()) {
 				SetFocus (pThis->m_hWndPassword);
 			} else {
 				SetFocus (pThis->m_hWndConnect);
@@ -461,7 +475,7 @@ LRESULT CALLBACK CWindowLOGIN::ConnectWndProc(HWND hWnd, UINT message, WPARAM wP
 	switch (message) {
 	case WM_CHAR:
  		if (wParam == VK_TAB) {
-			if (GetKeyState (VK_SHIFT) & 0x8000) {
+			if (IsShiftPressed ()) {
 				SetFocus (pThis->m_hWndSavePassword);
 			} else {
 				SetFocus (pThis->m_hWndAccount);

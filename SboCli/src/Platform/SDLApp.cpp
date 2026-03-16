@@ -6,7 +6,10 @@
 /* ========================================================================= */
 
 #include "stdafx.h"
+#include <SDL_syswm.h>
 #include "SDLApp.h"
+#include "SDLEventUtil.h"
+#include "SDLInput.h"
 #include "SboCli_priv.h"
 
 
@@ -17,6 +20,52 @@
 /* Limit how many fixed updates run back-to-back when the client stalls. */
 #define MAX_FRAME_SKIP	5
 
+static HWND GetMainWindowHandle(SDL_Window *pWindow)
+{
+	SDL_SysWMinfo wmInfo;
+
+	if (pWindow == NULL) {
+		return NULL;
+	}
+
+	SDL_VERSION (&wmInfo.version);
+	if (!SDL_GetWindowWMInfo (pWindow, &wmInfo)) {
+		return NULL;
+	}
+
+	return wmInfo.info.win.window;
+}
+
+static BOOL IsMainWindowMessage(HWND hMainWnd, const MSG &msg)
+{
+	if ((hMainWnd == NULL) || (msg.hwnd != hMainWnd)) {
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+static BOOL ShouldSkipMainWindowInputMessage(HWND hMainWnd, const MSG &msg)
+{
+	if (!IsMainWindowMessage (hMainWnd, msg)) {
+		return FALSE;
+	}
+
+	return IsSDLManagedInputWindowMessage (msg.message);
+}
+
+static BOOL ShouldBridgeWin32QuitMessage(HWND hMainWnd, const MSG &msg)
+{
+	if (msg.message == WM_QUIT) {
+		return TRUE;
+	}
+
+	if (!IsMainWindowMessage (hMainWnd, msg)) {
+		return FALSE;
+	}
+
+	return (msg.message == WM_CLOSE) ? TRUE : FALSE;
+}
 
 /* ========================================================================= */
 /* Function    : CSDLApp::CSDLApp                                             */
@@ -103,7 +152,7 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 	if (!m_Window.CreateRenderer ()) {
 		return -1;
 	}
-	if (!pHost->OnSDLInit (m_Window.GetHWND ())) {
+	if (!pHost->OnSDLInit (m_Window.GetSDLWindow ())) {
 		return -1;
 	}
 
@@ -138,8 +187,52 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 				break;
 
 			case SDL_KEYDOWN:
-			case SDL_KEYUP:
 				/* Keyboard state is sampled separately by MgrKeyInput::Renew(). */
+				break;
+
+			case SDL_KEYUP:
+				pHost->OnSDLKeyUp (CSDLInput::ScancodeToVK (sdlEvent.key.keysym.scancode));
+				break;
+
+			case SDL_WINDOWEVENT:
+				switch (sdlEvent.window.event)
+				{
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+				case SDL_WINDOWEVENT_RESTORED:
+					pHost->OnSDLFocusChanged (TRUE);
+					break;
+
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+				case SDL_WINDOWEVENT_MINIMIZED:
+					pHost->OnSDLFocusChanged (FALSE);
+					break;
+
+				default:
+					break;
+				}
+				break;
+
+			case SDL_MOUSEMOTION:
+				pHost->OnSDLMouseMove (sdlEvent.motion.x, sdlEvent.motion.y);
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:
+				if (sdlEvent.button.button == SDL_BUTTON_LEFT) {
+					pHost->OnSDLMouseLeftButtonDown (
+						sdlEvent.button.x,
+						sdlEvent.button.y,
+						(sdlEvent.button.clicks >= 2) ? TRUE : FALSE);
+				} else if (sdlEvent.button.button == SDL_BUTTON_RIGHT) {
+					pHost->OnSDLMouseRightButtonDown (
+						sdlEvent.button.x,
+						sdlEvent.button.y,
+						(sdlEvent.button.clicks >= 2) ? TRUE : FALSE);
+					if (sdlEvent.button.clicks >= 2) {
+						pHost->OnSDLMouseRightButtonDoubleClick (
+							sdlEvent.button.x,
+							sdlEvent.button.y);
+					}
+				}
 				break;
 
 			default:
@@ -223,21 +316,24 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 void CSDLApp::PollWin32Messages(void)
 {
 	MSG msg;
+	HWND hMainWnd;
 
+	hMainWnd = GetMainWindowHandle (m_Window.GetSDLWindow ());
+
+	/* SDL 管理済みのメインウィンドウ入力はここで捨てる。 */
+	/* それ以外の独自メッセージや子ウィンドウ通知は Win32 として流す。 */
 	while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
 	{
-		if (msg.message == WM_QUIT) {
-			SDL_Event sdlQuit;
-			ZeroMemory (&sdlQuit, sizeof (sdlQuit));
-			sdlQuit.type = SDL_QUIT;
-			SDL_PushEvent (&sdlQuit);
-			break;
+		if (ShouldBridgeWin32QuitMessage (hMainWnd, msg)) {
+			PushSDLQuitEvent ();
+			if (msg.message == WM_QUIT) {
+				break;
+			}
+			continue;
 		}
 
-		if (msg.message == WM_SYSKEYDOWN) {
-			if (msg.wParam == VK_MENU || msg.wParam == VK_F10) {
-				continue;
-			}
+		if (ShouldSkipMainWindowInputMessage (hMainWnd, msg)) {
+			continue;
 		}
 
 		TranslateMessage (&msg);

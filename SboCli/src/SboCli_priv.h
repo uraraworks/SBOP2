@@ -42,6 +42,26 @@ inline int PixelToTile(int px)       { return px / MAPPARTSSIZE; }
 /* ピクセル座標 → そのタイルの中心ピクセル座標 */
 inline int PixelToTileCenter(int px) { return PixelToTile(px) * MAPPARTSSIZE + MAPPARTSSIZE / 2; }
 
+/* SDL 側へ移行済みのメインウィンドウ入力メッセージ判定 */
+inline BOOL IsSDLManagedInputWindowMessage(UINT msg)
+{
+	switch (msg)
+	{
+	case WM_ACTIVATE:
+	case WM_KEYUP:
+	case WM_KEYDOWN:
+	case WM_SYSKEYDOWN:
+	case WM_SYSKEYUP:
+	case WM_MOUSEMOVE:
+	case WM_LBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONDBLCLK:
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 /* ウィンドウメッセージ */
 enum {
 	WM_INITEND = WM_APP,								/* 初期化完了 */

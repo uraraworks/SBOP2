@@ -8,6 +8,9 @@
 
 #include "stdafx.h"
 #include <comdef.h>
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#include <SDL_syswm.h>
 #include "resource.h"
 #include "SBOVersion.h"
 #include "UraraSockTCPSBO.h"
@@ -33,6 +36,7 @@
 #include "MgrKeyInput.h"
 #include "MgrSound.h"
 #include "Platform/SDLApp.h"
+#include "Platform/SDLEventUtil.h"
 #include "MainFrame.h"
 
 
@@ -43,8 +47,6 @@
 #define CLNAME "SboCli"								/* 登録クラス名 */
 #define TIMERID_TOOLCHECK	100						/* ツールチェックタイマー */
 #define TIMER_TOOLCHECK		1000					/* ツールチェックタイマー周期 */
-#define TIMERID_ACTIVECHECK	101						/* アクティブウィンドウチェックタイマー */
-#define TIMER_ACTIVECHECK	1000					/* アクティブウィンドウチェックタイマー周期 */
 
 int g_nSboCliRenderFrameRate = DRAWCOUNT;
 static WNDPROC g_pSDLBaseWndProc = NULL;
@@ -183,10 +185,22 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 /*			 既存の OnCreate + OnInitEnd 相当の初期化処理を実行する			 */
 /* ========================================================================= */
 
-BOOL CMainFrame::OnSDLInit(HWND hWnd)
+BOOL CMainFrame::OnSDLInit(SDL_Window *pWindow)
 {
 	TCHAR szFileName[MAX_PATH];
 	POINT pt;
+	SDL_SysWMinfo wmInfo;
+	HWND hWnd;
+
+	if (pWindow == NULL) {
+		return FALSE;
+	}
+
+	SDL_VERSION (&wmInfo.version);
+	if (!SDL_GetWindowWMInfo (pWindow, &wmInfo)) {
+		return FALSE;
+	}
+	hWnd = wmInfo.info.win.window;
 
 	m_hWnd = hWnd;
 
@@ -212,15 +226,31 @@ BOOL CMainFrame::OnSDLInit(HWND hWnd)
 		SetWindowPos (hWnd, NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE);
 	}
 
-	/* ツールチェック・アクティブチェックタイマー開始（OnCreate相当） */
+	/* ツールチェックタイマー開始（OnCreate相当） */
 	SetTimer (hWnd, TIMERID_TOOLCHECK, TIMER_TOOLCHECK, NULL);
-	SetTimer (hWnd, TIMERID_ACTIVECHECK, TIMER_ACTIVECHECK, NULL);
 
 	/* 初期化処理を実行（OnInitEnd相当） */
 	/* WM_INITEND の PostMessage/DispatchMessage を経由しない直接呼び出し */
 	OnInitEnd (hWnd);
 
 	return TRUE;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLFocusChanged									 */
+/* 内容		:SDLフォーカス変化を既存のアクティブ状態へ反映する				 */
+/* 日付		:2026/03/16														 */
+/* ========================================================================= */
+
+void CMainFrame::OnSDLFocusChanged(BOOL bActive)
+{
+	m_bWindowActive = bActive;
+	if (!bActive) {
+		if (m_pMgrKeyInput) {
+			m_pMgrKeyInput->Reset ();
+		}
+	}
 }
 
 
@@ -238,6 +268,69 @@ BOOL CMainFrame::OnFrame(void)
 	KeyProc ();
 
 	return bDraw;
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLKeyUp										 */
+/* 内容		:SDLキーアップを既存ハンドラへ橋渡しする						 */
+/* 日付		:2026/03/16														 */
+/* ========================================================================= */
+
+void CMainFrame::OnSDLKeyUp(int vk)
+{
+	if (vk == 0) {
+		return;
+	}
+	OnKeyUp (m_hWnd, (UINT)vk, FALSE, 1, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLMouseMove									 */
+/* 内容		:SDLマウス移動イベントを既存ハンドラへ橋渡しする				 */
+/* 日付		:2026/03/16														 */
+/* ========================================================================= */
+
+void CMainFrame::OnSDLMouseMove(int x, int y)
+{
+	OnMouseMove (m_hWnd, x, y, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLMouseLeftButtonDown							 */
+/* 内容		:SDL左ボタン押下を既存ハンドラへ橋渡しする						 */
+/* 日付		:2026/03/16														 */
+/* ========================================================================= */
+
+void CMainFrame::OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick)
+{
+	OnLButtonDown (m_hWnd, bDoubleClick, x, y, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLMouseRightButtonDown							 */
+/* 内容		:SDL右ボタン押下を既存ハンドラへ橋渡しする						 */
+/* 日付		:2026/03/16														 */
+/* ========================================================================= */
+
+void CMainFrame::OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick)
+{
+	OnRButtonDown (m_hWnd, bDoubleClick, x, y, 0);
+}
+
+
+/* ========================================================================= */
+/* 関数名	:CMainFrame::OnSDLMouseRightButtonDoubleClick					 */
+/* 内容		:SDL右ダブルクリックを既存ハンドラへ橋渡しする					 */
+/* 日付		:2026/03/16														 */
+/* ========================================================================= */
+
+void CMainFrame::OnSDLMouseRightButtonDoubleClick(int x, int y)
+{
+	OnRButtonDblClk (m_hWnd, TRUE, x, y, 0);
 }
 
 
@@ -296,7 +389,6 @@ void CMainFrame::OnSDLDestroy(void)
 
 	/* タイマー停止 */
 	KillTimer (m_hWnd, TIMERID_TOOLCHECK);
-	KillTimer (m_hWnd, TIMERID_ACTIVECHECK);
 
 	/* ウィンドウ位置等をINIに保存（OnClose相当） */
 	ZeroMemory (szFileName, sizeof (szFileName));
@@ -714,37 +806,18 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 
 LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (IsSDLManagedInputWindowMessage (msg)) {
+		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
+	}
+
 	switch (msg) {
 	HANDLE_MSG (hWnd, WM_CREATE,		OnCreate);
-	HANDLE_MSG (hWnd, WM_CLOSE,			OnClose);
 	HANDLE_MSG (hWnd, WM_DESTROY,		OnDestroy);
 	case WM_PAINT:
 		OnPaint (hWnd);
 		return 0;
 	HANDLE_MSG (hWnd, WM_TIMER,			OnTimer);
 	HANDLE_MSG (hWnd, WM_COMMAND,		OnCommand);
-	case WM_ACTIVATE:
-		OnActivate (hWnd, LOWORD(wParam), (HWND)lParam, (BOOL)HIWORD(wParam));
-		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
-	case WM_KEYUP:
-		OnKeyUp (hWnd, (UINT)wParam, (BOOL)(lParam & (1UL << 31)), (int)(lParam & 0xFFFF), (UINT)((lParam >> 16) & 0xFFFF));
-		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
-	case WM_KEYDOWN:
-	case WM_SYSKEYDOWN:
-	case WM_SYSKEYUP:
-		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
-	case WM_LBUTTONDOWN:
-		OnLButtonDown (hWnd, FALSE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
-		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
-	case WM_RBUTTONDOWN:
-		OnRButtonDown (hWnd, FALSE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
-		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
-	case WM_RBUTTONDBLCLK:
-		OnRButtonDblClk (hWnd, TRUE, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
-		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
-	case WM_MOUSEMOVE:
-		OnMouseMove (hWnd, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), (UINT)wParam);
-		return ForwardToSDLBaseWndProc (hWnd, msg, wParam, lParam);
 
 	case WM_INITEND:				/* 初期化完了 */
 		OnInitEnd (hWnd);
@@ -824,7 +897,6 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	}
 
 	SetTimer (hWnd, TIMERID_TOOLCHECK, TIMER_TOOLCHECK, NULL);
-	SetTimer (hWnd, TIMERID_ACTIVECHECK, TIMER_ACTIVECHECK, NULL);
 	PostMessage (hWnd, WM_INITEND, 0, 0);
 
 	return TRUE;
@@ -905,26 +977,8 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	bRet = TRUE;
 Exit:
 	if (bRet == FALSE) {
-		PostMessage (hWnd, WM_CLOSE, 0, 0);
+		PushSDLQuitEvent ();
 	}
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CMainFrame::OnClose											 */
-/* 内容		:メッセージハンドラ(WM_CLOSE)									 */
-/* 日付		:2008/06/09														 */
-/* ========================================================================= */
-
-void CMainFrame::OnClose(HWND hWnd)
-{
-	/* SDL ウィンドウを使用中のため DestroyWindow は SDL 側に委ねる。        */
-	/* SDL_QUIT をプッシュしてメインループを終了させる。                      */
-	/* 設定保存・ソケット破棄は OnSDLDestroy() に一本化する。                 */
-	SDL_Event ev;
-	ZeroMemory (&ev, sizeof (ev));
-	ev.type = SDL_QUIT;
-	SDL_PushEvent (&ev);
 }
 
 
@@ -995,27 +1049,10 @@ void CMainFrame::OnTimer(HWND hWnd, UINT id)
 				m_dwLastTimeCheck = 0;
 				break;
 			}
-			PostMessage (hWnd, WM_CLOSE, 0, 0);
+			PushSDLQuitEvent ();
 		}
 		break;
 
-	case TIMERID_ACTIVECHECK:	/* アクティブウィンドウチェックタイマー */
-		{
-			HWND hWndFocus, hWndForeground;
-			SDL_Window *pFocusWindow;
-
-			m_bWindowActive = FALSE;
-			hWndFocus = GetFocus ();
-			hWndForeground = GetForegroundWindow ();
-			pFocusWindow = SDL_GetKeyboardFocus ();
-			if ((m_hWnd == hWndFocus) ||
-				(m_hWnd == hWndForeground) ||
-				(pFocusWindow != NULL) ||
-				(hWndFocus && IsChild (m_hWnd, hWndFocus))) {
-				m_bWindowActive = TRUE;
-			}
-		}
-		break;
 	}
 }
 
@@ -1033,27 +1070,6 @@ void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
 		/* 各ウィンドウで処理させる */
 		PostMessage (hWndCtl, WM_COMMAND, MAKELONG (codeNotify, id), (LPARAM)hWndCtl);
 		return;
-	}
-}
-
-
-/* ========================================================================= */
-/* 関数名	:CMainFrame::OnActivate											 */
-/* 内容		:メッセージハンドラ(WM_ACTIVATE)								 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
-void CMainFrame::OnActivate(HWND hWnd, UINT state, HWND hwndActDeact, BOOL fMinimized)
-{
-	/* 非アクティブになる？ */
-	if (state == WA_INACTIVE) {
-		m_bWindowActive = FALSE;
-		if (m_pMgrKeyInput) {
-			m_pMgrKeyInput->Reset ();
-		}
-
-	} else {
-		m_bWindowActive = TRUE;
 	}
 }
 
