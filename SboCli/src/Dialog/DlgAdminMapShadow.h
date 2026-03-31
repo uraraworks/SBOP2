@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapShadow.h										 */
-/* 内容			:マップ影編集ダイアログクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/06/06													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapShadow.h
+/// @brief マップ影編集ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/06/06
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -15,37 +13,35 @@ class CMgrGrpData;
 class CImg32;
 class CLibInfoMapShadow;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 class CDlgAdminMapShadow : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapShadow(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminMapShadow();							/* デストラクタ */
+			CDlgAdminMapShadow(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapShadow(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);						/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* メッセージハンドラ(WM_ADMINMSG) */
-
-
-protected:
-	void	RenewMessage			(LPCSTR pszMsg);	/* メッセージ欄を更新 */
-	void	MakeShadowImage			(void);				/* 影一覧画像を作成 */
-	DWORD	GetSelectMapShadowID	(void);				/* 選択中の影IDを取得 */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
 
 
 protected:
-	int		m_nSelectType,						/* 設定項目 */
-			m_nState;							/* 状態 */
-	DWORD	m_dwSelectShadowID;					/* 選択中の影ID */
-	CPoint	m_ptCursor,							/* カーソルのある位置 */
-			m_ptMoveSrc,						/* 移動元の位置 */
-			m_ptMoveDst;						/* 移動先の位置 */
+	void	RenewMessage(LPCSTR pszMsg); // メッセージ欄を更新
+	void	MakeShadowImage(void); // 影一覧画像を作成
+	DWORD	GetSelectMapShadowID(void); // 選択中の影IDを取得
 
-	CMgrGrpData			*m_pMgrGrpData;			/* グラフィックデータ管理 */
-	CImg32				*m_pImgShadow;			/* 影一覧画像 */
-	CLibInfoMapShadow	*m_pLibInfoMapShadow;	/* 編集中のマップ影情報 */
+
+protected:
+	int	m_nSelectType, // 設定項目
+			m_nState; // 状態
+	DWORD	m_dwSelectShadowID; // 選択中の影ID
+	CPoint	m_ptCursor, // カーソルのある位置
+			m_ptMoveSrc, // 移動元の位置
+			m_ptMoveDst; // 移動先の位置
+
+	CMgrGrpData	*m_pMgrGrpData; // グラフィックデータ管理
+	CImg32	*m_pImgShadow; // 影一覧画像
+	CLibInfoMapShadow	*m_pLibInfoMapShadow; // 編集中のマップ影情報
 
 
 
@@ -55,7 +51,7 @@ public:
 	CStaticMapShadow	m_ctlMapShadow;
 	CScrollBar	m_ctlScroll;
 	CComboBox	m_cbType;
-	int		m_nTypeSelect;
+	int	m_nTypeSelect;
 	CString	m_strID;
 	CString	m_strMsg;
 	//}}AFX_DATA
@@ -82,5 +78,3 @@ protected:
 };
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

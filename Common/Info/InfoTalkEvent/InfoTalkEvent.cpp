@@ -1,10 +1,8 @@
-/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:InfoTalkEvent.cpp											 */
-/* 内容			:会話イベント情報クラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/16													 */
-/* ========================================================================= */
+/// @file InfoTalkEvent.cpp
+/// @brief 会話イベント情報クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/16
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "InfoTalkEventPAGE.h"
@@ -14,23 +12,12 @@
 #include <limits>
 #include <vector>
 
-/* ========================================================================= */
-/* 定数定義																	 */
-/* ========================================================================= */
-
-/* ヘッダ情報 */
+// ヘッダ情報
 static LPCSTR s_aszName[] = {
-	"m_dwTalkEventID",	/* 会話イベントID */
-	"m_apTalkEvent",	/* 会話イベント */
+	"m_dwTalkEventID",	// 会話イベントID
+	"m_apTalkEvent",	// 会話イベント
 	NULL
 };
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::CInfoTalkEvent									 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
 
 CInfoTalkEvent::CInfoTalkEvent()
 {
@@ -39,24 +26,10 @@ CInfoTalkEvent::CInfoTalkEvent()
 	for (m_nElementCount = 0; s_aszName[m_nElementCount] != NULL; m_nElementCount ++) {}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::~CInfoTalkEvent								 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
-
 CInfoTalkEvent::~CInfoTalkEvent()
 {
-	DeleteAllTalkEvent ();
+	DeleteAllTalkEvent();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetElementNo									 */
-/* 内容		:要素番号を取得													 */
-/* 日付		:2005/07/05														 */
-/* ========================================================================= */
 
 int CInfoTalkEvent::GetElementNo(LPCSTR pszName)
 {
@@ -65,7 +38,7 @@ int CInfoTalkEvent::GetElementNo(LPCSTR pszName)
 	nRet = -1;
 
 	for (i = 0; s_aszName[i] != NULL; i ++) {
-		if (strcmp (s_aszName[i], pszName) == 0) {
+		if (strcmp(s_aszName[i], pszName) == 0) {
 			nRet = i;
 			break;
 		}
@@ -74,13 +47,6 @@ int CInfoTalkEvent::GetElementNo(LPCSTR pszName)
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetDataSize									 */
-/* 内容		:データサイズを取得												 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
-
 DWORD CInfoTalkEvent::GetDataSize(void)
 {
 	int i;
@@ -88,18 +54,11 @@ DWORD CInfoTalkEvent::GetDataSize(void)
 
 	dwRet = 0;
 	for (i = 0; i < m_nElementCount; i ++) {
-		dwRet += GetDataSizeNo (i);
+		dwRet += GetDataSizeNo(i);
 	}
 
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetDataSizeNo									 */
-/* 内容		:指定要素のデータサイズを取得									 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
 
 namespace {
 
@@ -393,7 +352,7 @@ bool SerializeTalkEvent(CInfoTalkEvent *pEvent, int nNo, CSerializeBuffer &write
 	return false;
 }
 
-} /* anonymous namespace */
+}	// anonymous namespace
 
 DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
 {
@@ -405,24 +364,10 @@ DWORD CInfoTalkEvent::GetDataSizeNo(int nNo)
 	return static_cast<DWORD>(writer.GetSize());
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetName										 */
-/* 内容		:要素名を取得													 */
-/* 日付		:2005/07/05														 */
-/* ========================================================================= */
-
 LPCSTR CInfoTalkEvent::GetName(int nNo)
 {
 	return s_aszName[nNo];
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetWriteData									 */
-/* 内容		:指定要素の保存用データを取得									 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
 
 PBYTE CInfoTalkEvent::GetWriteData(int nNo, PDWORD pdwSize)
 {
@@ -440,16 +385,9 @@ PBYTE CInfoTalkEvent::GetWriteData(int nNo, PDWORD pdwSize)
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::ReadElementData								 */
-/* 内容		:指定要素データを読み込み										 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
-
 DWORD CInfoTalkEvent::ReadElementData(
-	PBYTE pSrc,		/* [in] データの読み込み元 */
-	int nNo)		/* [in] 要素番号 */
+	PBYTE pSrc,	// [in] データの読み込み元
+	int nNo)	// [in] 要素番号
 {
 	int i, j, nNoTmp, nCount, nCount2, nType;
 	PBYTE pDst, pSrcTmp;
@@ -462,34 +400,34 @@ DWORD CInfoTalkEvent::ReadElementData(
 	pInfo	= NULL;
 
 	switch (nNo) {
-	case 0: pDst = (PBYTE)&m_dwTalkEventID; dwSize = sizeof (m_dwTalkEventID); break;	/* 会話イベントID */
-	case 1:				/* 会話イベント */
+	case 0: pDst = (PBYTE)&m_dwTalkEventID; dwSize = sizeof(m_dwTalkEventID); break;	// 会話イベントID
+	case 1:	// 会話イベント
 		pSrcTmp = pSrc;
-		CopyMemoryRenew (&nCount, pSrcTmp, sizeof (nCount), pSrcTmp);				/* データ数 */
+		CopyMemoryRenew(&nCount, pSrcTmp, sizeof(nCount), pSrcTmp);	// データ数
 		for (i = 0; i < nCount; i ++) {
-			CopyMemoryRenew (&nCount2, pSrcTmp, sizeof (nCount2), pSrcTmp);			/* 要素数 */
+			CopyMemoryRenew(&nCount2, pSrcTmp, sizeof(nCount2), pSrcTmp);	// 要素数
 
 			for (j = 0; j < nCount2; j ++) {
-				StoreRenew (strTmp, (LPCSTR)pSrcTmp, pSrcTmp);						/* 要素名 */
-				CopyMemoryRenew (&dwSizeTmp, pSrcTmp, sizeof (dwSizeTmp), pSrcTmp);	/* データサイズ */
+				StoreRenew(strTmp, (LPCSTR)pSrcTmp, pSrcTmp);	// 要素名
+				CopyMemoryRenew(&dwSizeTmp, pSrcTmp, sizeof(dwSizeTmp), pSrcTmp);	// データサイズ
 				if (j == 0) {
-					/* 最初はイベント種別 */
-					CopyMemoryRenew (&nType, pSrcTmp, sizeof (nType), pSrcTmp);		/* イベント種別 */
-					pInfo = (PCInfoTalkEventBase)GetNew (nType);
+					// 最初はイベント種別
+					CopyMemoryRenew(&nType, pSrcTmp, sizeof(nType), pSrcTmp);	// イベント種別
+					pInfo = (PCInfoTalkEventBase)GetNew(nType);
 				} else {
 					if (pInfo == NULL) {
 						pSrcTmp += dwSizeTmp;
 						continue;
 					}
-					nNoTmp = pInfo->GetElementNo ((LPCSTR)strTmp);
+					nNoTmp = pInfo->GetElementNo((LPCSTR)strTmp);
 					if (nNoTmp >= 0) {
-						dwSizeTmp = pInfo->ReadElementData (pSrcTmp, nNoTmp);
+						dwSizeTmp = pInfo->ReadElementData(pSrcTmp, nNoTmp);
 					}
 					pSrcTmp += dwSizeTmp;
 				}
 			}
 			if (pInfo) {
-				AddTalkEvent (pInfo);
+				AddTalkEvent(pInfo);
 			}
 		}
 		dwSize = (pSrcTmp - pSrc);
@@ -497,18 +435,11 @@ DWORD CInfoTalkEvent::ReadElementData(
 	}
 
 	if (pDst) {
-		CopyMemory (pDst, pSrc, dwSize);
+		CopyMemory(pDst, pSrc, dwSize);
 	}
 
 	return dwSize;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetSendDataSize								 */
-/* 内容		:送信データサイズを取得											 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
 
 DWORD CInfoTalkEvent::GetSendDataSize(void)
 {
@@ -516,27 +447,20 @@ DWORD CInfoTalkEvent::GetSendDataSize(void)
 	DWORD dwRet;
 	PCInfoTalkEventBase pInfo;
 
-	dwRet = sizeof (m_dwTalkEventID);	/* 会話イベントID */
+	dwRet = sizeof(m_dwTalkEventID);	// 会話イベントID
 
-	/* データ数分のサイズ */
-	dwRet += sizeof (DWORD);
+	// データ数分のサイズ
+	dwRet += sizeof(DWORD);
 
 	nCount = m_apTalkEvent.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
 
-		dwRet += pInfo->GetSendDataSize ();
+		dwRet += pInfo->GetSendDataSize();
 	}
 
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetSendData									 */
-/* 内容		:送信データを取得												 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
 
 PBYTE CInfoTalkEvent::GetSendData(void)
 {
@@ -545,38 +469,31 @@ PBYTE CInfoTalkEvent::GetSendData(void)
 	DWORD dwSize, dwCount, dwSizeTmp;
 	PCInfoTalkEventBase pInfo;
 
-	dwSize	= GetSendDataSize ();
-	pData	= ZeroNew (dwSize);
+	dwSize	= GetSendDataSize();
+	pData	= ZeroNew(dwSize);
 
 	pDataTmp = pData;
 
-	CopyMemoryRenew (pDataTmp, &m_dwTalkEventID, sizeof (m_dwTalkEventID), pDataTmp);	/* 会話イベントID */
+	CopyMemoryRenew(pDataTmp, &m_dwTalkEventID, sizeof(m_dwTalkEventID), pDataTmp);	// 会話イベントID
 
-	/* データ数を書き込み */
+	// データ数を書き込み
 	dwCount = (DWORD)m_apTalkEvent.size();
-	CopyMemoryRenew (pDataTmp, &dwCount, sizeof (dwCount), pDataTmp);
+	CopyMemoryRenew(pDataTmp, &dwCount, sizeof(dwCount), pDataTmp);
 
-	/* イベント情報を書き込み */
+	// イベント情報を書き込み
 	nCount = (int)dwCount;
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
 
-		dwSizeTmp	= pInfo->GetSendDataSize ();
-		pDataTmp2	= pInfo->GetSendData ();
-		CopyMemoryRenew (pDataTmp, pDataTmp2, dwSizeTmp, pDataTmp);	/* 会話イベント */
+		dwSizeTmp	= pInfo->GetSendDataSize();
+		pDataTmp2	= pInfo->GetSendData();
+		CopyMemoryRenew(pDataTmp, pDataTmp2, dwSizeTmp, pDataTmp);	// 会話イベント
 
-		SAFE_DELETE_ARRAY (pDataTmp2);
+		SAFE_DELETE_ARRAY(pDataTmp2);
 	}
 
 	return pData;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::SetSendData									 */
-/* 内容		:送信データから取り込み											 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
 
 PBYTE CInfoTalkEvent::SetSendData(PBYTE pSrc)
 {
@@ -585,31 +502,24 @@ PBYTE CInfoTalkEvent::SetSendData(PBYTE pSrc)
 	DWORD dwCount;
 	CInfoTalkEventBase InfoTmp, *pInfo;
 
-	DeleteAllTalkEvent ();
+	DeleteAllTalkEvent();
 
 	pDataTmp = pSrc;
-	CopyMemoryRenew (&m_dwTalkEventID, pDataTmp, sizeof (m_dwTalkEventID), pDataTmp);	/* 会話イベントID */
+	CopyMemoryRenew(&m_dwTalkEventID, pDataTmp, sizeof(m_dwTalkEventID), pDataTmp);	// 会話イベントID
 
-	/* データ数を読み込み */
-	CopyMemoryRenew (&dwCount, pDataTmp, sizeof (dwCount), pDataTmp);
+	// データ数を読み込み
+	CopyMemoryRenew(&dwCount, pDataTmp, sizeof(dwCount), pDataTmp);
 	nCount = (int)dwCount;
 
 	for (i = 0; i < nCount; i ++) {
-		InfoTmp.SetSendData (pDataTmp);
-		pInfo = (PCInfoTalkEventBase)GetNew (InfoTmp.m_nEventType);
-		pDataTmp = pInfo->SetSendData (pDataTmp);
-		AddTalkEvent (pInfo);
+		InfoTmp.SetSendData(pDataTmp);
+		pInfo = (PCInfoTalkEventBase)GetNew(InfoTmp.m_nEventType);
+		pDataTmp = pInfo->SetSendData(pDataTmp);
+		AddTalkEvent(pInfo);
 	}
 
 	return pDataTmp;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::Copy											 */
-/* 内容		:コピー															 */
-/* 日付		:2008/12/16														 */
-/* ========================================================================= */
 
 void CInfoTalkEvent::Copy(CInfoTalkEvent *pSrc)
 {
@@ -619,19 +529,12 @@ void CInfoTalkEvent::Copy(CInfoTalkEvent *pSrc)
 		return;
 	}
 
-	DeleteAllTalkEvent ();
-	pTmp = pSrc->GetSendData ();
-	SetSendData (pTmp);
+	DeleteAllTalkEvent();
+	pTmp = pSrc->GetSendData();
+	SetSendData(pTmp);
 
-	SAFE_DELETE (pTmp);
+	SAFE_DELETE(pTmp);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetNew											 */
-/* 内容		:新しい会話イベントを取得										 */
-/* 日付		:2008/12/17														 */
-/* ========================================================================= */
 
 PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
 {
@@ -640,13 +543,13 @@ PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
 	pRet = NULL;
 
 	switch (nType) {
-	case TALKEVENTTYPE_PAGE:			/* ページ切り替え */
+	case TALKEVENTTYPE_PAGE:	// ページ切り替え
 		pRet = new CInfoTalkEventPAGE;
 		break;
-	case TALKEVENTTYPE_MSG:				/* メッセージ表示 */
+	case TALKEVENTTYPE_MSG:	// メッセージ表示
 		pRet = new CInfoTalkEventBase;
 		break;
-	case TALKEVENTTYPE_MENU:			/* 項目選択 */
+	case TALKEVENTTYPE_MENU:	// 項目選択
 		pRet = new CInfoTalkEventMENU;
 		break;
 	default:
@@ -657,13 +560,6 @@ PCInfoTalkEventBase CInfoTalkEvent::GetNew(int nType)
 
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetPtr											 */
-/* 内容		:会話イベントを取得												 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
 
 PCInfoTalkEventBase CInfoTalkEvent::GetPtr(int nPage, int nNo)
 {
@@ -690,13 +586,6 @@ PCInfoTalkEventBase CInfoTalkEvent::GetPtr(int nPage, int nNo)
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::SetPtr											 */
-/* 内容		:会話イベントを差し替え											 */
-/* 日付		:2008/12/17														 */
-/* ========================================================================= */
-
 void CInfoTalkEvent::SetPtr(int nPage, int nNo, CInfoTalkEventBase *pInfo)
 {
 	int i, nCount, nNoCount;
@@ -721,18 +610,11 @@ void CInfoTalkEvent::SetPtr(int nPage, int nNo, CInfoTalkEventBase *pInfo)
                         return;
                 }
 
-                DeleteTalkEvent (pInfoTmp);
+                DeleteTalkEvent(pInfoTmp);
                 m_apTalkEvent[i] = pInfo;
                 break;
         }
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetEventArray									 */
-/* 内容		:指定ページ番号のイベント一覧を取得								 */
-/* 日付		:2008/12/17														 */
-/* ========================================================================= */
 
 void CInfoTalkEvent::GetEventArray(int nPage, ARRAYTALKEVENTBASEINFO &aDst)
 {
@@ -747,32 +629,18 @@ void CInfoTalkEvent::GetEventArray(int nPage, ARRAYTALKEVENTBASEINFO &aDst)
 		if (pInfo->m_nPage != nPage) {
 			continue;
 		}
-		aDst.push_back (pInfo);
+		aDst.push_back(pInfo);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetTalkEventCount								 */
-/* 内容		:会話イベントページ数を取得										 */
-/* 日付		:2008/12/29														 */
-/* ========================================================================= */
 
 int CInfoTalkEvent::GetTalkEventCount(int nPage)
 {
 	ARRAYTALKEVENTBASEINFO aInfoTmp;
 
-	GetEventArray (nPage, aInfoTmp);
+	GetEventArray(nPage, aInfoTmp);
 
 	return aInfoTmp.size();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::GetPageCount									 */
-/* 内容		:会話イベントページ数を取得										 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
 
 int CInfoTalkEvent::GetPageCount(void)
 {
@@ -784,30 +652,16 @@ int CInfoTalkEvent::GetPageCount(void)
 	nCount = m_apTalkEvent.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_apTalkEvent[i];
-		nRet = max (nRet, pInfo->m_nPage + 1);
+		nRet = max(nRet, pInfo->m_nPage + 1);
 	}
 
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::AddTalkEvent									 */
-/* 内容		:会話イベントを追加												 */
-/* 日付		:2008/12/17														 */
-/* ========================================================================= */
-
 void CInfoTalkEvent::AddTalkEvent(CInfoTalkEventBase *pInfo)
 {
-	m_apTalkEvent.push_back (pInfo);
+	m_apTalkEvent.push_back(pInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::UpTalkEvent									 */
-/* 内容		:指定イベントを1つ上に移動										 */
-/* 日付		:2008/12/29														 */
-/* ========================================================================= */
 
 void CInfoTalkEvent::UpTalkEvent(int nPage, int nNo)
 {
@@ -839,19 +693,12 @@ void CInfoTalkEvent::UpTalkEvent(int nPage, int nNo)
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::DownTalkEvent									 */
-/* 内容		:指定イベントを1つ下に移動										 */
-/* 日付		:2008/12/29														 */
-/* ========================================================================= */
-
 void CInfoTalkEvent::DownTalkEvent(int nPage, int nNo)
 {
 	int i, nNoBack, nCount, nNoCount;
 	PCInfoTalkEventBase pInfo;
 
-	nCount = GetTalkEventCount (nPage);
+	nCount = GetTalkEventCount(nPage);
 	if (nNo >= nCount - 1) {
 		return;
 	}
@@ -877,13 +724,6 @@ void CInfoTalkEvent::DownTalkEvent(int nPage, int nNo)
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::DeleteTalkEvent								 */
-/* 内容		:会話イベントを削除												 */
-/* 日付		:2008/12/17														 */
-/* ========================================================================= */
-
 void CInfoTalkEvent::DeleteTalkEvent(int nNo)
 {
 	PCInfoTalkEventBase pInfo;
@@ -893,39 +733,18 @@ void CInfoTalkEvent::DeleteTalkEvent(int nNo)
 	}
 
 	pInfo = m_apTalkEvent[nNo];
-	SAFE_DELETE (pInfo);
-	m_apTalkEvent.erase (m_apTalkEvent.begin () + nNo);
+	SAFE_DELETE(pInfo);
+	m_apTalkEvent.erase(m_apTalkEvent.begin() + nNo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::DeleteTalkEvent								 */
-/* 内容		:会話イベントを削除												 */
-/* 日付		:2008/12/17														 */
-/* ========================================================================= */
 
 void CInfoTalkEvent::DeleteTalkEvent(int nPage, int nNo)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::DeleteTalkEvent								 */
-/* 内容		:会話イベントを削除												 */
-/* 日付		:2008/12/17														 */
-/* ========================================================================= */
-
 void CInfoTalkEvent::DeleteTalkEvent(CInfoTalkEventBase *pInfo)
 {
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoTalkEvent::DeleteAllTalkEvent								 */
-/* 内容		:会話イベントを全て削除											 */
-/* 日付		:2008/12/20														 */
-/* ========================================================================= */
 
 void CInfoTalkEvent::DeleteAllTalkEvent(void)
 {
@@ -933,9 +752,8 @@ void CInfoTalkEvent::DeleteAllTalkEvent(void)
 
 	nCount = m_apTalkEvent.size();
 	for (i = nCount - 1; i >= 0; i --) {
-		DeleteTalkEvent (i);
+		DeleteTalkEvent(i);
 	}
 	m_apTalkEvent.clear();
 }
 
-/* Copyright(C)URARA-works 2008 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharModifyGrp.cpp									 */
-/* 内容			:選択キャラ情報編集[画像の設定]ダイアログクラス 実装ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/09/02													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharModifyGrp.cpp
+/// @brief 選択キャラ情報編集[画像の設定]ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/09/02
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "resource.h"
@@ -22,9 +20,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharModifyGrp::DoDataExchange(CDataExchange* pDX)
 {
@@ -48,14 +44,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharModifyGrp, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
-
-CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp(CWnd* pParent /*=NULL*/)
+CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminCharModifyGrp::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminCharModifyGrp)
@@ -73,100 +62,58 @@ CDlgAdminCharModifyGrp::CDlgAdminCharModifyGrp(CWnd* pParent /*=NULL*/)
 	m_pInfoChar = NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyGrp::~CDlgAdminCharModifyGrp				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
-
 CDlgAdminCharModifyGrp::~CDlgAdminCharModifyGrp()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyGrp::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
-
 void CDlgAdminCharModifyGrp::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminCharModifyGrp::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminCharModifyGrp::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyGrp::Renew									 */
-/* 内容		:更新															 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::Renew(void)
 {
-	m_strCharID.	Empty ();
-	m_strCharName.	Empty ();
+	m_strCharID.	Empty();
+	m_strCharName.	Empty();
 
 	if (m_pInfoChar == NULL) {
 		goto Exit;
 	}
 
 	m_strCharID.Format(_T("%u"), m_pInfoChar->m_dwCharID);
-	m_strCharName		= (LPCTSTR)m_pInfoChar->m_strCharName;
-	m_nGrpIDEye			= m_pInfoChar->m_wGrpIDEye;
+	m_strCharName	= (LPCTSTR)m_pInfoChar->m_strCharName;
+	m_nGrpIDEye	= m_pInfoChar->m_wGrpIDEye;
 	m_nGrpIDEyeColor	= m_pInfoChar->m_wGrpIDEyeColor;
-	m_nGrpIDHair		= m_pInfoChar->m_wGrpIDHairType;
+	m_nGrpIDHair	= m_pInfoChar->m_wGrpIDHairType;
 	m_nGrpIDHairColor	= m_pInfoChar->m_wGrpIDHairColor;
-	m_nGrpIDCloth		= m_pInfoChar->m_wGrpIDCloth;
-	m_nGrpIDSP			= m_pInfoChar->m_wGrpIDSP;
-	m_nGrpIDNPC			= m_pInfoChar->m_wGrpIDNPC;
+	m_nGrpIDCloth	= m_pInfoChar->m_wGrpIDCloth;
+	m_nGrpIDSP	= m_pInfoChar->m_wGrpIDSP;
+	m_nGrpIDNPC	= m_pInfoChar->m_wGrpIDNPC;
 
 Exit:
-	UpdateData (FALSE);
+	UpdateData(FALSE);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyGrp::OnAdminMsg								 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2007/03/18														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::OnAdminMsg(int nType, DWORD dwPara)
 {
 	PCLibInfoCharCli pLibInfoChar;
 
-	pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
-	m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (dwPara);
+	pLibInfoChar	= m_pMgrData->GetLibInfoChar();
+	m_pInfoChar	= (PCInfoCharCli)pLibInfoChar->GetPtr(dwPara);
 
-	Renew ();
+	Renew();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyGrp::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminCharModifyGrp::OnInitDialog()
 {
-	CDlgAdminBase::OnInitDialog ();
+	CDlgAdminBase::OnInitDialog();
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyGrp::OnSend									 */
-/* 内容		:ボタンハンドラ(送信)											 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModifyGrp::OnSend()
 {
@@ -176,21 +123,19 @@ void CDlgAdminCharModifyGrp::OnSend()
 	if (m_pInfoChar == NULL) {
 		return;
 	}
-	UpdateData ();
+	UpdateData();
 
-	InfoCharTmp.Create (m_pMgrData);
-	InfoCharTmp.Copy (m_pInfoChar);
-	InfoCharTmp.m_wGrpIDEye			= m_nGrpIDEye;
+	InfoCharTmp.Create(m_pMgrData);
+	InfoCharTmp.Copy(m_pInfoChar);
+	InfoCharTmp.m_wGrpIDEye	= m_nGrpIDEye;
 	InfoCharTmp.m_wGrpIDEyeColor	= m_nGrpIDEyeColor;
 	InfoCharTmp.m_wGrpIDHairType	= m_nGrpIDHair;
 	InfoCharTmp.m_wGrpIDHairColor	= m_nGrpIDHairColor;
-	InfoCharTmp.m_wGrpIDCloth		= m_nGrpIDCloth;
-	InfoCharTmp.m_wGrpIDSP			= m_nGrpIDSP;
-	InfoCharTmp.m_wGrpIDNPC			= m_nGrpIDNPC;
+	InfoCharTmp.m_wGrpIDCloth	= m_nGrpIDCloth;
+	InfoCharTmp.m_wGrpIDSP	= m_nGrpIDSP;
+	InfoCharTmp.m_wGrpIDNPC	= m_nGrpIDNPC;
 
-	Packet.Make (&InfoCharTmp, FALSE);
-	SendPacket (&Packet);
+	Packet.Make(&InfoCharTmp, FALSE);
+	SendPacket(&Packet);
 }
-
-/* Copyright(C)URARA-works 2007 */
 

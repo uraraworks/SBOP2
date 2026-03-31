@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:ListCtrlItemInfo.cpp										 */
-/* 内容			:アイテム一覧リストコントロールクラス 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/09/24													 */
-/* ========================================================================= */
+﻿/// @file ListCtrlItemInfo.cpp
+/// @brief アイテム一覧リストコントロールクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/09/24
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "LibInfoItem.h"
@@ -19,72 +17,41 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
-/* ========================================================================= */
-/* クラス設定																 */
-/* ========================================================================= */
+// クラス設定
 
 BEGIN_MESSAGE_MAP(CListCtrlItemInfo, CListCtrl)
 	//{{AFX_MSG_MAP(CListCtrlItemInfo)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CListCtrlItemInfo::CListCtrlItemInfo							 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/09/24														 */
-/* ========================================================================= */
-
 CListCtrlItemInfo::CListCtrlItemInfo()
 {
-	m_pWndParent		= NULL;
-	m_pMgrData			= NULL;
-	m_pLibInfoItem		= NULL;
+	m_pWndParent	= NULL;
+	m_pMgrData	= NULL;
+	m_pLibInfoItem	= NULL;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CListCtrlItemInfo::~CListCtrlItemInfo							 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/09/24														 */
-/* ========================================================================= */
 
 CListCtrlItemInfo::~CListCtrlItemInfo()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CListCtrlItemInfo::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2007/09/24														 */
-/* ========================================================================= */
-
 BOOL CListCtrlItemInfo::Create(CWnd *pParent, CMgrData *pMgrData)
 {
 	m_pWndParent	= pParent;
-	m_pMgrData		= pMgrData;
-	m_pLibInfoItem	= m_pMgrData->GetLibInfoItem ();
+	m_pMgrData	= pMgrData;
+	m_pLibInfoItem	= m_pMgrData->GetLibInfoItem();
 
-	SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
-	InsertColumn (1, _T("アイテム名"),	LVCFMT_LEFT, 120);
-	InsertColumn (2, _T("種別"),		LVCFMT_LEFT, 120);
-	InsertColumn (3, _T("所持キャラ"),	LVCFMT_LEFT, 120);
-	InsertColumn (4, _T("配置座標"),	LVCFMT_LEFT, 120);
+	SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	InsertColumn(0, _T("ID"),	LVCFMT_LEFT, 40);
+	InsertColumn(1, _T("アイテム名"),	LVCFMT_LEFT, 120);
+	InsertColumn(2, _T("種別"),	LVCFMT_LEFT, 120);
+	InsertColumn(3, _T("所持キャラ"),	LVCFMT_LEFT, 120);
+	InsertColumn(4, _T("配置座標"),	LVCFMT_LEFT, 120);
 
-	Renew ();
+	Renew();
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CListCtrlItemInfo::Renew										 */
-/* 内容		:更新															 */
-/* 日付		:2007/09/24														 */
-/* ========================================================================= */
 
 void CListCtrlItemInfo::Renew(void)
 {
@@ -98,35 +65,34 @@ void CListCtrlItemInfo::Renew(void)
 		return;
 	}
 
-	pLibInfoChar = m_pMgrData->GetLibInfoChar ();
+	pLibInfoChar = m_pMgrData->GetLibInfoChar();
 
-	DeleteAllItems ();
+	DeleteAllItems();
 
-	nCount = m_pLibInfoItem->GetCount ();
+	nCount = m_pLibInfoItem->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr (i);
+		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(i);
 		strTmp.Format(_T("%d"), pInfoItem->m_dwItemID);
-		InsertItem (i, strTmp);
-		SetItemData (i, pInfoItem->m_dwItemID);		/* ID */
-		strTmp = (LPCTSTR)pInfoItem->m_strName;	/* アイテム名 */
-		SetItemText (i, 1, strTmp);
+		InsertItem(i, strTmp);
+		SetItemData(i, pInfoItem->m_dwItemID);	// ID
+		strTmp = (LPCTSTR)pInfoItem->m_strName;	// アイテム名
+		SetItemText(i, 1, strTmp);
 
-		strTmp = m_pLibInfoItem->GetTypeName (pInfoItem->m_dwItemTypeID);
-		SetItemText (i, 2, strTmp);					/* 種別 */
+		strTmp = m_pLibInfoItem->GetTypeName(pInfoItem->m_dwItemTypeID);
+		SetItemText(i, 2, strTmp);	// 種別
 
-		strTmp.Empty ();
-		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr (pInfoItem->m_dwCharID);
+		strTmp.Empty();
+		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr(pInfoItem->m_dwCharID);
 		if (pInfoChar) {
 			strTmp.Format(_T("[%u]%s"), pInfoChar->m_dwCharID, (LPCTSTR)pInfoChar->m_strCharName);
 		}
-		SetItemText (i, 3, strTmp);					/* 所持キャラ */
+		SetItemText(i, 3, strTmp);	// 所持キャラ
 
-		strTmp.Empty ();
+		strTmp.Empty();
 		if (pInfoItem->m_dwMapID) {
-			strTmp.Format(_T("MAPID:%u (%d, %d)"), pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
+			strTmp.Format(_T("MAPID:%u(%d, %d)"), pInfoItem->m_dwMapID, pInfoItem->m_ptPos.x, pInfoItem->m_ptPos.y);
 		}
-		SetItemText (i, 4, strTmp);					/* 配置座標 */
+		SetItemText(i, 4, strTmp);	// 配置座標
 	}
 }
 
-/* Copyright(C)URARA-works 2007 */

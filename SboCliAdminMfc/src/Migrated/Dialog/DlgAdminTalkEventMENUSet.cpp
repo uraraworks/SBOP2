@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminTalkEventMENUSet.cpp								 */
-/* 内容			:会話イベント選択項目の設定ダイアログクラス 実装ファイル	 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/28													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminTalkEventMENUSet.cpp
+/// @brief 会話イベント選択項目の設定ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/28
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -19,9 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminTalkEventMENUSet::DoDataExchange(CDataExchange* pDX)
 {
@@ -37,55 +33,27 @@ BEGIN_MESSAGE_MAP(CDlgAdminTalkEventMENUSet, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMENUSet::CDlgAdminTalkEventMENUSet			 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
-
-CDlgAdminTalkEventMENUSet::CDlgAdminTalkEventMENUSet(CWnd* pParent /*=NULL*/)
+CDlgAdminTalkEventMENUSet::CDlgAdminTalkEventMENUSet(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminTalkEventMENUSet::IDD, pParent)
 	, m_strName(_T(""))
 {
 	//{{AFX_DATA_INIT(CDlgAdminTalkEventMENUSet)
 	//}}AFX_DATA_INIT
 
-	m_nPage		 = 0;
+	m_nPage	 = 0;
 	m_nPageCount = 0;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMENUSet::~CDlgAdminTalkEventMENUSet			 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
 
 CDlgAdminTalkEventMENUSet::~CDlgAdminTalkEventMENUSet()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMENUSet::Init								 */
-/* 内容		:初期化															 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
-
 void CDlgAdminTalkEventMENUSet::Init(CMgrData *pMgrData, int nPage)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
 	m_nPageCount = nPage;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMENUSet::OnInitDialog						 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminTalkEventMENUSet::OnInitDialog()
 {
@@ -95,41 +63,26 @@ BOOL CDlgAdminTalkEventMENUSet::OnInitDialog()
 	CDlgAdminBase::OnInitDialog();
 
 	for (i = 0; i < m_nPageCount; i ++) {
-		strTmp.Format (_T("ページ%d"), i + 1);
-		m_Combo.InsertString (i, strTmp);
+		strTmp.Format(_T("ページ%d"), i + 1);
+		m_Combo.InsertString(i, strTmp);
 	}
-	m_Combo.SetCurSel (m_nPage);
+	m_Combo.SetCurSel(m_nPage);
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMENUSet::PostNcDestroy						 */
-/* 内容		:終了処理														 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
-
 void CDlgAdminTalkEventMENUSet::PostNcDestroy()
 {
-	/* モードレスダイアログ時はこの関数を消す */
-	CDialog::PostNcDestroy ();
+	// モードレスダイアログ時はこの関数を消す
+	CDialog::PostNcDestroy();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMENUSet::OnOK								 */
-/* 内容		:ボタンハンドラ(OK)												 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
 
 void CDlgAdminTalkEventMENUSet::OnOK()
 {
-	UpdateData ();
+	UpdateData();
 
-	m_nPage = m_Combo.GetCurSel ();
+	m_nPage = m_Combo.GetCurSel();
 
-	CDlgAdminBase::OnOK ();
+	CDlgAdminBase::OnOK();
 }
 
-/* Copyright(C)URARA-works 2008 */

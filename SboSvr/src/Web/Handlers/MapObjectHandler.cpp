@@ -119,7 +119,7 @@ std::string ToUtf8String(const CmyString &value)
 #endif
 }
 
-/* UTF-8 文字列を内部文字コード (MBCS: CP932 / Unicode: UTF-16) に変換して CmyString へ代入 */
+// UTF-8 文字列を内部文字コード (MBCS: CP932 / Unicode: UTF-16) に変換して CmyString へ代入
 bool SetStringFromUtf8(CmyString &out, const std::string &utf8)
 {
         if (utf8.empty()) {
@@ -153,7 +153,7 @@ bool SetStringFromUtf8(CmyString &out, const std::string &utf8)
         return true;
 }
 
-/* CInfoMapObject の内容を JSON に出力する */
+// CInfoMapObject の内容を JSON に出力する
 void BuildTemplateJson(std::ostringstream &oss, const CInfoMapObject *pInfo)
 {
         oss << '{';
@@ -167,7 +167,7 @@ void BuildTemplateJson(std::ostringstream &oss, const CInfoMapObject *pInfo)
         oss << '}';
 }
 
-/* JSON から CInfoMapObject へ値を適用する */
+// JSON から CInfoMapObject へ値を適用する
 void ApplyJsonToTemplate(const std::string &json, CInfoMapObject *pInfo)
 {
         std::string name;
@@ -307,7 +307,7 @@ void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMa
         }
         oss << "],";
 
-        /* タイルデータ (各座標のベースグラフィックID) */
+        // タイルデータ (各座標のベースグラフィックID)
         oss << "\"tiles\":[";
         int nTileCount = pMap->m_sizeMap.cx * pMap->m_sizeMap.cy;
         if (pMap->m_pwMap != NULL && pPartsLib != NULL && nTileCount > 0) {
@@ -399,9 +399,7 @@ std::string CMapObjectListHandler::ResolveWeatherLabel(unsigned long weatherType
         return std::string("\xE4\xB8\x8D\xE6\x98\x8E");
 }
 
-/* ========================================================================= */
-/* CMapObjectTemplateListHandler                                              */
-/* ========================================================================= */
+// CMapObjectTemplateListHandler
 
 CMapObjectTemplateListHandler::CMapObjectTemplateListHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -455,9 +453,7 @@ std::string CMapObjectTemplateListHandler::BuildResponseJson() const
         return oss.str();
 }
 
-/* ========================================================================= */
-/* CMapObjectTemplateCreateHandler                                            */
-/* ========================================================================= */
+// CMapObjectTemplateCreateHandler
 
 CMapObjectTemplateCreateHandler::CMapObjectTemplateCreateHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -513,9 +509,7 @@ void CMapObjectTemplateCreateHandler::Handle(const HttpRequest &request, HttpRes
         response.SetJsonBody(oss.str());
 }
 
-/* ========================================================================= */
-/* CMapObjectTemplateUpdateHandler                                            */
-/* ========================================================================= */
+// CMapObjectTemplateUpdateHandler
 
 CMapObjectTemplateUpdateHandler::CMapObjectTemplateUpdateHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -577,9 +571,7 @@ void CMapObjectTemplateUpdateHandler::Handle(const HttpRequest &request, HttpRes
         response.SetJsonBody(oss.str());
 }
 
-/* ========================================================================= */
-/* CMapObjectTemplateDeleteHandler                                            */
-/* ========================================================================= */
+// CMapObjectTemplateDeleteHandler
 
 CMapObjectTemplateDeleteHandler::CMapObjectTemplateDeleteHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -629,7 +621,7 @@ void CMapObjectTemplateDeleteHandler::Handle(const HttpRequest &request, HttpRes
 
         pObjectLib->Delete(dwObjectId);
 
-        /* 削除後は全テンプレートを再送して各クライアントに反映 */
+        // 削除後は全テンプレートを再送して各クライアントに反映
         CPacketMAP_MAPOBJECT packet;
         packet.Make(pObjectLib);
         pSock->SendTo(0, &packet);
@@ -642,9 +634,7 @@ void CMapObjectTemplateDeleteHandler::Handle(const HttpRequest &request, HttpRes
         response.SetJsonBody(oss.str());
 }
 
-/* ========================================================================= */
-/* CMapPlacementCreateHandler                                                 */
-/* ========================================================================= */
+// CMapPlacementCreateHandler
 
 CMapPlacementCreateHandler::CMapPlacementCreateHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -733,9 +723,7 @@ void CMapPlacementCreateHandler::Handle(const HttpRequest &request, HttpResponse
         response.SetJsonBody(oss.str());
 }
 
-/* ========================================================================= */
-/* CMapPlacementUpdateHandler                                                 */
-/* ========================================================================= */
+// CMapPlacementUpdateHandler
 
 CMapPlacementUpdateHandler::CMapPlacementUpdateHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -827,9 +815,7 @@ void CMapPlacementUpdateHandler::Handle(const HttpRequest &request, HttpResponse
         response.SetJsonBody(oss.str());
 }
 
-/* ========================================================================= */
-/* CMapPlacementDeleteHandler                                                 */
-/* ========================================================================= */
+// CMapPlacementDeleteHandler
 
 CMapPlacementDeleteHandler::CMapPlacementDeleteHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -898,7 +884,7 @@ void CMapPlacementDeleteHandler::Handle(const HttpRequest &request, HttpResponse
 
         pPlacementLib->Delete(dwDataId);
 
-        /* 削除後はマップの全配置を再送して各クライアントに反映 */
+        // 削除後はマップの全配置を再送して各クライアントに反映
         CPacketMAP_MAPOBJECTDATA packet;
         packet.Make(dwMapId, pPlacementLib);
         pSock->SendTo(0, &packet);
@@ -911,4 +897,3 @@ void CMapPlacementDeleteHandler::Handle(const HttpRequest &request, HttpResponse
         response.statusLine = "HTTP/1.1 200 OK";
         response.SetJsonBody(oss.str());
 }
-

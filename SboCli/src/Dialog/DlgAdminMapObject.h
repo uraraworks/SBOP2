@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapObject.h										 */
-/* 内容			:マップオブジェクト一覧ダイアログクラス 定義ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/09/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapObject.h
+/// @brief マップオブジェクト一覧ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/09/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,27 +10,25 @@
 
 class CLibInfoMapObject;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapObject : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapObject(CWnd* pParent = NULL);			/* コンストラクタ */
-	virtual ~CDlgAdminMapObject();								/* デストラクタ */
+			CDlgAdminMapObject(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapObject(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	Renew		(void);											/* 一覧を更新 */
-
-
-protected:
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
+	void	Renew(void); // 一覧を更新
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* 通知先ウィンドウ */
-	CLibInfoMapObject	*m_pLibInfoMapObject;		/* マップオブジェクト情報ライブラリ */
+
+
+protected:
+	CWnd	*m_pWndNotify; // 通知先ウィンドウ
+	CLibInfoMapObject	*m_pLibInfoMapObject; // マップオブジェクト情報ライブラリ
 
 
 
@@ -59,5 +55,3 @@ protected:
 } CDlgAdminMapObject, *PCDlgAdminMapObject;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

@@ -13,4 +13,3 @@ bool TryGetBool(const std::string &json, const std::string &key, bool &outValue)
 size_t FindKey(const std::string &json, const std::string &key);
 bool IsNull(const std::string &json, const std::string &key);
 }
-

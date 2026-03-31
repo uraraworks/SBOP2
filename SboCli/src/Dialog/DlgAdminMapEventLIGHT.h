@@ -1,27 +1,23 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEventLIGHT.h									 */
-/* 内容			:マップイベント(灯り)ダイアログクラス 定義ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEventLIGHT.h
+/// @brief マップイベント(灯り)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "DlgAdminMapEventNONE.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapEventLIGHT : public CDlgAdminMapEventNONE
 {
 public:
-			CDlgAdminMapEventLIGHT(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminMapEventLIGHT();							/* デストラクタ */
+			CDlgAdminMapEventLIGHT(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapEventLIGHT(); // デストラクタ
 
-	void	Set		(CInfoMapEventBase *pSrc);							/* 設定 */
-	void	Get		(CInfoMapEventBase *pDst);							/* 取得 */
+	void	Set(CInfoMapEventBase *pSrc); // 設定
+	void	Get(CInfoMapEventBase *pDst); // 取得
 
 
 
@@ -46,5 +42,3 @@ public:
 } CDlgAdminMapEventLIGHT, *PCDlgAdminMapEventLIGHT;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

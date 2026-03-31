@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2005 */
-/* ========================================================================= */
-/* ファイル名：	WndSelectMapPartsGrp.h										 */
-/* 内容：		マップパーツ画像選択ウィンドウクラス 定義ファイル			 */
-/* 作成：		年がら年中春うらら(URARA-works)								 */
-/* 作成開始日：	2005/10/07													 */
-/* ========================================================================= */
+﻿/// @file WndSelectMapPartsGrp.h
+/// @brief マップパーツ画像選択ウィンドウクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2005/10/07
+/// @copyright Copyright(C)URARA-works 2005
 
 #pragma once
 
@@ -12,28 +10,26 @@ class CMgrData;
 class CMgrGrpData;
 class CImg32;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CWndSelectMapPartsGrp : public CWnd
 {
 public:
-			CWndSelectMapPartsGrp();							/* コンストラクタ */
-	virtual ~CWndSelectMapPartsGrp();							/* デストラクタ */
+			CWndSelectMapPartsGrp();							// コンストラクタ
+	virtual ~CWndSelectMapPartsGrp();							// デストラクタ
 
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData);	/* 作成 */
-	void	Destroy	(void);									/* 破棄 */
+	BOOL	Create(CWnd *pParent, CMgrData *pMgrData);	// 作成
+	void	Destroy(void);								// 破棄
 
 
 protected:
-	int			m_nSelect;						/* 選択されたパーツ番号 */
-	CWnd		*m_pWndParent;					/* 親ウィンドウ */
-	CImg32		*m_pImgBack;					/* バックバッファ */
+	int			m_nSelect;						// 選択されたパーツ番号
+	CWnd		*m_pWndParent;					// 親ウィンドウ
+	CImg32		*m_pImgBack;					// バックバッファ
 
-	CMgrData		*m_pMgrData;				/* データ管理 */
-	CMgrGrpData		*m_pMgrGrpData;				/* グラフィックデータ管理 */
+	CMgrData		*m_pMgrData;				// データ管理
+	CMgrGrpData		*m_pMgrGrpData;				// グラフィックデータ管理
 
 
 
@@ -41,7 +37,7 @@ public:
 	//{{AFX_VIRTUAL(CWndSelectMapPartsGrp)
 	public:
 	protected:
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -61,5 +57,3 @@ protected:
 } CWndSelectMapPartsGrp, *PCWndSelectMapPartsGrp;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2005 */

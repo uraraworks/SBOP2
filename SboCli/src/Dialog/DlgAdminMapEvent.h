@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEvent.h											 */
-/* 内容			:マップイベント一覧ダイアログクラス 定義ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/24													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEvent.h
+/// @brief マップイベント一覧ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/06/24
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -13,28 +11,26 @@
 class CInfoMapBase;
 class CLibInfoMapEvent;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapEvent : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapEvent(CWnd* pParent = NULL);			/* コンストラクタ */
-	virtual ~CDlgAdminMapEvent();								/* デストラクタ */
+			CDlgAdminMapEvent(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapEvent(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	Renew		(void);											/* 一覧を更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-
-
-protected:
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 一覧を更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* 通知先ウィンドウ */
-	CInfoMapBase		*m_pInfoMap;				/* 編集中のマップ情報 */
-	CLibInfoMapEvent	*m_pLibInfoMapEvent;		/* 編集中のマップイベント情報 */
+
+
+protected:
+	CWnd	*m_pWndNotify; // 通知先ウィンドウ
+	CInfoMapBase	*m_pInfoMap; // 編集中のマップ情報
+	CLibInfoMapEvent	*m_pLibInfoMapEvent; // 編集中のマップイベント情報
 
 
 
@@ -47,7 +43,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminMapEvent)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -62,5 +58,3 @@ protected:
 } CDlgAdminMapEvent, *PCDlgAdminMapEvent;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

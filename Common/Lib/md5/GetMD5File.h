@@ -1,26 +1,19 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:GetMD5File.h												 */
-/* 内容			:MD5計算クラス 定義ファイル									 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/08/28													 */
-/* ========================================================================= */
+﻿/// @file GetMD5File.h
+/// @brief MD5計算クラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/08/28
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
 #include "GetMD5.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
-
 class CGetMD5File : public CGetMD5
 {
 public:
-			CGetMD5File();							/* コンストラクタ */
-	virtual ~CGetMD5File();							/* デストラクタ */
+			CGetMD5File();	// コンストラクタ
+	virtual ~CGetMD5File();	// デストラクタ
 
-	void Update		(LPCSTR pszFileName);					/* 更新 */
+	void Update(LPCSTR pszFileName);	// 更新
 };
 
-/* Copyright(C)URARA-works 2007 */

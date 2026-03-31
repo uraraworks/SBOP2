@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:stdafx.h													 */
-/* 内容			:プリコンパイルヘッダ 定義ファイル							 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/08/26													 */
-/* ========================================================================= */
+﻿/// @file stdafx.h
+/// @brief プリコンパイルヘッダ 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/08/26
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -32,5 +30,3 @@ using namespace std;
 #include "myString.h"
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

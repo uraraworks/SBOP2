@@ -7,4 +7,3 @@ class CHealthHandler : public IApiHandler
 public:
         virtual void Handle(const HttpRequest &request, HttpResponse &response);
 };
-

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminTalkEventTab.h										 */
-/* 内容			:会話イベントタブダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/23													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminTalkEventTab.h
+/// @brief 会話イベントタブダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/23
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -13,30 +11,24 @@
 
 class CInfoTalkEvent;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminTalkEventTab : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkEventTab(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminTalkEventTab();							/* デストラクタ */
+			CDlgAdminTalkEventTab(CWnd* pParent = NULL);	// コンストラクタ
+	virtual ~CDlgAdminTalkEventTab();	// デストラクタ
 
-	void	Init		(CMgrData *pMgrData, CInfoTalkEvent *pInfo);	/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	SetPage		(int nPage);									/* 表示するページを設定 */
-
-
-protected:
-	void	Renew(void);					/* 更新 */
-
+	void	Init	(CMgrData *pMgrData, CInfoTalkEvent *pInfo);	// 初期化
+	void	OnAdminMsg	(int nType, DWORD dwPara);	// メッセージハンドラ(WM_ADMINMSG)
+	void	SetPage	(int nPage);	// 表示するページを設定
 
 protected:
-	int				m_nPage;		/* 表示中のページ番号 */
-	CInfoTalkEvent	*m_pInfo;		/* 編集中の会話イベント */
+	void	Renew(void);	// 更新
 
-
+protected:
+	int	m_nPage;	// 表示中のページ番号
+	CInfoTalkEvent	*m_pInfo;	// 編集中の会話イベント
 
 public:
 //	void OnOK(){}
@@ -66,4 +58,3 @@ public:
 
 //{{AFX_INSERT_LOCATION}}
 
-/* Copyright(C)URARA-works 2008 */

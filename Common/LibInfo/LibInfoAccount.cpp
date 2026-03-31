@@ -1,69 +1,32 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoAccount.cpp											 */
-/* 内容			:アカウント情報基底クラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/11/05													 */
-/* ========================================================================= */
+﻿/// @file LibInfoAccount.cpp
+/// @brief アカウント情報基底クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/11/05
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include "LibInfoAccount.h"
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::CLibInfoAccount								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
 
 CLibInfoAccount::CLibInfoAccount()
 {
 	m_paInfo = NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::~CLibInfoAccount								 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 CLibInfoAccount::~CLibInfoAccount()
 {
-	Destroy ();
+	Destroy();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
 
 void CLibInfoAccount::Create(void)
 {
 	m_paInfo = new ARRAYINFOACCOUNT;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::Destroy										 */
-/* 内容		:破棄															 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 void CLibInfoAccount::Destroy(void)
 {
-	DeleteAll ();
-	SAFE_DELETE (m_paInfo);
+	DeleteAll();
+	SAFE_DELETE(m_paInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::CheckPassword									 */
-/* 内容		:パスワードのチェック											 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
 
 BOOL CLibInfoAccount::CheckPassword(LPCSTR pszAccount, LPCSTR pszPassword)
 {
@@ -72,7 +35,7 @@ BOOL CLibInfoAccount::CheckPassword(LPCSTR pszAccount, LPCSTR pszPassword)
 
 	bRet = FALSE;
 
-	pInfoAccount = GetPtr (pszAccount);
+	pInfoAccount = GetPtr(pszAccount);
 	if (pInfoAccount == NULL) {
 		goto Exit;
 	}
@@ -86,14 +49,6 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::IsUseMacAddr									 */
-/* 内容		:MACアドレスが使用済みかチェック								 */
-/* 戻り値	:TRUE:使用済み													 */
-/* 日付		:2008/07/20														 */
-/* ========================================================================= */
-
 BOOL CLibInfoAccount::IsUseMacAddr(LPCSTR pszMacAddr)
 {
 	BOOL bRet;
@@ -102,13 +57,13 @@ BOOL CLibInfoAccount::IsUseMacAddr(LPCSTR pszMacAddr)
 
 	bRet = FALSE;
 
-	if (strcmp (pszMacAddr, "00-00-00-00-00-00") == 0) {
+	if (strcmp(pszMacAddr, "00-00-00-00-00-00") == 0) {
 		return FALSE;
 	}
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoAccount = (PCInfoAccount)GetPtr (i);
+		pInfoAccount = (PCInfoAccount)GetPtr(i);
 		if (pInfoAccount->m_strMacAddr == pszMacAddr) {
 			break;
 	}
@@ -122,24 +77,10 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetNew										 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoAccount::GetNew(void)
 {
 	return (PCInfoBase)new CInfoAccount;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetCount										 */
-/* 内容		:データ数を取得													 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
 
 int CLibInfoAccount::GetCount(void)
 {
@@ -156,53 +97,32 @@ Exit:
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::Add											 */
-/* 内容		:追加															 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 void CLibInfoAccount::Add(PCInfoBase pInfo)
 {
 	PCInfoAccount pAccountInfo;
 
 	pAccountInfo = (PCInfoAccount)pInfo;
 	if (pAccountInfo->m_dwAccountID == 0) {
-		pAccountInfo->m_dwAccountID = GetNewID ();
+		pAccountInfo->m_dwAccountID = GetNewID();
 	}
 
-	m_paInfo->Add (pAccountInfo);
+	m_paInfo->Add(pAccountInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 void CLibInfoAccount::Delete(
-	int nNo)		/* [in] 配列番号 */
+	int nNo)	// [in] 配列番号
 {
 	PCInfoAccount pInfo;
 
 	pInfo = m_paInfo->at(nNo);
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
-		m_paInfo->erase (m_paInfo->begin () + nNo);
+		m_paInfo->erase(m_paInfo->begin() + nNo);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 void CLibInfoAccount::Delete(
-	DWORD dwAccountID)		/* [in] アカウントID */
+	DWORD dwAccountID)	// [in] アカウントID
 {
 	int i, nCount, nNo;
 	PCInfoAccount pInfoTmp;
@@ -220,16 +140,9 @@ void CLibInfoAccount::Delete(
 	}
 
 	if (nNo >= 0) {
-		Delete (nNo);
+		Delete(nNo);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::DeleteAll										 */
-/* 内容		:全て削除														 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
 
 void CLibInfoAccount::DeleteAll(void)
 {
@@ -241,16 +154,9 @@ void CLibInfoAccount::DeleteAll(void)
 
 	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		Delete (i);
+		Delete(i);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetAccountID									 */
-/* 内容		:キャラIDからアカウントIDを取得									 */
-/* 日付		:2007/07/05														 */
-/* ========================================================================= */
 
 DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
 {
@@ -260,7 +166,7 @@ DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
 
 	dwRet = 0;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_paInfo->at(i);
 		if (pInfo->m_dwCharID == dwCharID) {
@@ -272,27 +178,13 @@ DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
 	return dwRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetPtr										 */
-/* 内容		:アカウント情報を取得											 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoAccount::GetPtr(int nNo)
 {
 	return (PCInfoBase)m_paInfo->at(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetPtr										 */
-/* 内容		:アカウント情報を取得											 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 PCInfoAccount CLibInfoAccount::GetPtr(
-	DWORD dwAccountID)		/* [in] アカウントID */
+	DWORD dwAccountID)	// [in] アカウントID
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -312,15 +204,8 @@ PCInfoAccount CLibInfoAccount::GetPtr(
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetPtr										 */
-/* 内容		:アカウント情報を取得											 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 PCInfoAccount CLibInfoAccount::GetPtr(
-	LPCSTR pszAccount)		/* [in] アカウント */
+	LPCSTR pszAccount)	// [in] アカウント
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -340,15 +225,8 @@ PCInfoAccount CLibInfoAccount::GetPtr(
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetPtrSessionID								 */
-/* 内容		:アカウント情報を取得											 */
-/* 日付		:2007/02/15														 */
-/* ========================================================================= */
-
 PCInfoAccount CLibInfoAccount::GetPtrSessionID(
-	DWORD dwSessionID)		/* [in] セッションID */
+	DWORD dwSessionID)	// [in] セッションID
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -368,15 +246,8 @@ PCInfoAccount CLibInfoAccount::GetPtrSessionID(
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetPtrMacAddr									 */
-/* 内容		:アカウント情報を取得											 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
-
 PCInfoAccount CLibInfoAccount::GetPtrMacAddr(
-	LPCSTR pszMacAddr)		/* [in] 作成時のMACアドレス */
+	LPCSTR pszMacAddr)	// [in] 作成時のMACアドレス
 {
 	int i, nCount;
 	PCInfoAccount pRet, pInfoTmp;
@@ -395,13 +266,6 @@ PCInfoAccount CLibInfoAccount::GetPtrMacAddr(
 
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoAccount::GetNewID										 */
-/* 内容		:新しいアカウントIDを取得										 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
 
 DWORD CLibInfoAccount::GetNewID(void)
 {
@@ -424,4 +288,3 @@ DWORD CLibInfoAccount::GetNewID(void)
 	return dwRet;
 }
 
-/* Copyright(C)URARA-works 2006 */

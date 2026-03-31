@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharDisable.h										 */
-/* 内容			:拒否一覧ダイアログクラス 定義ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/04/06													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharDisable.h
+/// @brief 拒否一覧ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/04/06
+/// @copyright Copyright(C)URARA-works 2009
 
 #pragma once
 
@@ -12,27 +10,25 @@
 
 class CLibInfoDisable;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharDisable : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharDisable(CWnd* pParent = NULL);			/* コンストラクタ */
-	virtual ~CDlgAdminCharDisable();							/* デストラクタ */
+			CDlgAdminCharDisable(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharDisable(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);						/* 初期化 */
-	void	Renew		(void);										/* 一覧を更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* メッセージハンドラ(WM_ADMINMSG) */
-
-
-protected:
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 一覧を更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* 通知先ウィンドウ */
-	CLibInfoDisable		*m_pLibInfoDisable;			/* 編集中の拒否情報 */
+
+
+protected:
+	CWnd	*m_pWndNotify; // 通知先ウィンドウ
+	CLibInfoDisable	*m_pLibInfoDisable; // 編集中の拒否情報
 
 
 
@@ -59,5 +55,3 @@ public:
 } CDlgAdminCharDisable, *PCDlgAdminCharDisable;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2009 */

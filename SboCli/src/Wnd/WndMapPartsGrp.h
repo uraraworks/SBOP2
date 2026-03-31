@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:WndMapPartsGrp.h											 */
-/* 内容			:マップパーツ画像一覧スタティックコントロールクラス 定義ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/05/15													 */
-/* ========================================================================= */
+﻿/// @file WndMapPartsGrp.h
+/// @brief マップパーツ画像一覧スタティックコントロールクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/05/15
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -12,37 +10,35 @@ class CMgrData;
 class CMgrGrpData;
 class CImg32;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CWndMapPartsGrp : public CWnd
 {
 public:
-			CWndMapPartsGrp();						/* コンストラクタ */
-	virtual ~CWndMapPartsGrp();						/* デストラクタ */
+			CWndMapPartsGrp();						// コンストラクタ
+	virtual ~CWndMapPartsGrp();						// デストラクタ
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID, int nMode=0);	/* 作成 */
-	void	Destroy	(void);									/* 破棄 */
+	BOOL	Create(CWnd *pParent, CMgrData *pMgrData, int nResourceID, int nMode=0);	// 作成
+	void	Destroy(void);								// 破棄
 
-	void	SetMode	(int nMode);							/* 画像モードの変更 */
-	void	SetNo	(int nGrpNo);							/* 画像番号の変更 */
-
-
-protected:
-	void	MakeImage		(int nMode);			/* 画像を作成 */
+	void	SetMode(int nMode);							// 画像モードの変更
+	void	SetNo(int nGrpNo);							// 画像番号の変更
 
 
 protected:
-	int			m_nPos,							/* 縦スクロール位置 */
-				m_nMode,						/* 画像モード */
-				m_nGrpNo;						/* 画像番号 */
-	CWnd		*m_pWndParent;					/* 親ウィンドウ */
-	CImg32		*m_pImgParts;					/* バックバッファ */
-	CPoint		m_ptCursor;						/* カーソルのあるパーツ位置 */
+	void	MakeImage(int nMode);			// 画像を作成
 
-	CMgrData		*m_pMgrData;				/* データ管理 */
-	CMgrGrpData		*m_pMgrGrpData;				/* グラフィックデータ管理 */
+
+protected:
+	int			m_nPos,							// 縦スクロール位置
+				m_nMode,						// 画像モード
+				m_nGrpNo;						// 画像番号
+	CWnd		*m_pWndParent;					// 親ウィンドウ
+	CImg32		*m_pImgParts;					// バックバッファ
+	CPoint		m_ptCursor;						// カーソルのあるパーツ位置
+
+	CMgrData		*m_pMgrData;				// データ管理
+	CMgrGrpData		*m_pMgrGrpData;				// グラフィックデータ管理
 
 
 
@@ -50,7 +46,7 @@ public:
 	//{{AFX_VIRTUAL(CWndMapPartsGrp)
 	public:
 	protected:
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -69,5 +65,3 @@ protected:
 } CWndMapPartsGrp, *PCWndMapPartsGrp;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

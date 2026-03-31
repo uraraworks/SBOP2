@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapInfo.h											 */
-/* 内容			:マップ情報編集ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/05/01													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapInfo.h
+/// @brief マップ情報編集ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/05/01
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -12,23 +10,21 @@
 
 class CInfoMapBase;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapInfo : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapInfo(CWnd* pParent = NULL);			/* コンストラクタ */
-	virtual ~CDlgAdminMapInfo();							/* デストラクタ */
+			CDlgAdminMapInfo(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapInfo(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);						/* 初期化 */
-	void	Renew		(void);										/* 更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
 
 
 protected:
-	CInfoMapBase	*m_pInfoMap;				/* 編集中のマップ情報 */
+	CInfoMapBase	*m_pInfoMap; // 編集中のマップ情報
 
 
 
@@ -36,8 +32,8 @@ public:
 	//{{AFX_DATA(CDlgAdminMapInfo)
 	enum { IDD = IDD_MAP_INFO };
 	CString	m_strMapSize;
-	int		m_nValue;
-	int		m_nDarkLevel;
+	int	m_nValue;
+	int	m_nDarkLevel;
 	CString	m_strMapID;
 	CString	m_strMapName;
 	CComboBox	m_cmbBGMID;
@@ -63,5 +59,3 @@ protected:
 } CDlgAdminMapInfo, *PCDlgAdminMapInfo;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

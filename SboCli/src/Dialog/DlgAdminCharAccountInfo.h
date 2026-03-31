@@ -1,32 +1,28 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharAccountInfo.h									 */
-/* 内容			:アカウント情報ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/06													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharAccountInfo.h
+/// @brief アカウント情報ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/06/06
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "DlgAdminBase.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharAccountInfo : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharAccountInfo(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminCharAccountInfo();						/* デストラクタ */
+			CDlgAdminCharAccountInfo(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharAccountInfo(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	Renew		(void);											/* 更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
 
 
 protected:
-	DWORD	m_dwAccountID;			/* 編集中のアカウントID */
+	DWORD	m_dwAccountID; // 編集中のアカウントID
 
 
 
@@ -56,5 +52,3 @@ protected:
 } CDlgAdminCharAccountInfo, *PCDlgAdminCharAccountInfo;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

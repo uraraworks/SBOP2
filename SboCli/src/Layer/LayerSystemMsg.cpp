@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:LayerSystemMsg.cpp											 */
-/* 内容			:レイヤー描画クラス(システムメッセージ) 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/07/30													 */
-/* ========================================================================= */
+﻿/// @file LayerSystemMsg.cpp
+/// @brief レイヤー描画クラス(システムメッセージ) 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/07/30
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "MgrData.h"
@@ -14,36 +12,18 @@
 #include "myString.h"
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerSystemMsg::CLayerSystemMsg								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
-
 CLayerSystemMsg::CLayerSystemMsg()
 {
-	m_nID				= LAYERTYPE_SYSTEMMSG;
-	m_dwLastTimeProc	= 0;
+	m_nID = LAYERTYPE_SYSTEMMSG;
+	m_dwLastTimeProc = 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSystemMsg::~CLayerSystemMsg								 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 CLayerSystemMsg::~CLayerSystemMsg()
 {
-	DeleteAllMsg ();
+	DeleteAllMsg();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSystemMsg::Draw											 */
-/* 内容		:描画															 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 void CLayerSystemMsg::Draw(PCImg32 pDst)
 {
@@ -53,20 +33,14 @@ void CLayerSystemMsg::Draw(PCImg32 pDst)
 	nCount = m_aSystemMsgInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSystemMsgInfo[i];
-		pDst->Blt (
+		pDst->Blt(
 				38, pInfo->nPosY,
-				pInfo->pImg->Width (), pInfo->pImg->Height (),
+				pInfo->pImg->Width(), pInfo->pImg->Height(),
 				pInfo->pImg,
 				0, 0, TRUE);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSystemMsg::TimerProc										 */
-/* 内容		:時間処理														 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 BOOL CLayerSystemMsg::TimerProc(void)
 {
@@ -77,11 +51,11 @@ BOOL CLayerSystemMsg::TimerProc(void)
 
 	bRet = FALSE;
 
-	dwTmp = timeGetTime () - m_dwLastTimeProc;
+	dwTmp = timeGetTime() - m_dwLastTimeProc;
 	if (dwTmp < 50) {
 		goto Exit;
 	}
-	m_dwLastTimeProc = timeGetTime ();
+	m_dwLastTimeProc = timeGetTime();
 
 	nCount = m_aSystemMsgInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
@@ -90,19 +64,13 @@ BOOL CLayerSystemMsg::TimerProc(void)
 		if (pInfo->nPosY > SCRSIZEY - (SCRSIZEY / 3)) {
 			continue;
 		}
-		DeleteMsg (i);
+		DeleteMsg(i);
 	}
 
 Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSystemMsg::AddMsg										 */
-/* 内容		:描画															 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 {
@@ -114,12 +82,12 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 	nCount = m_aSystemMsgInfo.size();
 
 	pInfo = new SYSTEMMSGINFO;
-	pInfo->nPosY	= SCRSIZEY;
-	pInfo->pImg		= new CImg32;
+	pInfo->nPosY = SCRSIZEY;
+	pInfo->pImg = new CImg32;
 
 	if (nCount > 0) {
 		pInfoTmp = m_aSystemMsgInfo[nCount - 1];
-		/* 追加すると既存のメッセージに重なる？ */
+		// 追加すると既存のメッセージに重なる？
 		if (pInfo->nPosY <= pInfoTmp->nPosY + 14) {
 			for (i = 0; i < nCount; i ++) {
 				pInfoTmp = m_aSystemMsgInfo[i];
@@ -128,46 +96,34 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 		}
 	}
 
-        CString strMsg = AnsiToTString (pszMsg);
-        nLen = strMsg.GetLength ();
-        pInfo->pImg->Create (nLen * 14 + 1, 14);
+        CString strMsg = AnsiToTString(pszMsg);
+        nLen = strMsg.GetLength();
+        pInfo->pImg->Create(nLen * 14 + 1, 14);
 
-	hDCTmp		= pInfo->pImg->Lock ();
-	hFontOld	= (HFONT)SelectObject (hDCTmp, m_hFont);
-	SetBkMode (hDCTmp, TRANSPARENT);
-        TextOut2 (hDCTmp, 1, 1, strMsg, cl);
+	hDCTmp = pInfo->pImg->Lock();
+	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
+	SetBkMode(hDCTmp, TRANSPARENT);
+        TextOut2(hDCTmp, 1, 1, strMsg, cl);
 
-	SelectObject (hDCTmp, hFontOld);
-	pInfo->pImg->Unlock ();
+	SelectObject(hDCTmp, hFontOld);
+	pInfo->pImg->Unlock();
 
-	m_aSystemMsgInfo.push_back (pInfo);
+	m_aSystemMsgInfo.push_back(pInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSystemMsg::DeleteMsg										 */
-/* 内容		:メッセージを削除												 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 void CLayerSystemMsg::DeleteMsg(int nNo)
 {
 	PSYSTEMMSGINFO pInfo;
 
         pInfo = m_aSystemMsgInfo[nNo];
-        SAFE_DELETE (pInfo->pImg);
-        SAFE_DELETE (pInfo);
+        SAFE_DELETE(pInfo->pImg);
+        SAFE_DELETE(pInfo);
         if ((nNo >= 0) && (nNo < static_cast<int>(m_aSystemMsgInfo.size()))) {
-                m_aSystemMsgInfo.erase (m_aSystemMsgInfo.begin () + nNo);
+                m_aSystemMsgInfo.erase(m_aSystemMsgInfo.begin() + nNo);
         }
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSystemMsg::DeleteAllMsg									 */
-/* 内容		:全てのメッセージを削除											 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 void CLayerSystemMsg::DeleteAllMsg(void)
 {
@@ -175,8 +131,6 @@ void CLayerSystemMsg::DeleteAllMsg(void)
 
 	nCount = m_aSystemMsgInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
-		DeleteMsg (i);
+		DeleteMsg(i);
 	}
 }
-
-/* Copyright(C)URARA-works 2007 */

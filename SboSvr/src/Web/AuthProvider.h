@@ -33,4 +33,3 @@ AuthStatus Authenticate(const HttpRequest &request, CMgrData *pMgrData, AuthCont
 bool HasRole(const AuthContext &context, const char *pszRoleId);
 std::string BuildForbiddenBody(const char *pszRequiredRole);
 }
-

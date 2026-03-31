@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminAccountAdd.cpp										 */
-/* 内容			:アカウント追加ダイアログクラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/01/17													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminAccountAdd.cpp
+/// @brief アカウント追加ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/01/17
+/// @copyright Copyright(C)URARA-works 2009
 
 #include "stdafx.h"
 #include "resource.h"
@@ -21,9 +19,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminAccountAdd::DoDataExchange(CDataExchange* pDX)
 {
@@ -40,14 +36,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminAccountAdd, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminAccountAdd::CDlgAdminAccountAdd						 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2009/01/17														 */
-/* ========================================================================= */
-
-CDlgAdminAccountAdd::CDlgAdminAccountAdd(CWnd* pParent /*=NULL*/)
+CDlgAdminAccountAdd::CDlgAdminAccountAdd(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminAccountAdd::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminAccountAdd)
@@ -56,57 +45,35 @@ CDlgAdminAccountAdd::CDlgAdminAccountAdd(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminAccountAdd::~CDlgAdminAccountAdd						 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2009/01/17														 */
-/* ========================================================================= */
-
 CDlgAdminAccountAdd::~CDlgAdminAccountAdd()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminAccountAdd::Init										 */
-/* 内容		:初期化															 */
-/* 日付		:2009/01/17														 */
-/* ========================================================================= */
-
 void CDlgAdminAccountAdd::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminAccountAdd::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminAccountAdd::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminAccountAdd::OnSend									 */
-/* 内容		:ボタンハンドラ(送信)											 */
-/* 日付		:2009/01/17														 */
-/* ========================================================================= */
 
 void CDlgAdminAccountAdd::OnSend()
 {
 	int nResult;
 	CPacketADMIN_ACCOUNT_REQ_ADD Packet;
 
-        nResult = MessageBox (_T("アカウント情報を送信しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox(_T("アカウント情報を送信しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	UpdateData ();
+	UpdateData();
 
 	CStringA strAccountA = TStringToUtf8(m_strAccount);
 	CStringA strPasswordA = TStringToUtf8(m_strPassword);
 
-	Packet.Make (strAccountA, strPasswordA);
-	SendPacket (&Packet);
+	Packet.Make(strAccountA, strPasswordA);
+	SendPacket(&Packet);
 }
 
-/* Copyright(C)URARA-works 2009 */

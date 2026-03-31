@@ -1,28 +1,24 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEventMOVE.h										 */
-/* 内容			:マップイベント(マップ内移動)ダイアログクラス 定義ファイル	 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/24													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEventMOVE.h
+/// @brief マップイベント(マップ内移動)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/06/24
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "DlgAdminMapEventNONE.h"
 #include "afxwin.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapEventMOVE : public CDlgAdminMapEventNONE
 {
 public:
-			CDlgAdminMapEventMOVE(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminMapEventMOVE();							/* デストラクタ */
+			CDlgAdminMapEventMOVE(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapEventMOVE(); // デストラクタ
 
-	void	Set		(CInfoMapEventBase *pSrc);							/* 設定 */
-	void	Get		(CInfoMapEventBase *pDst);							/* 取得 */
+	void	Set(CInfoMapEventBase *pSrc); // 設定
+	void	Get(CInfoMapEventBase *pDst); // 取得
 
 
 
@@ -50,5 +46,3 @@ public:
 } CDlgAdminMapEventMOVE, *PCDlgAdminMapEventMOVE;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

@@ -9,32 +9,32 @@
 
 // 表示設定
 struct LOGVIEWCTRLSETTING {
-	TCHAR		szFontText[LF_FACESIZE];	// フォント名(本文)
-	TCHAR		szFontHeader[LF_FACESIZE];	// フォント名(ヘッダ)
-	int			nFontPoint;					// フォントサイズ(ポイント)
-	COLORREF	crText;						// テキスト文字色
-	COLORREF	crBack;						// テキスト背景色
-	COLORREF	crSelectText;				// 選択文字色
-	COLORREF	crSelectBack;				// 選択背景色
-	COLORREF	crLinkText;					// リンク文字色
-	COLORREF	crLinkBack;					// リンク背景色
-	BOOL		bCancelSelectAfterCopy;		// コピー処理後、選択解除するか
-	int			nWheelDelta;				// マウスホイールでの移動量
-	int			nLinkNotifyType;			// リンク通知種別
+	TCHAR	szFontText[LF_FACESIZE];	// フォント名(本文)
+	TCHAR	szFontHeader[LF_FACESIZE];	// フォント名(ヘッダ)
+	int	nFontPoint;	// フォントサイズ(ポイント)
+	COLORREF	crText;	// テキスト文字色
+	COLORREF	crBack;	// テキスト背景色
+	COLORREF	crSelectText;	// 選択文字色
+	COLORREF	crSelectBack;	// 選択背景色
+	COLORREF	crLinkText;	// リンク文字色
+	COLORREF	crLinkBack;	// リンク背景色
+	BOOL	bCancelSelectAfterCopy;	// コピー処理後、選択解除するか
+	int	nWheelDelta;	// マウスホイールでの移動量
+	int	nLinkNotifyType;	// リンク通知種別
 };
 
 // 行情報
 struct LINEINFO {
-	SYSTEMTIME	stDateTime;					// 日時
-	CString		strText;					// 行テキスト
-	COLORREF	crFore;						// 前景色
-	COLORREF	crBack;						// 背景色
+	SYSTEMTIME	stDateTime;	// 日時
+	CString	strText;	// 行テキスト
+	COLORREF	crFore;	// 前景色
+	COLORREF	crBack;	// 背景色
 	struct TOKEN {
-		int		nStart;						// 単語開始位置
-		int		nLen;						// 単語の長さ(バイト)
-		int		nType;						// 単語の種類
+		int	nStart;	// 単語開始位置
+		int	nLen;	// 単語の長さ(バイト)
+		int	nType;	// 単語の種類
 	};
-	CStdArray<TOKEN, TOKEN>	aTokens;		// 単語情報
+	CStdArray<TOKEN, TOKEN>	aTokens;	// 単語情報
 
 	void operator=(const LINEINFO& li) {
 		stDateTime = li.stDateTime;
@@ -52,17 +52,17 @@ struct NMLVCLINK {
 };
 
 // テキスト保持限界
-#define	LVC_TEXT_LIMIT_INFINITE			0	// 無制限(メモリ依存)
-#define	LVC_TEXT_LIMIT_LINE				1	// 行数制限
-#define	LVC_TEXT_LIMIT_SIZE				2	// サイズ制限
+#define	LVC_TEXT_LIMIT_INFINITE	0	// 無制限(メモリ依存)
+#define	LVC_TEXT_LIMIT_LINE	1	// 行数制限
+#define	LVC_TEXT_LIMIT_SIZE	2	// サイズ制限
 
 // リンク通知種別
-#define	LVC_LINK_NOTIFY_NONE			0	// リンク通知なし
+#define	LVC_LINK_NOTIFY_NONE	0	// リンク通知なし
 #define	LVC_LINK_NOTIFY_DOUBLE_CLICK	1	// ダブルクリックで通知
 #define	LVC_LINK_NOTIFY_TRIPLE_CLICK	2	// トリプルクリックで通知
 
 // 通知コード
-#define	LVCN_LINK						100	// リンク通知コード
+#define	LVCN_LINK	100	// リンク通知コード
 
 /////////////////////////////////////////////////////////////////////////////
 // CLogViewCtrl ウィンドウ
@@ -95,31 +95,31 @@ public:
 
 protected:
 	CStdArray<LINEINFO, LINEINFO>	m_aTexts;	// 行情報
-	int		m_nLimitMode;					// テキスト限界
-	DWORD	m_dwLimitSize;					// テキスト限界値
-	DWORD	m_dwTextSize;					// 現在のテキストのサイズ
-	CSize	m_sizeChar;						// 半角1文字の幅と高さ
-	CSize	m_sizeView;						// 表示できるサイズ
-	CSize	m_sizeHeader;					// ヘッダの表示サイズ
-	CFont	m_fontText;						// フォント
-	CFont	m_fontHeader;					// フォント
-	int		m_nSelect;						// 選択状態(0:選択なし/1:文字選択/2:行選択)
-	int		m_nSelectCharStart;				// 文字選択開始位置
-	int		m_nSelectCharEnd;				// 文字選択終了位置
-	int		m_nSelectLineStart;				// 行選択開始位置
-	int		m_nSelectLineEnd;				// 行選択終了位置
-	CMenu	m_menuPopup;					// コンテキストメニュー
-	DWORD	m_dwTripleClick;				// トリプルクリック判定用
-	CPoint	m_ptTripleClick;				// トリプルクリック判定用
+	int	m_nLimitMode;	// テキスト限界
+	DWORD	m_dwLimitSize;	// テキスト限界値
+	DWORD	m_dwTextSize;	// 現在のテキストのサイズ
+	CSize	m_sizeChar;	// 半角1文字の幅と高さ
+	CSize	m_sizeView;	// 表示できるサイズ
+	CSize	m_sizeHeader;	// ヘッダの表示サイズ
+	CFont	m_fontText;	// フォント
+	CFont	m_fontHeader;	// フォント
+	int	m_nSelect;	// 選択状態(0:選択なし/1:文字選択/2:行選択)
+	int	m_nSelectCharStart;	// 文字選択開始位置
+	int	m_nSelectCharEnd;	// 文字選択終了位置
+	int	m_nSelectLineStart;	// 行選択開始位置
+	int	m_nSelectLineEnd;	// 行選択終了位置
+	CMenu	m_menuPopup;	// コンテキストメニュー
+	DWORD	m_dwTripleClick;	// トリプルクリック判定用
+	CPoint	m_ptTripleClick;	// トリプルクリック判定用
 
-	LOGVIEWCTRLSETTING	m_stSetting;		// 設定
+	LOGVIEWCTRLSETTING	m_stSetting;	// 設定
 
 	void	RecalcParam(const SIZE* psizeClient = NULL);
-	int		GetTextHeight(CDC* pDC, int nIndex);
+	int	GetTextHeight(CDC* pDC, int nIndex);
 	void	LimitText();
 	BOOL	GetSelectPos(CPoint point, int* pnLine, int* pnChar);
 	void	UpdateSelectParam(int nLine, int nChar);
-	int		FindToken(int nLine, int nChar);
+	int	FindToken(int nLine, int nChar);
 
 	// 生成されたメッセージ マップ関数
 protected:

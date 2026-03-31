@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:InfoCharSvr.cpp											 */
-/* 内容			:キャラ情報サーバークラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/01/14													 */
-/* ========================================================================= */
+﻿/// @file InfoCharSvr.cpp
+/// @brief キャラ情報サーバークラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/01/14
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "InfoMotion.h"
@@ -21,7 +19,7 @@ static DWORD GetMoveWaitBase(CInfoCharSvr *pInfoChar)
 	if (pInfoChar == NULL) {
 		return 11;
 	}
-	dwMoveWait = pInfoChar->GetMoveWait ();
+	dwMoveWait = pInfoChar->GetMoveWait();
 	if (dwMoveWait == 0) {
 		return 11;
 	}
@@ -33,7 +31,7 @@ static int GetMovePixelsPerSec(CInfoCharSvr *pInfoChar)
 	DWORD dwMoveWait;
 	ULONGLONG ullSpeed;
 
-	dwMoveWait = GetMoveWaitBase (pInfoChar);
+	dwMoveWait = GetMoveWaitBase(pInfoChar);
 	ullSpeed = (ULONGLONG)SERVER_CHAR_MOVE_PIXELS_PER_SEC * 11;
 	ullSpeed = (ullSpeed + dwMoveWait - 1) / dwMoveWait;
 	if (ullSpeed == 0) {
@@ -49,57 +47,50 @@ static DWORD GetHalfTileMoveInterval(CInfoCharSvr *pInfoChar)
 {
 	int nMovePixelsPerSec;
 
-	nMovePixelsPerSec = GetMovePixelsPerSec (pInfoChar);
-	return max ((DWORD)(((ULONGLONG)HALF_TILE * 1000 + nMovePixelsPerSec - 1) / nMovePixelsPerSec), (DWORD)1);
+	nMovePixelsPerSec = GetMovePixelsPerSec(pInfoChar);
+	return max((DWORD)(((ULONGLONG)HALF_TILE * 1000 + nMovePixelsPerSec - 1) / nMovePixelsPerSec), (DWORD)1);
 }
 
-}	/* namespace */
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::CInfoCharSvr										 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/01/14														 */
-/* ========================================================================= */
+}	// namespace
 
 CInfoCharSvr::CInfoCharSvr()
 {
-	m_nReserveChgEfect		= 0;
+	m_nReserveChgEfect	= 0;
 	m_nReserveChgMoveState	= 0;
-	m_nMoveCount			= 0;
-	m_bChgPos				= FALSE;
-	m_bChgMap				= FALSE;
-	m_bChgUpdatePos			= FALSE;
-	m_bChgSpeak				= FALSE;
-	m_bChgInfo				= FALSE;
-	m_bChgMoveState			= FALSE;
-	m_bChgProcState			= FALSE;
-	m_bChgScreenPos			= FALSE;
-	m_bChgGrp				= FALSE;
-	m_bChgEfcBalloon		= FALSE;
-	m_bChgMotion			= FALSE;
-	m_bChgStatus			= FALSE;
-	m_bChgFishingHit		= FALSE;
-	m_bChgMoveCount			= FALSE;
-	m_bChgPutNpc			= FALSE;
-	m_bChgTargetChar		= FALSE;
+	m_nMoveCount	= 0;
+	m_bChgPos	= FALSE;
+	m_bChgMap	= FALSE;
+	m_bChgUpdatePos	= FALSE;
+	m_bChgSpeak	= FALSE;
+	m_bChgInfo	= FALSE;
+	m_bChgMoveState	= FALSE;
+	m_bChgProcState	= FALSE;
+	m_bChgScreenPos	= FALSE;
+	m_bChgGrp	= FALSE;
+	m_bChgEfcBalloon	= FALSE;
+	m_bChgMotion	= FALSE;
+	m_bChgStatus	= FALSE;
+	m_bChgFishingHit	= FALSE;
+	m_bChgMoveCount	= FALSE;
+	m_bChgPutNpc	= FALSE;
+	m_bChgTargetChar	= FALSE;
 	m_bWaitCheckMapEvent	= FALSE;
-	m_bDropItem				= FALSE;
-	m_bAtack				= FALSE;
-	m_bRenewTargetPos		= FALSE;
-	m_bProcMoveMapIn		= FALSE;
-	m_bProcMoveMapOut		= FALSE;
-	m_bProcMoveMarkPos		= FALSE;
-	m_bProcSwoon			= FALSE;
-	m_bProcInvincible		= FALSE;
-	m_bStateFadeInOut		= FALSE;
-	m_bStatusInvincible		= FALSE;
-	m_pInfoMap				= NULL;
-	m_dwChgWait				= 0;
-	m_dwLastTimeChg			= 0;
-	m_dwEfcBalloonID		= 0;
-	m_dwMotionID			= 0;
-	m_dwMoveCount			= 0;
+	m_bDropItem	= FALSE;
+	m_bAtack	= FALSE;
+	m_bRenewTargetPos	= FALSE;
+	m_bProcMoveMapIn	= FALSE;
+	m_bProcMoveMapOut	= FALSE;
+	m_bProcMoveMarkPos	= FALSE;
+	m_bProcSwoon	= FALSE;
+	m_bProcInvincible	= FALSE;
+	m_bStateFadeInOut	= FALSE;
+	m_bStatusInvincible	= FALSE;
+	m_pInfoMap	= NULL;
+	m_dwChgWait	= 0;
+	m_dwLastTimeChg	= 0;
+	m_dwEfcBalloonID	= 0;
+	m_dwMotionID	= 0;
+	m_dwMoveCount	= 0;
 	m_dwLastMoveSyncSendTime = 0;
 	m_dwSuppressMapEventMapID = 0;
 	m_dwLastRecvMoveTime	= 0;
@@ -113,48 +104,27 @@ CInfoCharSvr::CInfoCharSvr()
 	m_nPendingEventTileX = 0;
 	m_nPendingEventTileY = 0;
 
-	m_pLibInfoCharSvr		= NULL;
+	m_pLibInfoCharSvr	= NULL;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::~CInfoCharSvr									 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/01/14														 */
-/* ========================================================================= */
 
 CInfoCharSvr::~CInfoCharSvr()
 {
-	DeleteAllProcInfo ();
+	DeleteAllProcInfo();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::SetSpeak											 */
-/* 内容		:発言内容を更新													 */
-/* 日付		:2007/02/24														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::SetSpeak(LPCSTR pszSpeak)
 {
-	CInfoCharBase::SetSpeak (pszSpeak);
+	CInfoCharBase::SetSpeak(pszSpeak);
 
-	if (m_strSpeak.IsEmpty () == FALSE) {
+	if (m_strSpeak.IsEmpty() == FALSE) {
 		m_bChgSpeak = TRUE;
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::SetMoveState										 */
-/* 内容		:移動状態を変更													 */
-/* 日付		:2007/04/20														 */
-/* ========================================================================= */
-
 void CInfoCharSvr::SetMoveState(int nMoveState)
 {
 	if (m_nMoveState == CHARMOVESTATE_DELETE) {
-		/* 削除は取り消せないようにする */
+		// 削除は取り消せないようにする
 		return;
 	}
 	if (nMoveState == m_nMoveState) {
@@ -163,72 +133,44 @@ void CInfoCharSvr::SetMoveState(int nMoveState)
 
 	m_bChgMoveState = TRUE;
 	switch (nMoveState) {
-	case CHARMOVESTATE_BATTLEATACK_WAIT:		/* 戦闘攻撃後の待ち時間 */
+	case CHARMOVESTATE_BATTLEATACK_WAIT:	// 戦闘攻撃後の待ち時間
 		m_dwChgWait = 1000;
-		m_dwLastTimeChg = timeGetTime ();
+		m_dwLastTimeChg = timeGetTime();
 		m_bChgMoveState = FALSE;
 		break;
 	case CHARMOVESTATE_BATTLE:
-		/* 溜め攻撃解除 */
+		// 溜め攻撃解除
 		m_bChargeAtack = FALSE;
 		break;
-	case CHARMOVESTATE_SWOON:					/* 気絶 */
-		/* 溜め攻撃解除 */
+	case CHARMOVESTATE_SWOON:	// 気絶
+		// 溜め攻撃解除
 		m_bChargeAtack = FALSE;
-		/* 行動情報を全て削除 */
-		DeleteAllProcInfo ();
-		SetMotion (-1);
-		SetProcState (CHARPROCSTATEID_NORMAL);
+		// 行動情報を全て削除
+		DeleteAllProcInfo();
+		SetMotion(-1);
+		SetProcState(CHARPROCSTATEID_NORMAL);
 		break;
 	}
 
-	CInfoCharBase::SetMoveState (nMoveState);
+	CInfoCharBase::SetMoveState(nMoveState);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharBase::SetProcState									 */
-/* 内容		:行動状態を変更													 */
-/* 日付		:2008/06/11														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::SetProcState(int nProcState)
 {
 	m_bChgProcState = TRUE;
 
-	CInfoCharBase::SetProcState (nProcState);
+	CInfoCharBase::SetProcState(nProcState);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::SetMap											 */
-/* 内容		:マップ情報を設定												 */
-/* 日付		:2007/09/17														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::SetMap(CInfoMapBase *pInfoMap)
 {
 	m_pInfoMap = pInfoMap;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::SetLibInfoChar									 */
-/* 内容		:キャラ情報ライブラリを設定										 */
-/* 日付		:2009/01/17														 */
-/* ========================================================================= */
-
 void CInfoCharSvr::SetLibInfoChar(CLibInfoCharSvr *pLibInfoChar)
 {
 	m_pLibInfoCharSvr = pLibInfoChar;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::SetEfcBalloon									 */
-/* 内容		:噴出しを設定													 */
-/* 日付		:2008/01/03														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::SetEfcBalloon(DWORD dwEfcBalloonID)
 {
@@ -236,25 +178,11 @@ void CInfoCharSvr::SetEfcBalloon(DWORD dwEfcBalloonID)
 	m_bChgEfcBalloon = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::SetMotion										 */
-/* 内容		:モーションを設定												 */
-/* 日付		:2008/01/03														 */
-/* ========================================================================= */
-
 void CInfoCharSvr::SetMotion(DWORD dwMotionID)
 {
 	m_dwMotionID = dwMotionID;
 	m_bChgMotion = TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::IsEnableBattle									 */
-/* 内容		:戦闘状態に遷移できるか判定										 */
-/* 日付		:2008/07/08														 */
-/* ========================================================================= */
 
 BOOL CInfoCharSvr::IsEnableBattle(void)
 {
@@ -262,11 +190,11 @@ BOOL CInfoCharSvr::IsEnableBattle(void)
 
 	bRet = FALSE;
 
-	/* ついていっている？ */
+	// ついていっている？
 	if (m_dwFrontCharID) {
 		goto Exit;
 	}
-	/* 気絶中？ */
+	// 気絶中？
 	if (m_nMoveState == CHARMOVESTATE_SWOON) {
 		goto Exit;
 	}
@@ -276,19 +204,11 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::IsEnableMove										 */
-/* 内容		:移動できる状態か判定											 */
-/* 日付		:2008/07/28														 */
-/* 戻り値	:TRUE:移動可													 */
-/* ========================================================================= */
-
 BOOL CInfoCharSvr::IsEnableMove(void)
 {
 	BOOL bRet;
 
-	bRet = CInfoCharBase::IsEnableMove ();
+	bRet = CInfoCharBase::IsEnableMove();
 	if (bRet == FALSE) {
 		goto Exit;
 	}
@@ -301,32 +221,25 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::CopyAll											 */
-/* 内容		:派生先の情報も全てコピー										 */
-/* 日付		:2007/09/17														 */
-/* ========================================================================= */
-
 void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 {
-	CInfoCharBase::Copy (pSrc);
+	CInfoCharBase::Copy(pSrc);
 
 	m_abyMark = pSrc->m_abyMark;
-	m_bNPC				= pSrc->m_bNPC;
-	m_dwSessionID		= pSrc->m_dwSessionID;
-	m_dwAccountID		= pSrc->m_dwAccountID;
+	m_bNPC	= pSrc->m_bNPC;
+	m_dwSessionID	= pSrc->m_dwSessionID;
+	m_dwAccountID	= pSrc->m_dwAccountID;
 	m_dwLastTimeSpeak	= pSrc->m_dwLastTimeSpeak;
-	m_dwTailCharID		= pSrc->m_dwTailCharID;
-	m_dwFrontCharID		= pSrc->m_dwFrontCharID;
+	m_dwTailCharID	= pSrc->m_dwTailCharID;
+	m_dwFrontCharID	= pSrc->m_dwFrontCharID;
 	m_nReserveChgEfect	= pSrc->m_nReserveChgEfect;
-	m_bChgPos			= pSrc->m_bChgPos;
-	m_bChgUpdatePos		= pSrc->m_bChgUpdatePos;
-	m_bChgSpeak			= pSrc->m_bChgSpeak;
-	m_bChgInfo			= pSrc->m_bChgInfo;
-	m_bChgMoveState		= pSrc->m_bChgMoveState;
-	m_bChgScreenPos		= pSrc->m_bChgScreenPos;
-	m_bChgPosRenew		= pSrc->m_bChgPosRenew;
+	m_bChgPos	= pSrc->m_bChgPos;
+	m_bChgUpdatePos	= pSrc->m_bChgUpdatePos;
+	m_bChgSpeak	= pSrc->m_bChgSpeak;
+	m_bChgInfo	= pSrc->m_bChgInfo;
+	m_bChgMoveState	= pSrc->m_bChgMoveState;
+	m_bChgScreenPos	= pSrc->m_bChgScreenPos;
+	m_bChgPosRenew	= pSrc->m_bChgPosRenew;
 	m_dwLastMoveSyncSendTime = pSrc->m_dwLastMoveSyncSendTime;
 	m_dwSuppressMapEventMapID = pSrc->m_dwSuppressMapEventMapID;
 	m_nSuppressMapEventTileX = pSrc->m_nSuppressMapEventTileX;
@@ -338,19 +251,12 @@ void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 	m_dwLastRecvMovePacketTime = pSrc->m_dwLastRecvMovePacketTime;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::Copy												 */
-/* 内容		:コピー															 */
-/* 日付		:2008/08/15														 */
-/* ========================================================================= */
-
 void CInfoCharSvr::Copy(CInfoCharBase *pSrc)
 {
 	PCInfoCharSvr pSrcTmp;
 
 	pSrcTmp = (PCInfoCharSvr)pSrc;
-	CInfoCharBase::Copy (pSrc);
+	CInfoCharBase::Copy(pSrc);
 
 	m_dwMoveCount	= pSrcTmp->m_dwMoveCount;
 	m_dwSuppressMapEventMapID = pSrcTmp->m_dwSuppressMapEventMapID;
@@ -359,57 +265,35 @@ void CInfoCharSvr::Copy(CInfoCharBase *pSrc)
 	m_bSuppressMapEventUntilLeave = pSrcTmp->m_bSuppressMapEventUntilLeave;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcAtack										 */
-/* 内容		:処理(攻撃した時)												 */
-/* 日付		:2007/09/17														 */
-/* ========================================================================= */
-
 void CInfoCharSvr::ProcAtack(void)
 {
-	/* 溜め攻撃解除 */
+	// 溜め攻撃解除
 	m_bChargeAtack = FALSE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcHit											 */
-/* 内容		:処理(攻撃を受けた時)											 */
-/* 日付		:2007/09/17														 */
-/* 戻り値	:TRUE:以降の処理を続行する										 */
-/* ========================================================================= */
 
 BOOL CInfoCharSvr::ProcHit(CInfoCharSvr *pInfoChar)
 {
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::TimerProc										 */
-/* 内容		:時間処理														 */
-/* 日付		:2007/09/17														 */
-/* ========================================================================= */
-
 BOOL CInfoCharSvr::TimerProc(DWORD dwTime)
 {
 	BOOL bRet;
 
-	bRet = CInfoCharBase::TimerProc (dwTime);
+	bRet = CInfoCharBase::TimerProc(dwTime);
 
 	if (m_nMoveState == CHARMOVESTATE_BATTLEATACK_WAIT) {
 		if (m_dwChgWait) {
 			if (dwTime - m_dwLastTimeChg > m_dwChgWait) {
 				m_dwChgWait = 0;
 				m_dwLastTimeChg = 0;
-				SetMoveState (CHARMOVESTATE_BATTLEATACK);
+				SetMoveState(CHARMOVESTATE_BATTLEATACK);
 			}
 		}
 	}
-	bRet |= TimerProcMOVE (dwTime);
+	bRet |= TimerProcMOVE(dwTime);
 
-	Proc (dwTime);
+	Proc(dwTime);
 
 	if (m_dwLightTime != 0) {
 		if (dwTime > m_dwLightTime) {
@@ -422,13 +306,6 @@ BOOL CInfoCharSvr::TimerProc(DWORD dwTime)
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::TimerProcMOVE									 */
-/* 内容		:時間処理(移動)													 */
-/* 日付		:2008/06/07														 */
-/* ========================================================================= */
-
 BOOL CInfoCharSvr::TimerProcMOVE(DWORD dwTime)
 {
 	BOOL bRet;
@@ -440,7 +317,7 @@ BOOL CInfoCharSvr::TimerProcMOVE(DWORD dwTime)
 		goto Exit;
 	}
 
-	dwMoveInterval = GetHalfTileMoveInterval (this);
+	dwMoveInterval = GetHalfTileMoveInterval(this);
 	dwTimeTmp = dwTime - m_dwLastTimeMove;
 	if (dwTimeTmp < dwMoveInterval) {
 		goto Exit;
@@ -454,19 +331,11 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::IsAtackTarget									 */
-/* 内容		:攻撃対象となるか判定											 */
-/* 日付		:2008/07/12														 */
-/* 戻り値	:TRUE:攻撃可													 */
-/* ========================================================================= */
-
 BOOL CInfoCharSvr::IsAtackTarget(void)
 {
 	BOOL bRet;
 
-	bRet = CInfoCharBase::IsAtackTarget ();
+	bRet = CInfoCharBase::IsAtackTarget();
 	if (bRet == FALSE) {
 		goto Exit;
 	}
@@ -474,10 +343,10 @@ BOOL CInfoCharSvr::IsAtackTarget(void)
 		goto Exit;
 	}
 	switch (m_nMoveType) {
-	case CHARMOVETYPE_STAND:		/* 移動しない */
-	case CHARMOVETYPE_BALL:			/* ボール */
-	case CHARMOVETYPE_SCORE:		/* 得点 */
-	case CHARMOVETYPE_PUTNPC:		/* NPC発生 */
+	case CHARMOVETYPE_STAND:	// 移動しない
+	case CHARMOVETYPE_BALL:	// ボール
+	case CHARMOVETYPE_SCORE:	// 得点
+	case CHARMOVETYPE_PUTNPC:	// NPC発生
 		bRet = FALSE;
 		goto Exit;
 	}
@@ -487,36 +356,15 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::GetHitEffectID									 */
-/* 内容		:ヒット時に相手に表示するエフェクトIDを取得						 */
-/* 日付		:2009/01/12														 */
-/* ========================================================================= */
-
 DWORD CInfoCharSvr::GetHitEffectID(void)
 {
 	return 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::GetDamage										 */
-/* 内容		:ダメージ値を取得												 */
-/* 日付		:2009/01/12														 */
-/* ========================================================================= */
-
 DWORD CInfoCharSvr::GetDamage(void)
 {
 	return 0;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::Proc												 */
-/* 内容		:行動処理														 */
-/* 日付		:2008/01/01														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::Proc(DWORD dwTime)
 {
@@ -534,101 +382,80 @@ void CInfoCharSvr::Proc(DWORD dwTime)
 		}
 
 		switch (pInfo->dwProcID) {
-		case CHARPROCID_FISHING:		/* 釣り */
-			bResult = ProcFISHING (pInfo->dwPara);
+		case CHARPROCID_FISHING:	// 釣り
+			bResult = ProcFISHING(pInfo->dwPara);
 			break;
-		case CHARPROCID_FISHING_HIT:	/* 釣り(ヒット) */
-			bResult = ProcFISHING_HIT (pInfo->dwPara);
+		case CHARPROCID_FISHING_HIT:	// 釣り(ヒット)
+			bResult = ProcFISHING_HIT(pInfo->dwPara);
 			break;
-		case CHARPROCID_MAPMOVEIN:		/* マップ内移動 */
-			bResult = ProcMAPMOVEIN (pInfo->dwPara);
+		case CHARPROCID_MAPMOVEIN:	// マップ内移動
+			bResult = ProcMAPMOVEIN(pInfo->dwPara);
 			break;
-		case CHARPROCID_MAPMOVEOUT:		/* マップ外移動 */
-			bResult = ProcMAPMOVEOUT (pInfo->dwPara);
+		case CHARPROCID_MAPMOVEOUT:	// マップ外移動
+			bResult = ProcMAPMOVEOUT(pInfo->dwPara);
 			break;
-		case CHARPROCID_SWOON:			/* 気絶 */
-			bResult = ProcSWOON (pInfo->dwPara);
+		case CHARPROCID_SWOON:	// 気絶
+			bResult = ProcSWOON(pInfo->dwPara);
 			break;
-		case CHARPROCID_INVINCIBLE:		/* 無敵 */
-			bResult = ProcINVINCIBLE (pInfo->dwPara);
+		case CHARPROCID_INVINCIBLE:	// 無敵
+			bResult = ProcINVINCIBLE(pInfo->dwPara);
 			break;
 		}
 		if (bResult) {
-			DeleteProcInfo (i);
+			DeleteProcInfo(i);
 			break;
 		}
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcFISHING										 */
-/* 内容		:行動処理(釣り)													 */
-/* 日付		:2008/01/01														 */
-/* ========================================================================= */
 
 BOOL CInfoCharSvr::ProcFISHING(DWORD dwPara)
 {
 	int nState;
 
 	nState = CHARMOVESTATE_STAND;
-	if (IsStateBattle ()) {
+	if (IsStateBattle()) {
 		nState = CHARMOVESTATE_BATTLE;
 	}
 
-	/* 釣れなかった */
-	if ((genrand () % 100) < 60) {
+	// 釣れなかった
+	if ((genrand() % 100) < 60) {
 //Todo:
-		SetEfcBalloon (8);
-		SetProcState (CHARPROCSTATEID_NORMAL);
-		SetMoveState (nState);
+		SetEfcBalloon(8);
+		SetProcState(CHARPROCSTATEID_NORMAL);
+		SetMoveState(nState);
 	} else {
-		SetMotion (CHARMOTIONLISTID_FISHING_HIT_UP);
-		AddProcInfo (CHARPROCID_FISHING_HIT, 5000, 0);
+		SetMotion(CHARMOTIONLISTID_FISHING_HIT_UP);
+		AddProcInfo(CHARPROCID_FISHING_HIT, 5000, 0);
 	}
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcFISHING_HIT									 */
-/* 内容		:行動処理(釣り(ヒット))											 */
-/* 日付		:2008/01/02														 */
-/* ========================================================================= */
 
 BOOL CInfoCharSvr::ProcFISHING_HIT(DWORD dwPara)
 {
 	int nState;
 
 	nState = CHARMOVESTATE_STAND;
-	if (IsStateBattle ()) {
+	if (IsStateBattle()) {
 		nState = CHARMOVESTATE_BATTLE;
 	}
 
-	/* 釣れなかった */
-	if ((genrand () % 100) < 60) {
+	// 釣れなかった
+	if ((genrand() % 100) < 60) {
 //Todo:
-		SetEfcBalloon (8);
+		SetEfcBalloon(8);
 
 	} else {
-		SetEfcBalloon (2);
+		SetEfcBalloon(2);
 		m_bChgFishingHit = TRUE;
 	}
-	SetMotion (-1);
-	SetMoveState (nState);
-	SetProcState (CHARPROCSTATEID_NORMAL);
-	DeleteProcInfo (CHARPROCID_FISHING);
+	SetMotion(-1);
+	SetMoveState(nState);
+	SetProcState(CHARPROCSTATEID_NORMAL);
+	DeleteProcInfo(CHARPROCID_FISHING);
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcMAPMOVEIN									 */
-/* 内容		:行動処理(マップ内移動)											 */
-/* 日付		:2008/06/28														 */
-/* ========================================================================= */
 
 BOOL CInfoCharSvr::ProcMAPMOVEIN(DWORD dwPara)
 {
@@ -636,32 +463,18 @@ BOOL CInfoCharSvr::ProcMAPMOVEIN(DWORD dwPara)
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcMAPMOVEOUT									 */
-/* 内容		:行動処理(マップ外移動)											 */
-/* 日付		:2008/07/27														 */
-/* ========================================================================= */
-
 BOOL CInfoCharSvr::ProcMAPMOVEOUT(DWORD dwPara)
 {
 	m_bProcMoveMapOut = TRUE;
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcSWOON										 */
-/* 内容		:行動処理(気絶)													 */
-/* 日付		:2008/06/29														 */
-/* ========================================================================= */
-
 BOOL CInfoCharSvr::ProcSWOON(DWORD dwPara)
 {
 	m_bProcSwoon = TRUE;
 	m_nReserveChgEfect = -1;
 
-	/* 記録位置へ戻る？ */
+	// 記録位置へ戻る？
 	if (dwPara != 0) {
 		m_bProcMoveMarkPos = TRUE;
 	}
@@ -669,27 +482,13 @@ BOOL CInfoCharSvr::ProcSWOON(DWORD dwPara)
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::ProcINVINCIBLE									 */
-/* 内容		:行動処理(無敵)													 */
-/* 日付		:2008/06/29														 */
-/* ========================================================================= */
-
 BOOL CInfoCharSvr::ProcINVINCIBLE(DWORD dwPara)
 {
 	m_bProcInvincible = TRUE;
-	/* 無敵解除 */
+	// 無敵解除
 	m_bStatusInvincible = FALSE;
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::DeleteProcInfo									 */
-/* 内容		:行動情報を削除													 */
-/* 日付		:2008/01/01														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::DeleteProcInfo(int nNo)
 {
@@ -700,16 +499,9 @@ void CInfoCharSvr::DeleteProcInfo(int nNo)
 	}
 
 	pInfo = m_apProcInfo[nNo];
-	SAFE_DELETE (pInfo);
-	m_apProcInfo.erase (m_apProcInfo.begin () + nNo);
+	SAFE_DELETE(pInfo);
+	m_apProcInfo.erase(m_apProcInfo.begin() + nNo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::DeleteProcInfo									 */
-/* 内容		:行動情報を削除													 */
-/* 日付		:2008/01/01														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::DeleteProcInfo(DWORD dwProcID)
 {
@@ -722,16 +514,9 @@ void CInfoCharSvr::DeleteProcInfo(DWORD dwProcID)
 		if (pInfo->dwProcID != dwProcID) {
 			continue;
 		}
-		DeleteProcInfo (i);
+		DeleteProcInfo(i);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::DeleteAllProcInfo								 */
-/* 内容		:行動情報を全て削除												 */
-/* 日付		:2008/01/01														 */
-/* ========================================================================= */
 
 void CInfoCharSvr::DeleteAllProcInfo(void)
 {
@@ -739,51 +524,30 @@ void CInfoCharSvr::DeleteAllProcInfo(void)
 
 	nCount = m_apProcInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
-		DeleteProcInfo (i);
+		DeleteProcInfo(i);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::AddProcInfo										 */
-/* 内容		:行動情報を追加													 */
-/* 日付		:2008/01/01														 */
-/* ========================================================================= */
-
 void CInfoCharSvr::AddProcInfo(
-	DWORD dwProcID,			/* [in] 処理ID */
-	DWORD dwStartTime,		/* [in] 開始時間 */
-	DWORD dwPara)			/* [in] パラメータ */
+	DWORD dwProcID,	// [in] 処理ID
+	DWORD dwStartTime,	// [in] 開始時間
+	DWORD dwPara)	// [in] パラメータ
 {
 	PCHARPROCINFO pInfo;
 
 	pInfo = new CHARPROCINFO;
-	pInfo->dwProcID			= dwProcID;			/* 行動ID */
-	pInfo->dwProcSetTime	= timeGetTime ();	/* 処理設定時間 */
-	pInfo->dwProcStartTime	= dwStartTime;		/* 処理開始時間 */
-	pInfo->dwPara			= dwPara;			/* パラメータ */
+	pInfo->dwProcID	= dwProcID;	// 行動ID
+	pInfo->dwProcSetTime	= timeGetTime();	// 処理設定時間
+	pInfo->dwProcStartTime	= dwStartTime;	// 処理開始時間
+	pInfo->dwPara	= dwPara;	// パラメータ
 
-	m_apProcInfo.push_back (pInfo);
+	m_apProcInfo.push_back(pInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::IncPutCount										 */
-/* 内容		:発生NPC数を増加												 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 void CInfoCharSvr::IncPutCount(void)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CInfoCharSvr::DecPutCount										 */
-/* 内容		:発生NPC数を減少												 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 void CInfoCharSvr::DecPutCount(void)
 {
 }
-
-/* Copyright(C)URARA-works 2007 */

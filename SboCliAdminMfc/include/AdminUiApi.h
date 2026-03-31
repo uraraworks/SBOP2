@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-/* Admin UI module ABI (Phase 1) */
+// Admin UI module ABI (Phase 1)
 
 enum
 {
@@ -24,13 +24,13 @@ typedef struct tagSboAdminUiHost
 	BOOL (__stdcall *GetMoveNoBlock)(void* userData);
 	void (__stdcall *SetMoveNoBlock)(void* userData, BOOL bMoveNoBlock);
 	void (__stdcall *SetViewGrid)(void* userData, int nViewGrid);
-	/* WndMap 用 Host API */
+	// WndMap 用 Host API
 	void* (__stdcall *GetMapData)(void* userData);
 	void  (__stdcall *GetWndMapSize)(void* userData, int* pCx, int* pCy);
 	void  (__stdcall *SetWndMapSize)(void* userData, int cx, int cy);
 	DWORD (__stdcall *GetSelectMapPartsID)(void* userData);
 	void  (__stdcall *SetSelectMapPartsID)(void* userData, DWORD dwPartsID);
-	/* TalkEvent 取得（戻り値は CInfoTalkEvent* を void* として渡す） */
+	// TalkEvent 取得（戻り値は CInfoTalkEvent* を void* として渡す）
 	void* (__stdcall *GetInfoTalkEvent)(void* userData);
 } SboAdminUiHost;
 

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:WindowOPTION_TASKBAR.h										 */
-/* 内容			:オプション(発言時にタスクバーチカチカ)ウィンドウクラス 定義ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/21													 */
-/* ========================================================================= */
+﻿/// @file WindowOPTION_TASKBAR.h
+/// @brief オプション(発言時にタスクバーチカチカ)ウィンドウクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/06/21
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -13,27 +11,21 @@
 class CImg32;
 class CMgrData;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
-
 typedef class CWindowOPTION_TASKBAR : public CWindowBase
 {
 public:
-			CWindowOPTION_TASKBAR();						/* コンストラクタ */
-	virtual ~CWindowOPTION_TASKBAR();						/* デストラクタ */
+			CWindowOPTION_TASKBAR();	// コンストラクタ
+	virtual ~CWindowOPTION_TASKBAR();	// デストラクタ
 
-	void	Create		(CMgrData *pMgrData);						/* 作成 */
-	void	Draw		(CImg32 *pDst);								/* 描画 */
+	void	Create(CMgrData *pMgrData);	// 作成
+	void	Draw(CImg32 *pDst);	// 描画
 
 
 private:
-	BOOL	OnUp		(void);								/* キーハンドラ(↑) */
-	BOOL	OnDown		(void);								/* キーハンドラ(↓) */
-	BOOL	OnLeft		(void);								/* キーハンドラ(←) */
-	BOOL	OnRight		(void);								/* キーハンドラ(→) */
-	BOOL	OnX			(BOOL bDown);						/* キーハンドラ(X) */
-	BOOL	OnZ			(BOOL bDown);						/* キーハンドラ(Z) */
+	BOOL	OnUp(void);	// キーハンドラ(↑)
+	BOOL	OnDown(void);	// キーハンドラ(↓)
+	BOOL	OnLeft(void);	// キーハンドラ(←)
+	BOOL	OnRight(void);	// キーハンドラ(→)
+	BOOL	OnX(BOOL bDown);	// キーハンドラ(X)
+	BOOL	OnZ(BOOL bDown);	// キーハンドラ(Z)
 } CWindowOPTION_TASKBAR, *PCWindowOPTION_TASKBAR;
-
-/* Copyright(C)URARA-works 2008 */

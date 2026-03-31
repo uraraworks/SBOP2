@@ -1,55 +1,46 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoSkill.h												 */
-/* 内容			:スキル情報ライブラリクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/04													 */
-/* ========================================================================= */
+﻿/// @file LibInfoSkill.h
+/// @brief スキル情報ライブラリクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/04
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "InfoSkillBase.h"
 #include "LibInfoBase.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
-
 typedef class CLibInfoSkill : public CLibInfoBase
 {
 public:
-			CLibInfoSkill();							/* コンストラクタ */
-	virtual ~CLibInfoSkill();							/* デストラクタ */
+			CLibInfoSkill();	// コンストラクタ
+	virtual ~CLibInfoSkill();	// デストラクタ
 
-	void Create			(void);									/* 作成 */
-	void Destroy		(void);									/* 破棄 */
+	void Create(void);	// 作成
+	void Destroy(void);	// 破棄
 
-	PCInfoBase GetNew	(void);									/* 新規データを取得 */
-	PCInfoBase GetNew	(int nTypeMain, int nTypeSub);			/* 新規データを取得 */
-	PCInfoBase RenewInfo(int nNo);								/* 内容に応じて更新 */
+	PCInfoBase GetNew(void);	// 新規データを取得
+	PCInfoBase GetNew(int nTypeMain, int nTypeSub);	// 新規データを取得
+	PCInfoBase RenewInfo(int nNo);	// 内容に応じて更新
 
-	int		GetCount	(void);									/* データ数を取得 */
-	void	Add			(PCInfoBase pInfo);						/* 追加 */
-	void	Delete		(int nNo);								/* 削除 */
-	void	Delete		(DWORD dwSkillID);						/* 削除 */
-	void	DeleteAll	(void);									/* 全て削除 */
-	void	Merge		(CLibInfoSkill *pSrc);					/* 取り込み */
+	int	GetCount(void);	// データ数を取得
+	void	Add(PCInfoBase pInfo);	// 追加
+	void	Delete(int nNo);	// 削除
+	void	Delete(DWORD dwSkillID);	// 削除
+	void	DeleteAll(void);	// 全て削除
+	void	Merge(CLibInfoSkill *pSrc);	// 取り込み
 
-	CInfoSkillBase	*Renew		(CInfoSkillBase *pSrc);			/* 更新 */
-	PCInfoBase		GetPtr		(int nNo);						/* 情報を取得 */
-	PCInfoBase		GetPtr		(DWORD dwSkillID);				/* 情報を取得 */
+	CInfoSkillBase	*Renew(CInfoSkillBase *pSrc);	// 更新
+	PCInfoBase	GetPtr(int nNo);	// 情報を取得
+	PCInfoBase	GetPtr(DWORD dwSkillID);	// 情報を取得
 
-	DWORD	GetSendDataSize		(void);							/* 送信データサイズを取得 */
-	PBYTE	GetSendData			(void);							/* 送信データを取得 */
-	PBYTE	SetSendData			(PBYTE pSrc);					/* 送信データから取り込み */
-
-
-protected:
-	DWORD	GetNewID	(void);									/* 新しいIDを取得 */
-
+	DWORD	GetSendDataSize(void);	// 送信データサイズを取得
+	PBYTE	GetSendData(void);	// 送信データを取得
+	PBYTE	SetSendData(PBYTE pSrc);	// 送信データから取り込み
 
 protected:
-	PARRAYSKILLBASEINFO	m_paInfo;				/* スキル情報 */
+	DWORD	GetNewID(void);	// 新しいIDを取得
+
+protected:
+	PARRAYSKILLBASEINFO	m_paInfo;	// スキル情報
 } CLibInfoSkill, *PCLibInfoSkill;
 
-/* Copyright(C)URARA-works 2008 */

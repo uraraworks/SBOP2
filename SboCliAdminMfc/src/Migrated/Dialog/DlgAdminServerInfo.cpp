@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminServerInfo.cpp										 */
-/* 内容			:サーバー情報ダイアログクラス 実装ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/07/08													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminServerInfo.cpp
+/// @brief サーバー情報ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/07/08
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "resource.h"
@@ -26,9 +24,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminServerInfo::DoDataExchange(CDataExchange* pDX)
 {
@@ -45,91 +41,47 @@ BEGIN_MESSAGE_MAP(CDlgAdminServerInfo, CDlgAdminBase)
 	ON_BN_CLICKED(IDC_RENEW_CLIENTVERSION, &CDlgAdminServerInfo::OnBnClickedRenewClientversion)
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminServerInfo::CDlgAdminServerInfo						 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/07/08														 */
-/* ========================================================================= */
-
-CDlgAdminServerInfo::CDlgAdminServerInfo(CWnd* pParent /*=NULL*/)
+CDlgAdminServerInfo::CDlgAdminServerInfo(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminServerInfo::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminServerInfo)
 	//}}AFX_DATA_INIT
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminServerInfo::~CDlgAdminServerInfo						 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/07/08														 */
-/* ========================================================================= */
-
 CDlgAdminServerInfo::~CDlgAdminServerInfo()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminServerInfo::Init										 */
-/* 内容		:初期化															 */
-/* 日付		:2007/07/08														 */
-/* ========================================================================= */
-
 void CDlgAdminServerInfo::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminServerInfo::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminServerInfo::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminServerInfo::OnSave									 */
-/* 内容		:ボタンハンドラ(サーバー情報保存)								 */
-/* 日付		:2007/07/08														 */
-/* ========================================================================= */
 
 void CDlgAdminServerInfo::OnSave()
 {
 	CPacketADMIN_SERVER_SAVEINFO Packet;
 
-	Packet.Make ();
-	SendPacket (&Packet);
+	Packet.Make();
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminServerInfo::OnBnClickedPlaysound						 */
-/* 内容		:ボタンハンドラ(放送前のお知らせ音)								 */
-/* 日付		:2008/06/02														 */
-/* ========================================================================= */
 
 void CDlgAdminServerInfo::OnBnClickedPlaysound()
 {
 	CPacketADMIN_REQ_PLAYSOUND Packet;
 
-	Packet.Make (SOUNDID_PINPONPANPON);
-	SendPacket (&Packet);
+	Packet.Make(SOUNDID_PINPONPANPON);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminServerInfo::OnBnClickedRenewClientversion				 */
-/* 内容		:ボタンハンドラ(クライアントバージョン更新)						 */
-/* 日付		:2008/06/07														 */
-/* ========================================================================= */
 
 void CDlgAdminServerInfo::OnBnClickedRenewClientversion()
 {
 	CPacketADMIN_RENEW_CLIENTVERSION Packet;
 
-	Packet.Make (VERTEXT);
-	SendPacket (&Packet);
+	Packet.Make(VERTEXT);
+	SendPacket(&Packet);
 }
-
-/* Copyright(C)URARA-works 2007 */
 

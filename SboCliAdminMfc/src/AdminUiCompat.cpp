@@ -31,7 +31,7 @@
 // --- CLibInfoCharCli ---
 CInfoBase* CLibInfoCharCli::GetPtr(DWORD dwCharID)
 {
-	return CLibInfoCharBase::GetPtr (dwCharID);
+	return CLibInfoCharBase::GetPtr(dwCharID);
 }
 
 // --- CInfoCharCli shim ---
@@ -81,9 +81,9 @@ CMgrDraw::~CMgrDraw() {}
 void CMgrDraw::Create(CMgrData *pMgrData)
 {
 	m_pMgrData = pMgrData;
-	m_pMgrGrpData = (pMgrData != NULL) ? pMgrData->GetMgrGrpData () : NULL;
-	m_pLibInfoMapParts = (pMgrData != NULL) ? pMgrData->GetLibInfoMapParts () : NULL;
-	m_pLibInfoMapShadow = (pMgrData != NULL) ? pMgrData->GetLibInfoMapShadow () : NULL;
+	m_pMgrGrpData = (pMgrData != NULL) ? pMgrData->GetMgrGrpData() : NULL;
+	m_pLibInfoMapParts = (pMgrData != NULL) ? pMgrData->GetLibInfoMapParts() : NULL;
+	m_pLibInfoMapShadow = (pMgrData != NULL) ? pMgrData->GetLibInfoMapShadow() : NULL;
 }
 
 void CMgrDraw::DrawMapParts(CImg32 *pDst, int x, int y, DWORD dwPartsID,
@@ -94,8 +94,8 @@ void CMgrDraw::DrawMapParts(CImg32 *pDst, int x, int y, DWORD dwPartsID,
 	if (m_pLibInfoMapParts == NULL) {
 		return;
 	}
-	pInfoMapParts = (CInfoMapParts *)m_pLibInfoMapParts->GetPtr (dwPartsID);
-	DrawMapParts (pDst, x, y, pInfoMapParts, nMode, bSingleSize, bUseColorKey, TRUE, byLevel);
+	pInfoMapParts = (CInfoMapParts *)m_pLibInfoMapParts->GetPtr(dwPartsID);
+	DrawMapParts(pDst, x, y, pInfoMapParts, nMode, bSingleSize, bUseColorKey, TRUE, byLevel);
 }
 
 void CMgrDraw::DrawMapParts(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapParts,
@@ -116,18 +116,18 @@ void CMgrDraw::DrawMapParts(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapP
 
 	nSize = 16;
 	nSizeDst = bSingleSize ? 16 : 32;
-	ImgTmp.Create (nSizeDst, nSizeDst * 2);
-	ImgTmp.SetColorKey (RGB (255, 0, 255));
+	ImgTmp.Create(nSizeDst, nSizeDst * 2);
+	ImgTmp.SetColorKey(RGB(255, 0, 255));
 
 	if (pInfoMapParts == NULL) {
-		pDst->FillRect (x, y, nSizeDst, nSizeDst, RGB (0, 0, 0));
+		pDst->FillRect(x, y, nSizeDst, nSizeDst, RGB(0, 0, 0));
 		return;
 	}
 
 	wGrpIDBase = pInfoMapParts->m_wGrpIDBase;
 	wGrpIDPile = pInfoMapParts->m_wGrpIDPile;
-	if (pInfoMapParts->GetAnimeCount () > 0) {
-		pAnime = pInfoMapParts->m_paAnimeInfo->at (pInfoMapParts->m_byAnimeNo);
+	if (pInfoMapParts->GetAnimeCount() > 0) {
+		pAnime = pInfoMapParts->m_paAnimeInfo->at(pInfoMapParts->m_byAnimeNo);
 		wGrpIDBase = pAnime->m_wGrpIDBase;
 		wGrpIDPile = pAnime->m_wGrpIDPile;
 	}
@@ -148,33 +148,33 @@ void CMgrDraw::DrawMapParts(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapP
 	}
 
 	if (nMode != 1) {
-		pImg = m_pMgrGrpData->GetDibMapParts (wGrpIDBase / 1024);
+		pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDBase / 1024);
 		if (pImg != NULL) {
-			ImgTmp.BltFrom256 (0, 0, nSize, nSize, pImg,
+			ImgTmp.BltFrom256(0, 0, nSize, nSize, pImg,
 				((wGrpIDBase % 1024) % 32) * nSize,
 				((wGrpIDBase % 1024) / 32) * nSize);
 		}
 	} else {
-		ImgTmp.FillRect (0, 0, nSize, nSize, RGB (255, 0, 255));
+		ImgTmp.FillRect(0, 0, nSize, nSize, RGB(255, 0, 255));
 	}
 	if (wGrpIDPile > 0) {
-		pImg = m_pMgrGrpData->GetDibMapParts (wGrpIDPile / 1024);
+		pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDPile / 1024);
 		if (pImg != NULL) {
-			ImgTmp.BltFrom256 (0, 0, nSize + 1, nSize, pImg,
+			ImgTmp.BltFrom256(0, 0, nSize + 1, nSize, pImg,
 				((wGrpIDPile % 1024) % 32) * nSize,
 				((wGrpIDPile % 1024) / 32) * nSize,
 				TRUE);
 		}
 	}
 
-	hDCBmp = ImgTmp.Lock ();
-	StretchBlt (hDCBmp, 0, nSizeDst, nSizeDst, nSizeDst, hDCBmp, 0, 0, nSize, nSize, SRCCOPY);
-	ImgTmp.Unlock ();
+	hDCBmp = ImgTmp.Lock();
+	StretchBlt(hDCBmp, 0, nSizeDst, nSizeDst, nSizeDst, hDCBmp, 0, 0, nSize, nSize, SRCCOPY);
+	ImgTmp.Unlock();
 
 	if (byLevel == 0) {
-		pDst->Blt (x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, bUseColorKey);
+		pDst->Blt(x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, bUseColorKey);
 	} else {
-		pDst->BltAlpha (x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, byLevel, bUseColorKey);
+		pDst->BltAlpha(x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, byLevel, bUseColorKey);
 	}
 }
 
@@ -197,39 +197,39 @@ void CMgrDraw::DrawMapShadow(CImg32 *pDst, int x, int y, DWORD dwShadowID,
 
 	nSize = 16;
 	nSizeDst = bSingleSize ? 16 : 32;
-	ImgTmp.Create (nSizeDst, nSizeDst * 2);
-	ImgTmp.SetColorKey (RGB (255, 0, 255));
+	ImgTmp.Create(nSizeDst, nSizeDst * 2);
+	ImgTmp.SetColorKey(RGB(255, 0, 255));
 
-	pInfoMapShadow = (CInfoMapShadow *)m_pLibInfoMapShadow->GetPtr (dwShadowID);
+	pInfoMapShadow = (CInfoMapShadow *)m_pLibInfoMapShadow->GetPtr(dwShadowID);
 	if (pInfoMapShadow == NULL) {
-		pDst->FillRect (x, y, nSizeDst, nSizeDst, RGB (0, 0, 0));
+		pDst->FillRect(x, y, nSizeDst, nSizeDst, RGB(0, 0, 0));
 		return;
 	}
 
 	wGrpIDBase = pInfoMapShadow->m_wGrpID;
-	if (pInfoMapShadow->GetAnimeCount () > 0) {
-		pAnime = pInfoMapShadow->m_paAnimeInfo->at (pInfoMapShadow->m_byAnimeNo);
+	if (pInfoMapShadow->GetAnimeCount() > 0) {
+		pAnime = pInfoMapShadow->m_paAnimeInfo->at(pInfoMapShadow->m_byAnimeNo);
 		wGrpIDBase = pAnime->m_wGrpIDBase;
 	}
 
 	pImg = bSingleSize
-		? m_pMgrGrpData->GetDibMapShadowTmp (wGrpIDBase / 1024)
-		: m_pMgrGrpData->GetDibMapShadow (wGrpIDBase / 1024);
+		? m_pMgrGrpData->GetDibMapShadowTmp(wGrpIDBase / 1024)
+		: m_pMgrGrpData->GetDibMapShadow(wGrpIDBase / 1024);
 	if (pImg == NULL) {
 		return;
 	}
-	ImgTmp.BltFrom256 (0, 0, nSize, nSize, pImg,
+	ImgTmp.BltFrom256(0, 0, nSize, nSize, pImg,
 		((wGrpIDBase % 1024) % 32) * nSize,
 		((wGrpIDBase % 1024) / 32) * nSize);
 
-	hDCBmp = ImgTmp.Lock ();
-	StretchBlt (hDCBmp, 0, nSizeDst, nSizeDst, nSizeDst, hDCBmp, 0, 0, nSize, nSize, SRCCOPY);
-	ImgTmp.Unlock ();
+	hDCBmp = ImgTmp.Lock();
+	StretchBlt(hDCBmp, 0, nSizeDst, nSizeDst, nSizeDst, hDCBmp, 0, 0, nSize, nSize, SRCCOPY);
+	ImgTmp.Unlock();
 
 	if (bSingleSize) {
-		pDst->Blt (x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, bUseColorKey);
+		pDst->Blt(x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, bUseColorKey);
 	} else {
-		pDst->BltAlpha (x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, 75, TRUE);
+		pDst->BltAlpha(x, y, nSizeDst, nSizeDst, &ImgTmp, 0, nSizeDst, 75, TRUE);
 	}
 }
 
@@ -245,19 +245,19 @@ void CMgrDraw::DrawIcon(CImg32 *pDst, int x, int y, int nIndex)
 	}
 
 	cx = cy = 16;
-	ImgTmp.Create (cx * 2, cy * 4);
-	ImgTmp.SetColorKey (RGB (255, 0, 255));
-	pImg = m_pMgrGrpData->GetDibIcon ();
+	ImgTmp.Create(cx * 2, cy * 4);
+	ImgTmp.SetColorKey(RGB(255, 0, 255));
+	pImg = m_pMgrGrpData->GetDibIcon();
 	if (pImg == NULL) {
 		return;
 	}
-	ImgTmp.BltFrom256 (0, 0, 16, 16, pImg, nIndex % 20 * cx, nIndex / 20 * cy);
+	ImgTmp.BltFrom256(0, 0, 16, 16, pImg, nIndex % 20 * cx, nIndex / 20 * cy);
 
-	hDCBmp = ImgTmp.Lock ();
-	StretchBlt (hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-	ImgTmp.Unlock ();
+	hDCBmp = ImgTmp.Lock();
+	StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
+	ImgTmp.Unlock();
 
-	pDst->Blt (x, y, cx * 2, cy * 2, &ImgTmp, 0, cy * 2, TRUE);
+	pDst->Blt(x, y, cx * 2, cy * 2, &ImgTmp, 0, cy * 2, TRUE);
 }
 
 // --- CMgrData shim ---
@@ -269,7 +269,7 @@ DWORD CMgrData::GetMapID(void)
 {
 	CInfoCharCli *pPlayerChar;
 
-	pPlayerChar = GetPlayerChar ();
+	pPlayerChar = GetPlayerChar();
 	return pPlayerChar ? pPlayerChar->m_dwMapID : 0;
 }
 
@@ -284,7 +284,7 @@ LPCSTR CMgrData::GetMotionProcName(DWORD dwProcID)
 	switch (dwProcID) {
 	case CHARMOTIONPROCID_ATACK:	return "攻撃";
 	case CHARMOTIONPROCID_FISHING:	return "釣り";
-	default:						return "何もしない";
+	default:	return "何もしない";
 	}
 }
 void   CMgrData::Destroy(void)                      {}
@@ -295,23 +295,23 @@ LPCSTR CMgrData::GetFamilyTypeName(WORD wFamilyTypeID)
 	case FAMILYTYPE_ELF:	return "エルフ";
 	case FAMILYTYPE_BST:	return "ジュウジン";
 	case FAMILYTYPE_DAEMON:	return "マゾク";
-	default:				return "";
+	default:	return "";
 	}
 }
 
 LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 {
 	switch (nMapEventType) {
-	case MAPEVENTTYPE_MOVE:			return "マップ内移動";
-	case MAPEVENTTYPE_MAPMOVE:		return "マップ間移動";
-	case MAPEVENTTYPE_TRASHBOX:		return "ゴミ箱";
+	case MAPEVENTTYPE_MOVE:	return "マップ内移動";
+	case MAPEVENTTYPE_MAPMOVE:	return "マップ間移動";
+	case MAPEVENTTYPE_TRASHBOX:	return "ゴミ箱";
 	case MAPEVENTTYPE_INITSTATUS:	return "ステータス初期化";
-	case MAPEVENTTYPE_GRPIDTMP:		return "一時画像設定";
-	case MAPEVENTTYPE_LIGHT:		return "灯り";
-	default:						return "未設定";
+	case MAPEVENTTYPE_GRPIDTMP:	return "一時画像設定";
+	case MAPEVENTTYPE_LIGHT:	return "灯り";
+	default:	return "未設定";
 	}
 }
-/* GetInfoTalkEvent シムは削除。DlgAdminCharModify は Host API 経由で取得する */
+// GetInfoTalkEvent シムは削除。DlgAdminCharModify は Host API 経由で取得する
 
 // --- CMgrSound shim ---
 // DlgAdminItemNew etc. call PlaySound for preview. Return silently.

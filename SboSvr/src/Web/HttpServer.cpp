@@ -78,7 +78,7 @@ ContentLengthParseResult TryParseContentLength(const std::string &request, size_
         if (nLineStart == std::string::npos) {
                 return ContentLengthNotPresent;
         }
-        nLineStart += 2; /* skip request line */
+        nLineStart += 2;	// skip request line
 
         while (nLineStart < nHeaderEnd) {
                 size_t nLineEnd = request.find("\r\n", nLineStart);
@@ -296,7 +296,7 @@ void CHttpServer::ProcessLoop()
 
                 timeval tv;
                 tv.tv_sec = 0;
-                tv.tv_usec = 500000; /* 500ms */
+                tv.tv_usec = 500000;	// 500ms
 
                 int nReady = select(0, &readSet, NULL, NULL, &tv);
                 if (nReady == SOCKET_ERROR) {

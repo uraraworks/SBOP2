@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminTalkEventSet.h										 */
-/* 内容			:会話イベント設定ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/23													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminTalkEventSet.h
+/// @brief 会話イベント設定ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/23
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -14,30 +12,25 @@
 class CInfoTalkEvent;
 class CDlgAdminTalkEventTab;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminTalkEventSet : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkEventSet(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminTalkEventSet();							/* デストラクタ */
+			CDlgAdminTalkEventSet(CWnd* pParent = NULL);	// コンストラクタ
+	virtual ~CDlgAdminTalkEventSet();	// デストラクタ
 
-	void	Init		(CMgrData *pMgrData, CInfoTalkEvent *pInfo = NULL);	/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	Get			(CInfoTalkEvent *&pDst);						/* 取得 */
-
-
-protected:
-	void	Renew	(void);			/* 更新 */
-	void	AddPage	(void);			/* ページの追加 */
-
+	void	Init	(CMgrData *pMgrData, CInfoTalkEvent *pInfo = NULL);	// 初期化
+	void	OnAdminMsg	(int nType, DWORD dwPara);	// メッセージハンドラ(WM_ADMINMSG)
+	void	Get	(CInfoTalkEvent *&pDst);	// 取得
 
 protected:
-	CInfoTalkEvent			*m_pInfo;		/* 編集中の会話イベント */
-	CDlgAdminTalkEventTab	*m_pDlgTab;		/* タブダイアログ */
+	void	Renew	(void);	// 更新
+	void	AddPage	(void);	// ページの追加
 
+protected:
+	CInfoTalkEvent	*m_pInfo;	// 編集中の会話イベント
+	CDlgAdminTalkEventTab	*m_pDlgTab;	// タブダイアログ
 
 public:
 	//{{AFX_DATA(CDlgAdminTalkEventSet)
@@ -47,7 +40,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminTalkEventSet)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -64,4 +57,3 @@ public:
 
 //{{AFX_INSERT_LOCATION}}
 
-/* Copyright(C)URARA-works 2008 */

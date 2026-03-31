@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:SboSoundData.cpp											 */
-/* 内容			:音関連DLL 実装ファイル										 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/05/03													 */
-/* ========================================================================= */
+﻿/// @file SboSoundData.cpp
+/// @brief 音関連DLL 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/05/03
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include <stdlib.h>
@@ -12,21 +10,17 @@
 #define SOUNDDATA_EXPORTS
 #include "SboSoundData.h"
 
-/* ========================================================================= */
-/* 構造体の定義																 */
-/* ========================================================================= */
+// 構造体の定義
 
-/* 効果音情報 */
+// 効果音情報
 typedef struct _SOUNDDATAINFO {
-	DWORD	dwSoundID;			/* 効果音ID */
-	int		nResourceID;		/* リソースID */
-	LPCSTR	pszSoundName;		/* 効果音名 */
+	DWORD	dwSoundID;			// 効果音ID
+	int		nResourceID;		// リソースID
+	LPCSTR	pszSoundName;		// 効果音名
 } SOUNDDATAINFO, *PSOUNDDATAINFO;
 
 
-/* ========================================================================= */
-/* 定数の定義																 */
-/* ========================================================================= */
+// 定数の定義
 
 static SOUNDDATAINFO g_aSoundDataTbl[] = {
 	SOUNDID_OK_PI73,			IDR_WAVE_PI73,			"決定音(pi73.wav)",
@@ -99,56 +93,34 @@ static SOUNDDATAINFO g_aSoundDataTbl[] = {
 };
 
 
-/* ========================================================================= */
-/* グローバル変数の定義														 */
-/* ========================================================================= */
+// グローバル変数の定義
 
-static int	g_nSoundDataCount;							/* 効果音数 */
+static int	g_nSoundDataCount;							// 効果音数
 
 
-/* ========================================================================= */
-/* 関数の定義																 */
-/* ========================================================================= */
+// 関数の定義
 
-SOUNDDATA_API	int		GetSoundCount		(void);					/* 効果音数を取得 */
-SOUNDDATA_API	int		GetSoundResourceID	(int nNo);				/* 効果音のリソースIDを取得 */
-SOUNDDATA_API	int		GetSoundNo			(DWORD dwSoundID);		/* 効果音のインデックスを取得 */
-SOUNDDATA_API	LPCSTR	GetSoundName		(DWORD dwSoundID);		/* 効果音名を取得 */
-static			void	Init				(void);					/* 初期化 */
-static			PSOUNDDATAINFO	GetSoundDataPtr	(DWORD dwSoundID);	/* 効果音情報を取得 */
+SOUNDDATA_API int			GetSoundCount(void);						// 効果音数を取得
+SOUNDDATA_API int			GetSoundResourceID(int nNo);				// 効果音のリソースIDを取得
+SOUNDDATA_API int			GetSoundNo(DWORD dwSoundID);				// 効果音のインデックスを取得
+SOUNDDATA_API LPCSTR		GetSoundName(DWORD dwSoundID);				// 効果音名を取得
+static void					Init(void);									// 初期化
+static PSOUNDDATAINFO		GetSoundDataPtr(DWORD dwSoundID);			// 効果音情報を取得
 
-
-/* ========================================================================= */
-/* 関数名	:DllMain														 */
-/* 内容		:DLLメイン処理													 */
-/* 日付		:2007/05/03														 */
-/* ========================================================================= */
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
-	Init ();
+	Init();
 
-    return TRUE;
+	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:GetSoundCount													 */
-/* 内容		:効果音数を取得													 */
-/* 日付		:2007/05/03														 */
-/* ========================================================================= */
 
 SOUNDDATA_API int GetSoundCount(void)
 {
 	return g_nSoundDataCount;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:GetSoundResourceID												 */
-/* 内容		:効果音のリソースIDを取得										 */
-/* 日付		:2007/05/03														 */
-/* ========================================================================= */
 
 SOUNDDATA_API int GetSoundResourceID(int nNo)
 {
@@ -168,12 +140,6 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:GetSoundID														 */
-/* 内容		:効果音IDを取得を取得											 */
-/* 日付		:2007/09/19														 */
-/* ========================================================================= */
-
 SOUNDDATA_API DWORD GetSoundID(int nNo)
 {
 	DWORD dwRet;
@@ -192,12 +158,6 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:GetSoundNo														 */
-/* 内容		:効果音のインデックスを取得										 */
-/* 日付		:2007/05/03														 */
-/* ========================================================================= */
-
 SOUNDDATA_API int GetSoundNo(DWORD dwSoundID)
 {
 	int i, nRet;
@@ -206,10 +166,10 @@ SOUNDDATA_API int GetSoundNo(DWORD dwSoundID)
 	nRet = -1;
 
 	if (dwSoundID == SOUNDID_CLAP0203) {
-		dwSoundID = ((rand () % 100) > 50) ? SOUNDID_CLAP02 : SOUNDID_CLAP03;
+		dwSoundID = ((rand() % 100) > 50) ? SOUNDID_CLAP02 : SOUNDID_CLAP03;
 	}
 
-	for (i = 0; i < g_nSoundDataCount; i ++) {
+	for (i = 0; i < g_nSoundDataCount; i++) {
 		pSoundData = &g_aSoundDataTbl[i];
 		if (pSoundData->dwSoundID != dwSoundID) {
 			continue;
@@ -222,12 +182,6 @@ SOUNDDATA_API int GetSoundNo(DWORD dwSoundID)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:GetSoundName													 */
-/* 内容		:効果音名を取得													 */
-/* 日付		:2007/05/03														 */
-/* ========================================================================= */
-
 SOUNDDATA_API LPCSTR GetSoundName(DWORD dwSoundID)
 {
 	LPCSTR pszRet;
@@ -235,7 +189,7 @@ SOUNDDATA_API LPCSTR GetSoundName(DWORD dwSoundID)
 
 	pszRet = "";
 
-	pSoundData = GetSoundDataPtr (dwSoundID);
+	pSoundData = GetSoundDataPtr(dwSoundID);
 	if (pSoundData == NULL) {
 		goto Exit;
 	}
@@ -246,34 +200,22 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:Init															 */
-/* 内容		:初期化															 */
-/* 日付		:2007/05/03														 */
-/* ========================================================================= */
-
 void Init(void)
 {
 	int i;
 	PSOUNDDATAINFO pSoundData;
 
-	/* 効果音数を求める */
+	// 効果音数を求める
 	g_nSoundDataCount = 0;
-	for (i = 0; ; i ++) {
+	for (i = 0; ; i++) {
 		pSoundData = &g_aSoundDataTbl[i];
 		if (pSoundData->dwSoundID == 0) {
 			break;
 		}
-		g_nSoundDataCount ++;
+		g_nSoundDataCount++;
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:GetSoundDataPtr												 */
-/* 内容		:効果音情報を取得												 */
-/* 日付		:2007/05/03														 */
-/* ========================================================================= */
 
 PSOUNDDATAINFO GetSoundDataPtr(DWORD dwSoundID)
 {
@@ -282,8 +224,8 @@ PSOUNDDATAINFO GetSoundDataPtr(DWORD dwSoundID)
 
 	pRet = NULL;
 
-	/* 効果音数を求める */
-	for (i = 0; i < g_nSoundDataCount; i ++) {
+	// 効果音数を求める
+	for (i = 0; i < g_nSoundDataCount; i++) {
 		pSoundData = &g_aSoundDataTbl[i];
 		if (pSoundData->dwSoundID != dwSoundID) {
 			continue;
@@ -294,5 +236,3 @@ PSOUNDDATAINFO GetSoundDataPtr(DWORD dwSoundID)
 
 	return pRet;
 }
-
-/* Copyright(C)URARA-works 2007 */

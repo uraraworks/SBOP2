@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEventLIGHT.cpp									 */
-/* 内容			:マップイベント(灯り)ダイアログクラス 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEventLIGHT.cpp
+/// @brief マップイベント(灯り)ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,9 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminMapEventLIGHT::DoDataExchange(CDataExchange* pDX)
 {
@@ -36,12 +32,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapEventLIGHT, CDlgAdminMapEventNONE)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventLIGHT::CDlgAdminMapEventLIGHT					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
-
 CDlgAdminMapEventLIGHT::CDlgAdminMapEventLIGHT(CWnd* pParent /*=NULL*/)
 	: CDlgAdminMapEventNONE(pParent)
 {
@@ -53,22 +43,10 @@ CDlgAdminMapEventLIGHT::CDlgAdminMapEventLIGHT(CWnd* pParent /*=NULL*/)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventLIGHT::~CDlgAdminMapEventLIGHT				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
-
 CDlgAdminMapEventLIGHT::~CDlgAdminMapEventLIGHT()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventLIGHT::Set									 */
-/* 内容		:設定															 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminMapEventLIGHT::Set(CInfoMapEventBase *pSrc)
 {
@@ -78,17 +56,11 @@ void CDlgAdminMapEventLIGHT::Set(CInfoMapEventBase *pSrc)
 	m_dwTime = pSrcTmp->m_dwTime;
 
 	nSelect = (pSrcTmp->m_bLightOn) ? IDC_RADIO_ON : IDC_RADIO_OFF;
-	CheckRadioButton (IDC_RADIO_OFF, IDC_RADIO_ON, nSelect);
+	CheckRadioButton(IDC_RADIO_OFF, IDC_RADIO_ON, nSelect);
 
-	UpdateData (FALSE);
+	UpdateData(FALSE);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventLIGHT::Get									 */
-/* 内容		:取得															 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminMapEventLIGHT::Get(CInfoMapEventBase *pDst)
 {
@@ -96,27 +68,19 @@ void CDlgAdminMapEventLIGHT::Get(CInfoMapEventBase *pDst)
 
 	PCInfoMapEventLIGHT pDstTmp = (PCInfoMapEventLIGHT)pDst;
 
-	UpdateData ();
+	UpdateData();
 
-	nSelect = GetCheckedRadioButton (IDC_RADIO_OFF, IDC_RADIO_ON);
+	nSelect = GetCheckedRadioButton(IDC_RADIO_OFF, IDC_RADIO_ON);
 	pDstTmp->m_bLightOn	= (nSelect == IDC_RADIO_ON) ? TRUE : FALSE;
 	pDstTmp->m_dwTime	= m_dwTime;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventLIGHT::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
-
 BOOL CDlgAdminMapEventLIGHT::OnInitDialog()
 {
 	CDlgAdminMapEventNONE::OnInitDialog();
 
-	CheckRadioButton (IDC_RADIO_OFF, IDC_RADIO_ON, IDC_RADIO_OFF);
+	CheckRadioButton(IDC_RADIO_OFF, IDC_RADIO_ON, IDC_RADIO_OFF);
 
 	return TRUE;
 }
-
-/* Copyright(C)URARA-works 2008 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharSkillBase.h									 */
-/* 内容			:スキル編集ダイアログクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharSkillBase.h
+/// @brief スキル編集ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -15,33 +13,31 @@ class CInfoSkillBase;
 class CDlgAdminCharSkillNONE;
 class CWndSelectGrp;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharSkillBase : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharSkillBase(CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual ~CDlgAdminCharSkillBase();						/* デストラクタ */
+			CDlgAdminCharSkillBase(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharSkillBase(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);						/* 初期化 */
-	void	Get			(CInfoSkillBase *&pDst);					/* 編集内容を取得 */
-	void	SetModify	(CInfoSkillBase *pSrc);						/* 編集モードとして設定 */
-
-
-protected:
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Get(CInfoSkillBase *&pDst); // 編集内容を取得
+	void	SetModify(CInfoSkillBase *pSrc); // 編集モードとして設定
 
 
 protected:
-	BOOL		m_bInit;						/* 初期化中 */
-	int			m_nTypeMain,					/* スキル種別(メイン) */
-				m_nTypeSub,						/* スキル種別(サブ) */
-				m_nUse;							/* 使用制限 */
-	BOOL		m_bModeModify;					/* 編集モード判定 */
-	CDlgAdminCharSkillNONE	*m_pDlgType;		/* 編集中のイベント種別ダイアログ */
-	CInfoSkillBase			*m_pInfo;			/* 編集中のスキル情報 */
-	CWndSelectGrp			*m_pWndSelectGrp;	/* 画像選択ウィンドウ */
+
+
+protected:
+	BOOL	m_bInit; // 初期化中
+	int	m_nTypeMain, // スキル種別(メイン)
+				m_nTypeSub, // スキル種別(サブ)
+				m_nUse; // 使用制限
+	BOOL	m_bModeModify; // 編集モード判定
+	CDlgAdminCharSkillNONE	*m_pDlgType; // 編集中のイベント種別ダイアログ
+	CInfoSkillBase	*m_pInfo; // 編集中のスキル情報
+	CWndSelectGrp	*m_pWndSelectGrp; // 画像選択ウィンドウ
 
 
 
@@ -60,7 +56,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminCharSkillBase)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -77,5 +73,3 @@ protected:
 } CDlgAdminCharSkillBase, *PCDlgAdminCharSkillBase;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

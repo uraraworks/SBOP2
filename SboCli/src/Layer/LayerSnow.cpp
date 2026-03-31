@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:LayerSnow.cpp												 */
-/* 内容			:レイヤー描画クラス(雪) 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/14													 */
-/* ========================================================================= */
+﻿/// @file LayerSnow.cpp
+/// @brief レイヤー描画クラス(雪) 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/14
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "MgrLayer.h"
@@ -16,62 +14,38 @@
 #include "LayerSnow.h"
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerSnow::CLayerSnow											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/14														 */
-/* ========================================================================= */
-
 CLayerSnow::CLayerSnow()
 {
 	m_nID = WEATHERTYPE_SNOW;
 
-	m_dwLastProc	= 0;
-	m_pLayerMap		= NULL;
-	m_pImgTmp		= new CImg32;
+	m_dwLastProc = 0;
+	m_pLayerMap = NULL;
+	m_pImgTmp = new CImg32;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSnow::~CLayerSnow										 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/14														 */
-/* ========================================================================= */
 
 CLayerSnow::~CLayerSnow()
 {
-	DeleteSnowInfoAll ();
-	SAFE_DELETE (m_pImgTmp);
+	DeleteSnowInfoAll();
+	SAFE_DELETE(m_pImgTmp);
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerSnow::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2008/12/14														 */
-/* ========================================================================= */
-
 void CLayerSnow::Create(
-	CMgrData	*pMgrData)		/* [in] データ管理 */
+	CMgrData *pMgrData) // [in] データ管理
 {
 	PCMgrLayer pMgrLayer;
 
-	CLayerBase::Create (pMgrData);
+	CLayerBase::Create(pMgrData);
 
-	pMgrLayer	= pMgrData->GetMgrLayer ();
-	m_pLayerMap = (PCLayerMap)pMgrLayer->Get (LAYERTYPE_MAP);
+	pMgrLayer = pMgrData->GetMgrLayer();
+	m_pLayerMap = (PCLayerMap)pMgrLayer->Get(LAYERTYPE_MAP);
 
-	m_pImgTmp->CreateWithoutGdi (100, 100);
+	m_pImgTmp->CreateWithoutGdi(100, 100);
 
-	RenewSnowInfo (200);
+	RenewSnowInfo(200);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSnow::Draw												 */
-/* 内容		:描画															 */
-/* 日付		:2008/12/14														 */
-/* ========================================================================= */
 
 void CLayerSnow::Draw(PCImg32 pDst)
 {
@@ -80,23 +54,23 @@ void CLayerSnow::Draw(PCImg32 pDst)
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aPosX[] = {0, 0, 1, -1, -1, -1, 1, 1}, aPosY[] = {1, -1, 0, 0, 1, -1, -1, 1};
 
-	nMoveX	= 0;
-	nMoveY	= 0;
-	nPosX	= 0;
-	nPosY	= 0;
+	nMoveX = 0;
+	nMoveY = 0;
+	nPosX = 0;
+	nPosY = 0;
 
 	if (m_pLayerMap) {
-		nMoveX	= m_pLayerMap->m_nMoveX;
-		nMoveY	= m_pLayerMap->m_nMoveY;
-		nPosX	= m_pLayerMap->m_nViewX;
-		nPosY	= m_pLayerMap->m_nViewY;
+		nMoveX = m_pLayerMap->m_nMoveX;
+		nMoveY = m_pLayerMap->m_nMoveY;
+		nPosX = m_pLayerMap->m_nViewX;
+		nPosY = m_pLayerMap->m_nViewY;
 
 		if (nMoveX || nMoveY) {
-			/* 移動中の座標を補正 */
-			nMoveX	*= aMoveX[m_pLayerMap->m_byDirection];
-			nMoveY	*= aMoveY[m_pLayerMap->m_byDirection];
-			nPosX	+= aPosX[m_pLayerMap->m_byDirection];
-			nPosY	+= aPosY[m_pLayerMap->m_byDirection];
+			// 移動中の座標を補正
+			nMoveX *= aMoveX[m_pLayerMap->m_byDirection];
+			nMoveY *= aMoveY[m_pLayerMap->m_byDirection];
+			nPosX += aPosX[m_pLayerMap->m_byDirection];
+			nPosY += aPosY[m_pLayerMap->m_byDirection];
 		}
 	}
 	x = nPosX % (DRAW_PARTS_X * 2);
@@ -108,18 +82,12 @@ void CLayerSnow::Draw(PCImg32 pDst)
 
 		xx = (pInfo->x + (SCRSIZEX - x * 16)) % SCRSIZEX;
 		yy = (pInfo->y + (SCRSIZEY - y * 16)) % SCRSIZEY;
-		m_pImgTmp->FillRect (0, 0, pInfo->nSize * 2, pInfo->nSize * 2, RGB (0, 0, 0));
-		m_pImgTmp->Circle (0, 0, pInfo->nSize, RGB (255, 255, 255));
-		pDst->BltAlpha (32 + xx + nMoveX, 32 + yy + nMoveY, pInfo->nSize * 2, pInfo->nSize * 2, m_pImgTmp, 0, 0, pInfo->nLevel, TRUE);
+		m_pImgTmp->FillRect(0, 0, pInfo->nSize * 2, pInfo->nSize * 2, RGB(0, 0, 0));
+		m_pImgTmp->Circle(0, 0, pInfo->nSize, RGB(255, 255, 255));
+		pDst->BltAlpha(32 + xx + nMoveX, 32 + yy + nMoveY, pInfo->nSize * 2, pInfo->nSize * 2, m_pImgTmp, 0, 0, pInfo->nLevel, TRUE);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerSnow::TimerProc											 */
-/* 内容		:時間処理														 */
-/* 日付		:2008/12/14														 */
-/* ========================================================================= */
 
 BOOL CLayerSnow::TimerProc(void)
 {
@@ -128,8 +96,8 @@ BOOL CLayerSnow::TimerProc(void)
 	DWORD dwTime;
 	PSTLAYERSNOW_SNOWINFO pInfo;
 
-	bRet	= FALSE;
-	dwTime	= timeGetTime ();
+	bRet = FALSE;
+	dwTime = timeGetTime();
 
 	if (dwTime - m_dwLastProc < 25) {
 		goto Exit;
@@ -165,8 +133,8 @@ BOOL CLayerSnow::TimerProc(void)
 				break;
 			}
 			pInfo->nLevel = (dwTime - pInfo->dwLastProc) / 10;
-			pInfo->nLevel = min (pInfo->nLevel, 100);
-			pInfo->nLevel = max (pInfo->nLevel, 1);
+			pInfo->nLevel = min(pInfo->nLevel, 100);
+			pInfo->nLevel = max(pInfo->nLevel, 1);
 			break;
 		}
 		bRet = TRUE;
@@ -178,43 +146,33 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerSnow::RenewSnowInfo										 */
-/* 内容		:雪情報を更新													 */
-/* 日付		:2008/12/14														 */
-/* ========================================================================= */
 void CLayerSnow::RenewSnowInfo(int nCount)
 {
 	int i, nTmp;
 	PSTLAYERSNOW_SNOWINFO pInfo;
 
-	DeleteSnowInfoAll ();
+	DeleteSnowInfoAll();
 
 	for (i = 0; i < nCount; i ++) {
 		pInfo = new STLAYERSNOW_SNOWINFO;
 
-		nTmp = (genrand () % 3);
-		pInfo->nState		= 0;
-		pInfo->nLevel		= 100;
-		pInfo->nSize		= 3 - nTmp;
-		pInfo->nStartY		= genrand () % SCRSIZEY;
-		pInfo->nEndY		= pInfo->nStartY + (SCRSIZEY - (genrand () % (SCRSIZEY / 3 * (nTmp + 1)))) + 32;
-		pInfo->x			= (genrand () % SCRSIZEX) + 32;
-		pInfo->y			= pInfo->nStartY;
-		pInfo->dwStartWait	= genrand () % 3000;
-		pInfo->dwWait		= 50 + nTmp * 50;
-		pInfo->dwLastProc	= timeGetTime ();
+		nTmp = (genrand() % 3);
+		pInfo->nState = 0;
+		pInfo->nLevel = 100;
+		pInfo->nSize = 3 - nTmp;
+		pInfo->nStartY = genrand() % SCRSIZEY;
+		pInfo->nEndY = pInfo->nStartY + (SCRSIZEY - (genrand() % (SCRSIZEY / 3 * (nTmp + 1)))) + 32;
+		pInfo->x = (genrand() % SCRSIZEX) + 32;
+		pInfo->y = pInfo->nStartY;
+		pInfo->dwStartWait = genrand() % 3000;
+		pInfo->dwWait = 50 + nTmp * 50;
+		pInfo->dwLastProc = timeGetTime();
 
-		m_aSnowInfo.push_back (pInfo);
+		m_aSnowInfo.push_back(pInfo);
 	}
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerSnow::DeleteSnowInfoAll									 */
-/* 内容		:雪情報を全て削除												 */
-/* 日付		:2008/12/14														 */
-/* ========================================================================= */
 void CLayerSnow::DeleteSnowInfoAll(void)
 {
 	int i, nCount;
@@ -223,9 +181,7 @@ void CLayerSnow::DeleteSnowInfoAll(void)
 	nCount = m_aSnowInfo.size();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_aSnowInfo[i];
-		SAFE_DELETE (pInfo);
+		SAFE_DELETE(pInfo);
 	}
 	m_aSnowInfo.clear();
 }
-
-/* Copyright(C)URARA-works 2008 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemNew.h											 */
-/* 内容			:アイテム新規追加ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/08/15													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemNew.h
+/// @brief アイテム新規追加ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/08/15
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -15,34 +13,32 @@ class CInfoItem;
 class CMgrGrpData;
 class CWndSelectItemGrp;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminItemNew : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemNew(CWnd* pParent = NULL);			/* コンストラクタ */
-	virtual ~CDlgAdminItemNew();							/* デストラクタ */
+			CDlgAdminItemNew(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminItemNew(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify, BOOL bPosSet = TRUE);	/* 初期化 */
-	void	Get			(CInfoItem *pDst);							/* 編集内容を取得 */
-	void	SetModify	(CInfoItem *pInfoItem);						/* 編集モードとして設定 */
-
-
-protected:
-	void	SelectSound	(DWORD dwSoundID);					/* 落としたときの効果音IDを選択 */
+	void	Init(CMgrData *pMgrData, CWnd **pWndNotify, BOOL bPosSet = TRUE); // 初期化
+	void	Get(CInfoItem *pDst); // 編集内容を取得
+	void	SetModify(CInfoItem *pInfoItem); // 編集モードとして設定
 
 
 protected:
-	DWORD				m_dwSelectItemTypeID,	/* 種別 */
-						m_dwSelectSoundID;		/* 落としたときの効果音ID */
-	BOOL				m_bModeModify,			/* 編集モード判定 */
-						m_bPosSet;				/* 設置位置を設定できるか判定 */
-	CWnd				**m_ppWndNotify;		/* 通知先ウィンドウ */
-	CMgrGrpData			*m_pMgrGrpData;			/* グラフィックデータ管理 */
-	CWndSelectItemGrp	*m_pWndSelectItemGrp;	/* アイテム画像選択ウィンドウ */
-	CLibInfoItemType	*m_pLibInfoItemType;	/* アイテム種別情報ライブラリ */
+	void	SelectSound(DWORD dwSoundID); // 落としたときの効果音IDを選択
+
+
+protected:
+	DWORD	m_dwSelectItemTypeID, // 種別
+						m_dwSelectSoundID; // 落としたときの効果音ID
+	BOOL	m_bModeModify, // 編集モード判定
+						m_bPosSet; // 設置位置を設定できるか判定
+	CWnd	**m_ppWndNotify; // 通知先ウィンドウ
+	CMgrGrpData	*m_pMgrGrpData; // グラフィックデータ管理
+	CWndSelectItemGrp	*m_pWndSelectItemGrp; // アイテム画像選択ウィンドウ
+	CLibInfoItemType	*m_pLibInfoItemType; // アイテム種別情報ライブラリ
 
 
 
@@ -53,17 +49,17 @@ public:
 	CComboBox	m_ctlDropSoundID;
 	CComboBox	m_ctlType;
 	CString	m_strName;
-	int		m_nMapID;
-	int		m_nPosX;
-	int		m_nPosY;
-	int		m_nGrpID;
+	int	m_nMapID;
+	int	m_nPosX;
+	int	m_nPosY;
+	int	m_nGrpID;
 	BOOL	m_bPutOn;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminItemNew)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -78,5 +74,3 @@ protected:
 } CDlgAdminItemNew, *PCDlgAdminItemNew;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

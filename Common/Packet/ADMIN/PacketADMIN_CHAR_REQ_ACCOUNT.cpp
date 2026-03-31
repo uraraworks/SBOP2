@@ -1,46 +1,24 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:PacketADMIN_CHAR_REQ_ACCOUNT.cpp							 */
-/* 内容			:コマンド(管理者系:アカウント情報要求) 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/07													 */
-/* ========================================================================= */
+﻿/// @file PacketADMIN_CHAR_REQ_ACCOUNT.cpp
+/// @brief コマンド(管理者系:アカウント情報要求) 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/06/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "StdAfx.h"
 #include "Command.h"
 #include "PacketADMIN_CHAR_REQ_ACCOUNT.h"
-
-/* ========================================================================= */
-/* 関数名	:CPacketADMIN_CHAR_REQ_ACCOUNT::CPacketADMIN_CHAR_REQ_ACCOUNT	 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/06/07														 */
-/* ========================================================================= */
 
 CPacketADMIN_CHAR_REQ_ACCOUNT::CPacketADMIN_CHAR_REQ_ACCOUNT()
 {
 	m_dwAccountID = 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CPacketADMIN_CHAR_REQ_ACCOUNT::~CPacketADMIN_CHAR_REQ_ACCOUNT	 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/06/07														 */
-/* ========================================================================= */
-
 CPacketADMIN_CHAR_REQ_ACCOUNT::~CPacketADMIN_CHAR_REQ_ACCOUNT()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CPacketADMIN_CHAR_REQ_ACCOUNT::Make							 */
-/* 内容		:パケットを作成													 */
-/* 日付		:2008/06/07														 */
-/* ========================================================================= */
-
 void CPacketADMIN_CHAR_REQ_ACCOUNT::Make(
-	DWORD dwAccountID)		/* [in] アカウントID */
+	DWORD dwAccountID)	// [in] アカウントID
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -50,36 +28,27 @@ void CPacketADMIN_CHAR_REQ_ACCOUNT::Make(
 			 sizeof (dwAccountID);
 
 	pData = new BYTE[dwSize];
-	ZeroMemory (pData, dwSize);
+	ZeroMemory(pData, dwSize);
 	pPacketBase = (PPACKETBASE)pData;
 
 	pPacketBase->byCmdMain	= SBOCOMMANDID_MAIN_ADMIN;
 	pPacketBase->byCmdSub	= SBOCOMMANDID_SUB_ADMIN_CHAR_REQ_ACCOUNT;
 
 	pDataTmp = (PBYTE)(pPacketBase + 1);
-	CopyMemoryRenew (pDataTmp, &dwAccountID, sizeof (dwAccountID), pDataTmp);	/* アカウントID */
+	CopyMemoryRenew(pDataTmp, &dwAccountID, sizeof (dwAccountID), pDataTmp);	// アカウントID
 
-	RenewPacket (pData, dwSize);
+	RenewPacket(pData, dwSize);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CPacketADMIN_CHAR_REQ_ACCOUNT::Set								 */
-/* 内容		:パケットを設定													 */
-/* 日付		:2008/06/07														 */
-/* ========================================================================= */
 
 PBYTE CPacketADMIN_CHAR_REQ_ACCOUNT::Set(PBYTE pPacket)
 {
 	PBYTE pRet, pDataTmp;
 
-	pRet		= pPacket;
-	pDataTmp	= CPacketBase::Set (pPacket);
+	pRet	= pPacket;
+	pDataTmp	= CPacketBase::Set(pPacket);
 
-	CopyMemoryRenew (&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	/* アカウントID */
+	CopyMemoryRenew(&m_dwAccountID, pDataTmp, sizeof (m_dwAccountID), pDataTmp);	// アカウントID
 
 	pRet = pDataTmp;
 	return pRet;
 }
-
-/* Copyright(C)URARA-works 2008 */

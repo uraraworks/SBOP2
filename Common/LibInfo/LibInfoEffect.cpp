@@ -1,70 +1,32 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoEffect.cpp											 */
-/* 内容			:エフェクト情報ライブラリクラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/07/26													 */
-/* ========================================================================= */
+﻿/// @file LibInfoEffect.cpp
+/// @brief エフェクト情報ライブラリクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/07/26
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "LibInfoEffect.h"
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::CLibInfoEffect									 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 CLibInfoEffect::CLibInfoEffect()
 {
 	m_paInfo = NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::~CLibInfoEffect								 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 CLibInfoEffect::~CLibInfoEffect()
 {
-	Destroy ();
+	Destroy();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::Create											 */
-/* 内容		:作成															 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 void CLibInfoEffect::Create(void)
 {
 	m_paInfo = new ARRAYEFFECT;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::Destroy										 */
-/* 内容		:破棄															 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 void CLibInfoEffect::Destroy(void)
 {
-	DeleteAll ();
-	SAFE_DELETE (m_paInfo);
+	DeleteAll();
+	SAFE_DELETE(m_paInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::Proc											 */
-/* 内容		:処理															 */
-/* 戻り値	:TRUE:処理した FALS:処理していない								 */
-/* 日付		:2007/04/30														 */
-/* ========================================================================= */
 
 BOOL CLibInfoEffect::Proc(void)
 {
@@ -74,33 +36,19 @@ BOOL CLibInfoEffect::Proc(void)
 
 	bRet = FALSE;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = (PCInfoEffect)GetPtr (i);
-		bRet |= pInfo->TimerProc (timeGetTime ());
+		pInfo = (PCInfoEffect)GetPtr(i);
+		bRet |= pInfo->TimerProc(timeGetTime());
 	}
 
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetNew											 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoEffect::GetNew(void)
 {
 	return new CInfoEffect;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetCount										 */
-/* 内容		:データ数を取得													 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 int CLibInfoEffect::GetCount(void)
 {
@@ -117,53 +65,32 @@ Exit:
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::Add											 */
-/* 内容		:追加															 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 void CLibInfoEffect::Add(PCInfoBase pInfo)
 {
 	PCInfoEffect pEffectInfo;
 
 	pEffectInfo = (PCInfoEffect)pInfo;
 	if (pEffectInfo->m_dwEffectID == 0) {
-		pEffectInfo->m_dwEffectID = GetNewID ();
+		pEffectInfo->m_dwEffectID = GetNewID();
 	}
 
-	m_paInfo->Add (pEffectInfo);
+	m_paInfo->Add(pEffectInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::Delete											 */
-/* 内容		:削除															 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 void CLibInfoEffect::Delete(
-	int nNo)		/* [in] 配列番号 */
+	int nNo)	// [in] 配列番号
 {
 	PCInfoEffect pInfo;
 
 	pInfo = m_paInfo->at(nNo);
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
-		m_paInfo->erase (m_paInfo->begin () + nNo);
+		m_paInfo->erase(m_paInfo->begin() + nNo);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::Delete											 */
-/* 内容		:削除															 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 void CLibInfoEffect::Delete(
-	DWORD dwEffectID)		/* [in] エフェクトID */
+	DWORD dwEffectID)	// [in] エフェクトID
 {
 	int i, nCount, nNo;
 	PCInfoEffect pInfoTmp;
@@ -181,16 +108,9 @@ void CLibInfoEffect::Delete(
 	}
 
 	if (nNo >= 0) {
-		Delete (nNo);
+		Delete(nNo);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::DeleteAll										 */
-/* 内容		:全て削除														 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 void CLibInfoEffect::DeleteAll(void)
 {
@@ -202,25 +122,18 @@ void CLibInfoEffect::DeleteAll(void)
 
 	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		Delete (i);
+		Delete(i);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetName										 */
-/* 内容		:エフェクト名を取得												 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
-
 void CLibInfoEffect::GetName(
-	DWORD dwEffectID,		/* [in]  エフェクトID */
-	CmyString &strDst)		/* [out] エフェクト名 */
+	DWORD dwEffectID,	// [in]  エフェクトID
+	CmyString &strDst)	// [out] エフェクト名
 {
 	int i, nCount;
 	PCInfoEffect pInfo;
 
-	strDst.Empty ();
+	strDst.Empty();
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
@@ -232,13 +145,6 @@ void CLibInfoEffect::GetName(
 		break;
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetPtr											 */
-/* 内容		:情報を取得														 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoEffect::GetPtr(int nNo)
 {
@@ -254,15 +160,8 @@ Exit:
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetPtr											 */
-/* 内容		:情報を取得														 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoEffect::GetPtr(
-	DWORD dwEffectID)		/* [in] エフェクトID */
+	DWORD dwEffectID)	// [in] エフェクトID
 {
 	int i, nCount;
 	PCInfoEffect pRet, pInfoTmp;
@@ -282,13 +181,6 @@ PCInfoBase CLibInfoEffect::GetPtr(
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetSendDataSize								 */
-/* 内容		:送信データサイズを取得											 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
-
 DWORD CLibInfoEffect::GetSendDataSize(void)
 {
 	int i, nCount;
@@ -297,23 +189,16 @@ DWORD CLibInfoEffect::GetSendDataSize(void)
 
 	dwSize = 0;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoEffect = (PCInfoEffect)GetPtr (i);
-		dwSize += pInfoEffect->GetSendDataSize ();
+		pInfoEffect = (PCInfoEffect)GetPtr(i);
+		dwSize += pInfoEffect->GetSendDataSize();
 	}
-	/* 終端用 */
-	dwSize += sizeof (DWORD);
+	// 終端用
+	dwSize += sizeof(DWORD);
 
 	return dwSize;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetSendData									 */
-/* 内容		:送信データを取得												 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoEffect::GetSendData(void)
 {
@@ -322,31 +207,24 @@ PBYTE CLibInfoEffect::GetSendData(void)
 	DWORD dwSize, dwSizeTmp;
 	PCInfoEffect pInfoEffect;
 
-	dwSize	= GetSendDataSize ();
+	dwSize	= GetSendDataSize();
 	pData	= new BYTE[dwSize];
-	ZeroMemory (pData, dwSize);
+	ZeroMemory(pData, dwSize);
 
 	pDataPos = pData;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoEffect = (PCInfoEffect)GetPtr (i);
+		pInfoEffect = (PCInfoEffect)GetPtr(i);
 
-		dwSizeTmp	= pInfoEffect->GetSendDataSize ();
-		pDataTmp	= pInfoEffect->GetSendData ();
-		CopyMemoryRenew (pDataPos, pDataTmp, dwSizeTmp, pDataPos);
-		SAFE_DELETE_ARRAY (pDataTmp);
+		dwSizeTmp	= pInfoEffect->GetSendDataSize();
+		pDataTmp	= pInfoEffect->GetSendData();
+		CopyMemoryRenew(pDataPos, pDataTmp, dwSizeTmp, pDataPos);
+		SAFE_DELETE_ARRAY(pDataTmp);
 	}
 
 	return pData;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::SetSendData									 */
-/* 内容		:送信データから取り込み											 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoEffect::SetSendData(PBYTE pSrc)
 {
@@ -357,32 +235,25 @@ PBYTE CLibInfoEffect::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 
 	while (1) {
-		CopyMemory (&dwTmp, pDataTmp, sizeof (DWORD));
+		CopyMemory(&dwTmp, pDataTmp, sizeof(DWORD));
 		if (dwTmp == 0) {
-			pDataTmp += sizeof (DWORD);
+			pDataTmp += sizeof(DWORD);
 			break;
 	}
-		pInfoEffectTmp = (PCInfoEffect)GetNew ();
-		pDataTmp = pInfoEffectTmp->SetSendData (pDataTmp);
+		pInfoEffectTmp = (PCInfoEffect)GetNew();
+		pDataTmp = pInfoEffectTmp->SetSendData(pDataTmp);
 
-		pInfoEffect = (PCInfoEffect)GetPtr (pInfoEffectTmp->m_dwEffectID);
+		pInfoEffect = (PCInfoEffect)GetPtr(pInfoEffectTmp->m_dwEffectID);
 		if (pInfoEffect) {
-			pInfoEffect->Copy (pInfoEffectTmp);
-			SAFE_DELETE (pInfoEffectTmp);
+			pInfoEffect->Copy(pInfoEffectTmp);
+			SAFE_DELETE(pInfoEffectTmp);
 	} else {
-			Add (pInfoEffectTmp);
+			Add(pInfoEffectTmp);
 	}
 	}
 
 	return pDataTmp;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoEffect::GetNewID										 */
-/* 内容		:新しいIDを取得													 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 DWORD CLibInfoEffect::GetNewID(void)
 {
@@ -405,4 +276,3 @@ DWORD CLibInfoEffect::GetNewID(void)
 	return dwRet;
 }
 
-/* Copyright(C)URARA-works 2007 */

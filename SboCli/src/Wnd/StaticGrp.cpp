@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:StaticGrp.cpp												 */
-/* 内容			:画像表示スタティックコントロールクラス 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/11/10													 */
-/* ========================================================================= */
+﻿/// @file StaticGrp.cpp
+/// @brief 画像表示スタティックコントロールクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/11/10
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "Img32.h"
@@ -19,10 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
-/* ========================================================================= */
-/* クラス設定																 */
-/* ========================================================================= */
+// クラス設定
 
 BEGIN_MESSAGE_MAP(CStaticGrp, CStatic)
 	//{{AFX_MSG_MAP(CStaticGrp)
@@ -30,13 +25,6 @@ BEGIN_MESSAGE_MAP(CStaticGrp, CStatic)
 	ON_WM_PAINT()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::CStaticGrp											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
 
 CStaticGrp::CStaticGrp()
 {
@@ -50,118 +38,62 @@ CStaticGrp::CStaticGrp()
 	m_pImgBack		= new CImg32;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::~CStaticGrp										 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
-
 CStaticGrp::~CStaticGrp()
 {
-	SAFE_DELETE (m_pImgBack);
+	SAFE_DELETE(m_pImgBack);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
 
 BOOL CStaticGrp::Create(CWnd *pParent, CMgrData *pMgrData)
 {
 	m_pWndParent	= pParent;
 	m_pMgrData		= pMgrData;
-	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
+	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData();
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::Init												 */
-/* 内容		:初期化															 */
-/* 日付		:2007/11/14														 */
-/* ========================================================================= */
 
 void CStaticGrp::Init(CImg32 *pSrc)
 {
 	int cx, cy;
 
-	m_pImgBack->Destroy ();
-	cx = pSrc->Width ();
-	cy = pSrc->Height ();
-	m_pImgBack->Create (cx, cy);
-	m_pImgBack->Blt (0, 0, cx, cy, pSrc, 0, 0);
+	m_pImgBack->Destroy();
+	cx = pSrc->Width();
+	cy = pSrc->Height();
+	m_pImgBack->Create(cx, cy);
+	m_pImgBack->Blt(0, 0, cx, cy, pSrc, 0, 0);
 
-	SetWindowPos (NULL, 0, 0, cx, cy, SWP_NOZORDER | SWP_NOMOVE);
-	InvalidateRect (NULL);
+	SetWindowPos(NULL, 0, 0, cx, cy, SWP_NOZORDER | SWP_NOMOVE);
+	InvalidateRect(NULL);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::Init												 */
-/* 内容		:初期化															 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
 
 void CStaticGrp::Init(DWORD dwGrpIDMain)
 {
 	m_dwGrpIDMain = dwGrpIDMain;
-	Set (0);
+	Set(0);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::Set												 */
-/* 内容		:画像設定														 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
 
 void CStaticGrp::Set(DWORD dwGrpIdSub)
 {
 	m_dwGrpIDSub = dwGrpIdSub;
-	RenewGrp (m_dwGrpIDMain, m_dwGrpIDSub);
+	RenewGrp(m_dwGrpIDMain, m_dwGrpIDSub);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::SetParam											 */
-/* 内容		:画像パラメータ設定												 */
-/* 日付		:2008/09/06														 */
-/* ========================================================================= */
 
 void CStaticGrp::SetParam(DWORD dwGrpIDParam)
 {
 	m_dwGrpIDParam = dwGrpIDParam;
-	RenewGrp (m_dwGrpIDMain, m_dwGrpIDSub);
+	RenewGrp(m_dwGrpIDMain, m_dwGrpIDSub);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::OnCreate											 */
-/* 内容		:メッセージハンドラ(WM_CREATE)									 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
 
 int CStaticGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CStatic::OnCreate (lpCreateStruct) == -1) {
+	if (CStatic::OnCreate(lpCreateStruct) == -1) {
 		return -1;
 	}
 
-	m_pImgBack->Create (32, 32);
+	m_pImgBack->Create(32, 32);
 
 	return 0;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::OnPaint											 */
-/* 内容		:メッセージハンドラ(WM_PAINT)									 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
 
 void CStaticGrp::OnPaint()
 {
@@ -170,21 +102,14 @@ void CStaticGrp::OnPaint()
 	CDC *pDCTmp;
 	CPaintDC dc(this);
 
-	cx = m_pImgBack->Width ();
-	cy = m_pImgBack->Height ();
+	cx = m_pImgBack->Width();
+	cy = m_pImgBack->Height();
 
-	hDC = m_pImgBack->Lock ();
-		pDCTmp = dc.FromHandle (hDC);
-		dc.BitBlt (0, 0, cx, cy, pDCTmp, 0, 0, SRCCOPY);
-	m_pImgBack->Unlock ();
+	hDC = m_pImgBack->Lock();
+		pDCTmp = dc.FromHandle(hDC);
+		dc.BitBlt(0, 0, cx, cy, pDCTmp, 0, 0, SRCCOPY);
+	m_pImgBack->Unlock();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticGrp::RenewGrp											 */
-/* 内容		:画像更新														 */
-/* 日付		:2007/11/10														 */
-/* ========================================================================= */
 
 void CStaticGrp::RenewGrp(DWORD dwGrpIDMain, DWORD dwGrpIDSub)
 {
@@ -192,27 +117,27 @@ void CStaticGrp::RenewGrp(DWORD dwGrpIDMain, DWORD dwGrpIDSub)
 	DWORD dwParam;
 	int x, y, nSize, nCountX;
 
-	m_pImgBack->Destroy ();
+	m_pImgBack->Destroy();
 
 	x = y = 0;
 	pImgTmp = NULL;
 	dwParam = 0;
 
-	nSize	= m_pMgrGrpData->GetGrpSize (dwGrpIDMain);
-	nCountX	= m_pMgrGrpData->GetGrpCountX (dwGrpIDMain);
+	nSize	= m_pMgrGrpData->GetGrpSize(dwGrpIDMain);
+	nCountX	= m_pMgrGrpData->GetGrpCountX(dwGrpIDMain);
 	if (dwGrpIDSub == 0) {
 		goto Exit;
 	}
 
 	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:		/* キャラ画像 */
-	case GRPIDMAIN_2X2_CHAR:	/* キャラ(32x32)画像 */
+	case GRPIDMAIN_CHAR:		// キャラ画像
+	case GRPIDMAIN_2X2_CHAR:	// キャラ(32x32)画像
 		dwGrpIDSub --;
 		dwParam = FAMILYTYPE_HUMAN;
 		x = (dwGrpIDSub % nCountX) * nSize;
 		y = (dwGrpIDSub / nCountX) * nSize;
 		break;
-	case GRPIDMAIN_ICON32:		/* アイコン(２倍表示) */
+	case GRPIDMAIN_ICON32:		// アイコン(２倍表示)
 		dwParam = m_dwGrpIDParam;
 		if (dwGrpIDSub == 0) {
 			break;
@@ -232,19 +157,17 @@ void CStaticGrp::RenewGrp(DWORD dwGrpIDMain, DWORD dwGrpIDSub)
 		break;
 	}
 
-	pImgTmp = m_pMgrGrpData->GetDib (dwGrpIDMain, dwGrpIDSub, dwParam);
+	pImgTmp = m_pMgrGrpData->GetDib(dwGrpIDMain, dwGrpIDSub, dwParam);
 
 Exit:
-	m_pImgBack->Create (nSize, nSize);
+	m_pImgBack->Create(nSize, nSize);
 	if (pImgTmp) {
 		if (dwGrpIDMain == GRPIDMAIN_ICON32) {
-			m_pMgrData->GetMgrDraw ()->DrawIcon (m_pImgBack, 0, 0, dwGrpIDSub);
+			m_pMgrData->GetMgrDraw()->DrawIcon(m_pImgBack, 0, 0, dwGrpIDSub);
 		} else {
-			m_pImgBack->BltFrom256 (0, 0, nSize, nSize, pImgTmp, x, y);
+			m_pImgBack->BltFrom256(0, 0, nSize, nSize, pImgTmp, x, y);
 		}
 	}
-	SetWindowPos (NULL, 0, 0, nSize, nSize, SWP_NOZORDER | SWP_NOMOVE);
-	InvalidateRect (NULL);
+	SetWindowPos(NULL, 0, 0, nSize, nSize, SWP_NOZORDER | SWP_NOMOVE);
+	InvalidateRect(NULL);
 }
-
-/* Copyright(C)URARA-works 2007 */

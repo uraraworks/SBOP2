@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEventNONE.h										 */
-/* 内容			:マップイベント(未設定)ダイアログクラス 定義ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/26													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEventNONE.h
+/// @brief マップイベント(未設定)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/06/26
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,23 +10,21 @@
 
 class CInfoMapEventBase;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapEventNONE : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapEventNONE(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminMapEventNONE();							/* デストラクタ */
+			CDlgAdminMapEventNONE(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapEventNONE(); // デストラクタ
 
-	virtual void	Init	(CMgrData *pMgrData);						/* 初期化 */
-	virtual void	Set		(CInfoMapEventBase *pSrc);					/* 設定 */
-	virtual void	Get		(CInfoMapEventBase *pDst);					/* 取得 */
+	virtual void	Init(CMgrData *pMgrData); // 初期化
+	virtual void	Set(CInfoMapEventBase *pSrc); // 設定
+	virtual void	Get(CInfoMapEventBase *pDst); // 取得
 
 
 protected:
-	int		m_nResourceID;			/* ダイアログリソースID */
+	int	m_nResourceID; // ダイアログリソースID
 
 
 
@@ -51,5 +47,3 @@ protected:
 } CDlgAdminMapEventNONE, *PCDlgAdminMapEventNONE;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

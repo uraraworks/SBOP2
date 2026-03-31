@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:MakeFileList.cpp											 */
-/* 内容			:アプリケーションクラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/08/26													 */
-/* ========================================================================= */
+﻿/// @file MakeFileList.cpp
+/// @brief アプリケーションクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/08/26
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "MakeFileList.h"
@@ -23,26 +21,14 @@ BEGIN_MESSAGE_MAP(CMakeFileListApp, CWinApp)
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/* 唯一の CMakeFileListApp オブジェクト */
+// 唯一の CMakeFileListApp オブジェクト
 CMakeFileListApp theApp;
 
-
-/* ========================================================================= */
-/* 関数名	:CMakeFileListApp::CMakeFileListApp								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/08/26														 */
-/* ========================================================================= */
 
 CMakeFileListApp::CMakeFileListApp()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMakeFileListApp::InitInstance									 */
-/* 内容		:初期化処理														 */
-/* 日付		:2008/08/26														 */
-/* ========================================================================= */
 
 BOOL CMakeFileListApp::InitInstance()
 {
@@ -53,5 +39,3 @@ BOOL CMakeFileListApp::InitInstance()
 
 	return FALSE;
 }
-
-/* Copyright(C)URARA-works 2007 */

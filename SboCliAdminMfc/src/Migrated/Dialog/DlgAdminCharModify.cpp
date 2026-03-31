@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharModify.cpp										 */
-/* 内容			:選択キャラ情報編集ダイアログクラス 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/03/17													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharModify.cpp
+/// @brief 選択キャラ情報編集ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/03/17
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "resource.h"
@@ -33,11 +31,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define COLORCOUNT	(14)		/* 色種類 */
+#define COLORCOUNT	(14)	// 色種類
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharModify::DoDataExchange(CDataExchange* pDX)
 {
@@ -66,14 +62,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharModify, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::CDlgAdminCharModify						 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/03/17														 */
-/* ========================================================================= */
-
-CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent /*=NULL*/)
+CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminCharModify::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminCharModify)
@@ -86,45 +75,24 @@ CDlgAdminCharModify::CDlgAdminCharModify(CWnd* pParent /*=NULL*/)
 	m_nPosY = 0;
 	//}}AFX_DATA_INIT
 
-	m_dwCharID			= 0;
-	m_pInfoChar			= NULL;
+	m_dwCharID	= 0;
+	m_pInfoChar	= NULL;
 	m_pInfoTalkEvent	= NULL;
-	Create (CDlgAdminCharModify::IDD, pParent);
+	Create(CDlgAdminCharModify::IDD, pParent);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::~CDlgAdminCharModify						 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/03/17														 */
-/* ========================================================================= */
 
 CDlgAdminCharModify::~CDlgAdminCharModify()
 {
-	SAFE_DELETE (m_pInfoTalkEvent);
+	SAFE_DELETE(m_pInfoTalkEvent);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::Init										 */
-/* 内容		:初期化															 */
-/* 日付		:2007/03/17														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModify::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	/* ウィンドウ作成 */
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::Renew										 */
-/* 内容		:更新															 */
-/* 日付		:2007/03/17														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModify::Renew(void)
 {
@@ -132,106 +100,99 @@ void CDlgAdminCharModify::Renew(void)
 	PCLibInfoMotionType pLibInfoMotionType;
 	PCInfoMotionType pInfoMotionType;
 
-	pLibInfoMotionType = m_pMgrData->GetLibInfoMotionType ();
-	m_strCharID.	Empty ();
-	m_strCharName.	Empty ();
+	pLibInfoMotionType = m_pMgrData->GetLibInfoMotionType();
+	m_strCharID.	Empty();
+	m_strCharName.	Empty();
 	m_bBlock	= FALSE;
-	m_bPush		= FALSE;
+	m_bPush	= FALSE;
 	m_dwMapID	= 0;
-	m_nPosX		= 0;
-	m_nPosY		= 0;
-	m_ctlMoveType.SetCurSel (0);
-	m_ctlMotionType.SetCurSel (0);
-	m_ctlSex.SetCurSel (0);
-	m_ctlColor.SetCurSel (0);
+	m_nPosX	= 0;
+	m_nPosY	= 0;
+	m_ctlMoveType.SetCurSel(0);
+	m_ctlMotionType.SetCurSel(0);
+	m_ctlSex.SetCurSel(0);
+	m_ctlColor.SetCurSel(0);
 
 	if (m_pInfoChar == NULL) {
 		goto Exit;
 	}
 
-        m_strCharID.Format (_T("%u"), m_pInfoChar->m_dwCharID);
+        m_strCharID.Format(_T("%u"), m_pInfoChar->m_dwCharID);
 	m_strCharName	= (LPCTSTR)m_pInfoChar->m_strCharName;
-	m_bBlock		= m_pInfoChar->m_bBlock;
-	m_bPush			= m_pInfoChar->m_bPush;
+	m_bBlock	= m_pInfoChar->m_bBlock;
+	m_bPush	= m_pInfoChar->m_bPush;
 	for (i = 0; i < CHARMOVETYPE_MAX; i ++) {
-		if (m_ctlMoveType.GetItemData (i) == m_pInfoChar->m_nMoveType) {
-			m_ctlMoveType.SetCurSel (i);
+		if (m_ctlMoveType.GetItemData(i) == m_pInfoChar->m_nMoveType) {
+			m_ctlMoveType.SetCurSel(i);
 			break;
 		}
 	}
 	if (i >= CHARMOVETYPE_MAX) {
-		m_ctlMoveType.SetCurSel (0);
+		m_ctlMoveType.SetCurSel(0);
 	}
 
 	m_dwMapID	= m_pInfoChar->m_dwMapID;
-	m_nPosX		= m_pInfoChar->m_nMapX;
-	m_nPosY		= m_pInfoChar->m_nMapY;
+	m_nPosX	= m_pInfoChar->m_nMapX;
+	m_nPosY	= m_pInfoChar->m_nMapY;
 
-	m_ctlMotionType.ResetContent ();
-	nCount = pLibInfoMotionType->GetCount ();
+	m_ctlMotionType.ResetContent();
+	nCount = pLibInfoMotionType->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoMotionType = (PCInfoMotionType)pLibInfoMotionType->GetPtr (i);
+		pInfoMotionType = (PCInfoMotionType)pLibInfoMotionType->GetPtr(i);
                 CString strMotionType = (LPCTSTR)pInfoMotionType->m_strName;
-                m_ctlMotionType.AddString (strMotionType);
-		m_ctlMotionType.SetItemData (i, pInfoMotionType->m_dwMotionTypeID);
+                m_ctlMotionType.AddString(strMotionType);
+		m_ctlMotionType.SetItemData(i, pInfoMotionType->m_dwMotionTypeID);
 	}
 
 	nNo = 0;
-	nCount = m_ctlMotionType.GetCount ();
+	nCount = m_ctlMotionType.GetCount();
 	for (i = 0; i < nCount; i ++) {
-		if (m_pInfoChar->m_dwMotionTypeID == m_ctlMotionType.GetItemData (i)) {
+		if (m_pInfoChar->m_dwMotionTypeID == m_ctlMotionType.GetItemData(i)) {
 			nNo = i;
 			break;
 		}
 	}
-	m_ctlMotionType.SetCurSel (nNo);
+	m_ctlMotionType.SetCurSel(nNo);
 
-	m_ctlSex.ResetContent ();
-        m_ctlSex.AddString (_T("男性"));
-        m_ctlSex.SetItemData (0, SEX_MALE);
-        m_ctlSex.AddString (_T("女性"));
-	m_ctlSex.SetItemData (1, SEX_FEMALE);
+	m_ctlSex.ResetContent();
+        m_ctlSex.AddString(_T("男性"));
+        m_ctlSex.SetItemData(0, SEX_MALE);
+        m_ctlSex.AddString(_T("女性"));
+	m_ctlSex.SetItemData(1, SEX_FEMALE);
 	nNo = 0;
 	if (m_pInfoChar->m_nSex == SEX_FEMALE) {
 		nNo = 1;
 	}
-	m_ctlSex.SetCurSel (nNo);
+	m_ctlSex.SetCurSel(nNo);
 
-	m_ctlColor.ResetContent ();
-        m_ctlColor.AddString (_T("赤"));
-        m_ctlColor.AddString (_T("黄"));
-        m_ctlColor.AddString (_T("緑"));
-        m_ctlColor.AddString (_T("青緑"));
-        m_ctlColor.AddString (_T("青"));
-        m_ctlColor.AddString (_T("紫"));
-        m_ctlColor.AddString (_T("白"));
-        m_ctlColor.AddString (_T("(濃)赤"));
-        m_ctlColor.AddString (_T("(濃)橙"));
-        m_ctlColor.AddString (_T("(濃)青"));
-        m_ctlColor.AddString (_T("(濃)紫"));
-        m_ctlColor.AddString (_T("(濃)黄緑"));
-        m_ctlColor.AddString (_T("(濃)緑"));
-        m_ctlColor.AddString (_T("(濃)水"));
+	m_ctlColor.ResetContent();
+        m_ctlColor.AddString(_T("赤"));
+        m_ctlColor.AddString(_T("黄"));
+        m_ctlColor.AddString(_T("緑"));
+        m_ctlColor.AddString(_T("青緑"));
+        m_ctlColor.AddString(_T("青"));
+        m_ctlColor.AddString(_T("紫"));
+        m_ctlColor.AddString(_T("白"));
+        m_ctlColor.AddString(_T("(濃)赤"));
+        m_ctlColor.AddString(_T("(濃)橙"));
+        m_ctlColor.AddString(_T("(濃)青"));
+        m_ctlColor.AddString(_T("(濃)紫"));
+        m_ctlColor.AddString(_T("(濃)黄緑"));
+        m_ctlColor.AddString(_T("(濃)緑"));
+        m_ctlColor.AddString(_T("(濃)水"));
 	for (i = 0; i < COLORCOUNT; i ++) {
-		if (m_pInfoChar->m_clName == GetColor (i)) {
+		if (m_pInfoChar->m_clName == GetColor(i)) {
 			break;
 		}
 	}
 	if (i >= COLORCOUNT) {
 		i = 6;
 	}
-	m_ctlColor.SetCurSel (i);
+	m_ctlColor.SetCurSel(i);
 
 Exit:
-	UpdateData (FALSE);
+	UpdateData(FALSE);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::OnAdminMsg								 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2007/03/18														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 {
@@ -241,107 +202,100 @@ void CDlgAdminCharModify::OnAdminMsg(int nType, DWORD dwPara)
 	CPacketCHAR_PARA1 Packet;
 
 	switch (nType) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	/* 左クリック通知 */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	// 左クリック通知
 		{
 			CString strDbg;
-			strDbg.Format (_T("[DlgAdminCharModify] LB down dwPara=%u current=%u\r\n"), dwPara, m_dwCharID);
-			OutputDebugString (strDbg);
+			strDbg.Format(_T("[DlgAdminCharModify] LB down dwPara=%u current=%u\r\n"), dwPara, m_dwCharID);
+			OutputDebugString(strDbg);
 		}
 		dwCharID = dwPara;
 		if (dwPara == (DWORD)-1) {
 			dwCharID = m_dwCharID;
 		}
-		pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
-		pInfoCharTmp	= (PCInfoCharCli)pLibInfoChar->GetPtr (dwCharID);
+		pLibInfoChar	= m_pMgrData->GetLibInfoChar();
+		pInfoCharTmp	= (PCInfoCharCli)pLibInfoChar->GetPtr(dwCharID);
 		if (pInfoCharTmp == NULL) {
 			CString strDbg;
-			strDbg.Format (_T("[DlgAdminCharModify] GetPtr(%u) returned NULL\r\n"), dwCharID);
-			OutputDebugString (strDbg);
+			strDbg.Format(_T("[DlgAdminCharModify] GetPtr(%u) returned NULL\r\n"), dwCharID);
+			OutputDebugString(strDbg);
 			if (dwPara == (DWORD)-1) {
 				CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
 
-				PacketCHAR_REQ_CHARINFO.Make (m_dwCharID);
-				SendPacket (&PacketCHAR_REQ_CHARINFO);
+				PacketCHAR_REQ_CHARINFO.Make(m_dwCharID);
+				SendPacket(&PacketCHAR_REQ_CHARINFO);
 				break;
 			}
 			dwCharID = 0;
 		}
 		m_pInfoChar = pInfoCharTmp;
 		m_dwCharID = dwCharID;
-		Renew ();
+		Renew();
 		if (m_dwCharID != 0) {
 			CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
 			CString strDbg;
 
-			PacketCHAR_REQ_CHARINFO.Make (m_dwCharID);
-			strDbg.Format (_T("[DlgAdminCharModify] sending CHAR_REQ_CHARINFO charID=%u\r\n"), m_dwCharID);
-			OutputDebugString (strDbg);
-			SendPacket (&PacketCHAR_REQ_CHARINFO);
+			PacketCHAR_REQ_CHARINFO.Make(m_dwCharID);
+			strDbg.Format(_T("[DlgAdminCharModify] sending CHAR_REQ_CHARINFO charID=%u\r\n"), m_dwCharID);
+			OutputDebugString(strDbg);
+			SendPacket(&PacketCHAR_REQ_CHARINFO);
 
-			Packet.Make (SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT, m_dwCharID, m_dwCharID);
-			SendPacket (&Packet);
+			Packet.Make(SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT, m_dwCharID, m_dwCharID);
+			SendPacket(&Packet);
 		}
 		break;
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	/* 右クリック通知 */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:	// 右クリック通知
 		if (m_pInfoChar) {
 			m_dwMapID = m_pInfoChar->m_dwMapID;
 		} else if ((m_pHost) && (m_pHost->GetMapData)) {
 			CInfoMapBase *pInfoMap;
 
-			pInfoMap = (CInfoMapBase*)m_pHost->GetMapData (m_pHost->userData);
+			pInfoMap = (CInfoMapBase*)m_pHost->GetMapData(m_pHost->userData);
 			m_dwMapID = pInfoMap ? pInfoMap->m_dwMapID : 0;
 		} else {
-			m_dwMapID = m_pMgrData->GetMapID ();
+			m_dwMapID = m_pMgrData->GetMapID();
 		}
-		m_nPosX		= HIWORD (dwPara);
-		m_nPosY		= LOWORD (dwPara);
-		UpdateData (FALSE);
+		m_nPosX	= HIWORD(dwPara);
+		m_nPosY	= LOWORD(dwPara);
+		UpdateData(FALSE);
 		break;
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK:	/* 右ダブルクリック通知 */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDBLCLK:	// 右ダブルクリック通知
 		if (m_pInfoChar) {
 			m_dwMapID = m_pInfoChar->m_dwMapID;
 		} else if ((m_pHost) && (m_pHost->GetMapData)) {
 			CInfoMapBase *pInfoMap;
 
-			pInfoMap = (CInfoMapBase*)m_pHost->GetMapData (m_pHost->userData);
+			pInfoMap = (CInfoMapBase*)m_pHost->GetMapData(m_pHost->userData);
 			m_dwMapID = pInfoMap ? pInfoMap->m_dwMapID : 0;
 		} else {
-			m_dwMapID = m_pMgrData->GetMapID ();
+			m_dwMapID = m_pMgrData->GetMapID();
 		}
-		m_nPosX = HIWORD (dwPara);
-		m_nPosY = LOWORD (dwPara);
-		UpdateData (FALSE);
-		Send (TRUE);
+		m_nPosX = HIWORD(dwPara);
+		m_nPosY = LOWORD(dwPara);
+		UpdateData(FALSE);
+		Send(TRUE);
 		break;
-	case ADMINMSG_RENEWTALKEVENT:			/* 会話イベント情報更新 */
+	case ADMINMSG_RENEWTALKEVENT:	// 会話イベント情報更新
 		if (m_pInfoChar == NULL) {
 			break;
 		}
 		if (dwPara != m_pInfoChar->m_dwCharID) {
 			break;
 		}
-		/* EXE/DLL 間で CInfoTalkEvent の実体を直接 Copy すると CRT ヒープ境界を跨いで壊れるため、ここでは同期しない */
-		OutputDebugString (_T("[DlgAdminCharModify] ADMINMSG_RENEWTALKEVENT ignored to avoid cross-module CInfoTalkEvent copy\r\n"));
+		// EXE/DLL 間で CInfoTalkEvent の実体を直接 Copy すると CRT ヒープ境界を跨いで壊れるため、ここでは同期しない
+		OutputDebugString(_T("[DlgAdminCharModify] ADMINMSG_RENEWTALKEVENT ignored to avoid cross-module CInfoTalkEvent copy\r\n"));
 		break;
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::OnMainFrame								 */
-/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
-/* 日付		:2026/03/08														 */
-/* ========================================================================= */
-
 void CDlgAdminCharModify::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWCHARINFO:		/* キャラ情報更新 */
+	case MAINFRAMEMSG_RENEWCHARINFO:	// キャラ情報更新
 		{
 			CString strDbg;
-			strDbg.Format (_T("[DlgAdminCharModify] MAINFRAMEMSG_RENEWCHARINFO dwParam=%u current=%u info=%p\r\n"),
+			strDbg.Format(_T("[DlgAdminCharModify] MAINFRAMEMSG_RENEWCHARINFO dwParam=%u current=%u info=%p\r\n"),
 				dwParam, m_dwCharID, m_pInfoChar);
-			OutputDebugString (strDbg);
+			OutputDebugString(strDbg);
 		}
 		if (m_pInfoChar == NULL) {
 			break;
@@ -349,67 +303,46 @@ void CDlgAdminCharModify::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		if (m_pInfoChar->m_dwCharID != dwParam) {
 			break;
 		}
-		Renew ();
+		Renew();
 		break;
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::OnInitDialog								 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2007/03/17														 */
-/* ========================================================================= */
-
 BOOL CDlgAdminCharModify::OnInitDialog()
 {
-	CDlgAdminBase::OnInitDialog ();
+	CDlgAdminBase::OnInitDialog();
 
-        m_ctlMoveType.AddString (_T("プレイヤーキャラ"));
-        m_ctlMoveType.SetItemData (0, CHARMOVETYPE_PC);
-        m_ctlMoveType.AddString (_T("移動しない"));
-        m_ctlMoveType.SetItemData (1, CHARMOVETYPE_STAND);
-        m_ctlMoveType.AddString (_T("ボール"));
-        m_ctlMoveType.SetItemData (2, CHARMOVETYPE_BALL);
-        m_ctlMoveType.AddString (_T("得点"));
-        m_ctlMoveType.SetItemData (3, CHARMOVETYPE_SCORE);
-        m_ctlMoveType.AddString (_T("容姿コピー(取り込み)"));
-        m_ctlMoveType.SetItemData (4, CHARMOVETYPE_STYLECOPY_PUT);
-        m_ctlMoveType.AddString (_T("攻撃受けるとアニメーション"));
-        m_ctlMoveType.SetItemData (5, CHARMOVETYPE_ATACKANIME);
-        m_ctlMoveType.AddString (_T("容姿コピー(反映)"));
-        m_ctlMoveType.SetItemData (6, CHARMOVETYPE_STYLECOPY_GET);
-        m_ctlMoveType.AddString (_T("NPC発生"));
-        m_ctlMoveType.SetItemData (7, CHARMOVETYPE_PUTNPC);
-        m_ctlMoveType.AddString (_T("戦闘1"));
-        m_ctlMoveType.SetItemData (8, CHARMOVETYPE_BATTLE1);
-        m_ctlMoveType.AddString (_T("戦闘2"));
-        m_ctlMoveType.SetItemData (9, CHARMOVETYPE_BATTLE2);
-	m_ctlMoveType.SetCurSel (0);
+        m_ctlMoveType.AddString(_T("プレイヤーキャラ"));
+        m_ctlMoveType.SetItemData(0, CHARMOVETYPE_PC);
+        m_ctlMoveType.AddString(_T("移動しない"));
+        m_ctlMoveType.SetItemData(1, CHARMOVETYPE_STAND);
+        m_ctlMoveType.AddString(_T("ボール"));
+        m_ctlMoveType.SetItemData(2, CHARMOVETYPE_BALL);
+        m_ctlMoveType.AddString(_T("得点"));
+        m_ctlMoveType.SetItemData(3, CHARMOVETYPE_SCORE);
+        m_ctlMoveType.AddString(_T("容姿コピー(取り込み)"));
+        m_ctlMoveType.SetItemData(4, CHARMOVETYPE_STYLECOPY_PUT);
+        m_ctlMoveType.AddString(_T("攻撃受けるとアニメーション"));
+        m_ctlMoveType.SetItemData(5, CHARMOVETYPE_ATACKANIME);
+        m_ctlMoveType.AddString(_T("容姿コピー(反映)"));
+        m_ctlMoveType.SetItemData(6, CHARMOVETYPE_STYLECOPY_GET);
+        m_ctlMoveType.AddString(_T("NPC発生"));
+        m_ctlMoveType.SetItemData(7, CHARMOVETYPE_PUTNPC);
+        m_ctlMoveType.AddString(_T("戦闘1"));
+        m_ctlMoveType.SetItemData(8, CHARMOVETYPE_BATTLE1);
+        m_ctlMoveType.AddString(_T("戦闘2"));
+        m_ctlMoveType.SetItemData(9, CHARMOVETYPE_BATTLE2);
+	m_ctlMoveType.SetCurSel(0);
 
 	m_pInfoTalkEvent = new CInfoTalkEvent;
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::OnSend									 */
-/* 内容		:ボタンハンドラ(送信)											 */
-/* 日付		:2007/03/18														 */
-/* ========================================================================= */
-
 void CDlgAdminCharModify::OnSend()
 {
-	Send (FALSE);
+	Send(FALSE);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::OnDelete									 */
-/* 内容		:ボタンハンドラ(削除)											 */
-/* 日付		:2008/11/28														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModify::OnDelete()
 {
@@ -420,26 +353,19 @@ void CDlgAdminCharModify::OnDelete()
 	if (m_pInfoChar == NULL) {
 		return;
 	}
-	if (m_pInfoChar->IsNPC () == FALSE) {
+	if (m_pInfoChar->IsNPC() == FALSE) {
 		return;
 	}
 
-        strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)m_pInfoChar->m_strCharName);
-        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        strTmp.Format(_T("[%s]を削除しますか？"), (LPCTSTR)m_pInfoChar->m_strCharName);
+        nResult = MessageBox(strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (SBOCOMMANDID_SUB_ADMIN_DELETECHARINFO, m_pInfoChar->m_dwCharID);
-	SendPacket (&Packet);
+	Packet.Make(SBOCOMMANDID_SUB_ADMIN_DELETECHARINFO, m_pInfoChar->m_dwCharID);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::OnTalk									 */
-/* 内容		:ボタンハンドラ(会話データの編集)								 */
-/* 日付		:2008/11/22														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModify::OnTalk()
 {
@@ -450,23 +376,16 @@ void CDlgAdminCharModify::OnTalk()
 		return;
 	}
 
-	Dlg.Init (m_pMgrData);
-	Dlg.m_pInfo->Copy (m_pInfoTalkEvent);
+	Dlg.Init(m_pMgrData);
+	Dlg.m_pInfo->Copy(m_pInfoTalkEvent);
 	Dlg.m_strTalk = (LPCTSTR)m_pInfoChar->m_strTalk;
-	nResult = Dlg.DoModal ();
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		return;
 	}
 	m_pInfoChar->m_strTalk = Dlg.m_strTalk;
-	m_pInfoTalkEvent->Copy (Dlg.m_pInfo);
+	m_pInfoTalkEvent->Copy(Dlg.m_pInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::OnSetMoveType								 */
-/* 内容		:ボタンハンドラ(移動種別の設定)									 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModify::OnSetMoveType()
 {
@@ -475,30 +394,23 @@ void CDlgAdminCharModify::OnSetMoveType()
 
 	pDlg = NULL;
 
-	nMoveType = m_ctlMoveType.GetItemData (m_ctlMoveType.GetCurSel ());
+	nMoveType = m_ctlMoveType.GetItemData(m_ctlMoveType.GetCurSel());
 	switch (nMoveType) {
-	case CHARMOVETYPE_PUTNPC:	/* NPC発生 */
+	case CHARMOVETYPE_PUTNPC:	// NPC発生
 		pDlg = new CDlgAdminCharModifyTypePUTNPC(this);
 		break;
 	}
 
 	if (pDlg) {
-		pDlg->Set (m_pInfoChar);
-		nResult = pDlg->DoModal ();
+		pDlg->Set(m_pInfoChar);
+		nResult = pDlg->DoModal();
 		if (nResult == IDOK) {
-			pDlg->Get (m_pInfoChar);
+			pDlg->Get(m_pInfoChar);
 		}
 	}
 
-	SAFE_DELETE (pDlg);
+	SAFE_DELETE(pDlg);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::Send										 */
-/* 内容		:送信処理														 */
-/* 日付		:2007/09/16														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 {
@@ -507,70 +419,61 @@ void CDlgAdminCharModify::Send(BOOL bChgScreenPos)
 	CPacketADMIN_CHARINFO Packet;
 	CPacketADMIN_CHAR_RENEW_TALKEVENT PacketADMIN_CHAR_RENEW_TALKEVENT;
 
-	pLibInfoChar	= m_pMgrData->GetLibInfoChar ();
-	m_pInfoChar		= (PCInfoCharCli)pLibInfoChar->GetPtr (m_dwCharID);
+	pLibInfoChar	= m_pMgrData->GetLibInfoChar();
+	m_pInfoChar	= (PCInfoCharCli)pLibInfoChar->GetPtr(m_dwCharID);
 	if (m_pInfoChar == NULL) {
 		return;
 	}
 
-	UpdateData ();
+	UpdateData();
 
-	InfoCharTmp.Create (m_pMgrData);
-	InfoCharTmp.Copy (m_pInfoChar);
-	InfoCharTmp.m_strCharName		= m_strCharName;
-	InfoCharTmp.m_bBlock			= m_bBlock;
-	InfoCharTmp.m_bPush				= m_bPush;
-	InfoCharTmp.m_nMoveType			= m_ctlMoveType.GetItemData (m_ctlMoveType.GetCurSel ());
-	InfoCharTmp.m_dwMapID			= m_dwMapID;
-	InfoCharTmp.m_nMapX				= m_nPosX;
-	InfoCharTmp.m_nMapY				= m_nPosY;
-	InfoCharTmp.m_dwMotionTypeID	= m_ctlMotionType.GetItemData (m_ctlMotionType.GetCurSel ());
-	InfoCharTmp.m_nSex				= m_ctlSex.GetItemData (m_ctlSex.GetCurSel ());
-	InfoCharTmp.m_clName			= GetColor (m_ctlColor.GetCurSel ());
-	InfoCharTmp.m_clSpeak			= InfoCharTmp.m_clName;
+	InfoCharTmp.Create(m_pMgrData);
+	InfoCharTmp.Copy(m_pInfoChar);
+	InfoCharTmp.m_strCharName	= m_strCharName;
+	InfoCharTmp.m_bBlock	= m_bBlock;
+	InfoCharTmp.m_bPush	= m_bPush;
+	InfoCharTmp.m_nMoveType	= m_ctlMoveType.GetItemData(m_ctlMoveType.GetCurSel());
+	InfoCharTmp.m_dwMapID	= m_dwMapID;
+	InfoCharTmp.m_nMapX	= m_nPosX;
+	InfoCharTmp.m_nMapY	= m_nPosY;
+	InfoCharTmp.m_dwMotionTypeID	= m_ctlMotionType.GetItemData(m_ctlMotionType.GetCurSel());
+	InfoCharTmp.m_nSex	= m_ctlSex.GetItemData(m_ctlSex.GetCurSel());
+	InfoCharTmp.m_clName	= GetColor(m_ctlColor.GetCurSel());
+	InfoCharTmp.m_clSpeak	= InfoCharTmp.m_clName;
 
-	Packet.Make (&InfoCharTmp, bChgScreenPos);
-	SendPacket (&Packet);
+	Packet.Make(&InfoCharTmp, bChgScreenPos);
+	SendPacket(&Packet);
 
 	m_pInfoTalkEvent->m_dwTalkEventID = m_dwCharID;
-	PacketADMIN_CHAR_RENEW_TALKEVENT.Make (m_pInfoTalkEvent, m_dwCharID);
-	SendPacket (&PacketADMIN_CHAR_RENEW_TALKEVENT);
+	PacketADMIN_CHAR_RENEW_TALKEVENT.Make(m_pInfoTalkEvent, m_dwCharID);
+	SendPacket(&PacketADMIN_CHAR_RENEW_TALKEVENT);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModify::GetColor									 */
-/* 内容		:番号から色を取得												 */
-/* 日付		:2008/11/23														 */
-/* ========================================================================= */
 
 COLORREF CDlgAdminCharModify::GetColor(int nNo)
 {
 	COLORREF clRet, acl[] = {
-		RGB (255, 200, 200),	/* 赤 */
-		RGB (255, 255, 200),	/* 黄 */
-		RGB (200, 255, 200),	/* 緑 */
-		RGB (200, 255, 255),	/* 青緑 */
-		RGB (200, 200, 255),	/* 青 */
-		RGB (255, 200, 255),	/* 紫 */
-		RGB (255, 255, 255),	/* 白 */
-		RGB (255, 150, 150),	/* 赤（ピンク） */
-		RGB (255, 200, 100),	/* 橙 */
-		RGB (150, 150, 255),	/* 青 */
-		RGB (200, 100, 255),	/* 紫 */
-		RGB (200, 255, 150),	/* 黄緑 */
-		RGB (150, 255, 150),	/* 緑 */
-		RGB (100, 200, 255),	/* 水 */
+		RGB(255, 200, 200),	// 赤
+		RGB(255, 255, 200),	// 黄
+		RGB(200, 255, 200),	// 緑
+		RGB(200, 255, 255),	// 青緑
+		RGB(200, 200, 255),	// 青
+		RGB(255, 200, 255),	// 紫
+		RGB(255, 255, 255),	// 白
+		RGB(255, 150, 150),	// 赤（ピンク）
+		RGB(255, 200, 100),	// 橙
+		RGB(150, 150, 255),	// 青
+		RGB(200, 100, 255),	// 紫
+		RGB(200, 255, 150),	// 黄緑
+		RGB(150, 255, 150),	// 緑
+		RGB(100, 200, 255),	// 水
 	};
 
 	if (nNo >= COLORCOUNT) {
-		clRet = RGB (255, 255, 255);
+		clRet = RGB(255, 255, 255);
 	} else {
 		clRet = acl[nNo];
 	}
 
 	return clRet;
 }
-
-/* Copyright(C)URARA-works 2007 */
 

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharSkillHEAL.h									 */
-/* 内容			:スキル(回復)ダイアログクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/01/22													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharSkillHEAL.h
+/// @brief スキル(回復)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/01/22
+/// @copyright Copyright(C)URARA-works 2009
 
 #pragma once
 
@@ -12,19 +10,17 @@
 
 class CInfoSkillBase;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharSkillHEAL : public CDlgAdminCharSkillNONE
 {
 public:
-			CDlgAdminCharSkillHEAL(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminCharSkillHEAL();							/* デストラクタ */
+			CDlgAdminCharSkillHEAL(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharSkillHEAL(); // デストラクタ
 
-	virtual void	Init	(CMgrData *pMgrData);						/* 初期化 */
-	virtual void	Set		(CInfoSkillBase *pSrc);						/* 設定 */
-	virtual void	Get		(CInfoSkillBase *pDst);						/* 取得 */
+	virtual void	Init(CMgrData *pMgrData); // 初期化
+	virtual void	Set(CInfoSkillBase *pSrc); // 設定
+	virtual void	Get(CInfoSkillBase *pDst); // 取得
 
 
 
@@ -52,5 +48,3 @@ protected:
 } CDlgAdminCharSkillHEAL, *PCDlgAdminCharSkillHEAL;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2009 */

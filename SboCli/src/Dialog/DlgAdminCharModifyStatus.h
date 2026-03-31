@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharModifyStatus.h									 */
-/* 内容			:選択キャラ情報編集[ステータス]ダイアログクラス 定義ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/07/12													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharModifyStatus.h
+/// @brief 選択キャラ情報編集[ステータス]ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/07/12
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,24 +10,22 @@
 
 class CInfoCharCli;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharModifyStatus : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharModifyStatus(CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual ~CDlgAdminCharModifyStatus();						/* デストラクタ */
+			CDlgAdminCharModifyStatus(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharModifyStatus(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	Renew		(void);											/* 更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* メッセージハンドラ(WM_MAINFRAME) */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
+	void	OnMainFrame(DWORD dwCommand, DWORD dwParam); // メッセージハンドラ(WM_MAINFRAME)
 
 
 protected:
-	CInfoCharCli	*m_pInfoChar;					/* 編集中のキャラ情報 */
+	CInfoCharCli	*m_pInfoChar; // 編集中のキャラ情報
 
 
 
@@ -87,5 +83,3 @@ protected:
 } CDlgAdminCharModifyStatus, *PCDlgAdminCharModifyStatus;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

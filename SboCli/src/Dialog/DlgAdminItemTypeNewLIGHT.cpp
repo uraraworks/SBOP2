@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemTypeNewLIGHT.cpp								 */
-/* 内容			:アイテム種別(灯り)設定ダイアログクラス 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/10/19													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemTypeNewLIGHT.cpp
+/// @brief アイテム種別(灯り)設定ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/10/19
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,9 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminItemTypeNewLIGHT::DoDataExchange(CDataExchange* pDX)
 {
@@ -37,12 +33,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminItemTypeNewLIGHT, CDlgAdminBase)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewLIGHT::CDlgAdminItemTypeNewLIGHT			 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/10/19														 */
-/* ========================================================================= */
-
 CDlgAdminItemTypeNewLIGHT::CDlgAdminItemTypeNewLIGHT(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminItemTypeNewLIGHT::IDD, pParent)
 {
@@ -53,52 +43,26 @@ CDlgAdminItemTypeNewLIGHT::CDlgAdminItemTypeNewLIGHT(CWnd* pParent /*=NULL*/)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewLIGHT::~CDlgAdminItemTypeNewLIGHT			 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/10/19														 */
-/* ========================================================================= */
-
 CDlgAdminItemTypeNewLIGHT::~CDlgAdminItemTypeNewLIGHT()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewLIGHT::Set									 */
-/* 内容		:編集内容を設定													 */
-/* 日付		:2008/10/19														 */
-/* ========================================================================= */
-
 void CDlgAdminItemTypeNewLIGHT::Set(CInfoItemTypeBase *pSrc)
 {
-	m_nValue1	= (int)pSrc->m_dwValue;		/* 灯りレベル */
-	m_nValue2	= (int)pSrc->m_dwValue2;	/* 持続時間 */
+	m_nValue1	= (int)pSrc->m_dwValue; // 灯りレベル
+	m_nValue2	= (int)pSrc->m_dwValue2; // 持続時間
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewLIGHT::Get									 */
-/* 内容		:編集内容を取得													 */
-/* 日付		:2008/10/19														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeNewLIGHT::Get(CInfoItemTypeBase *&pDst)
 {
-	pDst->m_dwValue		= m_nValue1;		/* 灯りレベル */
-	pDst->m_dwValue2	= m_nValue2;		/* 持続時間 */
+	pDst->m_dwValue	= m_nValue1; // 灯りレベル
+	pDst->m_dwValue2	= m_nValue2; // 持続時間
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewLIGHT::PostNcDestroy						 */
-/* 内容		:終了処理														 */
-/* 日付		:2008/10/19														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeNewLIGHT::PostNcDestroy()
 {
-	CDialog::PostNcDestroy ();
+	CDialog::PostNcDestroy();
 }
-
-/* Copyright(C)URARA-works 2008 */

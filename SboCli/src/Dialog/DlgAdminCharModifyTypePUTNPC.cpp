@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharModifyTypePUTNPC.cpp							 */
-/* 内容			:キャラ情報 移動種別の設定(NPC発生)ダイアログクラス 実装ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/07/12													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharModifyTypePUTNPC.cpp
+/// @brief キャラ情報 移動種別の設定(NPC発生)ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/07/12
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,9 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharModifyTypePUTNPC::DoDataExchange(CDataExchange* pDX)
 {
@@ -41,12 +37,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharModifyTypePUTNPC, CDlgAdminCharModifyTypeBase)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypePUTNPC::CDlgAdminCharModifyTypePUTNPC	 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 CDlgAdminCharModifyTypePUTNPC::CDlgAdminCharModifyTypePUTNPC(CWnd* pParent /*=NULL*/)
 	: CDlgAdminCharModifyTypeBase(CDlgAdminCharModifyTypePUTNPC::IDD, pParent)
 {
@@ -62,95 +52,63 @@ CDlgAdminCharModifyTypePUTNPC::CDlgAdminCharModifyTypePUTNPC(CWnd* pParent /*=NU
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypePUTNPC::~CDlgAdminCharModifyTypePUTNPC	 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 CDlgAdminCharModifyTypePUTNPC::~CDlgAdminCharModifyTypePUTNPC()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypePUTNPC::Set								 */
-/* 内容		:設定															 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModifyTypePUTNPC::Set(CInfoCharCli *pSrc)
 {
 	m_dwPutCycle	= pSrc->m_dwPutCycle;
 	m_nMaxPutCount	= pSrc->m_nMaxPutCount;
 	m_nPutAverage	= pSrc->m_nPutAverage;
-	m_nPutAreaX		= pSrc->m_ptPutArea.x;
-	m_nPutAreaY		= pSrc->m_ptPutArea.y;
+	m_nPutAreaX	= pSrc->m_ptPutArea.x;
+	m_nPutAreaY	= pSrc->m_ptPutArea.y;
 	m_nPutMoveType	= pSrc->m_nPutMoveType;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypePUTNPC::Get								 */
-/* 内容		:取得															 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 void CDlgAdminCharModifyTypePUTNPC::Get(CInfoCharCli *pDst)
 {
-	pDst->m_dwPutCycle		= m_dwPutCycle;
+	pDst->m_dwPutCycle	= m_dwPutCycle;
 	pDst->m_nMaxPutCount	= m_nMaxPutCount;
-	pDst->m_nPutAverage		= m_nPutAverage;
-	pDst->m_ptPutArea.x		= m_nPutAreaX;
-	pDst->m_ptPutArea.y		= m_nPutAreaY;
+	pDst->m_nPutAverage	= m_nPutAverage;
+	pDst->m_ptPutArea.x	= m_nPutAreaX;
+	pDst->m_ptPutArea.y	= m_nPutAreaY;
 	pDst->m_nPutMoveType	= m_nPutMoveType;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypePUTNPC::OnInitDialog					 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminCharModifyTypePUTNPC::OnInitDialog()
 {
 	int i, nCount, nNo;
 
-	CDlgAdminCharModifyTypeBase::OnInitDialog ();
+	CDlgAdminCharModifyTypeBase::OnInitDialog();
 
-        m_ctlMoveType.AddString (_T("戦闘1"));
-        m_ctlMoveType.SetItemData (0, CHARMOVETYPE_BATTLE1);
-        m_ctlMoveType.AddString (_T("戦闘2"));
-        m_ctlMoveType.SetItemData (1, CHARMOVETYPE_BATTLE2);
+        m_ctlMoveType.AddString(_T("戦闘1"));
+        m_ctlMoveType.SetItemData(0, CHARMOVETYPE_BATTLE1);
+        m_ctlMoveType.AddString(_T("戦闘2"));
+        m_ctlMoveType.SetItemData(1, CHARMOVETYPE_BATTLE2);
 
 	nNo = 0;
-	nCount = m_ctlMoveType.GetCount ();
+	nCount = m_ctlMoveType.GetCount();
 	for (i = 0; i < nCount; i ++) {
-		if (m_nPutMoveType == m_ctlMoveType.GetItemData (i)) {
+		if (m_nPutMoveType == m_ctlMoveType.GetItemData(i)) {
 			nNo = i;
 			break;
 		}
 	}
-	m_ctlMoveType.SetCurSel (nNo);
+	m_ctlMoveType.SetCurSel(nNo);
 
 	return TRUE;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypePUTNPC::OnOK							 */
-/* 内容		:ボタンハンドラ(OK)												 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 void CDlgAdminCharModifyTypePUTNPC::OnOK()
 {
-	UpdateData ();
+	UpdateData();
 
-	m_nPutMoveType = m_ctlMoveType.GetItemData (m_ctlMoveType.GetCurSel ());
+	m_nPutMoveType = m_ctlMoveType.GetItemData(m_ctlMoveType.GetCurSel());
 
-	CDlgAdminCharModifyTypeBase::EndDialog (IDOK);
+	CDlgAdminCharModifyTypeBase::EndDialog(IDOK);
 }
-
-/* Copyright(C)URARA-works 2008 */

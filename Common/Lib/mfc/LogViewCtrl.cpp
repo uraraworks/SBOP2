@@ -15,25 +15,25 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define	CLASS_NAME			_T("LogViewCtrl")
+#define	CLASS_NAME	_T("LogViewCtrl")
 
-#define	HEADER_COLUMN		11		// ヘッダ表示分の文字数
+#define	HEADER_COLUMN	11	// ヘッダ表示分の文字数
 
 // 選択方法
-#define	SELECT_TYPE_NONE	0		// 未選択
-#define	SELECT_TYPE_CHAR	1		// 文字選択
-#define	SELECT_TYPE_LINE	2		// 行選択
+#define	SELECT_TYPE_NONE	0	// 未選択
+#define	SELECT_TYPE_CHAR	1	// 文字選択
+#define	SELECT_TYPE_LINE	2	// 行選択
 
 // トークン種別
-#define	TOKEN_TYPE_NONE		0		// 不明
-#define	TOKEN_TYPE_ALNUM	1		// 半角英数
-#define	TOKEN_TYPE_ZENKAKU	2		// 全角
-#define	TOKEN_TYPE_PUNCT	3		// 区切り
-#define	TOKEN_TYPE_LINK		4		// リンク
+#define	TOKEN_TYPE_NONE	0	// 不明
+#define	TOKEN_TYPE_ALNUM	1	// 半角英数
+#define	TOKEN_TYPE_ZENKAKU	2	// 全角
+#define	TOKEN_TYPE_PUNCT	3	// 区切り
+#define	TOKEN_TYPE_LINK	4	// リンク
 
 // メニューコマンドID
-#define	ID_MENU_COPY		100		// 「コピー」コマンド
-#define	ID_MENU_ALLSELECT	101		// 「すべて選択」コマンド
+#define	ID_MENU_COPY	100	// 「コピー」コマンド
+#define	ID_MENU_ALLSELECT	101	// 「すべて選択」コマンド
 
 class CCurrentDC : public CDC
 {
@@ -311,7 +311,7 @@ int CLogViewCtrl::GetTextHeight(CDC* pDC, int nIndex)
 	int	cx = 0;
 	for (LPCTSTR psz = m_aTexts[nIndex].strText; *psz != _T('\0'); psz = CharNext(psz)) {
 		UINT	uChar = (_istlead(*psz) != 0) ? ((*reinterpret_cast<const WORD*>(psz) & 0x00ff) << 8) | (*reinterpret_cast<const WORD*>(psz) >> 8) : *reinterpret_cast<const BYTE*>(psz);
-		int		nWidth;
+		int	nWidth;
 		pDC->GetOutputCharWidth(uChar, uChar, &nWidth);
 		cx += nWidth;
 		if (cx > m_sizeView.cx) {
@@ -417,7 +417,7 @@ BOOL CLogViewCtrl::GetSelectPos(CPoint point, int* pnLine, int* pnChar)
 	int	y = rcItem.top + m_sizeChar.cy;
 	int	x = 0;
 	for (LPCTSTR psz = m_aTexts[nLine].strText; ; psz = CharNext(psz)) {
-		int		nWidth;
+		int	nWidth;
 		if (*psz != _T('\0')) {
 			UINT	uChar = (_istlead(*psz) != 0) ? ((*reinterpret_cast<const WORD*>(psz) & 0x00ff) << 8) | (*reinterpret_cast<const WORD*>(psz) >> 8) : *reinterpret_cast<const BYTE*>(psz);
 			dc.GetOutputCharWidth(uChar, uChar, &nWidth);
@@ -539,7 +539,7 @@ BOOL CLogViewCtrl::PreCreateWindow(CREATESTRUCT& cs)
 		return FALSE;
 	}
 
-	cs.style |= WS_VSCROLL;		// 縦スクロールを追加
+	cs.style |= WS_VSCROLL;	// 縦スクロールを追加
 	cs.style &= ~WS_HSCROLL;	// 横スクロールを削除
 	cs.lpszClass = CLASS_NAME;
 
@@ -573,7 +573,6 @@ void CLogViewCtrl::PreSubclassWindow()
 	RecalcParam();
 }
 
-
 BEGIN_MESSAGE_MAP(CLogViewCtrl, CWnd)
 	//{{AFX_MSG_MAP(CLogViewCtrl)
 	ON_WM_NCHITTEST()
@@ -594,7 +593,6 @@ BEGIN_MESSAGE_MAP(CLogViewCtrl, CWnd)
 	ON_COMMAND(ID_MENU_COPY, OnMenuCopy)
 	ON_COMMAND(ID_MENU_ALLSELECT, OnMenuAllSelect)
 END_MESSAGE_MAP()
-
 
 /////////////////////////////////////////////////////////////////////////////
 // CLogViewCtrl メッセージ ハンドラ

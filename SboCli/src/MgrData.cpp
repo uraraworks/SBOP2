@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:MgrData.cpp												 */
-/* 内容			:データマネージャクラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/09/24													 */
-/* ========================================================================= */
+﻿/// @file MgrData.cpp
+/// @brief データマネージャクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/09/24
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include <comdef.h>
@@ -38,12 +36,6 @@
 #include "MgrKeyInput.h"
 #include "MgrData.h"
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::CMgrData												 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 CMgrData::CMgrData()
 {
@@ -118,7 +110,7 @@ CMgrData::CMgrData()
 
 	m_pLibInfoCharOnline	= NULL;
 
-	ZeroMemory (&m_stInputGuid, sizeof (m_stInputGuid));
+	ZeroMemory(&m_stInputGuid, sizeof(m_stInputGuid));
 	m_sizeDlgMapPartsEdit.cx = 0;
 	m_sizeDlgMapPartsEdit.cy = 0;
 	m_sizeWndMap.cx			 = 400;
@@ -127,52 +119,40 @@ CMgrData::CMgrData()
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::~CMgrData											 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 CMgrData::~CMgrData()
 {
-	Destroy ();
+	Destroy();
 
-	SAFE_DELETE (m_pInfoAccount);
-	SAFE_DELETE (m_pInfoTalkEvent);
-	SAFE_DELETE (m_pMgrSound);
-	SAFE_DELETE (m_pMgrDraw);
-	SAFE_DELETE (m_pMgrLayer);
-	SAFE_DELETE (m_pMgrWindow);
-	SAFE_DELETE (m_pMgrKeyInput);
-	SAFE_DELETE (m_pLibInfoChar);
-	SAFE_DELETE (m_pLibInfoDisable);
-	SAFE_DELETE (m_pLibInfoMap);
-	SAFE_DELETE (m_pLibInfoMapObject);
-	SAFE_DELETE (m_pLibInfoMapParts);
-	SAFE_DELETE (m_pLibInfoMapShadow);
-	SAFE_DELETE (m_pLibInfoItem);
-	SAFE_DELETE (m_pLibInfoItemType);
-	SAFE_DELETE (m_pLibInfoItemWeapon);
-	SAFE_DELETE (m_pLibInfoEffect);
-	SAFE_DELETE (m_pLibInfoMotion);
-	SAFE_DELETE (m_pLibInfoMotionType);
-	SAFE_DELETE (m_pLibInfoEfcBalloon);
-	SAFE_DELETE (m_pLibInfoSystem);
-	SAFE_DELETE (m_pLibInfoSkill);
+	SAFE_DELETE(m_pInfoAccount);
+	SAFE_DELETE(m_pInfoTalkEvent);
+	SAFE_DELETE(m_pMgrSound);
+	SAFE_DELETE(m_pMgrDraw);
+	SAFE_DELETE(m_pMgrLayer);
+	SAFE_DELETE(m_pMgrWindow);
+	SAFE_DELETE(m_pMgrKeyInput);
+	SAFE_DELETE(m_pLibInfoChar);
+	SAFE_DELETE(m_pLibInfoDisable);
+	SAFE_DELETE(m_pLibInfoMap);
+	SAFE_DELETE(m_pLibInfoMapObject);
+	SAFE_DELETE(m_pLibInfoMapParts);
+	SAFE_DELETE(m_pLibInfoMapShadow);
+	SAFE_DELETE(m_pLibInfoItem);
+	SAFE_DELETE(m_pLibInfoItemType);
+	SAFE_DELETE(m_pLibInfoItemWeapon);
+	SAFE_DELETE(m_pLibInfoEffect);
+	SAFE_DELETE(m_pLibInfoMotion);
+	SAFE_DELETE(m_pLibInfoMotionType);
+	SAFE_DELETE(m_pLibInfoEfcBalloon);
+	SAFE_DELETE(m_pLibInfoSystem);
+	SAFE_DELETE(m_pLibInfoSkill);
 
-	SAFE_DELETE (m_pLibInfoCharOnline);
+	SAFE_DELETE(m_pLibInfoCharOnline);
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 void CMgrData::Create(
-	CMainFrame		*pMainFrame,		/* [in] メインフレーム */
-	CMgrGrpData		*pMgrGrpData)		/* [in] グラフィックデータ管理 */
+	CMainFrame		*pMainFrame,		// [in] メインフレーム
+	CMgrGrpData		*pMgrGrpData)		// [in] グラフィックデータ管理
 {
 	m_pMainFrame	= pMainFrame;
 	m_pMgrGrpData	= pMgrGrpData;
@@ -201,144 +181,126 @@ void CMgrData::Create(
 	m_pLibInfoSkill			= new CLibInfoSkill;
 	m_pLibInfoCharOnline	= new CLibInfoCharCli;
 
-	ReadIniData ();
+	ReadIniData();
 
-	m_pMgrSound->			Create ();
-	m_pMgrDraw->			Create (this);
-	m_pMgrLayer->			Create (this);
-	m_pMgrWindow->			Create (this);
-	m_pMgrKeyInput->		Create ();
-	m_pLibInfoChar->		Create (this);
-	m_pLibInfoDisable->		Create ();
-	m_pLibInfoMapObject->	Create ();
-	m_pLibInfoMapParts->	Create ();
-	m_pLibInfoMapShadow->	Create ();
-	m_pLibInfoMap->			Create (m_pLibInfoMapParts);
-	m_pLibInfoItem->		Create ();
-	m_pLibInfoItemType->	Create ();
-	m_pLibInfoItemWeapon->	Create ();
-	m_pLibInfoEffect->		Create ();
-	m_pLibInfoMotion->		Create ();
-	m_pLibInfoMotionType->	Create ();
-	m_pLibInfoEfcBalloon->	Create ();
-	m_pLibInfoSystem->		Create ();
-	m_pLibInfoSkill->		Create ();
+	m_pMgrSound->			Create();
+	m_pMgrDraw->			Create(this);
+	m_pMgrLayer->			Create(this);
+	m_pMgrWindow->			Create(this);
+	m_pMgrKeyInput->		Create();
+	m_pLibInfoChar->		Create(this);
+	m_pLibInfoDisable->		Create();
+	m_pLibInfoMapObject->	Create();
+	m_pLibInfoMapParts->	Create();
+	m_pLibInfoMapShadow->	Create();
+	m_pLibInfoMap->			Create(m_pLibInfoMapParts);
+	m_pLibInfoItem->		Create();
+	m_pLibInfoItemType->	Create();
+	m_pLibInfoItemWeapon->	Create();
+	m_pLibInfoEffect->		Create();
+	m_pLibInfoMotion->		Create();
+	m_pLibInfoMotionType->	Create();
+	m_pLibInfoEfcBalloon->	Create();
+	m_pLibInfoSystem->		Create();
+	m_pLibInfoSkill->		Create();
 
-	m_pLibInfoCharOnline->	Create (this);
+	m_pLibInfoCharOnline->	Create(this);
 
-	m_pLibInfoItem->SetTypeInfo (m_pLibInfoItemType);
-	m_pLibInfoItem->SetWeaponInfo (m_pLibInfoItemWeapon);
+	m_pLibInfoItem->SetTypeInfo(m_pLibInfoItemType);
+	m_pLibInfoItem->SetWeaponInfo(m_pLibInfoItemWeapon);
 
-	m_pMgrSound->SetBGMVolume (m_nBGMVolume);
-	m_pMgrSound->SetSEVolume (m_nSEVolume);
+	m_pMgrSound->SetBGMVolume(m_nBGMVolume);
+	m_pMgrSound->SetSEVolume(m_nSEVolume);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::Destroy												 */
-/* 内容		:破棄															 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrData::Destroy(void)
 {
-	if (m_pMgrSound)			{	m_pMgrSound->			Destroy ();	}
-	if (m_pMgrDraw)				{	m_pMgrDraw->			Destroy ();	}
-	if (m_pMgrLayer)			{	m_pMgrLayer->			Destroy ();	}
-	if (m_pMgrWindow)			{	m_pMgrWindow->			Destroy ();	}
-	if (m_pMgrKeyInput)			{	m_pMgrKeyInput->		Destroy ();	}
-	if (m_pLibInfoChar)			{	m_pLibInfoChar->		Destroy ();	}
-	if (m_pLibInfoDisable)		{	m_pLibInfoDisable->		Destroy ();	}
-	if (m_pLibInfoMap)			{	m_pLibInfoMap->			Destroy ();	}
-	if (m_pLibInfoMapObject)	{	m_pLibInfoMapObject->	Destroy ();	}
-	if (m_pLibInfoMapParts)		{	m_pLibInfoMapParts->	Destroy ();	}
-	if (m_pLibInfoMapShadow)	{	m_pLibInfoMapShadow->	Destroy ();	}
-	if (m_pLibInfoItem)			{	m_pLibInfoItem->		Destroy ();	}
-	if (m_pLibInfoItemType)		{	m_pLibInfoItemType->	Destroy ();	}
-	if (m_pLibInfoItemWeapon)	{	m_pLibInfoItemWeapon->	Destroy ();	}
-	if (m_pLibInfoEffect)		{	m_pLibInfoEffect->		Destroy ();	}
-	if (m_pLibInfoMotion)		{	m_pLibInfoMotion->		Destroy ();	}
-	if (m_pLibInfoMotionType)	{	m_pLibInfoMotionType->	Destroy ();	}
-	if (m_pLibInfoEfcBalloon)	{	m_pLibInfoEfcBalloon->	Destroy ();	}
-	if (m_pLibInfoSystem)		{	m_pLibInfoSystem->		Destroy ();	}
-	if (m_pLibInfoSkill)		{	m_pLibInfoSkill->		Destroy ();	}
+	if (m_pMgrSound)			{	m_pMgrSound->			Destroy();	}
+	if (m_pMgrDraw)				{	m_pMgrDraw->			Destroy();	}
+	if (m_pMgrLayer)			{	m_pMgrLayer->			Destroy();	}
+	if (m_pMgrWindow)			{	m_pMgrWindow->			Destroy();	}
+	if (m_pMgrKeyInput)			{	m_pMgrKeyInput->		Destroy();	}
+	if (m_pLibInfoChar)			{	m_pLibInfoChar->		Destroy();	}
+	if (m_pLibInfoDisable)		{	m_pLibInfoDisable->		Destroy();	}
+	if (m_pLibInfoMap)			{	m_pLibInfoMap->			Destroy();	}
+	if (m_pLibInfoMapObject)	{	m_pLibInfoMapObject->	Destroy();	}
+	if (m_pLibInfoMapParts)		{	m_pLibInfoMapParts->	Destroy();	}
+	if (m_pLibInfoMapShadow)	{	m_pLibInfoMapShadow->	Destroy();	}
+	if (m_pLibInfoItem)			{	m_pLibInfoItem->		Destroy();	}
+	if (m_pLibInfoItemType)		{	m_pLibInfoItemType->	Destroy();	}
+	if (m_pLibInfoItemWeapon)	{	m_pLibInfoItemWeapon->	Destroy();	}
+	if (m_pLibInfoEffect)		{	m_pLibInfoEffect->		Destroy();	}
+	if (m_pLibInfoMotion)		{	m_pLibInfoMotion->		Destroy();	}
+	if (m_pLibInfoMotionType)	{	m_pLibInfoMotionType->	Destroy();	}
+	if (m_pLibInfoEfcBalloon)	{	m_pLibInfoEfcBalloon->	Destroy();	}
+	if (m_pLibInfoSystem)		{	m_pLibInfoSystem->		Destroy();	}
+	if (m_pLibInfoSkill)		{	m_pLibInfoSkill->		Destroy();	}
 
-	DeleteAllSystemMsg ();
+	DeleteAllSystemMsg();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::SaveIniData											 */
-/* 内容		:設定情報を保存													 */
-/* 日付		:2007/07/05														 */
-/* ========================================================================= */
 
 void CMgrData::SaveIniData(void)
 {
-        TCHAR szModulePath[MAX_PATH];
-        TCHAR szIniPath[MAX_PATH];
-    char szCrypt[128];
-        WCHAR szwGuid[40];
-        CmyString strTmp;
-        CCryptUtil CryptUtil;
+	TCHAR szModulePath[MAX_PATH];
+	TCHAR szIniPath[MAX_PATH];
+	char szCrypt[128];
+	WCHAR szwGuid[40];
+	CmyString strTmp;
+	CCryptUtil CryptUtil;
 
-        ZeroMemory (szModulePath, sizeof (szModulePath));
-        GetModuleFileName (NULL, szModulePath, _countof (szModulePath));
-        _tcscpy_s (szIniPath, szModulePath);
-        int nExtPos = static_cast<int>(_tcslen (szIniPath)) - 3;
-        if (nExtPos >= 0) {
-                _tcscpy_s (&szIniPath[nExtPos], _countof (szIniPath) - nExtPos, _T("ini"));
-        } else {
-                _tcscat_s (szIniPath, _T(".ini"));
-        }
+	ZeroMemory(szModulePath, sizeof(szModulePath));
+	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
+	_tcscpy_s(szIniPath, szModulePath);
+	int nExtPos = static_cast<int>(_tcslen(szIniPath)) - 3;
+	if (nExtPos >= 0) {
+		_tcscpy_s(&szIniPath[nExtPos], _countof(szIniPath) - nExtPos, _T("ini"));
+	} else {
+		_tcscat_s(szIniPath, _T(".ini"));
+	}
 
-        ZeroMemory (szCrypt, sizeof (szCrypt));
-    CStringA strPasswordUtf8 = TStringToUtf8 ((LPCTSTR)m_strLastPassword);
-    CryptUtil.CryptStr (strPasswordUtf8, szCrypt, 10);
-    CString strEncrypted = Utf8ToTString (szCrypt);
+	ZeroMemory(szCrypt, sizeof(szCrypt));
+	CStringA strPasswordUtf8 = TStringToUtf8((LPCTSTR)m_strLastPassword);
+	CryptUtil.CryptStr(strPasswordUtf8, szCrypt, 10);
+	CString strEncrypted = Utf8ToTString(szCrypt);
 
-        WritePrivateProfileString (_T("Account"), _T("Account"), (LPCTSTR)m_strLastAccount, szIniPath);
-        WritePrivateProfileString (_T("Account"), _T("Password"), strEncrypted, szIniPath);
+	WritePrivateProfileString(_T("Account"), _T("Account"), (LPCTSTR)m_strLastAccount, szIniPath);
+	WritePrivateProfileString(_T("Account"), _T("Password"), strEncrypted, szIniPath);
 
-        strTmp.Format(_T("%d"), m_bSavePassword);
-        WritePrivateProfileString (_T("Setting"), _T("SavePassword"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bDisableLogin);
-        WritePrivateProfileString (_T("Setting"), _T("DisableLogin"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bOptionTaskbar);
-        WritePrivateProfileString (_T("Setting"), _T("OptionTaskbar"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bOptionViewChat);
-        WritePrivateProfileString (_T("Setting"), _T("OptionViewChat"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bOptionViewItem);
-        WritePrivateProfileString (_T("Setting"), _T("OptionViewItem"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bOptionViewItemName);
-        WritePrivateProfileString (_T("Setting"), _T("OptionViewItemName"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bOptionViewHelpIcon);
-        WritePrivateProfileString (_T("Setting"), _T("OptionViewHelpIcon"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bOptionBattleMsgLog);
-        WritePrivateProfileString (_T("Setting"), _T("OptionBattleMsgLog"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_bOption60Frame);
-        WritePrivateProfileString (_T("Setting"), _T("Option60Frame"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_nSEVolume);
-        WritePrivateProfileString (_T("Setting"), _T("SEVolume"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_nBGMVolume);
-        WritePrivateProfileString (_T("Setting"), _T("BGMVolume"), strTmp, szIniPath);
-        strTmp.Format(_T("%d"), m_nDrawMode);
-        WritePrivateProfileString (_T("Setting"), _T("DrawMode"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bSavePassword);
+	WritePrivateProfileString(_T("Setting"), _T("SavePassword"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bDisableLogin);
+	WritePrivateProfileString(_T("Setting"), _T("DisableLogin"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bOptionTaskbar);
+	WritePrivateProfileString(_T("Setting"), _T("OptionTaskbar"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bOptionViewChat);
+	WritePrivateProfileString(_T("Setting"), _T("OptionViewChat"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bOptionViewItem);
+	WritePrivateProfileString(_T("Setting"), _T("OptionViewItem"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bOptionViewItemName);
+	WritePrivateProfileString(_T("Setting"), _T("OptionViewItemName"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bOptionViewHelpIcon);
+	WritePrivateProfileString(_T("Setting"), _T("OptionViewHelpIcon"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bOptionBattleMsgLog);
+	WritePrivateProfileString(_T("Setting"), _T("OptionBattleMsgLog"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_bOption60Frame);
+	WritePrivateProfileString(_T("Setting"), _T("Option60Frame"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_nSEVolume);
+	WritePrivateProfileString(_T("Setting"), _T("SEVolume"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_nBGMVolume);
+	WritePrivateProfileString(_T("Setting"), _T("BGMVolume"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_nDrawMode);
+	WritePrivateProfileString(_T("Setting"), _T("DrawMode"), strTmp, szIniPath);
 
-        StringFromGUID2 (m_stInputGuid, szwGuid, _countof (szwGuid));
-        CString strGuid (szwGuid);
-        WritePrivateProfileString (_T("Setting"), _T("InputDevice"), strGuid, szIniPath);
+	StringFromGUID2(m_stInputGuid, szwGuid, _countof(szwGuid));
+	CString strGuid(szwGuid);
+	WritePrivateProfileString(_T("Setting"), _T("InputDevice"), strGuid, szIniPath);
 
-        strTmp.Format(_T("%d"), m_nSleepTimer);
-        WritePrivateProfileString (_T("Setting"), _T("SleepTimer"), strTmp, szIniPath);
+	strTmp.Format(_T("%d"), m_nSleepTimer);
+	WritePrivateProfileString(_T("Setting"), _T("SleepTimer"), strTmp, szIniPath);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::SetWindowInfo										 */
-/* 内容		:ウィンドウ情報を設定											 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrData::SetWindowInfo(HINSTANCE hInstance, HWND hWndMain)
 {
@@ -347,23 +309,11 @@ void CMgrData::SetWindowInfo(HINSTANCE hInstance, HWND hWndMain)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::SetAccount											 */
-/* 内容		:使用中のアカウント情報を設定									 */
-/* 日付		:2006/11/08														 */
-/* ========================================================================= */
-
 void CMgrData::SetAccount(CInfoAccount *pInfoAccount)
 {
-	m_pInfoAccount->Copy (pInfoAccount);
+	m_pInfoAccount->Copy(pInfoAccount);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetAccountID											 */
-/* 内容		:使用中のアカウントIDを取得										 */
-/* 日付		:2006/12/02														 */
-/* ========================================================================= */
 
 DWORD CMgrData::GetAccountID(void)
 {
@@ -371,35 +321,17 @@ DWORD CMgrData::GetAccountID(void)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::SetCharID											 */
-/* 内容		:使用中のキャラIDを設定											 */
-/* 日付		:2007/03/21														 */
-/* ========================================================================= */
-
 void CMgrData::SetCharID(DWORD dwCharID)
 {
 	m_pInfoAccount->m_dwCharID = dwCharID;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetCharID											 */
-/* 内容		:使用中のキャラIDを取得											 */
-/* 日付		:2007/01/02														 */
-/* ========================================================================= */
-
 DWORD CMgrData::GetCharID(void)
 {
 	return m_pInfoAccount->m_dwCharID;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetMapID												 */
-/* 内容		:現在のマップIDを取得											 */
-/* 日付		:2008/11/29														 */
-/* ========================================================================= */
 
 DWORD CMgrData::GetMapID(void)
 {
@@ -416,12 +348,6 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetFamilyTypeName									 */
-/* 内容		:種族名を取得													 */
-/* 日付		:2007/04/07														 */
-/* ========================================================================= */
-
 LPCSTR CMgrData::GetFamilyTypeName(WORD wFamilyTypeID)
 {
 	LPCSTR pszRet;
@@ -429,21 +355,15 @@ LPCSTR CMgrData::GetFamilyTypeName(WORD wFamilyTypeID)
 	pszRet = "";
 
 	switch (wFamilyTypeID) {
-	case FAMILYTYPE_HUMAN:	pszRet = "ニンゲン";	break;		/* ニンゲン */
-	case FAMILYTYPE_ELF:	pszRet = "エルフ";		break;		/* エルフ */
-	case FAMILYTYPE_BST:	pszRet = "ジュウジン";	break;		/* ジュウジン */
-	case FAMILYTYPE_DAEMON:	pszRet = "マゾク";		break;		/* マゾク */
+	case FAMILYTYPE_HUMAN:	pszRet = "ニンゲン";	break;	// ニンゲン
+	case FAMILYTYPE_ELF:	pszRet = "エルフ";		break;	// エルフ
+	case FAMILYTYPE_BST:	pszRet = "ジュウジン";	break;	// ジュウジン
+	case FAMILYTYPE_DAEMON:	pszRet = "マゾク";		break;	// マゾク
 	}
 
 	return pszRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetHairTypeName										 */
-/* 内容		:髪型名を取得													 */
-/* 日付		:2007/04/07														 */
-/* ========================================================================= */
 
 LPCSTR CMgrData::GetHairTypeName(WORD wHairTypeID)
 {
@@ -480,12 +400,6 @@ LPCSTR CMgrData::GetHairTypeName(WORD wHairTypeID)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetHairColorName										 */
-/* 内容		:髪色名を取得													 */
-/* 日付		:2007/05/11														 */
-/* ========================================================================= */
-
 LPCSTR CMgrData::GetHairColorName(WORD wHairColorID)
 {
 	LPCSTR pszRet;
@@ -512,12 +426,6 @@ LPCSTR CMgrData::GetHairColorName(WORD wHairColorID)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetEyeColorName										 */
-/* 内容		:目色名を取得													 */
-/* 日付		:2007/05/11														 */
-/* ========================================================================= */
-
 LPCSTR CMgrData::GetEyeColorName(WORD wEyeColorID)
 {
 	LPCSTR pszRet;
@@ -537,12 +445,6 @@ LPCSTR CMgrData::GetEyeColorName(WORD wEyeColorID)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetMotionName										 */
-/* 内容		:モーション名を取得												 */
-/* 日付		:2007/05/11														 */
-/* ========================================================================= */
-
 LPCSTR CMgrData::GetMotionName(DWORD dwMotionID)
 {
 	LPCSTR pszRet;
@@ -550,110 +452,104 @@ LPCSTR CMgrData::GetMotionName(DWORD dwMotionID)
 	pszRet = "";
 
 	switch (dwMotionID) {
-	case CHARMOTIONLISTID_STAND_UP:					pszRet = "立ち(上)";				break;	/* 立ち(上) */
-	case CHARMOTIONLISTID_STAND_DOWN:				pszRet = "立ち(下)";				break;	/* 立ち(下) */
-	case CHARMOTIONLISTID_STAND_LEFT:				pszRet = "立ち(左)";				break;	/* 立ち(左) */
-	case CHARMOTIONLISTID_STAND_RIGHT:				pszRet = "立ち(右)";				break;	/* 立ち(右) */
-	case CHARMOTIONLISTID_WALK_UP:					pszRet = "歩き(上)";				break;	/* 歩き(上) */
-	case CHARMOTIONLISTID_WALK_DOWN:				pszRet = "歩き(下)";				break;	/* 歩き(下) */
-	case CHARMOTIONLISTID_WALK_LEFT:				pszRet = "歩き(左)";				break;	/* 歩き(左) */
-	case CHARMOTIONLISTID_WALK_RIGHT:				pszRet = "歩き(右)";				break;	/* 歩き(右) */
-	case CHARMOTIONLISTID_SIT_UP:					pszRet = "座り(上)";				break;	/* 座り(上) */
-	case CHARMOTIONLISTID_SIT_DOWN:					pszRet = "座り(下)";				break;	/* 座り(下) */
-	case CHARMOTIONLISTID_SIT_LEFT:					pszRet = "座り(左)";				break;	/* 座り(左) */
-	case CHARMOTIONLISTID_SIT_RIGHT:				pszRet = "座り(右)";				break;	/* 座り(右) */
-	case CHARMOTIONLISTID_BATTLESTAND_UP:			pszRet = "戦闘立ち(上)";			break;	/* 戦闘立ち(上) */
-	case CHARMOTIONLISTID_BATTLESTAND_DOWN:			pszRet = "戦闘立ち(下)";			break;	/* 戦闘立ち(下) */
-	case CHARMOTIONLISTID_BATTLESTAND_LEFT:			pszRet = "戦闘立ち(左)";			break;	/* 戦闘立ち(左) */
-	case CHARMOTIONLISTID_BATTLESTAND_RIGHT:		pszRet = "戦闘立ち(右)";			break;	/* 戦闘立ち(右) */
-	case CHARMOTIONLISTID_BATTLEWALK_UP:			pszRet = "すり足(上)";				break;	/* すり足(上) */
-	case CHARMOTIONLISTID_BATTLEWALK_DOWN:			pszRet = "すり足(下)";				break;	/* すり足(下) */
-	case CHARMOTIONLISTID_BATTLEWALK_LEFT:			pszRet = "すり足(左)";				break;	/* すり足(左) */
-	case CHARMOTIONLISTID_BATTLEWALK_RIGHT:			pszRet = "すり足(右)";				break;	/* すり足(右) */
-	case CHARMOTIONLISTID_SWING_UP:					pszRet = "振り(上)";				break;	/* 振り(上) */
-	case CHARMOTIONLISTID_SWING_DOWN:				pszRet = "振り(下)";				break;	/* 振り(下) */
-	case CHARMOTIONLISTID_SWING_LEFT:				pszRet = "振り(左)";				break;	/* 振り(左) */
-	case CHARMOTIONLISTID_SWING_RIGHT:				pszRet = "振り(右)";				break;	/* 振り(右) */
-	case CHARMOTIONLISTID_POKE_UP:					pszRet = "突き(上)";				break;	/* 突き(上) */
-	case CHARMOTIONLISTID_POKE_DOWN:				pszRet = "突き(下)";				break;	/* 突き(下) */
-	case CHARMOTIONLISTID_POKE_LEFT:				pszRet = "突き(左)";				break;	/* 突き(左) */
-	case CHARMOTIONLISTID_POKE_RIGHT:				pszRet = "突き(右)";				break;	/* 突き(右) */
-	case CHARMOTIONLISTID_BOWWALK_UP:				pszRet = "弓用すり足(上)";			break;	/* 弓用すり足(上) */
-	case CHARMOTIONLISTID_BOWWALK_DOWN:				pszRet = "弓用すり足(下)";			break;	/* 弓用すり足(下) */
-	case CHARMOTIONLISTID_BOWWALK_LEFT:				pszRet = "弓用すり足(左)";			break;	/* 弓用すり足(左) */
-	case CHARMOTIONLISTID_BOWWALK_RIGHT:			pszRet = "弓用すり足(右)";			break;	/* 弓用すり足(右) */
-	case CHARMOTIONLISTID_BOW_UP:					pszRet = "弓(上)";					break;	/* 弓(上) */
-	case CHARMOTIONLISTID_BOW_DOWN:					pszRet = "弓(下)";					break;	/* 弓(下) */
-	case CHARMOTIONLISTID_BOW_LEFT:					pszRet = "弓(左)";					break;	/* 弓(左) */
-	case CHARMOTIONLISTID_BOW_RIGHT:				pszRet = "弓(右)";					break;	/* 弓(右) */
-	case CHARMOTIONLISTID_GLOVEWALK_UP:				pszRet = "打撃用すり足(上)";		break;	/* 打撃用すり足(上) */
-	case CHARMOTIONLISTID_GLOVEWALK_DOWN:			pszRet = "打撃用すり足(下)";		break;	/* 打撃用すり足(下) */
-	case CHARMOTIONLISTID_GLOVEWALK_LEFT:			pszRet = "打撃用すり足(左)";		break;	/* 打撃用すり足(左) */
-	case CHARMOTIONLISTID_GLOVEWALK_RIGHT:			pszRet = "打撃用すり足(右)";		break;	/* 打撃用すり足(右) */
-	case CHARMOTIONLISTID_GLOVE_UP:					pszRet = "打撃(上)";				break;	/* 打撃(上) */
-	case CHARMOTIONLISTID_GLOVE_DOWN:				pszRet = "打撃(下)";				break;	/* 打撃(下) */
-	case CHARMOTIONLISTID_GLOVE_LEFT:				pszRet = "打撃(左)";				break;	/* 打撃(左) */
-	case CHARMOTIONLISTID_GLOVE_RIGHT:				pszRet = "打撃(右)";				break;	/* 打撃(右) */
-	case CHARMOTIONLISTID_FISHINGWALK_UP:			pszRet = "釣り用すり足(上)";		break;	/* 釣り用すり足(上) */
-	case CHARMOTIONLISTID_FISHINGWALK_DOWN:			pszRet = "釣り用すり足(下)";		break;	/* 釣り用すり足(下) */
-	case CHARMOTIONLISTID_FISHINGWALK_LEFT:			pszRet = "釣り用すり足(左)";		break;	/* 釣り用すり足(左) */
-	case CHARMOTIONLISTID_FISHINGWALK_RIGHT:		pszRet = "釣り用すり足(右)";		break;	/* 釣り用すり足(右) */
-	case CHARMOTIONLISTID_FISHING_UP:				pszRet = "釣り(上)";				break;	/* 釣り(上) */
-	case CHARMOTIONLISTID_FISHING_DOWN:				pszRet = "釣り(下)";				break;	/* 釣り(下) */
-	case CHARMOTIONLISTID_FISHING_LEFT:				pszRet = "釣り(左)";				break;	/* 釣り(左) */
-	case CHARMOTIONLISTID_FISHING_RIGHT:			pszRet = "釣り(右)";				break;	/* 釣り(右) */
-	case CHARMOTIONLISTID_FISHING_HIT_UP:			pszRet = "釣りヒット(上)";			break;	/* 釣りヒット(上) */
-	case CHARMOTIONLISTID_FISHING_HIT_DOWN:			pszRet = "釣りヒット(下)";			break;	/* 釣りヒット(下) */
-	case CHARMOTIONLISTID_FISHING_HIT_LEFT:			pszRet = "釣りヒット(左)";			break;	/* 釣りヒット(左) */
-	case CHARMOTIONLISTID_FISHING_HIT_RIGHT:		pszRet = "釣りヒット(右)";			break;	/* 釣りヒット(右) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_UP:		pszRet = "弓用戦闘立ち(上)";		break;	/* 弓用戦闘立ち(上) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_DOWN:		pszRet = "弓用戦闘立ち(下)";		break;	/* 弓用戦闘立ち(下) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_LEFT:		pszRet = "弓用戦闘立ち(左)";		break;	/* 弓用戦闘立ち(左) */
-	case CHARMOTIONLISTID_BOWBATTLESTAND_RIGHT:		pszRet = "弓用戦闘立ち(右)";		break;	/* 弓用戦闘立ち(右) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_UP:		pszRet = "打撃用戦闘立ち(上)";		break;	/* 打撃用戦闘立ち(上) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_DOWN:	pszRet = "打撃用戦闘立ち(下)";		break;	/* 打撃用戦闘立ち(下) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_LEFT:	pszRet = "打撃用戦闘立ち(左)";		break;	/* 打撃用戦闘立ち(左) */
-	case CHARMOTIONLISTID_GLOVEBATTLESTAND_RIGHT:	pszRet = "打撃用戦闘立ち(右)";		break;	/* 打撃用戦闘立ち(右) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_UP:	pszRet = "釣り用戦闘立ち(上)";		break;	/* 釣り用戦闘立ち(上) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_DOWN:	pszRet = "釣り用戦闘立ち(下)";		break;	/* 釣り用戦闘立ち(下) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_LEFT:	pszRet = "釣り用戦闘立ち(左)";		break;	/* 釣り用戦闘立ち(左) */
-	case CHARMOTIONLISTID_FISHINGBATTLESTAND_RIGHT:	pszRet = "釣り用戦闘立ち(右)";		break;	/* 釣り用戦闘立ち(右) */
-	case CHARMOTIONLISTID_STAND:					pszRet = "立ち";					break;	/* 立ち */
-	case CHARMOTIONLISTID_STAND_SIMPLE:				pszRet = "立ち(上下左右1コマずつ)";	break;	/* 立ち(上下左右1コマずつ) */
-	case CHARMOTIONLISTID_WALK:						pszRet = "歩き(方向無し)";			break;	/* 歩き(方向無し) */
-	case CHARMOTIONLISTID_DESTROY:					pszRet = "破壊";					break;	/* 破壊 */
-	case CHARMOTIONLISTID_SIMPLE:					pszRet = "16コマ連続";				break;	/* 16コマ連続 */
-	case CHARMOTIONLISTID_DEFENSE_UP:				pszRet = "防御(上)";				break;	/* 防御(上) */
-	case CHARMOTIONLISTID_DEFENSE_DOWN:				pszRet = "防御(下)";				break;	/* 防御(下) */
-	case CHARMOTIONLISTID_DEFENSE_LEFT:				pszRet = "防御(左)";				break;	/* 防御(左) */
-	case CHARMOTIONLISTID_DEFENSE_RIGHT:			pszRet = "防御(右)";				break;	/* 防御(右) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_UP:		pszRet = "防御成功(上)";			break;	/* 防御成功(上) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_DOWN:		pszRet = "防御成功(下)";			break;	/* 防御成功(下) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_LEFT:		pszRet = "防御成功(左)";			break;	/* 防御成功(左) */
-	case CHARMOTIONLISTID_DEFENSE_SUCCESS_RIGHT:	pszRet = "防御成功(右)";			break;	/* 防御成功(右) */
-	case CHARMOTIONLISTID_BOWDEFENSE_UP:			pszRet = "弓用防御(上)";			break;	/* 弓用防御(上) */
-	case CHARMOTIONLISTID_BOWDEFENSE_DOWN:			pszRet = "弓用防御(下)";			break;	/* 弓用防御(下) */
-	case CHARMOTIONLISTID_BOWDEFENSE_LEFT:			pszRet = "弓用防御(左)";			break;	/* 弓用防御(左) */
-	case CHARMOTIONLISTID_BOWDEFENSE_RIGHT:			pszRet = "弓用防御(右)";			break;	/* 弓用防御(右) */
-	case CHARMOTIONLISTID_DAMAGE_UP:				pszRet = "ダメージ(上)";			break;	/* ダメージ(上) */
-	case CHARMOTIONLISTID_DAMAGE_DOWN:				pszRet = "ダメージ(下)";			break;	/* ダメージ(下) */
-	case CHARMOTIONLISTID_DAMAGE_LEFT:				pszRet = "ダメージ(左)";			break;	/* ダメージ(左) */
-	case CHARMOTIONLISTID_DAMAGE_RIGHT:				pszRet = "ダメージ(右)";			break;	/* ダメージ(右) */
-	case CHARMOTIONLISTID_DEAD_UP:					pszRet = "死亡(上)";				break;	/* 死亡(上) */
-	case CHARMOTIONLISTID_DEAD_DOWN:				pszRet = "死亡(下)";				break;	/* 死亡(下) */
-	case CHARMOTIONLISTID_DEAD_LEFT:				pszRet = "死亡(左)";				break;	/* 死亡(左) */
-	case CHARMOTIONLISTID_DEAD_RIGHT:				pszRet = "死亡(右)";				break;	/* 死亡(右) */
+	case CHARMOTIONLISTID_STAND_UP:					pszRet = "立ち(上)";				break;	// 立ち(上)
+	case CHARMOTIONLISTID_STAND_DOWN:				pszRet = "立ち(下)";				break;	// 立ち(下)
+	case CHARMOTIONLISTID_STAND_LEFT:				pszRet = "立ち(左)";				break;	// 立ち(左)
+	case CHARMOTIONLISTID_STAND_RIGHT:				pszRet = "立ち(右)";				break;	// 立ち(右)
+	case CHARMOTIONLISTID_WALK_UP:					pszRet = "歩き(上)";				break;	// 歩き(上)
+	case CHARMOTIONLISTID_WALK_DOWN:				pszRet = "歩き(下)";				break;	// 歩き(下)
+	case CHARMOTIONLISTID_WALK_LEFT:				pszRet = "歩き(左)";				break;	// 歩き(左)
+	case CHARMOTIONLISTID_WALK_RIGHT:				pszRet = "歩き(右)";				break;	// 歩き(右)
+	case CHARMOTIONLISTID_SIT_UP:					pszRet = "座り(上)";				break;	// 座り(上)
+	case CHARMOTIONLISTID_SIT_DOWN:					pszRet = "座り(下)";				break;	// 座り(下)
+	case CHARMOTIONLISTID_SIT_LEFT:					pszRet = "座り(左)";				break;	// 座り(左)
+	case CHARMOTIONLISTID_SIT_RIGHT:				pszRet = "座り(右)";				break;	// 座り(右)
+	case CHARMOTIONLISTID_BATTLESTAND_UP:			pszRet = "戦闘立ち(上)";			break;	// 戦闘立ち(上)
+	case CHARMOTIONLISTID_BATTLESTAND_DOWN:			pszRet = "戦闘立ち(下)";			break;	// 戦闘立ち(下)
+	case CHARMOTIONLISTID_BATTLESTAND_LEFT:			pszRet = "戦闘立ち(左)";			break;	// 戦闘立ち(左)
+	case CHARMOTIONLISTID_BATTLESTAND_RIGHT:		pszRet = "戦闘立ち(右)";			break;	// 戦闘立ち(右)
+	case CHARMOTIONLISTID_BATTLEWALK_UP:			pszRet = "すり足(上)";				break;	// すり足(上)
+	case CHARMOTIONLISTID_BATTLEWALK_DOWN:			pszRet = "すり足(下)";				break;	// すり足(下)
+	case CHARMOTIONLISTID_BATTLEWALK_LEFT:			pszRet = "すり足(左)";				break;	// すり足(左)
+	case CHARMOTIONLISTID_BATTLEWALK_RIGHT:			pszRet = "すり足(右)";				break;	// すり足(右)
+	case CHARMOTIONLISTID_SWING_UP:					pszRet = "振り(上)";				break;	// 振り(上)
+	case CHARMOTIONLISTID_SWING_DOWN:				pszRet = "振り(下)";				break;	// 振り(下)
+	case CHARMOTIONLISTID_SWING_LEFT:				pszRet = "振り(左)";				break;	// 振り(左)
+	case CHARMOTIONLISTID_SWING_RIGHT:				pszRet = "振り(右)";				break;	// 振り(右)
+	case CHARMOTIONLISTID_POKE_UP:					pszRet = "突き(上)";				break;	// 突き(上)
+	case CHARMOTIONLISTID_POKE_DOWN:				pszRet = "突き(下)";				break;	// 突き(下)
+	case CHARMOTIONLISTID_POKE_LEFT:				pszRet = "突き(左)";				break;	// 突き(左)
+	case CHARMOTIONLISTID_POKE_RIGHT:				pszRet = "突き(右)";				break;	// 突き(右)
+	case CHARMOTIONLISTID_BOWWALK_UP:				pszRet = "弓用すり足(上)";			break;	// 弓用すり足(上)
+	case CHARMOTIONLISTID_BOWWALK_DOWN:				pszRet = "弓用すり足(下)";			break;	// 弓用すり足(下)
+	case CHARMOTIONLISTID_BOWWALK_LEFT:				pszRet = "弓用すり足(左)";			break;	// 弓用すり足(左)
+	case CHARMOTIONLISTID_BOWWALK_RIGHT:			pszRet = "弓用すり足(右)";			break;	// 弓用すり足(右)
+	case CHARMOTIONLISTID_BOW_UP:					pszRet = "弓(上)";					break;	// 弓(上)
+	case CHARMOTIONLISTID_BOW_DOWN:					pszRet = "弓(下)";					break;	// 弓(下)
+	case CHARMOTIONLISTID_BOW_LEFT:					pszRet = "弓(左)";					break;	// 弓(左)
+	case CHARMOTIONLISTID_BOW_RIGHT:				pszRet = "弓(右)";					break;	// 弓(右)
+	case CHARMOTIONLISTID_GLOVEWALK_UP:				pszRet = "打撃用すり足(上)";		break;	// 打撃用すり足(上)
+	case CHARMOTIONLISTID_GLOVEWALK_DOWN:			pszRet = "打撃用すり足(下)";		break;	// 打撃用すり足(下)
+	case CHARMOTIONLISTID_GLOVEWALK_LEFT:			pszRet = "打撃用すり足(左)";		break;	// 打撃用すり足(左)
+	case CHARMOTIONLISTID_GLOVEWALK_RIGHT:			pszRet = "打撃用すり足(右)";		break;	// 打撃用すり足(右)
+	case CHARMOTIONLISTID_GLOVE_UP:					pszRet = "打撃(上)";				break;	// 打撃(上)
+	case CHARMOTIONLISTID_GLOVE_DOWN:				pszRet = "打撃(下)";				break;	// 打撃(下)
+	case CHARMOTIONLISTID_GLOVE_LEFT:				pszRet = "打撃(左)";				break;	// 打撃(左)
+	case CHARMOTIONLISTID_GLOVE_RIGHT:				pszRet = "打撃(右)";				break;	// 打撃(右)
+	case CHARMOTIONLISTID_FISHINGWALK_UP:			pszRet = "釣り用すり足(上)";		break;	// 釣り用すり足(上)
+	case CHARMOTIONLISTID_FISHINGWALK_DOWN:			pszRet = "釣り用すり足(下)";		break;	// 釣り用すり足(下)
+	case CHARMOTIONLISTID_FISHINGWALK_LEFT:			pszRet = "釣り用すり足(左)";		break;	// 釣り用すり足(左)
+	case CHARMOTIONLISTID_FISHINGWALK_RIGHT:		pszRet = "釣り用すり足(右)";		break;	// 釣り用すり足(右)
+	case CHARMOTIONLISTID_FISHING_UP:				pszRet = "釣り(上)";				break;	// 釣り(上)
+	case CHARMOTIONLISTID_FISHING_DOWN:				pszRet = "釣り(下)";				break;	// 釣り(下)
+	case CHARMOTIONLISTID_FISHING_LEFT:				pszRet = "釣り(左)";				break;	// 釣り(左)
+	case CHARMOTIONLISTID_FISHING_RIGHT:			pszRet = "釣り(右)";				break;	// 釣り(右)
+	case CHARMOTIONLISTID_FISHING_HIT_UP:			pszRet = "釣りヒット(上)";			break;	// 釣りヒット(上)
+	case CHARMOTIONLISTID_FISHING_HIT_DOWN:			pszRet = "釣りヒット(下)";			break;	// 釣りヒット(下)
+	case CHARMOTIONLISTID_FISHING_HIT_LEFT:			pszRet = "釣りヒット(左)";			break;	// 釣りヒット(左)
+	case CHARMOTIONLISTID_FISHING_HIT_RIGHT:		pszRet = "釣りヒット(右)";			break;	// 釣りヒット(右)
+	case CHARMOTIONLISTID_BOWBATTLESTAND_UP:		pszRet = "弓用戦闘立ち(上)";		break;	// 弓用戦闘立ち(上)
+	case CHARMOTIONLISTID_BOWBATTLESTAND_DOWN:		pszRet = "弓用戦闘立ち(下)";		break;	// 弓用戦闘立ち(下)
+	case CHARMOTIONLISTID_BOWBATTLESTAND_LEFT:		pszRet = "弓用戦闘立ち(左)";		break;	// 弓用戦闘立ち(左)
+	case CHARMOTIONLISTID_BOWBATTLESTAND_RIGHT:		pszRet = "弓用戦闘立ち(右)";		break;	// 弓用戦闘立ち(右)
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_UP:		pszRet = "打撃用戦闘立ち(上)";		break;	// 打撃用戦闘立ち(上)
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_DOWN:	pszRet = "打撃用戦闘立ち(下)";		break;	// 打撃用戦闘立ち(下)
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_LEFT:	pszRet = "打撃用戦闘立ち(左)";		break;	// 打撃用戦闘立ち(左)
+	case CHARMOTIONLISTID_GLOVEBATTLESTAND_RIGHT:	pszRet = "打撃用戦闘立ち(右)";		break;	// 打撃用戦闘立ち(右)
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_UP:	pszRet = "釣り用戦闘立ち(上)";		break;	// 釣り用戦闘立ち(上)
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_DOWN:	pszRet = "釣り用戦闘立ち(下)";		break;	// 釣り用戦闘立ち(下)
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_LEFT:	pszRet = "釣り用戦闘立ち(左)";		break;	// 釣り用戦闘立ち(左)
+	case CHARMOTIONLISTID_FISHINGBATTLESTAND_RIGHT:	pszRet = "釣り用戦闘立ち(右)";		break;	// 釣り用戦闘立ち(右)
+	case CHARMOTIONLISTID_STAND:					pszRet = "立ち";					break;	// 立ち
+	case CHARMOTIONLISTID_STAND_SIMPLE:				pszRet = "立ち(上下左右1コマずつ)";	break;	// 立ち(上下左右1コマずつ)
+	case CHARMOTIONLISTID_WALK:						pszRet = "歩き(方向無し)";			break;	// 歩き(方向無し)
+	case CHARMOTIONLISTID_DESTROY:					pszRet = "破壊";					break;	// 破壊
+	case CHARMOTIONLISTID_SIMPLE:					pszRet = "16コマ連続";				break;	// 16コマ連続
+	case CHARMOTIONLISTID_DEFENSE_UP:				pszRet = "防御(上)";				break;	// 防御(上)
+	case CHARMOTIONLISTID_DEFENSE_DOWN:				pszRet = "防御(下)";				break;	// 防御(下)
+	case CHARMOTIONLISTID_DEFENSE_LEFT:				pszRet = "防御(左)";				break;	// 防御(左)
+	case CHARMOTIONLISTID_DEFENSE_RIGHT:			pszRet = "防御(右)";				break;	// 防御(右)
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_UP:		pszRet = "防御成功(上)";			break;	// 防御成功(上)
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_DOWN:		pszRet = "防御成功(下)";			break;	// 防御成功(下)
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_LEFT:		pszRet = "防御成功(左)";			break;	// 防御成功(左)
+	case CHARMOTIONLISTID_DEFENSE_SUCCESS_RIGHT:	pszRet = "防御成功(右)";			break;	// 防御成功(右)
+	case CHARMOTIONLISTID_BOWDEFENSE_UP:			pszRet = "弓用防御(上)";			break;	// 弓用防御(上)
+	case CHARMOTIONLISTID_BOWDEFENSE_DOWN:			pszRet = "弓用防御(下)";			break;	// 弓用防御(下)
+	case CHARMOTIONLISTID_BOWDEFENSE_LEFT:			pszRet = "弓用防御(左)";			break;	// 弓用防御(左)
+	case CHARMOTIONLISTID_BOWDEFENSE_RIGHT:			pszRet = "弓用防御(右)";			break;	// 弓用防御(右)
+	case CHARMOTIONLISTID_DAMAGE_UP:				pszRet = "ダメージ(上)";			break;	// ダメージ(上)
+	case CHARMOTIONLISTID_DAMAGE_DOWN:				pszRet = "ダメージ(下)";			break;	// ダメージ(下)
+	case CHARMOTIONLISTID_DAMAGE_LEFT:				pszRet = "ダメージ(左)";			break;	// ダメージ(左)
+	case CHARMOTIONLISTID_DAMAGE_RIGHT:				pszRet = "ダメージ(右)";			break;	// ダメージ(右)
+	case CHARMOTIONLISTID_DEAD_UP:					pszRet = "死亡(上)";				break;	// 死亡(上)
+	case CHARMOTIONLISTID_DEAD_DOWN:				pszRet = "死亡(下)";				break;	// 死亡(下)
+	case CHARMOTIONLISTID_DEAD_LEFT:				pszRet = "死亡(左)";				break;	// 死亡(左)
+	case CHARMOTIONLISTID_DEAD_RIGHT:				pszRet = "死亡(右)";				break;	// 死亡(右)
 	}
 
 	return pszRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetMotionProcName									 */
-/* 内容		:行動名を取得													 */
-/* 日付		:2008/01/01														 */
-/* ========================================================================= */
 
 LPCSTR CMgrData::GetMotionProcName(DWORD dwProcID)
 {
@@ -662,20 +558,14 @@ LPCSTR CMgrData::GetMotionProcName(DWORD dwProcID)
 	pszRet = "";
 
 	switch (dwProcID) {
-	case CHARMOTIONPROCID_ATACK:		pszRet = "攻撃";		break;		/* 攻撃 */
-	case CHARMOTIONPROCID_FISHING:		pszRet = "釣り";		break;		/* 釣り */
+	case CHARMOTIONPROCID_ATACK:		pszRet = "攻撃";		break;	// 攻撃
+	case CHARMOTIONPROCID_FISHING:		pszRet = "釣り";		break;	// 釣り
 	default:							pszRet = "何もしない";	break;
 	}
 
 	return pszRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetMapEventName										 */
-/* 内容		:マップイベント種別名を取得										 */
-/* 日付		:2008/07/17														 */
-/* ========================================================================= */
 
 LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 {
@@ -684,12 +574,12 @@ LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 	pszRet = "";
 
 	switch (nMapEventType) {
-	case MAPEVENTTYPE_MOVE:			pszRet = "マップ内移動";	break;	/* マップ内移動 */
-	case MAPEVENTTYPE_MAPMOVE:		pszRet = "マップ間移動";	break;	/* マップ間移動 */
-	case MAPEVENTTYPE_TRASHBOX:		pszRet = "ゴミ箱";			break;	/* ゴミ箱 */
-	case MAPEVENTTYPE_INITSTATUS:	pszRet = "ステータス初期化";break;	/* ステータス初期化 */
-	case MAPEVENTTYPE_GRPIDTMP:		pszRet = "一時画像設定";	break;	/* 一時画像設定 */
-	case MAPEVENTTYPE_LIGHT:		pszRet = "灯り";			break;	/* 灯り */
+	case MAPEVENTTYPE_MOVE:			pszRet = "マップ内移動";	break;	// マップ内移動
+	case MAPEVENTTYPE_MAPMOVE:		pszRet = "マップ間移動";	break;	// マップ間移動
+	case MAPEVENTTYPE_TRASHBOX:		pszRet = "ゴミ箱";			break;	// ゴミ箱
+	case MAPEVENTTYPE_INITSTATUS:	pszRet = "ステータス初期化";break;	// ステータス初期化
+	case MAPEVENTTYPE_GRPIDTMP:		pszRet = "一時画像設定";	break;	// 一時画像設定
+	case MAPEVENTTYPE_LIGHT:		pszRet = "灯り";			break;	// 灯り
 	default:						pszRet = "未設定";			break;
 	}
 
@@ -697,23 +587,11 @@ LPCSTR CMgrData::GetMapEventName(int nMapEventType)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetSystemMsgCount									 */
-/* 内容		:システムメッセージ数を取得										 */
-/* 日付		:2007/09/06														 */
-/* ========================================================================= */
-
 int CMgrData::GetSystemMsgCount(void)
 {
 	return m_aSystemMsg.size();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetSystemMsg											 */
-/* 内容		:システムメッセージを追加										 */
-/* 日付		:2007/09/06														 */
-/* ========================================================================= */
 
 PSTSYSTEMMSG CMgrData::GetSystemMsg(int nNo)
 {
@@ -731,12 +609,6 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::AddSystemMsg											 */
-/* 内容		:システムメッセージを追加										 */
-/* 日付		:2007/09/06														 */
-/* ========================================================================= */
-
 void CMgrData::AddSystemMsg(BOOL bAddLog, LPCSTR pszMsg, COLORREF clMsg)
 {
 	PSTSYSTEMMSG pSystemMsg;
@@ -746,15 +618,9 @@ void CMgrData::AddSystemMsg(BOOL bAddLog, LPCSTR pszMsg, COLORREF clMsg)
 	pSystemMsg->strMsg	= pszMsg;
 	pSystemMsg->clMsg	= clMsg;
 
-	m_aSystemMsg.push_back (pSystemMsg);
+	m_aSystemMsg.push_back(pSystemMsg);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::DeleteAllSystemMsg									 */
-/* 内容		:システムメッセージを全て削除									 */
-/* 日付		:2007/09/06														 */
-/* ========================================================================= */
 
 void CMgrData::DeleteAllSystemMsg(void)
 {
@@ -762,57 +628,33 @@ void CMgrData::DeleteAllSystemMsg(void)
 	PSTSYSTEMMSG pSystemMsg;
 
 	nCount = m_aSystemMsg.size();
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pSystemMsg = m_aSystemMsg[i];
-		SAFE_DELETE (pSystemMsg);
+		SAFE_DELETE(pSystemMsg);
 	}
 	m_aSystemMsg.clear();
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::SetSEVolume											 */
-/* 内容		:効果音量を設定													 */
-/* 日付		:2007/09/16														 */
-/* ========================================================================= */
-
 void CMgrData::SetSEVolume(int nSEVolume)
 {
 	m_nSEVolume = nSEVolume;
-	SaveIniData ();
+	SaveIniData();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::SetSEVolume											 */
-/* 内容		:BGM音量を設定													 */
-/* 日付		:2007/09/16														 */
-/* ========================================================================= */
 
 void CMgrData::SetBGMVolume(int nBGMVolume)
 {
 	m_nBGMVolume = nBGMVolume;
-	SaveIniData ();
+	SaveIniData();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::SetInfoTalkEvent										 */
-/* 内容		:会話イベント情報の設定											 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
 
 void CMgrData::SetInfoTalkEvent(CInfoTalkEvent *pSrc)
 {
-	m_pInfoTalkEvent->Copy (pSrc);
+	m_pInfoTalkEvent->Copy(pSrc);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrData::GetInfoTalkEvent										 */
-/* 内容		:会話イベント情報の取得											 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
 
 CInfoTalkEvent *CMgrData::GetInfoTalkEvent(void)
 {
@@ -820,67 +662,58 @@ CInfoTalkEvent *CMgrData::GetInfoTalkEvent(void)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrData::ReadIniData											 */
-/* 内容		:iniファイルから設定を読み込み									 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 void CMgrData::ReadIniData(void)
 {
-        int nTmp;
-        TCHAR szModulePath[MAX_PATH];
-        TCHAR szIniPath[MAX_PATH];
-        TCHAR szTmp[128];
-        char szDecrypted[128];
-        CCryptUtil CryptUtil;
+	int nTmp;
+	TCHAR szModulePath[MAX_PATH];
+	TCHAR szIniPath[MAX_PATH];
+	TCHAR szTmp[128];
+	char szDecrypted[128];
+	CCryptUtil CryptUtil;
 
-        ZeroMemory (szModulePath, sizeof (szModulePath));
-        GetModuleFileName (NULL, szModulePath, _countof (szModulePath));
-        _tcscpy_s (szIniPath, szModulePath);
-        int nExtPos = static_cast<int>(_tcslen (szIniPath)) - 3;
-        if (nExtPos >= 0) {
-                _tcscpy_s (&szIniPath[nExtPos], _countof (szIniPath) - nExtPos, _T("ini"));
-        } else {
-                _tcscat_s (szIniPath, _T(".ini"));
-        }
+	ZeroMemory(szModulePath, sizeof(szModulePath));
+	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
+	_tcscpy_s(szIniPath, szModulePath);
+	int nExtPos = static_cast<int>(_tcslen(szIniPath)) - 3;
+	if (nExtPos >= 0) {
+		_tcscpy_s(&szIniPath[nExtPos], _countof(szIniPath) - nExtPos, _T("ini"));
+	} else {
+		_tcscat_s(szIniPath, _T(".ini"));
+	}
 
-        GetPrivateProfileString (_T("Setting"), _T("ServerAddr"), _T("127.0.0.1"), szTmp, _countof (szTmp), szIniPath);
-        m_strServerAddr = szTmp;
-        m_wServerPort = static_cast<WORD>(GetPrivateProfileInt (_T("Setting"), _T("ServerPort"), 2006, szIniPath));
-        m_bSavePassword = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("SavePassword"), 0, szIniPath);
-//      m_bDisableLogin = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("DisableLogin"), 0, szIniPath);
-        m_bOptionTaskbar = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionTaskbar"), 0, szIniPath);
-        m_bOptionViewChat = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewChat"), 1, szIniPath);
-        m_bOptionViewItem = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewItem"), 1, szIniPath);
-        m_bOptionViewItemName = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewItemName"), 1, szIniPath);
-        m_bOptionViewHelpIcon = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionViewHelpIcon"), 1, szIniPath);
-        m_bOptionBattleMsgLog = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("OptionBattleMsgLog"), 0, szIniPath);
-        m_bOption60Frame = (BOOL)GetPrivateProfileInt (_T("Setting"), _T("Option60Frame"), 0, szIniPath);
+	GetPrivateProfileString(_T("Setting"), _T("ServerAddr"), _T("127.0.0.1"), szTmp, _countof(szTmp), szIniPath);
+	m_strServerAddr = szTmp;
+	m_wServerPort = static_cast<WORD>(GetPrivateProfileInt(_T("Setting"), _T("ServerPort"), 2006, szIniPath));
+	m_bSavePassword = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("SavePassword"), 0, szIniPath);
+//	m_bDisableLogin = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("DisableLogin"), 0, szIniPath);
+	m_bOptionTaskbar = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionTaskbar"), 0, szIniPath);
+	m_bOptionViewChat = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionViewChat"), 1, szIniPath);
+	m_bOptionViewItem = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionViewItem"), 1, szIniPath);
+	m_bOptionViewItemName = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionViewItemName"), 1, szIniPath);
+	m_bOptionViewHelpIcon = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionViewHelpIcon"), 1, szIniPath);
+	m_bOptionBattleMsgLog = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionBattleMsgLog"), 0, szIniPath);
+	m_bOption60Frame = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("Option60Frame"), 0, szIniPath);
 
-        GetPrivateProfileString (_T("Account"), _T("Account"), _T(""), szTmp, _countof (szTmp), szIniPath);
-        m_strLastAccount = szTmp;
-        GetPrivateProfileString (_T("Account"), _T("Password"), _T(""), szTmp, _countof (szTmp), szIniPath);
-        CStringA strEncrypted = TStringToUtf8 (szTmp);
-        ZeroMemory (szDecrypted, sizeof (szDecrypted));
-        CryptUtil.UnCryptStr (strEncrypted, szDecrypted, 10);
-        m_strLastPassword = szDecrypted;
+	GetPrivateProfileString(_T("Account"), _T("Account"), _T(""), szTmp, _countof(szTmp), szIniPath);
+	m_strLastAccount = szTmp;
+	GetPrivateProfileString(_T("Account"), _T("Password"), _T(""), szTmp, _countof(szTmp), szIniPath);
+	CStringA strEncrypted = TStringToUtf8(szTmp);
+	ZeroMemory(szDecrypted, sizeof(szDecrypted));
+	CryptUtil.UnCryptStr(strEncrypted, szDecrypted, 10);
+	m_strLastPassword = szDecrypted;
 
-        nTmp = GetPrivateProfileInt (_T("Setting"), _T("SEVolume"), 2, szIniPath);
-        m_nSEVolume = min (nTmp, 4);
-        nTmp = GetPrivateProfileInt (_T("Setting"), _T("BGMVolume"), 2, szIniPath);
-        m_nBGMVolume = min (nTmp, 4);
-        nTmp = GetPrivateProfileInt (_T("Setting"), _T("DrawMode"), 1, szIniPath);
-        m_nDrawMode = min (nTmp, 4);
+	nTmp = GetPrivateProfileInt(_T("Setting"), _T("SEVolume"), 2, szIniPath);
+	m_nSEVolume = min(nTmp, 4);
+	nTmp = GetPrivateProfileInt(_T("Setting"), _T("BGMVolume"), 2, szIniPath);
+	m_nBGMVolume = min(nTmp, 4);
+	nTmp = GetPrivateProfileInt(_T("Setting"), _T("DrawMode"), 1, szIniPath);
+	m_nDrawMode = min(nTmp, 4);
 
-        GetPrivateProfileString (_T("Setting"), _T("InputDevice"), _T(""), szTmp, _countof (szTmp), szIniPath);
-        if (_tcslen (szTmp) > 0) {
-                CLSIDFromString (szTmp, &m_stInputGuid);
-        }
+	GetPrivateProfileString(_T("Setting"), _T("InputDevice"), _T(""), szTmp, _countof(szTmp), szIniPath);
+	if (_tcslen(szTmp) > 0) {
+		CLSIDFromString(szTmp, &m_stInputGuid);
+	}
 
-        nTmp = GetPrivateProfileInt (_T("Setting"), _T("SleepTimer"), 0, szIniPath);
-        m_nSleepTimer = min (nTmp, 5);
+	nTmp = GetPrivateProfileInt(_T("Setting"), _T("SleepTimer"), 0, szIniPath);
+	m_nSleepTimer = min(nTmp, 5);
 }
-
-
-/* Copyright(C)URARA-works 2006 */

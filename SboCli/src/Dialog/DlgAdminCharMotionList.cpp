@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharMotionList.cpp									 */
-/* 内容			:キャラモーションリストダイアログクラス 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/10/28													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharMotionList.cpp
+/// @brief キャラモーションリストダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/10/28
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "resource.h"
@@ -22,9 +20,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharMotionList::DoDataExchange(CDataExchange* pDX)
 {
@@ -43,12 +39,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharMotionList, CDlgAdminBase)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharMotionList::CDlgAdminCharMotionList				 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/10/28														 */
-/* ========================================================================= */
-
 CDlgAdminCharMotionList::CDlgAdminCharMotionList(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminCharMotionList::IDD, pParent)
 	, m_nGrpIDSub(0)
@@ -61,51 +51,27 @@ CDlgAdminCharMotionList::CDlgAdminCharMotionList(CWnd* pParent /*=NULL*/)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharMotionList::~CDlgAdminCharMotionList				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/10/28														 */
-/* ========================================================================= */
-
 CDlgAdminCharMotionList::~CDlgAdminCharMotionList()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharMotionList::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2007/08/23														 */
-/* ========================================================================= */
-
 void CDlgAdminCharMotionList::Init(CMgrData *pMgrData, DWORD dwMotionTypeID)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
 	m_dwMotionTypeID = dwMotionTypeID;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharMotionList::OnMainFrame							 */
-/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
-/* 日付		:2007/11/23														 */
-/* ========================================================================= */
-
 void CDlgAdminCharMotionList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWMOTION:		/* モーション情報更新 */
+	case MAINFRAMEMSG_RENEWMOTION: // モーション情報更新
 		break;
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharMotionList::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2007/10/28														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminCharMotionList::OnInitDialog()
 {
@@ -113,43 +79,31 @@ BOOL CDlgAdminCharMotionList::OnInitDialog()
 	LPCSTR pszItem;
 	CmyString strTmp;
 
-	CDlgAdminBase::OnInitDialog ();
+	CDlgAdminBase::OnInitDialog();
 
-	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, _T("ID"),					LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, _T("編集するモーション"),	LVCFMT_LEFT, 300);
+	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_List.InsertColumn(0, _T("ID"),	LVCFMT_LEFT, 40);
+	m_List.InsertColumn(1, _T("編集するモーション"),	LVCFMT_LEFT, 300);
 
 	for (i = CHARMOTIONLISTID_NONE + 1; i < CHARMOTIONLISTID_MAX; i ++) {
-                pszItem = m_pMgrData->GetMotionName (i);
+                pszItem = m_pMgrData->GetMotionName(i);
                 if (pszItem == NULL) {
                         break;
                 }
                 strTmp.Format(_T("%d"), i);
-                m_List.InsertItem (i - 1, strTmp);
-                CString strName = Utf8ToTString (pszItem);
-                m_List.SetItemText (i - 1, 1, strName);
+                m_List.InsertItem(i - 1, strTmp);
+                CString strName = Utf8ToTString(pszItem);
+                m_List.SetItemText(i - 1, 1, strName);
 	}
 
 	return TRUE;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminBase::PostNcDestroy									 */
-/* 内容		:終了処理														 */
-/* 日付		:2007/03/18														 */
-/* ========================================================================= */
-
 void CDlgAdminCharMotionList::PostNcDestroy()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharMotionList::OnModify								 */
-/* 内容		:ボタンハンドラ(編集)											 */
-/* 日付		:2007/10/28														 */
-/* ========================================================================= */
 
 void CDlgAdminCharMotionList::OnModify()
 {
@@ -159,42 +113,33 @@ void CDlgAdminCharMotionList::OnModify()
 	CDlgAdminCharMotion Dlg(this);
 	CPacketADMIN_CHAR_RENEWMOTION Packet;
 
-	nNo = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nNo = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nNo < 0) {
 		return;
 	}
 	dwMotionListID = nNo + 1;
 
-	UpdateData ();
+	UpdateData();
 
-	pLibInfo = m_pMgrData->GetLibInfoMotion ();
+	pLibInfo = m_pMgrData->GetLibInfoMotion();
 
-	Dlg.Init (m_pMgrData, m_dwMotionTypeID, dwMotionListID, m_nGrpIDSub);
-	Dlg.SetList (pLibInfo);
+	Dlg.Init(m_pMgrData, m_dwMotionTypeID, dwMotionListID, m_nGrpIDSub);
+	Dlg.SetList(pLibInfo);
 
-	nResult = Dlg.DoModal ();
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		return;
 	}
-	Dlg.GetList (pLibInfo);
+	Dlg.GetList(pLibInfo);
 
-	Packet.Make (m_dwMotionTypeID, dwMotionListID, pLibInfo);
-	SendPacket (&Packet);
+	Packet.Make(m_dwMotionTypeID, dwMotionListID, pLibInfo);
+	SendPacket(&Packet);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemNew::OnOK											 */
-/* 内容		:ボタンハンドラ(OK)												 */
-/* 日付		:2007/08/16														 */
-/* ========================================================================= */
 
 void CDlgAdminCharMotionList::OnOK()
 {
-	UpdateData ();
+	UpdateData();
 
-	CDlgAdminBase::EndDialog (IDOK);
+	CDlgAdminBase::EndDialog(IDOK);
 }
-
-/* Copyright(C)URARA-works 2007 */
-

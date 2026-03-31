@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoCharBase.cpp										 */
-/* 内容			:キャラ情報基底クラス 実装ファイル							 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/10/01													 */
-/* ========================================================================= */
+﻿/// @file LibInfoCharBase.cpp
+/// @brief キャラ情報基底クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/10/01
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -12,139 +10,75 @@
 #include <string.h>
 #include "LibInfoCharBase.h"
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::CLibInfoCharBase								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 CLibInfoCharBase::CLibInfoCharBase()
 {
 	m_dwNewIDTmp	= 0;
-	m_paInfo		= NULL;
+	m_paInfo	= NULL;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::~CLibInfoCharBase							 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 CLibInfoCharBase::~CLibInfoCharBase()
 {
-	Destroy ();
+	Destroy();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 void CLibInfoCharBase::Create(void)
 {
 	m_paInfo = new ARRAYINFOCHARBASE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::Destroy										 */
-/* 内容		:破棄															 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 void CLibInfoCharBase::Destroy(void)
 {
-	DeleteAll ();
-	SAFE_DELETE (m_paInfo);
+	DeleteAll();
+	SAFE_DELETE(m_paInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::Proc											 */
-/* 内容		:処理															 */
-/* 戻り値	:TRUE:処理した FALS:処理していない								 */
-/* 日付		:2007/01/21														 */
-/* ========================================================================= */
 
 BOOL CLibInfoCharBase::Proc(void)
 {
 	return FALSE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::RenewSize									 */
-/* 内容		:マップサイズ更新												 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
-
 void CLibInfoCharBase::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 {
 	int i, nCount;
 	PCInfoCharBase pInfoCharBase;
 
-	/* マップサイズをキャラサイズに変更 */
+	// マップサイズをキャラサイズに変更
 	nSize *= 2;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoCharBase = (PCInfoCharBase)GetPtr (i);
+		pInfoCharBase = (PCInfoCharBase)GetPtr(i);
 
 		if (pInfoCharBase->m_dwMapID != dwMapID) {
 			continue;
 	}
 
 		switch (nDirection) {
-		case 0:		/* 上 */
+		case 0:	// 上
 			pInfoCharBase->m_nMapY += nSize;
-			pInfoCharBase->m_nMapY = max (pInfoCharBase->m_nMapY, 0);
+			pInfoCharBase->m_nMapY = max(pInfoCharBase->m_nMapY, 0);
 			break;
-		case 1:		/* 下 */
+		case 1:	// 下
 			break;
-		case 2:		/* 左 */
+		case 2:	// 左
 			pInfoCharBase->m_nMapX += nSize;
-			pInfoCharBase->m_nMapX = max (pInfoCharBase->m_nMapX, 0);
+			pInfoCharBase->m_nMapX = max(pInfoCharBase->m_nMapX, 0);
 			break;
-		case 3:		/* 右 */
+		case 3:	// 右
 			break;
 	}
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetNew										 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2007/01/21														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoCharBase::GetNew(void)
 {
-	return (PCInfoBase)GetNew (CHARMOVETYPE_PC);
+	return (PCInfoBase)GetNew(CHARMOVETYPE_PC);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetNew										 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoCharBase::GetNew(int nType)
 {
 	return (PCInfoBase)new CInfoCharBase;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoBase::GetSaveNo										 */
-/* 内容		:保存する情報のインデックスを取得								 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 
 void CLibInfoCharBase::GetSaveNo(ARRAYINT &anDst)
 {
@@ -153,23 +87,16 @@ void CLibInfoCharBase::GetSaveNo(ARRAYINT &anDst)
 
 	anDst.clear();
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharBase)GetPtr (i);
-		if (pChar->IsLogoutDelete ()) {
+		pChar = (PCInfoCharBase)GetPtr(i);
+		if (pChar->IsLogoutDelete()) {
 			continue;
 	}
 
-		anDst.push_back (i);
+		anDst.push_back(i);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetCount										 */
-/* 内容		:データ数を取得													 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 int CLibInfoCharBase::GetCount(void)
 {
@@ -186,13 +113,6 @@ Exit:
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetCountScreen								 */
-/* 内容		:データ数を取得(画面内のキャラ)									 */
-/* 日付		:2007/01/27														 */
-/* ========================================================================= */
-
 int CLibInfoCharBase::GetCountScreen(PCInfoCharBase pCharBase)
 {
 	BOOL bResult;
@@ -201,11 +121,11 @@ int CLibInfoCharBase::GetCountScreen(PCInfoCharBase pCharBase)
 
 	nRet = 0;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharBase)GetPtr (i);
+		pChar = (PCInfoCharBase)GetPtr(i);
 
-		bResult = IsScreenInside (pCharBase, pChar);
+		bResult = IsScreenInside(pCharBase, pChar);
 		if (bResult == FALSE) {
 			continue;
 	}
@@ -215,81 +135,46 @@ int CLibInfoCharBase::GetCountScreen(PCInfoCharBase pCharBase)
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::Add											 */
-/* 内容		:追加															 */
-/* 日付		:2007/04/30														 */
-/* ========================================================================= */
-
 void CLibInfoCharBase::Add(PCInfoBase pInfo)
 {
-	Add ((PCInfoCharBase)pInfo);
+	Add((PCInfoCharBase)pInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::Add											 */
-/* 内容		:追加															 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 DWORD CLibInfoCharBase::Add(PCInfoCharBase pChar)
 {
 	if (pChar->m_dwCharID == 0) {
-		pChar->m_dwCharID = GetNewID ();
+		pChar->m_dwCharID = GetNewID();
 	}
 
-	m_paInfo->Add (pChar);
+	m_paInfo->Add(pChar);
 
 	return pChar->m_dwCharID;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::CopyAdd										 */
-/* 内容		:コピーして追加													 */
-/* 日付		:2007/01/27														 */
-/* ========================================================================= */
 
 void CLibInfoCharBase::CopyAdd(PCInfoCharBase pChar)
 {
 	PCInfoCharBase pCharTmp;
 
-	pCharTmp = (PCInfoCharBase)GetNew (pChar->m_nMoveType);
-	pCharTmp->Copy (pChar);
+	pCharTmp = (PCInfoCharBase)GetNew(pChar->m_nMoveType);
+	pCharTmp->Copy(pChar);
 
-	m_paInfo->Add (pCharTmp);
+	m_paInfo->Add(pCharTmp);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 void CLibInfoCharBase::Delete(
-	int nNo)		/* [in] 配列番号 */
+	int nNo)	// [in] 配列番号
 {
 	PCInfoCharBase pInfo;
 
 	pInfo = m_paInfo->at(nNo);
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
-		m_paInfo->erase (m_paInfo->begin () + nNo);
+		m_paInfo->erase(m_paInfo->begin() + nNo);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 void CLibInfoCharBase::Delete(
-	DWORD dwCharID)		/* [in] キャラID */
+	DWORD dwCharID)	// [in] キャラID
 {
 	int i, nCount, nNo;
 	PCInfoCharBase pInfoTmp;
@@ -307,16 +192,9 @@ void CLibInfoCharBase::Delete(
 	}
 
 	if (nNo >= 0) {
-		Delete (nNo);
+		Delete(nNo);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::DeleteAll									 */
-/* 内容		:全て削除														 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 void CLibInfoCharBase::DeleteAll(void)
 {
@@ -328,17 +206,10 @@ void CLibInfoCharBase::DeleteAll(void)
 
 	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		Delete (i);
+		Delete(i);
 	}
 	m_dwNewIDTmp = 0;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::SortY										 */
-/* 内容		:Y座標順にソート												 */
-/* 日付		:2006/10/08														 */
-/* ========================================================================= */
 
 void CLibInfoCharBase::SortY(void)
 {
@@ -382,26 +253,18 @@ void CLibInfoCharBase::SortY(void)
 		}
 			nNo = j;
 	}
-		anNo.insert (anNo.begin () + nNo, i);
-		aTmp.insert (aTmp.begin () + nNo, pInfo);
+		anNo.insert(anNo.begin() + nNo, i);
+		aTmp.insert(aTmp.begin() + nNo, pInfo);
 	}
 
-	m_paInfo->Copy (&aTmp);
+	m_paInfo->Copy(&aTmp);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::IsBlockChar									 */
-/* 内容		:一歩前でぶつかるかチェック										 */
-/* 戻り値	:TRUE:ぶつかる													 */
-/* 日付		:2007/09/01														 */
-/* ========================================================================= */
-
 BOOL CLibInfoCharBase::IsBlockChar(
-	PCInfoCharBase pChar,			/* [in] 判定元のキャラ情報 */
-	int nDirection,					/* [in] 判定方向 */
-	BOOL bNoBlockFlg/*TRUE*/,		/* [in] TRUE:キャラのぶつかり判定を使用する */
-	BOOL bHitCheck/*FALSE*/)		/* [in] TRUE:重なっている場合は判定しない */
+	PCInfoCharBase pChar,	// [in] 判定元のキャラ情報
+	int nDirection,	// [in] 判定方向
+	BOOL bNoBlockFlg/*TRUE*/,	// [in] TRUE:キャラのぶつかり判定を使用する
+	BOOL bHitCheck/*FALSE*/)	// [in] TRUE:重なっている場合は判定しない
 {
 	BOOL bRet, bResult;
 	int i, nCount, nDirectionBack;
@@ -415,18 +278,18 @@ BOOL CLibInfoCharBase::IsBlockChar(
 	ptBack.y = pChar->m_nMapY;
 	nDirectionBack = pChar->m_nDirection;
 	pChar->m_nDirection = nDirection;
-	pChar->GetFrontPos (ptFront, nDirection, TRUE);
-	pChar->GetCollisionRect (rcSrc);
+	pChar->GetFrontPos(ptFront, nDirection, TRUE);
+	pChar->GetCollisionRect(rcSrc);
 	pChar->m_nMapX = ptFront.x;
 	pChar->m_nMapY = ptFront.y;
-	pChar->GetCollisionRectOnce (rcFront);
+	pChar->GetCollisionRectOnce(rcFront);
 	pChar->m_nMapX = ptBack.x;
 	pChar->m_nMapY = ptBack.y;
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = m_paInfo->at(i);
-		bResult = pInfoCharTmp->IsLogin ();
+		bResult = pInfoCharTmp->IsLogin();
 		if (bResult == FALSE) {
 			continue;
 	}
@@ -436,7 +299,7 @@ BOOL CLibInfoCharBase::IsBlockChar(
 		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 	}
-		pInfoCharTmp->GetCollisionRect (rcTmp);
+		pInfoCharTmp->GetCollisionRect(rcTmp);
 		if (!((rcFront.left <= rcTmp.right) && (rcTmp.left <= rcFront.right) &&
 			(rcFront.top <= rcTmp.bottom) && (rcTmp.top <= rcFront.bottom))) {
 			continue;
@@ -447,7 +310,7 @@ BOOL CLibInfoCharBase::IsBlockChar(
 		if (bHitCheck) {
 			if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
 				(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
-				/* 重なる場合は対象外 */
+				// 重なる場合は対象外
 				continue;
 		}
 	}
@@ -458,13 +321,6 @@ BOOL CLibInfoCharBase::IsBlockChar(
 
 	return bRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::IsUseName									 */
-/* 内容		:名前が使用されているかチェック									 */
-/* 日付		:2006/12/03														 */
-/* ========================================================================= */
 
 BOOL CLibInfoCharBase::IsUseName(LPCSTR pszName)
 {
@@ -486,14 +342,6 @@ BOOL CLibInfoCharBase::IsUseName(LPCSTR pszName)
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::NameCheck									 */
-/* 内容		:名前に使用できない名前があるかチェック							 */
-/* 戻り値	:TRUE:問題無し													 */
-/* 日付		:2007/02/22														 */
-/* ========================================================================= */
-
 BOOL CLibInfoCharBase::NameCheck(LPCSTR pszName)
 {
 	int i, nLen;
@@ -506,26 +354,26 @@ BOOL CLibInfoCharBase::NameCheck(LPCSTR pszName)
 	if (pszName == NULL) {
 		goto Exit;
 	}
-	nLen = strlen (pszName);
+	nLen = strlen(pszName);
 	if (nLen <= 0) {
 		goto Exit;
 	}
-        pszTmp = strstr (pszName, " ");
+        pszTmp = strstr(pszName, " ");
         if (pszTmp) {
                 goto Exit;
         }
-        pszTmp = strstr (pszName, "　");
+        pszTmp = strstr(pszName, "　");
         if (pszTmp) {
                 goto Exit;
         }
-        pszTmp = strstr (pszName, "\t");
+        pszTmp = strstr(pszName, "\t");
 	if (pszTmp) {
 		goto Exit;
 	}
 
 	for (i = 0; i < nLen; i ++) {
 		byTmp = (BYTE)pszName[i];
-		if (IsDBCSLeadByte (byTmp)) {
+		if (IsDBCSLeadByte(byTmp)) {
 			i ++;
 			continue;
 	}
@@ -539,26 +387,12 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetTurnDirection								 */
-/* 内容		:逆向きを取得													 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
-
 int CLibInfoCharBase::GetTurnDirection(int nDirection)
 {
 	int anTurnDirection[] = {1, 0, 3, 2, 6, 7, 4, 5};
 
 	return anTurnDirection[nDirection];
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetDistance									 */
-/* 内容		:キャラ座標で距離を取得											 */
-/* 日付		:2009/01/17														 */
-/* ========================================================================= */
 
 void CLibInfoCharBase::GetDistance(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, PCInfoCharBase pInfoCharDst, BOOL bFrontPos/*FALSE*/)
 {
@@ -568,10 +402,10 @@ void CLibInfoCharBase::GetDistance(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, P
 	if (pInfoCharSrc->m_dwMapID != pInfoCharDst->m_dwMapID) {
 		return;
 	}
-	/* 比較元の座標矩形を取得 */
-	pInfoCharSrc->GetPosRect (rcSrc, bFrontPos);
-	/* 比較先の座標矩形を取得 */
-	pInfoCharDst->GetPosRect (rcDst);
+	// 比較元の座標矩形を取得
+	pInfoCharSrc->GetPosRect(rcSrc, bFrontPos);
+	// 比較先の座標矩形を取得
+	pInfoCharDst->GetPosRect(rcDst);
 
 	sizeDst.cx = rcSrc.left - rcDst.right;
 	if (pInfoCharSrc->m_nMapX < pInfoCharDst->m_nMapX) {
@@ -580,7 +414,7 @@ void CLibInfoCharBase::GetDistance(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, P
 	} else if (pInfoCharSrc->m_nMapX == pInfoCharDst->m_nMapX) {
 		sizeDst.cx = 0;
 	}
-	sizeDst.cx = max (sizeDst.cx, 0);
+	sizeDst.cx = max(sizeDst.cx, 0);
 
 	sizeDst.cy = rcSrc.top - rcDst.bottom;
 	if (pInfoCharSrc->m_nMapY < pInfoCharDst->m_nMapY) {
@@ -589,37 +423,29 @@ void CLibInfoCharBase::GetDistance(SIZE &sizeDst, PCInfoCharBase pInfoCharSrc, P
 	} else if (pInfoCharSrc->m_nMapY == pInfoCharDst->m_nMapY) {
 		sizeDst.cy = 0;
 	}
-	sizeDst.cy = max (sizeDst.cy, 0);
+	sizeDst.cy = max(sizeDst.cy, 0);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::IsScreenInside								 */
-/* 内容		:画面内にいるかチェック											 */
-/* 戻り値	:TRUE:画面内 FALSE:画面外										 */
-/* 日付		:2007/01/27														 */
-/* ========================================================================= */
-
 BOOL CLibInfoCharBase::IsScreenInside(
-	PCInfoCharBase pCharBase,		/* [in] 基準となるキャラ */
-	PCInfoCharBase pCharTarget)		/* [in] チェック対象のキャラ */
+	PCInfoCharBase pCharBase,	// [in] 基準となるキャラ
+	PCInfoCharBase pCharTarget)	// [in] チェック対象のキャラ
 {
 	BOOL bRet, bResult;
 
 	bRet = FALSE;
 
-	/* ログインしていない？ */
-	bResult = pCharTarget->IsLogin ();
+	// ログインしていない？
+	bResult = pCharTarget->IsLogin();
 	if (bResult == FALSE) {
 		goto Exit;
 	}
-	/* 別のマップにいる？ */
+	// 別のマップにいる？
 	if (pCharBase->m_dwMapID != pCharTarget->m_dwMapID) {
 		goto Exit;
 	}
 	if (!(
-		(abs (pCharBase->m_nMapX - pCharTarget->m_nMapX) < DRAW_PARTS_X * 2) &&
-		(abs (pCharBase->m_nMapY - pCharTarget->m_nMapY) < DRAW_PARTS_Y * 2))) {
+		(abs(pCharBase->m_nMapX - pCharTarget->m_nMapX) < DRAW_PARTS_X * 2) &&
+		(abs(pCharBase->m_nMapY - pCharTarget->m_nMapY) < DRAW_PARTS_Y * 2))) {
 		goto Exit;
 	}
 
@@ -627,13 +453,6 @@ BOOL CLibInfoCharBase::IsScreenInside(
 Exit:
 	return bRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetFrontCharID								 */
-/* 内容		:一歩前のキャラIDを取得											 */
-/* 日付		:2007/07/26														 */
-/* ========================================================================= */
 
 DWORD CLibInfoCharBase::GetFrontCharID(DWORD dwCharID, int nDirection)
 {
@@ -645,12 +464,12 @@ DWORD CLibInfoCharBase::GetFrontCharID(DWORD dwCharID, int nDirection)
 
 	dwRet = 0;
 
-	pInfoCharSrc = (PCInfoCharBase)GetPtr (dwCharID);
+	pInfoCharSrc = (PCInfoCharBase)GetPtr(dwCharID);
 	if (pInfoCharSrc == NULL) {
 		goto Exit;
 	}
-	pInfoCharSrc->GetFrontPos (ptFront, nDirection, TRUE);
-	pInfoCharSrc->GetCharSize (size);
+	pInfoCharSrc->GetFrontPos(ptFront, nDirection, TRUE);
+	pInfoCharSrc->GetCharSize(size);
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
@@ -661,7 +480,7 @@ DWORD CLibInfoCharBase::GetFrontCharID(DWORD dwCharID, int nDirection)
 		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 	}
-		if (pInfoCharTmp->IsHitCharPos (ptFront.x, ptFront.y, &size) == FALSE) {
+		if (pInfoCharTmp->IsHitCharPos(ptFront.x, ptFront.y, &size) == FALSE) {
 			continue;
 	}
 		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
@@ -675,13 +494,6 @@ Exit:
 	return dwRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetFrontCharIDPush							 */
-/* 内容		:一歩前の押せるキャラIDを取得									 */
-/* 日付		:2007/09/09														 */
-/* ========================================================================= */
-
 DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 {
 	int i, nCount;
@@ -692,16 +504,16 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 
 	dwRet = 0;
 
-	pInfoCharSrc = (PCInfoCharBase)GetPtr (dwCharID);
+	pInfoCharSrc = (PCInfoCharBase)GetPtr(dwCharID);
 	if (pInfoCharSrc == NULL) {
 		goto Exit;
 	}
-	pInfoCharSrc->GetFrontPos (ptFront, nDirection, TRUE);
+	pInfoCharSrc->GetFrontPos(ptFront, nDirection, TRUE);
 	ptBack.x = pInfoCharSrc->m_nMapX;
 	ptBack.y = pInfoCharSrc->m_nMapY;
 	pInfoCharSrc->m_nMapX = ptFront.x;
 	pInfoCharSrc->m_nMapY = ptFront.y;
-	pInfoCharSrc->GetPosRect (rcFrontRect);
+	pInfoCharSrc->GetPosRect(rcFrontRect);
 	pInfoCharSrc->m_nMapX = ptBack.x;
 	pInfoCharSrc->m_nMapY = ptBack.y;
 
@@ -723,7 +535,7 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
 			continue;
 	}
-		pInfoCharTmp->GetPosRect (rcTmp);
+		pInfoCharTmp->GetPosRect(rcTmp);
 		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
 			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
 			continue;
@@ -736,13 +548,6 @@ Exit:
 	return dwRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetHitCharID									 */
-/* 内容		:指定座標に当たるキャラIDを取得									 */
-/* 日付		:2008/12/29														 */
-/* ========================================================================= */
-
 DWORD CLibInfoCharBase::GetHitCharID(DWORD dwCharIDBase, int x, int y)
 {
 	int i, nCount;
@@ -752,11 +557,11 @@ DWORD CLibInfoCharBase::GetHitCharID(DWORD dwCharIDBase, int x, int y)
 
 	dwRet = 0;
 
-	pInfoCharBase = (PCInfoCharBase)GetPtr (dwCharIDBase);
+	pInfoCharBase = (PCInfoCharBase)GetPtr(dwCharIDBase);
 	if (pInfoCharBase == NULL) {
 		goto Exit;
 	}
-	pInfoCharBase->GetCharSize (size);
+	pInfoCharBase->GetCharSize(size);
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
@@ -770,7 +575,7 @@ DWORD CLibInfoCharBase::GetHitCharID(DWORD dwCharIDBase, int x, int y)
 		if (pInfoCharBase->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 	}
-		if (pInfoCharTmp->IsHitCharPos (x, y, &size) == FALSE) {
+		if (pInfoCharTmp->IsHitCharPos(x, y, &size) == FALSE) {
 			continue;
 	}
 		dwRet = pInfoCharTmp->m_dwCharID;
@@ -781,50 +586,29 @@ Exit:
 	return dwRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::SetPtr										 */
-/* 内容		:キャラ情報を更新												 */
-/* 日付		:2007/09/02														 */
-/* ========================================================================= */
-
 void CLibInfoCharBase::SetPtr(DWORD dwCharID, PCInfoCharBase pChar)
 {
 	int i, nCount;
 	PCInfoCharBase pTmp;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
 		pTmp = (PCInfoCharBase)m_paInfo->at(i);
                 if (pTmp->m_dwCharID == dwCharID) {
-                        SAFE_DELETE (pTmp);
+                        SAFE_DELETE(pTmp);
                         (*m_paInfo)[i] = pChar;
                         break;
                 }
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetPtr										 */
-/* 内容		:キャラ情報を取得												 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoCharBase::GetPtr(int nNo)
 {
 	return (PCInfoBase)m_paInfo->at(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetPtr										 */
-/* 内容		:キャラ情報を取得												 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoCharBase::GetPtr(
-	DWORD dwCharID)		/* [in] キャラID */
+	DWORD dwCharID)	// [in] キャラID
 {
 	int i, nCount;
 	PCInfoCharBase pRet, pInfoTmp;
@@ -848,15 +632,8 @@ PCInfoBase CLibInfoCharBase::GetPtr(
 	return (PCInfoBase)pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetPtrAccountID								 */
-/* 内容		:キャラ情報を取得												 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoCharBase::GetPtrAccountID(
-	DWORD dwAccountID)		/* [in] アカウントID */
+	DWORD dwAccountID)	// [in] アカウントID
 {
 	int i, nCount;
 	PCInfoCharBase pRet, pInfoTmp;
@@ -880,16 +657,9 @@ PCInfoBase CLibInfoCharBase::GetPtrAccountID(
 	return (PCInfoBase)pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetPtrFront									 */
-/* 内容		:キャラ情報を取得												 */
-/* 日付		:2007/09/01														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoCharBase::GetPtrFront(
-	PCInfoCharBase pChar,		/* [in] 基準となるキャラ情報 */
-	int nDirection)				/* [in] 向き */
+	PCInfoCharBase pChar,	// [in] 基準となるキャラ情報
+	int nDirection)	// [in] 向き
 {
 	BOOL bResult;
 	int i, j, nCount, nCount2;
@@ -898,13 +668,13 @@ PCInfoBase CLibInfoCharBase::GetPtrFront(
 
 	pRet = NULL;
 
-	pChar->GetFrontPos (aptFront, nDirection);
+	pChar->GetFrontPos(aptFront, nDirection);
 	nCount2 = aptFront.size();
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = m_paInfo->at(i);
-		bResult = pInfoCharTmp->IsLogin ();
+		bResult = pInfoCharTmp->IsLogin();
 		if (bResult == FALSE) {
 			continue;
 	}
@@ -912,7 +682,7 @@ PCInfoBase CLibInfoCharBase::GetPtrFront(
 			continue;
 	}
 		for (j = 0; j < nCount2; j ++) {
-			if (pInfoCharTmp->IsHitCharPos (aptFront[j].x, aptFront[j].y)) {
+			if (pInfoCharTmp->IsHitCharPos(aptFront[j].x, aptFront[j].y)) {
 				break;
 		}
 	}
@@ -926,13 +696,6 @@ PCInfoBase CLibInfoCharBase::GetPtrFront(
 	return (PCInfoBase)pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetSendDataSize								 */
-/* 内容		:送信データサイズを取得											 */
-/* 日付		:2007/01/27														 */
-/* ========================================================================= */
-
 DWORD CLibInfoCharBase::GetSendDataSize(void)
 {
 	int i, nCount;
@@ -941,26 +704,19 @@ DWORD CLibInfoCharBase::GetSendDataSize(void)
 
 	dwRet = dwSize = 0;
 
-	/* データ数分のサイズ */
-	dwSize += sizeof (DWORD);
+	// データ数分のサイズ
+	dwSize += sizeof(DWORD);
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharBase)GetPtr (i);
+		pChar = (PCInfoCharBase)GetPtr(i);
 
-		dwSize += pChar->GetSendDataSize ();
+		dwSize += pChar->GetSendDataSize();
 	}
 
 	dwRet = dwSize;
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetSendData									 */
-/* 内容		:送信データを取得												 */
-/* 日付		:2007/01/27														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoCharBase::GetSendData(void)
 {
@@ -971,39 +727,31 @@ PBYTE CLibInfoCharBase::GetSendData(void)
 
 	pRet = NULL;
 
-	dwSize		= GetSendDataSize ();
-	pData		= ZeroNew (dwSize);
+	dwSize	= GetSendDataSize();
+	pData	= ZeroNew(dwSize);
 	dwOffset	= 0;
 
-	/* データ数を書き込み */
-	dwCount = (DWORD)GetCount ();
-	CopyMemory (pData, &dwCount, sizeof (dwCount));
-	dwOffset += sizeof (dwCount);
+	// データ数を書き込み
+	dwCount = (DWORD)GetCount();
+	CopyMemory(pData, &dwCount, sizeof(dwCount));
+	dwOffset += sizeof(dwCount);
 
-	/* キャラ情報を書き込み */
-	nCount = GetCount ();
+	// キャラ情報を書き込み
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharBase)GetPtr (i);
+		pChar = (PCInfoCharBase)GetPtr(i);
 
-		dwSizeTmp	= pChar->GetSendDataSize ();
-		pDataTmp	= pChar->GetSendData ();
-		CopyMemory (&pData[dwOffset], pDataTmp, dwSizeTmp);
+		dwSizeTmp	= pChar->GetSendDataSize();
+		pDataTmp	= pChar->GetSendData();
+		CopyMemory(&pData[dwOffset], pDataTmp, dwSizeTmp);
 		dwOffset += dwSizeTmp;
 
-		SAFE_DELETE_ARRAY (pDataTmp);
+		SAFE_DELETE_ARRAY(pDataTmp);
 	}
 
 	pRet = pData;
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::SetSendData									 */
-/* 内容		:送信データから取り込み											 */
-/* 日付		:2007/01/27														 */
-/* 戻り値	:処理した後のアドレス											 */
-/* ========================================================================= */
 
 PBYTE CLibInfoCharBase::SetSendData(PBYTE pSrc)
 {
@@ -1012,35 +760,28 @@ PBYTE CLibInfoCharBase::SetSendData(PBYTE pSrc)
 	PBYTE pRet, pDataTmp;
 	CInfoCharBase *pChar;
 
-	pRet		= pSrc;
+	pRet	= pSrc;
 	pDataTmp	= pSrc;
 
-	DeleteAll ();
+	DeleteAll();
 
-	/* データ数を読み込み */
-	CopyMemory (&dwCount, pDataTmp, sizeof (dwCount));
-	nCount		= (int)dwCount;
-	pDataTmp	+= sizeof (dwCount);
+	// データ数を読み込み
+	CopyMemory(&dwCount, pDataTmp, sizeof(dwCount));
+	nCount	= (int)dwCount;
+	pDataTmp	+= sizeof(dwCount);
 
 	for (i = 0; i < nCount; i ++) {
 		CInfoCharBase CharTmp;
 
-		pDataTmp	= CharTmp.SetSendData (pDataTmp);
-		pChar		= (PCInfoCharBase)GetNew (CharTmp.m_nMoveType);
-		pChar->Copy (&CharTmp);
-		Add (pChar);
+		pDataTmp	= CharTmp.SetSendData(pDataTmp);
+		pChar	= (PCInfoCharBase)GetNew(CharTmp.m_nMoveType);
+		pChar->Copy(&CharTmp);
+		Add(pChar);
 	}
 
 	pRet = pDataTmp;
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetDataSizeScreen							 */
-/* 内容		:データサイズを取得(画面内のキャラ)								 */
-/* 日付		:2007/01/27														 */
-/* ========================================================================= */
 
 DWORD CLibInfoCharBase::GetDataSizeScreen(PCInfoCharBase pCharBase)
 {
@@ -1051,31 +792,24 @@ DWORD CLibInfoCharBase::GetDataSizeScreen(PCInfoCharBase pCharBase)
 
 	dwRet = dwSize = 0;
 
-	/* データ数分のサイズ */
-	dwSize += sizeof (DWORD);
+	// データ数分のサイズ
+	dwSize += sizeof(DWORD);
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharBase)GetPtr (i);
+		pChar = (PCInfoCharBase)GetPtr(i);
 
-		/* 画面外？ */
-		bResult = IsScreenInside (pCharBase, pChar);
+		// 画面外？
+		bResult = IsScreenInside(pCharBase, pChar);
 		if (bResult == FALSE) {
 			continue;
 	}
-		dwSize += pChar->GetSendDataSize ();
+		dwSize += pChar->GetSendDataSize();
 	}
 
 	dwRet = dwSize;
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetDataScreen								 */
-/* 内容		:データを取得(画面内のキャラ)									 */
-/* 日付		:2007/01/27														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoCharBase::GetDataScreen(PCInfoCharBase pCharBase)
 {
@@ -1087,46 +821,39 @@ PBYTE CLibInfoCharBase::GetDataScreen(PCInfoCharBase pCharBase)
 
 	pRet = NULL;
 
-	dwSize		= GetDataSizeScreen (pCharBase);
-	pData		= ZeroNew (dwSize);
+	dwSize	= GetDataSizeScreen(pCharBase);
+	pData	= ZeroNew(dwSize);
 	dwOffset	= 0;
 
-	/* データ数を書き込み */
-	dwCount = (DWORD)GetCountScreen (pCharBase);
-	CopyMemory (pData, &dwCount, sizeof (dwCount));
-	dwOffset += sizeof (dwCount);
+	// データ数を書き込み
+	dwCount = (DWORD)GetCountScreen(pCharBase);
+	CopyMemory(pData, &dwCount, sizeof(dwCount));
+	dwOffset += sizeof(dwCount);
 
-	/* キャラ情報を書き込み */
-	nCount = GetCount ();
+	// キャラ情報を書き込み
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharBase)GetPtr (i);
+		pChar = (PCInfoCharBase)GetPtr(i);
 
 		if (pCharBase->m_dwMapID != pChar->m_dwMapID) {
 			continue;
 	}
-		/* 画面外？ */
-		bResult = IsScreenInside (pCharBase, pChar);
+		// 画面外？
+		bResult = IsScreenInside(pCharBase, pChar);
 		if (bResult == FALSE) {
 			continue;
 	}
-		dwSizeTmp	= pChar->GetSendDataSize ();
-		pDataTmp	= pChar->GetSendData ();
-		CopyMemory (&pData[dwOffset], pDataTmp, dwSizeTmp);
+		dwSizeTmp	= pChar->GetSendDataSize();
+		pDataTmp	= pChar->GetSendData();
+		CopyMemory(&pData[dwOffset], pDataTmp, dwSizeTmp);
 		dwOffset += dwSizeTmp;
 
-		SAFE_DELETE_ARRAY (pDataTmp);
+		SAFE_DELETE_ARRAY(pDataTmp);
 	}
 
 	pRet = pData;
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetNewID										 */
-/* 内容		:新しいキャラIDを取得											 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 DWORD CLibInfoCharBase::GetNewID(void)
 {
@@ -1153,4 +880,3 @@ DWORD CLibInfoCharBase::GetNewID(void)
 	return dwRet;
 }
 
-/* Copyright(C)URARA-works 2006 */

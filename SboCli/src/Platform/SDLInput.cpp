@@ -1,27 +1,17 @@
-/* Copyright(C)URARA-works 2025 */
-/* ========================================================================= */
-/* ファイル名	:SDLInput.cpp												 */
-/* 内容			:SDL入力マッパー 実装ファイル								 */
-/* 作成開始日	:2025/06/01													 */
-/* ========================================================================= */
+/// @file SDLInput.cpp
+/// @brief SDL入力マッパー 実装ファイル
+/// @date 2025/06/01
+/// @copyright Copyright(C)URARA-works 2025
 
 #include "stdafx.h"
 #include "SDLInput.h"
 
 
-/* ========================================================================= */
-/* 関数名	:CSDLInput::ScancodeToVK										 */
-/* 内容		:SDL_Scancode を Win32 仮想キーコードに変換する					 */
-/* 日付		:2025/06/01														 */
-/* 補足		:CMgrKeyInput が使用するキーコード（MgrKeyInput.cpp のテーブル）*/
-/*			 に対応するものだけマッピングすれば十分							 */
-/* ========================================================================= */
-
 int CSDLInput::ScancodeToVK(SDL_Scancode scancode)
 {
 	switch (scancode)
 	{
-	/* 文字キー */
+	// 文字キー
 	case SDL_SCANCODE_A:		return 'A';
 	case SDL_SCANCODE_B:		return 'B';
 	case SDL_SCANCODE_C:		return 'C';
@@ -41,13 +31,13 @@ int CSDLInput::ScancodeToVK(SDL_Scancode scancode)
 	case SDL_SCANCODE_X:		return 'X';
 	case SDL_SCANCODE_Z:		return 'Z';
 
-	/* 方向キー */
+	// 方向キー
 	case SDL_SCANCODE_UP:		return VK_UP;
 	case SDL_SCANCODE_DOWN:		return VK_DOWN;
 	case SDL_SCANCODE_LEFT:		return VK_LEFT;
 	case SDL_SCANCODE_RIGHT:	return VK_RIGHT;
 
-	/* 制御キー */
+	// 制御キー
 	case SDL_SCANCODE_RETURN:	return VK_RETURN;
 	case SDL_SCANCODE_ESCAPE:	return VK_ESCAPE;
 	case SDL_SCANCODE_TAB:		return VK_TAB;
@@ -57,28 +47,18 @@ int CSDLInput::ScancodeToVK(SDL_Scancode scancode)
 	case SDL_SCANCODE_RCTRL:	return VK_CONTROL;
 	case SDL_SCANCODE_SPACE:	return VK_SPACE;
 
-	/* @ キー（日本語配列では VK_OEM_3 に対応） */
+	// @ キー（日本語配列では VK_OEM_3 に対応）
 	case SDL_SCANCODE_GRAVE:	return VK_OEM_3;
 
 	default:					return 0;
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CSDLInput::VKToScancode										 */
-/* 内容		:Win32 仮想キーコードを SDL_Scancode に変換する					 */
-/* 日付		:2025/06/01														 */
-/* 補足		:CMgrKeyInput::Renew() が SDL_GetKeyboardState() を使うために追加*/
-/*			 VK_SHIFT/VK_CONTROL は左側スキャンコードを返す				 */
-/*			 （右側は Renew() 内で別途チェックする）						 */
-/* ========================================================================= */
-
 SDL_Scancode CSDLInput::VKToScancode(int vk)
 {
 	switch (vk)
 	{
-	/* 文字キー */
+	// 文字キー
 	case 'A':			return SDL_SCANCODE_A;
 	case 'B':			return SDL_SCANCODE_B;
 	case 'C':			return SDL_SCANCODE_C;
@@ -98,33 +78,26 @@ SDL_Scancode CSDLInput::VKToScancode(int vk)
 	case 'X':			return SDL_SCANCODE_X;
 	case 'Z':			return SDL_SCANCODE_Z;
 
-	/* 方向キー */
+	// 方向キー
 	case VK_UP:			return SDL_SCANCODE_UP;
 	case VK_DOWN:		return SDL_SCANCODE_DOWN;
 	case VK_LEFT:		return SDL_SCANCODE_LEFT;
 	case VK_RIGHT:		return SDL_SCANCODE_RIGHT;
 
-	/* 制御キー */
+	// 制御キー
 	case VK_RETURN:		return SDL_SCANCODE_RETURN;
 	case VK_ESCAPE:		return SDL_SCANCODE_ESCAPE;
 	case VK_TAB:		return SDL_SCANCODE_TAB;
-	case VK_SHIFT:		return SDL_SCANCODE_LSHIFT;		/* 左Shiftを代表値として返す */
-	case VK_CONTROL:	return SDL_SCANCODE_LCTRL;		/* 左Ctrlを代表値として返す  */
+	case VK_SHIFT:		return SDL_SCANCODE_LSHIFT;		// 左Shiftを代表値として返す
+	case VK_CONTROL:	return SDL_SCANCODE_LCTRL;		// 左Ctrlを代表値として返す
 	case VK_SPACE:		return SDL_SCANCODE_SPACE;
 
-	/* @ キー（日本語配列） */
+	// @ キー（日本語配列）
 	case VK_OEM_3:		return SDL_SCANCODE_GRAVE;
 
 	default:			return SDL_SCANCODE_UNKNOWN;
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CSDLInput::IsVKPressed										 */
-/* 内容		:Win32 仮想キーコードの押下状態を SDL キーボード状態から判定する */
-/* 日付		:2026/03/16														 */
-/* ========================================================================= */
 
 BOOL CSDLInput::IsVKPressed(int vk, const Uint8 *pKeyboardState)
 {
@@ -143,12 +116,10 @@ BOOL CSDLInput::IsVKPressed(int vk, const Uint8 *pKeyboardState)
 		return pKeyboardState[SDL_SCANCODE_LCTRL] || pKeyboardState[SDL_SCANCODE_RCTRL];
 
 	default:
-		scancode = VKToScancode (vk);
+		scancode = VKToScancode(vk);
 		if (scancode == SDL_SCANCODE_UNKNOWN) {
 			return FALSE;
 		}
 		return pKeyboardState[scancode] ? TRUE : FALSE;
 	}
 }
-
-/* Copyright(C)URARA-works 2025 */

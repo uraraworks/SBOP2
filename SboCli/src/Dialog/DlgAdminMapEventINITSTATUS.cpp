@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEventINITSTATUS.cpp								 */
-/* 内容			:マップイベント(ステータス初期化)ダイアログクラス 実装ファイル	 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/10/05													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEventINITSTATUS.cpp
+/// @brief マップイベント(ステータス初期化)ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/10/05
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -19,9 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminMapEventINITSTATUS::DoDataExchange(CDataExchange* pDX)
 {
@@ -37,12 +33,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapEventINITSTATUS, CDlgAdminMapEventNONE)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventINITSTATUS::CDlgAdminMapEventINITSTATUS		 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/10/05														 */
-/* ========================================================================= */
-
 CDlgAdminMapEventINITSTATUS::CDlgAdminMapEventINITSTATUS(CWnd* pParent /*=NULL*/)
 	: CDlgAdminMapEventNONE(pParent)
 {
@@ -55,22 +45,10 @@ CDlgAdminMapEventINITSTATUS::CDlgAdminMapEventINITSTATUS(CWnd* pParent /*=NULL*/
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventINITSTATUS::~CDlgAdminMapEventINITSTATUS		 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/10/05														 */
-/* ========================================================================= */
-
 CDlgAdminMapEventINITSTATUS::~CDlgAdminMapEventINITSTATUS()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventINITSTATUS::Set								 */
-/* 内容		:設定															 */
-/* 日付		:2008/10/05														 */
-/* ========================================================================= */
 
 void CDlgAdminMapEventINITSTATUS::Set(CInfoMapEventBase *pSrc)
 {
@@ -79,40 +57,28 @@ void CDlgAdminMapEventINITSTATUS::Set(CInfoMapEventBase *pSrc)
 
 	m_dwEffectID = pSrcTmp->m_dwEffectID;
 
-	/* エフェクトID */
+	// エフェクトID
 	nNo = 0;
-	nCount = m_ctlEffectID.GetCount ();
+	nCount = m_ctlEffectID.GetCount();
 	for (i = 0; i < nCount; i ++) {
-		if (m_dwEffectID == m_ctlEffectID.GetItemData (i)) {
+		if (m_dwEffectID == m_ctlEffectID.GetItemData(i)) {
 			nNo = i;
 			break;
 		}
 	}
-	m_ctlEffectID.SetCurSel (nNo);
+	m_ctlEffectID.SetCurSel(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventINITSTATUS::Get								 */
-/* 内容		:取得															 */
-/* 日付		:2008/10/05														 */
-/* ========================================================================= */
 
 void CDlgAdminMapEventINITSTATUS::Get(CInfoMapEventBase *pDst)
 {
 	int nNo;
 	PCInfoMapEventINITSTATUS pDstTmp = (PCInfoMapEventINITSTATUS)pDst;
 
-	nNo = m_ctlEffectID.GetCurSel ();
-	pDstTmp->m_dwEffectID = m_ctlEffectID.GetItemData (nNo);
+	nNo = m_ctlEffectID.GetCurSel();
+	pDstTmp->m_dwEffectID = m_ctlEffectID.GetItemData(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapEventINITSTATUS::OnInitDialog						 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/10/05														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminMapEventINITSTATUS::OnInitDialog()
 {
@@ -122,17 +88,15 @@ BOOL CDlgAdminMapEventINITSTATUS::OnInitDialog()
 
 	CDlgAdminMapEventNONE::OnInitDialog();
 
-	/* エフェクトID */
-	m_ctlEffectID.InsertString (0, _T("無し"));
-	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
-	nCount = pLibInfoEffect->GetCount ();
+	// エフェクトID
+	m_ctlEffectID.InsertString(0, _T("無し"));
+	pLibInfoEffect = m_pMgrData->GetLibInfoEffect();
+	nCount = pLibInfoEffect->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
-		m_ctlEffectID.InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoEffect->m_strName));
-		m_ctlEffectID.SetItemData (i + 1, pInfoEffect->m_dwEffectID);
+		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr(i);
+		m_ctlEffectID.InsertString(i + 1, Utf8ToTString((LPCSTR)pInfoEffect->m_strName));
+		m_ctlEffectID.SetItemData(i + 1, pInfoEffect->m_dwEffectID);
 	}
 
 	return TRUE;
 }
-
-/* Copyright(C)URARA-works 2008 */

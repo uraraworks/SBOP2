@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemTypeNewARMS.cpp								 */
-/* 内容			:アイテム種別(持ち物)設定ダイアログクラス 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/12/08													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemTypeNewARMS.cpp
+/// @brief アイテム種別(持ち物)設定ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/12/08
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "resource.h"
@@ -21,9 +19,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminItemTypeNewARMS::DoDataExchange(CDataExchange* pDX)
 {
@@ -39,12 +35,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminItemTypeNewARMS, CDlgAdminBase)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::CDlgAdminItemTypeNewARMS				 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/12/08														 */
-/* ========================================================================= */
-
 CDlgAdminItemTypeNewARMS::CDlgAdminItemTypeNewARMS(CWnd* pParent /*=NULL*/)
 : CDlgAdminBase(CDlgAdminItemTypeNewARMS::IDD, pParent)
 , m_pSrc(NULL)
@@ -55,49 +45,25 @@ CDlgAdminItemTypeNewARMS::CDlgAdminItemTypeNewARMS(CWnd* pParent /*=NULL*/)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::~CDlgAdminItemTypeNewARMS			 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/12/08														 */
-/* ========================================================================= */
-
 CDlgAdminItemTypeNewARMS::~CDlgAdminItemTypeNewARMS()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::Set									 */
-/* 内容		:編集内容を設定													 */
-/* 日付		:2007/12/08														 */
-/* ========================================================================= */
-
 void CDlgAdminItemTypeNewARMS::Set(CInfoItemTypeBase *pSrc)
 {
 	m_pSrc = pSrc;
-	m_dwWeaponInfoID	= pSrc->m_dwWeaponInfoID;		/* 武器情報ID */
-	m_dwValue			= pSrc->m_dwValue;				/* 攻撃力 */
+	m_dwWeaponInfoID	= pSrc->m_dwWeaponInfoID; // 武器情報ID
+	m_dwValue	= pSrc->m_dwValue; // 攻撃力
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::Get									 */
-/* 内容		:編集内容を取得													 */
-/* 日付		:2007/12/08														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeNewARMS::Get(CInfoItemTypeBase *&pDst)
 {
-	pDst->m_dwWeaponInfoID	= m_dwWeaponInfoID;		/* 武器情報ID */
-	pDst->m_dwValue			= m_dwValue;			/* 攻撃力 */
+	pDst->m_dwWeaponInfoID	= m_dwWeaponInfoID; // 武器情報ID
+	pDst->m_dwValue	= m_dwValue; // 攻撃力
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2007/12/08														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminItemTypeNewARMS::OnInitDialog()
 {
@@ -107,59 +73,41 @@ BOOL CDlgAdminItemTypeNewARMS::OnInitDialog()
 
 	CDlgAdminBase::OnInitDialog();
 
-	pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon ();
+	pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon();
 
-	m_ctlWeaponType.InsertString (0, _T("未指定"));
-	nCount = pLibInfoItemWeapon->GetCount ();
+	m_ctlWeaponType.InsertString(0, _T("未指定"));
+	nCount = pLibInfoItemWeapon->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoItemWeapon = (PCInfoItemWeapon)pLibInfoItemWeapon->GetPtr (i);
-		m_ctlWeaponType.InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoItemWeapon->m_strName));
-		m_ctlWeaponType.SetItemData (i + 1, pInfoItemWeapon->m_dwWeaponInfoID);
+		pInfoItemWeapon = (PCInfoItemWeapon)pLibInfoItemWeapon->GetPtr(i);
+		m_ctlWeaponType.InsertString(i + 1, Utf8ToTString((LPCSTR)pInfoItemWeapon->m_strName));
+		m_ctlWeaponType.SetItemData(i + 1, pInfoItemWeapon->m_dwWeaponInfoID);
 	}
 
-	SetWeaponType (m_dwWeaponInfoID);
+	SetWeaponType(m_dwWeaponInfoID);
 	OnCbnSelchangeWeapontype();
 
 	return TRUE;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::PostNcDestroy						 */
-/* 内容		:終了処理														 */
-/* 日付		:2007/09/30														 */
-/* ========================================================================= */
-
 void CDlgAdminItemTypeNewARMS::PostNcDestroy()
 {
-	CDialog::PostNcDestroy ();
+	CDialog::PostNcDestroy();
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::OnOK									 */
-/* 内容		:ボタンハンドラ(OK)												 */
-/* 日付		:2007/12/08														 */
-/* ========================================================================= */
-
 void CDlgAdminItemTypeNewARMS::OnOK()
 {
-	UpdateData ();
+	UpdateData();
 
 	if (m_pDlgWeaponType) {
 		m_pDlgWeaponType->Get(m_pSrc);
 	}
-	m_dwWeaponInfoID = GetWeaponType ();
+	m_dwWeaponInfoID = GetWeaponType();
 
-	CDlgAdminBase::EndDialog (IDOK);
+	CDlgAdminBase::EndDialog(IDOK);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::SetWeaponType						 */
-/* 内容		:武器種別を設定													 */
-/* 日付		:2007/12/09														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeNewARMS::SetWeaponType(DWORD dwWeaponInfoID)
 {
@@ -168,24 +116,18 @@ void CDlgAdminItemTypeNewARMS::SetWeaponType(DWORD dwWeaponInfoID)
 
 	nSelect = 0;
 
-	nCount = m_ctlWeaponType.GetCount ();
+	nCount = m_ctlWeaponType.GetCount();
 	for (i = 0; i < nCount; i ++) {
-		dwItemData = m_ctlWeaponType.GetItemData (i);
+		dwItemData = m_ctlWeaponType.GetItemData(i);
 		if (dwItemData != dwWeaponInfoID) {
 			continue;
 		}
 		nSelect = i;
 		break;
 	}
-	m_ctlWeaponType.SetCurSel (nSelect);
+	m_ctlWeaponType.SetCurSel(nSelect);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::GetWeaponType						 */
-/* 内容		:武器種別を取得													 */
-/* 日付		:2007/12/09														 */
-/* ========================================================================= */
 
 DWORD CDlgAdminItemTypeNewARMS::GetWeaponType(void)
 {
@@ -194,22 +136,16 @@ DWORD CDlgAdminItemTypeNewARMS::GetWeaponType(void)
 
 	dwRet = 0;
 
-	nSelect = m_ctlWeaponType.GetCurSel ();
+	nSelect = m_ctlWeaponType.GetCurSel();
 	if (nSelect < 0) {
 		goto Exit;
 	}
 
-	dwRet = m_ctlWeaponType.GetItemData (nSelect);
+	dwRet = m_ctlWeaponType.GetItemData(nSelect);
 Exit:
 	return dwRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeNewARMS::OnCbnSelchangeWeapontype				 */
-/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
-/* 日付		:2010/01/05														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeNewARMS::OnCbnSelchangeWeapontype()
 {
@@ -219,7 +155,7 @@ void CDlgAdminItemTypeNewARMS::OnCbnSelchangeWeapontype()
 	}
 
 	DWORD dwWeaponInfoID = GetWeaponType();
-	PCLibInfoItemWeapon pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon ();
+	PCLibInfoItemWeapon pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon();
 	PCInfoItemWeapon pInfoItemWeapon = (PCInfoItemWeapon)pLibInfoItemWeapon->GetPtr(dwWeaponInfoID);
 	if (pInfoItemWeapon == NULL) {
 		return;
@@ -240,5 +176,3 @@ void CDlgAdminItemTypeNewARMS::OnCbnSelchangeWeapontype()
 	m_pDlgWeaponType->ShowWindow(SW_SHOW);
 	m_pDlgWeaponType->MoveWindow(&rcTmp);
 }
-
-/* Copyright(C)URARA-works 2007 */

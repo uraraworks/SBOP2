@@ -1,4 +1,5 @@
-// DXAudio.h - unified header with XAudio2 BGM support
+/// @file DXAudio.h
+/// @brief DirectMusic/XAudio2統合ヘッダ（BGMサポート含む）定義ファイル
 #pragma once
 
 #ifndef NO_DIRECTMUSIC

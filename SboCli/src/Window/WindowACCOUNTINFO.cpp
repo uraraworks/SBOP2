@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:WindowACCOUNTINFO.cpp										 */
-/* 内容			:アカウント情報ウィンドウクラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/12/29													 */
-/* ========================================================================= */
+﻿/// @file WindowACCOUNTINFO.cpp
+/// @brief アカウント情報ウィンドウクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/12/29
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include "InfoAccount.h"
@@ -16,17 +14,11 @@
 #include "WindowACCOUNTINFO.h"
 
 
-/* ========================================================================= */
-/* 関数名：	CWindowACCOUNTINFO::CWindowACCOUNTINFO							 */
-/* 内容：	コンストラクタ													 */
-/* 日付：	2006/12/29														 */
-/* ========================================================================= */
-
 CWindowACCOUNTINFO::CWindowACCOUNTINFO()
 {
-	m_nPos			= 0;
-	m_nPosMax		= 2;
-	m_nID			= WINDOWTYPE_ACCOUNTINFO;
+	m_nPos	= 0;
+	m_nPosMax	= 2;
+	m_nID	= WINDOWTYPE_ACCOUNTINFO;
 	m_ptViewPos.x	= 280;
 	m_ptViewPos.y	= 48;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 10;
@@ -34,37 +26,19 @@ CWindowACCOUNTINFO::CWindowACCOUNTINFO()
 }
 
 
-/* ========================================================================= */
-/* 関数名：	CWindowACCOUNTINFO::~CWindowACCOUNTINFO							 */
-/* 内容：	デストラクタ													 */
-/* 日付：	2006/12/29														 */
-/* ========================================================================= */
-
 CWindowACCOUNTINFO::~CWindowACCOUNTINFO()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CWindowACCOUNTINFO::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2006/12/29														 */
-/* ========================================================================= */
-
 void CWindowACCOUNTINFO::Create(CMgrData *pMgrData)
 {
-	CWindowBase::Create (pMgrData);
+	CWindowBase::Create(pMgrData);
 
-	m_pDib->Create (m_sizeWindow.cx, m_sizeWindow.cy);
-	m_pDib->SetColorKey (RGB (40, 40, 40));
+	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
+	m_pDib->SetColorKey(RGB(40, 40, 40));
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CWindowACCOUNTINFO::Draw										 */
-/* 内容：	描画															 */
-/* 日付：	2006/12/29														 */
-/* ========================================================================= */
 
 void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 {
@@ -79,33 +53,31 @@ void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	DrawFrame ();
+	DrawFrame();
 
-	pInfoAccount	= m_pMgrData->GetAccount ();
-	pInfoChar		= m_pMgrData->GetPlayerChar ();
+	pInfoAccount	= m_pMgrData->GetAccount();
+	pInfoChar	= m_pMgrData->GetPlayerChar();
 	if (pInfoChar == NULL) {
 		goto Exit;
 	}
 
-	clText		= RGB (0, 0, 0);
-	hDC			= m_pDib->Lock ();
-	hFontOld	= (HFONT)SelectObject (hDC, m_hFont);
-	SetBkMode (hDC, TRANSPARENT);
+	clText	= RGB(0, 0, 0);
+	hDC	= m_pDib->Lock();
+	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
+	SetBkMode(hDC, TRANSPARENT);
 
 	strTmp.Format(_T("キャラ名:%s"), (LPCTSTR)pInfoChar->m_strCharName);
-	TextOut2 (hDC, 16, 16 + 16 * 0, strTmp,	clText);
+	TextOut2(hDC, 16, 16 + 16 * 0, strTmp,	clText);
 	strTmp.Format(_T("アカウント作成日時:"));
-	TextOut2 (hDC, 16, 16 + 16 * 1, strTmp,	clText);
-	TextOut2 (hDC, 16, 16 + 16 * 2, _T("前回ログイン日時:"),	clText);
-	TextOut2 (hDC, 16, 16 + 16 * 3, _T("ログイン回数:"),		clText);
+	TextOut2(hDC, 16, 16 + 16 * 1, strTmp,	clText);
+	TextOut2(hDC, 16, 16 + 16 * 2, _T("前回ログイン日時:"),	clText);
+	TextOut2(hDC, 16, 16 + 16 * 3, _T("ログイン回数:"),	clText);
 
-	SelectObject (hDC, hFontOld);
-	m_pDib->Unlock ();
+	SelectObject(hDC, hFontOld);
+	m_pDib->Unlock();
 
-	m_dwTimeDrawStart = timeGetTime ();
+	m_dwTimeDrawStart = timeGetTime();
 
 Exit:
-	pDst->Blt (m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
+	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
 }
-
-/* Copyright(C)URARA-works 2006 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:LayerMap.h													 */
-/* 内容			:レイヤー描画クラス(マップ) 実装ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/09/24													 */
-/* ========================================================================= */
+﻿/// @file LayerMap.cpp
+/// @brief レイヤー描画クラス(マップ) 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/09/24
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include "LibInfoMapParts.h"
@@ -30,120 +28,96 @@
 #include <math.h>
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerMap::CLayerMap											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 CLayerMap::CLayerMap()
 {
 	m_nID = LAYERTYPE_MAP;
 
-	m_bScroll			= TRUE;
-	m_byDirection		= 0;
-	m_nViewIcon			= 0;
-	m_nMoveWait			= MOVEWAIT;
-	m_nViewX			= 0;
-	m_nViewY			= 0;
-	m_nCameraSnapThreshold	= 1;
-	m_nMoveX			= 0;
-	m_nMoveY			= 0;
-	m_nSystemIconMode	= 0;
-	m_nSyatemIconOffset	= 0;
-	m_nLevelMapName		= 0;
-	m_dwLastTimeScroll	= 0;
+	m_bScroll = TRUE;
+	m_byDirection = 0;
+	m_nViewIcon = 0;
+	m_nMoveWait = MOVEWAIT;
+	m_nViewX = 0;
+	m_nViewY = 0;
+	m_nCameraSnapThreshold = 1;
+	m_nMoveX = 0;
+	m_nMoveY = 0;
+	m_nSystemIconMode = 0;
+	m_nSyatemIconOffset = 0;
+	m_nLevelMapName = 0;
+	m_dwLastTimeScroll = 0;
 	m_dwLastTimeCameraUpdate = 0;
-	m_dwLastTimeSystemIconMode	= 0;
-	m_dwLastTimeMapName	= 0;
-	m_dwMoveWaitOnce	= 0;
-	m_dCameraX			= 0.0;
-	m_dCameraY			= 0.0;
-	m_dCameraTargetX	= 0.0;
-	m_dCameraTargetY	= 0.0;
-	m_dCameraFollowSharpness = 8.0;	/* 停止後に約0.5秒で慣性っぽく収束 */
+	m_dwLastTimeSystemIconMode = 0;
+	m_dwLastTimeMapName = 0;
+	m_dwMoveWaitOnce = 0;
+	m_dCameraX = 0.0;
+	m_dCameraY = 0.0;
+	m_dCameraTargetX = 0.0;
+	m_dCameraTargetY = 0.0;
+	m_dCameraFollowSharpness = 8.0; // 停止後に約0.5秒で慣性っぽく収束
 
-	m_pDibLevel			= NULL;
-	m_pDibLevelTmp		= NULL;
-	m_pDibMapName		= NULL;
-	m_pLibInfoItem		= NULL;
-	m_pLibInfoMapParts	= NULL;
-	m_pLibInfoMapShadow	= NULL;
+	m_pDibLevel = NULL;
+	m_pDibLevelTmp = NULL;
+	m_pDibMapName = NULL;
+	m_pLibInfoItem = NULL;
+	m_pLibInfoMapParts = NULL;
+	m_pLibInfoMapShadow = NULL;
 
-	m_pLayerCould		= NULL;
-	m_pLayerMisty		= NULL;
-	m_pLayerSnow		= NULL;
+	m_pLayerCould = NULL;
+	m_pLayerMisty = NULL;
+	m_pLayerSnow = NULL;
 
-        m_hFont32 = CreateFont (32, 0, 0, 0, FW_NORMAL,
+        m_hFont32 = CreateFont(32, 0, 0, 0, FW_NORMAL,
                         TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
                         OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                         DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerMap::~CLayerMap											 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 CLayerMap::~CLayerMap()
 {
-	SAFE_DELETE (m_pDibLevel);
-	SAFE_DELETE (m_pDibLevelTmp);
-	SAFE_DELETE (m_pDibMapName);
-	SAFE_DELETE (m_pLayerCould);
-	SAFE_DELETE (m_pLayerMisty);
-	SAFE_DELETE (m_pLayerSnow);
+	SAFE_DELETE(m_pDibLevel);
+	SAFE_DELETE(m_pDibLevelTmp);
+	SAFE_DELETE(m_pDibMapName);
+	SAFE_DELETE(m_pLayerCould);
+	SAFE_DELETE(m_pLayerMisty);
+	SAFE_DELETE(m_pLayerSnow);
 
 	if (m_hFont32) {
-		DeleteObject (m_hFont32);
+		DeleteObject(m_hFont32);
 		m_hFont32 = NULL;
 	}
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerMap::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 void CLayerMap::Create(
-	CMgrData	*pMgrData)		/* [in] データ管理 */
+	CMgrData *pMgrData) // [in] データ管理
 {
-	CLayerBase::Create (pMgrData);
+	CLayerBase::Create(pMgrData);
 
-	m_pLibInfoItem		= m_pMgrData->GetLibInfoItem ();
-	m_pLibInfoMapParts	= m_pMgrData->GetLibInfoMapParts ();
-	m_pLibInfoMapShadow	= m_pMgrData->GetLibInfoMapShadow ();
+	m_pLibInfoItem = m_pMgrData->GetLibInfoItem();
+	m_pLibInfoMapParts = m_pMgrData->GetLibInfoMapParts();
+	m_pLibInfoMapShadow = m_pMgrData->GetLibInfoMapShadow();
 
 	m_pDibLevel = new CImg32;
-	m_pDibLevel->CreateWithoutGdi (SCRSIZEX + 64, SCRSIZEY + 64);
-	m_pDibLevel->FillRect (0, 0, m_pDibLevel->Width (), m_pDibLevel->Height (), RGB (100, 0, 0));
+	m_pDibLevel->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLevel->FillRect(0, 0, m_pDibLevel->Width(), m_pDibLevel->Height(), RGB(100, 0, 0));
 
 	m_pDibLevelTmp = new CImg32;
-	m_pDibLevelTmp->CreateWithoutGdi (SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLevelTmp->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
 
-	m_pDibLevelTmp->CircleGradation (0, 0, 64, 48, RGB (50, 0, 0));
+	m_pDibLevelTmp->CircleGradation(0, 0, 64, 48, RGB(50, 0, 0));
 
 	m_pLayerCould = new CLayerCloud;
 	m_pLayerMisty = new CLayerMisty;
 	m_pLayerSnow  = new CLayerSnow;
-	m_pLayerCould->Create (pMgrData);
-	m_pLayerMisty->Create (pMgrData);
-	m_pLayerSnow-> Create (pMgrData);
+	m_pLayerCould->Create(pMgrData);
+	m_pLayerMisty->Create(pMgrData);
+	m_pLayerSnow-> Create(pMgrData);
 
 	m_pLayerCould->m_pLayerMap = this;
 	m_pLayerSnow-> m_pLayerMap = this;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerMap::Draw												 */
-/* 内容		:描画															 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CLayerMap::Draw(PCImg32 pDst)
 {
@@ -151,59 +125,53 @@ void CLayerMap::Draw(PCImg32 pDst)
 	PCInfoMapBase pMap;
 	PCLayerBase pLayer;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
 
 	if (pMap->m_byLevel != 0) {
-		RenewLevel ();
+		RenewLevel();
 	}
 
-	DrawPartsBase	(pDst);
-	DrawMapPile		(pDst);
-	DrawItem		(pDst, 0);
+	DrawPartsBase(pDst);
+	DrawMapPile(pDst);
+	DrawItem(pDst, 0);
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
-		DrawMapObject	(pDst, y);
-		DrawChar		(pDst, y);
-		DrawPartsPile	(pDst, y);
-		DrawMapPile		(pDst, y);
+		DrawMapObject(pDst, y);
+		DrawChar(pDst, y);
+		DrawPartsPile(pDst, y);
+		DrawMapPile(pDst, y);
 	}
-	DrawPartsPile	(pDst);
-	DrawMapPile		(pDst, -98);
-	DrawShadow		(pDst);
+	DrawPartsPile(pDst);
+	DrawMapPile(pDst, -98);
+	DrawShadow(pDst);
 
 	pLayer = NULL;
 	switch (pMap->m_dwWeatherType) {
-	case WEATHERTYPE_CLOUD:		pLayer = m_pLayerCould;		break;
-	case WEATHERTYPE_MISTY:		pLayer = m_pLayerMisty;		break;
-	case WEATHERTYPE_SNOW:		pLayer = m_pLayerSnow;		break;
+	case WEATHERTYPE_CLOUD:  pLayer = m_pLayerCould; break;
+	case WEATHERTYPE_MISTY:  pLayer = m_pLayerMisty; break;
+	case WEATHERTYPE_SNOW:   pLayer = m_pLayerSnow;  break;
 	}
 	if (pLayer) {
-		pLayer->Draw (pDst);
+		pLayer->Draw(pDst);
 	}
 	if (pMap->m_byLevel != 0) {
-		pDst->SetLevel (m_pDibLevel);
+		pDst->SetLevel(m_pDibLevel);
 	}
-	DrawItem (pDst, 1);
-	DrawCharText		(pDst);
-	DrawGauge			(pDst);
-	DrawSystemIcon		(pDst);
-	DrawMapName			(pDst);
-	if (m_pMgrData->GetMapEventEditMode ()) {
-		DrawMapEventDebug (pDst);
+	DrawItem(pDst, 1);
+	DrawCharText(pDst);
+	DrawGauge(pDst);
+	DrawSystemIcon(pDst);
+	DrawMapName(pDst);
+	if (m_pMgrData->GetMapEventEditMode()) {
+		DrawMapEventDebug(pDst);
 	}
-	if (m_pMgrData->GetMapPartsEditMode ()) {
-		DrawMapPartsDebug (pDst);
+	if (m_pMgrData->GetMapPartsEditMode()) {
+		DrawMapPartsDebug(pDst);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerMap::TimerProc											 */
-/* 内容		:時間処理														 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 BOOL CLayerMap::TimerProc(void)
 {
@@ -211,63 +179,50 @@ BOOL CLayerMap::TimerProc(void)
 	PCInfoMapBase pMap;
 	PCLayerBase pLayer;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return FALSE;
 	}
 
-	bRet  = CLayerBase::TimerProc ();
-	bRet |= TimerProcScroll ();
-	bRet |= TimerProcSystemIcon ();
-	bRet |= TimerProcMapName ();
+	bRet  = CLayerBase::TimerProc();
+	bRet |= TimerProcScroll();
+	bRet |= TimerProcSystemIcon();
+	bRet |= TimerProcMapName();
 
 	switch (pMap->m_dwWeatherType) {
 	case WEATHERTYPE_CLOUD:
-		bRet |= m_pLayerCould->TimerProc ();
+		bRet |= m_pLayerCould->TimerProc();
 		break;
 	}
 
 	pLayer = NULL;
 	switch (pMap->m_dwWeatherType) {
-	case WEATHERTYPE_CLOUD:		pLayer = m_pLayerCould;		break;
-	case WEATHERTYPE_MISTY:		pLayer = m_pLayerMisty;		break;
-	case WEATHERTYPE_SNOW:		pLayer = m_pLayerSnow;		break;
+	case WEATHERTYPE_CLOUD:  pLayer = m_pLayerCould; break;
+	case WEATHERTYPE_MISTY:  pLayer = m_pLayerMisty; break;
+	case WEATHERTYPE_SNOW:   pLayer = m_pLayerSnow;  break;
 	}
 	if (pLayer) {
-		bRet |= pLayer->TimerProc ();
+		bRet |= pLayer->TimerProc();
 	}
 
 	return bRet;
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::IsScrollPos											 */
-/* 内容		:スクロールする場所か判定										 */
-/* 日付		:2006/11/01														 */
-/* 戻り値	:-1:スクロール不要 その他:スクロールする向き					 */
-/* ========================================================================= */
-
 int CLayerMap::IsScrollPos(
-	int x,				/* [in] キャラ座標(横) */
-	int y,				/* [in] キャラ座標(縦) */
-	int nDirection)		/* [in] 向き */
+	int x,          // [in] キャラ座標(横)
+	int y,          // [in] キャラ座標(縦)
+	int nDirection) // [in] 向き
 {
-	/* Phase 3: カメラ追随のためスクロール判定不要 */
+	// Phase 3: カメラ追随のためスクロール判定不要
 	return -1;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerMap::IsScrollArea										 */
-/* 内容		:スクロールできるか判定											 */
-/* 日付		:2006/11/01														 */
-/* ========================================================================= */
-
 BOOL CLayerMap::IsScrollArea(
-	int x,				/* [in] キャラ座標(横) */
-	int y,				/* [in] キャラ座標(縦) */
-	int &nDirection)	/* [in] 向き */
+	int x,           // [in] キャラ座標(横)
+	int y,           // [in] キャラ座標(縦)
+	int &nDirection) // [in] 向き
 {
 	BOOL bRet, bResult;
 	int nDirectionTmp;
@@ -276,7 +231,7 @@ BOOL CLayerMap::IsScrollArea(
 
 	switch (nDirection) {
 	case 0:
-		/* Phase 3: m_nViewY/x,y はpx単位。旧スケール*2→MAPPARTSSIZE に変換 */
+		// Phase 3: m_nViewY/x,y はpx単位。旧スケール*2→MAPPARTSSIZE に変換
 		if (y - m_nViewY >= (DRAW_PARTS_Y - 1) * MAPPARTSSIZE) {
 			goto Exit;
 		}
@@ -298,10 +253,10 @@ BOOL CLayerMap::IsScrollArea(
 		break;
 	case 4:
 		nDirectionTmp = 0;
-		bResult = IsScrollArea (x, y, nDirectionTmp);
+		bResult = IsScrollArea(x, y, nDirectionTmp);
 		nDirectionTmp = 3;
 		if (bResult) {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 			if (bResult) {
 				nDirectionTmp = nDirection;
 			} else {
@@ -309,7 +264,7 @@ BOOL CLayerMap::IsScrollArea(
 			}
 			bResult = TRUE;
 		} else {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 		}
 		bRet = bResult;
 		if (bRet) {
@@ -318,10 +273,10 @@ BOOL CLayerMap::IsScrollArea(
 		goto Exit;
 	case 5:
 		nDirectionTmp = 1;
-		bResult = IsScrollArea (x, y, nDirectionTmp);
+		bResult = IsScrollArea(x, y, nDirectionTmp);
 		nDirectionTmp = 3;
 		if (bResult) {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 			if (bResult) {
 				nDirectionTmp = nDirection;
 			} else {
@@ -329,7 +284,7 @@ BOOL CLayerMap::IsScrollArea(
 			}
 			bResult = TRUE;
 		} else {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 		}
 		bRet = bResult;
 		if (bRet) {
@@ -338,10 +293,10 @@ BOOL CLayerMap::IsScrollArea(
 		goto Exit;
 	case 6:
 		nDirectionTmp = 1;
-		bResult = IsScrollArea (x, y, nDirectionTmp);
+		bResult = IsScrollArea(x, y, nDirectionTmp);
 		nDirectionTmp = 2;
 		if (bResult) {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 			if (bResult) {
 				nDirectionTmp = nDirection;
 			} else {
@@ -349,7 +304,7 @@ BOOL CLayerMap::IsScrollArea(
 			}
 			bResult = TRUE;
 		} else {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 		}
 		bRet = bResult;
 		if (bRet) {
@@ -358,10 +313,10 @@ BOOL CLayerMap::IsScrollArea(
 		goto Exit;
 	case 7:
 		nDirectionTmp = 0;
-		bResult = IsScrollArea (x, y, nDirectionTmp);
+		bResult = IsScrollArea(x, y, nDirectionTmp);
 		nDirectionTmp = 2;
 		if (bResult) {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 			if (bResult) {
 				nDirectionTmp = nDirection;
 			} else {
@@ -369,7 +324,7 @@ BOOL CLayerMap::IsScrollArea(
 			}
 			bResult = TRUE;
 		} else {
-			bResult = IsScrollArea (x, y, nDirectionTmp);
+			bResult = IsScrollArea(x, y, nDirectionTmp);
 		}
 		bRet = bResult;
 		if (bRet) {
@@ -384,12 +339,6 @@ Exit:
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::IsScroll											 */
-/* 内容		:スクロール中か判定												 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 BOOL CLayerMap::IsScroll(void)
 {
 	return (m_dwLastTimeScroll) ? TRUE : FALSE;
@@ -397,8 +346,8 @@ BOOL CLayerMap::IsScroll(void)
 
 
 BOOL CLayerMap::IsInScreen(
-	int x,		/* [in] キャラ座標(横) */
-	int y)		/* [in] キャラ座標(縦) */
+	int x, // [in] キャラ座標(横)
+	int y) // [in] キャラ座標(縦)
 {
 	int nMarginX;
 	int nMarginY;
@@ -421,12 +370,6 @@ BOOL CLayerMap::IsInScreen(
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerMap::Scroll												 */
-/* 内容		:スクロール														 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 BYTE CLayerMap::Scroll(BYTE byDirection, BOOL bNoCheck)
 {
 	BYTE byRet;
@@ -435,7 +378,7 @@ BYTE CLayerMap::Scroll(BYTE byDirection, BOOL bNoCheck)
 
 	byRet = 0;
 
-	/* スクロールしないモード？ */
+	// スクロールしないモード？
 	if (m_bScroll == FALSE) {
 		goto Exit;
 	}
@@ -444,11 +387,11 @@ BYTE CLayerMap::Scroll(BYTE byDirection, BOOL bNoCheck)
 		m_nMoveX = m_nMoveY = 0;
 
 	} else {
-		if (IsScroll ()) {
+		if (IsScroll()) {
 			goto Exit;
 		}
 	}
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		goto Exit;
 	}
@@ -544,89 +487,61 @@ BYTE CLayerMap::Scroll(BYTE byDirection, BOOL bNoCheck)
 	if (m_dwMoveWaitOnce != 0) {
 		nMoveWait = m_dwMoveWaitOnce;
 	}
-	m_dwLastTimeScroll = timeGetTime () - nMoveWait;
+	m_dwLastTimeScroll = timeGetTime() - nMoveWait;
 	m_nViewX = (WORD)x;
 	m_nViewY = (WORD)y;
-	TimerProc ();
+	TimerProc();
 
 Exit:
 	return byRet;
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::SetCenterPos										 */
-/* 内容		:指定座標が画面中央になるように設定								 */
-/* 日付		:2007/02/15														 */
-/* ========================================================================= */
-
 void CLayerMap::SetCenterPos(
-	int x,		/* [in] キャラ座標(横) */
-	int y		/* [in] キャラ座標(縦) */
+	int x, // [in] キャラ座標(横)
+	int y  // [in] キャラ座標(縦)
 )
 {
-	SnapCameraToCenterPos (x, y);
+	SnapCameraToCenterPos(x, y);
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::SetCameraTargetCenterPos							 */
-/* 内容		:指定座標へカメラ追従目標を設定									 */
-/* ========================================================================= */
-
 void CLayerMap::SetCameraTargetCenterPos(
-	int x,		/* [in] キャラ座標(横) */
-	int y		/* [in] キャラ座標(縦) */
+	int x, // [in] キャラ座標(横)
+	int y  // [in] キャラ座標(縦)
 )
 {
 	double dCamX, dCamY;
 
-	CalcCameraPosFromCenter (x, y, dCamX, dCamY);
+	CalcCameraPosFromCenter(x, y, dCamX, dCamY);
 	m_dCameraTargetX = dCamX;
 	m_dCameraTargetY = dCamY;
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::SnapCameraToCenterPos								 */
-/* 内容		:指定座標へカメラを即時移動										 */
-/* ========================================================================= */
-
 void CLayerMap::SnapCameraToCenterPos(
-	int x,		/* [in] キャラ座標(横) */
-	int y		/* [in] キャラ座標(縦) */
+	int x, // [in] キャラ座標(横)
+	int y  // [in] キャラ座標(縦)
 )
 {
 	double dCamX, dCamY;
 
-	CalcCameraPosFromCenter (x, y, dCamX, dCamY);
+	CalcCameraPosFromCenter(x, y, dCamX, dCamY);
 	m_dCameraX = dCamX;
 	m_dCameraY = dCamY;
 	m_dCameraTargetX = dCamX;
 	m_dCameraTargetY = dCamY;
 	m_nViewX = (int)(dCamX + 0.5);
 	m_nViewY = (int)(dCamY + 0.5);
-	m_dwLastTimeCameraUpdate = timeGetTime ();
+	m_dwLastTimeCameraUpdate = timeGetTime();
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::SetScrollWait										 */
-/* 内容		:スクロール移動待ち時間を設定									 */
-/* 日付		:2007/02/15														 */
-/* ========================================================================= */
 
 void CLayerMap::SetScrollWait(int nMoveWait)
 {
 	m_nMoveWait = nMoveWait;
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::SetScrollMode										 */
-/* 内容		:スクロールするか設定											 */
-/* 日付		:2007/09/09														 */
-/* ========================================================================= */
 
 void CLayerMap::SetScrollMode(BOOL bScroll, int nViewIcon)
 {
@@ -637,12 +552,6 @@ void CLayerMap::SetScrollMode(BOOL bScroll, int nViewIcon)
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::SetSystemIconMode									 */
-/* 内容		:システムアイコンモードを設定									 */
-/* 日付		:2007/09/16														 */
-/* ========================================================================= */
-
 void CLayerMap::SetSystemIconMode(int nMode)
 {
 	if (m_nSystemIconMode == nMode) {
@@ -650,29 +559,17 @@ void CLayerMap::SetSystemIconMode(int nMode)
 	}
 
 	m_nSystemIconMode = nMode;
-	m_dwLastTimeSystemIconMode = timeGetTime ();
+	m_dwLastTimeSystemIconMode = timeGetTime();
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::GetViewMapPos										 */
-/* 内容		:視点をマップ座標で取得											 */
-/* 日付		:2008/04/19														 */
-/* ========================================================================= */
-
 void CLayerMap::GetViewMapPos(int &nDstX, int &nDstY)
 {
-	/* Phase 3: m_nViewX/Y はpx単位 → タイル座標 */
+	// Phase 3: m_nViewX/Y はpx単位 → タイル座標
 	nDstX = m_nViewX / MAPPARTSSIZE;
 	nDstY = m_nViewY / MAPPARTSSIZE;
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::RenewLevel											 */
-/* 内容		:明度レベル画像を更新											 */
-/* 日付		:2008/09/20														 */
-/* ========================================================================= */
 
 void CLayerMap::RenewLevel(void)
 {
@@ -683,7 +580,7 @@ void CLayerMap::RenewLevel(void)
 	PCInfoMotion pInfoMotion;
 	PCInfoMapBase pMap;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
@@ -691,17 +588,17 @@ void CLayerMap::RenewLevel(void)
 		return;
 	}
 
-	m_pDibLevel->FillRect (0, 0, m_pDibLevel->Width (), m_pDibLevel->Height (), RGB (100 - pMap->m_byLevel, 0, 0));
-	nCount = m_pLibInfoChar->GetCount ();
+	m_pDibLevel->FillRect(0, 0, m_pDibLevel->Width(), m_pDibLevel->Height(), RGB(100 - pMap->m_byLevel, 0, 0));
+	nCount = m_pLibInfoChar->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
+		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
 		if (pChar->m_nLightLevel == 0) {
 			continue;
 		}
 
-		pInfoMotion = pChar->GetMotionInfo ();
-		wGrpIDMainBase	= pInfoMotion->m_wGrpIDMainBase;
-		wGrpIdNPC		= pChar->m_wGrpIDNPC;
+		pInfoMotion = pChar->GetMotionInfo();
+		wGrpIDMainBase = pInfoMotion->m_wGrpIDMainBase;
+		wGrpIdNPC = pChar->m_wGrpIDNPC;
 		if (wGrpIdNPC != 0) {
 			if (wGrpIdNPC >= 50000) {
 				wGrpIdNPC -= 50000;
@@ -716,24 +613,18 @@ void CLayerMap::RenewLevel(void)
 		}
 
 		x = y = 32;
-		GetDrawPos (pChar, x, y);
-		pChar->GetViewCharPos (ptTmp);
+		GetDrawPos(pChar, x, y);
+		pChar->GetViewCharPos(ptTmp);
 		y -= (ptTmp.y / 2);
-		cx = m_pMgrGrpData->GetGrpSize (wGrpIDMainBase);
+		cx = m_pMgrGrpData->GetGrpSize(wGrpIDMainBase);
 		r = cx * 2;
 		nTmp = (r - cx / 2);
-//		m_pDibLevel->CircleGradation (x - nTmp, y - nTmp, r, cx + cx / 2, RGB (50, 0, 0));
-		m_pDibLevel->BltPlus (x - nTmp, y - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
-//		m_pDibLevel->Circle (x - nTmp, y - nTmp, r, RGB (100, 0, 0));
+//		m_pDibLevel->CircleGradation(x - nTmp, y - nTmp, r, cx + cx / 2, RGB(50, 0, 0));
+		m_pDibLevel->BltPlus(x - nTmp, y - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
+//		m_pDibLevel->Circle(x - nTmp, y - nTmp, r, RGB(100, 0, 0));
 	}
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::RenewMapName										 */
-/* 内容		:マップ名表示用画像を更新										 */
-/* 日付		:2008/11/22														 */
-/* ========================================================================= */
 
 void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 {
@@ -741,9 +632,9 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	HDC hDCTmp;
 	CString strMapName;
 
-	m_nLevelMapName		= 0;
-	m_dwLastTimeMapName	= 0;
-	SAFE_DELETE (m_pDibMapName);
+	m_nLevelMapName = 0;
+	m_dwLastTimeMapName = 0;
+	SAFE_DELETE(m_pDibMapName);
 
 	if ((pszMapName == NULL) || (*pszMapName == 0)) {
 		return;
@@ -786,12 +677,6 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerMap::TimerProcScroll										 */
-/* 内容		:時間処理(スクロール)											 */
-/* 日付		:2007/09/16														 */
-/* ========================================================================= */
-
 BOOL CLayerMap::TimerProcScroll(void)
 {
 	BOOL bRet;
@@ -800,7 +685,7 @@ BOOL CLayerMap::TimerProcScroll(void)
 	int nViewX, nViewY;
 
 	bRet = FALSE;
-	dwNow = timeGetTime ();
+	dwNow = timeGetTime();
 	if (m_dwLastTimeCameraUpdate == 0) {
 		m_dwLastTimeCameraUpdate = dwNow;
 		return FALSE;
@@ -819,7 +704,7 @@ BOOL CLayerMap::TimerProcScroll(void)
 	if (dDt > 0.10) {
 		dDt = 0.10;
 	}
-	dAlpha = 1.0 - exp (-m_dCameraFollowSharpness * dDt);
+	dAlpha = 1.0 - exp(-m_dCameraFollowSharpness * dDt);
 	if (dAlpha < 0.0) {
 		dAlpha = 0.0;
 	} else if (dAlpha > 1.0) {
@@ -830,8 +715,8 @@ BOOL CLayerMap::TimerProcScroll(void)
 	dNextY = m_dCameraY + (m_dCameraTargetY - m_dCameraY) * dAlpha;
 
 	dThreshold = (double)m_nCameraSnapThreshold;
-	dDiffX = fabs (m_dCameraTargetX - dNextX);
-	dDiffY = fabs (m_dCameraTargetY - dNextY);
+	dDiffX = fabs(m_dCameraTargetX - dNextX);
+	dDiffY = fabs(m_dCameraTargetY - dNextY);
 	if ((dDiffX <= dThreshold) && (dDiffY <= dThreshold)) {
 		dNextX = m_dCameraTargetX;
 		dNextY = m_dCameraTargetY;
@@ -851,11 +736,6 @@ BOOL CLayerMap::TimerProcScroll(void)
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::CalcCameraPosFromCenter								 */
-/* 内容		:指定座標が画面中央になるカメラ座標を算出							 */
-/* ========================================================================= */
-
 void CLayerMap::CalcCameraPosFromCenter(
 	int x,
 	int y,
@@ -868,7 +748,7 @@ void CLayerMap::CalcCameraPosFromCenter(
 	dCamX = 0.0;
 	dCamY = 0.0;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
@@ -897,47 +777,41 @@ void CLayerMap::CalcCameraPosFromCenter(
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::TimerProcSystemIcon									 */
-/* 内容		:時間処理(システムアイコン)										 */
-/* 日付		:2007/09/16														 */
-/* ========================================================================= */
-
 BOOL CLayerMap::TimerProcSystemIcon(void)
 {
 	BOOL bRet;
 	int nTmp, nMax, nMove;
 
-	bRet	= FALSE;
-	nMax	= 120;
-	nMove	= 4;
+	bRet = FALSE;
+	nMax = 120;
+	nMove = 4;
 
 	switch (m_nSystemIconMode) {
-	case 0:		/* 上に登場 */
+	case 0: // 上に登場
 		if (m_nSyatemIconOffset < 0) {
 			goto Exit;
 		}
 		break;
-	case 1:		/* 下へ退場 */
+	case 1: // 下へ退場
 		if (m_nSyatemIconOffset >= nMax) {
 			goto Exit;
 		}
 		break;
 	}
 
-	nTmp = timeGetTime () - m_dwLastTimeSystemIconMode;
+	nTmp = timeGetTime() - m_dwLastTimeSystemIconMode;
 	if (nTmp < 20) {
 		goto Exit;
 	}
 
-	m_dwLastTimeSystemIconMode = timeGetTime ();
+	m_dwLastTimeSystemIconMode = timeGetTime();
 
 	switch (m_nSystemIconMode) {
-	case 0:		/* 上に登場 */
-		m_nSyatemIconOffset = max (m_nSyatemIconOffset - nMove, 0);
+	case 0: // 上に登場
+		m_nSyatemIconOffset = max(m_nSyatemIconOffset - nMove, 0);
 		break;
-	case 1:		/* 下へ退場 */
-		m_nSyatemIconOffset = min (m_nSyatemIconOffset + nMove, nMax);
+	case 1: // 下へ退場
+		m_nSyatemIconOffset = min(m_nSyatemIconOffset + nMove, nMax);
 		break;
 	}
 
@@ -949,12 +823,6 @@ Exit:
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::TimerProcMapName									 */
-/* 内容		:時間処理(マップ名表示)											 */
-/* 日付		:2008/11/22														 */
-/* ========================================================================= */
-
 BOOL CLayerMap::TimerProcMapName(void)
 {
 	BOOL bRet;
@@ -965,7 +833,7 @@ BOOL CLayerMap::TimerProcMapName(void)
 	if (m_dwLastTimeMapName == 0) {
 		goto Exit;
 	}
-	dwTimeTmp = (timeGetTime () - m_dwLastTimeMapName) / 20;
+	dwTimeTmp = (timeGetTime() - m_dwLastTimeMapName) / 20;
 	if (dwTimeTmp == 0) {
 		goto Exit;
 	}
@@ -975,12 +843,12 @@ BOOL CLayerMap::TimerProcMapName(void)
 	} else {
 		m_nLevelMapName = 100 - (dwTimeTmp - 200);
 	}
-	m_nLevelMapName = min (m_nLevelMapName, 100);
-	m_nLevelMapName = max (m_nLevelMapName, 0);
+	m_nLevelMapName = min(m_nLevelMapName, 100);
+	m_nLevelMapName = max(m_nLevelMapName, 0);
 
-	/* 終了？ */
+	// 終了？
 	if (m_nLevelMapName == 0) {
-		RenewMapName (NULL);
+		RenewMapName(NULL);
 	}
 
 	bRet = TRUE;
@@ -988,12 +856,6 @@ Exit:
 	return bRet;
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawPartsBase										 */
-/* 内容		:描画(土台)														 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 {
@@ -1005,7 +867,7 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 	PCInfoMapBase pMap;
 	PCInfoMapParts pInfoMapParts, pInfoMapPartsBack;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
@@ -1015,20 +877,20 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 		}
 	}
 	byLevel = 0;
-	bPile = m_pMgrData->GetEditMapPile ();
+	bPile = m_pMgrData->GetEditMapPile();
 	if (bPile) {
 		byLevel = 50;
 	}
 
-	GetDrawMovePos (ptMove, ptPos);
-	nMoveX	= ptMove.x;
-	nMoveY	= ptMove.y;
-	nPosX	= ptPos.x;
-	nPosY	= ptPos.y;
+	GetDrawMovePos(ptMove, ptPos);
+	nMoveX = ptMove.x;
+	nMoveY = ptMove.y;
+	nPosX = ptPos.x;
+	nPosY = ptPos.y;
 
 	dwPartsIDBack = -1;
 	pInfoMapPartsBack = NULL;
-	m_pMgrDraw->LockDibTmp ();
+	m_pMgrDraw->LockDibTmp();
 	y = -1;
 	if (nDrawY != -99) {
 		y = nDrawY / 2;
@@ -1037,21 +899,21 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
 			xx = nPosX + x;
 			yy = nPosY + y;
-			dwPartsID = pMap->GetParts (xx, yy);
+			dwPartsID = pMap->GetParts(xx, yy);
 			if (dwPartsID == dwPartsIDBack) {
 				pInfoMapParts = pInfoMapPartsBack;
 			} else {
-				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr(dwPartsID);
 			}
 			if (bPile && pInfoMapParts) {
 				if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
-					pDst->FillRect (
+					pDst->FillRect(
 						32 + x * 32 + nMoveX,
 						32 + y * 32 + nMoveY,
-						32, 32, RGB (0, 0, 0));
+						32, 32, RGB(0, 0, 0));
 				}
 			}
-			m_pMgrDraw->DrawMapParts (
+			m_pMgrDraw->DrawMapParts(
 					pDst,
 					32 + x * 32 + nMoveX,
 					32 + y * 32 + nMoveY,
@@ -1061,22 +923,16 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 					TRUE,
 					FALSE,
 					byLevel);
-			pInfoMapPartsBack	= pInfoMapParts;
-			dwPartsIDBack		= dwPartsID;
+			pInfoMapPartsBack = pInfoMapParts;
+			dwPartsIDBack = dwPartsID;
 		}
 		if (nDrawY != -99) {
 			break;
 		}
 	}
-	m_pMgrDraw->UnLockDibTmp ();
+	m_pMgrDraw->UnLockDibTmp();
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawMapPile											 */
-/* 内容		:描画(マップ重ね合わせ)											 */
-/* 日付		:2008/12/06														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 {
@@ -1086,20 +942,20 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 	PCInfoMapBase pMap;
 	PCInfoMapParts pInfoMapParts, pInfoMapPartsBack;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
 
-	GetDrawMovePos (ptMove, ptPos);
-	nMoveX	= ptMove.x;
-	nMoveY	= ptMove.y;
-	nPosX	= ptPos.x;
-	nPosY	= ptPos.y;
+	GetDrawMovePos(ptMove, ptPos);
+	nMoveX = ptMove.x;
+	nMoveY = ptMove.y;
+	nPosX = ptPos.x;
+	nPosY = ptPos.y;
 
 	dwPartsIDBack = -1;
 	pInfoMapPartsBack = NULL;
-	m_pMgrDraw->LockDibTmp ();
+	m_pMgrDraw->LockDibTmp();
 	y = -1;
 	nCount = DRAW_PARTS_Y + 2;
 	if (nDrawY >= -1) {
@@ -1110,14 +966,14 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
 			xx = nPosX + x;
 			yy = nPosY + y;
-			dwPartsID = pMap->GetPartsPile (xx, yy);
+			dwPartsID = pMap->GetPartsPile(xx, yy);
 			if (dwPartsID == 0) {
 				continue;
 			}
 			if (dwPartsID == dwPartsIDBack) {
 				pInfoMapParts = pInfoMapPartsBack;
 			} else {
-				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr(dwPartsID);
 			}
 			if (nDrawY >= -1) {
 				if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
@@ -1132,7 +988,7 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 					continue;
 				}
 			}
-			m_pMgrDraw->DrawMapParts (
+			m_pMgrDraw->DrawMapParts(
 					pDst,
 					32 + x * 32 + nMoveX,
 					32 + y * 32 + nMoveY,
@@ -1141,54 +997,36 @@ void CLayerMap::DrawMapPile(PCImg32 pDst, int nDrawY/*-1*/)
 					FALSE,
 					TRUE,
 					FALSE);
-			pInfoMapPartsBack	= pInfoMapParts;
-			dwPartsIDBack		= dwPartsID;
+			pInfoMapPartsBack = pInfoMapParts;
+			dwPartsIDBack = dwPartsID;
 		}
 		if (nDrawY >= -1) {
 			break;
 		}
 	}
-	m_pMgrDraw->UnLockDibTmp ();
+	m_pMgrDraw->UnLockDibTmp();
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::GetDrawMapPos										 */
-/* 内容		:マップ座標の描画位置を所得										 */
-/* 日付		:2008/04/13														 */
-/* ========================================================================= */
-
 void CLayerMap::GetDrawMapPos(POINT *ptPos, int &nDstX, int &nDstY)
 {
-	/* Phase 3: ptPos はタイル座標、m_nViewX/Y はpx単位カメラ左上。
-	   旧スクロールアニメーション(m_nMoveX/Y)は廃止済み。
-	   描画オフセット = タイル座標×MAPPARTSSIZE - カメラpx */
+	// Phase 3: ptPos はタイル座標、m_nViewX/Y はpx単位カメラ左上。
+	// 旧スクロールアニメーション(m_nMoveX/Y)は廃止済み。
+	// 描画オフセット = タイル座標×MAPPARTSSIZE - カメラpx
 	nDstX += ptPos->x * MAPPARTSSIZE - m_nViewX;
 	nDstY += ptPos->y * MAPPARTSSIZE - m_nViewY;
 }
 
 
- /* ========================================================================= */
-/* 関数名	:CLayerMap::GetDrawMovePos										 */
-/* 内容		:スクロール中の描画位置を所得									 */
-/* 日付		:2009/03/14														 */
-/* ========================================================================= */
-
 void CLayerMap::GetDrawMovePos(POINT &ptMove, POINT &ptPos)
 {
-	/* Phase 3: カメラ追随方式。m_nViewX/Y はピクセル単位のカメラ左上座標 */
-	ptPos.x  = m_nViewX / MAPPARTSSIZE;		/* タイル開始インデックス(横) */
-	ptPos.y  = m_nViewY / MAPPARTSSIZE;		/* タイル開始インデックス(縦) */
-	ptMove.x = -(m_nViewX % MAPPARTSSIZE);	/* ピクセルオフセット(横, 0～-31) */
-	ptMove.y = -(m_nViewY % MAPPARTSSIZE);	/* ピクセルオフセット(縦, 0～-31) */
+	// Phase 3: カメラ追随方式。m_nViewX/Y はピクセル単位のカメラ左上座標
+	ptPos.x  = m_nViewX / MAPPARTSSIZE;      // タイル開始インデックス(横)
+	ptPos.y  = m_nViewY / MAPPARTSSIZE;      // タイル開始インデックス(縦)
+	ptMove.x = -(m_nViewX % MAPPARTSSIZE);   // ピクセルオフセット(横, 0～-31)
+	ptMove.y = -(m_nViewY % MAPPARTSSIZE);   // ピクセルオフセット(縦, 0～-31)
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawPartsPile										 */
-/* 内容		:描画(重ね合わせ)												 */
-/* 日付		:2007/05/26														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 {
@@ -1200,26 +1038,26 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 	PCInfoMapBase pMap;
 	PCInfoMapParts pInfoMapParts, pInfoMapPartsBack;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
 	byLevel = 0;
-	bPile = m_pMgrData->GetEditMapPile ();
+	bPile = m_pMgrData->GetEditMapPile();
 	if (bPile) {
 		byLevel = 50;
 	}
 
-	GetDrawMovePos (ptMove, ptPos);
-	nMoveX	= ptMove.x;
-	nMoveY	= ptMove.y;
-	nPosX	= ptPos.x;
-	nPosY	= ptPos.y;
-	byViewGrid = m_pMgrData->GetViewGrid ();
+	GetDrawMovePos(ptMove, ptPos);
+	nMoveX = ptMove.x;
+	nMoveY = ptMove.y;
+	nPosX = ptPos.x;
+	nPosY = ptPos.y;
+	byViewGrid = m_pMgrData->GetViewGrid();
 
 	dwPartsIDBack = -1;
 	pInfoMapPartsBack = NULL;
-	m_pMgrDraw->LockDibTmp ();
+	m_pMgrDraw->LockDibTmp();
 	y = -1;
 	nCount = DRAW_PARTS_Y + 2;
 	if (nDrawY != -99) {
@@ -1230,15 +1068,15 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
 			xx = nPosX + x;
 			yy = nPosY + y;
-			dwPartsID = pMap->GetParts (xx, yy);
+			dwPartsID = pMap->GetParts(xx, yy);
 			if (dwPartsID == dwPartsIDBack) {
 				pInfoMapParts = pInfoMapPartsBack;
 			} else {
-				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr(dwPartsID);
 			}
 			bDraw = TRUE;
-			pInfoMapPartsBack	= pInfoMapParts;
-			dwPartsIDBack		= dwPartsID;
+			pInfoMapPartsBack = pInfoMapParts;
+			dwPartsIDBack = dwPartsID;
 			if (pInfoMapParts == NULL) {
 				bDraw = FALSE;
 				continue;
@@ -1258,7 +1096,7 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 				}
 			}
 			if (bDraw) {
-				m_pMgrDraw->DrawMapParts (
+				m_pMgrDraw->DrawMapParts(
 						pDst,
 						32 + x * 32 + nMoveX,
 						32 + y * 32 + nMoveY,
@@ -1269,7 +1107,7 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 						FALSE);
 				if (bPile) {
 					if (nDrawY != -99) {
-						pDst->ChgLevel (
+						pDst->ChgLevel(
 							32 + x * 32 + nMoveX,
 							32 + y * 32 + nMoveY,
 							32, 32, 50);
@@ -1278,12 +1116,12 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 			}
 			if (byViewGrid && nDrawY == -99) {
 				if (byViewGrid == 1) {
-					pDst->Rectangle (32 + x * 32 + nMoveX, 32 + y * 32 + nMoveY, 32, 32, -1);
+					pDst->Rectangle(32 + x * 32 + nMoveX, 32 + y * 32 + nMoveY, 32, 32, -1);
 				} else {
-					pDst->Rectangle (32 + x * 32 + nMoveX,		32 + y * 32 + nMoveY,		16, 16, -1);
-					pDst->Rectangle (32 + x * 32 + nMoveX + 16,	32 + y * 32 + nMoveY,		16, 16, -1);
-					pDst->Rectangle (32 + x * 32 + nMoveX,		32 + y * 32 + nMoveY + 16,	16, 16, -1);
-					pDst->Rectangle (32 + x * 32 + nMoveX + 16,	32 + y * 32 + nMoveY + 16,	16, 16, -1);
+					pDst->Rectangle(32 + x * 32 + nMoveX,      32 + y * 32 + nMoveY,      16, 16, -1);
+					pDst->Rectangle(32 + x * 32 + nMoveX + 16, 32 + y * 32 + nMoveY,      16, 16, -1);
+					pDst->Rectangle(32 + x * 32 + nMoveX,      32 + y * 32 + nMoveY + 16, 16, 16, -1);
+					pDst->Rectangle(32 + x * 32 + nMoveX + 16, 32 + y * 32 + nMoveY + 16, 16, 16, -1);
 				}
 			}
 		}
@@ -1291,15 +1129,9 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 			break;
 		}
 	}
-	m_pMgrDraw->UnLockDibTmp ();
+	m_pMgrDraw->UnLockDibTmp();
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawShadow											 */
-/* 内容		:描画(マップ影)													 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 {
@@ -1309,18 +1141,18 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 	PCInfoMapBase pMap;
 	PCInfoMapShadow pInfoMapShadow;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
 
-	GetDrawMovePos (ptMove, ptPos);
-	nMoveX	= ptMove.x;
-	nMoveY	= ptMove.y;
-	nPosX	= ptPos.x;
-	nPosY	= ptPos.y;
+	GetDrawMovePos(ptMove, ptPos);
+	nMoveX = ptMove.x;
+	nMoveY = ptMove.y;
+	nPosX = ptPos.x;
+	nPosY = ptPos.y;
 
-	m_pMgrDraw->LockDibTmp ();
+	m_pMgrDraw->LockDibTmp();
 	y = -1;
 	if (nDrawY != -99) {
 		y = nDrawY;
@@ -1329,13 +1161,13 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 		for (x = -1; x < DRAW_PARTS_X + 2; x ++) {
 			xx = nPosX + x;
 			yy = nPosY + y;
-			wShadowID = pMap->GetShadow (xx, yy);
+			wShadowID = pMap->GetShadow(xx, yy);
 			if (wShadowID == 0) {
 				continue;
 			}
 			xx = 32 + x * 32 + nMoveX;
 			yy = 32 + y * 32 + nMoveY;
-			pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr ((DWORD)wShadowID);
+			pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr((DWORD)wShadowID);
 			if (pInfoMapShadow == NULL) {
 				continue;
 			}
@@ -1343,10 +1175,10 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 				if (pMap->m_byLevel != 0) {
 					r = 32 * 2;
 					nTmp = (r - 32 / 2);
-					m_pDibLevel->BltPlus (xx - nTmp, yy - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
+					m_pDibLevel->BltPlus(xx - nTmp, yy - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
 				}
 			} else {
-				m_pMgrDraw->DrawMapShadow (
+				m_pMgrDraw->DrawMapShadow(
 						pDst,
 						xx,
 						yy,
@@ -1360,15 +1192,9 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 			break;
 		}
 	}
-	m_pMgrDraw->UnLockDibTmp ();
+	m_pMgrDraw->UnLockDibTmp();
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawMapObject										 */
-/* 内容		:描画(マップオブジェクト)										 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 {
@@ -1381,30 +1207,30 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 	PCInfoMapObjectData pInfoData;
 	PCInfoMapObject pInfo;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
 	pLibInfoMapObjectData = pMap->m_pLibInfoMapObjectData;
-	pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject ();
+	pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject();
 
-	GetDrawMovePos (ptMove, ptPos);
-	nMoveX	= ptMove.x;
-	nMoveY	= ptMove.y;
-	nPosX	= ptPos.x;
-	nPosY	= ptPos.y;
+	GetDrawMovePos(ptMove, ptPos);
+	nMoveX = ptMove.x;
+	nMoveY = ptMove.y;
+	nPosX = ptPos.x;
+	nPosY = ptPos.y;
 
-	m_pMgrDraw->LockDibTmp ();
-y = -1;
+	m_pMgrDraw->LockDibTmp();
+	y = -1;
 	if (nDrawY != -99) {
 		y = nDrawY;
 	}
 
-	nCount = pLibInfoMapObjectData->GetCount ();
+	nCount = pLibInfoMapObjectData->GetCount();
 	yy = nPosY + y;
 	for (i = 0; i < nCount; i ++) {
-		pInfoData = (PCInfoMapObjectData)pLibInfoMapObjectData->GetPtr (i);
-		pInfo = (PCInfoMapObject)pLibInfoMapObject->GetPtr (pInfoData->m_dwObjectID);
+		pInfoData = (PCInfoMapObjectData)pLibInfoMapObjectData->GetPtr(i);
+		pInfo = (PCInfoMapObject)pLibInfoMapObject->GetPtr(pInfoData->m_dwObjectID);
 		if (pInfo == NULL) {
 			continue;
 		}
@@ -1433,7 +1259,7 @@ y = -1;
 		x = pInfoData->m_ptPos.x - nPosX;
 		y = pInfoData->m_ptPos.y - nPosY;
 		dwObjectID = pInfoData->m_dwObjectID;
-		m_pMgrDraw->DrawMapObject (
+		m_pMgrDraw->DrawMapObject(
 				pDst,
 				32 + x * 32 + nMoveX,
 				32 + y * 32 + nMoveY,
@@ -1441,15 +1267,9 @@ y = -1;
 				TRUE,
 				FALSE);
 	}
-	m_pMgrDraw->UnLockDibTmp ();
+	m_pMgrDraw->UnLockDibTmp();
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawItem											 */
-/* 内容		:描画(アイテム)													 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 {
@@ -1461,26 +1281,26 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 	HDC hDC;
 	HFONT hFontOld;
 
-	pPlayerChar = m_pMgrData->GetPlayerChar ();
+	pPlayerChar = m_pMgrData->GetPlayerChar();
 	if (pPlayerChar == NULL) {
 		return;
 	}
-	if (m_pMgrData->GetOptionViewItem () == FALSE) {
+	if (m_pMgrData->GetOptionViewItem() == FALSE) {
 		return;
 	}
 	if (nType != 0) {
-		if (m_pMgrData->GetOptionViewItemName () == FALSE) {
+		if (m_pMgrData->GetOptionViewItemName() == FALSE) {
 			return;
 		}
 	}
 
-	/* Phase 3: スクロールアニメーション廃止（xx/yy は常に 0） */
+	// Phase 3: スクロールアニメーション廃止（xx/yy は常に 0）
 	xx = yy = 0;
 
-	nCount = m_pLibInfoItem->GetAreaCount ();
-	m_pMgrDraw->LockDibTmp ();
+	nCount = m_pLibInfoItem->GetAreaCount();
+	m_pMgrDraw->LockDibTmp();
 	for (i = 0; i < nCount; i ++) {
-		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtrArea (i);
+		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtrArea(i);
 		if (pInfoItem->m_dwMapID != pPlayerChar->m_dwMapID) {
 			continue;
 		}
@@ -1494,7 +1314,7 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 		y = 32 + (pInfoItem->m_ptPos.y - m_nViewY) + yy;
 		y -= 16;
 		if (nType == 0) {
-			m_pMgrDraw->DrawItem (
+			m_pMgrDraw->DrawItem(
 					pDst,
 					x,
 					y,
@@ -1502,44 +1322,32 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 					0,
 					FALSE);
 		} else {
-			hDC = pDst->Lock ();
-			hFontOld = (HFONT)SelectObject (hDC, m_hFont);
-			SetBkMode (hDC, TRANSPARENT);
+			hDC = pDst->Lock();
+			hFontOld = (HFONT)SelectObject(hDC, m_hFont);
+			SetBkMode(hDC, TRANSPARENT);
 			x += 16;
-			x -= (pInfoItem->m_strName.GetLength () * 6 / 2);
+			x -= (pInfoItem->m_strName.GetLength() * 6 / 2);
 			y += 32;
-			TextOut2 (hDC, x, y, (LPCTSTR)pInfoItem->m_strName, RGB (255, 255, 255));
-			SelectObject (hDC, hFontOld);
-			pDst->Unlock ();
+			TextOut2(hDC, x, y, (LPCTSTR)pInfoItem->m_strName, RGB(255, 255, 255));
+			SelectObject(hDC, hFontOld);
+			pDst->Unlock();
 		}
 	}
-	m_pMgrDraw->UnLockDibTmp ();
+	m_pMgrDraw->UnLockDibTmp();
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::GetDrawPos											 */
-/* 内容		:描画位置を取得													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 {
 	POINT ptDrawMapPos;
 
-	pChar->GetDrawMapPos (ptDrawMapPos);
-	/* Phase 3: m_nMapX/Y・m_nViewX/Y ともにピクセル単位。スクロールアニメーション補正廃止 */
+	pChar->GetDrawMapPos(ptDrawMapPos);
+	// Phase 3: m_nMapX/Y・m_nViewX/Y ともにピクセル単位。スクロールアニメーション補正廃止
 	nDstX += (ptDrawMapPos.x - m_nViewX);
-	/* Phase 8: m_nMapY は足元基準のため、描画は半キャラ(16px)上へ補正する */
+	// Phase 8: m_nMapY は足元基準のため、描画は半キャラ(16px)上へ補正する
 	nDstY += (ptDrawMapPos.y - m_nViewY - HALF_TILE);
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawChar											 */
-/* 内容		:描画(キャラ)													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 {
@@ -1547,26 +1355,26 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
 	PCInfoCharCli pChar;
 	POINT ptTmp;
 
-	nCount = m_pLibInfoChar->GetCount ();
-	m_pMgrDraw->LockDibTmp ();
+	nCount = m_pLibInfoChar->GetCount();
+	m_pMgrDraw->LockDibTmp();
 	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
+		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
 		if (nDrawY != -99) {
-			/* Phase 3: m_nViewY/MAPPARTSSIZE でタイル行に変換して比較 */
+			// Phase 3: m_nViewY/MAPPARTSSIZE でタイル行に変換して比較
 			if (m_nViewY / MAPPARTSSIZE + nDrawY != pChar->m_nMapY / MAPPARTSSIZE) {
 				continue;
 			}
 		}
 		x = y = 32;
 
-		pChar->GetViewCharPos (ptTmp);
+		pChar->GetViewCharPos(ptTmp);
 		x -= ptTmp.x;
 		y -= ptTmp.y;
 
-		GetDrawPos (pChar, x, y);
-		m_pMgrDraw->DrawChar (pDst, x, y, pChar, FALSE);
+		GetDrawPos(pChar, x, y);
+		m_pMgrDraw->DrawChar(pDst, x, y, pChar, FALSE);
 	}
-	m_pMgrDraw->UnLockDibTmp ();
+	m_pMgrDraw->UnLockDibTmp();
 }
 
 void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
@@ -1581,42 +1389,42 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 	bDraw = TRUE;
 	nMaxX = SCRSIZEX + 32;
 	nMaxY = SCRSIZEY + 32;
-	nDrawMode = m_pMgrData->GetDrawMode ();
+	nDrawMode = m_pMgrData->GetDrawMode();
 	if (nDrawMode == 0) {
 		bDraw = FALSE;
 	}
-	bDrawChat = m_pMgrData->GetOptionViewChat ();
+	bDrawChat = m_pMgrData->GetOptionViewChat();
 
-	nCount = m_pLibInfoChar->GetCount ();
+	nCount = m_pLibInfoChar->GetCount();
 	for (i = nCount - 1; i >= 0; i --) {
-		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr (i);
+		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
 		if (pChar->m_nMoveType == CHARMOVETYPE_PUTNPC) {
-			if (m_pMgrData->GetAdminLevel () == ADMINLEVEL_NONE) {
+			if (m_pMgrData->GetAdminLevel() == ADMINLEVEL_NONE) {
 				continue;
 			}
 		}
-		pChar->GetDrawMapPos (ptDrawMapPos);
-		bResult = IsInScreen (ptDrawMapPos.x, ptDrawMapPos.y);
+		pChar->GetDrawMapPos(ptDrawMapPos);
+		bResult = IsInScreen(ptDrawMapPos.x, ptDrawMapPos.y);
 		if (bResult == FALSE) {
 			continue;
 		}
 		x = y = 32;
-		GetDrawPos (pChar, x, y);
-		pChar->GetViewCharPos (ptViewCharPos);
+		GetDrawPos(pChar, x, y);
+		pChar->GetViewCharPos(ptViewCharPos);
 
-		nCount2 = pChar->GetTextEffectCount ();
+		nCount2 = pChar->GetTextEffectCount();
 		for (j = 0; j < nCount2; j ++) {
-			pInfoTextEffect = pChar->GetTextEffect (j);
-			m_pMgrDraw->DrawTextEffect (pDst, x + pChar->m_nGrpSize, y - 20 - ptViewCharPos.y, pInfoTextEffect);
+			pInfoTextEffect = pChar->GetTextEffect(j);
+			m_pMgrDraw->DrawTextEffect(pDst, x + pChar->m_nGrpSize, y - 20 - ptViewCharPos.y, pInfoTextEffect);
 		}
 
-		cy = m_pMgrGrpData->GetGrpSize (GRPIDMAIN_EFCBALLOON);
-		dwBalloonID = pChar->GetBalloonGrpID ();
-		m_pMgrDraw->DrawBalloon (pDst, x, y - (cy * 2) - ptViewCharPos.y, dwBalloonID);
+		cy = m_pMgrGrpData->GetGrpSize(GRPIDMAIN_EFCBALLOON);
+		dwBalloonID = pChar->GetBalloonGrpID();
+		m_pMgrDraw->DrawBalloon(pDst, x, y - (cy * 2) - ptViewCharPos.y, dwBalloonID);
 
 		if (bDraw) {
-			nWidth = pChar->m_pDibName->Width ();
-			nHeight = pChar->m_pDibName->Height ();
+			nWidth = pChar->m_pDibName->Width();
+			nHeight = pChar->m_pDibName->Height();
 			xx = x + pChar->m_nGrpSize - (nWidth / 2);
 			if (xx < 32) {
 				xx = 32;
@@ -1631,12 +1439,12 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 			if (yy + nHeight >= nMaxY) {
 				yy = nMaxY - nHeight;
 			}
-			pDst->Blt (xx, yy, nWidth, nHeight, pChar->m_pDibName, 0, 0, TRUE);
+			pDst->Blt(xx, yy, nWidth, nHeight, pChar->m_pDibName, 0, 0, TRUE);
 		}
 
-		if (bDrawChat && pChar->m_strSpeak.GetLength () > 0) {
-			nWidth = pChar->m_pDibSpeak->Width ();
-			nHeight = pChar->m_pDibSpeak->Height ();
+		if (bDrawChat && pChar->m_strSpeak.GetLength() > 0) {
+			nWidth = pChar->m_pDibSpeak->Width();
+			nHeight = pChar->m_pDibSpeak->Height();
 			xx = x + pChar->m_nGrpSize - (nWidth / 2) + 3;
 			if (xx < 32) {
 				xx = 32;
@@ -1652,48 +1460,36 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 			if (yy + nHeight >= nMaxY) {
 				yy = nMaxY - nHeight;
 			}
-			pDst->Blt (xx, yy, nWidth, nHeight, pChar->m_pDibSpeak, 0, 0, TRUE);
+			pDst->Blt(xx, yy, nWidth, nHeight, pChar->m_pDibSpeak, 0, 0, TRUE);
 		}
 	}
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLayerMap::DrawSystemIcon										 */
-/* 内容		:描画(システムアイコン)											 */
-/* 日付		:2007/09/16														 */
-/* ========================================================================= */
-
 void CLayerMap::DrawSystemIcon(PCImg32 pDst)
 {
 	int nOffset;
 
-	if (m_pMgrData->GetOptionViewHelpIcon () == FALSE) {
+	if (m_pMgrData->GetOptionViewHelpIcon() == FALSE) {
 		return;
 	}
 
 	nOffset = m_nSyatemIconOffset;
 
-//	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688, 0, TRUE);			/* チャット */
-	pDst->BltFrom256 (SCRSIZEX - 64,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 1, 0, TRUE);	/* アイテム */
-	pDst->BltFrom256 (SCRSIZEX - 32,nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 7, 0, TRUE);	/* 休憩 */
-	pDst->BltFrom256 (SCRSIZEX,		nOffset + SCRSIZEY - 8,	32, 40, m_pDibSystem, 688 + 32 * 6, 0, TRUE);	/* システム */
-	pDst->BltFrom256 (64,			nOffset + SCRSIZEY - 8,	32, 32, m_pDibSystem, 688 + 64, 48, TRUE);		/* 視点 */
-	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 40,112, 32, m_pDibSystem, 688, 112, TRUE);			/* 説明 */
-	pDst->BltFrom256 (32,			nOffset + SCRSIZEY - 8,128, 36, m_pDibSystem, 688, 208, TRUE);			/* 説明 */
+//	pDst->BltFrom256(32,           nOffset + SCRSIZEY - 8, 32, 40, m_pDibSystem, 688,          0, TRUE); // チャット
+	pDst->BltFrom256(SCRSIZEX - 64, nOffset + SCRSIZEY - 8, 32, 40, m_pDibSystem, 688 + 32 * 1, 0, TRUE); // アイテム
+	pDst->BltFrom256(SCRSIZEX - 32, nOffset + SCRSIZEY - 8, 32, 40, m_pDibSystem, 688 + 32 * 7, 0, TRUE); // 休憩
+	pDst->BltFrom256(SCRSIZEX,      nOffset + SCRSIZEY - 8, 32, 40, m_pDibSystem, 688 + 32 * 6, 0, TRUE); // システム
+	pDst->BltFrom256(64,            nOffset + SCRSIZEY - 8, 32, 32, m_pDibSystem, 688 + 64,    48, TRUE); // 視点
+	pDst->BltFrom256(32,            nOffset + SCRSIZEY - 40, 112, 32, m_pDibSystem, 688,        112, TRUE); // 説明
+	pDst->BltFrom256(32,            nOffset + SCRSIZEY - 8, 128, 36, m_pDibSystem, 688,         208, TRUE); // 説明
 
 	if (m_nViewIcon > 0) {
-		/* 視点モード */
-		pDst->BltFrom256 (32, nOffset + SCRSIZEY - 80, 32, 32, m_pDibSystem, 688 + (m_nViewIcon - 1) * 32, 48, TRUE);
+		// 視点モード
+		pDst->BltFrom256(32, nOffset + SCRSIZEY - 80, 32, 32, m_pDibSystem, 688 + (m_nViewIcon - 1) * 32, 48, TRUE);
 	}
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawGauge											 */
-/* 内容		:描画(ゲージ類)													 */
-/* 日付		:2008/06/29														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawGauge(PCImg32 pDst)
 {
@@ -1701,64 +1497,58 @@ void CLayerMap::DrawGauge(PCImg32 pDst)
 	float fAverage;
 	PCInfoCharCli pPlayerChar;
 
-	pPlayerChar = m_pMgrData->GetPlayerChar ();
+	pPlayerChar = m_pMgrData->GetPlayerChar();
 	if (pPlayerChar == NULL) {
 		return;
 	}
-	if (pPlayerChar->IsStateBattle () == FALSE) {
+	if (pPlayerChar->IsStateBattle() == FALSE) {
 		return;
 	}
 
-	/* HP */
+	// HP
 	fAverage = (float)pPlayerChar->m_dwHP * 100 / (float)pPlayerChar->m_dwMaxHP;
-	nTmp	 = (int)(70.0f * fAverage * 0.01f) + 1;
+	nTmp = (int)(70.0f * fAverage * 0.01f) + 1;
 	x = 32 + 16;
 	y = 32 + SCRSIZEY - 80;
-	pDst->BltFrom256 (x, y, 80, 80, m_pDibSystem, 144, 48, TRUE);
+	pDst->BltFrom256(x, y, 80, 80, m_pDibSystem, 144, 48, TRUE);
 	if (pPlayerChar->m_dwHP > 0) {
-		pDst->BltFrom256 (x + 3, y + 3 + 70 - nTmp, 70, nTmp, m_pDibSystem, 144, 128 + 70 - nTmp, TRUE);
+		pDst->BltFrom256(x + 3, y + 3 + 70 - nTmp, 70, nTmp, m_pDibSystem, 144, 128 + 70 - nTmp, TRUE);
 	}
 
-	/* SP */
+	// SP
 	fAverage = (float)pPlayerChar->m_dwSP * 100 / (float)pPlayerChar->m_dwMaxSP;
-	nTmp	 = (int)(70.0f * fAverage * 0.01f) + 1;
+	nTmp = (int)(70.0f * fAverage * 0.01f) + 1;
 	x = 32 + SCRSIZEX - 96;
 	y = 32 + SCRSIZEY - 80;
-	pDst->BltFrom256 (x, y, 80, 80, m_pDibSystem, 224, 48, TRUE);
+	pDst->BltFrom256(x, y, 80, 80, m_pDibSystem, 224, 48, TRUE);
 	if (pPlayerChar->m_dwSP > 0) {
-		pDst->BltFrom256 (x + 3, y + 3 + 70 - nTmp, 70, nTmp, m_pDibSystem, 224, 128 + 70 - nTmp, TRUE);
+		pDst->BltFrom256(x + 3, y + 3 + 70 - nTmp, 70, nTmp, m_pDibSystem, 224, 128 + 70 - nTmp, TRUE);
 	}
 
-	/* アタックゲージ */
+	// アタックゲージ
 	x = 32 + 32 * 6;
 	y = 32 + SCRSIZEY - 66;
 	fAverage = (float)pPlayerChar->m_wAtackGauge * 100 / MAX_ATACKGAUGE;
-	nTmp	 = (int)(98 * fAverage * 0.01f) + 1;
-	pDst->BltFrom256 (x,		y,		104, 34, m_pDibSystem, 504, 52, TRUE);	/* ゲージ部分 */
-	pDst->BltFrom256 (x + 104,	y + 8,  28, 30, m_pDibSystem, 608, 60, TRUE);	/* アイコン部分 */
+	nTmp = (int)(98 * fAverage * 0.01f) + 1;
+	pDst->BltFrom256(x,       y,      104, 34, m_pDibSystem, 504, 52, TRUE); // ゲージ部分
+	pDst->BltFrom256(x + 104, y + 8,   28, 30, m_pDibSystem, 608, 60, TRUE); // アイコン部分
 	if (pPlayerChar->m_wAtackGauge > 0) {
-		pDst->BltFrom256 (x + 3, y + 15, nTmp, 16, m_pDibSystem, 448, 128);
+		pDst->BltFrom256(x + 3, y + 15, nTmp, 16, m_pDibSystem, 448, 128);
 	}
 
 	if (pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-		/* ガードゲージ */
+		// ガードゲージ
 		x = 32 + 32 * 6;
 		y = 32 + SCRSIZEY - 30;
 		fAverage = (float)pPlayerChar->m_wDefenseGauge * 100 / MAX_DEFENSEGAUGE;
-		nTmp	 = (int)(98 * fAverage * 0.01f) + 1;
-		pDst->BltFrom256 (x, y, 104, 28, m_pDibSystem, 488, 88, TRUE);
+		nTmp = (int)(98 * fAverage * 0.01f) + 1;
+		pDst->BltFrom256(x, y, 104, 28, m_pDibSystem, 488, 88, TRUE);
 		if (pPlayerChar->m_wDefenseGauge > 0) {
-			pDst->BltFrom256 (x + 3, y + 3,	nTmp, 10, m_pDibSystem, 448, 147, TRUE);
+			pDst->BltFrom256(x + 3, y + 3, nTmp, 10, m_pDibSystem, 448, 147, TRUE);
 		}
 	}
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawMapName											 */
-/* 内容		:描画(マップ名)													 */
-/* 日付		:2008/11/22														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawMapName(PCImg32 pDst)
 {
@@ -1768,24 +1558,18 @@ void CLayerMap::DrawMapName(PCImg32 pDst)
 		return;
 	}
 
-	cx = m_pDibMapName->Width ();
-	cy = m_pDibMapName->Height ();
+	cx = m_pDibMapName->Width();
+	cy = m_pDibMapName->Height();
 
-	x = pDst->Width () / 2;
+	x = pDst->Width() / 2;
 	x -= (cx / 2);
-	y = pDst->Height () / 2 - 72;
+	y = pDst->Height() / 2 - 72;
 	y -= (cy / 2);
 
-	pDst->BltAlphaFrom256 (x, y, 50, 58, m_pDibSystem, 544, 320, 100 - m_nLevelMapName, TRUE);
-	pDst->BltAlpha (x + 32, y + 16, cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
+	pDst->BltAlphaFrom256(x, y, 50, 58, m_pDibSystem, 544, 320, 100 - m_nLevelMapName, TRUE);
+	pDst->BltAlpha(x + 32, y + 16, cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
 }
 
-
- /* ========================================================================= */
-/* 関数名	:CLayerMap::DrawMapEventDebug									 */
-/* 内容		:描画(マップイベントデバッグ矩形)								 */
-/* 日付		:2026/03/10														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
 {
@@ -1794,15 +1578,15 @@ void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
 	PCInfoMapEventBase pEvent;
 	PCInfoCharCli pPlayer;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
 
-	/* 全イベントタイルに黄色の矩形を描画 */
-	nCount = pMap->GetEventCount ();
+	// 全イベントタイルに黄色の矩形を描画
+	nCount = pMap->GetEventCount();
 	for (i = 0; i < nCount; i ++) {
-		pEvent = pMap->GetEvent (i);
+		pEvent = pMap->GetEvent(i);
 		if (pEvent == NULL) {
 			continue;
 		}
@@ -1813,29 +1597,23 @@ void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
 
 			nWidth = (pEvent->m_ptPos2.x - pEvent->m_ptPos.x + 1) * MAPPARTSSIZE;
 			nHeight = (pEvent->m_ptPos2.y - pEvent->m_ptPos.y + 1) * MAPPARTSSIZE;
-			pDst->Rectangle (nScrX, nScrY, nWidth, nHeight, RGB (255, 200, 0));
+			pDst->Rectangle(nScrX, nScrY, nWidth, nHeight, RGB(255, 200, 0));
 		} else {
-			pDst->Rectangle (nScrX, nScrY, MAPPARTSSIZE, MAPPARTSSIZE, RGB (255, 255, 0));
+			pDst->Rectangle(nScrX, nScrY, MAPPARTSSIZE, MAPPARTSSIZE, RGB(255, 255, 0));
 		}
 	}
 
-	/* プレイヤーの衝突判定矩形を緑色で描画 */
-	pPlayer = m_pMgrData->GetPlayerChar ();
+	// プレイヤーの衝突判定矩形を緑色で描画
+	pPlayer = m_pMgrData->GetPlayerChar();
 	if (pPlayer) {
 		RECT rcHit;
-		pPlayer->GetCollisionRect (rcHit);
+		pPlayer->GetCollisionRect(rcHit);
 		nScrX = 32 + rcHit.left  - m_nViewX;
 		nScrY = 32 + rcHit.top   - m_nViewY;
-		pDst->Rectangle (nScrX, nScrY, rcHit.right - rcHit.left + 1, rcHit.bottom - rcHit.top + 1, RGB (0, 255, 0));
+		pDst->Rectangle(nScrX, nScrY, rcHit.right - rcHit.left + 1, rcHit.bottom - rcHit.top + 1, RGB(0, 255, 0));
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayerMap::DrawMapPartsDebug									 */
-/* 内容		:描画(マップパーツデバッグ矩形)								 */
-/* 日付		:2026/03/13														 */
-/* ========================================================================= */
 
 void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 {
@@ -1847,12 +1625,12 @@ void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 	PCInfoMapBase pMap;
 	PCInfoMapParts pInfoMapParts;
 
-	pMap = m_pMgrData->GetMap ();
+	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
 
-	GetDrawMovePos (ptMove, ptPos);
+	GetDrawMovePos(ptMove, ptPos);
 	nMoveX = ptMove.x;
 	nMoveY = ptMove.y;
 	nPosX = ptPos.x;
@@ -1866,8 +1644,8 @@ void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 			yy = nPosY + y;
 			bHit = FALSE;
 
-			dwPartsID = pMap->GetParts (xx, yy);
-			pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+			dwPartsID = pMap->GetParts(xx, yy);
+			pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr(dwPartsID);
 			if (pInfoMapParts) {
 				if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_BLOCK) ||
 					(pInfoMapParts->m_byBlockDirection != 0)) {
@@ -1876,8 +1654,8 @@ void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 			}
 
 			if (bHit == FALSE) {
-				dwPartsID = pMap->GetPartsPile (xx, yy);
-				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (dwPartsID);
+				dwPartsID = pMap->GetPartsPile(xx, yy);
+				pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr(dwPartsID);
 				if (pInfoMapParts) {
 					if ((pInfoMapParts->m_dwPartsType & BIT_PARTSHIT_BLOCK) ||
 						(pInfoMapParts->m_byBlockDirection != 0)) {
@@ -1887,24 +1665,24 @@ void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 			}
 
 			if (bHit) {
-				pDst->Rectangle (
+				pDst->Rectangle(
 					32 + x * MAPPARTSSIZE + nMoveX,
 					32 + y * MAPPARTSSIZE + nMoveY,
 					MAPPARTSSIZE,
 					MAPPARTSSIZE,
-					RGB (0, 255, 255));
+					RGB(0, 255, 255));
 			}
 		}
 	}
 
-	pPlayer = m_pMgrData->GetPlayerChar ();
+	pPlayer = m_pMgrData->GetPlayerChar();
 	if (pPlayer) {
-		pPlayer->GetCollisionRect (rcHit);
-		pDst->Rectangle (
+		pPlayer->GetCollisionRect(rcHit);
+		pDst->Rectangle(
 			32 + rcHit.left - m_nViewX,
 			32 + rcHit.top - m_nViewY,
 			rcHit.right - rcHit.left + 1,
 			rcHit.bottom - rcHit.top + 1,
-			RGB (0, 255, 0));
+			RGB(0, 255, 0));
 	}
 }

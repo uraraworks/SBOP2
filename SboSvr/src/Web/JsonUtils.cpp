@@ -259,4 +259,3 @@ bool TryGetStringArray(const std::string &json, const std::string &key, std::vec
         return true;
 }
 }
-

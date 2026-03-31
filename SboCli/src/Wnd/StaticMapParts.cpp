@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:StaticMapParts.cpp											 */
-/* 内容			:マップパーツ一覧スタティックコントロールクラス 実装ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/05/10													 */
-/* ========================================================================= */
+﻿/// @file StaticMapParts.cpp
+/// @brief マップパーツ一覧スタティックコントロールクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/05/10
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "LibInfoMapParts.h"
@@ -21,10 +19,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
-/* ========================================================================= */
-/* クラス設定																 */
-/* ========================================================================= */
+// クラス設定
 
 BEGIN_MESSAGE_MAP(CStaticMapParts, CStatic)
 	//{{AFX_MSG_MAP(CStaticMapParts)
@@ -33,13 +28,6 @@ BEGIN_MESSAGE_MAP(CStaticMapParts, CStatic)
 	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::CStaticMapParts								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
 
 CStaticMapParts::CStaticMapParts()
 {
@@ -56,102 +44,46 @@ CStaticMapParts::CStaticMapParts()
 	m_ptMoveDst.x	= m_ptMoveDst.y	= 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::~CStaticMapParts								 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
-
 CStaticMapParts::~CStaticMapParts()
 {
-	SAFE_DELETE (m_pImgParts);
+	SAFE_DELETE(m_pImgParts);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
 
 BOOL CStaticMapParts::Create(CWnd *pParent, CMgrData *pMgrData)
 {
 	m_pWndParent		= pParent;
 	m_pMgrData			= pMgrData;
-	m_pMgrGrpData		= m_pMgrData->GetMgrGrpData ();
-	m_pLibInfoMapParts	= m_pMgrData->GetLibInfoMapParts ();
+	m_pMgrGrpData		= m_pMgrData->GetMgrGrpData();
+	m_pLibInfoMapParts	= m_pMgrData->GetLibInfoMapParts();
 
-	MakePartsImage ();
+	MakePartsImage();
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::Renew											 */
-/* 内容		:パーツ一覧画像を作成して再描画									 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
-
 void CStaticMapParts::Renew(void)
 {
-	MakePartsImage ();
-	InvalidateRect (NULL);
+	MakePartsImage();
+	InvalidateRect(NULL);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::SetScrollPos									 */
-/* 内容		:縦スクロール位置を設定											 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
 
 void CStaticMapParts::SetScrollPos(int nPos)
 {
 	m_nPos = nPos;
-	Renew ();
+	Renew();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::OnLButtonDown									 */
-/* 内容		:メッセージハンドラ(WM_LBUTTONDOWN)								 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
 
 void CStaticMapParts::OnLButtonDown(CPoint point)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::OnRButtonDown									 */
-/* 内容		:メッセージハンドラ(WM_RBUTTONDOWN)								 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
-
 void CStaticMapParts::OnRButtonDown(CPoint point)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::OnMouseWheel									 */
-/* 内容		:メッセージハンドラ(WM_MOUSEWHEEL)								 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
-
 void CStaticMapParts::OnMouseWheel(short zDelta, CPoint pt)
 {
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::OnMouseMove									 */
-/* 内容		:メッセージハンドラ(WM_MOUSEMOVE)								 */
-/* 日付		:2007/04/25														 */
-/* ========================================================================= */
 
 void CStaticMapParts::OnMouseMove(CPoint point)
 {
@@ -163,16 +95,9 @@ void CStaticMapParts::OnMouseMove(CPoint point)
 	m_ptCursor.y = point.y / 16 + m_nPos;
 
 	if (ptBack != m_ptCursor) {
-		InvalidateRect (NULL, FALSE);
+		InvalidateRect(NULL, FALSE);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::OnCreate										 */
-/* 内容		:メッセージハンドラ(WM_CREATE)									 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
 
 int CStaticMapParts::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -183,13 +108,6 @@ int CStaticMapParts::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::OnPaint										 */
-/* 内容		:メッセージハンドラ(WM_PAINT)									 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
-
 void CStaticMapParts::OnPaint()
 {
 	int x, y, cy;
@@ -199,49 +117,35 @@ void CStaticMapParts::OnPaint()
 	CRgn rgn;
 	CPaintDC dc(this);
 
-	hDC = m_pImgParts->Lock ();
-	DCTmp.Attach (hDC);
+	hDC = m_pImgParts->Lock();
+	DCTmp.Attach(hDC);
 
-	GetWindowRect (rc);
-	rgn.CreateRectRgn (0, 0, rc.Width (), rc.Height ());
-	dc.SelectClipRgn (&rgn, RGN_COPY);
+	GetWindowRect(rc);
+	rgn.CreateRectRgn(0, 0, rc.Width(), rc.Height());
+	dc.SelectClipRgn(&rgn, RGN_COPY);
 
-	ScreenToClient (rc);
-	cy = min (rc.Height (), m_pImgParts->Height ());
-	dc.BitBlt (0, 0, m_pImgParts->Width (), cy, &DCTmp, 0, 0, SRCCOPY);
+	ScreenToClient(rc);
+	cy = min(rc.Height(), m_pImgParts->Height());
+	dc.BitBlt(0, 0, m_pImgParts->Width(), cy, &DCTmp, 0, 0, SRCCOPY);
 
 	x = m_ptCursor.x * 16;
 	y = (m_ptCursor.y - m_nPos) * 16;
 	cy = y + 15;
-	cy = min (cy, rc.Height ());
-	rcTmp.SetRect (x, y, x + 15, cy);
+	cy = min(cy, rc.Height());
+	rcTmp.SetRect(x, y, x + 15, cy);
 
-	dc.DrawEdge (rcTmp, EDGE_BUMP, BF_FLAT | BF_RECT);
+	dc.DrawEdge(rcTmp, EDGE_BUMP, BF_FLAT | BF_RECT);
 
-	m_pImgParts->Unlock ();
-	DCTmp.Detach ();
+	m_pImgParts->Unlock();
+	DCTmp.Detach();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::OnSize										 */
-/* 内容		:メッセージハンドラ(WM_SIZE)									 */
-/* 日付		:2007/05/10														 */
-/* ========================================================================= */
 
 void CStaticMapParts::OnSize(UINT nType, int cx, int cy)
 {
 	CStatic::OnSize(nType, cx, cy);
 
-	Renew ();
+	Renew();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CStaticMapParts::MakePartsImage								 */
-/* 内容		:パーツ一覧画像を作成											 */
-/* 日付		:2007/04/25														 */
-/* ========================================================================= */
 
 void CStaticMapParts::MakePartsImage(void)
 {
@@ -253,23 +157,23 @@ void CStaticMapParts::MakePartsImage(void)
 	if (m_pMgrData == NULL) {
 		return;
 	}
-	pMgrDraw = m_pMgrData->GetMgrDraw ();
+	pMgrDraw = m_pMgrData->GetMgrDraw();
 
-	GetWindowRect (rc);
-	ny = rc.Height () / 16;
+	GetWindowRect(rc);
+	ny = rc.Height() / 16;
 
-	m_pImgParts->Destroy ();
-	m_pImgParts->Create (16 * 23, rc.Height ());
-	m_pImgParts->FillRect (0, 0, m_pImgParts->Width (), m_pImgParts->Height (), RGB (128, 128, 128));
+	m_pImgParts->Destroy();
+	m_pImgParts->Create(16 * 23, rc.Height());
+	m_pImgParts->FillRect(0, 0, m_pImgParts->Width(), m_pImgParts->Height(), RGB(128, 128, 128));
 
-	nCount = m_pLibInfoMapParts->GetCount ();
+	nCount = m_pLibInfoMapParts->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr (i);
+		pInfoMapParts = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr(i);
 
 		if (!((pInfoMapParts->m_ptViewPos.y >= m_nPos) && (pInfoMapParts->m_ptViewPos.y <= m_nPos + ny))) {
 			continue;
 		}
-		pMgrDraw->DrawMapParts (
+		pMgrDraw->DrawMapParts(
 				m_pImgParts,
 				pInfoMapParts->m_ptViewPos.x * 16,
 				(pInfoMapParts->m_ptViewPos.y - m_nPos) * 16,
@@ -279,5 +183,3 @@ void CStaticMapParts::MakePartsImage(void)
 				FALSE);
 	}
 }
-
-/* Copyright(C)URARA-works 2007 */

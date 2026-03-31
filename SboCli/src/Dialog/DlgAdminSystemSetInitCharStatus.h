@@ -1,29 +1,25 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminSystemSetInitCharStatus.h							 */
-/* 内容			:キャラステータス初期値の設定ダイアログクラス 定義ファイル	 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/09/22													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminSystemSetInitCharStatus.h
+/// @brief キャラステータス初期値の設定ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/09/22
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "DlgAdminBase.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminSystemSetInitCharStatus : public CDlgAdminBase
 {
 public:
-			CDlgAdminSystemSetInitCharStatus(CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual ~CDlgAdminSystemSetInitCharStatus();					/* デストラクタ */
+			CDlgAdminSystemSetInitCharStatus(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminSystemSetInitCharStatus(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	Renew		(void);											/* 更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* メッセージハンドラ(WM_MAINFRAME) */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
+	void	OnMainFrame(DWORD dwCommand, DWORD dwParam); // メッセージハンドラ(WM_MAINFRAME)
 
 
 protected:
@@ -74,5 +70,3 @@ protected:
 } CDlgAdminSystemSetInitCharStatus, *PCDlgAdminSystemSetInitCharStatus;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

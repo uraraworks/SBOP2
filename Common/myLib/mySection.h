@@ -1,29 +1,23 @@
-﻿/* Copyright(C)URARA-works 2004 */
-/* ========================================================================= */
-/* ファイル名	:mySection.h												 */
-/* 内容			:クリティカルセクションクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2004/09/01													 */
-/* ========================================================================= */
+﻿/// @file mySection.h
+/// @brief クリティカルセクションクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2004/09/01
+/// @copyright Copyright(C)URARA-works 2004
 
 #pragma once
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 class CmySection
 {
 public:
-			CmySection();						/* コンストラクタ */
-	virtual ~CmySection();						/* デストラクタ */
+			CmySection();					// コンストラクタ
+	virtual ~CmySection();					// デストラクタ
 
-	void Enter	(void);									/* ロック */
-	void Leave	(void);									/* ロック解除 */
+	void Enter(void);						// ロック
+	void Leave(void);						// ロック解除
 
 
 protected:
-	CRITICAL_SECTION	m_Crit;					/* クリティカルセクション */
+	CRITICAL_SECTION	m_Crit;				// クリティカルセクション
 };
-
-/* Copyright(C)URARA-works 2004 */

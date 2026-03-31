@@ -1,35 +1,19 @@
-﻿/* Copyright(C)URARA-works 2005 */
-/* ========================================================================= */
-/* ファイル名		:LayoutHelper.cpp										 */
-/* 内容		:	ウィンドウサイズ変更時の配置補助クラス 実装ファイル			 */
-/* 作成		:	年がら年中春うらら(URARA-works)								 */
-/* 作成開始日		:2005/06/17												 */
-/* ========================================================================= */
+﻿/// @file LayoutHelper.cpp
+/// @brief ウィンドウサイズ変更時の配置補助クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2005/06/17
+/// @copyright Copyright(C)URARA-works 2005
 
 #include "stdafx.h"
 #include "LayoutHelper.h"
 
 typedef	std::vector<LH_CTRL_LAYOUT>::iterator	LayoutIterator;
-typedef	std::map<UINT, DWORD>::iterator			GroupIterator;
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::CLayoutHelper									 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
+typedef	std::map<UINT, DWORD>::iterator	GroupIterator;
 
 CLayoutHelper::CLayoutHelper()
 {
 	m_hBase = NULL;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::~CLayoutHelper									 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 CLayoutHelper::~CLayoutHelper()
 {
@@ -37,33 +21,19 @@ CLayoutHelper::~CLayoutHelper()
 	m_mapGroup.clear();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::Initialize										 */
-/* 内容		:初期化															 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 void CLayoutHelper::Initialize(HWND hBase)
 {
 	RECT rc;
 
 	m_hBase = hBase;
 
-	GetClientRect (m_hBase, &rc);
+	GetClientRect(m_hBase, &rc);
 	m_sizeBase.cx = rc.right - rc.left;
 	m_sizeBase.cy = rc.bottom - rc.top;
 
 	m_vLayout.clear();
 	m_mapGroup.clear();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::RegisterControl									 */
-/* 内容		:コントロールの登録												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CLayoutHelper::RegisterControl(HWND hWnd, DWORD dwFlags, UINT uGroup)
 {
@@ -74,29 +44,22 @@ BOOL CLayoutHelper::RegisterControl(HWND hWnd, DWORD dwFlags, UINT uGroup)
 	RECT rc;
 	LH_CTRL_LAYOUT lhLayout;
 
-	GetWindowRect (hWnd, &rc);
-	ScreenToClient (m_hBase, (LPPOINT)&rc);
-	ScreenToClient (m_hBase, ((LPPOINT)&rc) + 1);
+	GetWindowRect(hWnd, &rc);
+	ScreenToClient(m_hBase, (LPPOINT)&rc);
+	ScreenToClient(m_hBase, ((LPPOINT)&rc) + 1);
 
-	lhLayout.hWnd		= hWnd;
-	lhLayout.x			= rc.left;
-	lhLayout.y			= rc.top;
-	lhLayout.cx			= rc.right - rc.left;
-	lhLayout.cy			= rc.bottom - rc.top;
+	lhLayout.hWnd	= hWnd;
+	lhLayout.x	= rc.left;
+	lhLayout.y	= rc.top;
+	lhLayout.cx	= rc.right - rc.left;
+	lhLayout.cy	= rc.bottom - rc.top;
 	lhLayout.dwFlags	= dwFlags;
-	lhLayout.uGroup		= uGroup;
+	lhLayout.uGroup	= uGroup;
 
-	m_vLayout.push_back (lhLayout);
+	m_vLayout.push_back(lhLayout);
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::RegisterControl									 */
-/* 内容		:コントロールの登録												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CLayoutHelper::RegisterControl(UINT uID, DWORD dwFlags, UINT uGroup)
 {
@@ -108,31 +71,17 @@ BOOL CLayoutHelper::RegisterControl(UINT uID, DWORD dwFlags, UINT uGroup)
 	return RegisterControl(hWnd, dwFlags, uGroup);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::UnregisterControl								 */
-/* 内容		:コントロールの解除												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 BOOL CLayoutHelper::UnregisterControl(HWND hWnd)
 {
-	for (LayoutIterator it = m_vLayout.begin (); it != m_vLayout.end (); ++ it) {
+	for (LayoutIterator it = m_vLayout.begin(); it != m_vLayout.end(); ++ it) {
 		if (it->hWnd == hWnd) {
-			m_vLayout.erase (it);
+			m_vLayout.erase(it);
 			return TRUE;
 		}
 	}
 
 	return FALSE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::UnregisterControl								 */
-/* 内容		:コントロールの解除												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CLayoutHelper::UnregisterControl(UINT uID)
 {
@@ -144,13 +93,6 @@ BOOL CLayoutHelper::UnregisterControl(UINT uID)
 	return UnregisterControl(hWnd);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::DoLayout										 */
-/* 内容		:更新															 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 void CLayoutHelper::DoLayout(int cx, int cy)
 {
 	int	dx = cx - m_sizeBase.cx;
@@ -158,9 +100,9 @@ void CLayoutHelper::DoLayout(int cx, int cy)
 	m_sizeBase.cx = cx;
 	m_sizeBase.cy = cy;
 
-	HDWP hdwp = BeginDeferWindowPos (m_vLayout.size ());
+	HDWP hdwp = BeginDeferWindowPos(m_vLayout.size());
 
-	for (LayoutIterator it = m_vLayout.begin (); it != m_vLayout.end (); ++ it) {
+	for (LayoutIterator it = m_vLayout.begin(); it != m_vLayout.end(); ++ it) {
 		DWORD	dwFlags;
 		GroupIterator	itGroup = m_mapGroup.find(it->uGroup);
 		if (itGroup != m_mapGroup.end()) {
@@ -170,7 +112,7 @@ void CLayoutHelper::DoLayout(int cx, int cy)
 			dwFlags = it->dwFlags;
 		}
 		RECT rc;
-		SetRect (&rc, it->x, it->y, it->x + it->cx, it->y + it->cy);
+		SetRect(&rc, it->x, it->y, it->x + it->cx, it->y + it->cy);
 		if ((dwFlags & LH_CTRL_X) != 0) {
 			rc.left += dx;
 			rc.right += dx;
@@ -189,18 +131,11 @@ void CLayoutHelper::DoLayout(int cx, int cy)
 		it->y = rc.top;
 		it->cx = rc.right - rc.left;
 		it->cy = rc.bottom - rc.top;
-		hdwp = DeferWindowPos (hdwp, it->hWnd, NULL, it->x, it->y, it->cx, it->cy, SWP_NOOWNERZORDER | SWP_NOZORDER);
+		hdwp = DeferWindowPos(hdwp, it->hWnd, NULL, it->x, it->y, it->cx, it->cy, SWP_NOOWNERZORDER | SWP_NOZORDER);
 	}
 
-	EndDeferWindowPos (hdwp);
+	EndDeferWindowPos(hdwp);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::AddGroup										 */
-/* 内容		:グループの追加													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CLayoutHelper::AddGroup(UINT uGroup, DWORD dwFlags)
 {
@@ -210,22 +145,15 @@ BOOL CLayoutHelper::AddGroup(UINT uGroup, DWORD dwFlags)
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::DeleteGroup										 */
-/* 内容		:グループの削除													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 BOOL CLayoutHelper::DeleteGroup(UINT uGroup)
 {
-	/* グループを削除 */
+	// グループを削除
 	GroupIterator	itGroup = m_mapGroup.find(uGroup);
 	if (itGroup == m_mapGroup.end()) {
 		return FALSE;
 	}
 	m_mapGroup.erase(itGroup);
-	/* コントロールからグループを削除 */
+	// コントロールからグループを削除
 	for (LayoutIterator it = m_vLayout.begin(); it != m_vLayout.end(); ++it) {
 		if (it->uGroup == uGroup) {
 			it->uGroup = -1;
@@ -234,13 +162,6 @@ BOOL CLayoutHelper::DeleteGroup(UINT uGroup)
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::SetGroup										 */
-/* 内容		:グループの設定													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CLayoutHelper::SetGroup(HWND hWnd, UINT uGroup)
 {
@@ -258,13 +179,6 @@ BOOL CLayoutHelper::SetGroup(HWND hWnd, UINT uGroup)
 	return FALSE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::SetGroup										 */
-/* 内容		:グループの設定													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 BOOL CLayoutHelper::SetGroup(UINT uID, UINT uGroup)
 {
 	HWND	hWnd = GetDlgItem(m_hBase, uID);
@@ -274,13 +188,6 @@ BOOL CLayoutHelper::SetGroup(UINT uID, UINT uGroup)
 
 	return SetGroup(hWnd, uGroup);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::RemoveGroup										 */
-/* 内容		:グループの解除													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CLayoutHelper::RemoveGroup(HWND hWnd)
 {
@@ -294,13 +201,6 @@ BOOL CLayoutHelper::RemoveGroup(HWND hWnd)
 	return FALSE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::RemoveGroup										 */
-/* 内容		:グループの解除													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 BOOL CLayoutHelper::RemoveGroup(UINT uID)
 {
 	HWND	hWnd = GetDlgItem(m_hBase, uID);
@@ -310,13 +210,6 @@ BOOL CLayoutHelper::RemoveGroup(UINT uID)
 
 	return RemoveGroup(hWnd);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::GetGroupRect									 */
-/* 内容		:グループの矩形を取得											 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CLayoutHelper::GetGroupRect(UINT uGroup, RECT* pRect)
 {
@@ -343,13 +236,6 @@ BOOL CLayoutHelper::GetGroupRect(UINT uGroup, RECT* pRect)
 
 	return bExist;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::MoveGroup										 */
-/* 内容		:グループの移動													 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 void CLayoutHelper::MoveGroup(UINT uGroup, int x, int y, int cx, int cy, DWORD dwFlags)
 {
@@ -389,13 +275,6 @@ void CLayoutHelper::MoveGroup(UINT uGroup, int x, int y, int cx, int cy, DWORD d
 	EndDeferWindowPos(hdwp);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLayoutHelper::OffsetGroup										 */
-/* 内容		:グループのサイズ変更											 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 void CLayoutHelper::OffsetGroup(UINT uGroup, int left, int top, int right, int bottom)
 {
 	HDWP	hdwp = BeginDeferWindowPos(m_vLayout.size());
@@ -425,4 +304,3 @@ void CLayoutHelper::OffsetGroup(UINT uGroup, int left, int top, int right, int b
 	EndDeferWindowPos(hdwp);
 }
 
-/* Copyright(C)URARA-works 2005 */

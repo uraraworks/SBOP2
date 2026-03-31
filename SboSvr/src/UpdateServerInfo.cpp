@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:UpdateServerInfo.cpp										 */
-/* 内容			:サーバー情報更新クラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/05/22													 */
-/* ========================================================================= */
+﻿/// @file UpdateServerInfo.cpp
+/// @brief サーバー情報更新クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/05/22
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "StdAfx.h"
 #include <process.h>
@@ -13,67 +11,47 @@
 #include "SBOGlobal.h"
 #include "UpdateServerInfo.h"
 
-#define SERVERINFOFILENAME	_T("ServerInfo.csv")		/* サーバー情報ファイル名 */
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::CUpdateServerInfo							 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
+#define SERVERINFOFILENAME	_T("ServerInfo.csv")	// サーバー情報ファイル名
 
 CUpdateServerInfo::CUpdateServerInfo()
 {
-	m_hThread		= NULL;
+	m_hThread	= NULL;
 	m_hInitEvent	= NULL;
 	m_hExitEvent	= NULL;
-	m_hUpdate		= NULL;
-	m_nCount		= 0;
+	m_hUpdate	= NULL;
+	m_nCount	= 0;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::~CUpdateServerInfo							 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
 
 CUpdateServerInfo::~CUpdateServerInfo()
 {
-	Destroy ();
+	Destroy();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
-
 BOOL CUpdateServerInfo::Create(
-	LPCSTR pszAccount,			/* [in] FTPアカウント */
-	LPCSTR pszPassword,			/* [in] FTPパスワード */
-	LPCSTR pszServerAddr,		/* [in] サーバーアドレス */
-	LPCSTR pszUploadPath)		/* [in] アップロード先 */
+	LPCSTR pszAccount,	// [in] FTPアカウント
+	LPCSTR pszPassword,	// [in] FTPパスワード
+	LPCSTR pszServerAddr,	// [in] サーバーアドレス
+	LPCSTR pszUploadPath)	// [in] アップロード先
 {
 	BOOL bRet;
 
 	bRet = FALSE;
 
-	/* すでに作成されている */
+	// すでに作成されている
 	if(m_hThread != NULL){
 		return TRUE;
 	}
 
-	/* イベントを作成 */
-	m_hInitEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
+	// イベントを作成
+	m_hInitEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hInitEvent == NULL) {
 		goto Exit;
 	}
-	m_hExitEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
+	m_hExitEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hExitEvent == NULL) {
 		goto Exit;
 	}
-	m_hUpdate = CreateEvent (NULL, FALSE, FALSE, NULL);
+	m_hUpdate = CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hUpdate == NULL) {
 		goto Exit;
 	}
@@ -83,123 +61,95 @@ BOOL CUpdateServerInfo::Create(
 	m_strServerAddr	= pszServerAddr;
 	m_strUploadPath	= pszUploadPath;
 
-	/* スレッドを起動 */
+	// スレッドを起動
 	UINT threadID = 0;
-	m_hThread = (HANDLE)_beginthreadex (NULL, 0, ThreadEntry, (PVOID)this, 0, &threadID);
+	m_hThread = (HANDLE)_beginthreadex(NULL, 0, ThreadEntry, (PVOID)this, 0, &threadID);
 	if (m_hThread == NULL) {
 		goto Exit;
 	}
 
-	/* 初期化完了を待機 */
-	WaitForSingleObject (m_hInitEvent, INFINITE);
+	// 初期化完了を待機
+	WaitForSingleObject(m_hInitEvent, INFINITE);
 
 	bRet = TRUE;
 Exit:
 	if (bRet == FALSE) {
-		Destroy ();
+		Destroy();
 	}
 
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::Destroy										 */
-/* 内容		:破棄															 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
-
 void CUpdateServerInfo::Destroy(void)
 {
-	/* スレッドを停止 */
+	// スレッドを停止
 	if (m_hThread != NULL) {
-		SetEvent (m_hExitEvent);
-		WaitForSingleObject (m_hThread, INFINITE);
+		SetEvent(m_hExitEvent);
+		WaitForSingleObject(m_hThread, INFINITE);
 	}
 
-	/* イベントを破棄 */
+	// イベントを破棄
 	if (m_hExitEvent) {
-		CloseHandle (m_hExitEvent);
+		CloseHandle(m_hExitEvent);
 		m_hExitEvent = NULL;
 	}
 	if (m_hInitEvent) {
-		CloseHandle (m_hInitEvent);
+		CloseHandle(m_hInitEvent);
 		m_hInitEvent = NULL;
 	}
 	if (m_hThread) {
-		CloseHandle (m_hThread);
+		CloseHandle(m_hThread);
 		m_hThread = NULL;
 	}
 	if (m_hUpdate) {
-		CloseHandle (m_hUpdate);
+		CloseHandle(m_hUpdate);
 		m_hUpdate = NULL;
 	}
 
-	m_strAccount.	Empty ();
-	m_strPassword.	Empty ();
-	m_strServerAddr.Empty ();
-	m_strUploadPath.Empty ();
+	m_strAccount.	Empty();
+	m_strPassword.	Empty();
+	m_strServerAddr.Empty();
+	m_strUploadPath.Empty();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::Update										 */
-/* 内容		:更新															 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
-
 void CUpdateServerInfo::Update(
-	int nCount,				/* [in] ログイン人数 */
-	LPCSTR pszPlace,		/* [in] 最も集まっている場所 */
-	BOOL bUpload/*=FALSE*/)	/* [in] TRUE:すぐにアップロード */
+	int nCount,	// [in] ログイン人数
+	LPCSTR pszPlace,	// [in] 最も集まっている場所
+	BOOL bUpload	// =FALSE*/)	/* [in] TRUE:すぐにアップロード
 {
-	m_csUpdate.Enter ();
+	m_csUpdate.Enter();
 
 	m_nCount	= nCount;
 	m_strPlace	= pszPlace;
 
-	m_csUpdate.Leave ();
+	m_csUpdate.Leave();
 	if (bUpload) {
-		SetEvent (m_hUpdate);
+		SetEvent(m_hUpdate);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::ThreadEntry									 */
-/* 内容		:スレッドメイン処理												 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
 
 UINT __stdcall CUpdateServerInfo::ThreadEntry(LPVOID lpParam)
 {
 	CUpdateServerInfo *pThis = (CUpdateServerInfo *)lpParam;
 
-	pThis->ThreadMain ();
+	pThis->ThreadMain();
 
 	return 0;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::ThreadMain									 */
-/* 内容		:スレッドメイン処理												 */
-/* 日付		:2008/05/23														 */
-/* ========================================================================= */
 
 void CUpdateServerInfo::ThreadMain(void)
 {
 	DWORD dwResult;
 	HANDLE aHandle[] = {m_hExitEvent, m_hUpdate};
 
-	/* 開始完了 */
-	SetEvent (m_hInitEvent);
+	// 開始完了
+	SetEvent(m_hInitEvent);
 
-	MakeServerInfo ();
-	Upload ();
+	MakeServerInfo();
+	Upload();
 
 	while (1) {
-		dwResult = WaitForMultipleObjects (
+		dwResult = WaitForMultipleObjects(
 						sizeof (aHandle) / sizeof (HANDLE),
 						aHandle,
 						FALSE,
@@ -209,27 +159,20 @@ void CUpdateServerInfo::ThreadMain(void)
 			goto Exit;
 
 		case WAIT_OBJECT_0 + 1:
-			ResetEvent (m_hUpdate);
-			MakeServerInfo ();
-			Upload ();
+			ResetEvent(m_hUpdate);
+			MakeServerInfo();
+			Upload();
 			break;
 
 		case WAIT_TIMEOUT:
-			MakeServerInfo ();
-			Upload ();
+			MakeServerInfo();
+			Upload();
 			break;
 		}
 	}
 Exit:
 	return;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::MakeServerInfo								 */
-/* 内容		:サーバー情報作成												 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
 
 void CUpdateServerInfo::MakeServerInfo(void)
 {
@@ -238,34 +181,27 @@ void CUpdateServerInfo::MakeServerInfo(void)
 	time_t timeTmp;
 	CmyString strFileName, strTmp;
 
-	m_csUpdate.Enter ();
+	m_csUpdate.Enter();
 
-	GetFileName (strFileName);
-	hFile = CreateFile (strFileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	GetFileName(strFileName);
+	hFile = CreateFile(strFileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (hFile == INVALID_HANDLE_VALUE) {
 		goto Exit;
 	}
 
-	time (&timeTmp);
+	time(&timeTmp);
 	strTmp.Format(_T("%d,%d,%s\r\n"),
-			(int)timeTmp,			/* 0:保存されたUNIX時間 */
-			m_nCount,				/* 1:ログイン人数 */
-			(LPCSTR)m_strPlace);	/* 2:最も集まっている場所 */
+			(int)timeTmp,	// 0:保存されたUNIX時間
+			m_nCount,	// 1:ログイン人数
+			(LPCSTR)m_strPlace);	// 2:最も集まっている場所
 
 	dwBytes = 0;
-	WriteFile (hFile, (LPCSTR)strTmp, strTmp.GetLength (), &dwBytes, NULL);
-	CloseHandle (hFile);
+	WriteFile(hFile, (LPCSTR)strTmp, strTmp.GetLength(), &dwBytes, NULL);
+	CloseHandle(hFile);
 
 Exit:
-	m_csUpdate.Leave ();
+	m_csUpdate.Leave();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::Upload										 */
-/* 内容		:アップロード													 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
 
 void CUpdateServerInfo::Upload(void)
 {
@@ -274,24 +210,24 @@ void CUpdateServerInfo::Upload(void)
 	TCHAR szUpAddr[MAX_PATH + 1];
 	CmyString strFileName;
 
-	hHost		= NULL;
+	hHost	= NULL;
 	hInternet	= NULL;
 
-	if (m_strServerAddr.IsEmpty ()) {
+	if (m_strServerAddr.IsEmpty()) {
 		goto Exit;
 	}
 
-	GetFileName (strFileName);
-	/* ファイル名の作成 */
-   wsprintf (szUpAddr, _T("%s/%s"), (LPCTSTR)m_strUploadPath, SERVERINFOFILENAME);
+	GetFileName(strFileName);
+	// ファイル名の作成
+   wsprintf(szUpAddr, _T("%s/%s"), (LPCTSTR)m_strUploadPath, SERVERINFOFILENAME);
 
-	/* インターネットを開く */
-	hInternet = InternetOpen (_T("ScrapBookOnlineServer"), INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+	// インターネットを開く
+	hInternet = InternetOpen(_T("ScrapBookOnlineServer"), INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 	if (hInternet == NULL) {
 		goto Exit;
 	}
 
-	/* サーバーに接続 */
+	// サーバーに接続
 	hHost = InternetConnect(
 		hInternet,
 		m_strServerAddr,
@@ -305,7 +241,7 @@ void CUpdateServerInfo::Upload(void)
 		goto Exit;
    }
 
-   /* ファイルをアップロード */
+   // ファイルをアップロード
    bResult = FtpPutFile(
 		hHost,
                 (LPCTSTR)strFileName,
@@ -315,29 +251,20 @@ void CUpdateServerInfo::Upload(void)
 
 Exit:
    if (hHost) {
-	   InternetCloseHandle (hHost);
+	   InternetCloseHandle(hHost);
    }
    if (hInternet) {
-	   InternetCloseHandle (hInternet);
+	   InternetCloseHandle(hInternet);
    }
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CUpdateServerInfo::GetFileName									 */
-/* 内容		:サーバー情報ファイル名を取得									 */
-/* 日付		:2008/05/22														 */
-/* ========================================================================= */
 
 void CUpdateServerInfo::GetFileName(CmyString &strDst)
 {
     TCHAR szPath[MAX_PATH];
 
-	/* ファイル名の作成 */
-        GetModuleFilePath (szPath, _countof (szPath));
-    CString strBasePath (szPath);
-    CString strFileName (SERVERINFOFILENAME);
+	// ファイル名の作成
+        GetModuleFilePath(szPath, _countof(szPath));
+    CString strBasePath(szPath);
+    CString strFileName(SERVERINFOFILENAME);
     strDst.Format(_T("%sSBODATA\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)strFileName);
 }
-
-/* Copyright(C)URARA-works 2008 */

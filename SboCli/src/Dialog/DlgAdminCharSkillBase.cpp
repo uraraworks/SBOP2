@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharSkillBase.cpp									 */
-/* 内容			:スキル編集ダイアログクラス 実装ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharSkillBase.cpp
+/// @brief スキル編集ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -23,9 +21,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharSkillBase::DoDataExchange(CDataExchange* pDX)
 {
@@ -52,12 +48,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharSkillBase, CDlgAdminBase)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::CDlgAdminCharSkillBase					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
-
 CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminCharSkillBase::IDD, pParent)
 	, m_strName(_T(""))
@@ -66,46 +56,28 @@ CDlgAdminCharSkillBase::CDlgAdminCharSkillBase(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDlgAdminCharSkillBase)
 	//}}AFX_DATA_INIT
 
-	m_bInit			= TRUE;
-	m_nTypeMain		= -1;
-	m_nTypeSub		= -1;
-	m_nUse			= -1;
+	m_bInit	= TRUE;
+	m_nTypeMain	= -1;
+	m_nTypeSub	= -1;
+	m_nUse	= -1;
 	m_bModeModify	= FALSE;
-	m_pDlgType		= NULL;
-	m_pInfo			= NULL;
+	m_pDlgType	= NULL;
+	m_pInfo	= NULL;
 	m_pWndSelectGrp	= NULL;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::~CDlgAdminCharSkillBase				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
-
 CDlgAdminCharSkillBase::~CDlgAdminCharSkillBase()
 {
-	SAFE_DELETE (m_pInfo);
+	SAFE_DELETE(m_pInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillBase::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::Get									 */
-/* 内容		:編集内容を取得													 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillBase::Get(CInfoSkillBase *&pDst)
 {
@@ -115,41 +87,29 @@ void CDlgAdminCharSkillBase::Get(CInfoSkillBase *&pDst)
 		return;
 	}
 
-	SAFE_DELETE (pDst);
-	pDst = (PCInfoSkillBase)LibInfo.GetNew (m_pInfo->m_nTypeMain, m_pInfo->m_nTypeSub);
-	pDst->Copy (m_pInfo);
+	SAFE_DELETE(pDst);
+	pDst = (PCInfoSkillBase)LibInfo.GetNew(m_pInfo->m_nTypeMain, m_pInfo->m_nTypeSub);
+	pDst->Copy(m_pInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::SetModify								 */
-/* 内容		:編集モードとして設定											 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillBase::SetModify(CInfoSkillBase *pSrc)
 {
 	CLibInfoSkill LibInfo;
 
-	SAFE_DELETE (m_pInfo);
-	m_pInfo = (PCInfoSkillBase)LibInfo.GetNew (pSrc->m_nTypeMain, pSrc->m_nTypeSub);
-	m_pInfo->Copy (pSrc);
+	SAFE_DELETE(m_pInfo);
+	m_pInfo = (PCInfoSkillBase)LibInfo.GetNew(pSrc->m_nTypeMain, pSrc->m_nTypeSub);
+	m_pInfo->Copy(pSrc);
 
 	m_strName	= (LPCTSTR)m_pInfo->m_strName;
-	m_dwSP		= m_pInfo->m_dwSP;
+	m_dwSP	= m_pInfo->m_dwSP;
 	m_nTypeMain	= m_pInfo->m_nTypeMain;
 	m_nTypeSub	= m_pInfo->m_nTypeSub;
-	m_nUse		= m_pInfo->m_nUse;
+	m_nUse	= m_pInfo->m_nUse;
 
 	m_bModeModify = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminCharSkillBase::OnInitDialog()
 {
@@ -157,73 +117,73 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 
 	CDlgAdminBase::OnInitDialog();
 
-	RegisterControl (IDC_FRAME, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
-	RegisterControl (IDOK,		LH_CTRL_X | LH_CTRL_Y);
-	RegisterControl (IDCANCEL,	LH_CTRL_X | LH_CTRL_Y);
+	RegisterControl(IDC_FRAME, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl(IDOK,	LH_CTRL_X | LH_CTRL_Y);
+	RegisterControl(IDCANCEL,	LH_CTRL_X | LH_CTRL_Y);
 
 	if (m_bModeModify) {
-		SetWindowText (_T("スキルの編集"));
+		SetWindowText(_T("スキルの編集"));
 	}
 
-	m_ctlIconGrp.Create (this, m_pMgrData);
-	m_ctlIconGrp.Init (GRPIDMAIN_ICON32);
+	m_ctlIconGrp.Create(this, m_pMgrData);
+	m_ctlIconGrp.Init(GRPIDMAIN_ICON32);
 
-	m_ctlTypeMain.InsertString (0, _T("能力"));
-	m_ctlTypeMain.SetItemData (0, 0);
-	m_ctlTypeMain.InsertString (1, _T("戦闘"));
-	m_ctlTypeMain.SetItemData (1, SKILLTYPEMAIN_BATTLE);
-	m_ctlTypeMain.InsertString (2, _T("生活"));
-	m_ctlTypeMain.SetItemData (2, SKILLTYPEMAIN_LIFE);
+	m_ctlTypeMain.InsertString(0, _T("能力"));
+	m_ctlTypeMain.SetItemData(0, 0);
+	m_ctlTypeMain.InsertString(1, _T("戦闘"));
+	m_ctlTypeMain.SetItemData(1, SKILLTYPEMAIN_BATTLE);
+	m_ctlTypeMain.InsertString(2, _T("生活"));
+	m_ctlTypeMain.SetItemData(2, SKILLTYPEMAIN_LIFE);
 
 	nNo = nTmp = 0;
 	if (m_pInfo) {
 		for (i = 0; i < SKILLTYPEMAIN_MAX; i ++) {
-			if (m_pInfo->m_nTypeMain == m_ctlTypeMain.GetItemData (i)) {
+			if (m_pInfo->m_nTypeMain == m_ctlTypeMain.GetItemData(i)) {
 				nNo = i;
 				break;
 			}
 		}
 		nTmp = m_pInfo->m_nTypeSub;
-		m_ctlIconGrp.Set (m_pInfo->m_dwIconID);
+		m_ctlIconGrp.Set(m_pInfo->m_dwIconID);
 	}
-	m_ctlTypeMain.SetCurSel (nNo);
-	OnSelchangeTypeMain ();
+	m_ctlTypeMain.SetCurSel(nNo);
+	OnSelchangeTypeMain();
 
 	nNo = 0;
 	if (m_pInfo) {
 		m_pInfo->m_nTypeSub = nTmp;
-		nCount = m_ctlTypeSub.GetCount ();
+		nCount = m_ctlTypeSub.GetCount();
 		for (i = 0; i < nCount; i ++) {
-			if (m_pInfo->m_nTypeSub == m_ctlTypeSub.GetItemData (i)) {
+			if (m_pInfo->m_nTypeSub == m_ctlTypeSub.GetItemData(i)) {
 				nNo = i;
 				break;
 			}
 		}
 	}
-	m_ctlTypeSub.SetCurSel (nNo);
+	m_ctlTypeSub.SetCurSel(nNo);
 
-	m_ctlUse.InsertString (0, _T("制限無し"));
-	m_ctlUse.SetItemData (0, SKILLUSE_ANY);
-	m_ctlUse.InsertString (1, _T("通常時"));
-	m_ctlUse.SetItemData (1, SKILLUSE_NORMAL);
-	m_ctlUse.InsertString (2, _T("戦闘モード時"));
-	m_ctlUse.SetItemData (2, SKILLUSE_BATTLE);
+	m_ctlUse.InsertString(0, _T("制限無し"));
+	m_ctlUse.SetItemData(0, SKILLUSE_ANY);
+	m_ctlUse.InsertString(1, _T("通常時"));
+	m_ctlUse.SetItemData(1, SKILLUSE_NORMAL);
+	m_ctlUse.InsertString(2, _T("戦闘モード時"));
+	m_ctlUse.SetItemData(2, SKILLUSE_BATTLE);
 
 	nNo = 0;
 	if (m_pInfo) {
 		for (i = 0; i < SKILLUSE_MAX; i ++) {
-			if (m_pInfo->m_nUse == m_ctlUse.GetItemData (i)) {
+			if (m_pInfo->m_nUse == m_ctlUse.GetItemData(i)) {
 				nNo = i;
 				break;
 			}
 		}
 	}
-	m_ctlUse.SetCurSel (nNo);
+	m_ctlUse.SetCurSel(nNo);
 
-	OnSelchangeTypeSub ();
-	OnSelchangeUse ();
+	OnSelchangeTypeSub();
+	OnSelchangeUse();
 	if (m_pDlgType && m_pInfo) {
-		m_pDlgType->Set (m_pInfo);
+		m_pDlgType->Set(m_pInfo);
 	}
 	m_bInit = FALSE;
 
@@ -231,25 +191,19 @@ BOOL CDlgAdminCharSkillBase::OnInitDialog()
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CAdminWindow::OnAdminMsg										 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2007/03/18														 */
-/* ========================================================================= */
-
 LRESULT CDlgAdminCharSkillBase::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam) {
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* 左クリック通知 */
-//		m_nPosX = HIWORD (lParam);
-//		m_nPosY = LOWORD (lParam);
-		UpdateData (FALSE);
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN: // 左クリック通知
+//	m_nPosX = HIWORD(lParam);
+//	m_nPosY = LOWORD(lParam);
+		UpdateData(FALSE);
 		break;
-	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN:		/* 右クリック通知 */
+	case ADMINMSG_NOTIFYTYPE_RBUTTONDOWN: // 右クリック通知
 		if (m_pDlgType == NULL) {
 			break;
 		}
-		m_pDlgType->PostMessage (WM_ADMINMSG, wParam, lParam);
+		m_pDlgType->PostMessage(WM_ADMINMSG, wParam, lParam);
 		break;
 	}
 
@@ -257,58 +211,40 @@ LRESULT CDlgAdminCharSkillBase::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::PostNcDestroy							 */
-/* 内容		:終了処理														 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
-
 void CDlgAdminCharSkillBase::PostNcDestroy()
 {
-	CDialog::PostNcDestroy ();
+	CDialog::PostNcDestroy();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnSelchangeTypeMain					 */
-/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillBase::OnSelchangeTypeMain()
 {
 	int nTypeMain;
 
-	m_ctlTypeSub.ResetContent ();
+	m_ctlTypeSub.ResetContent();
 
-	m_ctlTypeSub.InsertString (0, _T("未設定"));
-	m_ctlTypeSub.SetItemData (0, 0);
+	m_ctlTypeSub.InsertString(0, _T("未設定"));
+	m_ctlTypeSub.SetItemData(0, 0);
 
-	nTypeMain = m_ctlTypeMain.GetItemData (m_ctlTypeMain.GetCurSel ());
+	nTypeMain = m_ctlTypeMain.GetItemData(m_ctlTypeMain.GetCurSel());
 	switch (nTypeMain) {
-	case SKILLTYPEMAIN_NONE:			/* 能力 */
+	case SKILLTYPEMAIN_NONE: // 能力
 		break;
-	case SKILLTYPEMAIN_BATTLE:			/* 戦闘 */
-		m_ctlTypeSub.InsertString (1, _T("移動して攻撃"));
-		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_BATTLE_MOVEATACK);
-		m_ctlTypeSub.InsertString (2, _T("回復"));
-		m_ctlTypeSub.SetItemData (2, SKILLTYPESUB_BATTLE_HEAL);
+	case SKILLTYPEMAIN_BATTLE: // 戦闘
+		m_ctlTypeSub.InsertString(1, _T("移動して攻撃"));
+		m_ctlTypeSub.SetItemData(1, SKILLTYPESUB_BATTLE_MOVEATACK);
+		m_ctlTypeSub.InsertString(2, _T("回復"));
+		m_ctlTypeSub.SetItemData(2, SKILLTYPESUB_BATTLE_HEAL);
 		break;
-	case SKILLTYPEMAIN_LIFE:			/* 生活 */
-		m_ctlTypeSub.InsertString (1, _T("釣り"));
-		m_ctlTypeSub.SetItemData (1, SKILLTYPESUB_LIFE_FISHING);
+	case SKILLTYPEMAIN_LIFE: // 生活
+		m_ctlTypeSub.InsertString(1, _T("釣り"));
+		m_ctlTypeSub.SetItemData(1, SKILLTYPESUB_LIFE_FISHING);
 		break;
 	}
-	m_ctlTypeSub.SetCurSel (0);
-	OnSelchangeTypeSub ();
+	m_ctlTypeSub.SetCurSel(0);
+	OnSelchangeTypeSub();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnSelchangeTypeSub						 */
-/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
 {
@@ -317,29 +253,29 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
 	PCInfoSkillBase pInfoTmp;
 	CLibInfoSkill LibInfo;
 
-	nTypeMain = m_ctlTypeMain.GetItemData (m_ctlTypeMain.GetCurSel ());
-	nTypeSub  = m_ctlTypeSub. GetItemData (m_ctlTypeSub. GetCurSel ());
+	nTypeMain = m_ctlTypeMain.GetItemData(m_ctlTypeMain.GetCurSel());
+	nTypeSub  = m_ctlTypeSub. GetItemData(m_ctlTypeSub. GetCurSel());
 
 	if (m_pDlgType) {
-		UnregisterControl (m_pDlgType->m_hWnd);
-		m_pDlgType->DestroyWindow ();
+		UnregisterControl(m_pDlgType->m_hWnd);
+		m_pDlgType->DestroyWindow();
 		m_pDlgType = NULL;
 	}
 
 	switch (nTypeMain) {
-	case SKILLTYPEMAIN_NONE:				/* 能力 */
+	case SKILLTYPEMAIN_NONE: // 能力
 		break;
-	case SKILLTYPEMAIN_BATTLE:				/* 戦闘 */
+	case SKILLTYPEMAIN_BATTLE: // 戦闘
 		switch (nTypeSub) {
-		case SKILLTYPESUB_BATTLE_MOVEATACK:		/* 移動して攻撃 */
+		case SKILLTYPESUB_BATTLE_MOVEATACK: // 移動して攻撃
 			m_pDlgType = new CDlgAdminCharSkillMOVEATACK(this);
 			break;
-		case SKILLTYPESUB_BATTLE_HEAL:			/* 回復 */
+		case SKILLTYPESUB_BATTLE_HEAL: // 回復
 			m_pDlgType = new CDlgAdminCharSkillHEAL(this);
 			break;
 		}
 		break;
-	case SKILLTYPEMAIN_LIFE:				/* 生活 */
+	case SKILLTYPEMAIN_LIFE: // 生活
 		break;
 	}
 	if (m_pDlgType == NULL) {
@@ -347,21 +283,21 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
 	}
 
 	if (m_pDlgType) {
-		m_pDlgType->Init (m_pMgrData);
-		GetDlgItem (IDC_FRAME)->GetWindowRect (rc);
-		ScreenToClient (rc);
-		m_pDlgType->MoveWindow (rc.left, rc.top, rc.Width (), rc.Height ());
-		RegisterControl (m_pDlgType->m_hWnd, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+		m_pDlgType->Init(m_pMgrData);
+		GetDlgItem(IDC_FRAME)->GetWindowRect(rc);
+		ScreenToClient(rc);
+		m_pDlgType->MoveWindow(rc.left, rc.top, rc.Width(), rc.Height());
+		RegisterControl(m_pDlgType->m_hWnd, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 	}
 
 	if (m_bInit == FALSE) {
 		if ((m_nTypeMain != nTypeMain) || (m_nTypeSub != nTypeSub)) {
-			pInfoTmp = (PCInfoSkillBase)LibInfo.GetNew (nTypeMain, nTypeSub);
+			pInfoTmp = (PCInfoSkillBase)LibInfo.GetNew(nTypeMain, nTypeSub);
 			if (m_pInfo) {
 				pInfoTmp->m_dwSkillID = m_pInfo->m_dwSkillID;
 			}
 
-			SAFE_DELETE (m_pInfo);
+			SAFE_DELETE(m_pInfo);
 			m_pInfo = pInfoTmp;
 		}
 	}
@@ -370,52 +306,34 @@ void CDlgAdminCharSkillBase::OnSelchangeTypeSub()
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnSelchangeUse							 */
-/* 内容		:イベントハンドラ(CBN_SELCHANGE)								 */
-/* 日付		:2008/12/09														 */
-/* ========================================================================= */
-
 void CDlgAdminCharSkillBase::OnSelchangeUse()
 {
 	int nNo;
 
-	nNo = m_ctlUse.GetCurSel ();
+	nNo = m_ctlUse.GetCurSel();
 	if (nNo < 0) {
 		return;
 	}
-	m_nUse = m_ctlUse.GetItemData (nNo);
+	m_nUse = m_ctlUse.GetItemData(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnOK									 */
-/* 内容		:ボタンハンドラ(OK)												 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillBase::OnOK()
 {
-	UpdateData ();
+	UpdateData();
 
 	if (m_pInfo) {
 		m_pInfo->m_strName	= m_strName;
-		m_pInfo->m_dwSP		= m_dwSP;
-		m_pInfo->m_nUse		= m_nUse;
+		m_pInfo->m_dwSP	= m_dwSP;
+		m_pInfo->m_nUse	= m_nUse;
 		if (m_pDlgType) {
-			m_pDlgType->Get (m_pInfo);
+			m_pDlgType->Get(m_pInfo);
 		}
-		m_pInfo->m_dwIconID = m_ctlIconGrp.GetIDSub ();
+		m_pInfo->m_dwIconID = m_ctlIconGrp.GetIDSub();
 	}
 
-	CDlgAdminBase::EndDialog (IDOK);
+	CDlgAdminBase::EndDialog(IDOK);
 }
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnLButtonDown							 */
-/* 内容		:メッセージハンドラ(WM_LBUTTONDOWN)								 */
-/* 日付		:2009/05/04														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillBase::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -428,44 +346,36 @@ void CDlgAdminCharSkillBase::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 
 	ptTmp = point;
-	ClientToScreen (&ptTmp);
+	ClientToScreen(&ptTmp);
 
-	GetDlgItem (IDC_ICONGRP)->GetWindowRect (rc);
-	bResult = rc.PtInRect (ptTmp);
+	GetDlgItem(IDC_ICONGRP)->GetWindowRect(rc);
+	bResult = rc.PtInRect(ptTmp);
 	if (bResult == FALSE) {
 		goto Exit;
 	}
 	m_pWndSelectGrp = new CWndSelectGrp;
-	m_pWndSelectGrp->Create (this, m_pMgrData, 0);
-	m_pWndSelectGrp->SetType (GRPIDMAIN_ICON32, m_ctlIconGrp.GetIDSub ());
-	m_pWndSelectGrp->ShowWindow (SW_SHOW);
+	m_pWndSelectGrp->Create(this, m_pMgrData, 0);
+	m_pWndSelectGrp->SetType(GRPIDMAIN_ICON32, m_ctlIconGrp.GetIDSub());
+	m_pWndSelectGrp->ShowWindow(SW_SHOW);
 
 Exit:
-	CDlgAdminBase::OnLButtonDown (nFlags, point);
+	CDlgAdminBase::OnLButtonDown(nFlags, point);
 }
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillBase::OnWndClose								 */
-/* 内容		:メッセージハンドラ(WM_WNDCLOSE)								 */
-/* 日付		:2009/05/04														 */
-/* ========================================================================= */
 
 LRESULT CDlgAdminCharSkillBase::OnWndClose(WPARAM wParam, LPARAM lParam)
 {
-	int nHi  = HIWORD (lParam);
-	int nLow = LOWORD (lParam);
+	int nHi  = HIWORD(lParam);
+	int nLow = LOWORD(lParam);
 
 	switch (wParam) {
-	case WINDOWID_SELECTMAPPARTSGRP:	/* 画像選択 */
+	case WINDOWID_SELECTMAPPARTSGRP: // 画像選択
 		m_pWndSelectGrp = NULL;
 		if (nLow == 0xFFFF) {
 			break;
 		}
-		m_ctlIconGrp.Set (nLow - 1);
+		m_ctlIconGrp.Set(nLow - 1);
 		break;
 	}
 
 	return -1;
 }
-
-/* Copyright(C)URARA-works 2008 */

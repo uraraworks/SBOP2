@@ -1,4 +1,5 @@
-// XAudio2-backed minimal audio for NO_DIRECTMUSIC builds
+/// @file DXAudio.cpp
+/// @brief XAudio2ベースのオーディオ実装（NO_DIRECTMUSICビルド用）
 #include "stdafx.h"
 #include <windows.h>
 #include <mmreg.h>

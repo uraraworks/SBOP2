@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:MakeFileListDlg.cpp										 */
-/* 内容			:メインダイアログクラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/08/26													 */
-/* ========================================================================= */
+﻿/// @file MakeFileListDlg.cpp
+/// @brief メインダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/08/26
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "GetMD5File.h"
@@ -18,9 +16,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/* ========================================================================= */
-/* CMakeFileListDlgクラスの設定												 */
-/* ========================================================================= */
+// CMakeFileListDlgクラスの設定
 
 void CMakeFileListDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -38,12 +34,6 @@ BEGIN_MESSAGE_MAP(CMakeFileListDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CMakeFileListDlg::CMakeFileListDlg								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/08/26														 */
-/* ========================================================================= */
-
 CMakeFileListDlg::CMakeFileListDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMakeFileListDlg::IDD, pParent)
 {
@@ -53,12 +43,6 @@ CMakeFileListDlg::CMakeFileListDlg(CWnd* pParent /*=NULL*/)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMakeFileListDlg::OnInitDialog									 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2007/08/26														 */
-/* ========================================================================= */
-
 BOOL CMakeFileListDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
@@ -66,20 +50,14 @@ BOOL CMakeFileListDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 大きいアイコンを設定
 	SetIcon(m_hIcon, FALSE);		// 小さいアイコンを設定
 
-	ReadIniFile ();
-	MakeHashList ();
+	ReadIniFile();
+	MakeHashList();
 
-	EndDialog (IDCANCEL);
+	EndDialog(IDCANCEL);
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMakeFileListDlg::ReadIniFile									 */
-/* 内容		:iniファイル読み込み											 */
-/* 日付		:2007/08/26														 */
-/* ========================================================================= */
 
 void CMakeFileListDlg::ReadIniFile(void)
 {
@@ -87,39 +65,33 @@ void CMakeFileListDlg::ReadIniFile(void)
 	TCHAR szFileName[MAX_PATH], szTmp[MAX_PATH];
 	CString strTmp;
 
-    ZeroMemory (szFileName, sizeof (szFileName));
-    GetModuleFileName (NULL, szFileName, _countof (szFileName));
-    size_t nNameLen = _tcslen (szFileName);
-    if (nNameLen >= 3) {
-            _tcscpy_s (szFileName + nNameLen - 3, _countof (szFileName) - (nNameLen - 3), _T("ini"));
-    } else {
-            _tcscat_s (szFileName, _T(".ini"));
-    }
+	ZeroMemory(szFileName, sizeof(szFileName));
+	GetModuleFileName(NULL, szFileName, _countof(szFileName));
+	size_t nNameLen = _tcslen(szFileName);
+	if (nNameLen >= 3) {
+		_tcscpy_s(szFileName + nNameLen - 3, _countof(szFileName) - (nNameLen - 3), _T("ini"));
+	} else {
+		_tcscat_s(szFileName, _T(".ini"));
+	}
 
-	/* ファイルリスト読み込み */
-        for (i = 0; ; i ++) {
-                strTmp.Format(_T("%d"), i + 1);
-                ZeroMemory (szTmp, sizeof (szTmp));
-                GetPrivateProfileString (_T("FileList"), strTmp, _T(""), szTmp, _countof (szTmp), szFileName);
-                if (_tcslen (szTmp) <= 0) {
-                        break;
-                }
-                m_astrFileList.push_back (CString (szTmp));
-        }
+	// ファイルリスト読み込み
+	for (i = 0; ; i++) {
+		strTmp.Format(_T("%d"), i + 1);
+		ZeroMemory(szTmp, sizeof(szTmp));
+		GetPrivateProfileString(_T("FileList"), strTmp, _T(""), szTmp, _countof(szTmp), szFileName);
+		if (_tcslen(szTmp) <= 0) {
+			break;
+		}
+		m_astrFileList.push_back(CString(szTmp));
+	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMakeFileListDlg::MakeHashList									 */
-/* 内容		:ファイルハッシュリスト作成										 */
-/* 日付		:2007/08/26														 */
-/* ========================================================================= */
 
 void CMakeFileListDlg::MakeHashList(void)
 {
 	int i, nCount;
-        TCHAR szPath[MAX_PATH];
-        char szHash[33];
+	TCHAR szPath[MAX_PATH];
+	char szHash[33];
 	DWORD dwFileSize;
 	HANDLE hFile;
 	CString strFileName, strTmp;
@@ -127,42 +99,40 @@ void CMakeFileListDlg::MakeHashList(void)
 	CStdioFile destFile;
 	CStdArray<DWORD, DWORD> adwFileSize;
 
-        GetModuleFilePath (szPath, _countof (szPath));
+	GetModuleFilePath(szPath, _countof(szPath));
 
-        nCount = static_cast<int>(m_astrFileList.size());
-        for (i = 0; i < nCount; i ++) {
-            CString strBasePath (szPath);
-            strFileName.Format(_T("%s%s"), (LPCTSTR)strBasePath, (LPCTSTR)m_astrFileList[i]);
+	nCount = static_cast<int>(m_astrFileList.size());
+	for (i = 0; i < nCount; i++) {
+		CString strBasePath(szPath);
+		strFileName.Format(_T("%s%s"), (LPCTSTR)strBasePath, (LPCTSTR)m_astrFileList[i]);
 
-		GetMD5.Init ();
-		GetMD5.Update (strFileName);
-		ZeroMemory (szHash, sizeof (szHash));
-		GetMD5.GetStr (szHash);
-		if (strlen (szHash) <= 0) {
+		GetMD5.Init();
+		GetMD5.Update(strFileName);
+		ZeroMemory(szHash, sizeof(szHash));
+		GetMD5.GetStr(szHash);
+		if (strlen(szHash) <= 0) {
 			continue;
 		}
-                m_astrHashList.push_back (AnsiToTString (szHash));
+		m_astrHashList.push_back(AnsiToTString(szHash));
 
 		dwFileSize = 0;
-		hFile = CreateFile (strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		hFile = CreateFile(strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile != INVALID_HANDLE_VALUE) {
-			dwFileSize = GetFileSize (hFile, NULL);
-			CloseHandle (hFile);
+			dwFileSize = GetFileSize(hFile, NULL);
+			CloseHandle(hFile);
 		}
-		adwFileSize.push_back (dwFileSize);
+		adwFileSize.push_back(dwFileSize);
 	}
 
-	/* ハッシュリストを保存 */
-    CString strBasePathAll (szPath);
-    strFileName.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strBasePathAll);
-	destFile.Open (strFileName, CFile::modeWrite | CFile::modeCreate, NULL);
+	// ハッシュリストを保存
+	CString strBasePathAll(szPath);
+	strFileName.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strBasePathAll);
+	destFile.Open(strFileName, CFile::modeWrite | CFile::modeCreate, NULL);
 
-        nCount = static_cast<int>(m_astrFileList.size());
-        for (i = 0; i < nCount; i ++) {
+	nCount = static_cast<int>(m_astrFileList.size());
+	for (i = 0; i < nCount; i++) {
 		strTmp.Format(_T("%s,%u,%s\n"), m_astrHashList[i], adwFileSize[i], m_astrFileList[i]);
-		destFile.WriteString (strTmp);
+		destFile.WriteString(strTmp);
 	}
-	destFile.Close ();
+	destFile.Close();
 }
-
-/* Copyright(C)URARA-works 2007 */

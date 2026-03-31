@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharList.h											 */
-/* 内容			:キャラ一覧ダイアログクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/01													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharList.h
+/// @brief キャラ一覧ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/01
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,27 +10,25 @@
 
 class CLibInfoCharCli;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharList : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharList(CWnd* pParent = NULL);			/* コンストラクタ */
-	virtual ~CDlgAdminCharList();								/* デストラクタ */
+			CDlgAdminCharList(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharList(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	Renew		(void);											/* 一覧を更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-
-
-protected:
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 一覧を更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* 通知先ウィンドウ */
-	CLibInfoCharCli		*m_pLibInfoChar;			/* 編集中のキャラ情報 */
+
+
+protected:
+	CWnd	*m_pWndNotify; // 通知先ウィンドウ
+	CLibInfoCharCli	*m_pLibInfoChar; // 編集中のキャラ情報
 
 
 
@@ -57,5 +53,3 @@ public:
 } CDlgAdminCharList, *PCDlgAdminCharList;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

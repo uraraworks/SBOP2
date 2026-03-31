@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharModifyTypeBase.cpp								 */
-/* 内容			:キャラ情報 移動種別の設定ダイアログクラス 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/07/12													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharModifyTypeBase.cpp
+/// @brief キャラ情報 移動種別の設定ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/07/12
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,9 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharModifyTypeBase::DoDataExchange(CDataExchange* pDX)
 {
@@ -35,12 +31,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharModifyTypeBase, CDlgAdminBase)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypeBase::CDlgAdminCharModifyTypeBase		 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 CDlgAdminCharModifyTypeBase::CDlgAdminCharModifyTypeBase(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminCharModifyTypeBase::IDD, pParent)
 {
@@ -53,48 +43,22 @@ CDlgAdminCharModifyTypeBase::CDlgAdminCharModifyTypeBase(int nResourceID, CWnd* 
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypeBase::~CDlgAdminCharModifyTypeBase		 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 CDlgAdminCharModifyTypeBase::~CDlgAdminCharModifyTypeBase()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypeBase::Set								 */
-/* 内容		:設定															 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 
 void CDlgAdminCharModifyTypeBase::Set(CInfoCharCli *pSrc)
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypeBase::Get								 */
-/* 内容		:取得															 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 void CDlgAdminCharModifyTypeBase::Get(CInfoCharCli *pDst)
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharModifyTypeBase::PostNcDestroy						 */
-/* 内容		:終了処理														 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
-
 void CDlgAdminCharModifyTypeBase::PostNcDestroy()
 {
-	CDialog::PostNcDestroy ();
+	CDialog::PostNcDestroy();
 }
-
-/* Copyright(C)URARA-works 2008 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemWeaponList.cpp									 */
-/* 内容			:アイテム武器情報一覧ダイアログクラス 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/08/10													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemWeaponList.cpp
+/// @brief アイテム武器情報一覧ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/08/10
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,9 +22,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminItemWeaponList::DoDataExchange(CDataExchange* pDX)
 {
@@ -45,14 +41,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminItemWeaponList, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::CDlgAdminItemWeaponList				 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/08/10														 */
-/* ========================================================================= */
-
-CDlgAdminItemWeaponList::CDlgAdminItemWeaponList(CWnd* pParent /*=NULL*/)
+CDlgAdminItemWeaponList::CDlgAdminItemWeaponList(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminItemWeaponList::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminItemWeaponList)
@@ -61,41 +50,20 @@ CDlgAdminItemWeaponList::CDlgAdminItemWeaponList(CWnd* pParent /*=NULL*/)
 	m_pLibInfoItemWeapon = NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::~CDlgAdminItemWeaponList				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/08/10														 */
-/* ========================================================================= */
-
 CDlgAdminItemWeaponList::~CDlgAdminItemWeaponList()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2008/08/10														 */
-/* ========================================================================= */
-
 void CDlgAdminItemWeaponList::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	m_pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon ();
+	m_pLibInfoItemWeapon = m_pMgrData->GetLibInfoItemWeapon();
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminItemWeaponList::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminItemWeaponList::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::Renew									 */
-/* 内容		:一覧を更新														 */
-/* 日付		:2008/08/10														 */
-/* ========================================================================= */
 
 void CDlgAdminItemWeaponList::Renew(void)
 {
@@ -103,49 +71,35 @@ void CDlgAdminItemWeaponList::Renew(void)
 	PCInfoItemWeapon pInfoItemWeapon;
 	CString strTmp;
 
-	nSelect = m_List.GetNextItem (-1, LVNI_SELECTED);
-	m_List.SetRedraw (FALSE);
-	m_List.DeleteAllItems ();
+	nSelect = m_List.GetNextItem(-1, LVNI_SELECTED);
+	m_List.SetRedraw(FALSE);
+	m_List.DeleteAllItems();
 
-	nCount = m_pLibInfoItemWeapon->GetCount ();
-	m_List.SetItemCount (nCount);
+	nCount = m_pLibInfoItemWeapon->GetCount();
+	m_List.SetItemCount(nCount);
 
 	for (i = 0; i < nCount; i ++) {
-		pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr (i);
+		pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr(i);
 		if (pInfoItemWeapon == NULL) {
 			continue;
 		}
 		strTmp.Format(_T("%d"), pInfoItemWeapon->m_dwWeaponInfoID);
-		m_List.InsertItem (i, strTmp);
-		m_List.SetItemData (i, pInfoItemWeapon->m_dwWeaponInfoID);	/* ID */
-		CString strName = (LPCTSTR)pInfoItemWeapon->m_strName;		/* 武器種別名 */
-		m_List.SetItemText (i, 1, strName);
+		m_List.InsertItem(i, strTmp);
+		m_List.SetItemData(i, pInfoItemWeapon->m_dwWeaponInfoID);	// ID
+		CString strName = (LPCTSTR)pInfoItemWeapon->m_strName;	// 武器種別名
+		m_List.SetItemText(i, 1, strName);
 	}
 
 	if (nSelect >= 0) {
-		m_List.SetItemState (nSelect, LVNI_SELECTED, LVNI_SELECTED);
-		m_List.EnsureVisible (nSelect, FALSE);
+		m_List.SetItemState(nSelect, LVNI_SELECTED, LVNI_SELECTED);
+		m_List.EnsureVisible(nSelect, FALSE);
 	}
-	m_List.SetRedraw ();
+	m_List.SetRedraw();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::OnAdminMsg							 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2007/08/23														 */
-/* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnAdminMsg(int nType, DWORD dwPara)
 {
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/08/10														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminItemWeaponList::OnInitDialog()
 {
@@ -153,41 +107,27 @@ BOOL CDlgAdminItemWeaponList::OnInitDialog()
 
 	CDlgAdminBase::OnInitDialog();
 
-	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, _T("武器種別名"),	LVCFMT_LEFT, 120);
+	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_List.InsertColumn(0, _T("ID"),	LVCFMT_LEFT, 40);
+	m_List.InsertColumn(1, _T("武器種別名"),	LVCFMT_LEFT, 120);
 
-	RegisterControl (IDC_LIST, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl(IDC_LIST, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	/* 全武器情報を要求 */
-	Packet.Make (0);
-	SendPacket (&Packet);
+	// 全武器情報を要求
+	Packet.Make(0);
+	SendPacket(&Packet);
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::OnMainFrame							 */
-/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
-/* 日付		:2007/08/16														 */
-/* ========================================================================= */
-
 void CDlgAdminItemWeaponList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWITEMWEAPONINFO:		/* 武器情報更新 */
-		Renew ();
+	case MAINFRAMEMSG_RENEWITEMWEAPONINFO:	// 武器情報更新
+		Renew();
 		break;
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::OnAdd									 */
-/* 内容		:ボタンハンドラ(新規追加)										 */
-/* 日付		:2007/08/15														 */
-/* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnAdd()
 {
@@ -198,28 +138,21 @@ void CDlgAdminItemWeaponList::OnAdd()
 
 	pInfoItemWeapon = NULL;
 
-	Dlg.Init (m_pMgrData);
-	nResult = Dlg.DoModal ();
+	Dlg.Init(m_pMgrData);
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		goto Exit;
 	}
 
-	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetNew ();
-	Dlg.Get (pInfoItemWeapon);
+	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetNew();
+	Dlg.Get(pInfoItemWeapon);
 
-	Packet.Make (pInfoItemWeapon);
-	SendPacket (&Packet);
+	Packet.Make(pInfoItemWeapon);
+	SendPacket(&Packet);
 
 Exit:
-	SAFE_DELETE (pInfoItemWeapon);
+	SAFE_DELETE(pInfoItemWeapon);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::OnModify								 */
-/* 内容		:ボタンハンドラ(編集)											 */
-/* 日付		:2007/08/16														 */
-/* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnModify()
 {
@@ -229,39 +162,32 @@ void CDlgAdminItemWeaponList::OnModify()
 	PCInfoItemWeapon pInfoItemWeapon;
 	CPacketADMIN_ITEMWEAPON_RENEW Packet;
 
-	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nResult = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nResult < 0) {
 		goto Exit;
 	}
-	dwWeaponInfoID	= m_List.GetItemData (nResult);
-	pInfoItemWeapon	= (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr (dwWeaponInfoID);
+	dwWeaponInfoID	= m_List.GetItemData(nResult);
+	pInfoItemWeapon	= (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr(dwWeaponInfoID);
 	if (pInfoItemWeapon == NULL) {
 		goto Exit;
 	}
 
-	Dlg.Init (m_pMgrData);
-	Dlg.Set (pInfoItemWeapon);
+	Dlg.Init(m_pMgrData);
+	Dlg.Set(pInfoItemWeapon);
 
-	nResult = Dlg.DoModal ();
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		goto Exit;
 	}
 
-	Dlg.Get (pInfoItemWeapon);
+	Dlg.Get(pInfoItemWeapon);
 
-	Packet.Make (pInfoItemWeapon);
-	SendPacket (&Packet);
+	Packet.Make(pInfoItemWeapon);
+	SendPacket(&Packet);
 
 Exit:
 	return;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::OnCopy								 */
-/* 内容		:ボタンハンドラ(コピー)											 */
-/* 日付		:2007/09/22														 */
-/* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnCopy()
 {
@@ -271,32 +197,25 @@ void CDlgAdminItemWeaponList::OnCopy()
 	PCInfoItem pInfoItem;
 	CPacketADMIN_ITEM_COPY Packet;
 
-	nNo = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nNo = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nNo < 0) {
 		return;
 	}
-	dwItemID	= m_List.GetItemData (nNo);
-	pInfoItem	= (PCInfoItem)m_pLibInfoItem->GetPtr (dwItemID);
+	dwItemID	= m_List.GetItemData(nNo);
+	pInfoItem	= (PCInfoItem)m_pLibInfoItem->GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		return;
 	}
 
-        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox(_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (dwItemID);
-	SendPacket (&Packet);
+	Packet.Make(dwItemID);
+	SendPacket(&Packet);
 #endif
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemWeaponList::OnDelete								 */
-/* 内容		:ボタンハンドラ(削除)											 */
-/* 日付		:2007/08/19														 */
-/* ========================================================================= */
 
 void CDlgAdminItemWeaponList::OnDelete()
 {
@@ -307,26 +226,24 @@ void CDlgAdminItemWeaponList::OnDelete()
 	CString strTmp;
 	CPacketADMIN_ITEM_DELETE Packet;
 
-	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nResult = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nResult < 0) {
 		return;
 	}
-	dwItemID	= m_List.GetItemData (nResult);
-	pInfoItem	= (PCInfoItem)m_pLibInfoItem->GetPtr (dwItemID);
+	dwItemID	= m_List.GetItemData(nResult);
+	pInfoItem	= (PCInfoItem)m_pLibInfoItem->GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		return;
 	}
 
-        strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
-        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        strTmp.Format(_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
+        nResult = MessageBox(strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (dwItemID);
-	SendPacket (&Packet);
+	Packet.Make(dwItemID);
+	SendPacket(&Packet);
 #endif
 }
-
-/* Copyright(C)URARA-works 2008 */
 

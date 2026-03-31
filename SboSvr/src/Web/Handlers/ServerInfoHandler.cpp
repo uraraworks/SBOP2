@@ -165,4 +165,3 @@ void CServerInfoHandler::ParseQueryParameters(const std::string &path, bool &out
                 nPos = nAmp + 1;
         }
 }
-

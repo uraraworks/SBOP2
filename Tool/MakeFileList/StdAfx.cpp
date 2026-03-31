@@ -1,13 +1,9 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:stdafx.cpp													 */
-/* 内容			:実装ファイル												 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/08/26													 */
-/* ========================================================================= */
+﻿/// @file stdafx.cpp
+/// @brief 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/08/26
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 
 #pragma comment(lib, "shlwapi.lib")
-
-/* Copyright(C)URARA-works 2007 */

@@ -18,7 +18,7 @@
 /* See the GNU Library General Public License for more details.    */
 /* You should have received a copy of the GNU Library General      */
 /* Public License along with this library; if not, write to the    */
-/* Free Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   */ 
+/* Free Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   */
 /* 02111-1307  USA                                                 */
 
 /* Copyright (C) 1997, 1999 Makoto Matsumoto and Takuji Nishimura. */
@@ -36,14 +36,14 @@
 #include "stdafx.h"
 #include<stdio.h>
 
-/* Period parameters */  
+// Period parameters
 #define N 624
 #define M 397
-#define MATRIX_A 0x9908b0df   /* constant vector a */
-#define UPPER_MASK 0x80000000 /* most significant w-r bits */
-#define LOWER_MASK 0x7fffffff /* least significant r bits */
+#define MATRIX_A 0x9908b0df   // constant vector a
+#define UPPER_MASK 0x80000000 // most significant w-r bits
+#define LOWER_MASK 0x7fffffff // least significant r bits
 
-/* Tempering parameters */   
+// Tempering parameters
 #define TEMPERING_MASK_B 0x9d2c5680
 #define TEMPERING_MASK_C 0xefc60000
 #define TEMPERING_SHIFT_U(y)  (y >> 11)
@@ -51,10 +51,10 @@
 #define TEMPERING_SHIFT_T(y)  (y << 15)
 #define TEMPERING_SHIFT_L(y)  (y >> 18)
 
-static unsigned long mt[N]; /* the array for the state vector  */
-static int mti=N+1; /* mti==N+1 means mt[N] is not initialized */
+static unsigned long mt[N]; // the array for the state vector
+static int mti=N+1; // mti==N+1 means mt[N] is not initialized
 
-/* Initializing the array with a seed */
+// Initializing the array with a seed
 void
 sgenrand(unsigned long seed)
 {
@@ -74,7 +74,7 @@ sgenrand(unsigned long seed)
 /* This function allows to choose any of 2^19937-1 ones.             */
 /* Essential bits in "seed_array[]" is following 19937 bits:         */
 /*  (seed_array[0]&UPPER_MASK), seed_array[1], ..., seed_array[N-1]. */
-/* (seed_array[0]&LOWER_MASK) is discarded.                          */ 
+/* (seed_array[0]&LOWER_MASK) is discarded.                          */
 /* Theoretically,                                                    */
 /*  (seed_array[0]&UPPER_MASK), seed_array[1], ..., seed_array[N-1]  */
 /* can take any values except all zeros.                             */
@@ -84,23 +84,23 @@ lsgenrand(unsigned long seed_array[])
 {
     int i;
 
-    for (i=0;i<N;i++) 
+    for (i=0;i<N;i++)
       mt[i] = seed_array[i];
     mti=N;
 }
 
-long 
+long
 genrand()
 {
     long y;
     static unsigned long mag01[2]={0x0, MATRIX_A};
-    /* mag01[x] = x * MATRIX_A  for x=0,1 */
+    // mag01[x] = x * MATRIX_A  for x=0,1
 
-    if (mti >= N) { /* generate N words at one time */
+    if (mti >= N) { // generate N words at one time
         int kk;
 
-        if (mti == N+1)   /* if sgenrand() has not been called, */
-            sgenrand(4357); /* a default initial seed is used   */
+        if (mti == N+1)   // if sgenrand() has not been called,
+            sgenrand(4357); // a default initial seed is used
 
         for (kk=0;kk<N-M;kk++) {
             y = (mt[kk]&UPPER_MASK)|(mt[kk+1]&LOWER_MASK);
@@ -115,22 +115,22 @@ genrand()
 
         mti = 0;
     }
-  
+
     y = mt[mti++];
     y ^= TEMPERING_SHIFT_U(y);
     y ^= TEMPERING_SHIFT_S(y) & TEMPERING_MASK_B;
     y ^= TEMPERING_SHIFT_T(y) & TEMPERING_MASK_C;
     y ^= TEMPERING_SHIFT_L(y);
 
-    return y; 
+    return y;
 }
 
 #if 0
-/* This main() outputs first 1000 generated numbers.  */
+// This main() outputs first 1000 generated numbers.
 main()
-{ 
+{
     int i;
-    
+
     sgenrand(4357);
     for (i=0; i<1000; i++) {
         printf("%10lu ", genrand());

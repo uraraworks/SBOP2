@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapShadowEdit.h									 */
-/* 内容			:マップ影編集ダイアログクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/06/06													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapShadowEdit.h
+/// @brief マップ影編集ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/06/06
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -15,37 +13,35 @@ class CWndMapShadowAnimeList;
 class CWndMapPartsGrp;
 class CInfoMapShadow;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 class CDlgAdminMapShadowEdit : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapShadowEdit(CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual	~CDlgAdminMapShadowEdit();						/* デストラクタ */
+			CDlgAdminMapShadowEdit(CWnd* pParent = NULL); // コンストラクタ
+	virtual	~CDlgAdminMapShadowEdit(); // デストラクタ
 
-	int DoModal (CMgrData *pMgrData);								/* モーダルダイアログ表示 */
+	int DoModal(CMgrData *pMgrData); // モーダルダイアログ表示
 
 
 protected:
-	void	SetData				(void);					/* データを画面に反映 */
-	void	GetData				(void);					/* 画面からデータを取得 */
-	void	OnSelectAnime		(void);					/* コマ選択処理 */
-	void	RenewButtonState	(void);					/* ボタン状態の設定 */
+	void	SetData(void); // データを画面に反映
+	void	GetData(void); // 画面からデータを取得
+	void	OnSelectAnime(void); // コマ選択処理
+	void	RenewButtonState(void); // ボタン状態の設定
 
 
 public:
-	int						m_nSelectType,				/* どちらの画像を選択しているか */
-							m_nAnimeNo;					/* アニメーション中の番号 */
-	WORD					m_wShadowGrpID;				/* 影画像ID */
-	DWORD					m_dwTimeLastAnime;			/* 最後にアニメーションした時間 */
-	SIZE					m_sizeWindow;				/* 表示開始時のウィンドウサイズ */
-	CMgrData				*m_pMgrData;				/* データ管理 */
-	CMgrGrpData				*m_pMgrGrpData;				/* グラフィックデータ管理 */
-	CWndMapShadowAnimeList	*m_pWndMapShadowAnimeList;	/* マップ影アニメーション一覧ウィンドウ */
-	CInfoMapShadow			*m_pInfoMapShadow;			/* マップ影情報 */
-	CWndMapPartsGrp			*m_pWndMapShadowGrp;		/* マップ影画像一覧 */
+	int	m_nSelectType, // どちらの画像を選択しているか
+							m_nAnimeNo; // アニメーション中の番号
+	WORD	m_wShadowGrpID; // 影画像ID
+	DWORD	m_dwTimeLastAnime; // 最後にアニメーションした時間
+	SIZE	m_sizeWindow; // 表示開始時のウィンドウサイズ
+	CMgrData	*m_pMgrData; // データ管理
+	CMgrGrpData	*m_pMgrGrpData; // グラフィックデータ管理
+	CWndMapShadowAnimeList	*m_pWndMapShadowAnimeList; // マップ影アニメーション一覧ウィンドウ
+	CInfoMapShadow	*m_pInfoMapShadow; // マップ影情報
+	CWndMapPartsGrp	*m_pWndMapShadowGrp; // マップ影画像一覧
 
 
 
@@ -56,16 +52,16 @@ public:
 	CString	m_strCount;
 	CString	m_strNow;
 	CComboBox	m_cbGrpNo;
-	int		m_nGrpNo;
-	int		m_nLevel;
-	int		m_nViewTime;
+	int	m_nGrpNo;
+	int	m_nLevel;
+	int	m_nViewTime;
 	BOOL	m_bLight;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminMapShadowEdit)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -93,5 +89,3 @@ protected:
 };
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

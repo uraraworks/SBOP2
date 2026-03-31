@@ -141,4 +141,3 @@ std::string BuildForbiddenBody(const char *pszRequiredRole)
         return oss.str();
 }
 }
-

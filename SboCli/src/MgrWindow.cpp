@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:MgrWindow.cpp												 */
-/* 内容			:ウィンドウマネージャクラス 実装ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/11/03													 */
-/* ========================================================================= */
+﻿/// @file MgrWindow.cpp
+/// @brief ウィンドウマネージャクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/11/03
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include "Img32.h"
@@ -51,12 +49,6 @@
 #include "MgrWindow.h"
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::CMgrWindow											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2005/05/06														 */
-/* ========================================================================= */
-
 CMgrWindow::CMgrWindow()
 {
 	m_bDraw			= FALSE;
@@ -67,50 +59,26 @@ CMgrWindow::CMgrWindow()
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::~CMgrWindow										 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2005/05/06														 */
-/* ========================================================================= */
-
 CMgrWindow::~CMgrWindow()
 {
-	Destroy ();
+	Destroy();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2005/05/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::Create(
-	CMgrData	*pMgrData)		/* [in] データ管理 */
+	CMgrData *pMgrData)		// [in] データ管理
 {
 	m_pMgrData		= pMgrData;
-	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
-	m_pMgrKeyInput	= m_pMgrData->GetMgrKeyInput ();
+	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData();
+	m_pMgrKeyInput	= m_pMgrData->GetMgrKeyInput();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::Destroy											 */
-/* 内容		:破棄															 */
-/* 日付		:2005/05/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::Destroy(void)
 {
-	DeleteAll ();
+	DeleteAll();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::Update												 */
-/* 内容		:全てのウィンドウを更新											 */
-/* 日付		:2006/11/08														 */
-/* ========================================================================= */
 
 void CMgrWindow::Update(void)
 {
@@ -118,18 +86,12 @@ void CMgrWindow::Update(void)
 	PCWindowBase pWindow;
 
 	nCount = m_paWindow->size();
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pWindow = m_paWindow->at(i);
-		pWindow->Update ();
+		pWindow->Update();
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::Draw												 */
-/* 内容		:描画															 */
-/* 日付		:2005/05/06														 */
-/* ========================================================================= */
 
 void CMgrWindow::Draw(PCImg32 pDst)
 {
@@ -137,21 +99,15 @@ void CMgrWindow::Draw(PCImg32 pDst)
 	PCWindowBase pWindow;
 
 	nCount = m_paWindow->size();
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pWindow = m_paWindow->at(i);
-		if (pWindow->IsShow () == FALSE) {
+		if (pWindow->IsShow() == FALSE) {
 			continue;
 		}
-		pWindow->Draw (pDst);
+		pWindow->Draw(pDst);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::TimerProc											 */
-/* 内容		:時間処理														 */
-/* 日付		:2005/06/12														 */
-/* ========================================================================= */
 
 BOOL CMgrWindow::TimerProc(void)
 {
@@ -161,14 +117,14 @@ BOOL CMgrWindow::TimerProc(void)
 
 	bRet = FALSE;
 	nCount = m_paWindow->size();
-	for (i = nCount - 1; i >= 0; i --) {
+	for (i = nCount - 1; i >= 0; i--) {
 		pWindow = m_paWindow->at(i);
-		if (pWindow->IsDelete ()) {
-			Delete (pWindow->GetID ());
+		if (pWindow->IsDelete()) {
+			Delete(pWindow->GetID());
 			bRet = TRUE;
 
 		} else {
-			bRet |= pWindow->TimerProc ();
+			bRet |= pWindow->TimerProc();
 		}
 	}
 
@@ -180,33 +136,21 @@ BOOL CMgrWindow::TimerProc(void)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::KeyProc											 */
-/* 内容		:キー処理														 */
-/* 日付		:2005/05/06														 */
-/* ========================================================================= */
-
 void CMgrWindow::KeyProc(BYTE byEvent, BOOL bDown)
 {
 	int i, nCount;
 	PCWindowBase pWindow;
 
 	nCount = m_paWindow->size();
-	for (i = nCount - 1; i >= 0; i --) {
+	for (i = nCount - 1; i >= 0; i--) {
 		pWindow = m_paWindow->at(i);
-		if (pWindow->IsActive ()) {
-			pWindow->KeyProc (byEvent, bDown);
+		if (pWindow->IsActive()) {
+			pWindow->KeyProc(byEvent, bDown);
 			break;
 		}
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::DeleteAll											 */
-/* 内容		:全てのウィンドウを破棄											 */
-/* 日付		:2005/05/22														 */
-/* ========================================================================= */
 
 void CMgrWindow::DeleteAll(void)
 {
@@ -214,22 +158,16 @@ void CMgrWindow::DeleteAll(void)
 	PCWindowBase pTmp;
 
 	pTmp = NULL;
-	FreeInfo (m_paWindow, pTmp);
+	FreeInfo(m_paWindow, pTmp);
 	m_bDraw		= TRUE;
 	m_bKeyInput	= FALSE;
 
 	if (m_pMgrData) {
-		hWndMain = m_pMgrData->GetMainWindow ();
-		SetFocus (hWndMain);
+		hWndMain = m_pMgrData->GetMainWindow();
+		SetFocus(hWndMain);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::Delete												 */
-/* 内容		:指定IDのウィンドウを削除										 */
-/* 日付		:2005/06/16														 */
-/* ========================================================================= */
 
 void CMgrWindow::Delete(int nID)
 {
@@ -237,31 +175,25 @@ void CMgrWindow::Delete(int nID)
 	PCWindowBase pWindow, pChild;
 
 	nCount = m_paWindow->size();
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pWindow = m_paWindow->at(i);
-		if (pWindow->GetID () == nID) {
+		if (pWindow->GetID() == nID) {
 			nCount2 = pWindow->m_apChild.size();
-			for (j = 0; j < nCount2; j ++) {
+			for (j = 0; j < nCount2; j++) {
 				pChild = pWindow->m_apChild[j];
 				pChild->m_bDelete = TRUE;
 			}
 
-			SAFE_DELETE (pWindow);
-			m_paWindow->erase (m_paWindow->begin () + i);
-			SetActive ();
+			SAFE_DELETE(pWindow);
+			m_paWindow->erase(m_paWindow->begin() + i);
+			SetActive();
 			m_bDraw = TRUE;
-			m_pMgrKeyInput->Reset ();
+			m_pMgrKeyInput->Reset();
 			break;
 		}
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::GetWindow											 */
-/* 内容		:指定IDのウィンドウを取得										 */
-/* 日付		:2005/06/11														 */
-/* ========================================================================= */
 
 CWindowBase *CMgrWindow::GetWindow(int nID)
 {
@@ -271,9 +203,9 @@ CWindowBase *CMgrWindow::GetWindow(int nID)
 	pRet	= NULL;
 	nCount	= m_paWindow->size();
 
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pTmp = m_paWindow->at(i);
-		if (pTmp->GetID () == nID) {
+		if (pTmp->GetID() == nID) {
 			pRet = pTmp;
 			break;
 		}
@@ -282,12 +214,6 @@ CWindowBase *CMgrWindow::GetWindow(int nID)
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::IsKeyInput											 */
-/* 内容		:キー処理の必要があるか判定										 */
-/* 日付		:2005/06/26														 */
-/* ========================================================================= */
 
 BOOL CMgrWindow::IsKeyInput(void)
 {
@@ -302,9 +228,9 @@ BOOL CMgrWindow::IsKeyInput(void)
 		goto Exit;
 	}
 
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pTmp = m_paWindow->at(i);
-		if (pTmp->IsActive ()) {
+		if (pTmp->IsActive()) {
 			bRet = TRUE;
 			break;
 		}
@@ -315,726 +241,498 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowLOGIN									 */
-/* 内容		:ログイン情報													 */
-/* 日付		:2005/05/06														 */
-/* ========================================================================= */
-
 void CMgrWindow::MakeWindowLOGIN(void)
 {
 	PCWindowLOGIN pWindowNew;
 
 	pWindowNew = new CWindowLOGIN;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowMSG										 */
-/* 内容		:メッセージ表示													 */
-/* 日付		:2005/06/11														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowMSG(LPCSTR pszMsg, DWORD dwTime, int nType)
 {
 	PCWindowMSG pWindowNew;
 	PCWindowBase pWindowTmp;
 
-	pWindowTmp = GetWindow (WINDOWTYPE_MSG);
+	pWindowTmp = GetWindow(WINDOWTYPE_MSG);
 	if (pWindowTmp) {
 		pWindowNew = (PCWindowMSG)pWindowTmp;
 
 	} else {
 		pWindowNew = new CWindowMSG;
-		pWindowNew->Create (m_pMgrData);
-		m_paWindow->Add (pWindowNew);
+		pWindowNew->Create(m_pMgrData);
+		m_paWindow->Add(pWindowNew);
 	}
 
-	pWindowNew->SetMsg (pszMsg, dwTime, nType);
+	pWindowNew->SetMsg(pszMsg, dwTime, nType);
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowLOGINMENU								 */
-/* 内容		:メニュー														 */
-/* 日付		:2006/11/05														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowLOGINMENU(void)
 {
 	PCWindowLOGINMENU pWindowNew;
 
 	pWindowNew = new CWindowLOGINMENU;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowCHARNAME									 */
-/* 内容		:キャラ名入力													 */
-/* 日付		:2006/11/08														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHARNAME(void)
 {
 	PCWindowCHARNAME pWindowNew;
 
 	pWindowNew = new CWindowCHARNAME;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSEX										 */
-/* 内容		:性別															 */
-/* 日付		:2006/11/14														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSEX(void)
 {
 	PCWindowSEX pWindowNew;
 
 	pWindowNew = new CWindowSEX;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowACCOUNTINFO								 */
-/* 内容		:アカウント情報													 */
-/* 日付		:2006/12/31														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowACCOUNTINFO(void)
 {
 	PCWindowACCOUNTINFO pWindowNew;
 
 	pWindowNew = new CWindowACCOUNTINFO;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSTATUS									 */
-/* 内容		:強さ															 */
-/* 日付		:2005/06/26														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSTATUS(BOOL bShow)
 {
 	PCWindowSTATUS pWindowNew;
 
 	pWindowNew = new CWindowSTATUS;
-	pWindowNew->Create (m_pMgrData);
-	pWindowNew->SetShow (bShow);
-	m_paWindow->Add (pWindowNew);
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetShow(bShow);
+	m_paWindow->Add(pWindowNew);
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowCHAT										 */
-/* 内容		:チャット入力													 */
-/* 日付		:2007/02/03														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHAT(void)
 {
 	PCWindowCHAT pWindowNew;
 
 	pWindowNew = new CWindowCHAT;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowFAMILYTYPE								 */
-/* 内容		:種族選択														 */
-/* 日付		:2007/04/07														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowFAMILYTYPE(void)
 {
 	PCWindowFAMILYTYPE pWindowNew;
 
 	pWindowNew = new CWindowFAMILYTYPE;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowHAIRTYPE									 */
-/* 内容		:髪型選択														 */
-/* 日付		:2007/04/08														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowHAIRTYPE(void)
 {
 	PCWindowHAIRTYPE pWindowNew;
 
 	pWindowNew = new CWindowHAIRTYPE;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowHAIRCOLOR								 */
-/* 内容		:髪色選択														 */
-/* 日付		:2007/04/08														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowHAIRCOLOR(void)
 {
 	PCWindowHAIRCOLOR pWindowNew;
 
 	pWindowNew = new CWindowHAIRCOLOR;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowEYECOLOR									 */
-/* 内容		:目色選択														 */
-/* 日付		:2007/04/08														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowEYECOLOR(void)
 {
 	PCWindowEYECOLOR pWindowNew;
 
 	pWindowNew = new CWindowEYECOLOR;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSTYLESELECT								 */
-/* 内容		:容姿選択														 */
-/* 日付		:2007/04/10														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSTYLESELECT(void)
 {
 	PCWindowSTYLESELECT pWindowNew;
 
 	pWindowNew = new CWindowSTYLESELECT;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowNAMEINPUT								 */
-/* 内容		:名前入力														 */
-/* 日付		:2007/04/10														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowNAMEINPUT(void)
 {
 	PCWindowNAMEINPUT pWindowNew;
 
 	pWindowNew = new CWindowNAMEINPUT;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSYSTEMMENU								 */
-/* 内容		:システムメニュー												 */
-/* 日付		:2007/06/19														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSYSTEMMENU(void)
 {
 	PCWindowSYSTEMMENU pWindowNew;
 
 	pWindowNew = new CWindowSYSTEMMENU;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSETCOLOR									 */
-/* 内容		:名前と発言色の設定												 */
-/* 日付		:2007/06/20														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETCOLOR(void)
 {
 	PCWindowSETCOLOR pWindowNew;
 
 	pWindowNew = new CWindowSETCOLOR;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSETBGMVOLUME								 */
-/* 内容		:BGM音量の設定													 */
-/* 日付		:2007/06/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETBGMVOLUME(void)
 {
 	PCWindowSETBGMVOLUME pWindowNew;
 
 	pWindowNew = new CWindowSETBGMVOLUME;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSETSOUNDVOLUME							 */
-/* 内容		:効果音音量の設定												 */
-/* 日付		:2007/06/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETSOUNDVOLUME(void)
 {
 	PCWindowSETSOUNDVOLUME pWindowNew;
 
 	pWindowNew = new CWindowSETSOUNDVOLUME;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSETDRAWMODE								 */
-/* 内容		:表示内容の設定													 */
-/* 日付		:2007/07/24														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSETDRAWMODE(void)
 {
 	PCWindowSETDRAWMODE pWindowNew;
 
 	pWindowNew = new CWindowSETDRAWMODE;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowITEMMENU									 */
-/* 内容		:アイテムメニュー												 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowITEMMENU(void)
 {
 	PCWindowITEMMENU pWindowNew;
 
 	pWindowNew = new CWindowITEMMENU;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowITEMMENU_SELECT							 */
-/* 内容		:アイテムどうするかメニュー										 */
-/* 日付		:2007/08/13														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowITEMMENU_SELECT(int nPos, DWORD dwItemID)
 {
 	PCWindowITEMMENU_SELECT pWindowNew;
 
 	pWindowNew = new CWindowITEMMENU_SELECT;
-	pWindowNew->Create (m_pMgrData);
-	pWindowNew->SetItemID (nPos, dwItemID);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetItemID(nPos, dwItemID);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION									 */
-/* 内容		:オプション														 */
-/* 日付		:2008/06/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION(void)
 {
 	PCWindowOPTION pWindowNew;
 
 	pWindowNew = new CWindowOPTION;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION_VIEWSET							 */
-/* 内容		:オプション-表示設定											 */
-/* 日付		:2008/06/27														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_VIEWSET(void)
 {
 	PCWindowOPTION_VIEWSET pWindowNew;
 
 	pWindowNew = new CWindowOPTION_VIEWSET;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION_VOLUMESET							 */
-/* 内容		:オプション-音量設定											 */
-/* 日付		:2008/06/28														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_VOLUMESET(void)
 {
 	PCWindowOPTION_VOLUMESET pWindowNew;
 
 	pWindowNew = new CWindowOPTION_VOLUMESET;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION_INPUTSET							 */
-/* 内容		:オプション-入力設定											 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_INPUTSET(void)
 {
 	PCWindowOPTION_INPUTSET pWindowNew;
 
 	pWindowNew = new CWindowOPTION_INPUTSET;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION_TASKBAR							 */
-/* 内容		:オプション(発言時にタスクバーチカチカ)							 */
-/* 日付		:2008/06/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_TASKBAR(void)
 {
 	PCWindowOPTION_TASKBAR pWindowNew;
 
 	pWindowNew = new CWindowOPTION_TASKBAR;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE				 */
-/* 内容		:オプション-入力設定-入力デバイスの設定							 */
-/* 日付		:2008/07/12														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE(void)
 {
 	PCWindowOPTION_INPUTSET_SETDEVICE pWindowNew;
 
 	pWindowNew = new CWindowOPTION_INPUTSET_SETDEVICE;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION_ACTIONSET							 */
-/* 内容		:オプション-動作設定											 */
-/* 日付		:2008/07/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_ACTIONSET(void)
 {
 	PCWindowOPTION_ACTIONSET pWindowNew;
 
 	pWindowNew = new CWindowOPTION_ACTIONSET;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER				 */
-/* 内容		:オプション-動作設定-おひるねタイマーの設定						 */
-/* 日付		:2008/07/21														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER(void)
 {
 	PCWindowOPTION_ACTIONSET_SLEEPTIMER pWindowNew;
 
 	pWindowNew = new CWindowOPTION_ACTIONSET_SLEEPTIMER;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowCOMMANDMENU								 */
-/* 内容		:コマンドメニュー												 */
-/* 日付		:2008/08/02														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowCOMMANDMENU(void)
 {
 	PCWindowCOMMANDMENU pWindowNew;
 
 	pWindowNew = new CWindowCOMMANDMENU;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowCHAR_STATUS								 */
-/* 内容		:キャラ-ステータス												 */
-/* 日付		:2008/10/27														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHAR_STATUS(void)
 {
 	PCWindowCHAR_STATUS pWindowNew;
 
 	pWindowNew = new CWindowCHAR_STATUS;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowCHAR_STATUS4								 */
-/* 内容		:キャラ-ステータス4												 */
-/* 日付		:2009/02/15														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowCHAR_STATUS4(void)
 {
 	PCWindowCHAR_STATUS4 pWindowNew;
 
 	pWindowNew = new CWindowCHAR_STATUS4;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowTEXTMSG									 */
-/* 内容		:テキストメッセージ												 */
-/* 日付		:2008/11/22														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg)
 {
 	PCWindowTEXTMSG pWindowNew;
 
 	pWindowNew = new CWindowTEXTMSG;
-	pWindowNew->Create (m_pMgrData);
-	pWindowNew->SetTitle (pszTitle);
-	pWindowNew->SetName (pszName);
-	pWindowNew->SetMsg (pszMsg);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetTitle(pszTitle);
+	pWindowNew->SetName(pszName);
+	pWindowNew->SetMsg(pszMsg);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowTEXTMSG									 */
-/* 内容		:テキストメッセージ												 */
-/* 日付		:2008/12/28														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo)
 {
 	PCWindowTEXTMSG pWindowNew;
 
 	pWindowNew = new CWindowTEXTMSG;
-	pWindowNew->Create (m_pMgrData);
-	pWindowNew->SetTitle (pszTitle);
-	pWindowNew->SetName (pszName);
-	pWindowNew->SetTalkEvent (pInfo);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetTitle(pszTitle);
+	pWindowNew->SetName(pszName);
+	pWindowNew->SetTalkEvent(pInfo);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSWOON									 */
-/* 内容		:気絶メニュー													 */
-/* 日付		:2008/12/02														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSWOON(void)
 {
 	PCWindowSWOON pWindowNew;
 
 	pWindowNew = new CWindowSWOON;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowSKILLMENU								 */
-/* 内容		:スキルメニュー													 */
-/* 日付		:2008/12/31														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowSKILLMENU(int nType/*-1*/)
 {
 	PCWindowSKILLMENU pWindowNew;
 
 	pWindowNew = new CWindowSKILLMENU;
-	pWindowNew->Create (m_pMgrData);
+	pWindowNew->Create(m_pMgrData);
 	if (nType != -1) {
-		pWindowNew->SetType (nType);
+		pWindowNew->SetType(nType);
 	}
-	m_paWindow->Add (pWindowNew);
-	SetActive ();
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::MakeWindowPLACEINFORMATION							 */
-/* 内容		:場所情報														 */
-/* 日付		:2009/02/11														 */
-/* ========================================================================= */
 
 void CMgrWindow::MakeWindowPLACEINFORMATION(void)
 {
 	PCWindowPLACEINFORMATION pWindowNew;
 
 	pWindowNew = new CWindowPLACEINFORMATION;
-	pWindowNew->Create (m_pMgrData);
-	m_paWindow->Add (pWindowNew);
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
 
 	m_bDraw = TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrWindow::SetActive											 */
-/* 内容		:アクティブなウィンドウの設定									 */
-/* 日付		:2005/06/16														 */
-/* ========================================================================= */
 
 void CMgrWindow::SetActive(void)
 {
@@ -1049,16 +747,14 @@ void CMgrWindow::SetActive(void)
 		return;
 	}
 
-	for (i = nCount - 1; i >= 0; i --) {
+	for (i = nCount - 1; i >= 0; i--) {
 		pWindow = m_paWindow->at(i);
-		if (pWindow->IsInput () == FALSE) {
+		if (pWindow->IsInput() == FALSE) {
 			continue;
 		}
-		pWindow->SetActive (1 - bSet);
+		pWindow->SetActive(1 - bSet);
 		bSet = TRUE;
 	}
 
 	m_bKeyInput = bSet;
 }
-
-/* Copyright(C)URARA-works 2006 */

@@ -86,4 +86,3 @@ HttpHeader *HttpResponse::FindHeaderInternal(const char *pszName)
         }
         return NULL;
 }
-

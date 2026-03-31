@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminTalkSet.h											 */
-/* 内容			:会話データ設定ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/11/22													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminTalkSet.h
+/// @brief 会話データ設定ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/11/22
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,20 +10,16 @@
 
 class CInfoTalkEvent;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminTalkSet : public CDlgAdminBase
 {
 public:
-			CDlgAdminTalkSet(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminTalkSet();						/* デストラクタ */
-
+			CDlgAdminTalkSet(CWnd* pParent = NULL);	// コンストラクタ
+	virtual ~CDlgAdminTalkSet();	// デストラクタ
 
 public:
-	CInfoTalkEvent		*m_pInfo;		/* 編集中の会話イベント */
-
+	CInfoTalkEvent	*m_pInfo;	// 編集中の会話イベント
 
 public:
 	void OnOK();
@@ -37,7 +31,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminTalkSet)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -51,4 +45,3 @@ public:
 
 //{{AFX_INSERT_LOCATION}}
 
-/* Copyright(C)URARA-works 2008 */

@@ -1,35 +1,19 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:CryptUtil.cpp												 */
-/* 内容			:暗号復号クラス 実装ファイル								 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/07/02													 */
-/* ========================================================================= */
+﻿/// @file CryptUtil.cpp
+/// @brief 暗号復号クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/07/02
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include <stdlib.h>
 #include <strsafe.h>
 #include "CryptUtil.h"
 
-
-/* ========================================================================= */
-/* 関数名	:CCryptUtil::CCryptUtil											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/07/02														 */
-/* ========================================================================= */
-
 CCryptUtil::CCryptUtil()
 {
 	m_pCryptData = NULL;
-	Init ();
+	Init();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CCryptUtil::~CCryptUtil										 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/07/02														 */
-/* ========================================================================= */
 
 CCryptUtil::~CCryptUtil()
 {
@@ -39,18 +23,11 @@ CCryptUtil::~CCryptUtil()
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CCryptUtil::Crypt												 */
-/* 内容		:暗号化															 */
-/* 日付		:2007/07/02														 */
-/* ========================================================================= */
-
 void CCryptUtil::Crypt(
-	PBYTE pSrc,			/* [in]  暗号化するデータ */
-	PBYTE pDst,			/* [out] 暗号化したデータ */
-	DWORD dwSize,		/* [in]  データサイズ */
-	int nKeyNo)			/* [in]  初期化位置 */
+	PBYTE pSrc,	// [in]  暗号化するデータ
+	PBYTE pDst,	// [out] 暗号化したデータ
+	DWORD dwSize,	// [in]  データサイズ
+	int nKeyNo)	// [in]  初期化位置
 {
 	DWORD i;
 
@@ -59,78 +36,49 @@ void CCryptUtil::Crypt(
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CCryptUtil::UnCrypt											 */
-/* 内容		:復号化															 */
-/* 日付		:2007/07/02														 */
-/* ========================================================================= */
-
 void CCryptUtil::UnCrypt(
-	PBYTE pSrc,			/* [in]  復号化するデータ */
-	PBYTE pDst,			/* [out] 復号化したデータ */
-	DWORD dwSize,		/* [in] データサイズ */
-	int nKeyNo)			/* [in] 初期化位置 */
+	PBYTE pSrc,	// [in]  復号化するデータ
+	PBYTE pDst,	// [out] 復号化したデータ
+	DWORD dwSize,	// [in] データサイズ
+	int nKeyNo)	// [in] 初期化位置
 {
-	Crypt (pSrc, pDst, dwSize, nKeyNo);
+	Crypt(pSrc, pDst, dwSize, nKeyNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CCryptUtil::CryptStr											 */
-/* 内容		:暗号化(文字列)													 */
-/* 日付		:2007/07/02														 */
-/* メモ		:pDstは dwSize * 3 + 1バイト以上必要							 */
-/* ========================================================================= */
-
 void CCryptUtil::CryptStr(
-	LPCSTR pszSrc,		/* [in]  暗号化するデータ */
-	LPSTR pszDst,		/* [out] 暗号化したデータ */
-	int nKeyNo)			/* [in]  初期化位置 */
+	LPCSTR pszSrc,	// [in]  暗号化するデータ
+	LPSTR pszDst,	// [out] 暗号化したデータ
+	int nKeyNo)	// [in]  初期化位置
 {
 	int i, nLen;
 
-	strcpy ((LPSTR)pszDst, "");
+	strcpy((LPSTR)pszDst, "");
 
-	nLen = strlen (pszSrc);
+	nLen = strlen(pszSrc);
         for (i = 0; i < nLen; i ++) {
-                StringCchPrintfA (&pszDst[i * 2], 3, "%02X", (BYTE)pszSrc[i] ^ m_pCryptData[nKeyNo % 256]);
+                StringCchPrintfA(&pszDst[i * 2], 3, "%02X", (BYTE)pszSrc[i] ^ m_pCryptData[nKeyNo % 256]);
         }
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CCryptUtil::UnCryptStr											 */
-/* 内容		:復号化(文字列)													 */
-/* 日付		:2007/07/02														 */
-/* ========================================================================= */
-
 void CCryptUtil::UnCryptStr(
-	LPCSTR pszSrc,		/* [in]  復号化するデータ */
-	LPSTR pszDst,		/* [out] 復号化したデータ */
-	int nKeyNo)			/* [in] 初期化位置 */
+	LPCSTR pszSrc,	// [in]  復号化するデータ
+	LPSTR pszDst,	// [out] 復号化したデータ
+	int nKeyNo)	// [in] 初期化位置
 {
 	int i, nLen, nPos;
 	char szTmp[3];
 
 	nPos = 0;
-	strcpy ((LPSTR)pszDst, "");
+	strcpy((LPSTR)pszDst, "");
 	szTmp[2] = 0;
 
-	nLen = strlen (pszSrc);
+	nLen = strlen(pszSrc);
 	for (i = 0; i < nLen; i += 2, nPos ++) {
-		CopyMemory (szTmp, &pszSrc[i], 2);
-		pszDst[nPos] = ((BYTE)strtol (szTmp, NULL, 16) ^ m_pCryptData[nKeyNo % 256]);
+		CopyMemory(szTmp, &pszSrc[i], 2);
+		pszDst[nPos] = ((BYTE)strtol(szTmp, NULL, 16) ^ m_pCryptData[nKeyNo % 256]);
 	}
 	pszDst[nPos] = 0;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CCryptUtil::Init												 */
-/* 内容		:初期化															 */
-/* 日付		:2007/07/02														 */
-/* ========================================================================= */
 
 void CCryptUtil::Init(void)
 {
@@ -181,4 +129,3 @@ void CCryptUtil::Init(void)
 	}
 }
 
-/* Copyright(C)URARA-works 2007 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:WindowSEX.cpp												 */
-/* 内容			:性別ウィンドウクラス 実装ファイル							 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/11/14													 */
-/* ========================================================================= */
+﻿/// @file WindowSEX.cpp
+/// @brief 性別ウィンドウクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/11/14
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include "Img32.h"
@@ -14,18 +12,12 @@
 #include "MgrSound.h"
 #include "WindowSEX.h"
 
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::CWindowSEX											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2005/06/22														 */
-/* ========================================================================= */
-
 CWindowSEX::CWindowSEX()
 {
-	m_nPos			= 0;
-	m_nPosMax		= 1;
-	m_bInput		= TRUE;
-	m_nID			= WINDOWTYPE_SEX;
+	m_nPos	= 0;
+	m_nPosMax	= 1;
+	m_bInput	= TRUE;
+	m_nID	= WINDOWTYPE_SEX;
 	m_ptViewPos.x	= 88;
 	m_ptViewPos.y	= 160;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 6;
@@ -33,39 +25,21 @@ CWindowSEX::CWindowSEX()
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::~CWindowSEX										 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2005/06/22														 */
-/* ========================================================================= */
-
 CWindowSEX::~CWindowSEX()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2006/11/14														 */
-/* ========================================================================= */
-
 void CWindowSEX::Create(CMgrData *pMgrData)
 {
-	CWindowBase::Create (pMgrData);
+	CWindowBase::Create(pMgrData);
 
-	m_pDib->Create (m_sizeWindow.cx, m_sizeWindow.cy);
-	m_pDib->SetColorKey (0);
+	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
+	m_pDib->SetColorKey(0);
 
-	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::Draw												 */
-/* 内容		:描画															 */
-/* 日付		:2005/06/22														 */
-/* ========================================================================= */
 
 void CWindowSEX::Draw(PCImg32 pDst)
 {
@@ -77,33 +51,27 @@ void CWindowSEX::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	DrawFrame ();
+	DrawFrame();
 
-	clText		= RGB (255, 127, 53);
-	hDC			= m_pDib->Lock ();
-	hFontOld	= (HFONT)SelectObject (hDC, m_hFont14);
-	SetBkMode (hDC, TRANSPARENT);
+	clText	= RGB(255, 127, 53);
+	hDC	= m_pDib->Lock();
+	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
+	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut4 (hDC, 48, 8, _T("性別"),	clText);
-	TextOut2 (hDC, 40, 16 + 16 * 1,		_T("♂ 男の子"),	clText);
-	TextOut2 (hDC, 40, 16 + 16 * 2 + 8,	_T("♀ 女の子"),	clText);
+	TextOut4(hDC, 48, 8, _T("性別"),	clText);
+	TextOut2(hDC, 40, 16 + 16 * 1,	_T("♂ 男の子"),	clText);
+	TextOut2(hDC, 40, 16 + 16 * 2 + 8,	_T("♀ 女の子"),	clText);
 
-	SelectObject (hDC, hFontOld);
-	m_pDib->Unlock ();
+	SelectObject(hDC, hFontOld);
+	m_pDib->Unlock();
 
-	DrawCursor (8, 32 + 24 * m_nPos);
-	m_dwTimeDrawStart = timeGetTime ();
+	DrawCursor(8, 32 + 24 * m_nPos);
+	m_dwTimeDrawStart = timeGetTime();
 
 Exit:
-	pDst->Blt (m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
+	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::TimerProc											 */
-/* 内容		:時間処理														 */
-/* 日付		:2005/06/22														 */
-/* ========================================================================= */
 
 BOOL CWindowSEX::TimerProc(void)
 {
@@ -113,7 +81,7 @@ BOOL CWindowSEX::TimerProc(void)
 	bRet = FALSE;
 
 	nCursorAnimeBack = m_nCursorAnime;
-	CWindowBase::TimerProc ();
+	CWindowBase::TimerProc();
 	if (nCursorAnimeBack == m_nCursorAnime) {
 		goto Exit;
 	}
@@ -125,12 +93,6 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::SetType											 */
-/* 内容		:性別を設定														 */
-/* 日付		:2007/04/18														 */
-/* ========================================================================= */
-
 void CWindowSEX::SetType(int nSex)
 {
 	if (nSex == SEX_FEMALE) {
@@ -138,15 +100,9 @@ void CWindowSEX::SetType(int nSex)
 	} else {
 		m_nPos = 0;
 	}
-	Redraw ();
+	Redraw();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::GetType											 */
-/* 内容		:性別を取得														 */
-/* 日付		:2005/06/23														 */
-/* ========================================================================= */
 
 int CWindowSEX::GetType(void)
 {
@@ -161,12 +117,6 @@ int CWindowSEX::GetType(void)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::OnUp												 */
-/* 内容		:キーハンドラ(↑)												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 BOOL CWindowSEX::OnUp(void)
 {
 	BOOL bRet;
@@ -177,20 +127,14 @@ BOOL CWindowSEX::OnUp(void)
 		goto Exit;
 	}
 	m_nPos --;
-	m_pMgrSound->PlaySound (SOUNDID_CURSORMOVE);
-	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
+	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
 
 	bRet = TRUE;
 Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::OnDown												 */
-/* 内容		:キーハンドラ(↓)												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CWindowSEX::OnDown(void)
 {
@@ -202,8 +146,8 @@ BOOL CWindowSEX::OnDown(void)
 		goto Exit;
 	}
 	m_nPos ++;
-	m_pMgrSound->PlaySound (SOUNDID_CURSORMOVE);
-	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
+	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
 
 	bRet = TRUE;
 Exit:
@@ -211,43 +155,25 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::OnLeft												 */
-/* 内容		:キーハンドラ(←)												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
-
 BOOL CWindowSEX::OnLeft(void)
 {
 	m_nPos = 0;
-	m_pMgrSound->PlaySound (SOUNDID_CURSORMOVE);
-	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
+	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::OnRight											 */
-/* 内容		:キーハンドラ(→)												 */
-/* 日付		:2005/06/17														 */
-/* ========================================================================= */
 
 BOOL CWindowSEX::OnRight(void)
 {
 	m_nPos = m_nPosMax;
-	m_pMgrSound->PlaySound (SOUNDID_CURSORMOVE);
-	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
+	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::OnX												 */
-/* 内容		:キーハンドラ(X)												 */
-/* 日付		:2005/06/21														 */
-/* ========================================================================= */
 
 BOOL CWindowSEX::OnX(BOOL bDown)
 {
@@ -259,22 +185,16 @@ BOOL CWindowSEX::OnX(BOOL bDown)
 		goto Exit;
 	}
 
-	pMgrWindow = m_pMgrData->GetMgrWindow ();
+	pMgrWindow = m_pMgrData->GetMgrWindow();
 
-	m_pMgrSound->PlaySound (SOUNDID_OK_PI73);
-	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, 0);
+	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
+	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 0);
 
 	bRet = TRUE;
 Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWindowSEX::OnZ												 */
-/* 内容		:キーハンドラ(Z)												 */
-/* 日付		:2005/06/22														 */
-/* ========================================================================= */
 
 BOOL CWindowSEX::OnZ(BOOL bDown)
 {
@@ -285,13 +205,11 @@ BOOL CWindowSEX::OnZ(BOOL bDown)
 		goto Exit;
 	}
 
-	m_pMgrSound->PlaySound (SOUNDID_CANCEL);
-	PostMessage (m_hWndMain, WM_WINDOWMSG, m_nID, -1);
+	m_pMgrSound->PlaySound(SOUNDID_CANCEL);
+	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, -1);
 	m_bDelete = TRUE;
 
 	bRet = TRUE;
 Exit:
 	return bRet;
 }
-
-/* Copyright(C)URARA-works 2006 */

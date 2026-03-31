@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:WndMapShadowGrp.h											 */
-/* 内容			:マップ影画像一覧スタティックコントロールクラス 定義ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/06/06													 */
-/* ========================================================================= */
+﻿/// @file WndMapShadowGrp.h
+/// @brief マップ影画像一覧スタティックコントロールクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/06/06
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -12,32 +10,30 @@ class CMgrData;
 class CMgrGrpData;
 class CImg32;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CWndMapShadowGrp : public CWnd
 {
 public:
-			CWndMapShadowGrp();						/* コンストラクタ */
-	virtual ~CWndMapShadowGrp();					/* デストラクタ */
+			CWndMapShadowGrp();						// コンストラクタ
+	virtual ~CWndMapShadowGrp();					// デストラクタ
 
-	BOOL	Create	(CWnd *pParent, CMgrData *pMgrData, int nResourceID);	/* 作成 */
-	void	Destroy	(void);									/* 破棄 */
-
-
-protected:
-	void	MakeImage	(void);			/* 画像を作成 */
+	BOOL	Create(CWnd *pParent, CMgrData *pMgrData, int nResourceID);	// 作成
+	void	Destroy(void);									// 破棄
 
 
 protected:
-	int			m_nPos;							/* 縦スクロール位置 */
-	CWnd		*m_pWndParent;					/* 親ウィンドウ */
-	CImg32		*m_pImgShadow;					/* バックバッファ */
-	CPoint		m_ptCursor;						/* カーソルのあるパーツ位置 */
+	void	MakeImage(void);			// 画像を作成
 
-	CMgrData		*m_pMgrData;				/* データ管理 */
-	CMgrGrpData		*m_pMgrGrpData;				/* グラフィックデータ管理 */
+
+protected:
+	int			m_nPos;							// 縦スクロール位置
+	CWnd		*m_pWndParent;					// 親ウィンドウ
+	CImg32		*m_pImgShadow;					// バックバッファ
+	CPoint		m_ptCursor;						// カーソルのあるパーツ位置
+
+	CMgrData		*m_pMgrData;				// データ管理
+	CMgrGrpData		*m_pMgrGrpData;				// グラフィックデータ管理
 
 
 
@@ -45,7 +41,7 @@ public:
 	//{{AFX_VIRTUAL(CWndMapShadowGrp)
 	public:
 	protected:
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -64,5 +60,3 @@ protected:
 } CWndMapShadowGrp, *PCWndMapShadowGrp;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

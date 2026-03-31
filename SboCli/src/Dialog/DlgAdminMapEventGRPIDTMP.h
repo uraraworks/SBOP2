@@ -1,27 +1,23 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEventGRPIDTMP.h									 */
-/* 内容			:マップイベント(一時画像設定)ダイアログクラス 定義ファイル	 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/10/12													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEventGRPIDTMP.h
+/// @brief マップイベント(一時画像設定)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/10/12
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "DlgAdminMapEventNONE.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapEventGRPIDTMP : public CDlgAdminMapEventNONE
 {
 public:
-			CDlgAdminMapEventGRPIDTMP(CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual ~CDlgAdminMapEventGRPIDTMP();						/* デストラクタ */
+			CDlgAdminMapEventGRPIDTMP(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapEventGRPIDTMP(); // デストラクタ
 
-	void	Set		(CInfoMapEventBase *pSrc);							/* 設定 */
-	void	Get		(CInfoMapEventBase *pDst);							/* 取得 */
+	void	Set(CInfoMapEventBase *pSrc); // 設定
+	void	Get(CInfoMapEventBase *pDst); // 取得
 
 
 
@@ -47,5 +43,3 @@ public:
 } CDlgAdminMapEventGRPIDTMP, *PCDlgAdminMapEventGRPIDTMP;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

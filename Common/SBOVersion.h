@@ -1,45 +1,37 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:SBOVersion.h												 */
-/* 内容			:バージョン定義ファイル										 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/06/07													 */
-/* ========================================================================= */
+﻿/// @file SBOVersion.h
+/// @brief バージョン定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/06/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
-/* ========================================================================= */
-/* 定数定義																	 */
-/* ========================================================================= */
+// 定数定義
 
-#define VERTEXT					"0.043"								/* バージョン */
-#define VERSIONVAL				(0x00004300)						/* バージョン番号 */
-#define DLLVER					"1"									/* DLLバージョン */
-#define GRPDATADLLVER			"4"									/* グラフィックデータDLLバージョン */
+#define VERTEXT				"0.043"								// バージョン
+#define VERSIONVAL			(0x00004300)						// バージョン番号
+#define DLLVER				"1"									// DLLバージョン
+#define GRPDATADLLVER		"4"									// グラフィックデータDLLバージョン
 
-/* ※注意[FILEVERSION]・[PRODUCTVERSION]を変更する必要があります */
+// ※注意[FILEVERSION]・[PRODUCTVERSION]を変更する必要があります
 
-/****************************************************************************
-	定数の定義
-****************************************************************************/
+// 定数の定義
 
-/* ファイルフラグ定数 */
+// ファイルフラグ定数
 #ifdef _DEBUG
 #define FILEFLAGS_VALUE		(0x1L)
 #else
 #define	FILEFLAGS_VALUE		(0x0L)
 #endif
 
-/* ファイルタイプ定数 */
+// ファイルタイプ定数
 #if(defined(_USRDLL) || defined(_WINDLL))
 #define	FILETYPE_VALUE		(0x2L)
 #else
 #define	FILETYPE_VALUE		(0x1L)
 #endif
 
-/****************************************************************************
-	バージョンリソース定義マクロ
-****************************************************************************/
+// バージョンリソース定義マクロ
 
 #define	SBO_VERSION(OriginalFilename)																	\
 																										\
@@ -75,5 +67,3 @@
 			VALUE "Translation", 0x411, 1200															\
 		END																								\
 	END
-
-/* Copyright(C)URARA-works 2008 */

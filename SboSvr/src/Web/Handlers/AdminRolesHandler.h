@@ -54,4 +54,3 @@ private:
         void EmitAuditTrace(DWORD dwAccountId, const std::vector<std::string> &roles, const std::string &comment, const std::string &actorLoginId) const;
         CMgrData *m_pMgrData;
 };
-

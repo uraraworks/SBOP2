@@ -1,9 +1,7 @@
-/* Copyright(C)URARA-works 2025 */
-/* ========================================================================= */
-/* File        : SDLApp.cpp                                                    */
-/* Contents    : SDL application main loop                                     */
-/* Created     : 2025/06/01                                                    */
-/* ========================================================================= */
+/// @file SDLApp.cpp
+/// @brief SDL application main loop
+/// @date 2025/06/01
+/// @copyright Copyright(C)URARA-works 2025
 
 #include "stdafx.h"
 #include <SDL_syswm.h>
@@ -13,11 +11,9 @@
 #include "SboCli_priv.h"
 
 
-/* ========================================================================= */
-/* Constants                                                                  */
-/* ========================================================================= */
+// Constants
 
-/* Limit how many fixed updates run back-to-back when the client stalls. */
+// Limit how many fixed updates run back-to-back when the client stalls.
 #define MAX_FRAME_SKIP	5
 
 static HWND GetMainWindowHandle(SDL_Window *pWindow)
@@ -28,8 +24,8 @@ static HWND GetMainWindowHandle(SDL_Window *pWindow)
 		return NULL;
 	}
 
-	SDL_VERSION (&wmInfo.version);
-	if (!SDL_GetWindowWMInfo (pWindow, &wmInfo)) {
+	SDL_VERSION(&wmInfo.version);
+	if (!SDL_GetWindowWMInfo(pWindow, &wmInfo)) {
 		return NULL;
 	}
 
@@ -47,11 +43,11 @@ static BOOL IsMainWindowMessage(HWND hMainWnd, const MSG &msg)
 
 static BOOL ShouldSkipMainWindowInputMessage(HWND hMainWnd, const MSG &msg)
 {
-	if (!IsMainWindowMessage (hMainWnd, msg)) {
+	if (!IsMainWindowMessage(hMainWnd, msg)) {
 		return FALSE;
 	}
 
-	return IsSDLManagedInputWindowMessage (msg.message);
+	return IsSDLManagedInputWindowMessage(msg.message);
 }
 
 static BOOL ShouldBridgeWin32QuitMessage(HWND hMainWnd, const MSG &msg)
@@ -60,36 +56,22 @@ static BOOL ShouldBridgeWin32QuitMessage(HWND hMainWnd, const MSG &msg)
 		return TRUE;
 	}
 
-	if (!IsMainWindowMessage (hMainWnd, msg)) {
+	if (!IsMainWindowMessage(hMainWnd, msg)) {
 		return FALSE;
 	}
 
 	return (msg.message == WM_CLOSE) ? TRUE : FALSE;
 }
 
-/* ========================================================================= */
-/* Function    : CSDLApp::CSDLApp                                             */
-/* ========================================================================= */
-
 CSDLApp::CSDLApp()
 {
 	m_bInitialized = FALSE;
 }
 
-
-/* ========================================================================= */
-/* Function    : CSDLApp::~CSDLApp                                            */
-/* ========================================================================= */
-
 CSDLApp::~CSDLApp()
 {
-	Destroy ();
+	Destroy();
 }
-
-
-/* ========================================================================= */
-/* Function    : CSDLApp::Init                                                */
-/* ========================================================================= */
 
 BOOL CSDLApp::Init(void)
 {
@@ -97,9 +79,9 @@ BOOL CSDLApp::Init(void)
 		return TRUE;
 	}
 
-	SDL_SetMainReady ();
+	SDL_SetMainReady();
 
-	if (SDL_Init (SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
 		return FALSE;
 	}
 
@@ -107,25 +89,14 @@ BOOL CSDLApp::Init(void)
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* Function    : CSDLApp::Destroy                                             */
-/* ========================================================================= */
-
 void CSDLApp::Destroy(void)
 {
-	m_Window.Destroy ();
+	m_Window.Destroy();
 	if (m_bInitialized) {
-		SDL_Quit ();
+		SDL_Quit();
 		m_bInitialized = FALSE;
 	}
 }
-
-
-/* ========================================================================= */
-/* Function    : CSDLApp::Run                                                 */
-/* Contents    : Run fixed-step update loop with decoupled render rate.       */
-/* ========================================================================= */
 
 int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHeight)
 {
@@ -146,13 +117,13 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		return -1;
 	}
 
-	if (!m_Window.Create (pszTitle, nWidth, nHeight)) {
+	if (!m_Window.Create(pszTitle, nWidth, nHeight)) {
 		return -1;
 	}
-	if (!m_Window.CreateRenderer ()) {
+	if (!m_Window.CreateRenderer()) {
 		return -1;
 	}
-	if (!pHost->OnSDLInit (m_Window.GetSDLWindow ())) {
+	if (!pHost->OnSDLInit(m_Window.GetSDLWindow())) {
 		return -1;
 	}
 
@@ -168,17 +139,17 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		dwRenderInterval = 1;
 	}
 
-	dwAccumulated		= 0;
-	dwTimeLast			= SDL_GetTicks ();
-	dwLastRenderTime	= (dwTimeLast >= dwRenderInterval) ? (dwTimeLast - dwRenderInterval) : 0;
-	dwTimeStart			= dwTimeLast;
-	byFps				= 0;
-	bDrawPending		= FALSE;
-	bQuit				= FALSE;
+	dwAccumulated = 0;
+	dwTimeLast = SDL_GetTicks();
+	dwLastRenderTime = (dwTimeLast >= dwRenderInterval) ? (dwTimeLast - dwRenderInterval) : 0;
+	dwTimeStart = dwTimeLast;
+	byFps = 0;
+	bDrawPending = FALSE;
+	bQuit = FALSE;
 
 	while (!bQuit)
 	{
-		while (SDL_PollEvent (&sdlEvent))
+		while (SDL_PollEvent(&sdlEvent))
 		{
 			switch (sdlEvent.type)
 			{
@@ -187,11 +158,11 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 				break;
 
 			case SDL_KEYDOWN:
-				/* Keyboard state is sampled separately by MgrKeyInput::Renew(). */
+				// Keyboard state is sampled separately by MgrKeyInput::Renew().
 				break;
 
 			case SDL_KEYUP:
-				pHost->OnSDLKeyUp (CSDLInput::ScancodeToVK (sdlEvent.key.keysym.scancode));
+				pHost->OnSDLKeyUp(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
 				break;
 
 			case SDL_WINDOWEVENT:
@@ -199,12 +170,12 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 				{
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
 				case SDL_WINDOWEVENT_RESTORED:
-					pHost->OnSDLFocusChanged (TRUE);
+					pHost->OnSDLFocusChanged(TRUE);
 					break;
 
 				case SDL_WINDOWEVENT_FOCUS_LOST:
 				case SDL_WINDOWEVENT_MINIMIZED:
-					pHost->OnSDLFocusChanged (FALSE);
+					pHost->OnSDLFocusChanged(FALSE);
 					break;
 
 				default:
@@ -213,22 +184,22 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 				break;
 
 			case SDL_MOUSEMOTION:
-				pHost->OnSDLMouseMove (sdlEvent.motion.x, sdlEvent.motion.y);
+				pHost->OnSDLMouseMove(sdlEvent.motion.x, sdlEvent.motion.y);
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
 				if (sdlEvent.button.button == SDL_BUTTON_LEFT) {
-					pHost->OnSDLMouseLeftButtonDown (
+					pHost->OnSDLMouseLeftButtonDown(
 						sdlEvent.button.x,
 						sdlEvent.button.y,
 						(sdlEvent.button.clicks >= 2) ? TRUE : FALSE);
 				} else if (sdlEvent.button.button == SDL_BUTTON_RIGHT) {
-					pHost->OnSDLMouseRightButtonDown (
+					pHost->OnSDLMouseRightButtonDown(
 						sdlEvent.button.x,
 						sdlEvent.button.y,
 						(sdlEvent.button.clicks >= 2) ? TRUE : FALSE);
 					if (sdlEvent.button.clicks >= 2) {
-						pHost->OnSDLMouseRightButtonDoubleClick (
+						pHost->OnSDLMouseRightButtonDoubleClick(
 							sdlEvent.button.x,
 							sdlEvent.button.y);
 					}
@@ -244,13 +215,13 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 			break;
 		}
 
-		PollWin32Messages ();
+		PollWin32Messages();
 
-		if (pHost->IsQuit ()) {
+		if (pHost->IsQuit()) {
 			break;
 		}
 
-		dwTimeTmp = SDL_GetTicks ();
+		dwTimeTmp = SDL_GetTicks();
 		{
 			DWORD dwElapsed = dwTimeTmp - dwTimeLast;
 			dwTimeLast = dwTimeTmp;
@@ -262,7 +233,7 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 			while ((dwAccumulated >= dwUpdateInterval) && (dwFrameSkip < MAX_FRAME_SKIP))
 			{
 				dwAccumulated -= dwUpdateInterval;
-				bDraw = pHost->OnFrame ();
+				bDraw = pHost->OnFrame();
 				if (bDraw) {
 					bDrawPending = TRUE;
 				}
@@ -279,11 +250,11 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 
 		if (bDrawPending && ((dwTimeTmp - dwLastRenderTime) >= dwRenderInterval))
 		{
-			SDL_Renderer *pRenderer = m_Window.GetRenderer ();
+			SDL_Renderer *pRenderer = m_Window.GetRenderer();
 			if (pRenderer)
 			{
-				SDL_RenderClear (pRenderer);
-				pHost->OnDraw (pRenderer);
+				SDL_RenderClear(pRenderer);
+				pHost->OnDraw(pRenderer);
 				byFps++;
 			}
 			dwLastRenderTime = dwTimeTmp;
@@ -293,7 +264,7 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		if (dwAccumulated < dwUpdateInterval)
 		{
 			DWORD dwSleepTime = dwUpdateInterval - dwAccumulated;
-			SDL_Delay ((dwSleepTime > 1) ? dwSleepTime - 1 : 1);
+			SDL_Delay((dwSleepTime > 1) ? dwSleepTime - 1 : 1);
 		}
 
 		if (dwTimeTmp - dwTimeStart >= 1000)
@@ -303,42 +274,35 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		}
 	}
 
-	pHost->OnSDLDestroy ();
+	pHost->OnSDLDestroy();
 
 	return 0;
 }
-
-
-/* ========================================================================= */
-/* Function    : CSDLApp::PollWin32Messages                                   */
-/* ========================================================================= */
 
 void CSDLApp::PollWin32Messages(void)
 {
 	MSG msg;
 	HWND hMainWnd;
 
-	hMainWnd = GetMainWindowHandle (m_Window.GetSDLWindow ());
+	hMainWnd = GetMainWindowHandle(m_Window.GetSDLWindow());
 
-	/* SDL 管理済みのメインウィンドウ入力はここで捨てる。 */
-	/* それ以外の独自メッセージや子ウィンドウ通知は Win32 として流す。 */
-	while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
+	// SDL 管理済みのメインウィンドウ入力はここで捨てる。
+	// それ以外の独自メッセージや子ウィンドウ通知は Win32 として流す。
+	while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
-		if (ShouldBridgeWin32QuitMessage (hMainWnd, msg)) {
-			PushSDLQuitEvent ();
+		if (ShouldBridgeWin32QuitMessage(hMainWnd, msg)) {
+			PushSDLQuitEvent();
 			if (msg.message == WM_QUIT) {
 				break;
 			}
 			continue;
 		}
 
-		if (ShouldSkipMainWindowInputMessage (hMainWnd, msg)) {
+		if (ShouldSkipMainWindowInputMessage(hMainWnd, msg)) {
 			continue;
 		}
 
-		TranslateMessage (&msg);
-		DispatchMessage (&msg);
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 }
-
-/* Copyright(C)URARA-works 2025 */

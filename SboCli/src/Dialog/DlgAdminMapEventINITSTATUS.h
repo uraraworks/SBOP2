@@ -1,31 +1,27 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapEventINITSTATUS.h								 */
-/* 内容			:マップイベント(ステータス初期化)ダイアログクラス 定義ファイル	 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/10/05													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapEventINITSTATUS.h
+/// @brief マップイベント(ステータス初期化)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/10/05
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "DlgAdminMapEventNONE.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapEventINITSTATUS : public CDlgAdminMapEventNONE
 {
 public:
-			CDlgAdminMapEventINITSTATUS(CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual ~CDlgAdminMapEventINITSTATUS();						/* デストラクタ */
+			CDlgAdminMapEventINITSTATUS(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapEventINITSTATUS(); // デストラクタ
 
-	void	Set		(CInfoMapEventBase *pSrc);							/* 設定 */
-	void	Get		(CInfoMapEventBase *pDst);							/* 取得 */
+	void	Set(CInfoMapEventBase *pSrc); // 設定
+	void	Get(CInfoMapEventBase *pDst); // 取得
 
 
 protected:
-	DWORD	m_dwEffectID;			/* エフェクトID */
+	DWORD	m_dwEffectID; // エフェクトID
 
 
 
@@ -49,5 +45,3 @@ public:
 } CDlgAdminMapEventINITSTATUS, *PCDlgAdminMapEventINITSTATUS;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

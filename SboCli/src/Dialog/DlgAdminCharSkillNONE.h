@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharSkillNONE.h									 */
-/* 内容			:スキル(未設定)ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharSkillNONE.h
+/// @brief スキル(未設定)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,23 +10,21 @@
 
 class CInfoSkillBase;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharSkillNONE : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharSkillNONE(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminCharSkillNONE();							/* デストラクタ */
+			CDlgAdminCharSkillNONE(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharSkillNONE(); // デストラクタ
 
-	virtual void	Init	(CMgrData *pMgrData);						/* 初期化 */
-	virtual void	Set		(CInfoSkillBase *pSrc);						/* 設定 */
-	virtual void	Get		(CInfoSkillBase *pDst);						/* 取得 */
+	virtual void	Init(CMgrData *pMgrData); // 初期化
+	virtual void	Set(CInfoSkillBase *pSrc); // 設定
+	virtual void	Get(CInfoSkillBase *pDst); // 取得
 
 
 protected:
-	int		m_nResourceID;			/* ダイアログリソースID */
+	int	m_nResourceID; // ダイアログリソースID
 
 
 
@@ -51,5 +47,3 @@ protected:
 } CDlgAdminCharSkillNONE, *PCDlgAdminCharSkillNONE;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

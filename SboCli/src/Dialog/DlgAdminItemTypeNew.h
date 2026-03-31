@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemTypeNew.h										 */
-/* 内容			:アイテム種別新規追加ダイアログクラス 定義ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/09/30													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemTypeNew.h
+/// @brief アイテム種別新規追加ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/09/30
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -15,37 +13,35 @@ class CMgrGrpData;
 class CWndSelectItemGrp;
 class CLibInfoItemType;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminItemTypeNew : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemTypeNew(CWnd* pParent = NULL);			/* コンストラクタ */
-	virtual ~CDlgAdminItemTypeNew();							/* デストラクタ */
+			CDlgAdminItemTypeNew(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminItemTypeNew(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData, CWnd **pWndNotify, BOOL bPosSet = TRUE);	/* 初期化 */
-	void	Get			(CInfoItemTypeBase *&pDst);						/* 編集内容を取得 */
-	void	SetModify	(CInfoItemTypeBase *pInfoItemType);				/* 編集モードとして設定 */
-
-
-protected:
-	void	SetGrpIDMain	(DWORD dwItemTypeID);	/* 装備メイン画像IDコンボボックスを設定 */
+	void	Init(CMgrData *pMgrData, CWnd **pWndNotify, BOOL bPosSet = TRUE); // 初期化
+	void	Get(CInfoItemTypeBase *&pDst); // 編集内容を取得
+	void	SetModify(CInfoItemTypeBase *pInfoItemType); // 編集モードとして設定
 
 
 protected:
-	DWORD				m_dwSelectItemTypeID,	/* 種別 */
-						m_dwSelectSoundID,		/* 落としたときの効果音ID */
-						m_dwUseEffectID,		/* 使った時に再生するエフェクトID */
-						m_dwUseSoundID,			/* 使った時に再生する効果音ID */
-						m_dwSelectGrpIDMain;	/* 装備メイン画像ID */
-	BOOL				m_bModeModify;			/* 編集モード判定 */
-	CWnd				**m_ppWndNotify;		/* 通知先ウィンドウ */
-	CMgrGrpData			*m_pMgrGrpData;			/* グラフィックデータ管理 */
-	CWndSelectItemGrp	*m_pWndSelectItemGrp;	/* アイテム画像選択ウィンドウ */
-	CLibInfoItemType	*m_pLibInfoItemType;	/* アイテム種別情報ライブラリ */
-	CInfoItemTypeBase	*m_pInfoItemType;		/* 編集中のアイテム種別情報 */
+	void	SetGrpIDMain(DWORD dwItemTypeID); // 装備メイン画像IDコンボボックスを設定
+
+
+protected:
+	DWORD	m_dwSelectItemTypeID, // 種別
+						m_dwSelectSoundID, // 落としたときの効果音ID
+						m_dwUseEffectID, // 使った時に再生するエフェクトID
+						m_dwUseSoundID, // 使った時に再生する効果音ID
+						m_dwSelectGrpIDMain; // 装備メイン画像ID
+	BOOL	m_bModeModify; // 編集モード判定
+	CWnd	**m_ppWndNotify; // 通知先ウィンドウ
+	CMgrGrpData	*m_pMgrGrpData; // グラフィックデータ管理
+	CWndSelectItemGrp	*m_pWndSelectItemGrp; // アイテム画像選択ウィンドウ
+	CLibInfoItemType	*m_pLibInfoItemType; // アイテム種別情報ライブラリ
+	CInfoItemTypeBase	*m_pInfoItemType; // 編集中のアイテム種別情報
 
 
 
@@ -59,17 +55,17 @@ public:
 	CComboBox	m_ctlUseEffectID;
 	CComboBox	m_ctlType;
 	CString	m_strName;
-	int		m_nDelAverage;
-	int		m_nGrpID;
+	int	m_nDelAverage;
+	int	m_nGrpID;
 	BOOL	m_bPutOn;
-	int		m_nGrpIDSub;
-	int		m_nIconGrpID;
+	int	m_nGrpIDSub;
+	int	m_nIconGrpID;
 	//}}AFX_DATA
 
 	//{{AFX_VIRTUAL(CDlgAdminItemTypeNew)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -85,5 +81,3 @@ protected:
 } CDlgAdminItemTypeNew, *PCDlgAdminItemTypeNew;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminEfcEffectList.cpp									 */
-/* 内容			:噴出し一覧ダイアログクラス 実装ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/07/06													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminEfcEffectList.cpp
+/// @brief 噴出し一覧ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/07/06
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -22,9 +20,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminEfcEffectList::DoDataExchange(CDataExchange* pDX)
 {
@@ -43,55 +39,27 @@ BEGIN_MESSAGE_MAP(CDlgAdminEfcEffectList, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::CDlgAdminEfcEffectList					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
-
-CDlgAdminEfcEffectList::CDlgAdminEfcEffectList(CWnd* pParent /*=NULL*/)
+CDlgAdminEfcEffectList::CDlgAdminEfcEffectList(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminEfcEffectList::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminEfcEffectList)
 	//}}AFX_DATA_INIT
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::~CDlgAdminEfcEffectList				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
-
 CDlgAdminEfcEffectList::~CDlgAdminEfcEffectList()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
-
 void CDlgAdminEfcEffectList::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	m_pLibInfo = m_pMgrData->GetLibInfoEffect ();
+	m_pLibInfo = m_pMgrData->GetLibInfoEffect();
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminEfcEffectList::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminEfcEffectList::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::Renew									 */
-/* 内容		:一覧を更新														 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
 
 void CDlgAdminEfcEffectList::Renew(void)
 {
@@ -99,75 +67,47 @@ void CDlgAdminEfcEffectList::Renew(void)
 	PCInfoEffect pInfoEffect;
 	CmyString strTmp;
 
-	m_List.DeleteAllItems ();
+	m_List.DeleteAllItems();
 
-	nCount = m_pLibInfo->GetCount ();
+	nCount = m_pLibInfo->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoEffect = (PCInfoEffect)m_pLibInfo->GetPtr (i);
+		pInfoEffect = (PCInfoEffect)m_pLibInfo->GetPtr(i);
 		strTmp.Format(_T("%d"), pInfoEffect->m_dwEffectID);
-		m_List.InsertItem (i, strTmp);
-		m_List.SetItemData (i, pInfoEffect->m_dwEffectID);
+		m_List.InsertItem(i, strTmp);
+		m_List.SetItemData(i, pInfoEffect->m_dwEffectID);
 		CString strName = (LPCTSTR)pInfoEffect->m_strName;
-		m_List.SetItemText (i, 1, strName);
+		m_List.SetItemText(i, 1, strName);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::OnAdminMsg								 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnAdminMsg(int nType, DWORD dwPara)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
-
 BOOL CDlgAdminEfcEffectList::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog();
 
-	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, _T("エフェクト名"),	LVCFMT_LEFT, 120);
+	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_List.InsertColumn(0, _T("ID"),	LVCFMT_LEFT, 40);
+	m_List.InsertColumn(1, _T("エフェクト名"),	LVCFMT_LEFT, 120);
 
-	RegisterControl (IDC_RENEW,	LH_CTRL_X);
-	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl(IDC_RENEW,	LH_CTRL_X);
+	RegisterControl(IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	Renew ();
+	Renew();
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::OnMainFrame							 */
-/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
-
 void CDlgAdminEfcEffectList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWEFFECT:		/* エフェクト情報更新 */
-		Renew ();
+	case MAINFRAMEMSG_RENEWEFFECT:	// エフェクト情報更新
+		Renew();
 		break;
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::OnAdd									 */
-/* 内容		:ボタンハンドラ(新規追加)										 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnAdd()
 {
@@ -176,26 +116,19 @@ void CDlgAdminEfcEffectList::OnAdd()
 	CDlgAdminEfcEffect Dlg(this);
 	CPacketADMIN_EFC_RENEWEFFECT Packet;
 
-	Dlg.Init (m_pMgrData, FALSE);
-	nResult = Dlg.DoModal ();
+	Dlg.Init(m_pMgrData, FALSE);
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		return;
 	}
 
-	pInfoEffect = (PCInfoEffect)m_pLibInfo->GetNew ();
-	Dlg.GetInfo (pInfoEffect);
+	pInfoEffect = (PCInfoEffect)m_pLibInfo->GetNew();
+	Dlg.GetInfo(pInfoEffect);
 
-	Packet.Make (0, pInfoEffect);
-	SendPacket (&Packet);
-	SAFE_DELETE (pInfoEffect);
+	Packet.Make(0, pInfoEffect);
+	SendPacket(&Packet);
+	SAFE_DELETE(pInfoEffect);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::OnModify								 */
-/* 内容		:ボタンハンドラ(編集)											 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnModify()
 {
@@ -204,46 +137,30 @@ void CDlgAdminEfcEffectList::OnModify()
 	CDlgAdminEfcEffect Dlg(this);
 	CPacketADMIN_EFC_RENEWEFFECT Packet;
 
-	nNo = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nNo = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nNo < 0) {
 		return;
 	}
-	pInfoEffect = (PCInfoEffect)m_pLibInfo->GetPtr (m_List.GetItemData (nNo));
+	pInfoEffect = (PCInfoEffect)m_pLibInfo->GetPtr(m_List.GetItemData(nNo));
 
-	Dlg.Init (m_pMgrData, TRUE);
-	Dlg.SetInfo (pInfoEffect);
-	nResult = Dlg.DoModal ();
+	Dlg.Init(m_pMgrData, TRUE);
+	Dlg.SetInfo(pInfoEffect);
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		return;
 	}
 
-	Dlg.GetInfo (pInfoEffect);
+	Dlg.GetInfo(pInfoEffect);
 
-	Packet.Make (pInfoEffect->m_dwEffectID, pInfoEffect);
-	SendPacket (&Packet);
+	Packet.Make(pInfoEffect->m_dwEffectID, pInfoEffect);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::OnDelete								 */
-/* 内容		:ボタンハンドラ(削除)											 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
 
 void CDlgAdminEfcEffectList::OnDelete()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminEfcEffectList::OnRenew								 */
-/* 内容		:ボタンハンドラ(更新)											 */
-/* 日付		:2008/07/06														 */
-/* ========================================================================= */
-
 void CDlgAdminEfcEffectList::OnRenew()
 {
 }
-
-/* Copyright(C)URARA-works 2008 */
 

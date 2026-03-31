@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminSelectEffect.h										 */
-/* 内容			:エフェクト選択ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/08/11													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminSelectEffect.h
+/// @brief エフェクト選択ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/08/11
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -14,21 +12,19 @@
 class CLibInfoEffect;
 class CInfoEffect;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminSelectEffect : public CDlgAdminBase
 {
 public:
-			CDlgAdminSelectEffect(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminSelectEffect();							/* デストラクタ */
+			CDlgAdminSelectEffect(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminSelectEffect(); // デストラクタ
 
-	DWORD	GetSelectID	(void);				/* 選択されたエフェクトIDを取得 */
+	DWORD	GetSelectID(void); // 選択されたエフェクトIDを取得
 
 
 protected:
-	DWORD	m_dwSelectID;					/* 選択されたエフェクトID */
+	DWORD	m_dwSelectID; // 選択されたエフェクトID
 
 
 
@@ -42,7 +38,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminSelectEffect)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -53,5 +49,3 @@ protected:
 } CDlgAdminSelectEffect, *PCDlgAdminSelectEffect;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

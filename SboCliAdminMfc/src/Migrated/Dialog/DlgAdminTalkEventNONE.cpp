@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminTalkEventNONE.cpp									 */
-/* 内容			:会話イベント設定(未選択)ダイアログクラス 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/23													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminTalkEventNONE.cpp
+/// @brief 会話イベント設定(未選択)ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/23
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -19,9 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminTalkEventNONE::DoDataExchange(CDataExchange* pDX)
 {
@@ -35,14 +31,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminTalkEventNONE, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventNONE::CDlgAdminTalkEventNONE					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
-CDlgAdminTalkEventNONE::CDlgAdminTalkEventNONE(CWnd* pParent /*=NULL*/)
+CDlgAdminTalkEventNONE::CDlgAdminTalkEventNONE(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminTalkEventNONE::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminTalkEventNONE)
@@ -52,74 +41,32 @@ CDlgAdminTalkEventNONE::CDlgAdminTalkEventNONE(CWnd* pParent /*=NULL*/)
 	m_nPageCount  = 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventNONE::~CDlgAdminTalkEventNONE				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
 CDlgAdminTalkEventNONE::~CDlgAdminTalkEventNONE()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventNONE::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
 void CDlgAdminTalkEventNONE::Init(CMgrData *pMgrData, int nPage)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
 	m_nPageCount = nPage;
 
-	/* ウィンドウ作成 */
-	Create (m_nResourceID, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(m_nResourceID, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventNONE::OnAdminMsg								 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
 
 void CDlgAdminTalkEventNONE::OnAdminMsg(int nType, DWORD dwPara)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventNONE::Set									 */
-/* 内容		:設定から画面に反映												 */
-/* 日付		:2008/12/25														 */
-/* ========================================================================= */
-
 void CDlgAdminTalkEventNONE::Set(CInfoTalkEventBase *pSrc)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventNONE::Get									 */
-/* 内容		:画面から設定に反映												 */
-/* 日付		:2008/12/25														 */
-/* ========================================================================= */
-
 void CDlgAdminTalkEventNONE::Get(CInfoTalkEventBase *pDst)
 {
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventNONE::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminTalkEventNONE::OnInitDialog()
 {
@@ -128,4 +75,3 @@ BOOL CDlgAdminTalkEventNONE::OnInitDialog()
 	return TRUE;
 }
 
-/* Copyright(C)URARA-works 2008 */

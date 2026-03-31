@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharSkillMOVEATACK.h								 */
-/* 内容			:スキル(移動して攻撃)ダイアログクラス 定義ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/01/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharSkillMOVEATACK.h
+/// @brief スキル(移動して攻撃)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/01/07
+/// @copyright Copyright(C)URARA-works 2009
 
 #pragma once
 
@@ -12,19 +10,17 @@
 
 class CInfoSkillBase;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharSkillMOVEATACK : public CDlgAdminCharSkillNONE
 {
 public:
-			CDlgAdminCharSkillMOVEATACK(CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual ~CDlgAdminCharSkillMOVEATACK();						/* デストラクタ */
+			CDlgAdminCharSkillMOVEATACK(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharSkillMOVEATACK(); // デストラクタ
 
-	virtual void	Init	(CMgrData *pMgrData);						/* 初期化 */
-	virtual void	Set		(CInfoSkillBase *pSrc);						/* 設定 */
-	virtual void	Get		(CInfoSkillBase *pDst);						/* 取得 */
+	virtual void	Init(CMgrData *pMgrData); // 初期化
+	virtual void	Set(CInfoSkillBase *pSrc); // 設定
+	virtual void	Get(CInfoSkillBase *pDst); // 取得
 
 
 protected:
@@ -64,5 +60,3 @@ protected:
 } CDlgAdminCharSkillMOVEATACK, *PCDlgAdminCharSkillMOVEATACK;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2009 */

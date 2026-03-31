@@ -1,36 +1,28 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminTalkEventMENU.h									 */
-/* 内容			:会話イベント設定(項目選択)ダイアログクラス 定義ファイル	 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/23													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminTalkEventMENU.h
+/// @brief 会話イベント設定(項目選択)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/23
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
 #include "DlgAdminTalkEventNONE.h"
 #include "afxcmn.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminTalkEventMENU : public CDlgAdminTalkEventNONE
 {
 public:
-			CDlgAdminTalkEventMENU(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminTalkEventMENU();							/* デストラクタ */
+			CDlgAdminTalkEventMENU(CWnd* pParent = NULL);	// コンストラクタ
+	virtual ~CDlgAdminTalkEventMENU();	// デストラクタ
 
-	void	Set	(CInfoTalkEventBase *pSrc);								/* 設定から画面に反映 */
-	void	Get	(CInfoTalkEventBase *pDst);								/* 画面から設定に反映 */
-
-
-protected:
-
+	void	Set	(CInfoTalkEventBase *pSrc);	// 設定から画面に反映
+	void	Get	(CInfoTalkEventBase *pDst);	// 画面から設定に反映
 
 protected:
 
-
+protected:
 
 public:
 	//{{AFX_DATA(CDlgAdminTalkEventMENU)
@@ -55,4 +47,3 @@ public:
 
 //{{AFX_INSERT_LOCATION}}
 
-/* Copyright(C)URARA-works 2008 */

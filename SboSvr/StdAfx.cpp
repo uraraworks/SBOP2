@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:stdafx.cpp													 */
-/* 内容			:実装ファイル												 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/11/04													 */
-/* ========================================================================= */
+﻿/// @file stdafx.cpp
+/// @brief 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/11/04
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 
@@ -22,5 +20,3 @@
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "Wininet.lib")
-
-/* Copyright(C)URARA-works 2006 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapObjectData.cpp									 */
-/* 内容			:マップオブジェクト配置データ一覧ダイアログクラス 実装ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/11/03													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapObjectData.cpp
+/// @brief マップオブジェクト配置データ一覧ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/11/03
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -27,9 +25,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminMapObjectData::DoDataExchange(CDataExchange* pDX)
 {
@@ -48,86 +44,51 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapObjectData, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::CDlgAdminMapObjectData					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
-
-CDlgAdminMapObjectData::CDlgAdminMapObjectData(CWnd* pParent /*=NULL*/)
+CDlgAdminMapObjectData::CDlgAdminMapObjectData(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminMapObjectData::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminMapObjectData)
 	//}}AFX_DATA_INIT
 
-	m_pWndNotify			= NULL;
-	m_pLibInfoMapObject		= NULL;
+	m_pWndNotify	= NULL;
+	m_pLibInfoMapObject	= NULL;
 	m_pLibInfoMapObjectData	= NULL;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::~CDlgAdminMapObjectData				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 CDlgAdminMapObjectData::~CDlgAdminMapObjectData()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
-
 void CDlgAdminMapObjectData::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	m_pInfoMap = m_pMgrData->GetMap ();
-	m_pLibInfoMapObject		= m_pMgrData->GetLibInfoMapObject ();
+	m_pInfoMap = m_pMgrData->GetMap();
+	m_pLibInfoMapObject	= m_pMgrData->GetLibInfoMapObject();
 	m_pLibInfoMapObjectData = m_pInfoMap->m_pLibInfoMapObjectData;
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminMapObjectData::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminMapObjectData::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::OnAdminMsg								 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2008/11/01														 */
-/* ========================================================================= */
 
 void CDlgAdminMapObjectData::OnAdminMsg(int nType, DWORD dwPara)
 {
 	PCDlgAdminMapObjectDataEdit pDlg;
 
 	switch (nType) {
-	case ADMINMSG_RENEWMAPINFO:					/* マップ情報更新 */
-		Renew ();
+	case ADMINMSG_RENEWMAPINFO:	// マップ情報更新
+		Renew();
 		break;
-	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:		/* 左クリック通知 */
+	case ADMINMSG_NOTIFYTYPE_LBUTTONDOWN:	// 左クリック通知
 		pDlg = (PCDlgAdminMapObjectDataEdit)m_pWndNotify;
 		if (pDlg == NULL) {
 			break;
 		}
-		pDlg->PostMessage (WM_ADMINMSG, (WPARAM)nType, (LPARAM)dwPara);
+		pDlg->PostMessage(WM_ADMINMSG, (WPARAM)nType, (LPARAM)dwPara);
 		break;
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::Renew									 */
-/* 内容		:一覧を更新														 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 void CDlgAdminMapObjectData::Renew(void)
 {
@@ -136,63 +97,49 @@ void CDlgAdminMapObjectData::Renew(void)
 	PCInfoMapObject pInfoMapObject;
 	CString strTmp;
 
-	m_pInfoMap = m_pMgrData->GetMap ();
-	m_pLibInfoMapObject		= m_pMgrData->GetLibInfoMapObject ();
+	m_pInfoMap = m_pMgrData->GetMap();
+	m_pLibInfoMapObject	= m_pMgrData->GetLibInfoMapObject();
 	m_pLibInfoMapObjectData = m_pInfoMap->m_pLibInfoMapObjectData;
 
-	m_List.DeleteAllItems ();
+	m_List.DeleteAllItems();
 
 	nCountTmp = 0;
-	nCount = m_pLibInfoMapObjectData->GetCount ();
+	nCount = m_pLibInfoMapObjectData->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfo = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (i);
-		pInfoMapObject = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr (pInfo->m_dwObjectID);
+		pInfo = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr(i);
+		pInfoMapObject = (PCInfoMapObject)m_pLibInfoMapObject->GetPtr(pInfo->m_dwObjectID);
 		if (pInfoMapObject == NULL) {
 			continue;
 		}
-		strTmp.Format(_T("%d"), pInfo->m_dwDataID);				/* ID */
-		m_List.InsertItem (nCountTmp, strTmp);
-		m_List.SetItemData (nCountTmp, pInfo->m_dwDataID);
-		strTmp.Format(_T("%d"), pInfo->m_ptPos.x);					/* X座標 */
-		m_List.SetItemText (nCountTmp, 1, strTmp);
-		strTmp.Format(_T("%d"), pInfo->m_ptPos.y);					/* Y座標 */
-		m_List.SetItemText (nCountTmp, 2, strTmp);
-		CString strName = (LPCTSTR)pInfoMapObject->m_strName;	/* オブジェクト名 */
-		m_List.SetItemText (nCountTmp, 3, strName);
+		strTmp.Format(_T("%d"), pInfo->m_dwDataID);	// ID
+		m_List.InsertItem(nCountTmp, strTmp);
+		m_List.SetItemData(nCountTmp, pInfo->m_dwDataID);
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.x);	// X座標
+		m_List.SetItemText(nCountTmp, 1, strTmp);
+		strTmp.Format(_T("%d"), pInfo->m_ptPos.y);	// Y座標
+		m_List.SetItemText(nCountTmp, 2, strTmp);
+		CString strName = (LPCTSTR)pInfoMapObject->m_strName;	// オブジェクト名
+		m_List.SetItemText(nCountTmp, 3, strName);
 		nCountTmp ++;
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminMapObjectData::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog();
 
-	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (1, _T("ID"),				LVCFMT_LEFT, 50);
-	m_List.InsertColumn (2, _T("X座標"),			LVCFMT_LEFT, 50);
-	m_List.InsertColumn (3, _T("Y座標"),			LVCFMT_LEFT, 50);
-	m_List.InsertColumn (4, _T("オブジェクト名"),	LVCFMT_LEFT, 200);
+	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_List.InsertColumn(1, _T("ID"),	LVCFMT_LEFT, 50);
+	m_List.InsertColumn(2, _T("X座標"),	LVCFMT_LEFT, 50);
+	m_List.InsertColumn(3, _T("Y座標"),	LVCFMT_LEFT, 50);
+	m_List.InsertColumn(4, _T("オブジェクト名"),	LVCFMT_LEFT, 200);
 
-	RegisterControl (IDC_RENEW,	LH_CTRL_X);
-	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl(IDC_RENEW,	LH_CTRL_X);
+	RegisterControl(IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	Renew ();
+	Renew();
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::OnAdd									 */
-/* 内容		:ボタンハンドラ(新規追加)										 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 void CDlgAdminMapObjectData::OnAdd()
 {
@@ -203,28 +150,21 @@ void CDlgAdminMapObjectData::OnAdd()
 
 	pInfo = NULL;
 
-	Dlg.Init (m_pMgrData, &m_pWndNotify);
-	nResult = Dlg.DoModal ();
+	Dlg.Init(m_pMgrData, &m_pWndNotify);
+	nResult = Dlg.DoModal();
 	m_pWndNotify = NULL;
 	if (nResult != IDOK) {
 		goto Exit;
 	}
-	pInfo = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetNew (); 
-	Dlg.Get (pInfo);
+	pInfo = (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetNew(); 
+	Dlg.Get(pInfo);
 
-	Packet.Make (m_pInfoMap->m_dwMapID, pInfo);
-	SendPacket (&Packet);
+	Packet.Make(m_pInfoMap->m_dwMapID, pInfo);
+	SendPacket(&Packet);
 
 Exit:
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::OnModify								 */
-/* 内容		:ボタンハンドラ(編集)											 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 void CDlgAdminMapObjectData::OnModify()
 {
@@ -234,33 +174,26 @@ void CDlgAdminMapObjectData::OnModify()
 	CPacketADMIN_MAP_RENEWOBJECTDATA Packet;
 	CDlgAdminMapObjectDataEdit Dlg(this);
 
-	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nResult = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nResult < 0) {
 		return;
 	}
-	dwDataID	= m_List.GetItemData (nResult);
-	pInfo		= (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (dwDataID);
+	dwDataID	= m_List.GetItemData(nResult);
+	pInfo	= (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr(dwDataID);
 
-	Dlg.Init (m_pMgrData, &m_pWndNotify);
-	Dlg.SetModify (pInfo);
+	Dlg.Init(m_pMgrData, &m_pWndNotify);
+	Dlg.SetModify(pInfo);
 
-	nResult = Dlg.DoModal ();
+	nResult = Dlg.DoModal();
 	m_pWndNotify = NULL;
 	if (nResult != IDOK) {
 		return;
 	}
-	Dlg.Get (pInfo);
+	Dlg.Get(pInfo);
 
-	Packet.Make (m_pInfoMap->m_dwMapID, pInfo);
-	SendPacket (&Packet);
+	Packet.Make(m_pInfoMap->m_dwMapID, pInfo);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::OnCopy									 */
-/* 内容		:ボタンハンドラ(コピー)											 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 void CDlgAdminMapObjectData::OnCopy()
 {
@@ -270,32 +203,25 @@ void CDlgAdminMapObjectData::OnCopy()
 	PCInfoMapEventBase pInfoItem;
 	CPacketADMIN_ITEMTYPE_COPY Packet;
 
-	nNo = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nNo = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nNo < 0) {
 		return;
 	}
-	dwItemID	= m_List.GetItemData (nNo);
-	pInfoItem	= (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr (dwItemID);
+	dwItemID	= m_List.GetItemData(nNo);
+	pInfoItem	= (PCInfoMapEventBase)m_pLibInfoMapEvent->GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		return;
 	}
 
-        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox(_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (dwItemID);
-	SendPacket (&Packet);
+	Packet.Make(dwItemID);
+	SendPacket(&Packet);
 #endif
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapObjectData::OnDelete								 */
-/* 内容		:ボタンハンドラ(削除)											 */
-/* 日付		:2008/11/03														 */
-/* ========================================================================= */
 
 void CDlgAdminMapObjectData::OnDelete()
 {
@@ -304,24 +230,22 @@ void CDlgAdminMapObjectData::OnDelete()
 	PCInfoMapObjectData pInfo;
 	CPacketADMIN_PARA2 Packet;
 
-	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nResult = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nResult < 0) {
 		return;
 	}
-	dwDataID	= m_List.GetItemData (nResult);
-	pInfo		= (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr (dwDataID);
+	dwDataID	= m_List.GetItemData(nResult);
+	pInfo	= (PCInfoMapObjectData)m_pLibInfoMapObjectData->GetPtr(dwDataID);
 	if (pInfo == NULL) {
 		return;
 	}
 
-        nResult = MessageBox (_T("選択されているデータを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox(_T("選択されているデータを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (SBOCOMMANDID_SUB_ADMIN_MAP_DELETEOBJECTDATA, m_pInfoMap->m_dwMapID, dwDataID);
-	SendPacket (&Packet);
+	Packet.Make(SBOCOMMANDID_SUB_ADMIN_MAP_DELETEOBJECTDATA, m_pInfoMap->m_dwMapID, dwDataID);
+	SendPacket(&Packet);
 }
-
-/* Copyright(C)URARA-works 2008 */
 

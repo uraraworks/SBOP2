@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharModifyTypePUTNPC.h								 */
-/* 内容			:キャラ情報 移動種別の設定(NPC発生)ダイアログクラス 定義ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/07/12													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharModifyTypePUTNPC.h
+/// @brief キャラ情報 移動種別の設定(NPC発生)ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/07/12
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,22 +10,20 @@
 
 class CInfoCharCli;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharModifyTypePUTNPC : public CDlgAdminCharModifyTypeBase
 {
 public:
-			CDlgAdminCharModifyTypePUTNPC(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminCharModifyTypePUTNPC();							/* デストラクタ */
+			CDlgAdminCharModifyTypePUTNPC(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharModifyTypePUTNPC(); // デストラクタ
 
-	virtual void	Set	(CInfoCharCli *pSrc);									/* 設定 */
-	virtual void	Get	(CInfoCharCli *pDst);									/* 取得 */
+	virtual void	Set(CInfoCharCli *pSrc); // 設定
+	virtual void	Get(CInfoCharCli *pDst); // 取得
 
 
 protected:
-	int	m_nPutMoveType;			/* 移動種別 */
+	int	m_nPutMoveType; // 移動種別
 
 
 
@@ -56,5 +52,3 @@ protected:
 } CDlgAdminCharModifyTypePUTNPC, *PCDlgAdminCharModifyTypePUTNPC;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

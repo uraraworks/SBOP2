@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2005 */
-/* ========================================================================= */
-/* ファイル名：	DlgMsgLog.cpp												 */
-/* 内容：		メッセージログダイアログクラス 実装ファイル					 */
-/* 作成：		年がら年中春うらら(URARA-works)								 */
-/* 作成開始日：	2005/09/25													 */
-/* ========================================================================= */
+﻿/// @file DlgMsgLog.cpp
+/// @brief メッセージログダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2005/09/25
+/// @copyright Copyright(C)URARA-works 2005
 
 #include "stdafx.h"
 #include "PacketCHAR_REQ_CHAT.h"
@@ -22,9 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/* ========================================================================= */
-/* クラス設定																 */
-/* ========================================================================= */
+// クラス設定
 
 void CDlgMsgLog::DoDataExchange(CDataExchange* pDX)
 {
@@ -47,12 +43,6 @@ BEGIN_MESSAGE_MAP(CDlgMsgLog, CDialog)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::CDlgMsgLog											 */
-/* 内容：	コンストラクタ													 */
-/* 日付：	2005/09/25														 */
-/* ========================================================================= */
-
 CDlgMsgLog::CDlgMsgLog(CWnd* pParent /*=NULL*/)
 	: CDialog(CDlgMsgLog::IDD, pParent)
 	, m_bTopMost(FALSE)
@@ -62,31 +52,19 @@ CDlgMsgLog::CDlgMsgLog(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CDlgMsgLog)
 	//}}AFX_DATA_INIT
 
-	m_pMgrData			= NULL;
-	m_pLog				= new CTextOutput;
-	m_hWndChat			= NULL;
+	m_pMgrData	= NULL;
+	m_pLog	= new CTextOutput;
+	m_hWndChat	= NULL;
 	m_OrgWndProcChat	= NULL;
-	m_bPushEnter		= FALSE;
+	m_bPushEnter	= FALSE;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::~CDlgMsgLog											 */
-/* 内容：	デストラクタ													 */
-/* 日付：	2005/09/25														 */
-/* ========================================================================= */
 
 CDlgMsgLog::~CDlgMsgLog()
 {
-	SAFE_DELETE (m_pLog);
+	SAFE_DELETE(m_pLog);
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::Create												 */
-/* 内容：	作成															 */
-/* 日付：	2005/09/25														 */
-/* ========================================================================= */
 
 BOOL CDlgMsgLog::Create(HWND hWndParent, CMgrData *pMgrData)
 {
@@ -94,64 +72,52 @@ BOOL CDlgMsgLog::Create(HWND hWndParent, CMgrData *pMgrData)
 	BOOL bCreated;
 
 	m_pMgrData	= pMgrData;
-	pWnd		= CWnd::FromHandle (hWndParent);
+	pWnd	= CWnd::FromHandle(hWndParent);
 
-	bCreated = CDialog::Create (IDD_MSGLOG, pWnd);
+	bCreated = CDialog::Create(IDD_MSGLOG, pWnd);
 	if (!bCreated) {
-		DWORD dwErr = GetLastError ();
+		DWORD dwErr = GetLastError();
 		CString strErr;
-		strErr.Format (_T("CDlgMsgLog::Create failed. GetLastError=0x%08X\r\n"), dwErr);
-		OutputDebugString (strErr);
+		strErr.Format(_T("CDlgMsgLog::Create failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString(strErr);
 		return FALSE;
 	}
 
-	ShowWindow (SW_SHOW);
-	pWnd->SetFocus ();
+	ShowWindow(SW_SHOW);
+	pWnd->SetFocus();
 
-	/* ログファイルの作成 */
-	MakeLogFile ();
+	// ログファイルの作成
+	MakeLogFile();
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::Add													 */
-/* 内容：	追加															 */
-/* 日付：	2005/09/25														 */
-/* ========================================================================= */
 
 void CDlgMsgLog::Add(LPCSTR pszLog, COLORREF cl)
 {
 	CString strTmp;
 	CTime time, timeTmp;
 
-	if ((pszLog == NULL) || (strlen (pszLog) <= 0)) {
+	if ((pszLog == NULL) || (strlen(pszLog) <= 0)) {
 		return;
 	}
 
-	time = CTime::GetCurrentTime ();
-	timeTmp = CTime::CTime (time.GetYear (), time.GetMonth (), time.GetDay (), 0, 0, 0);
+	time = CTime::GetCurrentTime();
+	timeTmp = CTime::CTime(time.GetYear(), time.GetMonth(), time.GetDay(), 0, 0, 0);
 	if (m_timeMakeLog != timeTmp) {
-		/* 日付が変わったのでログファイルを再作成 */
-		MakeLogFile ();
+		// 日付が変わったのでログファイルを再作成
+		MakeLogFile();
 	}
 
-	/* ログファイルに書き込み */
-        CString strLog = Utf8ToTString (pszLog);
-        strTmp.Format(_T("[%02d:%02d:%02d] %s"), time.GetHour (), time.GetMinute (), time.GetSecond (), (LPCTSTR)strLog);
-        CStringA strLogLineA = TStringToUtf8 ((LPCTSTR)strTmp);
-        m_pLog->Write ("%s", (LPCSTR)strLogLineA);
+	// ログファイルに書き込み
+        CString strLog = Utf8ToTString(pszLog);
+        strTmp.Format(_T("[%02d:%02d:%02d] %s"), time.GetHour(), time.GetMinute(), time.GetSecond(), (LPCTSTR)strLog);
+        CStringA strLogLineA = TStringToUtf8((LPCTSTR)strTmp);
+        m_pLog->Write("%s", (LPCSTR)strLogLineA);
 
-        m_wndLogViewCtrl.AddLine ((LPCTSTR)strLog, cl, RGB (40, 40, 40));
+        m_wndLogViewCtrl.AddLine((LPCTSTR)strLog, cl, RGB(40, 40, 40));
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::MakeLogFile											 */
-/* 内容：	現在時刻でログファイルを作成									 */
-/* 日付：	2005/10/01														 */
-/* ========================================================================= */
 
 void CDlgMsgLog::MakeLogFile(void)
 {
@@ -160,186 +126,144 @@ void CDlgMsgLog::MakeLogFile(void)
 	CString strTmp;
 	CTime time;
 
-	time = CTime::GetCurrentTime ();
-	m_timeMakeLog = CTime::CTime (time.GetYear (), time.GetMonth (), time.GetDay (), 0, 0, 0);
+	time = CTime::GetCurrentTime();
+	m_timeMakeLog = CTime::CTime(time.GetYear(), time.GetMonth(), time.GetDay(), 0, 0, 0);
 
 //Todo:
-	ZeroMemory (szName, sizeof (szName));
-	GetModuleFileName (NULL, szName, _countof (szName));
-	pszTmp	= PathFindFileName (szName);
+	ZeroMemory(szName, sizeof(szName));
+	GetModuleFileName(NULL, szName, _countof(szName));
+	pszTmp	= PathFindFileName(szName);
 	if (pszTmp != NULL) {
 		*pszTmp	= 0;
 	}
-	PathAddBackslash (szName);
+	PathAddBackslash(szName);
 
-        CString strBasePath (szName);
+        CString strBasePath(szName);
         strTmp.Format(_T("%sLog\\SBOログ(%d年%02d月%02d日).txt"),
                 (LPCTSTR)strBasePath,
-                time.GetYear (),
-                time.GetMonth (),
-                time.GetDay ());
-	/* ログファイルの作成 */
-        m_pLog->Destroy ();
-        CStringA strLogPathA = TStringToUtf8 ((LPCTSTR)strTmp);
-        m_pLog->Create (strLogPathA, FALSE, TRUE);
+                time.GetYear(),
+                time.GetMonth(),
+                time.GetDay());
+	// ログファイルの作成
+        m_pLog->Destroy();
+        CStringA strLogPathA = TStringToUtf8((LPCTSTR)strTmp);
+        m_pLog->Create(strLogPathA, FALSE, TRUE);
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::OnInitDialog										 */
-/* 内容：	メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付：	2005/09/26														 */
-/* ========================================================================= */
 
 BOOL CDlgMsgLog::OnInitDialog()
 {
 	CRect rc;
 	LOGVIEWCTRLSETTING stLOGVIEWCTRLSETTING;
  
-	CDialog::OnInitDialog ();
-	SetWindowText (Utf8ToTString (u8"メッセージログウィンドウ"));
+	CDialog::OnInitDialog();
+	SetWindowText(Utf8ToTString(u8"メッセージログウィンドウ"));
  
-	::GetWindowRect (m_pMgrData->GetMainWindow (), rc);
-	SetWindowPos (NULL, rc.right, rc.top, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
+	::GetWindowRect(m_pMgrData->GetMainWindow(), rc);
+	SetWindowPos(NULL, rc.right, rc.top, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 
-	/* ログ表示コントロールの設定 */
-	m_wndLogViewCtrl.GetSetting (&stLOGVIEWCTRLSETTING);
-	_tcscpy_s (stLOGVIEWCTRLSETTING.szFontText, _countof (stLOGVIEWCTRLSETTING.szFontText), _T("ＭＳ Ｐゴシック"));
-	_tcscpy_s (stLOGVIEWCTRLSETTING.szFontHeader, _countof (stLOGVIEWCTRLSETTING.szFontHeader), _T("ＭＳ ゴシック"));
-	stLOGVIEWCTRLSETTING.crBack				= RGB (40, 40, 40);
-	stLOGVIEWCTRLSETTING.crSelectBack		= RGB (40, 40, 255);
-	stLOGVIEWCTRLSETTING.crSelectText		= RGB (255, 255, 255);
-	stLOGVIEWCTRLSETTING.crLinkBack			= RGB (40, 40, 40);
-	stLOGVIEWCTRLSETTING.crLinkText			= RGB (255, 255, 255);
+	// ログ表示コントロールの設定
+	m_wndLogViewCtrl.GetSetting(&stLOGVIEWCTRLSETTING);
+	_tcscpy_s(stLOGVIEWCTRLSETTING.szFontText, _countof(stLOGVIEWCTRLSETTING.szFontText), _T("ＭＳ Ｐゴシック"));
+	_tcscpy_s(stLOGVIEWCTRLSETTING.szFontHeader, _countof(stLOGVIEWCTRLSETTING.szFontHeader), _T("ＭＳ ゴシック"));
+	stLOGVIEWCTRLSETTING.crBack	= RGB(40, 40, 40);
+	stLOGVIEWCTRLSETTING.crSelectBack	= RGB(40, 40, 255);
+	stLOGVIEWCTRLSETTING.crSelectText	= RGB(255, 255, 255);
+	stLOGVIEWCTRLSETTING.crLinkBack	= RGB(40, 40, 40);
+	stLOGVIEWCTRLSETTING.crLinkText	= RGB(255, 255, 255);
 	stLOGVIEWCTRLSETTING.nLinkNotifyType	= LVC_LINK_NOTIFY_DOUBLE_CLICK;
-	m_wndLogViewCtrl.SetSetting (&stLOGVIEWCTRLSETTING);
-	m_wndLogViewCtrl.SetTextLimit (LVC_TEXT_LIMIT_LINE, 3000);
+	m_wndLogViewCtrl.SetSetting(&stLOGVIEWCTRLSETTING);
+	m_wndLogViewCtrl.SetTextLimit(LVC_TEXT_LIMIT_LINE, 3000);
 
-	if (GetDlgItem (IDC_TOPMOST)) {
-		GetDlgItem (IDC_TOPMOST)->SetWindowText (Utf8ToTString (u8"最前面"));
+	if (GetDlgItem(IDC_TOPMOST)) {
+		GetDlgItem(IDC_TOPMOST)->SetWindowText(Utf8ToTString(u8"最前面"));
 	}
-	if (GetDlgItem (IDC_HIDE_MAINFRAME)) {
-		GetDlgItem (IDC_HIDE_MAINFRAME)->SetWindowText (Utf8ToTString (u8"メインウィンドウを非表示"));
+	if (GetDlgItem(IDC_HIDE_MAINFRAME)) {
+		GetDlgItem(IDC_HIDE_MAINFRAME)->SetWindowText(Utf8ToTString(u8"メインウィンドウを非表示"));
 	}
 
-	CLayoutHelper::Initialize (m_hWnd);
-	RegisterControl (m_wndLogViewCtrl.m_hWnd,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
-	RegisterControl (IDC_ONLINE,				LH_CTRL_Y);
-	RegisterControl (IDC_CHARCOUNT,				LH_CTRL_Y);
-	RegisterControl (IDC_TOPMOST,				LH_CTRL_X | LH_CTRL_Y);
-	RegisterControl (IDC_HIDE_MAINFRAME,		LH_CTRL_X | LH_CTRL_Y);
-	RegisterControl (IDC_CHAT,					LH_CTRL_WIDTH | LH_CTRL_Y);
+	CLayoutHelper::Initialize(m_hWnd);
+	RegisterControl(m_wndLogViewCtrl.m_hWnd,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl(IDC_ONLINE,	LH_CTRL_Y);
+	RegisterControl(IDC_CHARCOUNT,	LH_CTRL_Y);
+	RegisterControl(IDC_TOPMOST,	LH_CTRL_X | LH_CTRL_Y);
+	RegisterControl(IDC_HIDE_MAINFRAME,	LH_CTRL_X | LH_CTRL_Y);
+	RegisterControl(IDC_CHAT,	LH_CTRL_WIDTH | LH_CTRL_Y);
 
-	m_hWndChat = GetDlgItem (IDC_CHAT)->GetSafeHwnd ();
-	m_OrgWndProcChat = (WNDPROC)GetWindowLong (m_hWndChat, GWL_WNDPROC);
-	::SendMessage		(m_hWndChat, WM_SETFONT, (WPARAM)GetStockObject (DEFAULT_GUI_FONT), 0);
-	SetWindowLong		(m_hWndChat, GWL_USERDATA, (LONG)this);
-	SetWindowLong		(m_hWndChat, GWL_WNDPROC, (LONG)ChatWndProc);
+	m_hWndChat = GetDlgItem(IDC_CHAT)->GetSafeHwnd();
+	m_OrgWndProcChat = (WNDPROC)GetWindowLong(m_hWndChat, GWL_WNDPROC);
+	::SendMessage(m_hWndChat, WM_SETFONT, (WPARAM)GetStockObject(DEFAULT_GUI_FONT), 0);
+	SetWindowLong(m_hWndChat, GWL_USERDATA, (LONG)this);
+	SetWindowLong(m_hWndChat, GWL_WNDPROC, (LONG)ChatWndProc);
  
 	return TRUE;
 }
 
 
-/* ========================================================================= */
-/* 関数名：	CDlgMsgLog::OnSize												 */
-/* 内容：	メッセージハンドラ(WM_SIZE)										 */
-/* 日付：	2005/09/25														 */
-/* ========================================================================= */
-
 void CDlgMsgLog::OnSize(UINT nType, int cx, int cy)
 {
-	CDialog::OnSize (nType, cx, cy);
+	CDialog::OnSize(nType, cx, cy);
 
-	DoLayout (cx, cy);
+	DoLayout(cx, cy);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgMsgLog::PostNcDestroy										 */
-/* 内容		:後処理															 */
-/* 日付		:2007/04/12														 */
-/* ========================================================================= */
 
 void CDlgMsgLog::PostNcDestroy()
 {
 	HIMC hImc;
 
 	if (m_hWndChat) {
-		/* IMEをオフにする */
-		hImc = ImmGetContext (m_hWndChat);
-		ImmSetOpenStatus (hImc, FALSE);
-		ImmReleaseContext (m_hWndChat, hImc);
+		// IMEをオフにする
+		hImc = ImmGetContext(m_hWndChat);
+		ImmSetOpenStatus(hImc, FALSE);
+		ImmReleaseContext(m_hWndChat, hImc);
 
-		SetWindowLong (m_hWndChat, GWL_WNDPROC, (LONG)m_OrgWndProcChat);
+		SetWindowLong(m_hWndChat, GWL_WNDPROC, (LONG)m_OrgWndProcChat);
 		m_OrgWndProcChat = NULL;
 	}
 	delete this;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgMsgLog::OnLink												 */
-/* 内容		:ログコントロールからのリンク通知								 */
-/* 日付		:2007/04/12														 */
-/* ========================================================================= */
-
 void CDlgMsgLog::OnLink(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NMLVCLINK* pnmLink = reinterpret_cast<NMLVCLINK*>(pNMHDR);
 
-	ShellExecute (NULL, _T("open"), pnmLink->pszLink, NULL, NULL, SW_SHOW);
+	ShellExecute(NULL, _T("open"), pnmLink->pszLink, NULL, NULL, SW_SHOW);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgMsgLog::OnBnClickedTopMost									 */
-/* 内容		:ボタンハンドラ(最前面)											 */
-/* 日付		:2008/08/30														 */
-/* ========================================================================= */
 
 void CDlgMsgLog::OnBnClickedTopMost()
 {
-	UpdateData ();
+	UpdateData();
 
 	if (m_bTopMost) {
-		SetWindowPos (&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	} else {
-		SetWindowPos (&CWnd::wndNoTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		SetWindowPos(&CWnd::wndNoTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgMsgLog::OnBnClickedHideMainframe							 */
-/* 内容		:ボタンハンドラ(メインウィンドウ非表示)							 */
-/* 日付		:2008/06/08														 */
-/* ========================================================================= */
 
 void CDlgMsgLog::OnBnClickedHideMainframe()
 {
 	int nCmdShow;
 	HWND hWnd;
 
-	UpdateData ();
+	UpdateData();
 	nCmdShow = (m_bHideMainFrame) ? SW_HIDE : SW_SHOW;
 
-	::ShowWindow (m_pMgrData->GetMainWindow (), nCmdShow);
-	hWnd = m_pMgrData->GetAdminWindow ();
+	::ShowWindow(m_pMgrData->GetMainWindow(), nCmdShow);
+	hWnd = m_pMgrData->GetAdminWindow();
 	if (hWnd) {
-		::ShowWindow (hWnd, nCmdShow);
+		::ShowWindow(hWnd, nCmdShow);
 	}
-	hWnd = m_pMgrData->GetDebugWindow ();
+	hWnd = m_pMgrData->GetDebugWindow();
 	if (hWnd) {
-		::ShowWindow (hWnd, nCmdShow);
+		::ShowWindow(hWnd, nCmdShow);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgMsgLog::ChatWndProc										 */
-/* 内容		:チャット入力欄プロシージャ										 */
-/* 日付		:2008/06/08														 */
-/* ========================================================================= */
 
 LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -349,7 +273,7 @@ LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam,
 	CMainFrame *pMainFrame;
 	CmyString strTmp;
 
-	pThis	= (PCDlgMsgLog)GetWindowLong (hWnd, GWL_USERDATA);
+	pThis	= (PCDlgMsgLog)GetWindowLong(hWnd, GWL_USERDATA);
 	hResult	= -1;
 
 	switch (message) {
@@ -380,19 +304,19 @@ LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam,
 			if (pThis->m_bPushEnter == FALSE) {
 				break;
 			}
-			pThis->UpdateData ();
-			if (pThis->m_strChat.GetLength () > 0) {
-				pMainFrame = pThis->m_pMgrData->GetMainFrame ();
-				ZeroMemory (szTmp, sizeof (szTmp));
-				_tcsnccat (szTmp, pThis->m_strChat, 100);
-				TrimViewString (strTmp, szTmp);
+			pThis->UpdateData();
+			if (pThis->m_strChat.GetLength() > 0) {
+				pMainFrame = pThis->m_pMgrData->GetMainFrame();
+				ZeroMemory(szTmp, sizeof(szTmp));
+				_tcsnccat(szTmp, pThis->m_strChat, 100);
+				TrimViewString(strTmp, szTmp);
 				pThis->m_strChat = (LPCTSTR)strTmp;
-				::PostMessage (pThis->m_pMgrData->GetMainWindow (), WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
+				::PostMessage(pThis->m_pMgrData->GetMainWindow(), WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
 
-				pMainFrame->SendChat (0, (LPCSTR)strTmp, NULL);
+				pMainFrame->SendChat(0, (LPCSTR)strTmp, NULL);
 			}
-			pThis->m_strChat.Empty ();
-			pThis->UpdateData (FALSE);
+			pThis->m_strChat.Empty();
+			pThis->UpdateData(FALSE);
 			pThis->m_bPushEnter = FALSE;
 			hResult = 0;
 			break;
@@ -404,9 +328,7 @@ LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam,
 	}
 
 	if (hResult != 0) {
-		hResult = CallWindowProc (pThis->m_OrgWndProcChat, hWnd, message, wParam, lParam);
+		hResult = CallWindowProc(pThis->m_OrgWndProcChat, hWnd, message, wParam, lParam);
 	}
 	return hResult;
 }
-
-/* Copyright(C)URARA-works 2005 */

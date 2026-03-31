@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharSkillList.h									 */
-/* 内容			:スキルリストダイアログクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharSkillList.h
+/// @brief スキルリストダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/07
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,24 +10,22 @@
 
 class CLibInfoSkill;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharSkillList : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharSkillList(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminCharSkillList();							/* デストラクタ */
+			CDlgAdminCharSkillList(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharSkillList(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* メッセージハンドラ(WM_MAINFRAME) */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	OnMainFrame(DWORD dwCommand, DWORD dwParam); // メッセージハンドラ(WM_MAINFRAME)
 
-	void	Renew		(void);											/* リスト更新 */
+	void	Renew(void); // リスト更新
 
 
 protected:
-	CLibInfoSkill		*m_pLibInfoSkill;		/* スキル情報 */
+	CLibInfoSkill	*m_pLibInfoSkill; // スキル情報
 
 
 
@@ -56,5 +52,3 @@ protected:
 } CDlgAdminCharSkillList, *PCDlgAdminCharSkillList;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

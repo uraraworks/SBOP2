@@ -18,4 +18,3 @@ private:
         static std::string GetTimestamp();
         CMgrData *m_pMgrData;
 };
-

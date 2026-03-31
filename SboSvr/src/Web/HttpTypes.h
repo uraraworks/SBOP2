@@ -35,4 +35,3 @@ struct HttpResponse
 private:
         HttpHeader *FindHeaderInternal(const char *pszName);
 };
-

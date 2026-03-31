@@ -42,3 +42,4 @@ private:
 	CMgrData* m_pMgrData;
 	BOOL m_bLoadedFromDll;
 };
+

@@ -347,4 +347,3 @@ void CAdminRolesUpdateHandler::EmitAuditTrace(DWORD dwAccountId, const std::vect
         std::fprintf(stderr, "%s\n", oss.str().c_str());
 #endif
 }
-

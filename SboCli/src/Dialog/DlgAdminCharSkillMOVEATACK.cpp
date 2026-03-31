@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharSkillMOVEATACK.cpp								 */
-/* 内容			:スキル(移動して攻撃)ダイアログクラス 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/01/07													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharSkillMOVEATACK.cpp
+/// @brief スキル(移動して攻撃)ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/01/07
+/// @copyright Copyright(C)URARA-works 2009
 
 #include "stdafx.h"
 #include "resource.h"
@@ -20,9 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharSkillMOVEATACK::DoDataExchange(CDataExchange* pDX)
 {
@@ -52,12 +48,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharSkillMOVEATACK, CDlgAdminCharSkillNONE)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK		 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2009/01/07														 */
-/* ========================================================================= */
-
 CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK(CWnd* pParent /*=NULL*/)
 	: CDlgAdminCharSkillNONE(pParent)
 {
@@ -75,34 +65,16 @@ CDlgAdminCharSkillMOVEATACK::CDlgAdminCharSkillMOVEATACK(CWnd* pParent /*=NULL*/
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillMOVEATACK::~CDlgAdminCharSkillMOVEATACK		 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2009/01/07														 */
-/* ========================================================================= */
-
 CDlgAdminCharSkillMOVEATACK::~CDlgAdminCharSkillMOVEATACK()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillMOVEATACK::Init								 */
-/* 内容		:初期化															 */
-/* 日付		:2009/01/07														 */
-/* ========================================================================= */
-
 void CDlgAdminCharSkillMOVEATACK::Init(CMgrData *pMgrData)
 {
-	CDlgAdminCharSkillNONE::Init (pMgrData);
+	CDlgAdminCharSkillNONE::Init(pMgrData);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillMOVEATACK::Set								 */
-/* 内容		:設定															 */
-/* 日付		:2009/01/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 {
@@ -112,74 +84,68 @@ void CDlgAdminCharSkillMOVEATACK::Set(CInfoSkillBase *pSrc)
 	PCInfoSkillMOVEATACK pSrcTmp = (PCInfoSkillMOVEATACK)pSrc;
 
 	nNo = 0;
-	nCount = m_ctlTarget.GetCount ();
+	nCount = m_ctlTarget.GetCount();
 	for (i = 0; i < nCount; i ++) {
-		dwTmp = m_ctlTarget.GetItemData (i);
+		dwTmp = m_ctlTarget.GetItemData(i);
 		if (pSrcTmp->m_dwTartgetType == dwTmp) {
 			nNo = i;
 			break;
 		}
 	}
-	m_ctlTarget.SetCurSel (nNo);
+	m_ctlTarget.SetCurSel(nNo);
 
-	m_dwAliveTime		= pSrcTmp->m_dwAliveTime;		/* 耐久時間 */
-	m_dwWaitTime		= pSrcTmp->m_dwWaitTime;		/* 移動速度 */
-	m_dwValue1			= pSrcTmp->m_dwValue1;			/* 効果1 */
-	m_dwValue2			= pSrcTmp->m_dwValue2;			/* 効果2 */
-	m_dwDistance		= pSrcTmp->m_dwDistance;		/* 射程距離 */
-	m_bHitQuit			= pSrcTmp->m_bHitQuit;			/* ヒットすると消滅 */
-	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete;	/* 射程距離まで行くと消える */
+	m_dwAliveTime	= pSrcTmp->m_dwAliveTime; // 耐久時間
+	m_dwWaitTime	= pSrcTmp->m_dwWaitTime; // 移動速度
+	m_dwValue1	= pSrcTmp->m_dwValue1; // 効果1
+	m_dwValue2	= pSrcTmp->m_dwValue2; // 効果2
+	m_dwDistance	= pSrcTmp->m_dwDistance; // 射程距離
+	m_bHitQuit	= pSrcTmp->m_bHitQuit; // ヒットすると消滅
+	m_bDistanceDelete	= pSrcTmp->m_bDistanceDelete; // 射程距離まで行くと消える
 
-	/* 向きによる表示エフェクト */
+	// 向きによる表示エフェクト
 	for (j = 0; j < 4; j ++) {
 		pCombo = apCtlEffectID[j];
 		nNo = 0;
-		nCount = pCombo->GetCount ();
+		nCount = pCombo->GetCount();
 		for (i = 0; i < nCount; i ++) {
-			dwTmp = pCombo->GetItemData (i);
+			dwTmp = pCombo->GetItemData(i);
 			if (pSrcTmp->m_adwEffectID[j] == dwTmp) {
 				nNo = i;
 				break;
 			}
 		}
-		pCombo->SetCurSel (nNo);
+		pCombo->SetCurSel(nNo);
 	}
 
-	/* ヒット時の表示エフェクト */
+	// ヒット時の表示エフェクト
 	pCombo = &m_ctlHitEffect;
 	nNo = 0;
-	nCount = pCombo->GetCount ();
+	nCount = pCombo->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		dwTmp = pCombo->GetItemData (i);
+		dwTmp = pCombo->GetItemData(i);
 		if (pSrcTmp->m_dwHitEffectID == dwTmp) {
 			nNo = i;
 			break;
 		}
 	}
-	pCombo->SetCurSel (nNo);
+	pCombo->SetCurSel(nNo);
 
-	/* 発射種別 */
+	// 発射種別
 	pCombo = &m_ctlPutType;
 	nNo = 0;
-	nCount = pCombo->GetCount ();
+	nCount = pCombo->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		dwTmp = pCombo->GetItemData (i);
+		dwTmp = pCombo->GetItemData(i);
 		if (pSrcTmp->m_dwPutType == dwTmp) {
 			nNo = i;
 			break;
 		}
 	}
-	pCombo->SetCurSel (nNo);
+	pCombo->SetCurSel(nNo);
 
-	UpdateData (FALSE);
+	UpdateData(FALSE);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillMOVEATACK::Get								 */
-/* 内容		:取得															 */
-/* 日付		:2009/01/07														 */
-/* ========================================================================= */
 
 void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 {
@@ -187,38 +153,32 @@ void CDlgAdminCharSkillMOVEATACK::Get(CInfoSkillBase *pDst)
 	CComboBox *pCombo, *apCtlEffectID[] = { &m_ctlUp, &m_ctlDown, &m_ctlLeft, &m_ctlRight };
 	PCInfoSkillMOVEATACK pDstTmp = (PCInfoSkillMOVEATACK)pDst;
 
-	UpdateData ();
+	UpdateData();
 
-	nNo = m_ctlTarget.GetCurSel ();
-	pDstTmp->m_dwTartgetType	= m_ctlTarget.GetItemData (nNo);	/* 攻撃対象 */
-	pDstTmp->m_dwAliveTime		= m_dwAliveTime;		/* 耐久時間 */
-	pDstTmp->m_dwWaitTime		= m_dwWaitTime;			/* 移動速度 */
-	pDstTmp->m_dwValue1			= m_dwValue1;			/* 効果1 */
-	pDstTmp->m_dwValue2			= m_dwValue2;			/* 効果2 */
-	pDstTmp->m_dwDistance		= m_dwDistance;			/* 射程距離 */
-	pDstTmp->m_bHitQuit			= m_bHitQuit;			/* ヒットすると消滅 */
-	pDstTmp->m_bDistanceDelete	= m_bDistanceDelete;	/* 射程距離まで行くと消える */
+	nNo = m_ctlTarget.GetCurSel();
+	pDstTmp->m_dwTartgetType	= m_ctlTarget.GetItemData(nNo); // 攻撃対象
+	pDstTmp->m_dwAliveTime	= m_dwAliveTime; // 耐久時間
+	pDstTmp->m_dwWaitTime	= m_dwWaitTime; // 移動速度
+	pDstTmp->m_dwValue1	= m_dwValue1; // 効果1
+	pDstTmp->m_dwValue2	= m_dwValue2; // 効果2
+	pDstTmp->m_dwDistance	= m_dwDistance; // 射程距離
+	pDstTmp->m_bHitQuit	= m_bHitQuit; // ヒットすると消滅
+	pDstTmp->m_bDistanceDelete	= m_bDistanceDelete; // 射程距離まで行くと消える
 
-	/* 向きによる表示エフェクト */
+	// 向きによる表示エフェクト
 	for (i = 0; i < 4; i ++) {
 		pCombo = apCtlEffectID[i];
-		nNo = pCombo->GetCurSel ();
-		pDstTmp->m_adwEffectID[i] = pCombo->GetItemData (nNo);
+		nNo = pCombo->GetCurSel();
+		pDstTmp->m_adwEffectID[i] = pCombo->GetItemData(nNo);
 	}
-	/* ヒット時の表示エフェクト */
-	nNo = m_ctlHitEffect.GetCurSel ();
-	pDstTmp->m_dwHitEffectID = m_ctlHitEffect.GetItemData (nNo);
-	/* 発射種別 */
-	nNo = m_ctlPutType.GetCurSel ();
-	pDstTmp->m_dwPutType = m_ctlPutType.GetItemData (nNo);
+	// ヒット時の表示エフェクト
+	nNo = m_ctlHitEffect.GetCurSel();
+	pDstTmp->m_dwHitEffectID = m_ctlHitEffect.GetItemData(nNo);
+	// 発射種別
+	nNo = m_ctlPutType.GetCurSel();
+	pDstTmp->m_dwPutType = m_ctlPutType.GetItemData(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillMOVEATACK::OnInitDialog						 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2009/01/07														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 {
@@ -227,14 +187,14 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	PCLibInfoEffect pLibInfoEffect;
 	STINTLPCSTR *pIntLpcstr,
 		astTarget[] = {
-			ATACKTARGETTYPE_NONE,			"未設定",
-			ATACKTARGETTYPE_PC,				"プレイヤー",
-			ATACKTARGETTYPE_NPC,			"NPC",
-			ATACKTARGETTYPE_ALL,			"全て",
+			ATACKTARGETTYPE_NONE,	"未設定",
+			ATACKTARGETTYPE_PC,	"プレイヤー",
+			ATACKTARGETTYPE_NPC,	"NPC",
+			ATACKTARGETTYPE_ALL,	"全て",
 			-1, NULL
 		},
 		astPutType[] = {
-			SKILLMOVEATACKPUTTYPE_NONE,		"未設定",
+			SKILLMOVEATACKPUTTYPE_NONE,	"未設定",
 			SKILLMOVEATACKPUTTYPE_FRONT,	"前方",
 			SKILLMOVEATACKPUTTYPE_CROSS,	"上下左右",
 			-1, NULL
@@ -242,62 +202,54 @@ BOOL CDlgAdminCharSkillMOVEATACK::OnInitDialog()
 	CComboBox *pCombo, *apCtlEffectID[] = { &m_ctlUp, &m_ctlDown, &m_ctlLeft, &m_ctlRight, &m_ctlHitEffect };
 
 	CDlgAdminCharSkillNONE::OnInitDialog();
-	pLibInfoEffect = m_pMgrData->GetLibInfoEffect ();
+	pLibInfoEffect = m_pMgrData->GetLibInfoEffect();
 
-	/* 攻撃対象 */
+	// 攻撃対象
 	for (i = 0; ; i ++) {
 		pIntLpcstr = &astTarget[i];
 		if (pIntLpcstr->nValue == -1) {
 			break;
 		}
-		m_ctlTarget.InsertString (i, Utf8ToTString (pIntLpcstr->pszText));
-		m_ctlTarget.SetItemData (i, pIntLpcstr->nValue);
+		m_ctlTarget.InsertString(i, Utf8ToTString(pIntLpcstr->pszText));
+		m_ctlTarget.SetItemData(i, pIntLpcstr->nValue);
 	}
-	m_ctlTarget.SetCurSel (0);
+	m_ctlTarget.SetCurSel(0);
 
-	/* エフェクトID */
+	// エフェクトID
 	for (j = 0; j < 5; j ++) {
 		pCombo = apCtlEffectID[j];
-		pCombo->InsertString (0, _T("無し"));
+		pCombo->InsertString(0, _T("無し"));
 	}
-	nCount = pLibInfoEffect->GetCount ();
+	nCount = pLibInfoEffect->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr (i);
+		pInfoEffect = (PCInfoEffect)pLibInfoEffect->GetPtr(i);
 		for (j = 0; j < 5; j ++) {
 			pCombo = apCtlEffectID[j];
-			pCombo->InsertString (i + 1, Utf8ToTString ((LPCSTR)pInfoEffect->m_strName));
-			pCombo->SetItemData (i + 1, pInfoEffect->m_dwEffectID);
+			pCombo->InsertString(i + 1, Utf8ToTString((LPCSTR)pInfoEffect->m_strName));
+			pCombo->SetItemData(i + 1, pInfoEffect->m_dwEffectID);
 		}
 	}
 	for (j = 0; j < 5; j ++) {
 		pCombo = apCtlEffectID[j];
-		pCombo->SetCurSel (0);
+		pCombo->SetCurSel(0);
 	}
 
-	/* 発射種別 */
+	// 発射種別
 	for (i = 0; ; i ++) {
 		pIntLpcstr = &astPutType[i];
 		if (pIntLpcstr->nValue == -1) {
 			break;
 		}
-		m_ctlPutType.InsertString (i, Utf8ToTString (pIntLpcstr->pszText));
-		m_ctlPutType.SetItemData (i, pIntLpcstr->nValue);
+		m_ctlPutType.InsertString(i, Utf8ToTString(pIntLpcstr->pszText));
+		m_ctlPutType.SetItemData(i, pIntLpcstr->nValue);
 	}
-	m_ctlPutType.SetCurSel (0);
+	m_ctlPutType.SetCurSel(0);
 
 	return TRUE;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharSkillMOVEATACK::OnAdminMsg						 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2009/01/07														 */
-/* ========================================================================= */
-
 LRESULT CDlgAdminCharSkillMOVEATACK::OnAdminMsg(WPARAM wParam, LPARAM lParam)
 {
 	return -1;
 }
-
-/* Copyright(C)URARA-works 2009 */

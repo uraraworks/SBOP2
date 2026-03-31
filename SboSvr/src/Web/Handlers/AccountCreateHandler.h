@@ -42,4 +42,3 @@ private:
 
         CMgrData *m_pMgrData;
 };
-

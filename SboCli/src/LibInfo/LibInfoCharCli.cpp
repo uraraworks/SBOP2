@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoCharCli.cpp											 */
-/* 内容			:キャラ情報ライブラリクライアントクラス 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/10/01													 */
-/* ========================================================================= */
+﻿/// @file LibInfoCharCli.cpp
+/// @brief キャラ情報ライブラリクライアントクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/10/01
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include "LibInfoMotion.h"
@@ -42,11 +40,11 @@ static void GetMoveCheckMapRect(
 
 	pInfoChar->m_nMapX = nMapXBack + anPosX[nDirection] * nMovePixel;
 	pInfoChar->m_nMapY = nMapYBack + anPosY[nDirection] * nMovePixel;
-	pInfoChar->GetCollisionRect (rcDst);
+	pInfoChar->GetCollisionRect(rcDst);
 	pInfoChar->m_nMapX = nMapXBack;
 	pInfoChar->m_nMapY = nMapYBack;
 
-	/* 直進時は進行先の先頭辺だけを調べ、壁沿い移動時の引っ掛かりを減らす */
+	// 直進時は進行先の先頭辺だけを調べ、壁沿い移動時の引っ掛かりを減らす
 	switch (nDirection) {
 	case 0:
 		rcDst.bottom = rcDst.top;
@@ -62,13 +60,13 @@ static void GetMoveCheckMapRect(
 		break;
 	}
 
-	rcDst.left		/= MAPPARTSSIZE;
-	rcDst.right		/= MAPPARTSSIZE;
-	rcDst.top		/= MAPPARTSSIZE;
+	rcDst.left	/= MAPPARTSSIZE;
+	rcDst.right	/= MAPPARTSSIZE;
+	rcDst.top	/= MAPPARTSSIZE;
 	rcDst.bottom	/= MAPPARTSSIZE;
 
 	if ((rcDst.left < 0) || (rcDst.top < 0)) {
-		SetRect (&rcDst, -1, -1, -1, -1);
+		SetRect(&rcDst, -1, -1, -1, -1);
 	}
 }
 
@@ -86,10 +84,10 @@ static BOOL CanMoveDirection(
 	}
 
 	bResult = FALSE;
-	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
+	GetMoveCheckMapRect(pInfoChar, rcMap, nDirection);
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
 		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			bResult |= !pInfoMap->IsMoveOut (x, y, nDirection);
+			bResult |= !pInfoMap->IsMoveOut(x, y, nDirection);
 		}
 	}
 	bResult = !bResult;
@@ -98,10 +96,10 @@ static BOOL CanMoveDirection(
 	}
 
 	bResult = FALSE;
-	GetMoveCheckMapRect (pInfoChar, rcMap, nDirection);
+	GetMoveCheckMapRect(pInfoChar, rcMap, nDirection);
 	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
 		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			bResult |= !pInfoMap->IsMove (x, y, nDirection);
+			bResult |= !pInfoMap->IsMove(x, y, nDirection);
 		}
 	}
 	bResult = !bResult;
@@ -143,7 +141,7 @@ static BOOL TrySlideMove(
 		default:
 			break;
 		}
-		if (CanMoveDirection (pInfoMap, pInfoChar, nDirection)) {
+		if (CanMoveDirection(pInfoMap, pInfoChar, nDirection)) {
 			return TRUE;
 		}
 	}
@@ -154,52 +152,27 @@ static BOOL TrySlideMove(
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::CLibInfoCharCli								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 CLibInfoCharCli::CLibInfoCharCli()
 {
-	m_nProcNo		= 0;
+	m_nProcNo	= 0;
 	m_pMainFrame	= NULL;
-	m_pMgrData		= NULL;
+	m_pMgrData	= NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::~CLibInfoCharCli								 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
 
 CLibInfoCharCli::~CLibInfoCharCli()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 void CLibInfoCharCli::Create(CMgrData *pMgrData)
 {
-	CLibInfoCharBase::Create ();
+	CLibInfoCharBase::Create();
 
-	m_pMgrData		= pMgrData;
-	m_pMainFrame	= m_pMgrData->GetMainFrame ();
+	m_pMgrData	= pMgrData;
+	m_pMainFrame	= m_pMgrData->GetMainFrame();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::Proc											 */
-/* 内容		:処理															 */
-/* 戻り値	:TRUE:処理した FALS:処理していない								 */
-/* 日付		:2007/01/24														 */
-/* ========================================================================= */
 
 BOOL CLibInfoCharCli::Proc(void)
 {
@@ -209,7 +182,7 @@ BOOL CLibInfoCharCli::Proc(void)
 
 	bRet = FALSE;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	if (nCount <= 0) {
 		goto Exit;
 	}
@@ -219,7 +192,7 @@ BOOL CLibInfoCharCli::Proc(void)
 			m_nProcNo = 0;
 		}
 
-		pInfoChar = (PCInfoCharCli)GetPtr (m_nProcNo);
+		pInfoChar = (PCInfoCharCli)GetPtr(m_nProcNo);
 		m_nProcNo ++;
 		if (pInfoChar == NULL) {
 			goto Exit;
@@ -227,20 +200,20 @@ BOOL CLibInfoCharCli::Proc(void)
 
 		bResult = FALSE;
 		switch (pInfoChar->m_nMoveState) {
-		case CHARMOVESTATE_DELETE:			/* 消去 */
-			if (pInfoChar == m_pMgrData->GetPlayerChar ()) {
-				m_pMgrData->SetPlayerChar (NULL);
+		case CHARMOVESTATE_DELETE:	// 消去
+			if (pInfoChar == m_pMgrData->GetPlayerChar()) {
+				m_pMgrData->SetPlayerChar(NULL);
 			}
-			Delete (pInfoChar->m_dwCharID);
-			PostMessage (m_pMgrData->GetMainWindow (), WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARCOUNT, GetCount ());
+			Delete(pInfoChar->m_dwCharID);
+			PostMessage(m_pMgrData->GetMainWindow(), WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARCOUNT, GetCount());
 			m_nProcNo --;
 			bResult = TRUE;
 			break;
-//		case CHARMOVESTATE_STAND:			/* 立ち */
-//		case CHARMOVESTATE_MOVE:			/* 移動中 */
-//		case CHARMOVESTATE_DELETEREADY:		/* 消去準備 */
+//	case CHARMOVESTATE_STAND:	// 立ち
+//	case CHARMOVESTATE_MOVE:	// 移動中
+//	case CHARMOVESTATE_DELETEREADY:	// 消去準備
 		default:
-			bResult = pInfoChar->TimerProc (timeGetTime ());
+			bResult = pInfoChar->TimerProc(timeGetTime());
 			break;
 		}
 		bRet |= bResult;
@@ -250,13 +223,6 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::DeleteOutScreen								 */
-/* 内容		:画面外のキャラを削除											 */
-/* 戻り値	:TRUE:削除された												 */
-/* 日付		:2007/02/12														 */
-/* ========================================================================= */
 
 BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/)
 {
@@ -280,21 +246,21 @@ BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/
 	nViewRangeX = DRAW_PARTS_X * MAPPARTSSIZE + MAPPARTSSIZE;
 	nViewRangeY = DRAW_PARTS_Y * MAPPARTSSIZE + MAPPARTSSIZE;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = nCount - 1; i >= 0; i --) {
-		pCharTmp = (PCInfoCharCli)GetPtr (i);
+		pCharTmp = (PCInfoCharCli)GetPtr(i);
 		if (pCharTmp == pChar) {
 			continue;
 		}
-		/* 同マップ？ */
+		// 同マップ？
 		if (pCharTmp->m_dwMapID == pChar->m_dwMapID) {
-			/* 画面内？ */
-			if ((abs (pCharTmp->m_nMapX - pChar->m_nMapX) <= nViewRangeX) &&
-				(abs (pCharTmp->m_nMapY - pChar->m_nMapY) <= nViewRangeY)) {
+			// 画面内？
+			if ((abs(pCharTmp->m_nMapX - pChar->m_nMapX) <= nViewRangeX) &&
+				(abs(pCharTmp->m_nMapY - pChar->m_nMapY) <= nViewRangeY)) {
 				continue;
 			}
 		}
-		pCharTmp->ChgMoveState (nState);
+		pCharTmp->ChgMoveState(nState);
 		bRet = TRUE;
 	}
 
@@ -302,36 +268,24 @@ BOOL CLibInfoCharCli::DeleteOutScreen(CInfoCharCli *pChar, BOOL bDelete/*FALSE*/
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::RenewMotionInfo								 */
-/* 内容		:モーション情報を更新											 */
-/* 日付		:2007/11/24														 */
-/* ========================================================================= */
-
 void CLibInfoCharCli::RenewMotionInfo(DWORD dwCharID)
 {
 	int i, nCount;
 	PCInfoCharCli pChar;
 
 	if (dwCharID) {
-		pChar = (PCInfoCharCli)GetPtr (dwCharID);
-		RenewMotionInfo (pChar);
+		pChar = (PCInfoCharCli)GetPtr(dwCharID);
+		RenewMotionInfo(pChar);
 
 	} else {
-		nCount = GetCount ();
+		nCount = GetCount();
 		for (i = 0; i < nCount; i ++) {
-			pChar = (PCInfoCharCli)GetPtr (i);
-			RenewMotionInfo (pChar);
+			pChar = (PCInfoCharCli)GetPtr(i);
+			RenewMotionInfo(pChar);
 		}
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::RenewMotionInfo								 */
-/* 内容		:モーション情報を更新											 */
-/* 日付		:2007/11/24														 */
-/* ========================================================================= */
 
 void CLibInfoCharCli::RenewMotionInfo(CInfoCharCli *pChar)
 {
@@ -344,38 +298,32 @@ void CLibInfoCharCli::RenewMotionInfo(CInfoCharCli *pChar)
 
 	for (i = 0; i < CHARMOTIONID_MAX; i ++) {
 		dwMotionID = pChar->m_adwMotionID[i];
-		SetMotionInfo (pChar, i, dwMotionID);
+		SetMotionInfo(pChar, i, dwMotionID);
 	}
-	pChar->InitMotionInfo (-1);
+	pChar->InitMotionInfo(-1);
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::SetMotionInfo									 */
-/* 内容		:モーション情報を設定											 */
-/* 日付		:2008/01/03														 */
-/* ========================================================================= */
-
 void CLibInfoCharCli::SetMotionInfo(
-	CInfoCharCli *pChar,		/* [in] キャラ情報 */
-	DWORD dwMotionID,			/* [in] モーションID */
-	DWORD dwListID)				/* [in] モーションリストID */
+	CInfoCharCli *pChar,	// [in] キャラ情報
+	DWORD dwMotionID,	// [in] モーションID
+	DWORD dwListID)	// [in] モーションリストID
 {
 	int i;
 	DWORD dwMotionType;
 	PCLibInfoMotion pLibInfoMotion;
 	PCLibInfoItem pLibInfoItem;
 
-	pLibInfoMotion	= m_pMgrData->GetLibInfoMotion ();
-	pLibInfoItem	= m_pMgrData->GetLibInfoItem ();
+	pLibInfoMotion	= m_pMgrData->GetLibInfoMotion();
+	pLibInfoItem	= m_pMgrData->GetLibInfoItem();
 
 	switch (dwMotionID) {
-	case CHARMOTIONID_ATACK:			// 攻撃
+	case CHARMOTIONID_ATACK:	// 攻撃
 		dwListID	 = CHARMOTIONLISTID_SWING_UP;
-		dwMotionType = pLibInfoItem->GetMotionIDAtack (pChar->m_dwEquipItemIDArmsRight);
+		dwMotionType = pLibInfoItem->GetMotionIDAtack(pChar->m_dwEquipItemIDArmsRight);
 //Todo:暫定
 		if ((dwMotionType & INFOITEMARMS_MOTION_SWING) && (dwMotionType & INFOITEMARMS_MOTION_POKE)) {
-			if (rand () % 100 > 50) {
+			if (rand() % 100 > 50) {
 				dwListID = CHARMOTIONLISTID_SWING_UP;
 			} else {
 				dwListID = CHARMOTIONLISTID_POKE_UP;
@@ -398,42 +346,36 @@ void CLibInfoCharCli::SetMotionInfo(
 			dwListID = CHARMOTIONLISTID_FISHING_UP;
 		}
 		break;
-	case CHARMOTIONID_BATTLESTAND:		// 戦闘立ち
-		dwListID = pLibInfoItem->GetMotionIDBattleStand (pChar->m_dwEquipItemIDArmsRight);
+	case CHARMOTIONID_BATTLESTAND:	// 戦闘立ち
+		dwListID = pLibInfoItem->GetMotionIDBattleStand(pChar->m_dwEquipItemIDArmsRight);
 		if (dwListID == 0) {
 			dwListID = CHARMOTIONLISTID_BATTLESTAND_UP;
 		}
 		break;
-	case CHARMOTIONID_BATTLEWALK:		// すり足
-		dwListID = pLibInfoItem->GetMotionIDBattleWalk (pChar->m_dwEquipItemIDArmsRight);
+	case CHARMOTIONID_BATTLEWALK:	// すり足
+		dwListID = pLibInfoItem->GetMotionIDBattleWalk(pChar->m_dwEquipItemIDArmsRight);
 		if (dwListID == 0) {
 			dwListID = CHARMOTIONLISTID_BATTLEWALK_UP;
 		}
 		break;
 	case CHARMOTIONID_BATTLEDEFENSE:	// 防御
 		dwListID = CHARMOTIONLISTID_DEFENSE_UP;
-		dwMotionType = pLibInfoItem->GetMotionIDAtack (pChar->m_dwEquipItemIDArmsRight);
+		dwMotionType = pLibInfoItem->GetMotionIDAtack(pChar->m_dwEquipItemIDArmsRight);
 		if (dwMotionType & INFOITEMARMS_MOTION_BOW) {
 			dwListID = CHARMOTIONLISTID_BOWDEFENSE_UP;
 		}
 		break;
 	}
-	/* 向きに応じてモーションを切り替える？ */
+	// 向きに応じてモーションを切り替える？
 	if (pChar->m_bMotionDirection) {
 		for (i = 0; i < 4; i ++) {
-			pLibInfoMotion->GetMotionInfo (pChar->m_dwMotionTypeID, dwListID + i, pChar->m_aMotion[dwMotionID][i]);
+			pLibInfoMotion->GetMotionInfo(pChar->m_dwMotionTypeID, dwListID + i, pChar->m_aMotion[dwMotionID][i]);
 		}
 	} else {
-		pLibInfoMotion->GetMotionInfo (pChar->m_dwMotionTypeID, dwListID, pChar->m_aMotion[dwMotionID][0]);
+		pLibInfoMotion->GetMotionInfo(pChar->m_dwMotionTypeID, dwListID, pChar->m_aMotion[dwMotionID][0]);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharSvr::RenewGrpID									 */
-/* 内容		:装備画像IDを更新												 */
-/* 日付		:2007/12/22														 */
-/* ========================================================================= */
 
 void CLibInfoCharCli::RenewGrpID(DWORD dwCharID)
 {
@@ -442,54 +384,47 @@ void CLibInfoCharCli::RenewGrpID(DWORD dwCharID)
 	PCInfoItemTypeBase pInfoItemType;
 	PCLibInfoItem pLibInfoItem;
 
-	pLibInfoItem = m_pMgrData->GetLibInfoItem ();
+	pLibInfoItem = m_pMgrData->GetLibInfoItem();
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
 		if (dwCharID == 0) {
-			pInfoChar = (PCInfoCharBase)GetPtr (i);
+			pInfoChar = (PCInfoCharBase)GetPtr(i);
 		} else {
-			pInfoChar = (PCInfoCharBase)GetPtr (dwCharID);
+			pInfoChar = (PCInfoCharBase)GetPtr(dwCharID);
 			if (pInfoChar == NULL) {
 				break;
 			}
 			i = nCount;
 		}
 
-		/* 服 */
-		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDCloth);
+		// 服
+		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr(pInfoChar->m_dwEquipItemIDCloth);
 		if (pInfoItemType) {
-			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDCloth, &pInfoChar->m_wGrpIDSP);
+			pInfoItemType->SetGrpID(&pInfoChar->m_wGrpIDCloth, &pInfoChar->m_wGrpIDSP);
 		}
-		/* アクセサリ */
-		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDAcce1);
+		// アクセサリ
+		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr(pInfoChar->m_dwEquipItemIDAcce1);
 		if (pInfoItemType) {
-			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDAcce, NULL);
+			pInfoItemType->SetGrpID(&pInfoChar->m_wGrpIDAcce, NULL);
 		}
-		/* 持ち物 */
-		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDArmsRight);
+		// 持ち物
+		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr(pInfoChar->m_dwEquipItemIDArmsRight);
 		if (pInfoItemType) {
-			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDArmsMain, &pInfoChar->m_wGrpIDArmsSub);
+			pInfoItemType->SetGrpID(&pInfoChar->m_wGrpIDArmsMain, &pInfoChar->m_wGrpIDArmsSub);
 		}
-		/* 盾 */
-		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr (pInfoChar->m_dwEquipItemIDArmsLeft);
+		// 盾
+		pInfoItemType = (PCInfoItemTypeBase)pLibInfoItem->GetItemTypePtr(pInfoChar->m_dwEquipItemIDArmsLeft);
 		if (pInfoItemType) {
-			pInfoItemType->SetGrpID (&pInfoChar->m_wGrpIDArmsLeftMain, &pInfoChar->m_wGrpIDArmsLeftSub);
+			pInfoItemType->SetGrpID(&pInfoChar->m_wGrpIDArmsLeftMain, &pInfoChar->m_wGrpIDArmsLeftSub);
 		}
 	}
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharCli::IsMove										 */
-/* 内容		:指定方向に進めるかチェック										 */
-/* 日付		:2008/06/03														 */
-/* 戻り値	:TRUE:進める													 */
-/* ========================================================================= */
-
 BOOL CLibInfoCharCli::IsMove(
-	PCInfoCharBase pInfoChar,		/* [in] キャラ情報 */
-	int &nDirection)				/* [in/ou] 移動する向き */
+	PCInfoCharBase pInfoChar,	// [in] キャラ情報
+	int &nDirection)	// [in/ou] 移動する向き
 {
 	int nDirectionTmp;
 	BOOL bRet, bResult;
@@ -497,7 +432,7 @@ BOOL CLibInfoCharCli::IsMove(
 	POINT ptFront, ptBack;
 
 	bRet = FALSE;
-	pInfoMap = m_pMgrData->GetMap ();
+	pInfoMap = m_pMgrData->GetMap();
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
@@ -525,27 +460,27 @@ BOOL CLibInfoCharCli::IsMove(
 	   食み込みがない場合はスナップ前後で値が変わらないため副作用なし。
 	*/
 	switch (nDirection) {
-	case 4:	/* 右上 = 上(0) + 右(3) */
+	case 4:	// 右上 = 上(0) + 右(3)
 		nDirectionTmp = 0;
-		bRet = IsMove (pInfoChar, nDirectionTmp);
+		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 3;
-			/* 上がブロック: Yをブロックタイル下端にスナップ */
+			// 上がブロック: Yをブロックタイル下端にスナップ
 			ptBack.y = ((ptBack.y - HALF_TILE) / MAPPARTSSIZE + 1) * MAPPARTSSIZE + (HALF_TILE - 1);
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
+			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
 			pInfoChar->m_nMapY = ptFront.y;
 			nDirectionTmp = 3;
-			bRet = IsMove (pInfoChar, nDirectionTmp);
+			bRet = IsMove(pInfoChar, nDirectionTmp);
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			if (bRet) {
 				return TRUE;
 			}
-			/* 右がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			// 右がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
@@ -554,14 +489,14 @@ BOOL CLibInfoCharCli::IsMove(
 					if (nOffset != 0) {
 						BOOL bCanSlide;
 						nDirectionTmp = (nOffset < 0) ? 0 : 1;
-						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						bCanSlide = IsMove(pInfoChar, nDirectionTmp);
 						if (!bCanSlide) {
 							continue;
 						}
 						pInfoChar->m_nMapY = ptBack.y + nOffset;
 					}
 					nDirectionTmp = 3;
-					bRet = IsMove (pInfoChar, nDirectionTmp);
+					bRet = IsMove(pInfoChar, nDirectionTmp);
 					if (bRet) {
 						ptBack.y = pInfoChar->m_nMapY;
 						nDirection = 3;
@@ -574,34 +509,34 @@ BOOL CLibInfoCharCli::IsMove(
 				pInfoChar->m_nMapY = ptBack.y;
 			}
 			nDirection = 0;
-			/* 右がブロック（補正なし）: Xをブロックタイル左端にスナップ */
+			// 右がブロック（補正なし）: Xをブロックタイル左端にスナップ
 			ptBack.x = ((ptBack.x + MAPPARTSSIZE) / MAPPARTSSIZE) * MAPPARTSSIZE - MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
 		}
 		break;
-	case 5:	/* 右下 = 下(1) + 右(3) */
+	case 5:	// 右下 = 下(1) + 右(3)
 		nDirectionTmp = 1;
-		bRet = IsMove (pInfoChar, nDirectionTmp);
+		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 3;
-			/* 下がブロック: Yをブロックタイル上端にスナップ */
+			// 下がブロック: Yをブロックタイル上端にスナップ
 			ptBack.y = ((ptBack.y + 1) / MAPPARTSSIZE) * MAPPARTSSIZE - 1;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
+			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
 			pInfoChar->m_nMapY = ptFront.y;
 			nDirectionTmp = 3;
-			bRet = IsMove (pInfoChar, nDirectionTmp);
+			bRet = IsMove(pInfoChar, nDirectionTmp);
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			if (bRet) {
 				return TRUE;
 			}
-			/* 右がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			// 右がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
@@ -610,14 +545,14 @@ BOOL CLibInfoCharCli::IsMove(
 					if (nOffset != 0) {
 						BOOL bCanSlide;
 						nDirectionTmp = (nOffset < 0) ? 0 : 1;
-						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						bCanSlide = IsMove(pInfoChar, nDirectionTmp);
 						if (!bCanSlide) {
 							continue;
 						}
 						pInfoChar->m_nMapY = ptBack.y + nOffset;
 					}
 					nDirectionTmp = 3;
-					bRet = IsMove (pInfoChar, nDirectionTmp);
+					bRet = IsMove(pInfoChar, nDirectionTmp);
 					if (bRet) {
 						ptBack.y = pInfoChar->m_nMapY;
 						nDirection = 3;
@@ -630,34 +565,34 @@ BOOL CLibInfoCharCli::IsMove(
 				pInfoChar->m_nMapY = ptBack.y;
 			}
 			nDirection = 1;
-			/* 右がブロック（補正なし）: Xをブロックタイル左端にスナップ */
+			// 右がブロック（補正なし）: Xをブロックタイル左端にスナップ
 			ptBack.x = ((ptBack.x + MAPPARTSSIZE) / MAPPARTSSIZE) * MAPPARTSSIZE - MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
 		}
 		break;
-	case 6:	/* 左下 = 下(1) + 左(2) */
+	case 6:	// 左下 = 下(1) + 左(2)
 		nDirectionTmp = 1;
-		bRet = IsMove (pInfoChar, nDirectionTmp);
+		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 2;
-			/* 下がブロック: Yをブロックタイル上端にスナップ */
+			// 下がブロック: Yをブロックタイル上端にスナップ
 			ptBack.y = ((ptBack.y + 1) / MAPPARTSSIZE) * MAPPARTSSIZE - 1;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
+			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
 			pInfoChar->m_nMapY = ptFront.y;
 			nDirectionTmp = 2;
-			bRet = IsMove (pInfoChar, nDirectionTmp);
+			bRet = IsMove(pInfoChar, nDirectionTmp);
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			if (bRet) {
 				return TRUE;
 			}
-			/* 左がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			// 左がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
@@ -666,14 +601,14 @@ BOOL CLibInfoCharCli::IsMove(
 					if (nOffset != 0) {
 						BOOL bCanSlide;
 						nDirectionTmp = (nOffset < 0) ? 0 : 1;
-						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						bCanSlide = IsMove(pInfoChar, nDirectionTmp);
 						if (!bCanSlide) {
 							continue;
 						}
 						pInfoChar->m_nMapY = ptBack.y + nOffset;
 					}
 					nDirectionTmp = 2;
-					bRet = IsMove (pInfoChar, nDirectionTmp);
+					bRet = IsMove(pInfoChar, nDirectionTmp);
 					if (bRet) {
 						ptBack.y = pInfoChar->m_nMapY;
 						nDirection = 2;
@@ -686,34 +621,34 @@ BOOL CLibInfoCharCli::IsMove(
 				pInfoChar->m_nMapY = ptBack.y;
 			}
 			nDirection = 1;
-			/* 左がブロック（補正なし）: Xをブロックタイル右端にスナップ */
+			// 左がブロック（補正なし）: Xをブロックタイル右端にスナップ
 			ptBack.x = ((ptBack.x - 1) / MAPPARTSSIZE + 1) * MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			return TRUE;
 		}
 		break;
-	case 7:	/* 左上 = 上(0) + 左(2) */
+	case 7:	// 左上 = 上(0) + 左(2)
 		nDirectionTmp = 0;
-		bRet = IsMove (pInfoChar, nDirectionTmp);
+		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
 			nDirection = 2;
-			/* 上がブロック: Yをブロックタイル下端にスナップ */
+			// 上がブロック: Yをブロックタイル下端にスナップ
 			ptBack.y = ((ptBack.y - HALF_TILE) / MAPPARTSSIZE + 1) * MAPPARTSSIZE + (HALF_TILE - 1);
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos (ptFront, nDirectionTmp, TRUE);
+			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
 			pInfoChar->m_nMapX = ptFront.x;
 			pInfoChar->m_nMapY = ptFront.y;
 			nDirectionTmp = 2;
-			bRet = IsMove (pInfoChar, nDirectionTmp);
+			bRet = IsMove(pInfoChar, nDirectionTmp);
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 			if (bRet) {
 				return TRUE;
 			}
-			/* 左がブロック: 現在地 ±8px ずらしてコーナー補正 */
+			// 左がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
@@ -722,14 +657,14 @@ BOOL CLibInfoCharCli::IsMove(
 					if (nOffset != 0) {
 						BOOL bCanSlide;
 						nDirectionTmp = (nOffset < 0) ? 0 : 1;
-						bCanSlide = IsMove (pInfoChar, nDirectionTmp);
+						bCanSlide = IsMove(pInfoChar, nDirectionTmp);
 						if (!bCanSlide) {
 							continue;
 						}
 						pInfoChar->m_nMapY = ptBack.y + nOffset;
 					}
 					nDirectionTmp = 2;
-					bRet = IsMove (pInfoChar, nDirectionTmp);
+					bRet = IsMove(pInfoChar, nDirectionTmp);
 					if (bRet) {
 						ptBack.y = pInfoChar->m_nMapY;
 						nDirection = 2;
@@ -742,7 +677,7 @@ BOOL CLibInfoCharCli::IsMove(
 				pInfoChar->m_nMapY = ptBack.y;
 			}
 			nDirection = 0;
-			/* 左がブロック（補正なし）: Xをブロックタイル右端にスナップ */
+			// 左がブロック（補正なし）: Xをブロックタイル右端にスナップ
 			ptBack.x = ((ptBack.x - 1) / MAPPARTSSIZE + 1) * MAPPARTSSIZE;
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
@@ -751,10 +686,10 @@ BOOL CLibInfoCharCli::IsMove(
 		break;
 	}
 
-	bResult = CanMoveDirection (pInfoMap, pInfoChar, nDirection);
+	bResult = CanMoveDirection(pInfoMap, pInfoChar, nDirection);
 	if (bResult == FALSE) {
 		if (nDirection < 4) {
-			bResult = TrySlideMove (
+			bResult = TrySlideMove(
 				pInfoMap,
 				pInfoChar,
 				nDirection,
@@ -772,51 +707,32 @@ Exit:
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetNew										 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2006/10/01														 */
-/* ========================================================================= */
-
 CInfoBase *CLibInfoCharCli::GetNew(int nType)
 {
 	PCInfoCharCli pNew;
 
 	switch (nType) {
-	case CHARMOVETYPE_BALL:			pNew = (PCInfoCharCli)new CInfoCharBALLCli;			break;	/* ボール */
-	case CHARMOVETYPE_SCORE:		pNew = (PCInfoCharCli)new CInfoCharSCORECli;		break;	/* 得点 */
-	case CHARMOVETYPE_ATACKANIME:	pNew = (PCInfoCharCli)new CInfoCharATACKANIMECli;	break;	/* 攻撃受けるとアニメーション */
-	case CHARMOVETYPE_MOVEATACK:	pNew = (PCInfoCharCli)new CInfoCharMOVEATACKCli;	break;	/* 移動して攻撃 */
-	default:						pNew = (PCInfoCharCli)new CInfoCharCli;				break;
+	case CHARMOVETYPE_BALL:	pNew = (PCInfoCharCli)new CInfoCharBALLCli;	break;	// ボール
+	case CHARMOVETYPE_SCORE:	pNew = (PCInfoCharCli)new CInfoCharSCORECli;	break;	// 得点
+	case CHARMOVETYPE_ATACKANIME:	pNew = (PCInfoCharCli)new CInfoCharATACKANIMECli;	break;	// 攻撃受けるとアニメーション
+	case CHARMOVETYPE_MOVEATACK:	pNew = (PCInfoCharCli)new CInfoCharMOVEATACKCli;	break;	// 移動して攻撃
+	default:	pNew = (PCInfoCharCli)new CInfoCharCli;	break;
 	}
-	pNew->Create (m_pMgrData);
-	RenewMotionInfo (pNew);
+	pNew->Create(m_pMgrData);
+	RenewMotionInfo(pNew);
 
 	return (PCInfoBase)pNew;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetPtr										 */
-/* 内容		:キャラ情報を取得												 */
-/* 日付		:2007/03/21														 */
-/* ========================================================================= */
-
 CInfoBase *CLibInfoCharCli::GetPtr(int nNo)
 {
-	return CLibInfoCharBase::GetPtr (nNo);
+	return CLibInfoCharBase::GetPtr(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoCharBase::GetNew										 */
-/* 内容		:キャラ情報を取得												 */
-/* 日付		:2007/03/21														 */
-/* ========================================================================= */
 
 CInfoBase *CLibInfoCharCli::GetPtr(DWORD dwCharID)
 {
-	return CLibInfoCharBase::GetPtr (dwCharID);
+	return CLibInfoCharBase::GetPtr(dwCharID);
 }
 
-/* Copyright(C)URARA-works 2006 */

@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminTalkEventMSG.cpp									 */
-/* 内容			:会話イベント設定(メッセージ表示)ダイアログクラス 実装ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/23													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminTalkEventMSG.cpp
+/// @brief 会話イベント設定(メッセージ表示)ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/23
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "resource.h"
@@ -20,9 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminTalkEventMSG::DoDataExchange(CDataExchange* pDX)
 {
@@ -37,14 +33,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminTalkEventMSG, CDlgAdminTalkEventNONE)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
-CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG(CWnd* pParent /*=NULL*/)
+CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG(CWnd* pParent)
 	: CDlgAdminTalkEventNONE(pParent)
 	, m_strMsg(_T(""))
 {
@@ -54,59 +43,30 @@ CDlgAdminTalkEventMSG::CDlgAdminTalkEventMSG(CWnd* pParent /*=NULL*/)
 	m_nResourceID = CDlgAdminTalkEventMSG::IDD;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG					 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
-
 CDlgAdminTalkEventMSG::~CDlgAdminTalkEventMSG()
 {
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::Set										 */
-/* 内容		:設定から画面に反映												 */
-/* 日付		:2008/12/26														 */
-/* ========================================================================= */
 
 void CDlgAdminTalkEventMSG::Set(CInfoTalkEventBase *pSrc)
 {
 	m_strMsg = (LPCTSTR)pSrc->m_strText;
 
-	UpdateData (FALSE);
+	UpdateData(FALSE);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::Get										 */
-/* 内容		:画面から設定に反映												 */
-/* 日付		:2008/12/26														 */
-/* ========================================================================= */
 
 void CDlgAdminTalkEventMSG::Get(CInfoTalkEventBase *pDst)
 {
-	UpdateData ();
+	UpdateData();
 
 	pDst->m_strText = m_strMsg;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminTalkEventMSG::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2008/12/23														 */
-/* ========================================================================= */
 
 BOOL CDlgAdminTalkEventMSG::OnInitDialog()
 {
 	CDlgAdminTalkEventNONE::OnInitDialog();
 
-	RegisterControl (IDC_MSG, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl(IDC_MSG, LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
 	return TRUE;
 }
 
-/* Copyright(C)URARA-works 2008 */

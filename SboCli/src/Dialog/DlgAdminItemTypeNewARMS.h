@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemTypeNewARMS.h									 */
-/* 内容			:アイテム種別(持ち物)設定ダイアログクラス 定義ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/12/08													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemTypeNewARMS.h
+/// @brief アイテム種別(持ち物)設定ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/12/08
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -13,29 +11,27 @@
 class CInfoItemTypeBase;
 class CDlgAdminBase;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminItemTypeNewARMS : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemTypeNewARMS(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminItemTypeNewARMS();						/* デストラクタ */
+			CDlgAdminItemTypeNewARMS(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminItemTypeNewARMS(); // デストラクタ
 
-	void	Set(CInfoItemTypeBase *pSrc);							/* 編集内容を設定 */
-	void	Get(CInfoItemTypeBase *&pDst);							/* 編集内容を取得 */
-
-
-protected:
-	void	SetWeaponType(DWORD dwWeaponInfoID);		/* 武器種別を設定 */
-	DWORD	GetWeaponType(void);						/* 武器種別を取得 */
+	void	Set(CInfoItemTypeBase *pSrc); // 編集内容を設定
+	void	Get(CInfoItemTypeBase *&pDst); // 編集内容を取得
 
 
 protected:
-	CInfoItemTypeBase	*m_pSrc;				/* アイテム情報 */
-	DWORD				m_dwWeaponInfoID;		/* 武器情報ID */
-	CDlgAdminBase		*m_pDlgWeaponType;		/* 武器毎の設定画面 */
+	void	SetWeaponType(DWORD dwWeaponInfoID); // 武器種別を設定
+	DWORD	GetWeaponType(void); // 武器種別を取得
+
+
+protected:
+	CInfoItemTypeBase	*m_pSrc; // アイテム情報
+	DWORD	m_dwWeaponInfoID; // 武器情報ID
+	CDlgAdminBase	*m_pDlgWeaponType; // 武器毎の設定画面
 
 
 
@@ -50,7 +46,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminItemTypeNewARMS)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -63,5 +59,3 @@ public:
 } CDlgAdminItemTypeNewARMS, *PCDlgAdminItemTypeNewARMS;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

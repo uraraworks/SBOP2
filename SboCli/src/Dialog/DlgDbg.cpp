@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2005 */
-/* ========================================================================= */
-/* ファイル名	:DlgDbg.cpp													 */
-/* 内容			:デバッグ情報ダイアログクラス 実装ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/04/05													 */
-/* ========================================================================= */
+﻿/// @file DlgDbg.cpp
+/// @brief デバッグ情報ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/04/05
+/// @copyright Copyright(C)URARA-works 2005
 
 #include "stdafx.h"
 #include "UraraSockTCPSBO.h"
@@ -21,9 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/* ========================================================================= */
-/* クラス設定																 */
-/* ========================================================================= */
+// クラス設定
 
 void CDlgDbg::DoDataExchange(CDataExchange* pDX)
 {
@@ -45,12 +41,6 @@ BEGIN_MESSAGE_MAP(CDlgDbg, CDialog)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::CDlgDbg												 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
-
 CDlgDbg::CDlgDbg(CWnd* pParent /*=NULL*/)
 : CDialog(CDlgDbg::IDD, pParent)
 , m_pSock(NULL)
@@ -67,22 +57,10 @@ CDlgDbg::CDlgDbg(CWnd* pParent /*=NULL*/)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::~CDlgDbg												 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
-
 CDlgDbg::~CDlgDbg()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
 
 BOOL CDlgDbg::Create(HWND hWndParent, CMgrData *pMgrData)
 {
@@ -90,30 +68,24 @@ BOOL CDlgDbg::Create(HWND hWndParent, CMgrData *pMgrData)
 	BOOL bCreated;
 
 	m_pMgrData	= pMgrData;
-	m_pSock		= m_pMgrData->GetUraraSockTCP ();
-	pWnd		= CWnd::FromHandle (hWndParent);
+	m_pSock	= m_pMgrData->GetUraraSockTCP();
+	pWnd	= CWnd::FromHandle(hWndParent);
 
-	bCreated = CDialog::Create (IDD, pWnd);
+	bCreated = CDialog::Create(IDD, pWnd);
 	if (!bCreated) {
-		DWORD dwErr = GetLastError ();
+		DWORD dwErr = GetLastError();
 		CString strErr;
-		strErr.Format (_T("CDlgDbg::Create failed. GetLastError=0x%08X\r\n"), dwErr);
-		OutputDebugString (strErr);
+		strErr.Format(_T("CDlgDbg::Create failed. GetLastError=0x%08X\r\n"), dwErr);
+		OutputDebugString(strErr);
 		return FALSE;
 	}
 
-	ShowWindow (SW_SHOW);
-	pWnd->SetFocus ();
+	ShowWindow(SW_SHOW);
+	pWnd->SetFocus();
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::Renew													 */
-/* 内容		:更新															 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
 
 void CDlgDbg::Renew(void)
 {
@@ -121,98 +93,72 @@ void CDlgDbg::Renew(void)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::OnInitDialog											 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
-
 BOOL CDlgDbg::OnInitDialog()
 {
         TCHAR szFileName[MAX_PATH];
         CRect rc;
         POINT pt;
  
-	CDialog::OnInitDialog ();
-	SetWindowText (Utf8ToTString (u8"デバッグウィンドウ"));
+	CDialog::OnInitDialog();
+	SetWindowText(Utf8ToTString(u8"デバッグウィンドウ"));
  
-	::GetWindowRect (m_pMgrData->GetMainWindow (), rc);
-	SetWindowPos (NULL,
-		rc.right + GetSystemMetrics (SM_CXFIXEDFRAME) * 2, rc.top,
+	::GetWindowRect(m_pMgrData->GetMainWindow(), rc);
+	SetWindowPos(NULL,
+		rc.right + GetSystemMetrics(SM_CXFIXEDFRAME) * 2, rc.top,
 		0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 
-	CLayoutHelper::Initialize (m_hWnd);
+	CLayoutHelper::Initialize(m_hWnd);
 	SetTimer(100, 1000, NULL);
 
-        ZeroMemory (szFileName, sizeof (szFileName));
-        GetModuleFileName (NULL, szFileName, _countof (szFileName));
-        size_t nLen = _tcslen (szFileName);
+        ZeroMemory(szFileName, sizeof(szFileName));
+        GetModuleFileName(NULL, szFileName, _countof(szFileName));
+        size_t nLen = _tcslen(szFileName);
         if (nLen >= 3) {
-                _tcscpy_s (szFileName + nLen - 3, _countof (szFileName) - (nLen - 3), _T("ini"));
+                _tcscpy_s(szFileName + nLen - 3, _countof(szFileName) - (nLen - 3), _T("ini"));
         } else {
-                _tcscat_s (szFileName, _T(".ini"));
+                _tcscat_s(szFileName, _T(".ini"));
         }
  
-        m_pMgrData->SetDebugWindow (m_hWnd);
-        pt.x = GetPrivateProfileInt (_T("Pos"), _T("DebugX"), -1, szFileName);
-        pt.y = GetPrivateProfileInt (_T("Pos"), _T("DebugY"), -1, szFileName);
+        m_pMgrData->SetDebugWindow(m_hWnd);
+        pt.x = GetPrivateProfileInt(_T("Pos"), _T("DebugX"), -1, szFileName);
+        pt.y = GetPrivateProfileInt(_T("Pos"), _T("DebugY"), -1, szFileName);
 	if (!((pt.x == -1) && (pt.y == -1))) {
-		SetWindowPos (NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+		SetWindowPos(NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 	}
 
-	OnTimer (100);
+	OnTimer(100);
 	return TRUE;
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::OnSize												 */
-/* 内容		:メッセージハンドラ(WM_SIZE)									 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
-
 void CDlgDbg::OnSize(UINT nType, int cx, int cy)
 {
-	CDialog::OnSize (nType, cx, cy);
+	CDialog::OnSize(nType, cx, cy);
 
-	DoLayout (cx, cy);
+	DoLayout(cx, cy);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::OnTimer												 */
-/* 内容		:メッセージハンドラ(WM_TIMER)									 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
 
 void CDlgDbg::OnTimer(UINT nIDEvent)
 {
 	PCInfoCharCli pChar;
 
-	m_strOnline.Format(_T("オンライン：%d"), m_pMgrData->GetOnlineCount ());
-	m_strCharCount.Format(_T("キャラ数：%d"), m_pMgrData->GetCharCount ());
-	m_strPing.Format(_T("Ping：%dms 描画時間:%4dms"), m_pMgrData->GetPing (), m_pMgrData->GetDrawTime ());
+	m_strOnline.Format(_T("オンライン：%d"), m_pMgrData->GetOnlineCount());
+	m_strCharCount.Format(_T("キャラ数：%d"), m_pMgrData->GetCharCount());
+	m_strPing.Format(_T("Ping：%dms 描画時間:%4dms"), m_pMgrData->GetPing(), m_pMgrData->GetDrawTime());
 	m_strPos = "座標：";
-	pChar = m_pMgrData->GetPlayerChar ();
+	pChar = m_pMgrData->GetPlayerChar();
 	if (pChar) {
 		m_strPos.Format(_T("座標：MAP:%d X:%3d Y:%3d"), pChar->m_dwMapID, pChar->m_nMapX, pChar->m_nMapY);
 	}
-	m_strThrowghput.Format(_T("送信：%5dBps 受信：%5dBps"), m_pSock->GetThrowghPutSend (0), m_pSock->GetThrowghPutRecv (0));
+	m_strThrowghput.Format(_T("送信：%5dBps 受信：%5dBps"), m_pSock->GetThrowghPutSend(0), m_pSock->GetThrowghPutRecv(0));
 
 	UpdateData(FALSE);
 	SetTimer(100, 1000, NULL);
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgDbg::PostNcDestroy											 */
-/* 内容		:後処理															 */
-/* 日付		:2009/04/05														 */
-/* ========================================================================= */
-
 void CDlgDbg::PostNcDestroy()
 {
 	delete this;
 }
-
-/* Copyright(C)URARA-works 2009 */

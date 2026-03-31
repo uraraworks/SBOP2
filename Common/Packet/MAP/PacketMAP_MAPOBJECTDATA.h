@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:PacketMAP_MAPOBJECTDATA.h									 */
-/* 内容			:コマンド(マップ系:マップオブジェクト配置データ通知) 定義ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/11/03													 */
-/* ========================================================================= */
+﻿/// @file PacketMAP_MAPOBJECTDATA.h
+/// @brief コマンド(マップ系:マップオブジェクト配置データ通知) 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/11/03
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -13,24 +11,19 @@
 class CLibInfoMapObjectData;
 class CInfoMapObjectData;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CPacketMAP_MAPOBJECTDATA : public CPacketBase
 {
 public:
-			CPacketMAP_MAPOBJECTDATA();							/* コンストラクタ */
-	virtual ~CPacketMAP_MAPOBJECTDATA();						/* デストラクタ */
+			CPacketMAP_MAPOBJECTDATA();	// コンストラクタ
+	virtual ~CPacketMAP_MAPOBJECTDATA();	// デストラクタ
 
-	void	Make	(DWORD dwMapID, CLibInfoMapObjectData *pLibInfo);	/* パケットを作成 */
-	void	Make	(DWORD dwMapID, CInfoMapObjectData *pInfo);			/* パケットを作成 */
-	PBYTE	Set		(PBYTE pPacket);									/* パケットを設定 */
-
+	void	Make(DWORD dwMapID, CLibInfoMapObjectData *pLibInfo);	// パケットを作成
+	void	Make(DWORD dwMapID, CInfoMapObjectData *pInfo);	// パケットを作成
+	PBYTE	Set(PBYTE pPacket);	// パケットを設定
 
 public:
-	DWORD					m_dwMapID;			/* マップID */
-	CLibInfoMapObjectData	*m_pLibInfo;		/* マップオブジェクト配置データ */
+	DWORD	m_dwMapID;	// マップID
+	CLibInfoMapObjectData	*m_pLibInfo;	// マップオブジェクト配置データ
 } CPacketMAP_MAPOBJECTDATA, *PCPacketMAP_MAPOBJECTDATA;
-
-/* Copyright(C)URARA-works 2008 */

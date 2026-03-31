@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:DlgDbg.h													 */
-/* 内容			:デバッグ情報ダイアログクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/04/05													 */
-/* ========================================================================= */
+﻿/// @file DlgDbg.h
+/// @brief デバッグ情報ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/04/05
+/// @copyright Copyright(C)URARA-works 2009
 
 #pragma once
 
@@ -14,31 +12,29 @@
 class CMgrData;
 class CUraraSockTCPSBO;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgDbg : public CDialog, CLayoutHelper
 {
 public:
-			CDlgDbg(CWnd* pParent = NULL);				/* コンストラクタ */
-	virtual ~CDlgDbg();									/* デストラクタ */
+			CDlgDbg(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgDbg(); // デストラクタ
 
-	BOOL Create	(HWND hWndParent, CMgrData *pMgrData);			/* 作成 */
-	void Renew	(void);											/* 更新 */
-
-
-protected:
+	BOOL Create(HWND hWndParent, CMgrData *pMgrData); // 作成
+	void Renew(void); // 更新
 
 
 protected:
-	CMgrData			*m_pMgrData;			/* データ管理 */
-	CUraraSockTCPSBO	*m_pSock;				/* 通信マネージャ */
+
+
+protected:
+	CMgrData	*m_pMgrData; // データ管理
+	CUraraSockTCPSBO	*m_pSock; // 通信マネージャ
 
 
 public:
-	void OnOK () {}
-	void OnCancel () {}
+	void OnOK() {}
+	void OnCancel() {}
 	//{{AFX_DATA(CDlgDbg)
 	enum { IDD = IDD_DBGDLG };
 	CString	m_strOnline;
@@ -64,5 +60,3 @@ protected:
 } CDlgDbg, *PCDlgDbg;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2009 */

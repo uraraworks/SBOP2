@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharDisableNew.cpp									 */
-/* 内容			:拒否MACアドレスの追加ダイアログクラス 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/04/11													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharDisableNew.cpp
+/// @brief 拒否MACアドレスの追加ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/04/11
+/// @copyright Copyright(C)URARA-works 2009
 
 #include "stdafx.h"
 #include "resource.h"
@@ -16,9 +14,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminCharDisableNew::DoDataExchange(CDataExchange* pDX)
 {
@@ -34,12 +30,6 @@ BEGIN_MESSAGE_MAP(CDlgAdminCharDisableNew, CDlgAdminBase)
 END_MESSAGE_MAP()
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharDisableNew::CDlgAdminCharDisableNew				 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2009/04/11														 */
-/* ========================================================================= */
-
 CDlgAdminCharDisableNew::CDlgAdminCharDisableNew(CWnd* pParent /*=NULL*/)
 	: CDlgAdminBase(CDlgAdminCharDisableNew::IDD, pParent)
 {
@@ -49,40 +39,20 @@ CDlgAdminCharDisableNew::CDlgAdminCharDisableNew(CWnd* pParent /*=NULL*/)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharDisableNew::~CDlgAdminCharDisableNew				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2009/04/11														 */
-/* ========================================================================= */
-
 CDlgAdminCharDisableNew::~CDlgAdminCharDisableNew()
 {
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharDisableNew::PostNcDestroy							 */
-/* 内容		:終了処理														 */
-/* 日付		:2009/04/11														 */
-/* ========================================================================= */
-
 void CDlgAdminCharDisableNew::PostNcDestroy()
 {
-	CDialog::PostNcDestroy ();
+	CDialog::PostNcDestroy();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminCharDisableNew::OnOK									 */
-/* 内容		:ボタンハンドラ(OK)												 */
-/* 日付		:2009/04/11														 */
-/* ========================================================================= */
 
 void CDlgAdminCharDisableNew::OnOK()
 {
-	UpdateData ();
+	UpdateData();
 
-	CDlgAdminBase::EndDialog (IDOK);
+	CDlgAdminBase::EndDialog(IDOK);
 }
-
-/* Copyright(C)URARA-works 2009 */

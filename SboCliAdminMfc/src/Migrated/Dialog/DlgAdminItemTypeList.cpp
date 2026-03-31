@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemTypeList.cpp									 */
-/* 内容			:アイテム種別一覧ダイアログクラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/09/28													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemTypeList.cpp
+/// @brief アイテム種別一覧ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/09/28
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "resource.h"
@@ -26,9 +24,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminItemTypeList::DoDataExchange(CDataExchange* pDX)
 {
@@ -48,14 +44,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminItemTypeList, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::CDlgAdminItemTypeList					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
-
-CDlgAdminItemTypeList::CDlgAdminItemTypeList(CWnd* pParent /*=NULL*/)
+CDlgAdminItemTypeList::CDlgAdminItemTypeList(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminItemTypeList::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgAdminItemTypeList)
@@ -65,41 +54,20 @@ CDlgAdminItemTypeList::CDlgAdminItemTypeList(CWnd* pParent /*=NULL*/)
 	m_pLibInfoItemType	= NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::~CDlgAdminItemTypeList					 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
-
 CDlgAdminItemTypeList::~CDlgAdminItemTypeList()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::Init									 */
-/* 内容		:初期化															 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
-
 void CDlgAdminItemTypeList::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	m_pLibInfoItemType = m_pMgrData->GetLibInfoItemType ();
+	m_pLibInfoItemType = m_pMgrData->GetLibInfoItemType();
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminItemTypeList::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminItemTypeList::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::Renew									 */
-/* 内容		:一覧を更新														 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeList::Renew(void)
 {
@@ -107,80 +75,52 @@ void CDlgAdminItemTypeList::Renew(void)
 	PCInfoItemTypeBase pInfoItemType;
 	CString strTmp;
 
-	m_List.DeleteAllItems ();
+	m_List.DeleteAllItems();
 
-	nCount = m_pLibInfoItemType->GetCount ();
+	nCount = m_pLibInfoItemType->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (i);
+		pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr(i);
 		strTmp.Format(_T("%d"), pInfoItemType->m_dwTypeID);
-		m_List.InsertItem (i, strTmp);
-		m_List.SetItemData (i, pInfoItemType->m_dwTypeID);		/* ID */
-		CString strName = (LPCTSTR)pInfoItemType->m_strName;	/* アイテム名 */
-		m_List.SetItemText (i, 1, strName);	/* アイテム名 */
+		m_List.InsertItem(i, strTmp);
+		m_List.SetItemData(i, pInfoItemType->m_dwTypeID);	// ID
+		CString strName = (LPCTSTR)pInfoItemType->m_strName;	// アイテム名
+		m_List.SetItemText(i, 1, strName);	// アイテム名
 
-		strTmp = m_pLibInfoItemType->GetTypeName (pInfoItemType->m_dwItemTypeID);
-		m_List.SetItemText (i, 2, strTmp);					/* 種別 */
+		strTmp = m_pLibInfoItemType->GetTypeName(pInfoItemType->m_dwItemTypeID);
+		m_List.SetItemText(i, 2, strTmp);	// 種別
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnAdminMsg								 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnAdminMsg(int nType, DWORD dwPara)
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnInitDialog							 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
-
 BOOL CDlgAdminItemTypeList::OnInitDialog()
 {
 	CDlgAdminBase::OnInitDialog();
 
-	m_List.SetExtendedStyle (LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	m_List.InsertColumn (0, _T("ID"),			LVCFMT_LEFT, 40);
-	m_List.InsertColumn (1, _T("アイテム名"),	LVCFMT_LEFT, 120);
-	m_List.InsertColumn (2, _T("種別"),			LVCFMT_LEFT, 120);
+	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+	m_List.InsertColumn(0, _T("ID"),	LVCFMT_LEFT, 40);
+	m_List.InsertColumn(1, _T("アイテム名"),	LVCFMT_LEFT, 120);
+	m_List.InsertColumn(2, _T("種別"),	LVCFMT_LEFT, 120);
 
-	RegisterControl (IDC_RENEW,	LH_CTRL_X);
-	RegisterControl (IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
+	RegisterControl(IDC_RENEW,	LH_CTRL_X);
+	RegisterControl(IDC_LIST,	LH_CTRL_WIDTH | LH_CTRL_HEIGHT);
 
-	/* 全アイテム情報を要求 */
-	OnRenew ();
+	// 全アイテム情報を要求
+	OnRenew();
 
 	return TRUE;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnMainFrame								 */
-/* 内容		:メッセージハンドラ(WM_MAINFRAME)								 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
-
 void CDlgAdminItemTypeList::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
 	switch (dwCommand) {
-	case MAINFRAMEMSG_RENEWITEMTYPEINFO:		/* アイテム種別情報更新 */
-		Renew ();
+	case MAINFRAMEMSG_RENEWITEMTYPEINFO:	// アイテム種別情報更新
+		Renew();
 		break;
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnAdd									 */
-/* 内容		:ボタンハンドラ(新規追加)										 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnAdd()
 {
@@ -191,27 +131,20 @@ void CDlgAdminItemTypeList::OnAdd()
 
 	pInfoItem = NULL;
 
-	Dlg.Init (m_pMgrData, &m_pWndNotify);
-	nResult = Dlg.DoModal ();
+	Dlg.Init(m_pMgrData, &m_pWndNotify);
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		goto Exit;
 	}
 
-	Dlg.Get (pInfoItem);
+	Dlg.Get(pInfoItem);
 
-	Packet.Make (pInfoItem);
-	SendPacket (&Packet);
+	Packet.Make(pInfoItem);
+	SendPacket(&Packet);
 
 Exit:
-	SAFE_DELETE (pInfoItem);
+	SAFE_DELETE(pInfoItem);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnModify								 */
-/* 内容		:ボタンハンドラ(編集)											 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnModify()
 {
@@ -221,42 +154,35 @@ void CDlgAdminItemTypeList::OnModify()
 	PCInfoItemTypeBase pInfoItem, pInfoItemTmp;
 	CPacketITEM_RENEWITEMTYPEINFO Packet;
 
-	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nResult = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nResult < 0) {
 		goto Exit;
 	}
-	dwItemID	= m_List.GetItemData (nResult);
-	pInfoItem	= (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (dwItemID);
+	dwItemID	= m_List.GetItemData(nResult);
+	pInfoItem	= (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		goto Exit;
 	}
 
-	Dlg.Init (m_pMgrData, &m_pWndNotify);
-	Dlg.SetModify (pInfoItem);
+	Dlg.Init(m_pMgrData, &m_pWndNotify);
+	Dlg.SetModify(pInfoItem);
 
-	nResult = Dlg.DoModal ();
+	nResult = Dlg.DoModal();
 	if (nResult != IDOK) {
 		goto Exit;
 	}
 
 	pInfoItemTmp = NULL;
-	Dlg.Get (pInfoItemTmp);
-	pInfoItem->Copy (pInfoItemTmp);
-	SAFE_DELETE (pInfoItemTmp);
+	Dlg.Get(pInfoItemTmp);
+	pInfoItem->Copy(pInfoItemTmp);
+	SAFE_DELETE(pInfoItemTmp);
 
-	Packet.Make (pInfoItem);
-	SendPacket (&Packet);
+	Packet.Make(pInfoItem);
+	SendPacket(&Packet);
 
 Exit:
 	return;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnCopy									 */
-/* 内容		:ボタンハンドラ(コピー)											 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnCopy()
 {
@@ -265,31 +191,24 @@ void CDlgAdminItemTypeList::OnCopy()
 	PCInfoItemTypeBase pInfoItem;
 	CPacketADMIN_ITEMTYPE_COPY Packet;
 
-	nNo = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nNo = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nNo < 0) {
 		return;
 	}
-	dwItemID	= m_List.GetItemData (nNo);
-	pInfoItem	= (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (dwItemID);
+	dwItemID	= m_List.GetItemData(nNo);
+	pInfoItem	= (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		return;
 	}
 
-        nResult = MessageBox (_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox(_T("選択されているアイテムをコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (dwItemID);
-	SendPacket (&Packet);
+	Packet.Make(dwItemID);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnDelete								 */
-/* 内容		:ボタンハンドラ(削除)											 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnDelete()
 {
@@ -299,48 +218,34 @@ void CDlgAdminItemTypeList::OnDelete()
 	CString strTmp;
 	CPacketADMIN_ITEMTYPE_DELETE Packet;
 
-	nResult = m_List.GetNextItem (-1, LVNI_SELECTED);
+	nResult = m_List.GetNextItem(-1, LVNI_SELECTED);
 	if (nResult < 0) {
 		return;
 	}
-	dwItemID	= m_List.GetItemData (nResult);
-	pInfoItem	= (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (dwItemID);
+	dwItemID	= m_List.GetItemData(nResult);
+	pInfoItem	= (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		return;
 	}
 
-        strTmp.Format (_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
-        nResult = MessageBox (strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        strTmp.Format(_T("[%s]を削除しますか？"), (LPCTSTR)pInfoItem->m_strName);
+        nResult = MessageBox(strTmp, _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (dwItemID);
-	SendPacket (&Packet);
+	Packet.Make(dwItemID);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::OnRenew									 */
-/* 内容		:ボタンハンドラ(更新)											 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 void CDlgAdminItemTypeList::OnRenew()
 {
 	CPacketITEM_REQ_ITEMTYPEINFO Packet;
 
-	/* 全アイテム種別情報を要求 */
-	Packet.Make (0);
-	SendPacket (&Packet);
+	// 全アイテム種別情報を要求
+	Packet.Make(0);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminItemTypeList::GetIndex								 */
-/* 内容		:アイテムIDからインデックスを取得								 */
-/* 日付		:2007/09/28														 */
-/* ========================================================================= */
 
 int CDlgAdminItemTypeList::GetIndex(DWORD dwItemID)
 {
@@ -349,9 +254,9 @@ int CDlgAdminItemTypeList::GetIndex(DWORD dwItemID)
 
 	nRet = -1;
 
-	nCount = m_List.GetItemCount ();
+	nCount = m_List.GetItemCount();
 	for (i = 0; i < nCount; i ++) {
-		dwItemData = m_List.GetItemData (i);
+		dwItemData = m_List.GetItemData(i);
 		if (dwItemData == dwItemID) {
 			nRet = i;
 			break;
@@ -361,4 +266,3 @@ int CDlgAdminItemTypeList::GetIndex(DWORD dwItemID)
 	return nRet;
 }
 
-/* Copyright(C)URARA-works 2007 */

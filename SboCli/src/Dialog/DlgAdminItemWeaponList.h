@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminItemWeaponList.h									 */
-/* 内容			:アイテム武器情報一覧ダイアログクラス 定義ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/08/10													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminItemWeaponList.h
+/// @brief アイテム武器情報一覧ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/08/10
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -12,28 +10,26 @@
 
 class CLibInfoItemWeapon;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminItemWeaponList : public CDlgAdminBase
 {
 public:
-			CDlgAdminItemWeaponList(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminItemWeaponList();							/* デストラクタ */
+			CDlgAdminItemWeaponList(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminItemWeaponList(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	Renew		(void);											/* 一覧を更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	OnMainFrame	(DWORD dwCommand, DWORD dwParam);				/* メッセージハンドラ(WM_MAINFRAME) */
-
-
-protected:
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 一覧を更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
+	void	OnMainFrame(DWORD dwCommand, DWORD dwParam); // メッセージハンドラ(WM_MAINFRAME)
 
 
 protected:
-	CWnd				*m_pWndNotify;				/* 通知先ウィンドウ */
-	CLibInfoItemWeapon	*m_pLibInfoItemWeapon;		/* アイテム武器情報 */
+
+
+protected:
+	CWnd	*m_pWndNotify; // 通知先ウィンドウ
+	CLibInfoItemWeapon	*m_pLibInfoItemWeapon; // アイテム武器情報
 
 
 
@@ -60,5 +56,3 @@ protected:
 } CDlgAdminItemWeaponList, *PCDlgAdminItemWeaponList;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

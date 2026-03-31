@@ -442,4 +442,3 @@ CLibInfoAccount *CAccountCreateHandler::GetAccountLibrary() const
         }
         return m_pMgrData->GetLibInfoAccount();
 }
-

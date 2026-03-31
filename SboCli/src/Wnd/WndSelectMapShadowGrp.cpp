@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:WndSelectMapShadowGrp.cpp									 */
-/* 内容			:マップ影画像選択ウィンドウクラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/06/06													 */
-/* ========================================================================= */
+﻿/// @file WndSelectMapShadowGrp.cpp
+/// @brief マップ影画像選択ウィンドウクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/06/06
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "Img32.h"
@@ -18,10 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
-/* ========================================================================= */
-/* クラス設定																 */
-/* ========================================================================= */
+// クラス設定
 
 BEGIN_MESSAGE_MAP(CWndSelectMapShadowGrp, CWnd)
 	//{{AFX_MSG_MAP(CWndSelectMapShadowGrp)
@@ -38,13 +33,6 @@ BEGIN_MESSAGE_MAP(CWndSelectMapShadowGrp, CWnd)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::CWndSelectMapShadowGrp					 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
-
 CWndSelectMapShadowGrp::CWndSelectMapShadowGrp()
 {
 	m_nSelect		= -1;
@@ -55,24 +43,10 @@ CWndSelectMapShadowGrp::CWndSelectMapShadowGrp()
 	m_pImgBack		= new CImg32;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::~CWndSelectMapShadowGrp				 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
-
 CWndSelectMapShadowGrp::~CWndSelectMapShadowGrp()
 {
-	SAFE_DELETE (m_pImgBack);
+	SAFE_DELETE(m_pImgBack);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::Create									 */
-/* 内容		:作成															 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 BOOL CWndSelectMapShadowGrp::Create(CWnd *pParent, CMgrData *pMgrData)
 {
@@ -81,20 +55,20 @@ BOOL CWndSelectMapShadowGrp::Create(CWnd *pParent, CMgrData *pMgrData)
 
 	m_pWndParent	= pParent;
 	m_pMgrData		= pMgrData;
-	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
+	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData();
 
-	pParent->GetWindowRect (rcParent);
-	rc.SetRect (rcParent.left, rcParent.top, rcParent.left + 460, rcParent.top + 300);
-	AdjustWindowRect (&rc, WS_EX_TOOLWINDOW, FALSE);
+	pParent->GetWindowRect(rcParent);
+	rc.SetRect(rcParent.left, rcParent.top, rcParent.left + 460, rcParent.top + 300);
+	AdjustWindowRect(&rc, WS_EX_TOOLWINDOW, FALSE);
 
-        bRet = CWnd::CreateEx (
-                        WS_EX_TOOLWINDOW,
-                        AfxRegisterWndClass (CS_HREDRAW | CS_VREDRAW),
-                        _T("マップ影画像の選択"),
-			WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME | WS_HSCROLL | WS_VSCROLL,
-			rc,
-			pParent,
-			0);
+	bRet = CWnd::CreateEx(
+		WS_EX_TOOLWINDOW,
+		AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW),
+		_T("マップ影画像の選択"),
+		WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME | WS_HSCROLL | WS_VSCROLL,
+		rc,
+		pParent,
+		0);
 	if (bRet == FALSE) {
 		goto Exit;
 	}
@@ -103,24 +77,10 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::Destroy								 */
-/* 内容		:破棄															 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
-
 void CWndSelectMapShadowGrp::Destroy(void)
 {
-	DestroyWindow ();
+	DestroyWindow();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnCreate								 */
-/* 内容		:メッセージハンドラ(WM_CREATE)									 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 int CWndSelectMapShadowGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -131,45 +91,31 @@ int CWndSelectMapShadowGrp::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	/* スクロールバーの設定 */
-	ModifyStyle (0, WS_VSCROLL | WS_HSCROLL);
-	nCount = m_pMgrGrpData->GetMapPartsCount ();
+	// スクロールバーの設定
+	ModifyStyle(0, WS_VSCROLL | WS_HSCROLL);
+	nCount = m_pMgrGrpData->GetMapPartsCount();
 	cx = 32;
 	cy = nCount / 32;
-	SetScrollRange (SB_HORZ, 0, cx);
-	SetScrollRange (SB_VERT, 0, cy);
+	SetScrollRange(SB_HORZ, 0, cx);
+	SetScrollRange(SB_VERT, 0, cy);
 
-	GetScrollInfo (SB_HORZ, &stScrollInfo);
+	GetScrollInfo(SB_HORZ, &stScrollInfo);
 	stScrollInfo.nPage = 1;
-	SetScrollInfo (SB_HORZ, &stScrollInfo);
-	GetScrollInfo (SB_VERT, &stScrollInfo);
+	SetScrollInfo(SB_HORZ, &stScrollInfo);
+	GetScrollInfo(SB_VERT, &stScrollInfo);
 	stScrollInfo.nPage = 1;
-	SetScrollInfo (SB_VERT, &stScrollInfo);
+	SetScrollInfo(SB_VERT, &stScrollInfo);
 
 	return 0;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnClose								 */
-/* 内容		:メッセージハンドラ(WM_CLOSE)									 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
-
 void CWndSelectMapShadowGrp::OnClose()
 {
 	if (m_pWndParent) {
-		m_pWndParent->PostMessage (WM_WNDCLOSE, WINDOWID_SELECTMAPSHADOWGRP, (LPARAM)m_nSelect);
+		m_pWndParent->PostMessage(WM_WNDCLOSE, WINDOWID_SELECTMAPSHADOWGRP, (LPARAM)m_nSelect);
 	}
-	CWnd::OnClose ();
+	CWnd::OnClose();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnPaint								 */
-/* 内容		:メッセージハンドラ(WM_PAINT)									 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CWndSelectMapShadowGrp::OnPaint()
 {
@@ -180,35 +126,28 @@ void CWndSelectMapShadowGrp::OnPaint()
 
 	CPaintDC dc(this);
 
-	nCount = m_pMgrGrpData->GetMapShadowCount ();
+	nCount = m_pMgrGrpData->GetMapShadowCount();
 	cx = 32;
-	cy = m_pImgBack->Height () / 16 + 1;
+	cy = m_pImgBack->Height() / 16 + 1;
 	for (y = 0; y < cy; y ++) {
 		for (x = 0; x < cx; x ++) {
-			no = x + GetScrollPos (SB_HORZ) + ((y + GetScrollPos (SB_VERT)) * cx);
-			pImg = m_pMgrGrpData->GetDibMapShadowTmp (no / 1024);
+			no = x + GetScrollPos(SB_HORZ) + ((y + GetScrollPos(SB_VERT)) * cx);
+			pImg = m_pMgrGrpData->GetDibMapShadowTmp(no / 1024);
 			if (pImg == NULL) {
 				continue;
 			}
 
-			m_pImgBack->BltFrom256 (x * 16, y * 16, 16, 16, pImg, ((no % 1024) % cx) * 16, (no % 1024) / 32 * 16);
+			m_pImgBack->BltFrom256(x * 16, y * 16, 16, 16, pImg, ((no % 1024) % cx) * 16, (no % 1024) / 32 * 16);
 		}
 	}
 
-	hDC = m_pImgBack->Lock ();
-	pDCTmp = dc.FromHandle (hDC);
+	hDC = m_pImgBack->Lock();
+	pDCTmp = dc.FromHandle(hDC);
 
-	dc.BitBlt (0, 0, m_pImgBack->Width (), m_pImgBack->Height (), pDCTmp, 0, 0, SRCCOPY);
+	dc.BitBlt(0, 0, m_pImgBack->Width(), m_pImgBack->Height(), pDCTmp, 0, 0, SRCCOPY);
 
-	m_pImgBack->Unlock ();
+	m_pImgBack->Unlock();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnSize									 */
-/* 内容		:メッセージハンドラ(WM_SIZE)									 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CWndSelectMapShadowGrp::OnSize(UINT nType, int cx, int cy)
 {
@@ -216,26 +155,19 @@ void CWndSelectMapShadowGrp::OnSize(UINT nType, int cx, int cy)
 
 	CWnd::OnSize(nType, cx, cy);
 
-	m_pImgBack->Destroy ();
-	m_pImgBack->Create (cx, cy);
+	m_pImgBack->Destroy();
+	m_pImgBack->Create(cx, cy);
 
-	nCount = m_pMgrGrpData->GetMapPartsCount ();
+	nCount = m_pMgrGrpData->GetMapPartsCount();
 
-	/* スクロールバーの最大値を更新 */
+	// スクロールバーの最大値を更新
 	cxTmp = 32 - (cx / 32) - 1;
 	cyTmp = (nCount / 32) - (cy / 32) - 1;
-	cxTmp = min (32 - 1, cxTmp);
-	cyTmp = min (nCount / 32 - 1, cyTmp);
-	SetScrollRange (SB_HORZ, 0, cxTmp);
-	SetScrollRange (SB_VERT, 0, cyTmp);
+	cxTmp = min(32 - 1, cxTmp);
+	cyTmp = min(nCount / 32 - 1, cyTmp);
+	SetScrollRange(SB_HORZ, 0, cxTmp);
+	SetScrollRange(SB_VERT, 0, cyTmp);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnHScroll								 */
-/* 内容		:メッセージハンドラ(WM_HSCROLL)									 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CWndSelectMapShadowGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
@@ -243,28 +175,28 @@ void CWndSelectMapShadowGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 	BOOL bChange;
 	UINT nPosNow;
 
-	nPosNow = GetScrollPos (SB_HORZ);
+	nPosNow = GetScrollPos(SB_HORZ);
 	bChange = TRUE;
 
 	switch (nSBCode) {
-	case SB_LEFT:			/* 左端へスクロール */
-		GetScrollRange (SB_HORZ, &nMin, &nMax);
+	case SB_LEFT:			// 左端へスクロール
+		GetScrollRange(SB_HORZ, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_RIGHT:			/* 右端へスクロール */
-		GetScrollRange (SB_HORZ, &nMin, &nMax);
+	case SB_RIGHT:			// 右端へスクロール
+		GetScrollRange(SB_HORZ, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINELEFT:		/* 左へスクロール */
-	case SB_PAGELEFT:		/* 1ページ左へスクロール */
+	case SB_LINELEFT:		// 左へスクロール
+	case SB_PAGELEFT:		// 1ページ左へスクロール
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINERIGHT:		/* 右へスクロール */
-	case SB_PAGERIGHT:		/* 1ページ右へスクロール */
+	case SB_LINERIGHT:		// 右へスクロール
+	case SB_PAGERIGHT:		// 1ページ右へスクロール
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* 絶対位置へスクロール */
-	case SB_THUMBTRACK:		/* ドラッグされた */
+	case SB_THUMBPOSITION:	// 絶対位置へスクロール
+	case SB_THUMBTRACK:		// ドラッグされた
 		break;
 	default:
 		bChange = FALSE;
@@ -272,18 +204,11 @@ void CWndSelectMapShadowGrp::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 	}
 
 	if (bChange) {
-		SetScrollPos (SB_HORZ, nPos);
-		InvalidateRect (NULL);
+		SetScrollPos(SB_HORZ, nPos);
+		InvalidateRect(NULL);
 	}
 	CWnd::OnHScroll(nSBCode, nPos, pScrollBar);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnVScroll								 */
-/* 内容		:メッセージハンドラ(WM_VSCROLL)									 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CWndSelectMapShadowGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
@@ -291,28 +216,28 @@ void CWndSelectMapShadowGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 	BOOL bChange;
 	UINT nPosNow;
 
-	nPosNow = GetScrollPos (SB_VERT);
+	nPosNow = GetScrollPos(SB_VERT);
 	bChange = TRUE;
 
 	switch (nSBCode) {
-	case SB_TOP:			/* 1番上までスクロール */
-		GetScrollRange (SB_VERT, &nMin, &nMax);
+	case SB_TOP:			// 1番上までスクロール
+		GetScrollRange(SB_VERT, &nMin, &nMax);
 		nPos = nMin;
 		break;
-	case SB_BOTTOM:			/* 1番下までスクロール */
-		GetScrollRange (SB_VERT, &nMin, &nMax);
+	case SB_BOTTOM:			// 1番下までスクロール
+		GetScrollRange(SB_VERT, &nMin, &nMax);
 		nPos = nMax;
 		break;
-	case SB_LINEUP:			/* 1行上へスクロール */
-	case SB_PAGEUP:			/* 1ページ上へスクロール */
+	case SB_LINEUP:			// 1行上へスクロール
+	case SB_PAGEUP:			// 1ページ上へスクロール
 		nPos = nPosNow - 1;
 		break;
-	case SB_LINEDOWN:		/* 1行下へスクロール */
-	case SB_PAGEDOWN:		/* 1ページ下へスクロール */
+	case SB_LINEDOWN:		// 1行下へスクロール
+	case SB_PAGEDOWN:		// 1ページ下へスクロール
 		nPos = nPosNow + 1;
 		break;
-	case SB_THUMBPOSITION:	/* 絶対位置へスクロール */
-	case SB_THUMBTRACK:		/* ドラッグされた */
+	case SB_THUMBPOSITION:	// 絶対位置へスクロール
+	case SB_THUMBTRACK:		// ドラッグされた
 		break;
 	default:
 		bChange = FALSE;
@@ -320,18 +245,11 @@ void CWndSelectMapShadowGrp::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScr
 	}
 
 	if (bChange) {
-		SetScrollPos (SB_VERT, nPos);
-		InvalidateRect (NULL);
+		SetScrollPos(SB_VERT, nPos);
+		InvalidateRect(NULL);
 	}
 	CWnd::OnVScroll(nSBCode, nPos, pScrollBar);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnSetCursor							 */
-/* 内容		:メッセージハンドラ(WM_SETCURSOR)								 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 BOOL CWndSelectMapShadowGrp::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
@@ -339,66 +257,45 @@ BOOL CWndSelectMapShadowGrp::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message
 
 	bRet = TRUE;
 	if (nHitTest != HTCLIENT) {
-		bRet = CWnd::OnSetCursor (pWnd, nHitTest, message);
+		bRet = CWnd::OnSetCursor(pWnd, nHitTest, message);
 		goto Exit;
 	}
 
-	SetCursor (LoadCursor (NULL, IDC_ARROW));
+	SetCursor(LoadCursor(NULL, IDC_ARROW));
 Exit:
 	return bRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnLButtonDown							 */
-/* 内容		:メッセージハンドラ(WM_LBUTTONDOWN)								 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CWndSelectMapShadowGrp::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	int no, x, y, cx;
 	PCImg32 pImg;
 
-	pImg = m_pMgrGrpData->GetDibMapParts (0);
+	pImg = m_pMgrGrpData->GetDibMapParts(0);
 
-	if ((point.x >= pImg->Width ()) || (point.y >= pImg->Height ())) {
+	if ((point.x >= pImg->Width()) || (point.y >= pImg->Height())) {
 		goto Exit;
 	}
 
-	cx = pImg->Width () / 32;
+	cx = pImg->Width() / 32;
 	x = point.x / 32;
 	y = point.y / 32;
-	no = x + GetScrollPos (SB_HORZ) + ((y + GetScrollPos (SB_VERT)) * cx);
+	no = x + GetScrollPos(SB_HORZ) + ((y + GetScrollPos(SB_VERT)) * cx);
 	if (no < 0) {
 		return;
 	}
 
 	m_nSelect = no;
-	PostMessage (WM_CLOSE, 0, 0);
+	PostMessage(WM_CLOSE, 0, 0);
 Exit:
-	CWnd::OnLButtonDown (nFlags, point);
+	CWnd::OnLButtonDown(nFlags, point);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnRButtonDown							 */
-/* 内容		:メッセージハンドラ(WM_RBUTTONDOWN)								 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CWndSelectMapShadowGrp::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	PostMessage (WM_CLOSE, 0, 0);
-	CWnd::OnRButtonDown (nFlags, point);
+	PostMessage(WM_CLOSE, 0, 0);
+	CWnd::OnRButtonDown(nFlags, point);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::OnMouseWheel							 */
-/* 内容		:メッセージハンドラ(WM_MOUSEWHEEL)								 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 BOOL CWndSelectMapShadowGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
@@ -408,22 +305,13 @@ BOOL CWndSelectMapShadowGrp::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	if (zDelta < 0) {
 		nTmp = 1;
 	}
-	SetScrollPos (SB_VERT, GetScrollPos (SB_VERT) + nTmp);
-	InvalidateRect (NULL);
+	SetScrollPos(SB_VERT, GetScrollPos(SB_VERT) + nTmp);
+	InvalidateRect(NULL);
 
 	return CWnd::OnMouseWheel(nFlags, zDelta, pt);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CWndSelectMapShadowGrp::PostNcDestroy							 */
-/* 内容		:終了処理														 */
-/* 日付		:2007/06/06														 */
-/* ========================================================================= */
 
 void CWndSelectMapShadowGrp::PostNcDestroy()
 {
 	delete this;
 }
-
-/* Copyright(C)URARA-works 2007 */

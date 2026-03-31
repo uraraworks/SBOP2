@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapInfo.cpp										 */
-/* 内容			:マップ情報編集ダイアログクラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/05/01													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapInfo.cpp
+/// @brief マップ情報編集ダイアログクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/05/01
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "resource.h"
@@ -25,9 +23,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/* ========================================================================= */
-/* クラスの設定																 */
-/* ========================================================================= */
+// クラスの設定
 
 void CDlgAdminMapInfo::DoDataExchange(CDataExchange* pDX)
 {
@@ -54,14 +50,7 @@ BEGIN_MESSAGE_MAP(CDlgAdminMapInfo, CDlgAdminBase)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::CDlgAdminMapInfo								 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
-
-CDlgAdminMapInfo::CDlgAdminMapInfo(CWnd* pParent /*=NULL*/)
+CDlgAdminMapInfo::CDlgAdminMapInfo(CWnd* pParent)
 	: CDlgAdminBase(CDlgAdminMapInfo::IDD, pParent)
 	, m_bEnableBattle(TRUE)
 	, m_bRecovery(TRUE)
@@ -77,129 +66,87 @@ CDlgAdminMapInfo::CDlgAdminMapInfo(CWnd* pParent /*=NULL*/)
 	m_pInfoMap = NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::~CDlgAdminMapInfo							 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
-
 CDlgAdminMapInfo::~CDlgAdminMapInfo()
 {
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::Init											 */
-/* 内容		:初期化															 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
-
 void CDlgAdminMapInfo::Init(CMgrData *pMgrData)
 {
-	CDlgAdminBase::Init (pMgrData);
+	CDlgAdminBase::Init(pMgrData);
 
-	m_pInfoMap = m_pMgrData->GetMap ();
+	m_pInfoMap = m_pMgrData->GetMap();
 
-	/* ウィンドウ作成 */
-	Create (CDlgAdminMapInfo::IDD, m_pWndParent);
-	ShowWindow (SW_SHOW);
+	// ウィンドウ作成
+	Create(CDlgAdminMapInfo::IDD, m_pWndParent);
+	ShowWindow(SW_SHOW);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::Renew										 */
-/* 内容		:更新															 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
 
 void CDlgAdminMapInfo::Renew(void)
 {
-	m_pInfoMap = m_pMgrData->GetMap ();
+	m_pInfoMap = m_pMgrData->GetMap();
 	if (m_pInfoMap == NULL) {
 		return;
 	}
 
-	m_strMapSize.	Format (_T("(%d, %d)"), m_pInfoMap->m_sizeMap.cx, m_pInfoMap->m_sizeMap.cy);
-	m_strMapID.		Format (_T("%u"), m_pInfoMap->m_dwMapID);
+	m_strMapSize.	Format(_T("(%d, %d)"), m_pInfoMap->m_sizeMap.cx, m_pInfoMap->m_sizeMap.cy);
+	m_strMapID.	Format(_T("%u"), m_pInfoMap->m_dwMapID);
 
 	m_strMapName = (LPCTSTR)m_pInfoMap->m_strMapName;
 
-	SelectCmb (&m_cmbBGMID,			m_pInfoMap->m_dwBGMID);
-	SelectCmb (&m_cmbWeatherType,	m_pInfoMap->m_dwWeatherType);
-	m_nDarkLevel	= m_pInfoMap->m_byLevel;		/* 暗度 */
-	m_bEnableBattle	= m_pInfoMap->m_bEnableBattle;	/* 戦闘許可 */
-	m_bRecovery		= m_pInfoMap->m_bRecovery;		/* 気絶後回復する */
+	SelectCmb(&m_cmbBGMID,	m_pInfoMap->m_dwBGMID);
+	SelectCmb(&m_cmbWeatherType,	m_pInfoMap->m_dwWeatherType);
+	m_nDarkLevel	= m_pInfoMap->m_byLevel;	// 暗度
+	m_bEnableBattle	= m_pInfoMap->m_bEnableBattle;	// 戦闘許可
+	m_bRecovery	= m_pInfoMap->m_bRecovery;	// 気絶後回復する
 
-	UpdateData (FALSE);
+	UpdateData(FALSE);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::OnAdminMsg									 */
-/* 内容		:メッセージハンドラ(WM_ADMINMSG)								 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
 
 void CDlgAdminMapInfo::OnAdminMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
-	case ADMINMSG_RENEWMAPINFO:	/* マップ情報更新 */
-		Renew ();
+	case ADMINMSG_RENEWMAPINFO:	// マップ情報更新
+		Renew();
 		break;
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::OnInitDialog									 */
-/* 内容		:メッセージハンドラ(WM_INITDIALOG)								 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
-
 BOOL CDlgAdminMapInfo::OnInitDialog()
 {
-	CDlgAdminBase::OnInitDialog ();
+	CDlgAdminBase::OnInitDialog();
 
-	CheckRadioButton (IDC_UP, IDC_RIGHT, IDC_UP);
+	CheckRadioButton(IDC_UP, IDC_RIGHT, IDC_UP);
 
-	m_cmbBGMID.InsertString (0, _T("無し"));
-	m_cmbBGMID.InsertString (1, _T("大地の鼓動 short ver."));
+	m_cmbBGMID.InsertString(0, _T("無し"));
+	m_cmbBGMID.InsertString(1, _T("大地の鼓動 short ver."));
 	m_cmbBGMID.SetItemData	(1, BGMID_DAICHI_S);
-	m_cmbBGMID.InsertString (2, _T("飛翔"));
+	m_cmbBGMID.InsertString(2, _T("飛翔"));
 	m_cmbBGMID.SetItemData	(2, BGMID_HISYOU);
-	m_cmbBGMID.InsertString (3, _T("水車の見える情景"));
+	m_cmbBGMID.InsertString(3, _T("水車の見える情景"));
 	m_cmbBGMID.SetItemData	(3, BGMID_SUISHA);
-	m_cmbBGMID.InsertString (4, _T("A Little Fairy Tale"));
+	m_cmbBGMID.InsertString(4, _T("A Little Fairy Tale"));
 	m_cmbBGMID.SetItemData	(4, BGMID_FAIRYTALE);
-	m_cmbBGMID.InsertString (5, _T("Tabla_Image"));
+	m_cmbBGMID.InsertString(5, _T("Tabla_Image"));
 	m_cmbBGMID.SetItemData	(5, BGMID_TABLA_IMAGE);
-	m_cmbBGMID.InsertString (6, _T("flowed piano solo"));
+	m_cmbBGMID.InsertString(6, _T("flowed piano solo"));
 	m_cmbBGMID.SetItemData	(6, BGMID_FLOWED_PIANO);
-	m_cmbBGMID.InsertString (7, _T("冬の街　フルオケver"));
+	m_cmbBGMID.InsertString(7, _T("冬の街　フルオケver"));
 	m_cmbBGMID.SetItemData	(7, BGMID_HUYUNOMATI_FULL);
-	m_cmbBGMID.InsertString (8, _T("スーパーおやこどん 並盛ver/北"));
+	m_cmbBGMID.InsertString(8, _T("スーパーおやこどん 並盛ver/北"));
 	m_cmbBGMID.SetItemData	(8, BGMID_OYAKODON_NAMI);
 
-	m_cmbWeatherType.InsertString (0, _T("無し"));
-	m_cmbWeatherType.InsertString (1, _T("雲"));
+	m_cmbWeatherType.InsertString(0, _T("無し"));
+	m_cmbWeatherType.InsertString(1, _T("雲"));
 	m_cmbWeatherType.SetItemData  (1, WEATHERTYPE_CLOUD);
-	m_cmbWeatherType.InsertString (2, _T("霧"));
+	m_cmbWeatherType.InsertString(2, _T("霧"));
 	m_cmbWeatherType.SetItemData  (2, WEATHERTYPE_MISTY);
-	m_cmbWeatherType.InsertString (3, _T("雪"));
+	m_cmbWeatherType.InsertString(3, _T("雪"));
 	m_cmbWeatherType.SetItemData  (3, WEATHERTYPE_SNOW);
 
-	Renew ();
+	Renew();
 
 	return TRUE;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::OnAdd										 */
-/* 内容		:ボタンハンドラ(増やす)											 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
 
 void CDlgAdminMapInfo::OnAdd()
 {
@@ -210,13 +157,13 @@ void CDlgAdminMapInfo::OnAdd()
 		return;
 	}
 
-	UpdateData ();
+	UpdateData();
 	if (m_nValue <= 0) {
 		return;
 	}
 
 	nDirection = 0;
-	nResult = GetCheckedRadioButton (IDC_UP, IDC_RIGHT);
+	nResult = GetCheckedRadioButton(IDC_UP, IDC_RIGHT);
 	switch (nResult) {
 	case IDC_UP:
 		nDirection = 0;
@@ -233,16 +180,9 @@ void CDlgAdminMapInfo::OnAdd()
 	default:
 		return;
 	}
-	Packet.Make (m_pInfoMap->m_dwMapID, nDirection, m_nValue);
-	SendPacket (&Packet);
+	Packet.Make(m_pInfoMap->m_dwMapID, nDirection, m_nValue);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::OnDel										 */
-/* 内容		:ボタンハンドラ(減らす)											 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
 
 void CDlgAdminMapInfo::OnDel()
 {
@@ -253,13 +193,13 @@ void CDlgAdminMapInfo::OnDel()
 		return;
 	}
 
-	UpdateData ();
+	UpdateData();
 	if (m_nValue <= 0) {
 		return;
 	}
 
 	nDirection = 0;
-	nResult = GetCheckedRadioButton (IDC_UP, IDC_RIGHT);
+	nResult = GetCheckedRadioButton(IDC_UP, IDC_RIGHT);
 	switch (nResult) {
 	case IDC_UP:
 		nDirection = 0;
@@ -276,16 +216,9 @@ void CDlgAdminMapInfo::OnDel()
 	default:
 		return;
 	}
-	Packet.Make (m_pInfoMap->m_dwMapID, nDirection, m_nValue * -1);
-	SendPacket (&Packet);
+	Packet.Make(m_pInfoMap->m_dwMapID, nDirection, m_nValue * -1);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::OnChangemapname								 */
-/* 内容		:ボタンハンドラ(変更)											 */
-/* 日付		:2007/05/01														 */
-/* ========================================================================= */
 
 void CDlgAdminMapInfo::OnChangemapname()
 {
@@ -296,19 +229,19 @@ void CDlgAdminMapInfo::OnChangemapname()
 		return;
 	}
 
-	UpdateData ();
+	UpdateData();
 
-	nSelect = m_cmbBGMID.GetCurSel ();
-	m_pInfoMap->m_dwBGMID = m_cmbBGMID.GetItemData (nSelect);				/* BGMID */
-	nSelect = m_cmbWeatherType.GetCurSel ();
-	m_pInfoMap->m_dwWeatherType = m_cmbWeatherType.GetItemData (nSelect);	/* 天気種別 */
-	m_pInfoMap->m_byLevel		= (BYTE)m_nDarkLevel;						/* 暗度 */
-	m_pInfoMap->m_bEnableBattle	= m_bEnableBattle;							/* 戦闘許可 */
-	m_pInfoMap->m_bRecovery		= m_bRecovery;								/* 気絶後回復する */
+	nSelect = m_cmbBGMID.GetCurSel();
+	m_pInfoMap->m_dwBGMID = m_cmbBGMID.GetItemData(nSelect);	// BGMID
+	nSelect = m_cmbWeatherType.GetCurSel();
+	m_pInfoMap->m_dwWeatherType = m_cmbWeatherType.GetItemData(nSelect);	// 天気種別
+	m_pInfoMap->m_byLevel	= (BYTE)m_nDarkLevel;	// 暗度
+	m_pInfoMap->m_bEnableBattle	= m_bEnableBattle;	// 戦闘許可
+	m_pInfoMap->m_bRecovery	= m_bRecovery;	// 気絶後回復する
 
 	CStringA strMapNameA = TStringToUtf8(m_strMapName);
 
-	Packet.Make (
+	Packet.Make(
 			m_pInfoMap->m_dwMapID,
 			m_pInfoMap->m_dwBGMID,
 			m_pInfoMap->m_dwWeatherType,
@@ -316,28 +249,20 @@ void CDlgAdminMapInfo::OnChangemapname()
 			m_pInfoMap->m_bRecovery,
 			m_pInfoMap->m_byLevel,
 			strMapNameA);
-	SendPacket (&Packet);
+	SendPacket(&Packet);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CDlgAdminMapInfo::OnCopy										 */
-/* 内容		:ボタンハンドラ(コピー)											 */
-/* 日付		:2008/11/22														 */
-/* ========================================================================= */
 
 void CDlgAdminMapInfo::OnCopy()
 {
 	int nResult;
 	CPacketADMIN_PARA2 Packet;
 
-        nResult = MessageBox (_T("新しいマップとしてコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
+        nResult = MessageBox(_T("新しいマップとしてコピーしますか？"), _T("確認"), MB_YESNO | MB_ICONQUESTION);
 	if (nResult != IDYES) {
 		return;
 	}
 
-	Packet.Make (SBOCOMMANDID_SUB_ADMIN_MAP_ADD, m_pInfoMap->m_dwMapID, 0);
-	SendPacket (&Packet);
+	Packet.Make(SBOCOMMANDID_SUB_ADMIN_MAP_ADD, m_pInfoMap->m_dwMapID, 0);
+	SendPacket(&Packet);
 }
 
-/* Copyright(C)URARA-works 2007 */

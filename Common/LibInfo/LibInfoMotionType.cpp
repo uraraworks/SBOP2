@@ -1,70 +1,33 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoMotionType.cpp										 */
-/* 内容			:モーション情報ライブラリ基底クラス 実装ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/05/26													 */
-/* ========================================================================= */
+﻿/// @file LibInfoMotionType.cpp
+/// @brief モーション情報ライブラリ基底クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/05/26
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "LibInfoMotionType.h"
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::CLibInfoMotionType							 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
-
 CLibInfoMotionType::CLibInfoMotionType()
 {
 	m_dwNewIDTmp	= 0;
-	m_paInfo		= NULL;
+	m_paInfo	= NULL;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::~CLibInfoMotionType						 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 CLibInfoMotionType::~CLibInfoMotionType()
 {
-	Destroy ();
+	Destroy();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 void CLibInfoMotionType::Create(void)
 {
 	m_paInfo = new ARRAYMOTIONTYPEINFO;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::Destroy									 */
-/* 内容		:破棄															 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
-
 void CLibInfoMotionType::Destroy(void)
 {
-	DeleteAll ();
-	SAFE_DELETE (m_paInfo);
+	DeleteAll();
+	SAFE_DELETE(m_paInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::GetNew										 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoMotionType::GetNew(void)
 {
@@ -75,32 +38,18 @@ PCInfoBase CLibInfoMotionType::GetNew(void)
 	return pInfoMotion;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::GetPtr										 */
-/* 内容		:情報を取得														 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoMotionType::GetPtr(int nNo)
 {
 	PCInfoBase pRet;
 
 	pRet = NULL;
-	if (nNo < 0 || nNo >= GetCount ()) {
+	if (nNo < 0 || nNo >= GetCount()) {
 		goto Exit;
 	}
 	pRet = m_paInfo->at(nNo);
 Exit:
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::GetPtr										 */
-/* 内容		:情報を取得														 */
-/* 日付		:2008/05/27														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoMotionType::GetPtr(DWORD dwMotionTypeID)
 {
@@ -109,7 +58,7 @@ PCInfoBase CLibInfoMotionType::GetPtr(DWORD dwMotionTypeID)
 
 	pRet = NULL;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
 		pInfo = m_paInfo->at(i);
 		if (pInfo->m_dwMotionTypeID != dwMotionTypeID) {
@@ -121,13 +70,6 @@ PCInfoBase CLibInfoMotionType::GetPtr(DWORD dwMotionTypeID)
 
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::GetCount									 */
-/* 内容		:データ数を取得													 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 int CLibInfoMotionType::GetCount(void)
 {
@@ -144,53 +86,32 @@ Exit:
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::Add										 */
-/* 内容		:追加															 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
-
 void CLibInfoMotionType::Add(PCInfoBase pInfo)
 {
 	PCInfoMotionType pMotionTypeInfo;
 
 	pMotionTypeInfo = (PCInfoMotionType)pInfo;
 	if (pMotionTypeInfo->m_dwMotionTypeID == 0) {
-		pMotionTypeInfo->m_dwMotionTypeID = GetNewID ();
+		pMotionTypeInfo->m_dwMotionTypeID = GetNewID();
 	}
 
-	m_paInfo->Add (pMotionTypeInfo);
+	m_paInfo->Add(pMotionTypeInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
-
 void CLibInfoMotionType::Delete(
-	int nNo)		/* [in] 配列番号 */
+	int nNo)	// [in] 配列番号
 {
 	PCInfoMotionType pInfo;
 
 	pInfo = m_paInfo->at(nNo);
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
-		m_paInfo->erase (m_paInfo->begin () + nNo);
+		m_paInfo->erase(m_paInfo->begin() + nNo);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
-
 void CLibInfoMotionType::Delete(
-	DWORD dwMotionTypeID)		/* [in] モーション種別ID */
+	DWORD dwMotionTypeID)	// [in] モーション種別ID
 {
 	int i, nCount, nNo;
 	PCInfoMotionType pInfoTmp;
@@ -208,16 +129,9 @@ void CLibInfoMotionType::Delete(
 	}
 
 	if (nNo >= 0) {
-		Delete (nNo);
+		Delete(nNo);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::DeleteAll									 */
-/* 内容		:全て削除														 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 void CLibInfoMotionType::DeleteAll(void)
 {
@@ -229,16 +143,9 @@ void CLibInfoMotionType::DeleteAll(void)
 
 	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		Delete (i);
+		Delete(i);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::GetSendDataSize							 */
-/* 内容		:送信データサイズを取得											 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 DWORD CLibInfoMotionType::GetSendDataSize(DWORD dwMotionTypeID)
 {
@@ -256,20 +163,13 @@ DWORD CLibInfoMotionType::GetSendDataSize(DWORD dwMotionTypeID)
 				continue;
 		}
 	}
-		dwRet += pInfo->GetSendDataSize ();
+		dwRet += pInfo->GetSendDataSize();
 	}
 
-	dwRet += sizeof (DWORD);	/* 終端分 */
+	dwRet += sizeof(DWORD);	// 終端分
 
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::GetSendData								 */
-/* 内容		:送信データを取得												 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoMotionType::GetSendData(DWORD dwMotionTypeID)
 {
@@ -280,11 +180,11 @@ PBYTE CLibInfoMotionType::GetSendData(DWORD dwMotionTypeID)
 
 	pRet = NULL;
 
-	dwSize = GetSendDataSize (dwMotionTypeID);
+	dwSize = GetSendDataSize(dwMotionTypeID);
 	if (dwSize == 0) {
 		goto Exit;
 	}
-	pRet = ZeroNew (dwSize);
+	pRet = ZeroNew(dwSize);
 	pPos = pRet;
 
 	nCount = m_paInfo->size();
@@ -295,22 +195,15 @@ PBYTE CLibInfoMotionType::GetSendData(DWORD dwMotionTypeID)
 				continue;
 		}
 	}
-		dwSizeTmp	= pInfo->GetSendDataSize ();
-		pDataTmp	= pInfo->GetSendData ();
-		CopyMemoryRenew (pPos, pDataTmp, dwSizeTmp, pPos);
-		SAFE_DELETE_ARRAY (pDataTmp);
+		dwSizeTmp	= pInfo->GetSendDataSize();
+		pDataTmp	= pInfo->GetSendData();
+		CopyMemoryRenew(pPos, pDataTmp, dwSizeTmp, pPos);
+		SAFE_DELETE_ARRAY(pDataTmp);
 	}
 
 Exit:
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::SetSendData								 */
-/* 内容		:送信データから取り込み											 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoMotionType::SetSendData(PBYTE pSrc)
 {
@@ -322,31 +215,24 @@ PBYTE CLibInfoMotionType::SetSendData(PBYTE pSrc)
 
 	pDataTmp = pSrc;
 	while (1) {
-		CopyMemory (&dwMotionTypeID, pDataTmp, sizeof (dwMotionTypeID));
+		CopyMemory(&dwMotionTypeID, pDataTmp, sizeof(dwMotionTypeID));
 		if (dwMotionTypeID == 0) {
-			pDataTmp += sizeof (DWORD);
+			pDataTmp += sizeof(DWORD);
 			break;
 	}
-		pInfoMotion = (PCInfoMotionType)GetPtr (dwMotionTypeID);
+		pInfoMotion = (PCInfoMotionType)GetPtr(dwMotionTypeID);
 		if (pInfoMotion == NULL) {
 			pInfoMotion = new CInfoMotionType;
-			pDataTmp = pInfoMotion->SetSendData (pDataTmp);
-			Add (pInfoMotion);
+			pDataTmp = pInfoMotion->SetSendData(pDataTmp);
+			Add(pInfoMotion);
 	} else {
-			pDataTmp = pInfoMotion->SetSendData (pDataTmp);
+			pDataTmp = pInfoMotion->SetSendData(pDataTmp);
 	}
 	}
 	pRet = pDataTmp;
 
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoMotionType::GetNewID									 */
-/* 内容		:新しいモーションIDを取得										 */
-/* 日付		:2008/05/26														 */
-/* ========================================================================= */
 
 DWORD CLibInfoMotionType::GetNewID(void)
 {
@@ -373,4 +259,3 @@ DWORD CLibInfoMotionType::GetNewID(void)
 	return dwRet;
 }
 
-/* Copyright(C)URARA-works 2008 */

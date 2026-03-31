@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminMapObjectData.h									 */
-/* 内容			:マップオブジェクト配置データ一覧ダイアログクラス 定義ファイル */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/11/03													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminMapObjectData.h
+/// @brief マップオブジェクト配置データ一覧ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/11/03
+/// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
@@ -14,26 +12,24 @@ class CInfoMapBase;
 class CLibInfoMapObject;
 class CLibInfoMapObjectData;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminMapObjectData : public CDlgAdminBase
 {
 public:
-			CDlgAdminMapObjectData(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminMapObjectData();							/* デストラクタ */
+			CDlgAdminMapObjectData(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminMapObjectData(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);							/* 初期化 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);						/* メッセージハンドラ(WM_ADMINMSG) */
-	void	Renew		(void);											/* 一覧を更新 */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
+	void	Renew(void); // 一覧を更新
 
 
 protected:
-	CWnd					*m_pWndNotify;				/* 通知先ウィンドウ */
-	CInfoMapBase			*m_pInfoMap;				/* 編集中のマップ情報 */
-	CLibInfoMapObject		*m_pLibInfoMapObject;		/* マップオブジェクトデータライブラリ */
-	CLibInfoMapObjectData	*m_pLibInfoMapObjectData;	/* マップオブジェクト配置データライブラリ */
+	CWnd	*m_pWndNotify; // 通知先ウィンドウ
+	CInfoMapBase	*m_pInfoMap; // 編集中のマップ情報
+	CLibInfoMapObject	*m_pLibInfoMapObject; // マップオブジェクトデータライブラリ
+	CLibInfoMapObjectData	*m_pLibInfoMapObjectData; // マップオブジェクト配置データライブラリ
 
 
 
@@ -60,5 +56,3 @@ protected:
 } CDlgAdminMapObjectData, *PCDlgAdminMapObjectData;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2008 */

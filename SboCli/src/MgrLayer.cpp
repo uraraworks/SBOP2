@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:MgrLayer.h													 */
-/* 内容			:レイヤーマネージャクラス 実装ファイル						 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/09/24													 */
-/* ========================================================================= */
+﻿/// @file MgrLayer.cpp
+/// @brief レイヤーマネージャクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/09/24
+/// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
 #include "Img32.h"
@@ -21,12 +19,6 @@
 #include "MgrLayer.h"
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::CMgrLayer											 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 CMgrLayer::CMgrLayer()
 {
 	m_pMgrData		= NULL;
@@ -36,49 +28,25 @@ CMgrLayer::CMgrLayer()
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::~CMgrLayer											 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
-
 CMgrLayer::~CMgrLayer()
 {
-	Destroy ();
+	Destroy();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::Create												 */
-/* 内容		:作成															 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrLayer::Create(
-	CMgrData	*pMgrData)		/* [in] データ管理 */
+	CMgrData *pMgrData)		// [in] データ管理
 {
 	m_pMgrData		= pMgrData;
-	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData ();
+	m_pMgrGrpData	= m_pMgrData->GetMgrGrpData();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::Destroy												 */
-/* 内容		:破棄															 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrLayer::Destroy(void)
 {
-	DeleteAll ();
+	DeleteAll();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::Draw												 */
-/* 内容		:描画															 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrLayer::Draw(PCImg32 pDst)
 {
@@ -86,18 +54,12 @@ void CMgrLayer::Draw(PCImg32 pDst)
 	PCLayerBase pLayer;
 
 	nCount = m_paLayer->size();
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pLayer = m_paLayer->at(i);
-		pLayer->Draw (pDst);
+		pLayer->Draw(pDst);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::TimerProc											 */
-/* 内容		:時間処理														 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 BOOL CMgrLayer::TimerProc(void)
 {
@@ -108,20 +70,14 @@ BOOL CMgrLayer::TimerProc(void)
 	bRet	= FALSE;
 	nCount	= m_paLayer->size();
 
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pLayer = m_paLayer->at(i);
-		bRet |= pLayer->TimerProc ();
+		bRet |= pLayer->TimerProc();
 	}
 
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::Delete												 */
-/* 内容		:指定レイヤーを破棄												 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrLayer::Delete(int nID)
 {
@@ -129,22 +85,16 @@ void CMgrLayer::Delete(int nID)
 	PCLayerBase pLayer;
 
 	nCount = m_paLayer->size();
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pLayer = m_paLayer->at(i);
-		if (pLayer->GetID () == nID) {
-			SAFE_DELETE (pLayer);
-			m_paLayer->erase (m_paLayer->begin () + i);
+		if (pLayer->GetID() == nID) {
+			SAFE_DELETE(pLayer);
+			m_paLayer->erase(m_paLayer->begin() + i);
 			break;
 		}
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::DeleteAll											 */
-/* 内容		:全てのレイヤーを破棄											 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrLayer::DeleteAll(void)
 {
@@ -153,20 +103,14 @@ void CMgrLayer::DeleteAll(void)
 
 	if (m_paLayer) {
 		nCount = m_paLayer->size();
-		for (i = 0; i < nCount; i ++) {
+		for (i = 0; i < nCount; i++) {
 			pTmp = m_paLayer->at(i);
-			SAFE_DELETE (pTmp);
+			SAFE_DELETE(pTmp);
 		}
 		m_paLayer->clear();
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::Get													 */
-/* 内容		:指定IDのレイヤーを取得											 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 CLayerBase *CMgrLayer::Get(int nID)
 {
@@ -176,9 +120,9 @@ CLayerBase *CMgrLayer::Get(int nID)
 	pRet	= NULL;
 	nCount	= m_paLayer->size();
 
-	for (i = 0; i < nCount; i ++) {
+	for (i = 0; i < nCount; i++) {
 		pLayer = m_paLayer->at(i);
-		if (pLayer->GetID () == nID) {
+		if (pLayer->GetID() == nID) {
 			pRet = pLayer;
 			break;
 		}
@@ -188,131 +132,81 @@ CLayerBase *CMgrLayer::Get(int nID)
 }
 
 
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeLOGO											 */
-/* 内容		:レイヤー作成(ロゴ)												 */
-/* 日付		:2005/05/18														 */
-/* ========================================================================= */
-
 void CMgrLayer::MakeLOGO(void)
 {
 	PCLayerLogo pNew;
 
 	pNew = new CLayerLogo;
-	pNew->Create (m_pMgrData);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData);
+	m_paLayer->Add(pNew);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeTITLE											 */
-/* 内容		:レイヤー作成(タイトル)											 */
-/* 日付		:2007/03/26														 */
-/* ========================================================================= */
 
 void CMgrLayer::MakeTITLE(void)
 {
 	PCLayerTitle pNew;
 
 	pNew = new CLayerTitle;
-	pNew->Create (m_pMgrData);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData);
+	m_paLayer->Add(pNew);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeINFO											 */
-/* 内容		:レイヤー作成(お知らせ)											 */
-/* 日付		:2005/08/16														 */
-/* ========================================================================= */
 
 void CMgrLayer::MakeINFO(void)
 {
 	PCLayerInfo pNew;
 
 	pNew = new CLayerInfo;
-	pNew->Create (m_pMgrData);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData);
+	m_paLayer->Add(pNew);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeLOGINMENU										 */
-/* 内容		:レイヤー作成(ログインメニュー)									 */
-/* 日付		:2007/04/15														 */
-/* ========================================================================= */
 
 void CMgrLayer::MakeLOGINMENU(void)
 {
 	PCLayerLoginMenu pNew;
 
 	pNew = new CLayerLoginMenu;
-	pNew->Create (m_pMgrData);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData);
+	m_paLayer->Add(pNew);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeCHARSELECT										 */
-/* 内容		:レイヤー作成(キャラ選択)										 */
-/* 日付		:2005/07/04														 */
-/* ========================================================================= */
 
 void CMgrLayer::MakeCHARSELECT(DWORD dwAccountID)
 {
 	PCLayerCharSelect pNew;
 
 	pNew = new CLayerCharSelect;
-	pNew->Create (m_pMgrData, dwAccountID);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData, dwAccountID);
+	m_paLayer->Add(pNew);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeMAP												 */
-/* 内容		:レイヤー作成(マップ)											 */
-/* 日付		:2006/09/24														 */
-/* ========================================================================= */
 
 void CMgrLayer::MakeMAP(void)
 {
 	PCLayerMap pNew;
 
 	pNew = new CLayerMap;
-	pNew->Create (m_pMgrData);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData);
+	m_paLayer->Add(pNew);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeCLOUD											 */
-/* 内容		:レイヤー作成(雲)												 */
-/* 日付		:2007/04/19														 */
-/* ========================================================================= */
 
 void CMgrLayer::MakeCLOUD(void)
 {
 	PCLayerCloud pNew;
 
 	pNew = new CLayerCloud;
-	pNew->Create (m_pMgrData);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData);
+	m_paLayer->Add(pNew);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CMgrLayer::MakeSYSTEMMSG										 */
-/* 内容		:レイヤー作成(システムメッセージ)								 */
-/* 日付		:2007/07/30														 */
-/* ========================================================================= */
 
 void CMgrLayer::MakeSYSTEMMSG(void)
 {
 	PCLayerSystemMsg pNew;
 
 	pNew = new CLayerSystemMsg;
-	pNew->Create (m_pMgrData);
-	m_paLayer->Add (pNew);
+	pNew->Create(m_pMgrData);
+	m_paLayer->Add(pNew);
 }
-
-/* Copyright(C)URARA-works 2006 */

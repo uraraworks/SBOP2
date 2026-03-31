@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoItem.cpp											 */
-/* 内容			:アイテム情報ライブラリ基底クラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/05/05													 */
-/* ========================================================================= */
+﻿/// @file LibInfoItem.cpp
+/// @brief アイテム情報ライブラリ基底クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/05/05
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "InfoCharBase.h"
@@ -13,128 +11,72 @@
 #include "LibInfoMapParts.h"
 #include "LibInfoItem.h"
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::CLibInfoItem										 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 CLibInfoItem::CLibInfoItem()
 {
-	m_dwNewIDTmp			= 0;
-	m_paInfo				= NULL;
-	m_pLibInfoItemType		= NULL;
+	m_dwNewIDTmp	= 0;
+	m_paInfo	= NULL;
+	m_pLibInfoItemType	= NULL;
 	m_pLibInfoItemWeapon	= NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::~CLibInfoItem									 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 CLibInfoItem::~CLibInfoItem()
 {
-	Destroy ();
+	Destroy();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::Create											 */
-/* 内容		:作成															 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 void CLibInfoItem::Create(void)
 {
 	m_paInfo = new ARRAYITEMINFO;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::Destroy											 */
-/* 内容		:破棄															 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 void CLibInfoItem::Destroy(void)
 {
-	DeleteAll ();
-	SAFE_DELETE (m_paInfo);
+	DeleteAll();
+	SAFE_DELETE(m_paInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::SetTypeInfo										 */
-/* 内容		:アイテム種別情報を設定											 */
-/* 日付		:2007/10/06														 */
-/* ========================================================================= */
 
 void CLibInfoItem::SetTypeInfo(CLibInfoItemType *pLibInfoItemType)
 {
 	m_pLibInfoItemType = pLibInfoItemType;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::SetWeaponInfo									 */
-/* 内容		:武器情報を設定													 */
-/* 日付		:2007/10/06														 */
-/* ========================================================================= */
-
 void CLibInfoItem::SetWeaponInfo(CLibInfoItemWeapon *pLibInfoItemWeapon)
 {
 	m_pLibInfoItemWeapon = pLibInfoItemWeapon;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::RenewSize										 */
-/* 内容		:マップサイズ更新												 */
-/* 日付		:2007/08/25														 */
-/* ========================================================================= */
 
 void CLibInfoItem::RenewSize(DWORD dwMapID, int nDirection, int nSize)
 {
 	int i, nCount;
 	PCInfoItem pInfoItem;
 
-	/* マップサイズをキャラサイズに変更 */
+	// マップサイズをキャラサイズに変更
 	nSize *= 2;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoItem = (PCInfoItem)GetPtr (i);
+		pInfoItem = (PCInfoItem)GetPtr(i);
 
 		if (pInfoItem->m_dwMapID != dwMapID) {
 			continue;
 	}
 
 		switch (nDirection) {
-		case 0:		/* 上 */
+		case 0:	// 上
 			pInfoItem->m_ptPos.y += nSize;
-			pInfoItem->m_ptPos.y = max (pInfoItem->m_ptPos.y, 0);
+			pInfoItem->m_ptPos.y = max(pInfoItem->m_ptPos.y, 0);
 			break;
-		case 1:		/* 下 */
+		case 1:	// 下
 			break;
-		case 2:		/* 左 */
+		case 2:	// 左
 			pInfoItem->m_ptPos.x += nSize;
-			pInfoItem->m_ptPos.x = max (pInfoItem->m_ptPos.x, 0);
+			pInfoItem->m_ptPos.x = max(pInfoItem->m_ptPos.x, 0);
 			break;
-		case 3:		/* 右 */
+		case 3:	// 右
 			break;
 	}
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetNew											 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetNew(void)
 {
@@ -144,13 +86,6 @@ PCInfoBase CLibInfoItem::GetNew(void)
 
 	return pInfoItem;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetCount											 */
-/* 内容		:データ数を取得													 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 int CLibInfoItem::GetCount(void)
 {
@@ -167,34 +102,20 @@ Exit:
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::Add												 */
-/* 内容		:追加															 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 void CLibInfoItem::Add(PCInfoBase pInfo)
 {
 	PCInfoItem pItemInfo;
 
 	pItemInfo = (PCInfoItem)pInfo;
 	if (pItemInfo->m_dwItemID == 0) {
-		pItemInfo->m_dwItemID = GetNewID ();
+		pItemInfo->m_dwItemID = GetNewID();
 	}
 
-	m_paInfo->Add (pItemInfo);
+	m_paInfo->Add(pItemInfo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::Delete											 */
-/* 内容		:削除															 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 void CLibInfoItem::Delete(
-	int nNo)		/* [in] 配列番号 */
+	int nNo)	// [in] 配列番号
 {
 	int i, nCount;
 	PCInfoItem pInfo;
@@ -204,31 +125,24 @@ void CLibInfoItem::Delete(
 	nCount = m_adwAreaID.size();
 	for (i = 0; i < nCount; i ++) {
 		if (m_adwAreaID[i] == pInfo->m_dwItemID) {
-			m_adwAreaID.erase (m_adwAreaID.begin () + i);
+			m_adwAreaID.erase(m_adwAreaID.begin() + i);
 			break;
 	}
 	}
 
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
-		m_paInfo->erase (m_paInfo->begin () + nNo);
+		m_paInfo->erase(m_paInfo->begin() + nNo);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::Delete											 */
-/* 内容		:削除															 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 void CLibInfoItem::Delete(
-	DWORD dwItemID)		/* [in] アイテムID */
+	DWORD dwItemID)	// [in] アイテムID
 {
 	int i, nCount, nNo;
 	PCInfoItem pInfoTmp;
 
-	Enter ();
+	Enter();
 
 	nNo = -1;
 
@@ -243,18 +157,11 @@ void CLibInfoItem::Delete(
 	}
 
 	if (nNo >= 0) {
-		Delete (nNo);
+		Delete(nNo);
 	}
 
-	Leave ();
+	Leave();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::DeleteAll										 */
-/* 内容		:全て削除														 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 void CLibInfoItem::DeleteAll(void)
 {
@@ -266,17 +173,9 @@ void CLibInfoItem::DeleteAll(void)
 
 	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		Delete (i);
+		Delete(i);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::Sort												 */
-/* 内容		:表示位置に合わせてソート										 */
-/* 			:表示用のテーブルのみソートする									 */
-/* 日付		:2008/06/03														 */
-/* ========================================================================= */
 
 void CLibInfoItem::Sort(void)
 {
@@ -286,14 +185,14 @@ void CLibInfoItem::Sort(void)
 	ARRAYINT anNo;
 	ARRAYDWORD adwNo;
 
-	nCount = GetAreaCount ();
+	nCount = GetAreaCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoItem = (PCInfoItem)GetPtrArea (i);
+		pInfoItem = (PCInfoItem)GetPtrArea(i);
 		nCountTmp = anNo.size();
 		nNo = 0;
 		if (nCountTmp > 0) {
 			for (j = 0; j < nCountTmp; j ++) {
-				pInfoItemTmp = (PCInfoItem)GetPtrArea (anNo[j]);
+				pInfoItemTmp = (PCInfoItem)GetPtrArea(anNo[j]);
 				if (pInfoItem->m_ptPos.y < pInfoItemTmp->m_ptPos.y) {
 					break;
 			}
@@ -321,18 +220,11 @@ void CLibInfoItem::Sort(void)
 		}
 			nNo = j;
 	}
-		anNo.insert (anNo.begin () + nNo, i);
-		adwNo.insert (adwNo.begin () + nNo, pInfoItem->m_dwItemID);
+		anNo.insert(anNo.begin() + nNo, i);
+		adwNo.insert(adwNo.begin() + nNo, pInfoItem->m_dwItemID);
 	}
 	m_adwAreaID = adwNo;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetTypeName										 */
-/* 内容		:アイテム種別名を取得											 */
-/* 日付		:2007/09/23														 */
-/* ========================================================================= */
 
 LPCSTR CLibInfoItem::GetTypeName(DWORD dwTypeID)
 {
@@ -342,13 +234,6 @@ LPCSTR CLibInfoItem::GetTypeName(DWORD dwTypeID)
 
 	return pszRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetItemType										 */
-/* 内容		:アイテム種別を取得												 */
-/* 日付		:2007/10/07														 */
-/* ========================================================================= */
 
 DWORD CLibInfoItem::GetItemType(DWORD dwItemID)
 {
@@ -360,7 +245,7 @@ DWORD CLibInfoItem::GetItemType(DWORD dwItemID)
 	if (dwItemID == 0) {
 		goto Exit;
 	}
-	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr (dwItemID);
+	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr(dwItemID);
 	if (pInfoItemType == NULL) {
 		goto Exit;
 	}
@@ -369,13 +254,6 @@ DWORD CLibInfoItem::GetItemType(DWORD dwItemID)
 Exit:
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetItemTypeID									 */
-/* 内容		:アイテム種別IDを取得											 */
-/* 日付		:2008/08/08														 */
-/* ========================================================================= */
 
 DWORD CLibInfoItem::GetItemTypeID(DWORD dwItemID)
 {
@@ -387,7 +265,7 @@ DWORD CLibInfoItem::GetItemTypeID(DWORD dwItemID)
 	if (dwItemID == 0) {
 		goto Exit;
 	}
-	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr (dwItemID);
+	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr(dwItemID);
 	if (pInfoItemType == NULL) {
 		goto Exit;
 	}
@@ -396,13 +274,6 @@ DWORD CLibInfoItem::GetItemTypeID(DWORD dwItemID)
 Exit:
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetMotionIDAtack									 */
-/* 内容		:使用可能な攻撃モーションIDを取得								 */
-/* 日付		:2007/12/09														 */
-/* ========================================================================= */
 
 DWORD CLibInfoItem::GetMotionIDAtack(DWORD dwItemID)
 {
@@ -418,11 +289,11 @@ DWORD CLibInfoItem::GetMotionIDAtack(DWORD dwItemID)
 	if (m_pLibInfoItemType == NULL) {
 		goto Exit;
 	}
-	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr (dwItemID);
+	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr(dwItemID);
 	if (pInfoItemType == NULL) {
 		goto Exit;
 	}
-	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr (pInfoItemType->m_dwWeaponInfoID);
+	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr(pInfoItemType->m_dwWeaponInfoID);
 	if (pInfoItemWeapon == NULL) {
 		goto Exit;
 	}
@@ -431,13 +302,6 @@ DWORD CLibInfoItem::GetMotionIDAtack(DWORD dwItemID)
 Exit:
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetMotionIDBattleStand							 */
-/* 内容		:戦闘モード中の立ちモーションIDを取得							 */
-/* 日付		:2007/12/09														 */
-/* ========================================================================= */
 
 DWORD CLibInfoItem::GetMotionIDBattleStand(DWORD dwItemID)
 {
@@ -453,11 +317,11 @@ DWORD CLibInfoItem::GetMotionIDBattleStand(DWORD dwItemID)
 	if (m_pLibInfoItemType == NULL) {
 		goto Exit;
 	}
-	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr (dwItemID);
+	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr(dwItemID);
 	if (pInfoItemType == NULL) {
 		goto Exit;
 	}
-	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr (pInfoItemType->m_dwWeaponInfoID);
+	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr(pInfoItemType->m_dwWeaponInfoID);
 	if (pInfoItemWeapon == NULL) {
 		goto Exit;
 	}
@@ -466,13 +330,6 @@ DWORD CLibInfoItem::GetMotionIDBattleStand(DWORD dwItemID)
 Exit:
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetMotionIDBattleWalk							 */
-/* 内容		:戦闘モード中のすり足モーションIDを取得							 */
-/* 日付		:2007/12/09														 */
-/* ========================================================================= */
 
 DWORD CLibInfoItem::GetMotionIDBattleWalk(DWORD dwItemID)
 {
@@ -488,11 +345,11 @@ DWORD CLibInfoItem::GetMotionIDBattleWalk(DWORD dwItemID)
 	if (m_pLibInfoItemType == NULL) {
 		goto Exit;
 	}
-	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr (dwItemID);
+	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr(dwItemID);
 	if (pInfoItemType == NULL) {
 		goto Exit;
 	}
-	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr (pInfoItemType->m_dwWeaponInfoID);
+	pInfoItemWeapon = (PCInfoItemWeapon)m_pLibInfoItemWeapon->GetPtr(pInfoItemType->m_dwWeaponInfoID);
 	if (pInfoItemWeapon == NULL) {
 		goto Exit;
 	}
@@ -502,27 +359,13 @@ Exit:
 	return dwRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetPtr											 */
-/* 内容		:アイテム情報を取得												 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoItem::GetPtr(int nNo)
 {
 	return m_paInfo->at(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetPtr											 */
-/* 内容		:アイテム情報を取得												 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoItem::GetPtr(
-	DWORD dwItemID)		/* [in] アイテムID */
+	DWORD dwItemID)	// [in] アイテムID
 {
 	int i, nCount;
 	PCInfoItem pRet, pInfoTmp;
@@ -542,17 +385,10 @@ PCInfoBase CLibInfoItem::GetPtr(
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetPtr											 */
-/* 内容		:アイテム情報を取得												 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoItem::GetPtr(
-	DWORD dwMapID,			/* [in] 落ちているマップID */
-	POINT *pptPos,			/* [in] 落ちている座標 */
-	BOOL bPoint)/*=TRUE*/	/* [in] TRUE:完全一致の一点のみ対象にする */
+	DWORD dwMapID,	// [in] 落ちているマップID
+	POINT *pptPos,	// [in] 落ちている座標
+	BOOL bPoint)/*=TRUE*/		// [in] TRUE:完全一致の一点のみ対象にする
 {
 	int i, nCount;
 	PCInfoItem pRet, pInfoTmp;
@@ -570,8 +406,8 @@ PCInfoBase CLibInfoItem::GetPtr(
 				continue;
 		}
 	} else {
-			if ((abs (pInfoTmp->m_ptPos.x - pptPos->x) > HALF_TILE) ||
-				(abs (pInfoTmp->m_ptPos.y - pptPos->y) > HALF_TILE)) {
+			if ((abs(pInfoTmp->m_ptPos.x - pptPos->x) > HALF_TILE) ||
+				(abs(pInfoTmp->m_ptPos.y - pptPos->y) > HALF_TILE)) {
 				continue;
 			}
 	}
@@ -581,13 +417,6 @@ PCInfoBase CLibInfoItem::GetPtr(
 
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetItemTypePtr									 */
-/* 内容		:アイテム種別情報を取得											 */
-/* 日付		:2007/12/23														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoItem::GetItemTypePtr(DWORD dwItemID)
 {
@@ -602,22 +431,15 @@ PCInfoBase CLibInfoItem::GetItemTypePtr(DWORD dwItemID)
 	if (dwItemID == 0) {
 		goto Exit;
 	}
-	pInfoItem = (PCInfoItem)GetPtr (dwItemID);
+	pInfoItem = (PCInfoItem)GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		goto Exit;
 	}
 
-	pRet = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (pInfoItem->m_dwItemTypeID);
+	pRet = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr(pInfoItem->m_dwItemTypeID);
 Exit:
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetSendDataSize									 */
-/* 内容		:送信データサイズを取得											 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 DWORD CLibInfoItem::GetSendDataSize(void)
 {
@@ -627,26 +449,19 @@ DWORD CLibInfoItem::GetSendDataSize(void)
 
 	dwRet = dwSize = 0;
 
-	/* データ数分のサイズ */
-	dwSize += sizeof (DWORD);
+	// データ数分のサイズ
+	dwSize += sizeof(DWORD);
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pItem = (PCInfoItem)GetPtr (i);
+		pItem = (PCInfoItem)GetPtr(i);
 
-		dwSize += pItem->GetSendDataSize ();
+		dwSize += pItem->GetSendDataSize();
 	}
 
 	dwRet = dwSize;
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetSendData										 */
-/* 内容		:送信データを取得												 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoItem::GetSendData(void)
 {
@@ -657,39 +472,31 @@ PBYTE CLibInfoItem::GetSendData(void)
 
 	pRet = NULL;
 
-	dwSize		= GetSendDataSize ();
-	pData		= ZeroNew (dwSize);
+	dwSize	= GetSendDataSize();
+	pData	= ZeroNew(dwSize);
 	dwOffset	= 0;
 
-	/* データ数を書き込み */
-	dwCount = (DWORD)GetCount ();
-	CopyMemory (pData, &dwCount, sizeof (dwCount));
-	dwOffset += sizeof (dwCount);
+	// データ数を書き込み
+	dwCount = (DWORD)GetCount();
+	CopyMemory(pData, &dwCount, sizeof(dwCount));
+	dwOffset += sizeof(dwCount);
 
-	/* アイテム情報を書き込み */
-	nCount = GetCount ();
+	// アイテム情報を書き込み
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pItem = (PCInfoItem)GetPtr (i);
+		pItem = (PCInfoItem)GetPtr(i);
 
-		dwSizeTmp	= pItem->GetSendDataSize ();
-		pDataTmp	= pItem->GetSendData ();
-		CopyMemory (&pData[dwOffset], pDataTmp, dwSizeTmp);
+		dwSizeTmp	= pItem->GetSendDataSize();
+		pDataTmp	= pItem->GetSendData();
+		CopyMemory(&pData[dwOffset], pDataTmp, dwSizeTmp);
 		dwOffset += dwSizeTmp;
 
-		SAFE_DELETE_ARRAY (pDataTmp);
+		SAFE_DELETE_ARRAY(pDataTmp);
 	}
 
 	pRet = pData;
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::SetSendData										 */
-/* 内容		:送信データから取り込み											 */
-/* 日付		:2007/05/05														 */
-/* 戻り値	:処理した後のアドレス											 */
-/* ========================================================================= */
 
 PBYTE CLibInfoItem::SetSendData(PBYTE pSrc)
 {
@@ -698,34 +505,27 @@ PBYTE CLibInfoItem::SetSendData(PBYTE pSrc)
 	PBYTE pRet, pDataTmp;
 	PCInfoItem pItem;
 
-	pRet		= pSrc;
+	pRet	= pSrc;
 	pDataTmp	= pSrc;
 
-	DeleteAll ();
+	DeleteAll();
 
-	/* データ数を読み込み */
-	CopyMemory (&dwCount, pDataTmp, sizeof (dwCount));
-	nCount		= (int)dwCount;
-	pDataTmp	+= sizeof (dwCount);
+	// データ数を読み込み
+	CopyMemory(&dwCount, pDataTmp, sizeof(dwCount));
+	nCount	= (int)dwCount;
+	pDataTmp	+= sizeof(dwCount);
 
 	for (i = 0; i < nCount; i ++) {
-		pItem = (PCInfoItem)GetNew ();
+		pItem = (PCInfoItem)GetNew();
 
-		pDataTmp = pItem->SetSendData (pDataTmp);
-		Add (pItem);
+		pDataTmp = pItem->SetSendData(pDataTmp);
+		Add(pItem);
 	}
-	Sort ();
+	Sort();
 
 	pRet = pDataTmp;
 	return pRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::AddItem											 */
-/* 内容		:所持アイテムを追加												 */
-/* 日付		:2007/08/11														 */
-/* ========================================================================= */
 
 void CLibInfoItem::AddItem(DWORD dwCharID, DWORD dwItemID, ARRAYDWORD *padwItemID)
 {
@@ -733,13 +533,13 @@ void CLibInfoItem::AddItem(DWORD dwCharID, DWORD dwItemID, ARRAYDWORD *padwItemI
 	POINT ptTmp;
 	PCInfoItem pInfo;
 
-	pInfo = (PCInfoItem)GetPtr (dwItemID);
+	pInfo = (PCInfoItem)GetPtr(dwItemID);
 	if (pInfo == NULL) {
 		return;
 	}
 
-	/* 空いている場所を左上から探す */
-	bResult = GetFreePos (ptTmp, padwItemID);
+	// 空いている場所を左上から探す
+	bResult = GetFreePos(ptTmp, padwItemID);
 	if (bResult == FALSE) {
 		return;
 	}
@@ -749,15 +549,8 @@ void CLibInfoItem::AddItem(DWORD dwCharID, DWORD dwItemID, ARRAYDWORD *padwItemI
 	pInfo->m_dwMapID	= 0;
 	pInfo->m_ptPos.x	= 0;
 	pInfo->m_ptPos.y	= 0;
-	padwItemID->Add (dwItemID);
+	padwItemID->Add(dwItemID);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::DeleteItem										 */
-/* 内容		:所持アイテムを削除												 */
-/* 日付		:2007/08/11														 */
-/* ========================================================================= */
 
 void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNoPos)
 {
@@ -766,7 +559,7 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 	POINT ptTmp;
 	PCInfoItem pInfo, pInfoTmp;
 
-	pInfo = (PCInfoItem)GetPtr (dwItemID);
+	pInfo = (PCInfoItem)GetPtr(dwItemID);
 	if (pInfo == NULL) {
 		return;
 	}
@@ -775,43 +568,36 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 	for (i = 0; i < nCount; i ++) {
 		dwItemIDTmp = pInfoChar->m_adwItemID[i];
 		if (dwItemIDTmp == dwItemID) {
-			pInfoChar->m_adwItemID.erase (pInfoChar->m_adwItemID.begin () + i);
+			pInfoChar->m_adwItemID.erase(pInfoChar->m_adwItemID.begin() + i);
 			break;
 	}
 	}
-	/* 見つからなかった？ */
+	// 見つからなかった？
 	if (i >= nCount) {
 		return;
 	}
 
 	pInfo->m_dwCharID = 0;
-	ZeroMemory (&pInfo->m_ptBackPack, sizeof (pInfo->m_ptBackPack));
+	ZeroMemory(&pInfo->m_ptBackPack, sizeof(pInfo->m_ptBackPack));
 
-	/* 配置しない？ */
+	// 配置しない？
 	if (bNoPos) {
 		pInfo->m_dwMapID = 0;
 		pInfo->m_ptPos.x = pInfo->m_ptPos.y = 0;
 
 	} else {
-		pInfoChar->GetFrontPos (ptTmp);
-		pInfoTmp = (PCInfoItem)GetPtr (pInfoChar->m_dwMapID, &ptTmp);
+		pInfoChar->GetFrontPos(ptTmp);
+		pInfoTmp = (PCInfoItem)GetPtr(pInfoChar->m_dwMapID, &ptTmp);
 
 		pInfo->m_dwMapID	= pInfoChar->m_dwMapID;
-		pInfo->m_ptPos		= ptTmp;
-		/* アイテムが置かれている？ */
+		pInfo->m_ptPos	= ptTmp;
+		// アイテムが置かれている？
 		if (pInfoTmp) {
 			pInfo->m_nPosZ = pInfoTmp->m_nPosZ + 1;
 	}
 	}
-	Sort ();
+	Sort();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::Equip											 */
-/* 内容		:アイテム位置を装備用に入れ替え									 */
-/* 日付		:2007/10/08														 */
-/* ========================================================================= */
 
 void CLibInfoItem::Equip(CInfoCharBase *pInfoChar, DWORD dwItemIDOld, DWORD dwItemIDNew)
 {
@@ -820,8 +606,8 @@ void CLibInfoItem::Equip(CInfoCharBase *pInfoChar, DWORD dwItemIDOld, DWORD dwIt
 	PCInfoItem pInfoOld, pInfoNew;
 	POINT ptOld, ptNew;
 
-	pInfoOld = (PCInfoItem)GetPtr (dwItemIDOld);
-	pInfoNew = (PCInfoItem)GetPtr (dwItemIDNew);
+	pInfoOld = (PCInfoItem)GetPtr(dwItemIDOld);
+	pInfoNew = (PCInfoItem)GetPtr(dwItemIDNew);
 
 	ptOld.x = ptOld.y = 0;
 	ptNew.x = ptNew.y = 0;
@@ -838,34 +624,27 @@ void CLibInfoItem::Equip(CInfoCharBase *pInfoChar, DWORD dwItemIDOld, DWORD dwIt
 		for (i = 0; i < nCount; i ++) {
 			dwItemIDTmp = pInfoChar->m_adwItemID[i];
 			if (dwItemIDTmp == dwItemIDNew) {
-				pInfoChar->m_adwItemID.erase (pInfoChar->m_adwItemID.begin () + i);
+				pInfoChar->m_adwItemID.erase(pInfoChar->m_adwItemID.begin() + i);
 				break;
 		}
 	}
 		pInfoNew->m_ptBackPack.x = pInfoNew->m_ptBackPack.y = 0;
 	}
 	if (pInfoOld) {
-		/* 入れ替え？ */
+		// 入れ替え？
 		if (pInfoNew) {
 			pInfoOld->m_ptBackPack = ptNew;
 	} else {
-			GetFreePos (pInfoOld->m_ptBackPack, &pInfoChar->m_adwItemID);
+			GetFreePos(pInfoOld->m_ptBackPack, &pInfoChar->m_adwItemID);
 	}
-		pInfoChar->m_adwItemID.push_back (dwItemIDOld);
+		pInfoChar->m_adwItemID.push_back(dwItemIDOld);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::MakeItem											 */
-/* 内容		:指定場所にアイテムを作成										 */
-/* 日付		:2007/10/20														 */
-/* ========================================================================= */
-
 DWORD CLibInfoItem::MakeItem(
-	DWORD dwMapID,			/* [in] マップID */
-	POINT *pptPos,			/* [in] 座標 */
-	DWORD dwItemTypeID)		/* [in] アイテム種別ID */
+	DWORD dwMapID,	// [in] マップID
+	POINT *pptPos,	// [in] 座標
+	DWORD dwItemTypeID)	// [in] アイテム種別ID
 {
 	DWORD dwRet;
 	PCInfoItemTypeBase pInfoItemType;
@@ -873,35 +652,28 @@ DWORD CLibInfoItem::MakeItem(
 
 	dwRet = 0;
 
-	pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr (dwItemTypeID);
+	pInfoItemType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr(dwItemTypeID);
 	if (pInfoItemType == NULL) {
 		goto Exit;
 	}
 
-	pInfoItem = (PCInfoItem)GetNew ();
+	pInfoItem = (PCInfoItem)GetNew();
 	if (dwMapID > 0) {
 		pInfoItem->m_dwMapID	= dwMapID;
-		pInfoItem->m_ptPos		= *pptPos;
+		pInfoItem->m_ptPos	= *pptPos;
 	}
 	pInfoItem->m_dwItemTypeID	= dwItemTypeID;
-	pInfoItem->m_bPutOn			= pInfoItemType->m_bPutOn;
-	pInfoItem->m_strName		= pInfoItemType->m_strName;
-	pInfoItem->m_dwGrpID		= pInfoItemType->m_dwGrpID;
+	pInfoItem->m_bPutOn	= pInfoItemType->m_bPutOn;
+	pInfoItem->m_strName	= pInfoItemType->m_strName;
+	pInfoItem->m_dwGrpID	= pInfoItemType->m_dwGrpID;
 	pInfoItem->m_dwIconGrpID	= pInfoItemType->m_dwIconGrpID;
 	pInfoItem->m_dwDropSoundID	= pInfoItemType->m_dwDropSoundID;
 
-	Add (pInfoItem);
+	Add(pInfoItem);
 	dwRet = pInfoItem->m_dwItemID;
 Exit:
 	return dwRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetFreePos										 */
-/* 内容		:アイテムの空き場所を取得										 */
-/* 日付		:2007/10/08														 */
-/* ========================================================================= */
 
 BOOL CLibInfoItem::GetFreePos(POINT &ptDst, ARRAYDWORD *padwItemID)
 {
@@ -911,19 +683,19 @@ BOOL CLibInfoItem::GetFreePos(POINT &ptDst, ARRAYDWORD *padwItemID)
 
 	bRet = FALSE;
 
-	/* 空いている場所を左上から探す */
+	// 空いている場所を左上から探す
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
 			ptTmp.x = x;
 			ptTmp.y = y;
-			bResult = IsItemPos (&ptTmp, padwItemID);
+			bResult = IsItemPos(&ptTmp, padwItemID);
 			if (bResult == FALSE) {
 				x = y = 4;
 				break;
 		}
 	}
 	}
-	/* 空きがなかった？ */
+	// 空きがなかった？
 	if (bResult) {
 		goto Exit;
 	}
@@ -934,13 +706,6 @@ Exit:
 	return bRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::IsUseItem										 */
-/* 内容		:使用できるアイテムか判定										 */
-/* 日付		:2008/07/05														 */
-/* ========================================================================= */
-
 BOOL CLibInfoItem::IsUseItem(DWORD dwItemID)
 {
 	BOOL bRet;
@@ -949,17 +714,17 @@ BOOL CLibInfoItem::IsUseItem(DWORD dwItemID)
 
 	bRet = FALSE;
 
-	pInfoItem = (PCInfoItem)GetPtr (dwItemID);
+	pInfoItem = (PCInfoItem)GetPtr(dwItemID);
 	if (pInfoItem == NULL) {
 		goto Exit;
 	}
-	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr (dwItemID);
+	pInfoItemType = (PCInfoItemTypeBase)GetItemTypePtr(dwItemID);
 	if (pInfoItemType == NULL) {
 		goto Exit;
 	}
 
 	switch (pInfoItemType->m_dwItemTypeID) {
-	case ITEMTYPEID_HP:		/* HP増減 */
+	case ITEMTYPEID_HP:	// HP増減
 	case ITEMTYPEID_LIGHT:	/* 灯り*/
 		break;
 	default:
@@ -970,13 +735,6 @@ BOOL CLibInfoItem::IsUseItem(DWORD dwItemID)
 Exit:
 	return bRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::SetArea											 */
-/* 内容		:範囲指定一覧作成												 */
-/* 日付		:2008/06/14														 */
-/* ========================================================================= */
 
 void CLibInfoItem::SetArea(DWORD dwMapID, RECT *prcArea)
 {
@@ -995,40 +753,19 @@ void CLibInfoItem::SetArea(DWORD dwMapID, RECT *prcArea)
 			(pInfoTmp->m_ptPos.y >= prcArea->top) && (pInfoTmp->m_ptPos.y <= prcArea->bottom))) {
 			continue;
 	}
-		m_adwAreaID.push_back (pInfoTmp->m_dwItemID);
+		m_adwAreaID.push_back(pInfoTmp->m_dwItemID);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetAreaCount										 */
-/* 内容		:範囲指定一覧数取得												 */
-/* 日付		:2008/06/14														 */
-/* ========================================================================= */
 
 int CLibInfoItem::GetAreaCount(void)
 {
 	return m_adwAreaID.size();
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetPtrArea										 */
-/* 内容		:範囲指定一覧からアイテム情報を取得								 */
-/* 日付		:2008/06/14														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoItem::GetPtrArea(int nNo)
 {
-	return GetPtr (m_adwAreaID[nNo]);
+	return GetPtr(m_adwAreaID[nNo]);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::GetNewID											 */
-/* 内容		:新しいアイテムIDを取得											 */
-/* 日付		:2007/05/05														 */
-/* ========================================================================= */
 
 DWORD CLibInfoItem::GetNewID(void)
 {
@@ -1055,14 +792,6 @@ DWORD CLibInfoItem::GetNewID(void)
 	return dwRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoItem::IsItemPos										 */
-/* 内容		:指定場所が使用済みかチェック									 */
-/* 戻り値	:TRUE:使用済み													 */
-/* 日付		:2007/08/12														 */
-/* ========================================================================= */
-
 BOOL CLibInfoItem::IsItemPos(POINT *ptItem, ARRAYDWORD *padwItemID)
 {
 	BOOL bRet;
@@ -1073,7 +802,7 @@ BOOL CLibInfoItem::IsItemPos(POINT *ptItem, ARRAYDWORD *padwItemID)
 
 	nCount = padwItemID->size();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTmp = (PCInfoItem)GetPtr (padwItemID->at(i));
+		pInfoTmp = (PCInfoItem)GetPtr(padwItemID->at(i));
 		if (pInfoTmp == NULL) {
 			continue;
 	}
@@ -1088,4 +817,3 @@ Exit:
 	return bRet;
 }
 
-/* Copyright(C)URARA-works 2007 */

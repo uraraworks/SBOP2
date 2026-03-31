@@ -1,38 +1,34 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:ListCtrlItemInfo.h											 */
-/* 内容			:アイテム一覧リストコントロールクラス 定義ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/09/24													 */
-/* ========================================================================= */
+﻿/// @file ListCtrlItemInfo.h
+/// @brief アイテム一覧リストコントロールクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/09/24
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
 class CMgrData;
 class CLibInfoItem;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CListCtrlItemInfo : public CListCtrl
 {
 public:
-			CListCtrlItemInfo();						/* コンストラクタ */
-	virtual ~CListCtrlItemInfo();						/* デストラクタ */
+			CListCtrlItemInfo();						// コンストラクタ
+	virtual ~CListCtrlItemInfo();						// デストラクタ
 
 
-	BOOL	Create		(CWnd *pParent, CMgrData *pMgrData);	/* 作成 */
-	void	Renew		(void);									/* 一覧を更新 */
-
-
-protected:
+	BOOL	Create(CWnd *pParent, CMgrData *pMgrData);	// 作成
+	void	Renew(void);								// 一覧を更新
 
 
 protected:
-	CWnd			*m_pWndParent;			/* 親ウィンドウ */
-	CMgrData		*m_pMgrData;			/* データ管理 */
-	CLibInfoItem	*m_pLibInfoItem;		/* アイテム情報 */
+
+
+protected:
+	CWnd			*m_pWndParent;			// 親ウィンドウ
+	CMgrData		*m_pMgrData;			// データ管理
+	CLibInfoItem	*m_pLibInfoItem;		// アイテム情報
 
 
 
@@ -49,5 +45,3 @@ protected:
 } CListCtrlItemInfo, *PCListCtrlItemInfo;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

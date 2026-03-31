@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminBase.h												 */
-/* 内容			:管理者ウィンドウ基底ダイアログクラス 定義ファイル			 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/03/18													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminBase.h
+/// @brief 管理者ウィンドウ基底ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/03/18
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
@@ -16,34 +14,32 @@ class CPacketBase;
 struct tagSboAdminUiHost;
 typedef struct tagSboAdminUiHost SboAdminUiHost;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminBase : public CDialog, public CLayoutHelper
 {
 public:
-			CDlgAdminBase(int nResourceID, CWnd* pParent = NULL);	/* コンストラクタ */
-	virtual ~CDlgAdminBase();										/* デストラクタ */
+			CDlgAdminBase(int nResourceID, CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminBase(); // デストラクタ
 
-	virtual void	Init			(CMgrData *pMgrData);					/* 初期化 */
-	virtual void	Renew			(void);									/* 更新 */
-	virtual void	OnAdminMsg		(int nType, DWORD dwPara);				/* メッセージハンドラ(WM_ADMINMSG) */
-	virtual void	OnMainFrame		(DWORD dwCommand, DWORD dwParam);		/* メッセージハンドラ(WM_MAINFRAME) */
-	virtual void	Set				(CInfoItemTypeBase *pSrc)  {}			/* 編集内容を設定 */
-	virtual void	Get				(CInfoItemTypeBase *&pDst) {}			/* 編集内容を取得 */
-	void			SetHost			(const SboAdminUiHost* pHost);			/* Host APIを設定 */
-
-
-protected:
-	void	SelectCmb		(CComboBox *pCmb, DWORD dwID);	/* 項目を選択 */
-	void	SendPacket		(CPacketBase* pPacket);			/* パケット送信 */
+	virtual void	Init(CMgrData *pMgrData); // 初期化
+	virtual void	Renew(void); // 更新
+	virtual void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
+	virtual void	OnMainFrame(DWORD dwCommand, DWORD dwParam); // メッセージハンドラ(WM_MAINFRAME)
+	virtual void	Set(CInfoItemTypeBase *pSrc)  {} // 編集内容を設定
+	virtual void	Get(CInfoItemTypeBase *&pDst) {} // 編集内容を取得
+	void	SetHost(const SboAdminUiHost* pHost); // Host APIを設定
 
 
 protected:
-	CMgrData			*m_pMgrData;			/* データマネージャ */
-	CWnd				*m_pWndParent;			/* 親ウィンドウ */
-	const SboAdminUiHost *m_pHost;			/* Host API */
+	void	SelectCmb(CComboBox *pCmb, DWORD dwID); // 項目を選択
+	void	SendPacket(CPacketBase* pPacket); // パケット送信
+
+
+protected:
+	CMgrData	*m_pMgrData; // データマネージャ
+	CWnd	*m_pWndParent; // 親ウィンドウ
+	const SboAdminUiHost *m_pHost; // Host API
 
 
 
@@ -54,7 +50,7 @@ public:
 	//{{AFX_VIRTUAL(CDlgAdminBase)
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-	virtual void PostNcDestroy ();
+	virtual void PostNcDestroy();
 	//}}AFX_VIRTUAL
 
 protected:
@@ -67,5 +63,3 @@ protected:
 } CDlgAdminBase, *PCDlgAdminBase;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

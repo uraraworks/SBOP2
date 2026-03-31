@@ -1,36 +1,18 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:SaveLoadInfoChar.cpp										 */
-/* 内容			:データ保存・読み込みクラス(キャラ情報) 実装ファイル		 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/04/30													 */
-/* ========================================================================= */
+﻿/// @file SaveLoadInfoChar.cpp
+/// @brief データ保存・読み込みクラス(キャラ情報) 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/04/30
+/// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
 #include "SaveLoadInfoChar.h"
 
-
-/* ========================================================================= */
-/* 関数名	:CSaveLoadInfoChar::CSaveLoadInfoChar							 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2007/04/30														 */
-/* ========================================================================= */
-
 CSaveLoadInfoChar::CSaveLoadInfoChar()
 {
-	/* ファイル名の設定 */
-	SetFileName ("SBODATA\\SboDataChar.dat");
+	// ファイル名の設定
+	SetFileName("SBODATA\\SboDataChar.dat");
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CSaveLoadInfoChar::~CSaveLoadInfoChar							 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2007/04/30														 */
-/* ========================================================================= */
 
 CSaveLoadInfoChar::~CSaveLoadInfoChar()
 {
 }
-
-/* Copyright(C)URARA-works 2007 */

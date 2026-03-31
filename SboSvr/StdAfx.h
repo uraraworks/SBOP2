@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2006 */
-/* ========================================================================= */
-/* ファイル名	:stdafx.h													 */
-/* 内容			:プリコンパイルヘッダ 定義ファイル							 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2006/11/04													 */
-/* ========================================================================= */
+﻿/// @file stdafx.h
+/// @brief プリコンパイルヘッダ 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2006/11/04
+/// @copyright Copyright(C)URARA-works 2006
 
 #pragma once
 
@@ -36,5 +34,3 @@ using namespace std;
 #include "SboSvr_priv.h"
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2006 */

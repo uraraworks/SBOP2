@@ -1,13 +1,11 @@
-/* Copyright(C)URARA-works 2025 */
-/* ========================================================================= */
-/* ファイル名	:SDLWindow.h												 */
-/* 内容			:SDLウィンドウ ラッパー 定義ファイル						 */
-/* 作成日		:2025/06/01													 */
-/* 説明			:SDL_CreateWindow でウィンドウを生成し、					 */
-/*				 SDL_Renderer も管理する。								 */
-/*				 Win32 HWND は保持せず、必要な箇所で						 */
-/*				 SDL_GetWindowWMInfo から取得する。						 */
-/* ========================================================================= */
+/// @file SDLWindow.h
+/// @brief SDLウィンドウ ラッパー 定義ファイル
+/// @date 2025/06/01
+/// @copyright Copyright(C)URARA-works 2025
+/// @details SDL_CreateWindow でウィンドウを生成し、
+///          SDL_Renderer も管理する。
+///          Win32 HWND は保持せず、必要な箇所で
+///          SDL_GetWindowWMInfo から取得する。
 
 #pragma once
 
@@ -32,5 +30,3 @@ private:
 	SDL_Window		*m_pWindow;
 	SDL_Renderer	*m_pRenderer;
 };
-
-/* Copyright(C)URARA-works 2025 */

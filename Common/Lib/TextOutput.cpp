@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2005 */
-/* ========================================================================= */
-/* ファイル名：	TextOutput.cpp												 */
-/* 内容：		テキスト出力クラス 実装ファイル								 */
-/* 作成：		年がら年中春うらら(URARA-works)								 */
-/* 作成開始日：	2005/04/01													 */
-/* ========================================================================= */
+﻿/// @file TextOutput.cpp
+/// @brief テキスト出力クラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2005/04/01
+/// @copyright Copyright(C)URARA-works 2005
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -12,48 +10,27 @@
 #include "../myLib/myString.h"
 #include "TextOutput.h"
 
-
-/* ========================================================================= */
-/* 関数名：	CTextOutput::CTextOutput										 */
-/* 内容：	コンストラクタ													 */
-/* 日付：	2005/04/01														 */
-/* ========================================================================= */
-
 CTextOutput::CTextOutput()
 {
 	m_pszFileName	= NULL;
-	m_bHeader		= FALSE;
-	m_bReturn		= TRUE;
+	m_bHeader	= FALSE;
+	m_bReturn	= TRUE;
 
-	/* クリティカルセクションオブジェクトを初期化 */
-	InitializeCriticalSection (&m_csWrite);
+	// クリティカルセクションオブジェクトを初期化
+	InitializeCriticalSection(&m_csWrite);
 }
-
-
-/* ========================================================================= */
-/* 関数名：	CTextOutput::~CTextOutput										 */
-/* 内容：	デストラクタ													 */
-/* 日付：	2005/04/01														 */
-/* ========================================================================= */
 
 CTextOutput::~CTextOutput()
 {
-	Destroy ();
+	Destroy();
 
-	DeleteCriticalSection (&m_csWrite);
+	DeleteCriticalSection(&m_csWrite);
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CTextOutput::Create												 */
-/* 内容：	初期化															 */
-/* 日付：	2005/04/01														 */
-/* ========================================================================= */
-
 BOOL CTextOutput::Create(
-	LPCSTR pszFileName,		/* [in] 出力するファイル名 */
-	BOOL bHeader,			/* [in] ヘッダを書き込む？ */
-	BOOL bReturn)			/* [in] 改行コードを書き込む？ */
+	LPCSTR pszFileName,	// [in] 出力するファイル名
+	BOOL bHeader,	// [in] ヘッダを書き込む？
+	BOOL bReturn)	// [in] 改行コードを書き込む？
 {
 	BOOL bRet;
 
@@ -66,20 +43,13 @@ BOOL CTextOutput::Create(
 	m_bHeader = bHeader;
 	m_bReturn = bReturn;
 
-	m_pszFileName = new char[strlen (pszFileName) + 1];
-	strcpy (m_pszFileName, pszFileName);
+	m_pszFileName = new char[strlen(pszFileName) + 1];
+	strcpy(m_pszFileName, pszFileName);
 
 	bRet = TRUE;
 Exit:
 	return bRet;
 }
-
-
-/* ========================================================================= */
-/* 関数名：	CTextOutput::Destroy											 */
-/* 内容：	破棄															 */
-/* 日付：	2005/04/01														 */
-/* ========================================================================= */
 
 void CTextOutput::Destroy(void)
 {
@@ -89,43 +59,29 @@ void CTextOutput::Destroy(void)
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CTextOutput::Write												 */
-/* 内容：	書き込み														 */
-/* 日付：	2005/04/01														 */
-/* ========================================================================= */
-
 void CTextOutput::Write(
-	LPCSTR format, ...)		/* [in] 出力するフォーマット付き文字列 */
+	LPCSTR format, ...)	// [in] 出力するフォーマット付き文字列
 {
 	int nLen;
 	char szTmp[256];
 	va_list ap;
 
-	/* 引数の取り出し */
-	va_start (ap, format);
+	// 引数の取り出し
+	va_start(ap, format);
 
-	nLen = _vsnprintf (szTmp, sizeof (szTmp), format, ap);
+	nLen = _vsnprintf(szTmp, sizeof(szTmp), format, ap);
 	if (nLen <= 0) {
 		goto Exit;
 	}
 
-	WriteProc (szTmp);
+	WriteProc(szTmp);
 
 Exit:
 	return;
 }
 
-
-/* ========================================================================= */
-/* 関数名：	CTextOutput::WriteProc											 */
-/* 内容：	書き込み処理													 */
-/* 日付：	2005/04/01														 */
-/* ========================================================================= */
-
 void CTextOutput::WriteProc(
-	LPCSTR pszText)		/* [in] 出力するNULL終端文字列 */
+	LPCSTR pszText)	// [in] 出力するNULL終端文字列
 {
 	HANDLE hFile;
 	DWORD dwBytes;
@@ -133,16 +89,16 @@ void CTextOutput::WriteProc(
 	SYSTEMTIME stSysTime;
 	CString strFileName;
 
-	/* 排他開始 */
-	EnterCriticalSection (&m_csWrite);
+	// 排他開始
+	EnterCriticalSection(&m_csWrite);
 
 	if ((m_pszFileName == NULL) || (pszText == NULL)) {
 		goto Exit;
 	}
 
-	/* ファイルを開く */
-        strFileName = Utf8ToTString (m_pszFileName);
-        hFile = CreateFile (
+	// ファイルを開く
+        strFileName = Utf8ToTString(m_pszFileName);
+        hFile = CreateFile(
                         strFileName,
                         GENERIC_WRITE | GENERIC_READ,
                         0,
@@ -153,33 +109,32 @@ void CTextOutput::WriteProc(
 	if (hFile == INVALID_HANDLE_VALUE) {
 		goto Exit;
 	}
-	/* ファイルポインタを終端に移動 */
-	SetFilePointer (hFile, 0, 0, FILE_END);
+	// ファイルポインタを終端に移動
+	SetFilePointer(hFile, 0, 0, FILE_END);
 
-	/* ヘッダを書き込む？ */
+	// ヘッダを書き込む？
 	if (m_bHeader) {
-		GetLocalTime (&stSysTime);
-                StringCchPrintfA (szTmp, _countof (szTmp), "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
+		GetLocalTime(&stSysTime);
+                StringCchPrintfA(szTmp, _countof(szTmp), "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
                                 stSysTime.wYear, stSysTime.wMonth,  stSysTime.wDay,
                                 stSysTime.wHour, stSysTime.wMinute, stSysTime.wSecond,
                                 stSysTime.wMilliseconds);
-		WriteFile (hFile, szTmp, strlen (szTmp), &dwBytes, NULL);
+		WriteFile(hFile, szTmp, strlen(szTmp), &dwBytes, NULL);
 	}
 
-	/* 本文を書き込む */
-	WriteFile (hFile, pszText, strlen (pszText), &dwBytes, NULL);
+	// 本文を書き込む
+	WriteFile(hFile, pszText, strlen(pszText), &dwBytes, NULL);
 
-	/* 改行コードを書き込む？ */
+	// 改行コードを書き込む？
 	if (m_bReturn) {
-		strcpy (szTmp, "\r\n");
-		WriteFile (hFile, szTmp, strlen (szTmp), &dwBytes, NULL);
+		strcpy(szTmp, "\r\n");
+		WriteFile(hFile, szTmp, strlen(szTmp), &dwBytes, NULL);
 	}
 
-	CloseHandle (hFile);
+	CloseHandle(hFile);
 
 Exit:
-	/* 排他終了 */
-	LeaveCriticalSection (&m_csWrite);
+	// 排他終了
+	LeaveCriticalSection(&m_csWrite);
 }
 
-/* Copyright(C)URARA-works 2005 */

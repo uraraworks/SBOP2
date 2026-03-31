@@ -1,33 +1,29 @@
-﻿/* Copyright(C)URARA-works 2007 */
-/* ========================================================================= */
-/* ファイル名	:DlgAdminCharAdmin.h										 */
-/* 内容			:管理者権限の設定ダイアログクラス 定義ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2007/07/05													 */
-/* ========================================================================= */
+﻿/// @file DlgAdminCharAdmin.h
+/// @brief 管理者権限の設定ダイアログクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2007/07/05
+/// @copyright Copyright(C)URARA-works 2007
 
 #pragma once
 
 #include "DlgAdminBase.h"
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
+// クラス宣言
 
 typedef class CDlgAdminCharAdmin : public CDlgAdminBase
 {
 public:
-			CDlgAdminCharAdmin(CWnd* pParent = NULL);		/* コンストラクタ */
-	virtual ~CDlgAdminCharAdmin();							/* デストラクタ */
+			CDlgAdminCharAdmin(CWnd* pParent = NULL); // コンストラクタ
+	virtual ~CDlgAdminCharAdmin(); // デストラクタ
 
-	void	Init		(CMgrData *pMgrData);						/* 初期化 */
-	void	Renew		(void);										/* 更新 */
-	void	OnAdminMsg	(int nType, DWORD dwPara);					/* メッセージハンドラ(WM_ADMINMSG) */
+	void	Init(CMgrData *pMgrData); // 初期化
+	void	Renew(void); // 更新
+	void	OnAdminMsg(int nType, DWORD dwPara); // メッセージハンドラ(WM_ADMINMSG)
 
 
 protected:
-	int				m_nAdminLevel;					/* 管理者レベル */
-	DWORD			m_dwAccountID;					/* 編集中のアカウントID */
+	int	m_nAdminLevel; // 管理者レベル
+	DWORD	m_dwAccountID; // 編集中のアカウントID
 
 
 
@@ -53,5 +49,3 @@ protected:
 } CDlgAdminCharAdmin, *PCDlgAdminCharAdmin;
 
 //{{AFX_INSERT_LOCATION}}
-
-/* Copyright(C)URARA-works 2007 */

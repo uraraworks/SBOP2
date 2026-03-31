@@ -27,7 +27,7 @@ private:
         CMgrData *m_pMgrData;
 };
 
-/* オブジェクトテンプレート一覧 GET /api/maps/objects/templates */
+// オブジェクトテンプレート一覧 GET /api/maps/objects/templates
 class CMapObjectTemplateListHandler : public IApiHandler
 {
 public:
@@ -40,7 +40,7 @@ private:
         CMgrData *m_pMgrData;
 };
 
-/* オブジェクトテンプレート追加 POST /api/maps/objects/templates */
+// オブジェクトテンプレート追加 POST /api/maps/objects/templates
 class CMapObjectTemplateCreateHandler : public IApiHandler
 {
 public:
@@ -51,7 +51,7 @@ private:
         CMgrData *m_pMgrData;
 };
 
-/* オブジェクトテンプレート更新 PUT /api/maps/objects/templates */
+// オブジェクトテンプレート更新 PUT /api/maps/objects/templates
 class CMapObjectTemplateUpdateHandler : public IApiHandler
 {
 public:
@@ -62,7 +62,7 @@ private:
         CMgrData *m_pMgrData;
 };
 
-/* オブジェクトテンプレート削除 DELETE /api/maps/objects/templates */
+// オブジェクトテンプレート削除 DELETE /api/maps/objects/templates
 class CMapObjectTemplateDeleteHandler : public IApiHandler
 {
 public:
@@ -73,7 +73,7 @@ private:
         CMgrData *m_pMgrData;
 };
 
-/* オブジェクト配置追加 POST /api/maps/placements */
+// オブジェクト配置追加 POST /api/maps/placements
 class CMapPlacementCreateHandler : public IApiHandler
 {
 public:
@@ -84,7 +84,7 @@ private:
         CMgrData *m_pMgrData;
 };
 
-/* オブジェクト配置更新 PUT /api/maps/placements */
+// オブジェクト配置更新 PUT /api/maps/placements
 class CMapPlacementUpdateHandler : public IApiHandler
 {
 public:
@@ -95,7 +95,7 @@ private:
         CMgrData *m_pMgrData;
 };
 
-/* オブジェクト配置削除 DELETE /api/maps/placements */
+// オブジェクト配置削除 DELETE /api/maps/placements
 class CMapPlacementDeleteHandler : public IApiHandler
 {
 public:

@@ -1,81 +1,37 @@
-﻿/* Copyright(C)URARA-works 2008 */
-/* ========================================================================= */
-/* ファイル名	:LibInfoTalkEvent.cpp										 */
-/* 内容			:会話イベント情報ライブラリクラス 実装ファイル				 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2008/12/27													 */
-/* ========================================================================= */
+﻿/// @file LibInfoTalkEvent.cpp
+/// @brief 会話イベント情報ライブラリクラス 実装ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2008/12/27
+/// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
 #include "LibInfoTalkEvent.h"
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::CLibInfoTalkEvent							 */
-/* 内容		:コンストラクタ													 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 CLibInfoTalkEvent::CLibInfoTalkEvent()
 {
 	m_paInfo = NULL;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::~CLibInfoTalkEvent							 */
-/* 内容		:デストラクタ													 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 CLibInfoTalkEvent::~CLibInfoTalkEvent()
 {
-	Destroy ();
+	Destroy();
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::Create										 */
-/* 内容		:作成															 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 void CLibInfoTalkEvent::Create(void)
 {
 	m_paInfo = new ARRAYTALKEVENTINFO;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::Destroy										 */
-/* 内容		:破棄															 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 void CLibInfoTalkEvent::Destroy(void)
 {
-	DeleteAll ();
-	SAFE_DELETE (m_paInfo);
+	DeleteAll();
+	SAFE_DELETE(m_paInfo);
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::GetNew										 */
-/* 内容		:新規データを取得												 */
-/* 日付		:2008/12/07														 */
-/* ========================================================================= */
 
 PCInfoBase CLibInfoTalkEvent::GetNew(void)
 {
 	return (PCInfoBase)new CInfoTalkEvent;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::GetCount									 */
-/* 内容		:データ数を取得													 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 int CLibInfoTalkEvent::GetCount(void)
 {
@@ -92,53 +48,32 @@ Exit:
 	return nRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::Add											 */
-/* 内容		:追加															 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 void CLibInfoTalkEvent::Add(PCInfoBase pInfo)
 {
 	PCInfoTalkEvent pInfoTalkEvent;
 
 	pInfoTalkEvent = (PCInfoTalkEvent)pInfo;
 	if (pInfoTalkEvent->m_dwTalkEventID == 0) {
-		pInfoTalkEvent->m_dwTalkEventID = GetNewID ();
+		pInfoTalkEvent->m_dwTalkEventID = GetNewID();
 	}
 
-	m_paInfo->Add (pInfoTalkEvent);
+	m_paInfo->Add(pInfoTalkEvent);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 void CLibInfoTalkEvent::Delete(
-	int nNo)		/* [in] 配列番号 */
+	int nNo)	// [in] 配列番号
 {
 	PCInfoTalkEvent pInfo;
 
 	pInfo = m_paInfo->at(nNo);
-	SAFE_DELETE (pInfo);
+	SAFE_DELETE(pInfo);
 	if ((nNo >= 0) && (nNo < static_cast<int>(m_paInfo->size()))) {
-		m_paInfo->erase (m_paInfo->begin () + nNo);
+		m_paInfo->erase(m_paInfo->begin() + nNo);
 	}
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::Delete										 */
-/* 内容		:削除															 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 void CLibInfoTalkEvent::Delete(
-	DWORD dwTalkEventID)		/* [in] 会話イベントID */
+	DWORD dwTalkEventID)	// [in] 会話イベントID
 {
 	int i, nCount, nNo;
 	PCInfoTalkEvent pInfoTmp;
@@ -156,16 +91,9 @@ void CLibInfoTalkEvent::Delete(
 	}
 
 	if (nNo >= 0) {
-		Delete (nNo);
+		Delete(nNo);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::DeleteAll									 */
-/* 内容		:全て削除														 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 void CLibInfoTalkEvent::DeleteAll(void)
 {
@@ -177,41 +105,27 @@ void CLibInfoTalkEvent::DeleteAll(void)
 
 	nCount = m_paInfo->size();
 	for (i = nCount - 1; i >= 0; i --) {
-		Delete (i);
+		Delete(i);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::Merge										 */
-/* 内容		:取り込み														 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 void CLibInfoTalkEvent::Merge(CLibInfoTalkEvent *pSrc)
 {
 	int i, nCount;
 	PCInfoTalkEvent pInfoTmp, pInfoSrc;
 
-	nCount = pSrc->GetCount ();
+	nCount = pSrc->GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoSrc = (PCInfoTalkEvent)pSrc->GetPtr (i);
-		pInfoTmp = (PCInfoTalkEvent)GetPtr (pInfoSrc->m_dwTalkEventID);
+		pInfoSrc = (PCInfoTalkEvent)pSrc->GetPtr(i);
+		pInfoTmp = (PCInfoTalkEvent)GetPtr(pInfoSrc->m_dwTalkEventID);
 		if (pInfoTmp == NULL) {
-			pInfoTmp = (PCInfoTalkEvent)GetNew ();
-			pInfoTmp->Copy (pInfoSrc);
-			Add (pInfoTmp);
+			pInfoTmp = (PCInfoTalkEvent)GetNew();
+			pInfoTmp->Copy(pInfoSrc);
+			Add(pInfoTmp);
 	}
-		pInfoTmp->Copy (pInfoSrc);
+		pInfoTmp->Copy(pInfoSrc);
 	}
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::Renew										 */
-/* 内容		:更新															 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 CInfoTalkEvent *CLibInfoTalkEvent::Renew(CInfoTalkEvent *pSrc)
 {
@@ -226,11 +140,11 @@ CInfoTalkEvent *CLibInfoTalkEvent::Renew(CInfoTalkEvent *pSrc)
 		if (pInfoTmp->m_dwTalkEventID != pSrc->m_dwTalkEventID) {
 			continue;
 	}
-		pInfo = (PCInfoTalkEvent)GetNew ();
-		pInfo->Copy (pSrc);
+		pInfo = (PCInfoTalkEvent)GetNew();
+		pInfo->Copy(pSrc);
 		pInfo->m_dwTalkEventID = pInfoTmp->m_dwTalkEventID;
 
-                SAFE_DELETE (pInfoTmp);
+                SAFE_DELETE(pInfoTmp);
                 (*m_paInfo)[i] = pInfo;
 		pRet = pInfo;
 		break;
@@ -239,27 +153,13 @@ CInfoTalkEvent *CLibInfoTalkEvent::Renew(CInfoTalkEvent *pSrc)
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::GetPtr										 */
-/* 内容		:情報を取得														 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoTalkEvent::GetPtr(int nNo)
 {
 	return m_paInfo->at(nNo);
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::GetPtr										 */
-/* 内容		:情報を取得														 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 PCInfoBase CLibInfoTalkEvent::GetPtr(
-	DWORD dwTalkEventID)		/* [in] 会話イベントID */
+	DWORD dwTalkEventID)	// [in] 会話イベントID
 {
 	int i, nCount;
 	PCInfoTalkEvent pRet, pInfoTmp;
@@ -279,13 +179,6 @@ PCInfoBase CLibInfoTalkEvent::GetPtr(
 	return pRet;
 }
 
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::GetSendDataSize								 */
-/* 内容		:送信データサイズを取得											 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
-
 DWORD CLibInfoTalkEvent::GetSendDataSize(void)
 {
 	int i, nCount;
@@ -294,23 +187,16 @@ DWORD CLibInfoTalkEvent::GetSendDataSize(void)
 
 	dwSize = 0;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTalkEvent = (PCInfoTalkEvent)GetPtr (i);
-		dwSize += pInfoTalkEvent->GetSendDataSize ();
+		pInfoTalkEvent = (PCInfoTalkEvent)GetPtr(i);
+		dwSize += pInfoTalkEvent->GetSendDataSize();
 	}
-	/* 終端用 */
-	dwSize += sizeof (DWORD);
+	// 終端用
+	dwSize += sizeof(DWORD);
 
 	return dwSize;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::GetSendData									 */
-/* 内容		:送信データを取得												 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoTalkEvent::GetSendData(void)
 {
@@ -319,30 +205,23 @@ PBYTE CLibInfoTalkEvent::GetSendData(void)
 	DWORD dwSize, dwSizeTmp;
 	PCInfoTalkEvent pInfoTalkEvent;
 
-	dwSize	= GetSendDataSize ();
-	pData	= ZeroNew (dwSize);
+	dwSize	= GetSendDataSize();
+	pData	= ZeroNew(dwSize);
 
 	pDataPos = pData;
 
-	nCount = GetCount ();
+	nCount = GetCount();
 	for (i = 0; i < nCount; i ++) {
-		pInfoTalkEvent = (PCInfoTalkEvent)GetPtr (i);
+		pInfoTalkEvent = (PCInfoTalkEvent)GetPtr(i);
 
-		dwSizeTmp	= pInfoTalkEvent->GetSendDataSize ();
-		pDataTmp	= pInfoTalkEvent->GetSendData ();
-		CopyMemoryRenew (pDataPos, pDataTmp, dwSizeTmp, pDataPos);
-		SAFE_DELETE_ARRAY (pDataTmp);
+		dwSizeTmp	= pInfoTalkEvent->GetSendDataSize();
+		pDataTmp	= pInfoTalkEvent->GetSendData();
+		CopyMemoryRenew(pDataPos, pDataTmp, dwSizeTmp, pDataPos);
+		SAFE_DELETE_ARRAY(pDataTmp);
 	}
 
 	return pData;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::SetSendData									 */
-/* 内容		:送信データから取り込み											 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 PBYTE CLibInfoTalkEvent::SetSendData(PBYTE pSrc)
 {
@@ -353,34 +232,27 @@ PBYTE CLibInfoTalkEvent::SetSendData(PBYTE pSrc)
 	pDataTmp = pSrc;
 
 	while (1) {
-		CopyMemory (&dwTmp, pDataTmp, sizeof (DWORD));
+		CopyMemory(&dwTmp, pDataTmp, sizeof(DWORD));
 		if (dwTmp == 0) {
-			pDataTmp += sizeof (DWORD);
+			pDataTmp += sizeof(DWORD);
 			break;
 	}
 		pDataTmpBack = pDataTmp;
-		InfoTmp.SetSendData (pDataTmp);
-		pInfoTalkEventTmp = (PCInfoTalkEvent)GetNew ();
-		pDataTmp = pInfoTalkEventTmp->SetSendData (pDataTmpBack);
+		InfoTmp.SetSendData(pDataTmp);
+		pInfoTalkEventTmp = (PCInfoTalkEvent)GetNew();
+		pDataTmp = pInfoTalkEventTmp->SetSendData(pDataTmpBack);
 
-		pInfoTalkEvent = (PCInfoTalkEvent)GetPtr (pInfoTalkEventTmp->m_dwTalkEventID);
+		pInfoTalkEvent = (PCInfoTalkEvent)GetPtr(pInfoTalkEventTmp->m_dwTalkEventID);
 		if (pInfoTalkEvent) {
-			pInfoTalkEvent->Copy (pInfoTalkEventTmp);
-			SAFE_DELETE (pInfoTalkEventTmp);
+			pInfoTalkEvent->Copy(pInfoTalkEventTmp);
+			SAFE_DELETE(pInfoTalkEventTmp);
 	} else {
-			Add (pInfoTalkEventTmp);
+			Add(pInfoTalkEventTmp);
 	}
 	}
 
 	return pDataTmp;
 }
-
-
-/* ========================================================================= */
-/* 関数名	:CLibInfoTalkEvent::GetNewID									 */
-/* 内容		:新しいIDを取得													 */
-/* 日付		:2008/12/27														 */
-/* ========================================================================= */
 
 DWORD CLibInfoTalkEvent::GetNewID(void)
 {
@@ -403,4 +275,3 @@ DWORD CLibInfoTalkEvent::GetNewID(void)
 	return dwRet;
 }
 
-/* Copyright(C)URARA-works 2008 */

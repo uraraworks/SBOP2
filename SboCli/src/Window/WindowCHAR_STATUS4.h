@@ -1,10 +1,8 @@
-﻿/* Copyright(C)URARA-works 2009 */
-/* ========================================================================= */
-/* ファイル名	:WindowCHAR_STATUS4.h										 */
-/* 内容			:キャラ情報ウィンドウクラス 定義ファイル					 */
-/* 作成			:年がら年中春うらら(URARA-works)							 */
-/* 作成開始日	:2009/02/15													 */
-/* ========================================================================= */
+﻿/// @file WindowCHAR_STATUS4.h
+/// @brief キャラ情報ウィンドウクラス 定義ファイル
+/// @author 年がら年中春うらら(URARA-works)
+/// @date 2009/02/15
+/// @copyright Copyright(C)URARA-works 2009
 
 #pragma once
 
@@ -13,21 +11,15 @@
 class CImg32;
 class CMgrData;
 
-/* ========================================================================= */
-/* クラス宣言																 */
-/* ========================================================================= */
-
 typedef class CWindowCHAR_STATUS4 : public CWindowBase
 {
 public:
-			CWindowCHAR_STATUS4();							/* コンストラクタ */
-	virtual ~CWindowCHAR_STATUS4();							/* デストラクタ */
+			CWindowCHAR_STATUS4();	// コンストラクタ
+	virtual ~CWindowCHAR_STATUS4();	// デストラクタ
 
-	void	Create		(CMgrData *pMgrData);						/* 作成 */
-	void	Draw		(CImg32 *pDst);								/* 描画 */
+	void	Create(CMgrData *pMgrData);	// 作成
+	void	Draw(CImg32 *pDst);	// 描画
 
 
 protected:
 } CWindowCHAR_STATUS4, *PCWindowCHAR_STATUS4;
-
-/* Copyright(C)URARA-works 2009 */
