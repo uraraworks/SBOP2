@@ -40,7 +40,7 @@ private:
 	static void MainLoopThunk(void *pArg);
 #endif
 
-	// Win32 メッセージをポーリングする（WM_MAINFRAME等の独自メッセージ用）
+	// Win32 メッセージをポーリングする（未縮退のネイティブ通知用）
 	void	PollWin32Messages(void);
 
 private:

@@ -36,6 +36,7 @@ public:
 	virtual BOOL	HandleKeyDown(UINT vk);
 	virtual void	HandleTextInput(LPCSTR pszText);
 	virtual BOOL	HandleMouseLeftButtonDown(int x, int y);
+	void	SetFocusIndex(int nIndex);	// フォーカスを設定
 #if defined(__EMSCRIPTEN__)
 	void	UpdateBrowserDom(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);	// browser用DOMを更新
 	void	HideBrowserDom(void);	// browser用DOMを非表示
@@ -43,7 +44,6 @@ public:
 	void	SetPasswordFromBrowser(LPCSTR pszText);	// browser入力欄からパスワード反映
 	void	SetSavePasswordFromBrowser(BOOL bCheck);	// browserチェック状態反映
 	void	SubmitFromBrowser(void);	// browser接続実行
-	void	SetFocusIndex(int nIndex);	// フォーカスを設定
 #endif
 private:
 	void	MakeWindow(void);	// ウィンドウ作成
@@ -71,7 +71,6 @@ public:
 
 
 private:
-#if defined(__EMSCRIPTEN__)
 	enum {
 		LOGINFOCUS_ACCOUNT = 0,
 		LOGINFOCUS_PASSWORD,
@@ -82,7 +81,6 @@ private:
 	BOOL	m_bEnabled;
 	BOOL	m_bSavePassword;
 	int		m_nFocusIndex;
-#endif
 	HWND	m_hWndAccount,	// アカウント入力欄
 			m_hWndPassword,	// パスワード入力欄
 			m_hWndSavePassword,	// パスワードを記録するチェック

@@ -56,6 +56,11 @@ public:
 		int nType;
 		DWORD dwParam;
 	};
+	struct SocketNotify {
+		UINT message;
+		WPARAM wParam;
+		LPARAM lParam;
+	};
 
 	CMainFrame(); // コンストラクタ
 	virtual ~CMainFrame(); // デストラクタ
@@ -91,20 +96,16 @@ public:
 	virtual void OnSDLDestroy(void);
 
 private:
+	static void OnSocketNotifyThunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam);
 	BOOL InitNativeMainWindow(SDL_Window *pWindow); // ネイティブウィンドウ関連を初期化
-	void RestoreMainWindowPosition(HWND hWnd); // 保存済みのメインウィンドウ位置を復元
-	static LRESULT CALLBACK WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	void RestoreMainWindowPosition(SDL_Window *pWindow); // 保存済みのメインウィンドウ位置を復元
 	void OnInitEnd(HWND hWnd);
 	void OnDestroy(HWND hWnd);
-	void OnPaint(HWND hWnd);
-	void OnTimer(HWND hWnd, UINT id);
-	void OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify);
-	void OnKeyUp(HWND hWnd, UINT vk, BOOL fDown, int cRepeat, UINT flags);
-	void OnLButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags);
-	void OnRButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags);
-	void OnRButtonDblClk(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags);
-	void OnMouseMove(HWND hWnd, int x, int y, UINT keyFlags);
+	void OnKeyUp(UINT vk);
+	void OnLButtonDown(int x, int y);
+	void OnRButtonDown(int x, int y);
+	void OnRButtonDblClk(int x, int y);
+	void OnMouseMove(int x, int y);
 	void OnMgrDraw(int nType, DWORD dwPara);
 	void OnWindowMsg(int nType, DWORD dwPara);
 	void OnMainFrame(DWORD dwCommand, DWORD dwParam);
@@ -120,6 +121,11 @@ private:
 	void Connect(void);
 	void FlashMainWindow(void);
 	int GetMsgCmdType(LPCSTR pszText);
+	BOOL IsMainWindowInteractive(void) const;
+	void UpdateToolCheck(void);
+	void CheckToolResponsiveness(void);
+	void PostSocketMessage(UINT message, WPARAM wParam, LPARAM lParam);
+	void FlushPendingSocketMessages(void);
 	void FlushPendingMainFrameMessages(void);
 	void FlushPendingMgrDrawMessages(void);
 	void FlushPendingWindowMessages(void);
@@ -231,12 +237,12 @@ private:
 	HWND m_hWnd;
 	BOOL m_bWindowActive,
 		m_bRenewCharInfo,
-		m_bMainWindowSubclassed,
 		m_bRequestDraw;
 	int m_nGameState,
 		m_nDrawCount,
 		m_nFPS;
 	DWORD m_dwLastTimeCheck,
+		m_dwLastToolCheckTick,
 		m_dwDrawTime;
 	HRESULT m_hCom;
 	SYSTEMTIME m_stSystemTime;
@@ -265,6 +271,9 @@ private:
 	CLibInfoSystem *m_pLibInfoSystem;
 	CLibInfoSkill *m_pLibInfoSkill;
 	CStateProcBase *m_pStateProc;
+	SDL_Window *m_pSDLWindow;
+	CRITICAL_SECTION m_csSocketNotify;
+	std::deque<SocketNotify> m_aPendingSocketNotify;
 	CRITICAL_SECTION m_csMainFrameNotify;
 	std::deque<MainFrameNotify> m_aPendingMainFrameNotify;
 	CRITICAL_SECTION m_csMgrDrawNotify;

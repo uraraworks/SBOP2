@@ -1138,7 +1138,8 @@ LRESULT CALLBACK CWindowLOGIN::ConnectWndProc(HWND hWnd, UINT message, WPARAM wP
 		}
 		break;
 
-	case WM_COMMAND:
+	case WM_LBUTTONUP:
+	case WM_LBUTTONDBLCLK:
 		pThis->OnConnect();
 		break;
 	}

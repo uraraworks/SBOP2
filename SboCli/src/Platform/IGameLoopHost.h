@@ -36,6 +36,7 @@ public:
 	virtual void OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick) = 0;
 	virtual void OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick) = 0;
 	virtual void OnSDLMouseRightButtonDoubleClick(int x, int y) = 0;
+	// 未縮退のネイティブ通知（現在は主にソケット通知）を処理する
 	virtual BOOL OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam) = 0;
 
 	// 描画を行う（SDL: MgrDraw::Draw(SDL_Renderer*) に相当）

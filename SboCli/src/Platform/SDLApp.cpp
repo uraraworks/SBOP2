@@ -14,6 +14,7 @@
 #include "SDLEventUtil.h"
 #include "SDLInput.h"
 #include "SboCli_priv.h"
+#include "UraraSockTCP.h"
 
 
 // Constants
@@ -39,6 +40,20 @@ extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserPumpSingleFrame(void)
 		return;
 	}
 	g_pBrowserSDLApp->RequestBrowserRedraw();
+}
+#else
+static void SBOP2_DebugMarkStage(int stage, int hasRenderer, int r, int g, int b)
+{
+	UNREFERENCED_PARAMETER(stage);
+	UNREFERENCED_PARAMETER(hasRenderer);
+	UNREFERENCED_PARAMETER(r);
+	UNREFERENCED_PARAMETER(g);
+	UNREFERENCED_PARAMETER(b);
+}
+
+static void SBOP2_DebugCountOnDraw(int hasRenderer)
+{
+	UNREFERENCED_PARAMETER(hasRenderer);
 }
 #endif
 
@@ -94,16 +109,6 @@ static BOOL IsDirectHostWindowMessage(HWND hMainWnd, const MSG &msg)
 {
 	if (!IsMainWindowMessage(hMainWnd, msg)) {
 		return FALSE;
-	}
-
-	switch (msg.message) {
-	case WM_TIMER:
-	case WM_COMMAND:
-	case WM_MAINFRAME:
-	case WM_WINDOWMSG:
-	case WM_ADMINMSG:
-	case WM_MGRDRAW:
-		return TRUE;
 	}
 
 	if ((msg.message >= URARASOCK_MSGBASE) && (msg.message < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
@@ -504,6 +509,7 @@ void CSDLApp::PollWin32Messages(void)
 			continue;
 		}
 
+		// ソケット通知のような即時配送が必要なメッセージだけをホストへ直送する。
 		if (IsDirectHostWindowMessage(hMainWnd, msg)) {
 			if (m_pHost && m_pHost->OnWin32Message(msg.message, msg.wParam, msg.lParam)) {
 				continue;

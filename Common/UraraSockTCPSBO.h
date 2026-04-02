@@ -19,6 +19,7 @@ public:
 
 	void	DeleteRecvData(PBYTE pData);											// 受信データを削除
 	void	Destroy(void);															// 後始末
+	void	SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData);			// 通知先コールバックを設定
 	BOOL	Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount);		// 接続待ち開始
 	BOOL	Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr);	// サーバーへ接続
 	void	DeleteClient(DWORD dwID);											// クライアントを切断

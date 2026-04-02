@@ -78,6 +78,16 @@ void CUraraSockTCPSBO::Destroy(void)
 	m_pSock->Destroy();
 }
 
+
+void CUraraSockTCPSBO::SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData)
+{
+	if (m_pSock == NULL) {
+		return;
+	}
+
+	m_pSock->SetNotifySink(pfNotify, pUserData);
+}
+
 // 接続待ち開始
 
 BOOL CUraraSockTCPSBO::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)

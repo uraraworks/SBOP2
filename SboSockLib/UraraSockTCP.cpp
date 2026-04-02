@@ -132,6 +132,7 @@ public:
 
     void DeleteRecvData(PBYTE pData) override;
     void Destroy(void) override;
+    void SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData) override;
     BOOL Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount) override;
     BOOL Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr) override;
     void DeleteClient(DWORD dwID) override;
@@ -175,6 +176,8 @@ private:
     DWORD                    m_dwMaxConnectCount;
     HWND                     m_hWndParent;
     HWND                     m_hWnd;
+    PFURARASOCKNOTIFY        m_pfNotify;
+    void                    *m_pNotifyUserData;
     BYTE                     m_byMode;
     DWORD                    m_dwMsgBase;
     DWORD                    m_dwPreCheckKey;
@@ -583,6 +586,8 @@ CUraraSockTCPImpl::CUraraSockTCPImpl(void)
     , m_dwMaxConnectCount(1)
     , m_hWndParent(NULL)
     , m_hWnd(NULL)
+    , m_pfNotify(NULL)
+    , m_pNotifyUserData(NULL)
     , m_byMode(URARASOCKMODE_SREVER)
     , m_dwMsgBase(0)
     , m_dwPreCheckKey(0)
@@ -606,6 +611,8 @@ void CUraraSockTCPImpl::InitData(void)
 {
     m_hWndParent = NULL;
     m_hWnd = NULL;
+    m_pfNotify = NULL;
+    m_pNotifyUserData = NULL;
     m_wPort = 0;
     m_dwConnectCount = 0;
     m_dwMaxConnectCount = 1;
@@ -639,7 +646,7 @@ void CUraraSockTCPImpl::Destroy(void)
 
 BOOL CUraraSockTCPImpl::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)
 {
-    if ((m_hWndParent != NULL) || (hWndParent == NULL)) {
+    if ((m_hWndParent != NULL) || ((hWndParent == NULL) && (m_pfNotify == NULL))) {
         return FALSE;
     }
 
@@ -670,7 +677,7 @@ BOOL CUraraSockTCPImpl::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD
 
 BOOL CUraraSockTCPImpl::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)
 {
-    if ((m_hWndParent != NULL) || (hWndParent == NULL) || (pszAddr == NULL)) {
+    if ((m_hWndParent != NULL) || (((hWndParent == NULL) && (m_pfNotify == NULL)) || (pszAddr == NULL))) {
         return FALSE;
     }
 
@@ -702,6 +709,12 @@ BOOL CUraraSockTCPImpl::Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, W
 
     WaitForSingleObject(m_hEvent, INFINITE);
     return IsWindow(m_hWnd);
+}
+
+void CUraraSockTCPImpl::SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData)
+{
+    m_pfNotify = pfNotify;
+    m_pNotifyUserData = pUserData;
 }
 
 void CUraraSockTCPImpl::DeleteClient(DWORD dwID)
@@ -1239,6 +1252,10 @@ void CUraraSockTCPImpl::SendInternal(DWORD dwID, PBYTE pData, DWORD dwSize, DWOR
 
 void CUraraSockTCPImpl::PostParent(UINT uMsgOffset, WPARAM wParam, LPARAM lParam)
 {
+    if (m_pfNotify) {
+        m_pfNotify(m_pNotifyUserData, uMsgOffset, wParam, lParam);
+        return;
+    }
     if (m_hWndParent) {
         PostMessage(m_hWndParent, m_dwMsgBase + uMsgOffset, wParam, lParam);
     }

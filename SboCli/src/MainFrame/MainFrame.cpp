@@ -46,11 +46,9 @@
 // 定数定義
 
 #define CLNAME "SboCli" // 登録クラス名
-#define TIMERID_TOOLCHECK 100 // ツールチェックタイマー
 #define TIMER_TOOLCHECK 1000 // ツールチェックタイマー周期
 
 int g_nSboCliRenderFrameRate = DRAWCOUNT;
-static WNDPROC g_pSDLBaseWndProc = NULL;
 
 #if defined(__EMSCRIPTEN__)
 
@@ -64,15 +62,6 @@ EM_JS(void, SBOP2_DebugMarkInitEnd, (int grpLoaded), {
 	Module.sbop2GrpLoadResult = grpLoaded;
 });
 #endif
-
-static LRESULT ForwardToSDLBaseWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	if (g_pSDLBaseWndProc != NULL) {
-		return CallWindowProc(g_pSDLBaseWndProc, hWnd, msg, wParam, lParam);
-	}
-
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
 
 // メッセージコマンド種別
 enum {
@@ -103,12 +92,12 @@ CMainFrame::CMainFrame()
 	m_hWnd = NULL;
 	m_bWindowActive = TRUE;
 	m_bRenewCharInfo = FALSE;
-	m_bMainWindowSubclassed = FALSE;
 	m_bRequestDraw = FALSE;
 	m_nGameState = GAMESTATE_NONE;
 	m_nDrawCount = 30;
 	m_nFPS = 0;
 	m_dwLastTimeCheck = 0;
+	m_dwLastToolCheckTick = 0;
 	m_dwDrawTime = 0;
 
 	m_pStateProc = NULL;
@@ -142,8 +131,9 @@ CMainFrame::CMainFrame()
 	m_pLibInfoSkill = NULL;
 
 	m_hCom = CoInitializeEx(0, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	m_pSDLWindow = NULL;
 	ZeroMemory(&m_stSystemTime, sizeof(m_stSystemTime));
-	g_pSDLBaseWndProc = NULL;
+	InitializeCriticalSection(&m_csSocketNotify);
 	InitializeCriticalSection(&m_csMainFrameNotify);
 	InitializeCriticalSection(&m_csMgrDrawNotify);
 	InitializeCriticalSection(&m_csWindowNotify);
@@ -159,6 +149,7 @@ CMainFrame::~CMainFrame()
 	SAFE_DELETE(m_pSock);
 #endif
 	SAFE_DELETE(m_pMgrData);
+	DeleteCriticalSection(&m_csSocketNotify);
 	DeleteCriticalSection(&m_csMainFrameNotify);
 	DeleteCriticalSection(&m_csMgrDrawNotify);
 	DeleteCriticalSection(&m_csWindowNotify);
@@ -201,6 +192,7 @@ BOOL CMainFrame::OnSDLInit(SDL_Window *pWindow)
 		return FALSE;
 	}
 
+	m_pSDLWindow = pWindow;
 	m_pMgrData->SetLocalTitleMode(IsLocalTitleModeRequested());
 
 #if defined(__EMSCRIPTEN__)
@@ -210,9 +202,6 @@ BOOL CMainFrame::OnSDLInit(SDL_Window *pWindow)
 #else
 	if (!InitNativeMainWindow(pWindow)) {
 		return FALSE;
-	}
-	if ((m_hWnd != NULL) && (m_pMgrData->IsLocalTitleMode() == FALSE)) {
-		SetTimer(m_hWnd, TIMERID_TOOLCHECK, TIMER_TOOLCHECK, NULL);
 	}
 
 	// 初期化処理を実行（旧 WM_INITEND 相当）
@@ -240,23 +229,15 @@ BOOL CMainFrame::InitNativeMainWindow(SDL_Window *pWindow)
 	hWnd = wmInfo.info.win.window;
 	m_hWnd = hWnd;
 
-	RestoreMainWindowPosition(hWnd);
-
-	if (m_pMgrData->IsLocalTitleMode()) {
-		m_bMainWindowSubclassed = FALSE;
-		return TRUE;
-	}
-
-	// SDLウィンドウをサブクラス化: 独自メッセージは MainFrame が受け持つ。
-	SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
-	g_pSDLBaseWndProc = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)WndProcEntry);
-	m_bMainWindowSubclassed = (g_pSDLBaseWndProc != NULL);
+	RestoreMainWindowPosition(pWindow);
+	// MainFrame 向けの独自通知は内部キューまたは SDLApp 直送へ寄せたため、
+	// ここでは SDL ウィンドウをそのまま使う。
 	return TRUE;
 #endif
 }
 
 
-void CMainFrame::RestoreMainWindowPosition(HWND hWnd)
+void CMainFrame::RestoreMainWindowPosition(SDL_Window *pWindow)
 {
 	TCHAR szFileName[MAX_PATH];
 	POINT pt;
@@ -274,8 +255,8 @@ void CMainFrame::RestoreMainWindowPosition(HWND hWnd)
 
 	pt.x = GetPrivateProfileInt(_T("Pos"), _T("MainX"), -1, szFileName);
 	pt.y = GetPrivateProfileInt(_T("Pos"), _T("MainY"), -1, szFileName);
-	if (!((pt.x == -1) && (pt.y == -1))) {
-		SetWindowPos(hWnd, NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE);
+	if ((pWindow != NULL) && !((pt.x == -1) && (pt.y == -1))) {
+		SDL_SetWindowPosition(pWindow, pt.x, pt.y);
 	}
 }
 
@@ -375,6 +356,8 @@ BOOL CMainFrame::OnFrame(void)
 	FlushPendingAdminMessages();
 	FlushPendingMgrDrawMessages();
 	FlushPendingMainFrameMessages();
+	FlushPendingSocketMessages();
+	UpdateToolCheck();
 	bDraw = TimerProc();
 	if (m_bRequestDraw) {
 		bDraw = TRUE;
@@ -410,7 +393,7 @@ void CMainFrame::OnSDLKeyUp(int vk)
 	if (vk == 0) {
 		return;
 	}
-	OnKeyUp(m_hWnd, (UINT)vk, FALSE, 1, 0);
+	OnKeyUp((UINT)vk);
 }
 
 
@@ -429,25 +412,27 @@ void CMainFrame::OnSDLTextInput(LPCSTR pszText)
 
 void CMainFrame::OnSDLMouseMove(int x, int y)
 {
-	OnMouseMove(m_hWnd, x, y, 0);
+	OnMouseMove(x, y);
 }
 
 
 void CMainFrame::OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick)
 {
-	OnLButtonDown(m_hWnd, bDoubleClick, x, y, 0);
+	UNREFERENCED_PARAMETER(bDoubleClick);
+	OnLButtonDown(x, y);
 }
 
 
 void CMainFrame::OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick)
 {
-	OnRButtonDown(m_hWnd, bDoubleClick, x, y, 0);
+	UNREFERENCED_PARAMETER(bDoubleClick);
+	OnRButtonDown(x, y);
 }
 
 
 void CMainFrame::OnSDLMouseRightButtonDoubleClick(int x, int y)
 {
-	OnRButtonDblClk(m_hWnd, TRUE, x, y, 0);
+	OnRButtonDblClk(x, y);
 }
 
 
@@ -459,46 +444,18 @@ BOOL CMainFrame::OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam)
 	UNREFERENCED_PARAMETER(lParam);
 	return FALSE;
 #else
-	switch (message) {
-	case WM_TIMER:
-		OnTimer(m_hWnd, (UINT)wParam);
-		return TRUE;
-
-	case WM_COMMAND:
-		OnCommand(m_hWnd, LOWORD(wParam), (HWND)lParam, HIWORD(wParam));
-		return TRUE;
-
-	case WM_MAINFRAME:
-		DispatchMainFrameMessage((DWORD)wParam, (DWORD)lParam);
-		return TRUE;
-
-	case WM_WINDOWMSG:
-		DispatchWindowMessage((int)wParam, (DWORD)lParam);
-		return TRUE;
-
-	case WM_ADMINMSG:
-		DispatchAdminMessage((int)wParam, (DWORD)lParam);
-		return TRUE;
-
-	case WM_MGRDRAW:
-		DispatchMgrDrawMessage((int)wParam, (DWORD)lParam);
-		return TRUE;
-
-	default:
-		if ((message >= URARASOCK_MSGBASE) && (message < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
-			switch (message - URARASOCK_MSGBASE) {
-			case WM_URARASOCK_CONNECT:
-				OnConnect();
-				return TRUE;
-			case WM_URARASOCK_DISCONNECT:
-				OnDisConnect();
-				return TRUE;
-			case WM_URARASOCK_RECV:
-				OnRecv((PBYTE)wParam);
-				return TRUE;
-			}
+	if ((message >= URARASOCK_MSGBASE) && (message < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
+		switch (message - URARASOCK_MSGBASE) {
+		case WM_URARASOCK_CONNECT:
+			OnConnect();
+			return TRUE;
+		case WM_URARASOCK_DISCONNECT:
+			OnDisConnect();
+			return TRUE;
+		case WM_URARASOCK_RECV:
+			OnRecv((PBYTE)wParam);
+			return TRUE;
 		}
-		break;
 	}
 
 	return FALSE;
@@ -522,7 +479,7 @@ void CMainFrame::OnDraw(SDL_Renderer *pRenderer)
 #endif
 		return;
 	}
-	if ((!IsBrowserPlatform()) && m_hWnd && (!IsWindowVisible(m_hWnd))) {
+	if (!IsMainWindowInteractive()) {
 		return;
 	}
 
@@ -558,10 +515,6 @@ void CMainFrame::OnSDLDestroy(void)
 #endif
 
 	// タイマー停止
-#if !defined(__EMSCRIPTEN__)
-	KillTimer(m_hWnd, TIMERID_TOOLCHECK);
-#endif
-
 	// ウィンドウ位置等をINIに保存（OnClose相当）
 #if !defined(__EMSCRIPTEN__)
 	ZeroMemory(szFileName, sizeof(szFileName));
@@ -575,11 +528,13 @@ void CMainFrame::OnSDLDestroy(void)
 		}
 	}
 
-	if (m_hWnd && (IsIconic(m_hWnd) == FALSE) && (IsWindowVisible(m_hWnd))) {
-		GetWindowRect(m_hWnd, &rc);
-		strTmp.Format(_T("%d"), rc.left);
+	if (IsMainWindowInteractive() && (m_pSDLWindow != NULL)) {
+		int x, y;
+
+		SDL_GetWindowPosition(m_pSDLWindow, &x, &y);
+		strTmp.Format(_T("%d"), x);
 		WritePrivateProfileString(_T("Pos"), _T("MainX"), strTmp, szFileName);
-		strTmp.Format(_T("%d"), rc.top);
+		strTmp.Format(_T("%d"), y);
 		WritePrivateProfileString(_T("Pos"), _T("MainY"), strTmp, szFileName);
 
 		if (m_nGameState == GAMESTATE_MAP) {
@@ -619,16 +574,11 @@ void CMainFrame::OnSDLDestroy(void)
 	}
 #if !defined(__EMSCRIPTEN__)
 	if (m_pSock) {
+		m_pSock->SetNotifySink(NULL, NULL);
 		m_pSock->Destroy();
 	}
 #endif
-#if !defined(__EMSCRIPTEN__)
-	if (m_bMainWindowSubclassed && m_hWnd && g_pSDLBaseWndProc) {
-		SetWindowLongPtr(m_hWnd, GWLP_WNDPROC, (LONG_PTR)g_pSDLBaseWndProc);
-		g_pSDLBaseWndProc = NULL;
-		m_bMainWindowSubclassed = FALSE;
-	}
-#endif
+	m_pSDLWindow = NULL;
 	SAFE_DELETE(m_pStateProc);
 }
 
@@ -748,31 +698,6 @@ void CMainFrame::RenewItemArea(void)
 	rcTmp.top = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
 	rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 	m_pLibInfoItem->SetArea(pPlayerChar->m_dwMapID, &rcTmp);
-}
-
-
-LRESULT CALLBACK CMainFrame::WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-#if defined(__EMSCRIPTEN__)
-	UNREFERENCED_PARAMETER(hWnd);
-	UNREFERENCED_PARAMETER(msg);
-	UNREFERENCED_PARAMETER(wParam);
-	UNREFERENCED_PARAMETER(lParam);
-	return 0;
-#else
-	CMainFrame* pThis;
-
-	if (msg == WM_CREATE) {
-		SetWindowLong(hWnd, GWL_USERDATA, (LONG)(((LPCREATESTRUCT)lParam)->lpCreateParams));
-	}
-
-	// ユーザデータから this ポインタを取得し、処理を行う
-	pThis = (CMainFrame *)GetWindowLong(hWnd, GWL_USERDATA);
-	if (pThis) {
-		return pThis->WndProc(hWnd, msg, wParam, lParam);
-	}
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-#endif
 }
 
 
@@ -957,47 +882,6 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 }
 
 
-LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-#if defined(__EMSCRIPTEN__)
-	UNREFERENCED_PARAMETER(hWnd);
-	UNREFERENCED_PARAMETER(msg);
-	UNREFERENCED_PARAMETER(wParam);
-	UNREFERENCED_PARAMETER(lParam);
-	return 0;
-#else
-	if (IsSDLManagedInputWindowMessage(msg)) {
-		return ForwardToSDLBaseWndProc(hWnd, msg, wParam, lParam);
-	}
-
-	switch (msg) {
-	HANDLE_MSG(hWnd, WM_DESTROY, OnDestroy);
-	case WM_PAINT:
-		OnPaint(hWnd);
-		return 0;
-	HANDLE_MSG(hWnd, WM_TIMER, OnTimer);
-	HANDLE_MSG(hWnd, WM_COMMAND, OnCommand);
-	case WM_CTLCOLORSTATIC:
-		{
-			LRESULT lResult;
-
-			if (!CWindowLOGIN::HandleCtlColorStatic(wParam, lParam, lResult)) {
-				return ForwardToSDLBaseWndProc(hWnd, msg, wParam, lParam);
-			}
-			return lResult;
-		}
-	case WM_ERASEBKGND:
-		break;
-
-		default:
-			if (!OnWin32Message(msg, wParam, lParam)) {
-				return ForwardToSDLBaseWndProc(hWnd, msg, wParam, lParam);
-			}
-		}
-	return 0;
-#endif
-}
-
 void CMainFrame::OnInitEnd(HWND hWnd)
 {
 	BOOL bRet, bResult;
@@ -1015,6 +899,11 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	m_pMgrData->SetWindowInfo(GetModuleHandle(NULL), hWnd);
 	m_pMgrData->Create(this, m_pMgrGrpData);
 	m_pMgrData->SetUraraSockTCP(m_pSock);
+#if !defined(__EMSCRIPTEN__)
+	if (m_pSock) {
+		m_pSock->SetNotifySink(&CMainFrame::OnSocketNotifyThunk, this);
+	}
+#endif
 
 	m_pMgrDraw = m_pMgrData->GetMgrDraw();
 	m_pMgrLayer = m_pMgrData->GetMgrLayer();
@@ -1104,69 +993,7 @@ void CMainFrame::OnDestroy(HWND hWnd)
 }
 
 
-void CMainFrame::OnPaint(HWND hWnd)
-{
-	PAINTSTRUCT ps;
-
-	// Phase 3: SDL_RenderPresent が描画済みのため WM_PAINT では GDI再描画不要
-	// BeginPaint / EndPaint のペアは WM_PAINT ハンドラで必ず呼ぶ必要がある
-	BeginPaint(hWnd, &ps);
-	EndPaint(hWnd, &ps);
-}
-
-
-void CMainFrame::OnTimer(HWND hWnd, UINT id)
-{
-	switch (id) {
-	case TIMERID_TOOLCHECK: // ツールチェックタイマー
-		{
-			DWORD dwTmp, dwScond, dwTimeTmp;
-			SYSTEMTIME sysTime;
-
-			if (m_dwLastTimeCheck == 0) {
-				GetLocalTime(&m_stSystemTime);
-				m_dwLastTimeCheck = timeGetTime();
-				break;
-			}
-			GetLocalTime(&sysTime);
-			dwTimeTmp = timeGetTime();
-			if (sysTime.wMinute != m_stSystemTime.wMinute) {
-				m_dwLastTimeCheck = 0;
-				break;
-			}
-			if (sysTime.wSecond == m_stSystemTime.wSecond) {
-				break;
-			}
-			dwTmp = (dwTimeTmp - m_dwLastTimeCheck) / 1000;
-			dwScond = abs(sysTime.wSecond - m_stSystemTime.wSecond);
-			if (dwScond == dwTmp) {
-				m_dwLastTimeCheck = 0;
-				break;
-			}
-			if (dwTmp < dwScond * 3) {
-				m_dwLastTimeCheck = 0;
-				break;
-			}
-			PushSDLQuitEvent();
-		}
-		break;
-
-	}
-}
-
-
-void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
-{
-	// ボタンが押された？
-	if (codeNotify == BN_CLICKED) {
-		// 各ウィンドウで処理させる
-		PostMessage(hWndCtl, WM_COMMAND, MAKELONG(codeNotify, id), (LPARAM)hWndCtl);
-		return;
-	}
-}
-
-
-void CMainFrame::OnKeyUp(HWND hWnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
+void CMainFrame::OnKeyUp(UINT vk)
 {
 	if (m_pStateProc == NULL) {
 		return;
@@ -1177,7 +1004,7 @@ void CMainFrame::OnKeyUp(HWND hWnd, UINT vk, BOOL fDown, int cRepeat, UINT flags
 }
 
 
-void CMainFrame::OnLButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
+void CMainFrame::OnLButtonDown(int x, int y)
 {
 	CWindowBase *pWindow;
 
@@ -1193,7 +1020,7 @@ void CMainFrame::OnLButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT 
 }
 
 
-void CMainFrame::OnRButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
+void CMainFrame::OnRButtonDown(int x, int y)
 {
 	if (m_pStateProc == NULL) {
 		return;
@@ -1202,7 +1029,7 @@ void CMainFrame::OnRButtonDown(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT 
 }
 
 
-void CMainFrame::OnRButtonDblClk(HWND hWnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
+void CMainFrame::OnRButtonDblClk(int x, int y)
 {
 	if (m_pStateProc == NULL) {
 		return;
@@ -1211,7 +1038,7 @@ void CMainFrame::OnRButtonDblClk(HWND hWnd, BOOL fDoubleClick, int x, int y, UIN
 }
 
 
-void CMainFrame::OnMouseMove(HWND hWnd, int x, int y, UINT keyFlags)
+void CMainFrame::OnMouseMove(int x, int y)
 {
 	if (m_pStateProc == NULL) {
 		return;
@@ -1412,6 +1239,108 @@ BOOL CMainFrame::TimerProc(void)
 }
 
 
+void CMainFrame::UpdateToolCheck(void)
+{
+#if defined(__EMSCRIPTEN__)
+	return;
+#else
+	DWORD dwNow;
+
+	if ((m_pMgrData == NULL) || m_pMgrData->IsLocalTitleMode()) {
+		return;
+	}
+
+	dwNow = SDL_GetTicks();
+	if (m_dwLastToolCheckTick == 0) {
+		m_dwLastToolCheckTick = dwNow;
+		return;
+	}
+	if ((dwNow - m_dwLastToolCheckTick) < TIMER_TOOLCHECK) {
+		return;
+	}
+
+	m_dwLastToolCheckTick = dwNow;
+	CheckToolResponsiveness();
+#endif
+}
+
+
+void CMainFrame::CheckToolResponsiveness(void)
+{
+	DWORD dwTmp, dwScond, dwTimeTmp;
+	SYSTEMTIME sysTime;
+
+	if (m_dwLastTimeCheck == 0) {
+		GetLocalTime(&m_stSystemTime);
+		m_dwLastTimeCheck = timeGetTime();
+		return;
+	}
+	GetLocalTime(&sysTime);
+	dwTimeTmp = timeGetTime();
+	if (sysTime.wMinute != m_stSystemTime.wMinute) {
+		m_dwLastTimeCheck = 0;
+		return;
+	}
+	if (sysTime.wSecond == m_stSystemTime.wSecond) {
+		return;
+	}
+	dwTmp = (dwTimeTmp - m_dwLastTimeCheck) / 1000;
+	dwScond = abs(sysTime.wSecond - m_stSystemTime.wSecond);
+	if (dwScond == dwTmp) {
+		m_dwLastTimeCheck = 0;
+		return;
+	}
+	if (dwTmp < dwScond * 3) {
+		m_dwLastTimeCheck = 0;
+		return;
+	}
+	PushSDLQuitEvent();
+}
+
+
+void CMainFrame::OnSocketNotifyThunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam)
+{
+	CMainFrame *pThis;
+
+	pThis = (CMainFrame *)pUserData;
+	if (pThis == NULL) {
+		return;
+	}
+
+	pThis->PostSocketMessage(URARASOCK_MSGBASE + uMsgOffset, wParam, lParam);
+}
+
+
+void CMainFrame::PostSocketMessage(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	SocketNotify stNotify;
+
+	stNotify.message = message;
+	stNotify.wParam = wParam;
+	stNotify.lParam = lParam;
+
+	EnterCriticalSection(&m_csSocketNotify);
+	m_aPendingSocketNotify.push_back(stNotify);
+	LeaveCriticalSection(&m_csSocketNotify);
+}
+
+
+void CMainFrame::FlushPendingSocketMessages(void)
+{
+	std::deque<SocketNotify> aNotify;
+
+	EnterCriticalSection(&m_csSocketNotify);
+	aNotify.swap(m_aPendingSocketNotify);
+	LeaveCriticalSection(&m_csSocketNotify);
+
+	while (!aNotify.empty()) {
+		const SocketNotify stNotify = aNotify.front();
+		aNotify.pop_front();
+		OnWin32Message(stNotify.message, stNotify.wParam, stNotify.lParam);
+	}
+}
+
+
 void CMainFrame::KeyProc(void)
 {
 	int i;
@@ -1421,7 +1350,7 @@ void CMainFrame::KeyProc(void)
 	if (m_pMgrKeyInput == NULL) {
 		return;
 	}
-	if ((m_hWnd != NULL) && (IsWindowVisible(m_hWnd) == FALSE)) {
+	if (!IsMainWindowInteractive()) {
 		return;
 	}
 
@@ -1505,7 +1434,7 @@ void CMainFrame::Connect(void)
 	wPort = m_pMgrData->GetServerPort();
 
 	m_pMgrWindow->MakeWindowMSG("サーバーに接続しています");
-	m_pSock->Connect(m_hWnd, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, strTmp);
+	m_pSock->Connect(NULL, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, strTmp);
 #endif
 }
 
@@ -1539,6 +1468,26 @@ void CMainFrame::FlashMainWindow(void)
 	stFwi.uCount = 4;
 	stFwi.dwTimeout = 300;
 	FlashWindowEx(&stFwi);
+}
+
+
+BOOL CMainFrame::IsMainWindowInteractive(void) const
+{
+	Uint32 dwWindowFlags;
+
+	if (m_pSDLWindow == NULL) {
+		return TRUE;
+	}
+
+	dwWindowFlags = SDL_GetWindowFlags(m_pSDLWindow);
+	if (dwWindowFlags & SDL_WINDOW_HIDDEN) {
+		return FALSE;
+	}
+	if (dwWindowFlags & SDL_WINDOW_MINIMIZED) {
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 
