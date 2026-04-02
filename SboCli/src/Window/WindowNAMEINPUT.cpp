@@ -56,7 +56,7 @@ void CWindowNAMEINPUT::Create(CMgrData *pMgrData)
 	m_pInfoCharCli->MakeCharGrp();
 	m_pMgrData->GetLibInfoChar()->RenewMotionInfo(m_pInfoCharCli);
 
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 }
 
 
@@ -147,7 +147,7 @@ BOOL CWindowNAMEINPUT::OnUp(void)
 	}
 	m_nPos --;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	bRet = TRUE;
 Exit:
@@ -166,7 +166,7 @@ BOOL CWindowNAMEINPUT::OnDown(void)
 	}
 	m_nPos ++;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	bRet = TRUE;
 Exit:
@@ -178,7 +178,7 @@ BOOL CWindowNAMEINPUT::OnLeft(void)
 {
 	m_nPos = 0;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	return TRUE;
 }
@@ -188,7 +188,7 @@ BOOL CWindowNAMEINPUT::OnRight(void)
 {
 	m_nPos = m_nPosMax - 1;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	return TRUE;
 }
@@ -219,7 +219,7 @@ BOOL CWindowNAMEINPUT::OnX(BOOL bDown)
 			m_pMgrWindow->MakeWindowMSG("名前に空白は使えません", 3000);
 			break;
 		}
-		PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 0);
+	PostWindowMessage(0);
 		break;
 	}
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
@@ -240,7 +240,7 @@ BOOL CWindowNAMEINPUT::OnZ(BOOL bDown)
 	}
 
 	m_pMgrSound->PlaySound(SOUNDID_CANCEL);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, -1);
+	PostWindowMessage(-1);
 	m_bDelete = TRUE;
 
 	bRet = TRUE;

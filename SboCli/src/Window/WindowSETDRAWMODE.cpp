@@ -149,7 +149,7 @@ BOOL CWindowSETDRAWMODE::OnX(BOOL bDown)
 	}
 
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, m_nPos);
+	PostWindowMessage(m_nPos);
 
 	bRet = TRUE;
 Exit:

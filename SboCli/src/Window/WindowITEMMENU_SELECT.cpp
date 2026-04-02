@@ -212,7 +212,7 @@ BOOL CWindowITEMMENU_SELECT::OnX(BOOL bDown)
 	}
 
 //	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, m_anCommand[m_nPos]);
+	PostWindowMessage(m_anCommand[m_nPos]);
 
 	bRet = TRUE;
 Exit:

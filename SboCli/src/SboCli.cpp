@@ -11,6 +11,7 @@
 #include "MainFrame.h"
 #include "SboCli.h"
 
+#if !defined(__EMSCRIPTEN__)
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -68,3 +69,4 @@ Exit:
 	ExitProcess(0);
 	return FALSE;
 }
+#endif

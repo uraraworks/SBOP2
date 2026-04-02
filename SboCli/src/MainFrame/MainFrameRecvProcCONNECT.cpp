@@ -10,6 +10,7 @@
 #include "Packet.h"
 #include "LibInfoAccount.h"
 #include "InfoAccount.h"
+#include "Window/ILoginWindow.h"
 #include "WindowLOGIN.h"
 #include "MgrData.h"
 #include "MgrWindow.h"
@@ -31,18 +32,20 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 {
 	CPacketCONNECT_RES_LOGIN Packet;
 	CPacketACCOUNT_REQ_ACCOUNTINFO PacketREQ_ACCOUNTINFO;
-	PCWindowLOGIN pWindow;
+	ILoginWindow *pWindow;
 
 	Packet.Set(pData);
 
 	switch (Packet.m_nResult) {
 	case LOGINRES_OK: // 問題無し
 		// 入力内容とチェック状態を保存
-		pWindow = (PCWindowLOGIN)m_pMgrWindow->GetWindow(WINDOWTYPE_LOGIN);
-		pWindow->Save();
+		pWindow = m_pMgrWindow->GetLoginWindow();
+		if (pWindow) {
+			pWindow->Save();
+		}
 
 //Todo:お知らせ要求
-		PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGINMENU);
+		PostMainFrameMessage(MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGINMENU);
 		// アカウント情報を要求
 		PacketREQ_ACCOUNTINFO.Make(Packet.m_dwAccountID);
 		m_pSock->Send(&PacketREQ_ACCOUNTINFO);

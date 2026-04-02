@@ -13,6 +13,135 @@
 #include <vector>
 #include <cstdio>
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+
+EM_JS(void, SBOP2_DebugMarkGrpLoad, (
+	int foundBase,
+	int systemExists,
+	int systemRead,
+	int titleExists,
+	int titleBackExists,
+	int titleCloudExists
+), {
+	Module.sbop2GrpFoundBase = foundBase;
+	Module.sbop2GrpSystemExists = systemExists;
+	Module.sbop2GrpSystemRead = systemRead;
+	Module.sbop2GrpTitleExists = titleExists;
+	Module.sbop2GrpTitleBackExists = titleBackExists;
+	Module.sbop2GrpTitleCloudExists = titleCloudExists;
+	Module.sbop2GrpDiagCount = (Module.sbop2GrpDiagCount || 0) + 1;
+	Module.sbop2Stage = 8;
+	});
+#endif
+
+
+static BOOL ReadBinaryFile(LPCTSTR pszFilePath, std::vector<unsigned char> &data)
+{
+	FILE *fp;
+	long nSize;
+
+#ifdef UNICODE
+	if (_tfopen_s(&fp, pszFilePath, L"rb") != 0) {
+		fp = NULL;
+	}
+#else
+	fp = fopen(pszFilePath, "rb");
+#endif
+	if (fp == NULL) {
+		return FALSE;
+	}
+
+	if (fseek(fp, 0, SEEK_END) != 0) {
+		fclose(fp);
+		return FALSE;
+	}
+	nSize = ftell(fp);
+	if (nSize <= 0) {
+		fclose(fp);
+		return FALSE;
+	}
+	if (fseek(fp, 0, SEEK_SET) != 0) {
+		fclose(fp);
+		return FALSE;
+	}
+
+	data.resize((size_t)nSize);
+	if (fread(&data[0], 1, (size_t)nSize, fp) != (size_t)nSize) {
+		fclose(fp);
+		data.clear();
+		return FALSE;
+	}
+
+	fclose(fp);
+	return TRUE;
+}
+
+static BOOL FindSboGrpResBasePath(TCHAR *pszDst, size_t nDstCount)
+{
+	TCHAR szModulePath[MAX_PATH];
+	TCHAR szBasePath[MAX_PATH];
+	LPCTSTR apszBaseCandidates[] = {
+		_T(".\\SboGrpData\\res\\"),
+		_T("..\\SboGrpData\\res\\"),
+		_T("..\\..\\SboGrpData\\res\\"),
+		NULL
+	};
+	int i;
+
+#if defined(__EMSCRIPTEN__)
+	if ((pszDst != NULL) && (nDstCount > 0)) {
+		_tcscpy_s(pszDst, nDstCount, _T("/SboGrpData/res/"));
+		if (PathFileExists(_T("/SboGrpData/res/system.png"))) {
+			return TRUE;
+		}
+		pszDst[0] = _T('\0');
+	}
+#endif
+
+	ZeroMemory(szModulePath, sizeof(szModulePath));
+	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
+
+	for (i = 0; apszBaseCandidates[i] != NULL; i++) {
+		_tcscpy_s(szBasePath, szModulePath);
+		LPTSTR pszSlash = _tcsrchr(szBasePath, _T('\\'));
+		if (pszSlash != NULL) {
+			pszSlash[1] = _T('\0');
+		} else {
+			szBasePath[0] = _T('\0');
+		}
+		_tcscat_s(szBasePath, _countof(szBasePath), apszBaseCandidates[i]);
+
+		TCHAR szCheckPath[MAX_PATH];
+		_tcscpy_s(szCheckPath, _countof(szCheckPath), szBasePath);
+		_tcscat_s(szCheckPath, _countof(szCheckPath), _T("system.png"));
+		if (PathFileExists(szCheckPath)) {
+			_tcscpy_s(pszDst, nDstCount, szBasePath);
+			return TRUE;
+		}
+	}
+
+	if (nDstCount > 0) {
+		pszDst[0] = _T('\0');
+	}
+	return FALSE;
+}
+
+static void BuildSboGrpResPath(TCHAR *pszDst, size_t nDstCount, LPCTSTR pszBasePath, LPCTSTR pszFileName)
+{
+	if ((pszDst == NULL) || (nDstCount == 0)) {
+		return;
+	}
+
+	pszDst[0] = _T('\0');
+	if ((pszBasePath == NULL) || (pszFileName == NULL)) {
+		return;
+	}
+
+	_tcscpy_s(pszDst, nDstCount, pszBasePath);
+	_tcscat_s(pszDst, nDstCount, pszFileName);
+}
+
 
 CMgrGrpData::CMgrGrpData()
 {
@@ -553,6 +682,55 @@ Exit:
 }
 
 
+BOOL CMgrGrpData::LoadLocalTitleAssets(void)
+{
+	TCHAR szBasePath[MAX_PATH];
+	BOOL bLoaded;
+	TCHAR szFilePath[MAX_PATH];
+	BOOL bSystemExists;
+	BOOL bSystemRead;
+	BOOL bTitleExists;
+	BOOL bTitleBackExists;
+	BOOL bTitleCloudExists;
+
+	if (!FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+#if defined(__EMSCRIPTEN__)
+		SBOP2_DebugMarkGrpLoad(0, 0, 0, 0, 0, 0);
+#endif
+		return FALSE;
+	}
+
+	bLoaded = TRUE;
+	bSystemExists = FALSE;
+	bSystemRead = FALSE;
+	bTitleExists = FALSE;
+	bTitleBackExists = FALSE;
+	bTitleCloudExists = FALSE;
+
+	BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("system.png"));
+	bSystemExists = PathFileExists(szFilePath);
+	bSystemRead = Read256File(szFilePath, &m_pImgSystem, 1);
+	bLoaded &= bSystemRead;
+
+	BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("title.png"));
+	bTitleExists = PathFileExists(szFilePath);
+	bLoaded &= bTitleExists;
+	BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("title_back.png"));
+	bTitleBackExists = PathFileExists(szFilePath);
+	bLoaded &= bTitleBackExists;
+	BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("title_cloud.png"));
+	bTitleCloudExists = PathFileExists(szFilePath);
+	bLoaded &= bTitleCloudExists;
+
+#if defined(__EMSCRIPTEN__)
+	SBOP2_DebugMarkGrpLoad(1, bSystemExists ? 1 : 0, bSystemRead ? 1 : 0,
+		bTitleExists ? 1 : 0, bTitleBackExists ? 1 : 0, bTitleCloudExists ? 1 : 0);
+#endif
+
+	return bLoaded;
+}
+
+
 BOOL CMgrGrpData::CheckVersion(LPCSTR pszVersion)
 {
 	BOOL bRet;
@@ -563,8 +741,8 @@ BOOL CMgrGrpData::CheckVersion(LPCSTR pszVersion)
 	ZeroMemory(szTmp, sizeof(szTmp));
 	// バージョンチェック
 	LoadString(m_hDll, IDS_DLLVER, szTmp, _countof(szTmp));
-	CStringA strDllVersion = TStringToAnsi(szTmp);
-	if (strDllVersion.Compare(pszVersion) != 0) {
+	std::string strDllVersion = TStringToAnsiStd(szTmp);
+	if (strDllVersion != pszVersion) {
 		goto Exit;
 	}
 
@@ -1291,12 +1469,21 @@ PCImg32 CMgrGrpData::GetDibTmpLogo(void)
 {
 	BOOL bResult;
 	PCImg32 pImg;
+	TCHAR szBasePath[MAX_PATH];
+	TCHAR szFilePath[MAX_PATH];
 
 	pImg = new CImg32;
 	bResult	= Read256("IDP_LOGO", &pImg, 1);
 	if (bResult == FALSE) {
-		SAFE_DELETE(pImg);
-	} else {
+		if (FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+			BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("URARA-works-logo.png"));
+			bResult = Read256File(szFilePath, &pImg, 1);
+		}
+		if (bResult == FALSE) {
+			SAFE_DELETE(pImg);
+		}
+	}
+	if (pImg) {
 		pImg->SetColorKeyNo(255);
 	}
 
@@ -1308,12 +1495,21 @@ PCImg32 CMgrGrpData::GetDibTmpTitle(void)
 {
 	BOOL bResult;
 	PCImg32 pImg;
+	TCHAR szBasePath[MAX_PATH];
+	TCHAR szFilePath[MAX_PATH];
 
 	pImg	= new CImg32;
 	bResult	= Read256("IDP_TITLE", &pImg, 1);
 	if (bResult == FALSE) {
-		SAFE_DELETE(pImg);
-	} else {
+		if (FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+			BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("title.png"));
+			bResult = Read256File(szFilePath, &pImg, 1);
+		}
+		if (bResult == FALSE) {
+			SAFE_DELETE(pImg);
+		}
+	}
+	if (pImg) {
 		pImg->SetColorKeyNo(71);
 	}
 
@@ -1325,11 +1521,19 @@ PCImg32 CMgrGrpData::GetDibTmpTitleBack(void)
 {
 	BOOL bResult;
 	PCImg32 pImg;
+	TCHAR szBasePath[MAX_PATH];
+	TCHAR szFilePath[MAX_PATH];
 
 	pImg	= new CImg32;
 	bResult	= Read256("IDP_TITLE_BACK", &pImg, 1);
 	if (bResult == FALSE) {
-		SAFE_DELETE(pImg);
+		if (FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+			BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("title_back.png"));
+			bResult = Read256File(szFilePath, &pImg, 1);
+		}
+		if (bResult == FALSE) {
+			SAFE_DELETE(pImg);
+		}
 	}
 
 	return pImg;
@@ -1340,11 +1544,19 @@ PCImg32 CMgrGrpData::GetDibTmpTitleCloud(void)
 {
 	BOOL bResult;
 	PCImg32 pImg;
+	TCHAR szBasePath[MAX_PATH];
+	TCHAR szFilePath[MAX_PATH];
 
 	pImg	= new CImg32;
 	bResult	= Read256("IDP_TITLE_CLOUD", &pImg, 1);
 	if (bResult == FALSE) {
-		SAFE_DELETE(pImg);
+		if (FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+			BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("title_cloud.png"));
+			bResult = Read256File(szFilePath, &pImg, 1);
+		}
+		if (bResult == FALSE) {
+			SAFE_DELETE(pImg);
+		}
 	}
 
 	return pImg;
@@ -1855,6 +2067,62 @@ BOOL CMgrGrpData::Read256(LPCSTR pszName, PCImg32 *pDib, int nSize)
 		goto Exit;
 	}
 	if (image.size() != (size_t)width * height) {
+		goto Exit;
+	}
+
+	if (*pDib == NULL) {
+		*pDib = new CImg32;
+	}
+	pDibNew = *pDib;
+	pDibNew->CreateWithoutGdi256(width * nSize, height * nSize);
+	pData = pDibNew->GetBits();
+
+	for (i = 0; i < (int)state.info_png.color.palettesize; i++) {
+		const unsigned char *pEntry = &state.info_png.color.palette[i * 4];
+		pDibNew->SetPallet(i, pEntry[0], pEntry[1], pEntry[2]);
+	}
+
+	for (y = 0; y < (int)height; y++) {
+		BYTE *pDst = pData + (height - y - 1) * width;
+		CopyMemory(pDst, &image[(size_t)y * width], width);
+	}
+
+	bRet = TRUE;
+Exit:
+	return bRet;
+}
+
+
+BOOL CMgrGrpData::Read256File(LPCTSTR pszFilePath, PCImg32 *pDib, int nSize)
+{
+	BOOL bRet;
+	int i, y;
+	std::vector<unsigned char> fileData;
+	std::vector<unsigned char> image;
+	unsigned width, height;
+	lodepng::State state;
+	CImg32 *pDibNew;
+	BYTE *pData;
+
+	bRet = FALSE;
+	state.decoder.color_convert = 0;
+	state.info_raw.colortype = LCT_PALETTE;
+	state.info_raw.bitdepth = 8;
+
+	if (!ReadBinaryFile(pszFilePath, fileData)) {
+		goto Exit;
+	}
+
+	if (lodepng::decode(image, width, height, state, &fileData[0], fileData.size())) {
+		goto Exit;
+	}
+	if ((width == 0) || (height == 0)) {
+		goto Exit;
+	}
+	if (state.info_png.color.colortype != LCT_PALETTE) {
+		goto Exit;
+	}
+	if ((state.info_png.color.palettesize == 0) || (state.info_png.color.palettesize > 256)) {
 		goto Exit;
 	}
 

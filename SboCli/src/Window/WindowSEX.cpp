@@ -37,7 +37,7 @@ void CWindowSEX::Create(CMgrData *pMgrData)
 	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
 	m_pDib->SetColorKey(0);
 
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 }
 
 
@@ -128,7 +128,7 @@ BOOL CWindowSEX::OnUp(void)
 	}
 	m_nPos --;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	bRet = TRUE;
 Exit:
@@ -147,7 +147,7 @@ BOOL CWindowSEX::OnDown(void)
 	}
 	m_nPos ++;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	bRet = TRUE;
 Exit:
@@ -159,7 +159,7 @@ BOOL CWindowSEX::OnLeft(void)
 {
 	m_nPos = 0;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	return TRUE;
 }
@@ -169,7 +169,7 @@ BOOL CWindowSEX::OnRight(void)
 {
 	m_nPos = m_nPosMax;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	return TRUE;
 }
@@ -188,7 +188,7 @@ BOOL CWindowSEX::OnX(BOOL bDown)
 	pMgrWindow = m_pMgrData->GetMgrWindow();
 
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 0);
+	PostWindowMessage(0);
 
 	bRet = TRUE;
 Exit:
@@ -206,7 +206,7 @@ BOOL CWindowSEX::OnZ(BOOL bDown)
 	}
 
 	m_pMgrSound->PlaySound(SOUNDID_CANCEL);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, -1);
+	PostWindowMessage(-1);
 	m_bDelete = TRUE;
 
 	bRet = TRUE;

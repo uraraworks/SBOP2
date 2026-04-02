@@ -29,5 +29,5 @@ void CMainFrame::RecvProcSKILL_SKILLINFO(PBYTE pData)
 
 	m_pLibInfoSkill->Merge(Packet.m_pLibInfo);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSKILLINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWSKILLINFO, 0);
 }

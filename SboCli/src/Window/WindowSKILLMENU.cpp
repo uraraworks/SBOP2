@@ -352,7 +352,7 @@ BOOL CWindowSKILLMENU::OnX(BOOL bDown)
 
 	m_dwSelectID = dwSkillID;
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, dwSkillID);
+	PostWindowMessage(dwSkillID);
 
 	m_pMgrData->SetWindowPosSKILLMENUPos(m_nPos);
 	m_pMgrData->SetWindowPosSKILLMENUType(m_nType);

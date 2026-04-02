@@ -7,6 +7,61 @@
 #include "stdafx.h"
 #include "LibSboSoundLoader.h"
 
+#if defined(__EMSCRIPTEN__)
+
+CLibSboSoundLoader::CLibSboSoundLoader()
+{
+	m_hLib = NULL;
+	m_pGetSoundCount = NULL;
+	m_pGetSoundResourceID = NULL;
+	m_pGetSoundID = NULL;
+	m_pGetSoundNo = NULL;
+	m_pGetSoundName = NULL;
+}
+
+CLibSboSoundLoader::~CLibSboSoundLoader()
+{
+}
+
+void CLibSboSoundLoader::Load(void)
+{
+}
+
+void CLibSboSoundLoader::Free(void)
+{
+}
+
+int CLibSboSoundLoader::GetSoundCount(void)
+{
+	return 0;
+}
+
+int CLibSboSoundLoader::GetSoundResourceID(int nNo)
+{
+	(void)nNo;
+	return 0;
+}
+
+DWORD CLibSboSoundLoader::GetSoundID(int nNo)
+{
+	(void)nNo;
+	return 0;
+}
+
+int CLibSboSoundLoader::GetSoundNo(DWORD dwSoundID)
+{
+	(void)dwSoundID;
+	return -1;
+}
+
+LPCSTR CLibSboSoundLoader::GetSoundName(DWORD dwSoundID)
+{
+	(void)dwSoundID;
+	return "";
+}
+
+#else
+
 CLibSboSoundLoader::CLibSboSoundLoader()
 {
 	m_hLib = NULL;
@@ -108,3 +163,5 @@ LPCSTR CLibSboSoundLoader::GetSoundName(DWORD dwSoundID)
 	}
 	return m_pGetSoundName(dwSoundID);
 }
+
+#endif

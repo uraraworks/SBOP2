@@ -7,6 +7,9 @@
 #include "stdafx.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+#endif
 #include "SboCli_priv.h"	// SCRSIZEX / SCRSIZEY
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
@@ -21,8 +24,137 @@
 #include "MgrGrpData.h"
 #include "MgrLayer.h"
 #include "MgrWindow.h"
+#include "MainFrame.h"
 #include "myString.h"
 #include "MgrDraw.h"
+#include <vector>
+
+#if defined(__EMSCRIPTEN__)
+EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
+	const canvas = Module['canvas'];
+	Module.sbop2PresentCount = (Module.sbop2PresentCount || 0) + 1;
+	Module.sbop2PresentSize = width + 'x' + height;
+	Module.sbop2Stage = 7;
+	if (!canvas) {
+		return;
+	}
+	if (canvas.width !== width) {
+		canvas.width = width;
+	}
+	if (canvas.height !== height) {
+		canvas.height = height;
+	}
+	let ctx = Module['sbop2Ctx2d'];
+	if (!ctx) {
+		ctx = canvas.getContext('2d', { willReadFrequently: true });
+		Module['sbop2Ctx2d'] = ctx;
+	}
+	if (!ctx) {
+		return;
+	}
+	ctx.imageSmoothingEnabled = false;
+
+	let imageData = Module['sbop2ImageData'];
+	if (!imageData || imageData.width !== width || imageData.height !== height) {
+		imageData = ctx.createImageData(width, height);
+		Module['sbop2ImageData'] = imageData;
+	}
+
+	const base = pRgba >>> 0;
+	Module.sbop2PresentPtr = String(base);
+	const src = HEAPU8.subarray(base, base + width * height * 4);
+	const dst = imageData.data;
+	const sampleIndex = 0;
+	Module.sbop2PresentSample =
+		src[sampleIndex + 0] + '/' +
+		src[sampleIndex + 1] + '/' +
+		src[sampleIndex + 2] + '/' +
+		src[sampleIndex + 3];
+	dst.set(src);
+	ctx.putImageData(imageData, 0, 0);
+
+	const rectQueue = Module.sbop2RectQueue || [];
+	if (rectQueue.length > 0) {
+		ctx.save();
+		ctx.imageSmoothingEnabled = false;
+		for (const item of rectQueue) {
+			if (item.hasFill) {
+				ctx.fillStyle = 'rgba(' + item.fillR + ',' + item.fillG + ',' + item.fillB + ',' + (item.fillA / 255) + ')';
+				ctx.fillRect(item.x, item.y, item.w, item.h);
+			}
+			if (item.hasStroke) {
+				ctx.lineWidth = item.lineWidth;
+				ctx.strokeStyle = 'rgba(' + item.strokeR + ',' + item.strokeG + ',' + item.strokeB + ',' + (item.strokeA / 255) + ')';
+				ctx.strokeRect(item.x + 0.5, item.y + 0.5, Math.max(0, item.w - 1), Math.max(0, item.h - 1));
+			}
+		}
+		ctx.restore();
+	}
+	Module.sbop2RectQueue = [];
+
+	const textQueue = Module.sbop2TextQueue || [];
+	if (textQueue.length > 0) {
+		ctx.save();
+		ctx.textBaseline = 'top';
+		ctx.imageSmoothingEnabled = false;
+		for (const item of textQueue) {
+			ctx.fontKerning = 'none';
+			ctx.textAlign = 'left';
+			ctx.direction = 'ltr';
+			ctx.textRendering = 'geometricPrecision';
+			ctx.font =
+				(item.bold ? "bold " : "") +
+				String(item.size) +
+				"px 'Meiryo UI','Meiryo','Yu Gothic UI','Yu Gothic','MS PGothic','MS Gothic','Noto Sans JP',sans-serif";
+			if (item.outline) {
+				ctx.fillStyle = 'rgb(' + item.frameR + ',' + item.frameG + ',' + item.frameB + ')';
+				ctx.fillText(item.text, item.x - 1, item.y);
+				ctx.fillText(item.text, item.x + 1, item.y);
+				ctx.fillText(item.text, item.x, item.y - 1);
+				ctx.fillText(item.text, item.x, item.y + 1);
+			}
+			ctx.fillStyle = 'rgb(' + item.r + ',' + item.g + ',' + item.b + ')';
+			ctx.fillText(item.text, item.x, item.y);
+		}
+		ctx.restore();
+	}
+	Module.sbop2TextQueue = [];
+});
+EM_JS(void, SBOP2_DebugCanvasRgbaHead, (int r, int g, int b, int a), {
+	Module.sbop2CppRgbaHead = r + '/' + g + '/' + b + '/' + a;
+});
+#endif
+
+static void SBOP2_LogSurfaceSample(const char *pszLabel, CImg32 *pImg, int x, int y)
+{
+#if defined(__EMSCRIPTEN__)
+	if ((pszLabel == NULL) || (pImg == NULL) || (pImg->GetBits() == NULL)) {
+		return;
+	}
+
+	const int nWidth = pImg->Width();
+	const int nHeight = pImg->Height();
+	if ((nWidth <= 0) || (nHeight <= 0)) {
+		return;
+	}
+
+	x = max(0, min(nWidth - 1, x));
+	y = max(0, min(nHeight - 1, y));
+
+	const BYTE *pBits = pImg->GetBits();
+	const int nIndex = ((nHeight - 1 - y) * nWidth + x) * 4;
+	SDL_Log("%s sample=%u/%u/%u/%u", pszLabel,
+		(unsigned)pBits[nIndex + 0],
+		(unsigned)pBits[nIndex + 1],
+		(unsigned)pBits[nIndex + 2],
+		(unsigned)pBits[nIndex + 3]);
+#else
+	(void)pszLabel;
+	(void)pImg;
+	(void)x;
+	(void)y;
+#endif
+}
 
 
 CMgrDraw::CMgrDraw()
@@ -83,12 +215,59 @@ void CMgrDraw::Destroy(void)
 void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 {
 	m_pMgrLayer->	Draw(m_pDibBack);		// レイヤー
+#if defined(__EMSCRIPTEN__)
+	static BOOL s_bLoggedLayer = FALSE;
+	if (s_bLoggedLayer == FALSE) {
+		SBOP2_LogSurfaceSample("MgrDraw layer", m_pDibBack, 32, 32);
+		s_bLoggedLayer = TRUE;
+	}
+#endif
 	m_pMgrWindow->	Draw(m_pDibBack);		// ウィンドウ
+#if defined(__EMSCRIPTEN__)
+	static BOOL s_bLoggedWindow = FALSE;
+	if (s_bLoggedWindow == FALSE) {
+		SBOP2_LogSurfaceSample("MgrDraw window", m_pDibBack, 32, 32);
+		s_bLoggedWindow = TRUE;
+	}
+#endif
 
 	// 明度指定あり？
 	if (m_byLevel < 100 && m_byLevel > 0) {
 		m_pDibBack->ChgLevel(32, 32, SCRSIZEX, SCRSIZEY, (m_byLevel == 1) ? 0 : m_byLevel);
 	}
+
+#if defined(__EMSCRIPTEN__)
+	{
+		static std::vector<unsigned char> aCanvasRgba;
+		const int nWidth = SCRSIZEX;
+		const int nHeight = SCRSIZEY;
+		const int nFullWidth = m_pDibBack->Width();
+		const int nFullHeight = m_pDibBack->Height();
+		const BYTE *pSrc = m_pDibBack->GetBits();
+
+		aCanvasRgba.resize((size_t)nWidth * (size_t)nHeight * 4);
+		for (int y = 0; y < nHeight; ++y) {
+			const BYTE *pSrcRow = pSrc + ((size_t)(nFullHeight - 1 - (32 + y)) * (size_t)nFullWidth + 32) * 4;
+			unsigned char *pDstRow = &aCanvasRgba[(size_t)y * (size_t)nWidth * 4];
+			for (int x = 0; x < nWidth; ++x) {
+				pDstRow[x * 4 + 0] = pSrcRow[x * 4 + 2];
+				pDstRow[x * 4 + 1] = pSrcRow[x * 4 + 1];
+				pDstRow[x * 4 + 2] = pSrcRow[x * 4 + 0];
+				pDstRow[x * 4 + 3] = 255;
+			}
+		}
+
+		if (aCanvasRgba.size() >= 4) {
+			SBOP2_DebugCanvasRgbaHead(
+				(int)aCanvasRgba[0],
+				(int)aCanvasRgba[1],
+				(int)aCanvasRgba[2],
+				(int)aCanvasRgba[3]);
+		}
+		SBOP2_PresentToCanvas((int)(intptr_t)aCanvasRgba.data(), nWidth, nHeight);
+	}
+	return;
+#endif
 
 	if (pRenderer == NULL) {
 		return;
@@ -117,6 +296,12 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 								SDL_TEXTUREACCESS_STREAMING,
 								SCRSIZEX,
 								SCRSIZEY);
+			if (m_pBackTexture != NULL) {
+				// CImg32 はアルファ値を常に正しく管理していないため、
+				// ブラウザ側ではテクスチャを不透明・非ブレンド扱いに固定する。
+				SDL_SetTextureBlendMode(m_pBackTexture, SDL_BLENDMODE_NONE);
+				SDL_SetTextureAlphaMod(m_pBackTexture, 255);
+			}
 		}
 		if (m_pBackTexture == NULL) {
 			return;
@@ -136,6 +321,19 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 		stDst.h = SCRSIZEY;
 		SDL_RenderCopyEx(pRenderer, m_pBackTexture, NULL, &stDst,
 							0.0, NULL, SDL_FLIP_VERTICAL);
+#if defined(__EMSCRIPTEN__)
+		{
+			SDL_Rect stDebugRect;
+
+			stDebugRect.x = 0;
+			stDebugRect.y = 0;
+			stDebugRect.w = 32;
+			stDebugRect.h = 32;
+			SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_NONE);
+			SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
+			SDL_RenderFillRect(pRenderer, &stDebugRect);
+		}
+#endif
 		SDL_RenderPresent(pRenderer);
 	}
 }
@@ -960,7 +1158,6 @@ BOOL CMgrDraw::Fade(void)
 	int nTmp;
 	BOOL bRet;
 	DWORD dwTime;
-	HWND hWndMain;
 	WPARAM wParam;
 
 	bRet = FALSE;
@@ -975,7 +1172,6 @@ BOOL CMgrDraw::Fade(void)
 	}
 
 	wParam		= 0;
-	hWndMain	= m_pMgrData->GetMainWindow();
 	nTmp		= (dwTime - m_dwLastFade) / 4;
 	if (nTmp == 0) {
 		goto Exit;
@@ -1000,7 +1196,7 @@ BOOL CMgrDraw::Fade(void)
 	m_dwLastFade = dwTime;
 
 	if (wParam != 0) {
-		PostMessage(hWndMain, WM_MGRDRAW, wParam, 0);
+		m_pMgrData->PostMgrDrawMessage((int)wParam, 0);
 		SetFadeState(FADESTATE_NONE);
 	}
 
@@ -1050,9 +1246,6 @@ void CMgrDraw::SetLevel(BYTE byLevel)
 
 void CMgrDraw::SetFadeState(BYTE byFadeState)
 {
-	HWND hWndMain;
-
-	hWndMain		= m_pMgrData->GetMainWindow();
 	m_byFadeState	= byFadeState;
 	m_dwLastFade	= 0;
 
@@ -1061,13 +1254,13 @@ void CMgrDraw::SetFadeState(BYTE byFadeState)
 		if (m_byLevel == 0) {
 			SetLevel(1);
 		}
-		PostMessage(hWndMain, WM_MGRDRAW, MGRDRAWMSG_START_FADEIN, 0);
+		m_pMgrData->PostMgrDrawMessage(MGRDRAWMSG_START_FADEIN, 0);
 		break;
 	case FADESTATE_FADEOUT:
 		if (m_byLevel == 0) {
 			SetLevel(100);
 		}
-		PostMessage(hWndMain, WM_MGRDRAW, MGRDRAWMSG_START_FADEOUT, 0);
+		m_pMgrData->PostMgrDrawMessage(MGRDRAWMSG_START_FADEOUT, 0);
 		break;
 	}
 }
@@ -1108,13 +1301,13 @@ void CMgrDraw::SaveScreenShot(void)
 	_tcscat_s(szName, _countof(szName), szTmp);
 	_tcscat_s(szName, _countof(szName), _T(".png"));
 
-	CStringA szNameUtf8 = TStringToUtf8(szName);
+	std::string szNameUtf8 = TStringToUtf8Std(szName);
 
 	cx = m_pDibBack->Width();
 	cy = m_pDibBack->Height();
 	ImgTmp.CreateWithoutGdi(SCRSIZEX, SCRSIZEY);
 	ImgTmp.Blt(0, 0, SCRSIZEX, SCRSIZEY, m_pDibBack, (cx - SCRSIZEX) / 2, (cy - SCRSIZEY) / 2);
-	m_pMgrGrpData->Write(szNameUtf8, &ImgTmp);
+	m_pMgrGrpData->Write(szNameUtf8.c_str(), &ImgTmp);
 }
 
 

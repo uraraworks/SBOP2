@@ -30,7 +30,7 @@ void CMainFrame::RecvProcACCOUNT_RES_ACCOUNTINFO(PBYTE pData)
 	Packet.Set(pData);
 
 	m_pMgrData->SetAccount(Packet.m_pInfo);
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
 }
 
 
@@ -45,11 +45,11 @@ void CMainFrame::RecvProcACCOUNT_RES_MAKECHAR(PBYTE pData)
 	case MAKECHARRES_OK: // 問題無し
 		pAccountInfo = m_pMgrData->GetAccount();
 		pAccountInfo->m_adwCharID.push_back(Packet.m_dwCharID);
-		PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
+		PostMainFrameMessage(MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
 		break;
 	case MAKECHARRES_NG_USE: // 使用済み
 	case MAKECHARRES_NG_SPACE: // 空白が使用されている
 		break;
 	}
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RES_MAKECHAR, Packet.m_nResult);
+	PostMainFrameMessage(MAINFRAMEMSG_RES_MAKECHAR, Packet.m_nResult);
 }

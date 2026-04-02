@@ -46,6 +46,9 @@ BOOL CImg32::Create(
 	int cx,		// [in] 幅
 	int cy)		// [in] 高さ
 {
+#if defined(__EMSCRIPTEN__)
+	return CreateWithoutGdi(cx, cy);
+#else
 	BOOL bRet;
 	HDC hDC;
 
@@ -76,6 +79,7 @@ BOOL CImg32::Create(
 	bRet = TRUE;
 Exit:
 	return bRet;
+#endif
 }
 
 BOOL CImg32::CreateWithoutGdi(
@@ -443,7 +447,7 @@ void CImg32::CircleGradation(
 			if ((xx - mx) * (xx - mx) + (yy - my) * (yy - my) <= r * r) {
 				TARGB tTmp;
 				dTmp = (abs(j - r) * abs(j - r) + abs(i - r) * abs(i - r));
-				dTmp = max(dTmp, 1);
+				dTmp = max(dTmp, 1.0);
 				dTmp = sqrt(dTmp);
 				if ((int)dTmp < rr) {
 					nLevel = 0;
@@ -1075,8 +1079,71 @@ void CImg32::BltTurnUpAndDown(
 	}
 }
 
+void CImg32::BltStretchNearest(
+	int dx,			// [in] 描画先(X)
+	int dy,			// [in] 描画先(Y)
+	int dcx,		// [in] 描画先幅
+	int dcy,		// [in] 描画先高
+	CImg32 *pSrc,	// [in] 転送元
+	int sx,			// [in] 転送元の始点(X)
+	int sy,			// [in] 転送元の始点(Y)
+	int scx,		// [in] 転送元幅
+	int scy,		// [in] 転送元高
+	BOOL bColorKey)	// [in] カラーキーを使用
+{
+	int x, y, srcX, srcY;
+	DWORD dwLineDst, dwLineSrc, dwKey;
+	PBYTE pBitsDst, pBitsSrc;
+
+	if ((m_pBits == NULL) || (pSrc == NULL) || (pSrc->GetBits() == NULL)) {
+		return;
+	}
+	if ((dcx <= 0) || (dcy <= 0) || (scx <= 0) || (scy <= 0)) {
+		return;
+	}
+
+	pBitsDst = m_pBits;
+	pBitsSrc = pSrc->GetBits();
+	dwLineDst = BYTES_PER_LINE(Width());
+	dwLineSrc = BYTES_PER_LINE(pSrc->Width());
+	dwKey = pSrc->GetColorKey();
+
+	for (y = 0; y < dcy; y ++) {
+		int dstY = dy + y;
+		if ((dstY < 0) || (dstY >= Height())) {
+			continue;
+		}
+		srcY = sy + (y * scy) / dcy;
+		if ((srcY < 0) || (srcY >= pSrc->Height())) {
+			continue;
+		}
+
+		PDWORD dst = (PDWORD)(pBitsDst + (size_t)dwLineDst * (Height() - 1 - dstY) + (size_t)max(dx, 0) * BYTES_PER_PIXEL);
+		PDWORD srcLine = (PDWORD)(pBitsSrc + (size_t)dwLineSrc * (pSrc->Height() - 1 - srcY));
+
+		for (x = 0; x < dcx; x ++) {
+			int dstX = dx + x;
+			if ((dstX < 0) || (dstX >= Width())) {
+				continue;
+			}
+			srcX = sx + (x * scx) / dcx;
+			if ((srcX < 0) || (srcX >= pSrc->Width())) {
+				continue;
+			}
+
+			DWORD dwPixel = srcLine[srcX];
+			if ((!bColorKey) || (dwPixel != dwKey)) {
+				((PDWORD)(pBitsDst + (size_t)dwLineDst * (Height() - 1 - dstY)))[dstX] = dwPixel;
+			}
+		}
+	}
+}
+
 HDC CImg32::Lock(void)
 {
+#if defined(__EMSCRIPTEN__)
+	return NULL;
+#else
 	HDC hDC, hRet;
 
 	hRet = NULL;
@@ -1102,10 +1169,14 @@ HDC CImg32::Lock(void)
 
 Exit:
 	return hRet;
+#endif
 }
 
 void CImg32::Unlock(void)
 {
+#if defined(__EMSCRIPTEN__)
+	return;
+#else
 	if (m_hDC == NULL) {
 		return;
 	}
@@ -1113,6 +1184,7 @@ void CImg32::Unlock(void)
 	SelectObject(m_hDC, m_hBmpBack);
 	DeleteDC(m_hDC);
 	m_hDC = NULL;
+#endif
 }
 
 HBITMAP CImg32::GetSafeHandle(void)

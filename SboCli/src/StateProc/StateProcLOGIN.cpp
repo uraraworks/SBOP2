@@ -12,6 +12,9 @@
 #include "MgrWindow.h"
 #include "MgrDraw.h"
 #include "MgrLayer.h"
+#include "MainFrame.h"
+#include "Window/ILoginWindow.h"
+#include "LayerTitle.h"
 #include "StateProcLOGIN.h"
 
 CStateProcLOGIN::CStateProcLOGIN()
@@ -25,14 +28,30 @@ CStateProcLOGIN::~CStateProcLOGIN()
 
 void CStateProcLOGIN::Init(void)
 {
-	PCWindowLOGIN pWindow;
+	ILoginWindow *pWindow;
+	PCLayerTitle pLayerTitle;
 
 	m_pMgrWindow->MakeWindowLOGIN();
-	m_pMgrDraw->SetFadeState(FADESTATE_FADEIN);
 	m_pMgrLayer->MakeTITLE();
+	pLayerTitle = (PCLayerTitle)m_pMgrLayer->Get(LAYERTYPE_TITLE);
 
-	pWindow = (PCWindowLOGIN)m_pMgrWindow->GetWindow(WINDOWTYPE_LOGIN);
-	pWindow->SetShow(FALSE);
+	pWindow = m_pMgrWindow->GetLoginWindow();
+
+	if (m_pMgrData->IsLocalTitleMode() && IsBrowserPlatform()) {
+		m_pMgrDraw->SetLevel(100);
+		if (pLayerTitle) {
+			pLayerTitle->SetFadeLevel(200);
+		}
+		if (pWindow) {
+			pWindow->SetShow(TRUE);
+		}
+		m_bFadeIn = TRUE;
+	} else {
+		m_pMgrDraw->SetFadeState(FADESTATE_FADEIN);
+		if (pWindow) {
+			pWindow->SetShow(FALSE);
+		}
+	}
 
 	m_pMgrSound->PlayBGM(BGMID_HISYOU);
 }
@@ -40,7 +59,7 @@ void CStateProcLOGIN::Init(void)
 BOOL CStateProcLOGIN::TimerProc(void)
 {
 	PCLayerTitle pLayer;
-	PCWindowLOGIN pWindow;
+	ILoginWindow *pWindow;
 
 	if (m_bFadeIn) {
 		return FALSE;
@@ -50,8 +69,10 @@ BOOL CStateProcLOGIN::TimerProc(void)
 	if (pLayer->IsFadeInEnd()) {
 		m_bFadeIn = TRUE;
 
-		pWindow = (PCWindowLOGIN)m_pMgrWindow->GetWindow(WINDOWTYPE_LOGIN);
-		pWindow->SetShow(TRUE);
+		pWindow = m_pMgrWindow->GetLoginWindow();
+		if (pWindow) {
+			pWindow->SetShow(TRUE);
+		}
 	}
 
 	return TRUE;
@@ -59,7 +80,16 @@ BOOL CStateProcLOGIN::TimerProc(void)
 
 void CStateProcLOGIN::OnLButtonDown(int x, int y)
 {
+	ILoginWindow *pWindow;
 	PCLayerTitle pLayer;
+
+	pWindow = m_pMgrWindow->GetLoginWindow();
+	if ((m_bFadeIn) && (pWindow != NULL) && pWindow->HandleMouseLeftButtonDown(x, y)) {
+		return;
+	}
+	if (m_pMgrData->IsLocalTitleMode() && IsBrowserPlatform()) {
+		return;
+	}
 
 	pLayer = (PCLayerTitle)m_pMgrLayer->Get(LAYERTYPE_TITLE);
 	pLayer->EndFadeIn();

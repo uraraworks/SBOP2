@@ -47,14 +47,28 @@ BOOL CMgrSound::Create(void)
 	bRet = FALSE;
 
 	GetModuleFilePath(szPath, _countof(szPath));
-	CString strModulePath(szPath);
-	strFileName.Format(_T("%sSboSoundData.dll"), (LPCTSTR)strModulePath);
+	strFileName.Format(_T("%sSboSoundData.dll"), szPath);
 
 	bResult = m_pDXAudio->Create();
 	if (bResult == FALSE) {
+#if defined(__EMSCRIPTEN__)
+		bRet = TRUE;
+#endif
 		goto Exit;
 	}
+
+#if defined(__EMSCRIPTEN__)
+	// ブラウザではタイトル表示を優先し、音声資産が無くても継続する
+	bRet = TRUE;
+	goto Exit;
+#endif
+
 	m_hDllSoundData = LoadLibrary(strFileName);
+	if (m_hDllSoundData == NULL) {
+		// タイトル表示までは無音でも進められるようにする
+		bRet = TRUE;
+		goto Exit;
+	}
 	m_pDXAudio->SetResourceHandle(m_hDllSoundData);
 
 	m_pLibMusicLoader->Load();
@@ -85,6 +99,11 @@ void CMgrSound::PlaySound(DWORD dwSoundID)
 	int nNo;
 	IDirectMusicSegment8 **pDMS;
 
+#if defined(__EMSCRIPTEN__)
+	UNREFERENCED_PARAMETER(dwSoundID);
+	return;
+#endif
+
 	nNo = m_pLibSboSoundLoader->GetSoundNo(dwSoundID);
 	if (nNo < 0) {
 		return;
@@ -106,6 +125,12 @@ void CMgrSound::PlayBGM(
 	char szTmp[MAX_PATH];
 	TCHAR szBasePath[MAX_PATH];
 
+#if defined(__EMSCRIPTEN__)
+	UNREFERENCED_PARAMETER(nNo);
+	UNREFERENCED_PARAMETER(bPlay);
+	return;
+#endif
+
 	if (bPlay) {
 		if (m_dwSoundID == (DWORD)nNo) {
 			return;
@@ -113,8 +138,8 @@ void CMgrSound::PlayBGM(
 	}
 
 	GetModuleFilePath(szBasePath, _countof(szBasePath));
-	CStringA strBasePath = TStringToAnsi(szBasePath);
-	strcpy_s(szTmp, strBasePath);
+	std::string strBasePath = TStringToAnsiStd(szBasePath);
+	strcpy_s(szTmp, strBasePath.c_str());
 	strcat_s(szTmp, "BGM\\");
 	switch (nNo) {
 //	case 0:
@@ -226,6 +251,10 @@ void CMgrSound::SetSEVolume(int nVolume)
 void CMgrSound::ReadSoundData(void)
 {
 	int i, nCount, nResourceID;
+
+#if defined(__EMSCRIPTEN__)
+	return;
+#endif
 
 	nCount = m_pLibSboSoundLoader->GetSoundCount();
 

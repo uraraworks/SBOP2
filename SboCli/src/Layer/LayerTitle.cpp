@@ -72,7 +72,8 @@ void CLayerTitle::Draw(PCImg32 pDst)
 		pDst->BltAlphaFrom256(SCRSIZEX / 2 - (cx / 2) + 32, 80, cx, cy, m_pDibTitle, 0, 0, nTmp, TRUE);
 	}
 
-	if (m_dwLastTimeFadeIn == 0) {
+	if ((m_dwLastTimeFadeIn == 0) && m_hFont) {
+#if !defined(__EMSCRIPTEN__)
 		hDCTmp = pDst->Lock();
 		hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
 		SetBkMode(hDCTmp, TRANSPARENT);
@@ -80,6 +81,7 @@ void CLayerTitle::Draw(PCImg32 pDst)
 		TextOut1(hDCTmp, (480 - (strTmp.GetLength() * 6)) / 2 + 32, SCRSIZEY - 12 + 32, strTmp, RGB(255, 255, 255));
 		SelectObject(hDCTmp, hFontOld);
 		pDst->Unlock();
+#endif
 	}
 }
 
@@ -128,6 +130,13 @@ void CLayerTitle::StartFadeIn(void)
 void CLayerTitle::EndFadeIn(void)
 {
 	m_nFadeLevel = 200;
+	m_dwLastTimeFadeIn = 0;
+}
+
+
+void CLayerTitle::SetFadeLevel(int nFadeLevel)
+{
+	m_nFadeLevel = max(0, min(200, nFadeLevel));
 	m_dwLastTimeFadeIn = 0;
 }
 

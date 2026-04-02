@@ -70,7 +70,7 @@ void CStateProcLOGINMENU::Init(void)
 	m_pMgrLayer->MakeLOGINMENU();
 	m_pMgrLayer->MakeCHARSELECT(m_pMgrData->GetAccountID());
 
-	PostMessage(m_hWndMain, WM_MAINFRAME, MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
+	m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
 }
 
 void CStateProcLOGINMENU::OnWindowMsg(int nType, DWORD dwPara)
@@ -255,7 +255,7 @@ void CStateProcLOGINMENU::OnMgrDrawEND_FADEOUT(DWORD dwPara)
 
 	case STATE_BACK: // 戻る
 		m_pSock->Destroy();
-		PostMessage(m_hWndMain, WM_MAINFRAME, MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGIN);
+		m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGIN);
 		break;
 	}
 }
@@ -326,7 +326,7 @@ void CStateProcLOGINMENU::OnWindowMsgSTYLESELECT(DWORD dwPara)
 	case -1:
 		// キャンセルされたので前の画面に戻る
 		m_pMgrWindow->Delete(WINDOWTYPE_STYLESELECT);
-		PostMessage(m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_LOGINMENU, 1);
+		m_pMgrData->PostWindowMessage(WINDOWTYPE_LOGINMENU, 1);
 		break;
 	}
 }
@@ -345,7 +345,7 @@ void CStateProcLOGINMENU::OnWindowMsgNAMEINPUT(DWORD dwPara)
 	case -1:
 		// キャンセルされたので前の画面に戻る
 		m_pMgrWindow->Delete(WINDOWTYPE_NAMEINPUT);
-		PostMessage(m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_FAMILYTYPE, 0);
+		m_pMgrData->PostWindowMessage(WINDOWTYPE_FAMILYTYPE, 0);
 		break;
 	}
 }

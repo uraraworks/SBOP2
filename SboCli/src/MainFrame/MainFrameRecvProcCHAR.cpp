@@ -249,9 +249,9 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	}
 
 	if (pInfoChar) {
-		PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
+		PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
 	}
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
 }
 
 
@@ -286,10 +286,10 @@ void CMainFrame::RecvProcCHAR_CHARINFO(PBYTE pData)
 	// 重なり調整
 	m_pLibInfoChar->SortY();
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
 	if (nCount == 1) {
 		if (pInfoChar) {
-			PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
+			PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
 		}
 	}
 }
@@ -548,7 +548,7 @@ void CMainFrame::RecvProcCHAR_CHAT(PBYTE pData)
 	pInfoChar->SetSpeak(Packet.m_strChat);
 	m_pMgrSound->PlaySound(SOUNDID_CHAT);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARCHAT, Packet.m_dwCharID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCHAT, Packet.m_dwCharID);
 	FlashMainWindow();
 }
 
@@ -611,7 +611,7 @@ void CMainFrame::RecvProcCHAR_RES_PUTGET(PBYTE pData)
 		return;
 	}
 	m_pMgrData->AddSystemMsg(FALSE, strTmp, RGB(255, 255, 255));
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 }
 
 
@@ -649,7 +649,7 @@ void CMainFrame::RecvProcCHAR_ITEMINFO(PBYTE pData)
 
 	pInfoCharPlayer = m_pMgrData->GetPlayerChar();
 	if (pInfoChar == pInfoCharPlayer) {
-		PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
+		PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
 	}
 }
 
@@ -706,7 +706,7 @@ void CMainFrame::RecvProcCHAR_RES_TAIL(PBYTE pData)
 		}
 		if (strTmp.IsEmpty() == FALSE) {
 			m_pMgrData->AddSystemMsg(FALSE, strTmp, RGB(255, 255, 255));
-			PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+			PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 		}
 
 	} else if (pInfoCharTarget == pInfoCharPlayer) {
@@ -714,13 +714,13 @@ void CMainFrame::RecvProcCHAR_RES_TAIL(PBYTE pData)
 		case RES_TAIL_RESULT_OK:
 			strTmp.Format(_T("%sがついてきます"), (LPCTSTR)pInfoChar->m_strCharName);
 			m_pMgrData->AddSystemMsg(FALSE, strTmp, RGB(255, 255, 255));
-			PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+			PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 			pInfoCharPlayer->m_dwTailCharID = Packet.m_dwCharID;
 			break;
 		case RES_TAIL_RESULT_PARGE:
 			strTmp.Format(_T("%sはついていくのをやめました"), (LPCTSTR)pInfoChar->m_strCharName);
 			m_pMgrData->AddSystemMsg(FALSE, strTmp, RGB(255, 255, 255));
-			PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+			PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 			pInfoCharPlayer->m_dwTailCharID = Packet.m_dwCharID;
 			break;
 		}
@@ -776,7 +776,7 @@ void CMainFrame::RecvProcCHAR_MOTION(PBYTE pData)
 	m_pLibInfoMotion->SetList(Packet.m_dwMotionTypeID, Packet.m_dwMotionListID, Packet.m_pInfo);
 	m_pLibInfoChar->RenewMotionInfo((DWORD)0);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWMOTION, Packet.m_dwMotionListID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWMOTION, Packet.m_dwMotionListID);
 }
 
 
@@ -789,7 +789,7 @@ void CMainFrame::RecvProcCHAR_MOTIONTYPE(PBYTE pData)
 	pDataTmp = Packet.m_pInfo->GetSendData(Packet.m_dwMotionTypeID);
 	m_pLibInfoMotionType->SetSendData(pDataTmp);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWMOTIONTYPE, Packet.m_dwMotionTypeID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWMOTIONTYPE, Packet.m_dwMotionTypeID);
 	SAFE_DELETE(pDataTmp);
 }
 
@@ -879,11 +879,11 @@ void CMainFrame::RecvProcCHAR_STATUS(PBYTE pData)
 
 	dwHPBack = pInfoChar->m_dwHP;
 	Packet.SetParam(pInfoChar);
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSTATUS, Packet.m_dwCharID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWSTATUS, Packet.m_dwCharID);
 	if (pInfoChar == pInfoCharPlayer) {
 		// HPが減った？
 		if (dwHPBack > pInfoChar->m_dwHP) {
-			PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_DAMAGE, Packet.m_dwCharID);
+			PostMainFrameMessage(MAINFRAMEMSG_DAMAGE, Packet.m_dwCharID);
 		}
 	}
 }
@@ -950,8 +950,8 @@ void CMainFrame::RecvProcCHAR_RES_TALKEVENT(PBYTE pData)
 
 	m_pMgrData->SetInfoTalkEvent(Packet.m_pInfo);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWTALKEVENT, Packet.m_dwParam);
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWTALKEVENT, Packet.m_dwParam);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWTALKEVENT, Packet.m_dwParam);
+	PostAdminMessage(ADMINMSG_RENEWTALKEVENT, Packet.m_dwParam);
 }
 
 
@@ -972,6 +972,6 @@ void CMainFrame::RecvProcCHAR_SKILLINFO(PBYTE pData)
 
 	pInfoCharPlayer = m_pMgrData->GetPlayerChar();
 	if (pInfoChar == pInfoCharPlayer) {
-		PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
+		PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARINFO, pInfoChar->m_dwCharID);
 	}
 }

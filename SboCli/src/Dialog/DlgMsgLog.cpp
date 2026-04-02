@@ -311,7 +311,7 @@ LRESULT CALLBACK CDlgMsgLog::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam,
 				_tcsnccat(szTmp, pThis->m_strChat, 100);
 				TrimViewString(strTmp, szTmp);
 				pThis->m_strChat = (LPCTSTR)strTmp;
-				::PostMessage(pThis->m_pMgrData->GetMainWindow(), WM_WINDOWMSG, WINDOWTYPE_CHAT, 0);
+	pThis->m_pMgrData->PostWindowMessage(WINDOWTYPE_CHAT, 0);
 
 				pMainFrame->SendChat(0, (LPCSTR)strTmp, NULL);
 			}

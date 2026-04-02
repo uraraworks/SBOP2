@@ -154,7 +154,7 @@ BOOL CWindowOPTION_ACTIONSET_SLEEPTIMER::OnX(BOOL bDown)
 
 	m_bDelete = TRUE;
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, m_nSleepTimer);
+	PostWindowMessage(m_nSleepTimer);
 
 	bRet = TRUE;
 Exit:

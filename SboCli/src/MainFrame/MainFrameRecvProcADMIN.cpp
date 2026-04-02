@@ -35,7 +35,7 @@ void CMainFrame::RecvProcADMIN_RES_ADMINLEVEL(PBYTE pData)
 	CPacketADMIN_RES_ADMINLEVEL Packet;
 
 	Packet.Set(pData);
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_ADMINLEVEL, Packet.m_nAdminLevel);
+	PostAdminMessage(ADMINMSG_ADMINLEVEL, Packet.m_nAdminLevel);
 }
 
 
@@ -51,7 +51,7 @@ void CMainFrame::RecvProcADMIN_RENEWADMINLEVEL(PBYTE pData)
 		return;
 	}
 	m_pMgrData->SetAdminLevel(Packet.m_nAdminLevel);
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWADMINLEVEL, Packet.m_nAdminLevel);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWADMINLEVEL, Packet.m_nAdminLevel);
 }
 
 
@@ -81,7 +81,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RES_ACCOUNT(PBYTE pData)
 	pTmpData = InfoTmp.GetTmpData(dwDataSize);
 
 	dwDataID = m_pMgrData->Add(dwDataSize, pTmpData);
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_ACCOUNTINFO, dwDataID);
+	PostAdminMessage(ADMINMSG_ACCOUNTINFO, dwDataID);
 }
 
 
@@ -99,7 +99,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RES_ONLINE(PBYTE pData)
 
 	SAFE_DELETE_ARRAY(pTmp);
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_CHAR_ONLINE, 0);
+	PostAdminMessage(ADMINMSG_CHAR_ONLINE, 0);
 }
 
 
@@ -110,5 +110,5 @@ void CMainFrame::RecvProcADMIN_DISABLE_RES_INFO(PBYTE pData)
 	Packet.Set(pData);
 	m_pLibInfoDisable->CopyAll(Packet.m_pLibInfoDisable);
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWDISABLE, 0);
+	PostAdminMessage(ADMINMSG_RENEWDISABLE, 0);
 }

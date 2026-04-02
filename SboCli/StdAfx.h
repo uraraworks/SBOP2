@@ -8,6 +8,19 @@
 
 #pragma once
 
+#if defined(__EMSCRIPTEN__)
+
+#include "../Common/rpcsal_fallback.h"
+#include "src/Platform/BrowserCompat.h"
+#include "GlobalDefine.h"
+#include "myArray.h"
+#include "myString.h"
+#include "mySection.h"
+#include "SBOGlobal.h"
+#include "SboCli_priv.h"
+
+#else
+
 #include <winsock2.h>
 #ifndef _WINSOCKAPI_
 #define _WINSOCKAPI_
@@ -77,6 +90,8 @@ using namespace std;
 #include "mySection.h"
 #include "SBOGlobal.h"
 #include "SboCli_priv.h"
+
+#endif
 
 //{{AFX_INSERT_LOCATION}}
 

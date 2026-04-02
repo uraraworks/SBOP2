@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <deque>
+
 #include "Platform/IGameLoopHost.h"
 
 class CMgrData;
@@ -38,6 +40,23 @@ class CStateProcBase;
 class CMainFrame : public IGameLoopHost
 {
 public:
+	struct MainFrameNotify {
+		DWORD dwCommand;
+		DWORD dwParam;
+	};
+	struct MgrDrawNotify {
+		int nCode;
+		DWORD dwParam;
+	};
+	struct WindowNotify {
+		int nType;
+		DWORD dwParam;
+	};
+	struct AdminNotify {
+		int nType;
+		DWORD dwParam;
+	};
+
 	CMainFrame(); // コンストラクタ
 	virtual ~CMainFrame(); // デストラクタ
 
@@ -46,24 +65,36 @@ public:
 	void ChgMoveState(BOOL bChgBGM); // プレイヤー移動状態変更処理
 	void RenewItemArea(void); // 画面内のアイテム情報を更新
 	void SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst=NULL); // チャット送信
+	void DispatchMgrDrawMessage(int nCode, DWORD dwPara); // 描画通知を配送
+	void DispatchMainFrameMessage(DWORD dwCommand, DWORD dwParam); // メインフレーム通知を配送
+	void DispatchWindowMessage(int nType, DWORD dwParam); // ウィンドウ通知を配送
+	void DispatchAdminMessage(int nType, DWORD dwParam); // 管理通知を配送
+	void PostMgrDrawMessage(int nCode, DWORD dwPara); // 描画通知を保留投入
+	void PostMainFrameMessage(DWORD dwCommand, DWORD dwParam); // メインフレーム通知を保留投入
+	void PostWindowMessage(int nType, DWORD dwParam); // ウィンドウ通知を保留投入
+	void PostAdminMessage(int nType, DWORD dwParam); // 管理通知を保留投入
 
 	// IGameLoopHost 実装
 	virtual BOOL OnSDLInit(SDL_Window *pWindow);
 	virtual void OnSDLFocusChanged(BOOL bActive);
 	virtual BOOL OnFrame(void);
+	virtual void OnSDLKeyDown(int vk);
 	virtual void OnSDLKeyUp(int vk);
+	virtual void OnSDLTextInput(LPCSTR pszText);
 	virtual void OnSDLMouseMove(int x, int y);
 	virtual void OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick);
 	virtual void OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick);
 	virtual void OnSDLMouseRightButtonDoubleClick(int x, int y);
+	virtual BOOL OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam);
 	virtual void OnDraw(SDL_Renderer *pRenderer);
 	virtual BOOL IsQuit(void);
 	virtual void OnSDLDestroy(void);
 
 private:
+	BOOL InitNativeMainWindow(SDL_Window *pWindow); // ネイティブウィンドウ関連を初期化
+	void RestoreMainWindowPosition(HWND hWnd); // 保存済みのメインウィンドウ位置を復元
 	static LRESULT CALLBACK WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	BOOL OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct);
 	void OnInitEnd(HWND hWnd);
 	void OnDestroy(HWND hWnd);
 	void OnPaint(HWND hWnd);
@@ -89,6 +120,10 @@ private:
 	void Connect(void);
 	void FlashMainWindow(void);
 	int GetMsgCmdType(LPCSTR pszText);
+	void FlushPendingMainFrameMessages(void);
+	void FlushPendingMgrDrawMessages(void);
+	void FlushPendingWindowMessages(void);
+	void FlushPendingAdminMessages(void);
 
 	// 受信処理 (MainFrameRecvProcVERSION.cpp)
 	void RecvProcVERSION(BYTE byCmdSub, PBYTE pData);
@@ -195,7 +230,9 @@ private:
 private:
 	HWND m_hWnd;
 	BOOL m_bWindowActive,
-		m_bRenewCharInfo;
+		m_bRenewCharInfo,
+		m_bMainWindowSubclassed,
+		m_bRequestDraw;
 	int m_nGameState,
 		m_nDrawCount,
 		m_nFPS;
@@ -228,4 +265,12 @@ private:
 	CLibInfoSystem *m_pLibInfoSystem;
 	CLibInfoSkill *m_pLibInfoSkill;
 	CStateProcBase *m_pStateProc;
+	CRITICAL_SECTION m_csMainFrameNotify;
+	std::deque<MainFrameNotify> m_aPendingMainFrameNotify;
+	CRITICAL_SECTION m_csMgrDrawNotify;
+	std::deque<MgrDrawNotify> m_aPendingMgrDrawNotify;
+	CRITICAL_SECTION m_csWindowNotify;
+	std::deque<WindowNotify> m_aPendingWindowNotify;
+	CRITICAL_SECTION m_csAdminNotify;
+	std::deque<AdminNotify> m_aPendingAdminNotify;
 };

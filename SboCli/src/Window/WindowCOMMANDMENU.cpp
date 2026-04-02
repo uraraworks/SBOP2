@@ -182,7 +182,7 @@ BOOL CWindowCOMMANDMENU::OnX(BOOL bDown)
 
 	m_bDelete = TRUE;
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, m_nPos);
+	PostWindowMessage(m_nPos);
 
 	bRet = TRUE;
 Exit:
@@ -201,7 +201,7 @@ BOOL CWindowCOMMANDMENU::OnZ(BOOL bDown)
 
 	m_bDelete = TRUE;
 	m_pMgrSound->PlaySound(SOUNDID_CANCEL);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, -1);
+	PostWindowMessage(-1);
 
 	bRet = TRUE;
 Exit:

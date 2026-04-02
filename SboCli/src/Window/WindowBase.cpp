@@ -10,6 +10,49 @@
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "WindowBase.h"
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+#endif
+
+#if defined(__EMSCRIPTEN__)
+EM_JS(void, SBOP2_QueueCanvasText, (int x, int y, const char *pszText, int r, int g, int b, int size, int outline, int frameR, int frameG, int frameB, int bold), {
+	Module.sbop2TextQueue = Module.sbop2TextQueue || [];
+	Module.sbop2TextQueue.push({
+		x: x,
+		y: y,
+		text: UTF8ToString(pszText),
+		r: r,
+		g: g,
+		b: b,
+		size: size,
+		outline: !!outline,
+		frameR: frameR,
+		frameG: frameG,
+		frameB: frameB,
+		bold: !!bold
+	});
+});
+EM_JS(void, SBOP2_QueueCanvasRect, (int x, int y, int w, int h, int fillR, int fillG, int fillB, int fillA, int hasFill, int strokeR, int strokeG, int strokeB, int strokeA, int hasStroke, int lineWidth), {
+	Module.sbop2RectQueue = Module.sbop2RectQueue || [];
+	Module.sbop2RectQueue.push({
+		x: x,
+		y: y,
+		w: w,
+		h: h,
+		fillR: fillR,
+		fillG: fillG,
+		fillB: fillB,
+		fillA: fillA,
+		hasFill: !!hasFill,
+		strokeR: strokeR,
+		strokeG: strokeG,
+		strokeB: strokeB,
+		strokeA: strokeA,
+		hasStroke: !!hasStroke,
+		lineWidth: lineWidth
+	});
+});
+#endif
 
 CWindowBase::CWindowBase()
 {
@@ -122,6 +165,16 @@ void CWindowBase::Create(CMgrData *pMgrData)
 
 void CWindowBase::OnWindowMsg(int nType, DWORD dwPara)
 {
+}
+
+
+void CWindowBase::PostWindowMessage(DWORD dwPara)
+{
+	if (m_pMgrData == NULL) {
+		return;
+	}
+
+	m_pMgrData->PostWindowMessage(m_nID, dwPara);
 }
 
 
@@ -249,6 +302,33 @@ void CWindowBase::KeyProc(
 		m_dwTimeDrawStart	= 0;
 		m_dwLastTimeKey	= timeGetTime();
 	}
+}
+
+
+ILoginWindow *CWindowBase::GetLoginWindowInterface(void)
+{
+	return NULL;
+}
+
+
+BOOL CWindowBase::HandleSDLKeyDown(UINT vk)
+{
+	UNREFERENCED_PARAMETER(vk);
+	return FALSE;
+}
+
+
+void CWindowBase::HandleSDLTextInput(LPCSTR pszText)
+{
+	UNREFERENCED_PARAMETER(pszText);
+}
+
+
+BOOL CWindowBase::HandleSDLMouseLeftButtonDown(int x, int y)
+{
+	UNREFERENCED_PARAMETER(x);
+	UNREFERENCED_PARAMETER(y);
+	return FALSE;
 }
 
 
@@ -482,6 +562,106 @@ void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFr
 
 	SetTextColor(hDC, Color);
 	::TextOut(hDC, x, y, pStr, nLen);
+}
+
+
+void CWindowBase::DrawBrowserText(int x, int y, LPCTSTR pStr, COLORREF Color, int nFontSize, BOOL bDraw, COLORREF ColorFrame, BOOL bBold)
+{
+#if defined(__EMSCRIPTEN__)
+	if (pStr == NULL) {
+		return;
+	}
+
+	const int nLen = lstrlen(pStr);
+	if (nLen <= 0) {
+		return;
+	}
+
+	int nUtf8Len = WideCharToMultiByte(CP_UTF8, 0, pStr, nLen, NULL, 0, NULL, NULL);
+	if (nUtf8Len <= 0) {
+		return;
+	}
+
+	std::vector<char> aUtf8((size_t)nUtf8Len + 1, 0);
+	WideCharToMultiByte(CP_UTF8, 0, pStr, nLen, &aUtf8[0], nUtf8Len, NULL, NULL);
+	aUtf8[(size_t)nUtf8Len] = '\0';
+
+	const int nDrawX = m_ptViewPos.x + 32 + x;
+	const int nDrawY = m_ptViewPos.y + 32 + y - 2;
+	const int nColorR = (int)(Color & 0xFF);
+	const int nColorG = (int)((Color >> 8) & 0xFF);
+	const int nColorB = (int)((Color >> 16) & 0xFF);
+	const int nFrameR = (int)(ColorFrame & 0xFF);
+	const int nFrameG = (int)((ColorFrame >> 8) & 0xFF);
+	const int nFrameB = (int)((ColorFrame >> 16) & 0xFF);
+
+	SBOP2_QueueCanvasText(
+		nDrawX,
+		nDrawY,
+		&aUtf8[0],
+		nColorR,
+		nColorG,
+		nColorB,
+		nFontSize,
+		(int)bDraw,
+		nFrameR,
+		nFrameG,
+		nFrameB,
+		(int)bBold);
+#else
+	UNREFERENCED_PARAMETER(x);
+	UNREFERENCED_PARAMETER(y);
+	UNREFERENCED_PARAMETER(pStr);
+	UNREFERENCED_PARAMETER(Color);
+	UNREFERENCED_PARAMETER(nFontSize);
+	UNREFERENCED_PARAMETER(bDraw);
+	UNREFERENCED_PARAMETER(ColorFrame);
+	UNREFERENCED_PARAMETER(bBold);
+#endif
+}
+
+
+void CWindowBase::DrawBrowserRect(int x, int y, int cx, int cy, COLORREF ColorFill, BOOL bFill, COLORREF ColorStroke, BOOL bStroke, int nLineWidth, BYTE byFillAlpha, BYTE byStrokeAlpha)
+{
+#if defined(__EMSCRIPTEN__)
+	const int nDrawX = m_ptViewPos.x + 32 + x;
+	const int nDrawY = m_ptViewPos.y + 32 + y;
+	const int nFillR = (int)(ColorFill & 0xFF);
+	const int nFillG = (int)((ColorFill >> 8) & 0xFF);
+	const int nFillB = (int)((ColorFill >> 16) & 0xFF);
+	const int nStrokeR = (int)(ColorStroke & 0xFF);
+	const int nStrokeG = (int)((ColorStroke >> 8) & 0xFF);
+	const int nStrokeB = (int)((ColorStroke >> 16) & 0xFF);
+
+	SBOP2_QueueCanvasRect(
+		nDrawX,
+		nDrawY,
+		cx,
+		cy,
+		nFillR,
+		nFillG,
+		nFillB,
+		(int)byFillAlpha,
+		(int)bFill,
+		nStrokeR,
+		nStrokeG,
+		nStrokeB,
+		(int)byStrokeAlpha,
+		(int)bStroke,
+		nLineWidth);
+#else
+	UNREFERENCED_PARAMETER(x);
+	UNREFERENCED_PARAMETER(y);
+	UNREFERENCED_PARAMETER(cx);
+	UNREFERENCED_PARAMETER(cy);
+	UNREFERENCED_PARAMETER(ColorFill);
+	UNREFERENCED_PARAMETER(bFill);
+	UNREFERENCED_PARAMETER(ColorStroke);
+	UNREFERENCED_PARAMETER(bStroke);
+	UNREFERENCED_PARAMETER(nLineWidth);
+	UNREFERENCED_PARAMETER(byFillAlpha);
+	UNREFERENCED_PARAMETER(byStrokeAlpha);
+#endif
 }
 
 

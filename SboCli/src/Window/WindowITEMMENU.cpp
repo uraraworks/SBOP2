@@ -387,7 +387,7 @@ BOOL CWindowITEMMENU::OnX(BOOL bDown)
 	m_dwSelectItemID = dwItemID;
 	m_dwDragItemID	 = dwItemIDDrag;
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, dwItemID);
+	PostWindowMessage(dwItemID);
 	m_pMgrData->SetWindowPosITEMMENUPos(m_nPos);
 
 	bRet = TRUE;

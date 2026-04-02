@@ -31,5 +31,5 @@ void CMainFrame::RecvProcSYSTEM_INFO(PBYTE pData)
 	pInfoSystem = (PCInfoSystem)m_pLibInfoSystem->GetPtr();
 	pInfoSystem->Copy(Packet.m_pInfoSystem);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMINFO, 0);
 }

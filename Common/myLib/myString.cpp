@@ -1,5 +1,7 @@
 ﻿#include "StdAfx.h"
+#if !defined(__EMSCRIPTEN__)
 #include <tchar.h>
+#endif
 #include "myString.h"
 
 // コンストラクタ

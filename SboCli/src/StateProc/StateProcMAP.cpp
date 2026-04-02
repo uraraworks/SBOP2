@@ -1025,7 +1025,9 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 
 void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
+#if !defined(__EMSCRIPTEN__)
 	PostAdminUiMessage(WM_MAINFRAME, dwCommand, dwParam);
+#endif
 	m_pPlayerChar = m_pMgrData->GetPlayerChar();
 
 	switch (dwCommand) {
@@ -1140,12 +1142,28 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 void CStateProcMAP::OnAdminMsg(int nCode, DWORD dwPara)
 {
+#if defined(__EMSCRIPTEN__)
+	(void)nCode;
+	(void)dwPara;
+	return;
+#else
 	PostAdminUiMessage(WM_ADMINMSG, nCode, dwPara);
+#endif
 }
 
 void CStateProcMAP::CreateAdminUi(void)
 {
 	DestroyAdminUi();
+
+#if defined(__EMSCRIPTEN__)
+	if (m_pMgrData) {
+		m_pMgrData->SetAdminWindow(NULL);
+		m_pMgrData->SetAdminNotifyTypeL(ADMINNOTIFYTYPE_NONE);
+		m_pMgrData->SetAdminNotifyTypeR(ADMINNOTIFYTYPE_NONE);
+		m_pMgrData->SetAdminNotifyTypeRR(ADMINNOTIFYTYPE_NONE);
+	}
+	return;
+#endif
 
 	if ((m_pMgrData == NULL) || (m_pMgrData->GetAdminLevel() <= ADMINLEVEL_NONE)) {
 		return;
@@ -1160,17 +1178,29 @@ void CStateProcMAP::CreateAdminUi(void)
 
 void CStateProcMAP::DestroyAdminUi(void)
 {
+#if !defined(__EMSCRIPTEN__)
 	m_AdminUi.Destroy();
+#endif
 	m_hWndAdmin = NULL;
 	if (m_pMgrData) {
 		m_pMgrData->SetAdminWindow(NULL);
+		m_pMgrData->SetAdminNotifyTypeL(ADMINNOTIFYTYPE_NONE);
+		m_pMgrData->SetAdminNotifyTypeR(ADMINNOTIFYTYPE_NONE);
+		m_pMgrData->SetAdminNotifyTypeRR(ADMINNOTIFYTYPE_NONE);
 	}
 }
 
 void CStateProcMAP::PostAdminUiMessage(UINT message, WPARAM wParam, LPARAM lParam)
 {
+#if defined(__EMSCRIPTEN__)
+	(void)message;
+	(void)wParam;
+	(void)lParam;
+	return;
+#else
 	m_AdminUi.Notify(message, wParam, lParam);
 	m_hWndAdmin = m_AdminUi.GetWindow();
+#endif
 }
 
 
@@ -2749,7 +2779,7 @@ BOOL CStateProcMAP::MoveProc(
 
 	bResult = m_pLibInfoChar->DeleteOutScreen(m_pPlayerChar);
 	if (bResult) {
-		PostMessage(m_pMgrData->GetMainWindow(), WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
+		m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
 	}
 	pLayerMap->SetSystemIconMode(1);
 	m_dwLastTimeMove = timeGetTime();
@@ -3223,7 +3253,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_VIEWSET(DWORD dwPara)
 			AddSystemMsg(FALSE, "秒間60フレームで表示します", RGB(255, 255, 255));
 		}
 		m_pMgrData->SaveIniData();
-		PostMessage(m_pMgrData->GetMainWindow(), WM_MAINFRAME, MAINFRAMEMSG_RENEWVIEWSET, 0);
+		m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_RENEWVIEWSET, 0);
 		break;
 	default:
 		goto Exit;
@@ -3600,7 +3630,7 @@ void CStateProcMAP::AddSystemMsg(
 	COLORREF cl)		// [in] 表示色
 {
 	m_pMgrData->AddSystemMsg(bAddLog, pszMsg, cl);
-	PostMessage(m_pMgrData->GetMainWindow(), WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+	m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 }
 
 

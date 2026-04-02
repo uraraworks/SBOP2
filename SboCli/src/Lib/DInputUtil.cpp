@@ -1,4 +1,4 @@
-﻿/// @file DInputUtil.cpp
+/// @file DInputUtil.cpp
 /// @brief DirectInputユーティリティクラス 実装ファイル
 /// @author 年がら年中春うらら(URARA-works)
 /// @date 2007/09/30
@@ -7,6 +7,8 @@
 #include "StdAfx.h"
 #include "DInputUtil.h"
 
+#include <SDL.h>
+
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p)	{ if(p)	{ (p)->Release();(p)=NULL; } }
 #endif
@@ -14,8 +16,66 @@
 #define SAFE_DELETE(p)	{ if(p)	{ delete p;p=NULL; } }
 #endif
 
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dinput8.lib")
+#endif
+
+namespace {
+
+#if !defined(_WIN32) || defined(__EMSCRIPTEN__)
+typedef struct _DIDEVICEINSTANCE_STUB {
+	GUID guidInstance;
+	TCHAR tszInstanceName[MAX_PATH];
+} DIDEVICEINSTANCE_STUB;
+#endif
+
+BOOL IsGuidEqual(const GUID &stLeft, const GUID &stRight)
+{
+	return (memcmp(&stLeft, &stRight, sizeof(GUID)) == 0) ? TRUE : FALSE;
+}
+
+#if !defined(_WIN32) || defined(__EMSCRIPTEN__)
+GUID ConvertSDLGuid(const SDL_JoystickGUID &stSrc)
+{
+	GUID stDst;
+	const Uint8 *pSrc;
+
+	ZeroMemory(&stDst, sizeof(stDst));
+	pSrc = (const Uint8 *)&stSrc;
+	if (pSrc == NULL) {
+		return stDst;
+	}
+
+	stDst.Data1 =
+		((DWORD)pSrc[0]) |
+		((DWORD)pSrc[1] << 8) |
+		((DWORD)pSrc[2] << 16) |
+		((DWORD)pSrc[3] << 24);
+	stDst.Data2 = (WORD)(((WORD)pSrc[4]) | ((WORD)pSrc[5] << 8));
+	stDst.Data3 = (WORD)(((WORD)pSrc[6]) | ((WORD)pSrc[7] << 8));
+	CopyMemory(stDst.Data4, pSrc + 8, sizeof(stDst.Data4));
+
+	return stDst;
+}
+
+BOOL CopyDeviceName(TCHAR *pszDst, size_t nDstCount, const char *pszSrc)
+{
+	if ((pszDst == NULL) || (nDstCount == 0)) {
+		return FALSE;
+	}
+
+	pszDst[0] = _T('\0');
+	if (pszSrc == NULL) {
+		return TRUE;
+	}
+
+	MultiByteToWideChar(CP_UTF8, 0, pszSrc, -1, pszDst, (int)nDstCount);
+	return TRUE;
+}
+#endif
+
+} // namespace
 
 CDInputUtil::CDInputUtil()
 {
@@ -30,6 +90,7 @@ CDInputUtil::~CDInputUtil()
 
 BOOL CDInputUtil::Create(void)
 {
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 	BOOL bRet;
 	HRESULT hResult;
 
@@ -48,13 +109,25 @@ BOOL CDInputUtil::Create(void)
 	bRet = TRUE;
 Exit:
 	return bRet;
+#else
+	return (SDL_WasInit(SDL_INIT_JOYSTICK) != 0) ? TRUE : FALSE;
+#endif
 }
 
 void CDInputUtil::Destroy(void)
 {
 	DeleteAllDeviceInfo();
+
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 	SAFE_RELEASE(m_pDInput);
 	SAFE_RELEASE(m_pDevice);
+#else
+	if (m_pDevice != NULL) {
+		SDL_JoystickClose((SDL_Joystick *)m_pDevice);
+	}
+	m_pDInput = NULL;
+	m_pDevice = NULL;
+#endif
 }
 
 BOOL CDInputUtil::IsUseDevice(void)
@@ -73,6 +146,7 @@ Exit:
 
 DWORD CDInputUtil::GetKeyState(void)
 {
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 	DWORD dwRet;
 	HRESULT hr;
 	DIJOYSTATE dijs;
@@ -120,10 +194,51 @@ DWORD CDInputUtil::GetKeyState(void)
 
 Exit:
 	return dwRet;
+#else
+	SDL_Joystick *pJoystick;
+	const Sint16 nThreshold = 16000;
+	DWORD dwRet;
+
+	dwRet = 0;
+	pJoystick = (SDL_Joystick *)m_pDevice;
+	if (pJoystick == NULL) {
+		return 0;
+	}
+
+	SDL_JoystickUpdate();
+
+	if (SDL_JoystickGetAxis(pJoystick, 1) <= -nThreshold) {
+		dwRet |= BUTTON_UP;
+	}
+	if (SDL_JoystickGetAxis(pJoystick, 1) >= nThreshold) {
+		dwRet |= BUTTON_DOWN;
+	}
+	if (SDL_JoystickGetAxis(pJoystick, 0) <= -nThreshold) {
+		dwRet |= BUTTON_LEFT;
+	}
+	if (SDL_JoystickGetAxis(pJoystick, 0) >= nThreshold) {
+		dwRet |= BUTTON_RIGHT;
+	}
+	if (SDL_JoystickGetButton(pJoystick, 0)) {
+		dwRet |= BUTTON_BUTTON1;
+	}
+	if (SDL_JoystickGetButton(pJoystick, 1)) {
+		dwRet |= BUTTON_BUTTON1;
+	}
+	if (SDL_JoystickGetButton(pJoystick, 2)) {
+		dwRet |= BUTTON_BUTTON2;
+	}
+	if (SDL_JoystickGetButton(pJoystick, 3)) {
+		dwRet |= BUTTON_BUTTON2;
+	}
+
+	return dwRet;
+#endif
 }
 
 void CDInputUtil::SetDevice(int nNo, HWND hWnd)
 {
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 	PDINPUTDEVICEINFO pDeviceInfo;
 
 	if (nNo < 0) {
@@ -134,10 +249,28 @@ void CDInputUtil::SetDevice(int nNo, HWND hWnd)
 	pDeviceInfo = m_aDeviceInfo[nNo];
 
 	SetDevice(pDeviceInfo->guidInstance, hWnd);
+#else
+	GUID stGuid;
+
+	UNREFERENCED_PARAMETER(hWnd);
+
+	ZeroMemory(&stGuid, sizeof(stGuid));
+	if ((nNo < 0) || (nNo >= static_cast<int>(m_aDeviceInfo.size()))) {
+		if (m_pDevice != NULL) {
+			SDL_JoystickClose((SDL_Joystick *)m_pDevice);
+			m_pDevice = NULL;
+		}
+		return;
+	}
+
+	stGuid = m_aDeviceInfo[nNo]->guidInstance;
+	SetDevice(stGuid, NULL);
+#endif
 }
 
 void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 {
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 	HRESULT hr;
 
 	SAFE_RELEASE(m_pDevice);
@@ -212,10 +345,37 @@ void CDInputUtil::SetDevice(GUID &stSrc, HWND hWnd)
 	}
 
 	m_pDevice->Acquire();
+#else
+	int i, nCount;
+	SDL_Joystick *pJoystick;
+
+	UNREFERENCED_PARAMETER(hWnd);
+
+	if (m_pDevice != NULL) {
+		SDL_JoystickClose((SDL_Joystick *)m_pDevice);
+		m_pDevice = NULL;
+	}
+
+	nCount = SDL_NumJoysticks();
+	for (i = 0; i < nCount; i++) {
+		if (IsGuidEqual(ConvertSDLGuid(SDL_JoystickGetDeviceGUID(i)), stSrc) == FALSE) {
+			continue;
+		}
+
+		pJoystick = SDL_JoystickOpen(i);
+		if (pJoystick == NULL) {
+			continue;
+		}
+
+		m_pDevice = (LPDIRECTINPUTDEVICE8)pJoystick;
+		break;
+	}
+#endif
 }
 
 BOOL CDInputUtil::Enum(void)
 {
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 	BOOL bRet;
 	HRESULT hResult;
 
@@ -237,6 +397,30 @@ BOOL CDInputUtil::Enum(void)
 	bRet = TRUE;
 Exit:
 	return bRet;
+#else
+	int i, nCount;
+	PDINPUTDEVICEINFO pInfo;
+
+	DeleteAllDeviceInfo();
+
+	nCount = SDL_NumJoysticks();
+	for (i = 0; i < nCount; i++) {
+		pInfo = new DINPUTDEVICEINFO;
+		pInfo->guidInstance = ConvertSDLGuid(SDL_JoystickGetDeviceGUID(i));
+		pInfo->strName = _T("");
+
+		{
+			const char *pszName = SDL_JoystickNameForIndex(i);
+			TCHAR szName[MAX_PATH];
+			CopyDeviceName(szName, _countof(szName), pszName);
+			pInfo->strName = szName;
+		}
+
+		AddDeviceInfo(pInfo);
+	}
+
+	return (nCount > 0) ? TRUE : FALSE;
+#endif
 }
 
 int CDInputUtil::GetDeviceCount(void)
@@ -245,8 +429,8 @@ int CDInputUtil::GetDeviceCount(void)
 }
 
 BOOL CDInputUtil::GetDeviceName(
-	int nNo,			// [in] 配列番号
-	CmyString &strDst)	// [out] デバイス名
+	int nNo,
+	CmyString &strDst)
 {
 	BOOL bRet;
 	PDINPUTDEVICEINFO pInfo;
@@ -268,8 +452,8 @@ Exit:
 }
 
 BOOL CDInputUtil::GetGUID(
-	int nNo,		// [in] 配列番号
-	GUID &stDst)	// [out] 取得先
+	int nNo,
+	GUID &stDst)
 {
 	BOOL bRet;
 	PDINPUTDEVICEINFO pInfo;
@@ -292,6 +476,7 @@ Exit:
 
 BOOL CALLBACK CDInputUtil::EnumProc(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
 {
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 	PDINPUTDEVICEINFO pInfo;
 	PCDInputUtil pThis;
 
@@ -304,6 +489,11 @@ BOOL CALLBACK CDInputUtil::EnumProc(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
 	pThis->AddDeviceInfo(pInfo);
 
 	return DIENUM_CONTINUE;
+#else
+	UNREFERENCED_PARAMETER(lpddi);
+	UNREFERENCED_PARAMETER(pvRef);
+	return FALSE;
+#endif
 }
 
 void CDInputUtil::DeleteDeviceInfo(int nNo)

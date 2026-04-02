@@ -10,6 +10,7 @@
 #include "MgrDraw.h"
 #include "MgrLayer.h"
 #include "MgrSound.h"
+#include "MainFrame.h"
 #include "StateProcLOGO.h"
 
 CStateProcLOGO::CStateProcLOGO()
@@ -23,9 +24,9 @@ CStateProcLOGO::~CStateProcLOGO()
 
 void CStateProcLOGO::Init(void)
 {
+	m_pMgrLayer->MakeLOGO();
 	m_pMgrDraw->SetLevel(1);
 	m_pMgrDraw->SetFadeState(FADESTATE_FADEIN);
-	m_pMgrLayer->MakeLOGO();
 }
 
 BOOL CStateProcLOGO::TimerProc(void)
@@ -76,5 +77,5 @@ void CStateProcLOGO::OnMgrDrawEND_FADEIN(DWORD dwPara)
 
 void CStateProcLOGO::OnMgrDrawEND_FADEOUT(DWORD dwPara)
 {
-	PostMessage(m_hWndMain, WM_MAINFRAME, MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGIN);
+	m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGIN);
 }

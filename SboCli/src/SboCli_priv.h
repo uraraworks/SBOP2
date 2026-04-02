@@ -6,6 +6,12 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+#include <locale>
+#include <codecvt>
+#include <cstdlib>
+
 // 定数定義
 
 #ifndef MAPPARTSSIZE
@@ -35,6 +41,122 @@ inline int PixelToTile(int px)       { return px / MAPPARTSSIZE; }
 
 // ピクセル座標 → そのタイルの中心ピクセル座標
 inline int PixelToTileCenter(int px) { return PixelToTile(px) * MAPPARTSSIZE + MAPPARTSSIZE / 2; }
+
+inline BOOL IsBrowserPlatform(void)
+{
+#ifdef __EMSCRIPTEN__
+	return TRUE;
+#else
+	return FALSE;
+#endif
+}
+
+inline BOOL IsLocalTitleModeRequested(void)
+{
+	const char *pszValue;
+
+	if (IsBrowserPlatform()) {
+		return TRUE;
+	}
+
+	pszValue = getenv("SBOP2_LOCAL_TITLE");
+	if (pszValue == NULL) {
+		return FALSE;
+	}
+	if ((pszValue[0] == '0') && (pszValue[1] == '\0')) {
+		return FALSE;
+	}
+	if ((pszValue[0] == 'f' || pszValue[0] == 'F') &&
+		(pszValue[1] == 'a' || pszValue[1] == 'A') &&
+		(pszValue[2] == 'l' || pszValue[2] == 'L') &&
+		(pszValue[3] == 's' || pszValue[3] == 'S') &&
+		(pszValue[4] == 'e' || pszValue[4] == 'E') &&
+		(pszValue[5] == '\0')) {
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+inline std::string WideToCodePageString(const wchar_t *pszSrc, UINT codePage)
+{
+	std::string strRet;
+
+	if (pszSrc == NULL) {
+		return strRet;
+	}
+
+#if defined(__EMSCRIPTEN__)
+	if (codePage != CP_UTF8) {
+		codePage = CP_UTF8;
+	}
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	strRet = converter.to_bytes(pszSrc);
+#else
+	int nLen;
+
+	nLen = WideCharToMultiByte(codePage, 0, pszSrc, -1, NULL, 0, NULL, NULL);
+	if (nLen <= 0) {
+		return strRet;
+	}
+
+	std::vector<char> aBuffer((size_t)nLen);
+	WideCharToMultiByte(codePage, 0, pszSrc, -1, &aBuffer[0], nLen, NULL, NULL);
+	strRet.assign(&aBuffer[0]);
+#endif
+
+	return strRet;
+}
+
+inline std::basic_string<TCHAR> Utf8ToTStringStd(LPCSTR pszSrc)
+{
+	std::basic_string<TCHAR> strRet;
+
+	if (pszSrc == NULL) {
+		return strRet;
+	}
+
+#ifdef _UNICODE
+#if defined(__EMSCRIPTEN__)
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	strRet = converter.from_bytes(pszSrc);
+#else
+	int nLen;
+
+	nLen = MultiByteToWideChar(CP_UTF8, 0, pszSrc, -1, NULL, 0);
+	if (nLen <= 0) {
+		return strRet;
+	}
+
+	std::vector<wchar_t> aBuffer((size_t)nLen);
+	MultiByteToWideChar(CP_UTF8, 0, pszSrc, -1, &aBuffer[0], nLen);
+	strRet.assign(&aBuffer[0]);
+#endif
+#else
+	strRet = pszSrc;
+#endif
+
+	return strRet;
+}
+
+inline std::string TStringToUtf8Std(LPCTSTR pszSrc)
+{
+#ifdef _UNICODE
+	return WideToCodePageString(pszSrc, CP_UTF8);
+#else
+	return (pszSrc != NULL) ? std::string(pszSrc) : std::string();
+#endif
+}
+
+inline std::string TStringToAnsiStd(LPCTSTR pszSrc, UINT codePage = CP_ACP)
+{
+#ifdef _UNICODE
+	return WideToCodePageString(pszSrc, codePage);
+#else
+	UNREFERENCED_PARAMETER(codePage);
+	return (pszSrc != NULL) ? std::string(pszSrc) : std::string();
+#endif
+}
 
 // SDL 側へ移行済みのメインウィンドウ入力メッセージ判定
 inline BOOL IsSDLManagedInputWindowMessage(UINT msg)

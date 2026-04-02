@@ -5,7 +5,9 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#if !defined(__EMSCRIPTEN__)
 #include <comdef.h>
+#endif
 #include "InfoAccount.h"
 #include "InfoMapEventBase.h"
 #include "InfoTalkEvent.h"
@@ -65,6 +67,7 @@ CMgrData::CMgrData()
 	m_bMoveNoBlock			= FALSE;
 	m_bMapEventEditMode		= FALSE;
 	m_bMapPartsEditMode		= FALSE;
+	m_bLocalTitleMode		= FALSE;
 	m_bDisableLogin			= FALSE;
 	m_bSavePassword			= FALSE;
 	m_bOptionTaskbar		= FALSE;
@@ -157,6 +160,28 @@ void CMgrData::Create(
 	m_pMainFrame	= pMainFrame;
 	m_pMgrGrpData	= pMgrGrpData;
 
+#if defined(__EMSCRIPTEN__)
+	if (m_bLocalTitleMode) {
+		m_pMgrSound = new CMgrSound;
+		m_pMgrDraw = new CMgrDraw;
+		m_pMgrLayer = new CMgrLayer;
+		m_pMgrWindow = new CMgrWindow;
+		m_pMgrKeyInput = new CMgrKeyInput;
+
+		ReadIniData();
+
+		m_pMgrSound->Create();
+		m_pMgrDraw->Create(this);
+		m_pMgrLayer->Create(this);
+		m_pMgrWindow->Create(this);
+		m_pMgrKeyInput->Create();
+
+		m_pMgrSound->SetBGMVolume(m_nBGMVolume);
+		m_pMgrSound->SetSEVolume(m_nSEVolume);
+		return;
+	}
+#else
+
 	m_pInfoAccount			= new CInfoAccount;
 	m_pInfoTalkEvent		= new CInfoTalkEvent;
 	m_pMgrSound				= new CMgrSound;
@@ -211,6 +236,7 @@ void CMgrData::Create(
 
 	m_pMgrSound->SetBGMVolume(m_nBGMVolume);
 	m_pMgrSound->SetSEVolume(m_nSEVolume);
+#endif
 }
 
 
@@ -250,6 +276,10 @@ void CMgrData::SaveIniData(void)
 	CmyString strTmp;
 	CCryptUtil CryptUtil;
 
+	if (m_bLocalTitleMode) {
+		return;
+	}
+
 	ZeroMemory(szModulePath, sizeof(szModulePath));
 	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
 	_tcscpy_s(szIniPath, szModulePath);
@@ -261,12 +291,12 @@ void CMgrData::SaveIniData(void)
 	}
 
 	ZeroMemory(szCrypt, sizeof(szCrypt));
-	CStringA strPasswordUtf8 = TStringToUtf8((LPCTSTR)m_strLastPassword);
-	CryptUtil.CryptStr(strPasswordUtf8, szCrypt, 10);
-	CString strEncrypted = Utf8ToTString(szCrypt);
+	std::string strPasswordUtf8 = TStringToUtf8Std((LPCTSTR)m_strLastPassword);
+	CryptUtil.CryptStr(strPasswordUtf8.c_str(), szCrypt, 10);
+	std::basic_string<TCHAR> strEncrypted = Utf8ToTStringStd(szCrypt);
 
 	WritePrivateProfileString(_T("Account"), _T("Account"), (LPCTSTR)m_strLastAccount, szIniPath);
-	WritePrivateProfileString(_T("Account"), _T("Password"), strEncrypted, szIniPath);
+	WritePrivateProfileString(_T("Account"), _T("Password"), strEncrypted.c_str(), szIniPath);
 
 	strTmp.Format(_T("%d"), m_bSavePassword);
 	WritePrivateProfileString(_T("Setting"), _T("SavePassword"), strTmp, szIniPath);
@@ -294,8 +324,7 @@ void CMgrData::SaveIniData(void)
 	WritePrivateProfileString(_T("Setting"), _T("DrawMode"), strTmp, szIniPath);
 
 	StringFromGUID2(m_stInputGuid, szwGuid, _countof(szwGuid));
-	CString strGuid(szwGuid);
-	WritePrivateProfileString(_T("Setting"), _T("InputDevice"), strGuid, szIniPath);
+	WritePrivateProfileString(_T("Setting"), _T("InputDevice"), szwGuid, szIniPath);
 
 	strTmp.Format(_T("%d"), m_nSleepTimer);
 	WritePrivateProfileString(_T("Setting"), _T("SleepTimer"), strTmp, szIniPath);
@@ -306,6 +335,110 @@ void CMgrData::SetWindowInfo(HINSTANCE hInstance, HWND hWndMain)
 {
 	m_hInstance	= hInstance;
 	m_hWndMain	= hWndMain;
+}
+
+
+void CMgrData::PostMainFrameMessage(DWORD dwCommand, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->PostMainFrameMessage(dwCommand, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		PostMessage(m_hWndMain, WM_MAINFRAME, dwCommand, dwParam);
+	}
+}
+
+
+void CMgrData::DispatchMainFrameMessage(DWORD dwCommand, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->DispatchMainFrameMessage(dwCommand, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		SendMessage(m_hWndMain, WM_MAINFRAME, dwCommand, dwParam);
+	}
+}
+
+
+void CMgrData::PostWindowMessage(int nType, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->PostWindowMessage(nType, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		PostMessage(m_hWndMain, WM_WINDOWMSG, nType, dwParam);
+	}
+}
+
+
+void CMgrData::DispatchWindowMessage(int nType, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->DispatchWindowMessage(nType, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		SendMessage(m_hWndMain, WM_WINDOWMSG, nType, dwParam);
+	}
+}
+
+
+void CMgrData::PostAdminMessage(int nType, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->PostAdminMessage(nType, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		PostMessage(m_hWndMain, WM_ADMINMSG, nType, dwParam);
+	}
+}
+
+
+void CMgrData::DispatchAdminMessage(int nType, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->DispatchAdminMessage(nType, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		SendMessage(m_hWndMain, WM_ADMINMSG, nType, dwParam);
+	}
+}
+
+
+void CMgrData::PostMgrDrawMessage(int nCode, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->PostMgrDrawMessage(nCode, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		PostMessage(m_hWndMain, WM_MGRDRAW, nCode, dwParam);
+	}
+}
+
+
+void CMgrData::DispatchMgrDrawMessage(int nCode, DWORD dwParam)
+{
+	if (m_pMainFrame) {
+		m_pMainFrame->DispatchMgrDrawMessage(nCode, dwParam);
+		return;
+	}
+
+	if (m_hWndMain) {
+		SendMessage(m_hWndMain, WM_MGRDRAW, nCode, dwParam);
+	}
 }
 
 
@@ -671,6 +804,28 @@ void CMgrData::ReadIniData(void)
 	char szDecrypted[128];
 	CCryptUtil CryptUtil;
 
+	if (m_bLocalTitleMode) {
+		m_strServerAddr = _T("127.0.0.1");
+		m_wServerPort = 2006;
+		m_strLastAccount = _T("");
+		m_strLastPassword = _T("");
+		m_bSavePassword = FALSE;
+		m_bDisableLogin = FALSE;
+		m_bOptionTaskbar = FALSE;
+		m_bOptionViewChat = TRUE;
+		m_bOptionViewItem = TRUE;
+		m_bOptionViewItemName = TRUE;
+		m_bOptionViewHelpIcon = TRUE;
+		m_bOptionBattleMsgLog = FALSE;
+		m_bOption60Frame = FALSE;
+		m_nSEVolume = 2;
+		m_nBGMVolume = 2;
+		m_nDrawMode = 1;
+		m_nSleepTimer = 0;
+		ZeroMemory(&m_stInputGuid, sizeof(m_stInputGuid));
+		return;
+	}
+
 	ZeroMemory(szModulePath, sizeof(szModulePath));
 	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
 	_tcscpy_s(szIniPath, szModulePath);
@@ -697,9 +852,9 @@ void CMgrData::ReadIniData(void)
 	GetPrivateProfileString(_T("Account"), _T("Account"), _T(""), szTmp, _countof(szTmp), szIniPath);
 	m_strLastAccount = szTmp;
 	GetPrivateProfileString(_T("Account"), _T("Password"), _T(""), szTmp, _countof(szTmp), szIniPath);
-	CStringA strEncrypted = TStringToUtf8(szTmp);
+	std::string strEncrypted = TStringToUtf8Std(szTmp);
 	ZeroMemory(szDecrypted, sizeof(szDecrypted));
-	CryptUtil.UnCryptStr(strEncrypted, szDecrypted, 10);
+	CryptUtil.UnCryptStr(strEncrypted.c_str(), szDecrypted, 10);
 	m_strLastPassword = szDecrypted;
 
 	nTmp = GetPrivateProfileInt(_T("Setting"), _T("SEVolume"), 2, szIniPath);

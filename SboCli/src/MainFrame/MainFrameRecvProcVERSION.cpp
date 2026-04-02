@@ -8,6 +8,7 @@
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "Packet.h"
+#include "Window/ILoginWindow.h"
 #include "WindowLOGIN.h"
 #include "MacAddr.h"
 #include "MgrWindow.h"
@@ -27,7 +28,7 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 {
 	int nCount = 0;
 	BYTE abyTmp[10];
-	PCWindowLOGIN pWindow;
+	ILoginWindow *pWindow;
 	CPacketVERSION_RES_VERSIONCHECK Packet;
 	CPacketCONNECT_REQ_LOGIN PacketLOGIN;
 	CMacAddr MacAddr;
@@ -36,7 +37,7 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 
 	switch (Packet.m_nResult) {
 	case VERSIONCHECKRES_OK: // 問題無し
-		pWindow = (PCWindowLOGIN)m_pMgrWindow->GetWindow(WINDOWTYPE_LOGIN);
+		pWindow = m_pMgrWindow->GetLoginWindow();
 		if (pWindow == NULL) {
 			break;
 		}

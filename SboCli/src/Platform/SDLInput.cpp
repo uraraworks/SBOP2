@@ -41,6 +41,7 @@ int CSDLInput::ScancodeToVK(SDL_Scancode scancode)
 	case SDL_SCANCODE_RETURN:	return VK_RETURN;
 	case SDL_SCANCODE_ESCAPE:	return VK_ESCAPE;
 	case SDL_SCANCODE_TAB:		return VK_TAB;
+	case SDL_SCANCODE_BACKSPACE:	return VK_BACK;
 	case SDL_SCANCODE_LSHIFT:
 	case SDL_SCANCODE_RSHIFT:	return VK_SHIFT;
 	case SDL_SCANCODE_LCTRL:
@@ -88,6 +89,7 @@ SDL_Scancode CSDLInput::VKToScancode(int vk)
 	case VK_RETURN:		return SDL_SCANCODE_RETURN;
 	case VK_ESCAPE:		return SDL_SCANCODE_ESCAPE;
 	case VK_TAB:		return SDL_SCANCODE_TAB;
+	case VK_BACK:		return SDL_SCANCODE_BACKSPACE;
 	case VK_SHIFT:		return SDL_SCANCODE_LSHIFT;		// 左Shiftを代表値として返す
 	case VK_CONTROL:	return SDL_SCANCODE_LCTRL;		// 左Ctrlを代表値として返す
 	case VK_SPACE:		return SDL_SCANCODE_SPACE;

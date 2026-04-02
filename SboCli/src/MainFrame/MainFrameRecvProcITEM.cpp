@@ -53,7 +53,7 @@ void CMainFrame::RecvProcITEM_RES_ITEMINFO(PBYTE pData)
 	RenewItemArea();
 	m_pMgrWindow->Update();
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMINFO, pInfoItem->m_dwItemID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMINFO, pInfoItem->m_dwItemID);
 }
 
 
@@ -79,7 +79,7 @@ void CMainFrame::RecvProcITEM_ITEMINFO(PBYTE pData)
 	m_pLibInfoItem->Sort();
 	RenewItemArea();
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMINFO, 0);
 }
 
 
@@ -91,7 +91,7 @@ void CMainFrame::RecvProcITEM_DELETEITEMINFO(PBYTE pData)
 
 	m_pLibInfoItem->Delete(Packet.m_dwItemID);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMINFO, Packet.m_dwItemID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMINFO, Packet.m_dwItemID);
 }
 
 
@@ -113,7 +113,7 @@ void CMainFrame::RecvProcITEM_RES_ITEMTYPEINFO(PBYTE pData)
 	}
 
 	m_pLibInfoChar->RenewMotionInfo((DWORD)0);
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMTYPEINFO, pInfoItem->m_dwTypeID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMTYPEINFO, pInfoItem->m_dwTypeID);
 }
 
 
@@ -138,7 +138,7 @@ void CMainFrame::RecvProcITEM_ITEMTYPEINFO(PBYTE pData)
 	}
 
 	m_pLibInfoChar->RenewMotionInfo((DWORD)0);
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMTYPEINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMTYPEINFO, 0);
 }
 
 
@@ -151,7 +151,7 @@ void CMainFrame::RecvProcITEM_DELETEITEMTYPEINFO(PBYTE pData)
 	m_pLibInfoItemType->Delete(Packet.m_dwTypeID);
 
 	m_pLibInfoChar->RenewMotionInfo((DWORD)0);
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMTYPEINFO, Packet.m_dwTypeID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMTYPEINFO, Packet.m_dwTypeID);
 }
 
 
@@ -172,7 +172,7 @@ void CMainFrame::RecvProcITEM_RES_ITEMWEAPONINFO(PBYTE pData)
 		pInfoItemWeapon->Copy(Packet.m_pInfo);
 	}
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMWEAPONINFO, pInfoItemWeapon->m_dwWeaponInfoID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMWEAPONINFO, pInfoItemWeapon->m_dwWeaponInfoID);
 }
 
 
@@ -196,5 +196,5 @@ void CMainFrame::RecvProcITEM_ITEMWEAPONINFO(PBYTE pData)
 		pInfoItemWeapon->Copy(pInfoItemWeaponTmp);
 	}
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWITEMWEAPONINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWITEMWEAPONINFO, 0);
 }

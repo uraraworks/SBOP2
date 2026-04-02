@@ -52,6 +52,14 @@ public:
 	void			SetWindowInfo(HINSTANCE hInstance, HWND hWndMain);		// ウィンドウ情報を設定
 	HINSTANCE		GetInstance(void)	{ return m_hInstance;		}			// インスタンスハンドルを取得
 	HWND			GetMainWindow(void)	{ return m_hWndMain;		}			// メインウィンドウハンドルを取得
+	void			PostMainFrameMessage(DWORD dwCommand, DWORD dwParam);	// メインフレーム通知を保留投入
+	void			DispatchMainFrameMessage(DWORD dwCommand, DWORD dwParam);	// メインフレーム通知を即時配送
+	void			PostWindowMessage(int nType, DWORD dwParam);			// ウィンドウ通知を保留投入
+	void			DispatchWindowMessage(int nType, DWORD dwParam);		// ウィンドウ通知を即時配送
+	void			PostAdminMessage(int nType, DWORD dwParam);			// 管理通知を保留投入
+	void			DispatchAdminMessage(int nType, DWORD dwParam);		// 管理通知を即時配送
+	void			PostMgrDrawMessage(int nCode, DWORD dwParam);			// 描画通知を保留投入
+	void			DispatchMgrDrawMessage(int nCode, DWORD dwParam);		// 描画通知を即時配送
 
 	void				SetUraraSockTCP(CUraraSockTCPSBO *pSock)	{ m_pSock = pSock;	}	// 通信マネージャを設定
 	CUraraSockTCPSBO	*GetUraraSockTCP(void)						{ return m_pSock;	}	// 通信マネージャを取得
@@ -70,6 +78,8 @@ public:
 	int				GetChatModeBack(void)				{ return m_nChatModeBack;		}	// 前回のチャット種別を取得
 	void			SetDrawTime(DWORD dwDrawTime)		{ m_dwDrawTime = dwDrawTime;	}	// 描画時間を設定
 	DWORD			GetDrawTime(void)					{ return m_dwDrawTime;			}	// 描画時間を取得
+	void			SetLocalTitleMode(BOOL bLocalTitleMode)	{ m_bLocalTitleMode = bLocalTitleMode;	}	// タイトル表示専用モードを設定
+	BOOL			IsLocalTitleMode(void)				{ return m_bLocalTitleMode;		}	// タイトル表示専用モードか取得
 
 	void			SetAdminNotifyTypeL(int nType)		{ m_nAdminNotifyTypeL = nType;	}	// 管理者ウィンドウへの通知種別(左クリック)を設定
 	int				GetAdminNotifyTypeL(void)			{ return m_nAdminNotifyTypeL;	}	// 管理者ウィンドウへの通知種別(左クリック)を取得
@@ -232,7 +242,8 @@ private:
 						m_bOptionBattleMsgLog,		// 戦闘メッセージをログに残す
 						m_bOption60Frame,			// 60フレームで表示する
 						m_bMapEventEditMode,		// マップイベント編集モード
-						m_bMapPartsEditMode;		// マップパーツ編集モード
+						m_bMapPartsEditMode,		// マップパーツ編集モード
+						m_bLocalTitleMode;			// タイトル表示専用モード
 	BYTE				m_byViewGrid;				// グリッド表示
 	GUID				m_stInputGuid;				// 入力パッドのGUID
 	SIZE				m_sizeDlgMapPartsEdit,		// マップパーツ編集ダイアログサイズ

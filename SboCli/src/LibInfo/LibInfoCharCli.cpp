@@ -205,7 +205,7 @@ BOOL CLibInfoCharCli::Proc(void)
 				m_pMgrData->SetPlayerChar(NULL);
 			}
 			Delete(pInfoChar->m_dwCharID);
-			PostMessage(m_pMgrData->GetMainWindow(), WM_MAINFRAME, MAINFRAMEMSG_RENEWCHARCOUNT, GetCount());
+			m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCOUNT, GetCount());
 			m_nProcNo --;
 			bResult = TRUE;
 			break;

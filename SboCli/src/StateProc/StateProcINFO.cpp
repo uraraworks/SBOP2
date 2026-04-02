@@ -26,7 +26,7 @@ void CStateProcINFO::Init(void)
 
 void CStateProcINFO::OnLButtonDown(int x, int y)
 {
-	PostMessage(m_hWndMain, WM_MAINFRAME, MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGINMENU);
+	m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_CHGSTATE, GAMESTATE_LOGINMENU);
 }
 
 BOOL CStateProcINFO::OnX(BOOL bDown)

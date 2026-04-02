@@ -41,7 +41,7 @@ void CMainFrame::RecvProcEFFECT_RES_EFFECTINFO(PBYTE pData)
 	} else {
 		pInfoEffect->Copy(Packet.m_pInfo);
 	}
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWEFFECT, pInfoEffect->m_dwEffectID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWEFFECT, pInfoEffect->m_dwEffectID);
 }
 
 
@@ -65,7 +65,7 @@ void CMainFrame::RecvProcEFFECT_EFFECTINFO(PBYTE pData)
 			pInfoEffect->Copy(pInfoEffectTmp);
 		}
 	}
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWEFFECT, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWEFFECT, 0);
 }
 
 
@@ -76,7 +76,7 @@ void CMainFrame::RecvProcEFFECT_DELETEEFFECTINFO(PBYTE pData)
 	Packet.Set(pData);
 
 	m_pLibInfoEffect->Delete(Packet.m_dwEffectID);
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWEFFECT, Packet.m_dwEffectID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWEFFECT, Packet.m_dwEffectID);
 }
 
 
@@ -88,5 +88,5 @@ void CMainFrame::RecvProcEFFECT_BALLOONINFO(PBYTE pData)
 
 	m_pLibInfoEfcBalloon->SetList(Packet.m_dwListID, Packet.m_pLibInfo);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWBALLOON, Packet.m_dwListID);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWBALLOON, Packet.m_dwListID);
 }

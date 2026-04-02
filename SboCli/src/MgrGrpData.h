@@ -24,6 +24,7 @@ public:
 	virtual ~CMgrGrpData();									// デストラクタ
 
 	BOOL	Load(void);								// 読み込み
+	BOOL	LoadLocalTitleAssets(void);				// タイトル表示用の最小画像を読み込み
 	BOOL	CheckVersion(LPCSTR pszVersion);				// バージョンチェック
 	void	Write(LPCSTR pszFileName, CImg32 *pSrc);	// PNGデータの保存
 	CImg32	*GetDibSystem(void);							// システム画像イメージを取得
@@ -94,6 +95,7 @@ public:
 
 
 private:
+	BOOL	Read256File(LPCTSTR pszFilePath, PCImg32 *pDib, int nSize);	// PNGファイルの読み込み
 	BOOL	Read(LPCSTR pszName, PCImg32 *pDib, int nSize);	// PNGデータの読み込み
 	BOOL	Read256(LPCSTR pszName, PCImg32 *pDib, int nSize);	// PNGデータの読み込み
 

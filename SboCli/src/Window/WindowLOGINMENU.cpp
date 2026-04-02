@@ -217,7 +217,7 @@ BOOL CWindowLOGINMENU::OnX(BOOL bDown)
 	}
 
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, WINDOWTYPE_LOGINMENU, m_nPos);
+	m_pMgrData->PostWindowMessage(WINDOWTYPE_LOGINMENU, m_nPos);
 
 	bRet = TRUE;
 Exit:

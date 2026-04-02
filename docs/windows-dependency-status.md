@@ -1,6 +1,6 @@
 # Windows依存状況メモ
 
-最終更新日: 2026-03-16
+最終更新日: 2026-04-02
 
 ## 概要
 
@@ -16,6 +16,40 @@
   - 描画内部は `CImg32` / `HDC` / GDI ベースが主流。
   - 補助 UI と管理用ツールウィンドウは MFC / Win32 のまま。
   - 音声は `DXAudio` / `AflMusic` / `winmm` / `DirectSound` 系依存が残る。
+
+## 2026-04-01 の追加状況
+
+- browser title build は通過済みで、headless Chrome でもロゴ表示まで確認できた。
+- これは「SDL 導入だけでは不十分だが、残課題はかなり具体化できた」ことを意味する。
+- 現在の主ボトルネックは以下。
+  - `WM_MAINFRAME` / `WM_MGRDRAW` を前提にした状態遷移
+  - `PostMessage` と Win32 メッセージキュー前提の遅延通知
+  - `HWND` の有無で分岐する初期化順序
+  - browser では `emscripten_set_main_loop` 配下で毎フレーム deterministic に処理されないと破綻する箇所
+
+要するに、今後の本丸は「Win32 メッセージ処理からの脱却」である。
+
+## 2026-04-02 の方針合意
+
+- 管理者ダイアログ、各種ツールウィンドウ、補助ネイティブウィンドウは、ひとまず browser 版では使用しない前提で進める。
+- browser 版で優先して置き換える対象は、`WindowLOGIN`、`WindowCHAT`、`WindowCHARNAME` などの「入力用 Win32 コントロール依存」である。
+- これらは「Win32 コントロールを browser で再現する」のではなく、「自前描画 UI + SDL テキスト入力」へ置き換える方針とする。
+- 一般的な SDL アプリの流儀に合わせ、文字入力の入口は `SDL_StartTextInput()` / `SDL_StopTextInput()` / `SDL_TEXTINPUT` / `SDL_TEXTEDITING` / `SDL_KEYDOWN` を使い、入力欄の見た目・カーソル・確定処理はゲーム内 UI 側で持つ。
+- つまり、補助ウィンドウは browser 版では切る、ログインとチャットは SDL UI として作り直す、という二本立てで進める。
+
+## 2026-04-02 の追加進捗
+
+- `IGameLoopHost` / `SDLApp` / `MainFrame` に `SDL_KEYDOWN` と `SDL_TEXTINPUT` の橋渡しを追加した。
+- `ILoginWindow` に「キー押下」「テキスト入力」「左クリック」の抽象ハンドラを追加し、ログイン UI を Win32 子コントロール前提から少し切り離した。
+- `WindowLOGIN` は `__EMSCRIPTEN__` 時に `CreateWindow(Edit/Button)` を使わず、内部状態だけでアカウント欄・パスワード欄・保存チェック・接続ボタンを持つ土台を追加した。
+- browser 版 `CMgrWindow::MakeWindowLOGIN()` も、ローカルタイトルモードを含めて `WindowLOGINNull` ではなく `WindowLOGIN` を生成する形にした。
+- `WindowCHAT` と `WindowCHARNAME` にも browser 向け SDL テキスト入力の土台を追加し、`CMgrWindow` の browser 分岐でも実ウィンドウを生成するようにした。
+- `WindowBase` と `CMgrWindow` に SDL 入力受け口を追加し、アクティブウィンドウへ `SDL_KEYDOWN` / `SDL_TEXTINPUT` / 左クリックを流せる構造へ寄せた。
+- まだ「描画が browser 上で最終的に見えること」までは未確認であり、`CImg32` / GDI 系描画の制約は引き続き残る。
+- browser タイトル画面では、ロゴフェード後に `WindowLOGIN` が表示されるところまで到達した。
+- `WindowLOGIN` の browser 版は、最初の canvas 直接描画では日本語文字化けと位置ずれが強かったため、現在は HTML DOM オーバーレイで入力欄・チェックボックス・接続ボタンを重ねる方式へ切り替えている。
+- これにより、ログイン文字列の文字化けは解消し、見た目も native 版へかなり寄せられる状態になった。
+- 現時点の残課題は、browser 上の `WindowLOGIN` オーバーレイの縦位置微調整であり、左右位置は概ね合わせ込みできている。
 
 ## 実装済みの前進
 
@@ -83,6 +117,25 @@
 - `DInputUtil.cpp` は `dinput8.lib` 依存のまま。
 - Win32 コントロール入力欄やチャット入力欄は別途 Win32 依存を持つ。
 
+#### 2026-04-01 作業メモ
+
+- `SboCli/src/Lib/DInputUtil.*` に SDL ジョイスティック経路を追加し、Windows 以外では DirectInput ではなく SDL ベースで列挙・選択・入力取得できるようにした。
+- これにより `MgrKeyInput` と入力設定ウィンドウは既存 API のまま非 Windows ビルドへ寄せられるようになった。
+- ただし Windows 版は引き続き DirectInput 主系であり、完全統一は未完。
+- `MainFrame` 内部で発行していた `WM_MAINFRAME` は、受信処理ごとの `PostMessage` ではなく内部保留キュー経由で `OnFrame()` 先頭に配送する構造へ一段縮退した。
+- これにより `MainFrameRecvProc*` と `TimerProc()` からの主要な自己通知は Win32 メッセージキュー非依存になった。
+- `MgrData::PostMainFrameMessage()` / `DispatchMainFrameMessage()` を追加し、`StateProc*`・`WindowLOGIN`・`LibInfoCharCli` からの主要な `WM_MAINFRAME` 発行も `HWND` 直叩きから共通経路へ寄せた。
+- `WM_MGRDRAW` も `MgrData::PostMgrDrawMessage()` / `DispatchMgrDrawMessage()` と `MainFrame` 内部キュー経由へ寄せ、フェード開始・終了通知の自己 `PostMessage` を削減した。
+- `WM_WINDOWMSG` / `WM_ADMINMSG` についても `MgrData::PostWindowMessage()` / `PostAdminMessage()` を追加し、`Window/*`・`DlgMsgLog`・`StateProcLOGINMENU`・`MainFrameRecvProcADMIN|CHAR|MAP` の主要な発行元を共通経路へ移した。
+- この結果、`SDLApp::PollWin32Messages()` で必ずさばく必要がある独自メッセージは、ソケット通知や Win32/MFC 補助 UI 由来のものへかなり絞られてきた。
+- さらに browser 方針として、管理者ダイアログ関連は `StateProcMAP` 側で `__EMSCRIPTEN__` 時に生成・通知・通知種別設定を無効化した。現時点では「ブラウザ版は管理 UI なし」で固定し、ネイティブ専用のまま切り分ける。
+- `IGameLoopHost::OnWin32Message()` を追加し、`SDLApp::PollWin32Messages()` からメインウィンドウ向けの `WM_TIMER` / `WM_COMMAND` / `WM_MAINFRAME` / `WM_WINDOWMSG` / `WM_ADMINMSG` / `WM_MGRDRAW` / `URARASOCK` 通知を `MainFrame` へ直接配送するようにした。
+- これにより `DispatchMessage()` へ残るのは、`WM_CTLCOLORSTATIC` のような同期応答が必要なメッセージや補助 UI 起点のメッセージが中心になり、Win32 サブクラス化の責務をさらに限定できた。
+- あわせて `MainFrame::OnSDLInit()` から `SDL_GetWindowWMInfo()` / サブクラス化 / 保存位置復元を `InitNativeMainWindow()` へ切り出し、SDL 主系初期化とネイティブ専用初期化の境界を明示した。
+- 旧 `WM_CREATE` / `WM_INITEND` ベースのメインフレーム初期化経路は削除し、初期化は `OnSDLInit() -> OnInitEnd()` の 1 本に統一した。
+- ローカルタイトルモードではメインウィンドウのサブクラス化とツールチェックタイマー開始を行わないようにし、ネイティブ専用責務を通常クライアント時に限定した。
+- `WM_CTLCOLORSTATIC` に残っていた `IDC_SAVEPASSWORD` の直接処理は `WindowLOGIN::HandleCtlColorStatic()` へ寄せ、`MainFrame` からログインコントロール固有の知識を減らした。
+
 ### 4. 音声
 
 - `SboCli/src/Lib/DXAudio.*` が残存。
@@ -95,13 +148,31 @@
 - `DlgMsgLog`、デバッグウィンドウ、各種管理ダイアログは `HWND` / MFC / Win32 前提。
 - これらは SDL メインウィンドウ移行とは別レイヤで整理が必要。
 
+#### 2026-04-02 時点の整理方針
+
+- `DlgMsgLog`、管理者ダイアログ、デバッグウィンドウ、各種 `Wnd*` ツールは browser 版では無効化または Null 実装で切る。
+- `WindowLOGIN`、`WindowCHAT`、`WindowCHARNAME` は browser 版で必要なため、Win32 コントロールをやめて SDL テキスト入力ベースへ移行する。
+- 先行対象は `WindowLOGIN`。ここで SDL テキスト入力の土台を作り、その後 `WindowCHAT` と `WindowCHARNAME` に横展開する。
+
 ## 直近の優先タスク
 
-1. `MainFrame` / `SDLApp` に残る `HWND` 取得、サブクラス化、`PeekMessage` 依存をさらに縮退する。
-2. `MgrKeyInput` の DirectInput 依存を外し、入力経路を SDL に統一する。
-3. `MgrDraw` と `Window/*` / `Layer/*` の `HDC` / `CImg32` / GDI 描画を SDL テクスチャ経路へ移す。
-4. `CreateWindow` ベースの補助 UI を SDL UI 化または別レイヤへ分離する。
-5. `DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存を切り分ける。
+1. `WindowLOGIN` を「自前描画 UI + SDL テキスト入力」へ置き換え、`CreateWindow(Edit/Button)` 依存を外す。
+2. `WindowLOGIN` / `WindowCHAT` / `WindowCHARNAME` の browser 側描画を実機で確認し、必要なら `CImg32` / 文字描画まわりの見え方を補強する。
+3. browser 版で不要な補助 UI / 管理 UI / デバッグ UI を Null 実装または無効化で切る。
+4. `MainFrame` / `SDLApp` に残る `HWND` 取得、サブクラス化、`PeekMessage` 依存をさらに縮退する。
+5. `MgrKeyInput` の DirectInput 依存を外し、入力経路を SDL に統一する。
+6. `MgrDraw` と `Window/*` / `Layer/*` の `HDC` / `CImg32` / GDI 描画を SDL テクスチャ経路へ移す。
+7. `DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存を切り分ける。
+
+## 次セッション開始点
+
+- 最初の実装対象は `WindowLOGIN`。
+- ここでは以下を目標にする。
+  - アカウント欄とパスワード欄を SDL テキスト入力で扱えるようにする。
+  - Tab / Shift+Tab / Enter / Escape の遷移を Win32 コントロールではなく SDL イベントと内部状態で処理する。
+  - 「パスワードを記録する」チェックと「接続」ボタンも自前描画 UI として持つ。
+  - `WM_CTLCOLORSTATIC`、`CreateWindow()`、子コントロールのサブクラス化に依存しない `WindowLOGIN` を作る。
+- この土台ができたら、同じ入力モデルを `WindowCHAT` と `WindowCHARNAME` に適用する。
 
 ## 補足
 
@@ -114,3 +185,4 @@
   - `SDLWindow` の `HWND` 保持撤去
   - 終了要求の `SDL_QUIT` helper 共通化
 - 今後の本丸は `Phase 3`、特に描画内部と補助 UI の置換。
+- ただし browser タイトル到達の観点では、その前段として `Phase 3` の入口にある「メッセージ依存の縮退」を優先する。

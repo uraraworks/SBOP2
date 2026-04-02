@@ -1,6 +1,43 @@
 /// @file DXAudio.cpp
 /// @brief XAudio2ベースのオーディオ実装（NO_DIRECTMUSICビルド用）
 #include "stdafx.h"
+#if defined(__EMSCRIPTEN__)
+#include "DXAudio.h"
+
+CDXAudio::CDXAudio() {
+  m_pPerformance = nullptr;
+  m_pDefAudioPath = nullptr;
+  m_pDefAudioPath2 = nullptr;
+  m_pLoader = nullptr;
+  m_hResource = NULL;
+  m_pBgmFmt = nullptr;
+  m_pBgmAudio = nullptr;
+  m_cbBgmAudio = 0;
+  m_pBgmVoice = nullptr;
+  m_fBgmVolume = 1.0f;
+}
+
+CDXAudio::~CDXAudio() {
+}
+
+BOOL CDXAudio::Create(void) { return TRUE; }
+void CDXAudio::Destroy(void) {}
+void CDXAudio::SetResourceHandle(HMODULE hResource) { m_hResource = hResource; }
+BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi) { return FALSE; }
+void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg) {}
+BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg) { return FALSE; }
+BOOL CDXAudio::PlaySecoundary(IDirectMusicSegment8 *pSeg) { return FALSE; }
+void CDXAudio::SetVolPrimary(long lVol) {}
+void CDXAudio::SetVolSecoundary(long lVol) {}
+void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD dwFlg) {}
+void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwFlg) {}
+BOOL CDXAudio::IsPlaying(IDirectMusicSegment8 *pSeg) { return FALSE; }
+BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume) { return FALSE; }
+void CDXAudio::StopBGM() {}
+void CDXAudio::SetBGMVolume(float volume) { m_fBgmVolume = volume; }
+void CDXAudio::FreeBgmResources() {}
+
+#else
 #include <windows.h>
 #include <mmreg.h>
 #include <xaudio2.h>
@@ -269,3 +306,4 @@ void CDXAudio::SetBGMVolume(float volume) {
     ((IXAudio2SourceVoice*)m_pBgmVoice)->SetVolume(m_fBgmVolume);
   }
 }
+#endif

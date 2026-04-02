@@ -6,37 +6,63 @@
 
 #pragma once
 
+#include "ILoginWindow.h"
 #include "WindowBase.h"
 
 class CImg32;
 class CMgrData;
 class CMgrGrpData;
 
-typedef class CWindowLOGIN : public CWindowBase
+typedef class CWindowLOGIN : public CWindowBase, public ILoginWindow
 {
 public:
 			CWindowLOGIN();	// コンストラクタ
 	virtual ~CWindowLOGIN();	// デストラクタ
 
-	void	Create(CMgrData *pMgrData);	// 作成
+	virtual void	Create(CMgrData *pMgrData);	// 作成
 
 	void	Draw(CImg32 *pDst);	// 描画
-	void	Enable(BOOL bEnable);	// 入力許可・禁止
-	void	SetShow(BOOL bShow);	// 表示するか設定
-	void	Save(void);	// アカウントとパスワードを保存
+	virtual void	Enable(BOOL bEnable);	// 入力許可・禁止
+	virtual void	SetShow(BOOL bShow);	// 表示するか設定
+	virtual void	Save(void);	// アカウントとパスワードを保存
+	virtual ILoginWindow	*GetLoginWindowInterface(void)	{ return this; }
 	void	SetCheck(BOOL bCheck);	// パスワードを保存するチェックの設定
 	BOOL	GetCheck(void);	// パスワードを保存するチェックの取得
-	LPCSTR	GetAccount(void)	{ return m_strAccount;	}	// 入力されたアカウントを取得
-	LPCSTR	GetPassword(void)	{ return m_strPassword;	}	// 入力されたパスワードを取得
-
-
+	virtual LPCSTR	GetAccount(void) const	{ return m_strAccount;	}	// 入力されたアカウントを取得
+	virtual LPCSTR	GetPassword(void) const	{ return m_strPassword;	}	// 入力されたパスワードを取得
+	virtual BOOL	HandleSDLKeyDown(UINT vk);
+	virtual void	HandleSDLTextInput(LPCSTR pszText);
+	virtual BOOL	HandleSDLMouseLeftButtonDown(int x, int y);
+	virtual BOOL	HandleKeyDown(UINT vk);
+	virtual void	HandleTextInput(LPCSTR pszText);
+	virtual BOOL	HandleMouseLeftButtonDown(int x, int y);
+#if defined(__EMSCRIPTEN__)
+	void	UpdateBrowserDom(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);	// browser用DOMを更新
+	void	HideBrowserDom(void);	// browser用DOMを非表示
+	void	SetAccountFromBrowser(LPCSTR pszText);	// browser入力欄からアカウント反映
+	void	SetPasswordFromBrowser(LPCSTR pszText);	// browser入力欄からパスワード反映
+	void	SetSavePasswordFromBrowser(BOOL bCheck);	// browserチェック状態反映
+	void	SubmitFromBrowser(void);	// browser接続実行
+	void	SetFocusIndex(int nIndex);	// フォーカスを設定
+#endif
 private:
 	void	MakeWindow(void);	// ウィンドウ作成
+	void	UpdateSDLTextInput(void);	// SDLテキスト入力状態を更新
+	void	MoveFocus(int nStep);	// フォーカスを移動
+	void	DeleteBackward(void);	// 1文字削除
+	void	AppendText(LPCSTR pszText);	// テキスト追記
+	BOOL	IsTextFieldFocus(void) const;	// テキスト入力欄が選択中か
+	BOOL	IsInteractive(void) const;	// 操作可能か
+	BOOL	HitTest(int x, int y, RECT &rcDst, int nFocusIndex) const;	// 当たり判定
+	void	DrawBrowserControls(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);	// browser用コントロール描画
+	void	DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, BOOL bPassword, BOOL bFocused);	// 入力欄描画
+	static BOOL HandleCtlColorStatic(WPARAM wParam, LPARAM lParam, LRESULT &lResult);	// チェックボックス色設定
 	static LRESULT CALLBACK AccountWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// アカウント入力欄プロシージャ
 	static LRESULT CALLBACK PasswordWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// パスワード入力欄プロシージャ
 	static LRESULT CALLBACK SavePasswordWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// パスワードを記録するチェックプロシージャ
 	static LRESULT CALLBACK ConnectWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// 接続ボタンプロシージャ
 	void	OnConnect(void);	// 接続ボタンハンドラ
+	friend class CMainFrame;
 
 
 public:
@@ -45,6 +71,18 @@ public:
 
 
 private:
+#if defined(__EMSCRIPTEN__)
+	enum {
+		LOGINFOCUS_ACCOUNT = 0,
+		LOGINFOCUS_PASSWORD,
+		LOGINFOCUS_SAVEPASSWORD,
+		LOGINFOCUS_CONNECT,
+		LOGINFOCUS_MAX
+	};
+	BOOL	m_bEnabled;
+	BOOL	m_bSavePassword;
+	int		m_nFocusIndex;
+#endif
 	HWND	m_hWndAccount,	// アカウント入力欄
 			m_hWndPassword,	// パスワード入力欄
 			m_hWndSavePassword,	// パスワードを記録するチェック

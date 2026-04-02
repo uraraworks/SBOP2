@@ -6,9 +6,11 @@
 
 #pragma once
 
+#if !defined(__EMSCRIPTEN__)
 #include <atlbase.h>
 #include <atlstr.h>
 #include <atlconv.h>
+#endif
 
 #ifndef MB_ERR_INVALID_CHARS
 #define MB_ERR_INVALID_CHARS 0x00000008

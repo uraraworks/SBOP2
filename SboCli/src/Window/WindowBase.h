@@ -14,6 +14,7 @@ class CMgrData;
 class CMgrDraw;
 class CMgrSound;
 class CMgrGrpData;
+class ILoginWindow;
 
 typedef class CWindowBase
 {
@@ -27,6 +28,10 @@ public:
 	virtual void	Draw(CImg32 *pDst);	// 描画
 	virtual BOOL	TimerProc(void);	// 時間処理
 	virtual void	KeyProc(BYTE byCode, BOOL bDown);	// キー処理
+	virtual ILoginWindow	*GetLoginWindowInterface(void);	// ログインUIインターフェースを取得
+	virtual BOOL	HandleSDLKeyDown(UINT vk);	// SDLキー押下を処理
+	virtual void	HandleSDLTextInput(LPCSTR pszText);	// SDLテキスト入力を処理
+	virtual BOOL	HandleSDLMouseLeftButtonDown(int x, int y);	// SDL左クリックを処理
 			BOOL	IsDelete(void) { return m_bDelete;	}	// 削除判定
 			BOOL	IsInput(void) { return m_bInput;	}	// キー入力を行うか判定
 			BOOL	IsActive(void) { return m_bActive;	}	// アクティブか判定
@@ -42,6 +47,7 @@ public:
 
 
 protected:
+	void PostWindowMessage(DWORD dwPara);	// 自身のウィンドウ通知を保留投入
 	virtual BOOL OnUp(void);	// キーハンドラ(↑)
 	virtual BOOL OnDown(void);	// キーハンドラ(↓)
 	virtual BOOL OnLeft(void);	// キーハンドラ(←)
@@ -60,6 +66,8 @@ protected:
 	void TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	// 黒縁取りで文字描画
 	void TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color);	// 黒縁取りで文字描画(右詰)
 	void TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color = RGB(255, 255, 255));	// 黒縁取りで文字描画
+	void DrawBrowserText(int x, int y, LPCTSTR pStr, COLORREF Color, int nFontSize = 16, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10), BOOL bBold = TRUE);	// browser用テキスト重ね描画
+	void DrawBrowserRect(int x, int y, int cx, int cy, COLORREF ColorFill, BOOL bFill, COLORREF ColorStroke, BOOL bStroke, int nLineWidth = 1, BYTE byFillAlpha = 255, BYTE byStrokeAlpha = 255);	// browser用矩形重ね描画
 	void DrawFrame(int nType = 0);	// フレームを描画
 	void DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRightErace=FALSE);	// フレームを描画
 	void DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	// フレームを描画

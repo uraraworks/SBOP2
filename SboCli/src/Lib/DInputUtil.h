@@ -7,7 +7,15 @@
 #pragma once
 #include <vector>
 
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
 #include <dinput.h>
+#else
+typedef void *LPDIRECTINPUT8;
+typedef void *LPDIRECTINPUTDEVICE8;
+typedef struct _DIDEVICEINSTANCE_STUB *LPDIDEVICEINSTANCE_STUB;
+typedef const struct _DIDEVICEINSTANCE_STUB *LPCDIDEVICEINSTANCE;
+#define DIENUM_CONTINUE 1
+#endif
 
 // 定数の定義
 

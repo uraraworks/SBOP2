@@ -70,8 +70,6 @@ void CLayerCloud::Draw(PCImg32 pDst)
 		};
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aPosX[] = {0, 0, 1, -1, -1, -1, 1, 1}, aPosY[] = {1, -1, 0, 0, 1, -1, -1, 1};
-	HDC hDCBmp, hDCBmp2;
-
 	nMoveX = 0;
 	nMoveY = 0;
 	dPosX = 0.0;
@@ -121,14 +119,7 @@ void CLayerCloud::Draw(PCImg32 pDst)
 		yy = anPos[i * 4 + 1];
 
 		m_pDibBase->BltFrom256(0, 0, cx, cy, m_pDibCloud, xx, yy);
-
-		hDCBmp2 = m_pDibBase->Lock();
-		hDCBmp = pDst->Lock();
-
-		StretchBlt(hDCBmp2, 0, cy * 2, cx * 2, cy * 2, hDCBmp2, 0, 0, cx, cy, SRCCOPY);
-
-		m_pDibBase->Unlock();
-		pDst->Unlock();
+		m_pDibBase->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, m_pDibBase, 0, 0, cx, cy);
 		pDst->BltAlpha(32 + x, 32 + y, cx * 2, cy * 2, m_pDibBase, 0, cy * 2, 75, TRUE);
 	}
 }

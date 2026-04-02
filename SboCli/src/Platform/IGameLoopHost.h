@@ -29,11 +29,14 @@ public:
 	// TimerProc + KeyProc 相当
 	// 描画が必要なフレームならTRUEを返す
 	virtual BOOL OnFrame() = 0;
+	virtual void OnSDLKeyDown(int vk) = 0;
 	virtual void OnSDLKeyUp(int vk) = 0;
+	virtual void OnSDLTextInput(LPCSTR pszText) = 0;
 	virtual void OnSDLMouseMove(int x, int y) = 0;
 	virtual void OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick) = 0;
 	virtual void OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick) = 0;
 	virtual void OnSDLMouseRightButtonDoubleClick(int x, int y) = 0;
+	virtual BOOL OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam) = 0;
 
 	// 描画を行う（SDL: MgrDraw::Draw(SDL_Renderer*) に相当）
 	// SDL_RenderClear は呼び出し元(SDLApp)が行う

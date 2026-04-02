@@ -130,7 +130,7 @@ BOOL CWindowFAMILYTYPE::OnUp(void)
 	}
 	m_nPos --;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	bRet = TRUE;
 Exit:
@@ -149,7 +149,7 @@ BOOL CWindowFAMILYTYPE::OnDown(void)
 	}
 	m_nPos ++;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	bRet = TRUE;
 Exit:
@@ -161,7 +161,7 @@ BOOL CWindowFAMILYTYPE::OnLeft(void)
 {
 	m_nPos = 0;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	return TRUE;
 }
@@ -171,7 +171,7 @@ BOOL CWindowFAMILYTYPE::OnRight(void)
 {
 	m_nPos = m_nPosMax - 1;
 	m_pMgrSound->PlaySound(SOUNDID_CURSORMOVE);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
+	PostWindowMessage(1);
 
 	return TRUE;
 }
@@ -187,7 +187,7 @@ BOOL CWindowFAMILYTYPE::OnX(BOOL bDown)
 	}
 
 	m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 0);
+	PostWindowMessage(0);
 
 	bRet = TRUE;
 Exit:
@@ -205,7 +205,7 @@ BOOL CWindowFAMILYTYPE::OnZ(BOOL bDown)
 	}
 
 	m_pMgrSound->PlaySound(SOUNDID_CANCEL);
-	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, -1);
+	PostWindowMessage(-1);
 	m_bDelete = TRUE;
 
 	bRet = TRUE;

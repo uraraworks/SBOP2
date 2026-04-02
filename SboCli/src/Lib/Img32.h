@@ -36,6 +36,7 @@ public:
 	void	BltPlus(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, int nMax, BOOL bColorKey = FALSE);		// 矩形加算転送
 	void	BltTurnRightAndLeft(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);		// 左右反転して矩形転送
 	void	BltTurnUpAndDown(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);		// 上下反転して矩形転送
+	void	BltStretchNearest(int dx, int dy, int dcx, int dcy, CImg32 *pSrc, int sx, int sy, int scx, int scy, BOOL bColorKey = FALSE);	// 最近傍拡大縮小転送
 
 	HDC		Lock(void);				// 画像をロック
 	void	Unlock(void);			// ロック解除

@@ -8,14 +8,16 @@
 #include "Img32.h"
 #include "MgrData.h"
 #include "MgrKeyInput.h"
-#include "WindowLOGIN.h"
-#include "WindowMSG.h"
-#include "WindowLOGINMENU.h"
 #include "WindowCHARNAME.h"
+#include "WindowCHAT.h"
+#include "WindowLOGIN.h"
+#include "WindowLOGINNull.h"
+#include "WindowMSG.h"
+#if !defined(__EMSCRIPTEN__)
+#include "WindowLOGINMENU.h"
 #include "WindowSEX.h"
 #include "WindowACCOUNTINFO.h"
 #include "WindowSTATUS.h"
-#include "WindowCHAT.h"
 #include "WindowFAMILYTYPE.h"
 #include "WindowHAIRTYPE.h"
 #include "WindowHAIRCOLOR.h"
@@ -46,7 +48,243 @@
 #include "WindowSWOON.h"
 #include "WindowSKILLMENU.h"
 #include "WindowPLACEINFORMATION.h"
+#endif
 #include "MgrWindow.h"
+
+#if defined(__EMSCRIPTEN__)
+
+CMgrWindow::CMgrWindow()
+{
+	m_bDraw = FALSE;
+	m_bKeyInput = FALSE;
+	m_pMgrGrpData = NULL;
+	m_pMgrData = NULL;
+	m_paWindow = new ARRAYWINDOWBASE;
+}
+
+CMgrWindow::~CMgrWindow()
+{
+	Destroy();
+}
+
+void CMgrWindow::Create(CMgrData *pMgrData)
+{
+	m_pMgrData = pMgrData;
+	m_pMgrGrpData = (m_pMgrData != NULL) ? m_pMgrData->GetMgrGrpData() : NULL;
+	m_pMgrKeyInput = (m_pMgrData != NULL) ? m_pMgrData->GetMgrKeyInput() : NULL;
+}
+
+void CMgrWindow::Destroy(void)
+{
+	DeleteAll();
+}
+
+void CMgrWindow::Update(void)
+{
+	int nCount = m_paWindow->size();
+	for (int i = 0; i < nCount; ++i) {
+		m_paWindow->at(i)->Update();
+	}
+}
+
+void CMgrWindow::Draw(PCImg32 pDst)
+{
+	int nCount = m_paWindow->size();
+	for (int i = 0; i < nCount; ++i) {
+		PCWindowBase pWindow = m_paWindow->at(i);
+		if (pWindow->IsShow()) {
+			pWindow->Draw(pDst);
+		}
+	}
+}
+
+BOOL CMgrWindow::TimerProc(void)
+{
+	BOOL bRet = FALSE;
+	for (int i = (int)m_paWindow->size() - 1; i >= 0; --i) {
+		PCWindowBase pWindow = m_paWindow->at(i);
+		if (pWindow->IsDelete()) {
+			Delete(pWindow->GetID());
+			bRet = TRUE;
+		} else {
+			bRet |= pWindow->TimerProc();
+		}
+	}
+
+	if (m_bDraw) {
+		m_bDraw = FALSE;
+		bRet = TRUE;
+	}
+	return bRet;
+}
+
+void CMgrWindow::KeyProc(BYTE byEvent, BOOL bDown)
+{
+	for (int i = (int)m_paWindow->size() - 1; i >= 0; --i) {
+		PCWindowBase pWindow = m_paWindow->at(i);
+		if (pWindow->IsActive()) {
+			pWindow->KeyProc(byEvent, bDown);
+			break;
+		}
+	}
+}
+
+void CMgrWindow::DeleteAll(void)
+{
+	PCWindowBase pTmp = NULL;
+	FreeInfo(m_paWindow, pTmp);
+	m_bDraw = TRUE;
+	m_bKeyInput = FALSE;
+}
+
+void CMgrWindow::Delete(int nID)
+{
+	for (int i = 0; i < (int)m_paWindow->size(); ++i) {
+		PCWindowBase pWindow = m_paWindow->at(i);
+		if (pWindow->GetID() == nID) {
+			SAFE_DELETE(pWindow);
+			m_paWindow->erase(m_paWindow->begin() + i);
+			SetActive();
+			m_bDraw = TRUE;
+			if (m_pMgrKeyInput) {
+				m_pMgrKeyInput->Reset();
+			}
+			break;
+		}
+	}
+}
+
+CWindowBase *CMgrWindow::GetWindow(int nID)
+{
+	for (int i = 0; i < (int)m_paWindow->size(); ++i) {
+		PCWindowBase pTmp = m_paWindow->at(i);
+		if (pTmp->GetID() == nID) {
+			return pTmp;
+		}
+	}
+	return NULL;
+}
+
+CWindowBase *CMgrWindow::GetActiveWindow(void)
+{
+	for (int i = (int)m_paWindow->size() - 1; i >= 0; --i) {
+		PCWindowBase pWindow = m_paWindow->at(i);
+		if (pWindow->IsActive()) {
+			return pWindow;
+		}
+	}
+	return NULL;
+}
+
+ILoginWindow *CMgrWindow::GetLoginWindow(void)
+{
+	CWindowBase *pWindow = GetWindow(WINDOWTYPE_LOGIN);
+	return (pWindow != NULL) ? pWindow->GetLoginWindowInterface() : NULL;
+}
+
+BOOL CMgrWindow::IsKeyInput(void)
+{
+	return m_bKeyInput;
+}
+
+void CMgrWindow::MakeWindowLOGIN(void)
+{
+	CWindowBase *pWindowNew = new CWindowLOGIN;
+
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+
+void CMgrWindow::MakeWindowMSG(LPCSTR pszMsg, DWORD dwTime, int nType)
+{
+	PCWindowMSG pWindowNew = new CWindowMSG;
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetMsg(pszMsg, dwTime, nType);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+
+void CMgrWindow::MakeWindowLOGINMENU(void) {}
+void CMgrWindow::MakeWindowCHARNAME(void)
+{
+	PCWindowCHARNAME pWindowNew = new CWindowCHARNAME;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowSEX(void) {}
+void CMgrWindow::MakeWindowACCOUNTINFO(void) {}
+void CMgrWindow::MakeWindowSTATUS(BOOL bShow) { (void)bShow; }
+void CMgrWindow::MakeWindowCHAT(void)
+{
+	PCWindowCHAT pWindowNew = new CWindowCHAT;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowFAMILYTYPE(void) {}
+void CMgrWindow::MakeWindowHAIRTYPE(void) {}
+void CMgrWindow::MakeWindowHAIRCOLOR(void) {}
+void CMgrWindow::MakeWindowEYECOLOR(void) {}
+void CMgrWindow::MakeWindowSTYLESELECT(void) {}
+void CMgrWindow::MakeWindowNAMEINPUT(void) {}
+void CMgrWindow::MakeWindowSYSTEMMENU(void) {}
+void CMgrWindow::MakeWindowSETCOLOR(void) {}
+void CMgrWindow::MakeWindowSETBGMVOLUME(void) {}
+void CMgrWindow::MakeWindowSETSOUNDVOLUME(void) {}
+void CMgrWindow::MakeWindowSETDRAWMODE(void) {}
+void CMgrWindow::MakeWindowITEMMENU(void) {}
+void CMgrWindow::MakeWindowITEMMENU_SELECT(int nPos, DWORD dwItemID) { (void)nPos; (void)dwItemID; }
+void CMgrWindow::MakeWindowOPTION(void) {}
+void CMgrWindow::MakeWindowOPTION_VIEWSET(void) {}
+void CMgrWindow::MakeWindowOPTION_VOLUMESET(void) {}
+void CMgrWindow::MakeWindowOPTION_INPUTSET(void) {}
+void CMgrWindow::MakeWindowOPTION_TASKBAR(void) {}
+void CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE(void) {}
+void CMgrWindow::MakeWindowOPTION_ACTIONSET(void) {}
+void CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER(void) {}
+void CMgrWindow::MakeWindowCOMMANDMENU(void) {}
+void CMgrWindow::MakeWindowCHAR_STATUS(void) {}
+void CMgrWindow::MakeWindowCHAR_STATUS4(void) {}
+void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg)
+{
+	(void)pszTitle;
+	(void)pszName;
+	MakeWindowMSG(pszMsg, 0, 0);
+}
+void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo)
+{
+	(void)pszTitle;
+	(void)pszName;
+	(void)pInfo;
+}
+void CMgrWindow::MakeWindowSWOON(void) {}
+void CMgrWindow::MakeWindowSKILLMENU(int nType) { (void)nType; }
+void CMgrWindow::MakeWindowPLACEINFORMATION(void) {}
+
+void CMgrWindow::SetActive(void)
+{
+	BOOL bSet = FALSE;
+	m_bKeyInput = FALSE;
+
+	for (int i = (int)m_paWindow->size() - 1; i >= 0; --i) {
+		PCWindowBase pWindow = m_paWindow->at(i);
+		if (pWindow->IsInput() == FALSE) {
+			continue;
+		}
+		pWindow->SetActive(1 - bSet);
+		bSet = TRUE;
+	}
+
+	m_bKeyInput = bSet;
+}
+
+#else
 
 
 CMgrWindow::CMgrWindow()
@@ -215,6 +453,36 @@ CWindowBase *CMgrWindow::GetWindow(int nID)
 }
 
 
+CWindowBase *CMgrWindow::GetActiveWindow(void)
+{
+	int i, nCount;
+	PCWindowBase pWindow;
+
+	nCount = m_paWindow->size();
+	for (i = nCount - 1; i >= 0; i--) {
+		pWindow = m_paWindow->at(i);
+		if (pWindow->IsActive()) {
+			return pWindow;
+		}
+	}
+
+	return NULL;
+}
+
+
+ILoginWindow *CMgrWindow::GetLoginWindow(void)
+{
+	CWindowBase *pWindow;
+
+	pWindow = GetWindow(WINDOWTYPE_LOGIN);
+	if (pWindow == NULL) {
+		return NULL;
+	}
+
+	return pWindow->GetLoginWindowInterface();
+}
+
+
 BOOL CMgrWindow::IsKeyInput(void)
 {
 	int i, nCount;
@@ -243,9 +511,13 @@ Exit:
 
 void CMgrWindow::MakeWindowLOGIN(void)
 {
-	PCWindowLOGIN pWindowNew;
+	CWindowBase *pWindowNew;
 
-	pWindowNew = new CWindowLOGIN;
+	if (m_pMgrData->IsLocalTitleMode()) {
+		pWindowNew = new CWindowLOGINNull;
+	} else {
+		pWindowNew = new CWindowLOGIN;
+	}
 	pWindowNew->Create(m_pMgrData);
 	m_paWindow->Add(pWindowNew);
 
@@ -758,3 +1030,5 @@ void CMgrWindow::SetActive(void)
 
 	m_bKeyInput = bSet;
 }
+
+#endif

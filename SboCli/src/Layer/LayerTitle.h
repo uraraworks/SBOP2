@@ -24,6 +24,7 @@ public:
 	BOOL TimerProc(void); // 時間処理
 	void StartFadeIn(void); // フェードイン開始
 	void EndFadeIn(void); // フェードイン終了
+	void SetFadeLevel(int nFadeLevel); // フェードレベルを直接設定
 	BOOL IsFadeInEnd(void); // フェードイン終了？
 
 

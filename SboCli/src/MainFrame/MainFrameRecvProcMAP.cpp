@@ -76,7 +76,7 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 		m_pMgrData->SetMap(pInfoMap);
 		pInfoMap->RenewMapEvent();
 		m_pLibInfoChar->DeleteOutScreen(pInfoChar, TRUE);
-		PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, (DWORD)-1);
+	PostAdminMessage(ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, (DWORD)-1);
 		m_pMgrSound->PlayBGM(pInfoMap->m_dwBGMID, TRUE);
 	}
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get(LAYERTYPE_MAP);
@@ -87,8 +87,8 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 	m_pLibInfoMap->SetMapObject(m_pLibInfoMapObject);
 	m_pLibInfoMap->RenewHitTmp();
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWMAPINFO, 0);
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWMAPINFO, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
@@ -99,7 +99,7 @@ void CMainFrame::RecvProcMAP_ONLINE(PBYTE pData)
 	Packet.Set(pData);
 	m_pMgrData->SetOnlineCount(Packet.m_nCount);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWONLINECOUNT, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWONLINECOUNT, 0);
 }
 
 
@@ -124,7 +124,7 @@ void CMainFrame::RecvProcMAP_SYSTEMMSG(PBYTE pData)
 		m_pMgrSound->PlaySound(SOUNDID_W_CHAT);
 	}
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, (LPARAM)Packet.m_nMsgType);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, (LPARAM)Packet.m_nMsgType);
 	FlashMainWindow();
 }
 
@@ -246,7 +246,7 @@ void CMainFrame::RecvProcMAP_FORMATMSG(PBYTE pData)
 		FlashMainWindow();
 	}
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
 }
 
 
@@ -259,7 +259,7 @@ void CMainFrame::RecvProcMAP_MAPOBJECT(PBYTE pData)
 	m_pLibInfoMapObject->Merge(Packet.m_pLibInfoMapObject);
 	m_pLibInfoMap->RenewHitTmp();
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPOBJECT, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPOBJECT, 0);
 }
 
 
@@ -278,7 +278,7 @@ void CMainFrame::RecvProcMAP_MAPOBJECTDATA(PBYTE pData)
 	pInfoMap->m_pLibInfoMapObjectData->Merge(Packet.m_pLibInfo);
 	m_pLibInfoMap->RenewHitTmp();
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
@@ -297,7 +297,7 @@ void CMainFrame::RecvProcMAP_DELETEMAPOBJECTDATA(PBYTE pData)
 	pInfoMap->m_pLibInfoMapObjectData->Delete(Packet.m_dwPara);
 	pInfoMap->RenewHitTmp();
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
@@ -310,7 +310,7 @@ void CMainFrame::RecvProcMAP_MAPPARTS(PBYTE pData)
 	m_pLibInfoMapParts->Merge(Packet.m_pLibInfoMapParts);
 	m_pLibInfoMapParts->ResetAnime();
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPPARTS, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPPARTS, 0);
 }
 
 
@@ -349,8 +349,8 @@ void CMainFrame::RecvProcMAP_RENEWMAPSIZE(PBYTE pData)
 	m_pLibInfoChar->RenewSize(Packet.m_dwMapID, Packet.m_nDirection, Packet.m_nSize);
 	m_pLibInfoItem->RenewSize(Packet.m_dwMapID, Packet.m_nDirection, Packet.m_nSize);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWMAPINFO, 0);
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWMAPINFO, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
@@ -363,7 +363,7 @@ void CMainFrame::RecvProcMAP_DELETEPARTS(PBYTE pData)
 	m_pLibInfoMapParts->Delete(Packet.m_dwPartsID);
 	m_pLibInfoMap->DeleteParts(Packet.m_dwPartsID);
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPPARTS, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPPARTS, 0);
 }
 
 
@@ -402,7 +402,7 @@ void CMainFrame::RecvProcMAP_DELETEMAPSHADOW(PBYTE pData)
 	m_pLibInfoMapShadow->Delete(Packet.m_dwShadowID);
 	m_pLibInfoMap->DeleteShadow(Packet.m_dwShadowID);
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPSHADOW, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPSHADOW, 0);
 }
 
 
@@ -434,8 +434,8 @@ void CMainFrame::RecvProcMAP_MAPNAME(PBYTE pData)
 	}
 	m_pMgrSound->PlayBGM(pInfoMap->m_dwBGMID, TRUE);
 
-	PostMessage(m_hWnd, WM_MAINFRAME, MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+	PostMainFrameMessage(MAINFRAMEMSG_RENEWSYSTEMMSG, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
@@ -454,7 +454,7 @@ void CMainFrame::RecvProcMAP_MAPEVENT(PBYTE pData)
 	pInfoMap->m_pLibInfoMapEvent->Merge(Packet.m_pLibInfo);
 	pInfoMap->RenewMapEvent();
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPINFO, 0);
 }
 
 
@@ -473,7 +473,7 @@ void CMainFrame::RecvProcMAP_DELETEEVENT(PBYTE pData)
 	pInfoMap->m_pLibInfoMapEvent->Delete(Packet.m_dwPara);
 	pInfoMap->RenewMapEvent();
 
-	PostMessage(m_hWnd, WM_ADMINMSG, ADMINMSG_RENEWMAPINFO, 0);
+	PostAdminMessage(ADMINMSG_RENEWMAPINFO, 0);
 }
 
 

@@ -5,10 +5,33 @@
 /// @copyright Copyright(C)URARA-works 2005
 
 #include "stdafx.h"
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+#endif
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "Img32.h"
 #include "LayerLogo.h"
+
+#if defined(__EMSCRIPTEN__)
+EM_JS(void, SBOP2_DebugMarkLogoDraw, (), {
+	Module.sbop2LogoDrawCount = (Module.sbop2LogoDrawCount || 0) + 1;
+});
+EM_JS(void, SBOP2_DebugMarkLogoPixels, (const unsigned char *pBits, int width, int height), {
+	if (!pBits || width <= 0 || height <= 0) {
+		return;
+	}
+	const base = pBits >>> 0;
+	const stride = width * 4;
+	function sample(x, y) {
+		const iy = (height - 1 - y);
+		const idx = base + iy * stride + x * 4;
+		return HEAPU8[idx + 0] + '/' + HEAPU8[idx + 1] + '/' + HEAPU8[idx + 2] + '/' + HEAPU8[idx + 3];
+	}
+	Module.sbop2LogoTopLeft = sample(32, 32);
+	Module.sbop2LogoCenter = sample(width / 2, height / 2);
+});
+#endif
 
 
 CLayerLogo::CLayerLogo()
@@ -36,19 +59,28 @@ void CLayerLogo::Create(
 void CLayerLogo::Draw(PCImg32 pDst)
 {
 	int cx, cy;
-	HDC hDCBmp, hDCBmp2;
+
+#if defined(__EMSCRIPTEN__)
+	SBOP2_DebugMarkLogoDraw();
+#endif
 
 	cx = m_pDibBase->Width();
 	cy = m_pDibBase->Height();
 	m_pDibBase->FillRect(0, 0, cx, cy, RGB(255, 255, 255));
 	m_pDibBase->BltFrom256(cx / 2 - 104, cy / 2 - 40, 208, 80, m_pDibLogo, 0, 0, TRUE);
 
-	hDCBmp2 = m_pDibBase->Lock();
-	hDCBmp = pDst->Lock();
+	pDst->BltStretchNearest(
+		32,
+		32,
+		pDst->Width() - 64,
+		pDst->Height() - 64,
+		m_pDibBase,
+		0,
+		0,
+		m_pDibBase->Width(),
+		m_pDibBase->Height());
 
-	StretchBlt(hDCBmp, 32, 32, pDst->Width() - 64, pDst->Height() - 64,
-			hDCBmp2, 0, 0, m_pDibBase->Width(), m_pDibBase->Height(), SRCCOPY);
-
-	m_pDibBase->Unlock();
-	pDst->Unlock();
+#if defined(__EMSCRIPTEN__)
+	SBOP2_DebugMarkLogoPixels(pDst->GetBits(), pDst->Width(), pDst->Height());
+#endif
 }

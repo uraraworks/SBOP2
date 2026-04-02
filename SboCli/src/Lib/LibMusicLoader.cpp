@@ -7,6 +7,133 @@
 #include "stdafx.h"
 #include "LibMusicLoader.h"
 
+#if defined(__EMSCRIPTEN__)
+
+CLibMusicLoader::CLibMusicLoader()
+{
+	m_hLib = NULL;
+	m_pOpen1 = NULL;
+	m_pOpen2 = NULL;
+	m_pClose = NULL;
+	m_pFadeIn = NULL;
+	m_pFadeOut = NULL;
+	m_pPlayTime = NULL;
+	m_pPlay1 = NULL;
+	m_pPlay2 = NULL;
+	m_pCont = NULL;
+	m_pStop = NULL;
+	m_pIsPlay = NULL;
+	m_pSetLoop = NULL;
+	m_pSetRelativeVolume = NULL;
+	m_pGetTitle = NULL;
+	m_pGetAllTime = NULL;
+	m_pGetPlayTime = NULL;
+}
+
+CLibMusicLoader::~CLibMusicLoader()
+{
+}
+
+void CLibMusicLoader::Load(void)
+{
+}
+
+void CLibMusicLoader::Free(void)
+{
+}
+
+BOOL CLibMusicLoader::Open(LPCSTR pFileName, LPCSTR pType)
+{
+	(void)pFileName;
+	(void)pType;
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::Open(HMODULE hResource, HRSRC hSrc, LPCSTR pType)
+{
+	(void)hResource;
+	(void)hSrc;
+	(void)pType;
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::Close(void)
+{
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::FadeIn(INT nTime, INT nVolume)
+{
+	(void)nTime;
+	(void)nVolume;
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::FadeOut(INT nTime)
+{
+	(void)nTime;
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::PlayTime(DWORD dwTime)
+{
+	(void)dwTime;
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::Play(DWORDLONG dwlCount)
+{
+	(void)dwlCount;
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::Play(void)
+{
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::Cont(void)
+{
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::Stop(void)
+{
+	return FALSE;
+}
+
+BOOL CLibMusicLoader::IsPlay(void)
+{
+	return FALSE;
+}
+
+void CLibMusicLoader::SetLoop(BOOL bLoop)
+{
+	(void)bLoop;
+}
+
+void CLibMusicLoader::SetRelativeVolume(INT nVolume)
+{
+	(void)nVolume;
+}
+
+LPCSTR CLibMusicLoader::GetTitle(void)
+{
+	return NULL;
+}
+
+DWORDLONG CLibMusicLoader::GetAllTime(void)
+{
+	return 0;
+}
+
+DWORDLONG CLibMusicLoader::GetPlayTime(void)
+{
+	return 0;
+}
+
+#else
+
 CLibMusicLoader::CLibMusicLoader()
 {
 	m_hLib = NULL;
@@ -216,3 +343,5 @@ DWORDLONG CLibMusicLoader::GetPlayTime(void)
 	}
 	return m_pGetPlayTime();
 }
+
+#endif

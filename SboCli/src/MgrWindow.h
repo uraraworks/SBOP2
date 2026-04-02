@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "Window/ILoginWindow.h"
 #include "WindowBase.h"
 
 class CImg32;
@@ -79,6 +80,8 @@ public:
 	void		DeleteAll(void);						// 全てのウィンドウを破棄
 	void		Delete(int nID);						// 指定IDのウィンドウを削除
 	CWindowBase	*GetWindow(int nID);					// 指定IDのウィンドウを取得
+	CWindowBase	*GetActiveWindow(void);				// アクティブなウィンドウを取得
+	ILoginWindow	*GetLoginWindow(void);				// ログインUIを取得
 	BOOL		IsKeyInput(void);						// キー処理の必要があるか判定
 
 	// ウィンドウ作成

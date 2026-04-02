@@ -6,6 +6,7 @@
 
 #pragma once
 
+#if !defined(__EMSCRIPTEN__)
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
@@ -33,3 +34,4 @@ public:
 };
 
 //{{AFX_INSERT_LOCATION}}
+#endif

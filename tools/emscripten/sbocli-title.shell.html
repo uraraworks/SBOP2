@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SBOP2 SboCli Title</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10141a;
+      --panel: #18202a;
+      --text: #e7edf5;
+      --subtle: #91a0b3;
+      --accent: #58c4dd;
+      --border: #2d3947;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top, #1f2a36 0%, var(--bg) 45%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .layout {
+      width: min(92vw, 760px);
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .panel {
+      background: rgba(24, 32, 42, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--subtle);
+      font-size: 14px;
+    }
+
+    .status {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .probe {
+      color: var(--subtle);
+      font: 12px/1.5 Consolas, monospace;
+      word-break: break-all;
+    }
+
+    .canvas-wrap {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 10px;
+      position: relative;
+    }
+
+    .canvas-stage {
+      position: relative;
+      width: min(90vw, 480px);
+      height: min(90vw, 480px);
+    }
+
+    #canvas {
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      background: #000;
+      border: 1px solid #000;
+      outline: none;
+    }
+
+    .login-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      font-family: "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
+      color: #111;
+    }
+
+    .login-panel {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .login-label {
+      position: absolute;
+      left: 0;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 700;
+      color: #111;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+      white-space: nowrap;
+    }
+
+    .login-input {
+      position: absolute;
+      margin: 0;
+      padding: 0 4px;
+      border: 1px solid #9b6a38;
+      background: #fffaf3;
+      color: #111;
+      font: 12px/1 "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
+      pointer-events: auto;
+      outline: none;
+    }
+
+    .login-input:focus {
+      border-color: #ffc96d;
+      box-shadow: 0 0 0 1px #ffc96d;
+    }
+
+    .login-check {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #111;
+      pointer-events: auto;
+      white-space: nowrap;
+    }
+
+    .login-check input {
+      width: 12px;
+      height: 12px;
+      margin: 0;
+      accent-color: #9b6a38;
+    }
+
+    .login-button {
+      position: absolute;
+      margin: 0;
+      padding: 0;
+      border: 1px solid #9b6a38;
+      background: linear-gradient(#fff0cf, #e7be80);
+      color: #111;
+      font: 12px/1 "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .login-button:disabled,
+    .login-input:disabled,
+    .login-check input:disabled {
+      opacity: 0.7;
+      cursor: default;
+    }
+
+    #output {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      background: #0d1117;
+      color: #d7e2f0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      font: 12px/1.5 Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+  <main class="layout">
+    <section class="panel header">
+      <div>SBOP2 browser title build</div>
+      <div id="status" class="status">起動中...</div>
+    </section>
+
+    <section class="panel probe">
+      <div id="canvasProbe">canvas-probe: pending</div>
+    </section>
+
+    <section class="panel canvas-wrap">
+      <div class="canvas-stage">
+        <canvas id="canvas" width="480" height="480" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+        <div id="loginOverlay" class="login-overlay" hidden>
+          <div id="loginPanel" class="login-panel">
+            <div id="loginLabelAccount" class="login-label">アカウント</div>
+            <div id="loginLabelPassword" class="login-label">パスワード</div>
+            <input id="loginAccount" class="login-input" type="text" spellcheck="false" autocomplete="username">
+            <input id="loginPassword" class="login-input" type="password" spellcheck="false" autocomplete="current-password">
+            <label id="loginSaveWrap" class="login-check">
+              <input id="loginSave" type="checkbox">
+              <span>パスワードを記録する</span>
+            </label>
+            <button id="loginConnect" class="login-button" type="button">接続</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <textarea id="output" rows="8" readonly></textarea>
+    </section>
+  </main>
+
+  <script>
+    const statusElement = document.getElementById('status');
+    const canvasElement = document.getElementById('canvas');
+    const outputElement = document.getElementById('output');
+    const probeElement = document.getElementById('canvasProbe');
+    const loginOverlay = document.getElementById('loginOverlay');
+    const loginPanel = document.getElementById('loginPanel');
+    const loginLabelAccount = document.getElementById('loginLabelAccount');
+    const loginLabelPassword = document.getElementById('loginLabelPassword');
+    const loginAccountInput = document.getElementById('loginAccount');
+    const loginPasswordInput = document.getElementById('loginPassword');
+    const loginSaveWrap = document.getElementById('loginSaveWrap');
+    const loginSaveInput = document.getElementById('loginSave');
+    const loginConnectButton = document.getElementById('loginConnect');
+
+    function callLoginBridge(name, argTypes, args) {
+      if (!Module || typeof Module.ccall !== 'function') {
+        return;
+      }
+      Module.ccall(name, null, argTypes, args);
+    }
+
+    function focusLoginControl(focusIndex) {
+      if (focusIndex === 0 && document.activeElement !== loginAccountInput) {
+        loginAccountInput.focus({ preventScroll: true });
+      } else if (focusIndex === 1 && document.activeElement !== loginPasswordInput) {
+        loginPasswordInput.focus({ preventScroll: true });
+      } else if (focusIndex === 2 && document.activeElement !== loginSaveInput) {
+        loginSaveInput.focus({ preventScroll: true });
+      } else if (focusIndex === 3 && document.activeElement !== loginConnectButton) {
+        loginConnectButton.focus({ preventScroll: true });
+      }
+    }
+
+    window.SBOP2HideLoginOverlay = function() {
+      loginOverlay.hidden = true;
+    };
+
+    window.SBOP2UpdateLoginOverlay = function(state) {
+      if (!state || !state.visible) {
+        window.SBOP2HideLoginOverlay();
+        return;
+      }
+
+      const canvasRect = canvasElement.getBoundingClientRect();
+      const scaleX = canvasRect.width / canvasElement.width;
+      const scaleY = canvasRect.height / canvasElement.height;
+
+      loginOverlay.hidden = false;
+      const overlayOffsetX = Math.round(-22 * scaleX);
+      const overlayOffsetY = Math.round(-22 * scaleY);
+      const fontSizeLabel = Math.max(11, Math.round(12 * scaleY));
+      const fontSizeInput = Math.max(11, Math.round(12 * scaleY));
+      const fontSizeCheck = Math.max(10, Math.round(11 * scaleY));
+      const fontSizeButton = Math.max(11, Math.round(12 * scaleY));
+
+      loginPanel.style.left = ((state.windowX * scaleX) + overlayOffsetX) + 'px';
+      loginPanel.style.top = ((state.windowY * scaleY) + overlayOffsetY) + 'px';
+      loginPanel.style.width = (state.windowW * scaleX) + 'px';
+      loginPanel.style.height = (state.windowH * scaleY) + 'px';
+
+      loginLabelAccount.style.left = Math.round(18 * scaleX) + 'px';
+      loginLabelAccount.style.top = Math.round(6 * scaleY) + 'px';
+      loginLabelPassword.style.left = Math.round(18 * scaleX) + 'px';
+      loginLabelPassword.style.top = Math.round(32 * scaleY) + 'px';
+      loginLabelAccount.style.fontSize = fontSizeLabel + 'px';
+      loginLabelPassword.style.fontSize = fontSizeLabel + 'px';
+
+      loginAccountInput.style.left = Math.round((state.accountX - state.windowX - 8) * scaleX) + 'px';
+      loginAccountInput.style.top = Math.round((state.accountY - state.windowY - 12) * scaleY) + 'px';
+      loginAccountInput.style.width = (state.accountW * scaleX) + 'px';
+      loginAccountInput.style.height = (state.accountH * scaleY) + 'px';
+      loginAccountInput.style.fontSize = fontSizeInput + 'px';
+
+      loginPasswordInput.style.left = Math.round((state.passwordX - state.windowX - 8) * scaleX) + 'px';
+      loginPasswordInput.style.top = Math.round((state.passwordY - state.windowY - 12) * scaleY) + 'px';
+      loginPasswordInput.style.width = (state.passwordW * scaleX) + 'px';
+      loginPasswordInput.style.height = (state.passwordH * scaleY) + 'px';
+      loginPasswordInput.style.fontSize = fontSizeInput + 'px';
+
+      loginSaveWrap.style.left = Math.round((state.checkX - state.windowX - 4) * scaleX) + 'px';
+      loginSaveWrap.style.top = Math.round((state.checkY - state.windowY - 10) * scaleY) + 'px';
+      loginSaveWrap.style.fontSize = fontSizeCheck + 'px';
+
+      loginConnectButton.style.left = Math.round((state.buttonX - state.windowX - 10) * scaleX) + 'px';
+      loginConnectButton.style.top = Math.round((state.buttonY - state.windowY - 10) * scaleY) + 'px';
+      loginConnectButton.style.width = (state.buttonW * scaleX) + 'px';
+      loginConnectButton.style.height = (state.buttonH * scaleY) + 'px';
+      loginConnectButton.style.fontSize = fontSizeButton + 'px';
+
+      if (loginAccountInput.value !== state.account) {
+        loginAccountInput.value = state.account;
+      }
+      if (loginPasswordInput.value !== state.password) {
+        loginPasswordInput.value = state.password;
+      }
+      loginSaveInput.checked = !!state.savePassword;
+
+      loginAccountInput.disabled = !state.enabled;
+      loginPasswordInput.disabled = !state.enabled;
+      loginSaveInput.disabled = !state.enabled;
+      loginConnectButton.disabled = !state.enabled;
+
+      focusLoginControl(state.focusIndex);
+    };
+
+    loginAccountInput.addEventListener('focus', () => callLoginBridge('SBOP2_BrowserLoginSetFocus', ['number'], [0]));
+    loginPasswordInput.addEventListener('focus', () => callLoginBridge('SBOP2_BrowserLoginSetFocus', ['number'], [1]));
+    loginSaveInput.addEventListener('focus', () => callLoginBridge('SBOP2_BrowserLoginSetFocus', ['number'], [2]));
+    loginConnectButton.addEventListener('focus', () => callLoginBridge('SBOP2_BrowserLoginSetFocus', ['number'], [3]));
+
+    loginAccountInput.addEventListener('input', (event) => {
+      callLoginBridge('SBOP2_BrowserLoginSetAccount', ['string'], [event.target.value]);
+    });
+    loginPasswordInput.addEventListener('input', (event) => {
+      callLoginBridge('SBOP2_BrowserLoginSetPassword', ['string'], [event.target.value]);
+    });
+    loginSaveInput.addEventListener('change', (event) => {
+      callLoginBridge('SBOP2_BrowserLoginSetSavePassword', ['number'], [event.target.checked ? 1 : 0]);
+    });
+    loginConnectButton.addEventListener('click', () => {
+      callLoginBridge('SBOP2_BrowserLoginConnect', [], []);
+    });
+
+    for (const element of [loginAccountInput, loginPasswordInput]) {
+      element.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          callLoginBridge('SBOP2_BrowserLoginConnect', [], []);
+        }
+      });
+    }
+
+    function pumpSingleFrame() {
+      if (!Module || typeof Module._SBOP2_BrowserPumpSingleFrame !== 'function') {
+        return false;
+      }
+      if (Module.lastRunDependencyCount > 0) {
+        return false;
+      }
+      Module._SBOP2_BrowserPumpSingleFrame();
+      Module.sbop2PumpFallbackActive = 1;
+      Module.sbop2PumpFallbackTick = (Module.sbop2PumpFallbackTick || 0) + 1;
+      return true;
+    }
+
+    function ensurePumpFallback() {
+      if (!Module || Module.sbop2PumpFallbackChecked) {
+        return;
+      }
+      Module.sbop2PumpFallbackChecked = 1;
+      Module.sbop2PumpFallbackLastDraw = 0;
+      Module.sbop2PumpFallbackLastChange = Date.now();
+      Module.sbop2PumpFallbackTimer = window.setInterval(() => {
+        if (!Module) {
+          return;
+        }
+        const drawCount = Module.sbop2OnDrawCount || 0;
+        if (Module.sbop2PumpFallbackLastDraw !== drawCount) {
+          Module.sbop2PumpFallbackLastDraw = drawCount;
+          Module.sbop2PumpFallbackLastChange = Date.now();
+        }
+
+        const gameState = Module.sbop2GameState || 0;
+        const needsLogoFrames = gameState === 1 || gameState === 3;
+        const stalledMs = Date.now() - (Module.sbop2PumpFallbackLastChange || 0);
+        if (needsLogoFrames && stalledMs >= 120) {
+          pumpSingleFrame();
+        }
+        updateCanvasProbe();
+      }, 33);
+
+      window.setTimeout(() => {
+        if ((Module.sbop2OnDrawCount || 0) === 0) {
+          pumpSingleFrame();
+          updateCanvasProbe();
+        }
+      }, 200);
+    }
+
+    function updateCanvasProbe() {
+      if (!probeElement) {
+        return;
+      }
+      try {
+        const ctx = canvasElement.getContext('2d');
+        let samples = 'no-ctx';
+        if (ctx) {
+          const samplePoints = [
+            [0, 0],
+            [32, 32],
+            [80, 80],
+            [240, 240]
+          ];
+          samples = samplePoints.map(([x, y]) => {
+            const pixel = ctx.getImageData(x, y, 1, 1).data;
+            return x + ',' + y + '=' + pixel[0] + '/' + pixel[1] + '/' + pixel[2] + '/' + pixel[3];
+          }).join(' ');
+        }
+        const presentCount = (Module && Module.sbop2PresentCount) || 0;
+        const presentSize = (Module && Module.sbop2PresentSize) || 'none';
+        const presentSample = (Module && Module.sbop2PresentSample) || 'none';
+        const logoDraw = (Module && Module.sbop2LogoDrawCount) || 0;
+        const gameState = (Module && Module.sbop2GameState);
+        const hasStateProc = (Module && Module.sbop2HasStateProc);
+        const chgStateCount = (Module && Module.sbop2ChgStateCount) || 0;
+        const onDrawCount = (Module && Module.sbop2OnDrawCount) || 0;
+        const onDrawState = (Module && Module.sbop2OnDrawState);
+        const onDrawHasRenderer = (Module && Module.sbop2OnDrawHasRenderer);
+        const onDrawNullMgrDraw = (Module && Module.sbop2OnDrawNullMgrDraw) || 0;
+        const pumpActive = (Module && Module.sbop2PumpFallbackActive) || 0;
+        const pumpTick = (Module && Module.sbop2PumpFallbackTick) || 0;
+        const initEndReached = (Module && Module.sbop2InitEndReached) || 0;
+        const grpLoadResult = (Module && Module.sbop2GrpLoadResult);
+        const grpFoundBase = (Module && Module.sbop2GrpFoundBase);
+        const grpSystemExists = (Module && Module.sbop2GrpSystemExists);
+        const grpSystemRead = (Module && Module.sbop2GrpSystemRead);
+        const grpTitleExists = (Module && Module.sbop2GrpTitleExists);
+        const grpTitleBackExists = (Module && Module.sbop2GrpTitleBackExists);
+        const grpTitleCloudExists = (Module && Module.sbop2GrpTitleCloudExists);
+        const logoTopLeft = (Module && Module.sbop2LogoTopLeft) || 'none';
+        const logoCenter = (Module && Module.sbop2LogoCenter) || 'none';
+        const layerSample = (Module && Module.sbop2LayerSample) || 'none';
+        const windowSample = (Module && Module.sbop2WindowSample) || 'none';
+        const cppRgbaHead = (Module && Module.sbop2CppRgbaHead) || 'none';
+        const presentPtr = (Module && Module.sbop2PresentPtr) || 'none';
+        const fsSystem = (typeof FS !== 'undefined') ? FS.analyzePath('/SboGrpData/res/system.png').exists : 'noFS';
+        const fsTitle = (typeof FS !== 'undefined') ? FS.analyzePath('/SboGrpData/res/title.png').exists : 'noFS';
+        const fsTitleBack = (typeof FS !== 'undefined') ? FS.analyzePath('/SboGrpData/res/title_back.png').exists : 'noFS';
+        const fsTitleCloud = (typeof FS !== 'undefined') ? FS.analyzePath('/SboGrpData/res/title_cloud.png').exists : 'noFS';
+        const stage = (Module && Module.sbop2Stage) || 'none';
+        const lastStatus = (Module && Module.lastStatusText) || '';
+        const lastDeps = (Module && Module.lastRunDependencyCount);
+        probeElement.textContent = 'canvas-probe: ' + samples + ' stage=' + stage + ' status=' + lastStatus + ' deps=' + lastDeps + ' init=' + initEndReached + ' grp=' + grpLoadResult + ' base=' + grpFoundBase + ' sysExists=' + grpSystemExists + ' sysRead=' + grpSystemRead + ' title=' + grpTitleExists + ' back=' + grpTitleBackExists + ' cloud=' + grpTitleCloudExists + ' fsSys=' + fsSystem + ' fsTitle=' + fsTitle + ' fsBack=' + fsTitleBack + ' fsCloud=' + fsTitleCloud + ' game=' + gameState + ' hasState=' + hasStateProc + ' chg=' + chgStateCount + ' logoDraw=' + logoDraw + ' logoTL=' + logoTopLeft + ' logoC=' + logoCenter + ' layer=' + layerSample + ' window=' + windowSample + ' cpp=' + cppRgbaHead + ' ptr=' + presentPtr + ' onDraw=' + onDrawCount + ' state=' + onDrawState + ' renderer=' + onDrawHasRenderer + ' nullMgrDraw=' + onDrawNullMgrDraw + ' pump=' + pumpActive + '/' + pumpTick + ' present=' + presentCount + ' size=' + presentSize + ' sample=' + presentSample + ' data=' + canvasElement.toDataURL().slice(0, 48);
+      } catch (error) {
+        probeElement.textContent = 'canvas-probe-error: ' + String(error);
+      }
+    }
+
+    updateCanvasProbe();
+    window.setInterval(updateCanvasProbe, 1000);
+
+    var Module = {
+      canvas: canvasElement,
+      print(...args) {
+        const text = args.join(' ');
+        console.log(text);
+        if (outputElement) {
+          outputElement.value += text + '\n';
+          outputElement.scrollTop = outputElement.scrollHeight;
+        }
+      },
+      printErr(...args) {
+        const text = args.join(' ');
+        console.error(text);
+        if (outputElement) {
+          outputElement.value += text + '\n';
+          outputElement.scrollTop = outputElement.scrollHeight;
+        }
+      },
+      setStatus(text) {
+        Module.lastStatusText = text || '';
+        if (statusElement) {
+          statusElement.textContent = text || '';
+        }
+      },
+      monitorRunDependencies(left) {
+        Module.lastRunDependencyCount = left;
+        if (left > 0) {
+          Module.setStatus('準備中... ' + left);
+        } else {
+          Module.setStatus('起動完了');
+        }
+      },
+      onRuntimeInitialized() {
+        Module.setStatus('ランタイム初期化完了');
+        ensurePumpFallback();
+        updateCanvasProbe();
+      }
+    };
+
+    window.onerror = function(message) {
+      Module.setStatus('例外発生');
+      if (outputElement) {
+        outputElement.value += String(message) + '\n';
+      }
+    };
+  </script>
+  {{{ SCRIPT }}}
+</body>
+</html>
