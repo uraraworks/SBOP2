@@ -46,8 +46,8 @@ BOOL CMgrSound::Create(void)
 
 	bRet = FALSE;
 
-	GetModuleFilePath(szPath, _countof(szPath));
-	strFileName.Format(_T("%sSboSoundData.dll"), szPath);
+	BuildModuleRelativePath(szPath, _countof(szPath), _T("SboSoundData.dll"));
+	strFileName = szPath;
 
 	bResult = m_pDXAudio->Create();
 	if (bResult == FALSE) {
@@ -137,10 +137,9 @@ void CMgrSound::PlayBGM(
 		}
 	}
 
-	GetModuleFilePath(szBasePath, _countof(szBasePath));
+	BuildModuleRelativePath(szBasePath, _countof(szBasePath), _T("BGM\\"));
 	std::string strBasePath = TStringToAnsiStd(szBasePath);
 	strcpy_s(szTmp, strBasePath.c_str());
-	strcat_s(szTmp, "BGM\\");
 	switch (nNo) {
 //	case 0:
 //		strcat (szTmp, "v4.ogg");

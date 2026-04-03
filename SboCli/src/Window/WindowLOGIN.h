@@ -54,13 +54,7 @@ private:
 	BOOL	IsTextFieldFocus(void) const;	// テキスト入力欄が選択中か
 	BOOL	IsInteractive(void) const;	// 操作可能か
 	BOOL	HitTest(int x, int y, RECT &rcDst, int nFocusIndex) const;	// 当たり判定
-	void	DrawBrowserControls(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);	// browser用コントロール描画
 	void	DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, BOOL bPassword, BOOL bFocused);	// 入力欄描画
-	static BOOL HandleCtlColorStatic(WPARAM wParam, LPARAM lParam, LRESULT &lResult);	// チェックボックス色設定
-	static LRESULT CALLBACK AccountWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// アカウント入力欄プロシージャ
-	static LRESULT CALLBACK PasswordWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// パスワード入力欄プロシージャ
-	static LRESULT CALLBACK SavePasswordWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// パスワードを記録するチェックプロシージャ
-	static LRESULT CALLBACK ConnectWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// 接続ボタンプロシージャ
 	void	OnConnect(void);	// 接続ボタンハンドラ
 	friend class CMainFrame;
 
@@ -81,13 +75,4 @@ private:
 	BOOL	m_bEnabled;
 	BOOL	m_bSavePassword;
 	int		m_nFocusIndex;
-	HWND	m_hWndAccount,	// アカウント入力欄
-			m_hWndPassword,	// パスワード入力欄
-			m_hWndSavePassword,	// パスワードを記録するチェック
-			m_hWndConnect;	// 接続ボタン
-
-	WNDPROC	m_OrgWndProcAccount,	// アカウント入力欄の元ウィンドウプロシージャ
-			m_OrgWndProcPassword,	// パスワード入力欄の元ウィンドウプロシージャ
-			m_OrgWndProcSavePassword,	// パスワードを記録するチェックの元ウィンドウプロシージャ
-			m_OrgWndProcConnect;	// 接続ボタンの元ウィンドウプロシージャ
 } CWindowLOGIN, *PCWindowLOGIN;

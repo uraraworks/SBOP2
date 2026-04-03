@@ -242,16 +242,7 @@ void CMainFrame::RestoreMainWindowPosition(SDL_Window *pWindow)
 	TCHAR szFileName[MAX_PATH];
 	POINT pt;
 
-	ZeroMemory(szFileName, sizeof(szFileName));
-	GetModuleFileName(NULL, szFileName, _countof(szFileName));
-	{
-		size_t nNameLen = _tcslen(szFileName);
-		if (nNameLen >= 3) {
-			_tcscpy_s(szFileName + nNameLen - 3, _countof(szFileName) - (nNameLen - 3), _T("ini"));
-		} else {
-			_tcscat_s(szFileName, _T(".ini"));
-		}
-	}
+	GetModuleIniPath(szFileName, _countof(szFileName));
 
 	pt.x = GetPrivateProfileInt(_T("Pos"), _T("MainX"), -1, szFileName);
 	pt.y = GetPrivateProfileInt(_T("Pos"), _T("MainY"), -1, szFileName);
@@ -517,16 +508,7 @@ void CMainFrame::OnSDLDestroy(void)
 	// タイマー停止
 	// ウィンドウ位置等をINIに保存（OnClose相当）
 #if !defined(__EMSCRIPTEN__)
-	ZeroMemory(szFileName, sizeof(szFileName));
-	GetModuleFileName(NULL, szFileName, _countof(szFileName));
-	{
-		size_t nNameLen = _tcslen(szFileName);
-		if (nNameLen >= 3) {
-			_tcscpy_s(szFileName + nNameLen - 3, _countof(szFileName) - (nNameLen - 3), _T("ini"));
-		} else {
-			_tcscat_s(szFileName, _T(".ini"));
-		}
-	}
+	GetModuleIniPath(szFileName, _countof(szFileName));
 
 	if (IsMainWindowInteractive() && (m_pSDLWindow != NULL)) {
 		int x, y;
@@ -950,15 +932,9 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	}
 
 	if (m_pMgrData->IsLocalTitleMode() == FALSE) {
-		ZeroMemory(szName, sizeof(szName));
-		GetModuleFileName(NULL, szName, _countof(szName));
-		pszTmp = _tcsrchr(szName, _T('\\'));
-		if (pszTmp) {
-			pszTmp[1] = _T('\0');
-		}
-		_stprintf_s(szTmp, _T("%sss"), szName);
-		CreateDirectory(szTmp, NULL);
-		_stprintf_s(szTmp, _T("%sLog"), szName);
+		BuildModuleRelativePath(szName, _countof(szName), _T("ss"));
+		CreateDirectory(szName, NULL);
+		BuildModuleRelativePath(szTmp, _countof(szTmp), _T("Log"));
 		CreateDirectory(szTmp, NULL);
 	}
 
@@ -1152,13 +1128,7 @@ void CMainFrame::OnRecv(PBYTE pData)
 #if defined(_DEBUG) && !defined(__EMSCRIPTEN__)
 	static TCHAR s_szLogPath[MAX_PATH] = {0};
 	if (s_szLogPath[0] == 0) {
-		if (GetModuleFileName(NULL, s_szLogPath, _countof(s_szLogPath))) {
-			LPTSTR p = _tcsrchr(s_szLogPath, _T('\\'));
-			if (p) {
-				*(p + 1) = 0;
-			}
-			_tcscat_s(s_szLogPath, _T("SboCli_PacketLog.txt"));
-		}
+		BuildModuleRelativePath(s_szLogPath, _countof(s_szLogPath), _T("SboCli_PacketLog.txt"));
 	}
 	if (s_szLogPath[0] != 0) {
 		SYSTEMTIME st;

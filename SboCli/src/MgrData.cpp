@@ -269,7 +269,6 @@ void CMgrData::Destroy(void)
 
 void CMgrData::SaveIniData(void)
 {
-	TCHAR szModulePath[MAX_PATH];
 	TCHAR szIniPath[MAX_PATH];
 	char szCrypt[128];
 	WCHAR szwGuid[40];
@@ -280,15 +279,7 @@ void CMgrData::SaveIniData(void)
 		return;
 	}
 
-	ZeroMemory(szModulePath, sizeof(szModulePath));
-	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
-	_tcscpy_s(szIniPath, szModulePath);
-	int nExtPos = static_cast<int>(_tcslen(szIniPath)) - 3;
-	if (nExtPos >= 0) {
-		_tcscpy_s(&szIniPath[nExtPos], _countof(szIniPath) - nExtPos, _T("ini"));
-	} else {
-		_tcscat_s(szIniPath, _T(".ini"));
-	}
+	GetModuleIniPath(szIniPath, _countof(szIniPath));
 
 	ZeroMemory(szCrypt, sizeof(szCrypt));
 	std::string strPasswordUtf8 = TStringToUtf8Std((LPCTSTR)m_strLastPassword);
@@ -798,7 +789,6 @@ CInfoTalkEvent *CMgrData::GetInfoTalkEvent(void)
 void CMgrData::ReadIniData(void)
 {
 	int nTmp;
-	TCHAR szModulePath[MAX_PATH];
 	TCHAR szIniPath[MAX_PATH];
 	TCHAR szTmp[128];
 	char szDecrypted[128];
@@ -826,15 +816,7 @@ void CMgrData::ReadIniData(void)
 		return;
 	}
 
-	ZeroMemory(szModulePath, sizeof(szModulePath));
-	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
-	_tcscpy_s(szIniPath, szModulePath);
-	int nExtPos = static_cast<int>(_tcslen(szIniPath)) - 3;
-	if (nExtPos >= 0) {
-		_tcscpy_s(&szIniPath[nExtPos], _countof(szIniPath) - nExtPos, _T("ini"));
-	} else {
-		_tcscat_s(szIniPath, _T(".ini"));
-	}
+	GetModuleIniPath(szIniPath, _countof(szIniPath));
 
 	GetPrivateProfileString(_T("Setting"), _T("ServerAddr"), _T("127.0.0.1"), szTmp, _countof(szTmp), szIniPath);
 	m_strServerAddr = szTmp;

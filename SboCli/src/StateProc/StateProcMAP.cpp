@@ -194,14 +194,7 @@ void CStateProcMAP::Init(void)
 	TCHAR szFileName[MAX_PATH];
 	CRect rc;
 
-	ZeroMemory(szFileName, sizeof (szFileName));
-	GetModuleFileName(NULL, szFileName, _countof(szFileName));
-	size_t nLen = _tcslen(szFileName);
-	if (nLen >= 3) {
-		_tcscpy_s(szFileName + nLen - 3, _countof(szFileName) - (nLen - 3), _T("ini"));
-	} else {
-		_tcscat_s(szFileName, _T(".ini"));
-	}
+	GetModuleIniPath(szFileName, _countof(szFileName));
 
 	rc.left		= GetPrivateProfileInt(_T("Pos"), _T("LogLeft"),	-1, szFileName);
 	rc.top		= GetPrivateProfileInt(_T("Pos"), _T("LogTop"),	-1, szFileName);

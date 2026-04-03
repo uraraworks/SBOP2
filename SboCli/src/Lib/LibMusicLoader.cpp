@@ -147,10 +147,13 @@ CLibMusicLoader::~CLibMusicLoader()
 
 void CLibMusicLoader::Load(void)
 {
+	TCHAR szPath[MAX_PATH];
+
 	if (m_hLib) {
 		return;
 	}
-	m_hLib = LoadLibrary(_T("LibMusic.dll"));
+	BuildModuleRelativePath(szPath, _countof(szPath), _T("LibMusic.dll"));
+	m_hLib = LoadLibrary(szPath);
 	if (m_hLib == NULL) {
 		return;
 	}

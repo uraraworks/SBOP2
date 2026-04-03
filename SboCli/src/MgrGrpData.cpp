@@ -79,7 +79,6 @@ static BOOL ReadBinaryFile(LPCTSTR pszFilePath, std::vector<unsigned char> &data
 
 static BOOL FindSboGrpResBasePath(TCHAR *pszDst, size_t nDstCount)
 {
-	TCHAR szModulePath[MAX_PATH];
 	TCHAR szBasePath[MAX_PATH];
 	LPCTSTR apszBaseCandidates[] = {
 		_T(".\\SboGrpData\\res\\"),
@@ -99,17 +98,8 @@ static BOOL FindSboGrpResBasePath(TCHAR *pszDst, size_t nDstCount)
 	}
 #endif
 
-	ZeroMemory(szModulePath, sizeof(szModulePath));
-	GetModuleFileName(NULL, szModulePath, _countof(szModulePath));
-
 	for (i = 0; apszBaseCandidates[i] != NULL; i++) {
-		_tcscpy_s(szBasePath, szModulePath);
-		LPTSTR pszSlash = _tcsrchr(szBasePath, _T('\\'));
-		if (pszSlash != NULL) {
-			pszSlash[1] = _T('\0');
-		} else {
-			szBasePath[0] = _T('\0');
-		}
+		GetModuleFilePath(szBasePath, _countof(szBasePath));
 		_tcscat_s(szBasePath, _countof(szBasePath), apszBaseCandidates[i]);
 
 		TCHAR szCheckPath[MAX_PATH];
@@ -271,14 +261,7 @@ BOOL CMgrGrpData::Load(void)
 	bRet = FALSE;
 
 	// ファイル名の作成
-	GetModuleFileName(NULL, szName, _countof(szName));
-	LPTSTR pszPath = _tcsrchr(szName, _T('\\'));
-	if (pszPath != NULL) {
-		pszPath[1]	= _T('\0');
-	} else {
-		szName[0]	= _T('\0');
-	}
-	_tcscat_s(szName, _countof(szName), _T("SboGrpData.dll"));
+	BuildModuleRelativePath(szName, _countof(szName), _T("SboGrpData.dll"));
 
 	m_hDll = LoadLibrary(szName);
 	if (m_hDll == NULL) {

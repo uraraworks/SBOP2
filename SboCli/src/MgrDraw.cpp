@@ -1278,22 +1278,13 @@ void CMgrDraw::SaveScreenShot(void)
 	TCHAR szName[MAX_PATH];
 	TCHAR szTmp[128];
 	TCHAR szTmp2[20];
-	LPTSTR pszTmp;
 	SYSTEMTIME sysTime;
 	CImg32 ImgTmp;
 
 	// ファイル名の作成
-	ZeroMemory(szName, sizeof(szName));
-	GetModuleFileName(NULL, szName, _countof(szName));
-	pszTmp = _tcsrchr(szName, _T('\\'));
-	if (pszTmp != NULL) {
-		pszTmp[1] = _T('\0');
-	} else {
-		szName[0] = _T('\0');
-	}
+	BuildModuleRelativePath(szName, _countof(szName), _T("ss\\Sbo"));
 
 	GetLocalTime(&sysTime);
-	_tcscat_s(szName, _countof(szName), _T("ss\\Sbo"));
 	_stprintf_s(szTmp2, _countof(szTmp2), _T("%04d"), sysTime.wYear);
 	_stprintf_s(szTmp, _countof(szTmp), _T("%s%02d%02d%02d%02d%02d"),
 			&szTmp2[2],

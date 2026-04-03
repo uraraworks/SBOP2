@@ -90,6 +90,44 @@ void GetModuleFilePath(
 	PathAddBackslash(pszDst);					// 「\\」を追加
 }
 
+void GetModuleIniPath(
+	LPTSTR pszDst,
+	DWORD dwSize)
+{
+	int nExtPos;
+
+	if ((pszDst == NULL) || (dwSize == 0)) {
+		return;
+	}
+
+	ZeroMemory(pszDst, sizeof(TCHAR) * dwSize);
+	GetModuleFileName(NULL, pszDst, dwSize);
+
+	nExtPos = static_cast<int>(_tcslen(pszDst)) - 3;
+	if (nExtPos >= 0) {
+		_tcscpy_s(&pszDst[nExtPos], dwSize - nExtPos, _T("ini"));
+	} else {
+		_tcscat_s(pszDst, dwSize, _T(".ini"));
+	}
+}
+
+void BuildModuleRelativePath(
+	LPTSTR pszDst,
+	DWORD dwSize,
+	LPCTSTR pszRelativePath)
+{
+	if ((pszDst == NULL) || (dwSize == 0)) {
+		return;
+	}
+
+	GetModuleFilePath(pszDst, dwSize);
+	if ((pszRelativePath == NULL) || (pszRelativePath[0] == _T('\0'))) {
+		return;
+	}
+
+	_tcscat_s(pszDst, dwSize, pszRelativePath);
+}
+
 // AllCreateDirectory
 
 BOOL AllCreateDirectory(
