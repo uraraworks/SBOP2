@@ -49,8 +49,7 @@ public:
 	void			Destroy(void);												// 破棄
 	void			SaveIniData(void);											// 設定情報を保存
 
-	void			SetWindowInfo(HINSTANCE hInstance, HWND hWndMain);		// ウィンドウ情報を設定
-	HINSTANCE		GetInstance(void)	{ return m_hInstance;		}			// インスタンスハンドルを取得
+	void			SetMainWindow(HWND hWndMain);								// メインウィンドウを設定
 	HWND			GetMainWindow(void)	{ return m_hWndMain;		}			// メインウィンドウハンドルを取得
 	void			PostMainFrameMessage(DWORD dwCommand, DWORD dwParam);	// メインフレーム通知を保留投入
 	void			DispatchMainFrameMessage(DWORD dwCommand, DWORD dwParam);	// メインフレーム通知を即時配送
@@ -214,7 +213,6 @@ private:
 
 
 private:
-	HINSTANCE			m_hInstance;				// インスタンスハンドル
 	HWND				m_hWndMain,					// メインウィンドウハンドル
 						m_hWndAdmin,				// 管理者ウィンドウのウィンドウハンドル
 						m_hWndDebug;				// デバッグウィンドウのウィンドウハンドル

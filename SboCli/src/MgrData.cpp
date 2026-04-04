@@ -45,7 +45,6 @@ CMgrData::CMgrData()
 	m_hWndAdmin				= NULL;
 	m_hWndDebug				= NULL;
 	m_pSock					= NULL;
-	m_hInstance				= NULL;
 	m_wServerPort			= 0;
 	m_dwSelectMapPartsID	= 0;
 	m_dwSelectMapShadowID	= 0;
@@ -322,9 +321,8 @@ void CMgrData::SaveIniData(void)
 }
 
 
-void CMgrData::SetWindowInfo(HINSTANCE hInstance, HWND hWndMain)
+void CMgrData::SetMainWindow(HWND hWndMain)
 {
-	m_hInstance	= hInstance;
 	m_hWndMain	= hWndMain;
 }
 
@@ -333,14 +331,7 @@ void CMgrData::PostMainFrameMessage(DWORD dwCommand, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->PostMainFrameMessage(dwCommand, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		PostMessage(m_hWndMain, WM_MAINFRAME, dwCommand, dwParam);
-	}
-#endif
 }
 
 
@@ -348,14 +339,7 @@ void CMgrData::DispatchMainFrameMessage(DWORD dwCommand, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->DispatchMainFrameMessage(dwCommand, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		SendMessage(m_hWndMain, WM_MAINFRAME, dwCommand, dwParam);
-	}
-#endif
 }
 
 
@@ -363,14 +347,7 @@ void CMgrData::PostWindowMessage(int nType, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->PostWindowMessage(nType, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		PostMessage(m_hWndMain, WM_WINDOWMSG, nType, dwParam);
-	}
-#endif
 }
 
 
@@ -378,14 +355,7 @@ void CMgrData::DispatchWindowMessage(int nType, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->DispatchWindowMessage(nType, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		SendMessage(m_hWndMain, WM_WINDOWMSG, nType, dwParam);
-	}
-#endif
 }
 
 
@@ -393,14 +363,7 @@ void CMgrData::PostAdminMessage(int nType, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->PostAdminMessage(nType, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		PostMessage(m_hWndMain, WM_ADMINMSG, nType, dwParam);
-	}
-#endif
 }
 
 
@@ -408,14 +371,7 @@ void CMgrData::DispatchAdminMessage(int nType, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->DispatchAdminMessage(nType, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		SendMessage(m_hWndMain, WM_ADMINMSG, nType, dwParam);
-	}
-#endif
 }
 
 
@@ -423,14 +379,7 @@ void CMgrData::PostMgrDrawMessage(int nCode, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->PostMgrDrawMessage(nCode, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		PostMessage(m_hWndMain, WM_MGRDRAW, nCode, dwParam);
-	}
-#endif
 }
 
 
@@ -438,14 +387,7 @@ void CMgrData::DispatchMgrDrawMessage(int nCode, DWORD dwParam)
 {
 	if (m_pMainFrame) {
 		m_pMainFrame->DispatchMgrDrawMessage(nCode, dwParam);
-		return;
 	}
-
-#if !defined(__EMSCRIPTEN__)
-	if (m_hWndMain) {
-		SendMessage(m_hWndMain, WM_MGRDRAW, nCode, dwParam);
-	}
-#endif
 }
 
 

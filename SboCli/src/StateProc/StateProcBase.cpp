@@ -15,9 +15,6 @@
 
 CStateProcBase::CStateProcBase()
 {
-	m_hWndMain = NULL;
-	m_hWndAdmin = NULL;
-
 	m_pSock = NULL;
 	m_pMgrData = NULL;
 	m_pMgrSound = NULL;
@@ -36,8 +33,6 @@ void CStateProcBase::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 	m_pSock = pSock;
 	m_pMgrData = pMgrData;
 	m_pMgrSound = m_pMgrData->GetMgrSound();
-	m_hWndMain = m_pMgrData->GetMainWindow();
-	m_hWndAdmin = m_pMgrData->GetAdminWindow();
 	m_pMgrDraw = m_pMgrData->GetMgrDraw();
 	m_pMgrLayer = m_pMgrData->GetMgrLayer();
 	m_pMgrWindow = m_pMgrData->GetMgrWindow();

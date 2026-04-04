@@ -78,7 +78,6 @@ protected:
 
 
 public:
-	HWND	m_hWndMain;	// メインウィンドウハンドル
 	DWORD	m_dwLastTimerProc,	// 前回の時間処理時間
 					m_dwLastTimeCursor,	// 前回のカーソル処理時間
 					m_dwLastTimeKey;	// 前回のキー処理時間

@@ -69,8 +69,6 @@ protected:
 
 
 protected:
-	HWND m_hWndMain,    // メインフレームのウィンドウハンドル
-		 m_hWndAdmin;   // 管理者ウィンドウのウィンドウハンドル
 
 	CUraraSockTCPSBO *m_pSock;        // 通信マネージャ
 	CMgrData         *m_pMgrData;     // データ管理

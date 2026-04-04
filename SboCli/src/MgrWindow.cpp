@@ -392,7 +392,6 @@ void CMgrWindow::KeyProc(BYTE byEvent, BOOL bDown)
 
 void CMgrWindow::DeleteAll(void)
 {
-	HWND hWndMain;
 	PCWindowBase pTmp;
 
 	pTmp = NULL;
@@ -400,10 +399,14 @@ void CMgrWindow::DeleteAll(void)
 	m_bDraw		= TRUE;
 	m_bKeyInput	= FALSE;
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_pMgrData) {
+		HWND hWndMain;
+
 		hWndMain = m_pMgrData->GetMainWindow();
 		SetFocus(hWndMain);
 	}
+#endif
 }
 
 

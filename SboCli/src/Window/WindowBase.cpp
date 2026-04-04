@@ -70,7 +70,6 @@ CWindowBase::CWindowBase()
 	m_pMgrSound	= NULL;
 	m_pMgrGrpData	= NULL;
 	m_pDibSystem	= NULL;
-	m_hWndMain	= NULL;
 	m_dwLastTimerProc	= 0;
 	m_dwLastTimeCursor	= 0;
 	m_bShow	= TRUE;
@@ -158,7 +157,6 @@ void CWindowBase::Create(CMgrData *pMgrData)
 	m_pMgrDraw	= m_pMgrData->	GetMgrDraw();
 	m_pMgrSound	= m_pMgrData->	GetMgrSound();
 	m_pMgrGrpData	= m_pMgrData->	GetMgrGrpData();
-	m_hWndMain	= m_pMgrData->	GetMainWindow();
 	m_pDibSystem	= m_pMgrGrpData->	GetDibSystem();
 }
 

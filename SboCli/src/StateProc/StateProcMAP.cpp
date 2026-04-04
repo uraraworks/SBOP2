@@ -1171,9 +1171,6 @@ void CStateProcMAP::CreateAdminUi(void)
 	}
 	if (m_AdminUi.Create(m_pMgrData->GetMainWindow(), m_pMgrData)) {
 		m_AdminUi.Show();
-		m_hWndAdmin = m_AdminUi.GetWindow();
-	} else {
-		m_hWndAdmin = NULL;
 	}
 }
 
@@ -1182,7 +1179,6 @@ void CStateProcMAP::DestroyAdminUi(void)
 #if !defined(__EMSCRIPTEN__)
 	m_AdminUi.Destroy();
 #endif
-	m_hWndAdmin = NULL;
 	if (m_pMgrData) {
 		m_pMgrData->SetAdminWindow(NULL);
 		m_pMgrData->SetAdminNotifyTypeL(ADMINNOTIFYTYPE_NONE);
@@ -1200,7 +1196,6 @@ void CStateProcMAP::PostAdminUiMessage(UINT message, WPARAM wParam, LPARAM lPara
 	return;
 #else
 	m_AdminUi.Notify(message, wParam, lParam);
-	m_hWndAdmin = m_AdminUi.GetWindow();
 #endif
 }
 

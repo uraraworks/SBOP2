@@ -105,18 +105,6 @@ static BOOL ShouldBridgeWin32QuitMessage(HWND hMainWnd, const MSG &msg)
 	return (msg.message == WM_CLOSE) ? TRUE : FALSE;
 }
 
-static BOOL IsDirectHostWindowMessage(HWND hMainWnd, const MSG &msg)
-{
-	if (!IsMainWindowMessage(hMainWnd, msg)) {
-		return FALSE;
-	}
-
-	if ((msg.message >= URARASOCK_MSGBASE) && (msg.message < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
-		return TRUE;
-	}
-
-	return FALSE;
-}
 #endif
 
 CSDLApp::CSDLApp()
@@ -507,13 +495,6 @@ void CSDLApp::PollWin32Messages(void)
 
 		if (ShouldSkipMainWindowInputMessage(hMainWnd, msg)) {
 			continue;
-		}
-
-		// ソケット通知のような即時配送が必要なメッセージだけをホストへ直送する。
-		if (IsDirectHostWindowMessage(hMainWnd, msg)) {
-			if (m_pHost && m_pHost->OnWin32Message(msg.message, msg.wParam, msg.lParam)) {
-				continue;
-			}
 		}
 
 		TranslateMessage(&msg);

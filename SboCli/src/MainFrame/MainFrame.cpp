@@ -133,11 +133,6 @@ CMainFrame::CMainFrame()
 	m_hCom = CoInitializeEx(0, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 	m_pSDLWindow = NULL;
 	ZeroMemory(&m_stSystemTime, sizeof(m_stSystemTime));
-	InitializeCriticalSection(&m_csSocketNotify);
-	InitializeCriticalSection(&m_csMainFrameNotify);
-	InitializeCriticalSection(&m_csMgrDrawNotify);
-	InitializeCriticalSection(&m_csWindowNotify);
-	InitializeCriticalSection(&m_csAdminNotify);
 }
 
 
@@ -149,12 +144,6 @@ CMainFrame::~CMainFrame()
 	SAFE_DELETE(m_pSock);
 #endif
 	SAFE_DELETE(m_pMgrData);
-	DeleteCriticalSection(&m_csSocketNotify);
-	DeleteCriticalSection(&m_csMainFrameNotify);
-	DeleteCriticalSection(&m_csMgrDrawNotify);
-	DeleteCriticalSection(&m_csWindowNotify);
-	DeleteCriticalSection(&m_csAdminNotify);
-
 	if (SUCCEEDED(m_hCom)) {
 		CoUninitialize();
 	}
@@ -197,7 +186,7 @@ BOOL CMainFrame::OnSDLInit(SDL_Window *pWindow)
 
 #if defined(__EMSCRIPTEN__)
 	m_hWnd = NULL;
-	OnInitEnd(NULL);
+	OnInitEnd();
 	return TRUE;
 #else
 	if (!InitNativeMainWindow(pWindow)) {
@@ -205,7 +194,7 @@ BOOL CMainFrame::OnSDLInit(SDL_Window *pWindow)
 	}
 
 	// 初期化処理を実行（旧 WM_INITEND 相当）
-	OnInitEnd(m_hWnd);
+	OnInitEnd();
 
 	return TRUE;
 #endif
@@ -265,9 +254,10 @@ void CMainFrame::PostMgrDrawMessage(int nCode, DWORD dwPara)
 	stNotify.nCode = nCode;
 	stNotify.dwParam = dwPara;
 
-	EnterCriticalSection(&m_csMgrDrawNotify);
-	m_aPendingMgrDrawNotify.push_back(stNotify);
-	LeaveCriticalSection(&m_csMgrDrawNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxMgrDrawNotify);
+		m_aPendingMgrDrawNotify.push_back(stNotify);
+	}
 }
 
 
@@ -296,9 +286,10 @@ void CMainFrame::PostMainFrameMessage(DWORD dwCommand, DWORD dwParam)
 	stNotify.dwCommand = dwCommand;
 	stNotify.dwParam = dwParam;
 
-	EnterCriticalSection(&m_csMainFrameNotify);
-	m_aPendingMainFrameNotify.push_back(stNotify);
-	LeaveCriticalSection(&m_csMainFrameNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxMainFrameNotify);
+		m_aPendingMainFrameNotify.push_back(stNotify);
+	}
 }
 
 
@@ -309,9 +300,10 @@ void CMainFrame::PostWindowMessage(int nType, DWORD dwParam)
 	stNotify.nType = nType;
 	stNotify.dwParam = dwParam;
 
-	EnterCriticalSection(&m_csWindowNotify);
-	m_aPendingWindowNotify.push_back(stNotify);
-	LeaveCriticalSection(&m_csWindowNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxWindowNotify);
+		m_aPendingWindowNotify.push_back(stNotify);
+	}
 }
 
 
@@ -322,9 +314,10 @@ void CMainFrame::PostAdminMessage(int nType, DWORD dwParam)
 	stNotify.nType = nType;
 	stNotify.dwParam = dwParam;
 
-	EnterCriticalSection(&m_csAdminNotify);
-	m_aPendingAdminNotify.push_back(stNotify);
-	LeaveCriticalSection(&m_csAdminNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxAdminNotify);
+		m_aPendingAdminNotify.push_back(stNotify);
+	}
 }
 
 
@@ -864,7 +857,7 @@ void CMainFrame::SendChat(int nType, LPCSTR pszMsg, DWORD *pdwDst)
 }
 
 
-void CMainFrame::OnInitEnd(HWND hWnd)
+void CMainFrame::OnInitEnd(void)
 {
 	BOOL bRet, bResult;
 	TCHAR szName[MAX_PATH], szTmp[MAX_PATH];
@@ -878,7 +871,7 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 #endif
 
 	// 各マネージャクラスを作成
-	m_pMgrData->SetWindowInfo(GetModuleHandle(NULL), hWnd);
+	m_pMgrData->SetMainWindow(m_hWnd);
 	m_pMgrData->Create(this, m_pMgrGrpData);
 	m_pMgrData->SetUraraSockTCP(m_pSock);
 #if !defined(__EMSCRIPTEN__)
@@ -920,13 +913,8 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	SDL_Log("OnInitEnd: grp load result=%d localTitle=%d", bResult, m_pMgrData->IsLocalTitleMode());
 #endif
 	if (bResult == FALSE) {
-#if defined(__EMSCRIPTEN__)
-		SDL_Log("OnInitEnd: グラフィックデータDLLの読み込みに失敗しました");
-#else
-		if (hWnd) {
-			MessageBox(hWnd, _T("グラフィックデータDLLの読み込みに失敗しました"), _T("エラー"), MB_OK);
-		}
-#endif
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+			"エラー", "グラフィックデータDLLの読み込みに失敗しました", NULL);
 		goto Exit;
 	}
 
@@ -956,8 +944,8 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	SDL_Log("OnInitEnd: changed to state=%d", m_nGameState);
 #endif
 #if !defined(__EMSCRIPTEN__)
-	if (hWnd) {
-		ShowWindow(hWnd, SW_SHOW);
+	if (m_hWnd) {
+		ShowWindow(m_hWnd, SW_SHOW);
 	}
 #endif
 
@@ -1293,9 +1281,10 @@ void CMainFrame::PostSocketMessage(UINT message, WPARAM wParam, LPARAM lParam)
 	stNotify.wParam = wParam;
 	stNotify.lParam = lParam;
 
-	EnterCriticalSection(&m_csSocketNotify);
-	m_aPendingSocketNotify.push_back(stNotify);
-	LeaveCriticalSection(&m_csSocketNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxSocketNotify);
+		m_aPendingSocketNotify.push_back(stNotify);
+	}
 }
 
 
@@ -1303,9 +1292,10 @@ void CMainFrame::FlushPendingSocketMessages(void)
 {
 	std::deque<SocketNotify> aNotify;
 
-	EnterCriticalSection(&m_csSocketNotify);
-	aNotify.swap(m_aPendingSocketNotify);
-	LeaveCriticalSection(&m_csSocketNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxSocketNotify);
+		aNotify.swap(m_aPendingSocketNotify);
+	}
 
 	while (!aNotify.empty()) {
 		const SocketNotify stNotify = aNotify.front();
@@ -1471,9 +1461,10 @@ void CMainFrame::FlushPendingMainFrameMessages(void)
 {
 	std::deque<MainFrameNotify> aNotify;
 
-	EnterCriticalSection(&m_csMainFrameNotify);
-	aNotify.swap(m_aPendingMainFrameNotify);
-	LeaveCriticalSection(&m_csMainFrameNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxMainFrameNotify);
+		aNotify.swap(m_aPendingMainFrameNotify);
+	}
 
 	while (!aNotify.empty()) {
 		const MainFrameNotify stNotify = aNotify.front();
@@ -1487,9 +1478,10 @@ void CMainFrame::FlushPendingWindowMessages(void)
 {
 	std::deque<WindowNotify> aNotify;
 
-	EnterCriticalSection(&m_csWindowNotify);
-	aNotify.swap(m_aPendingWindowNotify);
-	LeaveCriticalSection(&m_csWindowNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxWindowNotify);
+		aNotify.swap(m_aPendingWindowNotify);
+	}
 
 	while (!aNotify.empty()) {
 		const WindowNotify stNotify = aNotify.front();
@@ -1503,9 +1495,10 @@ void CMainFrame::FlushPendingAdminMessages(void)
 {
 	std::deque<AdminNotify> aNotify;
 
-	EnterCriticalSection(&m_csAdminNotify);
-	aNotify.swap(m_aPendingAdminNotify);
-	LeaveCriticalSection(&m_csAdminNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxAdminNotify);
+		aNotify.swap(m_aPendingAdminNotify);
+	}
 
 	while (!aNotify.empty()) {
 		const AdminNotify stNotify = aNotify.front();
@@ -1519,9 +1512,10 @@ void CMainFrame::FlushPendingMgrDrawMessages(void)
 {
 	std::deque<MgrDrawNotify> aNotify;
 
-	EnterCriticalSection(&m_csMgrDrawNotify);
-	aNotify.swap(m_aPendingMgrDrawNotify);
-	LeaveCriticalSection(&m_csMgrDrawNotify);
+	{
+		std::lock_guard<std::mutex> lock(m_mtxMgrDrawNotify);
+		aNotify.swap(m_aPendingMgrDrawNotify);
+	}
 
 	while (!aNotify.empty()) {
 		const MgrDrawNotify stNotify = aNotify.front();

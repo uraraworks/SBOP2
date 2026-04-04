@@ -37,8 +37,6 @@ void CWindowFAMILYTYPE::Create(CMgrData *pMgrData)
 
 	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
 	m_pDib->SetColorKey(0);
-
-//	PostMessage(m_hWndMain, WM_WINDOWMSG, m_nID, 1);
 }
 
 

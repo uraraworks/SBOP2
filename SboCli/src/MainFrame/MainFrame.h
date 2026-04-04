@@ -7,6 +7,7 @@
 #pragma once
 
 #include <deque>
+#include <mutex>
 
 #include "Platform/IGameLoopHost.h"
 
@@ -90,16 +91,16 @@ public:
 	virtual void OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick);
 	virtual void OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick);
 	virtual void OnSDLMouseRightButtonDoubleClick(int x, int y);
-	virtual BOOL OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam);
 	virtual void OnDraw(SDL_Renderer *pRenderer);
 	virtual BOOL IsQuit(void);
 	virtual void OnSDLDestroy(void);
 
 private:
+	BOOL OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam);
 	static void OnSocketNotifyThunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam);
 	BOOL InitNativeMainWindow(SDL_Window *pWindow); // ネイティブウィンドウ関連を初期化
 	void RestoreMainWindowPosition(SDL_Window *pWindow); // 保存済みのメインウィンドウ位置を復元
-	void OnInitEnd(HWND hWnd);
+	void OnInitEnd(void);
 	void OnKeyUp(UINT vk);
 	void OnLButtonDown(int x, int y);
 	void OnRButtonDown(int x, int y);
@@ -271,14 +272,14 @@ private:
 	CLibInfoSkill *m_pLibInfoSkill;
 	CStateProcBase *m_pStateProc;
 	SDL_Window *m_pSDLWindow;
-	CRITICAL_SECTION m_csSocketNotify;
+	std::mutex m_mtxSocketNotify;
 	std::deque<SocketNotify> m_aPendingSocketNotify;
-	CRITICAL_SECTION m_csMainFrameNotify;
+	std::mutex m_mtxMainFrameNotify;
 	std::deque<MainFrameNotify> m_aPendingMainFrameNotify;
-	CRITICAL_SECTION m_csMgrDrawNotify;
+	std::mutex m_mtxMgrDrawNotify;
 	std::deque<MgrDrawNotify> m_aPendingMgrDrawNotify;
-	CRITICAL_SECTION m_csWindowNotify;
+	std::mutex m_mtxWindowNotify;
 	std::deque<WindowNotify> m_aPendingWindowNotify;
-	CRITICAL_SECTION m_csAdminNotify;
+	std::mutex m_mtxAdminNotify;
 	std::deque<AdminNotify> m_aPendingAdminNotify;
 };
