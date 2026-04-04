@@ -119,10 +119,11 @@
 
 ### 2. 描画内部
 
-- `MgrDraw.cpp` には多数の `HDC` 利用が残る。
-- `Img32` は `CreateDIBSection` と `HDC` を前提とした実装。
-- `Window/*` と `Layer/*` には GDI ベース描画が広く残存。
-- 現在の SDL 描画は「最終出力を SDL に寄せた段階」であり、内部バッファまでは置換されていない。
+- `MgrDraw.cpp` の `StretchBlt` は全て `CImg32::BltStretchNearest()` に置換済み。Lock/Unlock/HDC 不要。
+- `LockDibTmp()` からも不要な `Lock()` を除去済み。
+- ただし `CImg32::Create()` は依然として `CreateDIBSection` を使用（ネイティブ版）。Emscripten 版は `CreateWithoutGdi` で GDI 不使用。
+- テキスト描画（`TextOut` / `TextOutW`）は `CImg32::Lock()` で HDC を取得して GDI 経由で行う構造が WindowBase / LayerBase / 各 Window/Layer に約 58 ファイルに渡り残存。SDL_ttf 等の導入で置換可能だが未着手。
+- `Img32` のピクセル操作系メソッド（Blt / BltAlpha / FillRect / Rectangle 等）は GDI 非依存で動作。
 
 ### 3. 入力の残存依存
 
@@ -159,12 +160,24 @@
   - `MainFrame::OnInitEnd(HWND)` の HWND パラメータを除去し、`m_hWnd` 直接参照に統一。
   - `MessageBox()` を `SDL_ShowSimpleMessageBox()` に統一。
   - `MgrWindow::SetFocus()` に `#if !defined(__EMSCRIPTEN__)` ガードを追加。
+- 2026-04-04(3): 描画と音声の Windows 依存を縮退。
+  - `MgrDraw.cpp` の全 `StretchBlt`（15箇所）を `CImg32::BltStretchNearest()` に置換。Lock/Unlock/HDC が不要になった。
+  - `LockDibTmp()` から不要になった `Lock()` 呼び出しを除去。
+  - `DXAudio.cpp` を XAudio2 実装から SDL_audio 実装に全面書き換え。
+  - SE は最大 32 チャンネル同時再生、BGM は専用チャンネルでループ対応。
+  - `xaudio2.lib` のリンクを `SboCli.vcxproj` から除去。
+  - BGM ファイル読み込みを `CreateFileA`/`ReadFile` から `fopen`/`fread` に変更。
+  - メモリ管理を `CoTaskMemAlloc`/`CoTaskMemFree` から `malloc`/`free` に変更。
 
 ### 4. 音声
 
-- `SboCli/src/Lib/DXAudio.*` が残存。
-- `AflMusic` は `winmm` と DirectSound 系 API に依存。
-- `SboCli.vcxproj` は `xaudio2.lib` をリンクしている。
+- `DXAudio` は XAudio2 から SDL_audio に全面移行済み。`xaudio2.lib` のリンクは除去済み。
+- SE/BGM の再生は SDL_OpenAudioDevice + コールバックベースのミキサーで動作。
+- WAV 解析は既存パーサー + SDL_AudioCVT、OGG は stb_vorbis + SDL_AudioCVT で出力フォーマットに変換。
+- BGM ファイル読み込みは `fopen`/`fread` に変更（`CreateFileA`/`ReadFile` 依存を除去）。
+- メモリ管理は `CoTaskMemAlloc`/`CoTaskMemFree` から `malloc`/`free` に変更。
+- SE リソース読み込み（`SboSoundData.dll` からの `LoadResource`/`LockResource`）は依然として Windows 依存。
+- `AflMusic`（MIDI 再生）は `winmm` / DirectMusic 依存のまま。`aflMusic.dll` として動的ロード。
 
 ### 5. 補助 UI / 管理 UI
 
@@ -186,8 +199,8 @@
 3. browser 版で不要な補助 UI / 管理 UI / デバッグ UI を Null 実装または無効化で切る。
 4. ~~`MainFrame` / `SDLApp` に残る `HWND` 取得、サブクラス化、`PeekMessage` 依存をさらに縮退する。~~ → 概ね完了。残りは MFC 補助 UI の `DispatchMessage` のみ。
 5. ~~`MgrKeyInput` の DirectInput 依存を外し、入力経路を SDL に統一する。~~ → 完了
-6. `MgrDraw` と `Window/*` / `Layer/*` の `HDC` / `CImg32` / GDI 描画を SDL テクスチャ経路へ移す。
-7. `DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存を切り分ける。
+6. ~~`MgrDraw` の `HDC` / GDI 描画を SDL 経路へ移す。~~ → StretchBlt 全除去完了。残りはテキスト描画の GDI 依存（SDL_ttf 導入時に対応）。
+7. ~~`DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存を切り分ける。~~ → DXAudio は SDL_audio に移行完了。AflMusic（MIDI）は未着手。
 8. `SDLApp::PollWin32Messages()` の残責務を MFC 補助 UI の廃止にあわせて除去する。
 
 ## 次セッション開始点
