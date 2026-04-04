@@ -185,7 +185,7 @@ static void GetWindowLOGINCheckRect(RECT *pRect)
 
 static void GetWindowLOGINConnectRect(RECT *pRect)
 {
-	SetRect(pRect, 16 * 11 - 2, 16 * 4 + 2, 16 * 11 - 2 + 54, 16 * 4 + 2 + 18);
+	SetRect(pRect, 16 * 15 - 54 - 16, 16 * 5 + 6, 16 * 15 - 16, 16 * 5 + 6 + 18);
 }
 
 static void GetWindowLOGINCheckBoxRect(const RECT &rcCheck, RECT *pRect)
@@ -210,12 +210,13 @@ CWindowLOGIN::CWindowLOGIN()
 {
 	m_nID	= WINDOWTYPE_LOGIN;
 	m_sizeWindow.cx	= 16 * 15;
-	m_sizeWindow.cy	= 16 * 6;
+	m_sizeWindow.cy	= 16 * 7;
 	m_ptViewPos.x	= SCRSIZEX / 2 - m_sizeWindow.cx / 2;
 	m_ptViewPos.y	= 280;
 	m_bEnabled = TRUE;
 	m_bSavePassword = FALSE;
 	m_nFocusIndex = LOGINFOCUS_ACCOUNT;
+	m_nCursorPos = 0;
 	m_bInput = TRUE;
 }
 
@@ -358,6 +359,55 @@ BOOL CWindowLOGIN::HandleKeyDown(UINT vk)
 		DeleteBackward();
 		return TRUE;
 
+	case VK_DELETE:
+		if (IsTextFieldFocus()) {
+			DeleteForward();
+			return TRUE;
+		}
+		break;
+
+	case VK_LEFT:
+		if (IsTextFieldFocus()) {
+			if (m_nCursorPos > 0) {
+				m_nCursorPos--;
+				m_nCursorAnime = 0;
+				Redraw();
+			}
+			return TRUE;
+		}
+		break;
+
+	case VK_RIGHT:
+		if (IsTextFieldFocus()) {
+			CString str = GetCurrentFieldText();
+			if (m_nCursorPos < str.GetLength()) {
+				m_nCursorPos++;
+				m_nCursorAnime = 0;
+				Redraw();
+			}
+			return TRUE;
+		}
+		break;
+
+	case VK_HOME:
+		if (IsTextFieldFocus()) {
+			m_nCursorPos = 0;
+			m_nCursorAnime = 0;
+			Redraw();
+			return TRUE;
+		}
+		break;
+
+	case VK_END:
+		if (IsTextFieldFocus()) {
+			CString str = GetCurrentFieldText();
+			m_nCursorPos = str.GetLength();
+			m_nCursorAnime = 0;
+			Redraw();
+			return TRUE;
+		}
+		break;
+
 	case VK_SPACE:
 		if (m_nFocusIndex == LOGINFOCUS_SAVEPASSWORD) {
 			SetCheck(!GetCheck());
@@ -415,10 +465,26 @@ BOOL CWindowLOGIN::HandleMouseLeftButtonDown(int x, int y)
 
 	if (HitTest(x, y, rcTmp, LOGINFOCUS_ACCOUNT)) {
 		SetFocusIndex(LOGINFOCUS_ACCOUNT);
+		// クリックX座標からカーソル位置を計算（8px固定幅）
+		{
+			int nCharIndex = (x - rcTmp.left - 2) / 8;
+			CString str = GetCurrentFieldText();
+			if (nCharIndex < 0) nCharIndex = 0;
+			if (nCharIndex > str.GetLength()) nCharIndex = str.GetLength();
+			m_nCursorPos = nCharIndex;
+		}
 		return TRUE;
 	}
 	if (HitTest(x, y, rcTmp, LOGINFOCUS_PASSWORD)) {
 		SetFocusIndex(LOGINFOCUS_PASSWORD);
+		// クリックX座標からカーソル位置を計算（8px固定幅）
+		{
+			int nCharIndex = (x - rcTmp.left - 2) / 8;
+			CString str = GetCurrentFieldText();
+			if (nCharIndex < 0) nCharIndex = 0;
+			if (nCharIndex > str.GetLength()) nCharIndex = str.GetLength();
+			m_nCursorPos = nCharIndex;
+		}
 		return TRUE;
 	}
 	if (HitTest(x, y, rcTmp, LOGINFOCUS_SAVEPASSWORD)) {
@@ -494,6 +560,15 @@ void CWindowLOGIN::SetFocusIndex(int nIndex)
 	}
 
 	m_nFocusIndex = nIndex;
+
+	// フォーカス変更時はカーソルをテキスト末尾に設定
+	if (nIndex == LOGINFOCUS_ACCOUNT || nIndex == LOGINFOCUS_PASSWORD) {
+		CString str = GetCurrentFieldText();
+		m_nCursorPos = str.GetLength();
+	} else {
+		m_nCursorPos = 0;
+	}
+
 	UpdateSDLTextInput();
 	Redraw();
 }
@@ -501,35 +576,77 @@ void CWindowLOGIN::SetFocusIndex(int nIndex)
 
 void CWindowLOGIN::DeleteBackward(void)
 {
-	CmyString strTrimmed;
-	CString strTmp;
-	int nLength;
+	CString str;
 
 	if (!IsTextFieldFocus()) {
 		return;
 	}
-
-	strTmp = (m_nFocusIndex == LOGINFOCUS_ACCOUNT) ? (LPCTSTR)m_strAccount : (LPCTSTR)m_strPassword;
-	nLength = strTmp.GetLength();
-	if (nLength <= 0) {
+	if (m_nCursorPos <= 0) {
 		return;
 	}
 
-	strTmp = strTmp.Left(nLength - 1);
-	TrimViewString(strTrimmed, (LPCTSTR)strTmp);
+	str = GetCurrentFieldText();
+	if (m_nCursorPos > str.GetLength()) {
+		m_nCursorPos = str.GetLength();
+	}
+	if (m_nCursorPos <= 0) {
+		return;
+	}
+
+	str.Delete(m_nCursorPos - 1, 1);
+	m_nCursorPos--;
+	SetCurrentFieldText(str);
+	m_nCursorAnime = 0;
+	Redraw();
+}
+
+
+CString CWindowLOGIN::GetCurrentFieldText(void) const
+{
+	if (m_nFocusIndex == LOGINFOCUS_ACCOUNT) {
+		return CString((LPCTSTR)m_strAccount);
+	}
+	return CString((LPCTSTR)m_strPassword);
+}
+
+
+void CWindowLOGIN::SetCurrentFieldText(LPCTSTR pszText)
+{
+	CmyString strTrimmed;
+
+	TrimViewString(strTrimmed, pszText);
 	if (m_nFocusIndex == LOGINFOCUS_ACCOUNT) {
 		m_strAccount = strTrimmed;
 	} else {
 		m_strPassword = strTrimmed;
 	}
+}
+
+
+void CWindowLOGIN::DeleteForward(void)
+{
+	CString str;
+
+	if (!IsTextFieldFocus()) {
+		return;
+	}
+
+	str = GetCurrentFieldText();
+	if (m_nCursorPos >= str.GetLength()) {
+		return;
+	}
+
+	str.Delete(m_nCursorPos, 1);
+	SetCurrentFieldText(str);
+	m_nCursorAnime = 0;
 	Redraw();
 }
 
 
 void CWindowLOGIN::AppendText(LPCSTR pszText)
 {
-	CmyString strCurrent;
 	CmyString strAppend;
+	CString strCurrent;
 	CString strWide;
 	CString strFiltered;
 	int nAllow, nLength;
@@ -538,7 +655,7 @@ void CWindowLOGIN::AppendText(LPCSTR pszText)
 		return;
 	}
 
-	strCurrent = (m_nFocusIndex == LOGINFOCUS_ACCOUNT) ? m_strAccount : m_strPassword;
+	strCurrent = GetCurrentFieldText();
 	nAllow = LOGIN_TEXT_MAX - strCurrent.GetLength();
 	if (nAllow <= 0) {
 		return;
@@ -567,12 +684,18 @@ void CWindowLOGIN::AppendText(LPCSTR pszText)
 	}
 
 	TrimViewString(strAppend, (LPCTSTR)strFiltered);
-	strCurrent += (LPCTSTR)strAppend;
-	if (m_nFocusIndex == LOGINFOCUS_ACCOUNT) {
-		m_strAccount = strCurrent;
-	} else {
-		m_strPassword = strCurrent;
+
+	// カーソル位置に挿入する
+	if (m_nCursorPos < 0) {
+		m_nCursorPos = 0;
 	}
+	if (m_nCursorPos > strCurrent.GetLength()) {
+		m_nCursorPos = strCurrent.GetLength();
+	}
+	strCurrent.Insert(m_nCursorPos, (LPCTSTR)strAppend);
+	m_nCursorPos += strAppend.GetLength();
+	SetCurrentFieldText(strCurrent);
+	m_nCursorAnime = 0;
 	Redraw();
 }
 
@@ -625,7 +748,10 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		return;
 	}
 
-	DrawInputFrame1(rcField.left, rcField.top, rcField.right - rcField.left, rcField.bottom - rcField.top, bFocused ? 1 : 0);
+	DrawInputFrame1(rcField.left, rcField.top, rcField.right - rcField.left, rcField.bottom - rcField.top, bFocused ? 0 : 1);
+	if (bFocused) {
+		m_pDib->FillRect(rcField.left, rcField.top, rcField.right - rcField.left, rcField.bottom - rcField.top, RGB(255, 255, 255));
+	}
 	strDraw = pszText;
 	if (bPassword) {
 		strDraw = _T("");
@@ -636,7 +762,12 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 
 	TextOut2(hDC, rcField.left + 2, rcField.top + 1, strDraw, RGB(0, 0, 0));
 	if (bFocused && (m_nCursorAnime == 0)) {
-		nCursorX = rcField.left + 2 + strDraw.GetLength() * 8;
+		// カーソル位置に基づいて描画位置を計算
+		int nDrawCursorPos = m_nCursorPos;
+		if (nDrawCursorPos > strDraw.GetLength()) {
+			nDrawCursorPos = strDraw.GetLength();
+		}
+		nCursorX = rcField.left + 2 + nDrawCursorPos * 8;
 		if (nCursorX > rcField.right - 8) {
 			nCursorX = rcField.right - 8;
 		}
@@ -712,6 +843,22 @@ void CWindowLOGIN::SubmitFromBrowser(void)
 	OnConnect();
 }
 #endif
+
+BOOL CWindowLOGIN::TimerProc(void)
+{
+	int nOldAnime;
+
+	nOldAnime = m_nCursorAnime;
+	CWindowBase::TimerProc();
+
+	// カーソル点滅状態が変化し、かつテキスト入力欄にフォーカスがある場合は再描画
+	if (nOldAnime != m_nCursorAnime && IsTextFieldFocus()) {
+		m_dwTimeDrawStart = 0;	// 再描画を強制
+		return TRUE;
+	}
+	return (m_dwTimeDrawStart == 0) ? TRUE : FALSE;
+}
+
 
 void CWindowLOGIN::OnConnect(void)
 {

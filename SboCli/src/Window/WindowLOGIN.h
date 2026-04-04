@@ -37,6 +37,7 @@ public:
 	virtual void	HandleTextInput(LPCSTR pszText);
 	virtual BOOL	HandleMouseLeftButtonDown(int x, int y);
 	void	SetFocusIndex(int nIndex);	// フォーカスを設定
+	virtual BOOL	TimerProc(void);	// タイマー処理（カーソル点滅）
 #if defined(__EMSCRIPTEN__)
 	void	UpdateBrowserDom(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);	// browser用DOMを更新
 	void	HideBrowserDom(void);	// browser用DOMを非表示
@@ -49,13 +50,16 @@ private:
 	void	MakeWindow(void);	// ウィンドウ作成
 	void	UpdateSDLTextInput(void);	// SDLテキスト入力状態を更新
 	void	MoveFocus(int nStep);	// フォーカスを移動
-	void	DeleteBackward(void);	// 1文字削除
+	void	DeleteBackward(void);	// カーソル前の1文字削除（Backspace）
+	void	DeleteForward(void);	// カーソル位置の1文字削除（Delete）
 	void	AppendText(LPCSTR pszText);	// テキスト追記
 	BOOL	IsTextFieldFocus(void) const;	// テキスト入力欄が選択中か
 	BOOL	IsInteractive(void) const;	// 操作可能か
 	BOOL	HitTest(int x, int y, RECT &rcDst, int nFocusIndex) const;	// 当たり判定
 	void	DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, BOOL bPassword, BOOL bFocused);	// 入力欄描画
 	void	OnConnect(void);	// 接続ボタンハンドラ
+	CString	GetCurrentFieldText(void) const;	// フォーカス中フィールドのテキスト取得
+	void	SetCurrentFieldText(LPCTSTR pszText);	// フォーカス中フィールドのテキスト設定
 	friend class CMainFrame;
 
 
@@ -75,4 +79,5 @@ private:
 	BOOL	m_bEnabled;
 	BOOL	m_bSavePassword;
 	int		m_nFocusIndex;
+	int		m_nCursorPos;	// テキスト入力のカーソル位置（文字インデックス）
 } CWindowLOGIN, *PCWindowLOGIN;
