@@ -523,6 +523,7 @@ void CMgrWindow::MakeWindowLOGIN(void)
 	}
 	pWindowNew->Create(m_pMgrData);
 	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }

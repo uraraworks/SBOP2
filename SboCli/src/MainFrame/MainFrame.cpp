@@ -395,27 +395,27 @@ void CMainFrame::OnSDLTextInput(LPCSTR pszText)
 
 void CMainFrame::OnSDLMouseMove(int x, int y)
 {
-	OnMouseMove(x, y);
+	OnMouseMove(x + 32, y + 32);
 }
 
 
 void CMainFrame::OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick)
 {
 	UNREFERENCED_PARAMETER(bDoubleClick);
-	OnLButtonDown(x, y);
+	OnLButtonDown(x + 32, y + 32);
 }
 
 
 void CMainFrame::OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick)
 {
 	UNREFERENCED_PARAMETER(bDoubleClick);
-	OnRButtonDown(x, y);
+	OnRButtonDown(x + 32, y + 32);
 }
 
 
 void CMainFrame::OnSDLMouseRightButtonDoubleClick(int x, int y)
 {
-	OnRButtonDblClk(x, y);
+	OnRButtonDblClk(x + 32, y + 32);
 }
 
 
