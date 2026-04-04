@@ -351,7 +351,6 @@ void CMgrDraw::DrawChar(
 	POINT ptTmp;
 	PCInfoMotion pInfoMotion;
 	PCImg32 pSrc, pDibTmp;
-	HDC hDCBmp;
 
 	LockDibTmp();
 	pDibTmp = GetDibTmp();
@@ -415,11 +414,7 @@ void CMgrDraw::DrawChar(
 		m_pMgrGrpData->GetGrpPos(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
 		pSrc = m_pMgrGrpData->GetDib2x2CharShadow(0);
 		pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y);
-		hDCBmp = pDibTmp->Lock();
-		StretchBlt(hDCBmp, 0, cyChar * 2, cxChar * 2, cyChar * 2, hDCBmp, 0, 0, cxChar, cyChar, SRCCOPY);
-		if (bLock) {
-			pDibTmp->Unlock();
-		}
+		pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
 		pDst->BltAlpha(
 			x + pInfoMotion->m_ptDrawPosPile0.x,
 			y + pInfoMotion->m_ptDrawPosPile0.y,
@@ -435,11 +430,7 @@ void CMgrDraw::DrawChar(
 		ptTmp.y += nTmp;
 		pSrc = m_pMgrGrpData->GetDib2x2NPCShadow(wGrpIdNPC);
 		pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y);
-		hDCBmp = pDibTmp->Lock();
-		StretchBlt(hDCBmp, 0, cyChar * 2, cxChar * 2, cyChar * 2, hDCBmp, 0, 0, cxChar, cyChar, SRCCOPY);
-		if (bLock) {
-			pDibTmp->Unlock();
-		}
+		pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
 		pDst->BltAlpha(
 			x + pInfoMotion->m_ptDrawPosPile0.x,
 			y + pInfoMotion->m_ptDrawPosPile0.y,
@@ -476,11 +467,7 @@ void CMgrDraw::DrawChar(
 						pDibTmp->Blt(9,  10, 4, 2, pSrc, ptTmp.x +  9, 10, TRUE);
 					}
 				}
-				hDCBmp = pDibTmp->Lock();
-				StretchBlt(hDCBmp, 0, cyChar * 2, cxChar * 2, cyChar * 2, hDCBmp, 0, 0, cxChar, cyChar, SRCCOPY);
-				if (bLock) {
-					pDibTmp->Unlock();
-				}
+				pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
 				pDst->BltAlpha(
 					x + pInfoMotion->m_ptDrawPosPile0.x,
 					y + pInfoMotion->m_ptDrawPosPile0.y,
@@ -518,11 +505,7 @@ void CMgrDraw::DrawChar(
 					pSrc = m_pMgrGrpData->GetDib(GRPIDMAIN_2X2_EYE, 0, nEyeID);
 					pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x - 32 * 4, ptTmp.y, TRUE);
 				}
-				hDCBmp = pDibTmp->Lock();
-				StretchBlt(hDCBmp, 0, cyChar * 2, cxChar * 2, cyChar * 2, hDCBmp, 0, 0, cxChar, cyChar, SRCCOPY);
-				if (bLock) {
-					pDibTmp->Unlock();
-				}
+				pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
 				pDst->BltAlpha(
 					x + pInfoMotion->m_ptDrawPosPile0.x,
 					y + pInfoMotion->m_ptDrawPosPile0.y,
@@ -548,11 +531,7 @@ void CMgrDraw::DrawChar(
 			m_pMgrGrpData->GetGrpPos(wGrpIDMain, wGrpIDSub - 1, ptTmp);
 			pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
 
-			hDCBmp = pDibTmp->Lock();
-			StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-			if (bLock) {
-				pDibTmp->Unlock();
-			}
+			pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
 			pDst->BltAlpha(
 				x + nTmp + pInfoMotion->m_ptDrawPosPile1.x,
 				y + nTmp + pInfoMotion->m_ptDrawPosPile1.y,
@@ -577,11 +556,7 @@ void CMgrDraw::DrawChar(
 			m_pMgrGrpData->GetGrpPos(wGrpIDMain, wGrpIDSub - 1, ptTmp);
 			pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
 
-			hDCBmp = pDibTmp->Lock();
-			StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-			if (bLock) {
-				pDibTmp->Unlock();
-			}
+			pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
 			pDst->BltAlpha(
 				x + nTmp + pInfoMotion->m_ptDrawPosPile2.x,
 				y + nTmp + pInfoMotion->m_ptDrawPosPile2.y,
@@ -606,11 +581,7 @@ void CMgrDraw::DrawChar(
 			m_pMgrGrpData->GetGrpPos(wGrpIDMain, wGrpIDSub - 1, ptTmp);
 			pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
 
-			hDCBmp = pDibTmp->Lock();
-			StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-			if (bLock) {
-				pDibTmp->Unlock();
-			}
+			pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
 			pDst->BltAlpha(
 				x + nTmp + pInfoMotion->m_ptDrawPosPile3.x,
 				y + nTmp + pInfoMotion->m_ptDrawPosPile3.y,
@@ -630,11 +601,7 @@ ExitEffect:
 			nTmp = (cx - cxChar) * -1;
 		}
 		pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
-		hDCBmp = pDibTmp->Lock();
-		StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-		if (bLock) {
-			pDibTmp->Unlock();
-		}
+		pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
 		pDst->BltAlpha(x + nTmp, y + nTmp, cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoChar->GetEfcLevel(), TRUE);
 	}
 
@@ -656,7 +623,6 @@ void CMgrDraw::DrawChar(
 	BYTE byAnimeNoTmp;
 	int yy, cx, cy;
 	PCImg32 pSrc, pDibTmp;
-	HDC hDCBmp;
 
 	yy		= 0;
 	pSrc	= pInfoChar->m_pDibChar;
@@ -675,9 +641,7 @@ void CMgrDraw::DrawChar(
 
 	pDibTmp->Blt(0, 0, cx, cy, pSrc, (byDirection * 4 + byAnimeNoTmp) * cx, yy);
 
-	hDCBmp = pDibTmp->Lock();
-	StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-	pDibTmp->Unlock();
+	pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
 
 	pDst->BltAlpha(x, y, cx * 2, cy * 2, pDibTmp, 0, cy * 2, byLevel, TRUE);
 	ReleaseDibTmp();
@@ -716,7 +680,6 @@ void CMgrDraw::DrawMapParts(
 	WORD wGrpIDBase, wGrpIDPile;
 	PCImg32 pImg, pDibTmp;
 	PCInfoAnime pAnime;
-	HDC hDCBmp;
 
 	nSize = 16;
 	nSizeDst = 32;
@@ -766,11 +729,7 @@ void CMgrDraw::DrawMapParts(
 		pDibTmp->BltFrom256(0, 0, nSize+1, nSize, pImg, ((wGrpIDPile % 1024) % 32) * nSize, ((wGrpIDPile % 1024) / 32) * nSize, TRUE);
 	}
 
-	hDCBmp = pDibTmp->Lock();
-	StretchBlt(hDCBmp, 0, nSizeDst, nSizeDst, nSizeDst, hDCBmp, 0, 0, nSize, nSize, SRCCOPY);
-	if (bLock) {
-		pDibTmp->Unlock();
-	}
+	pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
 
 	if (byLevel == 0) {
 		pDst->Blt(x, y, nSizeDst, nSizeDst, pDibTmp, 0, nSizeDst, bUseColorKey);
@@ -797,7 +756,6 @@ void CMgrDraw::DrawMapShadow(
 	PCImg32 pImg, pDibTmp;
 	PCInfoMapShadow pInfoMapShadow;
 	PCInfoAnime pAnime;
-	HDC hDCBmp;
 
 	pDibTmp = GetDibTmp();
 	nSize = 16;
@@ -825,11 +783,7 @@ void CMgrDraw::DrawMapShadow(
 		pDibTmp->BltFrom256(0, 0, nSize, nSize, pImg, ((wGrpIDBase % 1024) % 32) * nSize, ((wGrpIDBase % 1024) / 32) * nSize);
 	}
 
-	hDCBmp = pDibTmp->Lock();
-	StretchBlt(hDCBmp, 0, nSizeDst, nSizeDst, nSizeDst, hDCBmp, 0, 0, nSize, nSize, SRCCOPY);
-	if (bLock) {
-		pDibTmp->Unlock();
-	}
+	pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
 
 	if (bSingleSize) {
 		pDst->Blt(x, y, nSizeDst, nSizeDst, pDibTmp, 0, nSizeDst, bUseColorKey);
@@ -855,7 +809,6 @@ void CMgrDraw::DrawMapObject(
 	WORD wGrpID;
 	PCImg32 pImg, pDibTmp;
 	PCInfoMapObject pInfo;
-	HDC hDCBmp;
 	PSTMAPOBJECTANIMEINFO pAnimeInfo;
 	PCLibInfoMapObject pLibInfoMapObject;
 
@@ -889,11 +842,7 @@ void CMgrDraw::DrawMapObject(
 		}
 	}
 
-	hDCBmp = pDibTmp->Lock();
-	StretchBlt(hDCBmp, 0, sizeDst.cy, sizeDst.cx, sizeDst.cy, hDCBmp, 0, 0, sizeSrc.cx, sizeSrc.cy, SRCCOPY);
-	if (bLock) {
-		pDibTmp->Unlock();
-	}
+	pDibTmp->BltStretchNearest(0, sizeDst.cy, sizeDst.cx, sizeDst.cy, pDibTmp, 0, 0, sizeSrc.cx, sizeSrc.cy);
 
 	pDst->Blt(x, y - (sizeDst.cy - 32), sizeDst.cx, sizeDst.cy, pDibTmp, 0, sizeDst.cy, bUseColorKey);
 
@@ -929,7 +878,6 @@ void CMgrDraw::DrawItem(
 	BOOL bLock)/*TRUE*/			// [in] テンポラリをロックする
 {
 	PCImg32 pImg, pDibTmp;
-	HDC hDCBmp;
 
 	pDibTmp = GetDibTmp();
 	if (pInfoItem == NULL) {
@@ -942,11 +890,7 @@ void CMgrDraw::DrawItem(
 	}
 	pDibTmp->BltFrom256(0, 0, 16, 16, pImg, (pInfoItem->m_dwGrpID % 32) * 16, (pInfoItem->m_dwGrpID / 32) * 16);
 
-	hDCBmp = pDibTmp->Lock();
-	StretchBlt(hDCBmp, 0, 32, 32, 32, hDCBmp, 0, 0, 16, 16, SRCCOPY);
-	if (bLock) {
-		pDibTmp->Unlock();
-	}
+	pDibTmp->BltStretchNearest(0, 32, 32, 32, pDibTmp, 0, 0, 16, 16);
 
 	if (byLevel == 0) {
 		pDst->Blt(x, y, 32, 32, pDibTmp, 0, 32, TRUE);
@@ -967,7 +911,6 @@ void CMgrDraw::DrawBalloon(
 {
 	int cx, cy;
 	PCImg32 pImg, pDibTmp;
-	HDC hDCBmp;
 	POINT ptTmp;
 
 	pDibTmp = GetDibTmp();
@@ -984,9 +927,7 @@ void CMgrDraw::DrawBalloon(
 	m_pMgrGrpData->GetGrpPos(GRPIDMAIN_EFCBALLOON, (WORD)dwBalloonID, ptTmp);
 	pDibTmp->BltFrom256(0, 0, 16, 16, pImg, ptTmp.x, ptTmp.y);
 
-	hDCBmp = pDibTmp->Lock();
-	StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-	pDibTmp->Unlock();
+	pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
 
 	pDst->Blt(x, y, cx * 2, cy * 2, pDibTmp, 0, cy * 2, TRUE);
 
@@ -1005,7 +946,6 @@ void CMgrDraw::DrawTextEffect(
 	BYTE byLevel;
 	int cx, cy, i, nCount;
 	PCImg32 pImg, pDibTmp;
-	HDC hDCBmp;
 	POINT ptSrc, ptTmp;
 
 	pDibTmp = GetDibTmp();
@@ -1042,9 +982,6 @@ void CMgrDraw::DrawTextEffect(
 		ptSrc.x = pInfoTextEffect->GetGrpNo(i) * cx;
 		pDibTmp->BltFrom256(cx * i + ptTmp.x, cy + ptTmp.y + 20, cx, cy, pImg, ptSrc.x, ptSrc.y);
 	}
-
-	hDCBmp = pDibTmp->Lock();
-	pDibTmp->Unlock();
 
 	if (byLevel == 0) {
 		pDst->Blt(x - (cx * nCount / 2), y - cy, (cx * nCount), cy * 2 + 20, pDibTmp, 0, 0, TRUE);
@@ -1124,16 +1061,13 @@ void CMgrDraw::DrawIcon(
 {
 	int cx, cy;
 	PCImg32 pImg, pDibTmp;
-	HDC hDCBmp;
 
 	cx = cy = 16;
 	pDibTmp	= GetDibTmp();
 	pImg	= m_pMgrGrpData->GetDibIcon();
 	pDibTmp->BltFrom256(0, 0, 16, 16, pImg, nIndex % 20 * cx, nIndex / 20 * cy);
 
-	hDCBmp = pDibTmp->Lock();
-	StretchBlt(hDCBmp, 0, cy * 2, cx * 2, cy * 2, hDCBmp, 0, 0, cx, cy, SRCCOPY);
-	pDibTmp->Unlock();
+	pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
 
 	pDst->Blt(x, y, cx * 2, cy * 2, pDibTmp, 0, cy * 2, TRUE);
 	ReleaseDibTmp();
@@ -1305,7 +1239,6 @@ void CMgrDraw::SaveScreenShot(void)
 void CMgrDraw::LockDibTmp(void)
 {
 	GetDibTmp();
-	m_pDibTmp->Lock();
 }
 
 
