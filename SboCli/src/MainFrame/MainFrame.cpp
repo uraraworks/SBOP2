@@ -928,7 +928,7 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 
 	if (m_pMgrData->IsLocalTitleMode() == FALSE) {
 		stGuid = m_pMgrData->GetInputGuid();
-		m_pMgrKeyInput->SetDevice(stGuid, hWnd);
+		m_pMgrKeyInput->SetDevice(stGuid);
 	}
 
 	if (m_pMgrData->IsLocalTitleMode() == FALSE) {
@@ -960,12 +960,6 @@ Exit:
 	if (bRet == FALSE) {
 		PushSDLQuitEvent();
 	}
-}
-
-
-void CMainFrame::OnDestroy(HWND hWnd)
-{
-	PostQuitMessage(0);
 }
 
 

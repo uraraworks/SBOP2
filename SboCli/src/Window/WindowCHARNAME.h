@@ -32,7 +32,6 @@ private:
 	void	DeleteBackward(void);	// 1文字削除
 	void	AppendText(LPCSTR pszText);	// テキスト追記
 	void	SubmitCharName(void);	// キャラ名確定
-	static LRESULT CALLBACK CharNameWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// キャラ名入力欄プロシージャ
 
 
 public:
@@ -41,7 +40,4 @@ public:
 
 private:
 	BOOL	m_bTextInputActive;	// SDLテキスト入力状態
-	HWND	m_hWndCharName;	// キャラ名入力欄
-
-	WNDPROC	m_OrgWndProcCharName;	// キャラ名入力欄の元ウィンドウプロシージャ
 } CWindowCHARNAME, *PCWindowCHARNAME;

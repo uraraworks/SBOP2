@@ -34,8 +34,6 @@ private:
 	void	DeleteBackward(void);	// 1文字削除
 	void	AppendText(LPCSTR pszText);	// テキスト追記
 	void	SubmitChat(void);	// チャット確定
-	static LRESULT CALLBACK ChatWndProcEntry(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// チャット入力欄プロシージャ
-	LRESULT ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);	// チャット入力欄プロシージャ
 
 
 public:
@@ -47,9 +45,5 @@ private:
 	BOOL	m_bPushEnter,	// Enterキー押下状態
 			m_bPushEsc,	// ESCキー押下状態
 			m_bTextInputActive;	// SDLテキスト入力状態
-	HWND	m_hWndChat;	// チャット入力欄
-
 	std::vector<int> m_aArrayType;	// チャット種別
-
-	WNDPROC	m_OrgWndProcChat;	// チャット入力欄の元ウィンドウプロシージャ
 } CWindowCHAT, *PCWindowCHAT;

@@ -22,8 +22,6 @@ CWindowCHARNAME::CWindowCHARNAME()
 	m_ptViewPos.y	= 180;
 	m_sizeWindow.cx	= 16 * 2 + 8 * 15;
 	m_sizeWindow.cy	= 16 * 2 + 16 * 3;
-	m_hWndCharName	= NULL;
-	m_OrgWndProcCharName	= NULL;
 }
 
 
@@ -220,14 +218,4 @@ void CWindowCHARNAME::SubmitCharName(void)
 		TrimViewString(m_strName, (LPCTSTR)strTmp);
 	}
 	m_pMgrData->PostWindowMessage(WINDOWTYPE_CHARNAME, 0);
-}
-
-
-LRESULT CALLBACK CWindowCHARNAME::CharNameWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	UNREFERENCED_PARAMETER(hWnd);
-	UNREFERENCED_PARAMETER(message);
-	UNREFERENCED_PARAMETER(wParam);
-	UNREFERENCED_PARAMETER(lParam);
-	return 0;
 }

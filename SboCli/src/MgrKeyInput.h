@@ -24,8 +24,8 @@ public:
 	BOOL	IsInput(BYTE byCode);						// 押下判定
 
 	// ジョイパッド関連
-	void	SetDevice(int nNo, HWND hWnd);				// 使用デバイスを設定
-	void	SetDevice(GUID &stSrc, HWND hWnd);			// 使用デバイスを設定
+	void	SetDevice(int nNo);							// 使用デバイスを設定
+	void	SetDevice(GUID &stSrc);						// 使用デバイスを設定
 	void	Enum(void);									// ジョイパッドを列挙
 	int		GetDeviceCount(void);						// デバイス数を取得
 	BOOL	GetDeviceName(int nNo, CmyString &strDst);	// デバイス名を取得

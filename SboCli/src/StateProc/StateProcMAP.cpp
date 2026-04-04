@@ -3337,7 +3337,7 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET_SETDEVICE(DWORD dwPara)
 	pMgrKeyInput = m_pMgrData->GetMgrKeyInput();
 	nNo = (int)dwPara;
 	nNo --;
-	pMgrKeyInput->SetDevice(nNo, m_pMgrData->GetMainWindow());
+	pMgrKeyInput->SetDevice(nNo);
 
 	ZeroMemory(&stGuid, sizeof (stGuid));
 	if (nNo >= 0) {

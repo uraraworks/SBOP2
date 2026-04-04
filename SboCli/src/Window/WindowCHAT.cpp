@@ -34,8 +34,6 @@ CWindowCHAT::CWindowCHAT()
 	m_sizeWindow.cx	= SCRSIZEX - (m_ptViewPos.x * 2) - 6;
 	m_sizeWindow.cy	= 16 + 14 + 6 + 4;
 	m_ptViewPos.x	= SCRSIZEX / 2 - m_sizeWindow.cx / 2;
-	m_hWndChat	= NULL;
-	m_OrgWndProcChat	= NULL;
 }
 
 
@@ -278,29 +276,4 @@ void CWindowCHAT::SubmitChat(void)
 		m_bDelete = TRUE;
 		UpdateSDLTextInput();
 	}
-}
-
-
-LRESULT CALLBACK CWindowCHAT::ChatWndProcEntry(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT hResult;
-	PCWindowCHAT pThis;
-
-	pThis	= (PCWindowCHAT)GetWindowLong(hWnd, GWL_USERDATA);
-	hResult	= -1;
-
-	if (pThis) {
-		hResult = pThis->ChatWndProc(hWnd, message, wParam, lParam);
-	}
-	return hResult;
-}
-
-
-LRESULT CWindowCHAT::ChatWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	UNREFERENCED_PARAMETER(hWnd);
-	UNREFERENCED_PARAMETER(message);
-	UNREFERENCED_PARAMETER(wParam);
-	UNREFERENCED_PARAMETER(lParam);
-	return 0;
 }

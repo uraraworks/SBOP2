@@ -100,7 +100,6 @@ private:
 	BOOL InitNativeMainWindow(SDL_Window *pWindow); // ネイティブウィンドウ関連を初期化
 	void RestoreMainWindowPosition(SDL_Window *pWindow); // 保存済みのメインウィンドウ位置を復元
 	void OnInitEnd(HWND hWnd);
-	void OnDestroy(HWND hWnd);
 	void OnKeyUp(UINT vk);
 	void OnLButtonDown(int x, int y);
 	void OnRButtonDown(int x, int y);

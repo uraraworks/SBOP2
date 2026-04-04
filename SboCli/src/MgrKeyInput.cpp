@@ -171,15 +171,15 @@ Exit:
 }
 
 
-void CMgrKeyInput::SetDevice(int nNo, HWND hWnd)
+void CMgrKeyInput::SetDevice(int nNo)
 {
-	m_pDInputUtil->SetDevice(nNo, hWnd);
+	m_pDInputUtil->SetDevice(nNo);
 }
 
 
-void CMgrKeyInput::SetDevice(GUID &stSrc, HWND hWnd)
+void CMgrKeyInput::SetDevice(GUID &stSrc)
 {
-	m_pDInputUtil->SetDevice(stSrc, hWnd);
+	m_pDInputUtil->SetDevice(stSrc);
 }
 
 

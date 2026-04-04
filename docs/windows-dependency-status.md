@@ -1,6 +1,6 @@
 # Windows依存状況メモ
 
-最終更新日: 2026-04-02
+最終更新日: 2026-04-04
 
 ## 概要
 
@@ -95,6 +95,13 @@
 - これらは `WM_WNDCLOSE` で親ダイアログへ通知する構成であり、SDL メインウィンドウの終了経路とは分けて考える。
 - `WndSelectMapShadowGrp` と `DlgAdminMapShadowEdit` の通知 ID 不整合は修正済み。
 
+### 6. 入力デバイスの SDL 統一
+
+- `DInputUtil` を全プラットフォームで SDL ジョイスティック API に統一した。
+- `dinput.h` インクルード、`dinput8.lib` / `dxguid.lib` のリンクを除去した。
+- `SetDevice()` から HWND 引数を削除し、呼び出し元（MainFrame / StateProcMAP / MgrKeyInput）も追従した。
+- `void*` キャストによる型不整合も解消し、`SDL_Joystick*` を直接保持する構成へ変更した。
+
 ## 残っている Windows 依存
 
 ### 1. ウィンドウとイベントループ
@@ -113,9 +120,9 @@
 
 ### 3. 入力の残存依存
 
-- DirectInput ベースのジョイパッド経路は残存。
-- `DInputUtil.cpp` は `dinput8.lib` 依存のまま。
-- Win32 コントロール入力欄やチャット入力欄は別途 Win32 依存を持つ。
+- DirectInput ベースのジョイパッド経路は **SDL に統一済み**。
+- `DInputUtil` は全プラットフォームで SDL ジョイスティック API を使用する構成に整理済み。`dinput8.lib` / `dxguid.lib` 依存は除去。
+- `WindowLOGIN` / `WindowCHAT` / `WindowCHARNAME` の Win32 コントロール依存は除去済み。
 
 #### 2026-04-01 作業メモ
 
@@ -128,6 +135,7 @@
 - `WM_MGRDRAW` も `MgrData::PostMgrDrawMessage()` / `DispatchMgrDrawMessage()` と `MainFrame` 内部キュー経由へ寄せ、フェード開始・終了通知の自己 `PostMessage` を削減した。
 - `WM_WINDOWMSG` / `WM_ADMINMSG` についても `MgrData::PostWindowMessage()` / `PostAdminMessage()` を追加し、`Window/*`・`DlgMsgLog`・`StateProcLOGINMENU`・`MainFrameRecvProcADMIN|CHAR|MAP` の主要な発行元を共通経路へ移した。
 - この結果、`SDLApp::PollWin32Messages()` で必ずさばく必要がある独自メッセージは、ソケット通知や Win32/MFC 補助 UI 由来のものへかなり絞られてきた。
+- 2026-04-04: Windows 版も SDL ジョイスティック主系に統一し、DirectInput コード・`dinput8.lib` 依存を完全除去した。HWND 引数も `SetDevice()` API から削除した。
 - さらに browser 方針として、管理者ダイアログ関連は `StateProcMAP` 側で `__EMSCRIPTEN__` 時に生成・通知・通知種別設定を無効化した。現時点では「ブラウザ版は管理 UI なし」で固定し、ネイティブ専用のまま切り分ける。
 - `IGameLoopHost::OnWin32Message()` を追加し、`SDLApp::PollWin32Messages()` からメインウィンドウ向けの `WM_TIMER` / `WM_COMMAND` / `WM_MAINFRAME` / `WM_WINDOWMSG` / `WM_ADMINMSG` / `WM_MGRDRAW` / `URARASOCK` 通知を `MainFrame` へ直接配送するようにした。
 - これにより `DispatchMessage()` へ残るのは、`WM_CTLCOLORSTATIC` のような同期応答が必要なメッセージや補助 UI 起点のメッセージが中心になり、Win32 サブクラス化の責務をさらに限定できた。
@@ -144,7 +152,7 @@
 
 ### 5. 補助 UI / 管理 UI
 
-- `WindowLOGIN.cpp`, `WindowCHAT.cpp`, `WindowCHARNAME.cpp` などは `CreateWindow()` 系の依存が残る。
+- `WindowLOGIN` / `WindowCHAT` / `WindowCHARNAME` の `CreateWindow()` / HWND ベースコントロール依存は除去済み。SDL テキスト入力ベースに移行完了。
 - `DlgMsgLog`、デバッグウィンドウ、各種管理ダイアログは `HWND` / MFC / Win32 前提。
 - これらは SDL メインウィンドウ移行とは別レイヤで整理が必要。
 
@@ -153,6 +161,7 @@
 - `DlgMsgLog`、管理者ダイアログ、デバッグウィンドウ、各種 `Wnd*` ツールは browser 版では無効化または Null 実装で切る。
 - `WindowLOGIN`、`WindowCHAT`、`WindowCHARNAME` は browser 版で必要なため、Win32 コントロールをやめて SDL テキスト入力ベースへ移行する。
 - 先行対象は `WindowLOGIN`。ここで SDL テキスト入力の土台を作り、その後 `WindowCHAT` と `WindowCHARNAME` に横展開する。
+- 2026-04-04: `WindowLOGIN` / `WindowCHAT` / `WindowCHARNAME` とも Win32 コントロール依存は除去完了。デッドコード（HWND / WNDPROC メンバ、WndProc コールバック）も削除済み。
 
 ## 直近の優先タスク
 
@@ -160,7 +169,7 @@
 2. `WindowLOGIN` / `WindowCHAT` / `WindowCHARNAME` の browser 側描画を実機で確認し、必要なら `CImg32` / 文字描画まわりの見え方を補強する。
 3. browser 版で不要な補助 UI / 管理 UI / デバッグ UI を Null 実装または無効化で切る。
 4. `MainFrame` / `SDLApp` に残る `HWND` 取得、サブクラス化、`PeekMessage` 依存をさらに縮退する。
-5. `MgrKeyInput` の DirectInput 依存を外し、入力経路を SDL に統一する。
+5. `MgrKeyInput` の DirectInput 依存を外し、入力経路を SDL に統一する。→ 完了
 6. `MgrDraw` と `Window/*` / `Layer/*` の `HDC` / `CImg32` / GDI 描画を SDL テクスチャ経路へ移す。
 7. `DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存を切り分ける。
 
