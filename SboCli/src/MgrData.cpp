@@ -336,9 +336,11 @@ void CMgrData::PostMainFrameMessage(DWORD dwCommand, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		PostMessage(m_hWndMain, WM_MAINFRAME, dwCommand, dwParam);
 	}
+#endif
 }
 
 
@@ -349,9 +351,11 @@ void CMgrData::DispatchMainFrameMessage(DWORD dwCommand, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		SendMessage(m_hWndMain, WM_MAINFRAME, dwCommand, dwParam);
 	}
+#endif
 }
 
 
@@ -362,9 +366,11 @@ void CMgrData::PostWindowMessage(int nType, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		PostMessage(m_hWndMain, WM_WINDOWMSG, nType, dwParam);
 	}
+#endif
 }
 
 
@@ -375,9 +381,11 @@ void CMgrData::DispatchWindowMessage(int nType, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		SendMessage(m_hWndMain, WM_WINDOWMSG, nType, dwParam);
 	}
+#endif
 }
 
 
@@ -388,9 +396,11 @@ void CMgrData::PostAdminMessage(int nType, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		PostMessage(m_hWndMain, WM_ADMINMSG, nType, dwParam);
 	}
+#endif
 }
 
 
@@ -401,9 +411,11 @@ void CMgrData::DispatchAdminMessage(int nType, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		SendMessage(m_hWndMain, WM_ADMINMSG, nType, dwParam);
 	}
+#endif
 }
 
 
@@ -414,9 +426,11 @@ void CMgrData::PostMgrDrawMessage(int nCode, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		PostMessage(m_hWndMain, WM_MGRDRAW, nCode, dwParam);
 	}
+#endif
 }
 
 
@@ -427,9 +441,11 @@ void CMgrData::DispatchMgrDrawMessage(int nCode, DWORD dwParam)
 		return;
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_hWndMain) {
 		SendMessage(m_hWndMain, WM_MGRDRAW, nCode, dwParam);
 	}
+#endif
 }
 
 

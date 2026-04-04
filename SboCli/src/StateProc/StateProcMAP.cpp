@@ -181,10 +181,12 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 	m_pLibInfoMap		= pMgrData->GetLibInfoMap();
 	m_pLibInfoItem		= pMgrData->GetLibInfoItem();
 
+#if !defined(__EMSCRIPTEN__)
 	m_pDlgMsgLog = new CDlgMsgLog;
 	m_pDlgMsgLog->Create(pMgrData->GetMainWindow(), m_pMgrData);
 	m_pDlgDbg = new CDlgDbg;
 	m_pDlgDbg->Create(pMgrData->GetMainWindow(), m_pMgrData);
+#endif
 }
 
 
@@ -196,6 +198,7 @@ void CStateProcMAP::Init(void)
 
 	GetModuleIniPath(szFileName, _countof(szFileName));
 
+#if !defined(__EMSCRIPTEN__)
 	rc.left		= GetPrivateProfileInt(_T("Pos"), _T("LogLeft"),	-1, szFileName);
 	rc.top		= GetPrivateProfileInt(_T("Pos"), _T("LogTop"),	-1, szFileName);
 	rc.right	= GetPrivateProfileInt(_T("Pos"), _T("LogRight"),	-1, szFileName);
@@ -203,6 +206,7 @@ void CStateProcMAP::Init(void)
 	if (!((rc.left == -1) && (rc.top == -1))) {
 		m_pDlgMsgLog->SetWindowPos(NULL, rc.left, rc.top, rc.Width(), rc.Height(), SWP_NOZORDER | SWP_NOACTIVATE);
 	}
+#endif
 
 	m_pPlayerChar	= m_pMgrData->GetPlayerChar();
 	m_pMap			= m_pMgrData->GetMap();
@@ -233,9 +237,13 @@ void CStateProcMAP::Init(void)
 
 void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
 {
+#if !defined(__EMSCRIPTEN__)
 	if (m_pDlgMsgLog->IsWindowVisible()) {
 		m_pDlgMsgLog->GetWindowRect(&rcDst);
 	}
+#else
+	UNREFERENCED_PARAMETER(rcDst);
+#endif
 }
 
 
@@ -1059,17 +1067,17 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 				KeyProc(0, FALSE);
 			}
 			strTmp.Format(_T("%s：%s"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoChar->m_strSpeak);
-			m_pDlgMsgLog->Add(strTmp, pInfoChar->m_clSpeak);
+			if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(strTmp, pInfoChar->m_clSpeak); }
 		}
 		break;
 
 	case MAINFRAMEMSG_RENEWCHARCOUNT:	// キャラ数更新
 		m_pMgrData->SetCharCount(dwParam);
-		m_pDlgDbg->Renew();
+		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
 		break;
 
 	case MAINFRAMEMSG_RENEWONLINECOUNT:	// オンライン数更新
-		m_pDlgDbg->Renew();
+		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
 		break;
 
 	case MAINFRAMEMSG_RENEWSYSTEMMSG:	// システムメッセージ更新
@@ -1087,7 +1095,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 				pSystemMsg = m_pMgrData->GetSystemMsg(i);
 
 				if (pSystemMsg->bAddLog) {
-					m_pDlgMsgLog->Add(pSystemMsg->strMsg, pSystemMsg->clMsg);
+					if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(pSystemMsg->strMsg, pSystemMsg->clMsg); }
 				}
 				pLayerSystemMsg->AddMsg(pSystemMsg->strMsg, pSystemMsg->clMsg);
 			}
@@ -2881,7 +2889,7 @@ Exit:
 		rcTmp.top	 = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
 		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 		m_pLibInfoItem->SetArea(m_pPlayerChar->m_dwMapID, &rcTmp);
-		m_pDlgDbg->Renew();
+		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
 	}
 
 	return bRet;

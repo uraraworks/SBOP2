@@ -481,9 +481,9 @@ void CMainFrame::OnDraw(SDL_Renderer *pRenderer)
 	}
 #endif
 
-	dwTmp = timeGetTime();
+	dwTmp = SDL_GetTicks();
 	m_pMgrDraw->Draw(pRenderer);
-	dwTmp = timeGetTime() - dwTmp;
+	dwTmp = SDL_GetTicks() - dwTmp;
 	m_pMgrData->SetDrawTime(dwTmp);
 	m_dwDrawTime += dwTmp;
 }
@@ -920,9 +920,13 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 	SDL_Log("OnInitEnd: grp load result=%d localTitle=%d", bResult, m_pMgrData->IsLocalTitleMode());
 #endif
 	if (bResult == FALSE) {
+#if defined(__EMSCRIPTEN__)
+		SDL_Log("OnInitEnd: グラフィックデータDLLの読み込みに失敗しました");
+#else
 		if (hWnd) {
 			MessageBox(hWnd, _T("グラフィックデータDLLの読み込みに失敗しました"), _T("エラー"), MB_OK);
 		}
+#endif
 		goto Exit;
 	}
 
@@ -931,12 +935,14 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 		m_pMgrKeyInput->SetDevice(stGuid);
 	}
 
+#if !defined(__EMSCRIPTEN__)
 	if (m_pMgrData->IsLocalTitleMode() == FALSE) {
 		BuildModuleRelativePath(szName, _countof(szName), _T("ss"));
 		CreateDirectory(szName, NULL);
 		BuildModuleRelativePath(szTmp, _countof(szTmp), _T("Log"));
 		CreateDirectory(szTmp, NULL);
 	}
+#endif
 
 	bResult = FALSE;
 	if (m_pMgrData->IsLocalTitleMode() == FALSE) {
@@ -949,9 +955,11 @@ void CMainFrame::OnInitEnd(HWND hWnd)
 #if defined(__EMSCRIPTEN__)
 	SDL_Log("OnInitEnd: changed to state=%d", m_nGameState);
 #endif
+#if !defined(__EMSCRIPTEN__)
 	if (hWnd) {
 		ShowWindow(hWnd, SW_SHOW);
 	}
+#endif
 
 	PostMainFrameMessage(MAINFRAMEMSG_RENEWVIEWSET, 0);
 
@@ -1231,6 +1239,7 @@ void CMainFrame::UpdateToolCheck(void)
 
 void CMainFrame::CheckToolResponsiveness(void)
 {
+#if !defined(__EMSCRIPTEN__)
 	DWORD dwTmp, dwScond, dwTimeTmp;
 	SYSTEMTIME sysTime;
 
@@ -1259,6 +1268,7 @@ void CMainFrame::CheckToolResponsiveness(void)
 		return;
 	}
 	PushSDLQuitEvent();
+#endif
 }
 
 
@@ -1405,6 +1415,7 @@ void CMainFrame::Connect(void)
 
 void CMainFrame::FlashMainWindow(void)
 {
+#if !defined(__EMSCRIPTEN__)
 	UINT uState;
 	FLASHWINFO stFwi;
 	APPBARDATA stAbd;
@@ -1432,6 +1443,7 @@ void CMainFrame::FlashMainWindow(void)
 	stFwi.uCount = 4;
 	stFwi.dwTimeout = 300;
 	FlashWindowEx(&stFwi);
+#endif
 }
 
 
