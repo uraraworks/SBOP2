@@ -258,7 +258,7 @@ void CMgrSound::ReadSoundData(void)
 	nCount = m_pLibSboSoundLoader->GetSoundCount();
 
 	SAFE_DELETE_ARRAY(m_apDMSSound);
-	m_apDMSSound = new IDirectMusicSegment8*[nCount];
+	m_apDMSSound = new IDirectMusicSegment8*[nCount]();
 
 	for (i = 0; i < nCount; i++) {
 		nResourceID = m_pLibSboSoundLoader->GetSoundResourceID(i);

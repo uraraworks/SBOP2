@@ -43,6 +43,7 @@ void CDXAudio::FreeBgmResources() {}
 // -----------------------------------------------------------------------
 #include <windows.h>   // LoadResource / LockResource 等
 #include <mmreg.h>     // WAVEFORMATEX
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <cmath>
 #include <cstdlib>

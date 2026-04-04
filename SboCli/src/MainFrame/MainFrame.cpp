@@ -165,7 +165,6 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 	if (!sdlApp.Init()) {
 		return -1;
 	}
-
 	int nRet = sdlApp.Run(this, szTitle, SCRSIZEX, SCRSIZEY);
 #if !defined(__EMSCRIPTEN__)
 	sdlApp.Destroy();
@@ -879,7 +878,6 @@ void CMainFrame::OnInitEnd(void)
 		m_pSock->SetNotifySink(&CMainFrame::OnSocketNotifyThunk, this);
 	}
 #endif
-
 	m_pMgrDraw = m_pMgrData->GetMgrDraw();
 	m_pMgrLayer = m_pMgrData->GetMgrLayer();
 	m_pMgrWindow = m_pMgrData->GetMgrWindow();

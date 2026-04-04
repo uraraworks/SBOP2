@@ -24,6 +24,8 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 	m_pSock = NULL;
 	m_hDll = NULL;
 	m_pfRelease = nullptr;
+	m_pfNotify = NULL;
+	m_pNotifyUserData = NULL;
 
 	m_hDll = LoadLibrary(strFileName);
 	if (m_hDll) {
@@ -81,11 +83,10 @@ void CUraraSockTCPSBO::Destroy(void)
 
 void CUraraSockTCPSBO::SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData)
 {
-	if (m_pSock == NULL) {
-		return;
-	}
-
-	m_pSock->SetNotifySink(pfNotify, pUserData);
+	// DLLのvtableを経由せず、ラッパー側でコールバックを保持するだけ
+	// （2008年ビルドのDLLはSetNotifySinkをvtableに持たないため直接呼び出し不可）
+	m_pfNotify = pfNotify;
+	m_pNotifyUserData = pUserData;
 }
 
 // 接続待ち開始

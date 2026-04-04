@@ -132,7 +132,7 @@ public:
 
     void DeleteRecvData(PBYTE pData) override;
     void Destroy(void) override;
-    void SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData) override;
+    void SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData);
     BOOL Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount) override;
     BOOL Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr) override;
     void DeleteClient(DWORD dwID) override;

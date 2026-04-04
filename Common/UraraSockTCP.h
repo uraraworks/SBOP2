@@ -48,7 +48,6 @@ class CUraraSockTCP
 public:
 	virtual void	DeleteRecvData(PBYTE pData)													= 0;	// 受信データを削除
 	virtual void	Destroy(void)																= 0;	// 後始末
-	virtual void	SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData)					= 0;	// 通知先コールバックを設定
 	virtual BOOL	Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)			= 0;	// 接続待ち開始
 	virtual BOOL	Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)		= 0;	// サーバーへ接続
 	virtual void	DeleteClient(DWORD dwID)													= 0;	// クライアントを切断
