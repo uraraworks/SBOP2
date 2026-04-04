@@ -106,10 +106,16 @@
 
 ### 1. ウィンドウとイベントループ
 
-- `MainFrame::OnSDLInit()` は `SDL_GetWindowWMInfo()` により `HWND` を取得している。
-- `MainFrame` は `SetWindowLongPtr()` により SDL ウィンドウをサブクラス化している。
-- `SDLApp::PollWin32Messages()` は `PeekMessage()` / `TranslateMessage()` / `DispatchMessage()` を使っている。
-- 独自メッセージ、子ウィンドウ通知、ソケット通知、タイマ通知は依然として Win32 メッセージ経由。
+- `MainFrame::InitNativeMainWindow()` は `SDL_GetWindowWMInfo()` により `HWND` を取得している。サブクラス化は除去済み。
+- `SDLApp::PollWin32Messages()` は `PeekMessage()` / `TranslateMessage()` / `DispatchMessage()` を使っている。ただし責務は「SDL 管理入力の破棄」「WM_QUIT/WM_CLOSE の SDL ブリッジ」「MFC 補助 UI の DispatchMessage」に限定済み。
+- 独自メッセージ（WM_MAINFRAME / WM_WINDOWMSG / WM_ADMINMSG / WM_MGRDRAW）は全て内部キュー経由に移行済み。Win32 メッセージキューを経由しない。
+- ソケット通知はコールバック→内部キュー経由に移行済み。`PollWin32Messages` 経由の直送パスは除去済み。
+- `IGameLoopHost` インターフェースから `OnWin32Message` は除去済み。
+- `MainFrame` の同期プリミティブは `CRITICAL_SECTION` から `std::mutex` に移行済み。
+- `MgrData` の `PostMessage` / `SendMessage` フォールバックは除去済み。`HINSTANCE` 保持も除去。
+- `StateProcBase` / `WindowBase` の未使用 `HWND` メンバ（`m_hWndMain` / `m_hWndAdmin`）は除去済み。
+- `MainFrame::OnInitEnd()` の `HWND` パラメータは除去済み。
+- `MessageBox()` は `SDL_ShowSimpleMessageBox()` に統一済み。
 
 ### 2. 描画内部
 
@@ -143,6 +149,16 @@
 - 旧 `WM_CREATE` / `WM_INITEND` ベースのメインフレーム初期化経路は削除し、初期化は `OnSDLInit() -> OnInitEnd()` の 1 本に統一した。
 - ローカルタイトルモードではメインウィンドウのサブクラス化とツールチェックタイマー開始を行わないようにし、ネイティブ専用責務を通常クライアント時に限定した。
 - `WM_CTLCOLORSTATIC` に残っていた `IDC_SAVEPASSWORD` の直接処理は `WindowLOGIN::HandleCtlColorStatic()` へ寄せ、`MainFrame` からログインコントロール固有の知識を減らした。
+- 2026-04-04(2): ネイティブ版の Win32 メッセージ経路をさらに縮退。
+  - `MgrData` の `PostMessage` / `SendMessage` フォールバックを全除去し、`m_pMainFrame` 直接経由に統一した。
+  - `IGameLoopHost::OnWin32Message()` 仮想メソッドを除去し、`SDLApp::PollWin32Messages()` からのソケット直送パスも除去した。
+  - `MainFrame::OnWin32Message()` は private メソッドに変更（内部キューの `FlushPendingSocketMessages` からのみ呼ばれる）。
+  - `MainFrame` の 5 つの `CRITICAL_SECTION` を `std::mutex` + `std::lock_guard` に置換し、ポータビリティを向上。
+  - `StateProcBase::m_hWndMain` / `m_hWndAdmin`、`WindowBase::m_hWndMain` を未使用として除去。
+  - `MgrData::SetWindowInfo(HINSTANCE, HWND)` を `SetMainWindow(HWND)` に改名し、未使用の `m_hInstance` / `GetInstance()` を除去。
+  - `MainFrame::OnInitEnd(HWND)` の HWND パラメータを除去し、`m_hWnd` 直接参照に統一。
+  - `MessageBox()` を `SDL_ShowSimpleMessageBox()` に統一。
+  - `MgrWindow::SetFocus()` に `#if !defined(__EMSCRIPTEN__)` ガードを追加。
 
 ### 4. 音声
 
@@ -165,13 +181,14 @@
 
 ## 直近の優先タスク
 
-1. `WindowLOGIN` を「自前描画 UI + SDL テキスト入力」へ置き換え、`CreateWindow(Edit/Button)` 依存を外す。
+1. ~~`WindowLOGIN` を「自前描画 UI + SDL テキスト入力」へ置き換え~~ → 完了
 2. `WindowLOGIN` / `WindowCHAT` / `WindowCHARNAME` の browser 側描画を実機で確認し、必要なら `CImg32` / 文字描画まわりの見え方を補強する。
 3. browser 版で不要な補助 UI / 管理 UI / デバッグ UI を Null 実装または無効化で切る。
-4. `MainFrame` / `SDLApp` に残る `HWND` 取得、サブクラス化、`PeekMessage` 依存をさらに縮退する。
-5. `MgrKeyInput` の DirectInput 依存を外し、入力経路を SDL に統一する。→ 完了
+4. ~~`MainFrame` / `SDLApp` に残る `HWND` 取得、サブクラス化、`PeekMessage` 依存をさらに縮退する。~~ → 概ね完了。残りは MFC 補助 UI の `DispatchMessage` のみ。
+5. ~~`MgrKeyInput` の DirectInput 依存を外し、入力経路を SDL に統一する。~~ → 完了
 6. `MgrDraw` と `Window/*` / `Layer/*` の `HDC` / `CImg32` / GDI 描画を SDL テクスチャ経路へ移す。
 7. `DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存を切り分ける。
+8. `SDLApp::PollWin32Messages()` の残責務を MFC 補助 UI の廃止にあわせて除去する。
 
 ## 次セッション開始点
 
