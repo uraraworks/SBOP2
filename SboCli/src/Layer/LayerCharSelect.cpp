@@ -13,6 +13,7 @@
 #include "MgrDraw.h"
 #include "Img32.h"
 #include "LayerCharSelect.h"
+#include "TextRenderer.h"
 
 
 CLayerCharSelect::CLayerCharSelect()
@@ -45,8 +46,6 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 {
 	int i, nCount, x, y, nTmp;
 	BYTE byAnimeNo, byLevel;
-	HDC hDC;
-	HFONT hFontOld;
 	PCInfoCharCli pChar;
 	POINT ptViewCharPos;
 
@@ -90,17 +89,12 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 		}
 
 		// 名前の描画
-		hDC = pDst->Lock();
-		hFontOld = (HFONT)SelectObject(hDC, m_hFont);
-		SetBkMode(hDC, TRANSPARENT);
 		TextOut2(
-				hDC,
+				pDst, FONTID_GOTHIC_12_NORMAL,
 				x + 16 - (pChar->m_strCharName.GetLength() * 6 / 2),
 				y + 56,
 				pChar->m_strCharName,
 				pChar->m_clName);
-		SelectObject(hDC, hFontOld);
-		pDst->Unlock();
 	}
 	if (m_nSelect >= 0) {
 		x = 32 + (nTmp * (m_nSelect + 1));

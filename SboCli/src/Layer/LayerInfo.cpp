@@ -9,6 +9,7 @@
 #include "MgrGrpData.h"
 #include "Img32.h"
 #include "LayerInfo.h"
+#include "TextRenderer.h"
 
 
 CLayerInfo::CLayerInfo()
@@ -36,19 +37,9 @@ void CLayerInfo::Create(
 
 void CLayerInfo::Draw(PCImg32 pDst)
 {
-	HFONT hFontOld;
-	HDC hDCTmp;
-
 	DrawFrame(pDst);
 
-	hDCTmp = pDst->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
-	SetBkMode(hDCTmp, TRANSPARENT);
-
-	TextOut1(hDCTmp, m_nX + 16, m_nY + 32, _T("お知らせ"), RGB(0, 0, 0));
-
-	SelectObject(hDCTmp, hFontOld);
-	pDst->Unlock();
+	TextOut1(pDst, FONTID_GOTHIC_12_NORMAL, m_nX + 16, m_nY + 32, _T("お知らせ"), RGB(0, 0, 0));
 }
 
 

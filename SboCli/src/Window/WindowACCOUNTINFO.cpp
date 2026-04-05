@@ -12,6 +12,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "WindowACCOUNTINFO.h"
+#include "TextRenderer.h"
 
 
 CWindowACCOUNTINFO::CWindowACCOUNTINFO()
@@ -42,8 +43,6 @@ void CWindowACCOUNTINFO::Create(CMgrData *pMgrData)
 
 void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 {
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	CmyString strTmp;
 	PCInfoAccount pInfoAccount;
@@ -61,20 +60,13 @@ void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	clText	= RGB(0, 0, 0);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
-
+	clText = RGB(0, 0, 0);
 	strTmp.Format(_T("キャラ名:%s"), (LPCTSTR)pInfoChar->m_strCharName);
-	TextOut2(hDC, 16, 16 + 16 * 0, strTmp,	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 16, 16 + 16 * 0, strTmp,	clText);
 	strTmp.Format(_T("アカウント作成日時:"));
-	TextOut2(hDC, 16, 16 + 16 * 1, strTmp,	clText);
-	TextOut2(hDC, 16, 16 + 16 * 2, _T("前回ログイン日時:"),	clText);
-	TextOut2(hDC, 16, 16 + 16 * 3, _T("ログイン回数:"),	clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 16, 16 + 16 * 1, strTmp,	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 16, 16 + 16 * 2, _T("前回ログイン日時:"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 16, 16 + 16 * 3, _T("ログイン回数:"),	clText);
 
 	m_dwTimeDrawStart = timeGetTime();
 

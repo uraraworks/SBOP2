@@ -82,6 +82,8 @@
 #include <tchar.h>
 #include <shlwapi.h>
 #include <map>
+#include <string>
+#include <vector>
 using namespace std;
 
 #include "GlobalDefine.h"

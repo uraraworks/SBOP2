@@ -10,6 +10,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "TextRenderer.h"
 #include "WindowSEX.h"
 
 CWindowSEX::CWindowSEX()
@@ -43,8 +44,6 @@ void CWindowSEX::Create(CMgrData *pMgrData)
 
 void CWindowSEX::Draw(PCImg32 pDst)
 {
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -53,17 +52,10 @@ void CWindowSEX::Draw(PCImg32 pDst)
 
 	DrawFrame();
 
-	clText	= RGB(255, 127, 53);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
-	SetBkMode(hDC, TRANSPARENT);
-
-	TextOut4(hDC, 48, 8, _T("性別"),	clText);
-	TextOut2(hDC, 40, 16 + 16 * 1,	_T("♂ 男の子"),	clText);
-	TextOut2(hDC, 40, 16 + 16 * 2 + 8,	_T("♀ 女の子"),	clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	clText = RGB(255, 127, 53);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 48, 8, _T("性別"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 40, 16 + 16 * 1,	_T("♂ 男の子"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 40, 16 + 16 * 2 + 8,	_T("♀ 女の子"),	clText);
 
 	DrawCursor(8, 32 + 24 * m_nPos);
 	m_dwTimeDrawStart = timeGetTime();

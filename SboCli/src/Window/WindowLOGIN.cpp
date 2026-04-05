@@ -11,6 +11,7 @@
 #include "MgrData.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include "TextRenderer.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
 #include <emscripten/emscripten.h>
@@ -251,8 +252,6 @@ void CWindowLOGIN::Create(CMgrData *pMgrData)
 
 void CWindowLOGIN::Draw(PCImg32 pDst)
 {
-	HDC hDC = NULL;
-	HFONT hFontOld = NULL;
 	RECT rcAccount, rcPassword, rcCheck, rcConnect;
 	CString strCheck;
 
@@ -265,19 +264,14 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
-		hDC	= m_pDib->Lock();
-		hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-		SetBkMode(hDC, TRANSPARENT);
 
-		TextOut2(hDC, 16, 16, _T("アカウント:"), RGB(1, 1, 1));
-		TextOut2(hDC, 16, 42, _T("パスワード:"), RGB(1, 1, 1));
-		DrawTextField(hDC, rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
-		DrawTextField(hDC, rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
-		TextOut2(hDC, rcCheck.left, rcCheck.top, strCheck, RGB(1, 1, 1));
-		TextOut2(hDC, rcConnect.left + 12, rcConnect.top + 2, GetLoginLabelConnect(), RGB(1, 1, 1));
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 16, 16, _T("アカウント:"), RGB(1, 1, 1));
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 16, 42, _T("パスワード:"), RGB(1, 1, 1));
+		DrawTextField(rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
+		DrawTextField(rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, rcCheck.left, rcCheck.top, strCheck, RGB(1, 1, 1));
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, rcConnect.left + 12, rcConnect.top + 2, GetLoginLabelConnect(), RGB(1, 1, 1));
 
-		SelectObject(hDC, hFontOld);
-		m_pDib->Unlock();
 		m_dwTimeDrawStart = timeGetTime();
 	}
 	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
@@ -739,14 +733,10 @@ BOOL CWindowLOGIN::HitTest(int x, int y, RECT &rcDst, int nFocusIndex) const
 	return ((x >= rcDst.left) && (x < rcDst.right) && (y >= rcDst.top) && (y < rcDst.bottom)) ? TRUE : FALSE;
 }
 
-void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, BOOL bPassword, BOOL bFocused)
+void CWindowLOGIN::DrawTextField(const RECT &rcField, LPCSTR pszText, BOOL bPassword, BOOL bFocused)
 {
 	CString strDraw;
 	int nCursorX;
-
-	if (hDC == NULL) {
-		return;
-	}
 
 	DrawInputFrame1(rcField.left, rcField.top, rcField.right - rcField.left, rcField.bottom - rcField.top, bFocused ? 0 : 1);
 	if (bFocused) {
@@ -760,7 +750,7 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		}
 	}
 
-	TextOut2(hDC, rcField.left + 2, rcField.top + 1, strDraw, RGB(0, 0, 0));
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, rcField.left + 2, rcField.top + 1, strDraw, RGB(0, 0, 0));
 	if (bFocused && (m_nCursorAnime == 0)) {
 		// カーソル位置に基づいて描画位置を計算
 		int nDrawCursorPos = m_nCursorPos;
@@ -771,7 +761,7 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		if (nCursorX > rcField.right - 8) {
 			nCursorX = rcField.right - 8;
 		}
-		TextOut2(hDC, nCursorX, rcField.top + 1, _T("|"), RGB(0, 0, 0));
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, nCursorX, rcField.top + 1, _T("|"), RGB(0, 0, 0));
 	}
 }
 

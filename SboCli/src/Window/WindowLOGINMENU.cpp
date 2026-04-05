@@ -12,6 +12,7 @@
 #include "MgrWindow.h"
 #include "MgrSound.h"
 #include "WindowLOGINMENU.h"
+#include "TextRenderer.h"
 
 
 CWindowLOGINMENU::CWindowLOGINMENU()
@@ -76,9 +77,7 @@ SetEnable(2, FALSE);
 void CWindowLOGINMENU::Draw(PCImg32 pDst)
 {
 	int nLevel;
-	HDC hDC;
-	HFONT hFontOld;
-	COLORREF clText, clBack;
+	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
@@ -86,23 +85,14 @@ void CWindowLOGINMENU::Draw(PCImg32 pDst)
 
 	DrawFrame();
 
-	clText	= RGB(1, 1, 1);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
-
-	clBack = RGB(1, 1, 1);
 	clText = (m_abEnable[0] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("キャラ選択"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 0, _T("キャラ選択"), clText);
 	clText = (m_abEnable[1] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, 32, 16 + 16 * 1, _T("新規作成"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 1, _T("新規作成"), clText);
 	clText = (m_abEnable[2] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, 32, 16 + 16 * 2, _T("キャラ削除"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 2, _T("キャラ削除"), clText);
 	clText = (m_abEnable[3] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, 32, 16 + 16 * 3, _T("戻る"), clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 3, _T("戻る"), clText);
 
 	DrawCursor(8, 16 + 16 * m_nPos);
 	m_dwTimeDrawStart = timeGetTime();

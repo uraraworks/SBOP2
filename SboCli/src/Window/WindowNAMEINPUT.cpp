@@ -16,6 +16,7 @@
 #include "MgrDraw.h"
 #include "WindowCHARNAME.h"
 #include "WindowNAMEINPUT.h"
+#include "TextRenderer.h"
 
 CWindowNAMEINPUT::CWindowNAMEINPUT()
 {
@@ -75,8 +76,6 @@ void CWindowNAMEINPUT::OnWindowMsg(int nType, DWORD dwPara)
 
 void CWindowNAMEINPUT::Draw(PCImg32 pDst)
 {
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	POINT nCursorPos[] = {
 		108, 240,
@@ -92,19 +91,13 @@ void CWindowNAMEINPUT::Draw(PCImg32 pDst)
 	DrawFrame2(108, 240, 16 * 7, 8, 2);
 
 	clText	= RGB(124, 123, 232);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
-	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut4(hDC, 88,	24,	_T("新規キャラクター作成"), clText);
-	TextOut4(hDC, 136,	48,	_T("名前入力"), clText);
-	TextOut4(hDC, 112,	216,	_T("キャラクター名"), clText);
-	TextOut4(hDC, 148,	288,	_T("登録"), clText);
-	TextOut4(hDC, 256,	288,	_T("３／３"), clText);
-	TextOut2(hDC, 108, 240 - 2, m_pInfoCharCli->m_strCharName, clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 88,	24,	_T("新規キャラクター作成"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 136,	48,	_T("名前入力"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 112,	216,	_T("キャラクター名"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 148,	288,	_T("登録"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 256,	288,	_T("３／３"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 108, 240 - 2, m_pInfoCharCli->m_strCharName, clText);
 
 	DrawCursor(nCursorPos[m_nPos].x - 32, nCursorPos[m_nPos].y - 6);
 	m_dwTimeDrawStart = timeGetTime();

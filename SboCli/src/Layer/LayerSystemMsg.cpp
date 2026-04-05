@@ -10,6 +10,7 @@
 #include "Img32.h"
 #include "LayerSystemMsg.h"
 #include "myString.h"
+#include "TextRenderer.h"
 
 
 CLayerSystemMsg::CLayerSystemMsg()
@@ -75,8 +76,6 @@ Exit:
 void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 {
 	int i, nLen, nCount;
-	HDC hDCTmp;
-	HFONT hFontOld;
 	PSYSTEMMSGINFO pInfo, pInfoTmp;
 
 	nCount = m_aSystemMsgInfo.size();
@@ -100,13 +99,7 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
         nLen = strMsg.GetLength();
         pInfo->pImg->Create(nLen * 14 + 1, 14);
 
-	hDCTmp = pInfo->pImg->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
-	SetBkMode(hDCTmp, TRANSPARENT);
-        TextOut2(hDCTmp, 1, 1, strMsg, cl);
-
-	SelectObject(hDCTmp, hFontOld);
-	pInfo->pImg->Unlock();
+        TextOut2(pInfo->pImg, FONTID_GOTHIC_12_NORMAL, 1, 1, strMsg, cl);
 
 	m_aSystemMsgInfo.push_back(pInfo);
 }

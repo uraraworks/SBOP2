@@ -21,6 +21,7 @@
 #include "MgrSound.h"
 #include "WindowTEXTMSG.h"
 #include "myString.h"
+#include "TextRenderer.h"
 
 #ifdef _UNICODE
 namespace
@@ -202,22 +203,13 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 		}
 		{
 			int i, nCount;
-			HDC hDC;
-			HFONT hFontOld;
 			COLORREF clText;
 
-			clText	= RGB(1, 1, 1);
-			hDC	= m_pDib->Lock();
-			hFontOld	= (HFONT)SelectObject(hDC, m_hFont16Normal);
-			SetBkMode(hDC, TRANSPARENT);
-
+			clText = RGB(1, 1, 1);
 			nCount = m_astrMenu.size();
 			for (i = 0; i < nCount; i ++) {
-				TextOut2(hDC, 32, y + cy + i * 16, (LPCTSTR)m_astrMenu[i], clText);
+				TextOut2(m_pDib, FONTID_GOTHIC_16_NORMAL, 32, y + cy + i * 16, (LPCTSTR)m_astrMenu[i], clText);
 			}
-
-			SelectObject(hDC, hFontOld);
-			m_pDib->Unlock();
 		}
 		DrawCursor(8, y + cy + 16 * m_nPos);
 		break;
@@ -578,8 +570,6 @@ BOOL CWindowTEXTMSG::OnZ(BOOL bDown)
 void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 {
 	int cx, cy;
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	LPCTSTR pszDraw = NULL;
 
@@ -601,25 +591,24 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 	cx = m_pDibText->Width();
 	cy = m_pDibText->Height() - 16;
 
-	clText	= RGB(1, 1, 1);
-	hDC	= m_pDibText->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont16Normal);
-	SetBkMode(hDC, TRANSPARENT);
-
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
+	TextOut2(m_pDibText, FONTID_GOTHIC_16_NORMAL, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
 
 	if (strncmp(pszText, "\r\n", 2) == 0) {
 		m_ptDraw.x = cx;
 	}
 
-	// 文字幅を実際の描画幅で進める
+	// 文字幅を実際の描画幅で進める（GDI で計測）
 	SIZE sizeText = {0, 0};
+	{
+		HDC hDC = m_pDibText->Lock();
 #ifdef UNICODE
-	GetTextExtentPoint32W(hDC, pszDraw, (int)_tcslen(pszDraw), &sizeText);
+		GetTextExtentPoint32W(hDC, pszDraw, (int)_tcslen(pszDraw), &sizeText);
 #else
-	GetTextExtentPoint32A(hDC, pszDraw, (int)strlen(pszDraw), &sizeText);
+		GetTextExtentPoint32A(hDC, pszDraw, (int)strlen(pszDraw), &sizeText);
 #endif
+		m_pDibText->Unlock();
+	}
 	m_ptDraw.x += sizeText.cx;
 	if (m_ptDraw.x + 8 >= cx) {
 		m_ptDraw.x = 0;
@@ -630,38 +619,26 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 			m_pDibText->FillRect(0, cy, cx, 16, RGB(0, 0, 0));
 		}
 	}
-
-	SelectObject(hDC, hFontOld);
-	m_pDibText->Unlock();
 }
 
 
 void CWindowTEXTMSG::RenewTitle(void)
 {
 	int y;
-	HDC hDC;
 	COLORREF clText, clFrame;
-	HFONT hFontOld;
 
 	m_pDibTitle->FillRect(0, 0, m_pDibTitle->Width(), m_pDibTitle->Height(), RGB(0, 0, 0));
-
-	hDC	= m_pDibTitle->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont16);
-	SetBkMode(hDC, TRANSPARENT);
 
 	y = 1;
 	clText  = RGB(255, 255, 255);
 	clFrame = RGB(1, 1, 1);
 	if (m_strTitle.GetLength() > 0) {
-		TextOut2(hDC, 1, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
+		TextOut2(m_pDibTitle, FONTID_GOTHIC_16_BOLD, 1, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
 		y += 16;
 	}
 	if (m_strName.GetLength() > 0) {
-		TextOut2(hDC, 1, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
+		TextOut2(m_pDibTitle, FONTID_GOTHIC_16_BOLD, 1, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
 	}
-
-	SelectObject(hDC, hFontOld);
-	m_pDibTitle->Unlock();
 }
 
 

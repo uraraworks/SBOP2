@@ -136,8 +136,6 @@ public:
 			m_dwBalloonAnimeID,	// 噴出しコマ番号
 			m_dwLastTimeBalloon,	// 最終噴出し更新時間
 			m_dwLastTimeDamage;	// 最終ダメージ受けた時間
-	HFONT	m_hFont;	// 描画に使うフォント
-
 	CMgrData	*m_pMgrData;	// データマネージャ
 	CMgrSound	*m_pMgrSound;	// サウンド管理
 	CImg32	*m_pDibChar,	// キャラ画像

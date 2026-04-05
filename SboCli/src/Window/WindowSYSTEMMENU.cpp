@@ -10,6 +10,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "TextRenderer.h"
 #include "WindowSYSTEMMENU.h"
 
 
@@ -43,8 +44,6 @@ void CWindowSYSTEMMENU::Create(CMgrData *pMgrData)
 void CWindowSYSTEMMENU::Draw(PCImg32 pDst)
 {
 	int nLevel;
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -53,17 +52,9 @@ void CWindowSYSTEMMENU::Draw(PCImg32 pDst)
 
 	DrawFrame();
 
-	clText	= RGB(1, 1, 1);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
-
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("名前と発言色の設定"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 1, _T("オプション"),	clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 0, _T("名前と発言色の設定"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 1, _T("オプション"),	clText);
 
 	DrawCursor(8, 16 + 16 * m_nPos);
 	m_dwTimeDrawStart = timeGetTime();

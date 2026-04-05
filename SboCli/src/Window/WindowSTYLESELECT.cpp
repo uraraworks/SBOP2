@@ -18,6 +18,7 @@
 #include "WindowHAIRCOLOR.h"
 #include "WindowEYECOLOR.h"
 #include "WindowSTYLESELECT.h"
+#include "TextRenderer.h"
 
 CWindowSTYLESELECT::CWindowSTYLESELECT()
 {
@@ -199,8 +200,6 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 void CWindowSTYLESELECT::Draw(PCImg32 pDst)
 {
 	int i, nCount, nDirection;
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	POINT nCursorPos[] = {
 		40, 104,
@@ -223,40 +222,34 @@ void CWindowSTYLESELECT::Draw(PCImg32 pDst)
 	DrawFrame(176, 112, 100, 136, 2);
 
 	clText	= RGB(124, 123, 232);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
-	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut4(hDC, 88,	24,	_T("新規キャラクター作成"), clText);
-	TextOut4(hDC, 136,	48,	_T("容姿選択"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 88,	24,	_T("新規キャラクター作成"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 136,	48,	_T("容姿選択"), clText);
 
-	TextOut4(hDC, nCursorPos[0].x + 26, nCursorPos[0].y - 24, _T("性別"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, nCursorPos[0].x + 26, nCursorPos[0].y - 24, _T("性別"), clText);
 	strTmp.Empty();
 	switch (m_nSex) {
 	case SEX_MALE:	strTmp = "♂　オトコ";	break;
 	case SEX_FEMALE:	strTmp = "♀　オンナ";	break;
 	}
-	TextOut2(hDC, 40, nCursorPos[0].y - 2, strTmp, clText);
-	TextOut4(hDC, nCursorPos[1].x + 26, nCursorPos[1].y - 24, _T("髪型"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 40, nCursorPos[0].y - 2, strTmp, clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, nCursorPos[1].x + 26, nCursorPos[1].y - 24, _T("髪型"), clText);
 	strTmp.Format(_T("%02d"), m_wHairTypeID);
 //	strTmp = m_pMgrData->GetHairTypeName(m_wHairTypeID);
-	TextOut2(hDC, 40, nCursorPos[1].y - 2, strTmp, clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 40, nCursorPos[1].y - 2, strTmp, clText);
 #if 0
-	TextOut4(hDC, nCursorPos[2].x + 26, nCursorPos[2].y - 24, _T("髪の色"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, nCursorPos[2].x + 26, nCursorPos[2].y - 24, _T("髪の色"), clText);
 //	strTmp.Format(_T("%02d"), m_wHairColorID);
 	strTmp = m_pMgrData->GetHairColorName(m_wHairColorID);
-	TextOut2(hDC, 40, nCursorPos[2].y - 2, strTmp, clText);
-	TextOut4(hDC, nCursorPos[3].x + 26, nCursorPos[3].y - 24, _T("目の色"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 40, nCursorPos[2].y - 2, strTmp, clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, nCursorPos[3].x + 26, nCursorPos[3].y - 24, _T("目の色"), clText);
 //	strTmp.Format(_T("%02d"), m_wEyeColorID);
 	strTmp = m_pMgrData->GetEyeColorName(m_wEyeColorID);
-	TextOut2(hDC, 40, nCursorPos[3].y - 2, strTmp, clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 40, nCursorPos[3].y - 2, strTmp, clText);
 #endif
 
-	TextOut4(hDC, 132,	288,	_T("次へ >>"), clText);
-	TextOut4(hDC, 256,	288,	_T("２／３"), clText);
-	
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 132,	288,	_T("次へ >>"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 256,	288,	_T("２／３"), clText);
 
 	DrawCursor(nCursorPos[m_nPos].x - 32, nCursorPos[m_nPos].y - 6);
 	m_dwTimeDrawStart = timeGetTime();

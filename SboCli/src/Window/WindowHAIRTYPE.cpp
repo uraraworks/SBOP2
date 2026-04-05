@@ -10,6 +10,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "TextRenderer.h"
 #include "WindowHAIRTYPE.h"
 
 CWindowHAIRTYPE::CWindowHAIRTYPE()
@@ -44,8 +45,6 @@ void CWindowHAIRTYPE::Create(CMgrData *pMgrData)
 
 void CWindowHAIRTYPE::Draw(PCImg32 pDst)
 {
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	CmyString strTmp;
 
@@ -55,18 +54,11 @@ void CWindowHAIRTYPE::Draw(PCImg32 pDst)
 
 	DrawFrame();
 
-	clText	= RGB(255, 127, 53);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
-	SetBkMode(hDC, TRANSPARENT);
-
-	TextOut4(hDC, 64, 8, _T("髪型"), clText);
+	clText = RGB(255, 127, 53);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 64, 8, _T("髪型"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);
-	TextOut4(hDC, 16, 32, strTmp, clText);
-//	TextOut2(hDC, 40, 32, m_pMgrData->GetHairTypeName((WORD)m_nPos), clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 16, 32, strTmp, clText);
+//	TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 40, 32, m_pMgrData->GetHairTypeName((WORD)m_nPos), clText);
 
 	m_pDib->BltFrom256(16 + m_nPosX * 8 - 2, 21, 10, 8, m_pDibSystem, 96, 24, TRUE);
 	m_pDib->BltFrom256(16 + m_nPosX * 8 - 2, 48, 10, 8, m_pDibSystem, 96, 32, TRUE);

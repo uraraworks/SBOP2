@@ -11,6 +11,7 @@
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "LayerBase.h"
+#include "TextRenderer.h"
 
 
 CLayerBase::CLayerBase()
@@ -25,24 +26,11 @@ CLayerBase::CLayerBase()
 
 	m_pDib = new CImg32;
 	m_pDibBase = new CImg32;
-
-#if defined(__EMSCRIPTEN__)
-	m_hFont = NULL;
-#else
-	m_hFont = CreateFont(12, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
-#endif
 }
 
 
 CLayerBase::~CLayerBase()
 {
-	if (m_hFont) {
-		DeleteObject(m_hFont);
-		m_hFont = NULL;
-	}
 	SAFE_DELETE(m_pDib);
 	SAFE_DELETE(m_pDibBase);
 }
@@ -80,75 +68,28 @@ BOOL CLayerBase::TimerProc(void)
 }
 
 
-void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color)
+void CLayerBase::TextOut1(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF color)
 {
-	if ((hDC == NULL) || (pStr == NULL)) {
+	if (pStr == NULL || pDst == NULL) {
 		return;
 	}
-
-	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-	SetTextColor(hDC, color);
-	::TextOut(hDC, x, y, pStr, nLen);
+	CTextRenderer::Instance().DrawText(pDst, (FontId)nFontId, x, y, pStr, color);
 }
 
 
-void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
+void CLayerBase::TextOut2(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
-	if ((hDC == NULL) || (pStr == NULL)) {
+	if (pStr == NULL || pDst == NULL) {
 		return;
 	}
-
-	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-	SetTextColor(hDC, colorFrame);
-	::TextOut(hDC, x - 1, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y, pStr, nLen);
-	::TextOut(hDC, x, y - 1, pStr, nLen);
-	::TextOut(hDC, x, y + 1, pStr, nLen);
-	SetTextColor(hDC, color);
-	::TextOut(hDC, x, y, pStr, nLen);
+	CTextRenderer::Instance().DrawTextOutlined(pDst, (FontId)nFontId, x, y, pStr, color, colorFrame);
 }
 
 
-void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
+void CLayerBase::TextOut3(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
-	if ((hDC == NULL) || (pStr == NULL)) {
+	if (pStr == NULL || pDst == NULL) {
 		return;
 	}
-
-	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-	SetTextColor(hDC, colorFrame);
-	::TextOut(hDC, x - 2, y, pStr, nLen);
-	::TextOut(hDC, x - 1, y, pStr, nLen);
-	::TextOut(hDC, x - 1, y - 2, pStr, nLen);
-	::TextOut(hDC, x - 2, y - 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y - 1, pStr, nLen);
-	::TextOut(hDC, x - 2, y + 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y + 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y + 2, pStr, nLen);
-
-	::TextOut(hDC, x + 2, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y - 2, pStr, nLen);
-	::TextOut(hDC, x + 2, y - 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y - 1, pStr, nLen);
-	::TextOut(hDC, x + 2, y + 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y + 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y + 2, pStr, nLen);
-
-	::TextOut(hDC, x, y - 2, pStr, nLen);
-	::TextOut(hDC, x, y - 1, pStr, nLen);
-	::TextOut(hDC, x, y + 2, pStr, nLen);
-	::TextOut(hDC, x, y + 1, pStr, nLen);
-
-	SetTextColor(hDC, color);
-	::TextOut(hDC, x, y, pStr, nLen);
+	CTextRenderer::Instance().DrawTextOutlinedThick(pDst, (FontId)nFontId, x, y, pStr, colorFrame, color);
 }

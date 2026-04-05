@@ -33,14 +33,13 @@ public:
 
 
 protected:
-	void TextOut1(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color); // 文字描画
-	void TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB(10, 10, 10)); // 縁取り文字描画
-	void TextOut3(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB(10, 10, 10)); // 縁取り文字描画
+	void TextOut1(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF color); // SDL_ttf版 文字描画
+	void TextOut2(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB(10, 10, 10)); // SDL_ttf版 縁取り文字描画
+	void TextOut3(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB(10, 10, 10)); // SDL_ttf版 縁取り文字描画
 
 
 protected:
 	int m_nID; // レイヤーID
-	HFONT m_hFont; // 描画に使うフォント
 	CImg32 *m_pDib, // バックバッファ
 		*m_pDibBase; // バックバッファ(元サイズ)
 	CImg32 *m_pDibSystem; // システム画像

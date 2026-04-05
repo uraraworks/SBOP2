@@ -67,7 +67,6 @@ private:
 
 
 public:
-	HFONT m_hFont32; // 描画に使うフォント(32ドット)
 	BOOL m_bScroll; // スクロールする判定
 	BYTE m_byDirection; // スクロール向き
 	int m_nViewIcon, // 視点アイコン

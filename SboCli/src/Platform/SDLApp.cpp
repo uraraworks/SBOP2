@@ -15,6 +15,7 @@
 #include "SDLInput.h"
 #include "SboCli_priv.h"
 #include "UraraSockTCP.h"
+#include "TextRenderer.h"
 
 
 // Constants
@@ -140,12 +141,19 @@ BOOL CSDLApp::Init(void)
 		return FALSE;
 	}
 
+	// テキスト描画エンジンの初期化
+	if (!CTextRenderer::Instance().Init()) {
+		// フォント読み込み失敗は致命的ではない — 警告のみ
+		// （描画時に NULL チェックで安全にスキップされる）
+	}
+
 	m_bInitialized = TRUE;
 	return TRUE;
 }
 
 void CSDLApp::Destroy(void)
 {
+	CTextRenderer::Instance().Destroy();
 	m_Window.Destroy();
 	if (m_bInitialized) {
 		SDL_Quit();

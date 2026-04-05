@@ -10,6 +10,7 @@
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "WindowBase.h"
+#include "TextRenderer.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
 #endif
@@ -80,31 +81,6 @@ CWindowBase::CWindowBase()
 	m_ptViewPos.x	= m_ptViewPos.y	= 0;
 	m_sizeWindow.cx	= m_sizeWindow.cy	= 0;
 
-        m_hFont = CreateFont(16, 0, 0, 0, FW_ULTRABOLD,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
-        m_hFont12 = CreateFont(12, 0, 0, 0, FW_NORMAL,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
-        m_hFont12Bold = CreateFont(12, 0, 0, 0, FW_ULTRABOLD,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
-        m_hFont14 = CreateFont(14, 0, 0, 0, FW_ULTRABOLD,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
-        m_hFont16 = CreateFont(16, 0, 0, 0, FW_ULTRABOLD,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
-        m_hFont16Normal = CreateFont(16, 0, 0, 0, FW_NORMAL,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
-
 	m_pDib->SetColorKey(RGB(255, 0, 255));
 }
 
@@ -123,30 +99,6 @@ CWindowBase::~CWindowBase()
 		m_pParent->DeleteChild(this);
 	}
 
-	if (m_hFont) {
-		DeleteObject(m_hFont);
-		m_hFont = NULL;
-	}
-	if (m_hFont12) {
-		DeleteObject(m_hFont12);
-		m_hFont12 = NULL;
-	}
-	if (m_hFont12Bold) {
-		DeleteObject(m_hFont12Bold);
-		m_hFont12Bold = NULL;
-	}
-	if (m_hFont14) {
-		DeleteObject(m_hFont14);
-		m_hFont14 = NULL;
-	}
-	if (m_hFont16) {
-		DeleteObject(m_hFont16);
-		m_hFont16 = NULL;
-	}
-	if (m_hFont16Normal) {
-		DeleteObject(m_hFont16Normal);
-		m_hFont16Normal = NULL;
-	}
 	SAFE_DELETE(m_pDib);
 }
 
@@ -459,110 +411,6 @@ BOOL CWindowBase::OnSpace(BOOL bDown)
 }
 
 
-void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
-{
-	if (pStr == NULL) {
-		return;
-	}
-#ifdef UNICODE
-	int nLen = wcslen((LPCWSTR)pStr);
-#else
-	int nLen = strlen((LPCSTR)pStr);
-#endif
-	if (nLen <= 0) {
-		return;
-	}
-	// 縁取りする？
-	if (bDraw) {
-		SetTextColor(hDC, ColorFrame);
-#ifdef UNICODE
-		::TextOutW(hDC, x - 1, y, (LPCWSTR)pStr, nLen);
-		::TextOutW(hDC, x + 1, y, (LPCWSTR)pStr, nLen);
-		::TextOutW(hDC, x, y - 1, (LPCWSTR)pStr, nLen);
-		::TextOutW(hDC, x, y + 1, (LPCWSTR)pStr, nLen);
-#else
-		::TextOutA(hDC, x - 1, y, (LPCSTR)pStr, nLen);
-		::TextOutA(hDC, x + 1, y, (LPCSTR)pStr, nLen);
-		::TextOutA(hDC, x, y - 1, (LPCSTR)pStr, nLen);
-		::TextOutA(hDC, x, y + 1, (LPCSTR)pStr, nLen);
-#endif
-	}
-	SetTextColor(hDC, Color);
-#ifdef UNICODE
-	::TextOutW(hDC, x, y, (LPCWSTR)pStr, nLen);
-#else
-	::TextOutA(hDC, x, y, (LPCSTR)pStr, nLen);
-#endif
-}
-
-
-void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color)
-{
-	if (pStr == NULL) {
-		return;
-	}
-
-	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-
-	RECT rc;
-
-	SetRect(&rc, x, y, cx, cy);
-	SetTextColor(hDC, RGB(10, 10, 10));
-
-	SetRect(&rc, x - 1, y, x + cx, y + cy);	DrawText(hDC, pStr, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-	SetRect(&rc, x + 1, y, x + cx, y + cy);	DrawText(hDC, pStr, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-	SetRect(&rc, x, y - 1, x + cx, y + cy);	DrawText(hDC, pStr, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-	SetRect(&rc, x, y + 1, x + cx, y + cy);	DrawText(hDC, pStr, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-
-	SetTextColor(hDC, Color);
-	SetRect(&rc, x, y, x + cx, y + cy);	DrawText(hDC, pStr, nLen, &rc, DT_RIGHT | DT_NOCLIP);
-}
-
-
-
-void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color)
-{
-	if (pStr == NULL) {
-		return;
-	}
-
-	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-	SetTextColor(hDC, ColorFrame);
-
-	::TextOut(hDC, x - 2, y, pStr, nLen);
-	::TextOut(hDC, x - 1, y, pStr, nLen);
-	::TextOut(hDC, x - 1, y - 2, pStr, nLen);
-	::TextOut(hDC, x - 2, y - 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y - 1, pStr, nLen);
-	::TextOut(hDC, x - 2, y + 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y + 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y + 2, pStr, nLen);
-
-	::TextOut(hDC, x + 2, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y - 2, pStr, nLen);
-	::TextOut(hDC, x + 2, y - 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y - 1, pStr, nLen);
-	::TextOut(hDC, x + 2, y + 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y + 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y + 2, pStr, nLen);
-
-	::TextOut(hDC, x, y - 2, pStr, nLen);
-	::TextOut(hDC, x, y - 1, pStr, nLen);
-	::TextOut(hDC, x, y + 2, pStr, nLen);
-	::TextOut(hDC, x, y + 1, pStr, nLen);
-
-	SetTextColor(hDC, Color);
-	::TextOut(hDC, x, y, pStr, nLen);
-}
-
-
 void CWindowBase::DrawBrowserText(int x, int y, LPCTSTR pStr, COLORREF Color, int nFontSize, BOOL bDraw, COLORREF ColorFrame, BOOL bBold)
 {
 #if defined(__EMSCRIPTEN__)
@@ -831,4 +679,35 @@ void CWindowBase::DrawInputFrame1(int x, int y, int cx, int cy, int nType)
 void CWindowBase::DrawIconFrame(int x, int y)
 {
 	m_pDib->BltFrom256(x, y, 34, 45, m_pDibSystem, 0, 883, TRUE);
+}
+
+
+void CWindowBase::TextOut2(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
+{
+	if (pStr == NULL || pDst == NULL) {
+		return;
+	}
+	if (bDraw) {
+		CTextRenderer::Instance().DrawTextOutlined(pDst, (FontId)nFontId, x, y, pStr, Color, ColorFrame);
+	} else {
+		CTextRenderer::Instance().DrawText(pDst, (FontId)nFontId, x, y, pStr, Color);
+	}
+}
+
+
+void CWindowBase::TextOut3(CImg32 *pDst, int nFontId, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color)
+{
+	if (pStr == NULL || pDst == NULL) {
+		return;
+	}
+	CTextRenderer::Instance().DrawTextRight(pDst, (FontId)nFontId, x, y, cx, cy, pStr, Color);
+}
+
+
+void CWindowBase::TextOut4(CImg32 *pDst, int nFontId, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color)
+{
+	if (pStr == NULL || pDst == NULL) {
+		return;
+	}
+	CTextRenderer::Instance().DrawTextOutlinedThick(pDst, (FontId)nFontId, x, y, pStr, ColorFrame, Color);
 }

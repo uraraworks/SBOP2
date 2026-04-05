@@ -12,6 +12,7 @@
 #include "MgrSound.h"
 #include "WindowFAMILYTYPE.h"
 #include "myString.h"
+#include "TextRenderer.h"
 
 CWindowFAMILYTYPE::CWindowFAMILYTYPE()
 {
@@ -43,8 +44,6 @@ void CWindowFAMILYTYPE::Create(CMgrData *pMgrData)
 void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 {
 	int i, nCount;
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	POINT nCursorPos[] = {
 		40, 104
@@ -66,22 +65,15 @@ void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 
 //	m_pDib->BltFrom256(166, 128, 120, 104, m_pDibSystem, m_nPos * 120, 520, TRUE);
 
-	clText	= RGB(124, 123, 232);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
-	SetBkMode(hDC, TRANSPARENT);
-
-	TextOut4(hDC, 88,	24,	_T("新規キャラクター作成"), clText);
-	TextOut4(hDC, 136,	48,	_T("種族選択"), clText);
-	TextOut4(hDC, 256,	288,	_T("１／３"), clText);
+	clText = RGB(124, 123, 232);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 88,	24,	_T("新規キャラクター作成"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 136,	48,	_T("種族選択"), clText);
+	TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 256,	288,	_T("１／３"), clText);
 
 	for (i = 0; i < nCount; i ++) {
 		CString strFamily = Utf8ToTString(m_pMgrData->GetFamilyTypeName((WORD)(FAMILYTYPE_HUMAN + i)));
-		TextOut2(hDC, nCursorPos[i].x, nCursorPos[i].y - 4, strFamily, clText);
+		TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, nCursorPos[i].x, nCursorPos[i].y - 4, strFamily, clText);
 	}
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
 
 	DrawCursor(nCursorPos[m_nPos].x - 32, nCursorPos[m_nPos].y - 6);
 	m_dwTimeDrawStart = timeGetTime();

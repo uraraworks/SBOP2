@@ -18,6 +18,7 @@
 #include "MgrSound.h"
 #include "InfoCharCli.h"
 #include "LayerMap.h"
+#include "TextRenderer.h"
 
 static BOOL IsCharInPlayableRange(PCInfoCharCli pInfoChar)
 {
@@ -153,10 +154,6 @@ CInfoCharCli::CInfoCharCli()
 
 	m_ptMove.x = m_ptMove.y = 0;
 
-        m_hFont = CreateFont(12, 0, 0, 0, FW_NORMAL,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
 }
 
 
@@ -164,10 +161,6 @@ CInfoCharCli::~CInfoCharCli()
 {
 	DeleteAllTextEffect();
 	DeleteAllMovePosQue();
-	if (m_hFont) {
-		DeleteObject(m_hFont);
-		m_hFont = NULL;
-	}
 	SAFE_DELETE(m_pDibChar);
 	SAFE_DELETE(m_pDibName);
 	SAFE_DELETE(m_pDibSpeak);
@@ -708,9 +701,7 @@ void CInfoCharCli::MakeCharGrp(void)
 
 void CInfoCharCli::SetName(LPCSTR pszName)
 {
-	int i, nCount, nLen, x;
-	HFONT hFontOld;
-	HDC hDCTmp;
+	int i, nCount, x;
 	PCImg32 pDibSystem;
 
 	SAFE_DELETE(m_pDibName);
@@ -728,28 +719,13 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 	m_pDibName->Create(strlen(pszName) * 6 + 2 + (nCount * 16), 16);
 	m_pDibName->Clear();
 
-	hDCTmp = m_pDibName->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
-	SetBkMode(hDCTmp, TRANSPARENT);
-
 	for (i = 0; i < nCount; i ++) {
 		m_pDibName->BltFrom256(x, 1, 16, 16, pDibSystem, 176 + (m_abyMark[i] - 1) * 16, 0, TRUE);
 		x += 16;
 	}
 
-        nLen = static_cast<int>(strlen(pszName));
         CString strText = AnsiToTString(pszName);
-        int nDrawLen = strText.GetLength();
-        SetTextColor(hDCTmp, RGB(10, 10, 10));
-        ::TextOut(hDCTmp, x + 0, 2, strText, nDrawLen);
-        ::TextOut(hDCTmp, x + 2, 2, strText, nDrawLen);
-        ::TextOut(hDCTmp, x + 1, 1, strText, nDrawLen);
-        ::TextOut(hDCTmp, x + 1, 3, strText, nDrawLen);
-        SetTextColor(hDCTmp, m_clName);
-        ::TextOut(hDCTmp, x + 1, 2, strText, nDrawLen);
-
-	SelectObject(hDCTmp, hFontOld);
-	m_pDibName->Unlock();
+        CTextRenderer::Instance().DrawTextOutlined(m_pDibName, (FontId)FONTID_GOTHIC_12_NORMAL, x + 1, 2, strText, m_clName, RGB(10, 10, 10));
 }
 
 
@@ -758,8 +734,6 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	char szTmp[32];
 	BOOL bResult;
 	int nPos, nLen, nLenTmp, nCount, nWidth, nHeight, nLine;
-	HFONT hFontOld;
-	HDC hDCTmp;
 	CmyString strSpeak1, strSpeak2;
 
 	SAFE_DELETE(m_pDibSpeak);
@@ -788,10 +762,6 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	m_pDibSpeak->Create((nWidth + 1) * 6 + 2, nHeight * 14);
 	m_pDibSpeak->Clear();
 
-	hDCTmp = m_pDibSpeak->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
-	SetBkMode(hDCTmp, TRANSPARENT);
-
 	// 全角10文字単位で1行ずつ画像を作成
 	while (1) {
 		ZeroMemory(szTmp, sizeof (szTmp));
@@ -812,14 +782,7 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
                 nPos += nCount;
                 if (nLenTmp > 0) {
                         CString strLine = AnsiToTString(szTmp);
-                        int nDrawLenTmp = strLine.GetLength();
-                        SetTextColor(hDCTmp, RGB(10, 10, 10));
-                        ::TextOut(hDCTmp, 0, 1 + nLine * 14, strLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 2, 1 + nLine * 14, strLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 1, 0 + nLine * 14, strLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 1, 2 + nLine * 14, strLine, nDrawLenTmp);
-                        SetTextColor(hDCTmp, m_clSpeak);
-                        ::TextOut(hDCTmp, 1, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        CTextRenderer::Instance().DrawTextOutlined(m_pDibSpeak, (FontId)FONTID_GOTHIC_12_NORMAL, 1, 1 + nLine * 14, strLine, m_clSpeak, RGB(10, 10, 10));
                         nLine ++;
                 }
 
@@ -827,9 +790,6 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 			break;
 		}
 	}
-
-	SelectObject(hDCTmp, hFontOld);
-	m_pDibSpeak->Unlock();
 }
 
 

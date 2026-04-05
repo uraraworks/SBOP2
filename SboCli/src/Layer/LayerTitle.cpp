@@ -9,6 +9,7 @@
 #include "MgrGrpData.h"
 #include "Img32.h"
 #include "LayerTitle.h"
+#include "TextRenderer.h"
 
 
 CLayerTitle::CLayerTitle()
@@ -47,8 +48,6 @@ void CLayerTitle::Create(
 void CLayerTitle::Draw(PCImg32 pDst)
 {
 	int i, cx, cy, nTmp, x;
-	HDC hDCTmp;
-	HFONT hFontOld;
 	CmyString strTmp;
 
 	nTmp = 100 - (m_nFadeLevel / 2);
@@ -72,15 +71,10 @@ void CLayerTitle::Draw(PCImg32 pDst)
 		pDst->BltAlphaFrom256(SCRSIZEX / 2 - (cx / 2) + 32, 80, cx, cy, m_pDibTitle, 0, 0, nTmp, TRUE);
 	}
 
-	if ((m_dwLastTimeFadeIn == 0) && m_hFont) {
+	if (m_dwLastTimeFadeIn == 0) {
 #if !defined(__EMSCRIPTEN__)
-		hDCTmp = pDst->Lock();
-		hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
-		SetBkMode(hDCTmp, TRANSPARENT);
 		strTmp = "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.";
-		TextOut1(hDCTmp, (480 - (strTmp.GetLength() * 6)) / 2 + 32, SCRSIZEY - 12 + 32, strTmp, RGB(255, 255, 255));
-		SelectObject(hDCTmp, hFontOld);
-		pDst->Unlock();
+		TextOut1(pDst, FONTID_GOTHIC_12_NORMAL, (480 - (strTmp.GetLength() * 6)) / 2 + 32, SCRSIZEY - 12 + 32, strTmp, RGB(255, 255, 255));
 #endif
 	}
 }

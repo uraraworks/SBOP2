@@ -10,6 +10,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "TextRenderer.h"
 #include "WindowSETBGMVOLUME.h"
 
 
@@ -45,8 +46,6 @@ void CWindowSETBGMVOLUME::Create(CMgrData *pMgrData)
 void CWindowSETBGMVOLUME::Draw(PCImg32 pDst)
 {
 	int nLevel;
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -55,20 +54,12 @@ void CWindowSETBGMVOLUME::Draw(PCImg32 pDst)
 
 	DrawFrame();
 
-	clText	= RGB(1, 1, 1);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
-
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("無し"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 1, _T("１"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 2, _T("２"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 3, _T("３"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 4, _T("４"),	clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 0, _T("無し"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 1, _T("１"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 2, _T("２"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 3, _T("３"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 4, _T("４"),	clText);
 
 	DrawCursor(8, 16 + 16 * m_nPos);
 	m_dwTimeDrawStart = timeGetTime();

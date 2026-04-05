@@ -10,6 +10,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "TextRenderer.h"
 #include "WindowOPTION_VOLUMESET.h"
 
 
@@ -47,8 +48,6 @@ void CWindowOPTION_VOLUMESET::Create(CMgrData *pMgrData)
 void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
 {
 	int i, nLevel;
-	HDC hDC;
-	HFONT hFontOld;
 	LPCTSTR apszTmp[] = {_T("０"), _T("１"), _T("２"), _T("３"), _T("４"), _T("MAX")};
 	COLORREF clText;
 
@@ -59,24 +58,18 @@ void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
 	DrawFrame();
 
 	clText	= RGB(1, 1, 1);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("BGM"), clText);
-	TextOut2(hDC, 32, 16 + 16 * 1, _T("効果音"), clText);
-	TextOut2(hDC, 32 + 72, 16 + 16 * 0, _T("MIN"), clText);
-	TextOut2(hDC, 32 + 72, 16 + 16 * 1, _T("MIN"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 0, _T("BGM"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 1, _T("効果音"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32 + 72, 16 + 16 * 0, _T("MIN"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32 + 72, 16 + 16 * 1, _T("MIN"), clText);
 	for (i = 0; i < 6; i ++) {
-		TextOut2(hDC, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 0, apszTmp[i], clText);
-		TextOut2(hDC, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 1, apszTmp[i], clText);
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 0, apszTmp[i], clText);
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 1, apszTmp[i], clText);
 	}
 
 	DrawCursor(32 + 24 + 72 + (m_nVolumeBgm * 32), 16 + 16 * 0);
 	DrawCursor(32 + 24 + 72 + (m_nVolumeSound * 32), 16 + 16 * 1);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
 
 	DrawCursor(8, 16 + 16 * m_nPos);
 	m_dwTimeDrawStart = timeGetTime();

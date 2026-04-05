@@ -12,6 +12,7 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include "WindowCHARNAME.h"
+#include "TextRenderer.h"
 
 CWindowCHARNAME::CWindowCHARNAME()
 {
@@ -44,19 +45,12 @@ void CWindowCHARNAME::Create(CMgrData *pMgrData)
 
 void CWindowCHARNAME::Draw(PCImg32 pDst)
 {
-	HDC hDC = NULL;
-	HFONT hFontOld = NULL;
-
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
 		DrawInputFrame1(16, 48, 8 * MAXLEN_CHARNAME, 14, 0);
 
-		hDC	= m_pDib->Lock();
-		hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
-		SetBkMode(hDC, TRANSPARENT);
-
-		TextOut4(hDC, 24, 16, _T("キャラクター名"), RGB(255, 127, 53));
-		TextOut2(hDC, 18, 46, m_strName, RGB(0, 0, 0));
+		TextOut4(m_pDib, FONTID_PGOTHIC_14_BOLD, 24, 16, _T("キャラクター名"), RGB(255, 127, 53));
+		TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, 18, 46, m_strName, RGB(0, 0, 0));
 		if (m_bActive && (m_nCursorAnime == 0)) {
 			int nCursorX;
 
@@ -64,11 +58,8 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 			if (nCursorX > 16 + 8 * MAXLEN_CHARNAME - 6) {
 				nCursorX = 16 + 8 * MAXLEN_CHARNAME - 6;
 			}
-			TextOut2(hDC, nCursorX, 46, _T("|"), RGB(0, 0, 0));
+			TextOut2(m_pDib, FONTID_PGOTHIC_14_BOLD, nCursorX, 46, _T("|"), RGB(0, 0, 0));
 		}
-
-		SelectObject(hDC, hFontOld);
-		m_pDib->Unlock();
 
 		m_dwTimeDrawStart = timeGetTime();
 	}

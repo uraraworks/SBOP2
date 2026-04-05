@@ -25,6 +25,7 @@
 #include "LayerSnow.h"
 #include "LayerMap.h"
 #include "myString.h"
+#include "TextRenderer.h"
 #include <math.h>
 
 
@@ -66,10 +67,7 @@ CLayerMap::CLayerMap()
 	m_pLayerMisty = NULL;
 	m_pLayerSnow = NULL;
 
-        m_hFont32 = CreateFont(32, 0, 0, 0, FW_NORMAL,
-                        TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
+	// フォントは SDL_ttf (FONTID_GOTHIC_32_NORMAL) を使用するため GDI フォント生成不要
 }
 
 
@@ -82,10 +80,6 @@ CLayerMap::~CLayerMap()
 	SAFE_DELETE(m_pLayerMisty);
 	SAFE_DELETE(m_pLayerSnow);
 
-	if (m_hFont32) {
-		DeleteObject(m_hFont32);
-		m_hFont32 = NULL;
-	}
 }
 
 
@@ -628,8 +622,6 @@ void CLayerMap::RenewLevel(void)
 
 void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 {
-	HFONT hFontOld;
-	HDC hDCTmp;
 	CString strMapName;
 
 	m_nLevelMapName = 0;
@@ -646,32 +638,17 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 		return;
 	}
 
-	// 仮のDCとフォントでテキスト幅を取得
-	HDC hScreenDC = GetDC(NULL);
-	HFONT hOldFont = (HFONT)SelectObject(hScreenDC, m_hFont32);
-	SIZE sizeText = {0, 0};
-#ifdef UNICODE
-	GetTextExtentPoint32W(hScreenDC, strMapName, nLen, &sizeText);
-#else
-	GetTextExtentPoint32A(hScreenDC, strMapName, nLen, &sizeText);
-#endif
-	SelectObject(hScreenDC, hOldFont);
-	ReleaseDC(NULL, hScreenDC);
+	// SDL_ttf でテキスト幅を取得
+	int nTextW = 0, nTextH = 0;
+	CTextRenderer::Instance().GetTextSize((FontId)FONTID_GOTHIC_32_NORMAL, strMapName, &nTextW, &nTextH);
 
-	int nWidth = sizeText.cx + 8; // 余白
+	int nWidth = nTextW + 8; // 余白
 	int nHeight = 36;
 
 	m_pDibMapName = new CImg32;
 	m_pDibMapName->Create(nWidth, nHeight);
 
-	hDCTmp = m_pDibMapName->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont32);
-	SetBkMode(hDCTmp, TRANSPARENT);
-
-	this->TextOut3(hDCTmp, 1, 2, strMapName, RGB(255, 255, 255));
-
-	SelectObject(hDCTmp, hFontOld);
-	m_pDibMapName->Unlock();
+	this->TextOut3(m_pDibMapName, FONTID_GOTHIC_32_NORMAL, 1, 2, strMapName, RGB(255, 255, 255));
 
 	m_dwLastTimeMapName = timeGetTime();
 }
@@ -1278,8 +1255,6 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 		aPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, aPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	PCInfoItem pInfoItem;
 	PCInfoCharCli pPlayerChar;
-	HDC hDC;
-	HFONT hFontOld;
 
 	pPlayerChar = m_pMgrData->GetPlayerChar();
 	if (pPlayerChar == NULL) {
@@ -1322,15 +1297,10 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 					0,
 					FALSE);
 		} else {
-			hDC = pDst->Lock();
-			hFontOld = (HFONT)SelectObject(hDC, m_hFont);
-			SetBkMode(hDC, TRANSPARENT);
 			x += 16;
 			x -= (pInfoItem->m_strName.GetLength() * 6 / 2);
 			y += 32;
-			TextOut2(hDC, x, y, (LPCTSTR)pInfoItem->m_strName, RGB(255, 255, 255));
-			SelectObject(hDC, hFontOld);
-			pDst->Unlock();
+			TextOut2(pDst, FONTID_GOTHIC_12_NORMAL, x, y, (LPCTSTR)pInfoItem->m_strName, RGB(255, 255, 255));
 		}
 	}
 	m_pMgrDraw->UnLockDibTmp();

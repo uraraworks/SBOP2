@@ -10,6 +10,7 @@
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "WindowMSG.h"
+#include "TextRenderer.h"
 
 CWindowMSG::CWindowMSG()
 {
@@ -39,8 +40,6 @@ void CWindowMSG::Create(CMgrData *pMgrData)
 void CWindowMSG::Draw(PCImg32 pDst)
 {
 	int nTmp;
-	HDC hDC;
-	HFONT hFontOld;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
@@ -52,16 +51,10 @@ void CWindowMSG::Draw(PCImg32 pDst)
 	if (m_nType == 4) {
 		nTmp = 5;
 	}
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
 
 	if (m_strMsg.IsEmpty() == FALSE) {
-		TextOut2(hDC, 16, 16 + nTmp, m_strMsg, RGB(1, 1, 1));
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 16, 16 + nTmp, m_strMsg, RGB(1, 1, 1));
 	}
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
 
 	m_dwTimeDrawStart = timeGetTime();
 

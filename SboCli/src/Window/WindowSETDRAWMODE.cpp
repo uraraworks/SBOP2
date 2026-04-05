@@ -10,6 +10,7 @@
 #include "MgrGrpData.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
+#include "TextRenderer.h"
 #include "WindowSETDRAWMODE.h"
 
 
@@ -44,8 +45,6 @@ void CWindowSETDRAWMODE::Create(CMgrData *pMgrData)
 void CWindowSETDRAWMODE::Draw(PCImg32 pDst)
 {
 	int nLevel;
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -54,16 +53,9 @@ void CWindowSETDRAWMODE::Draw(PCImg32 pDst)
 
 	DrawFrame();
 
-	clText	= RGB(1, 1, 1);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
-
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("名前を表示する"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 1, _T("名前を表示しない"),	clText);
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
+	clText = RGB(1, 1, 1);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 0, _T("名前を表示する"),	clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 1, _T("名前を表示しない"),	clText);
 
 	DrawCursor(8, 16 + 16 * m_nPos);
 	m_dwTimeDrawStart = timeGetTime();

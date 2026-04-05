@@ -11,6 +11,7 @@
 #include "MgrWindow.h"
 #include "MgrSound.h"
 #include "MgrKeyInput.h"
+#include "TextRenderer.h"
 #include "WindowOPTION_INPUTSET_SETDEVICE.h"
 
 
@@ -65,8 +66,6 @@ void CWindowOPTION_INPUTSET_SETDEVICE::Create(CMgrData *pMgrData)
 void CWindowOPTION_INPUTSET_SETDEVICE::Draw(PCImg32 pDst)
 {
 	int nLevel, i;
-	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	CmyString strTmp;
 
@@ -77,19 +76,13 @@ void CWindowOPTION_INPUTSET_SETDEVICE::Draw(PCImg32 pDst)
 	DrawFrame();
 
 	clText	= RGB(1, 1, 1);
-	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
-	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("使用しない"), clText);
+	TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * 0, _T("使用しない"), clText);
 
 	for (i = 0; i < m_nPosMax; i ++) {
 		m_MgrKeyInput->GetDeviceName(i, strTmp);
-		TextOut2(hDC, 32, 16 + 16 * (i + 1), strTmp, clText);
+		TextOut2(m_pDib, FONTID_PGOTHIC_16_BOLD, 32, 16 + 16 * (i + 1), strTmp, clText);
 	}
-
-	SelectObject(hDC, hFontOld);
-	m_pDib->Unlock();
 
 	DrawCursor(8, 16 + 16 * m_nPos);
 	m_dwTimeDrawStart = timeGetTime();
