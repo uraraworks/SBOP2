@@ -101,7 +101,7 @@ private:
 
 
 private:
-	HMODULE		m_hDll;					// DLLのモジュールハンドル
+	void*		m_hDll;					// SDL_LoadObject用
 
 	int			m_nMapPartsCount,		// マップパーツ画像数
 				m_nMapShadowCount;		// マップ影画像数
