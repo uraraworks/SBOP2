@@ -5,6 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "StdAfx.h"
+#include <SDL.h>			// SDL_LoadObject / SDL_UnloadObject 用
 #include "resource.h"
 #include "DXAudio.h"
 #include "LibMusicLoader.h"
@@ -41,13 +42,14 @@ CMgrSound::~CMgrSound()
 BOOL CMgrSound::Create(void)
 {
 	BOOL bRet, bResult;
+	// BuildModuleRelativePath は TCHAR* を受け取るため TCHAR 配列を使用
 	TCHAR szPath[MAX_PATH];
-	CmyString strFileName;
 
 	bRet = FALSE;
 
+	// TCHAR でパスを構築してから ANSI 文字列に変換（SDL_LoadObject は char* を受け取る）
 	BuildModuleRelativePath(szPath, _countof(szPath), _T("SboSoundData.dll"));
-	strFileName = szPath;
+	std::string ansiPath = TStringToAnsiStd(szPath);
 
 	bResult = m_pDXAudio->Create();
 	if (bResult == FALSE) {
@@ -63,7 +65,8 @@ BOOL CMgrSound::Create(void)
 	goto Exit;
 #endif
 
-	m_hDllSoundData = LoadLibrary(strFileName);
+	// Win32 LoadLibrary の代わりに SDL_LoadObject でクロスプラットフォーム対応
+	m_hDllSoundData = SDL_LoadObject(ansiPath.c_str());
 	if (m_hDllSoundData == NULL) {
 		// タイトル表示までは無音でも進められるようにする
 		bRet = TRUE;
@@ -90,6 +93,11 @@ void CMgrSound::Destroy(void)
 	}
 	if (m_pLibMusicLoader) {
 		m_pLibMusicLoader->Free();
+	}
+	// SDL_LoadObject で読み込んだDLLを解放
+	if (m_hDllSoundData) {
+		SDL_UnloadObject(m_hDllSoundData);
+		m_hDllSoundData = NULL;
 	}
 }
 
@@ -266,7 +274,9 @@ void CMgrSound::ReadSoundData(void)
 			continue;
 		}
 		m_pDXAudio->GetSegFromRes(
-			FindResource(m_hDllSoundData, MAKEINTRESOURCE(nResourceID), _T("WAVE")),
+			// m_hDllSoundData は void* なので HMODULE にキャストして Win32 API に渡す
+			// （Windowsビルドでのみ到達するコードパス）
+			FindResource((HMODULE)m_hDllSoundData, MAKEINTRESOURCE(nResourceID), _T("WAVE")),
 			&m_apDMSSound[i]);
 	}
 }

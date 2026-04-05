@@ -34,7 +34,7 @@ public:
 
 
 protected:
-	HMODULE				m_hLib;		// DLLのモジュールハンドル
+	void*				m_hLib;		// DLLのモジュールハンドル（SDL_LoadObject用）
 
 	// 以下関数ポインタ
 	LIBSBOSOUNDGetSoundCount		m_pGetSoundCount;

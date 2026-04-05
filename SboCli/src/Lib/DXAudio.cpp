@@ -22,7 +22,7 @@ CDXAudio::~CDXAudio() {
 
 BOOL CDXAudio::Create(void) { return TRUE; }
 void CDXAudio::Destroy(void) {}
-void CDXAudio::SetResourceHandle(HMODULE hResource) { m_hResource = hResource; }
+void CDXAudio::SetResourceHandle(void* hResource) { m_hResource = hResource; }
 BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi) { return FALSE; }
 void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg) {}
 BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg) { return FALSE; }
@@ -264,7 +264,7 @@ void CDXAudio::Destroy(void)
     // グローバルエンジンはアプリ全体で共有するため、ここでは閉じない
 }
 
-void CDXAudio::SetResourceHandle(HMODULE hResource)
+void CDXAudio::SetResourceHandle(void* hResource)
 {
     m_hResource = hResource;
 }
@@ -273,9 +273,10 @@ BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL /*bMi
 {
     if (!pSeg || !m_hResource || g_audioDevice == 0) return FALSE;
 
-    HGLOBAL hRes = LoadResource(m_hResource, hSrc);
+    // m_hResource は void* だが Windows 版でしか到達しないため HMODULE にキャストして使用
+    HGLOBAL hRes = LoadResource((HMODULE)m_hResource, hSrc);
     if (!hRes) return FALSE;
-    DWORD sz = SizeofResource(m_hResource, hSrc);
+    DWORD sz = SizeofResource((HMODULE)m_hResource, hSrc);
     const BYTE* mem = (const BYTE*)LockResource(hRes);
     if (!mem || sz == 0) return FALSE;
 

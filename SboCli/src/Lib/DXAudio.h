@@ -19,7 +19,7 @@ public:
 
     BOOL Create            (void);
     void Destroy           (void);
-    void SetResourceHandle (HMODULE hResource);
+    void SetResourceHandle (void* hResource);
 
     BOOL GetSegFromRes     (HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi = FALSE);
     void ReleaseSeg        (IDirectMusicSegment8 *pSeg);
@@ -41,7 +41,7 @@ private:
     IDirectMusicAudioPath8   *m_pDefAudioPath;
     IDirectMusicAudioPath8   *m_pDefAudioPath2;
     IDirectMusicLoader8      *m_pLoader;
-    HMODULE                   m_hResource;
+    void*                     m_hResource;  // Windows版では (HMODULE) キャストして使用
 
     // XAudio2-backed BGM state
     void*                     m_pBgmFmt;    // WAVEFORMATEX*

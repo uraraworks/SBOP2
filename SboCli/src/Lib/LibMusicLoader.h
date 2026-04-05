@@ -56,7 +56,7 @@ public:
 
 
 protected:
-	HMODULE	m_hLib;		// DLLのモジュールハンドル
+	void*	m_hLib;		// SDL_LoadObject で取得したDLLハンドル
 
 	// 以下関数ポインタ
 	LIBMUSICOpen1				m_pOpen1;

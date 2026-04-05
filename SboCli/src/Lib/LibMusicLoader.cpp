@@ -1,138 +1,12 @@
-﻿/// @file LibMusicLoader.cpp
+/// @file LibMusicLoader.cpp
 /// @brief AflMusicライブラリ読み込みクラス 実装ファイル
 /// @author 年がら年中春うらら(URARA-works)
 /// @date 2005/10/18
 /// @copyright Copyright(C)URARA-works 2005
 
 #include "stdafx.h"
+#include <SDL.h>
 #include "LibMusicLoader.h"
-
-#if defined(__EMSCRIPTEN__)
-
-CLibMusicLoader::CLibMusicLoader()
-{
-	m_hLib = NULL;
-	m_pOpen1 = NULL;
-	m_pOpen2 = NULL;
-	m_pClose = NULL;
-	m_pFadeIn = NULL;
-	m_pFadeOut = NULL;
-	m_pPlayTime = NULL;
-	m_pPlay1 = NULL;
-	m_pPlay2 = NULL;
-	m_pCont = NULL;
-	m_pStop = NULL;
-	m_pIsPlay = NULL;
-	m_pSetLoop = NULL;
-	m_pSetRelativeVolume = NULL;
-	m_pGetTitle = NULL;
-	m_pGetAllTime = NULL;
-	m_pGetPlayTime = NULL;
-}
-
-CLibMusicLoader::~CLibMusicLoader()
-{
-}
-
-void CLibMusicLoader::Load(void)
-{
-}
-
-void CLibMusicLoader::Free(void)
-{
-}
-
-BOOL CLibMusicLoader::Open(LPCSTR pFileName, LPCSTR pType)
-{
-	(void)pFileName;
-	(void)pType;
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::Open(HMODULE hResource, HRSRC hSrc, LPCSTR pType)
-{
-	(void)hResource;
-	(void)hSrc;
-	(void)pType;
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::Close(void)
-{
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::FadeIn(INT nTime, INT nVolume)
-{
-	(void)nTime;
-	(void)nVolume;
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::FadeOut(INT nTime)
-{
-	(void)nTime;
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::PlayTime(DWORD dwTime)
-{
-	(void)dwTime;
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::Play(DWORDLONG dwlCount)
-{
-	(void)dwlCount;
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::Play(void)
-{
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::Cont(void)
-{
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::Stop(void)
-{
-	return FALSE;
-}
-
-BOOL CLibMusicLoader::IsPlay(void)
-{
-	return FALSE;
-}
-
-void CLibMusicLoader::SetLoop(BOOL bLoop)
-{
-	(void)bLoop;
-}
-
-void CLibMusicLoader::SetRelativeVolume(INT nVolume)
-{
-	(void)nVolume;
-}
-
-LPCSTR CLibMusicLoader::GetTitle(void)
-{
-	return NULL;
-}
-
-DWORDLONG CLibMusicLoader::GetAllTime(void)
-{
-	return 0;
-}
-
-DWORDLONG CLibMusicLoader::GetPlayTime(void)
-{
-	return 0;
-}
-
-#else
 
 CLibMusicLoader::CLibMusicLoader()
 {
@@ -152,29 +26,33 @@ void CLibMusicLoader::Load(void)
 	if (m_hLib) {
 		return;
 	}
+	// 実行ファイルと同じディレクトリにある LibMusic.dll を読み込む
+	// BuildModuleRelativePath は TCHAR* を受け取るため TCHAR 配列を使用
 	BuildModuleRelativePath(szPath, _countof(szPath), _T("LibMusic.dll"));
-	m_hLib = LoadLibrary(szPath);
+	// SDL_LoadObject は char* を受け取るため ANSI 文字列に変換
+	std::string ansiPath = TStringToAnsiStd(szPath);
+	m_hLib = SDL_LoadObject(ansiPath.c_str());
 	if (m_hLib == NULL) {
 		return;
 	}
 
 	// 各関数のアドレスを取得
-	m_pOpen1             = (LIBMUSICOpen1)             GetProcAddress(m_hLib, "Open1");
-	m_pOpen2             = (LIBMUSICOpen2)             GetProcAddress(m_hLib, "Open2");
-	m_pClose             = (LIBMUSICClose)             GetProcAddress(m_hLib, "Close");
-	m_pFadeIn            = (LIBMUSICFadeIn)            GetProcAddress(m_hLib, "FadeIn");
-	m_pFadeOut           = (LIBMUSICFadeOut)           GetProcAddress(m_hLib, "FadeOut");
-	m_pPlayTime          = (LIBMUSICPlayTime)          GetProcAddress(m_hLib, "PlayTime");
-	m_pPlay1             = (LIBMUSICPlay1)             GetProcAddress(m_hLib, "Play1");
-	m_pPlay2             = (LIBMUSICPlay2)             GetProcAddress(m_hLib, "Play2");
-	m_pCont              = (LIBMUSICCont)              GetProcAddress(m_hLib, "Cont");
-	m_pStop              = (LIBMUSICStop)              GetProcAddress(m_hLib, "Stop");
-	m_pIsPlay            = (LIBMUSICIsPlay)            GetProcAddress(m_hLib, "IsPlay");
-	m_pSetLoop           = (LIBMUSICSetLoop)           GetProcAddress(m_hLib, "SetLoop");
-	m_pSetRelativeVolume = (LIBMUSICSetRelativeVolume) GetProcAddress(m_hLib, "SetRelativeVolume");
-	m_pGetTitle          = (LIBMUSICGetTitle)          GetProcAddress(m_hLib, "GetTitle");
-	m_pGetAllTime        = (LIBMUSICGetAllTime)        GetProcAddress(m_hLib, "GetAllTime");
-	m_pGetPlayTime       = (LIBMUSICGetPlayTime)       GetProcAddress(m_hLib, "GetPlayTime");
+	m_pOpen1             = (LIBMUSICOpen1)             SDL_LoadFunction(m_hLib, "Open1");
+	m_pOpen2             = (LIBMUSICOpen2)             SDL_LoadFunction(m_hLib, "Open2");
+	m_pClose             = (LIBMUSICClose)             SDL_LoadFunction(m_hLib, "Close");
+	m_pFadeIn            = (LIBMUSICFadeIn)            SDL_LoadFunction(m_hLib, "FadeIn");
+	m_pFadeOut           = (LIBMUSICFadeOut)           SDL_LoadFunction(m_hLib, "FadeOut");
+	m_pPlayTime          = (LIBMUSICPlayTime)          SDL_LoadFunction(m_hLib, "PlayTime");
+	m_pPlay1             = (LIBMUSICPlay1)             SDL_LoadFunction(m_hLib, "Play1");
+	m_pPlay2             = (LIBMUSICPlay2)             SDL_LoadFunction(m_hLib, "Play2");
+	m_pCont              = (LIBMUSICCont)              SDL_LoadFunction(m_hLib, "Cont");
+	m_pStop              = (LIBMUSICStop)              SDL_LoadFunction(m_hLib, "Stop");
+	m_pIsPlay            = (LIBMUSICIsPlay)            SDL_LoadFunction(m_hLib, "IsPlay");
+	m_pSetLoop           = (LIBMUSICSetLoop)           SDL_LoadFunction(m_hLib, "SetLoop");
+	m_pSetRelativeVolume = (LIBMUSICSetRelativeVolume) SDL_LoadFunction(m_hLib, "SetRelativeVolume");
+	m_pGetTitle          = (LIBMUSICGetTitle)          SDL_LoadFunction(m_hLib, "GetTitle");
+	m_pGetAllTime        = (LIBMUSICGetAllTime)        SDL_LoadFunction(m_hLib, "GetAllTime");
+	m_pGetPlayTime       = (LIBMUSICGetPlayTime)       SDL_LoadFunction(m_hLib, "GetPlayTime");
 
 	if (m_pOpen1 == NULL) {
 		Free();
@@ -184,7 +62,8 @@ void CLibMusicLoader::Load(void)
 void CLibMusicLoader::Free(void)
 {
 	if (m_hLib) {
-		FreeLibrary(m_hLib);
+		SDL_UnloadObject(m_hLib);
+		m_hLib               = NULL;	// アンロード後はNULLに戻す
 		m_pOpen1             = NULL;
 		m_pOpen2             = NULL;
 		m_pClose             = NULL;
@@ -346,5 +225,3 @@ DWORDLONG CLibMusicLoader::GetPlayTime(void)
 	}
 	return m_pGetPlayTime();
 }
-
-#endif
