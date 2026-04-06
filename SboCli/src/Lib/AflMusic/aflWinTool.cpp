@@ -1,11 +1,14 @@
-﻿#pragma unmanaged
+#pragma unmanaged
 
+#ifdef _WIN32
 #include <windows.h>
-
+#include <direct.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 
 #include "aflWinTool.h"
-#include <direct.h>
-#include <sys/stat.h> 
+#include <sys/stat.h>
 #include <stdio.h>
 /*
 
@@ -24,14 +27,14 @@
 	#endif //_DEBUG
 #else
 		#define CHECK_MEMORY_LEAK
-#endif 
+#endif
 
 */
 
 #ifdef _MSC_VER
 	#pragma comment(lib, "imm32.lib")
 	#pragma comment(lib, "winmm.lib")
-#endif 
+#endif
 
 //namespace Afl::Windows
 namespace Afl{namespace Windows{
@@ -42,27 +45,59 @@ namespace Afl{namespace Windows{
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflSemaphore::AflSemaphore()
 {
+#ifdef _WIN32
 	m_hEvent = CreateSemaphore(NULL,0,100000,NULL);
+#else
+	// SDL セマフォを初期カウント0で生成
+	m_pSem = SDL_CreateSemaphore(0);
+#endif
 }
 AflSemaphore::~AflSemaphore()
 {
-    CloseHandle(m_hEvent);
+#ifdef _WIN32
+	CloseHandle(m_hEvent);
+#else
+	SDL_DestroySemaphore(m_pSem);
+#endif
 }
 void AflSemaphore::clear()
 {
+#ifdef _WIN32
+	// カウントを上限まで増やして「フラッシュ」する（元の実装を維持）
 	while(ReleaseSemaphore(m_hEvent,1,NULL));
+#else
+	// セマフォのカウントを0に戻す（保留シグナルを全消費）
+	while(SDL_SemTryWait(m_pSem) == 0) {}
+#endif
 }
 bool AflSemaphore::release(LONG lCount)
 {
+#ifdef _WIN32
 	return ReleaseSemaphore(m_hEvent,lCount,NULL)!=0;
+#else
+	// lCount 回シグナルを発行する
+	bool bResult = true;
+	for(LONG i = 0; i < lCount; i++)
+	{
+		if(SDL_SemPost(m_pSem) != 0)
+			bResult = false;
+	}
+	return bResult;
+#endif
 }
+#ifdef _WIN32
 HANDLE AflSemaphore::getHandle()const
 {
 	return m_hEvent;
 }
+#endif
 void AflSemaphore::wait()const
 {
-    WaitForSingleObject(m_hEvent,INFINITE);
+#ifdef _WIN32
+	WaitForSingleObject(m_hEvent,INFINITE);
+#else
+	SDL_SemWait(m_pSem);
+#endif
 }
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -71,32 +106,65 @@ void AflSemaphore::wait()const
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflEvent::AflEvent()
 {
+#ifdef _WIN32
 	m_hEvent = CreateEvent(NULL,false,false,NULL);
+#else
+	// SDL セマフォで auto-reset event を模倣（初期カウント0）
+	m_pSem = SDL_CreateSemaphore(0);
+#endif
 }
 AflEvent::~AflEvent()
 {
-    CloseHandle(m_hEvent);
+#ifdef _WIN32
+	CloseHandle(m_hEvent);
+#else
+	SDL_DestroySemaphore(m_pSem);
+#endif
 }
 void AflEvent::clear()
 {
+#ifdef _WIN32
 	ResetEvent(m_hEvent);
+#else
+	// 保留シグナルを全て消費してカウントを0に戻す
+	while(SDL_SemTryWait(m_pSem) == 0) {}
+#endif
 }
 bool AflEvent::release(LONG lCount)
 {
+#ifdef _WIN32
 	return ReleaseSemaphore(m_hEvent,lCount,NULL)!=0;
+#else
+	// lCount 回シグナルを発行する
+	bool bResult = true;
+	for(LONG i = 0; i < lCount; i++)
+	{
+		if(SDL_SemPost(m_pSem) != 0)
+			bResult = false;
+	}
+	return bResult;
+#endif
 }
+#ifdef _WIN32
 HANDLE AflEvent::getHandle()const
 {
 	return m_hEvent;
 }
+#endif
 void AflEvent::wait()const
 {
-    WaitForSingleObject(m_hEvent,INFINITE);
+#ifdef _WIN32
+	WaitForSingleObject(m_hEvent,INFINITE);
+#else
+	SDL_SemWait(m_pSem);
+#endif
 }
+
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflAdviseTimer
-// 周期呼び出し用
+// 周期呼び出し用（COM/DirectShow依存 - Windows専用）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#ifdef _WIN32
 AflAdviseTimer::AflAdviseTimer()
 {
 	//DirectShow用のIReferenceClockのGUID
@@ -151,47 +219,93 @@ REFERENCE_TIME AflAdviseTimer::getTime()
     m_pReferenceClock->GetTime(&rtBase);
     return rtBase;
 }
+#endif // _WIN32
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflMediaTimer
 // 周期呼び出し用
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+#ifndef _WIN32
+// SDL タイマーコールバック: 毎インターバルでセマフォにシグナルを発行する
+static Uint32 SDLTimerCallback(Uint32 interval, void* param)
+{
+	SDL_SemPost((SDL_sem*)param);
+	return interval; // 繰り返し継続
+}
+#endif
+
 AflMediaTimer::AflMediaTimer()
 {
+#ifdef _WIN32
 	timeGetDevCaps(&m_timeCaps,sizeof(m_timeCaps));
 	timeBeginPeriod(m_timeCaps.wPeriodMin);
 	m_timerID = 0;
+#else
+	// SDL セマフォを初期カウント0で生成
+	m_pSem = SDL_CreateSemaphore(0);
+	m_timerID = 0;
+#endif
 }
 AflMediaTimer::~AflMediaTimer()
 {
 	stopTimer();
+#ifdef _WIN32
 	timeEndPeriod(m_timeCaps.wPeriodMin);
+#else
+	SDL_DestroySemaphore(m_pSem);
+#endif
 }
 bool AflMediaTimer::startTimer(DWORD dwTime)
 {
 	stopTimer();
+#ifdef _WIN32
     //セマフォイベントの設定
 	m_timerID = timeSetEvent(m_timeCaps.wPeriodMin,0,
 		(LPTIMECALLBACK)m_event.getHandle(),0,TIME_PERIODIC | TIME_CALLBACK_EVENT_SET);
 	return m_timerID != 0;
+#else
+	// SDLの最小分解能(1ms)でタイマーを起動し、毎インターバルでセマフォをシグナル
+	m_timerID = SDL_AddTimer(1, SDLTimerCallback, m_pSem);
+	return m_timerID != 0;
+#endif
 }
 bool AflMediaTimer::stopTimer()
 {
 	if(!m_timerID)
 		return false;
 	//イベントの動作停止
+#ifdef _WIN32
 	bool bFlag = timeKillEvent(m_timerID) == S_OK;
+#else
+	bool bFlag = SDL_RemoveTimer(m_timerID) == SDL_TRUE;
+#endif
 	m_timerID = 0;
 	return bFlag;
 }
 void AflMediaTimer::waitTimer()
 {
 	//時間が来るまで待機
+#ifdef _WIN32
 	m_event.wait();
+#else
+	SDL_SemWait(m_pSem);
+#endif
 }
 bool AflMediaTimer::release(LONG lCount)
 {
+#ifdef _WIN32
 	return m_event.release();
+#else
+	// lCount 回シグナルを発行する
+	bool bResult = true;
+	for(LONG i = 0; i < lCount; i++)
+	{
+		if(SDL_SemPost(m_pSem) != 0)
+			bResult = false;
+	}
+	return bResult;
+#endif
 }
 
 
@@ -201,10 +315,13 @@ bool AflMediaTimer::release(LONG lCount)
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 AflTimeCounter::AflTimeCounter()
 {
+#ifdef _WIN32
 	//タイマーの分解能設定
 	TIMECAPS timeCaps;
-	timeGetDevCaps(&timeCaps,sizeof(TIMECAPS));       
+	timeGetDevCaps(&timeCaps,sizeof(TIMECAPS));
 	timeBeginPeriod(timeCaps.wPeriodMin);
+#endif
+	// SDLはタイマー分解能をSDL内部で管理するため非Windows環境では不要
 
 	m_bEnable = true;
 	m_dwSyncTime = 10;
@@ -212,10 +329,13 @@ AflTimeCounter::AflTimeCounter()
 }
 AflTimeCounter::~AflTimeCounter()
 {
+#ifdef _WIN32
 	//タイマーの分解能復帰
 	TIMECAPS timeCaps;
-	timeGetDevCaps(&timeCaps,sizeof(TIMECAPS));       
+	timeGetDevCaps(&timeCaps,sizeof(TIMECAPS));
 	timeEndPeriod(timeCaps.wPeriodMin);
+#endif
+	// 非Windows環境ではSDLが管理するため何もしない
 }
 void AflTimeCounter::setTimeSync(DWORD dwTime)
 {
@@ -225,11 +345,20 @@ void AflTimeCounter::setTimeSync(DWORD dwTime)
 void AflTimeCounter::resetTime()
 {
 	m_iNowCount = 0;
+#ifdef _WIN32
 	m_dwStartTime = timeGetTime();
+#else
+	// SDL_GetTicks() でミリ秒タイムスタンプを取得
+	m_dwStartTime = SDL_GetTicks();
+#endif
 }
 DWORD AflTimeCounter::getTime() const
 {
+#ifdef _WIN32
 	return timeGetTime() - m_dwStartTime;
+#else
+	return SDL_GetTicks() - m_dwStartTime;
+#endif
 }
 INT AflTimeCounter::getCount()
 {
@@ -250,7 +379,7 @@ INT AflTimeCounter::getCount()
 	dwTime = getTime();
 	m_iNowCount =  dwTime / m_dwSyncTime;
 	iCount = m_iNowCount - iOldCount;
-	
+
 	if(!iCount)
 		m_dwSleepTime = dwTime % m_dwSyncTime;
 	else
@@ -259,17 +388,25 @@ INT AflTimeCounter::getCount()
 }
 void AflTimeCounter::sleep() const
 {
+#ifdef _WIN32
 	if(m_bEnable)
 		Sleep(m_dwSleepTime);
 	else
 		Sleep(0);
+#else
+	if(m_bEnable)
+		SDL_Delay(m_dwSleepTime);
+	else
+		SDL_Delay(0);
+#endif
 }
 DWORD AflTimeCounter::sleepTime() const
 {
 	if(m_bEnable)
 		return m_dwSleepTime;
 	return 0;
-}void AflTimeCounter::setEnable(bool bFlag)
+}
+void AflTimeCounter::setEnable(bool bFlag)
 {
 	m_bEnable = bFlag;
 }
@@ -277,8 +414,9 @@ DWORD AflTimeCounter::sleepTime() const
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFileName
-// ファイル名とパス制御
+// ファイル名とパス制御（Windows専用実装）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#ifdef _WIN32
 bool AflFileName::setFileName(LPCSTR pFileName)
 {
 	CHAR cPath[_MAX_PATH];
@@ -286,16 +424,16 @@ bool AflFileName::setFileName(LPCSTR pFileName)
 	CHAR cDir[_MAX_DIR];
 	CHAR cFname[_MAX_FNAME];
 	CHAR cExt[_MAX_EXT];
-	
+
 	_fullpath(cPath,pFileName,_MAX_PATH);
 	_splitpath(cPath,cDrive,cDir,cFname,cExt);
-	
+
 	m_strFullPath = cPath;
 	m_strDrive = cDrive;
 	m_strDir = cDir;
 	m_strFname = cFname;
 	m_strExt = cExt;
-	
+
 	m_strPath = m_strDrive.c_str();
 	m_strPath += m_strDir.c_str();
 
@@ -337,7 +475,7 @@ std::string AflFileName::relativePath(LPCSTR pFileName)
 		strFileName += pPath;
 
 	strFileName += m_strFileName.c_str();
-	
+
 	return strFileName;
 }
 bool AflFileName::pushPath()
@@ -365,6 +503,7 @@ bool AflFileName::changePath()
 	chdir(m_strPath.c_str());
 	return true;
 }
+#endif // _WIN32
 
 
 //------------------------------------------------------------
@@ -425,9 +564,10 @@ bool AflRect::isRectNull() const
 		return true;
 }
 
+#ifdef _WIN32
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFont
-// フォント系
+// フォント系（GDI依存 - Windows専用）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //-----------------------------------------------------
 AflFont::AflFont()
@@ -534,10 +674,10 @@ bool AflFont::getFontSize(LPSIZE pSize,HFONT hFont,LPCSTR pText,INT iLength,INT 
 	iHeight += sizeFont.cy;
 	SelectObject(hdmDC,holdFont);
 	DeleteDC(hdmDC);
-	
+
 	if(iWidth > iMaxWidth)
 		iMaxWidth = iWidth;
-	
+
 	if(pSize)
 	{
 		pSize->cx = iMaxWidth;
@@ -589,10 +729,10 @@ bool AflFont::getFontSize(LPSIZE pSize,HFONT hFont,LPCWSTR pText,INT iLength,INT
 	iHeight += sizeFont.cy;
 	SelectObject(hdmDC,holdFont);
 	DeleteDC(hdmDC);
-	
+
 	if(iWidth > iMaxWidth)
 		iMaxWidth = iWidth;
-	
+
 	if(pSize)
 	{
 		pSize->cx = iMaxWidth;
@@ -604,7 +744,7 @@ bool AflFont::getFontSize(LPSIZE pSize,HFONT hFont,LPCWSTR pText,INT iLength,INT
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFep
-// FEP制御用
+// FEP制御用（IMM依存 - Windows専用）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //-----------------------------------------------------
 AflFep::AflFep()
@@ -765,6 +905,7 @@ INT AflFep::getCandidateEnd() const
     return iCount;
 }
 //-----------------------------------------------------
+#endif // _WIN32
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflThreadTimer
@@ -810,7 +951,11 @@ void AflThreadTimer::stop()
 	INT i;
 	m_bEnable = false;
 	for(i=0;i<1000 && m_bEnter;i++)
+#ifdef _WIN32
 		Sleep(1);
+#else
+		SDL_Delay(1);
+#endif
 }
 DWORD AflThreadTimer::getInterval()
 {
@@ -862,9 +1007,9 @@ void AflThreadTimer::onProc(LPVOID pvoid)
 		INT i;
 		//必要動作回数
 		INT iCount = m_aflTimeCounter.getCount();
-		
+
 		//実行処理用ループ
-		if(m_bEnable && m_paflProcAction) 
+		if(m_bEnable && m_paflProcAction)
 		{
 			for(i=0;m_bEnable && i<iCount;i++)
 				m_paflProcAction->call(pvoid);
@@ -884,7 +1029,13 @@ void AflThreadTimer::onProc(LPVOID pvoid)
 			}
 		}
 		if(m_bEnable)
+		{
+#ifdef _WIN32
 			Sleep(m_aflTimeCounter.sleepTime());
+#else
+			SDL_Delay(m_aflTimeCounter.sleepTime());
+#endif
+		}
 	}
 
 	if(m_paflProcEnd)
@@ -894,4 +1045,3 @@ void AflThreadTimer::onProc(LPVOID pvoid)
 }
 //namespace
 };};
-

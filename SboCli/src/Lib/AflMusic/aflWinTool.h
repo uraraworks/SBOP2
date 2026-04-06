@@ -1,14 +1,18 @@
-﻿#if _MSC_VER >= 1100
+#if _MSC_VER >= 1100
 #pragma once
 #endif // _MSC_VER >= 1100
 #ifndef __INC_AFLWINTOOL
 
 #pragma warning( disable : 4786 )	//STLの警告外し
 #include <string>
-#include <imm.h>
 #include <map>
 
+#ifdef _WIN32
+#include <imm.h>
 #include <strmif.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 
 #include "aflStd.h"
 
@@ -45,18 +49,26 @@ public:
 	~AflSemaphore();
 	void clear();
 	bool release(LONG lCount=1);
-	HANDLE getHandle()const;
 	void wait()const;
 
+#ifdef _WIN32
+	HANDLE getHandle()const;
+#endif
+
 protected:
-    HANDLE m_hEvent;
+#ifdef _WIN32
+	HANDLE m_hEvent;
+#else
+	SDL_sem* m_pSem;
+#endif
 };
 
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflAdviseTimer
-// 周期呼び出し用
+// 周期呼び出し用（Windows/COM/DirectShow依存 - 非Windows環境では不使用）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#ifdef _WIN32
 class AflAdviseTimer
 {
 public:
@@ -72,6 +84,7 @@ protected:
     DWORD m_dwAdviseToken;
 	AflSemaphore m_semaphore;
 };
+#endif // _WIN32
 
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -85,11 +98,18 @@ public:
 	~AflEvent();
 	void clear();
 	bool release(LONG lCount=1);
-	HANDLE getHandle()const;
 	void wait()const;
 
+#ifdef _WIN32
+	HANDLE getHandle()const;
+#endif
+
 protected:
-    HANDLE m_hEvent;
+#ifdef _WIN32
+	HANDLE m_hEvent;
+#else
+	SDL_sem* m_pSem;
+#endif
 };
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -107,9 +127,14 @@ public:
  	bool release(LONG lCount=1);
     DWORD getTime();
 protected:
+#ifdef _WIN32
 	AflEvent m_event;
 	MMRESULT m_timerID;
 	TIMECAPS m_timeCaps;
+#else
+	SDL_sem* m_pSem;
+	SDL_TimerID m_timerID;
+#endif
 };
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -138,10 +163,12 @@ protected:
 	DWORD m_dwSleepTime;
 	bool m_bEnable;
 };
+
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFileName
-// ファイル名とパス制御
+// ファイル名とパス制御（Windows専用実装）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#ifdef _WIN32
 class AflFileName
 {
 public:
@@ -167,6 +194,8 @@ protected:
 
 	std::string m_strTempPath;
 };
+#endif // _WIN32
+
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFep
 // FEP制御用
@@ -187,9 +216,10 @@ public:
 	int high,low;
 };
 
+#ifdef _WIN32
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFont
-// フォント系
+// フォント系（GDI依存 - Windows専用）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class AflFont
 {
@@ -218,7 +248,7 @@ protected:
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflFep
-// FEP制御用
+// FEP制御用（IMM依存 - Windows専用）
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class AflFep
 {
@@ -244,6 +274,8 @@ protected:
     HWND m_hWnd;
     LPCANDIDATELIST m_pCandidateList;
 };
+#endif // _WIN32
+
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // AflThreadTimer
 // 時間制御ループスレッド
@@ -285,4 +317,3 @@ private:
 
 #define __INC_AFLWINTOOL
 #endif
-
