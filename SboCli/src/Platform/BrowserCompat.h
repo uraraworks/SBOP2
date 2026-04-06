@@ -1401,6 +1401,44 @@ inline int DrawText(HDC, LPCTSTR, int, LPRECT, UINT)
 	return 0;
 }
 
+inline BOOL GetTextExtentPoint32(HDC hDC, LPCTSTR lpString, int c, LPSIZE psizl)
+{
+	if (!psizl) return FALSE;
+	SdlDCContext* ctx = SdlDCGet(hDC);
+	if (ctx && ctx->currentFont) {
+		int w = 0, h = 0;
+		if (SdlFontGetTextExtent(ctx->currentFont, lpString, c, &w, &h)) {
+			psizl->cx = w;
+			psizl->cy = h;
+			return TRUE;
+		}
+	}
+	// フォールバック: 固定サイズ推定
+	psizl->cx = c * 8;
+	psizl->cy = 16;
+	return TRUE;
+}
+
+inline BOOL GetTextExtentPoint32W(HDC hDC, LPCWSTR lpString, int c, LPSIZE psizl)
+{
+	if (!psizl) return FALSE;
+	SdlDCContext* ctx = SdlDCGet(hDC);
+	if (ctx && ctx->currentFont) {
+		int w = 0, h = 0;
+		if (SdlFontGetTextExtent(ctx->currentFont, lpString, c, &w, &h)) {
+			psizl->cx = w;
+			psizl->cy = h;
+			return TRUE;
+		}
+	}
+	// フォールバック: 固定サイズ推定（ワイド文字は倍幅想定）
+	psizl->cx = c * 12;
+	psizl->cy = 16;
+	return TRUE;
+}
+
+inline int lstrlenW(LPCWSTR s) { return s ? (int)wcslen(s) : 0; }
+
 inline BOOL StretchBlt(HDC, int, int, int, int, HDC, int, int, int, int, DWORD)
 {
 	return TRUE;
