@@ -2066,13 +2066,11 @@ BOOL CMgrGrpData::Read(LPCSTR pszName, PCImg32 *pDib, int nSize)
 	std::vector<unsigned char> image;
 	unsigned width, height;
 	CImg32 *pDibNew;
-	CImg32 *pDibTmp, *pDibTmp2;
+	CImg32 *pDibTmp;
 	BYTE *pData;
-	HDC hDCBmp, hDCBmp2;
 
 	bRet		= FALSE;
 	pDibTmp		= NULL;
-	pDibTmp2	= NULL;
 
 	// ファイルベース読み込みを先行試行（リソースAPI不使用でも動作可能にする）
 	std::vector<unsigned char> fileData;
@@ -2141,23 +2139,13 @@ BOOL CMgrGrpData::Read(LPCSTR pszName, PCImg32 *pDib, int nSize)
 		}
 	}
 
-	pDibTmp2 = new CImg32;
-	pDibTmp2->Create(width * nSize, height * nSize);
-	hDCBmp  = pDibTmp->Lock();
-	hDCBmp2 = pDibTmp2->Lock();
-
-	StretchBlt(hDCBmp2, 0, 0, width * nSize, height * nSize,
-		hDCBmp, 0, 0, width, height, SRCCOPY);
-
-	pDibTmp->Unlock();
-	pDibTmp2->Unlock();
-
-	pDibNew->Blt(0, 0, width * nSize, height * nSize, pDibTmp2, 0, 0);
+	// GDI StretchBlt を BltStretchNearest に置換（GDI/HDC不使用）
+	pDibNew->BltStretchNearest(0, 0, width * nSize, height * nSize,
+		pDibTmp, 0, 0, width, height);
 
 	bRet = TRUE;
 Exit:
 	SAFE_DELETE(pDibTmp);
-	SAFE_DELETE(pDibTmp2);
 	return bRet;
 }
 
