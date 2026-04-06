@@ -86,7 +86,7 @@ inline std::string WideToCodePageString(const wchar_t *pszSrc, UINT codePage)
 		return strRet;
 	}
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	if (codePage != CP_UTF8) {
 		codePage = CP_UTF8;
 	}
@@ -117,7 +117,7 @@ inline std::basic_string<TCHAR> Utf8ToTStringStd(LPCSTR pszSrc)
 	}
 
 #ifdef _UNICODE
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	strRet = converter.from_bytes(pszSrc);
 #else

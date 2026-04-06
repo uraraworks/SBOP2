@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include <math.h>
 #include "Img32.h"
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 #include "Platform/SdlFont.h"
 #endif
 
@@ -49,7 +49,7 @@ BOOL CImg32::Create(
 	int cx,		// [in] 幅
 	int cy)		// [in] 高さ
 {
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	return CreateWithoutGdi(cx, cy);
 #else
 	BOOL bRet;
@@ -1144,7 +1144,7 @@ void CImg32::BltStretchNearest(
 
 HDC CImg32::Lock(void)
 {
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	// SdlFontのDCコンテキストを登録して仮想DCを返す
 	if (m_pBits && !m_hDC) {
 		m_hDC = (HDC)SdlDCRegister(m_pBits, Width(), Height());
@@ -1181,7 +1181,7 @@ Exit:
 
 void CImg32::Unlock(void)
 {
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	if (m_hDC) {
 		SdlDCUnregister(m_hDC);
 		m_hDC = NULL;

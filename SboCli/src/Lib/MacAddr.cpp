@@ -6,10 +6,14 @@
 
 #include "StdAfx.h"
 #include <cstdio>
+#ifdef _WIN32
 #include <Iphlpapi.h>
+#endif // _WIN32
 #include "MacAddr.h"
 
+#ifdef _WIN32
 #pragma comment(lib, "Iphlpapi.lib")
+#endif // _WIN32
 
 CMacAddr::CMacAddr()
 {
@@ -19,6 +23,8 @@ CMacAddr::CMacAddr()
 CMacAddr::~CMacAddr()
 {
 }
+
+#ifdef _WIN32
 
 BOOL CMacAddr::Get(
 	PBYTE pDst,	// [out] 取得したMACアドレス(バイナリ6バイト)
@@ -205,3 +211,54 @@ Exit:
 	}
 	return nRet;
 }
+
+#else // !_WIN32
+
+// 非Windows環境向けのダミー実装
+// サーバーへの識別子として最低限の固定値を返す
+
+BOOL CMacAddr::Get(
+	PBYTE pDst,	// [out] 取得したMACアドレス(バイナリ6バイト)
+	int nNo)	// [in]  取得したいNIC番号(0が最初)
+{
+	// ダミーMACアドレス: 00:00:00:00:00:01
+	static const unsigned char dummyMac[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
+	for (int i = 0; i < 6; i++) {
+		pDst[i] = dummyMac[i];
+	}
+	return TRUE;
+}
+
+BOOL CMacAddr::GetStr(
+	LPSTR pszDst,	// [out] 取得したMACアドレス(文字列形式)
+	int nNo)		// [in]  取得したいNIC番号(0が最初)
+{
+	// ダミーMACアドレスを文字列にフォーマットして返す
+	unsigned char mac[6];
+	BOOL bResult = Get(mac, nNo);
+	snprintf(pszDst, 18, "%02X-%02X-%02X-%02X-%02X-%02X",
+		mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+	return bResult;
+}
+
+int CMacAddr::GetCount(void)
+{
+	return m_nCount;
+}
+
+BOOL CMacAddr::GetDeviceName(
+	LPSTR pszDst,	// [out] 取得したデバイス名
+	int nNo)		// [in]  取得したいNIC番号(0が最初)
+{
+	// 非Windows環境ではデバイス名として "unknown" を返す
+	snprintf(pszDst, 8, "unknown");
+	return TRUE;
+}
+
+int CMacAddr::GetNICCount(void)
+{
+	// 非Windows環境ではNIC数を1として返す
+	return 1;
+}
+
+#endif // _WIN32

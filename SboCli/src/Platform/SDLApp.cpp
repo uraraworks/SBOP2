@@ -4,7 +4,7 @@
 /// @copyright Copyright(C)URARA-works 2025
 
 #include "stdafx.h"
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 #include <SDL_syswm.h>
 #else
 #include <emscripten/emscripten.h>
@@ -60,7 +60,7 @@ static void SBOP2_DebugCountOnDraw(int hasRenderer)
 }
 #endif
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 static HWND GetMainWindowHandle(SDL_Window *pWindow)
 {
 	SDL_SysWMinfo wmInfo;

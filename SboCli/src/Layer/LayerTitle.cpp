@@ -73,7 +73,7 @@ void CLayerTitle::Draw(PCImg32 pDst)
 	}
 
 	if ((m_dwLastTimeFadeIn == 0) && m_hFont) {
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 		hDCTmp = pDst->Lock();
 		hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
 		SetBkMode(hDCTmp, TRANSPARENT);

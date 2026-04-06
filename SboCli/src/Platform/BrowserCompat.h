@@ -5,7 +5,7 @@
 
 #pragma once
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 
 #include <SDL.h>
 #include "Platform/SdlFont.h"
@@ -28,6 +28,8 @@
 #include <sys/stat.h>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -1013,23 +1015,175 @@ inline DWORD GetLastError(void)
 	return 0;
 }
 
-inline UINT GetPrivateProfileInt(LPCTSTR, LPCTSTR, int nDefault, LPCTSTR)
+// -----------------------------------------------------------------------
+// iniファイル読み書きヘルパー（compat_ini_ プレフィックスで衝突回避）
+// -----------------------------------------------------------------------
+
+/// wchar_t パスを UTF-8 文字列に変換する
+inline std::string compat_ini_wcs_to_utf8(const wchar_t* pwsz)
 {
-	return (UINT)nDefault;
+	if (pwsz == NULL) return std::string();
+	// mbstowcs の逆：wcstombs でロケール依存変換
+	char buf[4096];
+	size_t n = wcstombs(buf, pwsz, sizeof(buf) - 1);
+	if (n == (size_t)-1) return std::string();
+	buf[n] = '\0';
+	// パス区切り '\' → '/'
+	for (size_t i = 0; buf[i] != '\0'; ++i) {
+		if (buf[i] == '\\') buf[i] = '/';
+	}
+	return std::string(buf);
 }
 
-inline DWORD GetPrivateProfileString(LPCTSTR, LPCTSTR, LPCTSTR pszDefault, LPTSTR pszReturnedString, DWORD nSize, LPCTSTR)
+/// 文字列前後の空白を除去する
+inline std::string compat_ini_trim(const std::string& s)
+{
+	size_t b = s.find_first_not_of(" \t\r\n");
+	if (b == std::string::npos) return std::string();
+	size_t e = s.find_last_not_of(" \t\r\n");
+	return s.substr(b, e - b + 1);
+}
+
+/// iniファイルをパースして map<section, map<key, value>> を返す
+inline std::map<std::string, std::map<std::string, std::string>>
+compat_ini_load(const std::string& path)
+{
+	std::map<std::string, std::map<std::string, std::string>> data;
+	std::ifstream ifs(path.c_str());
+	if (!ifs.is_open()) return data;
+
+	std::string line;
+	std::string curSection;
+	while (std::getline(ifs, line)) {
+		std::string t = compat_ini_trim(line);
+		if (t.empty() || t[0] == ';' || t[0] == '#') continue; // コメント行スキップ
+		if (t[0] == '[') {
+			// セクション行
+			size_t end = t.find(']');
+			if (end != std::string::npos) {
+				curSection = compat_ini_trim(t.substr(1, end - 1));
+			}
+		} else {
+			// キー=値 行
+			size_t eq = t.find('=');
+			if (eq != std::string::npos) {
+				std::string key = compat_ini_trim(t.substr(0, eq));
+				std::string val = compat_ini_trim(t.substr(eq + 1));
+				data[curSection][key] = val;
+			}
+		}
+	}
+	return data;
+}
+
+/// iniデータを map から指定パスのファイルへ書き出す
+inline bool compat_ini_save(
+	const std::string& path,
+	const std::map<std::string, std::map<std::string, std::string>>& data)
+{
+	std::ofstream ofs(path.c_str());
+	if (!ofs.is_open()) return false;
+
+	for (auto& sec : data) {
+		ofs << "[" << sec.first << "]\n";
+		for (auto& kv : sec.second) {
+			ofs << kv.first << "=" << kv.second << "\n";
+		}
+		ofs << "\n";
+	}
+	return true;
+}
+
+// -----------------------------------------------------------------------
+// GetPrivateProfileInt: iniファイルからキーを読んで整数返す
+// -----------------------------------------------------------------------
+inline UINT GetPrivateProfileInt(
+	LPCTSTR pszSection, LPCTSTR pszKey, int nDefault, LPCTSTR pszFileName)
+{
+	if (pszSection == NULL || pszKey == NULL || pszFileName == NULL) {
+		return (UINT)nDefault;
+	}
+	std::string path    = compat_ini_wcs_to_utf8(pszFileName);
+	std::string section = compat_ini_wcs_to_utf8(pszSection);
+	std::string key     = compat_ini_wcs_to_utf8(pszKey);
+
+	auto data = compat_ini_load(path);
+	auto itSec = data.find(section);
+	if (itSec == data.end()) return (UINT)nDefault;
+	auto itKey = itSec->second.find(key);
+	if (itKey == itSec->second.end()) return (UINT)nDefault;
+
+	return (UINT)atoi(itKey->second.c_str());
+}
+
+// -----------------------------------------------------------------------
+// GetPrivateProfileString: iniファイルからキーを読んでバッファにコピー
+// -----------------------------------------------------------------------
+inline DWORD GetPrivateProfileString(
+	LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszDefault,
+	LPTSTR pszReturnedString, DWORD nSize, LPCTSTR pszFileName)
 {
 	if ((pszReturnedString == NULL) || (nSize == 0)) {
 		return 0;
 	}
-	_tcscpy_s(pszReturnedString, nSize, (pszDefault != NULL) ? pszDefault : _T(""));
+
+	// 読み込み結果を格納する文字列（デフォルト値で初期化）
+	const wchar_t* pwszFallback = (pszDefault != NULL) ? pszDefault : _T("");
+	std::string fallbackUtf8 = compat_ini_wcs_to_utf8(pwszFallback);
+	std::string resultUtf8   = fallbackUtf8;
+
+	if (pszSection != NULL && pszKey != NULL && pszFileName != NULL) {
+		std::string path    = compat_ini_wcs_to_utf8(pszFileName);
+		std::string section = compat_ini_wcs_to_utf8(pszSection);
+		std::string key     = compat_ini_wcs_to_utf8(pszKey);
+
+		auto data = compat_ini_load(path);
+		auto itSec = data.find(section);
+		if (itSec != data.end()) {
+			auto itKey = itSec->second.find(key);
+			if (itKey != itSec->second.end()) {
+				resultUtf8 = itKey->second;
+			}
+		}
+	}
+
+	// UTF-8 → wchar_t に変換してバッファへコピー
+	wchar_t wbuf[4096];
+	size_t n = mbstowcs(wbuf, resultUtf8.c_str(), sizeof(wbuf) / sizeof(wbuf[0]) - 1);
+	if (n == (size_t)-1) n = 0;
+	wbuf[n] = L'\0';
+
+	_tcscpy_s(pszReturnedString, nSize, wbuf);
 	return (DWORD)_tcslen(pszReturnedString);
 }
 
-inline BOOL WritePrivateProfileString(LPCTSTR, LPCTSTR, LPCTSTR, LPCTSTR)
+// -----------------------------------------------------------------------
+// WritePrivateProfileString: iniファイルのキーを更新または追加して書き戻す
+// -----------------------------------------------------------------------
+inline BOOL WritePrivateProfileString(
+	LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszString, LPCTSTR pszFileName)
 {
-	return TRUE;
+	if (pszSection == NULL || pszKey == NULL || pszFileName == NULL) {
+		return FALSE;
+	}
+	std::string path    = compat_ini_wcs_to_utf8(pszFileName);
+	std::string section = compat_ini_wcs_to_utf8(pszSection);
+	std::string key     = compat_ini_wcs_to_utf8(pszKey);
+	std::string value   = (pszString != NULL) ? compat_ini_wcs_to_utf8(pszString) : std::string();
+
+	// 既存データを読み込んでキーを更新（なければ新規追加）
+	auto data = compat_ini_load(path);
+	if (pszString != NULL) {
+		data[section][key] = value;
+	} else {
+		// pszString == NULL はキー削除を意味する
+		auto itSec = data.find(section);
+		if (itSec != data.end()) {
+			itSec->second.erase(key);
+		}
+	}
+
+	return compat_ini_save(path, data) ? TRUE : FALSE;
 }
 
 inline DWORD GetFileAttributes(LPCTSTR pszPath)

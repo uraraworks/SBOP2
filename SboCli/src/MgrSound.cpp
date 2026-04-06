@@ -53,14 +53,14 @@ BOOL CMgrSound::Create(void)
 
 	bResult = m_pDXAudio->Create();
 	if (bResult == FALSE) {
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 		bRet = TRUE;
 #endif
 		goto Exit;
 	}
 
-#if defined(__EMSCRIPTEN__)
-	// ブラウザではタイトル表示を優先し、音声資産が無くても継続する
+#if !defined(_WIN32)
+	// 非Windowsではタイトル表示を優先し、音声資産が無くても継続する
 	bRet = TRUE;
 	goto Exit;
 #endif
@@ -107,7 +107,7 @@ void CMgrSound::PlaySound(DWORD dwSoundID)
 	int nNo;
 	IDirectMusicSegment8 **pDMS;
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	UNREFERENCED_PARAMETER(dwSoundID);
 	return;
 #endif
@@ -133,7 +133,7 @@ void CMgrSound::PlayBGM(
 	char szTmp[MAX_PATH];
 	TCHAR szBasePath[MAX_PATH];
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	UNREFERENCED_PARAMETER(nNo);
 	UNREFERENCED_PARAMETER(bPlay);
 	return;
@@ -259,7 +259,7 @@ void CMgrSound::ReadSoundData(void)
 {
 	int i, nCount, nResourceID;
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	return;
 #endif
 

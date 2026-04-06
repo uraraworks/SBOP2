@@ -13,7 +13,7 @@
 #include "WindowLOGIN.h"
 #include "WindowLOGINNull.h"
 #include "WindowMSG.h"
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 #include "WindowLOGINMENU.h"
 #include "WindowSEX.h"
 #include "WindowACCOUNTINFO.h"
@@ -51,7 +51,7 @@
 #endif
 #include "MgrWindow.h"
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 
 CMgrWindow::CMgrWindow()
 {
@@ -399,7 +399,7 @@ void CMgrWindow::DeleteAll(void)
 	m_bDraw		= TRUE;
 	m_bKeyInput	= FALSE;
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	if (m_pMgrData) {
 		HWND hWndMain;
 

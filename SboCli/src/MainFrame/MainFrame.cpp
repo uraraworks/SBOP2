@@ -5,7 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 #include <comdef.h>
 #else
 #include <emscripten/em_js.h>
@@ -140,7 +140,7 @@ CMainFrame::~CMainFrame()
 {
 	SAFE_DELETE(m_pStateProc);
 	SAFE_DELETE(m_pMgrGrpData);
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	SAFE_DELETE(m_pSock);
 #endif
 	SAFE_DELETE(m_pMgrData);
@@ -490,7 +490,7 @@ BOOL CMainFrame::IsQuit(void)
 
 void CMainFrame::OnSDLDestroy(void)
 {
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	RECT rc;
 	TCHAR szFileName[MAX_PATH];
 	HWND hWndTmp;
@@ -499,7 +499,7 @@ void CMainFrame::OnSDLDestroy(void)
 
 	// タイマー停止
 	// ウィンドウ位置等をINIに保存（OnClose相当）
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	GetModuleIniPath(szFileName, _countof(szFileName));
 
 	if (IsMainWindowInteractive() && (m_pSDLWindow != NULL)) {
@@ -546,7 +546,7 @@ void CMainFrame::OnSDLDestroy(void)
 	if (m_pMgrData && (!m_pMgrData->IsLocalTitleMode())) {
 		m_pMgrData->SaveIniData();
 	}
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	if (m_pSock) {
 		m_pSock->SetNotifySink(NULL, NULL);
 		m_pSock->Destroy();
@@ -561,7 +561,7 @@ void CMainFrame::DisConnectProc(int nID)
 {
 	ILoginWindow *pWindow;
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	m_pSock->Destroy();
 #endif
 
@@ -873,7 +873,7 @@ void CMainFrame::OnInitEnd(void)
 	m_pMgrData->SetMainWindow(m_hWnd);
 	m_pMgrData->Create(this, m_pMgrGrpData);
 	m_pMgrData->SetUraraSockTCP(m_pSock);
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	if (m_pSock) {
 		m_pSock->SetNotifySink(&CMainFrame::OnSocketNotifyThunk, this);
 	}
@@ -921,7 +921,7 @@ void CMainFrame::OnInitEnd(void)
 		m_pMgrKeyInput->SetDevice(stGuid);
 	}
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	if (m_pMgrData->IsLocalTitleMode() == FALSE) {
 		BuildModuleRelativePath(szName, _countof(szName), _T("ss"));
 		CreateDirectory(szName, NULL);
@@ -941,7 +941,7 @@ void CMainFrame::OnInitEnd(void)
 #if defined(__EMSCRIPTEN__)
 	SDL_Log("OnInitEnd: changed to state=%d", m_nGameState);
 #endif
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	if (m_hWnd) {
 		ShowWindow(m_hWnd, SW_SHOW);
 	}
@@ -1113,7 +1113,7 @@ void CMainFrame::OnRecv(PBYTE pData)
 
 	Packet.Set(pData);
 
-#if defined(_DEBUG) && !defined(__EMSCRIPTEN__)
+#if defined(_DEBUG) && defined(_WIN32)
 	static TCHAR s_szLogPath[MAX_PATH] = {0};
 	if (s_szLogPath[0] == 0) {
 		BuildModuleRelativePath(s_szLogPath, _countof(s_szLogPath), _T("SboCli_PacketLog.txt"));
@@ -1188,7 +1188,7 @@ BOOL CMainFrame::TimerProc(void)
 	}
 #endif
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	MsgWaitForMultipleObjects(0, NULL, FALSE, 1, QS_ALLINPUT);
 #endif
 
@@ -1225,7 +1225,7 @@ void CMainFrame::UpdateToolCheck(void)
 
 void CMainFrame::CheckToolResponsiveness(void)
 {
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	DWORD dwTmp, dwScond, dwTimeTmp;
 	SYSTEMTIME sysTime;
 
@@ -1361,7 +1361,7 @@ void CMainFrame::ChgGameState(int nGameState)
 	switch (nGameState) {
 	case GAMESTATE_LOGO: m_pStateProc = new CStateProcLOGO; break; // URARA-worksロゴ
 	case GAMESTATE_LOGIN: m_pStateProc = new CStateProcLOGIN; break; // ログイン画面
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	case GAMESTATE_DISCONNECT: m_pStateProc = new CStateProcDISCONNECT; break; // 切断
 	case GAMESTATE_INFO: m_pStateProc = new CStateProcINFO; break; // お知らせ画面
 	case GAMESTATE_LOGINMENU: m_pStateProc = new CStateProcLOGINMENU; break; // メニュー画面
@@ -1403,7 +1403,7 @@ void CMainFrame::Connect(void)
 
 void CMainFrame::FlashMainWindow(void)
 {
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	UINT uState;
 	FLASHWINFO stFwi;
 	APPBARDATA stAbd;

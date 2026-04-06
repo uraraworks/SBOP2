@@ -26,7 +26,7 @@ CLayerBase::CLayerBase()
 	m_pDib = new CImg32;
 	m_pDibBase = new CImg32;
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	m_hFont = NULL;
 #else
 	m_hFont = CreateFont(12, 0, 0, 0, FW_NORMAL,

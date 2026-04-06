@@ -181,7 +181,7 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 	m_pLibInfoMap		= pMgrData->GetLibInfoMap();
 	m_pLibInfoItem		= pMgrData->GetLibInfoItem();
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	m_pDlgMsgLog = new CDlgMsgLog;
 	m_pDlgMsgLog->Create(pMgrData->GetMainWindow(), m_pMgrData);
 	m_pDlgDbg = new CDlgDbg;
@@ -198,7 +198,7 @@ void CStateProcMAP::Init(void)
 
 	GetModuleIniPath(szFileName, _countof(szFileName));
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	rc.left		= GetPrivateProfileInt(_T("Pos"), _T("LogLeft"),	-1, szFileName);
 	rc.top		= GetPrivateProfileInt(_T("Pos"), _T("LogTop"),	-1, szFileName);
 	rc.right	= GetPrivateProfileInt(_T("Pos"), _T("LogRight"),	-1, szFileName);
@@ -237,7 +237,7 @@ void CStateProcMAP::Init(void)
 
 void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
 {
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	if (m_pDlgMsgLog->IsWindowVisible()) {
 		m_pDlgMsgLog->GetWindowRect(&rcDst);
 	}
@@ -1030,7 +1030,7 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 
 void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 {
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	PostAdminUiMessage(WM_MAINFRAME, dwCommand, dwParam);
 #endif
 	m_pPlayerChar = m_pMgrData->GetPlayerChar();
@@ -1147,7 +1147,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 void CStateProcMAP::OnAdminMsg(int nCode, DWORD dwPara)
 {
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	(void)nCode;
 	(void)dwPara;
 	return;
@@ -1160,7 +1160,7 @@ void CStateProcMAP::CreateAdminUi(void)
 {
 	DestroyAdminUi();
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	if (m_pMgrData) {
 		m_pMgrData->SetAdminWindow(NULL);
 		m_pMgrData->SetAdminNotifyTypeL(ADMINNOTIFYTYPE_NONE);
@@ -1180,7 +1180,7 @@ void CStateProcMAP::CreateAdminUi(void)
 
 void CStateProcMAP::DestroyAdminUi(void)
 {
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 	m_AdminUi.Destroy();
 #endif
 	if (m_pMgrData) {
@@ -1193,7 +1193,7 @@ void CStateProcMAP::DestroyAdminUi(void)
 
 void CStateProcMAP::PostAdminUiMessage(UINT message, WPARAM wParam, LPARAM lParam)
 {
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	(void)message;
 	(void)wParam;
 	(void)lParam;

@@ -11,7 +11,7 @@
 #include "MainFrame.h"
 #include "SboCli.h"
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE

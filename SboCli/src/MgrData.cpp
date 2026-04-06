@@ -5,7 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 #include <comdef.h>
 #endif
 #include "InfoAccount.h"
@@ -159,7 +159,7 @@ void CMgrData::Create(
 	m_pMainFrame	= pMainFrame;
 	m_pMgrGrpData	= pMgrGrpData;
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	if (m_bLocalTitleMode) {
 		m_pMgrSound = new CMgrSound;
 		m_pMgrDraw = new CMgrDraw;

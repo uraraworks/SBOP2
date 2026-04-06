@@ -207,13 +207,17 @@ void CDlgMsgLog::OnSize(UINT nType, int cx, int cy)
 
 void CDlgMsgLog::PostNcDestroy()
 {
+#ifdef _WIN32
 	HIMC hImc;
+#endif
 
 	if (m_hWndChat) {
+#ifdef _WIN32
 		// IMEをオフにする
 		hImc = ImmGetContext(m_hWndChat);
 		ImmSetOpenStatus(hImc, FALSE);
 		ImmReleaseContext(m_hWndChat, hImc);
+#endif
 
 		SetWindowLong(m_hWndChat, GWL_WNDPROC, (LONG)m_OrgWndProcChat);
 		m_OrgWndProcChat = NULL;

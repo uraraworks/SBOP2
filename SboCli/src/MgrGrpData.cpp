@@ -91,7 +91,7 @@ static BOOL FindSboGrpResBasePath(TCHAR *pszDst, size_t nDstCount)
 	};
 	int i;
 
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 	if ((pszDst != NULL) && (nDstCount > 0)) {
 		_tcscpy_s(pszDst, nDstCount, _T("/SboGrpData/res/"));
 		if (PathFileExists(_T("/SboGrpData/res/system.png"))) {

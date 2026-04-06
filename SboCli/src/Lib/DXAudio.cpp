@@ -1,7 +1,7 @@
 /// @file DXAudio.cpp
 /// @brief SDL_audioベースのオーディオ実装（NO_DIRECTMUSICビルド用）
 #include "stdafx.h"
-#if defined(__EMSCRIPTEN__)
+#if !defined(_WIN32)
 #include "DXAudio.h"
 
 CDXAudio::CDXAudio() {
