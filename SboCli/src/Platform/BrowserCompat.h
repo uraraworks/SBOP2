@@ -8,6 +8,7 @@
 #if defined(__EMSCRIPTEN__)
 
 #include <SDL.h>
+#include "Platform/SdlFont.h"
 #include <cstdarg>
 #include <cstddef>
 #include <cstdint>
@@ -1303,18 +1304,29 @@ inline BOOL FlashWindowEx(PFLASHWINFO)
 	return TRUE;
 }
 
-inline HFONT CreateFont(int, int, int, int, int, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPCTSTR)
+inline HFONT CreateFont(int nHeight, int /*nWidth*/, int /*nEscapement*/, int /*nOrientation*/,
+	int nWeight, DWORD /*fdwItalic*/, DWORD /*fdwUnderline*/, DWORD /*fdwStrikeOut*/,
+	DWORD /*fdwCharSet*/, DWORD /*fdwOutputPrecision*/, DWORD /*fdwClipPrecision*/,
+	DWORD /*fdwQuality*/, DWORD /*fdwPitchAndFamily*/, LPCTSTR /*lpszFace*/)
 {
-	return NULL;
+	bool bold = (nWeight >= 700); // FW_BOLD = 700
+	return (HFONT)SdlFontCreate(abs(nHeight), bold);
 }
 
-inline HGDIOBJ SelectObject(HDC, HGDIOBJ hObject)
+inline HGDIOBJ SelectObject(HDC hDC, HGDIOBJ hObject)
 {
+	SdlDCContext* ctx = SdlDCGet(hDC);
+	if (ctx) {
+		HGDIOBJ old = (HGDIOBJ)ctx->currentFont;
+		ctx->currentFont = hObject;
+		return old;
+	}
 	return hObject;
 }
 
-inline BOOL DeleteObject(HGDIOBJ)
+inline BOOL DeleteObject(HGDIOBJ hObj)
 {
+	SdlFontDestroy(hObj);
 	return TRUE;
 }
 
@@ -1358,8 +1370,14 @@ inline HBITMAP CreateDIBSection(HDC, const BITMAPINFO *pBmpInfo, UINT, void **pp
 	return (HBITMAP)pNewBits;
 }
 
-inline COLORREF SetTextColor(HDC, COLORREF color)
+inline COLORREF SetTextColor(HDC hDC, COLORREF color)
 {
+	SdlDCContext* ctx = SdlDCGet(hDC);
+	if (ctx) {
+		COLORREF old = (COLORREF)ctx->textColor;
+		ctx->textColor = (unsigned long)color;
+		return old;
+	}
 	return color;
 }
 
@@ -1368,14 +1386,14 @@ inline int SetBkMode(HDC, int)
 	return TRANSPARENT;
 }
 
-inline BOOL TextOut(HDC, int, int, LPCTSTR, int)
+inline BOOL TextOut(HDC hDC, int x, int y, LPCTSTR pStr, int nLen)
 {
-	return TRUE;
+	return SdlFontTextOut(hDC, x, y, pStr, nLen) ? TRUE : FALSE;
 }
 
-inline BOOL TextOutW(HDC, int, int, LPCWSTR, int)
+inline BOOL TextOutW(HDC hDC, int x, int y, LPCWSTR pStr, int nLen)
 {
-	return TRUE;
+	return SdlFontTextOut(hDC, x, y, pStr, nLen) ? TRUE : FALSE;
 }
 
 inline int DrawText(HDC, LPCTSTR, int, LPRECT, UINT)

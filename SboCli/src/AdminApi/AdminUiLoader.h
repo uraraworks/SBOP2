@@ -37,7 +37,7 @@ private:
 private:
 	SboAdminUiHost m_Host;
 	SboAdminUiModule m_Module;
-	HMODULE m_hModule;
+	void* m_hModule;
 	SboDestroyAdminUiModuleProc m_pDestroyFactory;
 	CMgrData* m_pMgrData;
 	BOOL m_bLoadedFromDll;

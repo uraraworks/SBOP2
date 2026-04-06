@@ -1,16 +1,34 @@
 #include "stdafx.h"
-
+#if !defined(_WINDLL)
+#include <SDL.h>
+#endif
 #include "AdminUiLoader.h"
 #include "MgrData.h"
 #include "PacketBase.h"
 #include "UraraSockTCPSBO.h"
 #include "InfoTalkEvent.h"
 
+// DLL動的ロードのプラットフォーム抽象化マクロ
+// SboCliAdminMfc（_WINDLL定義あり）ではSDL未使用のためWin32 APIを使う
+#if !defined(_WINDLL)
+#define DYN_LOAD_LIB(path)        SDL_LoadObject(path)
+#define DYN_LOAD_FUNC(lib, name)  SDL_LoadFunction(lib, name)
+#define DYN_UNLOAD_LIB(lib)       SDL_UnloadObject(lib)
+#else
+#define DYN_LOAD_LIB(path)        ((void*)LoadLibrary(path))
+#define DYN_LOAD_FUNC(lib, name)  ((void*)GetProcAddress((HMODULE)(lib), name))
+#define DYN_UNLOAD_LIB(lib)       FreeLibrary((HMODULE)(lib))
+#endif
+
 namespace
 {
 	void WriteAdminUiLoaderDebug(LPCSTR pszText)
 	{
+#if !defined(_WINDLL)
+		SDL_Log("%s", pszText);
+#else
 		OutputDebugStringA(pszText);
+#endif
 	}
 
 	BOOL IsValidModule(const SboAdminUiModule* pModule)
@@ -50,17 +68,6 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 {
 	SboCreateAdminUiModuleProc pCreateFactory;
 	BOOL bCreated;
-	TCHAR szExePath[MAX_PATH];
-	TCHAR szExeDir[MAX_PATH];
-	TCHAR szCandidatePath[MAX_PATH];
-	LPCTSTR apszCandidates[] = {
-		_T("SboCliAdminMfc.dll"),
-		_T(".\\SboCliAdminMfc.dll"),
-		_T(".\\SboCli\\Debug\\SboCliAdminMfc.dll"),
-		_T(".\\SboCli\\Release\\SboCliAdminMfc.dll"),
-		NULL
-	};
-	int i;
 
 	Destroy();
 	if (pMgrData == NULL) {
@@ -74,7 +81,7 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 	m_Host.GetMainWindow = HostGetMainWindow;
 	m_Host.GetMgrData = HostGetMgrData;
 	m_Host.SetAdminWindow = HostSetAdminWindow;
-	// DLL ぁEAdminWindow を�E前管琁E��るため、LocalAdminUi 系 Host API は不要E
+	// DLL がAdminWindow を直前管理するため、LocalAdminUi 系 Host API は不要
 	m_Host.CreateLocalAdminUi = NULL;
 	m_Host.DestroyLocalAdminUi = NULL;
 	m_Host.NotifyLocalAdminUi = NULL;
@@ -93,48 +100,73 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 
 	m_hModule = NULL;
 
-	for (i = 0; apszCandidates[i] != NULL; i ++) {
-		m_hModule = LoadLibrary(apszCandidates[i]);
-		if (m_hModule) {
-			WriteAdminUiLoaderDebug("[AdminUiLoader] loaded admin ui dll from candidate path\n");
-			break;
-		}
+#if !defined(_WINDLL)
+	// SboCli: BuildModuleRelativePath + SDL_LoadObject でクロスプラットフォーム対応
+	{
+		TCHAR szPath[MAX_PATH];
+		BuildModuleRelativePath(szPath, _countof(szPath), _T("SboCliAdminMfc.dll"));
+		std::string ansiPath = TStringToAnsiStd(szPath);
+		m_hModule = DYN_LOAD_LIB(ansiPath.c_str());
 	}
+#else
+	// SboCliAdminMfc: Win32 API（TCHAR/Unicode対応）
+	{
+		int i;
+		TCHAR szExePath[MAX_PATH];
+		TCHAR szExeDir[MAX_PATH];
+		TCHAR szCandidatePath[MAX_PATH];
+		LPCTSTR apszCandidates[] = {
+			_T("SboCliAdminMfc.dll"),
+			_T(".\\SboCliAdminMfc.dll"),
+			_T(".\\SboCli\\Debug\\SboCliAdminMfc.dll"),
+			_T(".\\SboCli\\Release\\SboCliAdminMfc.dll"),
+			NULL
+		};
 
-	if (m_hModule == NULL) {
-		szExePath[0] = 0;
-		szExeDir[0] = 0;
-		if (GetModuleFileName(NULL, szExePath, _countof(szExePath)) > 0) {
-			_tcscpy_s(szExeDir, _countof(szExeDir), szExePath);
-			for (i = (int)_tcslen(szExeDir) - 1; i >= 0; i --) {
-				if ((szExeDir[i] == _T('\\')) || (szExeDir[i] == _T('/'))) {
-					szExeDir[i] = 0;
-					break;
+		for (i = 0; apszCandidates[i] != NULL; i ++) {
+			m_hModule = DYN_LOAD_LIB(apszCandidates[i]);
+			if (m_hModule) {
+				WriteAdminUiLoaderDebug("[AdminUiLoader] loaded admin ui dll from candidate path\n");
+				break;
+			}
+		}
+
+		if (m_hModule == NULL) {
+			szExePath[0] = 0;
+			szExeDir[0] = 0;
+			if (GetModuleFileName(NULL, szExePath, _countof(szExePath)) > 0) {
+				_tcscpy_s(szExeDir, _countof(szExeDir), szExePath);
+				for (i = (int)_tcslen(szExeDir) - 1; i >= 0; i --) {
+					if ((szExeDir[i] == _T('\\')) || (szExeDir[i] == _T('/'))) {
+						szExeDir[i] = 0;
+						break;
+					}
+				}
+				if (szExeDir[0]) {
+					_stprintf_s(szCandidatePath, _countof(szCandidatePath), _T("%s\\SboCliAdminMfc.dll"), szExeDir);
+					m_hModule = DYN_LOAD_LIB(szCandidatePath);
+					if (m_hModule) {
+						WriteAdminUiLoaderDebug("[AdminUiLoader] loaded admin ui dll from exe directory\n");
+					}
 				}
 			}
-			if (szExeDir[0]) {
-				_stprintf_s(szCandidatePath, _countof(szCandidatePath), _T("%s\\SboCliAdminMfc.dll"), szExeDir);
-				m_hModule = LoadLibrary(szCandidatePath);
-				if (m_hModule) {
-					WriteAdminUiLoaderDebug("[AdminUiLoader] loaded admin ui dll from exe directory\n");
-				}
-			}
 		}
 	}
+#endif
 
 	if (m_hModule == NULL) {
-		// DLL が存在しなぁE��合�E管琁E��EI なしで動作（非管琁E��E�Eレイ継続！E
+		// DLL が存在しない場合は管理機能なしで動作（非管理モードでプレイ継続）
 		WriteAdminUiLoaderDebug("[AdminUiLoader] failed to load admin ui dll\n");
 		return FALSE;
 	}
 
-	pCreateFactory = (SboCreateAdminUiModuleProc)GetProcAddress(m_hModule, "CreateAdminUiModule");
+	pCreateFactory = (SboCreateAdminUiModuleProc)DYN_LOAD_FUNC(m_hModule, "CreateAdminUiModule");
 	if (pCreateFactory == NULL) {
-		pCreateFactory = (SboCreateAdminUiModuleProc)GetProcAddress(m_hModule, "_CreateAdminUiModule@8");
+		pCreateFactory = (SboCreateAdminUiModuleProc)DYN_LOAD_FUNC(m_hModule, "_CreateAdminUiModule@8");
 	}
-	m_pDestroyFactory = (SboDestroyAdminUiModuleProc)GetProcAddress(m_hModule, "DestroyAdminUiModule");
+	m_pDestroyFactory = (SboDestroyAdminUiModuleProc)DYN_LOAD_FUNC(m_hModule, "DestroyAdminUiModule");
 	if (m_pDestroyFactory == NULL) {
-		m_pDestroyFactory = (SboDestroyAdminUiModuleProc)GetProcAddress(m_hModule, "_DestroyAdminUiModule@4");
+		m_pDestroyFactory = (SboDestroyAdminUiModuleProc)DYN_LOAD_FUNC(m_hModule, "_DestroyAdminUiModule@4");
 	}
 	if (pCreateFactory == NULL) {
 		WriteAdminUiLoaderDebug("[AdminUiLoader] CreateAdminUiModule export not found\n");
@@ -160,7 +192,7 @@ BOOL CAdminUiLoader::Create(HWND hWndParent, CMgrData* pMgrData)
 	}
 	ZeroMemory(&m_Module, sizeof(m_Module));
 	m_pDestroyFactory = NULL;
-	FreeLibrary(m_hModule);
+	DYN_UNLOAD_LIB(m_hModule);
 	m_hModule = NULL;
 	return FALSE;
 }
@@ -178,7 +210,7 @@ void CAdminUiLoader::Destroy(void)
 	}
 
 	if (m_hModule) {
-		FreeLibrary(m_hModule);
+		DYN_UNLOAD_LIB(m_hModule);
 	}
 
 	ZeroMemory(&m_Module, sizeof(m_Module));
@@ -392,4 +424,3 @@ void* __stdcall CAdminUiLoader::HostGetInfoTalkEvent(void* userData)
 	}
 	return pLoader->m_pMgrData->GetInfoTalkEvent();
 }
-

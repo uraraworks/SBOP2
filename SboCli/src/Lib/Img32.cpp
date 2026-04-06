@@ -7,6 +7,9 @@
 #include "stdafx.h"
 #include <math.h>
 #include "Img32.h"
+#if defined(__EMSCRIPTEN__)
+#include "Platform/SdlFont.h"
+#endif
 
 // 定数の定義
 
@@ -1142,7 +1145,11 @@ void CImg32::BltStretchNearest(
 HDC CImg32::Lock(void)
 {
 #if defined(__EMSCRIPTEN__)
-	return NULL;
+	// SdlFontのDCコンテキストを登録して仮想DCを返す
+	if (m_pBits && !m_hDC) {
+		m_hDC = (HDC)SdlDCRegister(m_pBits, Width(), Height());
+	}
+	return m_hDC;
 #else
 	HDC hDC, hRet;
 
@@ -1175,6 +1182,10 @@ Exit:
 void CImg32::Unlock(void)
 {
 #if defined(__EMSCRIPTEN__)
+	if (m_hDC) {
+		SdlDCUnregister(m_hDC);
+		m_hDC = NULL;
+	}
 	return;
 #else
 	if (m_hDC == NULL) {

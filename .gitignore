@@ -371,3 +371,4 @@ SDL2/
 # 作業用スクリプト（コミット対象外）
 fix_wndmap.ps1
 build_sbocli.ps1
+SDL2_ttf/
