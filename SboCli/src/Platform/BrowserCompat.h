@@ -1439,6 +1439,23 @@ inline BOOL GetTextExtentPoint32W(HDC hDC, LPCWSTR lpString, int c, LPSIZE psizl
 
 inline int lstrlenW(LPCWSTR s) { return s ? (int)wcslen(s) : 0; }
 
+inline BOOL GetTextExtentPoint32A(HDC hDC, LPCSTR lpString, int c, LPSIZE psizl)
+{
+	if (!psizl) return FALSE;
+	// ANSI文字列をワイド文字に変換してGetTextExtentPoint32に委譲
+	if (lpString && c > 0) {
+		int wlen = MultiByteToWideChar(CP_UTF8, 0, lpString, c, NULL, 0);
+		if (wlen > 0) {
+			std::vector<wchar_t> wbuf(wlen);
+			MultiByteToWideChar(CP_UTF8, 0, lpString, c, wbuf.data(), wlen);
+			return GetTextExtentPoint32(hDC, wbuf.data(), wlen, psizl);
+		}
+	}
+	psizl->cx = c * 8;
+	psizl->cy = 16;
+	return TRUE;
+}
+
 inline BOOL StretchBlt(HDC, int, int, int, int, HDC, int, int, int, int, DWORD)
 {
 	return TRUE;
