@@ -710,7 +710,9 @@ void CDlgAdminCharMotion::RenewPreview(void)
 
 	hDCBmp2 = Img.Lock();
 	hDCBmp = ImgTmp.Lock();
+#ifdef _WIN32
 	StretchBlt(hDCBmp, 0, 0, 64, 64, hDCBmp2, 0, 0, 32, 32, SRCCOPY);
+#endif // _WIN32
 	Img.Unlock();
 	ImgTmp.Unlock();
 

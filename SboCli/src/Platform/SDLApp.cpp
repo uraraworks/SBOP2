@@ -14,6 +14,9 @@
 #include "SDLEventUtil.h"
 #include "SDLInput.h"
 #include "SboCli_priv.h"
+#if !defined(_WINDLL) && !defined(_WIN32)
+#include "SdlFont.h"
+#endif
 #include "UraraSockTCP.h"
 
 
@@ -140,6 +143,15 @@ BOOL CSDLApp::Init(void)
 		return FALSE;
 	}
 
+#if !defined(_WINDLL) && !defined(_WIN32)
+	// SDL_ttfフォントシステムの初期化
+	{
+		TCHAR szFontDir[MAX_PATH];
+		BuildModuleRelativePath(szFontDir, _countof(szFontDir), _T("font\\"));
+		std::string ansiFontDir = TStringToAnsiStd(szFontDir);
+		SdlFontInit(ansiFontDir.c_str());
+	}
+#endif
 	m_bInitialized = TRUE;
 	return TRUE;
 }
@@ -148,6 +160,9 @@ void CSDLApp::Destroy(void)
 {
 	m_Window.Destroy();
 	if (m_bInitialized) {
+#if !defined(_WINDLL) && !defined(_WIN32)
+		SdlFontShutdown();
+#endif
 		SDL_Quit();
 		m_bInitialized = FALSE;
 	}

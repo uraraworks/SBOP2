@@ -127,6 +127,7 @@ void CWndMapShadowGrp::OnPaint()
 	CRgn rgn;
 	CPaintDC dc(this);
 
+#ifdef _WIN32
 	hDC = m_pImgShadow->Lock();
 	DCTmp.Attach(hDC);
 
@@ -150,6 +151,7 @@ void CWndMapShadowGrp::OnPaint()
 
 	m_pImgShadow->Unlock();
 	DCTmp.Detach();
+#endif // _WIN32
 }
 
 void CWndMapShadowGrp::OnSize(UINT nType, int cx, int cy)

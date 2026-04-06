@@ -171,11 +171,13 @@ void CDlgAdminMapShadowEdit::OnPaint()
 	ImgPreview.BltFrom256(0, 0, 16, 16, pImg, (no % 1024) % 32 * 16, (no % 1024) / 32 * 16);
 
 	// プレビュー
+#ifdef _WIN32
 	hDC	= ImgPreview.Lock();
 	pDCTmp	= dc.FromHandle(hDC);
 	pDC	= GetDlgItem(IDC_PREVIEW)->GetDC();
 	pDC->StretchBlt(0, 0, 32, 32, pDCTmp, 0, 0, 16, 16, SRCCOPY);
 	ImgPreview.Unlock();
+#endif // _WIN32
 }
 
 

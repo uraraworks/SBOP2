@@ -147,6 +147,7 @@ void CWndMapPartsGrp::OnPaint()
 	CRgn rgn;
 	CPaintDC dc(this);
 
+#ifdef _WIN32
 	hDC = m_pImgParts->Lock();
 	DCTmp.Attach(hDC);
 
@@ -170,6 +171,7 @@ void CWndMapPartsGrp::OnPaint()
 
 	m_pImgParts->Unlock();
 	DCTmp.Detach();
+#endif // _WIN32
 }
 
 void CWndMapPartsGrp::OnSize(UINT nType, int cx, int cy)

@@ -141,12 +141,14 @@ void CWndSelectMapPartsGrp::OnPaint()
 		}
 	}
 
+#ifdef _WIN32
 	hDC = m_pImgBack->Lock();
 	pDCTmp = dc.FromHandle(hDC);
 
 	dc.BitBlt(0, 0, m_pImgBack->Width(), m_pImgBack->Height(), pDCTmp, 0, 0, SRCCOPY);
 
 	m_pImgBack->Unlock();
+#endif // _WIN32
 }
 
 void CWndSelectMapPartsGrp::OnSize(UINT nType, int cx, int cy)

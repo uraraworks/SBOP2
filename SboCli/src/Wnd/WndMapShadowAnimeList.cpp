@@ -132,6 +132,7 @@ void CWndMapShadowAnimeList::OnPaint()
 	CRgn rgn;
 	CPaintDC dc(this);
 
+#ifdef _WIN32
 	hDC = m_pImgShadow->Lock();
 	DCTmp.Attach(hDC);
 
@@ -148,6 +149,7 @@ void CWndMapShadowAnimeList::OnPaint()
 
 	m_pImgShadow->Unlock();
 	DCTmp.Detach();
+#endif // _WIN32
 }
 
 void CWndMapShadowAnimeList::OnSize(UINT nType, int cx, int cy)

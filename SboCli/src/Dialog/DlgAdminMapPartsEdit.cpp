@@ -202,11 +202,13 @@ void CDlgAdminMapPartsEdit::OnPaint()
 	}
 	ImgTmp.	BltFrom256(0, 0, 16, 16, pImg, (no % 1024) % 32 * 16, (no % 1024) / 32 * 16);
 	ImgPreview.	BltFrom256(0, 0, 16, 16, pImg, (no % 1024) % 32 * 16, (no % 1024) / 32 * 16);
+#ifdef _WIN32
 	hDC	= ImgTmp.Lock();
 	pDCTmp	= dc.FromHandle(hDC);
 	pDC	= GetDlgItem(IDC_BASE)->GetDC();
 	pDC->StretchBlt(0, 0, 32, 32, pDCTmp, 0, 0, 16, 16, SRCCOPY);
 	ImgTmp.Unlock();
+#endif // _WIN32
 
 	// 重ね合わせ
 	no = m_wPartsPile;
@@ -219,18 +221,22 @@ void CDlgAdminMapPartsEdit::OnPaint()
 		byLevel = (BYTE)m_nLevel;
 		ImgPreview.BltAlphaFrom256(0, 0, 16, 16, pImg, (no % 1024) % 32 * 16, (no % 1024) / 32 * 16, byLevel, TRUE);
 	}
+#ifdef _WIN32
 	hDC	= ImgTmp.Lock();
 	pDCTmp	= dc.FromHandle(hDC);
 	pDC	= GetDlgItem(IDC_PILE)->GetDC();
 	pDC->StretchBlt(0, 0, 32, 32, pDCTmp, 0, 0, 16, 16, SRCCOPY);
 	ImgTmp.Unlock();
+#endif // _WIN32
 
 	// プレビュー
+#ifdef _WIN32
 	hDC	= ImgPreview.Lock();
 	pDCTmp	= dc.FromHandle(hDC);
 	pDC	= GetDlgItem(IDC_PREVIEW)->GetDC();
 	pDC->StretchBlt(0, 0, 32, 32, pDCTmp, 0, 0, 16, 16, SRCCOPY);
 	ImgPreview.Unlock();
+#endif // _WIN32
 }
 
 

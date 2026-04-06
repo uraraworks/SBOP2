@@ -105,10 +105,12 @@ void CStaticGrp::OnPaint()
 	cx = m_pImgBack->Width();
 	cy = m_pImgBack->Height();
 
+#ifdef _WIN32
 	hDC = m_pImgBack->Lock();
 		pDCTmp = dc.FromHandle(hDC);
 		dc.BitBlt(0, 0, cx, cy, pDCTmp, 0, 0, SRCCOPY);
 	m_pImgBack->Unlock();
+#endif // _WIN32
 }
 
 void CStaticGrp::RenewGrp(DWORD dwGrpIDMain, DWORD dwGrpIDSub)
