@@ -1,14 +1,18 @@
-﻿/// @file UraraSockTCP.h
-/// @brief 汎用TCP通信クラス 定義ファイル
-/// @author 年がら年中春うらら(URARA-works)
+/// @file UraraSockTCP.h
+/// @brief Generic TCP communication class definition
+/// @author URARA-works
 /// @date 2003/10/28
 /// @copyright Copyright(C)URARA-works 2008
 
 #pragma once
 
+#ifdef _WIN32
 #define DLLURARASOCKTCP_API __declspec(dllexport)
+#else
+#define DLLURARASOCKTCP_API
+#endif
 
-// 定数の定義
+// Constant definitions
 
 #ifndef SAFE_DELETE
 	#define SAFE_DELETE(p)			{ if(p) { delete (p);	(p)=NULL; } }
@@ -17,52 +21,77 @@
 	#define SAFE_DELETE_ARRAY(p)	{ if(p) { delete[] (p);	(p)=NULL; } }
 #endif
 
-#define URARASOCK_SENDALL		0x00000000					// 全員に送信
+#define URARASOCK_SENDALL		0x00000000	// Send to all
 
-// ウィンドウメッセージ(設定した基準値＋以下の値)
+// Window messages (base value + following values)
 enum {
-	WM_URARASOCK_HOST = 0,									// 待ち受け開始
-	WM_URARASOCK_ADDCLIENT,									// クライアントが接続した
-	WM_URARASOCK_DECCLIENT,									// クライアントが切断した
-	WM_URARASOCK_CONNECT,									// サーバーに接続した
-	WM_URARASOCK_DISCONNECT,								// サーバーと切断した
-	WM_URARASOCK_RECV,										// データ受信
-	WM_URARASOCK_SEND,										// データ送信
+	WM_URARASOCK_HOST = 0,		// Start listening
+	WM_URARASOCK_ADDCLIENT,		// Client connected
+	WM_URARASOCK_DECCLIENT,		// Client disconnected
+	WM_URARASOCK_CONNECT,		// Connected to server
+	WM_URARASOCK_DISCONNECT,	// Disconnected from server
+	WM_URARASOCK_RECV,			// Data received
+	WM_URARASOCK_SEND,			// Data sent
 	WM_URARASOCK_MAX
 };
 
-// 送信優先順位
+// Send priority
 enum URARASOCK_SENDPRIORITY {
-	URARASOCK_SENDPRIORITY_HIGH = 0,						// 高い
-	URARASOCK_SENDPRIORITY_MIDDLE,							// 普通
-	URARASOCK_SENDPRIORITY_LOW,								// 低い
+	URARASOCK_SENDPRIORITY_HIGH = 0,	// High
+	URARASOCK_SENDPRIORITY_MIDDLE,		// Normal
+	URARASOCK_SENDPRIORITY_LOW,			// Low
 };
 
 typedef void (*PFURARASOCKNOTIFY)(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam);
 
 
-// クラス宣言
+// Class declaration
 
 class CUraraSockTCP
 {
 public:
-	virtual void	DeleteRecvData(PBYTE pData)													= 0;	// 受信データを削除
-	virtual void	Destroy(void)																= 0;	// 後始末
-	virtual BOOL	Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)			= 0;	// 接続待ち開始
-	virtual BOOL	Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)		= 0;	// サーバーへ接続
-	virtual void	DeleteClient(DWORD dwID)													= 0;	// クライアントを切断
-	virtual void	SendCancel(DWORD dwID = 0)													= 0;	// 送信キャンセル
-	virtual void	Send(PBYTE pData, DWORD dwSize, BYTE byPriority = URARASOCK_SENDPRIORITY_MIDDLE)					= 0;	// サーバーへデータ送信
-	virtual void	SendTo(DWORD dwID, PBYTE pData, DWORD dwSize, BYTE byPriority = URARASOCK_SENDPRIORITY_MIDDLE)	= 0;	// クライアントへデータ送信
-	virtual DWORD	GetThrowghPutSend(DWORD dwID)												= 0;	// リンク・スループット量を取得
-	virtual DWORD	GetThrowghPutRecv(DWORD dwID)												= 0;	// リンク・スループット量を取得
-	virtual DWORD	GetQueCount(DWORD dwID)														= 0;	// キュー数を取得
-	virtual DWORD	GetIPAddress(DWORD dwID)													= 0;	// IPアドレスを取得
+	virtual void	DeleteRecvData(PBYTE pData)												= 0;	// Delete received data
+	virtual void	Destroy(void)															= 0;	// Cleanup
+	virtual BOOL	Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)		= 0;	// Start listening
+	virtual BOOL	Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)	= 0;	// Connect to server
+	virtual void	DeleteClient(DWORD dwID)												= 0;	// Disconnect client
+	virtual void	SendCancel(DWORD dwID = 0)												= 0;	// Cancel send
+	virtual void	Send(PBYTE pData, DWORD dwSize, BYTE byPriority = URARASOCK_SENDPRIORITY_MIDDLE)					= 0;	// Send data to server
+	virtual void	SendTo(DWORD dwID, PBYTE pData, DWORD dwSize, BYTE byPriority = URARASOCK_SENDPRIORITY_MIDDLE)	= 0;	// Send data to client
+	virtual DWORD	GetThrowghPutSend(DWORD dwID)											= 0;	// Get send throughput
+	virtual DWORD	GetThrowghPutRecv(DWORD dwID)											= 0;	// Get recv throughput
+	virtual DWORD	GetQueCount(DWORD dwID)													= 0;	// Get queue count
+	virtual DWORD	GetIPAddress(DWORD dwID)												= 0;	// Get IP address
 };
 
+#ifdef _WIN32
 extern "C"{
-DLLURARASOCKTCP_API CUraraSockTCP *GetUraraSockTCP(void);			// クラスのポインタを取得
-DLLURARASOCKTCP_API void ReleaseUraraSockTCP(CUraraSockTCP *&pSrc);	// クラスのポインタを解放
+DLLURARASOCKTCP_API CUraraSockTCP *GetUraraSockTCP(void);			// Get class pointer
+DLLURARASOCKTCP_API void ReleaseUraraSockTCP(CUraraSockTCP *&pSrc);	// Release class pointer
 }
 typedef CUraraSockTCP *(*PFGETURARASOCKTCP)(void);
 typedef void (*PFRELEASEURARASOCKTCP)(CUraraSockTCP *&pSrc);
+#else
+// Non-Windows: stub implementation (no-op)
+class CUraraSockTCPStub : public CUraraSockTCP
+{
+public:
+	virtual void	DeleteRecvData(PBYTE) override {}
+	virtual void	Destroy(void) override {}
+	virtual BOOL	Host(HWND, DWORD, DWORD, WORD, DWORD) override { return FALSE; }
+	virtual BOOL	Connect(HWND, DWORD, DWORD, WORD, LPCSTR) override { return FALSE; }
+	virtual void	DeleteClient(DWORD) override {}
+	virtual void	SendCancel(DWORD = 0) override {}
+	virtual void	Send(PBYTE, DWORD, BYTE = URARASOCK_SENDPRIORITY_MIDDLE) override {}
+	virtual void	SendTo(DWORD, PBYTE, DWORD, BYTE = URARASOCK_SENDPRIORITY_MIDDLE) override {}
+	virtual DWORD	GetThrowghPutSend(DWORD) override { return 0; }
+	virtual DWORD	GetThrowghPutRecv(DWORD) override { return 0; }
+	virtual DWORD	GetQueCount(DWORD) override { return 0; }
+	virtual DWORD	GetIPAddress(DWORD) override { return 0; }
+};
+
+inline CUraraSockTCP *GetUraraSockTCP(void) { return new CUraraSockTCPStub(); }
+inline void ReleaseUraraSockTCP(CUraraSockTCP *&pSrc) { if (pSrc) { delete pSrc; pSrc = NULL; } }
+typedef CUraraSockTCP *(*PFGETURARASOCKTCP)(void);
+typedef void (*PFRELEASEURARASOCKTCP)(CUraraSockTCP *&pSrc);
+#endif

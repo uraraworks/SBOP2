@@ -6,7 +6,9 @@
 
 #include "stdafx.h"
 
+#ifdef _WIN32
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "imm32.lib")
 #pragma comment(lib, "shlwapi.lib")
+#endif

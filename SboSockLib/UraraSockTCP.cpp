@@ -1,6 +1,11 @@
 #include "StdAfx.h"
 
+// UraraSockTCP uses WSAAsyncSelect + hidden window message pump mechanism.
+// Currently Windows-only. Non-Windows uses stub implementation.
 #include "UraraSockTCP.h"
+
+#ifdef _WIN32
+
 #include "crc.h"
 #include "CWinsockStart.h"
 #ifndef URARASOCK_USEZLIB
@@ -1273,4 +1278,6 @@ extern "C" DLLURARASOCKTCP_API void ReleaseUraraSockTCP(CUraraSockTCP *&pSrc)
         pSrc = NULL;
     }
 }
+
+#endif // _WIN32
 

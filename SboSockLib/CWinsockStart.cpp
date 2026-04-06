@@ -1,15 +1,20 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "CWinsockStart.h"
 
 CWinsockStart::CWinsockStart(void)
 {
+#ifdef _WIN32
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 0), &wsaData);
+#endif
+    // POSIX: ソケット初期化不要
 }
 
 CWinsockStart::~CWinsockStart(void)
 {
+#ifdef _WIN32
     WSACleanup();
+#endif
 }
 
 DWORD CWinsockStart::GetIPaddr(const char *pName)
@@ -18,70 +23,76 @@ DWORD CWinsockStart::GetIPaddr(const char *pName)
         return 0;
     }
 
-    IN_ADDR addr;
-    ZeroMemory(&addr, sizeof(addr));
-    if (InetPtonA(AF_INET, pName, &addr) == 1) {
-        return addr.S_un.S_addr;
+    struct in_addr addr;
+    memset(&addr, 0, sizeof(addr));
+    if (inet_pton(AF_INET, pName, &addr) == 1) {
+        return addr.s_addr;
     }
 
-    ADDRINFOA hints;
-    ZeroMemory(&hints, sizeof(hints));
+    struct addrinfo hints;
+    memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
-    PADDRINFOA result = NULL;
+    struct addrinfo *result = NULL;
     DWORD dwAddr = 0;
-    if (GetAddrInfoA(pName, NULL, &hints, &result) != 0) {
+    if (getaddrinfo(pName, NULL, &hints, &result) != 0) {
         return 0;
     }
 
-    for (PADDRINFOA ptr = result; ptr != NULL; ptr = ptr->ai_next) {
-        if ((ptr->ai_family == AF_INET) && (ptr->ai_addrlen >= sizeof(sockaddr_in))) {
-            const sockaddr_in *sin = reinterpret_cast<const sockaddr_in *>(ptr->ai_addr);
-            dwAddr = sin->sin_addr.S_un.S_addr;
+    for (struct addrinfo *ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+        if ((ptr->ai_family == AF_INET) && (ptr->ai_addrlen >= sizeof(struct sockaddr_in))) {
+            const struct sockaddr_in *sin = reinterpret_cast<const struct sockaddr_in *>(ptr->ai_addr);
+            dwAddr = sin->sin_addr.s_addr;
             break;
         }
     }
 
-    FreeAddrInfoA(result);
+    freeaddrinfo(result);
     return dwAddr;
 }
 
-BOOL CWinsockStart::GetMyPcAddr(char *szName, int iLen, IN_ADDR *pAddr)
+BOOL CWinsockStart::GetMyPcAddr(char *szName, int iLen,
+#ifdef _WIN32
+    IN_ADDR *pAddr
+#else
+    struct in_addr *pAddr
+#endif
+)
 {
     if ((szName == NULL) || (iLen <= 0) || (pAddr == NULL)) {
         return FALSE;
     }
 
-    ZeroMemory(szName, iLen);
-    ZeroMemory(pAddr, sizeof(IN_ADDR));
+    memset(szName, 0, iLen);
+    memset(pAddr, 0, sizeof(*pAddr));
 
     if (gethostname(szName, iLen - 1) != 0) {
         return FALSE;
     }
 
-    ADDRINFOA hints;
-    ZeroMemory(&hints, sizeof(hints));
+    struct addrinfo hints;
+    memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
-    PADDRINFOA result = NULL;
-    if (GetAddrInfoA(szName, NULL, &hints, &result) != 0) {
+    struct addrinfo *result = NULL;
+    if (getaddrinfo(szName, NULL, &hints, &result) != 0) {
         return FALSE;
     }
 
     BOOL bSuccess = FALSE;
-    for (PADDRINFOA ptr = result; ptr != NULL; ptr = ptr->ai_next) {
-        if ((ptr->ai_family == AF_INET) && (ptr->ai_addrlen >= sizeof(sockaddr_in))) {
-            const sockaddr_in *sin = reinterpret_cast<const sockaddr_in *>(ptr->ai_addr);
+    for (struct addrinfo *ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+        if ((ptr->ai_family == AF_INET) && (ptr->ai_addrlen >= sizeof(struct sockaddr_in))) {
+            const struct sockaddr_in *sin = reinterpret_cast<const struct sockaddr_in *>(ptr->ai_addr);
             *pAddr = sin->sin_addr;
             bSuccess = TRUE;
             break;
         }
     }
 
-    FreeAddrInfoA(result);
+    freeaddrinfo(result);
     return bSuccess;
 }
