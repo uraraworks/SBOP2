@@ -102,6 +102,21 @@
 - `SetDevice()` から HWND 引数を削除し、呼び出し元（MainFrame / StateProcMAP / MgrKeyInput）も追従した。
 - `void*` キャストによる型不整合も解消し、`SDL_Joystick*` を直接保持する構成へ変更した。
 
+### 7. DLL動的ロードの SDL 統一
+
+- `LibMusicLoader`（LibMusic.dll ローダー）を `LoadLibrary`/`GetProcAddress`/`FreeLibrary` から `SDL_LoadObject`/`SDL_LoadFunction`/`SDL_UnloadObject` に移行。
+- `LibSboSoundLoader`（SboSoundData.dll ローダー）も同様に SDL API に移行。ただし `SboCliAdminMfc` からも参照されるため、`_WINDLL` 定義の有無で SDL / Win32 API を切り替える条件コンパイルを導入。
+- `MgrSound` の `SboSoundData.dll` ロードも `SDL_LoadObject` に変更。`m_hDllSoundData` の型を `HMODULE` から `void*` に変更。
+- `DXAudio::SetResourceHandle()` のシグネチャを `HMODULE` から `void*` に変更。内部の `LoadResource`/`SizeofResource` 呼び出し箇所では `(HMODULE)` キャスト使用（Windows版のみ到達するコード）。
+- `#if defined(__EMSCRIPTEN__)` によるスタブ分岐を除去し、SDL API による統一実装に一本化（LibMusicLoader）。DLLが見つからなければ SDL_LoadObject が NULL を返すため、スタブと同等の動作。
+
+### 8. グラフィックリソース読み込みのファイルベース化
+
+- `MgrGrpData::Read()` と `Read256()` に、ファイルベース読み込みの先行試行を追加。リソース名→ファイル名の静的マッピングテーブル（`GetFileNameForResource()`）により、`SboGrpData/res/` 以下のPNGファイルから直接読み込めるようにした。
+- ファイルが見つからない場合は従来のDLLリソースAPI（`FindResource`/`LoadResource`/`LockResource`）にフォールバック。既存のDLL配布環境での動作互換を維持。
+- `MgrGrpData` の `LoadLibrary` を `SDL_LoadObject` に移行。`m_hDll` の型を `HMODULE` → `void*` に変更。`SboCliAdminMfc` からも参照されるため `_WINDLL` 条件で Win32 API にフォールバック。
+- リソースAPI呼び出し箇所（`FindResource`/`LoadResource`/`SizeofResource`/`LoadString`）は `(HMODULE)` キャストで互換維持。
+
 ## 残っている Windows 依存
 
 ### 1. ウィンドウとイベントループ
@@ -178,6 +193,7 @@
 - メモリ管理は `CoTaskMemAlloc`/`CoTaskMemFree` から `malloc`/`free` に変更。
 - SE リソース読み込み（`SboSoundData.dll` からの `LoadResource`/`LockResource`）は依然として Windows 依存。
 - `AflMusic`（MIDI 再生）は `winmm` / DirectMusic 依存のまま。`aflMusic.dll` として動的ロード。
+- `MgrSound.cpp` の `FindResource()` は `void*` から `(HMODULE)` キャストで Win32 API を呼び出す。SE リソースのファイルベース化（DLL 資産抽出）が完了すれば除去可能。
 
 ### 5. 補助 UI / 管理 UI
 
@@ -202,6 +218,8 @@
 6. ~~`MgrDraw` の `HDC` / GDI 描画を SDL 経路へ移す。~~ → StretchBlt 全除去完了。残りはテキスト描画の GDI 依存（SDL_ttf 導入時に対応）。
 7. ~~`DXAudio` / `AflMusic` / `winmm` / `DirectSound` 依存を切り分ける。~~ → DXAudio は SDL_audio に移行完了。AflMusic（MIDI）は未着手。
 8. `SDLApp::PollWin32Messages()` の残責務を MFC 補助 UI の廃止にあわせて除去する。
+9. ~~DLL 動的ロードを `LoadLibrary`/`GetProcAddress` から SDL API（`SDL_LoadObject`/`SDL_LoadFunction`/`SDL_UnloadObject`）へ統一する。~~ → 完了（LibMusicLoader / LibSboSoundLoader / MgrSound）。
+10. ~~`MgrGrpData` のグラフィックリソース読み込みをファイルベース化し、`LoadLibrary` を SDL API に統一する。~~ → 完了（ファイル→リソースの2段フォールバック構成）。
 
 ## 次セッション開始点
 

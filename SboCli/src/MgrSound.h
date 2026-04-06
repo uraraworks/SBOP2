@@ -59,7 +59,7 @@ protected:
 	DWORD					m_dwSoundID;			// 再生中のBGMID
 	int						m_SEVolume;				// 効果音量
 	float					m_fBGMVolume;			// BGM音量
-	HMODULE					m_hDllSoundData;		// 音関連DLLのハンドル
+	void*					m_hDllSoundData;		// 音関連DLLのハンドル（SDL_LoadObject用）
 	CDXAudio				*m_pDXAudio;			// サウンドライブラリ
 	CLibMusicLoader			*m_pLibMusicLoader;		// MIDI再生ライブラリ
 	CLibSboSoundLoader		*m_pLibSboSoundLoader;	// サウンドデータライブラリ

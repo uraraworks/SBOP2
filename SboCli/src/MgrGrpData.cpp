@@ -5,6 +5,9 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#if !defined(_WINDLL)
+#include <SDL.h>
+#endif
 #include "../../SboGrpData/resource.h"
 #include "Img32.h"
 #include "third_party/lodepng.h"
@@ -132,6 +135,132 @@ static void BuildSboGrpResPath(TCHAR *pszDst, size_t nDstCount, LPCTSTR pszBaseP
 	_tcscat_s(pszDst, nDstCount, pszFileName);
 }
 
+/// リソース名（ANSI）から対応する相対ファイル名（TCHAR）を取得
+/// @return ファイル名が見つかればTRUE
+static BOOL GetFileNameForResource(LPCSTR pszResName, TCHAR *pszDst, size_t nDstCount)
+{
+	// SboGrpData.rc のリソース定義に基づくマッピング
+	static const struct { const char* resName; LPCTSTR fileName; } s_map[] = {
+		{ "IDP_MAP_01",             _T("map01.png") },
+		{ "IDP_MAP_02",             _T("map02.png") },
+		{ "IDP_MAP_03",             _T("map03.png") },
+		{ "IDP_SYSTEM",             _T("system.png") },
+		{ "IDP_LOGO",               _T("URARA-works-logo.png") },
+		{ "IDP_TITLE_BACK",         _T("title_back.png") },
+		{ "IDP_TITLE",              _T("title.png") },
+		{ "IDP_BODY_HUM",           _T("body\\hum.png") },
+		{ "IDP_BODY_BST",           _T("body\\bst.png") },
+		{ "IDP_BODY_BST_EAR",       _T("body\\bst_ear.png") },
+		{ "IDP_BODY_DRK",           _T("body\\drk.png") },
+		{ "IDP_BODY_DRK_EAR",       _T("body\\drk_ear.png") },
+		{ "IDP_BODY_ELF",           _T("body\\elf.png") },
+		{ "IDP_BODY_ELF_EAR",       _T("body\\elf_ear.png") },
+		{ "IDP_HAIR_D01",           _T("hair\\hair_d01.png") },
+		{ "IDP_HAIR_D02",           _T("hair\\hair_d02.png") },
+		{ "IDP_HAIR_D03",           _T("hair\\hair_d03.png") },
+		{ "IDP_HAIR_D04",           _T("hair\\hair_d04.png") },
+		{ "IDP_HAIR_D05",           _T("hair\\hair_d05.png") },
+		{ "IDP_HAIR_D06",           _T("hair\\hair_d06.png") },
+		{ "IDP_HAIR_D07",           _T("hair\\hair_d07.png") },
+		{ "IDP_HAIR_D08",           _T("hair\\hair_d08.png") },
+		{ "IDP_HAIR_D09",           _T("hair\\hair_d09.png") },
+		{ "IDP_HAIR_D10",           _T("hair\\hair_d10.png") },
+		{ "IDP_HAIR_D11",           _T("hair\\hair_d11.png") },
+		{ "IDP_HAIR_D12",           _T("hair\\hair_d12.png") },
+		{ "IDP_HAIR_D13",           _T("hair\\hair_d13.png") },
+		{ "IDP_HAIR_U01",           _T("hair\\hair_u01.png") },
+		{ "IDP_HAIR_U02",           _T("hair\\hair_u02.png") },
+		{ "IDP_HAIR_U03",           _T("hair\\hair_u03.png") },
+		{ "IDP_HAIR_U04",           _T("hair\\hair_u04.png") },
+		{ "IDP_HAIR_U05",           _T("hair\\hair_u05.png") },
+		{ "IDP_HAIR_U06",           _T("hair\\hair_u06.png") },
+		{ "IDP_HAIR_U07",           _T("hair\\hair_u07.png") },
+		{ "IDP_HAIR_U08",           _T("hair\\hair_u08.png") },
+		{ "IDP_HAIR_U09",           _T("hair\\hair_u09.png") },
+		{ "IDP_HAIR_U10",           _T("hair\\hair_u10.png") },
+		{ "IDP_HAIR_U11",           _T("hair\\hair_u11.png") },
+		{ "IDP_HAIR_U12",           _T("hair\\hair_u12.png") },
+		{ "IDP_HAIR_U13",           _T("hair\\hair_u13.png") },
+		{ "IDP_CLOTH_01",           _T("clothes\\cloth01.png") },
+		{ "IDP_CLOTH_02",           _T("clothes\\cloth02.png") },
+		{ "IDP_CLOTH_SP01",         _T("clothes\\sp01.png") },
+		{ "IDP_EYE_01",             _T("eyes\\eye01.png") },
+		{ "IDP_EYE_02",             _T("eyes\\eye02.png") },
+		{ "IDP_EYE_03",             _T("eyes\\eye03.png") },
+		{ "IDP_EYE_04",             _T("eyes\\eye04.png") },
+		{ "IDP_EYE_05",             _T("eyes\\eye05.png") },
+		{ "IDP_EYE_06",             _T("eyes\\eye06.png") },
+		{ "IDP_CHARSELECT_BACK",    _T("char_back.png") },
+		{ "IDP_SHADOW",             _T("shadow.png") },
+		{ "IDP_MAPSHADOW_01",       _T("map_shadow01.png") },
+		{ "IDP_ACCE_01",            _T("acce01.png") },
+		{ "IDP_ACCE_02",            _T("acce02.png") },
+		{ "IDP_ITEM_01",            _T("item.png") },
+		{ "IDP_MARK",               _T("mark.png") },
+		{ "IDP_WEAPON_01",          _T("weapons\\weapon01.png") },
+		{ "IDP_WEAPON_02",          _T("weapons\\weapon02.png") },
+		{ "IDP_WEAPON_BOW_01",      _T("weapons\\weapon_bow01.png") },
+		{ "IDP_WEAPON_ARROW_01",    _T("weapons\\weapon_arrow01.png") },
+		{ "IDP_WEAPON_GLOVE_01",    _T("weapons\\weapon_glove01.png") },
+		{ "IDP_WEAPON_ETC_01",      _T("weapons\\weapon_etc01.png") },
+		{ "IDP_BALLOON_01",         _T("balloon_01.png") },
+		{ "IDP_NPC_01",             _T("NPC\\npc01.png") },
+		{ "IDP_NPC_02",             _T("NPC\\npc02.png") },
+		{ "IDP_TITLE_CLOUD",        _T("title_cloud.png") },
+		{ "IDP_ICON",               _T("icon.png") },
+		{ "IDP_2X2_BODY_HUM",       _T("2x2\\2x2_hum.png") },
+		{ "IDP_2X2_HUM_HAIR_U01",   _T("2x2\\2x2_hum_hair_u01.png") },
+		{ "IDP_2X2_EYE_01",         _T("2x2\\2x2_eye01.png") },
+		{ "IDP_2X2_EYE_02",         _T("2x2\\2x2_eye02.png") },
+		{ "IDP_2X2_EYE_03",         _T("2x2\\2x2_eye03.png") },
+		{ "IDP_2X2_EYE_04",         _T("2x2\\2x2_eye04.png") },
+		{ "IDP_2X2_EYE_05",         _T("2x2\\2x2_eye05.png") },
+		{ "IDP_2X2_CLOTH_00",       _T("2x2\\2x2_cloth00.png") },
+		{ "IDP_2X2_CLOTH_01",       _T("2x2\\2x2_cloth01.png") },
+		{ "IDP_2X2_CLOTH_02",       _T("2x2\\2x2_cloth02.png") },
+		{ "IDP_2X2_CLOTH_03",       _T("2x2\\2x2_cloth03.png") },
+		{ "IDP_2X2_HAIR_01",        _T("2x2\\2x2_hair01.png") },
+		{ "IDP_2X2_HAIR_02",        _T("2x2\\2x2_hair02.png") },
+		{ "IDP_2X2_HAIR_03",        _T("2x2\\2x2_hair03.png") },
+		{ "IDP_2X2_HAIR_04",        _T("2x2\\2x2_hair04.png") },
+		{ "IDP_2X2_SP_CLOTH_01",    _T("2x2\\2x2_sp_cloth01.png") },
+		{ "IDP_2X2_SP_CLOTH_02",    _T("2x2\\2x2_sp_cloth02.png") },
+		{ "IDP_2X2_SP_HAIR_01",     _T("2x2\\2x2_sp_hair01.png") },
+		{ "IDP_2X2_SP_HAIR_02",     _T("2x2\\2x2_sp_hair02.png") },
+		{ "IDP_2X2_ARMS_01",        _T("2x2\\2x2_arms01.png") },
+		{ "IDP_2X2_ARMS_02",        _T("2x2\\2x2_arms02.png") },
+		{ "IDP_2X2_ARMS_03",        _T("2x2\\2x2_arms03.png") },
+		{ "IDP_2X2_ARMS_SP_01",     _T("2x2\\2x2_arms_sp01.png") },
+		{ "IDP_2X2_SHIELD_01",      _T("2x2\\2x2_shield01.png") },
+		{ "IDP_2X2_BOW_01",         _T("2x2\\2x2_bow01.png") },
+		{ "IDP_2X2_NPC_001",        _T("2x2\\2x2_npc001.png") },
+		{ "IDP_2X2_NPC_002",        _T("2x2\\2x2_npc002.png") },
+		{ "IDP_2X2_NPC_003",        _T("2x2\\2x2_npc003.png") },
+		{ "IDP_2X2_NPC_004",        _T("2x2\\2x2_npc004.png") },
+		{ "IDP_2X2_NPC_005",        _T("2x2\\2x2_npc005.png") },
+		{ "IDP_2X2_NPC_006",        _T("2x2\\2x2_npc006.png") },
+		{ "IDP_2X2_NPC_001_SHADOW", _T("2x2\\2x2_npc001_shadow.png") },
+		{ "IDP_2X2_NPC_002_SHADOW", _T("2x2\\2x2_npc002_shadow.png") },
+		{ "IDP_2X2_NPC_003_SHADOW", _T("2x2\\2x2_npc003_shadow.png") },
+		{ "IDP_2X2_NPC_004_SHADOW", _T("2x2\\2x2_npc004_shadow.png") },
+		{ "IDP_2X2_NPC_005_SHADOW", _T("2x2\\2x2_npc005_shadow.png") },
+		{ "IDP_2X2_NPC_006_SHADOW", _T("2x2\\2x2_npc006_shadow.png") },
+		{ "IDP_2X2_CHAR_SHADOW_01", _T("2x2\\2x2_char_shadow_01.png") },
+		{ "IDP_NUM_S",              _T("num_s.png") },
+		{ "IDP_NUM_M",              _T("num_m.png") },
+		{ "IDP_NUM_L",              _T("num_l.png") },
+		{ "IDP_EFC_32_01",          _T("efc_32_01.png") },
+		{ "IDP_EFC_64_01",          _T("efc_64_01.png") },
+	};
+	for (int i = 0; i < _countof(s_map); i++) {
+		if (strcmp(pszResName, s_map[i].resName) == 0) {
+			_tcscpy_s(pszDst, nDstCount, s_map[i].fileName);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 
 CMgrGrpData::CMgrGrpData()
 {
@@ -188,7 +317,11 @@ CMgrGrpData::~CMgrGrpData()
 	PCImg32 pImg;
 
 	if (m_hDll) {
-		FreeLibrary(m_hDll);
+#if !defined(_WINDLL)
+		SDL_UnloadObject(m_hDll);
+#else
+		FreeLibrary((HMODULE)m_hDll);
+#endif
 		m_hDll = NULL;
 	}
 
@@ -262,8 +395,16 @@ BOOL CMgrGrpData::Load(void)
 
 	// ファイル名の作成
 	BuildModuleRelativePath(szName, _countof(szName), _T("SboGrpData.dll"));
-
-	m_hDll = LoadLibrary(szName);
+#if !defined(_WINDLL)
+	// SboCli: SDL_LoadObject でクロスプラットフォーム対応
+	{
+		std::string ansiDllPath = TStringToAnsiStd(szName);
+		m_hDll = SDL_LoadObject(ansiDllPath.c_str());
+	}
+#else
+	// SboCliAdminMfc: Win32 API
+	m_hDll = (void*)LoadLibrary(szName);
+#endif
 	if (m_hDll == NULL) {
 		goto Exit;
 	}
@@ -723,7 +864,7 @@ BOOL CMgrGrpData::CheckVersion(LPCSTR pszVersion)
 
 	ZeroMemory(szTmp, sizeof(szTmp));
 	// バージョンチェック
-	LoadString(m_hDll, IDS_DLLVER, szTmp, _countof(szTmp));
+	LoadString((HINSTANCE)m_hDll, IDS_DLLVER, szTmp, _countof(szTmp));
 	std::string strDllVersion = TStringToAnsiStd(szTmp);
 	if (strDllVersion != pszVersion) {
 		goto Exit;
@@ -1925,29 +2066,47 @@ BOOL CMgrGrpData::Read(LPCSTR pszName, PCImg32 *pDib, int nSize)
 	std::vector<unsigned char> image;
 	unsigned width, height;
 	CImg32 *pDibNew;
-	CImg32 *pDibTmp, *pDibTmp2;
+	CImg32 *pDibTmp;
 	BYTE *pData;
-	HDC hDCBmp, hDCBmp2;
 
 	bRet		= FALSE;
 	pDibTmp		= NULL;
-	pDibTmp2	= NULL;
 
-	CString strName = AnsiToTString(pszName);
-	LPCTSTR pszNameT = strName;
-	hResInfo = FindResource(m_hDll, pszNameT, _T("PNG"));
-	if (hResInfo == NULL) {
-		goto Exit;
-	}
-	hRes = LoadResource(m_hDll, hResInfo);
-	if (hRes == NULL) {
-		goto Exit;
+	// ファイルベース読み込みを先行試行（リソースAPI不使用でも動作可能にする）
+	std::vector<unsigned char> fileData;
+	{
+		TCHAR szBasePath[MAX_PATH];
+		TCHAR szFileName[MAX_PATH];
+		TCHAR szFilePath[MAX_PATH];
+		if (GetFileNameForResource(pszName, szFileName, _countof(szFileName))) {
+			if (FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+				BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, szFileName);
+				ReadBinaryFile(szFilePath, fileData);
+			}
+		}
 	}
 
-	dwResourceSize = SizeofResource(m_hDll, hResInfo);
-	pResourceData = (const BYTE *)LockResource(hRes);
-	if ((pResourceData == NULL) || (dwResourceSize == 0)) {
-		goto Exit;
+	if (!fileData.empty()) {
+		// ファイルから取得済み
+		dwResourceSize = (DWORD)fileData.size();
+		pResourceData = &fileData[0];
+	} else {
+		// リソースAPIにフォールバック
+		CString strName = AnsiToTString(pszName);
+		LPCTSTR pszNameT = strName;
+		hResInfo = FindResource((HMODULE)m_hDll, pszNameT, _T("PNG"));
+		if (hResInfo == NULL) {
+			goto Exit;
+		}
+		hRes = LoadResource((HMODULE)m_hDll, hResInfo);
+		if (hRes == NULL) {
+			goto Exit;
+		}
+		dwResourceSize = SizeofResource((HMODULE)m_hDll, hResInfo);
+		pResourceData = (const BYTE *)LockResource(hRes);
+		if ((pResourceData == NULL) || (dwResourceSize == 0)) {
+			goto Exit;
+		}
 	}
 
 	if (lodepng::decode(image, width, height, pResourceData, dwResourceSize)) {
@@ -1980,23 +2139,13 @@ BOOL CMgrGrpData::Read(LPCSTR pszName, PCImg32 *pDib, int nSize)
 		}
 	}
 
-	pDibTmp2 = new CImg32;
-	pDibTmp2->Create(width * nSize, height * nSize);
-	hDCBmp  = pDibTmp->Lock();
-	hDCBmp2 = pDibTmp2->Lock();
-
-	StretchBlt(hDCBmp2, 0, 0, width * nSize, height * nSize,
-		hDCBmp, 0, 0, width, height, SRCCOPY);
-
-	pDibTmp->Unlock();
-	pDibTmp2->Unlock();
-
-	pDibNew->Blt(0, 0, width * nSize, height * nSize, pDibTmp2, 0, 0);
+	// GDI StretchBlt を BltStretchNearest に置換（GDI/HDC不使用）
+	pDibNew->BltStretchNearest(0, 0, width * nSize, height * nSize,
+		pDibTmp, 0, 0, width, height);
 
 	bRet = TRUE;
 Exit:
 	SAFE_DELETE(pDibTmp);
-	SAFE_DELETE(pDibTmp2);
 	return bRet;
 }
 
@@ -2020,21 +2169,41 @@ BOOL CMgrGrpData::Read256(LPCSTR pszName, PCImg32 *pDib, int nSize)
 	state.info_raw.colortype = LCT_PALETTE;
 	state.info_raw.bitdepth = 8;
 
-	CString strName = AnsiToTString(pszName);
-	LPCTSTR pszNameT = strName;
-	hResInfo = FindResource(m_hDll, pszNameT, _T("PNG"));
-	if (hResInfo == NULL) {
-		goto Exit;
-	}
-	hRes = LoadResource(m_hDll, hResInfo);
-	if (hRes == NULL) {
-		goto Exit;
+	// ファイルベース読み込みを先行試行（リソースAPI不使用でも動作可能にする）
+	std::vector<unsigned char> fileData256;
+	{
+		TCHAR szBasePath[MAX_PATH];
+		TCHAR szFileName[MAX_PATH];
+		TCHAR szFilePath[MAX_PATH];
+		if (GetFileNameForResource(pszName, szFileName, _countof(szFileName))) {
+			if (FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+				BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, szFileName);
+				ReadBinaryFile(szFilePath, fileData256);
+			}
+		}
 	}
 
-	dwResourceSize = SizeofResource(m_hDll, hResInfo);
-	pResourceData = (const BYTE *)LockResource(hRes);
-	if ((pResourceData == NULL) || (dwResourceSize == 0)) {
-		goto Exit;
+	if (!fileData256.empty()) {
+		// ファイルから取得済み
+		dwResourceSize = (DWORD)fileData256.size();
+		pResourceData = &fileData256[0];
+	} else {
+		// リソースAPIにフォールバック
+		CString strName = AnsiToTString(pszName);
+		LPCTSTR pszNameT = strName;
+		hResInfo = FindResource((HMODULE)m_hDll, pszNameT, _T("PNG"));
+		if (hResInfo == NULL) {
+			goto Exit;
+		}
+		hRes = LoadResource((HMODULE)m_hDll, hResInfo);
+		if (hRes == NULL) {
+			goto Exit;
+		}
+		dwResourceSize = SizeofResource((HMODULE)m_hDll, hResInfo);
+		pResourceData = (const BYTE *)LockResource(hRes);
+		if ((pResourceData == NULL) || (dwResourceSize == 0)) {
+			goto Exit;
+		}
 	}
 
 	if (lodepng::decode(image, width, height, state, pResourceData, dwResourceSize)) {

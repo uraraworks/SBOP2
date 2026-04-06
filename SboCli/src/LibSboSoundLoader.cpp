@@ -1,66 +1,26 @@
-﻿/// @file LibSboSoundLoader.cpp
+/// @file LibSboSoundLoader.cpp
 /// @brief SBOサウンドデータライブラリ読み込みクラス 実装ファイル
 /// @author 年がら年中春うらら(URARA-works)
 /// @date 2007/05/03
 /// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
+#if !defined(_WINDLL)
+#include <SDL.h>
+#endif
 #include "LibSboSoundLoader.h"
 
-#if defined(__EMSCRIPTEN__)
-
-CLibSboSoundLoader::CLibSboSoundLoader()
-{
-	m_hLib = NULL;
-	m_pGetSoundCount = NULL;
-	m_pGetSoundResourceID = NULL;
-	m_pGetSoundID = NULL;
-	m_pGetSoundNo = NULL;
-	m_pGetSoundName = NULL;
-}
-
-CLibSboSoundLoader::~CLibSboSoundLoader()
-{
-}
-
-void CLibSboSoundLoader::Load(void)
-{
-}
-
-void CLibSboSoundLoader::Free(void)
-{
-}
-
-int CLibSboSoundLoader::GetSoundCount(void)
-{
-	return 0;
-}
-
-int CLibSboSoundLoader::GetSoundResourceID(int nNo)
-{
-	(void)nNo;
-	return 0;
-}
-
-DWORD CLibSboSoundLoader::GetSoundID(int nNo)
-{
-	(void)nNo;
-	return 0;
-}
-
-int CLibSboSoundLoader::GetSoundNo(DWORD dwSoundID)
-{
-	(void)dwSoundID;
-	return -1;
-}
-
-LPCSTR CLibSboSoundLoader::GetSoundName(DWORD dwSoundID)
-{
-	(void)dwSoundID;
-	return "";
-}
-
+// DLL動的ロードのプラットフォーム抽象化マクロ
+// SboCliAdminMfc（_WINDLL定義あり）ではSDL未使用のためWin32 APIを使う
+// DLL関数ロード・解放のプラットフォーム抽象化マクロ
+// SboCliAdminMfc（_WINDLL定義あり）ではSDL未使用のためWin32 APIを使う
+#if !defined(_WINDLL)
+#define DYN_LOAD_FUNC(lib, name)   SDL_LoadFunction(lib, name)
+#define DYN_UNLOAD_LIB(lib)        SDL_UnloadObject(lib)
 #else
+#define DYN_LOAD_FUNC(lib, name)   ((void*)GetProcAddress((HMODULE)(lib), name))
+#define DYN_UNLOAD_LIB(lib)        FreeLibrary((HMODULE)(lib))
+#endif
 
 CLibSboSoundLoader::CLibSboSoundLoader()
 {
@@ -82,23 +42,34 @@ CLibSboSoundLoader::~CLibSboSoundLoader()
 
 void CLibSboSoundLoader::Load(void)
 {
-	TCHAR szPath[MAX_PATH];
-
 	if (m_hLib) {
 		return;
 	}
+
+#if !defined(_WINDLL)
+	// SboCli: SDL_LoadObject でクロスプラットフォーム対応
+	// BuildModuleRelativePath は TCHAR* を受け取るため TCHAR 配列を使用
+	TCHAR szPath[MAX_PATH];
 	BuildModuleRelativePath(szPath, _countof(szPath), _T("SboSoundData.dll"));
-	m_hLib = LoadLibrary(szPath);
+	// SDL_LoadObject は char* を受け取るため ANSI 文字列に変換
+	std::string ansiPath = TStringToAnsiStd(szPath);
+	m_hLib = SDL_LoadObject(ansiPath.c_str());
+#else
+	// SboCliAdminMfc: Win32 API（TCHAR/Unicode対応）
+	TCHAR szPath[MAX_PATH];
+	BuildModuleRelativePath(szPath, _countof(szPath), _T("SboSoundData.dll"));
+	m_hLib = (void*)LoadLibrary(szPath);
+#endif
 	if (m_hLib == NULL) {
 		return;
 	}
 
 	// 各関数のアドレスを取得
-	m_pGetSoundCount		= (LIBSBOSOUNDGetSoundCount)		GetProcAddress(m_hLib, "GetSoundCount");
-	m_pGetSoundResourceID	= (LIBSBOSOUNDGetSoundResourceID)	GetProcAddress(m_hLib, "GetSoundResourceID");
-	m_pGetSoundID			= (LIBSBOSOUNDGetSoundID)			GetProcAddress(m_hLib, "GetSoundID");
-	m_pGetSoundNo			= (LIBSBOSOUNDGetSoundNo)			GetProcAddress(m_hLib, "GetSoundNo");
-	m_pGetSoundName			= (LIBSBOSOUNDGetSoundName)			GetProcAddress(m_hLib, "GetSoundName");
+	m_pGetSoundCount		= (LIBSBOSOUNDGetSoundCount)		DYN_LOAD_FUNC(m_hLib, "GetSoundCount");
+	m_pGetSoundResourceID	= (LIBSBOSOUNDGetSoundResourceID)	DYN_LOAD_FUNC(m_hLib, "GetSoundResourceID");
+	m_pGetSoundID			= (LIBSBOSOUNDGetSoundID)			DYN_LOAD_FUNC(m_hLib, "GetSoundID");
+	m_pGetSoundNo			= (LIBSBOSOUNDGetSoundNo)			DYN_LOAD_FUNC(m_hLib, "GetSoundNo");
+	m_pGetSoundName			= (LIBSBOSOUNDGetSoundName)			DYN_LOAD_FUNC(m_hLib, "GetSoundName");
 
 	if ((m_pGetSoundCount		== NULL) ||
 		(m_pGetSoundResourceID	== NULL) ||
@@ -113,7 +84,8 @@ void CLibSboSoundLoader::Load(void)
 void CLibSboSoundLoader::Free(void)
 {
 	if (m_hLib) {
-		FreeLibrary(m_hLib);
+		DYN_UNLOAD_LIB(m_hLib);
+		m_hLib = NULL;
 		m_pGetSoundCount		= NULL;
 		m_pGetSoundResourceID	= NULL;
 		m_pGetSoundID			= NULL;
@@ -166,5 +138,3 @@ LPCSTR CLibSboSoundLoader::GetSoundName(DWORD dwSoundID)
 	}
 	return m_pGetSoundName(dwSoundID);
 }
-
-#endif
