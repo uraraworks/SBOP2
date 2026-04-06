@@ -46,7 +46,11 @@ static void WritePosSyncDebugLog(DWORD dwCharID, int nBeforeX, int nBeforeY, int
 			nApplyX,
 			nApplyY,
 			bUpdate ? 1 : 0);
+#ifdef _WIN32
 	OutputDebugStringA(szDbg);
+#else
+	SDL_Log("%s", szDbg);
+#endif
 }
 #endif
 
@@ -188,7 +192,11 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 			Packet.m_pInfo->m_dwMapID,
 			Packet.m_pInfo->m_nMapX,
 			Packet.m_pInfo->m_nMapY);
+#ifdef _WIN32
 		OutputDebugString(strDbg);
+#else
+		SDL_Log("%s", (LPCSTR)CStringA(strDbg));
+#endif
 	}
 
 	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(Packet.m_pInfo->m_dwCharID);

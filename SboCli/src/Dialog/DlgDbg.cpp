@@ -76,7 +76,11 @@ BOOL CDlgDbg::Create(HWND hWndParent, CMgrData *pMgrData)
 		DWORD dwErr = GetLastError();
 		CString strErr;
 		strErr.Format(_T("CDlgDbg::Create failed. GetLastError=0x%08X\r\n"), dwErr);
+#ifdef _WIN32
 		OutputDebugString(strErr);
+#else
+		SDL_Log("%s", (LPCSTR)CStringA(strErr));
+#endif
 		return FALSE;
 	}
 
