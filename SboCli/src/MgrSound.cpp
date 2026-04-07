@@ -133,12 +133,6 @@ void CMgrSound::PlayBGM(
 	char szTmp[MAX_PATH];
 	TCHAR szBasePath[MAX_PATH];
 
-#if !defined(_WIN32)
-	UNREFERENCED_PARAMETER(nNo);
-	UNREFERENCED_PARAMETER(bPlay);
-	return;
-#endif
-
 	if (bPlay) {
 		if (m_dwSoundID == (DWORD)nNo) {
 			return;

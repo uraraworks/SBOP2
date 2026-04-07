@@ -1,54 +1,30 @@
 /// @file DXAudio.cpp
-/// @brief SDL_audioベースのオーディオ実装（NO_DIRECTMUSICビルド用）
+/// @brief SDL_audioベースのオーディオ実装（NO_DIRECTMUSICビルド用、クロスプラットフォーム対応）
 #include "stdafx.h"
-#if !defined(_WIN32)
-#include "DXAudio.h"
-
-CDXAudio::CDXAudio() {
-  m_pPerformance = nullptr;
-  m_pDefAudioPath = nullptr;
-  m_pDefAudioPath2 = nullptr;
-  m_pLoader = nullptr;
-  m_hResource = NULL;
-  m_pBgmFmt = nullptr;
-  m_pBgmAudio = nullptr;
-  m_cbBgmAudio = 0;
-  m_pBgmVoice = nullptr;
-  m_fBgmVolume = 1.0f;
-}
-
-CDXAudio::~CDXAudio() {
-}
-
-BOOL CDXAudio::Create(void) { return TRUE; }
-void CDXAudio::Destroy(void) {}
-void CDXAudio::SetResourceHandle(void* hResource) { m_hResource = hResource; }
-BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL bMidi) { return FALSE; }
-void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg) {}
-BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg) { return FALSE; }
-BOOL CDXAudio::PlaySecoundary(IDirectMusicSegment8 *pSeg) { return FALSE; }
-void CDXAudio::SetVolPrimary(long lVol) {}
-void CDXAudio::SetVolSecoundary(long lVol) {}
-void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD dwFlg) {}
-void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwFlg) {}
-BOOL CDXAudio::IsPlaying(IDirectMusicSegment8 *pSeg) { return FALSE; }
-BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume) { return FALSE; }
-void CDXAudio::StopBGM() {}
-void CDXAudio::SetBGMVolume(float volume) { m_fBgmVolume = volume; }
-void CDXAudio::FreeBgmResources() {}
-
-#else
-// -----------------------------------------------------------------------
-// SDL_audio ベース実装（Windows ネイティブ向け）
-// -----------------------------------------------------------------------
-#include <windows.h>   // LoadResource / LockResource 等
-#include <mmreg.h>     // WAVEFORMATEX
-#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
+
+#ifdef _WIN32
+#include <windows.h>   // LoadResource / LockResource 等
+#include <mmreg.h>     // WAVEFORMATEX
+#else
+// 非Windows用のWAVEFORMATEX互換定義
+#pragma pack(push, 1)
+struct WAVEFORMATEX {
+    unsigned short wFormatTag;
+    unsigned short nChannels;
+    unsigned long  nSamplesPerSec;
+    unsigned long  nAvgBytesPerSec;
+    unsigned short nBlockAlign;
+    unsigned short wBitsPerSample;
+    unsigned short cbSize;
+};
+#pragma pack(pop)
+#endif
+
 #include "third_party/stb_vorbis.c"
 #include "DXAudio.h"
 
@@ -79,10 +55,10 @@ struct AudioChannel {
     SDL_bool     active;  ///< 再生中フラグ
 };
 
-static AudioChannel     g_channels[MAX_SE_CHANNELS + 1];  ///< [0..MAX_SE_CHANNELS-1]=SE, [MAX_SE_CHANNELS]=BGM
+static AudioChannel      g_channels[MAX_SE_CHANNELS + 1];  ///< [0..MAX_SE_CHANNELS-1]=SE, [MAX_SE_CHANNELS]=BGM
 static SDL_AudioDeviceID g_audioDevice = 0;
-static SDL_AudioSpec    g_obtainedSpec;
-static float            g_sfx_volume = 1.0f;   ///< SE 全体の音量（リニア）
+static SDL_AudioSpec     g_obtainedSpec;
+static float             g_sfx_volume = 1.0f;   ///< SE 全体の音量（リニア）
 
 // -----------------------------------------------------------------------
 // 音声コールバック
@@ -271,6 +247,8 @@ void CDXAudio::SetResourceHandle(void* hResource)
 
 BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL /*bMidi*/)
 {
+#ifdef _WIN32
+    // Windows のみ: DLL リソースから WAV を読み込む
     if (!pSeg || !m_hResource || g_audioDevice == 0) return FALSE;
 
     // m_hResource は void* だが Windows 版でしか到達しないため HMODULE にキャストして使用
@@ -285,6 +263,11 @@ BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL /*bMi
 
     *pSeg = (IDirectMusicSegment8*)seg;
     return TRUE;
+#else
+    // 非Windows: DLL リソースからの WAV 読み込みは未対応
+    (void)hSrc; (void)pSeg;
+    return FALSE;
+#endif
 }
 
 void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg)
@@ -496,5 +479,3 @@ void CDXAudio::SetBGMVolume(float volume)
         SDL_UnlockAudioDevice(g_audioDevice);
     }
 }
-
-#endif
