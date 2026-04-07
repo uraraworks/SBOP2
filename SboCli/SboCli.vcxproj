@@ -294,6 +294,12 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClCompile Include="src\Platform\SDLWindow.cpp">
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Platform\ImGuiMsgLog.cpp">
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Platform\ImGuiDbg.cpp">
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\StateProc\StateProcBase.cpp" />
     <ClCompile Include="src\StateProc\StateProcDISCONNECT.cpp" />
     <ClCompile Include="src\StateProc\StateProcINFO.cpp" />
@@ -462,6 +468,8 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClInclude Include="src\MainFrame\MainFrame.h" />
     <ClInclude Include="src\Platform\SdlFont.h" />
     <ClInclude Include="src\Platform\IGameLoopHost.h" />
+    <ClInclude Include="src\Platform\ImGuiMsgLog.h" />
+    <ClInclude Include="src\Platform\ImGuiDbg.h" />
     <ClInclude Include="src\Platform\SDLApp.h" />
     <ClInclude Include="src\Platform\SDLInput.h" />
     <ClInclude Include="src\Platform\SDLWindow.h" />

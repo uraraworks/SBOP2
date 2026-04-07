@@ -462,6 +462,12 @@
     <ClCompile Include="src\StateProc\StateProcMAP.cpp">
       <Filter>Source Files\StateProc</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\ImGuiMsgLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\ImGuiDbg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Window\WindowACCOUNTINFO.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
@@ -967,6 +973,12 @@
     </ClInclude>
     <ClInclude Include="src\StateProc\StateProcMAP.h">
       <Filter>Header Files\StateProc No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\ImGuiMsgLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\ImGuiDbg.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\WindowACCOUNTINFO.h">
       <Filter>Header Files\Window No. 1</Filter>

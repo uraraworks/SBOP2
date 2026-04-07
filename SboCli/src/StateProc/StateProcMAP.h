@@ -14,6 +14,8 @@ class CInfoMapBase;
 class CLibInfoCharCli;
 class CLibInfoMapBase;
 class CLibInfoItem;
+class CImGuiMsgLog;
+class CImGuiDbg;
 #ifdef _WIN32
 class CDlgMsgLog;
 class CDlgDbg;
@@ -105,6 +107,7 @@ protected:
 
 public:
 	void StartAutoWalkToEvent(int nTileX, int nTileY); // イベントタイルへの自動歩行開始
+	void DrawImGui(void);              // ImGuiウィジェット描画
 
 
 protected:
@@ -145,4 +148,6 @@ protected:
 	CDlgMsgLog      *m_pDlgMsgLog;    // メッセージログウィンドウ
 	CDlgDbg         *m_pDlgDbg;       // デバッグウィンドウ
 #endif
+	CImGuiMsgLog    *m_pImGuiMsgLog;  // ImGui版メッセージログ
+	CImGuiDbg       *m_pImGuiDbg;     // ImGui版デバッグ
 } CStateProcMAP, *PCStateProcMAP;

@@ -66,6 +66,8 @@
 #include "DlgMsgLog.h"
 #include "DlgDbg.h"
 #endif
+#include "Platform/ImGuiMsgLog.h"
+#include "Platform/ImGuiDbg.h"
 #include "MainFrame.h"
 #include "MgrData.h"
 
@@ -165,6 +167,8 @@ CStateProcMAP::CStateProcMAP()
 	m_pDlgMsgLog		= NULL;
 	m_pDlgDbg			= NULL;
 #endif
+	m_pImGuiMsgLog		= NULL;
+	m_pImGuiDbg			= NULL;
 }
 
 
@@ -191,6 +195,10 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 	m_pDlgDbg = new CDlgDbg;
 	m_pDlgDbg->Create(pMgrData->GetMainWindow(), m_pMgrData);
 #endif
+	m_pImGuiMsgLog = new CImGuiMsgLog;
+	m_pImGuiMsgLog->Init(m_pMgrData);
+	m_pImGuiDbg = new CImGuiDbg;
+	m_pImGuiDbg->Init(m_pMgrData);
 }
 
 
@@ -1078,6 +1086,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 #ifdef _WIN32
 			if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(strTmp, pInfoChar->m_clSpeak); }
 #endif
+			if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Add(strTmp, pInfoChar->m_clSpeak); }
 		}
 		break;
 
@@ -1112,6 +1121,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 #ifdef _WIN32
 					if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(pSystemMsg->strMsg, pSystemMsg->clMsg); }
 #endif
+					if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Add(pSystemMsg->strMsg, pSystemMsg->clMsg); }
 				}
 				pLayerSystemMsg->AddMsg(pSystemMsg->strMsg, pSystemMsg->clMsg);
 			}
@@ -3725,3 +3735,9 @@ DWORD CStateProcMAP::GetTalkCharID(DWORD dwCharID, int nDirection)
 	return dwRet;
 }
 
+
+void CStateProcMAP::DrawImGui(void)
+{
+	if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Draw(); }
+	if (m_pImGuiDbg) { m_pImGuiDbg->Draw(); }
+}

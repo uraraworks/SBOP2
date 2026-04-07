@@ -92,6 +92,7 @@ public:
 	virtual void OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick);
 	virtual void OnSDLMouseRightButtonDoubleClick(int x, int y);
 	virtual void OnDraw(SDL_Renderer *pRenderer);
+	virtual void OnDrawImGui();
 	virtual BOOL IsQuit(void);
 	virtual void OnSDLDestroy(void);
 

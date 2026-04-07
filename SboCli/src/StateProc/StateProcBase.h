@@ -36,6 +36,7 @@ public:
 	virtual void OnMainFrame(DWORD dwCommand, DWORD dwParam);         // メッセージハンドラ(WM_MAINFRAME)
 	virtual void OnAdminMsg(int nType, DWORD dwPara);                 // メッセージハンドラ(WM_ADMINMSG)
 			void OnMgrDraw(int nCode, DWORD dwPara);                  // メッセージハンドラ(WM_MGRDRAW)
+	virtual void DrawImGui(void) {}                                   // ImGuiウィジェット描画
 
 
 protected:

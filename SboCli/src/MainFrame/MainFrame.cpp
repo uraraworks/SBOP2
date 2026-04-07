@@ -474,6 +474,14 @@ void CMainFrame::OnDraw(SDL_Renderer *pRenderer)
 }
 
 
+void CMainFrame::OnDrawImGui()
+{
+	if (m_pStateProc) {
+		m_pStateProc->DrawImGui();
+	}
+}
+
+
 BOOL CMainFrame::IsQuit(void)
 {
 	// SDL_QUIT がメインの終了トリガーなので常にFALSEを返す
