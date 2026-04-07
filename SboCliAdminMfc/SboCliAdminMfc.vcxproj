@@ -349,6 +349,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AdminUiApi.h" />
+    <ClInclude Include="src\AdminWindow.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>
