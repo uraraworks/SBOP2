@@ -1,0 +1,12 @@
+{
+  "name": "sbop2-websocket-bridge",
+  "version": "1.0.0",
+  "description": "SboSvr TCP ↔ WebSocket ブリッジサーバー",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.0.0"
+  }
+}
