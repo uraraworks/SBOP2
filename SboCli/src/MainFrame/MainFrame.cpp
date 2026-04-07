@@ -421,12 +421,6 @@ void CMainFrame::OnSDLMouseRightButtonDoubleClick(int x, int y)
 
 BOOL CMainFrame::OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam)
 {
-#if defined(__EMSCRIPTEN__)
-	UNREFERENCED_PARAMETER(message);
-	UNREFERENCED_PARAMETER(wParam);
-	UNREFERENCED_PARAMETER(lParam);
-	return FALSE;
-#else
 	if ((message >= URARASOCK_MSGBASE) && (message < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
 		switch (message - URARASOCK_MSGBASE) {
 		case WM_URARASOCK_CONNECT:
@@ -442,7 +436,6 @@ BOOL CMainFrame::OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam)
 	}
 
 	return FALSE;
-#endif
 }
 
 
@@ -873,11 +866,9 @@ void CMainFrame::OnInitEnd(void)
 	m_pMgrData->SetMainWindow(m_hWnd);
 	m_pMgrData->Create(this, m_pMgrGrpData);
 	m_pMgrData->SetUraraSockTCP(m_pSock);
-#if defined(_WIN32)
 	if (m_pSock) {
 		m_pSock->SetNotifySink(&CMainFrame::OnSocketNotifyThunk, this);
 	}
-#endif
 	m_pMgrDraw = m_pMgrData->GetMgrDraw();
 	m_pMgrLayer = m_pMgrData->GetMgrLayer();
 	m_pMgrWindow = m_pMgrData->GetMgrWindow();

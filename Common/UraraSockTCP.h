@@ -72,7 +72,9 @@ DLLURARASOCKTCP_API void ReleaseUraraSockTCP(CUraraSockTCP *&pSrc);	// Release c
 typedef CUraraSockTCP *(*PFGETURARASOCKTCP)(void);
 typedef void (*PFRELEASEURARASOCKTCP)(CUraraSockTCP *&pSrc);
 #else
-// Non-Windows: stub implementation (no-op)
+// 非Windows環境向け実装
+#ifndef __EMSCRIPTEN__
+// 非Windows / 非Emscripten: スタブ実装（何もしない）
 class CUraraSockTCPStub : public CUraraSockTCP
 {
 public:
@@ -89,9 +91,16 @@ public:
 	virtual DWORD	GetQueCount(DWORD) override { return 0; }
 	virtual DWORD	GetIPAddress(DWORD) override { return 0; }
 };
-
 inline CUraraSockTCP *GetUraraSockTCP(void) { return new CUraraSockTCPStub(); }
+#endif // !__EMSCRIPTEN__
+
 inline void ReleaseUraraSockTCP(CUraraSockTCP *&pSrc) { if (pSrc) { delete pSrc; pSrc = NULL; } }
 typedef CUraraSockTCP *(*PFGETURARASOCKTCP)(void);
 typedef void (*PFRELEASEURARASOCKTCP)(CUraraSockTCP *&pSrc);
-#endif
+#endif // _WIN32
+
+// Emscripten環境では GetUraraSockTCP() は UraraSockTCPWebSocket.h 末尾で定義される
+// （CUraraSockTCPWebSocket クラスの定義後に inline 実装する必要があるため）
+#if defined(__EMSCRIPTEN__) && !defined(URARASOCKTCP_WEBSOCKET_INCLUDED)
+#include "UraraSockTCPWebSocket.h"
+#endif // __EMSCRIPTEN__ && !URARASOCKTCP_WEBSOCKET_INCLUDED

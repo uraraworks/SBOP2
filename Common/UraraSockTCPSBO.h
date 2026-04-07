@@ -6,6 +6,9 @@
 #pragma once
 
 #include "UraraSockTCP.h"
+#ifdef __EMSCRIPTEN__
+#include "UraraSockTCPWebSocket.h"
+#endif
 
 class CPacketBase;
 

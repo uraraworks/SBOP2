@@ -14,6 +14,17 @@
 
 CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 {
+	m_pSock = NULL;
+	m_hDll = NULL;
+	m_pfRelease = nullptr;
+	m_pfNotify = NULL;
+	m_pNotifyUserData = NULL;
+
+#ifdef __EMSCRIPTEN__
+	// Emscripten環境: DLLは存在しないのでWebSocket版を直接生成
+	m_pSock = GetUraraSockTCP();
+	// m_pfRelease は nullptr のまま（デストラクタで delete する）
+#else
 	TCHAR szFileName[MAX_PATH];
 	PFGETURARASOCKTCP pfGetUraraSockTCP;
 	PFRELEASEURARASOCKTCP pfReleaseUraraSockTCP = nullptr;
@@ -23,12 +34,6 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 	GetModuleFilePath(szFileName, _countof(szFileName));
 	CString strFileName(szFileName);
 	strFileName += _T("UraraSockTCP.dll");
-
-	m_pSock = NULL;
-	m_hDll = NULL;
-	m_pfRelease = nullptr;
-	m_pfNotify = NULL;
-	m_pNotifyUserData = NULL;
 
 #if !defined(_WINDLL)
 	// SDL_LoadObject でクロスプラットフォーム対応
@@ -54,6 +59,7 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 			m_pfRelease = pfReleaseUraraSockTCP;
 		}
 	}
+#endif // __EMSCRIPTEN__
 }
 
 // デストラクタ
@@ -107,6 +113,13 @@ void CUraraSockTCPSBO::SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData
 	// （2008年ビルドのDLLはSetNotifySinkをvtableに持たないため直接呼び出し不可）
 	m_pfNotify = pfNotify;
 	m_pNotifyUserData = pUserData;
+#ifdef __EMSCRIPTEN__
+	// WebSocket版はm_pSock自身がコールバックを管理するため転送する
+	if (m_pSock) {
+		CUraraSockTCPWebSocket* pWs = static_cast<CUraraSockTCPWebSocket*>(m_pSock);
+		pWs->SetNotifySink(pfNotify, pUserData);
+	}
+#endif
 }
 
 // 接続待ち開始
