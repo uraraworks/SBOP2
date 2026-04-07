@@ -14,8 +14,10 @@ class CInfoMapBase;
 class CLibInfoCharCli;
 class CLibInfoMapBase;
 class CLibInfoItem;
+#ifdef _WIN32
 class CDlgMsgLog;
 class CDlgDbg;
+#endif
 
 // クラス宣言
 
