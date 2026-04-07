@@ -346,19 +346,9 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClCompile Include="src\Dialog\DlgMsgLog.cpp" />
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlEffectInfo.cpp" />
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlItemInfo.cpp" />
-    <ClCompile Include="src\Wnd\StaticGrp.cpp" />
-    <ClCompile Include="src\Wnd\StaticMapObjectGrp.cpp" />
-    <ClCompile Include="src\Wnd\StaticMapParts.cpp" />
-    <ClCompile Include="src\Wnd\StaticMapShadow.cpp" />
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndMap.cpp" />
-    <ClCompile Include="src\Wnd\WndMapPartsAnimeList.cpp" />
-    <ClCompile Include="src\Wnd\WndMapPartsGrp.cpp" />
-    <ClCompile Include="src\Wnd\WndMapShadowAnimeList.cpp" />
-    <ClCompile Include="src\Wnd\WndMapShadowGrp.cpp" />
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndSelectGrp.cpp" />
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndSelectItemGrp.cpp" />
-    <ClCompile Include="src\Wnd\WndSelectMapPartsGrp.cpp" />
-    <ClCompile Include="src\Wnd\WndSelectMapShadowGrp.cpp" />
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndToolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -526,19 +516,9 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClInclude Include="src\Dialog\DlgMsgLog.h" />
     <ClInclude Include="src\Wnd\ListCtrlEffectInfo.h" />
     <ClInclude Include="src\Wnd\ListCtrlItemInfo.h" />
-    <ClInclude Include="src\Wnd\StaticGrp.h" />
-    <ClInclude Include="src\Wnd\StaticMapObjectGrp.h" />
-    <ClInclude Include="src\Wnd\StaticMapParts.h" />
-    <ClInclude Include="src\Wnd\StaticMapShadow.h" />
     <ClInclude Include="src\Wnd\WndMap.h" />
-    <ClInclude Include="src\Wnd\WndMapPartsAnimeList.h" />
-    <ClInclude Include="src\Wnd\WndMapPartsGrp.h" />
-    <ClInclude Include="src\Wnd\WndMapShadowAnimeList.h" />
-    <ClInclude Include="src\Wnd\WndMapShadowGrp.h" />
     <ClInclude Include="src\Wnd\WndSelectGrp.h" />
     <ClInclude Include="src\Wnd\WndSelectItemGrp.h" />
-    <ClInclude Include="src\Wnd\WndSelectMapPartsGrp.h" />
-    <ClInclude Include="src\Wnd\WndSelectMapShadowGrp.h" />
     <ClInclude Include="src\Wnd\WndToolbar.h" />
   </ItemGroup>
   <ItemGroup>

@@ -606,43 +606,13 @@
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlItemInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Wnd\StaticGrp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\StaticMapObjectGrp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\StaticMapParts.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\StaticMapShadow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Wnd\WndMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndMapPartsAnimeList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndMapPartsGrp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndMapShadowAnimeList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndMapShadowGrp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndSelectGrp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Wnd\WndSelectItemGrp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndSelectMapPartsGrp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndSelectMapShadowGrp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndToolbar.cpp">
@@ -1121,43 +1091,13 @@
     <ClInclude Include="src\Wnd\ListCtrlItemInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Wnd\StaticGrp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\StaticMapObjectGrp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\StaticMapParts.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\StaticMapShadow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Wnd\WndMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndMapPartsAnimeList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndMapPartsGrp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndMapShadowAnimeList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndMapShadowGrp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndSelectGrp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndSelectItemGrp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndSelectMapPartsGrp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndSelectMapShadowGrp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Wnd\WndToolbar.h">

@@ -318,18 +318,18 @@
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_PARA1.cpp" />
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_CHARINFO.cpp" />
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_STATUS.cpp" />
-    <!-- 依存キャリア: SboCli/src/Wnd (Static系) -->
-    <ClCompile Include="..\SboCli\src\Wnd\StaticGrp.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\StaticMapObjectGrp.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\StaticMapParts.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\StaticMapShadow.cpp" />
-    <!-- 依存キャリア: SboCli/src/Wnd (Wnd系追加) -->
-    <ClCompile Include="..\SboCli\src\Wnd\WndMapPartsAnimeList.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\WndMapPartsGrp.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\WndMapShadowAnimeList.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\WndMapShadowGrp.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\WndSelectMapPartsGrp.cpp" />
-    <ClCompile Include="..\SboCli\src\Wnd\WndSelectMapShadowGrp.cpp" />
+    <!-- 移管済み: SboCliAdminMfc/src/Migrated/Wnd (Static系) -->
+    <ClCompile Include="src\Migrated\Wnd\StaticGrp.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\StaticMapObjectGrp.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\StaticMapParts.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\StaticMapShadow.cpp" />
+    <!-- 移管済み: SboCliAdminMfc/src/Migrated/Wnd (Wnd系追加) -->
+    <ClCompile Include="src\Migrated\Wnd\WndMapPartsAnimeList.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndMapPartsGrp.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndMapShadowAnimeList.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndMapShadowGrp.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndSelectMapPartsGrp.cpp" />
+    <ClCompile Include="src\Migrated\Wnd\WndSelectMapShadowGrp.cpp" />
     <!-- 依存キャリア: SboCli/src (LibSboSoundLoader) -->
     <ClCompile Include="..\SboCli\src\LibSboSoundLoader.cpp" />
     <!-- 依存キャリア: Common/Packet/ADMIN (追加分) -->

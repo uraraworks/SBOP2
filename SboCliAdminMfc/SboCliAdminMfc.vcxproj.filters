@@ -170,12 +170,72 @@
     <ClCompile Include="src\Migrated\Dialog\DlgAdminEfcEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\StaticGrp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\StaticMapObjectGrp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\StaticMapParts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\StaticMapShadow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\WndMapPartsAnimeList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\WndMapPartsGrp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\WndMapShadowAnimeList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\WndMapShadowGrp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\WndSelectMapPartsGrp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Migrated\Wnd\WndSelectMapShadowGrp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\AdminUiApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\StaticGrp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\StaticMapObjectGrp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\StaticMapParts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\StaticMapShadow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\WndMapPartsAnimeList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\WndMapPartsGrp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\WndMapShadowAnimeList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\WndMapShadowGrp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\WndSelectMapPartsGrp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Migrated\Wnd\WndSelectMapShadowGrp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
