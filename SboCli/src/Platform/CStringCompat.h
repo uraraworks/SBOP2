@@ -39,7 +39,7 @@ public:
 	}
 
 	CStringTCompat(const TChar *pszSrc)
-		: m_data((pszSrc != NULL) ? pszSrc : TChar()), m_buffer()
+		: m_data((pszSrc != NULL) ? string_type(pszSrc) : string_type()), m_buffer()
 	{
 	}
 
@@ -80,6 +80,12 @@ public:
 		if (pszSrc != NULL) {
 			m_data += pszSrc;
 		}
+		return *this;
+	}
+
+	CStringTCompat &operator +=(TChar ch)
+	{
+		m_data += ch;
 		return *this;
 	}
 
@@ -283,6 +289,43 @@ public:
 	{
 		size_t nPos = m_data.rfind(ch);
 		return (nPos == string_type::npos) ? -1 : static_cast<int>(nPos);
+	}
+
+	int Delete(int nIndex, int nCount = 1)
+	{
+		if (nIndex < 0 || static_cast<size_t>(nIndex) >= m_data.length()) {
+			return GetLength();
+		}
+		size_t nActual = std::min(static_cast<size_t>(nCount), m_data.length() - static_cast<size_t>(nIndex));
+		m_data.erase(static_cast<size_t>(nIndex), nActual);
+		return GetLength();
+	}
+
+	int Insert(int nIndex, const TChar *pszStr)
+	{
+		if (pszStr == NULL) {
+			return GetLength();
+		}
+		if (nIndex < 0) {
+			nIndex = 0;
+		}
+		if (static_cast<size_t>(nIndex) > m_data.length()) {
+			nIndex = static_cast<int>(m_data.length());
+		}
+		m_data.insert(static_cast<size_t>(nIndex), pszStr);
+		return GetLength();
+	}
+
+	int Insert(int nIndex, TChar ch)
+	{
+		if (nIndex < 0) {
+			nIndex = 0;
+		}
+		if (static_cast<size_t>(nIndex) > m_data.length()) {
+			nIndex = static_cast<int>(m_data.length());
+		}
+		m_data.insert(m_data.begin() + nIndex, ch);
+		return GetLength();
 	}
 
 	TChar operator [](int nIndex) const

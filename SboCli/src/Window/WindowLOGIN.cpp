@@ -752,7 +752,7 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 	if (bFocused) {
 		m_pDib->FillRect(rcField.left, rcField.top, rcField.right - rcField.left, rcField.bottom - rcField.top, RGB(255, 255, 255));
 	}
-	strDraw = pszText;
+	strDraw = Utf8ToTString(pszText);
 	if (bPassword) {
 		strDraw = _T("");
 		for (int i = 0; pszText[i] != _T('\0'); ++i) {

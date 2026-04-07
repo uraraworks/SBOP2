@@ -21,6 +21,14 @@
 #include <tchar.h>
 #else
 // POSIX / Emscripten
+// TCHAR = wchar_t として定義しているので _UNICODE / UNICODE を定義
+#if !defined(_UNICODE)
+#define _UNICODE
+#endif
+#if !defined(UNICODE)
+#define UNICODE
+#endif
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>

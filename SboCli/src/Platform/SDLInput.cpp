@@ -51,6 +51,11 @@ int CSDLInput::ScancodeToVK(SDL_Scancode scancode)
 	// @ キー（日本語配列では VK_OEM_3 に対応）
 	case SDL_SCANCODE_GRAVE:	return VK_OEM_3;
 
+	// 編集キー
+	case SDL_SCANCODE_DELETE:	return VK_DELETE;
+	case SDL_SCANCODE_HOME:		return VK_HOME;
+	case SDL_SCANCODE_END:		return VK_END;
+
 	default:					return 0;
 	}
 }
@@ -96,6 +101,11 @@ SDL_Scancode CSDLInput::VKToScancode(int vk)
 
 	// @ キー（日本語配列）
 	case VK_OEM_3:		return SDL_SCANCODE_GRAVE;
+
+	// 編集キー
+	case VK_DELETE:		return SDL_SCANCODE_DELETE;
+	case VK_HOME:		return SDL_SCANCODE_HOME;
+	case VK_END:		return SDL_SCANCODE_END;
 
 	default:			return SDL_SCANCODE_UNKNOWN;
 	}

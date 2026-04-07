@@ -6,6 +6,19 @@
 
 #if !defined(_WIN32)
 
+// TCHAR = wchar_t として定義しているので _UNICODE / UNICODE を定義
+#if !defined(_UNICODE)
+#define _UNICODE
+#endif
+#if !defined(UNICODE)
+#define UNICODE
+#endif
+
+// 非Windows環境では DirectMusic を使用しない
+#if !defined(NO_DIRECTMUSIC)
+#define NO_DIRECTMUSIC
+#endif
+
 // -----------------------------------------------------------------------
 // 基本型 typedef
 // -----------------------------------------------------------------------
@@ -162,6 +175,9 @@ typedef void *HBRUSH;
 #define VK_CONTROL 0x11
 #define VK_SPACE 0x20
 #define VK_SNAPSHOT 0x2C
+#define VK_DELETE 0x2E
+#define VK_HOME 0x24
+#define VK_END 0x23
 #define VK_OEM_3 0xC0
 #define BN_CLICKED 0
 
