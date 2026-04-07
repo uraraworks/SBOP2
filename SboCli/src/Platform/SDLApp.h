@@ -43,6 +43,9 @@ private:
 	// Win32 メッセージをポーリングする（未縮退のネイティブ通知用）
 	void	PollWin32Messages(void);
 
+	void	InitImGui(SDL_Renderer *pRenderer);
+	void	ShutdownImGui(void);
+
 private:
 	CSDLWindow	m_Window;		// SDLウィンドウ
 	BOOL		m_bInitialized;	// SDL初期化済みフラグ
@@ -57,4 +60,5 @@ private:
 	BOOL		m_bDrawPending;		// 描画保留
 	BOOL		m_bQuit;			// 終了要求
 	BOOL		m_bDestroyCalled;	// Destroy通知済み
+	BOOL		m_bImGuiInitialized;	// ImGui初期化済みフラグ
 };

@@ -39,8 +39,11 @@ public:
 
 	// 描画を行う（SDL: MgrDraw::Draw(SDL_Renderer*) に相当）
 	// SDL_RenderClear は呼び出し元(SDLApp)が行う
-	// SDL_RenderPresent は実装側(MgrDraw::Draw)が行う
+	// SDL_RenderPresent は呼び出し元(SDLApp)が行う（ImGui描画後）
 	virtual void OnDraw(SDL_Renderer *pRenderer) = 0;
+
+	// ImGui UIの描画を行う（SDL_RenderPresent前に呼ばれる）
+	virtual void OnDrawImGui() {}
 
 	// ゲーム終了判定（TRUEなら終了）
 	virtual BOOL IsQuit() = 0;

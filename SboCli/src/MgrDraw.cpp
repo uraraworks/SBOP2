@@ -334,7 +334,6 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 			SDL_RenderFillRect(pRenderer, &stDebugRect);
 		}
 #endif
-		SDL_RenderPresent(pRenderer);
 	}
 }
 

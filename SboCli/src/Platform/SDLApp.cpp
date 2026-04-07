@@ -10,6 +10,9 @@
 #include <emscripten/emscripten.h>
 #include <emscripten/em_js.h>
 #endif
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_sdlrenderer2.h>
 #include "SDLApp.h"
 #include "SDLEventUtil.h"
 #include "SDLInput.h"
@@ -124,6 +127,7 @@ CSDLApp::CSDLApp()
 	m_bDrawPending = FALSE;
 	m_bQuit = FALSE;
 	m_bDestroyCalled = FALSE;
+	m_bImGuiInitialized = FALSE;
 }
 
 CSDLApp::~CSDLApp()
@@ -158,6 +162,7 @@ BOOL CSDLApp::Init(void)
 
 void CSDLApp::Destroy(void)
 {
+	ShutdownImGui();
 	m_Window.Destroy();
 	if (m_bInitialized) {
 #if !defined(_WINDLL) && !defined(_WIN32)
@@ -166,6 +171,42 @@ void CSDLApp::Destroy(void)
 		SDL_Quit();
 		m_bInitialized = FALSE;
 	}
+}
+
+void CSDLApp::InitImGui(SDL_Renderer *pRenderer)
+{
+	if (m_bImGuiInitialized) {
+		return;
+	}
+	if (m_Window.GetSDLWindow() == NULL || pRenderer == NULL) {
+		return;
+	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	// 日本語フォント（将来対応用、現時点ではデフォルトフォント）
+	io.IniFilename = NULL;  // imgui.ini保存を無効化
+
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplSDL2_InitForSDLRenderer(m_Window.GetSDLWindow(), pRenderer);
+	ImGui_ImplSDLRenderer2_Init(pRenderer);
+
+	m_bImGuiInitialized = TRUE;
+}
+
+void CSDLApp::ShutdownImGui(void)
+{
+	if (!m_bImGuiInitialized) {
+		return;
+	}
+	ImGui_ImplSDLRenderer2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+	m_bImGuiInitialized = FALSE;
 }
 
 int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHeight)
@@ -224,6 +265,8 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		SBOP2_DebugMarkStage(3, (m_Window.GetRenderer() != NULL) ? 1 : 0, 0, 160, 64);
 	}
 #endif
+
+	InitImGui(m_Window.GetRenderer());
 
 	m_pHost = pHost;
 	m_dwUpdateInterval = (GAME_UPDATE_FPS > 0) ? (DWORD)(1000 / GAME_UPDATE_FPS) : 16;
@@ -297,6 +340,9 @@ void CSDLApp::RunFrame(void)
 
 	while (SDL_PollEvent(&sdlEvent))
 	{
+		if (m_bImGuiInitialized) {
+			ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+		}
 		switch (sdlEvent.type)
 		{
 		case SDL_QUIT:
@@ -441,6 +487,19 @@ void CSDLApp::RunFrame(void)
 			SBOP2_DebugCountOnDraw((pRenderer != NULL) ? 1 : 0);
 			SBOP2_DebugMarkStage(6, (pRenderer != NULL) ? 1 : 0, 224, 32, 32);
 			m_pHost->OnDraw(pRenderer);
+			// ImGui描画
+			if (m_bImGuiInitialized && pRenderer != NULL) {
+				ImGui_ImplSDLRenderer2_NewFrame();
+				ImGui_ImplSDL2_NewFrame();
+				ImGui::NewFrame();
+				m_pHost->OnDrawImGui();
+				ImGui::Render();
+				ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), pRenderer);
+			}
+			// RenderPresent（MgrDraw::Drawから移動）
+			if (pRenderer != NULL) {
+				SDL_RenderPresent(pRenderer);
+			}
 			m_byFps++;
 		}
 		m_dwLastRenderTime = dwTimeTmp;
