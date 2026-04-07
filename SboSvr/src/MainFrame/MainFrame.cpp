@@ -22,6 +22,7 @@
 #include "UpdateServerInfo.h"
 #include "MainFrame.h"
 #include "Web/HttpServer.h"
+#include "Web/WebSocketBridge.h"
 
 // 定数定義
 
@@ -55,11 +56,13 @@ CMainFrame::CMainFrame()
 	m_pLibInfoTalkEvent	= NULL;
 	m_pLog	= NULL;
 	m_pHttpServer	= NULL;
+	m_pWebSocketBridge	= NULL;
 
 	m_pSock	= new CUraraSockTCPSBO;
 	m_pMgrData	= new CMgrData;
 	m_pUpdateServerInfo	= new CUpdateServerInfo;
 	m_pHttpServer	= new CHttpServer;
+	m_pWebSocketBridge	= new CWebSocketBridge;
 
         m_hFont = CreateFont(12, 0, 0, 0, FW_NORMAL,
                         FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
@@ -76,10 +79,14 @@ CMainFrame::~CMainFrame()
 	if (m_pHttpServer) {
 		m_pHttpServer->Stop();
 	}
+	if (m_pWebSocketBridge) {
+		m_pWebSocketBridge->Stop();
+	}
 	SAFE_DELETE(m_pMgrData);
 	SAFE_DELETE(m_pSock);
 	SAFE_DELETE(m_pUpdateServerInfo);
 	SAFE_DELETE(m_pHttpServer);
+	SAFE_DELETE(m_pWebSocketBridge);
 }
 
 int CMainFrame::MainLoop(HINSTANCE hInstance)
@@ -351,6 +358,20 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 			}
 		}
 	}
+	// WebSocketブリッジサーバーの起動
+	// WebSocketポート = HTTPポート+1（例: 18080 → 18081）
+	if (m_pWebSocketBridge) {
+		unsigned short wWsPort = static_cast<unsigned short>(wHttpPort + 1);
+		if (m_pWebSocketBridge->Start(wWsPort, wPort)) {
+			if (m_pLog) {
+				m_pLog->Write("WebSocketブリッジを起動しました [WsPort:%u → TcpPort:%u]", wWsPort, wPort);
+			}
+		} else {
+			if (m_pLog) {
+				m_pLog->Write("WebSocketブリッジの起動に失敗しました [WsPort:%u]", wWsPort);
+			}
+		}
+	}
 	m_pLibInfoAccount	= m_pMgrData->GetLibInfoAccount();
 	m_pLibInfoMap	= m_pMgrData->GetLibInfoMap();
 	m_pLibInfoMapObject	= m_pMgrData->GetLibInfoMapObject();
@@ -415,6 +436,12 @@ void CMainFrame::OnClose(HWND hWnd)
                 m_pHttpServer->Stop();
                 if (m_pLog) {
                         m_pLog->Write("HTTPサーバーを停止しました");
+                }
+        }
+        if (m_pWebSocketBridge) {
+                m_pWebSocketBridge->Stop();
+                if (m_pLog) {
+                        m_pLog->Write("WebSocketブリッジを停止しました");
                 }
         }
 	m_pSock->Destroy();

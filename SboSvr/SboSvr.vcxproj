@@ -277,6 +277,7 @@
   <ClCompile Include="src\Web\Handlers\MapPartsHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\StaticFileHandler.cpp" />
     <ClCompile Include="src\Web\HttpServer.cpp" />
+    <ClCompile Include="src\Web\WebSocketBridge.cpp" />
     <ClCompile Include="src\Web\HttpTypes.cpp" />
     <ClCompile Include="src\Web\JsonUtils.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -393,6 +394,7 @@
   <ClInclude Include="src\Web\Handlers\MapPartsHandler.h" />
     <ClInclude Include="src\Web\Handlers\StaticFileHandler.h" />
     <ClInclude Include="src\Web\HttpServer.h" />
+    <ClInclude Include="src\Web\WebSocketBridge.h" />
     <ClInclude Include="src\Web\HttpTypes.h" />
     <ClInclude Include="src\Web\JsonUtils.h" />
     <ClInclude Include="src\Web\AuthProvider.h" />
