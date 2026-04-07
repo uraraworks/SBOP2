@@ -71,9 +71,11 @@ typedef DWORD COLORREF;
 typedef unsigned long ULONG;
 typedef long long INT_PTR;
 typedef unsigned long long ULONG_PTR;
+typedef unsigned long long ULONGLONG;
 typedef std::uint64_t DWORDLONG;
 typedef void *HMENU;
 typedef void *HBRUSH;
+typedef void *HDWP;
 
 // -----------------------------------------------------------------------
 // 定数マクロ
@@ -102,6 +104,17 @@ typedef void *HBRUSH;
 #define MAX_PATH 260
 #define _MAX_PATH 260
 #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+#define INVALID_HANDLE_VALUE ((HANDLE)(LONG_PTR)-1)
+#define GENERIC_READ 0x80000000L
+#define GENERIC_WRITE 0x40000000L
+#define FILE_BEGIN 0
+#define FILE_CURRENT 1
+#define FILE_END 2
+#define OPEN_EXISTING 3
+#define OPEN_ALWAYS 4
+#define CREATE_ALWAYS 2
+#define FILE_ATTRIBUTE_NORMAL 0x00000080
+#define FILE_SHARE_READ 0x00000001
 
 #define CP_UTF8 65001
 #define CP_ACP 0
@@ -139,6 +152,8 @@ typedef void *HBRUSH;
 #define SWP_NOSIZE 0x0001
 #define SWP_NOZORDER 0x0004
 #define SWP_NOACTIVATE 0x0010
+#define SWP_NOOWNERZORDER 0x0200
+#define LF_FACESIZE 32
 #define FLASHW_TRAY 0x00000002
 #define ABS_AUTOHIDE 0x0000001
 #define ABM_GETSTATE 0x00000004
@@ -190,8 +205,19 @@ typedef void *HBRUSH;
 #define _T(x) L##x
 #define TEXT(x) _T(x)
 
+#ifndef _countof
+#define _countof(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 #ifndef RGB
 #define RGB(r,g,b) ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16)))
+#endif
+
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
 #endif
 
 // -----------------------------------------------------------------------
@@ -231,6 +257,16 @@ typedef struct _GUID {
 	WORD Data3;
 	BYTE Data4[8];
 } GUID;
+
+inline bool operator==(const GUID& a, const GUID& b)
+{
+	return (a.Data1 == b.Data1) && (a.Data2 == b.Data2) && (a.Data3 == b.Data3) &&
+		(memcmp(a.Data4, b.Data4, 8) == 0);
+}
+inline bool operator!=(const GUID& a, const GUID& b)
+{
+	return !(a == b);
+}
 
 typedef struct tagBITMAPINFOHEADER {
 	DWORD biSize;
@@ -314,11 +350,55 @@ typedef struct tagCREATESTRUCTW {
 	DWORD dwExStyle;
 } CREATESTRUCTW, *LPCREATESTRUCT;
 
+typedef struct tagNMHDR {
+	HWND hwndFrom;
+	UINT_PTR idFrom;
+	UINT code;
+} NMHDR, *LPNMHDR;
+
 typedef struct tagCRITICAL_SECTION {
 	SDL_mutex *pMutex;
 } CRITICAL_SECTION, *LPCRITICAL_SECTION;
 
 // ウィンドウプロシージャ型
 typedef LRESULT (CALLBACK *WNDPROC)(HWND, UINT, WPARAM, LPARAM);
+
+// WPARAM/LPARAM 合成マクロ
+#ifndef MAKELPARAM
+#define MAKELPARAM(l,h) ((LPARAM)(DWORD)MAKELONG(l,h))
+#endif
+#ifndef MAKEWPARAM
+#define MAKEWPARAM(l,h) ((WPARAM)(DWORD)MAKELONG(l,h))
+#endif
+#ifndef LOWORD
+#define LOWORD(l) ((WORD)(((DWORD_PTR)(l)) & 0xffff))
+#endif
+#ifndef HIWORD
+#define HIWORD(l) ((WORD)((((DWORD_PTR)(l)) >> 16) & 0xffff))
+#endif
+#ifndef GET_X_LPARAM
+#define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
+#endif
+#ifndef GET_Y_LPARAM
+#define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
+#endif
+
+// CRect クラス（RECT の C++ ラッパー）
+struct CRect : public RECT {
+    CRect() { left = top = right = bottom = 0; }
+    CRect(LONG l, LONG t, LONG r, LONG b) { left = l; top = t; right = r; bottom = b; }
+    CRect(const RECT &rc) { left = rc.left; top = rc.top; right = rc.right; bottom = rc.bottom; }
+    LONG Width() const { return right - left; }
+    LONG Height() const { return bottom - top; }
+    bool IsRectEmpty() const { return (right <= left) || (bottom <= top); }
+    void SetRect(LONG l, LONG t, LONG r, LONG b) { left = l; top = t; right = r; bottom = b; }
+    void SetRectEmpty() { left = top = right = bottom = 0; }
+    bool PtInRect(POINT pt) const {
+        return (pt.x >= left) && (pt.x < right) && (pt.y >= top) && (pt.y < bottom);
+    }
+    CRect& operator=(const RECT &rc) {
+        left = rc.left; top = rc.top; right = rc.right; bottom = rc.bottom; return *this;
+    }
+};
 
 #endif // !_WIN32

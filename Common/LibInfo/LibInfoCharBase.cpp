@@ -5,7 +5,9 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#ifdef _WIN32
 #include <tchar.h>
+#endif
 #include <math.h>
 #include <string.h>
 #include "LibInfoCharBase.h"

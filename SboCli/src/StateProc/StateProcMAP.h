@@ -139,6 +139,8 @@ protected:
 	CLibInfoCharCli *m_pLibInfoChar;   // キャラ情報ライブラリ
 	CLibInfoMapBase *m_pLibInfoMap;    // マップ情報ライブラリ
 	CLibInfoItem    *m_pLibInfoItem;   // アイテム情報ライブラリ
+#ifdef _WIN32
 	CDlgMsgLog      *m_pDlgMsgLog;    // メッセージログウィンドウ
 	CDlgDbg         *m_pDlgDbg;       // デバッグウィンドウ
+#endif
 } CStateProcMAP, *PCStateProcMAP;

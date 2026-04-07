@@ -443,6 +443,9 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	int i, nCount;
 	PBYTE pRet, pSrc, pTmp;
 	DWORD dwSize, dwTmp;
+	// セーブ互換用変換値（ピクセル→旧単位）。Phase 6 で除去予定
+	int nSaveMapX;
+	int nSaveMapY;
 
 	pRet	= NULL;
 	pSrc	= NULL;
@@ -454,9 +457,8 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	}
 	pRet = new BYTE[dwSize];
 
-	// セーブ互換用変換値（ピクセル→旧単位）。Phase 6 で除去予定
-	int nSaveMapX = m_nMapX / HALF_TILE;
-	int nSaveMapY = m_nMapY / HALF_TILE;
+	nSaveMapX = m_nMapX / HALF_TILE;
+	nSaveMapY = m_nMapY / HALF_TILE;
 
 	switch (nNo) {
 	case 0:	pSrc = (PBYTE)&nSaveMapX;	break;

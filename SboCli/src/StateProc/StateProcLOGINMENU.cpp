@@ -323,7 +323,7 @@ void CStateProcLOGINMENU::OnWindowMsgSTYLESELECT(DWORD dwPara)
 		m_pWindowNAMEINPUT->m_pInfoCharCli->MakeCharGrp();
 		break;
 
-	case -1:
+	case (DWORD)-1:
 		// キャンセルされたので前の画面に戻る
 		m_pMgrWindow->Delete(WINDOWTYPE_STYLESELECT);
 		m_pMgrData->PostWindowMessage(WINDOWTYPE_LOGINMENU, 1);
@@ -342,7 +342,7 @@ void CStateProcLOGINMENU::OnWindowMsgNAMEINPUT(DWORD dwPara)
 		m_pSock->Send(&Packet);
 		break;
 
-	case -1:
+	case (DWORD)-1:
 		// キャンセルされたので前の画面に戻る
 		m_pMgrWindow->Delete(WINDOWTYPE_NAMEINPUT);
 		m_pMgrData->PostWindowMessage(WINDOWTYPE_FAMILYTYPE, 0);

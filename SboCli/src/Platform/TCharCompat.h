@@ -312,6 +312,83 @@ inline int MessageBox(HWND, LPCTSTR, LPCTSTR, UINT)
 // MultiByteToWideChar / WideCharToMultiByte（完全版）
 // -----------------------------------------------------------------------
 
+// -----------------------------------------------------------------------
+// UTF-8 / UTF-16(wchar_t) 変換ヘルパー（std::codecvt_utf8_utf16 代替）
+// -----------------------------------------------------------------------
+
+/// UTF-8 バイト列をワイド文字列(UTF-32/16)に変換（内部ヘルパー）
+inline std::wstring Utf8ToWstring(const char *pszSrc, size_t nSrcLen)
+{
+	std::wstring result;
+	const unsigned char *p = reinterpret_cast<const unsigned char *>(pszSrc);
+	const unsigned char *pEnd = p + nSrcLen;
+	while (p < pEnd) {
+		uint32_t cp = 0;
+		if (*p < 0x80) {
+			cp = *p++;
+		} else if ((*p & 0xE0) == 0xC0) {
+			cp = (*p++ & 0x1F) << 6;
+			if (p < pEnd) cp |= (*p++ & 0x3F);
+		} else if ((*p & 0xF0) == 0xE0) {
+			cp = (*p++ & 0x0F) << 12;
+			if (p < pEnd) cp |= (*p++ & 0x3F) << 6;
+			if (p < pEnd) cp |= (*p++ & 0x3F);
+		} else if ((*p & 0xF8) == 0xF0) {
+			cp = (*p++ & 0x07) << 18;
+			if (p < pEnd) cp |= (*p++ & 0x3F) << 12;
+			if (p < pEnd) cp |= (*p++ & 0x3F) << 6;
+			if (p < pEnd) cp |= (*p++ & 0x3F);
+		} else {
+			++p; // 無効バイトはスキップ
+			continue;
+		}
+		if (sizeof(wchar_t) == 2 && cp >= 0x10000) {
+			// UTF-16 サロゲートペア
+			cp -= 0x10000;
+			result.push_back(static_cast<wchar_t>(0xD800 | (cp >> 10)));
+			result.push_back(static_cast<wchar_t>(0xDC00 | (cp & 0x3FF)));
+		} else {
+			result.push_back(static_cast<wchar_t>(cp));
+		}
+	}
+	return result;
+}
+
+/// ワイド文字列をUTF-8バイト列に変換（内部ヘルパー）
+inline std::string WstringToUtf8(const wchar_t *pszSrc, size_t nSrcLen)
+{
+	std::string result;
+	const wchar_t *p = pszSrc;
+	const wchar_t *pEnd = p + nSrcLen;
+	while (p < pEnd) {
+		uint32_t cp = static_cast<uint32_t>(*p++);
+		// UTF-16 サロゲートペア処理
+		if (sizeof(wchar_t) == 2 && cp >= 0xD800 && cp <= 0xDBFF && p < pEnd) {
+			uint32_t lo = static_cast<uint32_t>(*p);
+			if (lo >= 0xDC00 && lo <= 0xDFFF) {
+				cp = 0x10000 + ((cp - 0xD800) << 10) + (lo - 0xDC00);
+				++p;
+			}
+		}
+		if (cp < 0x80) {
+			result.push_back(static_cast<char>(cp));
+		} else if (cp < 0x800) {
+			result.push_back(static_cast<char>(0xC0 | (cp >> 6)));
+			result.push_back(static_cast<char>(0x80 | (cp & 0x3F)));
+		} else if (cp < 0x10000) {
+			result.push_back(static_cast<char>(0xE0 | (cp >> 12)));
+			result.push_back(static_cast<char>(0x80 | ((cp >> 6) & 0x3F)));
+			result.push_back(static_cast<char>(0x80 | (cp & 0x3F)));
+		} else {
+			result.push_back(static_cast<char>(0xF0 | (cp >> 18)));
+			result.push_back(static_cast<char>(0x80 | ((cp >> 12) & 0x3F)));
+			result.push_back(static_cast<char>(0x80 | ((cp >> 6) & 0x3F)));
+			result.push_back(static_cast<char>(0x80 | (cp & 0x3F)));
+		}
+	}
+	return result;
+}
+
 /// マルチバイト文字列をワイド文字列に変換する
 inline int MultiByteToWideChar(UINT, DWORD, LPCSTR pszSrc, int nSrcLen, LPWSTR pszDst, int nDstLen)
 {
@@ -319,15 +396,8 @@ inline int MultiByteToWideChar(UINT, DWORD, LPCSTR pszSrc, int nSrcLen, LPWSTR p
 		return 0;
 	}
 
-	std::string strSrc;
-	if (nSrcLen < 0) {
-		strSrc = pszSrc;
-	} else {
-		strSrc.assign(pszSrc, pszSrc + nSrcLen);
-	}
-
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	std::wstring strWide = converter.from_bytes(strSrc);
+	size_t srcLen = (nSrcLen < 0) ? strlen(pszSrc) : static_cast<size_t>(nSrcLen);
+	std::wstring strWide = Utf8ToWstring(pszSrc, srcLen);
 	int nRequired = (int)strWide.size() + ((nSrcLen < 0) ? 1 : 0);
 
 	if ((pszDst == NULL) || (nDstLen <= 0)) {
@@ -350,15 +420,8 @@ inline int WideCharToMultiByte(UINT, DWORD, LPCWSTR pszSrc, int nSrcLen, LPSTR p
 		return 0;
 	}
 
-	std::wstring strSrc;
-	if (nSrcLen < 0) {
-		strSrc = pszSrc;
-	} else {
-		strSrc.assign(pszSrc, pszSrc + nSrcLen);
-	}
-
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	std::string strUtf8 = converter.to_bytes(strSrc);
+	size_t srcLen = (nSrcLen < 0) ? wcslen(pszSrc) : static_cast<size_t>(nSrcLen);
+	std::string strUtf8 = WstringToUtf8(pszSrc, srcLen);
 	int nRequired = (int)strUtf8.size() + ((nSrcLen < 0) ? 1 : 0);
 
 	if ((pszDst == NULL) || (nDstLen <= 0)) {

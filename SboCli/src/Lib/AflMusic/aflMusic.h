@@ -1,8 +1,10 @@
 ﻿#ifndef __INC_AFLMUSIC
 
+#ifdef _WIN32
 #ifndef _INC_MMSYSTEM
 	#include <mmsystem.h>
 #endif
+#endif // _WIN32
 #include <stdio.h>
 #include "AflStd.h"
 #include "AflWinTool.h"

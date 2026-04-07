@@ -53,6 +53,20 @@ public:
 	{
 	}
 
+	// 異なる文字型からの変換コンストラクタ（wchar_t→char / char→wchar_t）
+	template<typename TOther>
+	explicit CStringTCompat(const CStringTCompat<TOther> &strSrc)
+		: m_data(), m_buffer()
+	{
+		const TOther *pSrc = strSrc.GetString();
+		if (pSrc != NULL) {
+			while (*pSrc) {
+				m_data.push_back(static_cast<TChar>(*pSrc));
+				++pSrc;
+			}
+		}
+	}
+
 	CStringTCompat &operator =(const CStringTCompat &strSrc)
 	{
 		if (this != &strSrc) {
@@ -138,7 +152,7 @@ public:
 		const size_t nBufferLength = static_cast<size_t>(nMinBufferLength) + 1;
 		m_buffer.assign(nBufferLength, 0);
 		if (!m_data.empty()) {
-			const size_t nCopyLength = std::min(m_data.length(), nBufferLength - 1);
+			const size_t nCopyLength = (std::min)(m_data.length(), nBufferLength - 1);
 			std::copy_n(m_data.c_str(), nCopyLength, m_buffer.begin());
 			m_buffer[nCopyLength] = 0;
 		}
@@ -182,7 +196,7 @@ public:
 	int CompareNoCase(const TChar *pszSrc) const
 	{
 		const string_type strSrc = (pszSrc != NULL) ? pszSrc : string_type();
-		size_t nMin = std::min(m_data.length(), strSrc.length());
+		size_t nMin = (std::min)(m_data.length(), strSrc.length());
 		for (size_t i = 0; i < nMin; ++i) {
 			const TChar chLeft = BrowserCompatToLower(m_data[i]);
 			const TChar chRight = BrowserCompatToLower(strSrc[i]);
@@ -242,7 +256,7 @@ public:
 		size_t nPos = static_cast<size_t>(nFirst);
 		size_t nLength = m_data.length() - nPos;
 		if (nCount >= 0) {
-			nLength = std::min(nLength, static_cast<size_t>(nCount));
+			nLength = (std::min)(nLength, static_cast<size_t>(nCount));
 		}
 		return CStringTCompat(m_data.substr(nPos, nLength));
 	}
@@ -252,7 +266,7 @@ public:
 		if (nCount <= 0) {
 			return CStringTCompat();
 		}
-		return CStringTCompat(m_data.substr(0, std::min(m_data.length(), static_cast<size_t>(nCount))));
+		return CStringTCompat(m_data.substr(0, (std::min)(m_data.length(), static_cast<size_t>(nCount))));
 	}
 
 	CStringTCompat Right(int nCount) const
@@ -260,7 +274,7 @@ public:
 		if (nCount <= 0) {
 			return CStringTCompat();
 		}
-		const size_t nLength = std::min(m_data.length(), static_cast<size_t>(nCount));
+		const size_t nLength = (std::min)(m_data.length(), static_cast<size_t>(nCount));
 		return CStringTCompat(m_data.substr(m_data.length() - nLength, nLength));
 	}
 
@@ -296,7 +310,7 @@ public:
 		if (nIndex < 0 || static_cast<size_t>(nIndex) >= m_data.length()) {
 			return GetLength();
 		}
-		size_t nActual = std::min(static_cast<size_t>(nCount), m_data.length() - static_cast<size_t>(nIndex));
+		size_t nActual = (std::min)(static_cast<size_t>(nCount), m_data.length() - static_cast<size_t>(nIndex));
 		m_data.erase(static_cast<size_t>(nIndex), nActual);
 		return GetLength();
 	}

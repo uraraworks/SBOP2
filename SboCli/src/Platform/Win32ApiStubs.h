@@ -549,4 +549,139 @@ inline errno_t _tfopen_s(FILE **ppFile, LPCTSTR pszFileName, LPCTSTR pszMode)
 	return (*ppFile == NULL) ? errno : 0;
 }
 
+// -----------------------------------------------------------------------
+// ファイルAPI スタブ（HANDLE ベース → fopen/fread にマッピング）
+// -----------------------------------------------------------------------
+
+/// CreateFileA: fopenでファイルを開き、HANDLEとして返す
+inline HANDLE CreateFileA(
+	LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD, LPVOID,
+	DWORD dwCreationDisposition, DWORD, HANDLE)
+{
+	const char *mode = "rb";
+	if (dwDesiredAccess == GENERIC_WRITE) {
+		mode = (dwCreationDisposition == OPEN_ALWAYS) ? "ab" : "wb";
+	} else if ((dwDesiredAccess & GENERIC_WRITE) != 0) {
+		mode = (dwCreationDisposition == OPEN_ALWAYS) ? "r+b" : "w+b";
+	}
+	if (dwCreationDisposition == OPEN_EXISTING) {
+		// ファイルが存在しなければ失敗
+		FILE *fp = fopen(lpFileName, mode);
+		return fp ? (HANDLE)fp : INVALID_HANDLE_VALUE;
+	}
+	FILE *fp = fopen(lpFileName, mode);
+	return fp ? (HANDLE)fp : INVALID_HANDLE_VALUE;
+}
+
+/// CreateFile (LPCTSTR版): wchar_t パスを UTF-8 変換して CreateFileA を呼ぶ
+inline HANDLE CreateFile(
+	LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
+	LPVOID lpSecurityAttributes, DWORD dwCreationDisposition,
+	DWORD dwFlagsAndAttributes, HANDLE hTemplateFile)
+{
+	std::string path = BrowserCompatWideToUtf8(lpFileName);
+	return CreateFileA(path.c_str(), dwDesiredAccess, dwShareMode,
+		lpSecurityAttributes, dwCreationDisposition,
+		dwFlagsAndAttributes, hTemplateFile);
+}
+
+/// ReadFile: freadでデータを読み込む
+inline BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead,
+	LPDWORD lpNumberOfBytesRead, LPVOID)
+{
+	if (hFile == INVALID_HANDLE_VALUE || hFile == NULL) return FALSE;
+	size_t n = fread(lpBuffer, 1, nNumberOfBytesToRead, (FILE*)hFile);
+	if (lpNumberOfBytesRead) *lpNumberOfBytesRead = (DWORD)n;
+	return TRUE;
+}
+
+/// WriteFile: fwriteでデータを書き込む
+inline BOOL WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite,
+	LPDWORD lpNumberOfBytesWritten, LPVOID)
+{
+	if (hFile == INVALID_HANDLE_VALUE || hFile == NULL) return FALSE;
+	size_t n = fwrite(lpBuffer, 1, nNumberOfBytesToWrite, (FILE*)hFile);
+	if (lpNumberOfBytesWritten) *lpNumberOfBytesWritten = (DWORD)n;
+	return TRUE;
+}
+
+/// SetFilePointer: fseekでファイル位置を移動
+inline DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove, LPVOID, DWORD dwMoveMethod)
+{
+	if (hFile == INVALID_HANDLE_VALUE || hFile == NULL) return (DWORD)-1;
+	int origin = SEEK_SET;
+	if (dwMoveMethod == FILE_CURRENT) origin = SEEK_CUR;
+	else if (dwMoveMethod == FILE_END) origin = SEEK_END;
+	fseek((FILE*)hFile, lDistanceToMove, origin);
+	return (DWORD)ftell((FILE*)hFile);
+}
+
+/// GetFileSize: fseek/ftellでファイルサイズを取得
+inline DWORD GetFileSize(HANDLE hFile, LPDWORD)
+{
+	if (hFile == INVALID_HANDLE_VALUE || hFile == NULL) return (DWORD)-1;
+	long pos = ftell((FILE*)hFile);
+	fseek((FILE*)hFile, 0, SEEK_END);
+	long size = ftell((FILE*)hFile);
+	fseek((FILE*)hFile, pos, SEEK_SET);
+	return (DWORD)size;
+}
+
+/// CloseHandle: fcloseでファイルを閉じる
+inline BOOL CloseHandle(HANDLE hObject)
+{
+	if (hObject == INVALID_HANDLE_VALUE || hObject == NULL) return FALSE;
+	fclose((FILE*)hObject);
+	return TRUE;
+}
+
+// -----------------------------------------------------------------------
+// 文字列操作スタブ
+// -----------------------------------------------------------------------
+
+/// _strnicmp: strncasecmpにマッピング
+inline int _strnicmp(const char *s1, const char *s2, size_t n)
+{
+	return strncasecmp(s1, s2, n);
+}
+
+/// _vsnprintf: vsnprintfにマッピング
+#ifndef _vsnprintf
+#define _vsnprintf vsnprintf
+#endif
+
+/// StringCchPrintfA: snprintfにマッピング
+#ifndef StringCchPrintfA
+#define StringCchPrintfA(buf, cch, fmt, ...) snprintf((buf), (cch), (fmt), ##__VA_ARGS__)
+#endif
+
+/// IsDBCSLeadByte: 非Windows環境では常にFALSE
+inline BOOL IsDBCSLeadByte(BYTE)
+{
+	return FALSE;
+}
+
+// -----------------------------------------------------------------------
+// ウィンドウ操作スタブ（Admin UI用 - 非Windows環境では何もしない）
+// -----------------------------------------------------------------------
+
+inline BOOL IsWindow(HWND) { return FALSE; }
+inline BOOL GetClientRect(HWND, LPRECT pRect) { if (pRect) ZeroMemory(pRect, sizeof(RECT)); return FALSE; }
+// GetWindowRect は WndProcCompat.h で定義済み（再定義を避けるため削除）
+inline BOOL ScreenToClient(HWND, LPPOINT) { return FALSE; }
+inline HWND GetDlgItem(HWND, UINT) { return NULL; }
+// SetRect は WndProcCompat.h で定義済み（再定義を避けるため削除）
+inline BOOL UnionRect(LPRECT dst, const RECT* a, const RECT* b)
+{
+	if (!dst || !a || !b) return FALSE;
+	dst->left = (a->left < b->left) ? a->left : b->left;
+	dst->top = (a->top < b->top) ? a->top : b->top;
+	dst->right = (a->right > b->right) ? a->right : b->right;
+	dst->bottom = (a->bottom > b->bottom) ? a->bottom : b->bottom;
+	return TRUE;
+}
+inline HDWP BeginDeferWindowPos(int) { return NULL; }
+inline HDWP DeferWindowPos(HDWP h, HWND, HWND, int, int, int, int, UINT) { return h; }
+inline BOOL EndDeferWindowPos(HDWP) { return TRUE; }
+
 #endif // !_WIN32

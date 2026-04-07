@@ -71,7 +71,7 @@ public:
             nIndex = 0;
         }
         const size_type requested = static_cast<size_type>(nIndex);
-        const size_type pos = std::min(requested, this->size());
+        const size_type pos = (std::min)(requested, this->size());
         this->insert(this->begin() + static_cast<std::ptrdiff_t>(pos), newElement);
     }
 

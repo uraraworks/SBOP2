@@ -6,7 +6,9 @@
 
 #include "stdafx.h"
 #include <stdio.h>
+#ifdef _WIN32
 #include <strsafe.h>
+#endif
 #include "../myLib/myString.h"
 #include "TextOutput.h"
 

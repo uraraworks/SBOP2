@@ -8,7 +8,9 @@
 
 #include "resource.h"
 #include "LayoutHelper.h"
+#ifdef _WIN32
 #include "LogViewCtrl.h"
+#endif
 
 class CMgrData;
 class CTextOutput;

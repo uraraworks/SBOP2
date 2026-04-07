@@ -110,7 +110,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 			m_pMgrWindow->Delete(WINDOWTYPE_SEX);
 			m_pWindowSEX = NULL;
 			break;
-		case -1:
+		case (DWORD)-1:
 			m_nSex = m_nSexBack;
 			break;
 		default:
@@ -129,7 +129,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 			m_wHairTypeIDBack = m_wHairTypeID;
 			bAnime = TRUE;
 			break;
-		case -1:
+		case (DWORD)-1:
 			m_wHairTypeID = m_wHairTypeIDBack;
 			m_pWindowHAIRTYPE = NULL;
 			bAnime = TRUE;
@@ -150,7 +150,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 			m_wHairColorIDBack = m_wHairColorID;
 			bAnime = TRUE;
 			break;
-		case -1:
+		case (DWORD)-1:
 			m_wHairColorID = m_wHairColorIDBack;
 			m_pWindowHAIRCOLOR = NULL;
 			bAnime = TRUE;
@@ -170,7 +170,7 @@ void CWindowSTYLESELECT::OnWindowMsg(int nType, DWORD dwPara)
 			m_pWindowEYECOLOR = NULL;
 			m_wEyeColorIDBack = m_wEyeColorID;
 			break;
-		case -1:
+		case (DWORD)-1:
 			m_wEyeColorID = m_wEyeColorIDBack;
 			m_pWindowEYECOLOR = NULL;
 			break;

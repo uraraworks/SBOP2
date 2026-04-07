@@ -1,6 +1,8 @@
 ﻿#pragma unmanaged
 
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include <fstream>
 #include "aflWinTool.h"
@@ -25,10 +27,10 @@
 #endif 
 */
   
-#ifndef _WFL_NONDMUSIC
+#if !defined(_WFL_NONDMUSIC) && !defined(NO_DIRECTMUSIC)
 	#include <dmusicc.h>
 	#include <dmusici.h>
-#endif //_WFL_NONDMUSIC
+#endif
 
 
 

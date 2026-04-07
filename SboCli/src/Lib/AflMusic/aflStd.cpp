@@ -68,8 +68,9 @@ THANDLE AflThread::createThread(LPVOID pAddress,LPVOID pvData,LPDWORD pdwId)
 		#else		//WIN32APIスレッド
 			hThread = ::CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)pAddress,pvData,0,pdwId);				//スレッドの発生
 		#endif
-	#else			//POSIXスレッド
-		pthread_create(&hThread,NULL,(LPVOID(*)(LPVOID))pAddress,pvData);
+	#else			// SDL2スレッド（Emscripten対応）
+		hThread = SDL_CreateThread((SDL_ThreadFunction)pAddress, "AflThread", pvData);
+		(void)pdwId; // SDL2 はスレッドIDをここでは返さない
 	#endif
 	return hThread;
 }
@@ -80,8 +81,8 @@ bool AflThread::closeThread(THANDLE hThread)
 	{
 	#ifdef _WIN32	//WIN32ハンドル用
 		::CloseHandle(hThread);
-	#else			//POSIXハンドル用
-		pthread_detach(hThread);
+	#else			// SDL2スレッドのデタッチ
+		SDL_DetachThread(hThread);
 	#endif
 		return true;
 	}
@@ -162,7 +163,12 @@ bool AflThread::startThread(AflThreadProc* paflThreadProc,LPVOID pvData)
 	return m_hThread != 0;
 }
 //------------------------------------------------------------
+#ifdef _WIN32
 DWORD AflThread::threadProcServer(LPVOID pVoid)
+#else
+// SDL_CreateThread / pthread が要求する int 返値シグネチャ
+int AflThread::threadProcServer(LPVOID pVoid)
+#endif
 {
 	//スレッド初期化用データの設定
 	LPVOID* ppThreadData = (LPVOID*)pVoid;
@@ -172,7 +178,7 @@ DWORD AflThread::threadProcServer(LPVOID pVoid)
 	//仮想関数の呼び出し
 	pAflThread->m_dwExitCode = pAflThread->threadProcRouter(pvData);
 	pAflThread->m_bEnable = false;
-	return pAflThread->m_dwExitCode;
+	return (int)pAflThread->m_dwExitCode;
 }
 DWORD AflThread::threadProcRouter(LPVOID pvData)
 {
@@ -454,14 +460,14 @@ LPSTR AflStd::replacString(LPCSTR pData,int nCount,LPCSTR pString[])
 	}
 	for(i=0;;i++)
 	{
-		char* pBuff2 = 0;
+		const char* pBuff2 = 0;
 		for(l=0,k=0;k<nCount;k++)
 		{
-			char* pBuff3 = strstr(pBuff,pString[k*2]);
+			const char* pBuff3 = strstr(pBuff,pString[k*2]);
 			if((pBuff3 < pBuff2 || pBuff2 == 0) && pBuff3 != 0)
 			{
 				pBuff2 = pBuff3;
-				l = k;  	
+				l = k;
 			}
 		}
 		if(pBuff2==0)
@@ -470,7 +476,7 @@ LPSTR AflStd::replacString(LPCSTR pData,int nCount,LPCSTR pString[])
 		++pnCount[l];
 		pBuff+=strlen(pString[l*2]);
 	}
-	
+
 	int nLength=0;
 	for(j=0;j<nCount;j++)
 	{
@@ -481,10 +487,10 @@ LPSTR AflStd::replacString(LPCSTR pData,int nCount,LPCSTR pString[])
 
 	for(i=0,j=0;pData[i] != 0;)
 	{
-		char* pBuff2 = 0;
+		const char* pBuff2 = 0;
 		for(l=0,k=0;k<nCount;k++)
 		{
-			char* pBuff3 = strstr(pBuff,pString[k*2]);
+			const char* pBuff3 = strstr(pBuff,pString[k*2]);
 			if((pBuff3 < pBuff2 || pBuff2 == 0) && pBuff3 != 0)
 			{
 				pBuff2 = pBuff3;

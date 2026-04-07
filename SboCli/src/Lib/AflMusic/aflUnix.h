@@ -10,6 +10,7 @@
 	#define THANDLE HANDLE
 	typedef int socklen_t;
 #else
+	#include <SDL2/SDL.h>
 	#include <unistd.h>
 	#include <sys/types.h>
 	#include <sys/time.h>
@@ -18,12 +19,11 @@
 	#include <sys/ioctl.h>
 	#include <netinet/in.h>
 	#include <arpa/inet.h>
-	#include <pthread.h>
 	#include <unistd.h>
 	#include <netdb.h>
 
 
-	#define Sleep(msec)	usleep(msec*1000)
+	#define Sleep(msec)	SDL_Delay(msec)
 	#define ZeroMemory(dest,length)	memset(dest,0,length)
 
 	typedef struct tagRect{int left,top,right,bottom;}RECT,*LPRECT,*PRECT;
@@ -38,12 +38,14 @@
 	typedef char CHAR,TCHAR,*PCHAR,*LPCHAR;
 	typedef unsigned char UCHAR,*PUCHAR,*LPUCHAR;
 	typedef short SHORT,*PSHORT,*LPSHORT;
+	typedef long LONG,*PLONG,*LPLONG;
 	typedef void *LPVOID,*PVOID;
 	typedef int *PINT,INT,HANDLE;
 	typedef void const* LPCVOID;
 	typedef float FLOAT,*PFLOAT;
-	#define THANDLE pthread_t
-	
+	// SDL2スレッドを使用（Emscripten対応）
+	#define THANDLE SDL_Thread*
+
 	#define TRUE 1
 	#define FALSE 0
 
@@ -53,12 +55,10 @@
 	#define SOCKET_ERROR            (-1)
 	#define ioctlsocket ioctl
 	#define closesocket close
-	
+
 	inline long timeGetTime()
 	{
-		timeval tv;
-		gettimeofday(&tv,NULL);
-		return tv.tv_usec;
+		return (long)SDL_GetTicks();
 	}
 
 #endif

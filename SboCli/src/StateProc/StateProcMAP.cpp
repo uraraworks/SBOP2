@@ -62,8 +62,10 @@
 #include "WindowPLACEINFORMATION.h"
 #include "WindowCHAR_STATUS.h"
 #include "WindowCHAR_STATUS4.h"
+#ifdef _WIN32
 #include "DlgMsgLog.h"
 #include "DlgDbg.h"
+#endif
 #include "MainFrame.h"
 #include "MgrData.h"
 
@@ -159,8 +161,10 @@ CStateProcMAP::CStateProcMAP()
 	m_pLibInfoChar		= NULL;
 	m_pLibInfoMap		= NULL;
 	m_pLibInfoItem		= NULL;
+#ifdef _WIN32
 	m_pDlgMsgLog		= NULL;
 	m_pDlgDbg			= NULL;
+#endif
 }
 
 
@@ -1071,17 +1075,23 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 				KeyProc(0, FALSE);
 			}
 			strTmp.Format(_T("%s：%s"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoChar->m_strSpeak);
+#ifdef _WIN32
 			if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(strTmp, pInfoChar->m_clSpeak); }
+#endif
 		}
 		break;
 
 	case MAINFRAMEMSG_RENEWCHARCOUNT:	// キャラ数更新
 		m_pMgrData->SetCharCount(dwParam);
+#ifdef _WIN32
 		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
+#endif
 		break;
 
 	case MAINFRAMEMSG_RENEWONLINECOUNT:	// オンライン数更新
+#ifdef _WIN32
 		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
+#endif
 		break;
 
 	case MAINFRAMEMSG_RENEWSYSTEMMSG:	// システムメッセージ更新
@@ -1099,7 +1109,9 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 				pSystemMsg = m_pMgrData->GetSystemMsg(i);
 
 				if (pSystemMsg->bAddLog) {
+#ifdef _WIN32
 					if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(pSystemMsg->strMsg, pSystemMsg->clMsg); }
+#endif
 				}
 				pLayerSystemMsg->AddMsg(pSystemMsg->strMsg, pSystemMsg->clMsg);
 			}
@@ -2888,7 +2900,9 @@ Exit:
 		rcTmp.top	 = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
 		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 		m_pLibInfoItem->SetArea(m_pPlayerChar->m_dwMapID, &rcTmp);
+#ifdef _WIN32
 		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
+#endif
 	}
 
 	return bRet;

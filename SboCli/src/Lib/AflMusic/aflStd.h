@@ -189,7 +189,12 @@ public:
 	THANDLE getThreadHandle()const{return m_hThread;}
 	DWORD getThreadID()const{return m_dwThreadID;}
 protected:
+#ifdef _WIN32
 	static DWORD threadProcServer(LPVOID pVoid);
+#else
+	// SDL_CreateThread / pthread_create は int を返す関数を要求する
+	static int threadProcServer(LPVOID pVoid);
+#endif
 	DWORD threadProcRouter(LPVOID pvData);
 
 	THANDLE m_hThread;						//スレッドハンドル
@@ -234,15 +239,16 @@ protected:
 	CRITICAL_SECTION m_Sect;
 };
 #else
+// SDL2 Mutexを使用（Emscripten対応）
 class AflCritical : public AflSyncObject
 {
 public:
-	AflCritical(){::pthread_mutex_init(&m_Sect,NULL);}
-	~AflCritical(){::pthread_mutex_destroy(&m_Sect);}
-	bool lock(){return ::pthread_mutex_lock(&m_Sect);}
-	bool unlock(){return ::pthread_mutex_unlock(&m_Sect);}
+	AflCritical(){m_pMutex = SDL_CreateMutex();}
+	~AflCritical(){SDL_DestroyMutex(m_pMutex);}
+	bool lock(){return SDL_LockMutex(m_pMutex) == 0;}
+	bool unlock(){return SDL_UnlockMutex(m_pMutex) == 0;}
 protected:
-	pthread_mutex_t m_Sect;
+	SDL_mutex* m_pMutex;
 };
 #endif
 

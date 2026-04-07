@@ -67,10 +67,10 @@ inline BOOL IntersectRect(LPRECT pDst, const RECT *pSrc1, const RECT *pSrc2)
 	if ((pDst == NULL) || (pSrc1 == NULL) || (pSrc2 == NULL)) {
 		return FALSE;
 	}
-	pDst->left = std::max(pSrc1->left, pSrc2->left);
-	pDst->top = std::max(pSrc1->top, pSrc2->top);
-	pDst->right = std::min(pSrc1->right, pSrc2->right);
-	pDst->bottom = std::min(pSrc1->bottom, pSrc2->bottom);
+	pDst->left = (std::max)(pSrc1->left, pSrc2->left);
+	pDst->top = (std::max)(pSrc1->top, pSrc2->top);
+	pDst->right = (std::min)(pSrc1->right, pSrc2->right);
+	pDst->bottom = (std::min)(pSrc1->bottom, pSrc2->bottom);
 	if ((pDst->left >= pDst->right) || (pDst->top >= pDst->bottom)) {
 		ZeroMemory(pDst, sizeof(RECT));
 		return FALSE;

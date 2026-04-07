@@ -6,7 +6,7 @@
 
 #pragma once
 
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 #include <atlbase.h>
 #include <atlstr.h>
 #include <atlconv.h>
