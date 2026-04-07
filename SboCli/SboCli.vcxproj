@@ -344,12 +344,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClCompile Include="StdAfx.cpp" />
     <ClCompile Include="src\Dialog\DlgDbg.cpp" />
     <ClCompile Include="src\Dialog\DlgMsgLog.cpp" />
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlEffectInfo.cpp" />
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlItemInfo.cpp" />
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndMap.cpp" />
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndSelectGrp.cpp" />
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndSelectItemGrp.cpp" />
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndToolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\crc.h" />
@@ -514,12 +508,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="src\Dialog\DlgDbg.h" />
     <ClInclude Include="src\Dialog\DlgMsgLog.h" />
-    <ClInclude Include="src\Wnd\ListCtrlEffectInfo.h" />
-    <ClInclude Include="src\Wnd\ListCtrlItemInfo.h" />
-    <ClInclude Include="src\Wnd\WndMap.h" />
-    <ClInclude Include="src\Wnd\WndSelectGrp.h" />
-    <ClInclude Include="src\Wnd\WndSelectItemGrp.h" />
-    <ClInclude Include="src\Wnd\WndToolbar.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\MsgLog.html" />

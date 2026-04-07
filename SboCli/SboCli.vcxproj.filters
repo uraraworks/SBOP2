@@ -600,24 +600,6 @@
     <ClCompile Include="src\Dialog\DlgMsgLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlEffectInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\ListCtrlItemInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndSelectGrp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wnd\WndSelectItemGrp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\SboCliAdminMfc\src\Migrated\Wnd\WndToolbar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AdminApi\AdminUiApi.h">
@@ -1083,24 +1065,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog\DlgMsgLog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\ListCtrlEffectInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\ListCtrlItemInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndSelectGrp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndSelectItemGrp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wnd\WndToolbar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
