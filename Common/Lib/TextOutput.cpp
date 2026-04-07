@@ -8,6 +8,8 @@
 #include <stdio.h>
 #ifdef _WIN32
 #include <strsafe.h>
+#else
+#include <sys/time.h>
 #endif
 #include "../myLib/myString.h"
 #include "TextOutput.h"
@@ -85,11 +87,14 @@ Exit:
 void CTextOutput::WriteProc(
 	LPCSTR pszText)	// [in] 出力するNULL終端文字列
 {
-	HANDLE hFile;
-	DWORD dwBytes;
+	FILE* pFile;
 	char szTmp[128];
+#ifdef _WIN32
 	SYSTEMTIME stSysTime;
-	CString strFileName;
+#else
+	struct timeval tv;
+	struct tm* pTm;
+#endif
 
 	// 排他開始
 	EnterCriticalSection(&m_csWrite);
@@ -98,42 +103,42 @@ void CTextOutput::WriteProc(
 		goto Exit;
 	}
 
-	// ファイルを開く
-        strFileName = Utf8ToTString(m_pszFileName);
-        hFile = CreateFile(
-                        strFileName,
-                        GENERIC_WRITE | GENERIC_READ,
-                        0,
-                        0,
-			OPEN_ALWAYS,
-			FILE_ATTRIBUTE_NORMAL,
-			0);
-	if (hFile == INVALID_HANDLE_VALUE) {
+	// ファイルを追記モードで開く（ファイルが存在しない場合は新規作成）
+	pFile = fopen(m_pszFileName, "ab");
+	if (pFile == NULL) {
 		goto Exit;
 	}
-	// ファイルポインタを終端に移動
-	SetFilePointer(hFile, 0, 0, FILE_END);
 
 	// ヘッダを書き込む？
 	if (m_bHeader) {
+#ifdef _WIN32
+		// Windows: GetLocalTime でミリ秒を取得
 		GetLocalTime(&stSysTime);
-                StringCchPrintfA(szTmp, _countof(szTmp), "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
-                                stSysTime.wYear, stSysTime.wMonth,  stSysTime.wDay,
-                                stSysTime.wHour, stSysTime.wMinute, stSysTime.wSecond,
-                                stSysTime.wMilliseconds);
-		WriteFile(hFile, szTmp, strlen(szTmp), &dwBytes, NULL);
+		StringCchPrintfA(szTmp, _countof(szTmp), "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
+				stSysTime.wYear,   stSysTime.wMonth,  stSysTime.wDay,
+				stSysTime.wHour,   stSysTime.wMinute, stSysTime.wSecond,
+				stSysTime.wMilliseconds);
+#else
+		// 非Windows: gettimeofday でミリ秒を取得
+		gettimeofday(&tv, NULL);
+		pTm = localtime(&tv.tv_sec);
+		snprintf(szTmp, sizeof(szTmp), "%04d/%02d/%02d %02d:%02d:%02d:%03d\t",
+				pTm->tm_year + 1900, pTm->tm_mon + 1, pTm->tm_mday,
+				pTm->tm_hour, pTm->tm_min, pTm->tm_sec,
+				(int)(tv.tv_usec / 1000));
+#endif
+		fwrite(szTmp, 1, strlen(szTmp), pFile);
 	}
 
 	// 本文を書き込む
-	WriteFile(hFile, pszText, strlen(pszText), &dwBytes, NULL);
+	fwrite(pszText, 1, strlen(pszText), pFile);
 
 	// 改行コードを書き込む？
 	if (m_bReturn) {
-		strcpy(szTmp, "\r\n");
-		WriteFile(hFile, szTmp, strlen(szTmp), &dwBytes, NULL);
+		fwrite("\r\n", 1, 2, pFile);
 	}
 
-	CloseHandle(hFile);
+	fclose(pFile);
 
 Exit:
 	// 排他終了

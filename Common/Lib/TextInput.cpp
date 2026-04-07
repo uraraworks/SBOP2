@@ -12,7 +12,7 @@ CTextInput::CTextInput()
 {
 	m_dwLine	= 0;
 	m_pszFileName	= NULL;
-	m_hFile	= INVALID_HANDLE_VALUE;
+	m_pFile	= NULL;
 }
 
 CTextInput::~CTextInput()
@@ -60,7 +60,7 @@ void CTextInput::SetLine(DWORD dwLine)
 	CmyString strTmp;
 
 	m_dwLine = 0;
-	SetFilePointer(m_hFile, 0, NULL, FILE_BEGIN);
+	fseek(m_pFile, 0, SEEK_SET);
 
 	for (i = 0; i < dwLine; i ++) {
 		strTmp = ReadLine();
@@ -95,37 +95,28 @@ DWORD CTextInput::GetLineCount(void)
 BOOL CTextInput::Open(LPCSTR pszFileName)
 {
 	BOOL bRet;
-	HANDLE hFile;
 
 	bRet = FALSE;
 
-	// ファイルを開く
-	hFile = CreateFileA(
-			pszFileName,
-			GENERIC_READ,
-			0,
-			0,
-			OPEN_EXISTING,
-			FILE_ATTRIBUTE_NORMAL,
-			0);
-	if (hFile == INVALID_HANDLE_VALUE) {
+	// ファイルをバイナリ読み込みモードで開く
+	m_pFile = fopen(pszFileName, "rb");
+	if (m_pFile == NULL) {
 		goto Exit;
 	}
 
-	m_hFile	= hFile;
-	bRet	= TRUE;
+	bRet = TRUE;
 Exit:
 	return bRet;
 }
 
 void CTextInput::Close(void)
 {
-	if (m_hFile == INVALID_HANDLE_VALUE) {
+	if (m_pFile == NULL) {
 		return;
 	}
 
-	CloseHandle(m_hFile);
-	m_hFile = INVALID_HANDLE_VALUE;
+	fclose(m_pFile);
+	m_pFile = NULL;
 }
 
 CmyString CTextInput::ReadProc(void)
@@ -143,13 +134,15 @@ CmyString CTextInput::ReadProc(void)
 		strTmp.Empty();
 		// 改行コードか終端までのループ
 		while (1) {
-			bResult = ReadFile(m_hFile, &byTmp1, 1, &dwSize, NULL);
-			if ((bResult == FALSE) || (dwSize == 0)) {
+			// 1バイト読み込む（戻り値0で読み終わり）
+			dwSize = (DWORD)fread(&byTmp1, 1, 1, m_pFile);
+			if (dwSize == 0) {
 				break;
 			}
 			if (byTmp1 == 0x0D) {
-				bResult = ReadFile(m_hFile, &byTmp2, 1, &dwSize, NULL);
-				if (bResult == FALSE) {
+				// 次の1バイトを読み込む
+				dwSize = (DWORD)fread(&byTmp2, 1, 1, m_pFile);
+				if (dwSize == 0) {
 					break;
 				}
 				if (byTmp2 == 0x0A) {
@@ -166,7 +159,7 @@ CmyString CTextInput::ReadProc(void)
 				strTmp += (LPCSTR)szTmp;
 			}
 		}
-                strRet += (LPCSTR)strTmp;
+		strRet += (LPCSTR)strTmp;
 
 		bResult = IsCSVCheck(strRet);
 		// CSV形式の1行として正しい？

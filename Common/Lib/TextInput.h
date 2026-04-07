@@ -28,6 +28,6 @@ protected:
 protected:
 	DWORD	m_dwLine;	// 現在の読み込み位置
 	LPSTR	m_pszFileName;	// ファイル名
-	HANDLE	m_hFile;	// ファイルハンドル
+	FILE*	m_pFile;	// ファイルポインタ
 };
 

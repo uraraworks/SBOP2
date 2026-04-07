@@ -18,21 +18,27 @@ CGetMD5File::~CGetMD5File()
 void CGetMD5File::Update(LPCSTR pszFileName)
 {
 	PBYTE pTmp;
-	DWORD dwFileSize, dwBytes;
-	HANDLE hFile;
+	FILE* pFile;
+	long dwFileSize;
 
 	pTmp = NULL;
 
-	hFile = CreateFileA(pszFileName, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (hFile == INVALID_HANDLE_VALUE) {
+	// ファイルをバイナリ読み込みモードで開く
+	pFile = fopen(pszFileName, "rb");
+	if (pFile == NULL) {
 		goto Exit;
 	}
-	dwFileSize = GetFileSize(hFile, NULL);
+
+	// ファイルサイズを取得
+	fseek(pFile, 0, SEEK_END);
+	dwFileSize = ftell(pFile);
+	fseek(pFile, 0, SEEK_SET);
+
 	pTmp = new BYTE[dwFileSize];
 
 	// ファイルを読み込む
-	ReadFile(hFile, pTmp, dwFileSize, &dwBytes, NULL);
-	CloseHandle(hFile);
+	fread(pTmp, 1, dwFileSize, pFile);
+	fclose(pFile);
 
 	CGetMD5::Update(pTmp, dwFileSize);
 

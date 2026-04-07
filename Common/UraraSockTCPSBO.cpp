@@ -4,6 +4,9 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "StdAfx.h"
+#if !defined(_WINDLL)
+#include <SDL.h>
+#endif
 #include "Packet/PacketBase.h"
 #include "UraraSockTCPSBO.h"
 
@@ -27,10 +30,23 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 	m_pfNotify = NULL;
 	m_pNotifyUserData = NULL;
 
-	m_hDll = LoadLibrary(strFileName);
+#if !defined(_WINDLL)
+	// SDL_LoadObject でクロスプラットフォーム対応
+	{
+		std::string ansiFileName = TStringToAnsiStd(strFileName);
+		m_hDll = SDL_LoadObject(ansiFileName.c_str());
+	}
+#else
+	m_hDll = (void*)LoadLibrary(strFileName);
+#endif
 	if (m_hDll) {
-		pfGetUraraSockTCP = (PFGETURARASOCKTCP)GetProcAddress(m_hDll, "GetUraraSockTCP");
-		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)GetProcAddress(m_hDll, "ReleaseUraraSockTCP");
+#if !defined(_WINDLL)
+		pfGetUraraSockTCP = (PFGETURARASOCKTCP)SDL_LoadFunction(m_hDll, "GetUraraSockTCP");
+		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)SDL_LoadFunction(m_hDll, "ReleaseUraraSockTCP");
+#else
+		pfGetUraraSockTCP = (PFGETURARASOCKTCP)GetProcAddress((HMODULE)m_hDll, "GetUraraSockTCP");
+		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)GetProcAddress((HMODULE)m_hDll, "ReleaseUraraSockTCP");
+#endif
 		if (pfGetUraraSockTCP) {
 			m_pSock = pfGetUraraSockTCP();
 		}
@@ -55,7 +71,11 @@ CUraraSockTCPSBO::~CUraraSockTCPSBO(void)
 	}
 
 	if (m_hDll) {
-		FreeLibrary(m_hDll);
+#if !defined(_WINDLL)
+		SDL_UnloadObject(m_hDll);
+#else
+		FreeLibrary((HMODULE)m_hDll);
+#endif
 		m_hDll = NULL;
 	}
 }
