@@ -14,11 +14,6 @@
 #define UNICODE
 #endif
 
-// 非Windows環境では DirectMusic を使用しない
-#if !defined(NO_DIRECTMUSIC)
-#define NO_DIRECTMUSIC
-#endif
-
 // -----------------------------------------------------------------------
 // 基本型 typedef
 // -----------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /// @file DXAudio.cpp
-/// @brief SDL_audioベースのオーディオ実装（NO_DIRECTMUSICビルド用、クロスプラットフォーム対応）
+/// @brief SDL_audioベースのオーディオ実装（クロスプラットフォーム対応）
 #include "stdafx.h"
 #include <SDL.h>
 #include <cmath>
@@ -195,15 +195,9 @@ static float DbToLinear(long dB)
 // -----------------------------------------------------------------------
 
 CDXAudio::CDXAudio()
-    : m_pPerformance(nullptr)
-    , m_pDefAudioPath(nullptr)
-    , m_pDefAudioPath2(nullptr)
-    , m_pLoader(nullptr)
-    , m_hResource(NULL)
-    , m_pBgmFmt(nullptr)
+    : m_hResource(NULL)
     , m_pBgmAudio(nullptr)
     , m_cbBgmAudio(0)
-    , m_pBgmVoice(nullptr)
     , m_fBgmVolume(1.0f)
 {
 }
@@ -245,7 +239,7 @@ void CDXAudio::SetResourceHandle(void* hResource)
     m_hResource = hResource;
 }
 
-BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL /*bMidi*/)
+BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, void **pSeg, BOOL /*bMidi*/)
 {
 #ifdef _WIN32
     // Windows のみ: DLL リソースから WAV を読み込む
@@ -261,7 +255,7 @@ BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL /*bMi
     WAVSEG* seg = nullptr;
     if (!ParseWavFromMemory(mem, sz, &seg)) return FALSE;
 
-    *pSeg = (IDirectMusicSegment8*)seg;
+    *pSeg = seg;
     return TRUE;
 #else
     // 非Windows: DLL リソースからの WAV 読み込みは未対応
@@ -270,7 +264,7 @@ BOOL CDXAudio::GetSegFromRes(HRSRC hSrc, IDirectMusicSegment8 **pSeg, BOOL /*bMi
 #endif
 }
 
-void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg)
+void CDXAudio::ReleaseSeg(void *pSeg)
 {
     if (!pSeg) return;
     WAVSEG* seg = (WAVSEG*)pSeg;
@@ -278,7 +272,7 @@ void CDXAudio::ReleaseSeg(IDirectMusicSegment8 *pSeg)
     free(seg);
 }
 
-BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg)
+BOOL CDXAudio::PlayPrimary(void *pSeg)
 {
     if (!pSeg || g_audioDevice == 0) return FALSE;
     WAVSEG* seg = (WAVSEG*)pSeg;
@@ -301,7 +295,7 @@ BOOL CDXAudio::PlayPrimary(IDirectMusicSegment8 *pSeg)
     return FALSE;  // 空きチャンネルなし
 }
 
-BOOL CDXAudio::PlaySecoundary(IDirectMusicSegment8 *pSeg)
+BOOL CDXAudio::PlaySecoundary(void *pSeg)
 {
     return PlayPrimary(pSeg);
 }
@@ -318,7 +312,7 @@ void CDXAudio::SetVolSecoundary(long lVol)
     g_sfx_volume = DbToLinear(lVol);
 }
 
-void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD /*dwFlg*/)
+void CDXAudio::Stop(void *pSeg, DWORD /*dwFlg*/)
 {
     if (!pSeg || g_audioDevice == 0) return;
     WAVSEG* seg = (WAVSEG*)pSeg;
@@ -332,7 +326,7 @@ void CDXAudio::Stop(IDirectMusicSegment8 *pSeg, DWORD /*dwFlg*/)
     SDL_UnlockAudioDevice(g_audioDevice);
 }
 
-void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwRepeats)
+void CDXAudio::SetLoopPoints(void *pSeg, DWORD dwRepeats)
 {
     // SDL ミキサーでのループは AudioChannel::loop フラグで制御する。
     // GetSegFromRes 時点ではループ設定を保持しておらず、
@@ -342,7 +336,7 @@ void CDXAudio::SetLoopPoints(IDirectMusicSegment8 *pSeg, DWORD dwRepeats)
     (void)dwRepeats;
 }
 
-BOOL CDXAudio::IsPlaying(IDirectMusicSegment8 *pSeg)
+BOOL CDXAudio::IsPlaying(void *pSeg)
 {
     if (!pSeg || g_audioDevice == 0) return FALSE;
     WAVSEG* seg = (WAVSEG*)pSeg;
@@ -374,8 +368,6 @@ void CDXAudio::FreeBgmResources()
         free(m_pBgmAudio);
         m_pBgmAudio = nullptr;
     }
-    m_pBgmFmt    = nullptr;  // WAVEFORMATEX* は持たない（SDL_audio では不要）
-    m_pBgmVoice  = nullptr;  // 使用しない
     m_cbBgmAudio = 0;
 }
 

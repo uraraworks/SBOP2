@@ -6,11 +6,6 @@
 
 #pragma once
 
-#ifndef NO_DIRECTMUSIC
-#include <dmusici.h>
-#else
-struct IDirectMusicSegment8;
-#endif
 #include "SboSoundData.h"
 
 class CDXAudio;
@@ -61,6 +56,5 @@ protected:
 	void*					m_hDllSoundData;		// 音関連DLLのハンドル（SDL_LoadObject用）
 	CDXAudio				*m_pDXAudio;			// サウンドライブラリ
 	CLibSboSoundLoader		*m_pLibSboSoundLoader;	// サウンドデータライブラリ
-	IDirectMusicSegment8	**m_apDMSSound;			// 効果音
-	// Audiere dependency removed
+	void					**m_apDMSSound;			// 効果音セグメント配列（不透明ポインタ）
 } CMgrSound, *PCMgrSound;

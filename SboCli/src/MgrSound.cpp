@@ -22,7 +22,6 @@ CMgrSound::CMgrSound()
 	m_pDXAudio			= new CDXAudio;
 	m_pLibSboSoundLoader = new CLibSboSoundLoader;
 	m_apDMSSound		= NULL;
-	// BGM: XAudio2 再生に切替のため未使用
 }
 
 
@@ -98,7 +97,7 @@ void CMgrSound::Destroy(void)
 void CMgrSound::PlaySound(DWORD dwSoundID)
 {
 	int nNo;
-	IDirectMusicSegment8 **pDMS;
+	void **pDMS;
 
 #if !defined(_WIN32)
 	UNREFERENCED_PARAMETER(dwSoundID);
@@ -253,7 +252,7 @@ void CMgrSound::ReadSoundData(void)
 	nCount = m_pLibSboSoundLoader->GetSoundCount();
 
 	SAFE_DELETE_ARRAY(m_apDMSSound);
-	m_apDMSSound = new IDirectMusicSegment8*[nCount]();
+	m_apDMSSound = new void*[nCount]();
 
 	for (i = 0; i < nCount; i++) {
 		nResourceID = m_pLibSboSoundLoader->GetSoundResourceID(i);
