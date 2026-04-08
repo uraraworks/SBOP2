@@ -103,7 +103,7 @@
       <AdditionalOptions>/ignore:4099 /ignore:4217 %(AdditionalOptions)</AdditionalOptions>
       <IgnoreSpecificDefaultLibraries>MSVCRTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>..\SDL2\lib\x86;..\SDL2_ttf\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;ws2_32.lib;winmm.lib;shlwapi.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;ws2_32.lib;shlwapi.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul
@@ -160,7 +160,7 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>..\SDL2\lib\x86;..\SDL2_ttf\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;ws2_32.lib;winmm.lib;shlwapi.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;ws2_32.lib;shlwapi.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul

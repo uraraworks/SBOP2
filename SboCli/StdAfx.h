@@ -57,8 +57,12 @@
 #define __RPC__out_ecount_part(_Count,_Length)
 #endif
 
+#include <SDL.h>
 #include <windows.h>
-#include <mmsystem.h>
+// timeGetTime を SDL_GetTicks にマッピング（winmm.lib 依存を除去するため）
+// inline 関数ではなくマクロにすることで dllimport 宣言との競合を回避する
+#undef timeGetTime
+#define timeGetTime() ((DWORD)SDL_GetTicks())
 #include <tchar.h>
 #include <shlwapi.h>
 #include <map>
