@@ -4,7 +4,7 @@
 
 #pragma once
 
-#if !defined(_WINDLL) && !defined(_WIN32)
+#if !defined(_WINDLL)
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -43,4 +43,4 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen);
 // テキストサイズ取得
 bool SdlFontGetTextExtent(void* hFont, const wchar_t* pStr, int nLen, int* pWidth, int* pHeight);
 
-#endif // !_WINDLL && !_WIN32
+#endif // !_WINDLL

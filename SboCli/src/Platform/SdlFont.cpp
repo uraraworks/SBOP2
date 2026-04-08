@@ -2,7 +2,7 @@
 /// @brief SDL_ttfベースのフォント管理・テキスト描画 実装
 /// @date 2026/04/06
 
-#if !defined(_WINDLL) && !defined(_WIN32)
+#if !defined(_WINDLL)
 
 #include "SdlFont.h"
 #include <cstdlib>
@@ -290,4 +290,4 @@ bool SdlFontGetTextExtent(void* hFont, const wchar_t* pStr, int nLen, int* pWidt
     return true;
 }
 
-#endif // !_WINDLL && !_WIN32
+#endif // !_WINDLL
