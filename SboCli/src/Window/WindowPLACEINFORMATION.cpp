@@ -42,7 +42,6 @@ void CWindowPLACEINFORMATION::Draw(PCImg32 pDst)
 	int nTmp;
 	float fTmp;
 	HDC hDC;
-	HFONT hFontOld;
 	PCInfoMapBase pInfoMap;
 	PCInfoCharCli pInfoChar;
 
@@ -61,16 +60,14 @@ void CWindowPLACEINFORMATION::Draw(PCImg32 pDst)
 	m_pDib->BltFrom256(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, m_pDibSystem, 0, 624, TRUE);
 
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont12);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut2(hDC, 34, 6, (LPCTSTR)pInfoMap->m_strMapName, RGB(1, 1, 1));
+	TextOut2(hDC, m_hFont12, 34, 6, (LPCTSTR)pInfoMap->m_strMapName, RGB(1, 1, 1));
 
 	fTmp = (float)pInfoChar->m_dwHP * 100.0f / (float)pInfoChar->m_dwMaxHP;
 	nTmp = (int)((float)65 * fTmp / 100.0f);
 	m_pDib->BltFrom256(216, 13, nTmp, 7, m_pDibSystem, 0, 758, TRUE);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	m_dwTimeDrawStart = timeGetTime();

@@ -70,7 +70,6 @@ void CWindowCHAT::Create(CMgrData *pMgrData)
 void CWindowCHAT::Draw(PCImg32 pDst)
 {
 	HDC hDC;
-	HFONT hFontOld;
 
 	if (m_dwTimeDrawStart) {
 		goto Exit;
@@ -88,9 +87,8 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 	m_pDib->BltFrom256(50, 0, 16, 16, m_pDibSystem, 48 + (m_aArrayType[m_nType] * 16), 112);
 
 	hDC = m_pDib->Lock();
-	hFontOld = (HFONT)SelectObject(hDC, m_hFont14);
 	SetBkMode(hDC, TRANSPARENT);
-	TextOut2(hDC, 8 + 8, 16 + 4, m_strChat, RGB(0, 0, 0));
+	TextOut2(hDC, m_hFont14, 8 + 8, 16 + 4, m_strChat, RGB(0, 0, 0));
 	if (m_bActive && (m_nCursorAnime == 0)) {
 		int nCursorX;
 
@@ -98,9 +96,8 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 		if (nCursorX > m_sizeWindow.cx - 24) {
 			nCursorX = m_sizeWindow.cx - 24;
 		}
-		TextOut2(hDC, nCursorX, 16 + 4, _T("|"), RGB(0, 0, 0));
+		TextOut2(hDC, m_hFont14, nCursorX, 16 + 4, _T("|"), RGB(0, 0, 0));
 	}
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	m_dwTimeDrawStart = timeGetTime();

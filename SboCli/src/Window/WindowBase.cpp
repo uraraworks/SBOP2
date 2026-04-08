@@ -461,7 +461,7 @@ BOOL CWindowBase::OnSpace(BOOL bDown)
 }
 
 
-void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
+void CWindowBase::TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw, COLORREF ColorFrame)
 {
 	if (pStr == NULL) {
 		return;
@@ -474,6 +474,7 @@ void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, 
 	if (nLen <= 0) {
 		return;
 	}
+	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
 	// 縁取りする？
 	if (bDraw) {
 		SetTextColor(hDC, ColorFrame);
@@ -495,10 +496,11 @@ void CWindowBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, 
 #else
 	::TextOutA(hDC, x, y, (LPCSTR)pStr, nLen);
 #endif
+	SelectObject(hDC, hFontOld);
 }
 
 
-void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color)
+void CWindowBase::TextOut3(HDC hDC, HFONT hFont, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color)
 {
 	if (pStr == NULL) {
 		return;
@@ -510,6 +512,7 @@ void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCTSTR pStr, 
 	}
 
 	RECT rc;
+	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
 
 	SetRect(&rc, x, y, cx, cy);
 	SetTextColor(hDC, RGB(10, 10, 10));
@@ -521,11 +524,12 @@ void CWindowBase::TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCTSTR pStr, 
 
 	SetTextColor(hDC, Color);
 	SetRect(&rc, x, y, x + cx, y + cy);	DrawText(hDC, pStr, nLen, &rc, DT_RIGHT | DT_NOCLIP);
+	SelectObject(hDC, hFontOld);
 }
 
 
 
-void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color)
+void CWindowBase::TextOut4(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color)
 {
 	if (pStr == NULL) {
 		return;
@@ -535,6 +539,7 @@ void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFr
 	if (nLen <= 0) {
 		return;
 	}
+	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
 	SetTextColor(hDC, ColorFrame);
 
 	::TextOut(hDC, x - 2, y, pStr, nLen);
@@ -562,6 +567,7 @@ void CWindowBase::TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFr
 
 	SetTextColor(hDC, Color);
 	::TextOut(hDC, x, y, pStr, nLen);
+	SelectObject(hDC, hFontOld);
 }
 
 

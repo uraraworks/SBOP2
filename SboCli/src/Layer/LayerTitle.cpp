@@ -50,7 +50,6 @@ void CLayerTitle::Draw(PCImg32 pDst)
 {
 	int i, cx, cy, nTmp, x;
 	HDC hDCTmp;
-	HFONT hFontOld;
 	CmyString strTmp;
 
 	nTmp = 100 - (m_nFadeLevel / 2);
@@ -77,11 +76,9 @@ void CLayerTitle::Draw(PCImg32 pDst)
 	if ((m_dwLastTimeFadeIn == 0) && m_hFont) {
 #if defined(_WIN32)
 		hDCTmp = pDst->Lock();
-		hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
 		SetBkMode(hDCTmp, TRANSPARENT);
 		strTmp = "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.";
-		TextOut1(hDCTmp, (480 - (strTmp.GetLength() * 6)) / 2 + 32, SCRSIZEY - 12 + 32, strTmp, RGB(255, 255, 255));
-		SelectObject(hDCTmp, hFontOld);
+		TextOut1(hDCTmp, m_hFont, (480 - (strTmp.GetLength() * 6)) / 2 + 32, SCRSIZEY - 12 + 32, strTmp, RGB(255, 255, 255));
 		pDst->Unlock();
 #endif
 	}

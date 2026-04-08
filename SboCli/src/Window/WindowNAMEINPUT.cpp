@@ -76,7 +76,6 @@ void CWindowNAMEINPUT::OnWindowMsg(int nType, DWORD dwPara)
 void CWindowNAMEINPUT::Draw(PCImg32 pDst)
 {
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	POINT nCursorPos[] = {
 		108, 240,
@@ -93,17 +92,15 @@ void CWindowNAMEINPUT::Draw(PCImg32 pDst)
 
 	clText	= RGB(124, 123, 232);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut4(hDC, 88,	24,	_T("新規キャラクター作成"), clText);
-	TextOut4(hDC, 136,	48,	_T("名前入力"), clText);
-	TextOut4(hDC, 112,	216,	_T("キャラクター名"), clText);
-	TextOut4(hDC, 148,	288,	_T("登録"), clText);
-	TextOut4(hDC, 256,	288,	_T("３／３"), clText);
-	TextOut2(hDC, 108, 240 - 2, m_pInfoCharCli->m_strCharName, clText);
+	TextOut4(hDC, m_hFont14, 88,	24,	_T("新規キャラクター作成"), clText);
+	TextOut4(hDC, m_hFont14, 136,	48,	_T("名前入力"), clText);
+	TextOut4(hDC, m_hFont14, 112,	216,	_T("キャラクター名"), clText);
+	TextOut4(hDC, m_hFont14, 148,	288,	_T("登録"), clText);
+	TextOut4(hDC, m_hFont14, 256,	288,	_T("３／３"), clText);
+	TextOut2(hDC, m_hFont14, 108, 240 - 2, m_pInfoCharCli->m_strCharName, clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	DrawCursor(nCursorPos[m_nPos].x - 32, nCursorPos[m_nPos].y - 6);

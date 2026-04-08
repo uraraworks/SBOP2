@@ -45,7 +45,6 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 {
 //	int i;
 	HDC hDC;
-	HFONT hFontOld;
 //	char szTmp[128];
 	PCInfoCharCli pChar;
 	PCLibInfoCharCli pLibInfoChar;
@@ -63,7 +62,6 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 	DrawFrame(2);
 
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkColor(hDC, RGB(255, 255, 255));
 #if 0
 	for (i = 0; i < 2; i ++) {
@@ -74,9 +72,9 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 	}
 #endif
 
-//	TextOut2(hDC, 32, 0, _T("強さ"), RGB(0, 0, 0));
+//	TextOut2(hDC, m_hFont, 32, 0, _T("強さ"), RGB(0, 0, 0));
 	SetBkMode(hDC, TRANSPARENT);
-	TextOut2(hDC, 16 + 8 * 0, 16 * 1, _T("レベル"), RGB(0, 0, 0));
+	TextOut2(hDC, m_hFont, 16 + 8 * 0, 16 * 1, _T("レベル"), RGB(0, 0, 0));
 #if 0
 	char szTmp[128];
 
@@ -138,7 +136,6 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 	sprintf_s(szTmp, sizeof(szTmp), "%I64d", pChar->m_ulExp);
 	TextOut2(hDC, 32 + 8 * 5, 16 * 12, szTmp, RGB(150, 255, 200));
 #endif
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	m_dwTimeDrawStart = timeGetTime();

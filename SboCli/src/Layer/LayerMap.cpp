@@ -630,7 +630,6 @@ void CLayerMap::RenewLevel(void)
 
 void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 {
-	HFONT hFontOld;
 	HDC hDCTmp;
 	CString strMapName;
 
@@ -657,7 +656,7 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 #else
 	GetTextExtentPoint32A(hScreenDC, strMapName, nLen, &sizeText);
 #endif
-	SelectObject(hScreenDC, hOldFont);
+	SelectObject(hScreenDC, hOldFont); // テキスト幅取得用の一時DC（m_pDib と無関係）
 	ReleaseDC(NULL, hScreenDC);
 
 	int nWidth = sizeText.cx + 8; // 余白
@@ -667,12 +666,10 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	m_pDibMapName->Create(nWidth, nHeight);
 
 	hDCTmp = m_pDibMapName->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont32);
 	SetBkMode(hDCTmp, TRANSPARENT);
 
-	this->TextOut3(hDCTmp, 1, 2, strMapName, RGB(255, 255, 255));
+	this->TextOut3(hDCTmp, m_hFont32, 1, 2, strMapName, RGB(255, 255, 255));
 
-	SelectObject(hDCTmp, hFontOld);
 	m_pDibMapName->Unlock();
 
 	m_dwLastTimeMapName = SDL_GetTicks();
@@ -1281,7 +1278,6 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 	PCInfoItem pInfoItem;
 	PCInfoCharCli pPlayerChar;
 	HDC hDC;
-	HFONT hFontOld;
 
 	pPlayerChar = m_pMgrData->GetPlayerChar();
 	if (pPlayerChar == NULL) {
@@ -1325,13 +1321,11 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 					FALSE);
 		} else {
 			hDC = pDst->Lock();
-			hFontOld = (HFONT)SelectObject(hDC, m_hFont);
 			SetBkMode(hDC, TRANSPARENT);
 			x += 16;
 			x -= (pInfoItem->m_strName.GetLength() * 6 / 2);
 			y += 32;
-			TextOut2(hDC, x, y, (LPCTSTR)pInfoItem->m_strName, RGB(255, 255, 255));
-			SelectObject(hDC, hFontOld);
+			TextOut2(hDC, m_hFont, x, y, (LPCTSTR)pInfoItem->m_strName, RGB(255, 255, 255));
 			pDst->Unlock();
 		}
 	}

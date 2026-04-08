@@ -45,7 +45,6 @@ void CWindowHAIRTYPE::Create(CMgrData *pMgrData)
 void CWindowHAIRTYPE::Draw(PCImg32 pDst)
 {
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	CmyString strTmp;
 
@@ -57,15 +56,13 @@ void CWindowHAIRTYPE::Draw(PCImg32 pDst)
 
 	clText	= RGB(255, 127, 53);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut4(hDC, 64, 8, _T("髪型"), clText);
+	TextOut4(hDC, m_hFont14, 64, 8, _T("髪型"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);
-	TextOut4(hDC, 16, 32, strTmp, clText);
-//	TextOut2(hDC, 40, 32, m_pMgrData->GetHairTypeName((WORD)m_nPos), clText);
+	TextOut4(hDC, m_hFont14, 16, 32, strTmp, clText);
+//	TextOut2(hDC, m_hFont14, 40, 32, m_pMgrData->GetHairTypeName((WORD)m_nPos), clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	m_pDib->BltFrom256(16 + m_nPosX * 8 - 2, 21, 10, 8, m_pDibSystem, 96, 24, TRUE);

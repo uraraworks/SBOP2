@@ -47,7 +47,6 @@ void CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw(PCImg32 pDst)
 {
 	int i, nLevel;
 	HDC hDC;
-	HFONT hFontOld;
 	LPCTSTR apszTmp[] = {_T("３分"), _T("５分"), _T("10分"), _T("30分"), _T("60分")};
 	COLORREF clText;
 
@@ -59,17 +58,15 @@ void CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("なし"), clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("なし"), clText);
 	for (i = 0; i < 5; i ++) {
-		TextOut2(hDC, 32 + 51 + (i * 51), 16 + 16 * 0, apszTmp[i], clText);
+		TextOut2(hDC, m_hFont, 32 + 51 + (i * 51), 16 + 16 * 0, apszTmp[i], clText);
 	}
 
 	DrawCursor(8 + (m_nSleepTimer * 51), 16 + 16 * 0);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	m_dwTimeDrawStart = timeGetTime();

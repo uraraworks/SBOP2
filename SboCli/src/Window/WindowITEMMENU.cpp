@@ -62,7 +62,6 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 {
 	int i, nCount, nLevel, x, y, nCursor;
 	HDC hDC;
-	HFONT hFontOld;
 	PCInfoItem pInfoItem, pIntoItemDrag;
 
 	if (m_dwTimeDrawStart) {
@@ -98,12 +97,10 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	DrawEquip(3, m_pPlayerChar->m_dwEquipItemIDArmsLeft);	// 盾
 
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont12);
 	SetBkMode(hDC, TRANSPARENT);
-	TextOut2(hDC, 12 + 5, 7 + 4, _T("装備"), RGB(255, 255, 255));
-	TextOut2(hDC, 12 + 5, 134 + 3, _T("バッグ(B)"), RGB(255, 255, 255));
+	TextOut2(hDC, m_hFont12, 12 + 5, 7 + 4, _T("装備"), RGB(255, 255, 255));
+	TextOut2(hDC, m_hFont12, 12 + 5, 134 + 3, _T("バッグ(B)"), RGB(255, 255, 255));
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	pIntoItemDrag = NULL;
@@ -153,24 +150,25 @@ Exit:
 	// アイテム名を表示
 	if (m_strName.IsEmpty() == FALSE) {
 		hDC = pDst->Lock();
-		hFontOld = (HFONT)SelectObject(hDC, m_hFont12);
 		SetBkMode(hDC, TRANSPARENT);
 
 		GetDrawPos(m_nPos, x, y);
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
 
+		// GetTextExtentPoint32 はフォント選択後に計測する必要がある
+		HFONT hFontOld = (HFONT)SelectObject(hDC, m_hFont12);
 		SIZE sizeText = {0, 0};
 #ifdef UNICODE
 		GetTextExtentPoint32W(hDC, m_strName, m_strName.GetLength(), &sizeText);
 #else
 		GetTextExtentPoint32A(hDC, m_strName, m_strName.GetLength(), &sizeText);
 #endif
+		SelectObject(hDC, hFontOld);
 		int nWidth = sizeText.cx;
 		DrawFrame2(x, y, nWidth, 16, 0, pDst, 4);
-		TextOut2(hDC, x, y, (LPCTSTR)m_strName, RGB(10, 10, 10), FALSE);
+		TextOut2(hDC, m_hFont12, x, y, (LPCTSTR)m_strName, RGB(10, 10, 10), FALSE);
 
-		SelectObject(hDC, hFontOld);
 		pDst->Unlock();
 	}
 }

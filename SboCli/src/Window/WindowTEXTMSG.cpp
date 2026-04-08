@@ -203,20 +203,17 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 		{
 			int i, nCount;
 			HDC hDC;
-			HFONT hFontOld;
 			COLORREF clText;
 
 			clText	= RGB(1, 1, 1);
 			hDC	= m_pDib->Lock();
-			hFontOld	= (HFONT)SelectObject(hDC, m_hFont16Normal);
 			SetBkMode(hDC, TRANSPARENT);
 
 			nCount = m_astrMenu.size();
 			for (i = 0; i < nCount; i ++) {
-				TextOut2(hDC, 32, y + cy + i * 16, (LPCTSTR)m_astrMenu[i], clText);
+				TextOut2(hDC, m_hFont16Normal, 32, y + cy + i * 16, (LPCTSTR)m_astrMenu[i], clText);
 			}
 
-			SelectObject(hDC, hFontOld);
 			m_pDib->Unlock();
 		}
 		DrawCursor(8, y + cy + 16 * m_nPos);
@@ -579,7 +576,6 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 {
 	int cx, cy;
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	LPCTSTR pszDraw = NULL;
 
@@ -603,23 +599,25 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDibText->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont16Normal);
 	SetBkMode(hDC, TRANSPARENT);
 
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
+	TextOut2(hDC, m_hFont16Normal, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
 
 	if (strncmp(pszText, "\r\n", 2) == 0) {
 		m_ptDraw.x = cx;
 	}
 
 	// 文字幅を実際の描画幅で進める
+	// GetTextExtentPoint32 はフォント選択後に計測する必要があるため一時的に SelectObject する
 	SIZE sizeText = {0, 0};
+	HFONT hFontOld = (HFONT)SelectObject(hDC, m_hFont16Normal);
 #ifdef UNICODE
 	GetTextExtentPoint32W(hDC, pszDraw, (int)_tcslen(pszDraw), &sizeText);
 #else
 	GetTextExtentPoint32A(hDC, pszDraw, (int)strlen(pszDraw), &sizeText);
 #endif
+	SelectObject(hDC, hFontOld);
 	m_ptDraw.x += sizeText.cx;
 	if (m_ptDraw.x + 8 >= cx) {
 		m_ptDraw.x = 0;
@@ -631,7 +629,6 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 		}
 	}
 
-	SelectObject(hDC, hFontOld);
 	m_pDibText->Unlock();
 }
 
@@ -641,26 +638,23 @@ void CWindowTEXTMSG::RenewTitle(void)
 	int y;
 	HDC hDC;
 	COLORREF clText, clFrame;
-	HFONT hFontOld;
 
 	m_pDibTitle->FillRect(0, 0, m_pDibTitle->Width(), m_pDibTitle->Height(), RGB(0, 0, 0));
 
 	hDC	= m_pDibTitle->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont16);
 	SetBkMode(hDC, TRANSPARENT);
 
 	y = 1;
 	clText  = RGB(255, 255, 255);
 	clFrame = RGB(1, 1, 1);
 	if (m_strTitle.GetLength() > 0) {
-		TextOut2(hDC, 1, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
+		TextOut2(hDC, m_hFont16, 1, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
 		y += 16;
 	}
 	if (m_strName.GetLength() > 0) {
-		TextOut2(hDC, 1, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
+		TextOut2(hDC, m_hFont16, 1, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
 	}
 
-	SelectObject(hDC, hFontOld);
 	m_pDibTitle->Unlock();
 }
 

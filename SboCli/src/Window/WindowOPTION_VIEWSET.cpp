@@ -55,7 +55,6 @@ void CWindowOPTION_VIEWSET::Draw(PCImg32 pDst)
 {
 	int nLevel, i, nCount;
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -66,19 +65,17 @@ void CWindowOPTION_VIEWSET::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut2(hDC, 32 + 24, 16 + 16 * 0, _T("発言時にタスクバーチカチカ"),	clText);
-	TextOut2(hDC, 32 + 24, 16 + 16 * 1, _T("名前を表示する"),	clText);
-	TextOut2(hDC, 32 + 24, 16 + 16 * 2, _T("発言を表示する"),	clText);
-	TextOut2(hDC, 32 + 24, 16 + 16 * 3, _T("アイテムを表示する"),	clText);
-	TextOut2(hDC, 32 + 24, 16 + 16 * 4, _T("アイテム名を表示する"),	clText);
-	TextOut2(hDC, 32 + 24, 16 + 16 * 5, _T("ヘルプアイコンを表示する"),	clText);
-	TextOut2(hDC, 32 + 24, 16 + 16 * 6, _T("戦闘メッセージをログに残す"),	clText);
-	TextOut2(hDC, 32 + 24, 16 + 16 * 7, _T("60フレームで表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 0, _T("発言時にタスクバーチカチカ"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 1, _T("名前を表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 2, _T("発言を表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 3, _T("アイテムを表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 4, _T("アイテム名を表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 5, _T("ヘルプアイコンを表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 6, _T("戦闘メッセージをログに残す"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 7, _T("60フレームで表示する"),	clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	nCount = m_adwCheckTime.size();

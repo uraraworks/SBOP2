@@ -52,7 +52,6 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 {
 	int i, nCount, nLevel;
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	LPCTSTR pszTmp;
 
@@ -64,7 +63,6 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkMode(hDC, TRANSPARENT);
 
 	clText = RGB(1, 1, 1);
@@ -78,10 +76,9 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 		case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	pszTmp = _T("装備を外す");	break;	// 装備を外す
 		case ITEMMENU_SELECT_COMMAND_USE:	pszTmp = _T("使う");	break;	// 使う
 		}
-		TextOut2(hDC, 32, 16 + 16 * i, pszTmp, clText);
+		TextOut2(hDC, m_hFont, 32, 16 + 16 * i, pszTmp, clText);
 	}
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	DrawCursor(8, 16 + 16 * m_nPos);

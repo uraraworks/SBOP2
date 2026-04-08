@@ -80,7 +80,7 @@ BOOL CLayerBase::TimerProc(void)
 }
 
 
-void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color)
+void CLayerBase::TextOut1(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color)
 {
 	if ((hDC == NULL) || (pStr == NULL)) {
 		return;
@@ -90,12 +90,14 @@ void CLayerBase::TextOut1(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color)
 	if (nLen <= 0) {
 		return;
 	}
+	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
 	SetTextColor(hDC, color);
 	::TextOut(hDC, x, y, pStr, nLen);
+	SelectObject(hDC, hFontOld);
 }
 
 
-void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
+void CLayerBase::TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
 	if ((hDC == NULL) || (pStr == NULL)) {
 		return;
@@ -105,6 +107,7 @@ void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, C
 	if (nLen <= 0) {
 		return;
 	}
+	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
 	SetTextColor(hDC, colorFrame);
 	::TextOut(hDC, x - 1, y, pStr, nLen);
 	::TextOut(hDC, x + 1, y, pStr, nLen);
@@ -112,10 +115,11 @@ void CLayerBase::TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, C
 	::TextOut(hDC, x, y + 1, pStr, nLen);
 	SetTextColor(hDC, color);
 	::TextOut(hDC, x, y, pStr, nLen);
+	SelectObject(hDC, hFontOld);
 }
 
 
-void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
+void CLayerBase::TextOut3(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
 	if ((hDC == NULL) || (pStr == NULL)) {
 		return;
@@ -125,6 +129,7 @@ void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, C
 	if (nLen <= 0) {
 		return;
 	}
+	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
 	SetTextColor(hDC, colorFrame);
 	::TextOut(hDC, x - 2, y, pStr, nLen);
 	::TextOut(hDC, x - 1, y, pStr, nLen);
@@ -151,4 +156,5 @@ void CLayerBase::TextOut3(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF color, C
 
 	SetTextColor(hDC, color);
 	::TextOut(hDC, x, y, pStr, nLen);
+	SelectObject(hDC, hFontOld);
 }

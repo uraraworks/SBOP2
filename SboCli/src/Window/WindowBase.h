@@ -63,9 +63,9 @@ protected:
 	virtual BOOL OnZ(BOOL bDown);	// キーハンドラ(Z)
 	virtual BOOL OnEscape(BOOL bDown);	// キーハンドラ(Escape)
 	virtual BOOL OnSpace(BOOL bDown);	// キーハンドラ(Space)
-	void TextOut2(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	// 黒縁取りで文字描画
-	void TextOut3(HDC hDC, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color);	// 黒縁取りで文字描画(右詰)
-	void TextOut4(HDC hDC, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color = RGB(255, 255, 255));	// 黒縁取りで文字描画
+	void TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF Color, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10));	// 黒縁取りで文字描画
+	void TextOut3(HDC hDC, HFONT hFont, int x, int y, int cx, int cy, LPCTSTR pStr, COLORREF Color);	// 黒縁取りで文字描画(右詰)
+	void TextOut4(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color = RGB(255, 255, 255));	// 黒縁取りで文字描画
 	void DrawBrowserText(int x, int y, LPCTSTR pStr, COLORREF Color, int nFontSize = 16, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10), BOOL bBold = TRUE);	// browser用テキスト重ね描画
 	void DrawBrowserRect(int x, int y, int cx, int cy, COLORREF ColorFill, BOOL bFill, COLORREF ColorStroke, BOOL bStroke, int nLineWidth = 1, BYTE byFillAlpha = 255, BYTE byStrokeAlpha = 255);	// browser用矩形重ね描画
 	void DrawFrame(int nType = 0);	// フレームを描画

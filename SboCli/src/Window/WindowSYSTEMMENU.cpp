@@ -44,7 +44,6 @@ void CWindowSYSTEMMENU::Draw(PCImg32 pDst)
 {
 	int nLevel;
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -55,14 +54,12 @@ void CWindowSYSTEMMENU::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkMode(hDC, TRANSPARENT);
 
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("名前と発言色の設定"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 1, _T("オプション"),	clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("名前と発言色の設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("オプション"),	clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	DrawCursor(8, 16 + 16 * m_nPos);

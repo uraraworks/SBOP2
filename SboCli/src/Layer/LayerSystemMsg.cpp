@@ -78,7 +78,6 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 {
 	int i, nLen, nCount;
 	HDC hDCTmp;
-	HFONT hFontOld;
 	PSYSTEMMSGINFO pInfo, pInfoTmp;
 
 	nCount = m_aSystemMsgInfo.size();
@@ -103,11 +102,9 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
         pInfo->pImg->Create(nLen * 14 + 1, 14);
 
 	hDCTmp = pInfo->pImg->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
 	SetBkMode(hDCTmp, TRANSPARENT);
-        TextOut2(hDCTmp, 1, 1, strMsg, cl);
+        TextOut2(hDCTmp, m_hFont, 1, 1, strMsg, cl);
 
-	SelectObject(hDCTmp, hFontOld);
 	pInfo->pImg->Unlock();
 
 	m_aSystemMsgInfo.push_back(pInfo);

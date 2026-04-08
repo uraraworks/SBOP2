@@ -45,7 +45,6 @@ void CWindowSWOON::Draw(PCImg32 pDst)
 {
 	int nLevel;
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -56,14 +55,12 @@ void CWindowSWOON::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkMode(hDC, TRANSPARENT);
 
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, 16 + 16, 16 + 16 * 0, _T("この場で助けを待つ"),	clText);
-	TextOut2(hDC, 16 + 15, 16 + 16 * 1, _T("記録した場所で復活する"),	clText);
+	TextOut2(hDC, m_hFont, 16 + 16, 16 + 16 * 0, _T("この場で助けを待つ"),	clText);
+	TextOut2(hDC, m_hFont, 16 + 15, 16 + 16 * 1, _T("記録した場所で復活する"),	clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	DrawCursor(8, 16 + 16 * m_nPos);

@@ -46,7 +46,6 @@ void CWindowEYECOLOR::Create(CMgrData *pMgrData)
 void CWindowEYECOLOR::Draw(PCImg32 pDst)
 {
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	CmyString strTmp;
 	CString strEyeColor;
@@ -59,16 +58,14 @@ void CWindowEYECOLOR::Draw(PCImg32 pDst)
 
 	clText	= RGB(255, 127, 53);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut4(hDC, 56, 8, _T("目の色"), clText);
+	TextOut4(hDC, m_hFont14, 56, 8, _T("目の色"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);
-	TextOut4(hDC, 16, 32, strTmp, clText);
+	TextOut4(hDC, m_hFont14, 16, 32, strTmp, clText);
         strEyeColor = Utf8ToTString(m_pMgrData->GetEyeColorName((WORD)m_nPos));
-        TextOut2(hDC, 40, 32, strEyeColor, clText);
+        TextOut2(hDC, m_hFont14, 40, 32, strEyeColor, clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	m_pDib->BltFrom256(16 + m_nPosX * 8 - 2, 21, 10, 8, m_pDibSystem, 96, 24, TRUE);

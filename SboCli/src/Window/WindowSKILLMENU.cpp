@@ -62,7 +62,6 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	LPCTSTR aszTitle[] = {_T("戦闘(F)"), _T("生活(L)"), _T("能力")};
 	int i, nCount, nLevel, x, y, nTmp;
 	HDC hDC;
-	HFONT hFontOld;
 	PCInfoSkillBase pInfoSkill;
 
 	if (m_dwTimeDrawStart) {
@@ -73,15 +72,13 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	DrawFrame(5);
 
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont12);
 	SetBkMode(hDC, TRANSPARENT);
 	for (i = 0; i < 3; i ++) {
 		int nType = (m_nType == i) ? 7 : 5;
 		DrawFrame(7 + 49 * i, 7, 48, 24, nType);
-		TextOut2(hDC, 7 + 5 + 49 * i, 7 + 4, aszTitle[i],
+		TextOut2(hDC, m_hFont12, 7 + 5 + 49 * i, 7 + 4, aszTitle[i],
 			(m_nType == i) ? RGB(255, 255, 255) : RGB(196, 140, 81));
 	}
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	DrawFrame(4, 23, 200, 248, 6);
@@ -129,16 +126,14 @@ Exit:
 	// スキル名を表示
 	if ((m_nMode == 1) && (m_strName.IsEmpty() == FALSE)) {
 		hDC	= pDst->Lock();
-		hFontOld	= (HFONT)SelectObject(hDC, m_hFont12);
 		SetBkMode(hDC, TRANSPARENT);
 
 		GetDrawPos(m_nPos, x, y);
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
 		DrawFrame2(x, y, m_strName.GetLength() * 6, 16, 0, pDst, 4);
-		TextOut2(hDC, x, y, (LPCTSTR)m_strName, RGB(10, 10, 10), FALSE);
+		TextOut2(hDC, m_hFont12, x, y, (LPCTSTR)m_strName, RGB(10, 10, 10), FALSE);
 
-		SelectObject(hDC, hFontOld);
 		pDst->Unlock();
 	}
 }

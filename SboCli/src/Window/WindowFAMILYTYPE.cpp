@@ -44,7 +44,6 @@ void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 {
 	int i, nCount;
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	POINT nCursorPos[] = {
 		40, 104
@@ -68,19 +67,17 @@ void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 
 	clText	= RGB(124, 123, 232);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont14);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut4(hDC, 88,	24,	_T("新規キャラクター作成"), clText);
-	TextOut4(hDC, 136,	48,	_T("種族選択"), clText);
-	TextOut4(hDC, 256,	288,	_T("１／３"), clText);
+	TextOut4(hDC, m_hFont14, 88,	24,	_T("新規キャラクター作成"), clText);
+	TextOut4(hDC, m_hFont14, 136,	48,	_T("種族選択"), clText);
+	TextOut4(hDC, m_hFont14, 256,	288,	_T("１／３"), clText);
 
 	for (i = 0; i < nCount; i ++) {
 		CString strFamily = Utf8ToTString(m_pMgrData->GetFamilyTypeName((WORD)(FAMILYTYPE_HUMAN + i)));
-		TextOut2(hDC, nCursorPos[i].x, nCursorPos[i].y - 4, strFamily, clText);
+		TextOut2(hDC, m_hFont14, nCursorPos[i].x, nCursorPos[i].y - 4, strFamily, clText);
 	}
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	DrawCursor(nCursorPos[m_nPos].x - 32, nCursorPos[m_nPos].y - 6);

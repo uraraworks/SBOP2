@@ -43,7 +43,6 @@ void CWindowACCOUNTINFO::Create(CMgrData *pMgrData)
 void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 {
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 	CmyString strTmp;
 	PCInfoAccount pInfoAccount;
@@ -63,17 +62,15 @@ void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 
 	clText	= RGB(0, 0, 0);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkMode(hDC, TRANSPARENT);
 
 	strTmp.Format(_T("キャラ名:%s"), (LPCTSTR)pInfoChar->m_strCharName);
-	TextOut2(hDC, 16, 16 + 16 * 0, strTmp,	clText);
+	TextOut2(hDC, m_hFont, 16, 16 + 16 * 0, strTmp,	clText);
 	strTmp.Format(_T("アカウント作成日時:"));
-	TextOut2(hDC, 16, 16 + 16 * 1, strTmp,	clText);
-	TextOut2(hDC, 16, 16 + 16 * 2, _T("前回ログイン日時:"),	clText);
-	TextOut2(hDC, 16, 16 + 16 * 3, _T("ログイン回数:"),	clText);
+	TextOut2(hDC, m_hFont, 16, 16 + 16 * 1, strTmp,	clText);
+	TextOut2(hDC, m_hFont, 16, 16 + 16 * 2, _T("前回ログイン日時:"),	clText);
+	TextOut2(hDC, m_hFont, 16, 16 + 16 * 3, _T("ログイン回数:"),	clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	m_dwTimeDrawStart = timeGetTime();

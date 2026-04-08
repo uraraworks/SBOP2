@@ -252,7 +252,6 @@ void CWindowLOGIN::Create(CMgrData *pMgrData)
 void CWindowLOGIN::Draw(PCImg32 pDst)
 {
 	HDC hDC = NULL;
-	HFONT hFontOld = NULL;
 	RECT rcAccount, rcPassword, rcCheck, rcConnect;
 	CString strCheck;
 
@@ -266,17 +265,15 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
 		hDC	= m_pDib->Lock();
-		hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 		SetBkMode(hDC, TRANSPARENT);
 
-		TextOut2(hDC, 16, 16, _T("アカウント:"), RGB(1, 1, 1));
-		TextOut2(hDC, 16, 42, _T("パスワード:"), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, 16, 16, _T("アカウント:"), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, 16, 42, _T("パスワード:"), RGB(1, 1, 1));
 		DrawTextField(hDC, rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
 		DrawTextField(hDC, rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
-		TextOut2(hDC, rcCheck.left, rcCheck.top, strCheck, RGB(1, 1, 1));
-		TextOut2(hDC, rcConnect.left + 12, rcConnect.top + 2, GetLoginLabelConnect(), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, rcCheck.left, rcCheck.top, strCheck, RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, rcConnect.left + 12, rcConnect.top + 2, GetLoginLabelConnect(), RGB(1, 1, 1));
 
-		SelectObject(hDC, hFontOld);
 		m_pDib->Unlock();
 		m_dwTimeDrawStart = timeGetTime();
 	}
@@ -760,7 +757,7 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		}
 	}
 
-	TextOut2(hDC, rcField.left + 2, rcField.top + 1, strDraw, RGB(0, 0, 0));
+	TextOut2(hDC, m_hFont, rcField.left + 2, rcField.top + 1, strDraw, RGB(0, 0, 0));
 	if (bFocused && (m_nCursorAnime == 0)) {
 		// カーソル位置に基づいて描画位置を計算
 		int nDrawCursorPos = m_nCursorPos;
@@ -771,7 +768,7 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		if (nCursorX > rcField.right - 8) {
 			nCursorX = rcField.right - 8;
 		}
-		TextOut2(hDC, nCursorX, rcField.top + 1, _T("|"), RGB(0, 0, 0));
+		TextOut2(hDC, m_hFont, nCursorX, rcField.top + 1, _T("|"), RGB(0, 0, 0));
 	}
 }
 

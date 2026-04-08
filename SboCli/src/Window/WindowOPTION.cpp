@@ -45,7 +45,6 @@ void CWindowOPTION::Draw(PCImg32 pDst)
 {
 	int nLevel;
 	HDC hDC;
-	HFONT hFontOld;
 	COLORREF clText;
 
 	if (m_dwTimeDrawStart) {
@@ -56,15 +55,13 @@ void CWindowOPTION::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	hFontOld	= (HFONT)SelectObject(hDC, m_hFont);
 	SetBkMode(hDC, TRANSPARENT);
 
-	TextOut2(hDC, 32, 16 + 16 * 0, _T("表示設定"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 1, _T("音量設定"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 2, _T("入力設定"),	clText);
-	TextOut2(hDC, 32, 16 + 16 * 3, _T("動作設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("表示設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("音量設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 2, _T("入力設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 3, _T("動作設定"),	clText);
 
-	SelectObject(hDC, hFontOld);
 	m_pDib->Unlock();
 
 	DrawCursor(8, 16 + 16 * m_nPos);
