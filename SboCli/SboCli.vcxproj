@@ -257,7 +257,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClCompile Include="src\Lib\DInputUtil.cpp" />
     <ClCompile Include="src\Lib\DXAudio.cpp" />
     <ClCompile Include="src\Lib\Img32.cpp" />
-    <ClCompile Include="src\Lib\LibMusicLoader.cpp" />
     <ClCompile Include="src\Lib\MacAddr.cpp" />
     <ClCompile Include="src\Lib\third_party\lodepng.cpp" />
     <ClCompile Include="src\MainFrame\MainFrame.cpp" />
@@ -454,7 +453,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClInclude Include="src\Lib\DInputUtil.h" />
     <ClInclude Include="src\Lib\DXAudio.h" />
     <ClInclude Include="src\Lib\Img32.h" />
-    <ClInclude Include="src\Lib\LibMusicLoader.h" />
     <ClInclude Include="src\Lib\MacAddr.h" />
     <ClInclude Include="src\Lib\third_party\lodepng.h" />
     <ClInclude Include="src\Lib\Png\png.h" />

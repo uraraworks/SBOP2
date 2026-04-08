@@ -8,7 +8,6 @@
 #include <SDL.h>			// SDL_LoadObject / SDL_UnloadObject 用
 #include "resource.h"
 #include "DXAudio.h"
-#include "LibMusicLoader.h"
 #include "LibSboSoundLoader.h"
 #include "MgrSound.h"
 
@@ -21,7 +20,6 @@ CMgrSound::CMgrSound()
 	m_fBGMVolume		= 0.50f;
 	m_hDllSoundData		= NULL;
 	m_pDXAudio			= new CDXAudio;
-	m_pLibMusicLoader	= new CLibMusicLoader;
 	m_pLibSboSoundLoader = new CLibSboSoundLoader;
 	m_apDMSSound		= NULL;
 	// BGM: XAudio2 再生に切替のため未使用
@@ -33,7 +31,6 @@ CMgrSound::~CMgrSound()
 	Destroy();
 
 	SAFE_DELETE(m_pDXAudio);
-	SAFE_DELETE(m_pLibMusicLoader);
 	SAFE_DELETE(m_pLibSboSoundLoader);
 	SAFE_DELETE_ARRAY(m_apDMSSound);
 }
@@ -74,7 +71,6 @@ BOOL CMgrSound::Create(void)
 	}
 	m_pDXAudio->SetResourceHandle(m_hDllSoundData);
 
-	m_pLibMusicLoader->Load();
 	m_pLibSboSoundLoader->Load();
 
 	// 効果音を読み込み
@@ -90,9 +86,6 @@ void CMgrSound::Destroy(void)
 {
 	if (m_pDXAudio) {
 		m_pDXAudio->Destroy();
-	}
-	if (m_pLibMusicLoader) {
-		m_pLibMusicLoader->Free();
 	}
 	// SDL_LoadObject で読み込んだDLLを解放
 	if (m_hDllSoundData) {

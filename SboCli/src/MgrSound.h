@@ -14,7 +14,6 @@ struct IDirectMusicSegment8;
 #include "SboSoundData.h"
 
 class CDXAudio;
-class CLibMusicLoader;
 class CLibSboSoundLoader;
 
 // 定数定義
@@ -61,7 +60,6 @@ protected:
 	float					m_fBGMVolume;			// BGM音量
 	void*					m_hDllSoundData;		// 音関連DLLのハンドル（SDL_LoadObject用）
 	CDXAudio				*m_pDXAudio;			// サウンドライブラリ
-	CLibMusicLoader			*m_pLibMusicLoader;		// MIDI再生ライブラリ
 	CLibSboSoundLoader		*m_pLibSboSoundLoader;	// サウンドデータライブラリ
 	IDirectMusicSegment8	**m_apDMSSound;			// 効果音
 	// Audiere dependency removed

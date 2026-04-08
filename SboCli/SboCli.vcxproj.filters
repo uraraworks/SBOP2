@@ -426,9 +426,6 @@
     <ClCompile Include="src\Lib\Img32.cpp">
       <Filter>Source Files\Lib</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lib\LibMusicLoader.cpp">
-      <Filter>Source Files\Lib</Filter>
-    </ClCompile>
     <ClCompile Include="src\Lib\MacAddr.cpp">
       <Filter>Source Files\Lib</Filter>
     </ClCompile>
@@ -915,9 +912,6 @@
       <Filter>Header Files\Lib No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\Lib\Img32.h">
-      <Filter>Header Files\Lib No. 1</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lib\LibMusicLoader.h">
       <Filter>Header Files\Lib No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\Lib\MacAddr.h">
