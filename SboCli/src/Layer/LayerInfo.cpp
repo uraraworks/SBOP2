@@ -41,7 +41,6 @@ void CLayerInfo::Draw(PCImg32 pDst)
 	DrawFrame(pDst);
 
 	hDCTmp = pDst->Lock();
-	SetBkMode(hDCTmp, TRANSPARENT);
 
 	TextOut1(hDCTmp, m_hFont, m_nX + 16, m_nY + 32, _T("お知らせ"), RGB(0, 0, 0));
 

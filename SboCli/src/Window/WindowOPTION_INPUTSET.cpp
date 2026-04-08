@@ -55,7 +55,6 @@ void CWindowOPTION_INPUTSET::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("使用するジョイパッドの設定"), clText);
 

@@ -62,7 +62,6 @@ void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 
 	clText	= RGB(0, 0, 0);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	strTmp.Format(_T("キャラ名:%s"), (LPCTSTR)pInfoChar->m_strCharName);
 	TextOut2(hDC, m_hFont, 16, 16 + 16 * 0, strTmp,	clText);

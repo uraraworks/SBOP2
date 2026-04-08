@@ -61,7 +61,6 @@ void CWindowCHAR_STATUS4::Draw(PCImg32 pDst)
 	m_pDib->BltFrom256(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, m_pDibSystem, 0, 647, TRUE);
 
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut2(hDC, m_hFont12, 7, 6, (LPCTSTR)pInfoChar->m_strCharName, RGB(255, 255, 255));
 

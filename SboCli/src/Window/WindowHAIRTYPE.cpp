@@ -56,7 +56,6 @@ void CWindowHAIRTYPE::Draw(PCImg32 pDst)
 
 	clText	= RGB(255, 127, 53);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut4(hDC, m_hFont14, 64, 8, _T("髪型"), clText);
 	strTmp.Format(_T("%02d"), m_nPos);

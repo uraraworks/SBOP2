@@ -5,6 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#include "Platform/SdlFont.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoCharCli.h"
 #include "Img32.h"
@@ -26,21 +27,14 @@ CLayerBase::CLayerBase()
 	m_pDib = new CImg32;
 	m_pDibBase = new CImg32;
 
-#if !defined(_WIN32)
-	m_hFont = NULL;
-#else
-	m_hFont = CreateFont(12, 0, 0, 0, FW_NORMAL,
-			FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-			DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
-#endif
+	m_hFont = (HFONT)SdlFontCreate(12, false);
 }
 
 
 CLayerBase::~CLayerBase()
 {
 	if (m_hFont) {
-		DeleteObject(m_hFont);
+		SdlFontDestroy((void*)m_hFont);
 		m_hFont = NULL;
 	}
 	SAFE_DELETE(m_pDib);
@@ -82,79 +76,76 @@ BOOL CLayerBase::TimerProc(void)
 
 void CLayerBase::TextOut1(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color)
 {
-	if ((hDC == NULL) || (pStr == NULL)) {
-		return;
-	}
-
+	if ((hDC == NULL) || (pStr == NULL) || (hFont == NULL)) return;
 	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
-	SetTextColor(hDC, color);
-	::TextOut(hDC, x, y, pStr, nLen);
-	SelectObject(hDC, hFontOld);
+	if (nLen <= 0) return;
+
+	SdlDCContext* ctx = SdlDCGet(hDC);
+	if (ctx == NULL) return;
+	ctx->currentFont = (void*)hFont;
+	ctx->textColor = (unsigned long)color;
+	SdlFontTextOut(hDC, x, y, pStr, nLen);
 }
 
 
 void CLayerBase::TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
-	if ((hDC == NULL) || (pStr == NULL)) {
-		return;
-	}
-
+	if ((hDC == NULL) || (pStr == NULL) || (hFont == NULL)) return;
 	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
-	SetTextColor(hDC, colorFrame);
-	::TextOut(hDC, x - 1, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y, pStr, nLen);
-	::TextOut(hDC, x, y - 1, pStr, nLen);
-	::TextOut(hDC, x, y + 1, pStr, nLen);
-	SetTextColor(hDC, color);
-	::TextOut(hDC, x, y, pStr, nLen);
-	SelectObject(hDC, hFontOld);
+	if (nLen <= 0) return;
+
+	SdlDCContext* ctx = SdlDCGet(hDC);
+	if (ctx == NULL) return;
+	ctx->currentFont = (void*)hFont;
+
+	// 縁取り 4 方向
+	ctx->textColor = (unsigned long)colorFrame;
+	SdlFontTextOut(hDC, x - 1, y, pStr, nLen);
+	SdlFontTextOut(hDC, x + 1, y, pStr, nLen);
+	SdlFontTextOut(hDC, x, y - 1, pStr, nLen);
+	SdlFontTextOut(hDC, x, y + 1, pStr, nLen);
+	// 本体
+	ctx->textColor = (unsigned long)color;
+	SdlFontTextOut(hDC, x, y, pStr, nLen);
 }
 
 
 void CLayerBase::TextOut3(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame)
 {
-	if ((hDC == NULL) || (pStr == NULL)) {
-		return;
-	}
-
+	if ((hDC == NULL) || (pStr == NULL) || (hFont == NULL)) return;
 	int nLen = lstrlen(pStr);
-	if (nLen <= 0) {
-		return;
-	}
-	HFONT hFontOld = (HFONT)SelectObject(hDC, hFont);
-	SetTextColor(hDC, colorFrame);
-	::TextOut(hDC, x - 2, y, pStr, nLen);
-	::TextOut(hDC, x - 1, y, pStr, nLen);
-	::TextOut(hDC, x - 1, y - 2, pStr, nLen);
-	::TextOut(hDC, x - 2, y - 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y - 1, pStr, nLen);
-	::TextOut(hDC, x - 2, y + 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y + 1, pStr, nLen);
-	::TextOut(hDC, x - 1, y + 2, pStr, nLen);
+	if (nLen <= 0) return;
 
-	::TextOut(hDC, x + 2, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y, pStr, nLen);
-	::TextOut(hDC, x + 1, y - 2, pStr, nLen);
-	::TextOut(hDC, x + 2, y - 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y - 1, pStr, nLen);
-	::TextOut(hDC, x + 2, y + 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y + 1, pStr, nLen);
-	::TextOut(hDC, x + 1, y + 2, pStr, nLen);
+	SdlDCContext* ctx = SdlDCGet(hDC);
+	if (ctx == NULL) return;
+	ctx->currentFont = (void*)hFont;
 
-	::TextOut(hDC, x, y - 2, pStr, nLen);
-	::TextOut(hDC, x, y - 1, pStr, nLen);
-	::TextOut(hDC, x, y + 2, pStr, nLen);
-	::TextOut(hDC, x, y + 1, pStr, nLen);
+	// 縁取り 20 方向
+	ctx->textColor = (unsigned long)colorFrame;
+	SdlFontTextOut(hDC, x - 2, y, pStr, nLen);
+	SdlFontTextOut(hDC, x - 1, y, pStr, nLen);
+	SdlFontTextOut(hDC, x - 1, y - 2, pStr, nLen);
+	SdlFontTextOut(hDC, x - 2, y - 1, pStr, nLen);
+	SdlFontTextOut(hDC, x - 1, y - 1, pStr, nLen);
+	SdlFontTextOut(hDC, x - 2, y + 1, pStr, nLen);
+	SdlFontTextOut(hDC, x - 1, y + 1, pStr, nLen);
+	SdlFontTextOut(hDC, x - 1, y + 2, pStr, nLen);
 
-	SetTextColor(hDC, color);
-	::TextOut(hDC, x, y, pStr, nLen);
-	SelectObject(hDC, hFontOld);
+	SdlFontTextOut(hDC, x + 2, y, pStr, nLen);
+	SdlFontTextOut(hDC, x + 1, y, pStr, nLen);
+	SdlFontTextOut(hDC, x + 1, y - 2, pStr, nLen);
+	SdlFontTextOut(hDC, x + 2, y - 1, pStr, nLen);
+	SdlFontTextOut(hDC, x + 1, y - 1, pStr, nLen);
+	SdlFontTextOut(hDC, x + 2, y + 1, pStr, nLen);
+	SdlFontTextOut(hDC, x + 1, y + 1, pStr, nLen);
+	SdlFontTextOut(hDC, x + 1, y + 2, pStr, nLen);
+
+	SdlFontTextOut(hDC, x, y - 2, pStr, nLen);
+	SdlFontTextOut(hDC, x, y - 1, pStr, nLen);
+	SdlFontTextOut(hDC, x, y + 2, pStr, nLen);
+	SdlFontTextOut(hDC, x, y + 1, pStr, nLen);
+
+	// 本体
+	ctx->textColor = (unsigned long)color;
+	SdlFontTextOut(hDC, x, y, pStr, nLen);
 }

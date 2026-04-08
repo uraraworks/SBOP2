@@ -73,7 +73,6 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 #endif
 
 //	TextOut2(hDC, m_hFont, 32, 0, _T("強さ"), RGB(0, 0, 0));
-	SetBkMode(hDC, TRANSPARENT);
 	TextOut2(hDC, m_hFont, 16 + 8 * 0, 16 * 1, _T("レベル"), RGB(0, 0, 0));
 #if 0
 	char szTmp[128];

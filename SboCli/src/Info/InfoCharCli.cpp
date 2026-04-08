@@ -7,6 +7,7 @@
 #include "stdafx.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include "Platform/SdlFont.h"
 #include "InfoEffect.h"
 #include "LibInfoEffect.h"
 #include "LibInfoEfcBalloon.h"
@@ -155,10 +156,7 @@ CInfoCharCli::CInfoCharCli()
 
 	m_ptMove.x = m_ptMove.y = 0;
 
-        m_hFont = CreateFont(12, 0, 0, 0, FW_NORMAL,
-                        FALSE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ ゴシック"));
+	m_hFont = (HFONT)SdlFontCreate(12, false);
 }
 
 
@@ -167,7 +165,7 @@ CInfoCharCli::~CInfoCharCli()
 	DeleteAllTextEffect();
 	DeleteAllMovePosQue();
 	if (m_hFont) {
-		DeleteObject(m_hFont);
+		SdlFontDestroy((void*)m_hFont);
 		m_hFont = NULL;
 	}
 	SAFE_DELETE(m_pDibChar);
@@ -711,7 +709,6 @@ void CInfoCharCli::MakeCharGrp(void)
 void CInfoCharCli::SetName(LPCSTR pszName)
 {
 	int i, nCount, nLen, x;
-	HFONT hFontOld;
 	HDC hDCTmp;
 	PCImg32 pDibSystem;
 
@@ -731,8 +728,6 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 	m_pDibName->Clear();
 
 	hDCTmp = m_pDibName->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
-	SetBkMode(hDCTmp, TRANSPARENT);
 
 	for (i = 0; i < nCount; i ++) {
 		m_pDibName->BltFrom256(x, 1, 16, 16, pDibSystem, 176 + (m_abyMark[i] - 1) * 16, 0, TRUE);
@@ -742,15 +737,22 @@ void CInfoCharCli::SetName(LPCSTR pszName)
         nLen = static_cast<int>(strlen(pszName));
         CString strText = AnsiToTString(pszName);
         int nDrawLen = strText.GetLength();
-        SetTextColor(hDCTmp, RGB(10, 10, 10));
-        ::TextOut(hDCTmp, x + 0, 2, strText, nDrawLen);
-        ::TextOut(hDCTmp, x + 2, 2, strText, nDrawLen);
-        ::TextOut(hDCTmp, x + 1, 1, strText, nDrawLen);
-        ::TextOut(hDCTmp, x + 1, 3, strText, nDrawLen);
-        SetTextColor(hDCTmp, m_clName);
-        ::TextOut(hDCTmp, x + 1, 2, strText, nDrawLen);
+        {
+            SdlDCContext* ctx = SdlDCGet(hDCTmp);
+            if (ctx) {
+                ctx->currentFont = (void*)m_hFont;
+                // 縁取り 4 方向
+                ctx->textColor = (unsigned long)RGB(10, 10, 10);
+                SdlFontTextOut(hDCTmp, x + 0, 2, strText, nDrawLen);
+                SdlFontTextOut(hDCTmp, x + 2, 2, strText, nDrawLen);
+                SdlFontTextOut(hDCTmp, x + 1, 1, strText, nDrawLen);
+                SdlFontTextOut(hDCTmp, x + 1, 3, strText, nDrawLen);
+                // 本体
+                ctx->textColor = (unsigned long)m_clName;
+                SdlFontTextOut(hDCTmp, x + 1, 2, strText, nDrawLen);
+            }
+        }
 
-	SelectObject(hDCTmp, hFontOld);
 	m_pDibName->Unlock();
 }
 
@@ -760,7 +762,6 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	char szTmp[32];
 	BOOL bResult;
 	int nPos, nLen, nLenTmp, nCount, nWidth, nHeight, nLine;
-	HFONT hFontOld;
 	HDC hDCTmp;
 	CmyString strSpeak1, strSpeak2;
 
@@ -791,8 +792,6 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	m_pDibSpeak->Clear();
 
 	hDCTmp = m_pDibSpeak->Lock();
-	hFontOld = (HFONT)SelectObject(hDCTmp, m_hFont);
-	SetBkMode(hDCTmp, TRANSPARENT);
 
 	// 全角10文字単位で1行ずつ画像を作成
 	while (1) {
@@ -815,13 +814,19 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
                 if (nLenTmp > 0) {
                         CString strLine = AnsiToTString(szTmp);
                         int nDrawLenTmp = strLine.GetLength();
-                        SetTextColor(hDCTmp, RGB(10, 10, 10));
-                        ::TextOut(hDCTmp, 0, 1 + nLine * 14, strLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 2, 1 + nLine * 14, strLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 1, 0 + nLine * 14, strLine, nDrawLenTmp);
-                        ::TextOut(hDCTmp, 1, 2 + nLine * 14, strLine, nDrawLenTmp);
-                        SetTextColor(hDCTmp, m_clSpeak);
-                        ::TextOut(hDCTmp, 1, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        SdlDCContext* ctx = SdlDCGet(hDCTmp);
+                        if (ctx) {
+                            ctx->currentFont = (void*)m_hFont;
+                            // 縁取り 4 方向
+                            ctx->textColor = (unsigned long)RGB(10, 10, 10);
+                            SdlFontTextOut(hDCTmp, 0, 1 + nLine * 14, strLine, nDrawLenTmp);
+                            SdlFontTextOut(hDCTmp, 2, 1 + nLine * 14, strLine, nDrawLenTmp);
+                            SdlFontTextOut(hDCTmp, 1, 0 + nLine * 14, strLine, nDrawLenTmp);
+                            SdlFontTextOut(hDCTmp, 1, 2 + nLine * 14, strLine, nDrawLenTmp);
+                            // 本体
+                            ctx->textColor = (unsigned long)m_clSpeak;
+                            SdlFontTextOut(hDCTmp, 1, 1 + nLine * 14, strLine, nDrawLenTmp);
+                        }
                         nLine ++;
                 }
 
@@ -830,7 +835,6 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 		}
 	}
 
-	SelectObject(hDCTmp, hFontOld);
 	m_pDibSpeak->Unlock();
 }
 

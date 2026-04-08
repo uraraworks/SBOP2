@@ -51,7 +51,6 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 		DrawInputFrame1(16, 48, 8 * MAXLEN_CHARNAME, 14, 0);
 
 		hDC	= m_pDib->Lock();
-		SetBkMode(hDC, TRANSPARENT);
 
 		TextOut4(hDC, m_hFont14, 24, 16, _T("キャラクター名"), RGB(255, 127, 53));
 		TextOut2(hDC, m_hFont14, 18, 46, m_strName, RGB(0, 0, 0));

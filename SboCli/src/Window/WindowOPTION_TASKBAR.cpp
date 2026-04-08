@@ -55,7 +55,6 @@ void CWindowOPTION_TASKBAR::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("ON"),	clText);
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("OFF"),	clText);

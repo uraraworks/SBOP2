@@ -87,7 +87,6 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 	m_pDib->BltFrom256(50, 0, 16, 16, m_pDibSystem, 48 + (m_aArrayType[m_nType] * 16), 112);
 
 	hDC = m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 	TextOut2(hDC, m_hFont14, 8 + 8, 16 + 4, m_strChat, RGB(0, 0, 0));
 	if (m_bActive && (m_nCursorAnime == 0)) {
 		int nCursorX;

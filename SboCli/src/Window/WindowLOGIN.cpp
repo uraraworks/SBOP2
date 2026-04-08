@@ -265,7 +265,6 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
 		hDC	= m_pDib->Lock();
-		SetBkMode(hDC, TRANSPARENT);
 
 		TextOut2(hDC, m_hFont, 16, 16, _T("アカウント:"), RGB(1, 1, 1));
 		TextOut2(hDC, m_hFont, 16, 42, _T("パスワード:"), RGB(1, 1, 1));

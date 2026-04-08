@@ -7,9 +7,7 @@
 #include "stdafx.h"
 #include <math.h>
 #include "Img32.h"
-#if !defined(_WIN32)
 #include "Platform/SdlFont.h"
-#endif
 
 // 定数の定義
 
@@ -1144,58 +1142,19 @@ void CImg32::BltStretchNearest(
 
 HDC CImg32::Lock(void)
 {
-#if !defined(_WIN32)
 	// SdlFontのDCコンテキストを登録して仮想DCを返す
 	if (m_pBits && !m_hDC) {
 		m_hDC = (HDC)SdlDCRegister(m_pBits, Width(), Height());
 	}
 	return m_hDC;
-#else
-	HDC hDC, hRet;
-
-	hRet = NULL;
-	// オブジェクトが不正
-	if ((m_hBmp == NULL) || (m_hBmp == HBITMAP_WITHOUT_GDI)) {
-		goto Exit;
-	}
-
-	// すでにロックしている
-	if (m_hDC) {
-		hRet = m_hDC;
-		goto Exit;
-	}
-
-	// コンパチブル DC を作成して、ビットマップを選択
-	hDC = GetDC(NULL);
-	m_hDC = CreateCompatibleDC(hDC);
-	ReleaseDC(NULL, hDC);
-	if (m_hDC) {
-		m_hBmpBack = (HBITMAP)SelectObject(m_hDC, m_hBmp);
-	}
-	hRet = m_hDC;
-
-Exit:
-	return hRet;
-#endif
 }
 
 void CImg32::Unlock(void)
 {
-#if !defined(_WIN32)
 	if (m_hDC) {
 		SdlDCUnregister(m_hDC);
 		m_hDC = NULL;
 	}
-	return;
-#else
-	if (m_hDC == NULL) {
-		return;
-	}
-
-	SelectObject(m_hDC, m_hBmpBack);
-	DeleteDC(m_hDC);
-	m_hDC = NULL;
-#endif
 }
 
 HBITMAP CImg32::GetSafeHandle(void)

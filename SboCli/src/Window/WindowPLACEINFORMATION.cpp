@@ -60,7 +60,6 @@ void CWindowPLACEINFORMATION::Draw(PCImg32 pDst)
 	m_pDib->BltFrom256(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, m_pDibSystem, 0, 624, TRUE);
 
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut2(hDC, m_hFont12, 34, 6, (LPCTSTR)pInfoMap->m_strMapName, RGB(1, 1, 1));
 

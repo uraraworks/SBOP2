@@ -58,7 +58,6 @@ void CWindowOPTION_ACTIONSET_SLEEPTIMER::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("なし"), clText);
 	for (i = 0; i < 5; i ++) {

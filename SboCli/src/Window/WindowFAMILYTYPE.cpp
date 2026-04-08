@@ -67,7 +67,6 @@ void CWindowFAMILYTYPE::Draw(PCImg32 pDst)
 
 	clText	= RGB(124, 123, 232);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut4(hDC, m_hFont14, 88,	24,	_T("新規キャラクター作成"), clText);
 	TextOut4(hDC, m_hFont14, 136,	48,	_T("種族選択"), clText);

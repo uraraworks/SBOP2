@@ -52,7 +52,6 @@ void CWindowSETCOLOR::Draw(PCImg32 pDst)
 	DrawFrame();
 
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("白"),	RGB(255, 255, 255), TRUE);
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("赤"),	RGB(255, 200, 200), TRUE);

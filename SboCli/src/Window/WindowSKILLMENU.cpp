@@ -72,7 +72,6 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	DrawFrame(5);
 
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 	for (i = 0; i < 3; i ++) {
 		int nType = (m_nType == i) ? 7 : 5;
 		DrawFrame(7 + 49 * i, 7, 48, 24, nType);
@@ -126,7 +125,6 @@ Exit:
 	// スキル名を表示
 	if ((m_nMode == 1) && (m_strName.IsEmpty() == FALSE)) {
 		hDC	= pDst->Lock();
-		SetBkMode(hDC, TRANSPARENT);
 
 		GetDrawPos(m_nPos, x, y);
 		x = m_ptViewPos.x + 32 + x - 8;

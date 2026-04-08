@@ -5,6 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
+#include "Platform/SdlFont.h"
 #include "Command.h"
 #include "PacketCHAR_PARA1.h"
 #include "UraraSockTCPSBO.h"
@@ -207,7 +208,6 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 
 			clText	= RGB(1, 1, 1);
 			hDC	= m_pDib->Lock();
-			SetBkMode(hDC, TRANSPARENT);
 
 			nCount = m_astrMenu.size();
 			for (i = 0; i < nCount; i ++) {
@@ -599,7 +599,6 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDibText->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	clText = RGB(1, 1, 1);
 	TextOut2(hDC, m_hFont16Normal, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
@@ -608,17 +607,10 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 		m_ptDraw.x = cx;
 	}
 
-	// 文字幅を実際の描画幅で進める
-	// GetTextExtentPoint32 はフォント選択後に計測する必要があるため一時的に SelectObject する
-	SIZE sizeText = {0, 0};
-	HFONT hFontOld = (HFONT)SelectObject(hDC, m_hFont16Normal);
-#ifdef UNICODE
-	GetTextExtentPoint32W(hDC, pszDraw, (int)_tcslen(pszDraw), &sizeText);
-#else
-	GetTextExtentPoint32A(hDC, pszDraw, (int)strlen(pszDraw), &sizeText);
-#endif
-	SelectObject(hDC, hFontOld);
-	m_ptDraw.x += sizeText.cx;
+	// SdlFontGetTextExtent でフォント直接計測
+	int textW = 0, textH = 0;
+	SdlFontGetTextExtent((void*)m_hFont16Normal, pszDraw, (int)_tcslen(pszDraw), &textW, &textH);
+	m_ptDraw.x += textW;
 	if (m_ptDraw.x + 8 >= cx) {
 		m_ptDraw.x = 0;
 		m_ptDraw.y += 16;
@@ -642,7 +634,6 @@ void CWindowTEXTMSG::RenewTitle(void)
 	m_pDibTitle->FillRect(0, 0, m_pDibTitle->Width(), m_pDibTitle->Height(), RGB(0, 0, 0));
 
 	hDC	= m_pDibTitle->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	y = 1;
 	clText  = RGB(255, 255, 255);

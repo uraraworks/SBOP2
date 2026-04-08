@@ -102,7 +102,6 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
         pInfo->pImg->Create(nLen * 14 + 1, 14);
 
 	hDCTmp = pInfo->pImg->Lock();
-	SetBkMode(hDCTmp, TRANSPARENT);
         TextOut2(hDCTmp, m_hFont, 1, 1, strMsg, cl);
 
 	pInfo->pImg->Unlock();

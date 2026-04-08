@@ -7,6 +7,7 @@
 #include "stdafx.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#include "Platform/SdlFont.h"
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoMapBase.h"
@@ -68,10 +69,7 @@ CLayerMap::CLayerMap()
 	m_pLayerMisty = NULL;
 	m_pLayerSnow = NULL;
 
-        m_hFont32 = CreateFont(32, 0, 0, 0, FW_NORMAL,
-                        TRUE, FALSE, FALSE, SHIFTJIS_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("ＭＳ Ｐゴシック"));
+	m_hFont32 = (HFONT)SdlFontCreate(32, false);
 }
 
 
@@ -85,7 +83,7 @@ CLayerMap::~CLayerMap()
 	SAFE_DELETE(m_pLayerSnow);
 
 	if (m_hFont32) {
-		DeleteObject(m_hFont32);
+		SdlFontDestroy((void*)m_hFont32);
 		m_hFont32 = NULL;
 	}
 }
@@ -647,17 +645,10 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 		return;
 	}
 
-	// 仮のDCとフォントでテキスト幅を取得
-	HDC hScreenDC = GetDC(NULL);
-	HFONT hOldFont = (HFONT)SelectObject(hScreenDC, m_hFont32);
-	SIZE sizeText = {0, 0};
-#ifdef UNICODE
-	GetTextExtentPoint32W(hScreenDC, strMapName, nLen, &sizeText);
-#else
-	GetTextExtentPoint32A(hScreenDC, strMapName, nLen, &sizeText);
-#endif
-	SelectObject(hScreenDC, hOldFont); // テキスト幅取得用の一時DC（m_pDib と無関係）
-	ReleaseDC(NULL, hScreenDC);
+	// SdlFontGetTextExtent でフォント直接計測
+	int textW = 0, textH = 0;
+	SdlFontGetTextExtent((void*)m_hFont32, strMapName, nLen, &textW, &textH);
+	SIZE sizeText = { textW, textH };
 
 	int nWidth = sizeText.cx + 8; // 余白
 	int nHeight = 36;
@@ -666,7 +657,6 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	m_pDibMapName->Create(nWidth, nHeight);
 
 	hDCTmp = m_pDibMapName->Lock();
-	SetBkMode(hDCTmp, TRANSPARENT);
 
 	this->TextOut3(hDCTmp, m_hFont32, 1, 2, strMapName, RGB(255, 255, 255));
 
@@ -1321,7 +1311,6 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 					FALSE);
 		} else {
 			hDC = pDst->Lock();
-			SetBkMode(hDC, TRANSPARENT);
 			x += 16;
 			x -= (pInfoItem->m_strName.GetLength() * 6 / 2);
 			y += 32;

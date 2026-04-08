@@ -52,7 +52,6 @@ void CWindowMSG::Draw(PCImg32 pDst)
 		nTmp = 5;
 	}
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	if (m_strMsg.IsEmpty() == FALSE) {
 		TextOut2(hDC, m_hFont, 16, 16 + nTmp, m_strMsg, RGB(1, 1, 1));

@@ -57,7 +57,6 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	DrawFrame(5);
 	DrawFrame(12, 7, 80, 24, 7);

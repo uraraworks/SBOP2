@@ -54,7 +54,6 @@ void CWindowSEX::Draw(PCImg32 pDst)
 
 	clText	= RGB(255, 127, 53);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	TextOut4(hDC, m_hFont14, 48, 8, _T("性別"),	clText);
 	TextOut2(hDC, m_hFont14, 40, 16 + 16 * 1,	_T("♂ 男の子"),	clText);

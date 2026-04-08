@@ -87,7 +87,6 @@ void CWindowLOGINMENU::Draw(PCImg32 pDst)
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
-	SetBkMode(hDC, TRANSPARENT);
 
 	clBack = RGB(1, 1, 1);
 	clText = (m_abEnable[0] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);

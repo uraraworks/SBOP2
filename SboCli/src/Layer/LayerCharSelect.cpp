@@ -90,7 +90,6 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 
 		// 名前の描画
 		hDC = pDst->Lock();
-		SetBkMode(hDC, TRANSPARENT);
 		TextOut2(
 				hDC,
 				m_hFont,
