@@ -60,7 +60,6 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
-#include <imm.h>
 #include <time.h>
 #include <tchar.h>
 #include <shlwapi.h>

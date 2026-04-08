@@ -20,7 +20,6 @@
 
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "imm32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "Rpcrt4.lib")
 

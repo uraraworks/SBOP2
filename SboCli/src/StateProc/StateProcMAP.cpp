@@ -761,7 +761,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 					nType,
 					dwNotifyData,
 					nCount);
-				OutputDebugString(strDbg);
+				SDL_Log("%ls", (LPCWSTR)strDbg);
 			}
 			PostAdminUiMessage(WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		}

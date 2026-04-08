@@ -5,6 +5,8 @@
 /// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "Img32.h"
@@ -51,11 +53,11 @@ BOOL CLayerSystemMsg::TimerProc(void)
 
 	bRet = FALSE;
 
-	dwTmp = timeGetTime() - m_dwLastTimeProc;
+	dwTmp = SDL_GetTicks() - m_dwLastTimeProc;
 	if (dwTmp < 50) {
 		goto Exit;
 	}
-	m_dwLastTimeProc = timeGetTime();
+	m_dwLastTimeProc = SDL_GetTicks();
 
 	nCount = m_aSystemMsgInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {

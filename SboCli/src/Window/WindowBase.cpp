@@ -5,6 +5,8 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "Img32.h"
 #include "MgrWindow.h"
 #include "MgrData.h"
@@ -188,7 +190,7 @@ void CWindowBase::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	m_dwTimeDrawStart = timeGetTime();
+	m_dwTimeDrawStart = SDL_GetTicks();
 
 Exit:
 	return;
@@ -201,8 +203,8 @@ BOOL CWindowBase::TimerProc(void)
 
 	bRet = FALSE;
 
-	if (timeGetTime() - m_dwLastTimeCursor > 300) {
-		m_dwLastTimeCursor = timeGetTime();
+	if (SDL_GetTicks() - m_dwLastTimeCursor > 300) {
+		m_dwLastTimeCursor = SDL_GetTicks();
 		m_nCursorAnime ++;
 		if (m_nCursorAnime >= 2) {
 			m_nCursorAnime = 0;
@@ -232,7 +234,7 @@ void CWindowBase::KeyProc(
 	if (m_nCountKeyRepeate > 1) {
 		dwTime = 125;
 	}
-	dwTimeTmp = timeGetTime() - m_dwLastTimeKey;
+	dwTimeTmp = SDL_GetTicks() - m_dwLastTimeKey;
 
 	bResult = FALSE;
 	if (byCode == 'B') {
@@ -298,7 +300,7 @@ void CWindowBase::KeyProc(
 
 	if (bResult) {
 		m_dwTimeDrawStart	= 0;
-		m_dwLastTimeKey	= timeGetTime();
+		m_dwLastTimeKey	= SDL_GetTicks();
 	}
 }
 

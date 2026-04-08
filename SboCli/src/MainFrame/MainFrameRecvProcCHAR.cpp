@@ -5,6 +5,8 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "SboCli_priv.h"
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
@@ -47,11 +49,7 @@ static void WritePosSyncDebugLog(DWORD dwCharID, int nBeforeX, int nBeforeY, int
 			nApplyX,
 			nApplyY,
 			bUpdate ? 1 : 0);
-#ifdef _WIN32
-	OutputDebugStringA(szDbg);
-#else
 	SDL_Log("%s", szDbg);
-#endif
 }
 #endif
 

@@ -1078,7 +1078,7 @@ BOOL CMgrDraw::TimerProc(void)
 	BOOL bRet;
 	DWORD dwTime;
 
-	dwTime = timeGetTime();
+	dwTime = SDL_GetTicks();
 
 	bRet = Fade();
 
@@ -1098,7 +1098,7 @@ BOOL CMgrDraw::Fade(void)
 		goto Exit;
 	}
 
-	dwTime = timeGetTime();
+	dwTime = SDL_GetTicks();
 
 	if (m_dwLastFade == 0) {
 		m_dwLastFade = dwTime;

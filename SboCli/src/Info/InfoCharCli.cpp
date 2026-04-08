@@ -5,6 +5,8 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "InfoEffect.h"
 #include "LibInfoEffect.h"
 #include "LibInfoEfcBalloon.h"
@@ -180,7 +182,7 @@ void CInfoCharCli::Create(CMgrData *pMgrData)
 	m_pMgrData	= pMgrData;
 	m_pMgrSound	= m_pMgrData->GetMgrSound();
 	m_pSock	= m_pMgrData->GetUraraSockTCP();
-	ResetDrawMoveSegment(m_nMapX, m_nMapY, timeGetTime());
+	ResetDrawMoveSegment(m_nMapX, m_nMapY, SDL_GetTicks());
 }
 
 
@@ -229,7 +231,7 @@ int CInfoCharCli::SetPos(int x, int y, BOOL bBack/*FALSE*/)
 	DWORD dwNowTime, dwDuration;
 	double dDrawX, dDrawY;
 
-	dwNowTime = timeGetTime();
+	dwNowTime = SDL_GetTicks();
 	nDeltaX = x - m_nMapX;
 	nDeltaY = y - m_nMapY;
 	nDeltaMax = abs(nDeltaX);
@@ -341,11 +343,11 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		} else {
 			nAnime = 0;
 		}
-		m_dwLastTimeAnime = timeGetTime();
+		m_dwLastTimeAnime = SDL_GetTicks();
 		break;
 	case CHARMOVESTATE_ANIME:	// アニメーション
 		nAnime = 0;
-		m_dwLastTimeAnime = timeGetTime();
+		m_dwLastTimeAnime = SDL_GetTicks();
 		break;
 	case CHARMOVESTATE_SWOON:	// 気絶
 		// 溜め攻撃解除
@@ -469,7 +471,7 @@ void CInfoCharCli::GetDrawMapPos(POINT &ptDst) const
 {
 	double dDrawX, dDrawY;
 
-	GetDrawMapPosDouble(dDrawX, dDrawY, timeGetTime());
+	GetDrawMapPosDouble(dDrawX, dDrawY, SDL_GetTicks());
 	ptDst.x = (int)((dDrawX >= 0.0) ? (dDrawX + 0.5) : (dDrawX - 0.5));
 	ptDst.y = (int)((dDrawY >= 0.0) ? (dDrawY + 0.5) : (dDrawY - 0.5));
 }
@@ -549,7 +551,7 @@ void CInfoCharCli::SetMoveState(int nMoveState)
 {
 	switch (nMoveState) {
 	case CHARMOVESTATE_DAMAGE:	// ダメージ
-		m_dwLastTimeDamage = timeGetTime();
+		m_dwLastTimeDamage = SDL_GetTicks();
 		// 時間の更新だけで状態は変更しない
 		return;
 	}
@@ -848,7 +850,7 @@ void CInfoCharCli::SetSleepTimer(BOOL bSleepTimer)
 
 void CInfoCharCli::SetViewState(int nViewState)
 {
-	m_dwLastTimeViewState	= timeGetTime();
+	m_dwLastTimeViewState	= SDL_GetTicks();
 	m_nViewState	= nViewState;
 
 	switch (m_nViewState) {
@@ -1002,7 +1004,7 @@ Exit:
 
 void CInfoCharCli::SetBalloonID(DWORD dwBalloonID)
 {
-	m_dwLastTimeBalloon = timeGetTime();
+	m_dwLastTimeBalloon = SDL_GetTicks();
 	m_dwBalloonID	= dwBalloonID;
 	m_dwBalloonAnimeID	= 0;
 	m_dwBalloonGrpID	= 0;
@@ -1105,7 +1107,7 @@ void CInfoCharCli::InitMotionInfo(DWORD dwMotionID)
 		m_nAnime = 0;
 	}
 	m_bMotionInterrupt	= FALSE;
-	m_dwLastTimeAnime	= timeGetTime();
+	m_dwLastTimeAnime	= SDL_GetTicks();
 
 	if (dwMotionID == CHARMOTIONID_INTERRUUPT) {
 		m_bMotionInterrupt = TRUE;
@@ -1365,7 +1367,7 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 		return;
 	}
 
-	dwNowTime = timeGetTime();
+	dwNowTime = SDL_GetTicks();
 	m_bPredictedMove	= TRUE;
 	m_nPredictDirection	= nDirection;
 	m_nPredictSpeed	= GetPredictMovePixelsPerSec(this);

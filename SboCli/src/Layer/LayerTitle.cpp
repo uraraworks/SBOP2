@@ -5,6 +5,8 @@
 /// @copyright Copyright(C)URARA-works 2005
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "Img32.h"
@@ -92,7 +94,7 @@ BOOL CLayerTitle::TimerProc(void)
 	DWORD dwTime, dwTmp;
 
 	bRet = CLayerBase::TimerProc();
-	dwTime = timeGetTime();
+	dwTime = SDL_GetTicks();
 
 	if (m_dwLastTimeFadeIn != 0) {
 		dwTmp = dwTime - m_dwLastTimeFadeIn;
@@ -123,7 +125,7 @@ BOOL CLayerTitle::TimerProc(void)
 
 void CLayerTitle::StartFadeIn(void)
 {
-	m_dwLastTimeFadeIn = timeGetTime();
+	m_dwLastTimeFadeIn = SDL_GetTicks();
 }
 
 

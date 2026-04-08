@@ -5,6 +5,8 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "LibInfoMapParts.h"
 #include "LibInfoMapShadow.h"
 #include "LibInfoMapBase.h"
@@ -487,7 +489,7 @@ BYTE CLayerMap::Scroll(BYTE byDirection, BOOL bNoCheck)
 	if (m_dwMoveWaitOnce != 0) {
 		nMoveWait = m_dwMoveWaitOnce;
 	}
-	m_dwLastTimeScroll = timeGetTime() - nMoveWait;
+	m_dwLastTimeScroll = SDL_GetTicks() - nMoveWait;
 	m_nViewX = (WORD)x;
 	m_nViewY = (WORD)y;
 	TimerProc();
@@ -533,7 +535,7 @@ void CLayerMap::SnapCameraToCenterPos(
 	m_dCameraTargetY = dCamY;
 	m_nViewX = (int)(dCamX + 0.5);
 	m_nViewY = (int)(dCamY + 0.5);
-	m_dwLastTimeCameraUpdate = timeGetTime();
+	m_dwLastTimeCameraUpdate = SDL_GetTicks();
 }
 
 
@@ -559,7 +561,7 @@ void CLayerMap::SetSystemIconMode(int nMode)
 	}
 
 	m_nSystemIconMode = nMode;
-	m_dwLastTimeSystemIconMode = timeGetTime();
+	m_dwLastTimeSystemIconMode = SDL_GetTicks();
 }
 
 
@@ -673,7 +675,7 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	SelectObject(hDCTmp, hFontOld);
 	m_pDibMapName->Unlock();
 
-	m_dwLastTimeMapName = timeGetTime();
+	m_dwLastTimeMapName = SDL_GetTicks();
 }
 
 
@@ -685,7 +687,7 @@ BOOL CLayerMap::TimerProcScroll(void)
 	int nViewX, nViewY;
 
 	bRet = FALSE;
-	dwNow = timeGetTime();
+	dwNow = SDL_GetTicks();
 	if (m_dwLastTimeCameraUpdate == 0) {
 		m_dwLastTimeCameraUpdate = dwNow;
 		return FALSE;
@@ -799,12 +801,12 @@ BOOL CLayerMap::TimerProcSystemIcon(void)
 		break;
 	}
 
-	nTmp = timeGetTime() - m_dwLastTimeSystemIconMode;
+	nTmp = SDL_GetTicks() - m_dwLastTimeSystemIconMode;
 	if (nTmp < 20) {
 		goto Exit;
 	}
 
-	m_dwLastTimeSystemIconMode = timeGetTime();
+	m_dwLastTimeSystemIconMode = SDL_GetTicks();
 
 	switch (m_nSystemIconMode) {
 	case 0: // 上に登場
@@ -833,7 +835,7 @@ BOOL CLayerMap::TimerProcMapName(void)
 	if (m_dwLastTimeMapName == 0) {
 		goto Exit;
 	}
-	dwTimeTmp = (timeGetTime() - m_dwLastTimeMapName) / 20;
+	dwTimeTmp = (SDL_GetTicks() - m_dwLastTimeMapName) / 20;
 	if (dwTimeTmp == 0) {
 		goto Exit;
 	}

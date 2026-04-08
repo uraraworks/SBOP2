@@ -5,6 +5,8 @@
 /// @copyright Copyright(C)URARA-works 2008
 
 #include "stdafx.h"
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
@@ -97,7 +99,7 @@ BOOL CLayerSnow::TimerProc(void)
 	PSTLAYERSNOW_SNOWINFO pInfo;
 
 	bRet = FALSE;
-	dwTime = timeGetTime();
+	dwTime = SDL_GetTicks();
 
 	if (dwTime - m_dwLastProc < 25) {
 		goto Exit;
@@ -166,7 +168,7 @@ void CLayerSnow::RenewSnowInfo(int nCount)
 		pInfo->y = pInfo->nStartY;
 		pInfo->dwStartWait = genrand() % 3000;
 		pInfo->dwWait = 50 + nTmp * 50;
-		pInfo->dwLastProc = timeGetTime();
+		pInfo->dwLastProc = SDL_GetTicks();
 
 		m_aSnowInfo.push_back(pInfo);
 	}
