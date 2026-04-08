@@ -58,9 +58,7 @@
 #endif
 
 #include <windows.h>
-#include <windowsx.h>
 #include <mmsystem.h>
-#include <time.h>
 #include <tchar.h>
 #include <shlwapi.h>
 #include <map>

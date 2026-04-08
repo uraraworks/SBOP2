@@ -49,17 +49,10 @@ BOOL CMgrSound::Create(void)
 
 	bResult = m_pDXAudio->Create();
 	if (bResult == FALSE) {
-#if !defined(_WIN32)
+		// オーディオデバイス初期化失敗時はタイトル表示を優先し無音で継続
 		bRet = TRUE;
-#endif
 		goto Exit;
 	}
-
-#if !defined(_WIN32)
-	// 非Windowsではタイトル表示を優先し、音声資産が無くても継続する
-	bRet = TRUE;
-	goto Exit;
-#endif
 
 	// Win32 LoadLibrary の代わりに SDL_LoadObject でクロスプラットフォーム対応
 	m_hDllSoundData = SDL_LoadObject(ansiPath.c_str());
@@ -99,10 +92,10 @@ void CMgrSound::PlaySound(DWORD dwSoundID)
 	int nNo;
 	void **pDMS;
 
-#if !defined(_WIN32)
-	UNREFERENCED_PARAMETER(dwSoundID);
-	return;
-#endif
+	// 効果音テーブル未生成（DLL読み込み失敗時など）は無音で継続
+	if (m_apDMSSound == NULL) {
+		return;
+	}
 
 	nNo = m_pLibSboSoundLoader->GetSoundNo(dwSoundID);
 	if (nNo < 0) {
@@ -243,11 +236,12 @@ void CMgrSound::SetSEVolume(int nVolume)
 
 void CMgrSound::ReadSoundData(void)
 {
-	int i, nCount, nResourceID;
-
 #if !defined(_WIN32)
+	// 非Windowsでは Windows リソース API (FindResource) が使えないため
+	// 効果音テーブルを生成しない（PlaySound 側で NULL チェックされる）
 	return;
-#endif
+#else
+	int i, nCount, nResourceID;
 
 	nCount = m_pLibSboSoundLoader->GetSoundCount();
 
@@ -261,8 +255,8 @@ void CMgrSound::ReadSoundData(void)
 		}
 		m_pDXAudio->GetSegFromRes(
 			// m_hDllSoundData は void* なので HMODULE にキャストして Win32 API に渡す
-			// （Windowsビルドでのみ到達するコードパス）
 			FindResource((HMODULE)m_hDllSoundData, MAKEINTRESOURCE(nResourceID), _T("WAVE")),
 			&m_apDMSSound[i]);
 	}
+#endif
 }
