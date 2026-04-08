@@ -20,13 +20,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
-    <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
-    <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
@@ -105,7 +103,7 @@
       <AdditionalOptions>/ignore:4099 /ignore:4217 %(AdditionalOptions)</AdditionalOptions>
       <IgnoreSpecificDefaultLibraries>MSVCRTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>..\SDL2\lib\x86;..\SDL2_ttf\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;ws2_32.lib;winmm.lib;imm32.lib;shlwapi.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul
@@ -162,7 +160,7 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>..\SDL2\lib\x86;..\SDL2_ttf\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;ws2_32.lib;winmm.lib;imm32.lib;shlwapi.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul
@@ -233,7 +231,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClCompile Include="..\Common\Lib\CryptUtil.cpp" />
     <ClCompile Include="..\Common\Lib\DataSlot.cpp" />
     <ClCompile Include="..\Common\Lib\LayoutHelper.cpp" />
-    <ClCompile Include="..\Common\Lib\mfc\LogViewCtrl.cpp" />
     <ClCompile Include="..\Common\Lib\ParamUtil.cpp" />
     <ClCompile Include="..\Common\Lib\TextOutput.cpp" />
     <ClCompile Include="..\common\mt19937int.cpp" />
@@ -366,8 +363,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StdAfx.cpp" />
-    <ClCompile Include="src\Dialog\DlgDbg.cpp" />
-    <ClCompile Include="src\Dialog\DlgMsgLog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\crc.h" />
@@ -429,7 +424,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClInclude Include="..\Common\Lib\CryptUtil.h" />
     <ClInclude Include="..\Common\Lib\DataSlot.h" />
     <ClInclude Include="..\Common\Lib\LayoutHelper.h" />
-    <ClInclude Include="..\Common\Lib\mfc\LogViewCtrl.h" />
     <ClInclude Include="..\Common\Lib\ParamUtil.h" />
     <ClInclude Include="..\Common\Lib\TextOutput.h" />
     <ClInclude Include="..\Common\SBOGlobal.h" />
@@ -535,8 +529,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     <ClInclude Include="..\imgui\backends\imgui_impl_sdl2.h" />
     <ClInclude Include="..\imgui\backends\imgui_impl_sdlrenderer2.h" />
     <ClInclude Include="StdAfx.h" />
-    <ClInclude Include="src\Dialog\DlgDbg.h" />
-    <ClInclude Include="src\Dialog\DlgMsgLog.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\MsgLog.html" />

@@ -7,13 +7,13 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+#include <winres.h>
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 日本語 resources
+// ・ｽ・ｽ・ｽ{・ｽ・ｽ resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 #ifdef _WIN32
@@ -32,26 +32,21 @@ BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE
 BEGIN
-    "#include ""afxres.h""\r\n"
+    "#include <winres.h>\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE
 BEGIN
-    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
-    "#define _AFX_NO_OLE_RESOURCES\r\n"
-    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
-    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
     "\r\n"
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)\r\n"
     "#ifdef _WIN32\r\n"
     "LANGUAGE 17, 1\r\n"
     "#pragma code_page(65001)\r\n"
     "#endif //_WIN32\r\n"
-    "#include ""res\\SboCli.rc2""  // Microsoft Visual C++ 以外のツールで編集されたリソース\r\n"
-    "#include ""l.jpn\\afxres.rc""          // 標準のコンポーネント\r\n"
+    "#include ""res\SboCli.rc2""  // Microsoft Visual C++ 以外のツールで編集されたリソース\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -71,22 +66,11 @@ END
 // Dialog
 //
 
-IDD_MSGLOG DIALOGEX 0, 0, 243, 120
-STYLE DS_SETFONT | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_THICKFRAME
-CAPTION "メッセージログウィンドウ"
-FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
-BEGIN
-    CONTROL         "",IDC_LOG,"LogViewCtrl",WS_VSCROLL | WS_TABSTOP,0,0,242,90
-    EDITTEXT        IDC_CHAT,1,92,240,14,ES_AUTOHSCROLL
-    CONTROL         "最前面",IDC_TOPMOST,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,127,106,34,10
-    CONTROL         "メインウィンドウ非表示",IDC_HIDE_MAINFRAME,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,166,106,74,10
-END
-
 
 IDD_BASE DIALOGEX 0, 0, 223, 214
 STYLE DS_SETFONT | WS_CHILD | WS_CLIPCHILDREN
 EXSTYLE WS_EX_STATICEDGE
-FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
+FONT 9, "・ｽl・ｽr ・ｽo・ｽS・ｽV・ｽb・ｽN", 0, 0, 0x1
 BEGIN
 END
 
@@ -152,17 +136,6 @@ END
 
 
 
-IDD_DBGDLG DIALOGEX 0, 0, 122, 54
-STYLE DS_SETFONT | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION
-CAPTION "デバッグウィンドウ"
-FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
-BEGIN
-    LTEXT           "Ping:",IDC_PING,0,19,121,8
-    LTEXT           "座標：",IDC_POS,0,29,80,8
-    LTEXT           "送受信：",IDC_THROWGHPUT,0,39,121,8
-    LTEXT           "オンライン：",IDC_ONLINE,0,0,80,8
-    LTEXT           "キャラ数：",IDC_CHAR,0,10,80,8
-END
 
 
 
@@ -184,11 +157,6 @@ END
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO 
 BEGIN
-    IDD_MSGLOG, DIALOG
-    BEGIN
-        BOTTOMMARGIN, 118
-    END
-
     IDD_PARTS_EDIT, DIALOG
     BEGIN
         LEFTMARGIN, 2
@@ -474,12 +442,6 @@ BEGIN
         BOTTOMMARGIN, 66
     END
 
-    IDD_DBGDLG, DIALOG
-    BEGIN
-        RIGHTMARGIN, 121
-        BOTTOMMARGIN, 52
-    END
-
     IDD_CHAR_DISABLE_NEW, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -511,10 +473,10 @@ END
 
 STRINGTABLE 
 BEGIN
-    IDP_SOCKETS_INIT_FAILED "Windows ｿｹｯﾄの初期化に失敗しました。"
+    IDP_SOCKETS_INIT_FAILED "Windows ・ｽ・ｽ・ｽﾄの擾ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽﾉ趣ｿｽ・ｽs・ｽ・ｽ・ｽﾜゑｿｽ・ｽ・ｽ・ｽB"
 END
 
-#endif    // 日本語 resources
+#endif    // ・ｽ・ｽ・ｽ{・ｽ・ｽ resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -524,18 +486,13 @@ END
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-#define _AFX_NO_SPLITTER_RESOURCES
-#define _AFX_NO_OLE_RESOURCES
-#define _AFX_NO_TRACKER_RESOURCES
-#define _AFX_NO_PROPERTY_RESOURCES
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 #ifdef _WIN32
 LANGUAGE 17, 1
 #pragma code_page(65001)
 #endif //_WIN32
-#include "res\SboCli.rc2"  // Microsoft Visual C++ 以外のツールで編集されたリソース
-#include "l.jpn\afxres.rc"          // 標準のコンポーネント
+#include "res\SboCli.rc2"  // Microsoft Visual C++ ・ｽﾈ外・ｽﾌツ・ｽ[・ｽ・ｽ・ｽﾅ編集・ｽ・ｽ・ｽ黷ｽ・ｽ・ｽ・ｽ\・ｽ[・ｽX
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

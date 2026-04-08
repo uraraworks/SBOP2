@@ -1,4 +1,4 @@
-﻿/* Copyright(C)URARA-works 2006 */
+/* Copyright(C)URARA-works 2006 */
 /* ========================================================================= */
 /* ファイル名	:stdafx.h													 */
 /* 内容			:プリコンパイルヘッダ 定義ファイル							 */
@@ -27,7 +27,6 @@
 #endif
 #include "../Common/rpcsal_fallback.h"
 
-#define VC_EXTRALEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します。
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -37,16 +36,14 @@
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0A00
 #endif
-// Ensure SAL/RPC SAL macros are available for Windows headers
+
 #include <sdkddkver.h>
 #include <rpc.h>
 #include <rpcndr.h>
 #include <rpcsal.h>
 #include <sal.h>
 
-// Fallback: if some toolchains pull older headers (e.g., DXSDK)
-// and RPC SAL macros are missing, define them as no-ops so
-// Windows SDK headers like objidlbase.h compile.
+// RPC SAL macros のフォールバック定義
 #ifndef __RPC__in_xcount_full
 #define __RPC__in_xcount_full(_Size)
 #endif
@@ -59,22 +56,8 @@
 #ifndef __RPC__out_ecount_part
 #define __RPC__out_ecount_part(_Count,_Length)
 #endif
-#include <afxwin.h>         // MFC のコアおよび標準コンポーネント
-#include <afxext.h>         // MFC の拡張部分
-#include <afxdisp.h>        // MFC のオートメーション クラス
-#include <afxdtctl.h>		// MFC の Internet Explorer 4 コモン コントロール サポート
-#ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC の Windows コモン コントロール サポート
-#endif // _AFX_NO_AFXCMN_SUPPORT
-#include <afxtempl.h>
 
-//#pragma warning(disable:4192)
-//#pragma warning(disable:4146)
-//#pragma warning(disable:4049)
-
-#define DIRECTINPUT_VERSION	DIRECTINPUT_HEADER_VERSION
-
-#include <winsock2.h>
+#include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
 #include <imm.h>
@@ -83,6 +66,26 @@
 #include <shlwapi.h>
 #include <map>
 using namespace std;
+
+#define DIRECTINPUT_VERSION	DIRECTINPUT_HEADER_VERSION
+
+// CRect クラス（MFC除去後の互換定義）
+struct CRect : public RECT {
+    CRect() { left = top = right = bottom = 0; }
+    CRect(LONG l, LONG t, LONG r, LONG b) { left = l; top = t; right = r; bottom = b; }
+    CRect(const RECT &rc) { left = rc.left; top = rc.top; right = rc.right; bottom = rc.bottom; }
+    LONG Width() const { return right - left; }
+    LONG Height() const { return bottom - top; }
+    bool IsRectEmpty() const { return (right <= left) || (bottom <= top); }
+    void SetRect(LONG l, LONG t, LONG r, LONG b) { left = l; top = t; right = r; bottom = b; }
+    void SetRectEmpty() { left = top = right = bottom = 0; }
+    bool PtInRect(POINT pt) const {
+        return (pt.x >= left) && (pt.x < right) && (pt.y >= top) && (pt.y < bottom);
+    }
+    CRect& operator=(const RECT &rc) {
+        left = rc.left; top = rc.top; right = rc.right; bottom = rc.bottom; return *this;
+    }
+};
 
 #include "GlobalDefine.h"
 #include "myArray.h"

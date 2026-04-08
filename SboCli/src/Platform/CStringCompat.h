@@ -1,10 +1,8 @@
 /// @file CStringCompat.h
-/// @brief 非Windows環境向け CStringTCompat テンプレートクラス
+/// @brief CStringTCompat テンプレートクラス（全プラットフォーム共通）
 /// @date 2026/04/07
 
 #pragma once
-
-#if !defined(_WIN32)
 
 // -----------------------------------------------------------------------
 // 大文字小文字変換ヘルパー（char / wchar_t 特殊化）
@@ -21,7 +19,7 @@ inline char BrowserCompatToLower(char ch)
 template<>
 inline wchar_t BrowserCompatToLower(wchar_t ch)
 {
-	return static_cast<wchar_t>(std::towlower(ch));
+	return static_cast<wchar_t>(towlower(ch));
 }
 
 // -----------------------------------------------------------------------
@@ -363,7 +361,19 @@ private:
 	{
 		va_list argCopy;
 		va_copy(argCopy, args);
+#if defined(_WIN32)
+		// MSVC では vswprintf の引数順が異なるため _vsnwprintf_s を使用
+		int nRet;
+		if (pszDst == NULL || nDstCount == 0) {
+			// サイズ計算用: 十分大きなバッファで試す
+			wchar_t tmp[4096];
+			nRet = _vsnwprintf_s(tmp, _countof(tmp), _TRUNCATE, pszFormat, argCopy);
+		} else {
+			nRet = _vsnwprintf_s(pszDst, nDstCount, _TRUNCATE, pszFormat, argCopy);
+		}
+#else
 		int nRet = vswprintf(pszDst, nDstCount, pszFormat, argCopy);
+#endif
 		va_end(argCopy);
 		return nRet;
 	}
@@ -374,7 +384,8 @@ private:
 };
 
 // CString は wchar_t 版、CStringA は char 版
+// Windows では ATL (atlstr.h) が CString/CStringA を提供するため typedef 不要
+#if !defined(_WIN32)
 typedef CStringTCompat<wchar_t> CString;
 typedef CStringTCompat<char> CStringA;
-
-#endif // !_WIN32
+#endif

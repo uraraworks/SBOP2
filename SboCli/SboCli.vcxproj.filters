@@ -312,9 +312,6 @@
     <ClCompile Include="..\Common\Lib\TextOutput.cpp">
       <Filter>Source Files\Common\Lib No. 2</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Lib\mfc\LogViewCtrl.cpp">
-      <Filter>Source Files\Common\Lib No. 2\mfc</Filter>
-    </ClCompile>
     <ClCompile Include="..\Common\LibInfo\LibInfoAccount.cpp">
       <Filter>Source Files\Common\LibInfo</Filter>
     </ClCompile>
@@ -618,12 +615,6 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp">
       <Filter>Source Files\MainFrame</Filter>
     </ClCompile>
-    <ClCompile Include="src\Dialog\DlgDbg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Dialog\DlgMsgLog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AdminApi\AdminUiApi.h">
@@ -811,9 +802,6 @@
     </ClInclude>
     <ClInclude Include="..\Common\Lib\TextOutput.h">
       <Filter>Header Files\Common No. 1\Lib No. 3</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Common\Lib\mfc\LogViewCtrl.h">
-      <Filter>Header Files\Common No. 1\Lib No. 3\mfc No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\LibInfo\LibInfoAccount.h">
       <Filter>Header Files\Common No. 1\LibInfo No. 1</Filter>
@@ -1099,12 +1087,6 @@
     </ClInclude>
     <ClInclude Include="src\MainFrame\MainFrame.h">
       <Filter>Header Files\MainFrame No. 1</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dialog\DlgDbg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Dialog\DlgMsgLog.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

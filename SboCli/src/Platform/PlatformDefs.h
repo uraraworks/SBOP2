@@ -383,7 +383,9 @@ typedef LRESULT (CALLBACK *WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 #endif
 
-// CRect クラス（RECT の C++ ラッパー）
+#endif // !_WIN32
+
+// CRect クラス（RECT の C++ ラッパー、全プラットフォーム共通）
 struct CRect : public RECT {
     CRect() { left = top = right = bottom = 0; }
     CRect(LONG l, LONG t, LONG r, LONG b) { left = l; top = t; right = r; bottom = b; }
@@ -400,5 +402,3 @@ struct CRect : public RECT {
         left = rc.left; top = rc.top; right = rc.right; bottom = rc.bottom; return *this;
     }
 };
-
-#endif // !_WIN32

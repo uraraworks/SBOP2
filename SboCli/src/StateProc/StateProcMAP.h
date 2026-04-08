@@ -16,10 +16,6 @@ class CLibInfoMapBase;
 class CLibInfoItem;
 class CImGuiMsgLog;
 class CImGuiDbg;
-#ifdef _WIN32
-class CDlgMsgLog;
-class CDlgDbg;
-#endif
 
 // クラス宣言
 
@@ -144,10 +140,6 @@ protected:
 	CLibInfoCharCli *m_pLibInfoChar;   // キャラ情報ライブラリ
 	CLibInfoMapBase *m_pLibInfoMap;    // マップ情報ライブラリ
 	CLibInfoItem    *m_pLibInfoItem;   // アイテム情報ライブラリ
-#ifdef _WIN32
-	CDlgMsgLog      *m_pDlgMsgLog;    // メッセージログウィンドウ
-	CDlgDbg         *m_pDlgDbg;       // デバッグウィンドウ
-#endif
 	CImGuiMsgLog    *m_pImGuiMsgLog;  // ImGui版メッセージログ
 	CImGuiDbg       *m_pImGuiDbg;     // ImGui版デバッグ
 } CStateProcMAP, *PCStateProcMAP;

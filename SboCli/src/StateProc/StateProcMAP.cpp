@@ -62,10 +62,6 @@
 #include "WindowPLACEINFORMATION.h"
 #include "WindowCHAR_STATUS.h"
 #include "WindowCHAR_STATUS4.h"
-#ifdef _WIN32
-#include "DlgMsgLog.h"
-#include "DlgDbg.h"
-#endif
 #include "Platform/ImGuiMsgLog.h"
 #include "Platform/ImGuiDbg.h"
 #include "MainFrame.h"
@@ -163,10 +159,6 @@ CStateProcMAP::CStateProcMAP()
 	m_pLibInfoChar		= NULL;
 	m_pLibInfoMap		= NULL;
 	m_pLibInfoItem		= NULL;
-#ifdef _WIN32
-	m_pDlgMsgLog		= NULL;
-	m_pDlgDbg			= NULL;
-#endif
 	m_pImGuiMsgLog		= NULL;
 	m_pImGuiDbg			= NULL;
 }
@@ -189,12 +181,6 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 	m_pLibInfoMap		= pMgrData->GetLibInfoMap();
 	m_pLibInfoItem		= pMgrData->GetLibInfoItem();
 
-#if defined(_WIN32)
-	m_pDlgMsgLog = new CDlgMsgLog;
-	m_pDlgMsgLog->Create(pMgrData->GetMainWindow(), m_pMgrData);
-	m_pDlgDbg = new CDlgDbg;
-	m_pDlgDbg->Create(pMgrData->GetMainWindow(), m_pMgrData);
-#endif
 	m_pImGuiMsgLog = new CImGuiMsgLog;
 	m_pImGuiMsgLog->Init(m_pMgrData);
 	m_pImGuiDbg = new CImGuiDbg;
@@ -205,21 +191,6 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 
 void CStateProcMAP::Init(void)
 {
-	TCHAR szFileName[MAX_PATH];
-	CRect rc;
-
-	GetModuleIniPath(szFileName, _countof(szFileName));
-
-#if defined(_WIN32)
-	rc.left		= GetPrivateProfileInt(_T("Pos"), _T("LogLeft"),	-1, szFileName);
-	rc.top		= GetPrivateProfileInt(_T("Pos"), _T("LogTop"),	-1, szFileName);
-	rc.right	= GetPrivateProfileInt(_T("Pos"), _T("LogRight"),	-1, szFileName);
-	rc.bottom	= GetPrivateProfileInt(_T("Pos"), _T("LogBottom"),	-1, szFileName);
-	if (!((rc.left == -1) && (rc.top == -1))) {
-		m_pDlgMsgLog->SetWindowPos(NULL, rc.left, rc.top, rc.Width(), rc.Height(), SWP_NOZORDER | SWP_NOACTIVATE);
-	}
-#endif
-
 	m_pPlayerChar	= m_pMgrData->GetPlayerChar();
 	m_pMap			= m_pMgrData->GetMap();
 	m_dwLastEventMapID = 0;
@@ -249,13 +220,7 @@ void CStateProcMAP::Init(void)
 
 void CStateProcMAP::GetMsgLogRect(RECT &rcDst)
 {
-#if defined(_WIN32)
-	if (m_pDlgMsgLog->IsWindowVisible()) {
-		m_pDlgMsgLog->GetWindowRect(&rcDst);
-	}
-#else
 	UNREFERENCED_PARAMETER(rcDst);
-#endif
 }
 
 
@@ -796,11 +761,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 					nType,
 					dwNotifyData,
 					nCount);
-#ifdef _WIN32
 				OutputDebugString(strDbg);
-#else
-				SDL_Log("%s", (LPCSTR)CStringA(strDbg));
-#endif
 			}
 			PostAdminUiMessage(WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		}
@@ -1083,24 +1044,15 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 				KeyProc(0, FALSE);
 			}
 			strTmp.Format(_T("%s：%s"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoChar->m_strSpeak);
-#ifdef _WIN32
-			if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(strTmp, pInfoChar->m_clSpeak); }
-#endif
 			if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Add(strTmp, pInfoChar->m_clSpeak); }
 		}
 		break;
 
 	case MAINFRAMEMSG_RENEWCHARCOUNT:	// キャラ数更新
 		m_pMgrData->SetCharCount(dwParam);
-#ifdef _WIN32
-		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
-#endif
 		break;
 
 	case MAINFRAMEMSG_RENEWONLINECOUNT:	// オンライン数更新
-#ifdef _WIN32
-		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
-#endif
 		break;
 
 	case MAINFRAMEMSG_RENEWSYSTEMMSG:	// システムメッセージ更新
@@ -1118,9 +1070,6 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 				pSystemMsg = m_pMgrData->GetSystemMsg(i);
 
 				if (pSystemMsg->bAddLog) {
-#ifdef _WIN32
-					if (m_pDlgMsgLog) { m_pDlgMsgLog->Add(pSystemMsg->strMsg, pSystemMsg->clMsg); }
-#endif
 					if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Add(pSystemMsg->strMsg, pSystemMsg->clMsg); }
 				}
 				pLayerSystemMsg->AddMsg(pSystemMsg->strMsg, pSystemMsg->clMsg);
@@ -2910,9 +2859,6 @@ Exit:
 		rcTmp.top	 = pLayerMap->m_nViewY - (MAPPARTSSIZE * 2);
 		rcTmp.bottom = pLayerMap->m_nViewY + (DRAW_PARTS_Y * MAPPARTSSIZE) + (MAPPARTSSIZE * 2);
 		m_pLibInfoItem->SetArea(m_pPlayerChar->m_dwMapID, &rcTmp);
-#ifdef _WIN32
-		if (m_pDlgDbg) { m_pDlgDbg->Renew(); }
-#endif
 	}
 
 	return bRet;
