@@ -548,10 +548,6 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
       <Project>{277a614e-bccb-4abf-a0d9-856356071b8a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\SboCliAdminMfc\SboCliAdminMfc.vcxproj">
-      <Project>{c0febbb0-b780-4406-b1cb-a33ae929a0f2}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\SboSockLib\SboSockLib.vcxproj">
       <Project>{36b127cf-63af-4864-93ab-4f9d40e17c9a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
