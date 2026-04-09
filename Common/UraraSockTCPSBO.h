@@ -36,9 +36,5 @@ public:
 
 
 protected:
-	void*			m_hDll;				// 通信ライブラリDLL（SDL_LoadObject対応でvoid*に変更）
-	CUraraSockTCP	*m_pSock;			// 通信ライブラリ
-	PFRELEASEURARASOCKTCP m_pfRelease;	// Release function from DLL to free object
-	PFURARASOCKNOTIFY m_pfNotify;		// 通知コールバック（DLLを経由せずラッパー側で保持）
-	void			*m_pNotifyUserData;	// 通知コールバックのユーザーデータ
+	CUraraSockTCP	*m_pSock;			// 通信ライブラリ（SboSockLib.lib から静的リンク）
 } CUraraSockTCPSBO, *PCUraraSockTCPSBO;

@@ -107,7 +107,7 @@
       <OutputFile>.\Release/SboSvr.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;xcopy /y /d "..\SboSockLib\Release\SboSockLib.dll" "$(TargetDir)" 2&gt;nul</Command>
+      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -150,13 +150,16 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>MSVCRTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Common\myLib\myZlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Debug/SboSvr.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;xcopy /y /d "..\SboSockLib\Debug\SboSockLib.dll" "$(TargetDir)" 2&gt;nul</Command>
+      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -418,8 +421,6 @@
     <ProjectReference Include="..\SboSockLib\SboSockLib.vcxproj">
       <Project>{36b127cf-63af-4864-93ab-4f9d40e17c9a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\SboGrpData\SboGrpData.vcxproj">
       <Project>{50f32fa9-de14-43c2-9551-cbc31bea628d}</Project>

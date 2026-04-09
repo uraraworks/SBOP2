@@ -108,8 +108,7 @@
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul
 xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul
-xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul
-xcopy /y /d "..\SboSockLib\Debug\SboSockLib.dll" "$(OutDir)" 2&gt;nul</Command>
+xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul</Command>
     </PostBuildEvent>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -167,8 +166,7 @@ xcopy /y /d "..\SboSockLib\Debug\SboSockLib.dll" "$(OutDir)" 2&gt;nul</Command>
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul
 xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul
-xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul
-xcopy /y /d "..\SboSockLib\Release\SboSockLib.dll" "$(OutDir)" 2&gt;nul</Command>
+xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul</Command>
     </PostBuildEvent>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -557,8 +555,6 @@ xcopy /y /d "..\SboSockLib\Release\SboSockLib.dll" "$(OutDir)" 2&gt;nul</Command
     <ProjectReference Include="..\SboSockLib\SboSockLib.vcxproj">
       <Project>{36b127cf-63af-4864-93ab-4f9d40e17c9a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

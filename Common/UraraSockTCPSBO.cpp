@@ -4,12 +4,6 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "StdAfx.h"
-// SDL2 が使えるなら SDL_LoadObject 経由で動的ロードする。
-// SboSockLib (_LIB) のように SDL2 を持たないビルドでは Win32 API にフォールバックする。
-#if __has_include(<SDL.h>)
-#include <SDL.h>
-#define SBO_USE_SDL_LOADOBJECT 1
-#endif
 #include "Packet/PacketBase.h"
 #include "UraraSockTCPSBO.h"
 
@@ -18,75 +12,16 @@
 CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 {
 	m_pSock = NULL;
-	m_hDll = NULL;
-	m_pfRelease = nullptr;
-	m_pfNotify = NULL;
-	m_pNotifyUserData = NULL;
 
-#ifdef __EMSCRIPTEN__
-	// Emscripten環境: DLLは存在しないのでWebSocket版を直接生成
+	// SboSockLib は static lib として直接リンクするため GetUraraSockTCP() を直接呼ぶ
 	m_pSock = GetUraraSockTCP();
-	// m_pfRelease は nullptr のまま（デストラクタで delete する）
-#else
-	TCHAR szFileName[MAX_PATH];
-	PFGETURARASOCKTCP pfGetUraraSockTCP;
-	PFRELEASEURARASOCKTCP pfReleaseUraraSockTCP = nullptr;
-
-	ZeroMemory(szFileName, sizeof(szFileName));
-
-	GetModuleFilePath(szFileName, _countof(szFileName));
-	CString strFileName(szFileName);
-	strFileName += _T("SboSockLib.dll");
-
-#if defined(SBO_USE_SDL_LOADOBJECT)
-	// SDL_LoadObject でクロスプラットフォーム対応
-	{
-		std::string ansiFileName = TStringToAnsiStd(strFileName);
-		m_hDll = SDL_LoadObject(ansiFileName.c_str());
-	}
-#else
-	m_hDll = (void*)LoadLibrary(strFileName);
-#endif
-	if (m_hDll) {
-#if defined(SBO_USE_SDL_LOADOBJECT)
-		pfGetUraraSockTCP = (PFGETURARASOCKTCP)SDL_LoadFunction(m_hDll, "GetUraraSockTCP");
-		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)SDL_LoadFunction(m_hDll, "ReleaseUraraSockTCP");
-#else
-		pfGetUraraSockTCP = (PFGETURARASOCKTCP)GetProcAddress((HMODULE)m_hDll, "GetUraraSockTCP");
-		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)GetProcAddress((HMODULE)m_hDll, "ReleaseUraraSockTCP");
-#endif
-		if (pfGetUraraSockTCP) {
-			m_pSock = pfGetUraraSockTCP();
-		}
-		if (pfReleaseUraraSockTCP) {
-			m_pfRelease = pfReleaseUraraSockTCP;
-		}
-	}
-#endif // __EMSCRIPTEN__
 }
 
 // デストラクタ
 
 CUraraSockTCPSBO::~CUraraSockTCPSBO(void)
 {
-	// Use the DLL provided release function when available, because the
-	// object was created inside the DLL and must be freed there to avoid
-	// CRT heap mismatch.
-	if (m_pfRelease && m_pSock) {
-		m_pfRelease(m_pSock);
-		m_pSock = nullptr;
-	} else {
-		SAFE_DELETE(m_pSock);
-	}
-
-	if (m_hDll) {
-#if defined(SBO_USE_SDL_LOADOBJECT)
-		SDL_UnloadObject(m_hDll);
-#else
-		FreeLibrary((HMODULE)m_hDll);
-#endif
-		m_hDll = NULL;
-	}
+	SAFE_DELETE(m_pSock);
 }
 
 void CUraraSockTCPSBO::DeleteRecvData(PBYTE pData)
@@ -112,18 +47,10 @@ void CUraraSockTCPSBO::Destroy(void)
 
 void CUraraSockTCPSBO::SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData)
 {
-	// ラッパー側にも保持しておく（Emscripten フォールバック等で参照される）
-	m_pfNotify = pfNotify;
-	m_pNotifyUserData = pUserData;
-	// m_pSock（SboSockLib.dll から取得したインスタンス）に転送する。
-	// SboSockLib は vtable 経由で SetNotifySink を持つため直接呼び出し可能。
+	// m_pSock（SboSockLib.lib から静的リンクで取得したインスタンス）に転送する。
+	// CUraraSockTCPImpl は vtable 経由で SetNotifySink を持つため直接呼び出し可能。
 	if (m_pSock) {
-#ifdef __EMSCRIPTEN__
-		CUraraSockTCPWebSocket* pWs = static_cast<CUraraSockTCPWebSocket*>(m_pSock);
-		pWs->SetNotifySink(pfNotify, pUserData);
-#else
 		m_pSock->SetNotifySink(pfNotify, pUserData);
-#endif
 	}
 }
 
