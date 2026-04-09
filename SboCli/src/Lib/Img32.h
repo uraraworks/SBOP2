@@ -41,7 +41,6 @@ public:
 	HDC		Lock(void);				// 画像をロック
 	void	Unlock(void);			// ロック解除
 
-	HBITMAP	GetSafeHandle(void);	// ビットマップハンドルを取得
 	int		Width(void);			// 幅を取得
 	int		Height(void);			// 高さを取得
 	int		GetImageSize(void);		// データサイズを取得
@@ -69,7 +68,6 @@ protected:
 
 protected:
 	HBITMAP		m_hBmp;			// ビットマップハンドル
-	HBITMAP		m_hBmpBack;		// ビットマップハンドル保存用
 	BITMAPINFO	m_bmpInfo;		// ビットマップ情報
 	LPBYTE		m_pBits;		// ビットデータ
 	HDC			m_hDC;			// デバイスコンテキストハンドル

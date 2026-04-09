@@ -62,7 +62,6 @@ void CWindowSTATUS::Draw(PCImg32 pDst)
 	DrawFrame(2);
 
 	hDC	= m_pDib->Lock();
-	SetBkColor(hDC, RGB(255, 255, 255));
 #if 0
 	for (i = 0; i < 2; i ++) {
 		m_pDib->BltFrom256(16, 32 + i * 16, 16, 16, m_pDibSystem, 224 + i * 16, 32, TRUE);

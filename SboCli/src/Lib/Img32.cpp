@@ -47,40 +47,8 @@ BOOL CImg32::Create(
 	int cx,		// [in] 幅
 	int cy)		// [in] 高さ
 {
-#if !defined(_WIN32)
+	// 全プラットフォームで GDI 非依存パスに統一
 	return CreateWithoutGdi(cx, cy);
-#else
-	BOOL bRet;
-	HDC hDC;
-
-	bRet = FALSE;
-
-	if (m_hBmp) {
-		goto Exit;
-	}
-
-	// ビットマップ情報を設定
-	ZeroMemory(&m_bmpInfo, sizeof(m_bmpInfo));
-	m_bmpInfo.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-	m_bmpInfo.bmiHeader.biWidth       = cx;
-	m_bmpInfo.bmiHeader.biHeight      = cy;
-	m_bmpInfo.bmiHeader.biPlanes      = 1;
-	m_bmpInfo.bmiHeader.biBitCount    = BYTES_PER_PIXEL * 8;
-	m_bmpInfo.bmiHeader.biCompression = BI_RGB;
-
-	// DIB セクションオブジェクトを作成
-	hDC = GetDC(NULL);
-	m_hBmp = CreateDIBSection(hDC, &m_bmpInfo, DIB_RGB_COLORS, (PVOID*)&m_pBits, 0, 0);
-	ReleaseDC(NULL, hDC);
-
-	if (m_hBmp == FALSE) {
-		goto Exit;
-	}
-
-	bRet = TRUE;
-Exit:
-	return bRet;
-#endif
 }
 
 BOOL CImg32::CreateWithoutGdi(
@@ -162,14 +130,9 @@ void CImg32::Destroy(void)
 {
 	Unlock();
 
-	// DIB セクションオブジェクトを破棄
+	// ビットデータを破棄（常に CreateWithoutGdi で確保されたメモリ）
 	if (m_hBmp) {
-		if (m_hBmp != HBITMAP_WITHOUT_GDI) {
-			DeleteObject(m_hBmp);
-
-		} else {
-			delete [] m_pBits;
-		}
+		delete [] m_pBits;
 	}
 
 	if (m_pPallet) {
@@ -1157,11 +1120,6 @@ void CImg32::Unlock(void)
 	}
 }
 
-HBITMAP CImg32::GetSafeHandle(void)
-{
-	return m_hBmp;
-}
-
 int CImg32::Width(void)
 {
 	int nRet;
@@ -1400,7 +1358,6 @@ void CImg32::BltAlphaFrom256(
 void CImg32::InitData(void)
 {
 	m_hBmp = NULL;
-	m_hBmpBack = NULL;
 	m_pBits = NULL;
 	m_hDC = NULL;
 	m_dwColorKey = 0;
