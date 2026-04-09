@@ -259,8 +259,7 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 	GetWindowLOGINPasswordRect(&rcPassword);
 	GetWindowLOGINCheckRect(&rcCheck);
 	GetWindowLOGINConnectRect(&rcConnect);
-	strCheck = m_bSavePassword ? _T("[x] ") : _T("[ ] ");
-	strCheck += GetLoginLabelSavePassword();
+	strCheck = GetLoginLabelSavePassword();
 
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
@@ -268,12 +267,17 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 		DrawBrowserControls(rcAccount, rcPassword, rcCheck, rcConnect);
 		hDC	= m_pDib->Lock();
 
-		TextOut2(hDC, m_hFont, 16, 16, _T("アカウント:"), RGB(1, 1, 1));
-		TextOut2(hDC, m_hFont, 16, 42, _T("パスワード:"), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, 16, 14, _T("アカウント:"), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, 16, 40, _T("パスワード:"), RGB(1, 1, 1));
 		DrawTextField(hDC, rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
 		DrawTextField(hDC, rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
-		TextOut2(hDC, m_hFont, rcCheck.left, rcCheck.top, strCheck, RGB(1, 1, 1));
-		TextOut2(hDC, m_hFont, rcConnect.left + 12, rcConnect.top + 2, GetLoginLabelConnect(), RGB(1, 1, 1));
+		{
+			// チェックボックス枠の右端を取得してテキストをその右側に描画
+			RECT rcCheckBox;
+			GetWindowLOGINCheckBoxRect(rcCheck, &rcCheckBox);
+			TextOut2(hDC, m_hFont, rcCheckBox.right + 4, rcCheck.top - 2, strCheck, RGB(1, 1, 1));
+		}
+		TextOut2(hDC, m_hFont, rcConnect.left + 12, rcConnect.top, GetLoginLabelConnect(), RGB(1, 1, 1));
 
 		m_pDib->Unlock();
 		m_dwTimeDrawStart = timeGetTime();
@@ -802,18 +806,19 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		}
 	}
 
-	TextOut2(hDC, m_hFont, rcField.left + 2, rcField.top + 1, strDraw, RGB(0, 0, 0));
+	TextOut2(hDC, m_hFont, rcField.left + 2, rcField.top - 1, strDraw, RGB(0, 0, 0));
 	if (bFocused && (m_nCursorAnime == 0)) {
 		// カーソル位置に基づいて描画位置を計算
+		// 暫定: 半角幅を固定値で計算 (Noto Sans CJK Regular 12pt の半角は約 7px)
 		int nDrawCursorPos = m_nCursorPos;
 		if (nDrawCursorPos > strDraw.GetLength()) {
 			nDrawCursorPos = strDraw.GetLength();
 		}
-		nCursorX = rcField.left + 2 + nDrawCursorPos * 8;
+		nCursorX = rcField.left + 2 + nDrawCursorPos * 7;
 		if (nCursorX > rcField.right - 8) {
 			nCursorX = rcField.right - 8;
 		}
-		TextOut2(hDC, m_hFont, nCursorX, rcField.top + 1, _T("|"), RGB(0, 0, 0));
+		TextOut2(hDC, m_hFont, nCursorX, rcField.top - 1, _T("|"), RGB(0, 0, 0));
 	}
 }
 
