@@ -4,8 +4,11 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "StdAfx.h"
-#if !defined(_WINDLL)
+// SDL2 が使えるなら SDL_LoadObject 経由で動的ロードする。
+// SboSockLib (_LIB) のように SDL2 を持たないビルドでは Win32 API にフォールバックする。
+#if __has_include(<SDL.h>)
 #include <SDL.h>
+#define SBO_USE_SDL_LOADOBJECT 1
 #endif
 #include "Packet/PacketBase.h"
 #include "UraraSockTCPSBO.h"
@@ -35,7 +38,7 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 	CString strFileName(szFileName);
 	strFileName += _T("UraraSockTCP.dll");
 
-#if !defined(_WINDLL)
+#if defined(SBO_USE_SDL_LOADOBJECT)
 	// SDL_LoadObject でクロスプラットフォーム対応
 	{
 		std::string ansiFileName = TStringToAnsiStd(strFileName);
@@ -45,7 +48,7 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 	m_hDll = (void*)LoadLibrary(strFileName);
 #endif
 	if (m_hDll) {
-#if !defined(_WINDLL)
+#if defined(SBO_USE_SDL_LOADOBJECT)
 		pfGetUraraSockTCP = (PFGETURARASOCKTCP)SDL_LoadFunction(m_hDll, "GetUraraSockTCP");
 		pfReleaseUraraSockTCP = (PFRELEASEURARASOCKTCP)SDL_LoadFunction(m_hDll, "ReleaseUraraSockTCP");
 #else
@@ -77,7 +80,7 @@ CUraraSockTCPSBO::~CUraraSockTCPSBO(void)
 	}
 
 	if (m_hDll) {
-#if !defined(_WINDLL)
+#if defined(SBO_USE_SDL_LOADOBJECT)
 		SDL_UnloadObject(m_hDll);
 #else
 		FreeLibrary((HMODULE)m_hDll);

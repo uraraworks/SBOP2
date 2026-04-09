@@ -57,12 +57,17 @@
 #define __RPC__out_ecount_part(_Count,_Length)
 #endif
 
+// SDL2 が使える翻訳単位でのみ SDL_GetTicks を有効化する。
+// SboCliAdminMfc など SDL2 インクルードパスを持たないプロジェクトから
+// この StdAfx.h が間接的に取り込まれてもビルドできるよう __has_include で分岐する。
+#if __has_include(<SDL.h>)
 #include <SDL.h>
-#include <windows.h>
 // timeGetTime を SDL_GetTicks にマッピング（winmm.lib 依存を除去するため）
 // inline 関数ではなくマクロにすることで dllimport 宣言との競合を回避する
 #undef timeGetTime
 #define timeGetTime() ((DWORD)SDL_GetTicks())
+#endif
+#include <windows.h>
 #include <tchar.h>
 #include <shlwapi.h>
 #include <map>
