@@ -187,8 +187,25 @@ void CSDLApp::InitImGui(SDL_Renderer *pRenderer)
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	// 日本語フォント（将来対応用、現時点ではデフォルトフォント）
 	io.IniFilename = NULL;  // imgui.ini保存を無効化
+
+	// 日本語フォントのロード（文字化け対策）
+	// ※ multi-viewport (ImGuiConfigFlags_ViewportsEnable) は SDL_Renderer バックエンドが
+	//   未対応のため有効化しない。ImGui ウィンドウはメインウィンドウ内に表示される。
+	{
+		ImFontConfig fontConfig;
+		fontConfig.MergeMode = false;
+		ImFont* pFont = io.Fonts->AddFontFromFileTTF(
+			"font/NotoSansCJKjp-Regular.otf",
+			16.0f,
+			&fontConfig,
+			io.Fonts->GetGlyphRangesJapanese()
+		);
+		if (pFont == NULL) {
+			// フォントファイルが見つからない場合はデフォルトフォントにフォールバック
+			io.Fonts->AddFontDefault();
+		}
+	}
 
 	ImGui::StyleColorsDark();
 
