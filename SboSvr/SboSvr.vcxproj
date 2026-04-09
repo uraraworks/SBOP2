@@ -226,6 +226,7 @@
     <ClCompile Include="..\common\mt19937int.cpp" />
     <ClCompile Include="..\Common\RouteSearch.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\UraraSockTCPSBO.cpp" />
     <ClCompile Include="src\Info\InfoCharSvr.cpp" />
     <ClCompile Include="src\Info\InfoChar\InfoCharATACKANIMESvr.cpp" />
     <ClCompile Include="src\Info\InfoChar\InfoCharBATTLE1Svr.cpp" />
@@ -352,6 +353,7 @@
     <ClInclude Include="..\Common\Lib\TextOutput.h" />
     <ClInclude Include="..\Common\RouteSearch.h" />
     <ClInclude Include="..\Common\SBOGlobal.h" />
+    <ClInclude Include="..\Common\UraraSockTCPSBO.h" />
     <ClInclude Include="..\Common\SBOVersion.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Info\InfoCharSvr.h" />

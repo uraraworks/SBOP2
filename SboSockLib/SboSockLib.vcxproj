@@ -324,12 +324,6 @@
     <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp" />
     <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
-    <ClCompile Include="..\Common\UraraSockTCPSBO.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="CWinsockStart.cpp" />
     <ClCompile Include="UraraSockTCP.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -496,7 +490,6 @@
     <ClInclude Include="..\Common\SBOGlobal.h" />
     <ClInclude Include="CWinsockStart.h" />
     <ClInclude Include="..\common\UraraSockTCP.h" />
-    <ClInclude Include="..\Common\UraraSockTCPSBO.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

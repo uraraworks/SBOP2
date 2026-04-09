@@ -195,6 +195,9 @@
     <ClCompile Include="..\Common\SBOGlobal.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\Common\UraraSockTCPSBO.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
     <ClCompile Include="..\Common\Info\InfoAccount.cpp">
       <Filter>Source Files\Common\Info</Filter>
     </ClCompile>
@@ -675,6 +678,9 @@
       <Filter>Header Files\Common No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\SBOGlobal.h">
+      <Filter>Header Files\Common No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\UraraSockTCPSBO.h">
       <Filter>Header Files\Common No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\SBOVersion.h">

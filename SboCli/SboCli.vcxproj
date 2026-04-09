@@ -239,6 +239,7 @@ xcopy /y /d "..\SboSockLib\Release\SboSockLib.dll" "$(OutDir)" 2&gt;nul</Command
     <ClCompile Include="..\Common\Lib\TextOutput.cpp" />
     <ClCompile Include="..\common\mt19937int.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\UraraSockTCPSBO.cpp" />
     <ClCompile Include="src\AdminApi\AdminUiLoader.cpp" />
     <ClCompile Include="src\Info\InfoCharCli.cpp" />
     <ClCompile Include="src\Info\InfoChar\InfoCharATACKANIMECli.cpp" />
@@ -430,6 +431,7 @@ xcopy /y /d "..\SboSockLib\Release\SboSockLib.dll" "$(OutDir)" 2&gt;nul</Command
     <ClInclude Include="..\Common\Lib\ParamUtil.h" />
     <ClInclude Include="..\Common\Lib\TextOutput.h" />
     <ClInclude Include="..\Common\SBOGlobal.h" />
+    <ClInclude Include="..\Common\UraraSockTCPSBO.h" />
     <ClInclude Include="..\Common\SBOVersion.h" />
     <ClInclude Include="..\SboSoundData\SboSoundData.h" />
     <ClInclude Include="Resource.h" />
