@@ -268,17 +268,17 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 		DrawBrowserControls(rcAccount, rcPassword, rcCheck, rcConnect);
 		hDC	= m_pDib->Lock();
 
-		TextOut2(hDC, m_hFont, 16, 12, _T("アカウント:"), RGB(1, 1, 1));
-		TextOut2(hDC, m_hFont, 16, 38, _T("パスワード:"), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, 16, 10, _T("アカウント:"), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, 16, 36, _T("パスワード:"), RGB(1, 1, 1));
 		DrawTextField(hDC, rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
 		DrawTextField(hDC, rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
 		{
 			// チェックボックス枠の右端を取得してテキストをその右側に描画
 			RECT rcCheckBox;
 			GetWindowLOGINCheckBoxRect(rcCheck, &rcCheckBox);
-			TextOut2(hDC, m_hFont, rcCheckBox.right + 4, rcCheck.top - 4, strCheck, RGB(1, 1, 1));
+			TextOut2(hDC, m_hFont, rcCheckBox.right + 4, rcCheck.top - 6, strCheck, RGB(1, 1, 1));
 		}
-		TextOut2(hDC, m_hFont, rcConnect.left + 12, rcConnect.top - 2, GetLoginLabelConnect(), RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, rcConnect.left + 12, rcConnect.top - 4, GetLoginLabelConnect(), RGB(1, 1, 1));
 
 		m_pDib->Unlock();
 		m_dwTimeDrawStart = timeGetTime();
@@ -807,7 +807,7 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		}
 	}
 
-	TextOut2(hDC, m_hFont, rcField.left + 2, rcField.top - 3, strDraw, RGB(0, 0, 0));
+	TextOut2(hDC, m_hFont, rcField.left + 2, rcField.top - 5, strDraw, RGB(0, 0, 0));
 	if (bFocused && (m_nCursorAnime == 0)) {
 		// カーソル位置に基づいて描画位置を計算
 		int nDrawCursorPos = m_nCursorPos;
@@ -830,7 +830,7 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 		if (nCursorX > rcField.right - 8) {
 			nCursorX = rcField.right - 8;
 		}
-		TextOut2(hDC, m_hFont, nCursorX, rcField.top - 3, _T("|"), RGB(0, 0, 0));
+		TextOut2(hDC, m_hFont, nCursorX, rcField.top - 5, _T("|"), RGB(0, 0, 0));
 	}
 }
 
