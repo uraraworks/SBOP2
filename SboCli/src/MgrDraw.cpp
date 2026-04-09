@@ -479,7 +479,7 @@ void CMgrDraw::DrawChar(
 				if (pInfoChar->m_nSex == SEX_FEMALE) {
 					nTmp += 32 * 4;
 				}
-				pSrc = m_pMgrGrpData->GetDib(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, 0);
+				pSrc = m_pMgrGrpData->GetDib(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, pInfoChar->m_wFamilyID);
 				// 体
 				pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp);
 				if ((pInfoChar->m_wGrpIDSP == 0) && (pInfoChar->m_wGrpIDTmpMain == 0)) {
