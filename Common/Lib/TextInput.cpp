@@ -59,6 +59,11 @@ void CTextInput::SetLine(DWORD dwLine)
 	DWORD i;
 	CmyString strTmp;
 
+	// ファイル未オープン時は何もしない（Create 失敗を許容するため）
+	if (m_pFile == NULL) {
+		return;
+	}
+
 	m_dwLine = 0;
 	fseek(m_pFile, 0, SEEK_SET);
 
@@ -126,6 +131,11 @@ CmyString CTextInput::ReadProc(void)
 	BYTE byTmp1, byTmp2;
 	DWORD dwSize;
 	CmyString strTmp, strRet;
+
+	// ファイル未オープン時は空文字列を返す（Create 失敗を許容するため）
+	if (m_pFile == NULL) {
+		return strRet;
+	}
 
 	szTmp[1] = 0;
 
