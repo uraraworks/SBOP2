@@ -3,9 +3,44 @@
 
 #include "stdafx.h"
 #include <imgui.h>
+#include <windows.h>
+#include <string>
 #include "ImGuiMsgLog.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+
+/// @brief SJIS (CP932) 文字列を UTF-8 に変換する
+/// @param pszSjis SJIS 文字列（NULL 終端）
+/// @return UTF-8 std::string。変換失敗時は空文字列を返す
+static std::string SjisToUtf8(const char *pszSjis)
+{
+    if (pszSjis == NULL || pszSjis[0] == '\0') {
+        return std::string();
+    }
+
+    // SJIS → UTF-16
+    int nWideLen = MultiByteToWideChar(CP_ACP, 0, pszSjis, -1, NULL, 0);
+    if (nWideLen <= 0) {
+        return std::string(pszSjis);  // 変換失敗時はそのまま返す
+    }
+    std::wstring wstr(nWideLen, L'\0');
+    MultiByteToWideChar(CP_ACP, 0, pszSjis, -1, &wstr[0], nWideLen);
+
+    // UTF-16 → UTF-8
+    int nUtf8Len = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
+    if (nUtf8Len <= 0) {
+        return std::string(pszSjis);  // 変換失敗時はそのまま返す
+    }
+    std::string utf8(nUtf8Len, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &utf8[0], nUtf8Len, NULL, NULL);
+
+    // WideCharToMultiByte は NULL 終端を含む長さを返すので末尾の '\0' を除去
+    if (!utf8.empty() && utf8.back() == '\0') {
+        utf8.pop_back();
+    }
+
+    return utf8;
+}
 
 CImGuiMsgLog::CImGuiMsgLog()
     : m_pMgrData(NULL)
@@ -31,7 +66,9 @@ void CImGuiMsgLog::Add(const char *pszLog, unsigned int color)
     }
 
     LogLine line;
-    line.text = pszLog;
+    // SJIS (CP932) 文字列を UTF-8 に変換してから保持する
+    // ImGui は UTF-8 を要求するため、SJIS のまま渡すと文字化けする
+    line.text = SjisToUtf8(pszLog);
     line.color = color;
     m_lines.push_back(line);
 
@@ -75,8 +112,13 @@ void CImGuiMsgLog::Draw()
     ImGui::EndChild();
 
     // チャット入力
+    // 背景と文字色を明示的に設定して、黒背景に黒文字で見えなくなる問題を防ぐ
+    ImGui::PushStyleColor(ImGuiCol_FrameBg,  ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_Text,     ImVec4(1.0f,  1.0f,  1.0f,  1.0f));
     ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
-    if (ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), flags)) {
+    bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), flags);
+    ImGui::PopStyleColor(2);
+    if (bEntered) {
         if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {
             CMainFrame *pMainFrame = m_pMgrData->GetMainFrame();
             if (pMainFrame != NULL) {
