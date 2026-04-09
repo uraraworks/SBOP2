@@ -1,4 +1,4 @@
-/// @file UraraSockTCP.h
+﻿/// @file UraraSockTCP.h
 /// @brief Generic TCP communication class definition
 /// @author URARA-works
 /// @date 2003/10/28
