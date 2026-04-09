@@ -496,7 +496,9 @@ void CMgrDraw::DrawChar(
 				pSrc = m_pMgrGrpData->GetDib(wGrpIDMain, 0, wGrpIDSub);
 				// 服
 				pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
-				pSrc = m_pMgrGrpData->GetDib(GRPIDMAIN_2X2_HAIR, 0, pInfoChar->m_wGrpIDHairType);
+				// m_wGrpIDHairType は 1-based (1〜N) だが GetDib2x2Hair は 0-based 配列インデックスを使うため -1 する
+				pSrc = m_pMgrGrpData->GetDib(GRPIDMAIN_2X2_HAIR, 0,
+					pInfoChar->m_wGrpIDHairType > 0 ? pInfoChar->m_wGrpIDHairType - 1 : 0);
 				// 髪
 				pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
 				if (nDirection != 0) {
