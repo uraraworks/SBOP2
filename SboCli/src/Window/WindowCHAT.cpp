@@ -83,6 +83,9 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 	// 枠
 	DrawInputFrame1(8 + 6, 16 + 6, m_sizeWindow.cx - 16 - 6 - 6, 14, 0);
 
+	// 入力欄内側を白で塗りつぶす（黒背景に黒文字で見えなくなるのを防ぐ）
+	m_pDib->FillRect(8 + 6, 16 + 6, m_sizeWindow.cx - 16 - 6 - 6, 14, RGB(255, 255, 255));
+
 	// チャット種別アイコン
 	m_pDib->BltFrom256(50, 0, 16, 16, m_pDibSystem, 48 + (m_aArrayType[m_nType] * 16), 112);
 
