@@ -687,8 +687,8 @@ void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr)
 }
 
 void CMainFrame::UpdateServerInfo(
-	BOOL bSend	// =TRUE*/,		/* [in] TRUE:オンライン数を通知する
-	BOOL bUpload	// =FALSE*/)		/* [in] TRUE:すぐにアップロードする
+	BOOL bSend		/*=TRUE*/,		/* [in] TRUE:オンライン数を通知する */
+	BOOL bUpload	/*=FALSE*/)		/* [in] TRUE:すぐにアップロードする */
 {
 	int nCount;
 	CmyString strTmp;

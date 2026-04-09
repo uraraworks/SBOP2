@@ -113,9 +113,9 @@ void CUpdateServerInfo::Destroy(void)
 }
 
 void CUpdateServerInfo::Update(
-	int nCount,	// [in] ログイン人数
+	int nCount,			// [in] ログイン人数
 	LPCSTR pszPlace,	// [in] 最も集まっている場所
-	BOOL bUpload	// =FALSE*/)	/* [in] TRUE:すぐにアップロード
+	BOOL bUpload	/*=FALSE*/)	/* [in] TRUE:すぐにアップロード */
 {
 	m_csUpdate.Enter();
 
