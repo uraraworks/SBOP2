@@ -107,7 +107,8 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul
-xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
+xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul
+xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul</Command>
     </PostBuildEvent>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -164,7 +165,8 @@ xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "..\SDL2\lib\x86\SDL2.dll" "$(OutDir)" 2&gt;nul
-xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul</Command>
+xcopy /y "..\SDL2_ttf\lib\x86\SDL2_ttf.dll" "$(OutDir)" 2&gt;nul
+xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul</Command>
     </PostBuildEvent>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
