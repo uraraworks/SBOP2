@@ -623,14 +623,13 @@ void CWindowBase::DrawBrowserRect(int x, int y, int cx, int cy, COLORREF ColorFi
 		(int)bStroke,
 		nLineWidth);
 #else
-	UNREFERENCED_PARAMETER(x);
-	UNREFERENCED_PARAMETER(y);
-	UNREFERENCED_PARAMETER(cx);
-	UNREFERENCED_PARAMETER(cy);
-	UNREFERENCED_PARAMETER(ColorFill);
-	UNREFERENCED_PARAMETER(bFill);
-	UNREFERENCED_PARAMETER(ColorStroke);
-	UNREFERENCED_PARAMETER(bStroke);
+	// アルファは未対応 (byFillAlpha / byStrokeAlpha は無視。半透明 UI が必要になった時点で再検討)
+	if (bFill) {
+		m_pDib->FillRect(x, y, cx, cy, ColorFill);
+	}
+	if (bStroke) {
+		m_pDib->Rectangle(x, y, cx, cy, ColorStroke);
+	}
 	UNREFERENCED_PARAMETER(nLineWidth);
 	UNREFERENCED_PARAMETER(byFillAlpha);
 	UNREFERENCED_PARAMETER(byStrokeAlpha);

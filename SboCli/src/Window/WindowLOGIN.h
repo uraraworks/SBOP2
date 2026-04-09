@@ -56,6 +56,7 @@ private:
 	BOOL	IsTextFieldFocus(void) const;	// テキスト入力欄が選択中か
 	BOOL	IsInteractive(void) const;	// 操作可能か
 	BOOL	HitTest(int x, int y, RECT &rcDst, int nFocusIndex) const;	// 当たり判定
+	void	DrawBrowserControls(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);	// 入力欄・チェックボックス・ボタンの自前描画
 	void	DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, BOOL bPassword, BOOL bFocused);	// 入力欄描画
 	void	OnConnect(void);	// 接続ボタンハンドラ
 	CString	GetCurrentFieldText(void) const;	// フォーカス中フィールドのテキスト取得

@@ -264,6 +264,8 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
+		// 入力欄背景・チェックボックス枠・接続ボタン枠を自前描画（Windows / Emscripten 共通）
+		DrawBrowserControls(rcAccount, rcPassword, rcCheck, rcConnect);
 		hDC	= m_pDib->Lock();
 
 		TextOut2(hDC, m_hFont, 16, 16, _T("アカウント:"), RGB(1, 1, 1));
@@ -734,6 +736,50 @@ BOOL CWindowLOGIN::HitTest(int x, int y, RECT &rcDst, int nFocusIndex) const
 
 	return ((x >= rcDst.left) && (x < rcDst.right) && (y >= rcDst.top) && (y < rcDst.bottom)) ? TRUE : FALSE;
 }
+
+void CWindowLOGIN::DrawBrowserControls(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect)
+{
+	const BOOL bFocusAccount = (m_nFocusIndex == LOGINFOCUS_ACCOUNT);
+	const BOOL bFocusPassword = (m_nFocusIndex == LOGINFOCUS_PASSWORD);
+	const BOOL bFocusCheck = (m_nFocusIndex == LOGINFOCUS_SAVEPASSWORD);
+	const BOOL bFocusConnect = (m_nFocusIndex == LOGINFOCUS_CONNECT);
+	RECT rcCheckBox;
+
+	// アカウント入力欄
+	DrawBrowserRect(rcAccount.left - 1, rcAccount.top - 1, rcAccount.right - rcAccount.left + 2, rcAccount.bottom - rcAccount.top + 2, RGB(120, 78, 42), FALSE, RGB(120, 78, 42), TRUE);
+	DrawBrowserRect(rcAccount.left, rcAccount.top, rcAccount.right - rcAccount.left, rcAccount.bottom - rcAccount.top, RGB(255, 252, 245), TRUE, RGB(240, 214, 172), TRUE);
+	if (bFocusAccount) {
+		DrawBrowserRect(rcAccount.left - 2, rcAccount.top - 2, rcAccount.right - rcAccount.left + 4, rcAccount.bottom - rcAccount.top + 4, RGB(255, 255, 255), FALSE, RGB(255, 196, 92), TRUE);
+	}
+
+	// パスワード入力欄
+	DrawBrowserRect(rcPassword.left - 1, rcPassword.top - 1, rcPassword.right - rcPassword.left + 2, rcPassword.bottom - rcPassword.top + 2, RGB(120, 78, 42), FALSE, RGB(120, 78, 42), TRUE);
+	DrawBrowserRect(rcPassword.left, rcPassword.top, rcPassword.right - rcPassword.left, rcPassword.bottom - rcPassword.top, RGB(255, 252, 245), TRUE, RGB(240, 214, 172), TRUE);
+	if (bFocusPassword) {
+		DrawBrowserRect(rcPassword.left - 2, rcPassword.top - 2, rcPassword.right - rcPassword.left + 4, rcPassword.bottom - rcPassword.top + 4, RGB(255, 255, 255), FALSE, RGB(255, 196, 92), TRUE);
+	}
+
+	// チェックボックス
+	GetWindowLOGINCheckBoxRect(rcCheck, &rcCheckBox);
+	if (bFocusCheck) {
+		DrawBrowserRect(rcCheckBox.left - 2, rcCheckBox.top - 2, (rcCheckBox.right - rcCheckBox.left) + 4, (rcCheckBox.bottom - rcCheckBox.top) + 4, RGB(255, 255, 255), FALSE, RGB(255, 196, 92), TRUE);
+	}
+	DrawBrowserRect(rcCheckBox.left, rcCheckBox.top, rcCheckBox.right - rcCheckBox.left, rcCheckBox.bottom - rcCheckBox.top, RGB(255, 250, 240), TRUE, RGB(120, 78, 42), TRUE);
+	if (m_bSavePassword) {
+		DrawBrowserRect(rcCheckBox.left + 3, rcCheckBox.top + 3, 5, 5, RGB(80, 56, 24), TRUE, RGB(80, 56, 24), FALSE);
+	}
+
+	// 接続ボタン
+	DrawBrowserRect(rcConnect.left, rcConnect.top, rcConnect.right - rcConnect.left, rcConnect.bottom - rcConnect.top, RGB(235, 206, 158), TRUE, RGB(120, 78, 42), TRUE);
+	DrawBrowserRect(rcConnect.left + 1, rcConnect.top + 1, rcConnect.right - rcConnect.left - 2, 1, RGB(255, 245, 224), TRUE, RGB(255, 245, 224), FALSE);	// 上ハイライト
+	DrawBrowserRect(rcConnect.left + 1, rcConnect.top + 1, 1, rcConnect.bottom - rcConnect.top - 2, RGB(255, 245, 224), TRUE, RGB(255, 245, 224), FALSE);	// 左ハイライト
+	DrawBrowserRect(rcConnect.left + 1, rcConnect.bottom - 2, rcConnect.right - rcConnect.left - 2, 1, RGB(154, 108, 58), TRUE, RGB(154, 108, 58), FALSE);	// 下影
+	DrawBrowserRect(rcConnect.right - 2, rcConnect.top + 1, 1, rcConnect.bottom - rcConnect.top - 2, RGB(154, 108, 58), TRUE, RGB(154, 108, 58), FALSE);	// 右影
+	if (bFocusConnect) {
+		DrawBrowserRect(rcConnect.left - 2, rcConnect.top - 2, rcConnect.right - rcConnect.left + 4, rcConnect.bottom - rcConnect.top + 4, RGB(255, 255, 255), FALSE, RGB(255, 196, 92), TRUE);
+	}
+}
+
 
 void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, BOOL bPassword, BOOL bFocused)
 {
