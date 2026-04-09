@@ -16,13 +16,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
@@ -72,10 +72,14 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0411</Culture>
     </ResourceCompile>
-    <Lib>
-      <OutputFile>.\Release\SboSockLib.lib</OutputFile>
+    <Link>
+      <OutputFile>.\Release\SboSockLib.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Lib>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;..\Common\myLib\myZlib\zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Common\myLib\myZlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Release/SboSockLib.bsc</OutputFile>
@@ -103,10 +107,16 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0411</Culture>
     </ResourceCompile>
-    <Lib>
-      <OutputFile>.\Debug\SboSockLib.lib</OutputFile>
+    <Link>
+      <OutputFile>.\Debug\SboSockLib.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Lib>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;..\Common\myLib\myZlib\zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Common\myLib\myZlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <IgnoreSpecificDefaultLibraries>MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Debug/SboSockLib.bsc</OutputFile>
@@ -258,6 +268,61 @@
     <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELIST.cpp" />
     <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_FILELISTCHECK.cpp" />
     <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.cpp" />
+    <ClCompile Include="..\Common\crc.cpp" />
+    <ClCompile Include="..\Common\myLib\myZlib\myZlib.cpp" />
+    <ClCompile Include="..\Common\myLib\mySection.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
+    <ClCompile Include="..\Common\Info\InfoBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoAccount.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\Info\InfoCharBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoDisable.cpp" />
+    <ClCompile Include="..\Common\Info\InfoEffect.cpp" />
+    <ClCompile Include="..\Common\Info\InfoFileList.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItemType\InfoItemTypeBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoItemWeapon.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventGRPIDTMP.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventINITSTATUS.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventLIGHT.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMAPMOVE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapEvent\InfoMapEventMOVE.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObject.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapParts.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillHEAL.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSkill\InfoSkillMOVEATACK.cpp" />
+    <ClCompile Include="..\Common\Info\InfoSystem.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEvent.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventBase.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventMENU.cpp" />
+    <ClCompile Include="..\Common\Info\InfoTalkEvent\InfoTalkEventPAGE.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoCharBase.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoDisable.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEfcBalloon.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoEffect.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItem.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoItemWeapon.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapEvent.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObject.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapObjectData.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapParts.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMapShadow.cpp" />
+    <ClCompile Include="..\Common\Info\InfoMotion.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Common\Info\InfoMotionType.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotion.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp" />
+    <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
     <ClCompile Include="..\Common\UraraSockTCPSBO.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>

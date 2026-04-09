@@ -52,6 +52,7 @@ class CUraraSockTCP
 public:
 	virtual void	DeleteRecvData(PBYTE pData)												= 0;	// Delete received data
 	virtual void	Destroy(void)															= 0;	// Cleanup
+	virtual void	SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData)				= 0;	// コールバック登録
 	virtual BOOL	Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, DWORD dwCount)		= 0;	// Start listening
 	virtual BOOL	Connect(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WORD wPort, LPCSTR pszAddr)	= 0;	// Connect to server
 	virtual void	DeleteClient(DWORD dwID)												= 0;	// Disconnect client
@@ -80,6 +81,7 @@ class CUraraSockTCPStub : public CUraraSockTCP
 public:
 	virtual void	DeleteRecvData(PBYTE) override {}
 	virtual void	Destroy(void) override {}
+	virtual void	SetNotifySink(PFURARASOCKNOTIFY, void *) override {}
 	virtual BOOL	Host(HWND, DWORD, DWORD, WORD, DWORD) override { return FALSE; }
 	virtual BOOL	Connect(HWND, DWORD, DWORD, WORD, LPCSTR) override { return FALSE; }
 	virtual void	DeleteClient(DWORD) override {}

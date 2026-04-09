@@ -36,7 +36,7 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 
 	GetModuleFilePath(szFileName, _countof(szFileName));
 	CString strFileName(szFileName);
-	strFileName += _T("UraraSockTCP.dll");
+	strFileName += _T("SboSockLib.dll");
 
 #if defined(SBO_USE_SDL_LOADOBJECT)
 	// SDL_LoadObject でクロスプラットフォーム対応
@@ -112,17 +112,19 @@ void CUraraSockTCPSBO::Destroy(void)
 
 void CUraraSockTCPSBO::SetNotifySink(PFURARASOCKNOTIFY pfNotify, void *pUserData)
 {
-	// DLLのvtableを経由せず、ラッパー側でコールバックを保持するだけ
-	// （2008年ビルドのDLLはSetNotifySinkをvtableに持たないため直接呼び出し不可）
+	// ラッパー側にも保持しておく（Emscripten フォールバック等で参照される）
 	m_pfNotify = pfNotify;
 	m_pNotifyUserData = pUserData;
-#ifdef __EMSCRIPTEN__
-	// WebSocket版はm_pSock自身がコールバックを管理するため転送する
+	// m_pSock（SboSockLib.dll から取得したインスタンス）に転送する。
+	// SboSockLib は vtable 経由で SetNotifySink を持つため直接呼び出し可能。
 	if (m_pSock) {
+#ifdef __EMSCRIPTEN__
 		CUraraSockTCPWebSocket* pWs = static_cast<CUraraSockTCPWebSocket*>(m_pSock);
 		pWs->SetNotifySink(pfNotify, pUserData);
-	}
+#else
+		m_pSock->SetNotifySink(pfNotify, pUserData);
 #endif
+	}
 }
 
 // 接続待ち開始

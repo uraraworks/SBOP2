@@ -19,6 +19,8 @@
 #include <process.h>
 #include <shlwapi.h>
 #include <tchar.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 #else
 // POSIX / Emscripten
 #include <sys/types.h>
