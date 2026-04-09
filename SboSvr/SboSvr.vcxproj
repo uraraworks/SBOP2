@@ -107,7 +107,7 @@
       <OutputFile>.\Release/SboSvr.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"</Command>
+      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;mt.exe -nologo -manifest "$(ProjectDir)SboSvr.manifest" -outputresource:"$(TargetPath)";#1</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -159,7 +159,7 @@
       <OutputFile>.\Debug/SboSvr.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"</Command>
+      <Command>if exist "$(TargetDir)webroot" rmdir /S /Q "$(TargetDir)webroot"&#x0D;&#x0A;mkdir "$(TargetDir)webroot"&#x0D;&#x0A;xcopy /E /I /Y /H "$(ProjectDir)webroot\*.*" "$(TargetDir)webroot\"&#x0D;&#x0A;if exist "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" copy /Y "$(SolutionDir)SboGrpData\$(Configuration)\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;if exist "$(SolutionDir)Release\SboGrpData.dll" copy /Y "$(SolutionDir)Release\SboGrpData.dll" "$(TargetDir)SboGrpData.dll"&#x0D;&#x0A;mt.exe -nologo -manifest "$(ProjectDir)SboSvr.manifest" -outputresource:"$(TargetPath)";#1</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
