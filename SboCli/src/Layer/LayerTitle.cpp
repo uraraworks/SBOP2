@@ -33,6 +33,25 @@ EM_JS(void, SBOP2_DebugMarkLayerTitleDraw, (int fadeLevel, int cloudPos, int bac
     Module.sbop2LayerTitleLastCloudPos = cloudPos;
     Module.sbop2LayerTitleBackNullAtDraw = backNull;
 });
+// LayerTitle 専用テキストキュー: WindowBase の SBOP2_QueueCanvasText と同じ仕組みで push する
+// 重複定義を避けるため関数名を SBOP2_QueueLayerText として定義
+EM_JS(void, SBOP2_QueueLayerText, (int x, int y, const char *pszText, int r, int g, int b, int size, int outline, int frameR, int frameG, int frameB, int bold), {
+    Module.sbop2TextQueue = Module.sbop2TextQueue || [];
+    Module.sbop2TextQueue.push({
+        x: x,
+        y: y,
+        text: UTF8ToString(pszText),
+        r: r,
+        g: g,
+        b: b,
+        size: size,
+        outline: !!outline,
+        frameR: frameR,
+        frameG: frameG,
+        frameB: frameB,
+        bold: !!bold
+    });
+});
 #endif
 
 
@@ -121,6 +140,17 @@ void CLayerTitle::Draw(PCImg32 pDst)
 		strTmp = "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.";
 		TextOut1(hDCTmp, m_hFont, (480 - (strTmp.GetLength() * 6)) / 2 + 32, SCRSIZEY - 12 + 32, strTmp, RGB(255, 255, 255));
 		pDst->Unlock();
+#elif defined(__EMSCRIPTEN__)
+		// Emscripten では canvas への直接描画が使えないため、テキストキューに積んで JS 側で描画
+		strTmp = "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.";
+		SBOP2_QueueLayerText(
+			(480 - strTmp.GetLength() * 6) / 2 + 32,
+			SCRSIZEY - 12 + 32,
+			(LPCSTR)strTmp,
+			255, 255, 255, // 白
+			12,            // フォントサイズ (TextOut1 相当)
+			0, 0, 0, 0,    // outline なし / frame なし
+			0);            // bold なし
 #endif
 	}
 }

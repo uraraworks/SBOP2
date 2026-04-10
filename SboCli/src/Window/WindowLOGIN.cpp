@@ -264,12 +264,14 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
-		// 入力欄背景・チェックボックス枠・接続ボタン枠を自前描画（Windows / Emscripten 共通）
-		DrawBrowserControls(rcAccount, rcPassword, rcCheck, rcConnect);
 		hDC	= m_pDib->Lock();
 
 		TextOut2(hDC, m_hFont, 16, 10, _T("アカウント:"), RGB(1, 1, 1));
 		TextOut2(hDC, m_hFont, 16, 36, _T("パスワード:"), RGB(1, 1, 1));
+
+#if !defined(__EMSCRIPTEN__)
+		// Emscripten では DOM overlay が入力欄/ボタン/チェックを担うため canvas 側描画はスキップ
+		DrawBrowserControls(rcAccount, rcPassword, rcCheck, rcConnect);
 		DrawTextField(hDC, rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
 		DrawTextField(hDC, rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
 		{
@@ -279,6 +281,7 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 			TextOut2(hDC, m_hFont, rcCheckBox.right + 4, rcCheck.top - 6, strCheck, RGB(1, 1, 1));
 		}
 		TextOut2(hDC, m_hFont, rcConnect.left + 12, rcConnect.top - 4, GetLoginLabelConnect(), RGB(1, 1, 1));
+#endif // !defined(__EMSCRIPTEN__)
 
 		m_pDib->Unlock();
 		m_dwTimeDrawStart = timeGetTime();
