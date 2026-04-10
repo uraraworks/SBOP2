@@ -29,10 +29,10 @@ $sources = @(
     "SboCli/src/Platform/SDLApp.cpp",
     "SboCli/src/Platform/SDLInput.cpp",
     "SboCli/src/Platform/SDLWindow.cpp",
+    "SboCli/src/Platform/SdlFont.cpp",
     "SboCli/src/Lib/DInputUtil.cpp",
     "SboCli/src/Lib/DXAudio.cpp",
     "SboCli/src/Lib/Img32.cpp",
-    "SboCli/src/Lib/LibMusicLoader.cpp",
     "SboCli/src/LibSboSoundLoader.cpp",
     "SboCli/src/Lib/third_party/lodepng.cpp",
     "SboCli/src/Layer/LayerBase.cpp",
@@ -50,7 +50,17 @@ $sources = @(
     "Common/Lib/DataSlot.cpp",
     "Common/SBOGlobal.cpp",
     "Common/myLib/mySection.cpp",
-    "Common/myLib/myString.cpp"
+    "Common/myLib/myString.cpp",
+    "Common/UraraSockTCPSBO.cpp",
+    "Common/UraraSockTCPWebSocket.cpp",
+    "Common/crc.cpp",
+    "Common/myLib/myZlib/myZlib.cpp",
+    "imgui/imgui.cpp",
+    "imgui/imgui_draw.cpp",
+    "imgui/imgui_tables.cpp",
+    "imgui/imgui_widgets.cpp",
+    "imgui/backends/imgui_impl_sdl2.cpp",
+    "imgui/backends/imgui_impl_sdlrenderer2.cpp"
 )
 
 function Resolve-Empp {

@@ -99,7 +99,9 @@ function Get-IncludeArgs {
         "Common/Packet/SKILL",
         "Common/myLib/myZLib",
         "SboSoundData",
-        "SDL2/include"
+        "SDL2/include",
+        "imgui",
+        "imgui/backends"
     )
 
     $args = New-Object System.Collections.Generic.List[string]
