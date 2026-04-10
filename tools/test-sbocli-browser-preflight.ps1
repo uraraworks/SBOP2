@@ -131,6 +131,8 @@ $commonArgItems = @(
     "-D_UNICODE",
     "-DNO_DIRECTMUSIC",
     "-D_WFL_NONDMUSIC",
+    "-sUSE_SDL=2",
+    "-sUSE_SDL_TTF=2",
     "-Winvalid-pch",
     "-include",
     (Join-Path $repoRoot "Common/rpcsal_fallback.h"),

@@ -87,6 +87,7 @@ $objects = foreach ($source in $sources) {
 
 $linkArgs = @(
     "-sUSE_SDL=2",
+    "-sUSE_SDL_TTF=2",
     "-sALLOW_MEMORY_GROWTH=1",
     "-sASSERTIONS=1",
     "-sSTACK_SIZE=2097152",
