@@ -367,15 +367,24 @@ void CSDLApp::RunFrame(void)
 			break;
 
 		case SDL_KEYDOWN:
-			m_pHost->OnSDLKeyDown(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+			// ImGui がキーボードをキャプチャ中の場合はゲーム側に渡さない
+			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
+				m_pHost->OnSDLKeyDown(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+			}
 			break;
 
 		case SDL_KEYUP:
-			m_pHost->OnSDLKeyUp(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+			// ImGui がキーボードをキャプチャ中の場合はゲーム側に渡さない
+			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
+				m_pHost->OnSDLKeyUp(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+			}
 			break;
 
 		case SDL_TEXTINPUT:
-			m_pHost->OnSDLTextInput(sdlEvent.text.text);
+			// ImGui がキーボードをキャプチャ中の場合はゲーム側に渡さない
+			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
+				m_pHost->OnSDLTextInput(sdlEvent.text.text);
+			}
 			break;
 
 		case SDL_WINDOWEVENT:

@@ -93,6 +93,7 @@ CMainFrame::CMainFrame()
 	m_bWindowActive = TRUE;
 	m_bRenewCharInfo = FALSE;
 	m_bRequestDraw = FALSE;
+	m_byWindowHandledDownCode = 0;
 	m_nGameState = GAMESTATE_NONE;
 	m_nDrawCount = 30;
 	m_nFPS = 0;
@@ -1336,11 +1337,23 @@ void CMainFrame::KeyProc(void)
 	}
 	bResult = m_pMgrWindow->IsKeyInput();
 	if (bResult) {
+		// ウィンドウ側がキー入力を処理する
+		// KEYDOWN エッジを処理したキーコードを記録し、後続の KEYUP エッジが
+		// StateProc に漏れて二重処理（例: チャット閉じた直後の Enter で再オープン）しないようにする
+		if (bDown) {
+			m_byWindowHandledDownCode = byCode;
+		}
 		m_pMgrWindow->KeyProc(byCode, bDown);
 
 	} else {
-		if (m_pStateProc) {
-			m_pStateProc->KeyProc(byCode, bDown);
+		// ウィンドウが直前の KEYDOWN を処理していたキーの KEYUP エッジは StateProc に渡さない
+		// （ウィンドウが閉じた直後にポーリングが離上エッジを検出しても誤作動しないようにするため）
+		if (!bDown && (byCode == m_byWindowHandledDownCode) && (m_byWindowHandledDownCode != 0)) {
+			m_byWindowHandledDownCode = 0;
+		} else {
+			if (m_pStateProc) {
+				m_pStateProc->KeyProc(byCode, bDown);
+			}
 		}
 	}
 }

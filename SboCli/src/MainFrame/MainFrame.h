@@ -239,6 +239,7 @@ private:
 	BOOL m_bWindowActive,
 		m_bRenewCharInfo,
 		m_bRequestDraw;
+	BYTE m_byWindowHandledDownCode;	// ウィンドウが処理した KEYDOWN のキーコード（離上エッジの二重処理防止用）
 	int m_nGameState,
 		m_nDrawCount,
 		m_nFPS;
