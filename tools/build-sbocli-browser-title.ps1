@@ -1,7 +1,8 @@
 param(
     [string]$OutDir = "out/browser-title",
     [string]$PreflightOutDir = "out/browser-title/obj",
-    [switch]$SkipPreflight
+    [switch]$SkipPreflight,
+    [switch]$Force
 )
 
 Set-StrictMode -Version Latest
@@ -15,6 +16,44 @@ $preflightScript = Join-Path $scriptDir "test-sbocli-browser-preflight.ps1"
 $eglSwapPost = Join-Path $scriptDir "emscripten\egl_swapinterval_post.js"
 $shellFile = Join-Path $scriptDir "emscripten\sbocli-title.shell.html"
 $resDir = Join-Path $repoRoot "SboGrpData\res"
+
+# Up-to-date check: 出力 html がソースよりも新しければ何もしない
+if (-not $Force) {
+    $outFile = Join-Path $outPath "sbocli-title.html"
+    if (Test-Path $outFile) {
+        $outTime = (Get-Item $outFile).LastWriteTime
+        $watchedDirs = @(
+            (Join-Path $repoRoot "SboCli/src"),
+            (Join-Path $repoRoot "SboCli/StdAfx.h"),
+            (Join-Path $repoRoot "Common"),
+            (Join-Path $repoRoot "imgui")
+        )
+        $newest = $null
+        foreach ($d in $watchedDirs) {
+            if (Test-Path $d) {
+                $items = Get-ChildItem -Path $d -Recurse -ErrorAction SilentlyContinue `
+                    -Include "*.cpp","*.h","*.hpp","*.c","*.cc"
+                foreach ($item in $items) {
+                    if (($newest -eq $null) -or ($item.LastWriteTime -gt $newest)) {
+                        $newest = $item.LastWriteTime
+                    }
+                }
+            }
+        }
+        # ビルドスクリプト群やシェルファイル等の補助ファイルもチェック
+        $auxFiles = Get-ChildItem -Path $scriptDir -Recurse -ErrorAction SilentlyContinue `
+            -Include "*.ps1","*.js","*.html","*.json"
+        foreach ($item in $auxFiles) {
+            if (($newest -eq $null) -or ($item.LastWriteTime -gt $newest)) {
+                $newest = $item.LastWriteTime
+            }
+        }
+        if ($newest -ne $null -and $newest -lt $outTime) {
+            Write-Host "[browser-build] up-to-date, skipping (latest source: $newest, output: $outTime)"
+            exit 0
+        }
+    }
+}
 
 $sources = @(
     "SboCli/src/BrowserMain.cpp",
