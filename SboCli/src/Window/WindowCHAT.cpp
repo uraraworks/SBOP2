@@ -9,6 +9,7 @@
 #include "Img32.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
+#include "MgrKeyInput.h"
 #include "MgrWindow.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
@@ -135,6 +136,8 @@ BOOL CWindowCHAT::HandleSDLKeyDown(UINT vk)
 		m_pMgrData->SetChatModeBack(m_nType);
 		m_bDelete = TRUE;
 		UpdateSDLTextInput();
+		// ウィンドウ削除直後にポーリングが Escape 離上エッジを StateProc に渡さないようリセット
+		m_pMgrData->GetMgrKeyInput()->Reset();
 		return TRUE;
 
 	case VK_UP:
@@ -275,4 +278,8 @@ void CWindowCHAT::SubmitChat(void)
 		m_bDelete = TRUE;
 		UpdateSDLTextInput();
 	}
+	// Enter を押してウィンドウを閉じた直後、ポーリングが Enter 離上エッジを
+	// StateProcMAP::OnEnter(FALSE) に誤送信してチャットを再オープンしないよう
+	// キー入力状態を全リセットする
+	m_pMgrData->GetMgrKeyInput()->Reset();
 }

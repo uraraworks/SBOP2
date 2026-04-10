@@ -8,6 +8,7 @@
 #include "DInputUtil.h"
 #include "MgrKeyInput.h"
 #include "Platform/SDLInput.h"
+#include "imgui.h"
 
 
 CMgrKeyInput::CMgrKeyInput()
@@ -89,6 +90,17 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 
 	byCode	= 0;
 	bDown	= FALSE;
+
+	// ImGui がキーボードをキャプチャ中はゲーム側のポーリングをスキップ
+	// （メッセージログ入力欄や ImGui 系 UI にフォーカスがある場合、
+	//   SDL_GetKeyboardState で直接取得したキー状態がゲームに流れないようにする）
+	if (ImGui::GetCurrentContext() != NULL && ImGui::GetIO().WantCaptureKeyboard) {
+		// 内部状態を「全キー離上」にリセットしておく
+		// → ImGui キャプチャ解除の瞬間に古い押下エッジが誤検出されないようにするため
+		ZeroMemory(m_abyKeyState,     sizeof(m_abyKeyState));
+		ZeroMemory(m_abyKeyStateBack, sizeof(m_abyKeyStateBack));
+		return;
+	}
 
 	// SDL キーボード状態を取得（SDLApp::Run() の SDL_PollEvent 後に更新済み）
 	pKeyboardState = SDL_GetKeyboardState(NULL);
