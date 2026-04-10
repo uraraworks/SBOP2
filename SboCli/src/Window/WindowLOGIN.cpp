@@ -252,14 +252,21 @@ void CWindowLOGIN::Create(CMgrData *pMgrData)
 
 void CWindowLOGIN::Draw(PCImg32 pDst)
 {
-	HDC hDC = NULL;
 	RECT rcAccount, rcPassword, rcCheck, rcConnect;
-	CString strCheck;
 
 	GetWindowLOGINAccountRect(&rcAccount);
 	GetWindowLOGINPasswordRect(&rcPassword);
 	GetWindowLOGINCheckRect(&rcCheck);
 	GetWindowLOGINConnectRect(&rcConnect);
+
+#if defined(__EMSCRIPTEN__)
+	// Emscripten ビルドでは canvas 側描画を完全スキップし、DOM overlay のみで表示する
+	// パネル枠・ラベルも含めてすべて canvas への Blt を行わない
+	g_pBrowserLoginWindow = this;
+	UpdateBrowserDom(rcAccount, rcPassword, rcCheck, rcConnect);
+#else
+	HDC hDC = NULL;
+	CString strCheck;
 	strCheck = GetLoginLabelSavePassword();
 
 	if (m_dwTimeDrawStart == 0) {
@@ -269,8 +276,6 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 		TextOut2(hDC, m_hFont, 16, 10, _T("アカウント:"), RGB(1, 1, 1));
 		TextOut2(hDC, m_hFont, 16, 36, _T("パスワード:"), RGB(1, 1, 1));
 
-#if !defined(__EMSCRIPTEN__)
-		// Emscripten では DOM overlay が入力欄/ボタン/チェックを担うため canvas 側描画はスキップ
 		DrawBrowserControls(rcAccount, rcPassword, rcCheck, rcConnect);
 		DrawTextField(hDC, rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
 		DrawTextField(hDC, rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
@@ -281,17 +286,12 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 			TextOut2(hDC, m_hFont, rcCheckBox.right + 4, rcCheck.top - 6, strCheck, RGB(1, 1, 1));
 		}
 		TextOut2(hDC, m_hFont, rcConnect.left + 12, rcConnect.top - 4, GetLoginLabelConnect(), RGB(1, 1, 1));
-#endif // !defined(__EMSCRIPTEN__)
 
 		m_pDib->Unlock();
 		m_dwTimeDrawStart = timeGetTime();
 	}
 	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
-
-#if defined(__EMSCRIPTEN__)
-	g_pBrowserLoginWindow = this;
-	UpdateBrowserDom(rcAccount, rcPassword, rcCheck, rcConnect);
-#endif
+#endif // defined(__EMSCRIPTEN__)
 }
 
 

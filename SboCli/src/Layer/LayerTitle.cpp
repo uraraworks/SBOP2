@@ -144,8 +144,8 @@ void CLayerTitle::Draw(PCImg32 pDst)
 		// Emscripten では canvas への直接描画が使えないため、テキストキューに積んで JS 側で描画
 		strTmp = "Copyright (C)2003-2010 URARA-WORKS. All rights reserved.";
 		SBOP2_QueueLayerText(
-			(480 - strTmp.GetLength() * 6) / 2 + 32,
-			SCRSIZEY - 12 + 32,
+			(480 - strTmp.GetLength() * 6) / 2,
+			SCRSIZEY - 12,
 			(LPCSTR)strTmp,
 			255, 255, 255, // 白
 			12,            // フォントサイズ (TextOut1 相当)
