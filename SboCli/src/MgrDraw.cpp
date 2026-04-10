@@ -120,41 +120,7 @@ EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
 	}
 	Module.sbop2TextQueue = [];
 });
-EM_JS(void, SBOP2_DebugCanvasRgbaHead, (int r, int g, int b, int a), {
-	Module.sbop2CppRgbaHead = r + '/' + g + '/' + b + '/' + a;
-});
 #endif
-
-static void SBOP2_LogSurfaceSample(const char *pszLabel, CImg32 *pImg, int x, int y)
-{
-#if defined(__EMSCRIPTEN__)
-	if ((pszLabel == NULL) || (pImg == NULL) || (pImg->GetBits() == NULL)) {
-		return;
-	}
-
-	const int nWidth = pImg->Width();
-	const int nHeight = pImg->Height();
-	if ((nWidth <= 0) || (nHeight <= 0)) {
-		return;
-	}
-
-	x = max(0, min(nWidth - 1, x));
-	y = max(0, min(nHeight - 1, y));
-
-	const BYTE *pBits = pImg->GetBits();
-	const int nIndex = ((nHeight - 1 - y) * nWidth + x) * 4;
-	SDL_Log("%s sample=%u/%u/%u/%u", pszLabel,
-		(unsigned)pBits[nIndex + 0],
-		(unsigned)pBits[nIndex + 1],
-		(unsigned)pBits[nIndex + 2],
-		(unsigned)pBits[nIndex + 3]);
-#else
-	(void)pszLabel;
-	(void)pImg;
-	(void)x;
-	(void)y;
-#endif
-}
 
 
 CMgrDraw::CMgrDraw()
@@ -215,23 +181,7 @@ void CMgrDraw::Destroy(void)
 void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 {
 	m_pMgrLayer->	Draw(m_pDibBack);		// レイヤー
-#if defined(__EMSCRIPTEN__)
-	// レイヤー数が 2 以上になった後（LOGIN 遷移後）の初回から最大 3 回サンプルを取得
-	static int s_nLoggedLayer = 0;
-	if (s_nLoggedLayer < 3 && m_pMgrLayer->GetLayerCount() >= 2) {
-		SBOP2_LogSurfaceSample("MgrDraw layer", m_pDibBack, 32, 32);
-		s_nLoggedLayer++;
-	}
-#endif
 	m_pMgrWindow->	Draw(m_pDibBack);		// ウィンドウ
-#if defined(__EMSCRIPTEN__)
-	// 同様にウィンドウ描画後のサンプルも最大 3 回取得
-	static int s_nLoggedWindow = 0;
-	if (s_nLoggedWindow < 3 && m_pMgrLayer->GetLayerCount() >= 2) {
-		SBOP2_LogSurfaceSample("MgrDraw window", m_pDibBack, 32, 32);
-		s_nLoggedWindow++;
-	}
-#endif
 
 	// 明度指定あり？
 	if (m_byLevel < 100 && m_byLevel > 0) {
@@ -259,13 +209,6 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 			}
 		}
 
-		if (aCanvasRgba.size() >= 4) {
-			SBOP2_DebugCanvasRgbaHead(
-				(int)aCanvasRgba[0],
-				(int)aCanvasRgba[1],
-				(int)aCanvasRgba[2],
-				(int)aCanvasRgba[3]);
-		}
 		SBOP2_PresentToCanvas((int)(intptr_t)aCanvasRgba.data(), nWidth, nHeight);
 	}
 	return;
@@ -323,19 +266,6 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 		stDst.h = SCRSIZEY;
 		SDL_RenderCopyEx(pRenderer, m_pBackTexture, NULL, &stDst,
 							0.0, NULL, SDL_FLIP_VERTICAL);
-#if defined(__EMSCRIPTEN__)
-		{
-			SDL_Rect stDebugRect;
-
-			stDebugRect.x = 0;
-			stDebugRect.y = 0;
-			stDebugRect.w = 32;
-			stDebugRect.h = 32;
-			SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_NONE);
-			SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
-			SDL_RenderFillRect(pRenderer, &stDebugRect);
-		}
-#endif
 	}
 }
 

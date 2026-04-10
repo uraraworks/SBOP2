@@ -31,35 +31,12 @@
 #if defined(__EMSCRIPTEN__)
 static CSDLApp *g_pBrowserSDLApp = NULL;
 
-EM_JS(void, SBOP2_DebugMarkStage, (int stage, int hasRenderer, int r, int g, int b), {
-	Module.sbop2Stage = stage;
-	Module.sbop2OnDrawHasRenderer = hasRenderer;
-});
-EM_JS(void, SBOP2_DebugCountOnDraw, (int hasRenderer), {
-	Module.sbop2OnDrawCount = (Module.sbop2OnDrawCount || 0) + 1;
-	Module.sbop2OnDrawHasRenderer = hasRenderer;
-});
-
 extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserPumpSingleFrame(void)
 {
 	if (g_pBrowserSDLApp == NULL) {
 		return;
 	}
 	g_pBrowserSDLApp->RequestBrowserRedraw();
-}
-#else
-static void SBOP2_DebugMarkStage(int stage, int hasRenderer, int r, int g, int b)
-{
-	UNREFERENCED_PARAMETER(stage);
-	UNREFERENCED_PARAMETER(hasRenderer);
-	UNREFERENCED_PARAMETER(r);
-	UNREFERENCED_PARAMETER(g);
-	UNREFERENCED_PARAMETER(b);
-}
-
-static void SBOP2_DebugCountOnDraw(int hasRenderer)
-{
-	UNREFERENCED_PARAMETER(hasRenderer);
 }
 #endif
 
@@ -248,51 +225,15 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 	}
 #if defined(__EMSCRIPTEN__)
 	g_pBrowserSDLApp = this;
-	{
-		std::string strTitle = pszTitle;
-		strTitle += " [CW]";
-		SDL_SetWindowTitle(m_Window.GetSDLWindow(), strTitle.c_str());
-		SBOP2_DebugMarkStage(1, 0, 0, 96, 192);
-	}
 #endif
 	if (!m_Window.CreateRenderer()) {
-#if defined(__EMSCRIPTEN__)
-		if (m_Window.GetSDLWindow() != NULL) {
-			std::string strTitle = SDL_GetWindowTitle(m_Window.GetSDLWindow());
-			strTitle += " [CR-NG]";
-			SDL_SetWindowTitle(m_Window.GetSDLWindow(), strTitle.c_str());
-		}
-#else
+#if !defined(__EMSCRIPTEN__)
 		return -1;
 #endif
 	}
-#if defined(__EMSCRIPTEN__)
-	{
-		SDL_Renderer *pRenderer = m_Window.GetRenderer();
-		std::string strTitle = SDL_GetWindowTitle(m_Window.GetSDLWindow());
-		strTitle += " [CR]";
-		SDL_SetWindowTitle(m_Window.GetSDLWindow(), strTitle.c_str());
-		SBOP2_DebugMarkStage(2, (pRenderer != NULL) ? 1 : 0, 192, 64, 0);
-	}
-#endif
 	if (!pHost->OnSDLInit(m_Window.GetSDLWindow())) {
-#if defined(__EMSCRIPTEN__)
-		if (m_Window.GetSDLWindow() != NULL) {
-			std::string strTitle = SDL_GetWindowTitle(m_Window.GetSDLWindow());
-			strTitle += " [INIT-NG]";
-			SDL_SetWindowTitle(m_Window.GetSDLWindow(), strTitle.c_str());
-		}
-#endif
 		return -1;
 	}
-#if defined(__EMSCRIPTEN__)
-	{
-		std::string strTitle = pszTitle;
-		strTitle += " [INIT]";
-		SDL_SetWindowTitle(m_Window.GetSDLWindow(), strTitle.c_str());
-		SBOP2_DebugMarkStage(3, (m_Window.GetRenderer() != NULL) ? 1 : 0, 0, 160, 64);
-	}
-#endif
 
 	InitImGui(m_Window.GetRenderer());
 
@@ -325,8 +266,6 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		// SDL_RenderClear は呼ばない。
 		// canvas 2D は MgrDraw::Draw が putImageData で直接描画するため、
 		// SDL_RenderClear で黒クリアすると canvas が上書きされてしまう。
-		SBOP2_DebugCountOnDraw((pRenderer != NULL) ? 1 : 0);
-		SBOP2_DebugMarkStage(4, (pRenderer != NULL) ? 1 : 0, 208, 192, 0);
 		m_pHost->OnDraw(pRenderer);
 	}
 #endif
@@ -361,10 +300,6 @@ void CSDLApp::RunFrame(void)
 {
 	SDL_Event sdlEvent;
 	DWORD dwTimeTmp;
-#if defined(__EMSCRIPTEN__)
-	static BOOL s_bLoggedLoop = FALSE;
-	static BOOL s_bLoggedDraw = FALSE;
-#endif
 
 	while (SDL_PollEvent(&sdlEvent))
 	{
@@ -448,14 +383,6 @@ void CSDLApp::RunFrame(void)
 		goto Exit;
 	}
 
-#if defined(__EMSCRIPTEN__)
-	if (s_bLoggedLoop == FALSE) {
-		SDL_Log("RunFrame: entered main loop");
-		s_bLoggedLoop = TRUE;
-		SBOP2_DebugMarkStage(5, (m_Window.GetRenderer() != NULL) ? 1 : 0, 160, 0, 160);
-	}
-#endif
-
 	PollWin32Messages();
 
 	// ImGui の InputText にフォーカスがある場合に SDL_TEXTINPUT イベントを発生させる
@@ -517,24 +444,9 @@ void CSDLApp::RunFrame(void)
 			)
 		{
 #if defined(__EMSCRIPTEN__)
-			if (s_bLoggedDraw == FALSE) {
-				SDL_Log("RunFrame: drawing frame pending=%d", m_bDrawPending);
-				s_bLoggedDraw = TRUE;
-				if (m_Window.GetSDLWindow() != NULL) {
-					std::string strTitle = SDL_GetWindowTitle(m_Window.GetSDLWindow());
-					if (strTitle.find("[DRAW]") == std::string::npos) {
-						strTitle += " [DRAW]";
-						SDL_SetWindowTitle(m_Window.GetSDLWindow(), strTitle.c_str());
-					}
-				}
-			}
-#endif
-#if defined(__EMSCRIPTEN__)
 			// Emscripten版: canvas 2D は MgrDraw::Draw が putImageData で直接描画するため、
 			// SDL_RenderClear / ImGui描画 / SDL_RenderPresent はすべてスキップする。
 			// （SDL_RenderPresent が SDL renderer の黒バッファで canvas を上書きしてしまう問題を回避）
-			SBOP2_DebugCountOnDraw((pRenderer != NULL) ? 1 : 0);
-			SBOP2_DebugMarkStage(6, (pRenderer != NULL) ? 1 : 0, 224, 32, 32);
 			if (pRenderer != NULL) {
 				m_pHost->OnDraw(pRenderer);
 			}
@@ -542,8 +454,6 @@ void CSDLApp::RunFrame(void)
 			if (pRenderer != NULL) {
 				SDL_RenderClear(pRenderer);
 			}
-			SBOP2_DebugCountOnDraw((pRenderer != NULL) ? 1 : 0);
-			SBOP2_DebugMarkStage(6, (pRenderer != NULL) ? 1 : 0, 224, 32, 32);
 			m_pHost->OnDraw(pRenderer);
 			// ImGui描画
 			if (m_bImGuiInitialized && pRenderer != NULL) {
