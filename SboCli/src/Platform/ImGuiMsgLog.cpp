@@ -9,6 +9,39 @@
 #include "MgrData.h"
 #include "MainFrame.h"
 
+/// @brief UTF-8 文字列を SJIS (CP932) に変換する
+/// @param pszUtf8 UTF-8 文字列（NULL 終端）
+/// @return SJIS std::string。変換失敗時は元の文字列をそのまま返す
+static std::string Utf8ToSjis(const char *pszUtf8)
+{
+    if (pszUtf8 == NULL || pszUtf8[0] == '\0') {
+        return std::string();
+    }
+
+    // UTF-8 → UTF-16
+    int nWideLen = MultiByteToWideChar(CP_UTF8, 0, pszUtf8, -1, NULL, 0);
+    if (nWideLen <= 0) {
+        return std::string(pszUtf8);  // 変換失敗時はそのまま返す
+    }
+    std::wstring wstr(nWideLen, L'\0');
+    MultiByteToWideChar(CP_UTF8, 0, pszUtf8, -1, &wstr[0], nWideLen);
+
+    // UTF-16 → SJIS (CP932)
+    int nSjisLen = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
+    if (nSjisLen <= 0) {
+        return std::string(pszUtf8);  // 変換失敗時はそのまま返す
+    }
+    std::string sjis(nSjisLen, '\0');
+    WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, &sjis[0], nSjisLen, NULL, NULL);
+
+    // WideCharToMultiByte は NULL 終端を含む長さを返すので末尾の '\0' を除去
+    if (!sjis.empty() && sjis.back() == '\0') {
+        sjis.pop_back();
+    }
+
+    return sjis;
+}
+
 /// @brief SJIS (CP932) 文字列を UTF-8 に変換する
 /// @param pszSjis SJIS 文字列（NULL 終端）
 /// @return UTF-8 std::string。変換失敗時は空文字列を返す
@@ -140,7 +173,11 @@ void CImGuiMsgLog::Draw()
         if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {
             CMainFrame *pMainFrame = m_pMgrData->GetMainFrame();
             if (pMainFrame != NULL) {
-                pMainFrame->SendChat(0, m_chatBuf, NULL);
+                // m_chatBuf は ImGui が管理する UTF-8 文字列。
+                // SendChat / サーバは SJIS (CP932) を期待するため、
+                // ここで UTF-8 → SJIS 変換してから渡す。
+                std::string sjisMsg = Utf8ToSjis(m_chatBuf);
+                pMainFrame->SendChat(0, sjisMsg.c_str(), NULL);
             }
         }
         m_chatBuf[0] = '\0';
