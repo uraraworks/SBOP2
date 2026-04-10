@@ -489,7 +489,9 @@ void CMgrDraw::DrawChar(
 					wGrpIDSub  = pInfoChar->m_wGrpIDCloth;
 				} else {
 					wGrpIDMain = GRPIDMAIN_2X2_SPCLOTH;
-					wGrpIDSub  = pInfoChar->m_wGrpIDSP;
+					// 特殊服リソースは IDP_2X2_SP_CLOTH_01 (i=0) 始まりで配列にロードされるため
+					// m_wGrpIDSP=1 → 配列[0]=SP_CLOTH_01 と対応させるには -1 補正が必要
+					wGrpIDSub  = (pInfoChar->m_wGrpIDSP > 0) ? pInfoChar->m_wGrpIDSP - 1 : 0;
 					if (pInfoChar->m_wGrpIDTmpMain != 0) {
 						wGrpIDMain = pInfoChar->m_wGrpIDTmpMain;
 						wGrpIDSub  = pInfoChar->m_wGrpIDTmpSub;
