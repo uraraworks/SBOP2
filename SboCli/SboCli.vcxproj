@@ -69,8 +69,8 @@
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BrowserTitle|Win32'">
-    <NMakeBuildCommandLine>pwsh -NoProfile -ExecutionPolicy Bypass -File "$(SolutionDir)tools\build-sbocli-browser-title.ps1"</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>pwsh -NoProfile -ExecutionPolicy Bypass -File "$(SolutionDir)tools\build-sbocli-browser-title.ps1"</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine>pwsh -NoProfile -ExecutionPolicy Bypass -Command "&amp; { $emsdkRoot = if ($env:EMSDK) { $env:EMSDK } else { 'C:\emsdk' }; if (Test-Path (Join-Path $emsdkRoot 'emsdk_env.ps1')) { . (Join-Path $emsdkRoot 'emsdk_env.ps1') } ; &amp; '$(SolutionDir)tools\build-sbocli-browser-title.ps1' }"</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>pwsh -NoProfile -ExecutionPolicy Bypass -Command "&amp; { $emsdkRoot = if ($env:EMSDK) { $env:EMSDK } else { 'C:\emsdk' }; if (Test-Path (Join-Path $emsdkRoot 'emsdk_env.ps1')) { . (Join-Path $emsdkRoot 'emsdk_env.ps1') } ; &amp; '$(SolutionDir)tools\build-sbocli-browser-title.ps1' }"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>pwsh -NoProfile -Command "if (Test-Path '$(SolutionDir)out\browser-title') { Remove-Item -Recurse -Force '$(SolutionDir)out\browser-title' }"</NMakeCleanCommandLine>
     <NMakeOutput>$(SolutionDir)out\browser-title\sbocli-title.html</NMakeOutput>
     <NMakePreprocessorDefinitions>__EMSCRIPTEN__;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
