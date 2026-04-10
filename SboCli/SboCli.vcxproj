@@ -196,6 +196,20 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
       <OutputFile>.\Release/SboCli.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BrowserTitle|Win32'">
+    <ClCompile>
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClInclude>
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ResourceCompile>
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ResourceCompile>
+    <Midl>
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\crc.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
