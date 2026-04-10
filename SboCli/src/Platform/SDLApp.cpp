@@ -156,10 +156,15 @@ BOOL CSDLApp::Init(void)
 #if !defined(_WINDLL)
 	// SDL_ttfフォントシステムの初期化
 	{
+#if defined(__EMSCRIPTEN__)
+		// Emscripten では --preload-file SboCli/font@/font でマウントされる
+		SdlFontInit("/font");
+#else
 		TCHAR szFontDir[MAX_PATH];
 		BuildModuleRelativePath(szFontDir, _countof(szFontDir), _T("font\\"));
 		std::string ansiFontDir = TStringToAnsiStd(szFontDir);
 		SdlFontInit(ansiFontDir.c_str());
+#endif
 	}
 #endif
 	m_bInitialized = TRUE;

@@ -16,6 +16,7 @@ $preflightScript = Join-Path $scriptDir "test-sbocli-browser-preflight.ps1"
 $eglSwapPost = Join-Path $scriptDir "emscripten\egl_swapinterval_post.js"
 $shellFile = Join-Path $scriptDir "emscripten\sbocli-title.shell.html"
 $resDir = Join-Path $repoRoot "SboGrpData\res"
+$fontDir = Join-Path $repoRoot "SboCli\font"
 
 # Up-to-date check: 出力 html がソースよりも新しければ何もしない
 if (-not $Force) {
@@ -143,6 +144,7 @@ $linkArgs = @(
     "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap']",
     "-sENVIRONMENT=web",
     "--preload-file", "$resDir@/SboGrpData/res",
+    "--preload-file", "$fontDir@/font",
     "--shell-file", $shellFile,
     "--post-js", $eglSwapPost,
     "-o", (Join-Path $outPath "sbocli-title.html")
