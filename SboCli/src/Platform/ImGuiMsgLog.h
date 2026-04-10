@@ -29,5 +29,6 @@ private:
     bool m_bScrollToBottom;
     char m_chatBuf[256];
     bool m_bVisible;
+    bool m_bFocusInput;  // 次フレームで入力欄にフォーカスを戻すフラグ
     static const int MAX_LINES = 3000;
 };

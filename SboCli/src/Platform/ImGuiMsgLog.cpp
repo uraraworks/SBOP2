@@ -46,6 +46,7 @@ CImGuiMsgLog::CImGuiMsgLog()
     : m_pMgrData(NULL)
     , m_bScrollToBottom(false)
     , m_bVisible(true)
+    , m_bFocusInput(false)
 {
     m_chatBuf[0] = '\0';
 }
@@ -112,12 +113,29 @@ void CImGuiMsgLog::Draw()
     ImGui::EndChild();
 
     // チャット入力
-    // 背景と文字色を明示的に設定して、黒背景に黒文字で見えなくなる問題を防ぐ
-    ImGui::PushStyleColor(ImGuiCol_FrameBg,  ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_Text,     ImVec4(1.0f,  1.0f,  1.0f,  1.0f));
+    ImGui::Separator();
+
+    // 次フレームでフォーカスを戻す必要がある場合はここで予約する
+    if (m_bFocusInput) {
+        ImGui::SetKeyboardFocusHere(0);
+        m_bFocusInput = false;
+    }
+
+    // FrameBg/Hovered/Active と Text を明示的に設定して視認性を確保する
+    // デフォルトのダークテーマでは FrameBg がほぼ黒になるため、
+    // 入力欄の背景と文字色を明示的に上書きする
+    ImGui::PushStyleColor(ImGuiCol_FrameBg,        ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(0.30f, 0.30f, 0.30f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive,  ImVec4(0.35f, 0.35f, 0.35f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_Text,           ImVec4(1.0f,  1.0f,  1.0f,  1.0f));
+
+    // 入力欄を幅いっぱいに広げる
+    ImGui::SetNextItemWidth(-1.0f);
+
     ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
     bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), flags);
-    ImGui::PopStyleColor(2);
+    ImGui::PopStyleColor(4);
+
     if (bEntered) {
         if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {
             CMainFrame *pMainFrame = m_pMgrData->GetMainFrame();
@@ -126,7 +144,9 @@ void CImGuiMsgLog::Draw()
             }
         }
         m_chatBuf[0] = '\0';
-        ImGui::SetKeyboardFocusHere(-1);  // 入力欄にフォーカスを戻す
+        // 次フレームの InputText 描画前にフォーカスを予約する
+        // （InputText 後の SetKeyboardFocusHere(-1) は確実でないため）
+        m_bFocusInput = true;
     }
 
     ImGui::End();
