@@ -363,6 +363,10 @@ void CMainFrame::OnSDLKeyDown(int vk)
 
 	pWindow = (m_pMgrWindow != NULL) ? m_pMgrWindow->GetActiveWindow() : NULL;
 	if ((pWindow != NULL) && pWindow->HandleSDLKeyDown((UINT)vk)) {
+		// SDL イベント経由でウィンドウがキーを消費した場合も、
+		// ポーリング (KeyProc/Renew) 側の KEYUP エッジが StateProcMAP に
+		// 誤送信されないよう、処理済みキーコードを記録する。
+		m_byWindowHandledDownCode = (BYTE)vk;
 		return;
 	}
 
