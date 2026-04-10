@@ -7,10 +7,33 @@
 #include "stdafx.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+#endif
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "Img32.h"
 #include "LayerTitle.h"
+
+#if defined(__EMSCRIPTEN__)
+// LayerTitle 生成時のデバッグマーク: 背景・タイトル・雲の NULL 有無とサイズを JS に記録
+EM_JS(void, SBOP2_DebugMarkLayerTitleCreate, (int backNull, int backW, int backH, int titleNull, int titleW, int titleH, int cloudNull, int cloudW, int cloudH), {
+    Module.sbop2LayerTitleCreated = 1;
+    Module.sbop2LayerTitleBackNull = backNull;
+    Module.sbop2LayerTitleBackSize = backW + 'x' + backH;
+    Module.sbop2LayerTitleTitleNull = titleNull;
+    Module.sbop2LayerTitleTitleSize = titleW + 'x' + titleH;
+    Module.sbop2LayerTitleCloudNull = cloudNull;
+    Module.sbop2LayerTitleCloudSize = cloudW + 'x' + cloudH;
+});
+// LayerTitle 描画毎のデバッグマーク: フェードレベル・雲位置・背景 NULL 有無を JS に蓄積
+EM_JS(void, SBOP2_DebugMarkLayerTitleDraw, (int fadeLevel, int cloudPos, int backNull), {
+    Module.sbop2LayerTitleDrawCount = (Module.sbop2LayerTitleDrawCount || 0) + 1;
+    Module.sbop2LayerTitleLastFade = fadeLevel;
+    Module.sbop2LayerTitleLastCloudPos = cloudPos;
+    Module.sbop2LayerTitleBackNullAtDraw = backNull;
+});
+#endif
 
 
 CLayerTitle::CLayerTitle()
@@ -43,6 +66,20 @@ void CLayerTitle::Create(
 	m_pDibTitle = m_pMgrGrpData->GetDibTmpTitle();
 	m_pDibTitleBack = m_pMgrGrpData->GetDibTmpTitleBack();
 	m_pDibTitleCloud = m_pMgrGrpData->GetDibTmpTitleCloud();
+
+#if defined(__EMSCRIPTEN__)
+	// Create 直後の各画像の NULL 有無とサイズをブラウザ JS に記録（描画されない原因調査用）
+	SBOP2_DebugMarkLayerTitleCreate(
+		(m_pDibTitleBack  == NULL) ? 1 : 0,
+		(m_pDibTitleBack  != NULL) ? m_pDibTitleBack->Width()  : 0,
+		(m_pDibTitleBack  != NULL) ? m_pDibTitleBack->Height() : 0,
+		(m_pDibTitle      == NULL) ? 1 : 0,
+		(m_pDibTitle      != NULL) ? m_pDibTitle->Width()      : 0,
+		(m_pDibTitle      != NULL) ? m_pDibTitle->Height()     : 0,
+		(m_pDibTitleCloud == NULL) ? 1 : 0,
+		(m_pDibTitleCloud != NULL) ? m_pDibTitleCloud->Width()  : 0,
+		(m_pDibTitleCloud != NULL) ? m_pDibTitleCloud->Height() : 0);
+#endif
 }
 
 
@@ -51,6 +88,11 @@ void CLayerTitle::Draw(PCImg32 pDst)
 	int i, cx, cy, nTmp, x;
 	HDC hDCTmp;
 	CmyString strTmp;
+
+#if defined(__EMSCRIPTEN__)
+	// Draw 呼び出し毎にフェードレベル・雲位置・背景 NULL 有無を JS に記録
+	SBOP2_DebugMarkLayerTitleDraw(m_nFadeLevel, m_nCloudPos, (m_pDibTitleBack == NULL) ? 1 : 0);
+#endif
 
 	nTmp = 100 - (m_nFadeLevel / 2);
 	if (m_nFadeLevel > 100) {

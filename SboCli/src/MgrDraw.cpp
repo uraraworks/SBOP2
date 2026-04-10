@@ -216,18 +216,20 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 {
 	m_pMgrLayer->	Draw(m_pDibBack);		// レイヤー
 #if defined(__EMSCRIPTEN__)
-	static BOOL s_bLoggedLayer = FALSE;
-	if (s_bLoggedLayer == FALSE) {
+	// レイヤー数が 2 以上になった後（LOGIN 遷移後）の初回から最大 3 回サンプルを取得
+	static int s_nLoggedLayer = 0;
+	if (s_nLoggedLayer < 3 && m_pMgrLayer->GetLayerCount() >= 2) {
 		SBOP2_LogSurfaceSample("MgrDraw layer", m_pDibBack, 32, 32);
-		s_bLoggedLayer = TRUE;
+		s_nLoggedLayer++;
 	}
 #endif
 	m_pMgrWindow->	Draw(m_pDibBack);		// ウィンドウ
 #if defined(__EMSCRIPTEN__)
-	static BOOL s_bLoggedWindow = FALSE;
-	if (s_bLoggedWindow == FALSE) {
+	// 同様にウィンドウ描画後のサンプルも最大 3 回取得
+	static int s_nLoggedWindow = 0;
+	if (s_nLoggedWindow < 3 && m_pMgrLayer->GetLayerCount() >= 2) {
 		SBOP2_LogSurfaceSample("MgrDraw window", m_pDibBack, 32, 32);
-		s_bLoggedWindow = TRUE;
+		s_nLoggedWindow++;
 	}
 #endif
 

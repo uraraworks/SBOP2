@@ -28,6 +28,7 @@ public:
 	void Delete(int nID);						// 指定レイヤーを破棄
 	void DeleteAll(void);						// 全てのレイヤーを破棄
 	CLayerBase *Get(int nID);					// 指定IDのレイヤーを取得
+	int GetLayerCount(void) const { return m_paLayer ? (int)m_paLayer->size() : 0; }	// レイヤー数取得
 
 	// レイヤー作成
 	void MakeLOGO(void);						// ロゴ
