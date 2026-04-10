@@ -143,6 +143,12 @@ BOOL CSDLApp::Init(void)
 
 	SDL_SetMainReady();
 
+	// IME フローティングウィンドウを SDL ウィンドウ内に表示するためのヒント。
+	// SDL_CreateWindow() より前に設定する必要がある。
+	// これにより ImGui の InputText フォーカス時に IME 変換ウィンドウが
+	// カーソル位置（入力欄の真下）に表示される。
+	SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0) {
 		return FALSE;
 	}
