@@ -322,9 +322,9 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 #if defined(__EMSCRIPTEN__)
 	{
 		SDL_Renderer *pRenderer = m_Window.GetRenderer();
-		if (pRenderer != NULL) {
-			SDL_RenderClear(pRenderer);
-		}
+		// SDL_RenderClear は呼ばない。
+		// canvas 2D は MgrDraw::Draw が putImageData で直接描画するため、
+		// SDL_RenderClear で黒クリアすると canvas が上書きされてしまう。
 		SBOP2_DebugCountOnDraw((pRenderer != NULL) ? 1 : 0);
 		SBOP2_DebugMarkStage(4, (pRenderer != NULL) ? 1 : 0, 208, 192, 0);
 		m_pHost->OnDraw(pRenderer);
@@ -529,6 +529,16 @@ void CSDLApp::RunFrame(void)
 				}
 			}
 #endif
+#if defined(__EMSCRIPTEN__)
+			// Emscripten版: canvas 2D は MgrDraw::Draw が putImageData で直接描画するため、
+			// SDL_RenderClear / ImGui描画 / SDL_RenderPresent はすべてスキップする。
+			// （SDL_RenderPresent が SDL renderer の黒バッファで canvas を上書きしてしまう問題を回避）
+			SBOP2_DebugCountOnDraw((pRenderer != NULL) ? 1 : 0);
+			SBOP2_DebugMarkStage(6, (pRenderer != NULL) ? 1 : 0, 224, 32, 32);
+			if (pRenderer != NULL) {
+				m_pHost->OnDraw(pRenderer);
+			}
+#else
 			if (pRenderer != NULL) {
 				SDL_RenderClear(pRenderer);
 			}
@@ -548,6 +558,7 @@ void CSDLApp::RunFrame(void)
 			if (pRenderer != NULL) {
 				SDL_RenderPresent(pRenderer);
 			}
+#endif
 			m_byFps++;
 		}
 		m_dwLastRenderTime = dwTimeTmp;
