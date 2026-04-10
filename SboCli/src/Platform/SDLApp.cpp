@@ -447,6 +447,17 @@ void CSDLApp::RunFrame(void)
 
 	PollWin32Messages();
 
+	// ImGui の InputText にフォーカスがある場合に SDL_TEXTINPUT イベントを発生させる
+	// imgui_impl_sdl2 の 2023-04-06 更新で SDL_StartTextInput() 自動呼び出しが廃止されたため、
+	// アプリ側で WantTextInput フラグを見て手動で制御する。
+	// StopTextInput は SBOP2 ネイティブ入力欄（WindowCHAT 等）が自分で管理するため、
+	// ImGui 側からは Stop しない（干渉防止）。
+	if (m_bImGuiInitialized && ImGui::GetIO().WantTextInput) {
+		if (!SDL_IsTextInputActive()) {
+			SDL_StartTextInput();
+		}
+	}
+
 	if (m_pHost->IsQuit()) {
 		m_bQuit = TRUE;
 		goto Exit;

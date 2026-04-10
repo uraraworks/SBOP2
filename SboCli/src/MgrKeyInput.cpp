@@ -162,8 +162,23 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 
 void CMgrKeyInput::Reset(void)
 {
-	ZeroMemory(m_abyKeyState,		sizeof(m_abyKeyState));
-	ZeroMemory(m_abyKeyStateBack,	sizeof(m_abyKeyStateBack));
+	ZeroMemory(m_abyKeyState,     sizeof(m_abyKeyState));
+	ZeroMemory(m_abyKeyStateBack, sizeof(m_abyKeyStateBack));
+
+	// 現在押下中のキーを「押下中エッジ済み」状態として記録しておく
+	// → 次フレームの Renew() で「変化なし」と判定され、誤って KEYDOWN エッジが
+	//   再検出されないようにする（離上の瞬間だけ正しく KEYUP エッジを発生させる）
+	const Uint8 *pKeyboardState = SDL_GetKeyboardState(NULL);
+	for (int i = 0; ; i++) {
+		BYTE byCodeTmp = m_abyCode[i];
+		if (byCodeTmp == 0) {
+			break;
+		}
+		if (CSDLInput::IsVKPressed(byCodeTmp, pKeyboardState)) {
+			m_abyKeyState[byCodeTmp]     = 0x80;
+			m_abyKeyStateBack[byCodeTmp] = 1;
+		}
+	}
 }
 
 
