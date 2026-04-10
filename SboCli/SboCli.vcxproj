@@ -9,6 +9,10 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="BrowserTitle|Win32">
+      <Configuration>BrowserTitle</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A9104A8-45F0-40D3-AE44-A404B5F8F394}</ProjectGuid>
@@ -28,6 +32,12 @@
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BrowserTitle|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -38,6 +48,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BrowserTitle|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -54,6 +67,16 @@
     <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BrowserTitle|Win32'">
+    <NMakeBuildCommandLine>pwsh -NoProfile -ExecutionPolicy Bypass -File "$(SolutionDir)tools\build-sbocli-browser-title.ps1"</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>pwsh -NoProfile -ExecutionPolicy Bypass -File "$(SolutionDir)tools\build-sbocli-browser-title.ps1"</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>pwsh -NoProfile -Command "if (Test-Path '$(SolutionDir)out\browser-title') { Remove-Item -Recurse -Force '$(SolutionDir)out\browser-title' }"</NMakeCleanCommandLine>
+    <NMakeOutput>$(SolutionDir)out\browser-title\sbocli-title.html</NMakeOutput>
+    <NMakePreprocessorDefinitions>__EMSCRIPTEN__;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeIncludeSearchPath>$(SolutionDir)SboCli\src;$(SolutionDir)SboCli;$(SolutionDir)Common;$(SolutionDir)Common\Lib;$(SolutionDir)Common\Lib\md5;$(SolutionDir)Common\Info;$(SolutionDir)Common\myLib;$(SolutionDir)Common\Packet;$(SolutionDir)imgui;$(SolutionDir)imgui\backends;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <OutDir>$(SolutionDir)out\browser-title\</OutDir>
+    <IntDir>$(SolutionDir)out\browser-title\obj\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
