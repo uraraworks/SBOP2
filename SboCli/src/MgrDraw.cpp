@@ -484,7 +484,8 @@ void CMgrDraw::DrawChar(
 				pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp);
 				if ((pInfoChar->m_wGrpIDSP == 0) && (pInfoChar->m_wGrpIDTmpMain == 0)) {
 					wGrpIDMain = GRPIDMAIN_2X2_CLOTH;
-					wGrpIDSub  = pInfoChar->m_wGrpIDCloth;
+					// m_wGrpIDCloth は 1-based (1〜N) だが GetDib2x2Cloth は 0-based 配列インデックスを使うため -1 する
+					wGrpIDSub  = pInfoChar->m_wGrpIDCloth > 0 ? pInfoChar->m_wGrpIDCloth - 1 : 0;
 				} else {
 					wGrpIDMain = GRPIDMAIN_2X2_SPCLOTH;
 					wGrpIDSub  = pInfoChar->m_wGrpIDSP;
