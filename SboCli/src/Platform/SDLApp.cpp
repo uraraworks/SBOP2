@@ -126,6 +126,13 @@ BOOL CSDLApp::Init(void)
 	// カーソル位置（入力欄の真下）に表示される。
 	SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 
+#ifdef __EMSCRIPTEN__
+	// ブラウザ版で SDL2 が window レベルでキーイベントを preventDefault するのを抑止する。
+	// canvas にフォーカスがあるときだけキャプチャするように制限し、
+	// DOM の <input> 要素 (ログイン入力欄等) にキー入力が届くようにする。
+	SDL_SetHint(SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT, "#canvas");
+#endif
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0) {
 		return FALSE;
 	}
