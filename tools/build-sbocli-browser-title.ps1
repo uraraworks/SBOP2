@@ -84,6 +84,7 @@ $sources = @(
     "SboCli/src/StateProc/StateProcLOGIN.cpp",
     "SboCli/src/Window/WindowBase.cpp",
     "SboCli/src/Window/WindowLOGIN.cpp",
+    "SboCli/src/Window/WindowLOGINBrowser.cpp",
     "SboCli/src/Window/WindowLOGINNull.cpp",
     "SboCli/src/Window/WindowMSG.cpp",
     "Common/Lib/CryptUtil.cpp",

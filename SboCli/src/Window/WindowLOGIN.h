@@ -6,6 +6,8 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
 #include "ILoginWindow.h"
 #include "WindowBase.h"
 
@@ -38,14 +40,6 @@ public:
 	virtual BOOL	HandleMouseLeftButtonDown(int x, int y);
 	void	SetFocusIndex(int nIndex);	// フォーカスを設定
 	virtual BOOL	TimerProc(void);	// タイマー処理（カーソル点滅）
-#if defined(__EMSCRIPTEN__)
-	void	UpdateBrowserDom(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);	// browser用DOMを更新
-	void	HideBrowserDom(void);	// browser用DOMを非表示
-	void	SetAccountFromBrowser(LPCSTR pszText);	// browser入力欄からアカウント反映
-	void	SetPasswordFromBrowser(LPCSTR pszText);	// browser入力欄からパスワード反映
-	void	SetSavePasswordFromBrowser(BOOL bCheck);	// browserチェック状態反映
-	void	SubmitFromBrowser(void);	// browser接続実行
-#endif
 private:
 	void	MakeWindow(void);	// ウィンドウ作成
 	void	UpdateSDLTextInput(void);	// SDLテキスト入力状態を更新
@@ -82,3 +76,5 @@ private:
 	int		m_nFocusIndex;
 	int		m_nCursorPos;	// テキスト入力のカーソル位置（文字インデックス）
 } CWindowLOGIN, *PCWindowLOGIN;
+
+#endif // !__EMSCRIPTEN__

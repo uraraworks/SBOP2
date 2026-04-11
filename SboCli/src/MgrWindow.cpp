@@ -12,6 +12,7 @@
 #include "WindowCHAT.h"
 #include "WindowLOGIN.h"
 #include "WindowLOGINNull.h"
+#include "WindowLOGINBrowser.h"
 #include "WindowMSG.h"
 #if defined(_WIN32)
 #include "WindowLOGINMENU.h"
@@ -189,7 +190,7 @@ BOOL CMgrWindow::IsKeyInput(void)
 
 void CMgrWindow::MakeWindowLOGIN(void)
 {
-	CWindowBase *pWindowNew = new CWindowLOGIN;
+	CWindowBase *pWindowNew = new CWindowLOGINBrowser;
 
 	pWindowNew->Create(m_pMgrData);
 	m_paWindow->Add(pWindowNew);
@@ -519,7 +520,11 @@ void CMgrWindow::MakeWindowLOGIN(void)
 	if (m_pMgrData->IsLocalTitleMode()) {
 		pWindowNew = new CWindowLOGINNull;
 	} else {
+#ifdef __EMSCRIPTEN__
+		pWindowNew = new CWindowLOGINBrowser;
+#else
 		pWindowNew = new CWindowLOGIN;
+#endif
 	}
 	pWindowNew->Create(m_pMgrData);
 	m_paWindow->Add(pWindowNew);

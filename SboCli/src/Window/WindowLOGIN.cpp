@@ -5,16 +5,15 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+
+#ifndef __EMSCRIPTEN__
+
 #include "Img32.h"
 #include "MgrWindow.h"
 #include "MgrSound.h"
 #include "MgrData.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
-#if defined(__EMSCRIPTEN__)
-#include <emscripten/em_js.h>
-#include <emscripten/emscripten.h>
-#endif
 #include "WindowLOGIN.h"
 #include "../Platform/SdlFont.h"
 
@@ -23,93 +22,6 @@ namespace {
 enum {
 	LOGIN_TEXT_MAX = 255,
 };
-
-#if defined(__EMSCRIPTEN__)
-static CWindowLOGIN *g_pBrowserLoginWindow = NULL;
-
-EM_JS(void, SBOP2_UpdateLoginDom, (int visible, int enabled,
-	int windowX, int windowY, int windowW, int windowH,
-	int accountX, int accountY, int accountW, int accountH,
-	int passwordX, int passwordY, int passwordW, int passwordH,
-	int checkX, int checkY, int checkW, int checkH,
-	int buttonX, int buttonY, int buttonW, int buttonH,
-	const char *pszAccount, const char *pszPassword, int bSavePassword, int nFocusIndex), {
-	if (typeof window.SBOP2UpdateLoginOverlay !== 'function') {
-		return;
-	}
-	window.SBOP2UpdateLoginOverlay({
-		visible: !!visible,
-		enabled: !!enabled,
-		windowX: windowX,
-		windowY: windowY,
-		windowW: windowW,
-		windowH: windowH,
-		accountX: accountX,
-		accountY: accountY,
-		accountW: accountW,
-		accountH: accountH,
-		passwordX: passwordX,
-		passwordY: passwordY,
-		passwordW: passwordW,
-		passwordH: passwordH,
-		checkX: checkX,
-		checkY: checkY,
-		checkW: checkW,
-		checkH: checkH,
-		buttonX: buttonX,
-		buttonY: buttonY,
-		buttonW: buttonW,
-		buttonH: buttonH,
-		account: UTF8ToString(pszAccount),
-		password: UTF8ToString(pszPassword),
-		savePassword: !!bSavePassword,
-		focusIndex: nFocusIndex
-	});
-});
-
-EM_JS(void, SBOP2_HideLoginDom, (), {
-	if (typeof window.SBOP2HideLoginOverlay === 'function') {
-		window.SBOP2HideLoginOverlay();
-	}
-});
-
-extern "C" {
-EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserLoginSetAccount(const char *pszText)
-{
-	if (g_pBrowserLoginWindow != NULL) {
-		g_pBrowserLoginWindow->SetAccountFromBrowser(pszText);
-	}
-}
-
-EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserLoginSetPassword(const char *pszText)
-{
-	if (g_pBrowserLoginWindow != NULL) {
-		g_pBrowserLoginWindow->SetPasswordFromBrowser(pszText);
-	}
-}
-
-EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserLoginSetSavePassword(int bCheck)
-{
-	if (g_pBrowserLoginWindow != NULL) {
-		g_pBrowserLoginWindow->SetSavePasswordFromBrowser(bCheck ? TRUE : FALSE);
-	}
-}
-
-EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserLoginSetFocus(int nFocusIndex)
-{
-	if (g_pBrowserLoginWindow != NULL) {
-		g_pBrowserLoginWindow->SetFocusIndex(nFocusIndex);
-	}
-}
-
-EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserLoginConnect(void)
-{
-	if (g_pBrowserLoginWindow != NULL) {
-		g_pBrowserLoginWindow->SubmitFromBrowser();
-	}
-}
-}
-#endif
 
 static LPCTSTR GetLoginLabelAccount(void)
 {
@@ -224,12 +136,6 @@ CWindowLOGIN::CWindowLOGIN()
 
 CWindowLOGIN::~CWindowLOGIN()
 {
-#if defined(__EMSCRIPTEN__)
-	if (g_pBrowserLoginWindow == this) {
-		g_pBrowserLoginWindow = NULL;
-	}
-	HideBrowserDom();
-#endif
 	UpdateSDLTextInput();
 }
 
@@ -253,25 +159,19 @@ void CWindowLOGIN::Create(CMgrData *pMgrData)
 void CWindowLOGIN::Draw(PCImg32 pDst)
 {
 	RECT rcAccount, rcPassword, rcCheck, rcConnect;
+	HDC hDC = NULL;
+	CString strCheck;
 
 	GetWindowLOGINAccountRect(&rcAccount);
 	GetWindowLOGINPasswordRect(&rcPassword);
 	GetWindowLOGINCheckRect(&rcCheck);
 	GetWindowLOGINConnectRect(&rcConnect);
 
-#if defined(__EMSCRIPTEN__)
-	// Emscripten ビルドでは canvas 側描画を完全スキップし、DOM overlay のみで表示する
-	// パネル枠・ラベルも含めてすべて canvas への Blt を行わない
-	g_pBrowserLoginWindow = this;
-	UpdateBrowserDom(rcAccount, rcPassword, rcCheck, rcConnect);
-#else
-	HDC hDC = NULL;
-	CString strCheck;
 	strCheck = GetLoginLabelSavePassword();
 
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
-		hDC	= m_pDib->Lock();
+		hDC = m_pDib->Lock();
 
 		TextOut2(hDC, m_hFont, 16, 10, _T("アカウント:"), RGB(1, 1, 1));
 		TextOut2(hDC, m_hFont, 16, 36, _T("パスワード:"), RGB(1, 1, 1));
@@ -280,7 +180,6 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 		DrawTextField(hDC, rcAccount, m_strAccount, FALSE, (m_nFocusIndex == LOGINFOCUS_ACCOUNT));
 		DrawTextField(hDC, rcPassword, m_strPassword, TRUE, (m_nFocusIndex == LOGINFOCUS_PASSWORD));
 		{
-			// チェックボックス枠の右端を取得してテキストをその右側に描画
 			RECT rcCheckBox;
 			GetWindowLOGINCheckBoxRect(rcCheck, &rcCheckBox);
 			TextOut2(hDC, m_hFont, rcCheckBox.right + 4, rcCheck.top - 6, strCheck, RGB(1, 1, 1));
@@ -291,7 +190,6 @@ void CWindowLOGIN::Draw(PCImg32 pDst)
 		m_dwTimeDrawStart = timeGetTime();
 	}
 	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
-#endif // defined(__EMSCRIPTEN__)
 }
 
 
@@ -299,11 +197,6 @@ void CWindowLOGIN::Enable(BOOL bEnable)
 {
 	m_bEnabled = bEnable;
 	UpdateSDLTextInput();
-	if (!bEnable) {
-#if defined(__EMSCRIPTEN__)
-		HideBrowserDom();
-#endif
-	}
 	Redraw();
 }
 
@@ -312,11 +205,6 @@ void CWindowLOGIN::SetShow(BOOL bShow)
 {
 	CWindowBase::SetShow(bShow);
 	UpdateSDLTextInput();
-	if (!bShow) {
-#if defined(__EMSCRIPTEN__)
-		HideBrowserDom();
-#endif
-	}
 	Redraw();
 }
 
@@ -838,74 +726,6 @@ void CWindowLOGIN::DrawTextField(HDC hDC, const RECT &rcField, LPCSTR pszText, B
 }
 
 
-#if defined(__EMSCRIPTEN__)
-void CWindowLOGIN::UpdateBrowserDom(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect)
-{
-	const int nWindowX = m_ptViewPos.x + 32;
-	const int nWindowY = m_ptViewPos.y + 32;
-
-	SBOP2_UpdateLoginDom(
-		(IsInteractive() ? 1 : 0),
-		m_bEnabled ? 1 : 0,
-		nWindowX,
-		nWindowY,
-		m_sizeWindow.cx,
-		m_sizeWindow.cy,
-		nWindowX + rcAccount.left,
-		nWindowY + rcAccount.top,
-		rcAccount.right - rcAccount.left,
-		rcAccount.bottom - rcAccount.top,
-		nWindowX + rcPassword.left,
-		nWindowY + rcPassword.top,
-		rcPassword.right - rcPassword.left,
-		rcPassword.bottom - rcPassword.top,
-		nWindowX + rcCheck.left,
-		nWindowY + rcCheck.top,
-		rcCheck.right - rcCheck.left,
-		rcCheck.bottom - rcCheck.top,
-		nWindowX + rcConnect.left,
-		nWindowY + rcConnect.top,
-		rcConnect.right - rcConnect.left,
-		rcConnect.bottom - rcConnect.top,
-		m_strAccount,
-		m_strPassword,
-		m_bSavePassword ? 1 : 0,
-		m_nFocusIndex);
-}
-
-
-void CWindowLOGIN::HideBrowserDom(void)
-{
-	SBOP2_HideLoginDom();
-}
-
-
-void CWindowLOGIN::SetAccountFromBrowser(LPCSTR pszText)
-{
-	NormalizeLoginText(m_strAccount, pszText, TRUE);
-	Redraw();
-}
-
-
-void CWindowLOGIN::SetPasswordFromBrowser(LPCSTR pszText)
-{
-	NormalizeLoginText(m_strPassword, pszText, FALSE);
-	Redraw();
-}
-
-
-void CWindowLOGIN::SetSavePasswordFromBrowser(BOOL bCheck)
-{
-	SetCheck(bCheck);
-}
-
-
-void CWindowLOGIN::SubmitFromBrowser(void)
-{
-	OnConnect();
-}
-#endif
-
 BOOL CWindowLOGIN::TimerProc(void)
 {
 	int nOldAnime;
@@ -932,3 +752,5 @@ void CWindowLOGIN::OnConnect(void)
 	Enable(FALSE);
 	m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_CONNECT, 0);
 }
+
+#endif // !__EMSCRIPTEN__

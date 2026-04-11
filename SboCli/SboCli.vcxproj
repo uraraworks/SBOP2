@@ -359,6 +359,7 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClCompile Include="src\Window\WindowITEMMENU.cpp" />
     <ClCompile Include="src\Window\WindowITEMMENU_SELECT.cpp" />
     <ClCompile Include="src\Window\WindowLOGIN.cpp" />
+    <ClCompile Include="src\Window\WindowLOGINBrowser.cpp" />
     <ClCompile Include="src\Window\WindowLOGINNull.cpp" />
     <ClCompile Include="src\Window\WindowLOGINMENU.cpp" />
     <ClCompile Include="src\Window\WindowMSG.cpp" />
@@ -539,6 +540,7 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClInclude Include="src\Window\WindowITEMMENU.h" />
     <ClInclude Include="src\Window\WindowITEMMENU_SELECT.h" />
     <ClInclude Include="src\Window\WindowLOGIN.h" />
+    <ClInclude Include="src\Window\WindowLOGINBrowser.h" />
     <ClInclude Include="src\Window\WindowLOGINNull.h" />
     <ClInclude Include="src\Window\ILoginWindow.h" />
     <ClInclude Include="src\Window\WindowLOGINMENU.h" />
