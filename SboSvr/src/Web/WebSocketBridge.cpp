@@ -9,6 +9,8 @@
 #include <wincrypt.h>
 #pragma comment(lib, "advapi32.lib")
 
+#include "crc.h" // CCRC: pre-check ハンドシェイクのCRC計算用
+
 // ============================================================
 //  WebSocket オペコード定数
 // ============================================================
@@ -24,7 +26,7 @@ const int WS_OPCODE_PONG         = 0xA; ///< Pong
 /// WebSocketハンドシェイクで使うGUID（RFC 6455）
 const char *kWsGuid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
-/// PACKETINFO ヘッダサイズ（dwCmd 4byte + dwSize 4byte）
+/// PACKETINFO ヘッダサイズ（dwSize 4byte + dwCRC 4byte）
 const DWORD kPacketInfoSize = 8;
 
 /// セッションスレッドの受信タイムアウト（ミリ秒）
@@ -389,6 +391,57 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 
     OutputDebugStringA("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
 
+    // 4. TCP pre-check ハンドシェイク
+    //    SboSockLib はクライアント接続直後に認証チャレンジを送ってくる。
+    //    WebSocketBridge が TCP クライアントとしてこれに応答する。
+    {
+        // チャレンジ受信: [PACKETINFO(8)][dwChallenge(4)]
+        unsigned char abyHeader[8];
+        if (!RecvAll(hTcpSock, abyHeader, 8)) {
+            OutputDebugStringA("[WebSocketBridge] pre-check: header recv FAILED\n");
+            closesocket(hTcpSock);
+            closesocket(hWsClient);
+            return;
+        }
+        DWORD dwPayloadSize = 0;
+        memcpy(&dwPayloadSize, &abyHeader[0], sizeof(DWORD));
+        if (dwPayloadSize != sizeof(DWORD)) {
+            OutputDebugStringA("[WebSocketBridge] pre-check: unexpected payload size\n");
+            closesocket(hTcpSock);
+            closesocket(hWsClient);
+            return;
+        }
+        DWORD dwChallenge = 0;
+        if (!RecvAll(hTcpSock, reinterpret_cast<unsigned char *>(&dwChallenge), sizeof(DWORD))) {
+            OutputDebugStringA("[WebSocketBridge] pre-check: challenge recv FAILED\n");
+            closesocket(hTcpSock);
+            closesocket(hWsClient);
+            return;
+        }
+
+        // レスポンス計算
+        const DWORD kPreCheckKey = 0x56BB3E5E;
+        DWORD dwResponse = (dwChallenge & kPreCheckKey) * kPreCheckKey;
+
+        // レスポンス送信: [PACKETINFO(8)][dwResponse(4)]
+        unsigned char abySend[12]; // 8 + 4
+        DWORD dwRespSize = sizeof(DWORD);
+        memcpy(&abySend[0], &dwRespSize, sizeof(DWORD));           // dwSize = 4
+        // CRC は SboSockLib のものと互換にする
+        CCRC crc;
+        DWORD dwCRC = crc.GetCRC(reinterpret_cast<PBYTE>(&dwResponse), sizeof(DWORD));
+        memcpy(&abySend[4], &dwCRC, sizeof(DWORD));                // dwCRC
+        memcpy(&abySend[8], &dwResponse, sizeof(DWORD));           // payload
+        if (!SendAll(hTcpSock, reinterpret_cast<const char *>(abySend), sizeof(abySend))) {
+            OutputDebugStringA("[WebSocketBridge] pre-check: response send FAILED\n");
+            closesocket(hTcpSock);
+            closesocket(hWsClient);
+            return;
+        }
+
+        OutputDebugStringA("[WebSocketBridge] pre-check: OK\n");
+    }
+
     // 3. 双方向ブリッジループ
     BridgeLoop(hWsClient, hTcpSock);
 
@@ -684,20 +737,15 @@ void CWebSocketBridge::BridgeLoop(SOCKET hWsClient, SOCKET hTcpSock)
             tcpRecvBuf.resize(nOldSize + static_cast<size_t>(nRecv));
             memcpy(&tcpRecvBuf[nOldSize], szBuf, static_cast<size_t>(nRecv));
 
-            // PACKETINFOヘッダ（8バイト: dwCmd 4byte + dwSize 4byte）に従い
+            // PACKETINFOヘッダ（8バイト: dwSize 4byte + dwCRC 4byte）に従い
             // 完全なパケット単位で WebSocketフレームに変換して送信する
             while (tcpRecvBuf.size() >= kPacketInfoSize) {
-                // dwSize はヘッダ先頭から4バイト目（dwCmd が先）に格納されている
-                // PACKETINFO 構造: [dwCmd(4)] [dwSize(4)]
-                // dwSize はヘッダ8バイト + ペイロードの合計サイズ
-                DWORD dwTotalSize = 0;
-                memcpy(&dwTotalSize, &tcpRecvBuf[4], sizeof(DWORD));
+                // PACKETINFO 構造: [dwSize(4)] [dwCRC(4)]
+                // dwSize はペイロードのみのサイズ（ヘッダ 8 バイトを含まない）
+                DWORD dwPayloadSize = 0;
+                memcpy(&dwPayloadSize, &tcpRecvBuf[0], sizeof(DWORD));
 
-                if (dwTotalSize < kPacketInfoSize) {
-                    // 不正なパケット：バッファを破棄して終了
-                    tcpRecvBuf.clear();
-                    break;
-                }
+                DWORD dwTotalSize = dwPayloadSize + kPacketInfoSize;
 
                 if (tcpRecvBuf.size() < static_cast<size_t>(dwTotalSize)) {
                     // まだパケット全体が揃っていない
