@@ -1069,22 +1069,15 @@ void CMainFrame::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 
 void CMainFrame::OnConnect(void)
 {
-#if defined(__EMSCRIPTEN__)
-	return;
-#else
 	CPacketVERSION_REQ_VERSIONCHECK Packet;
 
 	Packet.Make(VERSIONVAL);
 	m_pSock->Send(&Packet);
-#endif
 }
 
 
 void CMainFrame::OnDisConnect(void)
 {
-#if defined(__EMSCRIPTEN__)
-	return;
-#else
 	switch (m_nGameState) {
 	case GAMESTATE_LOGIN: // ログイン画面
 		DisConnectProc(DISCONNECTID_CONNECT);
@@ -1101,16 +1094,11 @@ void CMainFrame::OnDisConnect(void)
 		ChgGameState(GAMESTATE_DISCONNECT);
 		break;
 	}
-#endif
 }
 
 
 void CMainFrame::OnRecv(PBYTE pData)
 {
-#if defined(__EMSCRIPTEN__)
-	UNREFERENCED_PARAMETER(pData);
-	return;
-#else
 	CPacketBase Packet;
 
 	Packet.Set(pData);
@@ -1148,7 +1136,6 @@ void CMainFrame::OnRecv(PBYTE pData)
 	}
 
 	m_pSock->DeleteRecvData(pData);
-#endif
 }
 
 
@@ -1375,12 +1362,10 @@ void CMainFrame::ChgGameState(int nGameState)
 	switch (nGameState) {
 	case GAMESTATE_LOGO: m_pStateProc = new CStateProcLOGO; break; // URARA-worksロゴ
 	case GAMESTATE_LOGIN: m_pStateProc = new CStateProcLOGIN; break; // ログイン画面
-#if defined(_WIN32)
 	case GAMESTATE_DISCONNECT: m_pStateProc = new CStateProcDISCONNECT; break; // 切断
 	case GAMESTATE_INFO: m_pStateProc = new CStateProcINFO; break; // お知らせ画面
 	case GAMESTATE_LOGINMENU: m_pStateProc = new CStateProcLOGINMENU; break; // メニュー画面
 	case GAMESTATE_MAP: m_pStateProc = new CStateProcMAP; break; // マップ画面
-#endif
 	}
 
 	if (m_pStateProc) {
