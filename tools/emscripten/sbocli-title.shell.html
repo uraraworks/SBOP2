@@ -218,6 +218,27 @@
   </main>
 
   <script>
+    // URL クエリ ?server=host:port を解析して window.sbop2ServerAddr / sbop2ServerPort にセット
+    (function parseServerQuery() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const server = params.get('server');
+        if (server) {
+          const colonIdx = server.lastIndexOf(':');
+          if (colonIdx > 0) {
+            const host = server.substring(0, colonIdx);
+            const port = parseInt(server.substring(colonIdx + 1), 10);
+            if (host && port > 0) {
+              window.sbop2ServerAddr = host;
+              window.sbop2ServerPort = port;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[SBOP2] server query parse failed:', e);
+      }
+    })();
+
     const statusElement = document.getElementById('status');
     const canvasElement = document.getElementById('canvas');
     const outputElement = document.getElementById('output');

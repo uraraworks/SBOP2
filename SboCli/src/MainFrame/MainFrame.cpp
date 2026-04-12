@@ -103,11 +103,7 @@ CMainFrame::CMainFrame()
 
 	m_pStateProc = NULL;
 	m_pMgrData = new CMgrData;
-#if defined(__EMSCRIPTEN__)
-	m_pSock = NULL;
-#else
 	m_pSock = new CUraraSockTCPSBO;
-#endif
 	m_pMgrGrpData = new CMgrGrpData;
 
 	m_pMgrDraw = NULL;
@@ -904,8 +900,9 @@ void CMainFrame::OnInitEnd(void)
 	m_pLibInfoSkill = m_pMgrData->GetLibInfoSkill();
 
 	// グラフィックデータDLLの読み込み
+	// ブラウザ版は DLL ロードができないため、常にローカルアセットへフォールバックする
 	bResult = m_pMgrGrpData->Load();
-	if ((bResult == FALSE) && m_pMgrData->IsLocalTitleMode()) {
+	if ((bResult == FALSE) && (m_pMgrData->IsLocalTitleMode() || IsBrowserPlatform())) {
 		bResult = m_pMgrGrpData->LoadLocalTitleAssets();
 	}
 #if defined(__EMSCRIPTEN__)
@@ -920,7 +917,8 @@ void CMainFrame::OnInitEnd(void)
 		goto Exit;
 	}
 
-	if (m_pMgrData->IsLocalTitleMode() == FALSE) {
+	// ブラウザでは DirectInput を使わないので SetDevice をスキップ
+	if ((m_pMgrData->IsLocalTitleMode() == FALSE) && !IsBrowserPlatform()) {
 		stGuid = m_pMgrData->GetInputGuid();
 		m_pMgrKeyInput->SetDevice(stGuid);
 	}
@@ -1398,9 +1396,6 @@ void CMainFrame::ChgGameState(int nGameState)
 
 void CMainFrame::Connect(void)
 {
-#if defined(__EMSCRIPTEN__)
-	return;
-#else
 	WORD wPort;
 	CmyString strTmp;
 
@@ -1413,7 +1408,6 @@ void CMainFrame::Connect(void)
 
 	m_pMgrWindow->MakeWindowMSG("サーバーに接続しています");
 	m_pSock->Connect(NULL, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, strTmp);
-#endif
 }
 
 

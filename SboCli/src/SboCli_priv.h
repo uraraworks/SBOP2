@@ -51,13 +51,25 @@ inline BOOL IsBrowserPlatform(void)
 #endif
 }
 
+#ifdef __EMSCRIPTEN__
+// BrowserMain.cpp で EM_JS として定義される関数のプロトタイプ宣言
+// EM_JS は C linkage で関数を生成するため extern "C" で囲む必要がある
+extern "C" {
+int SBOP2_GetBrowserServerAddr(char *pBuf, int nBufSize);
+int SBOP2_GetBrowserServerPort(void);
+}
+#endif
+
 inline BOOL IsLocalTitleModeRequested(void)
 {
-	const char *pszValue;
-
-	if (IsBrowserPlatform()) {
-		return TRUE;
+#ifdef __EMSCRIPTEN__
+	// URL クエリ ?server=host:port が指定されていれば本番接続モード (FALSE)
+	if (SBOP2_GetBrowserServerPort() > 0) {
+		return FALSE;
 	}
+	return TRUE;
+#else
+	const char *pszValue;
 
 	pszValue = getenv("SBOP2_LOCAL_TITLE");
 	if (pszValue == NULL) {
@@ -76,6 +88,7 @@ inline BOOL IsLocalTitleModeRequested(void)
 	}
 
 	return TRUE;
+#endif
 }
 
 inline std::string WideToCodePageString(const wchar_t *pszSrc, UINT codePage)

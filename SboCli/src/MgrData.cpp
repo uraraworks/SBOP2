@@ -8,6 +8,7 @@
 #if defined(_WIN32)
 #include <comdef.h>
 #endif
+#include "SboCli_priv.h"
 #include "InfoAccount.h"
 #include "InfoMapEventBase.h"
 #include "InfoTalkEvent.h"
@@ -160,25 +161,27 @@ void CMgrData::Create(
 	m_pMgrGrpData	= pMgrGrpData;
 
 #if !defined(_WIN32)
-	if (m_bLocalTitleMode) {
-		m_pMgrSound = new CMgrSound;
-		m_pMgrDraw = new CMgrDraw;
-		m_pMgrLayer = new CMgrLayer;
-		m_pMgrWindow = new CMgrWindow;
-		m_pMgrKeyInput = new CMgrKeyInput;
+	// ブラウザ版は m_bLocalTitleMode の値に関係なく最小構成のマネージャを生成する。
+	// 従来は local title mode 専用の初期化だったが、URL クエリ経由で非ローカルモードに
+	// 切り替えたとき何も生成されないまま fall through してしまい、後続の NULL デリファレンスで
+	// スタッククッキー破壊（memory access out of bounds）を引き起こしていた。
+	m_pMgrSound = new CMgrSound;
+	m_pMgrDraw = new CMgrDraw;
+	m_pMgrLayer = new CMgrLayer;
+	m_pMgrWindow = new CMgrWindow;
+	m_pMgrKeyInput = new CMgrKeyInput;
 
-		ReadIniData();
+	ReadIniData();
 
-		m_pMgrSound->Create();
-		m_pMgrDraw->Create(this);
-		m_pMgrLayer->Create(this);
-		m_pMgrWindow->Create(this);
-		m_pMgrKeyInput->Create();
+	m_pMgrSound->Create();
+	m_pMgrDraw->Create(this);
+	m_pMgrLayer->Create(this);
+	m_pMgrWindow->Create(this);
+	m_pMgrKeyInput->Create();
 
-		m_pMgrSound->SetBGMVolume(m_nBGMVolume);
-		m_pMgrSound->SetSEVolume(m_nSEVolume);
-		return;
-	}
+	m_pMgrSound->SetBGMVolume(m_nBGMVolume);
+	m_pMgrSound->SetSEVolume(m_nSEVolume);
+	return;
 #else
 
 	m_pInfoAccount			= new CInfoAccount;
@@ -752,7 +755,9 @@ void CMgrData::ReadIniData(void)
 	char szDecrypted[128];
 	CCryptUtil CryptUtil;
 
-	if (m_bLocalTitleMode) {
+	// ローカルタイトルモード、またはブラウザ版では INI ファイルが存在しないので
+	// デフォルト値を埋めてすぐに返す（ブラウザは URL クエリで ServerAddr/Port を後述で上書き）
+	if (m_bLocalTitleMode || IsBrowserPlatform()) {
 		m_strServerAddr = _T("127.0.0.1");
 		m_wServerPort = 2006;
 		m_strLastAccount = _T("");
@@ -771,6 +776,17 @@ void CMgrData::ReadIniData(void)
 		m_nDrawMode = 1;
 		m_nSleepTimer = 0;
 		ZeroMemory(&m_stInputGuid, sizeof(m_stInputGuid));
+#ifdef __EMSCRIPTEN__
+		// URL クエリ ?server=host:port が指定されていれば ServerAddr/Port を上書き
+		{
+			char szAddr[128] = {0};
+			int nPort = SBOP2_GetBrowserServerPort();
+			if (nPort > 0 && SBOP2_GetBrowserServerAddr(szAddr, sizeof(szAddr))) {
+				m_strServerAddr = szAddr;
+				m_wServerPort = (WORD)nPort;
+			}
+		}
+#endif
 		return;
 	}
 

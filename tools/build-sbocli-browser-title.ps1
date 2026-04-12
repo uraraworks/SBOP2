@@ -143,6 +143,8 @@ $linkArgs = @(
     "-sASSERTIONS=1",
     "-sSTACK_SIZE=2097152",
     "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap']",
+    "-sDISABLE_EXCEPTION_CATCHING=0",
+    "-lwebsocket",
     "-sENVIRONMENT=web",
     "--preload-file", "$resDir@/SboGrpData/res",
     "--preload-file", "$fontDir@/font",
