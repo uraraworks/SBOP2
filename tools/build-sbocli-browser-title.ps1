@@ -101,7 +101,73 @@ $sources = @(
     "imgui/imgui_tables.cpp",
     "imgui/imgui_widgets.cpp",
     "imgui/backends/imgui_impl_sdl2.cpp",
-    "imgui/backends/imgui_impl_sdlrenderer2.cpp"
+    "imgui/backends/imgui_impl_sdlrenderer2.cpp",
+    # RecvProc (VERSION/CONNECT/ACCOUNT のみ。CHAR以降はブラウザ版で未対応)
+    "SboCli/src/MainFrame/MainFrameRecvProcVERSION.cpp",
+    "SboCli/src/MainFrame/MainFrameRecvProcCONNECT.cpp",
+    "SboCli/src/MainFrame/MainFrameRecvProcACCOUNT.cpp",
+    # StateProc (DISCONNECT/INFO/LOGINMENU。MAP はブラウザ版で未対応)
+    "SboCli/src/StateProc/StateProcDISCONNECT.cpp",
+    "SboCli/src/StateProc/StateProcINFO.cpp",
+    "SboCli/src/StateProc/StateProcLOGINMENU.cpp",
+    # Packet (基底クラス)
+    "Common/Packet/PacketBase.cpp",
+    # Packet (VERSION)
+    "Common/Packet/VERSION/PacketVERSION_REQ_VERSIONCHECK.cpp",
+    "Common/Packet/VERSION/PacketVERSION_RES_VERSIONCHECK.cpp",
+    "Common/Packet/VERSION/PacketVERSION_RES_FILELISTCHECK.cpp",
+    # Packet (CONNECT)
+    "Common/Packet/CONNECT/PacketCONNECT_REQ_LOGIN.cpp",
+    "Common/Packet/CONNECT/PacketCONNECT_RES_LOGIN.cpp",
+    "Common/Packet/CONNECT/PacketCONNECT_REQ_PLAY.cpp",
+    "Common/Packet/CONNECT/PacketCONNECT_RES_PLAY.cpp",
+    "Common/Packet/CONNECT/PacketCONNECT_KEEPALIVE.cpp",
+    # Packet (ACCOUNT)
+    "Common/Packet/ACCOUNT/PacketACCOUNT_REQ_ACCOUNTINFO.cpp",
+    "Common/Packet/ACCOUNT/PacketACCOUNT_RES_ACCOUNTINFO.cpp",
+    "Common/Packet/ACCOUNT/PacketACCOUNT_REQ_MAKECHAR.cpp",
+    "Common/Packet/ACCOUNT/PacketACCOUNT_RES_MAKECHAR.cpp",
+    # Packet (CHAR - ログインメニューで使用する分のみ)
+    "Common/Packet/CHAR/PacketCHAR_REQ_CHARINFO.cpp",
+    # Info
+    "Common/Info/InfoAccount.cpp",
+    "Common/Info/InfoCharBase.cpp",
+    "SboCli/src/Info/InfoCharCli.cpp",
+    # LibInfo
+    "Common/LibInfo/LibInfoAccount.cpp",
+    "Common/LibInfo/LibInfoCharBase.cpp",
+    "SboCli/src/LibInfo/LibInfoCharCli.cpp",
+    # Window (ログインメニュー関連)
+    "SboCli/src/Window/WindowLOGINMENU.cpp",
+    "SboCli/src/Window/WindowSTATUS.cpp",
+    "SboCli/src/Window/WindowCHARNAME.cpp",
+    "SboCli/src/Window/WindowSEX.cpp",
+    "SboCli/src/Window/WindowSTYLESELECT.cpp",
+    "SboCli/src/Window/WindowNAMEINPUT.cpp",
+    "SboCli/src/Window/WindowFAMILYTYPE.cpp",
+    "SboCli/src/Window/WindowHAIRTYPE.cpp",
+    "SboCli/src/Window/WindowHAIRCOLOR.cpp",
+    "SboCli/src/Window/WindowEYECOLOR.cpp",
+    # Layer (ログインメニュー関連)
+    "SboCli/src/Layer/LayerCharSelect.cpp",
+    "SboCli/src/Layer/LayerLoginMenu.cpp",
+    "SboCli/src/Layer/LayerInfo.cpp",
+    # Lib
+    "SboCli/src/Lib/MacAddr.cpp",
+    # Info (基底クラス・エフェクト)
+    "Common/Info/InfoBase.cpp",
+    "Common/Info/InfoEffect.cpp",
+    "Common/Info/InfoTextEffect.cpp",
+    # LibInfo (エフェクト)
+    "Common/LibInfo/LibInfoEfcBalloon.cpp",
+    "Common/LibInfo/LibInfoEffect.cpp",
+    # Layer (マップ - InfoCharCli からの参照で必要)
+    "SboCli/src/Layer/LayerMap.cpp",
+    # Packet (InfoCharCli からの参照で必要)
+    "Common/Packet/BATTLE/PacketBATTLE_REQ_ATACK.cpp",
+    "Common/Packet/CHAR/PacketCHAR_PARA1.cpp",
+    # Info (アニメーション - InfoEffect からの参照で必要)
+    "Common/Info/InfoAnime.cpp"
 )
 
 function Resolve-Empp {
@@ -146,6 +212,7 @@ $linkArgs = @(
     "-sDISABLE_EXCEPTION_CATCHING=0",
     "-lwebsocket",
     "-sENVIRONMENT=web",
+    "-Wl,--error-limit=0",
     "--preload-file", "$resDir@/SboGrpData/res",
     "--preload-file", "$fontDir@/font",
     "--shell-file", $shellFile,

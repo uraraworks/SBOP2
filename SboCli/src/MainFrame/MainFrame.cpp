@@ -1126,6 +1126,7 @@ void CMainFrame::OnRecv(PBYTE pData)
 	case SBOCOMMANDID_MAIN_VERSION: RecvProcVERSION(Packet.m_byCmdSub, pData); break; // バージョン系
 	case SBOCOMMANDID_MAIN_CONNECT: RecvProcCONNECT(Packet.m_byCmdSub, pData); break; // 接続系
 	case SBOCOMMANDID_MAIN_ACCOUNT: RecvProcACCOUNT(Packet.m_byCmdSub, pData); break; // アカウント系
+#if !defined(__EMSCRIPTEN__)
 	case SBOCOMMANDID_MAIN_CHAR: RecvProcCHAR(Packet.m_byCmdSub, pData); break; // キャラ系
 	case SBOCOMMANDID_MAIN_MAP: RecvProcMAP(Packet.m_byCmdSub, pData); break; // マップ系
 	case SBOCOMMANDID_MAIN_ITEM: RecvProcITEM(Packet.m_byCmdSub, pData); break; // アイテム系
@@ -1133,6 +1134,7 @@ void CMainFrame::OnRecv(PBYTE pData)
 	case SBOCOMMANDID_MAIN_EFFECT: RecvProcEFFECT(Packet.m_byCmdSub, pData); break; // エフェクト系
 	case SBOCOMMANDID_MAIN_SYSTEM: RecvProcSYSTEM(Packet.m_byCmdSub, pData); break; // システム系
 	case SBOCOMMANDID_MAIN_SKILL: RecvProcSKILL(Packet.m_byCmdSub, pData); break; // スキル系
+#endif
 	}
 
 	m_pSock->DeleteRecvData(pData);
@@ -1365,7 +1367,9 @@ void CMainFrame::ChgGameState(int nGameState)
 	case GAMESTATE_DISCONNECT: m_pStateProc = new CStateProcDISCONNECT; break; // 切断
 	case GAMESTATE_INFO: m_pStateProc = new CStateProcINFO; break; // お知らせ画面
 	case GAMESTATE_LOGINMENU: m_pStateProc = new CStateProcLOGINMENU; break; // メニュー画面
+#if !defined(__EMSCRIPTEN__)
 	case GAMESTATE_MAP: m_pStateProc = new CStateProcMAP; break; // マップ画面
+#endif
 	}
 
 	if (m_pStateProc) {
