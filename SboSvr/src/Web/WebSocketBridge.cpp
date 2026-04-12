@@ -6,6 +6,8 @@
 #include <cstring>
 #include <process.h>
 #include <cstdlib>
+#include <wincrypt.h>
+#pragma comment(lib, "advapi32.lib")
 
 // ============================================================
 //  WebSocket オペコード定数
@@ -20,7 +22,7 @@ const int WS_OPCODE_PING         = 0x9; ///< Ping
 const int WS_OPCODE_PONG         = 0xA; ///< Pong
 
 /// WebSocketハンドシェイクで使うGUID（RFC 6455）
-const char *kWsGuid = "258EAFA5-E914-47DA-95CA-5AB5DC085B11";
+const char *kWsGuid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
 /// PACKETINFO ヘッダサイズ（dwCmd 4byte + dwSize 4byte）
 const DWORD kPacketInfoSize = 8;
@@ -41,85 +43,22 @@ inline unsigned int RotLeft32(unsigned int val, int bits)
 /// @brief SHA-1ハッシュを計算する
 void Sha1Internal(const unsigned char *pData, size_t nLength, unsigned char hash[20])
 {
-    // 初期ハッシュ値
-    unsigned int h0 = 0x67452301u;
-    unsigned int h1 = 0xEFCDAB89u;
-    unsigned int h2 = 0x98BADCFEu;
-    unsigned int h3 = 0x10325476u;
-    unsigned int h4 = 0xC3D2E1F0u;
+    HCRYPTPROV hProv = 0;
+    HCRYPTHASH hHash = 0;
+    DWORD dwHashLen = 20;
 
-    // メッセージ長（ビット単位）を64bitBEで保存するための値
-    unsigned long long bitLen = static_cast<unsigned long long>(nLength) * 8ULL;
-
-    // パディング済みメッセージを構築
-    // 末尾に 0x80、次に 0x00 を詰め、最後の 8byte にビット長を BE で格納
-    // ブロックサイズ 64byte の倍数になるよう調整
-    size_t nPaddedLen = nLength + 1; // 0x80 の分
-    while ((nPaddedLen % 64) != 56) {
-        ++nPaddedLen;
+    ZeroMemory(hash, 20);
+    if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
+        return;
     }
-    nPaddedLen += 8; // ビット長フィールド
-
-    std::vector<unsigned char> msg(nPaddedLen, 0);
-    if (nLength > 0) {
-        memcpy(&msg[0], pData, nLength);
+    if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash)) {
+        CryptReleaseContext(hProv, 0);
+        return;
     }
-    msg[nLength] = 0x80;
-
-    // ビット長をBig-Endianで末尾8バイトに書き込む
-    for (int i = 0; i < 8; ++i) {
-        msg[nPaddedLen - 8 + i] = static_cast<unsigned char>((bitLen >> (56 - i * 8)) & 0xFF);
-    }
-
-    // 64バイトブロックごとに処理
-    for (size_t nBlock = 0; nBlock < nPaddedLen / 64; ++nBlock) {
-        const unsigned char *pBlock = &msg[nBlock * 64];
-
-        unsigned int w[80];
-        // 最初の16ワードをBig-Endianで読み込む
-        for (int i = 0; i < 16; ++i) {
-            w[i] = (static_cast<unsigned int>(pBlock[i * 4    ]) << 24)
-                 | (static_cast<unsigned int>(pBlock[i * 4 + 1]) << 16)
-                 | (static_cast<unsigned int>(pBlock[i * 4 + 2]) <<  8)
-                 | (static_cast<unsigned int>(pBlock[i * 4 + 3])      );
-        }
-        // 残り64ワードを拡張
-        for (int i = 16; i < 80; ++i) {
-            w[i] = RotLeft32(w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16], 1);
-        }
-
-        unsigned int a = h0, b = h1, c = h2, d = h3, e = h4;
-
-        for (int i = 0; i < 80; ++i) {
-            unsigned int f, k;
-            if (i < 20) {
-                f = (b & c) | ((~b) & d);
-                k = 0x5A827999u;
-            } else if (i < 40) {
-                f = b ^ c ^ d;
-                k = 0x6ED9EBA1u;
-            } else if (i < 60) {
-                f = (b & c) | (b & d) | (c & d);
-                k = 0x8F1BBCDCu;
-            } else {
-                f = b ^ c ^ d;
-                k = 0xCA62C1D6u;
-            }
-            unsigned int temp = RotLeft32(a, 5) + f + e + k + w[i];
-            e = d; d = c; c = RotLeft32(b, 30); b = a; a = temp;
-        }
-
-        h0 += a; h1 += b; h2 += c; h3 += d; h4 += e;
-    }
-
-    // 結果をBig-Endianで出力
-    unsigned int hArr[5] = { h0, h1, h2, h3, h4 };
-    for (int i = 0; i < 5; ++i) {
-        hash[i * 4    ] = static_cast<unsigned char>((hArr[i] >> 24) & 0xFF);
-        hash[i * 4 + 1] = static_cast<unsigned char>((hArr[i] >> 16) & 0xFF);
-        hash[i * 4 + 2] = static_cast<unsigned char>((hArr[i] >>  8) & 0xFF);
-        hash[i * 4 + 3] = static_cast<unsigned char>((hArr[i]      ) & 0xFF);
-    }
+    CryptHashData(hHash, pData, (DWORD)nLength, 0);
+    CryptGetHashParam(hHash, HP_HASHVAL, hash, &dwHashLen, 0);
+    CryptDestroyHash(hHash);
+    CryptReleaseContext(hProv, 0);
 }
 
 // ============================================================
@@ -358,8 +297,10 @@ void CWebSocketBridge::HandleAccept()
 {
     SOCKET hWsClient = accept(m_hListen, NULL, NULL);
     if (hWsClient == INVALID_SOCKET) {
+        OutputDebugStringA("[WebSocketBridge] HandleAccept: accept FAILED\n");
         return;
     }
+    OutputDebugStringA("[WebSocketBridge] HandleAccept: accepted\n");
 
     // セッションスレッドに引数を渡す
     WebSocketSessionArgs *pArgs = new WebSocketSessionArgs();
@@ -399,6 +340,8 @@ unsigned __stdcall CWebSocketBridge::SessionThreadProc(void *lpParam)
 
 void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 {
+    OutputDebugStringA("[WebSocketBridge] HandleSession: start\n");
+
     // ソケットのタイムアウトを設定
     DWORD dwTimeout = kSessionTimeoutMs;
     setsockopt(hWsClient, SOL_SOCKET, SO_RCVTIMEO,
@@ -408,13 +351,16 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 
     // 1. WebSocketハンドシェイク
     if (!PerformHandshake(hWsClient)) {
+        OutputDebugStringA("[WebSocketBridge] HandleSession: handshake FAILED\n");
         closesocket(hWsClient);
         return;
     }
+    OutputDebugStringA("[WebSocketBridge] HandleSession: handshake OK\n");
 
     // 2. localhost の TCPゲームポートへ接続
     SOCKET hTcpSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (hTcpSock == INVALID_SOCKET) {
+        OutputDebugStringA("[WebSocketBridge] HandleSession: TCP socket create FAILED\n");
         closesocket(hWsClient);
         return;
     }
@@ -425,12 +371,23 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
     tcpAddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK); // 127.0.0.1
     tcpAddr.sin_port        = htons(m_wTcpPort);
 
+    {
+        char szLog[128];
+        wsprintfA(szLog, "[WebSocketBridge] TCP connect to 127.0.0.1:%d\n", (int)m_wTcpPort);
+        OutputDebugStringA(szLog);
+    }
+
     if (connect(hTcpSock, reinterpret_cast<const sockaddr *>(&tcpAddr),
                 sizeof(tcpAddr)) == SOCKET_ERROR) {
+        char szLog[128];
+        wsprintfA(szLog, "[WebSocketBridge] TCP connect FAILED: WSA=%d\n", WSAGetLastError());
+        OutputDebugStringA(szLog);
         closesocket(hTcpSock);
         closesocket(hWsClient);
         return;
     }
+
+    OutputDebugStringA("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
 
     // 3. 双方向ブリッジループ
     BridgeLoop(hWsClient, hTcpSock);
