@@ -113,7 +113,6 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Common\myLib\myString.cpp" />
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.cpp" />
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.cpp" />
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.cpp" />
@@ -260,7 +259,6 @@
     <ClCompile Include="..\Common\Packet\VERSION\PacketVERSION_RES_VERSIONCHECK.cpp" />
     <ClCompile Include="..\Common\crc.cpp" />
     <ClCompile Include="..\Common\myLib\myZlib\myZlib.cpp" />
-    <ClCompile Include="..\Common\myLib\mySection.cpp" />
     <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
     <ClCompile Include="..\Common\Info\InfoBase.cpp" />
     <ClCompile Include="..\Common\Info\InfoAccount.cpp" />
