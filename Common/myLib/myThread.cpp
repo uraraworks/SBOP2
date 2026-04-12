@@ -1,4 +1,4 @@
-/// @file myThread.cpp
+﻿/// @file myThread.cpp
 /// @brief スレッドクラス 実装ファイル
 /// @author 年がら年中春うらら(URARA-works)
 /// @date 2007/04/28
