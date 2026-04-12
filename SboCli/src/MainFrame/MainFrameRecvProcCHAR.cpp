@@ -20,7 +20,9 @@
 #include "InfoCharCli.h"
 #include "LayerMap.h"
 #include "StateProcBase.h"
+#if !defined(__EMSCRIPTEN__)
 #include "StateProcMAP.h"
+#endif
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrSound.h"
@@ -247,12 +249,14 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 			RenewItemArea();
 			bSyncEventTile = TRUE;
 		}
+#if !defined(__EMSCRIPTEN__)
 		if (bSyncEventTile && (m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
 			((CStateProcMAP *)m_pStateProc)->SyncLastEventTile(
 				pInfoChar->m_dwMapID,
 				pInfoChar->m_nMapX,
 				pInfoChar->m_nMapY);
 		}
+#endif
 	}
 
 	if (pInfoChar) {
@@ -857,14 +861,18 @@ void CMainFrame::RecvProcCHAR_RES_CHECKMAPEVENT(PBYTE pData)
 		int nTileX = (int)((Packet.m_dwPara >> 16) & 0x7FFF);
 		int nTileY = (int)(Packet.m_dwPara & 0xFFFF);
 		pInfoChar->m_bWaitCheckMapEvent = FALSE;
+#if !defined(__EMSCRIPTEN__)
 		if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
 			((CStateProcMAP *)m_pStateProc)->StartAutoWalkToEvent(nTileX, nTileY);
 		}
+#endif
 	} else {
 		pInfoChar->m_bWaitCheckMapEvent = FALSE;
+#if !defined(__EMSCRIPTEN__)
 		if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
 			((CStateProcMAP *)m_pStateProc)->ResetMapEventCheckSendState();
 		}
+#endif
 	}
 }
 
@@ -950,9 +958,11 @@ void CMainFrame::RecvProcCHAR_RES_TALKEVENT(PBYTE pData)
 		if (pInfoCharPlayer) {
 			pInfoCharPlayer->m_bWaitCheckMapEvent = FALSE;
 		}
+#if !defined(__EMSCRIPTEN__)
 		if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
 			((CStateProcMAP *)m_pStateProc)->ResetMapEventCheckSendState();
 		}
+#endif
 	}
 
 	m_pMgrData->SetInfoTalkEvent(Packet.m_pInfo);

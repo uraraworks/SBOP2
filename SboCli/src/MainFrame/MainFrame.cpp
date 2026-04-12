@@ -1126,8 +1126,8 @@ void CMainFrame::OnRecv(PBYTE pData)
 	case SBOCOMMANDID_MAIN_VERSION: RecvProcVERSION(Packet.m_byCmdSub, pData); break; // バージョン系
 	case SBOCOMMANDID_MAIN_CONNECT: RecvProcCONNECT(Packet.m_byCmdSub, pData); break; // 接続系
 	case SBOCOMMANDID_MAIN_ACCOUNT: RecvProcACCOUNT(Packet.m_byCmdSub, pData); break; // アカウント系
-#if !defined(__EMSCRIPTEN__)
 	case SBOCOMMANDID_MAIN_CHAR: RecvProcCHAR(Packet.m_byCmdSub, pData); break; // キャラ系
+#if !defined(__EMSCRIPTEN__)
 	case SBOCOMMANDID_MAIN_MAP: RecvProcMAP(Packet.m_byCmdSub, pData); break; // マップ系
 	case SBOCOMMANDID_MAIN_ITEM: RecvProcITEM(Packet.m_byCmdSub, pData); break; // アイテム系
 	case SBOCOMMANDID_MAIN_ADMIN: RecvProcADMIN(Packet.m_byCmdSub, pData); break; // 管理者系

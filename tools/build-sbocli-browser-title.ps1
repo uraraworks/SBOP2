@@ -167,7 +167,54 @@ $sources = @(
     "Common/Packet/BATTLE/PacketBATTLE_REQ_ATACK.cpp",
     "Common/Packet/CHAR/PacketCHAR_PARA1.cpp",
     # Info (アニメーション - InfoEffect からの参照で必要)
-    "Common/Info/InfoAnime.cpp"
+    "Common/Info/InfoAnime.cpp",
+    # RecvProc (CHAR - キャラ情報受信処理)
+    "SboCli/src/MainFrame/MainFrameRecvProcCHAR.cpp",
+    # Packet (CHAR - 全 CHAR パケット。PacketCHAR_REQ_CHARINFO と PacketCHAR_PARA1 は追加済み)
+    "Common/Packet/CHAR/PacketCHAR_CHARID.cpp",
+    "Common/Packet/CHAR/PacketCHAR_CHARINFO.cpp",
+    "Common/Packet/CHAR/PacketCHAR_CHAT.cpp",
+    "Common/Packet/CHAR/PacketCHAR_GRP.cpp",
+    "Common/Packet/CHAR/PacketCHAR_ITEMINFO.cpp",
+    "Common/Packet/CHAR/PacketCHAR_MODIFY_PARAM.cpp",
+    "Common/Packet/CHAR/PacketCHAR_MOTION.cpp",
+    "Common/Packet/CHAR/PacketCHAR_MOTIONTYPE.cpp",
+    "Common/Packet/CHAR/PacketCHAR_MOVEPOS.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_CHARINFO2.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_CHAT.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_DRAGITEM.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_EQUIP.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_MODIFY_PARAM.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_PUSH.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_PUTGET.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_TAIL.cpp",
+    "Common/Packet/CHAR/PacketCHAR_REQ_USEITEM.cpp",
+    "Common/Packet/CHAR/PacketCHAR_RES_CHARINFO.cpp",
+    "Common/Packet/CHAR/PacketCHAR_RES_PUTGET.cpp",
+    "Common/Packet/CHAR/PacketCHAR_RES_TALKEVENT.cpp",
+    "Common/Packet/CHAR/PacketCHAR_RES_TAIL.cpp",
+    "Common/Packet/CHAR/PacketCHAR_SET_EFCBALLOON.cpp",
+    "Common/Packet/CHAR/PacketCHAR_SET_EFFECT.cpp",
+    "Common/Packet/CHAR/PacketCHAR_SKILLINFO.cpp",
+    "Common/Packet/CHAR/PacketCHAR_STATE.cpp",
+    "Common/Packet/CHAR/PacketCHAR_STATUS.cpp",
+    "Common/Packet/CHAR/PacketCHAR_TEXTEFFECT.cpp",
+    # LibInfo (モーション・アイテム - RecvProcCHAR の依存)
+    "Common/LibInfo/LibInfoMotion.cpp",
+    "Common/LibInfo/LibInfoMotionType.cpp",
+    "Common/LibInfo/LibInfoItem.cpp",
+    "Common/LibInfo/LibInfoItemType.cpp",
+    "Common/LibInfo/LibInfoItemWeapon.cpp",
+    # LibInfo (基底クラス)
+    "Common/LibInfo/LibInfoBase.cpp",
+    # Info (マップ基底・モーション・トークイベント)
+    "Common/Info/InfoMapBase.cpp",
+    "Common/Info/InfoMotion.cpp",
+    "Common/Info/InfoMotionType.cpp",
+    "Common/Info/InfoTalkEvent/InfoTalkEvent.cpp",
+    "Common/Info/InfoTalkEvent/InfoTalkEventBase.cpp",
+    "Common/Info/InfoTalkEvent/InfoTalkEventMENU.cpp",
+    "Common/Info/InfoTalkEvent/InfoTalkEventPAGE.cpp"
 )
 
 function Resolve-Empp {
@@ -221,7 +268,12 @@ $linkArgs = @(
 ) + $objects
 
 Write-Host "[browser-link] linking sbocli-title.html"
-& $empp @linkArgs
+
+# コマンドライン長制限を回避するためレスポンスファイルを使用
+$rspFile = Join-Path $outPath "link_args.rsp"
+# バックスラッシュをフォワードスラッシュに変換（em++ がエスケープ文字として解釈するのを防止）
+$linkArgs | ForEach-Object { $_.Replace('\', '/') } | Out-File -FilePath $rspFile -Encoding utf8NoBOM
+& $empp "@$rspFile"
 if ($LASTEXITCODE -ne 0) {
     throw "browser link に失敗しました。"
 }
