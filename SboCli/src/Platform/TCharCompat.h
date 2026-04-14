@@ -312,6 +312,9 @@ inline int MessageBox(HWND, LPCTSTR, LPCTSTR, UINT)
 // MultiByteToWideChar / WideCharToMultiByte（完全版）
 // -----------------------------------------------------------------------
 
+// SJIS→wstring 変換（SjisConvert.cpp に実装。Emscripten では TextDecoder 使用）
+#include "SjisConvert.h"
+
 // -----------------------------------------------------------------------
 // UTF-8 / UTF-16(wchar_t) 変換ヘルパー（std::codecvt_utf8_utf16 代替）
 // -----------------------------------------------------------------------
@@ -390,14 +393,23 @@ inline std::string WstringToUtf8(const wchar_t *pszSrc, size_t nSrcLen)
 }
 
 /// マルチバイト文字列をワイド文字列に変換する
-inline int MultiByteToWideChar(UINT, DWORD, LPCSTR pszSrc, int nSrcLen, LPWSTR pszDst, int nDstLen)
+/// codePage が CP932 (932) または CP_ACP (0) の場合は SJIS として変換する。
+/// それ以外（CP_UTF8=65001 など）は UTF-8 として変換する。
+inline int MultiByteToWideChar(UINT codePage, DWORD, LPCSTR pszSrc, int nSrcLen, LPWSTR pszDst, int nDstLen)
 {
 	if (pszSrc == NULL) {
 		return 0;
 	}
 
-	size_t srcLen = (nSrcLen < 0) ? strlen(pszSrc) : static_cast<size_t>(nSrcLen);
-	std::wstring strWide = Utf8ToWstring(pszSrc, srcLen);
+	std::wstring strWide;
+	if (codePage == 932 || codePage == 0 /* CP_ACP */) {
+		// SJIS (CP932) → wstring 変換（Emscripten では TextDecoder 使用）
+		strWide = SjisToWstring(pszSrc, nSrcLen);
+	} else {
+		// UTF-8 その他 → wstring 変換
+		size_t srcLen = (nSrcLen < 0) ? strlen(pszSrc) : static_cast<size_t>(nSrcLen);
+		strWide = Utf8ToWstring(pszSrc, srcLen);
+	}
 	int nRequired = (int)strWide.size() + ((nSrcLen < 0) ? 1 : 0);
 
 	if ((pszDst == NULL) || (nDstLen <= 0)) {

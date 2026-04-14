@@ -321,6 +321,9 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClCompile Include="src\Platform\SdlFont.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Platform\SjisConvert.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Platform\SDLApp.cpp">
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
@@ -501,6 +504,7 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClInclude Include="src\Lib\Png\pngconf.h" />
     <ClInclude Include="src\MainFrame\MainFrame.h" />
     <ClInclude Include="src\Platform\SdlFont.h" />
+    <ClInclude Include="src\Platform\SjisConvert.h" />
     <ClInclude Include="src\Platform\IGameLoopHost.h" />
     <ClInclude Include="src\Platform\ImGuiMsgLog.h" />
     <ClInclude Include="src\Platform\ImGuiDbg.h" />

@@ -70,6 +70,7 @@ $sources = @(
     "SboCli/src/Platform/SDLInput.cpp",
     "SboCli/src/Platform/SDLWindow.cpp",
     "SboCli/src/Platform/SdlFont.cpp",
+    "SboCli/src/Platform/SjisConvert.cpp",
     "SboCli/src/Lib/DInputUtil.cpp",
     "SboCli/src/Lib/DXAudio.cpp",
     "SboCli/src/Lib/Img32.cpp",
