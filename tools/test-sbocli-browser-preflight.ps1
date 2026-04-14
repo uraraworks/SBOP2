@@ -219,6 +219,7 @@ foreach ($arg in $includeArgs) {
 $failed = @()
 $skipped = 0
 $compiled = 0
+$global:LASTEXITCODE = 0
 
 foreach ($source in $Sources) {
     $sourcePath = Join-Path $repoRoot $source
