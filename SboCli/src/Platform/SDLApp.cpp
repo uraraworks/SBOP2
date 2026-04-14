@@ -36,21 +36,7 @@ extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserPumpSingleFrame(void)
 	if (g_pBrowserSDLApp == NULL) {
 		return;
 	}
-	try {
-		g_pBrowserSDLApp->RequestBrowserRedraw();
-	} catch (const std::exception &e) {
-		static int s_nCount = 0;
-		if (s_nCount < 3) {
-			fprintf(stderr, "INFO: PumpSingleFrame caught std::exception: %s\n", e.what());
-			s_nCount++;
-		}
-	} catch (...) {
-		static int s_nCount2 = 0;
-		if (s_nCount2 < 3) {
-			fprintf(stderr, "INFO: PumpSingleFrame caught unknown exception\n");
-			s_nCount2++;
-		}
-	}
+	g_pBrowserSDLApp->RequestBrowserRedraw();
 }
 #endif
 

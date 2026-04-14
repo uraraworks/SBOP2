@@ -864,6 +864,9 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 	bSystemRead = Read256File(szFilePath, &m_pImgSystem, 1);
 	bLoaded &= bSystemRead;
 
+	// 影画像（CLayerCloud が GetDibShadow() で参照）
+	Read256("IDP_SHADOW", &m_pImgShadow, 1);
+
 	BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("title.png"));
 	bTitleExists = PathFileExists(szFilePath);
 	bLoaded &= bTitleExists;
@@ -1116,16 +1119,6 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 			m_paImg2x2CharShadow->Add(pImg);
 		}
 	}
-
-	fprintf(stderr, "INFO: LoadLocalTitleAssets: body=%d ear=%d cloth=%d eye=%d hairD=%d hairU=%d sp=%d acce=%d "
-		"2x2_body=%d 2x2_cloth=%d 2x2_eye=%d 2x2_hair=%d 2x2_arms=%d 2x2_npc=%d\n",
-		(int)m_paImgBody->size(), (int)m_paImgEar->size(),
-		(int)m_paImgCloth->size(), (int)m_paImgEye->size(),
-		(int)m_paImgHairD->size(), (int)m_paImgHairU->size(),
-		(int)m_paImgSP->size(), (int)m_paImgAcce->size(),
-		(int)m_paImg2x2Body->size(), (int)m_paImg2x2Cloth->size(),
-		(int)m_paImg2x2Eye->size(), (int)m_paImg2x2Hair->size(),
-		(int)m_paImg2x2Arms->size(), (int)m_paImg2x2NPC->size());
 
 	return bLoaded;
 }

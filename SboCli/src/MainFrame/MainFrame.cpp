@@ -1152,6 +1152,7 @@ BOOL CMainFrame::TimerProc(void)
 	bDraw |= m_pMgrLayer->TimerProc();
 	bDraw |= m_pMgrWindow->TimerProc();
 #if defined(__EMSCRIPTEN__)
+	bDraw |= m_pLibInfoChar->Proc();
 	if (m_pStateProc) {
 		bDraw |= m_pStateProc->TimerProc();
 	}
