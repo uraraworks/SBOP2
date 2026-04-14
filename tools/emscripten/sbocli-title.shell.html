@@ -402,9 +402,10 @@
         }
 
         const gameState = Module.sbop2GameState || 0;
-        const needsLogoFrames = gameState === 1 || gameState === 3;
+        // 全ゲーム状態でフレーム駆動が必要（メインループが設定されていないため）
+        const needsFrames = gameState > 0;
         const stalledMs = Date.now() - (Module.sbop2PumpFallbackLastChange || 0);
-        if (needsLogoFrames && stalledMs >= 120) {
+        if (needsFrames && stalledMs >= 120) {
           pumpSingleFrame();
         }
         updateCanvasProbe();

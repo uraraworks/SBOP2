@@ -214,7 +214,17 @@ $sources = @(
     "Common/Info/InfoTalkEvent/InfoTalkEvent.cpp",
     "Common/Info/InfoTalkEvent/InfoTalkEventBase.cpp",
     "Common/Info/InfoTalkEvent/InfoTalkEventMENU.cpp",
-    "Common/Info/InfoTalkEvent/InfoTalkEventPAGE.cpp"
+    "Common/Info/InfoTalkEvent/InfoTalkEventPAGE.cpp",
+    # Info (アイテム・吹き出し - LibInfo* の依存)
+    "Common/Info/InfoItem.cpp",
+    "Common/Info/InfoItemType/InfoItemTypeBase.cpp",
+    "Common/Info/InfoItemWeapon.cpp",
+    "Common/Info/InfoEfcBalloon.cpp",
+    # Info (キャラ系 - InfoCharCli の依存)
+    "SboCli/src/Info/InfoChar/InfoCharATACKANIMECli.cpp",
+    "SboCli/src/Info/InfoChar/InfoCharBALLCli.cpp",
+    "SboCli/src/Info/InfoChar/InfoCharMOVEATACKCli.cpp",
+    "SboCli/src/Info/InfoChar/InfoCharSCORECli.cpp"
 )
 
 function Resolve-Empp {
@@ -253,7 +263,9 @@ $linkArgs = @(
     "-sUSE_SDL=2",
     "-sUSE_SDL_TTF=2",
     "-sALLOW_MEMORY_GROWTH=1",
-    "-sASSERTIONS=1",
+    "-sASSERTIONS=2",
+    "-sSAFE_HEAP=1",
+    "-sSTACK_OVERFLOW_CHECK=2",
     "-sSTACK_SIZE=2097152",
     "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap']",
     "-sDISABLE_EXCEPTION_CATCHING=0",

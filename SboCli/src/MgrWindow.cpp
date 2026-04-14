@@ -14,10 +14,8 @@
 #include "WindowLOGINNull.h"
 #include "WindowLOGINBrowser.h"
 #include "WindowMSG.h"
-#if defined(_WIN32)
 #include "WindowLOGINMENU.h"
 #include "WindowSEX.h"
-#include "WindowACCOUNTINFO.h"
 #include "WindowSTATUS.h"
 #include "WindowFAMILYTYPE.h"
 #include "WindowHAIRTYPE.h"
@@ -25,6 +23,8 @@
 #include "WindowEYECOLOR.h"
 #include "WindowSTYLESELECT.h"
 #include "WindowNAMEINPUT.h"
+#if defined(_WIN32)
+#include "WindowACCOUNTINFO.h"
 #include "WindowSYSTEMMENU.h"
 #include "WindowSETCOLOR.h"
 #include "WindowSETBGMVOLUME.h"
@@ -208,7 +208,14 @@ void CMgrWindow::MakeWindowMSG(LPCSTR pszMsg, DWORD dwTime, int nType)
 	m_bDraw = TRUE;
 }
 
-void CMgrWindow::MakeWindowLOGINMENU(void) {}
+void CMgrWindow::MakeWindowLOGINMENU(void)
+{
+	PCWindowLOGINMENU pWindowNew = new CWindowLOGINMENU;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
 void CMgrWindow::MakeWindowCHARNAME(void)
 {
 	PCWindowCHARNAME pWindowNew = new CWindowCHARNAME;
@@ -217,9 +224,24 @@ void CMgrWindow::MakeWindowCHARNAME(void)
 	SetActive();
 	m_bDraw = TRUE;
 }
-void CMgrWindow::MakeWindowSEX(void) {}
+void CMgrWindow::MakeWindowSEX(void)
+{
+	PCWindowSEX pWindowNew = new CWindowSEX;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
 void CMgrWindow::MakeWindowACCOUNTINFO(void) {}
-void CMgrWindow::MakeWindowSTATUS(BOOL bShow) { (void)bShow; }
+void CMgrWindow::MakeWindowSTATUS(BOOL bShow)
+{
+	PCWindowSTATUS pWindowNew = new CWindowSTATUS;
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetShow(bShow);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
 void CMgrWindow::MakeWindowCHAT(void)
 {
 	PCWindowCHAT pWindowNew = new CWindowCHAT;
@@ -228,12 +250,54 @@ void CMgrWindow::MakeWindowCHAT(void)
 	SetActive();
 	m_bDraw = TRUE;
 }
-void CMgrWindow::MakeWindowFAMILYTYPE(void) {}
-void CMgrWindow::MakeWindowHAIRTYPE(void) {}
-void CMgrWindow::MakeWindowHAIRCOLOR(void) {}
-void CMgrWindow::MakeWindowEYECOLOR(void) {}
-void CMgrWindow::MakeWindowSTYLESELECT(void) {}
-void CMgrWindow::MakeWindowNAMEINPUT(void) {}
+void CMgrWindow::MakeWindowFAMILYTYPE(void)
+{
+	PCWindowFAMILYTYPE pWindowNew = new CWindowFAMILYTYPE;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowHAIRTYPE(void)
+{
+	PCWindowHAIRTYPE pWindowNew = new CWindowHAIRTYPE;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowHAIRCOLOR(void)
+{
+	PCWindowHAIRCOLOR pWindowNew = new CWindowHAIRCOLOR;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowEYECOLOR(void)
+{
+	PCWindowEYECOLOR pWindowNew = new CWindowEYECOLOR;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowSTYLESELECT(void)
+{
+	PCWindowSTYLESELECT pWindowNew = new CWindowSTYLESELECT;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowNAMEINPUT(void)
+{
+	PCWindowNAMEINPUT pWindowNew = new CWindowNAMEINPUT;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+	m_bDraw = TRUE;
+}
 void CMgrWindow::MakeWindowSYSTEMMENU(void) {}
 void CMgrWindow::MakeWindowSETCOLOR(void) {}
 void CMgrWindow::MakeWindowSETBGMVOLUME(void) {}
