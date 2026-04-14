@@ -43,66 +43,75 @@ void CLayerCharSelect::Create(
 
 void CLayerCharSelect::Draw(PCImg32 pDst)
 {
-	int i, nCount, x, y, nTmp;
-	BYTE byAnimeNo, byLevel;
-	HDC hDC;
-	PCInfoCharCli pChar;
-	POINT ptViewCharPos;
+	try {
+		int i, nCount, x, y, nTmp;
+		BYTE byAnimeNo, byLevel;
+		HDC hDC;
+		PCInfoCharCli pChar;
+		POINT ptViewCharPos;
 
-	nCount = m_pInfoAccount->m_adwCharID.size();
-	nTmp = SCRSIZEX / (3 + 1);
+		nCount = m_pInfoAccount->m_adwCharID.size();
+		nTmp = SCRSIZEX / (3 + 1);
 
-	for (i = 0; i < 3; i ++) {
-		x = 32 + (nTmp * (i + 1));
-		y = SCRSIZEY / 2 + 32;
-		byAnimeNo = m_byAnime;
-		byLevel = 100;
+		for (i = 0; i < 3; i ++) {
+			x = 32 + (nTmp * (i + 1));
+			y = SCRSIZEY / 2 + 32;
+			byAnimeNo = m_byAnime;
+			byLevel = 100;
 
-		DrawFrame(pDst, x - 16, y - 24, 64, 72, 3);
-		if (i >= nCount) {
-			pDst->BltFrom256(x, y, 32, 32, m_pDibSystem, 112, 96, TRUE);
-			continue;
+			DrawFrame(pDst, x - 16, y - 24, 64, 72, 3);
+			if (i >= nCount) {
+				pDst->BltFrom256(x, y, 32, 32, m_pDibSystem, 112, 96, TRUE);
+				continue;
+			}
+
+			pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_pInfoAccount->m_adwCharID[i]);
+			if (pChar == NULL) {
+				continue;
+			}
+			pChar->GetViewCharPos(ptViewCharPos);
+			if (i != m_nSelect) {
+				byAnimeNo = 1;
+				byLevel = 50;
+			}
+			if (ptViewCharPos.y != 0) {
+				y += 16;
+			}
+			// 必ず下向き
+			pChar->m_nDirection = 1;
+
+			// キャラの描画
+			m_pMgrDraw->DrawChar(
+					pDst,
+					x - ptViewCharPos.x, y - ptViewCharPos.y + 16,
+					pChar);
+			if (ptViewCharPos.y != 0) {
+				y -= 16;
+			}
+
+			// 名前の描画
+			hDC = pDst->Lock();
+			TextOut2(
+					hDC,
+					m_hFont,
+					x + 16 - (pChar->m_strCharName.GetLength() * 6 / 2),
+					y + 56,
+					pChar->m_strCharName,
+					pChar->m_clName);
+			pDst->Unlock();
 		}
-
-		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_pInfoAccount->m_adwCharID[i]);
-		if (pChar == NULL) {
-			continue;
+		if (m_nSelect >= 0) {
+			x = 32 + (nTmp * (m_nSelect + 1));
+			y = SCRSIZEY / 2 + 32;
+			pDst->BltFrom256(x - 24, y - 21, 24, 21, m_pDibSystem, 72, 0, TRUE);
 		}
-		pChar->GetViewCharPos(ptViewCharPos);
-		if (i != m_nSelect) {
-			byAnimeNo = 1;
-			byLevel = 50;
+	} catch (const std::exception &e) {
+		static int s_nLogged = 0;
+		if (s_nLogged < 3) {
+			fprintf(stderr, "INFO: LayerCharSelect::Draw caught: %s\n", e.what());
+			s_nLogged++;
 		}
-		if (ptViewCharPos.y != 0) {
-			y += 16;
-		}
-		// 必ず下向き
-		pChar->m_nDirection = 1;
-
-		// キャラの描画
-		m_pMgrDraw->DrawChar(
-				pDst,
-				x - ptViewCharPos.x, y - ptViewCharPos.y + 16,
-				pChar);
-		if (ptViewCharPos.y != 0) {
-			y -= 16;
-		}
-
-		// 名前の描画
-		hDC = pDst->Lock();
-		TextOut2(
-				hDC,
-				m_hFont,
-				x + 16 - (pChar->m_strCharName.GetLength() * 6 / 2),
-				y + 56,
-				pChar->m_strCharName,
-				pChar->m_clName);
-		pDst->Unlock();
-	}
-	if (m_nSelect >= 0) {
-		x = 32 + (nTmp * (m_nSelect + 1));
-		y = SCRSIZEY / 2 + 32;
-		pDst->BltFrom256(x - 24, y - 21, 24, 21, m_pDibSystem, 72, 0, TRUE);
+		throw;
 	}
 }
 

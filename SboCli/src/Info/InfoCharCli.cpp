@@ -953,7 +953,7 @@ CInfoMotion *CInfoCharCli::GetMotionInfo(int *pnCount)
 	if (nCount == 0) {
 		goto Exit;
 	}
-	if (nAnime >= nCount) {
+	if (nAnime < 0 || nAnime >= nCount) {
 		nAnime = 0;
 	}
 	pRet = paMotionInfo->at(nAnime);

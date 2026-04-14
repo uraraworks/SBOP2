@@ -283,6 +283,7 @@ void CMgrDraw::DrawChar(
 	PCInfoMotion pInfoMotion;
 	PCImg32 pSrc, pDibTmp;
 
+	try {
 	LockDibTmp();
 	pDibTmp = GetDibTmp();
 	pInfoMotion = pInfoChar->GetMotionInfo();
@@ -545,6 +546,21 @@ ExitEffect:
 Exit:
 	ReleaseDibTmp();
 	UnLockDibTmp();
+	} catch (const std::exception &e) {
+		static int s_nLogged = 0;
+		if (s_nLogged < 3) {
+			fprintf(stderr, "INFO: MgrDraw::DrawChar caught: %s (charID=%d family=%d moveState=%d nAnime=%d)\n",
+				e.what(),
+				pInfoChar ? (int)pInfoChar->m_dwCharID : -1,
+				pInfoChar ? (int)pInfoChar->m_wFamilyID : -1,
+				pInfoChar ? (int)pInfoChar->m_nMoveState : -1,
+				pInfoChar ? (int)pInfoChar->m_nAnime : -1);
+			s_nLogged++;
+		}
+		ReleaseDibTmp();
+		UnLockDibTmp();
+		throw;
+	}
 }
 
 
