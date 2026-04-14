@@ -2,8 +2,12 @@ param(
     [string]$OutDir = "out/browser-title",
     [string]$PreflightOutDir = "out/browser-title/obj",
     [switch]$SkipPreflight,
-    [switch]$Force
+    [switch]$Force,
+    [switch]$Rebuild  # -Force の別名（後方互換用）
 )
+
+# -Rebuild は -Force の別名
+if ($Rebuild) { $Force = $true }
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -245,7 +249,12 @@ function Resolve-Empp {
 }
 
 if (-not $SkipPreflight) {
-    & $preflightScript -OutDir $PreflightOutDir -Sources $sources
+    # -Force/-Rebuild が指定された場合は preflight にも伝播して全ファイル再コンパイル
+    if ($Force) {
+        & $preflightScript -OutDir $PreflightOutDir -Sources $sources -Force
+    } else {
+        & $preflightScript -OutDir $PreflightOutDir -Sources $sources
+    }
     if ($LASTEXITCODE -ne 0) {
         throw "browser preflight に失敗しました。"
     }

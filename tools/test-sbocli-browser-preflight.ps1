@@ -9,7 +9,10 @@ param(
         "SboCli/src/MgrSound.cpp",
         "SboCli/src/MgrData.cpp",
         "SboCli/src/MainFrame/MainFrame.cpp"
-    )
+    ),
+    # 差分ビルドを無効化して全ファイルを再コンパイルする
+    [switch]$Force,
+    [switch]$Rebuild  # -Force の別名（後方互換用）
 )
 
 Set-StrictMode -Version Latest
@@ -18,6 +21,9 @@ $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Split-Path -Parent $scriptDir
 $outPath = Join-Path $repoRoot $OutDir
+
+# -Rebuild は -Force の別名
+if ($Rebuild) { $Force = $true }
 
 function Resolve-Empp {
     $cmd = Get-Command em++ -ErrorAction SilentlyContinue
@@ -112,6 +118,65 @@ function Get-IncludeArgs {
     return $args
 }
 
+# .d ファイルを解析して依存ファイルリストを返す（Makefile 形式）
+function Get-DepsFromDFile {
+    param([string]$DFile)
+
+    if (-not (Test-Path $DFile)) {
+        return @()
+    }
+
+    $content = Get-Content $DFile -Raw -Encoding utf8
+    # "target: dep1 dep2 \" 形式を解析。行末バックスラッシュを除去して結合
+    $content = $content -replace '\\\r?\n', ' '
+    # コロン以降を取得
+    if ($content -match ':\s+(.+)') {
+        $depPart = $Matches[1]
+        # スペース区切りで分割（バックスラッシュエスケープスペースは除く）
+        $deps = $depPart -split '\s+' | Where-Object { $_ -ne '' -and $_ -ne '\' }
+        return $deps
+    }
+    return @()
+}
+
+# ソースファイルが up-to-date かどうか判定
+# .d ファイルが存在する場合はヘッダ依存も考慮する
+function Test-UpToDate {
+    param(
+        [string]$ObjectPath,
+        [string]$DepFile,
+        [string]$SourcePath
+    )
+
+    if (-not (Test-Path $ObjectPath)) {
+        return $false
+    }
+
+    $objTime = (Get-Item $ObjectPath).LastWriteTime
+
+    # .d ファイルが存在する場合はその依存関係を使う
+    if (Test-Path $DepFile) {
+        $deps = Get-DepsFromDFile -DFile $DepFile
+        if ($deps.Count -gt 0) {
+            foreach ($dep in $deps) {
+                # パスの区切り文字を正規化
+                $depNorm = $dep -replace '/', '\'
+                if (Test-Path $depNorm) {
+                    $depTime = (Get-Item $depNorm).LastWriteTime
+                    if ($depTime -gt $objTime) {
+                        return $false
+                    }
+                }
+            }
+            return $true
+        }
+    }
+
+    # .d ファイルがない場合はソースファイルのみで判定
+    $srcTime = (Get-Item $SourcePath).LastWriteTime
+    return $srcTime -lt $objTime
+}
+
 $empp = Resolve-Empp
 $vsDevCmd = $null
 if (-not $empp) {
@@ -137,6 +202,8 @@ $commonArgItems = @(
     "-sUSE_SDL_TTF=2",
     "-sDISABLE_EXCEPTION_CATCHING=0",
     "-Winvalid-pch",
+    # -MMD: 依存関係ファイル（.d）を生成（差分ビルド用）
+    "-MMD",
     "-include",
     (Join-Path $repoRoot "Common/rpcsal_fallback.h"),
     "-include",
@@ -150,6 +217,8 @@ foreach ($arg in $includeArgs) {
 }
 
 $failed = @()
+$skipped = 0
+$compiled = 0
 
 foreach ($source in $Sources) {
     $sourcePath = Join-Path $repoRoot $source
@@ -159,10 +228,22 @@ foreach ($source in $Sources) {
         continue
     }
 
-    $objectName = ([IO.Path]::GetFileNameWithoutExtension($sourcePath)) + ".o"
-    $objectPath = Join-Path $outPath $objectName
+    $baseName = [IO.Path]::GetFileNameWithoutExtension($sourcePath)
+    $objectPath = Join-Path $outPath ($baseName + ".o")
+    $depFile = Join-Path $outPath ($baseName + ".d")
 
-    Write-Host "[browser-preflight] $source"
+    # 差分ビルドチェック（-Force/-Rebuild 指定時はスキップ）
+    if (-not $Force -and $empp) {
+        if (Test-UpToDate -ObjectPath $objectPath -DepFile $depFile -SourcePath $sourcePath) {
+            Write-Host "[browser-preflight] skip (up-to-date): $source"
+            $skipped++
+            continue
+        }
+    }
+
+    Write-Host "[browser-preflight] compile: $source"
+    $compiled++
+
     if ($empp) {
         $args = New-Object System.Collections.Generic.List[string]
         foreach ($arg in $commonArgs) {
@@ -171,6 +252,9 @@ foreach ($source in $Sources) {
         $args.Add($sourcePath)
         $args.Add("-o")
         $args.Add($objectPath)
+        # -MF で .d ファイルの出力先を明示指定（デフォルトはソースと同階層になるため）
+        $args.Add("-MF")
+        $args.Add($depFile)
 
         & $empp @args
         if ($LASTEXITCODE -ne 0) {
@@ -203,4 +287,4 @@ if ($failed.Count -gt 0) {
     Write-Error ("browser preflight failed: " + ($failed -join ", "))
 }
 
-Write-Host "[browser-preflight] success"
+Write-Host "[browser-preflight] success (compiled: $compiled, skipped: $skipped)"
