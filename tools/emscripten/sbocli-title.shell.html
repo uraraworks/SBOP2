@@ -459,6 +459,8 @@
         const grpTitleExists = (Module && Module.sbop2GrpTitleExists);
         const grpTitleBackExists = (Module && Module.sbop2GrpTitleBackExists);
         const grpTitleCloudExists = (Module && Module.sbop2GrpTitleCloudExists);
+        const cloudLoaded = (Module && Module.sbop2CloudLoaded);
+        const cloudSize = (Module && Module.sbop2CloudW) ? (Module.sbop2CloudW + 'x' + Module.sbop2CloudH) : 'none';
         const logoTopLeft = (Module && Module.sbop2LogoTopLeft) || 'none';
         const logoCenter = (Module && Module.sbop2LogoCenter) || 'none';
         const layerSample = (Module && Module.sbop2LayerSample) || 'none';
@@ -472,7 +474,7 @@
         const stage = (Module && Module.sbop2Stage) || 'none';
         const lastStatus = (Module && Module.lastStatusText) || '';
         const lastDeps = (Module && Module.lastRunDependencyCount);
-        probeElement.textContent = 'canvas-probe: ' + samples + ' stage=' + stage + ' status=' + lastStatus + ' deps=' + lastDeps + ' init=' + initEndReached + ' grp=' + grpLoadResult + ' base=' + grpFoundBase + ' sysExists=' + grpSystemExists + ' sysRead=' + grpSystemRead + ' title=' + grpTitleExists + ' back=' + grpTitleBackExists + ' cloud=' + grpTitleCloudExists + ' fsSys=' + fsSystem + ' fsTitle=' + fsTitle + ' fsBack=' + fsTitleBack + ' fsCloud=' + fsTitleCloud + ' game=' + gameState + ' hasState=' + hasStateProc + ' chg=' + chgStateCount + ' logoDraw=' + logoDraw + ' logoTL=' + logoTopLeft + ' logoC=' + logoCenter + ' layer=' + layerSample + ' window=' + windowSample + ' cpp=' + cppRgbaHead + ' ptr=' + presentPtr + ' onDraw=' + onDrawCount + ' state=' + onDrawState + ' renderer=' + onDrawHasRenderer + ' nullMgrDraw=' + onDrawNullMgrDraw + ' pump=' + pumpActive + '/' + pumpTick + ' present=' + presentCount + ' size=' + presentSize + ' sample=' + presentSample + ' data=' + canvasElement.toDataURL().slice(0, 48);
+        probeElement.textContent = 'canvas-probe: ' + samples + ' stage=' + stage + ' status=' + lastStatus + ' deps=' + lastDeps + ' init=' + initEndReached + ' grp=' + grpLoadResult + ' base=' + grpFoundBase + ' sysExists=' + grpSystemExists + ' sysRead=' + grpSystemRead + ' title=' + grpTitleExists + ' back=' + grpTitleBackExists + ' cloud=' + grpTitleCloudExists + ' cloudLoaded=' + cloudLoaded + ' cloudSz=' + cloudSize + ' fsSys=' + fsSystem + ' fsTitle=' + fsTitle + ' fsBack=' + fsTitleBack + ' fsCloud=' + fsTitleCloud + ' game=' + gameState + ' hasState=' + hasStateProc + ' chg=' + chgStateCount + ' logoDraw=' + logoDraw + ' logoTL=' + logoTopLeft + ' logoC=' + logoCenter + ' layer=' + layerSample + ' window=' + windowSample + ' cpp=' + cppRgbaHead + ' ptr=' + presentPtr + ' onDraw=' + onDrawCount + ' state=' + onDrawState + ' renderer=' + onDrawHasRenderer + ' nullMgrDraw=' + onDrawNullMgrDraw + ' pump=' + pumpActive + '/' + pumpTick + ' present=' + presentCount + ' size=' + presentSize + ' sample=' + presentSample + ' data=' + canvasElement.toDataURL().slice(0, 48);
       } catch (error) {
         probeElement.textContent = 'canvas-probe-error: ' + String(error);
       }

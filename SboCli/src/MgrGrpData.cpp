@@ -36,6 +36,12 @@ EM_JS(void, SBOP2_DebugMarkGrpLoad, (
 	Module.sbop2GrpDiagCount = (Module.sbop2GrpDiagCount || 0) + 1;
 	Module.sbop2Stage = 8;
 	});
+
+EM_JS(void, SBOP2_DebugMarkCloudLoad, (int loaded, int w, int h), {
+	Module.sbop2CloudLoaded = loaded;
+	Module.sbop2CloudW = w;
+	Module.sbop2CloudH = h;
+	});
 #endif
 
 
@@ -1804,6 +1810,13 @@ PCImg32 CMgrGrpData::GetDibTmpTitleCloud(void)
 		// パレットインデックス 0 がマゼンタ（#FF00FF）= 透明色として使用
 		// title.png が SetColorKeyNo(71) を明示設定するのと同様に、雲も明示的に設定する
 		pImg->SetColorKeyNo(0);
+#if defined(__EMSCRIPTEN__)
+		SBOP2_DebugMarkCloudLoad(1, pImg->Width(), pImg->Height());
+#endif
+	} else {
+#if defined(__EMSCRIPTEN__)
+		SBOP2_DebugMarkCloudLoad(0, 0, 0);
+#endif
 	}
 
 	return pImg;
