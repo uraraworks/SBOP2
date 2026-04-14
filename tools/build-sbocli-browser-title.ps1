@@ -277,7 +277,7 @@ $linkArgs = @(
     "-sSAFE_HEAP=1",
     "-sSTACK_OVERFLOW_CHECK=2",
     "-sSTACK_SIZE=2097152",
-    "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap']",
+    "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','HEAPU8']",
     "-sDISABLE_EXCEPTION_CATCHING=0",
     "-lwebsocket",
     "-sENVIRONMENT=web",
