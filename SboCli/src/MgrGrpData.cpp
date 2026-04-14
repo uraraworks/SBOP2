@@ -975,6 +975,12 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 		m_paImgAcce->Add(pImg);
 	}
 
+	fprintf(stderr, "INFO: LoadLocalTitleAssets: body=%d ear=%d cloth=%d eye=%d hairD=%d hairU=%d sp=%d acce=%d\n",
+		(int)m_paImgBody->size(), (int)m_paImgEar->size(),
+		(int)m_paImgCloth->size(), (int)m_paImgEye->size(),
+		(int)m_paImgHairD->size(), (int)m_paImgHairU->size(),
+		(int)m_paImgSP->size(), (int)m_paImgAcce->size());
+
 	return bLoaded;
 }
 
@@ -1152,6 +1158,9 @@ PCImg32 CMgrGrpData::GetDibBody(WORD wFamilyID)
 	default:
 		goto Exit;
 	}
+	if ((nNo < 0) || ((size_t)nNo >= m_paImgBody->size())) {
+		goto Exit;
+	}
 	pImg = m_paImgBody->at(nNo);
 
 Exit:
@@ -1173,6 +1182,9 @@ PCImg32 CMgrGrpData::GetDibEar(WORD wFamilyID)
 	case FAMILYTYPE_BST:	nNo = 0;	break;	// ジュウジン
 	case FAMILYTYPE_DAEMON:	nNo = 1;	break;	// マゾク
 	default:
+		goto Exit;
+	}
+	if ((nNo < 0) || ((size_t)nNo >= m_paImgEar->size())) {
 		goto Exit;
 	}
 	pImg = m_paImgEar->at(nNo);
