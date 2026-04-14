@@ -385,6 +385,12 @@ void CMgrDraw::DrawChar(
 		switch (pInfoMotion->m_anDrawList[i]) {
 		case 0:
 			if (bTrace) fprintf(stderr, "INFO: DrawChar M6a i=%d\n", i); // M6a: case 0 入口
+			// ログ1: 2x2 分岐直前の変数確認
+			if (bTrace && i == 0) {
+				fprintf(stderr, "INFO: DrawChar[0] wGrpIDMainBase=%d wGrpIDSubBase=%d wFamilyID=%d sex=%d cxChar=%d\n",
+					(int)wGrpIDMainBase, (int)pInfoMotion->m_wGrpIDSubBase,
+					(int)pInfoChar->m_wFamilyID, (int)pInfoChar->m_nSex, cxChar);
+			}
 			// 2x2サイズ以外？
 			if (wGrpIDMainBase != GRPIDMAIN_2X2_CHAR) {
 				nTmp = 0;
@@ -423,9 +429,31 @@ void CMgrDraw::DrawChar(
 				if (pInfoChar->m_nSex == SEX_FEMALE) {
 					nTmp += 32 * 4;
 				}
+				// ログ2: 2x2 分岐に入った直後、GetGrpPos 後の位置確認
+				if (bTrace && i == 0) {
+					fprintf(stderr, "INFO: DrawChar[0] 2x2: ptTmp=(%d,%d) nTmp=%d\n", (int)ptTmp.x, (int)ptTmp.y, nTmp);
+				}
 				pSrc = m_pMgrGrpData->GetDib(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, pInfoChar->m_wFamilyID);
+				// ログ3: body 取得後の pSrc 確認
+				if (bTrace && i == 0) {
+					fprintf(stderr, "INFO: DrawChar[0] 2x2 body: pSrc=%p size=(%d,%d)\n",
+						(void*)pSrc,
+						pSrc ? pSrc->Width() : -1,
+						pSrc ? pSrc->Height() : -1);
+				}
 				// 体
 				pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp);
+				// ログ4: body の BltFrom256 後の pDibTmp 先頭ピクセルダンプ
+				if (bTrace && i == 0) {
+					const BYTE *p00 = pDibTmp->GetBits();
+					int H = pDibTmp->Height();
+					int W = pDibTmp->Width();
+					const BYTE *row0  = p00 + (H - 1) * W * 4;       // y=0 の行（Y反転）
+					const BYTE *row16 = p00 + (H - 1 - 16) * W * 4;  // y=16 の行
+					fprintf(stderr, "INFO: DrawChar[0] 2x2 after-body pDibTmp(0,0)=[%02X %02X %02X %02X] (16,16)=[%02X %02X %02X %02X]\n",
+						row0[0], row0[1], row0[2], row0[3],
+						row16[64], row16[65], row16[66], row16[67]);
+				}
 				if ((pInfoChar->m_wGrpIDSP == 0) && (pInfoChar->m_wGrpIDTmpMain == 0)) {
 					wGrpIDMain = GRPIDMAIN_2X2_CLOTH;
 					// 服リソースは IDP_2X2_CLOTH_00 (i=0) 始まりで配列にロードされるため
@@ -441,12 +469,24 @@ void CMgrDraw::DrawChar(
 						wGrpIDSub  = pInfoChar->m_wGrpIDTmpSub;
 					}
 				}
+				// ログ5: cloth 取得前の ID 確認
+				if (bTrace && i == 0) {
+					fprintf(stderr, "INFO: DrawChar[0] 2x2 cloth: wGrpIDMain=%d wGrpIDSub=%d\n", (int)wGrpIDMain, (int)wGrpIDSub);
+				}
 				pSrc = m_pMgrGrpData->GetDib(wGrpIDMain, 0, wGrpIDSub);
+				// ログ5b: cloth 取得後の pSrc 確認
+				if (bTrace && i == 0) {
+					fprintf(stderr, "INFO: DrawChar[0] 2x2 cloth pSrc=%p\n", (void*)pSrc);
+				}
 				// 服
 				pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
 				// m_wGrpIDHairType は 1-based (1〜N) だが GetDib2x2Hair は 0-based 配列インデックスを使うため -1 する
 				pSrc = m_pMgrGrpData->GetDib(GRPIDMAIN_2X2_HAIR, 0,
 					pInfoChar->m_wGrpIDHairType > 0 ? pInfoChar->m_wGrpIDHairType - 1 : 0);
+				// ログ6: hair 取得後の pSrc 確認
+				if (bTrace && i == 0) {
+					fprintf(stderr, "INFO: DrawChar[0] 2x2 hair pSrc=%p hairType=%d\n", (void*)pSrc, (int)pInfoChar->m_wGrpIDHairType);
+				}
 				// 髪
 				pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y + nTmp, TRUE);
 				if (nDirection != 0) {
@@ -455,6 +495,19 @@ void CMgrDraw::DrawChar(
 					pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x - 32 * 4, ptTmp.y, TRUE);
 				}
 				pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
+				// ログ7: 最終 BltAlpha 直前の pDibTmp ピクセルダンプ（2x ストレッチ後）
+				if (bTrace && i == 0) {
+					const BYTE *p = pDibTmp->GetBits();
+					int H = pDibTmp->Height();
+					int W = pDibTmp->Width();
+					// Y反転考慮: y=80 の行は (H-1-80)*W*4
+					int rowOff = H - 1 - 80;
+					if (rowOff >= 0) {
+						const BYTE *row = p + rowOff * W * 4;
+						fprintf(stderr, "INFO: DrawChar[0] 2x2 pre-BltAlpha pDibTmp@(32,80)=[%02X %02X %02X %02X]\n",
+							row[128], row[129], row[130], row[131]);
+					}
+				}
 				pDst->BltAlpha(
 					x + pInfoMotion->m_ptDrawPosPile0.x,
 					y + pInfoMotion->m_ptDrawPosPile0.y,
