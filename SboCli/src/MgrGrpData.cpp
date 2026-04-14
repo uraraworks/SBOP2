@@ -975,11 +975,157 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 		m_paImgAcce->Add(pImg);
 	}
 
-	fprintf(stderr, "INFO: LoadLocalTitleAssets: body=%d ear=%d cloth=%d eye=%d hairD=%d hairU=%d sp=%d acce=%d\n",
+	// 2x2 体（HUMAN のみ）
+	{
+		pImg	= new CImg32;
+		bResult	= Read256("IDP_2X2_BODY_HUM", &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+		} else {
+			m_paImg2x2Body->Add(pImg);
+		}
+	}
+	// 2x2 服
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_CLOTH_%02d", i);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2Cloth->Add(pImg);
+	}
+	// 2x2 目
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_EYE_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2Eye->Add(pImg);
+	}
+	// 2x2 髪
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_HAIR_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2Hair->Add(pImg);
+	}
+	// 2x2 特殊服
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_SP_CLOTH_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2SPCloth->Add(pImg);
+	}
+	// 2x2 特殊髪
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_SP_HAIR_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2SPHair->Add(pImg);
+	}
+	// 2x2 武器(arms)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_ARMS_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2Arms->Add(pImg);
+	}
+	// 2x2 シールド
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_SHIELD_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2Shield->Add(pImg);
+	}
+	// 2x2 特殊武器(arms SP)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_ARMS_SP_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2ArmsSP->Add(pImg);
+	}
+	// 2x2 弓
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_BOW_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2Bow->Add(pImg);
+	}
+	// 2x2 NPC
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_NPC_%03d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2NPC->Add(pImg);
+	}
+	// 2x2 NPC 影
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_NPC_%03d_SHADOW", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImg2x2NPCShadow->Add(pImg);
+	}
+	// 2x2 キャラ影（固定1枚）
+	{
+		pImg	= new CImg32;
+		bResult	= Read256("IDP_2X2_CHAR_SHADOW_01", &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+		} else {
+			m_paImg2x2CharShadow->Add(pImg);
+		}
+	}
+
+	fprintf(stderr, "INFO: LoadLocalTitleAssets: body=%d ear=%d cloth=%d eye=%d hairD=%d hairU=%d sp=%d acce=%d "
+		"2x2_body=%d 2x2_cloth=%d 2x2_eye=%d 2x2_hair=%d 2x2_arms=%d 2x2_npc=%d\n",
 		(int)m_paImgBody->size(), (int)m_paImgEar->size(),
 		(int)m_paImgCloth->size(), (int)m_paImgEye->size(),
 		(int)m_paImgHairD->size(), (int)m_paImgHairU->size(),
-		(int)m_paImgSP->size(), (int)m_paImgAcce->size());
+		(int)m_paImgSP->size(), (int)m_paImgAcce->size(),
+		(int)m_paImg2x2Body->size(), (int)m_paImg2x2Cloth->size(),
+		(int)m_paImg2x2Eye->size(), (int)m_paImg2x2Hair->size(),
+		(int)m_paImg2x2Arms->size(), (int)m_paImg2x2NPC->size());
 
 	return bLoaded;
 }
@@ -1441,6 +1587,9 @@ PCImg32 CMgrGrpData::GetDib2x2Body(WORD wFamilyID)
 	switch (wFamilyID) {
 	case FAMILYTYPE_HUMAN:	nNo = 0;	break;	// ニンゲン
 	default:
+		goto Exit;
+	}
+	if ((nNo < 0) || ((size_t)nNo >= m_paImg2x2Body->size())) {
 		goto Exit;
 	}
 	pImg = m_paImg2x2Body->at(nNo);

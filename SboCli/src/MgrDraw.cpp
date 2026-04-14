@@ -283,9 +283,9 @@ void CMgrDraw::DrawChar(
 	PCInfoMotion pInfoMotion;
 	PCImg32 pSrc, pDibTmp;
 
-	// 最初の 2 フレーム分だけマーカーを出力（ログ溢れ防止）
+	// 最初の 4 フレーム分だけマーカーを出力（ログ溢れ防止）
 	static int s_nTraceFrames = 0;
-	bool bTrace = (s_nTraceFrames < 2);
+	bool bTrace = (s_nTraceFrames < 4);
 	if (bTrace) s_nTraceFrames++;
 
 	try {
