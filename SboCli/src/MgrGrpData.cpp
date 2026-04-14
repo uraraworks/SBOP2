@@ -1800,6 +1800,11 @@ PCImg32 CMgrGrpData::GetDibTmpTitleCloud(void)
 			SAFE_DELETE(pImg);
 		}
 	}
+	if (pImg) {
+		// パレットインデックス 0 がマゼンタ（#FF00FF）= 透明色として使用
+		// title.png が SetColorKeyNo(71) を明示設定するのと同様に、雲も明示的に設定する
+		pImg->SetColorKeyNo(0);
+	}
 
 	return pImg;
 }
