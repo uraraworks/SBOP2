@@ -359,6 +359,22 @@ void CMgrDraw::DrawChar(
 			x + pInfoMotion->m_ptDrawPosPile0.x,
 			y + pInfoMotion->m_ptDrawPosPile0.y,
 			cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, 75, TRUE);
+		// ログ: 影 BltAlpha 直後の pDst プローブ（影は見えているので参照点）
+		if (bTrace) {
+			int dstX = x + pInfoMotion->m_ptDrawPosPile0.x;
+			int dstY = y + pInfoMotion->m_ptDrawPosPile0.y;
+			int pdW = pDst->Width();
+			int pdH = pDst->Height();
+			int probeX = dstX + 32;
+			int probeY = dstY + 32;
+			fprintf(stderr, "INFO: DrawChar 2x2 shadow dst=(%d,%d) probeXY=(%d,%d) pdW=%d pdH=%d\n",
+				dstX, dstY, probeX, probeY, pdW, pdH);
+			if (probeX >= 0 && probeX < pdW && probeY >= 0 && probeY < pdH) {
+				const BYTE *pb = pDst->GetBits() + (pdH - 1 - probeY) * pdW * 4 + probeX * 4;
+				fprintf(stderr, "INFO: DrawChar 2x2 post-shadow pDst probe=[%02X %02X %02X %02X]\n",
+					pb[0], pb[1], pb[2], pb[3]);
+			}
+		}
 		break;
 
 	case GRPIDMAIN_2X2_NPC:
@@ -508,10 +524,41 @@ void CMgrDraw::DrawChar(
 							row[128], row[129], row[130], row[131]);
 					}
 				}
+				// ログ8: BltAlpha 直前の pDst プローブ（座標・nFadeLevel も確認）
+				if (bTrace && i == 0) {
+					int dstX = x + pInfoMotion->m_ptDrawPosPile0.x;
+					int dstY = y + pInfoMotion->m_ptDrawPosPile0.y;
+					int pdW = pDst->Width();
+					int pdH = pDst->Height();
+					// pDst の body 中央付近 (dstX+32, dstY+32) をプローブ
+					int probeX = dstX + 32;
+					int probeY = dstY + 32;
+					fprintf(stderr, "INFO: DrawChar[0] 2x2 pre-BltAlpha dst=(%d,%d) sz=(%d,%d) cxChar2=%d nFadeLevel=%d probeXY=(%d,%d) pdW=%d pdH=%d\n",
+						dstX, dstY, cxChar * 2, cyChar * 2, cxChar * 2, nFadeLevel, probeX, probeY, pdW, pdH);
+					if (probeX >= 0 && probeX < pdW && probeY >= 0 && probeY < pdH) {
+						const BYTE *pb = pDst->GetBits() + (pdH - 1 - probeY) * pdW * 4 + probeX * 4;
+						fprintf(stderr, "INFO: DrawChar[0] 2x2 pre-BltAlpha pDst probe=[%02X %02X %02X %02X]\n",
+							pb[0], pb[1], pb[2], pb[3]);
+					}
+				}
 				pDst->BltAlpha(
 					x + pInfoMotion->m_ptDrawPosPile0.x,
 					y + pInfoMotion->m_ptDrawPosPile0.y,
 					cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
+				// ログ9: BltAlpha 直後の pDst プローブ
+				if (bTrace && i == 0) {
+					int dstX = x + pInfoMotion->m_ptDrawPosPile0.x;
+					int dstY = y + pInfoMotion->m_ptDrawPosPile0.y;
+					int pdW = pDst->Width();
+					int pdH = pDst->Height();
+					int probeX = dstX + 32;
+					int probeY = dstY + 32;
+					if (probeX >= 0 && probeX < pdW && probeY >= 0 && probeY < pdH) {
+						const BYTE *pb = pDst->GetBits() + (pdH - 1 - probeY) * pdW * 4 + probeX * 4;
+						fprintf(stderr, "INFO: DrawChar[0] 2x2 post-BltAlpha pDst probe=[%02X %02X %02X %02X]\n",
+							pb[0], pb[1], pb[2], pb[3]);
+					}
+				}
 			}
 			break;
 		case 1:		// 重ね画像１
