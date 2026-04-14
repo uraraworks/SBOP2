@@ -280,6 +280,8 @@ $linkArgs = @(
     "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','HEAPU8']",
     "-sEXPORTED_FUNCTIONS=['_main','_malloc','_free']",
     "-sDISABLE_EXCEPTION_CATCHING=0",
+    # wasm の関数名をスタックトレースに残して診断しやすくする
+    "--profiling-funcs",
     "-lwebsocket",
     "-sENVIRONMENT=web",
     "-Wl,--error-limit=0",

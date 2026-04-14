@@ -283,10 +283,17 @@ void CMgrDraw::DrawChar(
 	PCInfoMotion pInfoMotion;
 	PCImg32 pSrc, pDibTmp;
 
+	// 最初の 2 フレーム分だけマーカーを出力（ログ溢れ防止）
+	static int s_nTraceFrames = 0;
+	bool bTrace = (s_nTraceFrames < 2);
+	if (bTrace) s_nTraceFrames++;
+
 	try {
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M1\n"); // M1: try ブロック入口
 	LockDibTmp();
 	pDibTmp = GetDibTmp();
 	pInfoMotion = pInfoChar->GetMotionInfo();
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M2\n"); // M2: GetMotionInfo 直後
 	if (pInfoMotion == NULL) {
 		goto Exit;
 	}
@@ -311,6 +318,7 @@ void CMgrDraw::DrawChar(
 	}
 
 	nDirection = pInfoChar->GetDrawDirection(-1);
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M3\n"); // M3: GetDrawDirection 直後
 	cx = cy = m_pMgrGrpData->GetGrpSize(wGrpIDMainBase);
 	cxChar = cyChar = cx;
 
@@ -369,11 +377,14 @@ void CMgrDraw::DrawChar(
 			cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, 75, TRUE);
 		break;
 	}
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M4\n"); // M4: 影描画 switch 抜け直後
 
 	nCount = pInfoMotion->m_anDrawList.size();
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M5 nCount=%d\n", nCount); // M5: nCount 確認
 	for (i = 0; i < nCount; i++) {
 		switch (pInfoMotion->m_anDrawList[i]) {
 		case 0:
+			if (bTrace) fprintf(stderr, "INFO: DrawChar M6a i=%d\n", i); // M6a: case 0 入口
 			// 2x2サイズ以外？
 			if (wGrpIDMainBase != GRPIDMAIN_2X2_CHAR) {
 				nTmp = 0;
@@ -451,6 +462,7 @@ void CMgrDraw::DrawChar(
 			}
 			break;
 		case 1:		// 重ね画像１
+			if (bTrace) fprintf(stderr, "INFO: DrawChar M6b i=%d\n", i); // M6b: case 1 入口
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile1;
 			wGrpIDSub  = pInfoMotion->m_wGrpIDSubPile1;
 			if (wGrpIDSub == 0) {
@@ -476,6 +488,7 @@ void CMgrDraw::DrawChar(
 				cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel1, TRUE);
 			break;
 		case 2:		// 重ね画像２
+			if (bTrace) fprintf(stderr, "INFO: DrawChar M6c i=%d\n", i); // M6c: case 2 入口
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile2;
 			wGrpIDSub  = pInfoMotion->m_wGrpIDSubPile2;
 			if (wGrpIDSub == 0) {
@@ -501,6 +514,7 @@ void CMgrDraw::DrawChar(
 				cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel2, TRUE);
 			break;
 		case 3:		// 重ね画像３
+			if (bTrace) fprintf(stderr, "INFO: DrawChar M6d i=%d\n", i); // M6d: case 3 入口
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile3;
 			wGrpIDSub  = pInfoMotion->m_wGrpIDSubPile3;
 			if (wGrpIDSub == 0) {
@@ -527,9 +541,11 @@ void CMgrDraw::DrawChar(
 			break;
 		}
 	}
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M7\n"); // M7: for ループ終了直後
 
 ExitEffect:
 	// エフェクト
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M8\n"); // M8: ExitEffect ラベル後
 	pSrc = pInfoChar->GetEfcImg();
 	if (pSrc) {
 		pInfoChar->GetEfcGrpPos(ptTmp);
@@ -544,6 +560,7 @@ ExitEffect:
 	}
 
 Exit:
+	if (bTrace) fprintf(stderr, "INFO: DrawChar M9\n"); // M9: Exit ラベル後（ReleaseDibTmp 直前）
 	ReleaseDibTmp();
 	UnLockDibTmp();
 	} catch (const std::exception &e) {
