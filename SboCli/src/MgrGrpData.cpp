@@ -133,6 +133,16 @@ static void BuildSboGrpResPath(TCHAR *pszDst, size_t nDstCount, LPCTSTR pszBaseP
 
 	_tcscpy_s(pszDst, nDstCount, pszBasePath);
 	_tcscat_s(pszDst, nDstCount, pszFileName);
+
+#if !defined(_WIN32)
+	// Emscripten VFS（および Linux）はバックスラッシュをパス区切りとして解釈しないため
+	// GetFileNameForResource が返す Windows 形式パスをスラッシュに変換する
+	for (TCHAR *p = pszDst; *p != _T('\0'); p++) {
+		if (*p == _T('\\')) {
+			*p = _T('/');
+		}
+	}
+#endif
 }
 
 /// リソース名（ANSI）から対応する相対ファイル名（TCHAR）を取得
@@ -816,6 +826,18 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 	BOOL bTitleExists;
 	BOOL bTitleBackExists;
 	BOOL bTitleCloudExists;
+	int i;
+	PCImg32 pImg;
+	BOOL bResult;
+	char szTmp[64];
+	LPSTR pszTmp,
+		apszBodyTbl[] = {
+			"IDP_BODY_BST", "IDP_BODY_BST_EAR",
+			"IDP_BODY_DRK", "IDP_BODY_DRK_EAR",
+			"IDP_BODY_ELF", "IDP_BODY_ELF_EAR",
+			"IDP_BODY_HUM", NULL,
+			NULL, NULL
+		};
 
 	if (!FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
 #if defined(__EMSCRIPTEN__)
@@ -850,6 +872,102 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 	SBOP2_DebugMarkGrpLoad(1, bSystemExists ? 1 : 0, bSystemRead ? 1 : 0,
 		bTitleExists ? 1 : 0, bTitleBackExists ? 1 : 0, bTitleCloudExists ? 1 : 0);
 #endif
+
+	// キャラ選択画面で必要なキャラクター画像をロード
+	// （DLL なしのブラウザ版でも Load() の代わりにファイルから読み込む）
+	// 体・耳
+	for (i = 0; ; i += 2) {
+		pszTmp = apszBodyTbl[i];
+		if (pszTmp == NULL) {
+			break;
+		}
+		pImg	= new CImg32;
+		bResult	= Read256(pszTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgBody->Add(pImg);
+
+		pImg = NULL;
+		// 耳
+		pszTmp = apszBodyTbl[i + 1];
+		if (pszTmp) {
+			pImg	= new CImg32;
+			bResult	= Read256(pszTmp, &pImg, 1);
+			if (bResult == FALSE) {
+				delete pImg;
+				pImg = NULL;
+			}
+		}
+		m_paImgEar->Add(pImg);
+	}
+	// 服
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_CLOTH_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgCloth->Add(pImg);
+	}
+	// 目
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_EYE_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgEye->Add(pImg);
+	}
+	// 髪(下)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_HAIR_D%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgHairD->Add(pImg);
+	}
+	// 髪(上)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_HAIR_U%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgHairU->Add(pImg);
+	}
+	// 特殊服
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_CLOTH_SP%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgSP->Add(pImg);
+	}
+	// アクセサリ
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_ACCE_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgAcce->Add(pImg);
+	}
 
 	return bLoaded;
 }
