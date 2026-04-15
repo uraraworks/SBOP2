@@ -3,7 +3,9 @@
 
 #include "stdafx.h"
 #include <imgui.h>
+#if defined(_WIN32)
 #include <windows.h>
+#endif
 #include <string>
 #include "ImGuiMsgLog.h"
 #include "MgrData.h"
@@ -17,7 +19,7 @@ static std::string Utf8ToSjis(const char *pszUtf8)
     if (pszUtf8 == NULL || pszUtf8[0] == '\0') {
         return std::string();
     }
-
+#if defined(_WIN32)
     // UTF-8 → UTF-16
     int nWideLen = MultiByteToWideChar(CP_UTF8, 0, pszUtf8, -1, NULL, 0);
     if (nWideLen <= 0) {
@@ -40,6 +42,10 @@ static std::string Utf8ToSjis(const char *pszUtf8)
     }
 
     return sjis;
+#else
+    // ブラウザ版：サーバは UTF-8 を直接受け付けるため変換不要
+    return std::string(pszUtf8);
+#endif
 }
 
 /// @brief SJIS (CP932) 文字列を UTF-8 に変換する
@@ -50,7 +56,7 @@ static std::string SjisToUtf8(const char *pszSjis)
     if (pszSjis == NULL || pszSjis[0] == '\0') {
         return std::string();
     }
-
+#if defined(_WIN32)
     // SJIS → UTF-16
     int nWideLen = MultiByteToWideChar(CP_ACP, 0, pszSjis, -1, NULL, 0);
     if (nWideLen <= 0) {
@@ -73,6 +79,10 @@ static std::string SjisToUtf8(const char *pszSjis)
     }
 
     return utf8;
+#else
+    // ブラウザ版：受信データはすでに UTF-8 のため変換不要
+    return std::string(pszSjis);
+#endif
 }
 
 CImGuiMsgLog::CImGuiMsgLog()
