@@ -160,51 +160,6 @@ void CMgrData::Create(
 	m_pMainFrame	= pMainFrame;
 	m_pMgrGrpData	= pMgrGrpData;
 
-#if !defined(_WIN32)
-	// ブラウザ版: ログインフローに必要な LibInfo 群を生成する。
-	// Map/System/Skill 系はまだ Web ビルドに .cpp が入っていないので除外。
-	m_pInfoAccount			= new CInfoAccount;
-	m_pInfoTalkEvent		= new CInfoTalkEvent;
-	m_pMgrSound				= new CMgrSound;
-	m_pMgrDraw				= new CMgrDraw;
-	m_pMgrLayer				= new CMgrLayer;
-	m_pMgrWindow			= new CMgrWindow;
-	m_pMgrKeyInput			= new CMgrKeyInput;
-	m_pLibInfoChar			= new CLibInfoCharCli;
-	m_pLibInfoItem			= new CLibInfoItem;
-	m_pLibInfoItemType		= new CLibInfoItemType;
-	m_pLibInfoItemWeapon	= new CLibInfoItemWeapon;
-	m_pLibInfoEffect		= new CLibInfoEffect;
-	m_pLibInfoMotion		= new CLibInfoMotion;
-	m_pLibInfoMotionType	= new CLibInfoMotionType;
-	m_pLibInfoEfcBalloon	= new CLibInfoEfcBalloon;
-	m_pLibInfoCharOnline	= new CLibInfoCharCli;
-
-	ReadIniData();
-
-	m_pMgrSound->			Create();
-	m_pMgrDraw->			Create(this);
-	m_pMgrLayer->			Create(this);
-	m_pMgrWindow->			Create(this);
-	m_pMgrKeyInput->		Create();
-	m_pLibInfoChar->		Create(this);
-	m_pLibInfoItem->		Create();
-	m_pLibInfoItemType->	Create();
-	m_pLibInfoItemWeapon->	Create();
-	m_pLibInfoEffect->		Create();
-	m_pLibInfoMotion->		Create();
-	m_pLibInfoMotionType->	Create();
-	m_pLibInfoEfcBalloon->	Create();
-	m_pLibInfoCharOnline->	Create(this);
-
-	m_pLibInfoItem->SetTypeInfo(m_pLibInfoItemType);
-	m_pLibInfoItem->SetWeaponInfo(m_pLibInfoItemWeapon);
-
-	m_pMgrSound->SetBGMVolume(m_nBGMVolume);
-	m_pMgrSound->SetSEVolume(m_nSEVolume);
-	return;
-#else
-
 	m_pInfoAccount			= new CInfoAccount;
 	m_pInfoTalkEvent		= new CInfoTalkEvent;
 	m_pMgrSound				= new CMgrSound;
@@ -259,7 +214,6 @@ void CMgrData::Create(
 
 	m_pMgrSound->SetBGMVolume(m_nBGMVolume);
 	m_pMgrSound->SetSEVolume(m_nSEVolume);
-#endif
 }
 
 
