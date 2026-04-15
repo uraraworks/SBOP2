@@ -227,6 +227,8 @@ BOOL CStateProcLOGINMENU::OnZ(BOOL bDown)
 
 	m_pWindowLOGINMENU->SetActive(TRUE);
 	m_pWindowLOGINMENU->SetInput(TRUE);
+	// IsKeyInput() が TRUE を返すよう m_bKeyInput を再計算する
+	m_pMgrWindow->SetActive();
 
 	m_nSelect = 0;
 	m_nState = STATE_MENU;
@@ -269,6 +271,9 @@ void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
 		m_nState = STATE_SELECTPLAYCHAR;
 		m_pWindowLOGINMENU->SetActive(FALSE);
 		m_pWindowLOGINMENU->SetInput(FALSE);
+		// SetActive()/SetInput() は WindowBase のフラグを変えるだけなので、
+		// MgrWindow 側の m_bKeyInput を再計算して IsKeyInput() が FALSE を返すよう更新する
+		m_pMgrWindow->SetActive();
 		pLayer = (PCLayerCharSelect)m_pMgrLayer->Get(LAYERTYPE_CHARSELECT);
 		pLayer->SetSelect(0);
 		break;

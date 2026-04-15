@@ -123,9 +123,10 @@ public:
 	void MakeWindowSKILLMENU(int nType = -1);								// スキルメニュー
 	void MakeWindowPLACEINFORMATION(void);									// 場所情報
 
+	void SetActive(void);							// アクティブなウィンドウの再計算（m_bKeyInput 更新）
+
 
 private:
-	void SetActive(void);							// アクティブなウィンドウの設定
 
 
 private:
