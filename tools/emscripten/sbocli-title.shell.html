@@ -496,7 +496,7 @@
       },
       printErr(...args) {
         const text = args.join(' ');
-        console.error(text);
+        console.warn(text);
         if (outputElement) {
           outputElement.value += text + '\n';
           outputElement.scrollTop = outputElement.scrollHeight;

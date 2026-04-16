@@ -209,7 +209,7 @@ BOOL CStateProcLOGINMENU::OnX(BOOL bDown)
 {
 	PCLayerCharSelect pLayer;
 
-	if (bDown) {
+	if (!bDown) {
 		return FALSE;
 	}
 

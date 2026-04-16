@@ -300,6 +300,8 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	PacketMAP_SYSTEMMSG.Make(strTmp, 0, FALSE);
 	m_pSock->SendTo(dwSessionID, &PacketMAP_SYSTEMMSG);
 
+	pInfoChar->m_bProcMoveMapIn = TRUE;
+
 Exit:
 	SAFE_DELETE_ARRAY(pTmp);
 }
