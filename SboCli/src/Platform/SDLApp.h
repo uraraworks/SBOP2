@@ -33,6 +33,7 @@ public:
 #if defined(__EMSCRIPTEN__)
 	void	RequestBrowserRedraw(void);
 #endif
+	BYTE	GetFps(void) const { return m_byFpsLast; }
 
 private:
 	void	RunFrame(void);
@@ -51,6 +52,7 @@ private:
 	BOOL		m_bInitialized;	// SDL初期化済みフラグ
 	IGameLoopHost *m_pHost;		// 実行中ホスト
 	BYTE		m_byFps;		// FPSカウンタ
+	BYTE		m_byFpsLast;		// 直近1秒間のFPS値
 	DWORD		m_dwUpdateInterval;	// 更新間隔
 	DWORD		m_dwRenderInterval;	// 描画間隔
 	DWORD		m_dwAccumulated;	// 固定更新残り時間

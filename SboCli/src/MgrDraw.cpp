@@ -199,13 +199,17 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 
 		aCanvasRgba.resize((size_t)nWidth * (size_t)nHeight * 4);
 		for (int y = 0; y < nHeight; ++y) {
-			const BYTE *pSrcRow = pSrc + ((size_t)(nFullHeight - 1 - (32 + y)) * (size_t)nFullWidth + 32) * 4;
-			unsigned char *pDstRow = &aCanvasRgba[(size_t)y * (size_t)nWidth * 4];
+			const uint32_t *pSrcRow = reinterpret_cast<const uint32_t *>(
+				pSrc + ((size_t)(nFullHeight - 1 - (32 + y)) * (size_t)nFullWidth + 32) * 4);
+			uint32_t *pDstRow = reinterpret_cast<uint32_t *>(
+				&aCanvasRgba[(size_t)y * (size_t)nWidth * 4]);
 			for (int x = 0; x < nWidth; ++x) {
-				pDstRow[x * 4 + 0] = pSrcRow[x * 4 + 2];
-				pDstRow[x * 4 + 1] = pSrcRow[x * 4 + 1];
-				pDstRow[x * 4 + 2] = pSrcRow[x * 4 + 0];
-				pDstRow[x * 4 + 3] = 255;
+				// BGRA → RGBA: R と B を入れ替え、A=0xFF 固定
+				uint32_t px = pSrcRow[x];
+				pDstRow[x] = (px & 0x0000FF00u)           // G そのまま
+				           | ((px & 0x00FF0000u) >> 16)    // B → R
+				           | ((px & 0x000000FFu) << 16)    // R → B
+				           | 0xFF000000u;                  // A=255
 			}
 		}
 

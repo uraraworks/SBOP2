@@ -445,18 +445,15 @@ $objects = foreach ($source in $sources) {
 }
 
 $linkArgs = @(
+    "-O2",
     "-sUSE_SDL=2",
     "-sUSE_SDL_TTF=2",
     "-sALLOW_MEMORY_GROWTH=1",
-    "-sASSERTIONS=2",
-    "-sSAFE_HEAP=1",
-    "-sSTACK_OVERFLOW_CHECK=2",
+    "-sASSERTIONS=0",
     "-sSTACK_SIZE=2097152",
     "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','HEAPU8']",
     "-sEXPORTED_FUNCTIONS=['_main','_malloc','_free']",
     "-sDISABLE_EXCEPTION_CATCHING=0",
-    # wasm の関数名をスタックトレースに残して診断しやすくする
-    "--profiling-funcs",
     "-lwebsocket",
     "-sENVIRONMENT=web",
     "-Wl,--error-limit=0",

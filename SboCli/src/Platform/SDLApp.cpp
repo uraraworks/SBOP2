@@ -22,6 +22,16 @@
 #endif
 #include "UraraSockTCP.h"
 
+#if defined(__EMSCRIPTEN__)
+// DOM 上の FPS 表示を更新する
+EM_JS(void, updateFpsDisplay, (int fps, int drawMs), {
+    var el = document.getElementById('fpsDisplay');
+    if (el) {
+        el.textContent = 'FPS: ' + fps + '  DrawTime: ' + drawMs + 'ms';
+    }
+});
+#endif
+
 
 // Constants
 
@@ -90,11 +100,16 @@ static BOOL ShouldBridgeWin32QuitMessage(HWND hMainWnd, const MSG &msg)
 
 #endif
 
+// グローバル FPS カウンタ（ImGuiDbg から参照）
+BYTE g_byFpsLast = 0;
+DWORD g_dwDrawTimeLast = 0;
+
 CSDLApp::CSDLApp()
 {
 	m_bInitialized = FALSE;
 	m_pHost = NULL;
 	m_byFps = 0;
+	m_byFpsLast = 0;
 	m_dwUpdateInterval = 0;
 	m_dwRenderInterval = 0;
 	m_dwAccumulated = 0;
@@ -453,9 +468,10 @@ void CSDLApp::RunFrame(void)
 #if defined(__EMSCRIPTEN__)
 			// Emscripten版: canvas 2D は MgrDraw::Draw が putImageData で直接描画するため、
 			// SDL_RenderClear / ImGui描画 / SDL_RenderPresent はすべてスキップする。
-			// （SDL_RenderPresent が SDL renderer の黒バッファで canvas を上書きしてしまう問題を回避）
-			if (pRenderer != NULL) {
+			{
+				DWORD dwDrawStart = SDL_GetTicks();
 				m_pHost->OnDraw(pRenderer);
+				g_dwDrawTimeLast = SDL_GetTicks() - dwDrawStart;
 			}
 #else
 			if (pRenderer != NULL) {
@@ -484,6 +500,11 @@ void CSDLApp::RunFrame(void)
 
 	if (dwTimeTmp - m_dwTimeStart >= 1000)
 	{
+		m_byFpsLast = m_byFps;
+		g_byFpsLast = m_byFpsLast;
+#if defined(__EMSCRIPTEN__)
+		updateFpsDisplay((int)m_byFpsLast, (int)g_dwDrawTimeLast);
+#endif
 		m_byFps = 0;
 		m_dwTimeStart = dwTimeTmp;
 	}

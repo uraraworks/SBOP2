@@ -8,6 +8,9 @@
 #include "UraraSockTCPSBO.h"
 #include "InfoCharCli.h"
 
+// SDLApp.cpp で定義されたグローバル FPS カウンタ
+extern BYTE g_byFpsLast;
+
 CImGuiDbg::CImGuiDbg()
     : m_pMgrData(NULL)
     , m_pSock(NULL)
@@ -42,7 +45,7 @@ void CImGuiDbg::Draw()
 
     ImGui::Text(u8"オンライン：%d", m_pMgrData->GetOnlineCount());
     ImGui::Text(u8"キャラ数：%d", m_pMgrData->GetCharCount());
-    ImGui::Text(u8"Ping：%dms 描画時間:%4dms", m_pMgrData->GetPing(), m_pMgrData->GetDrawTime());
+    ImGui::Text(u8"FPS：%d  Ping：%dms 描画時間:%4dms", (int)g_byFpsLast, m_pMgrData->GetPing(), m_pMgrData->GetDrawTime());
 
     PCInfoCharCli pChar = m_pMgrData->GetPlayerChar();
     if (pChar != NULL) {
