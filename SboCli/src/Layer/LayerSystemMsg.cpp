@@ -97,7 +97,11 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 		}
 	}
 
-        CString strMsg = AnsiToTString(pszMsg);
+        // pszMsg は CmyString::operator LPCSTR() 経由で渡るため Win32 では SJIS、
+        // ブラウザ版では WideCharToMultiByte スタブの都合で UTF-8。
+        // Utf8ToTString は UTF-8 を優先しつつ失敗時に CP932 にフォールバックするので
+        // 両プラットフォームで正しく wchar_t へ変換できる。
+        CString strMsg = Utf8ToTString(pszMsg);
         nLen = strMsg.GetLength();
         pInfo->pImg->Create(nLen * 14 + 1, 14);
 

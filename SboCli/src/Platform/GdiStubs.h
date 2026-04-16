@@ -203,12 +203,12 @@ inline BOOL GetTextExtentPoint32W(HDC hDC, LPCWSTR lpString, int c, LPSIZE psizl
 inline BOOL GetTextExtentPoint32A(HDC hDC, LPCSTR lpString, int c, LPSIZE psizl)
 {
 	if (!psizl) return FALSE;
-	// ANSI文字列をワイド文字に変換してGetTextExtentPoint32に委譲
+	// Win32 版の A 系 API は SJIS(CP932) を想定する。CP_ACP で変換する。
 	if (lpString && c > 0) {
-		int wlen = MultiByteToWideChar(CP_UTF8, 0, lpString, c, NULL, 0);
+		int wlen = MultiByteToWideChar(CP_ACP, 0, lpString, c, NULL, 0);
 		if (wlen > 0) {
 			std::vector<wchar_t> wbuf(wlen);
-			MultiByteToWideChar(CP_UTF8, 0, lpString, c, wbuf.data(), wlen);
+			MultiByteToWideChar(CP_ACP, 0, lpString, c, wbuf.data(), wlen);
 			return GetTextExtentPoint32(hDC, wbuf.data(), wlen, psizl);
 		}
 	}

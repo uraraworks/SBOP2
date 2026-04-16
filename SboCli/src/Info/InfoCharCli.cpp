@@ -708,7 +708,7 @@ void CInfoCharCli::MakeCharGrp(void)
 
 void CInfoCharCli::SetName(LPCSTR pszName)
 {
-	int i, nCount, nLen, x;
+	int i, nCount, x;
 	HDC hDCTmp;
 	PCImg32 pDibSystem;
 
@@ -723,8 +723,17 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 	x	= 0;
 	nCount	= m_abyMark.size();
 
+	// pszName は CmyString::operator LPCSTR() 経由で渡るため、Win32 では CP932(SJIS)、
+	// ブラウザ版では WideCharToMultiByte スタブの都合で UTF-8 が返る。
+	// 描画側でどちらを受けても文字化けしないよう、ここでは CmyString の wchar_t を
+	// 直接使って描画し、幅も文字数ベースで計算する。
+	LPCTSTR pszWide = (LPCTSTR)m_strCharName;
+	int nDrawLen = (pszWide != NULL) ? static_cast<int>(_tcslen(pszWide)) : 0;
+	// 幅は 12px/文字（Win32 の 2byte/文字 * 6px と同等）
+	int nNameW = nDrawLen * 12 + 2;
+
 	m_pDibName = new CImg32;
-	m_pDibName->Create(strlen(pszName) * 6 + 2 + (nCount * 16), 16);
+	m_pDibName->Create(nNameW + (nCount * 16), 16);
 	m_pDibName->Clear();
 
 	hDCTmp = m_pDibName->Lock();
@@ -734,24 +743,21 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 		x += 16;
 	}
 
-        nLen = static_cast<int>(strlen(pszName));
-        CString strText = AnsiToTString(pszName);
-        int nDrawLen = strText.GetLength();
-        {
-            SdlDCContext* ctx = SdlDCGet(hDCTmp);
-            if (ctx) {
-                ctx->currentFont = (void*)m_hFont;
-                // 縁取り 4 方向
-                ctx->textColor = (unsigned long)RGB(10, 10, 10);
-                SdlFontTextOut(hDCTmp, x + 0, 2, strText, nDrawLen);
-                SdlFontTextOut(hDCTmp, x + 2, 2, strText, nDrawLen);
-                SdlFontTextOut(hDCTmp, x + 1, 1, strText, nDrawLen);
-                SdlFontTextOut(hDCTmp, x + 1, 3, strText, nDrawLen);
-                // 本体
-                ctx->textColor = (unsigned long)m_clName;
-                SdlFontTextOut(hDCTmp, x + 1, 2, strText, nDrawLen);
-            }
-        }
+	if (pszWide != NULL && nDrawLen > 0) {
+		SdlDCContext* ctx = SdlDCGet(hDCTmp);
+		if (ctx) {
+			ctx->currentFont = (void*)m_hFont;
+			// 縁取り 4 方向
+			ctx->textColor = (unsigned long)RGB(10, 10, 10);
+			SdlFontTextOut(hDCTmp, x + 0, 2, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + 2, 2, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + 1, 1, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + 1, 3, pszWide, nDrawLen);
+			// 本体
+			ctx->textColor = (unsigned long)m_clName;
+			SdlFontTextOut(hDCTmp, x + 1, 2, pszWide, nDrawLen);
+		}
+	}
 
 	m_pDibName->Unlock();
 }
@@ -759,11 +765,8 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 
 void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 {
-	char szTmp[32];
-	BOOL bResult;
-	int nPos, nLen, nLenTmp, nCount, nWidth, nHeight, nLine;
+	int nPos, nLen, nWidth, nHeight, nLine;
 	HDC hDCTmp;
-	CmyString strSpeak1, strSpeak2;
 
 	SAFE_DELETE(m_pDibSpeak);
 	CInfoCharBase::SetSpeak(pszSpeak);
@@ -771,68 +774,53 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	if (pszSpeak == NULL) {
 		return;
 	}
-	nLen = strlen(pszSpeak);
+
+	// pszSpeak のバイト長ではなく m_strSpeak(wchar_t) の文字数で折り返し計算する。
+	// ブラウザ版では pszSpeak が UTF-8 になる可能性があり、IsDBCSLeadByte による
+	// SJIS 前提の分割が使えないため wchar_t ベースに統一する。
+	LPCTSTR pszWide = (LPCTSTR)m_strSpeak;
+	nLen = (pszWide != NULL) ? static_cast<int>(_tcslen(pszWide)) : 0;
 	if (nLen <= 0) {
 		return;
 	}
 
+	// 1 行あたり 10 全角文字（= 20 半角相当）なので wchar_t で 10 文字単位に分割する
+	const int CHARS_PER_LINE = 10;
+
 	// 画像作成準備
 	nPos	= 0;
 	nLine	= 0;
-	nWidth	= (nLen > 20) ? 20 : nLen;
-	nHeight = nLen / 20 + 1;
-	if (nLen % 20 == 0) {
-		// 改行丁度の文字数の場合は画像サイズを1行分減らす
-		nHeight --;
-		nHeight = max(nHeight, 1);
-	}
+	nWidth	= (nLen > CHARS_PER_LINE) ? CHARS_PER_LINE : nLen;
+	nHeight = (nLen + CHARS_PER_LINE - 1) / CHARS_PER_LINE;
+	nHeight = max(nHeight, 1);
 
 	m_pDibSpeak = new CImg32;
-	m_pDibSpeak->Create((nWidth + 1) * 6 + 2, nHeight * 14);
+	m_pDibSpeak->Create((nWidth * 2 + 1) * 6 + 2, nHeight * 14);
 	m_pDibSpeak->Clear();
 
 	hDCTmp = m_pDibSpeak->Lock();
 
-	// 全角10文字単位で1行ずつ画像を作成
-	while (1) {
-		ZeroMemory(szTmp, sizeof (szTmp));
-		// 1行分の文字列を作成
-		for (nCount = 0; nCount < 20; nCount ++) {
-			if (nPos + nCount >= nLen) {
-				break;
-			}
-			szTmp[nCount] = pszSpeak[nPos + nCount];
-			bResult = IsDBCSLeadByte(pszSpeak[nPos + nCount]);
-			if (bResult) {
-				// 全角文字の先頭バイトの時は後ろの1バイトも追加
-				nCount ++;
-				szTmp[nCount] = pszSpeak[nPos + nCount];
-			}
+	while (nPos < nLen) {
+		int nChunk = nLen - nPos;
+		if (nChunk > CHARS_PER_LINE) {
+			nChunk = CHARS_PER_LINE;
 		}
-                nLenTmp = strlen(szTmp);
-                nPos += nCount;
-                if (nLenTmp > 0) {
-                        CString strLine = AnsiToTString(szTmp);
-                        int nDrawLenTmp = strLine.GetLength();
-                        SdlDCContext* ctx = SdlDCGet(hDCTmp);
-                        if (ctx) {
-                            ctx->currentFont = (void*)m_hFont;
-                            // 縁取り 4 方向
-                            ctx->textColor = (unsigned long)RGB(10, 10, 10);
-                            SdlFontTextOut(hDCTmp, 0, 1 + nLine * 14, strLine, nDrawLenTmp);
-                            SdlFontTextOut(hDCTmp, 2, 1 + nLine * 14, strLine, nDrawLenTmp);
-                            SdlFontTextOut(hDCTmp, 1, 0 + nLine * 14, strLine, nDrawLenTmp);
-                            SdlFontTextOut(hDCTmp, 1, 2 + nLine * 14, strLine, nDrawLenTmp);
-                            // 本体
-                            ctx->textColor = (unsigned long)m_clSpeak;
-                            SdlFontTextOut(hDCTmp, 1, 1 + nLine * 14, strLine, nDrawLenTmp);
-                        }
-                        nLine ++;
-                }
-
-		if (nPos >= nLen) {
-			break;
+		LPCTSTR pLine = pszWide + nPos;
+		SdlDCContext* ctx = SdlDCGet(hDCTmp);
+		if (ctx) {
+			ctx->currentFont = (void*)m_hFont;
+			// 縁取り 4 方向
+			ctx->textColor = (unsigned long)RGB(10, 10, 10);
+			SdlFontTextOut(hDCTmp, 0, 1 + nLine * 14, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, 2, 1 + nLine * 14, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, 1, 0 + nLine * 14, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, 1, 2 + nLine * 14, pLine, nChunk);
+			// 本体
+			ctx->textColor = (unsigned long)m_clSpeak;
+			SdlFontTextOut(hDCTmp, 1, 1 + nLine * 14, pLine, nChunk);
 		}
+		nPos += nChunk;
+		nLine ++;
 	}
 
 	m_pDibSpeak->Unlock();

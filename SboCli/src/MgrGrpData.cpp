@@ -1120,6 +1120,40 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 		}
 	}
 
+	// Phase 12: マップ描画に必要なアセットを追加ロード
+	// マップパーツ
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_MAP_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgMapParts->Add(pImg);
+	}
+	m_nMapPartsCount = i;
+	// マップ影
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_MAPSHADOW_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgMapShadow->Add(pImg);
+	}
+	m_nMapShadowCount = i;
+	// アイコン（CLayerMap::DrawSystemIcon が参照）
+	Read256("IDP_ICON", &m_pImgIcon, 1);
+	// アイテム画像
+	Read256("IDP_ITEM_01", &m_pImgItem, 1);
+	// 数字（ゲージ等で使用）
+	Read256("IDP_NUM_S", &m_pImgNumS, 1);
+	Read256("IDP_NUM_M", &m_pImgNumM, 1);
+	Read256("IDP_NUM_L", &m_pImgNumL, 1);
+
 	return bLoaded;
 }
 

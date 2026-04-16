@@ -5,6 +5,10 @@
 #if !defined(_WINDLL)
 
 #include "SdlFont.h"
+#if !defined(_WIN32)
+#include "TCharCompat.h"
+#endif
+#include "SjisConvert.h"
 #include <cstdlib>
 #include <cstring>
 #include <cwchar>
@@ -27,12 +31,18 @@ static uintptr_t s_nextFontId = 1;
 static uintptr_t s_nextDCId = 1;
 
 // ワイド文字列→UTF-8変換
+// Emscripten では wchar_t が 32bit (UTF-32) のため codecvt_utf8_utf16 は使えない。
+// Win32 版は 16bit (UTF-16) だが WstringToUtf8 はサロゲートペアも扱えるので両対応。
 static std::string WideToUtf8(const wchar_t* pStr, int nLen)
 {
     if (!pStr || nLen <= 0) return std::string();
+#if defined(_WIN32)
     std::wstring ws(pStr, nLen);
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
     return converter.to_bytes(ws);
+#else
+    return WstringToUtf8(pStr, static_cast<size_t>(nLen));
+#endif
 }
 
 // フォントシステム初期化
@@ -254,8 +264,11 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
     TTF_Font* pFont = GetTTFFont(ctx->currentFont);
     if (!pFont) return false;
 
-    // nLen文字分をコピー
-    std::string text(pStr, nLen);
+    // Win32 版と同じく pStr は SJIS(CP932) 前提。TTF_RenderUTF8_Blended は
+    // UTF-8 を要求するため、SJIS → wstring → UTF-8 で変換してから渡す。
+    std::wstring wstr = SjisToWstring(pStr, nLen);
+    if (wstr.empty()) return false;
+    std::string text = WideToUtf8(wstr.c_str(), (int)wstr.size());
     if (text.empty()) return false;
 
     SDL_Color color;
