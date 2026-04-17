@@ -228,6 +228,15 @@ void CLibInfoCharSvr::LogIn(
 	pChar->m_strSpeak.Empty();
 	pChar->m_ptCharBack.x = pChar->m_nMapX;
 	pChar->m_ptCharBack.y = pChar->m_nMapY;
+	// クライアントの timeGetTime() はブラウザリロード等で 0 にリセットされるため、
+	// サーバー側に残った最終時刻と比較すると正当なパケットが「時刻逆行」と判定されてしまう。
+	// 新規ログイン時に時刻系フィールドをリセットする。
+	pChar->m_dwLastTimeMove = 0;
+	{
+		PCInfoCharSvr pCharSvr = (PCInfoCharSvr)pChar;
+		pCharSvr->m_dwLastRecvMovePacketTime = 0;
+		pCharSvr->m_dwLastMoveSyncSendTime = 0;
+	}
 	m_paInfoLogin->push_back(pChar);
 }
 

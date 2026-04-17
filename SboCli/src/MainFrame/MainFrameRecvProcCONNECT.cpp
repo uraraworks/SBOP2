@@ -5,8 +5,6 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "Packet.h"
@@ -79,7 +77,6 @@ void CMainFrame::RecvProcCONNECT_RES_PLAY(PBYTE pData)
 	CPacketCONNECT_RES_PLAY Packet;
 
 	Packet.Set(pData);
-	SDL_Log("[RES_PLAY] Result=%d -> ChgGameState(GAMESTATE_MAP)", Packet.m_nResult);
 
 	switch (Packet.m_nResult) {
 	case PLAYRES_ADMINLEVEL_ALL: // 管理者(全権限)

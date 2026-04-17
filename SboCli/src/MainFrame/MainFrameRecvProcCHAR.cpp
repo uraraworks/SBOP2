@@ -5,8 +5,6 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
 #include "SboCli_priv.h"
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
@@ -222,7 +220,6 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 
 	pInfoAccount = m_pMgrData->GetAccount();
 	if (pInfoAccount->m_dwCharID == Packet.m_pInfo->m_dwCharID) {
-		SDL_Log("[RES_CHARINFO] SetPlayerChar CharID=%u", pInfoChar->m_dwCharID);
 		m_pMgrData->SetPlayerChar(pInfoChar);
 	}
 
@@ -273,7 +270,6 @@ void CMainFrame::RecvProcCHAR_CHARINFO(PBYTE pData)
 	Packet.Set(pData);
 
 	nCount = Packet.m_pLibInfo->GetCount();
-	SDL_Log("[CHARINFO] 受信キャラ数=%d", nCount);
 	for (i = 0; i < nCount; i++) {
 		pInfoCharTmp = (PCInfoCharCli)Packet.m_pLibInfo->GetPtr(i);
 
@@ -289,13 +285,11 @@ void CMainFrame::RecvProcCHAR_CHARINFO(PBYTE pData)
 		} else {
 			pInfoChar->Copy(pInfoCharTmp);
 		}
-		SDL_Log("[CHARINFO] 追加 CharID=%u MoveType=%d", pInfoCharTmp->m_dwCharID, pInfoCharTmp->m_nMoveType);
 		pInfoChar->MakeCharGrp();
 		m_pLibInfoChar->RenewMotionInfo(pInfoChar);
 	}
 	// 重なり調整
 	m_pLibInfoChar->SortY();
-	SDL_Log("[CHARINFO] 総キャラ数=%d", m_pLibInfoChar->GetCount());
 
 	PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
 	if (nCount == 1) {

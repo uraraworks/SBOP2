@@ -5,8 +5,6 @@
 /// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "Packet.h"
@@ -62,7 +60,6 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 	CPacketMAP_RES_MAPINFO Packet;
 
 	Packet.Set(pData);
-	SDL_Log("[MAP_RES_MAPINFO] MapID=%u", Packet.m_pInfo->m_dwMapID);
 
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(Packet.m_pInfo->m_dwMapID);
 	if (pInfoMap == NULL) {
@@ -74,10 +71,8 @@ void CMainFrame::RecvProcMAP_RES_MAPINFO(PBYTE pData)
 	}
 
 	pInfoChar = m_pMgrData->GetPlayerChar();
-	SDL_Log("[MAP_RES_MAPINFO] PlayerChar=%p, MapID=%u", (void*)pInfoChar, pInfoChar ? pInfoChar->m_dwMapID : 0u);
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
 	if (pInfoMap) {
-		SDL_Log("[MAP_RES_MAPINFO] RenewMapEvent MapID=%u", pInfoMap->m_dwMapID);
 		m_pMgrData->SetMap(pInfoMap);
 		pInfoMap->RenewMapEvent();
 		m_pLibInfoChar->DeleteOutScreen(pInfoChar, TRUE);

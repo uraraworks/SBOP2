@@ -300,7 +300,10 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	PacketMAP_SYSTEMMSG.Make(strTmp, 0, FALSE);
 	m_pSock->SendTo(dwSessionID, &PacketMAP_SYSTEMMSG);
 
-	pInfoChar->m_bProcMoveMapIn = TRUE;
+	// MoveMapIn を直接呼んで NPC 情報送信とマップイベント初期化を確実に実行する。
+	// ProcLocalFlgCheck の else if 連鎖では m_bProcMoveMapIn に到達する前に
+	// 他のフラグが優先されて走らないことがあるため、フラグ経由ではなく直接呼ぶ。
+	m_pLibInfoChar->MoveMapIn(pInfoChar);
 
 Exit:
 	SAFE_DELETE_ARRAY(pTmp);

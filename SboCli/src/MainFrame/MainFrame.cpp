@@ -1277,10 +1277,6 @@ void CMainFrame::FlushPendingSocketMessages(void)
 		std::lock_guard<std::mutex> lock(m_mtxSocketNotify);
 		aNotify.swap(m_aPendingSocketNotify);
 	}
-	if (!aNotify.empty()) {
-		SDL_Log("[Flush] パケット数=%d", (int)aNotify.size());
-	}
-
 	while (!aNotify.empty()) {
 		const SocketNotify stNotify = aNotify.front();
 		aNotify.pop_front();

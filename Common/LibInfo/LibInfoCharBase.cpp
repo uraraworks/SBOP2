@@ -445,9 +445,12 @@ BOOL CLibInfoCharBase::IsScreenInside(
 	if (pCharBase->m_dwMapID != pCharTarget->m_dwMapID) {
 		goto Exit;
 	}
+	// Phase 8: m_nMapX/Y は px 単位。旧判定 (DRAW_PARTS_* * 2) は旧座標系向けで
+	// 現状ほぼ自キャラしか含まれず、ゲーム開始時の周辺キャラ情報送信に NPC が乗らない。
+	// GetScreenCharID と同じ px ベース判定に揃える。
 	if (!(
-		(abs(pCharBase->m_nMapX - pCharTarget->m_nMapX) < DRAW_PARTS_X * 2) &&
-		(abs(pCharBase->m_nMapY - pCharTarget->m_nMapY) < DRAW_PARTS_Y * 2))) {
+		(abs(pCharBase->m_nMapX - pCharTarget->m_nMapX) < DRAW_PARTS_X * MAPPARTSSIZE) &&
+		(abs(pCharBase->m_nMapY - pCharTarget->m_nMapY) < DRAW_PARTS_Y * MAPPARTSSIZE))) {
 		goto Exit;
 	}
 
