@@ -23,11 +23,17 @@
 #include "UraraSockTCP.h"
 
 #if defined(__EMSCRIPTEN__)
-// DOM 上の FPS 表示を更新する
-EM_JS(void, updateFpsDisplay, (int fps, int drawMs), {
+// DOM 上の FPS 表示を更新する（秒間呼出し回数・1秒内最大時間・レイヤー・Swizzle・Present の各区間 ms を含む）
+EM_JS(void, updateFpsDisplay,
+      (int fps, int mlps, int ofps, int maxRf, int maxDraw, int layerMs, int swizzleMs, int presentMs), {
     var el = document.getElementById('fpsDisplay');
     if (el) {
-        el.textContent = 'FPS: ' + fps + '  DrawTime: ' + drawMs + 'ms';
+        el.textContent = 'FPS:' + fps +
+            ' ML/s:' + mlps +
+            ' OF/s:' + ofps +
+            ' MaxRF:' + maxRf + 'ms' +
+            ' MaxD:' + maxDraw + 'ms' +
+            '(L:' + layerMs + ' S:' + swizzleMs + ' P:' + presentMs + ')';
     }
 });
 #endif
@@ -103,6 +109,13 @@ static BOOL ShouldBridgeWin32QuitMessage(HWND hMainWnd, const MSG &msg)
 // グローバル FPS カウンタ（ImGuiDbg から参照）
 BYTE g_byFpsLast = 0;
 DWORD g_dwDrawTimeLast = 0;
+DWORD g_dwDrawLayerMs = 0;    // レイヤー合成時間（ms）
+DWORD g_dwDrawSwizzleMs = 0;  // BGRA→RGBA 変換時間（ms）
+DWORD g_dwDrawPresentMs = 0;  // Present 時間（ms）
+DWORD g_dwMainLoopCallsPerSec = 0;  // MainLoopThunk の秒間呼出し回数
+DWORD g_dwOnFrameCallsPerSec = 0;   // OnFrame (ゲーム更新) の秒間呼出し回数
+DWORD g_dwMaxRunFrameMs = 0;        // 1秒内の最大 RunFrame 時間
+DWORD g_dwMaxDrawMs = 0;            // 1秒内の最大 OnDraw 時間
 
 CSDLApp::CSDLApp()
 {
@@ -120,6 +133,10 @@ CSDLApp::CSDLApp()
 	m_bQuit = FALSE;
 	m_bDestroyCalled = FALSE;
 	m_bImGuiInitialized = FALSE;
+	m_dwMainLoopCallCount = 0;
+	m_dwOnFrameCallCount = 0;
+	m_dwMaxRunFrameThisSec = 0;
+	m_dwMaxDrawThisSec = 0;
 }
 
 CSDLApp::~CSDLApp()
@@ -442,6 +459,7 @@ void CSDLApp::RunFrame(void)
 		while ((m_dwAccumulated >= m_dwUpdateInterval) && (dwFrameSkip < MAX_FRAME_SKIP))
 		{
 			m_dwAccumulated -= m_dwUpdateInterval;
+			m_dwOnFrameCallCount++;  // 秒間 OnFrame 呼出し回数カウント
 			if (m_pHost->OnFrame()) {
 				m_bDrawPending = TRUE;
 			}
@@ -472,6 +490,9 @@ void CSDLApp::RunFrame(void)
 				DWORD dwDrawStart = SDL_GetTicks();
 				m_pHost->OnDraw(pRenderer);
 				g_dwDrawTimeLast = SDL_GetTicks() - dwDrawStart;
+				if (g_dwDrawTimeLast > m_dwMaxDrawThisSec) {
+					m_dwMaxDrawThisSec = g_dwDrawTimeLast;
+				}
 			}
 #else
 			if (pRenderer != NULL) {
@@ -502,8 +523,23 @@ void CSDLApp::RunFrame(void)
 	{
 		m_byFpsLast = m_byFps;
 		g_byFpsLast = m_byFpsLast;
+		g_dwMainLoopCallsPerSec = m_dwMainLoopCallCount;
+		g_dwOnFrameCallsPerSec = m_dwOnFrameCallCount;
+		g_dwMaxRunFrameMs = m_dwMaxRunFrameThisSec;
+		g_dwMaxDrawMs = m_dwMaxDrawThisSec;
+		m_dwMainLoopCallCount = 0;
+		m_dwOnFrameCallCount = 0;
+		m_dwMaxRunFrameThisSec = 0;
+		m_dwMaxDrawThisSec = 0;
 #if defined(__EMSCRIPTEN__)
-		updateFpsDisplay((int)m_byFpsLast, (int)g_dwDrawTimeLast);
+		updateFpsDisplay((int)m_byFpsLast,
+		                 (int)g_dwMainLoopCallsPerSec,
+		                 (int)g_dwOnFrameCallsPerSec,
+		                 (int)g_dwMaxRunFrameMs,
+		                 (int)g_dwMaxDrawMs,
+		                 (int)g_dwDrawLayerMs,
+		                 (int)g_dwDrawSwizzleMs,
+		                 (int)g_dwDrawPresentMs);
 #endif
 		m_byFps = 0;
 		m_dwTimeStart = dwTimeTmp;
@@ -532,13 +568,17 @@ void CSDLApp::RequestBrowserRedraw(void)
 #if defined(__EMSCRIPTEN__)
 void CSDLApp::MainLoopThunk(void *pArg)
 {
-	CSDLApp *pApp;
-
-	pApp = (CSDLApp *)pArg;
+	CSDLApp *pApp = (CSDLApp *)pArg;
 	if (pApp == NULL) {
 		return;
 	}
+	pApp->m_dwMainLoopCallCount++;
+	DWORD dwStart = SDL_GetTicks();
 	pApp->RunFrame();
+	DWORD dwElapsed = SDL_GetTicks() - dwStart;
+	if (dwElapsed > pApp->m_dwMaxRunFrameThisSec) {
+		pApp->m_dwMaxRunFrameThisSec = dwElapsed;
+	}
 }
 #endif
 

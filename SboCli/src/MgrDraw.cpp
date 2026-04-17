@@ -30,14 +30,22 @@
 #include <vector>
 
 #if defined(__EMSCRIPTEN__)
+// SDLApp.cpp で定義した描画区間計測用グローバル変数
+extern DWORD g_dwDrawLayerMs;
+extern DWORD g_dwDrawSwizzleMs;
+extern DWORD g_dwDrawPresentMs;
+#endif
+
+#if defined(__EMSCRIPTEN__)
 EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
+	// shell.html の pump fallback に「描画が生きている」ことを知らせる
+	// （このカウンタの未更新で fallback が誤動作し OnFrame が二重駆動されていた）
+	Module.sbop2OnDrawCount = (Module.sbop2OnDrawCount || 0) + 1;
 	const canvas = Module['canvas'];
-	Module.sbop2PresentCount = (Module.sbop2PresentCount || 0) + 1;
-	Module.sbop2PresentSize = width + 'x' + height;
-	Module.sbop2Stage = 7;
 	if (!canvas) {
 		return;
 	}
+	// キャンバスサイズが異なる場合のみ変更（初回のみ走る想定）
 	if (canvas.width !== width) {
 		canvas.width = width;
 	}
@@ -47,30 +55,23 @@ EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
 	let ctx = Module['sbop2Ctx2d'];
 	if (!ctx) {
 		ctx = canvas.getContext('2d', { willReadFrequently: true });
+		if (!ctx) {
+			return;
+		}
+		// imageSmoothingEnabled は 2D コンテキスト生成直後に一度だけ設定
+		ctx.imageSmoothingEnabled = false;
 		Module['sbop2Ctx2d'] = ctx;
 	}
-	if (!ctx) {
-		return;
-	}
-	ctx.imageSmoothingEnabled = false;
 
-	let imageData = Module['sbop2ImageData'];
-	if (!imageData || imageData.width !== width || imageData.height !== height) {
-		imageData = ctx.createImageData(width, height);
-		Module['sbop2ImageData'] = imageData;
-	}
-
+	// ゼロコピー: HEAPU8.buffer を共有した ImageData を毎フレーム生成
+	// ALLOW_MEMORY_GROWTH=1 で Wasm memory grow 後に buffer が差し替わるため
+	// キャッシュせず毎フレーム最新の HEAPU8.buffer を参照する
 	const base = pRgba >>> 0;
-	Module.sbop2PresentPtr = String(base);
-	const src = HEAPU8.subarray(base, base + width * height * 4);
-	const dst = imageData.data;
-	const sampleIndex = 0;
-	Module.sbop2PresentSample =
-		src[sampleIndex + 0] + '/' +
-		src[sampleIndex + 1] + '/' +
-		src[sampleIndex + 2] + '/' +
-		src[sampleIndex + 3];
-	dst.set(src);
+	const imageData = new ImageData(
+		new Uint8ClampedArray(HEAPU8.buffer, base, width * height * 4),
+		width,
+		height
+	);
 	ctx.putImageData(imageData, 0, 0);
 
 	const rectQueue = Module.sbop2RectQueue || [];
@@ -180,6 +181,11 @@ void CMgrDraw::Destroy(void)
 
 void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 {
+#if defined(__EMSCRIPTEN__)
+	// 区間計測: レイヤー合成開始
+	DWORD dwT0 = SDL_GetTicks();
+#endif
+
 	m_pMgrLayer->	Draw(m_pDibBack);		// レイヤー
 	m_pMgrWindow->	Draw(m_pDibBack);		// ウィンドウ
 
@@ -190,6 +196,10 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 
 #if defined(__EMSCRIPTEN__)
 	{
+		// 区間計測: レイヤー合成終了
+		DWORD dwT1 = SDL_GetTicks();
+		g_dwDrawLayerMs = dwT1 - dwT0;
+
 		static std::vector<unsigned char> aCanvasRgba;
 		const int nWidth = SCRSIZEX;
 		const int nHeight = SCRSIZEY;
@@ -213,7 +223,15 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 			}
 		}
 
+		// 区間計測: BGRA→RGBA 変換終了
+		DWORD dwT2 = SDL_GetTicks();
+		g_dwDrawSwizzleMs = dwT2 - dwT1;
+
 		SBOP2_PresentToCanvas((int)(intptr_t)aCanvasRgba.data(), nWidth, nHeight);
+
+		// 区間計測: Present 終了
+		DWORD dwT3 = SDL_GetTicks();
+		g_dwDrawPresentMs = dwT3 - dwT2;
 	}
 	return;
 #endif
