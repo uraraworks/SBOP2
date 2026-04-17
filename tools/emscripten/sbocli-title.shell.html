@@ -470,6 +470,10 @@
       if (Module.lastRunDependencyCount > 0) {
         return false;
       }
+      // ユーザーアクティベーション前（Click to Start オーバーレイ表示中）はフレーム進行を止める
+      if (!Module.sbop2UserActivated) {
+        return false;
+      }
       Module._SBOP2_BrowserPumpSingleFrame();
       Module.sbop2PumpFallbackActive = 1;
       Module.sbop2PumpFallbackTick = (Module.sbop2PumpFallbackTick || 0) + 1;
@@ -485,6 +489,10 @@
       Module.sbop2PumpFallbackLastChange = Date.now();
       Module.sbop2PumpFallbackTimer = window.setInterval(() => {
         if (!Module) {
+          return;
+        }
+        // ユーザーアクティベーション前はフレーム進行を止める
+        if (!Module.sbop2UserActivated) {
           return;
         }
         const drawCount = Module.sbop2OnDrawCount || 0;
@@ -504,6 +512,10 @@
       }, 33);
 
       window.setTimeout(() => {
+        // ユーザーアクティベーション前はフレーム進行を止める
+        if (!Module.sbop2UserActivated) {
+          return;
+        }
         if ((Module.sbop2OnDrawCount || 0) === 0) {
           pumpSingleFrame();
           updateCanvasProbe();
