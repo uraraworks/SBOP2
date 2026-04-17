@@ -21,6 +21,8 @@ $eglSwapPost = Join-Path $scriptDir "emscripten\egl_swapinterval_post.js"
 $shellFile = Join-Path $scriptDir "emscripten\sbocli-title.shell.html"
 $resDir = Join-Path $repoRoot "SboGrpData\res"
 $fontDir = Join-Path $repoRoot "SboCli\font"
+$bgmDir  = Join-Path $repoRoot "Release\BGM"
+$wavDir  = Join-Path $repoRoot "SboSoundData\res\WAVE"
 
 # Up-to-date check: 出力 html がソースよりも新しければ何もしない
 if (-not $Force) {
@@ -62,6 +64,7 @@ if (-not $Force) {
 
 $sources = @(
     "SboCli/src/BrowserMain.cpp",
+    "SboCli/src/Platform/SoundDataTableBrowser.cpp",
     "SboCli/src/MainFrame/MainFrame.cpp",
     "SboCli/src/MgrData.cpp",
     "SboCli/src/MgrSound.cpp",
@@ -459,6 +462,8 @@ $linkArgs = @(
     "-Wl,--error-limit=0",
     "--preload-file", "$resDir@/SboGrpData/res",
     "--preload-file", "$fontDir@/font",
+    "--preload-file", "$bgmDir@/BGM",
+    "--preload-file", "$wavDir@/WAVE",
     "--shell-file", $shellFile,
     "--post-js", $eglSwapPost,
     "-o", (Join-Path $outPath "sbocli-title.html")

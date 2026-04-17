@@ -353,6 +353,44 @@ BOOL CDXAudio::IsPlaying(void *pSeg)
 }
 
 // -----------------------------------------------------------------------
+// WAV ファイル読み込み（Web版 SE ロード用）
+// -----------------------------------------------------------------------
+
+/// @brief WAVファイルをファイルI/Oで読み込み、効果音セグメントを生成する。
+/// @param path  WAVファイルのパス（Emscripten仮想FS上のパス、例: "/WAVE/select.wav"）
+/// @param pSeg  成功時に生成した WAVSEG ポインタを返す（呼び出し側は ReleaseSeg で解放）
+/// @return 成功なら TRUE
+BOOL CDXAudio::LoadWavFromFile(const char* path, void** pSeg)
+{
+    if (!path || !pSeg || g_audioDevice == 0) return FALSE;
+
+    // ファイル全体を読み込む
+    FILE* fp = fopen(path, "rb");
+    if (!fp) return FALSE;
+    fseek(fp, 0, SEEK_END);
+    long fsize = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    if (fsize <= 0) { fclose(fp); return FALSE; }
+
+    BYTE* mem = (BYTE*)malloc((size_t)fsize);
+    if (!mem) { fclose(fp); return FALSE; }
+    if (fread(mem, 1, (size_t)fsize, fp) != (size_t)fsize) {
+        free(mem); fclose(fp); return FALSE;
+    }
+    fclose(fp);
+
+    WAVSEG* seg = nullptr;
+    if (!ParseWavFromMemory(mem, (DWORD)fsize, &seg)) {
+        free(mem);
+        return FALSE;
+    }
+    free(mem);
+
+    *pSeg = seg;
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
 // BGM 関連
 // -----------------------------------------------------------------------
 

@@ -10,6 +10,9 @@
 #include "DXAudio.h"
 #include "LibSboSoundLoader.h"
 #include "MgrSound.h"
+#ifdef __EMSCRIPTEN__
+#include "Platform/SoundDataTableBrowser.h"
+#endif
 
 // Audiere dependency removed
 
@@ -38,14 +41,8 @@ CMgrSound::~CMgrSound()
 BOOL CMgrSound::Create(void)
 {
 	BOOL bRet, bResult;
-	// BuildModuleRelativePath は TCHAR* を受け取るため TCHAR 配列を使用
-	TCHAR szPath[MAX_PATH];
 
 	bRet = FALSE;
-
-	// TCHAR でパスを構築してから ANSI 文字列に変換（SDL_LoadObject は char* を受け取る）
-	BuildModuleRelativePath(szPath, _countof(szPath), _T("SboSoundData.dll"));
-	std::string ansiPath = TStringToAnsiStd(szPath);
 
 	bResult = m_pDXAudio->Create();
 	if (bResult == FALSE) {
@@ -54,19 +51,32 @@ BOOL CMgrSound::Create(void)
 		goto Exit;
 	}
 
-	// Win32 LoadLibrary の代わりに SDL_LoadObject でクロスプラットフォーム対応
-	m_hDllSoundData = SDL_LoadObject(ansiPath.c_str());
-	if (m_hDllSoundData == NULL) {
-		// タイトル表示までは無音でも進められるようにする
-		bRet = TRUE;
-		goto Exit;
-	}
-	m_pDXAudio->SetResourceHandle(m_hDllSoundData);
-
-	m_pLibSboSoundLoader->Load();
-
-	// 効果音を読み込み
+#ifdef __EMSCRIPTEN__
+	// Web版: SboSoundData.dll は存在しないため、静的テーブルからWAVファイルを直接ロード
 	ReadSoundData();
+#else
+	{
+		// BuildModuleRelativePath は TCHAR* を受け取るため TCHAR 配列を使用
+		TCHAR szPath[MAX_PATH];
+		// TCHAR でパスを構築してから ANSI 文字列に変換（SDL_LoadObject は char* を受け取る）
+		BuildModuleRelativePath(szPath, _countof(szPath), _T("SboSoundData.dll"));
+		std::string ansiPath = TStringToAnsiStd(szPath);
+
+		// Win32 LoadLibrary の代わりに SDL_LoadObject でクロスプラットフォーム対応
+		m_hDllSoundData = SDL_LoadObject(ansiPath.c_str());
+		if (m_hDllSoundData == NULL) {
+			// タイトル表示までは無音でも進められるようにする
+			bRet = TRUE;
+			goto Exit;
+		}
+		m_pDXAudio->SetResourceHandle(m_hDllSoundData);
+
+		m_pLibSboSoundLoader->Load();
+
+		// 効果音を読み込み
+		ReadSoundData();
+	}
+#endif
 
 	bRet = TRUE;
 Exit:
@@ -97,7 +107,12 @@ void CMgrSound::PlaySound(DWORD dwSoundID)
 		return;
 	}
 
+#ifdef __EMSCRIPTEN__
+	// Web版: 静的テーブルから SOUNDID → インデックスを解決
+	nNo = SoundDataBrowser::GetSoundNo(dwSoundID);
+#else
 	nNo = m_pLibSboSoundLoader->GetSoundNo(dwSoundID);
+#endif
 	if (nNo < 0) {
 		return;
 	}
@@ -116,7 +131,6 @@ void CMgrSound::PlayBGM(
 	BOOL bPlay)	// [in] 既に同じIDのBGMが再生中の時はそのままにしておく
 {
 	char szTmp[MAX_PATH];
-	TCHAR szBasePath[MAX_PATH];
 
 	if (bPlay) {
 		if (m_dwSoundID == (DWORD)nNo) {
@@ -124,9 +138,17 @@ void CMgrSound::PlayBGM(
 		}
 	}
 
-	BuildModuleRelativePath(szBasePath, _countof(szBasePath), _T("BGM\\"));
-	std::string strBasePath = TStringToAnsiStd(szBasePath);
-	strcpy_s(szTmp, strBasePath.c_str());
+#ifdef __EMSCRIPTEN__
+	// Web版: --preload-file で /BGM/ にマウントされたパスを使用
+	strcpy_s(szTmp, "/BGM/");
+#else
+	{
+		TCHAR szBasePath[MAX_PATH];
+		BuildModuleRelativePath(szBasePath, _countof(szBasePath), _T("BGM\\"));
+		std::string strBasePath = TStringToAnsiStd(szBasePath);
+		strcpy_s(szTmp, strBasePath.c_str());
+	}
+#endif
 	switch (nNo) {
 //	case 0:
 //		strcat (szTmp, "v4.ogg");
@@ -236,11 +258,23 @@ void CMgrSound::SetSEVolume(int nVolume)
 
 void CMgrSound::ReadSoundData(void)
 {
-#if !defined(_WIN32)
-	// 非Windowsでは Windows リソース API (FindResource) が使えないため
-	// 効果音テーブルを生成しない（PlaySound 側で NULL チェックされる）
-	return;
-#else
+#ifdef __EMSCRIPTEN__
+	// Web版: SoundDataTableBrowser から WAVファイル名を取得してファイルI/Oでロード
+	// WAVファイルは --preload-file で /WAVE/ にマウントされていることが前提
+	int nCount = SoundDataBrowser::GetSoundCount();
+
+	SAFE_DELETE_ARRAY(m_apDMSSound);
+	m_apDMSSound = new void*[nCount]();
+
+	for (int i = 0; i < nCount; i++) {
+		const char* fileName = SoundDataBrowser::GetWavFileName(i);
+		if (fileName == NULL || fileName[0] == '\0') continue;
+		char szPath[512];
+		snprintf(szPath, sizeof(szPath), "/WAVE/%s", fileName);
+		m_pDXAudio->LoadWavFromFile(szPath, &m_apDMSSound[i]);
+	}
+#elif defined(_WIN32)
+	// Windows版: SboSoundData.dll のリソースから WAV を読み込む
 	int i, nCount, nResourceID;
 
 	nCount = m_pLibSboSoundLoader->GetSoundCount();
@@ -258,5 +292,8 @@ void CMgrSound::ReadSoundData(void)
 			FindResource((HMODULE)m_hDllSoundData, MAKEINTRESOURCE(nResourceID), _T("WAVE")),
 			&m_apDMSSound[i]);
 	}
+#else
+	// 非Windowsかつ非Emscripten: 効果音テーブルを生成しない（PlaySound 側で NULL チェックされる）
+	return;
 #endif
 }

@@ -23,6 +23,9 @@ public:
     void SetLoopPoints     (void *pSeg, DWORD dwFlg);
     BOOL IsPlaying         (void *pSeg);
 
+    // WAV ファイルから効果音セグメントを生成（Web版で使用）
+    BOOL LoadWavFromFile   (const char* path, void** pSeg);
+
     // BGM (OGG/WAV ファイルを SDL_audio で再生)
     BOOL PlayBGMFile       (const char* path, BOOL bLoop, float volume);
     void StopBGM           ();
