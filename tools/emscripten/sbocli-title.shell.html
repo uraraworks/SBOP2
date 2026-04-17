@@ -91,6 +91,47 @@
       outline: none;
     }
 
+    /* ── Click to Start オーバーレイ ── */
+    #startOverlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 14, 20, 0.82);
+      z-index: 10;
+      pointer-events: auto;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #startOverlay .start-title {
+      font-size: clamp(18px, 4vw, 26px);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    #startOverlay .start-sub {
+      font-size: clamp(12px, 2.5vw, 16px);
+      color: var(--accent);
+      letter-spacing: 0.12em;
+    }
+
+    #startOverlay .start-hint {
+      margin-top: 20px;
+      font-size: 11px;
+      color: var(--subtle);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
     .login-overlay {
       position: absolute;
       inset: 0;
@@ -197,6 +238,12 @@
     <section class="panel canvas-wrap">
       <div class="canvas-stage">
         <canvas id="canvas" width="480" height="480" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+        <!-- Click to Start オーバーレイ（Autoplay Policy 対策） -->
+        <div id="startOverlay">
+          <div class="start-title">クリックしてスタート</div>
+          <div class="start-sub">Click to Start</div>
+          <div class="start-hint">▼ タップまたはキーを押してください ▼</div>
+        </div>
         <div id="loginOverlay" class="login-overlay" hidden>
           <div id="loginPanel" class="login-panel">
             <div id="loginLabelAccount" class="login-label">アカウント</div>
@@ -244,6 +291,7 @@
     const canvasElement = document.getElementById('canvas');
     const outputElement = document.getElementById('output');
     const probeElement = document.getElementById('canvasProbe');
+    const startOverlay = document.getElementById('startOverlay');
     const loginOverlay = document.getElementById('loginOverlay');
     const loginPanel = document.getElementById('loginPanel');
     const loginLabelAccount = document.getElementById('loginLabelAccount');
@@ -253,6 +301,49 @@
     const loginSaveWrap = document.getElementById('loginSaveWrap');
     const loginSaveInput = document.getElementById('loginSave');
     const loginConnectButton = document.getElementById('loginConnect');
+
+    // ── Click to Start: ユーザー操作による AudioContext の resume ──
+    let startGameCalled = false;
+    function startGame() {
+      if (startGameCalled) return;
+      startGameCalled = true;
+
+      // オーバーレイを非表示にしてキャンバスへフォーカス移動
+      if (startOverlay) {
+        startOverlay.style.display = 'none';
+      }
+      canvasElement.focus();
+
+      // SDL2 の AudioContext を resume する（Autoplay Policy 対策）
+      try {
+        const audioCtx = (Module && Module.SDL2 && Module.SDL2.audioContext)
+          || (window.SDL2 && window.SDL2.audioContext)
+          || null;
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(function(e) {
+            console.warn('[SBOP2] AudioContext.resume failed:', e);
+          });
+        }
+      } catch (e) {
+        console.warn('[SBOP2] AudioContext resume error:', e);
+      }
+
+      // C++ 側が参照できるフラグをセット
+      if (Module) {
+        Module.sbop2UserActivated = true;
+      }
+    }
+
+    // click / touchstart / keydown いずれかで startGame を呼ぶ
+    if (startOverlay) {
+      startOverlay.addEventListener('click',      startGame, { once: true });
+      startOverlay.addEventListener('touchstart', startGame, { once: true, passive: true });
+    }
+    // キーダウンでも開始できるようにする（オーバーレイが表示中の間のみ）
+    window.addEventListener('keydown', function onFirstKey() {
+      startGame();
+      window.removeEventListener('keydown', onFirstKey);
+    });
 
     function callLoginBridge(name, argTypes, args) {
       if (!Module || typeof Module.ccall !== 'function') {

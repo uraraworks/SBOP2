@@ -2,6 +2,8 @@
 /// @brief SDL_audio ベースのオーディオ出力（効果音 + BGM） 定義ファイル
 #pragma once
 
+#include <map>
+
 typedef class CDXAudio
 {
 public:
@@ -31,6 +33,12 @@ public:
     void StopBGM           ();
     void SetBGMVolume      (float volume);
 
+    // BGM プリデコードキャッシュ（Emscripten版でのマップ切替無音解消用）
+    // 指定パスのBGMを事前にデコードしてキャッシュに保存（keyで参照）
+    BOOL PreloadBGM        (int key, const char* path);
+    // プリロード済みBGMを再生（未プリロードなら FALSE を返す）
+    BOOL PlayBGMCached     (int key, BOOL bLoop, float volume);
+
 private:
     void*                     m_hResource;  // Windows版では (HMODULE) キャストして使用
 
@@ -40,4 +48,13 @@ private:
     float                     m_fBgmVolume; // 0.0 - 1.0
 
     void FreeBgmResources();
+
+    // BGM プリデコードキャッシュ（key=BGMID, value={pcmData, pcmBytes}）
+    struct BgmCacheEntry {
+        unsigned char* pcmData;
+        unsigned long  pcmBytes;
+    };
+    std::map<int, BgmCacheEntry> m_bgmCache;
+
+    void FreeBgmCache();
 } CDXAudio, *PCDXAudio;

@@ -54,6 +54,23 @@ BOOL CMgrSound::Create(void)
 #ifdef __EMSCRIPTEN__
 	// Web版: SboSoundData.dll は存在しないため、静的テーブルからWAVファイルを直接ロード
 	ReadSoundData();
+
+	// 全BGMを事前デコードしてキャッシュ（マップ切替時の無音を防ぐ）
+	static const struct { int id; const char* file; } s_bgmPreloadTable[] = {
+		{ BGMID_DAICHI_S,        "daichi_s.ogg"        },
+		{ BGMID_HISYOU,          "hisyou.ogg"          },
+		{ BGMID_SUISHA,          "suisha.ogg"           },
+		{ BGMID_FAIRYTALE,       "fairytale.ogg"        },
+		{ BGMID_TABLA_IMAGE,     "tabla_image.ogg"      },
+		{ BGMID_FLOWED_PIANO,    "flowed piano.ogg"     },
+		{ BGMID_HUYUNOMATI_FULL, "huyunomati_full.ogg"  },
+		{ BGMID_OYAKODON_NAMI,   "oyakodon_nami.ogg"    },
+	};
+	for (size_t i = 0; i < sizeof(s_bgmPreloadTable)/sizeof(s_bgmPreloadTable[0]); i++) {
+		char szPath[256];
+		snprintf(szPath, sizeof(szPath), "/BGM/%s", s_bgmPreloadTable[i].file);
+		m_pDXAudio->PreloadBGM(s_bgmPreloadTable[i].id, szPath);
+	}
 #else
 	{
 		// BuildModuleRelativePath は TCHAR* を受け取るため TCHAR 配列を使用
@@ -139,7 +156,13 @@ void CMgrSound::PlayBGM(
 	}
 
 #ifdef __EMSCRIPTEN__
-	// Web版: --preload-file で /BGM/ にマウントされたパスを使用
+	// Web版: キャッシュから即時再生（プリデコード済みの場合）
+	m_dwSoundID = (DWORD)nNo;
+	m_pDXAudio->StopBGM();
+	if (m_pDXAudio->PlayBGMCached(nNo, TRUE, m_fBGMVolume)) {
+		return;
+	}
+	// キャッシュヒットしなかった場合は既存のファイル再生にフォールバック
 	strcpy_s(szTmp, "/BGM/");
 #else
 	{

@@ -231,6 +231,8 @@ BOOL CDXAudio::Create(void)
 
 void CDXAudio::Destroy(void)
 {
+    // BGM プリデコードキャッシュを解放する
+    FreeBgmCache();
     // グローバルエンジンはアプリ全体で共有するため、ここでは閉じない
 }
 
@@ -394,37 +396,29 @@ BOOL CDXAudio::LoadWavFromFile(const char* path, void** pSeg)
 // BGM 関連
 // -----------------------------------------------------------------------
 
-void CDXAudio::FreeBgmResources()
+/// @brief ファイルパスから BGM データ（WAV または OGG）をデコードして PCM バッファを返す。
+/// @param path       BGM ファイルのパス
+/// @param pOutPcm    成功時に PCM データへのポインタを返す（呼び出し側が free する）
+/// @param pOutBytes  成功時に PCM データのバイト数を返す
+/// @return 成功なら true
+static bool DecodeBgmFile(const char* path, Uint8** pOutPcm, Uint32* pOutBytes)
 {
-    if (g_audioDevice != 0) {
-        SDL_LockAudioDevice(g_audioDevice);
-        g_channels[BGM_CHANNEL_INDEX].active = SDL_FALSE;
-        g_channels[BGM_CHANNEL_INDEX].data   = nullptr;
-        SDL_UnlockAudioDevice(g_audioDevice);
-    }
-    if (m_pBgmAudio) {
-        free(m_pBgmAudio);
-        m_pBgmAudio = nullptr;
-    }
-    m_cbBgmAudio = 0;
-}
-
-BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume)
-{
-    if (!path || g_audioDevice == 0) return FALSE;
+    if (!path || !pOutPcm || !pOutBytes) return false;
+    *pOutPcm  = nullptr;
+    *pOutBytes = 0;
 
     // ファイル全体を読み込む
     FILE* fp = fopen(path, "rb");
-    if (!fp) return FALSE;
+    if (!fp) return false;
     fseek(fp, 0, SEEK_END);
     long fsize = ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    if (fsize <= 0) { fclose(fp); return FALSE; }
+    if (fsize <= 0) { fclose(fp); return false; }
 
     BYTE* mem = (BYTE*)malloc((size_t)fsize);
-    if (!mem) { fclose(fp); return FALSE; }
+    if (!mem) { fclose(fp); return false; }
     if (fread(mem, 1, (size_t)fsize, fp) != (size_t)fsize) {
-        free(mem); fclose(fp); return FALSE;
+        free(mem); fclose(fp); return false;
     }
     fclose(fp);
 
@@ -446,7 +440,7 @@ BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume)
         int frames = stb_vorbis_decode_filename(path, &ch, &rate, &pcm);
         if (frames <= 0 || !pcm || ch <= 0 || rate <= 0) {
             if (pcm) free(pcm);
-            return FALSE;
+            return false;
         }
 
         // stb_vorbis の出力（16bit PCM）を SDL_AudioCVT で変換
@@ -455,26 +449,66 @@ BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume)
         int ret = SDL_BuildAudioCVT(&cvt,
             AUDIO_S16LSB, (Uint8)ch, rate,
             g_obtainedSpec.format, g_obtainedSpec.channels, g_obtainedSpec.freq);
-        if (ret < 0) { free(pcm); return FALSE; }
+        if (ret < 0) { free(pcm); return false; }
 
         Uint32 bufSize = (cvt.len_mult > 0)
             ? (Uint32)(rawBytes * cvt.len_mult)
             : rawBytes;
         Uint8* buf = (Uint8*)malloc(bufSize);
-        if (!buf) { free(pcm); return FALSE; }
+        if (!buf) { free(pcm); return false; }
         memcpy(buf, pcm, rawBytes);
         free(pcm);
 
         cvt.buf = buf;
         cvt.len = (int)rawBytes;
         if (ret > 0 && SDL_ConvertAudio(&cvt) != 0) {
-            free(buf); return FALSE;
+            free(buf); return false;
         }
         pcmData  = buf;
         pcmBytes = (ret > 0) ? (Uint32)cvt.len_cvt : rawBytes;
     }
 
-    if (!pcmData || pcmBytes == 0) { if (pcmData) free(pcmData); return FALSE; }
+    if (!pcmData || pcmBytes == 0) { if (pcmData) free(pcmData); return false; }
+
+    *pOutPcm   = pcmData;
+    *pOutBytes = pcmBytes;
+    return true;
+}
+
+void CDXAudio::FreeBgmResources()
+{
+    if (g_audioDevice != 0) {
+        SDL_LockAudioDevice(g_audioDevice);
+        g_channels[BGM_CHANNEL_INDEX].active = SDL_FALSE;
+        g_channels[BGM_CHANNEL_INDEX].data   = nullptr;
+        SDL_UnlockAudioDevice(g_audioDevice);
+    }
+    if (m_pBgmAudio) {
+        free(m_pBgmAudio);
+        m_pBgmAudio = nullptr;
+    }
+    m_cbBgmAudio = 0;
+}
+
+void CDXAudio::FreeBgmCache()
+{
+    // m_bgmCache 内の全 PCM バッファを解放する
+    for (auto& entry : m_bgmCache) {
+        if (entry.second.pcmData) {
+            free(entry.second.pcmData);
+        }
+    }
+    m_bgmCache.clear();
+}
+
+BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume)
+{
+    if (!path || g_audioDevice == 0) return FALSE;
+
+    Uint8* pcmData  = nullptr;
+    Uint32 pcmBytes = 0;
+
+    if (!DecodeBgmFile(path, &pcmData, &pcmBytes)) return FALSE;
 
     // 既存 BGM を停止してリソースを解放
     FreeBgmResources();
@@ -492,6 +526,49 @@ BOOL CDXAudio::PlayBGMFile(const char* path, BOOL bLoop, float volume)
     g_channels[BGM_CHANNEL_INDEX].active = SDL_TRUE;
     SDL_UnlockAudioDevice(g_audioDevice);
 
+    return TRUE;
+}
+
+BOOL CDXAudio::PreloadBGM(int key, const char* path)
+{
+    // 既にキャッシュ済みならスキップ
+    if (m_bgmCache.find(key) != m_bgmCache.end()) return TRUE;
+
+    Uint8* pcmData  = nullptr;
+    Uint32 pcmBytes = 0;
+    if (!DecodeBgmFile(path, &pcmData, &pcmBytes)) return FALSE;
+
+    BgmCacheEntry entry;
+    entry.pcmData  = pcmData;
+    entry.pcmBytes = (unsigned long)pcmBytes;
+    m_bgmCache[key] = entry;
+    return TRUE;
+}
+
+BOOL CDXAudio::PlayBGMCached(int key, BOOL bLoop, float volume)
+{
+    auto it = m_bgmCache.find(key);
+    if (it == m_bgmCache.end()) return FALSE;
+    if (g_audioDevice == 0) return FALSE;
+
+    // 既存BGMチャンネルをリセット（キャッシュのPCMは解放しない）
+    SDL_LockAudioDevice(g_audioDevice);
+    g_channels[BGM_CHANNEL_INDEX].data   = it->second.pcmData;
+    g_channels[BGM_CHANNEL_INDEX].size   = it->second.pcmBytes;
+    g_channels[BGM_CHANNEL_INDEX].pos    = 0;
+    g_channels[BGM_CHANNEL_INDEX].volume = volume;
+    g_channels[BGM_CHANNEL_INDEX].loop   = bLoop ? SDL_TRUE : SDL_FALSE;
+    g_channels[BGM_CHANNEL_INDEX].active = SDL_TRUE;
+    SDL_UnlockAudioDevice(g_audioDevice);
+
+    // m_pBgmAudio はキャッシュのPCMを指さないように nullptr にしておく
+    // （FreeBgmResources から二重解放されないようにするため）
+    if (m_pBgmAudio) {
+        free(m_pBgmAudio);
+    }
+    m_pBgmAudio  = nullptr;
+    m_cbBgmAudio = 0;
+    m_fBgmVolume = volume;
     return TRUE;
 }
 
