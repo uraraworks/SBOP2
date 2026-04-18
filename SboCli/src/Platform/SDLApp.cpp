@@ -9,6 +9,7 @@
 #else
 #include <emscripten/emscripten.h>
 #include <emscripten/em_js.h>
+#include <emscripten/em_asm.h>
 #endif
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
@@ -474,7 +475,7 @@ void CSDLApp::RunFrame(void)
 		m_dwRenderInterval = 1;
 	}
 
-	if (m_bDrawPending && ((dwTimeTmp - m_dwLastRenderTime) >= m_dwRenderInterval))
+	if ((dwTimeTmp - m_dwLastRenderTime) >= m_dwRenderInterval)
 	{
 		SDL_Renderer *pRenderer = m_Window.GetRenderer();
 		if ((pRenderer != NULL)
@@ -571,6 +572,18 @@ void CSDLApp::MainLoopThunk(void *pArg)
 	CSDLApp *pApp = (CSDLApp *)pArg;
 	if (pApp == NULL) {
 		return;
+	}
+	// Click to Start 前はフレーム進行を止める。
+	// 一度 true になったら以後は JS へ問い合わせない。
+	static bool s_bUserActivated = false;
+	if (!s_bUserActivated) {
+		int nActivated = EM_ASM_INT({
+			return (Module && Module.sbop2UserActivated) ? 1 : 0;
+		});
+		if (nActivated == 0) {
+			return;
+		}
+		s_bUserActivated = true;
 	}
 	pApp->m_dwMainLoopCallCount++;
 	DWORD dwStart = SDL_GetTicks();

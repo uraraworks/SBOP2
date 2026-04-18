@@ -23,8 +23,9 @@
 #include "WindowEYECOLOR.h"
 #include "WindowSTYLESELECT.h"
 #include "WindowNAMEINPUT.h"
-#if defined(_WIN32)
-#include "WindowACCOUNTINFO.h"
+#include "WindowCOMMANDMENU.h"
+#include "WindowCHAR_STATUS4.h"
+#include "WindowPLACEINFORMATION.h"
 #include "WindowSYSTEMMENU.h"
 #include "WindowSETCOLOR.h"
 #include "WindowSETBGMVOLUME.h"
@@ -40,15 +41,14 @@
 #include "WindowOPTION_INPUTSET_SETDEVICE.h"
 #include "WindowOPTION_ACTIONSET.h"
 #include "WindowOPTION_ACTIONSET_SLEEPTIMER.h"
-#include "WindowCOMMANDMENU.h"
 #include "WindowCHAR_STATUS.h"
-#include "WindowCHAR_STATUS2.h"
-#include "WindowCHAR_STATUS3.h"
-#include "WindowCHAR_STATUS4.h"
-#include "WindowTEXTMSG.h"
 #include "WindowSWOON.h"
 #include "WindowSKILLMENU.h"
-#include "WindowPLACEINFORMATION.h"
+#if defined(_WIN32)
+#include "WindowACCOUNTINFO.h"
+#include "WindowCHAR_STATUS2.h"
+#include "WindowCHAR_STATUS3.h"
+#include "WindowTEXTMSG.h"
 #endif
 #include "MgrWindow.h"
 
@@ -298,24 +298,204 @@ void CMgrWindow::MakeWindowNAMEINPUT(void)
 	SetActive();
 	m_bDraw = TRUE;
 }
-void CMgrWindow::MakeWindowSYSTEMMENU(void) {}
-void CMgrWindow::MakeWindowSETCOLOR(void) {}
-void CMgrWindow::MakeWindowSETBGMVOLUME(void) {}
-void CMgrWindow::MakeWindowSETSOUNDVOLUME(void) {}
-void CMgrWindow::MakeWindowSETDRAWMODE(void) {}
-void CMgrWindow::MakeWindowITEMMENU(void) {}
-void CMgrWindow::MakeWindowITEMMENU_SELECT(int nPos, DWORD dwItemID) { (void)nPos; (void)dwItemID; }
-void CMgrWindow::MakeWindowOPTION(void) {}
-void CMgrWindow::MakeWindowOPTION_VIEWSET(void) {}
-void CMgrWindow::MakeWindowOPTION_VOLUMESET(void) {}
-void CMgrWindow::MakeWindowOPTION_INPUTSET(void) {}
-void CMgrWindow::MakeWindowOPTION_TASKBAR(void) {}
-void CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE(void) {}
-void CMgrWindow::MakeWindowOPTION_ACTIONSET(void) {}
-void CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER(void) {}
-void CMgrWindow::MakeWindowCOMMANDMENU(void) {}
-void CMgrWindow::MakeWindowCHAR_STATUS(void) {}
-void CMgrWindow::MakeWindowCHAR_STATUS4(void) {}
+void CMgrWindow::MakeWindowSYSTEMMENU(void)
+{
+	PCWindowSYSTEMMENU pWindowNew;
+
+	pWindowNew = new CWindowSYSTEMMENU;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowSETCOLOR(void)
+{
+	PCWindowSETCOLOR pWindowNew;
+
+	pWindowNew = new CWindowSETCOLOR;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowSETBGMVOLUME(void)
+{
+	PCWindowSETBGMVOLUME pWindowNew;
+
+	pWindowNew = new CWindowSETBGMVOLUME;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowSETSOUNDVOLUME(void)
+{
+	PCWindowSETSOUNDVOLUME pWindowNew;
+
+	pWindowNew = new CWindowSETSOUNDVOLUME;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowSETDRAWMODE(void)
+{
+	PCWindowSETDRAWMODE pWindowNew;
+
+	pWindowNew = new CWindowSETDRAWMODE;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowITEMMENU(void)
+{
+	PCWindowITEMMENU pWindowNew;
+
+	pWindowNew = new CWindowITEMMENU;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowITEMMENU_SELECT(int nPos, DWORD dwItemID)
+{
+	PCWindowITEMMENU_SELECT pWindowNew;
+
+	pWindowNew = new CWindowITEMMENU_SELECT;
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetItemID(nPos, dwItemID);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION(void)
+{
+	PCWindowOPTION pWindowNew;
+
+	pWindowNew = new CWindowOPTION;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION_VIEWSET(void)
+{
+	PCWindowOPTION_VIEWSET pWindowNew;
+
+	pWindowNew = new CWindowOPTION_VIEWSET;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION_VOLUMESET(void)
+{
+	PCWindowOPTION_VOLUMESET pWindowNew;
+
+	pWindowNew = new CWindowOPTION_VOLUMESET;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION_INPUTSET(void)
+{
+	PCWindowOPTION_INPUTSET pWindowNew;
+
+	pWindowNew = new CWindowOPTION_INPUTSET;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION_TASKBAR(void)
+{
+	PCWindowOPTION_TASKBAR pWindowNew;
+
+	pWindowNew = new CWindowOPTION_TASKBAR;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION_INPUTSET_SETDEVICE(void)
+{
+	PCWindowOPTION_INPUTSET_SETDEVICE pWindowNew;
+
+	pWindowNew = new CWindowOPTION_INPUTSET_SETDEVICE;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION_ACTIONSET(void)
+{
+	PCWindowOPTION_ACTIONSET pWindowNew;
+
+	pWindowNew = new CWindowOPTION_ACTIONSET;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowOPTION_ACTIONSET_SLEEPTIMER(void)
+{
+	PCWindowOPTION_ACTIONSET_SLEEPTIMER pWindowNew;
+
+	pWindowNew = new CWindowOPTION_ACTIONSET_SLEEPTIMER;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowCOMMANDMENU(void)
+{
+	PCWindowCOMMANDMENU pWindowNew;
+
+	pWindowNew = new CWindowCOMMANDMENU;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowCHAR_STATUS(void)
+{
+	PCWindowCHAR_STATUS pWindowNew;
+
+	pWindowNew = new CWindowCHAR_STATUS;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowCHAR_STATUS4(void)
+{
+	PCWindowCHAR_STATUS4 pWindowNew;
+
+	pWindowNew = new CWindowCHAR_STATUS4;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+
+	m_bDraw = TRUE;
+}
 void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg)
 {
 	(void)pszTitle;
@@ -328,9 +508,41 @@ void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEve
 	(void)pszName;
 	(void)pInfo;
 }
-void CMgrWindow::MakeWindowSWOON(void) {}
-void CMgrWindow::MakeWindowSKILLMENU(int nType) { (void)nType; }
-void CMgrWindow::MakeWindowPLACEINFORMATION(void) {}
+void CMgrWindow::MakeWindowSWOON(void)
+{
+	PCWindowSWOON pWindowNew;
+
+	pWindowNew = new CWindowSWOON;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowSKILLMENU(int nType/*-1*/)
+{
+	PCWindowSKILLMENU pWindowNew;
+
+	pWindowNew = new CWindowSKILLMENU;
+	pWindowNew->Create(m_pMgrData);
+	if (nType != -1) {
+		pWindowNew->SetType(nType);
+	}
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowPLACEINFORMATION(void)
+{
+	PCWindowPLACEINFORMATION pWindowNew;
+
+	pWindowNew = new CWindowPLACEINFORMATION;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+
+	m_bDraw = TRUE;
+}
 
 void CMgrWindow::SetActive(void)
 {
