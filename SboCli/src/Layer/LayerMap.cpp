@@ -502,7 +502,18 @@ void CLayerMap::SetCenterPos(
 	int y  // [in] キャラ座標(縦)
 )
 {
+	// [DBG-CAM-1] SetCenterPos 入口: 引数と現在カメラ状態をログ出力
+	SboDbgLog("[SetCenterPos] arg=(%d,%d) camXY=(%.1f,%.1f) targetXY=(%.1f,%.1f) viewXY=(%d,%d)",
+		x, y,
+		m_dCameraX, m_dCameraY,
+		m_dCameraTargetX, m_dCameraTargetY,
+		m_nViewX, m_nViewY);
 	SnapCameraToCenterPos(x, y);
+	// [DBG-CAM-1 更新後] SnapCameraToCenterPos 呼び出し後のカメラ状態を確認
+	SboDbgLog("[SetCenterPos 更新後] camXY=(%.1f,%.1f) targetXY=(%.1f,%.1f) viewXY=(%d,%d)",
+		m_dCameraX, m_dCameraY,
+		m_dCameraTargetX, m_dCameraTargetY,
+		m_nViewX, m_nViewY);
 }
 
 
@@ -513,6 +524,7 @@ void CLayerMap::SetCameraTargetCenterPos(
 {
 	double dCamX, dCamY;
 
+	// 毎フレーム呼ばれるためここにはログを置かない
 	CalcCameraPosFromCenter(x, y, dCamX, dCamY);
 	m_dCameraTargetX = dCamX;
 	m_dCameraTargetY = dCamY;
@@ -526,6 +538,12 @@ void CLayerMap::SnapCameraToCenterPos(
 {
 	double dCamX, dCamY;
 
+	// [DBG-CAM-3] SnapCameraToCenterPos 入口: 引数と現在カメラ状態をログ出力
+	SboDbgLog("[SnapCameraToCenterPos] arg=(%d,%d) camXY=(%.1f,%.1f) targetXY=(%.1f,%.1f) viewXY=(%d,%d)",
+		x, y,
+		m_dCameraX, m_dCameraY,
+		m_dCameraTargetX, m_dCameraTargetY,
+		m_nViewX, m_nViewY);
 	CalcCameraPosFromCenter(x, y, dCamX, dCamY);
 	m_dCameraX = dCamX;
 	m_dCameraY = dCamY;
@@ -534,6 +552,11 @@ void CLayerMap::SnapCameraToCenterPos(
 	m_nViewX = (int)(dCamX + 0.5);
 	m_nViewY = (int)(dCamY + 0.5);
 	m_dwLastTimeCameraUpdate = SDL_GetTicks();
+	// [DBG-CAM-3 更新後] Snap 完了後のカメラ状態を確認
+	SboDbgLog("[SnapCameraToCenterPos 更新後] camXY=(%.1f,%.1f) targetXY=(%.1f,%.1f) viewXY=(%d,%d)",
+		m_dCameraX, m_dCameraY,
+		m_dCameraTargetX, m_dCameraTargetY,
+		m_nViewX, m_nViewY);
 }
 
 
@@ -711,6 +734,15 @@ BOOL CLayerMap::TimerProcScroll(void)
 		dNextY = m_dCameraTargetY;
 	}
 
+	// [DBG-SCROLL] 1フレームの移動量が8px超の場合のみログ出力（毎フレームは出さない）
+	if ((fabs(dNextX - m_dCameraX) > 8.0) || (fabs(dNextY - m_dCameraY) > 8.0)) {
+		SboDbgLog("[TimerProcScroll] 大移動検出 dDt=%.4f dAlpha=%.4f camX %.1f->%.1f camY %.1f->%.1f targetXY=(%.1f,%.1f)",
+			dDt, dAlpha,
+			m_dCameraX, dNextX,
+			m_dCameraY, dNextY,
+			m_dCameraTargetX, m_dCameraTargetY);
+	}
+
 	m_dCameraX = dNextX;
 	m_dCameraY = dNextY;
 
@@ -739,6 +771,15 @@ void CLayerMap::CalcCameraPosFromCenter(
 
 	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
+		// マップ未ロードのまま呼び出された: dCamX/Y が 0 のまま返るため移動バグの原因になる
+		// 毎フレーム出ると重いので、引数が変化したときだけログ出力
+		static int s_nLastX = INT_MIN;
+		static int s_nLastY = INT_MIN;
+		if ((x != s_nLastX) || (y != s_nLastY)) {
+			SboDbgLog("[CalcCameraPosFromCenter] pMap==NULL arg=(%d,%d)", x, y);
+			s_nLastX = x;
+			s_nLastY = y;
+		}
 		return;
 	}
 

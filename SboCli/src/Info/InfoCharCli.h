@@ -152,10 +152,13 @@ public:
 	BOOL	m_bPredictedMove;	// 予測移動中か
 	int	m_nPredictBaseX,	// 予測開始X(px)
 			m_nPredictBaseY,	// 予測開始Y(px)
+			m_nPredictSyncX,	// 直近の確定同期X(px)
+			m_nPredictSyncY,	// 直近の確定同期Y(px)
 			m_nPredictDirection,	// 予測向き
 			m_nPredictSpeed,	// 予測速度(px/sec基準)
 			m_nDrawDirectionOverride;	// 描画用の向き上書き
 	DWORD	m_dwPredictRecvTime,	// 受信タイムスタンプ
+			m_dwPredictLeadLimitMs,	// 予測移動の先読み上限時間
 			m_dwDrawMoveStartTime,	// 描画補間開始時刻
 			m_dwDrawMoveEndTime;	// 描画補間終了時刻
 	double	m_dDrawMoveStartX,	// 描画補間開始X

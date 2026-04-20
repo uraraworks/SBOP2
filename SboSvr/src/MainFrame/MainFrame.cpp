@@ -174,9 +174,44 @@ void CMainFrame::SendToScreenChar(
 		if (!(
 			(abs(pInfoCharTmp->m_nMapX - pInfoChar->m_nMapX) < DRAW_PARTS_X * MAPPARTSSIZE + MAPPARTSSIZE) &&
 			(abs(pInfoCharTmp->m_nMapY - pInfoChar->m_nMapY) < DRAW_PARTS_Y * MAPPARTSSIZE + MAPPARTSSIZE))) {
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+			switch (pPacket->m_byCmdSub) {
+			case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+			case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+			case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+				m_pLog->Write(
+					"[MOVE_SCREEN_SKIP] [PACKET:%d][SRC_CHARID:%u][DST_CHARID:%u][SRC_POS:%d,%d][DST_POS:%d,%d]",
+					pPacket->m_byCmdSub,
+					pInfoChar->m_dwCharID,
+					pInfoCharTmp->m_dwCharID,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY,
+					pInfoCharTmp->m_nMapX,
+					pInfoCharTmp->m_nMapY);
+				break;
+			}
+#endif
 			continue;
 		}
 		if (pInfoCharTmp->m_dwSessionID) {
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+			switch (pPacket->m_byCmdSub) {
+			case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+			case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+			case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+				m_pLog->Write(
+					"[MOVE_SCREEN_SEND] [PACKET:%d][SRC_CHARID:%u][DST_CHARID:%u][DST_SESSION:%u][SRC_POS:%d,%d][DST_POS:%d,%d]",
+					pPacket->m_byCmdSub,
+					pInfoChar->m_dwCharID,
+					pInfoCharTmp->m_dwCharID,
+					pInfoCharTmp->m_dwSessionID,
+					pInfoChar->m_nMapX,
+					pInfoChar->m_nMapY,
+					pInfoCharTmp->m_nMapX,
+					pInfoCharTmp->m_nMapY);
+				break;
+			}
+#endif
 			m_pSock->SendTo(pInfoCharTmp->m_dwSessionID, pPacket);
 		}
 	}
@@ -693,6 +728,10 @@ void CMainFrame::UpdateServerInfo(
 	int nCount;
 	CmyString strTmp;
 	CPacketMAP_ONLINE Packet;
+
+	if ((m_pLibInfoChar == NULL) || (m_pUpdateServerInfo == NULL)) {
+		return;
+	}
 
 	nCount = m_pLibInfoChar->GetCountOnline();
 	m_pLibInfoChar->GetPlaceName(strTmp);

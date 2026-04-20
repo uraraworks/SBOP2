@@ -47,7 +47,7 @@ static void WritePosSyncDebugLog(DWORD dwCharID, int nBeforeX, int nBeforeY, int
 			nApplyX,
 			nApplyY,
 			bUpdate ? 1 : 0);
-	SDL_Log("%s", szDbg);
+	SboDbgLog("%s", szDbg);
 }
 #endif
 
@@ -88,6 +88,7 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData)
 void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 {
 	int nDeltaX, nDeltaY, nDeltaMax;
+	int nStateMove, nStateStop;
 	int nSetX, nSetY, nBeforeX, nBeforeY, nApplyX, nApplyY;
 	LPCSTR pszAdjustType;
 	DWORD dwRecvTime;
@@ -96,6 +97,26 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 
 	Packet.Set(pData);
 
+	/*
+	   WebSocket 経路で壊れた POS_SYNC が混ざることがあり、
+	   異常な方向や座標をそのまま食べると大ジャンプや描画負荷増大を招く。
+	   正常範囲外の値は同期対象から外して、既存の MOVE_* / 次の正常同期を待つ。
+	*/
+	if ((Packet.m_nDirection < 0) || (Packet.m_nDirection > 7) ||
+		(abs(Packet.m_pos.x) > 100000) ||
+		(abs(Packet.m_pos.y) > 100000)) {
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+		SboDbgLog("[POS_SYNC][DROP_INVALID] charID=%u dir=%d pos=(%d,%d) update=%d ts=%u",
+			Packet.m_dwCharID,
+			Packet.m_nDirection,
+			Packet.m_pos.x,
+			Packet.m_pos.y,
+			Packet.m_bUpdate ? 1 : 0,
+			Packet.m_dwTimeStamp);
+#endif
+		return;
+	}
+
 	if (m_pMgrData->GetCharID() == Packet.m_dwCharID) {
 		return;
 	}
@@ -103,6 +124,15 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
 		return;
+	}
+	nStateMove = CHARMOVESTATE_MOVE;
+	nStateStop = CHARMOVESTATE_STAND;
+	if (pInfoChar->IsStateBattle()) {
+		nStateMove = CHARMOVESTATE_BATTLEMOVE;
+		nStateStop = CHARMOVESTATE_BATTLE;
+		if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
+			nStateStop = CHARMOVESTATE_BATTLE_DEFENSE;
+		}
 	}
 
 	nBeforeX = pInfoChar->m_nMapX;
@@ -118,7 +148,28 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 		nDeltaMax = abs(nDeltaY);
 	}
 
-	if (nDeltaMax >= 32) {
+	if ((nDeltaMax > 0) && (nDeltaMax < 8)) {
+		/*
+		   Web 版は細かい移動や向き変更直後に 1〜7px 程度の差分で止まることがある。
+		   ここを無視すると「届いているのに少し前の位置/向きのまま」に見えるため、
+		   小差分はそのまま同期して表示遅延を防ぐ。
+		*/
+		pInfoChar->SetPos(Packet.m_pos.x, Packet.m_pos.y);
+		nApplyX = Packet.m_pos.x;
+		nApplyY = Packet.m_pos.y;
+		pszAdjustType = "micro";
+	} else if (Packet.m_bUpdate && (nDeltaMax >= 8) && (nDeltaMax < 32)) {
+		/*
+		   MOVE_* が抜ける環境では POS_SYNC(update) が唯一の最新位置になることがある。
+		   予測移動中でも 8〜31px の更新差分を握りつぶすと、
+		   ちょん移動や向き変更が数秒遅れて最後に飛んで見える。
+		   update 付きの中差分は即時反映して、見た目の取り残されを減らす。
+		*/
+		pInfoChar->SetPos(Packet.m_pos.x, Packet.m_pos.y);
+		nApplyX = Packet.m_pos.x;
+		nApplyY = Packet.m_pos.y;
+		pszAdjustType = "update-sync";
+	} else if (nDeltaMax >= 32) {
 		pInfoChar->SetPos(Packet.m_pos.x, Packet.m_pos.y);
 		nApplyX = Packet.m_pos.x;
 		nApplyY = Packet.m_pos.y;
@@ -134,16 +185,40 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 		pszAdjustType = "skip";
 	}
 	pInfoChar->SetDirection(Packet.m_nDirection);
+	pInfoChar->m_nPredictSyncX = Packet.m_pos.x;
+	pInfoChar->m_nPredictSyncY = Packet.m_pos.y;
 
-	dwRecvTime = Packet.m_dwTimeStamp;
-	if (dwRecvTime == 0) {
-		dwRecvTime = timeGetTime();
+	// POS_SYNC のタイムスタンプは送信元プロセス基準なので、別ブラウザ/別プロセス間では
+	// 受信側ローカル時計と一致しない。予測移動はローカル受信時刻を基準にする。
+	dwRecvTime = SDL_GetTicks();
+	// [DBG-POSSYNC-TIME] timeGetTime は Win32 専用のため SDL_GetTicks() で代替
+	// 量を減らすため m_bUpdate==TRUE（移動開始）のパケットのみ出力する
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	if (Packet.m_bUpdate) {
+		DWORD dwSdlNow = SDL_GetTicks();
+		SboDbgLog("[POS_SYNC][CHAR:%u][update] pkt.TimeStamp=%u SDL_GetTicks=%u diff=%d",
+			Packet.m_dwCharID,
+			Packet.m_dwTimeStamp,
+			dwSdlNow,
+			(int)((int)dwSdlNow - (int)Packet.m_dwTimeStamp));
 	}
+#endif
 	if (Packet.m_bUpdate) {
 		pInfoChar->StartPredictedMove(Packet.m_nDirection, Packet.m_pos.x, Packet.m_pos.y, dwRecvTime);
+		/*
+		   Web 版では MOVE_* が欠けても POS_SYNC(update) は届くことがある。
+		   この時に予測移動だけ開始して移動状態へ入れないと、
+		   座標だけ動いて歩行アニメが止まったままに見えてしまう。
+		*/
+		if (pInfoChar->m_nMoveState != nStateMove) {
+			pInfoChar->ChgMoveState(nStateMove);
+		}
 	} else {
 		pInfoChar->DeleteAllMovePosQue();
 		pInfoChar->StopPredictedMove(Packet.m_pos.x, Packet.m_pos.y);
+		if (pInfoChar->IsStateMove()) {
+			pInfoChar->ChgMoveState(nStateStop);
+		}
 	}
 
 	pInfoChar->m_bRedraw = TRUE;
@@ -170,7 +245,7 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	DWORD dwMapIDBack;
 	int nMapXBack, nMapYBack;
 	BOOL bSyncEventTile, bPlayerPosChanged;
-	PCInfoCharCli pInfoChar;
+	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	PCInfoAccount pInfoAccount;
 	PCLayerMap pLayerMap;
 	CPacketCHAR_RES_CHARINFO Packet;
@@ -181,20 +256,14 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	nMapXBack = nMapYBack = 0;
 	bSyncEventTile = FALSE;
 	bPlayerPosChanged = FALSE;
-	{
-		CString strDbg;
-		strDbg.Format(_T("[RecvProcCHAR_RES_CHARINFO] charID=%u moveType=%d mapID=%u pos=(%d,%d)\r\n"),
-			Packet.m_pInfo->m_dwCharID,
-			Packet.m_pInfo->m_nMoveType,
-			Packet.m_pInfo->m_dwMapID,
-			Packet.m_pInfo->m_nMapX,
-			Packet.m_pInfo->m_nMapY);
-#ifdef _WIN32
-		OutputDebugString(strDbg);
-#else
-		SDL_Log("%s", TStringToUtf8Std((LPCTSTR)strDbg).c_str());
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	SboDbgLog("[RES_CHARINFO入口] charID=%u moveType=%d mapID=%u pos=(%d,%d)",
+		Packet.m_pInfo->m_dwCharID,
+		Packet.m_pInfo->m_nMoveType,
+		Packet.m_pInfo->m_dwMapID,
+		Packet.m_pInfo->m_nMapX,
+		Packet.m_pInfo->m_nMapY);
 #endif
-	}
 
 	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(Packet.m_pInfo->m_dwCharID);
 	if (pInfoChar == NULL) {
@@ -213,6 +282,16 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	nMapXBack = pInfoChar->m_nMapX;
 	nMapYBack = pInfoChar->m_nMapY;
 
+	// [DBG-CHARINFO-1] Copy 前のバックアップ値と新規キャラかどうかをログ出力
+	{
+		BOOL bIsNewChar = (dwMapIDBack == 0) ? TRUE : FALSE;
+		SboDbgLog("[RES_CHARINFO] Copy前 mapIDBack=%u posBack=(%d,%d) newChar=%d packetMap=%u packetPos=(%d,%d)",
+			dwMapIDBack, nMapXBack, nMapYBack, bIsNewChar,
+			Packet.m_pInfo->m_dwMapID,
+			Packet.m_pInfo->m_nMapX,
+			Packet.m_pInfo->m_nMapY);
+	}
+
 	pInfoChar->Copy(Packet.m_pInfo);
 	pInfoChar->MakeCharGrp();
 	pInfoChar->m_bRedraw = TRUE;
@@ -221,6 +300,23 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	pInfoAccount = m_pMgrData->GetAccount();
 	if (pInfoAccount->m_dwCharID == Packet.m_pInfo->m_dwCharID) {
 		m_pMgrData->SetPlayerChar(pInfoChar);
+	}
+	pInfoCharPlayer = m_pMgrData->GetPlayerChar();
+	if ((pInfoChar != NULL) &&
+		(pInfoChar != pInfoCharPlayer) &&
+		(pInfoCharPlayer != NULL) &&
+		(pInfoChar->m_dwMapID != pInfoCharPlayer->m_dwMapID)) {
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+		SboDbgLog("[RES_CHARINFO->DeleteOtherMapChar] charID=%u charMap=%u playerMap=%u pos=(%d,%d)",
+			pInfoChar->m_dwCharID,
+			pInfoChar->m_dwMapID,
+			pInfoCharPlayer->m_dwMapID,
+			pInfoChar->m_nMapX,
+			pInfoChar->m_nMapY);
+#endif
+		m_pLibInfoChar->Delete(pInfoChar->m_dwCharID);
+		PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
+		return;
 	}
 
 	// 自キャラ？
@@ -239,6 +335,11 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 		}
 		if (bPlayerPosChanged || Packet.m_bChgScreenPos) {
 			pLayerMap = (PCLayerMap)m_pMgrLayer->Get(LAYERTYPE_MAP);
+			// [DBG-CHARINFO-2] SetCenterPos 呼び出し判定をログ出力
+			SboDbgLog("[RES_CHARINFO] bPlayerPosChanged=%d bChgScreenPos=%d SetCenterPos呼出=%d 引数=(%d,%d)",
+				bPlayerPosChanged, Packet.m_bChgScreenPos,
+				(pLayerMap != NULL) ? 1 : 0,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY);
 			if (pLayerMap) {
 				pLayerMap->SetCenterPos(pInfoChar->m_nMapX, pInfoChar->m_nMapY);
 			}
@@ -305,6 +406,12 @@ void CMainFrame::RecvProcCHAR_MOVE_START(PBYTE pData)
 	CPacketCHAR_MOVE_START Packet;
 
 	Packet.Set(pData);
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	// (A') MOVE_START 受信ログ：開始通知の有無と CharID を確認
+	SboDbgLog("[MOVE_START] charID=%u dir=%d pos=(%d,%d) bUpdate=%d",
+		Packet.m_dwCharID, Packet.m_nDirection,
+		Packet.m_pos.x, Packet.m_pos.y, Packet.m_bUpdate);
+#endif
 	RecvProcCHAR_MOVE_CORE(
 			Packet.m_dwCharID,
 			Packet.m_nDirection,
@@ -320,6 +427,12 @@ void CMainFrame::RecvProcCHAR_MOVE_DIR_CHANGE(PBYTE pData)
 	CPacketCHAR_MOVE_DIR_CHANGE Packet;
 
 	Packet.Set(pData);
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	// (A'') MOVE_DIR_CHANGE 受信ログ：方向変更通知の有無
+	SboDbgLog("[MOVE_DIR_CHANGE] charID=%u dir=%d pos=(%d,%d) bUpdate=%d",
+		Packet.m_dwCharID, Packet.m_nDirection,
+		Packet.m_pos.x, Packet.m_pos.y, Packet.m_bUpdate);
+#endif
 	RecvProcCHAR_MOVE_CORE(
 			Packet.m_dwCharID,
 			Packet.m_nDirection,
@@ -335,6 +448,12 @@ void CMainFrame::RecvProcCHAR_MOVE_STOP(PBYTE pData)
 	CPacketCHAR_MOVE_STOP Packet;
 
 	Packet.Set(pData);
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	// (A) MOVE_STOP 受信ログ：停止通知が届いているか確認するため
+	SboDbgLog("[MOVE_STOP] charID=%u dir=%d pos=(%d,%d) bUpdate=%d",
+		Packet.m_dwCharID, Packet.m_nDirection,
+		Packet.m_pos.x, Packet.m_pos.y, Packet.m_bUpdate);
+#endif
 	RecvProcCHAR_MOVE_CORE(
 			Packet.m_dwCharID,
 			Packet.m_nDirection,
@@ -348,12 +467,22 @@ void CMainFrame::RecvProcCHAR_MOVE_STOP(PBYTE pData)
 void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPacketPosX, int nPacketPosY, BOOL bUpdate, BOOL bForceStop)
 {
 	int nState, nStateStand, nStateMove, nResult, nStateStop;
+	BOOL bDirectionChanged, bPositionChanged;
 	BOOL bResult;
 	DWORD dwRecvTime;
 	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	PCLayerMap pLayerMap;
 
 	pLayerMap = (PCLayerMap)m_pMgrLayer->Get(LAYERTYPE_MAP);
+
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	// 受信 CharID と自キャラ CharID を比較してログ出力
+	SboDbgLog("[MOVE_CORE] pktCharID=%u selfCharID=%u isSelf=%d pos=(%d,%d) bForceStop=%d",
+		dwCharID,
+		m_pMgrData->GetCharID(),
+		(m_pMgrData->GetCharID() == dwCharID) ? 1 : 0,
+		nPacketPosX, nPacketPosY, bForceStop);
+#endif
 
 	// 自キャラ？
 	if (m_pMgrData->GetCharID() == dwCharID) {
@@ -371,6 +500,10 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 	if (pInfoChar == NULL) {
 		CPacketCHAR_REQ_CHARINFO PacketCHAR_REQ_CHARINFO;
 
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+		SboDbgLog("[MOVE_CORE] pInfoChar==NULL → REQ_CHARINFO pktCharID=%u",
+			dwCharID);
+#endif
 		// 画面内？
 		if (pLayerMap) {
 			bResult = pLayerMap->IsInScreen(nPacketPosX, nPacketPosY);
@@ -382,6 +515,8 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		return;
 	}
 	nState = -1;
+	bDirectionChanged = FALSE;
+	bPositionChanged = FALSE;
 
 	nStateStand = CHARMOVESTATE_STAND;
 	nStateMove = CHARMOVESTATE_MOVE;
@@ -393,14 +528,31 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		nStateMove = CHARMOVESTATE_BATTLEMOVE;
 	}
 
-	if (pInfoChar->m_nDirection != nDirection) {
-		if (pInfoChar->m_nMoveState != CHARMOVESTATE_SIT) {
-			nState = nStateStand;
-		}
-	}
+	bDirectionChanged = (pInfoChar->m_nDirection != nDirection) ? TRUE : FALSE;
+	bPositionChanged = !((pInfoChar->m_nMapX == nPacketPosX) && (pInfoChar->m_nMapY == nPacketPosY));
 
-	if (!((pInfoChar->m_nMapX == nPacketPosX) && (pInfoChar->m_nMapY == nPacketPosY))) {
-		nState = nStateMove;
+	/*
+	   Web 版では短い入力や方向転換で、位置差分がほぼ無い MOVE_DIR_CHANGE が先に届くことがある。
+	   ここを STAND 扱いにすると、見る側は向き変更を保留したまま歩行アニメだけが残りやすい。
+	   停止通知以外で向きまたは位置が変わった場合は、移動継続として扱う。
+	*/
+	if (!bForceStop) {
+		if (bPositionChanged) {
+			nState = nStateMove;
+		} else if (bDirectionChanged) {
+			/*
+			   位置が変わらない向き変更だけのパケットは、その場の向き反映を優先する。
+			   ここを常に MOVE 扱いすると、MOVE_STOP 欠落時に足踏みだけが残りやすい。
+			   既に移動中のキャラに対する方向転換だけ MOVE 継続とみなす。
+			*/
+			if (pInfoChar->IsStateMove()) {
+				nState = nStateMove;
+			} else if (pInfoChar->m_nMoveState != CHARMOVESTATE_SIT) {
+				nState = nStateStand;
+			}
+		}
+	} else if (bDirectionChanged && (pInfoChar->m_nMoveState != CHARMOVESTATE_SIT)) {
+		nState = nStateStand;
 	}
 
 	bResult = TRUE;
@@ -442,6 +594,10 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		} else {
 			bResult = pInfoChar->IsStateMove();
 			if (bResult) {
+				if (bDirectionChanged) {
+					pInfoChar->SetDirection(nDirection);
+					pInfoChar->m_bRedraw = TRUE;
+				}
 				if ((nState != -1) ||
 					(pInfoChar->m_nMapX != nPacketPosX) ||
 					(pInfoChar->m_nMapY != nPacketPosY) ||
@@ -477,12 +633,19 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 {
 	BOOL bChgBGM;
+	BOOL bKeepPredicted;
 	int nState;
+	DWORD dwNowTime;
 	PCInfoMapBase pInfoMap;
 	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	CPacketCHAR_STATE Packet;
 
 	Packet.Set(pData);
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	// (B) CHAR_STATE 受信ログ：どの状態変化が届いているか確認するため
+	SboDbgLog("[CHAR_STATE] charID=%u nState=%d",
+		Packet.m_dwCharID, Packet.m_nState);
+#endif
 
 	pInfoCharPlayer = m_pMgrData->GetPlayerChar();
 
@@ -495,16 +658,132 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 	if (nState == CHARMOVESTATE_DELETE) {
 		nState = CHARMOVESTATE_DELETEREADY;
 	}
+	if ((pInfoChar != pInfoCharPlayer) &&
+		(nState == CHARMOVESTATE_DELETEREADY)) {
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+		SboDbgLog("[CHAR_STATE->DeleteRemoteNow] charID=%u mapID=%u pos=(%d,%d)",
+			pInfoChar->m_dwCharID,
+			pInfoChar->m_dwMapID,
+			pInfoChar->m_nMapX,
+			pInfoChar->m_nMapY);
+#endif
+		m_pLibInfoChar->Delete(pInfoChar->m_dwCharID);
+		PostMainFrameMessage(MAINFRAMEMSG_RENEWCHARCOUNT, m_pLibInfoChar->GetCount());
+		return;
+	}
+
+	/*
+	   Web の移動同期では MOVE_* / POS_SYNC の方が細かく正しい状態を持っている。
+	   リモートキャラに対して短周期で届く STAND/BATTLE 系 CHAR_STATE をそのまま反映すると、
+	   ちょんちょん移動や向き変更直後の見た目を潰しやすい。
+	   停止系状態は、直近で MoveSync が動いている間だけ MOVE_* 側を優先する。
+	*/
+	if ((pInfoChar != pInfoCharPlayer) &&
+		((nState == CHARMOVESTATE_MOVE) ||
+		 (nState == CHARMOVESTATE_BATTLEMOVE))) {
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+		SboDbgLog("[CHAR_STATE->IgnoreRemoteMoveState] charID=%u nState=%d pos=(%d,%d) pred=%d que=%d move=%d",
+			pInfoChar->m_dwCharID,
+			nState,
+			pInfoChar->m_nMapX,
+			pInfoChar->m_nMapY,
+			pInfoChar->m_bPredictedMove ? 1 : 0,
+			(int)pInfoChar->m_apMovePosQue.size(),
+			pInfoChar->IsStateMove() ? 1 : 0);
+#endif
+		pInfoChar->SetChgWait(FALSE);
+		return;
+	}
+
+	if ((pInfoChar != pInfoCharPlayer) &&
+		((nState == CHARMOVESTATE_STAND) ||
+		 (nState == CHARMOVESTATE_BATTLE) ||
+		 (nState == CHARMOVESTATE_BATTLE_DEFENSE))) {
+		DWORD dwNowTimeState;
+		DWORD dwPredictAge;
+		BOOL bRecentMoveSync;
+
+		dwNowTimeState = SDL_GetTicks();
+		dwPredictAge = 0xFFFFFFFF;
+		if ((pInfoChar->m_dwPredictRecvTime != 0) &&
+			(dwNowTimeState >= pInfoChar->m_dwPredictRecvTime)) {
+			dwPredictAge = dwNowTimeState - pInfoChar->m_dwPredictRecvTime;
+		}
+		bRecentMoveSync = FALSE;
+		if ((dwPredictAge <= 400) &&
+			(pInfoChar->m_bPredictedMove || (pInfoChar->m_apMovePosQue.size() > 0) || pInfoChar->IsStateMove())) {
+			bRecentMoveSync = TRUE;
+		} else if (dwPredictAge <= 400) {
+			bRecentMoveSync = TRUE;
+		}
+		if (bRecentMoveSync) {
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+			SboDbgLog("[CHAR_STATE->SkipByMoveSync] charID=%u nState=%d pos=(%d,%d) dt=%u pred=%d que=%d move=%d",
+				pInfoChar->m_dwCharID,
+				nState,
+				pInfoChar->m_nMapX,
+				pInfoChar->m_nMapY,
+				(dwPredictAge != 0xFFFFFFFF) ? dwPredictAge : 0,
+				pInfoChar->m_bPredictedMove ? 1 : 0,
+				(int)pInfoChar->m_apMovePosQue.size(),
+				pInfoChar->IsStateMove() ? 1 : 0);
+#endif
+			pInfoChar->SetChgWait(FALSE);
+			return;
+		}
+	}
 
 	if (nState == CHARMOVESTATE_BATTLEATACK) {
 		m_pLibInfoChar->RenewMotionInfo(pInfoChar);
 	}
 	pInfoChar->ChgMoveState(nState);
 	pInfoChar->SetChgWait(FALSE);
+	bKeepPredicted = FALSE;
 	if ((pInfoChar != pInfoCharPlayer) &&
 		(nState != CHARMOVESTATE_MOVE) &&
 		(nState != CHARMOVESTATE_BATTLEMOVE)) {
-		pInfoChar->StopPredictedMove(pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+		/*
+		   Web 版では MOVE_* 直後に CHAR_STATE=STAND/BATTLE が先に届くことがあり、
+		   短い移動や向き変更が StopPredictedMove で潰されやすい。
+		   直近で移動予測を開始している間は停止処理を少し猶予する。
+		*/
+		dwNowTime = SDL_GetTicks();
+		if ((pInfoChar->m_bPredictedMove || (pInfoChar->m_apMovePosQue.size() > 0)) &&
+			(pInfoChar->m_dwPredictRecvTime != 0) &&
+			(dwNowTime >= pInfoChar->m_dwPredictRecvTime) &&
+			(dwNowTime - pInfoChar->m_dwPredictRecvTime <= 250)) {
+			bKeepPredicted = TRUE;
+		}
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+		if (bKeepPredicted) {
+			SboDbgLog("[CHAR_STATE->KeepPredicted] charID=%u nState=%d pos=(%d,%d) dt=%u",
+				pInfoChar->m_dwCharID,
+				nState,
+				pInfoChar->m_nMapX,
+				pInfoChar->m_nMapY,
+				dwNowTime - pInfoChar->m_dwPredictRecvTime);
+		} else {
+			// (C) StopPredictedMove 呼び出しログ：予測移動停止が実際に発火しているか確認するため
+			SboDbgLog("[CHAR_STATE->StopPredicted] charID=%u nState=%d pos=(%d,%d)",
+				pInfoChar->m_dwCharID, nState, pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+		}
+#endif
+		if (bKeepPredicted == FALSE) {
+			int nStopX, nStopY;
+
+			nStopX = pInfoChar->m_nMapX;
+			nStopY = pInfoChar->m_nMapY;
+			if (pInfoChar->m_nPredictSyncX != 0 || pInfoChar->m_nPredictSyncY != 0) {
+				/*
+				   Web 版では短い移動の MOVE_STOP が欠けることがある。
+				   その場合でも直近の POS_SYNC/MOVE_* で受けた確定位置へ戻して止めると、
+				   行き過ぎた位置で足踏みしたまま固まる症状を減らせる。
+				*/
+				nStopX = pInfoChar->m_nPredictSyncX;
+				nStopY = pInfoChar->m_nPredictSyncY;
+			}
+			pInfoChar->StopPredictedMove(nStopX, nStopY);
+		}
 	}
 
 	if (pInfoChar == pInfoCharPlayer) {

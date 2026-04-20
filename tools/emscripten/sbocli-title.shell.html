@@ -630,23 +630,30 @@
     updateCanvasProbe();
     window.setInterval(updateCanvasProbe, 1000);
 
+    // ログ欄リングバッファヘルパ: 最新 500 行に制限して O(n²) 肥大を防ぐ
+    const LOG_LINE_LIMIT = 500;
+    function appendLogLine(text) {
+      if (!outputElement) return;
+      const lines = outputElement.value ? outputElement.value.split('\n') : [];
+      lines.push(text);
+      while (lines.length > LOG_LINE_LIMIT) {
+        lines.shift();
+      }
+      outputElement.value = lines.join('\n');
+      outputElement.scrollTop = outputElement.scrollHeight;
+    }
+
     var Module = {
       canvas: canvasElement,
       print(...args) {
         const text = args.join(' ');
         console.log(text);
-        if (outputElement) {
-          outputElement.value += text + '\n';
-          outputElement.scrollTop = outputElement.scrollHeight;
-        }
+        appendLogLine(text);
       },
       printErr(...args) {
         const text = args.join(' ');
         console.warn(text);
-        if (outputElement) {
-          outputElement.value += text + '\n';
-          outputElement.scrollTop = outputElement.scrollHeight;
-        }
+        appendLogLine(text);
       },
       setStatus(text) {
         Module.lastStatusText = text || '';
@@ -672,9 +679,7 @@
 
     window.onerror = function(message) {
       Module.setStatus('例外発生');
-      if (outputElement) {
-        outputElement.value += String(message) + '\n';
-      }
+      appendLogLine(String(message));
     };
   </script>
   {{{ SCRIPT }}}

@@ -282,6 +282,14 @@ int CStateProcMAP::GetPlayerMoveStep(DWORD dwNowTime, int &nAccumOut, DWORD &dwL
 	ullAccumulated = (ULONGLONG)nAccumOut + (ULONGLONG)dwElapsed * nMovePixelsPerSec;
 	nMoveStep = (int)(ullAccumulated / 1000);
 	nAccumOut = (int)(ullAccumulated % 1000);
+
+	// [DBG-MOVESTEP] 大移動（5px超）のときのみログ出力してログ欄肥大を防ぐ
+	if (nMoveStep > 5) {
+		DWORD dwMoveWaitLog = GetPlayerMoveWaitBase(m_pPlayerChar);
+		SboDbgLog("[GetPlayerMoveStep] dwElapsed=%u dwMoveWait=%u nMovePixelsPerSec=%d nMoveStep=%d",
+			dwElapsed, dwMoveWaitLog, nMovePixelsPerSec, nMoveStep);
+	}
+
 	return nMoveStep;
 }
 
@@ -523,20 +531,38 @@ BOOL CStateProcMAP::TimerProc(void)
 			}
 		}
 		if (m_pPlayerChar->m_bWaitCheckMapEvent && (m_bSendCheckMapEvent == FALSE)) {
+			CPacketCHAR_MOVE_DIR_CHANGE PacketMoveDirChange;
 			CPacketCHAR_MOVE_STOP PacketMoveStop;
 			CPacketCHAR_PARA1 PacketPara1;
 
-			/* 判定要求の直前に現在位置を強制同期して、サーバー側の取りこぼしを防ぐ */
-			PacketMoveStop.Make(
-				m_pPlayerChar->m_dwMapID,
-				m_pPlayerChar->m_dwCharID,
-				m_pPlayerChar->m_nDirection,
-				m_pPlayerChar->m_nMapX,
-				m_pPlayerChar->m_nMapY,
-				FALSE,
-				0,
-				timeGetTime());
-			m_pSock->Send(&PacketMoveStop);
+			/* 判定要求の直前に現在位置を強制同期して、サーバー側の取りこぼしを防ぐ。
+			   サーバーからの状態反映が一瞬 STAND に戻っても、MoveSync 継続中に
+			   MOVE_STOP を送ると他クライアント側の予測移動まで止まるため、
+			   Dead Reckoning 送信中は常に MOVE_DIR_CHANGE(update=TRUE) で同期する。 */
+			if (m_bMoveSyncActive) {
+				PacketMoveDirChange.Make(
+					m_pPlayerChar->m_dwMapID,
+					m_pPlayerChar->m_dwCharID,
+					m_pPlayerChar->m_nDirection,
+					m_pPlayerChar->m_nMapX,
+					m_pPlayerChar->m_nMapY,
+					TRUE,
+					1,
+					timeGetTime());
+				m_pSock->Send(&PacketMoveDirChange);
+				m_dwLastTimeMoveSyncSend = timeGetTime();
+			} else {
+				PacketMoveStop.Make(
+					m_pPlayerChar->m_dwMapID,
+					m_pPlayerChar->m_dwCharID,
+					m_pPlayerChar->m_nDirection,
+					m_pPlayerChar->m_nMapX,
+					m_pPlayerChar->m_nMapY,
+					FALSE,
+					0,
+					timeGetTime());
+				m_pSock->Send(&PacketMoveStop);
+			}
 
 			/* Phase 8: 自由移動では停止タイミング依存にすると取りこぼすため、待機フラグ時に即チェック要求する */
 			PacketPara1.Make(SBOCOMMANDID_SUB_CHAR_REQ_CHECKMAPEVENT, m_pPlayerChar->m_dwCharID, 0);
@@ -2759,10 +2785,6 @@ BOOL CStateProcMAP::MoveProc(
 	y += yy;
 ExitSend:
 	m_pPlayerChar->m_bRedraw = TRUE;
-	if (bSyncSend == FALSE) {
-		bRet = TRUE;
-		goto Exit;
-	}
 	if (!((xBack == x) && (yBack == y) && (nDirectionBack == nDirection))) {
 		/* サーバへ移動通知（Dead Reckoning専用） */
 		if (m_bMoveSyncActive == FALSE) {
@@ -2819,11 +2841,15 @@ ExitSend:
 		}
 
 		/*
-		   キャラ座標・範囲イベントはタイル内でも発火しうるため、
-		   自キャラが実際に移動したフレームではサーバーへ判定を委譲する。
-		   マップ切替直後だけは再発火防止のため、このフレームでは送らない。
+		   移動イベント判定は毎ピクセル要求すると Web 版では同期量が過剰になり、
+		   移動の滑らかさや停止位置に悪影響が出る。
+		   そのため、マップ切替直後を除き、タイルを跨いだ時だけサーバーへ判定を委譲する。
 		*/
-		if (bMapChanged == FALSE && !m_bAutoWalkToEvent) {
+		if (bMapChanged == FALSE &&
+			!m_bAutoWalkToEvent &&
+			((m_bHasLastEventTile == FALSE) ||
+			 (m_nLastEventTileX != nCurTileX) ||
+			 (m_nLastEventTileY != nCurTileY))) {
 			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
 			m_bSendCheckMapEvent = FALSE;
 			/* サーバーが最新位置でイベント判定できるよう現在位置を強制同期

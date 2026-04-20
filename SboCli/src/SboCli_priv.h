@@ -29,6 +29,19 @@
 #define CHAR_MOVE_COLLISION_LOOKAHEAD	(CHAR_MOVE_SPEED_MAX)	// 当たり判定先読み(px)。最大移動量未満だと斜め入力時に食い込む
 #define MAXCOUNT_CHARGRPCOUNTONEFILE	(16)					// キャラ画像の1ファイルに登録されているキャラ数
 
+// POS_SYNC デバッグログ有効フラグ
+// Emscripten（ブラウザ）ビルドでは常に有効、Windows デバッグビルドでも有効
+// GlobalDefine.h で先に (0) 定義されている可能性があるため、
+// Emscripten / Debug ビルドでは明示的に undef してから再定義する
+#ifdef SBO_ENABLE_POS_SYNC_DEBUG_LOG
+#undef SBO_ENABLE_POS_SYNC_DEBUG_LOG
+#endif
+#if defined(__EMSCRIPTEN__) || defined(_DEBUG)
+#define SBO_ENABLE_POS_SYNC_DEBUG_LOG 1
+#else
+#define SBO_ENABLE_POS_SYNC_DEBUG_LOG 0
+#endif
+
 // 座標変換ユーティリティ
 // 自由移動（ピクセル単位座標）への移行準備。Phase 2 以降で順次使用する。
 // タイル座標の唯一の変換係数として MAPPARTSSIZE(32) を確立する。
@@ -344,3 +357,13 @@ typedef struct _STINTLPCSTR {
 	int		nValue;			// 数値
 	LPCSTR	pszText;		// 文字列ポインタ
 } STINTLPCSTR, *PSTINTLPCSTR;
+
+// ------------------------------------------------------------
+// デバッグログ出力ユーティリティ
+//   SDL_Log を使用する。Emscripten ビルドでも SDL_Log は
+//   printf 相当で動作するため問題ない。
+//   ※ <emscripten.h> を直接 include すると ./emscripten/emscripten.h
+//     ローカルスタブとの型競合が起きるため使用しない。
+// ------------------------------------------------------------
+#include <SDL.h>
+#define SboDbgLog SDL_Log

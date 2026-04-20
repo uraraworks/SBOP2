@@ -9,6 +9,8 @@
 #include <cstring>
 #include <cstdlib>
 #include "crc.h"
+#include "PacketBase.h"
+#include "Command.h"
 #include "myLib/myZlib/myZlib.h"
 #include "UraraSockTCPWebSocket.h"
 
@@ -24,6 +26,52 @@ struct WS_PACKETINFO {
 #pragma pack(pop)
 
 static CCRC g_wsCrc;  // CRC計算用
+
+static bool IsWebMoveTracePacket(PBYTE pData, DWORD dwSize)
+{
+    CPacketBase PacketBase;
+
+    if ((pData == NULL) || (dwSize < sizeof(PACKETBASE))) {
+        return false;
+    }
+
+    PacketBase.Set(pData);
+    if (PacketBase.m_byCmdMain != SBOCOMMANDID_MAIN_CHAR) {
+        return false;
+    }
+
+    switch (PacketBase.m_byCmdSub) {
+    case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+    case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+    case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+    case SBOCOMMANDID_SUB_CHAR_POS_SYNC:
+    case SBOCOMMANDID_SUB_CHAR_RES_CHARINFO:
+    case SBOCOMMANDID_SUB_CHAR_CHARINFO:
+        return true;
+    }
+
+    return false;
+}
+
+static const char* GetWebMoveTracePacketName(BYTE byCmdSub)
+{
+    switch (byCmdSub) {
+    case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+        return "MOVE_START";
+    case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+        return "MOVE_DIR_CHANGE";
+    case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+        return "MOVE_STOP";
+    case SBOCOMMANDID_SUB_CHAR_POS_SYNC:
+        return "POS_SYNC";
+    case SBOCOMMANDID_SUB_CHAR_RES_CHARINFO:
+        return "RES_CHARINFO";
+    case SBOCOMMANDID_SUB_CHAR_CHARINFO:
+        return "CHARINFO";
+    }
+
+    return "UNKNOWN";
+}
 
 // コンストラクタ
 
@@ -123,6 +171,17 @@ void CUraraSockTCPWebSocket::Send(PBYTE pData, DWORD dwSize, BYTE byPriority)
 
     if (!m_bConnected || m_socket <= 0) {
         return;
+    }
+
+    if (IsWebMoveTracePacket(pData, dwSize)) {
+        CPacketBase PacketBase;
+
+        PacketBase.Set(pData);
+        SDL_Log("[WebSocket][Send] main=%u sub=%u(%s) size=%u",
+            PacketBase.m_byCmdMain,
+            PacketBase.m_byCmdSub,
+            GetWebMoveTracePacketName(PacketBase.m_byCmdSub),
+            dwSize);
     }
 
     // zlib圧縮（128バイト以上の場合）
@@ -288,6 +347,17 @@ EM_BOOL CUraraSockTCPWebSocket::OnMessage(int, const EmscriptenWebSocketMessageE
         }
 
         if (pResult) {
+            if (IsWebMoveTracePacket(pResult, dwResultSize)) {
+                CPacketBase PacketBase;
+
+                PacketBase.Set(pResult);
+                SDL_Log("[WebSocket][Recv] main=%u sub=%u(%s) size=%u",
+                    PacketBase.m_byCmdMain,
+                    PacketBase.m_byCmdSub,
+                    GetWebMoveTracePacketName(PacketBase.m_byCmdSub),
+                    dwResultSize);
+            }
+
             // WM_URARASOCK_RECV 通知
             // wParam = データポインタ（DeleteRecvData()で解放される）
             // lParam = セッションID（クライアントは常に0）

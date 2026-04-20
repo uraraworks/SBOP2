@@ -73,6 +73,48 @@ static int GetPredictMovePixelsPerSec(PCInfoCharCli pInfoChar)
 	return (int)ullSpeed;
 }
 
+static int ClampPredictMovePixelsPerSec(int nSpeed)
+{
+	/*
+	   Web 版の viewer 側はサーバー中継や POS_SYNC 間引きの影響で、
+	   実効速度がローカル移動より遅めに見えることがある。
+	   実測値が極端でも予測が暴れすぎないよう、安全側に丸めて使う。
+	*/
+	nSpeed = max(nSpeed, 48);
+	nSpeed = min(nSpeed, 110);
+	return nSpeed;
+}
+
+static DWORD GetPredictLeadLimitMs(PCInfoCharCli pInfoChar)
+{
+	DWORD dwLeadLimitMs;
+
+	dwLeadLimitMs = 240;
+	if ((pInfoChar != NULL) && (pInfoChar->m_dwPredictLeadLimitMs != 0)) {
+		dwLeadLimitMs = pInfoChar->m_dwPredictLeadLimitMs;
+	}
+
+	/*
+	   Web 版の viewer 側は POS_SYNC(update) の間隔が相手や経路によって揺れやすい。
+	   固定上限だと、同期が遅い環境では予測が先に尽きて一瞬停止しやすく、
+	   長すぎると今度は巻き戻りが増えるため、直近の受信間隔に応じて
+	   キャラごとに上限を持てるようにしている。
+	*/
+	return dwLeadLimitMs;
+}
+
+static DWORD ClampPredictLeadLimitMs(DWORD dwRecvInterval)
+{
+	/*
+	   受信間隔をそのまま使うと viewer 側が確定位置より先へ出やすい。
+	   少し控えめな比率で追従しつつ、停止感が強くなりすぎない範囲に抑える。
+	*/
+	dwRecvInterval = (dwRecvInterval * 2) / 3;
+	dwRecvInterval = max(dwRecvInterval, (DWORD)160);
+	dwRecvInterval = min(dwRecvInterval, (DWORD)320);
+	return dwRecvInterval;
+}
+
 static void ClampPredictedMoveForward(PCInfoCharCli pInfoChar, int nDirection, int &nX, int &nY)
 {
 	if (pInfoChar == NULL) {
@@ -111,6 +153,40 @@ static void ClampPredictedMoveForward(PCInfoCharCli pInfoChar, int nDirection, i
 	}
 }
 
+static void ClampPredictBaseToSync(int nDirection, int nSyncX, int nSyncY, int &nBaseX, int &nBaseY)
+{
+	switch (nDirection) {
+	case 0:
+		nBaseY = max(nBaseY, nSyncY);
+		break;
+	case 1:
+		nBaseY = min(nBaseY, nSyncY);
+		break;
+	case 2:
+		nBaseX = max(nBaseX, nSyncX);
+		break;
+	case 3:
+		nBaseX = min(nBaseX, nSyncX);
+		break;
+	case 4:
+		nBaseX = min(nBaseX, nSyncX);
+		nBaseY = max(nBaseY, nSyncY);
+		break;
+	case 5:
+		nBaseX = min(nBaseX, nSyncX);
+		nBaseY = min(nBaseY, nSyncY);
+		break;
+	case 6:
+		nBaseX = max(nBaseX, nSyncX);
+		nBaseY = min(nBaseY, nSyncY);
+		break;
+	case 7:
+		nBaseX = max(nBaseX, nSyncX);
+		nBaseY = max(nBaseY, nSyncY);
+		break;
+	}
+}
+
 
 CInfoCharCli::CInfoCharCli()
 {
@@ -143,10 +219,13 @@ CInfoCharCli::CInfoCharCli()
 	m_bPredictedMove	= FALSE;
 	m_nPredictBaseX	= 0;
 	m_nPredictBaseY	= 0;
+	m_nPredictSyncX	= 0;
+	m_nPredictSyncY	= 0;
 	m_nPredictDirection	= -1;
 	m_nPredictSpeed	= CHAR_MOVE_PIXELS_PER_SEC;
 	m_nDrawDirectionOverride = -1;
 	m_dwPredictRecvTime	= 0;
+	m_dwPredictLeadLimitMs	= 240;
 	m_dwDrawMoveStartTime	= 0;
 	m_dwDrawMoveEndTime	= 0;
 	m_dDrawMoveStartX	= 0.0;
@@ -1348,7 +1427,15 @@ void CInfoCharCli::DeleteAllMovePosQue(void)
 void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecvTime)
 {
 	int nDeltaMax;
-	DWORD dwNowTime;
+	int nPrevSyncX, nPrevSyncY, nObservedDelta, nObservedSpeed, nPredictSpeedPrev;
+	DWORD dwNowTime, dwPrevRecvTime, dwObservedInterval;
+
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
+	// [DBG] StartPredictedMove の呼び出しタイミングと引数を確認
+	SboDbgLog("[StartPredictedMove] charID=%u dir=%d pos=(%d,%d) recvTime=%u isSelf=%d",
+		m_dwCharID, nDirection, x, y, dwRecvTime,
+		(m_pMgrData && (m_pMgrData->GetCharID() == m_dwCharID)) ? 1 : 0);
+#endif
 
 	if (m_pMgrData && (m_pMgrData->GetCharID() == m_dwCharID)) {
 		m_bPredictedMove = FALSE;
@@ -1360,9 +1447,35 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 	}
 
 	dwNowTime = SDL_GetTicks();
+	dwPrevRecvTime = m_dwPredictRecvTime;
+	nPrevSyncX = m_nPredictSyncX;
+	nPrevSyncY = m_nPredictSyncY;
+	nPredictSpeedPrev = m_nPredictSpeed;
 	m_bPredictedMove	= TRUE;
 	m_nPredictDirection	= nDirection;
-	m_nPredictSpeed	= GetPredictMovePixelsPerSec(this);
+	if (nPredictSpeedPrev > 0) {
+		m_nPredictSpeed = ClampPredictMovePixelsPerSec(nPredictSpeedPrev);
+	} else {
+		m_nPredictSpeed	= GetPredictMovePixelsPerSec(this);
+	}
+	if ((dwPrevRecvTime != 0) && (dwNowTime >= dwPrevRecvTime)) {
+		m_dwPredictLeadLimitMs = ClampPredictLeadLimitMs(dwNowTime - dwPrevRecvTime);
+	} else if (m_dwPredictLeadLimitMs == 0) {
+		m_dwPredictLeadLimitMs = 240;
+	}
+	if ((dwPrevRecvTime != 0) && (dwNowTime > dwPrevRecvTime)) {
+		dwObservedInterval = dwNowTime - dwPrevRecvTime;
+		nObservedDelta = abs(x - nPrevSyncX);
+		if (nObservedDelta < abs(y - nPrevSyncY)) {
+			nObservedDelta = abs(y - nPrevSyncY);
+		}
+		if ((nObservedDelta >= 4) && (dwObservedInterval >= 80) && (dwObservedInterval <= 800)) {
+			nObservedSpeed = (int)(((ULONGLONG)nObservedDelta * 1000 + dwObservedInterval - 1) / dwObservedInterval);
+			m_nPredictSpeed = ClampPredictMovePixelsPerSec(nObservedSpeed);
+		}
+	}
+	m_nPredictSyncX = x;
+	m_nPredictSyncY = y;
 	DeleteAllMovePosQue();
 	m_ptMove.x = 0;
 	m_ptMove.y = 0;
@@ -1385,6 +1498,13 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 	} else {
 		m_nPredictBaseX = m_nMapX;
 		m_nPredictBaseY = m_nMapY;
+		/*
+		   直前の予測で少し先行している状態で新しい同期を受けた場合、
+		   その先行座標を次の予測基準にすると行き過ぎが累積して
+		   「進み過ぎてから戻される」見え方になりやすい。
+		   進行方向については、基準位置が確定同期を追い越さないように抑える。
+		*/
+		ClampPredictBaseToSync(nDirection, x, y, m_nPredictBaseX, m_nPredictBaseY);
 		m_dwPredictRecvTime = dwNowTime;
 	}
 }
@@ -1406,6 +1526,7 @@ void CInfoCharCli::StopPredictedMove(int x, int y)
 void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 {
 	int nFrame, nOffset, nX, nY;
+	DWORD dwPredictElapsed;
 	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1};
 	int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 
@@ -1419,15 +1540,39 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 		return;
 	}
 
-	nFrame = (int)(((ULONGLONG)(dwNowTime - m_dwPredictRecvTime) * GAME_UPDATE_FPS) / 1000);
+	dwPredictElapsed = dwNowTime - m_dwPredictRecvTime;
+	if (dwPredictElapsed > GetPredictLeadLimitMs(this)) {
+		dwPredictElapsed = GetPredictLeadLimitMs(this);
+	}
+
+	nFrame = (int)(((ULONGLONG)dwPredictElapsed * GAME_UPDATE_FPS) / 1000);
 	if (nFrame <= 0) {
 		return;
 	}
 
-	nOffset = (int)(((ULONGLONG)(dwNowTime - m_dwPredictRecvTime) * m_nPredictSpeed) / 1000);
+	nOffset = (int)(((ULONGLONG)dwPredictElapsed * m_nPredictSpeed) / 1000);
 	nX = m_nPredictBaseX + anPosX[m_nPredictDirection] * nOffset;
 	nY = m_nPredictBaseY + anPosY[m_nPredictDirection] * nOffset;
 	ClampPredictedMoveForward(this, m_nPredictDirection, nX, nY);
+
+	// [DBG-PREDICT] ログバッファ圧迫防止のため、1 秒に 1 回だけ出力する。
+	// 暴走が続いている事実だけわかればよく、連続出力で他のログ（MOVE_* 等）が
+	// 押し出されると原因調査ができなくなるため。
+	if (nOffset > 32) {
+		static DWORD s_dwLastLogTime = 0;
+		if ((s_dwLastLogTime == 0) || (dwNowTime - s_dwLastLogTime >= 1000)) {
+			s_dwLastLogTime = dwNowTime;
+			SboDbgLog("[UpdatePredictedPos] 大offset charID=%u now=%u recvTime=%u %s diff=%dms speed=%d offset=%d pos=(%d,%d)",
+				m_dwCharID,
+				dwNowTime,
+				m_dwPredictRecvTime,
+				(dwNowTime >= m_dwPredictRecvTime) ? "now>=recv" : "now<recv(異常)",
+				(int)(dwNowTime - m_dwPredictRecvTime),
+				m_nPredictSpeed,
+				nOffset,
+				nX, nY);
+		}
+	}
 
 	SetPos(nX, nY);
 	m_bRedraw = TRUE;
@@ -1813,4 +1958,3 @@ void CInfoCharCli::MotionProc(DWORD dwProcID)
 		break;
 	}
 }
-

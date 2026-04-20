@@ -95,7 +95,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	BOOL bResult;
 	int i, nCount, nResult, nCmdSub, nStopState;
 	int nNextPosX, nNextPosY, nMoveDist, nAllowDist, nSpeedLevel;
-	DWORD dwNowTime, dwElapsed, dwPacketTime;
+	DWORD dwNowTime = 0, dwElapsed, dwPacketTime;
 	BOOL bHasPacketTime;
 	LPCSTR pszPacketName;
 	PCInfoCharSvr pInfoChar, pInfoCharTmp, pInfoCharFront;
@@ -103,14 +103,17 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	int nDirection, nPacketPosX, nPacketPosY;
 	BOOL bUpdate;
 	CPacketBase PacketBase;
+	CPacketBase *pRelayPacket;
 	std::vector<PCInfoCharSvr> apInfoChar;
 
 	CPacketCHAR_MOVEPOS PacketMovePos;
 	CPacketCHAR_MOVE_START PacketMoveStart;
 	CPacketCHAR_MOVE_DIR_CHANGE PacketMoveDirChange;
 	CPacketCHAR_MOVE_STOP PacketMoveStop;
+	CPacketCHAR_POS_SYNC PacketPosSync;
 
 	PacketBase.Set(pData);
+	pRelayPacket = NULL;
 	nCmdSub = PacketBase.m_byCmdSub;
 
 	bUpdate = FALSE;
@@ -171,19 +174,49 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
+	m_pLog->Write(
+		"[MOVE_RECV] dwSessionID:%u [PACKET:%s][CHARID:%u][MAP:%u][POS:%d,%d][DIR:%d][UPDATE:%d][TS:%u][SPD:%d]",
+		dwSessionID,
+		pszPacketName,
+		dwCharID,
+		dwMapID,
+		nPacketPosX,
+		nPacketPosY,
+		nDirection,
+		bUpdate ? 1 : 0,
+		dwPacketTime,
+		nSpeedLevel);
+
 	if (nSpeedLevel <= 0) {
 		nSpeedLevel = 1;
 	}
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr(dwCharID);
 	if (pInfoChar == NULL) {
+		m_pLog->Write(
+			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:CHAR_NOT_FOUND][CHARID:%u]",
+			dwSessionID,
+			pszPacketName,
+			dwCharID);
 		return;
 	}
 	if (pInfoChar->m_dwMapID != dwMapID) {
+		m_pLog->Write(
+			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:MAP_MISMATCH][CHAR:%s][SERVER_MAP:%u][PACKET_MAP:%u]",
+			dwSessionID,
+			pszPacketName,
+			(LPCSTR)pInfoChar->m_strCharName,
+			pInfoChar->m_dwMapID,
+			dwMapID);
 		return;
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
+		m_pLog->Write(
+			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:SESSION_MISMATCH][CHAR:%s]",
+			dwSessionID,
+			pszPacketName,
+			(LPCSTR)pInfoChar->m_strCharName);
 		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
 		return;
 	}
@@ -203,12 +236,28 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		}
 		bResult = pInfoChar->IsStateBattle();
 		if (bResult == FALSE) {
-			// 移動できない状態なので無視
-			return;
+			// 既に MOVE 状態のキャラからの継続パケット
+			// （MOVE_DIR_CHANGE / MOVE_STOP）は許可する。
+			// これを許可しないと 2 パケット目以降が弾かれて MoveSync が機能しない。
+			if (pInfoChar->IsStateMove() == FALSE) {
+				// 移動できない状態なので無視
+				m_pLog->Write(
+					"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:MOVE_DISABLED][CHAR:%s][STATE:%d]",
+					dwSessionID,
+					pszPacketName,
+					(LPCSTR)pInfoChar->m_strCharName,
+					pInfoChar->m_nMoveState);
+				return;
+			}
 		}
 	}
 	if (pInfoChar->m_dwHP == 0) {
 		// HP0で歩こうとした時は気絶させる
+		m_pLog->Write(
+			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:HP_ZERO][CHAR:%s]",
+			dwSessionID,
+			pszPacketName,
+			(LPCSTR)pInfoChar->m_strCharName);
 		pInfoChar->SetMoveState(CHARMOVESTATE_SWOON);
 		return;
 	}
@@ -342,6 +391,99 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		// 停止通知は最終位置を確定同期させる
 		pInfoChar->SetMoveState(nStopState);
 		pInfoChar->m_bChgUpdatePos = TRUE;
+	} else {
+		// MOVE_START / MOVE_DIR_CHANGE: 移動状態へ遷移させる。
+		int nMoveStateNext = CHARMOVESTATE_MOVE;
+		if (pInfoChar->IsStateBattle()) {
+			nMoveStateNext = CHARMOVESTATE_BATTLEMOVE;
+		}
+		pInfoChar->SetMoveState(nMoveStateNext);
+	}
+
+	// PC はクライアント→サーバへ届いた MOVE_* パケットを
+	// そのまま他クライアントへ転送する（受信即中継方式）。
+	// ProcChgPos 経由だと 1 歩の移動状態が 1 フレーム未満で終わって
+	// MOVE_START が他クライアントに届かないため、直接中継に切り替えた。
+	// Web 版では SendToScreenChar() の画面内判定や受信側座標差で
+	// 近距離でも MOVE_* が欠落するケースがあるため、
+	// PC の移動系だけは同一マップ全体へ中継して配送漏れを避ける。
+	// NPC は従来通り ProcChgPos で MoveSync を発行する。
+	if (!pInfoChar->IsNPC()) {
+		m_pLog->Write(
+			"[MOVE_RELAY] [PACKET:%s][CHAR:%s][POS:%d,%d][DIR:%d][UPDATE:%d]",
+			pszPacketName,
+			(LPCSTR)pInfoChar->m_strCharName,
+			nPacketPosX,
+			nPacketPosY,
+			nDirection,
+			bUpdate ? 1 : 0);
+		switch (nCmdSub) {
+		case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+			pRelayPacket = &PacketMoveStart;
+			break;
+		case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+			pRelayPacket = &PacketMoveDirChange;
+			break;
+		case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+			pRelayPacket = &PacketMoveStop;
+			break;
+		}
+		if (pRelayPacket) {
+			nCount = m_pLibInfoChar->GetCountLogIn();
+			for (i = 0; i < nCount; i ++) {
+				pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(i);
+				if (pInfoCharTmp->IsLogin() == FALSE) {
+					continue;
+				}
+				if (pInfoCharTmp->m_dwMapID != pInfoChar->m_dwMapID) {
+					continue;
+				}
+				if (pInfoCharTmp->m_dwSessionID == 0) {
+					continue;
+				}
+				if (pInfoCharTmp->m_dwSessionID == dwSessionID) {
+					continue;
+				}
+				m_pSock->SendTo(pInfoCharTmp->m_dwSessionID, pRelayPacket);
+			}
+		}
+
+		/*
+		   POS_SYNC フォールバックを毎歩送ると Web の viewer 側で受信量が増えすぎ、
+		   FPS 低下や補間の飛びが出やすい。
+		   補助同期は「移動開始」「停止」「向き変更の節目」だけに絞り、
+		   連続歩行中の細かい刻みは MOVE_* の予測移動に任せる。
+		*/
+		if ((nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_START) ||
+			(nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) ||
+			((nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE) && (bUpdate == FALSE))) {
+			PacketPosSync.Make(
+				pInfoChar->m_dwMapID,
+				pInfoChar->m_dwCharID,
+				nDirection,
+				nPacketPosX,
+				nPacketPosY,
+				(nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) ? FALSE : TRUE,
+				nSpeedLevel,
+				dwPacketTime);
+			nCount = m_pLibInfoChar->GetCountLogIn();
+			for (i = 0; i < nCount; i ++) {
+				pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(i);
+				if (pInfoCharTmp->IsLogin() == FALSE) {
+					continue;
+				}
+				if (pInfoCharTmp->m_dwMapID != pInfoChar->m_dwMapID) {
+					continue;
+				}
+				if (pInfoCharTmp->m_dwSessionID == 0) {
+					continue;
+				}
+				if (pInfoCharTmp->m_dwSessionID == dwSessionID) {
+					continue;
+				}
+				m_pSock->SendTo(pInfoCharTmp->m_dwSessionID, &PacketPosSync);
+			}
+		}
 	}
 }
 

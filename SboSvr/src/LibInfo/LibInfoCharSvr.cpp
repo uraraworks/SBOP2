@@ -996,6 +996,9 @@ DWORD CLibInfoCharSvr::GetPlaceName(CmyString &strDst)
 	ARRAYINT anMapLoginCount;
 
 	strDst.Empty();
+	if ((m_pLibInfoMap == NULL) || (m_paInfoLogin == NULL)) {
+		return 0;
+	}
 
 	nCount = m_pLibInfoMap->GetCount();
 	if (nCount == 0) {
@@ -1031,6 +1034,9 @@ DWORD CLibInfoCharSvr::GetPlaceName(CmyString &strDst)
 		}
 	}
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(nNo);
+	if (pInfoMap == NULL) {
+		return 0;
+	}
 	strDst = pInfoMap->m_strMapName;
 
 	return pInfoMap->m_dwMapID;
@@ -1131,11 +1137,16 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 	pInfoChar->m_wAttrDark	= pInitCharStatus->wAttrDark;	// 属性[闇]
 	pInfoChar->m_dwMaxHP	= pInitCharStatus->dwMaxHP;	// 最大HP
 	pInfoChar->m_dwMaxSP	= pInitCharStatus->dwMaxSP;	// 最大SP
+	// 新規キャラの移動待ち時間は初期値 11 を固定で設定
+	// （本来は pInitCharStatus に dwMoveWait メンバを追加すべきだが、
+	//  Admin UI が不具合中で値入力できないため暫定でハードコード）
+	pInfoChar->m_dwMoveWait	= 11;
 
 	if (bInitPos) {
 		pInfoChar->m_dwMapID	= pInitCharStatus->dwInitPosMapID;	// マップID
-		pInfoChar->m_nMapX	= pInitCharStatus->ptInitPos.x;	// X座標
-		pInfoChar->m_nMapY	= pInitCharStatus->ptInitPos.y;	// Y座標
+		// ptInitPos はタイル座標なのでピクセルに変換（X:中央、Y:足元）
+		pInfoChar->m_nMapX	= pInitCharStatus->ptInitPos.x * MAPPARTSSIZE + HALF_TILE;	// X座標
+		pInfoChar->m_nMapY	= pInitCharStatus->ptInitPos.y * MAPPARTSSIZE + MAPPARTSSIZE - 1;	// Y座標
 	}
 
 	pInfoChar->m_dwHP = min(pInfoChar->m_dwHP, pInfoChar->m_dwMaxHP);
@@ -2269,8 +2280,12 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 	}
 
 	// 周りのキャラに座標を通知
+	// NPC 限定の MoveSync ロジック。
+	// PC は RecvProcCHAR_MOVEPOS 内で受信即転送しているので
+	// ProcChgPos では何もしない（二重送信防止）。
 	if (pInfoChar->IsNPC() && pInfoChar->IsStateMove()) {
 		if (pInfoChar->m_bMoveSyncActive == FALSE) {
+			// 初回通知: MOVE_START
 			PacketMoveStart.Make(
 					pInfoChar->m_dwMapID,
 					pInfoChar->m_dwCharID,
@@ -2285,6 +2300,7 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_nLastMoveSyncDirection = pInfoChar->m_nDirection;
 			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
 		} else if (pInfoChar->m_nLastMoveSyncDirection != pInfoChar->m_nDirection) {
+			// 方向変更: MOVE_DIR_CHANGE (bUpdate=FALSE)
 			PacketMoveDirChange.Make(
 					pInfoChar->m_dwMapID,
 					pInfoChar->m_dwCharID,
@@ -2298,6 +2314,7 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_nLastMoveSyncDirection = pInfoChar->m_nDirection;
 			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
 		} else if (dwNowTime - pInfoChar->m_dwLastMoveSyncSendTime >= 100) {
+			// NPC の 100ms 補正
 			PacketMoveDirChange.Make(
 					pInfoChar->m_dwMapID,
 					pInfoChar->m_dwCharID,
@@ -2310,17 +2327,22 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			m_pMainFrame->SendToScreenChar(pInfoChar, &PacketMoveDirChange);
 			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
 		}
-	} else {
-		PacketMoveDirChange.Make(
+	} else if (pInfoChar->IsNPC() && pInfoChar->m_bMoveSyncActive) {
+		// NPC が停止へ移行
+		CPacketCHAR_MOVE_STOP PacketMoveStop;
+		PacketMoveStop.Make(
 				pInfoChar->m_dwMapID,
 				pInfoChar->m_dwCharID,
 				pInfoChar->m_nDirection,
 				pInfoChar->m_nMapX,
 				pInfoChar->m_nMapY,
-				pInfoChar->m_bChgUpdatePos,
+				TRUE,
 				nSpeedLevel,
 				dwNowTime);
-		m_pMainFrame->SendToScreenChar(pInfoChar, &PacketMoveDirChange);
+		m_pMainFrame->SendToScreenChar(pInfoChar, &PacketMoveStop);
+		pInfoChar->m_bMoveSyncActive = FALSE;
+		pInfoChar->m_nLastMoveSyncDirection = -1;
+		pInfoChar->m_dwLastMoveSyncSendTime = 0;
 	}
 
 	// 移動後に見える範囲のキャラIDを通知
@@ -2453,9 +2475,12 @@ void CLibInfoCharSvr::CharProcMoveMarkPos(CInfoCharSvr *pInfoChar)
 	pInfoSystem	= (PCInfoSystem)m_pMgrData->GetLibInfoSystem()->GetPtr();
 	pInitCharStatus	= pInfoSystem->m_pInitCharStatus;
 
-	// 初期位置に転送
+	// 初期位置に転送（ptInitPos はタイル座標なのでピクセルに変換: X中央・Y足元）
 	pInfoChar->m_dwMapID = pInitCharStatus->dwInitPosMapID;	// マップID
-	pInfoChar->SetPos(pInitCharStatus->ptInitPos.x, pInitCharStatus->ptInitPos.y, TRUE);
+	pInfoChar->SetPos(
+		pInitCharStatus->ptInitPos.x * MAPPARTSSIZE + HALF_TILE,
+		pInitCharStatus->ptInitPos.y * MAPPARTSSIZE + MAPPARTSSIZE - 1,
+		TRUE);
 	pInfoChar->SetDirection(1);
 	pInfoChar->AddProcInfo(CHARPROCID_MAPMOVEOUT, 2000, 0);
 }
