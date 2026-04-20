@@ -1,16 +1,18 @@
 /// @file SaveLoadInfoChar.h
 /// @brief データ保存・読み込みクラス(キャラ情報) 定義ファイル
-///        Char ライブラリを SQLite 正規化テーブル (sys_char) に移行
+///        Char ライブラリを SQLite 完全正規化テーブルに移行
 ///
 ///  テーブル構成:
-///    sys_char: キャラ基本情報 + 各種 BLOB カラム
+///    sys_char      — キャラ基本情報 (全スカラを個別カラム)
+///    sys_char_item — 所持アイテムID サブテーブル (CharID, Slot, ItemID)
+///    sys_char_skill— 所持スキルID  サブテーブル (CharID, Slot, SkillID)
 ///
-///  方針:
-///    スカラ識別子 (CharID/MapID/HP/SP/Level/装備アイテムID等) は個別カラムに展開。
-///    外見 GrpID 群・ステータス能力値・NPC 発生情報・所持アイテム配列・所持スキル配列は
-///    フィールド数が多いため BLOB 格納（折衷 BLOB 方針）。
-///    派生クラス (CInfoCharSvr, CInfoCharBATTLE1Svr 等) は全て CInfoCharBase として
-///    m_nMoveType カラムで識別する。読み込み時は GetNew(m_nMoveType) で正しい型を生成する。
+///  旧 BLOB カラム (GrpIDData / StatusData / MoveData / PutNpcData /
+///                  ItemData / SkillData) は廃止し、全フィールドを
+///                  個別カラム / サブテーブルに展開する。
+///
+///  旧スキーマ検出時は全行をメモリに復元し DROP TABLE → 新 CREATE TABLE
+///  → 再書き込みするマイグレーションを EnsureTable() 内で自動実行する。
 ///
 /// @author 年がら年中春うらら(URARA-works)
 /// @date 2007/04/30
@@ -34,6 +36,7 @@ public:
 
 private:
 	// 正規化テーブルの CREATE TABLE を実行（なければ作成）
+	// 旧 BLOB スキーマを検出した場合は自動マイグレーションする
 	void	EnsureTable(void);
 	// メモリ上のキャラ情報を正規化テーブルに全行置換
 	void	SaveToNormalTable(void);
