@@ -53,6 +53,7 @@
 /// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
+#include <map>
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoCharBase.h"
 #include "InfoCharSvr.h"
@@ -696,6 +697,11 @@ BOOL CSaveLoadInfoChar::LoadFromNormalTable(PCLibInfoBase pDst)
 
 	CLibInfoCharBase* pLibChar = (CLibInfoCharBase*)pDst;
 
+	// CharID -> ポインタの一時マップ (サブテーブル読込時の ID 検索用)
+	// ※ pDst->GetPtr(n) は配列インデックスを要求するため、CharID での検索には使えない。
+	//    RenewIDPtr() は末尾で呼ぶので、ここでは自前マップを作る。
+	std::map<DWORD, PCInfoCharBase> mapCharByID;
+
 	int nRowCount = 0;
 	while (sqlite3_step(pStmt) == SQLITE_ROW) {
 		int nMoveType = sqlite3_column_int(pStmt, 6);
@@ -800,6 +806,7 @@ BOOL CSaveLoadInfoChar::LoadFromNormalTable(PCLibInfoBase pDst)
 
 		// ライブラリに追加（m_dwCharID が 0 でないので GetNewID() は呼ばれない）
 		pDst->Add(pInfo);
+		mapCharByID[pInfo->m_dwCharID] = pInfo;
 		nRowCount++;
 	}
 	sqlite3_finalize(pStmt);
@@ -815,8 +822,10 @@ BOOL CSaveLoadInfoChar::LoadFromNormalTable(PCLibInfoBase pDst)
 				// int nSlot   = sqlite3_column_int(pStmtItem, 1); // Slot はシーケンシャルに順序保証
 				DWORD dwItemID = (DWORD)sqlite3_column_int(pStmtItem, 2);
 
-				PCInfoCharBase pInfo = (PCInfoCharBase)pDst->GetPtr(dwCharID);
-				if (pInfo != NULL) pInfo->m_adwItemID.push_back(dwItemID);
+				auto it = mapCharByID.find(dwCharID);
+				if (it != mapCharByID.end()) {
+					it->second->m_adwItemID.push_back(dwItemID);
+				}
 			}
 			sqlite3_finalize(pStmtItem);
 		}
@@ -832,8 +841,10 @@ BOOL CSaveLoadInfoChar::LoadFromNormalTable(PCLibInfoBase pDst)
 				DWORD dwCharID  = (DWORD)sqlite3_column_int(pStmtSkill, 0);
 				DWORD dwSkillID = (DWORD)sqlite3_column_int(pStmtSkill, 2);
 
-				PCInfoCharBase pInfo = (PCInfoCharBase)pDst->GetPtr(dwCharID);
-				if (pInfo != NULL) pInfo->m_adwSkillID.push_back(dwSkillID);
+				auto it = mapCharByID.find(dwCharID);
+				if (it != mapCharByID.end()) {
+					it->second->m_adwSkillID.push_back(dwSkillID);
+				}
 			}
 			sqlite3_finalize(pStmtSkill);
 		}
