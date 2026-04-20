@@ -11,6 +11,7 @@ CSaveLoadInfoSystem::CSaveLoadInfoSystem()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataSystemInfo.dat");
+	SetName("System");
 }
 
 CSaveLoadInfoSystem::~CSaveLoadInfoSystem()

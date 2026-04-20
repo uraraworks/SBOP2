@@ -5,6 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "stdafx.h"
+#include "../../third_party/sqlite/sqlite3.h"
 #include "LibInfoAccount.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoMapObject.h"
@@ -27,6 +28,7 @@
 #include "ParamUtil.h"
 #include "UraraSockTCPSBO.h"
 #include "SaveLoad.h"
+#include "SaveLoadInfoBase.h"
 #include "LibInfoCharSVr.h"
 #include "MgrData.h"
 
@@ -153,6 +155,52 @@ void CMgrData::Destroy(void)
 	m_pLibInfoTalkEvent->	Destroy();
 }
 
+// -------------------------------------------------------
+// SQLite DB を開いて s_pDb にセットするヘルパー関数
+// 戻り値: 成功時 true
+// -------------------------------------------------------
+static bool OpenSboDb(sqlite3 **ppDb)
+{
+	char szDbPath[MAX_PATH];
+	char szDir[MAX_PATH];
+	LPSTR pszTmp;
+
+	// 実行ファイルのディレクトリを取得
+	GetModuleFileNameA(NULL, szDir, MAX_PATH);
+	pszTmp = strrchr(szDir, '\\');
+	if (pszTmp != NULL) {
+		pszTmp[1] = '\0';
+	}
+
+	// SBODATA ディレクトリが無ければ作成
+	strcpy_s(szDbPath, szDir);
+	strcat_s(szDbPath, "SBODATA");
+	CreateDirectoryA(szDbPath, NULL);
+
+	// DB ファイルパスを作成
+	strcat_s(szDbPath, "\\SboData.db");
+
+	// SQLite オープン
+	int nRet = sqlite3_open(szDbPath, ppDb);
+	if (nRet != SQLITE_OK) {
+		OutputDebugStringA("CMgrData: sqlite3_open failed\n");
+		*ppDb = NULL;
+		return false;
+	}
+
+	// テーブルが無ければ作成、PRAGMA 設定
+	const char *pszInit =
+		"PRAGMA journal_mode=WAL;"
+		"PRAGMA synchronous=NORMAL;"
+		"CREATE TABLE IF NOT EXISTS sbo_data("
+		"  name TEXT PRIMARY KEY NOT NULL,"
+		"  data BLOB NOT NULL"
+		");";
+	sqlite3_exec(*ppDb, pszInit, NULL, NULL, NULL);
+
+	return true;
+}
+
 void CMgrData::Save(void)
 {
 	CSaveLoadInfoAccount SaveLoadInfoAccount;
@@ -173,6 +221,15 @@ void CMgrData::Save(void)
 	CSaveLoadInfoSkill SaveLoadInfoSkill;
 	CSaveLoadInfoTalkEvent SaveLoadInfoTalkEvent;
 
+	// SQLite 接続を開いてクラス共有静的変数にセット
+	sqlite3 *pDb = NULL;
+	if (OpenSboDb(&pDb)) {
+		CSaveLoadInfoBase::s_pDb = pDb;
+		sqlite3_exec(pDb, "BEGIN TRANSACTION;", NULL, NULL, NULL);
+	} else {
+		CSaveLoadInfoBase::s_pDb = NULL;
+	}
+
 	SaveLoadInfoAccount.	Save((PCLibInfoBase)m_pLibInfoAccount);
 	SaveLoadInfoChar.	Save((PCLibInfoBase)m_pLibInfoChar);
 	SaveLoadInfoDisable.	Save((PCLibInfoBase)m_pLibInfoDisable);
@@ -190,6 +247,13 @@ void CMgrData::Save(void)
 	SaveLoadInfoSystem.	Save((PCLibInfoBase)m_pLibInfoSystem);
 	SaveLoadInfoSkill.	Save((PCLibInfoBase)m_pLibInfoSkill);
 	SaveLoadInfoTalkEvent.	Save((PCLibInfoBase)m_pLibInfoTalkEvent);
+
+	// トランザクションをコミットして接続を閉じる
+	if (pDb != NULL) {
+		sqlite3_exec(pDb, "COMMIT;", NULL, NULL, NULL);
+		sqlite3_close(pDb);
+		CSaveLoadInfoBase::s_pDb = NULL;
+	}
 }
 
 void CMgrData::Load(void)
@@ -211,6 +275,14 @@ void CMgrData::Load(void)
 	CSaveLoadInfoSystem SaveLoadInfoSystem;
 	CSaveLoadInfoSkill SaveLoadInfoSkill;
 	CSaveLoadInfoTalkEvent SaveLoadInfoTalkEvent;
+
+	// SQLite 接続を開いてクラス共有静的変数にセット（DB が無ければ open だけ、行なしで .dat フォールバックが働く）
+	sqlite3 *pDb = NULL;
+	if (OpenSboDb(&pDb)) {
+		CSaveLoadInfoBase::s_pDb = pDb;
+	} else {
+		CSaveLoadInfoBase::s_pDb = NULL;
+	}
 
 	m_pLibInfoAccount->	DeleteAll();
 	m_pLibInfoChar->	DeleteAll();
@@ -251,6 +323,12 @@ void CMgrData::Load(void)
 		pMapTmp = (PCInfoMapBase)m_pLibInfoMap->GetNew();
 		pMapTmp->Init(20, 20, 0);
 		m_pLibInfoMap->Add(pMapTmp);
+	}
+
+	// SQLite 接続を閉じる
+	if (pDb != NULL) {
+		sqlite3_close(pDb);
+		CSaveLoadInfoBase::s_pDb = NULL;
 	}
 
 	// 読み込み後のデータ補正

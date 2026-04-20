@@ -11,6 +11,7 @@ CSaveLoadInfoItem::CSaveLoadInfoItem()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataItem.dat");
+	SetName("Item");
 }
 
 CSaveLoadInfoItem::~CSaveLoadInfoItem()

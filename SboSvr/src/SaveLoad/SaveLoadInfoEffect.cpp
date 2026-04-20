@@ -12,6 +12,7 @@ CSaveLoadInfoEffect::CSaveLoadInfoEffect()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataEffect.dat");
+	SetName("Effect");
 }
 
 CSaveLoadInfoEffect::~CSaveLoadInfoEffect()

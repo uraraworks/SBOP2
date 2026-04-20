@@ -109,8 +109,17 @@
       <UniqueIdentifier>{e1b38db4-6c78-4702-a3cc-0670fb65d64c}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
+    <Filter Include="Source Files\ThirdParty">
+      <UniqueIdentifier>{a9f2c3d1-4b7e-4c21-b3f8-9e1d5a0c8f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ThirdParty">
+      <UniqueIdentifier>{b2e5d6c8-7a3f-4d91-a2b4-1c0e9f8d7e63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="third_party\sqlite\sqlite3.c">
+      <Filter>Source Files\ThirdParty</Filter>
+    </ClCompile>
     <ClCompile Include="src\MgrData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -514,6 +523,9 @@
     </ClInclude>
     <ClInclude Include="src\Web\AuthProvider.h">
       <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\sqlite\sqlite3.h">
+      <Filter>Header Files\ThirdParty</Filter>
     </ClInclude>
     <ClInclude Include="..\common\crc.h">
       <Filter>Header Files\Common No. 1</Filter>

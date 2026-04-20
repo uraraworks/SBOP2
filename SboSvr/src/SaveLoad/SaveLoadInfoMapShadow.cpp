@@ -12,6 +12,7 @@ CSaveLoadInfoMapShadow::CSaveLoadInfoMapShadow()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataMapShadow.dat");
+	SetName("MapShadow");
 }
 
 CSaveLoadInfoMapShadow::~CSaveLoadInfoMapShadow()

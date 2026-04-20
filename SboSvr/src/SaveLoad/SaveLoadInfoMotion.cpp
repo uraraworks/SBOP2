@@ -11,6 +11,7 @@ CSaveLoadInfoMotion::CSaveLoadInfoMotion()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataMotion.dat");
+	SetName("Motion");
 }
 
 CSaveLoadInfoMotion::~CSaveLoadInfoMotion()

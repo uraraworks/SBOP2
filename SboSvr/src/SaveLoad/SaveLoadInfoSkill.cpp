@@ -11,6 +11,7 @@ CSaveLoadInfoSkill::CSaveLoadInfoSkill()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataSkill.dat");
+	SetName("Skill");
 }
 
 CSaveLoadInfoSkill::~CSaveLoadInfoSkill()

@@ -11,6 +11,7 @@ CSaveLoadInfoDisable::CSaveLoadInfoDisable()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataDisable.dat");
+	SetName("Disable");
 }
 
 CSaveLoadInfoDisable::~CSaveLoadInfoDisable()

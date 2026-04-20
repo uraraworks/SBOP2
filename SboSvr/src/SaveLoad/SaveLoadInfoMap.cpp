@@ -11,6 +11,7 @@ CSaveLoadInfoMap::CSaveLoadInfoMap()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataMap.dat");
+	SetName("Map");
 }
 
 CSaveLoadInfoMap::~CSaveLoadInfoMap()

@@ -7,6 +7,12 @@
 #include "stdafx.h"
 #include "SaveLoadInfoBase.h"
 
+// SQLite3 を include（このファイルのみ）
+#include "../../third_party/sqlite/sqlite3.h"
+
+// 静的メンバの実体定義
+sqlite3 *CSaveLoadInfoBase::s_pDb = NULL;
+
 CSaveLoadInfoBase::CSaveLoadInfoBase()
 {
 	m_pData	= NULL;
@@ -27,48 +33,107 @@ CSaveLoadInfoBase::~CSaveLoadInfoBase()
 
 void CSaveLoadInfoBase::WriteData(void)
 {
-	HANDLE hFile;
-	DWORD dwBytes;
+	DWORD dwTotalSize;
 
-	hFile = CreateFile(m_strFileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	if (hFile == INVALID_HANDLE_VALUE) {
-		return;
+	dwTotalSize = m_dwHeaderSize + m_dwDataSize + 8;
+
+	// SQLite への書き込みを試みる
+	if (s_pDb != NULL && m_strName.GetLength() > 0) {
+		sqlite3_stmt *pStmt;
+		int nRet;
+		const char *pszSql =
+			"INSERT OR REPLACE INTO sbo_data(name, data) VALUES(?, ?);";
+
+		nRet = sqlite3_prepare_v2(s_pDb, pszSql, -1, &pStmt, NULL);
+		if (nRet == SQLITE_OK) {
+			sqlite3_bind_text(pStmt, 1, m_strName, -1, SQLITE_STATIC);
+			sqlite3_bind_blob(pStmt, 2, m_pData, (int)dwTotalSize, SQLITE_STATIC);
+			sqlite3_step(pStmt);
+			sqlite3_finalize(pStmt);
+			return;	// SQLite 書き込み成功 → .dat には書かない
+		}
+		// prepare 失敗時は .dat にフォールバック
+		OutputDebugStringA("SaveLoadInfoBase: SQLite prepare failed, fallback to .dat\n");
 	}
 
-	dwBytes = 0;
-	WriteFile(hFile, m_pData, m_dwHeaderSize + m_dwDataSize + 8, &dwBytes, NULL);
-	CloseHandle(hFile);
+	// SQLite 未接続またはエラー時は従来の .dat ファイルへ書き込み
+	{
+		HANDLE hFile;
+		DWORD dwBytes;
+
+		hFile = CreateFile(m_strFileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+		if (hFile == INVALID_HANDLE_VALUE) {
+			return;
+		}
+		dwBytes = 0;
+		WriteFile(hFile, m_pData, dwTotalSize, &dwBytes, NULL);
+		CloseHandle(hFile);
+	}
 }
 
 BOOL CSaveLoadInfoBase::ReadData(void)
 {
-	HANDLE hFile;
-	DWORD dwBytes;
-	BOOL bRet;
+	// まず SQLite から読み込みを試みる
+	if (s_pDb != NULL && m_strName.GetLength() > 0) {
+		sqlite3_stmt *pStmt;
+		int nRet;
+		const char *pszSql =
+			"SELECT data FROM sbo_data WHERE name = ?;";
 
-	bRet = FALSE;
-	hFile = CreateFile(m_strFileName, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (hFile == INVALID_HANDLE_VALUE) {
-		goto Exit;
+		nRet = sqlite3_prepare_v2(s_pDb, pszSql, -1, &pStmt, NULL);
+		if (nRet == SQLITE_OK) {
+			sqlite3_bind_text(pStmt, 1, m_strName, -1, SQLITE_STATIC);
+			if (sqlite3_step(pStmt) == SQLITE_ROW) {
+				// SQLite に行が存在した → BLOB を m_pData にコピー
+				int nBlobSize;
+				const void *pBlob;
+
+				nBlobSize = sqlite3_column_bytes(pStmt, 0);
+				pBlob     = sqlite3_column_blob(pStmt, 0);
+				if (pBlob != NULL && nBlobSize > 0) {
+					m_dwDataSize = (DWORD)nBlobSize;
+					SAFE_DELETE_ARRAY(m_pData);
+					m_pData = new BYTE[m_dwDataSize];
+					CopyMemory(m_pData, pBlob, m_dwDataSize);
+					sqlite3_finalize(pStmt);
+					return TRUE;
+				}
+			}
+			sqlite3_finalize(pStmt);
+		}
+		// prepare 失敗 or 行なし → .dat にフォールバック
 	}
 
-	// ファイルサイズ取得
-	m_dwDataSize = GetFileSize(hFile, NULL);
-	if ((int)m_dwDataSize == -1) {
-		goto Exit;
-	}
+	// SQLite に行がない場合は従来の .dat ファイルから読み込む
+	{
+		HANDLE hFile;
+		DWORD dwBytes;
+		BOOL bRet;
 
-	m_pData = new BYTE[m_dwDataSize];
-	// ファイル内容を全部読み込む
-	ReadFile(hFile, m_pData, m_dwDataSize, &dwBytes, NULL);
+		bRet = FALSE;
+		hFile = CreateFile(m_strFileName, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		if (hFile == INVALID_HANDLE_VALUE) {
+			goto Exit;
+		}
 
-	bRet = TRUE;
+		// ファイルサイズ取得
+		m_dwDataSize = GetFileSize(hFile, NULL);
+		if ((int)m_dwDataSize == -1) {
+			goto Exit;
+		}
+
+		SAFE_DELETE_ARRAY(m_pData);
+		m_pData = new BYTE[m_dwDataSize];
+		// ファイル内容を全部読み込む
+		ReadFile(hFile, m_pData, m_dwDataSize, &dwBytes, NULL);
+
+		bRet = TRUE;
 Exit:
-	if (hFile != INVALID_HANDLE_VALUE) {
-		CloseHandle(hFile);
+		if (hFile != INVALID_HANDLE_VALUE) {
+			CloseHandle(hFile);
+		}
+		return bRet;
 	}
-
-	return bRet;
 }
 
 void CSaveLoadInfoBase::Save(PCLibInfoBase pSrc)
@@ -289,6 +354,12 @@ void CSaveLoadInfoBase::SetFileName(LPCSTR pszName)
 	strcat(szName, pszName);
 
 	m_strFileName = szName;
+}
+
+void CSaveLoadInfoBase::SetName(LPCSTR pszName)
+{
+	// SQLite の PRIMARY KEY として使う論理名を設定
+	m_strName = pszName;
 }
 
 void CSaveLoadInfoBase::AddHeaderInfo(LPCSTR pszName)

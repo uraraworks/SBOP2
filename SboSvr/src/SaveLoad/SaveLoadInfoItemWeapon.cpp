@@ -11,6 +11,7 @@ CSaveLoadInfoItemWeapon::CSaveLoadInfoItemWeapon()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataItemWeapon.dat");
+	SetName("ItemWeapon");
 }
 
 CSaveLoadInfoItemWeapon::~CSaveLoadInfoItemWeapon()

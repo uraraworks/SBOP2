@@ -11,6 +11,7 @@ CSaveLoadInfoChar::CSaveLoadInfoChar()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataChar.dat");
+	SetName("Char");
 }
 
 CSaveLoadInfoChar::~CSaveLoadInfoChar()

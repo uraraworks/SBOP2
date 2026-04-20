@@ -9,8 +9,10 @@
 
 CSaveLoadInfoAccount::CSaveLoadInfoAccount()
 {
-	// ファイル名の設定
+	// ファイル名の設定（フォールバック用 .dat パス）
 	SetFileName("SBODATA\\SboDataAccount.dat");
+	// SQLite PRIMARY KEY 用論理名
+	SetName("Account");
 }
 
 CSaveLoadInfoAccount::~CSaveLoadInfoAccount()

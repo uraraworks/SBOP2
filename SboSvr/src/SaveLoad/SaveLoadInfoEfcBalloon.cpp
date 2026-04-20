@@ -11,6 +11,7 @@ CSaveLoadInfoEfcBalloon::CSaveLoadInfoEfcBalloon()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataEfcBalloon.dat");
+	SetName("EfcBalloon");
 }
 
 CSaveLoadInfoEfcBalloon::~CSaveLoadInfoEfcBalloon()

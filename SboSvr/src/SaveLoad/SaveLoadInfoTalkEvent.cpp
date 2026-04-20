@@ -11,6 +11,7 @@ CSaveLoadInfoTalkEvent::CSaveLoadInfoTalkEvent()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataTalkEvent.dat");
+	SetName("TalkEvent");
 }
 
 CSaveLoadInfoTalkEvent::~CSaveLoadInfoTalkEvent()

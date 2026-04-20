@@ -70,7 +70,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;.\third_party\sqlite;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -122,7 +122,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\src;.\src\Info;.\src\Info\InfoChar;.\src\Lib;.\src\LibInfo;.\src\MainFrame;.\src\SaveLoad;.\third_party\sqlite;..\Common;..\Common\Lib;..\Common\Lib\mfc;..\Common\Lib\md5;..\Common\Info;..\Common\Info\InfoMapEvent;..\Common\Info\InfoItemType;..\Common\Info\InfoSkill;..\Common\Info\InfoTalkEvent;..\Common\myLib;..\Common\LibInfo;..\Common\Packet;..\Common\Packet\ACCOUNT;..\Common\Packet\CHAR;..\Common\Packet\CONNECT;..\Common\Packet\ADMIN;..\Common\Packet\CONECT;..\Common\Packet\ITEM;..\Common\Packet\MSGCMD;..\Common\Packet\SKILL;..\Common\myLib\myZLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -164,6 +164,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="third_party\sqlite\sqlite3.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level1</WarningLevel>
+      <DisableSpecificWarnings>4244;4267;4996;4706;4090;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
     <ClCompile Include="..\common\crc.cpp" />
     <ClCompile Include="..\Common\Info\InfoAccount.cpp" />
     <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
@@ -293,6 +298,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="third_party\sqlite\sqlite3.h" />
     <ClInclude Include="..\common\crc.h" />
     <ClInclude Include="..\common\GlobalDefine.h" />
     <ClInclude Include="..\Common\Info\InfoAccount.h" />

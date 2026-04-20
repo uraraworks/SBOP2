@@ -12,6 +12,7 @@ CSaveLoadInfoMapParts::CSaveLoadInfoMapParts()
 {
 	// ファイル名の設定
 	SetFileName("SBODATA\\SboDataMapParts.dat");
+	SetName("MapParts");
 }
 
 CSaveLoadInfoMapParts::~CSaveLoadInfoMapParts()
