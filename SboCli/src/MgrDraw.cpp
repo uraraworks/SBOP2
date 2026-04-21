@@ -9,6 +9,10 @@
 #include <SDL.h>
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
+// wasm SIMD が有効な場合は wasm_simd128.h をインクルード
+#ifdef __wasm_simd128__
+#include <wasm_simd128.h>
+#endif
 #endif
 #include "SboCli_priv.h"	// SCRSIZEX / SCRSIZEY
 #include "LibInfoMapParts.h"
@@ -63,15 +67,27 @@ EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
 		Module['sbop2Ctx2d'] = ctx;
 	}
 
-	// ゼロコピー: HEAPU8.buffer を共有した ImageData を毎フレーム生成
-	// ALLOW_MEMORY_GROWTH=1 で Wasm memory grow 後に buffer が差し替わるため
-	// キャッシュせず毎フレーム最新の HEAPU8.buffer を参照する
+	// ImageData キャッシュ: 毎フレームの new ImageData / new Uint8ClampedArray 生成を回避する
+	// ALLOW_MEMORY_GROWTH=1 で Wasm memory grow が起きると HEAPU8.buffer が新しい
+	// ArrayBuffer に差し替わるため、前回の buffer 参照と比較して検出する
 	const base = pRgba >>> 0;
-	const imageData = new ImageData(
-		new Uint8ClampedArray(HEAPU8.buffer, base, width * height * 4),
-		width,
-		height
-	);
+	const wh = width * height;
+	let imageData = Module.sbop2ImageData;
+	if (!imageData
+		|| Module.sbop2HeapBuffer !== HEAPU8.buffer
+		|| Module.sbop2ImageDataBase !== base
+		|| Module.sbop2ImageDataWH !== wh) {
+		// buffer 差し替え or アドレス/サイズ変化 → キャッシュを再生成
+		imageData = new ImageData(
+			new Uint8ClampedArray(HEAPU8.buffer, base, wh * 4),
+			width,
+			height
+		);
+		Module.sbop2ImageData     = imageData;
+		Module.sbop2HeapBuffer    = HEAPU8.buffer;
+		Module.sbop2ImageDataBase = base;
+		Module.sbop2ImageDataWH   = wh;
+	}
 	ctx.putImageData(imageData, 0, 0);
 
 	const rectQueue = Module.sbop2RectQueue || [];
@@ -213,6 +229,31 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 				pSrc + ((size_t)(nFullHeight - 1 - (32 + y)) * (size_t)nFullWidth + 32) * 4);
 			uint32_t *pDstRow = reinterpret_cast<uint32_t *>(
 				&aCanvasRgba[(size_t)y * (size_t)nWidth * 4]);
+#if defined(__wasm_simd128__)
+			// SIMD 版: 一度に 4 ピクセル（16 バイト）処理
+			// 入力: B G R A B G R A B G R A B G R A  (バイトインデックス 0-15)
+			// 出力: R G B A R G B A R G B A R G B A
+			// shuffle index [2,1,0,3, 6,5,4,7, 10,9,8,11, 14,13,12,15] で B↔R swap
+			const v128_t alpha_mask = wasm_i32x4_splat((int)0xFF000000u);
+			int xSimd = 0;
+			for (; xSimd <= nWidth - 4; xSimd += 4) {
+				v128_t px = wasm_v128_load(pSrcRow + xSimd);
+				v128_t swapped = wasm_i8x16_shuffle(px, px,
+					2,1,0,3,  6,5,4,7,  10,9,8,11,  14,13,12,15);
+				// A チャンネルを 0xFF に固定（元の A 値を上書き）
+				v128_t out = wasm_v128_or(swapped, alpha_mask);
+				wasm_v128_store(pDstRow + xSimd, out);
+			}
+			// 端数ピクセル（SCRSIZEX が 4 の倍数でない場合のフォールバック）
+			for (int x = xSimd; x < nWidth; ++x) {
+				uint32_t px = pSrcRow[x];
+				pDstRow[x] = (px & 0x0000FF00u)
+				           | ((px & 0x00FF0000u) >> 16)
+				           | ((px & 0x000000FFu) << 16)
+				           | 0xFF000000u;
+			}
+#else
+			// スカラー版フォールバック: BGRA → RGBA、A=0xFF 固定
 			for (int x = 0; x < nWidth; ++x) {
 				// BGRA → RGBA: R と B を入れ替え、A=0xFF 固定
 				uint32_t px = pSrcRow[x];
@@ -221,6 +262,7 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 				           | ((px & 0x000000FFu) << 16)    // R → B
 				           | 0xFF000000u;                  // A=255
 			}
+#endif
 		}
 
 		// 区間計測: BGRA→RGBA 変換終了
