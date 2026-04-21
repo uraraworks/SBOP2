@@ -31,6 +31,7 @@
 #include "MainFrame.h"
 #include "myString.h"
 #include "MgrDraw.h"
+#include <set>
 #include <vector>
 
 #if defined(__EMSCRIPTEN__)
@@ -38,6 +39,65 @@
 extern DWORD g_dwDrawLayerMs;
 extern DWORD g_dwDrawSwizzleMs;
 extern DWORD g_dwDrawPresentMs;
+#endif
+
+#if defined(_DEBUG)
+static void LogMissingMapPartsAtlasOnce(
+	CMgrGrpData *pMgrGrpData,
+	PCInfoMapParts pInfoMapParts,
+	WORD wGrpID,
+	LPCSTR pszKind)
+{
+	static std::set<unsigned long long> s_setLogged;
+	const int nAtlasNo = static_cast<int>(wGrpID / 1024);
+	const int nLoadedAtlasCount = pMgrGrpData ? (pMgrGrpData->GetMapPartsCount() / 1024) : 0;
+	const DWORD dwPartsID = pInfoMapParts ? pInfoMapParts->m_dwPartsID : 0;
+	const unsigned long long ullKey =
+		(static_cast<unsigned long long>(dwPartsID) << 32) |
+		static_cast<unsigned long long>(wGrpID);
+
+	if (s_setLogged.insert(ullKey).second == false) {
+		return;
+	}
+
+	SboDbgLog(
+		"[DrawMapParts] %s 用画像不足 partsID=%u grpID=%u atlas=%d loadedAtlas=%d animeNo=%u animeCount=%d partsType=0x%08X",
+		pszKind,
+		dwPartsID,
+		static_cast<unsigned int>(wGrpID),
+		nAtlasNo,
+		nLoadedAtlasCount,
+		pInfoMapParts ? static_cast<unsigned int>(pInfoMapParts->m_byAnimeNo) : 0,
+		pInfoMapParts ? pInfoMapParts->GetAnimeCount() : 0,
+		pInfoMapParts ? static_cast<unsigned int>(pInfoMapParts->m_dwPartsType) : 0);
+}
+
+static void LogMissingMapShadowAtlasOnce(
+	CMgrGrpData *pMgrGrpData,
+	PCInfoMapShadow pInfoMapShadow,
+	WORD wGrpID)
+{
+	static std::set<unsigned long long> s_setLogged;
+	const int nAtlasNo = static_cast<int>(wGrpID / 1024);
+	const int nLoadedAtlasCount = pMgrGrpData ? (pMgrGrpData->GetMapShadowCount() / 1024) : 0;
+	const DWORD dwShadowID = pInfoMapShadow ? pInfoMapShadow->m_dwShadowID : 0;
+	const unsigned long long ullKey =
+		(static_cast<unsigned long long>(dwShadowID) << 32) |
+		static_cast<unsigned long long>(wGrpID);
+
+	if (s_setLogged.insert(ullKey).second == false) {
+		return;
+	}
+
+	SboDbgLog(
+		"[DrawMapShadow] 画像不足 shadowID=%u grpID=%u atlas=%d loadedAtlas=%d animeNo=%u animeCount=%d",
+		dwShadowID,
+		static_cast<unsigned int>(wGrpID),
+		nAtlasNo,
+		nLoadedAtlasCount,
+		pInfoMapShadow ? static_cast<unsigned int>(pInfoMapShadow->m_byAnimeNo) : 0,
+		pInfoMapShadow ? pInfoMapShadow->GetAnimeCount() : 0);
+}
 #endif
 
 #if defined(__EMSCRIPTEN__)
@@ -721,12 +781,24 @@ void CMgrDraw::DrawMapParts(
 
 	if (nMode != 1) {
 		pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDBase / 1024);
+		if (pImg == NULL) {
+#if defined(_DEBUG)
+			LogMissingMapPartsAtlasOnce(m_pMgrGrpData, pInfoMapParts, wGrpIDBase, "base");
+#endif
+			goto Exit;
+		}
 		pDibTmp->BltFrom256(0, 0, nSize, nSize, pImg, ((wGrpIDBase % 1024) % 32) * nSize, ((wGrpIDBase % 1024) / 32) * nSize);
 	} else {
 		pDibTmp->FillRect(0, 0, nSize, nSize, RGB(255, 0, 255));
 	}
 	if (wGrpIDPile > 0) {
 		pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDPile / 1024);
+		if (pImg == NULL) {
+#if defined(_DEBUG)
+			LogMissingMapPartsAtlasOnce(m_pMgrGrpData, pInfoMapParts, wGrpIDPile, "pile");
+#endif
+			goto Exit;
+		}
 		pDibTmp->BltFrom256(0, 0, nSize+1, nSize, pImg, ((wGrpIDPile % 1024) % 32) * nSize, ((wGrpIDPile % 1024) / 32) * nSize, TRUE);
 	}
 
@@ -778,9 +850,21 @@ void CMgrDraw::DrawMapShadow(
 	}
 	if (bSingleSize) {
 		pImg = m_pMgrGrpData->GetDibMapShadowTmp(wGrpIDBase / 1024);
+		if (pImg == NULL) {
+#if defined(_DEBUG)
+			LogMissingMapShadowAtlasOnce(m_pMgrGrpData, pInfoMapShadow, wGrpIDBase);
+#endif
+			goto Exit;
+		}
 		pDibTmp->BltFrom256(0, 0, nSize, nSize, pImg, ((wGrpIDBase % 1024) % 32) * nSize, ((wGrpIDBase % 1024) / 32) * nSize);
 	} else {
 		pImg = m_pMgrGrpData->GetDibMapShadow(wGrpIDBase / 1024);
+		if (pImg == NULL) {
+#if defined(_DEBUG)
+			LogMissingMapShadowAtlasOnce(m_pMgrGrpData, pInfoMapShadow, wGrpIDBase);
+#endif
+			goto Exit;
+		}
 		pDibTmp->BltFrom256(0, 0, nSize, nSize, pImg, ((wGrpIDBase % 1024) % 32) * nSize, ((wGrpIDBase % 1024) / 32) * nSize);
 	}
 

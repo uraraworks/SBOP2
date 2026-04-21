@@ -1,14 +1,39 @@
 /// @file SjisConvert.cpp
-/// @brief Emscripten 環境向け SJIS→wchar_t 変換実装
+/// @brief SJIS→wchar_t 変換実装
 /// @date 2026/04/14
-///
-/// Win32 環境ではこのファイルはコンパイルされない（BrowserCompat.h 経由の
-/// !_WIN32 ガードで保護）。Emscripten ではブラウザの TextDecoder API を使い
-/// SJIS (CP932) バイト列を UTF-8 経由で wstring に変換する。
-
-#if !defined(_WIN32)
 
 #include "SjisConvert.h"
+
+#if defined(_WIN32)
+
+#include <windows.h>
+
+/// SJIS バイト列を wstring に変換する（Windows 実装）
+std::wstring SjisToWstring(const char* pszSrc, int nSrcLen)
+{
+    if (pszSrc == nullptr || nSrcLen == 0) {
+        return std::wstring();
+    }
+
+    int srcLen = (nSrcLen < 0) ? -1 : nSrcLen;
+    int required = MultiByteToWideChar(932, 0, pszSrc, srcLen, nullptr, 0);
+    if (required <= 0) {
+        return std::wstring();
+    }
+
+    std::wstring result;
+    result.resize(required);
+    int converted = MultiByteToWideChar(932, 0, pszSrc, srcLen, &result[0], required);
+    if (converted <= 0) {
+        return std::wstring();
+    }
+
+    result.resize((srcLen < 0) ? (converted - 1) : converted);
+    return result;
+}
+
+#else
+
 #include "TCharCompat.h"
 
 #if defined(__EMSCRIPTEN__)
@@ -68,4 +93,4 @@ std::wstring SjisToWstring(const char* pszSrc, int nSrcLen)
 }
 #endif // __EMSCRIPTEN__
 
-#endif // !_WIN32
+#endif // _WIN32
