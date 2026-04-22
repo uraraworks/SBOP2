@@ -21,6 +21,7 @@ public:
 	// Save/Load を正規化テーブル経路でオーバーライド
 	virtual void	Save(PCLibInfoBase pSrc) override;	// 正規化テーブルに書き込み
 	virtual void	Load(PCLibInfoBase pDst) override;	// 正規化テーブルから読み込み
+	virtual void	SetHeaderInfo(PCInfoBase pInfo) override;	// BLOB/.dat 用ヘッダ情報を設定
 
 private:
 	// 正規化テーブルの CREATE TABLE を実行（なければ作成）
@@ -31,4 +32,6 @@ private:
 	BOOL	LoadFromNormalTable(PCLibInfoBase pDst);
 	// BLOB 経路（sbo_data / .dat）から読み込んでマイグレーション
 	BOOL	MigrateFromBlob(PCLibInfoBase pDst);
+	// SQLite 化直後の壊れたアニメ行（全 grpID=0）を検出
+	BOOL	HasBrokenAnimeRows(void);
 } CSaveLoadInfoMapShadow, *PCSaveLoadInfoMapShadow;

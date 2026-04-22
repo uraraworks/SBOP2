@@ -30,4 +30,8 @@ private:
 	BOOL	LoadFromNormalTable(PCLibInfoBase pDst);
 	// BLOB 経路（sbo_data / .dat）から読み込んでマイグレーション
 	BOOL	MigrateFromBlob(PCLibInfoBase pDst);
+	// .dat を優先して読み込む（壊れた SQLite 修復用）
+	BOOL	LoadFromDatOnly(PCLibInfoBase pDst);
+	// 歩行モーションの複数コマが失われた壊れたテーブルを検出
+	BOOL	HasBrokenMotionRows(void);
 } CSaveLoadInfoMotion, *PCSaveLoadInfoMotion;

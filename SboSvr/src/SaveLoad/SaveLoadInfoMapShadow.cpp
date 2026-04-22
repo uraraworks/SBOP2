@@ -17,6 +17,7 @@
 #include "stdafx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoMapShadow.h"
+#include "InfoAnime.h"
 #include "LibInfoMapShadow.h"
 #include "SaveLoadInfoMapShadow.h"
 
@@ -37,6 +38,25 @@ CSaveLoadInfoMapShadow::CSaveLoadInfoMapShadow()
 
 CSaveLoadInfoMapShadow::~CSaveLoadInfoMapShadow()
 {
+}
+
+void CSaveLoadInfoMapShadow::SetHeaderInfo(PCInfoBase pInfo)
+{
+	int i;
+	LPCSTR pszName;
+	CStringA strHeader;
+	CInfoAnime AnimeTmp;
+
+	CSaveLoadInfoBase::SetHeaderInfo(pInfo);
+
+	for (i = 0; ; i++) {
+		pszName = AnimeTmp.GetName(i);
+		if (pszName == NULL) {
+			break;
+		}
+		strHeader.Format("%s%s", PREFIX_INFOANIME, pszName);
+		AddHeaderInfo(strHeader);
+	}
 }
 
 // ============================================================
@@ -279,6 +299,37 @@ BOOL CSaveLoadInfoMapShadow::MigrateFromBlob(PCLibInfoBase pDst)
 	return TRUE;
 }
 
+BOOL CSaveLoadInfoMapShadow::HasBrokenAnimeRows(void)
+{
+	const char* pszSql =
+		"SELECT CASE"
+		"  WHEN EXISTS (SELECT 1 FROM sys_map_shadow_anime)"
+		"   AND NOT EXISTS ("
+		"     SELECT 1 FROM sys_map_shadow_anime"
+		"      WHERE IFNULL(GrpIDBase, 0) <> 0 OR IFNULL(GrpIDPile, 0) <> 0"
+		"   )"
+		"  THEN 1"
+		"  ELSE 0"
+		"END;";
+	sqlite3_stmt* pStmt = NULL;
+	BOOL bRet = FALSE;
+
+	if (s_pDb == NULL) {
+		return FALSE;
+	}
+
+	if (sqlite3_prepare_v2(s_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+		return FALSE;
+	}
+
+	if (sqlite3_step(pStmt) == SQLITE_ROW) {
+		bRet = sqlite3_column_int(pStmt, 0) ? TRUE : FALSE;
+	}
+	sqlite3_finalize(pStmt);
+
+	return bRet;
+}
+
 // ============================================================
 // Save のオーバーライド: 正規化テーブルにのみ書く
 // ============================================================
@@ -306,6 +357,13 @@ void CSaveLoadInfoMapShadow::Load(PCLibInfoBase pDst)
 
 	// テーブルが無ければ作成
 	EnsureTable();
+
+	// 旧 .dat からの移行時にアニメコマの grpID だけ欠落した DB を自動修復する
+	if (HasBrokenAnimeRows()) {
+		OutputDebugStringA("SaveLoadInfoMapShadow: 破損した正規化アニメ行を検出 → BLOB/.dat から再マイグレーション\n");
+		MigrateFromBlob(pDst);
+		return;
+	}
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {

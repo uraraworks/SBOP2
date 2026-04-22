@@ -14,10 +14,38 @@
 /// @copyright Copyright(C)URARA-works 2007
 
 #include "stdafx.h"
+#include <map>
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoMotion.h"
 #include "LibInfoMotion.h"
 #include "SaveLoadInfoMotion.h"
+
+static BOOL HasTableColumn(sqlite3* pDb, const char* pszTable, const char* pszColumn)
+{
+	CStringA strSql;
+	sqlite3_stmt* pStmt = NULL;
+	BOOL bRet = FALSE;
+
+	if (pDb == NULL || pszTable == NULL || pszColumn == NULL) {
+		return FALSE;
+	}
+
+	strSql.Format("PRAGMA table_info(%s);", pszTable);
+	if (sqlite3_prepare_v2(pDb, strSql, -1, &pStmt, NULL) != SQLITE_OK) {
+		return FALSE;
+	}
+
+	while (sqlite3_step(pStmt) == SQLITE_ROW) {
+		const char* pszName = (const char*)sqlite3_column_text(pStmt, 1);
+		if (pszName != NULL && strcmp(pszName, pszColumn) == 0) {
+			bRet = TRUE;
+			break;
+		}
+	}
+	sqlite3_finalize(pStmt);
+
+	return bRet;
+}
 
 // ============================================================
 // コンストラクタ / デストラクタ
@@ -45,12 +73,21 @@ void CSaveLoadInfoMotion::EnsureTable(void)
 {
 	if (s_pDb == NULL) return;
 
+	// 旧スキーマは MotionID を主キーにしていたため、同一リスト内の複数コマが欠落する。
+	// Slot 列が無い場合は壊れた旧設計なのでテーブルを作り直す。
+	if (HasTableColumn(s_pDb, "sys_motion", "Slot") == FALSE ||
+		HasTableColumn(s_pDb, "sys_motion_draw", "MotionSlot") == FALSE) {
+		sqlite3_exec(s_pDb, "DROP TABLE IF EXISTS sys_motion_draw;", NULL, NULL, NULL);
+		sqlite3_exec(s_pDb, "DROP TABLE IF EXISTS sys_motion;", NULL, NULL, NULL);
+	}
+
 	// メインテーブル
 	const char* pszMainSql =
 		"CREATE TABLE IF NOT EXISTS sys_motion("
-		"  MotionID      INTEGER PRIMARY KEY,"	// m_dwMotionID
-		"  MotionTypeID  INTEGER,"				// m_dwMotionTypeID
-		"  MotionListID  INTEGER,"				// m_dwMotionListID
+		"  MotionTypeID  INTEGER NOT NULL,"		// m_dwMotionTypeID
+		"  MotionListID  INTEGER NOT NULL,"		// m_dwMotionListID
+		"  Slot          INTEGER NOT NULL,"		// 同一リスト内のコマ番号
+		"  MotionID      INTEGER,"				// m_dwMotionID (一意ではない)
 		"  Wait          INTEGER,"				// m_byWait  (×１０ミリ秒)
 		"  Level1        INTEGER,"				// m_byLevel1 (透明度1)
 		"  Level2        INTEGER,"				// m_byLevel2 (透明度2)
@@ -75,7 +112,8 @@ void CSaveLoadInfoMotion::EnsureTable(void)
 		"  DrawPos2X     INTEGER,"				// m_ptDrawPosPile2.x
 		"  DrawPos2Y     INTEGER,"				// m_ptDrawPosPile2.y
 		"  DrawPos3X     INTEGER,"				// m_ptDrawPosPile3.x
-		"  DrawPos3Y     INTEGER"				// m_ptDrawPosPile3.y
+		"  DrawPos3Y     INTEGER,"				// m_ptDrawPosPile3.y
+		"  PRIMARY KEY (MotionTypeID, MotionListID, Slot)"
 		");";
 
 	sqlite3_exec(s_pDb, pszMainSql, NULL, NULL, NULL);
@@ -84,10 +122,12 @@ void CSaveLoadInfoMotion::EnsureTable(void)
 	//   MotionID + Slot を複合主キーとし、配列インデックスをそのまま Slot に格納
 	const char* pszSubSql =
 		"CREATE TABLE IF NOT EXISTS sys_motion_draw("
-		"  MotionID INTEGER NOT NULL,"
-		"  Slot     INTEGER NOT NULL,"
-		"  DrawNo   INTEGER,"
-		"  PRIMARY KEY (MotionID, Slot)"
+		"  MotionTypeID INTEGER NOT NULL,"
+		"  MotionListID INTEGER NOT NULL,"
+		"  MotionSlot   INTEGER NOT NULL,"
+		"  Slot         INTEGER NOT NULL,"
+		"  DrawNo       INTEGER,"
+		"  PRIMARY KEY (MotionTypeID, MotionListID, MotionSlot, Slot)"
 		");";
 
 	sqlite3_exec(s_pDb, pszSubSql, NULL, NULL, NULL);
@@ -109,7 +149,7 @@ void CSaveLoadInfoMotion::SaveToNormalTable(void)
 	// メインテーブル INSERT 文
 	const char* pszInsertMain =
 		"INSERT INTO sys_motion("
-		"  MotionID, MotionTypeID, MotionListID,"
+		"  MotionTypeID, MotionListID, Slot, MotionID,"
 		"  Wait, Level1, Level2, Level3,"
 		"  Pile, RedrawHand, Loop,"
 		"  GrpIDMainBase, GrpIDMainPile1, GrpIDMainPile2, GrpIDMainPile3,"
@@ -117,7 +157,7 @@ void CSaveLoadInfoMotion::SaveToNormalTable(void)
 		"  SoundID, ProcID,"
 		"  DrawPos0X, DrawPos0Y, DrawPos1X, DrawPos1Y,"
 		"  DrawPos2X, DrawPos2Y, DrawPos3X, DrawPos3Y"
-		") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+		") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
@@ -128,7 +168,7 @@ void CSaveLoadInfoMotion::SaveToNormalTable(void)
 
 	// サブテーブル INSERT 文（モーションごとに複数回使い回す）
 	const char* pszInsertSub =
-		"INSERT INTO sys_motion_draw(MotionID, Slot, DrawNo) VALUES(?,?,?);";
+		"INSERT INTO sys_motion_draw(MotionTypeID, MotionListID, MotionSlot, Slot, DrawNo) VALUES(?,?,?,?,?);";
 
 	sqlite3_stmt* pStmtSub = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertSub, -1, &pStmtSub, NULL);
@@ -141,41 +181,47 @@ void CSaveLoadInfoMotion::SaveToNormalTable(void)
 	// 保存対象のインデックス配列を取得
 	ARRAYINT anNo;
 	m_pLibInfoBase->GetSaveNo(anNo);
+	std::map<ULONGLONG, int> mapSlotNo;
 
 	int nCount = (int)anNo.size();
 	for (int i = 0; i < nCount; i++) {
 		PCInfoMotion pInfo = (PCInfoMotion)m_pLibInfoBase->GetPtr(anNo[i]);
+		ULONGLONG ullKey;
+		int nSlotNo;
 		if (pInfo == NULL) continue;
+		ullKey = (((ULONGLONG)pInfo->m_dwMotionTypeID) << 32) | (ULONGLONG)pInfo->m_dwMotionListID;
+		nSlotNo = mapSlotNo[ullKey]++;
 
 		// ---- メインテーブルへの INSERT ----
-		sqlite3_bind_int(pStmtMain,  1, (int)pInfo->m_dwMotionID);
-		sqlite3_bind_int(pStmtMain,  2, (int)pInfo->m_dwMotionTypeID);
-		sqlite3_bind_int(pStmtMain,  3, (int)pInfo->m_dwMotionListID);
-		sqlite3_bind_int(pStmtMain,  4, (int)pInfo->m_byWait);
-		sqlite3_bind_int(pStmtMain,  5, (int)pInfo->m_byLevel1);
-		sqlite3_bind_int(pStmtMain,  6, (int)pInfo->m_byLevel2);
-		sqlite3_bind_int(pStmtMain,  7, (int)pInfo->m_byLevel3);
-		sqlite3_bind_int(pStmtMain,  8, (int)pInfo->m_bPile);
-		sqlite3_bind_int(pStmtMain,  9, (int)pInfo->m_bRedrawHand);
-		sqlite3_bind_int(pStmtMain, 10, (int)pInfo->m_bLoop);
-		sqlite3_bind_int(pStmtMain, 11, (int)pInfo->m_wGrpIDMainBase);
-		sqlite3_bind_int(pStmtMain, 12, (int)pInfo->m_wGrpIDMainPile1);
-		sqlite3_bind_int(pStmtMain, 13, (int)pInfo->m_wGrpIDMainPile2);
-		sqlite3_bind_int(pStmtMain, 14, (int)pInfo->m_wGrpIDMainPile3);
-		sqlite3_bind_int(pStmtMain, 15, (int)pInfo->m_wGrpIDSubBase);
-		sqlite3_bind_int(pStmtMain, 16, (int)pInfo->m_wGrpIDSubPile1);
-		sqlite3_bind_int(pStmtMain, 17, (int)pInfo->m_wGrpIDSubPile2);
-		sqlite3_bind_int(pStmtMain, 18, (int)pInfo->m_wGrpIDSubPile3);
-		sqlite3_bind_int(pStmtMain, 19, (int)pInfo->m_dwSoundID);
-		sqlite3_bind_int(pStmtMain, 20, (int)pInfo->m_dwProcID);
-		sqlite3_bind_int(pStmtMain, 21, (int)pInfo->m_ptDrawPosPile0.x);
-		sqlite3_bind_int(pStmtMain, 22, (int)pInfo->m_ptDrawPosPile0.y);
-		sqlite3_bind_int(pStmtMain, 23, (int)pInfo->m_ptDrawPosPile1.x);
-		sqlite3_bind_int(pStmtMain, 24, (int)pInfo->m_ptDrawPosPile1.y);
-		sqlite3_bind_int(pStmtMain, 25, (int)pInfo->m_ptDrawPosPile2.x);
-		sqlite3_bind_int(pStmtMain, 26, (int)pInfo->m_ptDrawPosPile2.y);
-		sqlite3_bind_int(pStmtMain, 27, (int)pInfo->m_ptDrawPosPile3.x);
-		sqlite3_bind_int(pStmtMain, 28, (int)pInfo->m_ptDrawPosPile3.y);
+		sqlite3_bind_int(pStmtMain,  1, (int)pInfo->m_dwMotionTypeID);
+		sqlite3_bind_int(pStmtMain,  2, (int)pInfo->m_dwMotionListID);
+		sqlite3_bind_int(pStmtMain,  3, nSlotNo);
+		sqlite3_bind_int(pStmtMain,  4, (int)pInfo->m_dwMotionID);
+		sqlite3_bind_int(pStmtMain,  5, (int)pInfo->m_byWait);
+		sqlite3_bind_int(pStmtMain,  6, (int)pInfo->m_byLevel1);
+		sqlite3_bind_int(pStmtMain,  7, (int)pInfo->m_byLevel2);
+		sqlite3_bind_int(pStmtMain,  8, (int)pInfo->m_byLevel3);
+		sqlite3_bind_int(pStmtMain,  9, (int)pInfo->m_bPile);
+		sqlite3_bind_int(pStmtMain, 10, (int)pInfo->m_bRedrawHand);
+		sqlite3_bind_int(pStmtMain, 11, (int)pInfo->m_bLoop);
+		sqlite3_bind_int(pStmtMain, 12, (int)pInfo->m_wGrpIDMainBase);
+		sqlite3_bind_int(pStmtMain, 13, (int)pInfo->m_wGrpIDMainPile1);
+		sqlite3_bind_int(pStmtMain, 14, (int)pInfo->m_wGrpIDMainPile2);
+		sqlite3_bind_int(pStmtMain, 15, (int)pInfo->m_wGrpIDMainPile3);
+		sqlite3_bind_int(pStmtMain, 16, (int)pInfo->m_wGrpIDSubBase);
+		sqlite3_bind_int(pStmtMain, 17, (int)pInfo->m_wGrpIDSubPile1);
+		sqlite3_bind_int(pStmtMain, 18, (int)pInfo->m_wGrpIDSubPile2);
+		sqlite3_bind_int(pStmtMain, 19, (int)pInfo->m_wGrpIDSubPile3);
+		sqlite3_bind_int(pStmtMain, 20, (int)pInfo->m_dwSoundID);
+		sqlite3_bind_int(pStmtMain, 21, (int)pInfo->m_dwProcID);
+		sqlite3_bind_int(pStmtMain, 22, (int)pInfo->m_ptDrawPosPile0.x);
+		sqlite3_bind_int(pStmtMain, 23, (int)pInfo->m_ptDrawPosPile0.y);
+		sqlite3_bind_int(pStmtMain, 24, (int)pInfo->m_ptDrawPosPile1.x);
+		sqlite3_bind_int(pStmtMain, 25, (int)pInfo->m_ptDrawPosPile1.y);
+		sqlite3_bind_int(pStmtMain, 26, (int)pInfo->m_ptDrawPosPile2.x);
+		sqlite3_bind_int(pStmtMain, 27, (int)pInfo->m_ptDrawPosPile2.y);
+		sqlite3_bind_int(pStmtMain, 28, (int)pInfo->m_ptDrawPosPile3.x);
+		sqlite3_bind_int(pStmtMain, 29, (int)pInfo->m_ptDrawPosPile3.y);
 
 		sqlite3_step(pStmtMain);
 		sqlite3_reset(pStmtMain);
@@ -184,9 +230,11 @@ void CSaveLoadInfoMotion::SaveToNormalTable(void)
 		//   Slot = 配列インデックス (0-based) をそのまま使う
 		int nDrawCount = (int)pInfo->m_anDrawList.size();
 		for (int j = 0; j < nDrawCount; j++) {
-			sqlite3_bind_int(pStmtSub, 1, (int)pInfo->m_dwMotionID);
-			sqlite3_bind_int(pStmtSub, 2, j);
-			sqlite3_bind_int(pStmtSub, 3, (int)pInfo->m_anDrawList[j]);
+			sqlite3_bind_int(pStmtSub, 1, (int)pInfo->m_dwMotionTypeID);
+			sqlite3_bind_int(pStmtSub, 2, (int)pInfo->m_dwMotionListID);
+			sqlite3_bind_int(pStmtSub, 3, nSlotNo);
+			sqlite3_bind_int(pStmtSub, 4, j);
+			sqlite3_bind_int(pStmtSub, 5, (int)pInfo->m_anDrawList[j]);
 
 			sqlite3_step(pStmtSub);
 			sqlite3_reset(pStmtSub);	// reset で再利用（finalize より高効率）
@@ -209,7 +257,7 @@ BOOL CSaveLoadInfoMotion::LoadFromNormalTable(PCLibInfoBase pDst)
 	// メインテーブル SELECT
 	const char* pszSelectMain =
 		"SELECT"
-		"  MotionID, MotionTypeID, MotionListID,"
+		"  MotionTypeID, MotionListID, Slot, MotionID,"
 		"  Wait, Level1, Level2, Level3,"
 		"  Pile, RedrawHand, Loop,"
 		"  GrpIDMainBase, GrpIDMainPile1, GrpIDMainPile2, GrpIDMainPile3,"
@@ -217,7 +265,8 @@ BOOL CSaveLoadInfoMotion::LoadFromNormalTable(PCLibInfoBase pDst)
 		"  SoundID, ProcID,"
 		"  DrawPos0X, DrawPos0Y, DrawPos1X, DrawPos1Y,"
 		"  DrawPos2X, DrawPos2Y, DrawPos3X, DrawPos3Y"
-		" FROM sys_motion;";
+		" FROM sys_motion"
+		" ORDER BY MotionTypeID, MotionListID, Slot;";
 
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszSelectMain, -1, &pStmtMain, NULL);
@@ -226,7 +275,10 @@ BOOL CSaveLoadInfoMotion::LoadFromNormalTable(PCLibInfoBase pDst)
 	// サブテーブル SELECT（外側で一度 prepare し、各モーションごとに bind+reset で使い回す）
 	//   ORDER BY Slot を必ず付けて配列インデックス順を保証する
 	const char* pszSelectSub =
-		"SELECT Slot, DrawNo FROM sys_motion_draw WHERE MotionID=? ORDER BY Slot;";
+		"SELECT Slot, DrawNo"
+		"  FROM sys_motion_draw"
+		" WHERE MotionTypeID=? AND MotionListID=? AND MotionSlot=?"
+		" ORDER BY Slot;";
 
 	sqlite3_stmt* pStmtSub = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszSelectSub, -1, &pStmtSub, NULL);
@@ -243,40 +295,44 @@ BOOL CSaveLoadInfoMotion::LoadFromNormalTable(PCLibInfoBase pDst)
 
 		// m_dwMotionID を先にセットしてから Add() を呼ぶ
 		//   ← Add() 内で 0 なら GetNewID() が呼ばれてしまうため
-		DWORD dwMotionID = (DWORD)sqlite3_column_int(pStmtMain, 0);
-		pInfo->m_dwMotionID     = dwMotionID;
-		pInfo->m_dwMotionTypeID = (DWORD)sqlite3_column_int(pStmtMain, 1);
-		pInfo->m_dwMotionListID = (DWORD)sqlite3_column_int(pStmtMain, 2);
-		pInfo->m_byWait         = (BYTE) sqlite3_column_int(pStmtMain, 3);
-		pInfo->m_byLevel1       = (BYTE) sqlite3_column_int(pStmtMain, 4);
-		pInfo->m_byLevel2       = (BYTE) sqlite3_column_int(pStmtMain, 5);
-		pInfo->m_byLevel3       = (BYTE) sqlite3_column_int(pStmtMain, 6);
-		pInfo->m_bPile          = (BOOL) sqlite3_column_int(pStmtMain, 7);
-		pInfo->m_bRedrawHand    = (BOOL) sqlite3_column_int(pStmtMain, 8);
-		pInfo->m_bLoop          = (BOOL) sqlite3_column_int(pStmtMain, 9);
-		pInfo->m_wGrpIDMainBase  = (WORD)sqlite3_column_int(pStmtMain, 10);
-		pInfo->m_wGrpIDMainPile1 = (WORD)sqlite3_column_int(pStmtMain, 11);
-		pInfo->m_wGrpIDMainPile2 = (WORD)sqlite3_column_int(pStmtMain, 12);
-		pInfo->m_wGrpIDMainPile3 = (WORD)sqlite3_column_int(pStmtMain, 13);
-		pInfo->m_wGrpIDSubBase   = (WORD)sqlite3_column_int(pStmtMain, 14);
-		pInfo->m_wGrpIDSubPile1  = (WORD)sqlite3_column_int(pStmtMain, 15);
-		pInfo->m_wGrpIDSubPile2  = (WORD)sqlite3_column_int(pStmtMain, 16);
-		pInfo->m_wGrpIDSubPile3  = (WORD)sqlite3_column_int(pStmtMain, 17);
-		pInfo->m_dwSoundID       = (DWORD)sqlite3_column_int(pStmtMain, 18);
-		pInfo->m_dwProcID        = (DWORD)sqlite3_column_int(pStmtMain, 19);
-		pInfo->m_ptDrawPosPile0.x = (LONG)sqlite3_column_int(pStmtMain, 20);
-		pInfo->m_ptDrawPosPile0.y = (LONG)sqlite3_column_int(pStmtMain, 21);
-		pInfo->m_ptDrawPosPile1.x = (LONG)sqlite3_column_int(pStmtMain, 22);
-		pInfo->m_ptDrawPosPile1.y = (LONG)sqlite3_column_int(pStmtMain, 23);
-		pInfo->m_ptDrawPosPile2.x = (LONG)sqlite3_column_int(pStmtMain, 24);
-		pInfo->m_ptDrawPosPile2.y = (LONG)sqlite3_column_int(pStmtMain, 25);
-		pInfo->m_ptDrawPosPile3.x = (LONG)sqlite3_column_int(pStmtMain, 26);
-		pInfo->m_ptDrawPosPile3.y = (LONG)sqlite3_column_int(pStmtMain, 27);
+		DWORD dwMotionTypeID = (DWORD)sqlite3_column_int(pStmtMain, 0);
+		DWORD dwMotionListID = (DWORD)sqlite3_column_int(pStmtMain, 1);
+		int nMotionSlot = sqlite3_column_int(pStmtMain, 2);
+		pInfo->m_dwMotionTypeID = dwMotionTypeID;
+		pInfo->m_dwMotionListID = dwMotionListID;
+		pInfo->m_dwMotionID     = (DWORD)sqlite3_column_int(pStmtMain, 3);
+		pInfo->m_byWait         = (BYTE) sqlite3_column_int(pStmtMain, 4);
+		pInfo->m_byLevel1       = (BYTE) sqlite3_column_int(pStmtMain, 5);
+		pInfo->m_byLevel2       = (BYTE) sqlite3_column_int(pStmtMain, 6);
+		pInfo->m_byLevel3       = (BYTE) sqlite3_column_int(pStmtMain, 7);
+		pInfo->m_bPile          = (BOOL) sqlite3_column_int(pStmtMain, 8);
+		pInfo->m_bRedrawHand    = (BOOL) sqlite3_column_int(pStmtMain, 9);
+		pInfo->m_bLoop          = (BOOL) sqlite3_column_int(pStmtMain, 10);
+		pInfo->m_wGrpIDMainBase  = (WORD)sqlite3_column_int(pStmtMain, 11);
+		pInfo->m_wGrpIDMainPile1 = (WORD)sqlite3_column_int(pStmtMain, 12);
+		pInfo->m_wGrpIDMainPile2 = (WORD)sqlite3_column_int(pStmtMain, 13);
+		pInfo->m_wGrpIDMainPile3 = (WORD)sqlite3_column_int(pStmtMain, 14);
+		pInfo->m_wGrpIDSubBase   = (WORD)sqlite3_column_int(pStmtMain, 15);
+		pInfo->m_wGrpIDSubPile1  = (WORD)sqlite3_column_int(pStmtMain, 16);
+		pInfo->m_wGrpIDSubPile2  = (WORD)sqlite3_column_int(pStmtMain, 17);
+		pInfo->m_wGrpIDSubPile3  = (WORD)sqlite3_column_int(pStmtMain, 18);
+		pInfo->m_dwSoundID       = (DWORD)sqlite3_column_int(pStmtMain, 19);
+		pInfo->m_dwProcID        = (DWORD)sqlite3_column_int(pStmtMain, 20);
+		pInfo->m_ptDrawPosPile0.x = (LONG)sqlite3_column_int(pStmtMain, 21);
+		pInfo->m_ptDrawPosPile0.y = (LONG)sqlite3_column_int(pStmtMain, 22);
+		pInfo->m_ptDrawPosPile1.x = (LONG)sqlite3_column_int(pStmtMain, 23);
+		pInfo->m_ptDrawPosPile1.y = (LONG)sqlite3_column_int(pStmtMain, 24);
+		pInfo->m_ptDrawPosPile2.x = (LONG)sqlite3_column_int(pStmtMain, 25);
+		pInfo->m_ptDrawPosPile2.y = (LONG)sqlite3_column_int(pStmtMain, 26);
+		pInfo->m_ptDrawPosPile3.x = (LONG)sqlite3_column_int(pStmtMain, 27);
+		pInfo->m_ptDrawPosPile3.y = (LONG)sqlite3_column_int(pStmtMain, 28);
 
 		// ---- サブテーブルから描画順リストを復元 ----
 		//   prepared statement を bind + reset で再利用
 		pInfo->m_anDrawList.clear();
-		sqlite3_bind_int(pStmtSub, 1, (int)dwMotionID);
+		sqlite3_bind_int(pStmtSub, 1, (int)dwMotionTypeID);
+		sqlite3_bind_int(pStmtSub, 2, (int)dwMotionListID);
+		sqlite3_bind_int(pStmtSub, 3, nMotionSlot);
 		while (sqlite3_step(pStmtSub) == SQLITE_ROW) {
 			// Slot は連番のはずだが ORDER BY Slot で取得するので push_back で順序保証
 			int nDrawNo = sqlite3_column_int(pStmtSub, 1);
@@ -300,8 +356,13 @@ BOOL CSaveLoadInfoMotion::LoadFromNormalTable(PCLibInfoBase pDst)
 // ============================================================
 BOOL CSaveLoadInfoMotion::MigrateFromBlob(PCLibInfoBase pDst)
 {
-	// 親クラスの Load() を呼んで BLOB / .dat を読む
-	CSaveLoadInfoBase::Load(pDst);
+	// 旧 .dat があればそちらを優先する
+	//   2026-04-20 の SQLite 切替直後に sbo_data 側へ壊れた Motion BLOB が
+	//   入っている環境があり、優先順のままだと再マイグレーションで再発する。
+	if (LoadFromDatOnly(pDst) == FALSE) {
+		// .dat が無い環境だけ従来通り BLOB / .dat フォールバックへ進む
+		CSaveLoadInfoBase::Load(pDst);
+	}
 
 	// 読み込み結果を確認
 	if (pDst->GetCount() <= 0) {
@@ -322,6 +383,56 @@ BOOL CSaveLoadInfoMotion::MigrateFromBlob(PCLibInfoBase pDst)
 	}
 
 	return TRUE;
+}
+
+BOOL CSaveLoadInfoMotion::LoadFromDatOnly(PCLibInfoBase pDst)
+{
+	sqlite3* pDbBack;
+
+	if (pDst == NULL) {
+		return FALSE;
+	}
+
+	pDbBack = s_pDb;
+	s_pDb = NULL;
+	CSaveLoadInfoBase::Load(pDst);
+	s_pDb = pDbBack;
+
+	return (pDst->GetCount() > 0) ? TRUE : FALSE;
+}
+
+BOOL CSaveLoadInfoMotion::HasBrokenMotionRows(void)
+{
+	const char* pszSql =
+		"SELECT CASE"
+		"  WHEN EXISTS (SELECT 1 FROM sys_motion WHERE MotionListID IN (5,6,7,8))"
+		"   AND NOT EXISTS ("
+		"     SELECT 1"
+		"       FROM sys_motion"
+		"      WHERE MotionListID IN (5,6,7,8)"
+		"      GROUP BY MotionTypeID, MotionListID"
+		"     HAVING COUNT(*) > 1"
+		"   )"
+		"  THEN 1"
+		"  ELSE 0"
+		"END;";
+	sqlite3_stmt* pStmt = NULL;
+	BOOL bRet = FALSE;
+
+	if (s_pDb == NULL) {
+		return FALSE;
+	}
+
+	if (sqlite3_prepare_v2(s_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+		return FALSE;
+	}
+
+	if (sqlite3_step(pStmt) == SQLITE_ROW) {
+		bRet = sqlite3_column_int(pStmt, 0) ? TRUE : FALSE;
+	}
+	sqlite3_finalize(pStmt);
+
+	return bRet;
 }
 
 // ============================================================
@@ -351,6 +462,13 @@ void CSaveLoadInfoMotion::Load(PCLibInfoBase pDst)
 
 	// テーブルが無ければ作成
 	EnsureTable();
+
+	// 旧移行で歩行モーションの複数コマが失われた DB を自動修復する
+	if (HasBrokenMotionRows()) {
+		OutputDebugStringA("SaveLoadInfoMotion: 破損した正規化モーション行を検出 → .dat から再マイグレーション\n");
+		MigrateFromBlob(pDst);
+		return;
+	}
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
