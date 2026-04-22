@@ -357,6 +357,7 @@ void CSDLApp::RunFrame(void)
 			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
 				m_pHost->OnSDLKeyDown(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
 			}
+			m_bDrawPending = TRUE;
 			break;
 
 		case SDL_KEYUP:
@@ -364,6 +365,7 @@ void CSDLApp::RunFrame(void)
 			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
 				m_pHost->OnSDLKeyUp(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
 			}
+			m_bDrawPending = TRUE;
 			break;
 
 		case SDL_TEXTINPUT:
@@ -371,6 +373,7 @@ void CSDLApp::RunFrame(void)
 			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
 				m_pHost->OnSDLTextInput(sdlEvent.text.text);
 			}
+			m_bDrawPending = TRUE;
 			break;
 
 		case SDL_WINDOWEVENT:
@@ -379,11 +382,13 @@ void CSDLApp::RunFrame(void)
 			case SDL_WINDOWEVENT_FOCUS_GAINED:
 			case SDL_WINDOWEVENT_RESTORED:
 				m_pHost->OnSDLFocusChanged(TRUE);
+				m_bDrawPending = TRUE;
 				break;
 
 			case SDL_WINDOWEVENT_FOCUS_LOST:
 			case SDL_WINDOWEVENT_MINIMIZED:
 				m_pHost->OnSDLFocusChanged(FALSE);
+				m_bDrawPending = TRUE;
 				break;
 
 			default:
@@ -393,6 +398,7 @@ void CSDLApp::RunFrame(void)
 
 		case SDL_MOUSEMOTION:
 			m_pHost->OnSDLMouseMove(sdlEvent.motion.x, sdlEvent.motion.y);
+			m_bDrawPending = TRUE;
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
@@ -412,6 +418,7 @@ void CSDLApp::RunFrame(void)
 						sdlEvent.button.y);
 				}
 			}
+			m_bDrawPending = TRUE;
 			break;
 
 		default:
@@ -475,7 +482,7 @@ void CSDLApp::RunFrame(void)
 		m_dwRenderInterval = 1;
 	}
 
-	if ((dwTimeTmp - m_dwLastRenderTime) >= m_dwRenderInterval)
+	if (m_bDrawPending && ((dwTimeTmp - m_dwLastRenderTime) >= m_dwRenderInterval))
 	{
 		SDL_Renderer *pRenderer = m_Window.GetRenderer();
 		if ((pRenderer != NULL)

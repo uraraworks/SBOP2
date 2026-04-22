@@ -283,12 +283,14 @@ int CStateProcMAP::GetPlayerMoveStep(DWORD dwNowTime, int &nAccumOut, DWORD &dwL
 	nMoveStep = (int)(ullAccumulated / 1000);
 	nAccumOut = (int)(ullAccumulated % 1000);
 
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
 	// [DBG-MOVESTEP] 大移動（5px超）のときのみログ出力してログ欄肥大を防ぐ
 	if (nMoveStep > 5) {
 		DWORD dwMoveWaitLog = GetPlayerMoveWaitBase(m_pPlayerChar);
 		SboDbgLog("[GetPlayerMoveStep] dwElapsed=%u dwMoveWait=%u nMovePixelsPerSec=%d nMoveStep=%d",
 			dwElapsed, dwMoveWaitLog, nMovePixelsPerSec, nMoveStep);
 	}
+#endif
 
 	return nMoveStep;
 }
