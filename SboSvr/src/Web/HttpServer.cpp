@@ -26,6 +26,7 @@
 #include "Handlers/SelectionHandler.h"
 #include "Handlers/CharacterListHandler.h"
 #include "Handlers/CharacterDetailHandler.h"
+#include "Handlers/CharacterUpdateHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -735,6 +736,11 @@ void CHttpServer::RegisterDefaultHandlers()
         // キャラクター詳細取得 API  GET /api/characters/{charId}
         std::unique_ptr<IApiHandler> characterDetailHandler(new CCharacterDetailHandler(m_pMgrData));
         m_router.RegisterPrefix("GET", "/api/characters/", std::move(characterDetailHandler));
+
+        // キャラクター更新 API  PUT /api/characters/{charId}[/status|/equipment|/graphics]
+        // ハンドラ内部でサブパスを解析して振り分ける
+        std::unique_ptr<IApiHandler> characterUpdateHandler(new CCharacterUpdateHandler(m_pMgrData));
+        m_router.RegisterPrefix("PUT", "/api/characters/", std::move(characterUpdateHandler));
 
         // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
         CSelectionStore::GetInstance().SetChangeCallback(
