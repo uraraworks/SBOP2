@@ -285,6 +285,7 @@ function ensureAdminWebSocket() {
     }
     if (msg.kind === "selection_changed") {
       console.debug("[admin-ws] selection_changed", msg.payload);
+      applySelectionPayload(msg.payload);
     } else {
       console.debug("[admin-ws] 受信:", msg);
     }
@@ -2997,6 +2998,37 @@ async function handleMapWindowCellClick(x, y) {
     if (mapWindowSummaryEl) {
       mapWindowSummaryEl.textContent = "選択の同期に失敗しました";
     }
+    return;
+  }
+
+  refreshMapWindowCellHighlight();
+  updateMapWindowSelectedInfo();
+}
+
+/**
+ * WS の selection_changed ペイロードをマップウィンドウ画面に即時反映する。
+ * payload が null（選択解除）、または type が "map_cell" 以外の場合は selectedCell をクリアする。
+ * payload の mapId が現在表示中マップと異なる場合は無視する。
+ * @param {object|null} payload - Selection JSON ({type, mapId, x, y, ...}) または null
+ */
+function applySelectionPayload(payload) {
+  // マップウィンドウが表示されていない場合は何もしない
+  if (!mapWindowState.selectedMapId) return;
+
+  if (
+    payload &&
+    payload.type === "map_cell" &&
+    String(payload.mapId) === String(mapWindowState.selectedMapId) &&
+    typeof payload.x === "number" &&
+    typeof payload.y === "number"
+  ) {
+    // 現在表示中マップのセル選択を更新
+    mapWindowState.selectedCell = { x: payload.x, y: payload.y };
+  } else if (!payload) {
+    // 選択解除
+    mapWindowState.selectedCell = null;
+  } else {
+    // 別マップへの選択 or 非対応 type → 無視
     return;
   }
 
