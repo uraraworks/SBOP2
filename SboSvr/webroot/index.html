@@ -189,6 +189,7 @@
             <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-npcspawn">NPC発生</button>
             <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-items">アイテム</button>
             <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-skills">スキル</button>
+            <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-account">アカウント</button>
           </div>
 
           <!-- タブ: 基本情報 -->
@@ -432,6 +433,64 @@
               </tbody>
             </table>
           </div>
+
+          <!-- タブ: アカウント情報 -->
+          <div class="tab-panel" id="cd-tab-account" style="display:none">
+            <p id="cd-account-feedback" class="form-feedback" aria-live="polite"></p>
+
+            <!-- アカウント情報表示 -->
+            <section class="card" style="margin-bottom:1rem">
+              <h3 style="margin-top:0">アカウント情報</h3>
+              <dl class="detail-list">
+                <div><dt>アカウントID</dt><dd id="cd-acct-accountId">-</dd></div>
+                <div><dt>ログインID</dt><dd id="cd-acct-loginId">-</dd></div>
+                <div><dt>IP アドレス</dt><dd id="cd-acct-ip">-</dd></div>
+                <div><dt>MAC アドレス</dt><dd id="cd-acct-mac">-</dd></div>
+              </dl>
+              <div class="form-actions">
+                <button type="button" id="cd-acct-reload-btn" class="button secondary">再読み込み</button>
+              </div>
+            </section>
+
+            <!-- アカウント紐付け変更 -->
+            <section class="card" style="margin-bottom:1rem">
+              <h3 style="margin-top:0">アカウント紐付け変更</h3>
+              <p class="card-description">accountId=0 を指定すると紐付けを解除します。</p>
+              <div class="filter-row">
+                <label>アカウントID:
+                  <input type="number" id="cd-acct-id-input" placeholder="例: 1001" min="0" />
+                </label>
+                <button type="button" id="cd-acct-save-btn" class="button primary">変更</button>
+                <button type="button" id="cd-acct-unlink-btn" class="button danger">解除（0）</button>
+              </div>
+            </section>
+
+            <!-- 管理者権限レベル -->
+            <section class="card" style="margin-bottom:1rem">
+              <h3 style="margin-top:0">管理者権限レベル</h3>
+              <p class="card-description">0 = 一般、1 = 管理者。紐付きアカウントの権限レベルを変更します。</p>
+              <div class="filter-row">
+                <label>権限レベル (0-255):
+                  <input type="number" id="cd-admin-level-input" placeholder="例: 0" min="0" max="255" />
+                </label>
+                <button type="button" id="cd-admin-save-btn" class="button primary">保存</button>
+              </div>
+            </section>
+
+            <!-- 無効化（BAN） -->
+            <section class="card">
+              <h3 style="margin-top:0">アカウント無効化（BAN）</h3>
+              <p class="card-description">紐付きアカウントのログイン拒否フラグを設定します。</p>
+              <dl class="detail-list" style="margin-bottom:0.75rem">
+                <div><dt>現在の状態</dt><dd id="cd-disabled-status">-</dd></div>
+              </dl>
+              <div class="form-actions">
+                <button type="button" id="cd-ban-btn" class="button danger">BAN（無効化）</button>
+                <button type="button" id="cd-unban-btn" class="button secondary">BAN 解除</button>
+              </div>
+            </section>
+          </div>
+
         </div>
       </section>
     </div>
@@ -485,14 +544,72 @@
       </section>
     </div>
     <div class="view" data-view="character-account">
-      <section class="card placeholder-card">
-        <h2>アカウント紐付け・状態変更（プレースホルダー）</h2>
-        <p>キャラクターとアカウントの結び付きや BAN 状態を変更する画面を予定しています。</p>
-        <ul>
-          <li>キャラクター選択と現在のアカウント情報表示</li>
-          <li>ステータス変更（凍結、警告など）の操作</li>
-          <li>変更履歴タイムライン</li>
-        </ul>
+      <section class="card" id="char-acct-card">
+        <h2>アカウント紐付け・権限・BAN</h2>
+        <p class="card-description">CharID を入力してキャラクターのアカウント情報を表示・変更します。</p>
+        <div class="filter-row">
+          <label>CharID:
+            <input type="number" id="ca-char-id-input" placeholder="例: 1001" min="1" />
+          </label>
+          <button type="button" id="ca-load-btn" class="button">表示</button>
+        </div>
+        <p id="ca-feedback" class="form-feedback" aria-live="polite"></p>
+
+        <div id="ca-body" style="display:none">
+          <p style="margin-bottom:1rem">CharID: <strong id="ca-charId">-</strong> / キャラ名: <strong id="ca-charName">-</strong></p>
+
+          <!-- アカウント情報表示 -->
+          <section class="card" style="margin-bottom:1rem">
+            <h3 style="margin-top:0">アカウント情報</h3>
+            <dl class="detail-list">
+              <div><dt>アカウントID</dt><dd id="ca-acct-accountId">-</dd></div>
+              <div><dt>ログインID</dt><dd id="ca-acct-loginId">-</dd></div>
+              <div><dt>IP アドレス</dt><dd id="ca-acct-ip">-</dd></div>
+              <div><dt>MAC アドレス</dt><dd id="ca-acct-mac">-</dd></div>
+            </dl>
+          </section>
+
+          <!-- アカウント紐付け変更 -->
+          <section class="card" style="margin-bottom:1rem">
+            <h3 style="margin-top:0">アカウント紐付け変更</h3>
+            <p class="card-description">accountId=0 を指定すると紐付けを解除します。</p>
+            <div class="filter-row">
+              <label>アカウントID:
+                <input type="number" id="ca-new-account-id" placeholder="例: 1001" min="0" />
+              </label>
+              <button type="button" id="ca-link-btn" class="button primary">変更</button>
+              <button type="button" id="ca-unlink-btn" class="button danger">解除（0）</button>
+            </div>
+            <p id="ca-link-feedback" class="form-feedback" aria-live="polite"></p>
+          </section>
+
+          <!-- 管理者権限レベル -->
+          <section class="card" style="margin-bottom:1rem">
+            <h3 style="margin-top:0">管理者権限レベル</h3>
+            <p class="card-description">0 = 一般、1 = 管理者。紐付きアカウントの権限レベルを変更します。</p>
+            <div class="filter-row">
+              <label>権限レベル (0-255):
+                <input type="number" id="ca-admin-level" placeholder="例: 0" min="0" max="255" />
+              </label>
+              <button type="button" id="ca-admin-btn" class="button primary">保存</button>
+            </div>
+            <p id="ca-admin-feedback" class="form-feedback" aria-live="polite"></p>
+          </section>
+
+          <!-- 無効化（BAN） -->
+          <section class="card">
+            <h3 style="margin-top:0">アカウント無効化（BAN）</h3>
+            <p class="card-description">紐付きアカウントのログイン拒否フラグを設定します。</p>
+            <dl class="detail-list" style="margin-bottom:0.75rem">
+              <div><dt>現在の状態</dt><dd id="ca-disabled-status">-</dd></div>
+            </dl>
+            <div class="form-actions">
+              <button type="button" id="ca-ban-btn" class="button danger">BAN（無効化）</button>
+              <button type="button" id="ca-unban-btn" class="button secondary">BAN 解除</button>
+            </div>
+            <p id="ca-ban-feedback" class="form-feedback" aria-live="polite"></p>
+          </section>
+        </div>
       </section>
     </div>
     <div class="view" data-view="npc-management">

@@ -5094,7 +5094,7 @@ if (cdSkillAddBtn) {
 }
 
 /* -------------------------------------------------------
- * タブ切り替え時にアイテム/スキルを自動ロードする
+ * タブ切り替え時にアイテム/スキル/アカウントを自動ロードする
  * ------------------------------------------------------- */
 (function () {
   var charTabNav2 = document.getElementById("char-tab-nav");
@@ -5108,6 +5108,338 @@ if (cdSkillAddBtn) {
       fetchCharacterItems(currentCharId);
     } else if (tabId === "cd-tab-skills") {
       fetchCharacterSkills(currentCharId);
+    } else if (tabId === "cd-tab-account") {
+      fetchCharacterAccount(currentCharId);
     }
   });
 }());
+
+/* -------------------------------------------------------
+ * アカウント情報タブ (character-overview 内 cd-tab-account)
+ * ------------------------------------------------------- */
+
+/** GET /api/characters/{charId}/account を呼んでアカウント情報を取得する */
+async function fetchCharacterAccount(charId) {
+  var feedbackEl = document.getElementById("cd-account-feedback");
+  if (feedbackEl) { feedbackEl.textContent = ""; }
+
+  try {
+    var url = "/api/characters/" + encodeURIComponent(charId) + "/account";
+    var { response, data } = await fetchJson(url);
+    if (!response.ok || !data) {
+      var msg = (data && data.error) ? data.error : "アカウント情報の取得に失敗しました";
+      if (feedbackEl) { setFeedback("cd-account-feedback", "エラー: " + msg, true); }
+      return;
+    }
+    renderAccountInfo(data, "cd-acct-");
+    // 無効化状態の表示（disabled フィールドがあれば表示、なければ「情報なし」）
+    var disabledEl = document.getElementById("cd-disabled-status");
+    if (disabledEl) { disabledEl.textContent = "（disabled 情報はアカウントAPIから取得）"; }
+  } catch (err) {
+    console.error("fetchCharacterAccount error", err);
+    if (feedbackEl) { setFeedback("cd-account-feedback", "通信エラーが発生しました", true); }
+  }
+}
+
+/** アカウント情報を指定プレフィックスの要素に反映する */
+function renderAccountInfo(d, prefix) {
+  function setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) { el.textContent = (val === null || val === undefined || val === "") ? "-" : String(val); }
+  }
+  setText(prefix + "accountId", d.accountId);
+  setText(prefix + "loginId",   d.loginId);
+  setText(prefix + "ip",        d.ip);
+  setText(prefix + "mac",       d.mac);
+}
+
+/* アカウントタブ内の各ボタンイベント */
+(function () {
+  // 再読み込みボタン
+  var reloadBtn = document.getElementById("cd-acct-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () {
+      if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
+      fetchCharacterAccount(currentCharId);
+    });
+  }
+
+  // アカウント紐付け変更ボタン
+  var saveBtn = document.getElementById("cd-acct-save-btn");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", function () {
+      if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
+      var val = getNumVal("cd-acct-id-input");
+      if (val === null || val < 0) { alert("有効なアカウントID（0以上の整数）を入力してください"); return; }
+      putCharacterAccount(currentCharId, val, "cd-account-feedback");
+    });
+  }
+
+  // 解除ボタン（accountId=0）
+  var unlinkBtn = document.getElementById("cd-acct-unlink-btn");
+  if (unlinkBtn) {
+    unlinkBtn.addEventListener("click", function () {
+      if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
+      if (!confirm("アカウント紐付けを解除しますか？")) { return; }
+      putCharacterAccount(currentCharId, 0, "cd-account-feedback");
+    });
+  }
+
+  // 管理者権限レベル保存ボタン
+  var adminSaveBtn = document.getElementById("cd-admin-save-btn");
+  if (adminSaveBtn) {
+    adminSaveBtn.addEventListener("click", function () {
+      if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
+      var val = getNumVal("cd-admin-level-input");
+      if (val === null || val < 0 || val > 255) { alert("権限レベルは 0〜255 の整数で入力してください"); return; }
+      putCharacterAdmin(currentCharId, val, "cd-account-feedback");
+    });
+  }
+
+  // BAN ボタン
+  var banBtn = document.getElementById("cd-ban-btn");
+  if (banBtn) {
+    banBtn.addEventListener("click", function () {
+      if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
+      if (!confirm("このキャラクターのアカウントを BAN（無効化）しますか？")) { return; }
+      putCharacterDisabled(currentCharId, true, "cd-account-feedback");
+    });
+  }
+
+  // BAN 解除ボタン
+  var unbanBtn = document.getElementById("cd-unban-btn");
+  if (unbanBtn) {
+    unbanBtn.addEventListener("click", function () {
+      if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
+      putCharacterDisabled(currentCharId, false, "cd-account-feedback");
+    });
+  }
+}());
+
+/** PUT /api/characters/{charId}/account */
+async function putCharacterAccount(charId, accountId, feedbackId) {
+  try {
+    var { response, data } = await putJson("/api/characters/" + charId + "/account", { accountId: accountId });
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "アカウント紐付けの変更に失敗しました";
+      setFeedback(feedbackId, "エラー: " + msg, true);
+      return;
+    }
+    setFeedback(feedbackId, "アカウント紐付けを変更しました（accountId=" + accountId + "）", false);
+    fetchCharacterAccount(charId);
+  } catch (err) {
+    console.error("putCharacterAccount error", err);
+    setFeedback(feedbackId, "通信エラーが発生しました", true);
+  }
+}
+
+/** PUT /api/characters/{charId}/admin */
+async function putCharacterAdmin(charId, adminLevel, feedbackId) {
+  try {
+    var { response, data } = await putJson("/api/characters/" + charId + "/admin", { adminLevel: adminLevel });
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "管理者権限の設定に失敗しました";
+      setFeedback(feedbackId, "エラー: " + msg, true);
+      return;
+    }
+    setFeedback(feedbackId, "管理者権限レベルを " + adminLevel + " に設定しました", false);
+  } catch (err) {
+    console.error("putCharacterAdmin error", err);
+    setFeedback(feedbackId, "通信エラーが発生しました", true);
+  }
+}
+
+/** PUT /api/characters/{charId}/disabled */
+async function putCharacterDisabled(charId, disabled, feedbackId) {
+  try {
+    var { response, data } = await putJson("/api/characters/" + charId + "/disabled", { disabled: disabled });
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "無効化状態の変更に失敗しました";
+      setFeedback(feedbackId, "エラー: " + msg, true);
+      return;
+    }
+    var stateStr = disabled ? "BAN（無効化）" : "BAN 解除（有効化）";
+    setFeedback(feedbackId, stateStr + " しました", false);
+    var disabledEl = document.getElementById("cd-disabled-status");
+    if (disabledEl) { disabledEl.textContent = disabled ? "BAN中" : "有効"; }
+  } catch (err) {
+    console.error("putCharacterDisabled error", err);
+    setFeedback(feedbackId, "通信エラーが発生しました", true);
+  }
+}
+
+/* -------------------------------------------------------
+ * character-account ビュー（スタンドアロン画面）
+ * ------------------------------------------------------- */
+
+(function () {
+  var caLoadBtn = document.getElementById("ca-load-btn");
+  if (!caLoadBtn) { return; }
+
+  // 表示ボタン
+  caLoadBtn.addEventListener("click", function () {
+    var val = getNumVal("ca-char-id-input");
+    if (!val || val <= 0) { alert("有効な CharID（1以上の整数）を入力してください"); return; }
+    loadCaView(val);
+  });
+
+  // Enter キーで表示
+  var caInput = document.getElementById("ca-char-id-input");
+  if (caInput) {
+    caInput.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter") { caLoadBtn.click(); }
+    });
+  }
+
+  // アカウント紐付け変更
+  var caLinkBtn = document.getElementById("ca-link-btn");
+  if (caLinkBtn) {
+    caLinkBtn.addEventListener("click", function () {
+      var charId = getNumVal("ca-char-id-input");
+      if (!charId) { return; }
+      var val = getNumVal("ca-new-account-id");
+      if (val === null || val < 0) { alert("有効なアカウントID（0以上）を入力してください"); return; }
+      putCaAccount(charId, val);
+    });
+  }
+
+  // 解除ボタン（accountId=0）
+  var caUnlinkBtn = document.getElementById("ca-unlink-btn");
+  if (caUnlinkBtn) {
+    caUnlinkBtn.addEventListener("click", function () {
+      var charId = getNumVal("ca-char-id-input");
+      if (!charId) { return; }
+      if (!confirm("アカウント紐付けを解除しますか？")) { return; }
+      putCaAccount(charId, 0);
+    });
+  }
+
+  // 管理者権限レベル保存
+  var caAdminBtn = document.getElementById("ca-admin-btn");
+  if (caAdminBtn) {
+    caAdminBtn.addEventListener("click", function () {
+      var charId = getNumVal("ca-char-id-input");
+      if (!charId) { return; }
+      var val = getNumVal("ca-admin-level");
+      if (val === null || val < 0 || val > 255) { alert("権限レベルは 0〜255 の整数で入力してください"); return; }
+      putCaAdmin(charId, val);
+    });
+  }
+
+  // BAN ボタン
+  var caBanBtn = document.getElementById("ca-ban-btn");
+  if (caBanBtn) {
+    caBanBtn.addEventListener("click", function () {
+      var charId = getNumVal("ca-char-id-input");
+      if (!charId) { return; }
+      if (!confirm("このキャラクターのアカウントを BAN しますか？")) { return; }
+      putCaDisabled(charId, true);
+    });
+  }
+
+  // BAN 解除ボタン
+  var caUnbanBtn = document.getElementById("ca-unban-btn");
+  if (caUnbanBtn) {
+    caUnbanBtn.addEventListener("click", function () {
+      var charId = getNumVal("ca-char-id-input");
+      if (!charId) { return; }
+      putCaDisabled(charId, false);
+    });
+  }
+}());
+
+/** character-account ビューのキャラ情報とアカウント情報をロードする */
+async function loadCaView(charId) {
+  var feedbackEl = document.getElementById("ca-feedback");
+  var bodyEl     = document.getElementById("ca-body");
+  if (feedbackEl) { feedbackEl.textContent = "読み込み中..."; }
+  if (bodyEl) { bodyEl.style.display = "none"; }
+
+  try {
+    // まずキャラ詳細（charName を表示するため）
+    var detailRes = await fetchJson("/api/characters/" + encodeURIComponent(charId));
+    if (!detailRes.response.ok || !detailRes.data) {
+      var msg = (detailRes.data && detailRes.data.error) ? detailRes.data.error : "キャラクターが見つかりません";
+      if (feedbackEl) { setFeedback("ca-feedback", "エラー: " + msg, true); }
+      return;
+    }
+    var d = detailRes.data;
+    var charNameEl = document.getElementById("ca-charName");
+    var charIdEl   = document.getElementById("ca-charId");
+    if (charIdEl)   { charIdEl.textContent   = String(d.charId); }
+    if (charNameEl) { charNameEl.textContent = d.charName || "-"; }
+
+    // アカウント情報
+    var acctRes = await fetchJson("/api/characters/" + encodeURIComponent(charId) + "/account");
+    if (!acctRes.response.ok || !acctRes.data) {
+      var acctMsg = (acctRes.data && acctRes.data.error) ? acctRes.data.error : "アカウント情報の取得に失敗しました";
+      if (feedbackEl) { setFeedback("ca-feedback", "エラー: " + acctMsg, true); }
+      return;
+    }
+    renderAccountInfo(acctRes.data, "ca-acct-");
+
+    // 無効化状態は現在 API から返らないため表示なし
+    var caDisabledEl = document.getElementById("ca-disabled-status");
+    if (caDisabledEl) { caDisabledEl.textContent = "（APIから取得不可 — BAN 操作は実行可能）"; }
+
+    if (feedbackEl) { feedbackEl.textContent = ""; }
+    if (bodyEl) { bodyEl.style.display = ""; }
+  } catch (err) {
+    console.error("loadCaView error", err);
+    if (feedbackEl) { setFeedback("ca-feedback", "通信エラーが発生しました", true); }
+  }
+}
+
+/** character-account ビュー: アカウント紐付け変更 */
+async function putCaAccount(charId, accountId) {
+  try {
+    var { response, data } = await putJson("/api/characters/" + charId + "/account", { accountId: accountId });
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "アカウント紐付けの変更に失敗しました";
+      setFeedback("ca-link-feedback", "エラー: " + msg, true);
+      return;
+    }
+    setFeedback("ca-link-feedback", "アカウント紐付けを変更しました（accountId=" + accountId + "）", false);
+    // アカウント情報を再取得して表示更新
+    var acctRes = await fetchJson("/api/characters/" + charId + "/account");
+    if (acctRes.response.ok && acctRes.data) { renderAccountInfo(acctRes.data, "ca-acct-"); }
+  } catch (err) {
+    console.error("putCaAccount error", err);
+    setFeedback("ca-link-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+/** character-account ビュー: 管理者権限レベル設定 */
+async function putCaAdmin(charId, adminLevel) {
+  try {
+    var { response, data } = await putJson("/api/characters/" + charId + "/admin", { adminLevel: adminLevel });
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "管理者権限の設定に失敗しました";
+      setFeedback("ca-admin-feedback", "エラー: " + msg, true);
+      return;
+    }
+    setFeedback("ca-admin-feedback", "管理者権限レベルを " + adminLevel + " に設定しました", false);
+  } catch (err) {
+    console.error("putCaAdmin error", err);
+    setFeedback("ca-admin-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+/** character-account ビュー: 無効化/解除 */
+async function putCaDisabled(charId, disabled) {
+  try {
+    var { response, data } = await putJson("/api/characters/" + charId + "/disabled", { disabled: disabled });
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "無効化状態の変更に失敗しました";
+      setFeedback("ca-ban-feedback", "エラー: " + msg, true);
+      return;
+    }
+    var stateStr = disabled ? "BAN（無効化）" : "BAN 解除（有効化）";
+    setFeedback("ca-ban-feedback", stateStr + " しました", false);
+    var caDisabledEl = document.getElementById("ca-disabled-status");
+    if (caDisabledEl) { caDisabledEl.textContent = disabled ? "BAN 中" : "有効"; }
+  } catch (err) {
+    console.error("putCaDisabled error", err);
+    setFeedback("ca-ban-feedback", "通信エラーが発生しました", true);
+  }
+}
