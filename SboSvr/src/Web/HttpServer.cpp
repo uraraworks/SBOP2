@@ -27,6 +27,7 @@
 #include "Handlers/CharacterListHandler.h"
 #include "Handlers/CharacterDetailHandler.h"
 #include "Handlers/CharacterUpdateHandler.h"
+#include "Handlers/CharacterItemHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -733,9 +734,36 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> characterListHandler(new CCharacterListHandler(m_pMgrData));
         m_router.Register("GET", "/api/characters", std::move(characterListHandler));
 
-        // キャラクター詳細取得 API  GET /api/characters/{charId}
-        std::unique_ptr<IApiHandler> characterDetailHandler(new CCharacterDetailHandler(m_pMgrData));
-        m_router.RegisterPrefix("GET", "/api/characters/", std::move(characterDetailHandler));
+        // キャラクター所持アイテム / 所持スキル API
+        // NOTE: ApiRouter はプレフィックスが同長の場合、先に登録したエントリを優先する。
+        //       items/skills サブパスを持つリクエストをキャラクター詳細ハンドラより先に捕捉するため
+        //       CharacterDetailHandler より前に登録する。
+        //       items/skills 以外のパス（例: /api/characters/123）が来た場合は
+        //       CharacterDetailHandler に内部委譲する。
+        //   GET    /api/characters/{charId}/items
+        //   POST   /api/characters/{charId}/items
+        //   DELETE /api/characters/{charId}/items/{slot}
+        //   GET    /api/characters/{charId}/skills
+        //   POST   /api/characters/{charId}/skills
+        //   DELETE /api/characters/{charId}/skills/{slot}
+        //   GET    /api/characters/{charId}    ← items/skills 以外は詳細ハンドラに委譲
+        {
+                // CharacterDetailHandler のインスタンスを shared 参照で保持して委譲に使う
+                CCharacterDetailHandler *pDetailFallback = new CCharacterDetailHandler(m_pMgrData);
+
+                std::unique_ptr<IApiHandler> charItemGetHandler(
+                        new CCharacterItemHandler(m_pMgrData, pDetailFallback));
+                m_router.RegisterPrefix("GET", "/api/characters/", std::move(charItemGetHandler));
+
+                // pDetailFallback の所有権は CCharacterItemHandler(GET) が持つ
+                // POST/DELETE は items/skills のみ扱うので委譲不要
+        }
+
+        std::unique_ptr<IApiHandler> charItemPostHandler(new CCharacterItemHandler(m_pMgrData));
+        m_router.RegisterPrefix("POST", "/api/characters/", std::move(charItemPostHandler));
+
+        std::unique_ptr<IApiHandler> charItemDeleteHandler(new CCharacterItemHandler(m_pMgrData));
+        m_router.RegisterPrefix("DELETE", "/api/characters/", std::move(charItemDeleteHandler));
 
         // キャラクター更新 API  PUT /api/characters/{charId}[/status|/equipment|/graphics]
         // ハンドラ内部でサブパスを解析して振り分ける
