@@ -8,7 +8,7 @@
 class CMgrData;
 class IApiHandler;
 
-// キャラクター所持アイテム / 所持スキル API ハンドラ
+// キャラクター所持アイテム / 所持スキル / アカウント情報 API ハンドラ
 //
 // アイテム:
 //   GET    /api/characters/{charId}/items          → [{slot, itemId}]
@@ -20,11 +20,14 @@ class IApiHandler;
 //   POST   /api/characters/{charId}/skills         → 201 {slot, skillId}
 //   DELETE /api/characters/{charId}/skills/{slot}  → 204
 //
+// アカウント情報（GET のみ）:
+//   GET    /api/characters/{charId}/account        → {accountId, loginId, ip, mac}
+//
 // スロット上限:
 //   アイテム: m_nMaxItemCount (キャラデータのフィールド値)
 //   スキル  : MAX_CHAR_SKILL_SLOTS (= 64, 専用フィールド無しのため実装上の固定値)
 //
-// pFallbackHandler: items/skills 以外のサブパスが来た場合に委譲するハンドラ（所有権を持つ）
+// pFallbackHandler: items/skills/account 以外のサブパスが来た場合に委譲するハンドラ（所有権を持つ）
 //                   NULL の場合は 404 を返す
 
 class CCharacterItemHandler : public IApiHandler
@@ -52,4 +55,7 @@ private:
         void HandlePostSkill(const HttpRequest &request, HttpResponse &response, int nCharId);
         // DELETE /api/characters/{charId}/skills/{slot}
         void HandleDeleteSkill(const HttpRequest &request, HttpResponse &response, int nCharId, int nSlot);
+
+        // GET /api/characters/{charId}/account
+        void HandleGetAccount(const HttpRequest &request, HttpResponse &response, int nCharId);
 };

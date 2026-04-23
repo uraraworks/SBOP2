@@ -11,6 +11,8 @@
 #include "LibInfo/LibInfoCharSvr.h"
 #include "Info/InfoCharBase.h"
 #include "Info/InfoCharSvr.h"
+#include "LibInfo/LibInfoAccount.h"
+#include "Info/InfoAccount.h"
 
 // スキルスロット上限（専用フィールドが無いため実装上の固定値）
 static const int MAX_CHAR_SKILL_SLOTS = 64;
@@ -226,8 +228,17 @@ void CCharacterItemHandler::Handle(const HttpRequest &request, HttpResponse &res
                         response.statusLine = "HTTP/1.1 405 Method Not Allowed";
                         response.SetJsonBody("{\"error\":\"method_not_allowed\"}");
                 }
+        } else if (sub == "account") {
+                // GET /api/characters/{charId}/account のみ受け付ける
+                // PUT はキャラクター更新ハンドラ（CCharacterUpdateHandler）で処理する
+                if (method == "GET") {
+                        HandleGetAccount(request, response, nCharId);
+                } else {
+                        response.statusLine = "HTTP/1.1 405 Method Not Allowed";
+                        response.SetJsonBody("{\"error\":\"method_not_allowed\"}");
+                }
         } else {
-                // items/skills 以外のサブリソースはフォールバックに委譲
+                // items/skills/account 以外のサブリソースはフォールバックに委譲
                 if (m_pFallbackHandler != NULL) {
                         m_pFallbackHandler->Handle(request, response);
                         return;
@@ -554,4 +565,99 @@ void CCharacterItemHandler::HandleDeleteSkill(const HttpRequest & /*request*/, H
         response.statusLine = "HTTP/1.1 204 No Content";
         response.body = "";
         response.SetHeader("Content-Length", "0");
+}
+
+// ---------------------------------------------------------------------------
+// GET /api/characters/{charId}/account
+// キャラクターに紐付くアカウント情報を返す
+// Response: { accountId, loginId, ip, mac }
+// アカウントが紐付いていない（accountId=0）場合は accountId=0 で他フィールドを空文字返す
+// ---------------------------------------------------------------------------
+
+void CCharacterItemHandler::HandleGetAccount(const HttpRequest & /*request*/, HttpResponse &response, int nCharId)
+{
+        CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+        if (pCharLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        // キャラクターからアカウントIDを取得する
+        pCharLib->Enter();
+        CInfoCharBase *pChar = FindChar(pCharLib, nCharId);
+        if (pChar == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+        DWORD dwAccountId = pChar->m_dwAccountID;
+        pCharLib->Leave();
+
+        // アカウントIDが 0 の場合はアカウント情報なし
+        if (dwAccountId == 0) {
+                response.statusLine = "HTTP/1.1 200 OK";
+                response.SetJsonBody("{\"accountId\":0,\"loginId\":\"\",\"ip\":\"\",\"mac\":\"\"}");
+                return;
+        }
+
+        // アカウントライブラリからアカウント情報を取得する
+        CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
+        if (pAccountLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pAccountLib->Enter();
+        PCInfoAccount pAcc = pAccountLib->GetPtr(dwAccountId);
+        if (pAcc == NULL) {
+                pAccountLib->Leave();
+                // アカウントIDはあるがアカウントレコードが見つからない場合
+                response.statusLine = "HTTP/1.1 200 OK";
+                std::ostringstream ossNone;
+                ossNone << "{\"accountId\":" << dwAccountId << ",\"loginId\":\"\",\"ip\":\"\",\"mac\":\"\"}";
+                response.SetJsonBody(ossNone.str());
+                return;
+        }
+
+        // IPアドレスを文字列に変換する（IPv4 ドット区切り）
+        std::ostringstream ossIp;
+        DWORD dwIp = pAcc->m_dwIP;
+        ossIp << ((dwIp >> 24) & 0xFF) << '.'
+              << ((dwIp >> 16) & 0xFF) << '.'
+              << ((dwIp >>  8) & 0xFF) << '.'
+              << (dwIp & 0xFF);
+
+        // アカウント名（ログインID）を取得する
+        std::string loginId;
+        {
+                LPCSTR pszAcc = static_cast<LPCSTR>(pAcc->m_strAccount);
+                if (pszAcc != NULL) {
+                        loginId = pszAcc;
+                }
+        }
+
+        // MAC アドレス（ログイン時に記録された最新値）を取得する
+        std::string macAddr;
+        {
+                LPCSTR pszMac = static_cast<LPCSTR>(pAcc->m_strLastMacAddr);
+                if (pszMac != NULL) {
+                        macAddr = pszMac;
+                }
+        }
+
+        std::ostringstream oss;
+        oss << '{';
+        oss << "\"accountId\":" << dwAccountId << ',';
+        oss << "\"loginId\":\"" << JsonUtils::Escape(loginId) << "\",";
+        oss << "\"ip\":\"" << JsonUtils::Escape(ossIp.str()) << "\",";
+        oss << "\"mac\":\"" << JsonUtils::Escape(macAddr) << '"';
+        oss << '}';
+
+        pAccountLib->Leave();
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
 }

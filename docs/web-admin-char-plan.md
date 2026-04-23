@@ -49,20 +49,23 @@
 - `GET/POST/PUT /api/maps`, `GET/POST/PUT/DELETE /api/maps/events`
 - `GET/POST/PUT/DELETE /api/maps/parts`, `GET /api/maps/objects` 他
 
-### キャラクター関連 API: **完全欠落** ❌
+### キャラクター関連 API 実装状況
 
-| 機能 | 優先度 | エンドポイント |
-|---|---|---|
-| 一覧検索 | ⭐⭐⭐ | `GET /api/characters?name=...&accountId=...` |
-| 詳細取得 | ⭐⭐⭐ | `GET /api/characters/{charId}` |
-| 基本情報更新 | ⭐⭐⭐ | `PUT /api/characters/{charId}` |
-| ステータス更新 | ⭐⭐⭐ | `PUT /api/characters/{charId}/status` |
-| 装備更新 | ⭐⭐⭐ | `PUT /api/characters/{charId}/equipment` |
-| グラフィック更新 | ⭐⭐ | `PUT /api/characters/{charId}/graphics` |
-| アイテム管理 | ⭐⭐⭐ | `GET/POST/DELETE /api/characters/{charId}/items` |
-| スキル管理 | ⭐⭐⭐ | `GET/POST/DELETE /api/characters/{charId}/skills` |
-| アカウント管理 | ⭐⭐⭐ | `GET/PUT /api/characters/{charId}/account` |
-| NPC 追加 | ⭐⭐ | `POST /api/characters/npc` |
+| 機能 | 優先度 | エンドポイント | 状態 |
+|---|---|---|---|
+| 一覧検索 | ⭐⭐⭐ | `GET /api/characters?name=...&accountId=...` | ✅ フェーズ1実装済み |
+| 詳細取得 | ⭐⭐⭐ | `GET /api/characters/{charId}` | ✅ フェーズ2実装済み |
+| 基本情報更新 | ⭐⭐⭐ | `PUT /api/characters/{charId}` | ✅ フェーズ3実装済み |
+| ステータス更新 | ⭐⭐⭐ | `PUT /api/characters/{charId}/status` | ✅ フェーズ3実装済み |
+| 装備更新 | ⭐⭐⭐ | `PUT /api/characters/{charId}/equipment` | ✅ フェーズ3実装済み |
+| グラフィック更新 | ⭐⭐ | `PUT /api/characters/{charId}/graphics` | ✅ フェーズ3実装済み |
+| アイテム管理 | ⭐⭐⭐ | `GET/POST/DELETE /api/characters/{charId}/items` | ✅ フェーズ4実装済み |
+| スキル管理 | ⭐⭐⭐ | `GET/POST/DELETE /api/characters/{charId}/skills` | ✅ フェーズ4実装済み |
+| アカウント情報取得 | ⭐⭐⭐ | `GET /api/characters/{charId}/account` | ✅ フェーズ5実装済み |
+| アカウント紐付け変更 | ⭐⭐⭐ | `PUT /api/characters/{charId}/account` | ✅ フェーズ5実装済み |
+| 管理者権限設定 | ⭐⭐ | `PUT /api/characters/{charId}/admin` | ✅ フェーズ5実装済み |
+| キャラ無効化/解除 | ⭐⭐ | `PUT /api/characters/{charId}/disabled` | ✅ フェーズ5実装済み（アカウント m_bDisable） |
+| NPC 追加 | ⭐⭐ | `POST /api/characters/npc` | ❌ 未実装 |
 
 ## 4. 既存 Web UI プレースホルダー
 
@@ -94,8 +97,24 @@ Wave 2 セクションに既に定義:
 - `GET/POST/DELETE /api/characters/{charId}/items`
 - `GET/POST/DELETE /api/characters/{charId}/skills`
 
-### フェーズ 5: アカウント・NPC（並行可）
-- `GET/PUT /api/characters/{charId}/account`
+### フェーズ 5: アカウント・権限（実装済み 2026-04-24）
+- `GET /api/characters/{charId}/account` → `{accountId, loginId, ip, mac}` ✅
+  - `CCharacterItemHandler` で `account` サブパスを処理（items/skills/account の3サブパスを同ハンドラで受け付け）
+- `PUT /api/characters/{charId}/account` → アカウント紐付け変更 ✅
+  - `CCharacterUpdateHandler` の `account` サブパス処理として実装
+  - NPC への紐付けは 400、accountId=0 で解除、存在しない accountId は 400
+- `PUT /api/characters/{charId}/admin` → 管理者権限レベル設定 ✅
+  - `CCharacterUpdateHandler` の `admin` サブパス処理として実装
+  - キャラ→紐付きアカウントの `m_nAdminLevel` を更新（範囲 0-255）
+  - NPC・紐付けなしは 400
+- `PUT /api/characters/{charId}/disabled` → キャラ無効化/解除 ✅
+  - `CCharacterUpdateHandler` の `disabled` サブパス処理として実装
+  - キャラ→紐付きアカウントの `m_bDisable` を更新
+  - NPC・紐付けなしは 400
+  - `reason` フィールドは受け付けるが保存場所なし（現行保留）
+- NPC 追加 `POST /api/characters/npc` は未実装（保留）
+
+### フェーズ 6: NPC 追加（保留）
 - `POST /api/characters/npc`
 
 ## 6. 旧ダイアログと新 UI のマッピング

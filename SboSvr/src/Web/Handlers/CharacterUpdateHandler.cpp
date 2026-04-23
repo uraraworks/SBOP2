@@ -14,6 +14,8 @@
 #include "LibInfo/LibInfoCharSvr.h"
 #include "Info/InfoCharBase.h"
 #include "myLib/myString.h"
+#include "LibInfo/LibInfoAccount.h"
+#include "Info/InfoAccount.h"
 
 // ---------------------------------------------------------------------------
 // 内部ヘルパー
@@ -358,6 +360,12 @@ void CCharacterUpdateHandler::Handle(const HttpRequest &request, HttpResponse &r
                 HandleEquipment(request, response, nCharId);
         } else if (subResource == "graphics") {
                 HandleGraphics(request, response, nCharId);
+        } else if (subResource == "account") {
+                HandleAccount(request, response, nCharId);
+        } else if (subResource == "admin") {
+                HandleAdmin(request, response, nCharId);
+        } else if (subResource == "disabled") {
+                HandleDisabled(request, response, nCharId);
         } else if (subResource.empty()) {
                 HandleBasic(request, response, nCharId);
         } else {
@@ -704,4 +712,230 @@ void CCharacterUpdateHandler::HandleGraphics(const HttpRequest &request, HttpRes
 
         response.statusLine = "HTTP/1.1 200 OK";
         response.SetJsonBody(json);
+}
+
+// ---------------------------------------------------------------------------
+// アカウント紐付け変更  PUT /api/characters/{charId}/account
+// body: { "accountId": <number> }
+// accountId=0 は紐付け解除扱い（m_dwAccountID を 0 に設定）
+// NPC キャラクターへの紐付けは 400 を返す
+// ---------------------------------------------------------------------------
+
+void CCharacterUpdateHandler::HandleAccount(const HttpRequest &request, HttpResponse &response, int nCharId)
+{
+        int nAccountId = -1;
+        if (!JsonUtils::TryGetInt(request.body, "accountId", nAccountId) || nAccountId < 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_accountId\"}");
+                return;
+        }
+
+        // accountId > 0 の場合、アカウントライブラリに存在するか確認する
+        CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
+        if (pAccountLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+        if (pCharLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        // accountId > 0 なら存在確認
+        if (nAccountId > 0) {
+                pAccountLib->Enter();
+                PCInfoAccount pAcc = pAccountLib->GetPtr(static_cast<DWORD>(nAccountId));
+                pAccountLib->Leave();
+                if (pAcc == NULL) {
+                        response.statusLine = "HTTP/1.1 400 Bad Request";
+                        response.SetJsonBody("{\"error\":\"account_not_found\"}");
+                        return;
+                }
+        }
+
+        pCharLib->Enter();
+
+        CInfoCharBase *pChar = FindChar(pCharLib, nCharId);
+        if (pChar == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+
+        // NPC には紐付け不可
+        if (pChar->m_bNPC && nAccountId > 0) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"npc_cannot_have_account\"}");
+                return;
+        }
+
+        pChar->m_dwAccountID = static_cast<DWORD>(nAccountId);
+
+        std::ostringstream oss;
+        oss << "{\"charId\":" << nCharId << ",\"accountId\":" << nAccountId << '}';
+        std::string json = oss.str();
+
+        pCharLib->Leave();
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(json);
+}
+
+// ---------------------------------------------------------------------------
+// 管理者権限レベル設定  PUT /api/characters/{charId}/admin
+// body: { "adminLevel": <number> }
+// adminLevel 設定先はキャラクターに紐付くアカウントの m_nAdminLevel
+// キャラクターが NPC または accountId=0 の場合は 400 を返す
+// ---------------------------------------------------------------------------
+
+void CCharacterUpdateHandler::HandleAdmin(const HttpRequest &request, HttpResponse &response, int nCharId)
+{
+        int nAdminLevel = -1;
+        if (!JsonUtils::TryGetInt(request.body, "adminLevel", nAdminLevel) || nAdminLevel < 0 || nAdminLevel > 255) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_adminLevel\"}");
+                return;
+        }
+
+        CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+        if (pCharLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pCharLib->Enter();
+        CInfoCharBase *pChar = FindChar(pCharLib, nCharId);
+        if (pChar == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+
+        // NPC は管理者権限設定不可
+        if (pChar->m_bNPC) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"npc_cannot_have_admin\"}");
+                return;
+        }
+
+        DWORD dwAccountId = pChar->m_dwAccountID;
+        pCharLib->Leave();
+
+        if (dwAccountId == 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"no_account_linked\"}");
+                return;
+        }
+
+        CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
+        if (pAccountLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pAccountLib->Enter();
+        PCInfoAccount pAcc = pAccountLib->GetPtr(dwAccountId);
+        if (pAcc == NULL) {
+                pAccountLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"account_not_found\"}");
+                return;
+        }
+
+        pAcc->m_nAdminLevel = nAdminLevel;
+        pAccountLib->Leave();
+
+        std::ostringstream oss;
+        oss << "{\"charId\":" << nCharId << ",\"accountId\":" << dwAccountId << ",\"adminLevel\":" << nAdminLevel << '}';
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+// ---------------------------------------------------------------------------
+// キャラ無効化/解除  PUT /api/characters/{charId}/disabled
+// body: { "disabled": <bool>, "reason"?: <string> }
+// 無効化先はキャラクターに紐付くアカウントの m_bDisable フラグ
+// キャラクターが NPC または accountId=0 の場合は 400 を返す
+// NOTE: reason フィールドは受け付けるが現行実装では保存場所が無いため無視する。
+//       将来の拡張のためにパラメータとして定義しておく。
+// ---------------------------------------------------------------------------
+
+void CCharacterUpdateHandler::HandleDisabled(const HttpRequest &request, HttpResponse &response, int nCharId)
+{
+        bool bDisabled = false;
+        if (!JsonUtils::TryGetBool(request.body, "disabled", bDisabled)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_disabled\"}");
+                return;
+        }
+
+        CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+        if (pCharLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pCharLib->Enter();
+        CInfoCharBase *pChar = FindChar(pCharLib, nCharId);
+        if (pChar == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+
+        // NPC は無効化不可
+        if (pChar->m_bNPC) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"npc_cannot_be_disabled\"}");
+                return;
+        }
+
+        DWORD dwAccountId = pChar->m_dwAccountID;
+        pCharLib->Leave();
+
+        if (dwAccountId == 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"no_account_linked\"}");
+                return;
+        }
+
+        CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
+        if (pAccountLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pAccountLib->Enter();
+        PCInfoAccount pAcc = pAccountLib->GetPtr(dwAccountId);
+        if (pAcc == NULL) {
+                pAccountLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"account_not_found\"}");
+                return;
+        }
+
+        pAcc->m_bDisable = bDisabled ? TRUE : FALSE;
+        pAccountLib->Leave();
+
+        std::ostringstream oss;
+        oss << "{\"charId\":" << nCharId << ",\"accountId\":" << dwAccountId
+            << ",\"disabled\":" << (bDisabled ? "true" : "false") << '}';
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
 }
