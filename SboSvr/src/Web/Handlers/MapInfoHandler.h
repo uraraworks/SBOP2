@@ -29,3 +29,14 @@ public:
 private:
         CMgrData *m_pMgrData;
 };
+
+// マップ追加 POST /api/maps
+class CMapInfoCreateHandler : public IApiHandler
+{
+public:
+        explicit CMapInfoCreateHandler(CMgrData *pMgrData);
+        virtual void Handle(const HttpRequest &request, HttpResponse &response);
+
+private:
+        CMgrData *m_pMgrData;
+};

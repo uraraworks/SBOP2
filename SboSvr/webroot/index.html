@@ -250,6 +250,20 @@
             </select>
           </label>
           <button id="map-info-reload-btn" class="btn btn-secondary btn-sm">再読み込み</button>
+          <button id="map-info-add-btn" class="btn btn-primary btn-sm">マップ追加</button>
+        </div>
+
+        <div id="map-info-add-area" style="display:none" class="form-grid">
+          <label class="form-field compact">
+            <span class="form-label">コピー元マップ（空で空マップ作成）</span>
+            <select id="map-info-copy-select" class="form-select">
+              <option value="0">（空マップを新規作成）</option>
+            </select>
+          </label>
+          <div class="form-actions">
+            <button id="map-info-add-confirm-btn" class="btn btn-primary btn-sm">作成</button>
+            <button id="map-info-add-cancel-btn" class="btn btn-secondary btn-sm">キャンセル</button>
+          </div>
         </div>
 
         <p id="map-info-summary" class="map-parts-summary" aria-live="polite"></p>

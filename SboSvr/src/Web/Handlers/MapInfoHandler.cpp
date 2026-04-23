@@ -13,6 +13,8 @@
 #include "myLib/myString.h"
 #include "UraraSockTCPSBO.h"
 #include "Packet/ADMIN/PacketADMIN_MAP_SETMAPNAME.h"
+#include "Packet/MAP/PacketMAP_SYSTEMMSG.h"
+#include "LibInfo/LibInfoMapObject.h"
 
 namespace
 {
@@ -379,5 +381,88 @@ void CMapInfoUpdateHandler::Handle(const HttpRequest &request, HttpResponse &res
         pMapLib->Leave();
 
         response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+// ---------------------------------------------------------------------------
+// CMapInfoCreateHandler  POST /api/maps
+// ---------------------------------------------------------------------------
+
+CMapInfoCreateHandler::CMapInfoCreateHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapInfoCreateHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+        // TODO: 本番運用時は適切なロール判定を追加すること
+
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CLibInfoMapBase    *pMapLib    = m_pMgrData->GetLibInfoMap();
+        CLibInfoMapObject  *pMapObject = m_pMgrData->GetLibInfoMapObject();
+        CUraraSockTCPSBO   *pSock      = m_pMgrData->GetSock();
+        if (pMapLib == NULL || pSock == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        // copyFromMapId（省略または 0 で空マップ作成）
+        int nCopyFromId = 0;
+        JsonUtils::TryGetInt(request.body, "copyFromMapId", nCopyFromId);
+
+        pMapLib->Enter();
+
+        // コピー元マップが指定されていれば存在確認
+        CInfoMapBase *pSrcMap = NULL;
+        if (nCopyFromId != 0) {
+                pSrcMap = static_cast<CInfoMapBase *>(pMapLib->GetPtr(static_cast<DWORD>(nCopyFromId)));
+                if (pSrcMap == NULL) {
+                        pMapLib->Leave();
+                        response.statusLine = "HTTP/1.1 404 Not Found";
+                        response.SetJsonBody("{\"error\":\"copy_source_not_found\"}");
+                        return;
+                }
+        }
+
+        // 新規マップを作成して追加
+        CInfoMapBase *pNewMap = static_cast<CInfoMapBase *>(pMapLib->GetNew());
+        pNewMap->Init(DRAW_PARTS_X, DRAW_PARTS_Y, 1);
+        pMapLib->Add(pNewMap);
+        pMapLib->SetMapObject(pMapObject);
+
+        // コピー元が指定されていた場合は内容をコピー（MapID は新規 ID を維持）
+        if (pSrcMap != NULL) {
+                DWORD dwNewId = pNewMap->m_dwMapID;
+                pNewMap->Copy(pSrcMap);
+                pNewMap->m_dwMapID = dwNewId;
+        }
+
+        // 全クライアントへ SYSTEMMSG を送信（既存 RecvProcADMIN_MAP_ADD に倣う）
+        CmyString strMsg;
+        strMsg.Format(_T("SYSTEM:マップID[%d]が追加されました"), pNewMap->m_dwMapID);
+        CPacketMAP_SYSTEMMSG packetMsg;
+        packetMsg.Make(strMsg);
+        pSock->SendTo(0, &packetMsg);
+
+        // 作成したマップの JSON を返す
+        std::ostringstream oss;
+        BuildMapInfoJson(oss, pNewMap);
+
+        pMapLib->Leave();
+
+        response.statusLine = "HTTP/1.1 201 Created";
         response.SetJsonBody(oss.str());
 }

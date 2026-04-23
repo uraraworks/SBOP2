@@ -104,6 +104,11 @@ const mapInfoBattleCheck = document.getElementById("map-info-battle");
 const mapInfoRecoveryCheck = document.getElementById("map-info-recovery");
 const mapInfoFeedbackEl = document.getElementById("map-info-feedback");
 const mapInfoReloadBtn = document.getElementById("map-info-reload-btn");
+const mapInfoAddBtn = document.getElementById("map-info-add-btn");
+const mapInfoAddArea = document.getElementById("map-info-add-area");
+const mapInfoCopySelect = document.getElementById("map-info-copy-select");
+const mapInfoAddConfirmBtn = document.getElementById("map-info-add-confirm-btn");
+const mapInfoAddCancelBtn = document.getElementById("map-info-add-cancel-btn");
 
 /* マップイベント編集 */
 const mapEventMapSelect = document.getElementById("map-event-map");
@@ -2669,6 +2674,65 @@ async function saveMapInfo(event) {
   }
 }
 
+/** マップ追加ダイアログのコピー元セレクトを更新する */
+function refreshMapInfoCopySelect() {
+  if (!mapInfoCopySelect) {
+    return;
+  }
+  mapInfoCopySelect.innerHTML = "";
+  const emptyOpt = document.createElement("option");
+  emptyOpt.value = "0";
+  emptyOpt.textContent = "（空マップを新規作成）";
+  mapInfoCopySelect.appendChild(emptyOpt);
+  mapInfoState.maps.forEach((map) => {
+    const opt = document.createElement("option");
+    opt.value = String(map.id);
+    opt.textContent = `[${map.id}] ${map.name || "（名前なし）"}`;
+    mapInfoCopySelect.appendChild(opt);
+  });
+}
+
+/** POST /api/maps でマップを新規作成する */
+async function createMapInfo() {
+  const copyFromMapId = mapInfoCopySelect ? parseInt(mapInfoCopySelect.value, 10) || 0 : 0;
+  const payload = { copyFromMapId };
+
+  setMapInfoFeedback("作成中...", null);
+
+  try {
+    const { response, data } = await fetchJson("/api/maps", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok || !data || !data.id) {
+      const errMsg = (data && data.error) ? data.error : `HTTP ${response.status}`;
+      throw new Error(errMsg);
+    }
+
+    // 一覧を再取得し、新規作成マップを選択状態にする
+    mapInfoState.maps = [];
+    mapInfoState.loadError = null;
+    await loadMapInfoData(true);
+    mapInfoState.selectedMapId = data.id;
+    if (mapInfoSelect) {
+      mapInfoSelect.value = String(data.id);
+    }
+    renderMapInfoForm();
+
+    // 追加エリアを閉じる
+    if (mapInfoAddArea) {
+      mapInfoAddArea.style.display = "none";
+    }
+
+    setMapInfoFeedback(`マップ ID[${data.id}] を作成しました`, "success");
+  } catch (err) {
+    console.error("Failed to create map", err);
+    setMapInfoFeedback(`作成に失敗しました: ${err.message}`, "error");
+  }
+}
+
 /* =====================================================
  * マップウィンドウ画面 (map-window)
  * map-objects 画面の renderMapPreview() を土台に、
@@ -3272,6 +3336,32 @@ window.addEventListener("load", () => {
   if (mapInfoReloadBtn) {
     mapInfoReloadBtn.addEventListener("click", function () {
       loadMapInfoData(true);
+    });
+  }
+
+  // マップ追加ボタン：追加エリアを表示してコピー元セレクトを更新する
+  if (mapInfoAddBtn) {
+    mapInfoAddBtn.addEventListener("click", function () {
+      if (!mapInfoAddArea) {
+        return;
+      }
+      const isVisible = mapInfoAddArea.style.display !== "none";
+      if (isVisible) {
+        mapInfoAddArea.style.display = "none";
+      } else {
+        refreshMapInfoCopySelect();
+        mapInfoAddArea.style.display = "";
+      }
+    });
+  }
+  if (mapInfoAddConfirmBtn) {
+    mapInfoAddConfirmBtn.addEventListener("click", createMapInfo);
+  }
+  if (mapInfoAddCancelBtn) {
+    mapInfoAddCancelBtn.addEventListener("click", function () {
+      if (mapInfoAddArea) {
+        mapInfoAddArea.style.display = "none";
+      }
     });
   }
 

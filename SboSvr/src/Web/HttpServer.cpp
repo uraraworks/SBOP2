@@ -646,6 +646,9 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> mapInfoListHandler(new CMapInfoListHandler(m_pMgrData));
         m_router.Register("GET", "/api/maps", std::move(mapInfoListHandler));
 
+        std::unique_ptr<IApiHandler> mapInfoCreateHandler(new CMapInfoCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps", std::move(mapInfoCreateHandler));
+
         std::unique_ptr<IApiHandler> mapInfoUpdateHandler(new CMapInfoUpdateHandler(m_pMgrData));
         m_router.Register("PUT", "/api/maps", std::move(mapInfoUpdateHandler));
 
