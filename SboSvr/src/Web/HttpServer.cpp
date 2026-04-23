@@ -17,6 +17,7 @@
 #include "Handlers/MapObjectHandler.h"
 #include "Handlers/MapPartsHandler.h"
 #include "Handlers/StaticFileHandler.h"
+#include "Handlers/SelectionHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -625,6 +626,16 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> mapPartsDeleteHandler(new CMapPartsDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/maps/parts", std::move(mapPartsDeleteHandler));
+
+        // 選択状態 API（pick）
+        std::unique_ptr<IApiHandler> selectionPickHandler(new CSelectionPickHandler(m_pMgrData));
+        m_router.Register("POST", "/api/selection/pick", std::move(selectionPickHandler));
+
+        std::unique_ptr<IApiHandler> selectionGetHandler(new CSelectionGetHandler(m_pMgrData));
+        m_router.Register("GET", "/api/selection", std::move(selectionGetHandler));
+
+        std::unique_ptr<IApiHandler> selectionDeleteHandler(new CSelectionDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/selection", std::move(selectionDeleteHandler));
 
         std::unique_ptr<IApiHandler> mapSheetHandler(new CMapPartsSheetHandler(mapPartsProvider, "/api/assets/map-parts/sheets/"));
         m_router.RegisterPrefix("GET", "/api/assets/map-parts/sheets/", std::move(mapSheetHandler));

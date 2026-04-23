@@ -288,6 +288,7 @@
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\SelectionHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MapObjectHandler.cpp" />
   <ClCompile Include="src\Web\Handlers\MapPartsHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\StaticFileHandler.cpp" />
@@ -408,6 +409,7 @@
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
+    <ClInclude Include="src\Web\Handlers\SelectionHandler.h" />
     <ClInclude Include="src\Web\Handlers\MapObjectHandler.h" />
   <ClInclude Include="src\Web\Handlers\MapPartsHandler.h" />
     <ClInclude Include="src\Web\Handlers\StaticFileHandler.h" />
