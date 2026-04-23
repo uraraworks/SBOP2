@@ -189,6 +189,70 @@ const mapWindowState = {
 const MAP_PARTS_GALLERY_SCALE = 4;
 const MAP_PARTS_DETAIL_SCALE = 6;
 
+/* ------------------------------------------------------------------ */
+/* /ws/admin WebSocket クライアント                                      */
+/* ------------------------------------------------------------------ */
+
+const adminWs = {
+  socket: null,
+  retryDelay: 1000,   // 次回再接続までの待機時間 (ms)
+  retryTimer: null
+};
+
+/** ws:// または wss:// の URL を返す。 */
+function getAdminWsUrl() {
+  const proto = location.protocol === "https:" ? "wss" : "ws";
+  return `${proto}://${location.host}/ws/admin`;
+}
+
+/** 管理者 WebSocket を 1 本だけ確立する。既に接続中なら何もしない。 */
+function ensureAdminWebSocket() {
+  if (adminWs.socket &&
+      (adminWs.socket.readyState === WebSocket.OPEN ||
+       adminWs.socket.readyState === WebSocket.CONNECTING)) {
+    return;
+  }
+
+  const ws = new WebSocket(getAdminWsUrl());
+  adminWs.socket = ws;
+
+  ws.addEventListener("open", () => {
+    console.debug("[admin-ws] 接続しました");
+    adminWs.retryDelay = 1000; // 接続成功でバックオフをリセット
+  });
+
+  ws.addEventListener("message", (event) => {
+    let msg;
+    try {
+      msg = JSON.parse(event.data);
+    } catch {
+      console.debug("[admin-ws] JSON パース失敗:", event.data);
+      return;
+    }
+    if (msg.kind === "selection_changed") {
+      console.debug("[admin-ws] selection_changed", msg.payload);
+    } else {
+      console.debug("[admin-ws] 受信:", msg);
+    }
+  });
+
+  ws.addEventListener("close", (event) => {
+    console.debug("[admin-ws] 切断 (code:", event.code, ") — 再接続まで", adminWs.retryDelay, "ms");
+    adminWs.socket = null;
+    // 指数バックオフで再接続（最短 1s、最大 30s）
+    adminWs.retryTimer = setTimeout(() => {
+      adminWs.retryTimer = null;
+      ensureAdminWebSocket();
+    }, adminWs.retryDelay);
+    adminWs.retryDelay = Math.min(adminWs.retryDelay * 2, 30000);
+  });
+
+  ws.addEventListener("error", () => {
+    // close イベントが後続するので再接続処理はそちらに任せる
+    console.debug("[admin-ws] エラー発生");
+  });
+}
+
 function formatHex(value) {
   if (value === null || value === undefined) {
     return null;
@@ -2574,35 +2638,128 @@ function renderMapWindowGrid() {
   }
 }
 
-/** セルクリック時の処理。選択状態を更新してグリッドと情報表示を再描画する。 */
-function handleMapWindowCellClick(x, y) {
+/** 現在選択中の pick ターゲット種別値を返す（未取得時は "cell"）。 */
+function getMapWindowPickTarget() {
+  const checked = document.querySelector('input[name="map-window-pick-target"]:checked');
+  return checked ? checked.value : "cell";
+}
+
+/** pick ターゲット値を REST API 用 type 文字列へ変換する。 */
+const PICK_TARGET_TYPE_MAP = {
+  cell: "map_cell",
+  placement: "placement",
+  event: "event",
+  character: "char"
+};
+
+/**
+ * グリッドのセル選択ハイライトのみ更新する（再描画なし）。
+ */
+function refreshMapWindowCellHighlight() {
+  if (!mapWindowGridEl) return;
+  mapWindowGridEl.querySelectorAll(".map-object-cell").forEach((btn) => {
+    const bx = Number(btn.dataset.x);
+    const by = Number(btn.dataset.y);
+    const isNowSelected =
+      mapWindowState.selectedCell &&
+      mapWindowState.selectedCell.x === bx &&
+      mapWindowState.selectedCell.y === by;
+    btn.classList.toggle("is-selected", isNowSelected);
+  });
+}
+
+/** セルクリック時の処理。pick REST と連動して選択状態を更新する。 */
+async function handleMapWindowCellClick(x, y) {
+  const pickTarget = getMapWindowPickTarget();
+
+  // cell 以外は未対応
+  if (pickTarget !== "cell") {
+    if (mapWindowSummaryEl) {
+      mapWindowSummaryEl.textContent = "このピックタイプは未対応です（現在 cell のみ対応）";
+    }
+    return;
+  }
+
+  const mapId = mapWindowState.selectedMapId;
   const prev = mapWindowState.selectedCell;
-  // 同じセルを再クリックしたら選択解除
-  if (prev && prev.x === x && prev.y === y) {
-    mapWindowState.selectedCell = null;
-  } else {
-    mapWindowState.selectedCell = { x, y };
+  const isSameCell = prev && prev.x === x && prev.y === y;
+
+  try {
+    if (isSameCell) {
+      // 同じセル再クリック → 選択解除
+      const { response } = await fetchJson("/api/selection", { method: "DELETE" });
+      if (!response.ok) {
+        throw new Error(`DELETE /api/selection: ${response.status}`);
+      }
+      mapWindowState.selectedCell = null;
+    } else {
+      // 別セルクリック → 選択更新
+      const { response } = await fetchJson("/api/selection/pick", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "map_cell", mapId, x, y })
+      });
+      if (!response.ok) {
+        throw new Error(`POST /api/selection/pick: ${response.status}`);
+      }
+      mapWindowState.selectedCell = { x, y };
+    }
+  } catch (error) {
+    console.warn("[map-window] 選択の同期に失敗しました", error);
+    if (mapWindowSummaryEl) {
+      mapWindowSummaryEl.textContent = "選択の同期に失敗しました";
+    }
+    return;
   }
-  // グリッド全体の再描画を避けるため、既存セルのクラスだけ付け替える
-  if (mapWindowGridEl) {
-    mapWindowGridEl.querySelectorAll(".map-object-cell").forEach((btn) => {
-      const bx = Number(btn.dataset.x);
-      const by = Number(btn.dataset.y);
-      const isNowSelected = mapWindowState.selectedCell && mapWindowState.selectedCell.x === bx && mapWindowState.selectedCell.y === by;
-      btn.classList.toggle("is-selected", isNowSelected);
-    });
-  }
+
+  refreshMapWindowCellHighlight();
   updateMapWindowSelectedInfo();
 }
 
+/**
+ * GET /api/selection で現在の選択状態を取得し、
+ * type が "map_cell" かつ現在表示中マップと一致する場合のみ selectedCell をセットする。
+ * それ以外の場合は selectedCell を変更しない。
+ */
+async function syncMapWindowSelectionFromServer() {
+  if (!mapWindowState.selectedMapId) return;
+  try {
+    const { response, data } = await fetchJson("/api/selection");
+    if (!response.ok) {
+      throw new Error(`GET /api/selection: ${response.status}`);
+    }
+    if (
+      data &&
+      data.type === "map_cell" &&
+      String(data.mapId) === String(mapWindowState.selectedMapId) &&
+      typeof data.x === "number" &&
+      typeof data.y === "number"
+    ) {
+      mapWindowState.selectedCell = { x: data.x, y: data.y };
+    }
+    // 他マップや他種別は変更しない
+  } catch (error) {
+    console.warn("[map-window] 選択の同期に失敗しました", error);
+    if (mapWindowSummaryEl) {
+      mapWindowSummaryEl.textContent = "選択の同期に失敗しました";
+    }
+  }
+}
+
 /** マップウィンドウ用マップ選択 change ハンドラ。 */
-function handleMapWindowSelectChange(event) {
+async function handleMapWindowSelectChange(event) {
   const newId = event.target.value;
   mapWindowState.selectedMapId = newId || null;
   mapWindowState.selectedCell = null;
   updateMapWindowSummary();
   updateMapWindowSelectedInfo();
   renderMapWindowGrid();
+  // マップ変更後に選択状態を復元
+  if (mapWindowState.selectedMapId) {
+    await syncMapWindowSelectionFromServer();
+    refreshMapWindowCellHighlight();
+    updateMapWindowSelectedInfo();
+  }
 }
 
 /**
@@ -2633,7 +2790,10 @@ async function loadMapWindowData(forceReload = false) {
     updateMapWindowSummary();
     // overlay 描画に必要なパーツカタログを確保してからグリッドを描画する
     await ensureMapPartsCatalog();
+    // サーバーの選択状態を復元してからグリッドを描画する
+    await syncMapWindowSelectionFromServer();
     renderMapWindowGrid();
+    updateMapWindowSelectedInfo();
     return;
   }
 
@@ -2676,9 +2836,13 @@ async function loadMapWindowData(forceReload = false) {
     mapWindowState.isLoading = false;
     populateMapWindowOptions();
     updateMapWindowSummary();
-    updateMapWindowSelectedInfo();
     // overlay 描画に必要なパーツカタログを確保してからグリッドを描画する
     await ensureMapPartsCatalog();
+    // サーバーの選択状態を復元してからグリッドを描画する
+    if (!mapWindowState.loadError) {
+      await syncMapWindowSelectionFromServer();
+    }
+    updateMapWindowSelectedInfo();
     renderMapWindowGrid();
   }
 }
@@ -2766,6 +2930,9 @@ function activateRoute(route, options = {}) {
 }
 
 window.addEventListener("load", () => {
+  // 管理 WebSocket を起動する（再接続は ensureAdminWebSocket 内で自動管理）
+  ensureAdminWebSocket();
+
   const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;
   activateRoute(initialRoute, { initial: true });
 
