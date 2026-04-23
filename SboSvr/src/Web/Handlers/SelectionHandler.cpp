@@ -21,8 +21,16 @@ CSelectionStore &CSelectionStore::GetInstance()
 
 void CSelectionStore::Set(const std::string &sessionId, const Selection &selection)
 {
-    std::lock_guard<std::mutex> lock(m_mutex);
-    m_store[sessionId] = selection;
+    ChangeCallback cb;
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_store[sessionId] = selection;
+        cb = m_changeCallback;
+    }
+    // コールバックはロック外で呼ぶ（デッドロック防止）
+    if (cb) {
+        cb(sessionId, &selection);
+    }
 }
 
 bool CSelectionStore::Get(const std::string &sessionId, Selection &outSelection) const
@@ -38,8 +46,22 @@ bool CSelectionStore::Get(const std::string &sessionId, Selection &outSelection)
 
 void CSelectionStore::Clear(const std::string &sessionId)
 {
+    ChangeCallback cb;
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_store.erase(sessionId);
+        cb = m_changeCallback;
+    }
+    // コールバックはロック外で呼ぶ（デッドロック防止）
+    if (cb) {
+        cb(sessionId, NULL);
+    }
+}
+
+void CSelectionStore::SetChangeCallback(ChangeCallback cb)
+{
     std::lock_guard<std::mutex> lock(m_mutex);
-    m_store.erase(sessionId);
+    m_changeCallback = cb;
 }
 
 // ============================================================

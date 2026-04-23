@@ -65,6 +65,8 @@
 - [ ] マップ表示の共通コンポーネント化
 - [x] クリック対象選択 `pick` API
 - [x] サーバー側の選択状態管理
+- [x] 管理画面向け WebSocket `/ws/admin`（`CAdminWsHub` + `selection_changed` broadcast）
+- [ ] 管理画面 JS 側の WS 購読実装（次フェーズ）
 - [ ] Web / ネイティブ両対応の連携方式を文書化
 
 ## Wave 2B: マップ編集の残り

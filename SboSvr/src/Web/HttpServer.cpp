@@ -10,6 +10,9 @@
 #include <cstdlib>
 
 #include "HttpTypes.h"
+#include "AuthProvider.h"
+#include "WebSocketProtocol.h"
+#include "AdminWsHub.h"
 #include "Handlers/HealthHandler.h"
 #include "Handlers/ServerInfoHandler.h"
 #include "Handlers/AccountCreateHandler.h"
@@ -198,6 +201,9 @@ void CHttpServer::Stop()
                 CloseHandle(m_hStartedEvent);
                 m_hStartedEvent = NULL;
         }
+
+        // 管理画面 WebSocket 接続を全て閉じる
+        CAdminWsHub::Instance().Shutdown();
 }
 
 void CHttpServer::SetMgrData(CMgrData *pMgrData)
@@ -269,7 +275,7 @@ bool CHttpServer::CreateListener()
         service.sin_addr.s_addr = htonl(INADDR_ANY);
         service.sin_port = htons(m_wPort);
 
-        if (bind(m_hListen, reinterpret_cast<const sockaddr *>(&service), sizeof(service)) == SOCKET_ERROR) {
+        if (::bind(m_hListen, reinterpret_cast<const sockaddr *>(&service), sizeof(service)) == SOCKET_ERROR) {
                 return false;
         }
 
@@ -325,12 +331,18 @@ void CHttpServer::HandleAccept()
         setsockopt(hClient, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
         setsockopt(hClient, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
 
-        HandleClient(hClient);
-        closesocket(hClient);
+        // HandleClient が true を返した場合、ソケットは Hub に移譲済みなので閉じない
+        bool bTransferred = false;
+        HandleClient(hClient, bTransferred);
+        if (!bTransferred) {
+                closesocket(hClient);
+        }
 }
 
-void CHttpServer::HandleClient(SOCKET hClient)
+void CHttpServer::HandleClient(SOCKET hClient, bool &outTransferred)
 {
+        outTransferred = false;
+
         std::string request;
         request.reserve(1024);
 
@@ -368,6 +380,44 @@ void CHttpServer::HandleClient(SOCKET hClient)
                         shutdown(hClient, SD_BOTH);
                         return;
                 }
+        }
+
+        // --- /ws/admin WebSocket アップグレード判定 ---
+        // ヘッダ部分のみを渡してアップグレード処理を試みる
+        {
+                size_t nHeaderEndCheck = request.find("\r\n\r\n");
+                std::string headerBlock = (nHeaderEndCheck != std::string::npos)
+                    ? request.substr(0, nHeaderEndCheck + 4)
+                    : request;
+
+                // リクエストラインが "GET /ws/admin " かつ Upgrade: websocket を含む場合
+                bool bIsGet        = (request.size() >= 3) && (request.substr(0, 4) == "GET ");
+                bool bIsWsAdmin    = (request.find("GET /ws/admin ") != std::string::npos)
+                                  || (request.find("GET /ws/admin\r") != std::string::npos);
+                bool bHasUpgrade   = false;
+                bool bHasWsKey     = false;
+                {
+                        // 大文字小文字を無視して検索
+                        std::string lowerReq = headerBlock;
+                        for (size_t i = 0; i < lowerReq.size(); ++i) {
+                                lowerReq[i] = static_cast<char>(
+                                    std::tolower(static_cast<unsigned char>(lowerReq[i])));
+                        }
+                        bHasUpgrade = (lowerReq.find("upgrade: websocket") != std::string::npos);
+                        bHasWsKey   = (lowerReq.find("sec-websocket-key:") != std::string::npos);
+                }
+
+                if (bIsGet && bIsWsAdmin && bHasUpgrade && bHasWsKey) {
+                        if (HandleAdminWsUpgrade(hClient, headerBlock)) {
+                                outTransferred = true;
+                                return;
+                        }
+                        // ハンドシェイク失敗（401等）の場合はそのまま閉じる
+                        shutdown(hClient, SD_BOTH);
+                        return;
+                }
+
+                (void)bIsGet; // 未使用警告抑制
         }
 
         size_t nHeaderEnd = request.find("\r\n\r\n");
@@ -637,6 +687,12 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> selectionDeleteHandler(new CSelectionDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/selection", std::move(selectionDeleteHandler));
 
+        // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
+        CSelectionStore::GetInstance().SetChangeCallback(
+            [](const std::string &sessionId, const Selection *pSel) {
+                CAdminWsHub::Instance().BroadcastSelectionChanged(sessionId, pSel);
+            });
+
         std::unique_ptr<IApiHandler> mapSheetHandler(new CMapPartsSheetHandler(mapPartsProvider, "/api/assets/map-parts/sheets/"));
         m_router.RegisterPrefix("GET", "/api/assets/map-parts/sheets/", std::move(mapSheetHandler));
 
@@ -681,4 +737,99 @@ bool CHttpServer::ResolveWebRootPath(std::wstring &outPath) const
         outPath = basePath;
         return true;
 #endif
+}
+
+// ------------------------------------------------------------
+// /ws/admin WebSocket アップグレード処理
+// ------------------------------------------------------------
+
+bool CHttpServer::HandleAdminWsUpgrade(SOCKET hClient, const std::string &rawHeaders)
+{
+        // ローカルな HttpRequest をパースして認証チェック
+        HttpRequest httpRequest;
+        if (!ParseHttpRequest(rawHeaders, httpRequest)) {
+                // パース失敗は 400 で終了
+                const char *pszResp =
+                    "HTTP/1.1 400 Bad Request\r\n"
+                    "Content-Length: 0\r\n"
+                    "\r\n";
+                SendAll(hClient, pszResp, strlen(pszResp));
+                return false;
+        }
+
+        // 認証チェック（SESSID Cookie）
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus =
+            AuthProvider::Authenticate(httpRequest, m_pMgrData, authContext);
+
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                const char *pszResp =
+                    "HTTP/1.1 503 Service Unavailable\r\n"
+                    "Content-Length: 0\r\n"
+                    "\r\n";
+                SendAll(hClient, pszResp, strlen(pszResp));
+                return false;
+        }
+        if (authStatus != AuthProvider::AuthStatusOk) {
+                const char *pszResp =
+                    "HTTP/1.1 401 Unauthorized\r\n"
+                    "Content-Length: 0\r\n"
+                    "\r\n";
+                SendAll(hClient, pszResp, strlen(pszResp));
+                return false;
+        }
+
+        // Sec-WebSocket-Key ヘッダを探す
+        std::string clientKey;
+        for (size_t i = 0; i < httpRequest.headers.size(); ++i) {
+                const std::string &name = httpRequest.headers[i].name;
+                // 大文字小文字を無視して比較
+                std::string nameLower = name;
+                for (size_t j = 0; j < nameLower.size(); ++j) {
+                        nameLower[j] = static_cast<char>(
+                            std::tolower(static_cast<unsigned char>(nameLower[j])));
+                }
+                if (nameLower == "sec-websocket-key") {
+                        clientKey = httpRequest.headers[i].value;
+                        // 前後の空白を除去
+                        while (!clientKey.empty() &&
+                               (clientKey.front() == ' ' || clientKey.front() == '\t')) {
+                                clientKey.erase(clientKey.begin());
+                        }
+                        while (!clientKey.empty() &&
+                               (clientKey.back() == ' ' || clientKey.back() == '\t')) {
+                                clientKey.resize(clientKey.size() - 1);
+                        }
+                        break;
+                }
+        }
+
+        if (clientKey.empty()) {
+                const char *pszResp =
+                    "HTTP/1.1 400 Bad Request\r\n"
+                    "Content-Length: 0\r\n"
+                    "\r\n";
+                SendAll(hClient, pszResp, strlen(pszResp));
+                return false;
+        }
+
+        // Sec-WebSocket-Accept を計算して 101 Switching Protocols を返す
+        std::string acceptKey = WebSocketProtocol::ComputeAcceptKey(clientKey);
+
+        std::string response =
+            "HTTP/1.1 101 Switching Protocols\r\n"
+            "Upgrade: websocket\r\n"
+            "Connection: Upgrade\r\n"
+            "Sec-WebSocket-Accept: " + acceptKey + "\r\n"
+            "\r\n";
+
+        if (!SendAll(hClient, response.c_str(), response.size())) {
+                return false;
+        }
+
+        // ハンドシェイク成功 → Hub にソケットを移譲して recv ループを起動
+        CAdminWsHub::Instance().AddConnection(hClient, authContext.sessionId);
+
+        OutputDebugStringA("[HttpServer] /ws/admin: WebSocket upgrade OK, transferred to Hub\n");
+        return true; // ソケット所有権を移譲済みなので呼び出し元は closesocket しない
 }

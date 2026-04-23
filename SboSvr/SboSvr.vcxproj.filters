@@ -159,6 +159,12 @@
     <ClCompile Include="src\Web\HttpServer.cpp">
       <Filter>Source Files\Web</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\WebSocketProtocol.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\AdminWsHub.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\HttpTypes.cpp">
       <Filter>Source Files\Web</Filter>
     </ClCompile>
@@ -519,6 +525,12 @@
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\HttpServer.h">
+      <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\WebSocketProtocol.h">
+      <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\AdminWsHub.h">
       <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\HttpTypes.h">

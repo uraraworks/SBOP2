@@ -2,6 +2,7 @@
 
 #include "Web/ApiHandler.h"
 
+#include <functional>
 #include <map>
 #include <mutex>
 #include <string>
@@ -33,6 +34,11 @@ struct Selection
 class CSelectionStore
 {
 public:
+    /// @brief 変更通知コールバック型
+    /// @param sessionId  変更が発生したセッション ID
+    /// @param pSel       変更後の Selection（null なら削除）
+    using ChangeCallback = std::function<void(const std::string &sessionId, const Selection *pSel)>;
+
     static CSelectionStore &GetInstance();
 
     // 選択状態を設定する（sessionId をキーに上書き）
@@ -44,13 +50,17 @@ public:
     // 選択状態を削除する
     void Clear(const std::string &sessionId);
 
+    // 変更通知コールバックを設定する
+    void SetChangeCallback(ChangeCallback cb);
+
 private:
     CSelectionStore() {}
     CSelectionStore(const CSelectionStore &);
     CSelectionStore &operator=(const CSelectionStore &);
 
-    mutable std::mutex              m_mutex;
+    mutable std::mutex               m_mutex;
     std::map<std::string, Selection> m_store;
+    ChangeCallback                   m_changeCallback; ///< 変更通知コールバック
 };
 
 // POST /api/selection/pick — 対象を選択する

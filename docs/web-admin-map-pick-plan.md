@@ -66,8 +66,8 @@
 
 1. マップウィンドウ画面 `map-window` を webroot に新設（map-objects の `renderMapPreview()` を土台に、ピック対象種別の切替を想定した作り）
 2. `grpId → sheet/tileX/tileY` 変換と sheet URL 取得をヘルパー関数に抽出（map-window の実装中に必要になった箇所だけ）
-3. pick REST API（WS なしでも単発操作が動く基盤を先に固める）
-4. 管理画面向け WebSocket チャネル新設（`/ws/admin`）
+3. pick REST API（WS なしでも単発操作が動く基盤を先に固める）✅ 実装済み（6313b5d）
+4. 管理画面向け WebSocket チャネル新設（`/ws/admin`）✅ 実装済み — `WebSocketProtocol.h/cpp`, `AdminWsHub.h/cpp`, `HttpServer` Upgrade 分岐, `CSelectionStore` ChangeCallback
 5. マップウィンドウから WS 購読・pick 連動
 6. ゲーム画面側（ネイティブ / Web）からの pick 送信対応
 
