@@ -4836,3 +4836,278 @@ if (cdGraphicsForm) {
 
 // character-overview 画面が直接ナビから開かれたときは ID 入力フォームを表示するだけでよい
 // （一覧からクリックで来た場合は fetchCharacterDetail が自動的に呼ばれる）
+
+/* =======================================================
+ * 所持アイテム  GET/POST/DELETE /api/characters/{id}/items
+ * ======================================================= */
+
+/** GET /api/characters/{charId}/items → [{slot, itemId}] */
+async function fetchCharacterItems(charId) {
+  setFeedback("cd-items-feedback", "読み込み中...", false);
+  try {
+    var { response, data } = await fetchJson("/api/characters/" + encodeURIComponent(charId) + "/items");
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "アイテム取得に失敗しました";
+      setFeedback("cd-items-feedback", "エラー: " + msg, true);
+      return;
+    }
+    setFeedback("cd-items-feedback", "", false);
+    renderCharacterItems(data || []);
+  } catch (err) {
+    console.error("fetchCharacterItems error", err);
+    setFeedback("cd-items-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+/** アイテム一覧テーブルを描画する */
+function renderCharacterItems(items) {
+  var tbody = document.getElementById("cd-items-table-body");
+  if (!tbody) { return; }
+  if (!items || items.length === 0) {
+    tbody.innerHTML = "<tr><td colspan=\"3\">（データなし）</td></tr>";
+    return;
+  }
+  var html = "";
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    html += "<tr>" +
+      "<td>" + item.slot + "</td>" +
+      "<td>" + item.itemId + "</td>" +
+      "<td><button type=\"button\" class=\"button danger btn-sm cd-item-del-btn\" data-slot=\"" + item.slot + "\">削除</button></td>" +
+      "</tr>";
+  }
+  tbody.innerHTML = html;
+
+  // 削除ボタンにイベントを付与
+  tbody.querySelectorAll(".cd-item-del-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var slot = parseInt(btn.dataset.slot, 10);
+      if (!currentCharId) { return; }
+      deleteCharacterItem(currentCharId, slot);
+    });
+  });
+}
+
+/** POST /api/characters/{charId}/items  body: {itemId} */
+async function addCharacterItem(charId, itemId) {
+  setFeedback("cd-items-feedback", "追加中...", false);
+  try {
+    var res = await fetch("/api/characters/" + encodeURIComponent(charId) + "/items", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemId: itemId }),
+      credentials: "same-origin"
+    });
+    var data = null;
+    try { data = await res.json(); } catch (_) {}
+    if (!res.ok) {
+      var errCode = (data && data.error) ? data.error : "エラー";
+      if (errCode === "item_slots_full") {
+        alert("アイテムスロットが満杯です（上限に達しています）");
+      } else if (errCode === "not_found") {
+        alert("キャラクターが見つかりません");
+      } else {
+        setFeedback("cd-items-feedback", "エラー: " + errCode, true);
+      }
+      return;
+    }
+    setFeedback("cd-items-feedback", "追加しました（スロット " + data.slot + "）", false);
+    fetchCharacterItems(charId);
+  } catch (err) {
+    console.error("addCharacterItem error", err);
+    setFeedback("cd-items-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+/** DELETE /api/characters/{charId}/items/{slot} */
+async function deleteCharacterItem(charId, slot) {
+  setFeedback("cd-items-feedback", "削除中...", false);
+  try {
+    var res = await fetch("/api/characters/" + encodeURIComponent(charId) + "/items/" + slot, {
+      method: "DELETE",
+      credentials: "same-origin"
+    });
+    if (res.status === 204) {
+      setFeedback("cd-items-feedback", "削除しました（スロット " + slot + "）", false);
+      fetchCharacterItems(charId);
+      return;
+    }
+    var data = null;
+    try { data = await res.json(); } catch (_) {}
+    var errCode = (data && data.error) ? data.error : "エラー";
+    if (errCode === "not_found" || errCode === "slot_not_found") {
+      alert("指定スロットが見つかりません（slot: " + slot + "）");
+    } else {
+      setFeedback("cd-items-feedback", "エラー: " + errCode, true);
+    }
+  } catch (err) {
+    console.error("deleteCharacterItem error", err);
+    setFeedback("cd-items-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+// アイテム追加ボタン
+var cdItemAddBtn = document.getElementById("cd-item-add-btn");
+if (cdItemAddBtn) {
+  cdItemAddBtn.addEventListener("click", function () {
+    if (!currentCharId) {
+      alert("先にキャラクターを表示してください");
+      return;
+    }
+    var input = document.getElementById("cd-item-id-input");
+    if (!input) { return; }
+    var val = parseInt(input.value, 10);
+    if (!val || val <= 0) {
+      alert("有効なアイテムID（1以上の整数）を入力してください");
+      return;
+    }
+    addCharacterItem(currentCharId, val);
+  });
+}
+
+/* =======================================================
+ * 所持スキル  GET/POST/DELETE /api/characters/{id}/skills
+ * ======================================================= */
+
+/** GET /api/characters/{charId}/skills → [{slot, skillId}] */
+async function fetchCharacterSkills(charId) {
+  setFeedback("cd-skills-feedback", "読み込み中...", false);
+  try {
+    var { response, data } = await fetchJson("/api/characters/" + encodeURIComponent(charId) + "/skills");
+    if (!response.ok) {
+      var msg = (data && data.error) ? data.error : "スキル取得に失敗しました";
+      setFeedback("cd-skills-feedback", "エラー: " + msg, true);
+      return;
+    }
+    setFeedback("cd-skills-feedback", "", false);
+    renderCharacterSkills(data || []);
+  } catch (err) {
+    console.error("fetchCharacterSkills error", err);
+    setFeedback("cd-skills-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+/** スキル一覧テーブルを描画する */
+function renderCharacterSkills(skills) {
+  var tbody = document.getElementById("cd-skills-table-body");
+  if (!tbody) { return; }
+  if (!skills || skills.length === 0) {
+    tbody.innerHTML = "<tr><td colspan=\"3\">（データなし）</td></tr>";
+    return;
+  }
+  var html = "";
+  for (var i = 0; i < skills.length; i++) {
+    var skill = skills[i];
+    html += "<tr>" +
+      "<td>" + skill.slot + "</td>" +
+      "<td>" + skill.skillId + "</td>" +
+      "<td><button type=\"button\" class=\"button danger btn-sm cd-skill-del-btn\" data-slot=\"" + skill.slot + "\">削除</button></td>" +
+      "</tr>";
+  }
+  tbody.innerHTML = html;
+
+  // 削除ボタンにイベントを付与
+  tbody.querySelectorAll(".cd-skill-del-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var slot = parseInt(btn.dataset.slot, 10);
+      if (!currentCharId) { return; }
+      deleteCharacterSkill(currentCharId, slot);
+    });
+  });
+}
+
+/** POST /api/characters/{charId}/skills  body: {skillId} */
+async function addCharacterSkill(charId, skillId) {
+  setFeedback("cd-skills-feedback", "追加中...", false);
+  try {
+    var res = await fetch("/api/characters/" + encodeURIComponent(charId) + "/skills", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ skillId: skillId }),
+      credentials: "same-origin"
+    });
+    var data = null;
+    try { data = await res.json(); } catch (_) {}
+    if (!res.ok) {
+      var errCode = (data && data.error) ? data.error : "エラー";
+      if (errCode === "skill_slots_full") {
+        alert("スキルスロットが満杯です（上限 64 スロットに達しています）");
+      } else if (errCode === "not_found") {
+        alert("キャラクターが見つかりません");
+      } else {
+        setFeedback("cd-skills-feedback", "エラー: " + errCode, true);
+      }
+      return;
+    }
+    setFeedback("cd-skills-feedback", "追加しました（スロット " + data.slot + "）", false);
+    fetchCharacterSkills(charId);
+  } catch (err) {
+    console.error("addCharacterSkill error", err);
+    setFeedback("cd-skills-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+/** DELETE /api/characters/{charId}/skills/{slot} */
+async function deleteCharacterSkill(charId, slot) {
+  setFeedback("cd-skills-feedback", "削除中...", false);
+  try {
+    var res = await fetch("/api/characters/" + encodeURIComponent(charId) + "/skills/" + slot, {
+      method: "DELETE",
+      credentials: "same-origin"
+    });
+    if (res.status === 204) {
+      setFeedback("cd-skills-feedback", "削除しました（スロット " + slot + "）", false);
+      fetchCharacterSkills(charId);
+      return;
+    }
+    var data = null;
+    try { data = await res.json(); } catch (_) {}
+    var errCode = (data && data.error) ? data.error : "エラー";
+    if (errCode === "not_found" || errCode === "slot_not_found") {
+      alert("指定スロットが見つかりません（slot: " + slot + "）");
+    } else {
+      setFeedback("cd-skills-feedback", "エラー: " + errCode, true);
+    }
+  } catch (err) {
+    console.error("deleteCharacterSkill error", err);
+    setFeedback("cd-skills-feedback", "通信エラーが発生しました", true);
+  }
+}
+
+// スキル追加ボタン
+var cdSkillAddBtn = document.getElementById("cd-skill-add-btn");
+if (cdSkillAddBtn) {
+  cdSkillAddBtn.addEventListener("click", function () {
+    if (!currentCharId) {
+      alert("先にキャラクターを表示してください");
+      return;
+    }
+    var input = document.getElementById("cd-skill-id-input");
+    if (!input) { return; }
+    var val = parseInt(input.value, 10);
+    if (!val || val <= 0) {
+      alert("有効なスキルID（1以上の整数）を入力してください");
+      return;
+    }
+    addCharacterSkill(currentCharId, val);
+  });
+}
+
+/* -------------------------------------------------------
+ * タブ切り替え時にアイテム/スキルを自動ロードする
+ * ------------------------------------------------------- */
+(function () {
+  var charTabNav2 = document.getElementById("char-tab-nav");
+  if (!charTabNav2) { return; }
+  charTabNav2.addEventListener("click", function (ev) {
+    var btn = ev.target.closest(".tab-btn");
+    if (!btn) { return; }
+    var tabId = btn.dataset.tab;
+    if (!currentCharId) { return; }
+    if (tabId === "cd-tab-items") {
+      fetchCharacterItems(currentCharId);
+    } else if (tabId === "cd-tab-skills") {
+      fetchCharacterSkills(currentCharId);
+    }
+  });
+}());

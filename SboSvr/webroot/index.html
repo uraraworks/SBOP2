@@ -187,6 +187,8 @@
             <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-graphics">グラフィック</button>
             <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-movement">移動</button>
             <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-npcspawn">NPC発生</button>
+            <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-items">アイテム</button>
+            <button type="button" class="tab-btn" role="tab" data-tab="cd-tab-skills">スキル</button>
           </div>
 
           <!-- タブ: 基本情報 -->
@@ -379,6 +381,56 @@
               <div><dt>発生範囲X</dt><dd id="cd-putAreaX">-</dd></div>
               <div><dt>発生範囲Y</dt><dd id="cd-putAreaY">-</dd></div>
             </dl>
+          </div>
+
+          <!-- タブ: 所持アイテム -->
+          <div class="tab-panel" id="cd-tab-items" style="display:none">
+            <p id="cd-items-feedback" class="form-feedback" aria-live="polite"></p>
+            <!-- 追加フォーム -->
+            <div class="filter-row">
+              <label>アイテムID:
+                <input type="number" id="cd-item-id-input" placeholder="例: 1001" min="1" />
+              </label>
+              <button type="button" id="cd-item-add-btn" class="button primary">追加</button>
+            </div>
+            <!-- アイテム一覧テーブル -->
+            <table class="data-table" id="cd-items-table">
+              <thead>
+                <tr>
+                  <th>スロット</th>
+                  <th>アイテムID</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="cd-items-table-body">
+                <tr><td colspan="3">（データなし）</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- タブ: 所持スキル -->
+          <div class="tab-panel" id="cd-tab-skills" style="display:none">
+            <p id="cd-skills-feedback" class="form-feedback" aria-live="polite"></p>
+            <!-- 追加フォーム -->
+            <div class="filter-row">
+              <label>スキルID:
+                <input type="number" id="cd-skill-id-input" placeholder="例: 101" min="1" />
+              </label>
+              <button type="button" id="cd-skill-add-btn" class="button primary">追加</button>
+            </div>
+            <!-- スキル一覧テーブル -->
+            <table class="data-table" id="cd-skills-table">
+              <thead>
+                <tr>
+                  <th>スロット</th>
+                  <th>スキルID</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="cd-skills-table-body">
+                <tr><td colspan="3">（データなし）</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
