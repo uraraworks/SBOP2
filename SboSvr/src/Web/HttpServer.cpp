@@ -24,6 +24,7 @@
 #include "Handlers/MapShadowHandler.h"
 #include "Handlers/StaticFileHandler.h"
 #include "Handlers/SelectionHandler.h"
+#include "Handlers/CharacterListHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -725,6 +726,10 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> selectionDeleteHandler(new CSelectionDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/selection", std::move(selectionDeleteHandler));
+
+        // キャラクター一覧検索 API
+        std::unique_ptr<IApiHandler> characterListHandler(new CCharacterListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/characters", std::move(characterListHandler));
 
         // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
         CSelectionStore::GetInstance().SetChangeCallback(

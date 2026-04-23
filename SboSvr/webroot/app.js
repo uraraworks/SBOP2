@@ -3266,6 +3266,15 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "character-list") {
+    if (options.forceReload) {
+      charListState.offset = 0;
+      loadCharacterList();
+    } else if (!charListState.total && !charListState.isLoading) {
+      loadCharacterList();
+    }
+  }
+
   currentRoute = normalized;
 }
 
@@ -4185,5 +4194,186 @@ if (mapShadowCancelBtn) {
     mapShadowState.selectedId = null;
     if (mapShadowDetailSection) { mapShadowDetailSection.style.display = "none"; }
     renderMapShadowTable();
+  });
+}
+
+/* =====================================================
+ * キャラクター一覧画面 (character-list)
+ * GET /api/characters?name=&accountId=&mapId=&isNpc=&limit=20&offset=N
+ * レスポンス: { total, limit, offset, characters: [...] }
+ * ===================================================== */
+const charFilterName    = document.getElementById("char-filter-name");
+const charFilterAccId   = document.getElementById("char-filter-account-id");
+const charFilterMapId   = document.getElementById("char-filter-map-id");
+const charFilterIsNpc   = document.getElementById("char-filter-is-npc");
+const charSearchBtn     = document.getElementById("char-search-btn");
+const charResetBtn      = document.getElementById("char-reset-btn");
+const charListSummary   = document.getElementById("char-list-summary");
+const charListFeedback  = document.getElementById("char-list-feedback");
+const charListTableBody = document.getElementById("char-list-table-body");
+const charPrevBtn       = document.getElementById("char-prev-btn");
+const charNextBtn       = document.getElementById("char-next-btn");
+const charPageInfo      = document.getElementById("char-page-info");
+
+const CHAR_LIST_LIMIT = 20;
+
+const charListState = {
+  offset: 0,
+  total: 0,
+  isLoading: false,
+};
+
+/** クエリパラメータを組み立てて /api/characters を呼ぶ */
+async function loadCharacterList() {
+  if (!charListTableBody) { return; }
+  if (charListState.isLoading) { return; }
+
+  charListState.isLoading = true;
+  if (charListFeedback) { charListFeedback.textContent = "読み込み中..."; }
+  if (charListTableBody) { charListTableBody.innerHTML = '<tr><td colspan="7">読み込み中...</td></tr>'; }
+  updateCharPagination();
+
+  const params = new URLSearchParams();
+  if (charFilterName && charFilterName.value.trim()) {
+    params.set("name", charFilterName.value.trim());
+  }
+  if (charFilterAccId && charFilterAccId.value.trim()) {
+    params.set("accountId", charFilterAccId.value.trim());
+  }
+  if (charFilterMapId && charFilterMapId.value.trim()) {
+    params.set("mapId", charFilterMapId.value.trim());
+  }
+  if (charFilterIsNpc && charFilterIsNpc.value !== "") {
+    params.set("isNpc", charFilterIsNpc.value);
+  }
+  params.set("limit", String(CHAR_LIST_LIMIT));
+  params.set("offset", String(charListState.offset));
+
+  try {
+    const { response, data } = await fetchJson("/api/characters?" + params.toString());
+    if (!response.ok || !data || !Array.isArray(data.characters)) {
+      const msg = (data && data.error) ? data.error : "キャラクター一覧の取得に失敗しました";
+      if (charListFeedback) { charListFeedback.textContent = msg; }
+      charListTableBody.innerHTML = '<tr><td colspan="7">取得に失敗しました</td></tr>';
+      charListState.total = 0;
+      updateCharPagination();
+      return;
+    }
+
+    charListState.total = typeof data.total === "number" ? data.total : 0;
+    if (charListFeedback) { charListFeedback.textContent = ""; }
+    if (charListSummary) {
+      charListSummary.textContent = charListState.total > 0
+        ? `${charListState.total} 件中 ${charListState.offset + 1}〜${Math.min(charListState.offset + data.characters.length, charListState.total)} 件を表示`
+        : "該当するキャラクターがありません";
+    }
+
+    renderCharacterList(data.characters);
+    updateCharPagination();
+  } catch (err) {
+    console.error("loadCharacterList error", err);
+    if (charListFeedback) { charListFeedback.textContent = "通信エラーが発生しました"; }
+    charListTableBody.innerHTML = '<tr><td colspan="7">通信エラーが発生しました</td></tr>';
+    charListState.total = 0;
+    updateCharPagination();
+  } finally {
+    charListState.isLoading = false;
+  }
+}
+
+/** テーブル本体を描画する */
+function renderCharacterList(characters) {
+  if (!charListTableBody) { return; }
+  if (!characters.length) {
+    charListTableBody.innerHTML = '<tr><td colspan="7">データがありません</td></tr>';
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  characters.forEach(function (c) {
+    const tr = document.createElement("tr");
+    tr.style.cursor = "pointer";
+    tr.innerHTML =
+      "<td>" + escapeHtml(String(c.charId ?? "")) + "</td>" +
+      "<td>" + escapeHtml(String(c.charName ?? "")) + "</td>" +
+      "<td>" + escapeHtml(String(c.level ?? "")) + "</td>" +
+      "<td>" + escapeHtml(String(c.mapId ?? "")) + "</td>" +
+      "<td>" + escapeHtml(String(c.x ?? "")) + ", " + escapeHtml(String(c.y ?? "")) + "</td>" +
+      "<td>" + escapeHtml(String(c.accountId ?? "")) + "</td>" +
+      "<td>" + (c.isNpc ? "NPC" : "PC") + "</td>";
+    tr.addEventListener("click", function () {
+      console.log("キャラクター選択:", c);
+    });
+    fragment.appendChild(tr);
+  });
+  charListTableBody.innerHTML = "";
+  charListTableBody.appendChild(fragment);
+}
+
+/** ページングボタンの有効/無効を更新する */
+function updateCharPagination() {
+  const total  = charListState.total;
+  const offset = charListState.offset;
+  if (charPrevBtn) { charPrevBtn.disabled = offset <= 0; }
+  if (charNextBtn) { charNextBtn.disabled = offset + CHAR_LIST_LIMIT >= total; }
+  if (charPageInfo) {
+    if (total > 0) {
+      const page    = Math.floor(offset / CHAR_LIST_LIMIT) + 1;
+      const maxPage = Math.ceil(total / CHAR_LIST_LIMIT);
+      charPageInfo.textContent = page + " / " + maxPage + " ページ";
+    } else {
+      charPageInfo.textContent = "";
+    }
+  }
+}
+
+/** HTML エスケープ（キャラ一覧用）*/
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+// 検索ボタン
+if (charSearchBtn) {
+  charSearchBtn.addEventListener("click", function () {
+    charListState.offset = 0;
+    loadCharacterList();
+  });
+}
+
+// リセットボタン
+if (charResetBtn) {
+  charResetBtn.addEventListener("click", function () {
+    if (charFilterName)  { charFilterName.value  = ""; }
+    if (charFilterAccId) { charFilterAccId.value = ""; }
+    if (charFilterMapId) { charFilterMapId.value = ""; }
+    if (charFilterIsNpc) { charFilterIsNpc.value = ""; }
+    charListState.offset = 0;
+    charListState.total  = 0;
+    if (charListTableBody) { charListTableBody.innerHTML = ""; }
+    if (charListSummary)   { charListSummary.textContent  = ""; }
+    if (charListFeedback)  { charListFeedback.textContent = ""; }
+    updateCharPagination();
+  });
+}
+
+// 前へボタン
+if (charPrevBtn) {
+  charPrevBtn.addEventListener("click", function () {
+    if (charListState.offset <= 0) { return; }
+    charListState.offset = Math.max(0, charListState.offset - CHAR_LIST_LIMIT);
+    loadCharacterList();
+  });
+}
+
+// 次へボタン
+if (charNextBtn) {
+  charNextBtn.addEventListener("click", function () {
+    if (charListState.offset + CHAR_LIST_LIMIT >= charListState.total) { return; }
+    charListState.offset += CHAR_LIST_LIMIT;
+    loadCharacterList();
   });
 }

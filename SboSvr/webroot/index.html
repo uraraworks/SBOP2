@@ -180,14 +180,52 @@
       </section>
     </div>
     <div class="view" data-view="character-list">
-      <section class="card placeholder-card">
-        <h2>キャラクター一覧（プレースホルダー）</h2>
-        <p>Wave 2 で予定しているキャラクター検索・一覧画面です。既存 MFC 版のキャラリストを置き換えます。</p>
-        <ul>
-          <li>フィルター（名前、アカウントID、ステータス）</li>
-          <li>結果テーブル（ページング対応）</li>
-          <li>選択したキャラクターの詳細リンク</li>
-        </ul>
+      <section class="card">
+        <h2>キャラクター一覧</h2>
+        <!-- フィルター入力欄 -->
+        <div class="filter-row">
+          <label>名前（部分一致）:
+            <input type="text" id="char-filter-name" placeholder="キャラ名を入力" />
+          </label>
+          <label>アカウントID:
+            <input type="number" id="char-filter-account-id" placeholder="例: 1001" min="0" />
+          </label>
+          <label>マップID:
+            <input type="number" id="char-filter-map-id" placeholder="例: 1" min="0" />
+          </label>
+          <label>種別:
+            <select id="char-filter-is-npc">
+              <option value="">全て</option>
+              <option value="0">PC のみ</option>
+              <option value="1">NPC のみ</option>
+            </select>
+          </label>
+          <button type="button" id="char-search-btn" class="button">検索</button>
+          <button type="button" id="char-reset-btn" class="button secondary">リセット</button>
+        </div>
+        <p id="char-list-summary" class="result-message"></p>
+        <p id="char-list-feedback" class="form-feedback" aria-live="polite"></p>
+        <!-- キャラクター一覧テーブル -->
+        <table class="data-table" id="char-list-table">
+          <thead>
+            <tr>
+              <th>CharID</th>
+              <th>キャラ名</th>
+              <th>Lv</th>
+              <th>マップID</th>
+              <th>座標 (X, Y)</th>
+              <th>アカウントID</th>
+              <th>NPC</th>
+            </tr>
+          </thead>
+          <tbody id="char-list-table-body"></tbody>
+        </table>
+        <!-- ページングコントロール -->
+        <div class="pagination-row" id="char-pagination">
+          <button type="button" id="char-prev-btn" class="button secondary" disabled>前へ</button>
+          <span id="char-page-info"></span>
+          <button type="button" id="char-next-btn" class="button secondary" disabled>次へ</button>
+        </div>
       </section>
     </div>
     <div class="view" data-view="character-account">
