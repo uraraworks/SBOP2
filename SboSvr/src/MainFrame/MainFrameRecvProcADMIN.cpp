@@ -8,6 +8,9 @@
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
 #include "Packet.h"
+#include "Web/Handlers/SelectionHandler.h"
+#include <ctime>
+#include <cstdio>
 #include "LibInfoMapBase.h"
 #include "LibInfoMapObject.h"
 #include "LibInfoMapObjectData.h"
@@ -96,6 +99,8 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_INFO:	RecvProcADMIN_DISABLE_REQ_INFO(pData, dwSessionID);	break;	// 拒否情報要求
 	case SBOCOMMANDID_SUB_ADMIN_DISABLE_REQ_DELETE:	RecvProcADMIN_DISABLE_REQ_DELETE(pData, dwSessionID);	break;	// 拒否情報の削除要求
 	case SBOCOMMANDID_SUB_ADMIN_DISABLE_RENEWINFO:	RecvProcADMIN_DISABLE_RENEWINFO(pData, dwSessionID);	break;	// 拒否情報の更新
+	case SBOCOMMANDID_SUB_ADMIN_MAP_SELECTPICK:		RecvProcADMIN_MAP_SELECTPICK(pData, dwSessionID);	break;	// マップ選択ピック
+	case SBOCOMMANDID_SUB_ADMIN_MAP_SELECTCLEAR:	RecvProcADMIN_MAP_SELECTCLEAR(pData, dwSessionID);	break;	// マップ選択解除
 	}
 }
 
@@ -1255,4 +1260,54 @@ void CMainFrame::RecvProcADMIN_DISABLE_RENEWINFO(PBYTE pData, DWORD dwSessionID)
 
 	PacketADMIN_DISABLE_RES_INFO.Make(m_pLibInfoDisable);
 	SendToAdminChar(&PacketADMIN_DISABLE_RES_INFO);
+}
+
+// ゲームクライアントからのマップセル選択を CSelectionStore("game") へ格納する
+void CMainFrame::RecvProcADMIN_MAP_SELECTPICK(PBYTE pData, DWORD dwSessionID)
+{
+	CPacketADMIN_MAP_SELECTPICK Packet;
+	Packet.Set(pData);
+
+	// 種別マッピング: SELECTPICK_TYPE_* → SelectionType
+	SelectionType eType;
+	switch (Packet.m_byType) {
+	case SELECTPICK_TYPE_PLACEMENT:	eType = SelectionTypePlacement;	break;
+	case SELECTPICK_TYPE_EVENT:		eType = SelectionTypeEvent;		break;
+	case SELECTPICK_TYPE_CHAR:		eType = SelectionTypeChar;		break;
+	default:						eType = SelectionTypeMapCell;	break;
+	}
+
+	// ISO8601 タイムスタンプ生成
+	time_t now = time(NULL);
+	struct tm tmBuf;
+#if defined(_WIN32)
+	gmtime_s(&tmBuf, &now);
+#else
+	gmtime_r(&now, &tmBuf);
+#endif
+	char szUpdatedAt[32];
+	std::strftime(szUpdatedAt, sizeof(szUpdatedAt), "%Y-%m-%dT%H:%M:%SZ", &tmBuf);
+
+	// 固定キー "game" で選択状態を格納
+	// → 既存の SetChangeCallback 経由で CAdminWsHub::BroadcastSelectionChanged が自動発火
+	Selection sel;
+	sel.type       = eType;
+	sel.nMapId     = static_cast<int>(Packet.m_dwMapID);
+	sel.nX         = static_cast<int>(Packet.m_wX);
+	sel.nY         = static_cast<int>(Packet.m_wY);
+	sel.nRefId     = static_cast<int>(Packet.m_dwRefID);
+	sel.bHasRefId  = (Packet.m_dwRefID != 0);
+	sel.updatedAt  = szUpdatedAt;
+
+	CSelectionStore::GetInstance().Set("game", sel);
+}
+
+// ゲームクライアントからの選択解除を CSelectionStore("game") へ反映する
+void CMainFrame::RecvProcADMIN_MAP_SELECTCLEAR(PBYTE pData, DWORD dwSessionID)
+{
+	(void)pData;
+	(void)dwSessionID;
+
+	// 固定キー "game" の選択を削除
+	CSelectionStore::GetInstance().Clear("game");
 }

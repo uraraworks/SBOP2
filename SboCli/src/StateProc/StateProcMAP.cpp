@@ -75,6 +75,7 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include "StateProcMAP.h"
+#include "PacketADMIN_MAP_SELECTPICK.h"
 
 namespace {
 
@@ -862,6 +863,23 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		dwNotifyData = MAKELPARAM(y, x);
 		PostAdminUiMessage(WM_ADMINMSG, ADMINMSG_NOTIFYTYPE_LBUTTONDOWN, dwNotifyData);
 		break;
+	}
+
+	// 管理者モード時はセルクリック位置を SELECTPICK パケットでサーバーへ送信する
+	// （AdminNotifyType に関わらず常に送信。Web管理画面のマップウィンドウへ反映される）
+	if ((m_pMgrData->GetAdminLevel() > ADMINLEVEL_NONE) && (m_pMap != NULL)) {
+		int nPickX, nPickY;
+		CPacketADMIN_MAP_SELECTPICK Packet;
+
+		nPickX = (xx / MAPPARTSSIZE) + nMapX;
+		nPickY = (yy / MAPPARTSSIZE) + nMapY;
+		Packet.Make(
+			SELECTPICK_TYPE_MAPCELL,
+			m_pMap->m_dwMapID,
+			static_cast<WORD>(nPickX),
+			static_cast<WORD>(nPickY),
+			0);
+		m_pSock->Send(&Packet);
 	}
 }
 

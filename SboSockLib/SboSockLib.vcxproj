@@ -152,6 +152,8 @@
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWOBJECTDATA.cpp" />
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPNAME.cpp" />
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPSHADOW.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SELECTCLEAR.cpp" />
+    <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SELECTPICK.cpp" />
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETPARTS.cpp" />
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_PARA2.cpp" />
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_PLAYSOUND.cpp" />
@@ -368,6 +370,8 @@
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_RENEWOBJECTDATA.h" />
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPNAME.h" />
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETMAPSHADOW.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SELECTCLEAR.h" />
+    <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SELECTPICK.h" />
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_MAP_SETPARTS.h" />
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_PARA2.h" />
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_PLAYSOUND.h" />

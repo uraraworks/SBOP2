@@ -174,6 +174,8 @@ private:
 	void	RecvProcADMIN_DISABLE_REQ_INFO(PBYTE pData, DWORD dwSessionID);	// 拒否情報要求
 	void	RecvProcADMIN_DISABLE_REQ_DELETE(PBYTE pData, DWORD dwSessionID);	// 拒否情報の削除要求
 	void	RecvProcADMIN_DISABLE_RENEWINFO(PBYTE pData, DWORD dwSessionID);	// 拒否情報の更新
+	void	RecvProcADMIN_MAP_SELECTPICK(PBYTE pData, DWORD dwSessionID);		// マップ選択ピック
+	void	RecvProcADMIN_MAP_SELECTCLEAR(PBYTE pData, DWORD dwSessionID);	// マップ選択解除
 
 	// 受信処理(MainFrameRecvProcMSGCMD.cpp)
 	void	RecvProcMSGCMD(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	// メッセージコマンド系
