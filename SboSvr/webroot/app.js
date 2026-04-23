@@ -105,6 +105,15 @@ const mapInfoRecoveryCheck = document.getElementById("map-info-recovery");
 const mapInfoFeedbackEl = document.getElementById("map-info-feedback");
 const mapInfoReloadBtn = document.getElementById("map-info-reload-btn");
 
+/* マップイベント編集 */
+const mapEventMapSelect = document.getElementById("map-event-map");
+const mapEventSummaryEl = document.getElementById("map-event-summary");
+const mapEventTableBody = document.getElementById("map-event-table-body");
+const mapEventEditArea = document.getElementById("map-event-edit-area");
+const mapEventEditForm = document.getElementById("map-event-edit-form");
+const mapEventFeedbackEl = document.getElementById("map-event-feedback");
+const mapEventNewBtn = document.getElementById("map-event-new-btn");
+
 /* マップウィンドウ */
 const mapWindowMapSelect = document.getElementById("map-window-map");
 const mapWindowSummaryEl = document.getElementById("map-window-summary");
@@ -191,6 +200,16 @@ const mapPartsState = {
 const mapInfoState = {
   maps: [],
   selectedMapId: null,
+  isLoading: false,
+  loadError: null
+};
+
+/* マップイベント編集画面の状態 */
+const mapEventState = {
+  maps: [],          // {id, name} の一覧（マップ選択に使用）
+  selectedMapId: null,
+  events: [],        // 選択中マップのイベント一覧
+  selectedEventId: null,
   isLoading: false,
   loadError: null
 };
@@ -3123,6 +3142,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "map-events") {
+    if (options.forceReload || (!mapEventState.maps.length && !mapEventState.isLoading)) {
+      initMapEventView();
+    }
+  }
+
   if (normalized === "map-parts") {
     if (options.forceReload) {
       loadMapPartsData(true);
@@ -3262,4 +3287,441 @@ window.addEventListener("load", () => {
       }
     });
   }
+
+  // マップイベント画面の初期化
+  if (mapEventMapSelect) {
+    mapEventMapSelect.addEventListener("change", function () {
+      const id = parseInt(mapEventMapSelect.value, 10);
+      if (!isNaN(id)) {
+        mapEventState.selectedMapId = id;
+        mapEventState.selectedEventId = null;
+        loadMapEventList();
+      }
+    });
+  }
+  if (mapEventNewBtn) {
+    mapEventNewBtn.addEventListener("click", function () {
+      mapEventState.selectedEventId = null;
+      renderMapEventForm(null);
+    });
+  }
+  if (mapEventEditForm) {
+    mapEventEditForm.addEventListener("submit", saveMapEvent);
+  }
 });
+
+/* =====================================================
+ * マップイベント編集画面 (map-events)
+ * ===================================================== */
+
+const MAP_EVENT_TYPE_LABELS = {
+  0: "なし (NONE)",
+  1: "マップ内移動 (MOVE)",
+  2: "マップ間移動 (MAPMOVE)",
+  3: "ゴミ箱 (TRASHBOX)",
+  4: "ステータス初期化 (INITSTATUS)",
+  5: "一時画像設定 (GRPIDTMP)",
+  6: "灯り (LIGHT)"
+};
+
+const MAP_EVENT_HIT_TYPE_LABELS = {
+  0: "MAPPOS（マップ座標）",
+  1: "CHARPOS（キャラ座標）",
+  2: "AREA（範囲）",
+  3: "MAPPOS2（マップ座標完全一致）"
+};
+
+function setMapEventFeedback(message, type) {
+  if (!mapEventFeedbackEl) { return; }
+  mapEventFeedbackEl.textContent = message || "";
+  mapEventFeedbackEl.className = "form-feedback" + (type ? " form-feedback--" + type : "");
+}
+
+function setMapEventSummary(message) {
+  if (mapEventSummaryEl) {
+    mapEventSummaryEl.textContent = message || "";
+  }
+}
+
+/** マップ選択 select を描画する */
+function renderMapEventMapSelect() {
+  if (!mapEventMapSelect) { return; }
+  const prevId = mapEventState.selectedMapId;
+  mapEventMapSelect.innerHTML = "";
+
+  if (!mapEventState.maps.length) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "（マップなし）";
+    mapEventMapSelect.appendChild(opt);
+    return;
+  }
+
+  mapEventState.maps.forEach(function (map) {
+    const opt = document.createElement("option");
+    opt.value = String(map.id);
+    opt.textContent = "[" + map.id + "] " + (map.name || "（名前なし）");
+    if (map.id === prevId) { opt.selected = true; }
+    mapEventMapSelect.appendChild(opt);
+  });
+
+  if (!mapEventState.maps.some(function (m) { return m.id === mapEventState.selectedMapId; })) {
+    mapEventState.selectedMapId = mapEventState.maps[0].id;
+    mapEventMapSelect.value = String(mapEventState.selectedMapId);
+  }
+}
+
+/** イベント一覧テーブルを描画する */
+function renderMapEventTable() {
+  if (!mapEventTableBody) { return; }
+  mapEventTableBody.innerHTML = "";
+
+  if (!mapEventState.events.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 5;
+    td.textContent = "イベントなし";
+    td.style.textAlign = "center";
+    tr.appendChild(td);
+    mapEventTableBody.appendChild(tr);
+    return;
+  }
+
+  mapEventState.events.forEach(function (ev) {
+    const tr = document.createElement("tr");
+    if (ev.id === mapEventState.selectedEventId) {
+      tr.classList.add("selected-row");
+    }
+
+    function td(text) {
+      const el = document.createElement("td");
+      el.textContent = text;
+      return el;
+    }
+
+    tr.appendChild(td(ev.id));
+    tr.appendChild(td(ev.typeLabel || String(ev.type)));
+    tr.appendChild(td("(" + ev.pos.x + ", " + ev.pos.y + ")"));
+    tr.appendChild(td(ev.hitTypeLabel || String(ev.hitType)));
+
+    const tdBtn = document.createElement("td");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-secondary btn-sm";
+    btn.textContent = "編集";
+    btn.addEventListener("click", function () {
+      mapEventState.selectedEventId = ev.id;
+      renderMapEventTable();
+      renderMapEventForm(ev);
+    });
+    tdBtn.appendChild(btn);
+    tr.appendChild(tdBtn);
+
+    mapEventTableBody.appendChild(tr);
+  });
+}
+
+/** 種別依存フィールドの HTML を返す */
+function buildDetailFieldsHtml(type, detail) {
+  detail = detail || {};
+  switch (Number(type)) {
+  case 1: // MOVE
+    return '<label class="form-field"><span>移動先 X</span><input type="number" name="detail.destX" value="' + (detail.destX || 0) + '"></label>' +
+           '<label class="form-field"><span>移動先 Y</span><input type="number" name="detail.destY" value="' + (detail.destY || 0) + '"></label>' +
+           '<label class="form-field"><span>向き</span><input type="number" name="detail.direction" value="' + (detail.direction || 0) + '"></label>';
+  case 2: // MAPMOVE
+    return '<label class="form-field"><span>移動先マップID</span><input type="number" name="detail.destMapId" value="' + (detail.destMapId || 0) + '"></label>' +
+           '<label class="form-field"><span>移動先 X</span><input type="number" name="detail.destX" value="' + (detail.destX || 0) + '"></label>' +
+           '<label class="form-field"><span>移動先 Y</span><input type="number" name="detail.destY" value="' + (detail.destY || 0) + '"></label>' +
+           '<label class="form-field"><span>向き</span><input type="number" name="detail.direction" value="' + (detail.direction || 0) + '"></label>';
+  case 3: // TRASHBOX
+    return '<p class="field-note">固有フィールドなし</p>';
+  case 4: // INITSTATUS
+    return '<label class="form-field"><span>エフェクトID</span><input type="number" name="detail.effectId" value="' + (detail.effectId || 0) + '"></label>';
+  case 5: // GRPIDTMP
+    return '<label class="form-field"><span>設定種別 (0=解除 1=設定)</span><input type="number" name="detail.setType" value="' + (detail.setType || 0) + '"></label>' +
+           '<label class="form-field"><span>画像IDメイン</span><input type="number" name="detail.idMain" value="' + (detail.idMain || 0) + '"></label>' +
+           '<label class="form-field"><span>画像IDサブ</span><input type="number" name="detail.idSub" value="' + (detail.idSub || 0) + '"></label>';
+  case 6: // LIGHT
+    return '<label class="form-field"><span>灯りON</span><input type="checkbox" name="detail.lightOn"' + (detail.lightOn ? ' checked' : '') + '></label>' +
+           '<label class="form-field"><span>持続時間</span><input type="number" name="detail.time" value="' + (detail.time || 0) + '"></label>';
+  default:
+    return '';
+  }
+}
+
+/** 編集フォームを描画する (ev が null なら新規) */
+function renderMapEventForm(ev) {
+  if (!mapEventEditArea) { return; }
+  mapEventEditArea.style.display = "";
+
+  const isNew = (ev === null || ev === undefined);
+  const eventId = isNew ? 0 : ev.id;
+  const type    = isNew ? 1 : ev.type;
+  const detail  = isNew ? {} : (ev.detail || {});
+
+  // hitType select オプション生成
+  let hitTypeOptions = "";
+  Object.keys(MAP_EVENT_HIT_TYPE_LABELS).forEach(function (k) {
+    const sel = (!isNew && ev.hitType === Number(k)) ? " selected" : "";
+    hitTypeOptions += '<option value="' + k + '"' + sel + '>' + MAP_EVENT_HIT_TYPE_LABELS[k] + '</option>';
+  });
+
+  // type select オプション生成
+  let typeOptions = "";
+  Object.keys(MAP_EVENT_TYPE_LABELS).forEach(function (k) {
+    if (k === "0") { return; } // NONE は選択肢から除く
+    const sel = (Number(k) === type) ? " selected" : "";
+    typeOptions += '<option value="' + k + '"' + sel + '>' + MAP_EVENT_TYPE_LABELS[k] + '</option>';
+  });
+
+  const pos  = isNew ? { x: 0, y: 0 } : ev.pos;
+  const pos2 = isNew ? { x: 0, y: 0 } : ev.pos2;
+
+  mapEventEditArea.innerHTML =
+    '<form id="map-event-edit-form" class="edit-form">' +
+    '<input type="hidden" name="id" value="' + eventId + '">' +
+    '<h3>' + (isNew ? '新規イベント' : 'イベント ID: ' + eventId) + '</h3>' +
+    '<label class="form-field"><span>種別</span>' +
+      '<select name="type" id="map-event-type-select">' + typeOptions + '</select>' +
+    '</label>' +
+    '<label class="form-field"><span>効果音ID</span><input type="number" name="soundId" value="' + (isNew ? 0 : ev.soundId) + '"></label>' +
+    '<label class="form-field"><span>当たり判定種別</span>' +
+      '<select name="hitType">' + hitTypeOptions + '</select>' +
+    '</label>' +
+    '<label class="form-field"><span>判定向き</span><input type="number" name="hitDirection" value="' + (isNew ? 0 : ev.hitDirection) + '"></label>' +
+    '<label class="form-field"><span>座標1 X</span><input type="number" name="posX" value="' + pos.x + '"></label>' +
+    '<label class="form-field"><span>座標1 Y</span><input type="number" name="posY" value="' + pos.y + '"></label>' +
+    '<label class="form-field"><span>座標2 X</span><input type="number" name="pos2X" value="' + pos2.x + '"></label>' +
+    '<label class="form-field"><span>座標2 Y</span><input type="number" name="pos2Y" value="' + pos2.y + '"></label>' +
+    '<div id="map-event-detail-fields">' + buildDetailFieldsHtml(type, detail) + '</div>' +
+    '<div class="form-actions">' +
+      '<button type="submit" class="btn btn-primary">保存</button>' +
+      (!isNew ? '<button type="button" class="btn btn-danger" id="map-event-delete-btn">削除</button>' : '') +
+      '<button type="button" class="btn btn-secondary" id="map-event-cancel-btn">キャンセル</button>' +
+    '</div>' +
+    '</form>' +
+    '<p id="map-event-feedback" class="form-feedback" aria-live="polite"></p>';
+
+  // 種別変更で detail フィールドを切り替える
+  const typeSelect = document.getElementById("map-event-type-select");
+  const detailArea = document.getElementById("map-event-detail-fields");
+  if (typeSelect && detailArea) {
+    typeSelect.addEventListener("change", function () {
+      detailArea.innerHTML = buildDetailFieldsHtml(typeSelect.value, {});
+    });
+  }
+
+  // フォーム submit
+  const form = document.getElementById("map-event-edit-form");
+  if (form) {
+    form.addEventListener("submit", saveMapEvent);
+  }
+
+  // 削除ボタン
+  const deleteBtn = document.getElementById("map-event-delete-btn");
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", function () {
+      deleteMapEvent(eventId);
+    });
+  }
+
+  // キャンセルボタン
+  const cancelBtn = document.getElementById("map-event-cancel-btn");
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () {
+      mapEventState.selectedEventId = null;
+      mapEventEditArea.style.display = "none";
+      mapEventEditArea.innerHTML = "";
+    });
+  }
+}
+
+/** フォームデータから保存用ペイロードを組み立てる */
+function collectMapEventPayload(form) {
+  const data = new FormData(form);
+  const typeVal = parseInt(data.get("type") || "1", 10);
+  const payload = {
+    mapId:         mapEventState.selectedMapId,
+    id:            parseInt(data.get("id") || "0", 10),
+    type:          typeVal,
+    soundId:       parseInt(data.get("soundId") || "0", 10),
+    hitType:       parseInt(data.get("hitType") || "0", 10),
+    hitDirection:  parseInt(data.get("hitDirection") || "0", 10),
+    pos:  { x: parseInt(data.get("posX")  || "0", 10), y: parseInt(data.get("posY")  || "0", 10) },
+    pos2: { x: parseInt(data.get("pos2X") || "0", 10), y: parseInt(data.get("pos2Y") || "0", 10) },
+    detail: {}
+  };
+
+  switch (typeVal) {
+  case 1: // MOVE
+    payload.detail = {
+      destX: parseInt(data.get("detail.destX") || "0", 10),
+      destY: parseInt(data.get("detail.destY") || "0", 10),
+      direction: parseInt(data.get("detail.direction") || "0", 10)
+    };
+    break;
+  case 2: // MAPMOVE
+    payload.detail = {
+      destMapId: parseInt(data.get("detail.destMapId") || "0", 10),
+      destX: parseInt(data.get("detail.destX") || "0", 10),
+      destY: parseInt(data.get("detail.destY") || "0", 10),
+      direction: parseInt(data.get("detail.direction") || "0", 10)
+    };
+    break;
+  case 4: // INITSTATUS
+    payload.detail = {
+      effectId: parseInt(data.get("detail.effectId") || "0", 10)
+    };
+    break;
+  case 5: // GRPIDTMP
+    payload.detail = {
+      setType: parseInt(data.get("detail.setType") || "0", 10),
+      idMain:  parseInt(data.get("detail.idMain")  || "0", 10),
+      idSub:   parseInt(data.get("detail.idSub")   || "0", 10)
+    };
+    break;
+  case 6: // LIGHT
+    payload.detail = {
+      lightOn: form.querySelector('[name="detail.lightOn"]') ? form.querySelector('[name="detail.lightOn"]').checked : false,
+      time:    parseInt(data.get("detail.time") || "0", 10)
+    };
+    break;
+  default:
+    break;
+  }
+  return payload;
+}
+
+/** イベントを保存する (POST または PUT) */
+async function saveMapEvent(event) {
+  if (event) { event.preventDefault(); }
+  const form = event ? event.target : document.getElementById("map-event-edit-form");
+  if (!form) { return; }
+
+  const payload = collectMapEventPayload(form);
+  const isNew   = (payload.id === 0);
+  const method  = isNew ? "POST" : "PUT";
+
+  const feedbackEl = document.getElementById("map-event-feedback") || mapEventFeedbackEl;
+  if (feedbackEl) { feedbackEl.textContent = "保存中..."; feedbackEl.className = "form-feedback"; }
+
+  try {
+    const { response, data } = await fetchJson("/api/maps/events", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok || !data || !data.id) {
+      const msg = (data && data.error) ? data.error : "HTTP " + response.status;
+      throw new Error(msg);
+    }
+
+    if (isNew) {
+      mapEventState.events.push(data);
+    } else {
+      const idx = mapEventState.events.findIndex(function (e) { return e.id === data.id; });
+      if (idx >= 0) { mapEventState.events[idx] = data; }
+    }
+
+    mapEventState.selectedEventId = data.id;
+    setMapEventSummary("イベント " + mapEventState.events.length + " 件");
+    if (feedbackEl) { feedbackEl.textContent = "保存しました"; feedbackEl.className = "form-feedback form-feedback--success"; }
+    renderMapEventTable();
+    renderMapEventForm(data);
+  } catch (err) {
+    console.error("Failed to save map event", err);
+    if (feedbackEl) { feedbackEl.textContent = "保存に失敗しました: " + err.message; feedbackEl.className = "form-feedback form-feedback--error"; }
+  }
+}
+
+/** イベントを削除する */
+async function deleteMapEvent(eventId) {
+  if (!mapEventState.selectedMapId || !eventId) { return; }
+
+  const feedbackEl = document.getElementById("map-event-feedback") || mapEventFeedbackEl;
+  if (feedbackEl) { feedbackEl.textContent = "削除中..."; feedbackEl.className = "form-feedback"; }
+
+  try {
+    const { response, data } = await fetchJson(
+      "/api/maps/events?mapId=" + mapEventState.selectedMapId + "&id=" + eventId,
+      { method: "DELETE" }
+    );
+    if (!response.ok) {
+      const msg = (data && data.error) ? data.error : "HTTP " + response.status;
+      throw new Error(msg);
+    }
+
+    mapEventState.events = mapEventState.events.filter(function (e) { return e.id !== eventId; });
+    mapEventState.selectedEventId = null;
+    setMapEventSummary("イベント " + mapEventState.events.length + " 件");
+    renderMapEventTable();
+    if (mapEventEditArea) {
+      mapEventEditArea.style.display = "none";
+      mapEventEditArea.innerHTML = "";
+    }
+  } catch (err) {
+    console.error("Failed to delete map event", err);
+    if (feedbackEl) { feedbackEl.textContent = "削除に失敗しました: " + err.message; feedbackEl.className = "form-feedback form-feedback--error"; }
+  }
+}
+
+/** 選択中マップのイベント一覧を API から取得する */
+async function loadMapEventList() {
+  if (!mapEventState.selectedMapId) { return; }
+  mapEventState.isLoading = true;
+  mapEventState.loadError = null;
+  setMapEventSummary("読み込み中...");
+
+  try {
+    const { response, data } = await fetchJson("/api/maps/events?mapId=" + mapEventState.selectedMapId);
+    if (!response.ok || !data || !Array.isArray(data.events)) {
+      throw new Error("invalid_response");
+    }
+    mapEventState.events = data.events;
+    mapEventState.isLoading = false;
+    setMapEventSummary("イベント " + mapEventState.events.length + " 件");
+    renderMapEventTable();
+    if (mapEventEditArea) {
+      mapEventEditArea.style.display = "none";
+      mapEventEditArea.innerHTML = "";
+    }
+  } catch (err) {
+    console.error("Failed to load map events", err);
+    mapEventState.events = [];
+    mapEventState.isLoading = false;
+    mapEventState.loadError = "イベント一覧の取得に失敗しました";
+    setMapEventSummary(mapEventState.loadError);
+    renderMapEventTable();
+  }
+}
+
+/** マップイベント画面の初期化（マップ一覧を map-info API から流用して選択 select に入れる） */
+async function initMapEventView() {
+  if (!mapEventMapSelect) { return; }
+
+  // mapInfoState にマップ一覧が既にあればそのまま流用する
+  if (mapInfoState.maps.length) {
+    mapEventState.maps = mapInfoState.maps.slice().sort(function (a, b) { return a.id - b.id; });
+  } else {
+    try {
+      const { response, data } = await fetchJson("/api/maps");
+      if (response.ok && data && Array.isArray(data.maps)) {
+        mapEventState.maps = data.maps.slice().sort(function (a, b) { return a.id - b.id; });
+      }
+    } catch (err) {
+      console.error("Failed to load maps for event view", err);
+    }
+  }
+
+  renderMapEventMapSelect();
+
+  if (mapEventState.maps.length && !mapEventState.selectedMapId) {
+    mapEventState.selectedMapId = mapEventState.maps[0].id;
+    mapEventMapSelect.value = String(mapEventState.selectedMapId);
+  }
+
+  if (mapEventState.selectedMapId) {
+    loadMapEventList();
+  }
+}

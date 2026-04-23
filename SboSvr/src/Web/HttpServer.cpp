@@ -19,6 +19,7 @@
 #include "Handlers/AdminRolesHandler.h"
 #include "Handlers/MapInfoHandler.h"
 #include "Handlers/MapObjectHandler.h"
+#include "Handlers/MapEventHandler.h"
 #include "Handlers/MapPartsHandler.h"
 #include "Handlers/StaticFileHandler.h"
 #include "Handlers/SelectionHandler.h"
@@ -672,6 +673,19 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> mapPlacementDeleteHandler(new CMapPlacementDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/maps/placements", std::move(mapPlacementDeleteHandler));
+
+        // マップイベント API
+        std::unique_ptr<IApiHandler> mapEventListHandler(new CMapEventListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/maps/events", std::move(mapEventListHandler));
+
+        std::unique_ptr<IApiHandler> mapEventCreateHandler(new CMapEventCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps/events", std::move(mapEventCreateHandler));
+
+        std::unique_ptr<IApiHandler> mapEventUpdateHandler(new CMapEventUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/maps/events", std::move(mapEventUpdateHandler));
+
+        std::unique_ptr<IApiHandler> mapEventDeleteHandler(new CMapEventDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/maps/events", std::move(mapEventDeleteHandler));
 
         std::unique_ptr<IApiHandler> mapPartsHandler(new CMapPartsListHandler(m_pMgrData, mapPartsProvider));
         m_router.Register("GET", "/api/maps/parts", std::move(mapPartsHandler));

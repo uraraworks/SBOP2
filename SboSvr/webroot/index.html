@@ -296,14 +296,38 @@
       </section>
     </div>
     <div class="view" data-view="map-events">
-      <section class="card placeholder-card">
-        <h2>マップイベント一覧（プレースホルダー）</h2>
-        <p>既存のイベントを確認・編集する画面を Web 化する予定です。</p>
-        <ul>
-          <li>イベントの検索・フィルター</li>
-          <li>イベント詳細編集モーダル</li>
-          <li>更新履歴表示</li>
-        </ul>
+      <section class="card" id="map-events-browser">
+        <h2>マップイベント編集</h2>
+        <p class="card-description">マップを選択してイベントを確認・編集します。</p>
+
+        <div class="map-info-controls">
+          <label class="form-field">
+            <span>マップ選択</span>
+            <select id="map-event-map" name="mapId"></select>
+          </label>
+          <button type="button" class="btn btn-primary" id="map-event-new-btn">新規追加</button>
+        </div>
+
+        <p id="map-event-summary" class="section-summary" aria-live="polite"></p>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>種別</th>
+                <th>座標1</th>
+                <th>当たり判定</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="map-event-table-body"></tbody>
+          </table>
+        </div>
+
+        <div id="map-event-edit-area" style="display:none; margin-top:1rem;"></div>
+
+        <p id="map-event-feedback" class="form-feedback" aria-live="polite"></p>
       </section>
     </div>
     <div class="view" data-view="map-parts">
