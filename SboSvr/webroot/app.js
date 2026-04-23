@@ -5443,3 +5443,98 @@ async function putCaDisabled(charId, disabled) {
     setFeedback("ca-ban-feedback", "通信エラーが発生しました", true);
   }
 }
+
+// ---------------------------------------------------------------------------
+// NPC 追加
+// ---------------------------------------------------------------------------
+
+async function submitAddNpc(event) {
+  event.preventDefault();
+
+  var form = document.getElementById("npc-add-form");
+  if (!form) { return; }
+
+  // 必須項目
+  var charName = document.getElementById("npc-charName").value.trim();
+  var familyId = parseInt(document.getElementById("npc-familyId").value, 10);
+  var mapId    = parseInt(document.getElementById("npc-mapId").value, 10);
+  var x        = parseInt(document.getElementById("npc-x").value, 10);
+  var y        = parseInt(document.getElementById("npc-y").value, 10);
+
+  if (!charName) {
+    setFeedback("npc-add-feedback", "キャラ名は必須です", true);
+    return;
+  }
+  if (isNaN(familyId) || familyId <= 0) {
+    setFeedback("npc-add-feedback", "種族IDは1以上の整数を入力してください", true);
+    return;
+  }
+  if (isNaN(mapId) || mapId <= 0) {
+    setFeedback("npc-add-feedback", "マップIDは1以上の整数を入力してください", true);
+    return;
+  }
+  if (isNaN(x) || isNaN(y)) {
+    setFeedback("npc-add-feedback", "座標 X/Y を正しく入力してください", true);
+    return;
+  }
+
+  // 任意項目
+  var moveType    = parseInt(document.getElementById("npc-moveType").value, 10);
+  var sex         = parseInt(document.getElementById("npc-sex").value, 10) || 0;
+  var grpIdNpc    = parseInt(document.getElementById("npc-grpIdNpc").value, 10) || 0;
+  var grpIdInitNpc = parseInt(document.getElementById("npc-grpIdInitNpc").value, 10) || 0;
+  var motionTypeId = parseInt(document.getElementById("npc-motionTypeId").value, 10) || 0;
+  var block       = document.getElementById("npc-block").checked ? 1 : 0;
+  var push        = document.getElementById("npc-push").checked  ? 1 : 0;
+
+  var body = {
+    charName:     charName,
+    familyId:     familyId,
+    mapId:        mapId,
+    x:            x,
+    y:            y,
+    moveType:     isNaN(moveType) ? 1 : moveType,
+    sex:          sex,
+    grpIdNpc:     grpIdNpc,
+    grpIdInitNpc: grpIdInitNpc,
+    motionTypeId: motionTypeId,
+    block:        block,
+    push:         push
+  };
+
+  setFeedback("npc-add-feedback", "追加中...", false);
+
+  try {
+    var response = await fetch("/api/characters/npc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    var data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+
+    if (!response.ok) {
+      var errMsg = (data && data.error) ? data.error : "追加に失敗しました (HTTP " + response.status + ")";
+      setFeedback("npc-add-feedback", "エラー: " + errMsg, true);
+      return;
+    }
+
+    var charId = data && data.charId ? data.charId : "?";
+    setFeedback("npc-add-feedback",
+      "NPC を追加しました (charId=" + charId + ", mapId=" + mapId + ", x=" + x + ", y=" + y + ")",
+      false);
+
+    // フォームをリセットして再利用しやすくする
+    form.reset();
+    // moveType を default に戻す
+    document.getElementById("npc-moveType").value = "1";
+
+    // キャラクター一覧画面へ遷移する選択肢を提供
+    if (confirm("キャラクター一覧でこの NPC を確認しますか？")) {
+      navigateTo("character-search");
+    }
+  } catch (err) {
+    console.error("submitAddNpc error", err);
+    setFeedback("npc-add-feedback", "通信エラーが発生しました", true);
+  }
+}

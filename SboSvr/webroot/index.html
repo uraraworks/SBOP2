@@ -613,14 +613,78 @@
       </section>
     </div>
     <div class="view" data-view="npc-management">
-      <section class="card placeholder-card">
-        <h2>NPC 追加（プレースホルダー）</h2>
-        <p>マップ上に NPC をスポーンさせる操作を Web 化する予定です。</p>
-        <ul>
-          <li>テンプレート NPC 一覧からの選択</li>
-          <li>座標入力とプレビュー</li>
-          <li>生成リクエストの確認ダイアログ</li>
-        </ul>
+      <section class="card">
+        <h2>NPC 追加</h2>
+        <form id="npc-add-form" onsubmit="submitAddNpc(event)">
+          <fieldset>
+            <legend>必須項目</legend>
+            <div class="form-row">
+              <label for="npc-charName">キャラ名</label>
+              <input type="text" id="npc-charName" name="charName" required maxlength="32" placeholder="NPC名を入力">
+            </div>
+            <div class="form-row">
+              <label for="npc-familyId">種族ID</label>
+              <input type="number" id="npc-familyId" name="familyId" required min="1" placeholder="1">
+            </div>
+            <div class="form-row">
+              <label for="npc-mapId">マップID</label>
+              <input type="number" id="npc-mapId" name="mapId" required min="1" placeholder="1">
+            </div>
+            <div class="form-row">
+              <label for="npc-x">座標 X</label>
+              <input type="number" id="npc-x" name="x" required min="0" placeholder="0">
+            </div>
+            <div class="form-row">
+              <label for="npc-y">座標 Y</label>
+              <input type="number" id="npc-y" name="y" required min="0" placeholder="0">
+            </div>
+          </fieldset>
+          <details>
+            <summary>詳細設定（任意）</summary>
+            <fieldset>
+              <div class="form-row">
+                <label for="npc-moveType">移動種別</label>
+                <select id="npc-moveType" name="moveType">
+                  <option value="1" selected>1: STAND（移動しない）</option>
+                  <option value="0">0: PC</option>
+                  <option value="5">5: ATACKANIME（攻撃アニメ）</option>
+                  <option value="6">6: MOVEATACK（移動して攻撃）</option>
+                  <option value="8">8: PUTNPC（NPC発生）</option>
+                  <option value="9">9: BATTLE1</option>
+                  <option value="10">10: BATTLE2</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="npc-sex">性別 (0/1)</label>
+                <input type="number" id="npc-sex" name="sex" min="0" max="1" value="0">
+              </div>
+              <div class="form-row">
+                <label for="npc-grpIdNpc">NPC 画像ID</label>
+                <input type="number" id="npc-grpIdNpc" name="grpIdNpc" min="0" value="0">
+              </div>
+              <div class="form-row">
+                <label for="npc-grpIdInitNpc">初期 NPC 画像ID</label>
+                <input type="number" id="npc-grpIdInitNpc" name="grpIdInitNpc" min="0" value="0">
+              </div>
+              <div class="form-row">
+                <label for="npc-motionTypeId">モーション種別ID</label>
+                <input type="number" id="npc-motionTypeId" name="motionTypeId" min="0" value="0">
+              </div>
+              <div class="form-row">
+                <label for="npc-block">ブロック判定</label>
+                <input type="checkbox" id="npc-block" name="block">
+              </div>
+              <div class="form-row">
+                <label for="npc-push">押せる判定</label>
+                <input type="checkbox" id="npc-push" name="push">
+              </div>
+            </fieldset>
+          </details>
+          <p id="npc-add-feedback" class="form-feedback" aria-live="polite"></p>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">NPC を追加</button>
+          </div>
+        </form>
       </section>
     </div>
     <div class="view" data-view="motion-management">

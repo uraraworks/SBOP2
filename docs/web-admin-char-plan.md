@@ -65,7 +65,7 @@
 | アカウント紐付け変更 | ⭐⭐⭐ | `PUT /api/characters/{charId}/account` | ✅ フェーズ5実装済み |
 | 管理者権限設定 | ⭐⭐ | `PUT /api/characters/{charId}/admin` | ✅ フェーズ5実装済み |
 | キャラ無効化/解除 | ⭐⭐ | `PUT /api/characters/{charId}/disabled` | ✅ フェーズ5実装済み（アカウント m_bDisable） |
-| NPC 追加 | ⭐⭐ | `POST /api/characters/npc` | ❌ 未実装 |
+| NPC 追加 | ⭐⭐ | `POST /api/characters/npc` | ✅ フェーズ6実装済み |
 
 ## 4. 既存 Web UI プレースホルダー
 
@@ -112,10 +112,17 @@ Wave 2 セクションに既に定義:
   - キャラ→紐付きアカウントの `m_bDisable` を更新
   - NPC・紐付けなしは 400
   - `reason` フィールドは受け付けるが保存場所なし（現行保留）
-- NPC 追加 `POST /api/characters/npc` は未実装（保留）
+- NPC 追加 `POST /api/characters/npc` ✅（フェーズ6で実装済み、2026-04-24）
 
-### フェーズ 6: NPC 追加（保留）
-- `POST /api/characters/npc`
+### フェーズ 6: NPC 追加（実装済み 2026-04-24）
+- `POST /api/characters/npc` → NPC を新規追加 ✅
+  - 必須: charName, familyId, mapId, x, y
+  - 任意: moveType（デフォルト=STAND=1）, sex, grpIdNpc, grpIdInitNpc, motionTypeId, block, push
+  - `CCharacterItemHandler` の Handle() 内で `/api/characters/npc` パスを先行検出し HandlePostNpc() に委譲
+  - 内部: CInfoCharSvr テンポラリ → CLibInfoCharSvr::AddNPC() → メモリ Lib 追加 → Save タイマー任せ
+  - 旧 DlgAdminCharAddNPC の OnSend() パターンを踏襲（GetNew → Copy → Add → LogIn）
+  - 他クライアントへの NPC 出現パケット通知は保留（旧 MFC でも同様に非送信だった可能性あり要確認）
+  - UI: npc-management ビューに追加フォームを実装（詳細設定は `<details>` 折り畳み）
 
 ## 6. 旧ダイアログと新 UI のマッピング
 
