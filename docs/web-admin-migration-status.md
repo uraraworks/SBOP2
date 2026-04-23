@@ -1,6 +1,6 @@
 # Web管理画面 進捗確認
 
-最終更新: 2026-04-23（Wave 2B マップイベント API/UI 追加）
+最終更新: 2026-04-23（Wave 2B マップ影カタログ API/UI 追加）
 
 ## 使い方
 
@@ -75,8 +75,8 @@
 - [x] マップ情報 UI
 - [x] マップイベント API（GET/POST/PUT/DELETE /api/maps/events、6種別対応）
 - [x] マップイベント UI（マップ選択・一覧・編集・削除）
-- [ ] マップ影 API
-- [ ] マップ影 UI
+- [x] マップ影 API（GET/POST/PUT/DELETE /api/maps/shadows、影カタログ CRUD のみ）
+- [x] マップ影 UI（影カタログ一覧・編集フォーム・アニメーションコマ編集）
 - [ ] マップ追加 API
 - [ ] マップ追加 UI
 

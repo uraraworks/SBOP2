@@ -21,6 +21,7 @@
 #include "Handlers/MapObjectHandler.h"
 #include "Handlers/MapEventHandler.h"
 #include "Handlers/MapPartsHandler.h"
+#include "Handlers/MapShadowHandler.h"
 #include "Handlers/StaticFileHandler.h"
 #include "Handlers/SelectionHandler.h"
 #include "MgrData.h"
@@ -698,6 +699,19 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> mapPartsDeleteHandler(new CMapPartsDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/maps/parts", std::move(mapPartsDeleteHandler));
+
+        // マップ影カタログ API
+        std::unique_ptr<IApiHandler> mapShadowListHandler(new CMapShadowListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/maps/shadows", std::move(mapShadowListHandler));
+
+        std::unique_ptr<IApiHandler> mapShadowCreateHandler(new CMapShadowCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps/shadows", std::move(mapShadowCreateHandler));
+
+        std::unique_ptr<IApiHandler> mapShadowUpdateHandler(new CMapShadowUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/maps/shadows", std::move(mapShadowUpdateHandler));
+
+        std::unique_ptr<IApiHandler> mapShadowDeleteHandler(new CMapShadowDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/maps/shadows", std::move(mapShadowDeleteHandler));
 
         // 選択状態 API（pick）
         std::unique_ptr<IApiHandler> selectionPickHandler(new CSelectionPickHandler(m_pMgrData));

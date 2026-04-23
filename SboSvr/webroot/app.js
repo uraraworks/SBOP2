@@ -227,6 +227,14 @@ const mapWindowState = {
   sheetBaseUrl: "/api/assets/map-parts/sheets"
 };
 
+/* マップ影カタログ編集画面の状態 */
+const mapShadowState = {
+  shadows: [],          // 影カタログ一覧
+  selectedId: null,     // 編集中の影ID（null = 新規）
+  isLoading: false,
+  loadError: null
+};
+
 const MAP_PARTS_GALLERY_SCALE = 4;
 const MAP_PARTS_DETAIL_SCALE = 6;
 
@@ -3156,6 +3164,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "map-shadows") {
+    if (options.forceReload || (!mapShadowState.shadows.length && !mapShadowState.isLoading && !mapShadowState.loadError)) {
+      loadMapShadowList();
+    }
+  }
+
   currentRoute = normalized;
 }
 
@@ -3724,4 +3738,330 @@ async function initMapEventView() {
   if (mapEventState.selectedMapId) {
     loadMapEventList();
   }
+}
+
+// =============================================================================
+// マップ影カタログ編集画面 (map-shadows)
+// =============================================================================
+
+const mapShadowNewBtn       = document.getElementById("map-shadow-new-btn");
+const mapShadowTableBody    = document.getElementById("map-shadow-table-body");
+const mapShadowSummaryEl    = document.getElementById("map-shadow-summary");
+const mapShadowFeedbackEl   = document.getElementById("map-shadow-feedback");
+const mapShadowDetailSection = document.getElementById("map-shadow-detail");
+const mapShadowDetailTitle  = document.getElementById("map-shadow-detail-title");
+const mapShadowEditForm     = document.getElementById("map-shadow-edit-form");
+const mapShadowEditGrpId    = document.getElementById("map-shadow-edit-grp-id");
+const mapShadowEditViewType = document.getElementById("map-shadow-edit-view-type");
+const mapShadowEditAnimeType = document.getElementById("map-shadow-edit-anime-type");
+const mapShadowEditAnimeCount = document.getElementById("map-shadow-edit-anime-count");
+const mapShadowEditLevel    = document.getElementById("map-shadow-edit-level");
+const mapShadowEditLevelValue = document.getElementById("map-shadow-edit-level-value");
+const mapShadowEditLight    = document.getElementById("map-shadow-edit-light");
+const mapShadowEditPosX     = document.getElementById("map-shadow-edit-pos-x");
+const mapShadowEditPosY     = document.getElementById("map-shadow-edit-pos-y");
+const mapShadowFramesList   = document.getElementById("map-shadow-anime-frames-list");
+const mapShadowAddFrameBtn  = document.getElementById("map-shadow-add-frame-btn");
+const mapShadowSaveBtn      = document.getElementById("map-shadow-save-btn");
+const mapShadowCancelBtn    = document.getElementById("map-shadow-cancel-btn");
+const mapShadowEditFeedback = document.getElementById("map-shadow-edit-feedback");
+
+/** 影一覧をサーバーから取得して表示する */
+async function loadMapShadowList() {
+  if (!mapShadowTableBody) { return; }
+  mapShadowState.isLoading = true;
+  mapShadowState.loadError = null;
+  if (mapShadowSummaryEl) { mapShadowSummaryEl.textContent = "読み込み中..."; }
+
+  try {
+    const { response, data } = await fetchJson("/api/maps/shadows");
+    if (response.ok && data && Array.isArray(data.shadows)) {
+      mapShadowState.shadows = data.shadows;
+      renderMapShadowTable();
+      if (mapShadowSummaryEl) {
+        mapShadowSummaryEl.textContent = `${data.shadows.length} 件`;
+      }
+    } else {
+      mapShadowState.loadError = "読み込みに失敗しました";
+      if (mapShadowSummaryEl) { mapShadowSummaryEl.textContent = mapShadowState.loadError; }
+    }
+  } catch (err) {
+    mapShadowState.loadError = "通信エラーが発生しました";
+    if (mapShadowSummaryEl) { mapShadowSummaryEl.textContent = mapShadowState.loadError; }
+  } finally {
+    mapShadowState.isLoading = false;
+  }
+}
+
+/** 影一覧テーブルを描画する */
+function renderMapShadowTable() {
+  if (!mapShadowTableBody) { return; }
+  mapShadowTableBody.innerHTML = "";
+
+  if (!mapShadowState.shadows.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 8;
+    td.textContent = "影データがありません";
+    tr.appendChild(td);
+    mapShadowTableBody.appendChild(tr);
+    return;
+  }
+
+  mapShadowState.shadows.forEach(function (shadow) {
+    const tr = document.createElement("tr");
+    if (shadow.id === mapShadowState.selectedId) {
+      tr.classList.add("is-selected");
+    }
+
+    [
+      shadow.id,
+      shadow.grpId,
+      shadow.viewType,
+      shadow.animeType,
+      shadow.animeCount,
+      shadow.level,
+      shadow.light ? "明度" : "透明度"
+    ].forEach(function (val) {
+      const td = document.createElement("td");
+      td.textContent = val;
+      tr.appendChild(td);
+    });
+
+    const tdOp = document.createElement("td");
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = "button small";
+    editBtn.textContent = "編集";
+    editBtn.addEventListener("click", function () {
+      openMapShadowEdit(shadow.id);
+    });
+    const delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "button small danger";
+    delBtn.textContent = "削除";
+    delBtn.addEventListener("click", function () {
+      deleteMapShadow(shadow.id);
+    });
+    tdOp.appendChild(editBtn);
+    tdOp.appendChild(delBtn);
+    tr.appendChild(tdOp);
+
+    mapShadowTableBody.appendChild(tr);
+  });
+}
+
+/** アニメーションコマ入力行を 1 件生成して framesList に追加する */
+function addMapShadowFrameRow(frame) {
+  if (!mapShadowFramesList) { return; }
+  const row = document.createElement("div");
+  row.className = "anime-frame-row";
+
+  const fields = [
+    { label: "待ち(×10ms)", name: "wait",     value: frame ? frame.wait     : 0, min: 0, max: 255 },
+    { label: "透明度",       name: "level",    value: frame ? frame.level    : 0, min: 0, max: 255 },
+    { label: "下地GrpID",    name: "grpIdBase",value: frame ? frame.grpIdBase: 0, min: 0, max: 65535 },
+    { label: "重ねGrpID",    name: "grpIdPile",value: frame ? frame.grpIdPile: 0, min: 0, max: 65535 }
+  ];
+
+  fields.forEach(function (f) {
+    const label = document.createElement("label");
+    label.className = "form-field compact";
+    const span = document.createElement("span");
+    span.textContent = f.label;
+    const input = document.createElement("input");
+    input.type = "number";
+    input.dataset.frameField = f.name;
+    input.value = f.value;
+    input.min = f.min;
+    input.max = f.max;
+    label.appendChild(span);
+    label.appendChild(input);
+    row.appendChild(label);
+  });
+
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.className = "button small danger";
+  removeBtn.textContent = "削除";
+  removeBtn.addEventListener("click", function () {
+    row.parentNode.removeChild(row);
+  });
+  row.appendChild(removeBtn);
+
+  mapShadowFramesList.appendChild(row);
+}
+
+/** フォームにコマ一覧を設定する */
+function populateMapShadowFrames(animeFrames) {
+  if (!mapShadowFramesList) { return; }
+  mapShadowFramesList.innerHTML = "";
+  if (Array.isArray(animeFrames)) {
+    animeFrames.forEach(function (frame) {
+      addMapShadowFrameRow(frame);
+    });
+  }
+}
+
+/** フォームから animeFrames 配列を収集する */
+function collectMapShadowFrames() {
+  if (!mapShadowFramesList) { return []; }
+  const frames = [];
+  const rows = mapShadowFramesList.querySelectorAll(".anime-frame-row");
+  rows.forEach(function (row) {
+    const frame = {};
+    row.querySelectorAll("[data-frame-field]").forEach(function (input) {
+      frame[input.dataset.frameField] = Number(input.value) || 0;
+    });
+    frames.push(frame);
+  });
+  return frames;
+}
+
+/** 指定 ID の影を編集フォームに開く（null = 新規） */
+function openMapShadowEdit(id) {
+  if (!mapShadowDetailSection) { return; }
+  mapShadowDetailSection.style.display = "";
+  mapShadowState.selectedId = id;
+  renderMapShadowTable();
+
+  if (mapShadowEditFeedback) { mapShadowEditFeedback.textContent = ""; }
+
+  if (id === null) {
+    if (mapShadowDetailTitle) { mapShadowDetailTitle.textContent = "新規影を追加"; }
+    if (mapShadowEditGrpId)   { mapShadowEditGrpId.value   = "0"; }
+    if (mapShadowEditViewType){ mapShadowEditViewType.value = "0"; }
+    if (mapShadowEditAnimeType){ mapShadowEditAnimeType.value = "0"; }
+    if (mapShadowEditAnimeCount){ mapShadowEditAnimeCount.value = "0"; }
+    if (mapShadowEditLevel)   { mapShadowEditLevel.value   = "0"; }
+    if (mapShadowEditLevelValue){ mapShadowEditLevelValue.textContent = "0"; }
+    if (mapShadowEditLight)   { mapShadowEditLight.checked  = false; }
+    if (mapShadowEditPosX)    { mapShadowEditPosX.value    = "0"; }
+    if (mapShadowEditPosY)    { mapShadowEditPosY.value    = "0"; }
+    populateMapShadowFrames([]);
+    return;
+  }
+
+  const shadow = mapShadowState.shadows.find(function (s) { return s.id === id; });
+  if (!shadow) { return; }
+
+  if (mapShadowDetailTitle) { mapShadowDetailTitle.textContent = `影ID ${shadow.id} を編集`; }
+  if (mapShadowEditGrpId)    { mapShadowEditGrpId.value    = shadow.grpId; }
+  if (mapShadowEditViewType) { mapShadowEditViewType.value  = shadow.viewType; }
+  if (mapShadowEditAnimeType){ mapShadowEditAnimeType.value = shadow.animeType; }
+  if (mapShadowEditAnimeCount){ mapShadowEditAnimeCount.value = shadow.animeCount; }
+  if (mapShadowEditLevel)    { mapShadowEditLevel.value    = shadow.level; }
+  if (mapShadowEditLevelValue){ mapShadowEditLevelValue.textContent = shadow.level; }
+  if (mapShadowEditLight)    { mapShadowEditLight.checked  = !!shadow.light; }
+  if (mapShadowEditPosX)     { mapShadowEditPosX.value     = shadow.viewPos ? shadow.viewPos.x : 0; }
+  if (mapShadowEditPosY)     { mapShadowEditPosY.value     = shadow.viewPos ? shadow.viewPos.y : 0; }
+  populateMapShadowFrames(shadow.animeFrames || []);
+}
+
+/** フォームから JSON ペイロードを組み立てる */
+function buildMapShadowPayload(id) {
+  return {
+    id:         id || 0,
+    grpId:      Number(mapShadowEditGrpId ? mapShadowEditGrpId.value : 0),
+    viewType:   Number(mapShadowEditViewType ? mapShadowEditViewType.value : 0),
+    animeType:  Number(mapShadowEditAnimeType ? mapShadowEditAnimeType.value : 0),
+    animeCount: Number(mapShadowEditAnimeCount ? mapShadowEditAnimeCount.value : 0),
+    level:      Number(mapShadowEditLevel ? mapShadowEditLevel.value : 0),
+    light:      !!(mapShadowEditLight && mapShadowEditLight.checked),
+    viewPos: {
+      x: Number(mapShadowEditPosX ? mapShadowEditPosX.value : 0),
+      y: Number(mapShadowEditPosY ? mapShadowEditPosY.value : 0)
+    },
+    animeFrames: collectMapShadowFrames()
+  };
+}
+
+/** 影を保存（新規 or 更新）する */
+async function saveMapShadow(evt) {
+  if (evt) { evt.preventDefault(); }
+  if (mapShadowEditFeedback) { mapShadowEditFeedback.textContent = ""; }
+
+  const isNew = (mapShadowState.selectedId === null);
+  const payload = buildMapShadowPayload(mapShadowState.selectedId);
+
+  try {
+    const { response, data } = await fetchJson(
+      "/api/maps/shadows",
+      { method: isNew ? "POST" : "PUT", body: JSON.stringify(payload) }
+    );
+
+    if (response.ok) {
+      if (mapShadowEditFeedback) { mapShadowEditFeedback.textContent = isNew ? "追加しました" : "更新しました"; }
+      if (mapShadowFeedbackEl)   { mapShadowFeedbackEl.textContent = ""; }
+      await loadMapShadowList();
+      if (data && data.id) {
+        mapShadowState.selectedId = data.id;
+        renderMapShadowTable();
+      }
+    } else {
+      const msg = (data && data.error) ? data.error : "保存に失敗しました";
+      if (mapShadowEditFeedback) { mapShadowEditFeedback.textContent = msg; }
+    }
+  } catch (err) {
+    if (mapShadowEditFeedback) { mapShadowEditFeedback.textContent = "通信エラーが発生しました"; }
+  }
+}
+
+/** 影を削除する */
+async function deleteMapShadow(id) {
+  if (!window.confirm(`影ID ${id} を削除しますか？`)) { return; }
+
+  try {
+    const { response, data } = await fetchJson(
+      `/api/maps/shadows?id=${id}`,
+      { method: "DELETE" }
+    );
+
+    if (response.ok) {
+      if (mapShadowFeedbackEl) { mapShadowFeedbackEl.textContent = `影ID ${id} を削除しました`; }
+      if (mapShadowState.selectedId === id) {
+        mapShadowState.selectedId = null;
+        if (mapShadowDetailSection) { mapShadowDetailSection.style.display = "none"; }
+      }
+      await loadMapShadowList();
+    } else {
+      const msg = (data && data.error) ? data.error : "削除に失敗しました";
+      if (mapShadowFeedbackEl) { mapShadowFeedbackEl.textContent = msg; }
+    }
+  } catch (err) {
+    if (mapShadowFeedbackEl) { mapShadowFeedbackEl.textContent = "通信エラーが発生しました"; }
+  }
+}
+
+// イベントリスナー登録（要素が存在する場合のみ）
+if (mapShadowNewBtn) {
+  mapShadowNewBtn.addEventListener("click", function () {
+    openMapShadowEdit(null);
+  });
+}
+
+if (mapShadowEditLevel) {
+  mapShadowEditLevel.addEventListener("input", function () {
+    if (mapShadowEditLevelValue) {
+      mapShadowEditLevelValue.textContent = mapShadowEditLevel.value;
+    }
+  });
+}
+
+if (mapShadowAddFrameBtn) {
+  mapShadowAddFrameBtn.addEventListener("click", function () {
+    addMapShadowFrameRow(null);
+  });
+}
+
+if (mapShadowEditForm) {
+  mapShadowEditForm.addEventListener("submit", saveMapShadow);
+}
+
+if (mapShadowCancelBtn) {
+  mapShadowCancelBtn.addEventListener("click", function () {
+    mapShadowState.selectedId = null;
+    if (mapShadowDetailSection) { mapShadowDetailSection.style.display = "none"; }
+    renderMapShadowTable();
+  });
 }

@@ -35,6 +35,7 @@
         <li><a href="#map-parts" data-route="map-parts" class="nav-link">マップパーツ編集</a></li>
         <li><a href="#map-object-templates" data-route="map-object-templates" class="nav-link">オブジェクトテンプレート管理</a></li>
         <li><a href="#map-window" data-route="map-window" class="nav-link">マップウィンドウ</a></li>
+        <li><a href="#map-shadows" data-route="map-shadows" class="nav-link">マップ影カタログ編集</a></li>
         <li><a href="#map-objects" data-route="map-objects" class="nav-link">マップオブジェクト配置</a></li>
       </ul>
     </details>
@@ -599,6 +600,95 @@
             <span class="legend-item"><span class="legend-marker is-selected"></span>選択中セル</span>
           </div>
         </div>
+      </section>
+    </div>
+    <div class="view" data-view="map-shadows">
+      <section class="card" id="map-shadows-browser">
+        <h2>マップ影カタログ一覧</h2>
+        <p class="card-description">
+          影カタログの追加・編集・削除を行います。マップへの配置は別画面（将来実装）で行います。
+        </p>
+        <div class="map-parts-controls">
+          <button type="button" class="button primary" id="map-shadow-new-btn">新規追加</button>
+        </div>
+        <p id="map-shadow-summary" class="section-summary" aria-live="polite"></p>
+        <table class="data-table" id="map-shadow-table">
+          <thead>
+            <tr>
+              <th>影ID</th>
+              <th>グラフィックID</th>
+              <th>表示種別</th>
+              <th>アニメ種別</th>
+              <th>コマ数</th>
+              <th>透明度</th>
+              <th>明度モード</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="map-shadow-table-body"></tbody>
+        </table>
+        <p id="map-shadow-feedback" class="form-feedback" aria-live="polite"></p>
+      </section>
+      <section class="card" id="map-shadow-detail" style="display:none;">
+        <h2 id="map-shadow-detail-title">影の編集</h2>
+        <form id="map-shadow-edit-form" novalidate>
+          <div class="form-grid compact">
+            <label class="form-field">
+              <span>グラフィックID</span>
+              <input type="number" id="map-shadow-edit-grp-id" name="grpId" min="0" max="65535" />
+            </label>
+            <label class="form-field">
+              <span>表示種別</span>
+              <select id="map-shadow-edit-view-type" name="viewType">
+                <option value="0">通常 (0)</option>
+                <option value="1">背景 (1)</option>
+                <option value="2">装飾 (2)</option>
+                <option value="3">特殊 (3)</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>アニメーション種別</span>
+              <select id="map-shadow-edit-anime-type" name="animeType">
+                <option value="0">静止 (0)</option>
+                <option value="1">往復 (1)</option>
+                <option value="2">循環 (2)</option>
+                <option value="3">ランダム (3)</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>アニメーションコマ数</span>
+              <input type="number" id="map-shadow-edit-anime-count" name="animeCount" min="0" max="255" />
+            </label>
+            <label class="form-field">
+              <span>透明度</span>
+              <input type="range" id="map-shadow-edit-level" name="level" min="0" max="255" value="0" />
+              <span class="range-value" id="map-shadow-edit-level-value">0</span>
+            </label>
+            <label class="form-field">
+              <span>明度モード</span>
+              <input type="checkbox" id="map-shadow-edit-light" name="light" />
+              <span>透明度を明度として使う</span>
+            </label>
+            <label class="form-field coordinate">
+              <span>表示位置 X</span>
+              <input type="number" id="map-shadow-edit-pos-x" name="viewPosX" />
+            </label>
+            <label class="form-field coordinate">
+              <span>表示位置 Y</span>
+              <input type="number" id="map-shadow-edit-pos-y" name="viewPosY" />
+            </label>
+          </div>
+          <div id="map-shadow-anime-frames-section">
+            <h3>アニメーションコマ</h3>
+            <div id="map-shadow-anime-frames-list"></div>
+            <button type="button" class="button" id="map-shadow-add-frame-btn">コマを追加</button>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="button primary" id="map-shadow-save-btn">保存</button>
+            <button type="button" class="button" id="map-shadow-cancel-btn">キャンセル</button>
+          </div>
+        </form>
+        <p id="map-shadow-edit-feedback" class="form-feedback" aria-live="polite"></p>
       </section>
     </div>
     <div class="view" data-view="map-objects">

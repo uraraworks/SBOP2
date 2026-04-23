@@ -991,3 +991,20 @@ main {
     grid-template-columns: 1fr;
   }
 }
+
+/* マップ影カタログ編集 - アニメーションコマ行 */
+.anime-frame-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+  padding: 0.4rem 0.5rem;
+  margin-bottom: 0.3rem;
+  background: var(--color-surface-alt, #1e293b);
+  border-radius: 4px;
+}
+
+.anime-frame-row .form-field.compact {
+  flex: 0 0 auto;
+  min-width: 8rem;
+}
