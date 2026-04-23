@@ -7,6 +7,8 @@
 #include <cwchar>
 #include <iomanip>
 
+#include "lodepng.h"
+
 #include "MgrData.h"
 #include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
@@ -172,7 +174,63 @@ bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsi
                 return false;
         }
 
-        outData.assign(pResourceData, pResourceData + dwResourceSize);
+        // --- パレットインデックス 0 を透過化して返す ---
+        std::vector<unsigned char> rawPng(pResourceData, pResourceData + dwResourceSize);
+
+        // lodepng でパレット付き PNG としてデコード（元の色空間を維持）
+        lodepng::State state;
+        state.decoder.color_convert = 0; // 色変換しない（8bit パレットのまま取得）
+
+        std::vector<unsigned char> pixels;
+        unsigned int imgW = 0, imgH = 0;
+        unsigned int decErr = lodepng::decode(pixels, imgW, imgH, state, rawPng.data(), rawPng.size());
+        if (decErr != 0 ||
+            state.info_png.color.colortype != LCT_PALETTE ||
+            state.info_png.color.palettesize == 0)
+        {
+            // デコード失敗またはパレット形式でない → 元の PNG をそのまま返す
+            if (decErr != 0)
+            {
+                char szMsg[256];
+                _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
+                    "MapPartsHandler: lodepng decode failed (err=%u), using original PNG\n", decErr);
+                OutputDebugStringA(szMsg);
+            }
+            outData = std::move(rawPng);
+            return true;
+        }
+
+        // パレット先頭エントリ（インデックス 0）の α を 0（完全透過）に書き換える
+        // パレットは RGBA 各 1 byte 連続で格納: palette[idx*4 + 0..3] = R,G,B,A
+        //
+        // 注意: color_convert=0 でデコードすると info_raw が info_png.color の
+        // コピーになる。info_png.color.palette[3] だけ書き換えると info_raw と
+        // info_png.color のパレットが不一致になり lodepng_convert が走る。
+        // lodepng_convert の PALETTE→PALETTE 変換は α も含めた RGBA 完全一致で
+        // インデックスを探すため、α が異なると変換エラーになって元の PNG が
+        // フォールバック返却される（tRNS が出ない原因）。
+        // info_raw.palette[3] も同時に書き換えて両者を一致させることで
+        // エンコード時に変換不要パスを通り、tRNS が確実に出力される。
+        state.info_png.color.palette[3] = 0; // info_png: インデックス 0 の A を透過に
+        state.info_raw.palette[3]       = 0; // info_raw:  同上（両者を一致させる）
+        state.info_raw.colortype        = LCT_PALETTE;
+        state.info_raw.bitdepth         = 8;
+        state.encoder.auto_convert      = 0; // パレット PNG のままエンコード（色変換禁止）
+
+        std::vector<unsigned char> encodedPng;
+        unsigned int encErr = lodepng::encode(encodedPng, pixels, imgW, imgH, state);
+        if (encErr != 0)
+        {
+            // エンコード失敗 → 元の PNG をそのまま返す
+            char szMsg[256];
+            _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
+                "MapPartsHandler: lodepng encode failed (err=%u), using original PNG\n", encErr);
+            OutputDebugStringA(szMsg);
+            outData = std::move(rawPng);
+            return true;
+        }
+
+        outData = std::move(encodedPng);
         return true;
 }
 

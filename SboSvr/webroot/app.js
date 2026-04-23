@@ -91,6 +91,12 @@ const mapPartsSaveBtn = document.getElementById("map-parts-save-btn");
 const mapPartsCreateBtn = document.getElementById("map-parts-create-btn");
 const mapPartsDeleteBtn = document.getElementById("map-parts-delete-btn");
 
+/* マップウィンドウ */
+const mapWindowMapSelect = document.getElementById("map-window-map");
+const mapWindowSummaryEl = document.getElementById("map-window-summary");
+const mapWindowGridEl = document.getElementById("map-window-grid");
+const mapWindowSelectedInfoEl = document.getElementById("map-window-selected-info");
+
 const POLL_INTERVAL_MS = 30000;
 let serverTimerId = null;
 let cachedRoles = [];
@@ -165,6 +171,19 @@ const mapPartsState = {
   sheets: [],
   isLoading: false,
   loadError: null
+};
+
+/* マップウィンドウ画面の状態 */
+const mapWindowState = {
+  maps: [],             // normalizeMapEntry 済みのマップ一覧
+  selectedMapId: null,  // 現在選択中のマップID
+  selectedCell: null,   // 選択中セル { x, y } または null
+  isLoading: false,
+  loadError: null,
+  tileSize: 16,
+  sheetTileWidth: 32,
+  sheetTileHeight: 32,
+  sheetBaseUrl: "/api/assets/map-parts/sheets"
 };
 
 const MAP_PARTS_GALLERY_SCALE = 4;
@@ -266,6 +285,16 @@ function normalizeMapEntry(rawMap) {
     ? rawMap.objects.map((item, index) => normalizeMapObject(item, id, index))
     : [];
   const tiles = Array.isArray(rawMap?.tiles) ? rawMap.tiles : [];
+  // tilesBase: base grpId の配列。API が返さない場合は tiles（後方互換）を流用する。
+  const tilesBase = Array.isArray(rawMap?.tilesBase) ? rawMap.tilesBase : tiles;
+  // tilesPile: pile grpId の配列。API が返さない場合は空配列（overlay なし扱い）。
+  const tilesPile = Array.isArray(rawMap?.tilesPile) ? rawMap.tilesPile : [];
+  // tilesMapPileBase: 独立重ねレイヤ (m_pwMapPile) の base grpId 配列。
+  // 古いサーバーが API フィールドを返さない場合は空配列フォールバック（描画なし扱い）。
+  const tilesMapPileBase = Array.isArray(rawMap?.tilesMapPileBase) ? rawMap.tilesMapPileBase : [];
+  // tilesMapPilePile: 独立重ねレイヤ (m_pwMapPile) の pile grpId 配列。
+  // 古いサーバーが API フィールドを返さない場合は空配列フォールバック（描画なし扱い）。
+  const tilesMapPilePile = Array.isArray(rawMap?.tilesMapPilePile) ? rawMap.tilesMapPilePile : [];
 
   return {
     id,
@@ -278,7 +307,11 @@ function normalizeMapEntry(rawMap) {
     battleEnabled: Boolean(rawMap?.battleEnabled),
     recoveryEnabled: Boolean(rawMap?.recoveryEnabled),
     objects,
-    tiles
+    tiles,
+    tilesBase,
+    tilesPile,
+    tilesMapPileBase,
+    tilesMapPilePile
   };
 }
 
@@ -2217,6 +2250,60 @@ async function handleMapPartsDelete() {
   }
 }
 
+/**
+ * パーツカタログ（mapPartsState.parts）のみを確保する。
+ * map-parts 画面の DOM が存在しない状況でも呼べる軽量版。
+ * すでに読み込み済みの場合は何もしない（二重 fetch 回避）。
+ */
+async function ensureMapPartsCatalog() {
+  if (mapPartsState.isLoading) {
+    // 別タブでロード中の場合は完了まで少し待つ
+    await new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (!mapPartsState.isLoading) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 50);
+    });
+    return;
+  }
+  if (mapPartsState.parts.length && !mapPartsState.loadError) {
+    return; // すでに読み込み済み
+  }
+
+  mapPartsState.isLoading = true;
+  mapPartsState.loadError = null;
+  try {
+    const { response, data } = await fetchJson("/api/maps/parts");
+    if (!response.ok || !data || !Array.isArray(data.parts)) {
+      throw new Error("invalid_response");
+    }
+    mapPartsState.tileSize = Number(data.tileSize) || mapPartsState.tileSize;
+    mapPartsState.sheetTileWidth = Number(data.sheetTileWidth) || mapPartsState.sheetTileWidth;
+    mapPartsState.sheetTileHeight = Number(data.sheetTileHeight) || mapPartsState.sheetTileHeight;
+    if (typeof data.sheetBaseUrl === "string" && data.sheetBaseUrl.length) {
+      mapPartsState.sheetBaseUrl = data.sheetBaseUrl;
+    }
+    mapPartsState.sheetCount = Number(data.sheetCount) || 0;
+    mapPartsState.sheets = Array.isArray(data.sheets)
+      ? data.sheets.slice().sort((a, b) => a - b)
+      : [];
+    mapPartsState.parts = data.parts
+      .map((item) => normalizeMapPart(item))
+      .filter(Boolean)
+      .sort((a, b) => a.partsId - b.partsId);
+    mapPartsState.filtered = mapPartsState.parts.slice();
+  } catch (error) {
+    console.error("map-window: パーツカタログの取得に失敗しました", error);
+    mapPartsState.parts = [];
+    mapPartsState.filtered = [];
+    mapPartsState.loadError = "マップパーツの取得に失敗しました";
+  } finally {
+    mapPartsState.isLoading = false;
+  }
+}
+
 async function loadMapPartsData(forceReload = false) {
   if (!mapPartsGallery) {
     return;
@@ -2294,6 +2381,320 @@ function handleMapPartsFlagFilterChange(event) {
   applyMapPartsFilters();
 }
 
+/* =====================================================
+ * マップウィンドウ画面 (map-window)
+ * map-objects 画面の renderMapPreview() を土台に、
+ * オブジェクトオーバーレイなしのパーツ描画と
+ * セル選択・ハイライト機能を実装する。
+ * ===================================================== */
+
+/** マップウィンドウのサマリー文字列を更新する。 */
+function updateMapWindowSummary() {
+  if (!mapWindowSummaryEl) {
+    return;
+  }
+  if (mapWindowState.isLoading) {
+    mapWindowSummaryEl.textContent = "マップ情報を読み込み中...";
+    return;
+  }
+  if (mapWindowState.loadError) {
+    mapWindowSummaryEl.textContent = mapWindowState.loadError;
+    return;
+  }
+  const map = mapWindowState.maps.find((m) => m.id === mapWindowState.selectedMapId);
+  if (!map) {
+    mapWindowSummaryEl.textContent = mapWindowState.maps.length ? "マップを選択してください" : "マップデータなし";
+    return;
+  }
+  mapWindowSummaryEl.textContent = `${map.name}  (${map.width} × ${map.height})`;
+}
+
+/** マップウィンドウ用マップ選択 <select> を再描画する。 */
+function populateMapWindowOptions() {
+  if (!mapWindowMapSelect) {
+    return;
+  }
+  mapWindowMapSelect.innerHTML = "";
+  if (!mapWindowState.maps.length) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = mapWindowState.isLoading ? "読み込み中..." : "マップデータなし";
+    mapWindowMapSelect.appendChild(opt);
+    mapWindowMapSelect.disabled = true;
+    return;
+  }
+  mapWindowState.maps.forEach((map) => {
+    const opt = document.createElement("option");
+    opt.value = map.id;
+    opt.textContent = map.id ? `${map.name} (ID: ${map.id})` : map.name;
+    mapWindowMapSelect.appendChild(opt);
+  });
+  mapWindowMapSelect.disabled = mapWindowState.isLoading;
+  if (mapWindowState.selectedMapId) {
+    mapWindowMapSelect.value = mapWindowState.selectedMapId;
+  }
+}
+
+/**
+ * 選択中セル情報テキストを更新する。
+ * selectedCell が null の場合は「なし」を表示する。
+ */
+function updateMapWindowSelectedInfo() {
+  if (!mapWindowSelectedInfoEl) {
+    return;
+  }
+  if (!mapWindowState.selectedCell) {
+    mapWindowSelectedInfoEl.textContent = "選択中のセル: なし";
+    return;
+  }
+  const { x, y } = mapWindowState.selectedCell;
+  mapWindowSelectedInfoEl.textContent = `選択中のセル: X ${x}、Y ${y}`;
+}
+
+/**
+ * マップグリッドを描画する。
+ * map-objects の renderMapPreview() を参考に、
+ * オブジェクトオーバーレイなし・セル選択ハイライトのみを実装。
+ */
+function renderMapWindowGrid() {
+  if (!mapWindowGridEl) {
+    return;
+  }
+  mapWindowGridEl.innerHTML = "";
+
+  const showMessage = (message) => {
+    const empty = document.createElement("div");
+    empty.className = "empty-message";
+    empty.textContent = message;
+    mapWindowGridEl.style.gridTemplateColumns = "repeat(1, minmax(80px, 1fr))";
+    mapWindowGridEl.appendChild(empty);
+  };
+
+  if (mapWindowState.isLoading) {
+    showMessage("マップ情報を読み込み中です");
+    return;
+  }
+  if (mapWindowState.loadError) {
+    showMessage(mapWindowState.loadError);
+    return;
+  }
+
+  const map = mapWindowState.maps.find((m) => m.id === mapWindowState.selectedMapId);
+  if (!map) {
+    showMessage(mapWindowState.maps.length ? "マップが選択されていません" : "表示できるマップがありません");
+    return;
+  }
+
+  const hasTiles = Array.isArray(map.tiles) && map.tiles.length > 0;
+  const tileSize = mapWindowState.tileSize || 16;
+  const cellPx = tileSize * 2;
+  // sheetTileWidth/Height は grpId → tileX/tileY 変換（tile % width, tile / width）に使用する
+  const sheetTileWidth = mapWindowState.sheetTileWidth || 32;
+  const sel = mapWindowState.selectedCell;
+
+  if (hasTiles) {
+    mapWindowGridEl.style.gridTemplateColumns = `repeat(${Math.max(map.width, 1)}, ${cellPx}px)`;
+    mapWindowGridEl.classList.add("has-tiles");
+  } else {
+    mapWindowGridEl.style.gridTemplateColumns = `repeat(${Math.max(map.width, 1)}, minmax(28px, 1fr))`;
+    mapWindowGridEl.classList.remove("has-tiles");
+  }
+
+  for (let y = 0; y < map.height; y += 1) {
+    for (let x = 0; x < map.width; x += 1) {
+      const cellButton = document.createElement("button");
+      cellButton.type = "button";
+      cellButton.className = "map-object-cell";
+      cellButton.dataset.x = x.toString();
+      cellButton.dataset.y = y.toString();
+      cellButton.setAttribute("role", "gridcell");
+      cellButton.setAttribute("aria-label", `X: ${x}, Y: ${y}`);
+
+      if (hasTiles) {
+        const tileIndex = y * map.width + x;
+        cellButton.style.width = `${cellPx}px`;
+        cellButton.style.height = `${cellPx}px`;
+
+        // grpId → sprite オブジェクト変換ヘルパー（0 は null = 空セル扱い）
+        const grpIdToSprite = (grpId) => {
+          if (!grpId) return null;
+          const tile = grpId % 1024;
+          return {
+            sheet: Math.floor(grpId / 1024),
+            tile,
+            tileX: tile % sheetTileWidth,
+            tileY: Math.floor(tile / sheetTileWidth),
+          };
+        };
+
+        // 4 層描画: DOM 順が z-index 順になるので CSS 変更不要。
+        //   層 1: base        (m_pwMap → m_wGrpIDBase)
+        //   層 2: base の pile (m_pwMap → m_wGrpIDPile)
+        //   層 3: 独立重ねの base  (m_pwMapPile → m_wGrpIDBase)
+        //   層 4: 独立重ねの pile  (m_pwMapPile → m_wGrpIDPile)
+        const layerDefs = [
+          // --- 層 1: base 層 (m_wGrpIDBase) ---
+          // grpId が 0 の場合は空セル扱い（pile 側と同じく null を渡す）。
+          { grpId: Number(map.tilesBase[tileIndex]) || 0, className: "map-parts-tile" },
+          // --- 層 2: base パーツの内蔵 pile 絵 (m_wGrpIDPile) ---
+          // パーツカタログ逆引きは使わず、セルが直接持つ pile grpId をそのまま描画する。
+          { grpId: Number(map.tilesPile[tileIndex]) || 0, className: "map-parts-tile overlay" },
+          // --- 層 3: 独立重ねレイヤの base 絵 (m_pwMapPile → m_wGrpIDBase) ---
+          // m_pwMapPile が持つパーツのベース絵。0 の場合は描画なし。
+          { grpId: Number(map.tilesMapPileBase[tileIndex]) || 0, className: "map-parts-tile overlay" },
+          // --- 層 4: 独立重ねレイヤの pile 絵 (m_pwMapPile → m_wGrpIDPile) ---
+          // m_pwMapPile が持つパーツの内蔵重ね絵。0 の場合は描画なし。
+          { grpId: Number(map.tilesMapPilePile[tileIndex]) || 0, className: "map-parts-tile overlay" },
+        ];
+
+        for (const { grpId, className } of layerDefs) {
+          const sprite = grpIdToSprite(grpId);
+          const layerDiv = document.createElement("div");
+          layerDiv.className = className;
+          layerDiv.dataset.tilePixelSize = String(cellPx);
+          updateSpriteLayer(layerDiv, sprite);
+          if (sprite) {
+            layerDiv.style.backgroundRepeat = "no-repeat";
+          }
+          cellButton.appendChild(layerDiv);
+        }
+      }
+
+      // 選択中セルのハイライト
+      if (sel && sel.x === x && sel.y === y) {
+        cellButton.classList.add("is-selected");
+      }
+
+      cellButton.addEventListener("click", () => {
+        handleMapWindowCellClick(x, y);
+      });
+
+      mapWindowGridEl.appendChild(cellButton);
+    }
+  }
+}
+
+/** セルクリック時の処理。選択状態を更新してグリッドと情報表示を再描画する。 */
+function handleMapWindowCellClick(x, y) {
+  const prev = mapWindowState.selectedCell;
+  // 同じセルを再クリックしたら選択解除
+  if (prev && prev.x === x && prev.y === y) {
+    mapWindowState.selectedCell = null;
+  } else {
+    mapWindowState.selectedCell = { x, y };
+  }
+  // グリッド全体の再描画を避けるため、既存セルのクラスだけ付け替える
+  if (mapWindowGridEl) {
+    mapWindowGridEl.querySelectorAll(".map-object-cell").forEach((btn) => {
+      const bx = Number(btn.dataset.x);
+      const by = Number(btn.dataset.y);
+      const isNowSelected = mapWindowState.selectedCell && mapWindowState.selectedCell.x === bx && mapWindowState.selectedCell.y === by;
+      btn.classList.toggle("is-selected", isNowSelected);
+    });
+  }
+  updateMapWindowSelectedInfo();
+}
+
+/** マップウィンドウ用マップ選択 change ハンドラ。 */
+function handleMapWindowSelectChange(event) {
+  const newId = event.target.value;
+  mapWindowState.selectedMapId = newId || null;
+  mapWindowState.selectedCell = null;
+  updateMapWindowSummary();
+  updateMapWindowSelectedInfo();
+  renderMapWindowGrid();
+}
+
+/**
+ * マップウィンドウ用データロード。
+ * /api/maps/objects エンドポイントを map-objects 画面と共用する。
+ * 既に mapObjectState にデータがある場合はそちらを流用して二重 fetch を避ける。
+ */
+async function loadMapWindowData(forceReload = false) {
+  if (!mapWindowMapSelect) {
+    return;
+  }
+  if (mapWindowState.isLoading) {
+    return;
+  }
+
+  // map-objects 画面がすでにデータを持っている場合は流用する
+  if (!forceReload && mapObjectState.maps.length && !mapObjectState.loadError) {
+    mapWindowState.maps = mapObjectState.maps;
+    mapWindowState.tileSize = mapObjectState.tileSize;
+    mapWindowState.sheetTileWidth = mapObjectState.sheetTileWidth;
+    mapWindowState.sheetTileHeight = mapObjectState.sheetTileHeight;
+    mapWindowState.sheetBaseUrl = mapObjectState.sheetBaseUrl;
+    mapWindowState.loadError = null;
+    if (!mapWindowState.selectedMapId || !mapWindowState.maps.some((m) => m.id === mapWindowState.selectedMapId)) {
+      mapWindowState.selectedMapId = mapWindowState.maps.length ? mapWindowState.maps[0].id : null;
+    }
+    populateMapWindowOptions();
+    updateMapWindowSummary();
+    // overlay 描画に必要なパーツカタログを確保してからグリッドを描画する
+    await ensureMapPartsCatalog();
+    renderMapWindowGrid();
+    return;
+  }
+
+  // 独自にフェッチする
+  mapWindowState.isLoading = true;
+  mapWindowState.loadError = null;
+  updateMapWindowSummary();
+  renderMapWindowGrid();
+
+  try {
+    const { response, data } = await fetchJson("/api/maps/objects");
+    if (!response.ok || !data || !Array.isArray(data.maps)) {
+      throw new Error("invalid_response");
+    }
+
+    mapWindowState.tileSize = Number(data.tileSize) || mapWindowState.tileSize;
+    mapWindowState.sheetTileWidth = Number(data.sheetTileWidth) || mapWindowState.sheetTileWidth;
+    mapWindowState.sheetTileHeight = Number(data.sheetTileHeight) || mapWindowState.sheetTileHeight;
+    if (typeof data.sheetBaseUrl === "string" && data.sheetBaseUrl.length) {
+      mapWindowState.sheetBaseUrl = data.sheetBaseUrl;
+    }
+
+    mapWindowState.maps = data.maps.map((item) => normalizeMapEntry(item));
+
+    if (mapWindowState.maps.length) {
+      if (!mapWindowState.selectedMapId || !mapWindowState.maps.some((m) => m.id === mapWindowState.selectedMapId)) {
+        mapWindowState.selectedMapId = mapWindowState.maps[0].id;
+      }
+    } else {
+      mapWindowState.selectedMapId = null;
+    }
+    mapWindowState.selectedCell = null;
+  } catch (error) {
+    console.error("map-window: マップデータの取得に失敗しました", error);
+    mapWindowState.maps = [];
+    mapWindowState.selectedMapId = null;
+    mapWindowState.selectedCell = null;
+    mapWindowState.loadError = "マップデータの取得に失敗しました";
+  } finally {
+    mapWindowState.isLoading = false;
+    populateMapWindowOptions();
+    updateMapWindowSummary();
+    updateMapWindowSelectedInfo();
+    // overlay 描画に必要なパーツカタログを確保してからグリッドを描画する
+    await ensureMapPartsCatalog();
+    renderMapWindowGrid();
+  }
+}
+
+/** map-window ビューが初めて表示されたときの初期化処理。 */
+function initializeMapWindowView() {
+  if (!mapWindowMapSelect) {
+    return;
+  }
+  populateMapWindowOptions();
+  updateMapWindowSummary();
+  updateMapWindowSelectedInfo();
+  renderMapWindowGrid();
+  loadMapWindowData(false);
+}
+
 function getValidRoute(route) {
   if (!route) {
     return DEFAULT_ROUTE;
@@ -2329,6 +2730,14 @@ function activateRoute(route, options = {}) {
     startServerPolling();
   } else {
     stopServerPolling();
+  }
+
+  if (normalized === "map-window") {
+    if (options.forceReload) {
+      loadMapWindowData(true);
+    } else if (!mapWindowState.maps.length && !mapWindowState.isLoading && !mapWindowState.loadError) {
+      initializeMapWindowView();
+    }
   }
 
   if (normalized === "map-objects") {
@@ -2382,6 +2791,11 @@ window.addEventListener("load", () => {
   });
 
   loadRoles();
+
+  /* マップウィンドウ */
+  if (mapWindowMapSelect) {
+    mapWindowMapSelect.addEventListener("change", handleMapWindowSelectChange);
+  }
 
   if (mapObjectMapSelect) {
     initializeMapObjectView();

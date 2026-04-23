@@ -194,6 +194,28 @@ void ApplyJsonToTemplate(const std::string &json, CInfoMapObject *pInfo)
 }
 }
 
+// アニメパーツのとき先頭フレームの grpId を返す。
+// アニメが定義されていない場合は pParts 自身の grpId をそのまま返す。
+// 管理画面は静止表示で十分なので tick=0 (フレーム0) 固定で解決する。
+/*static*/
+ResolvedGrpId CMapObjectListHandler::ResolveRenderGrpId(const CInfoMapParts *pParts)
+{
+        ResolvedGrpId result = { pParts->m_wGrpIDBase, pParts->m_wGrpIDPile };
+
+        // アニメコマが 1 枚以上あるとき先頭フレームの grpId に差し替える
+        if (pParts->m_byAnimeCount > 0 &&
+            pParts->m_paAnimeInfo != NULL &&
+            !pParts->m_paAnimeInfo->empty()) {
+                const PCInfoAnime pFrame0 = pParts->m_paAnimeInfo->at(0);
+                if (pFrame0 != NULL) {
+                        result.base = pFrame0->m_wGrpIDBase;
+                        result.pile = pFrame0->m_wGrpIDPile;
+                }
+        }
+
+        return result;
+}
+
 CMapObjectListHandler::CMapObjectListHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
 {
@@ -307,9 +329,14 @@ void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMa
         }
         oss << "],";
 
-        // タイルデータ (各座標のベースグラフィックID)
-        oss << "\"tiles\":[";
+        // タイルデータ (各座標のベースグラフィックIDと重ねグラフィックID)
+        // 後方互換のため tilesBase と tilesPile を独立配列で返す。
+        // tiles（旧キー）は tilesBase と同じ内容で残す。
         int nTileCount = pMap->m_sizeMap.cx * pMap->m_sizeMap.cy;
+
+        // tilesBase: m_wGrpIDBase の配列 (後方互換用 tiles も同内容で出力)
+        // アニメパーツは先頭フレームの grpId を静止画として使用する
+        oss << "\"tilesBase\":[";
         if (pMap->m_pwMap != NULL && pPartsLib != NULL && nTileCount > 0) {
                 for (int i = 0; i < nTileCount; ++i) {
                         if (i > 0) {
@@ -317,11 +344,75 @@ void CMapObjectListHandler::AppendMapJson(std::ostringstream &oss, const CInfoMa
                         }
                         WORD wPartsID = pMap->m_pwMap[i];
                         const CInfoMapParts *pParts = static_cast<const CInfoMapParts *>(pPartsLib->GetPtr(static_cast<DWORD>(wPartsID)));
-                        if (pParts != NULL) {
-                                oss << pParts->m_wGrpIDBase;
-                        } else {
-                                oss << 0;
+                        oss << (pParts != NULL ? ResolveRenderGrpId(pParts).base : 0);
+                }
+        }
+        oss << "],";
+
+        // tilesPile: m_wGrpIDPile の配列
+        // アニメパーツは先頭フレームの grpId を静止画として使用する
+        oss << "\"tilesPile\":[";
+        if (pMap->m_pwMap != NULL && pPartsLib != NULL && nTileCount > 0) {
+                for (int i = 0; i < nTileCount; ++i) {
+                        if (i > 0) {
+                                oss << ',';
                         }
+                        WORD wPartsID = pMap->m_pwMap[i];
+                        const CInfoMapParts *pParts = static_cast<const CInfoMapParts *>(pPartsLib->GetPtr(static_cast<DWORD>(wPartsID)));
+                        oss << (pParts != NULL ? ResolveRenderGrpId(pParts).pile : 0);
+                }
+        }
+        oss << "],";
+
+        // tiles: 旧クライアントとの後方互換用 (tilesBase と同内容)
+        // アニメパーツは先頭フレームの grpId を静止画として使用する
+        oss << "\"tiles\":[";
+        if (pMap->m_pwMap != NULL && pPartsLib != NULL && nTileCount > 0) {
+                for (int i = 0; i < nTileCount; ++i) {
+                        if (i > 0) {
+                                oss << ',';
+                        }
+                        WORD wPartsID = pMap->m_pwMap[i];
+                        const CInfoMapParts *pParts = static_cast<const CInfoMapParts *>(pPartsLib->GetPtr(static_cast<DWORD>(wPartsID)));
+                        oss << (pParts != NULL ? ResolveRenderGrpId(pParts).base : 0);
+                }
+        }
+        oss << "],";
+
+        // tilesMapPileBase: 独立重ねレイヤ (m_pwMapPile) の各パーツが持つ base grpId 配列。
+        // DrawMapPile でベースマップの上に重ねて描画される独立配列のベース絵。
+        // m_pwMapPile[i] == 0 またはパーツ未登録の場合は 0 を入れる。
+        // アニメパーツは先頭フレームの grpId を静止画として使用する
+        oss << "\"tilesMapPileBase\":[";
+        if (pMap->m_pwMapPile != NULL && pPartsLib != NULL && nTileCount > 0) {
+                for (int i = 0; i < nTileCount; ++i) {
+                        if (i > 0) {
+                                oss << ',';
+                        }
+                        WORD wPartsID = pMap->m_pwMapPile[i];
+                        const CInfoMapParts *pParts = (wPartsID != 0)
+                                ? static_cast<const CInfoMapParts *>(pPartsLib->GetPtr(static_cast<DWORD>(wPartsID)))
+                                : NULL;
+                        oss << (pParts != NULL ? ResolveRenderGrpId(pParts).base : 0);
+                }
+        }
+        oss << "],";
+
+        // tilesMapPilePile: 独立重ねレイヤ (m_pwMapPile) の各パーツが持つ pile grpId 配列。
+        // 同パーツの内蔵重ね絵（ゲームクライアントでは DrawMapPile の pile 描画に相当）。
+        // m_pwMapPile[i] == 0 またはパーツ未登録の場合は 0 を入れる。
+        // アニメパーツは先頭フレームの grpId を静止画として使用する
+        oss << "\"tilesMapPilePile\":[";
+        if (pMap->m_pwMapPile != NULL && pPartsLib != NULL && nTileCount > 0) {
+                for (int i = 0; i < nTileCount; ++i) {
+                        if (i > 0) {
+                                oss << ',';
+                        }
+                        WORD wPartsID = pMap->m_pwMapPile[i];
+                        const CInfoMapParts *pParts = (wPartsID != 0)
+                                ? static_cast<const CInfoMapParts *>(pPartsLib->GetPtr(static_cast<DWORD>(wPartsID)))
+                                : NULL;
+                        oss << (pParts != NULL ? ResolveRenderGrpId(pParts).pile : 0);
                 }
         }
         oss << ']';

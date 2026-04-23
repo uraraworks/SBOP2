@@ -10,6 +10,13 @@ class CInfoMapBase;
 class CInfoMapObjectData;
 class CLibInfoMapObject;
 class CLibInfoMapParts;
+class CInfoMapParts;
+
+// アニメパーツの先頭フレームに差し替えた grpId ペアを保持する構造体
+struct ResolvedGrpId {
+        unsigned short base; // ベース grpId
+        unsigned short pile; // 重ね合わせ grpId
+};
 
 class CMapObjectListHandler : public IApiHandler
 {
@@ -23,6 +30,9 @@ private:
         void AppendObjectJson(std::ostringstream &oss, const CInfoMapObjectData *pPlacement, CLibInfoMapObject *pObjectLib) const;
         static std::string FormatHex(unsigned long value);
         static std::string ResolveWeatherLabel(unsigned long weatherType);
+
+        // アニメパーツのとき先頭フレームの grpId を返す。非アニメパーツはそのまま返す
+        static ResolvedGrpId ResolveRenderGrpId(const CInfoMapParts *pParts);
 
         CMgrData *m_pMgrData;
 };

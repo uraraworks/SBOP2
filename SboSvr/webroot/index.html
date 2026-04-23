@@ -34,6 +34,7 @@
         <li><a href="#map-events" data-route="map-events" class="nav-link">マップイベント一覧</a></li>
         <li><a href="#map-parts" data-route="map-parts" class="nav-link">マップパーツ編集</a></li>
         <li><a href="#map-object-templates" data-route="map-object-templates" class="nav-link">オブジェクトテンプレート管理</a></li>
+        <li><a href="#map-window" data-route="map-window" class="nav-link">マップウィンドウ</a></li>
         <li><a href="#map-objects" data-route="map-objects" class="nav-link">マップオブジェクト配置</a></li>
       </ul>
     </details>
@@ -484,6 +485,45 @@
             <button type="button" class="button danger" id="map-object-template-delete-btn">削除</button>
           </div>
         </form>
+      </section>
+    </div>
+    <div class="view" data-view="map-window">
+      <section class="card" id="map-window-browser">
+        <h2>マップウィンドウ</h2>
+        <p class="card-description">
+          マップを選択してタイルグリッドを表示します。セルをクリックすると座標をハイライトします。
+          ピック対象の種別切替は将来の pick API 連携に備えた枠です。
+        </p>
+        <div class="map-window-controls">
+          <label class="form-field compact">
+            <span>マップ</span>
+            <select id="map-window-map" name="mapId"></select>
+          </label>
+          <div class="map-window-summary" id="map-window-summary" aria-live="polite"></div>
+        </div>
+        <!-- ピック対象種別切替（将来の pick API 拡張用プレースホルダー） -->
+        <fieldset class="map-window-pick-type">
+          <legend>ピック対象種別</legend>
+          <div class="map-window-pick-radios">
+            <label><input type="radio" name="map-window-pick-target" value="cell" checked /> セル</label>
+            <label><input type="radio" name="map-window-pick-target" value="placement" /> 配置物</label>
+            <label><input type="radio" name="map-window-pick-target" value="event" /> イベント</label>
+            <label><input type="radio" name="map-window-pick-target" value="character" /> キャラ</label>
+          </div>
+        </fieldset>
+      </section>
+      <section class="card" id="map-window-viewer">
+        <h2>マップグリッド</h2>
+        <div class="map-window-selected-info" id="map-window-selected-info" aria-live="polite">
+          選択中のセル: なし
+        </div>
+        <div class="map-object-preview">
+          <div class="map-object-grid" id="map-window-grid" role="grid" aria-label="マップウィンドウ グリッド"></div>
+          <div class="map-object-legend">
+            <span class="legend-item"><span class="legend-marker"></span>空きセル</span>
+            <span class="legend-item"><span class="legend-marker is-selected"></span>選択中セル</span>
+          </div>
+        </div>
       </section>
     </div>
     <div class="view" data-view="map-objects">
