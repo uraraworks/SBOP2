@@ -168,15 +168,124 @@
       </section>
     </div>
     <div class="view" data-view="character-overview">
-      <section class="card placeholder-card">
-        <h2>キャラクター基本情報編集（プレースホルダー）</h2>
-        <p>Wave 2 で実装予定のキャラクター編集画面です。基本属性・外見・装備・ステータスを編集できるフォームを配置します。</p>
-        <ul>
-          <li>キャラクター検索バーと概要表示</li>
-          <li>基本情報（名前、レベル、陣営など）の編集フォーム</li>
-          <li>外見・アバターパーツのプレビュー枠</li>
-          <li>保存時の差分確認モーダル</li>
-        </ul>
+      <section class="card" id="char-detail-card">
+        <h2>キャラクター詳細表示</h2>
+        <p class="card-description">CharID を入力するか、キャラクター一覧の行をクリックすると詳細が表示されます。</p>
+        <div class="filter-row">
+          <label>CharID:
+            <input type="number" id="char-detail-id-input" placeholder="例: 1001" min="1" />
+          </label>
+          <button type="button" id="char-detail-load-btn" class="button">表示</button>
+        </div>
+        <p id="char-detail-feedback" class="form-feedback" aria-live="polite"></p>
+        <div id="char-detail-body" style="display:none">
+          <!-- 基本情報 -->
+          <h3>基本情報</h3>
+          <dl class="detail-list">
+            <div><dt>CharID</dt><dd id="cd-charId">-</dd></div>
+            <div><dt>キャラ名</dt><dd id="cd-charName">-</dd></div>
+            <div><dt>アカウントID</dt><dd id="cd-accountId">-</dd></div>
+            <div><dt>マップID</dt><dd id="cd-mapId">-</dd></div>
+            <div><dt>座標 (X, Y)</dt><dd id="cd-pos">-</dd></div>
+            <div><dt>向き</dt><dd id="cd-direction">-</dd></div>
+            <div><dt>移動状態</dt><dd id="cd-moveState">-</dd></div>
+            <div><dt>移動種別</dt><dd id="cd-moveType">-</dd></div>
+            <div><dt>種族ID</dt><dd id="cd-familyId">-</dd></div>
+            <div><dt>画像サイズ</dt><dd id="cd-grpSize">-</dd></div>
+            <div><dt>性別</dt><dd id="cd-sex">-</dd></div>
+            <div><dt>NPC</dt><dd id="cd-isNpc">-</dd></div>
+            <div><dt>ブロック</dt><dd id="cd-block">-</dd></div>
+            <div><dt>プッシュ</dt><dd id="cd-push">-</dd></div>
+          </dl>
+          <!-- ステータス -->
+          <h3>ステータス</h3>
+          <dl class="detail-list">
+            <div><dt>HP</dt><dd id="cd-hp">-</dd></div>
+            <div><dt>最大HP</dt><dd id="cd-maxHp">-</dd></div>
+            <div><dt>SP</dt><dd id="cd-sp">-</dd></div>
+            <div><dt>最大SP</dt><dd id="cd-maxSp">-</dd></div>
+            <div><dt>経験値</dt><dd id="cd-exp">-</dd></div>
+            <div><dt>レベル</dt><dd id="cd-level">-</dd></div>
+            <div><dt>スタミナ</dt><dd id="cd-stamina">-</dd></div>
+            <div><dt>腕力</dt><dd id="cd-power">-</dd></div>
+            <div><dt>体力</dt><dd id="cd-strength">-</dd></div>
+            <div><dt>魔力</dt><dd id="cd-magic">-</dd></div>
+            <div><dt>器用</dt><dd id="cd-skillful">-</dd></div>
+            <div><dt>攻撃技能</dt><dd id="cd-abilityAT">-</dd></div>
+            <div><dt>防御技能</dt><dd id="cd-abilityDF">-</dd></div>
+            <div><dt>攻撃力</dt><dd id="cd-pAtack">-</dd></div>
+            <div><dt>防御力</dt><dd id="cd-pDefense">-</dd></div>
+            <div><dt>魔法力</dt><dd id="cd-pMagic">-</dd></div>
+            <div><dt>魔法防御力</dt><dd id="cd-pMagicDefense">-</dd></div>
+            <div><dt>命中率</dt><dd id="cd-pHitAverage">-</dd></div>
+            <div><dt>回避率</dt><dd id="cd-pAvoidAverage">-</dd></div>
+            <div><dt>クリティカル率</dt><dd id="cd-pCriticalAverage">-</dd></div>
+            <div><dt>属性[火]</dt><dd id="cd-attrFire">-</dd></div>
+            <div><dt>属性[風]</dt><dd id="cd-attrWind">-</dd></div>
+            <div><dt>属性[水]</dt><dd id="cd-attrWater">-</dd></div>
+            <div><dt>属性[土]</dt><dd id="cd-attrEarth">-</dd></div>
+            <div><dt>属性[光]</dt><dd id="cd-attrLight">-</dd></div>
+            <div><dt>属性[闇]</dt><dd id="cd-attrDark">-</dd></div>
+          </dl>
+          <!-- 装備 -->
+          <h3>装備</h3>
+          <dl class="detail-list">
+            <div><dt>服</dt><dd id="cd-eqCloth">-</dd></div>
+            <div><dt>アクセサリ1</dt><dd id="cd-eqAcce1">-</dd></div>
+            <div><dt>アクセサリ2</dt><dd id="cd-eqAcce2">-</dd></div>
+            <div><dt>右手</dt><dd id="cd-eqArmsRight">-</dd></div>
+            <div><dt>左手</dt><dd id="cd-eqArmsLeft">-</dd></div>
+            <div><dt>頭</dt><dd id="cd-eqHead">-</dd></div>
+          </dl>
+          <!-- グラフィック -->
+          <h3>グラフィック ID</h3>
+          <dl class="detail-list">
+            <div><dt>NPC</dt><dd id="cd-grpNpc">-</dd></div>
+            <div><dt>服</dt><dd id="cd-grpCloth">-</dd></div>
+            <div><dt>目</dt><dd id="cd-grpEye">-</dd></div>
+            <div><dt>目色</dt><dd id="cd-grpEyeColor">-</dd></div>
+            <div><dt>髪</dt><dd id="cd-grpHairType">-</dd></div>
+            <div><dt>髪色</dt><dd id="cd-grpHairColor">-</dd></div>
+            <div><dt>特殊服</dt><dd id="cd-grpSp">-</dd></div>
+            <div><dt>一時服(メイン)</dt><dd id="cd-grpTmpMain">-</dd></div>
+            <div><dt>一時服(サブ)</dt><dd id="cd-grpTmpSub">-</dd></div>
+            <div><dt>アクセサリ</dt><dd id="cd-grpAcce">-</dd></div>
+            <div><dt>持ち物(メイン)</dt><dd id="cd-grpArmsMain">-</dd></div>
+            <div><dt>持ち物(サブ)</dt><dd id="cd-grpArmsSub">-</dd></div>
+            <div><dt>盾(メイン)</dt><dd id="cd-grpArmsLeftMain">-</dd></div>
+            <div><dt>盾(サブ)</dt><dd id="cd-grpArmsLeftSub">-</dd></div>
+            <div><dt>初期NPC</dt><dd id="cd-grpInitNpc">-</dd></div>
+            <div><dt>初期服</dt><dd id="cd-grpInitCloth">-</dd></div>
+            <div><dt>初期目</dt><dd id="cd-grpInitEye">-</dd></div>
+            <div><dt>初期目色</dt><dd id="cd-grpInitEyeColor">-</dd></div>
+            <div><dt>初期髪</dt><dd id="cd-grpInitHairType">-</dd></div>
+            <div><dt>初期髪色</dt><dd id="cd-grpInitHairColor">-</dd></div>
+            <div><dt>初期特殊服</dt><dd id="cd-grpInitSp">-</dd></div>
+          </dl>
+          <!-- 移動 -->
+          <h3>移動設定</h3>
+          <dl class="detail-list">
+            <div><dt>最大アイテム所持数</dt><dd id="cd-maxItemCount">-</dd></div>
+            <div><dt>ドロップ率</dt><dd id="cd-dropItemAverage">-</dd></div>
+            <div><dt>移動確率</dt><dd id="cd-moveAverage">-</dd></div>
+            <div><dt>戦闘時移動確率</dt><dd id="cd-moveAverageBattle">-</dd></div>
+            <div><dt>移動待ち(ms)</dt><dd id="cd-moveWait">-</dd></div>
+            <div><dt>戦闘時移動待ち(ms)</dt><dd id="cd-moveWaitBattle">-</dd></div>
+            <div><dt>索敵範囲CX</dt><dd id="cd-searchCX">-</dd></div>
+            <div><dt>索敵範囲CY</dt><dd id="cd-searchCY">-</dd></div>
+            <div><dt>モーション種別ID</dt><dd id="cd-motionTypeId">-</dd></div>
+          </dl>
+          <!-- NPC 発生 -->
+          <h3>NPC 発生設定</h3>
+          <dl class="detail-list">
+            <div><dt>発生周期</dt><dd id="cd-putCycle">-</dd></div>
+            <div><dt>発生させる移動種別</dt><dd id="cd-putMoveType">-</dd></div>
+            <div><dt>同時発生数</dt><dd id="cd-maxPutCount">-</dd></div>
+            <div><dt>発生確率</dt><dd id="cd-putAverage">-</dd></div>
+            <div><dt>発生範囲X</dt><dd id="cd-putAreaX">-</dd></div>
+            <div><dt>発生範囲Y</dt><dd id="cd-putAreaY">-</dd></div>
+          </dl>
+        </div>
       </section>
     </div>
     <div class="view" data-view="character-list">

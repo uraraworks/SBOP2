@@ -4302,7 +4302,9 @@ function renderCharacterList(characters) {
       "<td>" + escapeHtml(String(c.accountId ?? "")) + "</td>" +
       "<td>" + (c.isNpc ? "NPC" : "PC") + "</td>";
     tr.addEventListener("click", function () {
-      console.log("キャラクター選択:", c);
+      // character-overview 画面へ遷移して詳細を取得する
+      navigateTo("character-overview");
+      fetchCharacterDetail(c.charId);
     });
     fragment.appendChild(tr);
   });
@@ -4377,3 +4379,171 @@ if (charNextBtn) {
     loadCharacterList();
   });
 }
+
+/* =====================================================
+ * キャラクター詳細表示 (character-overview)
+ * GET /api/characters/{charId}
+ * ===================================================== */
+
+const charDetailIdInput  = document.getElementById("char-detail-id-input");
+const charDetailLoadBtn  = document.getElementById("char-detail-load-btn");
+const charDetailFeedback = document.getElementById("char-detail-feedback");
+const charDetailBody     = document.getElementById("char-detail-body");
+
+/** GET /api/characters/{charId} を呼んで詳細を取得する */
+async function fetchCharacterDetail(charId) {
+  if (!charDetailFeedback) { return; }
+  charDetailFeedback.textContent = "読み込み中...";
+  if (charDetailBody) { charDetailBody.style.display = "none"; }
+
+  try {
+    const { response, data } = await fetchJson("/api/characters/" + encodeURIComponent(charId));
+    if (!response.ok || !data) {
+      const msg = (data && data.error) ? data.error : "キャラクター詳細の取得に失敗しました";
+      charDetailFeedback.textContent = "エラー: " + msg;
+      return;
+    }
+    charDetailFeedback.textContent = "";
+    renderCharacterDetail(data);
+  } catch (err) {
+    console.error("fetchCharacterDetail error", err);
+    charDetailFeedback.textContent = "通信エラーが発生しました";
+  }
+}
+
+/** レスポンスデータを詳細表示欄に反映する */
+function renderCharacterDetail(d) {
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = (val === null || val === undefined) ? "-" : String(val); }
+  }
+
+  // 基本情報
+  setText("cd-charId",    d.charId);
+  setText("cd-charName",  d.charName);
+  setText("cd-accountId", d.accountId);
+  setText("cd-mapId",     d.mapId);
+  setText("cd-pos",       d.x + ", " + d.y);
+  setText("cd-direction", d.direction);
+  setText("cd-moveState", d.moveState);
+  setText("cd-moveType",  d.moveType);
+  setText("cd-familyId",  d.familyId);
+  setText("cd-grpSize",   d.grpSize);
+  setText("cd-sex",       d.sex);
+  setText("cd-isNpc",     d.isNpc ? "NPC" : "PC");
+  setText("cd-block",     d.block ? "あり" : "なし");
+  setText("cd-push",      d.push  ? "あり" : "なし");
+
+  // ステータス
+  if (d.status) {
+    var s = d.status;
+    setText("cd-hp",                s.hp);
+    setText("cd-maxHp",             s.maxHp);
+    setText("cd-sp",                s.sp);
+    setText("cd-maxSp",             s.maxSp);
+    setText("cd-exp",               s.exp);
+    setText("cd-level",             s.level);
+    setText("cd-stamina",           s.stamina);
+    setText("cd-power",             s.power);
+    setText("cd-strength",          s.strength);
+    setText("cd-magic",             s.magic);
+    setText("cd-skillful",          s.skillful);
+    setText("cd-abilityAT",         s.abilityAT);
+    setText("cd-abilityDF",         s.abilityDF);
+    setText("cd-pAtack",            s.pAtack);
+    setText("cd-pDefense",          s.pDefense);
+    setText("cd-pMagic",            s.pMagic);
+    setText("cd-pMagicDefense",     s.pMagicDefense);
+    setText("cd-pHitAverage",       s.pHitAverage);
+    setText("cd-pAvoidAverage",     s.pAvoidAverage);
+    setText("cd-pCriticalAverage",  s.pCriticalAverage);
+    setText("cd-attrFire",          s.attrFire);
+    setText("cd-attrWind",          s.attrWind);
+    setText("cd-attrWater",         s.attrWater);
+    setText("cd-attrEarth",         s.attrEarth);
+    setText("cd-attrLight",         s.attrLight);
+    setText("cd-attrDark",          s.attrDark);
+  }
+
+  // 装備
+  if (d.equipment) {
+    var e = d.equipment;
+    setText("cd-eqCloth",      e.cloth);
+    setText("cd-eqAcce1",      e.accesory1);
+    setText("cd-eqAcce2",      e.accesory2);
+    setText("cd-eqArmsRight",  e.armsRight);
+    setText("cd-eqArmsLeft",   e.armsLeft);
+    setText("cd-eqHead",       e.head);
+  }
+
+  // グラフィック
+  if (d.graphics) {
+    var g = d.graphics;
+    setText("cd-grpNpc",          g.npc);
+    setText("cd-grpCloth",        g.cloth);
+    setText("cd-grpEye",          g.eye);
+    setText("cd-grpEyeColor",     g.eyeColor);
+    setText("cd-grpHairType",     g.hairType);
+    setText("cd-grpHairColor",    g.hairColor);
+    setText("cd-grpSp",           g.sp);
+    setText("cd-grpTmpMain",      g.tmpMain);
+    setText("cd-grpTmpSub",       g.tmpSub);
+    setText("cd-grpAcce",         g.acce);
+    setText("cd-grpArmsMain",     g.armsMain);
+    setText("cd-grpArmsSub",      g.armsSub);
+    setText("cd-grpArmsLeftMain", g.armsLeftMain);
+    setText("cd-grpArmsLeftSub",  g.armsLeftSub);
+    setText("cd-grpInitNpc",      g.initNpc);
+    setText("cd-grpInitCloth",    g.initCloth);
+    setText("cd-grpInitEye",      g.initEye);
+    setText("cd-grpInitEyeColor", g.initEyeColor);
+    setText("cd-grpInitHairType", g.initHairType);
+    setText("cd-grpInitHairColor",g.initHairColor);
+    setText("cd-grpInitSp",       g.initSp);
+  }
+
+  // 移動
+  if (d.movement) {
+    var m = d.movement;
+    setText("cd-maxItemCount",      m.maxItemCount);
+    setText("cd-dropItemAverage",   m.dropItemAverage);
+    setText("cd-moveAverage",       m.moveAverage);
+    setText("cd-moveAverageBattle", m.moveAverageBattle);
+    setText("cd-moveWait",          m.moveWait);
+    setText("cd-moveWaitBattle",    m.moveWaitBattle);
+    setText("cd-searchCX",          m.searchDistanceCX);
+    setText("cd-searchCY",          m.searchDistanceCY);
+    setText("cd-motionTypeId",      m.motionTypeId);
+  }
+
+  // NPC 発生
+  if (d.npcSpawn) {
+    var n = d.npcSpawn;
+    setText("cd-putCycle",     n.putCycle);
+    setText("cd-putMoveType",  n.putMoveType);
+    setText("cd-maxPutCount",  n.maxPutCount);
+    setText("cd-putAverage",   n.putAverage);
+    setText("cd-putAreaX",     n.putAreaX);
+    setText("cd-putAreaY",     n.putAreaY);
+  }
+
+  if (charDetailBody) { charDetailBody.style.display = ""; }
+  // CharID 入力欄を取得した ID で同期しておく
+  if (charDetailIdInput) { charDetailIdInput.value = String(d.charId); }
+}
+
+// 「表示」ボタン
+if (charDetailLoadBtn) {
+  charDetailLoadBtn.addEventListener("click", function () {
+    if (!charDetailIdInput) { return; }
+    var val = parseInt(charDetailIdInput.value, 10);
+    if (!val || val <= 0) {
+      if (charDetailFeedback) { charDetailFeedback.textContent = "有効な CharID を入力してください"; }
+      return;
+    }
+    fetchCharacterDetail(val);
+  });
+}
+
+// character-overview 画面が直接ナビから開かれたときに ID 入力フォームを表示するだけでよい
+// （一覧からクリックで来た場合は fetchCharacterDetail が自動的に呼ばれる）
