@@ -8,7 +8,10 @@
 class CMgrData;
 class IApiHandler;
 
-// キャラクター所持アイテム / 所持スキル / アカウント情報 API ハンドラ
+// キャラクター所持アイテム / 所持スキル / アカウント情報 / NPC 追加 API ハンドラ
+//
+// NPC 追加:
+//   POST   /api/characters/npc                     → 201 {charId, charName, mapId, x, y, isNpc, ...}
 //
 // アイテム:
 //   GET    /api/characters/{charId}/items          → [{slot, itemId}]
@@ -58,4 +61,7 @@ private:
 
         // GET /api/characters/{charId}/account
         void HandleGetAccount(const HttpRequest &request, HttpResponse &response, int nCharId);
+
+        // POST /api/characters/npc  — NPC を新規追加する
+        void HandlePostNpc(const HttpRequest &request, HttpResponse &response);
 };

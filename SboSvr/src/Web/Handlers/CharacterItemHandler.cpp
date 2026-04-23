@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <string>
+#include <vector>
 #include <cstdlib>
 
 #include "Web/AuthProvider.h"
@@ -178,6 +179,30 @@ void CCharacterItemHandler::Handle(const HttpRequest &request, HttpResponse &res
                 return;
         }
 
+        const std::string &method = request.method;
+
+        // POST /api/characters/npc — NPC 新規追加
+        // /api/characters/npc はスラッシュが 1 つしかないため ExtractCharItemPath が
+        // false を返す。その前に特別処理として捕捉する。
+        {
+                const std::string npcPath = "/api/characters/npc";
+                // クエリ文字列を除いたパスと比較する
+                std::string pathNoQuery = request.path;
+                size_t nQ = pathNoQuery.find('?');
+                if (nQ != std::string::npos) {
+                        pathNoQuery = pathNoQuery.substr(0, nQ);
+                }
+                if (pathNoQuery == npcPath) {
+                        if (method == "POST") {
+                                HandlePostNpc(request, response);
+                        } else {
+                                response.statusLine = "HTTP/1.1 405 Method Not Allowed";
+                                response.SetJsonBody("{\"error\":\"method_not_allowed\"}");
+                        }
+                        return;
+                }
+        }
+
         // URL を解析して charId・サブリソース・スロット番号を取り出す
         int nCharId = 0;
         std::string sub;
@@ -193,8 +218,6 @@ void CCharacterItemHandler::Handle(const HttpRequest &request, HttpResponse &res
                 response.SetJsonBody("{\"error\":\"invalid_path\"}");
                 return;
         }
-
-        const std::string &method = request.method;
 
         if (sub == "items") {
                 if (method == "GET") {
@@ -659,5 +682,260 @@ void CCharacterItemHandler::HandleGetAccount(const HttpRequest & /*request*/, Ht
         pAccountLib->Leave();
 
         response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+// ---------------------------------------------------------------------------
+// POST /api/characters/npc
+// body: {
+//   charName  (必須),
+//   familyId  (必須),
+//   mapId     (必須),
+//   x         (必須),
+//   y         (必須),
+//   moveType  (任意, デフォルト=CHARMOVETYPE_STAND=1),
+//   sex       (任意, デフォルト=0),
+//   grpIdNpc     (任意, デフォルト=0),
+//   grpIdInitNpc (任意, デフォルト=0),
+//   motionTypeId (任意, デフォルト=0),
+//   block     (任意, デフォルト=false),
+//   push      (任意, デフォルト=false)
+// }
+// 成功時: 201 Created + 作成後キャラの基本 JSON
+// ---------------------------------------------------------------------------
+
+// UTF-8 文字列を内部文字コードに変換して CmyString へ代入するローカルヘルパー
+// （CharacterItemHandler 内では SetStringFromUtf8 が未定義のため独自実装）
+static bool SetCharNameFromUtf8(CmyString &out, const std::string &utf8)
+{
+        if (utf8.empty()) {
+                out = _T("");
+                return false;
+        }
+#ifdef _UNICODE
+        int wideLen = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), NULL, 0);
+        if (wideLen <= 0) {
+                return false;
+        }
+        std::vector<wchar_t> wide(static_cast<size_t>(wideLen) + 1, L'\0');
+        MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), &wide[0], wideLen);
+        out = &wide[0];
+#else
+        int wideLen = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), NULL, 0);
+        if (wideLen <= 0) {
+                return false;
+        }
+        std::vector<wchar_t> wide(static_cast<size_t>(wideLen) + 1, L'\0');
+        MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.size()), &wide[0], wideLen);
+
+        int mbLen = WideCharToMultiByte(932, 0, &wide[0], wideLen, NULL, 0, NULL, NULL);
+        if (mbLen <= 0) {
+                return false;
+        }
+        std::vector<char> mb(static_cast<size_t>(mbLen) + 1, '\0');
+        WideCharToMultiByte(932, 0, &wide[0], wideLen, &mb[0], mbLen, NULL, NULL);
+        out = &mb[0];
+#endif
+        return true;
+}
+
+// CmyString → UTF-8 std::string（ローカルヘルパー）
+static std::string CharNameToUtf8(const CmyString &value)
+{
+#ifdef _UNICODE
+        LPCWSTR pszWide = static_cast<LPCWSTR>(value);
+        if (pszWide == NULL || pszWide[0] == L'\0') {
+                return std::string();
+        }
+        int utf8Len = WideCharToMultiByte(CP_UTF8, 0, pszWide, -1, NULL, 0, NULL, NULL);
+        if (utf8Len <= 0) {
+                return std::string();
+        }
+        std::string utf8(static_cast<size_t>(utf8Len), '\0');
+        WideCharToMultiByte(CP_UTF8, 0, pszWide, -1, &utf8[0], utf8Len, NULL, NULL);
+        if (!utf8.empty() && utf8.back() == '\0') {
+                utf8.resize(utf8.size() - 1);
+        }
+        return utf8;
+#else
+        LPCSTR psz = static_cast<LPCSTR>(value);
+        if (psz == NULL || psz[0] == '\0') {
+                return std::string();
+        }
+        return std::string(psz);
+#endif
+}
+
+void CCharacterItemHandler::HandlePostNpc(const HttpRequest &request, HttpResponse &response)
+{
+        // --- 必須パラメータを取得する ---
+        std::string charName;
+        if (!JsonUtils::TryGetString(request.body, "charName", charName) || charName.empty()) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_charName\"}");
+                return;
+        }
+
+        int nFamilyId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "familyId", nFamilyId) || nFamilyId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_familyId\"}");
+                return;
+        }
+
+        int nMapId = 0;
+        if (!JsonUtils::TryGetInt(request.body, "mapId", nMapId) || nMapId <= 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_or_invalid_mapId\"}");
+                return;
+        }
+
+        int nX = 0;
+        if (!JsonUtils::TryGetInt(request.body, "x", nX)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_x\"}");
+                return;
+        }
+
+        int nY = 0;
+        if (!JsonUtils::TryGetInt(request.body, "y", nY)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"missing_y\"}");
+                return;
+        }
+
+        // --- 任意パラメータを取得する ---
+        // moveType: デフォルト CHARMOVETYPE_STAND (=1)
+        int nMoveType = CHARMOVETYPE_STAND;
+        {
+                int tmp = 0;
+                if (JsonUtils::TryGetInt(request.body, "moveType", tmp) &&
+                    tmp >= 0 && tmp < CHARMOVETYPE_MAX) {
+                        nMoveType = tmp;
+                }
+        }
+
+        // sex: デフォルト 0
+        int nSex = 0;
+        {
+                int tmp = 0;
+                if (JsonUtils::TryGetInt(request.body, "sex", tmp)) {
+                        nSex = tmp;
+                }
+        }
+
+        // grpIdNpc: NPC 画像 ID (m_wGrpIDNPC)
+        int nGrpIdNpc = 0;
+        {
+                int tmp = 0;
+                if (JsonUtils::TryGetInt(request.body, "grpIdNpc", tmp) && tmp >= 0) {
+                        nGrpIdNpc = tmp;
+                }
+        }
+
+        // grpIdInitNpc: 初期 NPC 画像 ID (m_wGrpIDInitNPC)
+        int nGrpIdInitNpc = 0;
+        {
+                int tmp = 0;
+                if (JsonUtils::TryGetInt(request.body, "grpIdInitNpc", tmp) && tmp >= 0) {
+                        nGrpIdInitNpc = tmp;
+                }
+        }
+
+        // motionTypeId: モーション種別 ID (m_dwMotionTypeID)
+        int nMotionTypeId = 0;
+        {
+                int tmp = 0;
+                if (JsonUtils::TryGetInt(request.body, "motionTypeId", tmp) && tmp >= 0) {
+                        nMotionTypeId = tmp;
+                }
+        }
+
+        // block / push (任意 bool): JSON に "block":true / "push":true で渡す
+        // TryGetInt で 0/1 を受け取る形式
+        bool bBlock = false;
+        {
+                int tmp = 0;
+                if (JsonUtils::TryGetInt(request.body, "block", tmp)) {
+                        bBlock = (tmp != 0);
+                }
+        }
+        bool bPush = false;
+        {
+                int tmp = 0;
+                if (JsonUtils::TryGetInt(request.body, "push", tmp)) {
+                        bPush = (tmp != 0);
+                }
+        }
+
+        // --- Lib を取得する ---
+        CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+        if (pCharLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        // --- テンポラリ CInfoCharSvr に値を設定してから AddNPC を呼ぶ ---
+        // AddNPC の内部では GetNew(moveType) → Copy → Add → LogIn の順で処理される。
+        // Copy で全フィールドが複製されるので、テンポラリに設定した値がそのまま引き継がれる。
+        // （旧 DlgAdminCharAddNPC::OnSend の実装に倣う）
+        CInfoCharSvr infoTmp;
+        infoTmp.m_nMoveType      = nMoveType;
+        infoTmp.m_dwMapID        = static_cast<DWORD>(nMapId);
+        // 旧クライアントは m_nMapX = posX * 2 で送信していた。
+        // Web API では生の座標 (x, y) をそのまま受け取り、AddNPC 側でそのまま使う。
+        infoTmp.m_nMapX          = nX;
+        infoTmp.m_nMapY          = nY;
+        infoTmp.m_wFamilyID      = static_cast<WORD>(nFamilyId);
+        infoTmp.m_nSex           = nSex;
+        infoTmp.m_wGrpIDNPC      = static_cast<WORD>(nGrpIdNpc);
+        infoTmp.m_wGrpIDInitNPC  = static_cast<WORD>(nGrpIdInitNpc);
+        infoTmp.m_dwMotionTypeID = static_cast<DWORD>(nMotionTypeId);
+        infoTmp.m_bBlock         = bBlock ? TRUE : FALSE;
+        infoTmp.m_bPush          = bPush  ? TRUE : FALSE;
+
+        // キャラ名を内部文字コードに変換してセット
+        if (!SetCharNameFromUtf8(infoTmp.m_strCharName, charName)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_charName_encoding\"}");
+                return;
+        }
+
+        // --- AddNPC を呼んで追加する ---
+        pCharLib->Enter();
+        CInfoCharBase *pAdded = pCharLib->AddNPC(&infoTmp);
+        if (pAdded == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"add_npc_failed\"}");
+                return;
+        }
+
+        // 追加直後の charId など必要な値を読み取っておく
+        DWORD dwNewCharId = pAdded->m_dwCharID;
+        DWORD dwNewMapId  = pAdded->m_dwMapID;
+        int   nNewX       = pAdded->m_nMapX;
+        int   nNewY       = pAdded->m_nMapY;
+        std::string newCharName = CharNameToUtf8(pAdded->m_strCharName);
+        WORD  wNewFamilyId      = pAdded->m_wFamilyID;
+        int   nNewMoveType      = pAdded->m_nMoveType;
+
+        pCharLib->Leave();
+
+        // --- 201 Created + 追加したキャラの基本情報を返す ---
+        std::ostringstream oss;
+        oss << '{';
+        oss << "\"charId\":"    << dwNewCharId << ',';
+        oss << "\"charName\":\"" << JsonUtils::Escape(newCharName) << "\",";
+        oss << "\"mapId\":"     << dwNewMapId << ',';
+        oss << "\"x\":"         << nNewX << ',';
+        oss << "\"y\":"         << nNewY << ',';
+        oss << "\"familyId\":"  << wNewFamilyId << ',';
+        oss << "\"moveType\":"  << nNewMoveType << ',';
+        oss << "\"isNpc\":true";
+        oss << '}';
+
+        response.statusLine = "HTTP/1.1 201 Created";
         response.SetJsonBody(oss.str());
 }
