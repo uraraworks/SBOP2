@@ -234,14 +234,65 @@
       </section>
     </div>
     <div class="view" data-view="map-info">
-      <section class="card placeholder-card">
-        <h2>マップ情報編集（プレースホルダー）</h2>
-        <p>マップ名やサイズ、BGM、天候などを編集できる画面を想定しています。</p>
-        <ul>
-          <li>マップ一覧と基本情報フォーム</li>
-          <li>BGM/天候プリセット選択</li>
-          <li>反映結果のプレビュー/差分表示</li>
-        </ul>
+      <section class="card" id="map-info-browser">
+        <h2>マップ情報編集</h2>
+        <p class="card-description">
+          マップ名・BGM・天候・戦闘設定などの基本情報を編集します。
+          名前を変更すると全クライアントへ通知されます。
+        </p>
+
+        <div class="map-parts-controls">
+          <label class="form-field compact">
+            <span class="form-label">マップ選択</span>
+            <select id="map-info-select" class="form-select">
+              <option value="">（読み込み中...）</option>
+            </select>
+          </label>
+          <button id="map-info-reload-btn" class="btn btn-secondary btn-sm">再読み込み</button>
+        </div>
+
+        <p id="map-info-summary" class="map-parts-summary" aria-live="polite"></p>
+
+        <div id="map-info-edit-area" style="display:none">
+          <form id="map-info-edit-form" class="form-grid" novalidate>
+            <label class="form-field">
+              <span class="form-label">マップ名</span>
+              <input type="text" id="map-info-name" class="form-input" maxlength="64" />
+            </label>
+            <label class="form-field">
+              <span class="form-label">BGM ID</span>
+              <input type="number" id="map-info-bgm" class="form-input" min="0" step="1" />
+            </label>
+            <label class="form-field">
+              <span class="form-label">天候</span>
+              <select id="map-info-weather" class="form-select">
+                <option value="0">指定なし (NONE)</option>
+                <option value="1">雲 (CLOUD)</option>
+                <option value="2">霧 (MISTY)</option>
+                <option value="3">雪 (SNOW)</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span class="form-label">暗さレベル (0–255)</span>
+              <input type="number" id="map-info-darkness" class="form-input" min="0" max="255" step="1" />
+            </label>
+            <div class="form-field form-field--inline">
+              <label class="form-checkbox">
+                <input type="checkbox" id="map-info-battle" />
+                <span>戦闘許可</span>
+              </label>
+              <label class="form-checkbox">
+                <input type="checkbox" id="map-info-recovery" />
+                <span>気絶後回復</span>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="map-info-save-btn">保存</button>
+            </div>
+          </form>
+        </div>
+
+        <p id="map-info-feedback" class="form-feedback" aria-live="polite"></p>
       </section>
     </div>
     <div class="view" data-view="map-events">

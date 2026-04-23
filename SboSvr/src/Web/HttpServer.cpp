@@ -17,6 +17,7 @@
 #include "Handlers/ServerInfoHandler.h"
 #include "Handlers/AccountCreateHandler.h"
 #include "Handlers/AdminRolesHandler.h"
+#include "Handlers/MapInfoHandler.h"
 #include "Handlers/MapObjectHandler.h"
 #include "Handlers/MapPartsHandler.h"
 #include "Handlers/StaticFileHandler.h"
@@ -638,6 +639,13 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> rolesUpdateHandler(new CAdminRolesUpdateHandler(m_pMgrData));
         m_router.Register("PUT", "/api/admin/roles", std::move(rolesUpdateHandler));
+
+        // マップ情報 API
+        std::unique_ptr<IApiHandler> mapInfoListHandler(new CMapInfoListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/maps", std::move(mapInfoListHandler));
+
+        std::unique_ptr<IApiHandler> mapInfoUpdateHandler(new CMapInfoUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/maps", std::move(mapInfoUpdateHandler));
 
         std::shared_ptr<CMapPartsResourceProvider> mapPartsProvider(new CMapPartsResourceProvider());
 

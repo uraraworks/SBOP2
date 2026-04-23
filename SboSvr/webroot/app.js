@@ -91,6 +91,20 @@ const mapPartsSaveBtn = document.getElementById("map-parts-save-btn");
 const mapPartsCreateBtn = document.getElementById("map-parts-create-btn");
 const mapPartsDeleteBtn = document.getElementById("map-parts-delete-btn");
 
+/* マップ情報編集 */
+const mapInfoSelect = document.getElementById("map-info-select");
+const mapInfoSummaryEl = document.getElementById("map-info-summary");
+const mapInfoEditArea = document.getElementById("map-info-edit-area");
+const mapInfoEditForm = document.getElementById("map-info-edit-form");
+const mapInfoNameInput = document.getElementById("map-info-name");
+const mapInfoBgmInput = document.getElementById("map-info-bgm");
+const mapInfoWeatherSelect = document.getElementById("map-info-weather");
+const mapInfoDarknessInput = document.getElementById("map-info-darkness");
+const mapInfoBattleCheck = document.getElementById("map-info-battle");
+const mapInfoRecoveryCheck = document.getElementById("map-info-recovery");
+const mapInfoFeedbackEl = document.getElementById("map-info-feedback");
+const mapInfoReloadBtn = document.getElementById("map-info-reload-btn");
+
 /* マップウィンドウ */
 const mapWindowMapSelect = document.getElementById("map-window-map");
 const mapWindowSummaryEl = document.getElementById("map-window-summary");
@@ -169,6 +183,14 @@ const mapPartsState = {
   sheetTileHeight: 32,
   sheetCount: 0,
   sheets: [],
+  isLoading: false,
+  loadError: null
+};
+
+/* マップ情報編集画面の状態 */
+const mapInfoState = {
+  maps: [],
+  selectedMapId: null,
   isLoading: false,
   loadError: null
 };
@@ -2446,6 +2468,181 @@ function handleMapPartsFlagFilterChange(event) {
 }
 
 /* =====================================================
+ * マップ情報編集画面 (map-info)
+ * GET /api/maps でマップ一覧を取得し、選択したマップの
+ * 基本情報（名前・BGM・天候・戦闘設定・暗さ）を編集する。
+ * ===================================================== */
+
+/** マップ情報のサマリー文字列を更新する */
+function setMapInfoSummary(message) {
+  if (mapInfoSummaryEl) {
+    mapInfoSummaryEl.textContent = message || "";
+  }
+}
+
+/** マップ情報フィードバックを表示する */
+function setMapInfoFeedback(message, type) {
+  if (!mapInfoFeedbackEl) {
+    return;
+  }
+  mapInfoFeedbackEl.textContent = message || "";
+  mapInfoFeedbackEl.className = "form-feedback";
+  if (type === "success") {
+    mapInfoFeedbackEl.classList.add("form-feedback--success");
+  } else if (type === "error") {
+    mapInfoFeedbackEl.classList.add("form-feedback--error");
+  }
+}
+
+/** マップ選択 select を再描画する */
+function renderMapInfoSelect() {
+  if (!mapInfoSelect) {
+    return;
+  }
+  const prevId = mapInfoState.selectedMapId;
+  mapInfoSelect.innerHTML = "";
+
+  if (!mapInfoState.maps.length) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "（マップなし）";
+    mapInfoSelect.appendChild(opt);
+    return;
+  }
+
+  mapInfoState.maps.forEach((map) => {
+    const opt = document.createElement("option");
+    opt.value = String(map.id);
+    opt.textContent = `[${map.id}] ${map.name || "（名前なし）"}`;
+    if (map.id === prevId) {
+      opt.selected = true;
+    }
+    mapInfoSelect.appendChild(opt);
+  });
+
+  // 先頭を選択状態にする（前回選択が消えた場合）
+  if (!mapInfoState.maps.some((m) => m.id === mapInfoState.selectedMapId)) {
+    mapInfoState.selectedMapId = mapInfoState.maps[0].id;
+    mapInfoSelect.value = String(mapInfoState.selectedMapId);
+  }
+}
+
+/** 選択中マップのフォームを更新する */
+function renderMapInfoForm() {
+  if (!mapInfoEditArea) {
+    return;
+  }
+
+  const map = mapInfoState.maps.find((m) => m.id === mapInfoState.selectedMapId);
+  if (!map) {
+    mapInfoEditArea.style.display = "none";
+    return;
+  }
+
+  mapInfoEditArea.style.display = "";
+
+  if (mapInfoNameInput) { mapInfoNameInput.value = map.name || ""; }
+  if (mapInfoBgmInput) { mapInfoBgmInput.value = typeof map.bgmId === "number" ? map.bgmId : 0; }
+  if (mapInfoWeatherSelect) { mapInfoWeatherSelect.value = String(typeof map.weatherType === "number" ? map.weatherType : 0); }
+  if (mapInfoDarknessInput) { mapInfoDarknessInput.value = typeof map.darknessLevel === "number" ? map.darknessLevel : 0; }
+  if (mapInfoBattleCheck) { mapInfoBattleCheck.checked = !!map.battleEnabled; }
+  if (mapInfoRecoveryCheck) { mapInfoRecoveryCheck.checked = !!map.recoveryEnabled; }
+}
+
+/** マップ情報一覧を API から取得する */
+async function loadMapInfoData(forceReload = false) {
+  if (mapInfoState.isLoading) {
+    return;
+  }
+  if (!forceReload && mapInfoState.maps.length && !mapInfoState.loadError) {
+    renderMapInfoSelect();
+    renderMapInfoForm();
+    return;
+  }
+
+  mapInfoState.isLoading = true;
+  mapInfoState.loadError = null;
+  setMapInfoSummary("マップ情報を読み込み中...");
+  setMapInfoFeedback("", null);
+
+  try {
+    const { response, data } = await fetchJson("/api/maps");
+    if (!response.ok || !data || !Array.isArray(data.maps)) {
+      throw new Error("invalid_response");
+    }
+
+    mapInfoState.maps = data.maps.slice().sort((a, b) => a.id - b.id);
+    mapInfoState.isLoading = false;
+
+    setMapInfoSummary(`マップ ${mapInfoState.maps.length} 件`);
+    renderMapInfoSelect();
+    renderMapInfoForm();
+  } catch (err) {
+    console.error("Failed to load map info", err);
+    mapInfoState.maps = [];
+    mapInfoState.loadError = "マップ情報の取得に失敗しました";
+    mapInfoState.isLoading = false;
+    setMapInfoSummary(mapInfoState.loadError);
+    setMapInfoFeedback(mapInfoState.loadError, "error");
+    renderMapInfoSelect();
+    renderMapInfoForm();
+  }
+}
+
+/** マップ情報を PUT で保存する */
+async function saveMapInfo(event) {
+  if (event) {
+    event.preventDefault();
+  }
+
+  const map = mapInfoState.maps.find((m) => m.id === mapInfoState.selectedMapId);
+  if (!map) {
+    setMapInfoFeedback("保存対象のマップが選択されていません", "error");
+    return;
+  }
+
+  const payload = { id: map.id };
+
+  if (mapInfoNameInput) { payload.name = mapInfoNameInput.value; }
+  if (mapInfoBgmInput) { payload.bgmId = parseInt(mapInfoBgmInput.value, 10) || 0; }
+  if (mapInfoWeatherSelect) { payload.weatherType = parseInt(mapInfoWeatherSelect.value, 10) || 0; }
+  if (mapInfoDarknessInput) {
+    const v = parseInt(mapInfoDarknessInput.value, 10);
+    payload.darknessLevel = isNaN(v) ? 0 : Math.min(255, Math.max(0, v));
+  }
+  if (mapInfoBattleCheck) { payload.battleEnabled = mapInfoBattleCheck.checked; }
+  if (mapInfoRecoveryCheck) { payload.recoveryEnabled = mapInfoRecoveryCheck.checked; }
+
+  setMapInfoFeedback("保存中...", null);
+
+  try {
+    const { response, data } = await fetchJson("/api/maps", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok || !data || !data.id) {
+      const errMsg = (data && data.error) ? data.error : `HTTP ${response.status}`;
+      throw new Error(errMsg);
+    }
+
+    // ローカルキャッシュを更新する
+    const idx = mapInfoState.maps.findIndex((m) => m.id === data.id);
+    if (idx >= 0) {
+      mapInfoState.maps[idx] = data;
+    }
+
+    setMapInfoFeedback("保存しました", "success");
+    renderMapInfoSelect();
+    renderMapInfoForm();
+  } catch (err) {
+    console.error("Failed to save map info", err);
+    setMapInfoFeedback(`保存に失敗しました: ${err.message}`, "error");
+  }
+}
+
+/* =====================================================
  * マップウィンドウ画面 (map-window)
  * map-objects 画面の renderMapPreview() を土台に、
  * オブジェクトオーバーレイなしのパーツ描画と
@@ -2896,6 +3093,14 @@ function activateRoute(route, options = {}) {
     stopServerPolling();
   }
 
+  if (normalized === "map-info") {
+    if (options.forceReload) {
+      loadMapInfoData(true);
+    } else if (!mapInfoState.maps.length && !mapInfoState.isLoading && !mapInfoState.loadError) {
+      loadMapInfoData(false);
+    }
+  }
+
   if (normalized === "map-window") {
     if (options.forceReload) {
       loadMapWindowData(true);
@@ -3009,6 +3214,26 @@ window.addEventListener("load", () => {
   }
   if (roleResetButton) {
     roleResetButton.addEventListener("click", handleRoleReset);
+  }
+
+  /* マップ情報編集イベント登録 */
+  if (mapInfoSelect) {
+    mapInfoSelect.addEventListener("change", function () {
+      const id = parseInt(mapInfoSelect.value, 10);
+      if (!isNaN(id)) {
+        mapInfoState.selectedMapId = id;
+        renderMapInfoForm();
+        setMapInfoFeedback("", null);
+      }
+    });
+  }
+  if (mapInfoEditForm) {
+    mapInfoEditForm.addEventListener("submit", saveMapInfo);
+  }
+  if (mapInfoReloadBtn) {
+    mapInfoReloadBtn.addEventListener("click", function () {
+      loadMapInfoData(true);
+    });
   }
 
   if (mapPartsGallery) {

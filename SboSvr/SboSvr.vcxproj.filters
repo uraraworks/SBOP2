@@ -150,6 +150,9 @@
     <ClCompile Include="src\Web\Handlers\SelectionHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\MapInfoHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\Handlers\MapObjectHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
@@ -516,6 +519,9 @@
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\SelectionHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\MapInfoHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\MapObjectHandler.h">
