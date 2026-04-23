@@ -4381,14 +4381,21 @@ if (charNextBtn) {
 }
 
 /* =====================================================
- * キャラクター詳細表示 (character-overview)
- * GET /api/characters/{charId}
+ * キャラクター詳細・編集 (character-overview)
+ * GET  /api/characters/{charId}
+ * PUT  /api/characters/{charId}
+ * PUT  /api/characters/{charId}/status
+ * PUT  /api/characters/{charId}/equipment
+ * PUT  /api/characters/{charId}/graphics
  * ===================================================== */
 
 const charDetailIdInput  = document.getElementById("char-detail-id-input");
 const charDetailLoadBtn  = document.getElementById("char-detail-load-btn");
 const charDetailFeedback = document.getElementById("char-detail-feedback");
 const charDetailBody     = document.getElementById("char-detail-body");
+
+/** 現在表示中のキャラID */
+var currentCharId = 0;
 
 /** GET /api/characters/{charId} を呼んで詳細を取得する */
 async function fetchCharacterDetail(charId) {
@@ -4404,6 +4411,7 @@ async function fetchCharacterDetail(charId) {
       return;
     }
     charDetailFeedback.textContent = "";
+    currentCharId = charId;
     renderCharacterDetail(data);
   } catch (err) {
     console.error("fetchCharacterDetail error", err);
@@ -4411,124 +4419,182 @@ async function fetchCharacterDetail(charId) {
   }
 }
 
-/** レスポンスデータを詳細表示欄に反映する */
+/** フィードバックメッセージを設定する（成功/エラー兼用） */
+function setFeedback(id, msg, isError) {
+  var el = document.getElementById(id);
+  if (!el) { return; }
+  el.textContent = msg;
+  el.style.color = isError ? "var(--color-danger, #f87171)" : "var(--color-success, #4ade80)";
+}
+
+/** input[type=number] の値を数値として取得する（空欄は null） */
+function getNumVal(id) {
+  var el = document.getElementById(id);
+  if (!el) { return null; }
+  var s = el.value.trim();
+  if (s === "") { return null; }
+  var n = parseInt(s, 10);
+  return isNaN(n) ? null : n;
+}
+
+/** input[type=text] の値を取得する（空欄は null） */
+function getStrVal(id) {
+  var el = document.getElementById(id);
+  if (!el) { return null; }
+  var s = el.value;
+  return s;
+}
+
+/** input[type=checkbox] の値を真偽値で取得する */
+function getBoolVal(id) {
+  var el = document.getElementById(id);
+  if (!el) { return null; }
+  return el.checked;
+}
+
+/** PUT リクエストを送る汎用関数 */
+async function putJson(url, body) {
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    credentials: "same-origin"
+  });
+  var data = null;
+  try { data = await res.json(); } catch (_) {}
+  return { response: res, data: data };
+}
+
+/** レスポンスデータを詳細フォームに反映する */
 function renderCharacterDetail(d) {
   function setText(id, val) {
-    const el = document.getElementById(id);
+    var el = document.getElementById(id);
     if (el) { el.textContent = (val === null || val === undefined) ? "-" : String(val); }
   }
+  function setInput(id, val) {
+    var el = document.getElementById(id);
+    if (!el) { return; }
+    if (el.type === "checkbox") {
+      el.checked = !!val;
+    } else {
+      el.value = (val === null || val === undefined) ? "" : String(val);
+    }
+  }
 
-  // 基本情報
+  // 基本情報（表示 span）
   setText("cd-charId",    d.charId);
-  setText("cd-charName",  d.charName);
   setText("cd-accountId", d.accountId);
-  setText("cd-mapId",     d.mapId);
-  setText("cd-pos",       d.x + ", " + d.y);
-  setText("cd-direction", d.direction);
   setText("cd-moveState", d.moveState);
-  setText("cd-moveType",  d.moveType);
-  setText("cd-familyId",  d.familyId);
-  setText("cd-grpSize",   d.grpSize);
-  setText("cd-sex",       d.sex);
   setText("cd-isNpc",     d.isNpc ? "NPC" : "PC");
-  setText("cd-block",     d.block ? "あり" : "なし");
-  setText("cd-push",      d.push  ? "あり" : "なし");
+
+  // 基本情報（フォーム入力値）
+  setInput("cdf-charName",    d.charName);
+  setInput("cdf-mapId",       d.mapId);
+  setInput("cdf-x",           d.x);
+  setInput("cdf-y",           d.y);
+  setInput("cdf-direction",   d.direction);
+  setInput("cdf-moveType",    d.moveType);
+  setInput("cdf-motionTypeId",d.motionTypeId);
+  setInput("cdf-familyId",    d.familyId);
+  setInput("cdf-grpSize",     d.grpSize);
+  setInput("cdf-sex",         d.sex);
+  setInput("cdf-block",       d.block);
+  setInput("cdf-push",        d.push);
 
   // ステータス
   if (d.status) {
     var s = d.status;
-    setText("cd-hp",                s.hp);
-    setText("cd-maxHp",             s.maxHp);
-    setText("cd-sp",                s.sp);
-    setText("cd-maxSp",             s.maxSp);
-    setText("cd-exp",               s.exp);
-    setText("cd-level",             s.level);
-    setText("cd-stamina",           s.stamina);
-    setText("cd-power",             s.power);
-    setText("cd-strength",          s.strength);
-    setText("cd-magic",             s.magic);
-    setText("cd-skillful",          s.skillful);
-    setText("cd-abilityAT",         s.abilityAT);
-    setText("cd-abilityDF",         s.abilityDF);
-    setText("cd-pAtack",            s.pAtack);
-    setText("cd-pDefense",          s.pDefense);
-    setText("cd-pMagic",            s.pMagic);
-    setText("cd-pMagicDefense",     s.pMagicDefense);
-    setText("cd-pHitAverage",       s.pHitAverage);
-    setText("cd-pAvoidAverage",     s.pAvoidAverage);
-    setText("cd-pCriticalAverage",  s.pCriticalAverage);
-    setText("cd-attrFire",          s.attrFire);
-    setText("cd-attrWind",          s.attrWind);
-    setText("cd-attrWater",         s.attrWater);
-    setText("cd-attrEarth",         s.attrEarth);
-    setText("cd-attrLight",         s.attrLight);
-    setText("cd-attrDark",          s.attrDark);
+    setInput("cdf-hp",               s.hp);
+    setInput("cdf-maxHp",            s.maxHp);
+    setInput("cdf-sp",               s.sp);
+    setInput("cdf-maxSp",            s.maxSp);
+    setInput("cdf-exp",              s.exp);
+    setInput("cdf-level",            s.level);
+    setInput("cdf-stamina",          s.stamina);
+    setInput("cdf-power",            s.power);
+    setInput("cdf-strength",         s.strength);
+    setInput("cdf-magic",            s.magic);
+    setInput("cdf-skillful",         s.skillful);
+    setInput("cdf-abilityAT",        s.abilityAT);
+    setInput("cdf-abilityDF",        s.abilityDF);
+    setInput("cdf-pAtack",           s.pAtack);
+    setInput("cdf-pDefense",         s.pDefense);
+    setInput("cdf-pMagic",           s.pMagic);
+    setInput("cdf-pMagicDefense",    s.pMagicDefense);
+    setInput("cdf-pHitAverage",      s.pHitAverage);
+    setInput("cdf-pAvoidAverage",    s.pAvoidAverage);
+    setInput("cdf-pCriticalAverage", s.pCriticalAverage);
+    setInput("cdf-attrFire",         s.attrFire);
+    setInput("cdf-attrWind",         s.attrWind);
+    setInput("cdf-attrWater",        s.attrWater);
+    setInput("cdf-attrEarth",        s.attrEarth);
+    setInput("cdf-attrLight",        s.attrLight);
+    setInput("cdf-attrDark",         s.attrDark);
   }
 
   // 装備
   if (d.equipment) {
     var e = d.equipment;
-    setText("cd-eqCloth",      e.cloth);
-    setText("cd-eqAcce1",      e.accesory1);
-    setText("cd-eqAcce2",      e.accesory2);
-    setText("cd-eqArmsRight",  e.armsRight);
-    setText("cd-eqArmsLeft",   e.armsLeft);
-    setText("cd-eqHead",       e.head);
+    setInput("cdf-eqCloth",      e.cloth);
+    setInput("cdf-eqAcce1",      e.accesory1);
+    setInput("cdf-eqAcce2",      e.accesory2);
+    setInput("cdf-eqArmsRight",  e.armsRight);
+    setInput("cdf-eqArmsLeft",   e.armsLeft);
+    setInput("cdf-eqHead",       e.head);
   }
 
   // グラフィック
   if (d.graphics) {
     var g = d.graphics;
-    setText("cd-grpNpc",          g.npc);
-    setText("cd-grpCloth",        g.cloth);
-    setText("cd-grpEye",          g.eye);
-    setText("cd-grpEyeColor",     g.eyeColor);
-    setText("cd-grpHairType",     g.hairType);
-    setText("cd-grpHairColor",    g.hairColor);
-    setText("cd-grpSp",           g.sp);
-    setText("cd-grpTmpMain",      g.tmpMain);
-    setText("cd-grpTmpSub",       g.tmpSub);
-    setText("cd-grpAcce",         g.acce);
-    setText("cd-grpArmsMain",     g.armsMain);
-    setText("cd-grpArmsSub",      g.armsSub);
-    setText("cd-grpArmsLeftMain", g.armsLeftMain);
-    setText("cd-grpArmsLeftSub",  g.armsLeftSub);
-    setText("cd-grpInitNpc",      g.initNpc);
-    setText("cd-grpInitCloth",    g.initCloth);
-    setText("cd-grpInitEye",      g.initEye);
-    setText("cd-grpInitEyeColor", g.initEyeColor);
-    setText("cd-grpInitHairType", g.initHairType);
-    setText("cd-grpInitHairColor",g.initHairColor);
-    setText("cd-grpInitSp",       g.initSp);
+    setInput("cdf-grpNpc",          g.npc);
+    setInput("cdf-grpCloth",        g.cloth);
+    setInput("cdf-grpEye",          g.eye);
+    setInput("cdf-grpEyeColor",     g.eyeColor);
+    setInput("cdf-grpHairType",     g.hairType);
+    setInput("cdf-grpHairColor",    g.hairColor);
+    setInput("cdf-grpSp",           g.sp);
+    setInput("cdf-grpTmpMain",      g.tmpMain);
+    setInput("cdf-grpTmpSub",       g.tmpSub);
+    setInput("cdf-grpAcce",         g.acce);
+    setInput("cdf-grpArmsMain",     g.armsMain);
+    setInput("cdf-grpArmsSub",      g.armsSub);
+    setInput("cdf-grpArmsLeftMain", g.armsLeftMain);
+    setInput("cdf-grpArmsLeftSub",  g.armsLeftSub);
+    setInput("cdf-grpInitNpc",      g.initNpc);
+    setInput("cdf-grpInitCloth",    g.initCloth);
+    setInput("cdf-grpInitEye",      g.initEye);
+    setInput("cdf-grpInitEyeColor", g.initEyeColor);
+    setInput("cdf-grpInitHairType", g.initHairType);
+    setInput("cdf-grpInitHairColor",g.initHairColor);
+    setInput("cdf-grpInitSp",       g.initSp);
   }
 
-  // 移動
+  // 移動（読み取り専用）
   if (d.movement) {
-    var m = d.movement;
-    setText("cd-maxItemCount",      m.maxItemCount);
-    setText("cd-dropItemAverage",   m.dropItemAverage);
-    setText("cd-moveAverage",       m.moveAverage);
-    setText("cd-moveAverageBattle", m.moveAverageBattle);
-    setText("cd-moveWait",          m.moveWait);
-    setText("cd-moveWaitBattle",    m.moveWaitBattle);
-    setText("cd-searchCX",          m.searchDistanceCX);
-    setText("cd-searchCY",          m.searchDistanceCY);
-    setText("cd-motionTypeId",      m.motionTypeId);
+    var mv = d.movement;
+    setText("cd-maxItemCount",      mv.maxItemCount);
+    setText("cd-dropItemAverage",   mv.dropItemAverage);
+    setText("cd-moveAverage",       mv.moveAverage);
+    setText("cd-moveAverageBattle", mv.moveAverageBattle);
+    setText("cd-moveWait",          mv.moveWait);
+    setText("cd-moveWaitBattle",    mv.moveWaitBattle);
+    setText("cd-searchCX",          mv.searchDistanceCX);
+    setText("cd-searchCY",          mv.searchDistanceCY);
+    setText("cd-motionTypeId",      mv.motionTypeId);
   }
 
-  // NPC 発生
+  // NPC 発生（読み取り専用）
   if (d.npcSpawn) {
-    var n = d.npcSpawn;
-    setText("cd-putCycle",     n.putCycle);
-    setText("cd-putMoveType",  n.putMoveType);
-    setText("cd-maxPutCount",  n.maxPutCount);
-    setText("cd-putAverage",   n.putAverage);
-    setText("cd-putAreaX",     n.putAreaX);
-    setText("cd-putAreaY",     n.putAreaY);
+    var ns = d.npcSpawn;
+    setText("cd-putCycle",     ns.putCycle);
+    setText("cd-putMoveType",  ns.putMoveType);
+    setText("cd-maxPutCount",  ns.maxPutCount);
+    setText("cd-putAverage",   ns.putAverage);
+    setText("cd-putAreaX",     ns.putAreaX);
+    setText("cd-putAreaY",     ns.putAreaY);
   }
 
   if (charDetailBody) { charDetailBody.style.display = ""; }
-  // CharID 入力欄を取得した ID で同期しておく
   if (charDetailIdInput) { charDetailIdInput.value = String(d.charId); }
 }
 
@@ -4545,5 +4611,228 @@ if (charDetailLoadBtn) {
   });
 }
 
-// character-overview 画面が直接ナビから開かれたときに ID 入力フォームを表示するだけでよい
+/* -------------------------------------------------------
+ * タブ切り替え
+ * ------------------------------------------------------- */
+var charTabNav = document.getElementById("char-tab-nav");
+if (charTabNav) {
+  charTabNav.addEventListener("click", function (ev) {
+    var btn = ev.target.closest(".tab-btn");
+    if (!btn) { return; }
+    var tabId = btn.dataset.tab;
+    if (!tabId) { return; }
+
+    // タブボタンのアクティブ切り替え
+    charTabNav.querySelectorAll(".tab-btn").forEach(function (b) {
+      b.classList.toggle("is-active", b === btn);
+    });
+
+    // タブパネルの表示切り替え
+    document.querySelectorAll("#char-detail-body .tab-panel").forEach(function (panel) {
+      panel.style.display = (panel.id === tabId) ? "" : "none";
+    });
+  });
+}
+
+/* -------------------------------------------------------
+ * 基本情報 保存  PUT /api/characters/{charId}
+ * ------------------------------------------------------- */
+var cdBasicForm = document.getElementById("cd-basic-form");
+if (cdBasicForm) {
+  cdBasicForm.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    if (!currentCharId) {
+      setFeedback("cd-basic-feedback", "先にキャラクターを表示してください", true);
+      return;
+    }
+    setFeedback("cd-basic-feedback", "保存中...", false);
+
+    // number 型フィールドの簡易バリデーション
+    var numFields = ["cdf-mapId","cdf-x","cdf-y","cdf-direction","cdf-moveType",
+                     "cdf-motionTypeId","cdf-familyId","cdf-grpSize","cdf-sex"];
+    for (var i = 0; i < numFields.length; i++) {
+      var el = document.getElementById(numFields[i]);
+      if (el && el.value.trim() !== "" && isNaN(parseInt(el.value, 10))) {
+        setFeedback("cd-basic-feedback", numFields[i] + " は数値で入力してください", true);
+        return;
+      }
+    }
+
+    var body = {};
+    var charName = getStrVal("cdf-charName");
+    if (charName !== null) { body.charName = charName; }
+    var mapId    = getNumVal("cdf-mapId");       if (mapId    !== null) { body.mapId    = mapId; }
+    var x        = getNumVal("cdf-x");           if (x        !== null) { body.x        = x; }
+    var y        = getNumVal("cdf-y");           if (y        !== null) { body.y        = y; }
+    var dir      = getNumVal("cdf-direction");   if (dir      !== null) { body.direction = dir; }
+    var moveType = getNumVal("cdf-moveType");    if (moveType !== null) { body.moveType = moveType; }
+    var motionId = getNumVal("cdf-motionTypeId");if (motionId !== null) { body.motionTypeId = motionId; }
+    var familyId = getNumVal("cdf-familyId");    if (familyId !== null) { body.familyId = familyId; }
+    var grpSize  = getNumVal("cdf-grpSize");     if (grpSize  !== null) { body.grpSize  = grpSize; }
+    var sex      = getNumVal("cdf-sex");         if (sex      !== null) { body.sex      = sex; }
+    body.block = getBoolVal("cdf-block");
+    body.push  = getBoolVal("cdf-push");
+
+    try {
+      var { response, data } = await putJson("/api/characters/" + currentCharId, body);
+      if (!response.ok) {
+        var msg = (data && data.error) ? data.error : "保存に失敗しました";
+        setFeedback("cd-basic-feedback", "エラー: " + msg, true);
+        return;
+      }
+      setFeedback("cd-basic-feedback", "保存しました", false);
+      // 最新データを再取得して表示を更新する
+      fetchCharacterDetail(currentCharId);
+    } catch (err) {
+      console.error("cd-basic-form save error", err);
+      setFeedback("cd-basic-feedback", "通信エラーが発生しました", true);
+    }
+  });
+}
+
+/* -------------------------------------------------------
+ * ステータス 保存  PUT /api/characters/{charId}/status
+ * ------------------------------------------------------- */
+var cdStatusForm = document.getElementById("cd-status-form");
+if (cdStatusForm) {
+  cdStatusForm.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    if (!currentCharId) {
+      setFeedback("cd-status-feedback", "先にキャラクターを表示してください", true);
+      return;
+    }
+    setFeedback("cd-status-feedback", "保存中...", false);
+
+    var statusFields = [
+      ["cdf-hp","hp"],["cdf-maxHp","maxHp"],["cdf-sp","sp"],["cdf-maxSp","maxSp"],
+      ["cdf-exp","exp"],["cdf-level","level"],["cdf-stamina","stamina"],
+      ["cdf-power","power"],["cdf-strength","strength"],["cdf-magic","magic"],
+      ["cdf-skillful","skillful"],["cdf-abilityAT","abilityAT"],["cdf-abilityDF","abilityDF"],
+      ["cdf-pAtack","pAtack"],["cdf-pDefense","pDefense"],["cdf-pMagic","pMagic"],
+      ["cdf-pMagicDefense","pMagicDefense"],["cdf-pHitAverage","pHitAverage"],
+      ["cdf-pAvoidAverage","pAvoidAverage"],["cdf-pCriticalAverage","pCriticalAverage"],
+      ["cdf-attrFire","attrFire"],["cdf-attrWind","attrWind"],["cdf-attrWater","attrWater"],
+      ["cdf-attrEarth","attrEarth"],["cdf-attrLight","attrLight"],["cdf-attrDark","attrDark"]
+    ];
+
+    var body = {};
+    for (var i = 0; i < statusFields.length; i++) {
+      var pair = statusFields[i];
+      var el = document.getElementById(pair[0]);
+      if (!el) { continue; }
+      var s = el.value.trim();
+      if (s === "") { continue; }
+      var n = parseInt(s, 10);
+      if (isNaN(n)) {
+        setFeedback("cd-status-feedback", pair[0] + " は数値で入力してください", true);
+        return;
+      }
+      body[pair[1]] = n;
+    }
+
+    try {
+      var { response, data } = await putJson("/api/characters/" + currentCharId + "/status", body);
+      if (!response.ok) {
+        var msg = (data && data.error) ? data.error : "保存に失敗しました";
+        setFeedback("cd-status-feedback", "エラー: " + msg, true);
+        return;
+      }
+      setFeedback("cd-status-feedback", "保存しました", false);
+      fetchCharacterDetail(currentCharId);
+    } catch (err) {
+      console.error("cd-status-form save error", err);
+      setFeedback("cd-status-feedback", "通信エラーが発生しました", true);
+    }
+  });
+}
+
+/* -------------------------------------------------------
+ * 装備 保存  PUT /api/characters/{charId}/equipment
+ * ------------------------------------------------------- */
+var cdEquipForm = document.getElementById("cd-equip-form");
+if (cdEquipForm) {
+  cdEquipForm.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    if (!currentCharId) {
+      setFeedback("cd-equip-feedback", "先にキャラクターを表示してください", true);
+      return;
+    }
+    setFeedback("cd-equip-feedback", "保存中...", false);
+
+    var equipFields = [
+      ["cdf-eqCloth","cloth"],["cdf-eqAcce1","accesory1"],["cdf-eqAcce2","accesory2"],
+      ["cdf-eqArmsRight","armsRight"],["cdf-eqArmsLeft","armsLeft"],["cdf-eqHead","head"]
+    ];
+
+    var body = {};
+    for (var i = 0; i < equipFields.length; i++) {
+      var pair = equipFields[i];
+      var n = getNumVal(pair[0]);
+      if (n !== null) { body[pair[1]] = n; }
+    }
+
+    try {
+      var { response, data } = await putJson("/api/characters/" + currentCharId + "/equipment", body);
+      if (!response.ok) {
+        var msg = (data && data.error) ? data.error : "保存に失敗しました";
+        setFeedback("cd-equip-feedback", "エラー: " + msg, true);
+        return;
+      }
+      setFeedback("cd-equip-feedback", "保存しました", false);
+      fetchCharacterDetail(currentCharId);
+    } catch (err) {
+      console.error("cd-equip-form save error", err);
+      setFeedback("cd-equip-feedback", "通信エラーが発生しました", true);
+    }
+  });
+}
+
+/* -------------------------------------------------------
+ * グラフィック 保存  PUT /api/characters/{charId}/graphics
+ * ------------------------------------------------------- */
+var cdGraphicsForm = document.getElementById("cd-graphics-form");
+if (cdGraphicsForm) {
+  cdGraphicsForm.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    if (!currentCharId) {
+      setFeedback("cd-graphics-feedback", "先にキャラクターを表示してください", true);
+      return;
+    }
+    setFeedback("cd-graphics-feedback", "保存中...", false);
+
+    var grpFields = [
+      ["cdf-grpNpc","npc"],["cdf-grpCloth","cloth"],["cdf-grpEye","eye"],
+      ["cdf-grpEyeColor","eyeColor"],["cdf-grpHairType","hairType"],["cdf-grpHairColor","hairColor"],
+      ["cdf-grpSp","sp"],["cdf-grpTmpMain","tmpMain"],["cdf-grpTmpSub","tmpSub"],
+      ["cdf-grpAcce","acce"],["cdf-grpArmsMain","armsMain"],["cdf-grpArmsSub","armsSub"],
+      ["cdf-grpArmsLeftMain","armsLeftMain"],["cdf-grpArmsLeftSub","armsLeftSub"],
+      ["cdf-grpInitNpc","initNpc"],["cdf-grpInitCloth","initCloth"],["cdf-grpInitEye","initEye"],
+      ["cdf-grpInitEyeColor","initEyeColor"],["cdf-grpInitHairType","initHairType"],
+      ["cdf-grpInitHairColor","initHairColor"],["cdf-grpInitSp","initSp"]
+    ];
+
+    var body = {};
+    for (var i = 0; i < grpFields.length; i++) {
+      var pair = grpFields[i];
+      var n = getNumVal(pair[0]);
+      if (n !== null) { body[pair[1]] = n; }
+    }
+
+    try {
+      var { response, data } = await putJson("/api/characters/" + currentCharId + "/graphics", body);
+      if (!response.ok) {
+        var msg = (data && data.error) ? data.error : "保存に失敗しました";
+        setFeedback("cd-graphics-feedback", "エラー: " + msg, true);
+        return;
+      }
+      setFeedback("cd-graphics-feedback", "保存しました", false);
+      fetchCharacterDetail(currentCharId);
+    } catch (err) {
+      console.error("cd-graphics-form save error", err);
+      setFeedback("cd-graphics-feedback", "通信エラーが発生しました", true);
+    }
+  });
+}
+
+// character-overview 画面が直接ナビから開かれたときは ID 入力フォームを表示するだけでよい
 // （一覧からクリックで来た場合は fetchCharacterDetail が自動的に呼ばれる）
