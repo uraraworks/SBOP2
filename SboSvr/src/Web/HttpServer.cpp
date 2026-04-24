@@ -31,6 +31,7 @@
 #include "Handlers/ItemTypeHandler.h"
 #include "Handlers/ItemHandler.h"
 #include "Handlers/WeaponHandler.h"
+#include "Handlers/EfcBalloonHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -823,6 +824,23 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> weaponDeleteHandler(new CWeaponDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/weapons", std::move(weaponDeleteHandler));
+
+        // 噴出し（吹き出し）情報 API（Wave 2D）
+        //   GET    /api/efc-balloons    一覧（コマ単位 flat）
+        //   POST   /api/efc-balloons    新規作成（listId 必須）
+        //   PUT    /api/efc-balloons    更新
+        //   DELETE /api/efc-balloons    削除
+        std::unique_ptr<IApiHandler> balloonListHandler(new CEfcBalloonListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/efc-balloons", std::move(balloonListHandler));
+
+        std::unique_ptr<IApiHandler> balloonCreateHandler(new CEfcBalloonCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/efc-balloons", std::move(balloonCreateHandler));
+
+        std::unique_ptr<IApiHandler> balloonUpdateHandler(new CEfcBalloonUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/efc-balloons", std::move(balloonUpdateHandler));
+
+        std::unique_ptr<IApiHandler> balloonDeleteHandler(new CEfcBalloonDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/efc-balloons", std::move(balloonDeleteHandler));
 
         // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
         CSelectionStore::GetInstance().SetChangeCallback(
