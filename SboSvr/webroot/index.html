@@ -842,6 +842,11 @@
               <option value="overlay">重ね合わせスプライト</option>
             </select>
           </label>
+          <label class="form-field compact">
+            <span>パーツID 指定</span>
+            <input type="number" id="map-parts-jump-id" min="0" />
+          </label>
+          <button type="button" class="button" data-picker="mapPart" data-picker-target="map-parts-jump-id">パーツを選択...</button>
         </div>
         <div class="map-parts-summary" id="map-parts-summary" aria-live="polite">マップパーツ情報を読み込み中です...</div>
         <div class="map-parts-gallery-wrapper" aria-live="polite">
