@@ -3299,6 +3299,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "effect-library") {
+    if (options.forceReload || (!effectState.items.length && !effectState.isLoading && !effectState.loadError)) {
+      loadEffectList(options.forceReload === true);
+    }
+  }
+
   currentRoute = normalized;
 }
 
@@ -5858,6 +5864,7 @@ window.addEventListener("load", function () {
   setupItemView();
   setupWeaponView();
   setupBalloonView();
+  setupEffectView();
 });
 
 // ---------------------------------------------------------------------------
@@ -6742,5 +6749,389 @@ function setupBalloonView() {
   const cancelBtn = document.getElementById("balloon-cancel-btn");
   if (cancelBtn) {
     cancelBtn.addEventListener("click", function () { closeBalloonEdit(); });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// エフェクト情報 /api/effects
+// ---------------------------------------------------------------------------
+
+const effectState = {
+  items: [],            // サーバー取得済みエフェクト一覧
+  isLoading: false,
+  loadError: null,
+  editing: null,        // 編集中の effectId（新規は 0）
+  editAnimes: []        // 編集中の animes ワーキングコピー
+};
+
+function setEffectFeedback(msg, isError) {
+  setFeedback("effect-feedback", msg || "", !!isError);
+}
+
+function setEffectEditFeedback(msg, isError) {
+  setFeedback("effect-edit-feedback", msg || "", !!isError);
+}
+
+async function loadEffectList(forceReload) {
+  if (effectState.isLoading) { return; }
+  effectState.isLoading = true;
+  effectState.loadError = null;
+  if (forceReload) {
+    setEffectFeedback("読み込み中...", false);
+  }
+  try {
+    const { response, data } = await fetchJson("/api/effects");
+    if (!response.ok || !data || !Array.isArray(data.items)) {
+      throw new Error("effects load failed: HTTP " + response.status);
+    }
+    effectState.items = data.items;
+    renderEffectTable();
+    setEffectFeedback("", false);
+  } catch (err) {
+    console.error("loadEffectList error", err);
+    effectState.loadError = err.message || String(err);
+    setEffectFeedback("読み込みに失敗しました", true);
+  } finally {
+    effectState.isLoading = false;
+  }
+}
+
+function renderEffectTable() {
+  const tbody = document.getElementById("effect-table-body");
+  const summary = document.getElementById("effect-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const items = effectState.items || [];
+  if (summary) {
+    summary.textContent = items.length + " 件";
+  }
+
+  items.forEach(function (e) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = e.effectId;
+    tr.appendChild(tdId);
+
+    const tdName = document.createElement("td");
+    tdName.textContent = e.name || "";
+    tr.appendChild(tdName);
+
+    const tdGrpMain = document.createElement("td");
+    tdGrpMain.textContent = e.grpIdMain;
+    tr.appendChild(tdGrpMain);
+
+    const tdSound = document.createElement("td");
+    tdSound.textContent = e.soundId;
+    tr.appendChild(tdSound);
+
+    const tdAnime = document.createElement("td");
+    tdAnime.textContent = Array.isArray(e.animes) ? e.animes.length : (e.animeCount || 0);
+    tr.appendChild(tdAnime);
+
+    const tdLoop = document.createElement("td");
+    tdLoop.textContent = e.loop ? "◯" : "";
+    tr.appendChild(tdLoop);
+
+    const tdLoopSound = document.createElement("td");
+    tdLoopSound.textContent = e.loopSound ? "◯" : "";
+    tr.appendChild(tdLoopSound);
+
+    const tdOps = document.createElement("td");
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.addEventListener("click", function () { openEffectEdit(e); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.5rem";
+    btnDel.addEventListener("click", function () { deleteEffect(e); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+function openEffectEdit(effect) {
+  const card = document.getElementById("effect-edit-card");
+  const title = document.getElementById("effect-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !effect;
+  effectState.editing = isNew ? 0 : effect.effectId;
+
+  if (title) {
+    title.textContent = isNew
+        ? "エフェクト 新規追加"
+        : ("エフェクト編集 (ID=" + effect.effectId + ")");
+  }
+
+  const src = effect || {
+    effectId: 0, name: "", grpIdMain: 0, soundId: 0,
+    loop: false, loopSound: false, animes: []
+  };
+
+  document.getElementById("effect-edit-effectId").value =
+      isNew ? "" : String(src.effectId);
+  document.getElementById("effect-edit-name").value      = src.name || "";
+  document.getElementById("effect-edit-grpIdMain").value = String(src.grpIdMain || 0);
+  document.getElementById("effect-edit-soundId").value   = String(src.soundId || 0);
+  document.getElementById("effect-edit-loop").checked      = !!src.loop;
+  document.getElementById("effect-edit-loopSound").checked = !!src.loopSound;
+
+  // animes のワーキングコピー（深いコピー）
+  effectState.editAnimes = (src.animes || []).map(function (a) {
+    return {
+      wait:      a.wait      || 0,
+      level:     a.level     || 0,
+      grpIdBase: a.grpIdBase || 0,
+      grpIdPile: a.grpIdPile || 0
+    };
+  });
+  renderEffectAnimeTable();
+
+  setEffectEditFeedback("", false);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeEffectEdit() {
+  const card = document.getElementById("effect-edit-card");
+  if (card) { card.style.display = "none"; }
+  effectState.editing = null;
+  effectState.editAnimes = [];
+  setEffectEditFeedback("", false);
+}
+
+function renderEffectAnimeTable() {
+  const tbody = document.getElementById("effect-anime-table-body");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const animes = effectState.editAnimes || [];
+  animes.forEach(function (a, idx) {
+    const tr = document.createElement("tr");
+
+    const tdIdx = document.createElement("td");
+    tdIdx.textContent = String(idx);
+    tr.appendChild(tdIdx);
+
+    function makeNumCell(value, max, onChange) {
+      const td = document.createElement("td");
+      const inp = document.createElement("input");
+      inp.type = "number";
+      inp.min = "0";
+      if (max !== null) { inp.max = String(max); }
+      inp.value = String(value || 0);
+      inp.style.width = "6em";
+      inp.addEventListener("input", function () {
+        let v = parseInt(inp.value, 10);
+        if (isNaN(v) || v < 0) { v = 0; }
+        if (max !== null && v > max) { v = max; }
+        onChange(v);
+      });
+      td.appendChild(inp);
+      return td;
+    }
+
+    tr.appendChild(makeNumCell(a.wait, 255, function (v) { a.wait = v; }));
+    tr.appendChild(makeNumCell(a.level, 255, function (v) { a.level = v; }));
+    tr.appendChild(makeNumCell(a.grpIdBase, 65535, function (v) { a.grpIdBase = v; }));
+    tr.appendChild(makeNumCell(a.grpIdPile, 65535, function (v) { a.grpIdPile = v; }));
+
+    const tdOps = document.createElement("td");
+    const btnUp = document.createElement("button");
+    btnUp.type = "button";
+    btnUp.className = "btn-secondary";
+    btnUp.textContent = "↑";
+    btnUp.disabled = (idx === 0);
+    btnUp.addEventListener("click", function () {
+      const arr = effectState.editAnimes;
+      if (idx > 0) {
+        const t = arr[idx - 1]; arr[idx - 1] = arr[idx]; arr[idx] = t;
+        renderEffectAnimeTable();
+      }
+    });
+    tdOps.appendChild(btnUp);
+
+    const btnDown = document.createElement("button");
+    btnDown.type = "button";
+    btnDown.className = "btn-secondary";
+    btnDown.textContent = "↓";
+    btnDown.style.marginLeft = "0.25rem";
+    btnDown.disabled = (idx === animes.length - 1);
+    btnDown.addEventListener("click", function () {
+      const arr = effectState.editAnimes;
+      if (idx < arr.length - 1) {
+        const t = arr[idx + 1]; arr[idx + 1] = arr[idx]; arr[idx] = t;
+        renderEffectAnimeTable();
+      }
+    });
+    tdOps.appendChild(btnDown);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.5rem";
+    btnDel.addEventListener("click", function () {
+      effectState.editAnimes.splice(idx, 1);
+      renderEffectAnimeTable();
+    });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+function addEffectAnime() {
+  const arr = effectState.editAnimes || [];
+  if (arr.length >= 255) {
+    setEffectEditFeedback("コマ数は最大 255 です", true);
+    return;
+  }
+  arr.push({ wait: 0, level: 255, grpIdBase: 0, grpIdPile: 0 });
+  effectState.editAnimes = arr;
+  renderEffectAnimeTable();
+}
+
+function buildEffectBodyFromForm() {
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+  return {
+    name:      document.getElementById("effect-edit-name").value,
+    grpIdMain: intVal("effect-edit-grpIdMain"),
+    soundId:   intVal("effect-edit-soundId"),
+    loop:      document.getElementById("effect-edit-loop").checked,
+    loopSound: document.getElementById("effect-edit-loopSound").checked,
+    animes:    (effectState.editAnimes || []).map(function (a) {
+      return {
+        wait:      a.wait      || 0,
+        level:     a.level     || 0,
+        grpIdBase: a.grpIdBase || 0,
+        grpIdPile: a.grpIdPile || 0
+      };
+    })
+  };
+}
+
+async function submitEffectForm(event) {
+  event.preventDefault();
+
+  const editing = effectState.editing;
+  if (editing === null) { return; }
+
+  const body = buildEffectBodyFromForm();
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) {
+    body.effectId = editing;
+  }
+
+  setEffectEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/effects", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setEffectEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setEffectEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadEffectList(false);
+    if (isNew && data && data.effectId) {
+      const created = effectState.items.find(function (x) {
+        return x.effectId === data.effectId;
+      });
+      if (created) {
+        openEffectEdit(created);
+      }
+    } else if (!isNew && data) {
+      // 既存編集: サーバーが返した内容で編集中の animes を更新
+      effectState.editAnimes = (data.animes || []).map(function (a) {
+        return {
+          wait:      a.wait      || 0,
+          level:     a.level     || 0,
+          grpIdBase: a.grpIdBase || 0,
+          grpIdPile: a.grpIdPile || 0
+        };
+      });
+      renderEffectAnimeTable();
+    }
+  } catch (err) {
+    console.error("submitEffectForm error", err);
+    setEffectEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+async function deleteEffect(effect) {
+  if (!effect || !effect.effectId) { return; }
+  const label = effect.name || "";
+  const msg = "エフェクト [" + label + "] (ID=" + effect.effectId + ") を削除しますか？";
+  if (!confirm(msg)) { return; }
+
+  setEffectFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/effects", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ effectId: effect.effectId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setEffectFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setEffectFeedback("削除しました (ID=" + effect.effectId + ")", false);
+    if (effectState.editing === effect.effectId) {
+      closeEffectEdit();
+    }
+    await loadEffectList(false);
+  } catch (err) {
+    console.error("deleteEffect error", err);
+    setEffectFeedback("通信エラーが発生しました", true);
+  }
+}
+
+function setupEffectView() {
+  const reloadBtn = document.getElementById("effect-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadEffectList(true); });
+  }
+  const newBtn = document.getElementById("effect-new-btn");
+  if (newBtn) {
+    newBtn.addEventListener("click", function () { openEffectEdit(null); });
+  }
+  const addAnimeBtn = document.getElementById("effect-anime-add-btn");
+  if (addAnimeBtn) {
+    addAnimeBtn.addEventListener("click", function () { addEffectAnime(); });
+  }
+  const form = document.getElementById("effect-edit-form");
+  if (form) {
+    form.addEventListener("submit", submitEffectForm);
+  }
+  const cancelBtn = document.getElementById("effect-cancel-btn");
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () { closeEffectEdit(); });
   }
 }

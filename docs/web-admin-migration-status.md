@@ -1,6 +1,6 @@
 # Web管理画面 進捗確認
 
-最終更新: 2026-04-24（Wave 2D 進行: 噴出し API / UI 完了）
+最終更新: 2026-04-24（Wave 2D 進行: エフェクト API / UI 完了）
 
 ## 使い方
 
@@ -33,7 +33,7 @@
 - ~~アイテム一覧~~（Wave 2D 実装済み）
 - ~~武器一覧~~（Wave 2D 実装済み）
 - ~~噴出し一覧~~（Wave 2D 実装済み）
-- エフェクト一覧
+- ~~エフェクト一覧~~（Wave 2D 実装済み）
 - 初期ステータス設定
 
 ### まだ受け皿がない重要項目
@@ -100,7 +100,7 @@
 - [x] アイテム一覧 API / UI
 - [x] 武器情報 API / UI
 - [x] 噴出し API / UI（GET/POST/PUT/DELETE /api/efc-balloons、コマ単位 flat CRUD）
-- [ ] エフェクト API / UI
+- [x] エフェクト API / UI（GET/POST/PUT/DELETE /api/effects、animes を nested 配列で扱う）
 - [ ] 初期ステータス API / UI
 
 ## 共通コンポーネント
@@ -115,7 +115,7 @@
 
 ## 次の実装順
 
-1. Wave 2D: エフェクト / 初期ステータス API・UI
+1. Wave 2D: 初期ステータス API・UI
 2. 共通コンポーネント picker 群の整備（画像・アイテム・マップパーツ等）
 
 ## 保留メモ
