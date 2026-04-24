@@ -17,9 +17,6 @@
 #include "PacketITEM_RES_ITEMINFO.h"
 #include "PacketITEM_DELETEITEMINFO.h"
 #include "PacketCHAR_ITEMINFO.h"
-// LibInfoCharSvr.h は CInfoMapEventBase の前方宣言を持たないため
-// InfoMapEventBase.h を先に include する必要がある
-#include "InfoMapEventBase.h"
 #include "LibInfo/LibInfoCharSvr.h"
 #include "Info/InfoCharSvr.h"
 

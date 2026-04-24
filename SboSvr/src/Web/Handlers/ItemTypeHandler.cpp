@@ -13,9 +13,6 @@
 #include "UraraSockTCPSBO.h"
 #include "PacketITEM_RES_ITEMTYPEINFO.h"
 #include "PacketITEM_DELETEITEMTYPEINFO.h"
-// LibInfoCharSvr.h は CInfoMapEventBase の前方宣言を持たないため
-// InfoMapEventBase.h を先に include する必要がある
-#include "InfoMapEventBase.h"
 #include "LibInfo/LibInfoCharSvr.h"
 
 // ---------------------------------------------------------------------------

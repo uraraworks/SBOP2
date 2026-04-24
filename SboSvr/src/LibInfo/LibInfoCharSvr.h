@@ -20,6 +20,7 @@ class CLibInfoItemType;
 class CLibInfoItem;
 class CLibInfoItemWeapon;
 class CUraraSockTCPSBO;
+class CInfoMapEventBase;
 
 using ARRAYINFOCHARSVR = CStdArray<CInfoCharSvr *>;
 using PARRAYINFOCHARSVR = ARRAYINFOCHARSVR *;
