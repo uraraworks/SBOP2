@@ -77,11 +77,96 @@
 #include "StateProcMAP.h"
 #include "PacketADMIN_MAP_SELECTPICK.h"
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+EM_JS(void, SBOP2_PostAdminCharPick, (unsigned int charId), {
+	if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+		window.parent.postMessage({
+			kind: 'sbop2_admin_char_pick',
+			charId: charId
+		}, '*');
+	}
+});
+#else
+static void SBOP2_PostAdminCharPick(unsigned int)
+{
+}
+#endif
+
 namespace {
 
 static BOOL IsLeftMousePressed(void)
 {
 	return (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_LMASK) ? TRUE : FALSE;
+}
+
+static DWORD FindAdminClickedCharID(CLibInfoCharCli *pLibInfoChar, PCLayerMap pLayerMap, int nScreenClickX, int nScreenClickY)
+{
+	int i, nCount, nBestScore;
+	DWORD dwCharID;
+
+	if ((pLibInfoChar == NULL) || (pLayerMap == NULL)) {
+		return 0;
+	}
+
+	dwCharID = 0;
+	nBestScore = INT_MAX;
+	nCount = pLibInfoChar->GetCount();
+	for (i = 0; i < nCount; i ++) {
+		PCInfoCharCli pInfoChar;
+		PCInfoMotion pInfoMotion;
+		POINT ptDrawMapPos;
+		POINT ptViewCharPos;
+		RECT rcChar;
+		int nDrawX, nDrawY;
+		int nHitW, nHitH;
+		int nCenterX, nCenterY;
+		int nScore;
+
+		pInfoChar = (PCInfoCharCli)pLibInfoChar->GetPtr(i);
+		if (pInfoChar == NULL) {
+			continue;
+		}
+		pInfoMotion = pInfoChar->GetMotionInfo();
+		pInfoChar->GetDrawMapPos(ptDrawMapPos);
+		pInfoChar->GetViewCharPos(ptViewCharPos);
+
+		nDrawX = 32 - ptViewCharPos.x + ptDrawMapPos.x - pLayerMap->m_nViewX;
+		nDrawY = 32 - ptViewCharPos.y + ptDrawMapPos.y - pLayerMap->m_nViewY - HALF_TILE;
+		if (pInfoMotion != NULL) {
+			nDrawX += pInfoMotion->m_ptDrawPosPile0.x;
+			nDrawY += pInfoMotion->m_ptDrawPosPile0.y;
+		}
+
+		nHitW = pInfoChar->m_nGrpSize * 2;
+		nHitH = pInfoChar->m_nGrpSize * 2;
+		if (nHitW < MAPPARTSSIZE) {
+			nHitW = MAPPARTSSIZE;
+		}
+		if (nHitH < MAPPARTSSIZE) {
+			nHitH = MAPPARTSSIZE;
+		}
+		SetRect(
+			&rcChar,
+			nDrawX - 8,
+			nDrawY - 8,
+			nDrawX + nHitW + 7,
+			nDrawY + nHitH + 7);
+		if ((nScreenClickX < rcChar.left) || (nScreenClickX > rcChar.right) ||
+			(nScreenClickY < rcChar.top) || (nScreenClickY > rcChar.bottom)) {
+			continue;
+		}
+
+		nCenterX = nDrawX + (nHitW / 2);
+		nCenterY = nDrawY + (nHitH / 2);
+		nScore = abs(nCenterX - nScreenClickX) + abs(nCenterY - nScreenClickY);
+		if (nScore >= nBestScore) {
+			continue;
+		}
+		nBestScore = nScore;
+		dwCharID = pInfoChar->m_dwCharID;
+	}
+	return dwCharID;
 }
 
 static double NormalizeMoveAngle(double dAngle)
@@ -706,6 +791,12 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算してタイル境界を正確に計算 */
 	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
 	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
+	{
+		DWORD dwPickedCharID = FindAdminClickedCharID(m_pLibInfoChar, pLayerMap, x, y);
+		if (dwPickedCharID != 0) {
+			SBOP2_PostAdminCharPick(static_cast<unsigned int>(dwPickedCharID));
+		}
+	}
 	nType = m_pMgrData->GetAdminNotifyTypeL();
 	switch (nType) {
 	case ADMINNOTIFYTYPE_CHARID:			// キャラID

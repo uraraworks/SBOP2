@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sbo 管理ポータル プレビュー</title>
+  <title>Sbo 管理ワークスペース</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="page-header">
-    <h1>サーバー管理ポータル（試験版）</h1>
-    <p>このページは Web 管理機能の PoC として提供されるダッシュボードです。</p>
+    <div>
+      <h1>Sbo 管理ワークスペース</h1>
+      <p>ゲーム画面を中心に、選択・配置・編集を同じ作業面で扱います。</p>
+    </div>
+    <a href="#map-window" data-route="map-window" class="header-map-link">マップウィンドウ</a>
   </header>
   <div class="app-layout">
   <nav class="main-nav" aria-label="主要メニュー">
-    <details open>
+    <details>
       <summary>Wave 1（運用基盤）</summary>
       <ul>
         <li><a href="#server-dashboard" data-route="server-dashboard" class="nav-link">サーバー情報ダッシュボード</a></li>
@@ -65,6 +68,34 @@
       </ul>
     </details>
   </nav>
+  <div class="workspace-body">
+    <aside class="card map-workspace-stage-card persistent-game-panel" id="admin-game-panel">
+      <div class="map-workspace-stage-header">
+        <div>
+          <h2>ゲーム画面</h2>
+          <p class="card-description">キャラクター情報画面を開いた状態でゲーム内キャラをクリックすると、右側に詳細を表示します。</p>
+        </div>
+        <div class="map-window-selected-info" id="admin-game-pick-info" aria-live="polite">
+          選択中のキャラ: なし
+        </div>
+      </div>
+      <div class="map-object-preview map-window-stage admin-game-stage">
+        <div class="map-window-screen admin-game-screen">
+          <iframe
+            id="admin-game-frame"
+            class="admin-game-frame"
+            src="about:blank"
+            data-game-src="/game/sbocli-title.html"
+            title="SBO Web クライアント"
+            loading="eager"
+            allow="autoplay; fullscreen"
+          ></iframe>
+          <div class="admin-game-missing" id="admin-game-missing" hidden>
+            Web クライアントを読み込めませんでした
+          </div>
+        </div>
+      </div>
+    </aside>
   <main id="view-container">
     <div class="view" data-view="server-dashboard">
       <section class="card" id="server-card">
@@ -1138,11 +1169,10 @@
       </section>
     </div>
     <div class="view" data-view="map-window">
-      <section class="card" id="map-window-browser">
-        <h2>マップウィンドウ</h2>
+      <section class="card map-workspace-panel map-workspace-tools" id="map-window-browser">
+        <h2>編集ツール</h2>
         <p class="card-description">
-          マップを選択してタイルグリッドを表示します。セルをクリックすると座標をハイライトします。
-          ピック対象の種別切替は将来の pick API 連携に備えた枠です。
+          操作対象のマップとピック種別を切り替えます。
         </p>
         <div class="map-window-controls">
           <label class="form-field compact">
@@ -1162,17 +1192,22 @@
           </div>
         </fieldset>
       </section>
-      <section class="card" id="map-window-viewer">
-        <h2>マップグリッド</h2>
-        <div class="map-window-selected-info" id="map-window-selected-info" aria-live="polite">
-          選択中のセル: なし
-        </div>
-        <div class="map-object-preview">
-          <div class="map-object-grid" id="map-window-grid" role="grid" aria-label="マップウィンドウ グリッド"></div>
-          <div class="map-object-legend">
-            <span class="legend-item"><span class="legend-marker"></span>空きセル</span>
-            <span class="legend-item"><span class="legend-marker is-selected"></span>選択中セル</span>
+      <section class="card map-workspace-panel map-workspace-inspector">
+        <h2>選択情報</h2>
+        <dl class="map-workspace-inspector-list">
+          <div>
+            <dt>対象</dt>
+            <dd>セル / 配置物 / イベント / キャラ</dd>
           </div>
+          <div>
+            <dt>編集</dt>
+            <dd>選択内容に応じたフォームをここへ集約します。</dd>
+          </div>
+        </dl>
+        <div class="form-actions">
+          <a class="button" href="#map-parts" data-route="map-parts">パーツ</a>
+          <a class="button" href="#map-events" data-route="map-events">イベント</a>
+          <a class="button" href="#map-objects" data-route="map-objects">配置物</a>
         </div>
       </section>
     </div>
@@ -2001,6 +2036,7 @@
       </section>
     </div>
   </main>
+  </div>
   </div>
   <footer class="page-footer">
     <small>&copy; 2024 Sbo Admin Platform Team</small>

@@ -1,4 +1,4 @@
-/// @file PacketADMIN_MAP_SELECTPICK.cpp
+﻿/// @file PacketADMIN_MAP_SELECTPICK.cpp
 /// @brief コマンド(管理者系:マップ選択ピック) 実装ファイル
 
 #include "StdAfx.h"

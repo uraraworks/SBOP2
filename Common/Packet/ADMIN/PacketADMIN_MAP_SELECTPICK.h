@@ -1,4 +1,4 @@
-/// @file PacketADMIN_MAP_SELECTPICK.h
+﻿/// @file PacketADMIN_MAP_SELECTPICK.h
 /// @brief コマンド(管理者系:マップ選択ピック) 定義ファイル
 
 #pragma once

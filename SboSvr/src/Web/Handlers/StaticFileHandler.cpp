@@ -10,7 +10,7 @@
 
 namespace
 {
-const unsigned long long kMaxStaticFileSize = 2ULL * 1024ULL * 1024ULL;
+const unsigned long long kMaxStaticFileSize = 64ULL * 1024ULL * 1024ULL;
 }
 
 CStaticFileHandler::CStaticFileHandler(const std::wstring &rootDirectory, const std::wstring &defaultDocument, const std::string &mountPath)
@@ -193,6 +193,12 @@ std::string CStaticFileHandler::DetermineContentType(const std::string &relative
         }
         if (extension == ".js") {
                 return "application/javascript; charset=utf-8";
+        }
+        if (extension == ".wasm") {
+                return "application/wasm";
+        }
+        if (extension == ".data") {
+                return "application/octet-stream";
         }
         if (extension == ".json") {
                 return "application/json; charset=utf-8";

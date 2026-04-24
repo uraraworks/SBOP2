@@ -124,6 +124,9 @@ const mapWindowMapSelect = document.getElementById("map-window-map");
 const mapWindowSummaryEl = document.getElementById("map-window-summary");
 const mapWindowGridEl = document.getElementById("map-window-grid");
 const mapWindowSelectedInfoEl = document.getElementById("map-window-selected-info");
+const adminGameFrame = document.getElementById("admin-game-frame");
+const adminGameMissingEl = document.getElementById("admin-game-missing");
+const adminGamePickInfoEl = document.getElementById("admin-game-pick-info");
 
 const POLL_INTERVAL_MS = 30000;
 let serverTimerId = null;
@@ -224,6 +227,7 @@ const mapWindowState = {
   maps: [],             // normalizeMapEntry 済みのマップ一覧
   selectedMapId: null,  // 現在選択中のマップID
   selectedCell: null,   // 選択中セル { x, y } または null
+  isInitialized: false,
   isLoading: false,
   loadError: null,
   tileSize: 16,
@@ -522,10 +526,73 @@ async function loadMapObjectData(forceReload = false) {
 
 
 
-const DEFAULT_ROUTE = "server-dashboard";
+const DEFAULT_ROUTE = "map-window";
 const views = document.querySelectorAll("[data-view]");
 const navLinks = document.querySelectorAll("[data-route]");
 let currentRoute = null;
+
+function updateAdminGamePickInfo(message) {
+  if (adminGamePickInfoEl) {
+    adminGamePickInfoEl.textContent = message || "選択中のキャラ: なし";
+  }
+}
+
+function openCharacterDetailFromGame(charId) {
+  const normalizedCharId = Number(charId);
+  if (!Number.isFinite(normalizedCharId) || normalizedCharId <= 0) {
+    return;
+  }
+  updateAdminGamePickInfo(`選択中のキャラ: ${normalizedCharId}`);
+  if (charDetailIdInput) {
+    charDetailIdInput.value = String(normalizedCharId);
+  }
+  navigateTo("character-overview");
+  fetchCharacterDetail(normalizedCharId);
+}
+
+function handleAdminGameMessage(event) {
+  if (adminGameFrame && event.source !== adminGameFrame.contentWindow) {
+    return;
+  }
+  const message = event.data;
+  if (!message || typeof message !== "object") {
+    return;
+  }
+  if (message.kind === "sbop2_admin_char_pick") {
+    openCharacterDetailFromGame(message.charId);
+  }
+}
+
+function buildAdminGameFrameUrl() {
+  const basePath = adminGameFrame ? (adminGameFrame.dataset.gameSrc || "/game/sbocli-title.html") : "/game/sbocli-title.html";
+  const httpPort = Number(window.location.port) || 18080;
+  const wsPort = httpPort + 1;
+  const host = window.location.hostname || "127.0.0.1";
+  const params = new URLSearchParams();
+  params.set("server", `${host}:${wsPort}`);
+  params.set("admin", "1");
+  return `${basePath}?${params.toString()}`;
+}
+
+function initializeAdminGameFrame() {
+  if (!adminGameFrame) {
+    return;
+  }
+  const nextUrl = buildAdminGameFrameUrl();
+  if (adminGameFrame.getAttribute("src") !== nextUrl) {
+    adminGameFrame.setAttribute("src", nextUrl);
+  }
+}
+
+function navigateTo(route, options = {}) {
+  const normalized = getValidRoute(route);
+  const currentHash = window.location.hash.replace(/^#/, "");
+  if (currentHash === normalized) {
+    activateRoute(normalized, { forceReload: !!options.forceReload });
+    return;
+  }
+  window.location.hash = `#${normalized}`;
+}
 
 /**
  * サーバーから JSON を取得する共通関数。
@@ -3172,6 +3239,10 @@ function initializeMapWindowView() {
   if (!mapWindowMapSelect) {
     return;
   }
+  if (mapWindowState.isInitialized) {
+    return;
+  }
+  mapWindowState.isInitialized = true;
   populateMapWindowOptions();
   updateMapWindowSummary();
   updateMapWindowSelectedInfo();
@@ -3468,6 +3539,15 @@ function initAuditLogView() {
 window.addEventListener("load", () => {
   // 管理 WebSocket を起動する（再接続は ensureAdminWebSocket 内で自動管理）
   ensureAdminWebSocket();
+  window.addEventListener("message", handleAdminGameMessage);
+  initializeAdminGameFrame();
+  if (adminGameFrame) {
+    adminGameFrame.addEventListener("error", () => {
+      if (adminGameMissingEl) {
+        adminGameMissingEl.hidden = false;
+      }
+    });
+  }
 
   const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;
   activateRoute(initialRoute, { initial: true });
@@ -3499,6 +3579,7 @@ window.addEventListener("load", () => {
   /* マップウィンドウ */
   if (mapWindowMapSelect) {
     mapWindowMapSelect.addEventListener("change", handleMapWindowSelectChange);
+    initializeMapWindowView();
   }
 
   if (mapObjectMapSelect) {

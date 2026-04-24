@@ -1,6 +1,6 @@
 # Web管理画面 マップウィンドウ + pick 基盤 詳細設計メモ
 
-最終更新: 2026-04-22
+最終更新: 2026-04-24
 
 ## 位置づけ
 
@@ -19,9 +19,9 @@
 
 | 層 | 担当 | 概要 |
 |---|---|---|
-| 1 | webroot | マップウィンドウ画面新設 + 描画ヘルパー抽出 |
+| 1 | webroot | 左側に Web クライアントを常設し、右側をツール / 編集パネルとして切り替える |
 | 2 | SboSvr | pick REST API + 選択状態モデル |
-| 3 | ゲームクライアント | ネイティブ / Web 両クライアントからの pick 送信 |
+| 3 | ゲームクライアント | Web クライアントから親管理画面への直接 pick 通知、必要に応じて selection API 連携 |
 
 ---
 
@@ -29,6 +29,10 @@
 
 ### 通信方式
 
+- 管理画面に埋め込んだ Web クライアントからの同一ブラウザ内連携は **`postMessage` を優先**
+  - サーバー往復なしで右側編集パネルへ反映できる
+  - 現在はキャラクター選択のみ実装済み
+  - マップセル / 配置物 / イベント選択は同じ通知形に拡張する
 - 管理画面への push は **WebSocket を採用**
 - 既存の `SboSvr/src/Web/WebSocketBridge.cpp` はゲーム TCP のブリッジ専用だが、  
   SHA-1 / Base64 / フレーム処理の実装は流用可能
@@ -64,12 +68,14 @@
 
 ### 実装順序
 
-1. マップウィンドウ画面 `map-window` を webroot に新設（map-objects の `renderMapPreview()` を土台に、ピック対象種別の切替を想定した作り）
-2. `grpId → sheet/tileX/tileY` 変換と sheet URL 取得をヘルパー関数に抽出（map-window の実装中に必要になった箇所だけ）
+1. 左側に Web クライアント iframe を常設し、右側を編集パネルとして使うレイアウトへ変更 ✅ 実装済み
+2. `/game/sbocli-title.html` を `SboSvr` から静的配信し、Debug / Release webroot へ同期 ✅ 実装済み
 3. pick REST API（WS なしでも単発操作が動く基盤を先に固める）✅ 実装済み（6313b5d）
 4. 管理画面向け WebSocket チャネル新設（`/ws/admin`）✅ 実装済み — `WebSocketProtocol.h/cpp`, `AdminWsHub.h/cpp`, `HttpServer` Upgrade 分岐, `CSelectionStore` ChangeCallback
-5. マップウィンドウから WS 購読・pick 連動
-6. ゲーム画面側（ネイティブ / Web）からの pick 送信対応
+5. Web クライアントからキャラクタークリックを `postMessage` で通知 ✅ 実装済み
+6. キャラクター編集画面で、通知された charId の詳細を自動取得 ✅ 実装済み
+7. ゲーム画面クリックを map_cell / placement / event 選択へ拡張
+8. 選択対象に応じて右側編集パネルを切り替え
 
 ### 完了条件
 
@@ -81,12 +87,23 @@
 
 ---
 
+## 実装済みメモ（2026-04-24）
+
+- 管理画面レイアウトを、左側 Web クライアント常設 / 右側編集パネル構成へ変更。
+- `SboSvr` の `/game/` 静的配信で `out/browser-title/sbocli-title.*` を読み込めるようにした。
+- `tools/build-sbocli-browser-title.ps1` でブラウザ版クライアントを `SboSvr/Debug/webroot/game` と `SboSvr/Release/webroot/game` へ同期する導線を追加。
+- `StateProcMAP.cpp` に Emscripten 専用の `SBOP2_PostAdminCharPick()` を追加。
+- キャラクタークリック判定は、実際の描画位置に合わせて `GetDrawMapPos()`、`GetViewCharPos()`、スクロール位置、モーション描画補正を使う。
+- `app.js` は `sbop2_admin_char_pick` を受け取り、`character-overview` を開いて `fetchCharacterDetail(charId)` を呼ぶ。
+
+---
+
 ## 未決事項
 
 - **マップウィンドウ画面の置き場所と他画面との関係**
-  - 候補: webroot/app.js に `renderMapWindow` 的な関数を追加、もしくはファイル分割
-  - 既存 map-objects 画面は当面そのまま残し、map-window とは独立運用する
-  - 現状 webroot は単一 app.js (約 2900 行) に集約されている
+  - 独立した `map-window` 中心ではなく、左側の Web クライアントを常設する方針に変更済み。
+  - 右側編集パネルを現在の選択対象に応じて切り替える。
+  - 既存 map-objects 画面は当面そのまま残し、ゲーム画面連携の対象を段階的に増やす。
 
 - **WebSocket メッセージスキーマ詳細**  
   選択更新以外（ホバー・カーソル同期・エラー通知 等）に何を流すか未定。
@@ -95,9 +112,9 @@
   既存 Web API でのセッション管理の仕組みを要確認。  
   参照先: `SboSvr/src/Web/HttpServer.cpp` の Cookie / トークン実装。
 
-- **ゲームクライアント側の分岐場所**  
-  「管理者モード時のみ pick 送信」をどのクラス / タイミングに入れるか未定。  
-  ネイティブは MFC レス SDL2 ベース、Web は Emscripten ビルド。
+- **ゲームクライアント側の分岐場所**
+  キャラクター選択は `CStateProcMAP::OnLButtonDown()` に実装済み。
+  マップセル / 配置物 / イベント選択も同じクリック入口で対象種別を判定する方針。
 
 - **認可（管理者ロール）とのすり合わせ**  
   `POST /api/selection/pick` を一般ユーザーが呼んだ場合の扱い未定。

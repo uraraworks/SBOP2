@@ -933,6 +933,12 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::wstring webRoot;
         if (ResolveWebRootPath(webRoot)) {
+                std::wstring browserGameRoot;
+                if (ResolveBrowserGamePath(browserGameRoot)) {
+                        std::unique_ptr<IApiHandler> browserGameHandler(new CStaticFileHandler(browserGameRoot, L"sbocli-title.html", "/game/"));
+                        m_router.RegisterPrefix("GET", "/game/", std::move(browserGameHandler));
+                }
+
                 std::unique_ptr<IApiHandler> staticHandler(new CStaticFileHandler(webRoot, L"index.html", "/"));
                 m_router.RegisterPrefix("GET", "/", std::move(staticHandler));
         }
@@ -971,6 +977,60 @@ bool CHttpServer::ResolveWebRootPath(std::wstring &outPath) const
 
         outPath = basePath;
         return true;
+#endif
+}
+
+bool CHttpServer::ResolveBrowserGamePath(std::wstring &outPath) const
+{
+#if !defined(_WIN32)
+        (void)outPath;
+        return false;
+#else
+        wchar_t szModulePath[MAX_PATH];
+        DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
+        if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
+                return false;
+        }
+
+        wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
+        if (pSlash == NULL) {
+                return false;
+        }
+        *(pSlash + 1) = L'\0';
+
+        const wchar_t *pszCandidates[] = {
+                L"..\\..\\out\\browser-title",
+                L"..\\out\\browser-title",
+                L"webroot\\game"
+        };
+
+        for (size_t i = 0; i < (sizeof(pszCandidates) / sizeof(pszCandidates[0])); ++i) {
+                std::wstring gamePath = szModulePath;
+                gamePath.append(pszCandidates[i]);
+
+                DWORD dwAttributes = GetFileAttributesW(gamePath.c_str());
+                if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
+                        continue;
+                }
+                if ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+                        continue;
+                }
+
+                std::wstring htmlPath = gamePath;
+                wchar_t last = htmlPath[htmlPath.size() - 1];
+                if ((last != L'\\') && (last != L'/')) {
+                        htmlPath.push_back(L'\\');
+                }
+                htmlPath.append(L"sbocli-title.html");
+                if (GetFileAttributesW(htmlPath.c_str()) == INVALID_FILE_ATTRIBUTES) {
+                        continue;
+                }
+
+                outPath = gamePath;
+                return true;
+        }
+
+        return false;
 #endif
 }
 

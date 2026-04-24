@@ -1,4 +1,4 @@
-/// @file PacketADMIN_MAP_SELECTCLEAR.h
+﻿/// @file PacketADMIN_MAP_SELECTCLEAR.h
 /// @brief コマンド(管理者系:マップ選択解除) 定義ファイル
 
 #pragma once

@@ -24,6 +24,36 @@ $fontDir = Join-Path $repoRoot "SboCli\font"
 $bgmDir  = Join-Path $repoRoot "Release\BGM"
 $wavDir  = Join-Path $repoRoot "SboSoundData\res\WAVE"
 
+function Sync-BrowserTitleToAdminWebroot {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$SourceDir
+    )
+
+    if (-not (Test-Path (Join-Path $SourceDir "sbocli-title.html"))) {
+        return
+    }
+
+    $adminWebroots = @(
+        (Join-Path $repoRoot "SboSvr\Debug\webroot"),
+        (Join-Path $repoRoot "SboSvr\Release\webroot")
+    )
+
+    foreach ($webroot in $adminWebroots) {
+        if (-not (Test-Path $webroot)) {
+            continue
+        }
+
+        $targetDir = Join-Path $webroot "game"
+        if (-not (Test-Path $targetDir)) {
+            New-Item -ItemType Directory -Path $targetDir | Out-Null
+        }
+
+        Copy-Item -Path (Join-Path $SourceDir "sbocli-title.*") -Destination $targetDir -Force
+        Write-Host "[browser-deploy] copied browser client to $targetDir"
+    }
+}
+
 # Up-to-date check: 出力 html がソースよりも新しければ何もしない
 if (-not $Force) {
     $outFile = Join-Path $outPath "sbocli-title.html"
@@ -57,6 +87,7 @@ if (-not $Force) {
         }
         if ($newest -ne $null -and $newest -lt $outTime) {
             Write-Host "[browser-build] up-to-date, skipping (latest source: $newest, output: $outTime)"
+            Sync-BrowserTitleToAdminWebroot -SourceDir $outPath
             exit 0
         }
     }
@@ -356,6 +387,8 @@ $sources = @(
     "Common/Packet/ADMIN/PacketADMIN_MAP_RENEWOBJECTDATA.cpp",
     "Common/Packet/ADMIN/PacketADMIN_MAP_SETMAPNAME.cpp",
     "Common/Packet/ADMIN/PacketADMIN_MAP_SETMAPSHADOW.cpp",
+    "Common/Packet/ADMIN/PacketADMIN_MAP_SELECTCLEAR.cpp",
+    "Common/Packet/ADMIN/PacketADMIN_MAP_SELECTPICK.cpp",
     "Common/Packet/ADMIN/PacketADMIN_MAP_SETPARTS.cpp",
     "Common/Packet/ADMIN/PacketADMIN_PARA2.cpp",
     "Common/Packet/ADMIN/PacketADMIN_PLAYSOUND.cpp",
@@ -481,4 +514,5 @@ if ($LASTEXITCODE -ne 0) {
     throw "browser link に失敗しました。"
 }
 
+Sync-BrowserTitleToAdminWebroot -SourceDir $outPath
 Write-Host "[browser-link] success"

@@ -1,4 +1,4 @@
-/// @file PacketADMIN_MAP_SELECTCLEAR.cpp
+﻿/// @file PacketADMIN_MAP_SELECTCLEAR.cpp
 /// @brief コマンド(管理者系:マップ選択解除) 実装ファイル
 
 #include "StdAfx.h"

@@ -34,6 +34,7 @@ private:
         bool    SendAll(SOCKET hSocket, const char *pData, size_t nLength);
         void    RegisterDefaultHandlers();
         bool    ResolveWebRootPath(std::wstring &outPath) const;
+        bool    ResolveBrowserGamePath(std::wstring &outPath) const;
 
         /// @brief /ws/admin WebSocket アップグレード要求を処理する
         /// ハンドシェイク成功後はソケットを CAdminWsHub に渡し、HttpServer は所有権を手放す。
