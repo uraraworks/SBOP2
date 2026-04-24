@@ -36,6 +36,9 @@
 #include "Handlers/EfcHandler.h"
 #include "Handlers/InitialStatusHandler.h"
 #include "Handlers/ImageCatalogHandler.h"
+#include "Handlers/AuditLogHandler.h"
+#include "AuditLog.h"
+#include "AuthProvider.h"
 #include "MgrData.h"
 
 namespace
@@ -524,6 +527,30 @@ void CHttpServer::HandleClient(SOCKET hClient, bool &outTransferred)
         }
 
         httpResponse.EnsureContentLength();
+
+        // --- 監査ログ記録（変更系 API の成功リクエストのみ） ---
+        // HandleClient 内でレスポンス送信前に記録する。
+        // actor は AuthProvider を改めて呼び出して取得（ハンドラ内で行われた認証判断とは独立）。
+        // パフォーマンス: Authenticate は Cookie パースと MgrData 参照のみの軽処理のため許容範囲。
+        if (AuditLog::ShouldAudit(httpRequest.method, httpRequest.path)) {
+                int nStatus = 0;
+                // statusLine は "HTTP/1.1 NNN ..." 形式
+                if (httpResponse.statusLine.size() >= 12) {
+                        nStatus = std::atoi(httpResponse.statusLine.c_str() + 9);
+                }
+                if (nStatus >= 200 && nStatus < 300) {
+                        AuthProvider::AuthContext authCtx;
+                        AuthProvider::AuthStatus  authSt =
+                            AuthProvider::Authenticate(httpRequest, m_pMgrData, authCtx);
+                        std::string actor   = (authSt == AuthProvider::AuthStatusOk) ? authCtx.loginId   : std::string("-");
+                        std::string acctId  = (authSt == AuthProvider::AuthStatusOk) ? authCtx.accountId : std::string();
+                        int         adminLv = (authSt == AuthProvider::AuthStatusOk) ? authCtx.adminLevel : 0;
+                        AuditLog::Record(
+                            httpRequest.method, httpRequest.path, nStatus,
+                            actor, acctId, adminLv, httpRequest.body);
+                }
+        }
+
         SendResponse(hClient, httpResponse);
         shutdown(hClient, SD_BOTH);
 }
@@ -887,6 +914,13 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> initialStatusUpdateHandler(new CInitialStatusUpdateHandler(m_pMgrData));
         m_router.Register("PUT", "/api/initial-status", std::move(initialStatusUpdateHandler));
+
+        // 監査ログ一覧 API（共通コンポーネント）
+        //   GET /api/audit-logs?actor=...&method=...&path=...&limit=N
+        //   管理画面の変更系操作（POST/PUT/DELETE 成功）を時系列で返す。
+        //   ストレージは in-memory リングバッファ（最大 500 件）。再起動で消える。
+        std::unique_ptr<IApiHandler> auditLogHandler(new CAuditLogListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/audit-logs", std::move(auditLogHandler));
 
         // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
         CSelectionStore::GetInstance().SetChangeCallback(
