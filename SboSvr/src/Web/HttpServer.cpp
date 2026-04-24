@@ -29,6 +29,7 @@
 #include "Handlers/CharacterUpdateHandler.h"
 #include "Handlers/CharacterItemHandler.h"
 #include "Handlers/ItemTypeHandler.h"
+#include "Handlers/ItemHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -787,6 +788,23 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> itemTypeDeleteHandler(new CItemTypeDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/item-types", std::move(itemTypeDeleteHandler));
+
+        // アイテム（インスタンス）API（Wave 2D）
+        //   GET    /api/items    一覧（?mapId=N / ?charId=N / ?drop=1）
+        //   POST   /api/items    新規作成
+        //   PUT    /api/items    更新
+        //   DELETE /api/items    削除
+        std::unique_ptr<IApiHandler> itemListHandler(new CItemListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/items", std::move(itemListHandler));
+
+        std::unique_ptr<IApiHandler> itemCreateHandler(new CItemCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/items", std::move(itemCreateHandler));
+
+        std::unique_ptr<IApiHandler> itemUpdateHandler(new CItemUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/items", std::move(itemUpdateHandler));
+
+        std::unique_ptr<IApiHandler> itemDeleteHandler(new CItemDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/items", std::move(itemDeleteHandler));
 
         // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
         CSelectionStore::GetInstance().SetChangeCallback(
