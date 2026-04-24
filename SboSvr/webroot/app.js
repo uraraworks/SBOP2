@@ -4219,6 +4219,18 @@ if (mapShadowNewBtn) {
   });
 }
 
+// 影ID 指定入力（picker と連動）: 値が変わったら該当影の編集画面を開く
+const mapShadowJumpInput = document.getElementById("map-shadow-jump-id");
+if (mapShadowJumpInput) {
+  mapShadowJumpInput.addEventListener("change", function () {
+    const v = Number(mapShadowJumpInput.value);
+    if (!Number.isFinite(v)) { return; }
+    const exists = mapShadowState.shadows.some(function (s) { return s.id === v; });
+    if (!exists) { return; }
+    openMapShadowEdit(v);
+  });
+}
+
 if (mapShadowEditLevel) {
   mapShadowEditLevel.addEventListener("input", function () {
     if (mapShadowEditLevelValue) {
@@ -7296,7 +7308,7 @@ function setupInitialStatusView() {
 /*                                                                      */
 /* 外部 API:                                                            */
 /*   openPicker({ type, initialValue, category, onSelect })             */
-/*     - type: "image" | "item" | "effect" | "mapPart"                  */
+/*     - type: "image" | "item" | "effect" | "mapPart" | "mapShadow"    */
 /*     - initialValue: 初期選択ID（省略時は null）                      */
 /*     - category: 画像 picker 時のカテゴリ key（例 "efcBalloon"）      */
 /*     - onSelect: (selectedValue) => void  決定時に呼ばれる            */
@@ -7324,6 +7336,7 @@ const pickerState = {
   itemsCache: null,      // アイテム一覧（1 回だけロード、必要に応じて再読込）
   effectsCache: null,    // エフェクト一覧（1 回だけロード、必要に応じて再読込）
   mapPartsCache: null,   // マップパーツ一覧（1 回だけロード、必要に応じて再読込）
+  mapShadowsCache: null, // マップ影一覧（1 回だけロード、必要に応じて再読込）
 };
 
 /** picker の DOM 要素を初期化（初回呼び出し時のみ実行）。 */
@@ -7432,6 +7445,10 @@ function openPicker(options) {
     pickerState.titleEl.textContent = "マップパーツを選択";
     if (pickerState.categoryWrap) { pickerState.categoryWrap.hidden = true; }
     if (pickerState.searchInput) { pickerState.searchInput.placeholder = "パーツ ID で絞り込み"; }
+  } else if (pickerState.type === "mapShadow") {
+    pickerState.titleEl.textContent = "マップ影を選択";
+    if (pickerState.categoryWrap) { pickerState.categoryWrap.hidden = true; }
+    if (pickerState.searchInput) { pickerState.searchInput.placeholder = "影 ID で絞り込み"; }
   } else {
     pickerState.titleEl.textContent = "選択";
   }
@@ -7471,6 +7488,10 @@ function openPicker(options) {
   } else if (pickerState.type === "mapPart") {
     refreshPickerItems(initialValue).catch(function (err) {
       setPickerFeedback("マップパーツ一覧取得に失敗: " + (err && err.message ? err.message : err), true);
+    });
+  } else if (pickerState.type === "mapShadow") {
+    refreshPickerItems(initialValue).catch(function (err) {
+      setPickerFeedback("マップ影一覧取得に失敗: " + (err && err.message ? err.message : err), true);
     });
   }
 
@@ -7618,6 +7639,40 @@ async function refreshPickerItems(initialValue) {
     }
     return;
   }
+  if (pickerState.type === "mapShadow") {
+    setPickerFeedback("読み込み中...");
+    const { response, data } = await fetchJson("/api/maps/shadows");
+    if (!response.ok || !data || !Array.isArray(data.shadows)) {
+      pickerState.currentItems = [];
+      renderPickerList();
+      setPickerFeedback("一覧取得に失敗（HTTP " + response.status + "）", true);
+      return;
+    }
+    pickerState.mapShadowsCache = data.shadows;
+    pickerState.currentItems = data.shadows
+      .slice()
+      .sort(function (a, b) { return (a.id || 0) - (b.id || 0); })
+      .map(function (s) {
+        const parts = [];
+        if (s.grpId != null) { parts.push("画像#" + s.grpId); }
+        if (s.light) { parts.push("明度"); } else { parts.push("透明度"); }
+        if (s.level != null) { parts.push("Lv" + s.level); }
+        return {
+          id: s.id,
+          label: "影#" + s.id,
+          meta: parts.join(" / ") || null,
+        };
+      });
+    setPickerFeedback("マップ影 " + pickerState.currentItems.length + " 件");
+    renderPickerList();
+    if (initialValue != null) {
+      const target = pickerState.currentItems.find(function (x) { return x.id === Number(initialValue); });
+      if (target) {
+        setPickerSelected(target.id, target.label);
+      }
+    }
+    return;
+  }
   if (pickerState.type === "mapPart") {
     setPickerFeedback("読み込み中...");
     const { response, data } = await fetchJson("/api/maps/parts");
@@ -7703,9 +7758,10 @@ function renderPickerList() {
         return false;
       });
 
-  // アイテム / エフェクト / マップパーツ picker は行表示にする（名前が長いため）
+  // アイテム / エフェクト / マップパーツ / マップ影 picker は行表示にする（名前が長いため）
   pickerState.listEl.classList.toggle("picker-mode-rows",
-    pickerState.type === "item" || pickerState.type === "effect" || pickerState.type === "mapPart");
+    pickerState.type === "item" || pickerState.type === "effect"
+    || pickerState.type === "mapPart" || pickerState.type === "mapShadow");
 
   if (pickerState.summaryEl) {
     pickerState.summaryEl.textContent = filtered.length + " 件 / " + pickerState.currentItems.length + " 件";

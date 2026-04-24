@@ -1105,6 +1105,11 @@
         </p>
         <div class="map-parts-controls">
           <button type="button" class="button primary" id="map-shadow-new-btn">新規追加</button>
+          <label class="form-field compact">
+            <span>影ID 指定</span>
+            <input type="number" id="map-shadow-jump-id" min="0" />
+          </label>
+          <button type="button" class="button" data-picker="mapShadow" data-picker-target="map-shadow-jump-id">影を選択...</button>
         </div>
         <p id="map-shadow-summary" class="section-summary" aria-live="polite"></p>
         <table class="data-table" id="map-shadow-table">
