@@ -3281,6 +3281,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "item-list") {
+    if (options.forceReload || (!itemState.items.length && !itemState.isLoading && !itemState.loadError)) {
+      loadItemList(options.forceReload === true);
+    }
+  }
+
   currentRoute = normalized;
 }
 
@@ -5837,4 +5843,323 @@ function setupItemTypeView() {
 // 初期化ブートストラップ（load イベント後に1度だけ実行する）
 window.addEventListener("load", function () {
   setupItemTypeView();
+  setupItemView();
 });
+
+// ---------------------------------------------------------------------------
+// アイテム一覧管理（Wave 2D）
+// ---------------------------------------------------------------------------
+
+const itemState = {
+  items: [],           // サーバー取得済みアイテム一覧
+  isLoading: false,
+  loadError: null,
+  editing: null,       // 編集中の itemId（新規は 0）
+  filter: { drop: true, charId: null, mapId: null }
+};
+
+function setItemFeedback(msg, isError) {
+  setFeedback("item-feedback", msg || "", !!isError);
+}
+
+function setItemEditFeedback(msg, isError) {
+  setFeedback("item-edit-feedback", msg || "", !!isError);
+}
+
+function buildItemQueryString() {
+  const params = [];
+  if (itemState.filter.drop) { params.push("drop=1"); }
+  if (itemState.filter.charId !== null && itemState.filter.charId >= 0) {
+    params.push("charId=" + itemState.filter.charId);
+  }
+  if (itemState.filter.mapId !== null && itemState.filter.mapId >= 0) {
+    params.push("mapId=" + itemState.filter.mapId);
+  }
+  return params.length ? ("?" + params.join("&")) : "";
+}
+
+async function loadItemList(forceReload) {
+  if (itemState.isLoading) { return; }
+  itemState.isLoading = true;
+  itemState.loadError = null;
+  if (forceReload) {
+    setItemFeedback("読み込み中...", false);
+  }
+  try {
+    const url = "/api/items" + buildItemQueryString();
+    const { response, data } = await fetchJson(url);
+    if (!response.ok || !data || !Array.isArray(data.items)) {
+      throw new Error("items load failed: HTTP " + response.status);
+    }
+    itemState.items = data.items;
+    renderItemTable();
+    setItemFeedback("", false);
+  } catch (err) {
+    console.error("loadItemList error", err);
+    itemState.loadError = err.message || String(err);
+    setItemFeedback("読み込みに失敗しました", true);
+  } finally {
+    itemState.isLoading = false;
+  }
+}
+
+function renderItemTable() {
+  const tbody = document.getElementById("item-table-body");
+  const summary = document.getElementById("item-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const items = itemState.items || [];
+  if (summary) {
+    summary.textContent = items.length + " 件";
+  }
+
+  items.forEach(function (it) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = it.itemId;
+    tr.appendChild(tdId);
+
+    const tdName = document.createElement("td");
+    tdName.textContent = it.name || "";
+    tr.appendChild(tdName);
+
+    const tdType = document.createElement("td");
+    const typeLabel = it.itemTypeName ? it.itemTypeName : "";
+    tdType.textContent = "[" + it.itemTypeId + "] " + typeLabel;
+    tr.appendChild(tdType);
+
+    const tdChar = document.createElement("td");
+    tdChar.textContent = it.charId ? ("[" + it.charId + "]") : "";
+    tr.appendChild(tdChar);
+
+    const tdPos = document.createElement("td");
+    if (it.mapId) {
+      tdPos.textContent = "MAP:" + it.mapId + " (" + it.posX + "," + it.posY + ")";
+    } else {
+      tdPos.textContent = "";
+    }
+    tr.appendChild(tdPos);
+
+    const tdGrp = document.createElement("td");
+    tdGrp.textContent = it.grpId + " / " + it.iconGrpId;
+    tr.appendChild(tdGrp);
+
+    const tdOps = document.createElement("td");
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.addEventListener("click", function () { openItemEdit(it); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.5rem";
+    btnDel.addEventListener("click", function () { deleteItem(it); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+function openItemEdit(item) {
+  const card = document.getElementById("item-edit-card");
+  const title = document.getElementById("item-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !item;
+  itemState.editing = isNew ? 0 : item.itemId;
+
+  if (title) {
+    title.textContent = isNew ? "アイテム 新規追加" : ("アイテム 編集 (ID=" + item.itemId + ")");
+  }
+
+  const src = item || {
+    itemId: 0, itemTypeId: 1, name: "",
+    grpId: 0, iconGrpId: 0, dropSoundId: 0,
+    putOn: false,
+    mapId: 0, posX: 0, posY: 0, posZ: 0,
+    charId: 0, backPackX: 0, backPackY: 0,
+    itemTypeName: ""
+  };
+
+  document.getElementById("item-edit-itemId").value     = isNew ? "" : String(src.itemId);
+  document.getElementById("item-edit-itemTypeId").value = String(src.itemTypeId || 1);
+  document.getElementById("item-edit-itemTypeName").textContent =
+      src.itemTypeName ? ("（" + src.itemTypeName + "）") : "";
+  document.getElementById("item-edit-name").value       = src.name || "";
+  document.getElementById("item-edit-putOn").checked    = !!src.putOn;
+  document.getElementById("item-edit-grpId").value      = String(src.grpId || 0);
+  document.getElementById("item-edit-iconGrpId").value  = String(src.iconGrpId || 0);
+  document.getElementById("item-edit-dropSoundId").value = String(src.dropSoundId || 0);
+  document.getElementById("item-edit-mapId").value      = String(src.mapId || 0);
+  document.getElementById("item-edit-posX").value       = String(src.posX || 0);
+  document.getElementById("item-edit-posY").value       = String(src.posY || 0);
+  document.getElementById("item-edit-posZ").value       = String(src.posZ || 0);
+  document.getElementById("item-edit-charId").value     = String(src.charId || 0);
+  document.getElementById("item-edit-backPackX").value  = String(src.backPackX || 0);
+  document.getElementById("item-edit-backPackY").value  = String(src.backPackY || 0);
+
+  setItemEditFeedback("", false);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeItemEdit() {
+  const card = document.getElementById("item-edit-card");
+  if (card) { card.style.display = "none"; }
+  itemState.editing = null;
+  setItemEditFeedback("", false);
+}
+
+function buildItemBodyFromForm() {
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+  return {
+    itemTypeId:  intVal("item-edit-itemTypeId"),
+    name:        document.getElementById("item-edit-name").value,
+    putOn:       document.getElementById("item-edit-putOn").checked,
+    grpId:       intVal("item-edit-grpId"),
+    iconGrpId:   intVal("item-edit-iconGrpId"),
+    dropSoundId: intVal("item-edit-dropSoundId"),
+    mapId:       intVal("item-edit-mapId"),
+    posX:        intVal("item-edit-posX"),
+    posY:        intVal("item-edit-posY"),
+    posZ:        intVal("item-edit-posZ"),
+    charId:      intVal("item-edit-charId"),
+    backPackX:   intVal("item-edit-backPackX"),
+    backPackY:   intVal("item-edit-backPackY")
+  };
+}
+
+async function submitItemForm(event) {
+  event.preventDefault();
+
+  const editing = itemState.editing;
+  if (editing === null) { return; }
+
+  const body = buildItemBodyFromForm();
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) {
+    body.itemId = editing;
+  }
+
+  setItemEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/items", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setItemEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setItemEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadItemList(false);
+    if (isNew && data && data.itemId) {
+      const created = itemState.items.find(function (x) { return x.itemId === data.itemId; });
+      if (created) {
+        openItemEdit(created);
+      }
+    }
+  } catch (err) {
+    console.error("submitItemForm error", err);
+    setItemEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+async function deleteItem(item) {
+  if (!item || !item.itemId) { return; }
+  const msg = "アイテム [" + (item.name || "") + "] (ID=" + item.itemId + ") を削除しますか？";
+  if (!confirm(msg)) { return; }
+
+  setItemFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/items", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ itemId: item.itemId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setItemFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setItemFeedback("削除しました (ID=" + item.itemId + ")", false);
+    if (itemState.editing === item.itemId) {
+      closeItemEdit();
+    }
+    await loadItemList(false);
+  } catch (err) {
+    console.error("deleteItem error", err);
+    setItemFeedback("通信エラーが発生しました", true);
+  }
+}
+
+function applyItemFilterFromUi() {
+  const drop = document.getElementById("item-filter-drop").checked;
+  const charIdRaw = document.getElementById("item-filter-charid").value;
+  const mapIdRaw = document.getElementById("item-filter-mapid").value;
+  itemState.filter.drop = drop;
+  itemState.filter.charId = charIdRaw === "" ? null : parseInt(charIdRaw, 10);
+  itemState.filter.mapId = mapIdRaw === "" ? null : parseInt(mapIdRaw, 10);
+  if (itemState.filter.charId !== null && isNaN(itemState.filter.charId)) { itemState.filter.charId = null; }
+  if (itemState.filter.mapId !== null && isNaN(itemState.filter.mapId)) { itemState.filter.mapId = null; }
+}
+
+function clearItemFilter() {
+  document.getElementById("item-filter-drop").checked = true;
+  document.getElementById("item-filter-charid").value = "";
+  document.getElementById("item-filter-mapid").value = "";
+  itemState.filter = { drop: true, charId: null, mapId: null };
+}
+
+function setupItemView() {
+  const reloadBtn = document.getElementById("item-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadItemList(true); });
+  }
+  const newBtn = document.getElementById("item-new-btn");
+  if (newBtn) {
+    newBtn.addEventListener("click", function () { openItemEdit(null); });
+  }
+  const form = document.getElementById("item-edit-form");
+  if (form) {
+    form.addEventListener("submit", submitItemForm);
+  }
+  const cancelBtn = document.getElementById("item-cancel-btn");
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () { closeItemEdit(); });
+  }
+  const applyBtn = document.getElementById("item-filter-apply-btn");
+  if (applyBtn) {
+    applyBtn.addEventListener("click", function () {
+      applyItemFilterFromUi();
+      loadItemList(true);
+    });
+  }
+  const clearBtn = document.getElementById("item-filter-clear-btn");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", function () {
+      clearItemFilter();
+      loadItemList(true);
+    });
+  }
+}

@@ -1397,14 +1397,118 @@
       </section>
     </div>
     <div class="view" data-view="item-list">
-      <section class="card placeholder-card">
-        <h2>アイテム一覧（プレースホルダー）</h2>
-        <p>マップ上のアイテムを検索・生成する機能を想定しています。</p>
-        <ul>
-          <li>マップ/カテゴリフィルター</li>
-          <li>アイテム生成リクエスト</li>
-          <li>削除・移動操作の監査ログ</li>
-        </ul>
+      <section class="card">
+        <h2>アイテム一覧</h2>
+        <p>マップ上に配置されているアイテム、およびキャラが所持しているアイテムを管理します。</p>
+        <div class="form-actions" style="margin-bottom:0.5rem;">
+          <button type="button" id="item-reload-btn" class="btn-secondary">再読込</button>
+          <button type="button" id="item-new-btn" class="btn-primary">新規追加</button>
+        </div>
+        <div class="form-row" style="gap:1rem;">
+          <label><input type="checkbox" id="item-filter-drop" checked> 落ちているもののみ</label>
+          <label>所持キャラID: <input type="number" id="item-filter-charid" min="0" value="" style="width:6rem;"></label>
+          <label>マップID: <input type="number" id="item-filter-mapid" min="0" value="" style="width:6rem;"></label>
+          <button type="button" id="item-filter-apply-btn" class="btn-secondary">フィルター適用</button>
+          <button type="button" id="item-filter-clear-btn" class="btn-secondary">クリア</button>
+        </div>
+        <p id="item-summary" class="muted"></p>
+        <div style="overflow-x:auto;">
+          <table class="data-table" id="item-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>名前</th>
+                <th>種別</th>
+                <th>所持キャラ</th>
+                <th>配置(マップ/座標)</th>
+                <th>画像</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="item-table-body"></tbody>
+          </table>
+        </div>
+        <p id="item-feedback" class="form-feedback" aria-live="polite"></p>
+      </section>
+
+      <section class="card" id="item-edit-card" style="display:none;">
+        <h2 id="item-edit-title">アイテム 編集</h2>
+        <form id="item-edit-form">
+          <fieldset>
+            <legend>基本情報</legend>
+            <div class="form-row">
+              <label for="item-edit-itemId">アイテムID</label>
+              <input type="text" id="item-edit-itemId" readonly placeholder="（新規は自動採番）">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-itemTypeId">アイテム種別ID</label>
+              <input type="number" id="item-edit-itemTypeId" min="1" value="1" required>
+              <span class="muted" id="item-edit-itemTypeName"></span>
+            </div>
+            <div class="form-row">
+              <label for="item-edit-name">アイテム名</label>
+              <input type="text" id="item-edit-name" maxlength="32" placeholder="表示名（省略時は種別の名前）">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-putOn">上に置けるか</label>
+              <input type="checkbox" id="item-edit-putOn">
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>画像・音声</legend>
+            <div class="form-row">
+              <label for="item-edit-grpId">地面画像ID</label>
+              <input type="number" id="item-edit-grpId" min="0" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-iconGrpId">バックパック画像ID</label>
+              <input type="number" id="item-edit-iconGrpId" min="0" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-dropSoundId">落下音ID</label>
+              <input type="number" id="item-edit-dropSoundId" min="0" value="0">
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>配置・所有</legend>
+            <div class="form-row">
+              <label for="item-edit-mapId">配置マップID（0=未配置）</label>
+              <input type="number" id="item-edit-mapId" min="0" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-posX">X座標</label>
+              <input type="number" id="item-edit-posX" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-posY">Y座標</label>
+              <input type="number" id="item-edit-posY" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-posZ">Z座標(高さ)</label>
+              <input type="number" id="item-edit-posZ" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-charId">所持キャラID（0=未所持）</label>
+              <input type="number" id="item-edit-charId" min="0" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-backPackX">バックパックX</label>
+              <input type="number" id="item-edit-backPackX" value="0">
+            </div>
+            <div class="form-row">
+              <label for="item-edit-backPackY">バックパックY</label>
+              <input type="number" id="item-edit-backPackY" value="0">
+            </div>
+          </fieldset>
+
+          <p id="item-edit-feedback" class="form-feedback" aria-live="polite"></p>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="item-save-btn">保存</button>
+            <button type="button" class="btn-secondary" id="item-cancel-btn">キャンセル</button>
+          </div>
+        </form>
       </section>
     </div>
     <div class="view" data-view="weapon-list">
