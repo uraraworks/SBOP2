@@ -138,6 +138,9 @@
     <ClCompile Include="src\Web\Handlers\HealthHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\ImageCatalogHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
@@ -519,6 +522,9 @@
       <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\HealthHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\ImageCatalogHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h">

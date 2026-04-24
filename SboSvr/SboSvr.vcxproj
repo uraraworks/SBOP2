@@ -284,6 +284,7 @@
     <ClCompile Include="src\UpdateServerInfo.cpp" />
     <ClCompile Include="src\Web\ApiRouter.cpp" />
     <ClCompile Include="src\Web\Handlers\HealthHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\ImageCatalogHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp" />
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
@@ -421,6 +422,7 @@
     <ClInclude Include="src\Web\ApiHandler.h" />
     <ClInclude Include="src\Web\ApiRouter.h" />
     <ClInclude Include="src\Web\Handlers\HealthHandler.h" />
+    <ClInclude Include="src\Web\Handlers\ImageCatalogHandler.h" />
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />

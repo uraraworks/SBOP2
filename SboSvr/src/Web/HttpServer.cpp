@@ -34,6 +34,7 @@
 #include "Handlers/EfcBalloonHandler.h"
 #include "Handlers/EfcHandler.h"
 #include "Handlers/InitialStatusHandler.h"
+#include "Handlers/ImageCatalogHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -809,6 +810,11 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> itemDeleteHandler(new CItemDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/items", std::move(itemDeleteHandler));
+
+        // 画像カテゴリカタログ API（共通 picker 向け、Wave 共通コンポーネント）
+        //   GET /api/image-categories   画像カテゴリ（GRPIDMAIN_*）一覧を返す
+        std::unique_ptr<IApiHandler> imageCatalogHandler(new CImageCatalogHandler());
+        m_router.Register("GET", "/api/image-categories", std::move(imageCatalogHandler));
 
         // 武器情報 API（Wave 2D）
         //   GET    /api/weapons    一覧
