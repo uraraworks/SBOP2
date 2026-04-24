@@ -33,6 +33,7 @@
 #include "Handlers/WeaponHandler.h"
 #include "Handlers/EfcBalloonHandler.h"
 #include "Handlers/EfcHandler.h"
+#include "Handlers/InitialStatusHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -859,6 +860,16 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> efcDeleteHandler(new CEfcDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/effects", std::move(efcDeleteHandler));
+
+        // 初期ステータス設定 API（Wave 2D）
+        //   GET /api/initial-status    現在値取得
+        //   PUT /api/initial-status    値更新（未指定キーは据え置き）
+        // 単一レコードのため POST/DELETE は提供しない。
+        std::unique_ptr<IApiHandler> initialStatusGetHandler(new CInitialStatusGetHandler(m_pMgrData));
+        m_router.Register("GET", "/api/initial-status", std::move(initialStatusGetHandler));
+
+        std::unique_ptr<IApiHandler> initialStatusUpdateHandler(new CInitialStatusUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/initial-status", std::move(initialStatusUpdateHandler));
 
         // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
         CSelectionStore::GetInstance().SetChangeCallback(
