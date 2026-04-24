@@ -32,6 +32,7 @@
         <li><a href="#skill-management" data-route="skill-management" class="nav-link">スキル一覧・編集</a></li>
         <li><a href="#map-info" data-route="map-info" class="nav-link">マップ情報編集</a></li>
         <li><a href="#map-events" data-route="map-events" class="nav-link">マップイベント一覧</a></li>
+        <li><a href="#talk-events" data-route="talk-events" class="nav-link">会話イベント編集</a></li>
         <li><a href="#map-parts" data-route="map-parts" class="nav-link">マップパーツ編集</a></li>
         <li><a href="#map-object-templates" data-route="map-object-templates" class="nav-link">オブジェクトテンプレート管理</a></li>
         <li><a href="#map-window" data-route="map-window" class="nav-link">マップウィンドウ</a></li>
@@ -799,6 +800,18 @@
           <button type="button" class="btn btn-primary" id="map-event-new-btn">新規追加</button>
         </div>
 
+        <!-- 会話イベント editor への導線（共通コンポーネントの組み込み動作確認用） -->
+        <div class="form-actions" style="margin-top:0.5rem;">
+          <label class="form-field">
+            <span>会話イベント ID (NPC/キャラ ID)</span>
+            <input type="number" id="map-event-talk-id-input" min="1" value="1">
+          </label>
+          <button type="button" class="btn btn-secondary"
+                  data-talk-event data-talk-event-target="map-event-talk-id-input">
+            会話イベント editor を開く
+          </button>
+        </div>
+
         <p id="map-event-summary" class="section-summary" aria-live="polite"></p>
 
         <div class="table-wrapper">
@@ -821,6 +834,72 @@
         <p id="map-event-feedback" class="form-feedback" aria-live="polite"></p>
       </section>
     </div>
+    <div class="view" data-view="talk-events">
+      <section class="card" id="talk-events-browser">
+        <h2>会話イベント編集</h2>
+        <p class="card-description">
+          NPC / キャラクターに紐づく会話イベント (CInfoTalkEvent) を編集します。
+          ID はキャラクター ID と対応しており、コマンド配列 (events[]) を行単位で差し替えます。
+        </p>
+
+        <div class="map-info-controls">
+          <label class="form-field">
+            <span>会話イベント ID</span>
+            <select id="talk-event-select"></select>
+          </label>
+          <button type="button" class="btn btn-primary" id="talk-event-reload-btn">再読み込み</button>
+          <button type="button" class="btn btn-primary" id="talk-event-new-btn">ID を指定して新規</button>
+        </div>
+
+        <p id="talk-event-summary" class="section-summary" aria-live="polite"></p>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>ページ数</th>
+                <th>行数</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="talk-event-table-body"></tbody>
+          </table>
+        </div>
+
+        <p id="talk-event-feedback" class="form-feedback" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <!-- 会話イベント editor モーダル -->
+    <div class="picker-modal" id="talk-event-modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="talk-event-modal-title">
+      <div class="picker-modal-backdrop" data-talk-event-dismiss></div>
+      <div class="picker-modal-panel" role="document" style="width:min(960px,95vw);">
+        <header class="picker-modal-header">
+          <h2 id="talk-event-modal-title" class="picker-modal-title">会話イベント editor</h2>
+          <button type="button" class="picker-modal-close" data-talk-event-dismiss aria-label="閉じる">&times;</button>
+        </header>
+        <div class="picker-modal-toolbar">
+          <span>ID: <strong id="talk-event-modal-id">-</strong></span>
+          <button type="button" class="btn btn-primary" id="talk-event-add-row-btn">行を追加</button>
+          <span class="picker-modal-summary" id="talk-event-modal-summary"></span>
+        </div>
+        <div class="picker-modal-body">
+          <div class="picker-modal-feedback" id="talk-event-modal-feedback" aria-live="polite"></div>
+          <div id="talk-event-rows-area" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
+        </div>
+        <footer class="picker-modal-footer">
+          <div class="picker-modal-selected">
+            編集中の行数: <strong id="talk-event-row-count">0</strong>
+          </div>
+          <div class="picker-modal-actions">
+            <button type="button" class="btn" data-talk-event-dismiss>キャンセル</button>
+            <button type="button" class="btn primary" id="talk-event-save-btn">保存</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+
     <div class="view" data-view="map-parts">
       <section class="card" id="map-parts-browser">
         <h2>マップパーツ一覧</h2>

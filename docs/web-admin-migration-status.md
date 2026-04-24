@@ -1,6 +1,6 @@
 # Web管理画面 進捗確認
 
-最終更新: 2026-04-24（共通コンポーネント: 画像 picker / アイテム picker / エフェクト picker / マップパーツ picker / マップ影 picker 実装）
+最終更新: 2026-04-24（共通コンポーネント: 画像 picker / アイテム picker / エフェクト picker / マップパーツ picker / マップ影 picker / 会話イベント editor 実装）
 
 ## 使い方
 
@@ -43,7 +43,6 @@
 - マップウィンドウ相当のビュー
 - ゲーム画面クリックとの連携
 - 共通 picker 群
-- 会話イベント editor
 
 ## Wave別チェック
 
@@ -110,7 +109,7 @@
 - [x] エフェクト picker
 - [x] マップパーツ picker
 - [x] マップ影 picker
-- [ ] 会話イベント editor
+- [x] 会話イベント editor
 - [ ] 差分確認 / 監査ログ共通表示
 
 ## 次の実装順
@@ -121,4 +120,18 @@
 
 - 旧 MFC の「選択キャラ」「選択マップ座標」は、Web ではサーバー側選択状態へ置き換える
 - `IDM_DEBUG_*` は恒久 UI ではなく、必要なら開発者向けツールとして別枠に分離する
-- `DlgAdminTalkEvent*` はマップイベント専用ではなく、将来的に複数機能から呼ぶ共通 editor にしたい
+- `DlgAdminTalkEvent*` の Web 版（会話イベント editor）は実装済み。共通コンポーネントとして
+  `openTalkEventEditor({ talkEventId, onSaved })` で呼び出し可能。宣言的には
+  `<button data-talk-event="<id>">` または `data-talk-event-target="<input id>"` でも開ける。
+  扱うコマンド種別: NONE / PAGE / MSG / MENU / ADDSKILL。
+- 会話イベント editor の残課題（TODO コメントは app.js に記載）:
+  - ADDSKILL でのスキル picker 連携（現状は ID 直接入力）
+  - PAGE 条件「アイテムあり/なし」の data 欄にアイテム picker を差し込む
+  - MSG テキストのプレビュー / 改行コード整形
+  - ページ単位でのグルーピング表示（現状は events[] 線形リスト）
+  - 行の Undo / 変更差分表示
+  - コミット前バリデーション（MENU のジャンプ先ページが存在するか等）
+  - ネイティブ側への通知（PacketADMIN_CHAR_RENEW_TALKEVENT 経由）が未実装。
+    現状は `CLibInfoTalkEvent` の in-memory を差し替えるだけで、クライアントへの
+    リアルタイム反映は次回保存時まで待たせている。必要なら同パケット相当の
+    ブロードキャストを追加する。

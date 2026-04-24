@@ -3252,6 +3252,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "talk-events") {
+    if (options.forceReload || (!talkEventState.loaded && !talkEventState.isLoading)) {
+      loadTalkEventList();
+    }
+  }
+
   if (normalized === "map-parts") {
     if (options.forceReload) {
       loadMapPartsData(true);
@@ -7836,4 +7842,616 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", bindPickerButtons);
 } else {
   bindPickerButtons();
+}
+
+// =============================================================================
+// 会話イベント editor（共通コンポーネント）
+//   /api/talk-events を読み書きし、CInfoTalkEvent の events[] を行単位で編集する。
+//   外部 API: openTalkEventEditor({ talkEventId, onSaved })
+//   - 一覧画面 (view="talk-events") からも、将来的にマップイベント / NPC から
+//     data-talk-event ボタンでも呼べる想定。
+// =============================================================================
+
+// 会話イベントコマンド種別（CInfoTalkEventBase.h の enum と一致）
+const TALK_EVENT_TYPE_NONE     = 0;
+const TALK_EVENT_TYPE_PAGE     = 1;
+const TALK_EVENT_TYPE_MSG      = 2;
+const TALK_EVENT_TYPE_MENU     = 3;
+const TALK_EVENT_TYPE_ADDSKILL = 4;
+
+const TALK_EVENT_TYPE_LABELS = {
+  0: "NONE（空）",
+  1: "PAGE（ページ切替）",
+  2: "MSG（メッセージ）",
+  3: "MENU（選択肢）",
+  4: "ADDSKILL（スキル追加）",
+};
+
+// ページ切替条件（CInfoTalkEventPAGE.h の enum と一致）
+const TALK_EVENT_PAGE_COND_LABELS = {
+  0: "条件なし",
+  1: "アイテムあり",
+  2: "アイテムなし",
+};
+
+const talkEventState = {
+  loaded: false,
+  isLoading: false,
+  items: [],             // [{id, pageCount, eventCount}]
+  selectedId: null,
+  // editor 用
+  editorOpen: false,
+  editorTalkEventId: null,
+  editorRows: [],        // {type, page, data, text, pageChgCondition, pageJump, menuItems:[{page,name}]}
+  editorOnSaved: null,
+};
+
+function getTalkEventEls() {
+  return {
+    tableBody: document.getElementById("talk-event-table-body"),
+    summary: document.getElementById("talk-event-summary"),
+    feedback: document.getElementById("talk-event-feedback"),
+    select: document.getElementById("talk-event-select"),
+    reloadBtn: document.getElementById("talk-event-reload-btn"),
+    newBtn: document.getElementById("talk-event-new-btn"),
+    modal: document.getElementById("talk-event-modal"),
+    modalId: document.getElementById("talk-event-modal-id"),
+    modalFeedback: document.getElementById("talk-event-modal-feedback"),
+    modalSummary: document.getElementById("talk-event-modal-summary"),
+    rowsArea: document.getElementById("talk-event-rows-area"),
+    rowCount: document.getElementById("talk-event-row-count"),
+    addRowBtn: document.getElementById("talk-event-add-row-btn"),
+    saveBtn: document.getElementById("talk-event-save-btn"),
+  };
+}
+
+function setTalkEventFeedback(message, isError) {
+  const els = getTalkEventEls();
+  if (!els.feedback) { return; }
+  els.feedback.textContent = message || "";
+  els.feedback.className = "form-feedback" + (isError ? " form-feedback--error" : "");
+}
+
+function setTalkEventModalFeedback(message, isError) {
+  const els = getTalkEventEls();
+  if (!els.modalFeedback) { return; }
+  els.modalFeedback.textContent = message || "";
+  els.modalFeedback.style.color = isError ? "#f87171" : "";
+}
+
+/** 一覧を API から取得して表示 */
+async function loadTalkEventList() {
+  const els = getTalkEventEls();
+  talkEventState.isLoading = true;
+  if (els.summary) { els.summary.textContent = "読み込み中..."; }
+
+  try {
+    const { response, data } = await fetchJson("/api/talk-events");
+    if (!response.ok || !data || !Array.isArray(data.talkEvents)) {
+      throw new Error("HTTP " + response.status);
+    }
+    talkEventState.items = data.talkEvents.slice().sort(function (a, b) { return (a.id || 0) - (b.id || 0); });
+    talkEventState.loaded = true;
+    talkEventState.isLoading = false;
+    if (els.summary) { els.summary.textContent = "会話イベント " + talkEventState.items.length + " 件"; }
+    renderTalkEventSelect();
+    renderTalkEventTable();
+  } catch (err) {
+    console.error("会話イベント一覧取得に失敗:", err);
+    talkEventState.isLoading = false;
+    if (els.summary) { els.summary.textContent = "取得失敗: " + err.message; }
+    setTalkEventFeedback("取得に失敗しました: " + err.message, true);
+  }
+}
+
+function renderTalkEventSelect() {
+  const els = getTalkEventEls();
+  if (!els.select) { return; }
+  els.select.innerHTML = "";
+  if (!talkEventState.items.length) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "（会話イベントなし）";
+    els.select.appendChild(opt);
+    return;
+  }
+  talkEventState.items.forEach(function (it) {
+    const opt = document.createElement("option");
+    opt.value = String(it.id);
+    opt.textContent = "ID " + it.id + "（" + it.pageCount + "ページ / " + it.eventCount + "行）";
+    els.select.appendChild(opt);
+  });
+}
+
+function renderTalkEventTable() {
+  const els = getTalkEventEls();
+  if (!els.tableBody) { return; }
+  els.tableBody.innerHTML = "";
+  if (!talkEventState.items.length) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td colspan="4" class="empty-cell">会話イベントがありません</td>';
+    els.tableBody.appendChild(tr);
+    return;
+  }
+  talkEventState.items.forEach(function (it) {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td>' + it.id + '</td>' +
+      '<td>' + it.pageCount + '</td>' +
+      '<td>' + it.eventCount + '</td>' +
+      '<td>' +
+        '<button type="button" class="btn btn-secondary" data-talk-event-edit="' + it.id + '">編集</button> ' +
+        '<button type="button" class="btn btn-danger" data-talk-event-delete="' + it.id + '">削除</button>' +
+      '</td>';
+    els.tableBody.appendChild(tr);
+  });
+}
+
+/** 削除（確認ダイアログ付き） */
+async function deleteTalkEvent(id) {
+  if (!confirm("会話イベント ID " + id + " を削除します。よろしいですか？")) { return; }
+  try {
+    const { response, data } = await fetchJson("/api/talk-events?id=" + id, { method: "DELETE" });
+    if (!response.ok) {
+      const msg = (data && data.error) ? data.error : "HTTP " + response.status;
+      throw new Error(msg);
+    }
+    setTalkEventFeedback("削除しました: ID " + id, false);
+    loadTalkEventList();
+  } catch (err) {
+    console.error("会話イベント削除失敗:", err);
+    setTalkEventFeedback("削除失敗: " + err.message, true);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// editor（モーダル）
+// ---------------------------------------------------------------------------
+
+/**
+ * 会話イベント editor を開く（共通 API）
+ * @param {Object} opts
+ *   - talkEventId: number 必須
+ *   - onSaved: (updated) => void 保存成功時に呼ばれる
+ */
+async function openTalkEventEditor(opts) {
+  const options = opts || {};
+  const talkEventId = Number(options.talkEventId);
+  if (!Number.isFinite(talkEventId) || talkEventId <= 0) {
+    alert("会話イベント ID が不正です");
+    return;
+  }
+  talkEventState.editorTalkEventId = talkEventId;
+  talkEventState.editorOnSaved = typeof options.onSaved === "function" ? options.onSaved : null;
+  talkEventState.editorRows = [];
+
+  const els = getTalkEventEls();
+  if (!els.modal) { return; }
+  if (els.modalId) { els.modalId.textContent = String(talkEventId); }
+  setTalkEventModalFeedback("読み込み中...", false);
+
+  els.modal.hidden = false;
+  els.modal.setAttribute("aria-hidden", "false");
+  talkEventState.editorOpen = true;
+
+  // 既存データを取得（なければ空の新規として扱う）
+  try {
+    const { response, data } = await fetchJson("/api/talk-events?id=" + talkEventId);
+    if (response.ok && data && Array.isArray(data.events)) {
+      talkEventState.editorRows = data.events.map(normalizeTalkEventRow);
+      setTalkEventModalFeedback("既存データ " + data.events.length + " 行を読み込みました", false);
+    } else if (response.status === 404) {
+      talkEventState.editorRows = [];
+      setTalkEventModalFeedback("新規会話イベント（既存なし）", false);
+    } else {
+      throw new Error("HTTP " + response.status);
+    }
+  } catch (err) {
+    console.error("会話イベント取得失敗:", err);
+    setTalkEventModalFeedback("取得失敗: " + err.message, true);
+  }
+
+  renderTalkEventEditorRows();
+}
+
+function closeTalkEventEditor() {
+  const els = getTalkEventEls();
+  if (!els.modal) { return; }
+  els.modal.hidden = true;
+  els.modal.setAttribute("aria-hidden", "true");
+  talkEventState.editorOpen = false;
+  talkEventState.editorOnSaved = null;
+}
+
+/** サーバーから来た 1 行を editorRows 用に正規化する */
+function normalizeTalkEventRow(ev) {
+  return {
+    type: Number(ev.type) || 0,
+    page: Number(ev.page) || 0,
+    data: Number(ev.data) || 0,
+    text: String(ev.text || ""),
+    pageChgCondition: Number(ev.pageChgCondition) || 0,
+    pageJump: Number(ev.pageJump) || 0,
+    menuItems: Array.isArray(ev.menuItems)
+      ? ev.menuItems.map(function (m) { return { page: Number(m.page) || 0, name: String(m.name || "") }; })
+      : [],
+  };
+}
+
+/** 編集中の行一覧を DOM に描画 */
+function renderTalkEventEditorRows() {
+  const els = getTalkEventEls();
+  if (!els.rowsArea) { return; }
+  els.rowsArea.innerHTML = "";
+
+  if (els.rowCount) { els.rowCount.textContent = String(talkEventState.editorRows.length); }
+  if (els.modalSummary) {
+    els.modalSummary.textContent = talkEventState.editorRows.length + " 行";
+  }
+
+  if (!talkEventState.editorRows.length) {
+    const empty = document.createElement("p");
+    empty.className = "field-note";
+    empty.textContent = "行がありません。右上の「行を追加」で追加してください。";
+    els.rowsArea.appendChild(empty);
+    return;
+  }
+
+  talkEventState.editorRows.forEach(function (row, idx) {
+    els.rowsArea.appendChild(buildTalkEventRowEl(row, idx));
+  });
+}
+
+/** 1 行分の編集 UI を組み立てる */
+function buildTalkEventRowEl(row, idx) {
+  const wrap = document.createElement("div");
+  wrap.className = "card";
+  wrap.style.padding = "0.5rem";
+  wrap.style.borderLeft = "3px solid #4b5563";
+
+  // 種別プルダウン
+  let typeOptions = "";
+  Object.keys(TALK_EVENT_TYPE_LABELS).forEach(function (k) {
+    const sel = (Number(k) === row.type) ? " selected" : "";
+    typeOptions += '<option value="' + k + '"' + sel + '>' + TALK_EVENT_TYPE_LABELS[k] + '</option>';
+  });
+
+  // 共通ヘッダ（行番号 / 種別 / ページ / 操作）
+  wrap.innerHTML =
+    '<div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">' +
+      '<strong style="min-width:3rem;">#' + idx + '</strong>' +
+      '<label class="form-field"><span>種別</span><select data-talk-event-row-field="type">' + typeOptions + '</select></label>' +
+      '<label class="form-field"><span>所属ページ</span><input type="number" data-talk-event-row-field="page" value="' + row.page + '"></label>' +
+      '<div style="margin-left:auto; display:flex; gap:0.25rem;">' +
+        '<button type="button" class="btn btn-secondary" data-talk-event-row-up="' + idx + '">↑</button>' +
+        '<button type="button" class="btn btn-secondary" data-talk-event-row-down="' + idx + '">↓</button>' +
+        '<button type="button" class="btn btn-danger" data-talk-event-row-delete="' + idx + '">削除</button>' +
+      '</div>' +
+    '</div>' +
+    '<div data-talk-event-row-body style="margin-top:0.4rem;"></div>';
+
+  const body = wrap.querySelector("[data-talk-event-row-body]");
+  renderTalkEventRowBody(body, row, idx);
+
+  // 種別変更で body を更新
+  const typeSel = wrap.querySelector('[data-talk-event-row-field="type"]');
+  if (typeSel) {
+    typeSel.addEventListener("change", function () {
+      row.type = Number(typeSel.value);
+      // 種別切替時に他派生フィールドは保持したまま UI だけ更新
+      renderTalkEventRowBody(body, row, idx);
+    });
+  }
+
+  const pageInp = wrap.querySelector('[data-talk-event-row-field="page"]');
+  if (pageInp) {
+    pageInp.addEventListener("input", function () { row.page = parseInt(pageInp.value || "0", 10) || 0; });
+  }
+
+  return wrap;
+}
+
+/** 行本体（種別依存フィールド）を body 要素に描画 */
+function renderTalkEventRowBody(body, row, idx) {
+  if (!body) { return; }
+  body.innerHTML = "";
+
+  if (row.type === TALK_EVENT_TYPE_NONE) {
+    const p = document.createElement("p");
+    p.className = "field-note";
+    p.textContent = "固有フィールドなし（NONE）";
+    body.appendChild(p);
+    return;
+  }
+
+  if (row.type === TALK_EVENT_TYPE_MSG) {
+    // メッセージ本文（複数行 textarea）
+    const label = document.createElement("label");
+    label.className = "form-field";
+    label.innerHTML =
+      '<span>メッセージ本文</span>' +
+      '<textarea rows="3" data-talk-event-row-field="text" style="width:100%;"></textarea>';
+    body.appendChild(label);
+    const ta = label.querySelector("textarea");
+    ta.value = row.text || "";
+    ta.addEventListener("input", function () { row.text = ta.value; });
+    return;
+  }
+
+  if (row.type === TALK_EVENT_TYPE_ADDSKILL) {
+    // スキル ID（m_dwData）
+    const label = document.createElement("label");
+    label.className = "form-field";
+    label.innerHTML =
+      '<span>スキル ID</span>' +
+      '<input type="number" data-talk-event-row-field="data" min="0">';
+    body.appendChild(label);
+    const inp = label.querySelector("input");
+    inp.value = String(row.data || 0);
+    inp.addEventListener("input", function () { row.data = parseInt(inp.value || "0", 10) || 0; });
+    return;
+  }
+
+  if (row.type === TALK_EVENT_TYPE_PAGE) {
+    // 条件 + ジャンプ先ページ
+    let condOptions = "";
+    Object.keys(TALK_EVENT_PAGE_COND_LABELS).forEach(function (k) {
+      const sel = (Number(k) === row.pageChgCondition) ? " selected" : "";
+      condOptions += '<option value="' + k + '"' + sel + '>' + TALK_EVENT_PAGE_COND_LABELS[k] + '</option>';
+    });
+    body.innerHTML =
+      '<label class="form-field"><span>切替条件</span><select data-talk-event-row-field="pageChgCondition">' + condOptions + '</select></label>' +
+      '<label class="form-field"><span>ジャンプ先ページ</span><input type="number" data-talk-event-row-field="pageJump" value="' + (row.pageJump || 0) + '"></label>' +
+      '<label class="form-field"><span>条件用データ (アイテム ID 等)</span><input type="number" data-talk-event-row-field="data" value="' + (row.data || 0) + '"></label>';
+    const condSel = body.querySelector('[data-talk-event-row-field="pageChgCondition"]');
+    const jumpInp = body.querySelector('[data-talk-event-row-field="pageJump"]');
+    const dataInp = body.querySelector('[data-talk-event-row-field="data"]');
+    if (condSel) { condSel.addEventListener("change", function () { row.pageChgCondition = Number(condSel.value); }); }
+    if (jumpInp) { jumpInp.addEventListener("input", function () { row.pageJump = parseInt(jumpInp.value || "0", 10) || 0; }); }
+    if (dataInp) { dataInp.addEventListener("input", function () { row.data = parseInt(dataInp.value || "0", 10) || 0; }); }
+    return;
+  }
+
+  if (row.type === TALK_EVENT_TYPE_MENU) {
+    // 選択肢一覧
+    const title = document.createElement("p");
+    title.className = "field-note";
+    title.textContent = "選択肢（ジャンプ先ページ番号 + 項目名）";
+    body.appendChild(title);
+
+    const listDiv = document.createElement("div");
+    listDiv.style.display = "flex";
+    listDiv.style.flexDirection = "column";
+    listDiv.style.gap = "0.25rem";
+    body.appendChild(listDiv);
+
+    function renderMenuItems() {
+      listDiv.innerHTML = "";
+      row.menuItems.forEach(function (mi, midx) {
+        const itemWrap = document.createElement("div");
+        itemWrap.style.display = "flex";
+        itemWrap.style.gap = "0.5rem";
+        itemWrap.style.alignItems = "center";
+        itemWrap.innerHTML =
+          '<span>#' + midx + '</span>' +
+          '<label class="form-field"><span>ページ</span><input type="number" value="' + mi.page + '" style="width:6rem;"></label>' +
+          '<label class="form-field" style="flex:1;"><span>項目名</span><input type="text" value=""></label>' +
+          '<button type="button" class="btn btn-danger">削除</button>';
+        const inps = itemWrap.querySelectorAll("input");
+        inps[0].addEventListener("input", function () { mi.page = parseInt(inps[0].value || "0", 10) || 0; });
+        inps[1].value = mi.name || "";
+        inps[1].addEventListener("input", function () { mi.name = inps[1].value; });
+        const delBtn = itemWrap.querySelector("button");
+        delBtn.addEventListener("click", function () {
+          row.menuItems.splice(midx, 1);
+          renderMenuItems();
+        });
+        listDiv.appendChild(itemWrap);
+      });
+    }
+
+    renderMenuItems();
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "btn btn-secondary";
+    addBtn.textContent = "+ 選択肢を追加";
+    addBtn.style.marginTop = "0.25rem";
+    addBtn.addEventListener("click", function () {
+      row.menuItems.push({ page: 0, name: "" });
+      renderMenuItems();
+    });
+    body.appendChild(addBtn);
+    return;
+  }
+}
+
+/** editor の全操作を 1 箇所に集約（イベント委譲） */
+function bindTalkEventEditor() {
+  const els = getTalkEventEls();
+
+  // 一覧画面のボタン（再読み込み / 新規 / 編集 / 削除）
+  if (els.reloadBtn) {
+    els.reloadBtn.addEventListener("click", function () { loadTalkEventList(); });
+  }
+  if (els.newBtn) {
+    els.newBtn.addEventListener("click", function () {
+      const raw = prompt("新規会話イベント ID (キャラクター ID) を入力してください。");
+      if (!raw) { return; }
+      const id = parseInt(raw, 10);
+      if (!Number.isFinite(id) || id <= 0) {
+        alert("不正な ID です");
+        return;
+      }
+      openTalkEventEditor({
+        talkEventId: id,
+        onSaved: function () { loadTalkEventList(); }
+      });
+    });
+  }
+  // 一覧テーブルの編集 / 削除（委譲）
+  const tableBody = els.tableBody;
+  if (tableBody) {
+    tableBody.addEventListener("click", function (ev) {
+      const editBtn = ev.target.closest("[data-talk-event-edit]");
+      if (editBtn) {
+        const id = Number(editBtn.getAttribute("data-talk-event-edit"));
+        openTalkEventEditor({
+          talkEventId: id,
+          onSaved: function () { loadTalkEventList(); }
+        });
+        return;
+      }
+      const delBtn = ev.target.closest("[data-talk-event-delete]");
+      if (delBtn) {
+        const id = Number(delBtn.getAttribute("data-talk-event-delete"));
+        deleteTalkEvent(id);
+      }
+    });
+  }
+
+  // モーダル dismiss
+  if (els.modal) {
+    const dismissEls = els.modal.querySelectorAll("[data-talk-event-dismiss]");
+    dismissEls.forEach(function (el) { el.addEventListener("click", closeTalkEventEditor); });
+  }
+
+  // 行追加
+  if (els.addRowBtn) {
+    els.addRowBtn.addEventListener("click", function () {
+      talkEventState.editorRows.push(normalizeTalkEventRow({ type: TALK_EVENT_TYPE_MSG }));
+      renderTalkEventEditorRows();
+    });
+  }
+
+  // 行本体のイベント委譲（上下移動 / 削除）
+  if (els.rowsArea) {
+    els.rowsArea.addEventListener("click", function (ev) {
+      const up = ev.target.closest("[data-talk-event-row-up]");
+      if (up) {
+        const i = Number(up.getAttribute("data-talk-event-row-up"));
+        if (i > 0) {
+          const tmp = talkEventState.editorRows[i - 1];
+          talkEventState.editorRows[i - 1] = talkEventState.editorRows[i];
+          talkEventState.editorRows[i] = tmp;
+          renderTalkEventEditorRows();
+        }
+        return;
+      }
+      const dn = ev.target.closest("[data-talk-event-row-down]");
+      if (dn) {
+        const i = Number(dn.getAttribute("data-talk-event-row-down"));
+        if (i < talkEventState.editorRows.length - 1) {
+          const tmp = talkEventState.editorRows[i + 1];
+          talkEventState.editorRows[i + 1] = talkEventState.editorRows[i];
+          talkEventState.editorRows[i] = tmp;
+          renderTalkEventEditorRows();
+        }
+        return;
+      }
+      const del = ev.target.closest("[data-talk-event-row-delete]");
+      if (del) {
+        const i = Number(del.getAttribute("data-talk-event-row-delete"));
+        talkEventState.editorRows.splice(i, 1);
+        renderTalkEventEditorRows();
+      }
+    });
+  }
+
+  // 保存
+  if (els.saveBtn) {
+    els.saveBtn.addEventListener("click", saveTalkEventEditor);
+  }
+
+  // ESC で閉じる
+  document.addEventListener("keydown", function (ev) {
+    if (!talkEventState.editorOpen) { return; }
+    if (ev.key === "Escape") { closeTalkEventEditor(); }
+  });
+
+  // data-talk-event 属性を持つ任意のボタンから editor を開けるようにする
+  //   <button data-talk-event="<id>"> または data-talk-event-target="<input id>">
+  //   のどちらでも動く（後者は input.value を ID として使う）
+  document.addEventListener("click", function (ev) {
+    const btn = ev.target.closest("button[data-talk-event]");
+    if (!btn) { return; }
+    let id = Number(btn.getAttribute("data-talk-event"));
+    if (!Number.isFinite(id) || id <= 0) {
+      const targetId = btn.getAttribute("data-talk-event-target");
+      if (targetId) {
+        const inp = document.getElementById(targetId);
+        if (inp) { id = Number(inp.value); }
+      }
+    }
+    if (!Number.isFinite(id) || id <= 0) {
+      alert("会話イベント ID が未指定です");
+      return;
+    }
+    openTalkEventEditor({ talkEventId: id });
+  });
+}
+
+/** 保存ボタン: 現在の editorRows を PUT /api/talk-events で送信 */
+async function saveTalkEventEditor() {
+  if (!talkEventState.editorOpen) { return; }
+  const id = talkEventState.editorTalkEventId;
+  if (!Number.isFinite(id) || id <= 0) { return; }
+
+  const payload = {
+    id: id,
+    events: talkEventState.editorRows.map(function (r) {
+      const base = {
+        type: r.type,
+        page: r.page,
+        data: r.data,
+        text: r.text,
+      };
+      if (r.type === TALK_EVENT_TYPE_PAGE) {
+        base.pageChgCondition = r.pageChgCondition;
+        base.pageJump = r.pageJump;
+      }
+      if (r.type === TALK_EVENT_TYPE_MENU) {
+        base.menuItems = r.menuItems.slice();
+      }
+      return base;
+    }),
+  };
+
+  setTalkEventModalFeedback("保存中...", false);
+  try {
+    const { response, data } = await fetchJson("/api/talk-events", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const msg = (data && data.error) ? data.error : "HTTP " + response.status;
+      throw new Error(msg);
+    }
+    setTalkEventModalFeedback("保存しました", false);
+    const cb = talkEventState.editorOnSaved;
+    // 少し間を置いて閉じる（メッセージを読んでもらう）
+    setTimeout(function () {
+      closeTalkEventEditor();
+      if (cb) { cb(data); }
+    }, 400);
+  } catch (err) {
+    console.error("会話イベント保存失敗:", err);
+    setTalkEventModalFeedback("保存失敗: " + err.message, true);
+  }
+}
+
+// TODO: 未実装機能（必要になり次第追加）
+//   - ADDSKILL でのスキル picker 連携（現状は ID 直接入力）
+//   - PAGE 条件の「アイテムあり/なし」で data にアイテム picker を出す
+//   - MSG テキストのプレビュー / 改行コード整形
+//   - ページ単位でのグルーピング表示（現状は events[] 線形リスト）
+//   - 行の Undo / 変更差分表示
+//   - コミット前バリデーション（MENU のページ番号が存在するか等）
+
+// 初期化（picker と同じく DOMContentLoaded / 即時の両対応）
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bindTalkEventEditor);
+} else {
+  bindTalkEventEditor();
 }
