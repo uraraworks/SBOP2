@@ -54,7 +54,7 @@
       <summary>Wave 3（監査・運用）</summary>
       <ul>
         <li><a href="#audit-reports" data-route="audit-reports" class="nav-link">監査レポートダウンロード</a></li>
-        <li><a href="#operation-history" data-route="operation-history" class="nav-link">操作履歴検索</a></li>
+        <li><a href="#operation-history" data-route="operation-history" class="nav-link">監査ログ（操作履歴）</a></li>
         <li><a href="#failback-guide" data-route="failback-guide" class="nav-link">フェイルバック手順</a></li>
       </ul>
     </details>
@@ -1869,14 +1869,63 @@
       </section>
     </div>
     <div class="view" data-view="operation-history">
-      <section class="card placeholder-card">
-        <h2>操作履歴検索（プレースホルダー）</h2>
-        <p>管理操作の履歴を検索・照会する画面です。</p>
-        <ul>
-          <li>クエリビルダー形式のフィルター</li>
-          <li>結果テーブルと詳細パネル</li>
-          <li>エクスポート・共有リンク生成</li>
-        </ul>
+      <section class="card">
+        <header class="card-header">
+          <h2>監査ログ（操作履歴）</h2>
+          <p class="card-sub">管理画面から実行された変更系 API（POST / PUT / DELETE）の成功履歴を新しい順に表示します。記録はサーバー再起動でリセットされるメモリ上のリングバッファです（最大 500 件）。</p>
+        </header>
+        <div class="form-row audit-log-filters">
+          <label>
+            実行者 (loginId)
+            <input type="text" id="auditLogFilterActor" placeholder="例: admin" />
+          </label>
+          <label>
+            メソッド
+            <select id="auditLogFilterMethod">
+              <option value="">すべて</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+          </label>
+          <label>
+            パス前方一致
+            <input type="text" id="auditLogFilterPath" placeholder="例: /api/maps" />
+          </label>
+          <label>
+            最大件数
+            <input type="number" id="auditLogFilterLimit" min="1" max="500" value="100" />
+          </label>
+          <div class="form-actions">
+            <button type="button" id="auditLogReloadBtn" class="primary">再読み込み</button>
+            <button type="button" id="auditLogClearBtn">フィルタクリア</button>
+          </div>
+        </div>
+        <div id="auditLogSummary" class="status-line"></div>
+        <div id="auditLogListContainer">
+          <table class="data-table audit-log-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>時刻 (UTC)</th>
+                <th>実行者</th>
+                <th>メソッド</th>
+                <th>パス</th>
+                <th>ステータス</th>
+                <th>本文(要約)</th>
+              </tr>
+            </thead>
+            <tbody id="auditLogListBody">
+              <tr><td colspan="7" class="empty-row">読み込み待ち...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- TODO:
+             - 差分 diff 表示（before/after JSON を並べる） 要: 記録側で before を保持
+             - CSV / JSON エクスポート
+             - SQLite への永続化（再起動でも残す）
+             - 期間フィルタ（日付範囲）
+             - 失敗リクエスト（4xx/5xx）の記録オプション -->
       </section>
     </div>
     <div class="view" data-view="failback-guide">

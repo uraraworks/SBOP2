@@ -3311,7 +3311,158 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "operation-history") {
+    if (options.forceReload || !auditLogState.loaded) {
+      loadAuditLogList();
+    }
+  }
+
   currentRoute = normalized;
+}
+
+// ============================================================
+// 監査ログ（操作履歴）表示
+// ============================================================
+// サーバー側の GET /api/audit-logs を叩いてテーブル表示する。
+// 記録はメモリ上のリングバッファ（最大 500 件）。
+// 詳細展開は行クリックで requestBody 要約を展開表示。
+// TODO: before/after の diff 表示、CSV エクスポート、SQLite 永続化は未対応。
+const auditLogState = {
+  entries: [],
+  loaded: false,
+  isLoading: false,
+  loadError: null,
+  expandedId: null
+};
+
+function escapeHtml(text) {
+  if (text == null) return "";
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function buildAuditLogQuery() {
+  const actor  = (document.getElementById("auditLogFilterActor") || {}).value || "";
+  const method = (document.getElementById("auditLogFilterMethod") || {}).value || "";
+  const path   = (document.getElementById("auditLogFilterPath") || {}).value || "";
+  const limit  = (document.getElementById("auditLogFilterLimit") || {}).value || "100";
+  const params = new URLSearchParams();
+  if (actor.trim())  params.set("actor", actor.trim());
+  if (method)        params.set("method", method);
+  if (path.trim())   params.set("path", path.trim());
+  if (limit)         params.set("limit", limit);
+  const qs = params.toString();
+  return qs ? `/api/audit-logs?${qs}` : "/api/audit-logs";
+}
+
+async function loadAuditLogList() {
+  const bodyEl    = document.getElementById("auditLogListBody");
+  const summaryEl = document.getElementById("auditLogSummary");
+  if (!bodyEl) return;
+  if (auditLogState.isLoading) return;
+  auditLogState.isLoading = true;
+  auditLogState.loadError = null;
+  bodyEl.innerHTML = '<tr><td colspan="7" class="empty-row">読み込み中...</td></tr>';
+  if (summaryEl) summaryEl.textContent = "";
+
+  try {
+    const { response, data } = await fetchJson(buildAuditLogQuery());
+    if (!response.ok || !data) {
+      throw new Error((data && data.error) || `HTTP ${response.status}`);
+    }
+    auditLogState.entries = Array.isArray(data.entries) ? data.entries : [];
+    auditLogState.loaded = true;
+    if (summaryEl) {
+      summaryEl.textContent =
+        `取得 ${data.count ?? auditLogState.entries.length} 件 / 全 ${data.total ?? "?"} 件（容量 ${data.capacity ?? "?"}）`;
+    }
+    renderAuditLogList();
+  } catch (err) {
+    auditLogState.loadError = err.message || String(err);
+    bodyEl.innerHTML = `<tr><td colspan="7" class="empty-row">取得エラー: ${escapeHtml(auditLogState.loadError)}</td></tr>`;
+  } finally {
+    auditLogState.isLoading = false;
+  }
+}
+
+function renderAuditLogList() {
+  const bodyEl = document.getElementById("auditLogListBody");
+  if (!bodyEl) return;
+  const entries = auditLogState.entries;
+  if (!entries.length) {
+    bodyEl.innerHTML = '<tr><td colspan="7" class="empty-row">該当する履歴はありません。</td></tr>';
+    return;
+  }
+  const rows = [];
+  for (const e of entries) {
+    const isExpanded = auditLogState.expandedId === e.id;
+    rows.push(
+      `<tr class="audit-log-row" data-audit-id="${e.id}">` +
+        `<td>${e.id}</td>` +
+        `<td>${escapeHtml(e.timestamp)}</td>` +
+        `<td>${escapeHtml(e.actor)}${e.adminLevel ? ` <span class="badge">Lv${e.adminLevel}</span>` : ""}</td>` +
+        `<td><span class="method method-${escapeHtml(e.method)}">${escapeHtml(e.method)}</span></td>` +
+        `<td class="audit-log-path">${escapeHtml(e.path)}</td>` +
+        `<td>${e.statusCode}</td>` +
+        `<td class="audit-log-body-cell">${escapeHtml((e.bodyDigest || "").slice(0, 80))}${(e.bodyDigest || "").length > 80 ? "…" : ""}</td>` +
+      `</tr>`
+    );
+    if (isExpanded) {
+      // 整形表示: JSON として parse できればインデント、できなければ生文字列
+      let pretty = e.bodyDigest || "(本文なし)";
+      try {
+        if (e.bodyDigest) {
+          const parsed = JSON.parse(e.bodyDigest);
+          pretty = JSON.stringify(parsed, null, 2);
+        }
+      } catch (_) { /* 非 JSON はそのまま */ }
+      rows.push(
+        `<tr class="audit-log-detail-row"><td colspan="7">` +
+          `<div class="audit-log-detail">` +
+            `<div><strong>accountId:</strong> ${escapeHtml(e.accountId || "-")}</div>` +
+            `<div><strong>bodySize:</strong> ${e.bodySize} bytes${e.bodySize > (e.bodyDigest || "").length ? "（要約のため末尾省略）" : ""}</div>` +
+            `<pre class="audit-log-body-pre">${escapeHtml(pretty)}</pre>` +
+          `</div>` +
+        `</td></tr>`
+      );
+    }
+  }
+  bodyEl.innerHTML = rows.join("");
+}
+
+function initAuditLogView() {
+  const reloadBtn = document.getElementById("auditLogReloadBtn");
+  const clearBtn  = document.getElementById("auditLogClearBtn");
+  const bodyEl    = document.getElementById("auditLogListBody");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", () => loadAuditLogList());
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      const ids = ["auditLogFilterActor", "auditLogFilterMethod", "auditLogFilterPath"];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      }
+      const limitEl = document.getElementById("auditLogFilterLimit");
+      if (limitEl) limitEl.value = "100";
+      loadAuditLogList();
+    });
+  }
+  if (bodyEl) {
+    bodyEl.addEventListener("click", (ev) => {
+      const tr = ev.target.closest("tr.audit-log-row");
+      if (!tr) return;
+      const id = Number(tr.dataset.auditId);
+      if (!Number.isFinite(id)) return;
+      auditLogState.expandedId = (auditLogState.expandedId === id) ? null : id;
+      renderAuditLogList();
+    });
+  }
 }
 
 window.addEventListener("load", () => {
@@ -3343,6 +3494,7 @@ window.addEventListener("load", () => {
   });
 
   loadRoles();
+  initAuditLogView();
 
   /* マップウィンドウ */
   if (mapWindowMapSelect) {
