@@ -20,6 +20,7 @@
 #include "Handlers/MapInfoHandler.h"
 #include "Handlers/MapObjectHandler.h"
 #include "Handlers/MapEventHandler.h"
+#include "Handlers/TalkEventHandler.h"
 #include "Handlers/MapPartsHandler.h"
 #include "Handlers/MapShadowHandler.h"
 #include "Handlers/StaticFileHandler.h"
@@ -701,6 +702,16 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> mapEventDeleteHandler(new CMapEventDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/maps/events", std::move(mapEventDeleteHandler));
+
+        // 会話イベント API（NPC 会話データなど、CInfoTalkEvent の CRUD）
+        std::unique_ptr<IApiHandler> talkEventListHandler(new CTalkEventListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/talk-events", std::move(talkEventListHandler));
+
+        std::unique_ptr<IApiHandler> talkEventUpdateHandler(new CTalkEventUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/talk-events", std::move(talkEventUpdateHandler));
+
+        std::unique_ptr<IApiHandler> talkEventDeleteHandler(new CTalkEventDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/talk-events", std::move(talkEventDeleteHandler));
 
         std::unique_ptr<IApiHandler> mapPartsHandler(new CMapPartsListHandler(m_pMgrData, mapPartsProvider));
         m_router.Register("GET", "/api/maps/parts", std::move(mapPartsHandler));

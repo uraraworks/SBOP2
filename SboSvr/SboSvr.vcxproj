@@ -293,6 +293,7 @@
     <ClCompile Include="src\Web\Handlers\MapInfoHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MapObjectHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MapEventHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\TalkEventHandler.cpp" />
   <ClCompile Include="src\Web\Handlers\MapPartsHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MapShadowHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterListHandler.cpp" />
@@ -430,6 +431,7 @@
     <ClInclude Include="src\Web\Handlers\MapInfoHandler.h" />
     <ClInclude Include="src\Web\Handlers\MapObjectHandler.h" />
     <ClInclude Include="src\Web\Handlers\MapEventHandler.h" />
+    <ClInclude Include="src\Web\Handlers\TalkEventHandler.h" />
   <ClInclude Include="src\Web\Handlers\MapPartsHandler.h" />
     <ClInclude Include="src\Web\Handlers\MapShadowHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterListHandler.h" />
