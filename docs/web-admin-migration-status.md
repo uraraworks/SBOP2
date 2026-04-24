@@ -101,7 +101,7 @@
 - [x] 武器情報 API / UI
 - [x] 噴出し API / UI（GET/POST/PUT/DELETE /api/efc-balloons、コマ単位 flat CRUD）
 - [x] エフェクト API / UI（GET/POST/PUT/DELETE /api/effects、animes を nested 配列で扱う）
-- [ ] 初期ステータス API / UI
+- [x] 初期ステータス API / UI（GET/PUT /api/initial-status、単一レコード編集フォーム）
 
 ## 共通コンポーネント
 
@@ -115,8 +115,7 @@
 
 ## 次の実装順
 
-1. Wave 2D: 初期ステータス API・UI
-2. 共通コンポーネント picker 群の整備（画像・アイテム・マップパーツ等）
+1. 共通コンポーネント picker 群の整備（画像・アイテム・マップパーツ等）
 
 ## 保留メモ
 

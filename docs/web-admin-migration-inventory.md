@@ -29,7 +29,7 @@
 | サーバー情報 | `IDM_SERVER_INFO`, `DlgAdminServerInfo` | `server-dashboard`, `GET /api/server` | 実装済み | 既に Web 側の入口として機能している |
 | アカウント追加 | `IDM_ACCOUNT_ADD`, `DlgAdminAccountAdd` | `account-create`, `POST /api/accounts` | 実装済み | MFC の「その他 > アカウント」を置換中 |
 | 管理者権限設定 | `IDM_CHAR_ADMIN`, `DlgAdminCharAdmin` | `role-management`, `GET/PUT /api/admin/roles` | 実装済み | ネイティブは選択キャラ起点、Web はアカウント/ロール起点に再編されている |
-| 初期ステータス設定 | `IDM_SYSTEM_SET_INITCHARSTATUS`, `DlgAdminSystemSetInitCharStatus` | `initial-status` | UI雛形 | API 未実装 |
+| 初期ステータス設定 | `IDM_SYSTEM_SET_INITCHARSTATUS`, `DlgAdminSystemSetInitCharStatus` | `initial-status`, `GET/PUT /api/initial-status` | 実装済み | Wave 2D 完了。単一レコード編集フォームで保存時に全クライアントへ `CPacketSYSTEM_INFO` を配信 |
 | デバッグ: グリッド表示 | `IDM_DEBUG_GRID_OFF`, `IDM_DEBUG_GRID`, `IDM_DEBUG_GRID_HALF` | なし | 未着手 | Web/ネイティブ共通のマップ表示基盤ができてから再判断 |
 | デバッグ: 移動あたり判定無効 | `IDM_DEBUG_MOVENOBLOCK` | なし | 未着手 | 恒久機能ではなく、内部管理用途として後回しでよい |
 

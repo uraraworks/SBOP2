@@ -5865,6 +5865,7 @@ window.addEventListener("load", function () {
   setupWeaponView();
   setupBalloonView();
   setupEffectView();
+  setupInitialStatusView();
 });
 
 // ---------------------------------------------------------------------------
@@ -7134,4 +7135,140 @@ function setupEffectView() {
   if (cancelBtn) {
     cancelBtn.addEventListener("click", function () { closeEffectEdit(); });
   }
+}
+
+// ---------------------------------------------------------------------------
+// 初期ステータス設定 /api/initial-status（Wave 2D）
+// 単一レコード設定のため GET / PUT のみで運用する。
+// ---------------------------------------------------------------------------
+
+const initialStatusState = {
+  current: null,    // 最後にサーバーから取得した値（フォーム「元に戻す」の基準）
+  isLoading: false
+};
+
+// フォーム上のフィールドID（HTML側のID接頭辞 init- を除いたキー一覧）
+const INITIAL_STATUS_FIELDS = [
+  "mapId", "posX", "posY",
+  "maxHp", "maxSp",
+  "stamina", "power", "strength", "magic", "skillful",
+  "abilityAt", "abilityDf",
+  "pAtack", "pDefense", "pMagic", "pMagicDefense",
+  "pHitAverage", "pAvoidAverage", "pCriticalAverage",
+  "attrFire", "attrWind", "attrWater", "attrEarth", "attrLight", "attrDark"
+];
+
+function setInitialStatusFeedback(msg, isError) {
+  setFeedback("initial-status-feedback", msg || "", !!isError);
+}
+
+function applyInitialStatusToForm(data) {
+  if (!data) { return; }
+  INITIAL_STATUS_FIELDS.forEach(function (key) {
+    const el = document.getElementById("init-" + key);
+    if (!el) { return; }
+    const v = data[key];
+    el.value = (v === undefined || v === null) ? "" : String(v);
+  });
+}
+
+async function loadInitialStatus(forceReload) {
+  if (initialStatusState.isLoading) { return; }
+  initialStatusState.isLoading = true;
+  if (forceReload) {
+    setInitialStatusFeedback("読み込み中...", false);
+  }
+  try {
+    const { response, data } = await fetchJson("/api/initial-status");
+    if (!response.ok || !data) {
+      throw new Error("initial-status load failed: HTTP " + response.status);
+    }
+    initialStatusState.current = data;
+    applyInitialStatusToForm(data);
+    setInitialStatusFeedback(forceReload ? "読み込みました" : "", false);
+  } catch (err) {
+    console.error("loadInitialStatus error", err);
+    setInitialStatusFeedback("読み込みに失敗しました", true);
+  } finally {
+    initialStatusState.isLoading = false;
+  }
+}
+
+function collectInitialStatusForm() {
+  const body = {};
+  for (let i = 0; i < INITIAL_STATUS_FIELDS.length; i++) {
+    const key = INITIAL_STATUS_FIELDS[i];
+    const el = document.getElementById("init-" + key);
+    if (!el) { continue; }
+    const raw = el.value;
+    if (raw === "" || raw === null || raw === undefined) {
+      return { error: key + " が空です" };
+    }
+    const n = Number(raw);
+    if (!Number.isFinite(n) || !Number.isInteger(n)) {
+      return { error: key + " に整数を指定してください" };
+    }
+    // posX / posY は負値も許容（その他は 0 以上）
+    if (key !== "posX" && key !== "posY" && n < 0) {
+      return { error: key + " は 0 以上で指定してください" };
+    }
+    body[key] = n;
+  }
+  return { body: body };
+}
+
+async function submitInitialStatusForm(ev) {
+  if (ev) { ev.preventDefault(); }
+  const collected = collectInitialStatusForm();
+  if (collected.error) {
+    setInitialStatusFeedback(collected.error, true);
+    return;
+  }
+  setInitialStatusFeedback("保存中...", false);
+  try {
+    const response = await fetch("/api/initial-status", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(collected.body)
+    });
+    const text = await response.text();
+    let data = null;
+    try { data = text ? JSON.parse(text) : null; } catch (_e) { data = null; }
+    if (!response.ok || !data) {
+      const reason = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setInitialStatusFeedback("保存に失敗しました: " + reason, true);
+      return;
+    }
+    initialStatusState.current = data;
+    applyInitialStatusToForm(data);
+    setInitialStatusFeedback("保存しました", false);
+  } catch (err) {
+    console.error("submitInitialStatusForm error", err);
+    setInitialStatusFeedback("通信エラーが発生しました", true);
+  }
+}
+
+function setupInitialStatusView() {
+  const reloadBtn = document.getElementById("initial-status-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadInitialStatus(true); });
+  }
+  const form = document.getElementById("initial-status-form");
+  if (form) {
+    form.addEventListener("submit", submitInitialStatusForm);
+  }
+  const revertBtn = document.getElementById("initial-status-revert-btn");
+  if (revertBtn) {
+    revertBtn.addEventListener("click", function () {
+      if (initialStatusState.current) {
+        applyInitialStatusToForm(initialStatusState.current);
+        setInitialStatusFeedback("フォームを前回値に戻しました", false);
+      } else {
+        loadInitialStatus(true);
+      }
+    });
+  }
+  // 初回自動読み込み（画面を開くタイミングに依らず、他ビューと同様ロード時に1回取得）
+  loadInitialStatus(false);
 }

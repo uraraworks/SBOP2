@@ -1798,14 +1798,64 @@
       </section>
     </div>
     <div class="view" data-view="initial-status">
-      <section class="card placeholder-card">
-        <h2>初期ステータス設定（プレースホルダー）</h2>
-        <p>新規キャラクターの初期パラメータを編集する画面です。</p>
-        <ul>
-          <li>テンプレート選択と複製</li>
-          <li>各種ステータス値の編集フォーム</li>
-          <li>バリデーション結果の表示</li>
-        </ul>
+      <section class="card">
+        <div class="card-head">
+          <h2>初期ステータス設定</h2>
+          <div class="card-actions">
+            <button type="button" id="initial-status-reload-btn" class="btn">再読み込み</button>
+          </div>
+        </div>
+        <p class="muted">新規キャラクター作成時に適用される初期パラメータです。保存すると即座にゲームサーバーへ反映されます。</p>
+        <p id="initial-status-feedback" class="feedback" aria-live="polite"></p>
+        <form id="initial-status-form" class="form-grid">
+          <fieldset class="form-section">
+            <legend>初期位置</legend>
+            <label>マップID<input type="number" id="init-mapId" min="0" step="1" required></label>
+            <label>座標 X<input type="number" id="init-posX" step="1" required></label>
+            <label>座標 Y<input type="number" id="init-posY" step="1" required></label>
+          </fieldset>
+          <fieldset class="form-section">
+            <legend>HP / SP</legend>
+            <label>最大HP<input type="number" id="init-maxHp" min="0" step="1" required></label>
+            <label>最大SP<input type="number" id="init-maxSp" min="0" step="1" required></label>
+          </fieldset>
+          <fieldset class="form-section">
+            <legend>基本能力</legend>
+            <label>スタミナ<input type="number" id="init-stamina" min="0" max="65535" step="1" required></label>
+            <label>腕力<input type="number" id="init-power" min="0" max="65535" step="1" required></label>
+            <label>体力<input type="number" id="init-strength" min="0" max="65535" step="1" required></label>
+            <label>魔力<input type="number" id="init-magic" min="0" max="65535" step="1" required></label>
+            <label>器用<input type="number" id="init-skillful" min="0" max="65535" step="1" required></label>
+          </fieldset>
+          <fieldset class="form-section">
+            <legend>技能</legend>
+            <label>攻撃技能<input type="number" id="init-abilityAt" min="0" max="65535" step="1" required></label>
+            <label>防御技能<input type="number" id="init-abilityDf" min="0" max="65535" step="1" required></label>
+          </fieldset>
+          <fieldset class="form-section">
+            <legend>戦闘パラメータ</legend>
+            <label>攻撃力<input type="number" id="init-pAtack" min="0" max="65535" step="1" required></label>
+            <label>防御力<input type="number" id="init-pDefense" min="0" max="65535" step="1" required></label>
+            <label>魔法力<input type="number" id="init-pMagic" min="0" max="65535" step="1" required></label>
+            <label>魔法防御力<input type="number" id="init-pMagicDefense" min="0" max="65535" step="1" required></label>
+            <label>命中率<input type="number" id="init-pHitAverage" min="0" max="65535" step="1" required></label>
+            <label>回避率<input type="number" id="init-pAvoidAverage" min="0" max="65535" step="1" required></label>
+            <label>クリティカル率<input type="number" id="init-pCriticalAverage" min="0" max="65535" step="1" required></label>
+          </fieldset>
+          <fieldset class="form-section">
+            <legend>属性値</legend>
+            <label>火<input type="number" id="init-attrFire" min="0" max="65535" step="1" required></label>
+            <label>風<input type="number" id="init-attrWind" min="0" max="65535" step="1" required></label>
+            <label>水<input type="number" id="init-attrWater" min="0" max="65535" step="1" required></label>
+            <label>土<input type="number" id="init-attrEarth" min="0" max="65535" step="1" required></label>
+            <label>光<input type="number" id="init-attrLight" min="0" max="65535" step="1" required></label>
+            <label>闇<input type="number" id="init-attrDark" min="0" max="65535" step="1" required></label>
+          </fieldset>
+          <div class="form-actions">
+            <button type="submit" id="initial-status-save-btn" class="btn primary">保存</button>
+            <button type="button" id="initial-status-revert-btn" class="btn">元に戻す</button>
+          </div>
+        </form>
       </section>
     </div>
   </main>
