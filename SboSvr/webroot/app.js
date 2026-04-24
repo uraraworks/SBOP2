@@ -7272,3 +7272,405 @@ function setupInitialStatusView() {
   // 初回自動読み込み（画面を開くタイミングに依らず、他ビューと同様ロード時に1回取得）
   loadInitialStatus(false);
 }
+
+/* -------------------------------------------------------------------- */
+/* 共通 picker モジュール（画像 / アイテム等の選択ダイアログ）           */
+/*                                                                      */
+/* 外部 API:                                                            */
+/*   openPicker({ type, initialValue, category, onSelect })             */
+/*     - type: "image" | "item"                                         */
+/*     - initialValue: 初期選択ID（省略時は null）                      */
+/*     - category: 画像 picker 時のカテゴリ key（例 "efcBalloon"）      */
+/*     - onSelect: (selectedValue) => void  決定時に呼ばれる            */
+/*                                                                      */
+/* HTML 側の <button data-picker="image|item" data-picker-target="ID"   */
+/*                    data-picker-category="key"> で宣言的に使える。    */
+/* -------------------------------------------------------------------- */
+const pickerState = {
+  modalEl: null,
+  titleEl: null,
+  categoryWrap: null,
+  categorySelect: null,
+  searchInput: null,
+  summaryEl: null,
+  feedbackEl: null,
+  listEl: null,
+  selectedLabelEl: null,
+  confirmBtn: null,
+  type: null,
+  currentItems: [],
+  selected: null,       // 現在の選択値（画像なら idSub、アイテムなら itemId）
+  selectedMeta: null,   // 表示用メタ情報
+  onSelect: null,
+  imageCategories: null, // 画像カテゴリカタログ（1 回だけロード）
+  itemsCache: null,      // アイテム一覧（1 回だけロード、必要に応じて再読込）
+};
+
+/** picker の DOM 要素を初期化（初回呼び出し時のみ実行）。 */
+function ensurePickerInitialized() {
+  if (pickerState.modalEl) {
+    return;
+  }
+  pickerState.modalEl = document.getElementById("picker-modal");
+  if (!pickerState.modalEl) {
+    return;
+  }
+  pickerState.titleEl = document.getElementById("picker-title");
+  pickerState.categoryWrap = document.getElementById("picker-category-wrap");
+  pickerState.categorySelect = document.getElementById("picker-category-select");
+  pickerState.searchInput = document.getElementById("picker-search-input");
+  pickerState.summaryEl = document.getElementById("picker-summary");
+  pickerState.feedbackEl = document.getElementById("picker-feedback");
+  pickerState.listEl = document.getElementById("picker-list");
+  pickerState.selectedLabelEl = document.getElementById("picker-selected-label");
+  pickerState.confirmBtn = document.getElementById("picker-confirm-btn");
+
+  // 閉じるボタン / バックドロップ
+  const dismissEls = pickerState.modalEl.querySelectorAll("[data-picker-dismiss]");
+  dismissEls.forEach(function (el) {
+    el.addEventListener("click", closePicker);
+  });
+
+  // 検索入力
+  if (pickerState.searchInput) {
+    pickerState.searchInput.addEventListener("input", function () {
+      renderPickerList();
+    });
+  }
+  // カテゴリ変更（画像 picker のみ）
+  if (pickerState.categorySelect) {
+    pickerState.categorySelect.addEventListener("change", function () {
+      refreshPickerItems();
+    });
+  }
+  // 決定ボタン
+  if (pickerState.confirmBtn) {
+    pickerState.confirmBtn.addEventListener("click", confirmPickerSelection);
+  }
+  // ESC キーで閉じる
+  document.addEventListener("keydown", function (ev) {
+    if (!pickerState.modalEl || pickerState.modalEl.hidden) {
+      return;
+    }
+    if (ev.key === "Escape") {
+      closePicker();
+    } else if (ev.key === "Enter" && pickerState.selected !== null) {
+      ev.preventDefault();
+      confirmPickerSelection();
+    }
+  });
+  // 一覧クリックのイベント委譲
+  if (pickerState.listEl) {
+    pickerState.listEl.addEventListener("click", function (ev) {
+      const li = ev.target.closest("li[data-picker-value]");
+      if (!li) { return; }
+      const rawValue = li.getAttribute("data-picker-value");
+      const numValue = Number(rawValue);
+      const meta = li.getAttribute("data-picker-meta") || "";
+      setPickerSelected(Number.isFinite(numValue) ? numValue : rawValue, meta);
+    });
+    pickerState.listEl.addEventListener("dblclick", function (ev) {
+      const li = ev.target.closest("li[data-picker-value]");
+      if (!li) { return; }
+      const rawValue = li.getAttribute("data-picker-value");
+      const numValue = Number(rawValue);
+      const meta = li.getAttribute("data-picker-meta") || "";
+      setPickerSelected(Number.isFinite(numValue) ? numValue : rawValue, meta);
+      confirmPickerSelection();
+    });
+  }
+}
+
+/** picker を開く（外部公開 API）。 */
+function openPicker(options) {
+  ensurePickerInitialized();
+  if (!pickerState.modalEl) {
+    console.warn("picker モーダルの DOM が見つかりません");
+    return;
+  }
+  const opts = options || {};
+  pickerState.type = opts.type || "image";
+  pickerState.onSelect = typeof opts.onSelect === "function" ? opts.onSelect : null;
+  pickerState.selected = null;
+  pickerState.selectedMeta = null;
+  pickerState.currentItems = [];
+
+  // タイトル / カテゴリ UI の切替
+  if (pickerState.type === "image") {
+    pickerState.titleEl.textContent = "画像を選択";
+    if (pickerState.categoryWrap) { pickerState.categoryWrap.hidden = false; }
+    if (pickerState.searchInput) { pickerState.searchInput.placeholder = "サブID で絞り込み"; }
+  } else if (pickerState.type === "item") {
+    pickerState.titleEl.textContent = "アイテムを選択";
+    if (pickerState.categoryWrap) { pickerState.categoryWrap.hidden = true; }
+    if (pickerState.searchInput) { pickerState.searchInput.placeholder = "ID や名前で絞り込み"; }
+  } else {
+    pickerState.titleEl.textContent = "選択";
+  }
+
+  if (pickerState.searchInput) {
+    pickerState.searchInput.value = "";
+  }
+  setPickerFeedback("");
+  updatePickerSelectedLabel();
+
+  pickerState.modalEl.hidden = false;
+  pickerState.modalEl.setAttribute("aria-hidden", "false");
+
+  // 初期値の保持（描画後に選択状態を復元）
+  const initialValue = opts.initialValue != null ? Number(opts.initialValue) : null;
+
+  if (pickerState.type === "image") {
+    ensureImageCategoriesLoaded()
+      .then(function () {
+        // カテゴリ選択状態を反映
+        if (opts.category && pickerState.categorySelect) {
+          pickerState.categorySelect.value = opts.category;
+        }
+        return refreshPickerItems(initialValue);
+      })
+      .catch(function (err) {
+        setPickerFeedback("カテゴリ取得に失敗: " + (err && err.message ? err.message : err), true);
+      });
+  } else if (pickerState.type === "item") {
+    refreshPickerItems(initialValue).catch(function (err) {
+      setPickerFeedback("アイテム一覧取得に失敗: " + (err && err.message ? err.message : err), true);
+    });
+  }
+
+  // フォーカスを検索ボックスへ
+  setTimeout(function () {
+    if (pickerState.searchInput) {
+      pickerState.searchInput.focus();
+    }
+  }, 0);
+}
+
+/** picker を閉じる。 */
+function closePicker() {
+  if (!pickerState.modalEl) { return; }
+  pickerState.modalEl.hidden = true;
+  pickerState.modalEl.setAttribute("aria-hidden", "true");
+  pickerState.onSelect = null;
+}
+
+function setPickerFeedback(message, isError) {
+  if (!pickerState.feedbackEl) { return; }
+  pickerState.feedbackEl.textContent = message || "";
+  pickerState.feedbackEl.style.color = isError ? "#f87171" : "";
+}
+
+function updatePickerSelectedLabel() {
+  if (!pickerState.selectedLabelEl) { return; }
+  if (pickerState.selected == null) {
+    pickerState.selectedLabelEl.textContent = "-";
+  } else if (pickerState.selectedMeta) {
+    pickerState.selectedLabelEl.textContent = pickerState.selected + "（" + pickerState.selectedMeta + "）";
+  } else {
+    pickerState.selectedLabelEl.textContent = String(pickerState.selected);
+  }
+  if (pickerState.confirmBtn) {
+    pickerState.confirmBtn.disabled = (pickerState.selected == null);
+  }
+}
+
+function setPickerSelected(value, meta) {
+  pickerState.selected = value;
+  pickerState.selectedMeta = meta || null;
+  updatePickerSelectedLabel();
+  // 視覚的な選択反映
+  if (pickerState.listEl) {
+    const all = pickerState.listEl.querySelectorAll("li[data-picker-value]");
+    all.forEach(function (li) {
+      const raw = li.getAttribute("data-picker-value");
+      const num = Number(raw);
+      const matches = Number.isFinite(num) ? num === value : raw === String(value);
+      li.classList.toggle("is-selected", matches);
+    });
+  }
+}
+
+function confirmPickerSelection() {
+  if (pickerState.selected == null) { return; }
+  const cb = pickerState.onSelect;
+  const val = pickerState.selected;
+  closePicker();
+  if (cb) {
+    try {
+      cb(val);
+    } catch (err) {
+      console.error("picker onSelect でエラー:", err);
+    }
+  }
+}
+
+/** 画像カテゴリカタログを API から 1 回だけ取得。 */
+async function ensureImageCategoriesLoaded() {
+  if (pickerState.imageCategories && pickerState.imageCategories.length > 0) {
+    return pickerState.imageCategories;
+  }
+  const { response, data } = await fetchJson("/api/image-categories");
+  if (!response.ok || !data || !Array.isArray(data.categories)) {
+    throw new Error("HTTP " + response.status);
+  }
+  pickerState.imageCategories = data.categories;
+  // カテゴリ <select> を構築（none は除外）
+  if (pickerState.categorySelect) {
+    pickerState.categorySelect.innerHTML = "";
+    pickerState.imageCategories.forEach(function (cat) {
+      if (cat.idMain === 0) { return; }
+      const opt = document.createElement("option");
+      opt.value = cat.key;
+      opt.textContent = cat.label + "（#" + cat.idMain + "）";
+      opt.dataset.idMain = cat.idMain;
+      opt.dataset.hintMaxSub = cat.hintMaxSub;
+      pickerState.categorySelect.appendChild(opt);
+    });
+  }
+  return pickerState.imageCategories;
+}
+
+/** 現在の picker 種別に応じて一覧を更新。 */
+async function refreshPickerItems(initialValue) {
+  if (pickerState.type === "image") {
+    const selKey = pickerState.categorySelect ? pickerState.categorySelect.value : null;
+    const cat = (pickerState.imageCategories || []).find(function (c) { return c.key === selKey; });
+    if (!cat) {
+      pickerState.currentItems = [];
+      renderPickerList();
+      return;
+    }
+    // 画像カテゴリは件数ベースで「0..hintMaxSub」の合成リストを作る
+    const hintMax = Math.max(0, Number(cat.hintMaxSub) || 0);
+    const items = [];
+    for (let i = 0; i <= hintMax; i++) {
+      items.push({ id: i, label: String(i), meta: cat.label });
+    }
+    pickerState.currentItems = items;
+    setPickerFeedback("カテゴリ: " + cat.label + "（0〜" + hintMax + "）");
+    renderPickerList();
+    if (initialValue != null && Number.isFinite(Number(initialValue))) {
+      setPickerSelected(Number(initialValue), cat.label);
+    }
+    return;
+  }
+  if (pickerState.type === "item") {
+    setPickerFeedback("読み込み中...");
+    const { response, data } = await fetchJson("/api/items");
+    if (!response.ok || !data || !Array.isArray(data.items)) {
+      pickerState.currentItems = [];
+      renderPickerList();
+      setPickerFeedback("一覧取得に失敗（HTTP " + response.status + "）", true);
+      return;
+    }
+    pickerState.itemsCache = data.items;
+    pickerState.currentItems = data.items.map(function (it) {
+      const typeName = it.itemTypeName || ("種別#" + it.itemTypeId);
+      return {
+        id: it.itemId,
+        label: it.name || ("アイテム#" + it.itemId),
+        meta: typeName,
+      };
+    });
+    setPickerFeedback("アイテム " + pickerState.currentItems.length + " 件");
+    renderPickerList();
+    if (initialValue != null) {
+      const target = pickerState.currentItems.find(function (x) { return x.id === Number(initialValue); });
+      if (target) {
+        setPickerSelected(target.id, target.label);
+      }
+    }
+    return;
+  }
+}
+
+/** 検索入力で絞り込みつつ現在のリストを描画。 */
+function renderPickerList() {
+  if (!pickerState.listEl) { return; }
+  const keyword = pickerState.searchInput ? pickerState.searchInput.value.trim().toLowerCase() : "";
+  const filtered = !keyword
+    ? pickerState.currentItems
+    : pickerState.currentItems.filter(function (it) {
+        if (String(it.id).includes(keyword)) { return true; }
+        if (it.label && it.label.toLowerCase().includes(keyword)) { return true; }
+        if (it.meta && it.meta.toLowerCase().includes(keyword)) { return true; }
+        return false;
+      });
+
+  // アイテム picker は行表示にする（名前が長いため）
+  pickerState.listEl.classList.toggle("picker-mode-rows", pickerState.type === "item");
+
+  if (pickerState.summaryEl) {
+    pickerState.summaryEl.textContent = filtered.length + " 件 / " + pickerState.currentItems.length + " 件";
+  }
+
+  if (filtered.length === 0) {
+    pickerState.listEl.innerHTML = '<li class="is-empty">該当する項目がありません</li>';
+    return;
+  }
+
+  // 大量件数対策: 先頭 500 件のみ描画
+  const MAX_RENDER = 500;
+  const capped = filtered.slice(0, MAX_RENDER);
+  const html = capped.map(function (it) {
+    const selCls = (pickerState.selected === it.id) ? " is-selected" : "";
+    const metaHtml = it.meta ? '<span class="picker-item-meta">' + escapeHtmlText(it.meta) + '</span>' : "";
+    const labelHtml = escapeHtmlText(it.label || String(it.id));
+    const metaAttr = it.meta ? ' data-picker-meta="' + escapeHtmlAttr(it.meta) + '"' : "";
+    return '<li data-picker-value="' + it.id + '"' + metaAttr + ' class="' + selCls.trim() + '">'
+      + '<span class="picker-item-id">#' + it.id + '</span>'
+      + '<span class="picker-item-label">' + labelHtml + '</span>'
+      + metaHtml
+      + '</li>';
+  }).join("");
+  const truncHtml = (filtered.length > MAX_RENDER)
+    ? '<li class="is-empty">（さらに ' + (filtered.length - MAX_RENDER) + ' 件。検索で絞り込んでください）</li>'
+    : "";
+  pickerState.listEl.innerHTML = html + truncHtml;
+}
+
+function escapeHtmlText(text) {
+  return String(text == null ? "" : text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+function escapeHtmlAttr(text) {
+  return escapeHtmlText(text).replace(/"/g, "&quot;");
+}
+
+/** data-picker 属性を持つボタン全てに共通のクリックハンドラを設定。 */
+function bindPickerButtons() {
+  document.addEventListener("click", function (ev) {
+    const btn = ev.target.closest("button[data-picker]");
+    if (!btn) { return; }
+    const type = btn.getAttribute("data-picker");
+    const targetId = btn.getAttribute("data-picker-target");
+    const category = btn.getAttribute("data-picker-category") || null;
+    if (!targetId) {
+      console.warn("data-picker-target が未指定です", btn);
+      return;
+    }
+    const inputEl = document.getElementById(targetId);
+    const initialValue = inputEl && inputEl.value !== "" ? Number(inputEl.value) : null;
+    openPicker({
+      type: type,
+      initialValue: initialValue,
+      category: category,
+      onSelect: function (value) {
+        if (!inputEl) { return; }
+        inputEl.value = String(value);
+        // change/input イベントを発火し、既存の入力監視ハンドラに気付かせる
+        inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+        inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+      },
+    });
+  });
+}
+
+// 初期化（DOMContentLoaded 直後／即時のどちらでも動くよう防御的に呼ぶ）
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bindPickerButtons);
+} else {
+  bindPickerButtons();
+}

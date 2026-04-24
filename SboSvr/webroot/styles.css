@@ -1158,3 +1158,168 @@ main {
   border-top: 1px solid var(--color-border, rgba(255,255,255,0.08));
   margin-top: 0.5rem;
 }
+
+/* -------------------------------------------------------------------- */
+/* 共通 picker モーダル（画像 / アイテム等を選択するダイアログ）         */
+/* -------------------------------------------------------------------- */
+.picker-btn {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+}
+.picker-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.picker-modal[hidden] {
+  display: none !important;
+}
+.picker-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+.picker-modal-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 92vw);
+  max-height: min(80vh, 640px);
+  background: var(--color-panel, #1e2733);
+  color: var(--color-text, #e2e8f0);
+  border: 1px solid var(--color-border, rgba(255,255,255,0.12));
+  border-radius: 8px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.picker-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border, rgba(255,255,255,0.08));
+}
+.picker-modal-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.picker-modal-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+.picker-modal-close:hover {
+  color: var(--color-accent, #7bb6ff);
+}
+.picker-modal-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border, rgba(255,255,255,0.08));
+}
+.picker-modal-toolbar label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+}
+.picker-modal-toolbar select,
+.picker-modal-toolbar input[type="search"] {
+  min-width: 10rem;
+  padding: 0.3rem 0.5rem;
+  background: var(--color-panel-muted, rgba(255,255,255,0.05));
+  color: inherit;
+  border: 1px solid var(--color-border, rgba(255,255,255,0.12));
+  border-radius: 4px;
+}
+.picker-modal-summary {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--color-muted, #94a3b8);
+}
+.picker-modal-body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 0.5rem 1rem;
+}
+.picker-modal-feedback {
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  color: var(--color-muted, #94a3b8);
+  margin-bottom: 0.25rem;
+}
+.picker-modal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.3rem;
+}
+.picker-modal-list.picker-mode-rows {
+  grid-template-columns: 1fr;
+}
+.picker-modal-list li {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border, rgba(255,255,255,0.08));
+  border-radius: 4px;
+  background: var(--color-panel-muted, rgba(255,255,255,0.03));
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.picker-modal-list li:hover {
+  background: rgba(123, 182, 255, 0.15);
+}
+.picker-modal-list li.is-selected {
+  background: rgba(123, 182, 255, 0.25);
+  border-color: var(--color-accent, #7bb6ff);
+}
+.picker-modal-list li.is-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--color-muted, #94a3b8);
+  cursor: default;
+  background: transparent;
+  border-style: dashed;
+}
+.picker-modal-list .picker-item-id {
+  font-weight: 600;
+  margin-right: 0.4rem;
+  color: var(--color-accent, #7bb6ff);
+}
+.picker-modal-list .picker-item-meta {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-muted, #94a3b8);
+  margin-top: 0.15rem;
+}
+.picker-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--color-border, rgba(255,255,255,0.08));
+}
+.picker-modal-selected {
+  font-size: 0.9rem;
+  color: var(--color-muted, #94a3b8);
+}
+.picker-modal-selected strong {
+  color: var(--color-text, #e2e8f0);
+  font-variant-numeric: tabular-nums;
+}
+.picker-modal-actions {
+  display: flex;
+  gap: 0.5rem;
+}

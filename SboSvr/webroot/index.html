@@ -392,6 +392,7 @@
               <label>アイテムID:
                 <input type="number" id="cd-item-id-input" placeholder="例: 1001" min="1" />
               </label>
+              <button type="button" class="btn picker-btn" data-picker="item" data-picker-target="cd-item-id-input">選択...</button>
               <button type="button" id="cd-item-add-btn" class="button primary">追加</button>
             </div>
             <!-- アイテム一覧テーブル -->
@@ -1460,6 +1461,7 @@
             <div class="form-row">
               <label for="item-edit-grpId">地面画像ID</label>
               <input type="number" id="item-edit-grpId" min="0" value="0">
+              <button type="button" class="btn picker-btn" data-picker="image" data-picker-target="item-edit-grpId">選択...</button>
             </div>
             <div class="form-row">
               <label for="item-edit-iconGrpId">バックパック画像ID</label>
@@ -1654,6 +1656,7 @@
             <div class="form-row">
               <label for="balloon-edit-grpId">画像ID</label>
               <input type="number" id="balloon-edit-grpId" min="0" value="0">
+              <button type="button" class="btn picker-btn" data-picker="image" data-picker-target="balloon-edit-grpId" data-picker-category="efcBalloon">選択...</button>
             </div>
             <div class="form-row">
               <label for="balloon-edit-soundId">効果音ID</label>
@@ -1863,6 +1866,42 @@
   <footer class="page-footer">
     <small>&copy; 2024 Sbo Admin Platform Team</small>
   </footer>
+
+  <!-- 共通 picker モーダル（画像 / アイテム等を選択するダイアログ） -->
+  <div class="picker-modal" id="picker-modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+    <div class="picker-modal-backdrop" data-picker-dismiss></div>
+    <div class="picker-modal-panel" role="document">
+      <header class="picker-modal-header">
+        <h2 id="picker-title" class="picker-modal-title">選択</h2>
+        <button type="button" class="picker-modal-close" data-picker-dismiss aria-label="閉じる">&times;</button>
+      </header>
+      <div class="picker-modal-toolbar">
+        <label class="picker-modal-category" id="picker-category-wrap">
+          <span>カテゴリ</span>
+          <select id="picker-category-select"></select>
+        </label>
+        <label class="picker-modal-search">
+          <span>検索</span>
+          <input type="search" id="picker-search-input" placeholder="IDや名前で絞り込み">
+        </label>
+        <span class="picker-modal-summary" id="picker-summary"></span>
+      </div>
+      <div class="picker-modal-body">
+        <div class="picker-modal-feedback" id="picker-feedback" aria-live="polite"></div>
+        <ul class="picker-modal-list" id="picker-list"></ul>
+      </div>
+      <footer class="picker-modal-footer">
+        <div class="picker-modal-selected">
+          現在の選択: <strong id="picker-selected-label">-</strong>
+        </div>
+        <div class="picker-modal-actions">
+          <button type="button" class="btn" data-picker-dismiss>キャンセル</button>
+          <button type="button" class="btn primary" id="picker-confirm-btn" disabled>決定</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
   <script src="/app.js" defer></script>
 </body>
 </html>
