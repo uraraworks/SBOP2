@@ -1,6 +1,6 @@
 # Web管理画面 進捗確認
 
-最終更新: 2026-04-24（共通コンポーネント: 画像 picker / アイテム picker / エフェクト picker / マップパーツ picker / マップ影 picker / 会話イベント editor 実装）
+最終更新: 2026-04-24（認可ルール棚卸しと Web / ネイティブ連携方式を文書化）
 
 ## 使い方
 
@@ -51,7 +51,7 @@
 - [x] サーバー情報ダッシュボード
 - [x] アカウント作成
 - [x] 管理者ロール設定
-- [ ] 認可ルールの棚卸しを文書へ反映
+- [x] 認可ルールの棚卸しを文書へ反映（[web-admin-authorization.md](./web-admin-authorization.md)）
 
 ## Wave 2A: マップ基盤
 
@@ -66,7 +66,7 @@
 - [x] サーバー側の選択状態管理
 - [x] 管理画面向け WebSocket `/ws/admin`（`CAdminWsHub` + `selection_changed` broadcast）
 - [x] 管理画面 JS 側の WS 購読実装（次フェーズ）
-- [ ] Web / ネイティブ両対応の連携方式を文書化
+- [x] Web / ネイティブ両対応の連携方式を文書化（[web-admin-native-coexistence.md](./web-admin-native-coexistence.md)）
 
 ## Wave 2B: マップ編集の残り
 
