@@ -364,6 +364,8 @@ FodyWeavers.xsd
 
 .claude
 ._*
+CLAUDE.local.md
+AGENTS.local.md
 
 # サードパーティライブラリ（手動配置・コミット対象外）
 SDL2/

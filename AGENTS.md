@@ -1,4 +1,24 @@
-# Project Instructions
+# Codex Instructions
 
-- Before starting work in this repository, read `CLAUDE.md`.
-- Follow the guidance in `CLAUDE.md` as project-specific instructions for this repository.
+このファイルは公開リポジトリに含める、Codex 向けの共通プロジェクト指示です。
+個人設定やローカル環境固有の運用は `AGENTS.local.md` に書き、コミットしないでください。
+
+## Project Instructions
+
+- 作業前に `CLAUDE.md` も確認し、共通のプロジェクト方針として尊重する。
+- `CLAUDE.md` に Claude Code 固有の記述がある場合は、Codex の実行環境に合わせて読み替える。
+
+## Codex Token-Saving Guidance
+
+- 回答・作業説明は日本語で行う。
+- 修正後の確認では、ユーザーが明示的に求めた場合を除き、フルビルドよりも関連プロジェクト・関連ファイルに絞ったコンパイル確認を優先する。
+- ビルドやテストの標準出力をそのまま会話に流さない。ログはファイルへ保存し、成功時は終了コードや短い成功報告だけにする。
+- 失敗時だけ、ログから `error` / `failed` / `warning` などの重要行と末尾の短い範囲を抽出して読む。
+- PowerShell でログを確認する場合は、必要に応じて次のように絞る。
+  - `Select-String -Path build.log -Pattern "error|failed|warning" -CaseSensitive:$false`
+  - `Get-Content build.log -Tail 80`
+- 既存の巨大ログファイルを読む場合も、全体を開かず `Select-String` / `Get-Content -Tail` / `rg` で必要箇所だけ抽出する。
+- 探索はまず `rg` / `rg --files` を使い、広範囲のファイル内容を一括で読まない。
+- 大きいファイルは必要な範囲だけ読む。全体把握が必要な場合も、先に `rg` や行番号付きの部分表示で範囲を絞る。
+- 長時間のビルド・テストが必要な場合は、出力をログファイルにリダイレクトして実行し、完了後に要約された結果だけ確認する。
+- サブエージェントを使う場合は、報告を短く制限し、ログ全文や読んだファイル一覧を返させない。例: 「報告は要点のみ200字以内」「ビルドログは error 行だけ抽出して報告」。
