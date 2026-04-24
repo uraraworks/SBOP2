@@ -7278,7 +7278,7 @@ function setupInitialStatusView() {
 /*                                                                      */
 /* 外部 API:                                                            */
 /*   openPicker({ type, initialValue, category, onSelect })             */
-/*     - type: "image" | "item"                                         */
+/*     - type: "image" | "item" | "effect"                              */
 /*     - initialValue: 初期選択ID（省略時は null）                      */
 /*     - category: 画像 picker 時のカテゴリ key（例 "efcBalloon"）      */
 /*     - onSelect: (selectedValue) => void  決定時に呼ばれる            */
@@ -7304,6 +7304,7 @@ const pickerState = {
   onSelect: null,
   imageCategories: null, // 画像カテゴリカタログ（1 回だけロード）
   itemsCache: null,      // アイテム一覧（1 回だけロード、必要に応じて再読込）
+  effectsCache: null,    // エフェクト一覧（1 回だけロード、必要に応じて再読込）
 };
 
 /** picker の DOM 要素を初期化（初回呼び出し時のみ実行）。 */
@@ -7404,6 +7405,10 @@ function openPicker(options) {
     pickerState.titleEl.textContent = "アイテムを選択";
     if (pickerState.categoryWrap) { pickerState.categoryWrap.hidden = true; }
     if (pickerState.searchInput) { pickerState.searchInput.placeholder = "ID や名前で絞り込み"; }
+  } else if (pickerState.type === "effect") {
+    pickerState.titleEl.textContent = "エフェクトを選択";
+    if (pickerState.categoryWrap) { pickerState.categoryWrap.hidden = true; }
+    if (pickerState.searchInput) { pickerState.searchInput.placeholder = "ID や名前で絞り込み"; }
   } else {
     pickerState.titleEl.textContent = "選択";
   }
@@ -7435,6 +7440,10 @@ function openPicker(options) {
   } else if (pickerState.type === "item") {
     refreshPickerItems(initialValue).catch(function (err) {
       setPickerFeedback("アイテム一覧取得に失敗: " + (err && err.message ? err.message : err), true);
+    });
+  } else if (pickerState.type === "effect") {
+    refreshPickerItems(initialValue).catch(function (err) {
+      setPickerFeedback("エフェクト一覧取得に失敗: " + (err && err.message ? err.message : err), true);
     });
   }
 
@@ -7582,6 +7591,35 @@ async function refreshPickerItems(initialValue) {
     }
     return;
   }
+  if (pickerState.type === "effect") {
+    setPickerFeedback("読み込み中...");
+    const { response, data } = await fetchJson("/api/effects");
+    if (!response.ok || !data || !Array.isArray(data.items)) {
+      pickerState.currentItems = [];
+      renderPickerList();
+      setPickerFeedback("一覧取得に失敗（HTTP " + response.status + "）", true);
+      return;
+    }
+    pickerState.effectsCache = data.items;
+    pickerState.currentItems = data.items.map(function (e) {
+      const meta = (e.grpId != null ? ("画像#" + e.grpId) : "")
+        + (e.soundId ? " / 音#" + e.soundId : "");
+      return {
+        id: e.effectId,
+        label: e.name || ("エフェクト#" + e.effectId),
+        meta: meta || null,
+      };
+    });
+    setPickerFeedback("エフェクト " + pickerState.currentItems.length + " 件");
+    renderPickerList();
+    if (initialValue != null) {
+      const target = pickerState.currentItems.find(function (x) { return x.id === Number(initialValue); });
+      if (target) {
+        setPickerSelected(target.id, target.label);
+      }
+    }
+    return;
+  }
 }
 
 /** 検索入力で絞り込みつつ現在のリストを描画。 */
@@ -7597,8 +7635,9 @@ function renderPickerList() {
         return false;
       });
 
-  // アイテム picker は行表示にする（名前が長いため）
-  pickerState.listEl.classList.toggle("picker-mode-rows", pickerState.type === "item");
+  // アイテム / エフェクト picker は行表示にする（名前が長いため）
+  pickerState.listEl.classList.toggle("picker-mode-rows",
+    pickerState.type === "item" || pickerState.type === "effect");
 
   if (pickerState.summaryEl) {
     pickerState.summaryEl.textContent = filtered.length + " 件 / " + pickerState.currentItems.length + " 件";

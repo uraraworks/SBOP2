@@ -1,6 +1,6 @@
 # Web管理画面 進捗確認
 
-最終更新: 2026-04-24（共通コンポーネント: 画像 picker / アイテム picker 実装）
+最終更新: 2026-04-24（共通コンポーネント: 画像 picker / アイテム picker / エフェクト picker 実装）
 
 ## 使い方
 
@@ -107,7 +107,7 @@
 
 - [x] 画像 picker
 - [x] アイテム picker
-- [ ] エフェクト picker
+- [x] エフェクト picker
 - [ ] マップパーツ picker
 - [ ] マップ影 picker
 - [ ] 会話イベント editor
