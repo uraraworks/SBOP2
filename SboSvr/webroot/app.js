@@ -3275,6 +3275,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "item-types") {
+    if (options.forceReload || (!itemTypeState.items.length && !itemTypeState.isLoading && !itemTypeState.loadError)) {
+      loadItemTypeList(options.forceReload === true);
+    }
+  }
+
   currentRoute = normalized;
 }
 
@@ -5538,3 +5544,297 @@ async function submitAddNpc(event) {
     setFeedback("npc-add-feedback", "通信エラーが発生しました", true);
   }
 }
+
+// ---------------------------------------------------------------------------
+// アイテム種別管理（Wave 2D）
+// ---------------------------------------------------------------------------
+
+const itemTypeState = {
+  items: [],          // サーバー取得済みアイテム種別一覧
+  isLoading: false,
+  loadError: null,
+  editing: null       // 編集中の typeId（新規は 0）
+};
+
+const ITEM_TYPE_LABELS = {
+  0: "効果無し",
+  1: "服",
+  2: "アクセサリ",
+  3: "持ち物",
+  4: "盾",
+  5: "HP増減",
+  6: "灯り"
+};
+
+function itemTypeLabel(id) {
+  return ITEM_TYPE_LABELS[id] || ("不明(" + id + ")");
+}
+
+function setItemTypeFeedback(msg, isError) {
+  setFeedback("item-type-feedback", msg || "", !!isError);
+}
+
+function setItemTypeEditFeedback(msg, isError) {
+  setFeedback("item-type-edit-feedback", msg || "", !!isError);
+}
+
+async function loadItemTypeList(forceReload) {
+  if (itemTypeState.isLoading) { return; }
+  itemTypeState.isLoading = true;
+  itemTypeState.loadError = null;
+  if (forceReload) {
+    setItemTypeFeedback("読み込み中...", false);
+  }
+  try {
+    const { response, data } = await fetchJson("/api/item-types");
+    if (!response.ok || !data || !Array.isArray(data.items)) {
+      throw new Error("item-types load failed: HTTP " + response.status);
+    }
+    itemTypeState.items = data.items;
+    renderItemTypeTable();
+    setItemTypeFeedback("", false);
+  } catch (err) {
+    console.error("loadItemTypeList error", err);
+    itemTypeState.loadError = err.message || String(err);
+    setItemTypeFeedback("読み込みに失敗しました", true);
+  } finally {
+    itemTypeState.isLoading = false;
+  }
+}
+
+function renderItemTypeTable() {
+  const tbody = document.getElementById("item-type-table-body");
+  const summary = document.getElementById("item-type-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const items = itemTypeState.items || [];
+  if (summary) {
+    summary.textContent = items.length + " 件";
+  }
+
+  items.forEach(function (it) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = it.typeId;
+    tr.appendChild(tdId);
+
+    const tdName = document.createElement("td");
+    tdName.textContent = it.name || "";
+    tr.appendChild(tdName);
+
+    const tdType = document.createElement("td");
+    tdType.textContent = itemTypeLabel(it.itemTypeId);
+    tr.appendChild(tdType);
+
+    const tdGrp = document.createElement("td");
+    tdGrp.textContent = it.grpId;
+    tr.appendChild(tdGrp);
+
+    const tdIcon = document.createElement("td");
+    tdIcon.textContent = it.iconGrpId;
+    tr.appendChild(tdIcon);
+
+    const tdOps = document.createElement("td");
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.addEventListener("click", function () { openItemTypeEdit(it); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.5rem";
+    btnDel.addEventListener("click", function () { deleteItemType(it); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+function openItemTypeEdit(item) {
+  const card = document.getElementById("item-type-edit-card");
+  const title = document.getElementById("item-type-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !item;
+  itemTypeState.editing = isNew ? 0 : item.typeId;
+
+  if (title) {
+    title.textContent = isNew ? "アイテム種別 新規追加" : ("アイテム種別 編集 (ID=" + item.typeId + ")");
+  }
+
+  const src = item || {
+    typeId: 0, itemTypeId: 0, name: "",
+    delAverage: 0, putOn: false,
+    grpId: 0, iconGrpId: 0, grpIdMain: 0, grpIdSub: 0,
+    dropSoundId: 0, useEffectId: 0, useSoundId: 0,
+    weaponInfoId: 0, value: 0, value2: 0,
+    moveWait: 0, moveCount: 0, target: 0, area: 0
+  };
+
+  document.getElementById("item-type-edit-typeId").value      = isNew ? "" : String(src.typeId);
+  document.getElementById("item-type-edit-itemTypeId").value  = String(src.itemTypeId);
+  document.getElementById("item-type-edit-name").value        = src.name || "";
+  document.getElementById("item-type-edit-delAverage").value  = String(src.delAverage || 0);
+  document.getElementById("item-type-edit-putOn").checked     = !!src.putOn;
+  document.getElementById("item-type-edit-grpId").value       = String(src.grpId || 0);
+  document.getElementById("item-type-edit-iconGrpId").value   = String(src.iconGrpId || 0);
+  document.getElementById("item-type-edit-grpIdMain").value   = String(src.grpIdMain || 0);
+  document.getElementById("item-type-edit-grpIdSub").value    = String(src.grpIdSub || 0);
+  document.getElementById("item-type-edit-dropSoundId").value = String(src.dropSoundId || 0);
+  document.getElementById("item-type-edit-useEffectId").value = String(src.useEffectId || 0);
+  document.getElementById("item-type-edit-useSoundId").value  = String(src.useSoundId || 0);
+  document.getElementById("item-type-edit-weaponInfoId").value = String(src.weaponInfoId || 0);
+  document.getElementById("item-type-edit-value").value       = String(src.value || 0);
+  document.getElementById("item-type-edit-value2").value      = String(src.value2 || 0);
+  document.getElementById("item-type-edit-moveWait").value    = String(src.moveWait || 0);
+  document.getElementById("item-type-edit-moveCount").value   = String(src.moveCount || 0);
+  document.getElementById("item-type-edit-target").value      = String(src.target || 0);
+  document.getElementById("item-type-edit-area").value        = String(src.area || 0);
+
+  setItemTypeEditFeedback("", false);
+
+  // スクロールしてフォームを見せる
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeItemTypeEdit() {
+  const card = document.getElementById("item-type-edit-card");
+  if (card) { card.style.display = "none"; }
+  itemTypeState.editing = null;
+  setItemTypeEditFeedback("", false);
+}
+
+function buildItemTypeBodyFromForm() {
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+  return {
+    itemTypeId:   intVal("item-type-edit-itemTypeId"),
+    name:         document.getElementById("item-type-edit-name").value,
+    delAverage:   intVal("item-type-edit-delAverage"),
+    putOn:        document.getElementById("item-type-edit-putOn").checked,
+    grpId:        intVal("item-type-edit-grpId"),
+    iconGrpId:    intVal("item-type-edit-iconGrpId"),
+    grpIdMain:    intVal("item-type-edit-grpIdMain"),
+    grpIdSub:     intVal("item-type-edit-grpIdSub"),
+    dropSoundId:  intVal("item-type-edit-dropSoundId"),
+    useEffectId:  intVal("item-type-edit-useEffectId"),
+    useSoundId:   intVal("item-type-edit-useSoundId"),
+    weaponInfoId: intVal("item-type-edit-weaponInfoId"),
+    value:        intVal("item-type-edit-value"),
+    value2:       intVal("item-type-edit-value2"),
+    moveWait:     intVal("item-type-edit-moveWait"),
+    moveCount:    intVal("item-type-edit-moveCount"),
+    target:       intVal("item-type-edit-target"),
+    area:         intVal("item-type-edit-area")
+  };
+}
+
+async function submitItemTypeForm(event) {
+  event.preventDefault();
+
+  const editing = itemTypeState.editing;
+  if (editing === null) { return; }
+
+  const body = buildItemTypeBodyFromForm();
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) {
+    body.typeId = editing;
+  }
+
+  setItemTypeEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/item-types", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setItemTypeEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setItemTypeEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadItemTypeList(false);
+    if (isNew && data && data.typeId) {
+      // 新規作成後は作成された項目の編集フォームに切り替え
+      const created = itemTypeState.items.find(function (x) { return x.typeId === data.typeId; });
+      if (created) {
+        openItemTypeEdit(created);
+      }
+    }
+  } catch (err) {
+    console.error("submitItemTypeForm error", err);
+    setItemTypeEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+async function deleteItemType(item) {
+  if (!item || !item.typeId) { return; }
+  const msg = "アイテム種別 [" + (item.name || "") + "] (ID=" + item.typeId + ") を削除しますか？";
+  if (!confirm(msg)) { return; }
+
+  setItemTypeFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/item-types", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ typeId: item.typeId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setItemTypeFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setItemTypeFeedback("削除しました (ID=" + item.typeId + ")", false);
+    // 編集フォームが同じ ID を開いていたら閉じる
+    if (itemTypeState.editing === item.typeId) {
+      closeItemTypeEdit();
+    }
+    await loadItemTypeList(false);
+  } catch (err) {
+    console.error("deleteItemType error", err);
+    setItemTypeFeedback("通信エラーが発生しました", true);
+  }
+}
+
+function setupItemTypeView() {
+  const reloadBtn = document.getElementById("item-type-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadItemTypeList(true); });
+  }
+  const newBtn = document.getElementById("item-type-new-btn");
+  if (newBtn) {
+    newBtn.addEventListener("click", function () { openItemTypeEdit(null); });
+  }
+  const form = document.getElementById("item-type-edit-form");
+  if (form) {
+    form.addEventListener("submit", submitItemTypeForm);
+  }
+  const cancelBtn = document.getElementById("item-type-cancel-btn");
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () { closeItemTypeEdit(); });
+  }
+}
+
+// 初期化ブートストラップ（load イベント後に1度だけ実行する）
+window.addEventListener("load", function () {
+  setupItemTypeView();
+});
