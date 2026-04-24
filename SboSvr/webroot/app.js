@@ -3287,6 +3287,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "weapon-list") {
+    if (options.forceReload || (!weaponState.items.length && !weaponState.isLoading && !weaponState.loadError)) {
+      loadWeaponList(options.forceReload === true);
+    }
+  }
+
   currentRoute = normalized;
 }
 
@@ -5844,6 +5850,7 @@ function setupItemTypeView() {
 window.addEventListener("load", function () {
   setupItemTypeView();
   setupItemView();
+  setupWeaponView();
 });
 
 // ---------------------------------------------------------------------------
@@ -6161,5 +6168,299 @@ function setupItemView() {
       clearItemFilter();
       loadItemList(true);
     });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 武器一覧管理（Wave 2D）
+// ---------------------------------------------------------------------------
+
+// 使用可能な攻撃モーションのビットフラグ（InfoItemArms.h の INFOITEMARMS_MOTION_*）
+const WEAPON_MOTION_SWING   = 0x01;
+const WEAPON_MOTION_POKE    = 0x02;
+const WEAPON_MOTION_BOW     = 0x04;
+const WEAPON_MOTION_BLOW    = 0x08;
+const WEAPON_MOTION_FISHING = 0x10;
+
+const weaponState = {
+  items: [],           // サーバー取得済み武器情報一覧
+  isLoading: false,
+  loadError: null,
+  editing: null        // 編集中の weaponInfoId（新規は 0）
+};
+
+function setWeaponFeedback(msg, isError) {
+  setFeedback("weapon-feedback", msg || "", !!isError);
+}
+
+function setWeaponEditFeedback(msg, isError) {
+  setFeedback("weapon-edit-feedback", msg || "", !!isError);
+}
+
+async function loadWeaponList(forceReload) {
+  if (weaponState.isLoading) { return; }
+  weaponState.isLoading = true;
+  weaponState.loadError = null;
+  if (forceReload) {
+    setWeaponFeedback("読み込み中...", false);
+  }
+  try {
+    const { response, data } = await fetchJson("/api/weapons");
+    if (!response.ok || !data || !Array.isArray(data.items)) {
+      throw new Error("weapons load failed: HTTP " + response.status);
+    }
+    weaponState.items = data.items;
+    renderWeaponTable();
+    setWeaponFeedback("", false);
+  } catch (err) {
+    console.error("loadWeaponList error", err);
+    weaponState.loadError = err.message || String(err);
+    setWeaponFeedback("読み込みに失敗しました", true);
+  } finally {
+    weaponState.isLoading = false;
+  }
+}
+
+function formatMotionType(motionType) {
+  const labels = [];
+  if (motionType & WEAPON_MOTION_SWING)   { labels.push("振る"); }
+  if (motionType & WEAPON_MOTION_POKE)    { labels.push("突く"); }
+  if (motionType & WEAPON_MOTION_BOW)     { labels.push("弓"); }
+  if (motionType & WEAPON_MOTION_BLOW)    { labels.push("打撃"); }
+  if (motionType & WEAPON_MOTION_FISHING) { labels.push("釣り"); }
+  return labels.length ? labels.join(",") : "-";
+}
+
+function renderWeaponTable() {
+  const tbody = document.getElementById("weapon-table-body");
+  const summary = document.getElementById("weapon-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const items = weaponState.items || [];
+  if (summary) {
+    summary.textContent = items.length + " 件";
+  }
+
+  items.forEach(function (w) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = w.weaponInfoId;
+    tr.appendChild(tdId);
+
+    const tdName = document.createElement("td");
+    tdName.textContent = w.name || "";
+    tr.appendChild(tdName);
+
+    const tdMotion = document.createElement("td");
+    tdMotion.textContent = formatMotionType(w.motionType || 0);
+    tr.appendChild(tdMotion);
+
+    const tdAtk = document.createElement("td");
+    tdAtk.textContent = String((w.effectIdAtack || []).length);
+    tr.appendChild(tdAtk);
+
+    const tdCri = document.createElement("td");
+    tdCri.textContent = String((w.effectIdCritical || []).length);
+    tr.appendChild(tdCri);
+
+    const tdOps = document.createElement("td");
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.addEventListener("click", function () { openWeaponEdit(w); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.5rem";
+    btnDel.addEventListener("click", function () { deleteWeapon(w); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+function openWeaponEdit(weapon) {
+  const card = document.getElementById("weapon-edit-card");
+  const title = document.getElementById("weapon-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !weapon;
+  weaponState.editing = isNew ? 0 : weapon.weaponInfoId;
+
+  if (title) {
+    title.textContent = isNew
+        ? "武器情報 新規追加"
+        : ("武器情報 編集 (ID=" + weapon.weaponInfoId + ")");
+  }
+
+  const src = weapon || {
+    weaponInfoId: 0, name: "",
+    motionType: 0, motionTypeStand: 0, motionTypeWalk: 0,
+    effectIdAtack: [], effectIdCritical: []
+  };
+
+  document.getElementById("weapon-edit-weaponInfoId").value =
+      isNew ? "" : String(src.weaponInfoId);
+  document.getElementById("weapon-edit-name").value = src.name || "";
+
+  const mt = src.motionType || 0;
+  document.getElementById("weapon-edit-motion-swing").checked   = !!(mt & WEAPON_MOTION_SWING);
+  document.getElementById("weapon-edit-motion-poke").checked    = !!(mt & WEAPON_MOTION_POKE);
+  document.getElementById("weapon-edit-motion-bow").checked     = !!(mt & WEAPON_MOTION_BOW);
+  document.getElementById("weapon-edit-motion-blow").checked    = !!(mt & WEAPON_MOTION_BLOW);
+  document.getElementById("weapon-edit-motion-fishing").checked = !!(mt & WEAPON_MOTION_FISHING);
+
+  document.getElementById("weapon-edit-motionTypeStand").value = String(src.motionTypeStand || 0);
+  document.getElementById("weapon-edit-motionTypeWalk").value  = String(src.motionTypeWalk  || 0);
+
+  document.getElementById("weapon-edit-effectIdAtack").value    = (src.effectIdAtack    || []).join(",");
+  document.getElementById("weapon-edit-effectIdCritical").value = (src.effectIdCritical || []).join(",");
+
+  setWeaponEditFeedback("", false);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeWeaponEdit() {
+  const card = document.getElementById("weapon-edit-card");
+  if (card) { card.style.display = "none"; }
+  weaponState.editing = null;
+  setWeaponEditFeedback("", false);
+}
+
+function parseIdListFromCsv(text) {
+  if (!text) { return []; }
+  const parts = String(text).split(",");
+  const out = [];
+  for (let i = 0; i < parts.length; ++i) {
+    const s = parts[i].trim();
+    if (s === "") { continue; }
+    const n = parseInt(s, 10);
+    if (!isNaN(n) && n >= 0) { out.push(n); }
+  }
+  return out;
+}
+
+function buildWeaponBodyFromForm() {
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+  let motionType = 0;
+  if (document.getElementById("weapon-edit-motion-swing").checked)   { motionType |= WEAPON_MOTION_SWING; }
+  if (document.getElementById("weapon-edit-motion-poke").checked)    { motionType |= WEAPON_MOTION_POKE; }
+  if (document.getElementById("weapon-edit-motion-bow").checked)     { motionType |= WEAPON_MOTION_BOW; }
+  if (document.getElementById("weapon-edit-motion-blow").checked)    { motionType |= WEAPON_MOTION_BLOW; }
+  if (document.getElementById("weapon-edit-motion-fishing").checked) { motionType |= WEAPON_MOTION_FISHING; }
+
+  return {
+    name: document.getElementById("weapon-edit-name").value,
+    motionType: motionType,
+    motionTypeStand: intVal("weapon-edit-motionTypeStand"),
+    motionTypeWalk:  intVal("weapon-edit-motionTypeWalk"),
+    effectIdAtack:    parseIdListFromCsv(document.getElementById("weapon-edit-effectIdAtack").value),
+    effectIdCritical: parseIdListFromCsv(document.getElementById("weapon-edit-effectIdCritical").value)
+  };
+}
+
+async function submitWeaponForm(event) {
+  event.preventDefault();
+
+  const editing = weaponState.editing;
+  if (editing === null) { return; }
+
+  const body = buildWeaponBodyFromForm();
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) {
+    body.weaponInfoId = editing;
+  }
+
+  setWeaponEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/weapons", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setWeaponEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setWeaponEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadWeaponList(false);
+    if (isNew && data && data.weaponInfoId) {
+      const created = weaponState.items.find(function (x) {
+        return x.weaponInfoId === data.weaponInfoId;
+      });
+      if (created) {
+        openWeaponEdit(created);
+      }
+    }
+  } catch (err) {
+    console.error("submitWeaponForm error", err);
+    setWeaponEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+async function deleteWeapon(weapon) {
+  if (!weapon || !weapon.weaponInfoId) { return; }
+  const msg = "武器情報 [" + (weapon.name || "") + "] (ID=" + weapon.weaponInfoId + ") を削除しますか？";
+  if (!confirm(msg)) { return; }
+
+  setWeaponFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/weapons", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ weaponInfoId: weapon.weaponInfoId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setWeaponFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setWeaponFeedback("削除しました (ID=" + weapon.weaponInfoId + ")", false);
+    if (weaponState.editing === weapon.weaponInfoId) {
+      closeWeaponEdit();
+    }
+    await loadWeaponList(false);
+  } catch (err) {
+    console.error("deleteWeapon error", err);
+    setWeaponFeedback("通信エラーが発生しました", true);
+  }
+}
+
+function setupWeaponView() {
+  const reloadBtn = document.getElementById("weapon-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadWeaponList(true); });
+  }
+  const newBtn = document.getElementById("weapon-new-btn");
+  if (newBtn) {
+    newBtn.addEventListener("click", function () { openWeaponEdit(null); });
+  }
+  const form = document.getElementById("weapon-edit-form");
+  if (form) {
+    form.addEventListener("submit", submitWeaponForm);
+  }
+  const cancelBtn = document.getElementById("weapon-cancel-btn");
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () { closeWeaponEdit(); });
   }
 }
