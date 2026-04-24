@@ -28,6 +28,7 @@ public:
 	void SetMotionInfo	(CInfoCharCli *pChar, DWORD dwMotionID, DWORD dwListID);	// モーション情報を設定
 	void RenewGrpID	(DWORD dwCharID);	// 装備画像IDを更新
 	BOOL IsMove	(PCInfoCharBase pInfoChar, int &nDirection);	// 指定方向に進めるかチェック
+	void ClampPredictedTargetByMap(PCInfoCharBase pInfoChar, int nDirection, int &nX, int &nY);	// 予測移動先をマップ壁で切り詰める
 
 	CInfoBase	*GetNew	(int nType);	// 新規データを取得
 	CInfoBase	*GetPtr	(int nNo);	// キャラ情報を取得

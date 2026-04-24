@@ -17,6 +17,7 @@
 #include "Img32.h"
 #include "MgrGrpData.h"
 #include "MgrData.h"
+#include "LibInfo/LibInfoCharCli.h"
 #include "MgrLayer.h"
 #include "MgrSound.h"
 #include "InfoCharCli.h"
@@ -1554,6 +1555,10 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 	nX = m_nPredictBaseX + anPosX[m_nPredictDirection] * nOffset;
 	nY = m_nPredictBaseY + anPosY[m_nPredictDirection] * nOffset;
 	ClampPredictedMoveForward(this, m_nPredictDirection, nX, nY);
+	// 壁にめり込まないように、現在位置から目標(nX,nY)への予測経路をマップ壁で切り詰める
+	if (m_pMgrData && m_pMgrData->GetLibInfoChar()) {
+		m_pMgrData->GetLibInfoChar()->ClampPredictedTargetByMap(this, m_nPredictDirection, nX, nY);
+	}
 
 	// [DBG-PREDICT] ログバッファ圧迫防止のため、1 秒に 1 回だけ出力する。
 	// 暴走が続いている事実だけわかればよく、連続出力で他のログ（MOVE_* 等）が

@@ -422,6 +422,80 @@ void CLibInfoCharCli::RenewGrpID(DWORD dwCharID)
 }
 
 
+void CLibInfoCharCli::ClampPredictedTargetByMap(
+	PCInfoCharBase pInfoChar,
+	int nDirection,
+	int &nX,
+	int &nY)
+{
+	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1};
+	int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	PCInfoMapBase pInfoMap;
+	int i, nMax, nStepX, nStepY, nSaveX, nSaveY, nCurX, nCurY;
+	int nNextX, nNextY;
+
+	if (pInfoChar == NULL) {
+		return;
+	}
+	if ((nDirection < 0) || (nDirection > 7)) {
+		return;
+	}
+	if (m_pMgrData == NULL) {
+		return;
+	}
+	pInfoMap = m_pMgrData->GetMap();
+	if (pInfoMap == NULL) {
+		return;
+	}
+
+	nStepX = anPosX[nDirection];
+	nStepY = anPosY[nDirection];
+	if ((nStepX == 0) && (nStepY == 0)) {
+		return;
+	}
+
+	nSaveX = pInfoChar->m_nMapX;
+	nSaveY = pInfoChar->m_nMapY;
+	nCurX = nSaveX;
+	nCurY = nSaveY;
+
+	nMax = abs(nX - nCurX);
+	if (nMax < abs(nY - nCurY)) {
+		nMax = abs(nY - nCurY);
+	}
+	// 暴走防止。1フレームで1タイル超の移動は想定外
+	if (nMax > MAPPARTSSIZE * 4) {
+		nMax = MAPPARTSSIZE * 4;
+	}
+
+	for (i = 0; i < nMax; i ++) {
+		nNextX = nCurX + nStepX;
+		nNextY = nCurY + nStepY;
+		// 目標を越えないように各軸で頭打ち
+		if ((nStepX > 0) && (nNextX > nX)) nNextX = nX;
+		if ((nStepX < 0) && (nNextX < nX)) nNextX = nX;
+		if ((nStepY > 0) && (nNextY > nY)) nNextY = nY;
+		if ((nStepY < 0) && (nNextY < nY)) nNextY = nY;
+
+		pInfoChar->m_nMapX = nCurX;
+		pInfoChar->m_nMapY = nCurY;
+		if (!CanMoveDirection(pInfoMap, pInfoChar, nDirection)) {
+			break;
+		}
+		nCurX = nNextX;
+		nCurY = nNextY;
+		if ((nCurX == nX) && (nCurY == nY)) {
+			break;
+		}
+	}
+
+	pInfoChar->m_nMapX = nSaveX;
+	pInfoChar->m_nMapY = nSaveY;
+	nX = nCurX;
+	nY = nCurY;
+}
+
+
 BOOL CLibInfoCharCli::IsMove(
 	PCInfoCharBase pInfoChar,	// [in] キャラ情報
 	int &nDirection)	// [in/ou] 移動する向き
