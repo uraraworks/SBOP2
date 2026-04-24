@@ -30,6 +30,7 @@
 #include "Handlers/CharacterItemHandler.h"
 #include "Handlers/ItemTypeHandler.h"
 #include "Handlers/ItemHandler.h"
+#include "Handlers/WeaponHandler.h"
 #include "MgrData.h"
 
 namespace
@@ -805,6 +806,23 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> itemDeleteHandler(new CItemDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/items", std::move(itemDeleteHandler));
+
+        // 武器情報 API（Wave 2D）
+        //   GET    /api/weapons    一覧
+        //   POST   /api/weapons    新規作成
+        //   PUT    /api/weapons    更新
+        //   DELETE /api/weapons    削除
+        std::unique_ptr<IApiHandler> weaponListHandler(new CWeaponListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/weapons", std::move(weaponListHandler));
+
+        std::unique_ptr<IApiHandler> weaponCreateHandler(new CWeaponCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/weapons", std::move(weaponCreateHandler));
+
+        std::unique_ptr<IApiHandler> weaponUpdateHandler(new CWeaponUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/weapons", std::move(weaponUpdateHandler));
+
+        std::unique_ptr<IApiHandler> weaponDeleteHandler(new CWeaponDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/weapons", std::move(weaponDeleteHandler));
 
         // 選択変更時に管理画面 WebSocket Hub へ通知するコールバックを登録
         CSelectionStore::GetInstance().SetChangeCallback(
