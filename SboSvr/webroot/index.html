@@ -1597,14 +1597,83 @@
       </section>
     </div>
     <div class="view" data-view="effect-balloon">
-      <section class="card placeholder-card">
-        <h2>噴出し一覧（プレースホルダー）</h2>
-        <p>メッセージ吹き出し定義を管理する画面を予定しています。</p>
-        <ul>
-          <li>吹き出しテンプレのプレビュー</li>
-          <li>テキスト/スタイル編集</li>
-          <li>プレビュー再生</li>
-        </ul>
+      <section class="card">
+        <h2>噴出し一覧</h2>
+        <p>噴出し（吹き出し）は「種別ID」単位のアニメーションコマ集合です。コマごとに効果音・画像・表示時間を設定します。</p>
+        <div class="form-actions" style="margin-bottom:0.5rem;">
+          <button type="button" id="balloon-reload-btn" class="btn-secondary">再読込</button>
+          <button type="button" id="balloon-new-btn" class="btn-primary">コマ追加</button>
+        </div>
+        <p id="balloon-summary" class="muted"></p>
+        <div style="overflow-x:auto;">
+          <table class="data-table" id="balloon-table">
+            <thead>
+              <tr>
+                <th>噴出しID</th>
+                <th>種別ID</th>
+                <th>コマ番号</th>
+                <th>噴出し名</th>
+                <th>画像ID</th>
+                <th>効果音ID</th>
+                <th>待ち時間 (×10ms)</th>
+                <th>ループ</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="balloon-table-body"></tbody>
+          </table>
+        </div>
+        <p id="balloon-feedback" class="form-feedback" aria-live="polite"></p>
+      </section>
+
+      <section class="card" id="balloon-edit-card" style="display:none;">
+        <h2 id="balloon-edit-title">噴出し コマ編集</h2>
+        <form id="balloon-edit-form">
+          <fieldset>
+            <legend>基本情報</legend>
+            <div class="form-row">
+              <label for="balloon-edit-efcBalloonId">噴出しID</label>
+              <input type="text" id="balloon-edit-efcBalloonId" readonly placeholder="（新規は自動採番）">
+            </div>
+            <div class="form-row">
+              <label for="balloon-edit-listId">種別ID</label>
+              <input type="number" id="balloon-edit-listId" min="1" value="1">
+            </div>
+            <div class="form-row">
+              <label for="balloon-edit-animeId">コマ番号</label>
+              <input type="number" id="balloon-edit-animeId" min="0" value="0">
+            </div>
+            <div class="form-row">
+              <label for="balloon-edit-name">噴出し名</label>
+              <input type="text" id="balloon-edit-name" maxlength="32" placeholder="噴出し名">
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>表示設定</legend>
+            <div class="form-row">
+              <label for="balloon-edit-grpId">画像ID</label>
+              <input type="number" id="balloon-edit-grpId" min="0" value="0">
+            </div>
+            <div class="form-row">
+              <label for="balloon-edit-soundId">効果音ID</label>
+              <input type="number" id="balloon-edit-soundId" min="0" value="0">
+            </div>
+            <div class="form-row">
+              <label for="balloon-edit-wait">待ち時間（0-255、×10ms）</label>
+              <input type="number" id="balloon-edit-wait" min="0" max="255" value="0">
+            </div>
+            <div class="form-row">
+              <label><input type="checkbox" id="balloon-edit-loop"> ループ再生</label>
+            </div>
+          </fieldset>
+
+          <p id="balloon-edit-feedback" class="form-feedback" aria-live="polite"></p>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="balloon-save-btn">保存</button>
+            <button type="button" class="btn-secondary" id="balloon-cancel-btn">キャンセル</button>
+          </div>
+        </form>
       </section>
     </div>
     <div class="view" data-view="effect-library">

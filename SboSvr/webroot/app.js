@@ -3293,6 +3293,12 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "effect-balloon") {
+    if (options.forceReload || (!balloonState.items.length && !balloonState.isLoading && !balloonState.loadError)) {
+      loadBalloonList(options.forceReload === true);
+    }
+  }
+
   currentRoute = normalized;
 }
 
@@ -5851,6 +5857,7 @@ window.addEventListener("load", function () {
   setupItemTypeView();
   setupItemView();
   setupWeaponView();
+  setupBalloonView();
 });
 
 // ---------------------------------------------------------------------------
@@ -6462,5 +6469,278 @@ function setupWeaponView() {
   const cancelBtn = document.getElementById("weapon-cancel-btn");
   if (cancelBtn) {
     cancelBtn.addEventListener("click", function () { closeWeaponEdit(); });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 噴出し（吹き出し）情報 /api/efc-balloons
+// ---------------------------------------------------------------------------
+
+const balloonState = {
+  items: [],           // サーバー取得済みコマ一覧
+  isLoading: false,
+  loadError: null,
+  editing: null        // 編集中の efcBalloonId（新規は 0）
+};
+
+function setBalloonFeedback(msg, isError) {
+  setFeedback("balloon-feedback", msg || "", !!isError);
+}
+
+function setBalloonEditFeedback(msg, isError) {
+  setFeedback("balloon-edit-feedback", msg || "", !!isError);
+}
+
+async function loadBalloonList(forceReload) {
+  if (balloonState.isLoading) { return; }
+  balloonState.isLoading = true;
+  balloonState.loadError = null;
+  if (forceReload) {
+    setBalloonFeedback("読み込み中...", false);
+  }
+  try {
+    const { response, data } = await fetchJson("/api/efc-balloons");
+    if (!response.ok || !data || !Array.isArray(data.items)) {
+      throw new Error("balloons load failed: HTTP " + response.status);
+    }
+    balloonState.items = data.items;
+    renderBalloonTable();
+    setBalloonFeedback("", false);
+  } catch (err) {
+    console.error("loadBalloonList error", err);
+    balloonState.loadError = err.message || String(err);
+    setBalloonFeedback("読み込みに失敗しました", true);
+  } finally {
+    balloonState.isLoading = false;
+  }
+}
+
+function renderBalloonTable() {
+  const tbody = document.getElementById("balloon-table-body");
+  const summary = document.getElementById("balloon-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  // listId → コマ数 をサマリに
+  const items = balloonState.items || [];
+  if (summary) {
+    const listIds = {};
+    items.forEach(function (b) { listIds[b.listId] = (listIds[b.listId] || 0) + 1; });
+    const listCount = Object.keys(listIds).length;
+    summary.textContent = items.length + " コマ / " + listCount + " 種別";
+  }
+
+  items.forEach(function (b) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = b.efcBalloonId;
+    tr.appendChild(tdId);
+
+    const tdListId = document.createElement("td");
+    tdListId.textContent = b.listId;
+    tr.appendChild(tdListId);
+
+    const tdAnime = document.createElement("td");
+    tdAnime.textContent = b.animeId;
+    tr.appendChild(tdAnime);
+
+    const tdName = document.createElement("td");
+    tdName.textContent = b.name || "";
+    tr.appendChild(tdName);
+
+    const tdGrp = document.createElement("td");
+    tdGrp.textContent = b.grpId;
+    tr.appendChild(tdGrp);
+
+    const tdSound = document.createElement("td");
+    tdSound.textContent = b.soundId;
+    tr.appendChild(tdSound);
+
+    const tdWait = document.createElement("td");
+    tdWait.textContent = b.wait;
+    tr.appendChild(tdWait);
+
+    const tdLoop = document.createElement("td");
+    tdLoop.textContent = b.loop ? "◯" : "";
+    tr.appendChild(tdLoop);
+
+    const tdOps = document.createElement("td");
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.addEventListener("click", function () { openBalloonEdit(b); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.5rem";
+    btnDel.addEventListener("click", function () { deleteBalloon(b); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+function openBalloonEdit(balloon) {
+  const card = document.getElementById("balloon-edit-card");
+  const title = document.getElementById("balloon-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !balloon;
+  balloonState.editing = isNew ? 0 : balloon.efcBalloonId;
+
+  if (title) {
+    title.textContent = isNew
+        ? "噴出し コマ新規追加"
+        : ("噴出し コマ編集 (ID=" + balloon.efcBalloonId + ")");
+  }
+
+  const src = balloon || {
+    efcBalloonId: 0, listId: 1, animeId: 0,
+    name: "", grpId: 0, soundId: 0, wait: 0, loop: false
+  };
+
+  document.getElementById("balloon-edit-efcBalloonId").value =
+      isNew ? "" : String(src.efcBalloonId);
+  document.getElementById("balloon-edit-listId").value  = String(src.listId || 1);
+  document.getElementById("balloon-edit-animeId").value = String(src.animeId || 0);
+  document.getElementById("balloon-edit-name").value    = src.name || "";
+  document.getElementById("balloon-edit-grpId").value   = String(src.grpId || 0);
+  document.getElementById("balloon-edit-soundId").value = String(src.soundId || 0);
+  document.getElementById("balloon-edit-wait").value    = String(src.wait || 0);
+  document.getElementById("balloon-edit-loop").checked  = !!src.loop;
+
+  setBalloonEditFeedback("", false);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeBalloonEdit() {
+  const card = document.getElementById("balloon-edit-card");
+  if (card) { card.style.display = "none"; }
+  balloonState.editing = null;
+  setBalloonEditFeedback("", false);
+}
+
+function buildBalloonBodyFromForm() {
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+  return {
+    listId:  intVal("balloon-edit-listId"),
+    animeId: intVal("balloon-edit-animeId"),
+    name:    document.getElementById("balloon-edit-name").value,
+    grpId:   intVal("balloon-edit-grpId"),
+    soundId: intVal("balloon-edit-soundId"),
+    wait:    intVal("balloon-edit-wait"),
+    loop:    document.getElementById("balloon-edit-loop").checked
+  };
+}
+
+async function submitBalloonForm(event) {
+  event.preventDefault();
+
+  const editing = balloonState.editing;
+  if (editing === null) { return; }
+
+  const body = buildBalloonBodyFromForm();
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) {
+    body.efcBalloonId = editing;
+  }
+
+  if (isNew && (!body.listId || body.listId <= 0)) {
+    setBalloonEditFeedback("種別ID は 1 以上を指定してください", true);
+    return;
+  }
+
+  setBalloonEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/efc-balloons", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setBalloonEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setBalloonEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadBalloonList(false);
+    if (isNew && data && data.efcBalloonId) {
+      const created = balloonState.items.find(function (x) {
+        return x.efcBalloonId === data.efcBalloonId;
+      });
+      if (created) {
+        openBalloonEdit(created);
+      }
+    }
+  } catch (err) {
+    console.error("submitBalloonForm error", err);
+    setBalloonEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+async function deleteBalloon(balloon) {
+  if (!balloon || !balloon.efcBalloonId) { return; }
+  const label = (balloon.name || "") +
+                " (listId=" + balloon.listId + ", animeId=" + balloon.animeId + ")";
+  const msg = "噴出しコマ [" + label + "] (ID=" + balloon.efcBalloonId + ") を削除しますか？";
+  if (!confirm(msg)) { return; }
+
+  setBalloonFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/efc-balloons", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ efcBalloonId: balloon.efcBalloonId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setBalloonFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setBalloonFeedback("削除しました (ID=" + balloon.efcBalloonId + ")", false);
+    if (balloonState.editing === balloon.efcBalloonId) {
+      closeBalloonEdit();
+    }
+    await loadBalloonList(false);
+  } catch (err) {
+    console.error("deleteBalloon error", err);
+    setBalloonFeedback("通信エラーが発生しました", true);
+  }
+}
+
+function setupBalloonView() {
+  const reloadBtn = document.getElementById("balloon-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadBalloonList(true); });
+  }
+  const newBtn = document.getElementById("balloon-new-btn");
+  if (newBtn) {
+    newBtn.addEventListener("click", function () { openBalloonEdit(null); });
+  }
+  const form = document.getElementById("balloon-edit-form");
+  if (form) {
+    form.addEventListener("submit", submitBalloonForm);
+  }
+  const cancelBtn = document.getElementById("balloon-cancel-btn");
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () { closeBalloonEdit(); });
   }
 }
