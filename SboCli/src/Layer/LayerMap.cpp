@@ -170,6 +170,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 	if (m_pMgrData->GetMapPartsEditMode()) {
 		DrawMapPartsDebug(pDst);
 	}
+	DrawAdminPick(pDst);
 }
 
 
@@ -1722,5 +1723,73 @@ void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 			rcHit.right - rcHit.left + 1,
 			rcHit.bottom - rcHit.top + 1,
 			RGB(0, 255, 0));
+	}
+}
+
+
+void CLayerMap::DrawAdminPick(CImg32 *pDst)
+{
+	if (m_pMgrData->GetAdminLevel() <= ADMINLEVEL_NONE) {
+		return;
+	}
+	PCInfoMapBase pMap = m_pMgrData->GetMap();
+	if (pMap == NULL) {
+		return;
+	}
+	DWORD dwPickMapID = m_pMgrData->GetAdminPickMapID();
+	if (dwPickMapID == 0 || dwPickMapID != pMap->m_dwMapID) {
+		return;
+	}
+
+	int nViewX = m_nViewX;
+	int nViewY = m_nViewY;
+
+	// セルハイライト（黄色枠）
+	int cellX = m_pMgrData->GetAdminPickCellX();
+	int cellY = m_pMgrData->GetAdminPickCellY();
+	int sx = cellX * MAPPARTSSIZE - nViewX;
+	int sy = cellY * MAPPARTSSIZE - nViewY;
+	pDst->Rectangle(sx, sy, MAPPARTSSIZE, MAPPARTSSIZE, RGB(255, 255, 0));
+	pDst->Rectangle(sx + 1, sy + 1, MAPPARTSSIZE - 2, MAPPARTSSIZE - 2, RGB(255, 255, 0));
+
+	// キャラハイライト（赤枠、セル枠より上に重ねる）
+	DWORD dwCharID = m_pMgrData->GetAdminPickCharID();
+	if (dwCharID != 0) {
+		int nCount = m_pLibInfoChar->GetCount();
+		for (int i = 0; i < nCount; i++) {
+			PCInfoCharCli pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
+			if (pInfoChar == NULL) {
+				continue;
+			}
+			if (pInfoChar->m_dwCharID != dwCharID) {
+				continue;
+			}
+			PCInfoMotion pInfoMotion = pInfoChar->GetMotionInfo();
+			int cx = 32;
+			int cy = 32;
+			POINT ptTmp;
+			pInfoChar->GetViewCharPos(ptTmp);
+			cx -= ptTmp.x;
+			cy -= ptTmp.y;
+			GetDrawPos(pInfoChar, cx, cy);
+			if (pInfoMotion != NULL) {
+				cx += pInfoMotion->m_ptDrawPosPile0.x;
+				cy += pInfoMotion->m_ptDrawPosPile0.y;
+			}
+			// 描画スプライトの透明左マージンに合わせて半キャラ分右にずらす
+			cx += pInfoChar->m_nGrpSize;
+
+			int gw = pInfoChar->m_nGrpSize * 2;
+			int gh = pInfoChar->m_nGrpSize * 2;
+			if (gw < MAPPARTSSIZE) {
+				gw = MAPPARTSSIZE;
+			}
+			if (gh < MAPPARTSSIZE * 2) {
+				gh = MAPPARTSSIZE * 2;
+			}
+			pDst->Rectangle(cx, cy, gw, gh, RGB(255, 80, 80));
+			pDst->Rectangle(cx + 1, cy + 1, gw - 2, gh - 2, RGB(255, 80, 80));
+			break;
+		}
 	}
 }

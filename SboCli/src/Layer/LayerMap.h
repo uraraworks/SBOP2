@@ -64,6 +64,7 @@ private:
 	void DrawMapName(CImg32 *pDst); // 描画(マップ名)
 	void DrawMapEventDebug(CImg32 *pDst); // 描画(マップイベントデバッグ矩形)
 	void DrawMapPartsDebug(CImg32 *pDst); // 描画(マップパーツデバッグ矩形)
+	void DrawAdminPick(CImg32 *pDst); // 描画(管理者ハイライト)
 
 
 public:

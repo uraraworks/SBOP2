@@ -91,6 +91,24 @@ public:
 	void			SetMapPartsEditMode(BOOL bOn)		{ m_bMapPartsEditMode = bOn;	}	// マップパーツ編集モードを設定
 	BOOL			GetMapPartsEditMode(void)			{ return m_bMapPartsEditMode;	}	// マップパーツ編集モードを取得
 
+	// 管理者ハイライト用（Web 管理画面連携。クリックで設定、再クリックで上書き）
+	void			SetAdminPick(DWORD dwMapID, WORD wCellX, WORD wCellY, DWORD dwCharID)
+	{
+		m_dwAdminPickMapID  = dwMapID;
+		m_wAdminPickCellX   = wCellX;
+		m_wAdminPickCellY   = wCellY;
+		m_dwAdminPickCharID = dwCharID;
+	}
+	DWORD			GetAdminPickMapID(void)		{ return m_dwAdminPickMapID;	}	// 管理者ハイライトのマップIDを取得
+	WORD			GetAdminPickCellX(void)		{ return m_wAdminPickCellX;		}	// 管理者ハイライトのセルX座標を取得
+	WORD			GetAdminPickCellY(void)		{ return m_wAdminPickCellY;		}	// 管理者ハイライトのセルY座標を取得
+	DWORD			GetAdminPickCharID(void)	{ return m_dwAdminPickCharID;	}	// 管理者ハイライトのキャラIDを取得
+	void			ClearAdminPick(void)
+	{
+		m_dwAdminPickMapID  = 0;
+		m_dwAdminPickCharID = 0;
+	}
+
 	void			SetLastAccount(LPCSTR pszAccount)		{ m_strLastAccount = pszAccount;	}	// 最終アカウント名を設定
 	LPCSTR			GetLastAccount(void)					{ return m_strLastAccount;			}	// 最終アカウント名を取得
 	void			SetLastPassword(LPCSTR pszPassword)		{ m_strLastPassword = pszPassword;	}	// 最終パスワードを設定
@@ -242,6 +260,10 @@ private:
 						m_bMapEventEditMode,		// マップイベント編集モード
 						m_bMapPartsEditMode,		// マップパーツ編集モード
 						m_bLocalTitleMode;			// タイトル表示専用モード
+	DWORD				m_dwAdminPickMapID,			// 管理者ハイライトのマップID（0=無効）
+						m_dwAdminPickCharID;		// 管理者ハイライトのキャラID（0=無効）
+	WORD				m_wAdminPickCellX,			// 管理者ハイライトのセルX座標
+						m_wAdminPickCellY;			// 管理者ハイライトのセルY座標
 	BYTE				m_byViewGrid;				// グリッド表示
 	GUID				m_stInputGuid;				// 入力パッドのGUID
 	SIZE				m_sizeDlgMapPartsEdit,		// マップパーツ編集ダイアログサイズ

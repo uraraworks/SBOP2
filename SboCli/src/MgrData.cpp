@@ -67,6 +67,10 @@ CMgrData::CMgrData()
 	m_bMoveNoBlock			= FALSE;
 	m_bMapEventEditMode		= FALSE;
 	m_bMapPartsEditMode		= FALSE;
+	m_dwAdminPickMapID		= 0;
+	m_dwAdminPickCharID		= 0;
+	m_wAdminPickCellX		= 0;
+	m_wAdminPickCellY		= 0;
 	m_bLocalTitleMode		= FALSE;
 	m_bDisableLogin			= FALSE;
 	m_bSavePassword			= FALSE;

@@ -79,16 +79,20 @@
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
-EM_JS(void, SBOP2_PostAdminCharPick, (unsigned int charId), {
+EM_JS(void, SBOP2_PostAdminPick, (unsigned int mapId, int cellX, int cellY, unsigned int charId, unsigned int itemId), {
 	if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
 		window.parent.postMessage({
-			kind: 'sbop2_admin_char_pick',
-			charId: charId
+			kind: 'sbop2_admin_pick',
+			mapId: mapId,
+			cellX: cellX,
+			cellY: cellY,
+			charId: charId,
+			itemId: itemId
 		}, '*');
 	}
 });
 #else
-static void SBOP2_PostAdminCharPick(unsigned int)
+static void SBOP2_PostAdminPick(unsigned int, int, int, unsigned int, unsigned int)
 {
 }
 #endif
@@ -143,8 +147,8 @@ static DWORD FindAdminClickedCharID(CLibInfoCharCli *pLibInfoChar, PCLayerMap pL
 		if (nHitW < MAPPARTSSIZE) {
 			nHitW = MAPPARTSSIZE;
 		}
-		if (nHitH < MAPPARTSSIZE) {
-			nHitH = MAPPARTSSIZE;
+		if (nHitH < MAPPARTSSIZE * 2) {
+			nHitH = MAPPARTSSIZE * 2;
 		}
 		SetRect(
 			&rcChar,
@@ -791,12 +795,6 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算してタイル境界を正確に計算 */
 	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
 	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
-	{
-		DWORD dwPickedCharID = FindAdminClickedCharID(m_pLibInfoChar, pLayerMap, x, y);
-		if (dwPickedCharID != 0) {
-			SBOP2_PostAdminCharPick(static_cast<unsigned int>(dwPickedCharID));
-		}
-	}
 	nType = m_pMgrData->GetAdminNotifyTypeL();
 	switch (nType) {
 	case ADMINNOTIFYTYPE_CHARID:			// キャラID
@@ -971,6 +969,28 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 			static_cast<WORD>(nPickY),
 			0);
 		m_pSock->Send(&Packet);
+
+		// Web管理画面へ pick 通知を送信（char > item > cell の優先度で情報をまとめて1回送信）
+		{
+			DWORD dwPickedCharID = FindAdminClickedCharID(m_pLibInfoChar, pLayerMap, x, y);
+			DWORD dwPickedItemID = 0;
+			{
+				POINT ptItem = { (x + pLayerMap->m_nViewX) / SCROLLSIZE, (y + pLayerMap->m_nViewY) / SCROLLSIZE };
+				PCInfoItem pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(m_pMap->m_dwMapID, &ptItem);
+				dwPickedItemID = pInfoItem ? pInfoItem->m_dwItemID : 0;
+			}
+			m_pMgrData->SetAdminPick(
+				m_pMap->m_dwMapID,
+				static_cast<WORD>(nPickX),
+				static_cast<WORD>(nPickY),
+				dwPickedCharID);
+			SBOP2_PostAdminPick(
+				static_cast<unsigned int>(m_pMap->m_dwMapID),
+				nPickX,
+				nPickY,
+				static_cast<unsigned int>(dwPickedCharID),
+				static_cast<unsigned int>(dwPickedItemID));
+		}
 	}
 }
 

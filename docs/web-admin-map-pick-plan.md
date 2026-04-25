@@ -74,7 +74,7 @@
 4. 管理画面向け WebSocket チャネル新設（`/ws/admin`）✅ 実装済み — `WebSocketProtocol.h/cpp`, `AdminWsHub.h/cpp`, `HttpServer` Upgrade 分岐, `CSelectionStore` ChangeCallback
 5. Web クライアントからキャラクタークリックを `postMessage` で通知 ✅ 実装済み
 6. キャラクター編集画面で、通知された charId の詳細を自動取得 ✅ 実装済み
-7. ゲーム画面クリックを map_cell / placement / event 選択へ拡張
+7. ゲーム画面クリックを map_cell / placement / event 選択へ拡張（クリック通知: ✅ 実装済み / ゲーム画面内ハイライト: ✅ 実装済み）
 8. 選択対象に応じて右側編集パネルを切り替え
 
 ### 完了条件

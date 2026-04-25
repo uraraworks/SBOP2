@@ -37,7 +37,6 @@
 
 - ゲーム画面上のマップパーツ / イベント配置編集オーバーレイ
 - Web クライアント側からの map_cell / placement / event pick 連携
-- Web クライアント内の選択状態ハイライト表示
 - 他管理者との同時編集カーソル / 競合表示
 
 ## Wave別チェック
@@ -62,12 +61,13 @@
 - [x] サーバー側の選択状態管理
 - [x] 管理画面向け WebSocket `/ws/admin`（`CAdminWsHub` + `selection_changed` broadcast）
 - [x] 管理画面 JS 側の WS 購読実装（次フェーズ）
+- [x] ゲーム画面内の選択ハイライト表示（`MgrData::SetAdminPick` + `LayerMap::DrawAdminPick`）
 - [x] Web / ネイティブ両対応の連携方式を文書化（[web-admin-native-coexistence.md](./web-admin-native-coexistence.md)）
 - [x] Web クライアントを管理画面に埋め込み（`/game/sbocli-title.html`）
 - [x] Debug / Release の `webroot/game` へブラウザ版クライアントを同期するビルド導線
 - [x] Web クライアントから親管理画面へ `postMessage` でキャラクター選択を通知
 - [x] キャラクター編集画面でゲーム内キャラクタークリック時に詳細を再取得
-- [ ] ゲーム画面クリックを map_cell / placement / event 選択にも拡張
+- [x] ゲーム画面クリックを map_cell / placement / event 選択にも拡張
 
 ## Wave 2B: マップ編集の残り
 
@@ -115,19 +115,20 @@
 
 ## 次の実装順
 
-1. Web クライアントのクリック通知をキャラクター以外（マップセル / 配置 / イベント）へ拡張
-2. 右側編集パネルで、現在の選択対象に応じた編集 UI を自動切り替え
-3. Web クライアント内に管理者向け選択ハイライト / オーバーレイを表示
+1. ~~Web クライアントのクリック通知をキャラクター以外（マップセル / 配置 / イベント）へ拡張~~ （実装済み）
+2. ~~右側編集パネルで、現在の選択対象に応じた編集 UI を自動切り替え~~ （実装済み: `handleAdminGamePick` で char/item/cell に応じて自動ナビゲーション）
+3. ~~Web クライアント内に管理者向け選択ハイライト / オーバーレイを表示~~ （実装済み: `MgrData` に AdminPick 状態を追加、`LayerMap::DrawAdminPick` でセル黄色枠・キャラ赤枠を描画）
 
 ## 保留メモ
 
 - 旧 MFC の「選択キャラ」「選択マップ座標」は、管理画面内に埋め込んだ Web クライアントから
   `postMessage` で直接 Web 管理画面へ通知する経路を優先する。サーバー側 selection API / WS は、
   複数管理者間同期やネイティブ管理者との連携が必要な場面で併用する。
-- 現在の直接連携はキャラクター選択のみ実装済み。`StateProcMAP.cpp` で描画座標ベースのヒット判定を行い、
-  `sbop2_admin_char_pick` を親画面へ送信する。
-- 管理画面側は `app.js` の `openCharacterDetailFromGame()` で `character-overview` を開き、
-  `fetchCharacterDetail(charId)` を呼ぶ。
+- 直接連携は char / placement / cell の3種対応済み。`StateProcMAP.cpp` で `sbop2_admin_pick`
+  メッセージ（mapId / cellX / cellY / charId / itemId を含む）を親画面へ送信する。
+  後方互換のため旧 `sbop2_admin_char_pick` メッセージも `handleAdminGameMessage` で受信できる。
+- 管理画面側は `app.js` の `handleAdminGamePick()` で優先度 char > item > cell に応じて
+  自動ナビゲーション（character-overview / map-objects / map-info）を行う。
 - `IDM_DEBUG_*` は恒久 UI ではなく、必要なら開発者向けツールとして別枠に分離する
 - `DlgAdminTalkEvent*` の Web 版（会話イベント editor）は実装済み。共通コンポーネントとして
   `openTalkEventEditor({ talkEventId, onSaved })` で呼び出し可能。宣言的には

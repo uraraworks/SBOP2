@@ -550,6 +550,39 @@ function openCharacterDetailFromGame(charId) {
   fetchCharacterDetail(normalizedCharId);
 }
 
+function handleAdminGamePick(message) {
+  const charId = Number(message.charId) || 0;
+  const itemId = Number(message.itemId) || 0;
+  const mapId = Number(message.mapId) || 0;
+  const cellX = Number(message.cellX) || 0;
+  const cellY = Number(message.cellY) || 0;
+
+  // 優先度: char > item > cell
+  if (charId > 0) {
+    openCharacterDetailFromGame(charId);
+    return;
+  }
+
+  if (itemId > 0 && mapId > 0) {
+    updateAdminGamePickInfo(`選択中の配置物: map=${mapId} (${cellX},${cellY}) item=${itemId}`);
+    if (mapObjectMapSelect) {
+      // map-objects 画面のマップ選択を合わせる（loadMapObjectData の後に反映するため state も更新）
+      mapObjectState.selectedMapId = String(mapId);
+    }
+    navigateTo("map-objects");
+    return;
+  }
+
+  if (mapId > 0) {
+    updateAdminGamePickInfo(`選択中のマップセル: map=${mapId} (${cellX},${cellY})`);
+    mapInfoState.selectedMapId = mapId;
+    navigateTo("map-info");
+    return;
+  }
+
+  updateAdminGamePickInfo("選択中: なし");
+}
+
 function handleAdminGameMessage(event) {
   if (adminGameFrame && event.source !== adminGameFrame.contentWindow) {
     return;
@@ -559,7 +592,12 @@ function handleAdminGameMessage(event) {
     return;
   }
   if (message.kind === "sbop2_admin_char_pick") {
+    // 後方互換
     openCharacterDetailFromGame(message.charId);
+    return;
+  }
+  if (message.kind === "sbop2_admin_pick") {
+    handleAdminGamePick(message);
   }
 }
 
