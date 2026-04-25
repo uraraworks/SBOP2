@@ -248,6 +248,33 @@
       padding: 10px;
       font: 12px/1.5 Consolas, monospace;
     }
+
+    /* 管理者画面の iframe 埋め込み時はゲーム画面のみを表示する */
+    body.admin-embed {
+      min-height: 100vh;
+      background: transparent;
+    }
+    body.admin-embed .layout {
+      width: 100%;
+      padding: 0;
+      gap: 0;
+    }
+    body.admin-embed .panel.header,
+    body.admin-embed .panel.probe,
+    body.admin-embed > main > section.panel:last-of-type {
+      display: none !important;
+    }
+    body.admin-embed .panel.canvas-wrap {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
+      border-radius: 0;
+    }
+    body.admin-embed .canvas-stage {
+      width: min(100vw, 100vh);
+      height: min(100vw, 100vh);
+    }
   </style>
 </head>
 <body>
@@ -299,6 +326,19 @@
   </main>
 
   <script>
+    // URL クエリ ?admin=1 が指定されたら管理者画面の iframe 埋め込みとして
+    // ゲーム画面のみを表示するように body にクラスを付与する
+    (function applyAdminEmbedMode() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('admin') === '1') {
+          document.body.classList.add('admin-embed');
+        }
+      } catch (e) {
+        console.warn('[SBOP2] admin embed query parse failed:', e);
+      }
+    })();
+
     // URL クエリ ?server=host:port を解析して window.sbop2ServerAddr / sbop2ServerPort にセット
     (function parseServerQuery() {
       try {
