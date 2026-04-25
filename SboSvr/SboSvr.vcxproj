@@ -275,6 +275,7 @@
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMapObject.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMapParts.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMapShadow.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapEvent.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMotion.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMotionType.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoSkill.cpp" />
@@ -415,6 +416,7 @@
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMapObject.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMapParts.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMapShadow.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapEvent.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMotion.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMotionType.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoSkill.h" />

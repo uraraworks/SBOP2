@@ -459,6 +459,9 @@
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMapShadow.cpp">
       <Filter>Source Files\SaveLoad</Filter>
     </ClCompile>
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapEvent.cpp">
+      <Filter>Source Files\SaveLoad</Filter>
+    </ClCompile>
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMotion.cpp">
       <Filter>Source Files\SaveLoad</Filter>
     </ClCompile>
@@ -861,6 +864,9 @@
       <Filter>Header Files\SaveLoad No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMapShadow.h">
+      <Filter>Header Files\SaveLoad No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapEvent.h">
       <Filter>Header Files\SaveLoad No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMotion.h">

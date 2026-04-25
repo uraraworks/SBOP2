@@ -210,6 +210,7 @@ void CMgrData::Save(void)
 	CSaveLoadInfoMapObject SaveLoadInfoMapObject;
 	CSaveLoadInfoMapParts SaveLoadInfoMapParts;
 	CSaveLoadInfoMapShadow SaveLoadInfoMapShadow;
+	CSaveLoadInfoMapEvent SaveLoadInfoMapEvent;
 	CSaveLoadInfoEffect SaveLoadInfoEffect;
 	CSaveLoadInfoItemType SaveLoadInfoItemType;
 	CSaveLoadInfoItem SaveLoadInfoItem;
@@ -234,6 +235,7 @@ void CMgrData::Save(void)
 	SaveLoadInfoChar.	Save((PCLibInfoBase)m_pLibInfoChar);
 	SaveLoadInfoDisable.	Save((PCLibInfoBase)m_pLibInfoDisable);
 	SaveLoadInfoMap.	Save((PCLibInfoBase)m_pLibInfoMap);
+	SaveLoadInfoMapEvent.	Save(m_pLibInfoMap);
 	SaveLoadInfoMapObject.	Save((PCLibInfoBase)m_pLibInfoMapObject);
 	SaveLoadInfoMapParts.	Save((PCLibInfoBase)m_pLibInfoMapParts);
 	SaveLoadInfoMapShadow.	Save((PCLibInfoBase)m_pLibInfoMapShadow);
@@ -265,6 +267,7 @@ void CMgrData::Load(void)
 	CSaveLoadInfoMapObject SaveLoadInfoMapObject;
 	CSaveLoadInfoMapParts SaveLoadInfoMapParts;
 	CSaveLoadInfoMapShadow SaveLoadInfoMapShadow;
+	CSaveLoadInfoMapEvent SaveLoadInfoMapEvent;
 	CSaveLoadInfoEffect SaveLoadInfoEffect;
 	CSaveLoadInfoItemType SaveLoadInfoItemType;
 	CSaveLoadInfoItem SaveLoadInfoItem;
@@ -307,6 +310,7 @@ void CMgrData::Load(void)
 	SaveLoadInfoMapObject.	Load((PCLibInfoBase)m_pLibInfoMapObject);
 	SaveLoadInfoMapParts.	Load((PCLibInfoBase)m_pLibInfoMapParts);
 	SaveLoadInfoMapShadow.	Load((PCLibInfoBase)m_pLibInfoMapShadow);
+	SaveLoadInfoMapEvent.	Load(m_pLibInfoMap);	// マップロード後にイベントを復元
 	SaveLoadInfoEffect.	Load((PCLibInfoBase)m_pLibInfoEffect);
 	SaveLoadInfoItemType.	Load((PCLibInfoBase)m_pLibInfoItemType);
 	SaveLoadInfoItem.	Load((PCLibInfoBase)m_pLibInfoItem);

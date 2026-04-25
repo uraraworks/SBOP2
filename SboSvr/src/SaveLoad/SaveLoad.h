@@ -13,6 +13,7 @@
 #include "SaveLoadInfoMapObject.h"	// マップオブジェクト情報
 #include "SaveLoadInfoMapParts.h"	// マップパーツ情報
 #include "SaveLoadInfoMapShadow.h"	// マップ影情報
+#include "SaveLoadInfoMapEvent.h"	// マップイベント情報
 #include "SaveLoadInfoEffect.h"	// エフェクト情報
 #include "SaveLoadInfoItemType.h"	// アイテム種別情報
 #include "SaveLoadInfoItem.h"	// アイテム情報
