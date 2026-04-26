@@ -156,7 +156,8 @@ int CMainFrame::MainLoop(HINSTANCE hInstance)
 
 void CMainFrame::SendToScreenChar(
 	CInfoCharBase *pInfoChar,	// [in] 送信基準のキャラ情報
-	CPacketBase *pPacket)	// [in] 送信パケット
+	CPacketBase *pPacket,	// [in] 送信パケット
+	BOOL bExcludeSelf)	// [in] TRUE の場合、送信元自身をスキップする
 {
 	int i, nCount;
 	PCInfoCharSvr pInfoCharTmp;
@@ -164,6 +165,9 @@ void CMainFrame::SendToScreenChar(
 	nCount = m_pLibInfoChar->GetCountLogIn();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(i);
+		if (bExcludeSelf && (pInfoCharTmp == pInfoChar)) {
+			continue;
+		}
 		if (pInfoCharTmp->IsLogin() == FALSE) {
 			continue;
 		}

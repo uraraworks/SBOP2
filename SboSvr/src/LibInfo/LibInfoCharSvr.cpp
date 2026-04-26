@@ -160,7 +160,7 @@ BOOL CLibInfoCharSvr::Proc(void)
 					TRUE,
 					1,
 					dwNowTime);
-			m_pMainFrame->SendToScreenChar(pInfoChar, &PacketPosSync);
+			m_pMainFrame->SendToScreenChar(pInfoChar, &PacketPosSync, TRUE);
 		}
 	}
 

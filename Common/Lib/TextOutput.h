@@ -7,6 +7,11 @@
 #ifndef _TEXTOUTPUT_H
 #define _TEXTOUTPUT_H
 
+/// @brief CString (SJIS) をログ出力用 UTF-8 に変換するマクロ
+/// 使用例: m_cLog.Write("キャラ名: %s", LOGSTR(pInfoChar->m_strCharName));
+/// ※ このマクロは一時オブジェクトを返すため、呼び出し式の中でのみ有効
+#define LOGSTR(cs) (SjisToUtf8((LPCSTR)(cs)).c_str())
+
 class CTextOutput
 {
 public:

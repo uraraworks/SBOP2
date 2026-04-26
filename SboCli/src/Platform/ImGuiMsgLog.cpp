@@ -40,38 +40,6 @@ static std::string Utf8ToSjis(const char *pszUtf8)
     return sjis;
 }
 
-/// @brief SJIS (CP932) 文字列を UTF-8 に変換する
-/// @param pszSjis SJIS 文字列（NULL 終端）
-/// @return UTF-8 std::string。変換失敗時は空文字列を返す
-static std::string SjisToUtf8(const char *pszSjis)
-{
-    if (pszSjis == NULL || pszSjis[0] == '\0') {
-        return std::string();
-    }
-    // SJIS → UTF-16
-    int nWideLen = MultiByteToWideChar(CP_ACP, 0, pszSjis, -1, NULL, 0);
-    if (nWideLen <= 0) {
-        return std::string(pszSjis);  // 変換失敗時はそのまま返す
-    }
-    std::wstring wstr(nWideLen, L'\0');
-    MultiByteToWideChar(CP_ACP, 0, pszSjis, -1, &wstr[0], nWideLen);
-
-    // UTF-16 → UTF-8
-    int nUtf8Len = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
-    if (nUtf8Len <= 0) {
-        return std::string(pszSjis);  // 変換失敗時はそのまま返す
-    }
-    std::string utf8(nUtf8Len, '\0');
-    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &utf8[0], nUtf8Len, NULL, NULL);
-
-    // WideCharToMultiByte は NULL 終端を含む長さを返すので末尾の '\0' を除去
-    if (!utf8.empty() && utf8.back() == '\0') {
-        utf8.pop_back();
-    }
-
-    return utf8;
-}
-
 CImGuiMsgLog::CImGuiMsgLog()
     : m_pMgrData(NULL)
     , m_bScrollToBottom(false)

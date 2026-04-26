@@ -12,6 +12,8 @@
 #include <atlconv.h>
 #endif
 
+#include <string>
+
 #ifndef MB_ERR_INVALID_CHARS
 #define MB_ERR_INVALID_CHARS 0x00000008
 #endif
@@ -180,6 +182,35 @@ inline CString LegacyAnsiToTString(LPCSTR pszSrc)
 inline CStringA TStringToLegacyAnsi(LPCTSTR pszSrc)
 {
 	return TStringToAnsi(pszSrc, SBO_LEGACY_CODEPAGE);
+}
+
+/// @brief SJIS (CP932) バイト列を UTF-8 に変換する
+/// CString (SJIS) をログ出力に渡す際に使用する
+/// 例: m_cLog.Write("キャラ名: %s", SjisToUtf8(strName));
+inline std::string SjisToUtf8(LPCSTR pszSrc)
+{
+	std::string result;
+	if (pszSrc == NULL || pszSrc[0] == '\0') {
+		return result;
+	}
+#ifdef _WIN32
+	int nWide = MultiByteToWideChar(932, 0, pszSrc, -1, NULL, 0);
+	if (nWide <= 0) {
+		return result;
+	}
+	std::wstring wide(nWide, L'\0');
+	MultiByteToWideChar(932, 0, pszSrc, -1, &wide[0], nWide);
+
+	int nUtf8 = WideCharToMultiByte(CP_UTF8, 0, wide.c_str(), -1, NULL, 0, NULL, NULL);
+	if (nUtf8 <= 0) {
+		return result;
+	}
+	result.resize(nUtf8 - 1);
+	WideCharToMultiByte(CP_UTF8, 0, wide.c_str(), -1, &result[0], nUtf8, NULL, NULL);
+#else
+	result = pszSrc; // 非Windowsでは変換不要 (UTF-8環境前提)
+#endif
+	return result;
 }
 #endif
 

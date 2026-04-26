@@ -43,7 +43,7 @@ public:
 	int	MainLoop(HINSTANCE hInstance);	// メインループ
 
 	// 送信処理
-	void	SendToScreenChar(CInfoCharBase *pInfoChar, CPacketBase *pPacket);	// 指定キャラと同じ画面のキャラへ送信
+	void	SendToScreenChar(CInfoCharBase *pInfoChar, CPacketBase *pPacket, BOOL bExcludeSelf = FALSE);	// 指定キャラと同じ画面のキャラへ送信
 	void	SendToMapChar(DWORD dwMapID, CPacketBase *pPacket);	// 指定マップにいるキャラへ送信
 	void	SendToAdminChar(CPacketBase *pPacket);	// 管理者権限を持っているキャラへ送信
 	void	SendToClient(DWORD dwSessionID, CPacketBase *pPacket);	// セッションIDが有効な場合のみ送信

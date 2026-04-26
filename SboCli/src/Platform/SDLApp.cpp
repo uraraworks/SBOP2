@@ -452,13 +452,6 @@ void CSDLApp::RunFrame(void)
 	{
 		DWORD dwElapsed = dwTimeTmp - m_dwTimeLast;
 		m_dwTimeLast = dwTimeTmp;
-#if defined(__EMSCRIPTEN__)
-		// ブラウザでは headless/RAF 環境で経過時間が極端に小さく見えることがある。
-		// 少なくとも 1 update 分は進めて fade と再描画を止めない。
-		if (dwElapsed < m_dwUpdateInterval) {
-			dwElapsed = m_dwUpdateInterval;
-		}
-#endif
 		m_dwAccumulated += dwElapsed;
 	}
 

@@ -103,7 +103,23 @@ void CTextOutput::WriteProc(
 		goto Exit;
 	}
 
-	// ファイルを追記モードで開く（ファイルが存在しない場合は新規作成）
+	// ファイルが存在しない場合は新規作成して UTF-8 BOM を書き込む
+	{
+		FILE* pCheck = fopen(m_pszFileName, "rb");
+		if (pCheck == NULL) {
+			// 新規ファイル: BOM (EF BB BF) を先頭に書く
+			FILE* pNew = fopen(m_pszFileName, "wb");
+			if (pNew != NULL) {
+				const unsigned char utf8Bom[] = { 0xEF, 0xBB, 0xBF };
+				fwrite(utf8Bom, 1, sizeof(utf8Bom), pNew);
+				fclose(pNew);
+			}
+		} else {
+			fclose(pCheck);
+		}
+	}
+
+	// ファイルを追記モードで開く
 	pFile = fopen(m_pszFileName, "ab");
 	if (pFile == NULL) {
 		goto Exit;
