@@ -187,6 +187,8 @@ void CWindowLOGINBrowser::Create(CMgrData *pMgrData)
 
 	CWindowBase::Create(pMgrData);
 
+	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
+	m_pDib->SetColorKey(0);
 	strAccount = m_pMgrData->GetLastAccount();
 	strPassword = m_pMgrData->GetLastPassword();
 	m_strAccount = strAccount;
@@ -203,6 +205,12 @@ void CWindowLOGINBrowser::Draw(PCImg32 pDst)
 	GetWindowLOGINPasswordRect(&rcPassword);
 	GetWindowLOGINCheckRect(&rcCheck);
 	GetWindowLOGINConnectRect(&rcConnect);
+
+	if (m_dwTimeDrawStart == 0) {
+		DrawFrame(0);
+		m_dwTimeDrawStart = timeGetTime();
+	}
+	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
 
 	g_pBrowserLoginWindow = this;
 	UpdateBrowserDom(rcAccount, rcPassword, rcCheck, rcConnect);

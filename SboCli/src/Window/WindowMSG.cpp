@@ -10,6 +10,7 @@
 #include "MgrData.h"
 #include "MgrGrpData.h"
 #include "WindowMSG.h"
+#include "../Platform/SdlFont.h"
 
 CWindowMSG::CWindowMSG()
 {
@@ -96,7 +97,15 @@ void CWindowMSG::SetMsg(LPCSTR pszMsg, DWORD dwTime, int nType)
 	m_dwTimeDrawStart	= 0;
 	m_dwDeleteTime	= dwTime;
 	m_dwLastTimerProc	= timeGetTime();
-	m_sizeWindow.cx	= 16 * 3 + (m_strMsg.GetLength() * 8);
+	int nTextWidth = 0;
+	int nTextHeight = 0;
+	if (m_hFont != NULL && m_strMsg.IsEmpty() == FALSE) {
+		SdlFontGetTextExtent((void*)m_hFont, (LPCTSTR)m_strMsg, m_strMsg.GetLength(), &nTextWidth, &nTextHeight);
+	}
+	if (nTextWidth <= 0) {
+		nTextWidth = m_strMsg.GetLegacyStoreLength() * 8;
+	}
+	m_sizeWindow.cx = 16 * 2 + nTextWidth;
 	m_ptViewPos.x	= SCRSIZEX / 2 - m_sizeWindow.cx / 2;
 
 	if (nType == 4) {

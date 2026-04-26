@@ -18,7 +18,8 @@
 // フォントエントリ
 struct SdlFontEntry {
     TTF_Font* pFont;
-    int height;
+    int height;       // 呼び出し側が要求したセル高（ピクセル）
+    int yOffset;      // 描画時の Y シフト量（負値: 上に詰める）
     bool bold;
 };
 
@@ -96,11 +97,20 @@ void* SdlFontCreate(int height, bool bold)
         return nullptr;
     }
 
+    // Noto Sans CJK は TTF_FontHeight が ptsize より大きくなる場合がある。
+    // ptsize は要求値のまま使い、はみ出し分は描画時に Y オフセットで吸収する。
+    int actualHeight = TTF_FontHeight(pFont);
+    // 上下中央寄せ: はみ出し分の半分を上、半分を下に逃がす
+    // 例: height=16, actual=22 → yOffset=-3（上3px・下3pxにオーバーフロー）
+    int yOffset = (actualHeight > height) ? ((height - actualHeight) / 2) : 0;
+    SDL_Log("SdlFontCreate: height=%d actual=%d yOffset=%d", height, actualHeight, yOffset);
+
     // エントリ登録
     void* id = (void*)(s_nextFontId++);
     SdlFontEntry entry;
     entry.pFont = pFont;
     entry.height = height;
+    entry.yOffset = yOffset;
     entry.bold = bold;
     s_fontMap[id] = entry;
 
@@ -158,6 +168,13 @@ static TTF_Font* GetTTFFont(void* hFont)
         return it->second.pFont;
     }
     return nullptr;
+}
+
+// フォントエントリ全体を取得するヘルパー
+static const SdlFontEntry* GetFontEntry(void* hFont)
+{
+    auto it = s_fontMap.find(hFont);
+    return (it != s_fontMap.end()) ? &it->second : nullptr;
 }
 
 // SDL_SurfaceのピクセルをCImg32バッファにブレンド描画
@@ -229,8 +246,9 @@ bool SdlFontTextOut(void* hDC, int x, int y, const wchar_t* pStr, int nLen)
     SdlDCContext* ctx = SdlDCGet(hDC);
     if (!ctx || !ctx->currentFont) return false;
 
-    TTF_Font* pFont = GetTTFFont(ctx->currentFont);
-    if (!pFont) return false;
+    const SdlFontEntry* entry = GetFontEntry(ctx->currentFont);
+    if (!entry || !entry->pFont) return false;
+    TTF_Font* pFont = entry->pFont;
 
     // ワイド文字をUTF-8に変換
     std::string utf8 = WideToUtf8(pStr, nLen);
@@ -247,9 +265,9 @@ bool SdlFontTextOut(void* hDC, int x, int y, const wchar_t* pStr, int nLen)
     SDL_Surface* pSurf = TTF_RenderUTF8_Blended(pFont, utf8.c_str(), color);
     if (!pSurf) return false;
 
-    // CImg32バッファに転送
+    // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
-                         ctx->width, ctx->height, x, y);
+                         ctx->width, ctx->height, x, y + entry->yOffset);
 
     SDL_FreeSurface(pSurf);
     return true;
@@ -261,8 +279,9 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
     SdlDCContext* ctx = SdlDCGet(hDC);
     if (!ctx || !ctx->currentFont) return false;
 
-    TTF_Font* pFont = GetTTFFont(ctx->currentFont);
-    if (!pFont) return false;
+    const SdlFontEntry* entry = GetFontEntry(ctx->currentFont);
+    if (!entry || !entry->pFont) return false;
+    TTF_Font* pFont = entry->pFont;
 
     // Win32 版と同じく pStr は SJIS(CP932) 前提。TTF_RenderUTF8_Blended は
     // UTF-8 を要求するため、SJIS → wstring → UTF-8 で変換してから渡す。
@@ -280,8 +299,9 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
     SDL_Surface* pSurf = TTF_RenderUTF8_Blended(pFont, text.c_str(), color);
     if (!pSurf) return false;
 
+    // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
-                         ctx->width, ctx->height, x, y);
+                         ctx->width, ctx->height, x, y + entry->yOffset);
 
     SDL_FreeSurface(pSurf);
     return true;
@@ -290,16 +310,17 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
 // テキストサイズ取得
 bool SdlFontGetTextExtent(void* hFont, const wchar_t* pStr, int nLen, int* pWidth, int* pHeight)
 {
-    TTF_Font* pFont = GetTTFFont(hFont);
-    if (!pFont || !pStr || nLen <= 0) return false;
+    const SdlFontEntry* entry = GetFontEntry(hFont);
+    if (!entry || !entry->pFont || !pStr || nLen <= 0) return false;
 
     std::string utf8 = WideToUtf8(pStr, nLen);
     int w = 0, h = 0;
-    if (TTF_SizeUTF8(pFont, utf8.c_str(), &w, &h) != 0) {
+    if (TTF_SizeUTF8(entry->pFont, utf8.c_str(), &w, &h) != 0) {
         return false;
     }
     if (pWidth) *pWidth = w;
-    if (pHeight) *pHeight = h;
+    // 呼び出し側のレイアウトとの整合のため、要求セル高を返す
+    if (pHeight) *pHeight = entry->height;
     return true;
 }
 

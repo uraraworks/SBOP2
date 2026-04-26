@@ -683,7 +683,7 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	SIZE sizeText = { textW, textH };
 
 	int nWidth = sizeText.cx + 8; // 余白
-	int nHeight = 36;
+	int nHeight = 40;
 
 	m_pDibMapName = new CImg32;
 	m_pDibMapName->Create(nWidth, nHeight);
