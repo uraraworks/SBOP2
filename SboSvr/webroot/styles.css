@@ -682,6 +682,10 @@ main {
   padding: 0;
 }
 
+.map-parts-gallery.is-compact {
+  grid-template-columns: repeat(auto-fill, 32px);
+}
+
 .map-parts-gallery-message {
   grid-column: 1 / -1;
   padding: 1.25rem;

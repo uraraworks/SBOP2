@@ -91,6 +91,13 @@ const mapPartsSaveBtn = document.getElementById("map-parts-save-btn");
 const mapPartsCreateBtn = document.getElementById("map-parts-create-btn");
 const mapPartsDeleteBtn = document.getElementById("map-parts-delete-btn");
 
+/* マップパーツ配置 */
+const mapPartsPlaceMapSelect = document.getElementById("map-parts-place-map");
+const mapPartsPlaceEditMasterBtn = document.getElementById("map-parts-place-edit-master-btn");
+const mapPartsPlaceSelectedLabel = document.getElementById("map-parts-place-selected-label");
+const mapPartsPlaceFeedbackEl = document.getElementById("map-parts-place-feedback");
+const mapPartsPlaceGallery = document.getElementById("map-parts-place-gallery");
+
 /* マップ情報編集 */
 const mapInfoSelect = document.getElementById("map-info-select");
 const mapInfoSummaryEl = document.getElementById("map-info-summary");
@@ -202,6 +209,12 @@ const mapPartsState = {
   sheets: [],
   isLoading: false,
   loadError: null
+};
+
+/* マップパーツ配置画面の状態 */
+const mapPartsPlaceState = {
+  selectedMapId: null,
+  selectedPartsId: null,
 };
 
 /* マップ情報編集画面の状態 */
@@ -2225,6 +2238,117 @@ function applyMapPartsFilters() {
   renderMapPartsPreview();
   updateMapPartsSummary();
 }
+/* ---- マップパーツ配置画面 ---- */
+
+function populateMapPartsPlaceMapOptions() {
+  if (!mapPartsPlaceMapSelect) {
+    return;
+  }
+  mapPartsPlaceMapSelect.innerHTML = "";
+  const maps = mapObjectState.maps;
+  if (!maps.length) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "（マップなし）";
+    mapPartsPlaceMapSelect.appendChild(opt);
+    return;
+  }
+  maps.forEach((map) => {
+    const opt = document.createElement("option");
+    opt.value = String(map.id);
+    opt.textContent = map.name || `マップ ${map.id}`;
+    mapPartsPlaceMapSelect.appendChild(opt);
+  });
+  if (mapPartsPlaceState.selectedMapId && maps.some((m) => m.id === mapPartsPlaceState.selectedMapId)) {
+    mapPartsPlaceMapSelect.value = String(mapPartsPlaceState.selectedMapId);
+  } else if (maps.length) {
+    mapPartsPlaceState.selectedMapId = maps[0].id;
+    mapPartsPlaceMapSelect.value = String(maps[0].id);
+  }
+}
+
+function renderMapPartsPlaceGallery(partsList) {
+  if (!mapPartsPlaceGallery) {
+    return;
+  }
+  mapPartsPlaceGallery.innerHTML = "";
+  if (!partsList || !partsList.length) {
+    const msg = document.createElement("div");
+    msg.className = "map-parts-gallery-message";
+    msg.textContent = "表示できるマップパーツがありません";
+    mapPartsPlaceGallery.appendChild(msg);
+    return;
+  }
+  const tileSize = mapPartsState.tileSize || 16;
+  const previewScale = 2;
+  const previewTileSize = tileSize * previewScale;
+
+  partsList.slice().sort((a, b) => a.partsId - b.partsId).forEach((part) => {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "map-parts-entry";
+    item.dataset.partId = String(part.partsId);
+    item.setAttribute("role", "listitem");
+    item.setAttribute("aria-label", `パーツID ${part.partsId}`);
+    if (part.partsId === mapPartsPlaceState.selectedPartsId) {
+      item.classList.add("is-selected");
+    }
+    item.setAttribute("aria-pressed", part.partsId === mapPartsPlaceState.selectedPartsId ? "true" : "false");
+
+    const thumb = document.createElement("div");
+    thumb.className = "map-parts-thumb";
+    const baseLayer = document.createElement("div");
+    baseLayer.className = "map-parts-tile";
+    const overlayLayer = document.createElement("div");
+    overlayLayer.className = "map-parts-tile overlay";
+    thumb.appendChild(baseLayer);
+    thumb.appendChild(overlayLayer);
+
+    thumb.style.width = "100%";
+    thumb.style.height = "100%";
+    baseLayer.dataset.previewScale = String(previewScale);
+    baseLayer.dataset.tilePixelSize = String(previewTileSize);
+    overlayLayer.dataset.previewScale = String(previewScale);
+    overlayLayer.dataset.tilePixelSize = String(previewTileSize);
+
+    updateSpriteLayer(baseLayer, part.sprites.base);
+    updateSpriteLayer(overlayLayer, part.sprites.overlay);
+
+    item.appendChild(thumb);
+
+    item.addEventListener("click", () => {
+      mapPartsPlaceState.selectedPartsId = part.partsId;
+      if (mapPartsPlaceSelectedLabel) {
+        const hexId = `0x${part.partsId.toString(16).toUpperCase().padStart(4, "0")}`;
+        const name = part.name || `パーツ ${part.partsId}`;
+        mapPartsPlaceSelectedLabel.textContent = `選択中: ${name} (ID: ${hexId})`;
+      }
+      mapPartsPlaceGallery.querySelectorAll(".map-parts-entry").forEach((el) => {
+        el.classList.toggle("is-selected", el.dataset.partId === String(part.partsId));
+        el.setAttribute("aria-pressed", el.dataset.partId === String(part.partsId) ? "true" : "false");
+      });
+    });
+
+    mapPartsPlaceGallery.appendChild(item);
+  });
+}
+
+async function initializeMapPartsPlaceView() {
+  // マップ一覧は mapObjectState を流用（未ロードなら読み込む）
+  if (!mapObjectState.maps.length && !mapObjectState.isLoading && !mapObjectState.loadError) {
+    await loadMapObjectData(false);
+  }
+  populateMapPartsPlaceMapOptions();
+
+  // パーツ一覧は mapPartsState を流用（未ロードなら読み込む）
+  if (!mapPartsState.parts.length && !mapPartsState.isLoading && !mapPartsState.loadError) {
+    await loadMapPartsData(false);
+  }
+  renderMapPartsPlaceGallery(mapPartsState.parts);
+}
+
+/* ---- マップパーツ配置画面 ここまで ---- */
+
 function renderMapPartsGallery() {
   if (!mapPartsGallery) {
     return;
@@ -3375,6 +3499,10 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "map-parts-place") {
+    initializeMapPartsPlaceView();
+  }
+
   if (normalized === "map-shadows") {
     if (options.forceReload || (!mapShadowState.shadows.length && !mapShadowState.isLoading && !mapShadowState.loadError)) {
       loadMapShadowList();
@@ -3618,6 +3746,21 @@ window.addEventListener("load", () => {
   if (mapWindowMapSelect) {
     mapWindowMapSelect.addEventListener("change", handleMapWindowSelectChange);
     initializeMapWindowView();
+  }
+
+  /* マップパーツ配置 */
+  if (mapPartsPlaceMapSelect) {
+    mapPartsPlaceMapSelect.addEventListener("change", () => {
+      const id = parseInt(mapPartsPlaceMapSelect.value, 10);
+      if (Number.isFinite(id)) {
+        mapPartsPlaceState.selectedMapId = id;
+      }
+    });
+  }
+  if (mapPartsPlaceEditMasterBtn) {
+    mapPartsPlaceEditMasterBtn.addEventListener("click", () => {
+      navigateTo("map-parts");
+    });
   }
 
   if (mapObjectMapSelect) {

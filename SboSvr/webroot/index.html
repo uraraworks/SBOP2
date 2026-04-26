@@ -37,6 +37,7 @@
         <li><a href="#map-events" data-route="map-events" class="nav-link">マップイベント一覧</a></li>
         <li><a href="#talk-events" data-route="talk-events" class="nav-link">会話イベント編集</a></li>
         <li><a href="#map-parts" data-route="map-parts" class="nav-link">マップパーツ編集</a></li>
+        <li><a href="#map-parts-place" data-route="map-parts-place" class="nav-link">マップパーツ配置</a></li>
         <li><a href="#map-object-templates" data-route="map-object-templates" class="nav-link">オブジェクトテンプレート管理</a></li>
         <li><a href="#map-window" data-route="map-window" class="nav-link">マップウィンドウ</a></li>
         <li><a href="#map-shadows" data-route="map-shadows" class="nav-link">マップ影カタログ編集</a></li>
@@ -1303,6 +1304,18 @@
           </div>
         </form>
         <p id="map-shadow-edit-feedback" class="form-feedback" aria-live="polite"></p>
+      </section>
+    </div>
+    <div class="view" data-view="map-parts-place">
+      <section class="card">
+        <h2>マップパーツ配置</h2>
+        <div class="map-object-controls">
+          <label>マップ <select id="map-parts-place-map"></select></label>
+          <button type="button" id="map-parts-place-edit-master-btn">パーツマスタ編集</button>
+        </div>
+        <p id="map-parts-place-selected-label" aria-live="polite">選択中: なし</p>
+        <p id="map-parts-place-feedback" class="result-message" role="status"></p>
+        <div id="map-parts-place-gallery" class="map-parts-gallery is-compact"></div>
       </section>
     </div>
     <div class="view" data-view="map-objects">
