@@ -721,6 +721,20 @@
       Module.setStatus('例外発生');
       appendLogLine(String(message));
     };
+
+    // Web管理画面からのモード切替・パーツID通知を受信
+    window.addEventListener("message", function(ev) {
+      if (!ev.data || typeof ev.data !== "object") return;
+      if (ev.data.kind === "sbop2_set_admin_mode") {
+        if (Module && Module.ccall) {
+          Module.ccall("SBOP2_SetWebAdminMode", null, ["number"], [Number(ev.data.mode) || 0]);
+        }
+      } else if (ev.data.kind === "sbop2_set_admin_parts_id") {
+        if (Module && Module.ccall) {
+          Module.ccall("SBOP2_SetWebAdminSelectedPartsID", null, ["number"], [Number(ev.data.partsId) || 0]);
+        }
+      }
+    });
   </script>
   {{{ SCRIPT }}}
 </body>

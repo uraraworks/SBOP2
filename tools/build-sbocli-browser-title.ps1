@@ -489,7 +489,7 @@ $linkArgs = @(
     "-sASSERTIONS=0",
     "-sSTACK_SIZE=2097152",
     "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','HEAPU8']",
-    "-sEXPORTED_FUNCTIONS=['_main','_malloc','_free']",
+    "-sEXPORTED_FUNCTIONS=['_main','_malloc','_free','_SBOP2_SetWebAdminMode','_SBOP2_SetWebAdminSelectedPartsID']",
     "-sDISABLE_EXCEPTION_CATCHING=0",
     "-lwebsocket",
     "-sENVIRONMENT=web",

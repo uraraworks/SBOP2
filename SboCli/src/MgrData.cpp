@@ -71,6 +71,8 @@ CMgrData::CMgrData()
 	m_dwAdminPickCharID		= 0;
 	m_wAdminPickCellX		= 0;
 	m_wAdminPickCellY		= 0;
+	m_wWebAdminSelectedPartsID	= 0;
+	m_nWebAdminMode			= 0;
 	m_bLocalTitleMode		= FALSE;
 	m_bDisableLogin			= FALSE;
 	m_bSavePassword			= FALSE;

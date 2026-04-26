@@ -79,6 +79,7 @@
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
+#include <emscripten/emscripten.h>
 EM_JS(void, SBOP2_PostAdminPick, (unsigned int mapId, int cellX, int cellY, unsigned int charId, unsigned int itemId), {
 	if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
 		window.parent.postMessage({
@@ -91,8 +92,37 @@ EM_JS(void, SBOP2_PostAdminPick, (unsigned int mapId, int cellX, int cellY, unsi
 		}, '*');
 	}
 });
+
+EM_JS(void, SBOP2_PostAdminPickupParts, (unsigned int mapId, int cellX, int cellY, unsigned int partsId), {
+	if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+		window.parent.postMessage({
+			kind: 'sbop2_admin_pickup_parts',
+			mapId: mapId, cellX: cellX, cellY: cellY, partsId: partsId
+		}, '*');
+	}
+});
+
+static CMgrData *s_pMgrDataForAdminMode = NULL;
+
+extern "C" {
+	EMSCRIPTEN_KEEPALIVE void SBOP2_SetWebAdminMode(int mode)
+	{
+		if (s_pMgrDataForAdminMode != NULL) {
+			s_pMgrDataForAdminMode->SetWebAdminMode(mode);
+		}
+	}
+	EMSCRIPTEN_KEEPALIVE void SBOP2_SetWebAdminSelectedPartsID(int partsId)
+	{
+		if (s_pMgrDataForAdminMode != NULL) {
+			s_pMgrDataForAdminMode->SetWebAdminSelectedPartsID(static_cast<WORD>(partsId));
+		}
+	}
+}
 #else
 static void SBOP2_PostAdminPick(unsigned int, int, int, unsigned int, unsigned int)
+{
+}
+static void SBOP2_PostAdminPickupParts(unsigned int, int, int, unsigned int)
 {
 }
 #endif
@@ -270,6 +300,10 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 	m_pLibInfoChar		= pMgrData->GetLibInfoChar();
 	m_pLibInfoMap		= pMgrData->GetLibInfoMap();
 	m_pLibInfoItem		= pMgrData->GetLibInfoItem();
+
+#if defined(__EMSCRIPTEN__)
+	s_pMgrDataForAdminMode = pMgrData;
+#endif
 
 	m_pImGuiMsgLog = new CImGuiMsgLog;
 	m_pImGuiMsgLog->Init(m_pMgrData);
@@ -795,6 +829,25 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算してタイル境界を正確に計算 */
 	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
 	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
+
+	// Web管理モード分岐（partsモードは独自処理、charモードは既存処理に流す）
+	{
+		int nWebMode = m_pMgrData->GetWebAdminMode();
+		if (nWebMode == 2) {	// parts モード: 選択中パーツID > 0 なら配置
+			WORD wPartsID = m_pMgrData->GetWebAdminSelectedPartsID();
+			if (wPartsID > 0 && m_pMap != NULL) {
+				int nCellX = (xx / MAPPARTSSIZE) + nMapX;
+				int nCellY = (yy / MAPPARTSSIZE) + nMapY;
+				m_pMap->SetParts(nCellX, nCellY, wPartsID);
+				CPacketADMIN_MAP_SETPARTS Packet;
+				Packet.Make(m_pMap->m_dwMapID, nCellX, nCellY, wPartsID, FALSE);
+				m_pSock->Send(&Packet);
+			}
+			return;	// 既存処理（pick 含む）はスキップ
+		}
+		// char モード (nWebMode == 1) は既存処理に流す
+	}
+
 	nType = m_pMgrData->GetAdminNotifyTypeL();
 	switch (nType) {
 	case ADMINNOTIFYTYPE_CHARID:			// キャラID
@@ -1012,6 +1065,27 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算 */
 	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
 	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
+
+	// Web管理モード分岐
+	{
+		int nWebMode = m_pMgrData->GetWebAdminMode();
+		if (nWebMode == 2) {	// parts モード: 右クリックでパーツID取得 → 親へ通知
+			if (m_pMap != NULL) {
+				int nCellX = (xx / MAPPARTSSIZE) + nMapX;
+				int nCellY = (yy / MAPPARTSSIZE) + nMapY;
+				WORD wPickedPartsID = m_pMap->GetParts(nCellX, nCellY);
+				m_pMgrData->SetWebAdminSelectedPartsID(wPickedPartsID);
+				SBOP2_PostAdminPickupParts(
+					static_cast<unsigned int>(m_pMap->m_dwMapID),
+					nCellX, nCellY,
+					static_cast<unsigned int>(wPickedPartsID));
+			}
+			return;
+		}
+		if (nWebMode == 1) {	// char モード: 右クリックは何もしない
+			return;
+		}
+	}
 
 	switch (m_pMgrData->GetAdminNotifyTypeR()) {
 	case ADMINNOTIFYTYPE_MAPEDIT:			// マップ編集(通知は無し)

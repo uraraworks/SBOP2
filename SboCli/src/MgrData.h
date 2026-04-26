@@ -109,6 +109,12 @@ public:
 		m_dwAdminPickCharID = 0;
 	}
 
+	// Web 管理画面のアクティブビューに応じたモード（0=free, 1=char, 2=parts）
+	void			SetWebAdminMode(int nMode)					{ m_nWebAdminMode = nMode;					}	// Web 管理モードを設定
+	int				GetWebAdminMode(void)						{ return m_nWebAdminMode;					}	// Web 管理モードを取得
+	void			SetWebAdminSelectedPartsID(WORD wPartsID)	{ m_wWebAdminSelectedPartsID = wPartsID;	}	// Web 管理 partsモード選択中パーツIDを設定
+	WORD			GetWebAdminSelectedPartsID(void)			{ return m_wWebAdminSelectedPartsID;		}	// Web 管理 partsモード選択中パーツIDを取得
+
 	void			SetLastAccount(LPCSTR pszAccount)		{ m_strLastAccount = pszAccount;	}	// 最終アカウント名を設定
 	LPCSTR			GetLastAccount(void)					{ return m_strLastAccount;			}	// 最終アカウント名を取得
 	void			SetLastPassword(LPCSTR pszPassword)		{ m_strLastPassword = pszPassword;	}	// 最終パスワードを設定
@@ -263,7 +269,9 @@ private:
 	DWORD				m_dwAdminPickMapID,			// 管理者ハイライトのマップID（0=無効）
 						m_dwAdminPickCharID;		// 管理者ハイライトのキャラID（0=無効）
 	WORD				m_wAdminPickCellX,			// 管理者ハイライトのセルX座標
-						m_wAdminPickCellY;			// 管理者ハイライトのセルY座標
+						m_wAdminPickCellY,			// 管理者ハイライトのセルY座標
+						m_wWebAdminSelectedPartsID;	// Web 管理 partsモードで選択中のパーツID
+	int					m_nWebAdminMode;			// Web 管理画面のモード（0=free, 1=char, 2=parts）
 	BYTE				m_byViewGrid;				// グリッド表示
 	GUID				m_stInputGuid;				// 入力パッドのGUID
 	SIZE				m_sizeDlgMapPartsEdit,		// マップパーツ編集ダイアログサイズ

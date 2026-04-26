@@ -1744,17 +1744,19 @@ void CLayerMap::DrawAdminPick(CImg32 *pDst)
 	int nViewX = m_nViewX;
 	int nViewY = m_nViewY;
 
-	// セルハイライト（黄色枠）
-	int cellX = m_pMgrData->GetAdminPickCellX();
-	int cellY = m_pMgrData->GetAdminPickCellY();
-	int sx = cellX * MAPPARTSSIZE - nViewX;
-	int sy = cellY * MAPPARTSSIZE - nViewY;
-	pDst->Rectangle(sx, sy, MAPPARTSSIZE, MAPPARTSSIZE, RGB(255, 255, 0));
-	pDst->Rectangle(sx + 1, sy + 1, MAPPARTSSIZE - 2, MAPPARTSSIZE - 2, RGB(255, 255, 0));
+	// セルハイライト（黄色枠）: char モード(1)では非表示
+	if (m_pMgrData->GetWebAdminMode() != 1) {
+		int cellX = m_pMgrData->GetAdminPickCellX();
+		int cellY = m_pMgrData->GetAdminPickCellY();
+		int sx = cellX * MAPPARTSSIZE - nViewX;
+		int sy = cellY * MAPPARTSSIZE - nViewY;
+		pDst->Rectangle(sx, sy, MAPPARTSSIZE, MAPPARTSSIZE, RGB(255, 255, 0));
+		pDst->Rectangle(sx + 1, sy + 1, MAPPARTSSIZE - 2, MAPPARTSSIZE - 2, RGB(255, 255, 0));
+	}
 
-	// キャラハイライト（赤枠、セル枠より上に重ねる）
+	// キャラハイライト（赤枠、セル枠より上に重ねる）: parts モード(2)では非表示
 	DWORD dwCharID = m_pMgrData->GetAdminPickCharID();
-	if (dwCharID != 0) {
+	if (dwCharID != 0 && m_pMgrData->GetWebAdminMode() != 2) {
 		int nCount = m_pLibInfoChar->GetCount();
 		for (int i = 0; i < nCount; i++) {
 			PCInfoCharCli pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);

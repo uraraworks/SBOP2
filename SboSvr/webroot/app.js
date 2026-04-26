@@ -611,6 +611,13 @@ function handleAdminGameMessage(event) {
   }
   if (message.kind === "sbop2_admin_pick") {
     handleAdminGamePick(message);
+    return;
+  }
+  if (message.kind === "sbop2_admin_pickup_parts") {
+    // 右クリックでゲーム側が拾ったパーツIDをギャラリー選択に反映
+    if (typeof message.partsId === "number" && message.partsId > 0) {
+      selectMapPartsPlaceItem(message.partsId);
+    }
   }
 }
 
@@ -2267,6 +2274,30 @@ function populateMapPartsPlaceMapOptions() {
   }
 }
 
+/**
+ * map-parts-place ギャラリーでパーツIDを選択し、ラベル・aria・iframe への通知を一括更新する。
+ * @param {number} partsId
+ * @param {string} [name]
+ */
+function selectMapPartsPlaceItem(partsId, name) {
+  mapPartsPlaceState.selectedPartsId = partsId;
+  if (mapPartsPlaceSelectedLabel) {
+    const hexId = `0x${partsId.toString(16).toUpperCase().padStart(4, "0")}`;
+    const displayName = name || `パーツ ${partsId}`;
+    mapPartsPlaceSelectedLabel.textContent = `選択中: ${displayName} (ID: ${hexId})`;
+  }
+  if (mapPartsPlaceGallery) {
+    mapPartsPlaceGallery.querySelectorAll(".map-parts-entry").forEach((el) => {
+      el.classList.toggle("is-selected", el.dataset.partId === String(partsId));
+      el.setAttribute("aria-pressed", el.dataset.partId === String(partsId) ? "true" : "false");
+    });
+  }
+  // ゲーム iframe へ選択中パーツIDを通知
+  if (adminGameFrame && adminGameFrame.contentWindow) {
+    adminGameFrame.contentWindow.postMessage({ kind: "sbop2_set_admin_parts_id", partsId: partsId }, "*");
+  }
+}
+
 function renderMapPartsPlaceGallery(partsList) {
   if (!mapPartsPlaceGallery) {
     return;
@@ -2317,16 +2348,7 @@ function renderMapPartsPlaceGallery(partsList) {
     item.appendChild(thumb);
 
     item.addEventListener("click", () => {
-      mapPartsPlaceState.selectedPartsId = part.partsId;
-      if (mapPartsPlaceSelectedLabel) {
-        const hexId = `0x${part.partsId.toString(16).toUpperCase().padStart(4, "0")}`;
-        const name = part.name || `パーツ ${part.partsId}`;
-        mapPartsPlaceSelectedLabel.textContent = `選択中: ${name} (ID: ${hexId})`;
-      }
-      mapPartsPlaceGallery.querySelectorAll(".map-parts-entry").forEach((el) => {
-        el.classList.toggle("is-selected", el.dataset.partId === String(part.partsId));
-        el.setAttribute("aria-pressed", el.dataset.partId === String(part.partsId) ? "true" : "false");
-      });
+      selectMapPartsPlaceItem(part.partsId, part.name);
     });
 
     mapPartsPlaceGallery.appendChild(item);
@@ -3552,6 +3574,17 @@ function activateRoute(route, options = {}) {
     if (options.forceReload || !auditLogState.loaded) {
       loadAuditLogList();
     }
+  }
+
+  // ゲーム iframe へ Web管理モードを通知
+  if (adminGameFrame && adminGameFrame.contentWindow) {
+    let adminMode = 0;
+    if (normalized === "character-overview") {
+      adminMode = 1;
+    } else if (normalized === "map-parts-place") {
+      adminMode = 2;
+    }
+    adminGameFrame.contentWindow.postMessage({ kind: "sbop2_set_admin_mode", mode: adminMode }, "*");
   }
 
   currentRoute = normalized;
