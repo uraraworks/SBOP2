@@ -8869,3 +8869,8 @@ if (document.readyState === "loading") {
 } else {
   bindTalkEventEditor();
 }
+
+// 管理画面全体で右クリックコンテキストメニューを抑止する
+document.addEventListener("contextmenu", function (ev) {
+  ev.preventDefault();
+});
