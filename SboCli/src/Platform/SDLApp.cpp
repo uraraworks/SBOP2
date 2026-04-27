@@ -462,6 +462,18 @@ void CSDLApp::RunFrame(void)
 				m_bDrawPending = TRUE;
 				break;
 
+#if !defined(__EMSCRIPTEN__)
+			case SDL_WINDOWEVENT_CLOSE:
+				// メイン窓の×ボタンが押された場合に終了フラグをセットする。
+				// サブ窓が存在すると最後のウィンドウではないため SDL_QUIT が自動発行されないので
+				// 明示的に終了を通知する。
+				if (m_Window.GetSDLWindow() != NULL &&
+				    sdlEvent.window.windowID == SDL_GetWindowID(m_Window.GetSDLWindow())) {
+					m_bQuit = TRUE;
+				}
+				break;
+#endif
+
 			default:
 				break;
 			}

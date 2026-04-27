@@ -224,7 +224,10 @@ BOOL CImGuiSubWindow::PumpTextInput(SDL_Window *pFocusWindow)
     if (m_pWindow == NULL || m_pCtx == NULL) {
         return FALSE;
     }
-    if (pFocusWindow != m_pWindow) {
+    // SDL_GetKeyboardFocus() がこのサブ窓を返す場合にフォーカスありと判定する。
+    // pFocusWindow が NULL の場合（フォーカス窓なし）も SDL_GetKeyboardFocus で再確認する。
+    SDL_Window *pActualFocus = (pFocusWindow != NULL) ? pFocusWindow : SDL_GetKeyboardFocus();
+    if (pActualFocus != m_pWindow) {
         return FALSE;
     }
     // このサブ窓がフォーカスを持っている

@@ -126,8 +126,9 @@ void CImGuiMsgLog::Draw()
     // チャット入力
     ImGui::Separator();
 
-    // 次フレームでフォーカスを戻す必要がある場合はここで予約する
-    if (m_bFocusInput) {
+    // 次フレームでフォーカスを戻す必要がある場合、またはウィンドウが初回表示された場合は
+    // InputText にフォーカスを当てる（IsWindowAppearing() は初回 Begin 時のみ true になる）
+    if (m_bFocusInput || ImGui::IsWindowAppearing()) {
         ImGui::SetKeyboardFocusHere(0);
         m_bFocusInput = false;
     }
