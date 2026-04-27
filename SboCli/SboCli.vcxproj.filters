@@ -465,6 +465,9 @@
     <ClCompile Include="src\Platform\ImGuiDbg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\ImGuiSubWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\Window\WindowACCOUNTINFO.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
@@ -966,6 +969,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\ImGuiDbg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\ImGuiSubWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\WindowACCOUNTINFO.h">

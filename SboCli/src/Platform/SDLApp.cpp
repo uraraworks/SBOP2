@@ -134,6 +134,10 @@ CSDLApp::CSDLApp()
 	m_bQuit = FALSE;
 	m_bDestroyCalled = FALSE;
 	m_bImGuiInitialized = FALSE;
+#if !defined(__EMSCRIPTEN__)
+	m_pSubDbg = NULL;
+	m_pSubLog = NULL;
+#endif
 	m_dwMainLoopCallCount = 0;
 	m_dwOnFrameCallCount = 0;
 	m_dwMaxRunFrameThisSec = 0;
@@ -191,6 +195,18 @@ BOOL CSDLApp::Init(void)
 void CSDLApp::Destroy(void)
 {
 	ShutdownImGui();
+#if !defined(__EMSCRIPTEN__)
+	if (m_pSubDbg != NULL) {
+		m_pSubDbg->Destroy();
+		delete m_pSubDbg;
+		m_pSubDbg = NULL;
+	}
+	if (m_pSubLog != NULL) {
+		m_pSubLog->Destroy();
+		delete m_pSubLog;
+		m_pSubLog = NULL;
+	}
+#endif
 	m_Window.Destroy();
 	if (m_bInitialized) {
 #if !defined(_WINDLL)
@@ -277,6 +293,24 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 
 	InitImGui(m_Window.GetRenderer());
 
+#if !defined(__EMSCRIPTEN__)
+	// サブウィンドウ生成（デバッグ / メッセージログ）
+	m_pSubDbg = new CImGuiSubWindow();
+	if (!m_pSubDbg->Create(u8"デバッグ", 320, 200)) {
+		delete m_pSubDbg;
+		m_pSubDbg = NULL;
+	}
+	m_pSubLog = new CImGuiSubWindow();
+	if (!m_pSubLog->Create(u8"メッセージログ", 480, 360)) {
+		delete m_pSubLog;
+		m_pSubLog = NULL;
+	}
+	// メイン ImGui コンテキストに戻す
+	if (m_bImGuiInitialized) {
+		ImGui::SetCurrentContext(ImGui::GetCurrentContext());
+	}
+#endif
+
 	m_pHost = pHost;
 	m_dwUpdateInterval = (GAME_UPDATE_FPS > 0) ? (DWORD)(1000 / GAME_UPDATE_FPS) : 16;
 	if (m_dwUpdateInterval == 0) {
@@ -345,6 +379,30 @@ void CSDLApp::RunFrame(void)
 
 	while (SDL_PollEvent(&sdlEvent))
 	{
+#if !defined(__EMSCRIPTEN__)
+		// サブウィンドウ宛てイベントはサブ窓側で処理し、メイン窓・ゲーム側には渡さない
+		{
+			BOOL bHandledBySub = FALSE;
+			if (m_pSubDbg != NULL && m_pSubDbg->IsCreated()) {
+				if (m_pSubDbg->ProcessEvent(sdlEvent)) {
+					bHandledBySub = TRUE;
+				}
+			}
+			if (!bHandledBySub && m_pSubLog != NULL && m_pSubLog->IsCreated()) {
+				if (m_pSubLog->ProcessEvent(sdlEvent)) {
+					bHandledBySub = TRUE;
+				}
+			}
+			if (bHandledBySub) {
+				// SDL_QUIT はメイン窓にも通知する
+				if (sdlEvent.type == SDL_QUIT) {
+					m_bQuit = TRUE;
+				}
+				continue;
+			}
+		}
+#endif // !defined(__EMSCRIPTEN__)
+
 		if (m_bImGuiInitialized) {
 			ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
 		}
@@ -355,7 +413,8 @@ void CSDLApp::RunFrame(void)
 			break;
 
 		case SDL_KEYDOWN:
-			// ImGui がキーボードをキャプチャ中の場合はゲーム側に渡さない
+			// サブ窓宛てキーイベントはゲーム側に渡さない（上で continue 済み）
+			// ImGui がキーボードをキャプチャ中の場合もゲーム側に渡さない
 			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
 				m_pHost->OnSDLKeyDown(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
 			}
@@ -514,6 +573,21 @@ void CSDLApp::RunFrame(void)
 			// RenderPresent（MgrDraw::Drawから移動）
 			if (pRenderer != NULL) {
 				SDL_RenderPresent(pRenderer);
+			}
+			// サブウィンドウ描画
+			if (m_pSubDbg != NULL && m_pSubDbg->IsCreated()) {
+				m_pSubDbg->BeginFrame();
+				m_pHost->OnDrawImGuiSub(IGameLoopHost::IMGUI_SUBWINDOW_DEBUG);
+				m_pSubDbg->EndFrame();
+			}
+			if (m_pSubLog != NULL && m_pSubLog->IsCreated()) {
+				m_pSubLog->BeginFrame();
+				m_pHost->OnDrawImGuiSub(IGameLoopHost::IMGUI_SUBWINDOW_LOG);
+				m_pSubLog->EndFrame();
+			}
+			// サブ窓描画後にメイン ImGui コンテキストを復元
+			if (m_bImGuiInitialized) {
+				// 次フレームの ImGui NewFrame のためにコンテキストを保持（何もしなくても OK）
 			}
 #endif
 			m_byFps++;

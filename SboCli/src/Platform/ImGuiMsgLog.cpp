@@ -81,16 +81,29 @@ void CImGuiMsgLog::Add(const char *pszLog, unsigned int color)
 
 void CImGuiMsgLog::Draw()
 {
+#if !defined(__EMSCRIPTEN__)
+    // ネイティブ版: 独立ウィンドウ全体をパネルで埋める
+    ImGuiViewport *vp = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(vp->WorkPos);
+    ImGui::SetNextWindowSize(vp->WorkSize);
+    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize
+                           | ImGuiWindowFlags_NoMove    | ImGuiWindowFlags_NoCollapse
+                           | ImGuiWindowFlags_NoBringToFrontOnFocus;
+    if (!ImGui::Begin(u8"メッセージログ##sub", NULL, flags)) {
+        ImGui::End();
+        return;
+    }
+#else
+    // ブラウザ版: 従来の浮動サブウィンドウ
     if (!m_bVisible) {
         return;
     }
-
     ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_FirstUseEver);
-
     if (!ImGui::Begin(u8"メッセージログ", &m_bVisible)) {
         ImGui::End();
         return;
     }
+#endif
 
     // ログ表示エリア（下部にチャット入力を残す）
     float footerHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();

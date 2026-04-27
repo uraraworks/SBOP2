@@ -3922,6 +3922,18 @@ DWORD CStateProcMAP::GetTalkCharID(DWORD dwCharID, int nDirection)
 
 void CStateProcMAP::DrawImGui(void)
 {
+#if defined(__EMSCRIPTEN__)
+	// ブラウザ版はメイン窓内サブウィンドウで両方描画
 	if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Draw(); }
 	if (m_pImGuiDbg) { m_pImGuiDbg->Draw(); }
+#endif
+}
+
+void CStateProcMAP::DrawImGuiSub(int kind)
+{
+	if (kind == 0 /* IMGUI_SUBWINDOW_DEBUG */) {
+		if (m_pImGuiDbg) { m_pImGuiDbg->Draw(); }
+	} else if (kind == 1 /* IMGUI_SUBWINDOW_LOG */) {
+		if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Draw(); }
+	}
 }

@@ -45,6 +45,15 @@ public:
 	// ImGui UIの描画を行う（SDL_RenderPresent前に呼ばれる）
 	virtual void OnDrawImGui() {}
 
+	// サブウィンドウ種別
+	enum ImGuiSubWindowKind {
+		IMGUI_SUBWINDOW_DEBUG = 0,
+		IMGUI_SUBWINDOW_LOG   = 1,
+	};
+
+	// 独立サブウィンドウ内の ImGui 描画（ネイティブ版のみ使用）
+	virtual void OnDrawImGuiSub(int /*kind*/) {}
+
 	// ゲーム終了判定（TRUEなら終了）
 	virtual BOOL IsQuit() = 0;
 

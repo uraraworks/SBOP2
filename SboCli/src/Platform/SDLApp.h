@@ -10,6 +10,9 @@
 
 #include "SDLWindow.h"
 #include "IGameLoopHost.h"
+#if !defined(__EMSCRIPTEN__)
+#include "ImGuiSubWindow.h"
+#endif
 
 // クラス宣言
 
@@ -63,6 +66,10 @@ private:
 	BOOL		m_bQuit;			// 終了要求
 	BOOL		m_bDestroyCalled;	// Destroy通知済み
 	BOOL		m_bImGuiInitialized;	// ImGui初期化済みフラグ
+#if !defined(__EMSCRIPTEN__)
+	CImGuiSubWindow *m_pSubDbg;		// デバッグサブウィンドウ
+	CImGuiSubWindow *m_pSubLog;		// メッセージログサブウィンドウ
+#endif
 	DWORD		m_dwMainLoopCallCount;	// 1秒内の MainLoopThunk 呼出し回数カウント
 	DWORD		m_dwOnFrameCallCount;	// 1秒内の OnFrame 呼出し回数カウント
 	DWORD		m_dwMaxRunFrameThisSec;	// 1秒内の最大 RunFrame 時間（ms）

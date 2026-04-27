@@ -32,16 +32,33 @@ void CImGuiDbg::Init(CMgrData *pMgrData)
 
 void CImGuiDbg::Draw()
 {
-    if (!m_bVisible || m_pMgrData == NULL) {
+    if (m_pMgrData == NULL) {
         return;
     }
 
+#if !defined(__EMSCRIPTEN__)
+    // ネイティブ版: 独立ウィンドウ全体をパネルで埋める
+    ImGuiViewport *vp = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(vp->WorkPos);
+    ImGui::SetNextWindowSize(vp->WorkSize);
+    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize
+                           | ImGuiWindowFlags_NoMove    | ImGuiWindowFlags_NoCollapse
+                           | ImGuiWindowFlags_NoBringToFrontOnFocus;
+    if (!ImGui::Begin(u8"デバッグ##sub", NULL, flags)) {
+        ImGui::End();
+        return;
+    }
+#else
+    // ブラウザ版: 従来の浮動サブウィンドウ
+    if (!m_bVisible) {
+        return;
+    }
     ImGui::SetNextWindowSize(ImVec2(320, 160), ImGuiCond_FirstUseEver);
-
     if (!ImGui::Begin(u8"デバッグ", &m_bVisible)) {
         ImGui::End();
         return;
     }
+#endif
 
     ImGui::Text(u8"オンライン：%d", m_pMgrData->GetOnlineCount());
     ImGui::Text(u8"キャラ数：%d", m_pMgrData->GetCharCount());

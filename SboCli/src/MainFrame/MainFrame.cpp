@@ -477,8 +477,18 @@ void CMainFrame::OnDraw(SDL_Renderer *pRenderer)
 
 void CMainFrame::OnDrawImGui()
 {
+#if defined(__EMSCRIPTEN__)
+	// ブラウザ版はメイン窓内サブウィンドウで描画
 	if (m_pStateProc) {
 		m_pStateProc->DrawImGui();
+	}
+#endif
+}
+
+void CMainFrame::OnDrawImGuiSub(int kind)
+{
+	if (m_pStateProc) {
+		m_pStateProc->DrawImGuiSub(kind);
 	}
 }
 
