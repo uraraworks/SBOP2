@@ -556,11 +556,13 @@ function openCharacterDetailFromGame(charId) {
     return;
   }
   updateAdminGamePickInfo(`選択中のキャラ: ${normalizedCharId}`);
-  if (charDetailIdInput) {
-    charDetailIdInput.value = String(normalizedCharId);
+  // character-overview ビューを開いている時のみ詳細を反映する
+  if (currentRoute === "character-overview") {
+    if (charDetailIdInput) {
+      charDetailIdInput.value = String(normalizedCharId);
+    }
+    fetchCharacterDetail(normalizedCharId);
   }
-  navigateTo("character-overview");
-  fetchCharacterDetail(normalizedCharId);
 }
 
 function handleAdminGamePick(message) {
@@ -570,7 +572,8 @@ function handleAdminGamePick(message) {
   const cellX = Number(message.cellX) || 0;
   const cellY = Number(message.cellY) || 0;
 
-  // 優先度: char > item > cell
+  // ゲーム画面クリックでは画面遷移はしない。pick 情報の表示のみ更新する
+  // （character-overview ビュー時のみ char 詳細を内部更新する）
   if (charId > 0) {
     openCharacterDetailFromGame(charId);
     return;
@@ -578,18 +581,11 @@ function handleAdminGamePick(message) {
 
   if (itemId > 0 && mapId > 0) {
     updateAdminGamePickInfo(`選択中の配置物: map=${mapId} (${cellX},${cellY}) item=${itemId}`);
-    if (mapObjectMapSelect) {
-      // map-objects 画面のマップ選択を合わせる（loadMapObjectData の後に反映するため state も更新）
-      mapObjectState.selectedMapId = String(mapId);
-    }
-    navigateTo("map-objects");
     return;
   }
 
   if (mapId > 0) {
     updateAdminGamePickInfo(`選択中のマップセル: map=${mapId} (${cellX},${cellY})`);
-    mapInfoState.selectedMapId = mapId;
-    navigateTo("map-info");
     return;
   }
 
