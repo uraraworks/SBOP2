@@ -414,7 +414,22 @@ void CSDLApp::RunFrame(void)
 #endif // !defined(__EMSCRIPTEN__)
 
 		if (m_bImGuiInitialized) {
-			ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+			// 案C: SDL_WINDOWEVENT はメイン窓宛てのものだけメイン ImGui に渡す。
+			// サブ窓の FOCUS_LOST/GAINED 等がメイン Context に流れると
+			// AddFocusEvent(false) → ClearActiveID が発生して InputText フォーカスが
+			// 意図せず解除される恐れがある。
+			bool bPassToMainImGui = true;
+#if !defined(__EMSCRIPTEN__)
+			if (sdlEvent.type == SDL_WINDOWEVENT) {
+				if (m_Window.GetSDLWindow() != NULL &&
+				    sdlEvent.window.windowID != SDL_GetWindowID(m_Window.GetSDLWindow())) {
+					bPassToMainImGui = false;
+				}
+			}
+#endif
+			if (bPassToMainImGui) {
+				ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+			}
 		}
 		switch (sdlEvent.type)
 		{

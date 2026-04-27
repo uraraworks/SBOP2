@@ -153,8 +153,20 @@ BOOL CImGuiSubWindow::ProcessEvent(const SDL_Event &ev)
         return FALSE;
     }
 
+    // 案B: マウスイベントの windowID 補正
+    // SDL が SDL_CaptureMouse 等でメイン窓にキャプチャを残している場合、
+    // サブ窓上のマウスイベントでも windowID がメイン窓のままになることがある。
+    // SDL_GetMouseFocus() がこのサブ窓を指す場合はサブ窓宛てとみなす。
     if (evWindowID != myWindowID) {
-        return FALSE;
+        bool bMouseEvent = (ev.type == SDL_MOUSEMOTION ||
+                            ev.type == SDL_MOUSEBUTTONDOWN ||
+                            ev.type == SDL_MOUSEBUTTONUP ||
+                            ev.type == SDL_MOUSEWHEEL);
+        if (bMouseEvent && SDL_GetMouseFocus() == m_pWindow) {
+            // マウスフォーカスはこの窓にある→サブ窓宛てとみなして処理続行
+        } else {
+            return FALSE;
+        }
     }
 
     // 閉じるボタン検出

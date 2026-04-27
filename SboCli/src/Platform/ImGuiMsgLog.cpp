@@ -126,11 +126,22 @@ void CImGuiMsgLog::Draw()
     // チャット入力
     ImGui::Separator();
 
-    // 次フレームでフォーカスを戻す必要がある場合、またはウィンドウが初回表示された場合は
-    // InputText にフォーカスを当てる（IsWindowAppearing() は初回 Begin 時のみ true になる）
-    if (m_bFocusInput || ImGui::IsWindowAppearing()) {
-        ImGui::SetKeyboardFocusHere(0);
-        m_bFocusInput = false;
+    // 案A: SetKeyboardFocusHere の継続的適用
+    // InputText に ActiveID がない時 (何もアクティブでない) は毎フレームフォーカスを再取得する。
+    // これにより「ログ窓クリックで一時的に外れても次フレームで取り戻す」挙動になる。
+    // IsWindowAppearing() は初回 Begin 時のみ true。
+    {
+        bool wantFocus = m_bFocusInput || ImGui::IsWindowAppearing();
+#if !defined(__EMSCRIPTEN__)
+        // ネイティブ版のみ: 何もアクティブでない場合も毎フレームフォーカスを維持する
+        if (!wantFocus && !ImGui::IsAnyItemActive()) {
+            wantFocus = true;
+        }
+#endif
+        if (wantFocus) {
+            ImGui::SetKeyboardFocusHere(0);
+            m_bFocusInput = false;
+        }
     }
 
     // FrameBg/Hovered/Active と Text を明示的に設定して視認性を確保する
