@@ -210,7 +210,11 @@ void CWindowLOGINBrowser::Draw(PCImg32 pDst)
 		DrawFrame(0);
 		m_dwTimeDrawStart = timeGetTime();
 	}
-	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
+	// 無効化中（接続要求の送信〜状態遷移までの間など）は DOM オーバーレイが隠れるため、
+	// canvas 側の枠だけ残ると空っぽの背景に見える。canvas 描画もまとめてスキップする。
+	if (m_bEnabled) {
+		pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
+	}
 
 	g_pBrowserLoginWindow = this;
 	UpdateBrowserDom(rcAccount, rcPassword, rcCheck, rcConnect);
