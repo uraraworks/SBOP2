@@ -545,9 +545,8 @@ const navLinks = document.querySelectorAll("[data-route]");
 let currentRoute = null;
 
 function updateAdminGamePickInfo(message) {
-  if (adminGamePickInfoEl) {
-    adminGamePickInfoEl.textContent = message || "選択中のキャラ: なし";
-  }
+  // pick 情報の常時表示は廃止。互換のため関数だけ残す（呼び出し元の no-op 化）
+  void message;
 }
 
 function openCharacterDetailFromGame(charId) {
