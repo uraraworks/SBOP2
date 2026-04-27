@@ -836,8 +836,12 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		if (nWebMode == 2) {	// parts モード: 選択中パーツID > 0 なら配置
 			WORD wPartsID = m_pMgrData->GetWebAdminSelectedPartsID();
 			if (wPartsID > 0 && m_pMap != NULL) {
-				int nCellX = (xx / MAPPARTSSIZE) + nMapX;
-				int nCellY = (yy / MAPPARTSSIZE) + nMapY;
+				/* 入力 x,y は OnSDLMouseLeftButtonDown で CImg32 パディング +32 が
+				   加算されている。可視マップ座標に戻してからセル換算する */
+				int nVisibleX = x - MAPPARTSSIZE + (pLayerMap->m_nViewX % MAPPARTSSIZE);
+				int nVisibleY = y - MAPPARTSSIZE + (pLayerMap->m_nViewY % MAPPARTSSIZE);
+				int nCellX = (nVisibleX / MAPPARTSSIZE) + nMapX;
+				int nCellY = (nVisibleY / MAPPARTSSIZE) + nMapY;
 				m_pMap->SetParts(nCellX, nCellY, wPartsID);
 				CPacketADMIN_MAP_SETPARTS Packet;
 				Packet.Make(m_pMap->m_dwMapID, nCellX, nCellY, wPartsID, FALSE);
@@ -1071,8 +1075,11 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 		int nWebMode = m_pMgrData->GetWebAdminMode();
 		if (nWebMode == 2) {	// parts モード: 右クリックでパーツID取得 → 親へ通知
 			if (m_pMap != NULL) {
-				int nCellX = (xx / MAPPARTSSIZE) + nMapX;
-				int nCellY = (yy / MAPPARTSSIZE) + nMapY;
+				/* OnLButtonDown と同様に CImg32 パディング +32 を相殺 */
+				int nVisibleX = x - MAPPARTSSIZE + (pLayerMap->m_nViewX % MAPPARTSSIZE);
+				int nVisibleY = y - MAPPARTSSIZE + (pLayerMap->m_nViewY % MAPPARTSSIZE);
+				int nCellX = (nVisibleX / MAPPARTSSIZE) + nMapX;
+				int nCellY = (nVisibleY / MAPPARTSSIZE) + nMapY;
 				WORD wPickedPartsID = m_pMap->GetParts(nCellX, nCellY);
 				m_pMgrData->SetWebAdminSelectedPartsID(wPickedPartsID);
 				SBOP2_PostAdminPickupParts(
