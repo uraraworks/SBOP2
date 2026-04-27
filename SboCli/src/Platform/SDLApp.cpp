@@ -311,9 +311,11 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 #endif
 
 #if defined(__EMSCRIPTEN__)
-	// requestAnimationFrame 依存だと headless/browser 環境で継続実行されないケースがあるため、
-	// ブラウザ版は timeout 駆動で固定更新を回す。
-	emscripten_set_main_loop_arg(&CSDLApp::MainLoopThunk, this, GAME_UPDATE_FPS, 1);
+	// fps=0 を渡すと emscripten は requestAnimationFrame 駆動になり、
+	// ブラウザの vsync に同期するためフレーム間隔のジッターが減って体感が軽くなる。
+	// 論理更新は m_dwAccumulated 方式で GAME_UPDATE_FPS に固定されるため、
+	// モニタのリフレッシュレートに関係なくゲーム速度は一定。
+	emscripten_set_main_loop_arg(&CSDLApp::MainLoopThunk, this, 0, 1);
 	return 0;
 #else
 	while (!m_bQuit)
