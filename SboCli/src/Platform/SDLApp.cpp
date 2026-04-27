@@ -55,6 +55,8 @@ extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserPumpSingleFrame(void)
 	}
 	g_pBrowserSDLApp->RequestBrowserRedraw();
 }
+#else
+CSDLApp *CSDLApp::s_pInstance = NULL;
 #endif
 
 #if defined(_WIN32)
@@ -135,6 +137,7 @@ CSDLApp::CSDLApp()
 	m_bDestroyCalled = FALSE;
 	m_bImGuiInitialized = FALSE;
 #if !defined(__EMSCRIPTEN__)
+	m_pMainCtx = NULL;
 	m_pSubDbg = NULL;
 	m_pSubLog = NULL;
 #endif
@@ -227,7 +230,11 @@ void CSDLApp::InitImGui(SDL_Renderer *pRenderer)
 	}
 
 	IMGUI_CHECKVERSION();
+#if !defined(__EMSCRIPTEN__)
+	m_pMainCtx = ImGui::CreateContext();
+#else
 	ImGui::CreateContext();
+#endif
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -267,6 +274,9 @@ void CSDLApp::ShutdownImGui(void)
 	ImGui_ImplSDLRenderer2_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+#if !defined(__EMSCRIPTEN__)
+	m_pMainCtx = NULL;
+#endif
 	m_bImGuiInitialized = FALSE;
 }
 
@@ -294,21 +304,9 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 	InitImGui(m_Window.GetRenderer());
 
 #if !defined(__EMSCRIPTEN__)
-	// サブウィンドウ生成（デバッグ / メッセージログ）
-	m_pSubDbg = new CImGuiSubWindow();
-	if (!m_pSubDbg->Create(u8"デバッグ", 320, 200)) {
-		delete m_pSubDbg;
-		m_pSubDbg = NULL;
-	}
-	m_pSubLog = new CImGuiSubWindow();
-	if (!m_pSubLog->Create(u8"メッセージログ", 480, 360)) {
-		delete m_pSubLog;
-		m_pSubLog = NULL;
-	}
-	// メイン ImGui コンテキストに戻す
-	if (m_bImGuiInitialized) {
-		ImGui::SetCurrentContext(ImGui::GetCurrentContext());
-	}
+	// s_pInstance をセット（StateProcMAP から ShowImGuiSubWindows を呼ぶために必要）
+	s_pInstance = this;
+	// サブウィンドウはゲーム画面遷移時に ShowImGuiSubWindows() で生成する
 #endif
 
 	m_pHost = pHost;
@@ -368,6 +366,9 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		m_bDestroyCalled = TRUE;
 	}
 
+	// グローバルインスタンスをクリア
+	s_pInstance = NULL;
+
 	return 0;
 #endif
 }
@@ -398,7 +399,16 @@ void CSDLApp::RunFrame(void)
 				if (sdlEvent.type == SDL_QUIT) {
 					m_bQuit = TRUE;
 				}
+				// サブ窓 ProcessEvent はコンテキストを切り替えるため、
+				// メイン窓のイベント処理前にメインコンテキストへ必ず戻す
+				if (m_bImGuiInitialized && m_pMainCtx != NULL) {
+					ImGui::SetCurrentContext(m_pMainCtx);
+				}
 				continue;
+			}
+			// サブ窓が処理しなかった場合もメインコンテキストを保証する
+			if (m_bImGuiInitialized && m_pMainCtx != NULL) {
+				ImGui::SetCurrentContext(m_pMainCtx);
 			}
 		}
 #endif // !defined(__EMSCRIPTEN__)
@@ -498,11 +508,34 @@ void CSDLApp::RunFrame(void)
 	// アプリ側で WantTextInput フラグを見て手動で制御する。
 	// StopTextInput は SBOP2 ネイティブ入力欄（WindowCHAT 等）が自分で管理するため、
 	// ImGui 側からは Stop しない（干渉防止）。
+#if !defined(__EMSCRIPTEN__)
+	// WantTextInput 判定前にメインコンテキストを保証する
+	if (m_bImGuiInitialized && m_pMainCtx != NULL) {
+		ImGui::SetCurrentContext(m_pMainCtx);
+	}
+	// サブ窓にフォーカスがある場合はサブ窓側で TextInput を管理する
+	if (m_bImGuiInitialized) {
+		bool bSubWindowFocused = false;
+		SDL_Window *pFocusWnd = SDL_GetKeyboardFocus();
+		if ((m_pSubDbg != NULL) && m_pSubDbg->IsCreated()) {
+			bSubWindowFocused = bSubWindowFocused || m_pSubDbg->PumpTextInput(pFocusWnd);
+		}
+		if ((m_pSubLog != NULL) && m_pSubLog->IsCreated()) {
+			bSubWindowFocused = bSubWindowFocused || m_pSubLog->PumpTextInput(pFocusWnd);
+		}
+		if (!bSubWindowFocused && ImGui::GetIO().WantTextInput) {
+			if (!SDL_IsTextInputActive()) {
+				SDL_StartTextInput();
+			}
+		}
+	}
+#else
 	if (m_bImGuiInitialized && ImGui::GetIO().WantTextInput) {
 		if (!SDL_IsTextInputActive()) {
 			SDL_StartTextInput();
 		}
 	}
+#endif
 
 	if (m_pHost->IsQuit()) {
 		m_bQuit = TRUE;
@@ -585,9 +618,9 @@ void CSDLApp::RunFrame(void)
 				m_pHost->OnDrawImGuiSub(IGameLoopHost::IMGUI_SUBWINDOW_LOG);
 				m_pSubLog->EndFrame();
 			}
-			// サブ窓描画後にメイン ImGui コンテキストを復元
-			if (m_bImGuiInitialized) {
-				// 次フレームの ImGui NewFrame のためにコンテキストを保持（何もしなくても OK）
+			// サブ窓描画後にメイン ImGui コンテキストへ必ず戻す
+			if (m_bImGuiInitialized && m_pMainCtx != NULL) {
+				ImGui::SetCurrentContext(m_pMainCtx);
 			}
 #endif
 			m_byFps++;
@@ -670,6 +703,47 @@ void CSDLApp::MainLoopThunk(void *pArg)
 	}
 }
 #endif
+
+#if !defined(__EMSCRIPTEN__)
+void CSDLApp::ShowImGuiSubWindows(void)
+{
+	// 既存のサブ窓が残っていれば一旦破棄してからリセット
+	HideImGuiSubWindows();
+
+	m_pSubDbg = new CImGuiSubWindow();
+	if (!m_pSubDbg->Create(u8"デバッグ", 320, 200)) {
+		delete m_pSubDbg;
+		m_pSubDbg = NULL;
+	}
+	m_pSubLog = new CImGuiSubWindow();
+	if (!m_pSubLog->Create(u8"メッセージログ", 480, 360)) {
+		delete m_pSubLog;
+		m_pSubLog = NULL;
+	}
+	// サブ窓生成後はメインコンテキストへ戻す
+	if (m_bImGuiInitialized && m_pMainCtx != NULL) {
+		ImGui::SetCurrentContext(m_pMainCtx);
+	}
+}
+
+void CSDLApp::HideImGuiSubWindows(void)
+{
+	if (m_pSubDbg != NULL) {
+		m_pSubDbg->Destroy();
+		delete m_pSubDbg;
+		m_pSubDbg = NULL;
+	}
+	if (m_pSubLog != NULL) {
+		m_pSubLog->Destroy();
+		delete m_pSubLog;
+		m_pSubLog = NULL;
+	}
+	// サブ窓破棄後はメインコンテキストへ戻す
+	if (m_bImGuiInitialized && m_pMainCtx != NULL) {
+		ImGui::SetCurrentContext(m_pMainCtx);
+	}
+}
+#endif // !defined(__EMSCRIPTEN__)
 
 void CSDLApp::PollWin32Messages(void)
 {

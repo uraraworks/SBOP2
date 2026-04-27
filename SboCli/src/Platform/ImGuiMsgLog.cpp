@@ -143,8 +143,8 @@ void CImGuiMsgLog::Draw()
     // 入力欄を幅いっぱいに広げる
     ImGui::SetNextItemWidth(-1.0f);
 
-    ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
-    bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), flags);
+    ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
+    bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), inputFlags);
     ImGui::PopStyleColor(4);
 
     if (bEntered) {

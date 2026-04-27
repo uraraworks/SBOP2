@@ -12,6 +12,7 @@
 #include "IGameLoopHost.h"
 #if !defined(__EMSCRIPTEN__)
 #include "ImGuiSubWindow.h"
+struct ImGuiContext;
 #endif
 
 // クラス宣言
@@ -37,6 +38,15 @@ public:
 	void	RequestBrowserRedraw(void);
 #endif
 	BYTE	GetFps(void) const { return m_byFpsLast; }
+
+#if !defined(__EMSCRIPTEN__)
+	// デバッグ/ログのサブウィンドウを生成・表示する（StateProcMAP::Init から呼ぶ）
+	void	ShowImGuiSubWindows(void);
+	// デバッグ/ログのサブウィンドウを破棄する（StateProcMAP デストラクタから呼ぶ）
+	void	HideImGuiSubWindows(void);
+	// グローバルインスタンス取得（StateProcMAP などから使用）
+	static CSDLApp *GetInstance(void) { return s_pInstance; }
+#endif
 
 private:
 	void	RunFrame(void);
@@ -67,8 +77,10 @@ private:
 	BOOL		m_bDestroyCalled;	// Destroy通知済み
 	BOOL		m_bImGuiInitialized;	// ImGui初期化済みフラグ
 #if !defined(__EMSCRIPTEN__)
+	ImGuiContext   *m_pMainCtx;		// メイン ImGuiContext
 	CImGuiSubWindow *m_pSubDbg;		// デバッグサブウィンドウ
 	CImGuiSubWindow *m_pSubLog;		// メッセージログサブウィンドウ
+	static CSDLApp *s_pInstance;	// グローバルインスタンスポインタ
 #endif
 	DWORD		m_dwMainLoopCallCount;	// 1秒内の MainLoopThunk 呼出し回数カウント
 	DWORD		m_dwOnFrameCallCount;	// 1秒内の OnFrame 呼出し回数カウント

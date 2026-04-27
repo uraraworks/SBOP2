@@ -46,6 +46,10 @@ public:
     void    Hide();
     void    Show();
 
+    // テキスト入力ポンプ: このウィンドウにフォーカスがあり WantTextInput なら
+    // SDL_StartTextInput を呼ぶ。フォーカスがある場合 TRUE を返す。
+    BOOL    PumpTextInput(SDL_Window *pFocusWindow);
+
     BOOL    IsCreated() const { return (m_pWindow != NULL); }
 
 private:

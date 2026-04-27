@@ -136,6 +136,9 @@ BOOL CImGuiSubWindow::ProcessEvent(const SDL_Event &ev)
     case SDL_TEXTINPUT:
         evWindowID = ev.text.windowID;
         break;
+    case SDL_TEXTEDITING:
+        evWindowID = ev.edit.windowID;
+        break;
     case SDL_MOUSEMOTION:
         evWindowID = ev.motion.windowID;
         break;
@@ -214,6 +217,24 @@ void CImGuiSubWindow::Show()
     if (m_pWindow != NULL) {
         SDL_ShowWindow(m_pWindow);
     }
+}
+
+BOOL CImGuiSubWindow::PumpTextInput(SDL_Window *pFocusWindow)
+{
+    if (m_pWindow == NULL || m_pCtx == NULL) {
+        return FALSE;
+    }
+    if (pFocusWindow != m_pWindow) {
+        return FALSE;
+    }
+    // このサブ窓がフォーカスを持っている
+    ImGui::SetCurrentContext(m_pCtx);
+    if (ImGui::GetIO().WantTextInput) {
+        if (!SDL_IsTextInputActive()) {
+            SDL_StartTextInput();
+        }
+    }
+    return TRUE;
 }
 
 #endif // !defined(__EMSCRIPTEN__)

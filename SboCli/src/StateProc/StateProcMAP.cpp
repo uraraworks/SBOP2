@@ -64,6 +64,7 @@
 #include "WindowCHAR_STATUS4.h"
 #include "Platform/ImGuiMsgLog.h"
 #include "Platform/ImGuiDbg.h"
+#include "Platform/SDLApp.h"
 #include "MainFrame.h"
 #include "MgrData.h"
 
@@ -288,6 +289,12 @@ CStateProcMAP::CStateProcMAP()
 CStateProcMAP::~CStateProcMAP()
 {
 	DestroyAdminUi();
+#if !defined(__EMSCRIPTEN__)
+	// マップ画面終了時にデバッグ/ログのサブウィンドウを破棄する
+	if (CSDLApp::GetInstance() != NULL) {
+		CSDLApp::GetInstance()->HideImGuiSubWindows();
+	}
+#endif
 	m_pMgrSound->StopBGM();
 }
 
@@ -326,6 +333,13 @@ void CStateProcMAP::Init(void)
 	m_pMgrLayer->MakeSYSTEMMSG();
 
 	CreateAdminUi();
+
+#if !defined(__EMSCRIPTEN__)
+	// ゲーム画面遷移時にデバッグ/ログのサブウィンドウを生成・表示する
+	if (CSDLApp::GetInstance() != NULL) {
+		CSDLApp::GetInstance()->ShowImGuiSubWindows();
+	}
+#endif
 
 	m_pMgrDraw->SetFadeState(FADESTATE_FADEIN);
 	m_nMoveSpeedAccum = 0;
@@ -852,6 +866,11 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		// char モード (nWebMode == 1) は既存処理に流す
 	}
 
+	// 管理者 DLL がロードされていない場合は管理者枠描画・クリック通知をスキップ
+	if (!m_AdminUi.IsLoadedFromDll()) {
+		return;
+	}
+
 	nType = m_pMgrData->GetAdminNotifyTypeL();
 	switch (nType) {
 	case ADMINNOTIFYTYPE_CHARID:			// キャラID
@@ -1094,6 +1113,11 @@ void CStateProcMAP::OnRButtonDown(int x, int y)
 		}
 	}
 
+	// 管理者 DLL がロードされていない場合は管理者枠描画・クリック通知をスキップ
+	if (!m_AdminUi.IsLoadedFromDll()) {
+		return;
+	}
+
 	switch (m_pMgrData->GetAdminNotifyTypeR()) {
 	case ADMINNOTIFYTYPE_MAPEDIT:			// マップ編集(通知は無し)
 		x = (xx / 32) + nMapX;
@@ -1148,6 +1172,11 @@ void CStateProcMAP::OnRButtonDblClk(int x, int y)
 	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
 	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
 
+	// 管理者 DLL がロードされていない場合は管理者枠描画・クリック通知をスキップ
+	if (!m_AdminUi.IsLoadedFromDll()) {
+		return;
+	}
+
 	switch (m_pMgrData->GetAdminNotifyTypeRR()) {
 	case ADMINNOTIFYTYPE_POS:				// マップ座標
 		x = (xx / 32) + nMapX;
@@ -1181,6 +1210,11 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算 */
 	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
 	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
+
+	// 管理者 DLL がロードされていない場合は管理者枠描画・クリック通知をスキップ
+	if (!m_AdminUi.IsLoadedFromDll()) {
+		return;
+	}
 
 	switch (m_pMgrData->GetAdminNotifyTypeL()) {
 	case ADMINNOTIFYTYPE_MAPEDIT:	// マップ編集(通知は無し)
