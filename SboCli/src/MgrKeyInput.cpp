@@ -8,6 +8,9 @@
 #include "DInputUtil.h"
 #include "MgrKeyInput.h"
 #include "Platform/SDLInput.h"
+#if !defined(__EMSCRIPTEN__)
+#include "Platform/SDLApp.h"
+#endif
 #include "imgui.h"
 
 
@@ -94,9 +97,21 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 	// ImGui がキーボードをキャプチャ中はゲーム側のポーリングをスキップ
 	// （メッセージログ入力欄や ImGui 系 UI にフォーカスがある場合、
 	//   SDL_GetKeyboardState で直接取得したキー状態がゲームに流れないようにする）
-	if (ImGui::GetCurrentContext() != NULL && ImGui::GetIO().WantCaptureKeyboard) {
+	bool bSkipPolling = (ImGui::GetCurrentContext() != NULL && ImGui::GetIO().WantCaptureKeyboard);
+#if !defined(__EMSCRIPTEN__)
+	// 独立サブウィンドウ (デバッグ/ログ) が OS キーボードフォーカスを持つ場合も
+	// ゲーム側のキーポーリングを止める。サブ窓内の自前テキスト入力欄は
+	// ImGui の WantCaptureKeyboard を立てないためここで明示的にスキップする。
+	if (!bSkipPolling) {
+		CSDLApp *pApp = CSDLApp::GetInstance();
+		if (pApp != NULL && pApp->IsSubWindowKeyboardFocused()) {
+			bSkipPolling = true;
+		}
+	}
+#endif
+	if (bSkipPolling) {
 		// 内部状態を「全キー離上」にリセットしておく
-		// → ImGui キャプチャ解除の瞬間に古い押下エッジが誤検出されないようにするため
+		// → キャプチャ解除の瞬間に古い押下エッジが誤検出されないようにするため
 		ZeroMemory(m_abyKeyState,     sizeof(m_abyKeyState));
 		ZeroMemory(m_abyKeyStateBack, sizeof(m_abyKeyStateBack));
 		return;

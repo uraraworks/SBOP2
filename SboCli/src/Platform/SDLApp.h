@@ -49,6 +49,8 @@ public:
 	static CSDLApp *GetInstance(void) { return s_pInstance; }
 	// メッセージログポインタを設定する（ShowImGuiSubWindows / HideImGuiSubWindows から呼ぶ）
 	void SetMsgLogPtr(CImGuiMsgLog *p) { m_pMsgLog = p; }
+	// サブ窓 (デバッグ/ログ) のいずれかが OS キーボードフォーカスを持つか
+	bool	IsSubWindowKeyboardFocused(void) const;
 #endif
 
 private:
@@ -62,11 +64,6 @@ private:
 
 	void	InitImGui(SDL_Renderer *pRenderer);
 	void	ShutdownImGui(void);
-
-#if !defined(__EMSCRIPTEN__)
-	// サブ窓 (デバッグ/ログ) のいずれかが OS キーボードフォーカスを持つか
-	bool	IsSubWindowKeyboardFocused(void) const;
-#endif
 
 private:
 	CSDLWindow	m_Window;		// SDLウィンドウ
