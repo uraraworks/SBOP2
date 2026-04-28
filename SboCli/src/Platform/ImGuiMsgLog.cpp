@@ -45,6 +45,7 @@ CImGuiMsgLog::CImGuiMsgLog()
     , m_bScrollToBottom(false)
     , m_bVisible(true)
     , m_bFocusInput(false)
+    , m_bInputActiveLastFrame(false)
 {
     m_chatBuf[0] = '\0';
 }
@@ -126,23 +127,22 @@ void CImGuiMsgLog::Draw()
     // チャット入力
     ImGui::Separator();
 
-    // 案A: SetKeyboardFocusHere の継続的適用
-    // InputText に ActiveID がない時 (何もアクティブでない) は毎フレームフォーカスを再取得する。
-    // これにより「ログ窓クリックで一時的に外れても次フレームで取り戻す」挙動になる。
-    // IsWindowAppearing() は初回 Begin 時のみ true。
-    {
-        bool wantFocus = m_bFocusInput || ImGui::IsWindowAppearing();
+    // 対策1: 前フレームで InputText がアクティブでなかった場合のみ毎フレームフォーカスを取り戻す。
+    // アクティブ中（ユーザーがタイプ中・IME 変換中）は邪魔しない。
+    // ログ窓クリック等で一時的に ActiveID が外れても次フレームで取り戻す。
 #if !defined(__EMSCRIPTEN__)
-        // ネイティブ版のみ: 何もアクティブでない場合も毎フレームフォーカスを維持する
-        if (!wantFocus && !ImGui::IsAnyItemActive()) {
-            wantFocus = true;
-        }
-#endif
-        if (wantFocus) {
-            ImGui::SetKeyboardFocusHere(0);
-            m_bFocusInput = false;
-        }
+    // ネイティブ版: unconditional に毎フレーム再フォーカス（前フレーム非アクティブ時のみ）
+    if (m_bFocusInput || ImGui::IsWindowAppearing() || !m_bInputActiveLastFrame) {
+        ImGui::SetKeyboardFocusHere(0);
+        m_bFocusInput = false;
     }
+#else
+    // ブラウザ版: 初回表示時とフォーカス要求時のみ
+    if (m_bFocusInput || ImGui::IsWindowAppearing()) {
+        ImGui::SetKeyboardFocusHere(0);
+        m_bFocusInput = false;
+    }
+#endif
 
     // FrameBg/Hovered/Active と Text を明示的に設定して視認性を確保する
     // デフォルトのダークテーマでは FrameBg がほぼ黒になるため、
@@ -157,7 +157,18 @@ void CImGuiMsgLog::Draw()
 
     ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
     bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), inputFlags);
+    // 前フレームアクティブ状態を更新（次フレームの SetKeyboardFocusHere 判定に使う）
+    m_bInputActiveLastFrame = ImGui::IsItemActive();
     ImGui::PopStyleColor(4);
+
+#if !defined(__EMSCRIPTEN__)
+    // デバッグログ: InputText 状態を毎フレーム出力（動作確認後に削除）
+    SDL_Log("[SubLog draw] active=%d focused=%d hovered=%d wantText=%d",
+        (int)ImGui::IsItemActive(),
+        (int)ImGui::IsItemFocused(),
+        (int)ImGui::IsItemHovered(),
+        (int)ImGui::GetIO().WantTextInput);
+#endif
 
     if (bEntered) {
         if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {

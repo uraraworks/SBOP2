@@ -176,6 +176,13 @@ BOOL CImGuiSubWindow::ProcessEvent(const SDL_Event &ev)
         return TRUE;
     }
 
+    // デバッグログ: マウスボタンイベントを記録（動作確認後に削除）
+    if (ev.type == SDL_MOUSEBUTTONDOWN) {
+        Uint32 my = SDL_GetWindowID(m_pWindow);
+        SDL_Log("[SubLog evt] btn ev_wid=%u my_wid=%u btn=%d x=%d y=%d",
+            ev.button.windowID, my, ev.button.button, ev.button.x, ev.button.y);
+    }
+
     // ImGui にイベントを渡す
     ImGui::SetCurrentContext(m_pCtx);
     ImGui_ImplSDL2_ProcessEvent(&ev);
@@ -194,6 +201,16 @@ void CImGuiSubWindow::BeginFrame()
     ImGui::SetCurrentContext(m_pCtx);
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
+
+    // 対策2: impl_sdl2 のマウス位置更新が multi-context 構成で不安定なため、
+    // サブ窓がキーボードフォーカスを持つ時に限りマウス位置を手動で上書きする
+    if (SDL_GetKeyboardFocus() == m_pWindow) {
+        int gx, gy, wx, wy;
+        SDL_GetGlobalMouseState(&gx, &gy);
+        SDL_GetWindowPosition(m_pWindow, &wx, &wy);
+        ImGui::GetIO().AddMousePosEvent((float)(gx - wx), (float)(gy - wy));
+    }
+
     ImGui::NewFrame();
 }
 
