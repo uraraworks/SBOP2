@@ -292,6 +292,8 @@ CStateProcMAP::~CStateProcMAP()
 #if !defined(__EMSCRIPTEN__)
 	// マップ画面終了時にデバッグ/ログのサブウィンドウを破棄する
 	if (CSDLApp::GetInstance() != NULL) {
+		// ポインタクリアを先に行い、破棄後のアクセスを防ぐ
+		CSDLApp::GetInstance()->SetMsgLogPtr(NULL);
 		CSDLApp::GetInstance()->HideImGuiSubWindows();
 	}
 #endif
@@ -338,6 +340,8 @@ void CStateProcMAP::Init(void)
 	// ゲーム画面遷移時にデバッグ/ログのサブウィンドウを生成・表示する
 	if (CSDLApp::GetInstance() != NULL) {
 		CSDLApp::GetInstance()->ShowImGuiSubWindows();
+		// ログ窓の自前入力実装にメッセージログポインタを渡す
+		CSDLApp::GetInstance()->SetMsgLogPtr(m_pImGuiMsgLog);
 	}
 #endif
 

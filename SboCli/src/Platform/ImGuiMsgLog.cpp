@@ -44,8 +44,10 @@ CImGuiMsgLog::CImGuiMsgLog()
     : m_pMgrData(NULL)
     , m_bScrollToBottom(false)
     , m_bVisible(true)
-    , m_bFocusInput(false)
-    , m_bInputActiveLastFrame(false)
+#if !defined(__EMSCRIPTEN__)
+    , m_chatLen(0)
+    , m_bAcceptInput(false)
+#endif
 {
     m_chatBuf[0] = '\0';
 }
@@ -127,56 +129,104 @@ void CImGuiMsgLog::Draw()
     // チャット入力
     ImGui::Separator();
 
-    // 対策1: 前フレームで InputText がアクティブでなかった場合のみ毎フレームフォーカスを取り戻す。
-    // アクティブ中（ユーザーがタイプ中・IME 変換中）は邪魔しない。
-    // ログ窓クリック等で一時的に ActiveID が外れても次フレームで取り戻す。
 #if !defined(__EMSCRIPTEN__)
-    // ネイティブ版: unconditional に毎フレーム再フォーカス（前フレーム非アクティブ時のみ）
-    if (m_bFocusInput || ImGui::IsWindowAppearing() || !m_bInputActiveLastFrame) {
-        ImGui::SetKeyboardFocusHere(0);
-        m_bFocusInput = false;
+    // ネイティブ版: SDL_TEXTINPUT / SDL_KEYDOWN で自前バッファを更新する自前実装
+    {
+        ImVec2 inputSize(ImGui::GetContentRegionAvail().x, ImGui::GetFrameHeight());
+        ImVec2 cursorPos = ImGui::GetCursorScreenPos();
+        // 入力欄背景矩形
+        ImGui::GetWindowDrawList()->AddRectFilled(
+            cursorPos,
+            ImVec2(cursorPos.x + inputSize.x, cursorPos.y + inputSize.y),
+            IM_COL32(64, 64, 64, 255)
+        );
+        // テキスト描画（内側に少しパディング）
+        ImGui::SetCursorScreenPos(ImVec2(cursorPos.x + 4.0f, cursorPos.y + 2.0f));
+        if (m_bAcceptInput) {
+            // 入力受付中: バッファ内容 + カーソル
+            ImGui::TextUnformatted(m_chatBuf);
+            ImGui::SameLine(0, 0);
+            ImGui::Text("_");
+        } else {
+            ImGui::TextUnformatted(m_chatBuf);
+        }
+        // 描画カーソルをフレーム高分進める
+        ImGui::SetCursorScreenPos(ImVec2(cursorPos.x, cursorPos.y + inputSize.y + ImGui::GetStyle().ItemSpacing.y));
     }
 #else
-    // ブラウザ版: 初回表示時とフォーカス要求時のみ
-    if (m_bFocusInput || ImGui::IsWindowAppearing()) {
-        ImGui::SetKeyboardFocusHere(0);
-        m_bFocusInput = false;
+    // ブラウザ版: 従来の ImGui InputText のまま（動作しているので変更しない）
+    {
+        // ブラウザ版: 初回表示時とフォーカス要求時のみ SetKeyboardFocusHere
+        static bool s_bFocusBrowser = true;
+        if (s_bFocusBrowser || ImGui::IsWindowAppearing()) {
+            ImGui::SetKeyboardFocusHere(0);
+            s_bFocusBrowser = false;
+        }
+
+        ImGui::PushStyleColor(ImGuiCol_FrameBg,        ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(0.30f, 0.30f, 0.30f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_FrameBgActive,  ImVec4(0.35f, 0.35f, 0.35f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_Text,           ImVec4(1.0f,  1.0f,  1.0f,  1.0f));
+
+        ImGui::SetNextItemWidth(-1.0f);
+        ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
+        bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), inputFlags);
+        ImGui::PopStyleColor(4);
+
+        if (bEntered) {
+            if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {
+                CMainFrame *pMainFrame = m_pMgrData->GetMainFrame();
+                if (pMainFrame != NULL) {
+                    std::string sjisMsg = Utf8ToSjis(m_chatBuf);
+                    pMainFrame->SendChat(0, sjisMsg.c_str(), NULL);
+                }
+            }
+            m_chatBuf[0] = '\0';
+            s_bFocusBrowser = true;
+        }
     }
 #endif
 
-    // FrameBg/Hovered/Active と Text を明示的に設定して視認性を確保する
-    // デフォルトのダークテーマでは FrameBg がほぼ黒になるため、
-    // 入力欄の背景と文字色を明示的に上書きする
-    ImGui::PushStyleColor(ImGuiCol_FrameBg,        ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(0.30f, 0.30f, 0.30f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgActive,  ImVec4(0.35f, 0.35f, 0.35f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_Text,           ImVec4(1.0f,  1.0f,  1.0f,  1.0f));
+    ImGui::End();
+}
 
-    // 入力欄を幅いっぱいに広げる
-    ImGui::SetNextItemWidth(-1.0f);
+#if !defined(__EMSCRIPTEN__)
+void CImGuiMsgLog::OnTextInput(const char *pszUtf8)
+{
+    if (pszUtf8 == NULL || pszUtf8[0] == '\0') {
+        return;
+    }
+    size_t addLen = strlen(pszUtf8);
+    if (m_chatLen + (int)addLen < (int)sizeof(m_chatBuf) - 1) {
+        memcpy(m_chatBuf + m_chatLen, pszUtf8, addLen);
+        m_chatLen += (int)addLen;
+        m_chatBuf[m_chatLen] = '\0';
+    }
+}
 
-    ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
-    bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), inputFlags);
-    // 前フレームアクティブ状態を更新（次フレームの SetKeyboardFocusHere 判定に使う）
-    m_bInputActiveLastFrame = ImGui::IsItemActive();
-    ImGui::PopStyleColor(4);
-
-    if (bEntered) {
+void CImGuiMsgLog::OnKeyDown(int keycode)
+{
+    if (keycode == SDLK_BACKSPACE) {
+        // UTF-8 末尾1文字を削除: 継続バイト (0x80-0xBF) を逆方向にスキップしてリードバイトまで削る
+        if (m_chatLen > 0) {
+            int i = m_chatLen - 1;
+            // 継続バイト (10xxxxxx) をスキップ
+            while (i > 0 && ((unsigned char)m_chatBuf[i] & 0xC0) == 0x80) {
+                i--;
+            }
+            m_chatLen = i;
+            m_chatBuf[m_chatLen] = '\0';
+        }
+    } else if (keycode == SDLK_RETURN || keycode == SDLK_KP_ENTER) {
         if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {
             CMainFrame *pMainFrame = m_pMgrData->GetMainFrame();
             if (pMainFrame != NULL) {
-                // m_chatBuf は ImGui が管理する UTF-8 文字列。
-                // SendChat / サーバは SJIS (CP932) を期待するため、
-                // ここで UTF-8 → SJIS 変換してから渡す。
                 std::string sjisMsg = Utf8ToSjis(m_chatBuf);
                 pMainFrame->SendChat(0, sjisMsg.c_str(), NULL);
             }
         }
+        m_chatLen = 0;
         m_chatBuf[0] = '\0';
-        // 次フレームの InputText 描画前にフォーカスを予約する
-        // （InputText 後の SetKeyboardFocusHere(-1) は確実でないため）
-        m_bFocusInput = true;
     }
-
-    ImGui::End();
 }
+#endif

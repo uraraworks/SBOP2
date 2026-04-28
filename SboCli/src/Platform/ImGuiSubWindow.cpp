@@ -264,12 +264,10 @@ BOOL CImGuiSubWindow::PumpTextInput(SDL_Window *pFocusWindow)
     if (pActualFocus != m_pWindow) {
         return FALSE;
     }
-    // このサブ窓がフォーカスを持っている
-    ImGui::SetCurrentContext(m_pCtx);
-    if (ImGui::GetIO().WantTextInput) {
-        if (!SDL_IsTextInputActive()) {
-            SDL_StartTextInput();
-        }
+    // このサブ窓がフォーカスを持っている: ログ窓は自前入力実装なので
+    // WantTextInput に依存せず無条件で SDL_StartTextInput を維持する
+    if (!SDL_IsTextInputActive()) {
+        SDL_StartTextInput();
     }
     return TRUE;
 }

@@ -15,6 +15,7 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
 #include "SDLApp.h"
+#include "ImGuiMsgLog.h"
 #include "SDLEventUtil.h"
 #include "SDLInput.h"
 #include "SboCli_priv.h"
@@ -140,6 +141,7 @@ CSDLApp::CSDLApp()
 	m_pMainCtx = NULL;
 	m_pSubDbg = NULL;
 	m_pSubLog = NULL;
+	m_pMsgLog = NULL;
 #endif
 	m_dwMainLoopCallCount = 0;
 	m_dwOnFrameCallCount = 0;
@@ -399,6 +401,15 @@ void CSDLApp::RunFrame(void)
 				if (sdlEvent.type == SDL_QUIT) {
 					m_bQuit = TRUE;
 				}
+				// ログ窓宛てのテキスト入力 / キーダウンを CImGuiMsgLog へ橋渡し
+				if (m_pSubLog != NULL && m_pSubLog->IsCreated() && m_pMsgLog != NULL) {
+					Uint32 logWid = m_pSubLog->GetWindowID();
+					if (sdlEvent.type == SDL_TEXTINPUT && sdlEvent.text.windowID == logWid) {
+						m_pMsgLog->OnTextInput(sdlEvent.text.text);
+					} else if (sdlEvent.type == SDL_KEYDOWN && sdlEvent.key.windowID == logWid) {
+						m_pMsgLog->OnKeyDown(sdlEvent.key.keysym.sym);
+					}
+				}
 				// サブ窓 ProcessEvent はコンテキストを切り替えるため、
 				// メイン窓のイベント処理前にメインコンテキストへ必ず戻す
 				if (m_bImGuiInitialized && m_pMainCtx != NULL) {
@@ -547,8 +558,14 @@ void CSDLApp::RunFrame(void)
 		if ((m_pSubDbg != NULL) && m_pSubDbg->IsCreated()) {
 			bSubWindowFocused = bSubWindowFocused || m_pSubDbg->PumpTextInput(pFocusWnd);
 		}
+		bool bLogFocused = false;
 		if ((m_pSubLog != NULL) && m_pSubLog->IsCreated()) {
-			bSubWindowFocused = bSubWindowFocused || m_pSubLog->PumpTextInput(pFocusWnd);
+			bLogFocused = m_pSubLog->PumpTextInput(pFocusWnd);
+			bSubWindowFocused = bSubWindowFocused || bLogFocused;
+		}
+		// ログ窓の入力受付状態を更新
+		if (m_pMsgLog != NULL) {
+			m_pMsgLog->SetAcceptInput(bLogFocused);
 		}
 		if (!bSubWindowFocused && ImGui::GetIO().WantTextInput) {
 			if (!SDL_IsTextInputActive()) {

@@ -13,6 +13,7 @@
 #if !defined(__EMSCRIPTEN__)
 #include "ImGuiSubWindow.h"
 struct ImGuiContext;
+class CImGuiMsgLog;
 #endif
 
 // クラス宣言
@@ -46,6 +47,8 @@ public:
 	void	HideImGuiSubWindows(void);
 	// グローバルインスタンス取得（StateProcMAP などから使用）
 	static CSDLApp *GetInstance(void) { return s_pInstance; }
+	// メッセージログポインタを設定する（ShowImGuiSubWindows / HideImGuiSubWindows から呼ぶ）
+	void SetMsgLogPtr(CImGuiMsgLog *p) { m_pMsgLog = p; }
 #endif
 
 private:
@@ -80,6 +83,7 @@ private:
 	ImGuiContext   *m_pMainCtx;		// メイン ImGuiContext
 	CImGuiSubWindow *m_pSubDbg;		// デバッグサブウィンドウ
 	CImGuiSubWindow *m_pSubLog;		// メッセージログサブウィンドウ
+	CImGuiMsgLog   *m_pMsgLog;		// メッセージログ入力通知先
 	static CSDLApp *s_pInstance;	// グローバルインスタンスポインタ
 #endif
 	DWORD		m_dwMainLoopCallCount;	// 1秒内の MainLoopThunk 呼出し回数カウント
