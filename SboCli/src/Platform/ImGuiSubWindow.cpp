@@ -154,17 +154,25 @@ BOOL CImGuiSubWindow::ProcessEvent(const SDL_Event &ev)
         return FALSE;
     }
 
-    // 案B: マウスイベントの windowID 補正
-    // SDL が SDL_CaptureMouse 等でメイン窓にキャプチャを残している場合、
-    // サブ窓上のマウスイベントでも windowID がメイン窓のままになることがある。
-    // SDL_GetMouseFocus() がこのサブ窓を指す場合はサブ窓宛てとみなす。
+    // windowID 補正
+    // マウス: SDL_CaptureMouse 等の影響で windowID がメイン窓のままになることがある→
+    //         SDL_GetMouseFocus() がこのサブ窓ならサブ窓宛てとみなす
+    // キー/テキスト入力: 同様に windowID が 0 や別窓 ID で来る場合に備え、
+    //         SDL_GetKeyboardFocus() がこのサブ窓ならサブ窓宛てとみなす
+    //         (これがないとログ窓フォーカス中のキー入力がメイン窓のゲーム側に流れる)
     if (evWindowID != myWindowID) {
         bool bMouseEvent = (ev.type == SDL_MOUSEMOTION ||
                             ev.type == SDL_MOUSEBUTTONDOWN ||
                             ev.type == SDL_MOUSEBUTTONUP ||
                             ev.type == SDL_MOUSEWHEEL);
+        bool bKeyEvent = (ev.type == SDL_KEYDOWN ||
+                          ev.type == SDL_KEYUP ||
+                          ev.type == SDL_TEXTINPUT ||
+                          ev.type == SDL_TEXTEDITING);
         if (bMouseEvent && SDL_GetMouseFocus() == m_pWindow) {
             // マウスフォーカスはこの窓にある→サブ窓宛てとみなして処理続行
+        } else if (bKeyEvent && SDL_GetKeyboardFocus() == m_pWindow) {
+            // キーボードフォーカスはこの窓にある→サブ窓宛てとみなして処理続行
         } else {
             return FALSE;
         }

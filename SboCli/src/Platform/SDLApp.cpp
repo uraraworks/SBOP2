@@ -402,12 +402,16 @@ void CSDLApp::RunFrame(void)
 					m_bQuit = TRUE;
 				}
 				// ログ窓宛てのテキスト入力 / キーダウンを CImGuiMsgLog へ橋渡し
+				// windowID ではなく SDL_GetKeyboardFocus() を見る
+				// (windowID は SDL のキャプチャ状態次第でメイン窓のままのことがある)
 				if (m_pSubLog != NULL && m_pSubLog->IsCreated() && m_pMsgLog != NULL) {
-					Uint32 logWid = m_pSubLog->GetWindowID();
-					if (sdlEvent.type == SDL_TEXTINPUT && sdlEvent.text.windowID == logWid) {
-						m_pMsgLog->OnTextInput(sdlEvent.text.text);
-					} else if (sdlEvent.type == SDL_KEYDOWN && sdlEvent.key.windowID == logWid) {
-						m_pMsgLog->OnKeyDown(sdlEvent.key.keysym.sym);
+					SDL_Window *pLogWnd = SDL_GetWindowFromID(m_pSubLog->GetWindowID());
+					if (pLogWnd != NULL && SDL_GetKeyboardFocus() == pLogWnd) {
+						if (sdlEvent.type == SDL_TEXTINPUT) {
+							m_pMsgLog->OnTextInput(sdlEvent.text.text);
+						} else if (sdlEvent.type == SDL_KEYDOWN) {
+							m_pMsgLog->OnKeyDown(sdlEvent.key.keysym.sym);
+						}
 					}
 				}
 				// サブ窓 ProcessEvent はコンテキストを切り替えるため、
