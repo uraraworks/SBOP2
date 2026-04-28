@@ -514,6 +514,19 @@ void CSDLApp::RunFrame(void)
 			m_bDrawPending = TRUE;
 			break;
 
+		case SDL_TEXTEDITING:
+			// IME変換中の未確定文字列を、ネイティブ入力欄へ描画用に渡す
+			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
+#if !defined(__EMSCRIPTEN__)
+				if (!IsSubWindowKeyboardFocused())
+#endif
+				{
+					m_pHost->OnSDLTextEditing(sdlEvent.edit.text);
+				}
+			}
+			m_bDrawPending = TRUE;
+			break;
+
 		case SDL_WINDOWEVENT:
 			switch (sdlEvent.window.event)
 			{

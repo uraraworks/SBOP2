@@ -92,10 +92,19 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 
 	hDC = m_pDib->Lock();
 	TextOut2(hDC, m_hFont14, 8 + 8, 16 + 4, m_strChat, RGB(0, 0, 0));
+	if (!m_strComposition.IsEmpty()) {
+		int nCompositionX;
+
+		nCompositionX = 8 + 8 + m_strChat.GetLength() * 8;
+		if (nCompositionX > m_sizeWindow.cx - 24) {
+			nCompositionX = m_sizeWindow.cx - 24;
+		}
+		TextOut2(hDC, m_hFont14, nCompositionX, 16 + 4, m_strComposition, RGB(40, 80, 180));
+	}
 	if (m_bActive && (m_nCursorAnime == 0)) {
 		int nCursorX;
 
-		nCursorX = 8 + 8 + m_strChat.GetLength() * 8;
+		nCursorX = 8 + 8 + (m_strChat.GetLength() + m_strComposition.GetLength()) * 8;
 		if (nCursorX > m_sizeWindow.cx - 24) {
 			nCursorX = m_sizeWindow.cx - 24;
 		}
@@ -126,6 +135,21 @@ BOOL CWindowCHAT::HandleSDLKeyDown(UINT vk)
 		return FALSE;
 	}
 
+	if (!m_strComposition.IsEmpty()) {
+		switch (vk) {
+		case VK_RETURN:
+		case VK_BACK:
+		case VK_UP:
+		case VK_DOWN:
+			return TRUE;
+
+		case VK_ESCAPE:
+			m_strComposition.Empty();
+			Redraw();
+			return TRUE;
+		}
+	}
+
 	nCount = (int)m_aArrayType.size();
 	switch (vk) {
 	case VK_RETURN:
@@ -135,6 +159,7 @@ BOOL CWindowCHAT::HandleSDLKeyDown(UINT vk)
 	case VK_ESCAPE:
 		m_pMgrData->SetChatModeBack(m_nType);
 		m_bDelete = TRUE;
+		m_strComposition.Empty();
 		UpdateSDLTextInput();
 		// ウィンドウ削除直後にポーリングが Escape 離上エッジを StateProc に渡さないようリセット
 		m_pMgrData->GetMgrKeyInput()->Reset();
@@ -169,7 +194,17 @@ void CWindowCHAT::HandleSDLTextInput(LPCSTR pszText)
 	if (!m_bActive) {
 		return;
 	}
+	m_strComposition.Empty();
 	AppendText(pszText);
+}
+
+
+void CWindowCHAT::HandleSDLTextEditing(LPCSTR pszText)
+{
+	if (!m_bActive) {
+		return;
+	}
+	SetCompositionText(pszText);
 }
 
 
@@ -268,6 +303,21 @@ void CWindowCHAT::AppendText(LPCSTR pszText)
 }
 
 
+void CWindowCHAT::SetCompositionText(LPCSTR pszText)
+{
+	CmyString strComposition;
+	CString strWide;
+
+	m_strComposition.Empty();
+	if ((pszText != NULL) && (pszText[0] != '\0')) {
+		strWide = Utf8ToTString(pszText);
+		TrimViewString(strComposition, (LPCTSTR)strWide);
+		m_strComposition = strComposition;
+	}
+	Redraw();
+}
+
+
 void CWindowCHAT::SubmitChat(void)
 {
 	if (!m_strChat.IsEmpty()) {
@@ -278,6 +328,7 @@ void CWindowCHAT::SubmitChat(void)
 		m_bDelete = TRUE;
 		UpdateSDLTextInput();
 	}
+	m_strComposition.Empty();
 	// Enter を押してウィンドウを閉じた直後、ポーリングが Enter 離上エッジを
 	// StateProcMAP::OnEnter(FALSE) に誤送信してチャットを再オープンしないよう
 	// キー入力状態を全リセットする

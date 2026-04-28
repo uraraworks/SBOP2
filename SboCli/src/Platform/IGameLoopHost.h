@@ -32,6 +32,7 @@ public:
 	virtual void OnSDLKeyDown(int vk) = 0;
 	virtual void OnSDLKeyUp(int vk) = 0;
 	virtual void OnSDLTextInput(LPCSTR pszText) = 0;
+	virtual void OnSDLTextEditing(LPCSTR pszText) = 0;
 	virtual void OnSDLMouseMove(int x, int y) = 0;
 	virtual void OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick) = 0;
 	virtual void OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick) = 0;

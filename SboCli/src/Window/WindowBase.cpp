@@ -307,6 +307,12 @@ void CWindowBase::HandleSDLTextInput(LPCSTR pszText)
 }
 
 
+void CWindowBase::HandleSDLTextEditing(LPCSTR pszText)
+{
+	UNREFERENCED_PARAMETER(pszText);
+}
+
+
 BOOL CWindowBase::HandleSDLMouseLeftButtonDown(int x, int y)
 {
 	UNREFERENCED_PARAMETER(x);

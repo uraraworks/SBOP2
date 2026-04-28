@@ -87,6 +87,7 @@ public:
 	virtual void OnSDLKeyDown(int vk);
 	virtual void OnSDLKeyUp(int vk);
 	virtual void OnSDLTextInput(LPCSTR pszText);
+	virtual void OnSDLTextEditing(LPCSTR pszText);
 	virtual void OnSDLMouseMove(int x, int y);
 	virtual void OnSDLMouseLeftButtonDown(int x, int y, BOOL bDoubleClick);
 	virtual void OnSDLMouseRightButtonDown(int x, int y, BOOL bDoubleClick);

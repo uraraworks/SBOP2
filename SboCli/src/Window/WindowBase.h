@@ -31,6 +31,7 @@ public:
 	virtual ILoginWindow	*GetLoginWindowInterface(void);	// ログインUIインターフェースを取得
 	virtual BOOL	HandleSDLKeyDown(UINT vk);	// SDLキー押下を処理
 	virtual void	HandleSDLTextInput(LPCSTR pszText);	// SDLテキスト入力を処理
+	virtual void	HandleSDLTextEditing(LPCSTR pszText);	// SDLテキスト編集中を処理
 	virtual BOOL	HandleSDLMouseLeftButtonDown(int x, int y);	// SDL左クリックを処理
 			BOOL	IsDelete(void) { return m_bDelete;	}	// 削除判定
 			BOOL	IsInput(void) { return m_bInput;	}	// キー入力を行うか判定

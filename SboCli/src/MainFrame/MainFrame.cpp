@@ -394,6 +394,19 @@ void CMainFrame::OnSDLTextInput(LPCSTR pszText)
 }
 
 
+void CMainFrame::OnSDLTextEditing(LPCSTR pszText)
+{
+	CWindowBase *pWindow;
+
+	pWindow = (m_pMgrWindow != NULL) ? m_pMgrWindow->GetActiveWindow() : NULL;
+	if (pWindow == NULL) {
+		return;
+	}
+
+	pWindow->HandleSDLTextEditing(pszText);
+}
+
+
 void CMainFrame::OnSDLMouseMove(int x, int y)
 {
 	OnMouseMove(x + 32, y + 32);

@@ -24,6 +24,7 @@ public:
 	void	SetActive(BOOL bActive);	// アクティブか設定
 	virtual BOOL	HandleSDLKeyDown(UINT vk);	// SDLキー押下を処理
 	virtual void	HandleSDLTextInput(LPCSTR pszText);	// SDLテキスト入力を処理
+	virtual void	HandleSDLTextEditing(LPCSTR pszText);	// SDLテキスト編集中を処理
 	virtual BOOL	HandleSDLMouseLeftButtonDown(int x, int y);	// SDL左クリックを処理
 	int	GetType(void);	// チャット種別を取得
 
@@ -33,11 +34,13 @@ private:
 	void	UpdateSDLTextInput(void);	// SDLテキスト入力状態を更新
 	void	DeleteBackward(void);	// 1文字削除
 	void	AppendText(LPCSTR pszText);	// テキスト追記
+	void	SetCompositionText(LPCSTR pszText);	// IME変換中テキストを設定
 	void	SubmitChat(void);	// チャット確定
 
 
 public:
 	CmyString	m_strChat;	// 入力された文字列
+	CmyString	m_strComposition;	// IME変換中の未確定文字列
 
 
 private:
