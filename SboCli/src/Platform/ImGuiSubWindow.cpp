@@ -7,6 +7,7 @@
 
 #if !defined(__EMSCRIPTEN__)
 
+#include <cfloat>
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_sdlrenderer2.h>
@@ -176,13 +177,6 @@ BOOL CImGuiSubWindow::ProcessEvent(const SDL_Event &ev)
         return TRUE;
     }
 
-    // デバッグログ: マウスボタンイベントを記録（動作確認後に削除）
-    if (ev.type == SDL_MOUSEBUTTONDOWN) {
-        Uint32 my = SDL_GetWindowID(m_pWindow);
-        SDL_Log("[SubLog evt] btn ev_wid=%u my_wid=%u btn=%d x=%d y=%d",
-            ev.button.windowID, my, ev.button.button, ev.button.x, ev.button.y);
-    }
-
     // ImGui にイベントを渡す
     ImGui::SetCurrentContext(m_pCtx);
     ImGui_ImplSDL2_ProcessEvent(&ev);
@@ -203,12 +197,23 @@ void CImGuiSubWindow::BeginFrame()
     ImGui_ImplSDL2_NewFrame();
 
     // 対策2: impl_sdl2 のマウス位置更新が multi-context 構成で不安定なため、
-    // サブ窓がキーボードフォーカスを持つ時に限りマウス位置を手動で上書きする
-    if (SDL_GetKeyboardFocus() == m_pWindow) {
-        int gx, gy, wx, wy;
+    // SDL_GetGlobalMouseState からサブ窓相対座標を手動注入する。
+    // キーボードフォーカス条件を外し、マウスがサブ窓矩形内なら正しい座標を、
+    // 矩形外なら -FLT_MAX を注入することで hover 判定を常に正確にする。
+    {
+        int gx = 0, gy = 0;
+        int wx = 0, wy = 0;
+        int ww = 0, wh = 0;
         SDL_GetGlobalMouseState(&gx, &gy);
         SDL_GetWindowPosition(m_pWindow, &wx, &wy);
-        ImGui::GetIO().AddMousePosEvent((float)(gx - wx), (float)(gy - wy));
+        SDL_GetWindowSize(m_pWindow, &ww, &wh);
+        int relX = gx - wx;
+        int relY = gy - wy;
+        if (relX >= 0 && relX < ww && relY >= 0 && relY < wh) {
+            ImGui::GetIO().AddMousePosEvent((float)relX, (float)relY);
+        } else {
+            ImGui::GetIO().AddMousePosEvent(-FLT_MAX, -FLT_MAX);
+        }
     }
 
     ImGui::NewFrame();

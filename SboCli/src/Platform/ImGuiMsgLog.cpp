@@ -161,15 +161,6 @@ void CImGuiMsgLog::Draw()
     m_bInputActiveLastFrame = ImGui::IsItemActive();
     ImGui::PopStyleColor(4);
 
-#if !defined(__EMSCRIPTEN__)
-    // デバッグログ: InputText 状態を毎フレーム出力（動作確認後に削除）
-    SDL_Log("[SubLog draw] active=%d focused=%d hovered=%d wantText=%d",
-        (int)ImGui::IsItemActive(),
-        (int)ImGui::IsItemFocused(),
-        (int)ImGui::IsItemHovered(),
-        (int)ImGui::GetIO().WantTextInput);
-#endif
-
     if (bEntered) {
         if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {
             CMainFrame *pMainFrame = m_pMgrData->GetMainFrame();
