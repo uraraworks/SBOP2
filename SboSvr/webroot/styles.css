@@ -14,6 +14,48 @@ body {
     linear-gradient(135deg, rgba(17, 24, 39, 1) 0%, rgba(22, 48, 58, 1) 48%, rgba(42, 36, 26, 1) 100%);
 }
 
+body.auth-pending {
+  overflow: hidden;
+}
+
+body.auth-pending .page-header,
+body.auth-pending .main-nav,
+body.auth-pending #view-container,
+body.auth-pending .map-workspace-stage-header {
+  display: none;
+}
+
+body.auth-pending .app-layout,
+body.auth-pending .workspace-body {
+  display: block;
+  flex: 1;
+  min-height: 100vh;
+  padding: 0;
+}
+
+body.auth-pending .persistent-game-panel {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: #000;
+}
+
+body.auth-pending .map-object-preview,
+body.auth-pending .admin-game-screen,
+body.auth-pending .admin-game-frame {
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  border: 0;
+  border-radius: 0;
+}
+
 .page-header,
 .page-footer {
   padding: 1rem clamp(1rem, 3vw, 2rem);
@@ -56,6 +98,13 @@ body {
 .header-map-link:hover,
 .header-map-link:focus-visible {
   background-color: rgba(20, 184, 166, 0.28);
+}
+
+.header-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .app-layout {

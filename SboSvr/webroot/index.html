@@ -3,16 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sbo 管理ワークスペース</title>
+  <title>スクラップブックオンラインPage2</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
-<body>
+<body class="auth-pending">
   <header class="page-header">
     <div>
-      <h1>Sbo 管理ワークスペース</h1>
+      <h1>スクラップブックオンラインPage2</h1>
       <p>ゲーム画面を中心に、選択・配置・編集を同じ作業面で扱います。</p>
     </div>
-    <a href="#map-window" data-route="map-window" class="header-map-link">マップウィンドウ</a>
+    <div class="header-actions">
+      <a href="#map-window" data-route="map-window" class="header-map-link">マップウィンドウ</a>
+      <button type="button" class="button secondary" id="admin-logout-button">ログアウト</button>
+    </div>
   </header>
   <div class="app-layout">
   <nav class="main-nav" aria-label="主要メニュー">

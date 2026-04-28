@@ -535,6 +535,7 @@
     });
     loginConnectButton.addEventListener('click', () => {
       callLoginBridge('SBOP2_BrowserLoginConnect', [], []);
+      window.SBOP2RequestWebAdminSession(loginAccountInput.value, loginPasswordInput.value);
     });
 
     for (const element of [loginAccountInput, loginPasswordInput]) {
@@ -542,9 +543,37 @@
         if (event.key === 'Enter') {
           event.preventDefault();
           callLoginBridge('SBOP2_BrowserLoginConnect', [], []);
+          window.SBOP2RequestWebAdminSession(loginAccountInput.value, loginPasswordInput.value);
         }
       });
     }
+
+    window.SBOP2RequestWebAdminSession = function(account, password) {
+      if (!account || !password) {
+        return;
+      }
+      fetch('/api/auth/admin-login', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ loginId: account, password: password })
+      })
+        .then((response) => response.ok ? response.json() : null)
+        .then((data) => {
+          if (!data || !data.authenticated || !(Number(data.adminLevel) > 0)) {
+            return;
+          }
+          if (window.parent) {
+            window.parent.postMessage({ kind: 'sbop2_admin_session_ready' }, window.location.origin);
+          }
+        })
+        .catch((error) => {
+          console.warn('[SBOP2] web admin session request failed:', error);
+        });
+    };
 
     function pumpSingleFrame() {
       if (!Module || typeof Module._SBOP2_BrowserPumpSingleFrame !== 'function') {

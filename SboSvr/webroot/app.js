@@ -6,6 +6,7 @@ const memoryEl = document.getElementById("server-memory");
 const latencyEl = document.getElementById("server-latency");
 const updatedEl = document.getElementById("server-updated");
 const reloadButton = document.getElementById("reload-server");
+const adminLogoutButton = document.getElementById("admin-logout-button");
 
 const accountForm = document.getElementById("account-form");
 const accountResultEl = document.getElementById("account-result");
@@ -543,6 +544,7 @@ const DEFAULT_ROUTE = "map-window";
 const views = document.querySelectorAll("[data-view]");
 const navLinks = document.querySelectorAll("[data-route]");
 let currentRoute = null;
+let adminWorkspaceInitialized = false;
 
 function updateAdminGamePickInfo(message) {
   // pick 情報の常時表示は廃止。互換のため関数だけ残す（呼び出し元の no-op 化）
@@ -597,6 +599,14 @@ function handleAdminGameMessage(event) {
   }
   const message = event.data;
   if (!message || typeof message !== "object") {
+    return;
+  }
+  if (message.kind === "sbop2_admin_session_ready") {
+    checkAdminAuthAndReveal().then((authorized) => {
+      if (authorized) {
+        initializeAdminWorkspace();
+      }
+    });
     return;
   }
   if (message.kind === "sbop2_admin_char_pick") {
@@ -676,6 +686,43 @@ async function fetchJson(url, options = {}) {
     }
   }
   return { response, data, text: rawText };
+}
+
+async function checkAdminAuthAndReveal() {
+  try {
+    const { response, data } = await fetchJson("/api/auth/me");
+    const authorized = response.ok && data && data.authenticated && Number(data.adminLevel) > 0;
+    document.body.classList.toggle("auth-pending", !authorized);
+    document.body.classList.toggle("admin-authorized", authorized);
+    return authorized;
+  } catch (error) {
+    document.body.classList.add("auth-pending");
+    document.body.classList.remove("admin-authorized");
+    return false;
+  }
+}
+
+async function clearAdminSession() {
+  try {
+    await fetchJson("/api/auth/logout", { method: "POST" });
+  } finally {
+    document.body.classList.add("auth-pending");
+    document.body.classList.remove("admin-authorized");
+    adminWorkspaceInitialized = false;
+  }
+}
+
+async function handleLogoutQuery() {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has("logout")) {
+    return false;
+  }
+  await clearAdminSession();
+  params.delete("logout");
+  const nextQuery = params.toString();
+  const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ""}${window.location.hash}`;
+  window.history.replaceState(null, "", nextUrl);
+  return true;
 }
 
 /** サーバー情報カードの表示を初期化する。 */
@@ -3730,9 +3777,18 @@ function initAuditLogView() {
   }
 }
 
-window.addEventListener("load", () => {
-  // 管理 WebSocket を起動する（再接続は ensureAdminWebSocket 内で自動管理）
+function initializeAdminWorkspace() {
+  if (adminWorkspaceInitialized) {
+    return;
+  }
+  adminWorkspaceInitialized = true;
   ensureAdminWebSocket();
+  const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;
+  activateRoute(initialRoute, { initial: true, forceReload: true });
+  loadRoles();
+}
+
+window.addEventListener("load", async () => {
   window.addEventListener("message", handleAdminGameMessage);
   initializeAdminGameFrame();
   if (adminGameFrame) {
@@ -3741,6 +3797,20 @@ window.addEventListener("load", () => {
         adminGameMissingEl.hidden = false;
       }
     });
+  }
+
+  if (adminLogoutButton) {
+    adminLogoutButton.addEventListener("click", async () => {
+      await clearAdminSession();
+    });
+  }
+
+  await handleLogoutQuery();
+  const authorized = await checkAdminAuthAndReveal();
+  if (authorized) {
+    adminWorkspaceInitialized = true;
+    // 管理 WebSocket を起動する（再接続は ensureAdminWebSocket 内で自動管理）
+    ensureAdminWebSocket();
   }
 
   const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;

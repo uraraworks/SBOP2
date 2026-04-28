@@ -1,18 +1,21 @@
 # Web管理画面 / Webクライアント / ネイティブクライアント 共存連携方式
 
-最終更新: 2026-04-24
+最終更新: 2026-04-28
 
 Web 管理画面 (`SboSvr/webroot/` + `/api/...`, `/ws/admin`) と、管理画面へ埋め込む Web クライアント、ネイティブクライアント (`SboCli`, 旧来のゲームクライアント) が同一サーバーに同時接続したときに、選択状態とデータ変更通知をどう同期するかを整理する。
 
 ## 登場人物
 
 - **Web 管理画面** — `SboSvr/webroot/app.js` / `CHttpServer` 経由。
+  - 一般プレイヤーと同じ URL から入る。未認証 / 一般アカウント状態ではゲーム画面のみ表示し、管理者ログイン後に管理 UI を展開する。
   - 認証は Cookie `SESSID`（セッション ID ＝ `CInfoAccount` の参照キー）。
-  - REST API `/api/...` と WebSocket `/ws/admin` で会話する。
+  - `POST /api/auth/admin-login` で管理者セッションを作成し、`POST /api/auth/logout` または `?logout=1` で破棄する。
+  - REST API `/api/...` と WebSocket `/ws/admin` は `adminLevel > ADMINLEVEL_NONE` の管理者だけ利用できる。
 - **埋め込み Web クライアント** — `SboSvr/webroot/index.html` の常設 iframe で `/game/sbocli-title.html?server=<host>:<wsPort>&admin=1` を読み込む。
   - `SboCli` の Emscripten ビルドを `SboSvr` から静的配信する。
   - 同一ブラウザ内の親管理画面とは `window.parent.postMessage(...)` で直接会話する。
-  - 現在はキャラクタークリック時に `{kind:"sbop2_admin_char_pick", charId}` を送る。
+  - 管理者ログイン成立時は `{kind:"sbop2_admin_session_ready"}` を親へ送る。親画面は iframe を再読み込みせず、管理 UI だけを初期化する。
+  - 現在はクリック選択時に `{kind:"sbop2_admin_pick", ...}` を送る。後方互換で `{kind:"sbop2_admin_char_pick", charId}` も受ける。
 - **ネイティブクライアント** — `SboCli` (SDL 化済み) および旧クライアント。
   - TCP ソケット経由で独自バイナリプロトコル（`Common/Packet/` 配下）を使う。
   - 管理者用パケットは `SBOCOMMANDID_SUB_ADMIN_*`。

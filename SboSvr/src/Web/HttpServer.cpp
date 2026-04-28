@@ -37,9 +37,11 @@
 #include "Handlers/InitialStatusHandler.h"
 #include "Handlers/ImageCatalogHandler.h"
 #include "Handlers/AuditLogHandler.h"
+#include "Handlers/AuthSessionHandler.h"
 #include "AuditLog.h"
 #include "AuthProvider.h"
 #include "MgrData.h"
+#include "GlobalDefine.h"
 
 namespace
 {
@@ -134,6 +136,32 @@ ContentLengthParseResult TryParseContentLength(const std::string &request, size_
         }
 
         return ContentLengthNotPresent;
+}
+
+bool IsPathPrefix(const std::string &path, const char *pszPrefix)
+{
+        if (pszPrefix == NULL) {
+                return false;
+        }
+        size_t nLen = strlen(pszPrefix);
+        return (path.size() >= nLen) && (path.compare(0, nLen, pszPrefix) == 0);
+}
+
+bool IsAuthApiPath(const std::string &path)
+{
+        return (path == "/api/auth/me") || (path == "/api/auth/admin-login") || (path == "/api/auth/logout");
+}
+
+void SetUnauthorizedResponse(HttpResponse &response)
+{
+        response.statusLine = "HTTP/1.1 401 Unauthorized";
+        response.SetJsonBody("{\"error\":\"unauthorized\"}");
+}
+
+void SetForbiddenAdminResponse(HttpResponse &response)
+{
+        response.statusLine = "HTTP/1.1 403 Forbidden";
+        response.SetJsonBody("{\"error\":\"forbidden\",\"required\":\"admin\"}");
 }
 }
 
@@ -512,6 +540,25 @@ void CHttpServer::HandleClient(SOCKET hClient, bool &outTransferred)
         }
 
         HttpResponse httpResponse;
+        if (IsPathPrefix(httpRequest.path, "/api/") && !IsAuthApiPath(httpRequest.path)) {
+                AuthProvider::AuthContext authContext;
+                AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(httpRequest, m_pMgrData, authContext);
+                if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                        httpResponse.statusLine = "HTTP/1.1 503 Service Unavailable";
+                        httpResponse.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                } else if (authStatus != AuthProvider::AuthStatusOk) {
+                        SetUnauthorizedResponse(httpResponse);
+                } else if (authContext.adminLevel <= ADMINLEVEL_NONE) {
+                        SetForbiddenAdminResponse(httpResponse);
+                }
+                if (httpResponse.statusLine != "HTTP/1.1 200 OK") {
+                        httpResponse.EnsureContentLength();
+                        SendResponse(hClient, httpResponse);
+                        shutdown(hClient, SD_BOTH);
+                        return;
+                }
+        }
+
         std::string allowedMethods;
         CApiRouter::RouteResult result = m_router.Dispatch(httpRequest, httpResponse, &allowedMethods);
 
@@ -671,6 +718,15 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> serverHandler(new CServerInfoHandler(m_pMgrData));
         m_router.Register("GET", "/api/server", std::move(serverHandler));
+
+        std::unique_ptr<IApiHandler> authMeHandler(new CAuthMeHandler(m_pMgrData));
+        m_router.Register("GET", "/api/auth/me", std::move(authMeHandler));
+
+        std::unique_ptr<IApiHandler> adminLoginHandler(new CAdminLoginHandler(m_pMgrData));
+        m_router.Register("POST", "/api/auth/admin-login", std::move(adminLoginHandler));
+
+        std::unique_ptr<IApiHandler> authLogoutHandler(new CAuthLogoutHandler());
+        m_router.Register("POST", "/api/auth/logout", std::move(authLogoutHandler));
 
         std::unique_ptr<IApiHandler> accountCreateHandler(new CAccountCreateHandler(m_pMgrData));
         m_router.Register("POST", "/api/accounts", std::move(accountCreateHandler));
@@ -1068,6 +1124,14 @@ bool CHttpServer::HandleAdminWsUpgrade(SOCKET hClient, const std::string &rawHea
         if (authStatus != AuthProvider::AuthStatusOk) {
                 const char *pszResp =
                     "HTTP/1.1 401 Unauthorized\r\n"
+                    "Content-Length: 0\r\n"
+                    "\r\n";
+                SendAll(hClient, pszResp, strlen(pszResp));
+                return false;
+        }
+        if (authContext.adminLevel <= ADMINLEVEL_NONE) {
+                const char *pszResp =
+                    "HTTP/1.1 403 Forbidden\r\n"
                     "Content-Length: 0\r\n"
                     "\r\n";
                 SendAll(hClient, pszResp, strlen(pszResp));

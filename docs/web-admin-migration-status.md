@@ -1,6 +1,6 @@
 # Web管理画面 進捗確認
 
-最終更新: 2026-04-24（管理画面への Web クライアント埋め込みとキャラクタークリック連携を反映）
+最終更新: 2026-04-28（同一URL入口・管理者セッション・ログアウト導線を反映）
 
 ## 使い方
 
@@ -15,6 +15,11 @@
 - サーバー情報ダッシュボード
 - アカウント作成
 - 管理者ロール設定
+- 同一URL入口での管理者ログイン切り替え
+  - 初期状態はゲーム画面のみ表示
+  - 管理者アカウントでログインするとページ再読み込みなしで管理 UI を展開
+  - 一般アカウントはゲーム画面のまま
+  - ヘッダーのログアウトボタン、または `?logout=1` で管理セッションを破棄
 - Web クライアント常設レイアウト（左: ゲーム画面 / 右: 編集パネル）
 - ゲーム画面クリックからキャラクター編集画面を開く連携
 - マップパーツ編集
@@ -46,6 +51,9 @@
 - [x] サーバー情報ダッシュボード
 - [x] アカウント作成
 - [x] 管理者ロール設定
+- [x] Web 管理セッション API（`/api/auth/me` / `/api/auth/admin-login` / `/api/auth/logout`）
+- [x] 同一 URL 入口で、管理者ログイン後に管理 UI を展開
+- [x] 管理者セッション解除導線（ログアウトボタン / `?logout=1`）
 - [x] 認可ルールの棚卸しを文書へ反映（[web-admin-authorization.md](./web-admin-authorization.md)）
 
 ## Wave 2A: マップ基盤
@@ -129,6 +137,9 @@
   後方互換のため旧 `sbop2_admin_char_pick` メッセージも `handleAdminGameMessage` で受信できる。
 - 管理画面側は `app.js` の `handleAdminGamePick()` で優先度 char > item > cell に応じて
   自動ナビゲーション（character-overview / map-objects / map-info）を行う。
+- 管理画面の入口は一般プレイヤーと同じ URL。`auth-pending` 状態ではゲーム iframe のみを表示し、
+  `POST /api/auth/admin-login` で管理者セッションが成立した後、iframe を再読み込みせず管理 UI だけを初期化する。
+  一般アカウントのテストに戻す場合は、ヘッダーのログアウトボタンか `?logout=1` を使う。
 - `IDM_DEBUG_*` は恒久 UI ではなく、必要なら開発者向けツールとして別枠に分離する
 - `DlgAdminTalkEvent*` の Web 版（会話イベント editor）は実装済み。共通コンポーネントとして
   `openTalkEventEditor({ talkEventId, onSaved })` で呼び出し可能。宣言的には

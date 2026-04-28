@@ -17,6 +17,16 @@
 #include "Platform/SDLEventUtil.h"
 #include "MainFrame.h"
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+
+EM_JS(void, SBOP2_RequestWebAdminSession, (const char *pszAccount, const char *pszPassword), {
+	if (typeof window.SBOP2RequestWebAdminSession !== 'function') {
+		return;
+	}
+	window.SBOP2RequestWebAdminSession(UTF8ToString(pszAccount), UTF8ToString(pszPassword));
+});
+#endif
 
 void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData)
 {
@@ -41,6 +51,9 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 		// 入力内容とチェック状態を保存
 		pWindow = m_pMgrWindow->GetLoginWindow();
 		if (pWindow) {
+#if defined(__EMSCRIPTEN__)
+			SBOP2_RequestWebAdminSession(pWindow->GetAccount(), pWindow->GetPassword());
+#endif
 			pWindow->Save();
 		}
 
