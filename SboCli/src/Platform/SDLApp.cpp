@@ -149,6 +149,25 @@ CSDLApp::CSDLApp()
 	m_dwMaxDrawThisSec = 0;
 }
 
+#if !defined(__EMSCRIPTEN__)
+bool CSDLApp::IsSubWindowKeyboardFocused(void) const
+{
+	SDL_Window *pFocus = SDL_GetKeyboardFocus();
+	if (pFocus == NULL) {
+		return false;
+	}
+	if ((m_pSubDbg != NULL) && m_pSubDbg->IsCreated()) {
+		SDL_Window *pDbg = SDL_GetWindowFromID(m_pSubDbg->GetWindowID());
+		if (pFocus == pDbg) return true;
+	}
+	if ((m_pSubLog != NULL) && m_pSubLog->IsCreated()) {
+		SDL_Window *pLog = SDL_GetWindowFromID(m_pSubLog->GetWindowID());
+		if (pFocus == pLog) return true;
+	}
+	return false;
+}
+#endif
+
 CSDLApp::~CSDLApp()
 {
 	Destroy();
@@ -455,8 +474,16 @@ void CSDLApp::RunFrame(void)
 		case SDL_KEYDOWN:
 			// サブ窓宛てキーイベントはゲーム側に渡さない（上で continue 済み）
 			// ImGui がキーボードをキャプチャ中の場合もゲーム側に渡さない
+			// 加えて、サブ窓のいずれかが OS キーボードフォーカスを持つ場合は
+			// 確実にゲーム側へ漏らさない (SDL のキャプチャ状態次第で
+			// windowID 判定をすり抜けることがあるためのセーフネット)
 			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
-				m_pHost->OnSDLKeyDown(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+#if !defined(__EMSCRIPTEN__)
+				if (!IsSubWindowKeyboardFocused())
+#endif
+				{
+					m_pHost->OnSDLKeyDown(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+				}
 			}
 			m_bDrawPending = TRUE;
 			break;
@@ -464,7 +491,12 @@ void CSDLApp::RunFrame(void)
 		case SDL_KEYUP:
 			// ImGui がキーボードをキャプチャ中の場合はゲーム側に渡さない
 			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
-				m_pHost->OnSDLKeyUp(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+#if !defined(__EMSCRIPTEN__)
+				if (!IsSubWindowKeyboardFocused())
+#endif
+				{
+					m_pHost->OnSDLKeyUp(CSDLInput::ScancodeToVK(sdlEvent.key.keysym.scancode));
+				}
 			}
 			m_bDrawPending = TRUE;
 			break;
@@ -472,7 +504,12 @@ void CSDLApp::RunFrame(void)
 		case SDL_TEXTINPUT:
 			// ImGui がキーボードをキャプチャ中の場合はゲーム側に渡さない
 			if (!m_bImGuiInitialized || !ImGui::GetIO().WantCaptureKeyboard) {
-				m_pHost->OnSDLTextInput(sdlEvent.text.text);
+#if !defined(__EMSCRIPTEN__)
+				if (!IsSubWindowKeyboardFocused())
+#endif
+				{
+					m_pHost->OnSDLTextInput(sdlEvent.text.text);
+				}
 			}
 			m_bDrawPending = TRUE;
 			break;
