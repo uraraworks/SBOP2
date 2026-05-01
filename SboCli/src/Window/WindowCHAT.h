@@ -26,6 +26,8 @@ public:
 	virtual void	HandleSDLTextInput(LPCSTR pszText);	// SDLテキスト入力を処理
 	virtual void	HandleSDLTextEditing(LPCSTR pszText);	// SDLテキスト編集中を処理
 	virtual BOOL	HandleSDLMouseLeftButtonDown(int x, int y);	// SDL左クリックを処理
+	void	SetCompositionTextFromBrowser(LPCSTR pszText);	// browser IME変換中テキストを設定
+	void	CommitTextFromBrowser(LPCSTR pszText);	// browser IME確定テキストを入力
 	int	GetType(void);	// チャット種別を取得
 
 
@@ -45,6 +47,7 @@ public:
 
 private:
 	int	m_nType;	// チャット種別
+	DWORD	m_dwSuppressSubmitUntil;	// browser IME確定直後のEnter送信抑制期限
 	BOOL	m_bPushEnter,	// Enterキー押下状態
 			m_bPushEsc,	// ESCキー押下状態
 			m_bTextInputActive;	// SDLテキスト入力状態

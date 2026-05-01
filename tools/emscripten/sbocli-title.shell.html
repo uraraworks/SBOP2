@@ -14,6 +14,7 @@
       --subtle: #91a0b3;
       --accent: #58c4dd;
       --border: #2d3947;
+      --game-scale: 1;
     }
 
     * {
@@ -77,8 +78,8 @@
 
     .canvas-stage {
       position: relative;
-      width: min(90vw, 480px);
-      height: min(90vw, 480px);
+      width: calc(480px * var(--game-scale));
+      height: calc(480px * var(--game-scale));
     }
 
     #canvas {
@@ -89,6 +90,25 @@
       background: #000;
       border: 1px solid #000;
       outline: none;
+    }
+
+    #sbop2ImeInput {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      border: 0;
+      opacity: 0.01;
+      color: transparent;
+      background: transparent;
+      caret-color: transparent;
+      resize: none;
+      overflow: hidden;
+      pointer-events: none;
+      ime-mode: active;
+      z-index: 0;
     }
 
     /* ── Click to Start オーバーレイ ── */
@@ -272,8 +292,8 @@
       border-radius: 0;
     }
     body.admin-embed .canvas-stage {
-      width: min(100vw, 100vh);
-      height: min(100vw, 100vh);
+      width: calc(480px * var(--game-scale));
+      height: calc(480px * var(--game-scale));
     }
   </style>
 </head>
@@ -292,6 +312,7 @@
     <section class="panel canvas-wrap">
       <div class="canvas-stage">
         <canvas id="canvas" width="480" height="480" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+        <textarea id="sbop2ImeInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
         <!-- Click to Start オーバーレイ（Autoplay Policy 対策） -->
         <!-- 初期状態は loading クラス付き → 操作不可・読み込み中表示 -->
         <div id="startOverlay" class="loading">
@@ -362,6 +383,7 @@
 
     const statusElement = document.getElementById('status');
     const canvasElement = document.getElementById('canvas');
+    const imeInputElement = document.getElementById('sbop2ImeInput');
     const outputElement = document.getElementById('output');
     const probeElement = document.getElementById('canvasProbe');
     const startOverlay = document.getElementById('startOverlay');
@@ -375,17 +397,122 @@
     const loginSaveInput = document.getElementById('loginSave');
     const loginConnectButton = document.getElementById('loginConnect');
 
+    function focusGameInput(force) {
+      if (!imeInputElement || (!force && loginOverlay.contains(document.activeElement))) {
+        return;
+      }
+      imeInputElement.focus({ preventScroll: true });
+    }
+
+    function isLoginElementActive() {
+      return !!(loginOverlay && loginOverlay.contains(document.activeElement));
+    }
+
+    function updateIntegerGameScale() {
+      const maxW = document.body.classList.contains('admin-embed')
+        ? window.innerWidth
+        : Math.min(window.innerWidth * 0.9, 480);
+      const maxH = document.body.classList.contains('admin-embed')
+        ? window.innerHeight
+        : Math.min(window.innerHeight * 0.9, 480);
+      const scale = Math.max(1, Math.floor(Math.min(maxW, maxH) / 480));
+      document.documentElement.style.setProperty('--game-scale', String(scale));
+    }
+
+    function clearGameImeInput() {
+      if (imeInputElement) {
+        imeInputElement.value = '';
+      }
+    }
+
+    function callChatBridge(name, text) {
+      if (!Module || typeof Module.ccall !== 'function') {
+        return;
+      }
+      Module.ccall(name, null, ['string'], [text || '']);
+    }
+
+    function setChatComposition(text) {
+      callChatBridge('SBOP2_BrowserChatSetComposition', text);
+    }
+
+    function commitChatText(text) {
+      if (text) {
+        callChatBridge('SBOP2_BrowserChatCommitText', text);
+      }
+    }
+
+    let gameInputComposing = false;
+    let suppressGameInputEnterUntil = 0;
+    let ignoreGameInputUntil = 0;
+    let compositionInputFallbackUntil = 0;
+    canvasElement.addEventListener('mousedown', () => focusGameInput(false));
+    canvasElement.addEventListener('touchstart', () => focusGameInput(false), { passive: true });
+    imeInputElement.addEventListener('compositionstart', () => {
+      gameInputComposing = true;
+      setChatComposition('');
+    });
+    imeInputElement.addEventListener('compositionupdate', (event) => {
+      gameInputComposing = true;
+      setChatComposition(event.data || imeInputElement.value || '');
+    });
+    imeInputElement.addEventListener('compositionend', (event) => {
+      const text = event.data || imeInputElement.value || '';
+      gameInputComposing = false;
+      setChatComposition('');
+      commitChatText(text);
+      clearGameImeInput();
+      suppressGameInputEnterUntil = performance.now() + 250;
+      if (text) {
+        ignoreGameInputUntil = performance.now() + 120;
+        compositionInputFallbackUntil = 0;
+      } else {
+        compositionInputFallbackUntil = performance.now() + 120;
+      }
+    });
+    imeInputElement.addEventListener('input', () => {
+      if (gameInputComposing) {
+        return;
+      }
+      if (performance.now() < ignoreGameInputUntil) {
+        clearGameImeInput();
+        return;
+      }
+      const text = imeInputElement.value || '';
+      if (performance.now() < compositionInputFallbackUntil) {
+        commitChatText(text);
+      }
+      clearGameImeInput();
+    });
+    imeInputElement.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && (event.isComposing || gameInputComposing || performance.now() < suppressGameInputEnterUntil)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    }, true);
+    document.addEventListener('keydown', (event) => {
+      if (!startGameCalled || isLoginElementActive()) {
+        return;
+      }
+      if (document.activeElement !== imeInputElement) {
+        focusGameInput(true);
+      }
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) {
+        event.preventDefault();
+      }
+    }, true);
+
     // ── Click to Start: ユーザー操作による AudioContext の resume ──
     let startGameCalled = false;
     function startGame() {
       if (startGameCalled) return;
       startGameCalled = true;
 
-      // オーバーレイを非表示にしてキャンバスへフォーカス移動
+      // オーバーレイを非表示にしてIME対応のゲーム入力欄へフォーカス移動
       if (startOverlay) {
         startOverlay.style.display = 'none';
       }
-      canvasElement.focus();
+      focusGameInput(false);
 
       // SDL2 の AudioContext を resume する（Autoplay Policy 対策）
       try {
@@ -443,10 +570,10 @@
     }
 
     window.SBOP2HideLoginOverlay = function() {
-      // ログイン入力要素にフォーカスがあったら canvas に戻す
-      // （SDL2 Emscripten port は canvas にフォーカスが無いとキー入力を受け取らない）
+      // ログイン入力要素にフォーカスがあったらゲーム入力欄に戻す
+      // （SDL2 Emscripten port は指定したキーボード要素にフォーカスが無いとキー入力を受け取らない）
       if (loginOverlay.contains(document.activeElement)) {
-        canvasElement.focus({ preventScroll: true });
+        focusGameInput(true);
       }
       loginOverlay.hidden = true;
     };
@@ -547,6 +674,9 @@
         }
       });
     }
+
+    window.addEventListener('resize', updateIntegerGameScale);
+    updateIntegerGameScale();
 
     window.SBOP2RequestWebAdminSession = function(account, password) {
       if (!account || !password) {

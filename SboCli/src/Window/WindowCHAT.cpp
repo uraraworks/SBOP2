@@ -11,9 +11,13 @@
 #include "MgrGrpData.h"
 #include "MgrKeyInput.h"
 #include "MgrWindow.h"
+#include "Platform/SdlFont.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include "WindowCHAT.h"
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/emscripten.h>
+#endif
 
 namespace {
 
@@ -21,7 +25,48 @@ enum {
 	CHAT_TEXT_MAX = 100,
 };
 
+#if defined(__EMSCRIPTEN__)
+static CWindowCHAT *g_pBrowserChatWindow = NULL;
+#endif
+
+static int GetFontTextWidth(HFONT hFont, LPCTSTR pszText)
+{
+	int nWidth, nHeight, nLen;
+
+	if (pszText == NULL) {
+		return 0;
+	}
+	nLen = (int)_tcslen(pszText);
+	if (nLen <= 0) {
+		return 0;
+	}
+	nWidth = 0;
+	nHeight = 0;
+	if (SdlFontGetTextExtent((void*)hFont, pszText, nLen, &nWidth, &nHeight)) {
+		return nWidth;
+	}
+	return nLen * 8;
 }
+
+}
+
+#if defined(__EMSCRIPTEN__)
+extern "C" {
+EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserChatSetComposition(const char *pszText)
+{
+	if (g_pBrowserChatWindow != NULL) {
+		g_pBrowserChatWindow->SetCompositionTextFromBrowser(pszText);
+	}
+}
+
+EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserChatCommitText(const char *pszText)
+{
+	if (g_pBrowserChatWindow != NULL) {
+		g_pBrowserChatWindow->CommitTextFromBrowser(pszText);
+	}
+}
+}
+#endif
 
 CWindowCHAT::CWindowCHAT()
 {
@@ -29,6 +74,7 @@ CWindowCHAT::CWindowCHAT()
 	m_bPushEnter	= FALSE;
 	m_bPushEsc	= FALSE;
 	m_bTextInputActive = FALSE;
+	m_dwSuppressSubmitUntil = 0;
 	m_nID	= WINDOWTYPE_CHAT;
 	m_nType	= 0;
 	m_ptViewPos.y	= SCRSIZEY - 88;
@@ -40,6 +86,11 @@ CWindowCHAT::CWindowCHAT()
 
 CWindowCHAT::~CWindowCHAT()
 {
+#if defined(__EMSCRIPTEN__)
+	if (g_pBrowserChatWindow == this) {
+		g_pBrowserChatWindow = NULL;
+	}
+#endif
 	UpdateSDLTextInput();
 }
 
@@ -49,6 +100,9 @@ void CWindowCHAT::Create(CMgrData *pMgrData)
 	int nResult;
 
 	CWindowBase::Create(pMgrData);
+#if defined(__EMSCRIPTEN__)
+	g_pBrowserChatWindow = this;
+#endif
 
 	m_aArrayType.push_back(0);
 	nResult = m_pMgrData->GetAdminLevel();
@@ -95,7 +149,7 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 	if (!m_strComposition.IsEmpty()) {
 		int nCompositionX;
 
-		nCompositionX = 8 + 8 + m_strChat.GetLength() * 8;
+		nCompositionX = 8 + 8 + GetFontTextWidth(m_hFont14, m_strChat);
 		if (nCompositionX > m_sizeWindow.cx - 24) {
 			nCompositionX = m_sizeWindow.cx - 24;
 		}
@@ -103,8 +157,11 @@ void CWindowCHAT::Draw(PCImg32 pDst)
 	}
 	if (m_bActive && (m_nCursorAnime == 0)) {
 		int nCursorX;
+		CString strCursorBase;
 
-		nCursorX = 8 + 8 + (m_strChat.GetLength() + m_strComposition.GetLength()) * 8;
+		strCursorBase = (LPCTSTR)m_strChat;
+		strCursorBase += (LPCTSTR)m_strComposition;
+		nCursorX = 8 + 8 + GetFontTextWidth(m_hFont14, strCursorBase);
 		if (nCursorX > m_sizeWindow.cx - 24) {
 			nCursorX = m_sizeWindow.cx - 24;
 		}
@@ -122,6 +179,13 @@ Exit:
 void CWindowCHAT::SetActive(BOOL bActive)
 {
 	CWindowBase::SetActive(bActive);
+#if defined(__EMSCRIPTEN__)
+	if (bActive && (!m_bDelete)) {
+		g_pBrowserChatWindow = this;
+	} else if (g_pBrowserChatWindow == this) {
+		g_pBrowserChatWindow = NULL;
+	}
+#endif
 	UpdateSDLTextInput();
 	Redraw();
 }
@@ -153,6 +217,10 @@ BOOL CWindowCHAT::HandleSDLKeyDown(UINT vk)
 	nCount = (int)m_aArrayType.size();
 	switch (vk) {
 	case VK_RETURN:
+		if ((m_dwSuppressSubmitUntil != 0) && (SDL_GetTicks() < m_dwSuppressSubmitUntil)) {
+			return TRUE;
+		}
+		m_dwSuppressSubmitUntil = 0;
 		SubmitChat();
 		return TRUE;
 
@@ -205,6 +273,26 @@ void CWindowCHAT::HandleSDLTextEditing(LPCSTR pszText)
 		return;
 	}
 	SetCompositionText(pszText);
+}
+
+
+void CWindowCHAT::SetCompositionTextFromBrowser(LPCSTR pszText)
+{
+	if (!m_bActive) {
+		return;
+	}
+	SetCompositionText(pszText);
+}
+
+
+void CWindowCHAT::CommitTextFromBrowser(LPCSTR pszText)
+{
+	if (!m_bActive) {
+		return;
+	}
+	m_strComposition.Empty();
+	m_dwSuppressSubmitUntil = SDL_GetTicks() + 250;
+	AppendText(pszText);
 }
 
 

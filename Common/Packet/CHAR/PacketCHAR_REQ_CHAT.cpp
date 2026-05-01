@@ -56,7 +56,11 @@ PBYTE CPacketCHAR_REQ_CHAT::Set(PBYTE pPacket)
 
 	CopyMemoryRenew(&m_dwCharID,	pDataTmp, sizeof (m_dwCharID),	pDataTmp);	// キャラID
 	CopyMemoryRenew(&m_nType,	pDataTmp, sizeof (m_nType),	pDataTmp);	// チャット種別
-	StoreRenew(m_strChat, (LPCSTR)pDataTmp, pDataTmp);	// 発言内容
+	{
+		LPCSTR pszChat = (LPCSTR)pDataTmp;
+		m_strChat = (LPCTSTR)Utf8ToTString(pszChat);	// 発言内容
+		pDataTmp += (strlen(pszChat) + 1);
+	}
 
 	pRet = pDataTmp;
 	return pRet;
