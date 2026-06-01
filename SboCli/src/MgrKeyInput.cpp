@@ -10,8 +10,22 @@
 #include "Platform/SDLInput.h"
 #if !defined(__EMSCRIPTEN__)
 #include "Platform/SDLApp.h"
+#else
+#include <emscripten/emscripten.h>
 #endif
 #include "imgui.h"
+
+#if defined(__EMSCRIPTEN__)
+// ブラウザのバーチャルパッドから注入される仮想キー押下状態。
+// JS 側 (sbocli-title.shell.html) が Module.ccall('SBOP2_BrowserSetPadKey', ...) で ON/OFF する。
+static BYTE g_abyBrowserPad[256] = {0};
+extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserSetPadKey(int vk, int down)
+{
+    if (vk >= 0 && vk < 256) {
+        g_abyBrowserPad[vk] = down ? 0x80 : 0;
+    }
+}
+#endif
 
 
 CMgrKeyInput::CMgrKeyInput()
@@ -131,6 +145,10 @@ void CMgrKeyInput::Renew(BYTE &byCode, BOOL &bDown)
 
 		// キーボードは SDL 状態を主系とし、ジョイパッドだけ DirectInput を併用する
 		m_abyKeyState[byCodeTmp] = CSDLInput::IsVKPressed(byCodeTmp, pKeyboardState) ? 0x80 : 0;
+#if defined(__EMSCRIPTEN__)
+		// バーチャルパッドの押下状態を OR で合流させる
+		m_abyKeyState[byCodeTmp] |= g_abyBrowserPad[byCodeTmp];
+#endif
 		switch (byCodeTmp) {
 		case VK_UP:		// ↑
 			m_abyKeyState[byCodeTmp] |= (dwKeyInput & BUTTON_UP) ? 0x80 : 0;
@@ -189,7 +207,11 @@ void CMgrKeyInput::Reset(void)
 		if (byCodeTmp == 0) {
 			break;
 		}
-		if (CSDLInput::IsVKPressed(byCodeTmp, pKeyboardState)) {
+		if (CSDLInput::IsVKPressed(byCodeTmp, pKeyboardState)
+#if defined(__EMSCRIPTEN__)
+		    || (g_abyBrowserPad[byCodeTmp] & 0x80)
+#endif
+		) {
 			m_abyKeyState[byCodeTmp]     = 0x80;
 			m_abyKeyStateBack[byCodeTmp] = 1;
 		}

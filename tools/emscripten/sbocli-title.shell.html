@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>SBOP2 SboCli Title</title>
   <style>
     :root {
@@ -15,6 +15,7 @@
       --accent: #58c4dd;
       --border: #2d3947;
       --game-scale: 1;
+      --pad-h: 160px; /* モバイル時のパッド領域の高さ */
     }
 
     * {
@@ -295,6 +296,154 @@
       width: calc(480px * var(--game-scale));
       height: calc(480px * var(--game-scale));
     }
+
+    /* ---- モバイル全画面モード（タッチ操作が主の端末＝スマホ/タブレットのみ） ---- */
+    /* JS の initVirtualPad が isTouch 判定後に body.mobile-pad を付与する */
+    html:has(body.mobile-pad),
+    body.mobile-pad {
+      height: 100%;
+    }
+    body.mobile-pad {
+      overflow: hidden;
+      overscroll-behavior: none;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      background: var(--bg);
+    }
+    body.mobile-pad .layout {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      gap: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    /* ログ欄を非表示: status ヘッダ / デバッグ probe / 下部 output テキストエリア */
+    body.mobile-pad .panel.header,
+    body.mobile-pad .panel.probe,
+    body.mobile-pad > main > section.panel:last-of-type {
+      display: none !important;
+    }
+    /* canvas-wrap を残りの縦領域すべてに拡張 */
+    body.mobile-pad .panel.canvas-wrap {
+      flex: 1;
+      min-height: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* 固定パッドとゲーム画面が重ならないよう下にパッド高分の余白を確保 */
+      padding-bottom: var(--pad-h);
+    }
+    /* ゲーム画面を短辺基準でパッド高を差し引いた領域にフィット（正方形キャンバス想定） */
+    body.mobile-pad .canvas-stage {
+      /* dvh 非対応の古い iOS 向けに vh フォールバックを先に指定し、対応環境では下の dvh が上書きする */
+      width: min(100vw, calc(100vh - var(--pad-h)));
+      height: min(100vw, calc(100vh - var(--pad-h)));
+      width: min(100vw, calc(100dvh - var(--pad-h)));
+      height: min(100vw, calc(100dvh - var(--pad-h)));
+    }
+    /* パッドを画面最下部に固定オーバーレイで常設（レイアウト/重なりの影響を受けないようにする） */
+    body.mobile-pad #virtualPad {
+      display: flex;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: var(--pad-h);
+      z-index: 2147483647;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(16, 20, 26, 0.92);
+      border-top: 1px solid var(--border);
+      padding: 8px 20px;
+      box-sizing: border-box;
+    }
+
+    /* ---- バーチャルパッド ---- */
+    /* タッチ端末判定で JS から display:flex を付与。PC では display:none のまま */
+    #virtualPad {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      width: calc(480px * var(--game-scale));
+      max-width: 100%;
+      padding: 8px 16px;
+      box-sizing: border-box;
+      /* 長押し選択・ダブルタップズームを抑制 */
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    /* アナログスティック */
+    .pad-stick {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 2px solid rgba(255, 255, 255, 0.45);
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      flex: 0 0 auto;
+    }
+    .pad-stick-knob {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 56px;
+      height: 56px;
+      margin-left: -28px;
+      margin-top: -28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      /* JS が translate でノブ位置を更新する。初期は中央 */
+      transform: translate(0px, 0px);
+      pointer-events: none;
+    }
+    /* A/B ボタン: 右カラム */
+    #virtualPad .pad-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+    /* 共通ボタンスタイル */
+    #virtualPad button {
+      min-width: 56px;
+      min-height: 56px;
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      border-radius: 50%;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.30);
+      color: #ffffff;
+      /* ボタン押下時のハイライトをブラウザ既定から無効化 */
+      -webkit-tap-highlight-color: transparent;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #virtualPad button:active {
+      background: rgba(88, 196, 221, 0.75);
+    }
+    /* 十字キー dpad 配置ルールは削除（アナログスティックに置き換え済み） */
+    /* 管理者画面埋め込み時はバーチャルパッドを非表示 */
+    /* ただしモバイル全画面モード時はパッドを出すため除外 */
+    body.admin-embed:not(.mobile-pad) #virtualPad {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -337,6 +486,18 @@
             </label>
             <button id="loginConnect" class="login-button" type="button">接続</button>
           </div>
+        </div>
+      </div>
+      <!-- バーチャルパッド: タッチ端末のみ表示（JS でタッチ判定後に display:flex を付与） -->
+      <div id="virtualPad">
+        <!-- アナログスティック（ドラッグで8方向入力） -->
+        <div class="pad-stick" id="padStick">
+          <div class="pad-stick-knob" id="padStickKnob"></div>
+        </div>
+        <!-- A/B ボタン（右カラム） -->
+        <div class="pad-buttons">
+          <button id="padA" type="button">A</button>
+          <button id="padB" type="button">B</button>
         </div>
       </div>
     </section>
@@ -398,6 +559,13 @@
     const loginConnectButton = document.getElementById('loginConnect');
 
     function focusGameInput(force) {
+      // モバイル全画面モード(body.mobile-pad)では仮想パッドで操作するため、
+      // 隠しIME入力欄(#sbop2ImeInput)へのフォーカスは行わない。
+      // iOS でこれを行うとソフトキーボードが出て画面下のバーチャルパッドを覆ってしまう。
+      if (document.body.classList.contains('mobile-pad')) {
+        return;
+      }
+      // 以下、既存処理
       if (!imeInputElement || (!force && loginOverlay.contains(document.activeElement))) {
         return;
       }
@@ -880,6 +1048,196 @@
       Module.setStatus('例外発生');
       appendLogLine(String(message));
     };
+
+    // ---- バーチャルパッド ----
+    // タッチ端末のみ表示し、各ボタンのタッチ/マウスイベントを仮想キー入力に変換する
+    (function initVirtualPad() {
+      // ?forcepad=1 を付けると PC（pointer:fine）でも強制的にパッドを有効化する（デバッグ用）
+      var forcePad = new URLSearchParams(window.location.search).get('forcepad') === '1';
+
+      // タッチ操作が主の端末＝スマホ/タブレットのみ対象
+      // pointer:coarse を AND することで、タッチ対応ノート PC 等の誤検出を抑制する
+      var isTouch = ((('ontouchstart' in window) || (navigator.maxTouchPoints > 0))
+                    && window.matchMedia('(pointer: coarse)').matches)
+                    || forcePad;
+
+      // 原因切り分け用診断ログ
+      console.log('[SBOP2][pad] forcePad=' + forcePad +
+        ' isTouch=' + isTouch +
+        ' ontouchstart=' + ('ontouchstart' in window) +
+        ' maxTouchPoints=' + navigator.maxTouchPoints +
+        ' coarse=' + window.matchMedia('(pointer: coarse)').matches +
+        ' adminEmbed=' + document.body.classList.contains('admin-embed'));
+
+      if (!isTouch) {
+        return;
+      }
+
+      var pad = document.getElementById('virtualPad');
+      if (!pad) {
+        return;
+      }
+      // モバイル全画面モードを有効化（ログ欄非表示・スクロール禁止・canvas フィット）
+      document.body.classList.add('mobile-pad');
+      // パッドを表示（CSS 側の body.mobile-pad #virtualPad でも flex 指定済み）
+      pad.style.display = 'flex';
+
+      // 表示後の実効スタイルを確認する診断ログ
+      var cs = window.getComputedStyle(pad);
+      console.log('[SBOP2][pad] after-show bodyClass="' + document.body.className +
+        '" computedDisplay=' + cs.display +
+        ' visibility=' + cs.visibility +
+        ' rect=' + JSON.stringify(pad.getBoundingClientRect()));
+
+      // Module.ccall ラッパ — Module 初期化前でも安全に呼べるようガード
+      function setPadKey(vk, down) {
+        if (window.Module && typeof Module.ccall === 'function') {
+          Module.ccall('SBOP2_BrowserSetPadKey', null, ['number', 'number'], [vk, down ? 1 : 0]);
+        }
+      }
+
+      // 各ボタンに VK をバインドするヘルパ
+      // touchstart/touchend/touchcancel (passive:false で preventDefault) +
+      // mousedown/mouseup/mouseleave でマウス操作にも対応
+      function bindPadButton(el, vk) {
+        el.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          setPadKey(vk, true);
+        }, { passive: false });
+        el.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          setPadKey(vk, false);
+        }, { passive: false });
+        el.addEventListener('touchcancel', function() {
+          setPadKey(vk, false);
+        });
+        el.addEventListener('mousedown', function() {
+          setPadKey(vk, true);
+        });
+        el.addEventListener('mouseup', function() {
+          setPadKey(vk, false);
+        });
+        el.addEventListener('mouseleave', function() {
+          setPadKey(vk, false);
+        });
+      }
+
+      // 各ボタンを Win32 VK 値にバインド
+      // A(Z=決定)=0x5A, B(X=キャンセル)=0x58
+      bindPadButton(document.getElementById('padA'),     0x5A);
+      bindPadButton(document.getElementById('padB'),     0x58);
+
+      // ---- アナログスティック（8方向） ----
+      var stick = document.getElementById('padStick');
+      var knob = document.getElementById('padStickKnob');
+      if (stick && knob) {
+        // VK 定数
+        var VK_LEFT = 0x25, VK_UP = 0x26, VK_RIGHT = 0x27, VK_DOWN = 0x28;
+        // 現在スティックが押下している方向キーの状態
+        var stickState = { up: false, down: false, left: false, right: false };
+        var stickTouchId = null; // 追跡中のタッチ識別子（マルチタッチ対応）
+
+        // 倒し量に応じて 8 方向へスナップし、対応キーの押下集合を返す
+        function dirsFromOffset(dx, dy, deadzone) {
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var dirs = { up: false, down: false, left: false, right: false };
+          if (dist < deadzone) {
+            return dirs; // デッドゾーン内は無入力
+          }
+          // 画面座標は下方向が +y。atan2(dy,dx): 右=0, 下=90, 左=180, 上=270(度)
+          var deg = Math.atan2(dy, dx) * 180 / Math.PI;
+          if (deg < 0) { deg += 360; }
+          var sector = Math.round(deg / 45) % 8; // 0=右,1=右下,2=下,3=左下,4=左,5=左上,6=上,7=右上
+          switch (sector) {
+            case 0: dirs.right = true; break;
+            case 1: dirs.right = true; dirs.down = true; break;
+            case 2: dirs.down = true; break;
+            case 3: dirs.down = true; dirs.left = true; break;
+            case 4: dirs.left = true; break;
+            case 5: dirs.left = true; dirs.up = true; break;
+            case 6: dirs.up = true; break;
+            case 7: dirs.up = true; dirs.right = true; break;
+          }
+          return dirs;
+        }
+
+        // 押下集合の差分だけ setPadKey を呼ぶ
+        function applyStickDirs(dirs) {
+          if (dirs.up !== stickState.up)       { setPadKey(VK_UP, dirs.up); stickState.up = dirs.up; }
+          if (dirs.down !== stickState.down)   { setPadKey(VK_DOWN, dirs.down); stickState.down = dirs.down; }
+          if (dirs.left !== stickState.left)   { setPadKey(VK_LEFT, dirs.left); stickState.left = dirs.left; }
+          if (dirs.right !== stickState.right) { setPadKey(VK_RIGHT, dirs.right); stickState.right = dirs.right; }
+        }
+
+        function releaseStick() {
+          applyStickDirs({ up: false, down: false, left: false, right: false });
+          knob.style.transform = 'translate(0px, 0px)';
+          stickTouchId = null;
+        }
+
+        // ベース中心からのオフセットを計算し、ノブ位置と方向を更新
+        function updateStick(clientX, clientY) {
+          var rect = stick.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dx = clientX - cx;
+          var dy = clientY - cy;
+          var maxR = rect.width * 0.5;       // ノブ移動の最大半径
+          var deadzone = rect.width * 0.18;  // デッドゾーン半径
+          // ノブ表示は最大半径でクランプ
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var kx = dx, ky = dy;
+          if (dist > maxR) {
+            kx = dx / dist * maxR;
+            ky = dy / dist * maxR;
+          }
+          knob.style.transform = 'translate(' + kx + 'px, ' + ky + 'px)';
+          applyStickDirs(dirsFromOffset(dx, dy, deadzone));
+        }
+
+        // タッチ操作（マルチタッチ: 自分の識別子だけ追跡）
+        stick.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          if (stickTouchId !== null) { return; }
+          var t = e.changedTouches[0];
+          stickTouchId = t.identifier;
+          updateStick(t.clientX, t.clientY);
+        }, { passive: false });
+        stick.addEventListener('touchmove', function(e) {
+          e.preventDefault();
+          for (var i = 0; i < e.changedTouches.length; i++) {
+            var t = e.changedTouches[i];
+            if (t.identifier === stickTouchId) {
+              updateStick(t.clientX, t.clientY);
+              break;
+            }
+          }
+        }, { passive: false });
+        function onStickTouchEnd(e) {
+          for (var i = 0; i < e.changedTouches.length; i++) {
+            if (e.changedTouches[i].identifier === stickTouchId) {
+              releaseStick();
+              break;
+            }
+          }
+        }
+        stick.addEventListener('touchend', onStickTouchEnd);
+        stick.addEventListener('touchcancel', onStickTouchEnd);
+
+        // マウス操作（PC の forcepad 検証用）
+        var stickMouseDown = false;
+        stick.addEventListener('mousedown', function(e) {
+          stickMouseDown = true;
+          updateStick(e.clientX, e.clientY);
+        });
+        window.addEventListener('mousemove', function(e) {
+          if (stickMouseDown) { updateStick(e.clientX, e.clientY); }
+        });
+        window.addEventListener('mouseup', function() {
+          if (stickMouseDown) { stickMouseDown = false; releaseStick(); }
+        });
+      }
+    })();
 
     // Web管理画面からのモード切替・パーツID通知を受信
     window.addEventListener("message", function(ev) {
