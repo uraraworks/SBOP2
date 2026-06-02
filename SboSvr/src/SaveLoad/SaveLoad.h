@@ -14,6 +14,7 @@
 #include "SaveLoadInfoMapParts.h"	// マップパーツ情報
 #include "SaveLoadInfoMapShadow.h"	// マップ影情報
 #include "SaveLoadInfoMapEvent.h"	// マップイベント情報
+#include "SaveLoadInfoMapObjectData.h"	// マップオブジェクト配置データ
 #include "SaveLoadInfoEffect.h"	// エフェクト情報
 #include "SaveLoadInfoItemType.h"	// アイテム種別情報
 #include "SaveLoadInfoItem.h"	// アイテム情報
