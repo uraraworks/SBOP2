@@ -6,7 +6,7 @@
 /// @date 2008/12/04
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoSkillBase.h"
 #include "InfoSkillHEAL.h"

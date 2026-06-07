@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "HealthHandler.h"
 
 void CHealthHandler::Handle(const HttpRequest & /*request*/, HttpResponse &response)

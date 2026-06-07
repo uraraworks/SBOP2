@@ -524,8 +524,7 @@ inline std::string BrowserCompatWideToUtf8(LPCTSTR pszSrc)
 	if (pszSrc == NULL) {
 		return std::string();
 	}
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	return converter.to_bytes(pszSrc);
+	return WstringToUtf8(pszSrc, wcslen(pszSrc));
 }
 
 /// _tfopen_s: ワイド文字パスを UTF-8 変換して fopen する

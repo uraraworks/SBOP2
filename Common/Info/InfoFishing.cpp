@@ -4,7 +4,7 @@
 /// @date 2008/06/02
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoFishing.h"
 
 // ヘッダ情報

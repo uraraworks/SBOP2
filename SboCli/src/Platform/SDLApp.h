@@ -74,6 +74,7 @@ private:
 	DWORD		m_dwUpdateInterval;	// 更新間隔
 	DWORD		m_dwRenderInterval;	// 描画間隔
 	DWORD		m_dwAccumulated;	// 固定更新残り時間
+	ULONGLONG	m_ullUpdateAccumulated;	// 固定更新残り時間(ms * FPS)
 	DWORD		m_dwTimeLast;		// 前回時刻
 	DWORD		m_dwLastRenderTime;	// 前回描画時刻
 	DWORD		m_dwTimeStart;		// FPS計測開始時刻

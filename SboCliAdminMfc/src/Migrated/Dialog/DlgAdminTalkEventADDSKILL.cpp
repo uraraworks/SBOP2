@@ -4,7 +4,7 @@
 /// @date 2008/12/31
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "LibInfoSkill.h"
 #include "InfoTalkEventBase.h"

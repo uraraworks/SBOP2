@@ -4,7 +4,7 @@
 /// @date 2005/01/24
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <math.h>
 #include "Img32.h"
 #include "Platform/SdlFont.h"

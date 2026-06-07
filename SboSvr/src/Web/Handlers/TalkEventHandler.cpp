@@ -17,7 +17,7 @@
 ///         "menuItems":[ {"page":1, "name":"項目名"} ] }
 ///     ]
 ///   }
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "TalkEventHandler.h"
 
 #include <sstream>

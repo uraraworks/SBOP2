@@ -1,7 +1,7 @@
 /// @file WindowLOGINBrowser.cpp
 /// @brief ログイン情報ウィンドウクラス（Emscripten DOM overlay 版）実装ファイル
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #ifdef __EMSCRIPTEN__
 

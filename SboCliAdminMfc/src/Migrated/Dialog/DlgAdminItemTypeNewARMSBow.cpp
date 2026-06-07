@@ -4,7 +4,7 @@
 /// @date 2009/08/29
 /// @copyright Copyright(C)URARA-works 2009
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SboCli.h"
 #include "InfoItemTypeBase.h"
 #include "DlgAdminItemTypeNewARMSBow.h"

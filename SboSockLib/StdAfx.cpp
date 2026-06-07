@@ -4,7 +4,7 @@
 /// @date 2008/01/20
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "winmm.lib")

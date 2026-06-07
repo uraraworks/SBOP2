@@ -4,7 +4,7 @@
 /// @date 2007/08/14
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "PacketADMIN_ITEM_ADD.h"
 #include "PacketADMIN_ITEM_COPY.h"

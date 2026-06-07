@@ -28,7 +28,7 @@
 /// @date 2026/04/25
 /// @copyright Copyright(C)URARA-works 2026
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoMapBase.h"
 #include "LibInfoMapBase.h"

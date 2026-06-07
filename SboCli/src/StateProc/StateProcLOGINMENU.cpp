@@ -4,7 +4,7 @@
 /// @date 2006/11/05
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "UraraSockTCPSBO.h"
 #include "PacketACCOUNT_REQ_MAKECHAR.h"
 #include "PacketACCOUNT_RES_MAKECHAR.h"

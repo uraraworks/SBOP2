@@ -4,7 +4,7 @@
 /// @date 2006/11/04
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #ifdef _DEBUG
 	#pragma comment(lib, "../Common/myLib/myZlib/zlibD.lib")

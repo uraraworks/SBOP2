@@ -5,7 +5,7 @@
 /// @date 2009/04/11
 /// @copyright Copyright(C)URARA-works 2009
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoDisable.h"
 #include "LibInfoDisable.h"

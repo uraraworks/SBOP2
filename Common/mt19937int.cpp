@@ -33,7 +33,7 @@
 /* ACM Transactions on Modeling and Computer Simulation,           */
 /* Vol. 8, No. 1, January 1998, pp 3--30.                          */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include<stdio.h>
 
 // Period parameters

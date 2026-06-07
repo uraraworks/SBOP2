@@ -4,7 +4,7 @@
 /// @date 2006/09/24
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #if defined(_WIN32)
 #include <comdef.h>
 #endif
@@ -82,7 +82,7 @@ CMgrData::CMgrData()
 	m_bOptionViewItemName	= TRUE;
 	m_bOptionViewHelpIcon	= TRUE;
 	m_bOptionBattleMsgLog	= FALSE;
-	m_bOption60Frame		= FALSE;
+	m_bOption60Frame		= TRUE;
 	m_byViewGrid			= 0;
 
 	m_nWindowPosITEMMENUPos		= -1;
@@ -751,7 +751,7 @@ void CMgrData::ReadIniData(void)
 		m_bOptionViewItemName = TRUE;
 		m_bOptionViewHelpIcon = TRUE;
 		m_bOptionBattleMsgLog = FALSE;
-		m_bOption60Frame = FALSE;
+		m_bOption60Frame = TRUE;
 		m_nSEVolume = 2;
 		m_nBGMVolume = 2;
 		m_nDrawMode = 1;
@@ -784,7 +784,7 @@ void CMgrData::ReadIniData(void)
 	m_bOptionViewItemName = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionViewItemName"), 1, szIniPath);
 	m_bOptionViewHelpIcon = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionViewHelpIcon"), 1, szIniPath);
 	m_bOptionBattleMsgLog = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("OptionBattleMsgLog"), 0, szIniPath);
-	m_bOption60Frame = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("Option60Frame"), 0, szIniPath);
+	m_bOption60Frame = (BOOL)GetPrivateProfileInt(_T("Setting"), _T("Option60Frame"), 1, szIniPath);
 
 	GetPrivateProfileString(_T("Account"), _T("Account"), _T(""), szTmp, _countof(szTmp), szIniPath);
 	m_strLastAccount = szTmp;

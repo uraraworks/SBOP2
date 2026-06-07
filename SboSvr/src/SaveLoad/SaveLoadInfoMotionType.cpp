@@ -5,7 +5,7 @@
 /// @date 2008/05/31
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoMotionType.h"
 #include "LibInfoMotionType.h"

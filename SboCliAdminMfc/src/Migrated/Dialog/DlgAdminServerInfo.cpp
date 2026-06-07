@@ -4,7 +4,7 @@
 /// @date 2007/07/08
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "PacketADMIN_SERVER_SAVEINFO.h"
 #include "PacketADMIN_REQ_PLAYSOUND.h"

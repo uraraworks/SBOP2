@@ -3,7 +3,7 @@
 /// @date 2026/04/27
 /// @copyright Copyright(C)URARA-works 2026
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #if !defined(__EMSCRIPTEN__)
 

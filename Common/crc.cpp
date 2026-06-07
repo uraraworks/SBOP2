@@ -5,7 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2005
 /// @see http://www.rfc-editor.org/rfc/rfc1952.txt
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "crc.h"
 
 // コンストラクタ

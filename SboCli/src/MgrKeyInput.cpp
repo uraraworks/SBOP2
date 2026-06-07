@@ -4,7 +4,7 @@
 /// @date 2006/10/01
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "DInputUtil.h"
 #include "MgrKeyInput.h"
 #include "Platform/SDLInput.h"

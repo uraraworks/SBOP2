@@ -4,7 +4,7 @@
 /// @date 2008/06/26
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "InfoMapEventBase.h"
 #include "LayoutHelper.h"

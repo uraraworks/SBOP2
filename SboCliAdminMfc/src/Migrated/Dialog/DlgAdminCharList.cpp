@@ -4,7 +4,7 @@
 /// @date 2008/12/01
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "UraraSockTCPSBO.h"
 #include "PacketADMIN_PARA2.h"

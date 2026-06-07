@@ -4,7 +4,7 @@
 /// @date 2008/09/07
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "InfoMapObject.h"
 #include "Img32.h"

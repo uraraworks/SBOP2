@@ -4,7 +4,7 @@
 /// @date 2005/05/17
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
 #endif

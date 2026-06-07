@@ -4,7 +4,7 @@
 /// @date 2007/07/30
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Platform/SdlFont.h"
 #include "LibInfoItem.h"
 #include "InfoCharCli.h"

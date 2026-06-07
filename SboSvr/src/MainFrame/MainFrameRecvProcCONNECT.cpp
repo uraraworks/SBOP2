@@ -4,7 +4,7 @@
 /// @date 2006/11/05
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <time.h>
 #include "UraraSockTCPSBO.h"
 #include "Command.h"

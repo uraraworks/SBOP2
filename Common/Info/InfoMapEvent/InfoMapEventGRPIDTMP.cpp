@@ -4,7 +4,7 @@
 /// @date 2008/10/12
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoMapEventGRPIDTMP.h"
 
 // ヘッダ情報

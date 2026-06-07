@@ -4,7 +4,7 @@
 /// @date 2008/07/13
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoTextEffect.h"
 
 #define ANIMECOUNT	(30)	// アニメーションコマ数

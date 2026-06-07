@@ -6,7 +6,7 @@
 /// @date 2007/07/26
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoEffect.h"
 #include "InfoAnime.h"

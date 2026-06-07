@@ -4,7 +4,7 @@
 /// @date 2007/05/03
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #if !defined(_WINDLL)
 #include <SDL.h>
 #endif

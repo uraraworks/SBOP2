@@ -4,7 +4,7 @@
 /// @date 2005/02/02
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "myZlib.h"
 
 #if 0	// 以下を任意のファイルにコピーして使用すると便利

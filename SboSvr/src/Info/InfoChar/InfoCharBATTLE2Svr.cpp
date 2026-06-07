@@ -4,7 +4,7 @@
 /// @date 2009/07/17
 /// @copyright Copyright(C)URARA-works 2009
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoMapBase.h"
 #include "InfoCharBATTLE2Svr.h"
 #include "LibInfoCharSvr.h"

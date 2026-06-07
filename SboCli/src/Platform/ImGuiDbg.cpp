@@ -1,7 +1,7 @@
 /// @file ImGuiDbg.cpp
 /// @brief ImGui版デバッグ情報表示 実装
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <imgui.h>
 #include "ImGuiDbg.h"
 #include "MgrData.h"

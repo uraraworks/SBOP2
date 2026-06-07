@@ -4,7 +4,7 @@
 /// @date 2007/09/27
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "LibInfoItemType.h"
 
 CLibInfoItemType::CLibInfoItemType()

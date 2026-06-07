@@ -16,6 +16,7 @@
       --border: #2d3947;
       --game-scale: 1;
       --pad-h: 160px; /* モバイル時のパッド領域の高さ */
+      --embed-height: 100dvh;
     }
 
     * {
@@ -341,6 +342,21 @@
       /* 固定パッドとゲーム画面が重ならないよう下にパッド高分の余白を確保 */
       padding-bottom: var(--pad-h);
     }
+    /*
+      管理Webの iframe 埋め込みでは外側も全画面高さを管理するため、
+      mobile-pad の中央寄せだとゲーム画面と固定パッドの間に余白が出やすい。
+      埋め込み時だけキャンバスをパッド直上へ寄せる。
+    */
+    body.admin-embed.mobile-pad .panel.canvas-wrap {
+      justify-content: flex-end;
+    }
+    body.admin-embed.mobile-pad {
+      position: relative;
+      height: var(--embed-height);
+    }
+    body.admin-embed.mobile-pad .layout {
+      height: var(--embed-height);
+    }
     /* ゲーム画面を短辺基準でパッド高を差し引いた領域にフィット（正方形キャンバス想定） */
     body.mobile-pad .canvas-stage {
       /* dvh 非対応の古い iOS 向けに vh フォールバックを先に指定し、対応環境では下の dvh が上書きする */
@@ -348,6 +364,10 @@
       height: min(100vw, calc(100vh - var(--pad-h)));
       width: min(100vw, calc(100dvh - var(--pad-h)));
       height: min(100vw, calc(100dvh - var(--pad-h)));
+    }
+    body.admin-embed.mobile-pad .canvas-stage {
+      width: min(100vw, calc(var(--embed-height) - var(--pad-h)));
+      height: min(100vw, calc(var(--embed-height) - var(--pad-h)));
     }
     /* パッドを画面最下部に固定オーバーレイで常設（レイアウト/重なりの影響を受けないようにする） */
     body.mobile-pad #virtualPad {
@@ -365,6 +385,9 @@
       border-top: 1px solid var(--border);
       padding: 8px 20px;
       box-sizing: border-box;
+    }
+    body.admin-embed.mobile-pad #virtualPad {
+      position: absolute;
     }
 
     /* ---- バーチャルパッド ---- */
@@ -411,20 +434,23 @@
       transform: translate(0px, 0px);
       pointer-events: none;
     }
-    /* A/B ボタン: 右カラム */
+    /* A/B/補助ボタン: 右側グリッド */
     #virtualPad .pad-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 64px);
+      gap: 10px;
       align-items: center;
+      justify-content: center;
     }
     /* 共通ボタンスタイル */
     #virtualPad button {
       min-width: 56px;
       min-height: 56px;
+      width: 64px;
+      height: 56px;
       border: 2px solid rgba(255, 255, 255, 0.55);
-      border-radius: 50%;
-      font-size: 20px;
+      border-radius: 999px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       background: rgba(255, 255, 255, 0.30);
@@ -494,10 +520,12 @@
         <div class="pad-stick" id="padStick">
           <div class="pad-stick-knob" id="padStickKnob"></div>
         </div>
-        <!-- A/B ボタン（右カラム） -->
+        <!-- A/B/補助ボタン（右側グリッド） -->
         <div class="pad-buttons">
           <button id="padA" type="button">A</button>
           <button id="padB" type="button">B</button>
+          <button id="padTab" type="button">Tab</button>
+          <button id="padSpace" type="button">Space</button>
         </div>
       </div>
     </section>
@@ -545,6 +573,14 @@
     const statusElement = document.getElementById('status');
     const canvasElement = document.getElementById('canvas');
     const imeInputElement = document.getElementById('sbop2ImeInput');
+
+    function applyAdminViewportHeight(height) {
+      var nHeight = Number(height);
+      if (!Number.isFinite(nHeight) || nHeight < 240) {
+        return;
+      }
+      document.documentElement.style.setProperty('--embed-height', Math.floor(nHeight) + 'px');
+    }
     const outputElement = document.getElementById('output');
     const probeElement = document.getElementById('canvasProbe');
     const startOverlay = document.getElementById('startOverlay');
@@ -1123,9 +1159,11 @@
       }
 
       // 各ボタンを Win32 VK 値にバインド
-      // A(Z=決定)=0x5A, B(X=キャンセル)=0x58
+      // A(Z=決定)=0x5A, B(X=キャンセル)=0x58, Tab=0x09, Space=0x20
       bindPadButton(document.getElementById('padA'),     0x5A);
       bindPadButton(document.getElementById('padB'),     0x58);
+      bindPadButton(document.getElementById('padTab'),   0x09);
+      bindPadButton(document.getElementById('padSpace'), 0x20);
 
       // ---- アナログスティック（8方向） ----
       var stick = document.getElementById('padStick');
@@ -1250,6 +1288,8 @@
         if (Module && Module.ccall) {
           Module.ccall("SBOP2_SetWebAdminSelectedPartsID", null, ["number"], [Number(ev.data.partsId) || 0]);
         }
+      } else if (ev.data.kind === "sbop2_admin_viewport") {
+        applyAdminViewportHeight(ev.data.height);
       }
     });
   </script>

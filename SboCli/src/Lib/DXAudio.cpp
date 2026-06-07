@@ -1,6 +1,6 @@
 /// @file DXAudio.cpp
 /// @brief SDL_audioベースのオーディオ実装（クロスプラットフォーム対応）
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <SDL.h>
 #include <cmath>
 #include <cstdlib>

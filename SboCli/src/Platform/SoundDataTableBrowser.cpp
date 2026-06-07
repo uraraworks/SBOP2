@@ -3,7 +3,7 @@
 ///
 /// SboSoundData.dll の代替として、SOUNDID と WAVファイル名の対応を静的テーブルで管理する。
 /// WAVファイルは Emscripten の --preload-file で /WAVE/ にマウントされていることが前提。
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <cstdlib>  // rand
 #include "SoundDataTableBrowser.h"
 #include "SboSoundData.h"  // SOUNDID_* 定数

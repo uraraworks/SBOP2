@@ -4,7 +4,7 @@
 /// @date 2007/02/03
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "PacketCHAR_REQ_CHAT.h"
 #include "Img32.h"
 #include "MgrData.h"

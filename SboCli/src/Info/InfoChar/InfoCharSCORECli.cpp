@@ -4,7 +4,7 @@
 /// @date 2007/09/09
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoCharSCORECli.h"
 
 

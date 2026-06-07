@@ -4,7 +4,7 @@
 /// @date 2005/06/06
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoBase.h"
 
 CInfoBase::CInfoBase()

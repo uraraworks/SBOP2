@@ -4,7 +4,7 @@
 /// @date 2009/01/08
 /// @copyright Copyright(C)URARA-works 2009
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoSkillMOVEATACK.h"
 
 // ヘッダ情報

@@ -30,7 +30,7 @@
 /// @date 2005/11/08
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoMapBase.h"
 #include "LibInfoMapBase.h"

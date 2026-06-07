@@ -4,7 +4,7 @@
 /// @date 2008/10/13
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"

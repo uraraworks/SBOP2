@@ -3,7 +3,7 @@
 /// @author Codex
 /// @date 2026/04/01
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "MgrData.h"
 #include "MgrWindow.h"
 #include "WindowLOGINNull.h"

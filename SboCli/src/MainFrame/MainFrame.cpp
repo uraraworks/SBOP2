@@ -4,7 +4,7 @@
 /// @date 2006/09/24
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #if defined(_WIN32)
 #include <comdef.h>
 #else
@@ -95,7 +95,7 @@ CMainFrame::CMainFrame()
 	m_bRequestDraw = FALSE;
 	m_byWindowHandledDownCode = 0;
 	m_nGameState = GAMESTATE_NONE;
-	m_nDrawCount = 30;
+	m_nDrawCount = DRAWCOUNT;
 	m_nFPS = 0;
 	m_dwLastTimeCheck = 0;
 	m_dwLastToolCheckTick = 0;

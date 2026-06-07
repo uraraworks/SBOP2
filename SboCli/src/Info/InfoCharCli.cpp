@@ -4,7 +4,7 @@
 /// @date 2006/10/01
 /// @copyright Copyright(C)URARA-works 2006
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include "Platform/SdlFont.h"

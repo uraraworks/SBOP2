@@ -8,6 +8,33 @@ const updatedEl = document.getElementById("server-updated");
 const reloadButton = document.getElementById("reload-server");
 const adminLogoutButton = document.getElementById("admin-logout-button");
 
+function updateAppViewportHeight() {
+  const viewport = window.visualViewport;
+  const height = viewport && viewport.height ? viewport.height : window.innerHeight;
+  if (height > 0) {
+    document.documentElement.style.setProperty("--app-height", `${height}px`);
+    syncAdminGameViewportHeight(height);
+  }
+}
+
+function syncAdminGameViewportHeight(height = null) {
+  const frame = document.getElementById("admin-game-frame");
+  const viewport = window.visualViewport;
+  const nextHeight = height || (viewport && viewport.height ? viewport.height : window.innerHeight);
+  if (!frame || !frame.contentWindow || !nextHeight || nextHeight < 240) {
+    return;
+  }
+  frame.contentWindow.postMessage({ kind: "sbop2_admin_viewport", height: Math.floor(nextHeight) }, "*");
+}
+
+updateAppViewportHeight();
+window.addEventListener("resize", updateAppViewportHeight);
+window.addEventListener("orientationchange", updateAppViewportHeight);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", updateAppViewportHeight);
+  window.visualViewport.addEventListener("scroll", updateAppViewportHeight);
+}
+
 const accountForm = document.getElementById("account-form");
 const accountResultEl = document.getElementById("account-result");
 const accountRolesContainer = document.getElementById("account-roles");
@@ -602,6 +629,7 @@ function handleAdminGameMessage(event) {
     return;
   }
   if (message.kind === "sbop2_admin_session_ready") {
+    syncAdminGameViewportHeight();
     checkAdminAuthAndReveal().then((authorized) => {
       if (authorized) {
         initializeAdminWorkspace();
@@ -3792,6 +3820,9 @@ window.addEventListener("load", async () => {
   window.addEventListener("message", handleAdminGameMessage);
   initializeAdminGameFrame();
   if (adminGameFrame) {
+    adminGameFrame.addEventListener("load", () => {
+      syncAdminGameViewportHeight();
+    });
     adminGameFrame.addEventListener("error", () => {
       if (adminGameMissingEl) {
         adminGameMissingEl.hidden = false;

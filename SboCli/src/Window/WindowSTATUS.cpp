@@ -4,7 +4,7 @@
 /// @date 2005/06/26
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <stdio.h>
 #include "InfoCharCli.h"
 #include "LibInfoCharCli.h"

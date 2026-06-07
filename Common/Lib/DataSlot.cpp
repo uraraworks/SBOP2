@@ -4,7 +4,7 @@
 /// @date 2008/06/07
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "DataSlot.h"
 
 CDataSlot::CDataSlot()

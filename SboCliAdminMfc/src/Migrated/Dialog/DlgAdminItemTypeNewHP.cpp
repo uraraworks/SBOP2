@@ -4,7 +4,7 @@
 /// @date 2008/08/15
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "InfoItemTypeBase.h"
 #include "InfoMotion.h"

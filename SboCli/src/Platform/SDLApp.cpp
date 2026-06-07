@@ -3,7 +3,7 @@
 /// @date 2025/06/01
 /// @copyright Copyright(C)URARA-works 2025
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #if defined(_WIN32)
 #include <SDL_syswm.h>
 #else
@@ -130,6 +130,7 @@ CSDLApp::CSDLApp()
 	m_dwUpdateInterval = 0;
 	m_dwRenderInterval = 0;
 	m_dwAccumulated = 0;
+	m_ullUpdateAccumulated = 0;
 	m_dwTimeLast = 0;
 	m_dwLastRenderTime = 0;
 	m_dwTimeStart = 0;
@@ -344,6 +345,7 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 	}
 
 	m_dwAccumulated = 0;
+	m_ullUpdateAccumulated = 0;
 	m_dwTimeLast = SDL_GetTicks();
 	m_dwLastRenderTime = (m_dwTimeLast >= m_dwRenderInterval) ? (m_dwTimeLast - m_dwRenderInterval) : 0;
 	m_dwTimeStart = m_dwTimeLast;
@@ -375,7 +377,12 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 	{
 		RunFrame();
 
-		if (!m_bQuit && (m_dwAccumulated < m_dwUpdateInterval))
+		if (!m_bQuit && (GAME_UPDATE_FPS > 0) && (m_ullUpdateAccumulated < 1000))
+		{
+			DWORD dwSleepTime = (DWORD)((1000 - m_ullUpdateAccumulated + GAME_UPDATE_FPS - 1) / GAME_UPDATE_FPS);
+			SDL_Delay((dwSleepTime > 1) ? dwSleepTime - 1 : 1);
+		}
+		else if (!m_bQuit && (GAME_UPDATE_FPS <= 0) && (m_dwAccumulated < m_dwUpdateInterval))
 		{
 			DWORD dwSleepTime = m_dwUpdateInterval - m_dwAccumulated;
 			SDL_Delay((dwSleepTime > 1) ? dwSleepTime - 1 : 1);
@@ -644,14 +651,23 @@ void CSDLApp::RunFrame(void)
 	{
 		DWORD dwElapsed = dwTimeTmp - m_dwTimeLast;
 		m_dwTimeLast = dwTimeTmp;
-		m_dwAccumulated += dwElapsed;
+		if (GAME_UPDATE_FPS > 0) {
+			m_ullUpdateAccumulated += (ULONGLONG)dwElapsed * (ULONGLONG)GAME_UPDATE_FPS;
+		} else {
+			m_dwAccumulated += dwElapsed;
+		}
 	}
 
 	{
 		DWORD dwFrameSkip = 0;
-		while ((m_dwAccumulated >= m_dwUpdateInterval) && (dwFrameSkip < MAX_FRAME_SKIP))
+		while (((GAME_UPDATE_FPS > 0) ? (m_ullUpdateAccumulated >= 1000) : (m_dwAccumulated >= m_dwUpdateInterval)) &&
+		       (dwFrameSkip < MAX_FRAME_SKIP))
 		{
-			m_dwAccumulated -= m_dwUpdateInterval;
+			if (GAME_UPDATE_FPS > 0) {
+				m_ullUpdateAccumulated -= 1000;
+			} else {
+				m_dwAccumulated -= m_dwUpdateInterval;
+			}
 			m_dwOnFrameCallCount++;  // 秒間 OnFrame 呼出し回数カウント
 			if (m_pHost->OnFrame()) {
 				m_bDrawPending = TRUE;

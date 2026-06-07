@@ -453,6 +453,8 @@ inline int WideCharToMultiByte(UINT, DWORD, LPCWSTR pszSrc, int nSrcLen, LPSTR p
 #define _ftprintf fwprintf
 
 /// 配列要素数を返すマクロ
+#ifndef _countof
 #define _countof(_Array) (sizeof(_Array) / sizeof((_Array)[0]))
+#endif
 
 #endif // !_WIN32

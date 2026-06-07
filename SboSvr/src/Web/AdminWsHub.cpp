@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "AdminWsHub.h"
 
 #include <sstream>

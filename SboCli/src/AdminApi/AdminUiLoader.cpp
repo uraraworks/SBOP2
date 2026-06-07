@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #if !defined(_WINDLL)
 #include <SDL.h>
 #endif

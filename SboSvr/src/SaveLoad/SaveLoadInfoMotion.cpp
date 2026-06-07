@@ -13,7 +13,7 @@
 /// @date 2007/11/23
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <map>
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoMotion.h"

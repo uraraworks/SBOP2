@@ -4,7 +4,7 @@
 /// @date 2005/06/17
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "LayoutHelper.h"
 
 typedef	std::vector<LH_CTRL_LAYOUT>::iterator	LayoutIterator;

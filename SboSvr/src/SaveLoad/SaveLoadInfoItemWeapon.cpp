@@ -7,7 +7,7 @@
 /// @date 2008/08/11
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "InfoItemWeapon.h"
 #include "LibInfoItemWeapon.h"

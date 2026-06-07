@@ -3,7 +3,7 @@
 /// @date 2025/06/01
 /// @copyright Copyright(C)URARA-works 2025
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SDLInput.h"
 
 

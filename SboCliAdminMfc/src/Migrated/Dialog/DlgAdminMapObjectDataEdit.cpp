@@ -4,7 +4,7 @@
 /// @date 2008/11/03
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "LibInfoMapObject.h"
 #include "LibInfoMapObjectData.h"

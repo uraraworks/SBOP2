@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "AccountCreateHandler.h"
 
 #include <algorithm>

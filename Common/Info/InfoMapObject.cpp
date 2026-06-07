@@ -4,7 +4,7 @@
 /// @date 2008/11/01
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoMapObject.h"
 
 // ヘッダ情報

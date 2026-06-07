@@ -4,7 +4,7 @@
 /// @date 2008/09/13
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "afxpriv.h"
 #include "WndToolbar.h"
 

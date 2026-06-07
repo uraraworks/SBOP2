@@ -4,7 +4,7 @@
 /// @date 2008/08/11
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "LibInfoEffect.h"
 #include "MgrData.h"
 #include "ListCtrlEffectInfo.h"

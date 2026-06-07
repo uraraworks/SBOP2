@@ -4,7 +4,7 @@
 /// @date 2008/07/21
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Img32.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"

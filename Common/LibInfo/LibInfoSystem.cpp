@@ -4,7 +4,7 @@
 /// @date 2008/09/28
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "LibInfoSystem.h"
 
 CLibInfoSystem::CLibInfoSystem()

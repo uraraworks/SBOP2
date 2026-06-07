@@ -4,7 +4,7 @@
 /// @date 2008/11/22
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Platform/SdlFont.h"
 #include "Command.h"
 #include "PacketCHAR_PARA1.h"

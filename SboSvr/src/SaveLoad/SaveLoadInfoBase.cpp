@@ -4,7 +4,7 @@
 /// @date 2005/04/26
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "SaveLoadInfoBase.h"
 
 // SQLite3 を include（このファイルのみ）

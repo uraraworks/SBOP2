@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "HttpServer.h"
 
 #include <string>
@@ -83,6 +83,78 @@ bool EqualsIgnoreCase(const std::string &lhs, const char *pszRhs)
         }
         return pszRhs[nLen] == '\0';
 }
+
+std::string ExtractHostName(const char *pszHost)
+{
+        if ((pszHost == NULL) || (pszHost[0] == '\0')) {
+                return "127.0.0.1";
+        }
+
+        std::string host = TrimCopy(pszHost);
+        if (host.empty()) {
+                return "127.0.0.1";
+        }
+
+        if (host[0] == '[') {
+                size_t nClose = host.find(']');
+                if (nClose != std::string::npos) {
+                        return host.substr(0, nClose + 1);
+                }
+        }
+
+        size_t nColon = host.find(':');
+        if (nColon != std::string::npos) {
+                return host.substr(0, nColon);
+        }
+        return host;
+}
+
+class CRedirectHandler : public IApiHandler
+{
+public:
+        explicit CRedirectHandler(const std::string &location)
+                : m_location(location)
+        {
+        }
+
+        virtual void Handle(const HttpRequest &, HttpResponse &response)
+        {
+                response.statusLine = "HTTP/1.1 302 Found";
+                response.body.clear();
+                response.SetHeader("Location", m_location);
+                response.SetHeader("Content-Type", "text/plain; charset=utf-8");
+                response.SetHeader("Content-Length", "0");
+        }
+
+private:
+        std::string m_location;
+};
+
+class CPlayerRootRedirectHandler : public IApiHandler
+{
+public:
+        explicit CPlayerRootRedirectHandler(unsigned short wHttpPort)
+                : m_wHttpPort(wHttpPort)
+        {
+        }
+
+        virtual void Handle(const HttpRequest &request, HttpResponse &response)
+        {
+                std::ostringstream location;
+                location << "/game/sbocli-title.html?server="
+                         << ExtractHostName(request.FindHeader("Host"))
+                         << ":" << static_cast<unsigned int>(m_wHttpPort + 1);
+
+                response.statusLine = "HTTP/1.1 302 Found";
+                response.body.clear();
+                response.SetHeader("Location", location.str());
+                response.SetHeader("Content-Type", "text/plain; charset=utf-8");
+                response.SetHeader("Content-Length", "0");
+        }
+
+private:
+        unsigned short m_wHttpPort;
+};
 
 enum ContentLengthParseResult
 {
@@ -995,8 +1067,14 @@ void CHttpServer::RegisterDefaultHandlers()
                         m_router.RegisterPrefix("GET", "/game/", std::move(browserGameHandler));
                 }
 
-                std::unique_ptr<IApiHandler> staticHandler(new CStaticFileHandler(webRoot, L"index.html", "/"));
-                m_router.RegisterPrefix("GET", "/", std::move(staticHandler));
+                std::unique_ptr<IApiHandler> playerRootHandler(new CPlayerRootRedirectHandler(m_wPort));
+                m_router.Register("GET", "/", std::move(playerRootHandler));
+
+                std::unique_ptr<IApiHandler> adminRedirectHandler(new CRedirectHandler("/admin/"));
+                m_router.Register("GET", "/admin", std::move(adminRedirectHandler));
+
+                std::unique_ptr<IApiHandler> adminStaticHandler(new CStaticFileHandler(webRoot, L"index.html", "/admin/"));
+                m_router.RegisterPrefix("GET", "/admin/", std::move(adminStaticHandler));
         }
 
         m_bHandlersRegistered = true;

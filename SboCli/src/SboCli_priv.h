@@ -18,7 +18,7 @@
 #define MAPPARTSSIZE	(32)									// マップパーツサイズ
 #endif
 #define GAME_UPDATE_FPS	(60)									// 内部更新フレームレート(FPS)
-#define DRAWCOUNT		(30)									// 既定の描画フレームレート(FPS)
+#define DRAWCOUNT		(60)									// 既定の描画フレームレート(FPS)
 #define SCRSIZEX		(MAPPARTSSIZE * DRAW_PARTS_X)			// マップ表示サイズ(横)
 #define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)			// マップ表示サイズ(縦)
 #define SCROLLSIZE		(16)									// スクロール単位（廃止予定：自由移動移行後は MAPPARTSSIZE に統一）
@@ -116,8 +116,16 @@ inline std::string WideToCodePageString(const wchar_t *pszSrc, UINT codePage)
 	if (codePage != CP_UTF8) {
 		codePage = CP_UTF8;
 	}
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	strRet = converter.to_bytes(pszSrc);
+	int nLen;
+
+	nLen = WideCharToMultiByte(codePage, 0, pszSrc, -1, NULL, 0, NULL, NULL);
+	if (nLen <= 0) {
+		return strRet;
+	}
+
+	std::vector<char> aBuffer((size_t)nLen);
+	WideCharToMultiByte(codePage, 0, pszSrc, -1, &aBuffer[0], nLen, NULL, NULL);
+	strRet.assign(&aBuffer[0]);
 #else
 	int nLen;
 
@@ -144,8 +152,16 @@ inline std::basic_string<TCHAR> Utf8ToTStringStd(LPCSTR pszSrc)
 
 #ifdef _UNICODE
 #if !defined(_WIN32)
-	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	strRet = converter.from_bytes(pszSrc);
+	int nLen;
+
+	nLen = MultiByteToWideChar(CP_UTF8, 0, pszSrc, -1, NULL, 0);
+	if (nLen <= 0) {
+		return strRet;
+	}
+
+	std::vector<wchar_t> aBuffer((size_t)nLen);
+	MultiByteToWideChar(CP_UTF8, 0, pszSrc, -1, &aBuffer[0], nLen);
+	strRet.assign(&aBuffer[0]);
 #else
 	int nLen;
 

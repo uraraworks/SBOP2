@@ -4,7 +4,7 @@
 /// @date 2008/12/14
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include "MgrLayer.h"

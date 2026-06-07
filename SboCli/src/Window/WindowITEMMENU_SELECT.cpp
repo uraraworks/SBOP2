@@ -4,7 +4,7 @@
 /// @date 2007/08/13
 /// @copyright Copyright(C)URARA-works 2007
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "LibInfoItem.h"
 #include "LibInfoItemType.h"
 #include "Img32.h"

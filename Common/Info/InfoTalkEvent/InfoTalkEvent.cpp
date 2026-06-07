@@ -4,7 +4,7 @@
 /// @date 2008/12/16
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoTalkEventPAGE.h"
 #include "InfoTalkEventMENU.h"
 #include "InfoTalkEvent.h"

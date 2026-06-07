@@ -4,7 +4,7 @@
 /// @date 2007/03/26
 /// @copyright Copyright(C)URARA-works 2005
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #if defined(__EMSCRIPTEN__)

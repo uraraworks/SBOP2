@@ -4,7 +4,7 @@
 /// @date 2008/10/19
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "resource.h"
 #include "InfoItemTypeBase.h"
 #include "MgrData.h"

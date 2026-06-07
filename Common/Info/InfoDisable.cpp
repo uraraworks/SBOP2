@@ -4,7 +4,7 @@
 /// @date 2009/04/08
 /// @copyright Copyright(C)URARA-works 2009
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoDisable.h"
 
 // ヘッダ情報

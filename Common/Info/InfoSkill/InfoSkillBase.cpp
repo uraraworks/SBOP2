@@ -4,7 +4,7 @@
 /// @date 2008/12/03
 /// @copyright Copyright(C)URARA-works 2008
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InfoSkillBase.h"
 
 // ヘッダ情報

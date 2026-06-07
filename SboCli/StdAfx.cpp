@@ -6,7 +6,7 @@
 /* 作成開始日：	2006/09/24													 */
 /* ========================================================================= */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #ifdef _DEBUG
         #pragma comment(lib, "../Common/myLib/myZlib/zlibD.lib")

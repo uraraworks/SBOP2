@@ -7,7 +7,7 @@
 // SDL_main マクロを無効化
 #define SDL_MAIN_HANDLED
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "MainFrame.h"
 
 #if defined(_WIN32)

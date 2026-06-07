@@ -1,7 +1,7 @@
 /// @file ImGuiMsgLog.cpp
 /// @brief ImGui版メッセージログ 実装
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <imgui.h>
 #include <string>
 #include "ImGuiMsgLog.h"
