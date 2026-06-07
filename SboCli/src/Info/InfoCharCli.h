@@ -99,6 +99,7 @@ public:
 	void	StartPredictedMove	(int nDirection, int x, int y, DWORD dwRecvTime);	// 予測移動開始
 	void	StopPredictedMove	(int x, int y);	// 予測移動停止
 	void	UpdatePredictedPos	(DWORD dwNowTime);	// 予測座標更新
+	void	SnapMoveInterpolation	(void);	// 現在座標へ描画補間を即時反映
 
 
 protected:

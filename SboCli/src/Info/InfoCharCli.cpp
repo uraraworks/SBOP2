@@ -1524,6 +1524,25 @@ void CInfoCharCli::StopPredictedMove(int x, int y)
 }
 
 
+void CInfoCharCli::SnapMoveInterpolation(void)
+{
+	DWORD dwNowTime;
+
+	dwNowTime = SDL_GetTicks();
+	m_bPredictedMove = FALSE;
+	m_nPredictDirection = -1;
+	m_nPredictBaseX = m_nMapX;
+	m_nPredictBaseY = m_nMapY;
+	m_nPredictSyncX = m_nMapX;
+	m_nPredictSyncY = m_nMapY;
+	m_dwPredictRecvTime = dwNowTime;
+	DeleteAllMovePosQue();
+	m_ptMove.x = 0;
+	m_ptMove.y = 0;
+	ResetDrawMoveSegment(m_nMapX, m_nMapY, dwNowTime);
+}
+
+
 void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 {
 	int nFrame, nOffset, nX, nY;

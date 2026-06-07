@@ -92,6 +92,43 @@ static BOOL IsMapEventRectTouchOrOverlap(const RECT &rcChar, const RECT &rcEvent
 	return TRUE;
 }
 
+static BOOL IsMapEventRectTouchOrOverlapForDirection(const RECT &rcChar, const RECT &rcEvent, int nDirection)
+{
+	int nOverlapX, nOverlapY;
+
+	nOverlapX = min(rcChar.right, rcEvent.right) - max(rcChar.left, rcEvent.left) + 1;
+	nOverlapY = min(rcChar.bottom, rcEvent.bottom) - max(rcChar.top, rcEvent.top) + 1;
+	if ((nOverlapX < 0) || (nOverlapY < 0)) {
+		return FALSE;
+	}
+	if ((nOverlapX > 0) && (nOverlapY > 0)) {
+		return TRUE;
+	}
+	if ((nOverlapX == 0) && (nOverlapY == 0)) {
+		return FALSE;
+	}
+
+	if (nOverlapY == 0) {
+		if ((rcEvent.bottom < rcChar.top) && ((nDirection == 0) || (nDirection == 4) || (nDirection == 7))) {
+			return TRUE;
+		}
+		if ((rcEvent.top > rcChar.bottom) && ((nDirection == 1) || (nDirection == 5) || (nDirection == 6))) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	if (nOverlapX == 0) {
+		if ((rcEvent.right < rcChar.left) && ((nDirection == 2) || (nDirection == 6) || (nDirection == 7))) {
+			return TRUE;
+		}
+		if ((rcEvent.left > rcChar.right) && ((nDirection == 3) || (nDirection == 4) || (nDirection == 5))) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	return FALSE;
+}
+
 BOOL CLibInfoCharSvr::CheckMapEvent(
 	CInfoCharSvr *pInfoChar,	// [in] 対象キャラ
 	BOOL bCheck/*=FALSE*/,		// [in] TRUE:チェックのみ
@@ -171,13 +208,13 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 		case MAPEVENTHITTYPE_MAPPOS:	// マップ座標縦横いずれか
 			GetMapEventTileRect(rcMapEvent, pptPos1->x, pptPos1->y);
 			bResult = bCheck
-				? IsMapEventRectTouchOrOverlap(rcChar, rcMapEvent)
+				? IsMapEventRectTouchOrOverlapForDirection(rcChar, rcMapEvent, pInfoChar->m_nDirection)
 				: IsMapEventRectOverlapEnough(rcChar, rcMapEvent, 8);
 			break;
 		case MAPEVENTHITTYPE_CHARPOS:	// キャラ座標
 			GetMapEventTileRect(rcMapEvent, pptPos1->x, pptPos1->y);
 			bResult = bCheck
-				? IsMapEventRectTouchOrOverlap(rcChar, rcMapEvent)
+				? IsMapEventRectTouchOrOverlapForDirection(rcChar, rcMapEvent, pInfoChar->m_nDirection)
 				: IsMapEventRectOverlapEnough(rcChar, rcMapEvent, 8);
 			break;
 		case MAPEVENTHITTYPE_AREA:	// 範囲
@@ -187,13 +224,13 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 				MapTileToPixelX(pptPos2->x) + MAPPARTSSIZE - 1,
 				MapTileToPixelY(pptPos2->y) + MAPPARTSSIZE - 1);
 			bResult = bCheck
-				? IsMapEventRectTouchOrOverlap(rcChar, rcMapEvent)
+				? IsMapEventRectTouchOrOverlapForDirection(rcChar, rcMapEvent, pInfoChar->m_nDirection)
 				: IsMapEventRectOverlapEnough(rcChar, rcMapEvent, 8);
 			break;
 		case MAPEVENTHITTYPE_MAPPOS2:	// マップ座標完全一致
 			GetMapEventTileRect(rcMapEvent, pptPos1->x, pptPos1->y);
 			bResult = bCheck
-				? IsMapEventRectTouchOrOverlap(rcChar, rcMapEvent)
+				? IsMapEventRectTouchOrOverlapForDirection(rcChar, rcMapEvent, pInfoChar->m_nDirection)
 				: IsMapEventRectOverlapEnough(rcChar, rcMapEvent, 8);
 			break;
 		}

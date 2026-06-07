@@ -10,6 +10,7 @@
 #include "LibInfoMapParts.h"
 #include "ParamUtil.h"
 #include "InfoMapBase.h"
+#include "InfoMapEventBase.h"
 #include "InfoTalkEvent.h"
 #include "PacketMAP_REQ_MAPINFO.h"
 #include "PacketCHAR_MOVE_START.h"
@@ -518,6 +519,83 @@ void CStateProcMAP::ResetPlayerMoveSyncState(void)
 
 void CStateProcMAP::StartAutoWalkToEvent(int nTileX, int nTileY)
 {
+	int i, nCount;
+	PCInfoMapEventBase pEvent;
+
+	if ((m_pMap != NULL) && (m_pPlayerChar != NULL)) {
+		RECT rcChar, rcEvent;
+		int nCharCenterX, nCharCenterY, nEventType;
+		int nLeft, nTop, nRight, nBottom;
+
+		m_pPlayerChar->GetCollisionRect(rcChar);
+		nCharCenterX = (rcChar.left + rcChar.right) / 2;
+		nCharCenterY = (rcChar.top + rcChar.bottom) / 2;
+		nLeft = nRight = nTileX;
+		nTop = nBottom = nTileY;
+		nCount = m_pMap->GetEventCount();
+		for (i = 0; i < nCount; i ++) {
+			pEvent = m_pMap->GetEvent(i);
+			if (pEvent == NULL) {
+				continue;
+			}
+
+			nLeft = min(pEvent->m_ptPos.x, pEvent->m_ptPos2.x);
+			nTop = min(pEvent->m_ptPos.y, pEvent->m_ptPos2.y);
+			nRight = max(pEvent->m_ptPos.x, pEvent->m_ptPos2.x);
+			nBottom = max(pEvent->m_ptPos.y, pEvent->m_ptPos2.y);
+			if (pEvent->m_nHitType != MAPEVENTHITTYPE_AREA) {
+				nLeft = nRight = pEvent->m_ptPos.x;
+				nTop = nBottom = pEvent->m_ptPos.y;
+			}
+			if ((nTileX < nLeft) || (nTileX > nRight) ||
+				(nTileY < nTop) || (nTileY > nBottom)) {
+				continue;
+			}
+			break;
+		}
+		if (i >= nCount) {
+			nLeft = nRight = nTileX;
+			nTop = nBottom = nTileY;
+		}
+
+		nEventType = m_pMap->GetMapEventType(nTileX, nTileY);
+		while ((nLeft > 0) && (m_pMap->GetMapEventType(nLeft - 1, nTileY) == nEventType)) {
+			nLeft --;
+		}
+		while ((nRight + 1 < m_pMap->m_sizeMap.cx) && (m_pMap->GetMapEventType(nRight + 1, nTileY) == nEventType)) {
+			nRight ++;
+		}
+		while ((nTop > 0) && (m_pMap->GetMapEventType(nTileX, nTop - 1) == nEventType)) {
+			nTop --;
+		}
+		while ((nBottom + 1 < m_pMap->m_sizeMap.cy) && (m_pMap->GetMapEventType(nTileX, nBottom + 1) == nEventType)) {
+			nBottom ++;
+		}
+
+		SetRect(
+			&rcEvent,
+			nLeft * MAPPARTSSIZE,
+			nTop * MAPPARTSSIZE,
+			(nRight + 1) * MAPPARTSSIZE - 1,
+			(nBottom + 1) * MAPPARTSSIZE - 1);
+		if (nLeft < nRight) {
+			int nOverlapLeft, nOverlapRight, nTargetX;
+
+			nOverlapLeft = max(rcChar.left, rcEvent.left);
+			nOverlapRight = min(rcChar.right, rcEvent.right);
+			nTargetX = ((nOverlapLeft <= nOverlapRight) ? ((nOverlapLeft + nOverlapRight) / 2) : nCharCenterX) / MAPPARTSSIZE;
+			nTileX = min(max(nTargetX, nLeft), nRight);
+		}
+		if (nTop < nBottom) {
+			int nOverlapTop, nOverlapBottom, nTargetY;
+
+			nOverlapTop = max(rcChar.top, rcEvent.top);
+			nOverlapBottom = min(rcChar.bottom, rcEvent.bottom);
+			nTargetY = ((nOverlapTop <= nOverlapBottom) ? ((nOverlapTop + nOverlapBottom) / 2) : nCharCenterY) / MAPPARTSSIZE;
+			nTileY = min(max(nTargetY, nTop), nBottom);
+		}
+	}
+
 	// タイル中央ピクセル座標を設定
 	// ヒットボックス形状: left=X+8, right=X+23, top=Y-15, bottom=Y
 	// X: タイル中央(nTileX*32+16) にヒットボックス中央(X+15)を合わせる

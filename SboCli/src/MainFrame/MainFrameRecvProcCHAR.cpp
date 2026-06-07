@@ -244,7 +244,7 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 {
 	DWORD dwMapIDBack;
 	int nMapXBack, nMapYBack;
-	BOOL bSyncEventTile, bPlayerPosChanged;
+	BOOL bSyncEventTile, bPlayerPosChanged, bResetMoveInterpolation;
 	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	PCInfoAccount pInfoAccount;
 	PCLayerMap pLayerMap;
@@ -256,6 +256,7 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	nMapXBack = nMapYBack = 0;
 	bSyncEventTile = FALSE;
 	bPlayerPosChanged = FALSE;
+	bResetMoveInterpolation = FALSE;
 #if SBO_ENABLE_POS_SYNC_DEBUG_LOG
 	SboDbgLog("[RES_CHARINFO入口] charID=%u moveType=%d mapID=%u pos=(%d,%d)",
 		Packet.m_pInfo->m_dwCharID,
@@ -271,11 +272,13 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 		pInfoChar->Copy(Packet.m_pInfo);
 		pInfoChar->SetViewState(INFOCHARCLI_VIEWSTATE_FADEIN);
 		m_pLibInfoChar->Add(pInfoChar);
+		bResetMoveInterpolation = TRUE;
 	} else {
 		// 移動種別が変わった？
 		if (Packet.m_pInfo->m_nMoveType != pInfoChar->m_nMoveType) {
 			pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetNew(Packet.m_pInfo->m_nMoveType);
 			m_pLibInfoChar->SetPtr(Packet.m_pInfo->m_dwCharID, pInfoChar);
+			bResetMoveInterpolation = TRUE;
 		}
 	}
 	dwMapIDBack = pInfoChar->m_dwMapID;
@@ -293,6 +296,13 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	}
 
 	pInfoChar->Copy(Packet.m_pInfo);
+	if ((bResetMoveInterpolation) ||
+		(dwMapIDBack != pInfoChar->m_dwMapID) ||
+		(abs(nMapXBack - pInfoChar->m_nMapX) >= MAPPARTSSIZE) ||
+		(abs(nMapYBack - pInfoChar->m_nMapY) >= MAPPARTSSIZE) ||
+		(Packet.m_bChgScreenPos)) {
+		pInfoChar->SnapMoveInterpolation();
+	}
 	pInfoChar->MakeCharGrp();
 	pInfoChar->m_bRedraw = TRUE;
 	m_pLibInfoChar->RenewMotionInfo(pInfoChar);
@@ -364,6 +374,9 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 void CMainFrame::RecvProcCHAR_CHARINFO(PBYTE pData)
 {
 	int i, nCount;
+	DWORD dwMapIDBack;
+	int nMapXBack, nMapYBack;
+	BOOL bResetMoveInterpolation;
 	PCInfoCharCli pInfoChar, pInfoCharTmp;
 	CPacketCHAR_CHARINFO Packet;
 
@@ -379,12 +392,25 @@ void CMainFrame::RecvProcCHAR_CHARINFO(PBYTE pData)
 			continue;
 		}
 		pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(pInfoCharTmp->m_dwCharID);
+		bResetMoveInterpolation = FALSE;
 		if (pInfoChar == NULL) {
 			pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetNew(pInfoCharTmp->m_nMoveType);
 			pInfoChar->Copy(pInfoCharTmp);
 			m_pLibInfoChar->Add(pInfoChar);
+			bResetMoveInterpolation = TRUE;
 		} else {
+			dwMapIDBack = pInfoChar->m_dwMapID;
+			nMapXBack = pInfoChar->m_nMapX;
+			nMapYBack = pInfoChar->m_nMapY;
 			pInfoChar->Copy(pInfoCharTmp);
+			if ((dwMapIDBack != pInfoChar->m_dwMapID) ||
+				(abs(nMapXBack - pInfoChar->m_nMapX) >= MAPPARTSSIZE) ||
+				(abs(nMapYBack - pInfoChar->m_nMapY) >= MAPPARTSSIZE)) {
+				bResetMoveInterpolation = TRUE;
+			}
+		}
+		if (bResetMoveInterpolation) {
+			pInfoChar->SnapMoveInterpolation();
 		}
 		pInfoChar->MakeCharGrp();
 		m_pLibInfoChar->RenewMotionInfo(pInfoChar);
