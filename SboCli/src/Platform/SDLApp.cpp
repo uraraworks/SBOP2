@@ -674,6 +674,17 @@ void CSDLApp::RunFrame(void)
 			}
 			dwFrameSkip++;
 		}
+		// MAX_FRAME_SKIP 到達後も残った蓄積時間は 2 フレーム分までに制限する
+		// (描画が重い間に債務が無限に溜まり、後でバースト消化されるのを防ぐ)
+		if (GAME_UPDATE_FPS > 0) {
+			if (m_ullUpdateAccumulated > 1000 * 2) {
+				m_ullUpdateAccumulated = 1000 * 2;
+			}
+		} else {
+			if (m_dwAccumulated > m_dwUpdateInterval * 2) {
+				m_dwAccumulated = m_dwUpdateInterval * 2;
+			}
+		}
 	}
 
 	m_dwRenderInterval = (g_nSboCliRenderFrameRate > 0)

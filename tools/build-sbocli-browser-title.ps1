@@ -481,7 +481,7 @@ $objects = foreach ($source in $sources) {
 }
 
 $linkArgs = @(
-    "-O2",
+    "-O3",
     "-msimd128",
     "-sUSE_SDL=2",
     "-sUSE_SDL_TTF=2",

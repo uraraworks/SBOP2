@@ -191,7 +191,7 @@ $includeArgs = Get-IncludeArgs -Root $repoRoot
 
 $commonArgs = New-Object System.Collections.Generic.List[string]
 $commonArgItems = @(
-    "-O2",
+    "-O3",
     "-msimd128",
     "-fno-strict-aliasing",
     "-c",
