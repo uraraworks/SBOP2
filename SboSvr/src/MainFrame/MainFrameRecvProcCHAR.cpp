@@ -621,16 +621,15 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 
 	// アイテムを拾う？
 	if (Packet.m_dwItemID == 0) {
-		pInfoChar->GetFrontPos(aptPos);
-		nCount = aptPos.size();
-		for (i = 0; i < nCount; i ++) {
-			ptPos = aptPos[i];
-			pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(pInfoChar->m_dwMapID, &ptPos, FALSE);
-			if (pInfoItem) {
-				break;
-			}
-		}
-		if (i < nCount) {
+		RECT rcFeet;
+		/* 足元の当たり判定矩形を HALF_TILE 広げてアイテムを探す（向き非依存） */
+		pInfoChar->GetCollisionRect(rcFeet);
+		rcFeet.left   -= HALF_TILE;
+		rcFeet.top    -= HALF_TILE;
+		rcFeet.right  += HALF_TILE;
+		rcFeet.bottom += HALF_TILE;
+		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtrInRect(pInfoChar->m_dwMapID, &rcFeet);
+		if (pInfoItem) {
 			bResult = pInfoChar->IsItemAdd();
 			if (bResult) {
 				// アイテムを追加

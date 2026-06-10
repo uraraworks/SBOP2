@@ -2089,26 +2089,16 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 			break;
 		}
 
-		m_pPlayerChar->GetFrontPos(ptFrontPos);
-		m_pPlayerChar->RenewBlockMapArea(ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
-		nCount = m_pPlayerChar->m_aposBockMapArea.size();
-		for (i = 0; i < nCount; i ++) {
-			/* 進入可能かチェック */
-			bResult |= !m_pMap->IsMove(m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
-		}
-		bResult = !bResult;
-		if (bResult) {
-			m_pPlayerChar->GetFrontPos(aptPos);
-			nCount = aptPos.size();
-			for (i = 0; i < nCount; i ++) {
-				ptPos = aptPos[i];
-				pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(m_pPlayerChar->m_dwMapID, &ptPos, FALSE);
-				if (pInfoItem) {
-					break;
-				}
-			}
-
-			if (i < nCount) {
+		{
+			RECT rcFeet;
+			/* 足元の当たり判定矩形を HALF_TILE 広げてアイテムを探す（向き非依存） */
+			m_pPlayerChar->GetCollisionRect(rcFeet);
+			rcFeet.left   -= HALF_TILE;
+			rcFeet.top    -= HALF_TILE;
+			rcFeet.right  += HALF_TILE;
+			rcFeet.bottom += HALF_TILE;
+			pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtrInRect(m_pPlayerChar->m_dwMapID, &rcFeet);
+			if (pInfoItem) {
 				/* アイテム拾う要求 */
 				PacketCHAR_REQ_PUTGET.Make(m_pPlayerChar->m_dwCharID, 0);
 				m_pSock->Send(&PacketCHAR_REQ_PUTGET);

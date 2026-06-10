@@ -418,6 +418,33 @@ PCInfoBase CLibInfoItem::GetPtr(
 	return pRet;
 }
 
+PCInfoBase CLibInfoItem::GetPtrInRect(
+	DWORD dwMapID,	// [in] 落ちているマップID
+	const RECT *prc)	// [in] 足元当たり判定の矩形（ピクセル）
+{
+	int i, nCount;
+	PCInfoItem pRet, pInfoTmp;
+
+	pRet = NULL;
+
+	nCount = m_paInfo->size();
+	for (i = nCount - 1; i >= 0; i --) {
+		pInfoTmp = m_paInfo->at(i);
+		if (pInfoTmp->m_dwMapID != dwMapID) {
+			continue;
+		}
+		// アイテム座標が足元矩形内にあるか（点 in 矩形）
+		if ((pInfoTmp->m_ptPos.x < prc->left) || (pInfoTmp->m_ptPos.x > prc->right) ||
+			(pInfoTmp->m_ptPos.y < prc->top) || (pInfoTmp->m_ptPos.y > prc->bottom)) {
+			continue;
+		}
+		pRet = pInfoTmp;
+		break;
+	}
+
+	return pRet;
+}
+
 PCInfoBase CLibInfoItem::GetItemTypePtr(DWORD dwItemID)
 {
 	PCInfoItemTypeBase pRet;
@@ -586,7 +613,9 @@ void CLibInfoItem::DeleteItem(DWORD dwItemID, CInfoCharBase *pInfoChar, BOOL bNo
 		pInfo->m_ptPos.x = pInfo->m_ptPos.y = 0;
 
 	} else {
-		pInfoChar->GetFrontPos(ptTmp);
+		// 足元に置く（モンスタードロップと同じくキャラのアンカー座標）
+		ptTmp.x = pInfoChar->m_nMapX;
+		ptTmp.y = pInfoChar->m_nMapY;
 		pInfoTmp = (PCInfoItem)GetPtr(pInfoChar->m_dwMapID, &ptTmp);
 
 		pInfo->m_dwMapID	= pInfoChar->m_dwMapID;

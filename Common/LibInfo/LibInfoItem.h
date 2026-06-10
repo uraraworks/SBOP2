@@ -44,6 +44,7 @@ public:
 	PCInfoBase	GetPtr(int nNo);	// アイテム情報を取得
 	PCInfoBase	GetPtr(DWORD dwItemID);	// アイテム情報を取得
 	PCInfoBase	GetPtr(DWORD dwMapID, POINT *pptPos, BOOL bPoint = TRUE);	// アイテム情報を取得
+	PCInfoBase	GetPtrInRect(DWORD dwMapID, const RECT *prc);	// 足元矩形内の地面アイテムを取得
 	PCInfoBase	GetItemTypePtr(DWORD dwItemID);	// アイテム種別情報を取得
 
 	DWORD	GetSendDataSize(void);	// 送信データサイズを取得
