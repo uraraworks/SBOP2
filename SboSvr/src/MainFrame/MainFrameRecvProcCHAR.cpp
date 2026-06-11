@@ -663,12 +663,9 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 				return;
 			}
 		}
-		pInfoChar->GetFrontMapPos(ptMapPos);
-		bResult = pInfoMap->IsMove(ptMapPos.x, ptMapPos.y, pInfoChar->m_nDirection);
-		if (bResult == FALSE) {
-			// 移動できないところには置けない
-			return;
-		}
+		// アイテムは足元（自分の立っている有効な地面）に置くため、前方タイルの
+		// 移動可否ゲートは廃止する。これが残っていると、ゴミ箱や壁が前方に来る位置で
+		// 投棄もされず地面にも置けない状態になっていた。
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(Packet.m_dwItemID);
 		if (pInfoItem == NULL) {
 			return;
@@ -684,9 +681,8 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 
 		nResult = RESULTID_CHAR_RES_PUTGET_PUT;
 
-		// ゴミ箱処理
-		nMapEventType = pInfoMap->GetMapEventType(ptMapPos.x, ptMapPos.y);
-		if (nMapEventType == MAPEVENTTYPE_TRASHBOX) {
+		// ゴミ箱処理（ドット単位の任意座標でも前方リーチ矩形でゴミ箱を確実に判定）
+		if (m_pLibInfoChar->IsTrashBoxInFront(pInfoChar)) {
 			nResult = RESULTID_CHAR_RES_PUTGET_DELETE;
 			PacketCHAR_RES_PUTGET.Make(pInfoItem->m_dwItemID, nResult);
 			m_pSock->SendTo(pInfoChar->m_dwSessionID, &PacketCHAR_RES_PUTGET);

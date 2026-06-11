@@ -187,6 +187,12 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 		if (pInfoMapEventBase == NULL) {
 			continue;
 		}
+		// ゴミ箱は接触で発動する歩行イベントではなく、アイテムを置いたときに
+		// PUT 経路 (GetMapEventType) で別途判定する。近づくと中心へ自動移動して
+		// しまう誤動作を防ぐため、マップイベント検出の対象から除外する。
+		if (pInfoMapEventBase->m_nType == MAPEVENTTYPE_TRASHBOX) {
+			continue;
+		}
 
 		pptPos1 = &pInfoMapEventBase->m_ptPos;
 		pptPos2 = &pInfoMapEventBase->m_ptPos2;
@@ -295,6 +301,51 @@ Exit:
 		}
 	}
 	return bRet;
+}
+
+BOOL CLibInfoCharSvr::IsTrashBoxInFront(CInfoCharSvr *pInfoChar)
+{
+	int i, nEventCount, nDir;
+	int fx[] = {0, 0, -1, 1, 1, 1, -1, -1}, fy[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	RECT rcReach, rcEvent;
+	PCInfoMapBase pInfoMap;
+	PCInfoMapEventBase pEv;
+
+	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
+	if (pInfoMap == NULL) {
+		return FALSE;
+	}
+
+	// 足元の当たり判定矩形を、向いている方向へ1タイル「平行移動」した前方矩形を作る。
+	// （拡大ではなく移動にすることで、足元〜2タイル先まで巻き込まず、隣接して向いた
+	// ときだけゴミ箱に重なる。拡大方式だと約2タイル離れていても投棄されてしまっていた。）
+	// ドット単位で任意座標に立っていても、矩形がプレイヤーに追従するので向いた先の
+	// 隣ゴミ箱タイルに重なる。
+	pInfoChar->GetCollisionRect(rcReach);
+	nDir = pInfoChar->m_nDirection;
+	if ((nDir >= 0) && (nDir <= 7)) {
+		if (fx[nDir] < 0) { rcReach.left -= MAPPARTSSIZE; rcReach.right -= MAPPARTSSIZE; }
+		if (fx[nDir] > 0) { rcReach.left += MAPPARTSSIZE; rcReach.right += MAPPARTSSIZE; }
+		if (fy[nDir] < 0) { rcReach.top -= MAPPARTSSIZE; rcReach.bottom -= MAPPARTSSIZE; }
+		if (fy[nDir] > 0) { rcReach.top += MAPPARTSSIZE; rcReach.bottom += MAPPARTSSIZE; }
+	}
+
+	nEventCount = pInfoMap->GetEventCount();
+	for (i = 0; i < nEventCount; i ++) {
+		pEv = pInfoMap->GetEvent(i);
+		if (pEv == NULL) {
+			continue;
+		}
+		if (pEv->m_nType != MAPEVENTTYPE_TRASHBOX) {
+			continue;
+		}
+		GetMapEventTileRect(rcEvent, pEv->m_ptPos.x, pEv->m_ptPos.y);
+		// 端が触れただけでは投棄しない。8px 以上重なったときのみ（マップイベントと同基準）。
+		if (IsMapEventRectOverlapEnough(rcReach, rcEvent, 8)) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBase *pInfoMapEventBase)

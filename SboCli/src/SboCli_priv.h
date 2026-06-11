@@ -36,7 +36,7 @@
 #ifdef SBO_ENABLE_POS_SYNC_DEBUG_LOG
 #undef SBO_ENABLE_POS_SYNC_DEBUG_LOG
 #endif
-#if defined(__EMSCRIPTEN__) || defined(_DEBUG)
+#if defined(_DEBUG) && !defined(__EMSCRIPTEN__)
 #define SBO_ENABLE_POS_SYNC_DEBUG_LOG 1
 #else
 #define SBO_ENABLE_POS_SYNC_DEBUG_LOG 0

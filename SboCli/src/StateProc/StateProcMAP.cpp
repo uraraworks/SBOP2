@@ -3379,28 +3379,10 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 
 	switch (dwPara) {
 	case ITEMMENU_SELECT_COMMAND_PUT:			// 地面に置く
-		bResult = FALSE;
-		m_pPlayerChar->GetFrontPos(ptFrontPos);
-		m_pPlayerChar->RenewBlockMapArea(ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
-		nCount = m_pPlayerChar->m_aposBockMapArea.size();
-		for (i = 0; i < nCount; i ++) {
-			/* 脱出可能かチェック */
-			bResult |= !m_pMap->IsMoveOut(m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
-		}
-		bResult = !bResult;
-		if (bResult) {
-			bResult = FALSE;
-			m_pPlayerChar->RenewBlockMapArea(ptFrontPos.x, ptFrontPos.y, m_pPlayerChar->m_nDirection);
-			nCount = m_pPlayerChar->m_aposBockMapArea.size();
-			for (i = 0; i < nCount; i ++) {
-				/* 進入可能かチェック */
-				bResult |= !m_pMap->IsMove(m_pPlayerChar->m_aposBockMapArea[i].x, m_pPlayerChar->m_aposBockMapArea[i].y, m_pPlayerChar->m_nDirection);
-			}
-			bResult = !bResult;
-		}
-		if (bResult == FALSE) {
-			break;
-		}
+		// アイテムは足元（自分の立っている有効な地面）に置くため、前方タイルの
+		// 進入/脱出可否チェックは廃止する。これが残っていると、ゴミ箱や壁が前方の
+		// 判定エリアに入る距離で「置く」を選んでもパケットが送られず持ったままになる。
+		// 投棄（ゴミ箱）と足元設置の振り分けはサーバー側が行う。
 		PacketCHAR_REQ_PUTGET.Make(m_pPlayerChar->m_dwCharID, dwItemID);
 		pPacket = &PacketCHAR_REQ_PUTGET;
 		break;

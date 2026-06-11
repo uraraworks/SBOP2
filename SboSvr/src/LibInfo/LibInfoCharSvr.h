@@ -62,6 +62,7 @@ public:
 	PCInfoCharBase	GetPtrSessionID(DWORD dwSessionID);	// キャラ情報を取得(セッションIDから)
 	PCInfoCharBase	GetPtrLogIn(int nNo);	// ログイン中キャラ情報を取得
 	PCInfoCharBase	GetPtrLogIn(DWORD dwCharID);	// ログイン中キャラ情報を取得
+	BOOL	IsTrashBoxInFront(CInfoCharSvr *pInfoChar);	// 前方リーチ矩形にゴミ箱があるか（投棄判定用）
 	PCInfoCharBase	GetPtrParent(CInfoCharSvr *pChar);	// 親キャラ情報を取得
 
 	int	GetNoLogIn(DWORD dwCharID);	// ログイン中キャラの配列番号を取得

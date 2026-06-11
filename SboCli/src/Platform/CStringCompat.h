@@ -372,7 +372,17 @@ private:
 			nRet = _vsnwprintf_s(pszDst, nDstCount, _TRUNCATE, pszFormat, argCopy);
 		}
 #else
-		int nRet = vswprintf(pszDst, nDstCount, pszFormat, argCopy);
+		// musl/Emscripten の vswprintf は vsnprintf と違い「測定モード」が無く、
+		// 出力がバッファに収まらないと -1 を返す。NULL/0 をそのまま渡すと常に -1 になり
+		// Format が空文字列になってしまう（拾得/設置メッセージ等が出ない原因）。
+		// Windows 側と同様に、サイズ計算時は十分大きい一時バッファで測定する。
+		int nRet;
+		if (pszDst == NULL || nDstCount == 0) {
+			wchar_t tmp[4096];
+			nRet = vswprintf(tmp, sizeof(tmp) / sizeof(tmp[0]), pszFormat, argCopy);
+		} else {
+			nRet = vswprintf(pszDst, nDstCount, pszFormat, argCopy);
+		}
 #endif
 		va_end(argCopy);
 		return nRet;

@@ -103,7 +103,6 @@ void* SdlFontCreate(int height, bool bold)
     // 上下中央寄せ: はみ出し分の半分を上、半分を下に逃がす
     // 例: height=16, actual=22 → yOffset=-3（上3px・下3pxにオーバーフロー）
     int yOffset = (actualHeight > height) ? ((height - actualHeight) / 2) : 0;
-    SDL_Log("SdlFontCreate: height=%d actual=%d yOffset=%d", height, actualHeight, yOffset);
 
     // エントリ登録
     void* id = (void*)(s_nextFontId++);

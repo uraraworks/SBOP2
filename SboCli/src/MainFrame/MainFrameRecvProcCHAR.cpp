@@ -285,6 +285,7 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 	nMapXBack = pInfoChar->m_nMapX;
 	nMapYBack = pInfoChar->m_nMapY;
 
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
 	// [DBG-CHARINFO-1] Copy 前のバックアップ値と新規キャラかどうかをログ出力
 	{
 		BOOL bIsNewChar = (dwMapIDBack == 0) ? TRUE : FALSE;
@@ -294,6 +295,7 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 			Packet.m_pInfo->m_nMapX,
 			Packet.m_pInfo->m_nMapY);
 	}
+#endif
 
 	pInfoChar->Copy(Packet.m_pInfo);
 	if ((bResetMoveInterpolation) ||
@@ -345,11 +347,13 @@ void CMainFrame::RecvProcCHAR_RES_CHARINFO(PBYTE pData)
 		}
 		if (bPlayerPosChanged || Packet.m_bChgScreenPos) {
 			pLayerMap = (PCLayerMap)m_pMgrLayer->Get(LAYERTYPE_MAP);
+#if SBO_ENABLE_POS_SYNC_DEBUG_LOG
 			// [DBG-CHARINFO-2] SetCenterPos 呼び出し判定をログ出力
 			SboDbgLog("[RES_CHARINFO] bPlayerPosChanged=%d bChgScreenPos=%d SetCenterPos呼出=%d 引数=(%d,%d)",
 				bPlayerPosChanged, Packet.m_bChgScreenPos,
 				(pLayerMap != NULL) ? 1 : 0,
 				pInfoChar->m_nMapX, pInfoChar->m_nMapY);
+#endif
 			if (pLayerMap) {
 				pLayerMap->SetCenterPos(pInfoChar->m_nMapX, pInfoChar->m_nMapY);
 			}
@@ -907,15 +911,21 @@ void CMainFrame::RecvProcCHAR_RES_PUTGET(PBYTE pData)
 		return;
 	}
 
+	// ブラウザ版(wchar_t 版 vswprintf)では書式中の %s が char* 扱いになり、
+	// ワイド文字列を渡す Format("%s...") が正しく整形できない。%s に依存せず
+	// 文字列連結で組み立てる（operator+= がプラットフォーム毎のエンコードを処理する）。
 	switch (Packet.m_nResult) {
 	case RESULTID_CHAR_RES_PUTGET_PUT: // 置いた
-		strTmp.Format(_T("%sを置きました"), (LPCTSTR)pInfoItem->m_strName);
+		strTmp = (LPCTSTR)pInfoItem->m_strName;
+		strTmp += "を置きました";
 		break;
 	case RESULTID_CHAR_RES_PUTGET_GET: // 取得した
-		strTmp.Format(_T("%sを拾いました"), (LPCTSTR)pInfoItem->m_strName);
+		strTmp = (LPCTSTR)pInfoItem->m_strName;
+		strTmp += "を拾いました";
 		break;
 	case RESULTID_CHAR_RES_PUTGET_DELETE: // 削除した
-		strTmp.Format(_T("%sは処分されました"), (LPCTSTR)pInfoItem->m_strName);
+		strTmp = (LPCTSTR)pInfoItem->m_strName;
+		strTmp += "は処分されました";
 		break;
 	}
 
