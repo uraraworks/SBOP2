@@ -3080,6 +3080,23 @@ BOOL CStateProcMAP::MoveProc(
 	}
 
 	m_pPlayerChar->ChgDirection(nDirection);
+	// ChgDirection は MOVE(移動中) 状態では m_nDirection を更新しない。ドット移動で
+	// 連続 MOVE 状態が続く自キャラは、これだと向き(体)が最初の方向に固定されてしまう
+	// （顔/目は描画向き override で更新されるため「顔だけ向く」状態になる）。
+	// 連続移動中も体の向きを追従させるため、ここで自キャラの向きを直接更新する。
+	// バーチャルパッドのスティック角度から決めた4方向(padFacing)があればそれを優先し、
+	// 無ければ移動方向そのものを向く。移動量(xx/yy)は8方向のままなので斜め移動は維持される。
+	{
+		int nBodyDir = nDirection;
+		if (pMgrKeyInput != NULL) {
+			int nPadFacing = pMgrKeyInput->GetBrowserPadFacing();
+			if (nPadFacing >= 0) {
+				nBodyDir = nPadFacing;
+			}
+		}
+		m_pPlayerChar->m_nDirection = nBodyDir;
+		nDirectionView = nBodyDir;
+	}
 	m_pPlayerChar->SetDrawDirectionOverride(nDirectionView);
 	m_pPlayerChar->SetPos(x + xx, y + yy);
 	m_pPlayerChar->ChgMoveState(nState);

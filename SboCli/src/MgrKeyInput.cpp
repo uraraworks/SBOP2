@@ -25,7 +25,24 @@ extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserSetPadKey(int vk, int down)
         g_abyBrowserPad[vk] = down ? 0x80 : 0;
     }
 }
+
+// バーチャルパッドのスティック角度から決めた「向き」(0=上,1=下,2=左,3=右、-1=未設定)。
+// 移動は8方向キーのままにし、描画向きだけこの4方向で上書きするために使う。
+static int g_nBrowserPadFacing = -1;
+extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserSetPadFacing(int nDirection)
+{
+    g_nBrowserPadFacing = nDirection;
+}
 #endif
+
+int CMgrKeyInput::GetBrowserPadFacing(void) const
+{
+#if defined(__EMSCRIPTEN__)
+    return g_nBrowserPadFacing;
+#else
+    return -1;
+#endif
+}
 
 
 CMgrKeyInput::CMgrKeyInput()

@@ -22,6 +22,7 @@ public:
 	void	Renew(BYTE &byCode, BOOL &bDown);			// 状態更新
 	void	Reset(void);								// 初期化
 	BOOL	IsInput(BYTE byCode);						// 押下判定
+	int		GetBrowserPadFacing(void) const;			// バーチャルパッドの向き(0=上,1=下,2=左,3=右、-1=なし)
 
 	// ジョイパッド関連
 	void	SetDevice(int nNo);							// 使用デバイスを設定

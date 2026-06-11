@@ -584,6 +584,7 @@
     const outputElement = document.getElementById('output');
     const probeElement = document.getElementById('canvasProbe');
     const startOverlay = document.getElementById('startOverlay');
+    const startLoadingElement = startOverlay ? startOverlay.querySelector('.start-loading') : null;
     const loginOverlay = document.getElementById('loginOverlay');
     const loginPanel = document.getElementById('loginPanel');
     const loginLabelAccount = document.getElementById('loginLabelAccount');
@@ -708,6 +709,7 @@
 
     // ── Click to Start: ユーザー操作による AudioContext の resume ──
     let startGameCalled = false;
+    let lastStartTouchTime = 0;
     function startGame() {
       if (startGameCalled) return;
       startGameCalled = true;
@@ -744,14 +746,32 @@
       // loading クラスを外すと CSS で ready ブロックが表示され pointer-events も戻る
       startOverlay.classList.remove('loading');
 
-      // click / touchstart / keydown いずれかで startGame を呼ぶ
-      startOverlay.addEventListener('click',      startGame, { once: true });
-      startOverlay.addEventListener('touchstart', startGame, { once: true, passive: true });
+      // touchstart 後にブラウザが合成 click を発行する端末があるため、タッチ起動時は後続 click を抑止する。
+      startOverlay.addEventListener('touchstart', function onFirstTouch(event) {
+        lastStartTouchTime = performance.now();
+        event.preventDefault();
+        startGame();
+        startOverlay.removeEventListener('touchstart', onFirstTouch);
+      }, { passive: false });
+      startOverlay.addEventListener('click', function onFirstClick(event) {
+        if (performance.now() - lastStartTouchTime < 700) {
+          event.preventDefault();
+          return;
+        }
+        startGame();
+        startOverlay.removeEventListener('click', onFirstClick);
+      });
       // キーダウンでも開始できるようにする（オーバーレイが表示中の間のみ）
       window.addEventListener('keydown', function onFirstKey() {
         startGame();
         window.removeEventListener('keydown', onFirstKey);
       });
+    }
+
+    function updateStartLoadingText(text) {
+      if (startLoadingElement && startOverlay && startOverlay.classList.contains('loading')) {
+        startLoadingElement.textContent = text || '読み込み中...';
+      }
     }
 
     function callLoginBridge(name, argTypes, args) {
@@ -1048,6 +1068,7 @@
 
     var Module = {
       canvas: canvasElement,
+      totalDependencies: 0,
       print(...args) {
         const text = args.join(' ');
         console.log(text);
@@ -1063,13 +1084,21 @@
         if (statusElement) {
           statusElement.textContent = text || '';
         }
+        updateStartLoadingText(text || '読み込み中...');
       },
       monitorRunDependencies(left) {
         Module.lastRunDependencyCount = left;
+        Module.totalDependencies = Math.max(Module.totalDependencies || 0, left);
         if (left > 0) {
-          Module.setStatus('準備中... ' + left);
+          if (Module.totalDependencies > 0) {
+            const loaded = Module.totalDependencies - left;
+            const percent = Math.max(0, Math.min(99, Math.floor(loaded * 100 / Module.totalDependencies)));
+            Module.setStatus('読み込み中... ' + percent + '%');
+          } else {
+            Module.setStatus('読み込み中...');
+          }
         } else {
-          Module.setStatus('起動完了');
+          Module.setStatus('読み込み中... 100%');
         }
       },
       onRuntimeInitialized() {
@@ -1174,6 +1203,8 @@
         // 現在スティックが押下している方向キーの状態
         var stickState = { up: false, down: false, left: false, right: false };
         var stickTouchId = null; // 追跡中のタッチ識別子（マルチタッチ対応）
+        var stickStabilizeTimer = null;
+        var stickStableDirs = { up: false, down: false, left: false, right: false };
 
         // 倒し量に応じて 8 方向へスナップし、対応キーの押下集合を返す
         function dirsFromOffset(dx, dy, deadzone) {
@@ -1201,14 +1232,62 @@
 
         // 押下集合の差分だけ setPadKey を呼ぶ
         function applyStickDirs(dirs) {
+          stickStableDirs = dirs;
           if (dirs.up !== stickState.up)       { setPadKey(VK_UP, dirs.up); stickState.up = dirs.up; }
           if (dirs.down !== stickState.down)   { setPadKey(VK_DOWN, dirs.down); stickState.down = dirs.down; }
           if (dirs.left !== stickState.left)   { setPadKey(VK_LEFT, dirs.left); stickState.left = dirs.left; }
           if (dirs.right !== stickState.right) { setPadKey(VK_RIGHT, dirs.right); stickState.right = dirs.right; }
         }
 
+        // スティック角度を 90 度ずつ 4 分割し、キャラの「向き」(0=上,1=下,2=左,3=右、-1=なし)を返す。
+        // 移動は dirsFromOffset の 8 方向のままで、向きだけこの 4 分割で自然に決める。
+        function facingFromOffset(dx, dy, deadzone) {
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < deadzone) { return -1; }
+          var deg = Math.atan2(dy, dx) * 180 / Math.PI; // 右=0,下=90,左=180,上=270
+          if (deg < 0) { deg += 360; }
+          if (deg >= 45 && deg < 135)  { return 1; } // 下
+          if (deg >= 135 && deg < 225) { return 2; } // 左
+          if (deg >= 225 && deg < 315) { return 0; } // 上
+          return 3;                                   // 右
+        }
+
+        // 向きの変化時だけ C 側へ通知する
+        var stickFacing = -1;
+        function setPadFacing(dir) {
+          if (dir === stickFacing) { return; }
+          stickFacing = dir;
+          if (typeof Module !== 'undefined' && Module.ccall) {
+            Module.ccall('SBOP2_BrowserSetPadFacing', null, ['number'], [dir]);
+          }
+        }
+
+        function startStickStabilizer() {
+          if (stickStabilizeTimer !== null) {
+            return;
+          }
+          stickStabilizeTimer = window.setInterval(function() {
+            if (stickTouchId === null) {
+              return;
+            }
+            if (stickStableDirs.up)    { setPadKey(VK_UP, true); }
+            if (stickStableDirs.down)  { setPadKey(VK_DOWN, true); }
+            if (stickStableDirs.left)  { setPadKey(VK_LEFT, true); }
+            if (stickStableDirs.right) { setPadKey(VK_RIGHT, true); }
+          }, 50);
+        }
+
+        function stopStickStabilizer() {
+          if (stickStabilizeTimer !== null) {
+            window.clearInterval(stickStabilizeTimer);
+            stickStabilizeTimer = null;
+          }
+        }
+
         function releaseStick() {
+          stopStickStabilizer();
           applyStickDirs({ up: false, down: false, left: false, right: false });
+          setPadFacing(-1);
           knob.style.transform = 'translate(0px, 0px)';
           stickTouchId = null;
         }
@@ -1231,6 +1310,7 @@
           }
           knob.style.transform = 'translate(' + kx + 'px, ' + ky + 'px)';
           applyStickDirs(dirsFromOffset(dx, dy, deadzone));
+          setPadFacing(facingFromOffset(dx, dy, deadzone));
         }
 
         // タッチ操作（マルチタッチ: 自分の識別子だけ追跡）
@@ -1239,6 +1319,7 @@
           if (stickTouchId !== null) { return; }
           var t = e.changedTouches[0];
           stickTouchId = t.identifier;
+          startStickStabilizer();
           updateStick(t.clientX, t.clientY);
         }, { passive: false });
         stick.addEventListener('touchmove', function(e) {
