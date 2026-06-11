@@ -170,6 +170,14 @@ void CLayerMap::Draw(PCImg32 pDst)
 	if (m_pMgrData->GetMapPartsEditMode()) {
 		DrawMapPartsDebug(pDst);
 	}
+	// Web 管理モード 3: マップイベント一覧ビュー → 全イベントタイルに枠を表示
+	if (m_pMgrData->GetWebAdminMode() == 3 && m_pMgrData->GetAdminLevel() > ADMINLEVEL_NONE) {
+		DrawAdminMapEventFrames(pDst);
+	}
+	// Web 管理モード 1: キャラ詳細・概要ビュー → 全キャラに枠を表示
+	if (m_pMgrData->GetWebAdminMode() == 1 && m_pMgrData->GetAdminLevel() > ADMINLEVEL_NONE) {
+		DrawAdminCharFrames(pDst);
+	}
 	DrawAdminPick(pDst);
 }
 
@@ -1610,12 +1618,12 @@ void CLayerMap::DrawMapName(PCImg32 pDst)
 }
 
 
-void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
+// Web管理モード3 および DrawMapEventDebug から呼ばれる: 全イベントタイルに黄色枠を描画
+void CLayerMap::DrawAdminMapEventFrames(CImg32 *pDst)
 {
 	int i, nCount, nScrX, nScrY;
 	PCInfoMapBase pMap;
 	PCInfoMapEventBase pEvent;
-	PCInfoCharCli pPlayer;
 
 	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
@@ -1632,15 +1640,23 @@ void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
 		nScrX = 32 + pEvent->m_ptPos.x * MAPPARTSSIZE - m_nViewX;
 		nScrY = 32 + pEvent->m_ptPos.y * MAPPARTSSIZE - m_nViewY;
 		if (pEvent->m_nHitType == MAPEVENTHITTYPE_AREA) {
-			int nWidth, nHeight;
-
-			nWidth = (pEvent->m_ptPos2.x - pEvent->m_ptPos.x + 1) * MAPPARTSSIZE;
-			nHeight = (pEvent->m_ptPos2.y - pEvent->m_ptPos.y + 1) * MAPPARTSSIZE;
+			int nWidth  = (pEvent->m_ptPos2.x - pEvent->m_ptPos.x + 1) * MAPPARTSSIZE;
+			int nHeight = (pEvent->m_ptPos2.y - pEvent->m_ptPos.y + 1) * MAPPARTSSIZE;
 			pDst->Rectangle(nScrX, nScrY, nWidth, nHeight, RGB(255, 200, 0));
 		} else {
 			pDst->Rectangle(nScrX, nScrY, MAPPARTSSIZE, MAPPARTSSIZE, RGB(255, 255, 0));
 		}
 	}
+}
+
+
+void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
+{
+	int nScrX, nScrY;
+	PCInfoCharCli pPlayer;
+
+	// 全イベントタイル枠は共通関数に委譲
+	DrawAdminMapEventFrames(pDst);
 
 	// プレイヤーの衝突判定矩形を緑色で描画
 	pPlayer = m_pMgrData->GetPlayerChar();
@@ -1650,6 +1666,50 @@ void CLayerMap::DrawMapEventDebug(CImg32 *pDst)
 		nScrX = 32 + rcHit.left  - m_nViewX;
 		nScrY = 32 + rcHit.top   - m_nViewY;
 		pDst->Rectangle(nScrX, nScrY, rcHit.right - rcHit.left + 1, rcHit.bottom - rcHit.top + 1, RGB(0, 255, 0));
+	}
+}
+
+
+// Web管理モード1: 全キャラに白枠（pick中キャラは赤枠）を描画
+void CLayerMap::DrawAdminCharFrames(CImg32 *pDst)
+{
+	DWORD dwPickCharID = m_pMgrData->GetAdminPickCharID();
+	int nCount = m_pLibInfoChar->GetCount();
+	for (int i = 0; i < nCount; i++) {
+		PCInfoCharCli pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
+		if (pInfoChar == NULL) {
+			continue;
+		}
+		PCInfoMotion pInfoMotion = pInfoChar->GetMotionInfo();
+		int cx = 32;
+		int cy = 32;
+		POINT ptTmp;
+		pInfoChar->GetViewCharPos(ptTmp);
+		cx -= ptTmp.x;
+		cy -= ptTmp.y;
+		GetDrawPos(pInfoChar, cx, cy);
+		if (pInfoMotion != NULL) {
+			cx += pInfoMotion->m_ptDrawPosPile0.x;
+			cy += pInfoMotion->m_ptDrawPosPile0.y;
+		}
+		// 描画スプライトの透明左マージンに合わせて半キャラ分右にずらす
+		cx += pInfoChar->m_nGrpSize;
+
+		int gw = pInfoChar->m_nGrpSize * 2;
+		int gh = pInfoChar->m_nGrpSize * 2;
+		if (gw < MAPPARTSSIZE) {
+			gw = MAPPARTSSIZE;
+		}
+		if (gh < MAPPARTSSIZE * 2) {
+			gh = MAPPARTSSIZE * 2;
+		}
+
+		// pick 中キャラは赤、それ以外は白
+		COLORREF col = (dwPickCharID != 0 && pInfoChar->m_dwCharID == dwPickCharID)
+			? RGB(255, 80, 80)
+			: RGB(255, 255, 255);
+		pDst->Rectangle(cx,     cy,     gw,     gh,     col);
+		pDst->Rectangle(cx + 1, cy + 1, gw - 2, gh - 2, col);
 	}
 }
 
@@ -1748,15 +1808,17 @@ void CLayerMap::DrawAdminPick(CImg32 *pDst)
 	if (m_pMgrData->GetWebAdminMode() != 1) {
 		int cellX = m_pMgrData->GetAdminPickCellX();
 		int cellY = m_pMgrData->GetAdminPickCellY();
-		int sx = cellX * MAPPARTSSIZE - nViewX;
-		int sy = cellY * MAPPARTSSIZE - nViewY;
+		/* DrawAdminMapEventFrames と同様に CImg32 パディング +MAPPARTSSIZE を加算する */
+		int sx = MAPPARTSSIZE + cellX * MAPPARTSSIZE - nViewX;
+		int sy = MAPPARTSSIZE + cellY * MAPPARTSSIZE - nViewY;
 		pDst->Rectangle(sx, sy, MAPPARTSSIZE, MAPPARTSSIZE, RGB(255, 255, 0));
 		pDst->Rectangle(sx + 1, sy + 1, MAPPARTSSIZE - 2, MAPPARTSSIZE - 2, RGB(255, 255, 0));
 	}
 
-	// キャラハイライト（赤枠、セル枠より上に重ねる）: parts モード(2)では非表示
+	// キャラハイライト（赤枠、セル枠より上に重ねる）: parts モード(2)および char モード(1)では非表示
+	// （char モード(1) では DrawAdminCharFrames が全キャラ枠を担当するため二重描画を避ける）
 	DWORD dwCharID = m_pMgrData->GetAdminPickCharID();
-	if (dwCharID != 0 && m_pMgrData->GetWebAdminMode() != 2) {
+	if (dwCharID != 0 && m_pMgrData->GetWebAdminMode() != 2 && m_pMgrData->GetWebAdminMode() != 1) {
 		int nCount = m_pLibInfoChar->GetCount();
 		for (int i = 0; i < nCount; i++) {
 			PCInfoCharCli pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);

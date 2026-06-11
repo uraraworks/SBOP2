@@ -109,7 +109,7 @@ public:
 		m_dwAdminPickCharID = 0;
 	}
 
-	// Web 管理画面のアクティブビューに応じたモード（0=free, 1=char, 2=parts）
+	// Web 管理画面のアクティブビューに応じたモード（0=free, 1=char(character-overview/character-list), 2=parts(map-parts-place), 3=map-events）
 	void			SetWebAdminMode(int nMode)					{ m_nWebAdminMode = nMode;					}	// Web 管理モードを設定
 	int				GetWebAdminMode(void)						{ return m_nWebAdminMode;					}	// Web 管理モードを取得
 	void			SetWebAdminSelectedPartsID(WORD wPartsID)	{ m_wWebAdminSelectedPartsID = wPartsID;	}	// Web 管理 partsモード選択中パーツIDを設定

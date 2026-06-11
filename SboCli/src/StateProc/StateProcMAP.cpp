@@ -948,6 +948,44 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		// char モード (nWebMode == 1) は既存処理に流す
 	}
 
+	// Web管理画面への pick 通知（DLL 有無に関わらずブラウザ版でも実行する）
+	// char > item > cell の優先度で情報をまとめて1回送信
+	// ※ここでは switch 文による x/y の書き換え前なのでスクリーン座標のまま渡す（FindAdminClickedCharID の本来の意図）
+	if ((m_pMgrData->GetAdminLevel() > ADMINLEVEL_NONE) && (m_pMap != NULL)) {
+		/* x,y には CImg32 パディング +MAPPARTSSIZE が加算されている。
+		   parts モードと同じ補正式でセル座標を求める */
+		int nPickX = ((x - MAPPARTSSIZE + (pLayerMap->m_nViewX % MAPPARTSSIZE)) / MAPPARTSSIZE) + nMapX;
+		int nPickY = ((y - MAPPARTSSIZE + (pLayerMap->m_nViewY % MAPPARTSSIZE)) / MAPPARTSSIZE) + nMapY;
+		CPacketADMIN_MAP_SELECTPICK PickPacket;
+		PickPacket.Make(
+			SELECTPICK_TYPE_MAPCELL,
+			m_pMap->m_dwMapID,
+			static_cast<WORD>(nPickX),
+			static_cast<WORD>(nPickY),
+			0);
+		m_pSock->Send(&PickPacket);
+
+		DWORD dwPickedCharID = FindAdminClickedCharID(m_pLibInfoChar, pLayerMap, x, y);
+		DWORD dwPickedItemID = 0;
+		{
+			/* パディング補正: x,y から +MAPPARTSSIZE を引いてアイテムセル座標を求める */
+			POINT ptItem = { (x - MAPPARTSSIZE + pLayerMap->m_nViewX) / SCROLLSIZE, (y - MAPPARTSSIZE + pLayerMap->m_nViewY) / SCROLLSIZE };
+			PCInfoItem pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(m_pMap->m_dwMapID, &ptItem);
+			dwPickedItemID = pInfoItem ? pInfoItem->m_dwItemID : 0;
+		}
+		m_pMgrData->SetAdminPick(
+			m_pMap->m_dwMapID,
+			static_cast<WORD>(nPickX),
+			static_cast<WORD>(nPickY),
+			dwPickedCharID);
+		SBOP2_PostAdminPick(
+			static_cast<unsigned int>(m_pMap->m_dwMapID),
+			nPickX,
+			nPickY,
+			static_cast<unsigned int>(dwPickedCharID),
+			static_cast<unsigned int>(dwPickedItemID));
+	}
+
 	// 管理者 DLL がロードされていない場合は管理者枠描画・クリック通知をスキップ
 	if (!m_AdminUi.IsLoadedFromDll()) {
 		return;
@@ -1112,44 +1150,6 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 		break;
 	}
 
-	// 管理者モード時はセルクリック位置を SELECTPICK パケットでサーバーへ送信する
-	// （AdminNotifyType に関わらず常に送信。Web管理画面のマップウィンドウへ反映される）
-	if ((m_pMgrData->GetAdminLevel() > ADMINLEVEL_NONE) && (m_pMap != NULL)) {
-		int nPickX, nPickY;
-		CPacketADMIN_MAP_SELECTPICK Packet;
-
-		nPickX = (xx / MAPPARTSSIZE) + nMapX;
-		nPickY = (yy / MAPPARTSSIZE) + nMapY;
-		Packet.Make(
-			SELECTPICK_TYPE_MAPCELL,
-			m_pMap->m_dwMapID,
-			static_cast<WORD>(nPickX),
-			static_cast<WORD>(nPickY),
-			0);
-		m_pSock->Send(&Packet);
-
-		// Web管理画面へ pick 通知を送信（char > item > cell の優先度で情報をまとめて1回送信）
-		{
-			DWORD dwPickedCharID = FindAdminClickedCharID(m_pLibInfoChar, pLayerMap, x, y);
-			DWORD dwPickedItemID = 0;
-			{
-				POINT ptItem = { (x + pLayerMap->m_nViewX) / SCROLLSIZE, (y + pLayerMap->m_nViewY) / SCROLLSIZE };
-				PCInfoItem pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(m_pMap->m_dwMapID, &ptItem);
-				dwPickedItemID = pInfoItem ? pInfoItem->m_dwItemID : 0;
-			}
-			m_pMgrData->SetAdminPick(
-				m_pMap->m_dwMapID,
-				static_cast<WORD>(nPickX),
-				static_cast<WORD>(nPickY),
-				dwPickedCharID);
-			SBOP2_PostAdminPick(
-				static_cast<unsigned int>(m_pMap->m_dwMapID),
-				nPickX,
-				nPickY,
-				static_cast<unsigned int>(dwPickedCharID),
-				static_cast<unsigned int>(dwPickedItemID));
-		}
-	}
 }
 
 

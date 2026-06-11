@@ -65,6 +65,8 @@ private:
 	void DrawMapEventDebug(CImg32 *pDst); // 描画(マップイベントデバッグ矩形)
 	void DrawMapPartsDebug(CImg32 *pDst); // 描画(マップパーツデバッグ矩形)
 	void DrawAdminPick(CImg32 *pDst); // 描画(管理者ハイライト)
+	void DrawAdminMapEventFrames(CImg32 *pDst); // 描画(Web管理モード3: 全イベントタイル枠)
+	void DrawAdminCharFrames(CImg32 *pDst); // 描画(Web管理モード1: 全キャラ枠)
 
 
 public:

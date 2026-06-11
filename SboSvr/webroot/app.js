@@ -600,21 +600,71 @@ function handleAdminGamePick(message) {
   const cellX = Number(message.cellX) || 0;
   const cellY = Number(message.cellY) || 0;
 
-  // ゲーム画面クリックでは画面遷移はしない。pick 情報の表示のみ更新する
-  // （character-overview ビュー時のみ char 詳細を内部更新する）
-  if (charId > 0) {
-    openCharacterDetailFromGame(charId);
-    return;
-  }
-
-  if (itemId > 0 && mapId > 0) {
-    updateAdminGamePickInfo(`選択中の配置物: map=${mapId} (${cellX},${cellY}) item=${itemId}`);
-    return;
-  }
-
-  if (mapId > 0) {
-    updateAdminGamePickInfo(`選択中のマップセル: map=${mapId} (${cellX},${cellY})`);
-    return;
+  // ビュー別処理
+  if (currentRoute === "character-overview") {
+    // キャラ詳細ビュー: charId があれば詳細を表示
+    if (charId > 0) {
+      openCharacterDetailFromGame(charId);
+      return;
+    }
+  } else if (currentRoute === "character-list") {
+    // キャラ一覧ビュー: charId があれば character-overview へ遷移して詳細を表示
+    if (charId > 0) {
+      navigateTo("character-overview");
+      fetchCharacterDetail(charId);
+      return;
+    }
+  } else if (currentRoute === "map-events") {
+    // マップイベント編集ビュー: クリックしたセルのイベントを編集フォームに表示
+    if (mapId > 0) {
+      // 選択中マップが異なる場合は切り替えてイベント一覧を再ロードしてから検索する
+      const switchAndFind = function () {
+        const ev = mapEventState.events.find(function (e) {
+          if (e.hitType === 2) {
+            // AREA 型: pos〜pos2 の矩形内包含判定
+            const x1 = Math.min(e.pos.x, e.pos2.x);
+            const x2 = Math.max(e.pos.x, e.pos2.x);
+            const y1 = Math.min(e.pos.y, e.pos2.y);
+            const y2 = Math.max(e.pos.y, e.pos2.y);
+            return cellX >= x1 && cellX <= x2 && cellY >= y1 && cellY <= y2;
+          }
+          // 通常イベント: pos と完全一致
+          return e.pos.x === cellX && e.pos.y === cellY;
+        });
+        if (ev) {
+          mapEventState.selectedEventId = ev.id;
+          renderMapEventTable();
+          renderMapEventForm(ev);
+          setMapEventFeedback("(" + cellX + "," + cellY + ") のイベントを選択しました", "success");
+        } else {
+          setMapEventFeedback("(" + cellX + "," + cellY + ") にイベントはありません", "");
+        }
+      };
+      if (mapEventState.selectedMapId !== mapId) {
+        mapEventState.selectedMapId = mapId;
+        if (mapEventMapSelect) { mapEventMapSelect.value = String(mapId); }
+        loadMapEventList().then(switchAndFind).catch(function () {
+          setMapEventFeedback("イベント一覧の取得に失敗しました", "error");
+        });
+      } else {
+        switchAndFind();
+      }
+      return;
+    }
+  } else {
+    // その他のビュー: 既存の char > item > cell 優先処理
+    if (charId > 0) {
+      openCharacterDetailFromGame(charId);
+      return;
+    }
+    if (itemId > 0 && mapId > 0) {
+      updateAdminGamePickInfo(`選択中の配置物: map=${mapId} (${cellX},${cellY}) item=${itemId}`);
+      return;
+    }
+    if (mapId > 0) {
+      updateAdminGamePickInfo(`選択中のマップセル: map=${mapId} (${cellX},${cellY})`);
+      return;
+    }
   }
 
   updateAdminGamePickInfo("選択中: なし");
@@ -3531,6 +3581,10 @@ function activateRoute(route, options = {}) {
     link.classList.toggle("is-active", link.dataset.route === normalized);
   });
 
+  document.querySelectorAll(".main-nav details[open]").forEach((d) => {
+    d.removeAttribute("open");
+  });
+
   if (normalized === "server-dashboard") {
     const shouldReload = options.initial || options.forceReload || currentRoute !== "server-dashboard";
     if (shouldReload) {
@@ -3661,10 +3715,12 @@ function activateRoute(route, options = {}) {
   // ゲーム iframe へ Web管理モードを通知
   if (adminGameFrame && adminGameFrame.contentWindow) {
     let adminMode = 0;
-    if (normalized === "character-overview") {
-      adminMode = 1;
+    if (normalized === "character-overview" || normalized === "character-list") {
+      adminMode = 1; // キャラ枠表示
     } else if (normalized === "map-parts-place") {
-      adminMode = 2;
+      adminMode = 2; // マップパーツ枠表示
+    } else if (normalized === "map-events") {
+      adminMode = 3; // マップイベント枠表示
     }
     adminGameFrame.contentWindow.postMessage({ kind: "sbop2_set_admin_mode", mode: adminMode }, "*");
   }
