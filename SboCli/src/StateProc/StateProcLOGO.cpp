@@ -57,6 +57,9 @@ void CStateProcLOGO::OnLButtonDown(int x, int y)
 
 BOOL CStateProcLOGO::OnX(BOOL bDown)
 {
+	if (bDown == FALSE) {
+		return TRUE;
+	}
 	OnLButtonDown(0, 0);
 
 	return TRUE;
@@ -64,6 +67,9 @@ BOOL CStateProcLOGO::OnX(BOOL bDown)
 
 BOOL CStateProcLOGO::OnZ(BOOL bDown)
 {
+	if (bDown == FALSE) {
+		return TRUE;
+	}
 	OnLButtonDown(0, 0);
 
 	return TRUE;
