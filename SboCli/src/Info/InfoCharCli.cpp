@@ -1786,11 +1786,13 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 		m_dwLastTimeMove += (dwTmp * dwWait);
 	}
 	if ((m_ptMove.x == 0) && (m_ptMove.y == 0)) {
-		if (m_pMgrData->GetCharID() != m_dwCharID) {
-			if (dwTime - m_dwLastTimeMove < 250) {
-				if (m_apMovePosQue.size() == 0) {
-					goto Exit;
-				}
+		// 自キャラ・リモート共通: 直前まで移動していてキューが空なら、すぐに立ちへ
+		// 落とさず猶予する。これをしないと連続歩行でもタイル到達ごとに1フレーム
+		// 立ちポーズ(m_nAnime=0)が挟まり、歩行アニメがカクついて見える。
+		// 自キャラの実際の停止はキー離し(KeyProc)で明示的に処理されるため遅延しない。
+		if (dwTime - m_dwLastTimeMove < 250) {
+			if (m_apMovePosQue.size() == 0) {
+				goto Exit;
 			}
 		}
 		m_nAnimeBack = m_nAnime;
