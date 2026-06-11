@@ -38,6 +38,8 @@
 #include "Handlers/ImageCatalogHandler.h"
 #include "Handlers/AuditLogHandler.h"
 #include "Handlers/AuthSessionHandler.h"
+#include "Handlers/SkillHandler.h"
+#include "Handlers/MotionHandler.h"
 #include "AuditLog.h"
 #include "AuthProvider.h"
 #include "MgrData.h"
@@ -1032,6 +1034,57 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> efcDeleteHandler(new CEfcDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/effects", std::move(efcDeleteHandler));
+
+        // スキルマスタ API
+        //   GET    /api/skills    一覧
+        //   POST   /api/skills    新規作成（typeMain/typeSub 必須）
+        //   PUT    /api/skills    更新（skillId 必須）
+        //   DELETE /api/skills    削除（skillId 必須）
+        std::unique_ptr<IApiHandler> skillListHandler(new CSkillListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/skills", std::move(skillListHandler));
+
+        std::unique_ptr<IApiHandler> skillCreateHandler(new CSkillCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/skills", std::move(skillCreateHandler));
+
+        std::unique_ptr<IApiHandler> skillUpdateHandler(new CSkillUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/skills", std::move(skillUpdateHandler));
+
+        std::unique_ptr<IApiHandler> skillDeleteHandler(new CSkillDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/skills", std::move(skillDeleteHandler));
+
+        // モーション種別 API
+        //   GET    /api/motion-types    一覧
+        //   POST   /api/motion-types    新規作成
+        //   PUT    /api/motion-types    更新（motionTypeId 必須）
+        //   DELETE /api/motion-types    削除（motionTypeId 必須）
+        std::unique_ptr<IApiHandler> motionTypeListHandler(new CMotionTypeListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/motion-types", std::move(motionTypeListHandler));
+
+        std::unique_ptr<IApiHandler> motionTypeCreateHandler(new CMotionTypeCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/motion-types", std::move(motionTypeCreateHandler));
+
+        std::unique_ptr<IApiHandler> motionTypeUpdateHandler(new CMotionTypeUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/motion-types", std::move(motionTypeUpdateHandler));
+
+        std::unique_ptr<IApiHandler> motionTypeDeleteHandler(new CMotionTypeDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/motion-types", std::move(motionTypeDeleteHandler));
+
+        // モーション個別 API
+        //   GET    /api/motions[?motionTypeId=N]  一覧（省略時は全件）
+        //   POST   /api/motions                   新規作成（motionTypeId, motionListId 必須）
+        //   PUT    /api/motions                   更新（motionId 必須）
+        //   DELETE /api/motions                   削除（motionId 必須）
+        std::unique_ptr<IApiHandler> motionListHandler(new CMotionListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/motions", std::move(motionListHandler));
+
+        std::unique_ptr<IApiHandler> motionCreateHandler(new CMotionCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/motions", std::move(motionCreateHandler));
+
+        std::unique_ptr<IApiHandler> motionUpdateHandler(new CMotionUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/motions", std::move(motionUpdateHandler));
+
+        std::unique_ptr<IApiHandler> motionDeleteHandler(new CMotionDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/motions", std::move(motionDeleteHandler));
 
         // 初期ステータス設定 API（Wave 2D）
         //   GET /api/initial-status    現在値取得

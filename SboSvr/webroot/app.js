@@ -3646,6 +3646,18 @@ function activateRoute(route, options = {}) {
     }
   }
 
+  if (normalized === "skill-management") {
+    if (options.forceReload || (!skillState.items.length && !skillState.isLoading && !skillState.loadError)) {
+      loadSkillList(options.forceReload === true);
+    }
+  }
+
+  if (normalized === "motion-management") {
+    if (options.forceReload || (!motionTypeState.items.length && !motionTypeState.isLoading && !motionTypeState.loadError)) {
+      loadMotionTypeList(options.forceReload === true);
+    }
+  }
+
   // ゲーム iframe へ Web管理モードを通知
   if (adminGameFrame && adminGameFrame.contentWindow) {
     let adminMode = 0;
@@ -6445,6 +6457,8 @@ window.addEventListener("load", function () {
   setupBalloonView();
   setupEffectView();
   setupInitialStatusView();
+  setupSkillView();
+  setupMotionView();
 });
 
 // ---------------------------------------------------------------------------
@@ -8997,6 +9011,937 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", bindTalkEventEditor);
 } else {
   bindTalkEventEditor();
+}
+
+// ---------------------------------------------------------------------------
+// スキルマスタ管理（skill-management ビュー）
+// ---------------------------------------------------------------------------
+
+// typeMain → typeSub の選択肢定義（InfoSkillBase.h の enum に対応）
+const SKILL_TYPE_SUB_OPTIONS = {
+  0: [{ value: 0, label: "0: NONE" }],
+  1: [
+    { value: 0, label: "0: NONE" },
+    { value: 1, label: "1: 移動して攻撃" },
+    { value: 2, label: "2: 回復" }
+  ],
+  2: [
+    { value: 0, label: "0: NONE" },
+    { value: 1, label: "1: 釣り" }
+  ]
+};
+
+const SKILL_TYPEMAIN_LABELS = { 0: "能力", 1: "戦闘", 2: "生活" };
+const SKILL_USE_LABELS = { 0: "制限無し", 1: "通常時", 2: "戦闘モード" };
+
+// classType → 派生フィールドセクションの表示切替キー
+// INFOSKILLTYPE_MOVEATACK = 1, INFOSKILLTYPE_HEAL = 2
+const SKILL_CLASS_TYPE_MOVEATACK = 1;
+const SKILL_CLASS_TYPE_HEAL      = 2;
+
+const skillState = {
+  items: [],
+  isLoading: false,
+  loadError: null,
+  editing: null   // 編集中の skillId（新規は 0）
+};
+
+function setSkillFeedback(msg, isError) {
+  setFeedback("skill-feedback", msg || "", !!isError);
+}
+
+function setSkillEditFeedback(msg, isError) {
+  setFeedback("skill-edit-feedback", msg || "", !!isError);
+}
+
+// typeMain に応じて typeSub の選択肢を更新する
+function updateSkillTypeSubOptions(typeMain, currentTypeSub) {
+  const sel = document.getElementById("skill-edit-typeSub");
+  if (!sel) { return; }
+  const opts = SKILL_TYPE_SUB_OPTIONS[typeMain] || SKILL_TYPE_SUB_OPTIONS[0];
+  sel.innerHTML = "";
+  opts.forEach(function (o) {
+    const opt = document.createElement("option");
+    opt.value = o.value;
+    opt.textContent = o.label;
+    sel.appendChild(opt);
+  });
+  sel.value = String(currentTypeSub || 0);
+}
+
+// classType に応じて派生フィールドセクションを表示切替する
+function updateSkillDerivedFields(classType) {
+  const maFields   = document.getElementById("skill-edit-moveatack-fields");
+  const healFields = document.getElementById("skill-edit-heal-fields");
+  if (maFields)   { maFields.style.display   = (classType === SKILL_CLASS_TYPE_MOVEATACK) ? "" : "none"; }
+  if (healFields) { healFields.style.display = (classType === SKILL_CLASS_TYPE_HEAL)      ? "" : "none"; }
+}
+
+// typeMain+typeSub から classType を推定する（サーバー側と同じルール）
+function skillClassTypeFromTypeSub(typeMain, typeSub) {
+  if (typeMain === 1) {
+    if (typeSub === 1) { return SKILL_CLASS_TYPE_MOVEATACK; }
+    if (typeSub === 2) { return SKILL_CLASS_TYPE_HEAL; }
+  }
+  return 0; // INFOSKILLTYPE_BASE
+}
+
+async function loadSkillList(forceReload) {
+  if (skillState.isLoading) { return; }
+  skillState.isLoading = true;
+  skillState.loadError = null;
+  if (forceReload) {
+    setSkillFeedback("読み込み中...", false);
+  }
+  try {
+    const { response, data } = await fetchJson("/api/skills");
+    if (!response.ok || !data || !Array.isArray(data.skills)) {
+      throw new Error("skills load failed: HTTP " + response.status);
+    }
+    skillState.items = data.skills;
+    renderSkillTable();
+    setSkillFeedback("", false);
+  } catch (err) {
+    console.error("loadSkillList error", err);
+    skillState.loadError = err.message || String(err);
+    setSkillFeedback("読み込みに失敗しました", true);
+  } finally {
+    skillState.isLoading = false;
+  }
+}
+
+function renderSkillTable() {
+  const tbody = document.getElementById("skill-table-body");
+  const summary = document.getElementById("skill-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const items = skillState.items || [];
+  if (summary) {
+    summary.textContent = items.length + " 件";
+  }
+
+  items.forEach(function (sk) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = sk.skillId;
+    tr.appendChild(tdId);
+
+    const tdName = document.createElement("td");
+    tdName.textContent = sk.name || "";
+    tr.appendChild(tdName);
+
+    const tdType = document.createElement("td");
+    const mainLabel = SKILL_TYPEMAIN_LABELS[sk.typeMain] || String(sk.typeMain);
+    const subOpts = SKILL_TYPE_SUB_OPTIONS[sk.typeMain] || [];
+    const subOpt = subOpts.find(function (o) { return o.value === sk.typeSub; });
+    tdType.textContent = mainLabel + "/" + (subOpt ? subOpt.label.replace(/^\d+: /, "") : String(sk.typeSub));
+    tr.appendChild(tdType);
+
+    const tdSp = document.createElement("td");
+    tdSp.textContent = sk.sp;
+    tr.appendChild(tdSp);
+
+    const tdUse = document.createElement("td");
+    tdUse.textContent = SKILL_USE_LABELS[sk.use] || String(sk.use);
+    tr.appendChild(tdUse);
+
+    const tdOps = document.createElement("td");
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.addEventListener("click", function () { openSkillEdit(sk); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.5rem";
+    btnDel.addEventListener("click", function () { deleteSkill(sk); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+function openSkillEdit(item) {
+  const card = document.getElementById("skill-edit-card");
+  const title = document.getElementById("skill-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !item;
+  skillState.editing = isNew ? 0 : item.skillId;
+
+  if (title) {
+    title.textContent = isNew ? "スキル 新規追加" : ("スキル 編集 (ID=" + item.skillId + ")");
+  }
+
+  const src = item || {
+    skillId: 0, name: "", sp: 0, iconId: 0,
+    typeMain: 0, typeSub: 0, use: 0, classType: 0
+  };
+
+  document.getElementById("skill-edit-skillId").value = isNew ? "" : String(src.skillId);
+  document.getElementById("skill-edit-name").value    = src.name || "";
+  document.getElementById("skill-edit-sp").value      = String(src.sp || 0);
+  document.getElementById("skill-edit-iconId").value  = String(src.iconId || 0);
+  document.getElementById("skill-edit-use").value     = String(src.use || 0);
+
+  // typeMain 設定後に typeSub を更新
+  const typeMainSel = document.getElementById("skill-edit-typeMain");
+  if (typeMainSel) { typeMainSel.value = String(src.typeMain || 0); }
+  updateSkillTypeSubOptions(src.typeMain || 0, src.typeSub || 0);
+
+  // 派生フィールドを表示切替
+  const classType = src.classType !== undefined ? src.classType
+    : skillClassTypeFromTypeSub(src.typeMain || 0, src.typeSub || 0);
+  updateSkillDerivedFields(classType);
+
+  // MOVEATACK フィールド
+  document.getElementById("skill-edit-targetType").value   = String(src.targetType  || 0);
+  document.getElementById("skill-edit-hitEffectId").value  = String(src.hitEffectId || 0);
+  document.getElementById("skill-edit-effectId0").value    = String(src.effectId0   || 0);
+  document.getElementById("skill-edit-effectId1").value    = String(src.effectId1   || 0);
+  document.getElementById("skill-edit-effectId2").value    = String(src.effectId2   || 0);
+  document.getElementById("skill-edit-effectId3").value    = String(src.effectId3   || 0);
+  document.getElementById("skill-edit-putType").value      = String(src.putType     || 0);
+  document.getElementById("skill-edit-aliveTime").value    = String(src.aliveTime   || 0);
+  document.getElementById("skill-edit-waitTime").value     = String(src.waitTime    || 0);
+  document.getElementById("skill-edit-value1-ma").value    = String(src.value1      || 0);
+  document.getElementById("skill-edit-value2-ma").value    = String(src.value2      || 0);
+  document.getElementById("skill-edit-distance-ma").value  = String(src.distance    || 0);
+  document.getElementById("skill-edit-hitQuit").checked       = !!src.hitQuit;
+  document.getElementById("skill-edit-distanceDelete").checked = !!src.distanceDelete;
+
+  // HEAL フィールド
+  document.getElementById("skill-edit-area").value              = String(src.area        || 0);
+  document.getElementById("skill-edit-healType").value          = String(src.healType    || 0);
+  document.getElementById("skill-edit-hitEffectId-heal").value  = String(src.hitEffectId || 0);
+  document.getElementById("skill-edit-value1-heal").value       = String(src.value1      || 0);
+  document.getElementById("skill-edit-value2-heal").value       = String(src.value2      || 0);
+  document.getElementById("skill-edit-distance-heal").value     = String(src.distance    || 0);
+
+  setSkillEditFeedback("", false);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeSkillEdit() {
+  const card = document.getElementById("skill-edit-card");
+  if (card) { card.style.display = "none"; }
+  skillState.editing = null;
+  setSkillEditFeedback("", false);
+}
+
+function buildSkillBodyFromForm() {
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+  const typeMain = intVal("skill-edit-typeMain");
+  const typeSub  = intVal("skill-edit-typeSub");
+  const classType = skillClassTypeFromTypeSub(typeMain, typeSub);
+
+  const body = {
+    name:     document.getElementById("skill-edit-name").value,
+    sp:       intVal("skill-edit-sp"),
+    iconId:   intVal("skill-edit-iconId"),
+    typeMain: typeMain,
+    typeSub:  typeSub,
+    use:      intVal("skill-edit-use")
+  };
+
+  if (classType === SKILL_CLASS_TYPE_MOVEATACK) {
+    body.targetType      = intVal("skill-edit-targetType");
+    body.hitEffectId     = intVal("skill-edit-hitEffectId");
+    body.effectId0       = intVal("skill-edit-effectId0");
+    body.effectId1       = intVal("skill-edit-effectId1");
+    body.effectId2       = intVal("skill-edit-effectId2");
+    body.effectId3       = intVal("skill-edit-effectId3");
+    body.putType         = intVal("skill-edit-putType");
+    body.aliveTime       = intVal("skill-edit-aliveTime");
+    body.waitTime        = intVal("skill-edit-waitTime");
+    body.value1          = intVal("skill-edit-value1-ma");
+    body.value2          = intVal("skill-edit-value2-ma");
+    body.distance        = intVal("skill-edit-distance-ma");
+    body.hitQuit         = document.getElementById("skill-edit-hitQuit").checked;
+    body.distanceDelete  = document.getElementById("skill-edit-distanceDelete").checked;
+  } else if (classType === SKILL_CLASS_TYPE_HEAL) {
+    body.area        = intVal("skill-edit-area");
+    body.healType    = intVal("skill-edit-healType");
+    body.hitEffectId = intVal("skill-edit-hitEffectId-heal");
+    body.value1      = intVal("skill-edit-value1-heal");
+    body.value2      = intVal("skill-edit-value2-heal");
+    body.distance    = intVal("skill-edit-distance-heal");
+  }
+
+  return body;
+}
+
+async function submitSkillForm(event) {
+  event.preventDefault();
+
+  const editing = skillState.editing;
+  if (editing === null) { return; }
+
+  const body = buildSkillBodyFromForm();
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) {
+    body.skillId = editing;
+  }
+
+  setSkillEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/skills", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setSkillEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setSkillEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadSkillList(false);
+    if (isNew && data && data.skillId) {
+      const created = skillState.items.find(function (x) { return x.skillId === data.skillId; });
+      if (created) { openSkillEdit(created); }
+    }
+  } catch (err) {
+    console.error("submitSkillForm error", err);
+    setSkillEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+async function deleteSkill(item) {
+  if (!item || !item.skillId) { return; }
+  const msg = "スキル [" + (item.name || "") + "] (ID=" + item.skillId + ") を削除しますか？";
+  if (!confirm(msg)) { return; }
+
+  setSkillFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/skills", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ skillId: item.skillId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setSkillFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setSkillFeedback("削除しました (ID=" + item.skillId + ")", false);
+    if (skillState.editing === item.skillId) {
+      closeSkillEdit();
+    }
+    await loadSkillList(false);
+  } catch (err) {
+    console.error("deleteSkill error", err);
+    setSkillFeedback("通信エラーが発生しました", true);
+  }
+}
+
+function setupSkillView() {
+  const reloadBtn = document.getElementById("skill-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadSkillList(true); });
+  }
+  const newBtn = document.getElementById("skill-new-btn");
+  if (newBtn) {
+    newBtn.addEventListener("click", function () { openSkillEdit(null); });
+  }
+  const form = document.getElementById("skill-edit-form");
+  if (form) {
+    form.addEventListener("submit", submitSkillForm);
+  }
+  const cancelBtn = document.getElementById("skill-cancel-btn");
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () { closeSkillEdit(); });
+  }
+  // typeMain 変更時に typeSub を動的に切り替え
+  const typeMainSel = document.getElementById("skill-edit-typeMain");
+  if (typeMainSel) {
+    typeMainSel.addEventListener("change", function () {
+      const typeMain = parseInt(this.value, 10) || 0;
+      updateSkillTypeSubOptions(typeMain, 0);
+      updateSkillDerivedFields(skillClassTypeFromTypeSub(typeMain, 0));
+    });
+  }
+  // typeSub 変更時に派生フィールドを切り替え
+  const typeSubSel = document.getElementById("skill-edit-typeSub");
+  if (typeSubSel) {
+    typeSubSel.addEventListener("change", function () {
+      const typeMain = parseInt(document.getElementById("skill-edit-typeMain").value, 10) || 0;
+      const typeSub  = parseInt(this.value, 10) || 0;
+      updateSkillDerivedFields(skillClassTypeFromTypeSub(typeMain, typeSub));
+    });
+  }
+}
+
+// ===========================================================================
+// モーション種別管理（motion-management ビュー）
+// ===========================================================================
+
+const motionTypeState = {
+  items: [],          // CInfoMotionType 一覧
+  isLoading: false,
+  loadError: null,
+  editing: null       // 編集中の motionTypeId（新規は 0）
+};
+
+const motionState = {
+  items: [],          // 現在表示中のモーション一覧
+  isLoading: false,
+  loadError: null,
+  currentTypeId: 0,   // 表示中の種別ID
+  editing: null       // 編集中の motionId（新規は 0）
+};
+
+function setMtypeFeedback(msg, isError) {
+  setFeedback("mtype-feedback", msg || "", !!isError);
+}
+
+function setMtypeEditFeedback(msg, isError) {
+  setFeedback("mtype-edit-feedback", msg || "", !!isError);
+}
+
+function setMotionFeedback(msg, isError) {
+  setFeedback("motion-feedback", msg || "", !!isError);
+}
+
+function setMotionEditFeedback(msg, isError) {
+  setFeedback("motion-edit-feedback", msg || "", !!isError);
+}
+
+// ---------------------------------------------------------------------------
+// モーション種別 一覧読み込み
+// ---------------------------------------------------------------------------
+async function loadMotionTypeList(forceReload) {
+  if (motionTypeState.isLoading) { return; }
+  motionTypeState.isLoading = true;
+  motionTypeState.loadError = null;
+  if (forceReload) { setMtypeFeedback("読み込み中...", false); }
+  try {
+    const { response, data } = await fetchJson("/api/motion-types");
+    if (!response.ok || !data || !Array.isArray(data.motionTypes)) {
+      throw new Error("motion-types load failed: HTTP " + response.status);
+    }
+    motionTypeState.items = data.motionTypes;
+    renderMotionTypeTable();
+    setMtypeFeedback("", false);
+  } catch (err) {
+    console.error("loadMotionTypeList error", err);
+    motionTypeState.loadError = err.message || String(err);
+    setMtypeFeedback("読み込みに失敗しました", true);
+  } finally {
+    motionTypeState.isLoading = false;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// モーション種別 テーブル描画
+// ---------------------------------------------------------------------------
+function renderMotionTypeTable() {
+  const tbody = document.getElementById("mtype-table-body");
+  const summary = document.getElementById("mtype-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const items = motionTypeState.items || [];
+  if (summary) { summary.textContent = items.length + " 件"; }
+
+  items.forEach(function (mt) {
+    const tr = document.createElement("tr");
+    // 選択中の行をハイライト
+    if (motionState.currentTypeId === mt.motionTypeId) {
+      tr.classList.add("row-selected");
+    }
+
+    const tdId = document.createElement("td");
+    tdId.textContent = mt.motionTypeId;
+    tr.appendChild(tdId);
+
+    const tdName = document.createElement("td");
+    tdName.textContent = mt.name || "";
+    tr.appendChild(tdName);
+
+    const tdGrp = document.createElement("td");
+    tdGrp.textContent = mt.grpIdSub;
+    tr.appendChild(tdGrp);
+
+    const tdOps = document.createElement("td");
+
+    const btnSelect = document.createElement("button");
+    btnSelect.type = "button";
+    btnSelect.className = "btn-secondary";
+    btnSelect.textContent = "モーション表示";
+    btnSelect.addEventListener("click", function () { selectMotionType(mt); });
+    tdOps.appendChild(btnSelect);
+
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.style.marginLeft = "0.25rem";
+    btnEdit.addEventListener("click", function () { openMtypeEdit(mt); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.25rem";
+    btnDel.addEventListener("click", function () { deleteMotionType(mt); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// 種別選択 → モーション一覧を表示
+// ---------------------------------------------------------------------------
+function selectMotionType(mt) {
+  motionState.currentTypeId = mt.motionTypeId;
+  renderMotionTypeTable(); // ハイライト更新
+  loadMotionList(mt.motionTypeId);
+
+  const section = document.getElementById("motion-list-section");
+  const title   = document.getElementById("motion-list-title");
+  if (section) { section.style.display = ""; }
+  if (title) { title.textContent = "モーション一覧 — " + (mt.name || "ID=" + mt.motionTypeId); }
+}
+
+// ---------------------------------------------------------------------------
+// モーション一覧 読み込み
+// ---------------------------------------------------------------------------
+async function loadMotionList(motionTypeId) {
+  if (motionState.isLoading) { return; }
+  motionState.isLoading = true;
+  motionState.loadError = null;
+  setMotionFeedback("読み込み中...", false);
+  try {
+    const { response, data } = await fetchJson("/api/motions?motionTypeId=" + motionTypeId);
+    if (!response.ok || !data || !Array.isArray(data.motions)) {
+      throw new Error("motions load failed: HTTP " + response.status);
+    }
+    motionState.items = data.motions;
+    renderMotionTable();
+    setMotionFeedback("", false);
+  } catch (err) {
+    console.error("loadMotionList error", err);
+    motionState.loadError = err.message || String(err);
+    setMotionFeedback("読み込みに失敗しました", true);
+  } finally {
+    motionState.isLoading = false;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// モーション テーブル描画
+// ---------------------------------------------------------------------------
+function renderMotionTable() {
+  const tbody  = document.getElementById("motion-table-body");
+  const summary = document.getElementById("motion-summary");
+  if (!tbody) { return; }
+  tbody.innerHTML = "";
+
+  const items = motionState.items || [];
+  if (summary) { summary.textContent = items.length + " 件"; }
+
+  items.forEach(function (m) {
+    const tr = document.createElement("tr");
+
+    const tdId = document.createElement("td");
+    tdId.textContent = m.motionId;
+    tr.appendChild(tdId);
+
+    const tdList = document.createElement("td");
+    tdList.textContent = m.motionListId;
+    tr.appendChild(tdList);
+
+    const tdWait = document.createElement("td");
+    tdWait.textContent = m.wait;
+    tr.appendChild(tdWait);
+
+    const tdLoop = document.createElement("td");
+    tdLoop.textContent = m.loop ? "はい" : "いいえ";
+    tr.appendChild(tdLoop);
+
+    const tdGrp = document.createElement("td");
+    tdGrp.textContent = m.grpIdMainBase;
+    tr.appendChild(tdGrp);
+
+    const tdOps = document.createElement("td");
+
+    const btnEdit = document.createElement("button");
+    btnEdit.type = "button";
+    btnEdit.className = "btn-secondary";
+    btnEdit.textContent = "編集";
+    btnEdit.addEventListener("click", function () { openMotionEdit(m); });
+    tdOps.appendChild(btnEdit);
+
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "btn-secondary";
+    btnDel.textContent = "削除";
+    btnDel.style.marginLeft = "0.25rem";
+    btnDel.addEventListener("click", function () { deleteMotion(m); });
+    tdOps.appendChild(btnDel);
+
+    tr.appendChild(tdOps);
+    tbody.appendChild(tr);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// 種別編集フォーム open/close
+// ---------------------------------------------------------------------------
+function openMtypeEdit(item) {
+  const card  = document.getElementById("mtype-edit-card");
+  const title = document.getElementById("mtype-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !item;
+  motionTypeState.editing = isNew ? 0 : item.motionTypeId;
+  if (title) {
+    title.textContent = isNew ? "種別 新規追加" : ("種別 編集 (ID=" + item.motionTypeId + ")");
+  }
+
+  const src = item || { motionTypeId: 0, name: "", grpIdSub: 0 };
+  document.getElementById("mtype-edit-id").value       = isNew ? "" : String(src.motionTypeId);
+  document.getElementById("mtype-edit-name").value     = src.name || "";
+  document.getElementById("mtype-edit-grpIdSub").value = String(src.grpIdSub || 0);
+
+  setMtypeEditFeedback("", false);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeMtypeEdit() {
+  const card = document.getElementById("mtype-edit-card");
+  if (card) { card.style.display = "none"; }
+  motionTypeState.editing = null;
+  setMtypeEditFeedback("", false);
+}
+
+// ---------------------------------------------------------------------------
+// 種別 保存（POST/PUT）
+// ---------------------------------------------------------------------------
+async function submitMtypeForm(event) {
+  event.preventDefault();
+
+  const editing = motionTypeState.editing;
+  if (editing === null) { return; }
+
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+
+  const body = {
+    name:     document.getElementById("mtype-edit-name").value,
+    grpIdSub: intVal("mtype-edit-grpIdSub")
+  };
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) { body.motionTypeId = editing; }
+
+  setMtypeEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/motion-types", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setMtypeEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setMtypeEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadMotionTypeList(false);
+    if (isNew && data && data.motionTypeId) {
+      const created = motionTypeState.items.find(function (x) { return x.motionTypeId === data.motionTypeId; });
+      if (created) { openMtypeEdit(created); }
+    }
+  } catch (err) {
+    console.error("submitMtypeForm error", err);
+    setMtypeEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 種別 削除
+// ---------------------------------------------------------------------------
+async function deleteMotionType(item) {
+  if (!item || !item.motionTypeId) { return; }
+  if (!confirm("種別 [" + (item.name || "") + "] (ID=" + item.motionTypeId + ") を削除しますか？")) { return; }
+
+  setMtypeFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/motion-types", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ motionTypeId: item.motionTypeId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setMtypeFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setMtypeFeedback("削除しました (ID=" + item.motionTypeId + ")", false);
+    if (motionTypeState.editing === item.motionTypeId) { closeMtypeEdit(); }
+    if (motionState.currentTypeId === item.motionTypeId) {
+      motionState.currentTypeId = 0;
+      motionState.items = [];
+      const section = document.getElementById("motion-list-section");
+      if (section) { section.style.display = "none"; }
+    }
+    await loadMotionTypeList(false);
+  } catch (err) {
+    console.error("deleteMotionType error", err);
+    setMtypeFeedback("通信エラーが発生しました", true);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// モーション編集フォーム open/close
+// ---------------------------------------------------------------------------
+function openMotionEdit(item) {
+  const card  = document.getElementById("motion-edit-card");
+  const title = document.getElementById("motion-edit-title");
+  if (!card) { return; }
+  card.style.display = "";
+
+  const isNew = !item;
+  motionState.editing = isNew ? 0 : item.motionId;
+  if (title) {
+    title.textContent = isNew ? "モーション 新規追加" : ("モーション 編集 (ID=" + item.motionId + ")");
+  }
+
+  const src = item || {
+    motionId: 0, motionTypeId: motionState.currentTypeId, motionListId: 1,
+    wait: 0, level1: 0, level2: 0, level3: 0,
+    pile: false, redrawHand: false, loop: false,
+    grpIdMainBase: 0, grpIdMainPile1: 0, grpIdMainPile2: 0, grpIdMainPile3: 0,
+    grpIdSubBase: 0, grpIdSubPile1: 0, grpIdSubPile2: 0, grpIdSubPile3: 0,
+    soundId: 0, procId: 0,
+    drawPosPile0x: 0, drawPosPile0y: 0,
+    drawPosPile1x: 0, drawPosPile1y: 0,
+    drawPosPile2x: 0, drawPosPile2y: 0,
+    drawPosPile3x: 0, drawPosPile3y: 0
+  };
+
+  function setNum(id, val) {
+    const el = document.getElementById(id);
+    if (el) { el.value = String(val || 0); }
+  }
+  function setChk(id, val) {
+    const el = document.getElementById(id);
+    if (el) { el.checked = !!val; }
+  }
+
+  document.getElementById("motion-edit-id").value     = isNew ? "" : String(src.motionId);
+  document.getElementById("motion-edit-typeId").value  = String(src.motionTypeId || motionState.currentTypeId);
+  setNum("motion-edit-listId",         src.motionListId);
+  setNum("motion-edit-wait",           src.wait);
+  setNum("motion-edit-level1",         src.level1);
+  setNum("motion-edit-level2",         src.level2);
+  setNum("motion-edit-level3",         src.level3);
+  setChk("motion-edit-pile",           src.pile);
+  setChk("motion-edit-redrawHand",     src.redrawHand);
+  setChk("motion-edit-loop",           src.loop);
+  setNum("motion-edit-grpIdMainBase",  src.grpIdMainBase);
+  setNum("motion-edit-grpIdMainPile1", src.grpIdMainPile1);
+  setNum("motion-edit-grpIdMainPile2", src.grpIdMainPile2);
+  setNum("motion-edit-grpIdMainPile3", src.grpIdMainPile3);
+  setNum("motion-edit-grpIdSubBase",   src.grpIdSubBase);
+  setNum("motion-edit-grpIdSubPile1",  src.grpIdSubPile1);
+  setNum("motion-edit-grpIdSubPile2",  src.grpIdSubPile2);
+  setNum("motion-edit-grpIdSubPile3",  src.grpIdSubPile3);
+  setNum("motion-edit-soundId",        src.soundId);
+  setNum("motion-edit-procId",         src.procId);
+  setNum("motion-edit-dp0x",           src.drawPosPile0x);
+  setNum("motion-edit-dp0y",           src.drawPosPile0y);
+  setNum("motion-edit-dp1x",           src.drawPosPile1x);
+  setNum("motion-edit-dp1y",           src.drawPosPile1y);
+  setNum("motion-edit-dp2x",           src.drawPosPile2x);
+  setNum("motion-edit-dp2y",           src.drawPosPile2y);
+  setNum("motion-edit-dp3x",           src.drawPosPile3x);
+  setNum("motion-edit-dp3y",           src.drawPosPile3y);
+
+  setMotionEditFeedback("", false);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeMotionEdit() {
+  const card = document.getElementById("motion-edit-card");
+  if (card) { card.style.display = "none"; }
+  motionState.editing = null;
+  setMotionEditFeedback("", false);
+}
+
+// ---------------------------------------------------------------------------
+// モーション 保存（POST/PUT）
+// ---------------------------------------------------------------------------
+async function submitMotionForm(event) {
+  event.preventDefault();
+
+  const editing = motionState.editing;
+  if (editing === null) { return; }
+
+  function intVal(id) {
+    const v = parseInt(document.getElementById(id).value, 10);
+    return isNaN(v) ? 0 : v;
+  }
+  function chkVal(id) {
+    const el = document.getElementById(id);
+    return el ? el.checked : false;
+  }
+
+  const body = {
+    motionTypeId:    intVal("motion-edit-typeId"),
+    motionListId:    intVal("motion-edit-listId"),
+    wait:            intVal("motion-edit-wait"),
+    level1:          intVal("motion-edit-level1"),
+    level2:          intVal("motion-edit-level2"),
+    level3:          intVal("motion-edit-level3"),
+    pile:            chkVal("motion-edit-pile"),
+    redrawHand:      chkVal("motion-edit-redrawHand"),
+    loop:            chkVal("motion-edit-loop"),
+    grpIdMainBase:   intVal("motion-edit-grpIdMainBase"),
+    grpIdMainPile1:  intVal("motion-edit-grpIdMainPile1"),
+    grpIdMainPile2:  intVal("motion-edit-grpIdMainPile2"),
+    grpIdMainPile3:  intVal("motion-edit-grpIdMainPile3"),
+    grpIdSubBase:    intVal("motion-edit-grpIdSubBase"),
+    grpIdSubPile1:   intVal("motion-edit-grpIdSubPile1"),
+    grpIdSubPile2:   intVal("motion-edit-grpIdSubPile2"),
+    grpIdSubPile3:   intVal("motion-edit-grpIdSubPile3"),
+    soundId:         intVal("motion-edit-soundId"),
+    procId:          intVal("motion-edit-procId"),
+    drawPosPile0x:   intVal("motion-edit-dp0x"),
+    drawPosPile0y:   intVal("motion-edit-dp0y"),
+    drawPosPile1x:   intVal("motion-edit-dp1x"),
+    drawPosPile1y:   intVal("motion-edit-dp1y"),
+    drawPosPile2x:   intVal("motion-edit-dp2x"),
+    drawPosPile2y:   intVal("motion-edit-dp2y"),
+    drawPosPile3x:   intVal("motion-edit-dp3x"),
+    drawPosPile3y:   intVal("motion-edit-dp3y")
+  };
+
+  const isNew = (editing === 0);
+  const method = isNew ? "POST" : "PUT";
+  if (!isNew) { body.motionId = editing; }
+
+  setMotionEditFeedback(isNew ? "追加中..." : "保存中...", false);
+
+  try {
+    const response = await fetch("/api/motions", {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setMotionEditFeedback("エラー: " + errMsg, true);
+      return;
+    }
+    setMotionEditFeedback(isNew ? "追加しました" : "保存しました", false);
+    await loadMotionList(motionState.currentTypeId);
+    if (isNew && data && data.motionId) {
+      const created = motionState.items.find(function (x) { return x.motionId === data.motionId; });
+      if (created) { openMotionEdit(created); }
+    }
+  } catch (err) {
+    console.error("submitMotionForm error", err);
+    setMotionEditFeedback("通信エラーが発生しました", true);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// モーション 削除
+// ---------------------------------------------------------------------------
+async function deleteMotion(item) {
+  if (!item || !item.motionId) { return; }
+  if (!confirm("モーション (ID=" + item.motionId + ", listId=" + item.motionListId + ") を削除しますか？")) { return; }
+
+  setMotionFeedback("削除中...", false);
+  try {
+    const response = await fetch("/api/motions", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ motionId: item.motionId })
+    });
+    let data = null;
+    try { data = await response.json(); } catch (e) { /* 無視 */ }
+    if (!response.ok) {
+      const errMsg = (data && data.error) ? data.error : ("HTTP " + response.status);
+      setMotionFeedback("削除エラー: " + errMsg, true);
+      return;
+    }
+    setMotionFeedback("削除しました (ID=" + item.motionId + ")", false);
+    if (motionState.editing === item.motionId) { closeMotionEdit(); }
+    await loadMotionList(motionState.currentTypeId);
+  } catch (err) {
+    console.error("deleteMotion error", err);
+    setMotionFeedback("通信エラーが発生しました", true);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// イベント配線
+// ---------------------------------------------------------------------------
+function setupMotionView() {
+  const reloadBtn = document.getElementById("mtype-reload-btn");
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", function () { loadMotionTypeList(true); });
+  }
+  const newBtn = document.getElementById("mtype-new-btn");
+  if (newBtn) {
+    newBtn.addEventListener("click", function () { openMtypeEdit(null); });
+  }
+  const mtypeForm = document.getElementById("mtype-edit-form");
+  if (mtypeForm) {
+    mtypeForm.addEventListener("submit", submitMtypeForm);
+  }
+  const mtypeCancelBtn = document.getElementById("mtype-cancel-btn");
+  if (mtypeCancelBtn) {
+    mtypeCancelBtn.addEventListener("click", function () { closeMtypeEdit(); });
+  }
+  const motionForm = document.getElementById("motion-edit-form");
+  if (motionForm) {
+    motionForm.addEventListener("submit", submitMotionForm);
+  }
+  const motionCancelBtn = document.getElementById("motion-cancel-btn");
+  if (motionCancelBtn) {
+    motionCancelBtn.addEventListener("click", function () { closeMotionEdit(); });
+  }
 }
 
 // 管理画面全体で右クリックコンテキストメニューを抑止する

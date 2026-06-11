@@ -1,6 +1,6 @@
 # Web管理画面 移植対象一覧
 
-最終更新: 2026-04-22
+最終更新: 2026-06-11
 
 ## 目的
 
@@ -41,12 +41,12 @@
 | 選択キャラ編集: ステータス | `IDM_CHAR_MODIFY_STATUS`, `DlgAdminCharModifyStatus` | `character-overview` に統合想定 | 未着手 | 基本情報と別画面にせず統合候補 |
 | 選択キャラ編集: 画像設定 | `IDM_CHAR_MODIFY_GRP`, `DlgAdminCharModifyGrp` | `character-overview` に統合想定 | 未着手 | 画像選択コンポーネントが別途必要 |
 | 選択キャラ編集: 所持アイテム | `IDM_CHAR_MODIFY_ITEM`, `DlgAdminCharModifyItem` | `character-overview` か専用詳細タブ | 未着手 | アイテム選択 UI とセットで設計する |
-| 選択キャラ編集: 所持スキル | `IDM_CHAR_MODIFY_SKILL`, `DlgAdminCharModifySkill` | `skill-management` またはキャラ詳細タブ | 未着手 | スキルマスタ整備と一緒にやる |
+| 選択キャラ編集: 所持スキル | `IDM_CHAR_MODIFY_SKILL`, `DlgAdminCharModifySkill` | `skill-management` またはキャラ詳細タブ | 実装済み | Wave 2C でキャラ詳細タブ (cd-tab-skills) に実装済み |
 | キャラクター一覧 | `IDM_CHAR_LIST`, `DlgAdminCharList` | `character-list` | UI雛形 | API 未実装 |
 | キャラとアカウントの紐付け | `DlgAdminCharAccountInfo` | `character-account` | UI雛形 | API 未実装 |
 | NPC 追加 | `IDM_CHAR_ADDNPC`, `DlgAdminCharAddNPC` | `npc-management` | UI雛形 | マップ pick 基盤が必要 |
-| モーション編集 | `IDM_CHAR_MOTION`, `DlgAdminCharMotion*` | `motion-management` | UI雛形 | 画像・モーションプレビュー方法を要再設計 |
-| スキル一覧・編集 | `IDM_CHAR_SKILL`, `DlgAdminCharSkill*` | `skill-management` | UI雛形 | キャラ所持スキル編集とマスタ編集の切り分け要 |
+| モーション編集 | `IDM_CHAR_MOTION`, `DlgAdminCharMotion*` | `motion-management` | 実装済み | /api/motion-types + /api/motions CRUD。プレビューは未実装・要再設計 |
+| スキル一覧・編集 | `IDM_CHAR_SKILL`, `DlgAdminCharSkill*` | `skill-management` | 実装済み | /api/skills CRUD。MOVEATACK/HEAL 派生フィールド対応。typeMain/typeSub で UI 切替 |
 | 拒否 / 凍結 | `IDM_CHAR_DISABLE`, `DlgAdminCharDisable*` | `character-account` に統合想定 | 未着手 | アカウント状態変更と同じ文脈で扱う想定 |
 | 会話設定 | `DlgAdminTalkSet`, `DlgAdminTalkEvent*` | なし | 未着手 | キャラ編集とマップオブジェクト配置編集の両方から使う共通エディタにする |
 

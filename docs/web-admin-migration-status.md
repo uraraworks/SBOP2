@@ -1,6 +1,6 @@
 # Web管理画面 進捗確認
 
-最終更新: 2026-04-28（同一URL入口・管理者セッション・ログアウト導線を反映）
+最終更新: 2026-06-11（スキル一覧・編集、モーション種別管理の実装完了を反映）
 
 ## 使い方
 
@@ -28,15 +28,15 @@
 
 ### UI プレースホルダーあり
 
-- モーション種別管理
-- スキル一覧・編集
+- ~~モーション種別管理~~（Wave 2E 実装済み）
+- ~~スキル一覧・編集~~（Wave 2E 実装済み）
 - ~~マップイベント一覧~~（Wave 2B 実装済み）
 - ~~アイテム種別一覧~~（Wave 2D 実装済み）
 - ~~アイテム一覧~~（Wave 2D 実装済み）
 - ~~武器一覧~~（Wave 2D 実装済み）
 - ~~噴出し一覧~~（Wave 2D 実装済み）
 - ~~エフェクト一覧~~（Wave 2D 実装済み）
-- 初期ステータス設定
+- ~~初期ステータス設定~~（Wave 2D 実装済み）
 
 ### まだ受け皿がない重要項目
 
@@ -110,6 +110,15 @@
 - [x] 噴出し API / UI（GET/POST/PUT/DELETE /api/efc-balloons、コマ単位 flat CRUD）
 - [x] エフェクト API / UI（GET/POST/PUT/DELETE /api/effects、animes を nested 配列で扱う）
 - [x] 初期ステータス API / UI（GET/PUT /api/initial-status、単一レコード編集フォーム）
+
+## Wave 2E: スキル / モーション管理
+
+- [x] スキル一覧 API / UI（GET/POST/PUT/DELETE /api/skills、基底フィールド + MOVEATACK/HEAL 派生クラス固有フィールド対応）
+- [x] スキル編集 UI（typeMain/typeSub に応じた表示切替）
+- [x] モーション種別 API / UI（GET/POST/PUT/DELETE /api/motion-types）
+- [x] モーション API / UI（GET/POST/PUT/DELETE /api/motions、種別選択 → モーション編集の 2 階層 UI）
+- [x] クライアント通知（更新時に `CPacketCHAR_MOTIONTYPE` / `CPacketCHAR_MOTION` を配信）
+- [ ] モーション再生プレビュー（スコープ外・要再設計のまま保留）
 
 ## 共通コンポーネント
 

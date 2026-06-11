@@ -144,6 +144,12 @@
     <ClCompile Include="src\Web\Handlers\AuditLogHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\SkillHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\Handlers\MotionHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\Handlers\AuthSessionHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
@@ -546,6 +552,12 @@
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\AuditLogHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\SkillHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\MotionHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\AuthSessionHandler.h">

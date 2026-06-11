@@ -306,6 +306,8 @@
     <ClCompile Include="src\Web\Handlers\CharacterUpdateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterItemHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ItemTypeHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\SkillHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\MotionHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ItemHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\WeaponHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\EfcBalloonHandler.cpp" />
@@ -449,6 +451,8 @@
     <ClInclude Include="src\Web\Handlers\CharacterUpdateHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterItemHandler.h" />
     <ClInclude Include="src\Web\Handlers\ItemTypeHandler.h" />
+    <ClInclude Include="src\Web\Handlers\SkillHandler.h" />
+    <ClInclude Include="src\Web\Handlers\MotionHandler.h" />
     <ClInclude Include="src\Web\Handlers\ItemHandler.h" />
     <ClInclude Include="src\Web\Handlers\WeaponHandler.h" />
     <ClInclude Include="src\Web\Handlers\EfcBalloonHandler.h" />
