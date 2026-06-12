@@ -2,6 +2,7 @@
 #include "ImageCatalogHandler.h"
 
 #include "GlobalDefine.h"
+#include "Web/Handlers/SpriteSheetHandler.h"
 
 #include <sstream>
 #include <string>
@@ -43,6 +44,9 @@ const ImageCategoryEntry kCategories[] = {
         { GRPIDMAIN_2X2_NPC,      "npc2x2",      "NPC(2x2)",         255 },
         { GRPIDMAIN_EFFECT64,     "effect64",    "エフェクト(64)",   63 },
         { GRPIDMAIN_ICON32,       "icon32",      "アイコン(32)",     63 },
+        // マップ系: GRPIDMAIN_* に列挙値が無いため idMain = 0 を使用
+        { 0,                      "mapParts",    "マップパーツ",      63 },
+        { 0,                      "mapShadow",   "マップ影",          63 },
 };
 
 // 簡易 JSON エスケープ（このハンドラは静的文字列しか扱わないので最小実装）
@@ -80,6 +84,9 @@ std::string EscapeJson(const char *pszText)
 
 void CImageCatalogHandler::Handle(const HttpRequest & /*request*/, HttpResponse &response)
 {
+        // SpriteSheetHandler のシングルトンから cellSize/countX/countY/sheetCount を突合する
+        CGrpResourceProvider &provider = CGrpResourceProvider::GetInstance();
+
         std::ostringstream oss;
         oss << "{\"categories\":[";
 
@@ -89,12 +96,35 @@ void CImageCatalogHandler::Handle(const HttpRequest & /*request*/, HttpResponse 
                         oss << ',';
                 }
                 const ImageCategoryEntry &e = kCategories[i];
+
+                // SpriteSheetHandler のカテゴリテーブルから cellSize/countX/countY を取得
+                int nCellSize = 0, nCountX = 0, nCountY = 0;
+                bool bHasLayout = provider.GetCategoryLayout(
+                    e.pszKey, nCellSize, nCountX, nCountY);
+
+                int nSheetCount = provider.GetSheetCount(e.pszKey);
+
                 oss << '{'
                     << "\"idMain\":"     << e.nIDMain << ','
                     << "\"key\":\""      << EscapeJson(e.pszKey)   << "\","
                     << "\"label\":\""    << EscapeJson(e.pszLabel) << "\","
-                    << "\"hintMaxSub\":" << e.nHintMaxSub
-                    << '}';
+                    << "\"hintMaxSub\":" << e.nHintMaxSub << ',';
+
+                if (bHasLayout) {
+                        oss << "\"cellSize\":" << nCellSize << ','
+                            << "\"countX\":"   << nCountX   << ','
+                            << "\"countY\":"   << nCountY   << ',';
+                }
+
+                oss << "\"sheetCount\":" << nSheetCount;
+
+                if (nSheetCount > 0) {
+                        oss << ','
+                            << "\"sheetUrl\":\"/api/assets/sprites/"
+                            << EscapeJson(e.pszKey) << "\"";
+                }
+
+                oss << '}';
         }
         oss << "]}";
 

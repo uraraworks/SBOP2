@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <exception>
 #include <cstring>
 #include <process.h>
 #include <cctype>
@@ -22,6 +23,7 @@
 #include "Handlers/MapEventHandler.h"
 #include "Handlers/TalkEventHandler.h"
 #include "Handlers/MapPartsHandler.h"
+#include "Handlers/SpriteSheetHandler.h"
 #include "Handlers/MapShadowHandler.h"
 #include "Handlers/StaticFileHandler.h"
 #include "Handlers/SelectionHandler.h"
@@ -40,9 +42,11 @@
 #include "Handlers/AuthSessionHandler.h"
 #include "Handlers/SkillHandler.h"
 #include "Handlers/MotionHandler.h"
+#include "Handlers/SoundCatalogHandler.h"
 #include "AuditLog.h"
 #include "AuthProvider.h"
 #include "MgrData.h"
+#include "TextOutput.h"
 #include "GlobalDefine.h"
 
 namespace
@@ -634,7 +638,38 @@ void CHttpServer::HandleClient(SOCKET hClient, bool &outTransferred)
         }
 
         std::string allowedMethods;
-        CApiRouter::RouteResult result = m_router.Dispatch(httpRequest, httpResponse, &allowedMethods);
+        CApiRouter::RouteResult result = CApiRouter::RouteNotFound;
+        // ハンドラ内の例外でサーバープロセス全体が落ちないよう保護する。
+        // 単一スレッド設計のため、1 リクエストの例外がサーバー全停止に直結する。
+        try {
+                result = m_router.Dispatch(httpRequest, httpResponse, &allowedMethods);
+        } catch (const std::exception &ex) {
+                if (m_pMgrData != NULL && m_pMgrData->GetLog() != NULL) {
+                        m_pMgrData->GetLog()->Write(
+                            "[HTTP] ハンドラ例外 %s %s : %s",
+                            httpRequest.method.c_str(), httpRequest.path.c_str(), ex.what());
+                }
+                httpResponse = HttpResponse();
+                httpResponse.statusLine = "HTTP/1.1 500 Internal Server Error";
+                httpResponse.SetJsonBody("{\"error\":\"internal_error\"}");
+                httpResponse.EnsureContentLength();
+                SendResponse(hClient, httpResponse);
+                shutdown(hClient, SD_BOTH);
+                return;
+        } catch (...) {
+                if (m_pMgrData != NULL && m_pMgrData->GetLog() != NULL) {
+                        m_pMgrData->GetLog()->Write(
+                            "[HTTP] ハンドラ不明例外 %s %s",
+                            httpRequest.method.c_str(), httpRequest.path.c_str());
+                }
+                httpResponse = HttpResponse();
+                httpResponse.statusLine = "HTTP/1.1 500 Internal Server Error";
+                httpResponse.SetJsonBody("{\"error\":\"internal_error\"}");
+                httpResponse.EnsureContentLength();
+                SendResponse(hClient, httpResponse);
+                shutdown(hClient, SD_BOTH);
+                return;
+        }
 
         if (result == CApiRouter::RouteMethodNotAllowed) {
                 httpResponse.statusLine = "HTTP/1.1 405 Method Not Allowed";
@@ -984,6 +1019,11 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> imageCatalogHandler(new CImageCatalogHandler());
         m_router.Register("GET", "/api/image-categories", std::move(imageCatalogHandler));
 
+        // サウンドカタログ API（共通 picker 向け）
+        //   GET /api/sounds   IDR_WAVE_* サウンド一覧（id / key / label）を返す
+        std::unique_ptr<IApiHandler> soundCatalogHandler(new CSoundCatalogHandler());
+        m_router.Register("GET", "/api/sounds", std::move(soundCatalogHandler));
+
         // 武器情報 API（Wave 2D）
         //   GET    /api/weapons    一覧
         //   POST   /api/weapons    新規作成
@@ -1111,6 +1151,12 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> mapSheetHandler(new CMapPartsSheetHandler(mapPartsProvider, "/api/assets/map-parts/sheets/"));
         m_router.RegisterPrefix("GET", "/api/assets/map-parts/sheets/", std::move(mapSheetHandler));
+
+        // 汎用スプライトシート配信 API
+        //   GET /api/assets/sprites/{categoryKey}/{sheetIndex}
+        //   categoryKey は ImageCatalogHandler の key 文字列と共通
+        std::unique_ptr<IApiHandler> spriteSheetHandler(new CSpriteSheetHandler("/api/assets/sprites/"));
+        m_router.RegisterPrefix("GET", "/api/assets/sprites/", std::move(spriteSheetHandler));
 
         std::wstring webRoot;
         if (ResolveWebRootPath(webRoot)) {
