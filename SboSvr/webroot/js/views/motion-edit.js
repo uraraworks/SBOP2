@@ -600,6 +600,7 @@ export function mount(container) {
   // --- キャンセル / 新規 ---
   cancelBtn.addEventListener("click", () => {
     resetForm(leftApi.getCurrentTypeId());
+    showList();
   });
 
   // --- 左ペイン ---
@@ -611,9 +612,11 @@ export function mount(container) {
       rightPane.appendChild(_formApi.el);
       _formApi.setMotion(m);
       showFeedback(feedbackEl, "", "");
+      showDetail();
     },
     onNew: () => {
       resetForm(leftApi.getCurrentTypeId());
+      showDetail();
     },
     onDelete: async (m) => {
       if (!confirm("モーション (ID=" + m.motionId + ") を削除しますか？")) return;
@@ -638,6 +641,31 @@ export function mount(container) {
       }
     },
   });
+
+  // 詳細ペインの先頭に「← 戻る」ボタンを追加
+  const backBar = document.createElement("div");
+  backBar.className = "me-action-bar";
+  const backBtn = document.createElement("button");
+  backBtn.type = "button";
+  backBtn.className = "button small";
+  backBtn.textContent = "← 戻る";
+  backBar.appendChild(backBtn);
+  rightPane.insertBefore(backBar, rightPane.firstChild);
+
+  // 画面切替ヘルパー
+  function showDetail() {
+    leftApi.el.style.display = "none";
+    rightPane.style.display = "";
+  }
+  function showList() {
+    rightPane.style.display = "none";
+    leftApi.el.style.display = "";
+  }
+
+  backBtn.addEventListener("click", showList);
+
+  // 初期状態: 一覧のみ表示
+  rightPane.style.display = "none";
 
   shell.appendChild(leftApi.el);
   shell.appendChild(rightPane);

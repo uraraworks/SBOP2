@@ -1,11 +1,20 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <mutex>
 
 #include "ApiRouter.h"
 
 class CMgrData;
 class CMainFrame;
+
+/// @brief クライアントスレッドに渡すコンテキスト
+struct ClientThreadCtx
+{
+        class CHttpServer *pServer;
+        SOCKET             hClient;
+};
 
 class CHttpServer
 {
@@ -20,6 +29,7 @@ public:
 
 private:
         static unsigned __stdcall ThreadProc(void *lpParam);
+        static unsigned __stdcall ClientThreadProc(void *lpParam);
 
         void    Run();
         bool    InitializeWinsock();
@@ -41,6 +51,11 @@ private:
         /// @return ソケットを Hub に移譲した場合 true（HandleAccept は closesocket しない）
         bool    HandleAdminWsUpgrade(SOCKET hClient, const std::string &rawHeaders);
 
+        /// @brief 終了済みクライアントスレッドを m_clientThreads から除去する (mutex 保護済みの呼び出し元から使う)
+        void    PruneClientThreadsLocked();
+
+        static const int kMaxClientThreads = 32;
+
         SOCKET          m_hListen;
         HANDLE          m_hThread;
         HANDLE          m_hStopEvent;
@@ -52,4 +67,7 @@ private:
         bool            m_bHandlersRegistered;
         CMgrData       *m_pMgrData;
         CMainFrame     *m_pMainFrame;
+
+        std::vector<HANDLE> m_clientThreads;
+        std::mutex          m_clientThreadsMutex;
 };

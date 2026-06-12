@@ -464,6 +464,28 @@ export function mount(container) {
 
   const detail = buildDetailPane({ feedbackEl });
 
+  // 詳細ペインの先頭に「← 戻る」ボタンを追加
+  const backBar = document.createElement("div");
+  backBar.className = "me-action-bar";
+  const backBtn = document.createElement("button");
+  backBtn.type = "button";
+  backBtn.className = "button small";
+  backBtn.textContent = "← 戻る";
+  backBar.appendChild(backBtn);
+  detail.el.insertBefore(backBar, detail.el.firstChild);
+
+  // 画面切替ヘルパー
+  function showDetail() {
+    leftApi.el.style.display = "none";
+    detail.el.style.display = "";
+  }
+  function showList() {
+    detail.el.style.display = "none";
+    leftApi.el.style.display = "";
+  }
+
+  backBtn.addEventListener("click", showList);
+
   // 保存
   detail.saveBtn.addEventListener("click", async () => {
     const payload = detail.collectData();
@@ -491,20 +513,23 @@ export function mount(container) {
     }
   });
 
-  // キャンセル/新規
+  // キャンセル/新規 → フォームクリア + 一覧に戻る
   detail.cancelBtn.addEventListener("click", () => {
     detail.setEffect(null);
     showFeedback(feedbackEl, "", "");
+    showList();
   });
 
   const leftApi = buildLeftPane({
     onSelect: (eff) => {
       detail.setEffect(eff);
       showFeedback(feedbackEl, "", "");
+      showDetail();
     },
     onNew: () => {
       detail.setEffect(null);
       showFeedback(feedbackEl, "", "");
+      showDetail();
     },
     onDelete: async (eff) => {
       if (!confirm("エフェクト [" + (eff.name || "") + "] (ID=" + eff.effectId + ") を削除しますか？")) return;
@@ -528,6 +553,9 @@ export function mount(container) {
       }
     },
   });
+
+  // 初期状態: 一覧のみ表示
+  detail.el.style.display = "none";
 
   shell.appendChild(leftApi.el);
   shell.appendChild(detail.el);

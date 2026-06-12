@@ -328,6 +328,31 @@ void CHttpServer::Stop()
 
         // 管理画面 WebSocket 接続を全て閉じる
         CAdminWsHub::Instance().Shutdown();
+
+        // クライアントスレッドが全て終了するのを待って CloseHandle
+        {
+                std::vector<HANDLE> threads;
+                {
+                        std::lock_guard<std::mutex> lock(m_clientThreadsMutex);
+                        threads.swap(m_clientThreads);
+                }
+
+                // MAXIMUM_WAIT_OBJECTS (64) 単位に分けて待機
+                const DWORD kWaitTimeout = 5000;
+                size_t i = 0;
+                while (i < threads.size()) {
+                        size_t chunkEnd = i + MAXIMUM_WAIT_OBJECTS;
+                        if (chunkEnd > threads.size()) {
+                                chunkEnd = threads.size();
+                        }
+                        DWORD count = static_cast<DWORD>(chunkEnd - i);
+                        WaitForMultipleObjects(count, &threads[i], TRUE, kWaitTimeout);
+                        i = chunkEnd;
+                }
+                for (HANDLE h : threads) {
+                        CloseHandle(h);
+                }
+        }
 }
 
 void CHttpServer::SetMgrData(CMgrData *pMgrData)
@@ -444,6 +469,35 @@ void CHttpServer::ProcessLoop()
         }
 }
 
+void CHttpServer::PruneClientThreadsLocked()
+{
+        std::vector<HANDLE> alive;
+        alive.reserve(m_clientThreads.size());
+        for (HANDLE h : m_clientThreads) {
+                if (WaitForSingleObject(h, 0) == WAIT_OBJECT_0) {
+                        CloseHandle(h);
+                } else {
+                        alive.push_back(h);
+                }
+        }
+        m_clientThreads.swap(alive);
+}
+
+unsigned __stdcall CHttpServer::ClientThreadProc(void *lpParam)
+{
+        ClientThreadCtx *pCtx = reinterpret_cast<ClientThreadCtx *>(lpParam);
+        CHttpServer *pServer  = pCtx->pServer;
+        SOCKET       hClient  = pCtx->hClient;
+        delete pCtx;
+
+        bool bTransferred = false;
+        pServer->HandleClient(hClient, bTransferred);
+        if (!bTransferred) {
+                closesocket(hClient);
+        }
+        return 0;
+}
+
 void CHttpServer::HandleAccept()
 {
         SOCKET hClient = accept(m_hListen, NULL, NULL);
@@ -455,11 +509,38 @@ void CHttpServer::HandleAccept()
         setsockopt(hClient, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
         setsockopt(hClient, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
 
-        // HandleClient が true を返した場合、ソケットは Hub に移譲済みなので閉じない
-        bool bTransferred = false;
-        HandleClient(hClient, bTransferred);
-        if (!bTransferred) {
-                closesocket(hClient);
+        // スレッド起動を試みる
+        bool bLaunched = false;
+        {
+                std::lock_guard<std::mutex> lock(m_clientThreadsMutex);
+                PruneClientThreadsLocked();
+
+                if (static_cast<int>(m_clientThreads.size()) < kMaxClientThreads) {
+                        ClientThreadCtx *pCtx = new ClientThreadCtx();
+                        pCtx->pServer = this;
+                        pCtx->hClient = hClient;
+
+                        unsigned int tid = 0;
+                        HANDLE hThread = reinterpret_cast<HANDLE>(
+                            _beginthreadex(NULL, 0, ClientThreadProc, pCtx, 0, &tid));
+                        if (hThread != NULL) {
+                                m_clientThreads.push_back(hThread);
+                                bLaunched = true;
+                        } else {
+                                // _beginthreadex 失敗: ctx を解放してフォールバック
+                                delete pCtx;
+                        }
+                }
+                // 上限超過 or 起動失敗の場合はフォールバック(同期処理)
+        }
+
+        if (!bLaunched) {
+                // バックプレッシャー: 従来どおり同期処理
+                bool bTransferred = false;
+                HandleClient(hClient, bTransferred);
+                if (!bTransferred) {
+                        closesocket(hClient);
+                }
         }
 }
 

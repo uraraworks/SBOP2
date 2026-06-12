@@ -1088,6 +1088,14 @@ main {
   gap: 0.9rem;
 }
 
+.view[data-view="map-parts-place"].is-active {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  gap: 0;
+}
+
 .map-workspace-panel {
   min-height: 0;
 }

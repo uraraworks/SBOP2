@@ -336,8 +336,8 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
       li.className = "ld-list-item" + (it.itemId === _selectedId ? " selected" : "");
 
       // アイコンサムネ
-      if (it.iconGrpId) {
-        const thumb = createSpriteThumb({ categoryKey: "icon32", sub: it.iconGrpId, size: 24 });
+      if (it.grpId) {
+        const thumb = createSpriteThumb({ categoryKey: "item", sub: it.grpId, size: 24 });
         thumb.el.className = "ld-item-thumb";
         li.appendChild(thumb.el);
       }
@@ -400,6 +400,28 @@ export function mount(container) {
 
   const detail = buildDetailPane({ feedbackEl });
 
+  // 詳細ペインの先頭に「← 戻る」ボタンを追加
+  const backBar = document.createElement("div");
+  backBar.className = "me-action-bar";
+  const backBtn = document.createElement("button");
+  backBtn.type = "button";
+  backBtn.className = "button small";
+  backBtn.textContent = "← 戻る";
+  backBar.appendChild(backBtn);
+  detail.el.insertBefore(backBar, detail.el.firstChild);
+
+  // 画面切替ヘルパー
+  function showDetail() {
+    leftApi.el.style.display = "none";
+    detail.el.style.display = "";
+  }
+  function showList() {
+    detail.el.style.display = "none";
+    leftApi.el.style.display = "";
+  }
+
+  backBtn.addEventListener("click", showList);
+
   // 保存
   detail.saveBtn.addEventListener("click", async () => {
     const payload = detail.collectData();
@@ -427,20 +449,23 @@ export function mount(container) {
     }
   });
 
-  // キャンセル/新規
+  // キャンセル/新規 → フォームクリア + 一覧に戻る
   detail.cancelBtn.addEventListener("click", () => {
     detail.setItem(null);
     showFeedback(feedbackEl, "", "");
+    showList();
   });
 
   const leftApi = buildLeftPane({
     onSelect: (it) => {
       detail.setItem(it);
       showFeedback(feedbackEl, "", "");
+      showDetail();
     },
     onNew: () => {
       detail.setItem(null);
       showFeedback(feedbackEl, "", "");
+      showDetail();
     },
     onDelete: async (it) => {
       if (!confirm("アイテム [" + (it.name || "") + "] (ID=" + it.itemId + ") を削除しますか？")) return;
@@ -464,6 +489,9 @@ export function mount(container) {
       }
     },
   });
+
+  // 初期状態: 一覧のみ表示
+  detail.el.style.display = "none";
 
   shell.appendChild(leftApi.el);
   shell.appendChild(detail.el);

@@ -1181,6 +1181,14 @@ export function mount(container) {
     }
   };
 
+  // キャラ一覧から遷移してきた場合に pendingCharId を消費して詳細を表示する
+  var pending = Number(window._charEditPendingCharId);
+  window._charEditPendingCharId = null;
+  if (pending > 0) {
+    idInp.value = String(pending);
+    doFetchChar(pending);
+  }
+
   _destroyFn = function () {
     window._charEditMount = null;
     container.innerHTML = "";

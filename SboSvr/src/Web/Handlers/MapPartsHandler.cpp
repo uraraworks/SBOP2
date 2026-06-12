@@ -36,6 +36,29 @@ static std::string RemoveUtf8Bom(std::string text)
         }
         return text;
 }
+
+// アニメーションコマ配列を JSON に出力する
+static void AppendAnimeFramesJson(std::ostringstream &oss, const CInfoMapParts *pInfo)
+{
+        oss << "\"animeFrames\":[";
+        int nCount = pInfo->m_paAnimeInfo ? static_cast<int>(pInfo->m_paAnimeInfo->GetSize()) : 0;
+        for (int i = 0; i < nCount; ++i) {
+                const PCInfoAnime pAnime = pInfo->m_paAnimeInfo->GetAt(i);
+                if (pAnime == NULL) {
+                        continue;
+                }
+                if (i > 0) {
+                        oss << ',';
+                }
+                oss << '{';
+                oss << "\"wait\":" << static_cast<int>(pAnime->m_byWait) << ',';
+                oss << "\"level\":" << static_cast<int>(pAnime->m_byLevel) << ',';
+                oss << "\"grpIdBase\":" << static_cast<int>(pAnime->m_wGrpIDBase) << ',';
+                oss << "\"grpIdPile\":" << static_cast<int>(pAnime->m_wGrpIDPile);
+                oss << '}';
+        }
+        oss << ']';
+}
 }
 
 CMapPartsResourceProvider::CMapPartsResourceProvider()
@@ -359,7 +382,9 @@ void CMapPartsListHandler::AppendPartJson(std::ostringstream &oss, const CInfoMa
         } else {
                 oss << "null";
         }
-        oss << "}";
+        oss << "},";
+
+        AppendAnimeFramesJson(oss, pInfo);
 
         oss << '}';
 }
@@ -417,7 +442,7 @@ void CMapPartsSheetHandler::Handle(const HttpRequest &request, HttpResponse &res
         response.statusLine = "HTTP/1.1 200 OK";
         response.body.assign(reinterpret_cast<const char *>(png.data()), reinterpret_cast<const char *>(png.data()) + png.size());
         response.SetHeader("Content-Type", "image/png");
-        response.SetHeader("Cache-Control", "public, max-age=60");
+        response.SetHeader("Cache-Control", "public, max-age=86400");
 }
 
 bool CMapPartsSheetHandler::TryParseSheetIndex(const std::string &path, int &sheetIndex) const
@@ -561,6 +586,50 @@ void ApplyJsonToPartsInfo(const std::string &json, CInfoMapParts *pInfo)
         BYTE byMoveDirection = 0;
         ParseMoveDirection(json, byMoveDirection);
         pInfo->m_byMoveDirection = byMoveDirection;
+
+        // animeFrames 配列のパース（"animeFrames":[{...},{...}]）
+        size_t nFramesKey = JsonUtils::FindKey(json, "animeFrames");
+        if (nFramesKey != std::string::npos) {
+                size_t nArrayStart = json.find('[', nFramesKey);
+                size_t nArrayEnd = json.find(']', nArrayStart);
+                if (nArrayStart != std::string::npos && nArrayEnd != std::string::npos) {
+                        // 既存コマをクリアして再構築
+                        pInfo->DeleteAllAnime();
+
+                        size_t nPos = nArrayStart + 1;
+                        while (nPos < nArrayEnd) {
+                                size_t nObjStart = json.find('{', nPos);
+                                if (nObjStart == std::string::npos || nObjStart >= nArrayEnd) {
+                                        break;
+                                }
+                                size_t nObjEnd = json.find('}', nObjStart);
+                                if (nObjEnd == std::string::npos || nObjEnd > nArrayEnd) {
+                                        break;
+                                }
+                                std::string frameJson = json.substr(nObjStart, nObjEnd - nObjStart + 1);
+
+                                pInfo->AddAnime();
+                                int nIdx = pInfo->GetAnimeCount() - 1;
+                                PCInfoAnime pAnime = pInfo->GetAnimePtr(nIdx);
+                                if (pAnime != NULL) {
+                                        if (JsonUtils::TryGetInt(frameJson, "wait", nVal)) {
+                                                pAnime->m_byWait = static_cast<BYTE>(nVal);
+                                        }
+                                        if (JsonUtils::TryGetInt(frameJson, "level", nVal)) {
+                                                pAnime->m_byLevel = static_cast<BYTE>(nVal);
+                                        }
+                                        if (JsonUtils::TryGetInt(frameJson, "grpIdBase", nVal)) {
+                                                pAnime->m_wGrpIDBase = static_cast<WORD>(nVal);
+                                        }
+                                        if (JsonUtils::TryGetInt(frameJson, "grpIdPile", nVal)) {
+                                                pAnime->m_wGrpIDPile = static_cast<WORD>(nVal);
+                                        }
+                                }
+
+                                nPos = nObjEnd + 1;
+                        }
+                }
+        }
 }
 
 void BuildSinglePartJson(std::ostringstream &oss, const CInfoMapParts *pInfo)
@@ -604,7 +673,9 @@ void BuildSinglePartJson(std::ostringstream &oss, const CInfoMapParts *pInfo)
         } else {
                 oss << "null";
         }
-        oss << '}';
+        oss << "},";
+
+        AppendAnimeFramesJson(oss, pInfo);
 
         oss << '}';
 }

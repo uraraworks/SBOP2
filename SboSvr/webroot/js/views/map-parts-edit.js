@@ -7,6 +7,7 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { fetchMapPartsData, invalidateMapPartsData } from "../data/map-parts-data.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createDragList } from "../components/drag-list.js";
 import { createAnimePreview } from "../components/anime-preview.js";
@@ -40,10 +41,7 @@ const DIRECTION_LABELS = { up: "上", down: "下", left: "左", right: "右" };
 // ----------------------------------------------------------------
 
 async function fetchPartsList() {
-  const { response, data } = await fetchJson("/api/maps/parts");
-  if (!response.ok || !Array.isArray(data?.parts)) {
-    throw new Error("マップパーツの取得に失敗しました");
-  }
+  const data = await fetchMapPartsData();
   return data.parts.map(normalizePart).filter(Boolean).sort((a, b) => a.partsId - b.partsId);
 }
 
@@ -381,7 +379,7 @@ function buildDetailForm(part) {
   previewH3.textContent = "プレビュー";
   previewSection.appendChild(previewH3);
 
-  const preview = createAnimePreview({ width: 32, height: 32, scale: 3 });
+  const preview = createAnimePreview({ width: 16, height: 16, scale: 6 });
   previewSection.appendChild(preview.el);
 
   const previewBtn = document.createElement("button");
@@ -723,6 +721,7 @@ export function mount(container) {
         showFeedback(container, `保存に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
+      invalidateMapPartsData();
       showFeedback(container, "保存しました", "success");
     },
 
@@ -746,6 +745,7 @@ export function mount(container) {
         showFeedback(container, `新規追加に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
+      invalidateMapPartsData();
       showFeedback(container, `パーツ ${data?.partsId ?? ""} を追加しました`, "success");
       return data?.partsId ?? null;
     },
@@ -761,6 +761,7 @@ export function mount(container) {
         showFeedback(container, `削除に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
+      invalidateMapPartsData();
       showFeedback(container, `パーツ ${part.partsId} を削除しました`, "success");
     },
   });
@@ -866,6 +867,7 @@ export async function openPartsDetail(partsId, options) {
         alert("保存に失敗しました: " + (data?.error ?? `HTTP ${response.status}`));
         return;
       }
+      invalidateMapPartsData();
       close({ saved: true, partsId });
     });
   });

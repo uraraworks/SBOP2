@@ -174,8 +174,14 @@ export function mount(container) {
 
       tr.addEventListener("click", () => {
         // character-overview (char-edit.js) へ遷移
-        window.location.hash = "#character-overview";
-        if (typeof window._charEditMount === "function") { window._charEditMount(c.charId); }
+        // hashchange は非同期発火のため、先に pendingCharId をセットしてから hash を変更する
+        if (window.location.hash === "#character-overview") {
+          // 既に同じ hash の場合は hashchange が発火しないので直接呼び出す
+          if (typeof window._charEditMount === "function") { window._charEditMount(c.charId); }
+        } else {
+          window._charEditPendingCharId = c.charId;
+          window.location.hash = "#character-overview";
+        }
       });
       fragment.appendChild(tr);
     });

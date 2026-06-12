@@ -7,6 +7,7 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { fetchMapPartsData } from "../data/map-parts-data.js";
 import { createPalette } from "./map-paint.js";
 import { openPartsDetail } from "./map-parts-edit.js";
 
@@ -42,20 +43,21 @@ function normalizeMapPart(raw) {
 // ----------------------------------------------------------------
 
 async function fetchParts() {
-  const partsRes = await fetchJson("/api/maps/parts");
-
   let parts = [];
   let sheetBaseUrl = "/api/assets/map-parts/sheets";
   let tileSize = 16;
   let sheetTileWidth = 32;
   let sheetTileHeight = 32;
 
-  if (partsRes.response.ok && Array.isArray(partsRes.data?.parts)) {
-    parts = partsRes.data.parts.map(normalizeMapPart).filter(Boolean).sort((a, b) => a.partsId - b.partsId);
-    if (partsRes.data.sheetBaseUrl) sheetBaseUrl = partsRes.data.sheetBaseUrl;
-    if (partsRes.data.tileSize) tileSize = Number(partsRes.data.tileSize) || tileSize;
-    if (partsRes.data.sheetTileWidth) sheetTileWidth = Number(partsRes.data.sheetTileWidth) || sheetTileWidth;
-    if (partsRes.data.sheetTileHeight) sheetTileHeight = Number(partsRes.data.sheetTileHeight) || sheetTileHeight;
+  try {
+    const data = await fetchMapPartsData();
+    parts = data.parts.map(normalizeMapPart).filter(Boolean).sort((a, b) => a.partsId - b.partsId);
+    if (data.sheetBaseUrl) sheetBaseUrl = data.sheetBaseUrl;
+    if (data.tileSize) tileSize = Number(data.tileSize) || tileSize;
+    if (data.sheetTileWidth) sheetTileWidth = Number(data.sheetTileWidth) || sheetTileWidth;
+    if (data.sheetTileHeight) sheetTileHeight = Number(data.sheetTileHeight) || sheetTileHeight;
+  } catch {
+    // parts=[] フォールバック
   }
 
   return { parts, sheetBaseUrl, tileSize, sheetTileWidth, sheetTileHeight };
@@ -66,9 +68,11 @@ async function fetchParts() {
 // ----------------------------------------------------------------
 
 let _destroyFn = null;
+let _mountToken = 0;
 
 export function mount(container) {
   if (_destroyFn) { _destroyFn(); _destroyFn = null; }
+  const token = ++_mountToken;
   container.innerHTML = "";
 
   // ---- ローディング表示 ----
@@ -96,10 +100,8 @@ export function mount(container) {
   let palette = null;
 
   fetchParts().then(({ parts, sheetBaseUrl, tileSize, sheetTileWidth, sheetTileHeight }) => {
+    if (token !== _mountToken) return;
     container.innerHTML = "";
-
-    // ---- コンテナを縦1カラムのflex構造にする ----
-    container.style.cssText = "display:flex;flex-direction:column;height:100%;overflow:hidden;";
 
     // ---- ツールバー(上部): 見出し + 編集ボタン ----
     const toolbar = document.createElement("div");
@@ -236,6 +238,7 @@ export function mount(container) {
       container.style.cssText = "";
     };
   }).catch((err) => {
+    if (token !== _mountToken) return;
     container.innerHTML = "";
     const errEl = document.createElement("p");
     errEl.className = "result-message error";

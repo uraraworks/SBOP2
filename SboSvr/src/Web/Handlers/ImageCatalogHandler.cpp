@@ -47,6 +47,7 @@ const ImageCategoryEntry kCategories[] = {
         // マップ系: GRPIDMAIN_* に列挙値が無いため idMain = 0 を使用
         { 0,                      "mapParts",    "マップパーツ",      63 },
         { 0,                      "mapShadow",   "マップ影",          63 },
+        { 0,                      "item",        "アイテム地面",      63 },
 };
 
 // 簡易 JSON エスケープ（このハンドラは静的文字列しか扱わないので最小実装）

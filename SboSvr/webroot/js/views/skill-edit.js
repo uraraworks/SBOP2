@@ -508,20 +508,23 @@ export function mount(container) {
     }
   });
 
-  // キャンセル/新規
+  // キャンセル/新規 → フォームクリア + 一覧に戻る
   detail.cancelBtn.addEventListener("click", function () {
     detail.setItem(null);
     showFeedback(feedbackEl, "", "");
+    showList();
   });
 
   var leftApi = buildLeftPane({
     onSelect: function (sk) {
       detail.setItem(sk);
       showFeedback(feedbackEl, "", "");
+      showDetail();
     },
     onNew: function () {
       detail.setItem(null);
       showFeedback(feedbackEl, "", "");
+      showDetail();
     },
     onDelete: async function (sk) {
       if (!confirm("スキル [" + (sk.name || "") + "] (ID=" + sk.skillId + ") を削除しますか？")) { return; }
@@ -546,6 +549,29 @@ export function mount(container) {
       }
     },
   });
+
+  // 詳細ペインの先頭に「← 戻る」ボタンを追加
+  var backBar = mkEl("div", "me-action-bar");
+  var backBtn = mkEl("button", "button small");
+  backBtn.type = "button";
+  backBtn.textContent = "← 戻る";
+  backBar.appendChild(backBtn);
+  detail.el.insertBefore(backBar, detail.el.firstChild);
+
+  // 画面切替ヘルパー
+  function showDetail() {
+    leftApi.el.style.display = "none";
+    detail.el.style.display = "";
+  }
+  function showList() {
+    detail.el.style.display = "none";
+    leftApi.el.style.display = "";
+  }
+
+  backBtn.addEventListener("click", showList);
+
+  // 初期状態: 一覧のみ表示
+  detail.el.style.display = "none";
 
   shell.appendChild(leftApi.el);
   shell.appendChild(detail.el);

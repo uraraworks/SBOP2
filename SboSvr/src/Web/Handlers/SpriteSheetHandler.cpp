@@ -70,6 +70,8 @@ static const SSpriteCategoryDef kSpriteCategories[] = {
     //   マップ影    : 16px セル、32x32 タイル / シート（IDP_MAP_01 と同サイズ）
     { 0,                      "mapParts",    L"IDP_MAP_%02d",        NULL,         16,       32,     32 },
     { 0,                      "mapShadow",   L"IDP_MAPSHADOW_%02d",  NULL,         16,       32,     32 },
+    // アイテム地面画像: IDP_ITEM_%02d (512x512, 16px セル, 横32×縦32)
+    { 0,                      "item",        L"IDP_ITEM_%02d",       NULL,         16,       32,     32 },
 };
 
 static const size_t kSpriteCategoryCount = sizeof(kSpriteCategories) / sizeof(kSpriteCategories[0]);
@@ -398,7 +400,7 @@ void CSpriteSheetHandler::Handle(const HttpRequest &request, HttpResponse &respo
         reinterpret_cast<const char *>(png.data()),
         reinterpret_cast<const char *>(png.data()) + png.size());
     response.SetHeader("Content-Type", "image/png");
-    response.SetHeader("Cache-Control", "public, max-age=60");
+    response.SetHeader("Cache-Control", "public, max-age=86400");
 }
 
 bool CSpriteSheetHandler::TryParsePath(
