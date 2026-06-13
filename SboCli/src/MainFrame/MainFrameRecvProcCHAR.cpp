@@ -601,10 +601,102 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		}
 	}
 	if (bResult == FALSE) {
+		// 画面外: ウェイポイントと予測を両方リセット
 		nState = CHARMOVESTATE_DELETEREADY;
+		pInfoChar->m_bWaypointMove = FALSE;
 		pInfoChar->StopPredictedMove(nPacketPosX, nPacketPosY);
 
+	} else if (pInfoChar->IsNPC()) {
+		// ─────────────────────────────────────────────────────────────
+		// NPC はウェイポイント追従方式（外挿なし）
+		//
+		// サーバーが 100ms ごとに送ってくる受信点を順に消化するだけで
+		// 外挿は不要。Dead Reckoning を使うと補正グライドが向きと無関係な
+		// 方向に滑り「右向きのまま左に進む」等の不一致が生じるため。
+		// ─────────────────────────────────────────────────────────────
+
+		/*
+		   ウェイポイント方式でも「直近の移動同期情報」は更新しておく。
+		   RecvProcCHAR_STATE の停止処理が鮮度判定に m_dwPredictRecvTime、
+		   停止フォールバック座標に m_nPredictSyncX/Y を参照するため、
+		   ここを更新しないと古い座標へ StopPredictedMove(=SetPos) が発火して
+		   「数キャラ分先へ一瞬ワープして戻る」症状になる。
+		*/
+		pInfoChar->m_dwPredictRecvTime = dwRecvTime;
+		pInfoChar->m_nPredictSyncX = nPacketPosX;
+		pInfoChar->m_nPredictSyncY = nPacketPosY;
+
+		if (bForceStop) {
+			// 停止パケット: 現在位置と停止位置の差が大きければ即時スナップ
+			nStateStop = CHARMOVESTATE_STAND;
+			if (pInfoChar->IsStateBattle()) {
+				nStateStop = CHARMOVESTATE_BATTLE;
+				if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
+					nStateStop = CHARMOVESTATE_BATTLE_DEFENSE;
+				}
+			}
+			int nStopDx = abs(pInfoChar->m_nMapX - nPacketPosX);
+			int nStopDy = abs(pInfoChar->m_nMapY - nPacketPosY);
+			if (max(nStopDx, nStopDy) > MAPPARTSSIZE) {
+				// 大きくズレている: 即時スナップ＋キュークリア
+				pInfoChar->m_bWaypointMove = FALSE;
+				pInfoChar->StopPredictedMove(nPacketPosX, nPacketPosY);
+				pInfoChar->SetDirection(nDirection);
+				pInfoChar->ChgMoveState(nStateStop);
+			} else {
+				// 近距離: 停止ウェイポイントとしてキューに積む
+				pInfoChar->AddMovePosQue(nStateStop, nDirection, nPacketPosX, nPacketPosY);
+				// ウェイポイント追従が未開始なら開始
+				if (!pInfoChar->m_bWaypointMove) {
+					pInfoChar->m_bWaypointMove = TRUE;
+					pInfoChar->m_bPredictedMove = FALSE;
+					pInfoChar->m_dwWaypointLastTime = dwRecvTime;
+				}
+			}
+			nState = -1;
+			pInfoChar->m_bRedraw = TRUE;
+		} else if (nState == nStateMove) {
+			// 移動パケット: ウェイポイントとしてキューに積む
+			// 向きは移動ベクトル/到達時に反映するため、ここでは SetDirection しない
+			pInfoChar->AddMovePosQue(nState, nDirection, nPacketPosX, nPacketPosY);
+			// 暴走防止: 何らかの異常でキューが溜まり続けた場合は古い経由点から間引く
+			while (pInfoChar->m_apMovePosQue.size() > 32) {
+				pInfoChar->DeleteMovePosQue(0);
+			}
+			pInfoChar->m_bPredictedMove = FALSE;
+			if (!pInfoChar->m_bWaypointMove) {
+				// 追従開始: 移動状態へ遷移してウェイポイント処理を起動
+				pInfoChar->m_bWaypointMove = TRUE;
+				pInfoChar->m_dwWaypointLastTime = dwRecvTime;
+				// まだ移動状態でなければ ChgMoveState で移動アニメを開始
+				if (!pInfoChar->IsStateMove()) {
+					pInfoChar->ChgMoveState(nState);
+					nState = -1;
+				} else {
+					nState = -1;
+				}
+			} else {
+				nState = -1;
+			}
+		} else {
+			// 位置変化なし・向き変更のみ
+			if (bDirectionChanged) {
+				if (pInfoChar->m_bWaypointMove) {
+					// 追従中: 経路の順序を保つためキュー経由で反映する
+					pInfoChar->AddMovePosQue(nState, nDirection, nPacketPosX, nPacketPosY);
+				} else {
+					// 追従していない(立ち状態等)はキューが消化されないため即時反映する
+					pInfoChar->SetDirection(nDirection);
+					pInfoChar->m_bRedraw = TRUE;
+				}
+			}
+			nState = -1;
+		}
 	} else {
+		// ─────────────────────────────────────────────────────────────
+		// PC（他プレイヤー）: 従来の Dead Reckoning 予測を維持
+		// パケット頻度が低く外挿なしでは滑らかさが出ないため。
+		// ─────────────────────────────────────────────────────────────
 		if (bForceStop) {
 			nStateStop = CHARMOVESTATE_STAND;
 			if (pInfoChar->IsStateBattle()) {

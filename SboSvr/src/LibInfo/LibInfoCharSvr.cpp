@@ -73,6 +73,71 @@ static int GetMoveSyncSpeedLevel(CInfoCharSvr *pInfoChar)
 	return max((nMovePixelsPerSec + SERVER_CHAR_MOVE_PIXELS_PER_SEC - 1) / SERVER_CHAR_MOVE_PIXELS_PER_SEC, 1);
 }
 
+/**
+ * @brief サーバーNPCの連続換算位置を返すヘルパー
+ *
+ * サーバーのNPCは Move() で HALF_TILE(16px) を一気にジャンプして
+ * 次の移動まで待つ方式。m_nMapX/Y はジャンプ後の確定座標のため、
+ * そのまま送るとクライアントの Dead Reckoning 予測と最大 HALF_TILE 分ズレる。
+ *
+ * この関数は m_ptCharBack(移動前) → m_nMapX/Y(移動後) を、
+ * m_dwLastTimeMove からの経過時間 ÷ 半タイル移動間隔 で線形補間した
+ * 連続換算位置を返す。
+ *
+ * ※ m_ptCharBack と m_dwLastTimeMove は InfoCharBase::SetPos() が
+ *   呼ばれるたびに更新される。Move() が内部で SetPos() を呼んでいる
+ *   限り、常に有効な値が入っている。
+ *
+ * ガード条件(補間せず m_nMapX/Y をそのまま返す):
+ *   - m_ptCharBack が (0,0)、または m_dwLastTimeMove == 0 (初期値)
+ *   - 経過時間 >= 間隔 (補間率 >= 1.0 で m_nMapX/Y に到達済み)
+ *   - |差分| > HALF_TILE (マップワープ等の異常値)
+ */
+static void GetInterpolatedNPCPos(CInfoCharSvr *pInfoChar, int &nOutX, int &nOutY)
+{
+	DWORD dwNowTime;
+	DWORD dwElapsed;
+	DWORD dwInterval;
+	int nMovePixelsPerSec;
+	int nDiffX, nDiffY;
+
+	nOutX = pInfoChar->m_nMapX;
+	nOutY = pInfoChar->m_nMapY;
+
+	// ガード: m_ptCharBack が未設定
+	if ((pInfoChar->m_ptCharBack.x == 0) && (pInfoChar->m_ptCharBack.y == 0)) {
+		return;
+	}
+	// ガード: m_dwLastTimeMove が未設定
+	if (pInfoChar->m_dwLastTimeMove == 0) {
+		return;
+	}
+	// ガード: 差分が HALF_TILE 超(ワープ等の異常値)
+	nDiffX = pInfoChar->m_nMapX - pInfoChar->m_ptCharBack.x;
+	nDiffY = pInfoChar->m_nMapY - pInfoChar->m_ptCharBack.y;
+	if ((abs(nDiffX) > HALF_TILE) || (abs(nDiffY) > HALF_TILE)) {
+		return;
+	}
+
+	dwNowTime = timeGetTime();
+	if (dwNowTime < pInfoChar->m_dwLastTimeMove) {
+		return;
+	}
+	dwElapsed = dwNowTime - pInfoChar->m_dwLastTimeMove;
+
+	nMovePixelsPerSec = GetMovePixelsPerSec(pInfoChar);
+	dwInterval = max((DWORD)(((ULONGLONG)HALF_TILE * 1000 + nMovePixelsPerSec - 1) / nMovePixelsPerSec), (DWORD)1);
+
+	// ガード: 経過時間 >= 間隔(補間率 1.0 以上 = 目的地に到達済み)
+	if (dwElapsed >= dwInterval) {
+		return;
+	}
+
+	// 線形補間: back + diff * (elapsed / interval)
+	nOutX = pInfoChar->m_ptCharBack.x + (int)((LONGLONG)nDiffX * dwElapsed / dwInterval);
+	nOutY = pInfoChar->m_ptCharBack.y + (int)((LONGLONG)nDiffY * dwElapsed / dwInterval);
+}
+
 }	// namespace
 
 CLibInfoCharSvr::CLibInfoCharSvr()
@@ -2268,13 +2333,11 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 
 	dwNowTime = timeGetTime();
 	nSpeedLevel = GetMoveSyncSpeedLevel(pInfoChar);
-	nStartX = pInfoChar->m_nMapX;
-	nStartY = pInfoChar->m_nMapY;
+	// MOVE_START 用: 連続換算位置ヘルパーで補間座標を取得する。
+	// 旧実装は m_ptCharBack を直接使っていたが、HALF_TILE ジャンプ直後に
+	// 呼ばれると最大 16px 未来の座標が届いてクライアント予測とズレる。
+	GetInterpolatedNPCPos(pInfoChar, nStartX, nStartY);
 	dwStartTime = dwNowTime;
-	if ((pInfoChar->m_ptCharBack.x != 0) || (pInfoChar->m_ptCharBack.y != 0)) {
-		nStartX = pInfoChar->m_ptCharBack.x;
-		nStartY = pInfoChar->m_ptCharBack.y;
-	}
 	if (pInfoChar->m_dwLastTimeMove != 0) {
 		dwStartTime = pInfoChar->m_dwLastTimeMove;
 	}
@@ -2301,12 +2364,16 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
 		} else if (pInfoChar->m_nLastMoveSyncDirection != pInfoChar->m_nDirection) {
 			// 方向変更: MOVE_DIR_CHANGE (bUpdate=FALSE)
+			// m_nMapX/Y をそのまま送ると HALF_TILE ジャンプ後の未来座標になるため
+			// 連続換算位置ヘルパーで補間した座標を使う。
+			int nDirChangeX, nDirChangeY;
+			GetInterpolatedNPCPos(pInfoChar, nDirChangeX, nDirChangeY);
 			PacketMoveDirChange.Make(
 					pInfoChar->m_dwMapID,
 					pInfoChar->m_dwCharID,
 					pInfoChar->m_nDirection,
-					pInfoChar->m_nMapX,
-					pInfoChar->m_nMapY,
+					nDirChangeX,
+					nDirChangeY,
 					FALSE,
 					nSpeedLevel,
 					dwNowTime);
@@ -2315,12 +2382,15 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
 		} else if (dwNowTime - pInfoChar->m_dwLastMoveSyncSendTime >= 100) {
 			// NPC の 100ms 補正
+			// 同様に補間座標を使って連続換算位置を送る。
+			int nUpdateX, nUpdateY;
+			GetInterpolatedNPCPos(pInfoChar, nUpdateX, nUpdateY);
 			PacketMoveDirChange.Make(
 					pInfoChar->m_dwMapID,
 					pInfoChar->m_dwCharID,
 					pInfoChar->m_nDirection,
-					pInfoChar->m_nMapX,
-					pInfoChar->m_nMapY,
+					nUpdateX,
+					nUpdateY,
 					TRUE,
 					nSpeedLevel,
 					dwNowTime);

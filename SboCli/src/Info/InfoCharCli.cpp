@@ -77,12 +77,14 @@ static int GetPredictMovePixelsPerSec(PCInfoCharCli pInfoChar)
 static int ClampPredictMovePixelsPerSec(int nSpeed)
 {
 	/*
-	   Web 版の viewer 側はサーバー中継や POS_SYNC 間引きの影響で、
-	   実効速度がローカル移動より遅めに見えることがある。
-	   実測値が極端でも予測が暴れすぎないよう、安全側に丸めて使う。
+	   予測速度をサーバー実速度(CHAR_MOVE_PIXELS_PER_SEC = 128px/秒)の
+	   範囲に収める。
+	   旧上限 110 はサーバー実速度より 14% 低く、常に遅延が蓄積し
+	   32px 超で即時スナップ(ワープ)が周期的に発生していた。
+	   下限 48 は低速ネット環境等での極端な補間暴れを防ぐため維持。
 	*/
 	nSpeed = max(nSpeed, 48);
-	nSpeed = min(nSpeed, 110);
+	nSpeed = min(nSpeed, CHAR_MOVE_PIXELS_PER_SEC);
 	return nSpeed;
 }
 
@@ -218,6 +220,8 @@ CInfoCharCli::CInfoCharCli()
 	m_pInfoEffect	= NULL;
 	m_pSock	= NULL;
 	m_bPredictedMove	= FALSE;
+	m_bWaypointMove	= FALSE;	// NPC ウェイポイント追従フラグ
+	m_dwWaypointLastTime	= 0;
 	m_nPredictBaseX	= 0;
 	m_nPredictBaseY	= 0;
 	m_nPredictSyncX	= 0;
@@ -564,9 +568,13 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 	bRet	= FALSE;
 	bResult	= CInfoCharBase::TimerProc(dwTime);
 
-	// Phase 6: 他プレイヤーのみ予測座標を毎フレーム更新
+	// Phase 6: 他プレイヤーのみ予測座標を毎フレーム更新（PC のみ。NPC はウェイポイント追従で処理）
 	if (m_bPredictedMove && m_pMgrData && (m_pMgrData->GetCharID() != m_dwCharID)) {
 		UpdatePredictedPos(dwTime);
+	}
+	// NPC ウェイポイント追従: 受信経由点を順に消化して向きと移動方向を一致させる
+	if (m_bWaypointMove && m_pMgrData && (m_pMgrData->GetCharID() != m_dwCharID)) {
+		UpdateWaypointMove(dwTime);
 	}
 
 	bResult |= RenewAnime	(dwTime);
@@ -1506,6 +1514,21 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 		   進行方向については、基準位置が確定同期を追い越さないように抑える。
 		*/
 		ClampPredictBaseToSync(nDirection, x, y, m_nPredictBaseX, m_nPredictBaseY);
+		/*
+		   ClampPredictBaseToSync は進行方向の軸しか補正しないため、
+		   直交軸のズレ(< MAPPARTSSIZE = 32px) が永続し「斜め後ろに滑る」
+		   見え方になる。上下移動(dir 0,1)なら X 軸、左右移動(dir 2,3)なら
+		   Y 軸を確定同期座標に合わせて直交軸のドリフトを収束させる。
+		   斜め方向(dir 4-7)は両軸が進行軸なので補正しない。
+		   SetPos の描画セグメント補間が滑らかに吸収するため即時スナップにはならない。
+		*/
+		if ((nDirection == 0) || (nDirection == 1)) {
+			// 上下移動: X 軸は直交軸なので確定同期 X に寄せる
+			m_nPredictBaseX = x;
+		} else if ((nDirection == 2) || (nDirection == 3)) {
+			// 左右移動: Y 軸は直交軸なので確定同期 Y に寄せる
+			m_nPredictBaseY = y;
+		}
 		m_dwPredictRecvTime = dwNowTime;
 	}
 }
@@ -1514,6 +1537,7 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 void CInfoCharCli::StopPredictedMove(int x, int y)
 {
 	m_bPredictedMove = FALSE;
+	m_bWaypointMove = FALSE;	// ウェイポイント追従も停止
 	m_nPredictDirection = -1;
 	DeleteAllMovePosQue();
 	m_ptMove.x = 0;
@@ -1530,6 +1554,7 @@ void CInfoCharCli::SnapMoveInterpolation(void)
 
 	dwNowTime = SDL_GetTicks();
 	m_bPredictedMove = FALSE;
+	m_bWaypointMove = FALSE;	// ウェイポイント追従も停止
 	m_nPredictDirection = -1;
 	m_nPredictBaseX = m_nMapX;
 	m_nPredictBaseY = m_nMapY;
@@ -1600,6 +1625,219 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 
 	SetPos(nX, nY);
 	m_bRedraw = TRUE;
+}
+
+
+namespace {
+
+/// 移動ベクトルの符号から 8 方向の向きを求める（該当なしは -1）
+/// 0:上 1:下 2:左 3:右 4:右上 5:右下 6:左下 7:左上
+static int GetDirectionFromVector(int nDx, int nDy)
+{
+	int nSignX, nSignY;
+
+	nSignX = (nDx > 0) ? 1 : ((nDx < 0) ? -1 : 0);
+	nSignY = (nDy > 0) ? 1 : ((nDy < 0) ? -1 : 0);
+
+	if ((nSignX == 0) && (nSignY < 0)) return 0;
+	if ((nSignX == 0) && (nSignY > 0)) return 1;
+	if ((nSignX < 0) && (nSignY == 0)) return 2;
+	if ((nSignX > 0) && (nSignY == 0)) return 3;
+	if ((nSignX > 0) && (nSignY < 0)) return 4;
+	if ((nSignX > 0) && (nSignY > 0)) return 5;
+	if ((nSignX < 0) && (nSignY > 0)) return 6;
+	if ((nSignX < 0) && (nSignY < 0)) return 7;
+	return -1;
+}
+
+}	// namespace
+
+/// @brief NPC ウェイポイント追従の毎フレーム処理
+///
+/// NPC はサーバーが 100ms ごとに連続して受信点を送ってくるため、
+/// Dead Reckoning（外挿）を使わず受信点を順番に消化する方式で移動させる。
+/// 移動中の向きは「実際の移動ベクトル」から導出する。クライアントは
+/// サーバーの実経路をなぞっているため、これで移動方向と向きが構造的に一致する
+/// （パケットの向きはサーバー処理タイミングにより転換点から数 px ずれることが
+///   あり、到達時反映だけだと曲がり角のたびに不一致が見えてしまう）。
+void CInfoCharCli::UpdateWaypointMove(DWORD dwNowTime)
+{
+	PMOVEPOSQUE pQue;
+	int nSpeed, nDx, nDy, nAbsDx, nAbsDy, nStep, nStepX, nStepY;
+	int nTotalDist, nMoved, nMoveDir, i, nCount;
+	DWORD dwElapsed, dwUsed;
+	BOOL bIsStandState;
+
+	if (!m_bWaypointMove) {
+		return;
+	}
+
+	// 前回更新からの経過時間
+	if (m_dwWaypointLastTime == 0) {
+		m_dwWaypointLastTime = dwNowTime;
+		return;
+	}
+	if (dwNowTime <= m_dwWaypointLastTime) {
+		return;
+	}
+	dwElapsed = dwNowTime - m_dwWaypointLastTime;
+	// タブ非アクティブ等で経過時間が極端に大きい場合は上限を設け、
+	// 復帰した瞬間に経路を一気に飛ばないようにする
+	if (dwElapsed > 500) {
+		dwElapsed = 500;
+		m_dwWaypointLastTime = dwNowTime - 500;
+	}
+
+	// キューが空なら待機（次パケットを待つ。待機時間は消費する）
+	if (m_apMovePosQue.size() == 0) {
+		m_dwWaypointLastTime = dwNowTime;
+		return;
+	}
+
+	// 遅延補正: キュー残経路長（チェビシェフ距離合計）に応じて速度を上げる
+	nSpeed = GetPredictMovePixelsPerSec(this);
+	nTotalDist = 0;
+	nCount = (int)m_apMovePosQue.size();
+	for (i = 0; i < nCount; i ++) {
+		pQue = m_apMovePosQue[i];
+		if (pQue->ptPos.x < 0) {
+			continue;	// 状態変更マーカーはスキップ
+		}
+		nAbsDx = abs(pQue->ptPos.x - m_nMapX);
+		nAbsDy = abs(pQue->ptPos.y - m_nMapY);
+		nTotalDist += max(nAbsDx, nAbsDy);	// チェビシェフ距離
+	}
+	if (nTotalDist > 48) {
+		nSpeed = nSpeed * 2;
+	} else if (nTotalDist > 24) {
+		nSpeed = nSpeed * 5 / 4;	// 1.25 倍
+	}
+	nSpeed = max(nSpeed, 1);
+
+	/*
+	   フレーム移動量(px)。1px 未満のときは時刻を消費せずに戻り、
+	   端数時間を翌フレームへ繰り越す。
+	   ここで時刻を消費してしまうと、移動速度の遅い NPC は毎フレーム
+	   切り捨てで一歩も動けず、キューが無限に成長して FPS 低下を招く。
+	*/
+	nStep = (int)(((ULONGLONG)dwElapsed * (DWORD)nSpeed) / 1000);
+	if (nStep <= 0) {
+		return;
+	}
+
+	nMoved = 0;
+	while (m_apMovePosQue.size() > 0) {
+		pQue = m_apMovePosQue[0];
+
+		// 状態変更マーカー（ptPos.x < 0）: 即時反映して pop
+		if (pQue->ptPos.x < 0) {
+			int nQueState = pQue->nState;
+
+			DeleteMovePosQue(0);
+			if (nQueState >= 0) {
+				/*
+				   ChgMoveState は「移動中に立ち系へ変更」されると
+				   マーカーを再キューして return する仕様のため、そのまま呼ぶと
+				   マーカーが自己増殖して無限ループ（フリーズ）になる。
+				   レガシー TimerProcMove(1815行付近) と同様に、先に移動状態を
+				   解除してから適用することで再キューを防ぐ。
+				*/
+				m_nAnimeBack = m_nAnime;
+				m_nMoveState = 0;
+				ChgMoveState(nQueState);
+				if (IsStateMove() == FALSE) {
+					// 立ち系へ遷移した: 追従終了（残キューは SetMoveState が削除済み）
+					m_bWaypointMove = FALSE;
+					break;
+				}
+			}
+			continue;
+		}
+
+		nDx = pQue->ptPos.x - m_nMapX;
+		nDy = pQue->ptPos.y - m_nMapY;
+		nAbsDx = abs(nDx);
+		nAbsDy = abs(nDy);
+
+		// ウェイポイント到達？
+		if ((nAbsDx == 0) && (nAbsDy == 0)) {
+			int nQueState;
+
+			// 到達: 向きを反映（停止時・その場向き変更の確定値）
+			if (pQue->nDirection >= 0) {
+				SetDirection(pQue->nDirection);
+				m_bRedraw = TRUE;
+			}
+			// 立ち系状態なら停止
+			// ※ DeleteMovePosQue は要素を SAFE_DELETE するため、先に nState を退避する
+			nQueState = pQue->nState;
+			bIsStandState = FALSE;
+			if ((nQueState == CHARMOVESTATE_STAND) ||
+				(nQueState == CHARMOVESTATE_BATTLE) ||
+				(nQueState == CHARMOVESTATE_BATTLE_DEFENSE)) {
+				bIsStandState = TRUE;
+			}
+			DeleteMovePosQue(0);
+			if (bIsStandState) {
+				m_bWaypointMove = FALSE;
+				// マーカー処理と同様、再キューによる無限ループを防いでから適用する
+				m_nAnimeBack = m_nAnime;
+				m_nMoveState = 0;
+				ChgMoveState(nQueState);
+				break;
+			}
+			continue;
+		}
+
+		// X/Y それぞれ目標を超えないようにクランプして前進
+		// （描画セグメント補間を1回で張るため SetPos は1回にまとめる）
+		nStepX = (nAbsDx > 0) ? min(nStep, nAbsDx) : 0;
+		nStepY = (nAbsDy > 0) ? min(nStep, nAbsDy) : 0;
+
+		// 向きは実際の移動ベクトルから決める（移動方向と向きの不一致を防ぐ）
+		nMoveDir = GetDirectionFromVector(nDx, nDy);
+		if ((nMoveDir >= 0) && (nMoveDir != m_nDirection)) {
+			SetDirection(nMoveDir);
+		}
+
+		{
+			int nNewX, nNewY;
+
+			nNewX = m_nMapX;
+			nNewY = m_nMapY;
+			if (nDx > 0) {
+				nNewX += nStepX;
+			} else if (nDx < 0) {
+				nNewX -= nStepX;
+			}
+			if (nDy > 0) {
+				nNewY += nStepY;
+			} else if (nDy < 0) {
+				nNewY -= nStepY;
+			}
+			SetPos(nNewX, nNewY);
+		}
+		m_bRedraw = TRUE;
+
+		// 移動量を記録（斜め成分はチェビシェフ距離で近似）
+		nMoved = max(nStepX, nStepY);
+		break;	// 1 フレームで 1 セグメントずつ処理（残量は次フレームへ）
+	}
+
+	/*
+	   時刻の消費は「実際に動いた距離」の分だけにして、端数を繰り越す。
+	   キューを消化し切った（または追従終了した）場合は残り時間も消費して、
+	   次パケット到着時に溜まった時間で一気に飛ぶのを防ぐ。
+	*/
+	if ((m_apMovePosQue.size() == 0) || (m_bWaypointMove == FALSE)) {
+		m_dwWaypointLastTime = dwNowTime;
+	} else if (nMoved > 0) {
+		dwUsed = (DWORD)(((ULONGLONG)nMoved * 1000) / (DWORD)nSpeed);
+		m_dwWaypointLastTime += dwUsed;
+		if (m_dwWaypointLastTime > dwNowTime) {
+			m_dwWaypointLastTime = dwNowTime;
+		}
+	}
 }
 
 
@@ -1699,6 +1937,10 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 
 	bRet	= FALSE;
 	if (m_bPredictedMove && m_pMgrData && (m_pMgrData->GetCharID() != m_dwCharID)) {
+		goto Exit;
+	}
+	// NPC ウェイポイント追従中はレガシー16px歩行処理と二重駆動しない
+	if (m_bWaypointMove && m_pMgrData && (m_pMgrData->GetCharID() != m_dwCharID)) {
 		goto Exit;
 	}
 	dwWait	= GetMoveWait();

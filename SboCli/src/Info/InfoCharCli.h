@@ -101,6 +101,9 @@ public:
 	void	UpdatePredictedPos	(DWORD dwNowTime);	// 予測座標更新
 	void	SnapMoveInterpolation	(void);	// 現在座標へ描画補間を即時反映
 
+	// NPC ウェイポイント追従: 受信経由点を順に消化して移動方向と向きを一致させる
+	void	UpdateWaypointMove	(DWORD dwNowTime);	// ウェイポイント追従更新
+
 
 protected:
 	virtual BOOL RenewAnime	(DWORD dwTime, int nAdd = 1);	// アニメーションの更新
@@ -150,7 +153,8 @@ public:
 	ARRAYMOTIONINFO	m_aMotion[CHARMOTIONID_MAX][4];	// モーション情報
 	ARRAYTEXTEFFECT	m_aTextEffect;	// 文字エフェクト
 	CStdArray<PMOVEPOSQUE, PMOVEPOSQUE>	m_apMovePosQue;	// 座標変更キュー
-	BOOL	m_bPredictedMove;	// 予測移動中か
+	BOOL	m_bPredictedMove,	// 予測移動中か
+			m_bWaypointMove;	// NPC ウェイポイント追従中か（外挿を使わず受信点を順に消化）
 	int	m_nPredictBaseX,	// 予測開始X(px)
 			m_nPredictBaseY,	// 予測開始Y(px)
 			m_nPredictSyncX,	// 直近の確定同期X(px)
@@ -158,7 +162,8 @@ public:
 			m_nPredictDirection,	// 予測向き
 			m_nPredictSpeed,	// 予測速度(px/sec基準)
 			m_nDrawDirectionOverride;	// 描画用の向き上書き
-	DWORD	m_dwPredictRecvTime,	// 受信タイムスタンプ
+	DWORD	m_dwWaypointLastTime,	// ウェイポイント追従: 前回更新時刻
+			m_dwPredictRecvTime,	// 受信タイムスタンプ
 			m_dwPredictLeadLimitMs,	// 予測移動の先読み上限時間
 			m_dwDrawMoveStartTime,	// 描画補間開始時刻
 			m_dwDrawMoveEndTime;	// 描画補間終了時刻
