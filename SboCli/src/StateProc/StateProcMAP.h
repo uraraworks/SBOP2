@@ -105,6 +105,9 @@ public:
 	void StartAutoWalkToEvent(int nTileX, int nTileY); // イベントタイルへの自動歩行開始
 	void DrawImGui(void);              // ImGuiウィジェット描画（ブラウザ版）
 	void DrawImGuiSub(int kind);       // ImGuiウィジェット描画（ネイティブサブウィンドウ）
+#if defined(__EMSCRIPTEN__)
+	void BrowserChatSubmit(const char *pszText, int nType); // DOM→C++ チャット送信ブリッジ
+#endif
 
 
 protected:

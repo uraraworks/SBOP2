@@ -7,6 +7,9 @@
 #include "ImGuiMsgLog.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+#endif
 
 /// @brief UTF-8 文字列を SJIS (CP932) に変換する
 /// @param pszUtf8 UTF-8 文字列（NULL 終端）
@@ -40,6 +43,18 @@ static std::string Utf8ToSjis(const char *pszUtf8)
     return sjis;
 }
 
+#if defined(__EMSCRIPTEN__)
+/// @brief SJIS メッセージを DOM チャットログへ転送する EM_JS 関数
+/// @param text    UTF-8 テキスト (C文字列ポインタ)
+/// @param cssColor "#RRGGBB" 形式の CSS 色文字列 (C文字列ポインタ)
+/// window.sbop2ChatLogAdd が未定義でも typeof ガードで落ちないようにする
+EM_JS(void, sbop2_chat_log_add_js, (const char *text, const char *cssColor), {
+    if (typeof window !== 'undefined' && typeof window.sbop2ChatLogAdd === 'function') {
+        window.sbop2ChatLogAdd(UTF8ToString(text), UTF8ToString(cssColor));
+    }
+});
+#endif
+
 CImGuiMsgLog::CImGuiMsgLog()
     : m_pMgrData(NULL)
     , m_bScrollToBottom(false)
@@ -67,6 +82,21 @@ void CImGuiMsgLog::Add(const char *pszLog, unsigned int color)
         return;
     }
 
+#if defined(__EMSCRIPTEN__)
+    // ブラウザ版: DOM側 window.sbop2ChatLogAdd へ転送する
+    // COLORREF (0x00BBGGRR) → "#RRGGBB" CSS 色文字列に変換
+    {
+        unsigned int r = (color >>  0) & 0xFF;
+        unsigned int g = (color >>  8) & 0xFF;
+        unsigned int b = (color >> 16) & 0xFF;
+        char szCssColor[8]; // "#RRGGBB\0"
+        snprintf(szCssColor, sizeof(szCssColor), "#%02X%02X%02X", r, g, b);
+
+        // SJIS → UTF-8 変換してから JS へ渡す
+        std::string utf8Text = SjisToUtf8(pszLog);
+        sbop2_chat_log_add_js(utf8Text.c_str(), szCssColor);
+    }
+#else
     LogLine line;
     // SJIS (CP932) 文字列を UTF-8 に変換してから保持する
     // ImGui は UTF-8 を要求するため、SJIS のまま渡すと文字化けする
@@ -80,11 +110,15 @@ void CImGuiMsgLog::Add(const char *pszLog, unsigned int color)
     }
 
     m_bScrollToBottom = true;
+#endif
 }
 
 void CImGuiMsgLog::Draw()
 {
-#if !defined(__EMSCRIPTEN__)
+#if defined(__EMSCRIPTEN__)
+    // ブラウザ版: チャットログ・入力は DOM 側(shell.html)が担うため何もしない
+    return;
+#else
     // ネイティブ版: 独立ウィンドウ全体をパネルで埋める
     ImGuiViewport *vp = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(vp->WorkPos);
@@ -96,17 +130,6 @@ void CImGuiMsgLog::Draw()
         ImGui::End();
         return;
     }
-#else
-    // ブラウザ版: 従来の浮動サブウィンドウ
-    if (!m_bVisible) {
-        return;
-    }
-    ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin(u8"メッセージログ", &m_bVisible)) {
-        ImGui::End();
-        return;
-    }
-#endif
 
     // ログ表示エリア（下部にチャット入力を残す）
     float footerHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
@@ -129,7 +152,6 @@ void CImGuiMsgLog::Draw()
     // チャット入力
     ImGui::Separator();
 
-#if !defined(__EMSCRIPTEN__)
     // ネイティブ版: SDL_TEXTINPUT / SDL_KEYDOWN で自前バッファを更新する自前実装
     {
         ImVec2 inputSize(ImGui::GetContentRegionAvail().x, ImGui::GetFrameHeight());
@@ -153,41 +175,9 @@ void CImGuiMsgLog::Draw()
         // 描画カーソルをフレーム高分進める
         ImGui::SetCursorScreenPos(ImVec2(cursorPos.x, cursorPos.y + inputSize.y + ImGui::GetStyle().ItemSpacing.y));
     }
-#else
-    // ブラウザ版: 従来の ImGui InputText のまま（動作しているので変更しない）
-    {
-        // ブラウザ版: 初回表示時とフォーカス要求時のみ SetKeyboardFocusHere
-        static bool s_bFocusBrowser = true;
-        if (s_bFocusBrowser || ImGui::IsWindowAppearing()) {
-            ImGui::SetKeyboardFocusHere(0);
-            s_bFocusBrowser = false;
-        }
-
-        ImGui::PushStyleColor(ImGuiCol_FrameBg,        ImVec4(0.25f, 0.25f, 0.25f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, ImVec4(0.30f, 0.30f, 0.30f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_FrameBgActive,  ImVec4(0.35f, 0.35f, 0.35f, 1.0f));
-        ImGui::PushStyleColor(ImGuiCol_Text,           ImVec4(1.0f,  1.0f,  1.0f,  1.0f));
-
-        ImGui::SetNextItemWidth(-1.0f);
-        ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
-        bool bEntered = ImGui::InputText(u8"##chat", m_chatBuf, sizeof(m_chatBuf), inputFlags);
-        ImGui::PopStyleColor(4);
-
-        if (bEntered) {
-            if (m_chatBuf[0] != '\0' && m_pMgrData != NULL) {
-                CMainFrame *pMainFrame = m_pMgrData->GetMainFrame();
-                if (pMainFrame != NULL) {
-                    std::string sjisMsg = Utf8ToSjis(m_chatBuf);
-                    pMainFrame->SendChat(0, sjisMsg.c_str(), NULL);
-                }
-            }
-            m_chatBuf[0] = '\0';
-            s_bFocusBrowser = true;
-        }
-    }
-#endif
 
     ImGui::End();
+#endif // __EMSCRIPTEN__
 }
 
 #if !defined(__EMSCRIPTEN__)

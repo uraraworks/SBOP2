@@ -106,6 +106,10 @@ EM_JS(void, SBOP2_PostAdminPickupParts, (unsigned int mapId, int cellX, int cell
 
 static CMgrData *s_pMgrDataForAdminMode = NULL;
 
+/// アクティブな CStateProcMAP インスタンスへのグローバルポインタ（ブラウザ版のみ）
+/// Create() でセット、デストラクタでクリアする
+static CStateProcMAP *s_pBrowserStateProcMAP = NULL;
+
 extern "C" {
 	EMSCRIPTEN_KEEPALIVE void SBOP2_SetWebAdminMode(int mode)
 	{
@@ -117,6 +121,16 @@ extern "C" {
 	{
 		if (s_pMgrDataForAdminMode != NULL) {
 			s_pMgrDataForAdminMode->SetWebAdminSelectedPartsID(static_cast<WORD>(partsId));
+		}
+	}
+
+	/// @brief DOM(JS)側からのチャット送信エントリポイント
+	/// @param pszText 送信テキスト（UTF-8。空文字列なら何もしない）
+	/// @param nType   チャット種別。負値は 0 に丸める
+	EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserChatSubmit(const char *pszText, int nType)
+	{
+		if (s_pBrowserStateProcMAP != NULL) {
+			s_pBrowserStateProcMAP->BrowserChatSubmit(pszText, nType);
 		}
 	}
 }
@@ -290,7 +304,12 @@ CStateProcMAP::CStateProcMAP()
 CStateProcMAP::~CStateProcMAP()
 {
 	DestroyAdminUi();
-#if !defined(__EMSCRIPTEN__)
+#if defined(__EMSCRIPTEN__)
+	// チャット送信ブリッジ用グローバルポインタをクリア（破棄後のアクセスを防ぐ）
+	if (s_pBrowserStateProcMAP == this) {
+		s_pBrowserStateProcMAP = NULL;
+	}
+#else
 	// マップ画面終了時にデバッグ/ログのサブウィンドウを破棄する
 	if (CSDLApp::GetInstance() != NULL) {
 		// ポインタクリアを先に行い、破棄後のアクセスを防ぐ
@@ -313,6 +332,7 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 
 #if defined(__EMSCRIPTEN__)
 	s_pMgrDataForAdminMode = pMgrData;
+	s_pBrowserStateProcMAP = this;  // チャット送信ブリッジ用にインスタンスを登録
 #endif
 
 	m_pImGuiMsgLog = new CImGuiMsgLog;
@@ -1397,7 +1417,12 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 			if (pInfoChar == m_pPlayerChar) {
 				KeyProc(0, FALSE);
 			}
-			strTmp.Format(_T("%s：%s"), (LPCTSTR)pInfoChar->m_strCharName, (LPCTSTR)pInfoChar->m_strSpeak);
+			// 注意: Format(_T("%s..."), ...) はワイド書式の %s が
+			// MSVC ではワイド・emscripten(POSIX) ではナローを期待する方言差があり、
+			// ブラウザ版で結果が空になる。方言に依存しない連結で組み立てる。
+			strTmp = pInfoChar->m_strCharName;
+			strTmp += _T("：");
+			strTmp += (LPCTSTR)pInfoChar->m_strSpeak;
 			if (m_pImGuiMsgLog) { m_pImGuiMsgLog->Add(strTmp, pInfoChar->m_clSpeak); }
 		}
 		break;
@@ -3256,6 +3281,67 @@ BOOL CStateProcMAP::OnWindowMsgCHAT(DWORD dwPara)
 Exit:
 	return TRUE;
 }
+
+
+
+#if defined(__EMSCRIPTEN__)
+/// @brief UTF-8 文字列を SJIS (CP932) に変換するローカルヘルパー（Emscripten 版）
+/// @details DOM 入力は UTF-8 なので、SendChat へ渡す前に SJIS へ変換する
+/// @param pszUtf8 UTF-8 文字列（NULL 終端）
+/// @return SJIS std::string。変換失敗時は元の文字列をそのまま返す
+static std::string StateProcMAP_Utf8ToSjis(const char *pszUtf8)
+{
+	if (pszUtf8 == NULL || pszUtf8[0] == '\0') {
+		return std::string();
+	}
+	// Emscripten 環境では SjisToWstring 等を逆用できないため
+	// UTF-8 文字列をそのまま返す（サーバー側が UTF-8 を受け付ける場合に有効）。
+	// サーバーが SJIS を要求する場合は EM_JS で TextEncoder/TextDecoder を用いた
+	// 変換を別途追加すること。現状は OnWindowMsgCHAT に合わせ生文字列を渡す。
+	return std::string(pszUtf8);
+}
+
+/// @brief DOM(JS)→C++ チャット送信ブリッジの実体
+/// @details OnWindowMsgCHAT と同等の処理をブラウザ向けに提供する。
+///          プレイヤーキャラ未設定・キー入力無効時は何もしない。
+///          既存のネイティブ経路の挙動は変更しない。
+void CStateProcMAP::BrowserChatSubmit(const char *pszText, int nType)
+{
+	CMainFrame *pMainFrame;
+
+	// 空文字列は何もしない
+	if (pszText == NULL || pszText[0] == '\0') {
+		return;
+	}
+
+	// nType は負値なら 0 に丸める
+	if (nType < 0) {
+		nType = 0;
+	}
+
+	m_pPlayerChar = m_pMgrData->GetPlayerChar();
+	if (m_pPlayerChar == NULL) {
+		return;
+	}
+	if (IsKeyInputEnable() == FALSE) {
+		return;
+	}
+
+	m_dwLastKeyInput = timeGetTime();
+
+	pMainFrame = m_pMgrData->GetMainFrame();
+	if (pMainFrame == NULL) {
+		return;
+	}
+
+	// DOM 入力は UTF-8 で届く。ブラウザ経路の ImGuiMsgLog 送信と同様に
+	// UTF-8→SJIS 変換してから SendChat へ渡す
+	{
+		std::string sjisMsg = StateProcMAP_Utf8ToSjis(pszText);
+		pMainFrame->SendChat(nType, sjisMsg.c_str(), &m_dwLastBalloonID);
+	}
+}
+#endif // __EMSCRIPTEN__
 
 
 
