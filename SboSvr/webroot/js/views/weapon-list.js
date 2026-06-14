@@ -15,8 +15,6 @@
  */
 
 import { fetchJson } from "../core/api.js";
-import { createSpriteField } from "../components/sprite-picker.js";
-import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 
 // ----------------------------------------------------------------
@@ -153,27 +151,6 @@ function buildDetailPane({ feedbackEl }) {
   motionSec.appendChild(motionGrid);
   pane.appendChild(motionSec);
 
-  // --- 武器画像 ---
-  const imgSec = document.createElement("section");
-  imgSec.className = "detail-section";
-  const imgH3 = document.createElement("h3");
-  imgH3.textContent = "武器画像";
-  imgSec.appendChild(imgH3);
-
-  const imgGrid = document.createElement("div");
-  imgGrid.className = "form-grid compact";
-
-  const sfWeapon = createSpriteField({
-    categoryKey: "weapon",
-    value: 0,
-    label: "武器メイン画像",
-    allowCategorySwitch: true,
-  });
-  imgGrid.appendChild(sfWeapon.el);
-
-  imgSec.appendChild(imgGrid);
-  pane.appendChild(imgSec);
-
   // --- エフェクトID ---
   const effectSec = document.createElement("section");
   effectSec.className = "detail-section";
@@ -209,8 +186,6 @@ function buildDetailPane({ feedbackEl }) {
 
   let _current = null;
 
-  // grpId は武器画像として保持（weaponInfoId とは別）
-  // 武器データに grpId フィールドがある場合は sfWeapon に反映
   function setWeapon(w) {
     _current = w || null;
     nameInput.value = w ? (w.name || "") : "";
@@ -220,7 +195,6 @@ function buildDetailPane({ feedbackEl }) {
 
     standSpin.setValue(w ? (w.motionTypeStand || 0) : 0);
     walkSpin.setValue(w ? (w.motionTypeWalk || 0) : 0);
-    sfWeapon.setValue(w ? (w.grpId || 0) : 0);
 
     atkInput.value = w ? ((w.effectIdAtack || []).join(",")) : "";
     criInput.value = w ? ((w.effectIdCritical || []).join(",")) : "";
@@ -234,7 +208,6 @@ function buildDetailPane({ feedbackEl }) {
       motionType:       motionType,
       motionTypeStand:  standSpin.getValue(),
       motionTypeWalk:   walkSpin.getValue(),
-      grpId:            sfWeapon.getValue(),
       effectIdAtack:    parseIdListFromCsv(atkInput.value),
       effectIdCritical: parseIdListFromCsv(criInput.value),
     };
@@ -301,13 +274,6 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
     filtered.forEach((w) => {
       const li = document.createElement("li");
       li.className = "ld-list-item" + (w.weaponInfoId === _selectedId ? " selected" : "");
-
-      // 武器画像サムネ
-      if (w.grpId) {
-        const thumb = createSpriteThumb({ categoryKey: "weapon", sub: w.grpId, size: 24 });
-        thumb.el.className = "ld-item-thumb";
-        li.appendChild(thumb.el);
-      }
 
       const label = document.createElement("span");
       const motionStr = formatMotionType(w.motionType || 0);
