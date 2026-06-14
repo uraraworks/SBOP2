@@ -257,10 +257,14 @@ bool CGrpResourceProvider::BuildResourceName(
     std::wstring &outName) const
 {
     if (cat.apszFixedNames != NULL) {
-        // 固定名テーブル: sheetIndex*2 番目が本体名
+        // 固定名テーブル: 偶数位置が本体名・NULL終端。
+        // sheetIndex*2 が終端を超える範囲外参照を防ぐため、
+        // 0 から idx まで偶数位置を走査し、終端(NULL)に達したら範囲外とみなす。
         int idx = sheetIndex * 2;
-        if (cat.apszFixedNames[idx] == NULL) {
-            return false;
+        for (int j = 0; j <= idx; j += 2) {
+            if (cat.apszFixedNames[j] == NULL) {
+                return false;  // 終端に到達 = sheetIndex が範囲外
+            }
         }
         outName = cat.apszFixedNames[idx];
         return true;
