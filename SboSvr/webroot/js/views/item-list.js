@@ -129,8 +129,9 @@ function buildDetailPane({ feedbackEl }) {
   imgGrid.appendChild(sfGrpId.el);
 
   // iconGrpId: バックパック内画像
+  // ゲームの DrawItem は item シートから描画するため item カテゴリを参照
   const sfIconGrpId = createSpriteField({
-    categoryKey: "icon32",
+    categoryKey: "item",
     value: 0,
     label: "バックパック内画像",
     allowCategorySwitch: true,

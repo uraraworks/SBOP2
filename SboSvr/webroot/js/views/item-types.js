@@ -151,9 +151,10 @@ function buildDetailPane({ feedbackEl }) {
   });
   imgGrid.appendChild(sfGrpId.el);
 
-  // iconGrpId: バックパック内画像 (icon32)
+  // iconGrpId: バックパック内画像
+  // ゲーム本体の DrawItem はバックパックアイコンを item シートから描画するため item カテゴリを参照する
   const sfIconGrpId = createSpriteField({
-    categoryKey: "icon32",
+    categoryKey: "item",
     value: 0,
     label: "バックパック内画像",
     allowCategorySwitch: true,
