@@ -1429,6 +1429,14 @@
         ensurePumpFallback();
         updateCanvasProbe();
         markStartOverlayReady();
+        // ?admin=1 埋め込み時: postMessage が届く前に初期値(-1=未接続)を 0(free モード)にして枠を有効化
+        try {
+          if (new URLSearchParams(window.location.search).get('admin') === '1') {
+            Module.ccall('SBOP2_SetWebAdminMode', null, ['number'], [0]);
+          }
+        } catch (e) {
+          console.warn('[SBOP2] admin mode init failed:', e);
+        }
       }
     };
 

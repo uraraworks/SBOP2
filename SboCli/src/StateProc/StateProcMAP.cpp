@@ -971,7 +971,7 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 	// Web管理画面への pick 通知（DLL 有無に関わらずブラウザ版でも実行する）
 	// char > item > cell の優先度で情報をまとめて1回送信
 	// ※ここでは switch 文による x/y の書き換え前なのでスクリーン座標のまま渡す（FindAdminClickedCharID の本来の意図）
-	if ((m_pMgrData->GetAdminLevel() > ADMINLEVEL_NONE) && (m_pMap != NULL)) {
+	if ((m_pMgrData->GetAdminLevel() > ADMINLEVEL_NONE) && (m_pMap != NULL) && (m_pMgrData->GetWebAdminMode() >= 0)) {
 		/* x,y には CImg32 パディング +MAPPARTSSIZE が加算されている。
 		   parts モードと同じ補正式でセル座標を求める */
 		int nPickX = ((x - MAPPARTSSIZE + (pLayerMap->m_nViewX % MAPPARTSSIZE)) / MAPPARTSSIZE) + nMapX;

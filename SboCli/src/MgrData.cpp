@@ -72,7 +72,7 @@ CMgrData::CMgrData()
 	m_wAdminPickCellX		= 0;
 	m_wAdminPickCellY		= 0;
 	m_wWebAdminSelectedPartsID	= 0;
-	m_nWebAdminMode			= 0;
+	m_nWebAdminMode			= -1;	// -1=未接続, 0=char モード, 1=char(強調), 2=parts モード
 	m_bLocalTitleMode		= FALSE;
 	m_bDisableLogin			= FALSE;
 	m_bSavePassword			= FALSE;

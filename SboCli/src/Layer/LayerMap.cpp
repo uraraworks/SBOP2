@@ -1789,6 +1789,10 @@ void CLayerMap::DrawMapPartsDebug(CImg32 *pDst)
 
 void CLayerMap::DrawAdminPick(CImg32 *pDst)
 {
+	// Web管理画面が未接続(-1)の間は枠を描画しない
+	if (m_pMgrData->GetWebAdminMode() < 0) {
+		return;
+	}
 	if (m_pMgrData->GetAdminLevel() <= ADMINLEVEL_NONE) {
 		return;
 	}
