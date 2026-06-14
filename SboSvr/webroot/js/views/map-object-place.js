@@ -1,22 +1,19 @@
 /**
  * views/map-object-place.js
  * マップオブジェクト配置画面 (route: map-objects)
- * F4: RPGツクール風グリッドペイントエディタ + 配置テーブル + テンプレート管理
  *
  * データモデル:
  *   - マップ選択 → /api/maps/objects でタイル + オブジェクト一覧を取得
  *   - テンプレート → /api/maps/objects/templates で管理
  *   - 配置 CRUD → /api/maps/placements (POST/PUT/DELETE)
  *
- * 機能:
- *   - タイル背景を描画したグリッドキャンバス
- *   - オブジェクトをオーバーレイ表示 (●マーカー)
- *   - 左クリック: 新規配置または既存オブジェクト選択
- *   - 右クリック: スポイト (tiles から partsId 取得)
- *   - 配置フォーム: objectId, x, y → POST/PUT
- *   - 削除ボタン
- *   - テンプレート管理: 一覧/新規/更新/削除
- *   - iframe postMessage 連携 (sbop2_admin_pick を維持)
+ * レイアウト: list-detail 骨格
+ *   一覧ビュー: マップ選択 + フィルタ + オブジェクト一覧テーブル + テンプレートパネル
+ *   詳細ビュー: 「← 一覧に戻る」 + 配置フォーム (objectId select, X, Y, 保存/削除/クリア)
+ *
+ * ゲーム画面クリック連携:
+ *   mount 時 / マップ選択変更時に sbop2_set_admin_mode (mode:0) を iframe へ送信。
+ *   sbop2_admin_pick 受信 → フォームに座標反映 → 詳細ビューへ切替。
  */
 
 import { fetchJson } from "../core/api.js";
@@ -111,149 +108,6 @@ function setFeedback(el, msg, type) {
   el.textContent = msg || "";
   el.className = "result-message";
   if (type) el.classList.add(type);
-}
-
-function resolveSheetUrl(baseUrl, sheetIndex) {
-  const base = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
-  return `${base}/${sheetIndex}.png`;
-}
-
-function grpIdToCoord(grpId, sheetTileWidth) {
-  if (!grpId) return null;
-  const sheet = Math.floor(grpId / 1024);
-  const tile  = grpId % 1024;
-  return { sheet, tileX: tile % sheetTileWidth, tileY: Math.floor(tile / sheetTileWidth) };
-}
-
-// ----------------------------------------------------------------
-// グリッドキャンバス（オブジェクト配置専用）
-// ----------------------------------------------------------------
-
-function createObjectGridCanvas({ sheetBaseUrl, tileSize, sheetTileWidth, sheetTileHeight, onCellClick }) {
-  const ZOOM = 2;
-  let map = null;
-  let selectedObjectId = null;
-  let previewCell = null;  // { x, y }
-
-  const imgCache = new Map();
-  function getImg(url) {
-    if (imgCache.has(url)) return imgCache.get(url);
-    const img = new Image();
-    img.src = url;
-    img.onload = () => requestDraw();
-    imgCache.set(url, img);
-    return img;
-  }
-
-  const wrap = document.createElement("div");
-  wrap.className = "mp-obj-grid-wrap";
-  const canvas = document.createElement("canvas");
-  canvas.className = "mp-obj-grid-canvas";
-  wrap.appendChild(canvas);
-  const ctx = canvas.getContext("2d");
-
-  let rafPending = false;
-  function requestDraw() {
-    if (!rafPending) {
-      rafPending = true;
-      requestAnimationFrame(() => { rafPending = false; draw(); });
-    }
-  }
-
-  function cellPx() { return tileSize * ZOOM; }
-
-  function draw() {
-    if (!map) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
-    const cp = cellPx();
-    canvas.width  = map.width  * cp;
-    canvas.height = map.height * cp;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.imageSmoothingEnabled = false;
-
-    // タイル背景
-    for (const [layerTiles] of [[map.tilesBase], [map.tilesPile]]) {
-      for (let row = 0; row < map.height; row++) {
-        for (let col = 0; col < map.width; col++) {
-          const grpId = Number(layerTiles[row * map.width + col] || 0);
-          if (!grpId) continue;
-          const coord = grpIdToCoord(grpId, sheetTileWidth);
-          if (!coord) continue;
-          const img = getImg(resolveSheetUrl(sheetBaseUrl, coord.sheet));
-          if (img && img.complete && img.naturalWidth) {
-            ctx.drawImage(img, coord.tileX * tileSize, coord.tileY * tileSize, tileSize, tileSize,
-              col * cp, row * cp, cp, cp);
-          }
-        }
-      }
-    }
-
-    // グリッド線
-    ctx.strokeStyle = "rgba(0,0,0,0.15)";
-    ctx.lineWidth = 1;
-    for (let col = 0; col <= map.width; col++) {
-      ctx.beginPath(); ctx.moveTo(col * cp, 0); ctx.lineTo(col * cp, canvas.height); ctx.stroke();
-    }
-    for (let row = 0; row <= map.height; row++) {
-      ctx.beginPath(); ctx.moveTo(0, row * cp); ctx.lineTo(canvas.width, row * cp); ctx.stroke();
-    }
-
-    // オブジェクト マーカー
-    if (!map.objects) return;
-    const occupantMap = new Map();
-    map.objects.forEach((obj) => occupantMap.set(`${obj.x},${obj.y}`, obj));
-
-    for (let row = 0; row < map.height; row++) {
-      for (let col = 0; col < map.width; col++) {
-        const isSelected = previewCell && previewCell.x === col && previewCell.y === row;
-        const obj = occupantMap.get(`${col},${row}`);
-        if (isSelected) {
-          ctx.fillStyle = "rgba(255,200,0,0.45)";
-          ctx.fillRect(col * cp, row * cp, cp, cp);
-        }
-        if (obj) {
-          const isObjSelected = obj.id === selectedObjectId;
-          ctx.fillStyle = isObjSelected ? "rgba(255,80,0,0.75)" : "rgba(0,120,255,0.55)";
-          ctx.fillRect(col * cp + 2, row * cp + 2, cp - 4, cp - 4);
-          ctx.fillStyle = "#fff";
-          ctx.font = `bold ${Math.max(8, cp / 2.5)}px sans-serif`;
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText("●", col * cp + cp / 2, row * cp + cp / 2);
-        }
-      }
-    }
-    ctx.textAlign = "start";
-    ctx.textBaseline = "alphabetic";
-  }
-
-  canvas.addEventListener("contextmenu", (ev) => ev.preventDefault());
-  canvas.addEventListener("click", (ev) => {
-    if (!map) return;
-    const rect = canvas.getBoundingClientRect();
-    const cp = cellPx();
-    const cx = Math.floor((ev.clientX - rect.left) / cp);
-    const cy = Math.floor((ev.clientY - rect.top) / cp);
-    if (cx < 0 || cx >= map.width || cy < 0 || cy >= map.height) return;
-    const occupantMap = new Map();
-    map.objects.forEach((obj) => occupantMap.set(`${obj.x},${obj.y}`, obj));
-    const occupant = occupantMap.get(`${cx},${cy}`) || null;
-    if (onCellClick) onCellClick(cx, cy, occupant);
-  });
-
-  function setMap(newMap) {
-    map = newMap;
-    selectedObjectId = null;
-    previewCell = null;
-    requestDraw();
-  }
-
-  function setSelection(objId, cell) {
-    selectedObjectId = objId;
-    previewCell = cell;
-    requestDraw();
-  }
-
-  return { el: wrap, setMap, setSelection };
 }
 
 // ----------------------------------------------------------------
@@ -477,15 +331,16 @@ export function mount(container) {
     previewCell: null,   // { x, y }
     filterType: "all",
     templates: [],
-    sheetBaseUrl: "/api/assets/map-parts/sheets",
-    tileSize: 16,
-    sheetTileWidth: 32,
-    sheetTileHeight: 32,
     isLoading: false,
   };
 
-  // ---- レイアウト構築 ----
-  // セクション1: ブラウザ（テーブル + グリッド）
+  // ================================================================
+  // 一覧ビュー
+  // ================================================================
+  const listView = document.createElement("div");
+  listView.className = "mop-list-view";
+
+  // ---- ブラウザセクション ----
   const browserSection = document.createElement("section");
   browserSection.className = "card";
   const h2 = document.createElement("h2");
@@ -493,7 +348,7 @@ export function mount(container) {
   browserSection.appendChild(h2);
   const desc = document.createElement("p");
   desc.className = "card-description";
-  desc.textContent = "マップを選択するとオブジェクト一覧と配置状況を確認できます。左クリックで座標/オブジェクト選択。";
+  desc.textContent = "マップを選択してオブジェクト一覧を確認。行クリックまたはゲーム画面クリックで配置編集画面を開きます。";
   browserSection.appendChild(desc);
 
   // コントロールバー
@@ -512,7 +367,6 @@ export function mount(container) {
   filterLabel.innerHTML = "<span>表示条件</span>";
   const filterSelect = document.createElement("select");
   filterSelect.name = "objectType";
-  // allとtype options
   [{ value: "all", label: "すべて" }, ...MAP_OBJECT_TYPE_OPTIONS].forEach(({ value, label }) => {
     const opt = document.createElement("option");
     opt.value = value;
@@ -542,49 +396,49 @@ export function mount(container) {
   table.appendChild(tbody);
   tableWrap.appendChild(table);
   browserSection.appendChild(tableWrap);
-  container.appendChild(browserSection);
 
-  // セクション2: エディタ（グリッドキャンバス + フォーム）
-  const editorSection = document.createElement("section");
-  editorSection.className = "card";
-  const h2ed = document.createElement("h2");
-  h2ed.textContent = "配置プレビューと編集";
-  editorSection.appendChild(h2ed);
-  const edDesc = document.createElement("p");
-  edDesc.className = "card-description";
-  edDesc.textContent = "座標グリッドをクリックすると、該当セルに新規オブジェクトを配置できます。";
-  editorSection.appendChild(edDesc);
+  listView.appendChild(browserSection);
+
+  // ---- テンプレートパネル ----
+  const templatePanel = createTemplatePanel({
+    onTemplatesChange(templates) {
+      state.templates = templates;
+      populateObjTypeSelect();
+    },
+  });
+  listView.appendChild(templatePanel.el);
+
+  container.appendChild(listView);
+
+  // ================================================================
+  // 詳細ビュー
+  // ================================================================
+  const detailView = document.createElement("div");
+  detailView.className = "mop-detail-view";
+  detailView.style.display = "none";
+
+  const detailSection = document.createElement("section");
+  detailSection.className = "card";
+
+  // 「← 一覧に戻る」バー
+  const backBar = document.createElement("div");
+  backBar.className = "form-actions";
+  const backBtn = document.createElement("button");
+  backBtn.type = "button";
+  backBtn.className = "button small";
+  backBtn.textContent = "← 一覧に戻る";
+  backBar.appendChild(backBtn);
+  detailSection.appendChild(backBar);
+
+  const h2det = document.createElement("h2");
+  h2det.textContent = "配置編集";
+  detailSection.appendChild(h2det);
 
   const selectedLabel = document.createElement("div");
   selectedLabel.className = "map-object-selected";
   selectedLabel.setAttribute("aria-live", "polite");
   selectedLabel.textContent = "選択中: 未選択";
-  editorSection.appendChild(selectedLabel);
-
-  const gridCanvas = createObjectGridCanvas({
-    sheetBaseUrl: state.sheetBaseUrl,
-    tileSize: state.tileSize,
-    sheetTileWidth: state.sheetTileWidth,
-    sheetTileHeight: state.sheetTileHeight,
-    onCellClick(cx, cy, occupant) {
-      handleCellClick(cx, cy, occupant);
-    },
-  });
-
-  const gridWrap = document.createElement("div");
-  gridWrap.className = "map-object-preview";
-  gridWrap.appendChild(gridCanvas.el);
-  // legend
-  const legend = document.createElement("div");
-  legend.className = "map-object-legend";
-  legend.innerHTML = `
-    <span class="legend-item"><span class="legend-marker"></span>空きセル</span>
-    <span class="legend-item"><span class="legend-marker" style="background:rgba(0,120,255,0.55)"></span>オブジェクトあり</span>
-    <span class="legend-item"><span class="legend-marker" style="background:rgba(255,200,0,0.45)"></span>選択位置</span>
-    <span class="legend-item"><span class="legend-marker" style="background:rgba(255,80,0,0.75)"></span>選択中オブジェクト</span>
-  `;
-  gridWrap.appendChild(legend);
-  editorSection.appendChild(gridWrap);
+  detailSection.appendChild(selectedLabel);
 
   // 配置フォーム
   const placementForm = document.createElement("form");
@@ -659,22 +513,33 @@ export function mount(container) {
   placementForm.appendChild(hiddenDataId);
   placementForm.appendChild(formGrid);
   placementForm.appendChild(formActions);
-  editorSection.appendChild(placementForm);
-  editorSection.appendChild(placementFeedbackEl);
-  container.appendChild(editorSection);
+  detailSection.appendChild(placementForm);
+  detailSection.appendChild(placementFeedbackEl);
 
-  // セクション3: テンプレート管理
-  const templatePanel = createTemplatePanel({
-    onTemplatesChange(templates) {
-      state.templates = templates;
-      populateObjTypeSelect();
-    },
+  detailView.appendChild(detailSection);
+  container.appendChild(detailView);
+
+  // ================================================================
+  // 画面切替
+  // ================================================================
+  function showList() {
+    detailView.style.display = "none";
+    listView.style.display = "";
+  }
+
+  function showDetail() {
+    listView.style.display = "none";
+    detailView.style.display = "";
+  }
+
+  backBtn.addEventListener("click", () => {
+    setFeedback(placementFeedbackEl, "", null);
+    showList();
   });
-  container.appendChild(templatePanel.el);
 
-  // ----------------------------------------------------------------
+  // ================================================================
   // ヘルパー関数
-  // ----------------------------------------------------------------
+  // ================================================================
 
   function populateObjTypeSelect() {
     const prev = objTypeSelect.value;
@@ -760,9 +625,16 @@ export function mount(container) {
         td.textContent = text;
         tr.appendChild(td);
       });
-      tr.addEventListener("click", () => selectObject(obj.id));
+      tr.addEventListener("click", () => {
+        selectObject(obj.id);
+        showDetail();
+      });
       tr.addEventListener("keydown", (ev) => {
-        if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); selectObject(obj.id); }
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          selectObject(obj.id);
+          showDetail();
+        }
       });
       tbody.appendChild(tr);
     });
@@ -800,21 +672,25 @@ export function mount(container) {
     state.previewCell = obj ? { x: obj.x, y: obj.y } : null;
     applyObjectToForm(obj || null);
     renderTable();
-    gridCanvas.setSelection(state.selectedObjectId, state.previewCell);
   }
 
   function handleCellClick(cx, cy, occupant) {
     if (occupant) {
       selectObject(occupant.id);
-      return;
+    } else {
+      state.previewCell = { x: cx, y: cy };
+      state.selectedObjectId = null;
+      applyObjectToForm(null);
+      xInput.value = String(cx);
+      yInput.value = String(cy);
+      setFeedback(placementFeedbackEl, `座標 (${cx}, ${cy}) を選択。オブジェクトを選んで「配置を保存」で追加します。`, null);
     }
-    state.previewCell = { x: cx, y: cy };
-    state.selectedObjectId = null;
-    applyObjectToForm(null);
-    xInput.value = String(cx);
-    yInput.value = String(cy);
-    gridCanvas.setSelection(null, state.previewCell);
-    setFeedback(placementFeedbackEl, `座標 (${cx}, ${cy}) を選択。オブジェクトを選んで「配置を保存」で追加します。`, null);
+  }
+
+  function notifyAdminMode() {
+    if (adminGameFrame && adminGameFrame.contentWindow) {
+      adminGameFrame.contentWindow.postMessage({ kind: "sbop2_set_admin_mode", mode: 0 }, "*");
+    }
   }
 
   async function loadMapData(forceReload = false) {
@@ -824,12 +700,6 @@ export function mount(container) {
     try {
       const { response, data } = await fetchJson("/api/maps/objects");
       if (!response.ok || !Array.isArray(data?.maps)) throw new Error("データ取得失敗");
-      if (data.sheetBaseUrl) {
-        state.sheetBaseUrl = data.sheetBaseUrl;
-      }
-      if (data.tileSize)       state.tileSize = Number(data.tileSize) || state.tileSize;
-      if (data.sheetTileWidth)  state.sheetTileWidth = Number(data.sheetTileWidth) || state.sheetTileWidth;
-      if (data.sheetTileHeight) state.sheetTileHeight = Number(data.sheetTileHeight) || state.sheetTileHeight;
 
       state.maps = data.maps.map(normalizeMapEntry);
       if (!state.selectedMapId || !state.maps.some((m) => String(m.id) === String(state.selectedMapId))) {
@@ -840,8 +710,6 @@ export function mount(container) {
       populateMapSelect();
       renderSummary();
       renderTable();
-      const map = getSelectedMap();
-      gridCanvas.setMap(map || null);
       applyObjectToForm(null);
     } catch (err) {
       summaryEl.textContent = `取得エラー: ${err.message}`;
@@ -850,20 +718,19 @@ export function mount(container) {
     }
   }
 
-  // ---- イベント ----
+  // ================================================================
+  // イベント
+  // ================================================================
+
   mapSelect.addEventListener("change", () => {
     state.selectedMapId = mapSelect.value;
     state.selectedObjectId = null;
     state.previewCell = null;
     renderSummary();
     renderTable();
-    const map = getSelectedMap();
-    gridCanvas.setMap(map || null);
     applyObjectToForm(null);
     setFeedback(placementFeedbackEl, "", null);
-    if (adminGameFrame && adminGameFrame.contentWindow) {
-      adminGameFrame.contentWindow.postMessage({ kind: "sbop2_set_admin_mode", mode: 0 }, "*");
-    }
+    notifyAdminMode();
   });
 
   filterSelect.addEventListener("change", () => {
@@ -874,6 +741,7 @@ export function mount(container) {
   clearBtn.addEventListener("click", () => {
     selectObject(null);
     setFeedback(placementFeedbackEl, "選択をクリアしました", null);
+    showList();
   });
 
   placementForm.addEventListener("submit", async (ev) => {
@@ -905,11 +773,7 @@ export function mount(container) {
       }
       setFeedback(placementFeedbackEl, `配置を${isUpdate ? "更新" : "追加"}しました (配置ID: ${data.dataId})`, "success");
       await loadMapData(true);
-      const newMap = getSelectedMap();
-      if (newMap && data.dataId) {
-        const added = newMap.objects.find((o) => o.placementId === data.dataId);
-        if (added) selectObject(added.id);
-      }
+      showList();
     } catch (err) {
       setFeedback(placementFeedbackEl, "保存中にエラーが発生しました", "error");
     }
@@ -935,16 +799,15 @@ export function mount(container) {
       state.selectedObjectId = null;
       state.previewCell = null;
       await loadMapData(true);
-      applyObjectToForm(null);
+      showList();
     } catch (err) {
       setFeedback(placementFeedbackEl, "削除中にエラーが発生しました", "error");
     }
   });
 
-  // ---- iframe メッセージ連携 ----
-  // app.js の handleAdminGamePick は currentRoute === "map-objects" の時に
-  // 独自処理していないため、ここで sbop2_admin_pick を受け取り
-  // クリックセル情報をフォームに反映する
+  // ================================================================
+  // iframe メッセージ連携 (sbop2_admin_pick)
+  // ================================================================
   function onAdminMessage(ev) {
     if (adminGameFrame && ev.source !== adminGameFrame.contentWindow) return;
     const msg = ev.data;
@@ -954,29 +817,35 @@ export function mount(container) {
       const cellX = Number(msg.cellX) || 0;
       const cellY = Number(msg.cellY) || 0;
       if (mapId > 0) {
-        // マップが違う場合は切り替え
         if (String(state.selectedMapId) !== String(mapId)) {
           state.selectedMapId = mapId;
           mapSelect.value = String(mapId);
           loadMapData(false).then(() => {
-            handleCellClick(cellX, cellY, null);
+            const map = getSelectedMap();
+            const occ = map
+              ? (new Map(map.objects.map((o) => [`${o.x},${o.y}`, o]))).get(`${cellX},${cellY}`) || null
+              : null;
+            handleCellClick(cellX, cellY, occ);
+            showDetail();
           });
         } else {
           const map = getSelectedMap();
-          if (map) {
-            const occupantMap = new Map();
-            map.objects.forEach((o) => occupantMap.set(`${o.x},${o.y}`, o));
-            const occ = occupantMap.get(`${cellX},${cellY}`) || null;
-            handleCellClick(cellX, cellY, occ);
-          }
+          const occ = map
+            ? (new Map(map.objects.map((o) => [`${o.x},${o.y}`, o]))).get(`${cellX},${cellY}`) || null
+            : null;
+          handleCellClick(cellX, cellY, occ);
+          showDetail();
         }
       }
     }
   }
   window.addEventListener("message", onAdminMessage);
 
-  // ---- 初期ロード ----
+  // ================================================================
+  // 初期ロード
+  // ================================================================
   loadMapData(false);
+  notifyAdminMode();
 
   _destroyFn = () => {
     window.removeEventListener("message", onAdminMessage);
