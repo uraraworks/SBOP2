@@ -64,7 +64,7 @@ function buildDetailPane({ feedbackEl }) {
   const previewH3 = document.createElement("h3");
   previewH3.textContent = "プレビュー";
   previewSec.appendChild(previewH3);
-  const preview = createAnimePreview({ width: 64, height: 64, scale: 2 });
+  const preview = createAnimePreview({ width: 63, height: 63, scale: 2 });
   previewSec.appendChild(preview.el);
   pane.appendChild(previewSec);
 
