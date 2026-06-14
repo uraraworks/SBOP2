@@ -119,8 +119,8 @@ export function createPalette(options) {
     const img = new Image();
     img.src = url;
     img.onload = () => {
-      // 読み込み後にギャラリーの該当サムネを再描画
-      gallery.querySelectorAll("canvas[data-parts-id]").forEach((c) => {
+      // 読み込み後は「既に表示済み(描画済み)」のcanvasのみ再描画
+      gallery.querySelectorAll("canvas[data-parts-id][data-drawn='1']").forEach((c) => {
         const pid = Number(c.dataset.partsId);
         const p = parts.find((x) => x.partsId === pid);
         if (p) drawThumb(c, p);
@@ -155,8 +155,41 @@ export function createPalette(options) {
     if (onSelect) onSelect(partsId);
   }
 
+  // ---- 遅延描画用 IntersectionObserver ----
+  let thumbObserver = null;
+
+  function createThumbObserver() {
+    if (thumbObserver) thumbObserver.disconnect();
+    thumbObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const canvas = entry.target;
+          if (canvas.dataset.drawn === "1") {
+            thumbObserver.unobserve(canvas);
+            return;
+          }
+          const pid = Number(canvas.dataset.partsId);
+          const part = parts.find((p) => p.partsId === pid);
+          if (part) {
+            drawThumb(canvas, part);
+            canvas.dataset.drawn = "1";
+          }
+          thumbObserver.unobserve(canvas);
+        });
+      },
+      { root: gallery, rootMargin: "200px" }
+    );
+    return thumbObserver;
+  }
+
   // ---- ギャラリー描画 ----
   function buildGallery() {
+    // 既存の observer を破棄してリーク防止
+    if (thumbObserver) {
+      thumbObserver.disconnect();
+      thumbObserver = null;
+    }
     gallery.innerHTML = "";
     if (!parts.length) {
       const msg = document.createElement("div");
@@ -165,6 +198,7 @@ export function createPalette(options) {
       gallery.appendChild(msg);
       return;
     }
+    const observer = createThumbObserver();
     parts.forEach((part) => {
       const item = document.createElement("button");
       item.type = "button";
@@ -178,7 +212,8 @@ export function createPalette(options) {
       canvas.height = cellPx;
       canvas.className = "mp-palette-item-thumb";
       canvas.dataset.partsId = String(part.partsId);
-      drawThumb(canvas, part);
+      // drawThumb はビューポートに入った時に遅延実行
+      observer.observe(canvas);
       item.appendChild(canvas);
 
       const label = document.createElement("span");
