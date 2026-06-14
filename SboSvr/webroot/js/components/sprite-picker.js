@@ -2,7 +2,7 @@
  * components/sprite-picker.js
  * スプライト選択モーダルダイアログ。
  * openSpritePicker() でモーダルを開き、ユーザーが選択→ onSelect コールバック。
- * createSpriteField() でサムネ+数値input+選択ボタン の横並びフィールドを返す。
+ * createSpriteField() でサムネ+数値input の横並びフィールドを返す。サムネクリックで選択モーダルを開く。
  */
 
 import { loadCatalog, calcSpriteCoord, loadSheetImage } from "../data/assets.js";
@@ -296,7 +296,8 @@ export async function openSpritePicker({ categoryKey, current = 0, allowCategory
 // ----------------------------------------------------------------
 
 /**
- * サムネ + 数値input + 選択ボタン の横並びフィールドを返す。
+ * サムネ + 数値input の横並びフィールドを返す。
+ * サムネをクリックするとスプライト選択モーダルが開く。
  *
  * @param {{
  *   categoryKey: string,
@@ -322,6 +323,13 @@ export function createSpriteField({ categoryKey, value = 0, onChange, label, all
   let _value = value;
 
   const thumb = createSpriteThumb({ categoryKey: _catKey, sub: _value, size: 32 });
+
+  // サムネをクリックで選択モーダルを開く
+  thumb.el.style.cursor = "pointer";
+  thumb.el.title = "クリックして選択";
+  thumb.el.setAttribute("role", "button");
+  thumb.el.setAttribute("tabindex", "0");
+
   wrap.appendChild(thumb.el);
 
   const numInput = document.createElement("input");
@@ -330,21 +338,8 @@ export function createSpriteField({ categoryKey, value = 0, onChange, label, all
   numInput.value = String(_value);
   wrap.appendChild(numInput);
 
-  const pickBtn = document.createElement("button");
-  pickBtn.type = "button";
-  pickBtn.className = "button small";
-  pickBtn.textContent = "選択…";
-  wrap.appendChild(pickBtn);
-
-  numInput.addEventListener("change", () => {
-    const v = parseInt(numInput.value, 10);
-    if (!Number.isFinite(v) || v < 0) return;
-    _value = v;
-    thumb.update(_value);
-    onChange?.(_value);
-  });
-
-  pickBtn.addEventListener("click", () => {
+  // ピッカーを開く共通処理
+  function _openPicker() {
     openSpritePicker({
       categoryKey: _catKey,
       current: _value,
@@ -357,6 +352,20 @@ export function createSpriteField({ categoryKey, value = 0, onChange, label, all
         onChange?.(_value);
       },
     });
+  }
+
+  // サムネクリック／キーボード操作でピッカーを開く
+  thumb.el.addEventListener("click", _openPicker);
+  thumb.el.addEventListener("keydown", (e) => {
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); _openPicker(); }
+  });
+
+  numInput.addEventListener("change", () => {
+    const v = parseInt(numInput.value, 10);
+    if (!Number.isFinite(v) || v < 0) return;
+    _value = v;
+    thumb.update(_value);
+    onChange?.(_value);
   });
 
   function getValue() { return _value; }
