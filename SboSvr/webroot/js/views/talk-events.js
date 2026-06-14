@@ -160,8 +160,8 @@ function renderTable() {
       `<td>${it.pageCount}</td>` +
       `<td>${it.eventCount}</td>` +
       `<td>` +
-        `<button type="button" class="btn btn-secondary" data-talk-event-edit="${it.id}">編集</button> ` +
-        `<button type="button" class="btn btn-danger" data-talk-event-delete="${it.id}">削除</button>` +
+        `<button type="button" class="btn btn-secondary btn-sm" data-talk-event-edit="${it.id}">編集</button> ` +
+        `<button type="button" class="btn btn-danger btn-sm" data-talk-event-delete="${it.id}">削除</button>` +
       `</td>`;
     els.tableBody.appendChild(tr);
   });
@@ -280,9 +280,9 @@ function buildRowEl(row, idx) {
       `<label class="form-field"><span>種別</span><select data-talk-row-field="type">${typeOptions}</select></label>` +
       `<label class="form-field"><span>所属ページ</span><input type="number" data-talk-row-field="page" value="${row.page}"></label>` +
       `<div style="margin-left:auto; display:flex; gap:0.25rem;">` +
-        `<button type="button" class="btn btn-secondary" data-talk-row-up="${idx}">↑</button>` +
-        `<button type="button" class="btn btn-secondary" data-talk-row-down="${idx}">↓</button>` +
-        `<button type="button" class="btn btn-danger" data-talk-row-delete="${idx}">削除</button>` +
+        `<button type="button" class="btn btn-secondary btn-sm" data-talk-row-up="${idx}">↑</button>` +
+        `<button type="button" class="btn btn-secondary btn-sm" data-talk-row-down="${idx}">↓</button>` +
+        `<button type="button" class="btn btn-danger btn-sm" data-talk-row-delete="${idx}">削除</button>` +
       `</div>` +
     `</div>` +
     `<div data-talk-row-body style="margin-top:0.4rem;"></div>`;
@@ -370,7 +370,7 @@ function renderRowBody(body, row) {
           `<span>#${midx}</span>` +
           `<label class="form-field"><span>ページ</span><input type="number" value="${mi.page}" style="width:6rem;"></label>` +
           `<label class="form-field" style="flex:1;"><span>項目名</span><input type="text" value=""></label>` +
-          `<button type="button" class="btn btn-danger">削除</button>`;
+          `<button type="button" class="btn btn-danger btn-sm">削除</button>`;
         const inps = itemWrap.querySelectorAll("input");
         inps[0].addEventListener("input", () => { mi.page = parseInt(inps[0].value || "0", 10) || 0; });
         inps[1].value = mi.name || "";
@@ -383,7 +383,7 @@ function renderRowBody(body, row) {
     renderMenuItems();
     const addBtn = document.createElement("button");
     addBtn.type = "button";
-    addBtn.className = "btn btn-secondary";
+    addBtn.className = "btn btn-secondary btn-sm";
     addBtn.textContent = "+ 選択肢を追加";
     addBtn.style.marginTop = "0.25rem";
     addBtn.addEventListener("click", () => { row.menuItems.push({ page: 0, name: "" }); renderMenuItems(); });
@@ -445,8 +445,8 @@ export function mount(container) {
             <span>会話イベント ID</span>
             <select id="talk-event-select"></select>
           </label>
-          <button type="button" class="btn btn-primary" id="talk-event-reload-btn">再読み込み</button>
-          <button type="button" class="btn btn-primary" id="talk-event-new-btn">ID を指定して新規</button>
+          <button type="button" class="btn btn-primary btn-sm" id="talk-event-reload-btn">再読み込み</button>
+          <button type="button" class="btn btn-primary btn-sm" id="talk-event-new-btn">ID を指定して新規</button>
         </div>
 
         <p id="talk-event-summary" class="section-summary" aria-live="polite"></p>
@@ -478,7 +478,7 @@ export function mount(container) {
           </header>
           <div class="picker-modal-toolbar">
             <span>ID: <strong id="talk-event-modal-id">-</strong></span>
-            <button type="button" class="btn btn-primary" id="talk-event-add-row-btn">行を追加</button>
+            <button type="button" class="btn btn-primary btn-sm" id="talk-event-add-row-btn">行を追加</button>
             <span class="picker-modal-summary" id="talk-event-modal-summary"></span>
           </div>
           <div class="picker-modal-body">
@@ -491,7 +491,7 @@ export function mount(container) {
             </div>
             <div class="picker-modal-actions">
               <button type="button" class="btn" data-talk-event-dismiss>キャンセル</button>
-              <button type="button" class="btn primary" id="talk-event-save-btn">保存</button>
+              <button type="button" class="btn btn-primary" id="talk-event-save-btn">保存</button>
             </div>
           </footer>
         </div>
