@@ -97,6 +97,8 @@ public:
 	CImg32 *m_pDibLevel, // 明度レベル画像
 		*m_pDibLevelTmp, // 灯り描画用テンポラリ
 		*m_pDibMapName; // マップ名表示用画像
+	CImg32 *m_pDibLight;    // 加算ライトのカラーバッファ
+	CImg32 *m_pDibLightTmp; // 光源テンプレ（暖色の円）
 	CLibInfoItem *m_pLibInfoItem; // アイテム情報ライブラリ
 	CLibInfoMapParts *m_pLibInfoMapParts; // マップパーツ情報
 	CLibInfoMapShadow *m_pLibInfoMapShadow; // マップ影情報

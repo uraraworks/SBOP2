@@ -25,9 +25,11 @@ public:
 	void	Rectangle(int x, int y, int cx, int cy, COLORREF clDraw);	// 矩形
 	void	Circle(int x, int y, int r, COLORREF clDraw);				// 円
 	void	CircleGradation(int x, int y, int r, int rr, COLORREF clDraw);	// 円(グラデーション)
+	void	MakeRadialLight(int cx, int cy, int r, COLORREF clColor);		// 放射状ライト（全RGB・加算用テンプレ）
 	void	ChgLevel(int x, int y, int cx, int cy, BYTE byLevel);		// 明度を変更
 	void	ChgColor(int x, int y, int cx, int cy, COLORREF clChg);	// 色素を変更
 	void	SetLevel(CImg32 *pSrc);									// 指定画像のR値を明度として反映
+	void	SetLevelEx(CImg32 *pLevel, CImg32 *pLight, COLORREF clNight, double dGlowFloor);	// 夜色へ減光→加算ライト合成（暗さ連動）
 
 	void	Blt(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);						// 矩形転送
 	void	BltLevel(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);	// 明度を変えながら矩形転送

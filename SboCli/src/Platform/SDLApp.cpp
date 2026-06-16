@@ -121,6 +121,11 @@ DWORD g_dwOnFrameCallsPerSec = 0;   // OnFrame (ゲーム更新) の秒間呼出
 DWORD g_dwMaxRunFrameMs = 0;        // 1秒内の最大 RunFrame 時間
 DWORD g_dwMaxDrawMs = 0;            // 1秒内の最大 OnDraw 時間
 
+double g_dDrawTileMs   = 0.0;  // 背景タイル/マップパーツ描画
+double g_dDrawCharMs   = 0.0;  // キャラ描画
+double g_dDrawShadowMs = 0.0;  // 影描画
+double g_dDrawLightMs  = 0.0;  // SetLevelEx ライティング合成
+
 CSDLApp::CSDLApp()
 {
 	m_bInitialized = FALSE;
@@ -766,6 +771,10 @@ void CSDLApp::RunFrame(void)
 		m_dwOnFrameCallCount = 0;
 		m_dwMaxRunFrameThisSec = 0;
 		m_dwMaxDrawThisSec = 0;
+		SDL_Log("DRAW ms: tile=%.2f char=%.2f shadow=%.2f light=%.2f | layer=%d swizzle=%d present=%d (fps=%d maxDraw=%dms)",
+		        g_dDrawTileMs, g_dDrawCharMs, g_dDrawShadowMs, g_dDrawLightMs,
+		        (int)g_dwDrawLayerMs, (int)g_dwDrawSwizzleMs, (int)g_dwDrawPresentMs,
+		        (int)m_byFpsLast, (int)g_dwMaxDrawMs);
 #if defined(__EMSCRIPTEN__)
 		updateFpsDisplay((int)m_byFpsLast,
 		                 (int)g_dwMainLoopCallsPerSec,

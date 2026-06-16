@@ -591,6 +591,114 @@ void CImg32::SetLevel(CImg32 *pSrc)
 	}
 }
 
+void CImg32::SetLevelEx(CImg32 *pLevel, CImg32 *pLight, COLORREF clNight, double dGlowFloor)
+{
+	int i, j, x, y, cx, cy;
+	PDWORD dst, plevel, plight;
+	DWORD dwLineDst;
+	BYTE byLevel;
+	PBYTE pBitsDst, pBitsLevel, pBitsLight;
+	TARGB tTint;
+
+	if (m_pBits == NULL) {
+		return;
+	}
+
+	tTint.ARGB = ColorrefToDword(clNight);
+
+	x = y = 0;
+	cx = Width();
+	cy = Height();
+
+	pBitsLevel = pLevel->GetBits();
+	pBitsLight = pLight->GetBits();
+	pBitsDst = m_pBits;
+	dwLineDst = BYTES_PER_LINE(Width());
+
+	x *= BYTES_PER_PIXEL;
+	y = Height() - 1 - y;
+
+	for (j = 0; j < cy; j ++) {
+		dst    = (PDWORD)(pBitsDst   + dwLineDst * (y - j) + x);
+		plevel = (PDWORD)(pBitsLevel + dwLineDst * (y - j) + x);
+		plight = (PDWORD)(pBitsLight + dwLineDst * (y - j) + x);
+		for (i = 0; i < cx; i ++) {
+			TARGB tDst, tLight, *ptDst;
+			int r, g, b;
+
+			ptDst = (TARGB *)&dst[i];
+			byLevel = PercentToHex(((TARGB *)(&plevel[i]))->B);
+
+			// 夜色へ寄せる（byLevel=0: 変化なし、byLevel=255: 完全に夜色）
+			tDst.ARGB = dst[i];
+			r = tDst.R + ((int)(tTint.R - tDst.R) * (byLevel + 1) >> 8);
+			g = tDst.G + ((int)(tTint.G - tDst.G) * (byLevel + 1) >> 8);
+			b = tDst.B + ((int)(tTint.B - tDst.B) * (byLevel + 1) >> 8);
+
+			// 加算ライト（暗さ連動スケール）
+			tLight.ARGB = plight[i];
+			{
+				double s = dGlowFloor + (1.0 - dGlowFloor) * (byLevel / 255.0);
+				r = r + (int)(tLight.R * s); if (r > 255) r = 255;
+				g = g + (int)(tLight.G * s); if (g > 255) g = 255;
+				b = b + (int)(tLight.B * s); if (b > 255) b = 255;
+			}
+
+			ptDst->R = (BYTE)r;
+			ptDst->G = (BYTE)g;
+			ptDst->B = (BYTE)b;
+		}
+	}
+}
+
+// 放射状ライトテンプレ生成（加算用）
+// 中心(cx,cy) 半径r。中心=clColor, 外周=黒, 二次減衰。既存ピクセルは上書き（黒背景前提）。
+void CImg32::MakeRadialLight(int cx, int cy, int r, COLORREF clColor)
+{
+	TARGB tCol;
+	PBYTE pBitsDst;
+	DWORD dwLineDst;
+	int x0, y0, x1, y1, i, j;
+
+	if (m_pBits == NULL || r <= 0) {
+		return;
+	}
+
+	tCol.ARGB = ColorrefToDword(clColor);
+
+	pBitsDst = m_pBits;
+	dwLineDst = BYTES_PER_LINE(Width());
+
+	// 走査範囲をクリップ
+	x0 = max(cx - r, 0);
+	y0 = max(cy - r, 0);
+	x1 = min(cx + r, Width() - 1);
+	y1 = min(cy + r, Height() - 1);
+
+	for (j = y0; j <= y1; j++) {
+		int yyy = Height() - 1 - j;
+		PDWORD dst = (PDWORD)(pBitsDst + dwLineDst * yyy + x0 * BYTES_PER_PIXEL);
+		for (i = x0; i <= x1; i++) {
+			int dx = i - cx;
+			int dy = j - cy;
+			double d = sqrt((double)(dx * dx + dy * dy));
+			if (d >= (double)r) {
+				*dst = 0;
+			} else {
+				double t = 1.0 - d / (double)r;
+				t = t * t * (3.0 - 2.0 * t);   // smoothstep: 縁・中心とも傾き0 → 境目が溶けて見えなくなる
+				TARGB tPix;
+				tPix.R = (BYTE)(tCol.R * t);
+				tPix.G = (BYTE)(tCol.G * t);
+				tPix.B = (BYTE)(tCol.B * t);
+				tPix.A = 0;
+				*dst = tPix.ARGB;
+			}
+			dst++;
+		}
+	}
+}
+
 void CImg32::Blt(
 	int dx,			// [in] 始点(X)
 	int dy,			// [in] 始点(Y)

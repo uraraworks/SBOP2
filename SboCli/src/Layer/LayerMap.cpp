@@ -30,6 +30,23 @@
 #include "myString.h"
 #include <math.h>
 
+// 描画内訳計測用グローバル（SDLApp.cpp で定義）
+extern double g_dDrawTileMs;
+extern double g_dDrawCharMs;
+extern double g_dDrawShadowMs;
+extern double g_dDrawLightMs;
+
+// 高精度計測ヘルパ
+static inline Uint64 PerfNow() { return SDL_GetPerformanceCounter(); }
+static inline double PerfMs(Uint64 from, Uint64 to) {
+    return (double)(to - from) * 1000.0 / (double)SDL_GetPerformanceFrequency();
+}
+
+// 加算ライティング パラメータ（見た目調整用。チャンネル順は内部表現依存なので実機で微調整する）
+static const COLORREF LIGHTING_NIGHT_TINT  = RGB(18, 24, 48);   // 暗部が寄る夜の色（黒の代わり）
+static const COLORREF LIGHTING_TORCH_COLOR = RGB(130, 84, 38);  // 弱すぎたので中庸に
+static const double    LIGHTING_GLOW_FLOOR = 0.65;             // 薄暗いマップでも見えるよう上げる
+
 
 CLayerMap::CLayerMap()
 {
@@ -61,6 +78,8 @@ CLayerMap::CLayerMap()
 	m_pDibLevel = NULL;
 	m_pDibLevelTmp = NULL;
 	m_pDibMapName = NULL;
+	m_pDibLight = NULL;
+	m_pDibLightTmp = NULL;
 	m_pLibInfoItem = NULL;
 	m_pLibInfoMapParts = NULL;
 	m_pLibInfoMapShadow = NULL;
@@ -78,6 +97,8 @@ CLayerMap::~CLayerMap()
 	SAFE_DELETE(m_pDibLevel);
 	SAFE_DELETE(m_pDibLevelTmp);
 	SAFE_DELETE(m_pDibMapName);
+	SAFE_DELETE(m_pDibLight);
+	SAFE_DELETE(m_pDibLightTmp);
 	SAFE_DELETE(m_pLayerCould);
 	SAFE_DELETE(m_pLayerMisty);
 	SAFE_DELETE(m_pLayerSnow);
@@ -107,6 +128,15 @@ void CLayerMap::Create(
 
 	m_pDibLevelTmp->CircleGradation(0, 0, 64, 48, RGB(50, 0, 0));
 
+	m_pDibLight = new CImg32;
+	m_pDibLight->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLight->FillRect(0, 0, m_pDibLight->Width(), m_pDibLight->Height(), RGB(0, 0, 0));
+
+	m_pDibLightTmp = new CImg32;
+	m_pDibLightTmp->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLightTmp->FillRect(0, 0, m_pDibLightTmp->Width(), m_pDibLightTmp->Height(), RGB(0, 0, 0));
+	m_pDibLightTmp->MakeRadialLight(64, 64, 64, LIGHTING_TORCH_COLOR);
+
 	m_pLayerCould = new CLayerCloud;
 	m_pLayerMisty = new CLayerMisty;
 	m_pLayerSnow  = new CLayerSnow;
@@ -134,18 +164,22 @@ void CLayerMap::Draw(PCImg32 pDst)
 		RenewLevel();
 	}
 
-	DrawPartsBase(pDst);
-	DrawMapPile(pDst);
-	DrawItem(pDst, 0);
+	// --- 描画内訳計測 ---
+	double dTile = 0.0, dChar = 0.0, dShadow = 0.0, dLight = 0.0;
+	Uint64 t;
+
+	t = PerfNow(); DrawPartsBase(pDst);       dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawMapPile(pDst);          dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawItem(pDst, 0);          dTile += PerfMs(t, PerfNow());
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
-		DrawMapObject(pDst, y);
-		DrawChar(pDst, y);
-		DrawPartsPile(pDst, y);
-		DrawMapPile(pDst, y);
+		t = PerfNow(); DrawMapObject(pDst, y); dTile += PerfMs(t, PerfNow());
+		t = PerfNow(); DrawChar(pDst, y);      dChar += PerfMs(t, PerfNow());
+		t = PerfNow(); DrawPartsPile(pDst, y); dTile += PerfMs(t, PerfNow());
+		t = PerfNow(); DrawMapPile(pDst, y);   dTile += PerfMs(t, PerfNow());
 	}
-	DrawPartsPile(pDst);
-	DrawMapPile(pDst, -98);
-	DrawShadow(pDst);
+	t = PerfNow(); DrawPartsPile(pDst);        dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawMapPile(pDst, -98);     dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawShadow(pDst);           dShadow += PerfMs(t, PerfNow());
 
 	pLayer = NULL;
 	switch (pMap->m_dwWeatherType) {
@@ -157,8 +191,13 @@ void CLayerMap::Draw(PCImg32 pDst)
 		pLayer->Draw(pDst);
 	}
 	if (pMap->m_byLevel != 0) {
-		pDst->SetLevel(m_pDibLevel);
+		t = PerfNow(); pDst->SetLevelEx(m_pDibLevel, m_pDibLight, LIGHTING_NIGHT_TINT, LIGHTING_GLOW_FLOOR); dLight += PerfMs(t, PerfNow());
 	}
+
+	g_dDrawTileMs   = dTile;
+	g_dDrawCharMs   = dChar;
+	g_dDrawShadowMs = dShadow;
+	g_dDrawLightMs  = dLight;
 	DrawItem(pDst, 1);
 	DrawCharText(pDst);
 	DrawGauge(pDst);
@@ -629,6 +668,7 @@ void CLayerMap::RenewLevel(void)
 	}
 
 	m_pDibLevel->FillRect(0, 0, m_pDibLevel->Width(), m_pDibLevel->Height(), RGB(100 - pMap->m_byLevel, 0, 0));
+	m_pDibLight->FillRect(0, 0, m_pDibLight->Width(), m_pDibLight->Height(), RGB(0, 0, 0));
 	nCount = m_pLibInfoChar->GetCount();
 	for (i = 0; i < nCount; i ++) {
 		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
@@ -661,6 +701,7 @@ void CLayerMap::RenewLevel(void)
 		nTmp = (r - cx / 2);
 //		m_pDibLevel->CircleGradation(x - nTmp, y - nTmp, r, cx + cx / 2, RGB(50, 0, 0));
 		m_pDibLevel->BltPlus(x - nTmp, y - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
+		m_pDibLight->BltPlus(x - nTmp, y - nTmp, r * 2, r * 2, m_pDibLightTmp, 0, 0, 255, TRUE);
 //		m_pDibLevel->Circle(x - nTmp, y - nTmp, r, RGB(100, 0, 0));
 	}
 }
@@ -1227,6 +1268,7 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 					r = 32 * 2;
 					nTmp = (r - 32 / 2);
 					m_pDibLevel->BltPlus(xx - nTmp, yy - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
+				m_pDibLight->BltPlus(xx - nTmp, yy - nTmp, r * 2, r * 2, m_pDibLightTmp, 0, 0, 255, TRUE);
 				}
 			} else {
 				m_pMgrDraw->DrawMapShadow(
