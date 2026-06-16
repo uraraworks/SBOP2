@@ -1109,6 +1109,17 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 		}
 		m_paImg2x2NPCShadow->Add(pImg);
 	}
+	// NPC（16px シート: 得点NPC等が IDP_NPC_01/02 を参照）
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_NPC_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgNPC->Add(pImg);
+	}
 	// 2x2 キャラ影（固定1枚）
 	{
 		pImg	= new CImg32;

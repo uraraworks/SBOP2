@@ -771,10 +771,11 @@ void CSDLApp::RunFrame(void)
 		m_dwOnFrameCallCount = 0;
 		m_dwMaxRunFrameThisSec = 0;
 		m_dwMaxDrawThisSec = 0;
-		SDL_Log("DRAW ms: tile=%.2f char=%.2f shadow=%.2f light=%.2f | layer=%d swizzle=%d present=%d (fps=%d maxDraw=%dms)",
-		        g_dDrawTileMs, g_dDrawCharMs, g_dDrawShadowMs, g_dDrawLightMs,
-		        (int)g_dwDrawLayerMs, (int)g_dwDrawSwizzleMs, (int)g_dwDrawPresentMs,
-		        (int)m_byFpsLast, (int)g_dwMaxDrawMs);
+		// 毎秒出力される描画内訳ログはコンソールを埋めるため無効化（FPS表示の updateFpsDisplay は維持）
+		// SDL_Log("DRAW ms: tile=%.2f char=%.2f shadow=%.2f light=%.2f | layer=%d swizzle=%d present=%d (fps=%d maxDraw=%dms)",
+		//         g_dDrawTileMs, g_dDrawCharMs, g_dDrawShadowMs, g_dDrawLightMs,
+		//         (int)g_dwDrawLayerMs, (int)g_dwDrawSwizzleMs, (int)g_dwDrawPresentMs,
+		//         (int)m_byFpsLast, (int)g_dwMaxDrawMs);
 #if defined(__EMSCRIPTEN__)
 		updateFpsDisplay((int)m_byFpsLast,
 		                 (int)g_dwMainLoopCallsPerSec,

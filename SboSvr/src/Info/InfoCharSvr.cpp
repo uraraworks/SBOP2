@@ -313,11 +313,22 @@ BOOL CInfoCharSvr::TimerProcMOVE(DWORD dwTime)
 	DWORD dwMoveInterval;
 
 	bRet = FALSE;
+	dwMoveInterval = GetHalfTileMoveInterval(this);
 	if (m_nMoveCount == 0) {
+		// 押し移動の終了判定: STAND/BALL が移動ステートのまま
+		// 1移動間隔ステップが来なければ停止し、MoveSync に MOVE_STOP を送らせる。
+		if ((m_nMoveType == CHARMOVETYPE_STAND || m_nMoveType == CHARMOVETYPE_BALL)
+			&& IsStateMove()
+			&& (dwTime - m_dwLastTimeMove >= dwMoveInterval)) {
+			int nState = CHARMOVESTATE_STAND;
+			if (IsStateBattle()) {
+				nState = CHARMOVESTATE_BATTLE;
+			}
+			SetMoveState(nState);
+		}
 		goto Exit;
 	}
 
-	dwMoveInterval = GetHalfTileMoveInterval(this);
 	dwTimeTmp = dwTime - m_dwLastTimeMove;
 	if (dwTimeTmp < dwMoveInterval) {
 		goto Exit;

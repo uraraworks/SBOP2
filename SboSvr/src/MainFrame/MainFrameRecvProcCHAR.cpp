@@ -739,16 +739,18 @@ void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 
 	Packet.Set(pData);
 
-	if (Packet.m_nPushCount == 1) {
-		m_pLibInfoChar->Move(Packet.m_dwCharID, Packet.m_nDirection, TRUE);
-	} else {
-		pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
-		if (pInfoChar == NULL) {
-			return;
-		}
-		pInfoChar->m_nDirection = Packet.m_nDirection;
+	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
+	if (pInfoChar == NULL) {
+		return;
+	}
+	pInfoChar->m_nDirection = Packet.m_nDirection;
+	// 押し移動はステップ移動経路に統一する。移動ステートにすることで
+	// MoveSync が MOVE_START/STOP を送り、進行中のみアニメ＋停止で止まる。
+	// 連射時に歩数が際限なく溜まらないよう上書き方式で上限を抑える。
+	if (Packet.m_nPushCount > pInfoChar->m_nMoveCount) {
 		pInfoChar->m_nMoveCount = Packet.m_nPushCount;
 	}
+	pInfoChar->SetMoveState(CHARMOVESTATE_MOVE);
 }
 
 void CMainFrame::RecvProcCHAR_REQ_TAIL(PBYTE pData, DWORD dwSessionID)

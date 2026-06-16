@@ -506,6 +506,7 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 	PCInfoCharBase pInfoCharSrc, pInfoCharTmp;
 	POINT ptBack, ptFront;
 	RECT rcFrontRect, rcTmp;
+	int nDirectionBack;
 
 	dwRet = 0;
 
@@ -513,14 +514,18 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 	if (pInfoCharSrc == NULL) {
 		goto Exit;
 	}
-	pInfoCharSrc->GetFrontPos(ptFront, nDirection, TRUE);
+	// IsBlockChar と同様にピクセル単位の矩形で前方位置を計算する
 	ptBack.x = pInfoCharSrc->m_nMapX;
 	ptBack.y = pInfoCharSrc->m_nMapY;
+	nDirectionBack = pInfoCharSrc->m_nDirection;
+	pInfoCharSrc->m_nDirection = nDirection;
+	pInfoCharSrc->GetFrontPos(ptFront, nDirection, TRUE);
 	pInfoCharSrc->m_nMapX = ptFront.x;
 	pInfoCharSrc->m_nMapY = ptFront.y;
-	pInfoCharSrc->GetPosRect(rcFrontRect);
+	pInfoCharSrc->GetCollisionRectOnce(rcFrontRect);
 	pInfoCharSrc->m_nMapX = ptBack.x;
 	pInfoCharSrc->m_nMapY = ptBack.y;
+	pInfoCharSrc->m_nDirection = nDirectionBack;
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
@@ -540,7 +545,7 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
 			continue;
 	}
-		pInfoCharTmp->GetPosRect(rcTmp);
+		pInfoCharTmp->GetCollisionRect(rcTmp);
 		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
 			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
 			continue;

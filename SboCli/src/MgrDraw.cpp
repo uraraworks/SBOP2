@@ -507,6 +507,9 @@ void CMgrDraw::DrawChar(
 				}
 				m_pMgrGrpData->GetGrpPos(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp, wGrpID);
 				ptTmp.y += nTmp;
+				// (1) 残像対策: 転写前に使用領域をカラーキー色でクリア（転写が空振りしても前キャラの残像が出ないようにする）
+				pDibTmp->FillRect(0, 0,          cxChar,     cyChar,     RGB(255, 0, 255));
+				pDibTmp->FillRect(0, cyChar * 2, cxChar * 2, cyChar * 2, RGB(255, 0, 255));
 				if (wGrpIDMainBase == GRPIDMAIN_CHAR || ((wGrpIDMainBase == GRPIDMAIN_NPC) && (pInfoChar->m_bMotionDirection))) {
 					pSrc = pInfoChar->m_pDibChar;
 					pDibTmp->Blt(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y);
