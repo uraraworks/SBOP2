@@ -738,16 +738,18 @@
     body.mobile-pad.chat-sheet-open #virtualPad {
       display: none !important;
     }
+    /* デバッグ情報パネルは ?debug=1 のときのみ表示（通常ルートでは非表示） */
+    body:not(.debug-mode) .debug-panel { display: none; }
   </style>
 </head>
 <body>
   <main class="layout">
-    <section class="panel header">
+    <section class="panel header debug-panel">
       <div>SBOP2 browser title build</div>
       <div id="status" class="status">起動中...</div>
     </section>
 
-    <section class="panel probe">
+    <section class="panel probe debug-panel">
       <div id="canvasProbe">canvas-probe: pending</div>
       <div id="fpsDisplay" style="font-family:monospace; font-size:14px; color:#0f0; margin-top:4px;">FPS: --</div>
     </section>
@@ -798,7 +800,7 @@
       </div>
     </section>
 
-    <section class="panel">
+    <section class="panel debug-panel">
       <textarea id="output" rows="8" readonly></textarea>
     </section>
   </main>
@@ -863,6 +865,13 @@
         console.warn('[SBOP2] admin embed query parse failed:', e);
       }
     })();
+
+    // ?debug=1 が付いている場合のみデバッグパネルを表示する
+    try {
+      if (new URLSearchParams(window.location.search).get('debug') === '1') {
+        document.body.classList.add('debug-mode');
+      }
+    } catch (e) {}
 
     // URL クエリ ?server=host:port を解析して window.sbop2ServerAddr / sbop2ServerPort にセット
     (function parseServerQuery() {

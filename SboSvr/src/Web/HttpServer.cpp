@@ -139,8 +139,8 @@ private:
 class CPlayerRootRedirectHandler : public IApiHandler
 {
 public:
-        explicit CPlayerRootRedirectHandler(unsigned short wHttpPort)
-                : m_wHttpPort(wHttpPort)
+        explicit CPlayerRootRedirectHandler(unsigned short wHttpPort, bool bDebug = false)
+                : m_wHttpPort(wHttpPort), m_bDebug(bDebug)
         {
         }
 
@@ -150,6 +150,7 @@ public:
                 location << "/game/sbocli-title.html?server="
                          << ExtractHostName(request.FindHeader("Host"))
                          << ":" << static_cast<unsigned int>(m_wHttpPort + 1);
+                if (m_bDebug) { location << "&debug=1"; }
 
                 response.statusLine = "HTTP/1.1 302 Found";
                 response.body.clear();
@@ -160,6 +161,7 @@ public:
 
 private:
         unsigned short m_wHttpPort;
+        bool m_bDebug;
 };
 
 enum ContentLengthParseResult
@@ -1249,6 +1251,9 @@ void CHttpServer::RegisterDefaultHandlers()
 
                 std::unique_ptr<IApiHandler> playerRootHandler(new CPlayerRootRedirectHandler(m_wPort));
                 m_router.Register("GET", "/", std::move(playerRootHandler));
+
+                std::unique_ptr<IApiHandler> playerDebugHandler(new CPlayerRootRedirectHandler(m_wPort, true));
+                m_router.Register("GET", "/debug", std::move(playerDebugHandler));
 
                 std::unique_ptr<IApiHandler> adminRedirectHandler(new CRedirectHandler("/admin/"));
                 m_router.Register("GET", "/admin", std::move(adminRedirectHandler));
