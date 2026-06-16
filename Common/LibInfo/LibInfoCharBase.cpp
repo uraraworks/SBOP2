@@ -514,18 +514,27 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 	if (pInfoCharSrc == NULL) {
 		goto Exit;
 	}
-	// IsBlockChar と同様にピクセル単位の矩形で前方位置を計算する
+	// 押し判定は Block=0 のボールが対象で、1フレームでも検出を外すと
+	// プレイヤーが食い込んですり抜けるため、現在位置〜前方位置を含む
+	// 掃引矩形(union)で広めに判定する。
+	RECT rcCur, rcFrontPos;
 	ptBack.x = pInfoCharSrc->m_nMapX;
 	ptBack.y = pInfoCharSrc->m_nMapY;
 	nDirectionBack = pInfoCharSrc->m_nDirection;
 	pInfoCharSrc->m_nDirection = nDirection;
+	pInfoCharSrc->GetCollisionRect(rcCur);
 	pInfoCharSrc->GetFrontPos(ptFront, nDirection, TRUE);
 	pInfoCharSrc->m_nMapX = ptFront.x;
 	pInfoCharSrc->m_nMapY = ptFront.y;
-	pInfoCharSrc->GetCollisionRectOnce(rcFrontRect);
+	pInfoCharSrc->GetCollisionRect(rcFrontPos);
 	pInfoCharSrc->m_nMapX = ptBack.x;
 	pInfoCharSrc->m_nMapY = ptBack.y;
 	pInfoCharSrc->m_nDirection = nDirectionBack;
+	// 現在と前方の collision 矩形を包含する掃引矩形
+	rcFrontRect.left   = (rcCur.left   < rcFrontPos.left)   ? rcCur.left   : rcFrontPos.left;
+	rcFrontRect.top    = (rcCur.top    < rcFrontPos.top)    ? rcCur.top    : rcFrontPos.top;
+	rcFrontRect.right  = (rcCur.right  > rcFrontPos.right)  ? rcCur.right  : rcFrontPos.right;
+	rcFrontRect.bottom = (rcCur.bottom > rcFrontPos.bottom) ? rcCur.bottom : rcFrontPos.bottom;
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
@@ -540,9 +549,6 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 			continue;
 	}
 		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
-			continue;
-	}
-		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
 			continue;
 	}
 		pInfoCharTmp->GetCollisionRect(rcTmp);
