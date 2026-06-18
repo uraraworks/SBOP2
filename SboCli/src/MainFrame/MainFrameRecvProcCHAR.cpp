@@ -125,6 +125,11 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	// 撃破フェードアウト中(DELETEREADY)のキャラはサーバ更新を無視し、
+	// フェードを完走させる（プレイヤー移動等に伴う再送での中断/即消滅を防ぐ）。
+	if (pInfoChar->m_nMoveState == CHARMOVESTATE_DELETEREADY) {
+		return;
+	}
 	nStateMove = CHARMOVESTATE_MOVE;
 	nStateStop = CHARMOVESTATE_STAND;
 	if (pInfoChar->IsStateBattle()) {
@@ -544,6 +549,11 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		}
 		return;
 	}
+	// 撃破フェードアウト中(DELETEREADY)のキャラはサーバ更新を無視し、
+	// フェードを完走させる（プレイヤー移動等に伴う再送での中断/即消滅を防ぐ）。
+	if (pInfoChar->m_nMoveState == CHARMOVESTATE_DELETEREADY) {
+		return;
+	}
 	nState = -1;
 	bDirectionChanged = FALSE;
 	bPositionChanged = FALSE;
@@ -776,12 +786,29 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	// 撃破フェードアウト中(DELETEREADY)のキャラはサーバ更新を無視し、
+	// フェードを完走させる（プレイヤー移動等に伴う再送での中断/即消滅を防ぐ）。
+	if (pInfoChar->m_nMoveState == CHARMOVESTATE_DELETEREADY) {
+		return;
+	}
 	nState = Packet.m_nState;
 	if (nState == CHARMOVESTATE_DELETE) {
 		nState = CHARMOVESTATE_DELETEREADY;
 	}
 	if ((pInfoChar != pInfoCharPlayer) &&
 		(nState == CHARMOVESTATE_DELETEREADY)) {
+		// 撃破された敵はフェードアウトしてから消す。
+		// SetMoveState(DELETEREADY) が SetViewState(FADEOUT) を起動し、
+		// 消滅エフェクト終了 + フェード完了後にクライアントが自動で DELETE する。
+		// 判定は SWOON 状態に加えて「消滅エフェクト再生中(m_pInfoEffect)」も対象に
+		// する。アイテムドロップ時など、DELETE 到着時に状態が SWOON から変化して
+		// いても、消滅エフェクト再生中なら確実にフェードへ乗せるため。
+		if ((pInfoChar->m_nMoveState == CHARMOVESTATE_SWOON) ||
+			(pInfoChar->m_pInfoEffect != NULL)) {
+			pInfoChar->SetMoveState(CHARMOVESTATE_DELETEREADY);
+			return;
+		}
+		// それ以外(画面外/ログアウト等)は従来通り即削除
 #if SBO_ENABLE_POS_SYNC_DEBUG_LOG
 		SboDbgLog("[CHAR_STATE->DeleteRemoteNow] charID=%u mapID=%u pos=(%d,%d)",
 			pInfoChar->m_dwCharID,

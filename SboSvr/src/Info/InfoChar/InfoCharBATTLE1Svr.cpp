@@ -103,13 +103,24 @@ BOOL CInfoCharBATTLE1Svr::ProcHit(CInfoCharSvr *pInfoChar)
 
 BOOL CInfoCharBATTLE1Svr::ProcSWOON(DWORD dwPara)
 {
-	if (m_nDropItemAverage != 0) {
-		m_bDropItem = TRUE;
+	if (dwPara == 0) {
+		// 1段階目: ドロップ判定 + 消滅エフェクト送出。
+		// ここで DELETE/DELETEREADY にすると、(a)エフェクト送出より先にキャラが
+		// 消える、(b)DELETEREADY だとサーバ側 Proc が回らず2段階目が発火しない、
+		// という不具合を招く。状態は SWOON のまま維持し、削除は2段階目に分離する。
+		// （m_bDropItem が同tickの送出で勝つため、エフェクトは次tickで送出される。
+		//   そのためにもキャラを即削除せず生かしておく必要がある。）
+		if (m_nDropItemAverage != 0) {
+			m_bDropItem = TRUE;
+		}
+		m_nReserveChgEfect = 5;	// 消滅エフェクト
+		AddProcInfo(CHARPROCID_SWOON, 200, 1);	// エフェクト送出後にサーバ側削除（フェードと重なる）
+	} else {
+		// 2段階目: サーバ側キャラを確実に削除（LogOut）。再送による復活なし。
+		// クライアントは受信した DELETE を撃破フェードアウトに変換して再生する
+		// （MainFrameRecvProcCHAR.cpp の SWOON 分岐）。
+		m_nReserveChgMoveState = CHARMOVESTATE_DELETE;
 	}
-
-//Todo:暫定
-	m_nReserveChgEfect = 5;
-	m_nReserveChgMoveState = CHARMOVESTATE_DELETE;
 
 	return TRUE;
 }

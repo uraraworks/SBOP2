@@ -2092,11 +2092,15 @@ BOOL CInfoCharCli::TimerProcViewState(DWORD dwTime)
 		if (m_nFadeLevel > 100) {
 			m_nFadeLevel = 100;
 			if ((m_pInfoEffect == NULL) || (m_pInfoEffect && m_pInfoEffect->m_bLoop)) {
-				SetViewState(INFOCHARCLI_VIEWSTATE_NONE);
 				// 消去準備？
 				if (m_nMoveState == CHARMOVESTATE_DELETEREADY) {
+					// 削除する場合はフェード解除(NONE=level0で全表示)せず、
+					// 透明(level=100)のまま DELETE する。次フレームでキャラが
+					// 削除されるまでの一瞬だけ再表示される現象を防ぐ。
 					SetMoveState(CHARMOVESTATE_DELETE);
 				} else {
+					// 削除以外（通常のフェードアウト→フェードイン）は従来通り
+					SetViewState(INFOCHARCLI_VIEWSTATE_NONE);
 					SetViewState(INFOCHARCLI_VIEWSTATE_FADEIN);
 				}
 			}

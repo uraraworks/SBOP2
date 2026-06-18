@@ -1749,7 +1749,9 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 	DWORD dwRet;
 	RECT rcFrontRect, rcTmp;
 	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
-	const int nAttackReach = 12;
+	// 移動ブロックがハーフタイル(16px)粒度で止まり、敵の手前に約16pxの隙間が残るため、
+	// 隣接時に確実に攻撃が届くようリーチを拡大（調整つまみ）。
+	const int nAttackReach = 20;
 
 	dwRet = 0;
 
@@ -1798,7 +1800,8 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 			continue;
 		}
 
-		pInfoCharTmp->GetCollisionRect(rcTmp);
+		// 被弾判定は全身矩形で行い、縦方向の当たり範囲を敵の全身に合わせる
+		pInfoCharTmp->GetPosRect(rcTmp);
 		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
 			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
 			continue;

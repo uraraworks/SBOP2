@@ -1165,6 +1165,29 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 	Read256("IDP_NUM_M", &m_pImgNumM, 1);
 	Read256("IDP_NUM_L", &m_pImgNumL, 1);
 
+	// エフェクト(32)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_EFC_32_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgEfc32->Add(pImg);
+	}
+	// エフェクト(64)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_EFC_64_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgEfc64->Add(pImg);
+	}
+
 	return bLoaded;
 }
 
