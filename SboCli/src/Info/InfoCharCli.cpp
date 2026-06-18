@@ -327,7 +327,7 @@ int CInfoCharCli::SetPos(int x, int y, BOOL bBack/*FALSE*/)
 		return nRet;
 	}
 
-	dwDuration = GetDrawMoveDuration((int)dDrawX, (int)dDrawY, x, y);
+	dwDuration = GetDrawMoveDuration(dDrawX, dDrawY, (double)x, (double)y);
 	if (dwDuration <= 1) {
 		ResetDrawMoveSegment(x, y, dwNowTime);
 		return nRet;
@@ -513,24 +513,25 @@ void CInfoCharCli::ResetDrawMoveSegment(int x, int y, DWORD dwNowTime)
 }
 
 
-DWORD CInfoCharCli::GetDrawMoveDuration(int nSrcX, int nSrcY, int nDstX, int nDstY)
+DWORD CInfoCharCli::GetDrawMoveDuration(double dSrcX, double dSrcY, double dDstX, double dDstY)
 {
-	int nDeltaX, nDeltaY, nDeltaMax, nMoveSpeed;
+	double dDeltaX, dDeltaY, dDeltaMax;
+	int nMoveSpeed;
 	DWORD dwDuration, dwWait;
 
-	nDeltaX = abs(nDstX - nSrcX);
-	nDeltaY = abs(nDstY - nSrcY);
-	nDeltaMax = nDeltaX;
-	if (nDeltaMax < nDeltaY) {
-		nDeltaMax = nDeltaY;
+	dDeltaX = fabs(dDstX - dSrcX);
+	dDeltaY = fabs(dDstY - dSrcY);
+	dDeltaMax = dDeltaX;
+	if (dDeltaMax < dDeltaY) {
+		dDeltaMax = dDeltaY;
 	}
-	if (nDeltaMax <= 0) {
+	if (dDeltaMax <= 0.0) {
 		return 0;
 	}
 
 	if (m_bPredictedMove && (m_nPredictSpeed > 0)) {
 		nMoveSpeed = m_nPredictSpeed;
-		dwDuration = max((DWORD)(((ULONGLONG)nDeltaMax * 1000 + nMoveSpeed - 1) / nMoveSpeed), (DWORD)1);
+		dwDuration = max((DWORD)ceil(dDeltaMax * 1000.0 / (double)nMoveSpeed), (DWORD)1);
 		return dwDuration;
 	}
 
@@ -540,11 +541,11 @@ DWORD CInfoCharCli::GetDrawMoveDuration(int nSrcX, int nSrcY, int nDstX, int nDs
 		if (m_dwMoveWaitOnce != 0) {
 			dwWait = m_dwMoveWaitOnce;
 		}
-		dwDuration = max((DWORD)((ULONGLONG)dwWait * (ULONGLONG)nDeltaMax), (DWORD)1);
+		dwDuration = max((DWORD)ceil((double)dwWait * dDeltaMax), (DWORD)1);
 		return dwDuration;
 	}
 	nMoveSpeed = CHAR_MOVE_PIXELS_PER_SEC;
-	dwDuration = max((DWORD)(((ULONGLONG)nDeltaMax * 1000 + nMoveSpeed - 1) / nMoveSpeed), (DWORD)1);
+	dwDuration = max((DWORD)ceil(dDeltaMax * 1000.0 / (double)nMoveSpeed), (DWORD)1);
 	return dwDuration;
 }
 

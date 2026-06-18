@@ -110,7 +110,7 @@ protected:
 
 	void GetDrawMapPosDouble	(double &dDstX, double &dDstY, DWORD dwNowTime) const;	// 描画用補間座標を取得
 	void ResetDrawMoveSegment	(int x, int y, DWORD dwNowTime);	// 描画補間を即時反映
-	DWORD GetDrawMoveDuration	(int nSrcX, int nSrcY, int nDstX, int nDstY);	// 描画補間時間を取得
+	DWORD GetDrawMoveDuration	(double dSrcX, double dSrcY, double dDstX, double dDstY);	// 描画補間時間を取得
 	BOOL TimerProcMove	(DWORD dwTime);	// 移動処理
 	BOOL TimerProcViewState	(DWORD dwTime);	// 表示状態処理
 	BOOL TimerProcAtack	(DWORD dwTime);	// 攻撃処理
