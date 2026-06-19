@@ -43,6 +43,7 @@
 #include "Handlers/SkillHandler.h"
 #include "Handlers/MotionHandler.h"
 #include "Handlers/SoundCatalogHandler.h"
+#include "Handlers/MapGenPatternHandler.h"
 #include "AuditLog.h"
 #include "AuthProvider.h"
 #include "MgrData.h"
@@ -1079,6 +1080,23 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> itemTypeDeleteHandler(new CItemTypeDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/item-types", std::move(itemTypeDeleteHandler));
+
+        // 自動生成マップパターン API（S1: CRUD 箱のみ、生成ロジックは S2 で実装）
+        //   GET    /api/map-gen-patterns  一覧
+        //   POST   /api/map-gen-patterns  新規作成
+        //   PUT    /api/map-gen-patterns  更新
+        //   DELETE /api/map-gen-patterns  削除
+        std::unique_ptr<IApiHandler> mapGenPatternListHandler(new CMapGenPatternListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/map-gen-patterns", std::move(mapGenPatternListHandler));
+
+        std::unique_ptr<IApiHandler> mapGenPatternCreateHandler(new CMapGenPatternCreateHandler(m_pMgrData));
+        m_router.Register("POST", "/api/map-gen-patterns", std::move(mapGenPatternCreateHandler));
+
+        std::unique_ptr<IApiHandler> mapGenPatternUpdateHandler(new CMapGenPatternUpdateHandler(m_pMgrData));
+        m_router.Register("PUT", "/api/map-gen-patterns", std::move(mapGenPatternUpdateHandler));
+
+        std::unique_ptr<IApiHandler> mapGenPatternDeleteHandler(new CMapGenPatternDeleteHandler(m_pMgrData));
+        m_router.Register("DELETE", "/api/map-gen-patterns", std::move(mapGenPatternDeleteHandler));
 
         // アイテム（インスタンス）API（Wave 2D）
         //   GET    /api/items    一覧（?mapId=N / ?charId=N / ?drop=1）

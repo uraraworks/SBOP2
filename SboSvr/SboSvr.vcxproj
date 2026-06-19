@@ -272,6 +272,7 @@
     <ClCompile Include="src\SaveLoad\SaveLoadInfoItemType.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoItemWeapon.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMap.cpp" />
+    <ClCompile Include="src\SaveLoad\SaveLoadInfoMapGenPattern.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMapObject.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMapParts.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoMapShadow.cpp" />
@@ -307,6 +308,7 @@
     <ClCompile Include="src\Web\Handlers\CharacterUpdateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterItemHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ItemTypeHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\MapGenPatternHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SkillHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MotionHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SoundCatalogHandler.cpp" />
@@ -419,6 +421,7 @@
     <ClInclude Include="src\SaveLoad\SaveLoadInfoItemType.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoItemWeapon.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMap.h" />
+    <ClInclude Include="src\SaveLoad\SaveLoadInfoMapGenPattern.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMapObject.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMapParts.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoMapShadow.h" />
@@ -454,6 +457,7 @@
     <ClInclude Include="src\Web\Handlers\CharacterUpdateHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterItemHandler.h" />
     <ClInclude Include="src\Web\Handlers\ItemTypeHandler.h" />
+    <ClInclude Include="src\Web\Handlers\MapGenPatternHandler.h" />
     <ClInclude Include="src\Web\Handlers\SkillHandler.h" />
     <ClInclude Include="src\Web\Handlers\MotionHandler.h" />
     <ClInclude Include="src\Web\Handlers\SoundCatalogHandler.h" />
