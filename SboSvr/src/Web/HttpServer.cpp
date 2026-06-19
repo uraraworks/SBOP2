@@ -44,6 +44,7 @@
 #include "Handlers/MotionHandler.h"
 #include "Handlers/SoundCatalogHandler.h"
 #include "Handlers/MapGenPatternHandler.h"
+#include "Handlers/MapGenPreviewHandler.h"
 #include "AuditLog.h"
 #include "AuthProvider.h"
 #include "MgrData.h"
@@ -1097,6 +1098,11 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> mapGenPatternDeleteHandler(new CMapGenPatternDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/map-gen-patterns", std::move(mapGenPatternDeleteHandler));
+
+        // S2: 洞窟マップ生成プレビュー API（生成結果は保存しない）
+        //   POST /api/map-gen-patterns/preview
+        std::unique_ptr<IApiHandler> mapGenPreviewHandler(new CMapGenPreviewHandler(m_pMgrData));
+        m_router.Register("POST", "/api/map-gen-patterns/preview", std::move(mapGenPreviewHandler));
 
         // アイテム（インスタンス）API（Wave 2D）
         //   GET    /api/items    一覧（?mapId=N / ?charId=N / ?drop=1）

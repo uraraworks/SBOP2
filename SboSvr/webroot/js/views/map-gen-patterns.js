@@ -22,6 +22,117 @@ import { createSpriteField } from "../components/sprite-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 
 // ================================================================
+// プレビュー描画定数（map-paint.js と同じ規約）
+// ================================================================
+
+/** 1タイルのゲーム内ピクセルサイズ（map-paint.js と同値） */
+const PREVIEW_TILE_SIZE = 16;
+/** シート横タイル数（map-paint.js と同値） */
+const PREVIEW_SHEET_TILE_WIDTH = 32;
+/** マップパーツシート画像の基底URL */
+const PREVIEW_SHEET_BASE_URL = "/api/assets/map-parts/sheets";
+
+// ================================================================
+// プレビュー描画ユーティリティ
+// ================================================================
+
+/**
+ * grpId → { sheet, tileX, tileY } に分解する（map-paint.js の grpIdToCoord と同じ規約）。
+ * grpId = sheet*1024 + tileX + tileY*sheetTileWidth
+ * @param {number} grpId
+ * @returns {{ sheet:number, tileX:number, tileY:number }|null}
+ */
+function previewGrpIdToCoord(grpId) {
+  if (!grpId) return null;
+  const sheet = Math.floor(grpId / 1024);
+  const tile  = grpId % 1024;
+  return {
+    sheet,
+    tileX: tile % PREVIEW_SHEET_TILE_WIDTH,
+    tileY: Math.floor(tile / PREVIEW_SHEET_TILE_WIDTH),
+  };
+}
+
+/**
+ * シート画像をキャッシュしながら返す（Map<url, HTMLImageElement>）。
+ * 読み込み完了時に onLoad コールバックを呼ぶ。
+ */
+function createPreviewImageCache() {
+  const cache = new Map(); // url → HTMLImageElement
+
+  function getOrLoad(sheetIndex, onLoad) {
+    const url = `${PREVIEW_SHEET_BASE_URL}/${sheetIndex}.png`;
+    if (cache.has(url)) return cache.get(url);
+    const img = new Image();
+    img.src = url;
+    img.onload = onLoad;
+    cache.set(url, img);
+    return img;
+  }
+
+  return { getOrLoad };
+}
+
+/**
+ * プレビュー canvas を描画するクロージャを生成する。
+ * @param {HTMLCanvasElement} canvas
+ * @returns {{ draw(result: {width,height,tilesBase:number[]}): void }}
+ */
+function createPreviewDrawer(canvas) {
+  const imgCache = createPreviewImageCache();
+  const ctx = canvas.getContext("2d");
+  let _lastResult = null;
+
+  /** raf ごとに1回だけ draw() を実行する */
+  let rafPending = false;
+  function requestDraw() {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(() => { rafPending = false; doDraw(); });
+    }
+  }
+
+  function doDraw() {
+    if (!_lastResult) return;
+    const { width, height, tilesBase } = _lastResult;
+    const ts = PREVIEW_TILE_SIZE; // 1タイルのpx
+
+    canvas.width  = width  * ts;
+    canvas.height = height * ts;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = false;
+
+    for (let row = 0; row < height; row++) {
+      for (let col = 0; col < width; col++) {
+        const grpId = tilesBase[row * width + col] || 0;
+        if (!grpId) continue; // 0=透明、スキップ
+        const coord = previewGrpIdToCoord(grpId);
+        if (!coord) continue;
+        const img = imgCache.getOrLoad(coord.sheet, requestDraw);
+        if (img && img.complete && img.naturalWidth) {
+          ctx.drawImage(
+            img,
+            coord.tileX * ts, coord.tileY * ts, ts, ts,
+            col * ts,         row * ts,         ts, ts
+          );
+        }
+      }
+    }
+  }
+
+  /**
+   * 生成結果をセットして描画を開始する。
+   * @param {{ width:number, height:number, tilesBase:number[] }} result
+   */
+  function draw(result) {
+    _lastResult = result;
+    requestDraw();
+  }
+
+  return { draw };
+}
+
+// ================================================================
 // 定数
 // ================================================================
 
@@ -218,9 +329,151 @@ function buildDetailPane({ feedbackEl }) {
   pane.appendChild(roleSec);
 
   // ================================================================
-  // S2 プレースホルダー
+  // プレビューセクション（S2 追加）
   // ================================================================
-  // ※ プレビュー（お試し生成 / canvas 描画）は S2 で追加予定
+  const previewSec = document.createElement("section");
+  previewSec.className = "detail-section";
+  const previewH3 = document.createElement("h3");
+  previewH3.textContent = "お試し生成プレビュー";
+  previewSec.appendChild(previewH3);
+
+  // --- シード入力行 ---
+  const seedRow = document.createElement("div");
+  seedRow.className = "form-grid compact";
+
+  const seedLbl = makeFormField("シード（空=ランダム）");
+  const seedInput = document.createElement("input");
+  seedInput.type = "number";
+  seedInput.min = "0";
+  seedInput.placeholder = "空欄でランダム";
+  seedInput.className = "form-input";
+  seedLbl.appendChild(seedInput);
+  seedRow.appendChild(seedLbl);
+  previewSec.appendChild(seedRow);
+
+  // --- ボタン行 ---
+  const previewBtnBar = document.createElement("div");
+  previewBtnBar.className = "me-action-bar";
+
+  const tryGenBtn = document.createElement("button");
+  tryGenBtn.type = "button";
+  tryGenBtn.className = "button";
+  tryGenBtn.textContent = "お試し生成";
+
+  const regenBtn = document.createElement("button");
+  regenBtn.type = "button";
+  regenBtn.className = "button";
+  regenBtn.textContent = "再生成（別シード）";
+
+  previewBtnBar.append(tryGenBtn, regenBtn);
+  previewSec.appendChild(previewBtnBar);
+
+  // --- プレビューフィードバック行 ---
+  const previewFeedback = document.createElement("p");
+  previewFeedback.className = "it-feedback result-message";
+  previewFeedback.style.display = "none";
+  previewSec.appendChild(previewFeedback);
+
+  // --- プレビュー canvas ---
+  const previewCanvas = document.createElement("canvas");
+  previewCanvas.style.display = "none";
+  previewCanvas.style.maxWidth = "100%";
+  previewCanvas.style.border = "1px solid var(--border-color, #ccc)";
+  previewCanvas.style.marginTop = "8px";
+  previewSec.appendChild(previewCanvas);
+
+  pane.appendChild(previewSec);
+
+  // --- プレビュー描画インスタンス ---
+  const previewDrawer = createPreviewDrawer(previewCanvas);
+
+  /**
+   * プレビュー API を呼び出してcanvasに描画する。
+   * @param {number|null} seed  null = 未指定（ランダム）
+   */
+  async function runPreview(seed) {
+    // フォームの現在値を収集
+    const paramsObj = {
+      width:          widthSpin.getValue(),
+      height:         heightSpin.getValue(),
+      floorAreaMin:   floorAreaMinSpin.getValue(),
+      blockMin:       blockMinSpin.getValue(),
+      blockMax:       blockMaxSpin.getValue(),
+      cutoffPercent:  cutoffSpin.getValue(),
+    };
+    const roleMapObj = {};
+    ROLE_LABELS.forEach(({ key }) => {
+      roleMapObj[key] = roleFields[key].getValue();
+    });
+
+    // リクエストボディ組み立て（既存パターン編集中なら patternId を付与）
+    const body = {};
+    if (_current?.patternId) {
+      body.patternId = _current.patternId;
+    } else {
+      body.params  = paramsObj;
+      body.roleMap = roleMapObj;
+    }
+    if (seed != null) body.seed = seed;
+
+    // フィードバック: 生成中
+    previewFeedback.textContent = "生成中…";
+    previewFeedback.className = "it-feedback result-message";
+    previewFeedback.style.display = "";
+    tryGenBtn.disabled = true;
+    regenBtn.disabled  = true;
+
+    try {
+      const { response, data } = await fetchJson("/api/map-gen-patterns/preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const errMsg = data?.error ?? data?.message ?? "HTTP " + response.status;
+        previewFeedback.textContent = "生成失敗: " + errMsg;
+        previewFeedback.className = "it-feedback result-message error";
+        previewCanvas.style.display = "none";
+        return;
+      }
+
+      // 成功: canvas 描画
+      const { width, height, seed: usedSeed, tilesBase } = data;
+      const floorCount = tilesBase.filter(g => g !== 0).length;
+      previewFeedback.textContent =
+        `生成成功 (seed=${usedSeed}, 床=${floorCount}タイル, ${width}×${height})`;
+      previewFeedback.className = "it-feedback result-message success";
+
+      // シード入力欄に使用シードを反映（次回「お試し生成」で同じ結果を再現できるように）
+      seedInput.value = String(usedSeed);
+
+      previewCanvas.style.display = "";
+      previewDrawer.draw({ width, height, tilesBase });
+
+    } catch (e) {
+      previewFeedback.textContent = "通信エラー: " + e.message;
+      previewFeedback.className = "it-feedback result-message error";
+      previewCanvas.style.display = "none";
+    } finally {
+      tryGenBtn.disabled = false;
+      regenBtn.disabled  = false;
+    }
+  }
+
+  // --- ボタンイベント ---
+
+  // お試し生成: シード入力欄の値を使用（空ならランダム）
+  tryGenBtn.addEventListener("click", () => {
+    const rawSeed = seedInput.value.trim();
+    const seed = rawSeed !== "" ? Number(rawSeed) : null;
+    runPreview(seed);
+  });
+
+  // 再生成（別シード）: seed を未指定で投げる（毎回ランダム）
+  regenBtn.addEventListener("click", () => {
+    runPreview(null);
+  });
 
   // ================================================================
   // 公開 API
