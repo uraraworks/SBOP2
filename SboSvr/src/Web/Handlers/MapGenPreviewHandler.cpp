@@ -10,6 +10,10 @@
 #include "MgrData.h"
 #include "SaveLoad/SaveLoadInfoMapGenPattern.h"
 #include "MapGen/MapGenCaveL3.h"
+#include "MapGen/MapGenTypes.h"
+#include "MapGen/MapGenCathedralL1.h"
+#include "MapGen/MapGenCatacombsL2.h"
+#include "MapGen/MapGenHellL4.h"
 
 // ---------------------------------------------------------------------------
 // CMapGenPreviewHandler — POST /api/map-gen-patterns/preview
@@ -40,9 +44,10 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
     const std::string &body = request.body;
 
     // patternId が指定されているか確認し、あれば DB から既定値を読む
-    MapGenCaveL3::Params genParams; // デフォルト値で初期化済み
-    int floorGrpId = 1;            // roleMap.floor のデフォルト
-    int wallGrpId  = 0;            // roleMap.wall のデフォルト
+    MapGen::Params genParams; // デフォルト値で初期化済み
+    int floorGrpId = 1;       // roleMap.floor のデフォルト
+    int wallGrpId  = 0;       // roleMap.wall のデフォルト
+    int algoType   = 0;       // 0=L3洞窟 1=L1聖堂 2=L2地下墓地 3=L4地獄
 
     int patternId = 0;
     bool hasPatternId = JsonUtils::TryGetInt(body, "patternId", patternId);
@@ -88,6 +93,9 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
         if (JsonUtils::TryGetInt(pj, "blockMax",     v)) genParams.blockMax     = v;
         if (JsonUtils::TryGetInt(pj, "cutoffPercent",v)) genParams.cutoffPercent= v;
         if (JsonUtils::TryGetInt(pj, "maxRetries",   v)) genParams.maxRetries   = v;
+
+        // DB レコードの AlgoType を読む
+        algoType = pRec->nAlgoType;
 
         // roleMapJson から floor/wall を読む
         const std::string &rm = pRec->strRoleMapJson;
@@ -186,6 +194,21 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
             genParams.seed = static_cast<uint32_t>(seedVal);
     }
 
+    // algoType の上書き（リクエスト body から）
+    {
+        int atVal = 0;
+        if (JsonUtils::TryGetInt(body, "algoType", atVal))
+            algoType = atVal;
+    }
+
+    // algoType 範囲チェック
+    if (algoType < 0 || algoType > 3)
+    {
+        response.statusLine = "HTTP/1.1 400 Bad Request";
+        response.SetJsonBody("{\"error\":\"unsupported_algoType\"}");
+        return;
+    }
+
     // パラメータ簡易バリデーション
     if (genParams.width < 10 || genParams.height < 10
         || genParams.blockMin < 2 || genParams.blockMax < genParams.blockMin
@@ -204,10 +227,43 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
         return;
     }
 
-    // マップ生成実行
+    // マップ生成実行（algoType でディスパッチ）
     std::vector<int> grid;
-    int outW = 0, outH = 0, outSeed = 0;
-    bool ok = MapGenCaveL3::GenerateCaveL3(genParams, grid, outW, outH, outSeed);
+    int outW = 0, outH = 0;
+    uint32_t outSeed = 0;
+    bool ok = false;
+
+    if (algoType == 0)
+    {
+        // L3 洞窟（既存エンジン）: MapGenCaveL3::Params に変換して呼ぶ
+        MapGenCaveL3::Params l3p;
+        l3p.width         = genParams.width;
+        l3p.height        = genParams.height;
+        l3p.floorAreaMin  = genParams.floorAreaMin;
+        l3p.blockMin      = genParams.blockMin;
+        l3p.blockMax      = genParams.blockMax;
+        l3p.cutoffPercent = genParams.cutoffPercent;
+        l3p.maxRetries    = genParams.maxRetries;
+        l3p.seed          = genParams.seed;
+        int l3seed = 0;
+        ok = MapGenCaveL3::GenerateCaveL3(l3p, grid, outW, outH, l3seed);
+        outSeed = static_cast<uint32_t>(l3seed);
+    }
+    else if (algoType == 1)
+    {
+        // L1 聖堂
+        ok = MapGenCathedralL1::GenerateCathedralL1(genParams, grid, outW, outH, outSeed);
+    }
+    else if (algoType == 2)
+    {
+        // L2 地下墓地
+        ok = MapGenCatacombsL2::GenerateCatacombsL2(genParams, grid, outW, outH, outSeed);
+    }
+    else if (algoType == 3)
+    {
+        // L4 地獄
+        ok = MapGenHellL4::GenerateHellL4(genParams, grid, outW, outH, outSeed);
+    }
 
     if (!ok)
     {

@@ -138,8 +138,18 @@ function createPreviewDrawer(canvas) {
 
 /** アルゴリズム種別の選択肢 */
 const ALGO_TYPE_LABELS = {
-  0: "洞窟(L3)",
-  // 将来ここに追加する
+  0: "洞窟 (L3)",
+  1: "聖堂 (L1)",
+  2: "地下墓地 (L2)",
+  3: "地獄 (L4)",
+};
+
+/** アルゴリズム種別ごとの補足説明文 */
+const ALGO_TYPE_DESC = {
+  0: "中央から再帰ブロック分割、有機的な洞窟形状を生成",
+  1: "格子状部屋配置、神聖な聖堂・教会風レイアウト",
+  2: "迷路状通路と小部屋の組み合わせ、地下墓地風構造",
+  3: "溶岩地形を模した大空洞・多層分岐レイアウト",
 };
 
 /** paramsJson の既定値（algoType=0 用） */
@@ -262,35 +272,71 @@ function buildDetailPane({ feedbackEl }) {
   pane.appendChild(basicSec);
 
   // ================================================================
-  // 生成パラメータセクション（algoType=0 用）
+  // 生成パラメータセクション
   // ================================================================
   const paramSec = document.createElement("section");
   paramSec.className = "detail-section";
   const paramH3 = document.createElement("h3");
-  paramH3.textContent = "生成パラメータ（algoType=0: 洞窟L3）";
+  paramH3.textContent = "生成パラメータ";
   paramSec.appendChild(paramH3);
+
+  // アルゴ別補足説明文（1行）
+  const algoDescEl = document.createElement("p");
+  algoDescEl.className = "muted";
+  algoDescEl.style.fontSize = "0.85em";
+  algoDescEl.style.margin = "0 0 8px";
+  paramSec.appendChild(algoDescEl);
 
   const paramGrid = document.createElement("div");
   paramGrid.className = "form-grid compact";
 
-  /** スピナー付きフォームフィールドを追加するヘルパ */
+  /** スピナー付きフォームフィールドを追加するヘルパ。label要素を返す */
   function addParamSpinner(labelText, min, max, defaultVal) {
     const lbl = makeFormField(labelText);
     const spin = createNumberSpinner({ value: defaultVal, min, max, step: 1 });
     lbl.appendChild(spin.el);
     paramGrid.appendChild(lbl);
-    return spin;
+    return { spin, lbl };
   }
 
-  const widthSpin        = addParamSpinner("マップ幅 (width)",              1, 9999, DEFAULT_PARAMS.width);
-  const heightSpin       = addParamSpinner("マップ高さ (height)",            1, 9999, DEFAULT_PARAMS.height);
-  const floorAreaMinSpin = addParamSpinner("最小床面積 (floorAreaMin)",       0, 9999, DEFAULT_PARAMS.floorAreaMin);
-  const blockMinSpin     = addParamSpinner("ブロック最小サイズ (blockMin)",   1, 9999, DEFAULT_PARAMS.blockMin);
-  const blockMaxSpin     = addParamSpinner("ブロック最大サイズ (blockMax)",   1, 9999, DEFAULT_PARAMS.blockMax);
-  const cutoffSpin       = addParamSpinner("カットオフ割合% (cutoffPercent)", 0,  100, DEFAULT_PARAMS.cutoffPercent);
+  const { spin: widthSpin }        = addParamSpinner("マップ幅 (width)",              1, 9999, DEFAULT_PARAMS.width);
+  const { spin: heightSpin }       = addParamSpinner("マップ高さ (height)",            1, 9999, DEFAULT_PARAMS.height);
+  const { spin: floorAreaMinSpin } = addParamSpinner("最小床面積 (floorAreaMin)",       0, 9999, DEFAULT_PARAMS.floorAreaMin);
+  // blockMin/blockMax はアルゴ別にラベルが変わるため label 要素も保持する
+  const { spin: blockMinSpin, lbl: blockMinLbl } = addParamSpinner("ブロック最小サイズ (blockMin)", 1, 9999, DEFAULT_PARAMS.blockMin);
+  const { spin: blockMaxSpin, lbl: blockMaxLbl } = addParamSpinner("ブロック最大サイズ (blockMax)", 1, 9999, DEFAULT_PARAMS.blockMax);
+  // cutoffPercent は L3(0) 専用。非L3では display:none にする
+  const { spin: cutoffSpin, lbl: cutoffLbl }     = addParamSpinner("カットオフ割合% (cutoffPercent)", 0, 100, DEFAULT_PARAMS.cutoffPercent);
 
   paramSec.appendChild(paramGrid);
   pane.appendChild(paramSec);
+
+  /**
+   * algoType に合わせてパラメータUIを更新する。
+   * 値は保持したまま label/visibility だけ切り替える。
+   * @param {number} type
+   */
+  function applyAlgoType(type) {
+    // 補足説明文
+    algoDescEl.textContent = ALGO_TYPE_DESC[type] ?? "";
+
+    if (type === 0) {
+      // L3(洞窟): blockMin/blockMax はブロックサイズ、cutoffPercent を表示
+      blockMinLbl.querySelector("span").textContent = "ブロック最小サイズ (blockMin)";
+      blockMaxLbl.querySelector("span").textContent = "ブロック最大サイズ (blockMax)";
+      cutoffLbl.style.display = "";
+    } else {
+      // L1/L2/L4(聖堂・地下墓地・地獄): blockMin/blockMax を「部屋サイズ範囲」として流用
+      blockMinLbl.querySelector("span").textContent = "部屋サイズ下限 (blockMin)";
+      blockMaxLbl.querySelector("span").textContent = "部屋サイズ上限 (blockMax)";
+      cutoffLbl.style.display = "none";
+    }
+  }
+
+  // アルゴ種別変更イベント
+  algoSelect.addEventListener("change", () => {
+    applyAlgoType(Number(algoSelect.value));
+  });
 
   // ================================================================
   // ロール→マップパーツ割り当てセクション
@@ -407,7 +453,10 @@ function buildDetailPane({ feedbackEl }) {
     });
 
     // リクエストボディ組み立て（既存パターン編集中なら patternId を付与）
-    const body = {};
+    // algoType は DB取得経路でも分岐するため常に body に乗せる
+    const body = {
+      algoType: Number(algoSelect.value),
+    };
     if (_current?.patternId) {
       body.patternId = _current.patternId;
     } else {
@@ -486,7 +535,9 @@ function buildDetailPane({ feedbackEl }) {
     _current = it || null;
 
     nameInput.value = it ? (it.patternName || "") : "";
-    algoSelect.value = String(it ? (it.algoType ?? 0) : 0);
+    const algoType = it ? (it.algoType ?? 0) : 0;
+    algoSelect.value = String(algoType);
+    applyAlgoType(algoType);
 
     // paramsJson: JSON 文字列 → オブジェクト（既定値フォールバック付き）
     const params = safeParseJson(it ? it.paramsJson : null, DEFAULT_PARAMS);
