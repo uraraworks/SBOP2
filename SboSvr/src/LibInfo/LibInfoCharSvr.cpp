@@ -2439,6 +2439,80 @@ void CLibInfoCharSvr::ProcChgMap(CInfoCharSvr *pInfoChar)
 	m_pMainFrame->SendToClient(pInfoChar->m_dwSessionID, &PacketMAP_PARA1);
 }
 
+void CLibInfoCharSvr::ApplyAdminEditWarp(CInfoCharSvr *pInfoChar, DWORD dwNewMapID, int nNewX, int nNewY, int nNewDir)
+{
+	if (pInfoChar == NULL) return;
+
+	BOOL bMapChanged = (dwNewMapID != pInfoChar->m_dwMapID);
+	BOOL bPosChanged = (nNewX != pInfoChar->m_nMapX) || (nNewY != pInfoChar->m_nMapY);
+	BOOL bDirChanged = (nNewDir >= 0) && (nNewDir != pInfoChar->m_nDirection);
+
+	// 未ログインなら値だけ書き換えて終了 (m_dwSessionID==0 は NPC または未接続)
+	if (pInfoChar->m_dwSessionID == 0) {
+		pInfoChar->m_dwMapID = dwNewMapID;
+		pInfoChar->m_nMapX = nNewX;
+		pInfoChar->m_nMapY = nNewY;
+		if (nNewDir >= 0) {
+			pInfoChar->m_nDirection = nNewDir;
+		}
+		return;
+	}
+
+	// 変更が無ければ何もしない
+	if (!bMapChanged && !bPosChanged && !bDirChanged) {
+		return;
+	}
+
+	// 旧位置のAOIにいる他キャラから自分を消す (mapID/posはまだ旧値)
+	CPacketCHAR_STATE PacketCHAR_STATE;
+	PacketCHAR_STATE.Make(pInfoChar->m_dwCharID, CHARMOVESTATE_DELETE);
+	m_pMainFrame->SendToScreenChar(pInfoChar, &PacketCHAR_STATE);
+
+	if (bMapChanged) {
+		// ── 別マップへの移動: MapEventProcMAPMOVE と同じパターン ──
+		pInfoChar->m_dwMapID = dwNewMapID;
+		SetPos(pInfoChar, dwNewMapID, nNewX, nNewY, TRUE);
+		if (nNewDir >= 0) {
+			pInfoChar->SetDirection(nNewDir);
+		}
+		pInfoChar->AddProcInfo(CHARPROCID_MAPMOVEOUT, 2000, 0);
+		pInfoChar->AddProcInfo(CHARPROCID_INVINCIBLE, 5000, 0);
+		pInfoChar->m_bStatusInvincible = TRUE;
+		pInfoChar->m_bStateFadeInOut = TRUE;
+
+		CPacketMAP_PARA1 PacketMAP_PARA1;
+		PacketMAP_PARA1.Make(SBOCOMMANDID_SUB_MAP_FADEINOUT, pInfoChar->m_dwMapID, 1);
+		m_pMainFrame->SendToClient(pInfoChar->m_dwSessionID, &PacketMAP_PARA1);
+		// 2秒後の CHARPROCID_MAPMOVEOUT タイマーが ProcMAPMOVEOUT を呼び、
+		// m_bProcMoveMapOut=TRUE 経由で MoveMapOut() が走って新マップ情報+FADEIN を送る
+	} else {
+		// ── 同マップ内座標/向き変更: フェードなしで反映 ──
+		SetPos(pInfoChar, pInfoChar->m_dwMapID, nNewX, nNewY, TRUE);
+		if (nNewDir >= 0) {
+			pInfoChar->SetDirection(nNewDir);
+		}
+
+		// 周囲AOIに最新キャラ情報をブロードキャスト
+		CPacketCHAR_RES_CHARINFO PacketCHAR_RES_CHARINFO;
+		PacketCHAR_RES_CHARINFO.Make(pInfoChar);
+		m_pMainFrame->SendToScreenChar(pInfoChar, &PacketCHAR_RES_CHARINFO);
+
+		// 自キャラへ最新情報（クライアント側はこれで自身の m_dwMapID/m_nMapX/m_nMapY を上書き）
+		m_pSock->SendTo(pInfoChar->m_dwSessionID, &PacketCHAR_RES_CHARINFO);
+
+		// 新位置の画面内に居る周囲キャラ一覧を自キャラに送る
+		PBYTE pTmp;
+		CLibInfoCharSvr LibInfoCharTmp;
+		LibInfoCharTmp.Create(m_pMgrData);
+		pTmp = GetDataScreen(pInfoChar);
+		LibInfoCharTmp.SetSendData(pTmp);
+		CPacketCHAR_CHARINFO PacketCHAR_CHARINFO;
+		PacketCHAR_CHARINFO.Make(&LibInfoCharTmp);
+		m_pSock->SendTo(pInfoChar->m_dwSessionID, &PacketCHAR_CHARINFO);
+		SAFE_DELETE_ARRAY(pTmp);
+	}
+}
+
 void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 {
 	CPacketCHAR_MOVE_DIR_CHANGE Packet;

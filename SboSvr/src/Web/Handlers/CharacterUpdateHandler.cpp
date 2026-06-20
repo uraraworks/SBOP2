@@ -13,6 +13,7 @@
 #include "MgrData.h"
 #include "LibInfo/LibInfoCharSvr.h"
 #include "Info/InfoCharBase.h"
+#include "Info/InfoCharSvr.h"
 #include "myLib/myString.h"
 #include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoAccount.h"
@@ -425,17 +426,25 @@ void CCharacterUpdateHandler::HandleBasic(const HttpRequest &request, HttpRespon
         if (JsonUtils::TryGetInt(request.body, "motionTypeId", nVal)) {
                 pChar->m_dwMotionTypeID = static_cast<DWORD>(nVal);
         }
-        if (JsonUtils::TryGetInt(request.body, "mapId", nVal)) {
-                pChar->m_dwMapID = static_cast<DWORD>(nVal);
-        }
-        if (JsonUtils::TryGetInt(request.body, "x", nVal)) {
-                pChar->m_nMapX = nVal;
-        }
-        if (JsonUtils::TryGetInt(request.body, "y", nVal)) {
-                pChar->m_nMapY = nVal;
-        }
-        if (JsonUtils::TryGetInt(request.body, "direction", nVal)) {
-                pChar->m_nDirection = nVal;
+        {
+                DWORD dwNewMapID = pChar->m_dwMapID;
+                int nNewX = pChar->m_nMapX;
+                int nNewY = pChar->m_nMapY;
+                int nNewDir = -1;
+                if (JsonUtils::TryGetInt(request.body, "mapId", nVal)) {
+                        dwNewMapID = static_cast<DWORD>(nVal);
+                }
+                if (JsonUtils::TryGetInt(request.body, "x", nVal)) {
+                        nNewX = nVal;
+                }
+                if (JsonUtils::TryGetInt(request.body, "y", nVal)) {
+                        nNewY = nVal;
+                }
+                if (JsonUtils::TryGetInt(request.body, "direction", nVal)) {
+                        nNewDir = nVal;
+                }
+                CInfoCharSvr *pInfoCharSvr = static_cast<CInfoCharSvr *>(pChar);
+                pCharLib->ApplyAdminEditWarp(pInfoCharSvr, dwNewMapID, nNewX, nNewY, nNewDir);
         }
         if (JsonUtils::TryGetInt(request.body, "familyId", nVal)) {
                 pChar->m_wFamilyID = static_cast<WORD>(nVal);
