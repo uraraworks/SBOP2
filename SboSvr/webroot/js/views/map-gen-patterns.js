@@ -363,7 +363,7 @@ function buildDetailPane({ feedbackEl }) {
   const roleFields = {};
   ROLE_LABELS.forEach(({ key, label }) => {
     const sf = createSpriteField({
-      categoryKey: "map-parts",
+      categoryKey: "mapParts",
       label: label,
       value: 0,
     });
