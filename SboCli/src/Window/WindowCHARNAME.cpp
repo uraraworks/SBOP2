@@ -8,15 +8,66 @@
 #include "Img32.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
+#include "MgrKeyInput.h"
 #include "MgrWindow.h"
+#include "Platform/SdlFont.h"
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include "WindowCHARNAME.h"
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/emscripten.h>
+#endif
+
+namespace {
+
+#if defined(__EMSCRIPTEN__)
+static CWindowCHARNAME *g_pBrowserCharNameWindow = NULL;
+#endif
+
+static int GetFontTextWidthCN(HFONT hFont, LPCTSTR pszText)
+{
+	int nWidth, nHeight, nLen;
+
+	if (pszText == NULL) {
+		return 0;
+	}
+	nLen = (int)_tcslen(pszText);
+	if (nLen <= 0) {
+		return 0;
+	}
+	nWidth = 0;
+	nHeight = 0;
+	if (SdlFontGetTextExtent((void*)hFont, pszText, nLen, &nWidth, &nHeight)) {
+		return nWidth;
+	}
+	return nLen * 8;
+}
+
+}
+
+#if defined(__EMSCRIPTEN__)
+extern "C" {
+EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserCharNameSetComposition(const char *pszText)
+{
+	if (g_pBrowserCharNameWindow != NULL) {
+		g_pBrowserCharNameWindow->SetCompositionTextFromBrowser(pszText);
+	}
+}
+
+EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserCharNameCommitText(const char *pszText)
+{
+	if (g_pBrowserCharNameWindow != NULL) {
+		g_pBrowserCharNameWindow->CommitTextFromBrowser(pszText);
+	}
+}
+}
+#endif
 
 CWindowCHARNAME::CWindowCHARNAME()
 {
 	m_bInput	= TRUE;
 	m_bTextInputActive = FALSE;
+	m_dwSuppressSubmitUntil = 0;
 	m_nID	= WINDOWTYPE_CHARNAME;
 	m_ptViewPos.x	= 136 + 32;
 	m_ptViewPos.y	= 180;
@@ -27,6 +78,11 @@ CWindowCHARNAME::CWindowCHARNAME()
 
 CWindowCHARNAME::~CWindowCHARNAME()
 {
+#if defined(__EMSCRIPTEN__)
+	if (g_pBrowserCharNameWindow == this) {
+		g_pBrowserCharNameWindow = NULL;
+	}
+#endif
 	UpdateSDLTextInput();
 }
 
@@ -34,6 +90,9 @@ CWindowCHARNAME::~CWindowCHARNAME()
 void CWindowCHARNAME::Create(CMgrData *pMgrData)
 {
 	CWindowBase::Create(pMgrData);
+#if defined(__EMSCRIPTEN__)
+	g_pBrowserCharNameWindow = this;
+#endif
 
 	m_bActive = TRUE;
 	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
@@ -50,14 +109,29 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 		DrawFrame();
 		DrawInputFrame1(16, 48, 8 * MAXLEN_CHARNAME, 14, 0);
 
+		// 入力欄内側を白で塗りつぶす（ブラウザ版で黒下地が透けて黒文字が見えなくなる対策）
+		m_pDib->FillRect(16, 48, 8 * MAXLEN_CHARNAME, 14, RGB(255, 255, 255));
+
 		hDC	= m_pDib->Lock();
 
 		TextOut4(hDC, m_hFont14, 24, 16, _T("キャラクター名"), RGB(255, 127, 53));
 		TextOut2(hDC, m_hFont14, 18, 46, m_strName, RGB(0, 0, 0));
+		if (!m_strComposition.IsEmpty()) {
+			int nCompositionX;
+
+			nCompositionX = 18 + GetFontTextWidthCN(m_hFont14, m_strName);
+			if (nCompositionX > 16 + 8 * MAXLEN_CHARNAME - 6) {
+				nCompositionX = 16 + 8 * MAXLEN_CHARNAME - 6;
+			}
+			TextOut2(hDC, m_hFont14, nCompositionX, 46, m_strComposition, RGB(40, 80, 180));
+		}
 		if (m_bActive && (m_nCursorAnime == 0)) {
 			int nCursorX;
+			CString strCursorBase;
 
-			nCursorX = 18 + m_strName.GetLength() * 8;
+			strCursorBase = (LPCTSTR)m_strName;
+			strCursorBase += (LPCTSTR)m_strComposition;
+			nCursorX = 18 + GetFontTextWidthCN(m_hFont14, strCursorBase);
 			if (nCursorX > 16 + 8 * MAXLEN_CHARNAME - 6) {
 				nCursorX = 16 + 8 * MAXLEN_CHARNAME - 6;
 			}
@@ -77,6 +151,13 @@ Exit:
 void CWindowCHARNAME::SetActive(BOOL bActive)
 {
 	CWindowBase::SetActive(bActive);
+#if defined(__EMSCRIPTEN__)
+	if (bActive && (!m_bDelete)) {
+		g_pBrowserCharNameWindow = this;
+	} else if (g_pBrowserCharNameWindow == this) {
+		g_pBrowserCharNameWindow = NULL;
+	}
+#endif
 	UpdateSDLTextInput();
 	Redraw();
 }
@@ -88,14 +169,37 @@ BOOL CWindowCHARNAME::HandleSDLKeyDown(UINT vk)
 		return FALSE;
 	}
 
+	// IME 変換中はキーを IME 側に取られているので、確定/取消以外は無視する
+	if (!m_strComposition.IsEmpty()) {
+		switch (vk) {
+		case VK_RETURN:
+		case VK_BACK:
+		case VK_UP:
+		case VK_DOWN:
+			return TRUE;
+
+		case VK_ESCAPE:
+			m_strComposition.Empty();
+			Redraw();
+			return TRUE;
+		}
+	}
+
 	switch (vk) {
 	case VK_RETURN:
+		// browser IME 確定直後の Enter で名前が即送信されないよう抑制期間を見る
+		if ((m_dwSuppressSubmitUntil != 0) && (SDL_GetTicks() < m_dwSuppressSubmitUntil)) {
+			return TRUE;
+		}
+		m_dwSuppressSubmitUntil = 0;
 		SubmitCharName();
 		return TRUE;
 
 	case VK_ESCAPE:
 		m_bDelete = TRUE;
+		m_strComposition.Empty();
 		UpdateSDLTextInput();
+		m_pMgrData->GetMgrKeyInput()->Reset();
 		return TRUE;
 
 	case VK_BACK:
@@ -111,6 +215,36 @@ void CWindowCHARNAME::HandleSDLTextInput(LPCSTR pszText)
 	if (!m_bActive) {
 		return;
 	}
+	m_strComposition.Empty();
+	AppendText(pszText);
+}
+
+
+void CWindowCHARNAME::HandleSDLTextEditing(LPCSTR pszText)
+{
+	if (!m_bActive) {
+		return;
+	}
+	SetCompositionText(pszText);
+}
+
+
+void CWindowCHARNAME::SetCompositionTextFromBrowser(LPCSTR pszText)
+{
+	if (!m_bActive) {
+		return;
+	}
+	SetCompositionText(pszText);
+}
+
+
+void CWindowCHARNAME::CommitTextFromBrowser(LPCSTR pszText)
+{
+	if (!m_bActive) {
+		return;
+	}
+	m_strComposition.Empty();
+	m_dwSuppressSubmitUntil = SDL_GetTicks() + 250;
 	AppendText(pszText);
 }
 
@@ -196,6 +330,21 @@ void CWindowCHARNAME::AppendText(LPCSTR pszText)
 
 	TrimViewString(strAppend, (LPCTSTR)strFiltered);
 	m_strName += (LPCTSTR)strAppend;
+	Redraw();
+}
+
+
+void CWindowCHARNAME::SetCompositionText(LPCSTR pszText)
+{
+	CmyString strComposition;
+	CString strWide;
+
+	m_strComposition.Empty();
+	if ((pszText != NULL) && (pszText[0] != '\0')) {
+		strWide = Utf8ToTString(pszText);
+		TrimViewString(strComposition, (LPCTSTR)strWide);
+		m_strComposition = strComposition;
+	}
 	Redraw();
 }
 

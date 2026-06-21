@@ -970,12 +970,16 @@
     }
 
     function setChatComposition(text) {
+      // チャット欄とキャラ名入力欄のどちらか「アクティブ」な側のみが
+      // C++ 側で受理する（非アクティブ側は m_bActive チェックで no-op になる）
       callChatBridge('SBOP2_BrowserChatSetComposition', text);
+      callChatBridge('SBOP2_BrowserCharNameSetComposition', text);
     }
 
     function commitChatText(text) {
       if (text) {
         callChatBridge('SBOP2_BrowserChatCommitText', text);
+        callChatBridge('SBOP2_BrowserCharNameCommitText', text);
       }
     }
 

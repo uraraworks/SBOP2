@@ -23,7 +23,10 @@ public:
 	void	SetActive(BOOL bActive);	// アクティブか設定
 	virtual BOOL	HandleSDLKeyDown(UINT vk);	// SDLキー押下を処理
 	virtual void	HandleSDLTextInput(LPCSTR pszText);	// SDLテキスト入力を処理
+	virtual void	HandleSDLTextEditing(LPCSTR pszText);	// SDLテキスト編集中を処理
 	virtual BOOL	HandleSDLMouseLeftButtonDown(int x, int y);	// SDL左クリックを処理
+	void	SetCompositionTextFromBrowser(LPCSTR pszText);	// browser IME変換中テキストを設定
+	void	CommitTextFromBrowser(LPCSTR pszText);	// browser IME確定テキストを入力
 
 
 private:
@@ -31,13 +34,16 @@ private:
 	void	UpdateSDLTextInput(void);	// SDLテキスト入力状態を更新
 	void	DeleteBackward(void);	// 1文字削除
 	void	AppendText(LPCSTR pszText);	// テキスト追記
+	void	SetCompositionText(LPCSTR pszText);	// IME変換中テキストを設定
 	void	SubmitCharName(void);	// キャラ名確定
 
 
 public:
 	CmyString	m_strName;	// 入力されたキャラ名
+	CmyString	m_strComposition;	// IME変換中の未確定文字列
 
 
 private:
+	DWORD	m_dwSuppressSubmitUntil;	// browser IME確定直後のEnter送信抑制期限
 	BOOL	m_bTextInputActive;	// SDLテキスト入力状態
 } CWindowCHARNAME, *PCWindowCHARNAME;
