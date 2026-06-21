@@ -375,13 +375,42 @@ BOOL CLibInfoCharBase::NameCheck(LPCSTR pszName)
 
 	for (i = 0; i < nLen; i ++) {
 		byTmp = (BYTE)pszName[i];
-		if (IsDBCSLeadByte(byTmp)) {
+		// 制御文字 / DEL は不可
+		if ((byTmp < 0x20) || (byTmp == 0x7F)) {
+			goto Exit;
+		}
+		// ASCII 印字可文字
+		if (byTmp < 0x80) {
+			continue;
+		}
+		// SJIS の DBCS 先頭バイトなら次の 1 バイトをスキップ
+		// （ブラウザ版は IsDBCSLeadByte がスタブで常に FALSE のため、
+		//  SJIS 先頭バイト範囲を明示的にも判定する）
+		if (IsDBCSLeadByte(byTmp) ||
+			((byTmp >= 0x81) && (byTmp <= 0x9F)) ||
+			((byTmp >= 0xE0) && (byTmp <= 0xFC))) {
 			i ++;
 			continue;
-	}
-		if ((byTmp < 0x20) || ((byTmp >= 0x7F) && !((byTmp >= 0xA1) && (byTmp <= 0xDF)))) {
-			goto Exit;
-	}
+		}
+		// SJIS 半角カナ (単独バイト)
+		if ((byTmp >= 0xA1) && (byTmp <= 0xDF)) {
+			continue;
+		}
+		// UTF-8 マルチバイトシーケンス (2/3/4 バイト) を許容
+		if ((byTmp & 0xE0) == 0xC0) {
+			i += 1;
+			continue;
+		}
+		if ((byTmp & 0xF0) == 0xE0) {
+			i += 2;
+			continue;
+		}
+		if ((byTmp & 0xF8) == 0xF0) {
+			i += 3;
+			continue;
+		}
+		// それ以外の 0x80 以上は無効
+		goto Exit;
 	}
 
 	bRet = TRUE;
