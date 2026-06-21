@@ -115,7 +115,8 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 		hDC	= m_pDib->Lock();
 
 		TextOut4(hDC, m_hFont14, 24, 16, _T("キャラクター名"), RGB(255, 127, 53));
-		TextOut2(hDC, m_hFont14, 18, 46, m_strName, RGB(0, 0, 0));
+		// 文字色 RGB(0,0,0) は SetColorKey(0) で透過扱いになるため RGB(1,1,1) を使う
+		TextOut2(hDC, m_hFont14, 18, 46, m_strName, RGB(1, 1, 1));
 		if (!m_strComposition.IsEmpty()) {
 			int nCompositionX;
 
@@ -135,7 +136,7 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 			if (nCursorX > 16 + 8 * MAXLEN_CHARNAME - 6) {
 				nCursorX = 16 + 8 * MAXLEN_CHARNAME - 6;
 			}
-			TextOut2(hDC, m_hFont14, nCursorX, 46, _T("|"), RGB(0, 0, 0));
+			TextOut2(hDC, m_hFont14, nCursorX, 46, _T("|"), RGB(1, 1, 1));
 		}
 
 		m_pDib->Unlock();
