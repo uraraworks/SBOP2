@@ -426,22 +426,30 @@ inline int MultiByteToWideChar(UINT codePage, DWORD, LPCSTR pszSrc, int nSrcLen,
 }
 
 /// ワイド文字列をマルチバイト文字列に変換する
-inline int WideCharToMultiByte(UINT, DWORD, LPCWSTR pszSrc, int nSrcLen, LPSTR pszDst, int nDstLen, LPCSTR, BOOL *)
+/// codePage が CP932 (932) または CP_ACP (0) の場合は SJIS にエンコードする。
+/// それ以外（CP_UTF8=65001 など）は UTF-8 として変換する。
+/// SJIS 変換は SjisConvert.cpp の WstringToSjis (JS 逆引きマップ経由) を使用する。
+inline int WideCharToMultiByte(UINT codePage, DWORD, LPCWSTR pszSrc, int nSrcLen, LPSTR pszDst, int nDstLen, LPCSTR, BOOL *)
 {
 	if (pszSrc == NULL) {
 		return 0;
 	}
 
 	size_t srcLen = (nSrcLen < 0) ? wcslen(pszSrc) : static_cast<size_t>(nSrcLen);
-	std::string strUtf8 = WstringToUtf8(pszSrc, srcLen);
-	int nRequired = (int)strUtf8.size() + ((nSrcLen < 0) ? 1 : 0);
+	std::string strOut;
+	if (codePage == 932 || codePage == 0 /* CP_ACP */) {
+		strOut = WstringToSjis(pszSrc, (int)srcLen);
+	} else {
+		strOut = WstringToUtf8(pszSrc, srcLen);
+	}
+	int nRequired = (int)strOut.size() + ((nSrcLen < 0) ? 1 : 0);
 
 	if ((pszDst == NULL) || (nDstLen <= 0)) {
 		return nRequired;
 	}
 
-	int nCopy = min((int)strUtf8.size(), nDstLen - 1);
-	memcpy(pszDst, strUtf8.data(), (size_t)nCopy);
+	int nCopy = min((int)strOut.size(), nDstLen - 1);
+	memcpy(pszDst, strOut.data(), (size_t)nCopy);
 	if (nSrcLen < 0) {
 		pszDst[nCopy] = '\0';
 		return nCopy + 1;
