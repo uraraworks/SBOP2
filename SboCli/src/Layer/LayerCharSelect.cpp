@@ -12,6 +12,7 @@
 #include "MgrGrpData.h"
 #include "MgrDraw.h"
 #include "Img32.h"
+#include "Platform/SdlFont.h"
 #include "LayerCharSelect.h"
 
 
@@ -88,15 +89,24 @@ void CLayerCharSelect::Draw(PCImg32 pDst)
 			y -= 16;
 		}
 
-		// 名前の描画
+		// 名前の描画（実フォント幅で中央寄せ）
 		hDC = pDst->Lock();
-		TextOut2(
-				hDC,
-				m_hFont,
-				x + 16 - (pChar->m_strCharName.GetLength() * 6 / 2),
-				y + 56,
-				pChar->m_strCharName,
-				pChar->m_clName);
+		{
+			int nNameWidth = 0, nNameHeight = 0;
+			int nNameLen = (int)_tcslen((LPCTSTR)pChar->m_strCharName);
+			if ((nNameLen <= 0) ||
+				!SdlFontGetTextExtent((void*)m_hFont, (LPCTSTR)pChar->m_strCharName, nNameLen, &nNameWidth, &nNameHeight)) {
+				// フォント幅計測に失敗したときは旧フォールバック
+				nNameWidth = nNameLen * 6;
+			}
+			TextOut2(
+					hDC,
+					m_hFont,
+					x + 16 - nNameWidth / 2,
+					y + 56,
+					pChar->m_strCharName,
+					pChar->m_clName);
+		}
 		pDst->Unlock();
 	}
 	if (m_nSelect >= 0) {
