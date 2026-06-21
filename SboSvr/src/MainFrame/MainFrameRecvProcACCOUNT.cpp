@@ -20,6 +20,7 @@ void CMainFrame::RecvProcACCOUNT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_ACCOUNT_REQ_ACCOUNTINFO:	RecvProcACCOUNT_REQ_ACCOUNTINFO(pData, dwSessionID);	break;	// アカウント情報要求
 	case SBOCOMMANDID_SUB_ACCOUNT_REQ_MAKECHAR:	RecvProcACCOUNT_REQ_MAKECHAR(pData, dwSessionID);	break;	// キャラ作成要求
+	case SBOCOMMANDID_SUB_ACCOUNT_REQ_DELETECHAR:	RecvProcACCOUNT_REQ_DELETECHAR(pData, dwSessionID);	break;	// キャラ削除要求
 	}
 }
 
@@ -135,4 +136,39 @@ void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
 Exit:
 	PacketRES_MAKECHAR.Make(nResult, dwCharID);
 	m_pSock->SendTo(dwSessionID, &PacketRES_MAKECHAR);
+}
+
+void CMainFrame::RecvProcACCOUNT_REQ_DELETECHAR(PBYTE pData, DWORD dwSessionID)
+{
+	int i, nCount, nResult;
+	PCLibInfoAccount pLibInfoAccount;
+	PCInfoAccount pInfoAccount;
+	CPacketACCOUNT_REQ_DELETECHAR Packet;
+	CPacketACCOUNT_RES_DELETECHAR PacketRES_DELETECHAR;
+
+	nResult	= DELETECHARRES_NG;
+
+	Packet.Set(pData);
+
+	pLibInfoAccount	= m_pMgrData->GetLibInfoAccount();
+	pInfoAccount	= pLibInfoAccount->GetPtr(Packet.m_dwAccountID);
+	if (pInfoAccount == NULL) {
+		goto Exit;
+	}
+
+	// m_adwCharID から該当 CharID を検索して削除
+	nCount = (int)pInfoAccount->m_adwCharID.size();
+	for (i = 0; i < nCount; i++) {
+		if (pInfoAccount->m_adwCharID[i] == Packet.m_dwCharID) {
+			pInfoAccount->m_adwCharID.erase(pInfoAccount->m_adwCharID.begin() + i);
+			break;
+		}
+	}
+
+	m_pLibInfoChar->Delete(Packet.m_dwCharID);
+	nResult = DELETECHARRES_OK;
+
+Exit:
+	PacketRES_DELETECHAR.Make(nResult, Packet.m_dwCharID);
+	m_pSock->SendTo(dwSessionID, &PacketRES_DELETECHAR);
 }

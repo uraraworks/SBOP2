@@ -65,8 +65,6 @@ void CWindowLOGINMENU::Update(void)
 	if ((nCharCount >= 0) && (nCharCount < 3)) {
 		SetEnable(1, TRUE);
 	}
-//Todo:
-SetEnable(2, FALSE);
 	SetEnable(3, TRUE);
 
 	CWindowBase::Update();

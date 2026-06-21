@@ -26,6 +26,7 @@
 #include "WindowCOMMANDMENU.h"
 #include "WindowCHAR_STATUS4.h"
 #include "WindowPLACEINFORMATION.h"
+#include "WindowDELCONFIRM.h"
 #include "WindowSYSTEMMENU.h"
 #include "WindowSETCOLOR.h"
 #include "WindowSETBGMVOLUME.h"
@@ -541,6 +542,14 @@ void CMgrWindow::MakeWindowPLACEINFORMATION(void)
 	pWindowNew->Create(m_pMgrData);
 	m_paWindow->Add(pWindowNew);
 
+	m_bDraw = TRUE;
+}
+void CMgrWindow::MakeWindowDELCONFIRM(void)
+{
+	PCWindowDELCONFIRM pWindowNew = new CWindowDELCONFIRM;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 	m_bDraw = TRUE;
 }
 
@@ -1286,6 +1295,19 @@ void CMgrWindow::MakeWindowPLACEINFORMATION(void)
 	pWindowNew = new CWindowPLACEINFORMATION;
 	pWindowNew->Create(m_pMgrData);
 	m_paWindow->Add(pWindowNew);
+
+	m_bDraw = TRUE;
+}
+
+
+void CMgrWindow::MakeWindowDELCONFIRM(void)
+{
+	PCWindowDELCONFIRM pWindowNew;
+
+	pWindowNew = new CWindowDELCONFIRM;
+	pWindowNew->Create(m_pMgrData);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
 
 	m_bDraw = TRUE;
 }

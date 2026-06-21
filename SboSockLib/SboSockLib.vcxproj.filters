@@ -122,10 +122,16 @@
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.cpp">
       <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
     </ClCompile>
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_DELETECHAR.cpp">
+      <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
+    </ClCompile>
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.cpp">
       <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.cpp">
+      <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_DELETECHAR.cpp">
       <Filter>Source Files\Common\Packet\ACCOUNT</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.cpp">
@@ -577,10 +583,16 @@
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.h">
       <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_DELETECHAR.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
+    </ClInclude>
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.h">
       <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_DELETECHAR.h">
       <Filter>Header Files\Common No. 1\Packet No. 1\ACCOUNT No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.h">

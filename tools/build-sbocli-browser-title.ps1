@@ -166,6 +166,8 @@ $sources = @(
     "Common/Packet/ACCOUNT/PacketACCOUNT_RES_ACCOUNTINFO.cpp",
     "Common/Packet/ACCOUNT/PacketACCOUNT_REQ_MAKECHAR.cpp",
     "Common/Packet/ACCOUNT/PacketACCOUNT_RES_MAKECHAR.cpp",
+    "Common/Packet/ACCOUNT/PacketACCOUNT_REQ_DELETECHAR.cpp",
+    "Common/Packet/ACCOUNT/PacketACCOUNT_RES_DELETECHAR.cpp",
     # Packet (CHAR - ログインメニューで使用する分のみ)
     "Common/Packet/CHAR/PacketCHAR_REQ_CHARINFO.cpp",
     # Info
@@ -181,6 +183,7 @@ $sources = @(
     "SboCli/src/Window/WindowSTATUS.cpp",
     "SboCli/src/Window/WindowCHARNAME.cpp",
     "SboCli/src/Window/WindowSEX.cpp",
+    "SboCli/src/Window/WindowDELCONFIRM.cpp",
     "SboCli/src/Window/WindowSTYLESELECT.cpp",
     "SboCli/src/Window/WindowNAMEINPUT.cpp",
     "SboCli/src/Window/WindowFAMILYTYPE.cpp",

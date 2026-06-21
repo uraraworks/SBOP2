@@ -149,6 +149,7 @@ private:
 	void RecvProcACCOUNT(BYTE byCmdSub, PBYTE pData);
 	void RecvProcACCOUNT_RES_ACCOUNTINFO(PBYTE pData);
 	void RecvProcACCOUNT_RES_MAKECHAR(PBYTE pData);
+	void RecvProcACCOUNT_RES_DELETECHAR(PBYTE pData);	// キャラ削除応答
 
 	// 受信処理 (MainFrameRecvProcCHAR.cpp)
 	void RecvProcCHAR(BYTE byCmdSub, PBYTE pData);

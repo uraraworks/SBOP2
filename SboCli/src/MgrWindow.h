@@ -59,6 +59,7 @@ enum {
 	WINDOWTYPE_SWOON,						// 気絶メニュー
 	WINDOWTYPE_SKILLMENU,					// スキルメニュー
 	WINDOWTYPE_PLACEINFORMATION,			// 場所情報
+	WINDOWTYPE_DELCONFIRM,				// 削除確認ダイアログ
 };
 
 
@@ -122,6 +123,7 @@ public:
 	void MakeWindowSWOON(void);												// 気絶メニュー
 	void MakeWindowSKILLMENU(int nType = -1);								// スキルメニュー
 	void MakeWindowPLACEINFORMATION(void);									// 場所情報
+	void MakeWindowDELCONFIRM(void);										// 削除確認ダイアログ
 
 	void SetActive(void);							// アクティブなウィンドウの再計算（m_bKeyInput 更新）
 

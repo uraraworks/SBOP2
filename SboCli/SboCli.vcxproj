@@ -380,6 +380,7 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClCompile Include="src\Window\WindowOPTION_VOLUMESET.cpp" />
     <ClCompile Include="src\Window\WindowPLACEINFORMATION.cpp" />
     <ClCompile Include="src\Window\WindowSETBGMVOLUME.cpp" />
+    <ClCompile Include="src\Window\WindowDELCONFIRM.cpp" />
     <ClCompile Include="src\Window\WindowSETCOLOR.cpp" />
     <ClCompile Include="src\Window\WindowSETDRAWMODE.cpp" />
     <ClCompile Include="src\Window\WindowSETSOUNDVOLUME.cpp" />
@@ -564,6 +565,7 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClInclude Include="src\Window\WindowOPTION_VOLUMESET.h" />
     <ClInclude Include="src\Window\WindowPLACEINFORMATION.h" />
     <ClInclude Include="src\Window\WindowSETBGMVOLUME.h" />
+    <ClInclude Include="src\Window\WindowDELCONFIRM.h" />
     <ClInclude Include="src\Window\WindowSETCOLOR.h" />
     <ClInclude Include="src\Window\WindowSETDRAWMODE.h" />
     <ClInclude Include="src\Window\WindowSETSOUNDVOLUME.h" />

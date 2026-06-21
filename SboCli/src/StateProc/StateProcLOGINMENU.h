@@ -13,6 +13,7 @@ class CWindowLOGINMENU;
 class CWindowSTATUS;
 class CWindowSTYLESELECT;
 class CWindowNAMEINPUT;
+class CWindowDELCONFIRM;
 class CInfoCharCli;
 
 // クラス宣言
@@ -24,6 +25,7 @@ public:
 	virtual ~CStateProcLOGINMENU(); // デストラクタ
 
 	void Init(void);                                // 初期化
+	BOOL TimerProc(void);                           // 時間処理（KEEPALIVE 送信用）
 	void OnWindowMsg(int nType, DWORD dwPara);      // メッセージハンドラ(WM_WINDOWMSG)
 	void OnMainFrame(DWORD dwCommand, DWORD dwParam); // メッセージハンドラ(WM_MAINFRAME)
 
@@ -38,6 +40,7 @@ protected:
 	void OnWindowMsgFAMILYTYPE(DWORD dwPara);         // 種族選択ウィンドウからの通知
 	void OnWindowMsgSTYLESELECT(DWORD dwPara);        // 容姿選択ウィンドウからの通知
 	void OnWindowMsgNAMEINPUT(DWORD dwPara);           // 名前入力ウィンドウからの通知
+	void OnWindowMsgDELCONFIRM(DWORD dwPara);         // 削除確認ダイアログからの通知
 
 
 protected:
@@ -51,6 +54,10 @@ protected:
 	CWindowSTATUS     *m_pWindowSTATUS;     // ステータスウィンドウ
 	CWindowSTYLESELECT *m_pWindowSTYLESELECT; // 容姿選択ウィンドウ
 	CWindowNAMEINPUT  *m_pWindowNAMEINPUT;  // 名前入力
+	CWindowDELCONFIRM *m_pWindowDELCONFIRM; // 削除確認ダイアログ
+
+	DWORD	m_dwDelCharID;	// 削除対象キャラID
+	DWORD	m_dwLastTimeKeepAlive;	// 最後に生存確認通知を送信した時間
 
 	CInfoCharCli *m_pInfoCharCli; // 作成中のキャラ情報
 } CStateProcLOGINMENU, *PCStateProcLOGINMENU;

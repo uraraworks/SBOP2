@@ -86,6 +86,7 @@ private:
 	void	RecvProcACCOUNT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	// アカウント系
 	void	RecvProcACCOUNT_REQ_ACCOUNTINFO(PBYTE pData, DWORD dwSessionID);	// アカウント情報要求
 	void	RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID);	// キャラ作成要求
+	void	RecvProcACCOUNT_REQ_DELETECHAR(PBYTE pData, DWORD dwSessionID);	// キャラ削除要求
 
 	// 受信処理(MainFrameRecvProcCHAR.cpp)
 	void	RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	// キャラ系

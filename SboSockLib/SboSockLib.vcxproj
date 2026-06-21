@@ -114,8 +114,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_DELETECHAR.cpp" />
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.cpp" />
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.cpp" />
+    <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_DELETECHAR.cpp" />
     <ClCompile Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.cpp" />
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.cpp" />
     <ClCompile Include="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.cpp" />
@@ -332,8 +334,10 @@
     <ClInclude Include="..\common\myLib\myArrayImpl.h" />
     <ClInclude Include="..\common\myLib\myString.h" />
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_ACCOUNTINFO.h" />
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_DELETECHAR.h" />
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_REQ_MAKECHAR.h" />
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_ACCOUNTINFO.h" />
+    <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_DELETECHAR.h" />
     <ClInclude Include="..\Common\Packet\ACCOUNT\PacketACCOUNT_RES_MAKECHAR.h" />
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_ACCOUNT_REQ_ADD.h" />
     <ClInclude Include="..\Common\Packet\ADMIN\PacketADMIN_CHARINFO.h" />

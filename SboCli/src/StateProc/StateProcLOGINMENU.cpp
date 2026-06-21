@@ -8,8 +8,11 @@
 #include "UraraSockTCPSBO.h"
 #include "PacketACCOUNT_REQ_MAKECHAR.h"
 #include "PacketACCOUNT_RES_MAKECHAR.h"
+#include "PacketACCOUNT_REQ_DELETECHAR.h"
+#include "PacketACCOUNT_RES_DELETECHAR.h"
 #include "PacketCHAR_REQ_CHARINFO.h"
 #include "PacketCONNECT_REQ_PLAY.h"
+#include "PacketCONNECT_KEEPALIVE.h"
 #include "InfoAccount.h"
 #include "LibInfoCharCli.h"
 #include "WindowSTATUS.h"
@@ -19,9 +22,11 @@
 #include "WindowSTYLESELECT.h"
 #include "WindowNAMEINPUT.h"
 #include "WindowFAMILYTYPE.h"
+#include "WindowDELCONFIRM.h"
 #include "LayerCharSelect.h"
 #include "InfoCharCli.h"
 #include "MgrData.h"
+#include "MgrKeyInput.h"
 #include "MgrWindow.h"
 #include "MgrDraw.h"
 #include "MgrLayer.h"
@@ -48,6 +53,10 @@ CStateProcLOGINMENU::CStateProcLOGINMENU()
 	m_pWindowSTATUS = NULL;
 	m_pWindowSTYLESELECT = NULL;
 	m_pWindowNAMEINPUT = NULL;
+	m_pWindowDELCONFIRM = NULL;
+
+	m_dwDelCharID = 0;
+	m_dwLastTimeKeepAlive = 0;
 
 	m_pInfoCharCli = new CInfoCharCli;
 }
@@ -71,6 +80,24 @@ void CStateProcLOGINMENU::Init(void)
 	m_pMgrLayer->MakeCHARSELECT(m_pMgrData->GetAccountID());
 
 	m_pMgrData->PostMainFrameMessage(MAINFRAMEMSG_RENEWACCOUNTINFO, 0);
+
+	m_dwLastTimeKeepAlive = timeGetTime();
+}
+
+BOOL CStateProcLOGINMENU::TimerProc(void)
+{
+	DWORD dwTime;
+
+	// 数分放置でタイムアウト切断されないよう、20秒ごとに生存確認通知を送る
+	dwTime = timeGetTime() - m_dwLastTimeKeepAlive;
+	if (dwTime > 20 * 1000) {
+		CPacketCONNECT_KEEPALIVE Packet;
+
+		m_dwLastTimeKeepAlive = timeGetTime();
+		Packet.Make(m_dwLastTimeKeepAlive);
+		m_pSock->Send(&Packet);
+	}
+	return FALSE;
 }
 
 void CStateProcLOGINMENU::OnWindowMsg(int nType, DWORD dwPara)
@@ -80,6 +107,7 @@ void CStateProcLOGINMENU::OnWindowMsg(int nType, DWORD dwPara)
 	case WINDOWTYPE_FAMILYTYPE:  OnWindowMsgFAMILYTYPE(dwPara);  break; // 種族選択
 	case WINDOWTYPE_STYLESELECT: OnWindowMsgSTYLESELECT(dwPara); break; // 容姿選択
 	case WINDOWTYPE_NAMEINPUT:   OnWindowMsgNAMEINPUT(dwPara);   break; // 名前入力
+	case WINDOWTYPE_DELCONFIRM:  OnWindowMsgDELCONFIRM(dwPara);  break; // 削除確認
 
 	case WINDOWTYPE_CHARNAME: // キャラ名入力
 		m_pWindowNAMEINPUT->OnWindowMsg(nType, dwPara);
@@ -128,6 +156,24 @@ void CStateProcLOGINMENU::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		break;
 	case MAINFRAMEMSG_RENEWCHARINFO: // キャラ情報更新
 		m_pMgrWindow->Update();
+		break;
+	case MAINFRAMEMSG_RES_DELETECHAR: // キャラ削除応答
+		{
+			PCLayerCharSelect pLayer;
+
+			if (dwParam == DELETECHARRES_OK) {
+				m_pMgrWindow->MakeWindowMSG("キャラクターを削除しました", 3000, 4);
+			}
+			// メニューに戻す
+			m_pWindowLOGINMENU->SetActive(TRUE);
+			m_pWindowLOGINMENU->SetInput(TRUE);
+			m_pMgrWindow->SetActive();
+			m_nSelect = 0;
+			m_nState = STATE_MENU;
+			pLayer = (PCLayerCharSelect)m_pMgrLayer->Get(LAYERTYPE_CHARSELECT);
+			pLayer->SetSelect(-1);
+			m_pMgrWindow->Update();
+		}
 		break;
 	default:
 		CStateProcBase::OnMainFrame(dwCommand, dwParam);
@@ -209,14 +255,32 @@ BOOL CStateProcLOGINMENU::OnX(BOOL bDown)
 {
 	PCLayerCharSelect pLayer;
 
-	if (!bDown) {
-		return FALSE;
-	}
-
 	pLayer = (PCLayerCharSelect)m_pMgrLayer->Get(LAYERTYPE_CHARSELECT);
-	m_pMgrData->SetCharID(pLayer->GetSelectCharID());
 
-	m_pMgrDraw->SetFadeState(FADESTATE_FADEOUT);
+	switch (m_nState) {
+	case STATE_SELECTPLAYCHAR: // キャラ選択（キー押下でフェードアウト開始）
+		if (!bDown) {
+			return FALSE;
+		}
+		m_pMgrData->SetCharID(pLayer->GetSelectCharID());
+		m_pMgrDraw->SetFadeState(FADESTATE_FADEOUT);
+		break;
+
+	case STATE_SELECTDELETECHAR: // 削除キャラ選択（キー離しで確認ダイアログを開く）
+		if (bDown) {
+			return FALSE;
+		}
+		m_dwDelCharID = pLayer->GetSelectCharID();
+		if (m_dwDelCharID == 0) {
+			return FALSE;
+		}
+		m_pMgrWindow->MakeWindowDELCONFIRM();
+		m_pWindowDELCONFIRM = (PCWindowDELCONFIRM)m_pMgrWindow->GetWindow(WINDOWTYPE_DELCONFIRM);
+		break;
+
+	default:
+		break;
+	}
 
 	return FALSE;
 }
@@ -283,6 +347,15 @@ void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
 		break;
 
 	case 2: // キャラ削除
+		m_nState = STATE_SELECTDELETECHAR;
+		m_pWindowLOGINMENU->SetActive(FALSE);
+		m_pWindowLOGINMENU->SetInput(FALSE);
+		m_pMgrWindow->SetActive();
+		// 「キャラ削除」選択時の X UP がキー入力状態に残らないようリセット
+		// （これを忘れると次の X が「すかり」で 2 回押し必要になる）
+		m_pMgrKeyInput->Reset();
+		pLayer = (PCLayerCharSelect)m_pMgrLayer->Get(LAYERTYPE_CHARSELECT);
+		pLayer->SetSelect(0);
 		break;
 
 	case 3: // 戻る
@@ -353,4 +426,21 @@ void CStateProcLOGINMENU::OnWindowMsgNAMEINPUT(DWORD dwPara)
 		m_pMgrData->PostWindowMessage(WINDOWTYPE_FAMILYTYPE, 0);
 		break;
 	}
+}
+
+void CStateProcLOGINMENU::OnWindowMsgDELCONFIRM(DWORD dwPara)
+{
+	switch (dwPara) {
+	case 0: // はい → 削除パケット送信
+		{
+			CPacketACCOUNT_REQ_DELETECHAR Packet;
+			Packet.Make(m_pMgrData->GetAccountID(), m_dwDelCharID);
+			m_pSock->Send(&Packet);
+		}
+		break;
+
+	case 1: // いいえ → 何もしない（ウィンドウは自動削除済み）
+		break;
+	}
+	m_pWindowDELCONFIRM = NULL;
 }

@@ -555,6 +555,9 @@
     <ClCompile Include="src\Window\WindowSETBGMVOLUME.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
+    <ClCompile Include="src\Window\WindowDELCONFIRM.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
     <ClCompile Include="src\Window\WindowSETCOLOR.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
@@ -1062,6 +1065,9 @@
       <Filter>Header Files\Window No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\WindowSETCOLOR.h">
+      <Filter>Header Files\Window No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\WindowDELCONFIRM.h">
       <Filter>Header Files\Window No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\WindowSETDRAWMODE.h">
