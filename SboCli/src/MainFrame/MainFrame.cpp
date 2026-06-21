@@ -1345,8 +1345,12 @@ void CMainFrame::KeyProc(void)
 		// ウィンドウ側がキー入力を処理する
 		// KEYDOWN エッジを処理したキーコードを記録し、後続の KEYUP エッジが
 		// StateProc に漏れて二重処理（例: チャット閉じた直後の Enter で再オープン）しないようにする
+		// 対応する UP がウィンドウ側で消化された時点で記録をクリアしておかないと、
+		// 次にメニューが閉じた後 StateProc 側の最初の UP まで一回スキップされる
 		if (bDown) {
 			m_byWindowHandledDownCode = byCode;
+		} else if (byCode == m_byWindowHandledDownCode) {
+			m_byWindowHandledDownCode = 0;
 		}
 		m_pMgrWindow->KeyProc(byCode, bDown);
 
