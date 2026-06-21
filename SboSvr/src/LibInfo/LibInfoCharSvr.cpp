@@ -1209,9 +1209,9 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 
 	if (bInitPos) {
 		pInfoChar->m_dwMapID	= pInitCharStatus->dwInitPosMapID;	// マップID
-		// ptInitPos はタイル座標なのでピクセルに変換（X:中央、Y:足元）
-		pInfoChar->m_nMapX	= pInitCharStatus->ptInitPos.x * MAPPARTSSIZE + HALF_TILE;	// X座標
-		pInfoChar->m_nMapY	= pInitCharStatus->ptInitPos.y * MAPPARTSSIZE + MAPPARTSSIZE - 1;	// Y座標
+		// ptInitPos はピクセル座標（足元基準）
+		pInfoChar->m_nMapX	= pInitCharStatus->ptInitPos.x;	// X座標
+		pInfoChar->m_nMapY	= pInitCharStatus->ptInitPos.y;	// Y座標
 	}
 
 	pInfoChar->m_dwHP = min(pInfoChar->m_dwHP, pInfoChar->m_dwMaxHP);
@@ -2622,11 +2622,11 @@ void CLibInfoCharSvr::CharProcMoveMarkPos(CInfoCharSvr *pInfoChar)
 	pInfoSystem	= (PCInfoSystem)m_pMgrData->GetLibInfoSystem()->GetPtr();
 	pInitCharStatus	= pInfoSystem->m_pInitCharStatus;
 
-	// 初期位置に転送（ptInitPos はタイル座標なのでピクセルに変換: X中央・Y足元）
+	// 初期位置に転送（ptInitPos はピクセル座標・足元基準）
 	pInfoChar->m_dwMapID = pInitCharStatus->dwInitPosMapID;	// マップID
 	pInfoChar->SetPos(
-		pInitCharStatus->ptInitPos.x * MAPPARTSSIZE + HALF_TILE,
-		pInitCharStatus->ptInitPos.y * MAPPARTSSIZE + MAPPARTSSIZE - 1,
+		pInitCharStatus->ptInitPos.x,
+		pInitCharStatus->ptInitPos.y,
 		TRUE);
 	pInfoChar->SetDirection(1);
 	pInfoChar->AddProcInfo(CHARPROCID_MAPMOVEOUT, 2000, 0);

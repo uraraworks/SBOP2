@@ -200,11 +200,10 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 			m_pLibInfoChar->SetInitStatus(pInfoChar, TRUE);
 		}
 
-		// 初期位置に転送
+		// 初期位置に転送（ptInitPos はピクセル座標・足元基準）
 		pInfoChar->m_dwMapID	= pInitCharStatus->dwInitPosMapID;	// マップID
-		// ptInitPos はタイル座標なのでピクセルに変換（X:中央、Y:足元）
-		pInfoChar->m_nMapX	= pInitCharStatus->ptInitPos.x * MAPPARTSSIZE + HALF_TILE;	// X座標
-		pInfoChar->m_nMapY	= pInitCharStatus->ptInitPos.y * MAPPARTSSIZE + MAPPARTSSIZE - 1;	// Y座標
+		pInfoChar->m_nMapX	= pInitCharStatus->ptInitPos.x;	// X座標
+		pInfoChar->m_nMapY	= pInitCharStatus->ptInitPos.y;	// Y座標
 		pInfoChar->m_bProcMoveMapOut = TRUE;
 		pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
 		if (pInfoMap == NULL) {
