@@ -12,6 +12,7 @@
 #include "Img32.h"
 #include "LayerSystemMsg.h"
 #include "myString.h"
+#include "Platform/SjisConvert.h"
 
 
 CLayerSystemMsg::CLayerSystemMsg()
@@ -97,11 +98,10 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 		}
 	}
 
-        // pszMsg は CmyString::operator LPCSTR() 経由で渡るため Win32 では SJIS、
-        // ブラウザ版では WideCharToMultiByte スタブの都合で UTF-8。
-        // Utf8ToTString は UTF-8 を優先しつつ失敗時に CP932 にフォールバックするので
-        // 両プラットフォームで正しく wchar_t へ変換できる。
-        CString strMsg = Utf8ToTString(pszMsg);
+        // pszMsg は CmyString::operator LPCSTR() 経由で渡るため、
+        // Win32・ブラウザ版ともに SJIS (CP932) バイト列。
+        // SjisToWstring で確定的に CP932 → wchar_t へ変換する。
+        CString strMsg = CString(SjisToWstring(pszMsg, -1).c_str());
         nLen = strMsg.GetLength();
         pInfo->pImg->Create(nLen * 14 + 1, 14);
 

@@ -53,6 +53,36 @@ std::string WstringToSjis(const wchar_t* pszSrc, int nSrcLen)
     return result;
 }
 
+/// SJIS バイト列を UTF-8 文字列に変換する（Windows 実装）
+std::string SjisBytesToUtf8(const char* pszSrc)
+{
+    if (pszSrc == nullptr || pszSrc[0] == '\0') {
+        return std::string();
+    }
+    // SJIS → UTF-16
+    int nWide = MultiByteToWideChar(932, 0, pszSrc, -1, nullptr, 0);
+    if (nWide <= 0) {
+        return std::string();
+    }
+    std::wstring wstr(nWide, L'\0');
+    MultiByteToWideChar(932, 0, pszSrc, -1, &wstr[0], nWide);
+    // NULL 終端文字を除く
+    if (!wstr.empty() && wstr.back() == L'\0') {
+        wstr.pop_back();
+    }
+    // UTF-16 → UTF-8
+    int nUtf8 = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    if (nUtf8 <= 0) {
+        return std::string();
+    }
+    std::string result(nUtf8, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &result[0], nUtf8, nullptr, nullptr);
+    if (!result.empty() && result.back() == '\0') {
+        result.pop_back();
+    }
+    return result;
+}
+
 #else
 
 #include "TCharCompat.h"
@@ -187,6 +217,23 @@ std::string WstringToSjis(const wchar_t* pszSrc, int nSrcLen)
     return result;
 }
 
+/// SJIS バイト列を UTF-8 文字列に変換する（Emscripten 実装）
+std::string SjisBytesToUtf8(const char* pszSrc)
+{
+    if (pszSrc == nullptr || pszSrc[0] == '\0') {
+        return std::string();
+    }
+    int srcLen = static_cast<int>(strlen(pszSrc));
+    // JavaScript TextDecoder('shift-jis') 経由で SJIS → UTF-8
+    char* pszUtf8 = sjis_bytes_to_utf8_js(pszSrc, srcLen);
+    if (pszUtf8 == nullptr) {
+        return std::string();
+    }
+    std::string result(pszUtf8);
+    free(pszUtf8);
+    return result;
+}
+
 #else
 // !__EMSCRIPTEN__ かつ !_WIN32 の環境（Linux 等）向けのフォールバック
 // 現状このプロジェクトではそのような環境はないが念のため UTF-8 として扱う
@@ -206,6 +253,17 @@ std::string WstringToSjis(const wchar_t* pszSrc, int nSrcLen)
     }
     size_t srcLen = (nSrcLen < 0) ? wcslen(pszSrc) : static_cast<size_t>(nSrcLen);
     return WstringToUtf8(pszSrc, srcLen);
+}
+
+/// SJIS バイト列を UTF-8 文字列に変換する（Linux 等フォールバック実装）
+/// このプロジェクトでは非 Win32/非 Emscripten 環境は想定外だが念のため
+std::string SjisBytesToUtf8(const char* pszSrc)
+{
+    if (pszSrc == nullptr) {
+        return std::string();
+    }
+    // フォールバック: UTF-8 として扱う（実際には文字化けするがクラッシュを避ける）
+    return std::string(pszSrc);
 }
 #endif // __EMSCRIPTEN__
 

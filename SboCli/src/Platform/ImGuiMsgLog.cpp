@@ -7,6 +7,7 @@
 #include "ImGuiMsgLog.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+#include "SjisConvert.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
 #endif
@@ -93,14 +94,14 @@ void CImGuiMsgLog::Add(const char *pszLog, unsigned int color)
         snprintf(szCssColor, sizeof(szCssColor), "#%02X%02X%02X", r, g, b);
 
         // SJIS → UTF-8 変換してから JS へ渡す
-        std::string utf8Text = SjisToUtf8(pszLog);
+        std::string utf8Text = SjisBytesToUtf8(pszLog);
         sbop2_chat_log_add_js(utf8Text.c_str(), szCssColor);
     }
 #else
     LogLine line;
     // SJIS (CP932) 文字列を UTF-8 に変換してから保持する
     // ImGui は UTF-8 を要求するため、SJIS のまま渡すと文字化けする
-    line.text = SjisToUtf8(pszLog);
+    line.text = SjisBytesToUtf8(pszLog);
     line.color = color;
     m_lines.push_back(line);
 

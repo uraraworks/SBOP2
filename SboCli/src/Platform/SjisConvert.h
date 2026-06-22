@@ -19,3 +19,9 @@ std::wstring SjisToWstring(const char* pszSrc, int nSrcLen);
 /// @param nSrcLen  変換する wchar_t 数。負値の場合は wcslen で自動計算
 /// @return 変換後の SJIS バイト列を格納した std::string。変換失敗時は空文字列
 std::string WstringToSjis(const wchar_t* pszSrc, int nSrcLen);
+
+/// SJIS (CP932) バイト列を UTF-8 文字列に変換する
+/// 内部で SjisToWstring → WstringToUtf8 と二段変換する
+/// @param pszSrc   変換元の SJIS 文字列（NULL 終端）
+/// @return 変換後の UTF-8 std::string。変換失敗時は空文字列
+std::string SjisBytesToUtf8(const char* pszSrc);
