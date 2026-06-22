@@ -195,7 +195,10 @@ BOOL CLibInfoCharSvr::Proc(void)
 	}
 
 	dwNowTime = timeGetTime();
-	if ((m_dwLastPosSyncTime == 0) || (dwNowTime - m_dwLastPosSyncTime >= 500)) {
+	// 移動中PCの位置同期間隔。500msだとクライアントの予測先読み(最大320ms/下限160ms)で
+	// 埋めきれず「歩く・止まる」のカクつきが出るため、予測下限(160ms)を下回る150msへ短縮し
+	// 予測が毎周期を埋めて滑らかに見えるようにする（代償は移動中PCの位置パケット増加のみ）。
+	if ((m_dwLastPosSyncTime == 0) || (dwNowTime - m_dwLastPosSyncTime >= 150)) {
 		CPacketCHAR_POS_SYNC PacketPosSync;
 		PCInfoCharSvr pInfoChar;
 
