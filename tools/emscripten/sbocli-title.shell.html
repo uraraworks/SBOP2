@@ -1391,15 +1391,51 @@
 
     // ログ欄リングバッファヘルパ: 最新 500 行に制限して O(n²) 肥大を防ぐ
     const LOG_LINE_LIMIT = 500;
-    function appendLogLine(text) {
-      if (!outputElement) return;
+    // スクロールバーが最下部に無い間（ユーザーが上にスクロールして読んだり選択
+    // している間）は textarea を一切書き換えず、新規行をここに溜める。
+    // これにより選択範囲とスクロール位置が壊れず、ログをコピーできる。
+    let pendingLogLines = [];
+    function isOutputAtBottom() {
+      if (!outputElement) return true;
+      return (outputElement.scrollHeight - outputElement.scrollTop - outputElement.clientHeight) < 8;
+    }
+    function flushLogToTextarea(newLines) {
+      if (!outputElement || !newLines.length) return;
       const lines = outputElement.value ? outputElement.value.split('\n') : [];
-      lines.push(text);
+      for (let i = 0; i < newLines.length; i++) {
+        lines.push(newLines[i]);
+      }
       while (lines.length > LOG_LINE_LIMIT) {
         lines.shift();
       }
       outputElement.value = lines.join('\n');
       outputElement.scrollTop = outputElement.scrollHeight;
+    }
+    function appendLogLine(text) {
+      if (!outputElement) return;
+      // 最下部にいない＝ユーザーが読んでいる/選択中なので、textarea を触らず保留する
+      if (!isOutputAtBottom()) {
+        pendingLogLines.push(text);
+        while (pendingLogLines.length > LOG_LINE_LIMIT) {
+          pendingLogLines.shift();
+        }
+        return;
+      }
+      // 最下部にいる: 保留分もまとめて反映し、最下部へ追従
+      const toFlush = pendingLogLines;
+      pendingLogLines = [];
+      toFlush.push(text);
+      flushLogToTextarea(toFlush);
+    }
+    // ユーザーが手動で最下部まで戻したら、溜まっていた行を流し込む
+    if (outputElement) {
+      outputElement.addEventListener('scroll', function() {
+        if (pendingLogLines.length && isOutputAtBottom()) {
+          const toFlush = pendingLogLines;
+          pendingLogLines = [];
+          flushLogToTextarea(toFlush);
+        }
+      });
     }
 
     var Module = {

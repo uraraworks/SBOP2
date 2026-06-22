@@ -27,7 +27,7 @@
 #if defined(__EMSCRIPTEN__)
 // DOM 上の FPS 表示を更新する（秒間呼出し回数・1秒内最大時間・レイヤー・Swizzle・Present の各区間 ms を含む）
 EM_JS(void, updateFpsDisplay,
-      (int fps, int mlps, int ofps, int maxRf, int maxDraw, int layerMs, int swizzleMs, int presentMs), {
+      (int fps, int mlps, int ofps, int maxRf, int maxDraw, int layerMs, int swizzleMs, int presentMs, int charCnt, int effectCnt), {
     var el = document.getElementById('fpsDisplay');
     if (el) {
         el.textContent = 'FPS:' + fps +
@@ -35,7 +35,8 @@ EM_JS(void, updateFpsDisplay,
             ' OF/s:' + ofps +
             ' MaxRF:' + maxRf + 'ms' +
             ' MaxD:' + maxDraw + 'ms' +
-            '(L:' + layerMs + ' S:' + swizzleMs + ' P:' + presentMs + ')';
+            '(L:' + layerMs + ' S:' + swizzleMs + ' P:' + presentMs + ')' +
+            ' C:' + charCnt + ' E:' + effectCnt;
     }
 });
 #endif
@@ -120,6 +121,9 @@ DWORD g_dwMainLoopCallsPerSec = 0;  // MainLoopThunk の秒間呼出し回数
 DWORD g_dwOnFrameCallsPerSec = 0;   // OnFrame (ゲーム更新) の秒間呼出し回数
 DWORD g_dwMaxRunFrameMs = 0;        // 1秒内の最大 RunFrame 時間
 DWORD g_dwMaxDrawMs = 0;            // 1秒内の最大 OnDraw 時間
+// TODO 診断用(一時): 累積調査。原因特定後に削除
+DWORD g_dwDiagCharCount   = 0;      // 直近フレームのキャラ/NPC 数
+DWORD g_dwDiagEffectCount = 0;      // 直近フレームのエフェクト数
 
 double g_dDrawTileMs   = 0.0;  // 背景タイル/マップパーツ描画
 double g_dDrawCharMs   = 0.0;  // キャラ描画
@@ -777,6 +781,8 @@ void CSDLApp::RunFrame(void)
 		//         (int)g_dwDrawLayerMs, (int)g_dwDrawSwizzleMs, (int)g_dwDrawPresentMs,
 		//         (int)m_byFpsLast, (int)g_dwMaxDrawMs);
 #if defined(__EMSCRIPTEN__)
+		// 累積調査用の char/effect 件数は画面上部の FPS オーバーレイに表示する
+		// （毎秒のログ出力はログ欄を埋めるため行わない）
 		updateFpsDisplay((int)m_byFpsLast,
 		                 (int)g_dwMainLoopCallsPerSec,
 		                 (int)g_dwOnFrameCallsPerSec,
@@ -784,7 +790,9 @@ void CSDLApp::RunFrame(void)
 		                 (int)g_dwMaxDrawMs,
 		                 (int)g_dwDrawLayerMs,
 		                 (int)g_dwDrawSwizzleMs,
-		                 (int)g_dwDrawPresentMs);
+		                 (int)g_dwDrawPresentMs,
+		                 (int)g_dwDiagCharCount,
+		                 (int)g_dwDiagEffectCount);
 #endif
 		m_byFps = 0;
 		m_dwTimeStart = dwTimeTmp;

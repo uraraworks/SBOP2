@@ -1162,6 +1162,10 @@ void CMainFrame::OnRecv(PBYTE pData)
 }
 
 
+// TODO 診断用(一時): 累積調査。原因特定後に削除
+extern DWORD g_dwDiagCharCount;
+extern DWORD g_dwDiagEffectCount;
+
 BOOL CMainFrame::TimerProc(void)
 {
 	BOOL bRet, bDraw, bResult;
@@ -1173,6 +1177,9 @@ BOOL CMainFrame::TimerProc(void)
 	bDraw |= m_pMgrLayer->TimerProc();
 	bDraw |= m_pMgrWindow->TimerProc();
 	bDraw |= m_pLibInfoChar->Proc();
+	// TODO 診断用(一時): 累積調査。原因特定後に削除
+	if (m_pLibInfoChar)   { g_dwDiagCharCount   = (DWORD)m_pLibInfoChar->GetCount(); }
+	if (m_pLibInfoEffect) { g_dwDiagEffectCount = (DWORD)m_pLibInfoEffect->GetCount(); }
 	bDraw |= m_pLibInfoMapParts->Proc();
 	bDraw |= m_pLibInfoMapShadow->Proc();
 
