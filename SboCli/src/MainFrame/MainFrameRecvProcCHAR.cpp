@@ -804,7 +804,8 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 		// する。アイテムドロップ時など、DELETE 到着時に状態が SWOON から変化して
 		// いても、消滅エフェクト再生中なら確実にフェードへ乗せるため。
 		if ((pInfoChar->m_nMoveState == CHARMOVESTATE_SWOON) ||
-			(pInfoChar->m_pInfoEffect != NULL)) {
+			(pInfoChar->m_pInfoEffect != NULL) ||
+			(pInfoChar->m_nMoveType == CHARMOVETYPE_MOVEATACK)) {	// 矢は着弾follow-through(数歩飛び込んでフェード)のため即削除しない
 			pInfoChar->SetMoveState(CHARMOVESTATE_DELETEREADY);
 			return;
 		}

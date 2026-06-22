@@ -88,7 +88,11 @@ void CInfoCharMOVEATACKCli::SetViewState(int nViewState)
 	CInfoCharCli::SetViewState(nViewState);
 
 	if (m_nViewState == INFOCHARCLI_VIEWSTATE_FADEOUT) {
-		m_nFadeLevel = 50;
+		// 矢のフェードは増分が速く(50→100を約50ms)、着弾follow-through が完走する前に
+		// フェード自動削除されて「手前でパッと消える」原因になっていた。矢はフェードを
+		// 使わず不透明のまま follow-through を完走させ、完了時に削除する(TimerProc側)。
+		m_nViewState = INFOCHARCLI_VIEWSTATE_NONE;
+		m_nFadeLevel = 0;
 		return;
 	}
 	// フェードイン・フェードアウトは無し

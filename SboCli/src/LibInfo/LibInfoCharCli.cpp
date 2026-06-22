@@ -201,6 +201,20 @@ BOOL CLibInfoCharCli::Proc(void)
 		bResult = FALSE;
 		switch (pInfoChar->m_nMoveState) {
 		case CHARMOVESTATE_DELETE:	// 消去
+			// 矢(MOVEATACK)の着弾follow-through: サーバは矢が敵の隣マスに来たら DELETE
+			// するため、即削除だと矢の本体が敵の手前でパッと消えて見える。数歩ぶん敵へ
+			// 飛び込んでフェードアウトしてから消すよう、follow-through 中は削除を保留する
+			// (実際の前進と完了判定は CInfoCharCli::TimerProc 側で行う)。
+			if ((pInfoChar->m_nMoveType == CHARMOVETYPE_MOVEATACK) &&
+			    (pInfoChar->m_nFollowThrough != 0)) {
+				if (pInfoChar->m_nFollowThrough < 0) {
+					pInfoChar->m_nFollowThrough = 3;	// あと3歩飛び込んでから消す
+					pInfoChar->SetViewState(INFOCHARCLI_VIEWSTATE_FADEOUT);
+				}
+				pInfoChar->m_nMoveState = CHARMOVESTATE_DELETEREADY;	// 即削除を回避
+				bResult = pInfoChar->TimerProc(timeGetTime());
+				break;
+			}
 			if (pInfoChar == m_pMgrData->GetPlayerChar()) {
 				m_pMgrData->SetPlayerChar(NULL);
 			}

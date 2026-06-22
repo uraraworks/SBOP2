@@ -213,6 +213,9 @@ CInfoCharCli::CInfoCharCli()
 	m_dwBalloonAnimeID	= 0;
 	m_dwLastTimeBalloon	= 0;
 	m_dwLastTimeDamage	= 0;
+	m_dwLastAutoFlyTime	= 0;
+	m_nFlyDir		= -1;
+	m_nFollowThrough	= -1;
 	m_pMgrData	= NULL;
 	m_pDibChar	= NULL;
 	m_pDibName	= NULL;
@@ -535,8 +538,13 @@ DWORD CInfoCharCli::GetDrawMoveDuration(double dSrcX, double dSrcY, double dDstX
 		return dwDuration;
 	}
 
-	if ((m_nMoveType != CHARMOVETYPE_PC) &&
-		((m_nMoveState == CHARMOVESTATE_MOVE) || (m_nMoveState == CHARMOVESTATE_BATTLEMOVE))) {
+	// 矢(MOVEATACK)は STAND 状態でも自律直進するため、描画補間も実移動速度
+	// (GetMoveWait*距離)で計算する。これをしないと既定の CHAR_MOVE_PIXELS_PER_SEC
+	// (128px/s)で補間され、実速度(約250px/s)に描画が追いつかず、着弾後に長く
+	// 居座って(描画追いつき待ち)から消える原因になる。
+	if ((m_nMoveType == CHARMOVETYPE_MOVEATACK) ||
+		((m_nMoveType != CHARMOVETYPE_PC) &&
+		 ((m_nMoveState == CHARMOVESTATE_MOVE) || (m_nMoveState == CHARMOVESTATE_BATTLEMOVE)))) {
 		dwWait = GetMoveWait();
 		if (m_dwMoveWaitOnce != 0) {
 			dwWait = m_dwMoveWaitOnce;
@@ -568,6 +576,81 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 
 	bRet	= FALSE;
 	bResult	= CInfoCharBase::TimerProc(dwTime);
+
+	// 弓の矢など飛び道具(MOVEATACK)の自律直進。
+	// サーバ(InfoCharMOVEATACKSvr)は矢を方向へ直進させ続けるが、矢へのウェイポイント
+	// 同期が断続的で、それと二重駆動すると飛距離がブレたり後退したりしていた。
+	// そこで生存中は autonomous をこの矢の唯一の移動権限にする:
+	//   ・飛行方向を初回に固定(m_nFlyDir)し、サーバ補正で向きがブレないようにする
+	//   ・ウェイポイント/予測フラグと経由点キューを毎フレーム無効化して二重駆動を断つ
+	//   ・サーバと同じ間隔(GetMoveWait()*16 ms)で 16px ずつ前進、SetPos で滑らかに
+	// 停止はサーバ DELETE 受信・画面外DELETEで必ず行われる(無限飛行防止)。
+	if ((m_nMoveType == CHARMOVETYPE_MOVEATACK) &&
+	    (m_nMoveState != CHARMOVESTATE_DELETE))
+	{
+		// 着弾follow-through: サーバは矢が敵の隣マスに来たら SetMoveState(DELETEREADY)
+		// で消滅させる。そのまま止めると敵の手前で消えて見えるため、DELETEREADY を
+		// 検知したら数歩ぶん敵へ飛び込んでから消す。
+		if ((m_nMoveState == CHARMOVESTATE_DELETEREADY) && (m_nFollowThrough < 0)) {
+			m_nFollowThrough = 3;	// あと3歩飛び込む(遅延ぶん＋隣マスを越えて敵へ届かせる)
+		}
+		if ((m_nFlyDir < 0) && (m_nDirection >= 0) && (m_nDirection < 4)) {
+			m_nFlyDir = m_nDirection;	// 初回に進行方向を固定
+		}
+		if (m_nFollowThrough == 0) {
+			// 前進し終えた。論理位置(m_nMapX/Y)は敵へ届いているが、描画は時間補間
+			// (draw segment)で遅れて追従するため、即削除すると見た目が手前で消える。
+			// 描画が論理位置(敵)に追いつくまでの間に m_nFadeLevel を 0→99 へ上げて
+			// フェードアウトさせ、到達(セグメント完了)と同時に削除する。
+			// これで矢が敵へ近づきながら溶けるように消える(パッと消えるのを防ぐ)。
+			m_bRedraw = TRUE;
+			if ((m_dwDrawMoveEndTime > m_dwDrawMoveStartTime) && (dwTime < m_dwDrawMoveEndTime)) {
+				int nProg = (int)((dwTime - m_dwDrawMoveStartTime) * 100
+				                  / (m_dwDrawMoveEndTime - m_dwDrawMoveStartTime));
+				m_nFadeLevel = (nProg < 0) ? 0 : ((nProg > 99) ? 99 : nProg);
+			} else {
+				m_nFadeLevel = 99;
+				m_nMoveState = CHARMOVESTATE_DELETE;
+			}
+		} else if ((m_nFlyDir >= 0) && (m_nFlyDir < 4)) {
+			// 二重駆動を断つ: サーバのウェイポイント/予測補正を無効化し経由点も破棄
+			m_bWaypointMove = FALSE;
+			m_bPredictedMove = FALSE;
+			if (m_apMovePosQue.size() > 0) {
+				DeleteAllMovePosQue();
+			}
+			m_nDirection = m_nFlyDir;	// 向きブレを戻す
+
+			// サーバ矢(InfoCharMOVEATACKSvr)と完全同速にする(m_dwMoveWait*16 ms ごとに 16px)。
+			DWORD dwStep = GetMoveWait() * 16;
+			if (dwStep == 0) {
+				dwStep = 64;
+			}
+			// 初回は即1歩前進(起動遅延ゼロ)。スポーン時の飛び出しを避けるため先行は最小限。
+			if (m_dwLastAutoFlyTime == 0) {
+				m_dwLastAutoFlyTime = dwTime - dwStep;
+			}
+			// 低FPSで取りこぼさないよう溜まったぶんは while で消化。nGuard で暴走防止。
+			static const int adx[4] = { 0, 0, -1, 1 };	// 上下左右
+			static const int ady[4] = { -1, 1, 0, 0 };
+			int nGuard = 0;
+			while ((dwTime - m_dwLastAutoFlyTime >= dwStep) && (nGuard < 64)) {
+				m_dwLastAutoFlyTime += dwStep;
+				SetPos(m_nMapX + adx[m_nFlyDir] * 16,
+				       m_nMapY + ady[m_nFlyDir] * 16);
+				m_bRedraw = TRUE;
+				nGuard++;
+				// follow-through 中は1歩ごとに消化。進め終えたら(==0)前進を止め、
+				// 次フレーム以降の「描画追いつき待ち」分岐で削除する。
+				if (m_nFollowThrough > 0) {
+					m_nFollowThrough--;
+					if (m_nFollowThrough == 0) {
+						break;
+					}
+				}
+			}
+		}
+	}
 
 	// Phase 6: 他プレイヤーのみ予測座標を毎フレーム更新（PC のみ。NPC はウェイポイント追従で処理）
 	if (m_bPredictedMove && m_pMgrData && (m_pMgrData->GetCharID() != m_dwCharID)) {
@@ -674,7 +757,11 @@ void CInfoCharCli::MakeCharGrp(void)
 	m_pDibChar->FillRect(0, 0, m_nGrpSize * 16, m_nGrpSize, RGB(255, 0, 255));
 	m_pDibChar->SetColorKey(RGB(255, 0, 255));
 
-	if (m_wFamilyID == 0) {
+	// 矢などNPC/特殊グラフィックのキャラは familyID(種族)を持たない(0)。
+	// 旧来の「familyID==0 で早期return」だと NPC グラフィックのブリット(下方)に
+	// 到達せず m_pDibChar が空のまま=不可視になるため、NPC/SP グラフィックを
+	// 持つ場合は早期returnしない。
+	if ((m_wFamilyID == 0) && (m_wGrpIDNPC == 0) && (m_wGrpIDSP == 0)) {
 		return;
 	}
 

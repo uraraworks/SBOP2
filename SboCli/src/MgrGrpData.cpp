@@ -1087,6 +1087,61 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 		}
 		m_paImg2x2Bow->Add(pImg);
 	}
+	// 武器
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_WEAPON_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgWeapon->Add(pImg);
+	}
+	// 武器(弓)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_WEAPON_BOW_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgWeaponBow->Add(pImg);
+	}
+	// 武器(矢)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_WEAPON_ARROW_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgWeaponArrow->Add(pImg);
+	}
+	// 武器(打撃)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_WEAPON_GLOVE_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgWeaponGlove->Add(pImg);
+	}
+	// 武器(その他)
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_WEAPON_ETC_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read256(szTmp, &pImg, 1);
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgWeaponEtc->Add(pImg);
+	}
 	// 2x2 NPC
 	for (i = 0; ; i++) {
 		sprintf_s(szTmp, sizeof(szTmp), "IDP_2X2_NPC_%03d", i + 1);

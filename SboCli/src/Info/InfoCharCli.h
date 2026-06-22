@@ -130,7 +130,9 @@ public:
 			m_nViewState,	// 表示状態
 			m_nFadeLevel,	// 透過レベル
 			m_nMoveStateReserve,	// モーション終わった後に変更する移動種別
-			m_nMoveStateBack;	// 前回の移動状態
+			m_nMoveStateBack,	// 前回の移動状態
+			m_nFlyDir,	// 矢(MOVEATACK)自律直進の固定方向(-1:未設定)
+			m_nFollowThrough;	// 矢の着弾follow-through残り歩数(-1:非作動)
 	POINT	m_ptMove;	// 移動中の座標
 	DWORD	m_dwMoveWaitOnce,	// 一度だけの移動待ち時間
 			m_dwLastTimeAnime,	// 最終アニメーション処理時間
@@ -139,7 +141,8 @@ public:
 			m_dwBalloonGrpID,	// 噴出し画像ID
 			m_dwBalloonAnimeID,	// 噴出しコマ番号
 			m_dwLastTimeBalloon,	// 最終噴出し更新時間
-			m_dwLastTimeDamage;	// 最終ダメージ受けた時間
+			m_dwLastTimeDamage,	// 最終ダメージ受けた時間
+			m_dwLastAutoFlyTime;	// 矢(MOVEATACK)自律直進の最終前進時間
 	HFONT	m_hFont;	// 描画に使うフォント
 
 	CMgrData	*m_pMgrData;	// データマネージャ
