@@ -110,6 +110,7 @@ function ensureAdminWebSocket() {
 const DEFAULT_ROUTE = "server-dashboard";
 const views = document.querySelectorAll("[data-view]");
 const navLinks = document.querySelectorAll("[data-route]");
+const navGroups = document.querySelectorAll(".main-nav details");
 let currentRoute = null;
 let adminWorkspaceInitialized = false;
 
@@ -364,6 +365,16 @@ function getValidRoute(route) {
   return matchingView ? route : DEFAULT_ROUTE;
 }
 
+function updateActiveNavGroup(route) {
+  navGroups.forEach((group) => {
+    const hasActiveRoute = !!group.querySelector(`[data-route="${route}"]`);
+    group.classList.toggle("is-active-group", hasActiveRoute);
+    if (hasActiveRoute) {
+      group.open = true;
+    }
+  });
+}
+
 function activateRoute(route, options = {}) {
   const normalized = getValidRoute(route);
   const shouldSkip = normalized === currentRoute && !options.forceReload && !options.initial;
@@ -383,9 +394,7 @@ function activateRoute(route, options = {}) {
     link.classList.toggle("is-active", link.dataset.route === normalized);
   });
 
-  document.querySelectorAll(".main-nav details[open]").forEach((d) => {
-    d.removeAttribute("open");
-  });
+  updateActiveNavGroup(normalized);
 
   // server-dashboard / map-info / map-window / map-events / talk-events /
   // character-list / operation-history は F9 移行済み (main.js の registerRoute が処理)
@@ -449,19 +458,6 @@ window.addEventListener("load", async () => {
 
   const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;
   activateRoute(initialRoute, { initial: true });
-
-  // メインメニューの details 排他制御: 1つ開くと他は閉じる
-  document.querySelectorAll(".main-nav details").forEach(function (details) {
-    details.addEventListener("toggle", function () {
-      if (details.open) {
-        document.querySelectorAll(".main-nav details").forEach(function (other) {
-          if (other !== details && other.open) {
-            other.removeAttribute("open");
-          }
-        });
-      }
-    });
-  });
 
   navLinks.forEach((link) => {
     link.addEventListener("click", (event) => {

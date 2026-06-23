@@ -41,37 +41,44 @@ static const wchar_t *const k2x2BodyNames[] = {
 // !! MgrGrpData.cpp と同期必須 !!
 // cellSize / countX / countY は GetGrpSize / GetGrpCountX / GetGrpCountY より転記
 static const SSpriteCategoryDef kSpriteCategories[] = {
-    // idMain                 key            リソース名パターン       固定名配列    cellSize  countX  countY
-    { GRPIDMAIN_CHAR,         "char",        NULL,                    kBodyNames,   16,       32,     1  },
-    { GRPIDMAIN_NPC,          "npc",         L"IDP_NPC_%02d",        NULL,         16,       16,     32 },
-    { GRPIDMAIN_WEAPON,       "weapon",      L"IDP_WEAPON_%02d",     NULL,         32,       32,     18 },
-    { GRPIDMAIN_WEAPON_BOW,   "weaponBow",   L"IDP_WEAPON_BOW_%02d", NULL,         32,       20,     18 },
-    { GRPIDMAIN_WEAPON_GLOVE, "weaponGlove", L"IDP_WEAPON_GLOVE_%02d", NULL,       32,       20,     18 },
-    { GRPIDMAIN_WEAPON_ETC,   "weaponEtc",   L"IDP_WEAPON_ETC_%02d", NULL,         32,       20,     18 },
-    { GRPIDMAIN_EFFECT32,     "effect32",    L"IDP_EFC_32_%02d",     NULL,         32,       16,     16 },
-    { GRPIDMAIN_EFFECT64,     "effect64",    L"IDP_EFC_64_%02d",     NULL,         64,       8,      8  },
-    { GRPIDMAIN_EFCBALLOON,   "efcBalloon",  L"IDP_BALLOON_%02d",    NULL,         16,       10,     15 },
-    { GRPIDMAIN_ICON32,       "icon32",      L"IDP_ICON",            NULL,         16,       20,     20 },
-    { GRPIDMAIN_2X2_CHAR,     "char2x2",     NULL,                   k2x2BodyNames,32,       16,     8  },
-    { GRPIDMAIN_2X2_CLOTH,    "cloth2x2",    L"IDP_2X2_CLOTH_%02d", NULL,         32,       16,     8  },
-    { GRPIDMAIN_2X2_EYE,      "eye2x2",      L"IDP_2X2_EYE_%02d",   NULL,         32,       12,     8  },
-    { GRPIDMAIN_2X2_HAIR,     "hair2x2",     L"IDP_2X2_HAIR_%02d",  NULL,         32,       16,     8  },
-    { GRPIDMAIN_2X2_SPCLOTH,  "spCloth2x2",  L"IDP_2X2_SP_CLOTH_%02d", NULL,      32,       16,     8  },
-    { GRPIDMAIN_2X2_SPHAIR,   "spHair2x2",   L"IDP_2X2_SP_HAIR_%02d", NULL,       32,       16,     8  },
-    { GRPIDMAIN_2X2_ARMS,     "arms2x2",     L"IDP_2X2_ARMS_%02d",  NULL,         24,       12,     25 },
-    { GRPIDMAIN_2X2_SHIELD,   "shield2x2",   L"IDP_2X2_SHIELD_%02d",NULL,         16,       5,      25 },
-    { GRPIDMAIN_2X2_ARMSSP,   "armsSp2x2",   L"IDP_2X2_ARMSSP_%02d",NULL,         24,       11,     25 },
-    { GRPIDMAIN_2X2_BOW,      "bow2x2",      L"IDP_2X2_BOW_%02d",   NULL,         24,       11,     25 },
-    { GRPIDMAIN_2X2_NPC,      "npc2x2",      L"IDP_2X2_NPC_%02d",   NULL,         32,       16,     8  },
+    // idMain                 key            リソース名パターン       固定名配列    cellSize  countX  countY first
+    { GRPIDMAIN_CHAR,         "char",        NULL,                    kBodyNames,   16,       32,     1,     0 },
+    { 0,                      "cloth",       L"IDP_CLOTH_%02d",      NULL,         16,       1,      32,    1 },
+    { 0,                      "eye",         L"IDP_EYE_%02d",        NULL,         16,       1,      32,    1 },
+    { 0,                      "hairDown",    L"IDP_HAIR_D%02d",      NULL,         16,       1,      32,    1 },
+    { 0,                      "hairUp",      L"IDP_HAIR_U%02d",      NULL,         16,       1,      32,    1 },
+    { 0,                      "spCloth",     L"IDP_CLOTH_SP%02d",    NULL,         16,       1,      32,    1 },
+    { 0,                      "acce",        L"IDP_ACCE_%02d",       NULL,         16,       1,      32,    1 },
+    { 0,                      "npcRow",      L"IDP_NPC_%02d",        NULL,         16,       1,      32,    1 },
+    { GRPIDMAIN_NPC,          "npc",         L"IDP_NPC_%02d",        NULL,         16,       16,     32,    1 },
+    { GRPIDMAIN_WEAPON,       "weapon",      L"IDP_WEAPON_%02d",     NULL,         32,       32,     18,    1 },
+    { GRPIDMAIN_WEAPON_BOW,   "weaponBow",   L"IDP_WEAPON_BOW_%02d", NULL,         32,       20,     18,    1 },
+    { GRPIDMAIN_WEAPON_GLOVE, "weaponGlove", L"IDP_WEAPON_GLOVE_%02d", NULL,       32,       20,     18,    1 },
+    { GRPIDMAIN_WEAPON_ETC,   "weaponEtc",   L"IDP_WEAPON_ETC_%02d", NULL,         32,       20,     18,    1 },
+    { GRPIDMAIN_EFFECT32,     "effect32",    L"IDP_EFC_32_%02d",     NULL,         32,       16,     16,    1 },
+    { GRPIDMAIN_EFFECT64,     "effect64",    L"IDP_EFC_64_%02d",     NULL,         64,       8,      8,     1 },
+    { GRPIDMAIN_EFCBALLOON,   "efcBalloon",  L"IDP_BALLOON_%02d",    NULL,         16,       10,     15,    1 },
+    { GRPIDMAIN_ICON32,       "icon32",      L"IDP_ICON",            NULL,         16,       20,     20,    0 },
+    { GRPIDMAIN_2X2_CHAR,     "char2x2",     NULL,                   k2x2BodyNames,32,       16,     8,     0 },
+    { GRPIDMAIN_2X2_CLOTH,    "cloth2x2",    L"IDP_2X2_CLOTH_%02d", NULL,         32,       16,     8,     0 },
+    { GRPIDMAIN_2X2_EYE,      "eye2x2",      L"IDP_2X2_EYE_%02d",   NULL,         32,       12,     8,     1 },
+    { GRPIDMAIN_2X2_HAIR,     "hair2x2",     L"IDP_2X2_HAIR_%02d",  NULL,         32,       16,     8,     1 },
+    { GRPIDMAIN_2X2_SPCLOTH,  "spCloth2x2",  L"IDP_2X2_SP_CLOTH_%02d", NULL,      32,       16,     8,     1 },
+    { GRPIDMAIN_2X2_SPHAIR,   "spHair2x2",   L"IDP_2X2_SP_HAIR_%02d", NULL,       32,       16,     8,     1 },
+    { GRPIDMAIN_2X2_ARMS,     "arms2x2",     L"IDP_2X2_ARMS_%02d",  NULL,         24,       12,     25,    1 },
+    { GRPIDMAIN_2X2_SHIELD,   "shield2x2",   L"IDP_2X2_SHIELD_%02d",NULL,         16,       5,      25,    1 },
+    { GRPIDMAIN_2X2_ARMSSP,   "armsSp2x2",   L"IDP_2X2_ARMS_SP_%02d",NULL,        24,       11,     25,    1 },
+    { GRPIDMAIN_2X2_BOW,      "bow2x2",      L"IDP_2X2_BOW_%02d",   NULL,         24,       11,     25,    1 },
+    { GRPIDMAIN_2X2_NPC,      "npc2x2",      L"IDP_2X2_NPC_%03d",   NULL,         32,       16,     8,     1 },
     // マップパーツ / マップ影は GRPIDMAIN_* に列挙値が無いため 0 を使用。
     // key は ImageCatalogHandler.cpp の kCategories[] と一致させること。
     // cellSize / countX / countY は MgrGrpData.cpp の読込ループ相当の設定:
     //   マップパーツ: 16px セル、32x32 タイル / シート
     //   マップ影    : 16px セル、32x32 タイル / シート（IDP_MAP_01 と同サイズ）
-    { 0,                      "mapParts",    L"IDP_MAP_%02d",        NULL,         16,       32,     32 },
-    { 0,                      "mapShadow",   L"IDP_MAPSHADOW_%02d",  NULL,         16,       32,     32 },
+    { 0,                      "mapParts",    L"IDP_MAP_%02d",        NULL,         16,       32,     32,    1 },
+    { 0,                      "mapShadow",   L"IDP_MAPSHADOW_%02d",  NULL,         16,       32,     32,    1 },
     // アイテム地面画像: IDP_ITEM_%02d (512x512, 16px セル, 横32×縦32)
-    { 0,                      "item",        L"IDP_ITEM_%02d",       NULL,         16,       32,     32 },
+    { 0,                      "item",        L"IDP_ITEM_%02d",       NULL,         16,       32,     32,    1 },
 };
 
 static const size_t kSpriteCategoryCount = sizeof(kSpriteCategories) / sizeof(kSpriteCategories[0]);
@@ -281,9 +288,9 @@ bool CGrpResourceProvider::BuildResourceName(
         outName = pattern;
         return true;
     }
-    // 番号付き（1始まり）
+    // 番号付き
     wchar_t szName[64] = {};
-    _snwprintf_s(szName, _countof(szName), _TRUNCATE, cat.pszResourcePattern, sheetIndex + 1);
+    _snwprintf_s(szName, _countof(szName), _TRUNCATE, cat.pszResourcePattern, sheetIndex + cat.nFirstResourceIndex);
     outName = szName;
     return true;
 }

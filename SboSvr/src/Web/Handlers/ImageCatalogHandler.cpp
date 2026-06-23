@@ -24,6 +24,13 @@ struct ImageCategoryEntry
 const ImageCategoryEntry kCategories[] = {
         { GRPIDMAIN_NONE,         "none",        "未設定",           0  },
         { GRPIDMAIN_CHAR,         "char",        "キャラ",           63 },
+        { 0,                      "cloth",       "服",               63 },
+        { 0,                      "eye",         "目",               191 },
+        { 0,                      "hairDown",    "髪",               415 },
+        { 0,                      "hairUp",      "髪(上)",           415 },
+        { 0,                      "spCloth",     "特殊服",           31 },
+        { 0,                      "acce",        "アクセサリ",        63 },
+        { 0,                      "npcRow",      "NPC(行)",           255 },
         { GRPIDMAIN_WEAPON,       "weapon",      "武器",             63 },
         { GRPIDMAIN_WEAPON_BOW,   "weaponBow",   "武器(弓)",         63 },
         { GRPIDMAIN_EFFECT32,     "effect32",    "エフェクト(32)",   63 },

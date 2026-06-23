@@ -14,7 +14,7 @@ import { loadCatalog, calcSpriteCoord, loadSheetImage } from "../data/assets.js"
  *   sub: number,
  *   size?: number,
  * }} options
- * @returns {{ el: HTMLElement, update: (sub: number) => void, destroy: () => void }}
+ * @returns {{ el: HTMLElement, update: (next: number|{ categoryKey?: string, sub?: number }) => void, destroy: () => void }}
  */
 export function createSpriteThumb({ categoryKey, sub, size = 32 }) {
   const wrap = document.createElement("span");
@@ -28,13 +28,15 @@ export function createSpriteThumb({ categoryKey, sub, size = 32 }) {
   wrap.appendChild(canvas);
 
   let _currentSub = sub;
+  let _categoryKey = categoryKey;
+  let _catalog = null;
   let _category = null;
   let _destroyed = false;
-  let _pendingDraw = false;
 
   // カタログ取得(非同期)
   loadCatalog().then((catalog) => {
-    _category = catalog.find((c) => c.key === categoryKey) ?? null;
+    _catalog = catalog;
+    _category = _findCategory(_categoryKey);
     if (!_destroyed) {
       _draw(_currentSub);
     }
@@ -42,16 +44,22 @@ export function createSpriteThumb({ categoryKey, sub, size = 32 }) {
     // カタログ取得失敗時はプレースホルダのまま
   });
 
+  function _findCategory(key) {
+    return _catalog ? (_catalog.find((c) => c.key === key) ?? null) : null;
+  }
+
   function _draw(s) {
     if (!_category) return;
-    const coord = calcSpriteCoord(_category, s);
+    const category = _category;
+    const drawCategoryKey = _categoryKey;
+    const coord = calcSpriteCoord(category, s);
     loadSheetImage(coord.sheetUrl)
       .then((img) => {
-        if (_destroyed || _currentSub !== s) return;
+        if (_destroyed || _currentSub !== s || _categoryKey !== drawCategoryKey || _category !== category) return;
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, size, size);
         ctx.imageSmoothingEnabled = false;
-        const cs = _category.cellSize;
+        const cs = category.cellSize;
         ctx.drawImage(img, coord.x, coord.y, cs, cs, 0, 0, size, size);
       })
       .catch(() => {
@@ -59,11 +67,23 @@ export function createSpriteThumb({ categoryKey, sub, size = 32 }) {
       });
   }
 
-  /** sub 値を変更して再描画する */
-  function update(newSub) {
-    _currentSub = newSub;
+  /** sub 値またはカテゴリを変更して再描画する */
+  function update(next) {
+    let nextSub = next;
+    if (next && typeof next === "object") {
+      if (typeof next.categoryKey === "string" && next.categoryKey !== _categoryKey) {
+        _categoryKey = next.categoryKey;
+        _category = _findCategory(_categoryKey);
+      }
+      if (next.sub !== undefined) {
+        nextSub = next.sub;
+      } else {
+        nextSub = _currentSub;
+      }
+    }
+    _currentSub = nextSub;
     if (_category) {
-      _draw(newSub);
+      _draw(nextSub);
     }
   }
 
@@ -80,7 +100,7 @@ export function createSpriteThumb({ categoryKey, sub, size = 32 }) {
  * 一覧テーブルのサムネ列など大量生成時向け。
  *
  * @param {{ categoryKey: string, sub: number, size?: number }} options
- * @returns {{ el: HTMLElement, update: (sub: number) => void, destroy: () => void }}
+ * @returns {{ el: HTMLElement, update: (next: number|{ categoryKey?: string, sub?: number }) => void, destroy: () => void }}
  */
 export function createSpriteThumbLazy({ categoryKey, sub, size = 32 }) {
   const wrap = document.createElement("span");
@@ -94,29 +114,38 @@ export function createSpriteThumbLazy({ categoryKey, sub, size = 32 }) {
   wrap.appendChild(canvas);
 
   let _currentSub = sub;
+  let _categoryKey = categoryKey;
+  let _catalog = null;
   let _category = null;
   let _visible = false;
   let _destroyed = false;
   let _drawn = false;
 
   loadCatalog().then((catalog) => {
-    _category = catalog.find((c) => c.key === categoryKey) ?? null;
+    _catalog = catalog;
+    _category = _findCategory(_categoryKey);
     if (!_destroyed && _visible) {
       _draw(_currentSub);
     }
   }).catch(() => {});
 
+  function _findCategory(key) {
+    return _catalog ? (_catalog.find((c) => c.key === key) ?? null) : null;
+  }
+
   function _draw(s) {
     if (!_category || _destroyed) return;
     _drawn = true;
-    const coord = calcSpriteCoord(_category, s);
+    const category = _category;
+    const drawCategoryKey = _categoryKey;
+    const coord = calcSpriteCoord(category, s);
     loadSheetImage(coord.sheetUrl)
       .then((img) => {
-        if (_destroyed || _currentSub !== s) return;
+        if (_destroyed || _currentSub !== s || _categoryKey !== drawCategoryKey || _category !== category) return;
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, size, size);
         ctx.imageSmoothingEnabled = false;
-        const cs = _category.cellSize;
+        const cs = category.cellSize;
         ctx.drawImage(img, coord.x, coord.y, cs, cs, 0, 0, size, size);
       })
       .catch(() => {});
@@ -131,10 +160,22 @@ export function createSpriteThumbLazy({ categoryKey, sub, size = 32 }) {
   });
   observer.observe(wrap);
 
-  function update(newSub) {
-    _currentSub = newSub;
+  function update(next) {
+    let nextSub = next;
+    if (next && typeof next === "object") {
+      if (typeof next.categoryKey === "string" && next.categoryKey !== _categoryKey) {
+        _categoryKey = next.categoryKey;
+        _category = _findCategory(_categoryKey);
+      }
+      if (next.sub !== undefined) {
+        nextSub = next.sub;
+      } else {
+        nextSub = _currentSub;
+      }
+    }
+    _currentSub = nextSub;
     _drawn = false;
-    if (_category && _visible) _draw(newSub);
+    if (_category && _visible) _draw(nextSub);
   }
 
   function destroy() {

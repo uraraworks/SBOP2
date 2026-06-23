@@ -34,6 +34,7 @@ struct SSpriteCategoryDef
     int         nCellSize;          // 1セルのピクセル幅・高さ
     int         nCountX;            // 横セル数
     int         nCountY;            // 縦セル数
+    int         nFirstResourceIndex; // sheetIndex=0 に対応するリソース番号
 };
 
 // ---------------------------------------------------------------------------

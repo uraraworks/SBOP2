@@ -12,7 +12,10 @@
 #include "Web/JsonUtils.h"
 #include "MgrData.h"
 #include "LibInfo/LibInfoCharSvr.h"
+#include "LibInfo/LibInfoMotion.h"
 #include "Info/InfoCharBase.h"
+#include "Info/InfoMotion.h"
+#include "GlobalDefine.h"
 #include "myLib/myString.h"
 
 // ---------------------------------------------------------------------------
@@ -151,6 +154,43 @@ bool ExtractCharIdFromPath(const std::string &path, int &outCharId)
         return true;
 }
 
+const CInfoMotion *FindFirstStandMotion(CMgrData *pMgrData, const CInfoCharBase *pChar)
+{
+        if ((pMgrData == NULL) || (pChar == NULL)) {
+                return NULL;
+        }
+
+        CLibInfoMotion *pMotionLib = pMgrData->GetLibInfoMotion();
+        if (pMotionLib == NULL) {
+                return NULL;
+        }
+
+        ARRAYMOTIONINFO motions;
+        DWORD dwListId = pChar->m_adwMotionID[CHARMOTIONID_STAND];
+        pMotionLib->GetMotionInfo(pChar->m_dwMotionTypeID, dwListId, motions);
+        if (motions.empty() && dwListId != CHARMOTIONLISTID_STAND_UP) {
+                pMotionLib->GetMotionInfo(pChar->m_dwMotionTypeID, CHARMOTIONLISTID_STAND_UP, motions);
+        }
+        if (motions.empty()) {
+                return NULL;
+        }
+        return motions[0];
+}
+
+const CInfoMotion *FindFirstMotion(CMgrData *pMgrData, const CInfoCharBase *pChar, DWORD dwListId)
+{
+        if ((pMgrData == NULL) || (pChar == NULL)) {
+                return NULL;
+        }
+        CLibInfoMotion *pMotionLib = pMgrData->GetLibInfoMotion();
+        if (pMotionLib == NULL) {
+                return NULL;
+        }
+        ARRAYMOTIONINFO motions;
+        pMotionLib->GetMotionInfo(pChar->m_dwMotionTypeID, dwListId, motions);
+        return motions.empty() ? NULL : motions[0];
+}
+
 } // namespace
 
 // ---------------------------------------------------------------------------
@@ -277,6 +317,17 @@ void CCharacterDetailHandler::Handle(const HttpRequest &request, HttpResponse &r
         oss << "\"head\":"        << pChar->m_dwEquipItemIDHead;
         oss << "},";
 
+        const CInfoMotion *pStandMotion = FindFirstStandMotion(m_pMgrData, pChar);
+        const CInfoMotion *pDownMotion = FindFirstMotion(m_pMgrData, pChar, CHARMOTIONLISTID_STAND_DOWN);
+        if (pDownMotion == NULL) {
+                pDownMotion = pStandMotion;
+        }
+        WORD wGrpIdMainBase = (pStandMotion != NULL) ? pStandMotion->m_wGrpIDMainBase : 0;
+        WORD wGrpIdSubBase = (pStandMotion != NULL) ? pStandMotion->m_wGrpIDSubBase : 0;
+        WORD wGrpIdSubDown = (pDownMotion != NULL) ? pDownMotion->m_wGrpIDSubBase : wGrpIdSubBase;
+        bool bNpcForces2x2 = (pChar->m_wGrpIDNPC != 0) && (pChar->m_wGrpIDNPC < 50000);
+        bool bGraphics2x2 = bNpcForces2x2 || (wGrpIdMainBase == GRPIDMAIN_2X2_CHAR) || (wGrpIdMainBase == GRPIDMAIN_2X2_NPC);
+
         // --- グラフィック ---
         oss << "\"graphics\":{";
         oss << "\"npc\":"            << pChar->m_wGrpIDNPC          << ',';
@@ -299,7 +350,11 @@ void CCharacterDetailHandler::Handle(const HttpRequest &request, HttpResponse &r
         oss << "\"initEyeColor\":"   << pChar->m_wGrpIDInitEyeColor << ',';
         oss << "\"initHairType\":"   << pChar->m_wGrpIDInitHairType << ',';
         oss << "\"initHairColor\":"  << pChar->m_wGrpIDInitHairColor << ',';
-        oss << "\"initSp\":"         << pChar->m_wGrpIDInitSP;
+        oss << "\"initSp\":"         << pChar->m_wGrpIDInitSP << ',';
+        oss << "\"baseGrpIdMain\":"  << wGrpIdMainBase << ',';
+        oss << "\"baseGrpIdSub\":"   << wGrpIdSubBase << ',';
+        oss << "\"baseGrpIdSubDown\":" << wGrpIdSubDown << ',';
+        oss << "\"is2x2\":"          << (bGraphics2x2 ? "true" : "false");
         oss << "},";
 
         // --- 移動 ---

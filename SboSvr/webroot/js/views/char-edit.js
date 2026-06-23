@@ -8,6 +8,7 @@
  *   PUT  /api/characters/{charId}/status
  *   PUT  /api/characters/{charId}/equipment
  *   PUT  /api/characters/{charId}/graphics
+ *   PUT  /api/characters/{charId}/movement
  *   GET/POST/DELETE /api/characters/{charId}/items[/{slot}]
  *   GET/POST/DELETE /api/characters/{charId}/skills[/{slot}]
  *   GET  /api/characters/{charId}/account
@@ -17,8 +18,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
-import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
+import { loadCatalog, calcSpriteCoord, loadSheetImage } from "../data/assets.js";
 
 // ----------------------------------------------------------------
 // アイテム情報マップキャッシュ (itemId → { name, iconGrpId })
@@ -88,6 +89,24 @@ function mkNumField(labelText) {
   lbl.appendChild(inp);
   wrap.appendChild(inp);
   return { wrap, inp };
+}
+
+function createNumberValueField(labelText, onChange) {
+  var nf = mkNumField(labelText);
+  nf.inp.min = "0";
+  nf.inp.addEventListener("change", function () {
+    onChange?.();
+  });
+  return {
+    el: nf.wrap,
+    getValue: function () {
+      var v = parseInt(nf.inp.value, 10);
+      return Number.isFinite(v) && v >= 0 ? v : 0;
+    },
+    setValue: function (value) {
+      nf.inp.value = String(value || 0);
+    },
+  };
 }
 
 function mkTextFieldEl(labelText, maxlength) {
@@ -327,48 +346,405 @@ function buildGraphicsTab() {
   fb.setAttribute("aria-live", "polite");
   panel.appendChild(fb);
 
-  var form = mkEl("form", "edit-form");
+  var form = mkEl("form", "edit-form char-graphics-form");
   form.id = "ce-graphics-form";
   panel.appendChild(form);
 
-  var grid = mkEl("div", "form-grid compact");
+  var previewSection = mkEl("section", "char-graphic-preview-panel");
+  var previewCanvas = document.createElement("canvas");
+  previewCanvas.width = 128;
+  previewCanvas.height = 128;
+  previewSection.appendChild(previewCanvas);
+  form.appendChild(previewSection);
+
+  var grid = mkEl("div", "char-graphic-grid");
   form.appendChild(grid);
 
-  // NPC/PC 系は npc カテゴリ。キャラ系は char/char2x2 可。allowCategorySwitch: true
+  var fields = {};
+  var graphicsContext = { is2x2: false, familyId: 0, sex: 0, baseGrpIdSubDown: 2 };
+  var catalogCache = null;
+
+  function raw(key) {
+    var field = fields[key];
+    return field ? field.getValue() : 0;
+  }
+
+  function is2x2() {
+    return !!graphicsContext.is2x2;
+  }
+
+  async function getCategory(key) {
+    if (!catalogCache) { catalogCache = await loadCatalog(); }
+    return catalogCache.find(function (c) { return c.key === key; }) || null;
+  }
+
+  function clampValue(v) {
+    v = Number(v) || 0;
+    return v < 0 ? 0 : v;
+  }
+
+  function sheetIndexForRowValue(value) {
+    return Math.floor(clampValue(value) / 32);
+  }
+
+  function rowForValue(value) {
+    return clampValue(value) % 32;
+  }
+
+  function sexOffset(size) {
+    return graphicsContext.sex === 2 ? size * 16 : 0;
+  }
+
+  function downX(size) {
+    return sexOffset(size) + size * 4;
+  }
+
+  function frontEyeX(size) {
+    return sexOffset(size) + size;
+  }
+
+  function twoByTwoDownCoord(category) {
+    var sub = Math.max(0, (Number(graphicsContext.baseGrpIdSubDown) || 1) - 1);
+    return calcSpriteCoord(category, sub);
+  }
+
+  function npc2x2FileIndex(value) {
+    return Math.floor((Math.max(1, clampValue(value)) - 1) / 2);
+  }
+
+  function npc2x2SlotOffset(category, value) {
+    return ((Math.max(1, clampValue(value)) - 1) % 2) * category.cellSize * 8;
+  }
+
+  async function drawFromSheet(ctx, categoryKey, sheetIndex, sx, sy, sw, sh, dx, dy, dw, dh) {
+    var category = await getCategory(categoryKey);
+    if (!category || !category.sheetUrl || sheetIndex < 0) { return; }
+    var img = await loadSheetImage(category.sheetUrl + "/" + sheetIndex);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+  }
+
+  async function drawNormalPart(ctx, kind, value, dx, dy, scale, refs) {
+    refs = refs || {};
+    var size = 16;
+    var dst = size * scale;
+    if (kind === "cloth") {
+      await drawFromSheet(ctx, "cloth", sheetIndexForRowValue(value), downX(size), rowForValue(value) * size, size, size, dx, dy, dst, dst);
+    } else if (kind === "sp") {
+      var sp = clampValue(value);
+      if (sp > 0) { await drawFromSheet(ctx, "spCloth", 0, size * 4, (sp - 1) * size, size, size, dx, dy, dst, dst); }
+    } else if (kind === "npc") {
+      var npc = clampValue(value);
+      if (npc >= 50000) { npc -= 50000; }
+      if (npc > 0) { await drawFromSheet(ctx, "npcRow", 0, size * 4, npc * size, size, size, dx, dy, dst, dst); }
+    } else if (kind === "hairDown") {
+      if (clampValue(value) <= 0) { return; }
+      await drawFromSheet(ctx, "hairDown", Math.max(0, raw(refs.hairColorKey || "hairColor") - 1), downX(size), clampValue(value) * size, size, size, dx, dy, dst, dst);
+    } else if (kind === "hairColor") {
+      var hairType = raw(refs.hairTypeKey || "hairType");
+      if (hairType <= 0) { return; }
+      await drawFromSheet(ctx, "hairDown", Math.max(0, clampValue(value) - 1), downX(size), hairType * size, size, size, dx, dy, dst, dst);
+    } else if (kind === "hairUp") {
+      if (clampValue(value) <= 0) { return; }
+      await drawFromSheet(ctx, "hairUp", Math.max(0, raw(refs.hairColorKey || "hairColor") - 1), downX(size), clampValue(value) * size, size, size, dx, dy, dst, dst);
+    } else if (kind === "eye") {
+      await drawFromSheet(ctx, "eye", Math.max(0, raw(refs.eyeColorKey || "eyeColor") - 1), frontEyeX(size), clampValue(value) * size, size, size, dx, dy, dst, dst);
+    } else if (kind === "eyeColor") {
+      await drawFromSheet(ctx, "eye", Math.max(0, clampValue(value) - 1), frontEyeX(size), raw(refs.eyeKey || "eye") * size, size, size, dx, dy, dst, dst);
+    } else if (kind === "acce") {
+      await drawFromSheet(ctx, "acce", sheetIndexForRowValue(value), downX(size), rowForValue(value) * size, size, size, dx, dy, dst, dst);
+    }
+  }
+
+  async function draw2x2Part(ctx, kind, value, dx, dy, scale) {
+    var size = 32;
+    var dst = size * scale;
+    var categoryKey = "";
+    var sheetIndex = 0;
+    if (kind === "body") {
+      categoryKey = "char2x2";
+      sheetIndex = 0;
+    } else if (kind === "cloth") {
+      categoryKey = "cloth2x2";
+      sheetIndex = clampValue(value);
+    } else if (kind === "sp") {
+      if (clampValue(value) <= 0) { return; }
+      categoryKey = "spCloth2x2";
+      sheetIndex = Math.max(0, clampValue(value) - 1);
+    } else if (kind === "npc") {
+      if (clampValue(value) <= 0) { return; }
+      categoryKey = "npc2x2";
+      sheetIndex = npc2x2FileIndex(value >= 50000 ? value - 50000 : value);
+    } else if (kind === "hair") {
+      if (clampValue(value) <= 0) { return; }
+      if (value >= 10001) {
+        categoryKey = "spHair2x2";
+        sheetIndex = Math.max(0, clampValue(value) - 10001);
+      } else {
+        categoryKey = "hair2x2";
+        sheetIndex = Math.max(0, clampValue(value) - 1);
+      }
+    } else if (kind === "eye") {
+      categoryKey = "eye2x2";
+      sheetIndex = 0;
+    }
+    var category = await getCategory(categoryKey);
+    if (!category || !category.sheetUrl) { return; }
+    var coord = kind === "eye" ? calcSpriteCoord(category, 0) : twoByTwoDownCoord(category);
+    var img = await loadSheetImage(category.sheetUrl + "/" + sheetIndex);
+    var sy = coord.y + ((kind !== "eye" && graphicsContext.sex === 2) ? size * 4 : 0);
+    var sx = coord.x + (kind === "npc" ? npc2x2SlotOffset(category, value >= 50000 ? value - 50000 : value) : 0);
+    if (sx + size > img.naturalWidth || sy + size > img.naturalHeight) { return; }
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, sx, sy, size, size, dx, dy, dst, dst);
+  }
+
+  function sampleKindFor2x2(kind) {
+    if (kind === "hairDown" || kind === "hairColor") { return "hair"; }
+    if (kind === "eyeColor") { return "eye"; }
+    return kind;
+  }
+
+  async function drawPartSample(ctx, field, value, canvasSize) {
+    ctx.clearRect(0, 0, canvasSize, canvasSize);
+    var size = is2x2() ? 32 : 16;
+    var scale = Math.max(1, Math.floor(canvasSize / size));
+    var dst = size * scale;
+    var dx = Math.floor((canvasSize - dst) / 2);
+    var dy = Math.floor((canvasSize - dst) / 2);
+    if (is2x2()) {
+      await draw2x2Part(ctx, sampleKindFor2x2(field.kind), value, dx, dy, scale);
+    } else {
+      await drawNormalPart(ctx, field.kind, value, dx, dy, scale, field.sampleRefs);
+    }
+  }
+
+  async function renderPreview() {
+    var ctx = previewCanvas.getContext("2d");
+    ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    ctx.imageSmoothingEnabled = false;
+    var size = is2x2() ? 32 : 16;
+    var scale = is2x2() ? 3 : 5;
+    var dst = size * scale;
+    var dx = Math.floor((previewCanvas.width - dst) / 2);
+    var dy = Math.floor((previewCanvas.height - dst) / 2);
+    if (is2x2()) {
+      if (raw("npc") > 0) {
+        await draw2x2Part(ctx, "npc", raw("npc"), dx, dy, scale);
+        return;
+      }
+      await draw2x2Part(ctx, "body", 0, dx, dy, scale);
+      await draw2x2Part(ctx, raw("sp") > 0 ? "sp" : "cloth", raw("sp") > 0 ? raw("sp") : raw("cloth"), dx, dy, scale);
+      await draw2x2Part(ctx, "hair", raw("hairType"), dx, dy, scale);
+      await draw2x2Part(ctx, "eye", raw("eye"), dx, dy, scale);
+    } else {
+      if (raw("npc") > 0) {
+        await drawNormalPart(ctx, "npc", raw("npc"), dx, dy, scale);
+        return;
+      }
+      await drawNormalPart(ctx, raw("sp") > 0 ? "sp" : "cloth", raw("sp") > 0 ? raw("sp") : raw("cloth"), dx, dy, scale);
+      await drawNormalPart(ctx, "hairDown", raw("hairType"), dx, dy, scale);
+      await drawNormalPart(ctx, "hairUp", raw("hairType"), dx, dy, scale);
+      await drawNormalPart(ctx, "eye", raw("eye"), dx, dy, scale);
+      if (raw("acce") > 0) { await drawNormalPart(ctx, "acce", raw("acce"), dx, dy, scale); }
+    }
+  }
+
+  function redrawGraphics() {
+    Object.keys(fields).forEach(function (key) {
+      if (fields[key].redraw) { fields[key].redraw(); }
+    });
+    renderPreview();
+  }
+
+  function candidateValues(field) {
+    var values = [];
+    var max = field.max || 31;
+    var min = field.min || 0;
+    if (typeof field.getMax === "function") { max = field.getMax(); }
+    for (var i = min; i <= max; i++) { values.push(i); }
+    return values;
+  }
+
+  async function loadNpc2x2CandidateValues() {
+    var category = await getCategory("npc2x2");
+    if (!category || !category.sheetUrl) { return [0]; }
+    var coord = twoByTwoDownCoord(category);
+    var sy = coord.y + (graphicsContext.sex === 2 ? category.cellSize * 4 : 0);
+    var values = [0];
+    var misses = 0;
+    for (var fileIndex = 0; fileIndex <= 127; fileIndex++) {
+      try {
+        var img = await loadSheetImage(category.sheetUrl + "/" + fileIndex);
+        for (var slot = 0; slot < 2; slot++) {
+          var value = fileIndex * 2 + slot + 1;
+          var sx = coord.x + slot * category.cellSize * 8;
+          if (sx + category.cellSize <= img.naturalWidth && sy + category.cellSize <= img.naturalHeight) {
+            values.push(value);
+          }
+        }
+        misses = 0;
+      } catch (_err) {
+        misses++;
+        if (misses >= 4) { break; }
+      }
+    }
+    return values;
+  }
+
+  async function candidateValuesForField(field, mode) {
+    if (field.kind === "npc" && is2x2()) { return loadNpc2x2CandidateValues(); }
+    if (!(field.hairModeSwitch && is2x2())) { return candidateValues(field); }
+    var values = [0];
+    var max = field.getMax();
+    for (var i = 1; i <= max; i++) {
+      values.push(mode === "special" ? 10000 + i : i);
+    }
+    return values;
+  }
+
+  function openPartPicker(field) {
+    var backdrop = mkEl("div", "cg-backdrop");
+    var dialog = mkEl("div", "cg-dialog");
+    var header = mkEl("div", "cg-header");
+    var title = mkEl("h3", "", field.label);
+    var idWrap = mkEl("label", "cg-id-input", "ID");
+    var idInput = mkInput("number", "form-input");
+    idInput.value = String(raw(field.key));
+    idInput.min = String(field.min || 0);
+    idWrap.appendChild(idInput);
+    header.append(title, idWrap);
+    var mode = field.hairModeSwitch && raw(field.key) >= 10001 ? "special" : "normal";
+    var switcher = null;
+    if (field.hairModeSwitch && is2x2()) {
+      switcher = mkEl("div", "cg-mode-switch");
+      var normalBtn = mkEl("button", "cg-mode-btn selected", "通常");
+      var specialBtn = mkEl("button", "cg-mode-btn", "特殊");
+      normalBtn.type = "button";
+      specialBtn.type = "button";
+      switcher.append(normalBtn, specialBtn);
+      normalBtn.addEventListener("click", function () { mode = "normal"; renderCandidates(); });
+      specialBtn.addEventListener("click", function () { mode = "special"; renderCandidates(); });
+    }
+    var list = mkEl("div", "cg-candidate-grid");
+    var footer = mkEl("div", "cg-footer");
+    var closeBtn = mkEl("button", "button", "閉じる");
+    closeBtn.type = "button";
+    footer.appendChild(closeBtn);
+    dialog.append(header);
+    if (switcher) { dialog.appendChild(switcher); }
+    dialog.append(list, footer);
+    backdrop.appendChild(dialog);
+    document.body.appendChild(backdrop);
+
+    function selectValue(value) {
+      fields[field.key].setValue(value);
+      idInput.value = String(value);
+      redrawGraphics();
+      Array.from(list.querySelectorAll(".cg-candidate")).forEach(function (btn) {
+        btn.classList.toggle("selected", Number(btn.dataset.value) === Number(value));
+      });
+    }
+
+    async function renderCandidates() {
+      list.innerHTML = "";
+      if (switcher) {
+        switcher.querySelectorAll(".cg-mode-btn").forEach(function (btn) {
+          btn.classList.toggle("selected", btn.textContent === (mode === "special" ? "特殊" : "通常"));
+        });
+      }
+      var values = await candidateValuesForField(field, mode);
+      values.forEach(function (value) {
+        var btn = mkEl("button", "cg-candidate");
+        btn.type = "button";
+        btn.dataset.value = String(value);
+        if (value === raw(field.key)) { btn.classList.add("selected"); }
+        var canvas = document.createElement("canvas");
+        var canvasSize = is2x2() ? 128 : 64;
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+        var id = mkEl("span", "", String(value));
+        btn.append(canvas, id);
+        list.appendChild(btn);
+        drawPartSample(canvas.getContext("2d"), field, value, canvasSize);
+        btn.addEventListener("click", function () { selectValue(value); });
+      });
+    }
+
+    renderCandidates();
+
+    idInput.addEventListener("change", function () {
+      var v = parseInt(idInput.value, 10);
+      if (Number.isFinite(v)) { selectValue(Math.max(0, v)); }
+    });
+    closeBtn.addEventListener("click", function () { backdrop.remove(); });
+    backdrop.addEventListener("click", function (ev) {
+      if (ev.target === backdrop) { backdrop.remove(); }
+    });
+  }
+
+  function createGraphicField(field) {
+    var wrap = mkEl("div", "char-graphic-field");
+    var label = mkEl("span", "char-graphic-label", field.label);
+    var canvas = document.createElement("canvas");
+    canvas.width = 48;
+    canvas.height = 48;
+    canvas.tabIndex = 0;
+    canvas.setAttribute("role", "button");
+    canvas.setAttribute("aria-label", field.label + "を選択");
+    var input = mkInput("number", "form-input");
+    input.min = String(field.min || 0);
+    wrap.append(label, canvas, input);
+    input.addEventListener("change", redrawGraphics);
+    canvas.addEventListener("click", function () { openPartPicker(field); });
+    canvas.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        openPartPicker(field);
+      }
+    });
+    return {
+      el: wrap,
+      getValue: function () { return clampValue(parseInt(input.value, 10)); },
+      setValue: function (value) { input.value = String(value || 0); },
+      redraw: function () { drawPartSample(canvas.getContext("2d"), field, this.getValue(), 48); },
+    };
+  }
+
   var graphicFields = [
-    { key: "npc",          label: "NPC",           cat: "npc"  },
-    { key: "cloth",        label: "服",             cat: "char" },
-    { key: "eye",          label: "目",             cat: "char" },
-    { key: "eyeColor",     label: "目色",           cat: "char" },
-    { key: "hairType",     label: "髪",             cat: "char" },
-    { key: "hairColor",    label: "髪色",           cat: "char" },
-    { key: "sp",           label: "特殊服",          cat: "char" },
-    { key: "tmpMain",      label: "一時服(メイン)",   cat: "char" },
-    { key: "tmpSub",       label: "一時服(サブ)",     cat: "char" },
-    { key: "acce",         label: "アクセサリ",       cat: "char" },
-    { key: "armsMain",     label: "持ち物(メイン)",   cat: "char" },
-    { key: "armsSub",      label: "持ち物(サブ)",     cat: "char" },
-    { key: "armsLeftMain", label: "盾(メイン)",       cat: "char" },
-    { key: "armsLeftSub",  label: "盾(サブ)",         cat: "char" },
-    { key: "initNpc",      label: "初期NPC",          cat: "npc"  },
-    { key: "initCloth",    label: "初期服",           cat: "char" },
-    { key: "initEye",      label: "初期目",           cat: "char" },
-    { key: "initEyeColor", label: "初期目色",          cat: "char" },
-    { key: "initHairType", label: "初期髪",           cat: "char" },
-    { key: "initHairColor",label: "初期髪色",          cat: "char" },
-    { key: "initSp",       label: "初期特殊服",        cat: "char" },
+    { key: "npc", label: "NPC", kind: "npc", min: 0, getMax: function () { return is2x2() ? 6 : 64; } },
+    { key: "cloth", label: "服", kind: "cloth", min: 0, getMax: function () { return is2x2() ? 4 : 63; } },
+    { key: "eye", label: "目", kind: "eye", min: 0, getMax: function () { return is2x2() ? 3 : 31; } },
+    { key: "eyeColor", label: "目色", kind: "eyeColor", min: 1, getMax: function () { return is2x2() ? 1 : 6; } },
+    { key: "hairType", label: "髪", kind: "hairDown", min: 0, hairModeSwitch: true, getMax: function () { return is2x2() ? 4 : 31; } },
+    { key: "hairColor", label: "髪色", kind: "hairColor", min: 1, getMax: function () { return is2x2() ? 1 : 13; } },
+    { key: "sp", label: "特殊服", kind: "sp", min: 0, getMax: function () { return is2x2() ? 2 : 3; } },
+    { key: "tmpMain", label: "一時服(メイン)", number: true },
+    { key: "tmpSub", label: "一時服(サブ)", number: true },
+    { key: "acce", label: "アクセサリ", kind: "acce", min: 0, getMax: function () { return 63; } },
+    { key: "armsMain", label: "持ち物(メイン)", number: true },
+    { key: "armsSub", label: "持ち物(サブ)", number: true },
+    { key: "armsLeftMain", label: "盾(メイン)", number: true },
+    { key: "armsLeftSub", label: "盾(サブ)", number: true },
+    { key: "initNpc", label: "初期NPC", kind: "npc", min: 0, getMax: function () { return is2x2() ? 6 : 64; } },
+    { key: "initCloth", label: "初期服", kind: "cloth", min: 0, getMax: function () { return is2x2() ? 4 : 63; } },
+    { key: "initEye", label: "初期目", kind: "eye", min: 0, sampleRefs: { eyeColorKey: "initEyeColor" }, getMax: function () { return is2x2() ? 3 : 31; } },
+    { key: "initEyeColor", label: "初期目色", kind: "eyeColor", min: 1, sampleRefs: { eyeKey: "initEye" }, getMax: function () { return is2x2() ? 1 : 6; } },
+    { key: "initHairType", label: "初期髪", kind: "hairDown", min: 0, hairModeSwitch: true, sampleRefs: { hairColorKey: "initHairColor" }, getMax: function () { return is2x2() ? 4 : 31; } },
+    { key: "initHairColor", label: "初期髪色", kind: "hairColor", min: 1, sampleRefs: { hairTypeKey: "initHairType" }, getMax: function () { return is2x2() ? 1 : 13; } },
+    { key: "initSp", label: "初期特殊服", kind: "sp", min: 0, getMax: function () { return is2x2() ? 2 : 3; } },
   ];
 
-  var spriteFields = {};
   graphicFields.forEach(function (f) {
-    var sf = createSpriteField({
-      categoryKey: f.cat,
-      value: 0,
-      label: f.label,
-      allowCategorySwitch: true,
-    });
+    if (f.number) {
+      var nf = createNumberValueField(f.label, redrawGraphics);
+      grid.appendChild(nf.el);
+      fields[f.key] = nf;
+      return;
+    }
+    var sf = createGraphicField(f);
     grid.appendChild(sf.el);
-    spriteFields[f.key] = sf;
+    fields[f.key] = sf;
   });
 
   var actions = mkEl("div", "form-actions");
@@ -377,11 +753,19 @@ function buildGraphicsTab() {
   actions.appendChild(saveBtn);
   form.appendChild(actions);
 
-  return { panel, fb, form, spriteFields };
+  function setGraphicsContext(next, rootData) {
+    graphicsContext.is2x2 = !!(next && next.is2x2);
+    graphicsContext.familyId = rootData ? (rootData.familyId || 0) : graphicsContext.familyId;
+    graphicsContext.sex = rootData ? (rootData.sex || 0) : graphicsContext.sex;
+    graphicsContext.baseGrpIdSubDown = next ? (next.baseGrpIdSubDown || next.baseGrpIdSub || 2) : graphicsContext.baseGrpIdSubDown;
+    redrawGraphics();
+  }
+
+  return { panel, fb, form, spriteFields: fields, syncGraphicsThumbs: redrawGraphics, setGraphicsContext };
 }
 
 // ----------------------------------------------------------------
-// タブパネル: 移動（読み取り専用）
+// タブパネル: 移動
 // ----------------------------------------------------------------
 
 function buildMovementTab() {
@@ -389,27 +773,38 @@ function buildMovementTab() {
   panel.id = "ce-tab-movement";
   panel.style.display = "none";
 
-  var dl = mkEl("dl", "detail-list");
-  panel.appendChild(dl);
+  var fb = mkEl("p", "form-feedback");
+  fb.setAttribute("aria-live", "polite");
+  panel.appendChild(fb);
 
-  var spanMap = {};
+  var form = mkEl("form", "edit-form");
+  form.id = "ce-movement-form";
+  panel.appendChild(form);
+
+  var grid = mkEl("div", "form-grid");
+  form.appendChild(grid);
+
+  var inputs = {};
   var mvFields = [
     ["maxItemCount","最大アイテム所持数"],["dropItemAverage","ドロップ率"],
     ["moveAverage","移動確率"],["moveAverageBattle","戦闘時移動確率"],
     ["moveWait","移動待ち(ms)"],["moveWaitBattle","戦闘時移動待ち(ms)"],
-    ["searchCX","索敵範囲CX"],["searchCY","索敵範囲CY"],
+    ["searchDistanceCX","索敵範囲CX"],["searchDistanceCY","索敵範囲CY"],
     ["motionTypeId","モーション種別ID"],
   ];
   mvFields.forEach(function (pair) {
-    var div = mkEl("div");
-    var dt = mkEl("dt", "", pair[1]);
-    var dd = mkEl("dd", "", "-");
-    div.append(dt, dd);
-    dl.appendChild(div);
-    spanMap[pair[0]] = dd;
+    var f = mkNumField(pair[1]);
+    grid.appendChild(f.wrap);
+    inputs[pair[0]] = f.inp;
   });
 
-  return { panel, spanMap };
+  var actions = mkEl("div", "form-actions");
+  var saveBtn = mkEl("button", "button primary", "保存");
+  saveBtn.type = "submit";
+  actions.appendChild(saveBtn);
+  form.appendChild(actions);
+
+  return { panel, fb, form, inputs };
 }
 
 // ----------------------------------------------------------------
@@ -767,21 +1162,13 @@ export function mount(container) {
         var sf = graphicsTab.spriteFields[k];
         if (sf && g[k] !== undefined) { sf.setValue(g[k] || 0); }
       });
+      graphicsTab.setGraphicsContext(g, d);
     }
 
     // 移動
     if (d.movement) {
       var mv = d.movement;
-      var sm = movementTab.spanMap;
-      if (sm.maxItemCount)      { sm.maxItemCount.textContent = String(mv.maxItemCount ?? "-"); }
-      if (sm.dropItemAverage)   { sm.dropItemAverage.textContent = String(mv.dropItemAverage ?? "-"); }
-      if (sm.moveAverage)       { sm.moveAverage.textContent = String(mv.moveAverage ?? "-"); }
-      if (sm.moveAverageBattle) { sm.moveAverageBattle.textContent = String(mv.moveAverageBattle ?? "-"); }
-      if (sm.moveWait)          { sm.moveWait.textContent = String(mv.moveWait ?? "-"); }
-      if (sm.moveWaitBattle)    { sm.moveWaitBattle.textContent = String(mv.moveWaitBattle ?? "-"); }
-      if (sm.searchCX)          { sm.searchCX.textContent = String(mv.searchDistanceCX ?? "-"); }
-      if (sm.searchCY)          { sm.searchCY.textContent = String(mv.searchDistanceCY ?? "-"); }
-      if (sm.motionTypeId)      { sm.motionTypeId.textContent = String(mv.motionTypeId ?? "-"); }
+      Object.keys(movementTab.inputs).forEach(function (k) { setNumInp(movementTab.inputs[k], mv[k]); });
     }
 
     // NPC発生
@@ -917,6 +1304,35 @@ export function mount(container) {
     } catch (err) {
       console.error("char-edit graphics save error", err);
       setFb(graphicsTab.fb, "通信エラーが発生しました", "error");
+    }
+  });
+
+  // ----------------------------------------------------------------
+  // 移動 保存
+  // ----------------------------------------------------------------
+  movementTab.form.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    if (!currentCharId) { setFb(movementTab.fb, "先にキャラクターを表示してください", "error"); return; }
+    setFb(movementTab.fb, "保存中...", "");
+
+    var body = {};
+    Object.keys(movementTab.inputs).forEach(function (k) {
+      var v = numVal(movementTab.inputs[k]);
+      if (v !== null) { body[k] = v; }
+    });
+
+    try {
+      var { response, data } = await putJson("/api/characters/" + currentCharId + "/movement", body);
+      if (!response.ok) {
+        var msg = (data && data.error) ? data.error : "保存に失敗しました";
+        setFb(movementTab.fb, "エラー: " + msg, "error");
+        return;
+      }
+      setFb(movementTab.fb, "保存しました", "success");
+      await doFetchChar(currentCharId);
+    } catch (err) {
+      console.error("char-edit movement save error", err);
+      setFb(movementTab.fb, "通信エラーが発生しました", "error");
     }
   });
 

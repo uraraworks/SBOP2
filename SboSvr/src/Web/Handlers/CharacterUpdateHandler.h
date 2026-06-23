@@ -11,6 +11,7 @@ class CMgrData;
 // PUT /api/characters/{charId}/status      → ステータス更新
 // PUT /api/characters/{charId}/equipment   → 装備更新
 // PUT /api/characters/{charId}/graphics    → グラフィック更新
+// PUT /api/characters/{charId}/movement    → 移動・探索設定更新
 // PUT /api/characters/{charId}/account     → アカウント紐付け変更
 // PUT /api/characters/{charId}/admin       → 管理者権限レベル設定
 // PUT /api/characters/{charId}/disabled    → キャラ無効化/解除（アカウント m_bDisable）
@@ -32,6 +33,8 @@ private:
         void HandleEquipment(const HttpRequest &request, HttpResponse &response, int nCharId);
         // グラフィック更新
         void HandleGraphics(const HttpRequest &request, HttpResponse &response, int nCharId);
+        // 移動・探索設定更新
+        void HandleMovement(const HttpRequest &request, HttpResponse &response, int nCharId);
         // アカウント紐付け変更
         void HandleAccount(const HttpRequest &request, HttpResponse &response, int nCharId);
         // 管理者権限レベル設定

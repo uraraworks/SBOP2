@@ -305,10 +305,12 @@ export async function openSpritePicker({ categoryKey, current = 0, allowCategory
  *   onChange?: (sub: number) => void,
  *   label?: string,
  *   allowCategorySwitch?: boolean,
+ *   valueToSub?: (value: number) => number,
+ *   subToValue?: (sub: number) => number,
  * }} options
- * @returns {{ el: HTMLElement, getValue: () => number, setValue: (sub: number) => void }}
+ * @returns {{ el: HTMLElement, getValue: () => number, setValue: (sub: number) => void, setThumb: (next: { categoryKey?: string, sub?: number }) => void }}
  */
-export function createSpriteField({ categoryKey, value = 0, onChange, label, allowCategorySwitch = false }) {
+export function createSpriteField({ categoryKey, value = 0, onChange, label, allowCategorySwitch = false, valueToSub, subToValue }) {
   const wrap = document.createElement("div");
   wrap.className = "sprite-field";
 
@@ -321,8 +323,10 @@ export function createSpriteField({ categoryKey, value = 0, onChange, label, all
 
   let _catKey = categoryKey;
   let _value = value;
+  const _valueToSub = typeof valueToSub === "function" ? valueToSub : (v) => v;
+  const _subToValue = typeof subToValue === "function" ? subToValue : (s) => s;
 
-  const thumb = createSpriteThumb({ categoryKey: _catKey, sub: _value, size: 32 });
+  const thumb = createSpriteThumb({ categoryKey: _catKey, sub: _valueToSub(_value), size: 32 });
 
   // サムネをクリックで選択モーダルを開く
   thumb.el.style.cursor = "pointer";
@@ -342,13 +346,13 @@ export function createSpriteField({ categoryKey, value = 0, onChange, label, all
   function _openPicker() {
     openSpritePicker({
       categoryKey: _catKey,
-      current: _value,
+      current: _valueToSub(_value),
       allowCategorySwitch,
       onSelect: ({ categoryKey: ck, sub }) => {
         _catKey = ck;
-        _value = sub;
+        _value = _subToValue(sub);
         numInput.value = String(_value);
-        thumb.update(_value);
+        thumb.update({ categoryKey: _catKey, sub: _valueToSub(_value) });
         onChange?.(_value);
       },
     });
@@ -364,7 +368,7 @@ export function createSpriteField({ categoryKey, value = 0, onChange, label, all
     const v = parseInt(numInput.value, 10);
     if (!Number.isFinite(v) || v < 0) return;
     _value = v;
-    thumb.update(_value);
+    thumb.update({ categoryKey: _catKey, sub: _valueToSub(_value) });
     onChange?.(_value);
   });
 
@@ -372,8 +376,16 @@ export function createSpriteField({ categoryKey, value = 0, onChange, label, all
   function setValue(sub) {
     _value = sub;
     numInput.value = String(sub);
-    thumb.update(sub);
+    thumb.update({ categoryKey: _catKey, sub: _valueToSub(sub) });
   }
 
-  return { el: wrap, getValue, setValue };
+  function setThumb(next) {
+    if (next && typeof next.categoryKey === "string") {
+      _catKey = next.categoryKey;
+    }
+    const sub = next && next.sub !== undefined ? next.sub : _value;
+    thumb.update({ categoryKey: _catKey, sub });
+  }
+
+  return { el: wrap, getValue, setValue, setThumb };
 }

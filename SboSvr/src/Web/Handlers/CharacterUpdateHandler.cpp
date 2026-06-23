@@ -316,11 +316,29 @@ std::string BuildGraphicsJson(const CInfoCharBase *pChar)
         return oss.str();
 }
 
+// 移動・探索設定 JSON を構築する
+std::string BuildMovementJson(const CInfoCharBase *pChar)
+{
+        std::ostringstream oss;
+        oss << '{';
+        oss << "\"maxItemCount\":"       << pChar->m_nMaxItemCount      << ',';
+        oss << "\"dropItemAverage\":"    << pChar->m_nDropItemAverage   << ',';
+        oss << "\"moveAverage\":"        << pChar->m_nMoveAverage       << ',';
+        oss << "\"moveAverageBattle\":"  << pChar->m_nMoveAverageBattle << ',';
+        oss << "\"moveWait\":"           << pChar->m_dwMoveWait         << ',';
+        oss << "\"moveWaitBattle\":"     << pChar->m_dwMoveWaitBattle   << ',';
+        oss << "\"searchDistanceCX\":"   << pChar->m_sizeSearchDistance.cx << ',';
+        oss << "\"searchDistanceCY\":"   << pChar->m_sizeSearchDistance.cy << ',';
+        oss << "\"motionTypeId\":"       << pChar->m_dwMotionTypeID;
+        oss << '}';
+        return oss.str();
+}
+
 } // namespace
 
 // ---------------------------------------------------------------------------
 // CCharacterUpdateHandler
-// PUT /api/characters/{charId}[/status|/equipment|/graphics]
+// PUT /api/characters/{charId}[/status|/equipment|/graphics|/movement]
 // ---------------------------------------------------------------------------
 
 CCharacterUpdateHandler::CCharacterUpdateHandler(CMgrData *pMgrData)
@@ -361,6 +379,8 @@ void CCharacterUpdateHandler::Handle(const HttpRequest &request, HttpResponse &r
                 HandleEquipment(request, response, nCharId);
         } else if (subResource == "graphics") {
                 HandleGraphics(request, response, nCharId);
+        } else if (subResource == "movement") {
+                HandleMovement(request, response, nCharId);
         } else if (subResource == "account") {
                 HandleAccount(request, response, nCharId);
         } else if (subResource == "admin") {
@@ -717,6 +737,66 @@ void CCharacterUpdateHandler::HandleGraphics(const HttpRequest &request, HttpRes
         }
 
         std::string json = BuildGraphicsJson(pChar);
+        pCharLib->Leave();
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(json);
+}
+
+// ---------------------------------------------------------------------------
+// 移動・探索設定更新  PUT /api/characters/{charId}/movement
+// ---------------------------------------------------------------------------
+
+void CCharacterUpdateHandler::HandleMovement(const HttpRequest &request, HttpResponse &response, int nCharId)
+{
+        CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+        if (pCharLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        pCharLib->Enter();
+
+        CInfoCharBase *pChar = FindChar(pCharLib, nCharId);
+        if (pChar == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+
+        int nVal = 0;
+
+        if (JsonUtils::TryGetInt(request.body, "maxItemCount", nVal)) {
+                pChar->m_nMaxItemCount = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "dropItemAverage", nVal)) {
+                pChar->m_nDropItemAverage = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "moveAverage", nVal)) {
+                pChar->m_nMoveAverage = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "moveAverageBattle", nVal)) {
+                pChar->m_nMoveAverageBattle = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "moveWait", nVal)) {
+                pChar->m_dwMoveWait = static_cast<DWORD>(nVal);
+        }
+        if (JsonUtils::TryGetInt(request.body, "moveWaitBattle", nVal)) {
+                pChar->m_dwMoveWaitBattle = static_cast<DWORD>(nVal);
+        }
+        if (JsonUtils::TryGetInt(request.body, "searchDistanceCX", nVal)) {
+                pChar->m_sizeSearchDistance.cx = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "searchDistanceCY", nVal)) {
+                pChar->m_sizeSearchDistance.cy = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "motionTypeId", nVal)) {
+                pChar->m_dwMotionTypeID = static_cast<DWORD>(nVal);
+        }
+
+        std::string json = BuildMovementJson(pChar);
         pCharLib->Leave();
 
         response.statusLine = "HTTP/1.1 200 OK";

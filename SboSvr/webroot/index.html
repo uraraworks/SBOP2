@@ -19,7 +19,11 @@
   </header>
   <div class="app-layout">
   <nav class="main-nav" aria-label="主要メニュー">
-    <details>
+    <div class="main-nav-header">
+      <span class="main-nav-title">管理メニュー</span>
+      <span class="main-nav-subtitle">Admin Console</span>
+    </div>
+    <details open>
       <summary>運用基盤</summary>
       <ul>
         <li><a href="#server-dashboard" data-route="server-dashboard" class="nav-link">サーバー情報ダッシュボード</a></li>
@@ -27,7 +31,7 @@
         <li><a href="#role-management" data-route="role-management" class="nav-link">管理者ロール設定</a></li>
       </ul>
     </details>
-    <details>
+    <details open>
       <summary>キャラクター・マップ</summary>
       <ul>
         <li><a href="#character-overview" data-route="character-overview" class="nav-link">キャラクター基本情報編集</a></li>
@@ -48,7 +52,7 @@
         <li><a href="#map-gen-patterns" data-route="map-gen-patterns" class="nav-link">自動生成マップ設定</a></li>
       </ul>
     </details>
-    <details>
+    <details open>
       <summary>アイテム・エフェクト</summary>
       <ul>
         <li><a href="#item-types" data-route="item-types" class="nav-link">アイテム種別一覧</a></li>
@@ -58,7 +62,7 @@
         <li><a href="#effect-library" data-route="effect-library" class="nav-link">エフェクト一覧</a></li>
       </ul>
     </details>
-    <details>
+    <details open>
       <summary>監査・運用</summary>
       <ul>
         <li><a href="#audit-reports" data-route="audit-reports" class="nav-link">監査レポートダウンロード</a></li>
@@ -66,7 +70,7 @@
         <li><a href="#failback-guide" data-route="failback-guide" class="nav-link">フェイルバック手順</a></li>
       </ul>
     </details>
-    <details>
+    <details open>
       <summary>システム設定</summary>
       <ul>
         <li><a href="#initial-status" data-route="initial-status" class="nav-link">初期ステータス設定</a></li>
